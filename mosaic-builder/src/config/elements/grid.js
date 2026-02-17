@@ -1,0 +1,45 @@
+export default {
+  type: 'grid',
+  name: 'Griglia',
+  icon: 'dashicons-grid-view',
+  category: 'content',
+  defaults: {
+    items: [
+      { id: 'g-1', title: 'Elemento 1', content: 'Descrizione del primo elemento.', image: '', tag: 'all' },
+      { id: 'g-2', title: 'Elemento 2', content: 'Descrizione del secondo elemento.', image: '', tag: 'all' },
+      { id: 'g-3', title: 'Elemento 3', content: 'Descrizione del terzo elemento.', image: '', tag: 'all' },
+    ],
+    columns: '3',
+    gap: 'default',
+    show_filter: false,
+    masonry: false,
+  },
+  fields: [
+    { key: 'items', label: 'Elementi', type: 'content-items', supportsDynamic: true,
+      itemFields: [
+        { key: 'title', label: 'Titolo', type: 'text' },
+        { key: 'content', label: 'Contenuto', type: 'textarea' },
+        { key: 'image', label: 'Immagine', type: 'image' },
+        { key: 'tag', label: 'Tag', type: 'text' },
+      ],
+      newItemDefaults: { title: 'Nuovo elemento', content: '', image: '', tag: 'all' },
+    },
+    { key: 'columns', label: 'Colonne', type: 'select', options: [
+      { value: '1', label: '1' },
+      { value: '2', label: '2' },
+      { value: '3', label: '3' },
+      { value: '4', label: '4' },
+      { value: '5', label: '5' },
+      { value: '6', label: '6' },
+    ]},
+    { key: 'gap', label: 'Gap', type: 'select', options: [
+      { value: 'collapse', label: 'Collassato' },
+      { value: 'small', label: 'Piccolo' },
+      { value: 'default', label: 'Predefinito' },
+      { value: 'medium', label: 'Medio' },
+      { value: 'large', label: 'Grande' },
+    ]},
+    { key: 'show_filter', label: 'Mostra filtro', type: 'toggle' },
+    { key: 'masonry', label: 'Masonry', type: 'toggle' },
+  ],
+};

@@ -1,0 +1,31 @@
+export default {
+  type: 'testimonial',
+  name: 'Testimonianza',
+  icon: 'dashicons-format-quote',
+  category: 'content',
+  defaults: {
+    quote: 'Un prodotto fantastico!',
+    author_name: 'Mario Rossi',
+    author_role: 'CEO',
+    avatar: '',
+    rating: '5',
+    bg_color: '#1F2937',
+    text_color: '#F3F4F6',
+  },
+  fields: [
+    { key: 'quote', label: 'Citazione', type: 'editor', mode: 'block' },
+    { key: 'author_name', label: 'Nome autore', type: 'editor', mode: 'inline' },
+    { key: 'author_role', label: 'Ruolo autore', type: 'editor', mode: 'inline' },
+    { key: 'avatar', label: 'Avatar', type: 'image' },
+    { key: 'rating', label: 'Valutazione', type: 'select', options: [
+      { value: '0', label: 'Nessuna' },
+      { value: '1', label: '1 stella' },
+      { value: '2', label: '2 stelle' },
+      { value: '3', label: '3 stelle' },
+      { value: '4', label: '4 stelle' },
+      { value: '5', label: '5 stelle' },
+    ]},
+    { key: 'bg_color', label: 'Colore sfondo', type: 'color' },
+    { key: 'text_color', label: 'Colore testo', type: 'color' },
+  ],
+};

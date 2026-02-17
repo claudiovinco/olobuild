@@ -1,0 +1,285 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+// Reset for WP admin area
+#olobuilder-app {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  box-sizing: border-box;
+
+  *, *::before, *::after {
+    box-sizing: inherit;
+  }
+
+  // Custom scrollbar
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 3px;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.25);
+    }
+  }
+}
+
+// Grid system
+.olo-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 16px;
+}
+
+// Tile in canvas
+.olo-grid-cell {
+  position: relative;
+  border: 2px dashed transparent;
+  border-radius: 8px;
+  transition: border-color 0.15s, box-shadow 0.15s;
+
+  &:hover {
+    border-color: rgb(var(--olo-primary-rgb, 99 102 241) / 0.4);
+  }
+
+  &--selected {
+    border-color: var(--olo-color-primary, #6366f1);
+    box-shadow: 0 0 0 2px rgb(var(--olo-primary-rgb, 99 102 241) / 0.2);
+  }
+}
+
+// Cell toolbar
+.olo-cell-toolbar {
+  position: absolute;
+  top: -32px;
+  right: 4px;
+  display: flex;
+  gap: 2px;
+  opacity: 0;
+  transition: opacity 0.15s;
+  z-index: 10;
+
+  .olo-grid-cell:hover & {
+    opacity: 1;
+  }
+
+  button {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 4px;
+    background: #374151;
+    color: #d1d5db;
+    cursor: pointer;
+    font-size: 12px;
+
+    &:hover {
+      background: #4b5563;
+      color: #fff;
+    }
+
+    &.delete:hover {
+      background: #dc2626;
+    }
+  }
+}
+
+// Drag ghost
+.sortable-ghost {
+  opacity: 0.4;
+  border: 2px dashed var(--olo-color-primary, #6366f1) !important;
+}
+
+.sortable-chosen {
+  cursor: grabbing;
+}
+
+// Row/Columns drop zones
+.olo-col-dropzone {
+  transition: border-color 0.15s, background-color 0.15s;
+
+  &:hover {
+    border-color: rgb(var(--olo-primary-rgb, 99 102 241) / 0.3) !important;
+  }
+}
+
+// Row tile layout selector
+.olo-row-tile button {
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+// Accordion animation in canvas
+.olo-accordion-panel-body {
+  display: grid;
+  grid-template-rows: 0fr;
+
+  &.is-open {
+    grid-template-rows: 1fr;
+  }
+
+  > div {
+    overflow: hidden;
+  }
+}
+
+// Rich text content styles in canvas
+.olo-grid-cell {
+  h1, h2, h3, h4 {
+    font-weight: 600;
+  }
+  ul {
+    list-style: disc;
+    padding-left: 1.5em;
+  }
+  ol {
+    list-style: decimal;
+    padding-left: 1.5em;
+  }
+  blockquote {
+    border-left: 3px solid currentColor;
+    padding-left: 0.75em;
+    opacity: 0.85;
+  }
+}
+
+// Preview mode - hide all editing UI
+.preview-mode {
+  // Hide cell borders and selection
+  .olo-grid-cell {
+    border-color: transparent !important;
+    box-shadow: none !important;
+
+    &:hover {
+      border-color: transparent !important;
+    }
+  }
+
+  // Hide cell toolbar (move/duplicate/delete)
+  .olo-cell-toolbar {
+    display: none !important;
+  }
+
+  // Hide fullwidth badge
+  .olo-fullwidth-badge {
+    display: none !important;
+  }
+
+  // Hide section bars
+  .olo-section-bar {
+    display: none !important;
+  }
+
+  // Hide section block borders but keep content backgrounds
+  .olo-section-block {
+    border-color: transparent !important;
+    background: transparent;
+  }
+
+  // Hide row bars
+  .olo-row-bar {
+    display: none !important;
+  }
+
+  // Hide row block borders but keep content backgrounds
+  .olo-row-block {
+    border-color: transparent !important;
+    background: transparent;
+  }
+
+  // Hide column dashed borders
+  .olo-column-block {
+    border-color: transparent !important;
+  }
+
+  // Hide empty column placeholder
+  .olo-column-empty {
+    display: none !important;
+  }
+
+  // Hide layout presets
+  .olo-row-presets {
+    display: none !important;
+  }
+
+  // Hide "Add Row" button
+  .olo-add-row {
+    display: none !important;
+  }
+
+  // Hide bottom drop zone
+  .olo-canvas-bottom-drop {
+    display: none !important;
+  }
+
+  // Hide empty canvas state
+  .olo-canvas-empty {
+    display: none !important;
+  }
+
+  // Remove canvas padding for cleaner preview
+  .olo-canvas {
+    padding: 0 !important;
+  }
+
+  // Remove section body padding
+  .olo-section-body {
+    padding: 0 !important;
+  }
+}
+
+// ============================================
+// Canvas WYSIWYG: remap Tailwind grays when
+// canvas has a light background
+// ============================================
+.olo-canvas[data-canvas-theme="light"] {
+  color: #374151;
+
+  // Text: flip light→dark
+  .mb-text-gray-100 { color: #111827 !important; }
+  .mb-text-gray-200 { color: #1f2937 !important; }
+  .mb-text-gray-300 { color: #374151 !important; }
+  .mb-text-gray-400 { color: #6b7280 !important; }
+  .mb-text-gray-500 { color: #9ca3af !important; }
+  .mb-text-gray-600 { color: #9ca3af !important; }
+
+  // Backgrounds: flip dark→light
+  .mb-bg-gray-600 { background-color: #d1d5db !important; }
+  .mb-bg-gray-700 { background-color: #e5e7eb !important; }
+  .mb-bg-gray-800 { background-color: #f3f4f6 !important; }
+  .mb-bg-gray-900 { background-color: #ffffff !important; }
+
+  // Hover backgrounds
+  .hover\:mb-bg-gray-700:hover { background-color: #e5e7eb !important; }
+}
+
+// Cell toolbar: adapt to light canvas
+.olo-canvas[data-canvas-theme="light"] {
+  .olo-cell-toolbar button {
+    background: #e5e7eb;
+    color: #374151;
+
+    &:hover {
+      background: #d1d5db;
+      color: #111827;
+    }
+
+    &.delete:hover {
+      background: #dc2626;
+      color: #fff;
+    }
+  }
+}

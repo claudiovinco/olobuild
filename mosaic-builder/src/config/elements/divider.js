@@ -1,0 +1,36 @@
+export default {
+  type: 'divider',
+  name: 'Divisore',
+  icon: 'dashicons-minus',
+  category: 'layout',
+  defaults: {
+    style: 'solid',
+    width: '100',
+    thickness: '1',
+    color: '#374151',
+    alignment: 'center',
+    text: '',
+    text_color: '#9CA3AF',
+    icon_emoji: '',
+  },
+  fields: [
+    { key: 'style', label: 'Stile', type: 'select', options: [
+      { value: 'solid', label: 'Continuo' },
+      { value: 'dashed', label: 'Tratteggiato' },
+      { value: 'dotted', label: 'Punteggiato' },
+      { value: 'double', label: 'Doppio' },
+      { value: 'gradient', label: 'Sfumato' },
+    ]},
+    { key: 'width', label: 'Larghezza (%)', type: 'range', min: 10, max: 100, step: 5 },
+    { key: 'thickness', label: 'Spessore (px)', type: 'range', min: 1, max: 10, step: 1 },
+    { key: 'color', label: 'Colore', type: 'color' },
+    { key: 'alignment', label: 'Allineamento', type: 'select', options: [
+      { value: 'left', label: 'Sinistra' },
+      { value: 'center', label: 'Centro' },
+      { value: 'right', label: 'Destra' },
+    ]},
+    { key: 'text', label: 'Testo', type: 'text' },
+    { key: 'text_color', label: 'Colore testo', type: 'color' },
+    { key: 'icon_emoji', label: 'Icona / Emoji', type: 'icon' },
+  ],
+};

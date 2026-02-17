@@ -1,0 +1,687 @@
+/**
+ * Olobuilder - Frontend Styles
+ * UIkit 3 handles most layout/component styling.
+ * This file provides custom overrides and Olobuilder-specific classes.
+ */
+
+/* ========================================
+   Template wrapper – full-width breakout
+   ======================================== */
+/*
+ * WordPress block themes nest content in multiple
+ * is-layout-constrained / has-global-padding wrappers.
+ * We break out to full viewport width with the classic
+ * left-50%/translateX(-50%) trick and clip overflow so
+ * the scrollbar doesn't cause an asymmetric shift.
+ */
+body:has(.olo-template) .wp-site-blocks {
+  overflow-x: clip;
+}
+.olo-template {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: none !important;
+}
+
+/* Grid wrapper (used at template level) */
+.olo-frontend-grid {
+  position: relative;
+  z-index: 2;
+  display: flow-root; /* BFC: prevents child margin collapsing through parent */
+  background: inherit; /* Inherit template background so section margins show correctly */
+}
+
+/* Element base */
+.olo-frontend-tile {
+  min-width: 0;
+}
+
+/* ========================================
+   Element full-width (fills its column)
+   ======================================== */
+.olo-tile-fullwidth {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ========================================
+   Video background (page-level .olo-tile-bg)
+   ======================================== */
+video.olo-tile-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* ========================================
+   Visibility helpers (beyond UIkit)
+   ======================================== */
+@media (min-width: 640px) and (max-width: 959px) {
+  .olo-hidden-tablet {
+    display: none !important;
+  }
+}
+
+/* ========================================
+   Rich text content styles
+   ======================================== */
+.olo-frontend-tile h1,
+.olo-frontend-tile h2,
+.olo-frontend-tile h3,
+.olo-frontend-tile h4 {
+  font-weight: 600;
+}
+.olo-frontend-tile blockquote {
+  border-left: 3px solid currentColor;
+  padding-left: 0.75em;
+  opacity: 0.85;
+}
+
+/* ========================================
+   UIkit overrides for Olobuilder elements
+   ======================================== */
+
+/* Ensure uk-section inside Olobuilder template uses correct box-sizing */
+.olo-template .uk-section {
+  box-sizing: border-box;
+}
+
+/* UIkit icons — ensure color cascades into injected SVG */
+.olo-template [uk-icon] > svg {
+  fill: currentColor;
+}
+.olo-template [uk-icon] > svg [stroke="#000"] {
+  stroke: currentColor;
+}
+
+/* Accordion custom styling hooks */
+.olo-template .uk-accordion-title {
+  font-size: 1em;
+}
+
+/* Progress bar custom colors (UIkit progress doesn't support custom colors natively) */
+.olo-template .uk-progress::-webkit-progress-value {
+  transition: width 0.6s ease;
+}
+.olo-template .uk-progress::-moz-progress-bar {
+  transition: width 0.6s ease;
+}
+
+/* Slideshow text overlay readability */
+.olo-template .uk-slideshow-items .uk-overlay {
+  max-width: 80%;
+}
+
+/* Table responsive scroll shadow hint */
+.olo-template .uk-overflow-auto {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ========================================
+   Header Builder
+   ======================================== */
+
+/* Header wrapper — base styles (z-index, width) */
+.olo-site-header {
+  left: 0;
+  width: 100%;
+  z-index: 980;
+}
+.olo-site-header .olo-template {
+  /* Reset the breakout trick — header is already at the top of .wp-site-blocks */
+  width: 100%;
+  left: 0;
+  transform: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* --- Overlay mode: fixed at top, content goes behind the header --- */
+.olo-site-header.olo-header-overlay {
+  position: fixed;
+  top: 0;
+}
+
+/* --- Classic mode: in flow + sticks to top on scroll --- */
+.olo-site-header.olo-header-classic {
+  position: sticky;
+  top: 0;
+  margin: 0 !important;
+  margin-block: 0 !important;
+}
+/* Prevent child margins from collapsing through the section —
+   this forces the section's background to cover the full area */
+.olo-site-header.olo-header-classic .uk-section {
+  display: flow-root;
+}
+.olo-site-header.olo-header-classic + main,
+.olo-site-header.olo-header-classic + .wp-block-group,
+.olo-site-header.olo-header-classic ~ main,
+.wp-site-blocks > .olo-site-header.olo-header-classic + * {
+  margin-block-start: 0 !important;
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+/* Fallback before JS sets the class (flicker prevention) */
+.olo-site-header:not(.olo-header-overlay):not(.olo-header-classic) {
+  position: fixed;
+  top: 0;
+}
+
+/* When Olobuilder header is active in overlay mode, hide the TT4 title/hero section */
+header.olo-site-header.olo-header-overlay + main > .wp-block-group:first-child {
+  display: none !important;
+}
+
+/* Site Logo element */
+.olo-sitelogo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.olo-sitelogo-link {
+  text-decoration: none;
+  color: inherit;
+  display: inline-flex;
+}
+.olo-sitelogo-link:hover {
+  opacity: 0.8;
+}
+
+/* Nav Menu element — no uk-navbar JS, pure CSS + uk-drop for submenus */
+.olo-nav-bar {
+  display: flex;
+  align-items: center;
+}
+.olo-navmenu .uk-navbar-nav {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 0;
+}
+.olo-navmenu .uk-navbar-nav > li {
+  position: relative;
+}
+.olo-navmenu .uk-navbar-nav > li > a {
+  display: flex;
+  align-items: center;
+  padding: 0 15px;
+  min-height: 40px;
+  text-decoration: none;
+  text-transform: none;
+  color: inherit;
+  transition: color 0.2s;
+}
+.olo-navmenu .uk-navbar-nav > li > a:hover {
+  text-decoration: none;
+}
+
+/* Mobile toggle */
+.olo-nav-toggle {
+  display: inline-flex;
+  align-items: center;
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Dropdown card styling */
+.olo-nav-dropdown {
+  min-width: 180px;
+}
+
+/* Offcanvas menu z-index above header */
+.olo-navmenu .uk-offcanvas {
+  z-index: 990;
+}
+
+/* ========================================
+   Sticky Header
+   ======================================== */
+.olo-site-header {
+  transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s;
+  margin-block-start: 0 !important;
+}
+.olo-header-sticky {
+  transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s;
+}
+/* Classic mode + sticky: when scrolled, switch to fixed */
+.olo-site-header.olo-header-classic.olo-header-sticky {
+  position: fixed;
+  top: 0;
+}
+/* Offset header below WP admin bar when logged in (overlay or fixed-sticky) */
+.admin-bar .olo-site-header.olo-header-overlay,
+.admin-bar .olo-site-header.olo-header-classic.olo-header-sticky {
+  top: 32px !important;
+}
+@media (max-width: 782px) {
+  .admin-bar .olo-site-header.olo-header-overlay,
+  .admin-bar .olo-site-header.olo-header-classic.olo-header-sticky {
+    top: 46px !important;
+  }
+}
+
+/* ========================================
+   Mega Menu
+   ======================================== */
+.olo-mega-drop {
+  width: 100%;
+  min-width: 500px;
+  max-width: 900px;
+}
+.olo-mega-panel {
+  padding: 25px 30px;
+}
+.olo-mega-panel .uk-nav-header {
+  text-transform: uppercase;
+  font-size: 0.85em;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+.olo-mega-panel .uk-nav-default > li > a {
+  padding: 4px 0;
+  font-size: 0.92em;
+}
+.olo-mega-header-link {
+  color: inherit;
+  text-decoration: none;
+}
+.olo-mega-header-link:hover {
+  text-decoration: underline;
+}
+
+/* ========================================
+   Button Items
+   ======================================== */
+.olo-navmenu .olo-nav-btn-item {
+  margin-left: 10px;
+  display: flex;
+  align-items: center;
+}
+.olo-navmenu .olo-nav-btn-item > a.uk-button {
+  min-height: auto;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+/* ========================================
+   Footer Builder
+   ======================================== */
+.olo-site-footer {
+  position: relative;
+  z-index: 1;
+  margin-block-start: 0 !important;
+}
+.olo-site-footer .olo-template {
+  width: 100%;
+  left: 0;
+  transform: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Header/Footer: sections inherit template background unless explicitly styled */
+.olo-site-header .uk-section-default,
+.olo-site-footer .uk-section-default {
+  background: transparent;
+}
+/* Ensure entire header chain is transparent by default */
+.olo-site-header .olo-template,
+.olo-site-header .olo-frontend-grid,
+.olo-site-header .olo-frontend-tile {
+  background: transparent;
+}
+
+/* ========================================
+   Leaflet Locations Map
+   ======================================== */
+
+/* Popup */
+.olo-map-popup {
+  font-family: inherit;
+  font-size: 0.9em;
+  line-height: 1.5;
+  max-width: 260px;
+}
+.olo-map-popup-img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+.olo-map-popup-title {
+  display: block;
+  font-size: 1.05em;
+  margin-bottom: 2px;
+}
+.olo-map-popup-address {
+  display: block;
+  font-size: 0.85em;
+  opacity: 0.65;
+  margin-bottom: 6px;
+}
+.olo-map-popup-excerpt {
+  margin: 0 0 6px;
+  font-size: 0.88em;
+  opacity: 0.8;
+}
+.olo-map-popup-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 3px;
+}
+.olo-map-popup-rating {
+  color: #f59e0b;
+  font-size: 0.9em;
+  letter-spacing: 1px;
+}
+.olo-map-popup-price {
+  font-size: 0.82em;
+  font-weight: 600;
+  color: #16a34a;
+}
+.olo-map-popup-details {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-bottom: 6px;
+  font-size: 0.82em;
+}
+.olo-map-popup-detail strong {
+  margin-right: 3px;
+}
+.olo-map-popup-detail a {
+  color: var(--olo-color-primary, #6366F1);
+  text-decoration: none;
+}
+.olo-map-popup-detail a:hover {
+  text-decoration: underline;
+}
+.olo-map-popup-gallery {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 6px;
+  align-items: center;
+}
+.olo-map-popup-gallery-link {
+  display: block;
+  flex-shrink: 0;
+}
+.olo-map-popup-gallery-thumb {
+  width: 52px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.olo-map-popup-gallery-link:hover .olo-map-popup-gallery-thumb {
+  opacity: 0.75;
+}
+.olo-map-popup-gallery-more {
+  font-size: 0.78em;
+  color: #64748b;
+  font-weight: 600;
+  padding-left: 2px;
+}
+.olo-map-popup-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 6px;
+}
+.olo-map-popup-badge {
+  display: inline-block;
+  font-size: 0.72em;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: #f3f4f6;
+  color: #374151;
+  white-space: nowrap;
+}
+.olo-map-popup-rental {
+  background: #f8fafc;
+  border-radius: 4px;
+  padding: 6px 8px;
+  margin-bottom: 6px;
+}
+.olo-map-popup-rental-price {
+  display: block;
+  font-size: 1.1em;
+  font-weight: 700;
+  color: #0f172a;
+}
+.olo-map-popup-rental-price small {
+  font-weight: 400;
+  font-size: 0.75em;
+  color: #64748b;
+}
+.olo-map-popup-rental-specs {
+  display: block;
+  font-size: 0.8em;
+  color: #475569;
+  margin-top: 2px;
+}
+.olo-map-popup-rental-status {
+  display: inline-block;
+  font-size: 0.75em;
+  font-weight: 600;
+  padding: 1px 8px;
+  border-radius: 3px;
+  margin-top: 4px;
+}
+.olo-map-popup-rental-booked {
+  background: #fef2f2;
+  color: #dc2626;
+}
+.olo-map-popup-rental-maintenance {
+  background: #fffbeb;
+  color: #d97706;
+}
+.olo-map-popup-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 4px;
+}
+.olo-map-popup-btn {
+  display: inline-block;
+  font-size: 0.82em;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 4px;
+  background: var(--olo-color-primary, #6366F1);
+  color: #fff !important;
+  text-decoration: none;
+}
+.olo-map-popup-btn:hover {
+  filter: brightness(0.85);
+}
+.olo-map-popup-link {
+  display: inline-block;
+  font-size: 0.85em;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--olo-color-primary, #6366F1);
+}
+.olo-map-popup-link:hover {
+  text-decoration: underline;
+}
+
+/* Filters */
+.olo-map-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 12px;
+  align-items: center;
+}
+.olo-map-filter-pill {
+  display: inline-block;
+  padding: 5px 14px;
+  font-size: 0.85em;
+  border: 1px solid #d1d5db;
+  border-radius: 999px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+.olo-map-filter-pill:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+.olo-map-filter-pill.olo-map-filter-active {
+  background: var(--olo-color-primary, #6366F1);
+  border-color: var(--olo-color-primary, #6366F1);
+  color: #fff;
+}
+.olo-map-filter-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 4px;
+  vertical-align: middle;
+}
+.olo-map-filter-pill.olo-map-filter-active .olo-map-filter-dot {
+  box-shadow: 0 0 0 2px rgba(255,255,255,0.8);
+}
+.olo-map-filter-select {
+  max-width: 250px;
+}
+
+/* SVG marker icon — remove leaflet divIcon default styles */
+.olo-map-marker {
+  background: none !important;
+  border: none !important;
+}
+
+/* Leaflet container border radius */
+.olo-map-canvas {
+  z-index: 1;
+}
+/* Keep Leaflet controls above popups */
+.olo-map-canvas .leaflet-control-container {
+  z-index: 800;
+}
+
+/* Gallery lightbox overlay */
+.olo-map-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.olo-map-lightbox-img {
+  max-width: 90vw;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: 4px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Post Grid
+   ═══════════════════════════════════════════════════════════ */
+
+.olo-postgrid-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 20px;
+  align-items: center;
+  justify-content: space-between;
+}
+.olo-postgrid-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+.olo-postgrid-pill {
+  display: inline-block;
+  padding: 5px 14px;
+  font-size: 0.85em;
+  border: 1px solid #d1d5db;
+  border-radius: 999px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+.olo-postgrid-pill:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+.olo-postgrid-pill.olo-postgrid-pill-active {
+  background: var(--olo-color-primary, #6366F1);
+  border-color: var(--olo-color-primary, #6366F1);
+  color: #fff;
+}
+.olo-postgrid-filter-select {
+  max-width: 250px;
+}
+.olo-postgrid-sort {
+  max-width: 200px;
+  margin-left: auto;
+}
+
+/* Card elements */
+.olo-postgrid-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 3px 10px;
+  font-size: 0.75em;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  background: rgba(0, 0, 0, 0.65);
+  color: #fff;
+  border-radius: 4px;
+  z-index: 1;
+}
+.olo-postgrid-meta {
+  font-size: 0.82em;
+  color: #888;
+  margin-bottom: 8px;
+}
+.olo-postgrid-excerpt {
+  font-size: 0.92em;
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+.olo-postgrid-price {
+  font-size: 1.15em;
+  font-weight: 700;
+  color: var(--olo-color-primary, #6366F1);
+  margin-bottom: 10px;
+}
+.olo-postgrid-link {
+  font-size: 0.9em;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+/* Item transition for filtering */
+.olo-postgrid-item {
+  transition: opacity 0.3s ease;
+}
+
+/* Empty state */
+.olo-postgrid-empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: #999;
+  font-size: 0.95em;
+}

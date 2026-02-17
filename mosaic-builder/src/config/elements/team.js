@@ -1,0 +1,24 @@
+export default {
+  type: 'team',
+  name: 'Membro del team',
+  icon: 'dashicons-businessperson',
+  category: 'content',
+  defaults: {
+    photo: '',
+    name: 'Jane Smith',
+    role: 'Lead Designer',
+    bio: 'Appassionata di creare esperienze utente eccellenti.',
+    link_url: '',
+    bg_color: '#1F2937',
+    text_color: '#F3F4F6',
+  },
+  fields: [
+    { key: 'photo', label: 'Foto / Video', type: 'media' },
+    { key: 'name', label: 'Nome', type: 'editor', mode: 'inline' },
+    { key: 'role', label: 'Ruolo', type: 'editor', mode: 'inline' },
+    { key: 'bio', label: 'Biografia', type: 'editor', mode: 'block' },
+    { key: 'link_url', label: 'URL link', type: 'text' },
+    { key: 'bg_color', label: 'Colore sfondo', type: 'color' },
+    { key: 'text_color', label: 'Colore testo', type: 'color' },
+  ],
+};

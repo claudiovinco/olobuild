@@ -1,0 +1,28 @@
+export default {
+  type: 'hero',
+  name: 'Hero',
+  icon: 'dashicons-cover-image',
+  category: 'layout',
+  defaults: {
+    title: 'Benvenuto nel nostro sito',
+    subtitle: 'Scopri qualcosa di straordinario',
+    background_color: '#6366F1',
+    text_color: '#FFFFFF',
+    cta_text: 'Inizia ora',
+    cta_url: '#',
+    cta_bg_color: '#FFFFFF',
+    cta_text_color: '',
+  },
+  fields: [
+    { key: 'title', label: 'Titolo', type: 'editor', mode: 'inline' },
+    { key: 'subtitle', label: 'Sottotitolo', type: 'editor', mode: 'inline' },
+    { type: 'separator', label: 'Colori' },
+    { key: 'background_color', label: 'Colore sfondo', type: 'color' },
+    { key: 'text_color', label: 'Colore testo', type: 'color' },
+    { type: 'separator', label: 'Invito all\'azione' },
+    { key: 'cta_text', label: 'Testo pulsante', type: 'text' },
+    { key: 'cta_url', label: 'URL pulsante', type: 'text' },
+    { key: 'cta_bg_color', label: 'Sfondo pulsante', type: 'color' },
+    { key: 'cta_text_color', label: 'Colore testo pulsante', type: 'color' },
+  ],
+};

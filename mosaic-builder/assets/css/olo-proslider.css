@@ -1,0 +1,284 @@
+/* ═══════════════════════════════════════════════════════════
+   ProSlider — Layout & Animations
+   ═══════════════════════════════════════════════════════════ */
+
+/* --- Container ------------------------------------------------ */
+.olo-proslider {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  background: #000;
+}
+
+/* Full-bleed: break out of uk-container to fill the viewport */
+.olo-tile-fullwidth > .olo-proslider {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+}
+/* --- Global background ----------------------------------------- */
+.olo-proslider-global-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+.olo-proslider-global-bg img,
+.olo-proslider-global-bg video,
+.olo-proslider-global-bg iframe {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.olo-proslider-track {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+/* --- Slide ---------------------------------------------------- */
+.olo-proslider-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  visibility: hidden;
+  z-index: 0;
+}
+.olo-proslider-slide.mps-active {
+  opacity: 1;
+  visibility: visible;
+  z-index: 1;
+}
+/* Persistent slide: stays visible underneath the active slide */
+.olo-proslider-slide.mps-persistent-visible {
+  opacity: 1;
+  visibility: visible;
+  z-index: 0;
+}
+
+/* Transition: fade */
+.olo-proslider[data-transition="fade"] .olo-proslider-slide {
+  transition: opacity var(--mps-trans-dur, 800ms) ease;
+}
+
+/* Transition: slide */
+.olo-proslider[data-transition="slide"] .olo-proslider-slide {
+  transform: translateX(100%);
+  opacity: 1;
+  visibility: visible;
+  transition: transform var(--mps-trans-dur, 800ms) ease;
+}
+.olo-proslider[data-transition="slide"] .olo-proslider-slide.mps-active {
+  transform: translateX(0);
+}
+.olo-proslider[data-transition="slide"] .olo-proslider-slide.mps-exit-left {
+  transform: translateX(-100%);
+}
+
+/* Transition: zoom */
+.olo-proslider[data-transition="zoom"] .olo-proslider-slide {
+  transform: scale(0.85);
+  transition: opacity var(--mps-trans-dur, 800ms) ease,
+              transform var(--mps-trans-dur, 800ms) ease;
+}
+.olo-proslider[data-transition="zoom"] .olo-proslider-slide.mps-active {
+  transform: scale(1);
+}
+
+/* --- Background ----------------------------------------------- */
+.olo-proslider-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+.olo-proslider-bg img,
+.olo-proslider-bg video,
+.olo-proslider-bg iframe {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.olo-proslider-bg iframe {
+  pointer-events: none;
+  border: 0;
+  /* YouTube 16:9 overflow trick */
+  width: 120%;
+  height: 120%;
+  margin-left: -10%;
+  margin-top: -10%;
+}
+.olo-proslider-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+/* --- Layer ---------------------------------------------------- */
+.olo-proslider-layer {
+  position: absolute;
+  z-index: 2;
+  opacity: 0;
+  box-sizing: border-box;
+}
+.olo-proslider-layer.mps-anim-visible {
+  opacity: 1;
+}
+
+/* --- Navigation: Arrows --------------------------------------- */
+.olo-proslider-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  background: rgba(0,0,0,0.45);
+  color: #fff;
+  border: none;
+  width: 48px;
+  height: 48px;
+  font-size: 24px;
+  line-height: 1;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.25s ease, opacity 0.25s ease;
+  opacity: 0.7;
+}
+.olo-proslider-arrow:hover {
+  background: rgba(0,0,0,0.7);
+  opacity: 1;
+}
+.olo-proslider-prev { left: 16px; }
+.olo-proslider-next { right: 16px; }
+
+/* --- Navigation: Dots ----------------------------------------- */
+.olo-proslider-dots {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  gap: 8px;
+}
+.olo-proslider-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.7);
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.25s ease, border-color 0.25s ease;
+}
+.olo-proslider-dot:hover {
+  border-color: #fff;
+}
+.olo-proslider-dot.mps-dot-active {
+  background: #fff;
+  border-color: #fff;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Ken Burns
+   ═══════════════════════════════════════════════════════════ */
+.olo-proslider-kenburns {
+  animation: mpsKenBurnsZoomIn var(--mps-kb-dur, 8000ms) ease forwards;
+}
+.olo-proslider-kenburns-out {
+  animation: mpsKenBurnsZoomOut var(--mps-kb-dur, 8000ms) ease forwards;
+}
+
+@keyframes mpsKenBurnsZoomIn {
+  from { transform: scale(1); }
+  to   { transform: scale(var(--mps-kb-scale, 1.2)); }
+}
+@keyframes mpsKenBurnsZoomOut {
+  from { transform: scale(var(--mps-kb-scale, 1.2)); }
+  to   { transform: scale(1); }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Layer Animation Library — Entrances (12)
+   ═══════════════════════════════════════════════════════════ */
+
+/* fadeIn */
+@keyframes mpsFadeIn { from { opacity:0 } to { opacity:1 } }
+/* fadeInUp */
+@keyframes mpsFadeInUp { from { opacity:0; transform:translateY(40px) } to { opacity:1; transform:translateY(0) } }
+/* fadeInDown */
+@keyframes mpsFadeInDown { from { opacity:0; transform:translateY(-40px) } to { opacity:1; transform:translateY(0) } }
+/* fadeInLeft */
+@keyframes mpsFadeInLeft { from { opacity:0; transform:translateX(-60px) } to { opacity:1; transform:translateX(0) } }
+/* fadeInRight */
+@keyframes mpsFadeInRight { from { opacity:0; transform:translateX(60px) } to { opacity:1; transform:translateX(0) } }
+/* slideInLeft */
+@keyframes mpsSlideInLeft { from { transform:translateX(-100%) } to { transform:translateX(0) } }
+/* slideInRight */
+@keyframes mpsSlideInRight { from { transform:translateX(100%) } to { transform:translateX(0) } }
+/* slideInUp */
+@keyframes mpsSlideInUp { from { transform:translateY(100%) } to { transform:translateY(0) } }
+/* slideInDown */
+@keyframes mpsSlideInDown { from { transform:translateY(-100%) } to { transform:translateY(0) } }
+/* zoomIn */
+@keyframes mpsZoomIn { from { opacity:0; transform:scale(0.4) } to { opacity:1; transform:scale(1) } }
+/* bounceIn */
+@keyframes mpsBounceIn {
+  0%   { opacity:0; transform:scale(0.3) }
+  50%  { opacity:1; transform:scale(1.08) }
+  70%  { transform:scale(0.95) }
+  100% { transform:scale(1) }
+}
+/* rotateIn */
+@keyframes mpsRotateIn { from { opacity:0; transform:rotate(-200deg) } to { opacity:1; transform:rotate(0) } }
+
+/* ═══════════════════════════════════════════════════════════
+   Layer Animation Library — Exits (12)
+   ═══════════════════════════════════════════════════════════ */
+
+/* fadeOut */
+@keyframes mpsFadeOut { from { opacity:1 } to { opacity:0 } }
+/* fadeOutUp */
+@keyframes mpsFadeOutUp { from { opacity:1; transform:translateY(0) } to { opacity:0; transform:translateY(-40px) } }
+/* fadeOutDown */
+@keyframes mpsFadeOutDown { from { opacity:1; transform:translateY(0) } to { opacity:0; transform:translateY(40px) } }
+/* fadeOutLeft */
+@keyframes mpsFadeOutLeft { from { opacity:1; transform:translateX(0) } to { opacity:0; transform:translateX(-60px) } }
+/* fadeOutRight */
+@keyframes mpsFadeOutRight { from { opacity:1; transform:translateX(0) } to { opacity:0; transform:translateX(60px) } }
+/* slideOutLeft */
+@keyframes mpsSlideOutLeft { from { transform:translateX(0) } to { transform:translateX(-100%) } }
+/* slideOutRight */
+@keyframes mpsSlideOutRight { from { transform:translateX(0) } to { transform:translateX(100%) } }
+/* slideOutUp */
+@keyframes mpsSlideOutUp { from { transform:translateY(0) } to { transform:translateY(-100%) } }
+/* slideOutDown */
+@keyframes mpsSlideOutDown { from { transform:translateY(0) } to { transform:translateY(100%) } }
+/* zoomOut */
+@keyframes mpsZoomOut { from { opacity:1; transform:scale(1) } to { opacity:0; transform:scale(0.4) } }
+/* bounceOut */
+@keyframes mpsBounceOut {
+  0%   { transform:scale(1) }
+  25%  { transform:scale(1.08) }
+  100% { opacity:0; transform:scale(0.3) }
+}
+/* rotateOut */
+@keyframes mpsRotateOut { from { opacity:1; transform:rotate(0) } to { opacity:0; transform:rotate(200deg) } }
+
+/* ═══════════════════════════════════════════════════════════
+   Responsive
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 640px) {
+  .olo-proslider-arrow { width: 36px; height: 36px; font-size: 18px; }
+  .olo-proslider-prev { left: 8px; }
+  .olo-proslider-next { right: 8px; }
+  .olo-proslider-dots { bottom: 10px; gap: 6px; }
+  .olo-proslider-dot { width: 10px; height: 10px; }
+  .olo-proslider-layer { font-size: 0.6em !important; }
+}

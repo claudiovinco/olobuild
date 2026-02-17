@@ -1,0 +1,181 @@
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+class Olo_Header_Integration {
+
+    public function init() {
+        add_filter( 'render_block', [ $this, 'replace_header_block' ], 10, 2 );
+        add_action( 'wp_enqueue_scripts', [ $this, 'maybe_enqueue_global_assets' ], 5 );
+
+        // Register nav menu location so Appearance → Menus works even with block themes
+        add_action( 'after_setup_theme', [ $this, 'register_nav_menus' ], 20 );
+    }
+
+    /**
+     * Register nav menu locations to enable the classic Menus admin on block themes.
+     */
+    public function register_nav_menus() {
+        register_nav_menus( [
+            'olo_header' => __( 'Header Olobuild', 'olobuilder' ),
+        ] );
+    }
+
+    /**
+     * Intercept core/template-part with area=header and replace with Olobuild header.
+     */
+    public function replace_header_block( $html, $block ) {
+        if ( $block['blockName'] !== 'core/template-part' ) {
+            return $html;
+        }
+
+        $area = $block['attrs']['area'] ?? '';
+        if ( $area !== 'header' ) {
+            return $html;
+        }
+
+        // Per-page override, then global fallback
+        $override = 0;
+        if ( is_singular() ) {
+            $override = (int) get_post_meta( get_queried_object_id(), '_olo_header_id', true );
+        }
+        $header_id = $override ?: (int) get_option( 'olo_active_header', 0 );
+
+        if ( ! $header_id ) {
+            return $html;
+        }
+
+        return $this->render_header( $header_id );
+    }
+
+    /**
+     * Render the Olobuild header template.
+     */
+    public function render_header( $template_id ) {
+        $db  = new Olo_Database();
+        $tpl = $db->get_template( $template_id );
+
+        if ( ! $tpl || $tpl['status'] !== 'published' ) {
+            return '';
+        }
+
+        $renderer   = new Olo_Frontend_Renderer();
+        $inner_html = $renderer->render_shortcode( [ 'id' => $template_id ] );
+
+        // Detect header_mode from template data (look for navmenu element)
+        $header_mode = $this->detect_header_mode( $tpl );
+
+        // Inline CSS for header mode
+        $inline_css = '<style>';
+        if ( $header_mode === 'overlay' ) {
+            $inline_css .= 'header.olo-site-header.olo-header-overlay + main { margin-block-start: 0 !important; margin-top: 0 !important; }';
+            $inline_css .= 'header.olo-site-header.olo-header-overlay + main > .wp-block-group:first-child { display: none !important; }';
+            $inline_css .= 'header.olo-site-header.olo-header-overlay + main > .wp-block-group:first-child + * { margin-block-start: 0 !important; margin-top: 0 !important; }';
+            $inline_css .= 'header.olo-site-header:not(.olo-header-classic) + main { margin-block-start: 0 !important; margin-top: 0 !important; }';
+            $inline_css .= 'header.olo-site-header:not(.olo-header-classic) + main > .wp-block-group:first-child { display: none !important; }';
+        } else {
+            // Classic: hide TT4 hero/title section + collapse gaps (same as overlay)
+            $inline_css .= 'header.olo-site-header { margin: 0 !important; margin-block: 0 !important; }';
+            $inline_css .= 'header.olo-site-header + main { margin-block-start: 0 !important; margin-top: 0 !important; }';
+            $inline_css .= 'header.olo-site-header + main > .wp-block-group:first-child { display: none !important; }';
+            $inline_css .= 'header.olo-site-header + main > .wp-block-group:first-child + * { margin-block-start: 0 !important; margin-top: 0 !important; }';
+        }
+        $inline_css .= '</style>';
+
+        return '<header class="olo-site-header">' . $inline_css . $inner_html . '</header>';
+    }
+
+    /**
+     * Walk the template tree to find a navmenu element and read its header_mode.
+     */
+    private function detect_header_mode( $tpl ) {
+        $content = $tpl['content'] ?? '';
+        $data    = is_string( $content ) ? json_decode( $content, true ) : $content;
+        if ( ! is_array( $data ) ) {
+            return 'overlay';
+        }
+        $mode = $this->find_navmenu_mode( $data );
+        return $mode ?? 'overlay';
+    }
+
+    private function find_navmenu_mode( $nodes ) {
+        foreach ( $nodes as $node ) {
+            if ( ! is_array( $node ) ) continue;
+            $type = $node['type'] ?? '';
+            if ( $type === 'navmenu' ) {
+                return ( $node['settings']['header_mode'] ?? 'overlay' );
+            }
+            if ( ! empty( $node['children'] ) ) {
+                $result = $this->find_navmenu_mode( $node['children'] );
+                if ( $result !== null ) {
+                    return $result;
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Enqueue UIkit + frontend CSS globally when a Olobuild header is active.
+     */
+    public function maybe_enqueue_global_assets() {
+        $override = 0;
+        if ( is_singular() ) {
+            $override = (int) get_post_meta( get_queried_object_id(), '_olo_header_id', true );
+        }
+        $header_id = $override ?: (int) get_option( 'olo_active_header', 0 );
+        if ( ! $header_id ) {
+            return;
+        }
+
+        // UIkit CSS
+        if ( ! wp_style_is( 'uikit-css', 'enqueued' ) ) {
+            wp_enqueue_style(
+                'uikit-css',
+                OLO_URL . 'assets/vendor/uikit/css/uikit.min.css',
+                [],
+                '3.21.16'
+            );
+        }
+
+        // UIkit JS
+        if ( ! wp_script_is( 'uikit-js', 'enqueued' ) ) {
+            wp_enqueue_script(
+                'uikit-js',
+                OLO_URL . 'assets/vendor/uikit/js/uikit.min.js',
+                [],
+                '3.21.16',
+                true
+            );
+        }
+
+        // UIkit Icons
+        if ( ! wp_script_is( 'uikit-icons-js', 'enqueued' ) ) {
+            wp_enqueue_script(
+                'uikit-icons-js',
+                OLO_URL . 'assets/vendor/uikit/js/uikit-icons.min.js',
+                [ 'uikit-js' ],
+                '3.21.16',
+                true
+            );
+        }
+
+        // Olobuild frontend CSS
+        if ( ! wp_style_is( 'olo-frontend-css', 'enqueued' ) ) {
+            wp_enqueue_style(
+                'olo-frontend-css',
+                OLO_URL . 'assets/css/frontend.css',
+                [ 'uikit-css' ],
+                OLO_VERSION
+            );
+        }
+
+        // Style System CSS
+        $style_css = Olo_Style_System::instance()->generate_css();
+        if ( ! empty( $style_css ) ) {
+            wp_add_inline_style( 'olo-frontend-css', $style_css );
+        }
+    }
+}

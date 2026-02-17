@@ -1,0 +1,228 @@
+/**
+ * Olobuilder – Single Location Page Styles
+ */
+
+/* ── Details Section ── */
+.olo-loc-details {
+  margin: 2em 0;
+}
+.olo-loc-details h3,
+.olo-loc-gallery h3,
+.olo-loc-rental h3,
+.olo-loc-map h3 {
+  font-size: 1.3em;
+  font-weight: 700;
+  margin-bottom: 0.8em;
+  padding-bottom: 0.4em;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+/* Info Cards Grid */
+.olo-loc-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 12px;
+  margin-bottom: 1em;
+}
+.olo-loc-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px;
+  background: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+.olo-loc-card-icon {
+  font-size: 1.4em;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.olo-loc-card strong {
+  display: block;
+  font-size: 0.78em;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #6b7280;
+  margin-bottom: 2px;
+}
+.olo-loc-card a {
+  color: var(--olo-color-primary, #6366F1);
+  text-decoration: none;
+}
+.olo-loc-card a:hover {
+  text-decoration: underline;
+}
+
+/* Badges */
+.olo-loc-badges,
+.olo-loc-rental-amenities-grid,
+.olo-loc-rental-rules-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 1em;
+}
+.olo-loc-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  font-size: 0.82em;
+  background: #f0f9ff;
+  border: 1px solid #bae6fd;
+  border-radius: 6px;
+  color: #0c4a6e;
+  white-space: nowrap;
+}
+
+/* Languages */
+.olo-loc-langs {
+  font-size: 0.9em;
+  margin-bottom: 1em;
+}
+.olo-loc-langs strong {
+  margin-right: 4px;
+}
+
+/* Highlights */
+.olo-loc-highlights {
+  margin-bottom: 1em;
+}
+.olo-loc-highlights strong {
+  display: block;
+  margin-bottom: 0.3em;
+}
+.olo-loc-highlights ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.olo-loc-highlights li {
+  padding: 3px 0;
+  padding-left: 1.2em;
+  position: relative;
+}
+.olo-loc-highlights li::before {
+  content: "\2713";
+  position: absolute;
+  left: 0;
+  color: #16a34a;
+  font-weight: bold;
+}
+
+/* ── Gallery ── */
+.olo-loc-gallery {
+  margin: 2em 0;
+}
+.olo-loc-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 8px;
+}
+.olo-loc-gallery-grid a {
+  display: block;
+  overflow: hidden;
+  border-radius: 6px;
+  aspect-ratio: 4 / 3;
+}
+.olo-loc-gallery-grid img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+.olo-loc-gallery-grid a:hover img {
+  transform: scale(1.05);
+}
+
+/* ── Rental Section ── */
+.olo-loc-rental {
+  margin: 2em 0;
+}
+.olo-loc-rental h4 {
+  font-size: 1em;
+  font-weight: 600;
+  margin: 1em 0 0.5em;
+}
+
+/* Pricing Card */
+.olo-loc-rental-pricing {
+  background: linear-gradient(135deg, #1e3a5f 0%, var(--olo-color-primary, #6366F1) 100%);
+  color: #fff;
+  border-radius: 10px;
+  padding: 20px 24px;
+  margin-bottom: 1.2em;
+}
+.olo-loc-rental-price-main {
+  font-size: 2em;
+  font-weight: 800;
+}
+.olo-loc-rental-price-main small {
+  font-size: 0.45em;
+  font-weight: 400;
+  opacity: 0.8;
+}
+.olo-loc-rental-price-alt {
+  display: flex;
+  gap: 16px;
+  font-size: 0.9em;
+  opacity: 0.85;
+  margin-top: 4px;
+}
+.olo-loc-rental-fees {
+  display: flex;
+  gap: 16px;
+  font-size: 0.82em;
+  opacity: 0.7;
+  margin-top: 8px;
+}
+.olo-loc-rental-book-btn {
+  display: inline-block;
+  margin-top: 14px;
+  padding: 10px 28px;
+  background: #fff;
+  color: var(--olo-color-primary, #6366F1) !important;
+  font-weight: 700;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+.olo-loc-rental-book-btn:hover {
+  background: #f0f9ff;
+  text-decoration: none;
+}
+
+/* Specs Grid */
+.olo-loc-rental-specs {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 10px;
+  margin-bottom: 1em;
+}
+.olo-loc-rental-spec {
+  text-align: center;
+  padding: 12px;
+  background: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+.olo-loc-rental-spec strong {
+  display: block;
+  font-size: 1.4em;
+  color: var(--olo-color-primary, #6366F1);
+}
+
+/* Check-in/out */
+.olo-loc-rental-times {
+  display: flex;
+  gap: 20px;
+  font-size: 0.9em;
+  margin-bottom: 1em;
+  padding: 10px 0;
+  border-top: 1px solid #e5e7eb;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+/* ── Single Map ── */
+.olo-loc-map {
+  margin: 2em 0;
+}

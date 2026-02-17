@@ -1,0 +1,26 @@
+export default {
+  type: 'progress',
+  name: 'Barra progresso',
+  icon: 'dashicons-chart-bar',
+  category: 'content',
+  defaults: {
+    bars: 'HTML|90\nJavaScript|80\nVue.js|75',
+    bar_color: '#6366F1',
+    bar_bg: '#1F2937',
+    text_color: '#F3F4F6',
+    height: '20',
+    show_percentage: true,
+    animated: true,
+    border_radius: '10',
+  },
+  fields: [
+    { key: 'bars', label: 'Barre (etichetta|valore per riga)', type: 'textarea' },
+    { key: 'bar_color', label: 'Colore barra', type: 'color' },
+    { key: 'bar_bg', label: 'Sfondo barra', type: 'color' },
+    { key: 'text_color', label: 'Colore testo', type: 'color' },
+    { key: 'height', label: 'Altezza (px)', type: 'range', min: 10, max: 600, step: 5 },
+    { key: 'show_percentage', label: 'Mostra percentuale', type: 'toggle' },
+    { key: 'animated', label: 'Animata', type: 'toggle' },
+    { key: 'border_radius', label: 'Border Radius', type: 'border-radius' },
+  ],
+};
