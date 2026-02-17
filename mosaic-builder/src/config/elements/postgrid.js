@@ -18,6 +18,7 @@ export default {
     columns_mobile: '1',
     gap: 'medium',
     match_height: false,
+    masonry: false,
     card_style: 'default',
     image_height: '200',
     show_image: true,
@@ -62,6 +63,7 @@ export default {
     { key: 'show_filters', label: 'Mostra filtri tassonomia', type: 'toggle' },
     { key: 'filter_style', label: 'Stile filtri', type: 'select', options: [
       { value: 'pills', label: 'Pills' },
+      { value: 'minimal', label: 'Minimale' },
       { value: 'dropdown', label: 'Dropdown' },
     ], condition: { field: 'show_filters', value: true } },
     { key: 'show_sort', label: 'Mostra dropdown ordinamento', type: 'toggle' },
@@ -89,10 +91,12 @@ export default {
       { value: 'large', label: 'Grande' },
     ]},
     { key: 'match_height', label: 'Stessa altezza', type: 'toggle' },
+    { key: 'masonry', label: 'Masonry', type: 'toggle' },
     { key: 'card_style', label: 'Stile card', type: 'select', options: [
       { value: 'default', label: 'Predefinito' },
       { value: 'hover', label: 'Effetto hover' },
       { value: 'primary', label: 'Primary' },
+      { value: 'minimal', label: 'Minimale' },
     ]},
 
     { type: 'separator', label: 'Contenuto card' },

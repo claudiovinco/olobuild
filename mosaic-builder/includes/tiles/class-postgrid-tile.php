@@ -25,6 +25,7 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
         'columns_mobile'  => '1',
         'gap'             => 'medium',
         'match_height'    => false,
+        'masonry'         => false,
         'card_style'      => 'default',
         'image_height'    => '200',
         'show_image'      => true,
@@ -161,8 +162,10 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
             'default' => 'uk-card-default',
             'hover'   => 'uk-card-default uk-card-hover',
             'primary' => 'uk-card-primary',
+            'minimal' => 'minimal',
         ];
-        $card_class = $card_style_map[ $s['card_style'] ] ?? 'uk-card-default';
+        $card_class    = $card_style_map[ $s['card_style'] ] ?? 'uk-card-default';
+        $is_minimal_card = $s['card_style'] === 'minimal';
 
         $uid          = 'olo-postgrid-' . wp_rand( 10000, 99999 );
         $image_height = absint( $s['image_height'] ) ?: 200;
@@ -190,14 +193,14 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
         ?>
         <style>
             .<?php echo $uid; ?> .olo-pg-img { transition: transform 0.5s ease, filter 0.5s ease; width: 100%; height: <?php echo $image_height; ?>px; object-fit: cover; display: block; }
-            .<?php echo $uid; ?> .uk-card:hover .olo-pg-hover-zoom { transform: scale(1.08); }
-            .<?php echo $uid; ?> .uk-card:hover .olo-pg-hover-zoom-rotate { transform: scale(1.08) rotate(2deg); }
+            .<?php echo $uid; ?> .uk-card:hover .olo-pg-hover-zoom, .<?php echo $uid; ?> .olo-card-minimal:hover .olo-pg-hover-zoom { transform: scale(1.08); }
+            .<?php echo $uid; ?> .uk-card:hover .olo-pg-hover-zoom-rotate, .<?php echo $uid; ?> .olo-card-minimal:hover .olo-pg-hover-zoom-rotate { transform: scale(1.08) rotate(2deg); }
             .<?php echo $uid; ?> .olo-pg-hover-brightness { filter: brightness(0.7); }
-            .<?php echo $uid; ?> .uk-card:hover .olo-pg-hover-brightness { filter: brightness(1); }
+            .<?php echo $uid; ?> .uk-card:hover .olo-pg-hover-brightness, .<?php echo $uid; ?> .olo-card-minimal:hover .olo-pg-hover-brightness { filter: brightness(1); }
             .<?php echo $uid; ?> .olo-pg-hover-desaturate { filter: grayscale(100%); }
-            .<?php echo $uid; ?> .uk-card:hover .olo-pg-hover-desaturate { filter: grayscale(0%); }
+            .<?php echo $uid; ?> .uk-card:hover .olo-pg-hover-desaturate, .<?php echo $uid; ?> .olo-card-minimal:hover .olo-pg-hover-desaturate { filter: grayscale(0%); }
             .<?php echo $uid; ?> .olo-pg-hover-blur-in { filter: blur(3px); }
-            .<?php echo $uid; ?> .uk-card:hover .olo-pg-hover-blur-in { filter: blur(0); }
+            .<?php echo $uid; ?> .uk-card:hover .olo-pg-hover-blur-in, .<?php echo $uid; ?> .olo-card-minimal:hover .olo-pg-hover-blur-in { filter: blur(0); }
             .<?php echo $uid; ?> .olo-pg-ribbon { position: absolute; z-index: 2; font-size: 11px; font-weight: 700; padding: 4px 12px; text-transform: uppercase; letter-spacing: 0.5px; background: <?php echo esc_attr( $ribbon_bg ); ?>; color: <?php echo esc_attr( $ribbon_color ); ?>; }
             .<?php echo $uid; ?> .olo-pg-ribbon--top-right { top: 0; right: 14px; border-radius: 0 0 4px 4px; }
             .<?php echo $uid; ?> .olo-pg-ribbon--top-left { top: 0; left: 14px; border-radius: 0 0 4px 4px; }
@@ -221,13 +224,67 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
             </div>
             <?php endif; ?>
 
-            <div class="olo-postgrid-grid uk-child-width-1-<?php echo $cols_mob; ?> uk-child-width-1-<?php echo $columns; ?>@m <?php echo esc_attr( $gap_class ); ?>" uk-grid <?php if ( ! empty( $s['match_height'] ) ) echo 'uk-height-match'; ?>>
+            <div class="olo-postgrid-grid uk-child-width-1-<?php echo $cols_mob; ?> uk-child-width-1-<?php echo $columns; ?>@m <?php echo esc_attr( $gap_class ); ?>" uk-grid<?php if ( ! empty( $s['masonry'] ) ) echo '="masonry: true"'; ?> <?php if ( ! empty( $s['match_height'] ) ) echo 'uk-height-match'; ?>>
                 <?php foreach ( $posts as $item ) : ?>
                 <div class="olo-postgrid-item"
                      <?php if ( ! empty( $item['terms'] ) ) : ?>data-terms="<?php echo esc_attr( implode( ',', $item['terms'] ) ); ?>"<?php endif; ?>
                      data-price="<?php echo esc_attr( $item['price'] ?? '0' ); ?>"
                      data-date="<?php echo esc_attr( $item['date'] ); ?>"
                      data-title="<?php echo esc_attr( $item['title'] ); ?>">
+                    <?php if ( $is_minimal_card ) : ?>
+                    <div class="olo-card-minimal">
+                        <?php if ( ! empty( $s['show_image'] ) && ! empty( $item['image'] ) ) : ?>
+                        <div class="olo-card-minimal__media" style="position:relative;overflow:hidden;">
+                            <?php if ( $s['link_style'] === 'card' ) : ?>
+                                <a href="<?php echo esc_url( $item['url'] ); ?>">
+                            <?php endif; ?>
+                            <img src="<?php echo esc_url( $item['image'] ); ?>"
+                                 alt="<?php echo esc_attr( $item['title'] ); ?>"
+                                 class="olo-card-minimal__img <?php echo esc_attr( $img_class ); ?>"
+                                 loading="lazy">
+                            <?php if ( $s['link_style'] === 'card' ) : ?>
+                                </a>
+                            <?php endif; ?>
+                            <?php if ( ! empty( $s['show_category'] ) && ! empty( $item['term_names'] ) ) : ?>
+                                <span class="olo-postgrid-badge"><?php echo esc_html( $item['term_names'][0] ); ?></span>
+                            <?php endif; ?>
+                            <?php if ( ! empty( $item['ribbon'] ) ) : ?>
+                                <span class="olo-pg-ribbon olo-pg-ribbon--<?php echo esc_attr( $ribbon_position ); ?>"><?php echo esc_html( $item['ribbon'] ); ?></span>
+                            <?php endif; ?>
+                        </div>
+                        <?php endif; ?>
+
+                        <h3 class="olo-card-minimal__title">
+                            <?php if ( $s['link_style'] === 'card' ) : ?>
+                                <a href="<?php echo esc_url( $item['url'] ); ?>" class="uk-link-reset"><?php echo esc_html( $item['title'] ); ?></a>
+                            <?php else : ?>
+                                <?php echo esc_html( $item['title'] ); ?>
+                            <?php endif; ?>
+                        </h3>
+
+                        <?php if ( ! empty( $s['show_meta'] ) ) : ?>
+                        <div class="olo-postgrid-meta">
+                            <?php echo esc_html( $item['date_fmt'] ); ?> &middot; <?php echo esc_html( $item['author'] ); ?>
+                        </div>
+                        <?php endif; ?>
+
+                        <?php if ( ! empty( $s['show_excerpt'] ) && ! empty( $item['excerpt'] ) ) : ?>
+                        <p class="olo-card-minimal__text"><?php echo wp_kses_post( $item['excerpt'] ); ?></p>
+                        <?php endif; ?>
+
+                        <?php if ( ! empty( $s['show_price'] ) && isset( $item['price'] ) ) : ?>
+                        <div class="olo-postgrid-price">
+                            <?php echo esc_html( $s['price_prefix'] . $item['price'] . $s['price_suffix'] ); ?>
+                        </div>
+                        <?php endif; ?>
+
+                        <?php if ( $s['link_style'] === 'button' ) : ?>
+                            <a href="<?php echo esc_url( $item['url'] ); ?>" class="uk-button uk-button-primary uk-button-small"><?php echo esc_html( $s['link_text'] ); ?></a>
+                        <?php elseif ( $s['link_style'] === 'text' ) : ?>
+                            <a href="<?php echo esc_url( $item['url'] ); ?>" class="olo-postgrid-link"><?php echo esc_html( $s['link_text'] ); ?> &rarr;</a>
+                        <?php endif; ?>
+                    </div>
+                    <?php else : ?>
                     <div class="uk-card <?php echo esc_attr( $card_class ); ?>">
                         <?php if ( ! empty( $s['show_image'] ) && ! empty( $item['image'] ) ) : ?>
                         <div class="uk-card-media-top" style="position:relative;overflow:hidden;">
@@ -282,6 +339,7 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
                             <?php endif; ?>
                         </div>
                     </div>
+                    <?php endif; ?>
                 </div>
                 <?php endforeach; ?>
             </div>
@@ -326,6 +384,15 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
                         </option>
                     <?php endforeach; ?>
                 </select>
+            <?php elseif ( $style === 'minimal' ) : ?>
+                <button class="olo-postgrid-pill olo-postgrid-pill--minimal olo-postgrid-pill-active" data-filter="">
+                    <?php esc_html_e( 'Tutti', 'olobuilder' ); ?>
+                </button>
+                <?php foreach ( $terms as $term ) : ?>
+                    <button class="olo-postgrid-pill olo-postgrid-pill--minimal" data-filter="<?php echo esc_attr( $term['slug'] ); ?>">
+                        <?php echo esc_html( $term['name'] ); ?>
+                    </button>
+                <?php endforeach; ?>
             <?php else : ?>
                 <button class="olo-postgrid-pill olo-postgrid-pill-active" data-filter="">
                     <?php esc_html_e( 'Tutti', 'olobuilder' ); ?>

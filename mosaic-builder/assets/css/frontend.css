@@ -678,6 +678,103 @@ header.olo-site-header.olo-header-overlay + main > .wp-block-group:first-child {
   transition: opacity 0.3s ease;
 }
 
+/* ── PostGrid: Minimal filter style ── */
+.olo-postgrid-pill--minimal {
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  padding: 6px 2px;
+  font-size: 0.78em;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #555;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+}
+.olo-postgrid-pill--minimal:hover {
+  background: transparent;
+  color: #111;
+  border-bottom-color: #aaa;
+}
+.olo-postgrid-pill--minimal.olo-postgrid-pill-active {
+  background: transparent;
+  color: #111;
+  border-bottom-color: currentColor;
+}
+.olo-postgrid-filters:has(.olo-postgrid-pill--minimal) {
+  gap: 16px;
+}
+
+/* ── Grid tile: Minimal filter style ── */
+.olo-filter-minimal {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 20px;
+  align-items: center;
+}
+.olo-filter-minimal__btn {
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  padding: 6px 2px;
+  font-size: 0.78em;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #555;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+}
+.olo-filter-minimal__btn:hover {
+  color: #111;
+  border-bottom-color: #aaa;
+}
+.olo-filter-minimal__btn--active,
+.uk-active > .olo-filter-minimal__btn {
+  color: #111;
+  border-bottom-color: currentColor;
+}
+
+/* ── Minimal card style (Grid + PostGrid) ── */
+.olo-card-minimal {
+  background: none;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+}
+.olo-card-minimal__media {
+  overflow: hidden;
+}
+.olo-card-minimal__img {
+  width: 100%;
+  display: block;
+  border-radius: 6px;
+  object-fit: cover;
+}
+.olo-card-minimal__title {
+  font-size: 1em;
+  font-weight: 700;
+  margin: 10px 0 4px;
+  line-height: 1.3;
+}
+.olo-card-minimal__title a {
+  color: inherit;
+  text-decoration: none;
+}
+.olo-card-minimal__title a:hover {
+  opacity: 0.75;
+}
+.olo-card-minimal__text {
+  font-size: 0.88em;
+  color: #666;
+  line-height: 1.5;
+  margin: 0;
+}
+
 /* Empty state */
 .olo-postgrid-empty {
   text-align: center;

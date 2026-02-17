@@ -16,10 +16,12 @@ class Olo_Grid_Tile extends Olo_Tile_Base {
             [ 'title' => 'Item 2', 'content' => 'Description for item two.', 'image' => '', 'tag' => 'all' ],
             [ 'title' => 'Item 3', 'content' => 'Description for item three.', 'image' => '', 'tag' => 'all' ],
         ],
-        'columns'     => '3',
-        'gap'         => 'default',
-        'show_filter' => false,
-        'masonry'     => false,
+        'columns'      => '3',
+        'gap'          => 'default',
+        'show_filter'  => false,
+        'filter_style' => 'pills',
+        'masonry'      => false,
+        'card_style'   => 'default',
     ];
 
     public function get_controls() {
@@ -75,12 +77,21 @@ class Olo_Grid_Tile extends Olo_Tile_Base {
         <div class="olo-grid <?php echo esc_attr( $uid ); ?>"<?php if ( ! empty( $s['show_filter'] ) && ! empty( $tags ) ) : ?> uk-filter="target: .js-filter"<?php endif; ?>>
 
             <?php if ( ! empty( $s['show_filter'] ) && ! empty( $tags ) ) : ?>
-            <ul class="uk-subnav uk-subnav-pill">
-                <li class="uk-active" uk-filter-control><a href="#">All</a></li>
-                <?php foreach ( $tags as $tag ) : ?>
-                <li uk-filter-control=".tag-<?php echo esc_attr( $tag ); ?>"><a href="#"><?php echo esc_html( ucfirst( $tag ) ); ?></a></li>
-                <?php endforeach; ?>
-            </ul>
+                <?php if ( $s['filter_style'] === 'minimal' ) : ?>
+                <div class="olo-filter-minimal">
+                    <button class="olo-filter-minimal__btn olo-filter-minimal__btn--active" uk-filter-control>All</button>
+                    <?php foreach ( $tags as $tag ) : ?>
+                    <button class="olo-filter-minimal__btn" uk-filter-control=".tag-<?php echo esc_attr( $tag ); ?>"><?php echo esc_html( ucfirst( $tag ) ); ?></button>
+                    <?php endforeach; ?>
+                </div>
+                <?php else : ?>
+                <ul class="uk-subnav uk-subnav-pill">
+                    <li class="uk-active" uk-filter-control><a href="#">All</a></li>
+                    <?php foreach ( $tags as $tag ) : ?>
+                    <li uk-filter-control=".tag-<?php echo esc_attr( $tag ); ?>"><a href="#"><?php echo esc_html( ucfirst( $tag ) ); ?></a></li>
+                    <?php endforeach; ?>
+                </ul>
+                <?php endif; ?>
             <?php endif; ?>
 
             <div class="js-filter uk-child-width-1-<?php echo esc_attr( $columns ); ?>@m <?php echo esc_attr( $gap_class ); ?>" uk-grid<?php if ( $masonry_attr ) : ?>="<?php echo esc_attr( $masonry_attr ); ?>"<?php endif; ?>>
@@ -91,6 +102,15 @@ class Olo_Grid_Tile extends Olo_Tile_Base {
                     }
                 ?>
                 <div<?php if ( $tag_class ) : ?> class="<?php echo esc_attr( $tag_class ); ?>"<?php endif; ?>>
+                    <?php if ( $s['card_style'] === 'minimal' ) : ?>
+                    <div class="olo-card-minimal">
+                        <?php if ( ! empty( $item['image'] ) ) : ?>
+                        <img class="olo-card-minimal__img" src="<?php echo esc_url( $item['image'] ); ?>" alt="<?php echo esc_attr( $item['title'] ); ?>">
+                        <?php endif; ?>
+                        <h3 class="olo-card-minimal__title"><?php echo wp_kses_post( $item['title'] ); ?></h3>
+                        <p class="olo-card-minimal__text"><?php echo wp_kses_post( $item['content'] ); ?></p>
+                    </div>
+                    <?php else : ?>
                     <div class="uk-card uk-card-default uk-card-body">
                         <?php if ( ! empty( $item['image'] ) ) : ?>
                         <div class="uk-card-media-top">
@@ -100,6 +120,7 @@ class Olo_Grid_Tile extends Olo_Tile_Base {
                         <h3 class="uk-card-title"><?php echo wp_kses_post( $item['title'] ); ?></h3>
                         <p><?php echo wp_kses_post( $item['content'] ); ?></p>
                     </div>
+                    <?php endif; ?>
                 </div>
                 <?php endforeach; ?>
             </div>

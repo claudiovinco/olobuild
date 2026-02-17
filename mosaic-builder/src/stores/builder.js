@@ -1,7 +1,9 @@
 import { defineStore } from 'pinia';
 import { useTilesStore as useTilesStoreRef } from './tiles';
 
-const mosaicData = window.mosaicData || {};
+function getOloData() {
+  return window.oloData || {};
+}
 
 export const useBuilderStore = defineStore('builder', {
   state: () => ({
@@ -51,9 +53,10 @@ export const useBuilderStore = defineStore('builder', {
 
   actions: {
     async loadTemplate(id) {
+      const olo = getOloData();
       try {
-        const res = await fetch(`${mosaicData.restUrl}/templates/${id}`, {
-          headers: { 'X-WP-Nonce': mosaicData.nonce },
+        const res = await fetch(`${olo.restUrl}/templates/${id}`, {
+          headers: { 'X-WP-Nonce': olo.nonce },
         });
         if (!res.ok) throw new Error('Failed to load template');
         const tpl = await res.json();
@@ -70,19 +73,20 @@ export const useBuilderStore = defineStore('builder', {
       if (!this.currentTemplate || this.isSaving) return;
 
       this.isSaving = true;
+      const olo = getOloData();
       try {
         const tilesStore = useTilesStoreRef();
 
         const method = this.currentTemplate.id ? 'PUT' : 'POST';
         const url = this.currentTemplate.id
-          ? `${mosaicData.restUrl}/templates/${this.currentTemplate.id}`
-          : `${mosaicData.restUrl}/templates`;
+          ? `${olo.restUrl}/templates/${this.currentTemplate.id}`
+          : `${olo.restUrl}/templates`;
 
         const res = await fetch(url, {
           method,
           headers: {
             'Content-Type': 'application/json',
-            'X-WP-Nonce': mosaicData.nonce,
+            'X-WP-Nonce': olo.nonce,
           },
           body: JSON.stringify({
             title: this.currentTemplate.title || 'Untitled',

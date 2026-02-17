@@ -5,7 +5,9 @@
       <span
         v-for="tag in uniqueTags"
         :key="tag"
-        class="mb-px-2 mb-py-0.5 mb-text-xs mb-rounded mb-bg-gray-600 mb-text-gray-300"
+        :class="s.filter_style === 'minimal'
+          ? 'mb-px-1 mb-py-0.5 mb-text-xs mb-text-gray-300 mb-uppercase mb-tracking-wide mb-border-b mb-border-gray-500'
+          : 'mb-px-2 mb-py-0.5 mb-text-xs mb-rounded mb-bg-gray-600 mb-text-gray-300'"
       >{{ tag }}</span>
     </div>
     <!-- Grid -->
@@ -16,10 +18,12 @@
       <div
         v-for="(item, i) in items"
         :key="item.id || i"
-        class="mb-border mb-border-gray-600 mb-rounded mb-overflow-hidden"
+        :class="s.card_style === 'minimal'
+          ? 'mb-overflow-hidden'
+          : 'mb-border mb-border-gray-600 mb-rounded mb-overflow-hidden'"
       >
-        <div v-if="item.image" class="mb-h-16 mb-bg-gray-700 mb-flex mb-items-center mb-justify-center mb-text-gray-500 mb-text-xs">IMG</div>
-        <div class="mb-p-2">
+        <div v-if="item.image" class="mb-h-16 mb-bg-gray-700 mb-flex mb-items-center mb-justify-center mb-text-gray-500 mb-text-xs" :class="s.card_style === 'minimal' ? 'mb-rounded' : ''">IMG</div>
+        <div :class="s.card_style === 'minimal' ? 'mb-pt-1' : 'mb-p-2'">
           <div class="mb-text-sm mb-font-medium mb-text-gray-200">{{ item.title }}</div>
           <div class="mb-text-xs mb-text-gray-400 mb-mt-1">{{ item.content }}</div>
         </div>

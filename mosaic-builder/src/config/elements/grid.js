@@ -12,7 +12,9 @@ export default {
     columns: '3',
     gap: 'default',
     show_filter: false,
+    filter_style: 'pills',
     masonry: false,
+    card_style: 'default',
   },
   fields: [
     { key: 'items', label: 'Elementi', type: 'content-items', supportsDynamic: true,
@@ -40,6 +42,14 @@ export default {
       { value: 'large', label: 'Grande' },
     ]},
     { key: 'show_filter', label: 'Mostra filtro', type: 'toggle' },
+    { key: 'filter_style', label: 'Stile filtro', type: 'select', options: [
+      { value: 'pills', label: 'Pills' },
+      { value: 'minimal', label: 'Minimale' },
+    ], condition: { field: 'show_filter', value: true } },
     { key: 'masonry', label: 'Masonry', type: 'toggle' },
+    { key: 'card_style', label: 'Stile card', type: 'select', options: [
+      { value: 'default', label: 'Predefinito' },
+      { value: 'minimal', label: 'Minimale' },
+    ]},
   ],
 };
