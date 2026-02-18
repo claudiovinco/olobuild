@@ -44,6 +44,7 @@ import TotopTile from './TotopTile.vue';
 import FragmentTile from './FragmentTile.vue';
 import GridTile from './GridTile.vue';
 import SwitcherTile from './SwitcherTile.vue';
+import SwitcherPanelTile from './SwitcherPanelTile.vue';
 import NavTile from './NavTile.vue';
 import SubnavTile from './SubnavTile.vue';
 import PanelSliderTile from './PanelSliderTile.vue';
@@ -101,6 +102,7 @@ const tileComponents = {
   fragment: FragmentTile,
   grid: GridTile,
   switcher: SwitcherTile,
+  switcherpanel: SwitcherPanelTile,
   nav: NavTile,
   subnav: SubnavTile,
   panelslider: PanelSliderTile,

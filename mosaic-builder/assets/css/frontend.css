@@ -700,8 +700,8 @@ header.olo-site-header.olo-header-overlay + main > .wp-block-group:first-child {
 }
 .olo-postgrid-pill--minimal.olo-postgrid-pill-active {
   background: transparent;
-  color: #111;
-  border-bottom-color: currentColor;
+  color: var(--olo-color-primary, #6366F1);
+  border-bottom-color: var(--olo-color-primary, #6366F1);
 }
 .olo-postgrid-filters:has(.olo-postgrid-pill--minimal) {
   gap: 16px;
@@ -715,6 +715,10 @@ header.olo-site-header.olo-header-overlay + main > .wp-block-group:first-child {
   margin-bottom: 20px;
   align-items: center;
 }
+
+/* ── Filter alignment (Grid + PostGrid) ── */
+.olo-filter-center { justify-content: center !important; width: 100%; }
+.olo-filter-right { justify-content: flex-end !important; width: 100%; }
 .olo-filter-minimal__btn {
   border: none;
   border-radius: 0;
@@ -735,8 +739,8 @@ header.olo-site-header.olo-header-overlay + main > .wp-block-group:first-child {
 }
 .olo-filter-minimal__btn--active,
 .uk-active > .olo-filter-minimal__btn {
-  color: #111;
-  border-bottom-color: currentColor;
+  color: var(--olo-color-primary, #6366F1);
+  border-bottom-color: var(--olo-color-primary, #6366F1);
 }
 
 /* ── Minimal card style (Grid + PostGrid) ── */
@@ -752,7 +756,6 @@ header.olo-site-header.olo-header-overlay + main > .wp-block-group:first-child {
 .olo-card-minimal__img {
   width: 100%;
   display: block;
-  border-radius: 6px;
   object-fit: cover;
 }
 .olo-card-minimal__title {
@@ -781,4 +784,139 @@ header.olo-site-header.olo-header-overlay + main > .wp-block-group:first-child {
   padding: 40px 20px;
   color: #999;
   font-size: 0.95em;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Switcher Panel
+   ═══════════════════════════════════════════════════════════ */
+
+.olo-switcherpanel {
+  position: relative;
+}
+
+/* Hero */
+.olo-sp-hero {
+  position: relative;
+  overflow: hidden;
+  background: #1a1a1a;
+}
+.olo-sp-hero__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.olo-sp-hero__placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #374151, #1f2937);
+}
+
+/* Navigation — positioned at bottom of hero */
+.olo-sp-nav {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0 30px;
+  gap: 0;
+  z-index: 2;
+}
+.olo-sp-nav > li > a {
+  display: inline-block;
+  padding: 12px 18px;
+  font-size: 0.8em;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.55);
+  text-decoration: none;
+  transition: color 0.2s;
+  position: relative;
+}
+.olo-sp-nav > li > a:hover {
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+}
+.olo-sp-nav > li.uk-active > a {
+  color: #fff;
+}
+
+/* Minimal nav style */
+.olo-sp-nav--minimal > li > a {
+  border-bottom: 2px solid transparent;
+}
+.olo-sp-nav--minimal > li.uk-active > a {
+  border-bottom-color: #fff;
+}
+
+/* UIkit subnav overrides inside hero */
+.olo-sp-hero .uk-subnav {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  margin: 0;
+  padding: 0 30px;
+  z-index: 2;
+}
+.olo-sp-hero .uk-subnav > li > a {
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 0.8em;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 12px 18px;
+}
+.olo-sp-hero .uk-subnav > li.uk-active > a {
+  color: #fff;
+}
+.olo-sp-hero .uk-subnav-pill > li.uk-active > a {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Panels */
+.olo-sp-panels {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.olo-sp-panel {
+  align-items: center;
+}
+.olo-sp-panel-body {
+  padding: 40px;
+}
+.olo-sp-panel__title {
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+.olo-sp-panel__text {
+  font-size: 0.95em;
+  line-height: 1.7;
+  color: #555;
+  margin-bottom: 20px;
+}
+.olo-sp-panel__img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+/* Responsive */
+@media (max-width: 639px) {
+  .olo-sp-nav,
+  .olo-sp-hero .uk-subnav {
+    padding: 0 12px;
+  }
+  .olo-sp-nav > li > a,
+  .olo-sp-hero .uk-subnav > li > a {
+    padding: 8px 10px;
+    font-size: 0.7em;
+  }
+  .olo-sp-panel-body {
+    padding: 20px;
+  }
 }

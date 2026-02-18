@@ -19,6 +19,7 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
         'taxonomy'        => '',
         'show_filters'    => false,
         'filter_style'    => 'pills',
+        'filter_align'    => 'left',
         'show_sort'       => false,
         'sort_options'    => 'date|title',
         'columns'         => '3',
@@ -27,7 +28,10 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
         'match_height'    => false,
         'masonry'         => false,
         'card_style'      => 'default',
+        'card_primary_bg' => '#6366F1',
         'image_height'    => '200',
+        'image_radius'    => '0',
+        'card_radius'     => '4',
         'show_image'      => true,
         'show_category'   => true,
         'show_excerpt'    => true,
@@ -169,6 +173,8 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
 
         $uid          = 'olo-postgrid-' . wp_rand( 10000, 99999 );
         $image_height = absint( $s['image_height'] ) ?: 200;
+        $image_radius = absint( $s['image_radius'] ?? 0 );
+        $card_radius  = absint( $s['card_radius'] ?? 4 );
 
         // Sort config for JS
         $sort_enabled = ! empty( $s['show_sort'] );
@@ -192,7 +198,11 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
         ob_start();
         ?>
         <style>
-            .<?php echo $uid; ?> .olo-pg-img { transition: transform 0.5s ease, filter 0.5s ease; width: 100%; height: <?php echo $image_height; ?>px; object-fit: cover; display: block; }
+            .<?php echo $uid; ?> .olo-pg-img { transition: transform 0.5s ease, filter 0.5s ease; width: 100%; height: <?php echo $image_height; ?>px; object-fit: cover; display: block; border-radius: <?php echo $image_radius; ?>px; }
+            .<?php echo $uid; ?> .olo-card-minimal__img { border-radius: <?php echo $image_radius; ?>px; }
+            .<?php echo $uid; ?> .uk-card-media-top { border-radius: <?php echo $image_radius; ?>px <?php echo $image_radius; ?>px 0 0; overflow: hidden; }
+            .<?php echo $uid; ?> .uk-card { border-radius: <?php echo $card_radius; ?>px; overflow: hidden; }
+            .<?php echo $uid; ?> .olo-card-minimal { border-radius: <?php echo $card_radius; ?>px; overflow: hidden; }
             .<?php echo $uid; ?> .uk-card:hover .olo-pg-hover-zoom, .<?php echo $uid; ?> .olo-card-minimal:hover .olo-pg-hover-zoom { transform: scale(1.08); }
             .<?php echo $uid; ?> .uk-card:hover .olo-pg-hover-zoom-rotate, .<?php echo $uid; ?> .olo-card-minimal:hover .olo-pg-hover-zoom-rotate { transform: scale(1.08) rotate(2deg); }
             .<?php echo $uid; ?> .olo-pg-hover-brightness { filter: brightness(0.7); }
@@ -208,6 +218,18 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .olo-postgrid-item > .uk-card { height: 100%; display: flex; flex-direction: column; }
             .<?php echo $uid; ?> .olo-postgrid-item > .uk-card > .uk-card-body { flex: 1; }
             <?php endif; ?>
+            <?php if ( $s['card_style'] === 'primary' ) :
+                $primary_bg = esc_attr( $s['card_primary_bg'] ?? '#6366F1' );
+            ?>
+            .<?php echo $uid; ?> .uk-card-primary { background-color: <?php echo $primary_bg; ?> !important; }
+            .<?php echo $uid; ?> .uk-card-primary .uk-card-title,
+            .<?php echo $uid; ?> .uk-card-primary .uk-card-body,
+            .<?php echo $uid; ?> .uk-card-primary .olo-postgrid-meta,
+            .<?php echo $uid; ?> .uk-card-primary .olo-postgrid-excerpt,
+            .<?php echo $uid; ?> .uk-card-primary .olo-postgrid-price,
+            .<?php echo $uid; ?> .uk-card-primary .olo-postgrid-link { color: #fff !important; }
+            .<?php echo $uid; ?> .uk-card-primary .uk-button-primary { background: rgba(255,255,255,0.2); border-color: #fff; }
+            <?php endif; ?>
         </style>
         <div class="olo-postgrid <?php echo $uid; ?>" id="<?php echo esc_attr( $uid ); ?>"
              data-postgrid-config="<?php echo esc_attr( wp_json_encode( $config ) ); ?>">
@@ -215,7 +237,7 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
             <?php if ( ! empty( $terms ) || $sort_enabled ) : ?>
             <div class="olo-postgrid-toolbar">
                 <?php if ( ! empty( $terms ) ) : ?>
-                    <?php $this->render_filters( $terms, $s['filter_style'], $uid ); ?>
+                    <?php $this->render_filters( $terms, $s['filter_style'], $uid, $s['filter_align'] ?? 'left' ); ?>
                 <?php endif; ?>
 
                 <?php if ( $sort_enabled ) : ?>
@@ -372,9 +394,10 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
         return $result;
     }
 
-    private function render_filters( $terms, $style, $grid_id ) {
+    private function render_filters( $terms, $style, $grid_id, $align = 'left' ) {
+        $fa_cls = $align === 'center' ? ' olo-filter-center' : ( $align === 'right' ? ' olo-filter-right' : '' );
         ?>
-        <div class="olo-postgrid-filters" data-postgrid-target="<?php echo esc_attr( $grid_id ); ?>">
+        <div class="olo-postgrid-filters<?php echo $fa_cls; ?>" data-postgrid-target="<?php echo esc_attr( $grid_id ); ?>">
             <?php if ( $style === 'dropdown' ) : ?>
                 <select class="olo-postgrid-filter-select uk-select" data-postgrid-filter-select>
                     <option value=""><?php esc_html_e( 'Tutti', 'olobuilder' ); ?></option>

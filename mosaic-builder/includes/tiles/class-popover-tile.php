@@ -11,53 +11,131 @@ class Olo_Popover_Tile extends Olo_Tile_Base {
     protected $icon     = 'dashicons-location-alt';
     protected $category = 'content';
     protected $defaults = [
-        'image'        => '',
-        'markers'      => [
-            [ 'id' => 'mk-1', 'x' => 25, 'y' => 30, 'title' => 'Point 1', 'content' => 'Description...' ],
-            [ 'id' => 'mk-2', 'x' => 70, 'y' => 60, 'title' => 'Point 2', 'content' => 'Description...' ],
+        'image'              => '',
+        'markers'            => [
+            [ 'id' => 'mk-1', 'x' => 25, 'y' => 30, 'title' => 'Point 1', 'content' => 'Description...', 'image' => '' ],
+            [ 'id' => 'mk-2', 'x' => 70, 'y' => 60, 'title' => 'Point 2', 'content' => 'Description...', 'image' => '' ],
         ],
-        'image_alt'    => '',
-        'marker_color' => '#6366F1',
+        'image_alt'          => '',
+        'image_height'       => '0',
+        'marker_color'       => '#6366F1',
+        'popup_bg'           => '#ffffff',
+        'popup_color'        => '#333333',
+        'popup_radius'       => '8',
+        'popup_img_height'   => '120',
+        'popup_hover_effect' => 'none',
+        'popup_hover_color'  => '#6366F1',
     ];
 
     public function get_controls() {
-        return [
-            [ 'key' => 'image',        'type' => 'image',  'label' => 'Image' ],
-            [ 'key' => 'markers',      'type' => 'panels', 'label' => 'Markers' ],
-            [ 'key' => 'image_alt',    'type' => 'text',   'label' => 'Image Alt Text' ],
-            [ 'key' => 'marker_color', 'type' => 'color',  'label' => 'Marker Color' ],
-        ];
+        return [];
     }
 
     public function render( $settings ) {
         $s = wp_parse_args( $settings, $this->defaults );
 
-        $markers = is_array( $s['markers'] ) ? $s['markers'] : [];
-        $color   = esc_attr( $s['marker_color'] ?: '#6366F1' );
+        $markers          = is_array( $s['markers'] ) ? $s['markers'] : [];
+        $color            = esc_attr( $s['marker_color'] ?: '#6366F1' );
+        $image_height     = absint( $s['image_height'] ?? 0 );
+        $popup_bg         = esc_attr( $s['popup_bg'] ?? '#ffffff' );
+        $popup_color      = esc_attr( $s['popup_color'] ?? '#333333' );
+        $popup_radius     = absint( $s['popup_radius'] ?? 8 );
+        $popup_img_height = absint( $s['popup_img_height'] ?? 120 );
+        $hover_effect     = $s['popup_hover_effect'] ?? 'none';
+        $hover_color      = esc_attr( $s['popup_hover_color'] ?? '#6366F1' );
+
+        $uid = 'olo-pop-' . wp_rand( 10000, 99999 );
+
+        // Image style
+        $img_style = 'width:100%;display:block;';
+        if ( $image_height > 0 ) {
+            $img_style .= 'height:' . $image_height . 'px;object-fit:cover;';
+        }
+
+        // Popup image top radius
+        $img_top_radius = $popup_radius > 0 ? $popup_radius . 'px ' . $popup_radius . 'px 0 0' : '0';
 
         ob_start();
         ?>
-        <div class="olo-popover uk-inline" style="width:100%;">
+        <style>
+            .<?php echo $uid; ?> .olo-popover-drop {
+                background: <?php echo $popup_bg; ?>;
+                color: <?php echo $popup_color; ?>;
+                border-radius: <?php echo $popup_radius; ?>px;
+                box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+                overflow: hidden;
+                min-width: 240px;
+                max-width: 320px;
+            }
+            .<?php echo $uid; ?> .olo-popover-drop h4 { color: <?php echo $popup_color; ?>; }
+            .<?php echo $uid; ?> .olo-popover-drop__body { padding: 16px 20px; }
+            .<?php echo $uid; ?> .olo-popover-drop__media {
+                position: relative;
+                overflow: hidden;
+                height: <?php echo $popup_img_height; ?>px;
+            }
+            .<?php echo $uid; ?> .olo-popover-drop__img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                display: block;
+                transition: transform 0.5s ease, filter 0.5s ease;
+            }
+            <?php if ( $hover_effect === 'zoom' ) : ?>
+            .<?php echo $uid; ?> .olo-popover-drop:hover .olo-popover-drop__img { transform: scale(1.08); }
+            <?php elseif ( $hover_effect === 'zoom-rotate' ) : ?>
+            .<?php echo $uid; ?> .olo-popover-drop:hover .olo-popover-drop__img { transform: scale(1.08) rotate(2deg); }
+            <?php elseif ( $hover_effect === 'brightness' ) : ?>
+            .<?php echo $uid; ?> .olo-popover-drop__img { filter: brightness(0.7); }
+            .<?php echo $uid; ?> .olo-popover-drop:hover .olo-popover-drop__img { filter: brightness(1); }
+            <?php elseif ( $hover_effect === 'desaturate' ) : ?>
+            .<?php echo $uid; ?> .olo-popover-drop__img { filter: grayscale(100%); }
+            .<?php echo $uid; ?> .olo-popover-drop:hover .olo-popover-drop__img { filter: grayscale(0%); }
+            <?php elseif ( $hover_effect === 'blur-in' ) : ?>
+            .<?php echo $uid; ?> .olo-popover-drop__img { filter: blur(3px); }
+            .<?php echo $uid; ?> .olo-popover-drop:hover .olo-popover-drop__img { filter: blur(0); }
+            <?php elseif ( $hover_effect === 'color-overlay' ) : ?>
+            .<?php echo $uid; ?> .olo-popover-drop__media::after {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background: <?php echo $hover_color; ?>;
+                opacity: 0;
+                transition: opacity 0.4s ease;
+                mix-blend-mode: multiply;
+                pointer-events: none;
+            }
+            .<?php echo $uid; ?> .olo-popover-drop:hover .olo-popover-drop__media::after { opacity: 0.45; }
+            <?php endif; ?>
+        </style>
+        <div class="olo-popover uk-inline <?php echo $uid; ?>" style="width:100%;">
             <?php if ( ! empty( $s['image'] ) ) : ?>
-                <img src="<?php echo esc_url( $s['image'] ); ?>" alt="<?php echo esc_attr( $s['image_alt'] ); ?>" style="width:100%;display:block;">
+                <img src="<?php echo esc_url( $s['image'] ); ?>" alt="<?php echo esc_attr( $s['image_alt'] ); ?>" style="<?php echo esc_attr( $img_style ); ?>">
             <?php else : ?>
-                <div style="width:100%;padding-bottom:56.25%;background:#1f2937;"></div>
+                <div style="width:100%;<?php echo $image_height > 0 ? 'height:' . $image_height . 'px;' : 'padding-bottom:56.25%;'; ?>background:#1f2937;"></div>
             <?php endif; ?>
 
             <?php foreach ( $markers as $i => $marker ) :
                 $x = floatval( $marker['x'] ?? 50 );
                 $y = floatval( $marker['y'] ?? 50 );
-                $marker_id = 'olo-popover-drop-' . wp_unique_id();
+                $marker_img = $marker['image'] ?? '';
             ?>
                 <a class="uk-position-absolute" href="#" style="left:<?php echo esc_attr( $x ); ?>%;top:<?php echo esc_attr( $y ); ?>%;transform:translate(-50%,-50%);width:20px;height:20px;border-radius:50%;background:<?php echo $color; ?>;display:block;box-shadow:0 0 0 3px rgba(255,255,255,0.4);" aria-label="<?php echo esc_attr( $marker['title'] ?? '' ); ?>"></a>
                 <div uk-drop="mode: click; pos: top-center">
-                    <div class="uk-card uk-card-body uk-card-default uk-card-small uk-border-rounded">
-                        <?php if ( ! empty( $marker['title'] ) ) : ?>
-                            <h4 class="uk-margin-small-bottom"><?php echo esc_html( $marker['title'] ); ?></h4>
+                    <div class="olo-popover-drop">
+                        <?php if ( ! empty( $marker_img ) ) : ?>
+                        <div class="olo-popover-drop__media">
+                            <img src="<?php echo esc_url( $marker_img ); ?>" alt="<?php echo esc_attr( $marker['title'] ?? '' ); ?>" class="olo-popover-drop__img" loading="lazy">
+                        </div>
                         <?php endif; ?>
-                        <?php if ( ! empty( $marker['content'] ) ) : ?>
-                            <p class="uk-margin-remove"><?php echo wp_kses_post( $marker['content'] ); ?></p>
-                        <?php endif; ?>
+                        <div class="olo-popover-drop__body">
+                            <?php if ( ! empty( $marker['title'] ) ) : ?>
+                                <h4 class="uk-margin-small-bottom"><?php echo esc_html( $marker['title'] ); ?></h4>
+                            <?php endif; ?>
+                            <?php if ( ! empty( $marker['content'] ) ) : ?>
+                                <p class="uk-margin-remove"><?php echo wp_kses_post( $marker['content'] ); ?></p>
+                            <?php endif; ?>
+                        </div>
                     </div>
                 </div>
             <?php endforeach; ?>

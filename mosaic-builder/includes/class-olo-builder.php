@@ -213,6 +213,7 @@ class Olo_Builder {
         require_once OLO_PATH . 'includes/tiles/class-fragment-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-grid-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-switcher-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-switcherpanel-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-nav-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-subnav-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-panelslider-tile.php';
@@ -266,6 +267,7 @@ class Olo_Builder {
         $manager->register_tile( new Olo_Fragment_Tile() );
         $manager->register_tile( new Olo_Grid_Tile() );
         $manager->register_tile( new Olo_Switcher_Tile() );
+        $manager->register_tile( new Olo_SwitcherPanel_Tile() );
         $manager->register_tile( new Olo_Nav_Tile() );
         $manager->register_tile( new Olo_Subnav_Tile() );
         $manager->register_tile( new Olo_PanelSlider_Tile() );

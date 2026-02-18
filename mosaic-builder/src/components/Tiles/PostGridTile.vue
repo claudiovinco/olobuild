@@ -1,7 +1,7 @@
 <template>
   <div class="olo-postgrid-preview">
     <div class="mpg-grid" :style="gridStyle">
-      <div v-for="n in cardCount" :key="n" class="mpg-card" :class="cardClasses">
+      <div v-for="n in cardCount" :key="n" class="mpg-card" :class="cardClasses" :style="cardStyle">
         <!-- Image area -->
         <div v-if="settings.show_image !== false" class="mpg-img-wrap" :style="{ height: imgHeight + 'px' }">
           <div :class="['mpg-img-bg', hoverImgClass]"></div>
@@ -65,6 +65,15 @@ const cardClasses = computed(() => {
   return ['mpg-card--' + cs];
 });
 
+const cardStyle = computed(() => {
+  const style = { borderRadius: (parseInt(props.settings.card_radius) || 4) + 'px' };
+  if ((props.settings.card_style || 'default') === 'primary') {
+    style.background = props.settings.card_primary_bg || '#6366F1';
+    style.borderColor = props.settings.card_primary_bg || '#6366F1';
+  }
+  return style;
+});
+
 const hoverImgClass = computed(() => {
   const fx = props.settings.hover_effect || 'none';
   return fx !== 'none' ? 'mpg-hover-' + fx : '';
@@ -80,7 +89,6 @@ const hoverImgClass = computed(() => {
 }
 .mpg-card {
   background: #fff;
-  border-radius: 4px;
   overflow: hidden;
   border: 1px solid #e5e7eb;
 }
@@ -90,16 +98,20 @@ const hoverImgClass = computed(() => {
 .mpg-card--hover:hover {
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
-.mpg-card--primary {
-  background: var(--olo-color-primary, #6366F1);
-  border-color: var(--olo-color-primary, #6366F1);
-}
 .mpg-card--primary .mpg-title,
 .mpg-card--primary .mpg-meta,
-.mpg-card--primary .mpg-excerpt {
-  color: #e0e7ff;
+.mpg-card--primary .mpg-excerpt,
+.mpg-card--primary .mpg-price {
+  color: rgba(255, 255, 255, 0.85);
 }
 .mpg-card--primary .mpg-title {
+  color: #fff;
+}
+.mpg-card--primary .mpg-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid #fff;
+}
+.mpg-card--primary .mpg-link {
   color: #fff;
 }
 

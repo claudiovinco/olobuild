@@ -20,6 +20,7 @@ class Olo_Grid_Tile extends Olo_Tile_Base {
         'gap'          => 'default',
         'show_filter'  => false,
         'filter_style' => 'pills',
+        'filter_align' => 'left',
         'masonry'      => false,
         'card_style'   => 'default',
     ];
@@ -76,16 +77,19 @@ class Olo_Grid_Tile extends Olo_Tile_Base {
         ?>
         <div class="olo-grid <?php echo esc_attr( $uid ); ?>"<?php if ( ! empty( $s['show_filter'] ) && ! empty( $tags ) ) : ?> uk-filter="target: .js-filter"<?php endif; ?>>
 
-            <?php if ( ! empty( $s['show_filter'] ) && ! empty( $tags ) ) : ?>
+            <?php if ( ! empty( $s['show_filter'] ) && ! empty( $tags ) ) :
+                $fa = $s['filter_align'] ?? 'left';
+                $fa_cls = $fa === 'center' ? ' olo-filter-center' : ( $fa === 'right' ? ' olo-filter-right' : '' );
+            ?>
                 <?php if ( $s['filter_style'] === 'minimal' ) : ?>
-                <div class="olo-filter-minimal">
+                <div class="olo-filter-minimal<?php echo $fa_cls; ?>">
                     <button class="olo-filter-minimal__btn olo-filter-minimal__btn--active" uk-filter-control>All</button>
                     <?php foreach ( $tags as $tag ) : ?>
                     <button class="olo-filter-minimal__btn" uk-filter-control=".tag-<?php echo esc_attr( $tag ); ?>"><?php echo esc_html( ucfirst( $tag ) ); ?></button>
                     <?php endforeach; ?>
                 </div>
                 <?php else : ?>
-                <ul class="uk-subnav uk-subnav-pill">
+                <ul class="uk-subnav uk-subnav-pill<?php echo $fa_cls; ?>">
                     <li class="uk-active" uk-filter-control><a href="#">All</a></li>
                     <?php foreach ( $tags as $tag ) : ?>
                     <li uk-filter-control=".tag-<?php echo esc_attr( $tag ); ?>"><a href="#"><?php echo esc_html( ucfirst( $tag ) ); ?></a></li>

@@ -13,6 +13,7 @@ export default {
     gap: 'default',
     show_filter: false,
     filter_style: 'pills',
+    filter_align: 'left',
     masonry: false,
     card_style: 'default',
   },
@@ -45,6 +46,11 @@ export default {
     { key: 'filter_style', label: 'Stile filtro', type: 'select', options: [
       { value: 'pills', label: 'Pills' },
       { value: 'minimal', label: 'Minimale' },
+    ], condition: { field: 'show_filter', value: true } },
+    { key: 'filter_align', label: 'Allineamento filtri', type: 'select', options: [
+      { value: 'left', label: 'Sinistra' },
+      { value: 'center', label: 'Centro' },
+      { value: 'right', label: 'Destra' },
     ], condition: { field: 'show_filter', value: true } },
     { key: 'masonry', label: 'Masonry', type: 'toggle' },
     { key: 'card_style', label: 'Stile card', type: 'select', options: [
