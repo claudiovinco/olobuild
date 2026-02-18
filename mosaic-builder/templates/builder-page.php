@@ -18,6 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
         top: 0;
         left: 0;
         z-index: 99999;
+        overflow-y: auto;
     }
 </style>
 <div id="olobuilder-app"></div>

@@ -23,7 +23,7 @@ import IconBoxTile from './IconBoxTile.vue';
 import AlertTile from './AlertTile.vue';
 import TeamTile from './TeamTile.vue';
 import AccordionTile from './AccordionTile.vue';
-import TabsTile from './TabsTile.vue';
+
 import SocialTile from './SocialTile.vue';
 import MapTile from './MapTile.vue';
 import CountdownTile from './CountdownTile.vue';
@@ -58,6 +58,7 @@ import NavMenuTile from './NavMenuTile.vue';
 import PostGridTile from './PostGridTile.vue';
 import ProSliderTile from './ProSliderTile.vue';
 import PopupTile from './PopupTile.vue';
+import MegaMenuTile from './MegaMenuTile.vue';
 
 const props = defineProps({
   tile: { type: Object, required: true },
@@ -81,7 +82,7 @@ const tileComponents = {
   alert: AlertTile,
   team: TeamTile,
   accordion: AccordionTile,
-  tabs: TabsTile,
+
   social: SocialTile,
   map: MapTile,
   countdown: CountdownTile,
@@ -116,6 +117,7 @@ const tileComponents = {
   postgrid: PostGridTile,
   proslider: ProSliderTile,
   popup: PopupTile,
+  megamenu: MegaMenuTile,
 };
 
 const tileComponent = computed(() => {

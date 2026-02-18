@@ -11,63 +11,244 @@ class Olo_Team_Tile extends Olo_Tile_Base {
     protected $icon     = 'dashicons-businessperson';
     protected $category = 'content';
     protected $defaults = [
-        'photo'       => '',
-        'hover_image' => '',
-        'hover_video' => '',
-        'name'        => 'Jane Smith',
-        'role'        => 'Lead Designer',
-        'bio'         => 'Passionate about creating beautiful user experiences.',
-        'link_url'    => '',
-        'bg_color'    => '#1F2937',
-        'text_color'  => '#F3F4F6',
+        'photo'              => '',
+        'hover_image'        => '',
+        'hover_video'        => '',
+        'name'               => 'Jane Smith',
+        'role'               => 'Lead Designer',
+        'bio'                => 'Appassionata di creare esperienze utente eccellenti.',
+        'link_text'          => 'Profilo',
+        'link_url'           => '',
+        'photo_size'         => '120',
+        'photo_shape'        => 'circle',
+        'photo_radius'       => '12',
+        'photo_border_width' => '3',
+        'photo_border_color' => '#FFFFFF',
+        'photo_shadow'       => 'md',
+        'photo_gap'          => '12',
+        'info_bg_color'      => '#6366F1',
+        'info_text_color'    => '#FFFFFF',
+        'info_padding'       => '24',
+        'info_width'         => '100',
+        'info_margin'        => '0',
+        'info_radius'        => '16',
+        'info_border_width'  => '0',
+        'info_border_color'  => '#4B5563',
+        'info_align'         => 'center',
+        'name_size'          => '20',
+        'name_weight'        => '600',
+        'role_size'          => '14',
+        'role_color'         => '',
+        'bio_size'           => '14',
+        'bg_color'           => '',
+        'tile_padding'       => '16',
+        'border_radius'      => '16',
+        'border_width'       => '0',
+        'border_color'       => '#374151',
     ];
 
-    public function get_controls() {
-        return [
-            [ 'key' => 'photo',      'type' => 'image',    'label' => 'Photo' ],
-            [ 'key' => 'name',       'type' => 'text',     'label' => 'Name' ],
-            [ 'key' => 'role',       'type' => 'text',     'label' => 'Role' ],
-            [ 'key' => 'bio',        'type' => 'textarea', 'label' => 'Bio' ],
-            [ 'key' => 'link_url',   'type' => 'text',     'label' => 'Profile URL' ],
-            [ 'key' => 'bg_color',   'type' => 'color',    'label' => 'Background Color' ],
-            [ 'key' => 'text_color', 'type' => 'color',    'label' => 'Text Color' ],
-        ];
-    }
+    public function get_controls() { return []; }
 
     public function render( $settings ) {
-        $s = wp_parse_args( $settings, $this->defaults );
+        $s   = wp_parse_args( $settings, $this->defaults );
+        $uid = 'olo-team-' . wp_rand( 10000, 99999 );
+
+        $bg       = $this->safe_color( $s['bg_color'] ) ?: 'transparent';
+        $fg       = $this->safe_color( $s['info_text_color'] ) ?: '#FFFFFF';
+        $tile_r   = intval( $s['border_radius'] );
+        $tile_bw  = intval( $s['border_width'] );
+        $tile_bc  = $this->safe_color( $s['border_color'] ) ?: '#374151';
+        $tile_pad = intval( $s['tile_padding'] );
+
+        // Photo
+        $ph_size   = intval( $s['photo_size'] ) ?: 120;
+        $ph_shape  = $s['photo_shape'] ?: 'circle';
+        $ph_bw     = intval( $s['photo_border_width'] );
+        $ph_bc     = $this->safe_color( $s['photo_border_color'] ) ?: '#FFFFFF';
+        $ph_gap    = max( intval( $s['photo_gap'] ), 0 );
+        $outer_sz  = $ph_size + $ph_bw * 2;
+        $shadow_map = [ 'sm' => '0 2px 6px rgba(0,0,0,.2)', 'md' => '0 4px 12px rgba(0,0,0,.3)', 'lg' => '0 8px 24px rgba(0,0,0,.4)' ];
+        $ph_shadow  = $shadow_map[ $s['photo_shadow'] ] ?? 'none';
+
+        // Photo shape
+        $hex_clip = 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)';
+        if ( $ph_shape === 'circle' ) {
+            $outer_radius = '50%';
+            $inner_radius = '50%';
+        } elseif ( $ph_shape === 'rounded' ) {
+            $r = intval( $s['photo_radius'] );
+            $outer_radius = $r . 'px';
+            $inner_radius = max( $r - $ph_bw, 0 ) . 'px';
+        } else {
+            $outer_radius = '0';
+            $inner_radius = '0';
+        }
+
+        // Info
+        $info_bg  = $this->safe_color( $s['info_bg_color'] ) ?: '';
+        $info_pad = intval( $s['info_padding'] ) ?: 24;
+        $info_w   = intval( $s['info_width'] ) ?: 100;
+        $info_m   = intval( $s['info_margin'] );
+        $info_r   = intval( $s['info_radius'] );
+        $info_bw  = intval( $s['info_border_width'] );
+        $info_bc  = $this->safe_color( $s['info_border_color'] ) ?: '#4B5563';
+        $align    = in_array( $s['info_align'], [ 'left', 'center', 'right' ] ) ? $s['info_align'] : 'center';
+
+        // Alignment
+        $jc = 'center';
+        if ( $align === 'left' )  $jc = 'flex-start';
+        if ( $align === 'right' ) $jc = 'flex-end';
+
+        // Typography
+        $name_fs = intval( $s['name_size'] ) ?: 20;
+        $name_fw = intval( $s['name_weight'] ) ?: 600;
+        $role_fs = intval( $s['role_size'] ) ?: 14;
+        $role_cl = $this->safe_color( $s['role_color'] ) ?: '';
+        $bio_fs  = intval( $s['bio_size'] ) ?: 14;
+
+        // Sanitize
+        $name_html = $this->sanitize_richtext( $s['name'] );
+        $role_html = $this->sanitize_richtext( $s['role'] );
+        $bio_html  = $this->sanitize_richtext( $s['bio'] );
+        $link_text = $this->sanitize_richtext( $s['link_text'] ?: 'Profilo' );
+
+        $photo_is_video = ! empty( $s['photo'] ) && preg_match( '/\.(mp4|webm|ogg)(\?.*)?$/i', $s['photo'] );
 
         ob_start();
         ?>
-        <div class="olo-team uk-card uk-card-default" style="<?php echo $this->build_style( [ 'background' => $s['bg_color'], 'color' => $s['text_color'] ] ); ?>; overflow: hidden; text-align: center;">
-            <?php
-            $photo_is_video = ! empty( $s['photo'] ) && preg_match( '/\.(mp4|webm|ogg)(\?.*)?$/i', $s['photo'] );
-            ?>
-            <?php if ( ! empty( $s['photo'] ) && $photo_is_video ) : ?>
-                <div class="uk-card-media-top">
-                    <video src="<?php echo esc_url( $s['photo'] ); ?>" autoplay muted loop playsinline style="width: 100%; height: 250px; object-fit: cover; display: block;"></video>
-                </div>
-            <?php elseif ( ! empty( $s['photo'] ) ) : ?>
-                <div class="uk-card-media-top">
-                    <?php
-                    $team_img = '<img src="' . esc_url( $s['photo'] ) . '" alt="' . esc_attr( $s['name'] ) . '" style="width: 100%; height: 250px; object-fit: cover;" />';
-                    echo $this->render_hover_wrap( $team_img, $s['hover_image'] ?? '', $s['hover_video'] ?? '' );
-                    ?>
-                </div>
-            <?php else : ?>
-                <div class="uk-card-media-top">
-                    <div style="width: 100%; height: 250px; background: #374151; display: flex; align-items: center; justify-content: center; font-size: 4em;">&#x1F464;</div>
-                </div>
-            <?php endif; ?>
-            <div class="uk-card-body">
-                <h3 style="font-size: 1.25em; font-weight: 600; margin: 0 0 4px;"><?php echo wp_kses_post( $s['name'] ); ?></h3>
-                <div style="font-size: 0.875em; opacity: 0.7; margin-bottom: 12px;"><?php echo wp_kses_post( $s['role'] ); ?></div>
-                <?php if ( ! empty( $s['bio'] ) ) : ?>
-                    <div style="font-size: 0.9em; opacity: 0.8; margin: 0; line-height: 1.5;"><?php echo wp_kses_post( $s['bio'] ); ?></div>
+        <style>
+            .<?php echo $uid; ?> {
+                overflow: visible;
+                border-radius: <?php echo $tile_r; ?>px;
+                background: <?php echo $bg; ?>;
+                padding: <?php echo $tile_pad; ?>px;
+                <?php if ( $tile_bw > 0 ) : ?>
+                border: <?php echo $tile_bw; ?>px solid <?php echo $tile_bc; ?>;
                 <?php endif; ?>
-                <?php if ( ! empty( $s['link_url'] ) ) : ?>
-                    <a href="<?php echo esc_url( $s['link_url'] ); ?>" style="display: inline-block; margin-top: 12px; color: #6366F1; text-decoration: none; font-weight: 500;">View Profile &rarr;</a>
+            }
+            .<?php echo $uid; ?> .olo-team-photo-wrap {
+                display: flex;
+                justify-content: <?php echo $jc; ?>;
+                margin-bottom: <?php echo $ph_gap; ?>px;
+            }
+            .<?php echo $uid; ?> .olo-team-photo-outer {
+                width: <?php echo $outer_sz; ?>px;
+                height: <?php echo $outer_sz; ?>px;
+                flex-shrink: 0;
+                display: flex; align-items: center; justify-content: center;
+                <?php if ( $ph_shape === 'hexagon' ) : ?>
+                clip-path: <?php echo $hex_clip; ?>;
+                background: <?php echo $ph_bw > 0 ? $ph_bc : 'transparent'; ?>;
+                <?php else : ?>
+                border-radius: <?php echo $outer_radius; ?>;
+                <?php if ( $ph_bw > 0 ) : ?>
+                background: <?php echo $ph_bc; ?>;
                 <?php endif; ?>
+                <?php if ( $ph_shadow !== 'none' ) : ?>
+                box-shadow: <?php echo $ph_shadow; ?>;
+                <?php endif; ?>
+                <?php endif; ?>
+            }
+            .<?php echo $uid; ?> .olo-team-photo-inner {
+                overflow: hidden;
+                width: <?php echo $ph_size; ?>px;
+                height: <?php echo $ph_size; ?>px;
+                flex-shrink: 0;
+                <?php if ( $ph_shape === 'hexagon' ) : ?>
+                clip-path: <?php echo $hex_clip; ?>;
+                <?php else : ?>
+                border-radius: <?php echo $inner_radius; ?>;
+                <?php endif; ?>
+            }
+            .<?php echo $uid; ?> .olo-team-photo-inner .olo-hover-wrap {
+                width: 100%; height: 100%; position: relative;
+            }
+            .<?php echo $uid; ?> .olo-team-photo-inner .olo-hover-media {
+                position: absolute; inset: 0; z-index: 1;
+                opacity: 0; transition: opacity .3s;
+            }
+            .<?php echo $uid; ?> .olo-team-photo-inner .olo-hover-wrap:hover .olo-hover-media {
+                opacity: 1;
+            }
+            .<?php echo $uid; ?> .olo-team-photo-inner img,
+            .<?php echo $uid; ?> .olo-team-photo-inner video {
+                width: 100%; height: 100%; object-fit: cover; display: block;
+            }
+            .<?php echo $uid; ?> .olo-team-info-wrap {
+                display: flex;
+                justify-content: <?php echo $jc; ?>;
+                <?php if ( $info_m > 0 ) : ?>
+                padding: 0 <?php echo $info_m; ?>px <?php echo $info_m; ?>px;
+                <?php endif; ?>
+            }
+            .<?php echo $uid; ?> .olo-team-info {
+                width: <?php echo $info_w; ?>%;
+                padding: <?php echo $info_pad; ?>px;
+                text-align: <?php echo $align; ?>;
+                color: <?php echo $fg; ?>;
+                border-radius: <?php echo $info_r; ?>px;
+                <?php if ( $info_bg ) : ?>
+                background: <?php echo $info_bg; ?>;
+                <?php endif; ?>
+                <?php if ( $info_bw > 0 ) : ?>
+                border: <?php echo $info_bw; ?>px solid <?php echo $info_bc; ?>;
+                <?php endif; ?>
+            }
+            .<?php echo $uid; ?> .olo-team-name {
+                font-size: <?php echo $name_fs; ?>px;
+                font-weight: <?php echo $name_fw; ?>;
+                margin: 0 0 4px; line-height: 1.3; color: <?php echo $fg; ?>;
+            }
+            .<?php echo $uid; ?> .olo-team-role {
+                font-size: <?php echo $role_fs; ?>px;
+                <?php if ( $role_cl ) : ?>
+                color: <?php echo $role_cl; ?>;
+                <?php else : ?>
+                opacity: 0.75;
+                <?php endif; ?>
+                margin-bottom: 10px;
+            }
+            .<?php echo $uid; ?> .olo-team-bio {
+                font-size: <?php echo $bio_fs; ?>px;
+                opacity: 0.8; line-height: 1.5; margin: 0;
+            }
+            .<?php echo $uid; ?> .olo-team-link {
+                display: inline-block; margin-top: 12px;
+                color: <?php echo $fg; ?>; text-decoration: none;
+                font-weight: 500; font-size: 14px; opacity: 0.9;
+            }
+            .<?php echo $uid; ?> .olo-team-link:hover {
+                opacity: 1; text-decoration: none;
+            }
+        </style>
+        <div class="olo-team <?php echo esc_attr( $uid ); ?>">
+            <div class="olo-team-photo-wrap">
+                <div class="olo-team-photo-outer">
+                    <div class="olo-team-photo-inner">
+                        <?php if ( ! empty( $s['photo'] ) && $photo_is_video ) : ?>
+                            <video src="<?php echo esc_url( $s['photo'] ); ?>" autoplay muted loop playsinline></video>
+                        <?php elseif ( ! empty( $s['photo'] ) ) : ?>
+                            <?php
+                            $img = '<img src="' . esc_url( $s['photo'] ) . '" alt="' . esc_attr( $s['name'] ) . '" />';
+                            echo $this->render_hover_wrap( $img, $s['hover_image'] ?? '', $s['hover_video'] ?? '' );
+                            ?>
+                        <?php else : ?>
+                            <div style="width:100%;height:100%;background:#374151;display:flex;align-items:center;justify-content:center;font-size:<?php echo round( $ph_size * 0.4 ); ?>px">&#x1F464;</div>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            </div>
+            <div class="olo-team-info-wrap">
+                <div class="olo-team-info">
+                    <h3 class="olo-team-name"><?php echo $name_html; ?></h3>
+                    <div class="olo-team-role"><?php echo $role_html; ?></div>
+                    <?php if ( ! empty( $s['bio'] ) ) : ?>
+                        <div class="olo-team-bio"><?php echo $bio_html; ?></div>
+                    <?php endif; ?>
+                    <?php if ( ! empty( $s['link_url'] ) ) : ?>
+                        <a href="<?php echo esc_url( $s['link_url'] ); ?>" class="olo-team-link"><?php echo $link_text; ?> &rarr;</a>
+                    <?php endif; ?>
+                </div>
             </div>
         </div>
         <?php

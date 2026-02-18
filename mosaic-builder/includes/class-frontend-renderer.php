@@ -795,6 +795,14 @@ class Olo_Frontend_Renderer {
         // Custom class will be added after we know it
         $pre_class_attr_classes = $classes;
 
+        // No-stack class for mobile
+        $nostack_class = '';
+        if ( ! $stack ) {
+            $nostack_class = 'olo-nostack-' . substr( md5( $node['id'] ?? wp_rand() ), 0, 6 );
+            $classes[] = $nostack_class;
+            $pre_class_attr_classes[] = $nostack_class;
+        }
+
         // uk-grid attribute with options
         $grid_opts = [];
         if ( $stack ) {
@@ -803,6 +811,15 @@ class Olo_Frontend_Renderer {
         $uk_grid = 'uk-grid';
 
         $html = '';
+
+        // No-stack CSS: prevent columns from stacking on mobile
+        if ( ! $stack && $nostack_class ) {
+            $html .= '<style>';
+            $html .= '.' . $nostack_class . '{flex-wrap:nowrap!important}';
+            $html .= '.' . $nostack_class . '>*{flex:1 1 auto}';
+            $html .= '.' . $nostack_class . '>[class*="uk-width-expand"]{flex:1 1 0%}';
+            $html .= '</style>';
+        }
 
         // Custom widths: generate scoped <style> block
         $is_custom_layout = ( ( $s['layout'] ?? '' ) === 'custom' && ! empty( $s['custom_widths'] ) );
@@ -813,12 +830,21 @@ class Olo_Frontend_Renderer {
             $widths = array_filter( array_map( 'floatval', explode( ',', $s['custom_widths'] ) ), function( $v ) { return $v > 0; } );
             if ( ! empty( $widths ) ) {
                 $html .= '<style>';
-                $html .= '@media(min-width:960px){';
-                foreach ( $widths as $i => $w ) {
-                    $nth = $i + 1;
-                    $html .= '.' . $custom_class . '>:nth-child(' . $nth . '){width:' . $w . '%!important}';
+                // When nostack is active, apply custom widths at ALL breakpoints
+                if ( ! $stack ) {
+                    foreach ( $widths as $i => $w ) {
+                        $nth = $i + 1;
+                        $html .= '.' . $custom_class . '>:nth-child(' . $nth . '){width:' . $w . '%!important}';
+                    }
+                } else {
+                    $html .= '@media(min-width:960px){';
+                    foreach ( $widths as $i => $w ) {
+                        $nth = $i + 1;
+                        $html .= '.' . $custom_class . '>:nth-child(' . $nth . '){width:' . $w . '%!important}';
+                    }
+                    $html .= '}';
                 }
-                $html .= '}</style>';
+                $html .= '</style>';
             }
         }
 

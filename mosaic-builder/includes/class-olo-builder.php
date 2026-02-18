@@ -192,7 +192,7 @@ class Olo_Builder {
         require_once OLO_PATH . 'includes/tiles/class-alert-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-team-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-accordion-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-tabs-tile.php';
+
         require_once OLO_PATH . 'includes/tiles/class-social-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-map-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-countdown-tile.php';
@@ -227,6 +227,7 @@ class Olo_Builder {
         require_once OLO_PATH . 'includes/tiles/class-postgrid-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-proslider-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-popup-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-megamenu-tile.php';
 
         $manager = Olo_Tile_Manager::instance();
         $manager->register_tile( new Olo_Section_Tile() );
@@ -246,7 +247,7 @@ class Olo_Builder {
         $manager->register_tile( new Olo_Alert_Tile() );
         $manager->register_tile( new Olo_Team_Tile() );
         $manager->register_tile( new Olo_Accordion_Tile() );
-        $manager->register_tile( new Olo_Tabs_Tile() );
+
         $manager->register_tile( new Olo_Social_Tile() );
         $manager->register_tile( new Olo_Map_Tile() );
         $manager->register_tile( new Olo_Countdown_Tile() );
@@ -281,6 +282,7 @@ class Olo_Builder {
         $manager->register_tile( new Olo_PostGrid_Tile() );
         $manager->register_tile( new Olo_ProSlider_Tile() );
         $manager->register_tile( new Olo_Popup_Tile() );
+        $manager->register_tile( new Olo_MegaMenu_Tile() );
     }
 
     /**
