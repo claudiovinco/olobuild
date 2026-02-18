@@ -3,7 +3,7 @@ import { defineStore } from 'pinia';
 const oloData = window.oloData || {};
 
 // Container types that hold children
-const CONTAINER_TYPES = ['section', 'row', 'column'];
+const CONTAINER_TYPES = ['section', 'row', 'column', 'inner-columns', 'inner-column'];
 
 function generateId() {
   if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
@@ -218,7 +218,18 @@ function createColumn(widthMedium = '', children = []) {
   };
 }
 
-export { generateId, createSection, createRow, createColumn, CONTAINER_TYPES, migrateLegacyContent, isLegacyFormat };
+function createInnerColumn(widthPercent = 50, children = []) {
+  return {
+    id: generateId(),
+    type: 'inner-column',
+    settings: { width: String(widthPercent) },
+    style: {},
+    advanced: {},
+    children: children,
+  };
+}
+
+export { generateId, createSection, createRow, createColumn, createInnerColumn, CONTAINER_TYPES, migrateLegacyContent, isLegacyFormat };
 
 export const useTilesStore = defineStore('tiles', {
   state: () => ({
@@ -265,6 +276,7 @@ export const useTilesStore = defineStore('tiles', {
           // Tile layout
           { type: 'hero', name: 'Hero', icon: 'dashicons-cover-image', category: 'layout', defaults: { title: 'Benvenuto nel nostro sito', subtitle: 'Scopri qualcosa di straordinario', background_color: '#6366F1', text_color: '#FFFFFF', cta_text: 'Inizia ora', cta_url: '#' } },
           { type: 'row', name: 'Riga / Colonne', icon: 'dashicons-columns', category: 'layout', defaults: { layout: '50-50', gap: '16', column_gap: 'default', vertical_align: 'stretch', stack_mobile: true } },
+          { type: 'inner-columns', name: 'Colonne interne', icon: 'dashicons-table-col-after', category: 'layout', defaults: { layout: '50-50', gap: '16', vertical_align: 'stretch', stack_mobile: true } },
           { type: 'spacer', name: 'Spaziatore', icon: 'dashicons-arrows-alt', category: 'layout', defaults: { height: '60', show_divider: false, divider_color: '#374151', divider_width: '100', divider_thickness: '1' } },
           { type: 'divider', name: 'Divisore', icon: 'dashicons-minus', category: 'layout', defaults: { style: 'solid', width: '100', thickness: '1', color: '#374151', alignment: 'center', text: '', text_color: '#9CA3AF', icon_emoji: '' } },
           // Tile contenuto
@@ -456,6 +468,42 @@ export const useTilesStore = defineStore('tiles', {
       }
 
       row.children = newCols;
+    },
+
+    changeInnerLayout(innerColsId, layoutKey) {
+      const innerLayoutWidths = {
+        '50-50': [50, 50],
+        '33-33-33': [33.33, 33.33, 33.34],
+        '25-75': [25, 75],
+        '75-25': [75, 25],
+        '25-50-25': [25, 50, 25],
+      };
+      const node = this.getTileById(innerColsId);
+      if (!node || node.type !== 'inner-columns') return;
+
+      const newWidths = innerLayoutWidths[layoutKey] || innerLayoutWidths['50-50'];
+      const currentCols = node.children || [];
+      node.settings = { ...node.settings, layout: layoutKey };
+
+      const newCols = newWidths.map((w, i) => {
+        if (currentCols[i]) {
+          currentCols[i].settings = { ...currentCols[i].settings, width: String(w) };
+          return currentCols[i];
+        }
+        return createInnerColumn(w, []);
+      });
+
+      // If reducing columns, move excess children to last column
+      if (currentCols.length > newCols.length) {
+        const lastCol = newCols[newCols.length - 1];
+        for (let i = newCols.length; i < currentCols.length; i++) {
+          if (Array.isArray(currentCols[i].children)) {
+            lastCol.children = [...(lastCol.children || []), ...currentCols[i].children];
+          }
+        }
+      }
+
+      node.children = newCols;
     },
 
     applyCustomWidths(rowId, value) {

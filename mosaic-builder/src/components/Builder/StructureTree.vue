@@ -143,34 +143,116 @@
                             @change="onChange"
                           >
                             <template #item="{ element: tile }">
-                              <div
-                                class="st-row st-row--element"
-                                :class="{ 'st-row--active': builderStore.selectedTileId === tile.id }"
-                                @click.stop="selectTile(tile.id)"
-                              >
-                                <span class="st-grip" title="Trascina per riordinare">
-                                  <svg width="6" height="10" viewBox="0 0 6 10" fill="currentColor">
-                                    <circle cx="1" cy="1" r="1"/><circle cx="5" cy="1" r="1"/>
-                                    <circle cx="1" cy="5" r="1"/><circle cx="5" cy="5" r="1"/>
-                                    <circle cx="1" cy="9" r="1"/><circle cx="5" cy="9" r="1"/>
-                                  </svg>
-                                </span>
-                                <span class="st-toggle-ph"></span>
-                                <span class="st-dot" :style="{ background: dotColor(tile.type) }"></span>
-                                <span class="st-name">{{ tileLabel(tile) }}</span>
-                                <span class="st-actions">
-                                  <button title="Duplica" @click.stop="duplicate(tile.id)">
-                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                      <rect x="9" y="9" width="13" height="13" rx="2"/>
-                                      <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+                              <div class="st-item">
+                                <div
+                                  class="st-row st-row--element"
+                                  :class="{ 'st-row--active': builderStore.selectedTileId === tile.id }"
+                                  @click.stop="selectTile(tile.id)"
+                                >
+                                  <span class="st-grip" title="Trascina per riordinare">
+                                    <svg width="6" height="10" viewBox="0 0 6 10" fill="currentColor">
+                                      <circle cx="1" cy="1" r="1"/><circle cx="5" cy="1" r="1"/>
+                                      <circle cx="1" cy="5" r="1"/><circle cx="5" cy="5" r="1"/>
+                                      <circle cx="1" cy="9" r="1"/><circle cx="5" cy="9" r="1"/>
                                     </svg>
+                                  </span>
+                                  <button
+                                    v-if="tile.type === 'inner-columns' && tile.children?.length"
+                                    class="st-toggle"
+                                    :class="{ 'st-toggle--open': isExpanded(tile.id) }"
+                                    @click.stop="toggle(tile.id)"
+                                  >
+                                    <svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor"><path d="M2 1l4 3-4 3z"/></svg>
                                   </button>
-                                  <button title="Elimina" @click.stop="remove(tile.id)">
-                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                      <path d="M18 6L6 18M6 6l12 12"/>
-                                    </svg>
-                                  </button>
-                                </span>
+                                  <span v-else class="st-toggle-ph"></span>
+                                  <span class="st-dot" :style="{ background: dotColor(tile.type) }"></span>
+                                  <span class="st-name">{{ tileLabel(tile) }}</span>
+                                  <span v-if="tile.type === 'inner-columns'" class="st-badge">{{ tile.settings?.layout || '50-50' }}</span>
+                                  <span class="st-actions">
+                                    <button title="Duplica" @click.stop="duplicate(tile.id)">
+                                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="9" y="9" width="13" height="13" rx="2"/>
+                                        <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+                                      </svg>
+                                    </button>
+                                    <button title="Elimina" @click.stop="remove(tile.id)">
+                                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M18 6L6 18M6 6l12 12"/>
+                                      </svg>
+                                    </button>
+                                  </span>
+                                </div>
+
+                                <!-- Inner columns children -->
+                                <div v-if="tile.type === 'inner-columns' && isExpanded(tile.id) && tile.children?.length" class="st-sub">
+                                  <div v-for="(icol, ici) in tile.children" :key="icol.id" class="st-item">
+                                    <div
+                                      class="st-row st-row--column"
+                                      :class="{ 'st-row--active': builderStore.selectedTileId === icol.id }"
+                                      @click.stop="selectTile(icol.id)"
+                                    >
+                                      <span class="st-grip-ph"></span>
+                                      <button
+                                        v-if="icol.children && icol.children.length > 0"
+                                        class="st-toggle"
+                                        :class="{ 'st-toggle--open': isExpanded(icol.id) }"
+                                        @click.stop="toggle(icol.id)"
+                                      >
+                                        <svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor"><path d="M2 1l4 3-4 3z"/></svg>
+                                      </button>
+                                      <span v-else class="st-toggle-ph"></span>
+                                      <span class="st-dot" style="background: #3B82F6"></span>
+                                      <span class="st-name">ICol {{ ici + 1 }} <span class="st-meta">{{ icol.settings?.width || '' }}%</span></span>
+                                      <span v-if="icol.children?.length" class="st-badge">{{ icol.children.length }}</span>
+                                    </div>
+
+                                    <!-- Inner column children: elements -->
+                                    <div v-if="isExpanded(icol.id) && icol.children?.length" class="st-sub">
+                                      <draggable
+                                        :list="icol.children"
+                                        item-key="id"
+                                        ghost-class="st-ghost"
+                                        :group="{ name: 'st-elements' }"
+                                        animation="150"
+                                        handle=".st-grip"
+                                        class="st-dropzone"
+                                        @change="onChange"
+                                      >
+                                        <template #item="{ element: innerTile }">
+                                          <div
+                                            class="st-row st-row--element"
+                                            :class="{ 'st-row--active': builderStore.selectedTileId === innerTile.id }"
+                                            @click.stop="selectTile(innerTile.id)"
+                                          >
+                                            <span class="st-grip" title="Trascina per riordinare">
+                                              <svg width="6" height="10" viewBox="0 0 6 10" fill="currentColor">
+                                                <circle cx="1" cy="1" r="1"/><circle cx="5" cy="1" r="1"/>
+                                                <circle cx="1" cy="5" r="1"/><circle cx="5" cy="5" r="1"/>
+                                                <circle cx="1" cy="9" r="1"/><circle cx="5" cy="9" r="1"/>
+                                              </svg>
+                                            </span>
+                                            <span class="st-toggle-ph"></span>
+                                            <span class="st-dot" :style="{ background: dotColor(innerTile.type) }"></span>
+                                            <span class="st-name">{{ tileLabel(innerTile) }}</span>
+                                            <span class="st-actions">
+                                              <button title="Duplica" @click.stop="duplicate(innerTile.id)">
+                                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                  <rect x="9" y="9" width="13" height="13" rx="2"/>
+                                                  <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+                                                </svg>
+                                              </button>
+                                              <button title="Elimina" @click.stop="remove(innerTile.id)">
+                                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                  <path d="M18 6L6 18M6 6l12 12"/>
+                                                </svg>
+                                              </button>
+                                            </span>
+                                          </div>
+                                        </template>
+                                      </draggable>
+                                    </div>
+                                  </div>
+                                </div>
                               </div>
                             </template>
                           </draggable>

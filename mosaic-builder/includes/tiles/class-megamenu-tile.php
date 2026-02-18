@@ -13,6 +13,8 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
     protected $defaults = [
         // Menu
         'menu_id'            => 0,
+        // Panel templates mapping { "menu_item_id": template_id }
+        'panel_templates'    => [],
         // Navbar
         'layout'             => 'left',
         'nav_bg'             => '',
@@ -276,11 +278,7 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
         /* === Mega Panel === */
         .<?php echo $uid; ?> .olo-mm-panel {
             position: absolute;
-            <?php if ( $s['panel_width'] === 'full' ) : ?>
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100vw;
-            <?php else : ?>
+            <?php if ( $s['panel_width'] !== 'full' ) : ?>
             left: 0;
             min-width: 600px;
             max-width: 900px;
@@ -302,7 +300,7 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
         }
         .<?php echo $uid; ?> .olo-mm-nav > li.olo-mm-open > .olo-mm-panel {
             opacity: 1;
-            transform: <?php echo $s['panel_width'] === 'full' ? 'translateX(-50%)' : 'none'; ?>;
+            transform: none;
             visibility: visible;
             pointer-events: auto;
         }
@@ -396,6 +394,18 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
             color: <?php echo $l_hcolor; ?>;
         }
 
+        /* Template panel: full viewport width */
+        .<?php echo $uid; ?> .olo-mm-panel-tpl {
+            max-width: none;
+            min-width: 0;
+            padding: 0;
+            border-radius: 0 0 <?php echo $p_radius; ?>px <?php echo $p_radius; ?>px;
+            /* left and width set by JS */
+        }
+        .<?php echo $uid; ?> .olo-mm-panel-tpl .olo-template {
+            margin: 0;
+        }
+
         /* === CTA Buttons === */
         .<?php echo $uid; ?> .olo-mm-btn {
             display: inline-flex;
@@ -456,6 +466,11 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
         }
         .<?php echo $uid; ?> .olo-mm-hamburger.olo-mm-ham-open span:nth-child(3) {
             transform: translateY(-7px) rotate(-45deg);
+        }
+        /* Hamburger open: paint above overlay/offcanvas, stay in place */
+        .<?php echo $uid; ?> .olo-mm-bar {
+            position: relative;
+            z-index: 10001;
         }
 
         /* === Off-Canvas Mobile === */
@@ -637,7 +652,8 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
                         $is_current = trailingslashit( $item->url ) === $current_url;
                         $is_button  = $this->is_button_item( $item, $idx, $total, $s );
                         $is_mega    = ! $is_button && $this->is_mega_item( $item, $subs, $grandchildren, $s );
-                        $has_subs   = ! $is_button && ! empty( $subs );
+                        $has_panel_tpl = ! $is_button && $this->get_panel_template_id( $item->ID, $s ) > 0;
+                        $has_subs   = ! $is_button && ( ! empty( $subs ) || $has_panel_tpl );
 
                         $li_classes = [];
                         if ( $is_current ) $li_classes[] = 'olo-mm-active';
@@ -655,7 +671,12 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
                                         <svg class="olo-mm-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"/></svg>
                                     <?php endif; ?>
                                 </a>
-                                <?php if ( $is_mega && ! empty( $subs ) ) : ?>
+                                <?php
+                                    $panel_tpl_id = $this->get_panel_template_id( $item->ID, $s );
+                                    if ( $panel_tpl_id ) :
+                                ?>
+                                    <?php $this->render_template_panel( $panel_tpl_id ); ?>
+                                <?php elseif ( $is_mega && ! empty( $subs ) ) : ?>
                                     <?php $this->render_mega_panel( $subs, $grandchildren, $s, $show_desc ); ?>
                                 <?php elseif ( $has_subs ) : ?>
                                     <?php $this->render_simple_dropdown( $subs ); ?>
@@ -675,7 +696,7 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
                     <?php else : ?>
                         <div></div>
                     <?php endif; ?>
-                    <button class="olo-mm-oc-close" aria-label="Chiudi">&times;</button>
+                    <div></div>
                 </div>
                 <ul class="olo-mm-mob-nav">
                     <?php foreach ( $tree as $idx => $item ) :
@@ -780,7 +801,17 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
 
             /* ── Hover Intent Desktop ── */
             var timers = {};
+            var isFull = <?php echo $s['panel_width'] === 'full' ? 'true' : 'false'; ?>;
             var navItems = root.querySelectorAll(".olo-mm-nav > li");
+
+            function posPanel(li) {
+                var panel = li.querySelector(".olo-mm-panel-tpl") || (isFull ? li.querySelector(".olo-mm-panel") : null);
+                if (!panel) return;
+                var rect = li.getBoundingClientRect();
+                panel.style.left = (-rect.left) + "px";
+                panel.style.width = document.documentElement.clientWidth + "px";
+            }
+
             navItems.forEach(function(li) {
                 var panel = li.querySelector(".olo-mm-panel, .olo-mm-dropdown");
                 if (!panel) return;
@@ -793,6 +824,8 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
                             o.setAttribute("aria-expanded", "false");
                         }
                     });
+                    // Position full-width panels before showing
+                    posPanel(li);
                     li.classList.add("olo-mm-open");
                     li.setAttribute("aria-expanded", "true");
                 });
@@ -819,7 +852,6 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
             var hamburger  = root.querySelector(".olo-mm-hamburger");
             var overlay    = root.querySelector(".olo-mm-overlay");
             var offcanvas  = root.querySelector(".olo-mm-offcanvas");
-            var closeBtn   = root.querySelector(".olo-mm-oc-close");
 
             function openMobile() {
                 overlay.classList.add("olo-mm-vis");
@@ -839,7 +871,6 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
                 offcanvas.classList.contains("olo-mm-vis") ? closeMobile() : openMobile();
             });
             if (overlay)  overlay.addEventListener("click", closeMobile);
-            if (closeBtn) closeBtn.addEventListener("click", closeMobile);
 
             /* ── Accordion Mobile ── */
             root.querySelectorAll(".olo-mm-mob-toggle").forEach(function(btn) {
@@ -882,6 +913,20 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
     }
 
     /* ─── Helpers ─── */
+
+    private function get_panel_template_id( $item_id, $s ) {
+        $map = $s['panel_templates'] ?? [];
+        if ( ! is_array( $map ) || empty( $map ) ) return 0;
+        return absint( $map[ (string) $item_id ] ?? 0 );
+    }
+
+    private function render_template_panel( $tpl_id ) {
+        ?>
+        <div class="olo-mm-panel olo-mm-panel-tpl">
+            <?php echo do_shortcode( '[olo_template id="' . absint( $tpl_id ) . '"]' ); ?>
+        </div>
+        <?php
+    }
 
     private function is_mega_item( $item, $subs, $grandchildren, $s ) {
         if ( empty( $subs ) ) return false;

@@ -475,6 +475,10 @@ class Olo_Frontend_Renderer {
                 return $this->render_row_node( $node, $manager, $template_id, $hover_css_rules, $tile_counter );
             case 'column':
                 return $this->render_column_node( $node, $manager, $template_id, $hover_css_rules, $tile_counter );
+            case 'inner-columns':
+                return $this->render_inner_columns_node( $node, $manager, $template_id, $hover_css_rules, $tile_counter );
+            case 'inner-column':
+                return $this->render_inner_column_node( $node, $manager, $template_id, $hover_css_rules, $tile_counter );
             default:
                 return $this->render_element_node( $node, $manager, $template_id, $hover_css_rules, $tile_counter );
         }
@@ -1014,6 +1018,137 @@ class Olo_Frontend_Renderer {
             $html .= ' style="' . esc_attr( implode( '; ', $inline_styles ) ) . '"';
         }
         $html .= $col_scrollspy_attr . $col_el_parallax_attr . '>';
+
+        foreach ( $node['children'] ?? [] as $child ) {
+            $html .= $this->render_node( $child, $manager, $template_id, $hover_css_rules, $tile_counter );
+        }
+
+        $html .= '</div>';
+        return $html;
+    }
+
+    /**
+     * Render an inner-columns container (flex row with sub-columns).
+     */
+    private function render_inner_columns_node( $node, $manager, $template_id, &$hover_css_rules, &$tile_counter ) {
+        $s        = $node['settings'] ?? [];
+        $style    = $node['style'] ?? [];
+        $advanced = $node['advanced'] ?? [];
+        $gap      = absint( $s['gap'] ?? 16 );
+        $valign   = $s['vertical_align'] ?? 'stretch';
+        $stack    = ! empty( $s['stack_mobile'] );
+
+        $align_css = $this->align_map[ $valign ] ?? 'stretch';
+
+        $inline_styles = [
+            'display: flex',
+            'gap: ' . $gap . 'px',
+            'align-items: ' . $align_css,
+        ];
+
+        if ( ! $stack ) {
+            $inline_styles[] = 'flex-wrap: nowrap';
+        } else {
+            $inline_styles[] = 'flex-wrap: wrap';
+        }
+
+        // Margin & Padding from style tab
+        if ( ! empty( $style['margin_top'] ) )    $inline_styles[] = "margin-top: {$style['margin_top']}px";
+        if ( ! empty( $style['margin_right'] ) )  $inline_styles[] = "margin-right: {$style['margin_right']}px";
+        if ( ! empty( $style['margin_bottom'] ) ) $inline_styles[] = "margin-bottom: {$style['margin_bottom']}px";
+        if ( ! empty( $style['margin_left'] ) )   $inline_styles[] = "margin-left: {$style['margin_left']}px";
+        if ( ! empty( $style['padding_top'] ) )    $inline_styles[] = "padding-top: {$style['padding_top']}px";
+        if ( ! empty( $style['padding_right'] ) )  $inline_styles[] = "padding-right: {$style['padding_right']}px";
+        if ( ! empty( $style['padding_bottom'] ) ) $inline_styles[] = "padding-bottom: {$style['padding_bottom']}px";
+        if ( ! empty( $style['padding_left'] ) )   $inline_styles[] = "padding-left: {$style['padding_left']}px";
+
+        // Background
+        $tile_bg = $this->get_effective_bg( $style );
+        if ( $tile_bg['type'] !== 'none' && $tile_bg['type'] !== 'image' && $tile_bg['type'] !== 'video' ) {
+            $bg_css = $this->get_bg_inline_css( $tile_bg );
+            if ( $bg_css ) $inline_styles[] = $bg_css;
+        }
+
+        // Border radius
+        if ( ! empty( $style['border_radius'] ) ) $inline_styles[] = $this->build_border_radius_css( $style['border_radius'] );
+
+        // Border
+        if ( ! empty( $style['border_width'] ) && intval( $style['border_width'] ) > 0 ) {
+            $bw = intval( $style['border_width'] );
+            $bs = $style['border_style'] ?? 'solid';
+            $bc = $style['border_color'] ?? '#374151';
+            $inline_styles[] = "border: {$bw}px {$bs} {$bc}";
+        }
+
+        $classes = [ 'olo-inner-columns' ];
+        if ( ! empty( $advanced['css_classes'] ) ) {
+            $classes[] = esc_attr( $advanced['css_classes'] );
+        }
+
+        $html = '';
+
+        // Stack on mobile: responsive CSS
+        if ( $stack ) {
+            $ic_class = 'olo-ic-' . substr( md5( $node['id'] ?? wp_rand() ), 0, 6 );
+            $classes[] = $ic_class;
+            $html .= '<style>@media(max-width:640px){.' . $ic_class . '{flex-direction:column}.' . $ic_class . '>*{width:100%!important}}</style>';
+        }
+
+        $html .= '<div class="' . esc_attr( implode( ' ', $classes ) ) . '" style="' . esc_attr( implode( '; ', $inline_styles ) ) . '">';
+
+        foreach ( $node['children'] ?? [] as $child ) {
+            $html .= $this->render_node( $child, $manager, $template_id, $hover_css_rules, $tile_counter );
+        }
+
+        $html .= '</div>';
+        return $html;
+    }
+
+    /**
+     * Render an inner-column (single sub-column within inner-columns).
+     */
+    private function render_inner_column_node( $node, $manager, $template_id, &$hover_css_rules, &$tile_counter ) {
+        $s        = $node['settings'] ?? [];
+        $style    = $node['style'] ?? [];
+        $advanced = $node['advanced'] ?? [];
+
+        $width = floatval( $s['width'] ?? 50 );
+
+        $inline_styles = [
+            'width: ' . $width . '%',
+            'min-width: 0',
+            'box-sizing: border-box',
+        ];
+
+        // Margin & Padding
+        if ( ! empty( $style['margin_top'] ) )    $inline_styles[] = "margin-top: {$style['margin_top']}px";
+        if ( ! empty( $style['margin_right'] ) )  $inline_styles[] = "margin-right: {$style['margin_right']}px";
+        if ( ! empty( $style['margin_bottom'] ) ) $inline_styles[] = "margin-bottom: {$style['margin_bottom']}px";
+        if ( ! empty( $style['margin_left'] ) )   $inline_styles[] = "margin-left: {$style['margin_left']}px";
+        if ( ! empty( $style['padding_top'] ) )    $inline_styles[] = "padding-top: {$style['padding_top']}px";
+        if ( ! empty( $style['padding_right'] ) )  $inline_styles[] = "padding-right: {$style['padding_right']}px";
+        if ( ! empty( $style['padding_bottom'] ) ) $inline_styles[] = "padding-bottom: {$style['padding_bottom']}px";
+        if ( ! empty( $style['padding_left'] ) )   $inline_styles[] = "padding-left: {$style['padding_left']}px";
+
+        // Background
+        $tile_bg = $this->get_effective_bg( $style );
+        if ( $tile_bg['type'] !== 'none' && $tile_bg['type'] !== 'image' && $tile_bg['type'] !== 'video' ) {
+            $bg_css = $this->get_bg_inline_css( $tile_bg );
+            if ( $bg_css ) $inline_styles[] = $bg_css;
+        }
+
+        // Border radius
+        if ( ! empty( $style['border_radius'] ) ) $inline_styles[] = $this->build_border_radius_css( $style['border_radius'] );
+
+        // Border
+        if ( ! empty( $style['border_width'] ) && intval( $style['border_width'] ) > 0 ) {
+            $bw = intval( $style['border_width'] );
+            $bs = $style['border_style'] ?? 'solid';
+            $bc = $style['border_color'] ?? '#374151';
+            $inline_styles[] = "border: {$bw}px {$bs} {$bc}";
+        }
+
+        $html = '<div class="olo-inner-column" style="' . esc_attr( implode( '; ', $inline_styles ) ) . '">';
 
         foreach ( $node['children'] ?? [] as $child ) {
             $html .= $this->render_node( $child, $manager, $template_id, $hover_css_rules, $tile_counter );

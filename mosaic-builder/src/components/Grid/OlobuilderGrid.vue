@@ -165,7 +165,7 @@
             <div
               class="olo-add-row"
               @dragover.prevent
-              @drop.prevent="onDropIntoSection($event, section)"
+              @drop.prevent.stop="onDropIntoSection($event, section)"
             >
               <button @click="addRowToSection(section)">+ Aggiungi riga</button>
             </div>
@@ -179,7 +179,7 @@
       v-if="tilesStore.canvasTiles.length === 0"
       class="olo-canvas-empty"
       @dragover.prevent
-      @drop.prevent="onDropCanvas"
+      @drop.prevent.stop="onDropCanvas"
     >
       <div style="font-size: 32px; margin-bottom: 8px;">&#x1F4D0;</div>
       <div>Trascina una tile dalla barra laterale per iniziare</div>
@@ -190,7 +190,7 @@
       v-else
       class="olo-canvas-bottom-drop"
       @dragover.prevent
-      @drop.prevent="onDropCanvas"
+      @drop.prevent.stop="onDropCanvas"
     >
       <span>+ Rilascia qui per aggiungere una sezione</span>
     </div>

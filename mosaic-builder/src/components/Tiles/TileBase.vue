@@ -59,6 +59,8 @@ import PostGridTile from './PostGridTile.vue';
 import ProSliderTile from './ProSliderTile.vue';
 import PopupTile from './PopupTile.vue';
 import MegaMenuTile from './MegaMenuTile.vue';
+import InnerColumnsTile from './InnerColumnsTile.vue';
+import TimelineTile from './TimelineTile.vue';
 
 const props = defineProps({
   tile: { type: Object, required: true },
@@ -118,6 +120,8 @@ const tileComponents = {
   proslider: ProSliderTile,
   popup: PopupTile,
   megamenu: MegaMenuTile,
+  'inner-columns': InnerColumnsTile,
+  timeline: TimelineTile,
 };
 
 const tileComponent = computed(() => {

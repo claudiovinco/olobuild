@@ -157,7 +157,8 @@ class Olo_Builder {
             'activeHeaderId' => (int) get_option( 'olo_active_header', 0 ),
             'activeFooterId' => (int) get_option( 'olo_active_footer', 0 ),
             'activeSingles'  => $this->get_active_singles_map(),
-            'templateList'   => $this->get_template_list(),
+            'templateList'       => $this->get_template_list(),
+            'megapanelTemplates' => $this->get_megapanel_templates(),
             'postTypes'      => $this->get_public_post_types(),
             'taxonomies'     => $this->get_public_taxonomies(),
             'siteInfo'       => [
@@ -228,6 +229,8 @@ class Olo_Builder {
         require_once OLO_PATH . 'includes/tiles/class-proslider-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-popup-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-megamenu-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-inner-columns-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-timeline-tile.php';
 
         $manager = Olo_Tile_Manager::instance();
         $manager->register_tile( new Olo_Section_Tile() );
@@ -283,6 +286,8 @@ class Olo_Builder {
         $manager->register_tile( new Olo_ProSlider_Tile() );
         $manager->register_tile( new Olo_Popup_Tile() );
         $manager->register_tile( new Olo_MegaMenu_Tile() );
+        $manager->register_tile( new Olo_InnerColumns_Tile() );
+        $manager->register_tile( new Olo_Timeline_Tile() );
     }
 
     /**
@@ -337,6 +342,19 @@ class Olo_Builder {
         $db     = new Olo_Database();
         $result = $db->list_templates( [ 'status' => 'published', 'per_page' => 100 ] );
         $list   = [ [ 'value' => 0, 'label' => '— Seleziona template —' ] ];
+        foreach ( $result['items'] as $t ) {
+            $list[] = [ 'value' => (int) $t['id'], 'label' => $t['title'] ];
+        }
+        return $list;
+    }
+
+    /**
+     * Get published templates of type "megapanel" for the mega menu panel selector.
+     */
+    private function get_megapanel_templates() {
+        $db     = new Olo_Database();
+        $result = $db->list_templates( [ 'status' => 'published', 'type' => 'megapanel', 'per_page' => 100 ] );
+        $list   = [ [ 'value' => 0, 'label' => 'Auto (colonne)' ] ];
         foreach ( $result['items'] as $t ) {
             $list[] = [ 'value' => (int) $t['id'], 'label' => $t['title'] ];
         }

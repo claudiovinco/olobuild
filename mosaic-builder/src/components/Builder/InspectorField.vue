@@ -94,6 +94,12 @@
         @update:modelValue="$emit('update:modelValue', $event)"
       />
 
+      <FieldMegaPanelMap
+        v-else-if="field.type === 'megapanel-map'"
+        :modelValue="modelValue"
+        @update:modelValue="$emit('update:modelValue', $event)"
+      />
+
       <!-- Custom field types rendered by parent (content-items) -->
       <slot v-else-if="field.type === 'content-items'" name="content-items" />
 
@@ -122,6 +128,7 @@ import FieldImage from './fields/FieldImage.vue';
 import FieldMedia from './fields/FieldMedia.vue';
 import FieldGallery from './fields/FieldGallery.vue';
 import FieldIcon from './fields/FieldIcon.vue';
+import FieldMegaPanelMap from './fields/FieldMegaPanelMap.vue';
 import DynamicFieldToggle from './DynamicFieldToggle.vue';
 
 const DYNAMIC_TYPES = ['text', 'textarea', 'editor', 'image', 'media'];
@@ -174,6 +181,7 @@ const fieldComponent = computed(() => {
     case 'gallery': return FieldGallery;
     case 'icon': return FieldIcon;
     case 'textarea': return FieldTextarea;
+    case 'megapanel-map': return FieldMegaPanelMap;
     default: return FieldText;
   }
 });

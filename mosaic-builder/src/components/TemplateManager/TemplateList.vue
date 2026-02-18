@@ -71,6 +71,12 @@
               >
                 Nuovo Footer
               </button>
+              <button
+                @click="createNew('megapanel')"
+                class="mb-block mb-w-full mb-text-left mb-px-4 mb-py-2.5 mb-text-sm mb-text-gray-200 hover:mb-bg-gray-700 mb-transition-colors"
+              >
+                Nuovo Mega Panel
+              </button>
               <div class="mb-border-t mb-border-gray-700"></div>
               <div class="mb-px-4 mb-py-2 mb-text-[10px] mb-text-gray-500 mb-uppercase mb-font-bold">Template Single</div>
               <button
@@ -160,6 +166,12 @@
             >
               Single: {{ getSinglePostType(tpl) }}
             </span>
+            <span
+              v-if="tpl.type === 'megapanel'"
+              class="mb-absolute mb-top-2 mb-left-2 mb-px-2 mb-py-0.5 mb-text-[10px] mb-font-bold mb-uppercase mb-rounded mb-bg-indigo-600/20 mb-text-indigo-300 mb-border mb-border-indigo-500/30"
+            >
+              Mega Panel
+            </span>
             <!-- Active header indicator -->
             <span
               v-if="tpl.type === 'header' && tpl.id === activeHeaderId"
@@ -242,7 +254,7 @@
             </div>
             <div class="mb-mt-3 mb-flex mb-items-center mb-gap-2">
               <!-- Shortcode for pages -->
-              <code v-if="tpl.type !== 'header' && tpl.type !== 'footer' && tpl.type !== 'single'" class="mb-text-[10px] mb-text-gray-500 mb-bg-gray-700 mb-px-2 mb-py-0.5 mb-rounded">
+              <code v-if="tpl.type !== 'header' && tpl.type !== 'footer' && tpl.type !== 'single' && tpl.type !== 'megapanel'" class="mb-text-[10px] mb-text-gray-500 mb-bg-gray-700 mb-px-2 mb-py-0.5 mb-rounded">
                 [olo_template id="{{ tpl.id }}"]
               </code>
               <!-- Activate/Deactivate for headers -->
@@ -353,6 +365,7 @@ const tabs = [
   { value: 'header', label: 'Header' },
   { value: 'footer', label: 'Footer' },
   { value: 'single', label: 'Single' },
+  { value: 'megapanel', label: 'Mega Panel' },
 ];
 const activeTab = ref('all');
 

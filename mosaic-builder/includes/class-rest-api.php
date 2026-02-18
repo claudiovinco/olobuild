@@ -66,6 +66,13 @@ class Olo_Rest_Api {
             'permission_callback' => [ $this, 'check_permission' ],
         ] );
 
+        // Menu items (L1 only) for a given menu
+        register_rest_route( $this->namespace, '/menu-items/(?P<menu_id>\d+)', [
+            'methods'             => 'GET',
+            'callback'            => [ $this, 'get_menu_items' ],
+            'permission_callback' => [ $this, 'check_permission' ],
+        ] );
+
         // Available tiles
         register_rest_route( $this->namespace, '/tiles', [
             'methods'             => 'GET',
@@ -273,6 +280,28 @@ class Olo_Rest_Api {
 
         $db->delete_template( $id );
         return rest_ensure_response( [ 'deleted' => true ] );
+    }
+
+    public function get_menu_items( $request ) {
+        $menu_id = absint( $request['menu_id'] );
+        $items   = wp_get_nav_menu_items( $menu_id );
+
+        if ( ! $items || ! is_array( $items ) ) {
+            return rest_ensure_response( [] );
+        }
+
+        // Return only L1 (top-level) items
+        $result = [];
+        foreach ( $items as $item ) {
+            if ( (int) $item->menu_item_parent === 0 ) {
+                $result[] = [
+                    'id'    => $item->ID,
+                    'title' => $item->title,
+                ];
+            }
+        }
+
+        return rest_ensure_response( $result );
     }
 
     public function get_tiles() {

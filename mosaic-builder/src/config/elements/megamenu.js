@@ -21,6 +21,7 @@ export default {
     item_gap: '15',
 
     // Mega Panel
+    panel_templates: {},
     mega_mode: 'auto',
     panel_width: 'container',
     panel_columns: '4',
@@ -103,6 +104,7 @@ export default {
 
     // -- Mega Panel --
     { type: 'separator', label: 'Mega Panel' },
+    { key: 'panel_templates', label: 'Template pannelli', type: 'megapanel-map' },
     { key: 'mega_mode', label: 'Attivazione mega', type: 'select', options: [
       { value: 'auto', label: 'Automatico (tutte con figli)' },
       { value: 'css-class', label: 'Solo classe mega-menu' },

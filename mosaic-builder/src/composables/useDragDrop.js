@@ -1,4 +1,4 @@
-import { useTilesStore, generateId, createSection, createRow, createColumn, CONTAINER_TYPES } from '@/stores/tiles';
+import { useTilesStore, generateId, createSection, createRow, createColumn, createInnerColumn, CONTAINER_TYPES } from '@/stores/tiles';
 import { useBuilderStore } from '@/stores/builder';
 
 export function useDragDrop() {
@@ -27,6 +27,19 @@ export function useDragDrop() {
     // Container types get a children array
     if (CONTAINER_TYPES.includes(tile.type)) {
       tile.children = [];
+    }
+
+    // Auto-create sub-columns for inner-columns
+    if (tile.type === 'inner-columns') {
+      const innerLayoutWidths = {
+        '50-50': [50, 50],
+        '33-33-33': [33.33, 33.33, 33.34],
+        '25-75': [25, 75],
+        '75-25': [75, 25],
+        '25-50-25': [25, 50, 25],
+      };
+      const widths = innerLayoutWidths[tile.settings.layout] || [50, 50];
+      tile.children = widths.map(w => createInnerColumn(w, []));
     }
 
     return tile;
