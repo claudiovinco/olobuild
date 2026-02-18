@@ -863,6 +863,18 @@ function inferField(key, value) {
 function evaluateCondition(condition, settings) {
   if (!condition || !settings) return true;
   const val = settings[condition.field];
+  if (condition.operator) {
+    const nv = parseFloat(val);
+    const nc = parseFloat(condition.value);
+    switch (condition.operator) {
+      case '!=': return Array.isArray(condition.value) ? !condition.value.includes(val) : val !== condition.value;
+      case '>':  return nv > nc;
+      case '<':  return nv < nc;
+      case '>=': return nv >= nc;
+      case '<=': return nv <= nc;
+      default:   return val === condition.value;
+    }
+  }
   return Array.isArray(condition.value) ? condition.value.includes(val) : val === condition.value;
 }
 

@@ -13,8 +13,6 @@
       type="number"
       :value="modelValue"
       @change="onInput($event)"
-      :min="min"
-      :max="max"
       :step="step"
       class="mb-w-14 mb-bg-white mb-border mb-border-gray-300 mb-rounded mb-px-1.5 mb-py-0.5 mb-text-xs mb-text-gray-900 mb-text-center"
     />
