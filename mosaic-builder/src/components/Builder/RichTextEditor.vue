@@ -284,7 +284,6 @@ onBeforeUnmount(() => {
 .rte-wrap {
   border: 1px solid #4b5563;
   border-radius: 6px;
-  overflow: hidden;
   background: #1f2937;
 }
 
@@ -441,11 +440,13 @@ onBeforeUnmount(() => {
   min-height: 40px;
   max-height: 300px;
   overflow-y: auto;
+  background: #ffffff;
+  border-radius: 0 0 5px 5px;
 }
 
 .rte-content :deep(.tiptap) {
   padding: 8px;
-  color: #e5e7eb;
+  color: #1f2937;
   font-size: 13px;
   line-height: 1.5;
   outline: none;
