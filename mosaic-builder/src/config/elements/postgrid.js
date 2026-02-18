@@ -37,6 +37,8 @@ export default {
     link_text: 'Vedi',
     link_style: 'button',
     hover_effect: 'none',
+    hover_image_field: '',
+    hover_video_field: '',
     ribbon_field: '',
     ribbon_position: 'top-right',
     ribbon_bg: '#e11d48',
@@ -157,6 +159,10 @@ export default {
       { value: 'desaturate', label: 'Desatura → colore' },
       { value: 'blur-in', label: 'Sfocatura → nitido' },
     ]},
+    { key: 'hover_image_field', label: 'Meta key immagine hover', type: 'text',
+      condition: { field: 'show_image', value: true } },
+    { key: 'hover_video_field', label: 'Meta key video hover (mp4)', type: 'text',
+      condition: { field: 'show_image', value: true } },
 
     { type: 'separator', label: 'Ribbon' },
 

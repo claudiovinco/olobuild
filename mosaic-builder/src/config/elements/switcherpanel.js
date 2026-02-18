@@ -31,8 +31,10 @@ export default {
         { key: 'button_text', label: 'Testo pulsante', type: 'text' },
         { key: 'button_url', label: 'URL pulsante', type: 'text' },
         { key: 'image', label: 'Immagine', type: 'image' },
+        { key: 'hover_image', label: 'Immagine hover', type: 'image' },
+        { key: 'hover_video', label: 'Video hover', type: 'media' },
       ],
-      newItemDefaults: { nav_label: 'Nuovo', title: 'Nuovo pannello', text: 'Contenuto del pannello.', button_text: 'READ MORE', button_url: '#', image: '' },
+      newItemDefaults: { nav_label: 'Nuovo', title: 'Nuovo pannello', text: 'Contenuto del pannello.', button_text: 'READ MORE', button_url: '#', image: '', hover_image: '', hover_video: '' },
       itemLabel: 'Pannello',
     },
 

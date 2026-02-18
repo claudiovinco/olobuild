@@ -136,7 +136,10 @@ class Olo_OverlayGrid_Tile extends Olo_Tile_Base {
                     <div>
                         <<?php echo $wrapper_tag; ?> <?php echo $wrapper_attr; ?>>
                             <?php if ( ! empty( $item['image'] ) ) : ?>
-                                <img src="<?php echo esc_url( $item['image'] ); ?>" alt="" class="<?php echo $img_class; ?>">
+                                <?php
+                                $og_img = '<img src="' . esc_url( $item['image'] ) . '" alt="" class="' . $img_class . '">';
+                                echo $this->render_hover_wrap( $og_img, $item['hover_image'] ?? '', $item['hover_video'] ?? '' );
+                                ?>
                             <?php else : ?>
                                 <div style="height:<?php echo $height; ?>px;background:#1f2937;width:100%;"></div>
                             <?php endif; ?>

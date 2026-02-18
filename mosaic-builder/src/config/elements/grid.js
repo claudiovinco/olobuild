@@ -23,9 +23,11 @@ export default {
         { key: 'title', label: 'Titolo', type: 'text' },
         { key: 'content', label: 'Contenuto', type: 'textarea' },
         { key: 'image', label: 'Immagine', type: 'image' },
+        { key: 'hover_image', label: 'Immagine hover', type: 'image' },
+        { key: 'hover_video', label: 'Video hover', type: 'media' },
         { key: 'tag', label: 'Tag', type: 'text' },
       ],
-      newItemDefaults: { title: 'Nuovo elemento', content: '', image: '', tag: 'all' },
+      newItemDefaults: { title: 'Nuovo elemento', content: '', image: '', hover_image: '', hover_video: '', tag: 'all' },
     },
     { key: 'columns', label: 'Colonne', type: 'select', options: [
       { value: '1', label: '1' },

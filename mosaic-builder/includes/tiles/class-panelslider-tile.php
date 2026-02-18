@@ -63,7 +63,10 @@ class Olo_PanelSlider_Tile extends Olo_Tile_Base {
                                 <div class="uk-card uk-card-<?php echo esc_attr( $style ); ?> uk-card-body">
                                     <?php if ( ! empty( $panel['image'] ) ) : ?>
                                         <div class="uk-card-media-top">
-                                            <img src="<?php echo esc_url( $panel['image'] ); ?>" alt="" uk-img>
+                                            <?php
+                                            $ps_img = '<img src="' . esc_url( $panel['image'] ) . '" alt="" uk-img style="width:100%;display:block;">';
+                                            echo $this->render_hover_wrap( $ps_img, $panel['hover_image'] ?? '', $panel['hover_video'] ?? '' );
+                                            ?>
                                         </div>
                                     <?php endif; ?>
                                     <h3 class="uk-card-title"><?php echo esc_html( $panel['title'] ?? '' ); ?></h3>

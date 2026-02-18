@@ -20,6 +20,7 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         'loc_taxonomy'         => '',
         'loc_show_filters'     => false,
         'loc_filter_style'     => 'pills',
+        'loc_filter_align'     => 'left',
         'loc_cluster'          => true,
         'loc_fit_bounds'       => true,
         'loc_default_zoom'     => '13',
@@ -29,6 +30,7 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         'loc_popup_show_link'    => true,
         'loc_max_locations'    => '100',
         'loc_tile_layer'       => 'osm',
+        'border_radius'        => '8',
     ];
 
     public function get_controls() {
@@ -56,6 +58,7 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         $address = $s['address'];
         $zoom    = absint( $s['zoom'] );
         $height  = absint( $s['height'] );
+        $radius  = absint( $s['border_radius'] ?? 8 );
 
         $coords = $this->parse_coords( $address );
 
@@ -71,7 +74,7 @@ class Olo_Map_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
-        <div class="olo-map" style="border-radius: 8px; overflow: hidden;">
+        <div class="olo-map" style="border-radius: <?php echo $radius; ?>px; overflow: hidden;">
             <iframe
                 src="<?php echo esc_url( $src ); ?>"
                 style="width: 100%; height: <?php echo $height; ?>px; border: 0;"
@@ -88,6 +91,7 @@ class Olo_Map_Tile extends Olo_Tile_Base {
      */
     private function render_locations( $s ) {
         $height = absint( $s['height'] );
+        $radius = absint( $s['border_radius'] ?? 8 );
         $map_id = 'olo-map-' . wp_unique_id();
 
         $locations = $this->query_locations( $s );
@@ -117,13 +121,13 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         <div class="olo-map olo-map-locations">
             <?php
             if ( ! empty( $s['loc_show_filters'] ) && ! empty( $terms ) ) {
-                $this->render_filters( $terms, $s['loc_filter_style'], $map_id );
+                $this->render_filters( $terms, $s['loc_filter_style'], $map_id, $s['loc_filter_align'] ?? 'left' );
             }
             ?>
             <div
                 id="<?php echo esc_attr( $map_id ); ?>"
                 class="olo-map-canvas"
-                style="height: <?php echo $height; ?>px; border-radius: 8px; overflow: hidden;"
+                style="height: <?php echo $height; ?>px; border-radius: <?php echo $radius; ?>px; overflow: hidden;"
                 data-map-config="<?php echo esc_attr( wp_json_encode( $config ) ); ?>"
             ></div>
         </div>
@@ -311,9 +315,10 @@ class Olo_Map_Tile extends Olo_Tile_Base {
     /**
      * Render filter UI (pills or dropdown).
      */
-    private function render_filters( $terms, $style, $map_id ) {
+    private function render_filters( $terms, $style, $map_id, $align = 'left' ) {
+        $align_cls = $align === 'center' ? ' olo-filter-center' : ( $align === 'right' ? ' olo-filter-right' : '' );
         ?>
-        <div class="olo-map-filters" data-map-target="<?php echo esc_attr( $map_id ); ?>">
+        <div class="olo-map-filters<?php echo $align_cls; ?>" data-map-target="<?php echo esc_attr( $map_id ); ?>">
             <?php if ( $style === 'dropdown' ) : ?>
                 <select class="olo-map-filter-select uk-select" data-filter-select>
                     <option value=""><?php esc_html_e( 'Tutti', 'olobuilder' ); ?></option>
@@ -323,6 +328,15 @@ class Olo_Map_Tile extends Olo_Tile_Base {
                         </option>
                     <?php endforeach; ?>
                 </select>
+            <?php elseif ( $style === 'minimal' ) : ?>
+                <button class="olo-map-filter-pill olo-map-filter-pill--minimal olo-map-filter-active" data-filter="">
+                    <?php esc_html_e( 'Tutti', 'olobuilder' ); ?>
+                </button>
+                <?php foreach ( $terms as $term ) : ?>
+                    <button class="olo-map-filter-pill olo-map-filter-pill--minimal" data-filter="<?php echo esc_attr( $term['slug'] ); ?>">
+                        <?php echo esc_html( $term['name'] ); ?>
+                    </button>
+                <?php endforeach; ?>
             <?php else : ?>
                 <button class="olo-map-filter-pill olo-map-filter-active" data-filter="">
                     <?php esc_html_e( 'Tutti', 'olobuilder' ); ?>

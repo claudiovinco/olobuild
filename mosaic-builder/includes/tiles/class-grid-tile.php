@@ -109,7 +109,10 @@ class Olo_Grid_Tile extends Olo_Tile_Base {
                     <?php if ( $s['card_style'] === 'minimal' ) : ?>
                     <div class="olo-card-minimal">
                         <?php if ( ! empty( $item['image'] ) ) : ?>
-                        <img class="olo-card-minimal__img" src="<?php echo esc_url( $item['image'] ); ?>" alt="<?php echo esc_attr( $item['title'] ); ?>">
+                        <?php
+                        $grid_min_img = '<img class="olo-card-minimal__img" src="' . esc_url( $item['image'] ) . '" alt="' . esc_attr( $item['title'] ) . '">';
+                        echo $this->render_hover_wrap( $grid_min_img, $item['hover_image'] ?? '', $item['hover_video'] ?? '' );
+                        ?>
                         <?php endif; ?>
                         <h3 class="olo-card-minimal__title"><?php echo wp_kses_post( $item['title'] ); ?></h3>
                         <p class="olo-card-minimal__text"><?php echo wp_kses_post( $item['content'] ); ?></p>
@@ -118,7 +121,10 @@ class Olo_Grid_Tile extends Olo_Tile_Base {
                     <div class="uk-card uk-card-default uk-card-body">
                         <?php if ( ! empty( $item['image'] ) ) : ?>
                         <div class="uk-card-media-top">
-                            <img src="<?php echo esc_url( $item['image'] ); ?>" alt="<?php echo esc_attr( $item['title'] ); ?>">
+                            <?php
+                            $grid_img = '<img src="' . esc_url( $item['image'] ) . '" alt="' . esc_attr( $item['title'] ) . '" style="width:100%;display:block;">';
+                            echo $this->render_hover_wrap( $grid_img, $item['hover_image'] ?? '', $item['hover_video'] ?? '' );
+                            ?>
                         </div>
                         <?php endif; ?>
                         <h3 class="uk-card-title"><?php echo wp_kses_post( $item['title'] ); ?></h3>
@@ -143,10 +149,12 @@ class Olo_Grid_Tile extends Olo_Tile_Base {
             foreach ( $raw as $item ) {
                 if ( is_array( $item ) && ! empty( $item['title'] ) ) {
                     $items[] = [
-                        'title'   => $item['title'],
-                        'content' => $item['content'] ?? '',
-                        'image'   => $item['image'] ?? '',
-                        'tag'     => $item['tag'] ?? 'all',
+                        'title'       => $item['title'],
+                        'content'     => $item['content'] ?? '',
+                        'image'       => $item['image'] ?? '',
+                        'hover_image' => $item['hover_image'] ?? '',
+                        'hover_video' => $item['hover_video'] ?? '',
+                        'tag'         => $item['tag'] ?? 'all',
                     ];
                 }
             }

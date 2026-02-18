@@ -12,6 +12,8 @@ class Olo_Team_Tile extends Olo_Tile_Base {
     protected $category = 'content';
     protected $defaults = [
         'photo'       => '',
+        'hover_image' => '',
+        'hover_video' => '',
         'name'        => 'Jane Smith',
         'role'        => 'Lead Designer',
         'bio'         => 'Passionate about creating beautiful user experiences.',
@@ -47,7 +49,10 @@ class Olo_Team_Tile extends Olo_Tile_Base {
                 </div>
             <?php elseif ( ! empty( $s['photo'] ) ) : ?>
                 <div class="uk-card-media-top">
-                    <img src="<?php echo esc_url( $s['photo'] ); ?>" alt="<?php echo esc_attr( $s['name'] ); ?>" style="width: 100%; height: 250px; object-fit: cover;" />
+                    <?php
+                    $team_img = '<img src="' . esc_url( $s['photo'] ) . '" alt="' . esc_attr( $s['name'] ) . '" style="width: 100%; height: 250px; object-fit: cover;" />';
+                    echo $this->render_hover_wrap( $team_img, $s['hover_image'] ?? '', $s['hover_video'] ?? '' );
+                    ?>
                 </div>
             <?php else : ?>
                 <div class="uk-card-media-top">

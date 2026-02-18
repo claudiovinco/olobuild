@@ -43,8 +43,10 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
         'price_suffix'    => '/notte',
         'link_text'       => 'Vedi',
         'link_style'      => 'button',
-        'hover_effect'    => 'none',
-        'ribbon_field'    => '',
+        'hover_effect'      => 'none',
+        'hover_image_field' => '',
+        'hover_video_field' => '',
+        'ribbon_field'      => '',
         'ribbon_position' => 'top-right',
         'ribbon_bg'       => '#e11d48',
         'ribbon_color'    => '#ffffff',
@@ -115,6 +117,20 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
                 $price_val = get_post_meta( $post->ID, sanitize_key( $s['price_field'] ), true );
                 if ( $price_val !== '' && $price_val !== false ) {
                     $item['price'] = is_numeric( $price_val ) ? floatval( $price_val ) : $price_val;
+                }
+            }
+
+            // Hover media
+            if ( ! empty( $s['hover_image_field'] ) ) {
+                $hi_val = get_post_meta( $post->ID, sanitize_key( $s['hover_image_field'] ), true );
+                if ( ! empty( $hi_val ) ) {
+                    $item['hover_image'] = is_array( $hi_val ) ? ( $hi_val['url'] ?? '' ) : $hi_val;
+                }
+            }
+            if ( ! empty( $s['hover_video_field'] ) ) {
+                $hv_val = get_post_meta( $post->ID, sanitize_key( $s['hover_video_field'] ), true );
+                if ( ! empty( $hv_val ) ) {
+                    $item['hover_video'] = $hv_val;
                 }
             }
 
@@ -260,10 +276,10 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
                             <?php if ( $s['link_style'] === 'card' ) : ?>
                                 <a href="<?php echo esc_url( $item['url'] ); ?>">
                             <?php endif; ?>
-                            <img src="<?php echo esc_url( $item['image'] ); ?>"
-                                 alt="<?php echo esc_attr( $item['title'] ); ?>"
-                                 class="olo-card-minimal__img <?php echo esc_attr( $img_class ); ?>"
-                                 loading="lazy">
+                            <?php
+                            $pg_min_img = '<img src="' . esc_url( $item['image'] ) . '" alt="' . esc_attr( $item['title'] ) . '" class="olo-card-minimal__img ' . esc_attr( $img_class ) . '" loading="lazy">';
+                            echo $this->render_hover_wrap( $pg_min_img, $item['hover_image'] ?? '', $item['hover_video'] ?? '' );
+                            ?>
                             <?php if ( $s['link_style'] === 'card' ) : ?>
                                 </a>
                             <?php endif; ?>
@@ -313,10 +329,10 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
                             <?php if ( $s['link_style'] === 'card' ) : ?>
                                 <a href="<?php echo esc_url( $item['url'] ); ?>">
                             <?php endif; ?>
-                            <img src="<?php echo esc_url( $item['image'] ); ?>"
-                                 alt="<?php echo esc_attr( $item['title'] ); ?>"
-                                 class="<?php echo esc_attr( $img_class ); ?>"
-                                 loading="lazy">
+                            <?php
+                            $pg_img = '<img src="' . esc_url( $item['image'] ) . '" alt="' . esc_attr( $item['title'] ) . '" class="' . esc_attr( $img_class ) . '" loading="lazy">';
+                            echo $this->render_hover_wrap( $pg_img, $item['hover_image'] ?? '', $item['hover_video'] ?? '' );
+                            ?>
                             <?php if ( $s['link_style'] === 'card' ) : ?>
                                 </a>
                             <?php endif; ?>

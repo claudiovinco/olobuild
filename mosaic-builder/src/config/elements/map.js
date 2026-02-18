@@ -14,6 +14,7 @@ export default {
     loc_taxonomy: '',
     loc_show_filters: false,
     loc_filter_style: 'pills',
+    loc_filter_align: 'left',
     loc_cluster: true,
     loc_fit_bounds: true,
     loc_default_zoom: '13',
@@ -25,6 +26,7 @@ export default {
     loc_tile_layer: 'osm',
     // Shared
     height: '400',
+    border_radius: '8',
   },
   fields: [
     {
@@ -67,7 +69,13 @@ export default {
     { key: 'loc_show_filters', label: 'Mostra filtri tassonomia', type: 'toggle', condition: { field: 'mode', value: 'locations' } },
     { key: 'loc_filter_style', label: 'Stile filtri', type: 'select', options: [
       { value: 'pills', label: 'Pillole (pulsanti)' },
+      { value: 'minimal', label: 'Minimale (sottolineatura)' },
       { value: 'dropdown', label: 'Menu a tendina' },
+    ], condition: { field: 'mode', value: 'locations' } },
+    { key: 'loc_filter_align', label: 'Allineamento filtri', type: 'select', options: [
+      { value: 'left', label: 'Sinistra' },
+      { value: 'center', label: 'Centro' },
+      { value: 'right', label: 'Destra' },
     ], condition: { field: 'mode', value: 'locations' } },
 
     { type: 'separator', condition: { field: 'mode', value: 'locations' } },
@@ -79,5 +87,6 @@ export default {
     // ── Condivisi ──
     { type: 'separator' },
     { key: 'height', label: 'Altezza (px)', type: 'range', min: 150, max: 800, step: 10 },
+    { key: 'border_radius', label: 'Raggio angoli (px)', type: 'range', min: 0, max: 30, step: 1 },
   ],
 };

@@ -27,12 +27,14 @@ export default {
     { key: 'slides', label: 'Slide', type: 'content-items', supportsDynamic: true,
       itemFields: [
         { key: 'image', label: 'Immagine', type: 'image' },
+        { key: 'hover_image', label: 'Immagine hover', type: 'image' },
+        { key: 'hover_video', label: 'Video hover', type: 'media' },
         { key: 'title', label: 'Titolo', type: 'text' },
         { key: 'subtitle', label: 'Sottotitolo', type: 'text' },
         { key: 'link', label: 'Link', type: 'text', placeholder: 'https://...' },
         { key: 'ribbon', label: 'Ribbon', type: 'text' },
       ],
-      newItemDefaults: { image: '', title: 'Nuova slide', subtitle: '', link: '', ribbon: '' },
+      newItemDefaults: { image: '', hover_image: '', hover_video: '', title: 'Nuova slide', subtitle: '', link: '', ribbon: '' },
       itemLabel: 'Slide',
     },
     { key: 'columns', label: 'Colonne', type: 'select', options: [

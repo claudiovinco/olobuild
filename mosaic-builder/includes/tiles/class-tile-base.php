@@ -75,6 +75,37 @@ abstract class Olo_Tile_Base {
      * Strips block-level tags (<p>), converts rgb() colors to hex
      * (WordPress safecss_filter_attr doesn't support rgb()), then sanitizes.
      */
+    /**
+     * Wrap an image in a hover-media container for image swap / video on hover.
+     *
+     * @param string $img_html  The original <img> (or inner HTML).
+     * @param string $hover_image  URL of the alternative hover image.
+     * @param string $hover_video  URL of an mp4 video to play on hover.
+     * @return string  Wrapped HTML, or original if no hover media.
+     */
+    protected function render_hover_wrap( $img_html, $hover_image = '', $hover_video = '' ) {
+        if ( empty( $hover_image ) && empty( $hover_video ) ) {
+            return $img_html;
+        }
+
+        $hover_el = '';
+        if ( ! empty( $hover_video ) ) {
+            $hover_el = '<video src="' . esc_url( $hover_video ) . '" muted loop playsinline preload="none"></video>';
+        } elseif ( ! empty( $hover_image ) ) {
+            $hover_el = '<img src="' . esc_url( $hover_image ) . '" alt="" loading="lazy" />';
+        }
+
+        $vid_attrs = '';
+        if ( ! empty( $hover_video ) ) {
+            $vid_attrs = " onmouseenter=\"var v=this.querySelector('.olo-hover-media video');if(v)v.play()\" onmouseleave=\"var v=this.querySelector('.olo-hover-media video');if(v){v.pause();v.currentTime=0}\"";
+        }
+
+        return '<div class="olo-hover-wrap"' . $vid_attrs . '>'
+             . $img_html
+             . '<div class="olo-hover-media">' . $hover_el . '</div>'
+             . '</div>';
+    }
+
     protected function sanitize_richtext( $html ) {
         // Strip block-level wrappers (TipTap may wrap in <p>)
         $html = preg_replace( '/<\/?p[^>]*>/', '', $html );

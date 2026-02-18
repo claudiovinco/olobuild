@@ -11,13 +11,15 @@ class Olo_Image_Tile extends Olo_Tile_Base {
     protected $icon     = 'dashicons-format-image';
     protected $category = 'media';
     protected $defaults = [
-        'image_url'  => '',
-        'alt_text'   => '',
-        'caption'    => '',
-        'link_url'   => '',
+        'image_url'   => '',
+        'hover_image' => '',
+        'hover_video' => '',
+        'alt_text'    => '',
+        'caption'     => '',
+        'link_url'    => '',
         'link_target' => '_self',
-        'object_fit' => 'cover',
-        'height'     => '300px',
+        'object_fit'  => 'cover',
+        'height'      => '300px',
     ];
 
     public function get_controls() {
@@ -45,6 +47,8 @@ class Olo_Image_Tile extends Olo_Tile_Base {
                 esc_attr( $s['height'] ),
                 esc_attr( $s['object_fit'] )
             );
+
+            $img = $this->render_hover_wrap( $img, $s['hover_image'] ?? '', $s['hover_video'] ?? '' );
 
             if ( ! empty( $s['link_url'] ) ) {
                 printf(

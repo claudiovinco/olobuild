@@ -11,6 +11,7 @@ export default {
     object_fit: 'cover',
     lightbox_animation: 'slide',
     show_caption: false,
+    hover_effect: 'none',
   },
   fields: [
     { key: 'images', label: 'Immagini', type: 'gallery' },
@@ -26,6 +27,14 @@ export default {
       { value: 'cover', label: 'Riempi' },
       { value: 'contain', label: 'Contieni' },
       { value: 'fill', label: 'Riempi (deforma)' },
+    ]},
+    { key: 'hover_effect', label: 'Effetto hover', type: 'select', options: [
+      { value: 'none', label: 'Nessuno' },
+      { value: 'zoom', label: 'Zoom' },
+      { value: 'zoom-rotate', label: 'Zoom + rotazione' },
+      { value: 'brightness', label: 'Luminosità' },
+      { value: 'desaturate', label: 'Desatura → colore' },
+      { value: 'blur-in', label: 'Sfocatura → nitido' },
     ]},
     { type: 'separator', label: 'Lightbox' },
     { key: 'lightbox_animation', label: 'Animazione lightbox', type: 'select', options: [

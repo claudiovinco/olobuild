@@ -273,7 +273,10 @@ class Olo_Accordion_Tile extends Olo_Tile_Base {
                                     echo $embed;
                                 endif; ?>
                                 <?php if ( ! empty( $panel_img ) ) : ?>
-                                    <img src="<?php echo esc_url( $panel_img ); ?>" alt="" loading="lazy" />
+                                    <?php
+                                    $acc_img = '<img src="' . esc_url( $panel_img ) . '" alt="" loading="lazy" />';
+                                    echo $this->render_hover_wrap( $acc_img, $panel['hover_image'] ?? '', '' );
+                                    ?>
                                 <?php endif; ?>
                             </div>
                         <?php endif; ?>
@@ -324,11 +327,12 @@ class Olo_Accordion_Tile extends Olo_Tile_Base {
             foreach ( $raw as $item ) {
                 if ( is_array( $item ) && ! empty( $item['title'] ) ) {
                     $panels[] = [
-                        'title'   => $item['title'],
-                        'content' => $item['content'] ?? '',
-                        'image'   => $item['image'] ?? '',
-                        'video'   => $item['video'] ?? '',
-                        'icon'    => $item['icon'] ?? '',
+                        'title'       => $item['title'],
+                        'content'     => $item['content'] ?? '',
+                        'image'       => $item['image'] ?? '',
+                        'hover_image' => $item['hover_image'] ?? '',
+                        'video'       => $item['video'] ?? '',
+                        'icon'        => $item['icon'] ?? '',
                     ];
                 }
             }

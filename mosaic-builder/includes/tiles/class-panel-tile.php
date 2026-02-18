@@ -16,6 +16,8 @@ class Olo_Panel_Tile extends Olo_Tile_Base {
         'meta'          => 'Written by Author',
         'content'       => 'Panel content goes here. Add your text, images, or any other content.',
         'image'         => '',
+        'hover_image'   => '',
+        'hover_video'   => '',
         'link_url'      => '',
         'link_target'   => '_self',
         'title_element' => 'h3',
@@ -60,7 +62,10 @@ class Olo_Panel_Tile extends Olo_Tile_Base {
         <div class="olo-panel <?php echo esc_attr( $card_class ); ?>">
             <?php if ( ! empty( $s['image'] ) ) : ?>
                 <div class="uk-card-media-top">
-                    <img src="<?php echo esc_url( $s['image'] ); ?>" alt="" style="width: 100%; display: block;" />
+                    <?php
+                    $panel_img = '<img src="' . esc_url( $s['image'] ) . '" alt="" style="width: 100%; display: block;" />';
+                    echo $this->render_hover_wrap( $panel_img, $s['hover_image'] ?? '', $s['hover_video'] ?? '' );
+                    ?>
                 </div>
             <?php endif; ?>
 

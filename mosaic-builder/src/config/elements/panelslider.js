@@ -22,8 +22,10 @@ export default {
         { key: 'title', label: 'Titolo', type: 'text' },
         { key: 'content', label: 'Contenuto', type: 'textarea' },
         { key: 'image', label: 'Immagine', type: 'image' },
+        { key: 'hover_image', label: 'Immagine hover', type: 'image' },
+        { key: 'hover_video', label: 'Video hover', type: 'media' },
       ],
-      newItemDefaults: { title: 'Nuova card', content: 'Contenuto...', image: '' },
+      newItemDefaults: { title: 'Nuova card', content: 'Contenuto...', image: '', hover_image: '', hover_video: '' },
       itemLabel: 'Card',
     },
     { key: 'columns', label: 'Colonne', type: 'select', options: [

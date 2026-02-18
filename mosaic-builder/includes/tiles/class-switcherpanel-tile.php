@@ -116,7 +116,10 @@ class Olo_SwitcherPanel_Tile extends Olo_Tile_Base {
                         </div>
                         <?php if ( ! empty( $item['image'] ) ) : ?>
                         <div class="uk-width-2-5@m">
-                            <img src="<?php echo esc_url( $item['image'] ); ?>" alt="<?php echo esc_attr( wp_strip_all_tags( $item['title'] ) ); ?>" class="olo-sp-panel__img" loading="lazy">
+                            <?php
+                            $sp_img = '<img src="' . esc_url( $item['image'] ) . '" alt="' . esc_attr( wp_strip_all_tags( $item['title'] ) ) . '" class="olo-sp-panel__img" loading="lazy">';
+                            echo $this->render_hover_wrap( $sp_img, $item['hover_image'] ?? '', $item['hover_video'] ?? '' );
+                            ?>
                         </div>
                         <?php endif; ?>
                     </div>
@@ -142,6 +145,8 @@ class Olo_SwitcherPanel_Tile extends Olo_Tile_Base {
                     'button_text' => $item['button_text'] ?? '',
                     'button_url'  => $item['button_url'] ?? '#',
                     'image'       => $item['image'] ?? '',
+                    'hover_image' => $item['hover_image'] ?? '',
+                    'hover_video' => $item['hover_video'] ?? '',
                 ];
             }
         }

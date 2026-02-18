@@ -5,6 +5,8 @@ export default {
   category: 'media',
   defaults: {
     image_url: '',
+    hover_image: '',
+    hover_video: '',
     alt_text: '',
     caption: '',
     link_url: '',
@@ -14,6 +16,8 @@ export default {
   },
   fields: [
     { key: 'image_url', label: 'Immagine', type: 'image' },
+    { key: 'hover_image', label: 'Immagine hover', type: 'image' },
+    { key: 'hover_video', label: 'Video hover', type: 'media' },
     { key: 'alt_text', label: 'Testo alternativo', type: 'text' },
     { key: 'caption', label: 'Didascalia', type: 'editor', mode: 'inline' },
     { key: 'link_url', label: 'URL link', type: 'text' },

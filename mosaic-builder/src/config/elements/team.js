@@ -5,6 +5,8 @@ export default {
   category: 'content',
   defaults: {
     photo: '',
+    hover_image: '',
+    hover_video: '',
     name: 'Jane Smith',
     role: 'Lead Designer',
     bio: 'Appassionata di creare esperienze utente eccellenti.',
@@ -14,6 +16,8 @@ export default {
   },
   fields: [
     { key: 'photo', label: 'Foto / Video', type: 'media' },
+    { key: 'hover_image', label: 'Immagine hover', type: 'image' },
+    { key: 'hover_video', label: 'Video hover', type: 'media' },
     { key: 'name', label: 'Nome', type: 'editor', mode: 'inline' },
     { key: 'role', label: 'Ruolo', type: 'editor', mode: 'inline' },
     { key: 'bio', label: 'Biografia', type: 'editor', mode: 'block' },

@@ -130,7 +130,10 @@ class Olo_OverlaySlider_Tile extends Olo_Tile_Base {
                                 <div class="uk-panel<?php echo $toggle_cls; ?>" style="overflow:hidden;" tabindex="0">
                                 <?php endif; ?>
                                     <?php if ( ! empty( $slide['image'] ) ) : ?>
-                                        <img src="<?php echo esc_url( $slide['image'] ); ?>" alt="" class="<?php echo $img_class; ?>">
+                                        <?php
+                                        $os_img = '<img src="' . esc_url( $slide['image'] ) . '" alt="" class="' . $img_class . '">';
+                                        echo $this->render_hover_wrap( $os_img, $slide['hover_image'] ?? '', $slide['hover_video'] ?? '' );
+                                        ?>
                                     <?php else : ?>
                                         <div style="height:<?php echo $height; ?>px;background:#1f2937;width:100%;"></div>
                                     <?php endif; ?>
