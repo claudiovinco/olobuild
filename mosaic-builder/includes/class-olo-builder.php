@@ -231,6 +231,10 @@ class Olo_Builder {
         require_once OLO_PATH . 'includes/tiles/class-megamenu-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-inner-columns-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-timeline-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-flipcard-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-imgcompare-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-marquee-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-togglebtn-tile.php';
 
         $manager = Olo_Tile_Manager::instance();
         $manager->register_tile( new Olo_Section_Tile() );
@@ -288,6 +292,10 @@ class Olo_Builder {
         $manager->register_tile( new Olo_MegaMenu_Tile() );
         $manager->register_tile( new Olo_InnerColumns_Tile() );
         $manager->register_tile( new Olo_Timeline_Tile() );
+        $manager->register_tile( new Olo_FlipCard_Tile() );
+        $manager->register_tile( new Olo_ImgCompare_Tile() );
+        $manager->register_tile( new Olo_Marquee_Tile() );
+        $manager->register_tile( new Olo_ToggleBtn_Tile() );
     }
 
     /**

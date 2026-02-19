@@ -20,6 +20,11 @@ class Olo_Popup_Tile extends Olo_Tile_Base {
         'modal_size'         => '',
         'modal_close_button' => true,
         'modal_title'        => '',
+        'modal_shadow'       => 'lg',
+        'modal_overlay'      => '60',
+        'modal_radius'       => '12',
+        'modal_border_width' => '0',
+        'modal_border_color' => '#374151',
         'content'            => '<p>Contenuto del popup...</p>',
         'image'              => '',
         'image_position'     => 'top',
@@ -35,6 +40,8 @@ class Olo_Popup_Tile extends Olo_Tile_Base {
             [ 'key' => 'button_icon',         'type' => 'icon',   'label' => 'Button Icon' ],
             [ 'key' => 'button_fullwidth',    'type' => 'toggle', 'label' => 'Full Width' ],
             [ 'key' => 'modal_size',          'type' => 'select', 'label' => 'Modal Size' ],
+            [ 'key' => 'modal_shadow',         'type' => 'select', 'label' => 'Modal Shadow' ],
+            [ 'key' => 'modal_overlay',        'type' => 'range',  'label' => 'Overlay Opacity' ],
             [ 'key' => 'modal_close_button',  'type' => 'toggle', 'label' => 'Close Button' ],
             [ 'key' => 'modal_title',         'type' => 'text',   'label' => 'Modal Title' ],
             [ 'key' => 'content',             'type' => 'editor', 'label' => 'Content' ],
@@ -83,9 +90,66 @@ class Olo_Popup_Tile extends Olo_Tile_Base {
         // Button text
         $btn_text = esc_html( $s['button_text'] ?: 'Apri' );
 
+        // Shadow map
+        $shadow_map = [
+            'none' => 'none',
+            'sm'   => '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.06)',
+            'md'   => '0 4px 6px rgba(0,0,0,0.1), 0 2px 4px rgba(0,0,0,0.06)',
+            'lg'   => '0 10px 30px rgba(0,0,0,0.15), 0 4px 12px rgba(0,0,0,0.1)',
+            'xl'   => '0 20px 50px rgba(0,0,0,0.2), 0 8px 20px rgba(0,0,0,0.12)',
+        ];
+        $shadow = $shadow_map[ $s['modal_shadow'] ?? 'lg' ] ?? $shadow_map['lg'];
+
+        // Overlay opacity (0-100 → 0.0-1.0)
+        $overlay_pct = max( 0, min( 100, intval( $s['modal_overlay'] ?? 60 ) ) );
+        $overlay_alpha = round( $overlay_pct / 100, 2 );
+
+        // Border radius
+        $radius = max( 0, intval( $s['modal_radius'] ?? 12 ) );
+
+        // Border
+        $border_w = max( 0, intval( $s['modal_border_width'] ?? 0 ) );
+        $border_c = $this->safe_color( $s['modal_border_color'] ?? '' ) ?: '#374151';
+
         ob_start();
         ?>
         <style>
+            /* Overlay darkness */
+            #<?php echo esc_attr( $uid ); ?> { background: rgba(0, 0, 0, <?php echo $overlay_alpha; ?>) !important; }
+            <?php if ( empty( $s['button_fullwidth'] ) ) : ?>
+            .olo-frontend-tile:has(> .olo-popup-<?php echo esc_attr( $uid ); ?>),
+            .olo-frontend-tile:has(> div > .olo-popup-<?php echo esc_attr( $uid ); ?>) {
+                display: inline-block;
+            }
+            .olo-popup-<?php echo esc_attr( $uid ); ?> { display: inline-block; }
+            <?php endif; ?>
+            /* Shadow + border-radius + border on modal dialog */
+            #<?php echo esc_attr( $uid ); ?> .uk-modal-dialog {
+                <?php if ( $radius > 0 ) : ?>border-radius: <?php echo $radius; ?>px; overflow: hidden;<?php endif; ?>
+                <?php if ( $shadow !== 'none' ) : ?>box-shadow: <?php echo $shadow; ?>;<?php endif; ?>
+                <?php if ( $border_w > 0 ) : ?>border: <?php echo $border_w; ?>px solid <?php echo $border_c; ?>;<?php endif; ?>
+            }
+            /* Full-screen: 20px margin from screen edges, template fills all space */
+            <?php if ( $s['modal_size'] === 'full' ) : ?>
+            #<?php echo esc_attr( $uid ); ?>.uk-modal-full { padding: 20px; box-sizing: border-box; }
+            #<?php echo esc_attr( $uid ); ?>.uk-modal-full > .uk-modal-dialog {
+                <?php if ( $radius > 0 ) : ?>border-radius: <?php echo $radius; ?>px;<?php endif; ?>
+                overflow: hidden;
+                width: 100%;
+                height: calc(100vh - 40px);
+                max-height: calc(100vh - 40px);
+                display: flex;
+                flex-direction: column;
+                <?php if ( $shadow !== 'none' ) : ?>box-shadow: <?php echo $shadow; ?>;<?php endif; ?>
+                <?php if ( $border_w > 0 ) : ?>border: <?php echo $border_w; ?>px solid <?php echo $border_c; ?>;<?php endif; ?>
+            }
+            #<?php echo esc_attr( $uid ); ?> .olo-popup-fullbody {
+                flex: 1;
+                overflow-y: auto;
+                overflow-x: hidden;
+                padding: 0;
+            }
+            <?php endif; ?>
             #<?php echo esc_attr( $uid ); ?> .uk-modal-body { overflow-x: hidden; }
             #<?php echo esc_attr( $uid ); ?> .olo-template,
             #<?php echo esc_attr( $uid ); ?> .olo-frontend-grid,
@@ -103,24 +167,24 @@ class Olo_Popup_Tile extends Olo_Tile_Base {
         // Full-screen modal uses special structure
         if ( $s['modal_size'] === 'full' ) :
         ?>
-        <div class="olo-popup">
+        <div class="olo-popup olo-popup-<?php echo esc_attr( $uid ); ?>">
             <button class="<?php echo esc_attr( $btn_class ); ?>" type="button" uk-toggle="target: #<?php echo esc_attr( $uid ); ?>">
                 <?php echo $icon_html; ?><?php echo $btn_text; ?>
             </button>
 
             <div id="<?php echo esc_attr( $uid ); ?>" class="uk-modal-full" <?php echo $modal_attr; ?>>
-                <div class="uk-modal-dialog uk-flex uk-flex-center uk-flex-middle" uk-height-viewport>
+                <div class="uk-modal-dialog">
                     <?php if ( ! empty( $s['modal_close_button'] ) ) : ?>
-                        <button class="uk-modal-close-full uk-close-large" type="button" uk-close></button>
+                        <button class="uk-modal-close-full uk-close-large" type="button" uk-close style="z-index:10;"></button>
                     <?php endif; ?>
-                    <div class="uk-modal-body uk-width-xlarge">
+                    <div class="olo-popup-fullbody">
                         <?php echo $this->render_modal_content( $s ); ?>
                     </div>
                 </div>
             </div>
         </div>
         <?php else : ?>
-        <div class="olo-popup">
+        <div class="olo-popup olo-popup-<?php echo esc_attr( $uid ); ?>">
             <button class="<?php echo esc_attr( $btn_class ); ?>" type="button" uk-toggle="target: #<?php echo esc_attr( $uid ); ?>">
                 <?php echo $icon_html; ?><?php echo $btn_text; ?>
             </button>

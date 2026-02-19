@@ -1,36 +1,90 @@
 <template>
-  <div style="padding: 16px; text-align: center;">
-    <span
-      class="mb-inline-flex mb-items-center mb-gap-2 mb-rounded mb-font-medium mb-text-sm mb-cursor-default"
-      :class="btnClass"
-      style="padding: 8px 20px;"
-    >
-      <span v-if="settings.button_icon" class="dashicons" :class="'dashicons-' + settings.button_icon" style="font-size:16px;width:16px;height:16px;"></span>
-      {{ settings.button_text || 'Apri' }}
-    </span>
-    <div class="mb-mt-2 mb-text-xs mb-text-gray-500">
-      Click → Modal {{ settings.mode === 'template' ? '(template)' : '(contenuto)' }}
-    </div>
+  <div :style="wrapStyle">
+    <button type="button" :style="btnStyle">
+      <span v-if="s.button_icon && iconSvg" class="olo-popup-icon" :style="iconStyle" v-html="iconSvg"></span>
+      {{ s.button_text || 'Apri' }}
+    </button>
   </div>
 </template>
 
 <script setup>
 import { computed } from 'vue';
+import iconsSvg from '../ProSlider/uikitIconsSvg.js';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
 });
 
-const btnClass = computed(() => {
-  const s = props.settings.button_style || 'default';
-  const map = {
-    default: 'mb-bg-gray-600 mb-text-white',
-    primary: 'mb-bg-blue-600 mb-text-white',
-    secondary: 'mb-bg-gray-500 mb-text-white',
-    danger: 'mb-bg-red-600 mb-text-white',
-    text: 'mb-bg-transparent mb-text-gray-300 mb-underline',
-    link: 'mb-bg-transparent mb-text-blue-400 mb-underline',
+const s = computed(() => ({
+  button_text: 'Apri',
+  button_style: 'default',
+  button_size: '',
+  button_icon: '',
+  button_fullwidth: false,
+  mode: 'simple',
+  ...props.settings,
+}));
+
+const iconSvg = computed(() => iconsSvg[s.value.button_icon] || '');
+
+const styleMap = {
+  default:   { bg: '#222', color: '#fff', border: 'none' },
+  primary:   { bg: 'var(--olo-color-primary, #6366F1)', color: '#fff', border: 'none' },
+  secondary: { bg: '#e5e7eb', color: '#222', border: 'none' },
+  danger:    { bg: '#dc2626', color: '#fff', border: 'none' },
+  text:      { bg: 'transparent', color: '#999', border: 'none', textDecoration: 'none' },
+  link:      { bg: 'transparent', color: 'var(--olo-color-primary, #6366F1)', border: 'none', textDecoration: 'none' },
+};
+
+const sizeMap = {
+  '':      { padding: '8px 24px', fontSize: '14px' },
+  small:   { padding: '5px 16px', fontSize: '12px' },
+  large:   { padding: '12px 32px', fontSize: '16px' },
+};
+
+const wrapStyle = computed(() => {
+  if (s.value.button_fullwidth) {
+    return { display: 'block' };
+  }
+  return { display: 'inline-block' };
+});
+
+const btnStyle = computed(() => {
+  const st = styleMap[s.value.button_style] || styleMap.default;
+  const sz = sizeMap[s.value.button_size] || sizeMap[''];
+  const base = {
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: '6px',
+    background: st.bg,
+    color: st.color,
+    border: st.border,
+    padding: sz.padding,
+    fontSize: sz.fontSize,
+    fontWeight: '500',
+    lineHeight: '1.4',
+    borderRadius: '2px',
+    cursor: 'default',
+    textTransform: 'uppercase',
+    letterSpacing: '0.5px',
+    fontFamily: 'inherit',
   };
-  return map[s] || map.default;
+  if (st.textDecoration) base.textDecoration = st.textDecoration;
+  if (s.value.button_fullwidth) base.width = '100%';
+  return base;
+});
+
+const iconStyle = computed(() => {
+  const sz = s.value.button_size === 'small' ? '14px' : s.value.button_size === 'large' ? '18px' : '16px';
+  return { display: 'inline-flex', width: sz, height: sz, flexShrink: '0' };
 });
 </script>
+
+<style scoped>
+.olo-popup-icon :deep(svg) {
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+  stroke: currentColor;
+}
+</style>

@@ -1,0 +1,326 @@
+<template>
+  <div
+    class="olo-fc-preview"
+    :style="containerStyle"
+    @mouseenter="onMouseEnter"
+    @mouseleave="onMouseLeave"
+    @click="onClick"
+  >
+    <div class="olo-fc-inner" :style="innerStyle">
+      <!-- Front -->
+      <div class="olo-fc-face olo-fc-face-front" :style="frontStyle">
+        <img
+          v-if="s.front_image"
+          class="olo-fc-bg"
+          :src="s.front_image"
+          alt=""
+        />
+        <div
+          v-if="s.front_image && s.front_overlay"
+          class="olo-fc-overlay"
+          :style="{ background: s.front_overlay }"
+        ></div>
+        <div v-if="s.front_video && !s.front_image" class="olo-fc-bg" style="display:flex;align-items:center;justify-content:center;background:#111827">
+          <div class="mb-text-center mb-text-gray-400">
+            <div class="mb-text-2xl mb-mb-1">&#9654;</div>
+            <div class="mb-text-xs">Video</div>
+          </div>
+        </div>
+        <div class="olo-fc-content" :style="frontContentStyle">
+          <div v-if="s.front_icon" class="olo-fc-icon" :style="frontIconStyle">
+            <span :uk-icon="'icon: ' + s.front_icon + '; width: ' + (parseInt(s.front_icon_size)||40) + '; height: ' + (parseInt(s.front_icon_size)||40)"></span>
+          </div>
+          <div v-if="s.front_title" class="olo-fc-title" :style="titleStyle" v-html="s.front_title"></div>
+          <div v-if="s.front_description" class="olo-fc-desc" :style="descStyle" v-html="s.front_description"></div>
+        </div>
+      </div>
+
+      <!-- Back -->
+      <div class="olo-fc-face olo-fc-face-back" :style="backFaceStyle">
+        <img
+          v-if="s.back_image"
+          class="olo-fc-bg"
+          :src="s.back_image"
+          alt=""
+        />
+        <div
+          v-if="s.back_image && s.back_overlay"
+          class="olo-fc-overlay"
+          :style="{ background: s.back_overlay }"
+        ></div>
+        <div v-if="s.back_video && !s.back_image" class="olo-fc-bg" style="display:flex;align-items:center;justify-content:center;background:#111827">
+          <div class="mb-text-center mb-text-gray-400">
+            <div class="mb-text-2xl mb-mb-1">&#9654;</div>
+            <div class="mb-text-xs">Video</div>
+          </div>
+        </div>
+        <div class="olo-fc-content" :style="backContentStyle">
+          <div v-if="s.back_icon" class="olo-fc-icon" :style="backIconStyle">
+            <span :uk-icon="'icon: ' + s.back_icon + '; width: ' + (parseInt(s.back_icon_size)||40) + '; height: ' + (parseInt(s.back_icon_size)||40)"></span>
+          </div>
+          <div v-if="s.back_title" class="olo-fc-title" :style="titleStyle" v-html="s.back_title"></div>
+          <div v-if="s.back_description" class="olo-fc-desc" :style="descStyle" v-html="s.back_description"></div>
+          <div v-if="s.back_cta_text">
+            <span class="olo-fc-cta" :style="ctaStyle">{{ s.back_cta_text }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref, computed } from 'vue';
+
+const props = defineProps({
+  settings: { type: Object, default: () => ({}) },
+});
+
+const s = computed(() => ({
+  front_image: '',
+  front_video: '',
+  front_icon: 'star',
+  front_icon_size: '40',
+  front_icon_color: '',
+  front_title: 'Titolo fronte',
+  front_description: 'Descrizione della card visibile.',
+  front_bg: '#1e1e2e',
+  front_overlay: 'rgba(0,0,0,0.3)',
+  front_text_color: '#F3F4F6',
+  front_text_align: 'center',
+  front_valign: 'center',
+
+  back_image: '',
+  back_video: '',
+  back_icon: '',
+  back_icon_size: '40',
+  back_icon_color: '',
+  back_title: 'Titolo retro',
+  back_description: 'Contenuto retro con dettagli.',
+  back_bg: '#6366F1',
+  back_overlay: '',
+  back_text_color: '#FFFFFF',
+  back_text_align: 'center',
+  back_valign: 'center',
+  back_cta_text: 'Scopri di più',
+  back_cta_url: '',
+  back_cta_target: false,
+  back_cta_bg: '#FFFFFF',
+  back_cta_color: '#6366F1',
+  back_cta_radius: '6',
+
+  flip_direction: 'horizontal',
+  flip_duration: '600',
+  flip_trigger: 'hover',
+  flip_easing: 'ease-in-out',
+
+  card_height: '350',
+  card_border_radius: '12',
+  card_shadow: 'md',
+  card_border_width: '0',
+  card_border_color: '#374151',
+  card_padding: '24',
+
+  title_size: '22',
+  title_weight: '600',
+  desc_size: '14',
+  ...props.settings,
+}));
+
+const flipped = ref(false);
+
+function onMouseEnter() {
+  if (s.value.flip_trigger !== 'click') flipped.value = true;
+}
+function onMouseLeave() {
+  if (s.value.flip_trigger !== 'click') flipped.value = false;
+}
+function onClick() {
+  if (s.value.flip_trigger === 'click') flipped.value = !flipped.value;
+}
+
+const vAlignMap = { top: 'flex-start', center: 'center', bottom: 'flex-end' };
+
+const shadowMap = {
+  none: 'none',
+  sm: '0 1px 2px rgba(0,0,0,0.05)',
+  md: '0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1)',
+  lg: '0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1)',
+  xl: '0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1)',
+};
+
+const halfH = computed(() => Math.round((parseInt(s.value.card_height) || 350) / 2));
+
+const containerStyle = computed(() => {
+  const h = parseInt(s.value.card_height) || 350;
+  const r = parseInt(s.value.card_border_radius) || 0;
+  const bw = parseInt(s.value.card_border_width) || 0;
+  const dir = s.value.flip_direction;
+  return {
+    perspective: (dir === 'slide-flip' || dir === 'cube') ? '2000px' : '1200px',
+    height: h + 'px',
+    borderRadius: r + 'px',
+    boxShadow: shadowMap[s.value.card_shadow] || shadowMap.md,
+    border: bw > 0 ? `${bw}px solid ${s.value.card_border_color || '#374151'}` : 'none',
+    cursor: 'pointer',
+  };
+});
+
+const flipTransform = computed(() => {
+  if (!flipped.value) return 'none';
+  const d = s.value.flip_direction;
+  switch (d) {
+    case 'vertical':   return 'rotateX(180deg)';
+    case 'diagonal':   return 'rotateX(180deg) rotateY(180deg)';
+    case 'cube':       return 'rotateY(90deg)';
+    case 'slide-flip': return 'translateX(-10%) rotateY(-180deg)';
+    case 'zoom-flip':  return 'scale(1.05) rotateY(180deg)';
+    default:           return 'rotateY(180deg)';
+  }
+});
+
+const innerStyle = computed(() => {
+  const st = {
+    position: 'relative',
+    width: '100%',
+    height: '100%',
+    transformStyle: 'preserve-3d',
+    transition: `transform ${parseInt(s.value.flip_duration) || 600}ms ${s.value.flip_easing || 'ease-in-out'}`,
+    transform: flipTransform.value,
+  };
+  if (s.value.flip_direction === 'cube') {
+    st.transformOrigin = `center center -${halfH.value}px`;
+  }
+  return st;
+});
+
+const backTransform = computed(() => {
+  const d = s.value.flip_direction;
+  const hH = halfH.value;
+  switch (d) {
+    case 'vertical':   return 'rotateX(180deg)';
+    case 'diagonal':   return 'rotateX(180deg) rotateY(180deg)';
+    case 'cube':       return `rotateY(-90deg) translateZ(${hH}px)`;
+    case 'slide-flip': return 'rotateY(180deg)';
+    case 'zoom-flip':  return 'rotateY(180deg)';
+    default:           return 'rotateY(180deg)';
+  }
+});
+
+const frontStyle = computed(() => {
+  const r = parseInt(s.value.card_border_radius) || 0;
+  const st = {
+    backgroundColor: s.value.front_bg || '#1e1e2e',
+    color: s.value.front_text_color || '#F3F4F6',
+    borderRadius: r + 'px',
+  };
+  if (s.value.flip_direction === 'cube') {
+    st.transform = `translateZ(${halfH.value}px)`;
+  }
+  return st;
+});
+
+const backFaceStyle = computed(() => {
+  const r = parseInt(s.value.card_border_radius) || 0;
+  return {
+    backgroundColor: s.value.back_bg || '#6366F1',
+    color: s.value.back_text_color || '#FFFFFF',
+    borderRadius: r + 'px',
+    transform: backTransform.value,
+  };
+});
+
+const frontContentStyle = computed(() => ({
+  padding: (parseInt(s.value.card_padding) || 24) + 'px',
+  justifyContent: vAlignMap[s.value.front_valign] || 'center',
+  textAlign: s.value.front_text_align || 'center',
+}));
+
+const backContentStyle = computed(() => ({
+  padding: (parseInt(s.value.card_padding) || 24) + 'px',
+  justifyContent: vAlignMap[s.value.back_valign] || 'center',
+  textAlign: s.value.back_text_align || 'center',
+}));
+
+const frontIconStyle = computed(() => {
+  const st = { fontSize: (parseInt(s.value.front_icon_size) || 40) + 'px' };
+  if (s.value.front_icon_color) st.color = s.value.front_icon_color;
+  return st;
+});
+
+const backIconStyle = computed(() => {
+  const st = { fontSize: (parseInt(s.value.back_icon_size) || 40) + 'px' };
+  if (s.value.back_icon_color) st.color = s.value.back_icon_color;
+  return st;
+});
+
+const titleStyle = computed(() => ({
+  fontSize: (parseInt(s.value.title_size) || 22) + 'px',
+  fontWeight: s.value.title_weight || '600',
+}));
+
+const descStyle = computed(() => ({
+  fontSize: (parseInt(s.value.desc_size) || 14) + 'px',
+}));
+
+const ctaStyle = computed(() => ({
+  display: 'inline-block',
+  marginTop: '16px',
+  padding: '10px 24px',
+  background: s.value.back_cta_bg || '#FFFFFF',
+  color: s.value.back_cta_color || '#6366F1',
+  borderRadius: (parseInt(s.value.back_cta_radius) || 6) + 'px',
+  textDecoration: 'none',
+  fontWeight: '600',
+  fontSize: (parseInt(s.value.desc_size) || 14) + 'px',
+  cursor: 'default',
+}));
+</script>
+
+<style scoped>
+.olo-fc-preview {
+  position: relative;
+}
+.olo-fc-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.olo-fc-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+.olo-fc-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+.olo-fc-content {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.olo-fc-icon {
+  line-height: 1;
+  margin-bottom: 12px;
+}
+.olo-fc-title {
+  margin: 0 0 8px;
+  line-height: 1.3;
+}
+.olo-fc-desc {
+  line-height: 1.5;
+  margin: 0;
+  opacity: 0.9;
+}
+</style>

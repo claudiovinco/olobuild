@@ -1,0 +1,161 @@
+export default {
+  type: 'flipcard',
+  name: 'FlipCard',
+  icon: 'dashicons-image-flip-horizontal',
+  category: 'content',
+  defaults: {
+    // Fronte
+    front_image: '',
+    front_video: '',
+    front_icon: 'star',
+    front_icon_size: '40',
+    front_icon_color: '',
+    front_title: 'Titolo fronte',
+    front_description: 'Descrizione della card visibile.',
+    front_bg: '#1e1e2e',
+    front_overlay: 'rgba(0,0,0,0.3)',
+    front_text_color: '#F3F4F6',
+    front_text_align: 'center',
+    front_valign: 'center',
+
+    // Retro
+    back_image: '',
+    back_video: '',
+    back_icon: '',
+    back_icon_size: '40',
+    back_icon_color: '',
+    back_title: 'Titolo retro',
+    back_description: 'Contenuto retro con dettagli.',
+    back_bg: '#6366F1',
+    back_overlay: '',
+    back_text_color: '#FFFFFF',
+    back_text_align: 'center',
+    back_valign: 'center',
+    back_cta_text: 'Scopri di più',
+    back_cta_url: '',
+    back_cta_target: false,
+    back_cta_bg: '#FFFFFF',
+    back_cta_color: '#6366F1',
+    back_cta_radius: '6',
+
+    // Animazione
+    flip_direction: 'horizontal',
+    flip_duration: '600',
+    flip_trigger: 'hover',
+    flip_easing: 'ease-in-out',
+
+    // Card
+    card_height: '350',
+    card_border_radius: '12',
+    card_shadow: 'md',
+    card_border_width: '0',
+    card_border_color: '#374151',
+    card_padding: '24',
+
+    // Tipografia
+    title_size: '22',
+    title_weight: '600',
+    desc_size: '14',
+  },
+  fields: [
+    // ── Fronte ──
+    { key: 'front_image', label: 'Immagine sfondo', type: 'image' },
+    { key: 'front_video', label: 'Video sfondo (mp4)', type: 'media' },
+    { key: 'front_icon', label: 'Icona', type: 'icon' },
+    { key: 'front_icon_size', label: 'Dimensione icona (px)', type: 'range', min: 24, max: 80 },
+    { key: 'front_icon_color', label: 'Colore icona', type: 'color' },
+    { key: 'front_title', label: 'Titolo', type: 'editor', mode: 'inline' },
+    { key: 'front_description', label: 'Descrizione', type: 'editor', mode: 'block' },
+    { key: 'front_bg', label: 'Colore sfondo', type: 'color' },
+    { key: 'front_overlay', label: 'Overlay (su immagine)', type: 'color',
+      condition: { field: 'front_image', op: 'notEmpty' } },
+    { key: 'front_text_color', label: 'Colore testo', type: 'color' },
+    { key: 'front_text_align', label: 'Allineamento testo', type: 'select', options: [
+      { value: 'left', label: 'Sinistra' },
+      { value: 'center', label: 'Centro' },
+      { value: 'right', label: 'Destra' },
+    ]},
+    { key: 'front_valign', label: 'Allineamento verticale', type: 'select', options: [
+      { value: 'top', label: 'Alto' },
+      { value: 'center', label: 'Centro' },
+      { value: 'bottom', label: 'Basso' },
+    ]},
+
+    // ── Retro ──
+    { type: 'separator', label: 'Retro' },
+    { key: 'back_image', label: 'Immagine sfondo', type: 'image' },
+    { key: 'back_video', label: 'Video sfondo (mp4)', type: 'media' },
+    { key: 'back_icon', label: 'Icona', type: 'icon' },
+    { key: 'back_icon_size', label: 'Dimensione icona (px)', type: 'range', min: 24, max: 80 },
+    { key: 'back_icon_color', label: 'Colore icona', type: 'color' },
+    { key: 'back_title', label: 'Titolo', type: 'editor', mode: 'inline' },
+    { key: 'back_description', label: 'Descrizione', type: 'editor', mode: 'block' },
+    { key: 'back_bg', label: 'Colore sfondo', type: 'color' },
+    { key: 'back_overlay', label: 'Overlay (su immagine)', type: 'color',
+      condition: { field: 'back_image', op: 'notEmpty' } },
+    { key: 'back_text_color', label: 'Colore testo', type: 'color' },
+    { key: 'back_text_align', label: 'Allineamento testo', type: 'select', options: [
+      { value: 'left', label: 'Sinistra' },
+      { value: 'center', label: 'Centro' },
+      { value: 'right', label: 'Destra' },
+    ]},
+    { key: 'back_valign', label: 'Allineamento verticale', type: 'select', options: [
+      { value: 'top', label: 'Alto' },
+      { value: 'center', label: 'Centro' },
+      { value: 'bottom', label: 'Basso' },
+    ]},
+    { key: 'back_cta_text', label: 'Testo pulsante', type: 'text' },
+    { key: 'back_cta_url', label: 'URL pulsante', type: 'text' },
+    { key: 'back_cta_target', label: 'Apri in nuova scheda', type: 'toggle' },
+    { key: 'back_cta_bg', label: 'Colore sfondo CTA', type: 'color' },
+    { key: 'back_cta_color', label: 'Colore testo CTA', type: 'color' },
+    { key: 'back_cta_radius', label: 'Raggio bordo CTA (px)', type: 'range', min: 0, max: 30 },
+
+    // ── Animazione ──
+    { type: 'separator', label: 'Animazione' },
+    { key: 'flip_direction', label: 'Tipo animazione', type: 'select', options: [
+      { value: 'horizontal', label: 'Flip orizzontale' },
+      { value: 'vertical', label: 'Flip verticale' },
+      { value: 'diagonal', label: 'Flip diagonale' },
+      { value: 'cube', label: 'Cubo 3D' },
+      { value: 'slide-flip', label: 'Slide + Flip' },
+      { value: 'zoom-flip', label: 'Zoom + Flip' },
+    ]},
+    { key: 'flip_duration', label: 'Durata (ms)', type: 'range', min: 400, max: 1200, step: 50 },
+    { key: 'flip_trigger', label: 'Trigger', type: 'select', options: [
+      { value: 'hover', label: 'Hover' },
+      { value: 'click', label: 'Click' },
+    ]},
+    { key: 'flip_easing', label: 'Easing', type: 'select', options: [
+      { value: 'ease', label: 'Ease' },
+      { value: 'ease-in-out', label: 'Ease In-Out' },
+      { value: 'cubic-bezier(0.68,-0.55,0.265,1.55)', label: 'Bounce' },
+    ]},
+
+    // ── Card ──
+    { type: 'separator', label: 'Card' },
+    { key: 'card_height', label: 'Altezza (px)', type: 'range', min: 200, max: 600, step: 10 },
+    { key: 'card_border_radius', label: 'Raggio bordo (px)', type: 'range', min: 0, max: 30 },
+    { key: 'card_shadow', label: 'Ombra', type: 'select', options: [
+      { value: 'none', label: 'Nessuna' },
+      { value: 'sm', label: 'Leggera' },
+      { value: 'md', label: 'Media' },
+      { value: 'lg', label: 'Grande' },
+      { value: 'xl', label: 'Extra grande' },
+    ]},
+    { key: 'card_border_width', label: 'Bordo (px)', type: 'range', min: 0, max: 4 },
+    { key: 'card_border_color', label: 'Colore bordo', type: 'color' },
+    { key: 'card_padding', label: 'Padding interno (px)', type: 'range', min: 0, max: 40 },
+
+    // ── Tipografia ──
+    { type: 'separator', label: 'Tipografia' },
+    { key: 'title_size', label: 'Dimensione titolo (px)', type: 'range', min: 16, max: 40 },
+    { key: 'title_weight', label: 'Peso titolo', type: 'select', options: [
+      { value: '400', label: 'Normal' },
+      { value: '500', label: 'Medium' },
+      { value: '600', label: 'Semibold' },
+      { value: '700', label: 'Bold' },
+    ]},
+    { key: 'desc_size', label: 'Dimensione descrizione (px)', type: 'range', min: 12, max: 20 },
+  ],
+};

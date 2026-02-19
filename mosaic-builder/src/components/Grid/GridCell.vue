@@ -116,6 +116,11 @@ const cellStyle = computed(() => {
   const bg = effectiveBg.value;
   const style = {};
 
+  // Popup tiles (non-fullwidth): inline-block so they sit side by side
+  if (props.tile.type === 'popup' && !props.tile.settings?.button_fullwidth) {
+    style.display = 'inline-block';
+  }
+
   // Margin
   if (s.margin_top) style.marginTop = `${s.margin_top}px`;
   if (s.margin_right) style.marginRight = `${s.margin_right}px`;

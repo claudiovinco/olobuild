@@ -1,5 +1,5 @@
 <template>
-  <div class="olo-tile">
+  <div class="olo-tile" :style="tileWrapStyle">
     <component :is="tileComponent" :settings="tile.settings" :tile-id="tile.id" />
   </div>
 </template>
@@ -61,6 +61,10 @@ import PopupTile from './PopupTile.vue';
 import MegaMenuTile from './MegaMenuTile.vue';
 import InnerColumnsTile from './InnerColumnsTile.vue';
 import TimelineTile from './TimelineTile.vue';
+import FlipCardTile from './FlipCardTile.vue';
+import ImgCompareTile from './ImgCompareTile.vue';
+import MarqueeTile from './MarqueeTile.vue';
+import ToggleBtnTile from './ToggleBtnTile.vue';
 
 const props = defineProps({
   tile: { type: Object, required: true },
@@ -122,9 +126,20 @@ const tileComponents = {
   megamenu: MegaMenuTile,
   'inner-columns': InnerColumnsTile,
   timeline: TimelineTile,
+  flipcard: FlipCardTile,
+  imgcompare: ImgCompareTile,
+  marquee: MarqueeTile,
+  togglebtn: ToggleBtnTile,
 };
 
 const tileComponent = computed(() => {
   return tileComponents[props.tile.type] || null;
+});
+
+const tileWrapStyle = computed(() => {
+  if (props.tile.type === 'popup' && !props.tile.settings?.button_fullwidth) {
+    return { display: 'inline-block' };
+  }
+  return {};
 });
 </script>
