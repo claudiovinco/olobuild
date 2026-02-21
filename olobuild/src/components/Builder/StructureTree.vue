@@ -43,7 +43,8 @@
                 <svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor"><path d="M2 1l4 3-4 3z"/></svg>
               </button>
               <span class="st-dot" style="background: var(--olo-color-primary, #6366F1)"></span>
-              <span class="st-name">Sezione</span>
+              <input v-if="renamingId === section.id" class="st-rename-input" :style="renameInputStyle" :value="renameValue" @input="renameValue = $event.target.value" @keydown.enter.prevent="confirmRename(section)" @keydown.escape="cancelRename()" @blur="confirmRename(section)" @click.stop />
+              <span v-else class="st-name" @click.stop="onNameClick(section)">{{ section.settings?._label || 'Sezione' }}</span>
               <span class="st-badge" style="color:#fff" v-if="section.children?.length">{{ section.children.length }}r</span>
               <span class="st-actions">
                 <button title="Duplica" @click.stop="duplicate(section.id)">
@@ -90,7 +91,8 @@
                         <svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor"><path d="M2 1l4 3-4 3z"/></svg>
                       </button>
                       <span class="st-dot" style="background: var(--olo-color-primary, #6366F1)"></span>
-                      <span class="st-name">Riga <span class="st-meta">{{ row.settings?.layout === 'custom' ? (row.settings?.custom_widths || '%') : (row.settings?.layout || '50-50') }}</span></span>
+                      <input v-if="renamingId === row.id" class="st-rename-input" :style="renameInputStyle" :value="renameValue" @input="renameValue = $event.target.value" @keydown.enter.prevent="confirmRename(row)" @keydown.escape="cancelRename()" @blur="confirmRename(row)" @click.stop />
+                      <span v-else class="st-name" @click.stop="onNameClick(row)">{{ row.settings?._label || 'Riga' }} <span class="st-meta">{{ row.settings?.layout === 'custom' ? (row.settings?.custom_widths || '%') : (row.settings?.layout || '50-50') }}</span></span>
                       <span class="st-actions">
                         <button title="Duplica" @click.stop="duplicate(row.id)">
                           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -126,7 +128,8 @@
                           </button>
                           <span v-else class="st-toggle-ph"></span>
                           <span class="st-dot" style="background: #3B82F6"></span>
-                          <span class="st-name">Col {{ ci + 1 }} <span class="st-meta">{{ col.settings?.width_medium || '' }}</span></span>
+                          <input v-if="renamingId === col.id" class="st-rename-input" :style="renameInputStyle" :value="renameValue" @input="renameValue = $event.target.value" @keydown.enter.prevent="confirmRename(col)" @keydown.escape="cancelRename()" @blur="confirmRename(col)" @click.stop />
+                          <span v-else class="st-name" @click.stop="onNameClick(col)">{{ col.settings?._label || ('Col ' + (ci + 1)) }} <span class="st-meta">{{ col.settings?.width_medium || '' }}</span></span>
                           <span v-if="col.children?.length" class="st-badge" style="color:#fff">{{ col.children.length }}</span>
                         </div>
 
@@ -166,7 +169,8 @@
                                   </button>
                                   <span v-else class="st-toggle-ph"></span>
                                   <span class="st-dot" :style="{ background: dotColor(tile.type) }"></span>
-                                  <span class="st-name">{{ tileLabel(tile) }}</span>
+                                  <input v-if="renamingId === tile.id" class="st-rename-input" :style="renameInputStyle" :value="renameValue" @input="renameValue = $event.target.value" @keydown.enter.prevent="confirmRename(tile)" @keydown.escape="cancelRename()" @blur="confirmRename(tile)" @click.stop />
+                                  <span v-else class="st-name" @click.stop="onNameClick(tile)">{{ tileLabel(tile) }}</span>
                                   <span v-if="tile.type === 'inner-columns'" class="st-badge" style="color:#fff">{{ tile.settings?.layout || '50-50' }}</span>
                                   <span class="st-actions">
                                     <button title="Duplica" @click.stop="duplicate(tile.id)">
@@ -202,7 +206,8 @@
                                       </button>
                                       <span v-else class="st-toggle-ph"></span>
                                       <span class="st-dot" style="background: #3B82F6"></span>
-                                      <span class="st-name">ICol {{ ici + 1 }} <span class="st-meta">{{ icol.settings?.width || '' }}%</span></span>
+                                      <input v-if="renamingId === icol.id" class="st-rename-input" :style="renameInputStyle" :value="renameValue" @input="renameValue = $event.target.value" @keydown.enter.prevent="confirmRename(icol)" @keydown.escape="cancelRename()" @blur="confirmRename(icol)" @click.stop />
+                                      <span v-else class="st-name" @click.stop="onNameClick(icol)">{{ icol.settings?._label || ('ICol ' + (ici + 1)) }} <span class="st-meta">{{ icol.settings?.width || '' }}%</span></span>
                                       <span v-if="icol.children?.length" class="st-badge" style="color:#fff">{{ icol.children.length }}</span>
                                     </div>
 
@@ -233,7 +238,8 @@
                                             </span>
                                             <span class="st-toggle-ph"></span>
                                             <span class="st-dot" :style="{ background: dotColor(innerTile.type) }"></span>
-                                            <span class="st-name">{{ tileLabel(innerTile) }}</span>
+                                            <input v-if="renamingId === innerTile.id" class="st-rename-input" :style="renameInputStyle" :value="renameValue" @input="renameValue = $event.target.value" @keydown.enter.prevent="confirmRename(innerTile)" @keydown.escape="cancelRename()" @blur="confirmRename(innerTile)" @click.stop />
+                                            <span v-else class="st-name" @click.stop="onNameClick(innerTile)">{{ tileLabel(innerTile) }}</span>
                                             <span class="st-actions">
                                               <button title="Duplica" @click.stop="duplicate(innerTile.id)">
                                                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -271,7 +277,7 @@
 </template>
 
 <script setup>
-import { reactive, computed, nextTick } from 'vue';
+import { ref, reactive, computed, nextTick, watch } from 'vue';
 import draggable from 'vuedraggable';
 import { useTilesStore } from '@/stores/tiles';
 import { useBuilderStore } from '@/stores/builder';
@@ -279,6 +285,41 @@ import { loadScrollFlashPrefs } from '@/utils/scrollFlashPrefs';
 
 const tilesStore = useTilesStore();
 const builderStore = useBuilderStore();
+
+// Inline rename
+const renamingId = ref(null);
+const renameValue = ref('');
+const renameInputStyle = 'flex:1;min-width:0;font-size:11px;color:#E5E7EB;background:#1f2937;border:1px solid #4B5563;border-radius:2px;padding:0 4px;height:20px;outline:none;font-family:inherit;line-height:20px';
+
+function onNameClick(tile) {
+  if (builderStore.selectedTileId === tile.id && renamingId.value !== tile.id) {
+    renamingId.value = tile.id;
+    renameValue.value = tile.settings?._label || '';
+    nextTick(function() {
+      var inp = document.querySelector('.st-rename-input');
+      if (inp) { inp.focus(); inp.select(); }
+    });
+  } else if (builderStore.selectedTileId !== tile.id) {
+    selectTile(tile.id);
+  }
+}
+
+function confirmRename(tile) {
+  if (renamingId.value !== tile.id) return;
+  var val = renameValue.value.trim();
+  if (!tile.settings) tile.settings = {};
+  if (val) {
+    tile.settings._label = val;
+  } else {
+    delete tile.settings._label;
+  }
+  renamingId.value = null;
+  builderStore.isDirty = true;
+}
+
+function cancelRename() {
+  renamingId.value = null;
+}
 
 // Track collapsed state (everything expanded by default)
 const collapsed = reactive({});
@@ -322,6 +363,7 @@ const tileNameMap = computed(() => {
 
 function tileLabel(tile) {
   const s = tile.settings || {};
+  if (s._label) return s._label.length > 30 ? s._label.substring(0, 30) + '\u2026' : s._label;
   const custom = s.title || s.heading || s.plan_name || s.name || s.quote || s.text || '';
   if (custom) {
     const clean = custom.replace(/<[^>]*>/g, '').trim();
@@ -405,6 +447,45 @@ function remove(id) {
 function onChange() {
   builderStore.isDirty = true;
 }
+
+// Expand ancestors of a tile so it's visible in the tree
+function expandAncestors(tileId) {
+  for (var s of tilesStore.canvasTiles) {
+    if (s.id === tileId) return;
+    if (!s.children) continue;
+    for (var r of s.children) {
+      if (r.id === tileId) { collapsed[s.id] = false; return; }
+      if (!r.children) continue;
+      for (var c of r.children) {
+        if (c.id === tileId) { collapsed[s.id] = false; collapsed[r.id] = false; return; }
+        if (!c.children) continue;
+        for (var e of c.children) {
+          if (e.id === tileId) { collapsed[s.id] = false; collapsed[r.id] = false; collapsed[c.id] = false; return; }
+          if (e.type === 'inner-columns' && e.children) {
+            for (var ic of e.children) {
+              if (ic.id === tileId) { collapsed[s.id] = false; collapsed[r.id] = false; collapsed[c.id] = false; collapsed[e.id] = false; return; }
+              if (ic.children) {
+                for (var ie of ic.children) {
+                  if (ie.id === tileId) { collapsed[s.id] = false; collapsed[r.id] = false; collapsed[c.id] = false; collapsed[e.id] = false; collapsed[ic.id] = false; return; }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// When a tile is selected (from canvas or anywhere), scroll tree to it
+watch(function() { return builderStore.selectedTileId; }, function(newId) {
+  if (!newId) return;
+  expandAncestors(newId);
+  nextTick(function() {
+    var el = document.querySelector('.st-row--active');
+    if (el) el.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  });
+});
 </script>
 
 <style scoped>
