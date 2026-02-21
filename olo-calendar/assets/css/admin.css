@@ -1,0 +1,85 @@
+/* Olo Calendar — Admin Meta Box */
+
+.olo-event-meta-wrap {
+    padding: 12px 0;
+}
+
+.olo-em-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 16px;
+    align-items: flex-end;
+}
+
+.olo-em-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 140px;
+}
+
+.olo-em-field label {
+    font-weight: 600;
+    font-size: 13px;
+    color: #1d2327;
+}
+
+.olo-em-field input[type="date"],
+.olo-em-field input[type="time"],
+.olo-em-field input[type="text"],
+.olo-em-field input[type="url"] {
+    padding: 6px 10px;
+    border: 1px solid #8c8f94;
+    border-radius: 4px;
+    font-size: 14px;
+    line-height: 1.5;
+    min-height: 36px;
+}
+
+.olo-em-field input[type="color"] {
+    width: 48px;
+    height: 36px;
+    padding: 2px;
+    border: 1px solid #8c8f94;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.olo-em-wide {
+    flex: 1;
+    min-width: 200px;
+}
+
+.olo-em-wide input {
+    width: 100%;
+}
+
+.olo-em-allday {
+    justify-content: center;
+    padding-bottom: 4px;
+}
+
+.olo-em-allday label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.olo-em-allday input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+}
+
+.olo-em-field .description {
+    font-size: 11px;
+    color: #646970;
+    margin-top: 2px;
+}
+
+.olo-em-time {
+    transition: opacity 0.2s ease;
+}

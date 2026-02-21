@@ -24,13 +24,25 @@
         <div v-if="!sidebarCollapsed" @mousedown.prevent="startResize($event)" style="flex:1;width:16px;cursor:col-resize"></div>
       </div>
       <BuilderCanvas />
-      <BuilderInspector v-if="!builderStore.previewMode" />
+      <!-- Inspector resize handle + collapse toggle -->
+      <div v-if="!builderStore.previewMode" style="flex-shrink:0;display:flex;flex-direction:column;align-items:center;background:#1f2937;border-left:1px solid #374151">
+        <button @click="toggleInspector" @mousedown.stop
+          style="width:16px;height:24px;background:none;border:none;color:#6B7280;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;margin:4px 0 0"
+          :title="inspectorCollapsed ? 'Espandi pannello' : 'Comprimi pannello'"
+        >
+          <svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor">
+            <path :d="inspectorCollapsed ? 'M7 0l-6 4 6 4z' : 'M1 0l6 4-6 4z'"/>
+          </svg>
+        </button>
+        <div v-if="!inspectorCollapsed" @mousedown.prevent="startInspectorResize($event)" style="flex:1;width:16px;cursor:col-resize"></div>
+      </div>
+      <BuilderInspector v-if="!builderStore.previewMode && !inspectorCollapsed" :style="{ width: inspectorWidth + 'px', flexShrink: 0 }" />
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, watch, onMounted, onUnmounted } from 'vue';
 import { useTilesStore } from './stores/tiles';
 import { useBuilderStore } from './stores/builder';
 import { useHistory } from './composables/useHistory';
@@ -83,6 +95,56 @@ function startResize(event) {
   document.addEventListener('mousemove', onMove);
   document.addEventListener('mouseup', onUp);
 }
+
+// Inspector resize + collapse
+var INSPECTOR_W_KEY = 'olo_inspector_w';
+var INSPECTOR_C_KEY = 'olo_inspector_c';
+const inspectorWidth = ref(parseInt(localStorage.getItem(INSPECTOR_W_KEY)) || 288);
+const inspectorCollapsed = ref(localStorage.getItem(INSPECTOR_C_KEY) === '1');
+
+function toggleInspector() {
+  inspectorCollapsed.value = !inspectorCollapsed.value;
+  localStorage.setItem(INSPECTOR_C_KEY, inspectorCollapsed.value ? '1' : '');
+}
+
+function startInspectorResize(event) {
+  var startX = event.clientX;
+  var startW = inspectorWidth.value;
+  document.body.style.cursor = 'col-resize';
+  document.body.style.userSelect = 'none';
+  function onMove(e) {
+    var w = startW - (e.clientX - startX);
+    if (w < 100) {
+      inspectorCollapsed.value = true;
+      localStorage.setItem(INSPECTOR_C_KEY, '1');
+    } else {
+      inspectorCollapsed.value = false;
+      localStorage.setItem(INSPECTOR_C_KEY, '');
+      inspectorWidth.value = Math.min(600, w);
+    }
+  }
+  function onUp() {
+    document.body.style.cursor = '';
+    document.body.style.userSelect = '';
+    localStorage.setItem(INSPECTOR_W_KEY, String(inspectorWidth.value));
+    document.removeEventListener('mousemove', onMove);
+    document.removeEventListener('mouseup', onUp);
+  }
+  document.addEventListener('mousemove', onMove);
+  document.addEventListener('mouseup', onUp);
+}
+
+// Auto-expand inspector when tile selected / page settings / style panel opened
+watch([
+  function() { return builderStore.selectedTileId; },
+  function() { return builderStore.pageSettingsOpen; },
+  function() { return builderStore.stylePanelOpen; }
+], function() {
+  if (inspectorCollapsed.value && (builderStore.selectedTileId || builderStore.pageSettingsOpen || builderStore.stylePanelOpen)) {
+    inspectorCollapsed.value = false;
+    localStorage.setItem(INSPECTOR_C_KEY, '');
+  }
+});
 
 onMounted(async () => {
   tilesStore.fetchRegisteredTiles();

@@ -1,0 +1,305 @@
+/**
+ * Olo Lang — Stili frontend (selettore lingua)
+ */
+
+/* Selettore lingua fisso */
+.olo-lang-switcher {
+    position: fixed;
+    z-index: 9999;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+/* Posizioni */
+.olo-lang-pos--bottom-right { bottom: 20px; right: 20px; }
+.olo-lang-pos--bottom-left  { bottom: 20px; left: 20px; }
+.olo-lang-pos--top-right    { top: 20px; right: 20px; }
+.olo-lang-pos--top-left     { top: 20px; left: 20px; }
+
+/* ============================
+   Stile Dropdown
+   ============================ */
+
+.olo-lang-dropdown {
+    position: relative;
+}
+
+.olo-lang-current {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    color: #374151;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+.olo-lang-current:hover {
+    border-color: #6366F1;
+    box-shadow: 0 2px 12px rgba(99, 102, 241, 0.15);
+}
+.olo-lang-current svg {
+    transition: transform 0.2s;
+}
+.olo-lang-dropdown.open .olo-lang-current svg {
+    transform: rotate(180deg);
+}
+
+/* Menu dropdown */
+.olo-lang-menu {
+    position: absolute;
+    bottom: calc(100% + 6px);
+    right: 0;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    min-width: 140px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(4px);
+    transition: opacity 0.2s, transform 0.2s, visibility 0.2s;
+    overflow: hidden;
+}
+.olo-lang-pos--top-right .olo-lang-menu,
+.olo-lang-pos--top-left .olo-lang-menu {
+    bottom: auto;
+    top: calc(100% + 6px);
+    transform: translateY(-4px);
+}
+.olo-lang-dropdown.open .olo-lang-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.olo-lang-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    color: #374151;
+    text-decoration: none;
+    transition: background 0.15s;
+}
+.olo-lang-option:hover {
+    background: #f3f4f6;
+    color: #6366F1;
+    text-decoration: none;
+}
+
+/* Codice lingua (badge) */
+.olo-lang-code {
+    display: inline-block;
+    min-width: 26px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    color: #6366F1;
+}
+
+.olo-lang-name {
+    font-weight: 400;
+}
+
+/* ============================
+   Stile Inline
+   ============================ */
+
+.olo-lang-switcher--inline {
+    display: flex;
+    gap: 4px;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.olo-lang-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 10px;
+    border-radius: 6px;
+    text-decoration: none;
+    color: #6b7280;
+    font-weight: 600;
+    font-size: 12px;
+    transition: background 0.15s, color 0.15s;
+}
+.olo-lang-link:hover {
+    background: #f3f4f6;
+    color: #374151;
+    text-decoration: none;
+}
+.olo-lang-link.olo-lang-active {
+    background: #6366F1;
+    color: #fff;
+}
+.olo-lang-link.olo-lang-active:hover {
+    background: #4f46e5;
+    color: #fff;
+}
+
+/* ============================
+   Tile LangSwitcher (Olobuild)
+   ============================ */
+
+.ols-switcher {
+    display: flex;
+    align-items: center;
+    gap: var(--ols-gap, 8px);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+/* Floating positions */
+.ols-layout--floating {
+    position: fixed;
+    z-index: 9999;
+}
+.ols-float--bottom-right { bottom: 20px; right: 20px; }
+.ols-float--bottom-left  { bottom: 20px; left: 20px; }
+.ols-float--top-right    { top: 20px; right: 20px; }
+.ols-float--top-left     { top: 20px; left: 20px; }
+.ols-float--middle-right { top: 50%; right: 20px; transform: translateY(-50%); }
+.ols-float--middle-left  { top: 50%; left: 20px; transform: translateY(-50%); }
+.ols-float--middle-right,
+.ols-float--middle-left {
+    flex-direction: column;
+}
+
+/* Items (inline & floating) */
+.ols-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border: 1px solid var(--ols-border, #e5e7eb);
+    border-radius: var(--ols-radius, 8px);
+    background: var(--ols-bg, #fff);
+    color: var(--ols-color, #374151);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.15s;
+    cursor: pointer;
+}
+.ols-item:hover {
+    border-color: var(--ols-active-bg, #6366F1);
+    text-decoration: none;
+    color: var(--ols-active-bg, #6366F1);
+}
+.ols-item.ols-active {
+    background: var(--ols-active-bg, #6366F1);
+    color: var(--ols-active-color, #fff);
+    border-color: var(--ols-active-bg, #6366F1);
+}
+.ols-item.ols-active:hover {
+    opacity: 0.9;
+    text-decoration: none;
+    color: var(--ols-active-color, #fff);
+}
+
+.ols-flag {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+.ols-code {
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+}
+.ols-label {
+    font-size: 10px;
+    opacity: 0.8;
+}
+
+/* Dropdown */
+.ols-dropdown {
+    position: relative;
+}
+.ols-trigger {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: var(--ols-bg, #fff);
+    border: 1px solid var(--ols-border, #e5e7eb);
+    border-radius: var(--ols-radius, 8px);
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ols-color, #374151);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+.ols-trigger:hover {
+    border-color: var(--ols-active-bg, #6366F1);
+    box-shadow: 0 2px 12px rgba(99,102,241,0.15);
+}
+.ols-arrow {
+    transition: transform 0.2s;
+    margin-left: 2px;
+}
+.ols-dropdown.ols-open .ols-arrow {
+    transform: rotate(180deg);
+}
+
+.ols-menu {
+    position: absolute;
+    bottom: calc(100% + 6px);
+    right: 0;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: var(--ols-radius, 8px);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    min-width: 140px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(4px);
+    transition: opacity 0.2s, transform 0.2s, visibility 0.2s;
+    overflow: hidden;
+    z-index: 100;
+}
+/* If floating top, open downward */
+.ols-float--top-right .ols-menu,
+.ols-float--top-left .ols-menu {
+    bottom: auto;
+    top: calc(100% + 6px);
+    transform: translateY(-4px);
+}
+.ols-layout--inline .ols-menu {
+    bottom: auto;
+    top: calc(100% + 6px);
+    transform: translateY(-4px);
+}
+.ols-dropdown.ols-open .ols-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+.ols-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    color: #374151;
+    text-decoration: none;
+    transition: background 0.15s;
+}
+.ols-option:hover {
+    background: #f3f4f6;
+    color: var(--ols-active-bg, #6366F1);
+    text-decoration: none;
+}

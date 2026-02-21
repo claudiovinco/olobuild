@@ -1,0 +1,42 @@
+export default {
+  type: 'serviceamenities',
+  name: 'Servizi e Comfort',
+  icon: 'dashicons-yes-alt',
+  category: 'booking',
+  defaults: {
+    meta_prefix: '_olo_service_',
+    columns: '4',
+    gap_x: '24',
+    gap_y: '10',
+    show_title: true,
+    title_text: 'Servizi e comfort',
+    title_size: '18',
+    title_color: '#1F2937',
+    check_color: '',
+    text_color: '#374151',
+    text_size: '14',
+  },
+  fields: [
+    { type: 'separator', label: 'Sorgente dati' },
+    { key: 'meta_prefix', label: 'Tipo servizio', type: 'select', optionsSource: 'metaPrefixes' },
+
+    { type: 'separator', label: 'Layout' },
+    { key: 'columns', label: 'Colonne', type: 'range', min: 2, max: 6, step: 1 },
+    { key: 'gap_x', label: 'Gap orizzontale (px)', type: 'range', min: 8, max: 48, step: 4 },
+    { key: 'gap_y', label: 'Gap verticale (px)', type: 'range', min: 4, max: 24, step: 2 },
+
+    { type: 'separator', label: 'Titolo sezione' },
+    { key: 'show_title', label: 'Mostra titolo', type: 'toggle' },
+    { key: 'title_text', label: 'Testo', type: 'text',
+      condition: { field: 'show_title', value: true } },
+    { key: 'title_size', label: 'Dimensione (px)', type: 'range', min: 14, max: 28, step: 1,
+      condition: { field: 'show_title', value: true } },
+    { key: 'title_color', label: 'Colore', type: 'color',
+      condition: { field: 'show_title', value: true } },
+
+    { type: 'separator', label: 'Colori' },
+    { key: 'check_color', label: 'Colore spunta', type: 'color' },
+    { key: 'text_color', label: 'Colore testo', type: 'color' },
+    { key: 'text_size', label: 'Dimensione testo (px)', type: 'range', min: 12, max: 18, step: 1 },
+  ],
+};

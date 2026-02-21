@@ -1,0 +1,1366 @@
+/**
+ * Olobuilder - Frontend Styles
+ * UIkit 3 handles most layout/component styling.
+ * This file provides custom overrides and Olobuilder-specific classes.
+ */
+
+/* ========================================
+   Template wrapper – full-width breakout
+   ======================================== */
+/*
+ * WordPress block themes nest content in multiple
+ * is-layout-constrained / has-global-padding wrappers.
+ * We break out to full viewport width with the classic
+ * left-50%/translateX(-50%) trick and clip overflow so
+ * the scrollbar doesn't cause an asymmetric shift.
+ */
+body:has(.olo-template) .wp-site-blocks {
+  overflow-x: clip;
+}
+.olo-template {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: none !important;
+}
+
+/* Grid wrapper (used at template level) */
+.olo-frontend-grid {
+  position: relative;
+  z-index: 2;
+  display: flow-root; /* BFC: prevents child margin collapsing through parent */
+  background: inherit; /* Inherit template background so section margins show correctly */
+}
+
+/* Element base */
+.olo-frontend-tile {
+  min-width: 0;
+}
+
+/* ========================================
+   Section full-bleed (edge to edge)
+   ======================================== */
+.olo-section-fullbleed {
+  width: 100%;
+  max-width: none;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* ========================================
+   Element full-width (fills its column)
+   ======================================== */
+.olo-tile-fullwidth {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ========================================
+   Video background (page-level .olo-tile-bg)
+   ======================================== */
+video.olo-tile-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* ========================================
+   Visibility helpers (beyond UIkit)
+   ======================================== */
+@media (min-width: 640px) and (max-width: 959px) {
+  .olo-hidden-tablet {
+    display: none !important;
+  }
+}
+
+/* ========================================
+   Rich text content styles
+   ======================================== */
+.olo-frontend-tile h1,
+.olo-frontend-tile h2,
+.olo-frontend-tile h3,
+.olo-frontend-tile h4 {
+  font-weight: 600;
+}
+.olo-frontend-tile blockquote {
+  border-left: 3px solid currentColor;
+  padding-left: 0.75em;
+  opacity: 0.85;
+}
+
+/* ========================================
+   UIkit overrides for Olobuilder elements
+   ======================================== */
+
+/* Ensure uk-section inside Olobuilder template uses correct box-sizing */
+.olo-template .uk-section {
+  box-sizing: border-box;
+}
+
+/* UIkit icons — ensure color cascades into injected SVG */
+.olo-template [uk-icon] > svg {
+  fill: currentColor;
+}
+.olo-template [uk-icon] > svg [stroke="#000"] {
+  stroke: currentColor;
+}
+
+/* Accordion custom styling hooks */
+.olo-template .uk-accordion-title {
+  font-size: 1em;
+}
+
+/* Progress bar custom colors (UIkit progress doesn't support custom colors natively) */
+.olo-template .uk-progress::-webkit-progress-value {
+  transition: width 0.6s ease;
+}
+.olo-template .uk-progress::-moz-progress-bar {
+  transition: width 0.6s ease;
+}
+
+/* Slideshow text overlay readability */
+.olo-template .uk-slideshow-items .uk-overlay {
+  max-width: 80%;
+}
+
+/* Table responsive scroll shadow hint */
+.olo-template .uk-overflow-auto {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ========================================
+   Header Builder
+   ======================================== */
+
+/* Header wrapper — base styles (z-index, width) */
+.olo-site-header {
+  left: 0;
+  width: 100%;
+  z-index: 980;
+}
+.olo-site-header .olo-template {
+  /* Reset the breakout trick — header is already at the top of .wp-site-blocks */
+  width: 100%;
+  left: 0;
+  transform: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* --- Overlay mode: fixed at top, content goes behind the header --- */
+.olo-site-header.olo-header-overlay {
+  position: fixed;
+  top: 0;
+}
+
+/* --- Classic mode: in flow + sticks to top on scroll --- */
+.olo-site-header.olo-header-classic {
+  position: sticky;
+  top: 0;
+  margin: 0 !important;
+  margin-block: 0 !important;
+}
+/* Prevent child margins from collapsing through the section —
+   this forces the section's background to cover the full area */
+.olo-site-header.olo-header-classic .uk-section {
+  display: flow-root;
+}
+.olo-site-header.olo-header-classic + main,
+.olo-site-header.olo-header-classic + .wp-block-group,
+.olo-site-header.olo-header-classic ~ main,
+.wp-site-blocks > .olo-site-header.olo-header-classic + * {
+  margin-block-start: 0 !important;
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+/* Fallback before JS sets the class (flicker prevention) */
+.olo-site-header:not(.olo-header-overlay):not(.olo-header-classic) {
+  position: fixed;
+  top: 0;
+}
+
+/* When Olobuilder header is active in overlay mode, hide the TT4 title/hero section */
+header.olo-site-header.olo-header-overlay + main > .wp-block-group:first-child {
+  display: none !important;
+}
+
+/* Site Logo element */
+.olo-sitelogo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.olo-sitelogo-link {
+  text-decoration: none;
+  color: inherit;
+  display: inline-flex;
+}
+.olo-sitelogo-link:hover {
+  opacity: 0.8;
+}
+
+/* Nav Menu element — no uk-navbar JS, pure CSS + uk-drop for submenus */
+.olo-nav-bar {
+  display: flex;
+  align-items: center;
+}
+.olo-navmenu .uk-navbar-nav {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 0;
+}
+.olo-navmenu .uk-navbar-nav > li {
+  position: relative;
+}
+.olo-navmenu .uk-navbar-nav > li > a {
+  display: flex;
+  align-items: center;
+  padding: 0 15px;
+  min-height: 40px;
+  text-decoration: none;
+  text-transform: none;
+  color: inherit;
+  transition: color 0.2s;
+}
+.olo-navmenu .uk-navbar-nav > li > a:hover {
+  text-decoration: none;
+}
+
+/* Mobile toggle */
+.olo-nav-toggle {
+  display: inline-flex;
+  align-items: center;
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Dropdown card styling */
+.olo-nav-dropdown {
+  min-width: 180px;
+}
+
+/* Offcanvas menu z-index above header */
+.olo-navmenu .uk-offcanvas {
+  z-index: 990;
+}
+
+/* ========================================
+   Sticky Header
+   ======================================== */
+.olo-site-header {
+  transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s;
+  margin-block-start: 0 !important;
+}
+.olo-header-sticky {
+  transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s;
+}
+/* Classic mode + sticky: when scrolled, switch to fixed */
+.olo-site-header.olo-header-classic.olo-header-sticky {
+  position: fixed;
+  top: 0;
+}
+/* Offset header below WP admin bar when logged in (overlay or fixed-sticky) */
+.admin-bar .olo-site-header.olo-header-overlay,
+.admin-bar .olo-site-header.olo-header-classic.olo-header-sticky {
+  top: 32px !important;
+}
+@media (max-width: 782px) {
+  .admin-bar .olo-site-header.olo-header-overlay,
+  .admin-bar .olo-site-header.olo-header-classic.olo-header-sticky {
+    top: 46px !important;
+  }
+}
+
+/* ========================================
+   Mega Menu
+   ======================================== */
+.olo-mega-drop {
+  width: 100%;
+  min-width: 500px;
+  max-width: 900px;
+}
+.olo-mega-panel {
+  padding: 25px 30px;
+}
+.olo-mega-panel .uk-nav-header {
+  text-transform: uppercase;
+  font-size: 0.85em;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+.olo-mega-panel .uk-nav-default > li > a {
+  padding: 4px 0;
+  font-size: 0.92em;
+}
+.olo-mega-header-link {
+  color: inherit;
+  text-decoration: none;
+}
+.olo-mega-header-link:hover {
+  text-decoration: underline;
+}
+
+/* ========================================
+   Button Items
+   ======================================== */
+.olo-navmenu .olo-nav-btn-item {
+  margin-left: 10px;
+  display: flex;
+  align-items: center;
+}
+.olo-navmenu .olo-nav-btn-item > a.uk-button {
+  min-height: auto;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+/* ========================================
+   Footer Builder
+   ======================================== */
+.olo-site-footer {
+  position: relative;
+  z-index: 1;
+  margin-block-start: 0 !important;
+}
+.olo-site-footer .olo-template {
+  width: 100%;
+  left: 0;
+  transform: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Header/Footer: sections inherit template background unless explicitly styled */
+.olo-site-header .uk-section-default,
+.olo-site-footer .uk-section-default {
+  background: transparent;
+}
+/* Ensure entire header chain is transparent by default */
+.olo-site-header .olo-template,
+.olo-site-header .olo-frontend-grid,
+.olo-site-header .olo-frontend-tile {
+  background: transparent;
+}
+
+/* ========================================
+   Leaflet Locations Map
+   ======================================== */
+
+/* Popup */
+.olo-map-popup {
+  font-family: inherit;
+  font-size: 0.9em;
+  line-height: 1.5;
+  max-width: 260px;
+}
+.olo-map-popup-img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+.olo-map-popup-title {
+  display: block;
+  font-size: 1.05em;
+  margin-bottom: 2px;
+}
+.olo-map-popup-address {
+  display: block;
+  font-size: 0.85em;
+  opacity: 0.65;
+  margin-bottom: 6px;
+}
+.olo-map-popup-excerpt {
+  margin: 0 0 6px;
+  font-size: 0.88em;
+  opacity: 0.8;
+}
+.olo-map-popup-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 3px;
+}
+.olo-map-popup-rating {
+  color: #f59e0b;
+  font-size: 0.9em;
+  letter-spacing: 1px;
+}
+.olo-map-popup-price {
+  font-size: 0.82em;
+  font-weight: 600;
+  color: #16a34a;
+}
+.olo-map-popup-details {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-bottom: 6px;
+  font-size: 0.82em;
+}
+.olo-map-popup-detail strong {
+  margin-right: 3px;
+}
+.olo-map-popup-detail a {
+  color: var(--olo-color-primary, #6366F1);
+  text-decoration: none;
+}
+.olo-map-popup-detail a:hover {
+  text-decoration: underline;
+}
+.olo-map-popup-gallery {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 6px;
+  align-items: center;
+}
+.olo-map-popup-gallery-link {
+  display: block;
+  flex-shrink: 0;
+}
+.olo-map-popup-gallery-thumb {
+  width: 52px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.olo-map-popup-gallery-link:hover .olo-map-popup-gallery-thumb {
+  opacity: 0.75;
+}
+.olo-map-popup-gallery-more {
+  font-size: 0.78em;
+  color: #64748b;
+  font-weight: 600;
+  padding-left: 2px;
+}
+.olo-map-popup-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 6px;
+}
+.olo-map-popup-badge {
+  display: inline-block;
+  font-size: 0.72em;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: #f3f4f6;
+  color: #374151;
+  white-space: nowrap;
+}
+.olo-map-popup-rental {
+  background: #f8fafc;
+  border-radius: 4px;
+  padding: 6px 8px;
+  margin-bottom: 6px;
+}
+.olo-map-popup-rental-price {
+  display: block;
+  font-size: 1.1em;
+  font-weight: 700;
+  color: #0f172a;
+}
+.olo-map-popup-rental-price small {
+  font-weight: 400;
+  font-size: 0.75em;
+  color: #64748b;
+}
+.olo-map-popup-rental-specs {
+  display: block;
+  font-size: 0.8em;
+  color: #475569;
+  margin-top: 2px;
+}
+.olo-map-popup-rental-status {
+  display: inline-block;
+  font-size: 0.75em;
+  font-weight: 600;
+  padding: 1px 8px;
+  border-radius: 3px;
+  margin-top: 4px;
+}
+.olo-map-popup-rental-booked {
+  background: #fef2f2;
+  color: #dc2626;
+}
+.olo-map-popup-rental-maintenance {
+  background: #fffbeb;
+  color: #d97706;
+}
+.olo-map-popup-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 4px;
+}
+.olo-map-popup-btn {
+  display: inline-block;
+  font-size: 0.82em;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 4px;
+  background: var(--olo-color-primary, #6366F1);
+  color: #fff !important;
+  text-decoration: none;
+}
+.olo-map-popup-btn:hover {
+  filter: brightness(0.85);
+}
+.olo-map-popup-link {
+  display: inline-block;
+  font-size: 0.85em;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--olo-color-primary, #6366F1);
+}
+.olo-map-popup-link:hover {
+  text-decoration: underline;
+}
+
+/* Filters */
+.olo-map-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 12px;
+  align-items: center;
+}
+.olo-map-filter-pill {
+  display: inline-block;
+  padding: 5px 14px;
+  font-size: 0.85em;
+  border: 1px solid #d1d5db;
+  border-radius: 999px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+.olo-map-filter-pill:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+.olo-map-filter-pill.olo-map-filter-active {
+  background: var(--olo-color-primary, #6366F1);
+  border-color: var(--olo-color-primary, #6366F1);
+  color: #fff;
+}
+.olo-map-filter-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 4px;
+  vertical-align: middle;
+}
+.olo-map-filter-pill.olo-map-filter-active .olo-map-filter-dot {
+  box-shadow: 0 0 0 2px rgba(255,255,255,0.8);
+}
+/* Minimal filter style for map */
+.olo-map-filter-pill--minimal {
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  padding: 6px 2px;
+  font-size: 0.78em;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #555;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+}
+.olo-map-filter-pill--minimal:hover {
+  background: transparent;
+  color: #111;
+  border-bottom-color: #aaa;
+}
+.olo-map-filter-pill--minimal.olo-map-filter-active {
+  background: transparent;
+  color: var(--olo-color-primary, #6366F1);
+  border-bottom-color: var(--olo-color-primary, #6366F1);
+}
+.olo-map-filters:has(.olo-map-filter-pill--minimal) {
+  gap: 16px;
+}
+
+.olo-map-filter-select {
+  max-width: 250px;
+}
+
+/* SVG marker icon — remove leaflet divIcon default styles */
+.olo-map-marker {
+  background: none !important;
+  border: none !important;
+}
+
+/* Leaflet container border radius */
+.olo-map-canvas {
+  z-index: 1;
+}
+/* Keep Leaflet controls above popups */
+.olo-map-canvas .leaflet-control-container {
+  z-index: 800;
+}
+
+/* Gallery lightbox overlay */
+.olo-map-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.olo-map-lightbox-img {
+  max-width: 90vw;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: 4px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* Service popup (baite/accommodation) */
+.olo-map-popup-service {
+  min-width: 240px;
+}
+.olo-map-popup-subline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 2px;
+  font-size: 12px;
+  color: #6b7280;
+}
+.olo-map-popup-locality {
+  font-weight: 500;
+}
+.olo-map-popup-altitude {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  background: #ecfdf5;
+  color: #065f46;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 1px 7px;
+  border-radius: 10px;
+}
+.olo-map-popup-svc-price {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+  margin-top: 6px;
+}
+.olo-map-popup-svc-price-main {
+  font-size: 16px;
+  font-weight: 700;
+  color: #111827;
+}
+.olo-map-popup-svc-price-main small {
+  font-size: 11px;
+  font-weight: 400;
+  color: #6b7280;
+}
+.olo-map-popup-svc-price-we {
+  font-size: 12px;
+  color: #6b7280;
+}
+.olo-map-popup-svc-price-we small {
+  font-size: 10px;
+}
+.olo-map-popup-svc-specs {
+  font-size: 12px;
+  color: #6b7280;
+  margin-top: 4px;
+}
+
+/* ── Service Filters Bar ── */
+.olo-map-filters-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 14px;
+  padding: 12px 14px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+}
+.olo-map-svc-filter-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: nowrap;
+}
+.olo-map-svc-filter-label {
+  font-size: 0.72em;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #6b7280;
+  white-space: nowrap;
+  min-width: 70px;
+  flex-shrink: 0;
+}
+.olo-map-svc-filter-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+/* Amenity pills: smaller chip */
+.olo-map-filter-pill--amenity {
+  font-size: 0.78em;
+  padding: 3px 10px;
+  border-color: #d1d5db;
+}
+.olo-map-filter-pill--amenity.olo-map-filter-active {
+  background: var(--olo-color-primary, #6366F1);
+  border-color: var(--olo-color-primary, #6366F1);
+  color: #fff;
+}
+.olo-map-amenity-icon {
+  margin-right: 3px;
+  font-size: 1.1em;
+}
+/* Counter */
+.olo-map-svc-filter-counter {
+  font-size: 0.78em;
+  color: #6b7280;
+  font-weight: 600;
+  text-align: right;
+  padding-top: 2px;
+  border-top: 1px solid #e5e7eb;
+}
+/* ── Filter Style: Minimal ── */
+.olo-map-filters-bar--minimal {
+  background: transparent;
+  border: none;
+  padding: 0 0 10px;
+  gap: 6px;
+}
+.olo-map-filters-bar--minimal .olo-map-svc-filter-label {
+  font-size: 0.68em;
+  color: #9ca3af;
+}
+.olo-map-filters-bar--minimal .olo-map-filter-pill {
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  padding: 4px 2px;
+  font-size: 0.78em;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #6b7280;
+  border-bottom: 2px solid transparent;
+}
+.olo-map-filters-bar--minimal .olo-map-filter-pill:hover {
+  background: transparent;
+  color: #374151;
+  border-bottom-color: #d1d5db;
+}
+.olo-map-filters-bar--minimal .olo-map-filter-pill.olo-map-filter-active {
+  background: transparent;
+  color: var(--olo-color-primary, #6366F1);
+  border-bottom-color: var(--olo-color-primary, #6366F1);
+}
+.olo-map-filters-bar--minimal .olo-map-svc-filter-pills {
+  gap: 12px;
+}
+.olo-map-filters-bar--minimal .olo-map-svc-filter-counter {
+  border-top: none;
+  font-size: 0.72em;
+  color: #9ca3af;
+}
+
+/* ── Filter Style: Elegant ── */
+.olo-map-filters-bar--elegant {
+  background: #ffffff;
+  border: 1px solid #f0f0f1;
+  border-radius: 6px;
+  padding: 10px 16px;
+  gap: 6px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+.olo-map-filters-bar--elegant .olo-map-svc-filter-label {
+  font-size: 0.65em;
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: 0.02em;
+  color: #9ca3af;
+  min-width: 60px;
+}
+.olo-map-filters-bar--elegant .olo-map-filter-pill {
+  border: 1px solid #f0f0f1;
+  border-radius: 4px;
+  background: transparent;
+  padding: 4px 12px;
+  font-size: 0.8em;
+  font-weight: 400;
+  color: #6b7280;
+  transition: all 0.2s ease;
+}
+.olo-map-filters-bar--elegant .olo-map-filter-pill:hover {
+  background: #fafafa;
+  border-color: #d1d5db;
+  color: #374151;
+}
+.olo-map-filters-bar--elegant .olo-map-filter-pill.olo-map-filter-active {
+  background: transparent;
+  border-color: var(--olo-color-primary, #6366F1);
+  color: var(--olo-color-primary, #6366F1);
+  font-weight: 500;
+}
+.olo-map-filters-bar--elegant .olo-map-filter-pill--amenity.olo-map-filter-active {
+  background: transparent;
+  border-color: var(--olo-color-primary, #6366F1);
+  color: var(--olo-color-primary, #6366F1);
+}
+.olo-map-filters-bar--elegant .olo-map-svc-filter-group {
+  border-bottom: 1px solid #f5f5f5;
+  padding-bottom: 6px;
+}
+.olo-map-filters-bar--elegant .olo-map-svc-filter-group:last-of-type {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+.olo-map-filters-bar--elegant .olo-map-svc-filter-counter {
+  border-top: none;
+  font-size: 0.72em;
+  color: #c0c4cc;
+  font-weight: 400;
+}
+
+/* ── Filter Style: Modern ── */
+.olo-map-filters-bar--modern {
+  background: #111827;
+  border: none;
+  border-radius: 12px;
+  padding: 14px 18px;
+  gap: 10px;
+}
+.olo-map-filters-bar--modern .olo-map-svc-filter-label {
+  font-size: 0.7em;
+  color: #9ca3af;
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: 0.02em;
+}
+.olo-map-filters-bar--modern .olo-map-filter-pill {
+  border: 1px solid #374151;
+  border-radius: 8px;
+  background: #1f2937;
+  padding: 5px 14px;
+  font-size: 0.82em;
+  font-weight: 500;
+  color: #d1d5db;
+  transition: all 0.15s ease;
+}
+.olo-map-filters-bar--modern .olo-map-filter-pill:hover {
+  background: #374151;
+  border-color: #4b5563;
+  color: #f9fafb;
+}
+.olo-map-filters-bar--modern .olo-map-filter-pill.olo-map-filter-active {
+  background: var(--olo-color-primary, #6366F1);
+  border-color: var(--olo-color-primary, #6366F1);
+  color: #fff;
+  box-shadow: 0 0 12px rgba(99, 102, 241, 0.3);
+}
+.olo-map-filters-bar--modern .olo-map-filter-pill--amenity.olo-map-filter-active {
+  background: var(--olo-color-primary, #6366F1);
+  border-color: var(--olo-color-primary, #6366F1);
+  color: #fff;
+}
+.olo-map-filters-bar--modern .olo-map-svc-filter-counter {
+  border-top: 1px solid #374151;
+  color: #6b7280;
+  font-size: 0.78em;
+}
+
+/* ── Filter Style: Compact (dropdowns) ── */
+.olo-map-filters-bar--compact {
+  background: transparent;
+  border: none;
+  padding: 0 0 10px;
+  gap: 8px;
+}
+.olo-map-compact-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+.olo-map-compact-select {
+  padding: 7px 32px 7px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%236b7280' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E") right 10px center no-repeat;
+  appearance: none;
+  -webkit-appearance: none;
+  font-size: 0.85em;
+  font-weight: 500;
+  color: #374151;
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  min-width: 120px;
+}
+.olo-map-compact-select:hover {
+  border-color: #9ca3af;
+}
+.olo-map-compact-select:focus {
+  outline: none;
+  border-color: var(--olo-color-primary, #6366F1);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+.olo-map-filters-bar--compact .olo-map-svc-filter-counter {
+  border-top: none;
+  font-size: 0.78em;
+  color: #9ca3af;
+}
+
+/* ── Filter position: side layout (left / right) ── */
+.olo-map-layout-side {
+  display: flex;
+  gap: 0;
+}
+.olo-map-layout-side > .olo-map-filters-bar {
+  width: 280px;
+  min-width: 280px;
+  max-height: 600px;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+.olo-map-layout-right {
+  flex-direction: row-reverse;
+}
+/* Side layout: vertical filter bar adjustments */
+.olo-map-layout-side > .olo-map-filters-bar {
+  border-radius: 0;
+}
+.olo-map-layout-left > .olo-map-filters-bar {
+  border-radius: 8px 0 0 8px;
+  border-right: 1px solid rgba(0,0,0,0.08);
+}
+.olo-map-layout-right > .olo-map-filters-bar {
+  border-radius: 0 8px 8px 0;
+  border-left: 1px solid rgba(0,0,0,0.08);
+}
+/* Side layout: map canvas fills height */
+.olo-map-layout-side .olo-map-canvas-wrap .olo-map-canvas {
+  height: 100% !important;
+  min-height: 400px;
+}
+/* Side compact: full-width selects */
+.olo-map-layout-side > .olo-map-filters-bar--compact .olo-map-compact-select {
+  width: 100%;
+  max-width: none;
+}
+
+/* Mobile: collapse side layout to stacked */
+@media (max-width: 767px) {
+  .olo-map-layout-side {
+    flex-direction: column;
+  }
+  .olo-map-layout-side > .olo-map-filters-bar {
+    width: 100%;
+    min-width: 0;
+    max-height: none;
+    border-radius: 8px 8px 0 0 !important;
+    border-right: none !important;
+    border-left: none !important;
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+  }
+}
+
+/* Mobile: scroll horizontally */
+@media (max-width: 639px) {
+  .olo-map-svc-filter-group {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  .olo-map-svc-filter-pills {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    max-width: 100%;
+    padding-bottom: 2px;
+  }
+  .olo-map-filters-bar {
+    padding: 8px 10px;
+    gap: 6px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Post Grid
+   ═══════════════════════════════════════════════════════════ */
+
+.olo-postgrid-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 20px;
+  align-items: center;
+  justify-content: space-between;
+}
+.olo-postgrid-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+.olo-postgrid-pill {
+  display: inline-block;
+  padding: 5px 14px;
+  font-size: 0.85em;
+  border: 1px solid #d1d5db;
+  border-radius: 999px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+.olo-postgrid-pill:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+.olo-postgrid-pill.olo-postgrid-pill-active {
+  background: var(--olo-color-primary, #6366F1);
+  border-color: var(--olo-color-primary, #6366F1);
+  color: #fff;
+}
+.olo-postgrid-filter-select {
+  max-width: 250px;
+}
+.olo-postgrid-sort {
+  max-width: 200px;
+  margin-left: auto;
+}
+
+/* Card elements */
+.olo-postgrid-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 3px 10px;
+  font-size: 0.75em;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  background: rgba(0, 0, 0, 0.65);
+  color: #fff;
+  border-radius: 4px;
+  z-index: 1;
+}
+.olo-postgrid-meta {
+  font-size: 0.82em;
+  color: #888;
+  margin-bottom: 8px;
+}
+.olo-postgrid-excerpt {
+  font-size: 0.92em;
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+.olo-postgrid-price {
+  font-size: 1.15em;
+  font-weight: 700;
+  color: var(--olo-color-primary, #6366F1);
+  margin-bottom: 10px;
+}
+.olo-postgrid-link {
+  font-size: 0.9em;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+/* Item transition for filtering */
+.olo-postgrid-item {
+  transition: opacity 0.3s ease;
+}
+
+/* ── PostGrid: Minimal filter style ── */
+.olo-postgrid-pill--minimal {
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  padding: 6px 2px;
+  font-size: 0.78em;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #555;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+}
+.olo-postgrid-pill--minimal:hover {
+  background: transparent;
+  color: #111;
+  border-bottom-color: #aaa;
+}
+.olo-postgrid-pill--minimal.olo-postgrid-pill-active {
+  background: transparent;
+  color: var(--olo-color-primary, #6366F1);
+  border-bottom-color: var(--olo-color-primary, #6366F1);
+}
+.olo-postgrid-filters:has(.olo-postgrid-pill--minimal) {
+  gap: 16px;
+}
+
+/* ── Grid tile: Minimal filter style ── */
+.olo-filter-minimal {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 20px;
+  align-items: center;
+}
+
+/* ── Filter alignment (Grid + PostGrid) ── */
+.olo-filter-center { justify-content: center !important; width: 100%; }
+.olo-filter-right { justify-content: flex-end !important; width: 100%; }
+.olo-filter-minimal__btn {
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  padding: 6px 2px;
+  font-size: 0.78em;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #555;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+}
+.olo-filter-minimal__btn:hover {
+  color: #111;
+  border-bottom-color: #aaa;
+}
+.olo-filter-minimal__btn--active,
+.uk-active > .olo-filter-minimal__btn {
+  color: var(--olo-color-primary, #6366F1);
+  border-bottom-color: var(--olo-color-primary, #6366F1);
+}
+
+/* ── Minimal card style (Grid + PostGrid) ── */
+.olo-card-minimal {
+  background: none;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+}
+.olo-card-minimal__media {
+  overflow: hidden;
+}
+.olo-card-minimal__img {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+.olo-card-minimal__title {
+  font-size: 1em;
+  font-weight: 700;
+  margin: 10px 0 4px;
+  line-height: 1.3;
+}
+.olo-card-minimal__title a {
+  color: inherit;
+  text-decoration: none;
+}
+.olo-card-minimal__title a:hover {
+  opacity: 0.75;
+}
+.olo-card-minimal__text {
+  font-size: 0.88em;
+  color: #666;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Empty state */
+.olo-postgrid-empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: #999;
+  font-size: 0.95em;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Hover Media Swap (image swap / video on hover)
+   ═══════════════════════════════════════════════════════════ */
+.olo-hover-wrap {
+  position: relative;
+  overflow: hidden;
+}
+.olo-hover-media {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  z-index: 1;
+  pointer-events: none;
+}
+@media (hover: hover) {
+  .olo-hover-wrap:hover .olo-hover-media {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+.olo-hover-media img,
+.olo-hover-media video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Switcher Panel
+   ═══════════════════════════════════════════════════════════ */
+
+.olo-switcherpanel {
+  position: relative;
+}
+
+/* Hero */
+.olo-sp-hero {
+  position: relative;
+  overflow: hidden;
+  background: #1a1a1a;
+}
+.olo-sp-hero__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.olo-sp-hero__placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #374151, #1f2937);
+}
+
+/* Navigation — positioned at bottom of hero */
+.olo-sp-nav {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0 30px;
+  gap: 0;
+  z-index: 2;
+}
+.olo-sp-nav > li > a {
+  display: inline-block;
+  padding: 12px 18px;
+  font-size: 0.8em;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.55);
+  text-decoration: none;
+  transition: color 0.2s;
+  position: relative;
+}
+.olo-sp-nav > li > a:hover {
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+}
+.olo-sp-nav > li.uk-active > a {
+  color: #fff;
+}
+
+/* Minimal nav style */
+.olo-sp-nav--minimal > li > a {
+  border-bottom: 2px solid transparent;
+}
+.olo-sp-nav--minimal > li.uk-active > a {
+  border-bottom-color: #fff;
+}
+
+/* UIkit subnav overrides inside hero */
+.olo-sp-hero .uk-subnav {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  margin: 0;
+  padding: 0 30px;
+  z-index: 2;
+}
+.olo-sp-hero .uk-subnav > li > a {
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 0.8em;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 12px 18px;
+}
+.olo-sp-hero .uk-subnav > li.uk-active > a {
+  color: #fff;
+}
+.olo-sp-hero .uk-subnav-pill > li.uk-active > a {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Panels */
+.olo-sp-panels {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.olo-sp-panel {
+  align-items: center;
+}
+.olo-sp-panel-body {
+  padding: 40px;
+}
+.olo-sp-panel__title {
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+.olo-sp-panel__text {
+  font-size: 0.95em;
+  line-height: 1.7;
+  color: #555;
+  margin-bottom: 20px;
+}
+.olo-sp-panel__img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+/* Responsive */
+@media (max-width: 639px) {
+  .olo-sp-nav,
+  .olo-sp-hero .uk-subnav {
+    padding: 0 12px;
+  }
+  .olo-sp-nav > li > a,
+  .olo-sp-hero .uk-subnav > li > a {
+    padding: 8px 10px;
+    font-size: 0.7em;
+  }
+  .olo-sp-panel-body {
+    padding: 20px;
+  }
+}

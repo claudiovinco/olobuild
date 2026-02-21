@@ -1,0 +1,637 @@
+/**
+ * Olo Lang — Stili admin
+ */
+
+/* Layout generale */
+.olo-lang-wrap {
+    max-width: 1200px;
+}
+.olo-lang-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 23px;
+    font-weight: 400;
+    margin: 16px 0;
+}
+.olo-lang-title .dashicons {
+    font-size: 28px;
+    width: 28px;
+    height: 28px;
+    color: #6366F1;
+}
+
+/* ========================================
+   Lista template
+   ======================================== */
+
+.olo-lang-table {
+    margin-top: 16px;
+}
+.olo-lang-table th,
+.olo-lang-table td {
+    vertical-align: middle;
+}
+.olo-lang-col-lang {
+    text-align: center;
+    width: 80px;
+}
+
+/* Badge percentuale */
+.olo-lang-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: opacity 0.2s;
+}
+.olo-lang-badge:hover {
+    opacity: 0.8;
+    text-decoration: none;
+}
+.olo-lang-badge--complete {
+    background: #dcfce7;
+    color: #166534;
+}
+.olo-lang-badge--partial {
+    background: #fef3c7;
+    color: #92400e;
+}
+.olo-lang-badge--empty {
+    background: #f3f4f6;
+    color: #6b7280;
+}
+
+/* ========================================
+   Editor traduzione
+   ======================================== */
+
+.olo-lang-editor-header {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    position: sticky;
+    top: 32px;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.olo-lang-back {
+    color: #6366F1;
+    text-decoration: none;
+    font-weight: 500;
+    white-space: nowrap;
+}
+.olo-lang-back:hover {
+    text-decoration: underline;
+}
+.olo-lang-editor-header h1 {
+    font-size: 16px;
+    font-weight: 400;
+    margin: 0;
+    flex: 1;
+}
+.olo-lang-editor-header h1 strong {
+    font-weight: 600;
+}
+
+/* Barra progresso */
+.olo-lang-progress-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 200px;
+}
+.olo-lang-progress-bar {
+    flex: 1;
+    height: 8px;
+    background: #e5e7eb;
+    border-radius: 4px;
+    overflow: hidden;
+}
+.olo-lang-progress-fill {
+    height: 100%;
+    background: #6366F1;
+    border-radius: 4px;
+    transition: width 0.4s ease;
+}
+.olo-lang-progress-text {
+    font-size: 13px;
+    color: #6b7280;
+    white-space: nowrap;
+}
+
+/* Pulsante salva */
+.olo-lang-save-btn {
+    background: #6366F1 !important;
+    border-color: #6366F1 !important;
+    color: #fff !important;
+    font-weight: 500;
+    white-space: nowrap;
+}
+.olo-lang-save-btn:hover {
+    background: #4f46e5 !important;
+    border-color: #4f46e5 !important;
+}
+.olo-lang-save-btn.saving {
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+/* Gruppo tile */
+.olo-lang-group {
+    margin-bottom: 24px;
+}
+.olo-lang-group-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #374151;
+    padding: 10px 16px;
+    background: #f3f4f6;
+    border-radius: 6px 6px 0 0;
+    margin: 0;
+    border: 1px solid #e5e7eb;
+    border-bottom: none;
+}
+
+/* Riga traduzione */
+.olo-lang-row {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-top: none;
+    padding: 14px 16px;
+    transition: background 0.15s;
+}
+.olo-lang-row:last-child {
+    border-radius: 0 0 6px 6px;
+}
+.olo-lang-row:hover {
+    background: #fafafa;
+}
+.olo-lang-row--done {
+    border-left: 3px solid #22c55e;
+}
+.olo-lang-row--outdated {
+    border-left: 3px solid #f59e0b;
+    background: #fffbeb;
+}
+
+/* Meta riga */
+.olo-lang-row-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+.olo-lang-field-context {
+    font-size: 11px;
+    color: #9ca3af;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.olo-lang-status {
+    font-size: 10px;
+    padding: 1px 8px;
+    border-radius: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+.olo-lang-status--done {
+    background: #dcfce7;
+    color: #166534;
+}
+.olo-lang-status--outdated {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+/* Colonne originale/traduzione */
+.olo-lang-row-fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+.olo-lang-row-fields label {
+    display: block;
+    font-size: 11px;
+    color: #6b7280;
+    margin-bottom: 4px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+.olo-lang-original-text,
+.olo-lang-original-html {
+    padding: 8px 12px;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 4px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #374151;
+    min-height: 38px;
+    word-break: break-word;
+}
+.olo-lang-original-html {
+    font-size: 13px;
+}
+
+/* Input traduzione */
+.olo-lang-input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    font-size: 14px;
+    line-height: 1.5;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    box-sizing: border-box;
+}
+.olo-lang-input:focus {
+    border-color: #6366F1;
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.15);
+    outline: none;
+}
+textarea.olo-lang-input {
+    resize: vertical;
+    min-height: 60px;
+}
+.olo-lang-input.olo-lang-dirty {
+    border-color: #f59e0b;
+}
+
+/* Footer editor */
+.olo-lang-editor-footer {
+    text-align: right;
+    padding: 16px 0;
+}
+
+/* Messaggio vuoto */
+.olo-lang-empty {
+    padding: 40px;
+    text-align: center;
+    color: #9ca3af;
+    font-size: 15px;
+}
+
+/* ========================================
+   Pagina impostazioni
+   ======================================== */
+
+.olo-lang-settings {
+    max-width: 700px;
+}
+.olo-lang-setting-section {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+}
+.olo-lang-setting-section h2 {
+    font-size: 15px;
+    font-weight: 600;
+    margin: 0 0 6px;
+    color: #111827;
+}
+.olo-lang-setting-section .description {
+    color: #6b7280;
+    margin-bottom: 12px;
+}
+.olo-lang-setting-section select {
+    max-width: 400px;
+}
+
+/* Tabella lingue */
+.olo-lang-languages-table {
+    margin-bottom: 12px;
+}
+.olo-lang-languages-table td,
+.olo-lang-languages-table th {
+    vertical-align: middle;
+    padding: 8px 12px;
+}
+
+/* Aggiungi lingua */
+.olo-lang-add-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+/* Toggle */
+.olo-lang-toggle-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+/* Opzioni switcher */
+.olo-lang-switcher-options {
+    padding-left: 24px;
+}
+.olo-lang-switcher-options p {
+    margin: 6px 0;
+}
+.olo-lang-switcher-options label {
+    display: inline-block;
+    width: 80px;
+    font-weight: 500;
+}
+
+/* Feedback salvataggio */
+.olo-lang-save-feedback {
+    margin-left: 12px;
+    font-weight: 500;
+    transition: opacity 0.3s;
+}
+.olo-lang-save-feedback.success {
+    color: #16a34a;
+}
+.olo-lang-save-feedback.error {
+    color: #dc2626;
+}
+
+/* Notifica toast */
+.olo-lang-toast {
+    position: fixed;
+    bottom: 40px;
+    right: 40px;
+    background: #1f2937;
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    z-index: 10000;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s, transform 0.3s;
+}
+.olo-lang-toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+.olo-lang-toast.success {
+    background: #166534;
+}
+.olo-lang-toast.error {
+    background: #991b1b;
+}
+
+/* ========================================
+   Stringhe Globali
+   ======================================== */
+
+/* Toolbar */
+.olo-gs-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 0;
+    flex-wrap: wrap;
+}
+.olo-gs-toolbar-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.olo-gs-toolbar-left label {
+    font-weight: 600;
+    font-size: 13px;
+    color: #374151;
+}
+.olo-gs-toolbar-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.olo-gs-select {
+    min-width: 180px;
+    padding: 6px 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    font-size: 13px;
+}
+.olo-gs-search {
+    min-width: 200px;
+    padding: 6px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    font-size: 13px;
+}
+.olo-gs-search:focus {
+    border-color: #6366F1;
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.15);
+    outline: none;
+}
+.olo-gs-counter {
+    font-size: 13px;
+    color: #6b7280;
+    white-space: nowrap;
+}
+
+/* Tab bar */
+.olo-gs-tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 2px solid #e5e7eb;
+    margin-top: 16px;
+    margin-bottom: 0;
+}
+.olo-gs-tab {
+    padding: 10px 20px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #6b7280;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    cursor: pointer;
+    transition: color 0.15s, border-color 0.15s;
+}
+.olo-gs-tab:hover {
+    color: #4f46e5;
+}
+.olo-gs-tab--active {
+    color: #6366F1;
+    border-bottom-color: #6366F1;
+}
+
+/* Panel */
+.olo-gs-panel {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    padding: 16px;
+}
+
+/* Scanner bar */
+.olo-gs-scan-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    padding: 10px 14px;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+}
+.olo-gs-scan-bar .dashicons {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
+    margin-top: -2px;
+}
+.olo-gs-scan-info {
+    font-size: 13px;
+    color: #6b7280;
+}
+
+/* Tabella stringhe */
+.olo-gs-table {
+    margin: 0;
+}
+.olo-gs-table th {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    color: #6b7280;
+    padding: 8px 12px;
+}
+.olo-gs-table td {
+    padding: 8px 12px;
+    vertical-align: middle;
+}
+.olo-gs-col-original {
+    width: 40%;
+    word-break: break-word;
+}
+.olo-gs-col-translation {
+    width: 40%;
+}
+.olo-gs-col-status {
+    width: 10%;
+    text-align: center;
+}
+.olo-gs-col-actions {
+    width: 10%;
+    text-align: center;
+}
+.olo-gs-input {
+    width: 100%;
+    padding: 6px 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    font-size: 13px;
+    box-sizing: border-box;
+    transition: border-color 0.15s;
+}
+.olo-gs-input:focus {
+    border-color: #6366F1;
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.15);
+    outline: none;
+}
+.olo-gs-empty {
+    text-align: center;
+    color: #9ca3af;
+    padding: 30px 10px !important;
+    font-size: 14px;
+}
+
+/* Badge stato */
+.olo-gs-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+.olo-gs-badge--tradotto {
+    background: #dcfce7;
+    color: #166534;
+}
+.olo-gs-badge--obsoleta {
+    background: #fef3c7;
+    color: #92400e;
+}
+.olo-gs-badge--bozza {
+    background: #f3f4f6;
+    color: #6b7280;
+}
+
+/* Pulsante elimina */
+.olo-gs-delete {
+    color: #dc2626 !important;
+    border-color: #fca5a5 !important;
+    font-size: 16px !important;
+    line-height: 1 !important;
+    padding: 2px 8px !important;
+}
+.olo-gs-delete:hover {
+    background: #fef2f2 !important;
+}
+
+/* Form custom */
+.olo-gs-add-form {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 16px;
+    padding: 12px 14px;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+}
+.olo-gs-add-form input {
+    flex: 1;
+}
+.olo-gs-add-form .dashicons {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
+    margin-top: -2px;
+}
+
+/* Responsive */
+@media (max-width: 960px) {
+    .olo-lang-row-fields {
+        grid-template-columns: 1fr;
+    }
+    .olo-lang-editor-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .olo-gs-toolbar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .olo-gs-toolbar-left,
+    .olo-gs-toolbar-right {
+        width: 100%;
+    }
+    .olo-gs-add-form {
+        flex-direction: column;
+    }
+}
