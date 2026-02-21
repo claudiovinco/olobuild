@@ -44,7 +44,7 @@
               </button>
               <span class="st-dot" style="background: var(--olo-color-primary, #6366F1)"></span>
               <input v-if="renamingId === section.id" class="st-rename-input" :style="renameInputStyle" :value="renameValue" @input="renameValue = $event.target.value" @keydown.enter.prevent="confirmRename(section)" @keydown.escape="cancelRename()" @blur="confirmRename(section)" @click.stop />
-              <span v-else class="st-name" @click.stop="onNameClick(section)">{{ section.settings?._label || 'Sezione' }}</span>
+              <span v-else class="st-name" @click.stop="onNameClick(section)" :title="section.settings?._label || 'Sezione'">{{ section.settings?._label || 'Sezione' }}</span>
               <span class="st-badge" style="color:#fff" v-if="section.children?.length">{{ section.children.length }}r</span>
               <span class="st-actions">
                 <button title="Duplica" @click.stop="duplicate(section.id)">
@@ -62,7 +62,7 @@
             </div>
 
             <!-- Section children: Rows -->
-            <div v-if="isExpanded(section.id)" class="st-sub">
+            <div v-if="isExpanded(section.id)" class="st-sub" style="margin-left:10px;padding-left:5px">
               <draggable
                 :list="section.children"
                 item-key="id"
@@ -92,7 +92,7 @@
                       </button>
                       <span class="st-dot" style="background: var(--olo-color-primary, #6366F1)"></span>
                       <input v-if="renamingId === row.id" class="st-rename-input" :style="renameInputStyle" :value="renameValue" @input="renameValue = $event.target.value" @keydown.enter.prevent="confirmRename(row)" @keydown.escape="cancelRename()" @blur="confirmRename(row)" @click.stop />
-                      <span v-else class="st-name" @click.stop="onNameClick(row)">{{ row.settings?._label || 'Riga' }} <span class="st-meta">{{ row.settings?.layout === 'custom' ? (row.settings?.custom_widths || '%') : (row.settings?.layout || '50-50') }}</span></span>
+                      <span v-else class="st-name" @click.stop="onNameClick(row)" :title="row.settings?._label || 'Riga'">{{ row.settings?._label || 'Riga' }} <span class="st-meta">{{ row.settings?.layout === 'custom' ? (row.settings?.custom_widths || '%') : (row.settings?.layout || '50-50') }}</span></span>
                       <span class="st-actions">
                         <button title="Duplica" @click.stop="duplicate(row.id)">
                           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -109,7 +109,7 @@
                     </div>
 
                     <!-- Row children: Columns -->
-                    <div v-if="isExpanded(row.id)" class="st-sub">
+                    <div v-if="isExpanded(row.id)" class="st-sub" style="margin-left:10px;padding-left:5px">
                       <div v-for="(col, ci) in (row.children || [])" :key="col.id" class="st-item">
                         <!-- Column node -->
                         <div
@@ -129,12 +129,12 @@
                           <span v-else class="st-toggle-ph"></span>
                           <span class="st-dot" style="background: #3B82F6"></span>
                           <input v-if="renamingId === col.id" class="st-rename-input" :style="renameInputStyle" :value="renameValue" @input="renameValue = $event.target.value" @keydown.enter.prevent="confirmRename(col)" @keydown.escape="cancelRename()" @blur="confirmRename(col)" @click.stop />
-                          <span v-else class="st-name" @click.stop="onNameClick(col)">{{ col.settings?._label || ('Col ' + (ci + 1)) }} <span class="st-meta">{{ col.settings?.width_medium || '' }}</span></span>
+                          <span v-else class="st-name" @click.stop="onNameClick(col)" :title="col.settings?._label || ('Col ' + (ci + 1))">{{ col.settings?._label || ('Col ' + (ci + 1)) }} <span class="st-meta">{{ col.settings?.width_medium || '' }}</span></span>
                           <span v-if="col.children?.length" class="st-badge" style="color:#fff">{{ col.children.length }}</span>
                         </div>
 
                         <!-- Column children: Elements -->
-                        <div v-if="isExpanded(col.id) && col.children?.length" class="st-sub">
+                        <div v-if="isExpanded(col.id) && col.children?.length" class="st-sub" style="margin-left:10px;padding-left:5px">
                           <draggable
                             :list="col.children"
                             item-key="id"
@@ -170,7 +170,7 @@
                                   <span v-else class="st-toggle-ph"></span>
                                   <span class="st-dot" :style="{ background: dotColor(tile.type) }"></span>
                                   <input v-if="renamingId === tile.id" class="st-rename-input" :style="renameInputStyle" :value="renameValue" @input="renameValue = $event.target.value" @keydown.enter.prevent="confirmRename(tile)" @keydown.escape="cancelRename()" @blur="confirmRename(tile)" @click.stop />
-                                  <span v-else class="st-name" @click.stop="onNameClick(tile)">{{ tileLabel(tile) }}</span>
+                                  <span v-else class="st-name" @click.stop="onNameClick(tile)" :title="tileLabelFull(tile)">{{ tileLabel(tile) }}</span>
                                   <span v-if="tile.type === 'inner-columns'" class="st-badge" style="color:#fff">{{ tile.settings?.layout || '50-50' }}</span>
                                   <span class="st-actions">
                                     <button title="Duplica" @click.stop="duplicate(tile.id)">
@@ -188,7 +188,7 @@
                                 </div>
 
                                 <!-- Inner columns children -->
-                                <div v-if="tile.type === 'inner-columns' && isExpanded(tile.id) && tile.children?.length" class="st-sub">
+                                <div v-if="tile.type === 'inner-columns' && isExpanded(tile.id) && tile.children?.length" class="st-sub" style="margin-left:10px;padding-left:5px">
                                   <div v-for="(icol, ici) in tile.children" :key="icol.id" class="st-item">
                                     <div
                                       class="st-row st-row--column"
@@ -207,12 +207,12 @@
                                       <span v-else class="st-toggle-ph"></span>
                                       <span class="st-dot" style="background: #3B82F6"></span>
                                       <input v-if="renamingId === icol.id" class="st-rename-input" :style="renameInputStyle" :value="renameValue" @input="renameValue = $event.target.value" @keydown.enter.prevent="confirmRename(icol)" @keydown.escape="cancelRename()" @blur="confirmRename(icol)" @click.stop />
-                                      <span v-else class="st-name" @click.stop="onNameClick(icol)">{{ icol.settings?._label || ('ICol ' + (ici + 1)) }} <span class="st-meta">{{ icol.settings?.width || '' }}%</span></span>
+                                      <span v-else class="st-name" @click.stop="onNameClick(icol)" :title="icol.settings?._label || ('ICol ' + (ici + 1))">{{ icol.settings?._label || ('ICol ' + (ici + 1)) }} <span class="st-meta">{{ icol.settings?.width || '' }}%</span></span>
                                       <span v-if="icol.children?.length" class="st-badge" style="color:#fff">{{ icol.children.length }}</span>
                                     </div>
 
                                     <!-- Inner column children: elements -->
-                                    <div v-if="isExpanded(icol.id) && icol.children?.length" class="st-sub">
+                                    <div v-if="isExpanded(icol.id) && icol.children?.length" class="st-sub" style="margin-left:10px;padding-left:5px">
                                       <draggable
                                         :list="icol.children"
                                         item-key="id"
@@ -239,7 +239,7 @@
                                             <span class="st-toggle-ph"></span>
                                             <span class="st-dot" :style="{ background: dotColor(innerTile.type) }"></span>
                                             <input v-if="renamingId === innerTile.id" class="st-rename-input" :style="renameInputStyle" :value="renameValue" @input="renameValue = $event.target.value" @keydown.enter.prevent="confirmRename(innerTile)" @keydown.escape="cancelRename()" @blur="confirmRename(innerTile)" @click.stop />
-                                            <span v-else class="st-name" @click.stop="onNameClick(innerTile)">{{ tileLabel(innerTile) }}</span>
+                                            <span v-else class="st-name" @click.stop="onNameClick(innerTile)" :title="tileLabelFull(innerTile)">{{ tileLabel(innerTile) }}</span>
                                             <span class="st-actions">
                                               <button title="Duplica" @click.stop="duplicate(innerTile.id)">
                                                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -361,15 +361,20 @@ const tileNameMap = computed(() => {
   return map;
 });
 
-function tileLabel(tile) {
+function tileLabelFull(tile) {
   const s = tile.settings || {};
-  if (s._label) return s._label.length > 30 ? s._label.substring(0, 30) + '\u2026' : s._label;
+  if (s._label) return s._label;
   const custom = s.title || s.heading || s.plan_name || s.name || s.quote || s.text || '';
   if (custom) {
     const clean = custom.replace(/<[^>]*>/g, '').trim();
-    if (clean) return clean.length > 30 ? clean.substring(0, 30) + '\u2026' : clean;
+    if (clean) return clean;
   }
   return tileNameMap.value[tile.type] || tile.type;
+}
+
+function tileLabel(tile) {
+  const full = tileLabelFull(tile);
+  return full.length > 30 ? full.substring(0, 30) + '\u2026' : full;
 }
 
 function selectTile(id) {
