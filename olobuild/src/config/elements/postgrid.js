@@ -61,6 +61,13 @@ export default {
     fx_kenburns: false,
     fx_kenburns_speed: '20',
     fx_kenburns_scale: '1.12',
+    // Dati servizio
+    show_service_stats: false,
+    show_service_club: false,
+    show_service_opening: false,
+    opening_bg_annual: '#059669',
+    opening_bg_seasonal: '#d97706',
+    opening_size: '11',
     // Overlay gradient
     overlay_gradient: false,
     overlay_color: '#000000',
@@ -151,6 +158,22 @@ export default {
     { key: 'excerpt_length', label: 'Parole estratto', type: 'range', min: 5, max: 50, step: 1,
       condition: { field: 'show_excerpt', value: true } },
     { key: 'show_meta', label: 'Mostra data e autore', type: 'toggle' },
+
+    { type: 'separator', label: 'Dati servizio' },
+
+    // ── Dati servizio ──
+    { key: 'show_service_stats', label: 'Mostra stats servizio', type: 'toggle',
+      condition: { field: 'post_type', value: 'olo_service' } },
+    { key: 'show_service_club', label: 'Mostra club', type: 'toggle',
+      condition: { field: 'post_type', value: 'olo_service' } },
+    { key: 'show_service_opening', label: 'Mostra badge apertura', type: 'toggle',
+      condition: { field: 'post_type', value: 'olo_service' } },
+    { key: 'opening_bg_annual', label: 'Sfondo apertura annuale', type: 'color',
+      condition: { field: 'show_service_opening', value: true } },
+    { key: 'opening_bg_seasonal', label: 'Sfondo apertura stagionale', type: 'color',
+      condition: { field: 'show_service_opening', value: true } },
+    { key: 'opening_size', label: 'Dimensione testo badge (px)', type: 'range', min: 8, max: 18, step: 1,
+      condition: { field: 'show_service_opening', value: true } },
 
     { type: 'separator', label: 'Prezzo' },
 

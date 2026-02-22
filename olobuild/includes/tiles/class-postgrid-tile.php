@@ -74,6 +74,13 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
         'overlay_opacity'   => '50',
         'overlay_direction' => 'bottom',
         'overlay_height'    => '50',
+        // Dati servizio
+        'show_service_stats'   => false,
+        'show_service_club'    => false,
+        'show_service_opening' => false,
+        'opening_bg_annual'    => '#059669',
+        'opening_bg_seasonal'  => '#d97706',
+        'opening_size'         => '11',
     ];
 
     public function get_controls() {
@@ -173,6 +180,23 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
                 $ribbon_val = get_post_meta( $post->ID, sanitize_key( $s['ribbon_field'] ), true );
                 if ( ! empty( $ribbon_val ) ) {
                     $item['ribbon'] = $ribbon_val;
+                }
+            }
+
+            // Service stats (only for olo_service)
+            if ( $post_type === 'olo_service' ) {
+                if ( ! empty( $s['show_service_stats'] ) ) {
+                    $item['service_capacity']  = get_post_meta( $post->ID, '_olo_service_capacity', true );
+                    $item['service_bedrooms']  = get_post_meta( $post->ID, '_olo_service_bedrooms', true );
+                    $item['service_bathrooms'] = get_post_meta( $post->ID, '_olo_service_bathrooms', true );
+                    $item['service_altitude']  = get_post_meta( $post->ID, '_olo_service_altitude', true );
+                }
+                if ( ! empty( $s['show_service_club'] ) ) {
+                    $item['service_club_group']    = get_post_meta( $post->ID, '_olo_service_club_group', true );
+                    $item['service_club_category'] = get_post_meta( $post->ID, '_olo_service_club_category', true );
+                }
+                if ( ! empty( $s['show_service_opening'] ) ) {
+                    $item['service_opening'] = get_post_meta( $post->ID, '_olo_service_opening', true );
                 }
             }
 
@@ -406,6 +430,13 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
                             <?php if ( ! empty( $item['ribbon'] ) ) : ?>
                                 <span class="olo-pg-ribbon olo-pg-ribbon--<?php echo esc_attr( $ribbon_position ); ?>"><?php echo esc_html( $item['ribbon'] ); ?></span>
                             <?php endif; ?>
+                            <?php if ( ! empty( $item['service_opening'] ) ) : ?>
+                                <?php
+                                    $op_bg = ( stripos( $item['service_opening'], 'stagionale' ) !== false )
+                                        ? $s['opening_bg_seasonal']
+                                        : $s['opening_bg_annual'];
+                                ?><span class="olo-pg-opening" style="background:<?php echo esc_attr( $op_bg ); ?>;font-size:<?php echo absint( $s['opening_size'] ); ?>px"><?php echo esc_html( $item['service_opening'] ); ?></span>
+                            <?php endif; ?>
                         </div>
                         <?php endif; ?>
 
@@ -427,6 +458,9 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
                         <?php if ( ! empty( $s['show_excerpt'] ) && ! empty( $item['excerpt'] ) ) : ?>
                         <p class="olo-card-minimal__text"><?php echo wp_kses_post( $item['excerpt'] ); ?></p>
                         <?php endif; ?>
+
+                        <?php if ( ! empty( $s['show_service_stats'] ) ) echo $this->render_service_stats( $item ); ?>
+                        <?php if ( ! empty( $s['show_service_club'] ) )  echo $this->render_service_club( $item ); ?>
 
                         <?php if ( ! empty( $s['show_price'] ) && isset( $item['price'] ) ) : ?>
                         <div class="olo-postgrid-price">
@@ -464,6 +498,13 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
                             <?php if ( ! empty( $item['ribbon'] ) ) : ?>
                                 <span class="olo-pg-ribbon olo-pg-ribbon--<?php echo esc_attr( $ribbon_position ); ?>"><?php echo esc_html( $item['ribbon'] ); ?></span>
                             <?php endif; ?>
+                            <?php if ( ! empty( $item['service_opening'] ) ) : ?>
+                                <?php
+                                    $op_bg = ( stripos( $item['service_opening'], 'stagionale' ) !== false )
+                                        ? $s['opening_bg_seasonal']
+                                        : $s['opening_bg_annual'];
+                                ?><span class="olo-pg-opening" style="background:<?php echo esc_attr( $op_bg ); ?>;font-size:<?php echo absint( $s['opening_size'] ); ?>px"><?php echo esc_html( $item['service_opening'] ); ?></span>
+                            <?php endif; ?>
                         </div>
                         <?php endif; ?>
 
@@ -485,6 +526,9 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
                             <?php if ( ! empty( $s['show_excerpt'] ) && ! empty( $item['excerpt'] ) ) : ?>
                             <p class="olo-postgrid-excerpt"><?php echo wp_kses_post( $item['excerpt'] ); ?></p>
                             <?php endif; ?>
+
+                            <?php if ( ! empty( $s['show_service_stats'] ) ) echo $this->render_service_stats( $item ); ?>
+                            <?php if ( ! empty( $s['show_service_club'] ) )  echo $this->render_service_club( $item ); ?>
 
                             <?php if ( ! empty( $s['show_price'] ) && isset( $item['price'] ) ) : ?>
                             <div class="olo-postgrid-price">
@@ -524,6 +568,25 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
         </div>
         <?php
         return ob_get_clean();
+    }
+
+    private function render_service_stats( $item ) {
+        $stats = [];
+        if ( ! empty( $item['service_capacity'] ) )  $stats[] = '<span class="olo-pg-stat" title="Ospiti"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="9" cy="7" r="3" stroke="currentColor" stroke-width="1.8"/><path d="M3 20C3 16.6863 5.68629 14 9 14C12.3137 14 15 16.6863 15 20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="17" cy="8" r="2" stroke="currentColor" stroke-width="1.8" opacity="0.6"/><path d="M17 14C19.2091 14 21 15.7909 21 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" opacity="0.6"/></svg> ' . esc_html( $item['service_capacity'] ) . '</span>';
+        if ( ! empty( $item['service_bedrooms'] ) )  $stats[] = '<span class="olo-pg-stat" title="Camere"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 18V12C3 10.3431 4.34315 9 6 9H18C19.6569 9 21 10.3431 21 12V18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M3 18V20M21 18V20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M7 9V7C7 5.89543 7.89543 5 9 5H15C16.1046 5 17 5.89543 17 7V9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="8.5" cy="7.5" r="1.5" fill="currentColor" opacity="0.5"/></svg> ' . esc_html( $item['service_bedrooms'] ) . '</span>';
+        if ( ! empty( $item['service_bathrooms'] ) ) $stats[] = '<span class="olo-pg-stat" title="Bagni"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 12H20V15C20 17.2091 18.2091 19 16 19H8C5.79086 19 4 17.2091 4 15V12Z" stroke="currentColor" stroke-width="1.8"/><path d="M4 12V5C4 4.44772 4.44772 4 5 4H7C7.55228 4 8 4.44772 8 5V12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M7 19V21M17 19V21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg> ' . esc_html( $item['service_bathrooms'] ) . '</span>';
+        if ( ! empty( $item['service_altitude'] ) )  $stats[] = '<span class="olo-pg-stat" title="Altitudine"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3L20 19H4L12 3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 8V13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/></svg> ' . esc_html( $item['service_altitude'] ) . 'm</span>';
+
+        if ( empty( $stats ) ) return '';
+        return '<div class="olo-pg-service-stats">' . implode( '', $stats ) . '</div>';
+    }
+
+    private function render_service_club( $item ) {
+        $parts = [];
+        if ( ! empty( $item['service_club_group'] ) )    $parts[] = esc_html( $item['service_club_group'] );
+        if ( ! empty( $item['service_club_category'] ) ) $parts[] = esc_html( $item['service_club_category'] );
+        if ( empty( $parts ) ) return '';
+        return '<div class="olo-pg-service-club">' . implode( ' · ', $parts ) . '</div>';
     }
 
     private function get_taxonomy_terms( $taxonomy ) {

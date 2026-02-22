@@ -16,12 +16,31 @@
             :class="'mpg-ribbon--' + (settings.ribbon_position || 'top-right')"
             :style="{ background: settings.ribbon_bg || '#e11d48', color: settings.ribbon_color || '#fff' }"
           >Ribbon</span>
+          <!-- Opening badge -->
+          <span v-if="settings.show_service_opening" class="mpg-opening" :style="{ background: n % 2 === 1 ? (settings.opening_bg_annual || '#059669') : (settings.opening_bg_seasonal || '#d97706'), fontSize: (parseInt(settings.opening_size) || 11) * 0.65 + 'px' }">{{ n % 2 === 1 ? 'Annuale' : 'Stagionale' }}</span>
         </div>
         <!-- Card body -->
         <div class="mpg-body" :style="bodyStyle">
           <div class="mpg-title" :style="{ fontSize: titleSize, color: settings.title_color || undefined }">Titolo articolo {{ n }}</div>
           <div v-if="settings.show_meta !== false" class="mpg-meta" :style="{ color: settings.meta_color || undefined }">12 Feb 2026 · Autore</div>
           <div v-if="settings.show_excerpt !== false" class="mpg-excerpt" :style="{ fontSize: excerptSize, color: settings.excerpt_color || undefined }">Lorem ipsum dolor sit amet, consectetur adipiscing elit...</div>
+          <!-- Service stats preview -->
+          <div v-if="settings.show_service_stats" class="mpg-service-stats">
+            <span class="mpg-stat" title="Ospiti">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><circle cx="9" cy="7" r="3" stroke="currentColor" stroke-width="2"/><path d="M3 20C3 16.6863 5.68629 14 9 14C12.3137 14 15 16.6863 15 20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> 6
+            </span>
+            <span class="mpg-stat" title="Camere">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M3 18V12C3 10.3431 4.34315 9 6 9H18C19.6569 9 21 10.3431 21 12V18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M3 18V20M21 18V20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> 3
+            </span>
+            <span class="mpg-stat" title="Bagni">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M4 12H20V15C20 17.2091 18.2091 19 16 19H8C5.79086 19 4 17.2091 4 15V12Z" stroke="currentColor" stroke-width="2"/></svg> 2
+            </span>
+            <span class="mpg-stat" title="Altitudine">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M12 3L20 19H4L12 3Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg> 1450m
+            </span>
+          </div>
+          <!-- Service club preview -->
+          <div v-if="settings.show_service_club" class="mpg-service-club">Dolomiti · 3 stelle</div>
           <div v-if="settings.show_price" class="mpg-price">{{ settings.price_prefix || '€' }}99{{ settings.price_suffix || '' }}</div>
           <div v-if="settings.link_style === 'button'" class="mpg-btn">{{ settings.link_text || 'Vedi' }}</div>
           <div v-else-if="settings.link_style === 'text'" class="mpg-link">{{ settings.link_text || 'Vedi' }} →</div>
@@ -383,6 +402,43 @@ const pagPageCount = computed(() => {
   border-radius: 999px;
   font-size: 8px;
   color: #6b7280;
+}
+
+/* Service stats preview */
+.mpg-service-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 3px;
+  font-size: 8px;
+  color: #6b7280;
+}
+.mpg-stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+.mpg-stat svg {
+  flex-shrink: 0;
+}
+.mpg-service-club {
+  font-size: 8px;
+  font-weight: 600;
+  color: var(--olo-color-primary, #6366F1);
+  margin-bottom: 3px;
+}
+/* Opening badge preview */
+.mpg-opening {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  color: #fff;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 3px;
+  z-index: 2;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
 }
 
 /* Info bar */

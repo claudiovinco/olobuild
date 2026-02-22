@@ -1515,3 +1515,43 @@ header.olo-site-header.olo-header-overlay + main > .wp-block-group:first-child {
   display: flex;
   will-change: transform;
 }
+
+/* ========================================
+   PostGrid — Service stats, club & opening
+   ======================================== */
+.olo-pg-service-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 8px;
+  font-size: 0.82em;
+  color: #555;
+}
+.olo-pg-stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.olo-pg-stat svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+.olo-pg-service-club {
+  font-size: 0.78em;
+  font-weight: 600;
+  color: var(--olo-color-primary, #6366F1);
+  margin-bottom: 8px;
+}
+.olo-pg-opening {
+  position: absolute;
+  top: 0;
+  right: 14px;
+  font-weight: 700;
+  padding: 4px 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #fff;
+  border-radius: 0 0 4px 4px;
+  z-index: 2;
+}

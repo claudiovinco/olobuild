@@ -3,7 +3,7 @@
  * Plugin Name: Olo Booking
  * Plugin URI:  https://clod.eu/olo-booking
  * Description: Sistema di prenotazioni per strutture ricettive (baite, appartamenti). Pannello gestore frontend, calendario, stagioni e tariffe.
- * Version:     3.5.4
+ * Version:     3.5.5
  * Author:      Claudio
  * Author URI:  https://clod.eu
  * Text Domain: olo-booking
@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'OLO_BOOK_VERSION', '3.5.4' );
+define( 'OLO_BOOK_VERSION', '3.5.5' );
 define( 'OLO_BOOK_PATH', plugin_dir_path( __FILE__ ) );
 define( 'OLO_BOOK_URL', plugin_dir_url( __FILE__ ) );
 define( 'OLO_BOOK_DB_VERSION', '2.0.0' );

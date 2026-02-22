@@ -3,7 +3,7 @@
  * Plugin Name: Olo Lang
  * Plugin URI:  https://clod.eu/olo-lang
  * Description: Sistema di traduzione multilingua per WordPress — traduce contenuti, menu, post e template (con supporto avanzato per Olobuild).
- * Version:     1.0.10
+ * Version:     1.0.12
  * Author:      Claudio
  * Author URI:  https://clod.eu
  * Text Domain: olo-lang
@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'OLO_LANG_VERSION', '1.0.10' );
+define( 'OLO_LANG_VERSION', '1.0.12' );
 define( 'OLO_LANG_PATH', plugin_dir_path( __FILE__ ) );
 define( 'OLO_LANG_URL', plugin_dir_url( __FILE__ ) );
 

@@ -477,6 +477,11 @@ class Olo_Booking_Rest_API_Manager {
             update_post_meta( $id, '_olo_service_enabled_amenity_cats', $cats );
         }
 
+        // Sincronizza meta alle copie tradotte (olo-lang)
+        if ( class_exists( 'Olo_Lang_Post_Translation' ) ) {
+            Olo_Lang_Post_Translation::sync_service_meta_to_translations( $id );
+        }
+
         // Return updated service
         $post = get_post( $id );
         return new WP_REST_Response( $this->format_service_full( $post ), 200 );
@@ -502,6 +507,12 @@ class Olo_Booking_Rest_API_Manager {
             ];
         }
         update_post_meta( $id, '_olo_service_seasons', $seasons );
+
+        // Sincronizza meta alle copie tradotte (olo-lang)
+        if ( class_exists( 'Olo_Lang_Post_Translation' ) ) {
+            Olo_Lang_Post_Translation::sync_service_meta_to_translations( $id );
+        }
+
         return new WP_REST_Response( [ 'success' => true, 'seasons' => $seasons ], 200 );
     }
 
@@ -521,6 +532,12 @@ class Olo_Booking_Rest_API_Manager {
             ];
         }
         update_post_meta( $id, '_olo_service_closures', $closures );
+
+        // Sincronizza meta alle copie tradotte (olo-lang)
+        if ( class_exists( 'Olo_Lang_Post_Translation' ) ) {
+            Olo_Lang_Post_Translation::sync_service_meta_to_translations( $id );
+        }
+
         return new WP_REST_Response( [ 'success' => true, 'closures' => $closures ], 200 );
     }
 
@@ -540,6 +557,11 @@ class Olo_Booking_Rest_API_Manager {
             set_post_thumbnail( $id, reset( $ids ) );
         } else {
             delete_post_thumbnail( $id );
+        }
+
+        // Sincronizza meta alle copie tradotte (olo-lang)
+        if ( class_exists( 'Olo_Lang_Post_Translation' ) ) {
+            Olo_Lang_Post_Translation::sync_service_meta_to_translations( $id );
         }
 
         // Return URLs

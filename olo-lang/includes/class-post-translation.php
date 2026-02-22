@@ -28,12 +28,18 @@ class Olo_Lang_Post_Translation {
         // AJAX: duplica post
         add_action( 'wp_ajax_olo_lang_duplicate_post', [ $this, 'ajax_duplicate_post' ] );
 
+        // AJAX: sincronizza meta servizio alle traduzioni
+        add_action( 'wp_ajax_olo_lang_sync_service', [ $this, 'ajax_sync_service' ] );
+
         // Colonna nella lista admin per olo_service
         add_filter( 'manage_olo_service_posts_columns', [ $this, 'add_columns' ] );
         add_action( 'manage_olo_service_posts_custom_column', [ $this, 'render_column' ], 10, 2 );
 
         // Frontend: nascondi copie tradotte dalle query (default lang) / prepara swap (target lang)
         add_action( 'pre_get_posts', [ $this, 'filter_query_by_lang' ] );
+
+        // Sincronizza meta servizio dall'originale alle copie (WP admin save)
+        add_action( 'save_post_olo_service', [ $this, 'on_save_service' ], 20, 2 );
 
         // Frontend: su singolo post, swap alla copia tradotta se disponibile
         add_filter( 'the_posts', [ $this, 'swap_single_post' ], 10, 2 );
@@ -130,7 +136,19 @@ class Olo_Lang_Post_Translation {
 
         echo '</div>';
 
-        // JS inline per il bottone Crea
+        // Pulsante "Sincronizza" per olo_service con traduzioni esistenti
+        $has_copies = ! empty( array_filter( $translations ) );
+        if ( $post->post_type === 'olo_service' && $has_copies ) {
+            echo '<div style="margin-top:10px;padding-top:10px;border-top:1px solid #ddd">';
+            echo '<button type="button" class="button button-small olo-lang-pt-sync" '
+                . 'data-post-id="' . esc_attr( $post->ID ) . '" '
+                . 'style="width:100%">'
+                . '&#8635; Sincronizza dati alle traduzioni</button>';
+            echo '<p style="font-size:11px;color:#6b7280;margin:4px 0 0">Propaga foto, video, amenities, prezzi, stagioni e tutti i dati strutturali alle copie EN/DE.</p>';
+            echo '</div>';
+        }
+
+        // JS inline per il bottone Crea + Sincronizza
         echo '<script>
         jQuery(function($){
             $(".olo-lang-pt-create").on("click", function(){
@@ -146,6 +164,22 @@ class Olo_Lang_Post_Translation {
                     } else {
                         alert(res.data || "Errore");
                         $btn.prop("disabled",false).text("Crea");
+                    }
+                });
+            });
+            $(".olo-lang-pt-sync").on("click", function(){
+                var $btn = $(this).prop("disabled",true).text("Sincronizzazione...");
+                $.post(ajaxurl, {
+                    action: "olo_lang_sync_service",
+                    post_id: $btn.data("post-id"),
+                    _wpnonce: "' . wp_create_nonce( 'olo_lang_sync' ) . '"
+                }, function(res){
+                    if(res.success){
+                        $btn.text("\\u2713 Sincronizzato (" + res.data.count + " copie)");
+                        setTimeout(function(){ $btn.prop("disabled",false).text("\\u21BB Sincronizza dati alle traduzioni"); }, 3000);
+                    } else {
+                        alert(res.data || "Errore");
+                        $btn.prop("disabled",false).text("\\u21BB Sincronizza dati alle traduzioni");
                     }
                 });
             });
@@ -182,6 +216,31 @@ class Olo_Lang_Post_Translation {
         wp_send_json_success( [
             'copy_id'  => $copy_id,
             'edit_url' => get_edit_post_link( $copy_id, 'raw' ),
+        ] );
+    }
+
+    /**
+     * AJAX: sincronizza meta servizio alle copie tradotte.
+     */
+    public function ajax_sync_service() {
+        check_ajax_referer( 'olo_lang_sync', '_wpnonce' );
+
+        if ( ! current_user_can( 'edit_posts' ) ) {
+            wp_send_json_error( 'Permesso negato.' );
+        }
+
+        $post_id = absint( $_POST['post_id'] ?? 0 );
+        if ( ! $post_id ) {
+            wp_send_json_error( 'ID mancante.' );
+        }
+
+        $count = self::sync_service_meta_to_translations( $post_id );
+
+        wp_send_json_success( [
+            'count'   => $count,
+            'message' => $count > 0
+                ? "Sincronizzate $count copie."
+                : 'Nessuna copia da sincronizzare.',
         ] );
     }
 
@@ -521,5 +580,152 @@ class Olo_Lang_Post_Translation {
         $translations = get_post_meta( $source_id, '_olo_lang_translations', true );
         $translations = is_array( $translations ) ? $translations : [];
         return $translations[ $lang ] ?? 0;
+    }
+
+    /**
+     * Ottieni tutti gli ID delle copie tradotte di un post originale.
+     */
+    public static function get_all_translation_ids( $post_id ) {
+        $translations = get_post_meta( $post_id, '_olo_lang_translations', true );
+        if ( ! is_array( $translations ) || empty( $translations ) ) {
+            return [];
+        }
+        $ids = [];
+        foreach ( $translations as $lang => $copy_id ) {
+            $copy_id = (int) $copy_id;
+            if ( $copy_id && get_post_status( $copy_id ) !== false ) {
+                $ids[ $lang ] = $copy_id;
+            }
+        }
+        return $ids;
+    }
+
+    /**
+     * Hook save_post_olo_service: sincronizza meta quando si salva da WP admin.
+     */
+    public function on_save_service( $post_id, $post ) {
+        if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+            return;
+        }
+        if ( wp_is_post_revision( $post_id ) ) {
+            return;
+        }
+        self::sync_service_meta_to_translations( $post_id );
+    }
+
+    // =========================================================================
+    // Sincronizzazione meta olo_service: originale → copie tradotte
+    // =========================================================================
+
+    /**
+     * Meta keys da sincronizzare automaticamente dall'originale alle copie.
+     * Sono tutti i dati NON traducibili (strutturali, media, numerici).
+     */
+    private static $syncable_meta_keys = [
+        // Gallery e media
+        '_olo_service_gallery',
+        '_thumbnail_id',
+        '_olo_service_video_1',
+        '_olo_service_video_2',
+        '_olo_service_video_3',
+        // Dati strutturali
+        '_olo_service_price',
+        '_olo_service_capacity',
+        '_olo_service_bedrooms',
+        '_olo_service_beds',
+        '_olo_service_bathrooms',
+        '_olo_service_sqm',
+        '_olo_service_type',
+        '_olo_service_color',
+        '_olo_service_manager',
+        // Orari e apertura
+        '_olo_service_checkin_time',
+        '_olo_service_checkout_time',
+        '_olo_service_checkin_day',
+        '_olo_service_opening',
+        // Localizzazione
+        '_olo_service_address',
+        '_olo_service_latitude',
+        '_olo_service_longitude',
+        '_olo_service_altitude',
+        '_olo_service_valley',
+        // Classificazione
+        '_olo_service_cipat',
+        '_olo_service_mushrooms',
+        '_olo_service_club_group',
+        '_olo_service_club_category',
+        // Amenities
+        '_olo_service_amenities',
+        '_olo_service_max_amenities',
+        '_olo_service_enabled_amenity_cats',
+        // Stagioni e chiusure
+        '_olo_service_seasons',
+        '_olo_service_closures',
+    ];
+
+    /**
+     * Sincronizza i meta non-traducibili da un servizio originale a tutte le sue copie.
+     *
+     * @param int $post_id  ID del post originale (italiano).
+     * @return int  Numero di copie aggiornate.
+     */
+    public static function sync_service_meta_to_translations( $post_id ) {
+        $post_id = (int) $post_id;
+
+        // Solo per olo_service
+        if ( get_post_type( $post_id ) !== 'olo_service' ) {
+            return 0;
+        }
+
+        // Solo se è un originale (non una copia tradotta)
+        $source = get_post_meta( $post_id, '_olo_lang_source', true );
+        if ( $source ) {
+            return 0;
+        }
+
+        // Ottieni le copie tradotte
+        $copy_ids = self::get_all_translation_ids( $post_id );
+        if ( empty( $copy_ids ) ) {
+            return 0;
+        }
+
+        // Leggi tutti i meta syncabili dall'originale
+        $meta_values = [];
+        foreach ( self::$syncable_meta_keys as $key ) {
+            $meta_values[ $key ] = get_post_meta( $post_id, $key, true );
+        }
+
+        // Propaga a tutte le copie
+        $updated = 0;
+        foreach ( $copy_ids as $lang => $copy_id ) {
+            foreach ( $meta_values as $key => $value ) {
+                if ( $value === '' || $value === false ) {
+                    delete_post_meta( $copy_id, $key );
+                } else {
+                    update_post_meta( $copy_id, $key, $value );
+                }
+            }
+
+            // Sincronizza anche la featured image (coerente con gallery)
+            $thumb_id = get_post_thumbnail_id( $post_id );
+            if ( $thumb_id ) {
+                set_post_thumbnail( $copy_id, $thumb_id );
+            } else {
+                delete_post_thumbnail( $copy_id );
+            }
+
+            // Sincronizza le tassonomie (categorie servizio)
+            $taxonomies = get_object_taxonomies( 'olo_service' );
+            foreach ( $taxonomies as $tax ) {
+                $terms = wp_get_object_terms( $post_id, $tax, [ 'fields' => 'ids' ] );
+                if ( ! is_wp_error( $terms ) ) {
+                    wp_set_object_terms( $copy_id, $terms, $tax );
+                }
+            }
+
+            $updated++;
+        }
+
+        return $updated;
     }
 }

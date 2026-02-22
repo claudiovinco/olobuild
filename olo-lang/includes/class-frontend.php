@@ -247,6 +247,9 @@ class Olo_Lang_Frontend {
      * Callback del buffer: sostituisce tutte le stringhe globali nell'HTML.
      * Usa strtr() che non ri-sostituisce testo gia' matchato (evita cascading).
      * Aggiunge anche varianti HTML-encoded (es. &#8230; per ...).
+     *
+     * IMPORTANTE: protegge gli attributi URL (src, href, srcset, action, data-src,
+     * poster, url()) dalla traduzione, per evitare la corruzione dei percorsi file.
      */
     public function process_output_buffer( $html ) {
         $map = $this->get_global_string_map();
@@ -255,8 +258,39 @@ class Olo_Lang_Frontend {
             return $html;
         }
 
-        // Aggiungi varianti HTML-encoded delle chiavi
-        // (WordPress/wptexturize converte ... in &#8230;, ← in &#8592;, ecc.)
+        // ── 1. Proteggi gli attributi URL dalla traduzione ──
+        // Sostituisci con placeholder univoci, poi rimetti dopo strtr()
+        $url_placeholders = [];
+        $counter = 0;
+
+        // Pattern per attributi che contengono URL: src="...", href="...", srcset="...",
+        // data-src="...", data-srcset="...", poster="...", action="...", url(...)
+        $html = preg_replace_callback(
+            '/(?:'
+                . '(?:src|href|srcset|action|poster|data-src|data-srcset|data-href|data-caption)\s*=\s*(["\'])([^\1]*?)\1'
+                . '|url\(\s*(["\']?)([^)]*?)\3\s*\)'
+            . ')/i',
+            function ( $m ) use ( &$url_placeholders, &$counter ) {
+                $placeholder = "\x00OLO_URL_" . $counter++ . "\x00";
+                $url_placeholders[ $placeholder ] = $m[0];
+                return $placeholder;
+            },
+            $html
+        );
+
+        // ── 2. Proteggi anche i blocchi <script> e <style> ──
+        $code_placeholders = [];
+        $html = preg_replace_callback(
+            '/<(script|style)\b[^>]*>.*?<\/\1>/si',
+            function ( $m ) use ( &$code_placeholders, &$counter ) {
+                $placeholder = "\x00OLO_CODE_" . $counter++ . "\x00";
+                $code_placeholders[ $placeholder ] = $m[0];
+                return $placeholder;
+            },
+            $html
+        );
+
+        // ── 3. Costruisci mappa espansa con varianti HTML-encoded ──
         $expanded = [];
         foreach ( $map as $search => $replace ) {
             $expanded[ $search ] = $replace;
@@ -294,9 +328,18 @@ class Olo_Lang_Frontend {
             }
         }
 
-        // strtr() non ri-sostituisce testo gia' matchato (no cascading)
-        // e gestisce automaticamente la priorita' per lunghezza
-        return strtr( $html, $expanded );
+        // ── 4. Applica traduzione solo sul contenuto testuale ──
+        $html = strtr( $html, $expanded );
+
+        // ── 5. Ripristina attributi URL e blocchi code originali ──
+        if ( ! empty( $code_placeholders ) ) {
+            $html = str_replace( array_keys( $code_placeholders ), array_values( $code_placeholders ), $html );
+        }
+        if ( ! empty( $url_placeholders ) ) {
+            $html = str_replace( array_keys( $url_placeholders ), array_values( $url_placeholders ), $html );
+        }
+
+        return $html;
     }
 
     /**
