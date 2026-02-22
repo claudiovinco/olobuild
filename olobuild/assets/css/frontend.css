@@ -23,6 +23,8 @@ body:has(.olo-template) .wp-site-blocks {
   left: 50%;
   transform: translateX(-50%);
   max-width: none !important;
+  container-type: inline-size;
+  container-name: olo-tpl;
 }
 
 /* Grid wrapper (used at template level) */
@@ -69,7 +71,7 @@ video.olo-tile-bg {
 /* ========================================
    Visibility helpers (beyond UIkit)
    ======================================== */
-@media (min-width: 640px) and (max-width: 959px) {
+@container olo-tpl (min-width: 640px) and (max-width: 959px) {
   .olo-hidden-tablet {
     display: none !important;
   }
@@ -972,7 +974,7 @@ header.olo-site-header.olo-header-overlay + main > .wp-block-group:first-child {
 }
 
 /* Mobile: collapse side layout to stacked */
-@media (max-width: 767px) {
+@container olo-tpl (max-width: 767px) {
   .olo-map-layout-side {
     flex-direction: column;
   }
@@ -988,7 +990,7 @@ header.olo-site-header.olo-header-overlay + main > .wp-block-group:first-child {
 }
 
 /* Mobile: scroll horizontally */
-@media (max-width: 639px) {
+@container olo-tpl (max-width: 639px) {
   .olo-map-svc-filter-group {
     flex-direction: column;
     align-items: flex-start;
@@ -1193,6 +1195,108 @@ header.olo-site-header.olo-header-overlay + main > .wp-block-group:first-child {
   margin: 0;
 }
 
+/* ── PostGrid: Paginazione ── */
+.olo-pg-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 24px;
+  flex-wrap: wrap;
+}
+/* Dots */
+.olo-pg-page-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid #d1d5db;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+.olo-pg-page-dot:hover {
+  border-color: #9ca3af;
+}
+.olo-pg-page-dot.olo-pg-page-active {
+  background: var(--olo-color-primary, #6366F1);
+  border-color: var(--olo-color-primary, #6366F1);
+}
+/* Numbers */
+.olo-pg-page-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 32px;
+  padding: 0 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  background: transparent;
+  font-size: 0.85em;
+  font-weight: 500;
+  color: inherit;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+.olo-pg-page-num:hover {
+  background: rgba(0,0,0,0.05);
+  border-color: #9ca3af;
+}
+.olo-pg-page-num.olo-pg-page-active {
+  background: var(--olo-color-primary, #6366F1);
+  border-color: var(--olo-color-primary, #6366F1);
+  color: #fff;
+}
+/* Arrow buttons */
+.olo-pg-page-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid #d1d5db;
+  background: transparent;
+  font-size: 1.2em;
+  color: inherit;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, opacity 0.2s;
+}
+.olo-pg-page-btn:hover:not(:disabled) {
+  background: rgba(0,0,0,0.05);
+  border-color: #9ca3af;
+}
+.olo-pg-page-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+.olo-pg-page-info {
+  font-size: 0.85em;
+  color: #6b7280;
+  min-width: 50px;
+  text-align: center;
+}
+/* Load more */
+.olo-pg-loadmore {
+  display: inline-block;
+  padding: 10px 28px;
+  border-radius: 999px;
+  border: 1px solid #d1d5db;
+  background: transparent;
+  font-size: 0.9em;
+  font-weight: 500;
+  color: inherit;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+.olo-pg-loadmore:hover {
+  background: var(--olo-color-primary, #6366F1);
+  border-color: var(--olo-color-primary, #6366F1);
+  color: #fff;
+}
+
 /* Empty state */
 .olo-postgrid-empty {
   text-align: center;
@@ -1350,7 +1454,7 @@ header.olo-site-header.olo-header-overlay + main > .wp-block-group:first-child {
 }
 
 /* Responsive */
-@media (max-width: 639px) {
+@container olo-tpl (max-width: 639px) {
   .olo-sp-nav,
   .olo-sp-hero .uk-subnav {
     padding: 0 12px;
@@ -1363,4 +1467,51 @@ header.olo-site-header.olo-header-overlay + main > .wp-block-group:first-child {
   .olo-sp-panel-body {
     padding: 20px;
   }
+}
+
+/* ========================================
+   Sticky Effect (Cover / Reveal)
+   ======================================== */
+/*
+ * Cover:  section sticks at top; subsequent sections scroll over it.
+ * Reveal: section sticks at top; previous section scrolls away revealing it.
+ * Both use position:sticky + low z-index. Non-sticky siblings get z-index:1
+ * so they appear above the stuck section.
+ */
+.olo-sticky-cover,
+.olo-sticky-reveal {
+  position: sticky !important;
+  top: 0;
+  z-index: 0;
+}
+
+/* Non-sticky sections need z-index:1 to scroll over/above sticky ones */
+.olo-frontend-grid:has(.olo-sticky-cover, .olo-sticky-reveal) > .uk-section:not(.olo-sticky-cover):not(.olo-sticky-reveal):not(.olo-sticky-cover-h):not(.olo-sticky-reveal-h),
+.olo-frontend-grid:has(.olo-sticky-cover-h, .olo-sticky-reveal-h) > .uk-section:not(.olo-sticky-cover):not(.olo-sticky-reveal):not(.olo-sticky-cover-h):not(.olo-sticky-reveal-h),
+.olo-frontend-grid:has(.olo-sticky-cover, .olo-sticky-reveal) > .olo-reveal-wrapper,
+.olo-frontend-grid:has(.olo-sticky-cover-h, .olo-sticky-reveal-h) > .olo-reveal-wrapper {
+  position: relative;
+  z-index: 1;
+}
+
+/* Horizontal sticky: sections are hidden inside the h-group wrapper */
+.olo-sticky-cover-h,
+.olo-sticky-reveal-h {
+  flex: 0 0 100%;
+  width: 100%;
+}
+
+/* Horizontal group wrapper */
+.olo-h-group {
+  position: relative;
+}
+.olo-h-viewport {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  overflow: hidden;
+}
+.olo-h-track {
+  display: flex;
+  will-change: transform;
 }

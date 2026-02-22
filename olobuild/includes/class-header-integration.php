@@ -130,7 +130,8 @@ class Olo_Header_Integration {
         $inline_css .= '.olo-has-header main > .entry-content:first-child, .olo-has-header main > .wp-block-post-content:first-child, .olo-has-header main > .wp-block-group:first-child + .entry-content, .olo-has-header main > .wp-block-group:first-child + .wp-block-post-content { margin-top: 0 !important; margin-block-start: 0 !important; padding-top: 0 !important; padding-block-start: 0 !important; }';
         $inline_css .= '</style>';
 
-        return '<header class="olo-site-header">' . $inline_css . $inner_html . '</header>';
+        $mode_class = ( $header_mode === 'classic' ) ? 'olo-header-classic' : 'olo-header-overlay';
+        return '<header class="olo-site-header ' . $mode_class . '">' . $inline_css . $inner_html . '</header>';
     }
 
     /**

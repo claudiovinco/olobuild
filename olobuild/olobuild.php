@@ -3,7 +3,7 @@
  * Plugin Name: Olobuild
  * Plugin URI:  https://example.com/olobuild
  * Description: Page builder professionale olonico con sistema a griglia (tile drag & drop).
- * Version:     1.65.33
+ * Version:     1.65.48
  * Author:      Claudio
  * Author URI:  https://example.com
  * Text Domain: olobuilder
@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'OLO_VERSION', '1.65.33' );
+define( 'OLO_VERSION', '1.65.48' );
 define( 'OLO_PATH', plugin_dir_path( __FILE__ ) );
 define( 'OLO_URL', plugin_dir_url( __FILE__ ) );
 

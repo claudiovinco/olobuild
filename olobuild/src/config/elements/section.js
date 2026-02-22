@@ -7,6 +7,8 @@ export default {
     style: 'default',
     width: 'default',
     padding: 'default',
+    sticky_effect: 'none',
+    sticky_top: '',
   },
   fields: [
     { key: 'style', label: 'Stile', type: 'select', options: [
@@ -30,5 +32,13 @@ export default {
       { value: 'xlarge', label: 'Extra grande' },
       { value: 'remove-vertical', label: 'Nessuno' },
     ]},
+    { key: 'sticky_effect', label: 'Effetto sticky', type: 'select', options: [
+      { value: 'none', label: 'Nessuno' },
+      { value: 'cover', label: 'Cover' },
+      { value: 'reveal', label: 'Reveal' },
+      { value: 'cover-h', label: 'Cover orizzontale' },
+      { value: 'reveal-h', label: 'Reveal orizzontale' },
+    ]},
+    { key: 'sticky_top', label: 'Offset dall\'alto (px)', type: 'text', placeholder: '0', condition: { field: 'sticky_effect', operator: '!=', value: 'none' } },
   ],
 };

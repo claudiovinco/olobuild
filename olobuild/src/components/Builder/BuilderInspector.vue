@@ -514,16 +514,24 @@
           <!-- Visibility -->
           <div>
             <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300 mb-mb-2">Visibilità</label>
-            <div class="mb-space-y-2">
-              <label v-for="vp in viewports" :key="vp.key" class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
-                <input
-                  type="checkbox"
-                  :checked="tileAdvanced['visible_' + vp.key] !== false"
-                  @change="updateAdvanced('visible_' + vp.key, $event.target.checked)"
-                  class="mb-rounded mb-border-gray-500"
-                />
-                <span class="mb-text-xs mb-text-gray-300">{{ vp.icon }} {{ vp.label }}</span>
-              </label>
+            <div class="mb-flex mb-items-center mb-gap-2">
+            <label v-for="vp in viewports" :key="vp.key" class="mb-flex mb-items-center mb-gap-1 mb-cursor-pointer" :title="(tileAdvanced['visible_' + vp.key] !== false ? 'Visibile su ' : 'Nascosto su ') + vp.label">
+              <input
+                type="checkbox"
+                :checked="tileAdvanced['visible_' + vp.key] !== false"
+                @change="updateAdvanced('visible_' + vp.key, $event.target.checked)"
+                class="mb-hidden"
+              />
+              <span
+                :class="[
+                  'mb-flex mb-items-center mb-justify-center mb-w-8 mb-h-8 mb-rounded-md mb-border mb-transition-all',
+                  tileAdvanced['visible_' + vp.key] !== false
+                    ? 'mb-border-primary-500 mb-bg-primary-600/20 mb-text-primary-300'
+                    : 'mb-border-gray-600 mb-bg-gray-700/50 mb-text-gray-500'
+                ]"
+                v-html="vp.svg"
+              ></span>
+            </label>
             </div>
           </div>
 
@@ -765,9 +773,9 @@ const tabs = ['Contenuto', 'Stile', 'Avanzate'];
 const showProSliderEditor = ref(false);
 const sides = ['top', 'right', 'bottom', 'left'];
 const viewports = [
-  { key: 'desktop', label: 'Desktop', icon: '\u{1F5B5}' },
-  { key: 'tablet', label: 'Tablet', icon: '\u{1F4F1}' },
-  { key: 'mobile', label: 'Mobile', icon: '\u{1F4F2}' },
+  { key: 'desktop', label: 'Desktop', svg: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg>' },
+  { key: 'tablet', label: 'Tablet', svg: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="12" x2="12.01" y1="18" y2="18"/></svg>' },
+  { key: 'mobile', label: 'Mobile', svg: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2"/><line x1="12" x2="12.01" y1="18" y2="18"/></svg>' },
 ];
 
 const selectedTile = computed(() => {

@@ -44,6 +44,29 @@ export default {
     ribbon_bg: '#e11d48',
     ribbon_color: '#ffffff',
     meta_filter: '',
+    // Stile testo
+    body_padding: '15',
+    title_size: '1',
+    excerpt_size: '0.92',
+    title_color: '',
+    excerpt_color: '',
+    meta_color: '',
+    body_bg: '',
+    body_bg_opacity: '100',
+    // Paginazione
+    pagination: false,
+    items_per_page: '6',
+    pagination_style: 'dots',
+    // Ken Burns
+    fx_kenburns: false,
+    fx_kenburns_speed: '20',
+    fx_kenburns_scale: '1.12',
+    // Overlay gradient
+    overlay_gradient: false,
+    overlay_color: '#000000',
+    overlay_opacity: '50',
+    overlay_direction: 'bottom',
+    overlay_height: '50',
   },
   fields: [
     // ── Query ──
@@ -150,6 +173,32 @@ export default {
       { value: 'card', label: 'Card cliccabile' },
     ]},
 
+    { type: 'separator', label: 'Stile testo' },
+
+    // ── Stile testo ──
+    { key: 'body_padding', label: 'Padding area testo (px)', type: 'range', min: 0, max: 40, step: 1 },
+    { key: 'title_size', label: 'Dimensione titolo (em)', type: 'range', min: 0.7, max: 2.5, step: 0.05 },
+    { key: 'title_color', label: 'Colore titolo', type: 'color' },
+    { key: 'excerpt_size', label: 'Dimensione estratto (em)', type: 'range', min: 0.7, max: 1.5, step: 0.05 },
+    { key: 'excerpt_color', label: 'Colore estratto', type: 'color' },
+    { key: 'meta_color', label: 'Colore meta (data/autore)', type: 'color' },
+    { key: 'body_bg', label: 'Sfondo area testo', type: 'color' },
+    { key: 'body_bg_opacity', label: 'Opacità sfondo testo (%)', type: 'range', min: 0, max: 100, step: 5,
+      condition: { field: 'body_bg', value: '', operator: '!=' } },
+
+    { type: 'separator', label: 'Paginazione' },
+
+    // ── Paginazione ──
+    { key: 'pagination', label: 'Abilita paginazione', type: 'toggle' },
+    { key: 'items_per_page', label: 'Articoli per pagina', type: 'range', min: 2, max: 24, step: 1,
+      condition: { field: 'pagination', value: true } },
+    { key: 'pagination_style', label: 'Stile paginazione', type: 'select', options: [
+      { value: 'dots', label: 'Punti' },
+      { value: 'numbers', label: 'Numeri' },
+      { value: 'arrows', label: 'Frecce' },
+      { value: 'loadmore', label: 'Carica altri' },
+    ], condition: { field: 'pagination', value: true } },
+
     { type: 'separator', label: 'Effetti hover' },
 
     // ── Hover ──
@@ -160,11 +209,38 @@ export default {
       { value: 'brightness', label: 'Luminosità' },
       { value: 'desaturate', label: 'Desatura → colore' },
       { value: 'blur-in', label: 'Sfocatura → nitido' },
+      { value: 'slide-up', label: 'Scorrimento in alto' },
+      { value: 'glow', label: 'Bagliore' },
+      { value: 'tilt', label: 'Tilt 3D' },
     ]},
     { key: 'hover_image_field', label: 'Meta key immagine hover', type: 'text',
       condition: { field: 'show_image', value: true } },
     { key: 'hover_video_field', label: 'Meta key video hover (mp4)', type: 'text',
       condition: { field: 'show_image', value: true } },
+
+    { type: 'separator', label: 'Effetti immagine' },
+
+    // ── Effetti immagine ──
+    { key: 'fx_kenburns', label: 'Ken Burns (zoom cinematico)', type: 'toggle',
+      condition: { field: 'show_image', value: true } },
+    { key: 'fx_kenburns_speed', label: 'Velocità Ken Burns (s)', type: 'range', min: 10, max: 40, step: 1,
+      condition: { field: 'fx_kenburns', value: true } },
+    { key: 'fx_kenburns_scale', label: 'Intensità zoom', type: 'range', min: 1.05, max: 1.25, step: 0.01,
+      condition: { field: 'fx_kenburns', value: true } },
+    { key: 'overlay_gradient', label: 'Overlay sfumato', type: 'toggle',
+      condition: { field: 'show_image', value: true } },
+    { key: 'overlay_color', label: 'Colore overlay', type: 'color',
+      condition: { field: 'overlay_gradient', value: true } },
+    { key: 'overlay_opacity', label: 'Opacità overlay (%)', type: 'range', min: 10, max: 90, step: 5,
+      condition: { field: 'overlay_gradient', value: true } },
+    { key: 'overlay_direction', label: 'Direzione sfumatura', type: 'select', options: [
+      { value: 'bottom', label: 'Dal basso' },
+      { value: 'top', label: "Dall'alto" },
+      { value: 'left', label: 'Da sinistra' },
+      { value: 'right', label: 'Da destra' },
+    ], condition: { field: 'overlay_gradient', value: true } },
+    { key: 'overlay_height', label: 'Altezza gradiente (%)', type: 'range', min: 20, max: 100, step: 5,
+      condition: { field: 'overlay_gradient', value: true } },
 
     { type: 'separator', label: 'Ribbon' },
 

@@ -590,59 +590,23 @@ const amenityIcons = {
   safe:       _i('<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M12 9v-2"/>'),
 };
 
-const amenityCategories = [
-  { key: 'general', label: 'Generali', items: [
-    { key: 'wifi', icon: amenityIcons.wifi, label: 'Wi-Fi' },
-    { key: 'heating', icon: amenityIcons.heating, label: 'Riscaldamento' },
-    { key: 'aircon', icon: amenityIcons.aircon, label: 'Aria condizionata' },
-    { key: 'fireplace', icon: amenityIcons.fireplace, label: 'Camino / Stufa' },
-    { key: 'tv', icon: amenityIcons.tv, label: 'TV' },
-    { key: 'pets', icon: amenityIcons.pets, label: 'Animali ammessi' },
-    { key: 'smoking', icon: amenityIcons.smoking, label: 'Fumatori' },
-    { key: 'elevator', icon: amenityIcons.elevator, label: 'Ascensore' },
-    { key: 'accessible', icon: amenityIcons.accessible, label: 'Accesso disabili' },
-  ]},
-  { key: 'kitchen', label: 'Cucina', items: [
-    { key: 'kitchen', icon: amenityIcons.kitchen, label: 'Cucina attrezzata' },
-    { key: 'oven', icon: amenityIcons.oven, label: 'Forno' },
-    { key: 'microwave', icon: amenityIcons.microwave, label: 'Microonde' },
-    { key: 'dishwasher', icon: amenityIcons.dishwasher, label: 'Lavastoviglie' },
-    { key: 'fridge', icon: amenityIcons.fridge, label: 'Frigorifero' },
-    { key: 'coffee', icon: amenityIcons.coffee, label: 'Macchina caffe' },
-    { key: 'kettle', icon: amenityIcons.kettle, label: 'Bollitore' },
-  ]},
-  { key: 'laundry', label: 'Bagno e Lavanderia', items: [
-    { key: 'washer', icon: amenityIcons.washer, label: 'Lavatrice' },
-    { key: 'dryer', icon: amenityIcons.dryer, label: 'Asciugatrice' },
-    { key: 'iron', icon: amenityIcons.iron, label: 'Ferro da stiro' },
-    { key: 'hairdryer', icon: amenityIcons.hairdryer, label: 'Asciugacapelli' },
-    { key: 'bathtub', icon: amenityIcons.bathtub, label: 'Vasca da bagno' },
-  ]},
-  { key: 'outdoor', label: 'Esterno', items: [
-    { key: 'parking', icon: amenityIcons.parking, label: 'Parcheggio' },
-    { key: 'garage', icon: amenityIcons.garage, label: 'Garage' },
-    { key: 'garden', icon: amenityIcons.garden, label: 'Giardino' },
-    { key: 'terrace', icon: amenityIcons.terrace, label: 'Terrazza / Balcone' },
-    { key: 'bbq', icon: amenityIcons.bbq, label: 'Barbecue' },
-    { key: 'pool', icon: amenityIcons.pool, label: 'Piscina' },
-    { key: 'hottub', icon: amenityIcons.hottub, label: 'Vasca idromassaggio' },
-  ]},
-  { key: 'sport', label: 'Sport e Attivita', items: [
-    { key: 'ski', icon: amenityIcons.ski, label: 'Vicino piste da sci' },
-    { key: 'bikes', icon: amenityIcons.bikes, label: 'Biciclette disponibili' },
-    { key: 'playground', icon: amenityIcons.playground, label: 'Area giochi bambini' },
-    { key: 'sauna', icon: amenityIcons.sauna, label: 'Sauna' },
-    { key: 'hiking', icon: amenityIcons.hiking, label: 'Sentieri escursionistici' },
-  ]},
-  { key: 'extras', label: 'Servizi extra', items: [
-    { key: 'linens', icon: amenityIcons.linens, label: 'Biancheria inclusa' },
-    { key: 'towels', icon: amenityIcons.towels, label: 'Asciugamani inclusi' },
-    { key: 'cleaning', icon: amenityIcons.cleaning, label: 'Pulizia finale inclusa' },
-    { key: 'crib', icon: amenityIcons.crib, label: 'Culla disponibile' },
-    { key: 'highchair', icon: amenityIcons.highchair, label: 'Seggiolone' },
-    { key: 'safe', icon: amenityIcons.safe, label: 'Cassaforte' },
-  ]},
-];
+/* Build amenityCategories from dynamic catalog (oloManagerConfig) with SVG icon fallback */
+const _catalogData = (window.oloManagerConfig || {}).amenitiesCatalog;
+const amenityCategories = (_catalogData && _catalogData.categories || []).map(cat => ({
+  key: cat.key,
+  label: cat.label,
+  items: (cat.items || []).map(item => {
+    let icon;
+    if (item.icon && item.icon.startsWith('emoji:')) {
+      // Custom emoji icon — render as text span
+      icon = `<span style="font-size:18px;line-height:1">${item.icon.slice(6)}</span>`;
+    } else {
+      // Built-in SVG icon or fallback checkmark
+      icon = amenityIcons[item.icon] || amenityIcons[item.key] || _i('<circle cx="12" cy="12" r="3"/>');
+    }
+    return { key: item.key, icon, label: item.label };
+  }),
+}));
 
 const amenities = ref([]);
 const enabledCats = ref([]);

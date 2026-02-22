@@ -4,7 +4,9 @@
       <div v-for="n in cardCount" :key="n" class="mpg-card" :class="cardClasses" :style="cardStyle">
         <!-- Image area -->
         <div v-if="settings.show_image !== false" class="mpg-img-wrap" :style="{ height: imgHeight + 'px' }">
-          <div :class="['mpg-img-bg', hoverImgClass]"></div>
+          <div :class="['mpg-img-bg', hoverImgClass, kenburnsClass]" :style="kenburnsStyle"></div>
+          <!-- Overlay gradient -->
+          <div v-if="settings.overlay_gradient" class="mpg-overlay" :style="overlayStyle"></div>
           <!-- Category badge -->
           <span v-if="settings.show_category !== false" class="mpg-category">Categoria</span>
           <!-- Ribbon -->
@@ -16,19 +18,36 @@
           >Ribbon</span>
         </div>
         <!-- Card body -->
-        <div class="mpg-body">
-          <div class="mpg-title">Titolo articolo {{ n }}</div>
-          <div v-if="settings.show_meta !== false" class="mpg-meta">12 Feb 2026 · Autore</div>
-          <div v-if="settings.show_excerpt !== false" class="mpg-excerpt">Lorem ipsum dolor sit amet, consectetur adipiscing elit...</div>
+        <div class="mpg-body" :style="bodyStyle">
+          <div class="mpg-title" :style="{ fontSize: titleSize, color: settings.title_color || undefined }">Titolo articolo {{ n }}</div>
+          <div v-if="settings.show_meta !== false" class="mpg-meta" :style="{ color: settings.meta_color || undefined }">12 Feb 2026 · Autore</div>
+          <div v-if="settings.show_excerpt !== false" class="mpg-excerpt" :style="{ fontSize: excerptSize, color: settings.excerpt_color || undefined }">Lorem ipsum dolor sit amet, consectetur adipiscing elit...</div>
           <div v-if="settings.show_price" class="mpg-price">{{ settings.price_prefix || '€' }}99{{ settings.price_suffix || '' }}</div>
           <div v-if="settings.link_style === 'button'" class="mpg-btn">{{ settings.link_text || 'Vedi' }}</div>
           <div v-else-if="settings.link_style === 'text'" class="mpg-link">{{ settings.link_text || 'Vedi' }} →</div>
         </div>
       </div>
     </div>
+    <!-- Pagination preview -->
+    <div v-if="settings.pagination" class="mpg-pagination">
+      <template v-if="paginationStyle === 'dots'">
+        <span v-for="i in pagPageCount" :key="i" class="mpg-pag-dot" :class="{ 'mpg-pag-active': i === 1 }"></span>
+      </template>
+      <template v-else-if="paginationStyle === 'numbers'">
+        <span v-for="i in pagPageCount" :key="i" class="mpg-pag-num" :class="{ 'mpg-pag-active': i === 1 }">{{ i }}</span>
+      </template>
+      <template v-else-if="paginationStyle === 'arrows'">
+        <span class="mpg-pag-arrow" style="opacity:0.35">‹</span>
+        <span class="mpg-pag-info">1 / {{ pagPageCount }}</span>
+        <span class="mpg-pag-arrow">›</span>
+      </template>
+      <template v-else-if="paginationStyle === 'loadmore'">
+        <span class="mpg-pag-loadmore">Carica altri</span>
+      </template>
+    </div>
     <!-- Info bar -->
     <div class="mpg-info">
-      {{ settings.post_type || 'post' }} · {{ settings.posts_per_page || 12 }} articoli · {{ cols }} colonne
+      {{ settings.post_type || 'post' }} · {{ settings.posts_per_page || 12 }} articoli · {{ cols }} colonne<template v-if="settings.pagination"> · {{ settings.items_per_page || 6 }}/pagina</template>
     </div>
   </div>
 </template>
@@ -77,6 +96,74 @@ const cardStyle = computed(() => {
 const hoverImgClass = computed(() => {
   const fx = props.settings.hover_effect || 'none';
   return fx !== 'none' ? 'mpg-hover-' + fx : '';
+});
+
+// Stile testo
+const bodyStyle = computed(() => {
+  const style = { padding: (parseInt(props.settings.body_padding) ?? 15) + 'px' };
+  const bg = props.settings.body_bg;
+  if (bg && bg.length >= 7) {
+    const r = parseInt(bg.slice(1, 3), 16);
+    const g = parseInt(bg.slice(3, 5), 16);
+    const b = parseInt(bg.slice(5, 7), 16);
+    const a = (parseInt(props.settings.body_bg_opacity) || 100) / 100;
+    style.background = `rgba(${r},${g},${b},${a})`;
+  }
+  return style;
+});
+
+const titleSize = computed(() => (parseFloat(props.settings.title_size) || 1) + 'em');
+const excerptSize = computed(() => (parseFloat(props.settings.excerpt_size) || 0.92) + 'em');
+
+// Overlay gradient
+const overlayStyle = computed(() => {
+  const color = props.settings.overlay_color || '#000000';
+  const opacity = (parseInt(props.settings.overlay_opacity) || 50) / 100;
+  const dir = props.settings.overlay_direction || 'bottom';
+  const height = parseInt(props.settings.overlay_height) || 50;
+
+  const r = parseInt(color.slice(1, 3), 16);
+  const g = parseInt(color.slice(3, 5), 16);
+  const b = parseInt(color.slice(5, 7), 16);
+
+  const dirMap = { bottom: 'to top', top: 'to bottom', left: 'to right', right: 'to left' };
+  const cssDir = dirMap[dir] || 'to top';
+
+  const posMap = { bottom: 'bottom:0;left:0;right:0;', top: 'top:0;left:0;right:0;', left: 'top:0;left:0;bottom:0;', right: 'top:0;right:0;bottom:0;' };
+  const isHoriz = dir === 'left' || dir === 'right';
+
+  return {
+    position: 'absolute',
+    ...(dir === 'bottom' ? { bottom: 0, left: 0, right: 0 } : {}),
+    ...(dir === 'top' ? { top: 0, left: 0, right: 0 } : {}),
+    ...(dir === 'left' ? { top: 0, left: 0, bottom: 0 } : {}),
+    ...(dir === 'right' ? { top: 0, right: 0, bottom: 0 } : {}),
+    width: isHoriz ? height + '%' : '100%',
+    height: isHoriz ? '100%' : height + '%',
+    pointerEvents: 'none',
+    zIndex: 1,
+    background: `linear-gradient(${cssDir}, rgba(${r},${g},${b},${opacity}), transparent)`,
+  };
+});
+
+// Ken Burns
+const kenburnsClass = computed(() => props.settings.fx_kenburns ? 'mpg-kenburns' : '');
+const kenburnsStyle = computed(() => {
+  if (!props.settings.fx_kenburns) return {};
+  const speed = parseInt(props.settings.fx_kenburns_speed) || 20;
+  const scale = parseFloat(props.settings.fx_kenburns_scale) || 1.12;
+  return {
+    '--kb-speed': speed + 's',
+    '--kb-scale': scale,
+  };
+});
+
+// Pagination
+const paginationStyle = computed(() => props.settings.pagination_style || 'dots');
+const pagPageCount = computed(() => {
+  const total = parseInt(props.settings.posts_per_page) || 12;
+  const perPage = parseInt(props.settings.items_per_page) || 6;
+  return Math.max(1, Math.ceil(total / perPage));
 });
 </script>
 
@@ -136,6 +223,27 @@ const hoverImgClass = computed(() => {
 .mpg-card:hover .mpg-hover-desaturate { filter: grayscale(0%); }
 .mpg-hover-blur-in { filter: blur(3px); }
 .mpg-card:hover .mpg-hover-blur-in { filter: blur(0); }
+/* New hover effects */
+.mpg-card:hover .mpg-hover-slide-up { transform: translateY(-8px) scale(1.02); }
+.mpg-hover-glow { filter: brightness(1); }
+.mpg-card:hover .mpg-hover-glow { filter: brightness(1.15) saturate(1.2); }
+.mpg-card { perspective: 800px; }
+.mpg-card:hover .mpg-hover-tilt { transform: rotateY(4deg) rotateX(2deg) scale(1.03); }
+
+/* Ken Burns preview */
+@keyframes mpg-kenburns {
+  0% { transform: scale(1); }
+  50% { transform: scale(var(--kb-scale, 1.12)); }
+  100% { transform: scale(1); }
+}
+.mpg-kenburns {
+  animation: mpg-kenburns var(--kb-speed, 20s) ease-in-out infinite;
+}
+
+/* Overlay */
+.mpg-overlay {
+  border-radius: 0;
+}
 
 /* Category badge */
 .mpg-category {
@@ -147,6 +255,7 @@ const hoverImgClass = computed(() => {
   font-size: 9px;
   padding: 2px 6px;
   border-radius: 3px;
+  z-index: 2;
 }
 
 /* Ribbon */
@@ -212,6 +321,68 @@ const hoverImgClass = computed(() => {
 .mpg-link {
   font-size: 9px;
   color: var(--olo-color-primary, #6366F1);
+}
+
+/* Pagination preview */
+.mpg-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+.mpg-pag-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  border: 1.5px solid #d1d5db;
+  background: transparent;
+}
+.mpg-pag-dot.mpg-pag-active {
+  background: var(--olo-color-primary, #6366F1);
+  border-color: var(--olo-color-primary, #6366F1);
+}
+.mpg-pag-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  font-size: 8px;
+  font-weight: 500;
+  border: 1px solid #d1d5db;
+  border-radius: 3px;
+  color: #6b7280;
+}
+.mpg-pag-num.mpg-pag-active {
+  background: var(--olo-color-primary, #6366F1);
+  border-color: var(--olo-color-primary, #6366F1);
+  color: #fff;
+}
+.mpg-pag-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border: 1px solid #d1d5db;
+  border-radius: 50%;
+  font-size: 10px;
+  color: #6b7280;
+}
+.mpg-pag-info {
+  font-size: 8px;
+  color: #9ca3af;
+}
+.mpg-pag-loadmore {
+  display: inline-block;
+  padding: 4px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 999px;
+  font-size: 8px;
+  color: #6b7280;
 }
 
 /* Info bar */

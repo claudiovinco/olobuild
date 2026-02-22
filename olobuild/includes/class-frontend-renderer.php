@@ -492,8 +492,23 @@ class Olo_Frontend_Renderer {
         $style    = $node['style'] ?? [];
         $advanced = $node['advanced'] ?? [];
 
+        // Sticky effect
+        $sticky_effect = $s['sticky_effect'] ?? 'none';
+        $is_sticky_v = in_array( $sticky_effect, [ 'cover', 'reveal' ], true );
+        $is_sticky_h = in_array( $sticky_effect, [ 'cover-h', 'reveal-h' ], true );
+        $is_sticky = $is_sticky_v || $is_sticky_h;
+        $sticky_top = intval( $s['sticky_top'] ?? 0 );
+
         // Section classes — position-relative needed for absolute-positioned children
-        $classes = [ 'uk-section', 'uk-position-relative' ];
+        // Sticky sections use position:sticky instead (handled via CSS class)
+        $classes = [ 'uk-section' ];
+        if ( $is_sticky_v ) {
+            $classes[] = 'olo-sticky-' . $sticky_effect;
+        } elseif ( $is_sticky_h ) {
+            $classes[] = 'olo-sticky-' . $sticky_effect;
+        } else {
+            $classes[] = 'uk-position-relative';
+        }
         $section_style = $s['style'] ?? 'default';
         $style_map = [
             'muted'     => 'uk-section-muted',
@@ -523,8 +538,13 @@ class Olo_Frontend_Renderer {
             $classes[] = esc_attr( $advanced['css_classes'] );
         }
 
-        // Background handling
+        // Sticky top offset (inline overrides CSS top:0) — only for vertical sticky
         $inline_styles = [];
+        if ( $is_sticky_v && $sticky_top > 0 ) {
+            $inline_styles[] = "top: {$sticky_top}px";
+        }
+
+        // Background handling
         $tile_bg = $this->get_effective_bg( $style );
         $has_bg_image = ( $tile_bg['type'] === 'image' && ! empty( $tile_bg['image_url'] ) );
         $has_bg_video = ( $tile_bg['type'] === 'video' && ! empty( $tile_bg['video_url'] ) );
@@ -673,6 +693,20 @@ class Olo_Frontend_Renderer {
         }
 
         $html .= '</div></div>';
+
+        // Reveal sections: wrap in a container that limits the sticky range.
+        // JS will set wrapper height = 2×section height and margin-top = -section height
+        // so the section sits behind the previous one and unsticks once fully revealed.
+        if ( $sticky_effect === 'reveal' ) {
+            $html = '<div class="olo-reveal-wrapper" data-sticky-top="' . $sticky_top . '">' . $html . '</div>';
+        }
+
+        // Horizontal sticky: add data attribute for JS grouping
+        if ( $is_sticky_h ) {
+            // Mark section with data for JS to build the horizontal scroll group
+            $html = '<div class="olo-h-marker" data-sticky-h="' . esc_attr( $sticky_effect ) . '" data-sticky-top="' . $sticky_top . '" style="display:contents">' . $html . '</div>';
+        }
+
         return $html;
     }
 
@@ -848,7 +882,7 @@ class Olo_Frontend_Renderer {
                         $html .= '.' . $custom_class . '>:nth-child(' . $nth . '){width:' . $w . '%!important}';
                     }
                 } else {
-                    $html .= '@media(min-width:960px){';
+                    $html .= '@container olo-tpl (min-width:960px){';
                     foreach ( $widths as $i => $w ) {
                         $nth = $i + 1;
                         $html .= '.' . $custom_class . '>:nth-child(' . $nth . '){width:' . $w . '%!important}';
@@ -1098,7 +1132,7 @@ class Olo_Frontend_Renderer {
         if ( $stack ) {
             $ic_class = 'olo-ic-' . substr( md5( $node['id'] ?? wp_rand() ), 0, 6 );
             $classes[] = $ic_class;
-            $html .= '<style>@media(max-width:640px){.' . $ic_class . '{flex-direction:column}.' . $ic_class . '>*{width:100%!important}}</style>';
+            $html .= '<style>@container olo-tpl (max-width:640px){.' . $ic_class . '{flex-direction:column}.' . $ic_class . '>*{width:100%!important}}</style>';
         }
 
         $html .= '<div class="' . esc_attr( implode( ' ', $classes ) ) . '" style="' . esc_attr( implode( '; ', $inline_styles ) ) . '">';
@@ -1642,6 +1676,119 @@ class Olo_Frontend_Renderer {
             </div>
             <?php if ( ! empty( $hover_css_rules ) ) : ?>
                 <style class="olo-hover-styles"><?php echo implode( ' ', $hover_css_rules ); ?></style>
+            <?php endif; ?>
+            <?php
+            // Sticky Effect: JS for reveal wrappers + horizontal scroll groups
+            $has_any_sticky_v = false;
+            $has_any_sticky_h = false;
+            foreach ( $tiles as $sec ) {
+                $eff = $sec['settings']['sticky_effect'] ?? 'none';
+                if ( $eff === 'cover' || $eff === 'reveal' ) $has_any_sticky_v = true;
+                if ( $eff === 'cover-h' || $eff === 'reveal-h' ) $has_any_sticky_h = true;
+            }
+            if ( $has_any_sticky_v || $has_any_sticky_h ) : ?>
+                <script>
+                (function(){
+                    <?php if ( $has_any_sticky_v ) : ?>
+                    function initReveal(){
+                        document.querySelectorAll('.olo-reveal-wrapper').forEach(function(wrap){
+                            var sec=wrap.querySelector('.olo-sticky-reveal');
+                            if(!sec)return;
+                            var top=parseInt(wrap.dataset.stickyTop)||0;
+                            wrap.style.height='';wrap.style.marginTop='';wrap.style.marginBottom='';
+                            var h=sec.offsetHeight;
+                            wrap.style.height=(h*2+top)+'px';
+                            wrap.style.marginTop='-'+h+'px';
+                            if(top)wrap.style.marginBottom='-'+top+'px';
+                        });
+                    }
+                    <?php endif; ?>
+                    <?php if ( $has_any_sticky_h ) : ?>
+                    function getSec(el){
+                        if(el.classList.contains('uk-section'))return el;
+                        return el.querySelector('.uk-section');
+                    }
+                    function findSibling(siblings,from,dir){
+                        var i=from+dir;
+                        while(i>=0&&i<siblings.length){
+                            var s=siblings[i];
+                            if(getSec(s))return s;
+                            i+=dir;
+                        }
+                        return null;
+                    }
+                    function initHGroups(){
+                        document.querySelectorAll('.olo-h-marker').forEach(function(marker){
+                            if(marker.dataset.oloHDone)return;
+                            marker.dataset.oloHDone='1';
+                            var mode=marker.dataset.stickyH;
+                            var stickyTop=parseInt(marker.dataset.stickyTop)||0;
+                            var mySec=getSec(marker);
+                            if(!mySec)return;
+                            var parent=marker.parentNode;
+                            var siblings=Array.from(parent.children);
+                            var idx=siblings.indexOf(marker);
+                            /* cover-h: this + next; reveal-h: prev + this */
+                            var pairEl=findSibling(siblings,idx,mode==='cover-h'?1:-1);
+                            if(!pairEl)return;
+                            var pairSec=getSec(pairEl);
+                            if(!pairSec)return;
+                            var secA=mode==='cover-h'?mySec:pairSec;
+                            var secB=mode==='cover-h'?pairSec:mySec;
+                            /* Mark pair as processed too */
+                            if(pairEl.dataset)pairEl.dataset.oloHDone='1';
+                            /* Build horizontal scroll group */
+                            var viewH=window.innerHeight-stickyTop;
+                            var group=document.createElement('div');
+                            group.className='olo-h-group';
+                            group.style.height=(viewH*2)+'px';
+                            var viewport=document.createElement('div');
+                            viewport.className='olo-h-viewport';
+                            viewport.style.top=stickyTop+'px';
+                            viewport.style.height=viewH+'px';
+                            var track=document.createElement('div');
+                            track.className='olo-h-track';
+                            track.style.height='100%';
+                            var cA=secA.cloneNode(true);
+                            var cB=secB.cloneNode(true);
+                            var panelCSS='flex:0 0 100%;width:100%;min-height:'+viewH+'px;box-sizing:border-box;position:relative;overflow:hidden';
+                            cA.style.cssText+=';'+panelCSS;
+                            cB.style.cssText+=';'+panelCSS;
+                            track.appendChild(cA);
+                            track.appendChild(cB);
+                            viewport.appendChild(track);
+                            group.appendChild(viewport);
+                            /* Insert and hide originals */
+                            var first=mode==='cover-h'?marker:pairEl;
+                            first.parentNode.insertBefore(group,first);
+                            marker.style.display='none';
+                            pairEl.style.display='none';
+                            /* Scroll-linked translateX */
+                            var ticking=false;
+                            function onScroll(){
+                                if(!ticking){ticking=true;requestAnimationFrame(function(){
+                                    var rect=group.getBoundingClientRect();
+                                    var scrolled=-rect.top;
+                                    var travel=group.offsetHeight-viewH;
+                                    var p=Math.max(0,Math.min(1,scrolled/travel));
+                                    track.style.transform='translateX('+ (-p*100) +'%)';
+                                    ticking=false;
+                                });}
+                            }
+                            window.addEventListener('scroll',onScroll,{passive:true});
+                            onScroll();
+                        });
+                    }
+                    <?php endif; ?>
+                    function initAll(){
+                        <?php if ( $has_any_sticky_v ) : ?>initReveal();<?php endif; ?>
+                        <?php if ( $has_any_sticky_h ) : ?>initHGroups();<?php endif; ?>
+                    }
+                    if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',initAll)}
+                    else{initAll()}
+                    window.addEventListener('load',initAll);
+                })();
+                </script>
             <?php endif; ?>
         </div>
         <?php

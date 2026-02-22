@@ -28,6 +28,10 @@
 
     <!-- Full-width indicator -->
     <div v-if="tile.style?.full_width" class="olo-fullwidth-badge">FULL</div>
+    <!-- Hidden in viewport indicator -->
+    <div v-if="isHiddenInViewport" class="olo-hidden-vp-badge">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" x2="23" y1="1" y2="23"/></svg>
+    </div>
 
     <!-- Tile content -->
     <div :class="{ 'olo-cell-content-z': hasBgImage || hasOverlay }">
@@ -53,6 +57,16 @@ const builderStore = useBuilderStore();
 const tilesStore = useTilesStore();
 
 const isSelected = computed(() => builderStore.selectedTileId === props.tile.id);
+
+// Responsive visibility: check if tile is hidden in current viewMode
+const isHiddenInViewport = computed(() => {
+  const adv = props.tile.advanced || {};
+  const mode = builderStore.viewMode;
+  if (mode === 'desktop' && adv.visible_desktop === false) return true;
+  if (mode === 'tablet' && adv.visible_tablet === false) return true;
+  if (mode === 'mobile' && adv.visible_mobile === false) return true;
+  return false;
+});
 
 const shadowMap = {
   none: 'none',
@@ -107,6 +121,7 @@ const cellClasses = computed(() => {
   if (isSelected.value) classes.push('olo-grid-cell--selected');
   if (props.tile.style?.full_width) classes.push('olo-grid-cell--fullwidth');
   if (hasBgImage.value || hasOverlay.value) classes.push('olo-grid-cell--has-bg');
+  if (isHiddenInViewport.value) classes.push('olo-grid-cell--hidden-vp');
   return classes;
 });
 
@@ -285,5 +300,24 @@ function remove() {
   border-radius: 3px;
   z-index: 10;
   letter-spacing: 0.5px;
+}
+
+/* Hidden in current viewport */
+.olo-grid-cell--hidden-vp {
+  opacity: 0.25;
+  border: 2px dashed #f59e0b !important;
+  position: relative;
+}
+.olo-hidden-vp-badge {
+  position: absolute;
+  top: 2px;
+  right: 6px;
+  background: #f59e0b;
+  color: #fff;
+  padding: 2px 4px;
+  border-radius: 3px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
 }
 </style>

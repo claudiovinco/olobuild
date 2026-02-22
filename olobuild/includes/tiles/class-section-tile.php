@@ -11,9 +11,11 @@ class Olo_Section_Tile extends Olo_Tile_Base {
     protected $icon     = 'dashicons-align-center';
     protected $category = 'structure';
     protected $defaults = [
-        'style'   => 'default',
-        'width'   => 'default',
-        'padding' => 'default',
+        'style'         => 'default',
+        'width'         => 'default',
+        'padding'       => 'default',
+        'sticky_effect' => 'none',
+        'sticky_top'    => '',
     ];
 
     public function get_controls() {
@@ -38,6 +40,13 @@ class Olo_Section_Tile extends Olo_Tile_Base {
                 'large'         => 'Large',
                 'xlarge'        => 'X-Large',
                 'remove-vertical' => 'None',
+            ]],
+            [ 'key' => 'sticky_effect', 'type' => 'select', 'label' => 'Sticky Effect', 'options' => [
+                'none'      => 'None',
+                'cover'     => 'Cover',
+                'reveal'    => 'Reveal',
+                'cover-h'   => 'Cover Horizontal',
+                'reveal-h'  => 'Reveal Horizontal',
             ]],
         ];
     }

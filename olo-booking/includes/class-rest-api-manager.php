@@ -206,6 +206,20 @@ class Olo_Booking_Rest_API_Manager {
             ],
         ] );
 
+        // ── Amenities Catalog (admin only) ──
+        register_rest_route( $this->ns, '/manager/amenities-catalog', [
+            [
+                'methods'             => 'GET',
+                'callback'            => [ $this, 'get_amenities_catalog' ],
+                'permission_callback' => [ $this, 'is_admin' ],
+            ],
+            [
+                'methods'             => 'PUT',
+                'callback'            => [ $this, 'save_amenities_catalog' ],
+                'permission_callback' => [ $this, 'is_admin' ],
+            ],
+        ] );
+
         // ── Permissions (admin only) ──
         register_rest_route( $this->ns, '/manager/permissions', [
             [
@@ -1260,14 +1274,73 @@ class Olo_Booking_Rest_API_Manager {
 
     public function save_theme( $request ) {
         $params = $request->get_json_params();
-        $colors = [];
-        $allowed = [ 'bg', 'card', 'sidebar', 'accent', 'primary', 'primaryDark', 'text', 'textMuted', 'headerBg', 'btnPrimary', 'btnSuccess', 'border' ];
-        foreach ( $allowed as $key ) {
-            if ( isset( $params['colors'][ $key ] ) ) {
-                $colors[ $key ] = sanitize_hex_color( $params['colors'][ $key ] ) ?: '';
+        $theme  = get_option( 'olo_manager_theme', [] );
+
+        // ── Colors ──
+        if ( isset( $params['colors'] ) ) {
+            $colors = [];
+            $allowed = [ 'bg', 'card', 'sidebar', 'accent', 'primary', 'primaryDark', 'text', 'textMuted', 'headerBg', 'btnPrimary', 'btnSuccess', 'border' ];
+            foreach ( $allowed as $key ) {
+                if ( isset( $params['colors'][ $key ] ) ) {
+                    $colors[ $key ] = sanitize_hex_color( $params['colors'][ $key ] ) ?: '';
+                }
+            }
+            $theme['colors'] = $colors;
+        }
+
+        // ── Login customization ──
+        if ( isset( $params['login'] ) ) {
+            $login = [];
+            if ( isset( $params['login']['logo_url'] ) ) {
+                $login['logo_url'] = esc_url_raw( $params['login']['logo_url'] );
+            }
+            if ( isset( $params['login']['logo_height'] ) ) {
+                $login['logo_height'] = max( 20, min( 120, absint( $params['login']['logo_height'] ) ) );
+            }
+            if ( isset( $params['login']['bg_color'] ) ) {
+                $login['bg_color'] = sanitize_hex_color( $params['login']['bg_color'] ) ?: '';
+            }
+            if ( isset( $params['login']['bg_image_url'] ) ) {
+                $login['bg_image_url'] = esc_url_raw( $params['login']['bg_image_url'] );
+            }
+            if ( isset( $params['login']['btn_color'] ) ) {
+                $login['btn_color'] = sanitize_hex_color( $params['login']['btn_color'] ) ?: '';
+            }
+            if ( isset( $params['login']['slug'] ) ) {
+                $raw = sanitize_title( $params['login']['slug'] );
+                $login['slug'] = $raw ?: 'gestione';
+            }
+            $theme['login'] = $login;
+
+            // Flush rewrite rules if slug changed
+            $old_slug = ( get_option( 'olo_manager_theme', [] )['login']['slug'] ?? 'gestione' );
+            $new_slug = $login['slug'] ?? 'gestione';
+            if ( $old_slug !== $new_slug ) {
+                // Save first, then flush
+                update_option( 'olo_manager_theme', $theme );
+                flush_rewrite_rules();
+                return new WP_REST_Response( [ 'success' => true, 'slug_changed' => true, 'new_slug' => $new_slug ], 200 );
             }
         }
-        update_option( 'olo_manager_theme', [ 'colors' => $colors ] );
+
+        update_option( 'olo_manager_theme', $theme );
+        return new WP_REST_Response( [ 'success' => true ], 200 );
+    }
+
+    /* =========================================================================
+     *  Amenities Catalog
+     * ======================================================================= */
+
+    public function get_amenities_catalog( $request ) {
+        return new WP_REST_Response( Olo_Amenities_Catalog::get_catalog(), 200 );
+    }
+
+    public function save_amenities_catalog( $request ) {
+        $params = $request->get_json_params();
+        $ok = Olo_Amenities_Catalog::save_catalog( $params );
+        if ( ! $ok ) {
+            return new WP_REST_Response( [ 'message' => 'Dati catalogo non validi.' ], 400 );
+        }
         return new WP_REST_Response( [ 'success' => true ], 200 );
     }
 

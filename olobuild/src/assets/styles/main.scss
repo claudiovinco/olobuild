@@ -252,6 +252,12 @@
     display: none !important;
   }
 
+  // Completely hide viewport-hidden elements in preview
+  .olo-grid-cell--hidden-vp,
+  .olo-node-hidden-vp {
+    display: none !important;
+  }
+
   // Remove canvas padding for cleaner preview
   .olo-canvas {
     padding: 0 !important;
@@ -304,6 +310,29 @@
 }
 .olo-tile-pulse {
   animation: olo-pulse var(--sf-cycle, 500ms) ease-in-out var(--sf-count, 2);
+}
+
+// ============================================
+// Container Queries — Responsive canvas preview
+// ============================================
+// When the builder canvas is narrow (tablet/mobile preview),
+// columns stack vertically — real responsive behavior.
+
+@container olo-canvas (max-width: 959px) {
+  .olo-row-columns.olo-row-stack {
+    flex-wrap: wrap;
+  }
+  .olo-row-columns.olo-row-stack > .olo-column-block {
+    width: 100% !important;
+    min-width: 100% !important;
+  }
+
+  .olo-ic-columns.olo-ic-stack {
+    flex-wrap: wrap;
+  }
+  .olo-ic-columns.olo-ic-stack > .olo-ic-column {
+    width: 100% !important;
+  }
 }
 
 // Cell toolbar: adapt to light canvas

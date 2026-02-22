@@ -11,6 +11,11 @@ class Olo_CPT_Service {
         add_action( 'init', [ __CLASS__, 'register_taxonomy' ] );
         add_filter( 'manage_olo_service_posts_columns', [ $this, 'admin_columns' ] );
         add_action( 'manage_olo_service_posts_custom_column', [ $this, 'admin_column_content' ], 10, 2 );
+
+        // Forza editor classico per olo_service (le metabox non funzionano con Gutenberg)
+        add_filter( 'use_block_editor_for_post_type', function ( $use, $post_type ) {
+            return $post_type === 'olo_service' ? false : $use;
+        }, 10, 2 );
     }
 
     public static function register_post_type() {

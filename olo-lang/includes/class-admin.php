@@ -238,6 +238,10 @@ class Olo_Lang_Admin {
      * Lista template con stato traduzioni.
      */
     private function render_template_list() {
+        if ( ! class_exists( 'Olo_Database' ) ) {
+            echo '<div class="wrap"><div class="notice notice-warning"><p>Per tradurre i template del page builder, attiva il plugin <strong>Olobuild</strong>.</p></div></div>';
+            return;
+        }
         $db        = new Olo_Database();
         $result    = $db->list_templates( [ 'per_page' => 100 ] );
         $templates = $result['items'] ?? [];
@@ -332,6 +336,10 @@ class Olo_Lang_Admin {
      * Editor di traduzione side-by-side per un template + lingua.
      */
     private function render_translation_editor( $template_id, $lang ) {
+        if ( ! class_exists( 'Olo_Database' ) ) {
+            echo '<div class="wrap"><div class="notice notice-warning"><p>Per tradurre i template del page builder, attiva il plugin <strong>Olobuild</strong>.</p></div></div>';
+            return;
+        }
         $db       = new Olo_Database();
         $template = $db->get_template( $template_id );
 

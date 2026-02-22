@@ -18,8 +18,14 @@ class Olo_Manager_Page {
     }
 
     public function add_rewrite_rules() {
-        add_rewrite_rule( '^gestione/?$', 'index.php?olo_manager_page=1', 'top' );
-        add_rewrite_rule( '^gestione/(.+)/?$', 'index.php?olo_manager_page=1', 'top' );
+        $slug = $this->get_login_slug();
+        add_rewrite_rule( '^' . preg_quote( $slug, '/' ) . '/?$', 'index.php?olo_manager_page=1', 'top' );
+        add_rewrite_rule( '^' . preg_quote( $slug, '/' ) . '/(.+)/?$', 'index.php?olo_manager_page=1', 'top' );
+    }
+
+    private function get_login_slug() {
+        $theme = get_option( 'olo_manager_theme', [] );
+        return ! empty( $theme['login']['slug'] ) ? $theme['login']['slug'] : 'gestione';
     }
 
     public function add_query_vars( $vars ) {
@@ -39,7 +45,7 @@ class Olo_Manager_Page {
         // Handle logout
         if ( isset( $_GET['olo_logout'] ) ) {
             wp_logout();
-            wp_safe_redirect( home_url( '/gestione/' ) );
+            wp_safe_redirect( home_url( '/' . $this->get_login_slug() . '/' ) );
             exit;
         }
 
@@ -90,7 +96,7 @@ class Olo_Manager_Page {
             exit;
         }
 
-        wp_safe_redirect( home_url( '/gestione/' ) );
+        wp_safe_redirect( home_url( '/' . $this->get_login_slug() . '/' ) );
         exit;
     }
 
@@ -99,6 +105,27 @@ class Olo_Manager_Page {
      * ======================================================================= */
 
     private function render_login_page( $error = '' ) {
+        $theme    = get_option( 'olo_manager_theme', [] );
+        $login    = $theme['login'] ?? [];
+        $logo_url    = ! empty( $login['logo_url'] ) ? $login['logo_url'] : plugins_url( '../assets/img/olobuild-logo-200.png', __FILE__ );
+        $logo_height = ! empty( $login['logo_height'] ) ? absint( $login['logo_height'] ) : 36;
+        $bg_color    = ! empty( $login['bg_color'] ) ? $login['bg_color'] : '';
+        $bg_image    = ! empty( $login['bg_image_url'] ) ? $login['bg_image_url'] : '';
+        $btn_color   = ! empty( $login['btn_color'] ) ? $login['btn_color'] : '#6366F1';
+        $slug        = $this->get_login_slug();
+
+        // Build body background style
+        if ( $bg_image ) {
+            $body_bg = 'background: url(' . esc_url( $bg_image ) . ') center/cover no-repeat fixed' . ( $bg_color ? ', ' . esc_attr( $bg_color ) : '' ) . ';';
+        } elseif ( $bg_color ) {
+            $body_bg = 'background: ' . esc_attr( $bg_color ) . ';';
+        } else {
+            $body_bg = 'background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);';
+        }
+
+        // Hover color (10% darker)
+        $btn_hover = $this->darken_hex( $btn_color, 15 );
+
         status_header( 200 );
         ?>
         <!DOCTYPE html>
@@ -111,7 +138,7 @@ class Olo_Manager_Page {
                 * { margin: 0; padding: 0; box-sizing: border-box; }
                 body {
                     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    <?php echo $body_bg; ?>
                     min-height: 100vh;
                     display: flex;
                     align-items: center;
@@ -130,7 +157,7 @@ class Olo_Manager_Page {
                     margin-bottom: 8px;
                 }
                 .login-logo img {
-                    height: 36px;
+                    height: <?php echo intval( $logo_height ); ?>px;
                 }
                 .login-subtitle {
                     text-align: center;
@@ -168,8 +195,8 @@ class Olo_Manager_Page {
                     outline: none;
                 }
                 .login-field input:focus {
-                    border-color: #6366F1;
-                    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+                    border-color: <?php echo esc_attr( $btn_color ); ?>;
+                    box-shadow: 0 0 0 3px <?php echo esc_attr( $btn_color ); ?>26;
                 }
                 .login-remember {
                     display: flex;
@@ -179,11 +206,11 @@ class Olo_Manager_Page {
                     font-size: 13px;
                     color: #6B7280;
                 }
-                .login-remember input { accent-color: #6366F1; }
+                .login-remember input { accent-color: <?php echo esc_attr( $btn_color ); ?>; }
                 .login-btn {
                     width: 100%;
                     padding: 12px;
-                    background: #6366F1;
+                    background: <?php echo esc_attr( $btn_color ); ?>;
                     color: #fff;
                     border: none;
                     border-radius: 8px;
@@ -192,26 +219,35 @@ class Olo_Manager_Page {
                     cursor: pointer;
                     transition: background 0.2s;
                 }
-                .login-btn:hover { background: #4F46E5; }
+                .login-btn:hover { background: <?php echo esc_attr( $btn_hover ); ?>; }
                 .login-footer {
                     text-align: center;
                     margin-top: 20px;
                     font-size: 12px;
                     color: #9CA3AF;
                 }
-                .login-footer a { color: #6366F1; text-decoration: none; }
+                .login-footer a { color: <?php echo esc_attr( $btn_color ); ?>; text-decoration: none; }
+                .login-copyright {
+                    position: fixed;
+                    bottom: 16px;
+                    left: 0;
+                    right: 0;
+                    text-align: center;
+                    font-size: 11px;
+                    color: rgba(255,255,255,0.6);
+                }
             </style>
         </head>
         <body>
             <div class="login-card">
                 <div class="login-logo">
-                    <img src="<?php echo esc_url( plugins_url( '../assets/img/olobuild-logo-200.png', __FILE__ ) ); ?>" alt="Olobuild" onerror="this.outerHTML='<strong style=\'font-size:24px;color:#6366F1\'>Olo Booking</strong>'" />
+                    <img src="<?php echo esc_url( $logo_url ); ?>" alt="Login" onerror="this.outerHTML='<strong style=\'font-size:24px;color:<?php echo esc_attr( $btn_color ); ?>\'>Olo Booking</strong>'" />
                 </div>
                 <p class="login-subtitle">Pannello Gestione Strutture</p>
                 <?php if ( $error ) : ?>
                     <div class="login-error"><?php echo esc_html( $error ); ?></div>
                 <?php endif; ?>
-                <form method="post" action="<?php echo esc_url( home_url( '/gestione/' ) ); ?>">
+                <form method="post" action="<?php echo esc_url( home_url( '/' . $slug . '/' ) ); ?>">
                     <?php wp_nonce_field( 'olo_manager_login' ); ?>
                     <input type="hidden" name="olo_manager_login" value="1" />
                     <div class="login-field">
@@ -231,9 +267,24 @@ class Olo_Manager_Page {
                     <a href="<?php echo esc_url( home_url( '/' ) ); ?>">&larr; Torna al sito</a>
                 </div>
             </div>
+            <div class="login-copyright">@2026 Olo Booking by OloBuild</div>
         </body>
         </html>
         <?php
+    }
+
+    /**
+     * Darken a hex color by a percentage.
+     */
+    private function darken_hex( $hex, $percent ) {
+        $hex = ltrim( $hex, '#' );
+        if ( strlen( $hex ) === 3 ) {
+            $hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2];
+        }
+        $r = max( 0, intval( hexdec( substr( $hex, 0, 2 ) ) * ( 1 - $percent / 100 ) ) );
+        $g = max( 0, intval( hexdec( substr( $hex, 2, 2 ) ) * ( 1 - $percent / 100 ) ) );
+        $b = max( 0, intval( hexdec( substr( $hex, 4, 2 ) ) * ( 1 - $percent / 100 ) ) );
+        return sprintf( '#%02x%02x%02x', $r, $g, $b );
     }
 
     private function render_error_page( $title, $message ) {
@@ -316,8 +367,8 @@ class Olo_Manager_Page {
             'restUrl'    => esc_url_raw( rest_url( 'olo-booking/v2' ) ),
             'nonce'      => wp_create_nonce( 'wp_rest' ),
             'homeUrl'    => home_url( '/' ),
-            'managerUrl' => home_url( '/gestione/' ),
-            'logoutUrl'  => home_url( '/gestione/?olo_logout=1' ),
+            'managerUrl' => home_url( '/' . $this->get_login_slug() . '/' ),
+            'logoutUrl'  => home_url( '/' . $this->get_login_slug() . '/?olo_logout=1' ),
             'user'       => [
                 'id'              => $user->ID,
                 'name'            => $user->display_name,
@@ -327,6 +378,7 @@ class Olo_Manager_Page {
                 'can_filter_type' => Olo_Role_Manager::can( 'filter_service_type' ),
                 'permissions'     => Olo_Role_Manager::get_user_permissions(),
             ],
+            'amenitiesCatalog'   => Olo_Amenities_Catalog::get_catalog(),
             'mediaUploadEnabled' => current_user_can( 'upload_files' ),
         ] );
 

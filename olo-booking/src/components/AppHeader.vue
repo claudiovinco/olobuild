@@ -12,6 +12,8 @@
       <router-link to="/prenotazioni" class="olom-nav-link" active-class="olom-nav-active">Prenotazioni</router-link>
       <router-link v-if="canManageUsers" to="/utenti" class="olom-nav-link" active-class="olom-nav-active">Utenti</router-link>
       <router-link v-if="isAdmin" to="/permessi" class="olom-nav-link" active-class="olom-nav-active">Permessi</router-link>
+      <router-link v-if="isAdmin" to="/amenities" class="olom-nav-link" active-class="olom-nav-active">Amenities</router-link>
+      <router-link v-if="isAdmin" to="/login-settings" class="olom-nav-link" active-class="olom-nav-active">Aspetto Login</router-link>
     </nav>
     <div class="olom-header-right">
       <div class="olom-user-badge">{{ initial }}</div>

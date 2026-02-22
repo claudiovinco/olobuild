@@ -2,8 +2,8 @@
 /**
  * Plugin Name: Olo Lang
  * Plugin URI:  https://clod.eu/olo-lang
- * Description: Sistema di traduzione professionale per Olobuild — traduce template, contenuti e frontend multilingua.
- * Version:     1.0.8
+ * Description: Sistema di traduzione multilingua per WordPress — traduce contenuti, menu, post e template (con supporto avanzato per Olobuild).
+ * Version:     1.0.10
  * Author:      Claudio
  * Author URI:  https://clod.eu
  * Text Domain: olo-lang
@@ -15,14 +15,14 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'OLO_LANG_VERSION', '1.0.8' );
+define( 'OLO_LANG_VERSION', '1.0.10' );
 define( 'OLO_LANG_PATH', plugin_dir_path( __FILE__ ) );
 define( 'OLO_LANG_URL', plugin_dir_url( __FILE__ ) );
 
-// Verifica dipendenza Olobuild
+// Suggerimento Olobuild (opzionale, non bloccante)
 add_action( 'admin_notices', function () {
     if ( ! defined( 'OLO_VERSION' ) ) {
-        echo '<div class="notice notice-error"><p><strong>Olo Lang</strong> richiede il plugin <strong>Olobuild</strong> attivo per funzionare.</p></div>';
+        echo '<div class="notice notice-info is-dismissible"><p><strong>Olo Lang</strong> funziona autonomamente. Installa <strong>Olobuild</strong> per tradurre anche i template del page builder.</p></div>';
     }
 } );
 
@@ -62,12 +62,8 @@ register_deactivation_hook( __FILE__, function () {
     delete_transient( 'olo_lang_activated' );
 } );
 
-// Inizializzazione (dopo Olobuild, priority 20)
+// Inizializzazione (priority 20 — dopo eventuali plugin che definiscono olo_t())
 add_action( 'plugins_loaded', function () {
-    if ( ! defined( 'OLO_VERSION' ) ) {
-        return;
-    }
-
     // Traduzione frontend
     $frontend = new Olo_Lang_Frontend();
     $frontend->init();

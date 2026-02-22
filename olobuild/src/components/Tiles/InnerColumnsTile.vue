@@ -9,6 +9,7 @@
     <!-- Sub-columns flex container -->
     <div
       class="olo-ic-columns"
+      :class="{ 'olo-ic-stack': settings.stack_mobile !== false }"
       :style="{
         gap: (settings.gap || 16) + 'px',
         alignItems: alignMap[settings.vertical_align] || 'stretch'

@@ -51,6 +51,29 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
         'ribbon_bg'       => '#e11d48',
         'ribbon_color'    => '#ffffff',
         'meta_filter'     => '',
+        // Stile testo
+        'body_padding'     => '15',
+        'title_size'       => '1',
+        'excerpt_size'     => '0.92',
+        'title_color'      => '',
+        'excerpt_color'    => '',
+        'meta_color'       => '',
+        'body_bg'          => '',
+        'body_bg_opacity'  => '100',
+        // Paginazione
+        'pagination'       => false,
+        'items_per_page'   => '6',
+        'pagination_style' => 'dots',
+        // Ken Burns
+        'fx_kenburns'       => false,
+        'fx_kenburns_speed' => '20',
+        'fx_kenburns_scale' => '1.12',
+        // Overlay gradient
+        'overlay_gradient'  => false,
+        'overlay_color'     => '#000000',
+        'overlay_opacity'   => '50',
+        'overlay_direction' => 'bottom',
+        'overlay_height'    => '50',
     ];
 
     public function get_controls() {
@@ -204,9 +227,15 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
         $card_radius  = absint( $s['card_radius'] ?? 4 );
 
         // Sort config for JS
-        $sort_enabled = ! empty( $s['show_sort'] );
-        $config       = [
-            'sortEnabled' => $sort_enabled,
+        $sort_enabled      = ! empty( $s['show_sort'] );
+        $pagination_on     = ! empty( $s['pagination'] );
+        $items_per_page    = max( 2, min( 24, absint( $s['items_per_page'] ) ) );
+        $pagination_style  = sanitize_key( $s['pagination_style'] ?? 'dots' );
+        $config            = [
+            'sortEnabled'      => $sort_enabled,
+            'paginationEnabled' => $pagination_on,
+            'itemsPerPage'     => $items_per_page,
+            'paginationStyle'  => $pagination_style,
         ];
 
         // Hover effect
@@ -215,6 +244,31 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
         if ( $hover_effect !== 'none' ) {
             $img_class .= ' olo-pg-hover-' . esc_attr( $hover_effect );
         }
+
+        // Ken Burns
+        $kenburns_on    = ! empty( $s['fx_kenburns'] );
+        $kenburns_speed = max( 10, min( 40, absint( $s['fx_kenburns_speed'] ?? 20 ) ) );
+        $kenburns_scale = max( 1.05, min( 1.25, floatval( $s['fx_kenburns_scale'] ?? 1.12 ) ) );
+        if ( $kenburns_on ) {
+            $img_class .= ' olo-pg-kenburns';
+        }
+
+        // Overlay gradient
+        $overlay_on        = ! empty( $s['overlay_gradient'] );
+        $overlay_color     = $s['overlay_color'] ?? '#000000';
+        $overlay_opacity   = max( 10, min( 90, absint( $s['overlay_opacity'] ?? 50 ) ) );
+        $overlay_direction = $s['overlay_direction'] ?? 'bottom';
+        $overlay_height    = max( 20, min( 100, absint( $s['overlay_height'] ?? 50 ) ) );
+
+        // Stile testo
+        $body_padding    = max( 0, min( 40, absint( $s['body_padding'] ?? 15 ) ) );
+        $title_size      = max( 0.7, min( 2.5, floatval( $s['title_size'] ?? 1 ) ) );
+        $excerpt_size    = max( 0.7, min( 1.5, floatval( $s['excerpt_size'] ?? 0.92 ) ) );
+        $title_color     = $s['title_color'] ?? '';
+        $excerpt_color   = $s['excerpt_color'] ?? '';
+        $meta_color      = $s['meta_color'] ?? '';
+        $body_bg         = $s['body_bg'] ?? '';
+        $body_bg_opacity = max( 0, min( 100, absint( $s['body_bg_opacity'] ?? 100 ) ) );
 
         // Ribbon
         $ribbon_field    = $s['ribbon_field'] ?? '';
@@ -241,6 +295,55 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .olo-pg-ribbon { position: absolute; z-index: 2; font-size: 11px; font-weight: 700; padding: 4px 12px; text-transform: uppercase; letter-spacing: 0.5px; background: <?php echo esc_attr( $ribbon_bg ); ?>; color: <?php echo esc_attr( $ribbon_color ); ?>; }
             .<?php echo $uid; ?> .olo-pg-ribbon--top-right { top: 0; right: 14px; border-radius: 0 0 4px 4px; }
             .<?php echo $uid; ?> .olo-pg-ribbon--top-left { top: 0; left: 14px; border-radius: 0 0 4px 4px; }
+            /* Stile testo */
+            .<?php echo $uid; ?> .uk-card-body { padding: <?php echo $body_padding; ?>px; }
+            .<?php echo $uid; ?> .olo-card-minimal__body { padding: <?php echo $body_padding; ?>px; }
+            .<?php echo $uid; ?> .uk-card-title { font-size: <?php echo $title_size; ?>em; }
+            .<?php echo $uid; ?> .olo-card-minimal__title { font-size: <?php echo $title_size; ?>em; }
+            .<?php echo $uid; ?> .olo-postgrid-excerpt { font-size: <?php echo $excerpt_size; ?>em; }
+            .<?php echo $uid; ?> .olo-card-minimal__text { font-size: <?php echo $excerpt_size; ?>em; }
+            <?php if ( $title_color ) : ?>
+            .<?php echo $uid; ?> .uk-card-title, .<?php echo $uid; ?> .uk-card-title a { color: <?php echo esc_attr( $title_color ); ?> !important; }
+            .<?php echo $uid; ?> .olo-card-minimal__title, .<?php echo $uid; ?> .olo-card-minimal__title a { color: <?php echo esc_attr( $title_color ); ?> !important; }
+            <?php endif; ?>
+            <?php if ( $excerpt_color ) : ?>
+            .<?php echo $uid; ?> .olo-postgrid-excerpt { color: <?php echo esc_attr( $excerpt_color ); ?> !important; }
+            .<?php echo $uid; ?> .olo-card-minimal__text { color: <?php echo esc_attr( $excerpt_color ); ?> !important; }
+            <?php endif; ?>
+            <?php if ( $meta_color ) : ?>
+            .<?php echo $uid; ?> .olo-postgrid-meta { color: <?php echo esc_attr( $meta_color ); ?> !important; }
+            <?php endif; ?>
+            <?php if ( $body_bg ) :
+                $bg_r = hexdec( substr( $body_bg, 1, 2 ) );
+                $bg_g = hexdec( substr( $body_bg, 3, 2 ) );
+                $bg_b = hexdec( substr( $body_bg, 5, 2 ) );
+                $bg_a = round( $body_bg_opacity / 100, 2 );
+            ?>
+            .<?php echo $uid; ?> .uk-card-body { background: rgba(<?php echo "$bg_r,$bg_g,$bg_b,$bg_a"; ?>); }
+            .<?php echo $uid; ?> .olo-card-minimal__body { background: rgba(<?php echo "$bg_r,$bg_g,$bg_b,$bg_a"; ?>); }
+            <?php endif; ?>
+            /* Nuovi effetti hover */
+            .<?php echo $uid; ?> .uk-card:hover .olo-pg-hover-slide-up, .<?php echo $uid; ?> .olo-card-minimal:hover .olo-pg-hover-slide-up { transform: translateY(-8px) scale(1.02); }
+            .<?php echo $uid; ?> .olo-pg-hover-glow { filter: brightness(1); }
+            .<?php echo $uid; ?> .uk-card:hover .olo-pg-hover-glow, .<?php echo $uid; ?> .olo-card-minimal:hover .olo-pg-hover-glow { filter: brightness(1.15) saturate(1.2); box-shadow: 0 0 20px rgba(255,255,255,0.3); }
+            .<?php echo $uid; ?> .uk-card { perspective: 800px; }
+            .<?php echo $uid; ?> .olo-card-minimal { perspective: 800px; }
+            .<?php echo $uid; ?> .uk-card:hover .olo-pg-hover-tilt, .<?php echo $uid; ?> .olo-card-minimal:hover .olo-pg-hover-tilt { transform: rotateY(4deg) rotateX(2deg) scale(1.03); }
+            <?php if ( $kenburns_on ) : ?>
+            /* Ken Burns */
+            @keyframes olo-kb-<?php echo $uid; ?> {
+                0% { transform: scale(1); }
+                50% { transform: scale(<?php echo $kenburns_scale; ?>); }
+                100% { transform: scale(1); }
+            }
+            .<?php echo $uid; ?> .olo-pg-kenburns { animation: olo-kb-<?php echo $uid; ?> <?php echo $kenburns_speed; ?>s ease-in-out infinite; }
+            .<?php echo $uid; ?> .olo-postgrid-item:nth-child(2n) .olo-pg-kenburns { animation-delay: -<?php echo round( $kenburns_speed / 3, 1 ); ?>s; }
+            .<?php echo $uid; ?> .olo-postgrid-item:nth-child(3n) .olo-pg-kenburns { animation-delay: -<?php echo round( $kenburns_speed * 2 / 3, 1 ); ?>s; }
+            <?php endif; ?>
+            <?php if ( $overlay_on ) : ?>
+            /* Overlay gradient */
+            .<?php echo $uid; ?> .olo-pg-overlay { position: absolute; inset: 0; pointer-events: none; z-index: 1; }
+            <?php endif; ?>
             <?php if ( ! empty( $s['match_height'] ) ) : ?>
             .<?php echo $uid; ?> .olo-postgrid-item > .uk-card { height: 100%; display: flex; flex-direction: column; }
             .<?php echo $uid; ?> .olo-postgrid-item > .uk-card > .uk-card-body { flex: 1; }
@@ -294,6 +397,9 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
                             <?php if ( $s['link_style'] === 'card' ) : ?>
                                 </a>
                             <?php endif; ?>
+                            <?php if ( $overlay_on ) : ?>
+                                <?php echo $this->render_overlay_gradient( $overlay_color, $overlay_opacity, $overlay_direction, $overlay_height ); ?>
+                            <?php endif; ?>
                             <?php if ( ! empty( $s['show_category'] ) && ! empty( $item['term_names'] ) ) : ?>
                                 <span class="olo-postgrid-badge"><?php echo esc_html( $item['term_names'][0] ); ?></span>
                             <?php endif; ?>
@@ -303,6 +409,7 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
                         </div>
                         <?php endif; ?>
 
+                        <div class="olo-card-minimal__body">
                         <h3 class="olo-card-minimal__title">
                             <?php if ( $s['link_style'] === 'card' ) : ?>
                                 <a href="<?php echo esc_url( $item['url'] ); ?>" class="uk-link-reset"><?php echo esc_html( $item['title'] ); ?></a>
@@ -332,6 +439,7 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
                         <?php elseif ( $s['link_style'] === 'text' ) : ?>
                             <a href="<?php echo esc_url( $item['url'] ); ?>" class="olo-postgrid-link"><?php echo esc_html( $s['link_text'] ); ?> &rarr;</a>
                         <?php endif; ?>
+                        </div><!-- /.olo-card-minimal__body -->
                     </div>
                     <?php else : ?>
                     <div class="uk-card <?php echo esc_attr( $card_class ); ?>">
@@ -346,6 +454,9 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
                             ?>
                             <?php if ( $s['link_style'] === 'card' ) : ?>
                                 </a>
+                            <?php endif; ?>
+                            <?php if ( $overlay_on ) : ?>
+                                <?php echo $this->render_overlay_gradient( $overlay_color, $overlay_opacity, $overlay_direction, $overlay_height ); ?>
                             <?php endif; ?>
                             <?php if ( ! empty( $s['show_category'] ) && ! empty( $item['term_names'] ) ) : ?>
                                 <span class="olo-postgrid-badge"><?php echo esc_html( $item['term_names'][0] ); ?></span>
@@ -392,6 +503,20 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
                 </div>
                 <?php endforeach; ?>
             </div>
+
+            <?php if ( $pagination_on ) : ?>
+            <div class="olo-pg-pagination" data-pagination-style="<?php echo esc_attr( $pagination_style ); ?>">
+                <?php if ( $pagination_style === 'arrows' ) : ?>
+                    <button class="olo-pg-page-btn olo-pg-prev" aria-label="Pagina precedente" disabled>&lsaquo;</button>
+                    <span class="olo-pg-page-info"></span>
+                    <button class="olo-pg-page-btn olo-pg-next" aria-label="Pagina successiva">&rsaquo;</button>
+                <?php elseif ( $pagination_style === 'loadmore' ) : ?>
+                    <button class="olo-pg-loadmore">Carica altri</button>
+                <?php else : ?>
+                    <!-- dots/numbers generati via JS -->
+                <?php endif; ?>
+            </div>
+            <?php endif; ?>
 
             <div class="olo-postgrid-empty" style="display:none;">
                 <p>Nessun risultato trovato.</p>
@@ -455,6 +580,25 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
             <?php endif; ?>
         </div>
         <?php
+    }
+
+    private function render_overlay_gradient( $color, $opacity, $direction, $height ) {
+        $r = hexdec( substr( $color, 1, 2 ) );
+        $g = hexdec( substr( $color, 3, 2 ) );
+        $b = hexdec( substr( $color, 5, 2 ) );
+        $a = round( $opacity / 100, 2 );
+
+        $dir_map = [ 'bottom' => 'to top', 'top' => 'to bottom', 'left' => 'to right', 'right' => 'to left' ];
+        $css_dir = $dir_map[ $direction ] ?? 'to top';
+
+        // Position the gradient at the correct edge
+        $pos_map = [ 'bottom' => 'bottom:0;left:0;right:0;', 'top' => 'top:0;left:0;right:0;', 'left' => 'top:0;left:0;bottom:0;', 'right' => 'top:0;right:0;bottom:0;' ];
+        $pos     = $pos_map[ $direction ] ?? 'bottom:0;left:0;right:0;';
+        $dim     = in_array( $direction, [ 'left', 'right' ], true )
+                   ? "width:{$height}%;height:100%;"
+                   : "width:100%;height:{$height}%;";
+
+        return '<div class="olo-pg-overlay" style="position:absolute;' . $pos . $dim . 'pointer-events:none;z-index:1;background:linear-gradient(' . $css_dir . ',rgba(' . $r . ',' . $g . ',' . $b . ',' . $a . '),transparent);"></div>';
     }
 
     private function render_sort_select( $s ) {

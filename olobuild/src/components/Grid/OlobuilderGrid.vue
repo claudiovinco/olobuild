@@ -14,7 +14,7 @@
       <template #item="{ element: section }">
         <div
           class="olo-section-block"
-          :class="{ 'olo-section-block--selected': builderStore.selectedTileId === section.id }"
+          :class="{ 'olo-section-block--selected': builderStore.selectedTileId === section.id, 'olo-node-hidden-vp': isHiddenInViewport(section) }"
           :data-tile-id="section.id"
           :style="{ ...getSectionColorStyle(section), ...(getNodeBg(section).type === 'solid' ? getNodeBgStyle(section) : {}), ...getNodeSpacingStyle(section) }"
         >
@@ -38,6 +38,7 @@
             <span v-if="hasBgImage(section)" class="olo-bar-badge olo-bar-badge--bg">BG</span>
             <span v-if="hasVideo(section)" class="olo-bar-badge olo-bar-badge--bg">VID</span>
             <span v-if="hasParallax(section)" class="olo-bar-badge olo-bar-badge--parallax">&#x21C5;</span>
+            <span v-if="section.settings?.sticky_effect && section.settings.sticky_effect !== 'none'" class="olo-bar-badge olo-bar-badge--sticky">{{ section.settings.sticky_effect.toUpperCase() }}</span>
             <span class="olo-bar-spacer"></span>
             <button class="olo-bar-btn" title="Duplica" @click.stop="duplicateItem(section.id)">&#x2398;</button>
             <button class="olo-bar-btn olo-bar-btn--delete" title="Elimina" @click.stop="removeItem(section.id)">&#x2715;</button>
@@ -57,7 +58,7 @@
               <template #item="{ element: row }">
                 <div
                   class="olo-row-block"
-                  :class="{ 'olo-row-block--selected': builderStore.selectedTileId === row.id }"
+                  :class="{ 'olo-row-block--selected': builderStore.selectedTileId === row.id, 'olo-node-hidden-vp': isHiddenInViewport(row) }"
                   :data-tile-id="row.id"
                   :style="{ ...(getNodeBg(row).type === 'solid' ? getNodeBgStyle(row) : {}), ...getNodeSpacingStyle(row) }"
                 >
@@ -89,6 +90,7 @@
                   <!-- Columns flex layout -->
                   <div
                     class="olo-row-columns"
+                    :class="{ 'olo-row-stack': row.settings?.stack_mobile !== false }"
                     :style="{
                       gap: (row.settings?.gap || 16) + 'px',
                       alignItems: alignMap[row.settings?.vertical_align] || 'stretch'
@@ -277,6 +279,16 @@ function getNodeSpacingStyle(node) {
   if (s.padding_bottom) st.paddingBottom = `${s.padding_bottom}px`;
   if (s.padding_left)   st.paddingLeft   = `${s.padding_left}px`;
   return st;
+}
+
+// Responsive visibility helper
+function isHiddenInViewport(node) {
+  const adv = node.advanced || {};
+  const mode = builderStore.viewMode;
+  if (mode === 'desktop' && adv.visible_desktop === false) return true;
+  if (mode === 'tablet' && adv.visible_tablet === false) return true;
+  if (mode === 'mobile' && adv.visible_mobile === false) return true;
+  return false;
 }
 
 const dragOverColId = ref(null);
@@ -554,6 +566,13 @@ function changeRowLayout(row, layoutKey) {
   background: rgba(245, 158, 11, 0.15);
   color: #FBBF24;
 }
+.olo-bar-badge--sticky {
+  background: rgba(168, 85, 247, 0.15);
+  color: #C084FC;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
 .olo-bar-spacer {
   flex: 1;
 }
@@ -810,5 +829,12 @@ function changeRowLayout(row, layoutKey) {
   background: rgba(0, 0, 0, 0.05);
   border-color: #d1d5db;
   color: #374151;
+}
+
+/* Hidden in current viewport mode */
+.olo-node-hidden-vp {
+  opacity: 0.2;
+  border-color: #f59e0b !important;
+  border-style: dashed !important;
 }
 </style>

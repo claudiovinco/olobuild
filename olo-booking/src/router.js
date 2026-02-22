@@ -6,6 +6,8 @@ import BookingsView from './views/BookingsView.vue';
 import BookingDetailView from './views/BookingDetailView.vue';
 import UsersView from './views/UsersView.vue';
 import PermissionsView from './views/PermissionsView.vue';
+import AmenitiesCatalogView from './views/AmenitiesCatalogView.vue';
+import LoginSettingsView from './views/LoginSettingsView.vue';
 
 export const router = createRouter({
     history: createWebHashHistory(),
@@ -16,5 +18,7 @@ export const router = createRouter({
         { path: '/prenotazione/:id', name: 'booking', component: BookingDetailView, props: true },
         { path: '/utenti', name: 'users', component: UsersView },
         { path: '/permessi', name: 'permissions', component: PermissionsView },
+        { path: '/amenities', name: 'amenities-catalog', component: AmenitiesCatalogView },
+        { path: '/login-settings', name: 'login-settings', component: LoginSettingsView },
     ],
 });

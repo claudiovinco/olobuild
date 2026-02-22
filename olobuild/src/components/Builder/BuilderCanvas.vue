@@ -134,6 +134,10 @@ const canvasStyle = computed(() => {
     style.color = stylesStore.colors.text || '#333333';
   }
 
+  // Container queries for responsive preview
+  style.containerType = 'inline-size';
+  style.containerName = 'olo-canvas';
+
   return style;
 });
 

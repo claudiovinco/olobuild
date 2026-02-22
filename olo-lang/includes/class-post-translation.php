@@ -351,14 +351,15 @@ class Olo_Lang_Post_Translation {
         $lang    = Olo_Lang_Language::detect_current_lang();
         $default = Olo_Lang_Language::get_default_lang();
 
-        if ( $lang === $default ) {
-            // Lingua default: nascondi le copie tradotte nelle query dei post type abilitati
-            // Eccezione: non filtrare la main query singolare (il post specifico richiesto)
-            if ( $query->is_main_query() && $query->is_singular() ) {
-                return;
-            }
+        // Eccezione: non filtrare la main query singolare (il post specifico richiesto)
+        if ( $query->is_main_query() && $query->is_singular() ) {
+            return;
+        }
 
-            $meta_query = $query->get( 'meta_query' ) ?: [];
+        $meta_query = $query->get( 'meta_query' ) ?: [];
+
+        if ( $lang === $default ) {
+            // Lingua default: nascondi le copie tradotte (mostra solo originali)
             $meta_query[] = [
                 'relation' => 'OR',
                 [
@@ -370,9 +371,27 @@ class Olo_Lang_Post_Translation {
                     'value' => '',
                 ],
             ];
-            $query->set( 'meta_query', $meta_query );
+        } else {
+            // Lingua target: mostra solo originali + copie nella lingua corrente
+            // (esclude copie in ALTRE lingue per evitare risultati gonfiati)
+            $meta_query[] = [
+                'relation' => 'OR',
+                [
+                    'key'     => '_olo_lang_source',
+                    'compare' => 'NOT EXISTS',
+                ],
+                [
+                    'key'   => '_olo_lang_source',
+                    'value' => '',
+                ],
+                [
+                    'key'   => '_olo_lang_lang',
+                    'value' => $lang,
+                ],
+            ];
         }
-        // Lingua target: lo swap viene gestito da swap_archive_posts (registrato in init)
+
+        $query->set( 'meta_query', $meta_query );
     }
 
     /**
@@ -449,9 +468,9 @@ class Olo_Lang_Post_Translation {
             $source_id = (int) get_post_meta( $post->ID, '_olo_lang_source', true );
 
             if ( $source_id ) {
-                // E' una copia — mostra solo se nella lingua corrente
+                // E' una copia — mostra solo se nella lingua corrente e non già vista
                 $post_lang = get_post_meta( $post->ID, '_olo_lang_lang', true );
-                if ( $post_lang === $lang ) {
+                if ( $post_lang === $lang && empty( $seen_sources[ $source_id ] ) ) {
                     $result[] = $post;
                     $seen_sources[ $source_id ] = true;
                 }

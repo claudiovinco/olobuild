@@ -922,32 +922,18 @@ class Olo_Map_Tile extends Olo_Tile_Base {
             return;
         }
 
-        $amenity_labels = [
-            'wifi'       => 'WiFi',
-            'fireplace'  => 'Camino',
-            'parking'    => 'Parcheggio',
-            'kitchen'    => 'Cucina',
-            'tv'         => 'TV',
-            'bbq'        => 'BBQ',
-            'terrace'    => 'Terrazza',
-            'heating'    => 'Riscaldamento',
-            'sauna'      => 'Sauna',
-            'hottub'     => 'Idromassaggio',
-            'ski'        => 'Sci',
-            'garden'     => 'Giardino',
-            'pets'       => 'Animali',
-            'washer'     => 'Lavatrice',
-            'highchair'  => 'Seggiolone',
-            'aircon'     => 'Aria Cond.',
-            'dishwasher' => 'Lavastoviglie',
-            'linens'     => 'Biancheria',
-            'towels'     => 'Asciugamani',
-            'pool'       => 'Piscina',
-            'hiking'     => 'Escursioni',
-            'bikes'      => 'Biciclette',
-            'elevator'   => 'Ascensore',
-            'accessible' => 'Accessibile',
-        ];
+        $amenity_labels = class_exists( 'Olo_Amenities_Catalog' )
+            ? Olo_Amenities_Catalog::get_all_labels()
+            : [
+                'wifi' => 'WiFi', 'fireplace' => 'Camino', 'parking' => 'Parcheggio',
+                'kitchen' => 'Cucina', 'tv' => 'TV', 'bbq' => 'BBQ', 'terrace' => 'Terrazza',
+                'heating' => 'Riscaldamento', 'sauna' => 'Sauna', 'hottub' => 'Idromassaggio',
+                'ski' => 'Sci', 'garden' => 'Giardino', 'pets' => 'Animali',
+                'washer' => 'Lavatrice', 'highchair' => 'Seggiolone', 'aircon' => 'Aria Cond.',
+                'dishwasher' => 'Lavastoviglie', 'linens' => 'Biancheria',
+                'towels' => 'Asciugamani', 'pool' => 'Piscina', 'hiking' => 'Escursioni',
+                'bikes' => 'Biciclette', 'elevator' => 'Ascensore', 'accessible' => 'Accessibile',
+            ];
 
         $amenity_icons = [
             'wifi'      => '&#128246;',
