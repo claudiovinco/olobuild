@@ -593,6 +593,29 @@
                   class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-sm mb-text-gray-900"
                 />
               </div>
+              <div v-if="singlePostItems.length > 0">
+                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Mostra solo su queste strutture</label>
+                <div class="mb-max-h-40 mb-overflow-y-auto mb-border mb-border-gray-300 mb-rounded-md mb-bg-white mb-p-1.5 mb-space-y-0.5">
+                  <label
+                    v-for="item in singlePostItems"
+                    :key="item.value"
+                    class="mb-flex mb-items-center mb-gap-2 mb-px-1.5 mb-py-1 mb-rounded mb-cursor-pointer hover:mb-bg-gray-100 mb-text-sm mb-text-gray-900"
+                  >
+                    <input
+                      type="checkbox"
+                      :checked="(tileAdvanced.cond_post_ids || []).includes(item.value)"
+                      @change="toggleCondPostId(item.value)"
+                      class="mb-w-3.5 mb-h-3.5 mb-rounded mb-accent-primary-600"
+                    />
+                    <span class="mb-truncate">{{ item.label }}</span>
+                  </label>
+                </div>
+                <button
+                  v-if="(tileAdvanced.cond_post_ids || []).length > 0"
+                  @click="updateAdvanced('cond_post_ids', [])"
+                  class="mb-mt-1 mb-text-[10px] mb-text-red-400 hover:mb-text-red-300 mb-cursor-pointer"
+                >Rimuovi filtro strutture</button>
+              </div>
               <p class="mb-text-[10px] mb-text-gray-500">Condizioni verificate server-side al momento del rendering.</p>
             </div>
           </CollapseSection>
@@ -984,6 +1007,19 @@ const tileBg = computed(() => {
 });
 
 const tileAdvanced = computed(() => selectedTile.value?.advanced || {});
+
+const singlePostItems = computed(() => (window.oloData || {}).singlePostItems || []);
+
+function toggleCondPostId(postId) {
+  const current = [...(tileAdvanced.value.cond_post_ids || [])];
+  const idx = current.indexOf(postId);
+  if (idx >= 0) {
+    current.splice(idx, 1);
+  } else {
+    current.push(postId);
+  }
+  updateAdvanced('cond_post_ids', current);
+}
 
 // Migrate old flat parallax format to new multi-stop object
 const elementParallaxData = computed(() => {

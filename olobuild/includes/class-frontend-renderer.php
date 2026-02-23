@@ -498,6 +498,13 @@ class Olo_Frontend_Renderer {
         $show_until = $adv['cond_show_until'] ?? '';
         if ( $show_until !== '' && $now > str_replace( 'T', ' ', $show_until ) ) return false;
 
+        // Per-post condition (show only on specific posts)
+        $cond_post_ids = $adv['cond_post_ids'] ?? [];
+        if ( ! empty( $cond_post_ids ) && is_array( $cond_post_ids ) ) {
+            $current_post_id = (string) get_the_ID();
+            if ( ! in_array( $current_post_id, $cond_post_ids, true ) ) return false;
+        }
+
         return true;
     }
 

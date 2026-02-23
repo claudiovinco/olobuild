@@ -164,6 +164,7 @@ class Olo_Builder {
             'metaPrefixes'   => $this->get_meta_prefixes(),
             'serviceList'    => $this->get_service_list(),
             'wpPages'        => $this->get_wp_pages(),
+            'singlePostItems' => $this->get_single_post_items(),
             'siteInfo'       => [
                 'name'     => get_bloginfo( 'name' ),
                 'tagline'  => get_bloginfo( 'description' ),
@@ -488,6 +489,42 @@ class Olo_Builder {
             'post_type'      => 'olo_service',
             'post_status'    => 'publish',
             'posts_per_page' => 100,
+            'orderby'        => 'title',
+            'order'          => 'ASC',
+        ] );
+        $result = [];
+        foreach ( $posts as $p ) {
+            $result[] = [
+                'value' => (string) $p->ID,
+                'label' => $p->post_title,
+            ];
+        }
+        return $result;
+    }
+
+    /**
+     * Get posts that use the current template (for per-post conditional visibility).
+     * Looks up which post type this template is assigned to, then returns all published posts of that type.
+     */
+    private function get_single_post_items() {
+        $tpl_id = absint( $_GET['template_id'] ?? 0 );
+        if ( ! $tpl_id ) return [];
+
+        // Find which post type uses this template
+        $post_types = get_post_types( [ 'public' => true ], 'names' );
+        $target_pt  = '';
+        foreach ( $post_types as $pt ) {
+            if ( (int) get_option( "olo_active_single_{$pt}", 0 ) === $tpl_id ) {
+                $target_pt = $pt;
+                break;
+            }
+        }
+        if ( ! $target_pt ) return [];
+
+        $posts  = get_posts( [
+            'post_type'      => $target_pt,
+            'post_status'    => 'publish',
+            'posts_per_page' => 200,
             'orderby'        => 'title',
             'order'          => 'ASC',
         ] );
