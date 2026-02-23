@@ -37,10 +37,10 @@ class Olo_Icon_Tile extends Olo_Tile_Base {
         $icon_name = esc_attr( $s['icon'] );
         $size      = absint( $s['size'] );
         $ratio     = $size > 0 ? round( $size / 20, 2 ) : 2;
-        $color     = ! empty( $s['color'] ) ? esc_attr( $s['color'] ) : '';
+        $color     = ! empty( $s['color'] ) ? $this->safe_color( $s['color'] ) : '';
         $target    = $s['link_target'] === '_blank' ? ' target="_blank" rel="noopener"' : '';
 
-        $icon_style = $color ? ' style="color:' . $color . ';"' : '';
+        $icon_style = $color ? ' style="color:' . esc_attr( $color ) . ';"' : '';
 
         ob_start();
         ?>

@@ -40,13 +40,9 @@ class Olo_Image_Tile extends Olo_Tile_Base {
         ?>
         <figure class="olo-image" style="margin: 0;">
             <?php
-            $img = sprintf(
-                '<img src="%s" alt="%s" uk-img class="uk-border-rounded" style="width: 100%%; height: %s; object-fit: %s; display: block;" />',
-                esc_url( $s['image_url'] ),
-                esc_attr( $s['alt_text'] ),
-                esc_attr( $s['height'] ),
-                esc_attr( $s['object_fit'] )
-            );
+            $att_id = absint( $s['image_url_id'] ?? 0 );
+            $extra  = 'uk-img style="width: 100%; height: ' . esc_attr( $s['height'] ) . '; object-fit: ' . esc_attr( $s['object_fit'] ) . '; display: block;"';
+            $img    = Olo_Tile_Utils::img_srcset( $att_id, $s['image_url'], $s['alt_text'], 'uk-border-rounded', 'full', $extra );
 
             $img = $this->render_hover_wrap( $img, $s['hover_image'] ?? '', $s['hover_video'] ?? '' );
 

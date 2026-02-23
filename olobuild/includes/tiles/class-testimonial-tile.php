@@ -106,10 +106,10 @@ class Olo_Testimonial_Tile extends Olo_Tile_Base {
                 border-radius: <?php echo $av_radius; ?>;
                 object-fit: cover;
                 <?php
-                $shadow_map = [ 'sm' => '0 1px 3px rgba(0,0,0,.3)', 'md' => '0 4px 8px rgba(0,0,0,.3)', 'lg' => '0 8px 20px rgba(0,0,0,.4)' ];
-                if ( isset( $shadow_map[ $s['avatar_shadow'] ] ) ) :
+                $av_shadow = Olo_Tile_Utils::shadow( $s['avatar_shadow'] ?? 'none', 'photo' );
+                if ( $av_shadow !== 'none' ) :
                 ?>
-                box-shadow: <?php echo $shadow_map[ $s['avatar_shadow'] ]; ?>;
+                box-shadow: <?php echo $av_shadow; ?>;
                 <?php endif; ?>
                 <?php
                 $abw = intval( $s['avatar_border_width'] );
@@ -201,7 +201,7 @@ class Olo_Testimonial_Tile extends Olo_Tile_Base {
     private function render_author( $s, $author_name, $author_role ) {
         $out = '';
         if ( ! empty( $s['avatar'] ) ) {
-            $out .= '<img src="' . esc_url( $s['avatar'] ) . '" alt="" />';
+            $out .= '<img src="' . esc_url( $s['avatar'] ) . '" alt="' . esc_attr( wp_strip_all_tags( $s['author_name'] ?? '' ) ) . '" loading="lazy" />';
         }
         $out .= '<div>';
         $out .= '<div class="olo-test-author-name">' . $author_name . '</div>';

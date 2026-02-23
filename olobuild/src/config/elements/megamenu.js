@@ -190,8 +190,8 @@ export default {
     // -- Header --
     { type: 'separator', label: 'Header' },
     { key: 'header_mode', label: 'Modalita header', type: 'select', options: [
-      { value: 'overlay', label: 'Overlay (trasparente)' },
-      { value: 'classic', label: 'Classico' },
+      { value: 'overlay', label: 'Sovrapposto (sopra la pagina)' },
+      { value: 'classic', label: 'In linea (pagina inizia dopo)' },
     ]},
     { key: 'sticky', label: 'Header sticky', type: 'toggle' },
     { key: 'sticky_show_on_up', label: 'Mostra su scroll up', type: 'toggle',

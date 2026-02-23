@@ -67,8 +67,7 @@ class Olo_Team_Tile extends Olo_Tile_Base {
         $ph_bc     = $this->safe_color( $s['photo_border_color'] ) ?: '#FFFFFF';
         $ph_gap    = max( intval( $s['photo_gap'] ), 0 );
         $outer_sz  = $ph_size + $ph_bw * 2;
-        $shadow_map = [ 'sm' => '0 2px 6px rgba(0,0,0,.2)', 'md' => '0 4px 12px rgba(0,0,0,.3)', 'lg' => '0 8px 24px rgba(0,0,0,.4)' ];
-        $ph_shadow  = $shadow_map[ $s['photo_shadow'] ] ?? 'none';
+        $ph_shadow  = Olo_Tile_Utils::shadow( $s['photo_shadow'] ?? 'none', 'photo' );
 
         // Photo shape
         $hex_clip = 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)';
@@ -229,7 +228,7 @@ class Olo_Team_Tile extends Olo_Tile_Base {
                             <video src="<?php echo esc_url( $s['photo'] ); ?>" autoplay muted loop playsinline></video>
                         <?php elseif ( ! empty( $s['photo'] ) ) : ?>
                             <?php
-                            $img = '<img src="' . esc_url( $s['photo'] ) . '" alt="' . esc_attr( $s['name'] ) . '" />';
+                            $img = Olo_Tile_Utils::img_srcset( absint( $s['photo_id'] ?? 0 ), $s['photo'], $s['name'] );
                             echo $this->render_hover_wrap( $img, $s['hover_image'] ?? '', $s['hover_video'] ?? '' );
                             ?>
                         <?php else : ?>

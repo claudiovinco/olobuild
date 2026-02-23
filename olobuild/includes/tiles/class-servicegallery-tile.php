@@ -253,7 +253,7 @@ class Olo_ServiceGallery_Tile extends Olo_Tile_Base {
             ?>
                 <?php if ( $is_visible ) : ?>
                 <a class="olo-sgal-item" href="<?php echo esc_url( $full ); ?>" data-caption="<?php echo esc_attr( $alt ); ?> (<?php echo $i; ?>/<?php echo $total; ?>)">
-                    <img src="<?php echo esc_url( $thumb_url ); ?>" alt="<?php echo esc_attr( $alt ); ?>" loading="lazy" />
+                    <?php echo Olo_Tile_Utils::img_srcset( $att_id, $thumb_url, $alt ); ?>
                     <?php if ( ! empty( $s['fx_tint'] ) ) : ?><div class="olo-sgal-tint"></div><?php endif; ?>
                     <?php if ( ! empty( $s['fx_grain'] ) ) : ?><div class="olo-sgal-grain"></div><?php endif; ?>
                     <?php if ( $is_last_vis ) : ?>

@@ -73,21 +73,14 @@ class Olo_Button_Tile extends Olo_Tile_Base {
         $border_width = absint( $s['border_width'] );
         $border_color = $this->safe_color( $s['border_color'] );
 
-        // Shadow map
-        $shadow_map = [
-            'none' => 'none',
-            'sm'   => '0 1px 2px rgba(0,0,0,.08)',
-            'md'   => '0 4px 6px rgba(0,0,0,.12)',
-            'lg'   => '0 10px 15px rgba(0,0,0,.12)',
-            'xl'   => '0 20px 25px rgba(0,0,0,.15)',
-        ];
-        $shadow = $shadow_map[ $s['shadow'] ] ?? 'none';
+        // Shadow
+        $shadow = Olo_Tile_Utils::shadow( $s['shadow'] ?? 'none' );
 
         // Hover colors
         $hover_bg     = $this->safe_color( $s['hover_bg_color'] );
         $hover_fg     = $this->safe_color( $s['hover_text_color'] );
         $hover_bc     = $this->safe_color( $s['hover_border_color'] );
-        $hover_shadow = ( $s['hover_shadow'] !== '' ) ? ( $shadow_map[ $s['hover_shadow'] ] ?? '' ) : '';
+        $hover_shadow = ( $s['hover_shadow'] !== '' ) ? Olo_Tile_Utils::shadow( $s['hover_shadow'] ) : '';
         $hover_effect = $s['hover_effect'] ?? 'lift';
 
         // Hover image/video

@@ -364,13 +364,7 @@ class Olo_ServiceRelated_Tile extends Olo_Tile_Base {
     private function render_styles( $uid, $s ) {
         $radius  = absint( $s['card_radius'] );
         $bg      = $this->safe_color( $s['card_bg'] ) ?: '#fff';
-        $shadow_map = [
-            'none' => 'none',
-            'sm'   => '0 1px 3px rgba(0,0,0,.08)',
-            'md'   => '0 4px 12px rgba(0,0,0,.1)',
-            'lg'   => '0 8px 24px rgba(0,0,0,.15)',
-        ];
-        $shadow  = $shadow_map[ $s['card_shadow'] ] ?? 'none';
+        $shadow  = Olo_Tile_Utils::shadow( $s['card_shadow'] ?? 'none' );
         $hover   = $s['card_hover_effect'];
         $t_size  = absint( $s['title_size'] ) ?: 17;
         $t_color = $this->safe_color( $s['title_color'] ) ?: '#1f2937';

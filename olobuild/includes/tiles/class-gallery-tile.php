@@ -236,6 +236,7 @@ class Olo_Gallery_Tile extends Olo_Tile_Base {
                 $url     = is_array( $img ) ? ( $img['url'] ?? '' ) : $img;
                 $alt     = is_array( $img ) ? ( $img['alt'] ?? '' ) : '';
                 $caption = is_array( $img ) ? ( $img['caption'] ?? '' ) : '';
+                $att_id  = is_array( $img ) ? absint( $img['id'] ?? 0 ) : 0;
                 if ( ! $url ) continue;
                 $i++;
 
@@ -247,7 +248,7 @@ class Olo_Gallery_Tile extends Olo_Tile_Base {
             ?>
                 <?php if ( $is_visible ) : ?>
                 <a class="olo-gal-item" href="<?php echo esc_url( $url ); ?>"<?php echo $caption_attr; ?>>
-                    <img src="<?php echo esc_url( $url ); ?>" alt="<?php echo esc_attr( $alt ); ?>" loading="lazy" />
+                    <?php echo Olo_Tile_Utils::img_srcset( $att_id, $url, $alt ); ?>
                     <?php if ( ! empty( $s['fx_tint'] ) ) : ?><div class="olo-gal-tint"></div><?php endif; ?>
                     <?php if ( ! empty( $s['fx_grain'] ) ) : ?><div class="olo-gal-grain"></div><?php endif; ?>
                     <?php if ( $is_last_vis ) : ?>

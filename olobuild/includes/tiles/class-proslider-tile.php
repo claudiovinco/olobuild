@@ -224,7 +224,7 @@ class Olo_ProSlider_Tile extends Olo_Tile_Base {
                 $dur   = absint( $bg['kenBurnsDuration'] ?? 8000 );
                 $kb_style = '--mps-kb-scale:' . $scale . ';--mps-kb-dur:' . $dur . 'ms;';
             }
-            return '<img src="' . esc_url( $bg['image'] ) . '" alt="" class="olo-proslider-bg-img' . $kb_class . '" style="' . esc_attr( $kb_style ) . '" draggable="false" />';
+            return '<img src="' . esc_url( $bg['image'] ) . '" alt="Slide background" class="olo-proslider-bg-img' . $kb_class . '" style="' . esc_attr( $kb_style ) . '" draggable="false" loading="lazy" />';
         }
 
         // Video — self hosted
@@ -233,7 +233,7 @@ class Olo_ProSlider_Tile extends Olo_Tile_Base {
             if ( preg_match( '/youtube\.com|youtu\.be/i', $url ) ) {
                 $vid_id = $this->extract_youtube_id( $url );
                 if ( $vid_id ) {
-                    return '<iframe src="https://www.youtube-nocookie.com/embed/' . esc_attr( $vid_id ) . '?autoplay=1&mute=1&loop=1&playlist=' . esc_attr( $vid_id ) . '&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';
+                    return '<iframe src="https://www.youtube-nocookie.com/embed/' . esc_attr( $vid_id ) . '?autoplay=1&mute=1&loop=1&playlist=' . esc_attr( $vid_id ) . '&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1" allow="autoplay; encrypted-media" allowfullscreen loading="lazy"></iframe>';
                 }
             }
             return '<video src="' . esc_url( $url ) . '" autoplay muted loop playsinline></video>';
@@ -314,7 +314,7 @@ class Olo_ProSlider_Tile extends Olo_Tile_Base {
             case 'image':
                 $src = esc_url( $layer['imageSrc'] ?? '' );
                 if ( ! $src ) return '';
-                return '<img src="' . $src . '" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:' . $radius . ';" draggable="false" />';
+                return '<img src="' . $src . '" alt="Slide image" style="width:100%;height:100%;object-fit:cover;border-radius:' . $radius . ';" draggable="false" loading="lazy" />';
 
             case 'button':
                 $url    = esc_url( $layer['buttonUrl'] ?? '#' );
@@ -326,7 +326,7 @@ class Olo_ProSlider_Tile extends Olo_Tile_Base {
             case 'icon':
                 $icon_name = esc_attr( $layer['iconName'] ?? 'star' );
                 $ratio     = max( 1, round( absint( $layer['fontSize'] ?? 24 ) / 20 ) );
-                return '<span style="color:' . $color . ';" uk-icon="icon: ' . $icon_name . '; ratio: ' . $ratio . '"></span>';
+                return '<span style="color:' . esc_attr( $color ) . ';" uk-icon="icon: ' . $icon_name . '; ratio: ' . $ratio . '"></span>';
 
             case 'video':
                 $video_src = $layer['videoSrc'] ?? '';
@@ -342,7 +342,7 @@ class Olo_ProSlider_Tile extends Olo_Tile_Base {
                         $yt_params .= '&mute=' . ( ! empty( $layer['videoMuted'] ) ? '1' : '0' );
                         $yt_params .= '&loop=' . ( ! empty( $layer['videoLoop'] ) ? '1' : '0' );
                         $yt_params .= '&playlist=' . esc_attr( $vid_id ) . '&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1';
-                        return '<iframe src="https://www.youtube-nocookie.com/embed/' . esc_attr( $vid_id ) . '?' . $yt_params . '" allow="autoplay; encrypted-media" allowfullscreen style="' . esc_attr( $video_style ) . 'border:0;"></iframe>';
+                        return '<iframe src="https://www.youtube-nocookie.com/embed/' . esc_attr( $vid_id ) . '?' . $yt_params . '" allow="autoplay; encrypted-media" allowfullscreen loading="lazy" style="' . esc_attr( $video_style ) . 'border:0;"></iframe>';
                     }
                 }
                 return '<video src="' . esc_url( $video_src ) . '"' . $autoplay . $muted . $loop . ' playsinline style="' . esc_attr( $video_style ) . '"></video>';

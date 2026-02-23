@@ -1,3 +1,5 @@
+import { borderFields, borderDefaults, shadowField } from './_shared.js';
+
 export default {
   type: 'switcher',
   name: 'Switcher',
@@ -11,6 +13,8 @@ export default {
     nav_style: 'tab',
     animation: '',
     vertical: false,
+    shadow: 'none',
+    ...borderDefaults,
   },
   fields: [
     { key: 'items', label: 'Elementi', type: 'content-items', supportsDynamic: true,
@@ -35,5 +39,7 @@ export default {
       { value: 'slide-bottom', label: 'Slide basso' },
     ]},
     { key: 'vertical', label: 'Verticale', type: 'toggle' },
+    shadowField,
+    ...borderFields,
   ],
 };

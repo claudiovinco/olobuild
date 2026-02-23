@@ -1,3 +1,5 @@
+import { borderFields, borderDefaults, shadowField } from './_shared.js';
+
 export default {
   type: 'popover',
   name: 'Popover',
@@ -18,6 +20,8 @@ export default {
     popup_img_height: '120',
     popup_hover_effect: 'none',
     popup_hover_color: '#6366F1',
+    shadow: 'none',
+    ...borderDefaults,
   },
   fields: [
     { key: 'image', label: 'Immagine', type: 'image' },
@@ -56,5 +60,7 @@ export default {
     ]},
     { key: 'popup_hover_color', label: 'Colore overlay hover', type: 'color',
       condition: { field: 'popup_hover_effect', value: 'color-overlay' } },
+    shadowField,
+    ...borderFields,
   ],
 };

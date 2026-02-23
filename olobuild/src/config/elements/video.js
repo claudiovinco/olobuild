@@ -1,3 +1,5 @@
+import { borderFields, borderDefaults, shadowField } from './_shared.js';
+
 export default {
   type: 'video',
   name: 'Video',
@@ -17,6 +19,8 @@ export default {
     overlay_color: '#000000',
     overlay_opacity: '0',
     caption: '',
+    shadow: 'none',
+    ...borderDefaults,
   },
   fields: [
     { key: 'source_type', label: 'Sorgente', type: 'select', options: [
@@ -43,5 +47,7 @@ export default {
     { key: 'overlay_opacity', label: 'Opacità overlay (%)', type: 'range', min: 0, max: 100, step: 5 },
     { type: 'separator', label: 'Didascalia' },
     { key: 'caption', label: 'Didascalia', type: 'editor', mode: 'inline' },
+    shadowField,
+    ...borderFields,
   ],
 };

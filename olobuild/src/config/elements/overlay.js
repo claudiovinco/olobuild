@@ -1,3 +1,5 @@
+import { borderFields, borderDefaults, shadowField } from './_shared.js';
+
 export default {
   type: 'overlay',
   name: 'Overlay',
@@ -13,8 +15,9 @@ export default {
     text_color: '#FFFFFF',
     hover_effect: 'fade',
     overlay_opacity: '70',
-    border_radius: '8',
     height: '300',
+    shadow: 'none',
+    ...borderDefaults,
   },
   fields: [
     { key: 'image_url', label: 'Immagine', type: 'image' },
@@ -33,7 +36,8 @@ export default {
       { value: 'zoom', label: 'Zoom' },
     ]},
     { key: 'overlay_opacity', label: 'Opacità overlay (%)', type: 'range', min: 0, max: 100, step: 5 },
-    { key: 'border_radius', label: 'Border Radius', type: 'border-radius' },
     { key: 'height', label: 'Altezza (px)', type: 'range', min: 10, max: 600, step: 5 },
+    shadowField,
+    ...borderFields,
   ],
 };

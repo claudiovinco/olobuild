@@ -41,3 +41,30 @@ export const columnWidthOptions = [
   { value: '1-6', label: '1/6' },
   { value: '5-6', label: '5/6' },
 ];
+
+// ─── Shadow field preset ───
+export const shadowField = {
+  key: 'shadow', label: 'Ombra', type: 'select', options: [
+    { value: 'none', label: 'Nessuna' },
+    { value: 'sm', label: 'Leggera' },
+    { value: 'md', label: 'Media' },
+    { value: 'lg', label: 'Forte' },
+    { value: 'xl', label: 'Molto forte' },
+  ],
+};
+
+// ─── Border fields preset (separator + width + color + radius) ───
+export const borderFields = [
+  { type: 'separator', label: 'Bordo' },
+  { key: 'border_width', label: 'Spessore bordo (px)', type: 'range', min: 0, max: 10, step: 1 },
+  { key: 'border_color', label: 'Colore bordo', type: 'color',
+    condition: { field: 'border_width', operator: '>', value: '0' } },
+  { key: 'border_radius', label: 'Arrotondamento angoli', type: 'border-radius' },
+];
+
+// Border defaults to merge into element defaults
+export const borderDefaults = {
+  border_width: '0',
+  border_color: '#e5e7eb',
+  border_radius: { tl: 0, tr: 0, br: 0, bl: 0 },
+};

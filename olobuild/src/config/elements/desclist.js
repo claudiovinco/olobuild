@@ -1,3 +1,5 @@
+import { shadowField } from './_shared.js';
+
 export default {
   type: 'desclist',
   name: 'Lista descrittiva',
@@ -23,6 +25,7 @@ export default {
     spacing: '16',
     striped: false,
     striped_color: 'rgba(255,255,255,0.03)',
+    shadow: 'none',
   },
   fields: [
     { key: 'items', label: 'Elementi', type: 'content-items', supportsDynamic: true,
@@ -60,5 +63,6 @@ export default {
     { key: 'border_color', label: 'Colore bordo', type: 'color' },
     { key: 'striped', label: 'Righe alternate', type: 'toggle' },
     { key: 'striped_color', label: 'Colore riga alternata', type: 'color' },
+    shadowField,
   ],
 };

@@ -1,3 +1,5 @@
+import { borderFields, borderDefaults, shadowField } from './_shared.js';
+
 export default {
   type: 'gallery',
   name: 'Galleria',
@@ -37,6 +39,8 @@ export default {
     more_size: '28',
     // Mobile
     mobile_columns: '2',
+    shadow: 'none',
+    ...borderDefaults,
   },
   fields: [
     { key: 'images', label: 'Immagini', type: 'gallery' },
@@ -101,5 +105,7 @@ export default {
       { value: 'scale', label: 'Scala' },
     ]},
     { key: 'show_caption', label: 'Mostra didascalie', type: 'toggle' },
+    shadowField,
+    ...borderFields,
   ],
 };

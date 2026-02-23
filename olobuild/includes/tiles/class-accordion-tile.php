@@ -274,7 +274,7 @@ class Olo_Accordion_Tile extends Olo_Tile_Base {
                                 endif; ?>
                                 <?php if ( ! empty( $panel_img ) ) : ?>
                                     <?php
-                                    $acc_img = '<img src="' . esc_url( $panel_img ) . '" alt="" loading="lazy" />';
+                                    $acc_img = '<img src="' . esc_url( $panel_img ) . '" alt="' . esc_attr( wp_strip_all_tags( $panel['title'] ?? '' ) ) . '" loading="lazy" />';
                                     echo $this->render_hover_wrap( $acc_img, $panel['hover_image'] ?? '', '' );
                                     ?>
                                 <?php endif; ?>

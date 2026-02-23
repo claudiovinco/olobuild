@@ -42,8 +42,13 @@ class Olo_Html_Tile extends Olo_Tile_Base {
             ?>
             <div class="olo-html uk-panel">
                 <?php
-                // Raw HTML output — intentional for admin-authored content
-                echo $s['html_content'];
+                // Full HTML for users with unfiltered_html capability (admins);
+                // sanitized fallback for everyone else.
+                if ( current_user_can( 'unfiltered_html' ) ) {
+                    echo $s['html_content'];
+                } else {
+                    echo wp_kses_post( $s['html_content'] );
+                }
                 ?>
             </div>
             <?php

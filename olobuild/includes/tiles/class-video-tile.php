@@ -78,6 +78,7 @@ class Olo_Video_Tile extends Olo_Tile_Base {
                         frameborder="0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowfullscreen
+                        loading="lazy"
                     ></iframe>
                 <?php else : ?>
                     <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #1f2937; display: flex; align-items: center; justify-content: center; color: #9ca3af;">
@@ -161,6 +162,7 @@ class Olo_Video_Tile extends Olo_Tile_Base {
                     frameborder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowfullscreen
+                    loading="lazy"
                 ></iframe>
             <?php else : ?>
                 <div style="width: 100%; height: 100%; background: #1f2937; display: flex; align-items: center; justify-content: center; color: #9ca3af;">

@@ -1,3 +1,5 @@
+import { borderFields, borderDefaults, shadowField } from './_shared.js';
+
 export default {
   type: 'nav',
   name: 'Nav',
@@ -11,6 +13,8 @@ export default {
     ],
     style: 'default',
     show_icons: false,
+    shadow: 'none',
+    ...borderDefaults,
   },
   fields: [
     { key: 'items', label: 'Elementi', type: 'content-items', supportsDynamic: true,
@@ -28,5 +32,7 @@ export default {
       { value: 'secondary', label: 'Secondary' },
     ]},
     { key: 'show_icons', label: 'Mostra icone', type: 'toggle' },
+    shadowField,
+    ...borderFields,
   ],
 };

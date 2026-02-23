@@ -232,14 +232,14 @@ class Olo_ImgCompare_Tile extends Olo_Tile_Base {
         <div class="olo-ic <?php echo esc_attr( $uid ); ?>" data-orientation="<?php echo esc_attr( $orientation ); ?>">
             <div class="olo-ic-after">
                 <?php if ( $after_url ) : ?>
-                    <img src="<?php echo $after_url; ?>" alt="<?php echo esc_attr( $after_lbl ); ?>" draggable="false" />
+                    <img src="<?php echo $after_url; ?>" alt="<?php echo esc_attr( $after_lbl ); ?>" draggable="false" loading="lazy" />
                 <?php else : ?>
                     <div style="width:100%;height:100%;background:#374151;display:flex;align-items:center;justify-content:center;color:#9CA3AF;font-size:14px;">Dopo</div>
                 <?php endif; ?>
             </div>
             <div class="olo-ic-before">
                 <?php if ( $before_url ) : ?>
-                    <img src="<?php echo $before_url; ?>" alt="<?php echo esc_attr( $before_lbl ); ?>" draggable="false" />
+                    <img src="<?php echo $before_url; ?>" alt="<?php echo esc_attr( $before_lbl ); ?>" draggable="false" loading="lazy" />
                 <?php else : ?>
                     <div style="width:100%;height:100%;background:#1F2937;display:flex;align-items:center;justify-content:center;color:#9CA3AF;font-size:14px;">Prima</div>
                 <?php endif; ?>

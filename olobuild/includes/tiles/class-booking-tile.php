@@ -88,19 +88,12 @@ class Olo_Booking_Tile extends Olo_Tile_Base {
         $css = '';
         $u   = ".{$uid}";
 
-        $shadow_map = [
-            'none' => 'none',
-            'sm'   => '0 1px 3px rgba(0,0,0,0.1)',
-            'md'   => '0 4px 12px rgba(0,0,0,0.1)',
-            'lg'   => '0 8px 24px rgba(0,0,0,0.15)',
-        ];
-
         // Widget container
         $max_w  = absint( $s['widget_max_width'] ) ?: 480;
         $bg     = $this->safe_color( $s['widget_bg'] );
         $radius = absint( $s['widget_border_radius'] );
         $border = $this->safe_color( $s['widget_border_color'] );
-        $shadow = $shadow_map[ $s['widget_shadow'] ] ?? 'none';
+        $shadow = Olo_Tile_Utils::shadow( $s['widget_shadow'] ?? 'none' );
 
         $css .= "{$u} .olob-widget{max-width:{$max_w}px";
         if ( $bg )     $css .= ";background:{$bg}";

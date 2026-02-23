@@ -1,3 +1,5 @@
+import { borderFields, borderDefaults } from './_shared.js';
+
 export default {
   type: 'content',
   name: 'Contenuto',
@@ -21,6 +23,7 @@ export default {
     hover_video: '',
     link_url: '',
     link_target: '_self',
+    ...borderDefaults,
   },
   fields: [
     { key: 'heading', label: 'Titolo', type: 'editor', mode: 'inline' },
@@ -76,5 +79,6 @@ export default {
       { value: '_self', label: 'Stessa finestra' },
       { value: '_blank', label: 'Nuova finestra' },
     ]},
+    ...borderFields,
   ],
 };

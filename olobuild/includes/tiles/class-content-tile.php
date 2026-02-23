@@ -56,15 +56,8 @@ class Olo_Content_Tile extends Olo_Tile_Base {
         $link_url     = $s['link_url'] ?? '';
         $link_target  = $s['link_target'] === '_blank' ? '_blank' : '_self';
 
-        // Shadow map
-        $shadow_map = [
-            'none' => 'none',
-            'sm'   => '0 1px 2px rgba(0,0,0,.05)',
-            'md'   => '0 4px 6px rgba(0,0,0,.1)',
-            'lg'   => '0 10px 15px rgba(0,0,0,.1)',
-            'xl'   => '0 20px 25px rgba(0,0,0,.1)',
-        ];
-        $shadow = $shadow_map[ $s['image_shadow'] ] ?? 'none';
+        // Shadow
+        $shadow = Olo_Tile_Utils::shadow( $s['image_shadow'] ?? 'none' );
 
         // Image CSS class
         $img_class = 'olo-ct-img';
@@ -175,7 +168,8 @@ class Olo_Content_Tile extends Olo_Tile_Base {
             return;
         }
 
-        $img_html = '<img src="' . esc_url( $s['image'] ) . '" alt="" class="' . esc_attr( $img_class ) . '" loading="lazy">';
+        $att_id   = absint( $s['image_id'] ?? 0 );
+        $img_html = Olo_Tile_Utils::img_srcset( $att_id, $s['image'], wp_strip_all_tags( $s['title'] ?? '' ), $img_class );
         $img_html = $this->render_hover_wrap( $img_html, $s['hover_image'] ?? '', $s['hover_video'] ?? '' );
 
         if ( ! empty( $link_url ) ) {

@@ -291,7 +291,7 @@ class Olo_FlipCard_Tile extends Olo_Tile_Base {
 
         // Background image
         if ( ! empty( $s[ $prefix . 'image' ] ) ) {
-            $html .= '<img class="olo-fc-bg" src="' . esc_url( $s[ $prefix . 'image' ] ) . '" alt="" loading="lazy" />';
+            $html .= Olo_Tile_Utils::img_srcset( absint( $s[ $prefix . 'image_id' ] ?? 0 ), $s[ $prefix . 'image' ], ucfirst( $side ) . ' side', 'olo-fc-bg' );
         }
 
         // Background video

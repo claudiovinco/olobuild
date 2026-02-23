@@ -58,7 +58,7 @@ class Olo_Slideshow_Tile extends Olo_Tile_Base {
                 <?php foreach ( $slides as $slide ) : ?>
                     <div>
                         <?php if ( ! empty( $slide['image'] ) ) : ?>
-                            <img src="<?php echo esc_url( $slide['image'] ); ?>" alt="" uk-cover>
+                            <?php echo Olo_Tile_Utils::img_srcset( absint( $slide['image_id'] ?? 0 ), $slide['image'], $slide['title'] ?? '', '', 'full', 'uk-cover' ); ?>
                         <?php else : ?>
                             <div style="position:absolute;inset:0;background:#1f2937;" uk-cover></div>
                         <?php endif; ?>

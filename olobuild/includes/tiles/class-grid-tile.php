@@ -110,7 +110,7 @@ class Olo_Grid_Tile extends Olo_Tile_Base {
                     <div class="olo-card-minimal">
                         <?php if ( ! empty( $item['image'] ) ) : ?>
                         <?php
-                        $grid_min_img = '<img class="olo-card-minimal__img" src="' . esc_url( $item['image'] ) . '" alt="' . esc_attr( $item['title'] ) . '">';
+                        $grid_min_img = '<img class="olo-card-minimal__img" src="' . esc_url( $item['image'] ) . '" alt="' . esc_attr( $item['title'] ) . '" loading="lazy">';
                         echo $this->render_hover_wrap( $grid_min_img, $item['hover_image'] ?? '', $item['hover_video'] ?? '' );
                         ?>
                         <?php endif; ?>
@@ -122,7 +122,7 @@ class Olo_Grid_Tile extends Olo_Tile_Base {
                         <?php if ( ! empty( $item['image'] ) ) : ?>
                         <div class="uk-card-media-top">
                             <?php
-                            $grid_img = '<img src="' . esc_url( $item['image'] ) . '" alt="' . esc_attr( $item['title'] ) . '" style="width:100%;display:block;">';
+                            $grid_img = '<img src="' . esc_url( $item['image'] ) . '" alt="' . esc_attr( $item['title'] ) . '" style="width:100%;display:block;" loading="lazy">';
                             echo $this->render_hover_wrap( $grid_img, $item['hover_image'] ?? '', $item['hover_video'] ?? '' );
                             ?>
                         </div>

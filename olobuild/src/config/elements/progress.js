@@ -1,3 +1,5 @@
+import { borderFields, borderDefaults, shadowField } from './_shared.js';
+
 export default {
   type: 'progress',
   name: 'Barra progresso',
@@ -11,7 +13,8 @@ export default {
     height: '20',
     show_percentage: true,
     animated: true,
-    border_radius: '10',
+    shadow: 'none',
+    ...borderDefaults,
   },
   fields: [
     { key: 'bars', label: 'Barre (etichetta|valore per riga)', type: 'textarea' },
@@ -21,6 +24,7 @@ export default {
     { key: 'height', label: 'Altezza (px)', type: 'range', min: 10, max: 600, step: 5 },
     { key: 'show_percentage', label: 'Mostra percentuale', type: 'toggle' },
     { key: 'animated', label: 'Animata', type: 'toggle' },
-    { key: 'border_radius', label: 'Border Radius', type: 'border-radius' },
+    shadowField,
+    ...borderFields,
   ],
 };

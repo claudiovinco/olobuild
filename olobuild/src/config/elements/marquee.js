@@ -1,3 +1,5 @@
+import { borderFields, borderDefaults, shadowField } from './_shared.js';
+
 export default {
   type: 'marquee',
   name: 'Nastro Scorrevole',
@@ -29,6 +31,8 @@ export default {
     border_top: '0',
     border_bottom: '0',
     border_color: '#374151',
+    shadow: 'none',
+    ...borderDefaults,
   },
   fields: [
     // ── Contenuto ──
@@ -81,5 +85,7 @@ export default {
     { key: 'border_top', label: 'Bordo superiore (px)', type: 'range', min: 0, max: 4 },
     { key: 'border_bottom', label: 'Bordo inferiore (px)', type: 'range', min: 0, max: 4 },
     { key: 'border_color', label: 'Colore bordo', type: 'color' },
+    shadowField,
+    ...borderFields,
   ],
 };

@@ -1,3 +1,5 @@
+import { borderFields, borderDefaults, shadowField } from './_shared.js';
+
 export default {
   type: 'servicehero',
   name: 'Hero Servizio',
@@ -37,6 +39,8 @@ export default {
     fx_tint_color: '#1E3A5F',
     fx_tint_opacity: '15',
     fx_tint_blend: 'multiply',
+    shadow: 'none',
+    ...borderDefaults,
   },
   fields: [
     { type: 'separator', label: 'Sorgente dati' },
@@ -117,5 +121,7 @@ export default {
       condition: { field: 'show_opening', value: true } },
     { key: 'opening_color', label: 'Testo ribbon', type: 'color',
       condition: { field: 'show_opening', value: true } },
+    shadowField,
+    ...borderFields,
   ],
 };

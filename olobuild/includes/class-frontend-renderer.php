@@ -263,12 +263,15 @@ class Olo_Frontend_Renderer {
 
     /**
      * Build uk-scrollspy attribute from advanced config.
+     * Supports stagger mode: animates direct children with incremental delay.
      */
     private function build_scrollspy_attr( $advanced ) {
         $animation = $advanced['scrollspy_animation'] ?? '';
         if ( empty( $animation ) ) {
             return '';
         }
+
+        $stagger = intval( $advanced['scrollspy_stagger'] ?? 0 );
 
         $parts = [ 'cls: uk-animation-' . esc_attr( $animation ) ];
 
@@ -280,6 +283,12 @@ class Olo_Frontend_Renderer {
         $repeat = ! empty( $advanced['scrollspy_repeat'] );
         if ( $repeat ) {
             $parts[] = 'repeat: true';
+        }
+
+        // Stagger mode: target direct children for sequential animation
+        if ( $stagger > 0 ) {
+            $parts[] = 'target: > *';
+            $parts[] = 'delay: ' . $stagger;
         }
 
         return ' uk-scrollspy="' . implode( '; ', $parts ) . '"';
@@ -464,9 +473,40 @@ class Olo_Frontend_Renderer {
     // =========================================================================
 
     /**
+     * Check conditional visibility rules. Returns false if node should be hidden.
+     */
+    private function should_render_node( $node ) {
+        $adv = $node['advanced'] ?? [];
+
+        // User role condition
+        $role_cond = $adv['cond_user_role'] ?? '';
+        if ( $role_cond !== '' ) {
+            if ( $role_cond === 'logged_in' && ! is_user_logged_in() ) return false;
+            if ( $role_cond === 'logged_out' && is_user_logged_in() ) return false;
+            if ( ! in_array( $role_cond, [ 'logged_in', 'logged_out' ], true ) ) {
+                // Specific role check
+                $user = wp_get_current_user();
+                if ( ! in_array( $role_cond, $user->roles ?? [], true ) ) return false;
+            }
+        }
+
+        // Time-based conditions
+        $now = current_time( 'mysql' );
+        $show_from = $adv['cond_show_from'] ?? '';
+        if ( $show_from !== '' && $now < str_replace( 'T', ' ', $show_from ) ) return false;
+
+        $show_until = $adv['cond_show_until'] ?? '';
+        if ( $show_until !== '' && $now > str_replace( 'T', ' ', $show_until ) ) return false;
+
+        return true;
+    }
+
+    /**
      * Render a node (recursive dispatcher).
      */
     private function render_node( $node, $manager, $template_id, &$hover_css_rules, &$tile_counter ) {
+        if ( ! $this->should_render_node( $node ) ) return '';
+
         $type = $node['type'] ?? '';
         switch ( $type ) {
             case 'section':
@@ -552,7 +592,8 @@ class Olo_Frontend_Renderer {
         $has_overlay  = ( $has_bg_any && ! empty( $tile_bg['overlay_opacity'] ) && intval( $tile_bg['overlay_opacity'] ) > 0 );
 
         if ( $has_bg_image || $has_bg_video ) {
-            $classes[] = 'uk-position-relative uk-overflow-hidden';
+            $classes[] = 'uk-position-relative';
+            $inline_styles[] = 'overflow: clip';
         } elseif ( $tile_bg['type'] !== 'none' ) {
             $bg_css = $this->get_bg_inline_css( $tile_bg );
             if ( $bg_css ) $inline_styles[] = $bg_css;
@@ -603,20 +644,23 @@ class Olo_Frontend_Renderer {
             $inline_styles[] = "opacity: {$opacity}";
         }
 
-        // Overflow hidden needed for border-radius clipping
+        // Overflow clip needed for border-radius clipping (clip instead of hidden to preserve sticky)
         if ( ! empty( $style['border_radius'] ) ) {
-            $classes[] = 'uk-overflow-hidden';
+            $inline_styles[] = 'overflow: clip';
         }
 
         if ( ! empty( $advanced['custom_css'] ) ) {
             $inline_styles[] = $advanced['custom_css'];
         }
 
-        // HTML ID
-        $id_attr = '';
-        if ( ! empty( $advanced['html_id'] ) ) {
-            $id_attr = ' id="' . esc_attr( $advanced['html_id'] ) . '"';
-        }
+        // HTML ID (always generate for hover CSS support)
+        $tile_counter++;
+        $css_id  = ! empty( $advanced['html_id'] ) ? $advanced['html_id'] : 'ms-' . $template_id . '-' . $tile_counter;
+        $id_attr = ' id="' . esc_attr( $css_id ) . '"';
+
+        // Hover CSS rules
+        $this->collect_hover_css( $style, $css_id, false, $hover_css_rules );
+        $this->collect_responsive_css( $style, $css_id );
 
         // Scrollspy & element parallax attributes
         $scrollspy_attr = $this->build_scrollspy_attr( $advanced );
@@ -767,13 +811,24 @@ class Olo_Frontend_Renderer {
         $has_opacity = ! empty( $style['opacity'] ) && intval( $style['opacity'] ) < 100;
         $has_shadow = ! empty( $style['shadow'] );
         $has_spacing = ! empty( $row_spacing_styles );
-        $needs_wrapper = $has_bg_image || $has_bg_video || $has_overlay || ( $tile_bg['type'] !== 'none' ) || $has_spacing || $has_border_radius || $has_border || $has_opacity || $has_shadow;
+        $has_hover   = ! empty( $style['hover'] ) && is_array( $style['hover'] ) && array_filter( $style['hover'], function( $v ) { return $v !== null && $v !== '' && $v !== false; } );
+        $needs_wrapper = $has_bg_image || $has_bg_video || $has_overlay || ( $tile_bg['type'] !== 'none' ) || $has_spacing || $has_border_radius || $has_border || $has_opacity || $has_shadow || $has_hover;
+
+        // ID for hover CSS support
+        $tile_counter++;
+        $row_css_id = ! empty( $advanced['html_id'] ) ? $advanced['html_id'] : 'mr-' . $template_id . '-' . $tile_counter;
+
+        // Hover CSS rules
+        $this->collect_hover_css( $style, $row_css_id, false, $hover_css_rules );
+        $this->collect_responsive_css( $style, $row_css_id );
+
         $wrapper_styles = [];
         $wrapper_classes = [];
 
         if ( $needs_wrapper ) {
             if ( $has_bg_image || $has_bg_video ) {
-                $wrapper_classes[] = 'uk-position-relative uk-overflow-hidden';
+                $wrapper_classes[] = 'uk-position-relative';
+                $wrapper_styles[] = 'overflow: clip';
             } elseif ( $tile_bg['type'] !== 'none' ) {
                 $bg_css = $this->get_bg_inline_css( $tile_bg );
                 if ( $bg_css ) $wrapper_styles[] = $bg_css;
@@ -793,9 +848,9 @@ class Olo_Frontend_Renderer {
                     $wrapper_classes[] = $uk_shadow_map[ $style['shadow'] ];
                 }
             }
-            // Overflow hidden for border-radius clipping
+            // Overflow clip for border-radius clipping (clip instead of hidden to preserve sticky)
             if ( $has_border_radius ) {
-                $wrapper_classes[] = 'uk-overflow-hidden';
+                $wrapper_styles[] = 'overflow: clip';
             }
             if ( ! empty( $advanced['custom_css'] ) ) {
                 $wrapper_styles[] = $advanced['custom_css'];
@@ -905,7 +960,7 @@ class Olo_Frontend_Renderer {
 
         // Open row wrapper (for background)
         if ( $needs_wrapper ) {
-            $html .= '<div class="' . esc_attr( implode( ' ', $wrapper_classes ) ) . '"';
+            $html .= '<div id="' . esc_attr( $row_css_id ) . '" class="' . esc_attr( implode( ' ', $wrapper_classes ) ) . '"';
             if ( $wrapper_styles ) {
                 $html .= ' style="' . esc_attr( implode( '; ', $wrapper_styles ) ) . '"';
             }
@@ -1050,11 +1105,19 @@ class Olo_Frontend_Renderer {
             $inline_styles[] = "opacity: {$opacity}";
         }
 
+        // ID for hover CSS support
+        $tile_counter++;
+        $col_css_id = ! empty( $advanced['html_id'] ) ? $advanced['html_id'] : 'mc-' . $template_id . '-' . $tile_counter;
+
+        // Hover CSS rules
+        $this->collect_hover_css( $style, $col_css_id, false, $hover_css_rules );
+        $this->collect_responsive_css( $style, $col_css_id );
+
         // Scrollspy & element parallax attributes for column
         $col_scrollspy_attr = $this->build_scrollspy_attr( $advanced );
         $col_el_parallax_attr = $this->build_element_parallax_attr( $advanced );
 
-        $html = '<div class="' . esc_attr( implode( ' ', $classes ) ) . '"';
+        $html = '<div id="' . esc_attr( $col_css_id ) . '" class="' . esc_attr( implode( ' ', $classes ) ) . '"';
         if ( ! empty( $inline_styles ) ) {
             $html .= ' style="' . esc_attr( implode( '; ', $inline_styles ) ) . '"';
         }
@@ -1126,6 +1189,14 @@ class Olo_Frontend_Renderer {
             $classes[] = esc_attr( $advanced['css_classes'] );
         }
 
+        // ID for hover CSS support
+        $tile_counter++;
+        $ic_css_id = ! empty( $advanced['html_id'] ) ? $advanced['html_id'] : 'mic-' . $template_id . '-' . $tile_counter;
+
+        // Hover CSS rules
+        $this->collect_hover_css( $style, $ic_css_id, false, $hover_css_rules );
+        $this->collect_responsive_css( $style, $ic_css_id );
+
         $html = '';
 
         // Stack on mobile: responsive CSS
@@ -1135,7 +1206,7 @@ class Olo_Frontend_Renderer {
             $html .= '<style>@container olo-tpl (max-width:640px){.' . $ic_class . '{flex-direction:column}.' . $ic_class . '>*{width:100%!important}}</style>';
         }
 
-        $html .= '<div class="' . esc_attr( implode( ' ', $classes ) ) . '" style="' . esc_attr( implode( '; ', $inline_styles ) ) . '">';
+        $html .= '<div id="' . esc_attr( $ic_css_id ) . '" class="' . esc_attr( implode( ' ', $classes ) ) . '" style="' . esc_attr( implode( '; ', $inline_styles ) ) . '">';
 
         foreach ( $node['children'] ?? [] as $child ) {
             $html .= $this->render_node( $child, $manager, $template_id, $hover_css_rules, $tile_counter );
@@ -1189,7 +1260,15 @@ class Olo_Frontend_Renderer {
             $inline_styles[] = "border: {$bw}px {$bs} {$bc}";
         }
 
-        $html = '<div class="olo-inner-column" style="' . esc_attr( implode( '; ', $inline_styles ) ) . '">';
+        // ID for hover CSS support
+        $tile_counter++;
+        $icol_css_id = ! empty( $advanced['html_id'] ) ? $advanced['html_id'] : 'mci-' . $template_id . '-' . $tile_counter;
+
+        // Hover CSS rules
+        $this->collect_hover_css( $style, $icol_css_id, false, $hover_css_rules );
+        $this->collect_responsive_css( $style, $icol_css_id );
+
+        $html = '<div id="' . esc_attr( $icol_css_id ) . '" class="olo-inner-column" style="' . esc_attr( implode( '; ', $inline_styles ) ) . '">';
 
         foreach ( $node['children'] ?? [] as $child ) {
             $html .= $this->render_node( $child, $manager, $template_id, $hover_css_rules, $tile_counter );
@@ -1340,8 +1419,8 @@ class Olo_Frontend_Renderer {
         $classes = [ 'olo-frontend-tile' ];
         if ( $shadow_class ) $classes[] = $shadow_class;
         if ( $is_fullwidth ) $classes[] = 'olo-tile-fullwidth';
-        if ( $has_bg_image || $has_bg_video || $has_overlay ) $classes[] = 'uk-position-relative uk-overflow-hidden';
-        if ( ! empty( $style['border_radius'] ) ) $classes[] = 'uk-overflow-hidden';
+        if ( $has_bg_image || $has_bg_video || $has_overlay ) { $classes[] = 'uk-position-relative'; $inline_styles[] = 'overflow: clip'; }
+        if ( ! empty( $style['border_radius'] ) ) $inline_styles[] = 'overflow: clip';
         if ( ! empty( $advanced['css_classes'] ) ) {
             $classes[] = esc_attr( $advanced['css_classes'] );
         }
@@ -1365,6 +1444,7 @@ class Olo_Frontend_Renderer {
 
         // Hover CSS rules
         $this->collect_hover_css( $style, $css_id, $is_fullwidth, $hover_css_rules );
+        $this->collect_responsive_css( $style, $css_id );
 
         // Scrollspy & element parallax attributes
         $elem_scrollspy_attr = $this->build_scrollspy_attr( $advanced );
@@ -1470,6 +1550,28 @@ class Olo_Frontend_Renderer {
     }
 
     /**
+     * Collect responsive spacing CSS rules for tablet and mobile.
+     * Reads style keys like margin_top_tablet, padding_left_mobile, etc.
+     */
+    private function collect_responsive_css( $style, $css_id ) {
+        foreach ( [ 'tablet' => '960px', 'mobile' => '640px' ] as $bp => $max_width ) {
+            $decls = [];
+            foreach ( [ 'margin', 'padding' ] as $prop ) {
+                foreach ( [ 'top', 'right', 'bottom', 'left' ] as $side ) {
+                    $key = "{$prop}_{$side}_{$bp}";
+                    if ( ! empty( $style[ $key ] ) ) {
+                        $decls[] = "{$prop}-{$side}: " . intval( $style[ $key ] ) . 'px';
+                    }
+                }
+            }
+            if ( ! empty( $decls ) ) {
+                $sel = '#' . esc_attr( $css_id );
+                $this->responsive_css_rules[ $max_width ][] = "{$sel} { " . implode( '; ', $decls ) . "; }";
+            }
+        }
+    }
+
+    /**
      * Check for postgrid element usage recursively.
      */
     private function check_postgrid_recursive( $nodes ) {
@@ -1514,6 +1616,23 @@ class Olo_Frontend_Renderer {
             }
             if ( ! empty( $node['children'] ) && is_array( $node['children'] ) ) {
                 if ( $this->check_proslider_recursive( $node['children'] ) ) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Generic recursive check for a specific tile type.
+     */
+    private function check_tile_recursive( $nodes, $tile_type ) {
+        foreach ( $nodes as $node ) {
+            if ( ( $node['type'] ?? '' ) === $tile_type ) {
+                return true;
+            }
+            if ( ! empty( $node['children'] ) && is_array( $node['children'] ) ) {
+                if ( $this->check_tile_recursive( $node['children'], $tile_type ) ) {
                     return true;
                 }
             }
@@ -1623,17 +1742,48 @@ class Olo_Frontend_Renderer {
             );
         }
 
+        // ServiceSearch detection (recursive)
+        if ( $this->check_tile_recursive( $tiles, 'servicesearch' ) ) {
+            wp_enqueue_script(
+                'olo-servicesearch-js',
+                OLO_URL . 'assets/js/olo-servicesearch.js',
+                [],
+                OLO_VERSION,
+                true
+            );
+        }
+
+        // ServiceResults detection (recursive)
+        if ( $this->check_tile_recursive( $tiles, 'serviceresults' ) ) {
+            $vendor_url = OLO_URL . 'assets/vendor/leaflet/';
+
+            wp_enqueue_style( 'leaflet-css', $vendor_url . 'leaflet.css', [], '1.9.4' );
+            wp_enqueue_style( 'leaflet-markercluster-css', $vendor_url . 'leaflet.markercluster.css', [ 'leaflet-css' ], '1.5.3' );
+            wp_enqueue_style( 'leaflet-markercluster-default-css', $vendor_url . 'leaflet.markercluster-default.css', [ 'leaflet-markercluster-css' ], '1.5.3' );
+
+            wp_enqueue_script( 'leaflet-js', $vendor_url . 'leaflet.js', [], '1.9.4', true );
+            wp_enqueue_script( 'leaflet-markercluster-js', $vendor_url . 'leaflet.markercluster.js', [ 'leaflet-js' ], '1.5.3', true );
+            wp_enqueue_script(
+                'olo-serviceresults-js',
+                OLO_URL . 'assets/js/olo-serviceresults.js',
+                [ 'leaflet-js', 'leaflet-markercluster-js' ],
+                OLO_VERSION,
+                true
+            );
+        }
+
         $manager = Olo_Tile_Manager::instance();
 
         $page_bg_css = $this->get_bg_inline_css( $page_bg );
         $hover_css_rules = [];
+        $this->responsive_css_rules = [];
         $tile_counter = 0;
 
         ob_start();
         ?>
         <div class="olo-template olo-template-<?php echo esc_attr( $id ); ?>"<?php
             if ( ( $page_bg['type'] === 'image' && ! empty( $page_bg['image_url'] ) ) || ( $page_bg['type'] === 'video' && ! empty( $page_bg['video_url'] ) ) ) {
-                echo ' style="position: relative; overflow: hidden"';
+                echo ' style="position: relative; overflow: clip"';
             } elseif ( $page_bg_css ) {
                 echo ' style="' . esc_attr( $page_bg_css ) . '"';
             }
@@ -1674,8 +1824,13 @@ class Olo_Frontend_Renderer {
                 }
                 ?>
             </div>
-            <?php if ( ! empty( $hover_css_rules ) ) : ?>
-                <style class="olo-hover-styles"><?php echo implode( ' ', $hover_css_rules ); ?></style>
+            <?php if ( ! empty( $hover_css_rules ) || ! empty( $this->responsive_css_rules ) ) : ?>
+                <style class="olo-hover-styles"><?php
+                    echo implode( ' ', $hover_css_rules );
+                    foreach ( $this->responsive_css_rules as $max_w => $rules ) {
+                        echo ' @media(max-width:' . $max_w . '){' . implode( ' ', $rules ) . '}';
+                    }
+                ?></style>
             <?php endif; ?>
             <?php
             // Sticky Effect: JS for reveal wrappers + horizontal scroll groups

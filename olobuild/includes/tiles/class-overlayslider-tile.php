@@ -131,7 +131,7 @@ class Olo_OverlaySlider_Tile extends Olo_Tile_Base {
                                 <?php endif; ?>
                                     <?php if ( ! empty( $slide['image'] ) ) : ?>
                                         <?php
-                                        $os_img = '<img src="' . esc_url( $slide['image'] ) . '" alt="" class="' . $img_class . '">';
+                                        $os_img = '<img src="' . esc_url( $slide['image'] ) . '" alt="' . esc_attr( $slide['title'] ?? '' ) . '" class="' . $img_class . '" loading="lazy">';
                                         echo $this->render_hover_wrap( $os_img, $slide['hover_image'] ?? '', $slide['hover_video'] ?? '' );
                                         ?>
                                     <?php else : ?>

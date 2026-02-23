@@ -133,13 +133,7 @@ class Olo_ServiceInfo_Tile extends Olo_Tile_Base {
         $hero_h    = absint( $s['acc_hero_height'] ) ?: 400;
         $max_w     = absint( $s['acc_max_width'] ) ?: 900;
         $radius    = absint( $s['acc_card_radius'] );
-        $shadow_map = [
-            'none' => 'none',
-            'sm'   => '0 1px 3px rgba(0,0,0,0.1)',
-            'md'   => '0 4px 12px rgba(0,0,0,0.12)',
-            'lg'   => '0 8px 30px rgba(0,0,0,0.12)',
-        ];
-        $shadow    = $shadow_map[ $s['acc_card_shadow'] ] ?? $shadow_map['lg'];
+        $shadow    = Olo_Tile_Utils::shadow( $s['acc_card_shadow'] ?? 'lg' );
         $padding   = absint( $s['acc_body_padding'] ) ?: 32;
         $title_sz  = absint( $s['acc_title_size'] ) ?: 30;
         $amenity_cols = absint( $s['acc_amenity_cols_desktop'] ) ?: 4;

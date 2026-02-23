@@ -100,6 +100,7 @@
                 :tileId="selectedTile.id"
                 :dynamic="selectedTile.dynamic || {}"
                 @update:modelValue="updateSetting(field.key, $event)"
+                @update:attachmentId="updateSetting(field.key + '_id', $event)"
                 @update:dynamic="onDynamicFieldUpdate"
               />
              </template>
@@ -113,6 +114,7 @@
                 :field="inferField(key, value)"
                 :modelValue="value"
                 @update:modelValue="updateSetting(key, $event)"
+                @update:attachmentId="updateSetting(key + '_id', $event)"
               />
             </div>
           </template>
@@ -165,18 +167,36 @@
             </label>
           </div>
 
+          <!-- Spacing breakpoint switcher -->
+          <div class="mb-flex mb-gap-1 mb-bg-gray-700 mb-rounded-lg mb-p-0.5 mb-mb-1">
+            <button
+              v-for="bp in spacingBreakpoints"
+              :key="bp.key"
+              @click="spacingBp = bp.key"
+              :class="[
+                'mb-flex-1 mb-py-1 mb-text-[10px] mb-font-medium mb-rounded-md mb-transition-colors mb-flex mb-items-center mb-justify-center mb-gap-1',
+                spacingBp === bp.key
+                  ? 'mb-bg-primary-600 mb-text-white'
+                  : 'mb-text-gray-400 hover:mb-text-gray-300'
+              ]"
+              :title="bp.label"
+              v-html="bp.icon"
+            ></button>
+          </div>
+
           <!-- Margin -->
           <div>
-            <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300 mb-mb-2">Margine (px)</label>
+            <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300 mb-mb-2">Margine (px) <span v-if="spacingBp !== 'desktop'" class="mb-text-amber-400 mb-text-[10px]">{{ spacingBpLabel }}</span></label>
             <div class="mb-grid mb-grid-cols-2 mb-gap-2">
               <div v-for="side in sides" :key="'m-' + side">
                 <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">{{ side }}</label>
                 <input
                   type="number"
-                  :value="tileStyle['margin_' + side] || 0"
-                  @input="updateStyle('margin_' + side, $event.target.value)"
+                  :value="tileStyle[spacingKey('margin_' + side)] || 0"
+                  @input="updateStyle(spacingKey('margin_' + side), $event.target.value)"
                   class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1 mb-text-sm mb-text-gray-900"
                   min="0" max="200" step="4"
+                  :placeholder="spacingBp !== 'desktop' ? 'Eredita' : ''"
                 />
               </div>
             </div>
@@ -184,16 +204,17 @@
 
           <!-- Padding -->
           <div>
-            <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300 mb-mb-2">Padding (px)</label>
+            <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300 mb-mb-2">Padding (px) <span v-if="spacingBp !== 'desktop'" class="mb-text-amber-400 mb-text-[10px]">{{ spacingBpLabel }}</span></label>
             <div class="mb-grid mb-grid-cols-2 mb-gap-2">
               <div v-for="side in sides" :key="'p-' + side">
                 <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">{{ side }}</label>
                 <input
                   type="number"
-                  :value="tileStyle['padding_' + side] || 0"
-                  @input="updateStyle('padding_' + side, $event.target.value)"
+                  :value="tileStyle[spacingKey('padding_' + side)] || 0"
+                  @input="updateStyle(spacingKey('padding_' + side), $event.target.value)"
                   class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1 mb-text-sm mb-text-gray-900"
                   min="0" max="200" step="4"
+                  :placeholder="spacingBp !== 'desktop' ? 'Eredita' : ''"
                 />
               </div>
             </div>
@@ -535,6 +556,47 @@
             </div>
           </div>
 
+          <!-- Conditional Visibility -->
+          <CollapseSection title="Visibilità condizionale">
+            <div class="mb-space-y-3">
+              <div>
+                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Mostra solo a</label>
+                <select
+                  :value="tileAdvanced.cond_user_role || ''"
+                  @change="updateAdvanced('cond_user_role', $event.target.value)"
+                  class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-sm mb-text-gray-900"
+                >
+                  <option value="">Tutti (nessun filtro)</option>
+                  <option value="logged_in">Utenti autenticati</option>
+                  <option value="logged_out">Visitatori non autenticati</option>
+                  <option value="administrator">Amministratori</option>
+                  <option value="editor">Editor</option>
+                  <option value="author">Autori</option>
+                  <option value="subscriber">Subscriber</option>
+                </select>
+              </div>
+              <div>
+                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Mostra da data</label>
+                <input
+                  type="datetime-local"
+                  :value="tileAdvanced.cond_show_from || ''"
+                  @change="updateAdvanced('cond_show_from', $event.target.value)"
+                  class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-sm mb-text-gray-900"
+                />
+              </div>
+              <div>
+                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Nascondi dopo data</label>
+                <input
+                  type="datetime-local"
+                  :value="tileAdvanced.cond_show_until || ''"
+                  @change="updateAdvanced('cond_show_until', $event.target.value)"
+                  class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-sm mb-text-gray-900"
+                />
+              </div>
+              <p class="mb-text-[10px] mb-text-gray-500">Condizioni verificate server-side al momento del rendering.</p>
+            </div>
+          </CollapseSection>
+
           <!-- Scrollspy -->
           <CollapseSection title="Animazione allo scroll">
             <div class="mb-space-y-3">
@@ -580,6 +642,20 @@
                     </button>
                     <span class="mb-text-xs mb-text-gray-300">Ripeti ad ogni scroll</span>
                   </label>
+                </div>
+                <div>
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Stagger figli (ms)</label>
+                  <div class="mb-flex mb-items-center mb-gap-2">
+                    <input
+                      type="range"
+                      :value="tileAdvanced.scrollspy_stagger || 0"
+                      @input="updateAdvanced('scrollspy_stagger', parseInt($event.target.value))"
+                      min="0" max="500" step="25"
+                      class="mb-flex-1"
+                    />
+                    <span class="mb-text-xs mb-text-gray-400 mb-w-14 mb-text-right">{{ tileAdvanced.scrollspy_stagger || 0 }}ms</span>
+                  </div>
+                  <p class="mb-text-[10px] mb-text-gray-500 mb-mt-0.5">Anima i figli diretti in sequenza</p>
                 </div>
               </template>
             </div>
@@ -887,6 +963,18 @@ function evaluateCondition(condition, settings) {
 }
 
 const tileStyle = computed(() => selectedTile.value?.style || {});
+
+// Responsive spacing breakpoints
+const spacingBp = ref('desktop');
+const spacingBreakpoints = [
+  { key: 'desktop', label: 'Desktop', icon: '<svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="16" height="11" rx="1"/><path d="M6 17h8M10 14v3"/></svg>' },
+  { key: 'tablet', label: 'Tablet', icon: '<svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="2" width="12" height="16" rx="1.5"/><circle cx="10" cy="16" r="0.5" fill="currentColor"/></svg>' },
+  { key: 'mobile', label: 'Mobile', icon: '<svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="2" width="10" height="16" rx="1.5"/><circle cx="10" cy="16" r="0.5" fill="currentColor"/></svg>' },
+];
+const spacingBpLabel = computed(() => spacingBreakpoints.find(b => b.key === spacingBp.value)?.label || '');
+function spacingKey(base) {
+  return spacingBp.value === 'desktop' ? base : base + '_' + spacingBp.value;
+}
 
 const tileBg = computed(() => {
   const s = tileStyle.value;

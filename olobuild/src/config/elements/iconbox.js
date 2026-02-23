@@ -1,3 +1,5 @@
+import { borderFields, borderDefaults, shadowField } from './_shared.js';
+
 export default {
   type: 'iconbox',
   name: 'Icon Box',
@@ -15,6 +17,8 @@ export default {
     title_font_size: '20',
     title_font_weight: '600',
     link_color: '#6366F1',
+    shadow: 'none',
+    ...borderDefaults,
   },
   fields: [
     { key: 'icon_emoji', label: 'Icona / Emoji', type: 'icon' },
@@ -39,5 +43,7 @@ export default {
     { type: 'separator', label: 'Colori' },
     { key: 'text_color', label: 'Colore testo', type: 'color' },
     { key: 'link_color', label: 'Colore link', type: 'color' },
+    shadowField,
+    ...borderFields,
   ],
 };

@@ -142,7 +142,8 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
 
             // Image
             if ( ! empty( $s['show_image'] ) ) {
-                $item['image'] = get_the_post_thumbnail_url( $post->ID, 'medium_large' ) ?: '';
+                $item['image']    = get_the_post_thumbnail_url( $post->ID, 'medium_large' ) ?: '';
+                $item['image_id'] = (int) get_post_thumbnail_id( $post->ID );
             }
 
             // Excerpt
@@ -415,7 +416,7 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
                                 <a href="<?php echo esc_url( $item['url'] ); ?>">
                             <?php endif; ?>
                             <?php
-                            $pg_min_img = '<img src="' . esc_url( $item['image'] ) . '" alt="' . esc_attr( $item['title'] ) . '" class="olo-card-minimal__img ' . esc_attr( $img_class ) . '" loading="lazy">';
+                            $pg_min_img = Olo_Tile_Utils::img_srcset( $item['image_id'] ?? 0, $item['image'], $item['title'], 'olo-card-minimal__img ' . $img_class );
                             echo $this->render_hover_wrap( $pg_min_img, $item['hover_image'] ?? '', $item['hover_video'] ?? '' );
                             ?>
                             <?php if ( $s['link_style'] === 'card' ) : ?>
@@ -483,7 +484,7 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
                                 <a href="<?php echo esc_url( $item['url'] ); ?>">
                             <?php endif; ?>
                             <?php
-                            $pg_img = '<img src="' . esc_url( $item['image'] ) . '" alt="' . esc_attr( $item['title'] ) . '" class="' . esc_attr( $img_class ) . '" loading="lazy">';
+                            $pg_img = Olo_Tile_Utils::img_srcset( $item['image_id'] ?? 0, $item['image'], $item['title'], $img_class );
                             echo $this->render_hover_wrap( $pg_img, $item['hover_image'] ?? '', $item['hover_video'] ?? '' );
                             ?>
                             <?php if ( $s['link_style'] === 'card' ) : ?>

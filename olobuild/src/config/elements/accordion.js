@@ -1,3 +1,5 @@
+import { shadowField } from './_shared.js';
+
 export default {
   type: 'accordion',
   name: 'Fisarmonica',
@@ -28,6 +30,7 @@ export default {
     border_radius: '8',
     faq_schema: false,
     separator_style: 'border',
+    shadow: 'none',
   },
   fields: [
     { key: 'panels', label: 'Pannelli', type: 'content-items', supportsDynamic: true,
@@ -87,5 +90,6 @@ export default {
     { key: 'gap', label: 'Gap (px)', type: 'range', min: 0, max: 48, step: 4 },
     { key: 'border_radius', label: 'Border Radius', type: 'border-radius' },
     { key: 'faq_schema', label: 'Schema FAQ', type: 'toggle' },
+    shadowField,
   ],
 };

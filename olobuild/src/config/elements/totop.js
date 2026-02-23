@@ -1,3 +1,5 @@
+import { borderFields, borderDefaults, shadowField } from './_shared.js';
+
 export default {
   type: 'totop',
   name: 'Torna su',
@@ -7,6 +9,8 @@ export default {
     alignment: 'right',
     style: 'default',
     smooth: true,
+    shadow: 'none',
+    ...borderDefaults,
   },
   fields: [
     { key: 'alignment', label: 'Allineamento', type: 'select', options: [
@@ -19,5 +23,7 @@ export default {
       { value: 'primary', label: 'Primary' },
     ]},
     { key: 'smooth', label: 'Scorrimento fluido', type: 'toggle' },
+    shadowField,
+    ...borderFields,
   ],
 };

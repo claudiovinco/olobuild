@@ -1,3 +1,5 @@
+import { borderFields, borderDefaults, shadowField } from './_shared.js';
+
 export default {
   type: 'headline',
   name: 'Titolo',
@@ -13,6 +15,8 @@ export default {
     heading_color: '#F3F4F6',
     subtitle_color: '#9CA3AF',
     heading_size: 'lg',
+    shadow: 'none',
+    ...borderDefaults,
   },
   fields: [
     { key: 'heading', label: 'Titolo', type: 'editor', mode: 'inline' },
@@ -46,5 +50,7 @@ export default {
       { value: 'lg', label: 'Grande' },
       { value: 'xl', label: 'Extra grande' },
     ]},
+    shadowField,
+    ...borderFields,
   ],
 };

@@ -1,3 +1,5 @@
+import { borderFields, borderDefaults, shadowField } from './_shared.js';
+
 export default {
   type: 'serviceamenities',
   name: 'Servizi e Comfort',
@@ -18,6 +20,8 @@ export default {
     icon_size: '18',
     text_color: '#374151',
     text_size: '14',
+    shadow: 'none',
+    ...borderDefaults,
   },
   fields: [
     { type: 'separator', label: 'Sorgente dati' },
@@ -47,5 +51,7 @@ export default {
       condition: { field: 'use_icons', value: false } },
     { key: 'text_color', label: 'Colore testo', type: 'color' },
     { key: 'text_size', label: 'Dimensione testo (px)', type: 'range', min: 12, max: 18, step: 1 },
+    shadowField,
+    ...borderFields,
   ],
 };

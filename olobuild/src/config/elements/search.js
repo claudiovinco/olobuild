@@ -1,3 +1,5 @@
+import { borderFields, borderDefaults, shadowField } from './_shared.js';
+
 export default {
   type: 'search',
   name: 'Ricerca',
@@ -8,6 +10,8 @@ export default {
     style: 'default',
     size: '',
     show_icon: true,
+    shadow: 'none',
+    ...borderDefaults,
   },
   fields: [
     { key: 'placeholder', label: 'Placeholder', type: 'text' },
@@ -21,5 +25,7 @@ export default {
       { value: 'large', label: 'Grande' },
     ]},
     { key: 'show_icon', label: 'Mostra icona', type: 'toggle' },
+    shadowField,
+    ...borderFields,
   ],
 };

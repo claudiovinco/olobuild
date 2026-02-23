@@ -1,3 +1,5 @@
+import { borderFields, borderDefaults, shadowField } from './_shared.js';
+
 export default {
   type: 'icon',
   name: 'Icona',
@@ -9,6 +11,8 @@ export default {
     color: '',
     link_url: '',
     link_target: '_self',
+    shadow: 'none',
+    ...borderDefaults,
   },
   fields: [
     { key: 'icon', label: 'Nome icona', type: 'icon' },
@@ -19,5 +23,7 @@ export default {
       { value: '_self', label: 'Stessa finestra' },
       { value: '_blank', label: 'Nuova finestra' },
     ]},
+    shadowField,
+    ...borderFields,
   ],
 };

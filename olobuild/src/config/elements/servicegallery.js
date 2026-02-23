@@ -1,3 +1,5 @@
+import { borderFields, borderDefaults, shadowField } from './_shared.js';
+
 export default {
   type: 'servicegallery',
   name: 'Galleria Servizio',
@@ -35,6 +37,8 @@ export default {
     more_size: '28',
     // Mobile
     mobile_columns: '2',
+    shadow: 'none',
+    ...borderDefaults,
   },
   fields: [
     { type: 'separator', label: 'Sorgente dati' },
@@ -88,5 +92,7 @@ export default {
     { key: 'more_bg', label: 'Sfondo overlay', type: 'color' },
     { key: 'more_color', label: 'Colore testo', type: 'color' },
     { key: 'more_size', label: 'Dimensione testo (px)', type: 'range', min: 16, max: 48, step: 2 },
+    shadowField,
+    ...borderFields,
   ],
 };

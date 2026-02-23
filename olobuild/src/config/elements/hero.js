@@ -1,3 +1,5 @@
+import { borderFields, borderDefaults, shadowField } from './_shared.js';
+
 export default {
   type: 'hero',
   name: 'Hero',
@@ -58,7 +60,8 @@ export default {
 
     // Avanzato
     full_bleed: false,
-    border_radius: '0',
+    shadow: 'none',
+    ...borderDefaults,
   },
   fields: [
     // ── Contenuto ──
@@ -174,6 +177,7 @@ export default {
     // ── Avanzato ──
     { type: 'separator', label: 'Avanzato' },
     { key: 'full_bleed', label: 'Full width (100vw)', type: 'toggle' },
-    { key: 'border_radius', label: 'Raggio bordo (px)', type: 'range', min: 0, max: 50, step: 1 },
+    shadowField,
+    ...borderFields,
   ],
 };

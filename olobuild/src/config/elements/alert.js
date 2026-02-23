@@ -1,3 +1,5 @@
+import { borderFields, borderDefaults, shadowField } from './_shared.js';
+
 export default {
   type: 'alert',
   name: 'Avviso',
@@ -8,6 +10,8 @@ export default {
     title: 'Attenzione!',
     message: 'Questo è un avviso informativo.',
     show_icon: true,
+    shadow: 'none',
+    ...borderDefaults,
   },
   fields: [
     { key: 'alert_type', label: 'Tipo', type: 'select', options: [
@@ -19,5 +23,7 @@ export default {
     { key: 'title', label: 'Titolo', type: 'editor', mode: 'inline' },
     { key: 'message', label: 'Messaggio', type: 'editor', mode: 'block' },
     { key: 'show_icon', label: 'Mostra icona', type: 'toggle' },
+    shadowField,
+    ...borderFields,
   ],
 };

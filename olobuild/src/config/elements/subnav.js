@@ -1,3 +1,5 @@
+import { borderFields, borderDefaults, shadowField } from './_shared.js';
+
 export default {
   type: 'subnav',
   name: 'Subnav',
@@ -11,6 +13,8 @@ export default {
     ],
     style: 'default',
     divider: false,
+    shadow: 'none',
+    ...borderDefaults,
   },
   fields: [
     { key: 'items', label: 'Elementi', type: 'content-items', supportsDynamic: true,
@@ -25,5 +29,7 @@ export default {
       { value: 'pill', label: 'Pill' },
     ]},
     { key: 'divider', label: 'Separatore', type: 'toggle' },
+    shadowField,
+    ...borderFields,
   ],
 };

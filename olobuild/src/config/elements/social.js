@@ -1,3 +1,5 @@
+import { borderFields, borderDefaults, shadowField } from './_shared.js';
+
 export default {
   type: 'social',
   name: 'Link social',
@@ -8,6 +10,8 @@ export default {
     size: '32',
     alignment: 'center',
     gap: '12',
+    shadow: 'none',
+    ...borderDefaults,
   },
   fields: [
     { key: 'links', label: 'Link (piattaforma|url per riga)', type: 'textarea' },
@@ -18,5 +22,7 @@ export default {
       { value: 'right', label: 'Destra' },
     ]},
     { key: 'gap', label: 'Gap (px)', type: 'range', min: 0, max: 48, step: 4 },
+    shadowField,
+    ...borderFields,
   ],
 };

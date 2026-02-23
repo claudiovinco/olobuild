@@ -1,3 +1,5 @@
+import { borderFields, borderDefaults, shadowField } from './_shared.js';
+
 export default {
   type: 'overlayslider',
   name: 'Overlay Slider',
@@ -22,6 +24,8 @@ export default {
     ribbon_position: 'top-right',
     ribbon_bg: '#e11d48',
     ribbon_color: '#ffffff',
+    shadow: 'none',
+    ...borderDefaults,
   },
   fields: [
     { key: 'slides', label: 'Slide', type: 'content-items', supportsDynamic: true,
@@ -104,5 +108,7 @@ export default {
     ]},
     { key: 'ribbon_bg', label: 'Sfondo ribbon', type: 'color' },
     { key: 'ribbon_color', label: 'Testo ribbon', type: 'color' },
+    shadowField,
+    ...borderFields,
   ],
 };

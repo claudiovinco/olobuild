@@ -8,7 +8,7 @@
       :dynamic="dynamic"
       @update:dynamic="onDynamicUpdate"
     >
-      <component :is="fieldComponent" v-bind="fieldProps" @update:modelValue="$emit('update:modelValue', $event)" />
+      <component :is="fieldComponent" v-bind="fieldProps" @update:modelValue="$emit('update:modelValue', $event)" @update:attachmentId="$emit('update:attachmentId', $event)" />
     </DynamicFieldToggle>
 
     <!-- Non-dynamic field (original behavior) -->
@@ -68,12 +68,14 @@
         v-else-if="field.type === 'image'"
         :modelValue="modelValue"
         @update:modelValue="$emit('update:modelValue', $event)"
+        @update:attachmentId="$emit('update:attachmentId', $event)"
       />
 
       <FieldMedia
         v-else-if="field.type === 'media'"
         :modelValue="modelValue"
         @update:modelValue="$emit('update:modelValue', $event)"
+        @update:attachmentId="$emit('update:attachmentId', $event)"
       />
 
       <FieldGallery
@@ -148,7 +150,7 @@ const props = defineProps({
   dynamic: { type: Object, default: () => ({}) },
 });
 
-const emit = defineEmits(['update:modelValue', 'update:dynamic', 'confirm']);
+const emit = defineEmits(['update:modelValue', 'update:dynamic', 'update:attachmentId', 'confirm']);
 
 const resolvedOptions = computed(() => {
   if (props.field.optionsSource) {
@@ -171,6 +173,9 @@ const resolvedOptions = computed(() => {
     if (props.field.optionsSource === 'serviceList') {
       const list = (md.serviceList || []);
       return [{ value: '', label: '— Tutti i servizi —' }, ...list];
+    }
+    if (props.field.optionsSource === 'wpPages') {
+      return md.wpPages || [];
     }
   }
   return props.field.options || [];

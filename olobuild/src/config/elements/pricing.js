@@ -1,3 +1,5 @@
+import { shadowField } from './_shared.js';
+
 export default {
   type: 'pricing',
   name: 'Listino prezzi',
@@ -64,6 +66,7 @@ export default {
     border_radius: '12',
     border_width: '0',
     border_color: '#374151',
+    shadow: 'none',
   },
   fields: [
     // ── Contenuto ──
@@ -185,5 +188,6 @@ export default {
     { key: 'border_width', label: 'Bordo tile (px)', type: 'range', min: 0, max: 5, step: 1 },
     { key: 'border_color', label: 'Colore bordo tile', type: 'color',
       condition: { field: 'border_width', operator: '>', value: '0' } },
+    shadowField,
   ],
 };

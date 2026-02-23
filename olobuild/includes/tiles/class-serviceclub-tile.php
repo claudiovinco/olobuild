@@ -72,7 +72,7 @@ class Olo_ServiceClub_Tile extends Olo_Tile_Base {
         <div class="<?php echo esc_attr( $uid ); ?>" style="<?php echo $wrap_style; ?>">
             <?php if ( ! empty( $s['logo_url'] ) ) : ?>
                 <img src="<?php echo esc_url( $s['logo_url'] ); ?>" alt="<?php echo esc_attr( $group ); ?>"
-                     style="width:<?php echo absint( $s['logo_width'] ); ?>px;height:auto;flex-shrink:0" />
+                     style="width:<?php echo absint( $s['logo_width'] ); ?>px;height:auto;flex-shrink:0" loading="lazy" />
             <?php endif; ?>
 
             <div style="display:flex;flex-direction:column;gap:2px">

@@ -151,7 +151,7 @@ class Olo_Header_Integration {
         foreach ( $nodes as $node ) {
             if ( ! is_array( $node ) ) continue;
             $type = $node['type'] ?? '';
-            if ( $type === 'navmenu' ) {
+            if ( $type === 'navmenu' || $type === 'megamenu' ) {
                 return ( $node['settings']['header_mode'] ?? 'overlay' );
             }
             if ( ! empty( $node['children'] ) ) {

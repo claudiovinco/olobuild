@@ -1,3 +1,5 @@
+import { borderFields, borderDefaults, shadowField } from './_shared.js';
+
 export default {
   type: 'grid',
   name: 'Griglia',
@@ -16,6 +18,8 @@ export default {
     filter_align: 'left',
     masonry: false,
     card_style: 'default',
+    shadow: 'none',
+    ...borderDefaults,
   },
   fields: [
     { key: 'items', label: 'Elementi', type: 'content-items', supportsDynamic: true,
@@ -59,5 +63,7 @@ export default {
       { value: 'default', label: 'Predefinito' },
       { value: 'minimal', label: 'Minimale' },
     ]},
+    shadowField,
+    ...borderFields,
   ],
 };

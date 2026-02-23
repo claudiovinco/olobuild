@@ -90,15 +90,8 @@ class Olo_Popup_Tile extends Olo_Tile_Base {
         // Button text
         $btn_text = esc_html( $s['button_text'] ?: 'Apri' );
 
-        // Shadow map
-        $shadow_map = [
-            'none' => 'none',
-            'sm'   => '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.06)',
-            'md'   => '0 4px 6px rgba(0,0,0,0.1), 0 2px 4px rgba(0,0,0,0.06)',
-            'lg'   => '0 10px 30px rgba(0,0,0,0.15), 0 4px 12px rgba(0,0,0,0.1)',
-            'xl'   => '0 20px 50px rgba(0,0,0,0.2), 0 8px 20px rgba(0,0,0,0.12)',
-        ];
-        $shadow = $shadow_map[ $s['modal_shadow'] ?? 'lg' ] ?? $shadow_map['lg'];
+        // Shadow
+        $shadow = Olo_Tile_Utils::shadow( $s['modal_shadow'] ?? 'lg' );
 
         // Overlay opacity (0-100 → 0.0-1.0)
         $overlay_pct = max( 0, min( 100, intval( $s['modal_overlay'] ?? 60 ) ) );
@@ -251,7 +244,7 @@ class Olo_Popup_Tile extends Olo_Tile_Base {
         // Image HTML
         $img_html = '';
         if ( $has_image ) {
-            $img_html = '<div class="olo-popup-image"><img src="' . esc_url( $image ) . '" alt="" loading="lazy" style="width:100%;height:auto;" /></div>';
+            $img_html = '<div class="olo-popup-image"><img src="' . esc_url( $image ) . '" alt="' . esc_attr( wp_strip_all_tags( $s['title'] ?? '' ) ) . '" loading="lazy" style="width:100%;height:auto;" /></div>';
         }
 
         // Content HTML

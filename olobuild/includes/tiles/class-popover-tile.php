@@ -110,7 +110,7 @@ class Olo_Popover_Tile extends Olo_Tile_Base {
         </style>
         <div class="olo-popover uk-inline <?php echo $uid; ?>" style="width:100%;">
             <?php if ( ! empty( $s['image'] ) ) : ?>
-                <img src="<?php echo esc_url( $s['image'] ); ?>" alt="<?php echo esc_attr( $s['image_alt'] ); ?>" style="<?php echo esc_attr( $img_style ); ?>">
+                <?php echo Olo_Tile_Utils::img_srcset( absint( $s['image_id'] ?? 0 ), $s['image'], $s['image_alt'] ?? '', '', 'full', 'style="' . esc_attr( $img_style ) . '"' ); ?>
             <?php else : ?>
                 <div style="width:100%;<?php echo $image_height > 0 ? 'height:' . $image_height . 'px;' : 'padding-bottom:56.25%;'; ?>background:#1f2937;"></div>
             <?php endif; ?>

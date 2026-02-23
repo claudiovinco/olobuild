@@ -1,3 +1,5 @@
+import { borderFields, borderDefaults, shadowField } from './_shared.js';
+
 export default {
   type: 'table',
   name: 'Tabella',
@@ -11,7 +13,8 @@ export default {
     header_bg: '#1F2937',
     header_text_color: '#F3F4F6',
     text_color: '#D1D5DB',
-    border_color: '#374151',
+    shadow: 'none',
+    ...borderDefaults,
   },
   fields: [
     { key: 'table_data', label: 'Dati tabella (col|col per riga)', type: 'textarea' },
@@ -21,6 +24,7 @@ export default {
     { key: 'header_bg', label: 'Sfondo intestazione', type: 'color' },
     { key: 'header_text_color', label: 'Colore testo intestazione', type: 'color' },
     { key: 'text_color', label: 'Colore testo', type: 'color' },
-    { key: 'border_color', label: 'Colore bordo', type: 'color' },
+    shadowField,
+    ...borderFields,
   ],
 };

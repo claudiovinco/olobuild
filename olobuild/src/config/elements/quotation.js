@@ -1,3 +1,5 @@
+import { borderFields, borderDefaults, shadowField } from './_shared.js';
+
 export default {
   type: 'quotation',
   name: 'Citazione',
@@ -8,6 +10,8 @@ export default {
     author: 'John Lennon',
     style: 'default',
     alignment: 'left',
+    shadow: 'none',
+    ...borderDefaults,
   },
   fields: [
     { key: 'content', label: 'Citazione', type: 'editor', mode: 'block' },
@@ -21,5 +25,7 @@ export default {
       { value: 'center', label: 'Centro' },
       { value: 'right', label: 'Destra' },
     ]},
+    shadowField,
+    ...borderFields,
   ],
 };

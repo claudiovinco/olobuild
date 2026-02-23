@@ -1,3 +1,5 @@
+import { borderFields, borderDefaults, shadowField } from './_shared.js';
+
 export default {
   type: 'code',
   name: 'Codice',
@@ -7,10 +9,14 @@ export default {
     code: 'console.log("Hello World");',
     language: 'javascript',
     show_line_numbers: false,
+    shadow: 'none',
+    ...borderDefaults,
   },
   fields: [
     { key: 'code', label: 'Codice', type: 'textarea' },
     { key: 'language', label: 'Linguaggio', type: 'text' },
     { key: 'show_line_numbers', label: 'Mostra numeri di riga', type: 'toggle' },
+    shadowField,
+    ...borderFields,
   ],
 };

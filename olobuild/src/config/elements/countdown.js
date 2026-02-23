@@ -1,3 +1,5 @@
+import { borderFields, borderDefaults, shadowField } from './_shared.js';
+
 export default {
   type: 'countdown',
   name: 'Conto alla rovescia',
@@ -26,6 +28,8 @@ export default {
     separator_font_size: '32',
     item_min_width: '70',
     padding: '32',
+    shadow: 'none',
+    ...borderDefaults,
   },
   fields: [
     { key: 'countdown_style', label: 'Stile', type: 'select', options: [
@@ -69,5 +73,7 @@ export default {
     { key: 'bg_color', label: 'Colore sfondo', type: 'color' },
     { key: 'text_color', label: 'Colore testo', type: 'color' },
     { key: 'accent_color', label: 'Colore accento', type: 'color' },
+    shadowField,
+    ...borderFields,
   ],
 };

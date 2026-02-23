@@ -89,6 +89,8 @@ import ServiceClubTile from './ServiceClubTile.vue';
 import ServiceRelatedTile from './ServiceRelatedTile.vue';
 import KillNextPrevTile from './KillNextPrevTile.vue';
 import LangSwitcherTile from './LangSwitcherTile.vue';
+import ServiceSearchTile from './ServiceSearchTile.vue';
+import ServiceResultsTile from './ServiceResultsTile.vue';
 
 const props = defineProps({
   tile: { type: Object, required: true },
@@ -178,6 +180,8 @@ const tileComponents = {
   servicerelated: ServiceRelatedTile,
   killnextprev: KillNextPrevTile,
   langswitcher: LangSwitcherTile,
+  servicesearch: ServiceSearchTile,
+  serviceresults: ServiceResultsTile,
 };
 
 const tileComponent = computed(() => {

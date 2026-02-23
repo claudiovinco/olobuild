@@ -86,7 +86,8 @@ class Olo_Marquee_Tile extends Olo_Tile_Base {
                         $url = is_array( $img ) ? ( $img['url'] ?? '' ) : $img;
                         $url = esc_url( $url );
                         if ( $url ) {
-                            $inner_html .= '<img class="olo-mq-img" src="' . $url . '" alt="" />';
+                            $alt = is_array( $img ) ? esc_attr( $img['alt'] ?? '' ) : '';
+                            $inner_html .= '<img class="olo-mq-img" src="' . $url . '" alt="' . $alt . '" loading="lazy" />';
                         }
                     }
                 }

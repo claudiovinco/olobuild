@@ -1,3 +1,5 @@
+import { borderFields, borderDefaults, shadowField } from './_shared.js';
+
 export default {
   type: 'panelslider',
   name: 'Panel Slider',
@@ -15,6 +17,8 @@ export default {
     show_arrows: true,
     autoplay: false,
     autoplay_interval: '5000',
+    shadow: 'none',
+    ...borderDefaults,
   },
   fields: [
     { key: 'panels', label: 'Pannelli', type: 'content-items', supportsDynamic: true,
@@ -52,5 +56,7 @@ export default {
     { key: 'show_arrows', label: 'Mostra frecce', type: 'toggle' },
     { key: 'autoplay', label: 'Autoplay', type: 'toggle' },
     { key: 'autoplay_interval', label: 'Intervallo autoplay (ms)', type: 'range', min: 1000, max: 10000, step: 500 },
+    shadowField,
+    ...borderFields,
   ],
 };

@@ -83,7 +83,7 @@ class Olo_SwitcherPanel_Tile extends Olo_Tile_Base {
             <!-- Hero image with nav overlay -->
             <div class="olo-sp-hero">
                 <?php if ( ! empty( $hero_image ) ) : ?>
-                    <img src="<?php echo esc_url( $hero_image ); ?>" alt="" class="olo-sp-hero__img" loading="lazy">
+                    <img src="<?php echo esc_url( $hero_image ); ?>" alt="<?php echo esc_attr( $s['hero_alt'] ?? '' ); ?>" class="olo-sp-hero__img" loading="lazy">
                 <?php else : ?>
                     <div class="olo-sp-hero__placeholder"></div>
                 <?php endif; ?>

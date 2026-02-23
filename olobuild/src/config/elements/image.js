@@ -1,3 +1,5 @@
+import { borderFields, borderDefaults, shadowField } from './_shared.js';
+
 export default {
   type: 'image',
   name: 'Immagine',
@@ -13,6 +15,8 @@ export default {
     link_target: '_self',
     object_fit: 'cover',
     height: '300px',
+    shadow: 'none',
+    ...borderDefaults,
   },
   fields: [
     { key: 'image_url', label: 'Immagine', type: 'image' },
@@ -31,5 +35,7 @@ export default {
       { value: 'fill', label: 'Riempi (deforma)' },
     ]},
     { key: 'height', label: 'Altezza', type: 'text' },
+    shadowField,
+    ...borderFields,
   ],
 };

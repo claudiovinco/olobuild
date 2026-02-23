@@ -49,7 +49,7 @@ const { openGallery } = useMediaPicker();
 function addImages() {
   openGallery((newImages) => {
     const current = props.modelValue || [];
-    const merged = [...current, ...newImages.map(img => ({ url: img.url, alt: img.alt, caption: '' }))];
+    const merged = [...current, ...newImages.map(img => ({ url: img.url, alt: img.alt, id: img.id, caption: '' }))];
     emit('update:modelValue', merged);
   });
 }

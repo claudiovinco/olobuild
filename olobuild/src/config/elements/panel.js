@@ -1,3 +1,5 @@
+import { borderFields, borderDefaults, shadowField } from './_shared.js';
+
 export default {
   type: 'panel',
   name: 'Pannello',
@@ -14,6 +16,8 @@ export default {
     link_url: '',
     link_target: '_self',
     title_element: 'h3',
+    shadow: 'none',
+    ...borderDefaults,
   },
   fields: [
     { key: 'style', label: 'Stile', type: 'select', options: [
@@ -39,5 +43,7 @@ export default {
       { value: 'h4', label: 'H4' },
       { value: 'div', label: 'DIV' },
     ]},
+    shadowField,
+    ...borderFields,
   ],
 };

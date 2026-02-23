@@ -1,3 +1,5 @@
+import { borderFields, borderDefaults } from './_shared.js';
+
 const shapeOptions = [
   { value: 'none', label: 'Nessuna' },
   { value: 'wave', label: 'Onda' },
@@ -108,6 +110,7 @@ export default {
     divider_color: '#374151',
     divider_width: '100',
     divider_thickness: '1',
+    ...borderDefaults,
   },
   fields: [
     { key: 'height', label: 'Altezza (px)', type: 'range', min: 0, max: 300, step: 5 },
@@ -151,5 +154,6 @@ export default {
       condition: { field: 'show_divider', value: true } },
     { key: 'divider_thickness', label: 'Spessore linea (px)', type: 'range', min: 1, max: 10, step: 1,
       condition: { field: 'show_divider', value: true } },
+    ...borderFields,
   ],
 };

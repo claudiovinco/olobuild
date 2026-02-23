@@ -1,3 +1,5 @@
+import { borderFields, borderDefaults, shadowField } from './_shared.js';
+
 export default {
   type: 'list',
   name: 'Lista',
@@ -10,6 +12,8 @@ export default {
     text_color: '#F3F4F6',
     spacing: '12',
     icon_size: '18',
+    shadow: 'none',
+    ...borderDefaults,
   },
   fields: [
     { key: 'items', label: 'Elementi (icona|testo per riga)', type: 'textarea' },
@@ -24,5 +28,7 @@ export default {
     { key: 'text_color', label: 'Colore testo', type: 'color' },
     { key: 'spacing', label: 'Spaziatura (px)', type: 'range', min: 4, max: 32, step: 2 },
     { key: 'icon_size', label: 'Dim. icona (px)', type: 'range', min: 14, max: 32, step: 2 },
+    shadowField,
+    ...borderFields,
   ],
 };

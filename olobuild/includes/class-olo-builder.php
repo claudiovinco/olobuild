@@ -163,6 +163,7 @@ class Olo_Builder {
             'taxonomies'     => $this->get_public_taxonomies(),
             'metaPrefixes'   => $this->get_meta_prefixes(),
             'serviceList'    => $this->get_service_list(),
+            'wpPages'        => $this->get_wp_pages(),
             'siteInfo'       => [
                 'name'     => get_bloginfo( 'name' ),
                 'tagline'  => get_bloginfo( 'description' ),
@@ -177,6 +178,7 @@ class Olo_Builder {
     }
 
     private function register_core_tiles() {
+        require_once OLO_PATH . 'includes/class-tile-utils.php';
         require_once OLO_PATH . 'includes/tiles/class-tile-base.php';
         require_once OLO_PATH . 'includes/tiles/class-section-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-column-tile.php';
@@ -261,6 +263,8 @@ class Olo_Builder {
         require_once OLO_PATH . 'includes/tiles/class-servicerelated-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-killnextprev-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-langswitcher-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-servicesearch-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-serviceresults-tile.php';
 
         $manager = Olo_Tile_Manager::instance();
         $manager->register_tile( new Olo_Section_Tile() );
@@ -346,6 +350,8 @@ class Olo_Builder {
         $manager->register_tile( new Olo_ServiceRelated_Tile() );
         $manager->register_tile( new Olo_KillNextPrev_Tile() );
         $manager->register_tile( new Olo_LangSwitcher_Tile() );
+        $manager->register_tile( new Olo_ServiceSearch_Tile() );
+        $manager->register_tile( new Olo_ServiceResults_Tile() );
     }
 
     /**
@@ -489,6 +495,21 @@ class Olo_Builder {
         foreach ( $posts as $p ) {
             $result[] = [
                 'value' => (string) $p->ID,
+                'label' => $p->post_title,
+            ];
+        }
+        return $result;
+    }
+
+    /**
+     * Get published WP pages for select dropdowns in the builder.
+     */
+    private function get_wp_pages() {
+        $pages  = get_pages( [ 'post_status' => 'publish', 'sort_column' => 'post_title' ] );
+        $result = [ [ 'value' => '', 'label' => '— Seleziona pagina —' ] ];
+        foreach ( $pages as $p ) {
+            $result[] = [
+                'value' => str_replace( home_url(), '', get_permalink( $p->ID ) ),
                 'label' => $p->post_title,
             ];
         }

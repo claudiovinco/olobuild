@@ -71,7 +71,7 @@ class Olo_Overlay_Tile extends Olo_Tile_Base {
         ?>
         <<?php echo $tag; ?> id="<?php echo esc_attr( $id ); ?>"<?php echo $link_attr; ?> class="olo-overlay uk-inline uk-transition-toggle" style="display:block;border-radius:<?php echo $radius_css; ?>;height:<?php echo $h; ?>px;overflow:hidden;cursor:pointer;">
             <?php if ( ! empty( $s['image_url'] ) ) : ?>
-                <img src="<?php echo esc_url( $s['image_url'] ); ?>" alt="" uk-cover>
+                <?php echo Olo_Tile_Utils::img_srcset( absint( $s['image_url_id'] ?? 0 ), $s['image_url'], $s['title'] ?? '', '', 'full', 'uk-cover' ); ?>
             <?php else : ?>
                 <div style="background:#374151;" uk-cover></div>
             <?php endif; ?>

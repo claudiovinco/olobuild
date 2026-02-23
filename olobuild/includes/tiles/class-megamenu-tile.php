@@ -148,8 +148,7 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
         $p_bt        = intval( $s['panel_border_top'] );
         $p_bc        = $this->safe_color( $s['panel_border_color'] ) ?: 'var(--olo-color-primary, #6366F1)';
         $p_anim      = $s['panel_animation'] === 'slide-down' ? 'slide' : 'fade';
-        $shadow_map  = [ 'sm' => '0 4px 12px rgba(0,0,0,.08)', 'md' => '0 8px 30px rgba(0,0,0,.12)', 'lg' => '0 16px 48px rgba(0,0,0,.18)' ];
-        $p_shadow    = $shadow_map[ $s['panel_shadow'] ] ?? 'none';
+        $p_shadow    = Olo_Tile_Utils::shadow( $s['panel_shadow'] ?? 'none', 'panel' );
         $dividers    = ! empty( $s['show_dividers'] );
 
         // Panel typography
@@ -692,7 +691,7 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
             <nav class="olo-mm-offcanvas" aria-label="Mobile menu">
                 <div class="olo-mm-oc-header">
                     <?php if ( ! empty( $s['mobile_logo'] ) ) : ?>
-                        <div class="olo-mm-oc-logo"><img src="<?php echo esc_url( $s['mobile_logo'] ); ?>" alt="Logo" /></div>
+                        <div class="olo-mm-oc-logo"><img src="<?php echo esc_url( $s['mobile_logo'] ); ?>" alt="Logo" loading="lazy" /></div>
                     <?php else : ?>
                         <div></div>
                     <?php endif; ?>
@@ -886,6 +885,7 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
             var showOnUp = <?php echo $show_on_up; ?>;
             var header = document.querySelector("header.olo-site-header");
             if (header) {
+                header.classList.remove("olo-header-overlay", "olo-header-classic");
                 header.classList.add("olo-header-" + headerMode);
                 if (stickyEnabled) {
                     var lastY = 0, hidden = false;

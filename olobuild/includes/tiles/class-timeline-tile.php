@@ -133,7 +133,7 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
         if ( ! empty( $video ) ) {
             $html .= $this->get_video_embed( $video );
         } elseif ( ! empty( $image ) ) {
-            $html .= '<img src="' . esc_url( $image ) . '" alt="" loading="lazy" />';
+            $html .= '<img src="' . esc_url( $image ) . '" alt="' . esc_attr( wp_strip_all_tags( $item['title'] ?? '' ) ) . '" loading="lazy" />';
         }
 
         $html .= '</div>';
@@ -182,13 +182,7 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
         $c_hover   = $s['card_hover'] ?: 'none';
         $c_maxw    = intval( $s['card_max_width'] ?? 0 );
 
-        $shadow_map = [
-            'none' => 'none',
-            'sm'   => '0 2px 6px rgba(0,0,0,.15)',
-            'md'   => '0 4px 12px rgba(0,0,0,.2)',
-            'lg'   => '0 8px 24px rgba(0,0,0,.3)',
-        ];
-        $c_shadow = $shadow_map[ $s['card_shadow'] ] ?? 'none';
+        $c_shadow = Olo_Tile_Utils::shadow( $s['card_shadow'] ?? 'none' );
 
         $d_clr   = $this->safe_color( $s['date_color'] ) ?: '#9CA3AF';
         $d_size  = intval( $s['date_size'] ) ?: 14;
