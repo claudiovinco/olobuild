@@ -165,6 +165,7 @@ class Olo_Builder {
             'serviceList'    => $this->get_service_list(),
             'wpPages'        => $this->get_wp_pages(),
             'singlePostItems' => $this->get_single_post_items(),
+            '_debug_tpl_id'   => absint( $_GET['template_id'] ?? 0 ),
             'siteInfo'       => [
                 'name'     => get_bloginfo( 'name' ),
                 'tagline'  => get_bloginfo( 'description' ),
@@ -266,6 +267,7 @@ class Olo_Builder {
         require_once OLO_PATH . 'includes/tiles/class-langswitcher-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-servicesearch-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-serviceresults-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-hostcard-tile.php';
 
         $manager = Olo_Tile_Manager::instance();
         $manager->register_tile( new Olo_Section_Tile() );
@@ -353,6 +355,7 @@ class Olo_Builder {
         $manager->register_tile( new Olo_LangSwitcher_Tile() );
         $manager->register_tile( new Olo_ServiceSearch_Tile() );
         $manager->register_tile( new Olo_ServiceResults_Tile() );
+        $manager->register_tile( new Olo_HostCard_Tile() );
     }
 
     /**
@@ -514,9 +517,17 @@ class Olo_Builder {
         $post_types = get_post_types( [ 'public' => true ], 'names' );
         $target_pt  = '';
         foreach ( $post_types as $pt ) {
-            if ( (int) get_option( "olo_active_single_{$pt}", 0 ) === $tpl_id ) {
+            $opt_val = get_option( "olo_active_single_{$pt}", 0 );
+            if ( (int) $opt_val === $tpl_id ) {
                 $target_pt = $pt;
                 break;
+            }
+        }
+        // Fallback: also check the template's own post meta for assigned post type
+        if ( ! $target_pt ) {
+            $meta_pt = get_post_meta( $tpl_id, '_olo_single_post_type', true );
+            if ( $meta_pt && post_type_exists( $meta_pt ) ) {
+                $target_pt = $meta_pt;
             }
         }
         if ( ! $target_pt ) return [];

@@ -71,6 +71,12 @@ class Olo_Booking_Rest_API_Manager {
             'permission_callback' => [ $this, 'can_manage' ],
         ] );
 
+        register_rest_route( $this->ns, '/manager/services/(?P<id>\d+)/clubs', [
+            'methods'             => 'PUT',
+            'callback'            => [ $this, 'update_clubs' ],
+            'permission_callback' => [ $this, 'can_manage' ],
+        ] );
+
         // ── Availability & Pricing (public) ──
         register_rest_route( $this->ns, '/availability/(?P<id>\d+)/month', [
             'methods'             => 'GET',
@@ -574,6 +580,44 @@ class Olo_Booking_Rest_API_Manager {
             ];
         }
         return new WP_REST_Response( [ 'success' => true, 'gallery' => $images ], 200 );
+    }
+
+    public function update_clubs( $request ) {
+        $id = (int) $request['id'];
+        if ( ! $this->check_service_access( $id ) ) {
+            return new WP_REST_Response( [ 'message' => 'Non autorizzato.' ], 403 );
+        }
+
+        $params = $request->get_json_params();
+        $clubs  = [];
+        foreach ( ( $params['clubs'] ?? [] ) as $c ) {
+            $name = sanitize_text_field( $c['name'] ?? '' );
+            $cat  = sanitize_text_field( $c['category'] ?? '' );
+            if ( $name === '' && $cat === '' ) continue;
+            $logo_id  = absint( $c['logo_id'] ?? 0 );
+            $logo_url = $logo_id ? wp_get_attachment_image_url( $logo_id, 'thumbnail' ) : '';
+            $url      = esc_url_raw( $c['url'] ?? '' );
+            $clubs[] = [
+                'name'     => $name,
+                'category' => $cat,
+                'logo_id'  => $logo_id,
+                'logo_url' => $logo_url ?: '',
+                'url'      => $url,
+            ];
+        }
+        update_post_meta( $id, '_olo_service_clubs', $clubs );
+
+        // Backward compat: sync first club to legacy fields
+        $first = $clubs[0] ?? null;
+        update_post_meta( $id, '_olo_service_club_group', $first ? $first['name'] : '' );
+        update_post_meta( $id, '_olo_service_club_category', $first ? $first['category'] : '' );
+
+        // Sincronizza meta alle copie tradotte (olo-lang)
+        if ( class_exists( 'Olo_Lang_Post_Translation' ) ) {
+            Olo_Lang_Post_Translation::sync_service_meta_to_translations( $id );
+        }
+
+        return new WP_REST_Response( [ 'success' => true, 'clubs' => $clubs ], 200 );
     }
 
     /* =========================================================================
@@ -1535,6 +1579,24 @@ class Olo_Booking_Rest_API_Manager {
         // Club di Prodotto
         $data['club_group']    = get_post_meta( $id, '_olo_service_club_group', true ) ?: '';
         $data['club_category'] = get_post_meta( $id, '_olo_service_club_category', true ) ?: '';
+
+        // Club array (multi)
+        $raw_clubs = get_post_meta( $id, '_olo_service_clubs', true );
+        $clubs = [];
+        if ( is_array( $raw_clubs ) ) {
+            foreach ( $raw_clubs as $c ) {
+                $logo_id  = absint( $c['logo_id'] ?? 0 );
+                $logo_url = $logo_id ? wp_get_attachment_image_url( $logo_id, 'thumbnail' ) : '';
+                $clubs[] = [
+                    'name'     => $c['name'] ?? '',
+                    'category' => $c['category'] ?? '',
+                    'logo_id'  => $logo_id,
+                    'logo_url' => $logo_url ?: ( $c['logo_url'] ?? '' ),
+                    'url'      => $c['url'] ?? '',
+                ];
+            }
+        }
+        $data['clubs'] = $clubs;
 
         // Amenities
         $data['amenities'] = get_post_meta( $id, '_olo_service_amenities', true ) ?: [];

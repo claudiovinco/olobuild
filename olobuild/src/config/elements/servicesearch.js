@@ -36,6 +36,7 @@ export default {
         { value: 'altitude', label: 'Altitudine', icon: 'arrow-up' },
         { value: 'type', label: 'Tipologia', icon: 'home' },
         { value: 'amenities', label: 'Servizi', icon: 'star' },
+        { value: 'club', label: 'Club di Prodotto', icon: 'award' },
       ],
     },
 

@@ -91,6 +91,36 @@ import KillNextPrevTile from './KillNextPrevTile.vue';
 import LangSwitcherTile from './LangSwitcherTile.vue';
 import ServiceSearchTile from './ServiceSearchTile.vue';
 import ServiceResultsTile from './ServiceResultsTile.vue';
+import HostcardTile from './HostcardTile.vue';
+
+// Olo Space tiles
+import OloRoomHeroTile from './OloRoomHeroTile.vue';
+import OloRoomGalleryTile from './OloRoomGalleryTile.vue';
+import OloRoomDescriptionTile from './OloRoomDescriptionTile.vue';
+import OloRoomEquipmentTile from './OloRoomEquipmentTile.vue';
+import OloRoomHoursTile from './OloRoomHoursTile.vue';
+import OloRoomContactsTile from './OloRoomContactsTile.vue';
+import OloRoomMapTile from './OloRoomMapTile.vue';
+import OloRoomShareTile from './OloRoomShareTile.vue';
+import OloRoomRelatedTile from './OloRoomRelatedTile.vue';
+import OloRoomBadgesTile from './OloRoomBadgesTile.vue';
+import OloRoomStatusTile from './OloRoomStatusTile.vue';
+import OloRoomPricingTile from './OloRoomPricingTile.vue';
+import OloRoomRulesTile from './OloRoomRulesTile.vue';
+import OloRoomLocationTile from './OloRoomLocationTile.vue';
+import OloRoomAvailabilityTile from './OloRoomAvailabilityTile.vue';
+import OloRoomClosuresTile from './OloRoomClosuresTile.vue';
+import OloRoomCalendarTile from './OloRoomCalendarTile.vue';
+import OloRoomGridTile from './OloRoomGridTile.vue';
+import OloRoomBookingTile from './OloRoomBookingTile.vue';
+import OloRoomDashboardTile from './OloRoomDashboardTile.vue';
+import OloRoomInfoTile from './OloRoomInfoTile.vue';
+import OloRoomFeaturedTile from './OloRoomFeaturedTile.vue';
+import OloRoomSearchTile from './OloRoomSearchTile.vue';
+import OloRoomCategoriesTile from './OloRoomCategoriesTile.vue';
+import OloRoomDistrictsTile from './OloRoomDistrictsTile.vue';
+import OloRoomStatsPublicTile from './OloRoomStatsPublicTile.vue';
+import OloRoomCtaTile from './OloRoomCtaTile.vue';
 
 const props = defineProps({
   tile: { type: Object, required: true },
@@ -182,6 +212,36 @@ const tileComponents = {
   langswitcher: LangSwitcherTile,
   servicesearch: ServiceSearchTile,
   serviceresults: ServiceResultsTile,
+  hostcard: HostcardTile,
+
+  // Olo Space tiles
+  olo_room_hero: OloRoomHeroTile,
+  olo_room_gallery: OloRoomGalleryTile,
+  olo_room_description: OloRoomDescriptionTile,
+  olo_room_equipment: OloRoomEquipmentTile,
+  olo_room_hours: OloRoomHoursTile,
+  olo_room_contacts: OloRoomContactsTile,
+  olo_room_map: OloRoomMapTile,
+  olo_room_share: OloRoomShareTile,
+  olo_room_related: OloRoomRelatedTile,
+  olo_room_badges: OloRoomBadgesTile,
+  olo_room_status: OloRoomStatusTile,
+  olo_room_pricing: OloRoomPricingTile,
+  olo_room_rules: OloRoomRulesTile,
+  olo_room_location: OloRoomLocationTile,
+  olo_room_availability: OloRoomAvailabilityTile,
+  olo_room_closures: OloRoomClosuresTile,
+  olo_room_calendar: OloRoomCalendarTile,
+  olo_room_grid: OloRoomGridTile,
+  olo_room_booking: OloRoomBookingTile,
+  olo_room_dashboard: OloRoomDashboardTile,
+  olo_room_info: OloRoomInfoTile,
+  olo_room_featured: OloRoomFeaturedTile,
+  olo_room_search: OloRoomSearchTile,
+  olo_room_categories: OloRoomCategoriesTile,
+  olo_room_districts: OloRoomDistrictsTile,
+  olo_room_stats_public: OloRoomStatsPublicTile,
+  olo_room_cta: OloRoomCtaTile,
 };
 
 const tileComponent = computed(() => {

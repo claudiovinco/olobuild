@@ -1909,4 +1909,114 @@ html { background: var(--olom-bg, #696969); }
     .olom-sidebar-active { border-bottom-color: var(--olom-primary); border-left-color: transparent; }
     .olom-detail-main { max-height: none; padding: 16px; }
     .olom-section-card { padding: 20px; }
+    .olom-club-header { display: none; }
+    .olom-club-row { flex-wrap: wrap; gap: 8px; }
+    .olom-club-col-logo { width: 56px; }
+    .olom-club-col-name, .olom-club-col-cat, .olom-club-col-url { flex: 1 1 100%; min-width: 0; }
+}
+
+/* ── Club di Prodotto ── */
+.olom-btn-outline {
+  background: transparent;
+  border: 1.5px dashed #d1d5db;
+  color: #6b7280;
+  font-weight: 600;
+  transition: border-color .15s, color .15s;
+}
+.olom-btn-outline:hover { border-color: var(--olom-primary); color: var(--olom-primary); }
+
+.olom-club-table { margin-top: 12px; }
+
+.olom-club-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  color: #9ca3af;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.olom-club-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-bottom: 1px solid #f3f4f6;
+  transition: background .1s;
+}
+.olom-club-row:hover { background: #f9fafb; }
+
+.olom-club-col-logo {
+  width: 64px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  position: relative;
+}
+.olom-club-col-name { flex: 2; min-width: 0; }
+.olom-club-col-cat { flex: 1.2; min-width: 0; }
+.olom-club-col-url { flex: 1.5; min-width: 0; }
+.olom-club-col-actions { width: 36px; flex-shrink: 0; text-align: center; }
+
+.olom-club-col-name input,
+.olom-club-col-cat input,
+.olom-club-col-url input {
+  width: 100%;
+  padding: 6px 10px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 13px;
+  transition: border-color .15s;
+}
+.olom-club-col-name input:focus,
+.olom-club-col-cat input:focus,
+.olom-club-col-url input:focus { border-color: var(--olom-primary); outline: none; }
+
+.olom-club-logo-wrap {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  border: 1.5px dashed #d1d5db;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  overflow: hidden;
+  transition: border-color .15s;
+  background: #f9fafb;
+}
+.olom-club-logo-wrap:hover { border-color: var(--olom-primary); }
+
+.olom-club-logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.olom-club-logo-placeholder {
+  font-size: 20px;
+  color: #d1d5db;
+  font-weight: 300;
+}
+
+.olom-club-logo-remove {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #dc2626;
+  color: #fff;
+  font-size: 12px;
+  line-height: 18px;
+  text-align: center;
+  border: none;
+  cursor: pointer;
+  padding: 0;
 }

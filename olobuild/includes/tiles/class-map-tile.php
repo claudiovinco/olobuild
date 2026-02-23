@@ -53,6 +53,17 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         'svc_popup_show_excerpt'   => true,
         'svc_popup_show_price'     => true,
         'svc_popup_show_altitude'  => true,
+        'svc_popup_show_specs'     => true,
+        'svc_popup_show_amenities' => false,
+        'svc_popup_show_gallery'   => false,
+        'svc_popup_show_valley'    => true,
+        'svc_popup_max_width'      => '280',
+        'svc_popup_img_height'     => '180',
+        'svc_popup_btn_text'       => 'Scopri e Prenota',
+        'svc_popup_btn_color'      => '#3b82f6',
+        'svc_popup_bg'             => '#ffffff',
+        'svc_popup_color'          => '#333333',
+        'svc_popup_radius'         => '8',
         'border_radius'        => '8',
     ];
 
@@ -451,18 +462,29 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         }
 
         $config = [
-            'mode'           => 'services',
-            'locations'      => $locations,
-            'center'         => $center,
-            'zoom'           => absint( $s['svc_default_zoom'] ),
-            'tileLayer'      => $s['svc_tile_layer'],
-            'cluster'        => (bool) $s['svc_cluster'],
-            'fitBounds'      => (bool) $s['svc_fit_bounds'],
-            'popupImage'     => (bool) $s['svc_popup_show_image'],
-            'popupExcerpt'   => (bool) $s['svc_popup_show_excerpt'],
-            'popupPrice'     => (bool) $s['svc_popup_show_price'],
-            'popupAltitude'  => (bool) $s['svc_popup_show_altitude'],
-            'popupLink'      => true,
+            'mode'              => 'services',
+            'locations'         => $locations,
+            'center'            => $center,
+            'zoom'              => absint( $s['svc_default_zoom'] ),
+            'tileLayer'         => $s['svc_tile_layer'],
+            'cluster'           => (bool) $s['svc_cluster'],
+            'fitBounds'         => (bool) $s['svc_fit_bounds'],
+            'popupImage'        => (bool) $s['svc_popup_show_image'],
+            'popupExcerpt'      => (bool) $s['svc_popup_show_excerpt'],
+            'popupPrice'        => (bool) $s['svc_popup_show_price'],
+            'popupAltitude'     => (bool) $s['svc_popup_show_altitude'],
+            'popupShowSpecs'    => (bool) $s['svc_popup_show_specs'],
+            'popupShowAmenities'=> (bool) $s['svc_popup_show_amenities'],
+            'popupShowGallery'  => (bool) $s['svc_popup_show_gallery'],
+            'popupShowValley'   => (bool) $s['svc_popup_show_valley'],
+            'popupMaxWidth'     => absint( $s['svc_popup_max_width'] ) ?: 280,
+            'popupImgHeight'    => absint( $s['svc_popup_img_height'] ) ?: 180,
+            'popupBtnText'      => $s['svc_popup_btn_text'] ?: 'Scopri e Prenota',
+            'popupBtnColor'     => $s['svc_popup_btn_color'] ?: '#3b82f6',
+            'popupBg'           => $s['svc_popup_bg'] ?: '#ffffff',
+            'popupColor'        => $s['svc_popup_color'] ?: '#333333',
+            'popupRadius'       => absint( $s['svc_popup_radius'] ),
+            'popupLink'         => true,
         ];
 
         ob_start();
@@ -590,6 +612,44 @@ class Olo_Map_Tile extends Olo_Tile_Base {
                 $amenities = maybe_unserialize( $raw_amenities );
                 if ( is_array( $amenities ) && ! empty( $amenities ) ) {
                     $location['amenities'] = array_values( $amenities );
+                    // Amenity labels for popup display
+                    $amenity_labels = class_exists( 'Olo_Amenities_Catalog' )
+                        ? Olo_Amenities_Catalog::get_all_labels()
+                        : [
+                            'wifi' => 'WiFi', 'fireplace' => 'Camino', 'parking' => 'Parcheggio',
+                            'kitchen' => 'Cucina', 'tv' => 'TV', 'bbq' => 'BBQ', 'terrace' => 'Terrazza',
+                            'heating' => 'Riscaldamento', 'sauna' => 'Sauna', 'hottub' => 'Idromassaggio',
+                            'ski' => 'Sci', 'garden' => 'Giardino', 'pets' => 'Animali',
+                            'washer' => 'Lavatrice', 'highchair' => 'Seggiolone', 'aircon' => 'Aria Cond.',
+                            'dishwasher' => 'Lavastoviglie', 'linens' => 'Biancheria',
+                            'towels' => 'Asciugamani', 'pool' => 'Piscina', 'hiking' => 'Escursioni',
+                            'bikes' => 'Biciclette',
+                        ];
+                    $labeled = [];
+                    foreach ( $amenities as $slug ) {
+                        $labeled[] = [
+                            'slug'  => $slug,
+                            'label' => $amenity_labels[ $slug ] ?? ucfirst( $slug ),
+                        ];
+                    }
+                    $location['amenities_labeled'] = $labeled;
+                }
+            }
+
+            // Gallery (first 4 attachments for popup mini-gallery)
+            $gallery_ids = get_post_meta( $post->ID, '_olo_service_gallery', true );
+            if ( ! empty( $gallery_ids ) && is_array( $gallery_ids ) ) {
+                $gallery_items = [];
+                foreach ( array_slice( $gallery_ids, 0, 4 ) as $att_id ) {
+                    $thumb = wp_get_attachment_image_url( $att_id, 'thumbnail' );
+                    $full  = wp_get_attachment_image_url( $att_id, 'large' );
+                    if ( $thumb && $full ) {
+                        $gallery_items[] = [ 'thumb' => $thumb, 'full' => $full ];
+                    }
+                }
+                if ( $gallery_items ) {
+                    $location['gallery']       = $gallery_items;
+                    $location['gallery_count'] = count( $gallery_ids );
                 }
             }
 

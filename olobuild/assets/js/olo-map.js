@@ -136,20 +136,42 @@
   }
 
   /**
+   * Amenity emoji map for popup badges.
+   */
+  var AMENITY_EMOJI = {
+    wifi: '📶', fireplace: '🔥', parking: '🅿️', kitchen: '🍳', tv: '📺',
+    bbq: '🍖', terrace: '☀️', heating: '♨️', sauna: '♨️', hottub: '🛁',
+    ski: '⛷️', garden: '🌿', pets: '🐾', washer: '🧺', highchair: '👶',
+    aircon: '❄️', dishwasher: '🍽️', linens: '🛏️', towels: '🛁',
+    pool: '🏊', hiking: '🥾', bikes: '🚲'
+  };
+
+  /**
    * Build popup HTML for a service (baita/accommodation).
    */
   function buildServicePopup(loc, config) {
-    var html = '<div class="olo-map-popup olo-map-popup-service">';
+    var bg = config.popupBg || '#ffffff';
+    var color = config.popupColor || '#333333';
+    var radius = config.popupRadius !== undefined ? config.popupRadius : 8;
+    var maxW = config.popupMaxWidth || 280;
+    var imgH = config.popupImgHeight || 180;
+    var btnColor = config.popupBtnColor || '#3b82f6';
+    var btnText = config.popupBtnText || 'Scopri e Prenota';
+
+    var html = '<div class="olo-map-popup olo-map-popup-service"'
+      + ' style="background:' + bg + ';color:' + color + ';border-radius:' + radius + 'px;max-width:' + maxW + 'px">';
 
     if (config.popupImage && loc.image) {
-      html += '<img src="' + loc.image + '" alt="' + escHtml(loc.title) + '" class="olo-map-popup-img" />';
+      html += '<img src="' + loc.image + '" alt="' + escHtml(loc.title) + '" class="olo-map-popup-img"'
+        + ' style="height:' + imgH + 'px;border-radius:' + radius + 'px ' + radius + 'px 0 0" />';
     }
 
-    html += '<strong class="olo-map-popup-title">' + escHtml(loc.title) + '</strong>';
+    html += '<div class="olo-map-popup-svc-body" style="padding:10px 12px">';
+    html += '<strong class="olo-map-popup-title" style="color:' + color + '">' + escHtml(loc.title) + '</strong>';
 
     // Locality + Altitude line
     var subline = '';
-    if (loc.valley) {
+    if (config.popupShowValley !== false && loc.valley) {
       subline += '<span class="olo-map-popup-locality">' + escHtml(loc.valley) + '</span>';
     }
     if (config.popupAltitude && loc.altitude !== undefined) {
@@ -170,13 +192,41 @@
     }
 
     // Specs row
-    var specs = [];
-    if (loc.bedrooms !== undefined) specs.push(loc.bedrooms + (loc.bedrooms == 1 ? ' camera' : ' camere'));
-    if (loc.bathrooms !== undefined) specs.push(loc.bathrooms + (loc.bathrooms == 1 ? ' bagno' : ' bagni'));
-    if (loc.capacity) specs.push('max ' + loc.capacity + ' ospiti');
-    if (loc.sqm) specs.push(loc.sqm + ' m&sup2;');
-    if (specs.length) {
-      html += '<div class="olo-map-popup-svc-specs">' + specs.join(' &middot; ') + '</div>';
+    if (config.popupShowSpecs !== false) {
+      var specs = [];
+      if (loc.bedrooms !== undefined) specs.push(loc.bedrooms + (loc.bedrooms == 1 ? ' camera' : ' camere'));
+      if (loc.bathrooms !== undefined) specs.push(loc.bathrooms + (loc.bathrooms == 1 ? ' bagno' : ' bagni'));
+      if (loc.capacity) specs.push('max ' + loc.capacity + ' ospiti');
+      if (loc.sqm) specs.push(loc.sqm + ' m&sup2;');
+      if (specs.length) {
+        html += '<div class="olo-map-popup-svc-specs">' + specs.join(' &middot; ') + '</div>';
+      }
+    }
+
+    // Amenities badges
+    if (config.popupShowAmenities && loc.amenities_labeled && loc.amenities_labeled.length) {
+      html += '<div class="olo-map-popup-amenities">';
+      loc.amenities_labeled.forEach(function(a) {
+        var emoji = AMENITY_EMOJI[a.slug] || '';
+        html += '<span class="olo-map-popup-amenity-badge">'
+          + (emoji ? '<span class="olo-map-popup-amenity-emoji">' + emoji + '</span>' : '')
+          + escHtml(a.label) + '</span>';
+      });
+      html += '</div>';
+    }
+
+    // Gallery mini-strip
+    if (config.popupShowGallery && loc.gallery && loc.gallery.length) {
+      html += '<div class="olo-map-popup-gallery">';
+      loc.gallery.forEach(function(item) {
+        html += '<a href="' + item.full + '" target="_blank" class="olo-map-popup-gallery-link">'
+              + '<img src="' + item.thumb + '" alt="" class="olo-map-popup-gallery-thumb" />'
+              + '</a>';
+      });
+      if (loc.gallery_count > loc.gallery.length) {
+        html += '<span class="olo-map-popup-gallery-more">+' + (loc.gallery_count - loc.gallery.length) + '</span>';
+      }
+      html += '</div>';
     }
 
     // Excerpt
@@ -187,11 +237,12 @@
     // Action: link to service page
     if (loc.url) {
       html += '<div class="olo-map-popup-actions">';
-      html += '<a href="' + loc.url + '" class="olo-map-popup-btn">Scopri e Prenota</a>';
+      html += '<a href="' + loc.url + '" class="olo-map-popup-btn" style="background:' + btnColor + '">'
+        + escHtml(btnText) + '</a>';
       html += '</div>';
     }
 
-    html += '</div>';
+    html += '</div></div>';
     return html;
   }
 
@@ -274,7 +325,8 @@
         opts.icon = getColorIcon(loc.color, iconCache);
       }
       var marker = L.marker([loc.lat, loc.lng], opts);
-      marker.bindPopup(buildPopup(loc, config), { maxWidth: 300 });
+      var popupMaxW = (config.mode === 'services' && config.popupMaxWidth) ? config.popupMaxWidth + 20 : 300;
+      marker.bindPopup(buildPopup(loc, config), { maxWidth: popupMaxW });
       marker._oloTerms = loc.terms || [];
       marker._oloId = loc.id;
       if (loc.altitude !== undefined) {

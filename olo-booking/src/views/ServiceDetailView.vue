@@ -127,13 +127,47 @@
     <!-- Section: Club di Prodotto -->
     <div v-if="activeTab === 'club'" class="olom-section-card">
       <div class="olom-section-head"><Award :size="20" :stroke-width="1.75" /><h3>Club di Prodotto</h3></div>
-      <p class="olom-hint">Assegna la struttura a un gruppo e una categoria per le suddivisioni marketing.</p>
-      <div class="olom-form-grid">
-        <div class="olom-form-row"><label>Gruppo</label><input type="text" v-model="form.club_group" placeholder="es. Trentino Marketing" /></div>
-        <div class="olom-form-row"><label>Categoria</label><input type="text" v-model="form.club_category" placeholder="es. Family, Romantica, Vacanze Attive" /></div>
+      <p class="olom-hint">Gestisci i club di prodotto associati a questa struttura.</p>
+
+      <!-- Club table -->
+      <div v-if="clubs.length" class="olom-club-table">
+        <div class="olom-club-header">
+          <span class="olom-club-col-logo">Logo</span>
+          <span class="olom-club-col-name">Nome gruppo</span>
+          <span class="olom-club-col-cat">Categoria</span>
+          <span class="olom-club-col-url">URL</span>
+          <span class="olom-club-col-actions"></span>
+        </div>
+        <div v-for="(club, idx) in clubs" :key="idx" class="olom-club-row">
+          <div class="olom-club-col-logo">
+            <div class="olom-club-logo-wrap" @click="pickClubLogo(idx)">
+              <img v-if="club.logo_url" :src="club.logo_url" alt="Logo" class="olom-club-logo-img" />
+              <span v-else class="olom-club-logo-placeholder">+</span>
+            </div>
+            <button v-if="club.logo_url" class="olom-club-logo-remove" @click="removeClubLogo(idx)" title="Rimuovi logo">&times;</button>
+          </div>
+          <div class="olom-club-col-name">
+            <input type="text" v-model="club.name" placeholder="es. Trentino Marketing" />
+          </div>
+          <div class="olom-club-col-cat">
+            <input type="text" v-model="club.category" placeholder="es. Family" />
+          </div>
+          <div class="olom-club-col-url">
+            <input type="url" v-model="club.url" placeholder="https://..." />
+          </div>
+          <div class="olom-club-col-actions">
+            <button class="olom-btn olom-btn-danger olom-btn-sm" @click="removeClub(idx)" title="Elimina club">&times;</button>
+          </div>
+        </div>
       </div>
+      <p v-else class="olom-hint" style="text-align:center;padding:20px 0;color:#9ca3af;">Nessun club associato. Aggiungi il primo club.</p>
+
+      <div style="margin-top:12px;">
+        <button class="olom-btn olom-btn-outline" @click="addClub">+ Aggiungi club</button>
+      </div>
+
       <div class="olom-section-foot">
-        <button class="olom-btn olom-btn-success" @click="saveInfo" :disabled="saving">{{ saving ? 'Salvataggio...' : 'Salva' }}</button>
+        <button class="olom-btn olom-btn-success" @click="saveClubs" :disabled="saving">{{ saving ? 'Salvataggio...' : 'Salva' }}</button>
         <span v-if="savedMsg" class="olom-saved-msg">{{ savedMsg }}</span>
       </div>
     </div>
@@ -647,6 +681,7 @@ const form = reactive({
   latitude: '', longitude: '',
   video_1: '', video_2: '', video_3: '',
 });
+const clubs = ref([]);
 const seasons = ref([]);
 const closures = ref([]);
 const gallery = ref([]);
@@ -713,6 +748,15 @@ onMounted(async () => {
     address: data.address || '', directions: data.directions || '', rules: data.rules || '', cipat: data.cipat || '',
     opening: data.opening, altitude: data.altitude || '', valley: data.valley || '', mushrooms: data.mushrooms || 0,
     club_group: data.club_group || '', club_category: data.club_category || '',
+  });
+  // Popola clubs array
+  if (data.clubs && data.clubs.length) {
+    clubs.value = data.clubs;
+  } else if (data.club_group || data.club_category) {
+    // Backward compat: migra vecchi campi singoli in array
+    clubs.value = [{ name: data.club_group || '', category: data.club_category || '', logo_id: 0, logo_url: '', url: '' }];
+  }
+  Object.assign(form, {
     latitude: data.latitude || '', longitude: data.longitude || '',
     video_1: data.video_1 || '', video_2: data.video_2 || '', video_3: data.video_3 || '',
   });
@@ -759,6 +803,40 @@ async function saveInfo() {
   try {
     const result = await api.put('/manager/services/' + props.id, form);
     service.value = result;
+    showSaved();
+  } finally { saving.value = false; }
+}
+
+/* ── Club di Prodotto ── */
+function addClub() {
+  clubs.value.push({ name: '', category: '', logo_id: 0, logo_url: '', url: '' });
+}
+function removeClub(idx) {
+  clubs.value.splice(idx, 1);
+}
+function removeClubLogo(idx) {
+  clubs.value[idx].logo_id = 0;
+  clubs.value[idx].logo_url = '';
+}
+function pickClubLogo(idx) {
+  const frame = wp.media({ title: 'Seleziona logo club', multiple: false, library: { type: 'image' } });
+  frame.on('select', () => {
+    const att = frame.state().get('selection').first().toJSON();
+    clubs.value[idx].logo_id = att.id;
+    clubs.value[idx].logo_url = att.sizes?.thumbnail?.url || att.url;
+  });
+  frame.open();
+}
+async function saveClubs() {
+  saving.value = true;
+  try {
+    const data = clubs.value.map(c => ({
+      name: c.name, category: c.category, logo_id: c.logo_id || 0, url: c.url || '',
+    }));
+    const result = await api.put('/manager/services/' + props.id + '/clubs', { clubs: data });
+    if (result.clubs) {
+      clubs.value = result.clubs;
+    }
     showSaved();
   } finally { saving.value = false; }
 }

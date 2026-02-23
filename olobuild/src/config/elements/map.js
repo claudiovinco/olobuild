@@ -49,6 +49,17 @@ export default {
     svc_popup_show_excerpt: true,
     svc_popup_show_price: true,
     svc_popup_show_altitude: true,
+    svc_popup_show_specs: true,
+    svc_popup_show_amenities: false,
+    svc_popup_show_gallery: false,
+    svc_popup_show_valley: true,
+    svc_popup_max_width: '280',
+    svc_popup_img_height: '180',
+    svc_popup_btn_text: 'Scopri e Prenota',
+    svc_popup_btn_color: '#3b82f6',
+    svc_popup_bg: '#ffffff',
+    svc_popup_color: '#333333',
+    svc_popup_radius: '8',
     // Shared
     height: '400',
     shadow: 'none',
@@ -192,6 +203,20 @@ export default {
     { key: 'svc_popup_show_excerpt', label: 'Popup: mostra descrizione', type: 'toggle', condition: { field: 'mode', value: 'services' } },
     { key: 'svc_popup_show_price', label: 'Popup: mostra prezzo', type: 'toggle', condition: { field: 'mode', value: 'services' } },
     { key: 'svc_popup_show_altitude', label: 'Popup: mostra altitudine', type: 'toggle', condition: { field: 'mode', value: 'services' } },
+    { key: 'svc_popup_show_specs', label: 'Popup: mostra specs (camere/bagni/ospiti)', type: 'toggle', condition: { field: 'mode', value: 'services' } },
+    { key: 'svc_popup_show_valley', label: 'Popup: mostra località/vallata', type: 'toggle', condition: { field: 'mode', value: 'services' } },
+    { key: 'svc_popup_show_amenities', label: 'Popup: mostra amenities', type: 'toggle', condition: { field: 'mode', value: 'services' } },
+    { key: 'svc_popup_show_gallery', label: 'Popup: mini gallery (4 thumb)', type: 'toggle', condition: { field: 'mode', value: 'services' } },
+
+    { type: 'separator', condition: { field: 'mode', value: 'services' } },
+
+    { key: 'svc_popup_max_width', label: 'Popup: larghezza max (px)', type: 'range', min: 200, max: 500, step: 10, condition: { field: 'mode', value: 'services' } },
+    { key: 'svc_popup_img_height', label: 'Popup: altezza immagine (px)', type: 'range', min: 80, max: 300, step: 10, condition: { field: 'mode', value: 'services' } },
+    { key: 'svc_popup_btn_text', label: 'Popup: testo pulsante CTA', type: 'text', condition: { field: 'mode', value: 'services' } },
+    { key: 'svc_popup_btn_color', label: 'Popup: colore pulsante', type: 'color', condition: { field: 'mode', value: 'services' } },
+    { key: 'svc_popup_bg', label: 'Popup: sfondo', type: 'color', condition: { field: 'mode', value: 'services' } },
+    { key: 'svc_popup_color', label: 'Popup: colore testo', type: 'color', condition: { field: 'mode', value: 'services' } },
+    { key: 'svc_popup_radius', label: 'Popup: border radius', type: 'range', min: 0, max: 20, step: 1, condition: { field: 'mode', value: 'services' } },
 
     // ── Condivisi ──
     { type: 'separator' },

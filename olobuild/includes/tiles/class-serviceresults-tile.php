@@ -103,6 +103,18 @@ class Olo_ServiceResults_Tile extends Olo_Tile_Base {
         $valleys = array_keys( $valleys );
         sort( $valleys );
 
+        // Club categories from data
+        $club_cats = [];
+        foreach ( $services as $svc ) {
+            if ( ! empty( $svc['club_categories'] ) ) {
+                foreach ( $svc['club_categories'] as $cc ) {
+                    $club_cats[ $cc ] = true;
+                }
+            }
+        }
+        $club_cats = array_keys( $club_cats );
+        sort( $club_cats );
+
         // Ranges
         $alt_ranges = array_filter( array_map( 'trim', explode( ',', $s['altitude_ranges'] ) ) );
         $guests_ranges = array_filter( array_map( 'trim', explode( ',', $s['guests_ranges'] ) ) );
@@ -336,6 +348,15 @@ class Olo_ServiceResults_Tile extends Olo_Tile_Base {
                     </select>
                     <?php endif; ?>
 
+                    <?php if ( isset( $vf['club'] ) && ! empty( $club_cats ) ) : ?>
+                    <select class="olo-svresults-select" data-filter="club">
+                        <option value=""><?php echo esc_html( olo_t( 'Club di Prodotto' ) ); ?></option>
+                        <?php foreach ( $club_cats as $cc ) : ?>
+                        <option value="<?php echo esc_attr( $cc ); ?>"><?php echo esc_html( $cc ); ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                    <?php endif; ?>
+
                 </div>
 
                 <?php if ( isset( $vf['amenities'] ) && ! empty( $amenities ) ) : ?>
@@ -444,6 +465,26 @@ class Olo_ServiceResults_Tile extends Olo_Tile_Base {
                 if ( $val !== '' && $val !== false ) {
                     $svc[ $json_key ] = is_numeric( $val ) ? floatval( $val ) : $val;
                 }
+            }
+
+            // Club categories
+            $clubs_raw = get_post_meta( $post->ID, '_olo_service_clubs', true );
+            $club_cats = [];
+            if ( is_array( $clubs_raw ) && ! empty( $clubs_raw ) ) {
+                foreach ( $clubs_raw as $club ) {
+                    $cat = trim( $club['category'] ?? '' );
+                    if ( $cat !== '' ) {
+                        $club_cats[] = $cat;
+                    }
+                }
+            } else {
+                $legacy_cat = get_post_meta( $post->ID, '_olo_service_club_category', true );
+                if ( $legacy_cat ) {
+                    $club_cats[] = trim( $legacy_cat );
+                }
+            }
+            if ( ! empty( $club_cats ) ) {
+                $svc['club_categories'] = array_values( array_unique( $club_cats ) );
             }
 
             // Amenities

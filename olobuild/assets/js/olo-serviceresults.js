@@ -176,6 +176,12 @@
       return false;
     }
 
+    // Club di Prodotto
+    if (filters.club) {
+      var clubCats = svc.club_categories || [];
+      if (clubCats.indexOf(filters.club) < 0) return false;
+    }
+
     // Amenities (AND logic)
     if (filters.amenities && filters.amenities.length > 0) {
       var svcAmenities = svc.amenities || [];
@@ -232,6 +238,7 @@
     if (filters.guests) params.set('guests', filters.guests);
     if (filters.bedrooms) params.set('bedrooms', filters.bedrooms);
     if (filters.type) params.set('type', filters.type);
+    if (filters.club) params.set('club', filters.club);
     if (filters.amenities && filters.amenities.length > 0) {
       params.set('amenities', filters.amenities.join(','));
     }

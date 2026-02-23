@@ -46,10 +46,36 @@ class Olo_ServiceClub_Tile extends Olo_Tile_Base {
         $pid = $post->ID;
         $pfx = rtrim( $s['meta_prefix'], '_' ) . '_';
 
-        $group    = get_post_meta( $pid, $pfx . 'club_group', true ) ?: '';
-        $category = get_post_meta( $pid, $pfx . 'club_category', true ) ?: '';
+        // Try new multi-club array first
+        $clubs_raw = get_post_meta( $pid, $pfx . 'clubs', true );
+        $clubs = [];
 
-        if ( ! $group && ! $category ) {
+        if ( is_array( $clubs_raw ) && ! empty( $clubs_raw ) ) {
+            foreach ( $clubs_raw as $c ) {
+                $logo_id  = absint( $c['logo_id'] ?? 0 );
+                $logo_url = $logo_id ? wp_get_attachment_image_url( $logo_id, 'medium' ) : '';
+                $clubs[] = [
+                    'name'     => $c['name'] ?? '',
+                    'category' => $c['category'] ?? '',
+                    'logo_url' => $logo_url ?: ( $c['logo_url'] ?? '' ),
+                    'url'      => $c['url'] ?? '',
+                ];
+            }
+        } else {
+            // Fallback: legacy single fields
+            $group    = get_post_meta( $pid, $pfx . 'club_group', true ) ?: '';
+            $category = get_post_meta( $pid, $pfx . 'club_category', true ) ?: '';
+            if ( $group || $category ) {
+                $clubs[] = [
+                    'name'     => $group,
+                    'category' => $category,
+                    'logo_url' => '',
+                    'url'      => '',
+                ];
+            }
+        }
+
+        if ( empty( $clubs ) ) {
             return '';
         }
 
@@ -59,37 +85,50 @@ class Olo_ServiceClub_Tile extends Olo_Tile_Base {
         $align_map  = [ 'left' => 'flex-start', 'center' => 'center', 'right' => 'flex-end' ];
         $align      = $align_map[ $s['align'] ] ?? 'flex-start';
 
-        $wrap_style = 'display:flex;';
-        $wrap_style .= $is_horiz ? 'flex-direction:row;align-items:center;' : 'flex-direction:column;align-items:' . $align . ';';
-        $wrap_style .= 'gap:' . absint( $s['gap'] ) . 'px;';
-        if ( $s['bg_color'] )      $wrap_style .= 'background:' . $this->safe_color( $s['bg_color'] ) . ';';
-        if ( $s['border_color'] )  $wrap_style .= 'border:1px solid ' . $this->safe_color( $s['border_color'] ) . ';';
-        if ( $s['border_radius'] ) $wrap_style .= 'border-radius:' . absint( $s['border_radius'] ) . 'px;';
-        if ( $s['padding'] )       $wrap_style .= 'padding:' . absint( $s['padding'] ) . 'px;';
+        // Override logo_url from settings only if no per-club logos and a global one is set
+        $global_logo = ! empty( $s['logo_url'] ) ? $s['logo_url'] : '';
 
         ob_start();
-        ?>
-        <div class="<?php echo esc_attr( $uid ); ?>" style="<?php echo $wrap_style; ?>">
-            <?php if ( ! empty( $s['logo_url'] ) ) : ?>
-                <img src="<?php echo esc_url( $s['logo_url'] ); ?>" alt="<?php echo esc_attr( $group ); ?>"
-                     style="width:<?php echo absint( $s['logo_width'] ); ?>px;height:auto;flex-shrink:0" loading="lazy" />
-            <?php endif; ?>
 
-            <div style="display:flex;flex-direction:column;gap:2px">
-                <?php if ( $s['show_category'] && $category ) : ?>
-                    <span style="font-size:<?php echo absint( $s['text_size'] ); ?>px;font-weight:<?php echo esc_attr( $s['text_weight'] ); ?>;color:<?php echo esc_attr( $s['text_color'] ); ?>">
-                        <?php echo esc_html( $category ); ?>
-                    </span>
+        foreach ( $clubs as $club ) {
+            $logo = $club['logo_url'] ?: $global_logo;
+
+            $wrap_style = 'display:flex;';
+            $wrap_style .= $is_horiz ? 'flex-direction:row;align-items:center;' : 'flex-direction:column;align-items:' . $align . ';';
+            $wrap_style .= 'gap:' . absint( $s['gap'] ) . 'px;';
+            if ( $s['bg_color'] )      $wrap_style .= 'background:' . $this->safe_color( $s['bg_color'] ) . ';';
+            if ( $s['border_color'] )  $wrap_style .= 'border:1px solid ' . $this->safe_color( $s['border_color'] ) . ';';
+            if ( $s['border_radius'] ) $wrap_style .= 'border-radius:' . absint( $s['border_radius'] ) . 'px;';
+            if ( $s['padding'] )       $wrap_style .= 'padding:' . absint( $s['padding'] ) . 'px;';
+
+            $has_url = ! empty( $club['url'] );
+            $tag     = $has_url ? 'a' : 'div';
+            $href    = $has_url ? ' href="' . esc_url( $club['url'] ) . '" target="_blank" rel="noopener noreferrer"' : '';
+            $link_s  = $has_url ? 'text-decoration:none;color:inherit;display:flex;' : '';
+            ?>
+            <<?php echo $tag; ?> class="<?php echo esc_attr( $uid ); ?>"<?php echo $href; ?> style="<?php echo $link_s . $wrap_style; ?>">
+                <?php if ( $logo ) : ?>
+                    <img src="<?php echo esc_url( $logo ); ?>" alt="<?php echo esc_attr( $club['name'] ); ?>"
+                         style="width:<?php echo absint( $s['logo_width'] ); ?>px;height:auto;flex-shrink:0" loading="lazy" />
                 <?php endif; ?>
 
-                <?php if ( $s['show_group'] && $group ) : ?>
-                    <span style="font-size:<?php echo absint( $s['group_size'] ); ?>px;color:<?php echo esc_attr( $s['group_color'] ); ?>">
-                        <?php echo esc_html( $group ); ?>
-                    </span>
-                <?php endif; ?>
-            </div>
-        </div>
-        <?php
+                <div style="display:flex;flex-direction:column;gap:2px">
+                    <?php if ( $s['show_category'] && $club['category'] ) : ?>
+                        <span style="font-size:<?php echo absint( $s['text_size'] ); ?>px;font-weight:<?php echo esc_attr( $s['text_weight'] ); ?>;color:<?php echo esc_attr( $s['text_color'] ); ?>">
+                            <?php echo esc_html( $club['category'] ); ?>
+                        </span>
+                    <?php endif; ?>
+
+                    <?php if ( $s['show_group'] && $club['name'] ) : ?>
+                        <span style="font-size:<?php echo absint( $s['group_size'] ); ?>px;color:<?php echo esc_attr( $s['group_color'] ); ?>">
+                            <?php echo esc_html( $club['name'] ); ?>
+                        </span>
+                    <?php endif; ?>
+                </div>
+            </<?php echo $tag; ?>>
+            <?php
+        }
+
         return ob_get_clean();
     }
 }

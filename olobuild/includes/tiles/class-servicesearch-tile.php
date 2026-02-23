@@ -46,6 +46,9 @@ class Olo_ServiceSearch_Tile extends Olo_Tile_Base {
         // Collect valleys from DB
         $valleys = $this->get_valleys();
 
+        // Club categories
+        $club_cats = isset( $vf['club'] ) ? $this->get_club_categories() : [];
+
         // Altitude ranges
         $alt_ranges = array_filter( array_map( 'trim', explode( ',', $s['altitude_ranges'] ) ) );
 
@@ -189,6 +192,18 @@ class Olo_ServiceSearch_Tile extends Olo_Tile_Base {
                 </div>
                 <?php endif; ?>
 
+                <?php if ( isset( $vf['club'] ) && ! empty( $club_cats ) ) : ?>
+                <div class="olo-svsearch-field">
+                    <label class="olo-svsearch-label"><?php echo esc_html( olo_t( 'Club di Prodotto' ) ); ?></label>
+                    <select class="olo-svsearch-select" data-param="club">
+                        <option value=""><?php echo esc_html( olo_t( 'Tutti i club' ) ); ?></option>
+                        <?php foreach ( $club_cats as $cc ) : ?>
+                        <option value="<?php echo esc_attr( $cc ); ?>"><?php echo esc_html( $cc ); ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <?php endif; ?>
+
                 <?php if ( isset( $vf['amenities'] ) && ! empty( $amenities ) ) : ?>
                 <div class="olo-svsearch-field olo-svsearch-field--amenities">
                     <label class="olo-svsearch-label"><?php echo esc_html( olo_t( 'Servizi' ) ); ?></label>
@@ -220,6 +235,57 @@ class Olo_ServiceSearch_Tile extends Olo_Tile_Base {
         </div>
         <?php
         return ob_get_clean();
+    }
+
+    private function get_club_categories() {
+        if ( ! post_type_exists( 'olo_service' ) ) {
+            return [];
+        }
+        global $wpdb;
+        $cats = [];
+
+        // New multi-club array: _olo_service_clubs (serialized)
+        $rows = $wpdb->get_col(
+            "SELECT pm.meta_value
+             FROM {$wpdb->postmeta} pm
+             INNER JOIN {$wpdb->posts} p ON p.ID = pm.post_id
+             WHERE pm.meta_key = '_olo_service_clubs'
+               AND pm.meta_value != ''
+               AND p.post_type = 'olo_service'
+               AND p.post_status = 'publish'"
+        );
+        foreach ( $rows as $raw ) {
+            $arr = maybe_unserialize( $raw );
+            if ( is_array( $arr ) ) {
+                foreach ( $arr as $club ) {
+                    $cat = trim( $club['category'] ?? '' );
+                    if ( $cat !== '' ) {
+                        $cats[ $cat ] = true;
+                    }
+                }
+            }
+        }
+
+        // Legacy: _olo_service_club_category
+        $legacy = $wpdb->get_col(
+            "SELECT DISTINCT pm.meta_value
+             FROM {$wpdb->postmeta} pm
+             INNER JOIN {$wpdb->posts} p ON p.ID = pm.post_id
+             WHERE pm.meta_key = '_olo_service_club_category'
+               AND pm.meta_value != ''
+               AND p.post_type = 'olo_service'
+               AND p.post_status = 'publish'"
+        );
+        foreach ( $legacy as $val ) {
+            $val = trim( $val );
+            if ( $val !== '' ) {
+                $cats[ $val ] = true;
+            }
+        }
+
+        $result = array_keys( $cats );
+        sort( $result );
+        return $result;
     }
 
     private function get_valleys() {

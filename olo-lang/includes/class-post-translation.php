@@ -654,6 +654,7 @@ class Olo_Lang_Post_Translation {
         '_olo_service_mushrooms',
         '_olo_service_club_group',
         '_olo_service_club_category',
+        '_olo_service_clubs',
         // Amenities
         '_olo_service_amenities',
         '_olo_service_max_amenities',
