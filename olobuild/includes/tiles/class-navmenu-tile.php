@@ -40,6 +40,20 @@ class Olo_NavMenu_Tile extends Olo_Tile_Base {
         'button_items' => 'none',
         'button_style' => 'primary',
         'button_size'  => 'small',
+        // Search in menu
+        'append_search'      => false,
+        'search_mode'        => 'modal',
+        'search_placeholder' => 'Cerca...',
+        'search_post_types'  => 'post,page',
+        'search_max_results' => 10,
+        // Stile ricerca mega menu
+        'search_input_bg'      => '#ffffff',
+        'search_input_color'   => '#374151',
+        'search_icon_color'    => '#9ca3af',
+        'search_border_color'  => '#e5e7eb',
+        'search_input_height'  => 36,
+        'search_results_bg'    => '#ffffff',
+        'search_hover_bg'      => '#f3f4f6',
     ];
 
     public function get_controls() {
@@ -308,6 +322,9 @@ class Olo_NavMenu_Tile extends Olo_Tile_Base {
                             <?php endif; ?>
                         </li>
                     <?php endforeach; ?>
+                    <?php if ( ! empty( $s['append_search'] ) ) : ?>
+                        <?php $this->render_navbar_search( $s ); ?>
+                    <?php endif; ?>
                 </ul>
             </nav>
 
@@ -318,6 +335,7 @@ class Olo_NavMenu_Tile extends Olo_Tile_Base {
                             <button class="uk-offcanvas-close" type="button" uk-close></button>
                             <ul class="uk-nav uk-nav-default uk-nav-parent-icon" uk-nav>
                                 <?php $this->render_mobile_items( $tree, $children, $grandchildren ); ?>
+                                <?php if ( ! empty( $s['append_search'] ) ) $this->render_mobile_search( $s ); ?>
                             </ul>
                         </div>
                     </div>
@@ -326,6 +344,7 @@ class Olo_NavMenu_Tile extends Olo_Tile_Base {
                         <div class="uk-card uk-card-body uk-card-default uk-card-small">
                             <ul class="uk-nav uk-nav-default uk-nav-parent-icon" uk-nav>
                                 <?php $this->render_mobile_items( $tree, $children, $grandchildren ); ?>
+                                <?php if ( ! empty( $s['append_search'] ) ) $this->render_mobile_search( $s ); ?>
                             </ul>
                         </div>
                     </div>
@@ -458,6 +477,11 @@ class Olo_NavMenu_Tile extends Olo_Tile_Base {
                         <?php endforeach; ?>
                     </div>
                 <?php endif; ?>
+                <?php if ( ! empty( $s['append_search'] ) ) : ?>
+                    <div class="olo-mega-search" style="border-top:1px solid #e5e7eb;padding:12px 16px 4px;margin-top:8px">
+                        <?php $this->render_mega_search( $s ); ?>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
         <?php
@@ -494,6 +518,105 @@ class Olo_NavMenu_Tile extends Olo_Tile_Base {
                 echo '<li><a href="' . esc_url( $item->url ) . '">' . esc_html( $item->title ) . '</a></li>';
             }
         }
+    }
+
+    /**
+     * Render the appended search widget as the last <li> in the navbar.
+     * Delegates to Olo_LiveSearch_Tile for the actual HTML.
+     */
+    private function render_navbar_search( $s ) {
+        $livesearch_tile = Olo_Tile_Manager::instance()->get_tile( 'livesearch' );
+        if ( ! $livesearch_tile ) {
+            return;
+        }
+
+        // Build settings for the embedded LiveSearch
+        $search_settings = [
+            'mode'            => $s['search_mode'] ?: 'modal',
+            'placeholder'     => $s['search_placeholder'] ?: 'Cerca...',
+            'post_types'      => $s['search_post_types'] ?: 'post,page',
+            'max_results'     => $s['search_max_results'] ?: 10,
+            'show_thumbnail'  => true,
+            'input_height'    => min( intval( $s['font_size'] ) + 26, 44 ),
+            'input_font_size' => $s['font_size'] ?: 14,
+            // Inherit navbar colors
+            'icon_color'      => $s['text_color'] ?: '#9ca3af',
+        ];
+
+        // Enqueue LiveSearch assets
+        wp_enqueue_style( 'olo-livesearch-css', OLO_URL . 'assets/css/olo-livesearch.css', [], OLO_VERSION );
+        wp_enqueue_script( 'olo-livesearch-js', OLO_URL . 'assets/js/olo-livesearch.js', [], OLO_VERSION, true );
+
+        $html = $livesearch_tile->render( $search_settings );
+
+        echo '<li class="olo-nav-search-item">';
+        echo $html;
+        echo '</li>';
+    }
+
+    /**
+     * Render a search field inside mobile menu.
+     */
+    private function render_mobile_search( $s ) {
+        $livesearch_tile = Olo_Tile_Manager::instance()->get_tile( 'livesearch' );
+        if ( ! $livesearch_tile ) {
+            return;
+        }
+
+        $height = intval( $s['search_input_height'] ?: 36 );
+
+        $search_settings = [
+            'mode'                 => 'inline',
+            'placeholder'          => $s['search_placeholder'] ?: 'Cerca...',
+            'post_types'           => $s['search_post_types'] ?: 'post,page',
+            'max_results'          => $s['search_max_results'] ?: 10,
+            'show_thumbnail'       => true,
+            'input_height'         => $height,
+            'input_font_size'      => max( 12, $height - 22 ),
+            'input_bg'             => $s['search_input_bg'] ?: '#ffffff',
+            'input_color'          => $s['search_input_color'] ?: '#374151',
+            'icon_color'           => $s['search_icon_color'] ?: '#9ca3af',
+            'results_border_color' => $s['search_border_color'] ?: '#e5e7eb',
+            'results_bg'           => $s['search_results_bg'] ?: '#ffffff',
+            'item_hover_bg'        => $s['search_hover_bg'] ?: '#f3f4f6',
+        ];
+
+        echo '<li class="olo-nav-search-mobile">';
+        echo $livesearch_tile->render( $search_settings );
+        echo '</li>';
+    }
+
+    /**
+     * Render an inline search field inside mega menu panels.
+     */
+    private function render_mega_search( $s ) {
+        $livesearch_tile = Olo_Tile_Manager::instance()->get_tile( 'livesearch' );
+        if ( ! $livesearch_tile ) {
+            return;
+        }
+
+        $height = intval( $s['search_input_height'] ?: 36 );
+
+        $search_settings = [
+            'mode'                 => 'inline',
+            'placeholder'          => $s['search_placeholder'] ?: 'Cerca...',
+            'post_types'           => $s['search_post_types'] ?: 'post,page',
+            'max_results'          => $s['search_max_results'] ?: 10,
+            'show_thumbnail'       => true,
+            'input_height'         => $height,
+            'input_font_size'      => max( 12, $height - 22 ),
+            'input_bg'             => $s['search_input_bg'] ?: '#ffffff',
+            'input_color'          => $s['search_input_color'] ?: '#374151',
+            'icon_color'           => $s['search_icon_color'] ?: '#9ca3af',
+            'results_border_color' => $s['search_border_color'] ?: '#e5e7eb',
+            'results_bg'           => $s['search_results_bg'] ?: '#ffffff',
+            'item_hover_bg'        => $s['search_hover_bg'] ?: '#f3f4f6',
+        ];
+
+        wp_enqueue_style( 'olo-livesearch-css', OLO_URL . 'assets/css/olo-livesearch.css', [], OLO_VERSION );
+        wp_enqueue_script( 'olo-livesearch-js', OLO_URL . 'assets/js/olo-livesearch.js', [], OLO_VERSION, true );
+
+        echo $livesearch_tile->render( $search_settings );
     }
 
     /**

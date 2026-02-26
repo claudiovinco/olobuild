@@ -16,6 +16,9 @@
             <span v-if="item.isMega" class="olo-navmenu-mega-arrow">&#9660;</span>
           </span>
         </template>
+        <span v-if="settings.append_search" class="olo-navmenu-item olo-navmenu-item--search" title="Ricerca">
+          <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8.5" cy="8.5" r="5.5"/><line x1="13" y1="13" x2="17" y2="17"/></svg>
+        </span>
       </div>
       <div class="olo-navmenu-label">{{ selectedMenu.name }}</div>
     </template>
@@ -133,6 +136,15 @@ const previewItems = computed(() => {
 .olo-navmenu-label {
   font-size: 10px;
   color: #6b7280;
+}
+.olo-navmenu-item--search {
+  color: #9ca3af;
+  padding: 4px 6px;
+  border: 1px dashed #4b5563;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 .olo-navmenu-empty {
   color: #6b7280;

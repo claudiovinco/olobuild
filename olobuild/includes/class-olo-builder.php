@@ -52,6 +52,25 @@ class Olo_Builder {
 
         // Register core tiles
         $this->register_core_tiles();
+
+        // LiveSearch REST endpoint
+        add_action( 'rest_api_init', [ 'Olo_LiveSearch_Tile', 'register_rest_routes' ] );
+
+        // Unsplash integration
+        $unsplash = new Olo_Unsplash();
+        $unsplash->init();
+
+        // Pexels integration
+        $pexels = new Olo_Pexels();
+        $pexels->init();
+
+        // Pixabay integration
+        $pixabay = new Olo_Pixabay();
+        $pixabay->init();
+
+        // Openverse integration
+        $openverse = new Olo_Openverse();
+        $openverse->init();
     }
 
     public function admin_menu() {
@@ -268,6 +287,9 @@ class Olo_Builder {
         require_once OLO_PATH . 'includes/tiles/class-servicesearch-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-serviceresults-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-hostcard-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-livesearch-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-shatteredimage-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-progallery-tile.php';
 
         $manager = Olo_Tile_Manager::instance();
         $manager->register_tile( new Olo_Section_Tile() );
@@ -356,6 +378,9 @@ class Olo_Builder {
         $manager->register_tile( new Olo_ServiceSearch_Tile() );
         $manager->register_tile( new Olo_ServiceResults_Tile() );
         $manager->register_tile( new Olo_HostCard_Tile() );
+        $manager->register_tile( new Olo_LiveSearch_Tile() );
+        $manager->register_tile( new Olo_ShatteredImage_Tile() );
+        $manager->register_tile( new Olo_ProGallery_Tile() );
     }
 
     /**

@@ -92,6 +92,9 @@ import LangSwitcherTile from './LangSwitcherTile.vue';
 import ServiceSearchTile from './ServiceSearchTile.vue';
 import ServiceResultsTile from './ServiceResultsTile.vue';
 import HostcardTile from './HostcardTile.vue';
+import LiveSearchTile from './LiveSearchTile.vue';
+import ShatteredImageTile from './ShatteredImageTile.vue';
+import ProGalleryTile from './ProGalleryTile.vue';
 
 // Olo Space tiles
 import OloRoomHeroTile from './OloRoomHeroTile.vue';
@@ -213,6 +216,9 @@ const tileComponents = {
   servicesearch: ServiceSearchTile,
   serviceresults: ServiceResultsTile,
   hostcard: HostcardTile,
+  livesearch: LiveSearchTile,
+  shatteredimage: ShatteredImageTile,
+  progallery: ProGalleryTile,
 
   // Olo Space tiles
   olo_room_hero: OloRoomHeroTile,

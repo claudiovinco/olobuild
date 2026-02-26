@@ -164,9 +164,23 @@ onUnmounted(() => {
 });
 
 async function openBuilder(templateId) {
-  await builderStore.loadTemplate(templateId);
+  const success = await builderStore.loadTemplate(templateId);
+  if (!success || !builderStore.currentTemplate) {
+    console.error('[Olobuild] Impossibile caricare il template', templateId, '— ricarico la pagina.');
+    // Retry: reload the whole page once (guard against infinite loop)
+    const reloadKey = 'olo_reload_' + templateId;
+    if (!sessionStorage.getItem(reloadKey)) {
+      sessionStorage.setItem(reloadKey, '1');
+      window.location.reload();
+      return;
+    }
+    sessionStorage.removeItem(reloadKey);
+    alert('Errore di caricamento del template. Riprova tra qualche secondo.');
+    return;
+  }
+  sessionStorage.removeItem('olo_reload_' + templateId);
   // Load template tiles into canvas
-  if (builderStore.currentTemplate && builderStore.currentTemplate.content) {
+  if (builderStore.currentTemplate.content) {
     tilesStore.setCanvasTiles(builderStore.currentTemplate.content);
   }
   currentView.value = 'builder';

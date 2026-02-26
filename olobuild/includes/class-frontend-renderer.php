@@ -1749,6 +1749,23 @@ class Olo_Frontend_Renderer {
             );
         }
 
+        // LiveSearch detection (recursive)
+        if ( $this->check_tile_recursive( $tiles, 'livesearch' ) ) {
+            wp_enqueue_style(
+                'olo-livesearch-css',
+                OLO_URL . 'assets/css/olo-livesearch.css',
+                [],
+                OLO_VERSION
+            );
+            wp_enqueue_script(
+                'olo-livesearch-js',
+                OLO_URL . 'assets/js/olo-livesearch.js',
+                [],
+                OLO_VERSION,
+                true
+            );
+        }
+
         // ServiceSearch detection (recursive)
         if ( $this->check_tile_recursive( $tiles, 'servicesearch' ) ) {
             wp_enqueue_script(

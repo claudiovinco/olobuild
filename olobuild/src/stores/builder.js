@@ -54,19 +54,30 @@ export const useBuilderStore = defineStore('builder', {
   actions: {
     async loadTemplate(id) {
       const olo = getOloData();
-      try {
-        const res = await fetch(`${olo.restUrl}/templates/${id}`, {
-          headers: { 'X-WP-Nonce': olo.nonce },
-        });
-        if (!res.ok) throw new Error('Failed to load template');
-        const tpl = await res.json();
-        // Ensure settings is always a plain object (PHP may return [] instead of {})
-        if (!tpl.settings || Array.isArray(tpl.settings)) tpl.settings = {};
-        this.currentTemplate = tpl;
-        this.isDirty = false;
-      } catch (err) {
-        console.error('loadTemplate error:', err);
+      const MAX_RETRIES = 2;
+      for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+        try {
+          const res = await fetch(`${olo.restUrl}/templates/${id}`, {
+            headers: { 'X-WP-Nonce': olo.nonce },
+          });
+          if (!res.ok) {
+            const errText = await res.text().catch(() => '');
+            throw new Error(`HTTP ${res.status}: ${errText.slice(0, 200)}`);
+          }
+          const tpl = await res.json();
+          // Ensure settings is always a plain object (PHP may return [] instead of {})
+          if (!tpl.settings || Array.isArray(tpl.settings)) tpl.settings = {};
+          this.currentTemplate = tpl;
+          this.isDirty = false;
+          return true;
+        } catch (err) {
+          console.error(`loadTemplate attempt ${attempt + 1}/${MAX_RETRIES + 1} error:`, err);
+          if (attempt < MAX_RETRIES) {
+            await new Promise(r => setTimeout(r, 500 * (attempt + 1)));
+          }
+        }
       }
+      return false;
     },
 
     async saveTemplate() {

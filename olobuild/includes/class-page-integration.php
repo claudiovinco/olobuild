@@ -43,7 +43,7 @@ class Olo_Page_Integration {
         if ( $post_type && $post_type !== 'page' && $post_type !== 'post' ) {
             $single_tpl = (int) get_option( "olo_active_single_{$post_type}", 0 );
             if ( $single_tpl ) {
-                return admin_url( 'admin.php?page=olobuilder&template_id=' . $single_tpl );
+                return admin_url( 'admin.php?page=olobuilder&template_id=' . $single_tpl . '&post_id=' . $post_id );
             }
         }
 

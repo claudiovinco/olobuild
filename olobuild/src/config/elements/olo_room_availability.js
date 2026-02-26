@@ -1,0 +1,46 @@
+export default {
+  type: 'olo_room_availability',
+  name: 'Sala - Disponibilità',
+  icon: 'dashicons-calendar-alt',
+  category: 'olo-space',
+  defaults: {
+    title: 'Disponibilità',
+    show_legend: true,
+    show_navigation: true,
+    months_ahead: '3',
+    color_free: '#32d296',
+    color_partial: '#f0ad4e',
+    color_full: '#f0506e',
+    color_closed: '#e0e0e0',
+    card_style: true,
+    day_radius: '4',
+  },
+  fields: [
+    { type: 'separator', label: 'Contenuto' },
+    { key: 'title', label: 'Titolo sezione', type: 'select', options: [
+      { value: 'Disponibilità', label: 'Disponibilità' },
+      { value: 'Calendario disponibilità', label: 'Calendario disponibilità' },
+      { value: 'Verifica disponibilità', label: 'Verifica disponibilità' },
+      { value: '', label: 'Nessun titolo' },
+    ]},
+    { key: 'show_legend', label: 'Mostra legenda colori', type: 'toggle' },
+    { key: 'show_navigation', label: 'Navigazione tra mesi', type: 'toggle' },
+    { key: 'months_ahead', label: 'Mesi navigabili in avanti', type: 'select', options: [
+      { value: '1', label: '1 mese' },
+      { value: '2', label: '2 mesi' },
+      { value: '3', label: '3 mesi' },
+      { value: '6', label: '6 mesi' },
+      { value: '12', label: '12 mesi' },
+    ]},
+
+    { type: 'separator', label: 'Aspetto' },
+    { key: 'card_style', label: 'Stile card con sfondo', type: 'toggle' },
+    { key: 'day_radius', label: 'Raggio celle giorno (px)', type: 'range', min: 0, max: 20, step: 1 },
+
+    { type: 'separator', label: 'Colori stato' },
+    { key: 'color_free', label: 'Libero', type: 'color' },
+    { key: 'color_partial', label: 'Parzialmente occupato', type: 'color' },
+    { key: 'color_full', label: 'Occupato', type: 'color' },
+    { key: 'color_closed', label: 'Chiuso', type: 'color' },
+  ],
+};
