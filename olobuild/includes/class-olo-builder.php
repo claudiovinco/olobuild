@@ -168,6 +168,9 @@ class Olo_Builder {
             'pluginUrl'      => OLO_URL,
             'templateId'     => absint( $_GET['template_id'] ?? 0 ),
             'postId'         => absint( $_GET['post_id'] ?? 0 ),
+            'postPermalink'  => ( ! empty( $_GET['post_id'] ) && absint( $_GET['post_id'] ) > 0 )
+                                    ? get_permalink( absint( $_GET['post_id'] ) )
+                                    : '',
             'themeColors'    => $this->detect_theme_colors(),
             'styles'         => $style_system->get_styles(),
             'stylesCss'      => $style_system->generate_css(),
@@ -290,6 +293,7 @@ class Olo_Builder {
         require_once OLO_PATH . 'includes/tiles/class-livesearch-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-shatteredimage-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-progallery-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-pdfviewer-tile.php';
 
         $manager = Olo_Tile_Manager::instance();
         $manager->register_tile( new Olo_Section_Tile() );
@@ -381,6 +385,7 @@ class Olo_Builder {
         $manager->register_tile( new Olo_LiveSearch_Tile() );
         $manager->register_tile( new Olo_ShatteredImage_Tile() );
         $manager->register_tile( new Olo_ProGallery_Tile() );
+        $manager->register_tile( new Olo_PdfViewer_Tile() );
     }
 
     /**

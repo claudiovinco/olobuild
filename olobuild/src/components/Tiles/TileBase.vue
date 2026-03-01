@@ -95,6 +95,7 @@ import HostcardTile from './HostcardTile.vue';
 import LiveSearchTile from './LiveSearchTile.vue';
 import ShatteredImageTile from './ShatteredImageTile.vue';
 import ProGalleryTile from './ProGalleryTile.vue';
+import PdfViewerTile from './PdfViewerTile.vue';
 
 // Olo Space tiles
 import OloRoomHeroTile from './OloRoomHeroTile.vue';
@@ -219,6 +220,7 @@ const tileComponents = {
   livesearch: LiveSearchTile,
   shatteredimage: ShatteredImageTile,
   progallery: ProGalleryTile,
+  pdfviewer: PdfViewerTile,
 
   // Olo Space tiles
   olo_room_hero: OloRoomHeroTile,

@@ -1648,6 +1648,26 @@ class Olo_Frontend_Renderer {
     }
 
     /**
+     * Check for progallery with custom lightbox (thumbs) recursively.
+     */
+    private function check_progallery_lightbox_recursive( $nodes ) {
+        foreach ( $nodes as $node ) {
+            if ( ( $node['type'] ?? '' ) === 'progallery' ) {
+                $thumbs = $node['settings']['lightbox_thumbs'] ?? 'none';
+                if ( in_array( $thumbs, [ 'bottom', 'right', 'left' ], true ) ) {
+                    return true;
+                }
+            }
+            if ( ! empty( $node['children'] ) && is_array( $node['children'] ) ) {
+                if ( $this->check_progallery_lightbox_recursive( $node['children'] ) ) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
      * Get video MIME type from URL.
      */
     private function get_video_mime( $url ) {
@@ -1794,6 +1814,45 @@ class Olo_Frontend_Renderer {
                 OLO_VERSION,
                 true
             );
+        }
+
+        // ProGallery custom lightbox detection (recursive)
+        if ( $this->check_progallery_lightbox_recursive( $tiles ) ) {
+            wp_enqueue_script(
+                'olo-progallery-lightbox-js',
+                OLO_URL . 'assets/js/olo-progallery-lightbox.js',
+                [],
+                OLO_VERSION,
+                true
+            );
+        }
+
+        // PdfViewer detection (recursive)
+        if ( $this->check_tile_recursive( $tiles, 'pdfviewer' ) ) {
+            wp_enqueue_script(
+                'pdfjs',
+                OLO_URL . 'assets/vendor/pdfjs/pdf.min.js',
+                [],
+                '3.11.174',
+                true
+            );
+            wp_enqueue_script(
+                'pageflip-js',
+                OLO_URL . 'assets/vendor/pageflip/page-flip.browser.js',
+                [],
+                '2.0.7',
+                true
+            );
+            wp_enqueue_script(
+                'olo-pdfviewer-js',
+                OLO_URL . 'assets/js/olo-pdfviewer.js',
+                [ 'pdfjs', 'pageflip-js' ],
+                OLO_VERSION,
+                true
+            );
+            wp_localize_script( 'olo-pdfviewer-js', 'oloPdfViewerData', [
+                'workerUrl' => OLO_URL . 'assets/vendor/pdfjs/pdf.worker.min.js',
+            ] );
         }
 
         $manager = Olo_Tile_Manager::instance();
