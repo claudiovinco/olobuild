@@ -3,11 +3,20 @@
     <!-- Preview -->
     <div v-if="modelValue" class="mb-relative mb-group">
       <img
-        v-if="!isVideo"
+        v-if="!isVideo && !isPdf"
         :src="modelValue"
         alt=""
         class="mb-w-full mb-h-24 mb-object-cover mb-rounded-md mb-border mb-border-gray-600"
       />
+      <div
+        v-else-if="isPdf"
+        class="mb-w-full mb-h-24 mb-rounded-md mb-border mb-border-gray-600 mb-bg-gray-800 mb-flex mb-flex-col mb-items-center mb-justify-center mb-text-gray-400"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="mb-w-8 mb-h-8 mb-text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+        </svg>
+        <span class="mb-mt-1 mb-text-xs mb-truncate mb-max-w-[180px]">{{ fileName }}</span>
+      </div>
       <div
         v-else
         class="mb-w-full mb-h-24 mb-rounded-md mb-border mb-border-gray-600 mb-bg-gray-800 mb-flex mb-items-center mb-justify-center mb-text-gray-400"
@@ -43,8 +52,10 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue', 'update:attachmentId']);
 
 const VIDEO_EXTS = /\.(mp4|webm|ogg)(\?.*)?$/i;
+const PDF_EXT = /\.pdf(\?.*)?$/i;
 
 const isVideo = computed(() => VIDEO_EXTS.test(props.modelValue));
+const isPdf = computed(() => PDF_EXT.test(props.modelValue));
 
 const fileName = computed(() => {
   if (!props.modelValue) return '';
