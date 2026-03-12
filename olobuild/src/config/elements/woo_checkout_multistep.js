@@ -1,0 +1,32 @@
+export default {
+  type: 'woo_checkout_multistep',
+  name: 'Checkout Multi-step WC',
+  icon: 'dashicons-cart',
+  category: 'woocommerce',
+  placeholder: 'Checkout multi-step WooCommerce',
+  defaults: {
+    step_labels: 'Dati,Spedizione,Pagamento,Conferma',
+    step_style: 'progress',
+    accent_color: '',
+    step_bg: '#F9FAFB',
+    active_color: '',
+    text_color: '#374151',
+    card_radius: 12,
+    show_order_review: true,
+  },
+  fields: [
+    { key: 'step_labels', label: 'Etichette step (virgola)', type: 'text' },
+    { key: 'step_style', label: 'Stile step', type: 'select', options: [
+      { value: 'progress', label: 'Barra progresso' },
+      { value: 'tabs', label: 'Tab' },
+      { value: 'numbered', label: 'Numeri' },
+    ]},
+    { key: 'show_order_review', label: 'Mostra riepilogo ordine', type: 'toggle' },
+    { type: 'separator', label: 'Colori' },
+    { key: 'accent_color', label: 'Colore accento', type: 'color' },
+    { key: 'active_color', label: 'Colore step attivo', type: 'color' },
+    { key: 'text_color', label: 'Colore testo', type: 'color' },
+    { key: 'step_bg', label: 'Sfondo step', type: 'color' },
+    { key: 'card_radius', label: 'Arrotondamento (px)', type: 'border-radius' },
+  ],
+};

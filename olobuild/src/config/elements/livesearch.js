@@ -1,10 +1,10 @@
-import { borderFields, borderDefaults, shadowField } from './_shared.js';
+import { shadowField } from './_shared.js';
 
 export default {
   type: 'livesearch',
   name: 'Ricerca Live',
   icon: 'dashicons-search',
-  category: 'dynamic',
+  category: 'navigation',
 
   defaults: {
     // Input e UX
@@ -14,6 +14,8 @@ export default {
     backdrop_color: 'rgba(0,0,0,0.5)',
     min_chars: '2',
     debounce_ms: '300',
+    animated_placeholder: false,
+    placeholder_words: '',
 
     // Risultati
     max_results: '10',
@@ -21,6 +23,7 @@ export default {
     show_all_url: '',
     show_all_text: 'Vedi tutti i risultati',
     show_thumbnail: true,
+    show_excerpt: true,
     title_only: false,
     no_results_text: 'Nessun risultato trovato',
 
@@ -32,31 +35,37 @@ export default {
 
     // Stile Input
     input_bg: '#ffffff',
-    input_color: '#374151',
-    icon_color: '#9ca3af',
+    input_color: '',
+    icon_color: '',
     input_font_size: '14',
     input_height: '44',
+    input_border_color: '#e5e7eb',
+    input_border_radius: '8',
+    focus_border_color: '#6366f1',
 
     // Stile Popup
     results_bg: '#ffffff',
-    results_border_color: '#e5e7eb',
-    item_hover_bg: '#f3f4f6',
-    title_color: '#111827',
+    results_border_color: '',
+    item_hover_bg: '',
+    title_color: '',
     excerpt_color: '#6b7280',
     results_max_height: '400',
+    results_border_radius: '10',
     thumb_width: '48',
     thumb_height: '48',
     thumb_radius: '6',
 
     // Bordo/Ombra
     shadow: 'none',
-    ...borderDefaults,
   },
 
   fields: [
     // ─── Input e UX ───
     { type: 'separator', label: 'Input e UX' },
     { key: 'placeholder', label: 'Placeholder', type: 'text' },
+    { key: 'animated_placeholder', label: 'Placeholder animato', type: 'toggle' },
+    { key: 'placeholder_words', label: 'Parole animate (una per riga)', type: 'textarea',
+      show: s => s.animated_placeholder },
     {
       key: 'mode',
       label: 'Modalit\u00e0',
@@ -69,9 +78,9 @@ export default {
       ],
     },
     { key: 'modal_width', label: 'Larghezza modale (px)', type: 'range', min: 400, max: 800, step: 20,
-      condition: { field: 'mode', value: 'modal' } },
+      show: s => s.mode === 'modal' },
     { key: 'backdrop_color', label: 'Colore backdrop', type: 'color',
-      condition: { field: 'mode', value: 'modal' } },
+      show: s => s.mode === 'modal' },
     { key: 'min_chars', label: 'Caratteri minimi', type: 'range', min: 1, max: 3, step: 1 },
     { key: 'debounce_ms', label: 'Debounce (ms)', type: 'range', min: 100, max: 800, step: 50 },
 
@@ -81,8 +90,9 @@ export default {
     { key: 'results_columns', label: 'Colonne risultati', type: 'range', min: 1, max: 4, step: 1 },
     { key: 'show_all_url', label: 'Pagina "Vedi tutti"', type: 'select', optionsSource: 'wpPages' },
     { key: 'show_all_text', label: 'Testo "Vedi tutti"', type: 'text',
-      condition: { field: 'show_all_url', operator: '!=', value: '' } },
+      show: s => !!s.show_all_url },
     { key: 'show_thumbnail', label: 'Mostra miniatura', type: 'toggle' },
+    { key: 'show_excerpt', label: 'Mostra estratto', type: 'toggle' },
     { key: 'title_only', label: 'Cerca solo nel titolo', type: 'toggle' },
     { key: 'no_results_text', label: 'Testo nessun risultato', type: 'text' },
 
@@ -101,7 +111,7 @@ export default {
     },
     { key: 'taxonomy_filter', label: 'Filtra per tassonomia', type: 'select', optionsSource: 'taxonomies' },
     { key: 'taxonomy_terms', label: 'Termini (slug separati da virgola)', type: 'text',
-      condition: { field: 'taxonomy_filter', operator: '!=', value: '' } },
+      show: s => !!s.taxonomy_filter },
     { key: 'exclude_terms', label: 'Escludi parole (separate da virgola)', type: 'text' },
 
     // ─── Stile Input ───
@@ -109,23 +119,30 @@ export default {
     { key: 'input_bg', label: 'Sfondo input', type: 'color' },
     { key: 'input_color', label: 'Colore testo', type: 'color' },
     { key: 'icon_color', label: 'Colore icona', type: 'color' },
+    { key: 'input_border_color', label: 'Colore bordo', type: 'color' },
+    { key: 'focus_border_color', label: 'Colore bordo focus', type: 'color' },
     { key: 'input_font_size', label: 'Dimensione font (px)', type: 'range', min: 12, max: 24, step: 1 },
     { key: 'input_height', label: 'Altezza input (px)', type: 'range', min: 32, max: 72, step: 2 },
+    { key: 'input_border_radius', label: 'Arrotondamento input (px)', type: 'border-radius' },
 
     // ─── Stile Popup ───
     { type: 'separator', label: 'Stile Popup risultati' },
     { key: 'results_bg', label: 'Sfondo popup', type: 'color' },
     { key: 'results_border_color', label: 'Bordo popup', type: 'color' },
+    { key: 'results_border_radius', label: 'Arrotondamento popup (px)', type: 'border-radius' },
     { key: 'item_hover_bg', label: 'Sfondo hover elemento', type: 'color' },
     { key: 'title_color', label: 'Colore titolo', type: 'color' },
-    { key: 'excerpt_color', label: 'Colore estratto', type: 'color' },
+    { key: 'excerpt_color', label: 'Colore estratto', type: 'color',
+      show: s => s.show_excerpt !== false },
     { key: 'results_max_height', label: 'Altezza max popup (px)', type: 'range', min: 200, max: 800, step: 20 },
-    { key: 'thumb_width', label: 'Larghezza miniatura (px)', type: 'range', min: 32, max: 120, step: 4 },
-    { key: 'thumb_height', label: 'Altezza miniatura (px)', type: 'range', min: 32, max: 120, step: 4 },
-    { key: 'thumb_radius', label: 'Arrotondamento miniatura (px)', type: 'range', min: 0, max: 16, step: 1 },
+    { key: 'thumb_width', label: 'Larghezza miniatura (px)', type: 'range', min: 32, max: 120, step: 4,
+      show: s => s.show_thumbnail !== false },
+    { key: 'thumb_height', label: 'Altezza miniatura (px)', type: 'range', min: 32, max: 120, step: 4,
+      show: s => s.show_thumbnail !== false },
+    { key: 'thumb_radius', label: 'Arrotondamento miniatura (px)', type: 'border-radius',
+      show: s => s.show_thumbnail !== false },
 
     // ─── Bordo / Ombra ───
-    shadowField,
-    ...borderFields,
+    ...shadowField,
   ],
 };

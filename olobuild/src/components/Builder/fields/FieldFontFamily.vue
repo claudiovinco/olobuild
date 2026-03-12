@@ -4,6 +4,7 @@
     <button
       type="button"
       @click="open = !open"
+      :aria-expanded="open"
       class="ff-trigger"
     >
       <span class="ff-preview" :style="previewStyle">{{ displayLabel }}</span>
@@ -33,6 +34,22 @@
             :class="{ 'ff-item--active': !modelValue }"
             @click="selectFont('')"
           >Predefinito (browser)</div>
+
+          <!-- Custom Fonts (uploaded) -->
+          <template v-if="filteredCustomFonts.length">
+            <div class="ff-group-label">Font personalizzati</div>
+            <div
+              v-for="font in filteredCustomFonts"
+              :key="'cf-' + font.id"
+              class="ff-item"
+              :class="{ 'ff-item--active': modelValue === font.name }"
+              :style="{ fontFamily: font.name + ', sans-serif' }"
+              @click="selectFont(font.name)"
+            >
+              {{ font.name }}
+              <span class="ff-badge ff-badge--custom">CF</span>
+            </div>
+          </template>
 
           <!-- Project Google Fonts (if any) -->
           <template v-if="projectFonts.length && filteredProjectFonts.length">
@@ -78,7 +95,7 @@
             </div>
           </template>
 
-          <div v-if="!filteredWebSafe.length && !filteredGoogle.length && !filteredProjectFonts.length" class="ff-empty">
+          <div v-if="!filteredCustomFonts.length && !filteredWebSafe.length && !filteredGoogle.length && !filteredProjectFonts.length" class="ff-empty">
             Nessun risultato
           </div>
         </div>
@@ -90,6 +107,7 @@
 <script setup>
 import { ref, computed, watch, nextTick, onMounted, onBeforeUnmount } from 'vue';
 import { useStylesStore } from '@/stores/styles';
+import { useFocusTrap } from '@/composables/useFocusTrap';
 
 const props = defineProps({
   modelValue: { type: String, default: '' },
@@ -104,6 +122,61 @@ const rootEl = ref(null);
 const dropdownEl = ref(null);
 const searchInput = ref(null);
 const dropdownPos = ref({});
+
+// Focus trap per accessibilità dropdown
+const { activate: activateTrap, deactivate: deactivateTrap } = useFocusTrap(dropdownEl);
+
+// Custom fonts (uploaded via REST API)
+const oloData = window.oloData || {};
+const customFonts = ref([]);
+const customFontsLoaded = ref(false);
+
+async function loadCustomFonts() {
+  if (customFontsLoaded.value) return;
+  try {
+    const res = await fetch(`${oloData.restUrl}/fonts`, {
+      headers: { 'X-WP-Nonce': oloData.nonce },
+    });
+    if (res.ok) {
+      customFonts.value = await res.json();
+    }
+  } catch (e) {
+    // silently fail
+  }
+  customFontsLoaded.value = true;
+}
+
+const filteredCustomFonts = computed(() => {
+  if (!customFonts.value.length) return [];
+  if (!search.value) return customFonts.value;
+  const q = search.value.toLowerCase();
+  return customFonts.value.filter(f => f.name.toLowerCase().includes(q));
+});
+
+// Inject @font-face for custom fonts preview in the builder
+function injectCustomFontFaces() {
+  if (!customFonts.value.length) return;
+  let styleEl = document.getElementById('olo-custom-fonts-preview');
+  if (!styleEl) {
+    styleEl = document.createElement('style');
+    styleEl.id = 'olo-custom-fonts-preview';
+    document.head.appendChild(styleEl);
+  }
+  let css = '';
+  for (const font of customFonts.value) {
+    if (!font.variants) continue;
+    for (const v of font.variants) {
+      if (!v.file) continue;
+      const ext = v.file.split('.').pop().toLowerCase();
+      let format = 'woff2';
+      if (ext === 'ttf') format = 'truetype';
+      else if (ext === 'otf') format = 'opentype';
+      else if (ext === 'woff') format = 'woff';
+      css += `@font-face { font-family: '${font.name}'; src: url('${v.file}') format('${format}'); font-weight: ${v.weight || '400'}; font-style: ${v.style || 'normal'}; font-display: swap; }\n`;
+    }
+  }
+  styleEl.textContent = css;
+}
 
 // Web-safe fonts
 const webSafeFonts = [
@@ -230,11 +303,22 @@ function loadGoogleFontsPreview() {
   }
 }
 
-watch(open, (val) => {
+watch(open, async (val) => {
   if (val) {
     positionDropdown();
     loadGoogleFontsPreview();
-    nextTick(() => searchInput.value?.focus());
+    await loadCustomFonts();
+    injectCustomFontFaces();
+    // Doppio nextTick per garantire che Teleport abbia renderizzato il DOM
+    nextTick(() => {
+      nextTick(() => {
+        searchInput.value?.focus();
+        activateTrap();
+      });
+    });
+  } else {
+    search.value = '';
+    deactivateTrap();
   }
 });
 
@@ -317,7 +401,7 @@ onBeforeUnmount(() => {
   border-color: var(--olo-color-primary, #6366f1);
 }
 .ff-search::placeholder {
-  color: #6b7280;
+  color: #9CA3AF;
 }
 
 .ff-list {
@@ -332,7 +416,7 @@ onBeforeUnmount(() => {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  color: #6b7280;
+  color: #9CA3AF;
 }
 
 .ff-item {
@@ -372,11 +456,15 @@ onBeforeUnmount(() => {
   background: #4285f4;
   color: #fff;
 }
+.ff-badge--custom {
+  background: #10b981;
+  color: #fff;
+}
 
 .ff-empty {
   padding: 16px;
   text-align: center;
-  color: #6b7280;
+  color: #9CA3AF;
   font-size: 12px;
 }
 </style>

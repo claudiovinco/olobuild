@@ -9,7 +9,7 @@ class Olo_Accordion_Tile extends Olo_Tile_Base {
     protected $type     = 'accordion';
     protected $name     = 'Fisarmonica';
     protected $icon     = 'dashicons-list-view';
-    protected $category = 'content';
+    protected $category = 'interactive';
     protected $defaults = [
         'panels'            => [
             [ 'title' => 'Accordion Item 1', 'content' => 'Content for the first accordion item.' ],
@@ -26,12 +26,12 @@ class Olo_Accordion_Tile extends Olo_Tile_Base {
         'media_align'       => 'right',
         'media_width'       => '35',
         'media_radius'      => '8',
-        'header_bg'         => '#111827',
-        'header_bg_active'  => '#1a2332',
-        'header_text_color' => '#F3F4F6',
-        'content_bg'        => '#0d1117',
-        'border_color'      => '#374151',
-        'text_color'        => '#d1d5db',
+        'header_bg'         => '',
+        'header_bg_active'  => '',
+        'header_text_color' => '',
+        'content_bg'        => '',
+        'border_color'      => '',
+        'text_color'        => '',
         'gap'               => '0',
         'border_radius'     => '8',
         'faq_schema'        => false,
@@ -95,12 +95,12 @@ class Olo_Accordion_Tile extends Olo_Tile_Base {
         $gap         = intval( $s['gap'] );
         $speed       = intval( $s['animation_speed'] );
 
-        $header_bg     = $this->safe_color( $s['header_bg'] );
-        $header_active = $this->safe_color( $s['header_bg_active'] );
-        $header_text   = $this->safe_color( $s['header_text_color'] );
-        $content_bg    = $this->safe_color( $s['content_bg'] );
-        $text_clr      = $this->safe_color( $s['text_color'] );
-        $border_clr    = $this->safe_color( $s['border_color'] );
+        $header_bg     = $this->safe_color_css( $s['header_bg'] );
+        $header_active = $this->safe_color_css( $s['header_bg_active'] );
+        $header_text   = $this->safe_color_css( $s['header_text_color'] );
+        $content_bg    = $this->safe_color_css( $s['content_bg'] );
+        $text_clr      = $this->safe_color_css( $s['text_color'] );
+        $border_clr    = $this->safe_color_css( $s['border_color'] );
 
         $icon_pos = $s['icon_position'];
         $icon_svg = $icon_pos !== 'none' ? $this->get_icon_svg( $s['icon_style'] ) : '';
@@ -111,7 +111,7 @@ class Olo_Accordion_Tile extends Olo_Tile_Base {
         $media_align  = ( $s['media_align'] ?? 'right' ) === 'left' ? 'left' : 'right';
         $media_margin = $media_align === 'right' ? '0 0 12px 16px' : '0 16px 12px 0';
         $media_width  = min( max( intval( $s['media_width'] ?? 35 ), 20 ), 50 );
-        $media_radius = absint( $s['media_radius'] ?? 8 );
+        $media_radius = Olo_Tile_Utils::border_radius( $s['media_radius'] ?? 8 );
 
         ob_start();
         ?>
@@ -130,7 +130,7 @@ class Olo_Accordion_Tile extends Olo_Tile_Base {
                 <?php if ( $is_4corners ) : ?>
                 border-radius: <?php echo $r_tl; ?>px <?php echo $r_tr; ?>px 0 0;
                 <?php else : ?>
-                border-radius: <?php echo $radius; ?>px <?php echo $radius; ?>px 0 0;
+                border-radius: <?php echo $radius_css; ?>; border-bottom-left-radius: 0; border-bottom-right-radius: 0;
                 <?php endif; ?>
                 <?php endif; ?>
             }
@@ -182,7 +182,7 @@ class Olo_Accordion_Tile extends Olo_Tile_Base {
                 margin: <?php echo $media_margin; ?>;
                 max-width: <?php echo $media_width; ?>%;
                 width: <?php echo $media_width; ?>%;
-                border-radius: <?php echo $media_radius; ?>px;
+                border-radius: <?php echo $media_radius; ?>;
                 overflow: hidden;
             }
             .<?php echo esc_attr( $uid ); ?> .macc-panel-media img,
@@ -191,7 +191,7 @@ class Olo_Accordion_Tile extends Olo_Tile_Base {
                 display: block;
                 width: 100%;
                 height: auto;
-                border-radius: <?php echo $media_radius; ?>px;
+                border-radius: <?php echo $media_radius; ?>;
             }
             .<?php echo esc_attr( $uid ); ?> .macc-panel-media iframe {
                 aspect-ratio: 16/9;
@@ -280,7 +280,7 @@ class Olo_Accordion_Tile extends Olo_Tile_Base {
                                 <?php endif; ?>
                             </div>
                         <?php endif; ?>
-                        <?php echo wp_kses_post( $panel['content'] ); ?>
+                        <?php echo nl2br( esc_html( wp_strip_all_tags( $panel['content'] ) ) ); ?>
                         <?php if ( $has_media ) : ?>
                             <div style="clear:both"></div>
                         <?php endif; ?>

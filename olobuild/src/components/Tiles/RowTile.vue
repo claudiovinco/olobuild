@@ -2,16 +2,28 @@
   <div class="olo-row-tile">
     <div class="olo-row-tile-label">
       <span>Row</span>
-      <span class="olo-row-tile-layout">{{ settings.layout || '50-50' }}</span>
+      <span class="olo-row-tile-layout">{{ s.layout }}</span>
     </div>
   </div>
 </template>
 
 <script setup>
-defineProps({
+import { computed } from 'vue';
+
+const defaults = {
+  layout: '50-50',
+  gap: '16',
+  column_gap: 'default',
+  vertical_align: 'stretch',
+  stack_mobile: true,
+};
+
+const props = defineProps({
   settings: { type: Object, default: () => ({}) },
   tileId: { type: String, default: '' },
 });
+
+const s = computed(() => ({ ...defaults, ...props.settings }));
 </script>
 
 <style scoped>

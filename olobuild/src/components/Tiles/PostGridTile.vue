@@ -21,9 +21,9 @@
         </div>
         <!-- Card body -->
         <div class="mpg-body" :style="bodyStyle">
-          <div class="mpg-title" :style="{ fontSize: titleSize, color: settings.title_color || undefined }">Titolo articolo {{ n }}</div>
-          <div v-if="settings.show_meta !== false" class="mpg-meta" :style="{ color: settings.meta_color || undefined }">12 Feb 2026 · Autore</div>
-          <div v-if="settings.show_excerpt !== false" class="mpg-excerpt" :style="{ fontSize: excerptSize, color: settings.excerpt_color || undefined }">Lorem ipsum dolor sit amet, consectetur adipiscing elit...</div>
+          <div class="mpg-title" :style="{ fontSize: titleSize, color: settings.title_color || undefined }">{{ fakeTitles[(n - 1) % fakeTitles.length] }}</div>
+          <div v-if="settings.show_meta !== false" class="mpg-meta" :style="{ color: settings.meta_color || undefined }">{{ fakeDates[(n - 1) % fakeDates.length] }} · {{ fakeAuthors[(n - 1) % fakeAuthors.length] }}</div>
+          <div v-if="settings.show_excerpt !== false" class="mpg-excerpt" :style="{ fontSize: excerptSize, color: settings.excerpt_color || undefined }">{{ fakeExcerpts[(n - 1) % fakeExcerpts.length] }}</div>
           <!-- Service stats preview -->
           <div v-if="settings.show_service_stats" class="mpg-service-stats">
             <span class="mpg-stat" title="Ospiti">
@@ -42,8 +42,8 @@
           <!-- Service club preview -->
           <div v-if="settings.show_service_club" class="mpg-service-club">Dolomiti · 3 stelle</div>
           <div v-if="settings.show_price" class="mpg-price">{{ settings.price_prefix || '€' }}99{{ settings.price_suffix || '' }}</div>
-          <div v-if="settings.link_style === 'button'" class="mpg-btn">{{ settings.link_text || 'Vedi' }}</div>
-          <div v-else-if="settings.link_style === 'text'" class="mpg-link">{{ settings.link_text || 'Vedi' }} →</div>
+          <div v-if="settings.link_style === 'button'" class="mpg-btn" data-olo-editable="link_text">{{ settings.link_text || 'Vedi' }}</div>
+          <div v-else-if="settings.link_style === 'text'" class="mpg-link" data-olo-editable="link_text">{{ settings.link_text || 'Vedi' }} →</div>
         </div>
       </div>
     </div>
@@ -78,6 +78,11 @@ const props = defineProps({
   settings: { type: Object, default: () => ({}) },
 });
 
+const fakeTitles = ['Come migliorare le performance', 'Guida completa al design', 'Le ultime novità del settore', 'Consigli pratici per iniziare', 'Tendenze e ispirazioni', 'Strategie per il successo'];
+const fakeDates = ['12 Feb 2026', '8 Gen 2026', '23 Mar 2026', '5 Apr 2026', '17 Nov 2025', '30 Dic 2025'];
+const fakeAuthors = ['Marco B.', 'Sara L.', 'Luca R.', 'Anna M.', 'Giorgio P.', 'Elena T.'];
+const fakeExcerpts = ['Scopri le tecniche più efficaci per ottimizzare ogni aspetto del tuo progetto...', 'Una panoramica completa su strumenti, metodi e best practice da adottare...', 'Le novità più interessanti e come possono influenzare il tuo lavoro quotidiano...', 'Passi concreti e suggerimenti utili per chi vuole partire col piede giusto...', 'Esplora le tendenze emergenti e lasciati ispirare da esempi reali...', 'Approcci collaudati per raggiungere obiettivi ambiziosi con efficacia...'];
+
 const cols = computed(() => parseInt(props.settings.columns) || 3);
 const cardCount = computed(() => Math.min(parseInt(props.settings.posts_per_page) || 6, cols.value * 2));
 
@@ -106,8 +111,8 @@ const cardClasses = computed(() => {
 const cardStyle = computed(() => {
   const style = { borderRadius: (parseInt(props.settings.card_radius) || 4) + 'px' };
   if ((props.settings.card_style || 'default') === 'primary') {
-    style.background = props.settings.card_primary_bg || '#6366F1';
-    style.borderColor = props.settings.card_primary_bg || '#6366F1';
+    style.background = props.settings.card_primary_bg || 'var(--olo-color-primary, #6366F1)';
+    style.borderColor = props.settings.card_primary_bg || 'var(--olo-color-primary, #6366F1)';
   }
   return style;
 });
@@ -305,7 +310,7 @@ const pagPageCount = computed(() => {
 .mpg-title {
   font-size: 11px;
   font-weight: 700;
-  color: #1f2937;
+  color: var(--olo-color-text, #374151);
   margin-bottom: 2px;
 }
 .mpg-meta {

@@ -1,6 +1,6 @@
 <template>
   <div :style="wrapStyle">
-    <h3 style="font-size:16px;font-weight:700;color:#1f2937;margin:0 0 12px">Tariffa</h3>
+    <h3 style="font-size:16px;font-weight:700;color:var(--olo-color-text, #374151);margin:0 0 12px">Tariffa</h3>
     <div style="text-align:center;padding:10px 0">
       <div style="font-size:32px;font-weight:700;color:#1e87f0">&euro; 25,00</div>
       <div style="font-size:14px;color:#6b7280;margin-top:2px">/ ora</div>

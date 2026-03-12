@@ -9,7 +9,7 @@ class Olo_FlipCard_Tile extends Olo_Tile_Base {
     protected $type     = 'flipcard';
     protected $name     = 'FlipCard';
     protected $icon     = 'dashicons-image-flip-horizontal';
-    protected $category = 'content';
+    protected $category = 'marketing';
     protected $defaults = [
         // Fronte
         'front_image'      => '',
@@ -21,7 +21,7 @@ class Olo_FlipCard_Tile extends Olo_Tile_Base {
         'front_description'=> 'Descrizione della card visibile.',
         'front_bg'         => '#1e1e2e',
         'front_overlay'    => 'rgba(0,0,0,0.3)',
-        'front_text_color' => '#F3F4F6',
+        'front_text_color' => '',
         'front_text_align' => 'center',
         'front_valign'     => 'center',
 
@@ -33,7 +33,7 @@ class Olo_FlipCard_Tile extends Olo_Tile_Base {
         'back_icon_color'  => '',
         'back_title'       => 'Titolo retro',
         'back_description' => 'Contenuto retro con dettagli.',
-        'back_bg'          => '#6366F1',
+        'back_bg'          => '',
         'back_overlay'     => '',
         'back_text_color'  => '#FFFFFF',
         'back_text_align'  => 'center',
@@ -41,8 +41,8 @@ class Olo_FlipCard_Tile extends Olo_Tile_Base {
         'back_cta_text'    => 'Scopri di più',
         'back_cta_url'     => '',
         'back_cta_target'  => false,
-        'back_cta_bg'      => '#FFFFFF',
-        'back_cta_color'   => '#6366F1',
+        'back_cta_bg'      => '',
+        'back_cta_color'   => '',
         'back_cta_radius'  => '6',
 
         // Animazione
@@ -56,7 +56,7 @@ class Olo_FlipCard_Tile extends Olo_Tile_Base {
         'card_border_radius' => '12',
         'card_shadow'        => 'md',
         'card_border_width'  => '0',
-        'card_border_color'  => '#374151',
+        'card_border_color'  => '',
         'card_padding'       => '24',
 
         // Tipografia
@@ -78,10 +78,10 @@ class Olo_FlipCard_Tile extends Olo_Tile_Base {
         $easing   = esc_attr( $s['flip_easing'] ?: 'ease-in-out' );
         $trigger  = in_array( $s['flip_trigger'], [ 'hover', 'click' ] ) ? $s['flip_trigger'] : 'hover';
         $height   = intval( $s['card_height'] ) ?: 350;
-        $radius   = intval( $s['card_border_radius'] );
-        $shadow   = $this->get_shadow( $s['card_shadow'] );
+        $radius   = Olo_Tile_Utils::border_radius( $s['card_border_radius'] ?? 0 );
+        $shadow   = Olo_Tile_Utils::shadow_value( $s, 'card_shadow' );
         $bw       = intval( $s['card_border_width'] );
-        $bc       = $this->safe_color( $s['card_border_color'] ) ?: '#374151';
+        $bc       = $this->safe_color_css( $s['card_border_color'] ) ?: 'var(--olo-color-text, #374151)';
         $padding  = intval( $s['card_padding'] );
         $halfH    = round( $height / 2 );
 
@@ -95,24 +95,24 @@ class Olo_FlipCard_Tile extends Olo_Tile_Base {
         $flip_transform = $this->get_flip_transform( $dir, $halfH );
 
         // Front face
-        $front_fg      = $this->safe_color( $s['front_text_color'] ) ?: '#F3F4F6';
-        $front_bg      = $this->safe_color( $s['front_bg'] ) ?: '#1e1e2e';
+        $front_fg      = $this->safe_color_css( $s['front_text_color'] ) ?: 'var(--olo-color-muted, #F3F4F6)';
+        $front_bg      = $this->safe_color_css( $s['front_bg'] ) ?: '#1e1e2e';
         $front_align   = in_array( $s['front_text_align'], [ 'left', 'center', 'right' ] ) ? $s['front_text_align'] : 'center';
         $front_valign  = $this->valign_css( $s['front_valign'] );
 
         // Back face
-        $back_fg       = $this->safe_color( $s['back_text_color'] ) ?: '#FFFFFF';
-        $back_bg       = $this->safe_color( $s['back_bg'] ) ?: '#6366F1';
+        $back_fg       = $this->safe_color_css( $s['back_text_color'] ) ?: '#FFFFFF';
+        $back_bg       = $this->safe_color_css( $s['back_bg'] ) ?: 'var(--olo-color-primary, #6366F1)';
         $back_align    = in_array( $s['back_text_align'], [ 'left', 'center', 'right' ] ) ? $s['back_text_align'] : 'center';
         $back_valign   = $this->valign_css( $s['back_valign'] );
 
         // CTA
-        $cta_text   = wp_kses_post( $s['back_cta_text'] );
+        $cta_text   = esc_html( wp_strip_all_tags( $s['back_cta_text'] ) );
         $cta_url    = esc_url( $s['back_cta_url'] );
         $cta_target = ! empty( $s['back_cta_target'] ) ? ' target="_blank" rel="noopener"' : '';
-        $cta_bg     = $this->safe_color( $s['back_cta_bg'] ) ?: '#FFFFFF';
-        $cta_color  = $this->safe_color( $s['back_cta_color'] ) ?: '#6366F1';
-        $cta_radius = intval( $s['back_cta_radius'] );
+        $cta_bg     = $this->safe_color_css( $s['back_cta_bg'] ) ?: '#FFFFFF';
+        $cta_color  = $this->safe_color_css( $s['back_cta_color'] ) ?: 'var(--olo-color-primary, #6366F1)';
+        $cta_radius = Olo_Tile_Utils::border_radius( $s['back_cta_radius'] ?? 0 );
 
         // Cube: front needs translateZ, back rotated on side
         $front_extra = '';
@@ -128,8 +128,11 @@ class Olo_FlipCard_Tile extends Olo_Tile_Base {
         <style>
             .<?php echo $uid; ?> {
                 perspective: <?php echo $perspective; ?>px;
+                width: 100%;
+                box-sizing: border-box;
                 height: <?php echo $height; ?>px;
-                <?php if ( $radius > 0 ) : ?>border-radius: <?php echo $radius; ?>px;<?php endif; ?>
+                overflow: hidden;
+                <?php if ( $radius && $radius !== '0px' ) : ?>border-radius: <?php echo $radius; ?>;<?php endif; ?>
                 cursor: pointer;
             }
             .<?php echo $uid; ?> .olo-fc-inner {
@@ -161,8 +164,8 @@ class Olo_FlipCard_Tile extends Olo_Tile_Base {
                 overflow: hidden;
                 display: flex;
                 flex-direction: column;
-                <?php if ( $radius > 0 ) : ?>border-radius: <?php echo $radius; ?>px;<?php endif; ?>
-                <?php if ( $shadow ) : ?>box-shadow: <?php echo $shadow; ?>;<?php endif; ?>
+                <?php if ( $radius && $radius !== '0px' ) : ?>border-radius: <?php echo $radius; ?>;<?php endif; ?>
+                <?php if ( $shadow && $shadow !== 'none' ) : ?>box-shadow: <?php echo $shadow; ?>;<?php endif; ?>
                 <?php if ( $bw > 0 ) : ?>border: <?php echo $bw; ?>px solid <?php echo $bc; ?>;<?php endif; ?>
             }
 
@@ -228,7 +231,7 @@ class Olo_FlipCard_Tile extends Olo_Tile_Base {
                 padding: 10px 24px;
                 background: <?php echo $cta_bg; ?>;
                 color: <?php echo $cta_color; ?> !important;
-                border-radius: <?php echo $cta_radius; ?>px;
+                border-radius: <?php echo $cta_radius; ?>;
                 text-decoration: none !important;
                 font-weight: 600;
                 font-size: <?php echo $desc_size; ?>px;
@@ -300,7 +303,7 @@ class Olo_FlipCard_Tile extends Olo_Tile_Base {
         }
 
         // Overlay
-        $overlay = $this->safe_color( $s[ $prefix . 'overlay' ] );
+        $overlay = $this->safe_color_css( $s[ $prefix . 'overlay' ] );
         if ( $overlay && ! empty( $s[ $prefix . 'image' ] ) ) {
             $html .= '<div class="olo-fc-overlay" style="background:' . $overlay . '"></div>';
         }
@@ -312,7 +315,7 @@ class Olo_FlipCard_Tile extends Olo_Tile_Base {
         $icon = trim( $s[ $prefix . 'icon' ] ?? '' );
         if ( $icon ) {
             $icon_size  = intval( $s[ $prefix . 'icon_size' ] ) ?: 40;
-            $icon_color = $this->safe_color( $s[ $prefix . 'icon_color' ] );
+            $icon_color = $this->safe_color_css( $s[ $prefix . 'icon_color' ] );
             $icon_style = "font-size:{$icon_size}px;";
             if ( $icon_color ) {
                 $icon_style .= "color:{$icon_color};";
@@ -321,13 +324,13 @@ class Olo_FlipCard_Tile extends Olo_Tile_Base {
         }
 
         // Title
-        $title = $this->sanitize_richtext( $s[ $prefix . 'title' ] );
+        $title = esc_html( wp_strip_all_tags( $s[ $prefix . 'title' ] ) );
         if ( $title ) {
             $html .= '<div class="olo-fc-title">' . $title . '</div>';
         }
 
         // Description
-        $desc = $this->sanitize_richtext( $s[ $prefix . 'description' ] );
+        $desc = nl2br( esc_html( wp_strip_all_tags( $s[ $prefix . 'description' ] ) ) );
         if ( $desc ) {
             $html .= '<div class="olo-fc-desc">' . $desc . '</div>';
         }
@@ -338,7 +341,7 @@ class Olo_FlipCard_Tile extends Olo_Tile_Base {
             $target = ! empty( $s['back_cta_target'] ) ? ' target="_blank" rel="noopener"' : '';
             $tag    = $url ? 'a' : 'span';
             $href   = $url ? ' href="' . $url . '"' : '';
-            $html  .= '<div><' . $tag . ' class="olo-fc-cta"' . $href . $target . '>' . wp_kses_post( $s['back_cta_text'] ) . '</' . $tag . '></div>';
+            $html  .= '<div><' . $tag . ' class="olo-fc-cta"' . $href . $target . '>' . esc_html( wp_strip_all_tags( $s['back_cta_text'] ) ) . '</' . $tag . '></div>';
         }
 
         $html .= '</div>'; // .olo-fc-content
@@ -380,20 +383,6 @@ class Olo_FlipCard_Tile extends Olo_Tile_Base {
     private function valign_css( $val ) {
         $map = [ 'top' => 'flex-start', 'center' => 'center', 'bottom' => 'flex-end' ];
         return $map[ $val ] ?? 'center';
-    }
-
-    /**
-     * Map shadow size to CSS box-shadow.
-     */
-    private function get_shadow( $size ) {
-        $shadows = [
-            'none' => '',
-            'sm'   => '0 1px 2px rgba(0,0,0,0.05)',
-            'md'   => '0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1)',
-            'lg'   => '0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1)',
-            'xl'   => '0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1)',
-        ];
-        return $shadows[ $size ] ?? $shadows['md'];
     }
 
 }

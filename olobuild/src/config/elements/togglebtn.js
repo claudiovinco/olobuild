@@ -2,7 +2,7 @@ export default {
   type: 'togglebtn',
   name: 'Pulsante Toggle',
   icon: 'dashicons-hidden',
-  category: 'content',
+  category: 'interactive',
   defaults: {
     // Contenuto
     text_show: 'Mostra di più',
@@ -18,11 +18,11 @@ export default {
     duration: '400',
 
     // Stile pulsante
-    btn_bg: 'transparent',
-    btn_color: '#6366F1',
-    btn_hover_bg: 'rgba(99,102,241,0.1)',
+    btn_bg: '',
+    btn_color: '',
+    btn_hover_bg: '',
     btn_border_width: '2',
-    btn_border_color: '#6366F1',
+    btn_border_color: '',
     btn_border_radius: '8',
     btn_padding_x: '24',
     btn_padding_y: '12',
@@ -75,7 +75,7 @@ export default {
     { key: 'btn_hover_bg', label: 'Sfondo hover', type: 'color' },
     { key: 'btn_border_width', label: 'Bordo (px)', type: 'range', min: 0, max: 4 },
     { key: 'btn_border_color', label: 'Colore bordo', type: 'color' },
-    { key: 'btn_border_radius', label: 'Raggio bordo (px)', type: 'range', min: 0, max: 30 },
+    { key: 'btn_border_radius', label: 'Raggio bordo (px)', type: 'border-radius' },
     { key: 'btn_padding_x', label: 'Padding orizzontale (px)', type: 'range', min: 8, max: 48 },
     { key: 'btn_padding_y', label: 'Padding verticale (px)', type: 'range', min: 4, max: 24 },
     { key: 'btn_font_size', label: 'Dimensione testo (px)', type: 'range', min: 12, max: 24 },

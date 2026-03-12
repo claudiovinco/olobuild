@@ -1,0 +1,80 @@
+import { shadowField } from './_shared.js';
+
+export default {
+  type: 'woo_product_bundle',
+  name: 'WC Bundle Prodotti',
+  icon: 'dashicons-archive',
+  category: 'woocommerce',
+  placeholder: 'Bundle prodotti WooCommerce',
+  defaults: {
+    product_ids: '',
+    discount_percent: '10',
+    bundle_title: 'Pacchetto risparmio',
+    show_savings: true,
+    button_text: 'Aggiungi tutto al carrello',
+    show_images: true,
+    show_prices: true,
+    show_descriptions: false,
+    layout: 'grid',
+    columns: '3',
+    gap: '24',
+    card_style: 'border',
+    title_tag: 'h3',
+    title_color: '',
+    price_color: '',
+    savings_color: '',
+    bundle_bg: '',
+    button_color: '',
+    button_bg: '',
+    divider_color: '',
+    shadow: 'none',
+  },
+  fields: [
+    { type: 'separator', label: 'Prodotti bundle' },
+    { key: 'product_ids', label: 'ID prodotti (virgola)', type: 'text', placeholder: 'es. 12,34,56' },
+    { key: 'bundle_title', label: 'Titolo bundle', type: 'text' },
+    { key: 'title_tag', label: 'Tag titolo', type: 'select', options: [
+      { value: 'h2', label: 'H2' },
+      { value: 'h3', label: 'H3' },
+      { value: 'h4', label: 'H4' },
+      { value: 'div', label: 'DIV' },
+    ]},
+
+    { type: 'separator', label: 'Sconto' },
+    { key: 'discount_percent', label: 'Sconto (%)', type: 'range', min: 0, max: 50, step: 1 },
+    { key: 'show_savings', label: 'Mostra risparmio', type: 'toggle' },
+
+    { type: 'separator', label: 'Layout' },
+    { key: 'layout', label: 'Layout', type: 'select', options: [
+      { value: 'grid', label: 'Griglia' },
+      { value: 'list', label: 'Lista' },
+      { value: 'compact', label: 'Compatto' },
+    ]},
+    { key: 'columns', label: 'Colonne (griglia)', type: 'range', min: 1, max: 6, step: 1 },
+    { key: 'gap', label: 'Gap (px)', type: 'range', min: 0, max: 48, step: 4 },
+    { key: 'card_style', label: 'Stile card', type: 'select', options: [
+      { value: 'default', label: 'Default' },
+      { value: 'shadow', label: 'Ombra' },
+      { value: 'border', label: 'Bordo' },
+    ]},
+
+    { type: 'separator', label: 'Elementi visibili' },
+    { key: 'show_images', label: 'Mostra immagini', type: 'toggle' },
+    { key: 'show_prices', label: 'Mostra prezzi singoli', type: 'toggle' },
+    { key: 'show_descriptions', label: 'Mostra descrizioni', type: 'toggle' },
+
+    { type: 'separator', label: 'Pulsante' },
+    { key: 'button_text', label: 'Testo pulsante', type: 'text' },
+
+    { type: 'separator', label: 'Colori' },
+    { key: 'title_color', label: 'Colore titolo', type: 'color' },
+    { key: 'price_color', label: 'Colore prezzo', type: 'color' },
+    { key: 'savings_color', label: 'Colore risparmio', type: 'color' },
+    { key: 'bundle_bg', label: 'Sfondo bundle', type: 'color' },
+    { key: 'button_color', label: 'Colore testo pulsante', type: 'color' },
+    { key: 'button_bg', label: 'Sfondo pulsante', type: 'color' },
+    { key: 'divider_color', label: 'Colore divisore', type: 'color' },
+
+    ...shadowField,
+  ],
+};

@@ -1,0 +1,58 @@
+export default {
+  type: 'woo_product_title',
+  name: 'Titolo Prodotto',
+  icon: 'dashicons-heading',
+  category: 'woocommerce',
+  placeholder: 'Titolo del prodotto WooCommerce',
+  defaults: {
+    tag: 'h1',
+    text_align: 'left',
+    color: '',
+    font_size: '32',
+    font_weight: '700',
+    line_height: '1.2',
+    link_to_product: false,
+    link_color_hover: '',
+  },
+  fields: [
+    { key: 'tag', label: 'Tag HTML', type: 'select', options: [
+      { value: 'h1', label: 'H1' },
+      { value: 'h2', label: 'H2' },
+      { value: 'h3', label: 'H3' },
+      { value: 'h4', label: 'H4' },
+      { value: 'h5', label: 'H5' },
+      { value: 'h6', label: 'H6' },
+    ]},
+    { key: 'link_to_product', label: 'Link al prodotto', type: 'toggle' },
+
+    { type: 'separator', label: 'Stile' },
+    { key: 'font_size', label: 'Dimensione (px)', type: 'range', min: 12, max: 96, step: 2 },
+    { key: 'font_weight', label: 'Peso font', type: 'select', options: [
+      { value: '300', label: 'Light' },
+      { value: '400', label: 'Normale' },
+      { value: '500', label: 'Medium' },
+      { value: '600', label: 'Semi-bold' },
+      { value: '700', label: 'Bold' },
+      { value: '800', label: 'Extra-bold' },
+      { value: '900', label: 'Black' },
+    ]},
+    { key: 'line_height', label: 'Altezza riga', type: 'select', options: [
+      { value: '1', label: '1' },
+      { value: '1.1', label: '1.1' },
+      { value: '1.2', label: '1.2' },
+      { value: '1.3', label: '1.3' },
+      { value: '1.4', label: '1.4' },
+      { value: '1.5', label: '1.5' },
+      { value: '1.6', label: '1.6' },
+    ]},
+    { key: 'text_align', label: 'Allineamento', type: 'select', options: [
+      { value: 'left', label: 'Sinistra' },
+      { value: 'center', label: 'Centro' },
+      { value: 'right', label: 'Destra' },
+    ]},
+
+    { type: 'separator', label: 'Colori' },
+    { key: 'color', label: 'Colore testo', type: 'color' },
+    { key: 'link_color_hover', label: 'Colore link hover', type: 'color' },
+  ],
+};

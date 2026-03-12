@@ -9,7 +9,7 @@ class Olo_Totop_Tile extends Olo_Tile_Base {
     protected $type     = 'totop';
     protected $name     = 'Torna su';
     protected $icon     = 'dashicons-arrow-up-alt';
-    protected $category = 'content';
+    protected $category = 'navigation';
     protected $defaults = [
         'alignment' => 'right',
         'style'     => 'default',

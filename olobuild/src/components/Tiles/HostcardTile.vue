@@ -8,7 +8,7 @@
             <circle cx="10" cy="6" r="4"/><path d="M2 18c0-4.4 3.6-8 8-8s8 3.6 8 8"/>
           </svg>
         </span>
-        {{ s.button_text || 'Il tuo gestore' }}
+        <span data-olo-editable="button_text">{{ s.button_text || 'Il tuo gestore' }}</span>
       </div>
     </div>
 
@@ -21,8 +21,8 @@
           </svg>
         </div>
         <div style="flex:1;min-width:0;">
-          <div style="font-weight:600;font-size:15px;color:#1f2937;">Nome Gestore</div>
-          <div v-if="s.label_role" style="font-size:13px;color:#6b7280;margin-top:2px;">{{ s.label_role }}</div>
+          <div style="font-weight:600;font-size:15px;color:var(--olo-color-text, #374151);">Nome Gestore</div>
+          <div v-if="s.label_role" style="font-size:13px;color:#6b7280;margin-top:2px;" data-olo-editable="label_role">{{ s.label_role }}</div>
         </div>
         <svg width="16" height="16" viewBox="0 0 20 20" fill="#9ca3af" style="flex-shrink:0;">
           <path d="M7 4l6 6-6 6" stroke="#9ca3af" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
@@ -38,8 +38,8 @@
             <circle cx="10" cy="6" r="4"/><path d="M2 18c0-4.4 3.6-8 8-8s8 3.6 8 8"/>
           </svg>
         </div>
-        <div style="font-weight:700;font-size:18px;color:#1f2937;margin-top:12px;">Nome Gestore</div>
-        <div v-if="s.label_role" style="font-size:14px;color:#6b7280;margin-top:4px;">{{ s.label_role }}</div>
+        <div style="font-weight:700;font-size:18px;color:var(--olo-color-text, #374151);margin-top:12px;">Nome Gestore</div>
+        <div v-if="s.label_role" style="font-size:14px;color:#6b7280;margin-top:4px;" data-olo-editable="label_role">{{ s.label_role }}</div>
       </div>
       <div v-if="s.show_bio" style="font-size:13px;color:#374151;line-height:1.6;margin-bottom:14px;text-align:center;">
         Biografia del gestore della struttura...
@@ -63,6 +63,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { getShadowValue } from '@/composables/useShadowMap';
 
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 
@@ -77,7 +78,7 @@ const defaults = {
 
 const s = computed(() => ({ ...defaults, ...props.settings }));
 
-const accent = computed(() => s.value.accent_color || '#6366F1');
+const accent = computed(() => s.value.accent_color || 'var(--olo-color-primary, #6366F1)');
 
 const wrapStyle = computed(() => ({
   maxWidth: '400px',
@@ -100,12 +101,10 @@ const buttonStyle = computed(() => {
   };
 });
 
-const shadowMap = { none: 'none', sm: '0 1px 3px rgba(0,0,0,0.1)', md: '0 4px 12px rgba(0,0,0,0.12)', lg: '0 8px 30px rgba(0,0,0,0.12)', xl: '0 12px 40px rgba(0,0,0,0.18)' };
-
 const cardStyle = computed(() => ({
   background: s.value.card_bg,
   borderRadius: s.value.card_radius + 'px',
-  boxShadow: shadowMap[s.value.modal_shadow] || shadowMap.lg,
+  boxShadow: getShadowValue(s.value, 'modal_shadow'),
   overflow: 'hidden',
   cursor: 'pointer',
   transition: 'box-shadow 0.2s ease',
@@ -121,7 +120,7 @@ const miniPhotoStyle = computed(() => ({
 const inlineStyle = computed(() => ({
   background: s.value.card_bg,
   borderRadius: s.value.card_radius + 'px',
-  boxShadow: shadowMap[s.value.modal_shadow] || shadowMap.lg,
+  boxShadow: getShadowValue(s.value, 'modal_shadow'),
   padding: '24px',
 }));
 

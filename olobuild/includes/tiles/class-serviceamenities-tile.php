@@ -18,7 +18,7 @@ class Olo_ServiceAmenities_Tile extends Olo_Tile_Base {
         'show_title'    => true,
         'title_text'    => 'Servizi e comfort',
         'title_size'    => 18,
-        'title_color'   => '#1F2937',
+        'title_color'   => '',
         'check_color'   => '',
         'use_icons'     => false,
         'icon_color'    => '',
@@ -136,7 +136,7 @@ class Olo_ServiceAmenities_Tile extends Olo_Tile_Base {
             // Fallback: cerchio generico
             $path = '<circle cx="12" cy="12" r="3"/>';
         }
-        return '<svg xmlns="http://www.w3.org/2000/svg" width="' . intval( $size ) . '" height="' . intval( $size ) . '" viewBox="0 0 24 24" fill="none" stroke="' . esc_attr( $color ) . '" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">' . $path . '</svg>';
+        return '<svg xmlns="http://www.w3.org/2000/svg" width="' . intval( $size ) . '" height="' . intval( $size ) . '" viewBox="0 0 24 24" fill="none" stroke="' . ( $this->safe_color_css( $color ) ?: 'currentColor' ) . '" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">' . $path . '</svg>';
     }
 
     public function get_controls() {
@@ -148,7 +148,7 @@ class Olo_ServiceAmenities_Tile extends Olo_Tile_Base {
 
         global $post;
         if ( ! $post || ! is_singular() ) {
-            return '<div style="padding:24px;text-align:center;color:#9ca3af;background:#f9fafb;border-radius:8px">'
+            return '<div style="padding:24px;text-align:center;color:var(--olo-color-text-muted, #9CA3AF);background:var(--olo-color-muted, #F3F4F6);border-radius:8px">'
                  . '<p style="margin:0">Inserisci in un template single.</p></div>';
         }
 
@@ -177,7 +177,7 @@ class Olo_ServiceAmenities_Tile extends Olo_Tile_Base {
         ?>
         <div class="<?php echo esc_attr( $uid ); ?>">
             <?php if ( ! empty( $s['show_title'] ) ) : ?>
-                <h3 style="font-size:<?php echo absint( $s['title_size'] ); ?>px;font-weight:700;color:<?php echo esc_attr( $s['title_color'] ); ?>;margin:0 0 16px;font-style:italic">
+                <h3 style="font-size:<?php echo absint( $s['title_size'] ); ?>px;font-weight:700;color:<?php echo $this->safe_color_css( $s['title_color'] ); ?>;margin:0 0 16px;font-style:italic">
                     <?php echo esc_html( $s['title_text'] ); ?>
                 </h3>
             <?php endif; ?>
@@ -187,11 +187,11 @@ class Olo_ServiceAmenities_Tile extends Olo_Tile_Base {
                 foreach ( $amenities as $key ) :
                     $label = $amenity_labels[ $key ] ?? ucfirst( str_replace( '_', ' ', $key ) );
                 ?>
-                <div style="display:flex;align-items:center;gap:8px;font-size:<?php echo absint( $s['text_size'] ); ?>px;color:<?php echo esc_attr( $s['text_color'] ); ?>;padding:4px 0">
+                <div style="display:flex;align-items:center;gap:8px;font-size:<?php echo absint( $s['text_size'] ); ?>px;color:<?php echo $this->safe_color_css( $s['text_color'] ); ?>;padding:4px 0">
                     <?php if ( $use_icons ) : ?>
-                        <span style="color:<?php echo esc_attr( $icon_color ); ?>;flex-shrink:0;display:inline-flex"><?php echo $this->get_amenity_svg( $key, $icon_size, $icon_color ); ?></span>
+                        <span style="color:<?php echo $this->safe_color_css( $icon_color ); ?>;flex-shrink:0;display:inline-flex"><?php echo $this->get_amenity_svg( $key, $icon_size, $icon_color ); ?></span>
                     <?php else : ?>
-                        <span style="color:<?php echo esc_attr( $accent ); ?>;font-size:16px;flex-shrink:0">&#10003;</span>
+                        <span style="color:<?php echo $this->safe_color_css( $accent ); ?>;font-size:16px;flex-shrink:0">&#10003;</span>
                     <?php endif; ?>
                     <span><?php echo esc_html( $label ); ?></span>
                 </div>

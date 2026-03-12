@@ -1,4 +1,3 @@
-import { borderFields, borderDefaults } from './_shared.js';
 
 export default {
   type: 'pdfviewer',
@@ -12,7 +11,7 @@ export default {
     start_page: '1',
     initial_zoom: 'fit-width',
     theme: 'light',
-    bg_color: '#f5f5f5',
+    bg_color: '',
     show_toolbar: true,
     show_page_nav: true,
     show_zoom: true,
@@ -21,7 +20,6 @@ export default {
     show_print: true,
     show_search: false,
     show_thumbnails: false,
-    ...borderDefaults,
   },
   fields: [
     { type: 'separator', label: 'Sorgente' },
@@ -64,6 +62,5 @@ export default {
     { key: 'show_thumbnails', label: 'Miniature', type: 'toggle',
       condition: { field: 'show_toolbar', value: true } },
 
-    ...borderFields,
   ],
 };

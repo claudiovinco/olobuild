@@ -61,7 +61,7 @@ class Olo_ServiceHero_Tile extends Olo_Tile_Base {
 
         global $post;
         if ( ! $post || ! is_singular() ) {
-            return '<div style="padding:24px;text-align:center;color:#9ca3af;background:#f9fafb;border-radius:8px">'
+            return '<div style="padding:24px;text-align:center;color:var(--olo-color-text-muted, #9CA3AF);background:var(--olo-color-muted, #F3F4F6);border-radius:8px">'
                  . '<p style="margin:0">Inserisci in un template single.</p></div>';
         }
 
@@ -78,13 +78,13 @@ class Olo_ServiceHero_Tile extends Olo_Tile_Base {
         $opening  = get_post_meta( $pid, $pfx . 'opening', true );
 
         $h      = absint( $s['hero_height'] ) ?: 400;
-        $radius = absint( $s['hero_radius'] );
+        $radius = Olo_Tile_Utils::border_radius( $s['hero_radius'] ?? 0 );
         $uid    = 'olo-shero-' . wp_rand( 10000, 99999 );
 
         // Overlay
         $overlay_css = '';
         if ( $s['hero_overlay'] === 'gradient' ) {
-            $oc   = $this->safe_color( $s['overlay_color'] );
+            $oc   = $this->safe_color_css( $s['overlay_color'] );
             $opa  = max( 0, min( 100, absint( $s['overlay_opacity'] ) ) );
             $overlay_css = "background:linear-gradient(to bottom,{$oc}05 40%,{$oc}" . dechex( (int) round( $opa * 2.55 ) ) . " 100%)";
         } elseif ( $s['hero_overlay'] === 'dark' ) {
@@ -121,7 +121,7 @@ class Olo_ServiceHero_Tile extends Olo_Tile_Base {
         ob_start();
         ?>
         <style>
-            .<?php echo $uid; ?> { position:relative; height:<?php echo $h; ?>px; overflow:hidden; border-radius:<?php echo $radius; ?>px; }
+            .<?php echo $uid; ?> { position:relative; height:<?php echo $h; ?>px; overflow:hidden; border-radius:<?php echo $radius; ?>; }
             .<?php echo $uid; ?> .olo-shero-img { width:100%; height:100%; object-fit:cover; display:block; transition:transform 0.6s cubic-bezier(.25,.46,.45,.94),filter 0.6s ease; will-change:transform; }
 
             /* Ken Burns */
@@ -152,7 +152,7 @@ class Olo_ServiceHero_Tile extends Olo_Tile_Base {
 
             /* Vignette */
             <?php if ( ! empty( $s['fx_vignette'] ) ) : ?>
-            .<?php echo $uid; ?>::after { content:''; position:absolute; inset:0; border-radius:<?php echo $radius; ?>px; box-shadow:inset 0 0 <?php echo $vig_str * 2; ?>px <?php echo $vig_str; ?>px rgba(0,0,0,0.<?php echo min( 60, $vig_str ); ?>); pointer-events:none; z-index:1; }
+            .<?php echo $uid; ?>::after { content:''; position:absolute; inset:0; border-radius:<?php echo $radius; ?>; box-shadow:inset 0 0 <?php echo $vig_str * 2; ?>px <?php echo $vig_str; ?>px rgba(0,0,0,0.<?php echo min( 60, $vig_str ); ?>); pointer-events:none; z-index:1; }
             <?php endif; ?>
 
             /* Shimmer */
@@ -171,17 +171,17 @@ class Olo_ServiceHero_Tile extends Olo_Tile_Base {
 
             /* Color tint */
             <?php if ( ! empty( $s['fx_tint'] ) ) : ?>
-            .<?php echo $uid; ?> .olo-shero-tint { position:absolute; inset:0; z-index:1; background:<?php echo esc_attr( $s['fx_tint_color'] ); ?>; opacity:0.<?php echo str_pad( $tint_opa, 2, '0', STR_PAD_LEFT ); ?>; mix-blend-mode:<?php echo esc_attr( $s['fx_tint_blend'] ); ?>; pointer-events:none; }
+            .<?php echo $uid; ?> .olo-shero-tint { position:absolute; inset:0; z-index:1; background:<?php echo $this->safe_color_css( $s['fx_tint_color'] ); ?>; opacity:0.<?php echo str_pad( $tint_opa, 2, '0', STR_PAD_LEFT ); ?>; mix-blend-mode:<?php echo esc_attr( $s['fx_tint_blend'] ); ?>; pointer-events:none; }
             <?php endif; ?>
 
             /* Badges */
             .<?php echo $uid; ?> .olo-shero-badges { position:absolute; top:16px; right:16px; display:flex; flex-wrap:wrap; gap:8px; z-index:3; justify-content:flex-end; }
-            .<?php echo $uid; ?> .olo-shero-badge { background:<?php echo esc_attr( $s['badge_bg'] ); ?>; backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); color:<?php echo esc_attr( $s['badge_color'] ); ?>; padding:6px 14px; border-radius:20px; font-size:13px; font-weight:600; display:flex; align-items:center; gap:5px; transition:transform 0.3s ease,box-shadow 0.3s ease; }
+            .<?php echo $uid; ?> .olo-shero-badge { background:<?php echo $this->safe_color_css( $s['badge_bg'] ); ?>; backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); color:<?php echo $this->safe_color_css( $s['badge_color'] ); ?>; padding:6px 14px; border-radius:20px; font-size:13px; font-weight:600; display:flex; align-items:center; gap:5px; transition:transform 0.3s ease,box-shadow 0.3s ease; }
             .<?php echo $uid; ?>:hover .olo-shero-badge { transform:translateY(-2px); box-shadow:0 4px 12px rgba(0,0,0,0.2); }
-            .<?php echo $uid; ?> .olo-shero-badge--opening { background:<?php echo esc_attr( $s['opening_bg'] ); ?>; color:<?php echo esc_attr( $s['opening_color'] ); ?>; }
+            .<?php echo $uid; ?> .olo-shero-badge--opening { background:<?php echo $this->safe_color_css( $s['opening_bg'] ); ?>; color:<?php echo $this->safe_color_css( $s['opening_color'] ); ?>; }
 
             /* Title */
-            .<?php echo $uid; ?> .olo-shero-title { position:absolute; bottom:24px; left:24px; right:24px; z-index:3; font-size:<?php echo absint( $s['title_size'] ); ?>px; font-weight:700; color:<?php echo esc_attr( $s['title_color'] ); ?>; margin:0; line-height:1.2; text-shadow:0 2px 12px rgba(0,0,0,0.4); transition:transform 0.4s ease,text-shadow 0.4s ease; }
+            .<?php echo $uid; ?> .olo-shero-title { position:absolute; bottom:24px; left:24px; right:24px; z-index:3; font-size:<?php echo absint( $s['title_size'] ); ?>px; font-weight:700; color:<?php echo $this->safe_color_css( $s['title_color'] ); ?>; margin:0; line-height:1.2; text-shadow:0 2px 12px rgba(0,0,0,0.4); transition:transform 0.4s ease,text-shadow 0.4s ease; }
             .<?php echo $uid; ?>:hover .olo-shero-title { transform:translateY(-3px); text-shadow:0 4px 20px rgba(0,0,0,0.5); }
             <?php if ( $s['title_position'] === 'center' ) : ?>
             .<?php echo $uid; ?> .olo-shero-title { bottom:auto; top:50%; left:50%; transform:translate(-50%,-50%); text-align:center; width:80%; }

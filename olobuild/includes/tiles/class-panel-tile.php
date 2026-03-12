@@ -9,7 +9,7 @@ class Olo_Panel_Tile extends Olo_Tile_Base {
     protected $type     = 'panel';
     protected $name     = 'Pannello';
     protected $icon     = 'dashicons-id-alt';
-    protected $category = 'content';
+    protected $category = 'interactive';
     protected $defaults = [
         'style'         => 'default',
         'title'         => 'Panel Title',
@@ -75,7 +75,7 @@ class Olo_Panel_Tile extends Olo_Tile_Base {
                     if ( ! empty( $s['link_url'] ) ) {
                         echo '<a href="' . esc_url( $s['link_url'] ) . '"' . $target . '>';
                     }
-                    echo wp_kses_post( $s['title'] );
+                    echo esc_html( wp_strip_all_tags( $s['title'] ) );
                     if ( ! empty( $s['link_url'] ) ) {
                         echo '</a>';
                     }
@@ -87,7 +87,7 @@ class Olo_Panel_Tile extends Olo_Tile_Base {
             <?php endif; ?>
 
             <?php if ( ! empty( $s['content'] ) ) : ?>
-                <div><?php echo wp_kses_post( $s['content'] ); ?></div>
+                <div><?php echo nl2br( esc_html( wp_strip_all_tags( $s['content'] ) ) ); ?></div>
             <?php endif; ?>
         </div>
         <?php

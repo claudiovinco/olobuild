@@ -1,0 +1,1612 @@
+<?php
+/**
+ * Olo_Cookie_Consent — Sistema completo GDPR/ePrivacy cookie consent.
+ *
+ * Features:
+ * - Banner + modal preferenze con categorie (necessary, analytics, marketing, preferences)
+ * - Script blocking per categoria (type="text/plain" data-cookiecategory)
+ * - Google Consent Mode v2
+ * - Log consensi per audit GDPR
+ * - Pagina admin con configurazione completa
+ * - Shortcode [olo_cookie_settings] per riaprire il pannello preferenze
+ * - Auto-blocco script noti (GA, GTM, Facebook Pixel, Hotjar, ecc.)
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+class Olo_Cookie_Consent {
+
+    private static $instance = null;
+
+    const OPT = 'olo_cookie_settings';
+
+    /** Default cookie categories */
+    const CATEGORIES = [ 'necessary', 'analytics', 'marketing', 'preferences' ];
+
+    /** Consent log table (without prefix) */
+    const LOG_TABLE = 'olo_consent_log';
+
+    public static function instance() {
+        if ( null === self::$instance ) {
+            self::$instance = new self();
+        }
+        return self::$instance;
+    }
+
+    private function __construct() {}
+
+    public function init() {
+        // Admin
+        add_action( 'admin_menu', [ $this, 'add_menu' ] );
+        add_action( 'admin_init', [ $this, 'register_settings' ] );
+        add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_admin_assets' ] );
+
+        // AJAX
+        add_action( 'wp_ajax_olo_cookie_log_consent', [ $this, 'ajax_log_consent' ] );
+        add_action( 'wp_ajax_nopriv_olo_cookie_log_consent', [ $this, 'ajax_log_consent' ] );
+        add_action( 'wp_ajax_olo_cookie_clear_log', [ $this, 'ajax_clear_log' ] );
+        add_action( 'wp_ajax_olo_cookie_export_log', [ $this, 'ajax_export_log' ] );
+
+        // Frontend
+        $opts = self::get_options();
+        if ( ! empty( $opts['enabled'] ) ) {
+            add_action( 'wp_footer', [ $this, 'render_frontend' ], 5 );
+            add_action( 'wp_head', [ $this, 'output_gcm_default' ], 1 );
+
+            // Script blocking
+            if ( ! empty( $opts['auto_block'] ) ) {
+                add_filter( 'script_loader_tag', [ $this, 'auto_block_scripts' ], 999, 2 );
+            }
+        }
+
+        // Shortcode
+        add_shortcode( 'olo_cookie_settings', [ $this, 'shortcode_open_preferences' ] );
+
+        // Create table
+        add_action( 'admin_init', [ $this, 'maybe_create_table' ] );
+    }
+
+    /* ═══════════════════════════════════════════════════
+     * OPTIONS
+     * ═══════════════════════════════════════════════════ */
+
+    public static function get_options() {
+        $defaults = [
+            'enabled'             => false,
+            'layout'              => 'bar',       // bar | box | fullwidth
+            'position'            => 'bottom',    // bottom | top
+            'show_reject_all'     => true,
+            'show_preferences'    => true,
+            'auto_block'          => true,
+            'gcm_enabled'         => false,        // Google Consent Mode v2
+            'consent_duration'    => 365,
+            'reshow_days'         => 0,            // 0 = never re-ask
+            'banner_version'      => 1,              // Increment when policy changes
+            'block_iframes'       => true,           // Block YouTube/Maps/etc. iframes
+            // Texts
+            'banner_title'        => 'Cookie',
+            'banner_message'      => 'Utilizziamo cookie per migliorare la tua esperienza di navigazione, mostrare contenuti personalizzati e analizzare il traffico del sito.',
+            'accept_all_text'     => 'Accetta tutti',
+            'reject_all_text'     => 'Rifiuta tutti',
+            'preferences_text'    => 'Personalizza',
+            'save_text'           => 'Salva preferenze',
+            'privacy_url'         => '',
+            'privacy_text'        => 'Informativa Privacy',
+            'cookie_policy_url'   => '',
+            'cookie_policy_text'  => 'Cookie Policy',
+            // Category descriptions
+            'cat_necessary_desc'  => 'Cookie essenziali per il funzionamento del sito. Non possono essere disattivati.',
+            'cat_analytics_desc'  => 'Cookie utilizzati per raccogliere statistiche anonime sull\'uso del sito.',
+            'cat_marketing_desc'  => 'Cookie utilizzati per mostrare pubblicità pertinente ai tuoi interessi.',
+            'cat_preferences_desc'=> 'Cookie che memorizzano le tue preferenze di navigazione (lingua, tema, ecc.).',
+            // Category labels
+            'cat_necessary_label' => 'Necessari',
+            'cat_analytics_label' => 'Analitici',
+            'cat_marketing_label' => 'Marketing',
+            'cat_preferences_label'=> 'Preferenze',
+            // Appearance
+            'bg_color'            => '#ffffff',
+            'text_color'          => '#1f2937',
+            'btn_primary_bg'      => '#2563eb',
+            'btn_primary_text'    => '#ffffff',
+            'btn_secondary_bg'    => '#e5e7eb',
+            'btn_secondary_text'  => '#374151',
+            'overlay'             => true,
+            'border_radius'       => 12,
+            // Auto-block patterns
+            'block_patterns'      => "google-analytics.com\ngoogletagmanager.com\nfacebook.net/en_US/fbevents.js\nhotjar.com\nclarity.ms\nlinkedin.com/insight\npinterest.com/ct.js\ntiktok.com/i18n/pixel\nsnapchat.com/scevent.min.js",
+            // Cookie declaration
+            'cookie_table'        => [],
+        ];
+
+        $saved = get_option( self::OPT, [] );
+        if ( ! is_array( $saved ) ) {
+            $saved = [];
+        }
+
+        return wp_parse_args( $saved, $defaults );
+    }
+
+    /* ═══════════════════════════════════════════════════
+     * ADMIN MENU & PAGE
+     * ═══════════════════════════════════════════════════ */
+
+    public function add_menu() {
+        add_submenu_page(
+            'olobuilder',
+            __( 'Cookie Consent', 'olobuilder' ),
+            __( 'Cookie Consent', 'olobuilder' ),
+            'manage_options',
+            'olo-cookie-consent',
+            [ $this, 'render_admin_page' ]
+        );
+    }
+
+    public function register_settings() {
+        register_setting( 'olo_cookie_group', self::OPT, [
+            'sanitize_callback' => [ $this, 'sanitize_options' ],
+        ] );
+    }
+
+    public function enqueue_admin_assets( $hook ) {
+        if ( strpos( $hook, 'olo-cookie-consent' ) === false ) {
+            return;
+        }
+        wp_enqueue_style( 'olo-cookie-admin', OLO_URL . 'assets/css/cookie-admin.css', [], OLO_VERSION );
+    }
+
+    public function sanitize_options( $input ) {
+        $clean = [];
+
+        // Booleans
+        $bools = [ 'enabled', 'show_reject_all', 'show_preferences', 'auto_block', 'gcm_enabled', 'overlay', 'block_iframes' ];
+        foreach ( $bools as $k ) {
+            $clean[ $k ] = ! empty( $input[ $k ] );
+        }
+
+        // Strings
+        $strings = [
+            'layout', 'position', 'banner_title', 'banner_message',
+            'accept_all_text', 'reject_all_text', 'preferences_text', 'save_text',
+            'privacy_text', 'cookie_policy_text',
+            'cat_necessary_desc', 'cat_analytics_desc', 'cat_marketing_desc', 'cat_preferences_desc',
+            'cat_necessary_label', 'cat_analytics_label', 'cat_marketing_label', 'cat_preferences_label',
+            'bg_color', 'text_color', 'btn_primary_bg', 'btn_primary_text',
+            'btn_secondary_bg', 'btn_secondary_text',
+        ];
+        foreach ( $strings as $k ) {
+            $clean[ $k ] = sanitize_text_field( $input[ $k ] ?? '' );
+        }
+
+        // URLs
+        $clean['privacy_url']       = esc_url_raw( $input['privacy_url'] ?? '' );
+        $clean['cookie_policy_url'] = esc_url_raw( $input['cookie_policy_url'] ?? '' );
+
+        // Integers
+        $clean['consent_duration'] = max( 1, min( 730, intval( $input['consent_duration'] ?? 365 ) ) );
+        $clean['reshow_days']      = max( 0, min( 365, intval( $input['reshow_days'] ?? 0 ) ) );
+        $clean['border_radius']    = max( 0, min( 30, intval( $input['border_radius'] ?? 12 ) ) );
+        $clean['banner_version']   = max( 1, intval( $input['banner_version'] ?? 1 ) );
+
+        // Layout validation
+        if ( ! in_array( $clean['layout'], [ 'bar', 'box', 'fullwidth' ], true ) ) {
+            $clean['layout'] = 'bar';
+        }
+        if ( ! in_array( $clean['position'], [ 'top', 'bottom' ], true ) ) {
+            $clean['position'] = 'bottom';
+        }
+
+        // Block patterns
+        $clean['block_patterns'] = sanitize_textarea_field( $input['block_patterns'] ?? '' );
+
+        // Cookie table (array of arrays)
+        $clean['cookie_table'] = [];
+        if ( ! empty( $input['cookie_table'] ) ) {
+            if ( is_array( $input['cookie_table'] ) ) {
+                foreach ( $input['cookie_table'] as $row ) {
+                    if ( ! empty( $row['name'] ) ) {
+                        $clean['cookie_table'][] = [
+                            'name'     => sanitize_text_field( $row['name'] ),
+                            'provider' => sanitize_text_field( $row['provider'] ?? '' ),
+                            'purpose'  => sanitize_text_field( $row['purpose'] ?? '' ),
+                            'expiry'   => sanitize_text_field( $row['expiry'] ?? '' ),
+                            'category' => in_array( $row['category'] ?? '', self::CATEGORIES, true ) ? $row['category'] : 'necessary',
+                        ];
+                    }
+                }
+            }
+        }
+
+        // Sync legacy option
+        update_option( 'olo_cookie_consent_enabled', $clean['enabled'] ? '1' : '' );
+
+        return $clean;
+    }
+
+    /* ─────────────────────────────────────────────
+     * Admin Page Render
+     * ───────────────────────────────────────────── */
+
+    public function render_admin_page() {
+        $opts = self::get_options();
+        $tab  = sanitize_key( $_GET['tab'] ?? 'general' );
+        $tabs = [
+            'general'     => __( 'Generale', 'olobuilder' ),
+            'texts'       => __( 'Testi', 'olobuilder' ),
+            'appearance'  => __( 'Aspetto', 'olobuilder' ),
+            'categories'  => __( 'Categorie', 'olobuilder' ),
+            'blocking'    => __( 'Blocco Script', 'olobuilder' ),
+            'declaration' => __( 'Dichiarazione Cookie', 'olobuilder' ),
+            'consent_log' => __( 'Log Consensi', 'olobuilder' ),
+        ];
+        ?>
+        <div class="wrap olo-ck-wrap">
+            <h1>
+                <span class="dashicons dashicons-shield" style="margin-right:8px;color:#2271b1"></span>
+                <?php esc_html_e( 'Cookie Consent', 'olobuilder' ); ?>
+            </h1>
+
+            <nav class="nav-tab-wrapper olo-ck-tabs">
+                <?php foreach ( $tabs as $slug => $label ) : ?>
+                    <a href="<?php echo esc_url( admin_url( 'admin.php?page=olo-cookie-consent&tab=' . $slug ) ); ?>"
+                       class="nav-tab <?php echo $tab === $slug ? 'nav-tab-active' : ''; ?>">
+                        <?php echo esc_html( $label ); ?>
+                    </a>
+                <?php endforeach; ?>
+            </nav>
+
+            <?php if ( $tab !== 'consent_log' ) : ?>
+            <form method="post" action="options.php" class="olo-ck-form">
+                <?php settings_fields( 'olo_cookie_group' ); ?>
+                <?php $this->render_hidden_fields( $opts, $tab ); ?>
+
+                <?php
+                switch ( $tab ) {
+                    case 'general':     $this->render_tab_general( $opts ); break;
+                    case 'texts':       $this->render_tab_texts( $opts ); break;
+                    case 'appearance':  $this->render_tab_appearance( $opts ); break;
+                    case 'categories':  $this->render_tab_categories( $opts ); break;
+                    case 'blocking':    $this->render_tab_blocking( $opts ); break;
+                    case 'declaration': $this->render_tab_declaration( $opts ); break;
+                }
+                ?>
+
+                <?php submit_button( __( 'Salva impostazioni', 'olobuilder' ) ); ?>
+            </form>
+            <?php else : ?>
+                <div class="olo-ck-form">
+                    <?php $this->render_tab_consent_log(); ?>
+                </div>
+            <?php endif; ?>
+        </div>
+        <?php
+    }
+
+    /**
+     * Render hidden fields to preserve settings from other tabs.
+     */
+    private function render_hidden_fields( $opts, $current_tab ) {
+        $n = self::OPT;
+
+        // All fields grouped by tab
+        $tab_fields = [
+            'general' => [ 'enabled', 'layout', 'position', 'show_reject_all', 'show_preferences', 'consent_duration', 'reshow_days', 'gcm_enabled', 'banner_version', 'block_iframes' ],
+            'texts' => [ 'banner_title', 'banner_message', 'accept_all_text', 'reject_all_text', 'preferences_text', 'save_text', 'privacy_url', 'privacy_text', 'cookie_policy_url', 'cookie_policy_text' ],
+            'appearance' => [ 'bg_color', 'text_color', 'btn_primary_bg', 'btn_primary_text', 'btn_secondary_bg', 'btn_secondary_text', 'overlay', 'border_radius' ],
+            'categories' => [ 'cat_necessary_label', 'cat_analytics_label', 'cat_marketing_label', 'cat_preferences_label', 'cat_necessary_desc', 'cat_analytics_desc', 'cat_marketing_desc', 'cat_preferences_desc' ],
+            'blocking' => [ 'auto_block', 'block_patterns' ],
+            'declaration' => [],
+        ];
+
+        // For each tab that is NOT the current one, output hidden fields
+        foreach ( $tab_fields as $tab_name => $fields ) {
+            if ( $tab_name === $current_tab ) {
+                continue;
+            }
+            foreach ( $fields as $field ) {
+                $val = $opts[ $field ] ?? '';
+                if ( is_bool( $val ) ) {
+                    if ( $val ) {
+                        echo '<input type="hidden" name="' . esc_attr( $n ) . '[' . esc_attr( $field ) . ']" value="1" />';
+                    }
+                } else {
+                    echo '<input type="hidden" name="' . esc_attr( $n ) . '[' . esc_attr( $field ) . ']" value="' . esc_attr( $val ) . '" />';
+                }
+            }
+        }
+
+        // Cookie table (always preserve if not on declaration tab)
+        if ( $current_tab !== 'declaration' ) {
+            if ( ! empty( $opts['cookie_table'] ) ) {
+                foreach ( $opts['cookie_table'] as $i => $row ) {
+                    foreach ( $row as $k => $v ) {
+                        echo '<input type="hidden" name="' . esc_attr( $n ) . '[cookie_table][' . $i . '][' . esc_attr( $k ) . ']" value="' . esc_attr( $v ) . '" />';
+                    }
+                }
+            }
+        }
+    }
+
+    /* ─── Tab: General ─── */
+
+    private function render_tab_general( $opts ) {
+        $n = self::OPT;
+        ?>
+        <div class="olo-ck-section">
+            <h2><?php esc_html_e( 'Impostazioni generali', 'olobuilder' ); ?></h2>
+            <table class="form-table olo-ck-table">
+                <tr>
+                    <th><?php esc_html_e( 'Abilita Cookie Banner', 'olobuilder' ); ?></th>
+                    <td>
+                        <label class="olo-ck-toggle">
+                            <input type="checkbox" name="<?php echo $n; ?>[enabled]" value="1" <?php checked( $opts['enabled'] ); ?> />
+                            <span class="olo-ck-toggle-slider"></span>
+                        </label>
+                    </td>
+                </tr>
+                <tr>
+                    <th><?php esc_html_e( 'Layout', 'olobuilder' ); ?></th>
+                    <td>
+                        <select name="<?php echo $n; ?>[layout]">
+                            <option value="bar" <?php selected( $opts['layout'], 'bar' ); ?>><?php esc_html_e( 'Barra', 'olobuilder' ); ?></option>
+                            <option value="box" <?php selected( $opts['layout'], 'box' ); ?>><?php esc_html_e( 'Box laterale', 'olobuilder' ); ?></option>
+                            <option value="fullwidth" <?php selected( $opts['layout'], 'fullwidth' ); ?>><?php esc_html_e( 'Full-width', 'olobuilder' ); ?></option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th><?php esc_html_e( 'Posizione', 'olobuilder' ); ?></th>
+                    <td>
+                        <select name="<?php echo $n; ?>[position]">
+                            <option value="bottom" <?php selected( $opts['position'], 'bottom' ); ?>><?php esc_html_e( 'In basso', 'olobuilder' ); ?></option>
+                            <option value="top" <?php selected( $opts['position'], 'top' ); ?>><?php esc_html_e( 'In alto', 'olobuilder' ); ?></option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th><?php esc_html_e( 'Mostra "Rifiuta tutti"', 'olobuilder' ); ?></th>
+                    <td>
+                        <label class="olo-ck-toggle">
+                            <input type="checkbox" name="<?php echo $n; ?>[show_reject_all]" value="1" <?php checked( $opts['show_reject_all'] ); ?> />
+                            <span class="olo-ck-toggle-slider"></span>
+                        </label>
+                        <p class="description"><?php esc_html_e( 'Richiesto dalle linee guida CNIL/Garante Privacy italiano.', 'olobuilder' ); ?></p>
+                    </td>
+                </tr>
+                <tr>
+                    <th><?php esc_html_e( 'Mostra "Personalizza"', 'olobuilder' ); ?></th>
+                    <td>
+                        <label class="olo-ck-toggle">
+                            <input type="checkbox" name="<?php echo $n; ?>[show_preferences]" value="1" <?php checked( $opts['show_preferences'] ); ?> />
+                            <span class="olo-ck-toggle-slider"></span>
+                        </label>
+                        <p class="description"><?php esc_html_e( 'Pulsante per aprire il pannello preferenze con le categorie.', 'olobuilder' ); ?></p>
+                    </td>
+                </tr>
+                <tr>
+                    <th><?php esc_html_e( 'Durata consenso', 'olobuilder' ); ?></th>
+                    <td>
+                        <input type="number" name="<?php echo $n; ?>[consent_duration]" value="<?php echo esc_attr( $opts['consent_duration'] ); ?>" min="1" max="730" class="small-text" />
+                        <span><?php esc_html_e( 'giorni', 'olobuilder' ); ?></span>
+                        <p class="description"><?php esc_html_e( 'GDPR raccomanda max 6 mesi (180 giorni). Molti usano 365.', 'olobuilder' ); ?></p>
+                    </td>
+                </tr>
+                <tr>
+                    <th><?php esc_html_e( 'Richiedere nuovamente dopo', 'olobuilder' ); ?></th>
+                    <td>
+                        <input type="number" name="<?php echo $n; ?>[reshow_days]" value="<?php echo esc_attr( $opts['reshow_days'] ); ?>" min="0" max="365" class="small-text" />
+                        <span><?php esc_html_e( 'giorni (0 = mai)', 'olobuilder' ); ?></span>
+                        <p class="description"><?php esc_html_e( 'Se la cookie policy cambia, puoi forzare la ripresentazione del banner.', 'olobuilder' ); ?></p>
+                    </td>
+                </tr>
+                <tr>
+                    <th><?php esc_html_e( 'Google Consent Mode v2', 'olobuilder' ); ?></th>
+                    <td>
+                        <label class="olo-ck-toggle">
+                            <input type="checkbox" name="<?php echo $n; ?>[gcm_enabled]" value="1" <?php checked( $opts['gcm_enabled'] ); ?> />
+                            <span class="olo-ck-toggle-slider"></span>
+                        </label>
+                        <p class="description"><?php esc_html_e( 'Invia segnali gtag("consent") a Google. Richiesto da Google Ads dal marzo 2024 per EEA/UK.', 'olobuilder' ); ?></p>
+                    </td>
+                </tr>
+                <tr>
+                    <th><?php esc_html_e( 'Blocco iframe', 'olobuilder' ); ?></th>
+                    <td>
+                        <label class="olo-ck-toggle">
+                            <input type="checkbox" name="<?php echo $n; ?>[block_iframes]" value="1" <?php checked( $opts['block_iframes'] ); ?> />
+                            <span class="olo-ck-toggle-slider"></span>
+                        </label>
+                        <p class="description"><?php esc_html_e( 'Blocca iframe di YouTube, Vimeo, Google Maps fino al consenso. Mostra un placeholder con pulsante "Carica contenuto".', 'olobuilder' ); ?></p>
+                    </td>
+                </tr>
+                <tr>
+                    <th><?php esc_html_e( 'Versione banner', 'olobuilder' ); ?></th>
+                    <td>
+                        <input type="number" name="<?php echo $n; ?>[banner_version]" value="<?php echo esc_attr( $opts['banner_version'] ); ?>" min="1" class="small-text" />
+                        <p class="description"><?php esc_html_e( 'Incrementa quando cambi la cookie policy. I visitatori che hanno dato il consenso a una versione precedente vedranno di nuovo il banner.', 'olobuilder' ); ?></p>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <?php
+    }
+
+    /* ─── Tab: Texts ─── */
+
+    private function render_tab_texts( $opts ) {
+        $n = self::OPT;
+        ?>
+        <div class="olo-ck-section">
+            <h2><?php esc_html_e( 'Testi del banner', 'olobuilder' ); ?></h2>
+            <table class="form-table olo-ck-table">
+                <tr>
+                    <th><?php esc_html_e( 'Titolo', 'olobuilder' ); ?></th>
+                    <td><input type="text" name="<?php echo $n; ?>[banner_title]" value="<?php echo esc_attr( $opts['banner_title'] ); ?>" class="regular-text" /></td>
+                </tr>
+                <tr>
+                    <th><?php esc_html_e( 'Messaggio', 'olobuilder' ); ?></th>
+                    <td><textarea name="<?php echo $n; ?>[banner_message]" rows="3" class="large-text"><?php echo esc_textarea( $opts['banner_message'] ); ?></textarea></td>
+                </tr>
+                <tr>
+                    <th><?php esc_html_e( 'Pulsante "Accetta tutti"', 'olobuilder' ); ?></th>
+                    <td><input type="text" name="<?php echo $n; ?>[accept_all_text]" value="<?php echo esc_attr( $opts['accept_all_text'] ); ?>" class="regular-text" /></td>
+                </tr>
+                <tr>
+                    <th><?php esc_html_e( 'Pulsante "Rifiuta tutti"', 'olobuilder' ); ?></th>
+                    <td><input type="text" name="<?php echo $n; ?>[reject_all_text]" value="<?php echo esc_attr( $opts['reject_all_text'] ); ?>" class="regular-text" /></td>
+                </tr>
+                <tr>
+                    <th><?php esc_html_e( 'Pulsante "Personalizza"', 'olobuilder' ); ?></th>
+                    <td><input type="text" name="<?php echo $n; ?>[preferences_text]" value="<?php echo esc_attr( $opts['preferences_text'] ); ?>" class="regular-text" /></td>
+                </tr>
+                <tr>
+                    <th><?php esc_html_e( 'Pulsante "Salva preferenze"', 'olobuilder' ); ?></th>
+                    <td><input type="text" name="<?php echo $n; ?>[save_text]" value="<?php echo esc_attr( $opts['save_text'] ); ?>" class="regular-text" /></td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="olo-ck-section">
+            <h2><?php esc_html_e( 'Link policy', 'olobuilder' ); ?></h2>
+            <table class="form-table olo-ck-table">
+                <tr>
+                    <th><?php esc_html_e( 'URL Privacy Policy', 'olobuilder' ); ?></th>
+                    <td>
+                        <input type="url" name="<?php echo $n; ?>[privacy_url]" value="<?php echo esc_url( $opts['privacy_url'] ); ?>" class="regular-text" placeholder="https://..." />
+                    </td>
+                </tr>
+                <tr>
+                    <th><?php esc_html_e( 'Testo link Privacy', 'olobuilder' ); ?></th>
+                    <td><input type="text" name="<?php echo $n; ?>[privacy_text]" value="<?php echo esc_attr( $opts['privacy_text'] ); ?>" class="regular-text" /></td>
+                </tr>
+                <tr>
+                    <th><?php esc_html_e( 'URL Cookie Policy', 'olobuilder' ); ?></th>
+                    <td>
+                        <input type="url" name="<?php echo $n; ?>[cookie_policy_url]" value="<?php echo esc_url( $opts['cookie_policy_url'] ); ?>" class="regular-text" placeholder="https://..." />
+                    </td>
+                </tr>
+                <tr>
+                    <th><?php esc_html_e( 'Testo link Cookie Policy', 'olobuilder' ); ?></th>
+                    <td><input type="text" name="<?php echo $n; ?>[cookie_policy_text]" value="<?php echo esc_attr( $opts['cookie_policy_text'] ); ?>" class="regular-text" /></td>
+                </tr>
+            </table>
+        </div>
+        <?php
+    }
+
+    /* ─── Tab: Appearance ─── */
+
+    private function render_tab_appearance( $opts ) {
+        $n = self::OPT;
+        ?>
+        <div class="olo-ck-section">
+            <h2><?php esc_html_e( 'Colori e stile', 'olobuilder' ); ?></h2>
+            <table class="form-table olo-ck-table">
+                <tr>
+                    <th><?php esc_html_e( 'Sfondo banner', 'olobuilder' ); ?></th>
+                    <td><input type="color" name="<?php echo $n; ?>[bg_color]" value="<?php echo esc_attr( $opts['bg_color'] ); ?>" /></td>
+                </tr>
+                <tr>
+                    <th><?php esc_html_e( 'Colore testo', 'olobuilder' ); ?></th>
+                    <td><input type="color" name="<?php echo $n; ?>[text_color]" value="<?php echo esc_attr( $opts['text_color'] ); ?>" /></td>
+                </tr>
+                <tr>
+                    <th><?php esc_html_e( 'Pulsante primario — sfondo', 'olobuilder' ); ?></th>
+                    <td><input type="color" name="<?php echo $n; ?>[btn_primary_bg]" value="<?php echo esc_attr( $opts['btn_primary_bg'] ); ?>" /></td>
+                </tr>
+                <tr>
+                    <th><?php esc_html_e( 'Pulsante primario — testo', 'olobuilder' ); ?></th>
+                    <td><input type="color" name="<?php echo $n; ?>[btn_primary_text]" value="<?php echo esc_attr( $opts['btn_primary_text'] ); ?>" /></td>
+                </tr>
+                <tr>
+                    <th><?php esc_html_e( 'Pulsante secondario — sfondo', 'olobuilder' ); ?></th>
+                    <td><input type="color" name="<?php echo $n; ?>[btn_secondary_bg]" value="<?php echo esc_attr( $opts['btn_secondary_bg'] ); ?>" /></td>
+                </tr>
+                <tr>
+                    <th><?php esc_html_e( 'Pulsante secondario — testo', 'olobuilder' ); ?></th>
+                    <td><input type="color" name="<?php echo $n; ?>[btn_secondary_text]" value="<?php echo esc_attr( $opts['btn_secondary_text'] ); ?>" /></td>
+                </tr>
+                <tr>
+                    <th><?php esc_html_e( 'Overlay scuro', 'olobuilder' ); ?></th>
+                    <td>
+                        <label class="olo-ck-toggle">
+                            <input type="checkbox" name="<?php echo $n; ?>[overlay]" value="1" <?php checked( $opts['overlay'] ); ?> />
+                            <span class="olo-ck-toggle-slider"></span>
+                        </label>
+                        <p class="description"><?php esc_html_e( 'Oscura la pagina dietro il banner per attirare l\'attenzione.', 'olobuilder' ); ?></p>
+                    </td>
+                </tr>
+                <tr>
+                    <th><?php esc_html_e( 'Border radius', 'olobuilder' ); ?></th>
+                    <td>
+                        <input type="number" name="<?php echo $n; ?>[border_radius]" value="<?php echo esc_attr( $opts['border_radius'] ); ?>" min="0" max="30" class="small-text" />
+                        <span>px</span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <?php
+    }
+
+    /* ─── Tab: Categories ─── */
+
+    private function render_tab_categories( $opts ) {
+        $n = self::OPT;
+        $cats = [
+            'necessary'   => [ 'icon' => 'admin-network',   'locked' => true ],
+            'analytics'   => [ 'icon' => 'chart-area',      'locked' => false ],
+            'marketing'   => [ 'icon' => 'megaphone',       'locked' => false ],
+            'preferences' => [ 'icon' => 'admin-settings',  'locked' => false ],
+        ];
+        ?>
+        <div class="olo-ck-section">
+            <h2><?php esc_html_e( 'Categorie cookie', 'olobuilder' ); ?></h2>
+            <p class="description"><?php esc_html_e( 'Personalizza nome e descrizione di ogni categoria mostrata nel pannello preferenze.', 'olobuilder' ); ?></p>
+
+            <?php foreach ( $cats as $cat => $meta ) : ?>
+            <div class="olo-ck-cat-card">
+                <div class="olo-ck-cat-header">
+                    <span class="dashicons dashicons-<?php echo esc_attr( $meta['icon'] ); ?>"></span>
+                    <strong><?php echo esc_html( ucfirst( $cat ) ); ?></strong>
+                    <?php if ( $meta['locked'] ) : ?>
+                        <span class="olo-ck-badge"><?php esc_html_e( 'Sempre attivo', 'olobuilder' ); ?></span>
+                    <?php endif; ?>
+                </div>
+                <table class="form-table olo-ck-table" style="margin-top:0">
+                    <tr>
+                        <th style="width:120px"><?php esc_html_e( 'Etichetta', 'olobuilder' ); ?></th>
+                        <td><input type="text" name="<?php echo $n; ?>[cat_<?php echo $cat; ?>_label]" value="<?php echo esc_attr( $opts[ "cat_{$cat}_label" ] ); ?>" class="regular-text" /></td>
+                    </tr>
+                    <tr>
+                        <th style="width:120px"><?php esc_html_e( 'Descrizione', 'olobuilder' ); ?></th>
+                        <td><textarea name="<?php echo $n; ?>[cat_<?php echo $cat; ?>_desc]" rows="2" class="large-text"><?php echo esc_textarea( $opts[ "cat_{$cat}_desc" ] ); ?></textarea></td>
+                    </tr>
+                </table>
+            </div>
+            <?php endforeach; ?>
+        </div>
+        <?php
+    }
+
+    /* ─── Tab: Blocking ─── */
+
+    private function render_tab_blocking( $opts ) {
+        $n = self::OPT;
+        ?>
+        <div class="olo-ck-section">
+            <h2><?php esc_html_e( 'Blocco automatico script', 'olobuilder' ); ?></h2>
+            <p class="description">
+                <?php esc_html_e( 'Blocca automaticamente script di terze parti finché l\'utente non accetta la categoria corrispondente.', 'olobuilder' ); ?>
+            </p>
+
+            <table class="form-table olo-ck-table">
+                <tr>
+                    <th><?php esc_html_e( 'Abilita auto-blocco', 'olobuilder' ); ?></th>
+                    <td>
+                        <label class="olo-ck-toggle">
+                            <input type="checkbox" name="<?php echo $n; ?>[auto_block]" value="1" <?php checked( $opts['auto_block'] ); ?> />
+                            <span class="olo-ck-toggle-slider"></span>
+                        </label>
+                        <p class="description"><?php esc_html_e( 'Converte gli script corrispondenti in type="text/plain" finché il consenso non è dato.', 'olobuilder' ); ?></p>
+                    </td>
+                </tr>
+                <tr>
+                    <th><?php esc_html_e( 'Pattern da bloccare', 'olobuilder' ); ?></th>
+                    <td>
+                        <textarea name="<?php echo $n; ?>[block_patterns]" rows="10" class="large-text code"><?php echo esc_textarea( $opts['block_patterns'] ); ?></textarea>
+                        <p class="description"><?php esc_html_e( 'Un dominio/pattern per riga. Gli script il cui src contiene uno di questi pattern vengono bloccati. Assegnati di default alla categoria "analytics" per google*, "marketing" per facebook/linkedin/tiktok/pinterest/snapchat.', 'olobuilder' ); ?></p>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="olo-ck-section">
+            <h2><?php esc_html_e( 'Blocco manuale', 'olobuilder' ); ?></h2>
+            <p class="description">
+                <?php esc_html_e( 'Puoi anche bloccare script manualmente nel tuo HTML aggiungendo:', 'olobuilder' ); ?>
+            </p>
+            <pre class="olo-ck-code">&lt;script type="text/plain" data-cookiecategory="analytics" src="..."&gt;&lt;/script&gt;
+&lt;script type="text/plain" data-cookiecategory="marketing"&gt;
+  // inline script bloccato finché l'utente non accetta "marketing"
+&lt;/script&gt;</pre>
+        </div>
+        <?php
+    }
+
+    /* ─── Tab: Declaration ─── */
+
+    private function render_tab_declaration( $opts ) {
+        $n    = self::OPT;
+        $rows = $opts['cookie_table'];
+        ?>
+        <div class="olo-ck-section">
+            <h2><?php esc_html_e( 'Dichiarazione cookie', 'olobuilder' ); ?></h2>
+            <p class="description">
+                <?php esc_html_e( 'Elenca i cookie utilizzati dal sito. Questi vengono mostrati nel pannello preferenze.', 'olobuilder' ); ?>
+            </p>
+
+            <table class="widefat olo-ck-decl-table" id="olo-ck-decl">
+                <thead>
+                    <tr>
+                        <th><?php esc_html_e( 'Nome cookie', 'olobuilder' ); ?></th>
+                        <th><?php esc_html_e( 'Provider', 'olobuilder' ); ?></th>
+                        <th><?php esc_html_e( 'Scopo', 'olobuilder' ); ?></th>
+                        <th><?php esc_html_e( 'Scadenza', 'olobuilder' ); ?></th>
+                        <th><?php esc_html_e( 'Categoria', 'olobuilder' ); ?></th>
+                        <th style="width:40px"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if ( ! empty( $rows ) ) : ?>
+                        <?php foreach ( $rows as $i => $row ) : ?>
+                            <tr>
+                                <td><input type="text" name="<?php echo $n; ?>[cookie_table][<?php echo $i; ?>][name]" value="<?php echo esc_attr( $row['name'] ); ?>" class="widefat" /></td>
+                                <td><input type="text" name="<?php echo $n; ?>[cookie_table][<?php echo $i; ?>][provider]" value="<?php echo esc_attr( $row['provider'] ); ?>" class="widefat" /></td>
+                                <td><input type="text" name="<?php echo $n; ?>[cookie_table][<?php echo $i; ?>][purpose]" value="<?php echo esc_attr( $row['purpose'] ); ?>" class="widefat" /></td>
+                                <td><input type="text" name="<?php echo $n; ?>[cookie_table][<?php echo $i; ?>][expiry]" value="<?php echo esc_attr( $row['expiry'] ); ?>" class="widefat" style="width:100px" /></td>
+                                <td>
+                                    <select name="<?php echo $n; ?>[cookie_table][<?php echo $i; ?>][category]" class="widefat">
+                                        <?php foreach ( self::CATEGORIES as $c ) : ?>
+                                            <option value="<?php echo $c; ?>" <?php selected( $row['category'], $c ); ?>><?php echo esc_html( $opts[ "cat_{$c}_label" ] ); ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </td>
+                                <td><button type="button" class="button olo-ck-remove-row" title="<?php esc_attr_e( 'Rimuovi', 'olobuilder' ); ?>">&times;</button></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+
+            <button type="button" class="button" id="olo-ck-add-row" style="margin-top:8px">
+                + <?php esc_html_e( 'Aggiungi cookie', 'olobuilder' ); ?>
+            </button>
+        </div>
+
+        <script>
+        (function(){
+            var idx = <?php echo count( $rows ); ?>;
+            var n   = '<?php echo esc_js( $n ); ?>';
+            var cats = <?php echo wp_json_encode( array_map( function($c) use ($opts) { return [ 'value' => $c, 'label' => $opts["cat_{$c}_label"] ]; }, self::CATEGORIES ) ); ?>;
+
+            document.getElementById('olo-ck-add-row').addEventListener('click', function(){
+                var tbody = document.querySelector('#olo-ck-decl tbody');
+                var tr = document.createElement('tr');
+                var catOpts = '';
+                cats.forEach(function(c){ catOpts += '<option value="'+c.value+'">'+c.label+'</option>'; });
+                tr.innerHTML = '<td><input type="text" name="'+n+'[cookie_table]['+idx+'][name]" class="widefat" /></td>'
+                    + '<td><input type="text" name="'+n+'[cookie_table]['+idx+'][provider]" class="widefat" /></td>'
+                    + '<td><input type="text" name="'+n+'[cookie_table]['+idx+'][purpose]" class="widefat" /></td>'
+                    + '<td><input type="text" name="'+n+'[cookie_table]['+idx+'][expiry]" class="widefat" style="width:100px" /></td>'
+                    + '<td><select name="'+n+'[cookie_table]['+idx+'][category]" class="widefat">'+catOpts+'</select></td>'
+                    + '<td><button type="button" class="button olo-ck-remove-row">&times;</button></td>';
+                tbody.appendChild(tr);
+                idx++;
+            });
+
+            document.getElementById('olo-ck-decl').addEventListener('click', function(e){
+                if(e.target.classList.contains('olo-ck-remove-row')){
+                    e.target.closest('tr').remove();
+                }
+            });
+        })();
+        </script>
+        <?php
+    }
+
+    /* ─── Tab: Consent Log ─── */
+
+    private function render_tab_consent_log() {
+        global $wpdb;
+        $table = $wpdb->prefix . self::LOG_TABLE;
+
+        $total = 0;
+        if ( $wpdb->get_var( "SHOW TABLES LIKE '$table'" ) === $table ) {
+            $total = (int) $wpdb->get_var( "SELECT COUNT(*) FROM $table" );
+        }
+
+        $page     = max( 1, intval( $_GET['paged'] ?? 1 ) );
+        $per_page = 30;
+        $offset   = ( $page - 1 ) * $per_page;
+        $rows     = [];
+
+        if ( $total > 0 ) {
+            $rows = $wpdb->get_results( $wpdb->prepare(
+                "SELECT * FROM $table ORDER BY created_at DESC LIMIT %d OFFSET %d",
+                $per_page, $offset
+            ), ARRAY_A );
+        }
+
+        ?>
+        <div class="olo-ck-section">
+            <h2><?php esc_html_e( 'Log dei consensi', 'olobuilder' ); ?></h2>
+            <p class="description">
+                <?php
+                printf(
+                    esc_html__( '%d consensi registrati. Il GDPR richiede di poter dimostrare il consenso raccolto.', 'olobuilder' ),
+                    $total
+                );
+                ?>
+            </p>
+
+            <div style="margin-bottom:12px;display:flex;gap:8px">
+                <button type="button" class="button" id="olo-ck-export-log">
+                    <span class="dashicons dashicons-download" style="margin-top:4px"></span>
+                    <?php esc_html_e( 'Esporta CSV', 'olobuilder' ); ?>
+                </button>
+                <button type="button" class="button" id="olo-ck-clear-log">
+                    <span class="dashicons dashicons-trash" style="margin-top:4px"></span>
+                    <?php esc_html_e( 'Svuota log', 'olobuilder' ); ?>
+                </button>
+                <span id="olo-ck-log-msg" class="olo-ck-msg"></span>
+            </div>
+
+            <?php if ( ! empty( $rows ) ) : ?>
+            <table class="widefat striped">
+                <thead>
+                    <tr>
+                        <th><?php esc_html_e( 'ID Consenso', 'olobuilder' ); ?></th>
+                        <th><?php esc_html_e( 'Data', 'olobuilder' ); ?></th>
+                        <th><?php esc_html_e( 'Azione', 'olobuilder' ); ?></th>
+                        <th><?php esc_html_e( 'Ver.', 'olobuilder' ); ?></th>
+                        <th><?php esc_html_e( 'IP (hash)', 'olobuilder' ); ?></th>
+                        <th><?php esc_html_e( 'Categorie accettate', 'olobuilder' ); ?></th>
+                        <th><?php esc_html_e( 'User Agent', 'olobuilder' ); ?></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ( $rows as $row ) : ?>
+                    <tr>
+                        <td><code><?php echo esc_html( substr( $row['consent_id'], 0, 12 ) ); ?>...</code></td>
+                        <td><?php echo esc_html( $row['created_at'] ); ?></td>
+                        <td>
+                            <?php
+                            $at = $row['action_type'] ?? 'initial';
+                            $at_labels = [ 'initial' => 'Primo consenso', 'update' => 'Modifica', 'revoke' => 'Revoca' ];
+                            $at_colors = [ 'initial' => '#28a745', 'update' => '#ffc107', 'revoke' => '#dc3545' ];
+                            echo '<span style="color:' . ( $at_colors[ $at ] ?? '#666' ) . ';font-weight:600">' . esc_html( $at_labels[ $at ] ?? $at ) . '</span>';
+                            ?>
+                        </td>
+                        <td><?php echo intval( $row['banner_version'] ?? 1 ); ?></td>
+                        <td><code><?php echo esc_html( substr( $row['ip_hash'], 0, 16 ) ); ?>...</code></td>
+                        <td>
+                            <?php
+                            $cats = json_decode( $row['categories'], true );
+                            if ( is_array( $cats ) ) {
+                                foreach ( $cats as $c => $v ) {
+                                    if ( $v ) {
+                                        echo '<span class="olo-ck-cat-pill">' . esc_html( $c ) . '</span> ';
+                                    }
+                                }
+                            }
+                            ?>
+                        </td>
+                        <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="<?php echo esc_attr( $row['user_agent'] ); ?>"><?php echo esc_html( $row['user_agent'] ); ?></td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+
+            <?php
+            // Pagination
+            $total_pages = ceil( $total / $per_page );
+            if ( $total_pages > 1 ) {
+                echo '<div class="tablenav"><div class="tablenav-pages">';
+                echo paginate_links( [
+                    'base'    => add_query_arg( 'paged', '%#%' ),
+                    'format'  => '',
+                    'current' => $page,
+                    'total'   => $total_pages,
+                ] );
+                echo '</div></div>';
+            }
+            ?>
+            <?php else : ?>
+                <p style="color:#666"><em><?php esc_html_e( 'Nessun consenso registrato.', 'olobuilder' ); ?></em></p>
+            <?php endif; ?>
+        </div>
+
+        <script>
+        (function(){
+            var nonce = '<?php echo wp_create_nonce( 'olo_cookie_log' ); ?>';
+            var msg   = document.getElementById('olo-ck-log-msg');
+
+            document.getElementById('olo-ck-clear-log').addEventListener('click', function(){
+                if(!confirm('<?php echo esc_js( __( 'Svuotare tutti i log dei consensi?', 'olobuilder' ) ); ?>'))return;
+                this.disabled = true;
+                var self = this;
+                fetch(ajaxurl + '?action=olo_cookie_clear_log&_nonce=' + nonce)
+                    .then(function(r){return r.json()})
+                    .then(function(d){
+                        if(d.success){ location.reload(); }
+                        self.disabled = false;
+                    });
+            });
+
+            document.getElementById('olo-ck-export-log').addEventListener('click', function(){
+                window.location = ajaxurl + '?action=olo_cookie_export_log&_nonce=' + nonce;
+            });
+        })();
+        </script>
+        <?php
+    }
+
+    /* ═══════════════════════════════════════════════════
+     * DATABASE
+     * ═══════════════════════════════════════════════════ */
+
+    public function maybe_create_table() {
+        global $wpdb;
+        $table   = $wpdb->prefix . self::LOG_TABLE;
+        $charset = $wpdb->get_charset_collate();
+
+        // dbDelta handles both CREATE and ALTER (adding new columns)
+        $sql = "CREATE TABLE $table (
+            id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            consent_id VARCHAR(64) NOT NULL,
+            ip_hash VARCHAR(64) NOT NULL DEFAULT '',
+            categories TEXT NOT NULL,
+            action_type VARCHAR(20) NOT NULL DEFAULT 'initial',
+            banner_version INT UNSIGNED NOT NULL DEFAULT 1,
+            user_agent VARCHAR(512) NOT NULL DEFAULT '',
+            created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            INDEX idx_consent_id (consent_id),
+            INDEX idx_created (created_at)
+        ) $charset;";
+
+        require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+        dbDelta( $sql );
+    }
+
+    /* ═══════════════════════════════════════════════════
+     * AJAX HANDLERS
+     * ═══════════════════════════════════════════════════ */
+
+    public function ajax_log_consent() {
+        // No nonce for frontend (anonymous users)
+        global $wpdb;
+
+        $consent_id   = sanitize_text_field( $_POST['consent_id'] ?? '' );
+        $categories   = $_POST['categories'] ?? '';
+        $action_type  = sanitize_text_field( $_POST['action_type'] ?? 'initial' );
+        $bv           = intval( $_POST['banner_version'] ?? 1 );
+
+        if ( empty( $consent_id ) ) {
+            wp_send_json_error( 'Missing consent_id' );
+        }
+
+        // Validate action type
+        if ( ! in_array( $action_type, [ 'initial', 'update', 'revoke' ], true ) ) {
+            $action_type = 'initial';
+        }
+
+        // Hash IP for privacy (GDPR: no plain IP storage)
+        $ip_hash = hash( 'sha256', $_SERVER['REMOTE_ADDR'] . wp_salt( 'auth' ) );
+        $ua      = sanitize_text_field( substr( $_SERVER['HTTP_USER_AGENT'] ?? '', 0, 512 ) );
+
+        // Validate categories JSON
+        $cats = json_decode( stripslashes( $categories ), true );
+        if ( ! is_array( $cats ) ) {
+            $cats = [];
+        }
+
+        $table = $wpdb->prefix . self::LOG_TABLE;
+        $wpdb->insert( $table, [
+            'consent_id'     => $consent_id,
+            'ip_hash'        => $ip_hash,
+            'categories'     => wp_json_encode( $cats ),
+            'action_type'    => $action_type,
+            'banner_version' => $bv,
+            'user_agent'     => $ua,
+        ] );
+
+        // Auto-prune: keep max 10000 entries
+        $count = (int) $wpdb->get_var( "SELECT COUNT(*) FROM $table" );
+        if ( $count > 10000 ) {
+            $wpdb->query( "DELETE FROM $table ORDER BY created_at ASC LIMIT " . ( $count - 10000 ) );
+        }
+
+        wp_send_json_success();
+    }
+
+    public function ajax_clear_log() {
+        check_ajax_referer( 'olo_cookie_log', '_nonce' );
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_send_json_error( 'Forbidden' );
+        }
+
+        global $wpdb;
+        $wpdb->query( "TRUNCATE TABLE " . $wpdb->prefix . self::LOG_TABLE );
+        wp_send_json_success();
+    }
+
+    public function ajax_export_log() {
+        check_ajax_referer( 'olo_cookie_log', '_nonce' );
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_die( 'Forbidden' );
+        }
+
+        global $wpdb;
+        $rows = $wpdb->get_results( "SELECT * FROM " . $wpdb->prefix . self::LOG_TABLE . " ORDER BY created_at DESC", ARRAY_A );
+
+        header( 'Content-Type: text/csv; charset=utf-8' );
+        header( 'Content-Disposition: attachment; filename=consent-log-' . date( 'Y-m-d' ) . '.csv' );
+
+        $out = fopen( 'php://output', 'w' );
+        fputcsv( $out, [ 'ID', 'Consent ID', 'IP Hash', 'Categories', 'Action Type', 'Banner Version', 'User Agent', 'Date' ] );
+
+        foreach ( $rows as $row ) {
+            fputcsv( $out, [
+                $row['id'],
+                $row['consent_id'],
+                $row['ip_hash'],
+                $row['categories'],
+                $row['action_type'] ?? 'initial',
+                $row['banner_version'] ?? 1,
+                $row['user_agent'],
+                $row['created_at'],
+            ] );
+        }
+
+        fclose( $out );
+        exit;
+    }
+
+    /* ═══════════════════════════════════════════════════
+     * FRONTEND
+     * ═══════════════════════════════════════════════════ */
+
+    /**
+     * Output Google Consent Mode v2 default state (deny all non-necessary).
+     * MUST be first script in <head>, before GTM/GA.
+     * NOTA: No && in inline scripts — WordPress converts them to HTML entities.
+     */
+    public function output_gcm_default() {
+        $opts = self::get_options();
+        if ( empty( $opts['gcm_enabled'] ) ) {
+            return;
+        }
+        ?>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('consent', 'default', {
+            'ad_storage': 'denied',
+            'ad_user_data': 'denied',
+            'ad_personalization': 'denied',
+            'analytics_storage': 'denied',
+            'functionality_storage': 'denied',
+            'personalization_storage': 'denied',
+            'security_storage': 'granted'
+        });
+        </script>
+        <?php
+    }
+
+    /**
+     * Render the complete frontend: banner + preferences modal + JS.
+     */
+    public function render_frontend() {
+        if ( is_admin() ) {
+            return;
+        }
+
+        $opts = self::get_options();
+
+        $bg      = sanitize_hex_color( $opts['bg_color'] ) ?: '#ffffff';
+        $text    = sanitize_hex_color( $opts['text_color'] ) ?: '#1f2937';
+        $btnPBg  = sanitize_hex_color( $opts['btn_primary_bg'] ) ?: '#2563eb';
+        $btnPTx  = sanitize_hex_color( $opts['btn_primary_text'] ) ?: '#ffffff';
+        $btnSBg  = sanitize_hex_color( $opts['btn_secondary_bg'] ) ?: '#e5e7eb';
+        $btnSTx  = sanitize_hex_color( $opts['btn_secondary_text'] ) ?: '#374151';
+        $radius  = intval( $opts['border_radius'] );
+        $layout  = $opts['layout'];
+        $pos     = $opts['position'] === 'top' ? 'top' : 'bottom';
+        $dur     = intval( $opts['consent_duration'] );
+
+        // Build policy links HTML
+        $links = '';
+        if ( ! empty( $opts['privacy_url'] ) ) {
+            $links .= ' <a href="' . esc_url( $opts['privacy_url'] ) . '" target="_blank" rel="noopener" style="color:' . $btnPBg . '">' . esc_html( $opts['privacy_text'] ) . '</a>';
+        }
+        if ( ! empty( $opts['cookie_policy_url'] ) ) {
+            if ( $links ) { $links .= ' | '; }
+            $links .= '<a href="' . esc_url( $opts['cookie_policy_url'] ) . '" target="_blank" rel="noopener" style="color:' . $btnPBg . '">' . esc_html( $opts['cookie_policy_text'] ) . '</a>';
+        }
+
+        // Categories for modal
+        $categories = [];
+        foreach ( self::CATEGORIES as $cat ) {
+            $categories[] = [
+                'id'       => $cat,
+                'label'    => $opts[ "cat_{$cat}_label" ],
+                'desc'     => $opts[ "cat_{$cat}_desc" ],
+                'required' => $cat === 'necessary',
+            ];
+        }
+
+        // Cookie table for modal
+        $cookie_table = $opts['cookie_table'];
+
+        // Position CSS
+        $bar_pos = $pos === 'top' ? 'top:0' : 'bottom:0';
+        $box_pos = $pos === 'top' ? 'top:20px' : 'bottom:20px';
+
+        // Layout-specific styles
+        $banner_style = '';
+        if ( $layout === 'bar' ) {
+            $banner_style = "position:fixed;{$bar_pos};left:0;right:0;";
+        } elseif ( $layout === 'box' ) {
+            $banner_style = "position:fixed;{$box_pos};left:20px;max-width:420px;";
+        } else {
+            $banner_style = "position:fixed;{$bar_pos};left:0;right:0;";
+        }
+
+        ?>
+        <!-- Olobuild Cookie Consent -->
+        <style>
+        .olo-cc-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:999998;display:none}
+        .olo-cc-banner{<?php echo $banner_style; ?>z-index:999999;background:<?php echo $bg; ?>;color:<?php echo $text; ?>;padding:20px 24px;box-shadow:0 -4px 20px rgba(0,0,0,0.12);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:14px;line-height:1.6;display:none;border-radius:<?php echo ($layout==='box') ? $radius.'px' : '0'; ?>}
+        .olo-cc-banner-inner{max-width:1200px;margin:0 auto}
+        .olo-cc-title{font-size:18px;font-weight:700;margin-bottom:8px}
+        .olo-cc-message{margin-bottom:16px;opacity:0.85}
+        .olo-cc-links{margin-bottom:12px;font-size:13px}
+        .olo-cc-btns{display:flex;gap:8px;flex-wrap:wrap}
+        .olo-cc-btn{padding:10px 22px;border:none;border-radius:<?php echo $radius; ?>px;cursor:pointer;font-size:14px;font-weight:600;transition:opacity 0.2s;outline:none}
+        .olo-cc-btn:hover{opacity:0.88}
+        .olo-cc-btn-primary{background:<?php echo $btnPBg; ?>;color:<?php echo $btnPTx; ?>}
+        .olo-cc-btn-secondary{background:<?php echo $btnSBg; ?>;color:<?php echo $btnSTx; ?>}
+        .olo-cc-btn-link{background:none;color:<?php echo $text; ?>;text-decoration:underline;padding:10px 12px;font-weight:500}
+
+        /* Modal */
+        .olo-cc-modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:999999;background:<?php echo $bg; ?>;color:<?php echo $text; ?>;width:90%;max-width:560px;max-height:85vh;overflow-y:auto;border-radius:<?php echo $radius; ?>px;box-shadow:0 20px 60px rgba(0,0,0,0.2);padding:28px;display:none;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:14px;line-height:1.6}
+        .olo-cc-modal-title{font-size:20px;font-weight:700;margin-bottom:8px}
+        .olo-cc-modal-close{position:absolute;top:12px;right:16px;background:none;border:none;font-size:22px;cursor:pointer;color:<?php echo $text; ?>;opacity:0.5;padding:4px}
+        .olo-cc-modal-close:hover{opacity:1}
+        .olo-cc-cat{border:1px solid <?php echo $btnSBg; ?>;border-radius:<?php echo max(6,$radius-4); ?>px;padding:16px;margin-bottom:12px}
+        .olo-cc-cat-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+        .olo-cc-cat-label{font-weight:600;font-size:15px}
+        .olo-cc-cat-desc{font-size:13px;opacity:0.7}
+        .olo-cc-cat-required{font-size:11px;background:<?php echo $btnSBg; ?>;color:<?php echo $btnSTx; ?>;padding:2px 8px;border-radius:10px;font-weight:600}
+
+        /* Toggle */
+        .olo-cc-toggle{position:relative;width:44px;height:24px;display:inline-block}
+        .olo-cc-toggle input{opacity:0;width:0;height:0}
+        .olo-cc-toggle-track{position:absolute;inset:0;background:#ccc;border-radius:24px;transition:0.25s;cursor:pointer}
+        .olo-cc-toggle-track::before{content:'';position:absolute;width:18px;height:18px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:0.25s}
+        .olo-cc-toggle input:checked+.olo-cc-toggle-track{background:<?php echo $btnPBg; ?>}
+        .olo-cc-toggle input:checked+.olo-cc-toggle-track::before{transform:translateX(20px)}
+
+        /* Cookie declaration table */
+        .olo-cc-decl{margin-top:16px;border-collapse:collapse;width:100%;font-size:12px}
+        .olo-cc-decl th,.olo-cc-decl td{text-align:left;padding:6px 8px;border-bottom:1px solid <?php echo $btnSBg; ?>}
+        .olo-cc-decl th{font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;opacity:0.6}
+
+        /* Re-open cookie settings button (shortcode) */
+        .olo-cc-reopen{cursor:pointer;text-decoration:underline;background:none;border:none;font:inherit;color:inherit}
+
+        @media(max-width:480px){
+            .olo-cc-banner{padding:16px}
+            .olo-cc-btns{flex-direction:column}
+            .olo-cc-btn{width:100%;text-align:center}
+            .olo-cc-modal{width:95%;padding:20px}
+        }
+        </style>
+
+        <?php if ( ! empty( $opts['overlay'] ) ) : ?>
+        <div class="olo-cc-overlay" id="olo-cc-overlay"></div>
+        <?php endif; ?>
+
+        <!-- Banner -->
+        <div class="olo-cc-banner" id="olo-cc-banner" role="dialog" aria-label="<?php echo esc_attr( $opts['banner_title'] ); ?>">
+            <div class="olo-cc-banner-inner">
+                <?php if ( ! empty( $opts['banner_title'] ) ) : ?>
+                    <div class="olo-cc-title"><?php echo esc_html( $opts['banner_title'] ); ?></div>
+                <?php endif; ?>
+                <div class="olo-cc-message"><?php echo esc_html( $opts['banner_message'] ); ?></div>
+                <?php if ( $links ) : ?>
+                    <div class="olo-cc-links"><?php echo $links; ?></div>
+                <?php endif; ?>
+                <div class="olo-cc-btns">
+                    <button class="olo-cc-btn olo-cc-btn-primary" id="olo-cc-accept-all"><?php echo esc_html( $opts['accept_all_text'] ); ?></button>
+                    <?php if ( $opts['show_reject_all'] ) : ?>
+                        <button class="olo-cc-btn olo-cc-btn-secondary" id="olo-cc-reject-all"><?php echo esc_html( $opts['reject_all_text'] ); ?></button>
+                    <?php endif; ?>
+                    <?php if ( $opts['show_preferences'] ) : ?>
+                        <button class="olo-cc-btn olo-cc-btn-link" id="olo-cc-open-prefs"><?php echo esc_html( $opts['preferences_text'] ); ?></button>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+
+        <!-- Preferences Modal -->
+        <div class="olo-cc-modal" id="olo-cc-modal" role="dialog" aria-label="<?php esc_attr_e( 'Preferenze cookie', 'olobuilder' ); ?>">
+            <button class="olo-cc-modal-close" id="olo-cc-modal-close" aria-label="<?php esc_attr_e( 'Chiudi', 'olobuilder' ); ?>">&times;</button>
+            <div class="olo-cc-modal-title"><?php echo esc_html( $opts['preferences_text'] ); ?></div>
+            <p style="opacity:0.7;margin-bottom:16px"><?php esc_html_e( 'Scegli quali categorie di cookie accettare. Puoi modificare le tue preferenze in qualsiasi momento.', 'olobuilder' ); ?></p>
+
+            <?php foreach ( $categories as $cat ) : ?>
+            <div class="olo-cc-cat">
+                <div class="olo-cc-cat-head">
+                    <span class="olo-cc-cat-label"><?php echo esc_html( $cat['label'] ); ?></span>
+                    <?php if ( $cat['required'] ) : ?>
+                        <span class="olo-cc-cat-required"><?php esc_html_e( 'Sempre attivo', 'olobuilder' ); ?></span>
+                    <?php else : ?>
+                        <label class="olo-cc-toggle">
+                            <input type="checkbox" data-cc-cat="<?php echo esc_attr( $cat['id'] ); ?>" />
+                            <span class="olo-cc-toggle-track"></span>
+                        </label>
+                    <?php endif; ?>
+                </div>
+                <div class="olo-cc-cat-desc"><?php echo esc_html( $cat['desc'] ); ?></div>
+            </div>
+            <?php endforeach; ?>
+
+            <?php if ( ! empty( $cookie_table ) ) : ?>
+            <details style="margin-top:12px">
+                <summary style="cursor:pointer;font-weight:600;font-size:13px"><?php esc_html_e( 'Dettaglio cookie utilizzati', 'olobuilder' ); ?></summary>
+                <table class="olo-cc-decl">
+                    <thead>
+                        <tr>
+                            <th><?php esc_html_e( 'Cookie', 'olobuilder' ); ?></th>
+                            <th><?php esc_html_e( 'Provider', 'olobuilder' ); ?></th>
+                            <th><?php esc_html_e( 'Scopo', 'olobuilder' ); ?></th>
+                            <th><?php esc_html_e( 'Scadenza', 'olobuilder' ); ?></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ( $cookie_table as $row ) : ?>
+                        <tr>
+                            <td><code><?php echo esc_html( $row['name'] ); ?></code></td>
+                            <td><?php echo esc_html( $row['provider'] ); ?></td>
+                            <td><?php echo esc_html( $row['purpose'] ); ?></td>
+                            <td><?php echo esc_html( $row['expiry'] ); ?></td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </details>
+            <?php endif; ?>
+
+            <div class="olo-cc-btns" style="margin-top:20px">
+                <button class="olo-cc-btn olo-cc-btn-primary" id="olo-cc-save-prefs"><?php echo esc_html( $opts['save_text'] ); ?></button>
+                <button class="olo-cc-btn olo-cc-btn-secondary" id="olo-cc-modal-accept-all"><?php echo esc_html( $opts['accept_all_text'] ); ?></button>
+            </div>
+        </div>
+
+        <script>
+        (function(){
+            var CC = {
+                cookieName: 'olo_cc',
+                duration: <?php echo $dur; ?>,
+                bannerVersion: <?php echo intval( $opts['banner_version'] ); ?>,
+                gcm: <?php echo $opts['gcm_enabled'] ? 'true' : 'false'; ?>,
+                blockIframes: <?php echo ! empty( $opts['block_iframes'] ) ? 'true' : 'false'; ?>,
+                ajaxUrl: '<?php echo esc_js( admin_url( 'admin-ajax.php' ) ); ?>',
+                cats: ['necessary','analytics','marketing','preferences'],
+                consentId: null,
+
+                init: function(){
+                    // Generate or retrieve consent ID
+                    var sid = localStorage.getItem('olo_cc_id');
+                    if(!sid){
+                        sid = 'cc_' + Date.now() + '_' + Math.random().toString(36).substr(2,9);
+                        localStorage.setItem('olo_cc_id', sid);
+                    }
+                    this.consentId = sid;
+
+                    var stored = this.getConsent();
+
+                    // Check banner version — re-ask if policy changed
+                    if(stored){
+                        var sv = stored._v || 1;
+                        if(sv < this.bannerVersion){
+                            // Policy changed: clear old consent, re-ask
+                            this.clearCookie();
+                            stored = null;
+                        }
+                    }
+
+                    if(!stored){
+                        this.showBanner();
+                        // Block iframes immediately
+                        if(this.blockIframes){ this.blockThirdPartyIframes(); }
+                    } else {
+                        this.applyConsent(stored, false);
+                    }
+                    this.bindEvents();
+                },
+
+                getConsent: function(){
+                    var match = document.cookie.match(new RegExp('(^| )' + this.cookieName + '=([^;]+)'));
+                    if(match){
+                        try { return JSON.parse(decodeURIComponent(match[2])); } catch(e){}
+                    }
+                    return null;
+                },
+
+                clearCookie: function(){
+                    document.cookie = this.cookieName + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;SameSite=Lax';
+                },
+
+                setConsent: function(cats, actionType){
+                    var prev = this.getConsent();
+                    if(!actionType){
+                        actionType = prev ? 'update' : 'initial';
+                    }
+
+                    // Stamp version
+                    cats._v = this.bannerVersion;
+                    cats._t = new Date().toISOString();
+
+                    var val = encodeURIComponent(JSON.stringify(cats));
+                    var d = new Date();
+                    d.setTime(d.getTime() + (this.duration * 86400000));
+                    document.cookie = this.cookieName + '=' + val + ';expires=' + d.toUTCString() + ';path=/;SameSite=Lax';
+
+                    this.applyConsent(cats, true);
+                    this.hideBanner();
+                    this.hideModal();
+                    this.logConsent(cats, actionType);
+                },
+
+                applyConsent: function(cats, isNew){
+                    // Activate blocked scripts
+                    var scripts = document.querySelectorAll('script[type="text/plain"][data-cookiecategory]');
+                    for(var i=0;i<scripts.length;i++){
+                        var cat = scripts[i].getAttribute('data-cookiecategory');
+                        if(cats[cat]){
+                            var ns = document.createElement('script');
+                            if(scripts[i].src){ ns.src = scripts[i].src; }
+                            else if(scripts[i].getAttribute('data-src')){ ns.src = scripts[i].getAttribute('data-src'); }
+                            else { ns.textContent = scripts[i].textContent; }
+                            ns.type = 'text/javascript';
+                            scripts[i].parentNode.replaceChild(ns, scripts[i]);
+                        }
+                    }
+
+                    // Unblock iframes
+                    if(this.blockIframes){
+                        this.unblockIframes(cats);
+                    }
+
+                    // Google Consent Mode v2 update
+                    if(this.gcm){
+                        if(typeof gtag === 'function'){
+                            gtag('consent', 'update', {
+                                'ad_storage': cats.marketing ? 'granted' : 'denied',
+                                'ad_user_data': cats.marketing ? 'granted' : 'denied',
+                                'ad_personalization': cats.marketing ? 'granted' : 'denied',
+                                'analytics_storage': cats.analytics ? 'granted' : 'denied',
+                                'functionality_storage': cats.preferences ? 'granted' : 'denied',
+                                'personalization_storage': cats.preferences ? 'granted' : 'denied'
+                            });
+                        }
+                    }
+
+                    // Dispatch custom event
+                    window.dispatchEvent(new CustomEvent('oloCookieConsent', { detail: cats }));
+                },
+
+                /* ── Iframe blocking ── */
+
+                blockThirdPartyIframes: function(){
+                    var iframes = document.querySelectorAll('iframe[src]');
+                    var blocked = ['youtube.com','youtube-nocookie.com','youtu.be','vimeo.com','google.com/maps','maps.google','facebook.com','instagram.com'];
+                    for(var i=0;i<iframes.length;i++){
+                        var src = iframes[i].src || '';
+                        var cat = this.getIframeCategory(src, blocked);
+                        if(cat){
+                            var wrap = document.createElement('div');
+                            wrap.className = 'olo-cc-iframe-placeholder';
+                            wrap.setAttribute('data-cc-iframe-cat', cat);
+                            wrap.setAttribute('data-cc-iframe-src', src);
+                            wrap.style.cssText = 'background:#f3f4f6;border:1px solid #e5e7eb;border-radius:8px;padding:32px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:200px;' + (iframes[i].width ? 'width:'+iframes[i].width+'px;' : 'width:100%;') + (iframes[i].height ? 'height:'+iframes[i].height+'px;' : '');
+                            wrap.innerHTML = '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>'
+                                + '<p style="margin:12px 0 8px;color:#6b7280;font-size:14px"><?php echo esc_js( __( 'Questo contenuto richiede il consenso ai cookie', 'olobuilder' ) ); ?></p>'
+                                + '<button class="olo-cc-iframe-load" style="background:#2563eb;color:#fff;border:none;padding:8px 20px;border-radius:6px;cursor:pointer;font-size:13px;font-weight:600"><?php echo esc_js( __( 'Accetta e carica', 'olobuilder' ) ); ?></button>';
+                            iframes[i].parentNode.replaceChild(wrap, iframes[i]);
+                        }
+                    }
+
+                    // Single iframe load button
+                    document.addEventListener('click', function(e){
+                        var btn = e.target.closest('.olo-cc-iframe-load');
+                        if(!btn) return;
+                        var ph = btn.closest('.olo-cc-iframe-placeholder');
+                        if(!ph) return;
+                        var cat = ph.getAttribute('data-cc-iframe-cat');
+                        var src = ph.getAttribute('data-cc-iframe-src');
+                        // Accept this category
+                        var current = CC.getConsent() || {necessary:true,analytics:false,marketing:false,preferences:false};
+                        current[cat] = true;
+                        CC.setConsent(current, 'update');
+                    });
+                },
+
+                getIframeCategory: function(src, patterns){
+                    var marketingDomains = ['facebook.com','instagram.com'];
+                    for(var j=0;j<patterns.length;j++){
+                        if(src.indexOf(patterns[j]) !== -1){
+                            for(var k=0;k<marketingDomains.length;k++){
+                                if(src.indexOf(marketingDomains[k]) !== -1) return 'marketing';
+                            }
+                            return 'analytics';
+                        }
+                    }
+                    return null;
+                },
+
+                unblockIframes: function(cats){
+                    var phs = document.querySelectorAll('.olo-cc-iframe-placeholder');
+                    for(var i=0;i<phs.length;i++){
+                        var cat = phs[i].getAttribute('data-cc-iframe-cat');
+                        if(cats[cat]){
+                            var src = phs[i].getAttribute('data-cc-iframe-src');
+                            var iframe = document.createElement('iframe');
+                            iframe.src = src;
+                            iframe.style.cssText = 'width:' + (phs[i].style.width||'100%') + ';height:' + (phs[i].style.height||'400px') + ';border:0';
+                            iframe.allow = 'accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture';
+                            iframe.allowFullscreen = true;
+                            phs[i].parentNode.replaceChild(iframe, phs[i]);
+                        }
+                    }
+                },
+
+                /* ── Logging ── */
+
+                logConsent: function(cats, actionType){
+                    var fd = new FormData();
+                    fd.append('action', 'olo_cookie_log_consent');
+                    fd.append('consent_id', this.consentId);
+                    fd.append('categories', JSON.stringify(cats));
+                    fd.append('action_type', actionType || 'initial');
+                    fd.append('banner_version', this.bannerVersion);
+                    fetch(this.ajaxUrl, { method:'POST', body: fd, credentials:'same-origin' });
+                },
+
+                /* ── UI ── */
+
+                showBanner: function(){
+                    var b = document.getElementById('olo-cc-banner');
+                    var o = document.getElementById('olo-cc-overlay');
+                    if(b) b.style.display = 'block';
+                    if(o) o.style.display = 'block';
+                },
+
+                hideBanner: function(){
+                    var b = document.getElementById('olo-cc-banner');
+                    var o = document.getElementById('olo-cc-overlay');
+                    if(b) b.style.display = 'none';
+                    if(o) o.style.display = 'none';
+                },
+
+                showModal: function(){
+                    var m = document.getElementById('olo-cc-modal');
+                    var o = document.getElementById('olo-cc-overlay');
+                    if(m) m.style.display = 'block';
+                    if(o) o.style.display = 'block';
+                    this.hideBanner();
+
+                    // Restore current choices
+                    var stored = this.getConsent();
+                    if(stored){
+                        var toggles = m.querySelectorAll('[data-cc-cat]');
+                        for(var i=0;i<toggles.length;i++){
+                            var cat = toggles[i].getAttribute('data-cc-cat');
+                            toggles[i].checked = !!stored[cat];
+                        }
+                    }
+                },
+
+                hideModal: function(){
+                    var m = document.getElementById('olo-cc-modal');
+                    var o = document.getElementById('olo-cc-overlay');
+                    if(m) m.style.display = 'none';
+                    if(o) o.style.display = 'none';
+                },
+
+                acceptAll: function(){
+                    var cats = { necessary: true, analytics: true, marketing: true, preferences: true };
+                    this.setConsent(cats);
+                },
+
+                rejectAll: function(){
+                    var cats = { necessary: true, analytics: false, marketing: false, preferences: false };
+                    this.setConsent(cats, 'revoke');
+                },
+
+                savePrefs: function(){
+                    var m = document.getElementById('olo-cc-modal');
+                    var cats = { necessary: true };
+                    var toggles = m.querySelectorAll('[data-cc-cat]');
+                    for(var i=0;i<toggles.length;i++){
+                        cats[toggles[i].getAttribute('data-cc-cat')] = toggles[i].checked;
+                    }
+                    this.setConsent(cats);
+                },
+
+                bindEvents: function(){
+                    var self = this;
+                    var on = function(id, fn){
+                        var el = document.getElementById(id);
+                        if(el){ el.addEventListener('click', function(){ fn.call(self); }); }
+                    };
+
+                    on('olo-cc-accept-all', self.acceptAll);
+                    on('olo-cc-reject-all', self.rejectAll);
+                    on('olo-cc-open-prefs', self.showModal);
+                    on('olo-cc-modal-close', self.hideModal);
+                    on('olo-cc-save-prefs', self.savePrefs);
+                    on('olo-cc-modal-accept-all', self.acceptAll);
+
+                    // Re-open buttons (shortcode)
+                    document.addEventListener('click', function(e){
+                        if(e.target.closest('.olo-cc-reopen')){
+                            e.preventDefault();
+                            self.showModal();
+                        }
+                    });
+
+                    // Close modal on overlay click
+                    var overlay = document.getElementById('olo-cc-overlay');
+                    if(overlay){
+                        overlay.addEventListener('click', function(){
+                            self.hideModal();
+                            // If no consent yet, re-show banner
+                            if(!self.getConsent()){
+                                self.showBanner();
+                            }
+                        });
+                    }
+
+                    // ESC key
+                    document.addEventListener('keydown', function(e){
+                        if(e.key === 'Escape'){
+                            var m = document.getElementById('olo-cc-modal');
+                            if(m){ if(m.style.display !== 'none'){ self.hideModal(); if(!self.getConsent()){self.showBanner();} } }
+                        }
+                    });
+                }
+            };
+
+            if(document.readyState === 'loading'){
+                document.addEventListener('DOMContentLoaded', function(){ CC.init(); });
+            } else {
+                CC.init();
+            }
+
+            // Global API
+            window.oloCookieConsent = CC;
+        })();
+        </script>
+        <?php
+    }
+
+    /* ═══════════════════════════════════════════════════
+     * SCRIPT AUTO-BLOCKING
+     * ═══════════════════════════════════════════════════ */
+
+    /**
+     * Auto-block known third-party scripts by changing type to text/plain.
+     * Scripts are activated when user grants consent for the matching category.
+     */
+    public function auto_block_scripts( $tag, $handle ) {
+        // Don't block in admin
+        if ( is_admin() ) {
+            return $tag;
+        }
+
+        // Don't block if consent already given
+        if ( isset( $_COOKIE['olo_cc'] ) ) {
+            $consent = json_decode( urldecode( $_COOKIE['olo_cc'] ), true );
+            if ( is_array( $consent ) ) {
+                // If all accepted, don't block anything
+                $all = true;
+                foreach ( [ 'analytics', 'marketing', 'preferences' ] as $c ) {
+                    if ( empty( $consent[ $c ] ) ) {
+                        $all = false;
+                        break;
+                    }
+                }
+                if ( $all ) {
+                    return $tag;
+                }
+            }
+        }
+
+        $opts     = self::get_options();
+        $patterns = array_filter( array_map( 'trim', explode( "\n", $opts['block_patterns'] ) ) );
+
+        if ( empty( $patterns ) ) {
+            return $tag;
+        }
+
+        // Marketing patterns
+        $marketing_patterns = [
+            'facebook.net', 'fbevents', 'linkedin.com/insight', 'pinterest.com/ct',
+            'tiktok.com', 'snapchat.com', 'doubleclick.net', 'googlesyndication',
+            'googleadservices', 'adsbygoogle',
+        ];
+
+        foreach ( $patterns as $pattern ) {
+            if ( stripos( $tag, $pattern ) !== false ) {
+                // Determine category
+                $category = 'analytics'; // default
+                foreach ( $marketing_patterns as $mp ) {
+                    if ( stripos( $pattern, $mp ) !== false ) {
+                        $category = 'marketing';
+                        break;
+                    }
+                }
+
+                // Check if this specific category is consented
+                if ( isset( $_COOKIE['olo_cc'] ) ) {
+                    $consent = json_decode( urldecode( $_COOKIE['olo_cc'] ), true );
+                    if ( is_array( $consent ) ) {
+                        if ( ! empty( $consent[ $category ] ) ) {
+                            return $tag; // Already consented for this category
+                        }
+                    }
+                }
+
+                // Block: change type to text/plain
+                $tag = str_replace( "type='text/javascript'", "type='text/plain'", $tag );
+                $tag = str_replace( 'type="text/javascript"', 'type="text/plain"', $tag );
+                // If no type attribute, add one
+                if ( strpos( $tag, 'type=' ) === false ) {
+                    $tag = str_replace( '<script ', '<script type="text/plain" ', $tag );
+                }
+                // Add category attribute
+                $tag = str_replace( '<script ', '<script data-cookiecategory="' . esc_attr( $category ) . '" ', $tag );
+                break;
+            }
+        }
+
+        return $tag;
+    }
+
+    /* ═══════════════════════════════════════════════════
+     * SHORTCODE
+     * ═══════════════════════════════════════════════════ */
+
+    /**
+     * [olo_cookie_settings] — renders a link/button to re-open the cookie preferences modal.
+     *
+     * @param array $atts Attributes: text, class, tag (a|button).
+     */
+    public function shortcode_open_preferences( $atts ) {
+        $atts = shortcode_atts( [
+            'text'  => __( 'Gestisci cookie', 'olobuilder' ),
+            'class' => '',
+            'tag'   => 'button',
+        ], $atts );
+
+        $tag   = in_array( $atts['tag'], [ 'a', 'button', 'span' ], true ) ? $atts['tag'] : 'button';
+        $class = 'olo-cc-reopen' . ( $atts['class'] ? ' ' . esc_attr( $atts['class'] ) : '' );
+
+        return '<' . $tag . ' class="' . $class . '">' . esc_html( $atts['text'] ) . '</' . $tag . '>';
+    }
+}

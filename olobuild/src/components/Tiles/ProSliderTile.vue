@@ -32,11 +32,11 @@
     </div>
 
     <!-- Nav preview -->
-    <div v-if="settings.showArrows !== false" class="mps-preview-arrows">
+    <div v-if="s.showArrows !== false" class="mps-preview-arrows">
       <span class="mps-preview-arrow">&lsaquo;</span>
       <span class="mps-preview-arrow">&rsaquo;</span>
     </div>
-    <div v-if="settings.showDots !== false && slideCount > 1" class="mps-preview-dots">
+    <div v-if="s.showDots !== false && slideCount > 1" class="mps-preview-dots">
       <span v-for="i in slideCount" :key="i" :class="['mps-preview-dot', i === 1 ? 'mps-preview-dot-active' : '']"></span>
     </div>
   </div>
@@ -50,15 +50,23 @@ const props = defineProps({
   settings: { type: Object, default: () => ({}) },
 });
 
+const defaults = {
+  height: 600,
+  showArrows: true,
+  showDots: true,
+  slides: [],
+};
+const s = computed(() => ({ ...defaults, ...props.settings }));
+
 const slides = computed(() => {
-  const s = props.settings.slides;
-  return Array.isArray(s) && s.length ? s : [];
+  const sl = s.value.slides;
+  return Array.isArray(sl) && sl.length ? sl : [];
 });
 
 const slideCount = computed(() => slides.value.length);
 const firstSlide = computed(() => slides.value[0] || null);
 const layers = computed(() => firstSlide.value?.layers || []);
-const sliderHeight = computed(() => parseInt(props.settings.height) || 600);
+const sliderHeight = computed(() => parseInt(s.value.height) || 600);
 
 const isTransparent = computed(() => (firstSlide.value?.background?.type) === 'transparent');
 
@@ -77,7 +85,7 @@ const bgStyle = computed(() => {
 });
 
 const globalBgStyle = computed(() => {
-  const gb = props.settings.globalBackground;
+  const gb = s.value.globalBackground;
   if (!gb) return { background: '#1e293b' };
   if (gb.type === 'image' && gb.image) {
     return { backgroundImage: `url(${gb.image})`, backgroundSize: 'cover', backgroundPosition: 'center' };
@@ -92,13 +100,17 @@ const overlayColor = computed(() => firstSlide.value?.background?.overlay || '#0
 const overlayOpacity = computed(() => firstSlide.value?.background?.overlayOpacity ?? 0.3);
 
 function layerStyle(l) {
-  return {
+  const st = {
     position: 'absolute',
     left: l.x + '%',
     top: l.y + '%',
     width: l.width === 'auto' ? 'auto' : l.width + '%',
     zIndex: 2,
   };
+  if (l.opacity !== undefined && l.opacity !== null && l.opacity !== 1) {
+    st.opacity = parseFloat(l.opacity);
+  }
+  return st;
 }
 
 function getIconSvg(name) {

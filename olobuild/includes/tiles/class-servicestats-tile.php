@@ -20,7 +20,7 @@ class Olo_ServiceStats_Tile extends Olo_Tile_Base {
         'number_size'        => 22,
         'label_size'         => 11,
         'icon_color'         => '#6366F1',
-        'number_color'       => '#1F2937',
+        'number_color'       => '',
         'label_color'        => '#9CA3AF',
         'show_dividers'      => false,
         'divider_color'      => '#E5E7EB',
@@ -35,7 +35,7 @@ class Olo_ServiceStats_Tile extends Olo_Tile_Base {
 
     private function svg_icon( $name, $size, $color ) {
         $s = absint( $size );
-        $c = esc_attr( $color );
+        $c = $this->safe_color_css( $color ) ?: 'currentColor';
         $icons = [
             'bed' => '<svg width="' . $s . '" height="' . $s . '" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 18V12C3 10.3431 4.34315 9 6 9H18C19.6569 9 21 10.3431 21 12V18" stroke="' . $c . '" stroke-width="1.8" stroke-linecap="round"/><path d="M3 18V20M21 18V20" stroke="' . $c . '" stroke-width="1.8" stroke-linecap="round"/><path d="M7 9V7C7 5.89543 7.89543 5 9 5H15C16.1046 5 17 5.89543 17 7V9" stroke="' . $c . '" stroke-width="1.8" stroke-linecap="round"/><circle cx="8.5" cy="7.5" r="1.5" fill="' . $c . '" opacity="0.5"/></svg>',
 
@@ -57,7 +57,7 @@ class Olo_ServiceStats_Tile extends Olo_Tile_Base {
 
         global $post;
         if ( ! $post || ! is_singular() ) {
-            return '<div style="padding:24px;text-align:center;color:#9ca3af;background:#f9fafb;border-radius:8px">'
+            return '<div style="padding:24px;text-align:center;color:var(--olo-color-text-muted, #9CA3AF);background:var(--olo-color-muted, #F3F4F6);border-radius:8px">'
                  . '<p style="margin:0">Inserisci in un template single.</p></div>';
         }
 
@@ -89,16 +89,16 @@ class Olo_ServiceStats_Tile extends Olo_Tile_Base {
 
         // Outer wrapper
         $wrap_css = '';
-        if ( $s['bg_color'] )      $wrap_css .= "background:{$this->safe_color($s['bg_color'])};";
+        if ( $s['bg_color'] )      $wrap_css .= "background:{$this->safe_color_css($s['bg_color'])};";
         if ( $s['border_radius'] ) $wrap_css .= "border-radius:{$s['border_radius']}px;";
         if ( $s['padding'] )       $wrap_css .= "padding:{$s['padding']}px;";
 
         // Item style
         $item_css = '';
-        if ( $s['item_bg'] )            $item_css .= "background:{$this->safe_color($s['item_bg'])};";
+        if ( $s['item_bg'] )            $item_css .= "background:{$this->safe_color_css($s['item_bg'])};";
         if ( $s['item_border_radius'] )  $item_css .= "border-radius:{$s['item_border_radius']}px;";
         if ( $s['item_padding'] )        $item_css .= "padding:{$s['item_padding']}px;";
-        if ( $s['item_border_color'] )   $item_css .= "border:1px solid {$this->safe_color($s['item_border_color'])};";
+        if ( $s['item_border_color'] )   $item_css .= "border:1px solid {$this->safe_color_css($s['item_border_color'])};";
 
         ob_start();
         ?>
@@ -108,10 +108,10 @@ class Olo_ServiceStats_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?>-item { <?php echo $item_css; ?> }
             .<?php echo $uid; ?>-inline .<?php echo $uid; ?>-item { display:flex; align-items:center; gap:8px; }
             <?php if ( ! empty( $s['show_dividers'] ) && $layout === 'grid' ) : ?>
-            .<?php echo $uid; ?>-grid .<?php echo $uid; ?>-item + .<?php echo $uid; ?>-item { border-left:1px solid <?php echo esc_attr( $s['divider_color'] ); ?>; }
+            .<?php echo $uid; ?>-grid .<?php echo $uid; ?>-item + .<?php echo $uid; ?>-item { border-left:1px solid <?php echo $this->safe_color_css( $s['divider_color'] ); ?>; }
             <?php endif; ?>
             <?php if ( ! empty( $s['show_dividers'] ) && $layout === 'inline' ) : ?>
-            .<?php echo $uid; ?>-inline .<?php echo $uid; ?>-item + .<?php echo $uid; ?>-item { padding-left:<?php echo $gap; ?>px; border-left:1px solid <?php echo esc_attr( $s['divider_color'] ); ?>; }
+            .<?php echo $uid; ?>-inline .<?php echo $uid; ?>-item + .<?php echo $uid; ?>-item { padding-left:<?php echo $gap; ?>px; border-left:1px solid <?php echo $this->safe_color_css( $s['divider_color'] ); ?>; }
             <?php endif; ?>
         </style>
         <div class="<?php echo esc_attr( $uid . '-' . $layout ); ?>">
@@ -119,12 +119,12 @@ class Olo_ServiceStats_Tile extends Olo_Tile_Base {
             <div class="<?php echo esc_attr( $uid ); ?>-item">
                 <?php if ( $layout === 'inline' ) : ?>
                     <span style="display:flex;align-items:center"><?php echo $this->svg_icon( $stat[0], $s['icon_size'], $s['icon_color'] ); ?></span>
-                    <span style="font-size:<?php echo absint( $s['number_size'] ); ?>px;font-weight:700;color:<?php echo esc_attr( $s['number_color'] ); ?>"><?php echo esc_html( $stat[1] ); ?></span>
-                    <span style="font-size:<?php echo absint( $s['label_size'] ); ?>px;text-transform:uppercase;color:<?php echo esc_attr( $s['label_color'] ); ?>;letter-spacing:0.5px;font-weight:600"><?php echo esc_html( $stat[2] ); ?></span>
+                    <span style="font-size:<?php echo absint( $s['number_size'] ); ?>px;font-weight:700;color:<?php echo $this->safe_color_css( $s['number_color'] ); ?>"><?php echo esc_html( $stat[1] ); ?></span>
+                    <span style="font-size:<?php echo absint( $s['label_size'] ); ?>px;text-transform:uppercase;color:<?php echo $this->safe_color_css( $s['label_color'] ); ?>;letter-spacing:0.5px;font-weight:600"><?php echo esc_html( $stat[2] ); ?></span>
                 <?php else : ?>
                     <div style="margin-bottom:6px;display:flex;justify-content:<?php echo $align === 'center' ? 'center' : ( $align === 'right' ? 'flex-end' : 'flex-start' ); ?>"><?php echo $this->svg_icon( $stat[0], $s['icon_size'], $s['icon_color'] ); ?></div>
-                    <div style="font-size:<?php echo absint( $s['number_size'] ); ?>px;font-weight:700;color:<?php echo esc_attr( $s['number_color'] ); ?>;line-height:1.2"><?php echo esc_html( $stat[1] ); ?></div>
-                    <div style="font-size:<?php echo absint( $s['label_size'] ); ?>px;text-transform:uppercase;color:<?php echo esc_attr( $s['label_color'] ); ?>;letter-spacing:0.5px;font-weight:600;margin-top:2px"><?php echo esc_html( $stat[2] ); ?></div>
+                    <div style="font-size:<?php echo absint( $s['number_size'] ); ?>px;font-weight:700;color:<?php echo $this->safe_color_css( $s['number_color'] ); ?>;line-height:1.2"><?php echo esc_html( $stat[1] ); ?></div>
+                    <div style="font-size:<?php echo absint( $s['label_size'] ); ?>px;text-transform:uppercase;color:<?php echo $this->safe_color_css( $s['label_color'] ); ?>;letter-spacing:0.5px;font-weight:600;margin-top:2px"><?php echo esc_html( $stat[2] ); ?></div>
                 <?php endif; ?>
             </div>
             <?php endforeach; ?>

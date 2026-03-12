@@ -2,7 +2,7 @@ export default {
   type: 'megamenu',
   name: 'Mega Menu',
   icon: 'dashicons-menu-alt3',
-  category: 'header',
+  category: 'navigation',
   defaults: {
     // Menu
     menu_id: 0,
@@ -24,8 +24,9 @@ export default {
     panel_templates: {},
     mega_mode: 'auto',
     panel_width: 'container',
+    panel_max_width: '900',
     panel_columns: '4',
-    panel_bg: '#FFFFFF',
+    panel_bg: '',
     panel_shadow: 'md',
     panel_radius: '8',
     panel_padding: '32',
@@ -49,16 +50,20 @@ export default {
     // Buttons (CTA items)
     button_mode: 'none',
     btn_bg: '',
-    btn_color: '#FFFFFF',
+    btn_color: '',
     btn_radius: '6',
     btn_hover_bg: '',
+
+    // Ricerca integrata (tile reference)
+    search_tile_id: '',
+    search_position: 'after',
 
     // Mobile
     mobile_breakpoint: '1024',
     mobile_side: 'left',
     hamburger_color: '',
-    mobile_bg: '#1e1e2e',
-    mobile_text_color: '#FFFFFF',
+    mobile_bg: '',
+    mobile_text_color: '',
     mobile_heading_color: '',
     mobile_accent_color: '',
     mobile_logo: '',
@@ -113,6 +118,8 @@ export default {
       { value: 'container', label: 'Contenitore' },
       { value: 'full', label: 'Full-width' },
     ]},
+    { key: 'panel_max_width', label: 'Larghezza max (px)', type: 'range', min: 400, max: 1400, step: 10,
+      condition: { field: 'panel_width', op: 'eq', value: 'container' } },
     { key: 'panel_columns', label: 'Colonne', type: 'range', min: 2, max: 6, step: 1 },
     { key: 'panel_bg', label: 'Sfondo panel', type: 'color' },
     { key: 'panel_shadow', label: 'Ombra', type: 'select', options: [
@@ -120,8 +127,21 @@ export default {
       { value: 'sm', label: 'Leggera' },
       { value: 'md', label: 'Media' },
       { value: 'lg', label: 'Grande' },
+      { value: 'custom', label: 'Personalizzata' },
     ]},
-    { key: 'panel_radius', label: 'Arrotondamento (px)', type: 'range', min: 0, max: 20, step: 1 },
+    { key: 'panel_shadow_h', label: 'Offset H (px)', type: 'range', min: -50, max: 50, step: 1,
+      condition: { field: 'panel_shadow', op: 'eq', value: 'custom' } },
+    { key: 'panel_shadow_v', label: 'Offset V (px)', type: 'range', min: -50, max: 50, step: 1,
+      condition: { field: 'panel_shadow', op: 'eq', value: 'custom' } },
+    { key: 'panel_shadow_blur', label: 'Sfocatura (px)', type: 'range', min: 0, max: 100, step: 1,
+      condition: { field: 'panel_shadow', op: 'eq', value: 'custom' } },
+    { key: 'panel_shadow_spread', label: 'Espansione (px)', type: 'range', min: -50, max: 50, step: 1,
+      condition: { field: 'panel_shadow', op: 'eq', value: 'custom' } },
+    { key: 'panel_shadow_color', label: 'Colore ombra', type: 'color',
+      condition: { field: 'panel_shadow', op: 'eq', value: 'custom' } },
+    { key: 'panel_shadow_inset', label: 'Ombra interna', type: 'toggle',
+      condition: { field: 'panel_shadow', op: 'eq', value: 'custom' } },
+    { key: 'panel_radius', label: 'Arrotondamento (px)', type: 'border-radius' },
     { key: 'panel_padding', label: 'Padding (px)', type: 'range', min: 16, max: 60, step: 2 },
     { key: 'panel_border_top', label: 'Linea accento top (px)', type: 'range', min: 0, max: 5, step: 1 },
     { key: 'panel_border_color', label: 'Colore linea accento', type: 'color' },
@@ -164,10 +184,21 @@ export default {
       condition: { field: 'button_mode', operator: '!=', value: 'none' } },
     { key: 'btn_color', label: 'Colore testo pulsante', type: 'color',
       condition: { field: 'button_mode', operator: '!=', value: 'none' } },
-    { key: 'btn_radius', label: 'Arrotondamento pulsante (px)', type: 'range', min: 0, max: 30, step: 1,
+    { key: 'btn_radius', label: 'Arrotondamento pulsante (px)', type: 'border-radius',
       condition: { field: 'button_mode', operator: '!=', value: 'none' } },
     { key: 'btn_hover_bg', label: 'Sfondo pulsante hover', type: 'color',
       condition: { field: 'button_mode', operator: '!=', value: 'none' } },
+
+    // -- Ricerca nel menu --
+    { type: 'separator', label: 'Ricerca nel menu' },
+    { key: 'search_tile_id', label: 'Tile ricerca', type: 'select',
+      optionsSource: 'searchTiles' },
+    { key: 'search_position', label: 'Posizione', type: 'select',
+      show: s => !!s.search_tile_id,
+      options: [
+        { value: 'before', label: 'Prima del menu (sinistra)' },
+        { value: 'after', label: 'Dopo il menu (destra)' },
+      ]},
 
     // -- Mobile --
     { type: 'separator', label: 'Mobile' },

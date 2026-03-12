@@ -9,28 +9,38 @@ class Olo_Table_Tile extends Olo_Tile_Base {
     protected $type     = 'table';
     protected $name     = 'Tabella';
     protected $icon     = 'dashicons-editor-table';
-    protected $category = 'content';
+    protected $category = 'text';
     protected $defaults = [
-        'table_data'       => "Feature|Basic|Pro|Enterprise\nStorage|5 GB|50 GB|Unlimited\nUsers|1|10|Unlimited\nSupport|Email|Priority|Dedicated",
-        'striped'          => true,
-        'bordered'         => true,
-        'hover_effect'     => true,
-        'header_bg'        => '#1F2937',
-        'header_text_color'=> '#F3F4F6',
-        'text_color'       => '#D1D5DB',
-        'border_color'     => '#374151',
+        'table_data'        => "Feature|Basic|Pro|Enterprise\nStorage|5 GB|50 GB|Unlimited\nUsers|1|10|Unlimited\nSupport|Email|Priority|Dedicated",
+        'has_header'        => true,
+        'striped'           => true,
+        'bordered'          => true,
+        'hover_effect'      => true,
+        'compact'           => false,
+        'first_col_bold'    => false,
+        'col_alignments'    => [],
+        'responsive_mode'   => 'scroll',
+        'header_bg'         => '',
+        'header_text_color' => '',
+        'text_color'        => '',
+        'border_color'      => '',
+        'even_row_bg'       => '',
     ];
 
     public function get_controls() {
         return [
-            [ 'key' => 'table_data',        'type' => 'textarea', 'label' => 'Table Data (header row first, | separator)' ],
-            [ 'key' => 'striped',           'type' => 'toggle',   'label' => 'Striped Rows' ],
-            [ 'key' => 'bordered',          'type' => 'toggle',   'label' => 'Bordered' ],
-            [ 'key' => 'hover_effect',      'type' => 'toggle',   'label' => 'Hover Effect' ],
-            [ 'key' => 'header_bg',         'type' => 'color',    'label' => 'Header Background' ],
-            [ 'key' => 'header_text_color', 'type' => 'color',    'label' => 'Header Text Color' ],
-            [ 'key' => 'text_color',        'type' => 'color',    'label' => 'Text Color' ],
-            [ 'key' => 'border_color',      'type' => 'color',    'label' => 'Border Color' ],
+            [ 'key' => 'has_header',        'type' => 'toggle',  'label' => 'Header Row' ],
+            [ 'key' => 'striped',           'type' => 'toggle',  'label' => 'Striped Rows' ],
+            [ 'key' => 'bordered',          'type' => 'toggle',  'label' => 'Bordered' ],
+            [ 'key' => 'hover_effect',      'type' => 'toggle',  'label' => 'Hover Effect' ],
+            [ 'key' => 'compact',           'type' => 'toggle',  'label' => 'Compact' ],
+            [ 'key' => 'first_col_bold',    'type' => 'toggle',  'label' => 'Bold First Column' ],
+            [ 'key' => 'responsive_mode',   'type' => 'select',  'label' => 'Responsive Mode' ],
+            [ 'key' => 'header_bg',         'type' => 'color',   'label' => 'Header Background' ],
+            [ 'key' => 'header_text_color', 'type' => 'color',   'label' => 'Header Text Color' ],
+            [ 'key' => 'text_color',        'type' => 'color',   'label' => 'Text Color' ],
+            [ 'key' => 'border_color',      'type' => 'color',   'label' => 'Border Color' ],
+            [ 'key' => 'even_row_bg',       'type' => 'color',   'label' => 'Even Row Background' ],
         ];
     }
 
@@ -39,39 +49,82 @@ class Olo_Table_Tile extends Olo_Tile_Base {
         $rows = $this->parse_table( $s['table_data'] );
 
         if ( empty( $rows ) ) {
-            return '<div class="olo-table" style="padding:20px;text-align:center;color:#6b7280;">No table data</div>';
+            return '<div class="olo-table" style="padding:20px;text-align:center;color:var(--olo-color-text-muted,#9CA3AF);">No table data</div>';
         }
 
-        $header = array_shift( $rows );
+        $has_header    = ! empty( $s['has_header'] );
+        $header        = $has_header ? array_shift( $rows ) : null;
+        $col_aligns    = is_array( $s['col_alignments'] ) ? $s['col_alignments'] : [];
+        $border_color  = $this->safe_color_css( $s['border_color'] ) ?: '#e5e7eb';
+        $text_color    = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-text,#374151)';
+        $header_bg     = $this->safe_color_css( $s['header_bg'] ) ?: 'var(--olo-color-secondary,#1F2937)';
+        $header_tc     = $this->safe_color_css( $s['header_text_color'] ) ?: '#fff';
+        $even_bg       = $this->safe_color_css( $s['even_row_bg'] ) ?: 'rgba(0,0,0,0.025)';
+        $compact       = ! empty( $s['compact'] );
+        $bordered      = ! empty( $s['bordered'] );
+        $striped       = ! empty( $s['striped'] );
+        $hover         = ! empty( $s['hover_effect'] );
+        $first_bold    = ! empty( $s['first_col_bold'] );
+        $responsive    = ( $s['responsive_mode'] ?? 'scroll' );
+        $pad           = $compact ? '6px 10px' : '10px 16px';
+        $uid           = 'olo-tbl-' . substr( md5( wp_json_encode( $s ) ), 0, 6 );
 
-        // Build UIkit table classes
-        $table_classes = [ 'uk-table' ];
-        if ( $s['striped'] ) {
-            $table_classes[] = 'uk-table-striped';
+        // Scoped CSS
+        $css = '<style>';
+        $css .= ".{$uid}{width:100%;border-collapse:collapse;color:{$text_color};font-size:" . ( $compact ? '13px' : '15px' ) . '}';
+        $css .= ".{$uid} th,.{$uid} td{padding:{$pad};text-align:left}";
+        if ( $bordered ) {
+            $css .= ".{$uid} th,.{$uid} td{border-bottom:1px solid {$border_color}}";
         }
-        if ( $s['hover_effect'] ) {
-            $table_classes[] = 'uk-table-hover';
+        if ( $hover ) {
+            $css .= ".{$uid} tbody tr:hover{background:rgba(99,102,241,0.06)}";
         }
-        if ( $s['bordered'] ) {
-            $table_classes[] = 'uk-table-divider';
+        if ( $responsive === 'stack' ) {
+            $css .= "@media(max-width:767px){";
+            $css .= ".{$uid} thead{display:none}";
+            $css .= ".{$uid} tbody tr{display:block;margin-bottom:12px;border:1px solid {$border_color};border-radius:6px;overflow:hidden}";
+            $css .= ".{$uid} tbody td{display:flex;justify-content:space-between;align-items:center;text-align:right}";
+            $css .= ".{$uid} tbody td::before{content:attr(data-label);font-weight:600;text-align:left;margin-right:12px}";
+            $css .= '}';
         }
+        $css .= '</style>';
 
         ob_start();
+        echo $css;
         ?>
-        <div class="olo-table uk-overflow-auto" style="padding:8px;">
-            <table class="<?php echo esc_attr( implode( ' ', $table_classes ) ); ?>" style="<?php echo $this->build_style( [ 'color' => $s['text_color'] ] ); ?>">
+        <div class="olo-table" style="<?php echo $responsive === 'scroll' ? 'overflow-x:auto' : ''; ?>">
+            <table class="<?php echo esc_attr( $uid ); ?>">
+                <?php if ( $header ) : ?>
                 <thead>
-                    <tr style="<?php echo $this->build_style( [ 'background' => $s['header_bg'], 'color' => $s['header_text_color'] ] ); ?>">
-                        <?php foreach ( $header as $cell ) : ?>
-                            <th style="padding:12px 16px;"><?php echo esc_html( $cell ); ?></th>
+                    <tr style="background:<?php echo esc_attr( $header_bg ); ?>;color:<?php echo esc_attr( $header_tc ); ?>">
+                        <?php foreach ( $header as $ci => $cell ) :
+                            $align = isset( $col_aligns[ $ci ] ) ? $col_aligns[ $ci ] : 'left';
+                        ?>
+                            <th style="text-align:<?php echo esc_attr( $align ); ?>;padding:<?php echo esc_attr( $pad ); ?>"><?php echo esc_html( $cell ); ?></th>
                         <?php endforeach; ?>
                     </tr>
                 </thead>
+                <?php endif; ?>
                 <tbody>
-                    <?php foreach ( $rows as $i => $row ) : ?>
-                        <tr>
-                            <?php foreach ( $row as $cell ) : ?>
-                                <td style="padding:10px 16px;"><?php echo esc_html( $cell ); ?></td>
+                    <?php foreach ( $rows as $ri => $row ) :
+                        $row_style = '';
+                        if ( $striped ) {
+                            if ( $ri % 2 === 1 ) {
+                                $row_style = "background:{$even_bg}";
+                            }
+                        }
+                    ?>
+                        <tr<?php echo $row_style ? ' style="' . esc_attr( $row_style ) . '"' : ''; ?>>
+                            <?php foreach ( $row as $ci => $cell ) :
+                                $align = isset( $col_aligns[ $ci ] ) ? $col_aligns[ $ci ] : 'left';
+                                $td_style = "text-align:{$align};padding:{$pad}";
+                                $bold = ( $first_bold && $ci === 0 ) ? ' style="font-weight:600;' . esc_attr( $td_style ) . '"' : ' style="' . esc_attr( $td_style ) . '"';
+                                $data_label = '';
+                                if ( $responsive === 'stack' && $header && isset( $header[ $ci ] ) ) {
+                                    $data_label = ' data-label="' . esc_attr( $header[ $ci ] ) . '"';
+                                }
+                            ?>
+                                <td<?php echo $bold . $data_label; ?>><?php echo esc_html( $cell ); ?></td>
                             <?php endforeach; ?>
                         </tr>
                     <?php endforeach; ?>
@@ -82,8 +135,25 @@ class Olo_Table_Tile extends Olo_Tile_Base {
         return ob_get_clean();
     }
 
-    private function parse_table( $text ) {
+    /**
+     * Parse table data — supports both array (new) and pipe-separated string (legacy).
+     */
+    private function parse_table( $data ) {
+        // New format: 2D array
+        if ( is_array( $data ) ) {
+            // Check if it's already a 2D array
+            if ( ! empty( $data ) && is_array( $data[0] ) ) {
+                return array_map( function( $row ) {
+                    return array_map( 'strval', $row );
+                }, $data );
+            }
+            // 1D array — treat each element as a pipe-separated line
+            $data = implode( "\n", $data );
+        }
+
+        // Legacy string format
         $rows  = [];
+        $text  = (string) $data;
         $lines = array_filter( array_map( 'trim', explode( "\n", $text ) ) );
         foreach ( $lines as $line ) {
             $cells = array_map( 'trim', explode( '|', $line ) );

@@ -77,6 +77,12 @@
               >
                 Nuovo Mega Panel
               </button>
+              <button
+                @click="createNew('404')"
+                class="mb-block mb-w-full mb-text-left mb-px-4 mb-py-2.5 mb-text-sm mb-text-gray-200 hover:mb-bg-gray-700 mb-transition-colors"
+              >
+                Nuova 404
+              </button>
               <div class="mb-border-t mb-border-gray-700"></div>
               <div class="mb-px-4 mb-py-2 mb-text-[10px] mb-text-gray-500 mb-uppercase mb-font-bold">Template Single</div>
               <button
@@ -121,17 +127,18 @@
       >
         <span class="mb-text-5xl mb-block mb-mb-4 mb-opacity-30">&#x1F9E9;</span>
         <h2 class="mb-text-lg mb-font-medium mb-text-gray-300 mb-mb-2">
-          {{ activeTab === 'header' ? 'Nessun header' : activeTab === 'footer' ? 'Nessun footer' : activeTab === 'single' ? 'Nessun template single' : 'Nessun template' }}
+          {{ activeTab === 'header' ? 'Nessun header' : activeTab === 'footer' ? 'Nessun footer' : activeTab === 'single' ? 'Nessun template single' : activeTab === '404' ? 'Nessuna pagina 404' : 'Nessun template' }}
         </h2>
         <p class="mb-text-sm mb-text-gray-500 mb-mb-6">
-          {{ activeTab === 'header' ? 'Crea il tuo primo template header.' : activeTab === 'footer' ? 'Crea il tuo primo template footer.' : activeTab === 'single' ? 'Crea un template single per un custom post type.' : 'Crea il tuo primo template per iniziare.' }}
+          {{ activeTab === 'header' ? 'Crea il tuo primo template header.' : activeTab === 'footer' ? 'Crea il tuo primo template footer.' : activeTab === 'single' ? 'Crea un template single per un custom post type.' : activeTab === '404' ? 'Crea la tua pagina 404 personalizzata.' : 'Crea il tuo primo template per iniziare.' }}
         </p>
         <button
           v-if="activeTab !== 'single'"
           @click="createNew(activeTab === 'all' ? 'page' : activeTab)"
+
           class="mb-px-5 mb-py-2.5 mb-bg-primary-600 mb-text-white mb-rounded-lg mb-font-medium mb-text-sm hover:mb-bg-primary-700 mb-transition-colors"
         >
-          {{ activeTab === 'header' ? 'Crea Header' : activeTab === 'footer' ? 'Crea Footer' : 'Crea Template' }}
+          {{ activeTab === 'header' ? 'Crea Header' : activeTab === 'footer' ? 'Crea Footer' : activeTab === '404' ? 'Crea 404' : 'Crea Template' }}
         </button>
       </div>
 
@@ -172,6 +179,12 @@
             >
               Mega Panel
             </span>
+            <span
+              v-if="tpl.type === '404'"
+              class="mb-absolute mb-top-2 mb-left-2 mb-px-2 mb-py-0.5 mb-text-[10px] mb-font-bold mb-uppercase mb-rounded mb-bg-red-600/20 mb-text-red-300 mb-border mb-border-red-500/30"
+            >
+              404
+            </span>
             <!-- Active header indicator -->
             <span
               v-if="tpl.type === 'header' && tpl.id === activeHeaderId"
@@ -189,6 +202,13 @@
             <!-- Active single indicator -->
             <span
               v-if="tpl.type === 'single' && isActiveSingle(tpl)"
+              class="mb-absolute mb-top-2 mb-right-2 mb-px-2 mb-py-0.5 mb-text-[10px] mb-font-bold mb-uppercase mb-rounded mb-bg-green-600/20 mb-text-green-300 mb-border mb-border-green-500/30"
+            >
+              Attivo
+            </span>
+            <!-- Active 404 indicator -->
+            <span
+              v-if="tpl.type === '404' && tpl.id === active404Id"
               class="mb-absolute mb-top-2 mb-right-2 mb-px-2 mb-py-0.5 mb-text-[10px] mb-font-bold mb-uppercase mb-rounded mb-bg-green-600/20 mb-text-green-300 mb-border mb-border-green-500/30"
             >
               Attivo
@@ -254,7 +274,7 @@
             </div>
             <div class="mb-mt-3 mb-flex mb-items-center mb-gap-2">
               <!-- Shortcode for pages -->
-              <code v-if="tpl.type !== 'header' && tpl.type !== 'footer' && tpl.type !== 'single' && tpl.type !== 'megapanel'" class="mb-text-[10px] mb-text-gray-500 mb-bg-gray-700 mb-px-2 mb-py-0.5 mb-rounded">
+              <code v-if="tpl.type !== 'header' && tpl.type !== 'footer' && tpl.type !== 'single' && tpl.type !== 'megapanel' && tpl.type !== '404'" class="mb-text-[10px] mb-text-gray-500 mb-bg-gray-700 mb-px-2 mb-py-0.5 mb-rounded">
                 [olo_template id="{{ tpl.id }}"]
               </code>
               <!-- Activate/Deactivate for headers -->
@@ -329,6 +349,30 @@
                   Attiva
                 </button>
               </template>
+              <!-- Activate/Deactivate for 404 -->
+              <template v-if="tpl.type === '404'">
+                <button
+                  v-if="tpl.id === active404Id"
+                  @click="deactivate404"
+                  class="mb-text-[11px] mb-px-3 mb-py-1 mb-rounded mb-bg-green-600/20 mb-text-green-300 mb-border mb-border-green-500/30 hover:mb-bg-red-600/20 hover:mb-text-red-300 hover:mb-border-red-500/30 mb-transition-colors"
+                >
+                  Disattiva
+                </button>
+                <button
+                  v-else
+                  @click="activate404(tpl.id)"
+                  :disabled="tpl.status !== 'published'"
+                  :class="[
+                    'mb-text-[11px] mb-px-3 mb-py-1 mb-rounded mb-border mb-transition-colors',
+                    tpl.status === 'published'
+                      ? 'mb-bg-gray-700 mb-text-gray-300 mb-border-gray-600 hover:mb-bg-red-600/20 hover:mb-text-red-300 hover:mb-border-red-500/30'
+                      : 'mb-bg-gray-700/50 mb-text-gray-600 mb-border-gray-700 mb-cursor-not-allowed'
+                  ]"
+                  :title="tpl.status !== 'published' ? 'Pubblica prima di attivare' : 'Imposta come pagina 404 attiva'"
+                >
+                  Attiva
+                </button>
+              </template>
             </div>
           </div>
         </div>
@@ -352,6 +396,7 @@ const showNewMenu = ref(false);
 const dropdownRef = ref(null);
 const activeHeaderId = ref(parseInt(oloData.activeHeaderId) || 0);
 const activeFooterId = ref(parseInt(oloData.activeFooterId) || 0);
+const active404Id = ref(parseInt(oloData.active404Id) || 0);
 const activeSingles = ref({ ...(oloData.activeSingles || {}) });
 const postTypes = oloData.postTypes || [];
 const renamingId = ref(null);
@@ -366,6 +411,7 @@ const tabs = [
   { value: 'footer', label: 'Footer' },
   { value: 'single', label: 'Single' },
   { value: 'megapanel', label: 'Mega Panel' },
+  { value: '404', label: '404' },
 ];
 const activeTab = ref('all');
 
@@ -383,7 +429,7 @@ function handleClickOutside(e) {
 async function fetchTemplates() {
   loading.value = true;
   try {
-    const res = await fetch(`${oloData.restUrl}/templates`, {
+    const res = await fetch(`${oloData.restUrl}/templates?per_page=200`, {
       headers: { 'X-WP-Nonce': oloData.nonce },
     });
     if (!res.ok) throw new Error('Failed to fetch');
@@ -445,6 +491,9 @@ async function deleteTemplate(id, title) {
       }
       if (id === activeFooterId.value) {
         activeFooterId.value = 0;
+      }
+      if (id === active404Id.value) {
+        active404Id.value = 0;
       }
       // Check if it was an active single template
       for (const [pt, tplId] of Object.entries(activeSingles.value)) {
@@ -509,6 +558,7 @@ async function activateHeader(id) {
     });
     if (res.ok) {
       activeHeaderId.value = id;
+      oloData.activeHeaderId = id;
     }
   } catch (err) {
     console.error('activateHeader error:', err);
@@ -523,6 +573,7 @@ async function deactivateHeader() {
     });
     if (res.ok) {
       activeHeaderId.value = 0;
+      oloData.activeHeaderId = 0;
     }
   } catch (err) {
     console.error('deactivateHeader error:', err);
@@ -541,6 +592,7 @@ async function activateFooter(id) {
     });
     if (res.ok) {
       activeFooterId.value = id;
+      oloData.activeFooterId = id;
     }
   } catch (err) {
     console.error('activateFooter error:', err);
@@ -555,9 +607,44 @@ async function deactivateFooter() {
     });
     if (res.ok) {
       activeFooterId.value = 0;
+      oloData.activeFooterId = 0;
     }
   } catch (err) {
     console.error('deactivateFooter error:', err);
+  }
+}
+
+async function activate404(id) {
+  try {
+    const res = await fetch(`${oloData.restUrl}/404/activate`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-WP-Nonce': oloData.nonce,
+      },
+      body: JSON.stringify({ id }),
+    });
+    if (res.ok) {
+      active404Id.value = id;
+      oloData.active404Id = id;
+    }
+  } catch (err) {
+    console.error('activate404 error:', err);
+  }
+}
+
+async function deactivate404() {
+  try {
+    const res = await fetch(`${oloData.restUrl}/404/activate`, {
+      method: 'DELETE',
+      headers: { 'X-WP-Nonce': oloData.nonce },
+    });
+    if (res.ok) {
+      active404Id.value = 0;
+      oloData.active404Id = 0;
+    }
+  } catch (err) {
+    console.error('deactivate404 error:', err);
   }
 }
 
@@ -583,6 +670,7 @@ async function activateSingle(id, postType) {
     });
     if (res.ok) {
       activeSingles.value = { ...activeSingles.value, [postType]: id };
+      oloData.activeSingles = { ...activeSingles.value };
     }
   } catch (err) {
     console.error('activateSingle error:', err);
@@ -604,6 +692,7 @@ async function deactivateSingle(postType) {
       const updated = { ...activeSingles.value };
       delete updated[postType];
       activeSingles.value = updated;
+      oloData.activeSingles = { ...updated };
     }
   } catch (err) {
     console.error('deactivateSingle error:', err);

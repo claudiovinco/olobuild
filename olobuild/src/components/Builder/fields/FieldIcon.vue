@@ -22,6 +22,7 @@
       type="button"
       @click="showPicker = true"
       class="mb-px-2 mb-py-1.5 mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded mb-text-[10px] mb-text-gray-300 hover:mb-bg-gray-600 mb-whitespace-nowrap"
+      aria-label="Sfoglia libreria icone"
     >Sfoglia</button>
 
     <!-- Icon picker modal -->
@@ -34,7 +35,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import iconsSvg from '../../ProSlider/uikitIconsSvg.js';
 import IconPicker from '../../ProSlider/IconPicker.vue';
 
@@ -45,8 +46,33 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue']);
 
 const showPicker = ref(false);
+const customSvgCache = ref({});
 
-const iconSvg = computed(() => iconsSvg[props.modelValue] || '');
+const isCustom = computed(() => props.modelValue?.startsWith('custom:'));
+
+const iconSvg = computed(() => {
+  if (isCustom.value) {
+    const name = props.modelValue.slice(7);
+    return customSvgCache.value[name] || '';
+  }
+  return iconsSvg[props.modelValue] || '';
+});
+
+// Load custom icon SVG if needed
+watch(() => props.modelValue, async (val) => {
+  if (!val?.startsWith('custom:')) return;
+  const name = val.slice(7);
+  if (customSvgCache.value[name]) return;
+  try {
+    const res = await fetch(`${window.oloData?.restUrl || '/wp-json/'}olo/v1/custom-icons`, {
+      headers: { 'X-WP-Nonce': window.oloData?.nonce || '' },
+    });
+    if (res.ok) {
+      const icons = await res.json();
+      customSvgCache.value = icons;
+    }
+  } catch (e) { /* silently fail */ }
+}, { immediate: true });
 
 function onSelect(name) {
   emit('update:modelValue', name);
@@ -72,7 +98,7 @@ function onSelect(name) {
   stroke: #d1d5db;
 }
 .field-icon-empty {
-  color: #6b7280;
+  color: #9CA3AF;
   font-size: 12px;
 }
 </style>

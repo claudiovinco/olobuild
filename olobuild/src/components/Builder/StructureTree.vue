@@ -1,8 +1,8 @@
 <template>
-  <div class="st-root">
+  <div ref="stRoot" class="st-root">
     <!-- Empty state -->
     <div v-if="tilesStore.canvasTiles.length === 0" class="st-empty">
-      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#4B5563" stroke-width="1.5">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="1.5">
         <rect x="3" y="3" width="7" height="7" rx="1"/>
         <rect x="14" y="3" width="7" height="7" rx="1"/>
         <rect x="3" y="14" width="7" height="7" rx="1"/>
@@ -39,7 +39,7 @@
                   <circle cx="1" cy="9" r="1"/><circle cx="5" cy="9" r="1"/>
                 </svg>
               </span>
-              <button class="st-toggle" :class="{ 'st-toggle--open': isExpanded(section.id) }" @click.stop="toggle(section.id)">
+              <button class="st-toggle" :class="{ 'st-toggle--open': isExpanded(section.id) }" aria-label="Espandi/comprimi sezione" @click.stop="toggle(section.id)">
                 <svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor"><path d="M2 1l4 3-4 3z"/></svg>
               </button>
               <span class="st-dot" style="background: var(--olo-color-primary, #6366F1)"></span>
@@ -47,13 +47,18 @@
               <span v-else class="st-name" @click.stop="onNameClick(section)" :title="section.settings?._label || 'Sezione'">{{ section.settings?._label || 'Sezione' }}</span>
               <span class="st-badge" style="color:#fff" v-if="section.children?.length">{{ section.children.length }}r</span>
               <span class="st-actions">
-                <button title="Duplica" @click.stop="duplicate(section.id)">
+                <button title="Duplica" aria-label="Duplica" @click.stop="duplicate(section.id)">
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <rect x="9" y="9" width="13" height="13" rx="2"/>
                     <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
                   </svg>
                 </button>
-                <button title="Elimina" @click.stop="remove(section.id)">
+                <button title="Salva come template" aria-label="Salva come template" @click.stop="emit('save-as-template', section)">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/>
+                  </svg>
+                </button>
+                <button title="Elimina" aria-label="Elimina" @click.stop="remove(section.id)">
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M18 6L6 18M6 6l12 12"/>
                   </svg>
@@ -87,20 +92,20 @@
                           <circle cx="1" cy="9" r="1"/><circle cx="5" cy="9" r="1"/>
                         </svg>
                       </span>
-                      <button class="st-toggle" :class="{ 'st-toggle--open': isExpanded(row.id) }" @click.stop="toggle(row.id)">
+                      <button class="st-toggle" :class="{ 'st-toggle--open': isExpanded(row.id) }" aria-label="Espandi/comprimi riga" @click.stop="toggle(row.id)">
                         <svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor"><path d="M2 1l4 3-4 3z"/></svg>
                       </button>
                       <span class="st-dot" style="background: var(--olo-color-primary, #6366F1)"></span>
                       <input v-if="renamingId === row.id" class="st-rename-input" :style="renameInputStyle" :value="renameValue" @input="renameValue = $event.target.value" @keydown.enter.prevent="confirmRename(row)" @keydown.escape="cancelRename()" @blur="confirmRename(row)" @click.stop />
                       <span v-else class="st-name" @click.stop="onNameClick(row)" :title="row.settings?._label || 'Riga'">{{ row.settings?._label || 'Riga' }} <span class="st-meta">{{ row.settings?.layout === 'custom' ? (row.settings?.custom_widths || '%') : (row.settings?.layout || '50-50') }}</span></span>
                       <span class="st-actions">
-                        <button title="Duplica" @click.stop="duplicate(row.id)">
+                        <button title="Duplica" aria-label="Duplica" @click.stop="duplicate(row.id)">
                           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <rect x="9" y="9" width="13" height="13" rx="2"/>
                             <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
                           </svg>
                         </button>
-                        <button title="Elimina" @click.stop="remove(row.id)">
+                        <button title="Elimina" aria-label="Elimina" @click.stop="remove(row.id)">
                           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M18 6L6 18M6 6l12 12"/>
                           </svg>
@@ -122,6 +127,7 @@
                             v-if="col.children && col.children.length > 0"
                             class="st-toggle"
                             :class="{ 'st-toggle--open': isExpanded(col.id) }"
+                            aria-label="Espandi/comprimi colonna"
                             @click.stop="toggle(col.id)"
                           >
                             <svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor"><path d="M2 1l4 3-4 3z"/></svg>
@@ -163,6 +169,7 @@
                                     v-if="tile.type === 'inner-columns' && tile.children?.length"
                                     class="st-toggle"
                                     :class="{ 'st-toggle--open': isExpanded(tile.id) }"
+                                    aria-label="Espandi/comprimi elemento"
                                     @click.stop="toggle(tile.id)"
                                   >
                                     <svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor"><path d="M2 1l4 3-4 3z"/></svg>
@@ -173,13 +180,13 @@
                                   <span v-else class="st-name" @click.stop="onNameClick(tile)" :title="tileLabelFull(tile)">{{ tileLabel(tile) }}</span>
                                   <span v-if="tile.type === 'inner-columns'" class="st-badge" style="color:#fff">{{ tile.settings?.layout || '50-50' }}</span>
                                   <span class="st-actions">
-                                    <button title="Duplica" @click.stop="duplicate(tile.id)">
+                                    <button title="Duplica" aria-label="Duplica" @click.stop="duplicate(tile.id)">
                                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <rect x="9" y="9" width="13" height="13" rx="2"/>
                                         <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
                                       </svg>
                                     </button>
-                                    <button title="Elimina" @click.stop="remove(tile.id)">
+                                    <button title="Elimina" aria-label="Elimina" @click.stop="remove(tile.id)">
                                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <path d="M18 6L6 18M6 6l12 12"/>
                                       </svg>
@@ -200,6 +207,7 @@
                                         v-if="icol.children && icol.children.length > 0"
                                         class="st-toggle"
                                         :class="{ 'st-toggle--open': isExpanded(icol.id) }"
+                                        aria-label="Espandi/comprimi colonna interna"
                                         @click.stop="toggle(icol.id)"
                                       >
                                         <svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor"><path d="M2 1l4 3-4 3z"/></svg>
@@ -241,13 +249,13 @@
                                             <input v-if="renamingId === innerTile.id" class="st-rename-input" :style="renameInputStyle" :value="renameValue" @input="renameValue = $event.target.value" @keydown.enter.prevent="confirmRename(innerTile)" @keydown.escape="cancelRename()" @blur="confirmRename(innerTile)" @click.stop />
                                             <span v-else class="st-name" @click.stop="onNameClick(innerTile)" :title="tileLabelFull(innerTile)">{{ tileLabel(innerTile) }}</span>
                                             <span class="st-actions">
-                                              <button title="Duplica" @click.stop="duplicate(innerTile.id)">
+                                              <button title="Duplica" aria-label="Duplica" @click.stop="duplicate(innerTile.id)">
                                                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                   <rect x="9" y="9" width="13" height="13" rx="2"/>
                                                   <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
                                                 </svg>
                                               </button>
-                                              <button title="Elimina" @click.stop="remove(innerTile.id)">
+                                              <button title="Elimina" aria-label="Elimina" @click.stop="remove(innerTile.id)">
                                                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                   <path d="M18 6L6 18M6 6l12 12"/>
                                                 </svg>
@@ -283,8 +291,11 @@ import { useTilesStore } from '@/stores/tiles';
 import { useBuilderStore } from '@/stores/builder';
 import { loadScrollFlashPrefs } from '@/utils/scrollFlashPrefs';
 
+const emit = defineEmits(['save-as-template']);
+
 const tilesStore = useTilesStore();
 const builderStore = useBuilderStore();
+const stRoot = ref(null);
 
 // Inline rename
 const renamingId = ref(null);
@@ -296,7 +307,7 @@ function onNameClick(tile) {
     renamingId.value = tile.id;
     renameValue.value = tile.settings?._label || '';
     nextTick(function() {
-      var inp = document.querySelector('.st-rename-input');
+      var inp = stRoot.value && stRoot.value.querySelector('.st-rename-input');
       if (inp) { inp.focus(); inp.select(); }
     });
   } else if (builderStore.selectedTileId !== tile.id) {
@@ -406,9 +417,9 @@ function selectTile(id) {
 
         // Color
         var hex = p.color || '#6366F1';
-        var r = parseInt(hex.slice(1, 3), 16) || 99;
-        var g = parseInt(hex.slice(3, 5), 16) || 102;
-        var b = parseInt(hex.slice(5, 7), 16) || 241;
+        var rp = parseInt(hex.slice(1, 3), 16); var r = isNaN(rp) ? 99 : rp;
+        var gp = parseInt(hex.slice(3, 5), 16); var g = isNaN(gp) ? 102 : gp;
+        var bp = parseInt(hex.slice(5, 7), 16); var b = isNaN(bp) ? 241 : bp;
         el.style.setProperty('--sf-color', 'rgb(' + r + ',' + g + ',' + b + ')');
         el.style.setProperty('--sf-color-soft', 'rgba(' + r + ',' + g + ',' + b + ',0.7)');
         el.style.setProperty('--sf-size', p.size + 'px');
@@ -487,7 +498,7 @@ watch(function() { return builderStore.selectedTileId; }, function(newId) {
   if (!newId) return;
   expandAncestors(newId);
   nextTick(function() {
-    var el = document.querySelector('.st-row--active');
+    var el = stRoot.value && stRoot.value.querySelector('.st-row--active');
     if (el) el.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
   });
 });
@@ -559,7 +570,7 @@ watch(function() { return builderStore.selectedTileId; }, function(newId) {
   transition: color 0.15s;
 }
 .st-row:hover .st-grip {
-  color: #4B5563;
+  color: #6B7280;
 }
 .st-grip:hover {
   color: #9CA3AF !important;
@@ -579,7 +590,7 @@ watch(function() { return builderStore.selectedTileId; }, function(newId) {
   justify-content: center;
   background: none;
   border: none;
-  color: #4B5563;
+  color: #6B7280;
   cursor: pointer;
   padding: 0;
   border-radius: 2px;
@@ -621,7 +632,7 @@ watch(function() { return builderStore.selectedTileId; }, function(newId) {
   color: #E5E7EB;
 }
 .st-meta {
-  color: #6B7280;
+  color: #9CA3AF;
   font-size: 10px;
   font-weight: 400;
 }
@@ -656,7 +667,7 @@ watch(function() { return builderStore.selectedTileId; }, function(newId) {
   height: 18px;
   background: none;
   border: none;
-  color: #4B5563;
+  color: #6B7280;
   cursor: pointer;
   border-radius: 2px;
   padding: 0;

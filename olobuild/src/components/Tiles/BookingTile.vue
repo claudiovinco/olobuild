@@ -7,7 +7,7 @@
           &#128197;
         </div>
         <div>
-          <div :style="{ fontSize: s.title_size+'px', fontWeight: s.title_weight, color: s.title_color || '#1f2937' }">
+          <div :style="{ fontSize: s.title_size+'px', fontWeight: s.title_weight, color: s.title_color || 'var(--olo-color-text, #374151)' }">
             {{ serviceLabel }}
           </div>
           <div :style="{ fontSize:'13px', color: s.meta_color, display:'flex', gap:'10px', marginTop:'2px' }">
@@ -56,14 +56,15 @@
 
 <script setup>
 import { computed } from 'vue';
+import { getShadowValue } from '@/composables/useShadowMap';
 
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 
 const defaults = {
-  service_id: 'auto', primary_color: '#6366F1', show_price: true, show_duration: true,
+  service_id: 'auto', primary_color: 'var(--olo-color-primary, #6366F1)', show_price: true, show_duration: true,
   widget_max_width: 480, widget_bg: '#FFFFFF', widget_border_radius: 12,
-  widget_border_color: '#E5E7EB', widget_shadow: 'sm', btn_bg: '#6366F1', btn_color: '#FFFFFF',
-  btn_radius: 8, available_color: '#6366F1', full_color: '#EF4444', slot_border_radius: 8,
+  widget_border_color: '#E5E7EB', widget_shadow: 'sm', btn_bg: 'var(--olo-color-primary, #6366F1)', btn_color: '#FFFFFF',
+  btn_radius: 8, available_color: 'var(--olo-color-primary, #6366F1)', full_color: '#EF4444', slot_border_radius: 8,
   title_size: 18, title_weight: '700', title_color: '', meta_color: '#6B7280', success_color: '#10B981',
 };
 
@@ -71,14 +72,12 @@ const s = computed(() => ({ ...defaults, ...props.settings }));
 
 const serviceLabel = computed(() => s.value.service_id === 'auto' ? 'Servizio corrente' : s.value.service_id === 'all' ? 'Seleziona servizio' : 'Consulenza Fiscale');
 
-const shadowMap = { none: 'none', sm: '0 1px 3px rgba(0,0,0,0.1)', md: '0 4px 12px rgba(0,0,0,0.1)', lg: '0 8px 24px rgba(0,0,0,0.15)' };
-
 const widgetStyle = computed(() => ({
   maxWidth: s.value.widget_max_width + 'px',
   background: s.value.widget_bg,
   borderRadius: s.value.widget_border_radius + 'px',
   border: '1px solid ' + s.value.widget_border_color,
-  boxShadow: shadowMap[s.value.widget_shadow] || 'none',
+  boxShadow: getShadowValue(s.value, 'widget_shadow'),
   overflow: 'hidden',
 }));
 

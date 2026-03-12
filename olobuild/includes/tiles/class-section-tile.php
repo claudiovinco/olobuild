@@ -11,11 +11,16 @@ class Olo_Section_Tile extends Olo_Tile_Base {
     protected $icon     = 'dashicons-align-center';
     protected $category = 'structure';
     protected $defaults = [
-        'style'         => 'default',
-        'width'         => 'default',
-        'padding'       => 'default',
-        'sticky_effect' => 'none',
-        'sticky_top'    => '',
+        'style'                => 'default',
+        'width'                => 'default',
+        'padding'              => 'default',
+        'sticky_effect'        => 'none',
+        'sticky_top'           => '',
+        'scroll_snap'          => false,
+        'snap_dots'            => false,
+        'snap_dot_color'       => '#ffffff',
+        'snap_dot_active_color'=> '',
+        'snap_dot_position'    => 'right',
     ];
 
     public function get_controls() {
@@ -48,6 +53,11 @@ class Olo_Section_Tile extends Olo_Tile_Base {
                 'cover-h'   => 'Cover Horizontal',
                 'reveal-h'  => 'Reveal Horizontal',
             ]],
+            [ 'key' => 'scroll_snap',          'type' => 'toggle', 'label' => 'Scroll Snap' ],
+            [ 'key' => 'snap_dots',            'type' => 'toggle', 'label' => 'Snap Dots' ],
+            [ 'key' => 'snap_dot_color',       'type' => 'color',  'label' => 'Dot Color' ],
+            [ 'key' => 'snap_dot_active_color','type' => 'color',  'label' => 'Active Dot Color' ],
+            [ 'key' => 'snap_dot_position',    'type' => 'select', 'label' => 'Dot Position' ],
         ];
     }
 

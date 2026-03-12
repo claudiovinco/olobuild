@@ -15,7 +15,7 @@ export function useDragDrop() {
     );
     if (!registered) return null;
 
-    const defaults = JSON.parse(JSON.stringify(registered.defaults));
+    const defaults = JSON.parse(JSON.stringify(registered.defaults || {}));
     const tile = {
       id: generateId(),
       type: registered.type,
@@ -113,6 +113,42 @@ export function useDragDrop() {
     return newTile;
   }
 
+  /**
+   * Handle drop of a global widget from sidebar to canvas.
+   * Creates the tile from the stored global widget data and wraps it.
+   */
+  function handleGlobalWidgetDrop(globalId, index) {
+    const newTile = tilesStore.insertGlobalWidget(globalId);
+    if (!newTile) return null;
+
+    const column = createColumn('1-1', [newTile]);
+    const row = createRow('100', [column]);
+    const tileToAdd = createSection([row]);
+
+    if (typeof index === 'number') {
+      tilesStore.canvasTiles.splice(index, 0, tileToAdd);
+    } else {
+      tilesStore.addTile(tileToAdd);
+    }
+
+    builderStore.isDirty = true;
+    builderStore.selectTile(newTile.id);
+    return newTile;
+  }
+
+  /**
+   * Handle drop of a global widget into a specific column.
+   */
+  function handleGlobalWidgetDropIntoColumn(globalId, columnId) {
+    const newTile = tilesStore.insertGlobalWidget(globalId);
+    if (!newTile) return null;
+
+    tilesStore.addChild(columnId, newTile);
+    builderStore.isDirty = true;
+    builderStore.selectTile(newTile.id);
+    return newTile;
+  }
+
   function handleReorder(evt) {
     if (evt.moved) {
       builderStore.isDirty = true;
@@ -124,6 +160,8 @@ export function useDragDrop() {
     createTileFromType,
     handleDropFromSidebar,
     handleDropIntoColumn,
+    handleGlobalWidgetDrop,
+    handleGlobalWidgetDropIntoColumn,
     handleReorder,
   };
 }

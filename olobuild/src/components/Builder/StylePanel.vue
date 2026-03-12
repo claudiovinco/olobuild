@@ -43,6 +43,21 @@
       </div>
     </CollapseSection>
 
+    <CollapseSection title="Colori Dark Mode">
+      <p class="mb-text-[10px] mb-text-gray-500 mb-mb-3">Colori usati quando il Dark Mode Toggle è attivo. Sovrascrivono i colori base.</p>
+      <div class="mb-space-y-2.5">
+        <div v-for="(value, key) in stylesStore.darkColors" :key="'dk-' + key">
+          <label class="mb-block mb-text-[10px] mb-font-medium mb-text-gray-400 mb-mb-0.5">
+            {{ formatLabel(key) }}
+          </label>
+          <FieldColor
+            :modelValue="value"
+            @update:modelValue="stylesStore.updateDarkColor(key, $event)"
+          />
+        </div>
+      </div>
+    </CollapseSection>
+
     <CollapseSection title="Tipografia">
       <div class="mb-space-y-2.5">
         <!-- Font Family (body) -->
@@ -120,6 +135,57 @@
             @update:modelValue="stylesStore.updateLayout('container_max_width', $event)"
           />
         </div>
+      </div>
+    </CollapseSection>
+
+    <CollapseSection title="Scala Spaziatura">
+      <p class="mb-text-[9px] mb-text-gray-500 mb-mb-2">8 livelli di spacing globali (CSS custom properties --olo-space-*)</p>
+      <div class="mb-space-y-2">
+        <div v-for="(lbl, key) in spacingLabels" :key="key">
+          <label class="mb-block mb-text-[10px] mb-font-medium mb-text-gray-400 mb-mb-0.5">{{ lbl }}</label>
+          <FieldText
+            :modelValue="(stylesStore.styles.spacing || {})[key] || spacingDefaults[key]"
+            @update:modelValue="stylesStore.updateSpacing(key, $event)"
+          />
+        </div>
+      </div>
+    </CollapseSection>
+
+    <CollapseSection title="Scala Border Radius">
+      <div class="mb-space-y-2">
+        <div v-for="(lbl, key) in radiusLabels" :key="key">
+          <label class="mb-block mb-text-[10px] mb-font-medium mb-text-gray-400 mb-mb-0.5">{{ lbl }}</label>
+          <FieldText
+            :modelValue="(stylesStore.styles.border_radius_scale || {})[key] || radiusDefaults[key]"
+            @update:modelValue="stylesStore.updateRadiusScale(key, $event)"
+          />
+        </div>
+      </div>
+    </CollapseSection>
+
+    <CollapseSection title="Ombre Globali">
+      <div class="mb-space-y-2">
+        <div v-for="(lbl, key) in shadowLabels" :key="key">
+          <label class="mb-block mb-text-[10px] mb-font-medium mb-text-gray-400 mb-mb-0.5">{{ lbl }}</label>
+          <FieldText
+            :modelValue="(stylesStore.styles.shadows || {})[key] || shadowDefaults[key]"
+            @update:modelValue="stylesStore.updateShadow(key, $event)"
+          />
+        </div>
+      </div>
+    </CollapseSection>
+
+    <CollapseSection title="Design Tokens">
+      <p class="mb-text-[9px] mb-text-gray-500 mb-mb-2">Esporta/importa tutti gli stili come file JSON per riutilizzarli su altri siti.</p>
+      <div class="mb-flex mb-gap-2">
+        <button
+          @click="stylesStore.exportDesignTokens()"
+          class="mb-flex-1 mb-py-1.5 mb-text-[10px] mb-font-medium mb-rounded-md mb-border mb-border-cyan-600 mb-text-cyan-400 hover:mb-bg-cyan-600/20 mb-transition-colors"
+        >Esporta JSON</button>
+        <button
+          @click="importTokens"
+          class="mb-flex-1 mb-py-1.5 mb-text-[10px] mb-font-medium mb-rounded-md mb-border mb-border-gray-600 mb-text-gray-400 hover:mb-bg-gray-700 mb-transition-colors"
+        >Importa JSON</button>
       </div>
     </CollapseSection>
 
@@ -213,6 +279,31 @@ function parseBorderRadius(val) {
   if (val && typeof val === 'object') return val;
   const s = String(val || '0');
   return parseInt(s) || 0;
+}
+
+const spacingLabels = { xs: 'XS (4px)', sm: 'SM (8px)', md: 'MD (16px)', lg: 'LG (24px)', xl: 'XL (32px)', '2xl': '2XL (48px)', '3xl': '3XL (64px)', '4xl': '4XL (96px)' };
+const spacingDefaults = { xs: '4px', sm: '8px', md: '16px', lg: '24px', xl: '32px', '2xl': '48px', '3xl': '64px', '4xl': '96px' };
+const radiusLabels = { sm: 'Piccolo (4px)', md: 'Medio (8px)', lg: 'Grande (16px)', full: 'Pieno (9999px)' };
+const radiusDefaults = { sm: '4px', md: '8px', lg: '16px', full: '9999px' };
+const shadowLabels = { sm: 'Leggera', md: 'Media', lg: 'Forte', xl: 'Molto forte' };
+const shadowDefaults = { sm: '0 1px 2px 0 rgba(0,0,0,0.05)', md: '0 4px 6px -1px rgba(0,0,0,0.1)', lg: '0 10px 15px -3px rgba(0,0,0,0.1)', xl: '0 20px 25px -5px rgba(0,0,0,0.1)' };
+
+function importTokens() {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.json';
+  input.onchange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    try {
+      const text = await file.text();
+      const tokens = JSON.parse(text);
+      stylesStore.importDesignTokens(tokens);
+    } catch (err) {
+      console.error('Import tokens error:', err);
+    }
+  };
+  input.click();
 }
 
 function addFont() {

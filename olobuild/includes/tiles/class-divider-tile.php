@@ -9,15 +9,15 @@ class Olo_Divider_Tile extends Olo_Tile_Base {
     protected $type     = 'divider';
     protected $name     = 'Divisore';
     protected $icon     = 'dashicons-minus';
-    protected $category = 'layout';
+    protected $category = 'essential';
     protected $defaults = [
         'style'      => 'solid',
         'width'      => '100',
         'thickness'  => '1',
-        'color'      => '#374151',
+        'color'      => '',
         'alignment'  => 'center',
         'text'       => '',
-        'text_color' => '#9CA3AF',
+        'text_color' => '',
         'icon_emoji' => '',
     ];
 
@@ -42,8 +42,8 @@ class Olo_Divider_Tile extends Olo_Tile_Base {
         $align_map = [ 'left' => 'flex-start', 'center' => 'center', 'right' => 'flex-end' ];
         $justify   = $align_map[ $s['alignment'] ] ?? 'center';
 
-        $line_clr = $this->safe_color( $s['color'] ) ?: '#374151';
-        $txt_clr  = $this->safe_color( $s['text_color'] );
+        $line_clr = $this->safe_color_css( $s['color'] ) ?: 'var(--olo-color-text, #374151)';
+        $txt_clr  = $this->safe_color_css( $s['text_color'] );
         $has_center = ! empty( $s['text'] ) || ! empty( $s['icon_emoji'] );
 
         // Use UIkit divider classes for simple cases, custom styling for complex ones

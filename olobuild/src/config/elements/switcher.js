@@ -1,10 +1,10 @@
-import { borderFields, borderDefaults, shadowField } from './_shared.js';
+import { shadowField } from './_shared.js';
 
 export default {
   type: 'switcher',
   name: 'Switcher',
   icon: 'dashicons-welcome-widgets-menus',
-  category: 'content',
+  category: 'interactive',
   defaults: {
     items: [
       { id: 'sw-1', title: 'Scheda 1', content: 'Contenuto della prima scheda.' },
@@ -14,19 +14,19 @@ export default {
     animation: '',
     vertical: false,
     shadow: 'none',
-    ...borderDefaults,
   },
   fields: [
     { key: 'items', label: 'Elementi', type: 'content-items', supportsDynamic: true,
       itemFields: [
         { key: 'title', label: 'Titolo', type: 'text' },
-        { key: 'content', label: 'Contenuto', type: 'editor', mode: 'block' },
+        { key: 'content', label: 'Contenuto', type: 'textarea' },
       ],
       newItemDefaults: { title: 'Nuova scheda', content: 'Contenuto della scheda.' },
       itemLabel: 'Scheda',
     },
     { key: 'nav_style', label: 'Stile navigazione', type: 'select', options: [
       { value: 'tab', label: 'Tab' },
+      { value: 'tab-underline', label: 'Tab Underline' },
       { value: 'subnav', label: 'Subnav' },
       { value: 'subnav-pill', label: 'Subnav Pill' },
     ]},
@@ -39,7 +39,6 @@ export default {
       { value: 'slide-bottom', label: 'Slide basso' },
     ]},
     { key: 'vertical', label: 'Verticale', type: 'toggle' },
-    shadowField,
-    ...borderFields,
+    ...shadowField,
   ],
 };

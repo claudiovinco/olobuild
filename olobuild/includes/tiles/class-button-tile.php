@@ -9,15 +9,15 @@ class Olo_Button_Tile extends Olo_Tile_Base {
     protected $type     = 'button';
     protected $name     = 'Pulsante';
     protected $icon     = 'dashicons-button';
-    protected $category = 'content';
+    protected $category = 'essential';
     protected $defaults = [
         'text'               => 'Click Here',
         'url'                => '#',
         'target'             => '_self',
         'alignment'          => 'center',
         'full_width'         => false,
-        'bg_color'           => '#6366F1',
-        'text_color'         => '#FFFFFF',
+        'bg_color'           => '',
+        'text_color'         => '',
         'border_radius'      => '6',
         'padding_x'          => '32',
         'padding_y'          => '14',
@@ -25,8 +25,11 @@ class Olo_Button_Tile extends Olo_Tile_Base {
         'font_weight'        => '600',
         'letter_spacing'     => '0',
         'text_transform'     => 'none',
+        'icon'               => '',
+        'icon_position'      => 'before',
+        'icon_spacing'       => '8',
         'border_width'       => '0',
-        'border_color'       => '#6366F1',
+        'border_color'       => '',
         'shadow'             => 'none',
         'hover_bg_color'     => '',
         'hover_text_color'   => '',
@@ -49,8 +52,8 @@ class Olo_Button_Tile extends Olo_Tile_Base {
         $align_class = 'uk-text-' . ( in_array( $s['alignment'], [ 'left', 'center', 'right' ], true ) ? $s['alignment'] : 'center' );
 
         // Colors
-        $bg = $this->safe_color( $s['bg_color'] );
-        $fg = $this->safe_color( $s['text_color'] );
+        $bg = $this->safe_color_css( $s['bg_color'] ) ?: 'var(--olo-color-primary, #6366F1)';
+        $fg = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-primary-contrast, #FFFFFF)';
 
         // Border radius
         $rad_raw = $s['border_radius'];
@@ -71,15 +74,15 @@ class Olo_Button_Tile extends Olo_Tile_Base {
 
         // Border
         $border_width = absint( $s['border_width'] );
-        $border_color = $this->safe_color( $s['border_color'] );
+        $border_color = $this->safe_color_css( $s['border_color'] ) ?: 'var(--olo-color-primary, #6366F1)';
 
         // Shadow
         $shadow = Olo_Tile_Utils::shadow( $s['shadow'] ?? 'none' );
 
         // Hover colors
-        $hover_bg     = $this->safe_color( $s['hover_bg_color'] );
-        $hover_fg     = $this->safe_color( $s['hover_text_color'] );
-        $hover_bc     = $this->safe_color( $s['hover_border_color'] );
+        $hover_bg     = $this->safe_color_css( $s['hover_bg_color'] );
+        $hover_fg     = $this->safe_color_css( $s['hover_text_color'] );
+        $hover_bc     = $this->safe_color_css( $s['hover_border_color'] );
         $hover_shadow = ( $s['hover_shadow'] !== '' ) ? Olo_Tile_Utils::shadow( $s['hover_shadow'] ) : '';
         $hover_effect = $s['hover_effect'] ?? 'lift';
 
@@ -197,9 +200,26 @@ class Olo_Button_Tile extends Olo_Tile_Base {
         <div class="olo-button <?php echo esc_attr( $align_class ); ?> <?php echo esc_attr( $uid ); ?>" style="padding: 16px 0; overflow: visible;">
             <?php
             $target_attr = $s['target'] === '_blank' ? ' target="_blank" rel="noopener noreferrer"' : ' target="_self"';
-            $btn_html = '<a href="' . esc_url( $s['url'] ) . '"' . $target_attr . ' class="olo-btn-link">'
-                      . '<span class="olo-btn-text">' . esc_html( $s['text'] ) . '</span>'
-                      . '</a>';
+
+            $icon_html = '';
+            if ( ! empty( $s['icon'] ) ) {
+                $icon_spacing = absint( $s['icon_spacing'] ?? 8 );
+                $icon_pos = $s['icon_position'] === 'after' ? 'after' : 'before';
+                $icon_html = '<span uk-icon="icon: ' . esc_attr( $s['icon'] ) . '; ratio: 1" style="vertical-align: middle;"></span>';
+            }
+
+            $text_html = esc_html( $s['text'] );
+            $icon_spacing_px = absint( $s['icon_spacing'] ?? 8 );
+
+            if ( $icon_html && $s['icon_position'] === 'after' ) {
+                $inner = '<span class="olo-btn-text" style="display:inline-flex;align-items:center;gap:' . $icon_spacing_px . 'px;">' . $text_html . $icon_html . '</span>';
+            } elseif ( $icon_html ) {
+                $inner = '<span class="olo-btn-text" style="display:inline-flex;align-items:center;gap:' . $icon_spacing_px . 'px;">' . $icon_html . $text_html . '</span>';
+            } else {
+                $inner = '<span class="olo-btn-text">' . $text_html . '</span>';
+            }
+
+            $btn_html = '<a href="' . esc_url( $s['url'] ) . '"' . $target_attr . ' class="olo-btn-link" role="button">' . $inner . '</a>';
 
             if ( $has_hover_media ) {
                 echo $this->render_hover_wrap( $btn_html, $s['hover_image'] ?? '', $s['hover_video'] ?? '' );

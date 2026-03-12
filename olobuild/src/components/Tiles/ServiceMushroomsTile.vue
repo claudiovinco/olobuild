@@ -6,9 +6,9 @@
     <div style="display:flex;align-items:center" :style="{ gap: s.gap + 'px' }">
       <svg v-for="i in 5" :key="i" :width="sz" :height="sz" viewBox="0 0 24 24" fill="none">
         <path d="M12 2C8 2 4 5.5 4 9.5C4 13 7 14.5 7 14.5L7.5 20C7.5 20.5 8 21 8.5 21H15.5C16 21 16.5 20.5 16.5 20L17 14.5C17 14.5 20 13 20 9.5C20 5.5 16 2 12 2Z"
-              :fill="i <= 3 ? s.active_color : s.inactive_color" />
+              :fill="i <= displayVal ? s.active_color : s.inactive_color" />
       </svg>
-      <span v-if="s.style === 'with-number'" :style="{ fontSize: sz+'px', fontWeight:'700', color: s.active_color, marginLeft:'4px' }">3/5</span>
+      <span v-if="s.style === 'with-number'" :style="{ fontSize: sz+'px', fontWeight:'700', color: s.active_color, marginLeft:'4px' }">{{ displayVal }}/5</span>
     </div>
     <div v-if="s.show_label && s.label_position === 'bottom'" :style="labelStyle" style="margin-top:4px">
       {{ s.label_text }}
@@ -28,6 +28,7 @@ const defaults = {
 };
 const s = computed(() => ({ ...defaults, ...props.settings }));
 const sz = computed(() => Math.min(parseInt(s.value.size) || 28, 36));
+const displayVal = computed(() => Math.max(0, Math.min(5, Math.round(parseFloat(s.value.value) || 3))));
 
 const alignMap = { left: 'flex-start', center: 'center', right: 'flex-end' };
 const wrapStyle = computed(() => {

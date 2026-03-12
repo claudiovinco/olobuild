@@ -56,28 +56,74 @@
         Caricamento tile...
       </div>
 
+      <!-- Global Widgets section -->
+      <div v-if="tilesStore.globalWidgets.length > 0" class="tp-group">
+        <button class="tp-cat-head" @click="toggleCategory('_global')">
+          <span class="tp-cat-dot" style="background: #D97706"></span>
+          <span class="tp-cat-label">Widget Globali</span>
+          <span class="tp-cat-count">{{ tilesStore.globalWidgets.length }}</span>
+          <svg class="tp-chevron" :class="{ 'tp-chevron--open': isCategoryOpen('_global') }" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="tp-drawer" :class="{ 'tp-drawer--open': isCategoryOpen('_global') }">
+          <div class="tp-grid">
+            <div
+              v-for="gw in tilesStore.globalWidgets"
+              :key="'gw-' + gw.id"
+              class="tp-gw-wrap"
+            >
+              <button
+                class="tp-btn tp-btn--global"
+                draggable="true"
+                @dragstart="onGlobalDragStart($event, gw.id)"
+                @click="addGlobalWidget(gw.id)"
+                :title="gw.name"
+              >{{ gw.name }}</button>
+              <button
+                class="tp-gw-del"
+                title="Elimina widget globale"
+                @click.stop="deleteGlobal(gw.id, gw.name)"
+              >&times;</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <p class="tp-hint">Clicca o trascina per aggiungere</p>
     </div>
 
     <!-- Structure tab -->
-    <StructureTree v-else />
+    <StructureTree v-else @save-as-template="section => $emit('save-as-template', section)" />
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useTilesStore } from '@/stores/tiles';
+import { useBuilderStore } from '@/stores/builder';
 import { useDragDrop } from '@/composables/useDragDrop';
+import { createSection, createRow, createColumn } from '@/stores/tiles';
 import StructureTree from './StructureTree.vue';
 
 const tilesStore = useTilesStore();
+const builderStore = useBuilderStore();
 const { handleDropFromSidebar } = useDragDrop();
+
+onMounted(() => {
+  tilesStore.fetchGlobalWidgets();
+});
 
 const activeTab = ref('tiles');
 const tilesByCategory = computed(() => tilesStore.tilesByCategory);
 
-// Collapsible categories
-const collapsedCategories = ref(new Set());
+// Collapsible categories — persisted in localStorage
+const STORAGE_KEY = 'olo_sidebar_collapsed';
+function loadCollapsed() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    return saved ? new Set(JSON.parse(saved)) : new Set();
+  } catch { return new Set(); }
+}
+const collapsedCategories = ref(loadCollapsed());
 
 function toggleCategory(category) {
   const s = new Set(collapsedCategories.value);
@@ -87,6 +133,7 @@ function toggleCategory(category) {
     s.add(category);
   }
   collapsedCategories.value = s;
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify([...s])); } catch {}
 }
 
 function isCategoryOpen(category) {
@@ -94,20 +141,35 @@ function isCategoryOpen(category) {
 }
 
 const categoryColors = {
-  layout: 'var(--olo-color-primary, #6366F1)',
-  content: '#22C55E',
+  essential: 'var(--olo-color-primary, #6366F1)',
+  layout: '#3B82F6',
+  text: '#22C55E',
   media: '#A855F7',
-  booking: '#F59E0B',
+  marketing: '#F59E0B',
+  interactive: '#06B6D4',
+  navigation: '#F43F5E',
+  dynamic: '#F97316',
+  booking: '#EAB308',
+  'olo-space': '#14B8A6',
 };
 
+// Ordine fisso delle categorie nella sidebar
+const categoryOrder = [
+  'essential', 'layout', 'text', 'media', 'marketing',
+  'interactive', 'navigation', 'dynamic', 'booking', 'olo-space',
+];
+
 const categoryLabels = {
+  essential: 'Essenziale',
   layout: 'Layout',
-  content: 'Contenuto',
+  text: 'Testo',
   media: 'Media',
-  structure: 'Struttura',
-  header: 'Header',
+  marketing: 'Marketing',
+  interactive: 'Interattivo',
+  navigation: 'Navigazione',
   dynamic: 'Dinamico',
   booking: 'Olo Booking',
+  'olo-space': 'Olo Space',
 };
 
 function categoryLabel(category) {
@@ -130,6 +192,29 @@ function addTile(tileType) {
   if (Date.now() - lastDragStart < 1000) return;
   handleDropFromSidebar(tileType);
 }
+
+function onGlobalDragStart(event, globalId) {
+  lastDragStart = Date.now();
+  event.dataTransfer.setData('global-widget-id', String(globalId));
+  event.dataTransfer.effectAllowed = 'copy';
+}
+
+function addGlobalWidget(globalId) {
+  if (Date.now() - lastDragStart < 1000) return;
+  const newTile = tilesStore.insertGlobalWidget(globalId);
+  if (!newTile) return;
+  // Wrap in Section > Row > Column
+  const col = createColumn('1-1', [newTile]);
+  const row = createRow('100', [col]);
+  const section = createSection([row]);
+  tilesStore.addTile(section);
+  builderStore.isDirty = true;
+}
+
+async function deleteGlobal(globalId, name) {
+  if (!confirm('Eliminare il widget globale "' + name + '"?\nLe istanze già inserite resteranno ma non saranno più sincronizzate.')) return;
+  await tilesStore.deleteGlobalWidget(globalId);
+}
 </script>
 
 <style scoped>
@@ -147,7 +232,7 @@ function addTile(tileType) {
   font-size: 11px;
   font-weight: 500;
   letter-spacing: 0.3px;
-  color: #6B7280;
+  color: #9CA3AF;
   background: none;
   border: none;
   border-bottom: 2px solid transparent;
@@ -208,7 +293,7 @@ function addTile(tileType) {
 }
 .tp-chevron {
   margin-left: auto;
-  color: #6B7280;
+  color: #9CA3AF;
   transform: rotate(-90deg);
   transition: transform 0.2s ease;
   flex-shrink: 0;
@@ -271,9 +356,48 @@ function addTile(tileType) {
   font-size: 11px;
   padding: 32px 0;
 }
+.tp-gw-wrap {
+  position: relative;
+}
+.tp-gw-wrap:hover .tp-gw-del {
+  opacity: 1;
+}
+.tp-gw-del {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #7f1d1d;
+  color: #fca5a5;
+  border: none;
+  font-size: 12px;
+  line-height: 1;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+.tp-gw-del:hover {
+  background: #991b1b;
+  color: #fff;
+}
+.tp-btn--global {
+  border-color: #92400e;
+  color: #D97706;
+}
+.tp-btn--global:hover {
+  background: rgba(217, 119, 6, 0.1) !important;
+  border-color: #D97706 !important;
+  color: #FBBF24 !important;
+}
 .tp-hint {
   font-size: 10px;
-  color: #6B7280;
+  color: #9CA3AF;
   text-align: center;
   margin-top: 8px;
 }

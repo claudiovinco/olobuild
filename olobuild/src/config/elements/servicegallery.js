@@ -1,4 +1,4 @@
-import { borderFields, borderDefaults, shadowField } from './_shared.js';
+import { shadowField } from './_shared.js';
 
 export default {
   type: 'servicegallery',
@@ -28,17 +28,16 @@ export default {
     fx_grain: false,
     fx_grain_opacity: '6',
     fx_tint: false,
-    fx_tint_color: '#1E3A5F',
+    fx_tint_color: '',
     fx_tint_opacity: '10',
     fx_tint_blend: 'multiply',
     // "+N" overlay
     more_bg: 'rgba(0,0,0,0.55)',
-    more_color: '#FFFFFF',
+    more_color: '',
     more_size: '28',
     // Mobile
     mobile_columns: '2',
     shadow: 'none',
-    ...borderDefaults,
   },
   fields: [
     { type: 'separator', label: 'Sorgente dati' },
@@ -49,7 +48,7 @@ export default {
     { key: 'rows', label: 'Righe visibili', type: 'range', min: 1, max: 5, step: 1 },
     { key: 'gap', label: 'Gap (px)', type: 'range', min: 2, max: 24, step: 2 },
     { key: 'thumb_height', label: 'Altezza miniature (px)', type: 'range', min: 100, max: 350, step: 10 },
-    { key: 'thumb_radius', label: 'Raggio bordi (px)', type: 'range', min: 0, max: 24, step: 2 },
+    { key: 'thumb_radius', label: 'Raggio bordi (px)', type: 'border-radius' },
     { key: 'mobile_columns', label: 'Colonne mobile', type: 'range', min: 1, max: 4, step: 1 },
     { key: 'lightbox', label: 'Lightbox (click per ingrandire)', type: 'toggle' },
 
@@ -92,7 +91,6 @@ export default {
     { key: 'more_bg', label: 'Sfondo overlay', type: 'color' },
     { key: 'more_color', label: 'Colore testo', type: 'color' },
     { key: 'more_size', label: 'Dimensione testo (px)', type: 'range', min: 16, max: 48, step: 2 },
-    shadowField,
-    ...borderFields,
+    ...shadowField,
   ],
 };

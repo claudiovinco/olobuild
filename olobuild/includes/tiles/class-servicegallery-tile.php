@@ -53,7 +53,7 @@ class Olo_ServiceGallery_Tile extends Olo_Tile_Base {
 
         global $post;
         if ( ! $post || ! is_singular() ) {
-            return '<div style="padding:24px;text-align:center;color:#9ca3af;background:#f9fafb;border-radius:8px">'
+            return '<div style="padding:24px;text-align:center;color:var(--olo-color-text-muted, #9CA3AF);background:var(--olo-color-muted, #F3F4F6);border-radius:8px">'
                  . '<p style="margin:0">Inserisci in un template single.</p></div>';
         }
 
@@ -73,7 +73,7 @@ class Olo_ServiceGallery_Tile extends Olo_Tile_Base {
         $rows    = max( 1, min( 5, absint( $s['rows'] ) ) );
         $gap     = absint( $s['gap'] );
         $th      = absint( $s['thumb_height'] ) ?: 200;
-        $radius  = absint( $s['thumb_radius'] );
+        $radius  = Olo_Tile_Utils::border_radius( $s['thumb_radius'] ?? 0 );
         $uid     = 'olo-sgal-' . wp_rand( 10000, 99999 );
         $mob_cols = max( 1, min( 4, absint( $s['mobile_columns'] ) ) );
 
@@ -104,7 +104,7 @@ class Olo_ServiceGallery_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .olo-sgal-item {
                 position: relative;
                 display: block;
-                border-radius: <?php echo $radius; ?>px;
+                border-radius: <?php echo $radius; ?>;
                 overflow: hidden;
                 height: <?php echo $th; ?>px;
                 cursor: pointer;
@@ -161,7 +161,7 @@ class Olo_ServiceGallery_Tile extends Olo_Tile_Base {
                 content: '';
                 position: absolute;
                 inset: 0;
-                border-radius: <?php echo $radius; ?>px;
+                border-radius: <?php echo $radius; ?>;
                 box-shadow: inset 0 0 <?php echo $vig_str * 2; ?>px <?php echo $vig_str; ?>px rgba(0,0,0,0.<?php echo min( 45, $vig_str ); ?>);
                 pointer-events: none;
                 z-index: 2;
@@ -189,7 +189,7 @@ class Olo_ServiceGallery_Tile extends Olo_Tile_Base {
                 position: absolute;
                 inset: 0;
                 z-index: 1;
-                background: <?php echo esc_attr( $s['fx_tint_color'] ); ?>;
+                background: <?php echo $this->safe_color_css( $s['fx_tint_color'] ); ?>;
                 opacity: 0.<?php echo str_pad( $tint_opa, 2, '0', STR_PAD_LEFT ); ?>;
                 mix-blend-mode: <?php echo esc_attr( $s['fx_tint_blend'] ); ?>;
                 pointer-events: none;
@@ -208,14 +208,14 @@ class Olo_ServiceGallery_Tile extends Olo_Tile_Base {
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                background: <?php echo esc_attr( $s['more_bg'] ); ?>;
-                color: <?php echo esc_attr( $s['more_color'] ); ?>;
+                background: <?php echo $this->safe_color_css( $s['more_bg'] ); ?>;
+                color: <?php echo $this->safe_color_css( $s['more_color'] ); ?>;
                 font-size: <?php echo $more_size; ?>px;
                 font-weight: 700;
                 letter-spacing: -0.5px;
                 pointer-events: none;
                 transition: background 0.3s ease;
-                border-radius: <?php echo $radius; ?>px;
+                border-radius: <?php echo $radius; ?>;
             }
             .<?php echo $uid; ?> .olo-sgal-item:hover .olo-sgal-more {
                 background: rgba(0,0,0,0.4);

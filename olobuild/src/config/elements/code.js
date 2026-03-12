@@ -1,22 +1,37 @@
-import { borderFields, borderDefaults, shadowField } from './_shared.js';
+import { shadowField } from './_shared.js';
 
 export default {
   type: 'code',
   name: 'Codice',
   icon: 'dashicons-editor-code',
-  category: 'content',
+  category: 'text',
   defaults: {
     code: 'console.log("Hello World");',
     language: 'javascript',
     show_line_numbers: false,
+    theme: 'github-dark',
+    show_copy_button: true,
+    font_size: '14',
+    max_height: '',
+    wrap_lines: false,
     shadow: 'none',
-    ...borderDefaults,
   },
   fields: [
     { key: 'code', label: 'Codice', type: 'textarea' },
     { key: 'language', label: 'Linguaggio', type: 'text' },
     { key: 'show_line_numbers', label: 'Mostra numeri di riga', type: 'toggle' },
-    shadowField,
-    ...borderFields,
+    { key: 'theme', label: 'Tema', type: 'select', options: [
+      { value: 'github-dark', label: 'GitHub Dark' },
+      { value: 'monokai', label: 'Monokai' },
+      { value: 'dracula', label: 'Dracula' },
+      { value: 'one-dark', label: 'One Dark' },
+      { value: 'solarized-dark', label: 'Solarized Dark' },
+      { value: 'light', label: 'Chiaro' },
+    ]},
+    { key: 'show_copy_button', label: 'Pulsante copia', type: 'toggle' },
+    { key: 'font_size', label: 'Dimensione font (px)', type: 'range', min: 10, max: 24, step: 1 },
+    { key: 'max_height', label: 'Altezza massima (px, vuoto = auto)', type: 'text' },
+    { key: 'wrap_lines', label: 'Avvolgi righe lunghe', type: 'toggle' },
+    ...shadowField,
   ],
 };

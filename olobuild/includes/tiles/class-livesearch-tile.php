@@ -9,7 +9,7 @@ class Olo_LiveSearch_Tile extends Olo_Tile_Base {
     protected $type     = 'livesearch';
     protected $name     = 'Ricerca Live';
     protected $icon     = 'dashicons-search';
-    protected $category = 'dynamic';
+    protected $category = 'navigation';
 
     protected $defaults = [
         'placeholder'          => 'Cerca...',
@@ -21,6 +21,7 @@ class Olo_LiveSearch_Tile extends Olo_Tile_Base {
         'show_all_url'         => '',
         'show_all_text'        => 'Vedi tutti i risultati',
         'show_thumbnail'       => true,
+        'show_excerpt'         => true,
         'title_only'           => false,
         'no_results_text'      => 'Nessun risultato trovato',
         'post_types'           => 'post,page',
@@ -28,14 +29,18 @@ class Olo_LiveSearch_Tile extends Olo_Tile_Base {
         'taxonomy_terms'       => '',
         'exclude_terms'        => '',
         'input_bg'             => '#ffffff',
-        'input_color'          => '#374151',
-        'icon_color'           => '#9ca3af',
+        'input_color'          => '',
+        'icon_color'           => '',
         'input_font_size'      => '14',
         'input_height'         => '44',
+        'input_border_color'   => '#e5e7eb',
+        'input_border_radius'  => '8',
+        'focus_border_color'   => '#6366f1',
         'results_bg'           => '#ffffff',
-        'results_border_color' => '#e5e7eb',
-        'item_hover_bg'        => '#f3f4f6',
-        'title_color'          => '#111827',
+        'results_border_color' => '',
+        'results_border_radius'=> '10',
+        'item_hover_bg'        => '',
+        'title_color'          => '',
         'excerpt_color'        => '#6b7280',
         'results_max_height'   => '400',
         'thumb_width'          => '48',
@@ -43,6 +48,8 @@ class Olo_LiveSearch_Tile extends Olo_Tile_Base {
         'thumb_radius'         => '6',
         'modal_width'          => '560',
         'backdrop_color'       => 'rgba(0,0,0,0.5)',
+        'animated_placeholder' => false,
+        'placeholder_words'    => '',
     ];
 
     public function get_controls() {
@@ -98,6 +105,15 @@ class Olo_LiveSearch_Tile extends Olo_Tile_Base {
      * Handle the AJAX live search request.
      */
     public static function handle_search( $request ) {
+        // Rate limiting: max 30 requests per minute per IP
+        $ip  = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( $_SERVER['REMOTE_ADDR'] ) : 'unknown';
+        $key = 'olo_ls_rl_' . md5( $ip );
+        $count = (int) get_transient( $key );
+        if ( $count > 30 ) {
+            return new WP_REST_Response( array( 'error' => 'Rate limit exceeded' ), 429 );
+        }
+        set_transient( $key, $count + 1, MINUTE_IN_SECONDS );
+
         $query_string = trim( $request->get_param( 'q' ) );
         if ( empty( $query_string ) ) {
             return new WP_REST_Response( [ 'results' => [], 'total' => 0 ], 200 );
@@ -248,6 +264,16 @@ class Olo_LiveSearch_Tile extends Olo_Tile_Base {
         $height      = max( 32, min( 72, intval( $s['input_height'] ) ) );
         $font_size   = max( 12, min( 24, intval( $s['input_font_size'] ) ) );
         $modal_width = max( 400, min( 800, intval( $s['modal_width'] ?? 560 ) ) );
+        $input_radius = Olo_Tile_Utils::border_radius( $s['input_border_radius'] ?? 8 );
+        $results_radius = Olo_Tile_Utils::border_radius( $s['results_border_radius'] ?? 10 );
+
+        // Animated placeholder
+        $anim_ph = ! empty( $s['animated_placeholder'] );
+        $ph_words = [];
+        if ( $anim_ph ) {
+            $raw = is_array( $s['placeholder_words'] ) ? implode( "\n", $s['placeholder_words'] ) : (string) $s['placeholder_words'];
+            $ph_words = array_filter( array_map( 'trim', explode( "\n", $raw ) ) );
+        }
 
         // Config JSON for frontend JS
         $config = [
@@ -262,35 +288,45 @@ class Olo_LiveSearch_Tile extends Olo_Tile_Base {
             'terms'       => $s['taxonomy_terms'],
             'exclude'     => $s['exclude_terms'],
             'showThumb'   => ! empty( $s['show_thumbnail'] ),
+            'showExcerpt' => ! empty( $s['show_excerpt'] ),
             'noResultsText' => $s['no_results_text'],
             'showAllUrl'  => $s['show_all_url'],
             'showAllText' => $s['show_all_text'],
             'restUrl'     => esc_url_raw( rest_url( 'olo/v1/livesearch' ) ),
             'modalWidth'  => $modal_width,
         ];
+
+        if ( $anim_ph && ! empty( $ph_words ) ) {
+            $config['animPh'] = array_values( $ph_words );
+        }
+
         $config_b64 = base64_encode( wp_json_encode( $config ) );
 
         // Inline CSS custom properties
         $css_vars_arr = [
-            '--ls-input-bg'         => $this->safe_color( $s['input_bg'] ),
-            '--ls-input-color'      => $this->safe_color( $s['input_color'] ),
-            '--ls-icon-color'       => $this->safe_color( $s['icon_color'] ),
-            '--ls-input-height'     => $height . 'px',
-            '--ls-input-font-size'  => $font_size . 'px',
-            '--ls-results-bg'       => $this->safe_color( $s['results_bg'] ),
-            '--ls-results-border'   => $this->safe_color( $s['results_border_color'] ),
-            '--ls-item-hover-bg'    => $this->safe_color( $s['item_hover_bg'] ),
-            '--ls-title-color'      => $this->safe_color( $s['title_color'] ),
-            '--ls-excerpt-color'    => $this->safe_color( $s['excerpt_color'] ),
-            '--ls-results-max-h'    => max( 200, min( 800, intval( $s['results_max_height'] ) ) ) . 'px',
-            '--ls-thumb-width'      => max( 32, min( 120, intval( $s['thumb_width'] ) ) ) . 'px',
-            '--ls-thumb-height'     => max( 32, min( 120, intval( $s['thumb_height'] ) ) ) . 'px',
-            '--ls-thumb-radius'     => max( 0, min( 16, intval( $s['thumb_radius'] ) ) ) . 'px',
-            '--ls-columns'          => max( 1, min( 4, intval( $s['results_columns'] ?? 1 ) ) ),
+            '--ls-input-bg'           => $this->safe_color_css( $s['input_bg'] ),
+            '--ls-input-color'        => $this->safe_color_css( $s['input_color'] ) ?: 'var(--olo-color-text, #374151)',
+            '--ls-icon-color'         => $this->safe_color_css( $s['icon_color'] ) ?: 'var(--olo-color-text-muted, #9CA3AF)',
+            '--ls-input-height'       => $height . 'px',
+            '--ls-input-font-size'    => $font_size . 'px',
+            '--ls-input-border-color' => $this->safe_color_css( $s['input_border_color'] ?? '' ) ?: 'var(--olo-color-border, #E5E7EB)',
+            '--ls-input-radius'       => $input_radius,
+            '--ls-focus-border-color' => $this->safe_color_css( $s['focus_border_color'] ?? '' ) ?: '#6366f1',
+            '--ls-results-bg'         => $this->safe_color_css( $s['results_bg'] ),
+            '--ls-results-border'     => $this->safe_color_css( $s['results_border_color'] ) ?: 'var(--olo-color-border, #E5E7EB)',
+            '--ls-results-radius'     => $results_radius,
+            '--ls-item-hover-bg'      => $this->safe_color_css( $s['item_hover_bg'] ) ?: 'var(--olo-color-muted, #F3F4F6)',
+            '--ls-title-color'        => $this->safe_color_css( $s['title_color'] ),
+            '--ls-excerpt-color'      => $this->safe_color_css( $s['excerpt_color'] ),
+            '--ls-results-max-h'      => max( 200, min( 800, intval( $s['results_max_height'] ) ) ) . 'px',
+            '--ls-thumb-width'        => max( 32, min( 120, intval( $s['thumb_width'] ) ) ) . 'px',
+            '--ls-thumb-height'       => max( 32, min( 120, intval( $s['thumb_height'] ) ) ) . 'px',
+            '--ls-thumb-radius'       => Olo_Tile_Utils::border_radius( $s['thumb_radius'] ?? 0 ),
+            '--ls-columns'            => max( 1, min( 4, intval( $s['results_columns'] ?? 1 ) ) ),
         ];
         if ( $mode === 'modal' ) {
             $css_vars_arr['--ls-modal-width']    = $modal_width . 'px';
-            $css_vars_arr['--ls-backdrop-color']  = esc_attr( $s['backdrop_color'] ?? 'rgba(0,0,0,0.5)' );
+            $css_vars_arr['--ls-backdrop-color']  = $this->safe_color_css( $s['backdrop_color'] ?? 'rgba(0,0,0,0.5)' );
         }
         $css_vars = $this->build_style( $css_vars_arr );
 
@@ -313,7 +349,7 @@ class Olo_LiveSearch_Tile extends Olo_Tile_Base {
                     <?php echo $icon_svg; ?>
                 </button>
 
-                <!-- Overlay modale (verrà spostato in <body> dal JS) -->
+                <!-- Overlay modale (verr&agrave; spostato in <body> dal JS) -->
                 <div class="olo-ls-overlay" style="<?php echo $css_vars; ?>">
                     <div class="olo-ls-backdrop"></div>
                     <div class="olo-ls-modal">
@@ -335,6 +371,10 @@ class Olo_LiveSearch_Tile extends Olo_Tile_Base {
                             <div class="olo-ls-empty" hidden>
                                 <?php echo esc_html( $s['no_results_text'] ?: 'Nessun risultato trovato' ); ?>
                             </div>
+                        </div>
+
+                        <div class="olo-ls-modal-hint">
+                            Premi <kbd>ESC</kbd> per chiudere
                         </div>
                     </div>
                 </div>

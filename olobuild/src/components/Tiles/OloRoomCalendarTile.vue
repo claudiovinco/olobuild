@@ -1,10 +1,10 @@
 <template>
   <div>
-    <h3 style="font-size:18px;font-weight:700;color:#1f2937;margin:0 0 12px">Disponibilità e Prenotazione</h3>
+    <h3 style="font-size:18px;font-weight:700;color:var(--olo-color-text, #374151);margin:0 0 12px">Disponibilità e Prenotazione</h3>
     <div style="border:1px solid #e5e7eb;border-radius:10px;overflow:hidden">
       <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:#f9fafb;border-bottom:1px solid #e5e7eb">
         <span style="font-size:11px;color:#6b7280;cursor:pointer">&lsaquo; Prec</span>
-        <span style="font-size:14px;font-weight:600;color:#1f2937">Febbraio 2026</span>
+        <span style="font-size:14px;font-weight:600;color:var(--olo-color-text, #374151)">Febbraio 2026</span>
         <span style="font-size:11px;color:#6b7280;cursor:pointer">Succ &rsaquo;</span>
       </div>
       <div style="display:grid;grid-template-columns:repeat(7,1fr);text-align:center">

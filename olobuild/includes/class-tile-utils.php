@@ -61,6 +61,32 @@ class Olo_Tile_Utils {
     }
 
     /**
+     * Get a box-shadow CSS value from tile style array.
+     * Supports preset (sm/md/lg/xl) and custom (prefix_h/v/blur/spread/color/inset).
+     *
+     * @param array  $style   Tile style array.
+     * @param string $prefix  Field prefix (e.g. 'shadow', 'card_shadow', 'widget_shadow').
+     * @param string $variant Map variant for presets: 'standard', 'photo', 'panel'.
+     * @return string CSS box-shadow value.
+     */
+    public static function shadow_value( $style, $prefix = 'shadow', $variant = 'standard' ) {
+        $key = $style[ $prefix ] ?? 'none';
+        if ( ! $key || $key === 'none' ) {
+            return 'none';
+        }
+        if ( $key === 'custom' ) {
+            $h      = intval( $style[ "{$prefix}_h" ] ?? 0 );
+            $v      = intval( $style[ "{$prefix}_v" ] ?? 0 );
+            $blur   = intval( $style[ "{$prefix}_blur" ] ?? 0 );
+            $spread = intval( $style[ "{$prefix}_spread" ] ?? 0 );
+            $color  = esc_attr( $style[ "{$prefix}_color" ] ?? 'rgba(0,0,0,0.15)' );
+            $inset  = ! empty( $style[ "{$prefix}_inset" ] ) ? 'inset ' : '';
+            return "{$inset}{$h}px {$v}px {$blur}px {$spread}px {$color}";
+        }
+        return self::shadow( $key, $variant );
+    }
+
+    /**
      * Build a border CSS string from width, style, color.
      *
      * @param int|string $width Border width in px.
@@ -155,14 +181,35 @@ class Olo_Tile_Utils {
         $cls    = $class ? ' class="' . esc_attr( $class ) . '"' : '';
         $extra  = $extra_attrs ? ' ' . $extra_attrs : '';
 
-        if ( $att_id > 0 ) {
-            $srcset = wp_get_attachment_image_srcset( $att_id, $size );
-            $sizes  = wp_get_attachment_image_sizes( $att_id, $size );
-            if ( $srcset ) {
-                return '<img src="' . $src . '" srcset="' . esc_attr( $srcset ) . '" sizes="' . esc_attr( $sizes ) . '" alt="' . $alt_s . '"' . $cls . ' loading="lazy"' . $extra . ' />';
+        // If no attachment ID, try to resolve from URL
+        if ( $att_id <= 0 && $src ) {
+            $resolved = attachment_url_to_postid( $url );
+            if ( $resolved ) {
+                $att_id = $resolved;
             }
         }
 
-        return '<img src="' . $src . '" alt="' . $alt_s . '"' . $cls . ' loading="lazy"' . $extra . ' />';
+        if ( $att_id > 0 ) {
+            $srcset = wp_get_attachment_image_srcset( $att_id, $size );
+            $sizes  = wp_get_attachment_image_sizes( $att_id, $size );
+            $meta   = wp_get_attachment_metadata( $att_id );
+            $w_attr = '';
+            $h_attr = '';
+            if ( ! empty( $meta['width'] ) ) {
+                $w_attr = ' width="' . intval( $meta['width'] ) . '"';
+                $h_attr = ' height="' . intval( $meta['height'] ) . '"';
+            }
+
+            if ( $srcset ) {
+                // Use responsive sizes that adapt to container width
+                $responsive_sizes = $sizes ?: '(max-width: 480px) 100vw, (max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw';
+                return '<img src="' . $src . '" srcset="' . esc_attr( $srcset ) . '" sizes="' . esc_attr( $responsive_sizes ) . '" alt="' . $alt_s . '"' . $cls . $w_attr . $h_attr . ' loading="lazy" decoding="async"' . $extra . ' />';
+            }
+
+            // Has attachment but no srcset (e.g. SVG) — still add dimensions
+            return '<img src="' . $src . '" alt="' . $alt_s . '"' . $cls . $w_attr . $h_attr . ' loading="lazy" decoding="async"' . $extra . ' />';
+        }
+
+        return '<img src="' . $src . '" alt="' . $alt_s . '"' . $cls . ' loading="lazy" decoding="async"' . $extra . ' />';
     }
 }

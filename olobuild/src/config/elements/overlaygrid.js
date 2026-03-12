@@ -1,10 +1,10 @@
-import { borderFields, borderDefaults, shadowField } from './_shared.js';
+import { shadowField } from './_shared.js';
 
 export default {
   type: 'overlaygrid',
   name: 'Overlay Grid',
   icon: 'dashicons-grid-view',
-  category: 'content',
+  category: 'interactive',
   defaults: {
     items: [
       { id: 'og-1', image: '', title: 'Elemento 1', subtitle: '', link: '' },
@@ -24,10 +24,9 @@ export default {
     hover_effect: 'none',
     hover_overlay: 'always',
     ribbon_position: 'top-right',
-    ribbon_bg: '#e11d48',
-    ribbon_color: '#ffffff',
+    ribbon_bg: '',
+    ribbon_color: '',
     shadow: 'none',
-    ...borderDefaults,
   },
   fields: [
     { key: 'items', label: 'Elementi', type: 'content-items', supportsDynamic: true,
@@ -122,7 +121,6 @@ export default {
     ]},
     { key: 'ribbon_bg', label: 'Sfondo ribbon', type: 'color' },
     { key: 'ribbon_color', label: 'Testo ribbon', type: 'color' },
-    shadowField,
-    ...borderFields,
+    ...shadowField,
   ],
 };

@@ -30,7 +30,8 @@
           v-html="iconSvg(isOpen(i))"
         ></span>
 
-        <span class="olo-accordion-title" v-html="panel.title"></span>
+        <span v-if="panel.icon" class="olo-accordion-panel-icon">{{ panel.icon }}</span>
+        <span class="olo-accordion-title" :data-olo-editable="'panels.' + i + '.title'">{{ panel.title }}</span>
 
         <!-- Icon right -->
         <span
@@ -49,11 +50,18 @@
         :style="bodyTransition"
       >
         <div class="olo-accordion-panel-inner">
+          <!-- Panel media -->
+          <div v-if="panel.image || panel.video" class="olo-accordion-media" :style="mediaStyle">
+            <img v-if="panel.image" :src="panel.image" alt="" class="olo-accordion-media-img" :style="{ borderRadius: (parseInt(s.media_radius) || 0) + 'px' }" />
+            <div v-else-if="panel.video" class="olo-accordion-media-video">&#x1F3AC; Video</div>
+          </div>
           <div
             class="olo-accordion-content"
             :style="contentStyle"
-            v-html="panel.content"
-          ></div>
+            style="white-space:pre-wrap;"
+            :data-olo-editable="'panels.' + i + '.content'"
+            data-olo-multiline
+          >{{ panel.content }}</div>
         </div>
       </div>
     </div>
@@ -193,21 +201,31 @@ const separatorClass = computed(() => {
 function headerStyle(index) {
   const open = isOpen(index);
   return {
-    background: open ? (s.value.header_bg_active || s.value.header_bg || '#1a2332') : (s.value.header_bg || '#111827'),
-    color: s.value.header_text_color || '#F3F4F6',
-    borderBottom: open && s.value.separator_style === 'border' ? `1px solid ${s.value.border_color || '#374151'}` : 'none',
+    background: open ? (s.value.header_bg_active || s.value.header_bg || 'var(--olo-color-muted, #F3F4F6)') : (s.value.header_bg || 'var(--olo-color-background, #FFFFFF)'),
+    color: s.value.header_text_color || 'var(--olo-color-text, #374151)',
+    borderBottom: open && s.value.separator_style === 'border' ? `1px solid ${s.value.border_color || 'var(--olo-color-border, #E5E7EB)'}` : 'none',
   };
 }
 
+const mediaStyle = computed(() => {
+  const align = s.value.media_align || 'right';
+  const w = parseInt(s.value.media_width) || 40;
+  return {
+    float: align === 'left' ? 'left' : 'right',
+    width: w + '%',
+    margin: align === 'left' ? '0 12px 8px 0' : '0 0 8px 12px',
+  };
+});
+
 const contentStyle = computed(() => ({
-  background: s.value.content_bg || '#0d1117',
-  color: s.value.text_color || '#d1d5db',
+  background: s.value.content_bg || 'var(--olo-color-background, #FFFFFF)',
+  color: s.value.text_color || 'var(--olo-color-text, #374151)',
 }));
 </script>
 
 <style scoped>
 .olo-accordion-panel {
-  border: 1px solid v-bind('s.border_color || "#374151"');
+  border: 1px solid v-bind('s.border_color || "var(--olo-color-border, #E5E7EB)"');
 }
 
 .olo-accordion-panel--sep-shadow {
@@ -272,22 +290,24 @@ const contentStyle = computed(() => ({
   line-height: 1.6;
 }
 
-/* Rich text content within accordion */
-.olo-accordion-content :deep(p) {
-  margin: 0 0 0.5em;
+.olo-accordion-panel-icon {
+  flex-shrink: 0;
+  font-size: 16px;
 }
-.olo-accordion-content :deep(p:last-child) {
-  margin-bottom: 0;
+.olo-accordion-media {
+  max-width: 50%;
 }
-.olo-accordion-content :deep(ul) {
-  list-style: disc;
-  padding-left: 1.5em;
+.olo-accordion-media-img {
+  width: 100%;
+  display: block;
+  object-fit: cover;
 }
-.olo-accordion-content :deep(ol) {
-  list-style: decimal;
-  padding-left: 1.5em;
-}
-.olo-accordion-content :deep(strong) {
-  font-weight: 700;
+.olo-accordion-media-video {
+  background: var(--olo-color-muted, #F3F4F6);
+  padding: 12px;
+  border-radius: 4px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--olo-color-text-muted, #9CA3AF);
 }
 </style>

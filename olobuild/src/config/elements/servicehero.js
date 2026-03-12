@@ -1,4 +1,4 @@
-import { borderFields, borderDefaults, shadowField } from './_shared.js';
+import { shadowField } from './_shared.js';
 
 export default {
   type: 'servicehero',
@@ -14,14 +14,14 @@ export default {
     overlay_opacity: '45',
     show_badges: true,
     badge_bg: 'rgba(30,41,59,0.75)',
-    badge_color: '#FFFFFF',
+    badge_color: '',
     show_title: true,
     title_size: '30',
-    title_color: '#FFFFFF',
+    title_color: '',
     title_position: 'bottom',
     show_opening: true,
-    opening_bg: '#059669',
-    opening_color: '#FFFFFF',
+    opening_bg: '',
+    opening_color: '',
     // Effects
     fx_kenburns: false,
     fx_kenburns_speed: '25',
@@ -36,11 +36,10 @@ export default {
     fx_grain: false,
     fx_grain_opacity: '8',
     fx_tint: false,
-    fx_tint_color: '#1E3A5F',
+    fx_tint_color: '',
     fx_tint_opacity: '15',
     fx_tint_blend: 'multiply',
     shadow: 'none',
-    ...borderDefaults,
   },
   fields: [
     { type: 'separator', label: 'Sorgente dati' },
@@ -48,7 +47,7 @@ export default {
 
     { type: 'separator', label: 'Layout' },
     { key: 'hero_height', label: 'Altezza (px)', type: 'range', min: 200, max: 600, step: 20 },
-    { key: 'hero_radius', label: 'Raggio bordi (px)', type: 'range', min: 0, max: 32, step: 2 },
+    { key: 'hero_radius', label: 'Raggio bordi (px)', type: 'border-radius' },
 
     { type: 'separator', label: 'Overlay' },
     { key: 'hero_overlay', label: 'Tipo overlay', type: 'select', options: [
@@ -121,7 +120,6 @@ export default {
       condition: { field: 'show_opening', value: true } },
     { key: 'opening_color', label: 'Testo ribbon', type: 'color',
       condition: { field: 'show_opening', value: true } },
-    shadowField,
-    ...borderFields,
+    ...shadowField,
   ],
 };

@@ -1,10 +1,10 @@
-import { borderFields, borderDefaults, shadowField } from './_shared.js';
+import { shadowField } from './_shared.js';
 
 export default {
   type: 'panel',
   name: 'Pannello',
   icon: 'dashicons-id-alt',
-  category: 'content',
+  category: 'interactive',
   defaults: {
     style: 'default',
     title: 'Titolo pannello',
@@ -17,7 +17,6 @@ export default {
     link_target: '_self',
     title_element: 'h3',
     shadow: 'none',
-    ...borderDefaults,
   },
   fields: [
     { key: 'style', label: 'Stile', type: 'select', options: [
@@ -29,9 +28,9 @@ export default {
     { key: 'image', label: 'Immagine', type: 'image' },
     { key: 'hover_image', label: 'Immagine hover', type: 'image' },
     { key: 'hover_video', label: 'Video hover', type: 'media' },
-    { key: 'title', label: 'Titolo', type: 'editor', mode: 'inline' },
+    { key: 'title', label: 'Titolo', type: 'text' },
     { key: 'meta', label: 'Meta', type: 'text' },
-    { key: 'content', label: 'Contenuto', type: 'editor', mode: 'block' },
+    { key: 'content', label: 'Contenuto', type: 'textarea' },
     { key: 'link_url', label: 'URL link', type: 'text' },
     { key: 'link_target', label: 'Apri in', type: 'select', options: [
       { value: '_self', label: 'Stessa finestra' },
@@ -43,7 +42,6 @@ export default {
       { value: 'h4', label: 'H4' },
       { value: 'div', label: 'DIV' },
     ]},
-    shadowField,
-    ...borderFields,
+    ...shadowField,
   ],
 };

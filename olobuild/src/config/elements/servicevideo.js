@@ -22,7 +22,7 @@ export default {
     show_play_btn: true,
     play_btn_size: '64',
     play_btn_bg: 'rgba(0,0,0,0.5)',
-    play_btn_color: '#FFFFFF',
+    play_btn_color: '',
   },
   fields: [
     { type: 'separator', label: 'Sorgente dati' },
@@ -49,7 +49,7 @@ export default {
       { value: '9/16', label: '9:16 (verticale)' },
     ]},
     { key: 'max_width', label: 'Larghezza max (px, vuoto = 100%)', type: 'text' },
-    { key: 'border_radius', label: 'Raggio bordi (px)', type: 'range', min: 0, max: 32, step: 2 },
+    { key: 'border_radius', label: 'Raggio bordi (px)', type: 'border-radius' },
 
     { type: 'separator', label: 'Poster' },
     { key: 'poster_from_thumb', label: 'Usa immagine in evidenza come poster', type: 'toggle' },

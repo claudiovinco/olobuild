@@ -25,16 +25,16 @@ export default {
     show_link: true,
     link_text: 'Dettagli',
     // Card style
-    card_bg: '#FFFFFF',
+    card_bg: '',
     card_radius: 12,
     card_shadow: 'sm',
     card_hover_effect: 'lift',
     title_size: 17,
     title_color: '',
-    meta_color: '#6B7280',
+    meta_color: '',
     price_color: '',
     btn_bg: '',
-    btn_color: '#FFFFFF',
+    btn_color: '',
     btn_radius: 8,
     // Slider
     autoplay: true,
@@ -129,15 +129,28 @@ export default {
     // ── Stile card ──
     { type: 'separator', label: 'Stile card' },
     { key: 'card_bg', label: 'Sfondo card', type: 'color' },
-    { key: 'card_radius', label: 'Raggio angoli (px)', type: 'range', min: 0, max: 24, step: 2 },
+    { key: 'card_radius', label: 'Raggio angoli (px)', type: 'border-radius' },
     {
       key: 'card_shadow', label: 'Ombra', type: 'select', options: [
         { value: 'none', label: 'Nessuna' },
         { value: 'sm', label: 'Leggera' },
         { value: 'md', label: 'Media' },
         { value: 'lg', label: 'Forte' },
+        { value: 'custom', label: 'Personalizzata' },
       ],
     },
+    { key: 'card_shadow_h', label: 'Offset H (px)', type: 'range', min: -50, max: 50, step: 1,
+      condition: { field: 'card_shadow', op: 'eq', value: 'custom' } },
+    { key: 'card_shadow_v', label: 'Offset V (px)', type: 'range', min: -50, max: 50, step: 1,
+      condition: { field: 'card_shadow', op: 'eq', value: 'custom' } },
+    { key: 'card_shadow_blur', label: 'Sfocatura (px)', type: 'range', min: 0, max: 100, step: 1,
+      condition: { field: 'card_shadow', op: 'eq', value: 'custom' } },
+    { key: 'card_shadow_spread', label: 'Espansione (px)', type: 'range', min: -50, max: 50, step: 1,
+      condition: { field: 'card_shadow', op: 'eq', value: 'custom' } },
+    { key: 'card_shadow_color', label: 'Colore ombra', type: 'color',
+      condition: { field: 'card_shadow', op: 'eq', value: 'custom' } },
+    { key: 'card_shadow_inset', label: 'Ombra interna', type: 'toggle',
+      condition: { field: 'card_shadow', op: 'eq', value: 'custom' } },
     {
       key: 'card_hover_effect', label: 'Effetto hover', type: 'select', options: [
         { value: 'none', label: 'Nessuno' },
@@ -152,6 +165,6 @@ export default {
     { key: 'price_color', label: 'Colore prezzo', type: 'color' },
     { key: 'btn_bg', label: 'Sfondo pulsante', type: 'color' },
     { key: 'btn_color', label: 'Colore testo pulsante', type: 'color' },
-    { key: 'btn_radius', label: 'Raggio pulsante (px)', type: 'range', min: 0, max: 20, step: 2 },
+    { key: 'btn_radius', label: 'Raggio pulsante (px)', type: 'border-radius' },
   ],
 };

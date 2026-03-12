@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import { getElementDefaults } from '../config/elementRegistry.js';
 
 const oloData = window.oloData || {};
 
@@ -15,11 +16,12 @@ function generateId() {
 /**
  * Recursively find a node by ID in a tree
  */
-function findNodeById(nodes, id) {
+function findNodeById(nodes, id, _depth = 0) {
+  if (_depth > 20) return undefined; // Guard against circular references
   for (const node of nodes) {
     if (node.id === id) return node;
     if (Array.isArray(node.children)) {
-      const found = findNodeById(node.children, id);
+      const found = findNodeById(node.children, id, _depth + 1);
       if (found) return found;
     }
     // Legacy: also search in settings.columns_data for backward compat during migration
@@ -39,11 +41,12 @@ function findNodeById(nodes, id) {
  * Find parent array and index of a node
  * Returns { parent: Array, index: number } or null
  */
-function findParentAndIndex(nodes, id) {
+function findParentAndIndex(nodes, id, _depth = 0) {
+  if (_depth > 20) return null; // Guard against circular references
   for (let i = 0; i < nodes.length; i++) {
     if (nodes[i].id === id) return { parent: nodes, index: i };
     if (Array.isArray(nodes[i].children)) {
-      const result = findParentAndIndex(nodes[i].children, id);
+      const result = findParentAndIndex(nodes[i].children, id, _depth + 1);
       if (result) return result;
     }
     // Legacy columns_data support
@@ -83,15 +86,24 @@ function assignNewIds(node) {
 }
 
 /**
- * Recursively normalize node tree to ensure style/advanced are plain objects.
- * PHP's json_decode converts {} to [] which becomes a JS Array,
- * causing named properties (like hover) to be lost during JSON.stringify.
+ * Recursively normalize node tree:
+ * - Ensure style/advanced are plain objects (PHP json_decode {} → [])
+ * - Merge saved settings with element config defaults so missing keys
+ *   get their default values (prevents toggles from losing state).
  */
 function normalizeNodes(nodes) {
   if (!Array.isArray(nodes)) return;
   for (const node of nodes) {
     if (Array.isArray(node.style)) node.style = {};
     if (Array.isArray(node.advanced)) node.advanced = {};
+    if (Array.isArray(node.settings)) node.settings = {};
+    // Merge element defaults into settings (saved values take precedence)
+    if (node.type) {
+      const defaults = getElementDefaults(node.type);
+      if (defaults && Object.keys(defaults).length) {
+        node.settings = { ...defaults, ...node.settings };
+      }
+    }
     if (Array.isArray(node.children)) {
       normalizeNodes(node.children);
     }
@@ -229,23 +241,39 @@ function createInnerColumn(widthPercent = 50, children = []) {
   };
 }
 
-export { generateId, createSection, createRow, createColumn, createInnerColumn, CONTAINER_TYPES, migrateLegacyContent, isLegacyFormat };
+export { generateId, createSection, createRow, createColumn, createInnerColumn, CONTAINER_TYPES, migrateLegacyContent, isLegacyFormat, deepCloneWithNewIds };
 
 export const useTilesStore = defineStore('tiles', {
   state: () => ({
     registeredTiles: [],
     canvasTiles: [],    // Array of Section nodes (tree root)
+    clipboardTile: null,   // Deep-cloned tile for copy/paste
+    clipboardStyle: null,  // Copied style object for paste-style
+    globalWidgets: [],     // Global widgets from DB
   }),
 
   getters: {
     tilesByCategory(state) {
-      const groups = {};
+      const unordered = {};
       for (const tile of state.registeredTiles) {
         // Don't show structure tiles (section, column) in the palette
         if (tile.category === 'structure') continue;
         const cat = tile.category || 'general';
-        if (!groups[cat]) groups[cat] = [];
-        groups[cat].push(tile);
+        if (!unordered[cat]) unordered[cat] = [];
+        unordered[cat].push(tile);
+      }
+      // Return in fixed order
+      const order = [
+        'essential', 'layout', 'text', 'media', 'marketing',
+        'interactive', 'navigation', 'dynamic', 'booking', 'olo-space',
+      ];
+      const groups = {};
+      for (const cat of order) {
+        if (unordered[cat]) groups[cat] = unordered[cat];
+      }
+      // Append any remaining categories not in the order list
+      for (const cat in unordered) {
+        if (!groups[cat]) groups[cat] = unordered[cat];
       }
       return groups;
     },
@@ -277,30 +305,30 @@ export const useTilesStore = defineStore('tiles', {
           { type: 'hero', name: 'Hero', icon: 'dashicons-cover-image', category: 'layout', defaults: { title: 'Benvenuto nel nostro sito', subtitle: 'Scopri qualcosa di straordinario', background_color: '#6366F1', text_color: '#FFFFFF', cta_text: 'Inizia ora', cta_url: '#' } },
           { type: 'row', name: 'Riga / Colonne', icon: 'dashicons-columns', category: 'layout', defaults: { layout: '50-50', gap: '16', column_gap: 'default', vertical_align: 'stretch', stack_mobile: true } },
           { type: 'inner-columns', name: 'Colonne interne', icon: 'dashicons-table-col-after', category: 'layout', defaults: { layout: '50-50', gap: '16', vertical_align: 'stretch', stack_mobile: true } },
-          { type: 'spacer', name: 'Spaziatore', icon: 'dashicons-arrows-alt', category: 'layout', defaults: { height: '60', show_divider: false, divider_color: '#374151', divider_width: '100', divider_thickness: '1' } },
-          { type: 'divider', name: 'Divisore', icon: 'dashicons-minus', category: 'layout', defaults: { style: 'solid', width: '100', thickness: '1', color: '#374151', alignment: 'center', text: '', text_color: '#9CA3AF', icon_emoji: '' } },
-          // Tile contenuto
-          { type: 'content', name: 'Contenuto', icon: 'dashicons-text-page', category: 'content', defaults: { heading: 'Titolo sezione', text: 'Aggiungi il tuo contenuto qui.', image: '' } },
-          { type: 'button', name: 'Pulsante', icon: 'dashicons-button', category: 'content', defaults: { text: 'Clicca qui', url: '#', target: '_self', alignment: 'center', bg_color: '#6366F1', text_color: '#FFFFFF', border_radius: '6', padding_x: '32', padding_y: '14', font_size: '16', full_width: false } },
-          { type: 'headline', name: 'Titolo', icon: 'dashicons-heading', category: 'content', defaults: { heading: 'Titolo sezione', subtitle: 'Un breve sottotitolo va qui', tag: 'h2', alignment: 'center', decoration: 'line', decoration_color: '#6366F1', heading_color: '#F3F4F6', subtitle_color: '#9CA3AF', heading_size: 'lg' } },
-          { type: 'testimonial', name: 'Testimonianza', icon: 'dashicons-format-quote', category: 'content', defaults: { quote: 'Un prodotto fantastico!', author_name: 'Mario Rossi', author_role: 'CEO', avatar: '', rating: '5', bg_color: '#1F2937', text_color: '#F3F4F6' } },
-          { type: 'pricing', name: 'Listino prezzi', icon: 'dashicons-money-alt', category: 'content', defaults: { plan_name: 'Piano Pro', price: '29', period: '/mese', features: 'Progetti illimitati\n10 GB di spazio', cta_text: 'Inizia ora', cta_url: '#', is_popular: false, bg_color: '#1F2937', accent_color: '#6366F1', text_color: '#F3F4F6' } },
-          { type: 'counter', name: 'Contatore', icon: 'dashicons-performance', category: 'content', defaults: { number: '1250', label: 'Clienti soddisfatti', prefix: '', suffix: '+', icon_emoji: '\uD83C\uDFC6', text_color: '#F3F4F6' } },
-          { type: 'iconbox', name: 'Riquadro icona', icon: 'dashicons-star-filled', category: 'content', defaults: { icon_emoji: '\uD83D\uDE80', title: 'Titolo funzionalità', description: 'Una breve descrizione.', link_url: '', link_text: 'Scopri di più', alignment: 'center', text_color: '#F3F4F6' } },
-          { type: 'alert', name: 'Avviso', icon: 'dashicons-warning', category: 'content', defaults: { alert_type: 'info', title: 'Attenzione!', message: 'Questo è un avviso informativo.', show_icon: true } },
-          { type: 'team', name: 'Membro team', icon: 'dashicons-businessperson', category: 'content', defaults: { photo: '', name: 'Maria Bianchi', role: 'Lead Designer', bio: 'Appassionata di UX e design.', link_url: '', bg_color: '#1F2937', text_color: '#F3F4F6' } },
-          { type: 'accordion', name: 'Fisarmonica', icon: 'dashicons-list-view', category: 'content', defaults: { panels: [ { id: 'p-1', title: 'Cos\'è Olobuilder?', content: 'Un potente page builder.' }, { id: 'p-2', title: 'Come funziona?', content: 'Trascina e rilascia le tile.' } ], toggle_mode: false, default_open: 'first', icon_position: 'right', icon_style: 'chevron', animate_icon: true, animation_speed: '300', header_bg: '#111827', header_bg_active: '#1a2332', header_text_color: '#F3F4F6', content_bg: '#0d1117', border_color: '#374151', text_color: '#d1d5db', gap: '0', border_radius: '8', faq_schema: false, separator_style: 'border' } },
-          { type: 'tabs', name: 'Schede', icon: 'dashicons-category', category: 'content', defaults: { tabs_data: 'Scheda 1\nContenuto della prima scheda.\n---\nScheda 2\nContenuto della seconda scheda.', accent_color: '#6366F1', text_color: '#F3F4F6' } },
-          { type: 'social', name: 'Link social', icon: 'dashicons-share', category: 'content', defaults: { links: 'facebook|https://facebook.com\ntwitter|https://twitter.com', size: '32', alignment: 'center', gap: '12' } },
-          { type: 'countdown', name: 'Conto alla rovescia', icon: 'dashicons-clock', category: 'content', defaults: { target_date: '2026-12-31T23:59', show_days: true, show_hours: true, show_minutes: true, show_seconds: true, expired_message: 'L\'evento è iniziato!', label_days: 'Giorni', label_hours: 'Ore', label_minutes: 'Minuti', label_seconds: 'Secondi', separator: ':', bg_color: '#111827', text_color: '#F3F4F6', accent_color: '#6366F1' } },
-          { type: 'html', name: 'HTML / Codice', icon: 'dashicons-editor-code', category: 'content', defaults: { html_content: '<div style="padding:20px;text-align:center;color:#9CA3AF;">HTML personalizzato</div>', sandbox: false } },
-          { type: 'list', name: 'Lista', icon: 'dashicons-editor-ul', category: 'content', defaults: { items: 'check|Funzionalità uno\ncheck|Funzionalità due\ncheck|Funzionalità tre', icon_default: 'check', icon_color: '#22C55E', text_color: '#F3F4F6', spacing: '12', icon_size: '18' } },
-          { type: 'table', name: 'Tabella', icon: 'dashicons-editor-table', category: 'content', defaults: { table_data: 'Funzionalità|Base|Pro\nSpazio|5 GB|50 GB\nUtenti|1|10', striped: true, bordered: true, hover_effect: true, header_bg: '#1F2937', header_text_color: '#F3F4F6', text_color: '#D1D5DB', border_color: '#374151' } },
-          { type: 'progress', name: 'Barra progresso', icon: 'dashicons-chart-bar', category: 'content', defaults: { bars: 'HTML|90\nJavaScript|80\nVue.js|75', bar_color: '#6366F1', bar_bg: '#1F2937', text_color: '#F3F4F6', height: '20', show_percentage: true, animated: true, border_radius: '10' } },
-          { type: 'desclist', name: 'Lista descrittiva', icon: 'dashicons-editor-justify', category: 'content', defaults: { items: 'Framework|Vue.js 3\nLinguaggio|PHP 7.4+', layout: 'stacked', term_color: '#F3F4F6', definition_color: '#9CA3AF', separator: true, border_color: '#374151' } },
-          // Tile media
-          { type: 'image', name: 'Immagine', icon: 'dashicons-format-image', category: 'media', defaults: { image_url: '', alt_text: '', caption: '', link_url: '', link_target: '_self', object_fit: 'cover', height: '300px' } },
-          { type: 'video', name: 'Video', icon: 'dashicons-video-alt3', category: 'media', defaults: { video_url: '', aspect_ratio: '16:9', autoplay: false, muted: false, caption: '' } },
+          { type: 'spacer', name: 'Spaziatore', icon: 'dashicons-arrows-alt', category: 'essential', defaults: { height: '60', show_divider: false, divider_color: '', divider_width: '100', divider_thickness: '1' } },
+          { type: 'divider', name: 'Divisore', icon: 'dashicons-minus', category: 'essential', defaults: { style: 'solid', width: '100', thickness: '1', color: '', alignment: 'center', text: '', text_color: '', icon_emoji: '' } },
+          // Tile essenziale
+          { type: 'content', name: 'Contenuto', icon: 'dashicons-text-page', category: 'essential', defaults: { heading: 'Titolo sezione', text: 'Aggiungi il tuo contenuto qui.', image: '' } },
+          { type: 'button', name: 'Pulsante', icon: 'dashicons-button', category: 'essential', defaults: { text: 'Clicca qui', url: '#', target: '_self', alignment: 'center', bg_color: '', text_color: '#FFFFFF', border_radius: '6', padding_x: '32', padding_y: '14', font_size: '16', full_width: false } },
+          { type: 'headline', name: 'Titolo', icon: 'dashicons-heading', category: 'essential', defaults: { heading: 'Titolo sezione', subtitle: 'Un breve sottotitolo va qui', tag: 'h2', alignment: 'center', decoration: 'line', decoration_color: '', heading_color: '', subtitle_color: '', heading_size: 'lg' } },
+          { type: 'testimonial', name: 'Testimonianza', icon: 'dashicons-format-quote', category: 'marketing', defaults: { quote: 'Un prodotto fantastico!', author_name: 'Mario Rossi', author_role: 'CEO', avatar: '', rating: '5', bg_color: '', text_color: '' } },
+          { type: 'pricing', name: 'Listino prezzi', icon: 'dashicons-money-alt', category: 'marketing', defaults: { plan_name: 'Piano Pro', price: '29', period: '/mese', features: 'Progetti illimitati\n10 GB di spazio', cta_text: 'Inizia ora', cta_url: '#', is_popular: false, bg_color: '', accent_color: '', text_color: '' } },
+          { type: 'counter', name: 'Contatore', icon: 'dashicons-performance', category: 'marketing', defaults: { number: '1250', label: 'Clienti soddisfatti', prefix: '', suffix: '+', icon_emoji: 'bolt', text_color: '' } },
+          { type: 'iconbox', name: 'Riquadro icona', icon: 'dashicons-star-filled', category: 'marketing', defaults: { icon_emoji: 'star', title: 'Titolo funzionalità', description: 'Una breve descrizione.', link_url: '', link_text: 'Scopri di più', alignment: 'center', text_color: '' } },
+          { type: 'alert', name: 'Avviso', icon: 'dashicons-warning', category: 'text', defaults: { alert_type: 'info', title: 'Attenzione!', message: 'Questo è un avviso informativo.', show_icon: true } },
+          { type: 'team', name: 'Membro team', icon: 'dashicons-businessperson', category: 'marketing', defaults: { photo: '', name: 'Maria Bianchi', role: 'Lead Designer', bio: 'Appassionata di UX e design.', link_url: '', bg_color: '', text_color: '' } },
+          { type: 'accordion', name: 'Fisarmonica', icon: 'dashicons-list-view', category: 'interactive', defaults: { panels: [ { id: 'p-1', title: 'Cos\'è Olobuild?', content: 'Un potente page builder.' }, { id: 'p-2', title: 'Come funziona?', content: 'Trascina e rilascia le tile.' } ], toggle_mode: false, default_open: 'first', icon_position: 'right', icon_style: 'chevron', animate_icon: true, animation_speed: '300', header_bg: '', header_bg_active: '', header_text_color: '', content_bg: '', border_color: '', text_color: '', gap: '0', border_radius: '8', faq_schema: false, separator_style: 'border' } },
+          { type: 'tabs', name: 'Schede', icon: 'dashicons-category', category: 'interactive', defaults: { tabs_data: 'Scheda 1\nContenuto della prima scheda.\n---\nScheda 2\nContenuto della seconda scheda.', accent_color: '', text_color: '' } },
+          { type: 'social', name: 'Link social', icon: 'dashicons-share', category: 'marketing', defaults: { links: 'facebook|https://facebook.com\ntwitter|https://twitter.com', size: '32', alignment: 'center', gap: '12' } },
+          { type: 'countdown', name: 'Conto alla rovescia', icon: 'dashicons-clock', category: 'marketing', defaults: { target_date: '2026-12-31T23:59', show_days: true, show_hours: true, show_minutes: true, show_seconds: true, expired_message: 'L\'evento è iniziato!', label_days: 'Giorni', label_hours: 'Ore', label_minutes: 'Minuti', label_seconds: 'Secondi', separator: ':', bg_color: '', text_color: '', accent_color: '' } },
+          { type: 'html', name: 'HTML / Codice', icon: 'dashicons-editor-code', category: 'text', defaults: { html_content: '<div style="padding:20px;text-align:center;color:#9CA3AF;">HTML personalizzato</div>', sandbox: false } },
+          { type: 'list', name: 'Lista', icon: 'dashicons-editor-ul', category: 'text', defaults: { items: 'check|Funzionalità uno\ncheck|Funzionalità due\ncheck|Funzionalità tre', icon_default: 'check', icon_color: '', text_color: '', spacing: '12', icon_size: '18' } },
+          { type: 'table', name: 'Tabella', icon: 'dashicons-editor-table', category: 'text', defaults: { table_data: 'Funzionalità|Base|Pro\nSpazio|5 GB|50 GB\nUtenti|1|10', striped: true, bordered: true, hover_effect: true, header_bg: '', header_text_color: '', text_color: '', border_color: '' } },
+          { type: 'progress', name: 'Barra progresso', icon: 'dashicons-chart-bar', category: 'marketing', defaults: { bars: 'HTML|90\nJavaScript|80\nVue.js|75', bar_color: '', bar_bg: '', text_color: '', height: '20', show_percentage: true, animated: true, border_radius: '10' } },
+          { type: 'desclist', name: 'Lista descrittiva', icon: 'dashicons-editor-justify', category: 'text', defaults: { items: 'Framework|Vue.js 3\nLinguaggio|PHP 7.4+', layout: 'stacked', term_color: '', definition_color: '', separator: true, border_color: '' } },
+          // Tile essenziale (media)
+          { type: 'image', name: 'Immagine', icon: 'dashicons-format-image', category: 'essential', defaults: { image_url: '', alt_text: '', caption: '', link_url: '', link_target: '_self', object_fit: 'cover', height: '300px' } },
+          { type: 'video', name: 'Video', icon: 'dashicons-video-alt3', category: 'essential', defaults: { video_url: '', aspect_ratio: '16:9', autoplay: false, muted: false, caption: '' } },
           { type: 'gallery', name: 'Galleria', icon: 'dashicons-format-gallery', category: 'media', defaults: { images: [], columns: '3', gap: '8', img_height: '200px', object_fit: 'cover' } },
           { type: 'map', name: 'Mappa', icon: 'dashicons-location', category: 'media', defaults: { address: 'Roma, Italia', zoom: '13', height: '350' } },
           { type: 'slideshow', name: 'Slideshow', icon: 'dashicons-slides', category: 'media', defaults: { slides: [ { id: 's-1', image: '', title: 'Slide uno', subtitle: 'Prima slide', link: '' } ], autoplay: true, autoplay_speed: '5000', show_arrows: true, show_dots: true, slide_height: '400', overlay_color: '#000000', text_color: '#FFFFFF', transition: 'slide' } },
@@ -371,6 +399,14 @@ export const useTilesStore = defineStore('tiles', {
       }
     },
 
+    applyStylePreset(tileId, styleObj) {
+      const tile = this.getTileById(tileId);
+      if (!tile) return;
+      const existing = (!tile.style || Array.isArray(tile.style)) ? {} : tile.style;
+      const presetCopy = JSON.parse(JSON.stringify(styleObj || {}));
+      tile.style = { ...existing, ...presetCopy };
+    },
+
     updateTileAdvanced(tileId, advancedProps) {
       const tile = this.getTileById(tileId);
       if (tile) {
@@ -424,6 +460,70 @@ export const useTilesStore = defineStore('tiles', {
       const clone = deepCloneWithNewIds(original);
       result.parent.splice(result.index + 1, 0, clone);
       return clone;
+    },
+
+    copyTile(tileId) {
+      const tile = this.getTileById(tileId);
+      if (tile) {
+        this.clipboardTile = JSON.parse(JSON.stringify(tile));
+      }
+    },
+
+    pasteTile(parentId, index) {
+      if (!this.clipboardTile) return null;
+      const clone = deepCloneWithNewIds(this.clipboardTile);
+      if (parentId) {
+        this.addChild(parentId, clone, index);
+      } else {
+        this.canvasTiles.push(clone);
+      }
+      return clone;
+    },
+
+    copyStyle(tileId) {
+      const tile = this.getTileById(tileId);
+      if (tile) {
+        this.clipboardStyle = JSON.parse(JSON.stringify(tile.style || {}));
+        try { localStorage.setItem('olo_clipboard_style', JSON.stringify(this.clipboardStyle)); } catch(e) {}
+      }
+    },
+
+    pasteStyle(tileId) {
+      const tile = this.getTileById(tileId);
+      if (!this.clipboardStyle) {
+        try { const s = localStorage.getItem('olo_clipboard_style'); if (s) this.clipboardStyle = JSON.parse(s); } catch(e) {}
+      }
+      if (!tile || !this.clipboardStyle) return;
+      // Copy only visual style properties, not content
+      const s = this.clipboardStyle;
+      const existing = (!tile.style || Array.isArray(tile.style)) ? {} : { ...tile.style };
+      const styleKeys = [
+        'margin_top', 'margin_right', 'margin_bottom', 'margin_left',
+        'padding_top', 'padding_right', 'padding_bottom', 'padding_left',
+        'bg_type', 'bg_color', 'bg_gradient_from', 'bg_gradient_to', 'bg_gradient_angle',
+        'border_width', 'border_style', 'border_color', 'border_radius',
+        'shadow', 'opacity', 'hover', 'transition',
+      ];
+      for (const key of styleKeys) {
+        if (s[key] !== undefined) {
+          existing[key] = JSON.parse(JSON.stringify(s[key]));
+        }
+      }
+      tile.style = existing;
+    },
+
+    moveUp(tileId) {
+      const result = findParentAndIndex(this.canvasTiles, tileId);
+      if (!result || result.index === 0) return;
+      const [item] = result.parent.splice(result.index, 1);
+      result.parent.splice(result.index - 1, 0, item);
+    },
+
+    moveDown(tileId) {
+      const result = findParentAndIndex(this.canvasTiles, tileId);
+      if (!result || result.index >= result.parent.length - 1) return;
+      const [item] = result.parent.splice(result.index, 1);
+      result.parent.splice(result.index + 1, 0, item);
     },
 
     // === Row layout restructuring ===
@@ -603,6 +703,173 @@ export const useTilesStore = defineStore('tiles', {
         const idx = col.tiles.findIndex(t => t.id === childTileId);
         if (idx !== -1) col.tiles.splice(idx, 1);
       }
+    },
+
+    // === Global Widgets ===
+
+    async fetchGlobalWidgets() {
+      try {
+        const res = await fetch(`${oloData.restUrl}/global-widgets`, {
+          headers: { 'X-WP-Nonce': oloData.nonce },
+        });
+        if (!res.ok) throw new Error('Failed to fetch global widgets');
+        this.globalWidgets = await res.json();
+      } catch (err) {
+        console.error('fetchGlobalWidgets error:', err);
+      }
+    },
+
+    async saveAsGlobalWidget(tileId) {
+      const tile = this.getTileById(tileId);
+      if (!tile) return;
+
+      const tileData = JSON.parse(JSON.stringify(tile));
+      // Remove the id so the stored data is a clean snapshot
+      delete tileData.id;
+      delete tileData.children;
+      delete tileData.global_id;
+
+      const name = tile.settings?.heading || tile.settings?.title || tile.settings?.text || tile.type || 'Widget globale';
+
+      try {
+        const res = await fetch(`${oloData.restUrl}/global-widgets`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-WP-Nonce': oloData.nonce,
+          },
+          body: JSON.stringify({ name, tile_data: tileData }),
+        });
+        if (!res.ok) throw new Error('Failed to save global widget');
+        const result = await res.json();
+
+        // Set global_id on the original tile
+        tile.global_id = result.id;
+
+        // Refresh list
+        await this.fetchGlobalWidgets();
+        return result;
+      } catch (err) {
+        console.error('saveAsGlobalWidget error:', err);
+      }
+    },
+
+    async updateGlobalWidget(globalId, tileId) {
+      const tile = this.getTileById(tileId);
+      if (!tile) return;
+
+      const tileData = JSON.parse(JSON.stringify(tile));
+      delete tileData.id;
+      delete tileData.children;
+      delete tileData.global_id;
+
+      try {
+        const res = await fetch(`${oloData.restUrl}/global-widgets/${globalId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-WP-Nonce': oloData.nonce,
+          },
+          body: JSON.stringify({ tile_data: tileData }),
+        });
+        if (!res.ok) throw new Error('Failed to update global widget');
+        await this.fetchGlobalWidgets();
+      } catch (err) {
+        console.error('updateGlobalWidget error:', err);
+      }
+    },
+
+    detachGlobalWidget(tileId) {
+      const tile = this.getTileById(tileId);
+      if (tile) {
+        delete tile.global_id;
+      }
+    },
+
+    insertGlobalWidget(globalId) {
+      const gw = this.globalWidgets.find(w => String(w.id) === String(globalId));
+      if (!gw) return null;
+
+      let tileData;
+      if (typeof gw.tile_data === 'string') {
+        try { tileData = JSON.parse(gw.tile_data); } catch { return null; }
+      } else {
+        tileData = JSON.parse(JSON.stringify(gw.tile_data));
+      }
+
+      // Create a new tile from the global widget data
+      const newTile = {
+        ...tileData,
+        id: generateId(),
+        global_id: parseInt(gw.id),
+      };
+
+      return newTile;
+    },
+
+    async deleteGlobalWidget(globalId) {
+      try {
+        const res = await fetch(`${oloData.restUrl}/global-widgets/${globalId}`, {
+          method: 'DELETE',
+          headers: { 'X-WP-Nonce': oloData.nonce },
+        });
+        if (!res.ok) throw new Error('Failed to delete global widget');
+        await this.fetchGlobalWidgets();
+      } catch (err) {
+        console.error('deleteGlobalWidget error:', err);
+      }
+    },
+
+    /**
+     * Al salvataggio: aggiorna il master nel DB per ogni tile con global_id.
+     */
+    async syncGlobalWidgetsOnSave() {
+      const globals = [];
+      const walk = (nodes) => {
+        for (const n of nodes) {
+          if (n.global_id) globals.push(n);
+          if (Array.isArray(n.children)) walk(n.children);
+        }
+      };
+      walk(this.canvasTiles);
+      for (const tile of globals) {
+        await this.updateGlobalWidget(tile.global_id, tile.id);
+      }
+    },
+
+    /**
+     * Al caricamento: sostituisci i dati locali con quelli del master dal DB.
+     */
+    syncGlobalWidgetsOnLoad() {
+      if (!this.globalWidgets.length) return;
+      const gwMap = {};
+      for (const gw of this.globalWidgets) {
+        gwMap[String(gw.id)] = gw;
+      }
+      const walk = (nodes) => {
+        for (const n of nodes) {
+          if (n.global_id) {
+            const master = gwMap[String(n.global_id)];
+            if (master) {
+              let masterData;
+              if (typeof master.tile_data === 'string') {
+                try { masterData = JSON.parse(master.tile_data); } catch { masterData = null; }
+              } else {
+                masterData = master.tile_data;
+              }
+              if (masterData) {
+                // Sovrascrivi settings e style dal master, mantieni id, global_id, children
+                n.type = masterData.type || n.type;
+                n.settings = JSON.parse(JSON.stringify(masterData.settings || {}));
+                n.style = JSON.parse(JSON.stringify(masterData.style || {}));
+                if (masterData.advanced) n.advanced = JSON.parse(JSON.stringify(masterData.advanced));
+              }
+            }
+          }
+          if (Array.isArray(n.children)) walk(n.children);
+        }
+      };
+      walk(this.canvasTiles);
     },
   },
 });

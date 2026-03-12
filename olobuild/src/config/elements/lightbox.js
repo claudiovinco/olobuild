@@ -1,0 +1,62 @@
+import { shadowField, conditionFields, conditionDefaults } from './_shared.js';
+
+export default {
+  type: 'lightbox',
+  name: 'Lightbox',
+  icon: 'dashicons-format-gallery',
+  category: 'media',
+  defaults: {
+    items: [
+      { id: 'lb-1', title: 'Immagine 1', type: 'image', url: '', thumb: '', caption: '' },
+    ],
+    columns: '3',
+    gap: '15',
+    thumb_ratio: '1:1',
+    thumb_radius: '8',
+    overlay_style: 'dark',
+    show_caption: true,
+    animation: 'fade',
+    shadow: 'none',
+    ...conditionDefaults,
+  },
+  fields: [
+    { key: 'items', label: 'Elementi', type: 'content-items',
+      itemFields: [
+        { key: 'title', label: 'Titolo', type: 'text' },
+        { key: 'type', label: 'Tipo', type: 'select', options: [
+          { value: 'image', label: 'Immagine' },
+          { value: 'video', label: 'Video (URL)' },
+          { value: 'iframe', label: 'iFrame (URL)' },
+        ] },
+        { key: 'url', label: 'URL media', type: 'text' },
+        { key: 'thumb', label: 'Miniatura', type: 'image' },
+        { key: 'caption', label: 'Didascalia', type: 'text' },
+      ],
+      newItemDefaults: { title: 'Nuovo elemento', type: 'image', url: '', thumb: '', caption: '' },
+    },
+    { type: 'separator', label: 'Layout' },
+    { key: 'columns', label: 'Colonne', type: 'range', min: 1, max: 6, step: 1 },
+    { key: 'gap', label: 'Gap (px)', type: 'range', min: 0, max: 40, step: 5 },
+    { key: 'thumb_ratio', label: 'Proporzione miniature', type: 'select', options: [
+      { value: '1:1', label: '1:1' },
+      { value: '4:3', label: '4:3' },
+      { value: '16:9', label: '16:9' },
+      { value: 'auto', label: 'Auto' },
+    ] },
+    { key: 'thumb_radius', label: 'Raggio bordo (px)', type: 'border-radius' },
+    { type: 'separator', label: 'Lightbox' },
+    { key: 'overlay_style', label: 'Stile overlay', type: 'select', options: [
+      { value: 'dark', label: 'Scuro' },
+      { value: 'light', label: 'Chiaro' },
+      { value: 'none', label: 'Nessuno' },
+    ] },
+    { key: 'show_caption', label: 'Mostra didascalia', type: 'toggle' },
+    { key: 'animation', label: 'Animazione', type: 'select', options: [
+      { value: 'fade', label: 'Dissolvenza' },
+      { value: 'slide', label: 'Scorrimento' },
+      { value: 'scale', label: 'Scala' },
+    ] },
+    ...shadowField,
+    ...conditionFields,
+  ],
+};

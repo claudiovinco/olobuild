@@ -9,7 +9,7 @@ class Olo_LangSwitcher_Tile extends Olo_Tile_Base {
     protected $type     = 'langswitcher';
     protected $name     = 'Selettore lingua';
     protected $icon     = 'dashicons-translation';
-    protected $category = 'header';
+    protected $category = 'navigation';
     protected $defaults = [
         'style'          => 'flags',
         'flag_shape'     => 'circle',
@@ -26,6 +26,16 @@ class Olo_LangSwitcher_Tile extends Olo_Tile_Base {
         'border_color'   => '#e5e7eb',
         'border_radius'  => 8,
         'show_dropdown_arrow' => true,
+        // Tabs
+        'tabs_edge'      => 'top',
+        'tabs_offset'    => 20,
+        'tabs_size'      => 'normal',
+        // Circle badge
+        'circle_bg'      => 'rgba(0,0,0,0.06)',
+        'circle_border'  => 'rgba(0,0,0,0.1)',
+        'circle_size'    => 36,
+        // Compact
+        'compact'        => false,
     ];
 
     public function get_controls() {
@@ -33,9 +43,8 @@ class Olo_LangSwitcher_Tile extends Olo_Tile_Base {
     }
 
     public function render( $settings ) {
-        // Se olo-lang non è attivo, non renderizzare
         if ( ! class_exists( 'Olo_Lang_Language' ) ) {
-            return '<p style="color:#999;text-align:center;font-size:12px;">Plugin Olo Lang non attivo.</p>';
+            return '<p style="color:var(--olo-color-text-muted, #9CA3AF);text-align:center;font-size:12px;">Plugin Olo Lang non attivo.</p>';
         }
 
         $s = wp_parse_args( $settings, $this->defaults );
@@ -51,9 +60,9 @@ class Olo_LangSwitcher_Tile extends Olo_Tile_Base {
         $shape   = sanitize_key( $s['flag_shape'] );
         $size    = absint( $s['flag_size'] );
         $gap     = absint( $s['gap'] );
-        $radius  = absint( $s['border_radius'] );
+        $radius  = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
+        $compact = ! empty( $s['compact'] );
 
-        // Flag emoji map
         $flags = [
             'it' => '🇮🇹', 'en' => '🇬🇧', 'de' => '🇩🇪', 'fr' => '🇫🇷',
             'es' => '🇪🇸', 'pt' => '🇵🇹', 'nl' => '🇳🇱', 'ru' => '🇷🇺',
@@ -64,16 +73,14 @@ class Olo_LangSwitcher_Tile extends Olo_Tile_Base {
             'sl' => '🇸🇮', 'bg' => '🇧🇬', 'uk' => '🇺🇦',
         ];
 
-        // CSS custom properties
         $css_vars = sprintf(
-            '--ols-size:%dpx;--ols-gap:%dpx;--ols-radius:%dpx;--ols-bg:%s;--ols-color:%s;--ols-active-bg:%s;--ols-active-color:%s;--ols-border:%s;',
+            '--ols-size:%dpx;--ols-gap:%dpx;--ols-radius:%s;--ols-bg:%s;--ols-color:%s;--ols-active-bg:%s;--ols-active-color:%s;--ols-border:%s;',
             $size, $gap, $radius,
-            esc_attr( $s['bg'] ), esc_attr( $s['color'] ),
-            esc_attr( $s['active_bg'] ), esc_attr( $s['active_color'] ),
-            esc_attr( $s['border_color'] )
+            $this->safe_color_css( $s['bg'] ), $this->safe_color_css( $s['color'] ),
+            $this->safe_color_css( $s['active_bg'] ), $this->safe_color_css( $s['active_color'] ),
+            $this->safe_color_css( $s['border_color'] )
         );
 
-        // Classi wrapper
         $wrapper_class = 'ols-switcher ols-style--' . $style . ' ols-layout--' . $layout;
         if ( $layout === 'floating' ) {
             $wrapper_class .= ' ols-float--' . sanitize_key( $s['floating_pos'] );
@@ -81,10 +88,30 @@ class Olo_LangSwitcher_Tile extends Olo_Tile_Base {
         if ( $shape === 'rounded' ) {
             $wrapper_class .= ' ols-shape--rounded';
         }
+        if ( $compact ) {
+            $wrapper_class .= ' ols-compact';
+        }
 
         ob_start();
 
-        if ( $layout === 'dropdown' ) {
+        // Emit base styles for new features (circle flags, compact)
+        if ( $style === 'flags_circle' || $compact ) {
+            echo '<style>';
+            if ( $style === 'flags_circle' ) {
+                echo '.ols-circle-flag{display:inline-flex;align-items:center;justify-content:center;border-radius:50%;border:2px solid;line-height:1;flex-shrink:0;}';
+            }
+            if ( $compact ) {
+                echo '.ols-compact .ols-item{padding:3px 6px !important;font-size:11px !important;gap:3px !important;}';
+                echo '.ols-compact .ols-trigger{padding:3px 6px !important;font-size:11px !important;gap:3px !important;}';
+                echo '.ols-compact .ols-code{font-size:10px !important;}';
+                echo '.ols-compact .ols-flag{font-size:16px !important;}';
+            }
+            echo '</style>';
+        }
+
+        if ( $layout === 'tabs' ) {
+            $this->render_tabs( $languages, $current, $flags, $s, $wrapper_class, $css_vars );
+        } elseif ( $layout === 'dropdown' ) {
             $this->render_dropdown( $languages, $current, $flags, $s, $wrapper_class, $css_vars );
         } else {
             $this->render_inline( $languages, $current, $flags, $s, $wrapper_class, $css_vars );
@@ -93,38 +120,123 @@ class Olo_LangSwitcher_Tile extends Olo_Tile_Base {
         return ob_get_clean();
     }
 
-    private function render_inline( $languages, $current, $flags, $s, $wrapper_class, $css_vars ) {
+    /**
+     * Render a single language item's inner content (flag/circle/code/name).
+     */
+    private function render_item_content( $lang, $flags, $s ) {
         $style_attr = $s['style'];
+        $code       = $lang['code'];
+        $flag       = $flags[ $code ] ?? '';
+
+        if ( $style_attr === 'flags_circle' ) {
+            $csz   = max( 24, intval( $s['circle_size'] ) );
+            $fsz   = round( $csz * 0.55 );
+            $c_bg  = $this->safe_color_css( $s['circle_bg'] ?? '' ) ?: 'rgba(0,0,0,0.06)';
+            $c_brd = $this->safe_color_css( $s['circle_border'] ?? '' ) ?: 'rgba(0,0,0,0.1)';
+            echo '<span class="ols-circle-flag" style="width:' . $csz . 'px;height:' . $csz . 'px;font-size:' . $fsz . 'px;background:' . esc_attr( $c_bg ) . ';border-color:' . esc_attr( $c_brd ) . '">' . $flag . '</span>';
+        }
+
+        if ( $style_attr === 'flags' || $style_attr === 'flags_text' ) {
+            echo '<span class="ols-flag" style="font-size:' . absint( $s['flag_size'] ) . 'px">' . $flag . '</span>';
+        }
+        if ( $style_attr === 'codes' || $style_attr === 'flags_text' ) {
+            echo '<span class="ols-code">' . esc_html( strtoupper( $code ) ) . '</span>';
+        }
+        if ( $style_attr === 'names' ) {
+            echo '<span class="ols-name">' . esc_html( $lang['name'] ) . '</span>';
+        }
+        if ( ! empty( $s['show_label'] ) && ( $style_attr === 'flags' || $style_attr === 'flags_circle' ) ) {
+            $label = $s['label_format'] === 'code' ? strtoupper( $code ) : $lang['name'];
+            echo '<span class="ols-label">' . esc_html( $label ) . '</span>';
+        }
+    }
+
+    private function render_inline( $languages, $current, $flags, $s, $wrapper_class, $css_vars ) {
         echo '<div class="' . esc_attr( $wrapper_class ) . '" style="' . $css_vars . '">';
         foreach ( $languages as $lang ) {
             $code   = $lang['code'];
             $url    = Olo_Lang_Language::get_language_url( $code );
             $active = $code === $current ? ' ols-active' : '';
-            $flag   = $flags[ $code ] ?? '';
 
             echo '<a href="' . esc_url( $url ) . '" class="ols-item' . $active . '" hreflang="' . esc_attr( $code ) . '" title="' . esc_attr( $lang['name'] ) . '">';
+            $this->render_item_content( $lang, $flags, $s );
+            echo '</a>';
+        }
+        echo '</div>';
+    }
 
-            if ( $style_attr === 'flags' || $style_attr === 'flags_text' ) {
-                echo '<span class="ols-flag" style="font-size:' . absint( $s['flag_size'] ) . 'px">' . $flag . '</span>';
-            }
-            if ( $style_attr === 'codes' || $style_attr === 'flags_text' ) {
-                echo '<span class="ols-code">' . esc_html( strtoupper( $code ) ) . '</span>';
-            }
-            if ( $style_attr === 'names' ) {
-                echo '<span class="ols-name">' . esc_html( $lang['name'] ) . '</span>';
-            }
-            if ( ! empty( $s['show_label'] ) && $style_attr === 'flags' ) {
-                $label = $s['label_format'] === 'code' ? strtoupper( $code ) : $lang['name'];
-                echo '<span class="ols-label">' . esc_html( $label ) . '</span>';
-            }
+    /**
+     * Render as fixed tabs on page edge.
+     */
+    private function render_tabs( $languages, $current, $flags, $s, $wrapper_class, $css_vars ) {
+        $edge   = in_array( $s['tabs_edge'], [ 'top', 'left', 'right' ], true ) ? $s['tabs_edge'] : 'top';
+        $offset = max( 0, intval( $s['tabs_offset'] ) );
+        $t_size = $s['tabs_size'] ?? 'normal';
 
+        $uid = 'ols-tab-' . substr( md5( wp_json_encode( $s ) ), 0, 6 );
+
+        // Size multipliers
+        $pad_map  = [ 'tiny' => '3px 5px', 'small' => '5px 8px', 'normal' => '7px 12px' ];
+        $font_map = [ 'tiny' => '10px', 'small' => '12px', 'normal' => '14px' ];
+        $flag_sz  = [ 'tiny' => 14, 'small' => 18, 'normal' => absint( $s['flag_size'] ) ];
+        $pad      = $pad_map[ $t_size ] ?? $pad_map['normal'];
+        $font     = $font_map[ $t_size ] ?? $font_map['normal'];
+        $fsz      = $flag_sz[ $t_size ] ?? $flag_sz['normal'];
+
+        $bg_color     = $this->safe_color_css( $s['bg'] ) ?: '#ffffff';
+        $text_color   = $this->safe_color_css( $s['color'] ) ?: '#374151';
+        $active_bg    = $this->safe_color_css( $s['active_bg'] ) ?: '#6366F1';
+        $active_color = $this->safe_color_css( $s['active_color'] ) ?: '#ffffff';
+        $border_color = $this->safe_color_css( $s['border_color'] ) ?: 'transparent';
+
+        echo '<style>';
+        echo ".{$uid}{position:fixed;z-index:10050;display:flex;gap:2px;}";
+
+        if ( $edge === 'top' ) {
+            echo ".{$uid}{top:0;left:{$offset}px;flex-direction:row;}";
+            echo ".{$uid} .ols-tab{border-radius:0 0 6px 6px;border-top:none;}";
+        } elseif ( $edge === 'right' ) {
+            echo ".{$uid}{top:{$offset}px;right:0;flex-direction:column;}";
+            echo ".{$uid} .ols-tab{border-radius:6px 0 0 6px;border-right:none;}";
+        } else {
+            echo ".{$uid}{top:{$offset}px;left:0;flex-direction:column;}";
+            echo ".{$uid} .ols-tab{border-radius:0 6px 6px 0;border-left:none;}";
+        }
+
+        echo ".{$uid} .ols-tab{display:flex;align-items:center;justify-content:center;gap:3px;";
+        echo "padding:{$pad};font-size:{$font};font-weight:600;text-decoration:none;";
+        echo "background:{$bg_color};color:{$text_color};border:1px solid {$border_color};";
+        echo "transition:all .2s;cursor:pointer;}";
+
+        echo ".{$uid} .ols-tab:hover{opacity:.8;}";
+        echo ".{$uid} .ols-tab.ols-active{background:{$active_bg};color:{$active_color};border-color:{$active_bg};}";
+        echo ".{$uid} .ols-tab .ols-flag{font-size:{$fsz}px;line-height:1;}";
+
+        // Circle flags inside tabs
+        if ( $s['style'] === 'flags_circle' ) {
+            $csz = $t_size === 'tiny' ? 22 : ( $t_size === 'small' ? 28 : max( 24, intval( $s['circle_size'] ) ) );
+            $c_bg  = $this->safe_color_css( $s['circle_bg'] ?? '' ) ?: 'rgba(255,255,255,0.2)';
+            $c_brd = $this->safe_color_css( $s['circle_border'] ?? '' ) ?: 'rgba(255,255,255,0.3)';
+            echo ".{$uid} .ols-circle-flag{width:{$csz}px;height:{$csz}px;font-size:" . round( $csz * 0.55 ) . "px;";
+            echo "border-radius:50%;border:2px solid {$c_brd};background:{$c_bg};display:inline-flex;align-items:center;justify-content:center;line-height:1;}";
+        }
+
+        echo '</style>';
+
+        echo '<div class="' . esc_attr( $uid ) . '">';
+        foreach ( $languages as $lang ) {
+            $code   = $lang['code'];
+            $url    = Olo_Lang_Language::get_language_url( $code );
+            $active = $code === $current ? ' ols-active' : '';
+
+            echo '<a href="' . esc_url( $url ) . '" class="ols-tab' . $active . '" hreflang="' . esc_attr( $code ) . '" title="' . esc_attr( $lang['name'] ) . '">';
+            $this->render_item_content( $lang, $flags, $s );
             echo '</a>';
         }
         echo '</div>';
     }
 
     private function render_dropdown( $languages, $current, $flags, $s, $wrapper_class, $css_vars ) {
-        $style_attr   = $s['style'];
         $current_lang = null;
         foreach ( $languages as $lang ) {
             if ( $lang['code'] === $current ) {
@@ -136,53 +248,30 @@ class Olo_LangSwitcher_Tile extends Olo_Tile_Base {
             $current_lang = $languages[0];
         }
 
-        $flag = $flags[ $current_lang['code'] ] ?? '';
-
         echo '<div class="' . esc_attr( $wrapper_class ) . '" style="' . $css_vars . '">';
         echo '<div class="ols-dropdown">';
 
-        // Trigger button
         echo '<button type="button" class="ols-trigger">';
-        if ( $style_attr === 'flags' || $style_attr === 'flags_text' ) {
-            echo '<span class="ols-flag" style="font-size:' . absint( $s['flag_size'] ) . 'px">' . $flag . '</span>';
-        }
-        if ( $style_attr === 'codes' || $style_attr === 'flags_text' ) {
-            echo '<span class="ols-code">' . esc_html( strtoupper( $current_lang['code'] ) ) . '</span>';
-        }
-        if ( $style_attr === 'names' ) {
-            echo '<span class="ols-name">' . esc_html( $current_lang['name'] ) . '</span>';
-        }
+        $this->render_item_content( $current_lang, $flags, $s );
         if ( ! empty( $s['show_dropdown_arrow'] ) ) {
             echo '<svg class="ols-arrow" width="12" height="12" viewBox="0 0 12 12"><path d="M2 4l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>';
         }
         echo '</button>';
 
-        // Menu
         echo '<div class="ols-menu">';
         foreach ( $languages as $lang ) {
-            if ( $lang['code'] === $current ) {
-                continue;
-            }
+            if ( $lang['code'] === $current ) continue;
             $code = $lang['code'];
             $url  = Olo_Lang_Language::get_language_url( $code );
-            $f    = $flags[ $code ] ?? '';
 
             echo '<a href="' . esc_url( $url ) . '" class="ols-option" hreflang="' . esc_attr( $code ) . '">';
-            if ( $style_attr === 'flags' || $style_attr === 'flags_text' ) {
-                echo '<span class="ols-flag" style="font-size:' . absint( $s['flag_size'] ) . 'px">' . $f . '</span>';
-            }
-            if ( $style_attr !== 'flags' ) {
-                $label = $style_attr === 'names' ? $lang['name'] : strtoupper( $code );
-                echo '<span class="ols-name">' . esc_html( $label ) . '</span>';
-            }
+            $this->render_item_content( $lang, $flags, $s );
             echo '</a>';
         }
         echo '</div>';
-
         echo '</div>';
         echo '</div>';
 
-        // JS per aprire/chiudere il dropdown
         echo '<script>
         (function(){
             document.querySelectorAll(".ols-dropdown").forEach(function(el){

@@ -38,7 +38,7 @@
   width: var(--ls-input-height, 44px);
   height: var(--ls-input-height, 44px);
   border-radius: 50%;
-  border: 1px solid var(--ls-results-border, #e5e7eb);
+  border: 1px solid var(--ls-input-border-color, #e5e7eb);
   background: var(--ls-input-bg, #fff);
   color: var(--ls-icon-color, #9ca3af);
   cursor: pointer;
@@ -60,14 +60,14 @@
   display: flex;
   align-items: center;
   background: var(--ls-input-bg, #fff);
-  border: 1px solid var(--ls-results-border, #e5e7eb);
-  border-radius: 8px;
+  border: 1px solid var(--ls-input-border-color, #e5e7eb);
+  border-radius: var(--ls-input-radius, 8px);
   transition: box-shadow .2s, border-color .2s, width .3s ease, opacity .3s ease;
   overflow: hidden;
 }
 
 .olo-ls-field:focus-within {
-  border-color: #6366f1;
+  border-color: var(--ls-focus-border-color, #6366f1);
   box-shadow: 0 0 0 3px rgba(99,102,241,.15);
 }
 
@@ -161,7 +161,7 @@
   min-width: 280px;
   background: var(--ls-results-bg, #fff);
   border: 1px solid var(--ls-results-border, #e5e7eb);
-  border-radius: 10px;
+  border-radius: var(--ls-results-radius, 10px);
   box-shadow: 0 10px 25px -5px rgba(0,0,0,.12), 0 4px 10px -3px rgba(0,0,0,.08);
   overflow: hidden;
   opacity: 0;
@@ -326,6 +326,28 @@
 .olo-ls-total {
   font-weight: 400;
   opacity: .7;
+}
+
+/* ─── Loading state ─── */
+.olo-ls-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 14px;
+}
+
+.olo-ls-spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #e5e7eb;
+  border-top-color: #6366f1;
+  border-radius: 50%;
+  animation: olo-ls-spin .6s linear infinite;
+}
+
+@keyframes olo-ls-spin {
+  to { transform: rotate(360deg); }
 }
 
 /* ═══════════════════════════════════════════

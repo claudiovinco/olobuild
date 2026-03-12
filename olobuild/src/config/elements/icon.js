@@ -1,29 +1,56 @@
-import { borderFields, borderDefaults, shadowField } from './_shared.js';
+import { shadowField } from './_shared.js';
 
 export default {
   type: 'icon',
   name: 'Icona',
   icon: 'dashicons-star-filled',
-  category: 'content',
+  category: 'essential',
   defaults: {
     icon: 'star',
     size: 40,
     color: '',
+    view: 'default',
+    bg_color: '',
+    bg_shape: 'circle',
+    padding: '20',
+    hover_animation: 'none',
+    rotation: '0',
+    secondary_color: '',
     link_url: '',
     link_target: '_self',
     shadow: 'none',
-    ...borderDefaults,
   },
   fields: [
     { key: 'icon', label: 'Nome icona', type: 'icon' },
     { key: 'size', label: 'Dimensione (px)', type: 'range', min: 16, max: 120, step: 4 },
     { key: 'color', label: 'Colore', type: 'color' },
+    { key: 'view', label: 'Visualizzazione', type: 'select', options: [
+      { value: 'default', label: 'Solo icona' },
+      { value: 'stacked', label: 'Con sfondo' },
+      { value: 'framed', label: 'Cornice' },
+    ]},
+    { key: 'bg_color', label: 'Colore sfondo/cornice', type: 'color',
+      condition: { field: 'view', operator: '!=', value: 'default' } },
+    { key: 'bg_shape', label: 'Forma', type: 'select', options: [
+      { value: 'circle', label: 'Cerchio' },
+      { value: 'square', label: 'Quadrato' },
+      { value: 'rounded', label: 'Arrotondato' },
+    ]},
+    { key: 'padding', label: 'Padding (px)', type: 'range', min: 8, max: 60, step: 4 },
+    { key: 'hover_animation', label: 'Animazione hover', type: 'select', options: [
+      { value: 'none', label: 'Nessuna' },
+      { value: 'grow', label: 'Ingrandisci' },
+      { value: 'shake', label: 'Vibra' },
+      { value: 'bounce', label: 'Rimbalza' },
+      { value: 'spin', label: 'Ruota' },
+      { value: 'pulse', label: 'Pulsazione' },
+    ]},
+    { key: 'rotation', label: 'Rotazione (°)', type: 'range', min: -180, max: 180, step: 15 },
     { key: 'link_url', label: 'URL link', type: 'text' },
     { key: 'link_target', label: 'Apri in', type: 'select', options: [
       { value: '_self', label: 'Stessa finestra' },
       { value: '_blank', label: 'Nuova finestra' },
     ]},
-    shadowField,
-    ...borderFields,
+    ...shadowField,
   ],
 };

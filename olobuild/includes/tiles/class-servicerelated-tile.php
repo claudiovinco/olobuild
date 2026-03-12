@@ -61,7 +61,7 @@ class Olo_ServiceRelated_Tile extends Olo_Tile_Base {
         $s = wp_parse_args( $settings, $this->defaults );
 
         if ( ! post_type_exists( 'olo_service' ) ) {
-            return '<div style="padding:24px;text-align:center;color:#9ca3af;background:#f9fafb;border-radius:8px">'
+            return '<div style="padding:24px;text-align:center;color:var(--olo-color-text-muted, #9CA3AF);background:var(--olo-color-muted, #F3F4F6);border-radius:8px">'
                  . '<p style="margin:0">Plugin <strong>Olo Booking</strong> non attivo.</p></div>';
         }
 
@@ -87,9 +87,9 @@ class Olo_ServiceRelated_Tile extends Olo_Tile_Base {
         $heading = trim( $s['heading'] );
         if ( $heading ) {
             $h_size  = absint( $s['heading_size'] ) ?: 22;
-            $h_color = $this->safe_color( $s['heading_color'] ) ?: '#1f2937';
+            $h_color = $this->safe_color_css( $s['heading_color'] ) ?: 'var(--olo-color-text, #374151)';
             $h_align = in_array( $s['heading_align'], [ 'left', 'center', 'right' ] ) ? $s['heading_align'] : 'left';
-            echo '<h3 class="olo-sr-heading ' . esc_attr( $uid ) . '-h" style="font-size:' . $h_size . 'px;color:' . esc_attr( $h_color ) . ';text-align:' . $h_align . ';margin:0 0 16px">' . esc_html( $heading ) . '</h3>';
+            echo '<h3 class="olo-sr-heading ' . esc_attr( $uid ) . '-h" style="font-size:' . $h_size . 'px;color:' . $h_color . ';text-align:' . $h_align . ';margin:0 0 16px">' . esc_html( $heading ) . '</h3>';
         }
 
         if ( $layout === 'marquee' ) {
@@ -226,7 +226,7 @@ class Olo_ServiceRelated_Tile extends Olo_Tile_Base {
                     <?php if ( $svc['image'] ) : ?>
                         <img src="<?php echo esc_url( $svc['image'] ); ?>" alt="<?php echo esc_attr( $svc['title'] ); ?>" loading="lazy" />
                     <?php else : ?>
-                        <div class="olo-sr-img-ph" style="background:<?php echo esc_attr( $svc['color'] ); ?>20">&#127968;</div>
+                        <div class="olo-sr-img-ph" style="background:<?php echo $this->safe_color_css( $svc['color'] ); ?>20">&#127968;</div>
                     <?php endif; ?>
                 </div>
             <?php endif; ?>
@@ -296,7 +296,7 @@ class Olo_ServiceRelated_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .olo-sr-track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;-ms-overflow-style:none;scrollbar-width:none}
             .<?php echo $uid; ?> .olo-sr-track::-webkit-scrollbar{display:none}
             .<?php echo $uid; ?> .olo-sr-card{scroll-snap-align:start;flex:0 0 calc(33.333% - <?php echo round( $gap * 2 / 3 ); ?>px);min-width:260px}
-            .<?php echo $uid; ?> .olo-sr-arrow{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.9);border:1px solid #e5e7eb;box-shadow:0 2px 8px rgba(0,0,0,.1);cursor:pointer;font-size:22px;line-height:1;display:flex;align-items:center;justify-content:center;transition:opacity .2s;z-index:2}
+            .<?php echo $uid; ?> .olo-sr-arrow{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.9);border:1px solid var(--olo-color-border, #E5E7EB);box-shadow:0 2px 8px rgba(0,0,0,.1);cursor:pointer;font-size:22px;line-height:1;display:flex;align-items:center;justify-content:center;transition:opacity .2s;z-index:2}
             .<?php echo $uid; ?> .olo-sr-arrow:hover{background:#fff;box-shadow:0 4px 12px rgba(0,0,0,.15)}
             .<?php echo $uid; ?> .olo-sr-prev{left:8px}
             .<?php echo $uid; ?> .olo-sr-next{right:8px}
@@ -362,20 +362,20 @@ class Olo_ServiceRelated_Tile extends Olo_Tile_Base {
     /* ─── Shared Styles ─── */
 
     private function render_styles( $uid, $s ) {
-        $radius  = absint( $s['card_radius'] );
-        $bg      = $this->safe_color( $s['card_bg'] ) ?: '#fff';
+        $radius  = Olo_Tile_Utils::border_radius( $s['card_radius'] ?? 0 );
+        $bg      = $this->safe_color_css( $s['card_bg'] ) ?: 'var(--olo-color-background, #FFFFFF)';
         $shadow  = Olo_Tile_Utils::shadow( $s['card_shadow'] ?? 'none' );
         $hover   = $s['card_hover_effect'];
         $t_size  = absint( $s['title_size'] ) ?: 17;
-        $t_color = $this->safe_color( $s['title_color'] ) ?: '#1f2937';
-        $m_color = $this->safe_color( $s['meta_color'] ) ?: '#6B7280';
-        $p_color = $this->safe_color( $s['price_color'] ) ?: '#6366F1';
-        $btn_bg  = $this->safe_color( $s['btn_bg'] ) ?: '#6366F1';
-        $btn_c   = $this->safe_color( $s['btn_color'] ) ?: '#fff';
-        $btn_r   = absint( $s['btn_radius'] );
+        $t_color = $this->safe_color_css( $s['title_color'] ) ?: 'var(--olo-color-text, #374151)';
+        $m_color = $this->safe_color_css( $s['meta_color'] ) ?: 'var(--olo-color-text-muted, #9CA3AF)';
+        $p_color = $this->safe_color_css( $s['price_color'] ) ?: 'var(--olo-color-primary, #6366F1)';
+        $btn_bg  = $this->safe_color_css( $s['btn_bg'] ) ?: 'var(--olo-color-primary, #6366F1)';
+        $btn_c   = $this->safe_color_css( $s['btn_color'] ) ?: 'var(--olo-color-primary-contrast, #FFFFFF)';
+        $btn_r   = Olo_Tile_Utils::border_radius( $s['btn_radius'] ?? 0 );
         ?>
         <style>
-            .<?php echo $uid; ?>-card{display:block;text-decoration:none;color:inherit;background:<?php echo $bg; ?>;border-radius:<?php echo $radius; ?>px;box-shadow:<?php echo $shadow; ?>;overflow:hidden;transition:transform .3s ease,box-shadow .3s ease}
+            .<?php echo $uid; ?>-card{display:block;text-decoration:none;color:inherit;background:<?php echo $bg; ?>;border-radius:<?php echo $radius; ?>;box-shadow:<?php echo $shadow; ?>;overflow:hidden;transition:transform .3s ease,box-shadow .3s ease}
             <?php if ( $hover === 'lift' ) : ?>
             .<?php echo $uid; ?>-card:hover{transform:translateY(-6px);box-shadow:0 12px 28px rgba(0,0,0,.15)}
             <?php elseif ( $hover === 'scale' ) : ?>
@@ -383,17 +383,17 @@ class Olo_ServiceRelated_Tile extends Olo_Tile_Base {
             <?php elseif ( $hover === 'glow' ) : ?>
             .<?php echo $uid; ?>-card:hover{box-shadow:0 0 0 3px <?php echo $btn_bg; ?>44,0 8px 20px rgba(0,0,0,.1)}
             <?php endif; ?>
-            .<?php echo $uid; ?>-card .olo-sr-img{overflow:hidden;position:relative;background:#f3f4f6}
+            .<?php echo $uid; ?>-card .olo-sr-img{overflow:hidden;position:relative;background:var(--olo-color-muted, #F3F4F6)}
             .<?php echo $uid; ?>-card .olo-sr-img img{width:100%;height:100%;object-fit:cover;transition:transform .4s ease}
             .<?php echo $uid; ?>-card:hover .olo-sr-img img{transform:scale(1.06)}
-            .<?php echo $uid; ?>-card .olo-sr-img-ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:32px;color:#9ca3af}
+            .<?php echo $uid; ?>-card .olo-sr-img-ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:32px;color:var(--olo-color-text-muted, #9CA3AF)}
             .<?php echo $uid; ?>-card .olo-sr-body{padding:16px}
             .<?php echo $uid; ?>-card .olo-sr-title{font-size:<?php echo $t_size; ?>px;font-weight:600;color:<?php echo $t_color; ?>;margin:0 0 6px;line-height:1.3}
             .<?php echo $uid; ?>-card .olo-sr-meta{display:flex;flex-wrap:wrap;gap:8px;font-size:13px;color:<?php echo $m_color; ?>;margin-bottom:8px}
             .<?php echo $uid; ?>-card .olo-sr-price{font-size:16px;font-weight:700;color:<?php echo $p_color; ?>;margin-bottom:8px}
             .<?php echo $uid; ?>-card .olo-sr-price small{font-weight:400;font-size:12px;opacity:.7}
             .<?php echo $uid; ?>-card .olo-sr-mush{font-size:14px;margin-bottom:6px}
-            .<?php echo $uid; ?>-card .olo-sr-btn{display:inline-block;padding:8px 18px;background:<?php echo $btn_bg; ?>;color:<?php echo $btn_c; ?>;border-radius:<?php echo $btn_r; ?>px;font-size:13px;font-weight:600;transition:opacity .2s}
+            .<?php echo $uid; ?>-card .olo-sr-btn{display:inline-block;padding:8px 18px;background:<?php echo $btn_bg; ?>;color:<?php echo $btn_c; ?>;border-radius:<?php echo $btn_r; ?>;font-size:13px;font-weight:600;transition:opacity .2s}
             .<?php echo $uid; ?>-card:hover .olo-sr-btn{opacity:.85}
         </style>
         <?php

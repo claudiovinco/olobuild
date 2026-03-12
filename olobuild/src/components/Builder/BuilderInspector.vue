@@ -58,52 +58,108 @@
           </div>
 
           <template v-if="elementFields.length > 0 && elementDef?.customEditor !== 'proslider'">
-            <template v-for="(field, idx) in elementFields" :key="field.key || ('sep-' + idx)">
-             <template v-if="!field.condition || evaluateCondition(field.condition, selectedTile.settings)">
-              <!-- Content items editor (generic multi-item) -->
-              <div v-if="field.type === 'content-items' && selectedTile?.settings?.[field.key]">
-                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ field.label }}</label>
-                <ContentItemsEditor
-                  :modelValue="selectedTile.settings[field.key]"
-                  :itemFields="field.itemFields"
-                  :newItemDefaults="field.newItemDefaults || {}"
-                  :itemLabel="field.itemLabel || 'Item'"
-                  :tileId="selectedTile.id"
-                  :supportsDynamic="field.supportsDynamic || false"
-                  :dynamic="selectedTile.dynamic || {}"
-                  @update:modelValue="updateSetting(field.key, $event)"
-                  @update:dynamic-query="updateDynamicQuery"
-                  @update:dynamic-item-map="updateDynamicItemMap"
-                />
-              </div>
+            <template v-for="(section, sIdx) in groupedSections" :key="'sec-' + sIdx">
+              <!-- Section without label (fields before first separator) — always open -->
+              <template v-if="section.label === null">
+                <template v-for="(field, fIdx) in section.fields" :key="field.key || ('f-' + sIdx + '-' + fIdx)">
+                  <template v-if="isFieldVisible(field)">
+                    <div v-if="field.type === 'content-items'">
+                      <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ field.label }}</label>
+                      <ContentItemsEditor
+                        :modelValue="ensureContentItems(selectedTile, field)"
+                        :itemFields="field.itemFields"
+                        :newItemDefaults="field.newItemDefaults || {}"
+                        :itemLabel="field.itemLabel || 'Item'"
+                        :tileId="selectedTile.id"
+                        :tileSettings="selectedTile.settings || {}"
+                        :supportsDynamic="field.supportsDynamic || false"
+                        :dynamic="selectedTile.dynamic || {}"
+                        @update:modelValue="updateSetting(field.key, $event)"
+                        @update:dynamic-query="updateDynamicQuery"
+                        @update:dynamic-item-map="updateDynamicItemMap"
+                      />
+                    </div>
+                    <div v-else-if="field.key === 'custom_widths' && selectedTile.type === 'row'">
+                      <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ field.label }}</label>
+                      <input
+                        type="text"
+                        :value="customWidthsLocal"
+                        :placeholder="field.placeholder || ''"
+                        class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-sm mb-text-gray-900"
+                        @input="customWidthsLocal = $event.target.value"
+                        @focus="onCustomWidthsFocus"
+                        @keydown.enter="applyCustomWidthsFromInspector"
+                        @blur="applyCustomWidthsFromInspector"
+                      />
+                    </div>
+                    <InspectorField
+                      v-else
+                      :field="resolveField(field)"
+                      :modelValue="selectedTile.settings?.[field.key]"
+                      :tileSettings="selectedTile.settings || {}"
+                      :tileId="selectedTile.id"
+                      :dynamic="selectedTile.dynamic || {}"
+                      @update:modelValue="updateSetting(field.key, $event)"
+                      @update:responsiveValue="updateSetting($event.key, $event.value)"
+                      @update:attachmentId="updateSetting(field.key + '_id', $event)"
+                      @update:dynamic="onDynamicFieldUpdate"
+                    />
+                  </template>
+                </template>
+              </template>
 
-              <!-- Custom widths: local input, apply only on Enter/blur -->
-              <div v-else-if="field.key === 'custom_widths' && selectedTile.type === 'row'">
-                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ field.label }}</label>
-                <input
-                  type="text"
-                  :value="customWidthsLocal"
-                  :placeholder="field.placeholder || ''"
-                  class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-sm mb-text-gray-900"
-                  @input="customWidthsLocal = $event.target.value"
-                  @focus="onCustomWidthsFocus"
-                  @keydown.enter="applyCustomWidthsFromInspector"
-                  @blur="applyCustomWidthsFromInspector"
-                />
-              </div>
-
-              <!-- Standard fields via InspectorField -->
-              <InspectorField
-                v-else
-                :field="field"
-                :modelValue="selectedTile.settings?.[field.key]"
-                :tileId="selectedTile.id"
-                :dynamic="selectedTile.dynamic || {}"
-                @update:modelValue="updateSetting(field.key, $event)"
-                @update:attachmentId="updateSetting(field.key + '_id', $event)"
-                @update:dynamic="onDynamicFieldUpdate"
-              />
-             </template>
+              <!-- Named section — collapsible, hidden if no visible fields -->
+              <CollapseSection
+                v-else-if="sectionHasVisibleFields(section)"
+                :title="section.label"
+                :defaultOpen="sIdx <= 1"
+              >
+                <template v-for="(field, fIdx) in section.fields" :key="field.key || ('f-' + sIdx + '-' + fIdx)">
+                  <template v-if="isFieldVisible(field)">
+                    <div v-if="field.type === 'content-items'">
+                      <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ field.label }}</label>
+                      <ContentItemsEditor
+                        :modelValue="ensureContentItems(selectedTile, field)"
+                        :itemFields="field.itemFields"
+                        :newItemDefaults="field.newItemDefaults || {}"
+                        :itemLabel="field.itemLabel || 'Item'"
+                        :tileId="selectedTile.id"
+                        :tileSettings="selectedTile.settings || {}"
+                        :supportsDynamic="field.supportsDynamic || false"
+                        :dynamic="selectedTile.dynamic || {}"
+                        @update:modelValue="updateSetting(field.key, $event)"
+                        @update:dynamic-query="updateDynamicQuery"
+                        @update:dynamic-item-map="updateDynamicItemMap"
+                      />
+                    </div>
+                    <div v-else-if="field.key === 'custom_widths' && selectedTile.type === 'row'">
+                      <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ field.label }}</label>
+                      <input
+                        type="text"
+                        :value="customWidthsLocal"
+                        :placeholder="field.placeholder || ''"
+                        class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-sm mb-text-gray-900"
+                        @input="customWidthsLocal = $event.target.value"
+                        @focus="onCustomWidthsFocus"
+                        @keydown.enter="applyCustomWidthsFromInspector"
+                        @blur="applyCustomWidthsFromInspector"
+                      />
+                    </div>
+                    <InspectorField
+                      v-else
+                      :field="resolveField(field)"
+                      :modelValue="selectedTile.settings?.[field.key]"
+                      :tileSettings="selectedTile.settings || {}"
+                      :tileId="selectedTile.id"
+                      :dynamic="selectedTile.dynamic || {}"
+                      @update:modelValue="updateSetting(field.key, $event)"
+                      @update:responsiveValue="updateSetting($event.key, $event.value)"
+                      @update:attachmentId="updateSetting(field.key + '_id', $event)"
+                      @update:dynamic="onDynamicFieldUpdate"
+                    />
+                  </template>
+                </template>
+              </CollapseSection>
             </template>
           </template>
 
@@ -187,37 +243,21 @@
           <!-- Margin -->
           <div>
             <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300 mb-mb-2">Margine (px) <span v-if="spacingBp !== 'desktop'" class="mb-text-amber-400 mb-text-[10px]">{{ spacingBpLabel }}</span></label>
-            <div class="mb-grid mb-grid-cols-2 mb-gap-2">
-              <div v-for="side in sides" :key="'m-' + side">
-                <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">{{ side }}</label>
-                <input
-                  type="number"
-                  :value="tileStyle[spacingKey('margin_' + side)] || 0"
-                  @input="updateStyle(spacingKey('margin_' + side), $event.target.value)"
-                  class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1 mb-text-sm mb-text-gray-900"
-                  min="0" max="200" step="4"
-                  :placeholder="spacingBp !== 'desktop' ? 'Eredita' : ''"
-                />
-              </div>
-            </div>
+            <FieldSpacing
+              :modelValue="marginObj"
+              @update:modelValue="onMarginUpdate"
+              :max="200"
+            />
           </div>
 
           <!-- Padding -->
           <div>
             <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300 mb-mb-2">Padding (px) <span v-if="spacingBp !== 'desktop'" class="mb-text-amber-400 mb-text-[10px]">{{ spacingBpLabel }}</span></label>
-            <div class="mb-grid mb-grid-cols-2 mb-gap-2">
-              <div v-for="side in sides" :key="'p-' + side">
-                <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">{{ side }}</label>
-                <input
-                  type="number"
-                  :value="tileStyle[spacingKey('padding_' + side)] || 0"
-                  @input="updateStyle(spacingKey('padding_' + side), $event.target.value)"
-                  class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1 mb-text-sm mb-text-gray-900"
-                  min="0" max="200" step="4"
-                  :placeholder="spacingBp !== 'desktop' ? 'Eredita' : ''"
-                />
-              </div>
-            </div>
+            <FieldSpacing
+              :modelValue="paddingObj"
+              @update:modelValue="onPaddingUpdate"
+              :max="200"
+            />
           </div>
 
           <!-- Background -->
@@ -260,6 +300,11 @@
                   <option value="solid">Continuo</option>
                   <option value="dashed">Tratteggiato</option>
                   <option value="dotted">Punteggiato</option>
+                  <option value="double">Doppio</option>
+                  <option value="groove">Incasso</option>
+                  <option value="ridge">Rilievo</option>
+                  <option value="inset">Inset</option>
+                  <option value="outset">Outset</option>
                   <option value="none">Nessuno</option>
                 </select>
               </div>
@@ -293,7 +338,14 @@
               <option value="md">Media</option>
               <option value="lg">Grande</option>
               <option value="xl">Extra grande</option>
+              <option value="custom">Personalizzata</option>
             </select>
+            <FieldBoxShadow
+              v-if="tileStyle.shadow === 'custom'"
+              :modelValue="tileStyle.shadow_custom || {}"
+              @update:modelValue="updateStyle('shadow_custom', $event)"
+              class="mb-mt-2"
+            />
           </div>
 
           <!-- Opacity -->
@@ -309,6 +361,100 @@
               />
               <span class="mb-text-xs mb-text-gray-400 mb-w-10 mb-text-right">{{ tileStyle.opacity || 100 }}%</span>
             </div>
+          </div>
+
+          <!-- Transform -->
+          <div>
+            <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300 mb-mb-2">Trasformazione</label>
+            <FieldTransform
+              :modelValue="tileStyle.transform || {}"
+              @update:modelValue="updateStyle('transform', $event)"
+            />
+          </div>
+
+          <!-- Text Shadow -->
+          <div>
+            <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300 mb-mb-2">Ombra testo</label>
+            <div class="mb-flex mb-gap-2">
+              <div class="mb-flex-1">
+                <label class="mb-text-[10px] mb-text-gray-400">H</label>
+                <input type="number" :value="tileStyle.text_shadow_h || 0" @input="updateStyle('text_shadow_h', parseInt($event.target.value))"
+                  class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded mb-px-2 mb-py-1 mb-text-xs mb-text-gray-900" />
+              </div>
+              <div class="mb-flex-1">
+                <label class="mb-text-[10px] mb-text-gray-400">V</label>
+                <input type="number" :value="tileStyle.text_shadow_v || 0" @input="updateStyle('text_shadow_v', parseInt($event.target.value))"
+                  class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded mb-px-2 mb-py-1 mb-text-xs mb-text-gray-900" />
+              </div>
+              <div class="mb-flex-1">
+                <label class="mb-text-[10px] mb-text-gray-400">Blur</label>
+                <input type="number" :value="tileStyle.text_shadow_blur || 0" @input="updateStyle('text_shadow_blur', parseInt($event.target.value))" min="0"
+                  class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded mb-px-2 mb-py-1 mb-text-xs mb-text-gray-900" />
+              </div>
+              <div class="mb-shrink-0">
+                <label class="mb-text-[10px] mb-text-gray-400">Colore</label>
+                <input type="color" :value="tileStyle.text_shadow_color || '#000000'" @input="updateStyle('text_shadow_color', $event.target.value)"
+                  class="mb-w-8 mb-h-7 mb-rounded mb-border-0 mb-cursor-pointer" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Backdrop Filter -->
+          <div>
+            <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300 mb-mb-2">Filtro sfondo (glassmorphism)</label>
+            <div class="mb-space-y-2">
+              <div class="mb-flex mb-items-center mb-gap-2">
+                <label class="mb-text-[10px] mb-text-gray-400 mb-w-16">Blur</label>
+                <input type="range" :value="tileStyle.backdrop_blur || 0" @input="updateStyle('backdrop_blur', parseInt($event.target.value))" min="0" max="30"
+                  class="mb-flex-1" />
+                <span class="mb-text-xs mb-text-gray-400 mb-w-10 mb-text-right">{{ tileStyle.backdrop_blur || 0 }}px</span>
+              </div>
+              <div class="mb-flex mb-items-center mb-gap-2">
+                <label class="mb-text-[10px] mb-text-gray-400 mb-w-16">Luminosità</label>
+                <input type="range" :value="tileStyle.backdrop_brightness || 100" @input="updateStyle('backdrop_brightness', parseInt($event.target.value))" min="0" max="200" step="5"
+                  class="mb-flex-1" />
+                <span class="mb-text-xs mb-text-gray-400 mb-w-10 mb-text-right">{{ tileStyle.backdrop_brightness || 100 }}%</span>
+              </div>
+              <div class="mb-flex mb-items-center mb-gap-2">
+                <label class="mb-text-[10px] mb-text-gray-400 mb-w-16">Saturazione</label>
+                <input type="range" :value="tileStyle.backdrop_saturate || 100" @input="updateStyle('backdrop_saturate', parseInt($event.target.value))" min="0" max="200" step="5"
+                  class="mb-flex-1" />
+                <span class="mb-text-xs mb-text-gray-400 mb-w-10 mb-text-right">{{ tileStyle.backdrop_saturate || 100 }}%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Overflow -->
+          <div>
+            <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300 mb-mb-2">Overflow</label>
+            <select
+              :value="tileStyle.overflow || 'visible'"
+              @change="updateStyle('overflow', $event.target.value)"
+              class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-sm mb-text-gray-900"
+            >
+              <option value="visible">Visibile</option>
+              <option value="hidden">Nascosto</option>
+              <option value="auto">Auto (scroll)</option>
+            </select>
+          </div>
+
+          <!-- Mask -->
+          <div>
+            <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300 mb-mb-2">Maschera</label>
+            <select
+              :value="tileStyle.mask || 'none'"
+              @change="updateStyle('mask', $event.target.value)"
+              class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-sm mb-text-gray-900"
+            >
+              <option value="none">Nessuna</option>
+              <option value="circle">Cerchio</option>
+              <option value="triangle">Triangolo</option>
+              <option value="diamond">Diamante</option>
+              <option value="hexagon">Esagono</option>
+              <option value="star">Stella</option>
+              <option value="blob">Blob</option>
+              <option value="wave">Onda</option>
+            </select>
           </div>
           </template>
 
@@ -331,6 +477,29 @@
                 type="text"
                 :value="tileHover.bg_color || ''"
                 @change="updateHover('bg_color', $event.target.value)"
+                placeholder="Nessun override"
+                class="mb-flex-1 mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1 mb-text-sm mb-text-gray-900"
+              />
+            </div>
+          </div>
+
+          <!-- Text Color -->
+          <div>
+            <div class="mb-flex mb-items-center mb-justify-between mb-mb-1">
+              <label class="mb-text-xs mb-font-semibold mb-text-gray-300">Colore testo</label>
+              <button v-if="tileHover.text_color" @click="resetHover('text_color')" class="mb-text-gray-500 hover:mb-text-gray-300 mb-text-xs" title="Ripristina">&times;</button>
+            </div>
+            <div class="mb-flex mb-gap-2">
+              <input
+                type="color"
+                :value="tileHover.text_color || '#000000'"
+                @input="updateHover('text_color', $event.target.value)"
+                class="mb-w-8 mb-h-8 mb-rounded mb-cursor-pointer mb-border-0"
+              />
+              <input
+                type="text"
+                :value="tileHover.text_color || ''"
+                @change="updateHover('text_color', $event.target.value)"
                 placeholder="Nessun override"
                 class="mb-flex-1 mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1 mb-text-sm mb-text-gray-900"
               />
@@ -377,7 +546,14 @@
               <option value="md">Media</option>
               <option value="lg">Grande</option>
               <option value="xl">Extra grande</option>
+              <option value="custom">Personalizzata</option>
             </select>
+            <FieldBoxShadow
+              v-if="tileHover.shadow === 'custom'"
+              :modelValue="tileHover.shadow_custom || {}"
+              @update:modelValue="updateHover('shadow_custom', $event)"
+              class="mb-mt-2"
+            />
           </div>
 
           <!-- Opacity -->
@@ -449,6 +625,151 @@
                 class="mb-flex-1"
               />
               <span class="mb-text-xs mb-text-gray-400 mb-w-10 mb-text-right">{{ tileHover.transform_rotate ?? '-' }}&deg;</span>
+            </div>
+          </div>
+
+          <!-- Transform TranslateX -->
+          <div>
+            <div class="mb-flex mb-items-center mb-justify-between mb-mb-1">
+              <label class="mb-text-xs mb-font-semibold mb-text-gray-300">Traslazione X (px)</label>
+              <button v-if="tileHover.transform_translateX != null" @click="resetHover('transform_translateX')" class="mb-text-gray-500 hover:mb-text-gray-300 mb-text-xs" title="Ripristina">&times;</button>
+            </div>
+            <div class="mb-flex mb-items-center mb-gap-2">
+              <input
+                type="range"
+                :value="tileHover.transform_translateX ?? 0"
+                @input="updateHover('transform_translateX', parseInt($event.target.value))"
+                min="-50" max="50" step="1"
+                class="mb-flex-1"
+              />
+              <span class="mb-text-xs mb-text-gray-400 mb-w-10 mb-text-right">{{ tileHover.transform_translateX ?? '-' }}px</span>
+            </div>
+          </div>
+
+          <!-- Transform SkewX/Y -->
+          <div>
+            <div class="mb-flex mb-items-center mb-justify-between mb-mb-1">
+              <label class="mb-text-xs mb-font-semibold mb-text-gray-300">Skew (deg)</label>
+            </div>
+            <div class="mb-flex mb-gap-2">
+              <div class="mb-flex-1">
+                <label class="mb-text-[10px] mb-text-gray-400">X</label>
+                <div class="mb-flex mb-items-center mb-gap-1">
+                  <input type="number" :value="tileHover.transform_skewX ?? 0" @input="updateHover('transform_skewX', parseInt($event.target.value))" min="-45" max="45"
+                    class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded mb-px-2 mb-py-1 mb-text-xs mb-text-gray-900" />
+                </div>
+              </div>
+              <div class="mb-flex-1">
+                <label class="mb-text-[10px] mb-text-gray-400">Y</label>
+                <div class="mb-flex mb-items-center mb-gap-1">
+                  <input type="number" :value="tileHover.transform_skewY ?? 0" @input="updateHover('transform_skewY', parseInt($event.target.value))" min="-45" max="45"
+                    class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded mb-px-2 mb-py-1 mb-text-xs mb-text-gray-900" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hover Text Shadow -->
+          <div>
+            <div class="mb-flex mb-items-center mb-justify-between mb-mb-1">
+              <label class="mb-text-xs mb-font-semibold mb-text-gray-300">Ombra testo</label>
+              <button v-if="tileHover.text_shadow_h != null" @click="resetHover('text_shadow_h'); resetHover('text_shadow_v'); resetHover('text_shadow_blur'); resetHover('text_shadow_color')" class="mb-text-gray-500 hover:mb-text-gray-300 mb-text-xs" title="Ripristina">&times;</button>
+            </div>
+            <div class="mb-flex mb-gap-2">
+              <div class="mb-flex-1">
+                <label class="mb-text-[10px] mb-text-gray-400">H</label>
+                <input type="number" :value="tileHover.text_shadow_h ?? ''" @input="updateHover('text_shadow_h', parseInt($event.target.value))"
+                  placeholder="-" class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded mb-px-2 mb-py-1 mb-text-xs mb-text-gray-900" />
+              </div>
+              <div class="mb-flex-1">
+                <label class="mb-text-[10px] mb-text-gray-400">V</label>
+                <input type="number" :value="tileHover.text_shadow_v ?? ''" @input="updateHover('text_shadow_v', parseInt($event.target.value))"
+                  placeholder="-" class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded mb-px-2 mb-py-1 mb-text-xs mb-text-gray-900" />
+              </div>
+              <div class="mb-flex-1">
+                <label class="mb-text-[10px] mb-text-gray-400">Blur</label>
+                <input type="number" :value="tileHover.text_shadow_blur ?? ''" @input="updateHover('text_shadow_blur', parseInt($event.target.value))" min="0"
+                  placeholder="-" class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded mb-px-2 mb-py-1 mb-text-xs mb-text-gray-900" />
+              </div>
+              <div class="mb-shrink-0">
+                <label class="mb-text-[10px] mb-text-gray-400">Colore</label>
+                <input type="color" :value="tileHover.text_shadow_color || '#000000'" @input="updateHover('text_shadow_color', $event.target.value)"
+                  class="mb-w-8 mb-h-7 mb-rounded mb-border-0 mb-cursor-pointer" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Border Radius -->
+          <div>
+            <div class="mb-flex mb-items-center mb-justify-between mb-mb-1">
+              <label class="mb-text-xs mb-font-semibold mb-text-gray-300">Border radius</label>
+              <button v-if="tileHover.border_radius != null" @click="resetHover('border_radius')" class="mb-text-gray-500 hover:mb-text-gray-300 mb-text-xs" title="Ripristina">&times;</button>
+            </div>
+            <FieldBorderRadius
+              :modelValue="tileHover.border_radius ?? ''"
+              @update:modelValue="updateHover('border_radius', $event)"
+            />
+          </div>
+
+          <!-- CSS Filters -->
+          <div>
+            <div class="mb-flex mb-items-center mb-justify-between mb-mb-1">
+              <label class="mb-text-xs mb-font-semibold mb-text-gray-300">Filtri CSS</label>
+              <button v-if="tileHover.filter_blur != null || tileHover.filter_brightness != null || tileHover.filter_saturate != null || tileHover.filter_contrast != null || tileHover.filter_grayscale != null || tileHover.filter_sepia != null"
+                @click="resetHover('filter_blur'); resetHover('filter_brightness'); resetHover('filter_saturate'); resetHover('filter_contrast'); resetHover('filter_grayscale'); resetHover('filter_sepia')"
+                class="mb-text-gray-500 hover:mb-text-gray-300 mb-text-xs" title="Ripristina">&times;</button>
+            </div>
+            <div class="mb-space-y-2">
+              <div class="mb-flex mb-items-center mb-gap-2">
+                <label class="mb-text-[10px] mb-text-gray-400 mb-w-16">Blur</label>
+                <input type="range" :value="tileHover.filter_blur ?? 0" @input="updateHover('filter_blur', parseInt($event.target.value))" min="0" max="20"
+                  class="mb-flex-1" />
+                <span class="mb-text-xs mb-text-gray-400 mb-w-10 mb-text-right">{{ tileHover.filter_blur ?? '-' }}px</span>
+              </div>
+              <div class="mb-flex mb-items-center mb-gap-2">
+                <label class="mb-text-[10px] mb-text-gray-400 mb-w-16">Luminosità</label>
+                <input type="range" :value="tileHover.filter_brightness ?? 100" @input="updateHover('filter_brightness', parseInt($event.target.value))" min="0" max="200" step="5"
+                  class="mb-flex-1" />
+                <span class="mb-text-xs mb-text-gray-400 mb-w-10 mb-text-right">{{ tileHover.filter_brightness ?? '-' }}%</span>
+              </div>
+              <div class="mb-flex mb-items-center mb-gap-2">
+                <label class="mb-text-[10px] mb-text-gray-400 mb-w-16">Contrasto</label>
+                <input type="range" :value="tileHover.filter_contrast ?? 100" @input="updateHover('filter_contrast', parseInt($event.target.value))" min="0" max="200" step="5"
+                  class="mb-flex-1" />
+                <span class="mb-text-xs mb-text-gray-400 mb-w-10 mb-text-right">{{ tileHover.filter_contrast ?? '-' }}%</span>
+              </div>
+              <div class="mb-flex mb-items-center mb-gap-2">
+                <label class="mb-text-[10px] mb-text-gray-400 mb-w-16">Saturazione</label>
+                <input type="range" :value="tileHover.filter_saturate ?? 100" @input="updateHover('filter_saturate', parseInt($event.target.value))" min="0" max="200" step="5"
+                  class="mb-flex-1" />
+                <span class="mb-text-xs mb-text-gray-400 mb-w-10 mb-text-right">{{ tileHover.filter_saturate ?? '-' }}%</span>
+              </div>
+              <div class="mb-flex mb-items-center mb-gap-2">
+                <label class="mb-text-[10px] mb-text-gray-400 mb-w-16">Scala grigi</label>
+                <input type="range" :value="tileHover.filter_grayscale ?? 0" @input="updateHover('filter_grayscale', parseInt($event.target.value))" min="0" max="100"
+                  class="mb-flex-1" />
+                <span class="mb-text-xs mb-text-gray-400 mb-w-10 mb-text-right">{{ tileHover.filter_grayscale ?? '-' }}%</span>
+              </div>
+              <div class="mb-flex mb-items-center mb-gap-2">
+                <label class="mb-text-[10px] mb-text-gray-400 mb-w-16">Seppia</label>
+                <input type="range" :value="tileHover.filter_sepia ?? 0" @input="updateHover('filter_sepia', parseInt($event.target.value))" min="0" max="100"
+                  class="mb-flex-1" />
+                <span class="mb-text-xs mb-text-gray-400 mb-w-10 mb-text-right">{{ tileHover.filter_sepia ?? '-' }}%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hover Backdrop Filter -->
+          <div>
+            <div class="mb-flex mb-items-center mb-justify-between mb-mb-1">
+              <label class="mb-text-xs mb-font-semibold mb-text-gray-300">Filtro sfondo</label>
+              <button v-if="tileHover.backdrop_blur != null" @click="resetHover('backdrop_blur')" class="mb-text-gray-500 hover:mb-text-gray-300 mb-text-xs" title="Ripristina">&times;</button>
+            </div>
+            <div class="mb-flex mb-items-center mb-gap-2">
+              <label class="mb-text-[10px] mb-text-gray-400 mb-w-10">Blur</label>
+              <input type="range" :value="tileHover.backdrop_blur ?? 0" @input="updateHover('backdrop_blur', parseInt($event.target.value))" min="0" max="30"
+                class="mb-flex-1" />
+              <span class="mb-text-xs mb-text-gray-400 mb-w-10 mb-text-right">{{ tileHover.backdrop_blur ?? '-' }}px</span>
             </div>
           </div>
 
@@ -620,6 +941,228 @@
             </div>
           </CollapseSection>
 
+          <!-- A/B Testing -->
+          <CollapseSection title="A/B Testing">
+            <div class="mb-space-y-3">
+              <!-- Loading -->
+              <div v-if="abLoading" class="mb-text-xs mb-text-gray-400 mb-text-center mb-py-2">Caricamento...</div>
+
+              <!-- No test: create button -->
+              <template v-else-if="!abTest">
+                <button
+                  @click="createAbTest"
+                  class="mb-w-full mb-bg-primary-600 mb-text-white mb-text-xs mb-font-medium mb-py-2 mb-px-3 mb-rounded-md hover:mb-bg-primary-700 mb-transition-colors"
+                >Crea test A/B</button>
+                <p class="mb-text-[10px] mb-text-gray-500">Confronta due varianti di questa tile per scoprire quale converte meglio.</p>
+              </template>
+
+              <!-- Test exists -->
+              <template v-else>
+                <!-- Name -->
+                <div>
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Nome test</label>
+                  <input
+                    type="text"
+                    :value="abTest.name"
+                    @change="updateAbField('name', $event.target.value)"
+                    :disabled="abTest.status === 'running'"
+                    class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-sm mb-text-gray-900"
+                  />
+                </div>
+
+                <!-- Status badge -->
+                <div class="mb-flex mb-items-center mb-gap-2">
+                  <span
+                    :class="[
+                      'mb-text-[10px] mb-font-bold mb-uppercase mb-px-2 mb-py-0.5 mb-rounded-full',
+                      abTest.status === 'running' ? 'mb-bg-green-100 mb-text-green-700' :
+                      abTest.status === 'stopped' ? 'mb-bg-red-100 mb-text-red-700' :
+                      'mb-bg-gray-100 mb-text-gray-600'
+                    ]"
+                  >{{ abTest.status === 'running' ? 'Attivo' : abTest.status === 'stopped' ? 'Fermato' : 'Bozza' }}</span>
+                </div>
+
+                <!-- Variant B overrides (only in draft) -->
+                <template v-if="abTest.status === 'draft'">
+                  <div>
+                    <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Variante B — proprietà da modificare</label>
+                    <div v-for="(val, key) in abVariantB" :key="key" class="mb-flex mb-items-center mb-gap-1 mb-mb-2">
+                      <span class="mb-text-[10px] mb-text-gray-300 mb-w-20 mb-truncate" :title="key">{{ abFieldLabel(key) }}</span>
+                      <input
+                        type="text"
+                        :value="val"
+                        @change="setAbOverride(key, $event.target.value)"
+                        class="mb-flex-1 mb-bg-white mb-border mb-border-gray-300 mb-rounded mb-px-1.5 mb-py-1 mb-text-xs mb-text-gray-900"
+                      />
+                      <button @click="removeAbOverride(key)" class="mb-text-red-400 hover:mb-text-red-300 mb-text-xs mb-px-1">x</button>
+                    </div>
+                    <select
+                      @change="addAbOverride($event.target.value); $event.target.value = ''"
+                      class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-xs mb-text-gray-500"
+                    >
+                      <option value="">+ Aggiungi proprietà...</option>
+                      <option v-for="f in abAvailableFields" :key="f.key" :value="f.key">{{ f.label }}</option>
+                    </select>
+                  </div>
+
+                  <!-- Goal type -->
+                  <div>
+                    <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Obiettivo conversione</label>
+                    <select
+                      :value="abTest.goal_type || 'click'"
+                      @change="updateAbField('goal_type', $event.target.value)"
+                      class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-sm mb-text-gray-900"
+                    >
+                      <option value="click">Click sulla tile</option>
+                      <option value="submit">Invio form</option>
+                    </select>
+                  </div>
+
+                  <!-- Goal selector (optional) -->
+                  <div>
+                    <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Selettore CSS obiettivo (opzionale)</label>
+                    <input
+                      type="text"
+                      :value="abTest.goal_selector || ''"
+                      @change="updateAbField('goal_selector', $event.target.value)"
+                      placeholder="es. .my-button, a.cta"
+                      class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-xs mb-text-gray-900"
+                    />
+                  </div>
+                </template>
+
+                <!-- Stats (running or stopped) -->
+                <template v-if="abTest.status === 'running' || abTest.status === 'stopped'">
+                  <div v-if="abStats" class="mb-space-y-2">
+                    <div class="mb-grid mb-grid-cols-2 mb-gap-2">
+                      <div class="mb-bg-gray-50 mb-rounded-lg mb-p-2 mb-text-center">
+                        <div class="mb-text-[10px] mb-text-gray-500 mb-uppercase mb-font-bold">Variante A</div>
+                        <div class="mb-text-lg mb-font-bold mb-text-gray-800">{{ abStats.variant_a?.conversion_rate || 0 }}%</div>
+                        <div class="mb-text-[10px] mb-text-gray-400">{{ abStats.variant_a?.views || 0 }} visite · {{ abStats.variant_a?.conversions || 0 }} conv.</div>
+                      </div>
+                      <div class="mb-bg-gray-50 mb-rounded-lg mb-p-2 mb-text-center">
+                        <div class="mb-text-[10px] mb-text-gray-500 mb-uppercase mb-font-bold">Variante B</div>
+                        <div class="mb-text-lg mb-font-bold mb-text-gray-800">{{ abStats.variant_b?.conversion_rate || 0 }}%</div>
+                        <div class="mb-text-[10px] mb-text-gray-400">{{ abStats.variant_b?.views || 0 }} visite · {{ abStats.variant_b?.conversions || 0 }} conv.</div>
+                      </div>
+                    </div>
+                    <div v-if="abStats.significant" class="mb-text-[10px] mb-font-bold mb-text-center mb-py-1 mb-rounded mb-bg-green-50 mb-text-green-700">
+                      Significativo (p={{ abStats.p_value }}) — Vincitore: {{ abStats.winner === 'a' ? 'A (originale)' : 'B (variante)' }}
+                    </div>
+                    <div v-else class="mb-text-[10px] mb-text-center mb-text-gray-400">
+                      Non ancora significativo{{ abStats.p_value ? ' (p=' + abStats.p_value + ')' : '' }} — servono più dati
+                    </div>
+                  </div>
+                </template>
+
+                <!-- Action buttons -->
+                <div class="mb-flex mb-gap-2 mb-mt-2">
+                  <button
+                    v-if="abTest.status === 'draft'"
+                    @click="startAbTest"
+                    :disabled="Object.keys(abVariantB).length === 0"
+                    class="mb-flex-1 mb-bg-green-600 mb-text-white mb-text-xs mb-font-medium mb-py-1.5 mb-px-2 mb-rounded-md hover:mb-bg-green-700 disabled:mb-opacity-40 mb-transition-colors"
+                  >Avvia test</button>
+                  <button
+                    v-if="abTest.status === 'running'"
+                    @click="stopAbTest"
+                    class="mb-flex-1 mb-bg-yellow-600 mb-text-white mb-text-xs mb-font-medium mb-py-1.5 mb-px-2 mb-rounded-md hover:mb-bg-yellow-700 mb-transition-colors"
+                  >Ferma test</button>
+                  <button
+                    @click="deleteAbTest"
+                    class="mb-bg-red-600 mb-text-white mb-text-xs mb-font-medium mb-py-1.5 mb-px-2 mb-rounded-md hover:mb-bg-red-700 mb-transition-colors"
+                  >Elimina</button>
+                </div>
+              </template>
+            </div>
+          </CollapseSection>
+
+          <!-- Entrance Animation (olo-entrance-*) -->
+          <CollapseSection title="Animazione di ingresso">
+            <div class="mb-space-y-3">
+              <div>
+                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Animazione</label>
+                <select
+                  :value="selectedTile?.settings?.entrance_animation || 'none'"
+                  @change="updateSetting('entrance_animation', $event.target.value)"
+                  class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-sm mb-text-gray-900"
+                >
+                  <option value="none">Nessuna</option>
+                  <option value="fade">Dissolvenza</option>
+                  <option value="slide-up">Scorrimento dal basso</option>
+                  <option value="slide-left">Scorrimento da sinistra</option>
+                  <option value="slide-right">Scorrimento da destra</option>
+                  <option value="slide-down">Scorrimento dall'alto</option>
+                  <option value="zoom-in">Zoom in</option>
+                  <option value="zoom-out">Zoom out</option>
+                  <option value="flip">Flip</option>
+                  <option value="rotate-in">Rotazione oraria</option>
+                  <option value="rotate-ccw">Rotazione antioraria</option>
+                  <option value="bounce">Rimbalzo</option>
+                  <option value="elastic">Elastico</option>
+                  <option value="blur-in">Sfocatura</option>
+                  <option value="swing">Oscillazione</option>
+                  <option value="rubber">Gomma</option>
+                  <option value="jello">Gelatina</option>
+                  <option value="back-in-left">Ritorno da sinistra</option>
+                  <option value="back-in-right">Ritorno da destra</option>
+                  <option value="typewriter">Macchina da scrivere</option>
+                  <option value="fade-up-big">Grande dissolvenza dal basso</option>
+                  <option value="fade-down-big">Grande dissolvenza dall'alto</option>
+                  <option value="lightspeed-left">Velocità luce da sinistra</option>
+                  <option value="lightspeed-right">Velocità luce da destra</option>
+                  <option value="roll-in">Rotolamento in entrata</option>
+                  <option value="jack-in-box">Scatola sorpresa</option>
+                  <option value="hinge">Cardine che cade</option>
+                  <option value="flip-y">Capovolgimento asse Y</option>
+                  <option value="flip-x">Capovolgimento asse X</option>
+                  <option value="zoom-in-down">Zoom + discesa</option>
+                  <option value="zoom-in-up">Zoom + salita</option>
+                  <option value="bounce-left">Rimbalzo da sinistra</option>
+                  <option value="bounce-right">Rimbalzo da destra</option>
+                  <option value="skew-in">Distorsione in entrata</option>
+                  <option value="curtain-reveal">Effetto tendina</option>
+                  <option value="blur-zoom">Sfocatura + Zoom</option>
+                </select>
+              </div>
+              <template v-if="selectedTile?.settings?.entrance_animation && selectedTile.settings.entrance_animation !== 'none'">
+                <div>
+                  <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
+                    <button
+                      @click="updateSetting('entrance_stagger', !selectedTile?.settings?.entrance_stagger)"
+                      :class="[
+                        'mb-relative mb-w-10 mb-h-5 mb-rounded-full mb-transition-colors mb-shrink-0',
+                        selectedTile?.settings?.entrance_stagger ? 'mb-bg-primary-600' : 'mb-bg-gray-600'
+                      ]"
+                    >
+                      <span
+                        :class="[
+                          'mb-absolute mb-top-0.5 mb-w-4 mb-h-4 mb-rounded-full mb-bg-white mb-transition-transform',
+                          selectedTile?.settings?.entrance_stagger ? 'mb-left-5' : 'mb-left-0.5'
+                        ]"
+                      ></span>
+                    </button>
+                    <span class="mb-text-xs mb-text-gray-300">Stagger figli</span>
+                  </label>
+                  <p class="mb-text-[10px] mb-text-gray-500 mb-mt-0.5">Anima i figli uno dopo l'altro con ritardo incrementale</p>
+                </div>
+                <div v-if="selectedTile?.settings?.entrance_stagger">
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Ritardo stagger (ms)</label>
+                  <div class="mb-flex mb-items-center mb-gap-2">
+                    <input
+                      type="range"
+                      :value="selectedTile?.settings?.entrance_stagger_delay || 100"
+                      @input="updateSetting('entrance_stagger_delay', $event.target.value)"
+                      min="50" max="500" step="25"
+                      class="mb-flex-1"
+                    />
+                    <span class="mb-text-xs mb-text-gray-400 mb-w-14 mb-text-right">{{ selectedTile?.settings?.entrance_stagger_delay || 100 }}ms</span>
+                  </div>
+                </div>
+              </template>
+            </div>
+          </CollapseSection>
+
           <!-- Scrollspy -->
           <CollapseSection title="Animazione allo scroll">
             <div class="mb-space-y-3">
@@ -693,6 +1236,149 @@
             />
           </CollapseSection>
 
+          <!-- Sticky -->
+          <CollapseSection title="Sticky">
+            <div class="mb-space-y-3">
+              <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
+                <input type="checkbox" :checked="tileAdvanced.sticky === true" @change="updateAdvanced('sticky', $event.target.checked)" class="mb-accent-primary-500" />
+                <span class="mb-text-xs mb-text-gray-300">Elemento sticky</span>
+              </label>
+              <template v-if="tileAdvanced.sticky">
+                <div>
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Posizione</label>
+                  <select :value="tileAdvanced.sticky_position || 'top'" @change="updateAdvanced('sticky_position', $event.target.value)" class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1 mb-text-sm mb-text-gray-900">
+                    <option value="top">In alto</option>
+                    <option value="bottom">In basso</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Offset (px): {{ tileAdvanced.sticky_offset || 0 }}</label>
+                  <input type="range" min="0" max="200" step="5" :value="tileAdvanced.sticky_offset || 0" @input="updateAdvanced('sticky_offset', $event.target.value)" class="mb-w-full mb-accent-primary-500" />
+                </div>
+                <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
+                  <input type="checkbox" :checked="tileAdvanced.sticky_on_mobile !== false" @change="updateAdvanced('sticky_on_mobile', $event.target.checked)" class="mb-accent-primary-500" />
+                  <span class="mb-text-xs mb-text-gray-300">Sticky su mobile</span>
+                </label>
+              </template>
+            </div>
+          </CollapseSection>
+
+          <!-- Mouse Tracking Effects -->
+          <CollapseSection title="Effetti mouse">
+            <div class="mb-space-y-3">
+              <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
+                <input type="checkbox" :checked="tileAdvanced.mouse_tilt === true" @change="updateAdvanced('mouse_tilt', $event.target.checked)" class="mb-accent-primary-500" />
+                <span class="mb-text-xs mb-text-gray-300">Tilt 3D al hover</span>
+              </label>
+              <template v-if="tileAdvanced.mouse_tilt">
+                <div>
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Intensità: {{ tileAdvanced.mouse_tilt_intensity || 15 }}</label>
+                  <input type="range" min="5" max="30" step="1" :value="tileAdvanced.mouse_tilt_intensity || 15" @input="updateAdvanced('mouse_tilt_intensity', $event.target.value)" class="mb-w-full mb-accent-primary-500" />
+                </div>
+              </template>
+              <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
+                <input type="checkbox" :checked="tileAdvanced.mouse_track === true" @change="updateAdvanced('mouse_track', $event.target.checked)" class="mb-accent-primary-500" />
+                <span class="mb-text-xs mb-text-gray-300">Segui cursore</span>
+              </label>
+              <template v-if="tileAdvanced.mouse_track">
+                <div>
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Velocità: {{ tileAdvanced.mouse_track_speed || 3 }}</label>
+                  <input type="range" min="1" max="10" step="1" :value="tileAdvanced.mouse_track_speed || 3" @input="updateAdvanced('mouse_track_speed', $event.target.value)" class="mb-w-full mb-accent-primary-500" />
+                </div>
+              </template>
+            </div>
+          </CollapseSection>
+
+          <!-- Infinite (Looping) Animations -->
+          <CollapseSection title="Animazione continua">
+            <div class="mb-space-y-3">
+              <div>
+                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Animazione</label>
+                <select :value="tileAdvanced.infinite_animation || 'none'" @change="updateAdvanced('infinite_animation', $event.target.value)" class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1 mb-text-sm mb-text-gray-900">
+                  <option value="none">Nessuna</option>
+                  <option value="float">Galleggiamento</option>
+                  <option value="pulse">Pulsazione</option>
+                  <option value="spin">Rotazione</option>
+                  <option value="wiggle">Dondolio</option>
+                  <option value="bounce">Rimbalzo</option>
+                  <option value="swing">Oscillazione</option>
+                  <option value="breathe">Respiro</option>
+                </select>
+              </div>
+              <template v-if="(tileAdvanced.infinite_animation || 'none') !== 'none'">
+                <div>
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Velocità: {{ tileAdvanced.infinite_speed || 3 }}s</label>
+                  <input type="range" min="1" max="10" step="0.5" :value="tileAdvanced.infinite_speed || 3" @input="updateAdvanced('infinite_speed', $event.target.value)" class="mb-w-full mb-accent-primary-500" />
+                </div>
+                <div>
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Direzione</label>
+                  <select :value="tileAdvanced.infinite_direction || 'normal'" @change="updateAdvanced('infinite_direction', $event.target.value)" class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1 mb-text-sm mb-text-gray-900">
+                    <option value="normal">Normale</option>
+                    <option value="alternate">Alternata</option>
+                    <option value="reverse">Inversa</option>
+                  </select>
+                </div>
+              </template>
+            </div>
+          </CollapseSection>
+
+          <!-- CSS Mask / Clip-path -->
+          <CollapseSection title="Maschera forma">
+            <div class="mb-space-y-3">
+              <div>
+                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Tipo maschera</label>
+                <select :value="tileAdvanced.mask_type || 'none'" @change="updateAdvanced('mask_type', $event.target.value)" class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1 mb-text-sm mb-text-gray-900">
+                  <option value="none">Nessuna</option>
+                  <option value="circle">Cerchio</option>
+                  <option value="ellipse">Ellisse</option>
+                  <option value="triangle">Triangolo</option>
+                  <option value="hexagon">Esagono</option>
+                  <option value="star">Stella</option>
+                  <option value="diamond">Diamante</option>
+                  <option value="blob">Blob</option>
+                  <option value="custom">Personalizzata</option>
+                </select>
+              </div>
+              <template v-if="tileAdvanced.mask_type === 'custom'">
+                <div>
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Clip-path CSS</label>
+                  <input
+                    type="text"
+                    :value="tileAdvanced.mask_custom || ''"
+                    @input="updateAdvanced('mask_custom', $event.target.value)"
+                    placeholder="polygon(50% 0%, 100% 100%, 0% 100%)"
+                    class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-xs mb-text-gray-900 mb-font-mono"
+                  />
+                </div>
+              </template>
+            </div>
+          </CollapseSection>
+
+          <!-- Note editor (solo builder, non renderizzate nel frontend) -->
+          <CollapseSection title="Note editor">
+            <textarea
+              :value="tileAdvanced.editor_note || ''"
+              @input="updateAdvanced('editor_note', $event.target.value)"
+              rows="3"
+              placeholder="Note visibili solo nel builder..."
+              class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-xs mb-text-gray-900 mb-resize-none"
+            ></textarea>
+            <p class="mb-text-[9px] mb-text-gray-500 mb-mt-1">Queste note sono visibili solo nel builder e non vengono pubblicate.</p>
+          </CollapseSection>
+
+          <!-- Custom JavaScript -->
+          <CollapseSection title="JavaScript personalizzato">
+            <textarea
+              :value="tileAdvanced.custom_js || ''"
+              @input="updateAdvanced('custom_js', $event.target.value)"
+              rows="4"
+              placeholder="// La variabile 'el' contiene l'elemento DOM"
+              class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-xs mb-text-gray-900 mb-font-mono mb-resize-y"
+              spellcheck="false"
+            ></textarea>
+            <p class="mb-text-[9px] mb-text-gray-500 mb-mt-1">JS eseguito nel frontend. La variabile <code style="background:#E5E7EB;padding:1px 4px;border-radius:3px">el</code> contiene l'elemento DOM.</p>
+          </CollapseSection>
+
           <!-- Positioning -->
           <CollapseSection title="Posizionamento">
             <div class="mb-space-y-3">
@@ -707,6 +1393,7 @@
                   <option value="relative">Relativo (offset dal flusso)</option>
                   <option value="absolute">Assoluto (libero nella sezione)</option>
                   <option value="fixed">Fisso (libero nella pagina)</option>
+                  <option value="sticky">Sticky (fisso durante lo scroll)</option>
                 </select>
               </div>
               <template v-if="tileAdvanced.position_mode && tileAdvanced.position_mode !== 'static'">
@@ -777,34 +1464,21 @@
                 <p class="mb-text-[9px] mb-text-gray-500 mb-leading-relaxed">
                   Valori: px (es. 100px), % (es. 50%), vh/vw. Assoluto è relativo alla sezione, Fisso alla finestra.
                 </p>
+                <div v-if="tileAdvanced.position_mode === 'fixed'">
+                  <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">Nascondi al raggiungimento di</label>
+                  <input
+                    type="text"
+                    :value="tileAdvanced.position_hide_at ?? ''"
+                    @change="updateAdvanced('position_hide_at', $event.target.value)"
+                    placeholder="HTML ID della sezione (es. fine-nav)"
+                    class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-0.5 mb-text-[11px] mb-text-gray-900"
+                  />
+                  <p class="mb-text-[9px] mb-text-gray-500 mb-mt-0.5">L'elemento scompare quando lo scroll raggiunge la sezione con questo ID.</p>
+                </div>
               </template>
             </div>
           </CollapseSection>
 
-          <!-- Column Span -->
-          <div>
-            <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300 mb-mb-2">Larghezza colonna</label>
-            <div class="mb-flex mb-items-center mb-gap-2">
-              <input
-                type="range"
-                :value="selectedTile.columns || 12"
-                @input="updateColumns($event.target.value)"
-                min="1" max="12" step="1"
-                class="mb-flex-1"
-              />
-              <span class="mb-text-xs mb-text-gray-400 mb-w-12 mb-text-right">{{ selectedTile.columns || 12 }}/12</span>
-            </div>
-            <div class="mb-grid mb-grid-cols-12 mb-gap-0.5 mb-mt-2">
-              <div
-                v-for="i in 12"
-                :key="i"
-                :class="[
-                  'mb-h-2 mb-rounded-sm',
-                  i <= (selectedTile.columns || 12) ? 'mb-bg-primary-500' : 'mb-bg-gray-700'
-                ]"
-              ></div>
-            </div>
-          </div>
         </div>
         </template>
 
@@ -830,7 +1504,10 @@ import StylePanel from './StylePanel.vue';
 import ContentItemsEditor from './ContentItemsEditor.vue';
 import InspectorField from './InspectorField.vue';
 import FieldBorderRadius from './fields/FieldBorderRadius.vue';
+import FieldSpacing from './fields/FieldSpacing.vue';
 import CollapseSection from './CollapseSection.vue';
+import FieldBoxShadow from './fields/FieldBoxShadow.vue';
+import FieldTransform from './fields/FieldTransform.vue';
 import ParallaxEditor from './ParallaxEditor.vue';
 import ProSliderEditor from '../ProSlider/ProSliderEditor.vue';
 
@@ -873,7 +1550,9 @@ const showProSliderEditor = ref(false);
 const sides = ['top', 'right', 'bottom', 'left'];
 const viewports = [
   { key: 'desktop', label: 'Desktop', svg: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg>' },
-  { key: 'tablet', label: 'Tablet', svg: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="12" x2="12.01" y1="18" y2="18"/></svg>' },
+  { key: 'tablet_landscape', label: 'Tablet L', svg: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><line x1="12" x2="12.01" y1="12" y2="12"/></svg>' },
+  { key: 'tablet', label: 'Tablet P', svg: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="12" x2="12.01" y1="18" y2="18"/></svg>' },
+  { key: 'mobile_landscape', label: 'Mobile L', svg: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="12" x2="12.01" y1="12" y2="12"/></svg>' },
   { key: 'mobile', label: 'Mobile', svg: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2"/><line x1="12" x2="12.01" y1="18" y2="18"/></svg>' },
 ];
 
@@ -891,6 +1570,15 @@ watch(() => builderStore.selectedTileId, () => {
   customWidthsEditing.value = false;
   const tile = selectedTile.value;
   customWidthsLocal.value = tile?.settings?.custom_widths || '';
+  // ProGallery: backward compat migration (filmstrip → strip_coverflow, auto-detect family)
+  if (tile && tile.type === 'progallery' && builderStore.selectedTileId) {
+    const lay = tile.settings?.layout || 'grid';
+    if (lay === 'filmstrip') {
+      tilesStore.updateTile(builderStore.selectedTileId, { layout: 'strip_coverflow', layout_family: 'strip' });
+    } else if (lay.startsWith('strip') && tile.settings?.layout_family !== 'strip') {
+      tilesStore.updateTile(builderStore.selectedTileId, { layout_family: 'strip' });
+    }
+  }
 }, { immediate: true });
 
 function onCustomWidthsFocus() {
@@ -985,18 +1673,109 @@ function evaluateCondition(condition, settings) {
   return Array.isArray(condition.value) ? condition.value.includes(val) : val === condition.value;
 }
 
+/**
+ * Check if a field should be visible — evaluates both `condition` (object) and `show` (function).
+ */
+function resolveField(field) {
+  if (typeof field.optionsFn === 'function') {
+    const settings = selectedTile.value?.settings || {};
+    return { ...field, options: field.optionsFn(settings) };
+  }
+  return field;
+}
+
+function ensureContentItems(tile, field) {
+  if (!tile?.settings) return [];
+  const val = tile.settings[field.key];
+  if (Array.isArray(val)) return val;
+  // Inizializza dal default del config se mancante
+  const def = field.newItemDefaults ? [] : [];
+  const elementDefs = elementDef.value?.defaults || {};
+  const fallback = elementDefs[field.key];
+  const init = Array.isArray(fallback) ? JSON.parse(JSON.stringify(fallback)) : [];
+  tile.settings[field.key] = init;
+  return init;
+}
+
+function isFieldVisible(field) {
+  const settings = selectedTile.value?.settings || {};
+  if (field.condition && !evaluateCondition(field.condition, settings)) return false;
+  if (typeof field.show === 'function' && !field.show(settings)) return false;
+  return true;
+}
+
+/**
+ * Group elementFields into collapsible sections split by separator type.
+ * Returns: [{ label: string|null, fields: Field[] }, ...]
+ */
+const groupedSections = computed(() => {
+  const sections = [];
+  let current = { label: null, fields: [] };
+  for (const field of elementFields.value) {
+    if (field.type === 'separator') {
+      if (current.fields.length > 0 || current.label !== null) {
+        sections.push(current);
+      }
+      current = { label: field.label, fields: [] };
+    } else {
+      current.fields.push(field);
+    }
+  }
+  if (current.fields.length > 0) {
+    sections.push(current);
+  }
+  return sections;
+});
+
+/**
+ * Check if a section has at least one visible field.
+ */
+function sectionHasVisibleFields(section) {
+  return section.fields.some(f => isFieldVisible(f));
+}
+
 const tileStyle = computed(() => selectedTile.value?.style || {});
 
 // Responsive spacing breakpoints
 const spacingBp = ref('desktop');
 const spacingBreakpoints = [
   { key: 'desktop', label: 'Desktop', icon: '<svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="16" height="11" rx="1"/><path d="M6 17h8M10 14v3"/></svg>' },
-  { key: 'tablet', label: 'Tablet', icon: '<svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="2" width="12" height="16" rx="1.5"/><circle cx="10" cy="16" r="0.5" fill="currentColor"/></svg>' },
+  { key: 'tablet_landscape', label: 'Tab L', icon: '<svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="4" width="18" height="13" rx="1.5"/><circle cx="10" cy="10" r="0.5" fill="currentColor"/></svg>' },
+  { key: 'tablet', label: 'Tab P', icon: '<svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="2" width="12" height="16" rx="1.5"/><circle cx="10" cy="16" r="0.5" fill="currentColor"/></svg>' },
+  { key: 'mobile_landscape', label: 'Mob L', icon: '<svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="5" width="18" height="10" rx="1.5"/><circle cx="10" cy="10" r="0.5" fill="currentColor"/></svg>' },
   { key: 'mobile', label: 'Mobile', icon: '<svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="2" width="10" height="16" rx="1.5"/><circle cx="10" cy="16" r="0.5" fill="currentColor"/></svg>' },
 ];
 const spacingBpLabel = computed(() => spacingBreakpoints.find(b => b.key === spacingBp.value)?.label || '');
 function spacingKey(base) {
   return spacingBp.value === 'desktop' ? base : base + '_' + spacingBp.value;
+}
+
+// Margin linked/unlinked
+const marginObj = computed(() => ({
+  top: parseInt(tileStyle.value[spacingKey('margin_top')]) || 0,
+  right: parseInt(tileStyle.value[spacingKey('margin_right')]) || 0,
+  bottom: parseInt(tileStyle.value[spacingKey('margin_bottom')]) || 0,
+  left: parseInt(tileStyle.value[spacingKey('margin_left')]) || 0,
+}));
+function onMarginUpdate(val) {
+  updateStyle(spacingKey('margin_top'), val.top);
+  updateStyle(spacingKey('margin_right'), val.right);
+  updateStyle(spacingKey('margin_bottom'), val.bottom);
+  updateStyle(spacingKey('margin_left'), val.left);
+}
+
+// Padding linked/unlinked
+const paddingObj = computed(() => ({
+  top: parseInt(tileStyle.value[spacingKey('padding_top')]) || 0,
+  right: parseInt(tileStyle.value[spacingKey('padding_right')]) || 0,
+  bottom: parseInt(tileStyle.value[spacingKey('padding_bottom')]) || 0,
+  left: parseInt(tileStyle.value[spacingKey('padding_left')]) || 0,
+}));
+function onPaddingUpdate(val) {
+  updateStyle(spacingKey('padding_top'), val.top);
+  updateStyle(spacingKey('padding_right'), val.right);
+  updateStyle(spacingKey('padding_bottom'), val.bottom);
+  updateStyle(spacingKey('padding_left'), val.left);
 }
 
 const tileBg = computed(() => {
@@ -1020,6 +1799,157 @@ function toggleCondPostId(postId) {
   }
   updateAdvanced('cond_post_ids', current);
 }
+
+// ─── A/B Testing ───
+const abTest = ref(null);
+const abStats = ref(null);
+const abLoading = ref(false);
+let abStatsTimer = null;
+
+const abVariantB = computed(() => {
+  if (!abTest.value) return {};
+  const variants = abTest.value.variants || {};
+  return variants.b || {};
+});
+
+const abAvailableFields = computed(() => {
+  const used = abVariantB.value;
+  return elementFields.value
+    .filter(f => f.key && f.type !== 'separator' && f.type !== 'content-items' && !(f.key in used))
+    .map(f => ({ key: f.key, label: f.label || f.key }));
+});
+
+function abFieldLabel(key) {
+  const f = elementFields.value.find(x => x.key === key);
+  return f ? (f.label || key) : key;
+}
+
+async function abFetch(path, opts = {}) {
+  const olo = window.oloData || {};
+  const res = await fetch(olo.restUrl + path, {
+    headers: { 'X-WP-Nonce': olo.nonce, 'Content-Type': 'application/json', ...opts.headers },
+    ...opts,
+  });
+  return res.json();
+}
+
+async function loadAbTest() {
+  if (!builderStore.selectedTileId) { abTest.value = null; abStats.value = null; return; }
+  abLoading.value = true;
+  try {
+    const tests = await abFetch('/ab-tests');
+    const tplId = builderStore.currentTemplate?.id;
+    const match = (tests || []).find(t => t.tile_id === builderStore.selectedTileId && (!tplId || parseInt(t.template_id) === parseInt(tplId)));
+    abTest.value = match || null;
+    abStats.value = null;
+    if (match && (match.status === 'running' || match.status === 'stopped')) {
+      fetchAbStats();
+    }
+  } catch (e) { abTest.value = null; }
+  abLoading.value = false;
+}
+
+async function createAbTest() {
+  const tplId = builderStore.currentTemplate?.id;
+  if (!tplId) { alert('Salva il template prima di creare un test A/B.'); return; }
+  abLoading.value = true;
+  try {
+    const data = await abFetch('/ab-tests', {
+      method: 'POST',
+      body: JSON.stringify({
+        name: 'Test ' + (currentTileType.value || 'tile'),
+        tile_id: builderStore.selectedTileId,
+        template_id: tplId,
+        variants: { a: {}, b: {} },
+        goal_type: 'click',
+      }),
+    });
+    if (data.id) await loadAbTest();
+  } catch (e) { console.error(e); }
+  abLoading.value = false;
+}
+
+async function updateAbField(key, value) {
+  if (!abTest.value) return;
+  await abFetch('/ab-tests/' + abTest.value.id, {
+    method: 'PUT',
+    body: JSON.stringify({ [key]: value }),
+  });
+  abTest.value[key] = value;
+}
+
+function setAbOverride(key, value) {
+  if (!abTest.value) return;
+  const variants = { ...(abTest.value.variants || {}), b: { ...abVariantB.value, [key]: value } };
+  abTest.value.variants = variants;
+  abFetch('/ab-tests/' + abTest.value.id, {
+    method: 'PUT',
+    body: JSON.stringify({ variants }),
+  });
+}
+
+function removeAbOverride(key) {
+  if (!abTest.value) return;
+  const b = { ...abVariantB.value };
+  delete b[key];
+  const variants = { ...(abTest.value.variants || {}), b };
+  abTest.value.variants = variants;
+  abFetch('/ab-tests/' + abTest.value.id, {
+    method: 'PUT',
+    body: JSON.stringify({ variants }),
+  });
+}
+
+function addAbOverride(key) {
+  if (!key || !abTest.value) return;
+  const currentVal = selectedTile.value?.settings?.[key] || '';
+  setAbOverride(key, currentVal);
+}
+
+async function startAbTest() {
+  if (!abTest.value) return;
+  await abFetch('/ab-tests/' + abTest.value.id + '/start', { method: 'POST' });
+  abTest.value.status = 'running';
+  fetchAbStats();
+  startAbStatsPolling();
+}
+
+async function stopAbTest() {
+  if (!abTest.value) return;
+  await abFetch('/ab-tests/' + abTest.value.id + '/stop', { method: 'POST' });
+  abTest.value.status = 'stopped';
+  stopAbStatsPolling();
+  fetchAbStats();
+}
+
+async function deleteAbTest() {
+  if (!abTest.value) return;
+  await abFetch('/ab-tests/' + abTest.value.id, { method: 'DELETE' });
+  abTest.value = null;
+  abStats.value = null;
+  stopAbStatsPolling();
+}
+
+async function fetchAbStats() {
+  if (!abTest.value) return;
+  try {
+    abStats.value = await abFetch('/ab-tests/' + abTest.value.id + '/stats');
+  } catch (e) { /* ignore */ }
+}
+
+function startAbStatsPolling() {
+  stopAbStatsPolling();
+  abStatsTimer = setInterval(fetchAbStats, 30000);
+}
+
+function stopAbStatsPolling() {
+  if (abStatsTimer) { clearInterval(abStatsTimer); abStatsTimer = null; }
+}
+
+watch(() => builderStore.selectedTileId, () => {
+  stopAbStatsPolling();
+  loadAbTest();
+}, { immediate: true });
 
 // Migrate old flat parallax format to new multi-stop object
 const elementParallaxData = computed(() => {
@@ -1060,6 +1990,11 @@ function updateSetting(key, value) {
     builderStore.isDirty = true;
     return;
   }
+  // ProGallery: when changing layout_family, auto-set layout to first of new family
+  if (tile && tile.type === 'progallery' && key === 'layout_family') {
+    const firstLayout = value === 'strip' ? 'strip' : 'grid';
+    tilesStore.updateTile(builderStore.selectedTileId, { layout: firstLayout });
+  }
   // Row custom_widths: handled by dedicated inline input, not here
   tilesStore.updateTile(builderStore.selectedTileId, { [key]: value });
   builderStore.isDirty = true;
@@ -1080,12 +2015,6 @@ function onTileBgUpdate(newBg) {
 function updateAdvanced(key, value) {
   if (!builderStore.selectedTileId) return;
   tilesStore.updateTileAdvanced(builderStore.selectedTileId, { [key]: value });
-  builderStore.isDirty = true;
-}
-
-function updateColumns(value) {
-  if (!selectedTile.value) return;
-  selectedTile.value.columns = parseInt(value);
   builderStore.isDirty = true;
 }
 

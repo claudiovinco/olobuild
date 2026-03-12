@@ -9,7 +9,7 @@ class Olo_OverlaySlider_Tile extends Olo_Tile_Base {
     protected $type     = 'overlayslider';
     protected $name     = 'Overlay Slider';
     protected $icon     = 'dashicons-format-gallery';
-    protected $category = 'content';
+    protected $category = 'interactive';
     protected $defaults = [
         'slides' => [
             [ 'id' => 'os-1', 'image' => '', 'title' => 'Slide 1', 'subtitle' => '', 'link' => '' ],
@@ -48,7 +48,7 @@ class Olo_OverlaySlider_Tile extends Olo_Tile_Base {
 
         $slides = is_array( $s['slides'] ) ? $s['slides'] : [];
         if ( empty( $slides ) ) {
-            return '<div class="olo-overlayslider" style="padding:40px;text-align:center;color:#6b7280;">No slides added</div>';
+            return '<div class="olo-overlayslider" style="padding:40px;text-align:center;color:var(--olo-color-text-muted, #9CA3AF);">No slides added</div>';
         }
 
         $columns  = absint( $s['columns'] ) ?: 1;
@@ -88,8 +88,8 @@ class Olo_OverlaySlider_Tile extends Olo_Tile_Base {
 
         // Ribbon
         $ribbon_position = esc_attr( $s['ribbon_position'] ?? 'top-right' );
-        $ribbon_bg       = esc_attr( $s['ribbon_bg'] ?? '#e11d48' );
-        $ribbon_color    = esc_attr( $s['ribbon_color'] ?? '#ffffff' );
+        $ribbon_bg       = $this->safe_color_css( $s['ribbon_bg'] ?? '#e11d48' );
+        $ribbon_color    = $this->safe_color_css( $s['ribbon_color'] ?? '#ffffff' );
 
         $uid = 'mos-os-' . wp_rand( 10000, 99999 );
 
@@ -135,7 +135,7 @@ class Olo_OverlaySlider_Tile extends Olo_Tile_Base {
                                         echo $this->render_hover_wrap( $os_img, $slide['hover_image'] ?? '', $slide['hover_video'] ?? '' );
                                         ?>
                                     <?php else : ?>
-                                        <div style="height:<?php echo $height; ?>px;background:#1f2937;width:100%;"></div>
+                                        <div style="height:<?php echo $height; ?>px;background:var(--olo-color-secondary, #1F2937);width:100%;"></div>
                                     <?php endif; ?>
                                     <?php if ( ! empty( $slide['ribbon'] ) ) : ?>
                                         <span class="mos-os-ribbon mos-os-ribbon--<?php echo $ribbon_position; ?>"><?php echo esc_html( $slide['ribbon'] ); ?></span>

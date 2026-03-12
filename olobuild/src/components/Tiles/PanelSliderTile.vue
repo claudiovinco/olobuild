@@ -17,14 +17,14 @@
           :style="{ background: `url(${panel.image}) center/cover no-repeat`, height: '100px' }"
         ></div>
         <div class="olo-ps-card-body">
-          <div class="mb-text-sm mb-font-semibold mb-text-gray-200 mb-mb-1">{{ panel.title }}</div>
-          <div class="mb-text-xs mb-text-gray-400 mb-line-clamp-2">{{ panel.content }}</div>
+          <div class="mb-text-sm mb-font-semibold mb-text-gray-200 mb-mb-1" :data-olo-editable="'panels.' + i + '.title'">{{ panel.title }}</div>
+          <div class="mb-text-xs mb-text-gray-400 mb-line-clamp-2" :data-olo-editable="'panels.' + i + '.content'">{{ panel.content }}</div>
         </div>
       </div>
     </div>
 
     <!-- Arrows -->
-    <template v-if="settings.show_arrows !== false && panels.length > maxVisible">
+    <template v-if="s.show_arrows !== false && panels.length > maxVisible">
       <button class="olo-ps-arrow olo-ps-prev" @click="prev" aria-label="Precedente">&#10094;</button>
       <button class="olo-ps-arrow olo-ps-next" @click="next" aria-label="Successivo">&#10095;</button>
     </template>
@@ -38,10 +38,17 @@ const props = defineProps({
   settings: { type: Object, default: () => ({}) },
 });
 
+const defaults = {
+  columns: '3',
+  card_style: 'default',
+  show_arrows: true,
+};
+const s = computed(() => ({ ...defaults, ...props.settings }));
+
 const offset = ref(0);
 
 const panels = computed(() => {
-  const raw = props.settings.panels;
+  const raw = s.value.panels;
   if (Array.isArray(raw) && raw.length) return raw;
   return [
     { id: 'ps-1', title: 'Scheda 1', content: 'Contenuto...', image: '' },
@@ -50,7 +57,7 @@ const panels = computed(() => {
   ];
 });
 
-const maxVisible = computed(() => Math.min(parseInt(props.settings.columns) || 3, 3));
+const maxVisible = computed(() => Math.min(parseInt(s.value.columns) || 3, 3));
 
 const visiblePanels = computed(() => {
   const start = offset.value;
@@ -65,15 +72,15 @@ const trackStyle = computed(() => ({
 }));
 
 const cardStyle = computed(() => {
-  const style = props.settings.card_style || 'default';
+  const style = s.value.card_style || 'default';
   const bgMap = {
-    default: '#1f2937',
-    primary: '#6366F1',
-    secondary: '#374151',
-    hover: '#1f2937',
+    default: 'var(--olo-color-muted, #F3F4F6)',
+    primary: 'var(--olo-color-primary, #6366F1)',
+    secondary: 'var(--olo-color-border, #E5E7EB)',
+    hover: 'var(--olo-color-muted, #F3F4F6)',
   };
   return {
-    background: bgMap[style] || '#1f2937',
+    background: bgMap[style] || 'var(--olo-color-muted, #F3F4F6)',
     borderRadius: '6px',
     overflow: 'hidden',
   };

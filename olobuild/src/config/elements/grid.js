@@ -1,10 +1,10 @@
-import { borderFields, borderDefaults, shadowField } from './_shared.js';
+import { shadowField } from './_shared.js';
 
 export default {
   type: 'grid',
   name: 'Griglia',
   icon: 'dashicons-grid-view',
-  category: 'content',
+  category: 'layout',
   defaults: {
     items: [
       { id: 'g-1', title: 'Elemento 1', content: 'Descrizione del primo elemento.', image: '', tag: 'all' },
@@ -19,7 +19,6 @@ export default {
     masonry: false,
     card_style: 'default',
     shadow: 'none',
-    ...borderDefaults,
   },
   fields: [
     { key: 'items', label: 'Elementi', type: 'content-items', supportsDynamic: true,
@@ -33,7 +32,7 @@ export default {
       ],
       newItemDefaults: { title: 'Nuovo elemento', content: '', image: '', hover_image: '', hover_video: '', tag: 'all' },
     },
-    { key: 'columns', label: 'Colonne', type: 'select', options: [
+    { key: 'columns', label: 'Colonne', type: 'select', responsive: true, options: [
       { value: '1', label: '1' },
       { value: '2', label: '2' },
       { value: '3', label: '3' },
@@ -63,7 +62,6 @@ export default {
       { value: 'default', label: 'Predefinito' },
       { value: 'minimal', label: 'Minimale' },
     ]},
-    shadowField,
-    ...borderFields,
+    ...shadowField,
   ],
 };

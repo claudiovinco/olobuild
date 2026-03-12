@@ -37,7 +37,7 @@ class Olo_ServiceMushrooms_Tile extends Olo_Tile_Base {
 
         global $post;
         if ( ! $post || ! is_singular() ) {
-            return '<div style="padding:24px;text-align:center;color:#9ca3af;background:#f9fafb;border-radius:8px">'
+            return '<div style="padding:24px;text-align:center;color:var(--olo-color-text-muted, #9CA3AF);background:var(--olo-color-muted, #F3F4F6);border-radius:8px">'
                  . '<p style="margin:0">Inserisci in un template single.</p></div>';
         }
 
@@ -58,7 +58,7 @@ class Olo_ServiceMushrooms_Tile extends Olo_Tile_Base {
         $justify   = $align_map[ $s['align'] ] ?? 'flex-start';
 
         $wrap_style = "display:flex;flex-direction:column;align-items:{$justify};";
-        if ( $s['bg_color'] )      $wrap_style .= "background:{$this->safe_color($s['bg_color'])};";
+        if ( $s['bg_color'] )      $wrap_style .= "background:{$this->safe_color_css($s['bg_color'])};";
         if ( $s['border_radius'] ) $wrap_style .= "border-radius:{$s['border_radius']}px;";
         if ( $s['padding'] )       $wrap_style .= "padding:{$s['padding']}px;";
 
@@ -66,7 +66,7 @@ class Olo_ServiceMushrooms_Tile extends Olo_Tile_Base {
         ?>
         <div class="<?php echo esc_attr( $uid ); ?>" style="<?php echo $wrap_style; ?>">
             <?php if ( ! empty( $s['show_label'] ) && $s['label_position'] === 'top' ) : ?>
-                <div style="font-size:<?php echo absint( $s['label_size'] ); ?>px;color:<?php echo esc_attr( $s['label_color'] ); ?>;font-weight:600;margin-bottom:6px">
+                <div style="font-size:<?php echo absint( $s['label_size'] ); ?>px;color:<?php echo $this->safe_color_css( $s['label_color'] ); ?>;font-weight:600;margin-bottom:6px">
                     <?php echo esc_html( $s['label_text'] ); ?>
                 </div>
             <?php endif; ?>
@@ -74,7 +74,7 @@ class Olo_ServiceMushrooms_Tile extends Olo_Tile_Base {
             <div style="display:flex;align-items:center;gap:<?php echo $gap; ?>px">
                 <?php for ( $i = 1; $i <= 5; $i++ ) :
                     $active = $i <= $mushrooms;
-                    $color  = $active ? esc_attr( $s['active_color'] ) : esc_attr( $s['inactive_color'] );
+                    $color  = $active ? $this->safe_color_css( $s['active_color'] ) : $this->safe_color_css( $s['inactive_color'] );
                 ?>
                     <svg width="<?php echo $size; ?>" height="<?php echo $size; ?>" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M12 2C8 2 4 5.5 4 9.5C4 13 7 14.5 7 14.5L7.5 20C7.5 20.5 8 21 8.5 21H15.5C16 21 16.5 20.5 16.5 20L17 14.5C17 14.5 20 13 20 9.5C20 5.5 16 2 12 2Z" fill="<?php echo $color; ?>" />
@@ -84,12 +84,12 @@ class Olo_ServiceMushrooms_Tile extends Olo_Tile_Base {
                 <?php endfor; ?>
 
                 <?php if ( $s['style'] === 'with-number' ) : ?>
-                    <span style="font-size:<?php echo $size; ?>px;font-weight:700;color:<?php echo esc_attr( $s['active_color'] ); ?>;margin-left:4px"><?php echo $mushrooms; ?>/5</span>
+                    <span style="font-size:<?php echo $size; ?>px;font-weight:700;color:<?php echo $this->safe_color_css( $s['active_color'] ); ?>;margin-left:4px"><?php echo $mushrooms; ?>/5</span>
                 <?php endif; ?>
             </div>
 
             <?php if ( ! empty( $s['show_label'] ) && $s['label_position'] === 'bottom' ) : ?>
-                <div style="font-size:<?php echo absint( $s['label_size'] ); ?>px;color:<?php echo esc_attr( $s['label_color'] ); ?>;font-weight:600;margin-top:6px">
+                <div style="font-size:<?php echo absint( $s['label_size'] ); ?>px;color:<?php echo $this->safe_color_css( $s['label_color'] ); ?>;font-weight:600;margin-top:6px">
                     <?php echo esc_html( $s['label_text'] ); ?>
                 </div>
             <?php endif; ?>

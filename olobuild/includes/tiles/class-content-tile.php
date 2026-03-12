@@ -9,10 +9,14 @@ class Olo_Content_Tile extends Olo_Tile_Base {
     protected $type     = 'content';
     protected $name     = 'Contenuto';
     protected $icon     = 'dashicons-text-page';
-    protected $category = 'content';
+    protected $category = 'essential';
     protected $defaults = [
-        'heading'            => 'Section Title',
-        'text'               => 'Add your content here. This is a simple text block that you can customize.',
+        'heading'            => 'Titolo sezione',
+        'heading_tag'        => 'h2',
+        'heading_size'       => 'md',
+        'heading_color'      => '',
+        'text'               => 'Aggiungi il tuo contenuto qui.',
+        'text_color'         => '',
         'image'              => '',
         'image_position'     => 'top',
         'image_width'        => '40',
@@ -20,8 +24,9 @@ class Olo_Content_Tile extends Olo_Tile_Base {
         'image_fit'          => 'cover',
         'image_radius'       => '0',
         'image_border_width' => '0',
-        'image_border_color' => '#e5e7eb',
+        'image_border_color' => '',
         'image_shadow'       => 'none',
+        'heading_gap'        => '8',
         'image_gap'          => '16',
         'hover_effect'       => 'none',
         'hover_image'        => '',
@@ -33,7 +38,7 @@ class Olo_Content_Tile extends Olo_Tile_Base {
     public function get_controls() {
         return [
             [ 'key' => 'heading', 'type' => 'text',     'label' => 'Heading' ],
-            [ 'key' => 'text',    'type' => 'textarea', 'label' => 'Content' ],
+            [ 'key' => 'text',    'type' => 'editor',   'label' => 'Content' ],
             [ 'key' => 'image',   'type' => 'image',    'label' => 'Image' ],
         ];
     }
@@ -43,14 +48,40 @@ class Olo_Content_Tile extends Olo_Tile_Base {
 
         $uid = 'olo-ct-' . wp_rand( 10000, 99999 );
 
-        $position     = in_array( $s['image_position'], [ 'top', 'bottom', 'left', 'right' ], true ) ? $s['image_position'] : 'top';
-        $is_horizontal = in_array( $position, [ 'left', 'right' ], true );
+        // Heading tag/size/color
+        $allowed_tags = [ 'h2', 'h3', 'h4', 'h5', 'p' ];
+        $htag = in_array( $s['heading_tag'] ?? 'h2', $allowed_tags, true ) ? $s['heading_tag'] : 'h2';
+
+        $size_px_map = [ 'sm' => '1.25rem', 'md' => '1.7rem', 'lg' => '2.3rem', 'xl' => '3rem' ];
+        $base_size   = $s['heading_size'] ?? 'md';
+        $font_size   = $size_px_map[ $base_size ] ?? '1.7rem';
+
+        $hd_clr = $this->safe_color_css( $s['heading_color'] ?? '' );
+        $hstyle = 'margin:0 0 ' . absint( $s['heading_gap'] ?? 8 ) . 'px 0;font-weight:bold;font-size:' . $font_size . ';';
+        if ( $hd_clr ) { $hstyle .= 'color:' . $hd_clr . ';'; }
+
+        // Text color
+        $txt_clr = $this->safe_color_css( $s['text_color'] ?? '' );
+        $txt_style = '';
+        if ( $txt_clr ) { $txt_style = 'color:' . $txt_clr . ';'; }
+
+        // Heading (plain text, no HTML)
+        $heading_text = esc_html( wp_strip_all_tags( $s['heading'] ) );
+        // Text content: supporta sia plain text (legacy) che HTML (da RichTextEditor)
+        $text_raw = $s['text'] ?? '';
+        if ( preg_match( '/^\s*</', $text_raw ) ) {
+            $text_content = wp_kses_post( $text_raw );
+        } else {
+            $text_content = nl2br( esc_html( $text_raw ) );
+        }
+
+        $position     = $this->validate_position( $s['image_position'] ?? 'top' );
         $image_width  = max( 20, min( 80, absint( $s['image_width'] ) ) );
         $image_height = $s['image_height'];
         $image_fit    = in_array( $s['image_fit'], [ 'cover', 'contain', 'fill' ], true ) ? $s['image_fit'] : 'cover';
-        $image_radius = absint( $s['image_radius'] );
+        $image_radius = Olo_Tile_Utils::border_radius( $s['image_radius'] ?? 0 );
         $border_width = absint( $s['image_border_width'] );
-        $border_color = $this->safe_color( $s['image_border_color'] ?? '#e5e7eb' );
+        $border_color = $this->safe_color_css( $s['image_border_color'] ) ?: 'var(--olo-color-border, #E5E7EB)';
         $image_gap    = absint( $s['image_gap'] );
         $hover_effect = $s['hover_effect'] ?? 'none';
         $link_url     = $s['link_url'] ?? '';
@@ -71,37 +102,54 @@ class Olo_Content_Tile extends Olo_Tile_Base {
             $height_css = is_numeric( $image_height ) ? $image_height . 'px' : esc_attr( $image_height );
         }
 
-        // UIkit grid fractions for horizontal layout
-        $uk_fractions = [
-            20 => '1-5', 25 => '1-4', 30 => '3-10', 33 => '1-3', 35 => '7-20',
-            40 => '2-5', 45 => '9-20', 50 => '1-2', 55 => '11-20', 60 => '3-5',
-            65 => '13-20', 66 => '2-3', 70 => '7-10', 75 => '3-4', 80 => '4-5',
-        ];
-        // Find closest fraction
-        $img_fraction  = $uk_fractions[ $image_width ] ?? null;
-        $text_width_pct = 100 - $image_width;
-        $text_fraction = $uk_fractions[ $text_width_pct ] ?? null;
+        // Flex direction map
+        $dir_map = [ 'top' => 'column', 'bottom' => 'column-reverse', 'left' => 'row', 'right' => 'row-reverse' ];
+        $is_hz   = in_array( $position, [ 'left', 'right' ], true );
 
-        // Fallback: use custom width if no UIkit fraction matches
-        $use_custom_widths = ( $img_fraction === null || $text_fraction === null );
+        // Responsive breakpoint overrides for image_position
+        $bp_map = [
+            'tablet_landscape' => 1200,
+            'tablet'           => 960,
+            'mobile_landscape' => 640,
+            'mobile'           => 480,
+        ];
 
         ob_start();
         ?>
         <style>
+            .<?php echo $uid; ?> .olo-ct-layout {
+                display: flex;
+                flex-direction: <?php echo $dir_map[ $position ]; ?>;
+                gap: <?php echo $image_gap; ?>px;
+                <?php if ( $is_hz ) : ?>align-items: flex-start;<?php endif; ?>
+            }
+            .<?php echo $uid; ?> .olo-ct-img-col {
+                overflow: hidden;
+                border-radius: <?php echo $image_radius; ?>;
+                <?php if ( $is_hz ) : ?>
+                width: <?php echo $image_width; ?>%;
+                flex-shrink: 0;
+                <?php endif; ?>
+            }
+            .<?php echo $uid; ?> .olo-ct-text {
+                <?php if ( $is_hz ) : ?>flex: 1; min-width: 0;<?php endif; ?>
+            }
             .<?php echo $uid; ?> .olo-ct-img {
                 transition: transform 0.5s ease, filter 0.5s ease;
                 width: 100%;
                 display: block;
                 height: <?php echo $height_css; ?>;
                 object-fit: <?php echo $image_fit; ?>;
-                border-radius: <?php echo $image_radius; ?>px;
+                border-radius: <?php echo $image_radius; ?>;
                 <?php if ( $border_width > 0 ) : ?>
                 border: <?php echo $border_width; ?>px solid <?php echo $border_color; ?>;
                 <?php endif; ?>
-                <?php if ( $shadow !== 'none' ) : ?>
-                box-shadow: <?php echo $shadow; ?>;
-                <?php endif; ?>
             }
+            <?php if ( $shadow !== 'none' ) : ?>
+            .<?php echo $uid; ?> .olo-ct-img-col {
+                box-shadow: <?php echo $shadow; ?>;
+            }
+            <?php endif; ?>
             <?php if ( $hover_effect !== 'none' ) : ?>
             .<?php echo $uid; ?>:hover .olo-ct-hover-zoom { transform: scale(1.08); }
             .<?php echo $uid; ?>:hover .olo-ct-hover-zoom-rotate { transform: scale(1.08) rotate(2deg); }
@@ -112,55 +160,72 @@ class Olo_Content_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .olo-ct-hover-blur-in { filter: blur(3px); }
             .<?php echo $uid; ?>:hover .olo-ct-hover-blur-in { filter: blur(0); }
             <?php endif; ?>
-            <?php if ( $is_horizontal && $use_custom_widths ) : ?>
-            .<?php echo $uid; ?> .olo-ct-img-col { width: <?php echo $image_width; ?>%; }
-            .<?php echo $uid; ?> .olo-ct-text-col { width: <?php echo $text_width_pct; ?>%; }
-            <?php endif; ?>
+            <?php
+            // Responsive heading_size overrides
+            foreach ( $bp_map as $bp => $max_w ) :
+                $sz_key = 'heading_size_' . $bp;
+                if ( ! empty( $s[ $sz_key ] ) ) :
+                    $bp_font = $size_px_map[ $s[ $sz_key ] ] ?? '';
+                    if ( $bp_font ) :
+            ?>
+            @media (max-width: <?php echo $max_w; ?>px) {
+                .<?php echo $uid; ?> .olo-ct-heading { font-size: <?php echo $bp_font; ?>; }
+            }
+            <?php
+                    endif;
+                endif;
+            endforeach;
+
+            // Responsive image_position overrides
+            foreach ( $bp_map as $bp => $max_w ) :
+                $pos_key = 'image_position_' . $bp;
+                if ( ! empty( $s[ $pos_key ] ) ) :
+                    $bp_pos = $this->validate_position( $s[ $pos_key ] );
+                    $bp_hz  = in_array( $bp_pos, [ 'left', 'right' ], true );
+            ?>
+            @media (max-width: <?php echo $max_w; ?>px) {
+                .<?php echo $uid; ?> .olo-ct-layout {
+                    flex-direction: <?php echo $dir_map[ $bp_pos ]; ?>;
+                    <?php if ( $bp_hz ) : ?>align-items: flex-start;<?php else : ?>align-items: stretch;<?php endif; ?>
+                }
+                .<?php echo $uid; ?> .olo-ct-img-col {
+                    <?php if ( $bp_hz ) : ?>
+                    width: <?php echo $image_width; ?>%;
+                    flex-shrink: 0;
+                    <?php else : ?>
+                    width: auto;
+                    flex-shrink: initial;
+                    <?php endif; ?>
+                }
+                .<?php echo $uid; ?> .olo-ct-text {
+                    <?php if ( $bp_hz ) : ?>flex: 1; min-width: 0;<?php else : ?>flex: initial; min-width: initial;<?php endif; ?>
+                }
+            }
+            <?php
+                endif;
+            endforeach;
+            ?>
         </style>
 
-        <div class="olo-content <?php echo $uid; ?> uk-panel" style="padding: 40px;">
-        <?php if ( $is_horizontal ) : ?>
-            <?php
-            // Horizontal layout: uk-grid with two columns
-            $img_col_cls  = $use_custom_widths ? 'olo-ct-img-col' : 'uk-width-' . $img_fraction . '@m';
-            $text_col_cls = $use_custom_widths ? 'olo-ct-text-col' : 'uk-width-' . $text_fraction . '@m';
-            $order_cls    = ( $position === 'right' ) ? ' uk-flex-last@m' : '';
-            ?>
-            <div class="uk-grid" uk-grid style="column-gap: <?php echo $image_gap; ?>px;">
-                <div class="<?php echo esc_attr( $img_col_cls . $order_cls ); ?>">
+        <div class="olo-content <?php echo $uid; ?> uk-panel">
+            <div class="olo-ct-layout">
+                <?php if ( ! empty( $s['image'] ) ) : ?>
+                <div class="olo-ct-img-col">
                     <?php $this->render_image_block( $s, $img_class, $link_url, $link_target ); ?>
                 </div>
-                <div class="<?php echo esc_attr( $text_col_cls ); ?>">
-                    <h2 class="uk-heading-small" style="margin-bottom: 0.5em;"><?php echo wp_kses_post( $s['heading'] ); ?></h2>
-                    <div><?php echo wp_kses_post( $s['text'] ); ?></div>
+                <?php endif; ?>
+                <div class="olo-ct-text">
+                    <<?php echo $htag; ?> class="olo-ct-heading" style="<?php echo $hstyle; ?>"><?php echo $heading_text; ?></<?php echo $htag; ?>>
+                    <div<?php if ( $txt_style ) echo ' style="' . $txt_style . '"'; ?>><?php echo $text_content; ?></div>
                 </div>
             </div>
-        <?php else : ?>
-            <?php
-            // Vertical layout: top or bottom
-            $is_bottom = ( $position === 'bottom' );
-            ?>
-            <?php if ( ! $is_bottom ) : ?>
-                <?php if ( ! empty( $s['image'] ) ) : ?>
-                    <div style="margin-bottom: <?php echo $image_gap; ?>px; overflow: hidden; border-radius: <?php echo $image_radius; ?>px;">
-                        <?php $this->render_image_block( $s, $img_class, $link_url, $link_target ); ?>
-                    </div>
-                <?php endif; ?>
-                <h2 class="uk-heading-small" style="margin-bottom: 0.5em;"><?php echo wp_kses_post( $s['heading'] ); ?></h2>
-                <div><?php echo wp_kses_post( $s['text'] ); ?></div>
-            <?php else : ?>
-                <h2 class="uk-heading-small" style="margin-bottom: 0.5em;"><?php echo wp_kses_post( $s['heading'] ); ?></h2>
-                <div><?php echo wp_kses_post( $s['text'] ); ?></div>
-                <?php if ( ! empty( $s['image'] ) ) : ?>
-                    <div style="margin-top: <?php echo $image_gap; ?>px; overflow: hidden; border-radius: <?php echo $image_radius; ?>px;">
-                        <?php $this->render_image_block( $s, $img_class, $link_url, $link_target ); ?>
-                    </div>
-                <?php endif; ?>
-            <?php endif; ?>
-        <?php endif; ?>
         </div>
         <?php
         return ob_get_clean();
+    }
+
+    private function validate_position( $pos ) {
+        return in_array( $pos, [ 'top', 'bottom', 'left', 'right' ], true ) ? $pos : 'top';
     }
 
     private function render_image_block( $s, $img_class, $link_url, $link_target ) {

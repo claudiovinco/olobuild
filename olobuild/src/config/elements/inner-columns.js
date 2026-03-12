@@ -1,3 +1,5 @@
+import { flexContainerFields, flexContainerDefaults } from './_shared.js';
+
 export default {
   type: 'inner-columns',
   name: 'Colonne interne',
@@ -8,6 +10,7 @@ export default {
     gap: '16',
     vertical_align: 'stretch',
     stack_mobile: true,
+    ...flexContainerDefaults,
   },
   fields: [
     { key: 'layout', label: 'Layout', type: 'select', options: [
@@ -25,5 +28,6 @@ export default {
       { value: 'end', label: 'Basso' },
     ] },
     { key: 'stack_mobile', label: 'Impila su mobile', type: 'toggle' },
+    ...flexContainerFields,
   ],
 };

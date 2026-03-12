@@ -1,0 +1,59 @@
+import { shadowField } from './_shared.js';
+
+export default {
+  type: 'audio',
+  name: 'Audio',
+  icon: 'dashicons-format-audio',
+  category: 'media',
+  defaults: {
+    source_type: 'file',
+    file_url: '',
+    audio_url: '',
+    autoplay: false,
+    loop: false,
+    muted: false,
+    show_controls: true,
+    player_style: 'default',
+    accent_color: '',
+    bg_color: '',
+    text_color: '',
+    border_radius: '8',
+    title: '',
+    artist: '',
+    cover_image: '',
+    shadow: 'none',
+  },
+  fields: [
+    { key: 'source_type', label: 'Sorgente', type: 'select', options: [
+      { value: 'file', label: 'File (Media Library)' },
+      { value: 'url', label: 'URL esterno' },
+    ]},
+    { key: 'file_url', label: 'File audio', type: 'media',
+      condition: { field: 'source_type', value: 'file' } },
+    { key: 'audio_url', label: 'URL audio', type: 'text',
+      condition: { field: 'source_type', value: 'url' } },
+
+    { type: 'separator', label: 'Riproduzione' },
+    { key: 'autoplay', label: 'Riproduzione automatica', type: 'toggle' },
+    { key: 'loop', label: 'Ripeti', type: 'toggle' },
+    { key: 'muted', label: 'Silenziato', type: 'toggle' },
+    { key: 'show_controls', label: 'Mostra controlli', type: 'toggle' },
+
+    { type: 'separator', label: 'Player' },
+    { key: 'player_style', label: 'Stile player', type: 'select', options: [
+      { value: 'default', label: 'Predefinito' },
+      { value: 'minimal', label: 'Minimale' },
+      { value: 'custom', label: 'Personalizzato' },
+    ]},
+    { key: 'accent_color', label: 'Colore accent', type: 'color' },
+    { key: 'bg_color', label: 'Sfondo', type: 'color' },
+    { key: 'text_color', label: 'Colore testo', type: 'color' },
+
+    { type: 'separator', label: 'Informazioni traccia' },
+    { key: 'title', label: 'Titolo', type: 'text' },
+    { key: 'artist', label: 'Artista', type: 'text' },
+    { key: 'cover_image', label: 'Immagine copertina', type: 'image' },
+
+    ...shadowField,
+  ],
+};

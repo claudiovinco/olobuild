@@ -18,7 +18,7 @@ export default {
     columns_mobile: '1',
     gap: 'medium',
     card_style: 'default',
-    card_primary_bg: '#6366F1',
+    card_primary_bg: '',
     match_height: false,
     image_height: '180',
     image_radius: '0',
@@ -45,13 +45,13 @@ export default {
     // Contenuto card
     card_content: 'excerpt,stats,price',
     show_service_opening: false,
-    opening_bg_annual: '#059669',
-    opening_bg_seasonal: '#d97706',
+    opening_bg_annual: '',
+    opening_bg_seasonal: '',
     opening_size: '11',
     ribbon_field: '',
     ribbon_position: 'top-right',
-    ribbon_bg: '#e11d48',
-    ribbon_color: '#ffffff',
+    ribbon_bg: '',
+    ribbon_color: '',
     excerpt_length: '15',
     price_prefix: '\u20ac',
     price_suffix: '/notte',
@@ -60,7 +60,7 @@ export default {
     random_order: false,
     items_per_page: '8',
     pagination_style: 'numbers',
-    marker_color: '#e11d48',
+    marker_color: '',
   },
   fields: [
     // ─── Filtri: quali mostrare ───
@@ -189,12 +189,12 @@ export default {
     { key: 'card_primary_bg', label: 'Colore sfondo card', type: 'color',
       condition: { field: 'card_style', value: 'primary' } },
     { key: 'match_height', label: 'Stessa altezza card', type: 'toggle' },
-    { key: 'card_radius', label: 'Arrotondamento angoli (px)', type: 'range', min: 0, max: 20, step: 1 },
+    { key: 'card_radius', label: 'Arrotondamento angoli (px)', type: 'border-radius' },
 
     // ─── Immagine ───
     { type: 'separator', label: 'Immagine' },
     { key: 'image_height', label: 'Altezza immagine (px)', type: 'range', min: 100, max: 350, step: 10 },
-    { key: 'image_radius', label: 'Raggio bordo immagine (px)', type: 'range', min: 0, max: 30, step: 1 },
+    { key: 'image_radius', label: 'Raggio bordo immagine (px)', type: 'border-radius' },
     { key: 'hover_effect', label: 'Effetto hover', type: 'select', options: [
       { value: 'none', label: 'Nessuno' },
       { value: 'zoom', label: 'Zoom' },

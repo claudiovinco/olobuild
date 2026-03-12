@@ -1,0 +1,46 @@
+export default {
+  type: 'twitterfeed',
+  name: 'X Timeline',
+  icon: 'dashicons-twitter',
+  category: 'marketing',
+  defaults: {
+    url: '',
+    embed_type: 'timeline',
+    theme: 'light',
+    width: '',
+    height: '600',
+    chrome: 'noheader,nofooter,noborders,noscrollbar',
+    tweet_limit: '5',
+    language: 'it',
+    alignment: 'center',
+    border_radius: '8',
+  },
+  fields: [
+    { key: 'url', label: 'URL profilo X / Tweet', type: 'text', placeholder: 'https://x.com/username' },
+    { key: 'embed_type', label: 'Tipo embed', type: 'select', options: [
+      { value: 'timeline', label: 'Timeline' },
+      { value: 'tweet', label: 'Tweet singolo' },
+    ]},
+    { key: 'theme', label: 'Tema', type: 'select', options: [
+      { value: 'light', label: 'Chiaro' },
+      { value: 'dark', label: 'Scuro' },
+    ]},
+    { key: 'width', label: 'Larghezza (px, vuoto = auto)', type: 'text', placeholder: '' },
+    { key: 'height', label: 'Altezza (px)', type: 'range', min: 200, max: 1200, step: 50 },
+    { key: 'chrome', label: 'Chrome (noheader,nofooter,...)', type: 'text' },
+    { key: 'tweet_limit', label: 'Limite tweet', type: 'range', min: 1, max: 20, step: 1 },
+    { key: 'language', label: 'Lingua', type: 'select', options: [
+      { value: 'it', label: 'Italiano' },
+      { value: 'en', label: 'English' },
+      { value: 'de', label: 'Deutsch' },
+      { value: 'fr', label: 'Francais' },
+      { value: 'es', label: 'Espanol' },
+    ]},
+    { key: 'alignment', label: 'Allineamento', type: 'select', options: [
+      { value: 'left', label: 'Sinistra' },
+      { value: 'center', label: 'Centro' },
+      { value: 'right', label: 'Destra' },
+    ]},
+    { key: 'border_radius', label: 'Arrotondamento (px)', type: 'border-radius' },
+  ],
+};

@@ -1,8 +1,10 @@
+import { shadowField } from './_shared.js';
+
 export default {
   type: 'button',
   name: 'Pulsante',
   icon: 'dashicons-button',
-  category: 'content',
+  category: 'essential',
   defaults: {
     text: 'Clicca qui',
     url: '#',
@@ -11,8 +13,8 @@ export default {
     full_width: false,
 
     // Style
-    bg_color: '#6366F1',
-    text_color: '#FFFFFF',
+    bg_color: '',
+    text_color: '',
     border_radius: '6',
     padding_x: '32',
     padding_y: '14',
@@ -20,8 +22,11 @@ export default {
     font_weight: '600',
     letter_spacing: '0',
     text_transform: 'none',
+    icon: '',
+    icon_position: 'before',
+    icon_spacing: '8',
     border_width: '0',
-    border_color: '#6366F1',
+    border_color: '',
     shadow: 'none',
 
     // Hover
@@ -35,12 +40,18 @@ export default {
   },
   fields: [
     { key: 'text', label: 'Testo pulsante', type: 'text' },
+    { key: 'icon', label: 'Icona', type: 'icon' },
+    { key: 'icon_position', label: 'Posizione icona', type: 'select', options: [
+      { value: 'before', label: 'Prima del testo' },
+      { value: 'after', label: 'Dopo il testo' },
+    ]},
+    { key: 'icon_spacing', label: 'Spazio icona (px)', type: 'range', min: 0, max: 24, step: 2 },
     { key: 'url', label: 'URL', type: 'text' },
     { key: 'target', label: 'Apri in', type: 'select', options: [
       { value: '_self', label: 'Stessa finestra' },
       { value: '_blank', label: 'Nuova scheda' },
     ]},
-    { key: 'alignment', label: 'Allineamento', type: 'select', options: [
+    { key: 'alignment', label: 'Allineamento', type: 'select', responsive: true, options: [
       { value: 'left', label: 'Sinistra' },
       { value: 'center', label: 'Centro' },
       { value: 'right', label: 'Destra' },
@@ -52,9 +63,9 @@ export default {
     { key: 'bg_color', label: 'Colore sfondo', type: 'color' },
     { key: 'text_color', label: 'Colore testo', type: 'color' },
     { key: 'border_radius', label: 'Border Radius', type: 'border-radius' },
-    { key: 'padding_x', label: 'Padding O (px)', type: 'range', min: 8, max: 80, step: 4 },
-    { key: 'padding_y', label: 'Padding V (px)', type: 'range', min: 4, max: 40, step: 2 },
-    { key: 'font_size', label: 'Dim. carattere (px)', type: 'range', min: 12, max: 32, step: 1 },
+    { key: 'padding_x', label: 'Padding O (px)', type: 'range', min: 8, max: 80, step: 4, responsive: true },
+    { key: 'padding_y', label: 'Padding V (px)', type: 'range', min: 4, max: 40, step: 2, responsive: true },
+    { key: 'font_size', label: 'Dim. carattere (px)', type: 'range', min: 12, max: 32, step: 1, responsive: true },
     { key: 'font_weight', label: 'Peso font', type: 'select', options: [
       { value: '400', label: 'Normale' },
       { value: '500', label: 'Medio' },
@@ -71,13 +82,7 @@ export default {
     ]},
     { key: 'border_width', label: 'Spessore bordo (px)', type: 'range', min: 0, max: 5, step: 1 },
     { key: 'border_color', label: 'Colore bordo', type: 'color' },
-    { key: 'shadow', label: 'Ombra', type: 'select', options: [
-      { value: 'none', label: 'Nessuna' },
-      { value: 'sm', label: 'Piccola' },
-      { value: 'md', label: 'Media' },
-      { value: 'lg', label: 'Grande' },
-      { value: 'xl', label: 'Extra grande' },
-    ]},
+    ...shadowField,
 
     { type: 'separator', label: 'Stato hover' },
 
@@ -99,7 +104,20 @@ export default {
       { value: 'md', label: 'Media' },
       { value: 'lg', label: 'Grande' },
       { value: 'xl', label: 'Extra grande' },
+      { value: 'custom', label: 'Personalizzata' },
     ]},
+    { key: 'hover_shadow_h', label: 'Offset H hover (px)', type: 'range', min: -50, max: 50, step: 1,
+      condition: { field: 'hover_shadow', op: 'eq', value: 'custom' } },
+    { key: 'hover_shadow_v', label: 'Offset V hover (px)', type: 'range', min: -50, max: 50, step: 1,
+      condition: { field: 'hover_shadow', op: 'eq', value: 'custom' } },
+    { key: 'hover_shadow_blur', label: 'Sfocatura hover (px)', type: 'range', min: 0, max: 100, step: 1,
+      condition: { field: 'hover_shadow', op: 'eq', value: 'custom' } },
+    { key: 'hover_shadow_spread', label: 'Espansione hover (px)', type: 'range', min: -50, max: 50, step: 1,
+      condition: { field: 'hover_shadow', op: 'eq', value: 'custom' } },
+    { key: 'hover_shadow_color', label: 'Colore ombra hover', type: 'color',
+      condition: { field: 'hover_shadow', op: 'eq', value: 'custom' } },
+    { key: 'hover_shadow_inset', label: 'Ombra interna hover', type: 'toggle',
+      condition: { field: 'hover_shadow', op: 'eq', value: 'custom' } },
     { key: 'hover_image', label: 'Immagine hover', type: 'image' },
     { key: 'hover_video', label: 'Video hover (mp4)', type: 'media' },
   ],

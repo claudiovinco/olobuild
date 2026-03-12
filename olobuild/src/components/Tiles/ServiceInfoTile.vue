@@ -12,7 +12,7 @@
     <!-- Body -->
     <div :style="bodyStyle">
       <!-- Title -->
-      <h1 :style="{ fontSize: s.acc_title_size+'px', fontWeight:'700', color:'#1F2937', margin:'0 0 20px', lineHeight:'1.2' }">
+      <h1 :style="{ fontSize: s.acc_title_size+'px', fontWeight:'700', color:'var(--olo-color-text, #374151)', margin:'0 0 20px', lineHeight:'1.2' }">
         Nome Baita / Servizio
       </h1>
 
@@ -31,7 +31,7 @@
         <div v-if="sec === 'stats'" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px;text-align:center">
           <div v-for="stat in stats" :key="stat.label">
             <div style="font-size:18px;margin-bottom:2px;color:#6B7280">{{ stat.icon }}</div>
-            <div style="font-size:20px;font-weight:700;color:#1F2937">{{ stat.value }}</div>
+            <div style="font-size:20px;font-weight:700;color:var(--olo-color-text, #374151)">{{ stat.value }}</div>
             <div style="font-size:11px;text-transform:uppercase;color:#6B7280;letter-spacing:0.5px;font-weight:600">{{ stat.label }}</div>
           </div>
         </div>
@@ -47,7 +47,7 @@
 
         <!-- Description -->
         <div v-if="sec === 'description' && s.acc_show_description" style="margin-bottom:28px">
-          <h3 style="font-size:17px;font-weight:700;color:#1F2937;margin:0 0 12px;font-style:italic">Descrizione</h3>
+          <h3 style="font-size:17px;font-weight:700;color:var(--olo-color-text, #374151);margin:0 0 12px;font-style:italic">Descrizione</h3>
           <div style="font-size:14px;line-height:1.7;color:#374151">
             <p style="margin:0 0 10px">La baita è un piccolo gioiello nascosto a 1.900 metri di altitudine, affacciata sui laghi cristallini.</p>
             <p style="margin:0">Completamente autonoma con pannelli solari e stufa a legna, offre 1 camera matrimoniale con vista lago.</p>
@@ -56,7 +56,7 @@
 
         <!-- Amenities -->
         <div v-if="sec === 'amenities' && s.acc_show_amenities" style="margin-bottom:28px">
-          <h3 style="font-size:17px;font-weight:700;color:#1F2937;margin:0 0 12px;font-style:italic">Servizi e comfort</h3>
+          <h3 style="font-size:17px;font-weight:700;color:var(--olo-color-text, #374151);margin:0 0 12px;font-style:italic">Servizi e comfort</h3>
           <div :style="amenitiesStyle">
             <div v-for="amenity in amenities" :key="amenity"
                  style="display:flex;align-items:center;gap:6px;font-size:13px;color:#374151;padding:3px 0">
@@ -69,9 +69,9 @@
         <!-- Check-in -->
         <div v-if="sec === 'checkin' && s.acc_show_checkin"
              :style="checkinStyle">
-          <strong style="color:#1F2937">Check-in:</strong> dalle 15:00
-          &nbsp;| &nbsp;<strong style="color:#1F2937">Check-out:</strong> entro 10:00
-          <br><strong style="color:#1F2937">Soggiorno minimo:</strong> 2 notti
+          <strong style="color:var(--olo-color-text, #374151)">Check-in:</strong> dalle 15:00
+          &nbsp;| &nbsp;<strong style="color:var(--olo-color-text, #374151)">Check-out:</strong> entro 10:00
+          <br><strong style="color:var(--olo-color-text, #374151)">Soggiorno minimo:</strong> 2 notti
         </div>
       </template>
     </div>
@@ -80,6 +80,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { getShadowValue } from '@/composables/useShadowMap';
 
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 
@@ -94,9 +95,7 @@ const defaults = {
 
 const s = computed(() => ({ ...defaults, ...props.settings }));
 
-const accent = computed(() => s.value.acc_accent_color || '#6366F1');
-
-const shadowMap = { none: 'none', sm: '0 1px 3px rgba(0,0,0,0.1)', md: '0 4px 12px rgba(0,0,0,0.12)', lg: '0 8px 30px rgba(0,0,0,0.12)' };
+const accent = computed(() => s.value.acc_accent_color || 'var(--olo-color-primary, #6366F1)');
 
 const orderedSections = computed(() => {
   const raw = s.value.acc_section_order || 'gallery,stats,prices,description,amenities,checkin';
@@ -124,7 +123,7 @@ const badgeStyle = {
 const bodyStyle = computed(() => ({
   padding: s.value.acc_body_padding + 'px',
   background: '#fff',
-  boxShadow: shadowMap[s.value.acc_card_shadow] || shadowMap.lg,
+  boxShadow: getShadowValue(s.value, 'acc_card_shadow'),
   borderRadius: `0 0 ${s.value.acc_card_radius}px ${s.value.acc_card_radius}px`,
 }));
 

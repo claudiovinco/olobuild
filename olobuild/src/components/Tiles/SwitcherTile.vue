@@ -15,6 +15,7 @@
                 : 'mb-font-normal mb-text-gray-400 hover:mb-text-gray-200'
             ]"
             :style="tabStyle(i)"
+            :data-olo-editable="'items.' + i + '.title'"
           >{{ item.title }}</button>
         </div>
         <div class="mb-text-xs mb-text-gray-500 mb-mt-1 mb-px-1">{{ navLabel }}</div>
@@ -22,7 +23,7 @@
 
       <!-- Content -->
       <div :class="contentWrapClass">
-        <div v-if="items[activeIndex]" class="mb-p-4 mb-leading-relaxed mb-text-sm mb-text-gray-300" v-html="items[activeIndex].content"></div>
+        <div v-if="items[activeIndex]" class="mb-p-4 mb-leading-relaxed mb-text-sm mb-text-gray-300" style="white-space:pre-wrap;" :data-olo-editable="'items.' + activeIndex + '.content'" data-olo-multiline>{{ items[activeIndex].content }}</div>
       </div>
     </div>
   </div>
@@ -37,7 +38,12 @@ const props = defineProps({
 
 const activeIndex = ref(0);
 
-const s = computed(() => props.settings);
+const defaults = {
+  nav_style: 'tab',
+  animation: '',
+  vertical: false,
+};
+const s = computed(() => ({ ...defaults, ...props.settings }));
 
 const items = computed(() => {
   const raw = s.value.items;

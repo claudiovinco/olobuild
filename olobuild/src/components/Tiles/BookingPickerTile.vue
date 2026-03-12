@@ -7,7 +7,7 @@
           &#128197;
         </div>
         <div>
-          <div :style="{ fontSize: s.title_size+'px', fontWeight: s.title_weight, color: s.title_color || '#1f2937' }">
+          <div :style="{ fontSize: s.title_size+'px', fontWeight: s.title_weight, color: s.title_color || 'var(--olo-color-text, #374151)' }">
             {{ serviceLabel }}
           </div>
           <div :style="{ fontSize:'13px', color: s.meta_color, display:'flex', gap:'10px', marginTop:'2px' }">
@@ -28,7 +28,7 @@
       <div style="display:grid;grid-template-columns:repeat(7,1fr);text-align:center;gap:4px">
         <span v-for="d in ['L','M','M','G','V','S','D']" :key="d" style="font-size:10px;font-weight:600;color:#9ca3af;text-transform:uppercase;padding:3px 0">{{ d }}</span>
         <div v-for="i in 14" :key="i"
-             :style="{ aspectRatio:'1', display:'flex', alignItems:'center', justifyContent:'center', borderRadius:'6px', fontSize:'11px', fontWeight:'500', background: i % 3 === 0 ? s.available_color+'14' : 'transparent', color: i % 3 === 0 ? s.available_color : '#6b7280' }">
+             :style="{ aspectRatio:'1', display:'flex', alignItems:'center', justifyContent:'center', borderRadius:'6px', fontSize:'11px', fontWeight:'500', background: i % 3 === 0 ? s.available_color+'14' : 'transparent', color: i % 3 === 0 ? s.available_color : 'var(--olo-color-text-muted, #9CA3AF)' }">
           {{ i }}
         </div>
       </div>
@@ -47,10 +47,10 @@ import { computed } from 'vue';
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 
 const defaults = {
-  service_id: '', primary_color: '#6366F1', show_price: true, show_duration: true,
+  service_id: '', primary_color: 'var(--olo-color-primary, #6366F1)', show_price: true, show_duration: true,
   widget_max_width: 480, widget_bg: '#FFFFFF', widget_border_radius: 12,
-  widget_border_color: '#E5E7EB', widget_shadow: 'sm', btn_bg: '#6366F1', btn_color: '#FFFFFF',
-  btn_radius: 8, available_color: '#6366F1', full_color: '#EF4444', slot_border_radius: 8,
+  widget_border_color: '#E5E7EB', widget_shadow: 'sm', btn_bg: 'var(--olo-color-primary, #6366F1)', btn_color: '#FFFFFF',
+  btn_radius: 8, available_color: 'var(--olo-color-primary, #6366F1)', full_color: '#EF4444', slot_border_radius: 8,
   title_size: 18, title_weight: '700', title_color: '', meta_color: '#6B7280', success_color: '#10B981',
 };
 
@@ -82,7 +82,7 @@ const headerStyle = computed(() => ({
 const navBtnStyle = computed(() => ({
   width: '30px', height: '30px', borderRadius: '6px', border: '1px solid #e5e7eb',
   display: 'flex', alignItems: 'center', justifyContent: 'center',
-  fontSize: '16px', color: '#6b7280',
+  fontSize: '16px', color: 'var(--olo-color-text-muted, #9CA3AF)',
 }));
 
 const ctaStyle = computed(() => ({

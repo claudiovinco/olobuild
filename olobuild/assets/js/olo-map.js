@@ -40,22 +40,22 @@
 
     var html = '<div class="olo-map-popup">';
     if (config.popupImage && loc.image) {
-      html += '<img src="' + loc.image + '" alt="' + escHtml(loc.title) + '" class="olo-map-popup-img" />';
+      html += '<img src="' + loc.image + '" alt="' + oloUtils.escHtml(loc.title) + '" class="olo-map-popup-img" />';
     }
-    html += '<strong class="olo-map-popup-title">' + escHtml(loc.title) + '</strong>';
+    html += '<strong class="olo-map-popup-title">' + oloUtils.escHtml(loc.title) + '</strong>';
     // Rating + Price
     var meta = '';
     if (loc.rating) {
       meta += '<span class="olo-map-popup-rating">' + buildStars(loc.rating) + '</span>';
     }
     if (loc.price) {
-      meta += '<span class="olo-map-popup-price">' + escHtml(loc.price) + '</span>';
+      meta += '<span class="olo-map-popup-price">' + oloUtils.escHtml(loc.price) + '</span>';
     }
     if (meta) {
       html += '<div class="olo-map-popup-meta">' + meta + '</div>';
     }
     if (loc.address) {
-      html += '<span class="olo-map-popup-address">' + escHtml(loc.address) + '</span>';
+      html += '<span class="olo-map-popup-address">' + oloUtils.escHtml(loc.address) + '</span>';
     }
     if (config.popupExcerpt && loc.excerpt) {
       html += '<p class="olo-map-popup-excerpt">' + loc.excerpt + '</p>';
@@ -76,10 +76,10 @@
     // Detail fields
     var details = '';
     if (loc.phone) {
-      details += '<span class="olo-map-popup-detail"><strong>&#9742;</strong> <a href="tel:' + escHtml(loc.phone) + '">' + escHtml(loc.phone) + '</a></span>';
+      details += '<span class="olo-map-popup-detail"><strong>&#9742;</strong> <a href="tel:' + oloUtils.escHtml(loc.phone) + '">' + oloUtils.escHtml(loc.phone) + '</a></span>';
     }
     if (loc.email) {
-      details += '<span class="olo-map-popup-detail"><strong>&#9993;</strong> <a href="mailto:' + escHtml(loc.email) + '">' + escHtml(loc.email) + '</a></span>';
+      details += '<span class="olo-map-popup-detail"><strong>&#9993;</strong> <a href="mailto:' + oloUtils.escHtml(loc.email) + '">' + oloUtils.escHtml(loc.email) + '</a></span>';
     }
     if (loc.hours) {
       details += '<span class="olo-map-popup-detail"><strong>&#128339;</strong> ' + loc.hours + '</span>';
@@ -152,27 +152,27 @@
   function buildServicePopup(loc, config) {
     var bg = config.popupBg || '#ffffff';
     var color = config.popupColor || '#333333';
-    var radius = config.popupRadius !== undefined ? config.popupRadius : 8;
+    var radius = config.popupRadius || '8px';
     var maxW = config.popupMaxWidth || 280;
     var imgH = config.popupImgHeight || 180;
     var btnColor = config.popupBtnColor || '#3b82f6';
     var btnText = config.popupBtnText || 'Scopri e Prenota';
 
     var html = '<div class="olo-map-popup olo-map-popup-service"'
-      + ' style="background:' + bg + ';color:' + color + ';border-radius:' + radius + 'px;max-width:' + maxW + 'px">';
+      + ' style="background:' + bg + ';color:' + color + ';border-radius:' + radius + ';max-width:' + maxW + 'px">';
 
     if (config.popupImage && loc.image) {
-      html += '<img src="' + loc.image + '" alt="' + escHtml(loc.title) + '" class="olo-map-popup-img"'
+      html += '<img src="' + loc.image + '" alt="' + oloUtils.escHtml(loc.title) + '" class="olo-map-popup-img"'
         + ' style="height:' + imgH + 'px;border-radius:' + radius + 'px ' + radius + 'px 0 0" />';
     }
 
     html += '<div class="olo-map-popup-svc-body" style="padding:10px 12px">';
-    html += '<strong class="olo-map-popup-title" style="color:' + color + '">' + escHtml(loc.title) + '</strong>';
+    html += '<strong class="olo-map-popup-title" style="color:' + color + '">' + oloUtils.escHtml(loc.title) + '</strong>';
 
     // Locality + Altitude line
     var subline = '';
     if (config.popupShowValley !== false && loc.valley) {
-      subline += '<span class="olo-map-popup-locality">' + escHtml(loc.valley) + '</span>';
+      subline += '<span class="olo-map-popup-locality">' + oloUtils.escHtml(loc.valley) + '</span>';
     }
     if (config.popupAltitude && loc.altitude !== undefined) {
       subline += '<span class="olo-map-popup-altitude">' + loc.altitude.toLocaleString('it-IT') + 'm s.l.m.</span>';
@@ -210,7 +210,7 @@
         var emoji = AMENITY_EMOJI[a.slug] || '';
         html += '<span class="olo-map-popup-amenity-badge">'
           + (emoji ? '<span class="olo-map-popup-amenity-emoji">' + emoji + '</span>' : '')
-          + escHtml(a.label) + '</span>';
+          + oloUtils.escHtml(a.label) + '</span>';
       });
       html += '</div>';
     }
@@ -238,7 +238,7 @@
     if (loc.url) {
       html += '<div class="olo-map-popup-actions">';
       html += '<a href="' + loc.url + '" class="olo-map-popup-btn" style="background:' + btnColor + '">'
-        + escHtml(btnText) + '</a>';
+        + oloUtils.escHtml(btnText) + '</a>';
       html += '</div>';
     }
 
@@ -255,12 +255,6 @@
     if (half) s += '&#189;';
     for (var i = 0; i < empty; i++) s += '&#9734;';
     return s;
-  }
-
-  function escHtml(str) {
-    var div = document.createElement('div');
-    div.appendChild(document.createTextNode(str || ''));
-    return div.innerHTML;
   }
 
   /**

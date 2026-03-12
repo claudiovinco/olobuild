@@ -10,7 +10,7 @@
         </div>
         <!-- Content -->
         <div :style="{ padding: s.card_padding+'px' }">
-          <div :style="{ fontSize: s.title_size+'px', fontWeight: s.title_weight, color: s.title_color || '#1f2937', marginBottom: '6px' }">
+          <div :style="{ fontSize: s.title_size+'px', fontWeight: s.title_weight, color: s.title_color || 'var(--olo-color-text, #374151)', marginBottom: '6px' }">
             {{ svc.title }}
           </div>
           <div style="display:flex;gap:10px;margin-bottom:8px">
@@ -31,6 +31,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { getShadowValue } from '@/composables/useShadowMap';
 
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 
@@ -39,14 +40,12 @@ const defaults = {
   show_excerpt: true, show_booking_btn: true, booking_btn_text: 'Prenota', link_to: 'service_page',
   card_bg: '#FFFFFF', card_border_radius: 12, card_border_color: '#E5E7EB', card_shadow: 'sm',
   card_padding: 24, card_hover_shadow: 'md', title_size: 18, title_weight: '600', title_color: '',
-  price_color: '#6366F1', price_size: 16, duration_color: '#6B7280', excerpt_color: '#6B7280',
-  excerpt_size: 14, btn_bg: '#6366F1', btn_color: '#FFFFFF', btn_radius: 8, btn_full_width: false,
+  price_color: 'var(--olo-color-primary, #6366F1)', price_size: 16, duration_color: '#6B7280', excerpt_color: '#6B7280',
+  excerpt_size: 14, btn_bg: 'var(--olo-color-primary, #6366F1)', btn_color: '#FFFFFF', btn_radius: 8, btn_full_width: false,
   image_height: 200, image_radius: 8, color_bar: true, color_bar_height: 4,
 };
 
 const s = computed(() => ({ ...defaults, ...props.settings }));
-
-const shadowMap = { none: 'none', sm: '0 1px 3px rgba(0,0,0,0.1)', md: '0 4px 12px rgba(0,0,0,0.1)', lg: '0 8px 24px rgba(0,0,0,0.15)' };
 
 const sampleServices = [
   { title: 'Consulenza Fiscale', duration: 60, price: '80,00', color: '#6366F1', excerpt: 'Consulenza personalizzata su tasse e contabilità.' },
@@ -63,7 +62,7 @@ const cardStyle = computed(() => ({
   background: s.value.card_bg,
   borderRadius: s.value.card_border_radius + 'px',
   border: '1px solid ' + s.value.card_border_color,
-  boxShadow: shadowMap[s.value.card_shadow] || 'none',
+  boxShadow: getShadowValue(s.value, 'card_shadow'),
   overflow: 'hidden',
   transition: 'box-shadow 0.2s ease',
 }));

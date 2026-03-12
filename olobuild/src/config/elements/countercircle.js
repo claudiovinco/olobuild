@@ -1,0 +1,46 @@
+export default {
+  type: 'countercircle',
+  name: 'Counter Circle',
+  icon: 'dashicons-marker',
+  category: 'content',
+  defaults: {
+    value: '75',
+    max_value: '100',
+    suffix: '%',
+    prefix: '',
+    title: 'Progresso',
+    size: '160',
+    stroke_width: '10',
+    stroke_color: '',
+    track_color: '',
+    text_color: '',
+    title_color: '',
+    duration: '1500',
+    title_position: 'below',
+  },
+  fields: [
+    { key: 'value', label: 'Valore', type: 'range', min: 0, max: 1000, step: 1 },
+    { key: 'max_value', label: 'Valore massimo', type: 'range', min: 1, max: 1000, step: 1 },
+    { key: 'suffix', label: 'Suffisso', type: 'text' },
+    { key: 'prefix', label: 'Prefisso', type: 'text' },
+    { key: 'title', label: 'Titolo', type: 'text' },
+    { key: 'title_position', label: 'Posizione titolo', type: 'select', options: [
+      { value: 'below', label: 'Sotto' },
+      { value: 'inside', label: 'Dentro' },
+      { value: 'above', label: 'Sopra' },
+    ]},
+
+    { type: 'separator', label: 'Aspetto' },
+    { key: 'size', label: 'Dimensione (px)', type: 'range', min: 60, max: 400, step: 10 },
+    { key: 'stroke_width', label: 'Spessore traccia', type: 'range', min: 2, max: 30, step: 1 },
+
+    { type: 'separator', label: 'Colori' },
+    { key: 'stroke_color', label: 'Colore progresso', type: 'color' },
+    { key: 'track_color', label: 'Colore traccia', type: 'color' },
+    { key: 'text_color', label: 'Colore testo', type: 'color' },
+    { key: 'title_color', label: 'Colore titolo', type: 'color' },
+
+    { type: 'separator', label: 'Animazione' },
+    { key: 'duration', label: 'Durata animazione (ms)', type: 'range', min: 0, max: 5000, step: 100 },
+  ],
+};

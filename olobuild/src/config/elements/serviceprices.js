@@ -8,12 +8,12 @@ export default {
     columns: '3',
     gap: '16',
     card_radius: '12',
-    card_border: '#E5E7EB',
+    card_border: '',
     card_padding: '20',
     accent_color: '',
     amount_size: '26',
     label_size: '14',
-    label_color: '#6B7280',
+    label_color: '',
     hover_border: true,
   },
   fields: [
@@ -23,7 +23,7 @@ export default {
     { type: 'separator', label: 'Layout' },
     { key: 'columns', label: 'Colonne', type: 'range', min: 1, max: 4, step: 1 },
     { key: 'gap', label: 'Gap (px)', type: 'range', min: 8, max: 32, step: 4 },
-    { key: 'card_radius', label: 'Raggio card (px)', type: 'range', min: 0, max: 24, step: 2 },
+    { key: 'card_radius', label: 'Raggio card (px)', type: 'border-radius' },
     { key: 'card_padding', label: 'Padding card (px)', type: 'range', min: 8, max: 32, step: 4 },
 
     { type: 'separator', label: 'Colori' },

@@ -1,5 +1,5 @@
 <template>
-  <div class="olo-canvas" :data-canvas-theme="canvasTheme">
+  <div ref="canvasRef" class="olo-canvas" :data-canvas-theme="canvasTheme" style="position: relative">
     <!-- Sections (top-level draggable) -->
     <draggable
       v-model="tilesStore.canvasTiles"
@@ -17,13 +17,22 @@
           :class="{ 'olo-section-block--selected': builderStore.selectedTileId === section.id, 'olo-node-hidden-vp': isHiddenInViewport(section) }"
           :data-tile-id="section.id"
           :style="{ ...getSectionColorStyle(section), ...(getNodeBg(section).type === 'solid' ? getNodeBgStyle(section) : {}), ...getNodeSpacingStyle(section) }"
+          @contextmenu.prevent="onTileContextMenu($event, section.id)"
         >
           <!-- Background preview layers -->
           <div
-            v-if="getNodeBg(section).type === 'image' || getNodeBg(section).type === 'gradient' || getNodeBg(section).type === 'video'"
+            v-if="getNodeBg(section).type === 'image' || getNodeBg(section).type === 'gradient'"
             class="olo-bg-preview"
             :style="getNodeBgStyle(section)"
           ></div>
+          <video
+            v-if="getNodeBg(section).type === 'video' && getNodeBg(section).video_url"
+            class="olo-bg-video"
+            :style="{ objectFit: getNodeBg(section).video_fit || 'cover', objectPosition: getNodeBg(section).image_position || 'center center' }"
+            :src="getNodeBg(section).video_url"
+            :poster="getNodeBg(section).video_poster || undefined"
+            muted autoplay loop playsinline
+          ></video>
           <div
             v-if="getOverlayStyle(section)"
             class="olo-bg-overlay"
@@ -31,7 +40,7 @@
           ></div>
 
           <!-- Section bar -->
-          <div class="olo-section-bar" @click.stop="selectTile(section.id)">
+          <div class="olo-section-bar" @click.stop="selectTile(section.id)" @contextmenu.prevent="onTileContextMenu($event, section.id)">
             <span class="olo-section-grip" title="Trascina per riordinare la sezione">&#x2630;</span>
             <span class="olo-bar-type">Sezione</span>
             <span v-if="section.settings?.style && section.settings.style !== 'default'" class="olo-bar-badge">{{ section.settings.style }}</span>
@@ -64,10 +73,18 @@
                 >
                   <!-- Background preview layers -->
                   <div
-                    v-if="getNodeBg(row).type === 'image' || getNodeBg(row).type === 'gradient' || getNodeBg(row).type === 'video'"
+                    v-if="getNodeBg(row).type === 'image' || getNodeBg(row).type === 'gradient'"
                     class="olo-bg-preview"
                     :style="getNodeBgStyle(row)"
                   ></div>
+                  <video
+                    v-if="getNodeBg(row).type === 'video' && getNodeBg(row).video_url"
+                    class="olo-bg-video"
+                    :style="{ objectFit: getNodeBg(row).video_fit || 'cover', objectPosition: getNodeBg(row).image_position || 'center center' }"
+                    :src="getNodeBg(row).video_url"
+                    :poster="getNodeBg(row).video_poster || undefined"
+                    muted autoplay loop playsinline
+                  ></video>
                   <div
                     v-if="getOverlayStyle(row)"
                     class="olo-bg-overlay"
@@ -75,7 +92,7 @@
                   ></div>
 
                   <!-- Row bar -->
-                  <div class="olo-row-bar" @click.stop="selectTile(row.id)">
+                  <div class="olo-row-bar" @click.stop="selectTile(row.id)" @contextmenu.prevent="onTileContextMenu($event, row.id)">
                     <span class="olo-row-grip" title="Trascina per riordinare la riga">&#x2630;</span>
                     <span class="olo-bar-type">Riga</span>
                     <span class="olo-bar-badge">{{ row.settings?.layout === 'custom' ? (row.settings?.custom_widths || '%') : (row.settings?.layout || '50-50') }}</span>
@@ -92,46 +109,58 @@
                     class="olo-row-columns"
                     :class="{ 'olo-row-stack': row.settings?.stack_mobile !== false }"
                     :style="{
-                      gap: (row.settings?.gap || 16) + 'px',
-                      alignItems: alignMap[row.settings?.vertical_align] || 'stretch'
+                      gap: rv(row.settings || {}, 'gap', 16, builderStore.viewMode) + 'px',
+                      alignItems: alignMap[row.settings?.vertical_align] || 'stretch',
+                      flexDirection: row.settings?.flex_direction || undefined,
+                      justifyContent: row.settings?.flex_justify || undefined,
+                      flexWrap: row.settings?.flex_wrap || undefined,
                     }"
                   >
-                    <div
-                      v-for="col in (row.children || [])"
-                      :key="col.id"
-                      class="olo-column-block"
-                      :class="{
-                        'olo-column-block--selected': builderStore.selectedTileId === col.id,
-                        'olo-column-block--dragover': dragOverColId === col.id
-                      }"
-                      :data-tile-id="col.id"
-                      :style="{ width: getColPercent(col) + '%', minWidth: 0, ...getNodeSpacingStyle(col) }"
-                      @click.stop="selectTile(col.id)"
-                      @dragover.prevent.stop="dragOverColId = col.id"
-                      @dragleave="onColDragLeave($event, col.id)"
-                      @drop.prevent.stop="onDropIntoColumn($event, col.id)"
-                    >
-                      <!-- Elements inside column -->
-                      <draggable
-                        :list="col.children"
-                        item-key="id"
-                        ghost-class="olo-ghost"
-                        animation="150"
-                        :group="{ name: 'elements' }"
-                        class="olo-column-elements"
-                        @change="onChange"
+                    <template v-for="(col, colIdx) in (row.children || [])" :key="col.id">
+                      <!-- Resize handle between columns -->
+                      <div
+                        v-if="colIdx > 0"
+                        class="olo-col-resize-handle"
+                        @mousedown.stop.prevent="startColResize($event, row, colIdx)"
+                        title="Trascina per ridimensionare"
                       >
-                        <template #item="{ element: tile }">
-                          <GridCell :tile="tile" />
-                        </template>
-                      </draggable>
-
-                      <!-- Empty column placeholder -->
-                      <div v-if="!col.children || col.children.length === 0" class="olo-column-empty">
-                        <span class="olo-column-plus">+</span>
-                        <span>Rilascia qui</span>
+                        <span class="olo-col-resize-grip"></span>
                       </div>
-                    </div>
+                      <div
+                        class="olo-column-block"
+                        :class="{
+                          'olo-column-block--selected': builderStore.selectedTileId === col.id,
+                          'olo-column-block--dragover': dragOverColId === col.id
+                        }"
+                        :data-tile-id="col.id"
+                        :style="{ width: getColPercent(col) + '%', minWidth: 0, ...getNodeSpacingStyle(col) }"
+                        @click.stop="selectTile(col.id)"
+                        @dragover.prevent.stop="dragOverColId = col.id"
+                        @dragleave="onColDragLeave($event, col.id)"
+                        @drop.prevent.stop="onDropIntoColumn($event, col.id)"
+                      >
+                        <!-- Elements inside column -->
+                        <draggable
+                          :list="col.children"
+                          item-key="id"
+                          ghost-class="olo-ghost"
+                          animation="150"
+                          :group="{ name: 'elements' }"
+                          class="olo-column-elements"
+                          @change="onChange"
+                        >
+                          <template #item="{ element: tile }">
+                            <GridCell :tile="tile" @contextmenu="onTileContextMenu" />
+                          </template>
+                        </draggable>
+
+                        <!-- Empty column placeholder -->
+                        <div v-if="!col.children || col.children.length === 0" class="olo-column-empty" @click.stop="openFinder(col.id)" style="cursor:pointer">
+                          <span class="olo-column-plus">+</span>
+                          <span>Rilascia qui</span>
+                        </div>
+                      </div>
+                    </template>
                   </div>
 
                   <!-- Layout presets -->
@@ -182,9 +211,11 @@
       class="olo-canvas-empty"
       @dragover.prevent
       @drop.prevent.stop="onDropCanvas"
+      @click.stop="openFinder()"
+      style="cursor:pointer"
     >
       <div style="font-size: 32px; margin-bottom: 8px;">&#x1F4D0;</div>
-      <div>Trascina una tile dalla barra laterale per iniziare</div>
+      <div>Trascina o clicca per aggiungere una tile</div>
     </div>
 
     <!-- Bottom drop zone (when canvas has content) -->
@@ -193,25 +224,34 @@
       class="olo-canvas-bottom-drop"
       @dragover.prevent
       @drop.prevent.stop="onDropCanvas"
+      @click.stop="openFinder()"
+      style="cursor:pointer"
     >
-      <span>+ Rilascia qui per aggiungere una sezione</span>
+      <span>+ Rilascia qui o clicca per aggiungere</span>
     </div>
+
+    <!-- Context menu -->
+    <ContextMenu ref="contextMenuRef" />
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted, onBeforeUnmount, inject } from 'vue';
 import draggable from 'vuedraggable';
 import { useTilesStore, createRow, createColumn } from '@/stores/tiles';
 import { useBuilderStore } from '@/stores/builder';
 import { useStylesStore } from '@/stores/styles';
 import { useDragDrop } from '@/composables/useDragDrop';
+import { resolveNodeBg, buildBgStyle, buildOverlayStyle } from '@/composables/useBackgroundStyle';
+import { rv } from '@/composables/useResponsiveValue';
 import GridCell from './GridCell.vue';
+import ContextMenu from '@/components/Builder/ContextMenu.vue';
 
 const tilesStore = useTilesStore();
 const builderStore = useBuilderStore();
 const stylesStore = useStylesStore();
-const { handleDropFromSidebar, handleDropIntoColumn, createTileFromType } = useDragDrop();
+const openFinder = inject('openFinder', () => {});
+const { handleDropFromSidebar, handleDropIntoColumn, handleGlobalWidgetDrop, handleGlobalWidgetDropIntoColumn, createTileFromType } = useDragDrop();
 
 function getSectionColorStyle(section) {
   const sectionType = section.settings?.style || 'default';
@@ -224,21 +264,13 @@ function getSectionColorStyle(section) {
   return map[sectionType] || {};
 }
 
+// Background helpers — delegano al composable condiviso
 function getNodeBg(node) {
-  const s = node.style || {};
-  if (s.bg && s.bg.type && s.bg.type !== 'none') return s.bg;
-  if (s.bg_color) return { type: 'solid', color: s.bg_color };
-  return { type: 'none' };
+  return resolveNodeBg(node);
 }
 
 function getNodeBgStyle(node) {
-  const bg = getNodeBg(node);
-  if (bg.type === 'solid') return { backgroundColor: bg.color };
-  if (bg.type === 'gradient') return { background: `linear-gradient(${bg.gradient_angle || 180}deg, ${bg.gradient_from || '#fff'}, ${bg.gradient_to || '#000'})` };
-  if (bg.type === 'image' && bg.image_url) return { backgroundImage: `url(${bg.image_url})`, backgroundSize: bg.image_size || 'cover', backgroundPosition: bg.image_position || 'center center', backgroundRepeat: 'no-repeat' };
-  if (bg.type === 'video' && bg.video_poster) return { backgroundImage: `url(${bg.video_poster})`, backgroundSize: 'cover', backgroundPosition: bg.image_position || 'center center', backgroundRepeat: 'no-repeat' };
-  if (bg.type === 'video') return { backgroundColor: '#1a1a2e' };
-  return {};
+  return buildBgStyle(getNodeBg(node));
 }
 
 function hasBgImage(node) {
@@ -262,22 +294,29 @@ function hasParallax(node) {
 }
 
 function getOverlayStyle(node) {
-  const bg = getNodeBg(node);
-  if (bg.type === 'none' || !bg.overlay_opacity || parseInt(bg.overlay_opacity) <= 0) return null;
-  return { backgroundColor: bg.overlay_color || '#000000', opacity: parseInt(bg.overlay_opacity) / 100 };
+  return buildOverlayStyle(getNodeBg(node));
 }
 
 function getNodeSpacingStyle(node) {
   const s = node.style || {};
+  const mode = builderStore.viewMode;
   const st = {};
-  if (s.margin_top)    st.marginTop    = `${s.margin_top}px`;
-  if (s.margin_right)  st.marginRight  = `${s.margin_right}px`;
-  if (s.margin_bottom) st.marginBottom = `${s.margin_bottom}px`;
-  if (s.margin_left)   st.marginLeft   = `${s.margin_left}px`;
-  if (s.padding_top)    st.paddingTop    = `${s.padding_top}px`;
-  if (s.padding_right)  st.paddingRight  = `${s.padding_right}px`;
-  if (s.padding_bottom) st.paddingBottom = `${s.padding_bottom}px`;
-  if (s.padding_left)   st.paddingLeft   = `${s.padding_left}px`;
+  const mt = rv(s, 'margin_top', undefined, mode);
+  const mr = rv(s, 'margin_right', undefined, mode);
+  const mb = rv(s, 'margin_bottom', undefined, mode);
+  const ml = rv(s, 'margin_left', undefined, mode);
+  if (mt) st.marginTop    = `${mt}px`;
+  if (mr) st.marginRight  = `${mr}px`;
+  if (mb) st.marginBottom = `${mb}px`;
+  if (ml) st.marginLeft   = `${ml}px`;
+  const pt = rv(s, 'padding_top', undefined, mode);
+  const pr = rv(s, 'padding_right', undefined, mode);
+  const pb = rv(s, 'padding_bottom', undefined, mode);
+  const pl = rv(s, 'padding_left', undefined, mode);
+  if (pt) st.paddingTop    = `${pt}px`;
+  if (pr) st.paddingRight  = `${pr}px`;
+  if (pb) st.paddingBottom = `${pb}px`;
+  if (pl) st.paddingLeft   = `${pl}px`;
   return st;
 }
 
@@ -286,10 +325,58 @@ function isHiddenInViewport(node) {
   const adv = node.advanced || {};
   const mode = builderStore.viewMode;
   if (mode === 'desktop' && adv.visible_desktop === false) return true;
+  if (mode === 'tablet_landscape' && adv.visible_tablet_landscape === false) return true;
   if (mode === 'tablet' && adv.visible_tablet === false) return true;
+  if (mode === 'mobile_landscape' && adv.visible_mobile_landscape === false) return true;
   if (mode === 'mobile' && adv.visible_mobile === false) return true;
   return false;
 }
+
+const contextMenuRef = ref(null);
+const canvasRef = ref(null);
+
+function onTileContextMenu(event, tileId) {
+  contextMenuRef.value?.open(event, tileId);
+}
+
+function onCanvasContextMenu(event) {
+  event.preventDefault();
+  event.stopPropagation();
+  // Risali il DOM fino a trovare un [data-tile-id]
+  let el = event.target;
+  while (el && el !== canvasRef.value) {
+    if (el.dataset && el.dataset.tileId) {
+      contextMenuRef.value?.open(event, el.dataset.tileId);
+      return;
+    }
+    el = el.parentElement;
+  }
+}
+
+function onDocumentContextMenu(event) {
+  // Solo se il click è dentro il canvas
+  const canvas = canvasRef.value;
+  if (!canvas || !canvas.contains(event.target)) return;
+  event.preventDefault();
+  event.stopImmediatePropagation();
+  // Risali il DOM fino a trovare un [data-tile-id]
+  let el = event.target;
+  while (el && el !== canvas) {
+    if (el.dataset && el.dataset.tileId) {
+      contextMenuRef.value?.open(event, el.dataset.tileId);
+      return;
+    }
+    el = el.parentElement;
+  }
+}
+
+onMounted(() => {
+  document.addEventListener('contextmenu', onDocumentContextMenu, true);
+});
+
+onBeforeUnmount(() => {
+  document.removeEventListener('contextmenu', onDocumentContextMenu, true);
+});
 
 const dragOverColId = ref(null);
 
@@ -371,6 +458,46 @@ function getColPercent(col) {
   return fractionToPercent[w] || 50;
 }
 
+// ── Column drag-resize ──
+function startColResize(event, row, colIdx) {
+  const cols = row.children || [];
+  if (colIdx < 1 || colIdx >= cols.length) return;
+  const leftCol = cols[colIdx - 1];
+  const rightCol = cols[colIdx];
+  const startX = event.clientX;
+  const rowEl = event.target.closest('.olo-row-columns');
+  if (!rowEl) return;
+  const rowWidth = rowEl.offsetWidth;
+  const leftStart = getColPercent(leftCol);
+  const rightStart = getColPercent(rightCol);
+
+  function onMove(e) {
+    const dx = e.clientX - startX;
+    const dpct = (dx / rowWidth) * 100;
+    let newLeft = Math.round((leftStart + dpct) * 10) / 10;
+    let newRight = Math.round((rightStart - dpct) * 10) / 10;
+    if (newLeft < 10) { newLeft = 10; newRight = leftStart + rightStart - 10; }
+    if (newRight < 10) { newRight = 10; newLeft = leftStart + rightStart - 10; }
+    leftCol.settings = { ...leftCol.settings, width_custom: String(newLeft) };
+    rightCol.settings = { ...rightCol.settings, width_custom: String(newRight) };
+    row.settings = { ...row.settings, layout: 'custom' };
+  }
+  function onUp() {
+    document.removeEventListener('mousemove', onMove);
+    document.removeEventListener('mouseup', onUp);
+    document.body.style.cursor = '';
+    document.body.style.userSelect = '';
+    // Sync custom_widths CSV on the row so PHP frontend can render it
+    const allWidths = cols.map(c => getColPercent(c));
+    row.settings = { ...row.settings, custom_widths: allWidths.join(',') };
+    builderStore.isDirty = true;
+  }
+  document.body.style.cursor = 'col-resize';
+  document.body.style.userSelect = 'none';
+  document.addEventListener('mousemove', onMove);
+  document.addEventListener('mouseup', onUp);
+}
+
 function selectTile(id) {
   builderStore.selectTile(id);
 }
@@ -400,6 +527,11 @@ function onColDragLeave(event, colId) {
 
 function onDropIntoColumn(event, colId) {
   dragOverColId.value = null;
+  const globalId = event.dataTransfer.getData('global-widget-id');
+  if (globalId) {
+    handleGlobalWidgetDropIntoColumn(globalId, colId);
+    return;
+  }
   const tileType = event.dataTransfer.getData('tile-type');
   if (!tileType) return;
   handleDropIntoColumn(tileType, colId);
@@ -408,6 +540,11 @@ function onDropIntoColumn(event, colId) {
 // --- Drop on canvas (creates new section) ---
 
 function onDropCanvas(event) {
+  const globalId = event.dataTransfer.getData('global-widget-id');
+  if (globalId) {
+    handleGlobalWidgetDrop(globalId);
+    return;
+  }
   const tileType = event.dataTransfer.getData('tile-type');
   if (!tileType) return;
   handleDropFromSidebar(tileType);
@@ -416,6 +553,18 @@ function onDropCanvas(event) {
 // --- Drop into section (adds row or element) ---
 
 function onDropIntoSection(event, section) {
+  const globalId = event.dataTransfer.getData('global-widget-id');
+  if (globalId) {
+    const newTile = tilesStore.insertGlobalWidget(globalId);
+    if (!newTile) return;
+    const col = createColumn('1-1', [newTile]);
+    const row = createRow('100', [col]);
+    if (!Array.isArray(section.children)) section.children = [];
+    section.children.push(row);
+    builderStore.isDirty = true;
+    builderStore.selectTile(newTile.id);
+    return;
+  }
   const tileType = event.dataTransfer.getData('tile-type');
   if (!tileType || tileType === 'section') return;
 
@@ -483,6 +632,16 @@ function changeRowLayout(row, layoutKey) {
 .olo-bg-preview {
   position: absolute;
   inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  opacity: 0.6;
+}
+.olo-bg-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   z-index: 0;
   pointer-events: none;
   border-radius: inherit;
@@ -626,6 +785,35 @@ function changeRowLayout(row, layoutKey) {
   min-height: 80px;
 }
 
+/* Column resize handle */
+.olo-col-resize-handle {
+  width: 8px;
+  flex-shrink: 0;
+  cursor: col-resize;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 5;
+  margin: 0 -4px;
+}
+.olo-col-resize-handle:hover .olo-col-resize-grip,
+.olo-col-resize-handle:active .olo-col-resize-grip {
+  opacity: 1;
+  background: var(--olo-color-primary, #6366F1);
+}
+.olo-col-resize-grip {
+  width: 3px;
+  height: 32px;
+  border-radius: 2px;
+  background: #9ca3af;
+  opacity: 0;
+  transition: opacity 0.15s, background 0.15s;
+}
+.olo-row-columns:hover .olo-col-resize-grip {
+  opacity: 0.5;
+}
+
 .olo-column-block {
   border: 2px dashed #d1d5db;
   min-height: 80px;
@@ -637,7 +825,7 @@ function changeRowLayout(row, layoutKey) {
 }
 .olo-column-block--dragover {
   border-color: var(--olo-color-primary, #6366F1);
-  background: rgb(var(--olo-primary-rgb, 99 102 241) / 0.08);
+  background: rgba(107, 114, 128, 0.08);
 }
 
 .olo-column-elements {
@@ -685,7 +873,7 @@ function changeRowLayout(row, layoutKey) {
 .olo-preset-btn--active {
   border-color: var(--olo-color-primary, #6366F1);
   color: var(--olo-color-primary, #6366F1);
-  background: rgb(var(--olo-primary-rgb, 99 102 241) / 0.1);
+  background: rgba(107, 114, 128, 0.1);
 }
 
 /* === Add row === */
@@ -752,7 +940,7 @@ function changeRowLayout(row, layoutKey) {
    ======================================== */
 .olo-canvas[data-canvas-theme="light"] .olo-section-block {
   border-color: #e5e7eb;
-  background: rgb(var(--olo-primary-rgb, 99 102 241) / 0.03);
+  background: rgba(107, 114, 128, 0.03);
 }
 .olo-canvas[data-canvas-theme="light"] .olo-section-bar {
   border-bottom-color: #e5e7eb;
@@ -760,7 +948,7 @@ function changeRowLayout(row, layoutKey) {
 }
 .olo-canvas[data-canvas-theme="light"] .olo-row-block {
   border-color: #d1d5db;
-  background: rgb(var(--olo-primary-rgb, 99 102 241) / 0.02);
+  background: rgba(107, 114, 128, 0.02);
 }
 .olo-canvas[data-canvas-theme="light"] .olo-row-bar {
   border-bottom-color: #d1d5db;

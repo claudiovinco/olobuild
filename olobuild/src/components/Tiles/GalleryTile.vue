@@ -1,18 +1,79 @@
 <template>
-  <div v-if="images.length > 0" :style="gridStyle">
-    <div v-for="(img, idx) in visibleImages" :key="idx" :style="thumbStyle">
-      <img
-        :src="typeof img === 'string' ? img : img.url"
-        :alt="typeof img === 'string' ? '' : (img.alt || '')"
-        :style="imgInnerStyle"
-      />
-      <!-- Tint -->
-      <div v-if="s.fx_tint" :style="tintStyle"></div>
-      <!-- Vignette -->
-      <div v-if="s.fx_vignette" :style="vignetteStyle"></div>
-      <!-- "+N" on last visible -->
-      <div v-if="idx === visibleImages.length - 1 && extraCount > 0" :style="moreStyle">
-        +{{ extraCount }}
+  <div v-if="images.length > 0">
+    <!-- Layout badge -->
+    <div v-if="s.layout !== 'grid'" style="display:inline-block;margin-bottom:6px;padding:2px 8px;background:rgba(99,102,241,0.25);border-radius:3px;font-size:9px;color:#a5b4fc;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">
+      {{ s.layout === 'masonry' ? 'Masonry' : 'Giustificato' }}
+    </div>
+    <!-- Filter bar preview -->
+    <div v-if="s.filter_bar" style="display:flex;gap:8px;margin-bottom:8px;padding:4px 0;">
+      <span style="font-size:9px;padding:2px 8px;background:rgba(255,255,255,0.15);border-radius:3px;color:#e5e7eb;font-weight:600;">Tutti</span>
+      <span style="font-size:9px;padding:2px 8px;color:#9ca3af;">Cat. 1</span>
+      <span style="font-size:9px;padding:2px 8px;color:#9ca3af;">Cat. 2</span>
+    </div>
+    <!-- Grid layout -->
+    <div v-if="s.layout === 'grid'" :style="gridStyle">
+      <div
+        v-for="(img, idx) in visibleImages"
+        :key="idx"
+        :style="thumbStyle(idx)"
+        :class="{ 'olo-gallery-hover-zoom': s.fx_hover_zoom }"
+      >
+        <img
+          :src="typeof img === 'string' ? img : img.url"
+          :alt="typeof img === 'string' ? '' : (img.alt || '')"
+          :style="imgInnerStyle"
+          :class="{ 'olo-gallery-kb': s.fx_kenburns }"
+        />
+        <div v-if="s.fx_tint" :style="tintStyle"></div>
+        <div v-if="s.fx_vignette" :style="vignetteStyle"></div>
+        <div v-if="s.fx_grain" class="olo-gallery-grain" :style="{ opacity: parseInt(s.fx_grain_opacity || 15) / 100 }"></div>
+        <div v-if="idx === visibleImages.length - 1 && extraCount > 0" :style="moreStyle">
+          +{{ extraCount }}
+        </div>
+      </div>
+    </div>
+    <!-- Masonry layout -->
+    <div v-else-if="s.layout === 'masonry'" :style="masonryContainerStyle">
+      <div
+        v-for="(img, idx) in visibleImages"
+        :key="idx"
+        :style="thumbStyle(idx)"
+        :class="{ 'olo-gallery-hover-zoom': s.fx_hover_zoom }"
+      >
+        <img
+          :src="typeof img === 'string' ? img : img.url"
+          :alt="typeof img === 'string' ? '' : (img.alt || '')"
+          :style="imgInnerStyle"
+          :class="{ 'olo-gallery-kb': s.fx_kenburns }"
+        />
+        <div v-if="s.fx_tint" :style="tintStyle"></div>
+        <div v-if="s.fx_vignette" :style="vignetteStyle"></div>
+        <div v-if="s.fx_grain" class="olo-gallery-grain" :style="{ opacity: parseInt(s.fx_grain_opacity || 15) / 100 }"></div>
+        <div v-if="idx === visibleImages.length - 1 && extraCount > 0" :style="moreStyle">
+          +{{ extraCount }}
+        </div>
+      </div>
+    </div>
+    <!-- Justified layout -->
+    <div v-else :style="justifiedContainerStyle">
+      <div
+        v-for="(img, idx) in visibleImages"
+        :key="idx"
+        :style="justifiedThumbStyle"
+        :class="{ 'olo-gallery-hover-zoom': s.fx_hover_zoom }"
+      >
+        <img
+          :src="typeof img === 'string' ? img : img.url"
+          :alt="typeof img === 'string' ? '' : (img.alt || '')"
+          :style="imgInnerStyle"
+          :class="{ 'olo-gallery-kb': s.fx_kenburns }"
+        />
+        <div v-if="s.fx_tint" :style="tintStyle"></div>
+        <div v-if="s.fx_vignette" :style="vignetteStyle"></div>
+        <div v-if="s.fx_grain" class="olo-gallery-grain" :style="{ opacity: parseInt(s.fx_grain_opacity || 15) / 100 }"></div>
+        <div v-if="idx === visibleImages.length - 1 && extraCount > 0" :style="moreStyle">
+          +{{ extraCount }}
+        </div>
       </div>
     </div>
   </div>
@@ -33,9 +94,13 @@ const props = defineProps({
 });
 
 const defaults = {
+  layout: 'grid', filter_bar: false, random_order: false,
   columns: '3', rows: '0', gap: '8', img_height: '200px', object_fit: 'cover', thumb_radius: '8',
-  fx_hover_zoom: true, fx_hover_tilt: false,
+  fx_hover_zoom: true, fx_hover_zoom_scale: '1.08',
+  fx_hover_tilt: false,
+  fx_kenburns: false, fx_kenburns_speed: '20', fx_kenburns_scale: '1.15',
   fx_vignette: false, fx_vignette_strength: '40',
+  fx_grain: false, fx_grain_opacity: '15',
   fx_tint: false, fx_tint_color: '#1E3A5F', fx_tint_opacity: '10', fx_tint_blend: 'multiply',
   more_bg: 'rgba(0,0,0,0.55)', more_color: '#FFFFFF', more_size: '28',
 };
@@ -43,11 +108,16 @@ const s = computed(() => ({ ...defaults, ...props.settings }));
 
 const images = computed(() => Array.isArray(props.settings.images) ? props.settings.images : []);
 
-const cols = computed(() => Math.max(2, Math.min(6, parseInt(s.value.columns) || 3)));
+const cols = computed(() => Math.max(2, Math.min(12, parseInt(s.value.columns) || 3)));
 const rows = computed(() => Math.max(0, Math.min(5, parseInt(s.value.rows) || 0)));
 const maxVisible = computed(() => rows.value > 0 ? cols.value * rows.value : images.value.length);
 const visibleImages = computed(() => images.value.slice(0, maxVisible.value));
 const extraCount = computed(() => Math.max(0, images.value.length - maxVisible.value));
+
+const masonryHeight = (index) => {
+  if (s.value.layout !== 'masonry') return s.value.img_height || '200px';
+  return (index % 3 === 0 ? '240' : index % 3 === 1 ? '180' : '220') + 'px';
+};
 
 const gridStyle = computed(() => ({
   display: 'grid',
@@ -55,18 +125,58 @@ const gridStyle = computed(() => ({
   gap: s.value.gap + 'px',
 }));
 
-const thumbStyle = computed(() => ({
+const masonryContainerStyle = computed(() => ({
+  columnCount: cols.value,
+  columnGap: s.value.gap + 'px',
+}));
+
+const justifiedContainerStyle = computed(() => ({
+  display: 'flex',
+  flexWrap: 'wrap',
+  gap: s.value.gap + 'px',
+}));
+
+const thumbStyle = (index) => {
+  const base = {
+    position: 'relative',
+    borderRadius: (s.value.thumb_radius || '8') + 'px',
+    overflow: 'hidden',
+  };
+  if (s.value.layout === 'masonry') {
+    base.height = masonryHeight(index);
+    base.marginBottom = s.value.gap + 'px';
+    base.breakInside = 'avoid';
+  } else {
+    base.height = s.value.img_height || '200px';
+  }
+  return base;
+};
+
+const justifiedThumbStyle = computed(() => ({
   position: 'relative',
   height: s.value.img_height || '200px',
   borderRadius: (s.value.thumb_radius || '8') + 'px',
   overflow: 'hidden',
+  flexGrow: 1,
+  minWidth: '120px',
 }));
 
-const imgInnerStyle = computed(() => ({
-  width: '100%', height: '100%',
-  objectFit: s.value.object_fit || 'cover',
-  display: 'block',
-}));
+const imgInnerStyle = computed(() => {
+  const st = {
+    width: '100%', height: '100%',
+    objectFit: s.value.object_fit || 'cover',
+    display: 'block',
+    transition: 'transform 0.4s ease',
+  };
+  if (s.value.fx_kenburns) {
+    st.animationName = 'oloKenBurns';
+    st.animationDuration = (parseInt(s.value.fx_kenburns_speed) || 20) + 's';
+    st.animationTimingFunction = 'ease-in-out';
+    st.animationIterationCount = 'infinite';
+    st.animationDirection = 'alternate';
+  }
+  return st;
+});
 
 const tintStyle = computed(() => ({
   position: 'absolute', inset: '0', zIndex: '1', pointerEvents: 'none',
@@ -93,3 +203,25 @@ const moreStyle = computed(() => ({
   borderRadius: (s.value.thumb_radius || '8') + 'px',
 }));
 </script>
+
+<style>
+@keyframes oloKenBurns {
+  0% { transform: scale(1) translate(0, 0); }
+  100% { transform: scale(1.15) translate(-2%, -1%); }
+}
+.olo-gallery-kb {
+  will-change: transform;
+}
+.olo-gallery-hover-zoom:hover img {
+  transform: scale(1.08) !important;
+}
+.olo-gallery-grain {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 128px 128px;
+  mix-blend-mode: overlay;
+}
+</style>

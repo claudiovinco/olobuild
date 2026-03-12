@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Olobuild — Manuale Pratico</title>
+<style>
+  :root {
+    --primary: #6366F1;
+    --primary-light: #818CF8;
+    --primary-bg: #EEF2FF;
+    --success: #10B981;
+    --danger: #EF4444;
+    --warning: #F59E0B;
+    --text: #1E293B;
+    --text-muted: #64748B;
+    --border: #E2E8F0;
+    --bg: #FFFFFF;
+    --bg-alt: #F8FAFC;
+    --bg-code: #F1F5F9;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    color: var(--text);
+    background: var(--bg-alt);
+    line-height: 1.7;
+    font-size: 15px;
+  }
+
+  /* Header hero */
+  .hero {
+    background: linear-gradient(135deg, var(--primary), #8B5CF6);
+    color: #fff;
+    padding: 60px 40px;
+    text-align: center;
+  }
+  .hero h1 { font-size: 2.8rem; font-weight: 800; margin-bottom: 12px; letter-spacing: -0.02em; }
+  .hero .subtitle { font-size: 1.15rem; opacity: 0.85; max-width: 600px; margin: 0 auto; }
+  .hero .version { display: inline-block; background: rgba(255,255,255,0.2); padding: 4px 16px; border-radius: 20px; font-size: 0.85rem; margin-top: 16px; }
+
+  /* Layout */
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+  .content { background: var(--bg); border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); margin: -40px auto 40px; padding: 48px 56px; position: relative; }
+  @media (max-width: 768px) { .content { padding: 24px 20px; margin: -20px 12px 24px; } }
+
+  /* TOC */
+  .toc { background: var(--primary-bg); border-radius: 10px; padding: 28px 32px; margin-bottom: 40px; }
+  .toc h2 { font-size: 1.1rem; color: var(--primary); margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.06em; }
+  .toc ol { columns: 2; column-gap: 32px; padding-left: 20px; }
+  .toc li { margin-bottom: 6px; font-size: 0.92rem; break-inside: avoid; }
+  .toc a { color: var(--text); text-decoration: none; }
+  .toc a:hover { color: var(--primary); }
+  @media (max-width: 600px) { .toc ol { columns: 1; } }
+
+  /* Sections */
+  h2 {
+    font-size: 1.7rem; font-weight: 700; color: var(--text);
+    margin: 56px 0 20px; padding-bottom: 12px;
+    border-bottom: 3px solid var(--primary);
+  }
+  h2:first-of-type { margin-top: 0; }
+  h3 { font-size: 1.2rem; font-weight: 600; color: var(--text); margin: 32px 0 12px; }
+  h4 { font-size: 1.05rem; font-weight: 600; margin: 20px 0 8px; }
+  p { margin-bottom: 14px; }
+  strong { font-weight: 600; }
+
+  /* Lists */
+  ul, ol { margin: 0 0 16px 24px; }
+  li { margin-bottom: 5px; }
+
+  /* Tables */
+  .table-wrap { overflow-x: auto; margin: 16px 0 28px; border-radius: 8px; border: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+  thead { background: var(--bg-alt); }
+  th { padding: 12px 16px; text-align: left; font-weight: 600; color: var(--text); border-bottom: 2px solid var(--border); white-space: nowrap; }
+  td { padding: 10px 16px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: #FAFBFF; }
+
+  /* Comparison tables special */
+  .cmp-table th:first-child { min-width: 220px; }
+  .cmp-table td:not(:first-child), .cmp-table th:not(:first-child) { text-align: center; }
+  .cmp-table .highlight { background: var(--primary-bg); font-weight: 600; }
+
+  /* Si/No badges */
+  .si { color: var(--success); font-weight: 700; }
+  .no { color: var(--danger); font-weight: 600; }
+  .parz { color: var(--warning); font-weight: 600; }
+
+  /* Code blocks */
+  pre {
+    background: var(--bg-code); border: 1px solid var(--border); border-radius: 8px;
+    padding: 20px 24px; overflow-x: auto; font-size: 0.85rem; line-height: 1.6;
+    font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+    margin: 12px 0 20px;
+  }
+  code { font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace; font-size: 0.88em; background: var(--bg-code); padding: 2px 6px; border-radius: 4px; }
+  pre code { background: none; padding: 0; }
+
+  /* Info boxes */
+  .note { background: #FEF3C7; border-left: 4px solid var(--warning); padding: 14px 20px; border-radius: 0 8px 8px 0; margin: 16px 0; font-size: 0.92rem; }
+  .note strong { color: #92400E; }
+  .info { background: var(--primary-bg); border-left: 4px solid var(--primary); padding: 14px 20px; border-radius: 0 8px 8px 0; margin: 16px 0; font-size: 0.92rem; }
+  .info strong { color: #4338CA; }
+  .pro { background: #D1FAE5; border-left: 4px solid var(--success); padding: 14px 20px; border-radius: 0 8px 8px 0; margin: 16px 0; font-size: 0.92rem; }
+  .con { background: #FEE2E2; border-left: 4px solid var(--danger); padding: 14px 20px; border-radius: 0 8px 8px 0; margin: 16px 0; font-size: 0.92rem; }
+
+  /* Tags */
+  .tag { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.78rem; font-weight: 600; }
+  .tag-primary { background: var(--primary-bg); color: var(--primary); }
+
+  /* Kbd */
+  kbd { background: var(--bg-code); border: 1px solid var(--border); border-radius: 4px; padding: 2px 8px; font-size: 0.85em; font-family: inherit; box-shadow: 0 1px 0 var(--border); }
+
+  /* Separator */
+  hr { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+
+  /* Footer */
+  .footer { text-align: center; padding: 32px; color: var(--text-muted); font-size: 0.85rem; }
+
+  /* Print */
+  @media print {
+    .hero { padding: 24px; }
+    .content { box-shadow: none; padding: 24px; }
+    .table-wrap { border: 1px solid #ccc; }
+    h2 { break-after: avoid; }
+    table { font-size: 0.8rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>Olobuild</h1>
+  <p class="subtitle">Manuale pratico per page builder WordPress professionale con sistema a griglia tile drag &amp; drop</p>
+  <span class="version">v2.7.2 &mdash; Marzo 2026</span>
+</div>
+
+<div class="container">
+<div class="content">
+
+<!-- TOC -->
+<nav class="toc">
+  <h2>Indice</h2>
+  <ol>
+    <li><a href="#cosè-olobuild">Cos'è Olobuild</a></li>
+    <li><a href="#architettura">Architettura e Stack Tecnologico</a></li>
+    <li><a href="#installazione">Installazione e Requisiti</a></li>
+    <li><a href="#interfaccia">L'interfaccia del Builder</a></li>
+    <li><a href="#griglia">Sistema a Griglia e Tile</a></li>
+    <li><a href="#elementi">Catalogo Completo Elementi (168 tile)</a></li>
+    <li><a href="#template">Sistema Template</a></li>
+    <li><a href="#design-system">Design System Globale</a></li>
+    <li><a href="#dinamico">Contenuto Dinamico</a></li>
+    <li><a href="#woocommerce">Integrazione WooCommerce (32 tile)</a></li>
+    <li><a href="#media-stock">Ricerca Media Stock</a></li>
+    <li><a href="#ai">Assistente AI</a></li>
+    <li><a href="#form">Form Builder</a></li>
+    <li><a href="#performance">Performance e SEO</a></li>
+    <li><a href="#avanzate">Funzionalità Avanzate</a></li>
+    <li><a href="#confronto">Confronto Tecnico con i Competitor</a></li>
+  </ol>
+</nav>
+
+<!-- ═══════════════════════════════ 1. COS'È ═══════════════════════════════ -->
+<h2 id="cosè-olobuild">1. Cos'è Olobuild</h2>
+<p>Olobuild è un page builder WordPress professionale basato su un <strong>sistema a griglia drag &amp; drop</strong> (tile). A differenza dei builder tradizionali che usano sezioni, righe e colonne, Olobuild organizza il contenuto in <strong>tile</strong> posizionabili liberamente su una griglia responsiva.</p>
+<ul>
+  <li><strong>168 elementi</strong> (tile) — dal semplice titolo al checkout WooCommerce multi-step</li>
+  <li><strong>Builder visuale</strong> con canvas interattivo, inspector laterale, albero struttura</li>
+  <li><strong>Template system completo</strong> — header, footer, single, archive, 404, search</li>
+  <li><strong>6 breakpoint responsivi</strong> — desktop, widescreen, tablet landscape, tablet, mobile landscape, mobile</li>
+  <li><strong>Design system globale</strong> — colori, tipografia, preset design, token CSS</li>
+  <li><strong>Contenuto dinamico</strong> — binding a post corrente, ACF, tassonomie, utente, WooCommerce</li>
+  <li><strong>32 tile WooCommerce</strong> — shop completo con checkout multi-step, filtri, quickview, wishlist</li>
+  <li><strong>Assistente AI</strong> — generazione testo, immagini, layout, CSS tramite Claude e DALL-E</li>
+  <li><strong>5 librerie media stock</strong> — Unsplash, Pexels, Pixabay, Openverse, Freesound</li>
+  <li><strong>Form builder integrato</strong> con token HMAC, rate limiting, upload file, export CSV</li>
+  <li><strong>Critical CSS automatico</strong>, asset optimizer, performance hints</li>
+</ul>
+
+<!-- ═══════════════════════════════ 2. ARCHITETTURA ═══════════════════════════════ -->
+<h2 id="architettura">2. Architettura e Stack Tecnologico</h2>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Livello</th><th>Tecnologia</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Frontend Builder</strong></td><td>Vue.js 3 + Pinia + Vite 5</td></tr>
+    <tr><td><strong>CSS Builder</strong></td><td>Tailwind CSS (prefix <code>mb-</code>) + SASS</td></tr>
+    <tr><td><strong>Frontend Sito</strong></td><td>UIkit 3 (grid, lightbox, animazioni)</td></tr>
+    <tr><td><strong>Backend</strong></td><td>PHP 7.4+ (classi WordPress)</td></tr>
+    <tr><td><strong>API</strong></td><td>WordPress REST API (namespace <code>olo/v1</code>)</td></tr>
+    <tr><td><strong>Database</strong></td><td>3 tabelle custom (<code>olo_templates</code>, <code>olo_revisions</code>, <code>olo_form_submissions</code>)</td></tr>
+    <tr><td><strong>Drag &amp; Drop</strong></td><td>vuedraggable (SortableJS)</td></tr>
+    <tr><td><strong>Editor Testo</strong></td><td>Tiptap (ProseMirror)</td></tr>
+    <tr><td><strong>Grafici</strong></td><td>Chart.js</td></tr>
+    <tr><td><strong>Animazioni</strong></td><td>36 entrance animations, stagger, UIkit Scrollspy, Lottie, infinite animations, hover/scroll/mouse effects</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3>Struttura File</h3>
+<pre>olobuild/
+├── olobuild.php                    → Entry point plugin
+├── includes/                       → 40+ classi PHP
+│   ├── class-olo-builder.php       → Core builder
+│   ├── class-rest-api.php          → 80+ endpoint REST
+│   ├── class-frontend-renderer.php → Render HTML frontend
+│   ├── class-database.php          → CRUD template/revisioni
+│   ├── class-dynamic-content.php   → Binding dati dinamici
+│   ├── class-ai-assistant.php      → 8 endpoint AI
+│   ├── class-form-handler.php      → Gestione form
+│   ├── tiles/                      → 168 classi tile PHP
+│   └── ...
+├── src/                            → Sorgenti Vue.js
+│   ├── stores/                     → Pinia (builder, tiles, styles)
+│   ├── config/elements/            → 178 config elementi
+│   ├── components/
+│   │   ├── Builder/                → Toolbar, Sidebar, Canvas, Inspector
+│   │   ├── Tiles/                  → 195 componenti Vue tile
+│   │   └── Grid/                   → Sistema griglia
+│   └── composables/                → 12 composable (history, autosave, shortcuts...)
+├── assets/                         → Build output (JS/CSS)
+└── templates/                      → Template PHP speciali</pre>
+
+<!-- ═══════════════════════════════ 3. INSTALLAZIONE ═══════════════════════════════ -->
+<h2 id="installazione">3. Installazione e Requisiti</h2>
+<h3>Requisiti minimi</h3>
+<ul>
+  <li>WordPress 5.8+</li>
+  <li>PHP 7.4+</li>
+  <li>MySQL 5.7+ / MariaDB 10.3+</li>
+</ul>
+<h3>Requisiti consigliati</h3>
+<ul>
+  <li>WordPress 6.4+</li>
+  <li>PHP 8.1+</li>
+  <li>256 MB memory limit</li>
+</ul>
+<h3>Installazione</h3>
+<ol>
+  <li>Caricare lo ZIP <code>olobuild.zip</code> da <strong>Plugin &gt; Aggiungi nuovo &gt; Carica plugin</strong></li>
+  <li>Attivare il plugin</li>
+  <li>Le tabelle database vengono create automaticamente</li>
+  <li>Accedere a <strong>Olobuild</strong> nel menu admin di WordPress</li>
+</ol>
+
+<!-- ═══════════════════════════════ 4. INTERFACCIA ═══════════════════════════════ -->
+<h2 id="interfaccia">4. L'interfaccia del Builder</h2>
+<p>L'interfaccia è divisa in 4 aree principali:</p>
+<pre>┌──────────────────────────────────────────────────────────┐
+│  TOOLBAR  [Undo] [Redo] [Device] [Preview] [Settings] [Save]  │
+├────────┬──────────────────────────────┬──────────────────┤
+│        │                              │                  │
+│  SIDE  │         CANVAS               │    INSPECTOR     │
+│  BAR   │                              │                  │
+│        │   ┌────┬────┬────┐           │  [Content]       │
+│Elementi│   │tile│tile│tile│           │  [Style]         │
+│Struttura│  ├────┴────┴────┤          │  [Advanced]      │
+│        │   │   tile        │           │                  │
+│        │   └───────────────┘           │  Campo 1: ____   │
+│        │                              │  Campo 2: ____   │
+│        │                              │  Campo 3: ____   │
+└────────┴──────────────────────────────┴──────────────────┘</pre>
+
+<h3>Toolbar (barra superiore)</h3>
+<ul>
+  <li><strong>Undo/Redo</strong> — storico illimitato con <kbd>Ctrl+Z</kbd> / <kbd>Ctrl+Shift+Z</kbd></li>
+  <li><strong>Device Switcher</strong> — 6 breakpoint (mobile → widescreen)</li>
+  <li><strong>Preview</strong> — anteprima frontend in tempo reale</li>
+  <li><strong>Page Settings</strong> — background pagina, max-width, breakpoint personalizzati</li>
+  <li><strong>Save</strong> — salvataggio con auto-dirty detection</li>
+</ul>
+<h3>Sidebar (pannello sinistro)</h3>
+<ul>
+  <li><strong>Libreria Elementi</strong> — tutti i 168 tile, filtrabili per categoria</li>
+  <li><strong>Albero Struttura</strong> — gerarchia DOM interattiva con show/hide e lock</li>
+  <li><strong>Finder</strong> — ricerca rapida per nome/tipo elemento (<kbd>Ctrl+F</kbd>)</li>
+</ul>
+<h3>Canvas (area centrale)</h3>
+<ul>
+  <li>Rendering live dei tile nella griglia</li>
+  <li><strong>Drag &amp; drop</strong> per posizionare e riordinare</li>
+  <li><strong>Click</strong> per selezionare → apre inspector</li>
+  <li><strong>Context menu</strong> (tasto destro) — copia, incolla, duplica, elimina</li>
+</ul>
+<h3>Inspector (pannello destro)</h3>
+<ul>
+  <li><strong>Tab Content</strong> — campi specifici del tile (testo, immagini, link, opzioni)</li>
+  <li><strong>Tab Style</strong> — background, bordi, ombre, padding, margin, transform</li>
+  <li><strong>Tab Advanced</strong> — ID/classe CSS, animazioni scroll, visibilità condizionale</li>
+  <li><strong>20 tipi di campo</strong> — testo, textarea, select, toggle, color picker, gradient, range, image, media, icon, font-family, gallery, rich editor, spacing, border-radius, box-shadow, transform, lottie picker, multi-pills, panel map</li>
+</ul>
+
+<h3>Scorciatoie tastiera</h3>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Tasto</th><th>Azione</th></tr></thead>
+  <tbody>
+    <tr><td><kbd>Ctrl+S</kbd></td><td>Salva</td></tr>
+    <tr><td><kbd>Ctrl+Z</kbd></td><td>Annulla</td></tr>
+    <tr><td><kbd>Ctrl+Shift+Z</kbd></td><td>Ripristina</td></tr>
+    <tr><td><kbd>Ctrl+C</kbd></td><td>Copia tile</td></tr>
+    <tr><td><kbd>Ctrl+V</kbd></td><td>Incolla tile</td></tr>
+    <tr><td><kbd>Ctrl+D</kbd></td><td>Duplica tile</td></tr>
+    <tr><td><kbd>Canc</kbd></td><td>Elimina tile</td></tr>
+    <tr><td><kbd>Ctrl+F</kbd></td><td>Finder (cerca elemento)</td></tr>
+  </tbody>
+</table>
+</div>
+
+<!-- ═══════════════════════════════ 5. GRIGLIA ═══════════════════════════════ -->
+<h2 id="griglia">5. Sistema a Griglia e Tile</h2>
+<p>Il cuore di Olobuild è il <strong>sistema a griglia responsiva</strong>. Ogni pagina è composta da <strong>sezioni</strong> che contengono <strong>griglie</strong> di <strong>tile</strong>.</p>
+<h3>Gerarchia strutturale</h3>
+<pre>Template
+└── Section (sfondo, padding, max-width)
+    └── Grid (colonne responsive, gap)
+        ├── Cell (tile singolo con span colonna/riga)
+        ├── Cell
+        └── Cell
+            └── Inner Grid (nesting illimitato)
+                ├── Cell
+                └── Cell</pre>
+
+<h3>Responsive Design — 6 Breakpoint</h3>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Breakpoint</th><th>Larghezza</th><th>Icona</th></tr></thead>
+  <tbody>
+    <tr><td>Mobile</td><td>&lt; 480px</td><td>smartphone verticale</td></tr>
+    <tr><td>Mobile Landscape</td><td>480–639px</td><td>smartphone orizzontale</td></tr>
+    <tr><td>Tablet</td><td>640–959px</td><td>tablet verticale</td></tr>
+    <tr><td>Tablet Landscape</td><td>960–1199px</td><td>tablet orizzontale</td></tr>
+    <tr><td>Desktop</td><td>1200–1399px</td><td>monitor</td></tr>
+    <tr><td>Widescreen</td><td>1400px+</td><td>monitor grande</td></tr>
+  </tbody>
+</table>
+</div>
+<p>Ogni campo dell'inspector con l'icona responsive supporta <strong>valori diversi per breakpoint</strong> (es. font-size 48px su desktop, 24px su mobile).</p>
+
+<!-- ═══════════════════════════════ 6. ELEMENTI ═══════════════════════════════ -->
+<h2 id="elementi">6. Catalogo Completo Elementi</h2>
+
+<h3>Layout e Struttura (5)</h3>
+<div class="table-wrap"><table>
+  <thead><tr><th>Tile</th><th>Descrizione</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Section</strong></td><td>Contenitore principale con background, overflow, padding</td></tr>
+    <tr><td><strong>Row</strong></td><td>Riga con colonne (compatibilità legacy)</td></tr>
+    <tr><td><strong>Column</strong></td><td>Colonna singola</td></tr>
+    <tr><td><strong>Inner Columns</strong></td><td>Sistema colonna annidato</td></tr>
+    <tr><td><strong>Grid</strong></td><td>Griglia drag &amp; drop con colonne responsive</td></tr>
+  </tbody>
+</table></div>
+
+<h3>Testo e Titoli (6)</h3>
+<div class="table-wrap"><table>
+  <thead><tr><th>Tile</th><th>Descrizione</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Headline</strong></td><td>Titolo con decorazioni (linea, divider, dot, star), gradiente testo, text stroke</td></tr>
+    <tr><td><strong>Animated Heading</strong></td><td>Titolo con animazioni (reveal, rotate, typewriter)</td></tr>
+    <tr><td><strong>Content</strong></td><td>Paragrafo ricco con editor Tiptap WYSIWYG</td></tr>
+    <tr><td><strong>List</strong></td><td>Lista puntata/numerata</td></tr>
+    <tr><td><strong>Description List</strong></td><td>Lista definizioni (dl/dt/dd)</td></tr>
+    <tr><td><strong>Text Mask</strong></td><td>Testo con maschera immagine/video</td></tr>
+  </tbody>
+</table></div>
+
+<h3>Immagini e Media (14)</h3>
+<div class="table-wrap"><table>
+  <thead><tr><th>Tile</th><th>Descrizione</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Image</strong></td><td>Immagine con lazy-load, srcset, lightbox, link</td></tr>
+    <tr><td><strong>Gallery</strong></td><td>Galleria foto in griglia con lightbox</td></tr>
+    <tr><td><strong>Pro Gallery</strong></td><td>Galleria avanzata con 5 preset bordi puzzle (classic, zigzag, onda, castello, abeti)</td></tr>
+    <tr><td><strong>Slideshow</strong></td><td>Slideshow immagini con transizioni</td></tr>
+    <tr><td><strong>Carousel</strong></td><td>Carousel immagini/contenuto</td></tr>
+    <tr><td><strong>Image Compare</strong></td><td>Before/after con slider</td></tr>
+    <tr><td><strong>Shattered Image</strong></td><td>Effetto immagine frammentata</td></tr>
+    <tr><td><strong>Lightbox</strong></td><td>Modale lightbox</td></tr>
+    <tr><td><strong>Video</strong></td><td>Embed YouTube, Vimeo, self-hosted</td></tr>
+    <tr><td><strong>Video Playlist</strong></td><td>Playlist video</td></tr>
+    <tr><td><strong>PDF Viewer</strong></td><td>Viewer PDF: flipbook, pagina singola, doppia, scroll continuo</td></tr>
+    <tr><td><strong>PDF Pro</strong></td><td>PDF avanzato con annotazioni</td></tr>
+    <tr><td><strong>Audio</strong></td><td>Player audio</td></tr>
+    <tr><td><strong>Lottie</strong></td><td>Animazioni Lottie (LottieFiles)</td></tr>
+  </tbody>
+</table></div>
+
+<h3>Pulsanti e Interazione (6)</h3>
+<div class="table-wrap"><table>
+  <thead><tr><th>Tile</th><th>Descrizione</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Button</strong></td><td>Pulsante singolo (filled, outline, ghost)</td></tr>
+    <tr><td><strong>Toggle Button</strong></td><td>Pulsante toggle</td></tr>
+    <tr><td><strong>Icon</strong></td><td>Icona singola (libreria + custom SVG)</td></tr>
+    <tr><td><strong>Icon Box</strong></td><td>Icona + titolo + descrizione</td></tr>
+    <tr><td><strong>Icon List</strong></td><td>Lista con icone personalizzate</td></tr>
+    <tr><td><strong>Social</strong></td><td>Pulsanti social network</td></tr>
+  </tbody>
+</table></div>
+
+<h3>Layout Avanzati (14)</h3>
+<div class="table-wrap"><table>
+  <thead><tr><th>Tile</th><th>Descrizione</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Overlay</strong></td><td>Contenuto con overlay modale</td></tr>
+    <tr><td><strong>Overlay Grid</strong></td><td>Griglia con overlay</td></tr>
+    <tr><td><strong>Overlay Slider</strong></td><td>Slider con overlay</td></tr>
+    <tr><td><strong>Panel</strong></td><td>Pannello collassabile</td></tr>
+    <tr><td><strong>Panel Slider</strong></td><td>Slider di pannelli</td></tr>
+    <tr><td><strong>Accordion</strong></td><td>Fisarmonica espandibile</td></tr>
+    <tr><td><strong>Switcher</strong></td><td>Tab navigation</td></tr>
+    <tr><td><strong>Switcher Panel</strong></td><td>Pannello switchabile</td></tr>
+    <tr><td><strong>Popover</strong></td><td>Tooltip popover</td></tr>
+    <tr><td><strong>Popup</strong></td><td>Modal popup</td></tr>
+    <tr><td><strong>Offcanvas</strong></td><td>Drawer laterale</td></tr>
+    <tr><td><strong>Marquee</strong></td><td>Testo/contenuto scorrevole</td></tr>
+    <tr><td><strong>Flip Card</strong></td><td>Carta con flip animato</td></tr>
+    <tr><td><strong>Link in Bio</strong></td><td>Layout link-tree</td></tr>
+  </tbody>
+</table></div>
+
+<h3>Visualizzazione Dati (7) + Grafici e Timeline (3)</h3>
+<div class="table-wrap"><table>
+  <thead><tr><th>Tile</th><th>Descrizione</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Table</strong></td><td>Tabella HTML completa</td></tr>
+    <tr><td><strong>Pricing</strong></td><td>Card listino prezzi</td></tr>
+    <tr><td><strong>Price List</strong></td><td>Listino dettagliato</td></tr>
+    <tr><td><strong>Progress</strong></td><td>Barra di progresso</td></tr>
+    <tr><td><strong>Progress Tracker</strong></td><td>Tracker multi-step</td></tr>
+    <tr><td><strong>Counter</strong></td><td>Contatore numerico animato</td></tr>
+    <tr><td><strong>Counter Circle</strong></td><td>Contatore circolare (gauge)</td></tr>
+    <tr><td><strong>Chart</strong></td><td>Grafici Chart.js (bar, line, pie, doughnut, radar)</td></tr>
+    <tr><td><strong>Timeline</strong></td><td>Timeline verticale/orizzontale</td></tr>
+    <tr><td><strong>Star Rating</strong></td><td>Valutazione a stelle</td></tr>
+  </tbody>
+</table></div>
+
+<h3>Hero, Navigazione, Post, Form, Social, Mappe, Speciali, Creativi</h3>
+<p>Vedi elenco completo nel documento — <strong>84 tile aggiuntivi</strong> tra hero, navigazione (11), contenuto post (6), form (3), social/embed (4), mappe (2), elementi speciali (15), elementi creativi (7), plus <strong>32 tile WooCommerce</strong>, <strong>20 tile Service/Booking</strong> e <strong>18 tile OloRoom</strong>.</p>
+
+<!-- ═══════════════════════════════ 7. TEMPLATE ═══════════════════════════════ -->
+<h2 id="template">7. Sistema Template</h2>
+<div class="table-wrap"><table>
+  <thead><tr><th>Tipo</th><th>Descrizione</th><th>Assegnazione</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Page</strong></td><td>Template per singola pagina/post</td><td>Via meta box nell'editor</td></tr>
+    <tr><td><strong>Header</strong></td><td>Testata globale del sito</td><td>Olobuild &gt; Header</td></tr>
+    <tr><td><strong>Footer</strong></td><td>Piè di pagina globale</td><td>Olobuild &gt; Footer</td></tr>
+    <tr><td><strong>Single</strong></td><td>Template per singolo post type</td><td>Olobuild &gt; Single &gt; {post_type}</td></tr>
+    <tr><td><strong>Archive</strong></td><td>Template per archivio post type</td><td>Olobuild &gt; Archive &gt; {post_type}</td></tr>
+    <tr><td><strong>404</strong></td><td>Pagina errore 404</td><td>Olobuild &gt; 404</td></tr>
+    <tr><td><strong>Search</strong></td><td>Pagina risultati ricerca</td><td>Olobuild &gt; Search</td></tr>
+    <tr><td><strong>WooCommerce</strong></td><td>Override pagine shop</td><td>Olobuild &gt; WooCommerce</td></tr>
+  </tbody>
+</table></div>
+
+<h3>Template Conditions</h3>
+<ul>
+  <li>Mostra su <strong>post specifico</strong> (pagina X, articolo Y)</li>
+  <li>Mostra su <strong>post type</strong> (tutti gli articoli, tutti i prodotti)</li>
+  <li>Mostra su <strong>categoria/tag</strong> specifica</li>
+  <li>Mostra per <strong>ruolo utente</strong> (admin, editor, subscriber)</li>
+  <li>Mostra in <strong>intervallo date</strong> (promozioni temporanee)</li>
+  <li>Logica <strong>AND/OR</strong> tra condizioni</li>
+  <li><strong>Priorità</strong> — il template con priorità più alta vince</li>
+</ul>
+
+<h3>Revisioni</h3>
+<p>Ogni salvataggio crea una <strong>revisione</strong> nel database. Dalla cronologia revisioni è possibile visualizzare ogni versione precedente e fare <strong>rollback</strong> a qualsiasi punto nel tempo.</p>
+
+<!-- ═══════════════════════════════ 8. DESIGN SYSTEM ═══════════════════════════════ -->
+<h2 id="design-system">8. Design System Globale</h2>
+<h3>Colori Globali</h3>
+<div class="table-wrap"><table>
+  <thead><tr><th>Token CSS</th><th>Uso</th></tr></thead>
+  <tbody>
+    <tr><td><code>--olo-color-primary</code></td><td>Colore principale (brand)</td></tr>
+    <tr><td><code>--olo-color-secondary</code></td><td>Colore secondario</td></tr>
+    <tr><td><code>--olo-color-muted</code></td><td>Sfondi neutri</td></tr>
+    <tr><td><code>--olo-color-success</code></td><td>Feedback positivo</td></tr>
+    <tr><td><code>--olo-color-warning</code></td><td>Avvisi</td></tr>
+    <tr><td><code>--olo-color-danger</code></td><td>Errori</td></tr>
+    <tr><td><code>--olo-color-text</code></td><td>Testo principale</td></tr>
+    <tr><td><code>--olo-color-border</code></td><td>Bordi</td></tr>
+    <tr><td><code>--olo-color-link</code></td><td>Link</td></tr>
+  </tbody>
+</table></div>
+<h3>Tipografia, Preset, Dark Mode</h3>
+<ul>
+  <li><strong>Font family</strong> principale e secondario + upload WOFF2/WOFF custom</li>
+  <li><strong>Dimensioni H1–H6</strong> con valori responsive</li>
+  <li><strong>Design Presets</strong> applicabili con un click (Light, Dark, Custom)</li>
+  <li><strong>Dark Mode</strong> integrato con varianti colori e rispetto <code>prefers-color-scheme</code></li>
+</ul>
+
+<!-- ═══════════════════════════════ 9. DINAMICO ═══════════════════════════════ -->
+<h2 id="dinamico">9. Contenuto Dinamico</h2>
+<p>Ogni campo di ogni tile può essere collegato a una <strong>sorgente dati dinamica</strong>:</p>
+<div class="table-wrap"><table>
+  <thead><tr><th>Sorgente</th><th>Campi</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Post corrente</strong></td><td>Titolo, contenuto, estratto, immagine, permalink, data, autore</td></tr>
+    <tr><td><strong>Custom Field</strong></td><td>Qualsiasi campo personalizzato del post</td></tr>
+    <tr><td><strong>ACF</strong></td><td>Tutti i tipi campo ACF (testo, immagine, repeater, option page)</td></tr>
+    <tr><td><strong>Tassonomia</strong></td><td>Categorie, tag, tassonomie custom</td></tr>
+    <tr><td><strong>Autore</strong></td><td>Nome, bio, avatar, email, sito</td></tr>
+    <tr><td><strong>Utente corrente</strong></td><td>Nome, ruolo, avatar, meta</td></tr>
+    <tr><td><strong>Sito</strong></td><td>Nome sito, descrizione, URL, anno corrente</td></tr>
+    <tr><td><strong>Data/Ora</strong></td><td>Data corrente, ora, giorno settimana</td></tr>
+    <tr><td><strong>Request</strong></td><td>Parametri URL, query string</td></tr>
+    <tr><td><strong>Archivio</strong></td><td>Titolo archivio, descrizione, conteggio</td></tr>
+    <tr><td><strong>WooCommerce</strong></td><td>Prezzo, stock, SKU, categorie prodotto</td></tr>
+    <tr><td><strong>Menu</strong></td><td>Voci menu WordPress</td></tr>
+    <tr><td><strong>Shortcode</strong></td><td>Output di qualsiasi shortcode</td></tr>
+    <tr><td><strong>Cookie</strong></td><td>Valore cookie specifico</td></tr>
+    <tr><td><strong>Navigazione post</strong></td><td>Post precedente/successivo</td></tr>
+  </tbody>
+</table></div>
+
+<!-- ═══════════════════════════════ 10. WOOCOMMERCE ═══════════════════════════════ -->
+<h2 id="woocommerce">10. Integrazione WooCommerce (32 tile)</h2>
+<h3>Pagine Shop</h3>
+<div class="table-wrap"><table>
+  <thead><tr><th>Tile</th><th>Funzione</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Woo Products</strong></td><td>Griglia prodotti con filtri, ordinamento, paginazione</td></tr>
+    <tr><td><strong>Woo Product Filter</strong></td><td>Filtri avanzati (prezzo, categoria, attributi)</td></tr>
+    <tr><td><strong>Woo Categories</strong></td><td>Griglia categorie prodotto</td></tr>
+    <tr><td><strong>Woo Sale Badge</strong></td><td>Badge sconto</td></tr>
+    <tr><td><strong>Woo Recently Viewed</strong></td><td>Prodotti visti di recente</td></tr>
+    <tr><td><strong>Woo Comparison</strong></td><td>Tabella confronto prodotti</td></tr>
+  </tbody>
+</table></div>
+<h3>Prodotto Singolo (16 tile)</h3>
+<p>Product Image, Gallery Slider, Title, Description, Price, Add to Cart, Meta, Tabs, Rating, Stock, Navigation, Related, Upsells, Cross Sells, Quickview, Bundle.</p>
+<h3>Carrello e Checkout</h3>
+<p>Cart, Mini Cart, Checkout, <strong>Checkout Multistep</strong> (dati &gt; spedizione &gt; pagamento), Notices.</p>
+<h3>Account e Ordini</h3>
+<p>My Account, Order Tracking, <strong>Wishlist</strong>, Breadcrumbs.</p>
+
+<!-- ═══════════════════════════════ 11. MEDIA STOCK ═══════════════════════════════ -->
+<h2 id="media-stock">11. Ricerca Media Stock</h2>
+<div class="table-wrap"><table>
+  <thead><tr><th>Provider</th><th>Tipo</th><th>Licenza</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Unsplash</strong></td><td>Foto</td><td>Gratuita commerciale</td></tr>
+    <tr><td><strong>Pexels</strong></td><td>Foto + Video</td><td>Gratuita commerciale</td></tr>
+    <tr><td><strong>Pixabay</strong></td><td>Foto + Video</td><td>Gratuita commerciale</td></tr>
+    <tr><td><strong>Openverse</strong></td><td>Foto</td><td>Creative Commons</td></tr>
+    <tr><td><strong>Freesound</strong></td><td>Audio</td><td>Creative Commons</td></tr>
+    <tr><td><strong>LottieFiles</strong></td><td>Animazioni</td><td>Lottie License</td></tr>
+  </tbody>
+</table></div>
+
+<!-- ═══════════════════════════════ 12. AI ═══════════════════════════════ -->
+<h2 id="ai">12. Assistente AI</h2>
+<div class="table-wrap"><table>
+  <thead><tr><th>Funzione</th><th>Cosa fa</th><th>Provider</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Genera Testo</strong></td><td>Crea contenuti (titoli, paragrafi, descrizioni)</td><td>Claude (Anthropic)</td></tr>
+    <tr><td><strong>Migliora Testo</strong></td><td>Riscrive e migliora testo esistente</td><td>Claude</td></tr>
+    <tr><td><strong>Traduci</strong></td><td>Traduzione in qualsiasi lingua</td><td>Claude</td></tr>
+    <tr><td><strong>Genera Immagine</strong></td><td>Crea immagini da prompt</td><td>DALL-E (OpenAI)</td></tr>
+    <tr><td><strong>Genera Layout</strong></td><td>Suggerisce struttura pagina</td><td>Claude</td></tr>
+    <tr><td><strong>Suggerisci Stile</strong></td><td>Propone combinazioni colori/font</td><td>Claude</td></tr>
+    <tr><td><strong>Genera Alt Text</strong></td><td>Alt text SEO per immagini</td><td>Claude</td></tr>
+    <tr><td><strong>Genera CSS</strong></td><td>Scrive CSS custom</td><td>Claude</td></tr>
+  </tbody>
+</table></div>
+
+<!-- ═══════════════════════════════ 13. FORM ═══════════════════════════════ -->
+<h2 id="form">13. Form Builder</h2>
+<ul>
+  <li><strong>Campi</strong>: testo, email, textarea, select, checkbox, radio, file upload</li>
+  <li><strong>Sicurezza</strong>: token HMAC (scadenza 12h) + rate limiting per IP</li>
+  <li><strong>Notifiche</strong>: email admin + risposta automatica utente</li>
+  <li><strong>Database</strong>: storico submission in admin con filtri e ricerca</li>
+  <li><strong>Export CSV</strong>: esporta tutte le submission</li>
+</ul>
+
+<!-- ═══════════════════════════════ 14. PERFORMANCE ═══════════════════════════════ -->
+<h2 id="performance">14. Performance e SEO</h2>
+<ul>
+  <li><strong>Critical CSS automatico</strong> — genera + cache per template, migliora LCP</li>
+  <li><strong>Asset Optimizer</strong> — minificazione CSS/JS, caricamento condizionale per tile</li>
+  <li><strong>Lazy load</strong> immagini nativo</li>
+  <li><strong>SEO Head</strong> — meta tag, Open Graph, Twitter Card, canonical URL</li>
+</ul>
+
+<!-- ═══════════════════════════════ 15. AVANZATE ═══════════════════════════════ -->
+<h2 id="avanzate">15. Funzionalità Avanzate</h2>
+<ul>
+  <li><strong>White Label</strong> — nome plugin, logo, colori personalizzati</li>
+  <li><strong>Maintenance Mode</strong> — pagina manutenzione con template Olobuild</li>
+  <li><strong>Cookie Consent</strong> — banner GDPR integrato</li>
+  <li><strong>Analytics</strong> — integrazione GA4</li>
+  <li><strong>A/B Testing</strong> — varianti template con split traffic</li>
+  <li><strong>Role Manager</strong> — permessi per ruolo WordPress</li>
+  <li><strong>Custom Code</strong> — snippet head/body/footer</li>
+  <li><strong>Custom Fonts</strong> — upload WOFF2/WOFF (zero Google Fonts)</li>
+  <li><strong>Import/Export Sito</strong> — migrazione completa</li>
+</ul>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════ -->
+<!-- ═══════════════════════════════ CONFRONTO ═══════════════════════════════ -->
+<!-- ═══════════════════════════════════════════════════════════════════════════ -->
+<h2 id="confronto">16. Confronto Tecnico con i Competitor</h2>
+<p>Confronto puramente tecnico sulle capacità di costruzione sito. Nessun riferimento a prezzo, ecosistema, community, documentazione o maturità del prodotto.</p>
+
+<hr>
+
+<!-- CMP 1 -->
+<h3>1. Architettura e Stack</h3>
+<div class="table-wrap"><table class="cmp-table">
+  <thead><tr><th>Aspetto</th><th>Olobuild</th><th>Elementor Pro</th><th>YOOtheme Pro</th><th>Avada</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Framework builder</strong></td><td class="highlight">Vue.js 3 + Pinia</td><td>React 18</td><td>Vue.js 2</td><td>jQuery + Backbone</td></tr>
+    <tr><td><strong>Bundler</strong></td><td class="highlight">Vite 5</td><td>webpack</td><td>webpack</td><td>webpack</td></tr>
+    <tr><td><strong>Framework CSS frontend</strong></td><td>UIkit 3</td><td>Proprio (Swiper)</td><td>UIkit 3</td><td>Bootstrap 5 + Fusion</td></tr>
+    <tr><td><strong>Editor testo ricco</strong></td><td>Tiptap (ProseMirror)</td><td>Proprio (inline)</td><td>Proprio (inline)</td><td>TinyMCE</td></tr>
+    <tr><td><strong>State management</strong></td><td class="highlight">Pinia (reactive)</td><td>Redux-like</td><td>Vuex</td><td>Custom pub/sub</td></tr>
+    <tr><td><strong>API backend</strong></td><td>WP REST API</td><td>REST + Ajax</td><td>REST + Ajax</td><td>Ajax custom</td></tr>
+    <tr><td><strong>Database</strong></td><td>3 tabelle custom</td><td>postmeta</td><td>postmeta</td><td>postmeta + 3 tabelle</td></tr>
+    <tr><td><strong>Rendering frontend</strong></td><td>PHP (HTML puro)</td><td>PHP (div wrapper)</td><td>PHP (HTML puro)</td><td>PHP (shortcode-based)</td></tr>
+  </tbody>
+</table></div>
+<div class="info"><strong>Note:</strong> Olobuild e YOOtheme condividono UIkit 3, ma Olobuild usa Vue 3 (Composition API) vs Vue 2. Elementor genera markup con più wrapper <code>&lt;div&gt;</code>. Avada usa jQuery — stack più datato.</div>
+
+<hr>
+
+<!-- CMP 2 -->
+<h3>2. Sistema di Layout</h3>
+<div class="table-wrap"><table class="cmp-table">
+  <thead><tr><th>Aspetto</th><th>Olobuild</th><th>Elementor Pro</th><th>YOOtheme Pro</th><th>Avada</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Modello layout</strong></td><td class="highlight">Griglia CSS 2D (free placement)</td><td>Sezione &gt; Colonna &gt; Widget</td><td>Sezione &gt; Riga &gt; Colonna</td><td>Container &gt; Colonna</td></tr>
+    <tr><td><strong>Nesting</strong></td><td class="highlight">Illimitato</td><td>1-2 livelli</td><td>1 livello</td><td>1 livello</td></tr>
+    <tr><td><strong>CSS Grid nativo</strong></td><td><span class="si">Si (base)</span></td><td><span class="si">Si (opt-in)</span></td><td><span class="no">No (Flexbox)</span></td><td><span class="si">Si (recente)</span></td></tr>
+    <tr><td><strong>Drag &amp; drop libero</strong></td><td><span class="si">Si</span></td><td><span class="no">No (sequenziale)</span></td><td><span class="no">No (sequenziale)</span></td><td><span class="no">No (sequenziale)</span></td></tr>
+    <tr><td><strong>Span colonne/righe</strong></td><td><span class="si">Si</span></td><td><span class="no">No</span></td><td><span class="no">No</span></td><td><span class="no">No</span></td></tr>
+  </tbody>
+</table></div>
+<div class="info"><strong>Differenza chiave:</strong> Olobuild posiziona i tile su una griglia 2D dove ogni cella può occupare N colonne e N righe. Gli altri builder sono sequenziali. Il modello a griglia è più flessibile per layout asimmetrici, ma richiede più attenzione nella gestione dei breakpoint.</div>
+
+<hr>
+
+<!-- CMP 3 -->
+<h3>3. Responsive Design</h3>
+<div class="table-wrap"><table class="cmp-table">
+  <thead><tr><th>Aspetto</th><th>Olobuild</th><th>Elementor Pro</th><th>YOOtheme Pro</th><th>Avada</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Breakpoint</strong></td><td>6 fissi</td><td class="highlight">7 (3 default + 4 custom)</td><td>3 (S, M, L)</td><td>6 fissi</td></tr>
+    <tr><td><strong>Breakpoint custom</strong></td><td><span class="no">No</span></td><td><span class="si">Si (qualsiasi px)</span></td><td><span class="no">No</span></td><td><span class="no">No</span></td></tr>
+    <tr><td><strong>Override per breakpoint</strong></td><td><span class="si">Si</span></td><td><span class="si">Si</span></td><td><span class="si">Si</span></td><td><span class="si">Si</span></td></tr>
+    <tr><td><strong>Preview device</strong></td><td><span class="si">Si (6)</span></td><td><span class="si">Si (7)</span></td><td><span class="si">Si (3)</span></td><td><span class="si">Si (6)</span></td></tr>
+    <tr><td><strong>Visibilità per device</strong></td><td><span class="si">Si</span></td><td><span class="si">Si</span></td><td><span class="si">Si</span></td><td><span class="si">Si</span></td></tr>
+  </tbody>
+</table></div>
+<div class="con"><strong>Punto debole Olobuild:</strong> Elementor permette breakpoint custom a qualsiasi valore px. Olobuild ha 6 breakpoint fissi, non personalizzabili.</div>
+<div class="con"><strong>Punto debole YOOtheme:</strong> Solo 3 breakpoint — per layout su tablet landscape vs portrait serve workaround CSS.</div>
+
+<hr>
+
+<!-- CMP 4 -->
+<h3>4. Elementi Nativi — Confronto per Categoria</h3>
+<p>Conteggio degli elementi <strong>inclusi nel prodotto base</strong> senza addon di terze parti.</p>
+<div class="table-wrap"><table class="cmp-table">
+  <thead><tr><th>Categoria</th><th>Olobuild</th><th>Elementor Pro</th><th>YOOtheme Pro</th><th>Avada</th></tr></thead>
+  <tbody>
+    <tr><td>Layout &amp; Struttura</td><td>5</td><td>4</td><td>4</td><td>5</td></tr>
+    <tr><td>Testo &amp; Titoli</td><td><strong>6</strong></td><td>4</td><td>3</td><td>4</td></tr>
+    <tr><td>Immagini &amp; Media</td><td><strong>14</strong></td><td>8</td><td>6</td><td>7</td></tr>
+    <tr><td>Video &amp; Audio</td><td><strong>4</strong></td><td>2</td><td>1</td><td>2</td></tr>
+    <tr><td>Navigazione &amp; Menu</td><td><strong>11</strong></td><td>5</td><td>4</td><td>6</td></tr>
+    <tr><td>Pulsanti &amp; CTA</td><td>3</td><td>2</td><td>1</td><td>2</td></tr>
+    <tr><td>Icone &amp; Social</td><td>4</td><td>4</td><td>3</td><td>4</td></tr>
+    <tr><td>Layout avanzati</td><td><strong>14</strong></td><td>8</td><td>6</td><td>8</td></tr>
+    <tr><td>Dati &amp; Grafici</td><td><strong>10</strong></td><td>4</td><td>2</td><td>5</td></tr>
+    <tr><td>Contenuto post</td><td>6</td><td>6</td><td>4</td><td>5</td></tr>
+    <tr><td>Form</td><td><strong>3</strong></td><td>2</td><td>0</td><td>1</td></tr>
+    <tr><td>WooCommerce</td><td><strong>32</strong></td><td>18</td><td>12</td><td>20</td></tr>
+    <tr><td>Elementi creativi</td><td><strong>7</strong></td><td>5</td><td>2</td><td>3</td></tr>
+    <tr><td>Elementi speciali</td><td><strong>15</strong></td><td>10</td><td>5</td><td>8</td></tr>
+    <tr><td>Settore verticale (booking, room)</td><td>38</td><td>0</td><td>0</td><td>0</td></tr>
+    <tr style="font-weight:700;background:#F0F0FF"><td><strong>Totale</strong></td><td><strong>172</strong></td><td><strong>~82</strong></td><td><strong>~53</strong></td><td><strong>~80</strong></td></tr>
+  </tbody>
+</table></div>
+<div class="note"><strong>Nota:</strong> I 38 tile verticali (service, booking, oloroom) sono specifici per il settore ricettivo. Escludendoli: <strong>134 vs ~82 vs ~53 vs ~80</strong> — comunque nettamente superiore. Il conteggio Elementor esclude addon terze parti (Crocoblock, Essential Addons, etc.).</div>
+
+<hr>
+
+<!-- CMP 5 -->
+<h3>5. WooCommerce — Profondità Integrazione</h3>
+<div class="table-wrap"><table class="cmp-table">
+  <thead><tr><th>Funzionalità</th><th>Olobuild</th><th>Elementor Pro</th><th>YOOtheme Pro</th><th>Avada</th></tr></thead>
+  <tbody>
+    <tr><td>Griglia prodotti con filtri</td><td><span class="si">Si</span></td><td><span class="si">Si</span></td><td><span class="si">Si</span></td><td><span class="si">Si</span></td></tr>
+    <tr><td>Pagina prodotto personalizzabile</td><td><span class="si">Si (16 tile)</span></td><td><span class="si">Si (12 widget)</span></td><td><span class="si">Si</span></td><td><span class="si">Si</span></td></tr>
+    <tr><td>Carrello custom</td><td><span class="si">Si</span></td><td><span class="si">Si</span></td><td><span class="no">No</span></td><td><span class="si">Si</span></td></tr>
+    <tr><td>Checkout custom</td><td><span class="si">Si</span></td><td><span class="si">Si</span></td><td><span class="no">No</span></td><td><span class="si">Si</span></td></tr>
+    <tr><td><strong>Checkout multi-step</strong></td><td><span class="si">Si</span></td><td><span class="si">Si</span></td><td><span class="no">No</span></td><td><span class="no">No</span></td></tr>
+    <tr><td>Mini cart (header)</td><td><span class="si">Si</span></td><td><span class="si">Si</span></td><td><span class="no">No</span></td><td><span class="si">Si</span></td></tr>
+    <tr><td>Filtri prodotto avanzati</td><td><span class="si">Si</span></td><td><span class="si">Si</span></td><td><span class="no">No</span></td><td><span class="si">Si</span></td></tr>
+    <tr><td><strong>Quick view modale</strong></td><td><span class="si">Si</span></td><td><span class="no">No (addon)</span></td><td><span class="no">No</span></td><td><span class="no">No</span></td></tr>
+    <tr><td><strong>Wishlist</strong></td><td><span class="si">Si</span></td><td><span class="no">No (addon)</span></td><td><span class="no">No</span></td><td><span class="no">No</span></td></tr>
+    <tr><td><strong>Confronto prodotti</strong></td><td><span class="si">Si</span></td><td><span class="no">No (addon)</span></td><td><span class="no">No</span></td><td><span class="no">No</span></td></tr>
+    <tr><td><strong>Bundle prodotti</strong></td><td><span class="si">Si</span></td><td><span class="no">No</span></td><td><span class="no">No</span></td><td><span class="no">No</span></td></tr>
+    <tr><td><strong>Order tracking</strong></td><td><span class="si">Si</span></td><td><span class="no">No</span></td><td><span class="no">No</span></td><td><span class="no">No</span></td></tr>
+    <tr><td>Prodotti visti di recente</td><td><span class="si">Si</span></td><td><span class="no">No (addon)</span></td><td><span class="no">No</span></td><td><span class="no">No</span></td></tr>
+    <tr><td>Navigazione prev/next</td><td><span class="si">Si</span></td><td><span class="si">Si</span></td><td><span class="no">No</span></td><td><span class="no">No</span></td></tr>
+    <tr><td>Badge sconto custom</td><td><span class="si">Si</span></td><td><span class="si">Si</span></td><td><span class="no">No</span></td><td><span class="si">Si</span></td></tr>
+    <tr><td>Account utente custom</td><td><span class="si">Si</span></td><td><span class="si">Si</span></td><td><span class="no">No</span></td><td><span class="si">Si</span></td></tr>
+  </tbody>
+</table></div>
+
+<hr>
+
+<!-- CMP 6 -->
+<h3>6. Contenuto Dinamico</h3>
+<div class="table-wrap"><table class="cmp-table">
+  <thead><tr><th>Sorgente dati</th><th>Olobuild</th><th>Elementor Pro</th><th>YOOtheme Pro</th><th>Avada</th></tr></thead>
+  <tbody>
+    <tr><td>Post corrente</td><td><span class="si">Si</span></td><td><span class="si">Si</span></td><td><span class="si">Si</span></td><td><span class="si">Si</span></td></tr>
+    <tr><td>Custom fields</td><td><span class="si">Si</span></td><td><span class="si">Si</span></td><td><span class="si">Si</span></td><td><span class="si">Si</span></td></tr>
+    <tr><td>ACF (tutti i tipi)</td><td><span class="si">Si</span></td><td><span class="si">Si</span></td><td><span class="si">Si</span></td><td><span class="si">Si</span></td></tr>
+    <tr><td>ACF Repeater</td><td><span class="si">Si</span></td><td><span class="si">Si</span></td><td><span class="si">Si</span></td><td><span class="no">No</span></td></tr>
+    <tr><td>ACF Option Page</td><td><span class="si">Si</span></td><td><span class="si">Si</span></td><td><span class="si">Si</span></td><td><span class="no">No</span></td></tr>
+    <tr><td>Tassonomie</td><td><span class="si">Si</span></td><td><span class="si">Si</span></td><td><span class="si">Si</span></td><td><span class="si">Si</span></td></tr>
+    <tr><td>Autore</td><td><span class="si">Si</span></td><td><span class="si">Si</span></td><td><span class="si">Si</span></td><td><span class="si">Si</span></td></tr>
+    <tr><td>Utente corrente</td><td><span class="si">Si</span></td><td><span class="si">Si</span></td><td><span class="no">No</span></td><td><span class="si">Si</span></td></tr>
+    <tr><td>Info sito</td><td><span class="si">Si</span></td><td><span class="si">Si</span></td><td><span class="si">Si</span></td><td><span class="si">Si</span></td></tr>
+    <tr><td>Data/Ora</td><td><span class="si">Si</span></td><td><span class="si">Si</span></td><td><span class="no">No</span></td><td><span class="si">Si</span></td></tr>
+    <tr><td>Parametri URL / query string</td><td><span class="si">Si</span></td><td><span class="si">Si</span></td><td><span class="no">No</span></td><td><span class="no">No</span></td></tr>
+    <tr><td><strong>Cookie</strong></td><td><span class="si">Si</span></td><td><span class="no">No</span></td><td><span class="no">No</span></td><td><span class="no">No</span></td></tr>
+    <tr><td>Shortcode come valore</td><td><span class="si">Si</span></td><td><span class="si">Si</span></td><td><span class="no">No</span></td><td><span class="no">No</span></td></tr>
+    <tr><td>Navigazione post</td><td><span class="si">Si</span></td><td><span class="si">Si</span></td><td><span class="no">No</span></td><td><span class="no">No</span></td></tr>
+    <tr><td>WooCommerce</td><td><span class="si">Si</span></td><td><span class="si">Si</span></td><td><span class="si">Si</span></td><td><span class="si">Si</span></td></tr>
+    <tr><td>Menu WordPress</td><td><span class="si">Si</span></td><td><span class="no">No</span></td><td><span class="si">Si</span></td><td><span class="no">No</span></td></tr>
+    <tr style="font-weight:700;background:#F0F0FF"><td><strong>Sorgenti totali</strong></td><td><strong>16</strong></td><td><strong>~12</strong></td><td><strong>~9</strong></td><td><strong>~9</strong></td></tr>
+  </tbody>
+</table></div>
+
+<hr>
+
+<!-- CMP 7 -->
+<h3>7. Rendering e Performance Frontend</h3>
+<div class="table-wrap"><table class="cmp-table">
+  <thead><tr><th>Aspetto</th><th>Olobuild</th><th>Elementor Pro</th><th>YOOtheme Pro</th><th>Avada</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Markup generato</strong></td><td>HTML semantico + UIkit</td><td><code>&lt;div&gt;</code> wrapper multipli</td><td>HTML semantico + UIkit</td><td><code>&lt;div&gt;</code> wrapper + Fusion</td></tr>
+    <tr><td><strong>CSS framework</strong></td><td>UIkit 3 (~30 KB gzip)</td><td>Proprio (~80 KB gzip)</td><td>UIkit 3 (~30 KB gzip)</td><td>Bootstrap + Fusion (~60 KB)</td></tr>
+    <tr><td><strong>JS frontend</strong></td><td>UIkit JS (~20 KB gzip)</td><td>Swiper + proprio (~100 KB)</td><td>UIkit JS (~20 KB gzip)</td><td>jQuery + Fusion (~80 KB)</td></tr>
+    <tr><td><strong>Asset condizionale</strong></td><td><span class="si">Si (per tile)</span></td><td><span class="parz">Parziale</span></td><td><span class="si">Si</span></td><td><span class="parz">Parziale</span></td></tr>
+    <tr><td><strong>Critical CSS automatico</strong></td><td><span class="si">Si (cache per template)</span></td><td><span class="no">No</span></td><td><span class="no">No</span></td><td><span class="no">No</span></td></tr>
+    <tr><td><strong>Lazy load immagini</strong></td><td><span class="si">Si</span></td><td><span class="si">Si</span></td><td><span class="si">Si</span></td><td><span class="si">Si</span></td></tr>
+  </tbody>
+</table></div>
+<div class="note"><strong>Nota onesta:</strong> Il critical CSS automatico è un vantaggio reale per i Core Web Vitals, ma soluzioni esterne (WP Rocket, Autoptimize) offrono la stessa funzionalità per qualsiasi builder. Il vantaggio è nell'integrazione nativa (zero configurazione).</div>
+
+<hr>
+
+<!-- CMP 8 -->
+<h3>8. Builder UX — Strumenti di Editing</h3>
+<div class="table-wrap"><table class="cmp-table">
+  <thead><tr><th>Funzionalità</th><th>Olobuild</th><th>Elementor Pro</th><th>YOOtheme Pro</th><th>Avada</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Undo/Redo</strong></td><td><span class="si">Si (illimitato)</span></td><td><span class="si">Si (limitato)</span></td><td><span class="si">Si</span></td><td><span class="si">Si</span></td></tr>
+    <tr><td><strong>Revisioni con rollback</strong></td><td><span class="si">Si (tabella dedicata)</span></td><td><span class="si">Si (revisioni WP)</span></td><td><span class="si">Si</span></td><td><span class="si">Si</span></td></tr>
+    <tr><td><strong>Context menu (tasto destro)</strong></td><td><span class="si">Si</span></td><td><span class="si">Si</span></td><td><span class="no">No</span></td><td><span class="no">No</span></td></tr>
+    <tr><td><strong>Finder (ricerca elemento)</strong></td><td><span class="si">Si (Ctrl+F)</span></td><td><span class="si">Si (Ctrl+E)</span></td><td><span class="no">No</span></td><td><span class="no">No</span></td></tr>
+    <tr><td><strong>Albero struttura</strong></td><td><span class="si">Si (show/hide/lock)</span></td><td><span class="si">Si (Navigator)</span></td><td><span class="si">Si (semplice)</span></td><td><span class="no">No</span></td></tr>
+    <tr><td><strong>Inline editing testo</strong></td><td><span class="si">Si (doppio click + floating toolbar)</span></td><td><span class="si">Si (click sul canvas)</span></td><td><span class="si">Si (click sul canvas)</span></td><td><span class="parz">Parziale</span></td></tr>
+    <tr><td><strong>AI integrato</strong></td><td><span class="si">Si (Claude + DALL-E)</span></td><td><span class="si">Si (AI proprietario)</span></td><td><span class="no">No</span></td><td><span class="parz">Beta</span></td></tr>
+    <tr><td><strong>Stock media integrati</strong></td><td><span class="si">Si (5 provider)</span></td><td><span class="no">No</span></td><td><span class="no">No</span></td><td><span class="no">No</span></td></tr>
+    <tr><td><strong>Global widgets (riusabili)</strong></td><td><span class="si">Si</span></td><td><span class="si">Si</span></td><td><span class="no">No</span></td><td><span class="si">Si</span></td></tr>
+  </tbody>
+</table></div>
+<div class="pro"><strong>Punto forte Olobuild:</strong> Inline editing con doppio click su qualsiasi campo testuale nel canvas, floating toolbar per formattazione rich text (bold, italic, colore, link), supporto campi array (accordion, timeline), protezione automatica per campi con dynamic binding attivo.</div>
+<div class="pro"><strong>Punto forte Olobuild:</strong> 5 librerie media stock integrate direttamente nel builder. In nessun altro builder puoi cercare "montagna" e importare da Unsplash/Pexels/Pixabay senza uscire dall'editor.</div>
+
+<hr>
+
+<!-- CMP 9 -->
+<h3>9. Motion Design e Animazioni</h3>
+<div class="table-wrap"><table class="cmp-table">
+  <thead><tr><th>Funzionalità</th><th>Olobuild</th><th>Elementor Pro</th><th>YOOtheme Pro</th><th>Avada</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Entrance animations</strong></td><td><span class="si">Si (36 preset)</span></td><td><span class="si">Si (~30 preset)</span></td><td><span class="si">Si (UIkit ~15)</span></td><td><span class="si">Si (~20)</span></td></tr>
+    <tr><td><strong>Stagger figli (sequenziale)</strong></td><td><span class="si">Si (ritardo configurabile)</span></td><td><span class="parz">Parziale (solo su griglia)</span></td><td><span class="si">Si (UIkit scrollspy)</span></td><td><span class="no">No</span></td></tr>
+    <tr><td><strong>Stagger item interni tile</strong></td><td><span class="si">Si (griglia, gallery, postgrid, ecc.)</span></td><td><span class="no">No</span></td><td><span class="parz">Parziale (scrollspy target)</span></td><td><span class="no">No</span></td></tr>
+    <tr><td><strong>Scroll-linked effects</strong></td><td><span class="si">Si (parallax multi-property)</span></td><td><span class="si">Si (motion effects)</span></td><td><span class="si">Si (UIkit parallax)</span></td><td><span class="parz">Parziale</span></td></tr>
+    <tr><td><strong>Hover transforms</strong></td><td><span class="si">Si (scale, translate, rotate, skew)</span></td><td><span class="si">Si</span></td><td><span class="parz">Parziale</span></td><td><span class="si">Si</span></td></tr>
+    <tr><td><strong>Hover filtri CSS</strong></td><td><span class="si">Si (blur, brightness, contrast, ecc.)</span></td><td><span class="si">Si</span></td><td><span class="no">No</span></td><td><span class="parz">Parziale</span></td></tr>
+    <tr><td><strong>Mouse tracking / Tilt 3D</strong></td><td><span class="si">Si (tilt + follow)</span></td><td><span class="si">Si (mouse effects)</span></td><td><span class="no">No</span></td><td><span class="no">No</span></td></tr>
+    <tr><td><strong>Infinite animations</strong></td><td><span class="si">Si (8 preset: float, pulse, spin, ecc.)</span></td><td><span class="si">Si</span></td><td><span class="no">No</span></td><td><span class="parz">Parziale</span></td></tr>
+    <tr><td><strong>CSS Filters (normal state)</strong></td><td><span class="si">Si (7 filtri)</span></td><td><span class="si">Si</span></td><td><span class="no">No</span></td><td><span class="si">Si</span></td></tr>
+    <tr><td><strong>Backdrop filter</strong></td><td><span class="si">Si (glassmorphism)</span></td><td><span class="si">Si</span></td><td><span class="no">No</span></td><td><span class="no">No</span></td></tr>
+    <tr><td><strong>CSS Transform (normal state)</strong></td><td><span class="si">Si (rotate, scale, skew, translate)</span></td><td><span class="si">Si</span></td><td><span class="no">No</span></td><td><span class="si">Si</span></td></tr>
+    <tr><td><strong>Transition personalizzabile</strong></td><td><span class="si">Si (durata + easing)</span></td><td><span class="si">Si</span></td><td><span class="no">No</span></td><td><span class="parz">Parziale</span></td></tr>
+    <tr><td><strong>Scrollspy (UIkit)</strong></td><td><span class="si">Si (repeat, delay, stagger)</span></td><td>N/A</td><td><span class="si">Si</span></td><td>N/A</td></tr>
+    <tr><td><strong>Lottie animations</strong></td><td><span class="si">Si</span></td><td><span class="si">Si</span></td><td><span class="no">No</span></td><td><span class="no">No</span></td></tr>
+    <tr><td><strong>Animation timeline visuale</strong></td><td><span class="no">No</span></td><td><span class="si">Si</span></td><td><span class="no">No</span></td><td><span class="no">No</span></td></tr>
+    <tr><td><strong>Reduced motion (a11y)</strong></td><td><span class="si">Si (prefers-reduced-motion)</span></td><td><span class="no">No</span></td><td><span class="no">No</span></td><td><span class="no">No</span></td></tr>
+  </tbody>
+</table></div>
+<div class="pro"><strong>Punto forte Olobuild:</strong> 36 animazioni di ingresso con stagger configurabile che funziona sia su tile figli (sezione → righe) sia su item interni (griglia → card). Mouse tilt 3D, 8 animazioni infinite, filtri CSS/backdrop completi, hover transforms con transizione personalizzabile. Unico builder con supporto nativo <code>prefers-reduced-motion</code> per accessibilità.</div>
+<div class="con"><strong>Gap rispetto a Elementor:</strong> Manca un editor timeline visuale per orchestrare sequenze di animazioni complesse su più elementi con keyframe precisi. Elementor è l'unico nel confronto ad offrire questa funzionalità.</div>
+
+<hr>
+
+<!-- CMP 10 -->
+<h3>10. Template System</h3>
+<div class="table-wrap"><table class="cmp-table">
+  <thead><tr><th>Aspetto</th><th>Olobuild</th><th>Elementor Pro</th><th>YOOtheme Pro</th><th>Avada</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Header builder</strong></td><td><span class="si">Si</span></td><td><span class="si">Si</span></td><td><span class="si">Si</span></td><td><span class="si">Si</span></td></tr>
+    <tr><td><strong>Footer builder</strong></td><td><span class="si">Si</span></td><td><span class="si">Si</span></td><td><span class="si">Si</span></td><td><span class="si">Si</span></td></tr>
+    <tr><td><strong>Single post type</strong></td><td><span class="si">Si</span></td><td><span class="si">Si</span></td><td><span class="si">Si</span></td><td><span class="si">Si</span></td></tr>
+    <tr><td><strong>Archive template</strong></td><td><span class="si">Si</span></td><td><span class="si">Si</span></td><td><span class="si">Si</span></td><td><span class="no">No (opzioni tema)</span></td></tr>
+    <tr><td><strong>404 template</strong></td><td><span class="si">Si</span></td><td><span class="si">Si</span></td><td><span class="no">No</span></td><td><span class="si">Si</span></td></tr>
+    <tr><td><strong>Search template</strong></td><td><span class="si">Si</span></td><td><span class="si">Si</span></td><td><span class="no">No</span></td><td><span class="si">Si</span></td></tr>
+    <tr><td><strong>Condizioni (AND/OR)</strong></td><td><span class="si">Si</span></td><td><span class="si">Si</span></td><td><span class="si">Si (semplice)</span></td><td><span class="si">Si</span></td></tr>
+    <tr><td><strong>Condizione per data/ora</strong></td><td><span class="si">Si</span></td><td><span class="no">No</span></td><td><span class="no">No</span></td><td><span class="no">No</span></td></tr>
+    <tr><td><strong>Template come shortcode</strong></td><td><span class="si">Si</span></td><td><span class="si">Si</span></td><td><span class="no">No</span></td><td><span class="no">No</span></td></tr>
+    <tr><td><strong>Query Loop</strong></td><td><span class="si">Si</span></td><td><span class="si">Si</span></td><td><span class="si">Si</span></td><td><span class="no">No</span></td></tr>
+  </tbody>
+</table></div>
+
+<hr>
+
+<!-- CMP 11 -->
+<h3>11. Integrato vs Plugin Esterni</h3>
+<p>Cosa è <strong>incluso nativamente</strong> e cosa richiede plugin aggiuntivi:</p>
+<div class="table-wrap"><table class="cmp-table">
+  <thead><tr><th>Funzionalità</th><th>Olobuild</th><th>Elementor Pro</th><th>YOOtheme Pro</th><th>Avada</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Form builder</strong></td><td><span class="si">Integrato</span></td><td><span class="si">Integrato</span></td><td><span class="no">Plugin esterno</span></td><td><span class="si">Integrato</span></td></tr>
+    <tr><td><strong>Popup/Modal</strong></td><td><span class="si">Integrato</span></td><td><span class="si">Integrato</span></td><td><span class="no">Plugin esterno</span></td><td><span class="no">Plugin esterno</span></td></tr>
+    <tr><td><strong>Media stock integrati</strong></td><td><span class="si">5 provider</span></td><td><span class="no">No</span></td><td><span class="no">No</span></td><td><span class="no">No</span></td></tr>
+    <tr><td><strong>AI content</strong></td><td><span class="si">Claude + DALL-E</span></td><td><span class="si">Elementor AI</span></td><td><span class="no">No</span></td><td><span class="parz">Beta</span></td></tr>
+    <tr><td><strong>Cookie consent</strong></td><td><span class="si">Integrato</span></td><td><span class="no">Plugin esterno</span></td><td><span class="no">Plugin esterno</span></td><td><span class="no">Plugin esterno</span></td></tr>
+    <tr><td><strong>Critical CSS</strong></td><td><span class="si">Integrato</span></td><td><span class="no">Plugin esterno</span></td><td><span class="no">Plugin esterno</span></td><td><span class="no">Plugin esterno</span></td></tr>
+    <tr><td><strong>A/B Testing</strong></td><td><span class="si">Integrato</span></td><td><span class="no">Plugin esterno</span></td><td><span class="no">Plugin esterno</span></td><td><span class="no">Plugin esterno</span></td></tr>
+    <tr><td><strong>SEO meta tags</strong></td><td><span class="si">Integrato (base)</span></td><td><span class="no">Plugin esterno</span></td><td><span class="no">Plugin esterno</span></td><td><span class="no">Plugin esterno</span></td></tr>
+    <tr><td><strong>Analytics</strong></td><td><span class="si">GA4 integrato</span></td><td><span class="no">Plugin esterno</span></td><td><span class="no">Plugin esterno</span></td><td><span class="no">Plugin esterno</span></td></tr>
+    <tr><td><strong>PDF Viewer</strong></td><td><span class="si">Flipbook integrato</span></td><td><span class="no">Plugin esterno</span></td><td><span class="no">No</span></td><td><span class="no">Plugin esterno</span></td></tr>
+    <tr><td><strong>Grafici (Chart.js)</strong></td><td><span class="si">Integrato</span></td><td><span class="no">Addon</span></td><td><span class="no">No</span></td><td><span class="no">Addon</span></td></tr>
+    <tr><td><strong>Wishlist WooCommerce</strong></td><td><span class="si">Integrato</span></td><td><span class="no">YITH addon</span></td><td><span class="no">No</span></td><td><span class="no">YITH addon</span></td></tr>
+    <tr><td><strong>Checkout multi-step</strong></td><td><span class="si">Integrato</span></td><td><span class="si">Integrato</span></td><td><span class="no">No</span></td><td><span class="no">No</span></td></tr>
+    <tr><td><strong>White label</strong></td><td><span class="si">Integrato</span></td><td><span class="no">Solo Agency</span></td><td><span class="no">No</span></td><td><span class="si">Integrato</span></td></tr>
+  </tbody>
+</table></div>
+<div class="note"><strong>Nota onesta:</strong> Ogni funzionalità integrata è meno specializzata della versione standalone. Il form builder non raggiunge WPForms Pro. Il cookie consent è base rispetto a CookieYes. La SEO è basilare rispetto a Rank Math. Il vantaggio è nell'integrazione coerente e nella riduzione di plugin.</div>
+
+<hr>
+
+<!-- CMP 12 -->
+<h3>12. Riepilogo Punti di Forza e Debolezza (tecnici)</h3>
+
+<h4>Dove Olobuild è tecnicamente superiore</h4>
+<div class="pro">
+<ul style="margin:0">
+  <li><strong>168 elementi nativi</strong> (134 escludendo verticali) vs 53-82 dei competitor</li>
+  <li><strong>32 tile WooCommerce</strong> con wishlist, confronto, bundle, quickview nativi</li>
+  <li><strong>5 librerie media stock</strong> integrate — unico builder</li>
+  <li><strong>Griglia 2D</strong> con posizionamento libero e nesting illimitato</li>
+  <li><strong>Stack moderno</strong> — Vue 3 + Vite 5 + Pinia</li>
+  <li><strong>Funzionalità integrate</strong> — form, popup, cookie, analytics, critical CSS, A/B test, PDF, chart</li>
+  <li><strong>Motion design completo</strong> — 36 entrance animations, stagger figli/item, hover transforms, mouse tilt 3D, 8 infinite animations, filtri CSS/backdrop, scrollspy, parallax scroll-linked</li>
+  <li><strong>16 sorgenti contenuto dinamico</strong> (incluse cookie e parametri URL)</li>
+</ul>
+</div>
+
+<h4>Dove Olobuild è tecnicamente inferiore</h4>
+<div class="con">
+<ul style="margin:0">
+  <li><strong>Breakpoint fissi</strong> — 6 breakpoint non personalizzabili (Elementor ne permette custom)</li>
+  <li><strong>Nessuna timeline di animazione</strong> — Elementor permette di orchestrare animazioni multiple con keyframe visuale. Olobuild ha 36 entrance animations, stagger, scroll effects, hover transforms e mouse tracking, ma non ha un editor timeline</li>
+  <li><strong>Nessun theme builder visuale</strong> — non c'è un'interfaccia grafica per mappare template a contesti</li>
+  <li><strong>Responsive manuale</strong> — la griglia 2D richiede più attenzione sui breakpoint rispetto al sistema colonna che collassa naturalmente</li>
+</ul>
+</div>
+
+<h4>Dove sono tutti alla pari</h4>
+<div class="info">
+Header/footer builder, revisioni, undo/redo, autosave, custom fonts, contenuto dinamico base (post, ACF, tassonomie), lazy load, copia/incolla, import/export template.
+</div>
+
+<!-- ═══════════════════════════════ GLOSSARIO ═══════════════════════════════ -->
+<hr>
+<h2>Glossario</h2>
+<div class="table-wrap"><table>
+  <thead><tr><th>Termine</th><th>Significato</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Tile</strong></td><td>Singolo elemento/blocco nel builder (equivalente di "widget" in Elementor)</td></tr>
+    <tr><td><strong>Section</strong></td><td>Contenitore di primo livello che ospita la griglia</td></tr>
+    <tr><td><strong>Grid</strong></td><td>Griglia CSS responsive che contiene i tile</td></tr>
+    <tr><td><strong>Cell</strong></td><td>Cella della griglia che ospita un tile</td></tr>
+    <tr><td><strong>Inspector</strong></td><td>Pannello laterale destro per modificare le proprietà del tile selezionato</td></tr>
+    <tr><td><strong>Breakpoint</strong></td><td>Punto di rottura responsivo (desktop, tablet, mobile...)</td></tr>
+    <tr><td><strong>Template</strong></td><td>Layout salvato (pagina, header, footer, single, archive...)</td></tr>
+    <tr><td><strong>Dynamic binding</strong></td><td>Collegamento di un campo a una sorgente dati che si aggiorna automaticamente</td></tr>
+    <tr><td><strong>Design token</strong></td><td>Variabile CSS globale condivisa da tutti i tile</td></tr>
+    <tr><td><strong>Critical CSS</strong></td><td>CSS minimo per il rendering above-the-fold, iniettato inline</td></tr>
+  </tbody>
+</table></div>
+
+</div><!-- /.content -->
+</div><!-- /.container -->
+
+<div class="footer">
+  Olobuild v2.7.2 — Page builder professionale per WordPress
+</div>
+
+</body>
+</html>

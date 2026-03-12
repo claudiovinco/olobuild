@@ -28,14 +28,14 @@ const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 const defaults = {
   layout: 'grid', columns: '4', gap: '16', align: 'center',
   icon_size: '24', number_size: '22', label_size: '11',
-  icon_color: '#6366F1', number_color: '#1F2937', label_color: '#9CA3AF',
+  icon_color: '', number_color: '', label_color: '',
   show_dividers: false, divider_color: '#E5E7EB',
   item_bg: '', item_border_radius: '8', item_padding: '0', item_border_color: '',
   bg_color: '', border_radius: '0', padding: '0',
 };
 const s = computed(() => ({ ...defaults, ...props.settings }));
 const iconSz = computed(() => Math.min(parseInt(s.value.icon_size) || 24, 32));
-const c = computed(() => s.value.icon_color);
+const c = computed(() => s.value.icon_color || '#6366F1');
 
 const justifyAlign = computed(() =>
   s.value.align === 'center' ? 'center' : s.value.align === 'right' ? 'flex-end' : 'flex-start'
@@ -89,12 +89,12 @@ function inlineItemStyle(idx) {
 
 const numStyle = computed(() => ({
   fontSize: Math.min(parseInt(s.value.number_size) || 22, 28) + 'px',
-  fontWeight: '700', color: s.value.number_color, lineHeight: '1.2',
+  fontWeight: '700', color: s.value.number_color || 'var(--olo-color-text, #374151)', lineHeight: '1.2',
 }));
 
 const lblStyle = computed(() => ({
   fontSize: Math.min(parseInt(s.value.label_size) || 11, 14) + 'px',
-  textTransform: 'uppercase', color: s.value.label_color,
+  textTransform: 'uppercase', color: s.value.label_color || 'var(--olo-color-text-muted, #9CA3AF)',
   letterSpacing: '0.5px', fontWeight: '600', marginTop: '2px',
 }));
 </script>

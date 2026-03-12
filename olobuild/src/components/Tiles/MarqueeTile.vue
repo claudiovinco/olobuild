@@ -4,7 +4,7 @@
       <!-- Text mode -->
       <template v-if="s.content_type !== 'images'">
         <template v-for="i in 10" :key="'t'+i">
-          <span class="olo-mq-text" :style="textStyle" v-html="s.text_items || 'Testo scorrevole'"></span>
+          <span class="olo-mq-text" :style="textStyle" data-olo-editable="text_items">{{ s.text_items || 'Testo scorrevole' }}</span>
           <span v-if="s.separator" class="olo-mq-sep" :style="sepStyle">{{ s.separator }}</span>
         </template>
       </template>
@@ -45,8 +45,8 @@ const s = computed(() => ({
   direction: 'left',
   pause_hover: true,
   gap: '60',
-  bg_color: '#111827',
-  text_color: '#FFFFFF',
+  bg_color: 'var(--olo-color-muted, #F3F4F6)',
+  text_color: 'var(--olo-color-text, #374151)',
   font_size: '16',
   font_weight: '500',
   letter_spacing: '1',
@@ -55,7 +55,7 @@ const s = computed(() => ({
   full_width: true,
   border_top: '0',
   border_bottom: '0',
-  border_color: '#374151',
+  border_color: 'var(--olo-color-border, #E5E7EB)',
   ...props.settings,
 }));
 
@@ -67,13 +67,13 @@ const imgList = computed(() => {
 
 const containerStyle = computed(() => {
   const st = {
-    background: s.value.bg_color || '#111827',
+    background: s.value.bg_color || 'var(--olo-color-muted, #F3F4F6)',
     height: (parseInt(s.value.height) || 50) + 'px',
     overflow: 'hidden',
   };
   const bt = parseInt(s.value.border_top) || 0;
   const bb = parseInt(s.value.border_bottom) || 0;
-  const bc = s.value.border_color || '#374151';
+  const bc = s.value.border_color || 'var(--olo-color-border, #E5E7EB)';
   if (bt > 0) st.borderTop = `${bt}px solid ${bc}`;
   if (bb > 0) st.borderBottom = `${bb}px solid ${bc}`;
   if (s.value.full_width) {
@@ -98,7 +98,7 @@ const trackStyle = computed(() => {
 });
 
 const textStyle = computed(() => ({
-  color: s.value.text_color || '#FFFFFF',
+  color: s.value.text_color || 'var(--olo-color-text, #374151)',
   fontSize: (parseInt(s.value.font_size) || 16) + 'px',
   fontWeight: s.value.font_weight || '500',
   letterSpacing: (parseInt(s.value.letter_spacing) || 0) + 'px',

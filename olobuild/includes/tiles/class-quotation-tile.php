@@ -9,7 +9,7 @@ class Olo_Quotation_Tile extends Olo_Tile_Base {
     protected $type     = 'quotation';
     protected $name     = 'Citazione';
     protected $icon     = 'dashicons-format-quote';
-    protected $category = 'content';
+    protected $category = 'text';
     protected $defaults = [
         'content'   => 'Life is what happens when you\'re busy making other plans.',
         'author'    => 'John Lennon',
@@ -41,7 +41,7 @@ class Olo_Quotation_Tile extends Olo_Tile_Base {
         ob_start();
         ?>
         <blockquote class="olo-quotation <?php echo $align_class; ?>">
-            <p><?php echo wp_kses_post( $s['content'] ); ?></p>
+            <p><?php echo nl2br( esc_html( wp_strip_all_tags( $s['content'] ) ) ); ?></p>
             <?php if ( ! empty( $s['author'] ) ) : ?>
                 <?php if ( $s['style'] === 'footer' ) : ?>
                     <footer><cite><?php echo esc_html( $s['author'] ); ?></cite></footer>

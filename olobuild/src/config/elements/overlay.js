@@ -1,4 +1,4 @@
-import { borderFields, borderDefaults, shadowField } from './_shared.js';
+import { shadowField } from './_shared.js';
 
 export default {
   type: 'overlay',
@@ -12,17 +12,16 @@ export default {
     link_url: '',
     link_target: '_self',
     overlay_color: '#000000',
-    text_color: '#FFFFFF',
+    text_color: '',
     hover_effect: 'fade',
     overlay_opacity: '70',
     height: '300',
     shadow: 'none',
-    ...borderDefaults,
   },
   fields: [
     { key: 'image_url', label: 'Immagine', type: 'image' },
-    { key: 'title', label: 'Titolo', type: 'editor', mode: 'inline' },
-    { key: 'description', label: 'Descrizione', type: 'editor', mode: 'block' },
+    { key: 'title', label: 'Titolo', type: 'text' },
+    { key: 'description', label: 'Descrizione', type: 'textarea' },
     { key: 'link_url', label: 'URL link', type: 'text' },
     { key: 'link_target', label: 'Apri in', type: 'select', options: [
       { value: '_self', label: 'Stessa finestra' },
@@ -37,7 +36,6 @@ export default {
     ]},
     { key: 'overlay_opacity', label: 'Opacità overlay (%)', type: 'range', min: 0, max: 100, step: 5 },
     { key: 'height', label: 'Altezza (px)', type: 'range', min: 10, max: 600, step: 5 },
-    shadowField,
-    ...borderFields,
+    ...shadowField,
   ],
 };

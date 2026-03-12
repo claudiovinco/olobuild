@@ -17,14 +17,15 @@
         <span
           v-if="item.ribbon"
           class="mog-ribbon"
-          :class="'mog-ribbon--' + (props.settings.ribbon_position || 'top-right')"
-          :style="{ background: props.settings.ribbon_bg || '#e11d48', color: props.settings.ribbon_color || '#fff' }"
+          :class="'mog-ribbon--' + (s.ribbon_position || 'top-right')"
+          :style="{ background: s.ribbon_bg || '#e11d48', color: s.ribbon_color || '#fff' }"
+          :data-olo-editable="'items.' + i + '.ribbon'"
         >{{ item.ribbon }}</span>
 
         <!-- Overlay -->
         <div class="mog-overlay" :class="[...overlayClasses, hoverOverlayClass]" :style="overlayPadStyle">
-          <component :is="titleTag" class="mb-font-bold mb-text-white mb-m-0" :style="titleFontStyle">{{ item.title }}</component>
-          <div v-if="item.subtitle" class="mb-text-xs mb-text-gray-200 mb-mt-1">{{ item.subtitle }}</div>
+          <component :is="titleTag" class="mb-font-bold mb-text-white mb-m-0" :style="titleFontStyle" :data-olo-editable="'items.' + i + '.title'">{{ item.title }}</component>
+          <div v-if="item.subtitle" class="mb-text-xs mb-text-gray-200 mb-mt-1" :data-olo-editable="'items.' + i + '.subtitle'">{{ item.subtitle }}</div>
           <div v-if="item.link" class="mb-text-[10px] mb-text-blue-300 mb-mt-1 mb-opacity-70">&#128279;</div>
         </div>
       </div>
@@ -39,8 +40,24 @@ const props = defineProps({
   settings: { type: Object, default: () => ({}) },
 });
 
+const defaults = {
+  columns: '3',
+  gap: 'medium',
+  height: '300',
+  overlay_position: 'bottom',
+  overlay_horizontal: 'left',
+  overlay_padding: 'medium',
+  title_size: 'h3',
+  hover_effect: 'none',
+  hover_overlay: 'always',
+  ribbon_position: 'top-right',
+  ribbon_bg: '#e11d48',
+  ribbon_color: '#ffffff',
+};
+const s = computed(() => ({ ...defaults, ...props.settings }));
+
 const items = computed(() => {
-  const raw = props.settings.items;
+  const raw = s.value.items;
   if (Array.isArray(raw) && raw.length) return raw;
   return [
     { id: 'og-1', image: '', title: 'Elemento 1', subtitle: '' },
@@ -49,10 +66,10 @@ const items = computed(() => {
   ];
 });
 
-const cols = computed(() => parseInt(props.settings.columns) || 3);
+const cols = computed(() => parseInt(s.value.columns) || 3);
 // Scale height down for preview — more columns = shorter cells
 const itemHeight = computed(() => {
-  const h = parseInt(props.settings.height) || 300;
+  const h = parseInt(s.value.height) || 300;
   const c = cols.value;
   if (c >= 4) return Math.min(h, 150);
   if (c >= 3) return Math.min(h, 200);
@@ -60,7 +77,7 @@ const itemHeight = computed(() => {
 });
 
 const gapMap = { collapse: '0px', small: '8px', medium: '16px', large: '24px' };
-const gap = computed(() => gapMap[props.settings.gap || 'medium'] || '16px');
+const gap = computed(() => gapMap[s.value.gap || 'medium'] || '16px');
 
 // gridStyle replaced with CSS custom properties on .mog-grid
 
@@ -72,8 +89,8 @@ function bgStyle(item) {
 }
 
 const overlayClasses = computed(() => {
-  const pos = props.settings.overlay_position || 'bottom';
-  const align = props.settings.overlay_horizontal || 'left';
+  const pos = s.value.overlay_position || 'bottom';
+  const align = s.value.overlay_horizontal || 'left';
   const classes = ['mog-overlay--' + pos];
   if (align === 'center') classes.push('mog-align-center');
   if (align === 'right') classes.push('mog-align-right');
@@ -81,19 +98,19 @@ const overlayClasses = computed(() => {
 });
 
 const overlayPadStyle = computed(() => {
-  const pad = props.settings.overlay_padding || 'medium';
+  const pad = s.value.overlay_padding || 'medium';
   if (pad === 'small') return { padding: '8px 12px' };
   if (pad === 'large') return { padding: '24px 32px' };
   return { padding: '12px 16px' };
 });
 
 const titleTag = computed(() => {
-  const tag = props.settings.title_size || 'h3';
+  const tag = s.value.title_size || 'h3';
   return ['h1', 'h2', 'h3', 'h4'].includes(tag) ? tag : 'h3';
 });
 
 const titleFontStyle = computed(() => {
-  const tag = props.settings.title_size || 'h3';
+  const tag = s.value.title_size || 'h3';
   const c = cols.value;
   // Scale font down for many columns in preview
   const scale = c >= 4 ? 0.7 : c >= 3 ? 0.85 : 1;
@@ -103,12 +120,12 @@ const titleFontStyle = computed(() => {
 });
 
 const hoverImageClass = computed(() => {
-  const fx = props.settings.hover_effect || 'none';
+  const fx = s.value.hover_effect || 'none';
   return fx !== 'none' ? 'mog-hover-' + fx : '';
 });
 
 const hoverOverlayClass = computed(() => {
-  const ov = props.settings.hover_overlay || 'always';
+  const ov = s.value.hover_overlay || 'always';
   return ov !== 'always' ? 'mog-ov-' + ov : '';
 });
 </script>

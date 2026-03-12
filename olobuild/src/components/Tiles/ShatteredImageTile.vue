@@ -28,6 +28,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { getShadowValue } from '@/composables/useShadowMap';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
@@ -396,11 +397,6 @@ const activeVariants = computed(() => KB_STYLES[s.value.kenburns_style] || KB_ST
 const containerStyle = computed(() => {
   const radius = parseInt(s.value.border_radius_outer) || 0;
   const bw = parseInt(s.value.border_width) || 0;
-  const shadowMap = {
-    none: 'none', sm: '0 1px 3px rgba(0,0,0,.12)',
-    md: '0 4px 12px rgba(0,0,0,.12)', lg: '0 10px 30px rgba(0,0,0,.18)',
-    xl: '0 20px 50px rgba(0,0,0,.25)',
-  };
   const style = {
     position: 'relative',
     width: '100%',
@@ -408,7 +404,7 @@ const containerStyle = computed(() => {
     overflow: 'hidden',
     borderRadius: radius + 'px',
     background: s.value.gap_color || 'transparent',
-    boxShadow: shadowMap[s.value.shadow] || 'none',
+    boxShadow: getShadowValue(s.value),
   };
   if (bw > 0) {
     style.border = bw + 'px solid ' + (s.value.border_color || '#e5e7eb');

@@ -9,7 +9,7 @@ class Olo_Html_Tile extends Olo_Tile_Base {
     protected $type     = 'html';
     protected $name     = 'HTML / Codice';
     protected $icon     = 'dashicons-editor-code';
-    protected $category = 'content';
+    protected $category = 'text';
     protected $defaults = [
         'html_content' => '<div style="padding:20px;text-align:center;color:#9CA3AF;">Custom HTML block</div>',
         'sandbox'      => false,

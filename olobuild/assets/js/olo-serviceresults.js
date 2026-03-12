@@ -313,9 +313,9 @@
   }
 
   function buildCard(svc, config) {
-    var radius = config.cardRadius || 8;
+    var radius = config.cardRadius || '8px';
     var imgH = config.imageHeight || 180;
-    var imgR = config.imageRadius || 0;
+    var imgR = config.imageRadius || '0px';
     var cardClass = 'olo-svresults-card';
     if (config.cardStyle === 'shadow') cardClass += ' olo-svresults-card--shadow';
     if (config.cardStyle === 'minimal') cardClass += ' olo-svresults-card--minimal';
@@ -328,25 +328,25 @@
 
     var isCardLink = config.linkStyle === 'card';
 
-    var html = '<div class="' + cardClass + '" data-svc-id="' + svc.id + '" style="border-radius:' + radius + 'px;overflow:hidden;">';
+    var html = '<div class="' + cardClass + '" data-svc-id="' + svc.id + '" style="border-radius:' + radius + ';overflow:hidden;">';
 
     // ── Media section ──
     if (svc.image) {
-      var mediaStyle = 'position:relative;overflow:hidden;height:' + imgH + 'px;' + (imgR ? 'border-radius:' + imgR + 'px;' : '');
+      var mediaStyle = 'position:relative;overflow:hidden;height:' + imgH + 'px;' + (imgR && imgR !== '0px' ? 'border-radius:' + imgR + ';' : '');
       html += '<div class="olo-svresults-card-media" style="' + mediaStyle + '">';
 
-      var imgTag = '<img src="' + escHtml(svc.image) + '" alt="' + escHtml(svc.title) + '" class="olo-svresults-card-img' + hoverClass + kbClass + '" loading="lazy">';
+      var imgTag = '<img src="' + oloUtils.escHtml(svc.image) + '" alt="' + oloUtils.escHtml(svc.title) + '" class="olo-svresults-card-img' + hoverClass + kbClass + '" loading="lazy">';
 
       if (isCardLink) {
         html += imgTag;
       } else {
-        html += '<a href="' + escHtml(svc.url) + '">' + imgTag + '</a>';
+        html += '<a href="' + oloUtils.escHtml(svc.url) + '">' + imgTag + '</a>';
       }
 
       // Overlay gradient
       if (config.overlayGradient && config.overlayColor) {
         var oc = config.overlayColor;
-        var r = parseInt(oc.substr(1,2),16)||0, g = parseInt(oc.substr(3,2),16)||0, b = parseInt(oc.substr(5,2),16)||0;
+        var rp=parseInt(oc.substring(1,3),16), r=isNaN(rp)?0:rp, gp=parseInt(oc.substring(3,5),16), g=isNaN(gp)?0:gp, bp=parseInt(oc.substring(5,7),16), b=isNaN(bp)?0:bp;
         var a = (config.overlayOpacity||50)/100;
         var dir = config.overlayDirection||'bottom';
         var cssDir = {bottom:'to top',top:'to bottom',left:'to right',right:'to left'}[dir]||'to top';
@@ -357,14 +357,14 @@
 
       // Ribbon
       if (svc.ribbon) {
-        html += '<span class="olo-svr-ribbon olo-svr-ribbon--' + (config.ribbonPosition||'top-right') + '" style="background:' + (config.ribbonBg||'#e11d48') + ';color:' + (config.ribbonColor||'#fff') + ';">' + escHtml(svc.ribbon) + '</span>';
+        html += '<span class="olo-svr-ribbon olo-svr-ribbon--' + (config.ribbonPosition||'top-right') + '" style="background:' + (config.ribbonBg||'#e11d48') + ';color:' + (config.ribbonColor||'#fff') + ';">' + oloUtils.escHtml(svc.ribbon) + '</span>';
       }
 
       // Opening badge
       if (config.showServiceOpening && svc.service_opening) {
         var opBg = (svc.service_opening.toLowerCase().indexOf('stagional') >= 0)
           ? (config.openingBgSeasonal || '#d97706') : (config.openingBgAnnual || '#059669');
-        html += '<span class="olo-svr-opening" style="background:' + opBg + ';font-size:' + (config.openingSize||11) + 'px;">' + escHtml(svc.service_opening) + '</span>';
+        html += '<span class="olo-svr-opening" style="background:' + opBg + ';font-size:' + (config.openingSize||11) + 'px;">' + oloUtils.escHtml(svc.service_opening) + '</span>';
       }
 
       html += '</div>';
@@ -375,7 +375,7 @@
     if (config.bodyPadding) bodyStyle += 'padding:' + config.bodyPadding + 'px;';
     if (config.bodyBg) {
       var bg = config.bodyBg;
-      var br2 = parseInt(bg.substr(1,2),16)||0, bg2 = parseInt(bg.substr(3,2),16)||0, bb = parseInt(bg.substr(5,2),16)||0;
+      var tp=parseInt(bg.substring(1,3),16), br2=isNaN(tp)?0:tp, tp2=parseInt(bg.substring(3,5),16), bg2=isNaN(tp2)?0:tp2, tp3=parseInt(bg.substring(5,7),16), bb=isNaN(tp3)?0:tp3;
       var ba = (config.bodyBgOpacity != null ? config.bodyBgOpacity : 100) / 100;
       bodyStyle += 'background:rgba(' + br2 + ',' + bg2 + ',' + bb + ',' + ba + ');';
     }
@@ -388,9 +388,9 @@
     if (config.titleColor) titleStyle += 'color:' + config.titleColor + ';';
     html += '<h3 class="olo-svresults-card-title" style="' + titleStyle + '">';
     if (isCardLink) {
-      html += escHtml(svc.title);
+      html += oloUtils.escHtml(svc.title);
     } else {
-      html += '<a href="' + escHtml(svc.url) + '">' + escHtml(svc.title) + '</a>';
+      html += '<a href="' + oloUtils.escHtml(svc.url) + '">' + oloUtils.escHtml(svc.title) + '</a>';
     }
     html += '</h3>';
 
@@ -422,10 +422,10 @@
     }
     if (config.linkStyle === 'button') {
       var defLink = (config.labels && config.labels.dettagli) || 'Dettagli';
-      html += '<a href="' + escHtml(svc.url) + '" class="olo-svresults-card-btn">' + escHtml(config.linkText || defLink) + '</a>';
+      html += '<a href="' + oloUtils.escHtml(svc.url) + '" class="olo-svresults-card-btn">' + oloUtils.escHtml(config.linkText || defLink) + '</a>';
     } else if (!isCardLink) {
       var defLink2 = (config.labels && config.labels.dettagli) || 'Dettagli';
-      html += '<a href="' + escHtml(svc.url) + '" class="olo-svresults-card-link">' + escHtml(config.linkText || defLink2) + ' &rarr;</a>';
+      html += '<a href="' + oloUtils.escHtml(svc.url) + '" class="olo-svresults-card-link">' + oloUtils.escHtml(config.linkText || defLink2) + ' &rarr;</a>';
     }
     html += '</div>';
 
@@ -433,7 +433,7 @@
 
     // Wrap card in link if card-clickable
     if (isCardLink) {
-      html = '<a href="' + escHtml(svc.url) + '" class="olo-svresults-card-wrap" style="text-decoration:none;color:inherit;display:block;">' + html + '</a>';
+      html = '<a href="' + oloUtils.escHtml(svc.url) + '" class="olo-svresults-card-wrap" style="text-decoration:none;color:inherit;display:block;">' + html + '</a>';
     }
 
     return html;
@@ -472,7 +472,7 @@
       var shown = container._svLoadmorePages * perPage;
       if (shown < filtered.length) {
         var lmLabel = (config.labels && config.labels.caricaAltro) || 'Carica altro';
-        html += '<button class="olo-svresults-pg-loadmore">' + escHtml(lmLabel) + '</button>';
+        html += '<button class="olo-svresults-pg-loadmore">' + oloUtils.escHtml(lmLabel) + '</button>';
       }
     } else {
       // numbers
@@ -617,10 +617,10 @@
   function buildPopup(svc, config) {
     var html = '<div class="olo-svresults-popup">';
     if (svc.image) {
-      html += '<img class="olo-svresults-popup-img" src="' + escHtml(svc.image) + '" alt="' + escHtml(svc.title) + '">';
+      html += '<img class="olo-svresults-popup-img" src="' + oloUtils.escHtml(svc.image) + '" alt="' + oloUtils.escHtml(svc.title) + '">';
     }
     html += '<div class="olo-svresults-popup-body">';
-    html += '<strong><a href="' + escHtml(svc.url) + '">' + escHtml(svc.title) + '</a></strong>';
+    html += '<strong><a href="' + oloUtils.escHtml(svc.url) + '">' + oloUtils.escHtml(svc.title) + '</a></strong>';
 
     var stats = [];
     var L2 = config.labels || {};
@@ -678,13 +678,6 @@
   // =========================================================================
   // Utils
   // =========================================================================
-
-  function escHtml(str) {
-    if (!str) return '';
-    var div = document.createElement('div');
-    div.textContent = str;
-    return div.innerHTML;
-  }
 
   function numberFormat(n) {
     return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');

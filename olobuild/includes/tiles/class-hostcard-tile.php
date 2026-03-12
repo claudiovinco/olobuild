@@ -53,7 +53,7 @@ class Olo_HostCard_Tile extends Olo_Tile_Base {
         }
 
         if ( ! $user_id ) {
-            return '<div class="olo-hostcard olo-hostcard--empty" style="padding:24px;text-align:center;color:#9ca3af;background:#f9fafb;border-radius:8px">'
+            return '<div class="olo-hostcard olo-hostcard--empty" style="padding:24px;text-align:center;color:var(--olo-color-text-muted, #9CA3AF);background:var(--olo-color-muted, #F3F4F6);border-radius:8px">'
                  . '<span uk-icon="icon:user;ratio:1.5" style="margin-bottom:8px;display:block"></span>'
                  . '<p style="margin:0">' . esc_html( olo_t( 'Nessun gestore assegnato' ) ) . '</p>'
                  . '</div>';
@@ -61,7 +61,7 @@ class Olo_HostCard_Tile extends Olo_Tile_Base {
 
         $user = get_userdata( $user_id );
         if ( ! $user ) {
-            return '<div class="olo-hostcard olo-hostcard--empty" style="padding:24px;text-align:center;color:#9ca3af;background:#f9fafb;border-radius:8px">'
+            return '<div class="olo-hostcard olo-hostcard--empty" style="padding:24px;text-align:center;color:var(--olo-color-text-muted, #9CA3AF);background:var(--olo-color-muted, #F3F4F6);border-radius:8px">'
                  . '<p style="margin:0">' . esc_html( olo_t( 'Gestore non trovato' ) ) . '</p>'
                  . '</div>';
         }
@@ -90,9 +90,9 @@ class Olo_HostCard_Tile extends Olo_Tile_Base {
         $variant     = $s['variant'] ?: 'card';
         $photo_size  = max( 60, min( 200, absint( $s['photo_size'] ) ) );
         $rounded     = ! empty( $s['photo_rounded'] );
-        $radius      = max( 0, absint( $s['card_radius'] ) );
-        $accent      = $this->safe_color( $s['accent_color'] ?? '' ) ?: 'var(--olo-color-primary, #6366F1)';
-        $card_bg     = $this->safe_color( $s['card_bg'] ?? '' ) ?: '#ffffff';
+        $radius      = Olo_Tile_Utils::border_radius( $s['card_radius'] ?? 0 );
+        $accent      = $this->safe_color_css( $s['accent_color'] ?? '' ) ?: 'var(--olo-color-primary, #6366F1)';
+        $card_bg     = $this->safe_color_css( $s['card_bg'] ?? '' ) ?: 'var(--olo-color-background, #FFFFFF)';
         $shadow      = Olo_Tile_Utils::shadow( $s['modal_shadow'] ?? 'lg' );
         $overlay_pct = max( 0, min( 100, intval( $s['modal_overlay'] ?? 60 ) ) );
         $overlay_a   = round( $overlay_pct / 100, 2 );
@@ -129,7 +129,7 @@ class Olo_HostCard_Tile extends Olo_Tile_Base {
         <style>
             #<?php echo esc_attr( $uid ); ?>-modal { background: rgba(0,0,0,<?php echo $overlay_a; ?>) !important; }
             #<?php echo esc_attr( $uid ); ?>-modal .uk-modal-dialog {
-                border-radius: <?php echo $radius; ?>px;
+                border-radius: <?php echo $radius; ?>;
                 overflow: hidden;
                 <?php if ( $shadow !== 'none' ) : ?>box-shadow: <?php echo $shadow; ?>;<?php endif; ?>
                 max-width: 480px;
@@ -162,8 +162,8 @@ class Olo_HostCard_Tile extends Olo_Tile_Base {
                        . 'style="width:' . $photo_size . 'px;height:' . $photo_size . 'px;border-radius:' . $br . ';object-fit:cover;" loading="lazy" />';
             } else {
                 $html .= '<div class="olo-hostcard-photo olo-hostcard-photo--placeholder" '
-                       . 'style="width:' . $photo_size . 'px;height:' . $photo_size . 'px;border-radius:' . $br . ';background:#e5e7eb;display:flex;align-items:center;justify-content:center;">'
-                       . '<span uk-icon="icon:user;ratio:2" style="color:#9ca3af"></span></div>';
+                       . 'style="width:' . $photo_size . 'px;height:' . $photo_size . 'px;border-radius:' . $br . ';background:var(--olo-color-border, #E5E7EB);display:flex;align-items:center;justify-content:center;">'
+                       . '<span uk-icon="icon:user;ratio:2" style="color:var(--olo-color-text-muted, #9CA3AF)"></span></div>';
             }
         }
 
@@ -248,7 +248,7 @@ class Olo_HostCard_Tile extends Olo_Tile_Base {
         $mini_size = min( $photo_size, 56 );
         $br = $rounded ? '50%' : '6px';
 
-        $html  = '<div class="olo-hostcard olo-hostcard--card" style="background:' . esc_attr( $card_bg ) . ';border-radius:' . $radius . 'px;'
+        $html  = '<div class="olo-hostcard olo-hostcard--card" style="background:' . esc_attr( $card_bg ) . ';border-radius:' . $radius . ';'
                . ( $shadow !== 'none' ? 'box-shadow:' . $shadow . ';' : '' ) . '">';
         $html .= '<a class="olo-hostcard-trigger" href="#" uk-toggle="target: #' . esc_attr( $uid ) . '-modal" style="text-decoration:none;color:inherit;display:flex;align-items:center;gap:14px;padding:16px;">';
 
@@ -256,17 +256,17 @@ class Olo_HostCard_Tile extends Olo_Tile_Base {
             $html .= '<img src="' . esc_url( $photo_url ) . '" alt="' . esc_attr( $name ) . '" '
                    . 'style="width:' . $mini_size . 'px;height:' . $mini_size . 'px;border-radius:' . $br . ';object-fit:cover;flex-shrink:0;" loading="lazy" />';
         } else {
-            $html .= '<div style="width:' . $mini_size . 'px;height:' . $mini_size . 'px;border-radius:' . $br . ';background:#e5e7eb;display:flex;align-items:center;justify-content:center;flex-shrink:0;">'
-                   . '<span uk-icon="icon:user;ratio:1.2" style="color:#9ca3af"></span></div>';
+            $html .= '<div style="width:' . $mini_size . 'px;height:' . $mini_size . 'px;border-radius:' . $br . ';background:var(--olo-color-border, #E5E7EB);display:flex;align-items:center;justify-content:center;flex-shrink:0;">'
+                   . '<span uk-icon="icon:user;ratio:1.2" style="color:var(--olo-color-text-muted, #9CA3AF)"></span></div>';
         }
 
         $html .= '<div style="flex:1;min-width:0;">';
-        $html .= '<div style="font-weight:600;font-size:15px;color:#1f2937;">' . esc_html( $name ) . '</div>';
+        $html .= '<div style="font-weight:600;font-size:15px;color:var(--olo-color-text, #374151);">' . esc_html( $name ) . '</div>';
         if ( $role_label ) {
-            $html .= '<div style="font-size:13px;color:#6b7280;margin-top:2px;">' . esc_html( olo_t( $role_label ) ) . '</div>';
+            $html .= '<div style="font-size:13px;color:var(--olo-color-text-muted, #9CA3AF);margin-top:2px;">' . esc_html( olo_t( $role_label ) ) . '</div>';
         }
         $html .= '</div>';
-        $html .= '<span uk-icon="icon:chevron-right;ratio:0.9" style="color:#9ca3af;flex-shrink:0;"></span>';
+        $html .= '<span uk-icon="icon:chevron-right;ratio:0.9" style="color:var(--olo-color-text-muted, #9CA3AF);flex-shrink:0;"></span>';
         $html .= '</a>';
         $html .= $this->render_modal( $uid, $content_html, $card_bg );
         $html .= '</div>';
@@ -278,7 +278,7 @@ class Olo_HostCard_Tile extends Olo_Tile_Base {
      * Variant: inline — all info visible directly, no modal.
      */
     private function render_inline_variant( $uid, $content_html, $card_bg, $radius, $shadow ) {
-        return '<div class="olo-hostcard olo-hostcard--inline" style="background:' . esc_attr( $card_bg ) . ';border-radius:' . $radius . 'px;padding:24px;'
+        return '<div class="olo-hostcard olo-hostcard--inline" style="background:' . esc_attr( $card_bg ) . ';border-radius:' . $radius . ';padding:24px;'
              . ( $shadow !== 'none' ? 'box-shadow:' . $shadow . ';' : '' ) . '">'
              . $content_html
              . '</div>';

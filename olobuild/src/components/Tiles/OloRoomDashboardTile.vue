@@ -7,7 +7,7 @@
     <div style="border:1px solid #e5e7eb;border-radius:10px;overflow:hidden">
       <div v-for="(b,i) in bookings" :key="i" :style="{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'10px 14px',borderBottom:i<2?'1px solid #f3f4f6':'none'}">
         <div>
-          <div style="font-size:13px;font-weight:600;color:#1f2937">{{ b.room }}</div>
+          <div style="font-size:13px;font-weight:600;color:var(--olo-color-text, #374151)">{{ b.room }}</div>
           <div style="font-size:11px;color:#6b7280">{{ b.date }}</div>
         </div>
         <span :style="{fontSize:'11px',fontWeight:'600',padding:'3px 10px',borderRadius:'12px',background:b.bg,color:b.color}">{{ b.status }}</span>

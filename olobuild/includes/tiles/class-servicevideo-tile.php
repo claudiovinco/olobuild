@@ -54,7 +54,7 @@ class Olo_ServiceVideo_Tile extends Olo_Tile_Base {
 
         global $post;
         if ( ! $post || ! is_singular() ) {
-            return '<div style="padding:24px;text-align:center;color:#9ca3af;background:#f9fafb;border-radius:8px">'
+            return '<div style="padding:24px;text-align:center;color:var(--olo-color-text-muted, #9CA3AF);background:var(--olo-color-muted, #F3F4F6);border-radius:8px">'
                  . '<p style="margin:0">Inserisci in un template single.</p></div>';
         }
 
@@ -64,12 +64,12 @@ class Olo_ServiceVideo_Tile extends Olo_Tile_Base {
 
         $video_url = get_post_meta( $pid, $pfx . 'video_' . $slot, true );
         if ( empty( $video_url ) ) {
-            return '<div style="padding:24px;text-align:center;color:#9ca3af;background:#f9fafb;border-radius:8px">'
+            return '<div style="padding:24px;text-align:center;color:var(--olo-color-text-muted, #9CA3AF);background:var(--olo-color-muted, #F3F4F6);border-radius:8px">'
                  . '<p style="margin:0">Video ' . $slot . ' non configurato.</p></div>';
         }
 
         $uid    = 'olo-svid-' . wp_rand( 10000, 99999 );
-        $radius = absint( $s['border_radius'] );
+        $radius = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
         $ratio  = esc_attr( $s['aspect_ratio'] ?: '16/9' );
         $max_w  = ! empty( $s['max_width'] ) ? 'max-width:' . absint( $s['max_width'] ) . 'px;margin:0 auto;' : '';
 
@@ -83,15 +83,15 @@ class Olo_ServiceVideo_Tile extends Olo_Tile_Base {
         $playsinline = ! empty( $s['playsinline'] );
 
         $play_btn_size  = max( 32, min( 96, absint( $s['play_btn_size'] ) ) );
-        $play_btn_bg    = esc_attr( $s['play_btn_bg'] );
-        $play_btn_color = esc_attr( $s['play_btn_color'] );
+        $play_btn_bg    = $this->safe_color_css( $s['play_btn_bg'] );
+        $play_btn_color = $this->safe_color_css( $s['play_btn_color'] );
 
         ob_start();
         ?>
         <style>
             .<?php echo $uid; ?> {
                 position: relative;
-                border-radius: <?php echo $radius; ?>px;
+                border-radius: <?php echo $radius; ?>;
                 overflow: hidden;
                 aspect-ratio: <?php echo $ratio; ?>;
                 <?php echo $max_w; ?>
@@ -103,7 +103,7 @@ class Olo_ServiceVideo_Tile extends Olo_Tile_Base {
                 height: 100%;
                 display: block;
                 border: 0;
-                border-radius: <?php echo $radius; ?>px;
+                border-radius: <?php echo $radius; ?>;
             }
             <?php if ( ! empty( $s['show_play_btn'] ) && $type === 'file' ) : ?>
             .<?php echo $uid; ?> .olo-svid-play {
@@ -178,7 +178,8 @@ class Olo_ServiceVideo_Tile extends Olo_Tile_Base {
                 <source src="<?php echo esc_url( $id_or_url ); ?>" type="<?php echo esc_attr( $this->get_mime( $id_or_url ) ); ?>">
             </video>
             <?php if ( ! empty( $s['show_play_btn'] ) && ! $autoplay ) : ?>
-            <button class="olo-svid-play" aria-label="Riproduci" onclick="var v=this.parentElement;v.classList.add('olo-svid-playing');v.querySelector('video').play();">
+            <?php self::enqueue_delegated_events(); ?>
+            <button class="olo-svid-play" aria-label="Riproduci" data-olo-svid-play="1">
                 <svg viewBox="0 0 24 24" fill="<?php echo $play_btn_color; ?>"><polygon points="6,3 20,12 6,21"/></svg>
             </button>
             <?php endif; ?>

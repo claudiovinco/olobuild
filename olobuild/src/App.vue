@@ -8,14 +8,19 @@
 
   <!-- Builder View -->
   <div v-else class="mb-flex mb-flex-col mb-h-screen mb-bg-gray-900 mb-text-gray-100 mb-overflow-hidden">
-    <BuilderToolbar @back="goToList" />
+    <!-- Skip link per accessibilità -->
+    <a href="#olo-canvas" class="mb-sr-only focus:mb-not-sr-only focus:mb-fixed focus:mb-top-2 focus:mb-left-2 focus:mb-z-50 focus:mb-bg-gray-800 focus:mb-text-white focus:mb-px-4 focus:mb-py-2 focus:mb-rounded">
+      Salta al contenuto
+    </a>
+    <BuilderToolbar @back="goToList" @open-revisions="onOpenRevisions" @open-finder="openFinder" @open-ai="aiAssistantRef?.open()" @open-library="templateLibraryRef?.open()" />
     <div class="mb-flex mb-flex-1 mb-overflow-hidden">
-      <BuilderSidebar v-if="!builderStore.previewMode && !sidebarCollapsed" :style="{ width: sidebarWidth + 'px', flexShrink: 0 }" />
+      <BuilderSidebar v-if="!builderStore.previewMode && !sidebarCollapsed" :style="{ width: sidebarWidth + 'px', flexShrink: 0 }" role="complementary" aria-label="Pannello elementi" @save-as-template="section => templateLibraryRef?.openSaveDialog(section)" />
       <!-- Resize handle + collapse toggle -->
       <div v-if="!builderStore.previewMode" style="flex-shrink:0;display:flex;flex-direction:column;align-items:center;background:#1f2937;border-right:1px solid #374151">
         <button @click="toggleSidebar" @mousedown.stop
           style="width:16px;height:24px;background:none;border:none;color:#6B7280;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;margin:4px 0 0"
           :title="sidebarCollapsed ? 'Espandi sidebar' : 'Comprimi sidebar'"
+          :aria-label="sidebarCollapsed ? 'Espandi sidebar' : 'Comprimi sidebar'"
         >
           <svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor">
             <path :d="sidebarCollapsed ? 'M1 0l6 4-6 4z' : 'M7 0l-6 4 6 4z'"/>
@@ -23,12 +28,13 @@
         </button>
         <div v-if="!sidebarCollapsed" @mousedown.prevent="startResize($event)" style="flex:1;width:16px;cursor:col-resize"></div>
       </div>
-      <BuilderCanvas />
+      <BuilderCanvas id="olo-canvas" role="main" aria-label="Area di lavoro" />
       <!-- Inspector resize handle + collapse toggle -->
       <div v-if="!builderStore.previewMode" style="flex-shrink:0;display:flex;flex-direction:column;align-items:center;background:#1f2937;border-left:1px solid #374151">
         <button @click="toggleInspector" @mousedown.stop
           style="width:16px;height:24px;background:none;border:none;color:#6B7280;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;margin:4px 0 0"
           :title="inspectorCollapsed ? 'Espandi pannello' : 'Comprimi pannello'"
+          :aria-label="inspectorCollapsed ? 'Espandi pannello' : 'Comprimi pannello'"
         >
           <svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor">
             <path :d="inspectorCollapsed ? 'M7 0l-6 4 6 4z' : 'M1 0l6 4-6 4z'"/>
@@ -36,31 +42,73 @@
         </button>
         <div v-if="!inspectorCollapsed" @mousedown.prevent="startInspectorResize($event)" style="flex:1;width:16px;cursor:col-resize"></div>
       </div>
-      <BuilderInspector v-if="!builderStore.previewMode && !inspectorCollapsed" :style="{ width: inspectorWidth + 'px', flexShrink: 0 }" />
+      <BuilderInspector v-if="!builderStore.previewMode && !inspectorCollapsed" :style="{ width: inspectorWidth + 'px', flexShrink: 0 }" role="complementary" aria-label="Proprietà" />
     </div>
+    <!-- Finder / Ricerca rapida (Ctrl+K) -->
+    <BuilderFinder ref="builderFinderRef" />
+    <!-- Cronologia revisioni -->
+    <RevisionHistory ref="revisionHistoryRef" />
+    <!-- Assistente AI -->
+    <AIAssistant ref="aiAssistantRef" />
+    <!-- Libreria Template -->
+    <TemplateLibrary ref="templateLibraryRef" />
   </div>
 </template>
 
 <script setup>
-import { ref, watch, onMounted, onUnmounted } from 'vue';
+import { ref, watch, onMounted, onUnmounted, provide } from 'vue';
 import { useTilesStore } from './stores/tiles';
 import { useBuilderStore } from './stores/builder';
 import { useHistory } from './composables/useHistory';
+import { useToast } from './composables/useToast.js';
 import TemplateList from './components/TemplateManager/TemplateList.vue';
 import BuilderToolbar from './components/Builder/BuilderToolbar.vue';
 import BuilderSidebar from './components/Builder/BuilderSidebar.vue';
 import BuilderCanvas from './components/Builder/BuilderCanvas.vue';
 import BuilderInspector from './components/Builder/BuilderInspector.vue';
+import BuilderFinder from './components/Builder/BuilderFinder.vue';
+import RevisionHistory from './components/Builder/RevisionHistory.vue';
+import AIAssistant from './components/Builder/AIAssistant.vue';
+import TemplateLibrary from './components/Builder/TemplateLibrary.vue';
 
 const builderStore = useBuilderStore();
 const tilesStore = useTilesStore();
 const { initHistory, handleKeyboard } = useHistory();
+const toast = useToast();
+const revisionHistoryRef = ref(null);
+const builderFinderRef = ref(null);
+const aiAssistantRef = ref(null);
+const templateLibraryRef = ref(null);
+
+function onOpenRevisions() {
+  if (revisionHistoryRef.value) {
+    revisionHistoryRef.value.open();
+  }
+}
+
+function openFinder(columnId) {
+  builderFinderRef.value?.open(columnId);
+}
+
+provide('openFinder', openFinder);
+
+// Dirty state: warn on page leave + title indicator
+function onBeforeUnload(e) {
+  if (builderStore.isDirty) {
+    e.preventDefault();
+    e.returnValue = '';
+  }
+}
+watch(() => builderStore.isDirty, (dirty) => {
+  const base = builderStore.currentTemplate?.title || 'Olobuild';
+  document.title = dirty ? '\u2022 ' + base + ' — Olobuild' : base + ' — Olobuild';
+});
 
 const currentView = ref('list'); // 'list' | 'builder'
 
 // Sidebar resize + collapse
-var SIDEBAR_W_KEY = 'olo_sidebar_w';
-var SIDEBAR_C_KEY = 'olo_sidebar_c';
+const SIDEBAR_W_KEY = 'olo_sidebar_w';
+const SIDEBAR_C_KEY = 'olo_sidebar_c';
 const sidebarWidth = ref(parseInt(localStorage.getItem(SIDEBAR_W_KEY)) || 240);
 const sidebarCollapsed = ref(localStorage.getItem(SIDEBAR_C_KEY) === '1');
 
@@ -97,8 +145,8 @@ function startResize(event) {
 }
 
 // Inspector resize + collapse
-var INSPECTOR_W_KEY = 'olo_inspector_w';
-var INSPECTOR_C_KEY = 'olo_inspector_c';
+const INSPECTOR_W_KEY = 'olo_inspector_w';
+const INSPECTOR_C_KEY = 'olo_inspector_c';
 const inspectorWidth = ref(parseInt(localStorage.getItem(INSPECTOR_W_KEY)) || 288);
 const inspectorCollapsed = ref(localStorage.getItem(INSPECTOR_C_KEY) === '1');
 
@@ -146,10 +194,39 @@ watch([
   }
 });
 
+// Responsive: auto-collapse sidebar e inspector su viewport <=1024px
+const TABLET_BREAKPOINT = 1024;
+function handleResize() {
+  if (window.innerWidth <= TABLET_BREAKPOINT) {
+    if (!sidebarCollapsed.value) {
+      sidebarCollapsed.value = true;
+      localStorage.setItem(SIDEBAR_C_KEY, '1');
+    }
+    if (!inspectorCollapsed.value) {
+      inspectorCollapsed.value = true;
+      localStorage.setItem(INSPECTOR_C_KEY, '1');
+    }
+  }
+}
+
+function onSaveSection(e) {
+  const section = e.detail?.section;
+  if (section) templateLibraryRef.value?.openSaveDialog(section);
+}
+
+function onLoadTemplate() {
+  templateLibraryRef.value?.open();
+}
+
 onMounted(async () => {
   tilesStore.fetchRegisteredTiles();
   initHistory();
   document.addEventListener('keydown', handleKeyboard);
+  document.addEventListener('olo:save-section', onSaveSection);
+  document.addEventListener('olo:load-template', onLoadTemplate);
+  window.addEventListener('beforeunload', onBeforeUnload);
+  window.addEventListener('resize', handleResize);
+  handleResize(); // check iniziale
 
   // Auto-open builder if templateId is passed from WordPress
   const oloData = window.oloData || {};
@@ -161,6 +238,10 @@ onMounted(async () => {
 
 onUnmounted(() => {
   document.removeEventListener('keydown', handleKeyboard);
+  document.removeEventListener('olo:save-section', onSaveSection);
+  document.removeEventListener('olo:load-template', onLoadTemplate);
+  window.removeEventListener('beforeunload', onBeforeUnload);
+  window.removeEventListener('resize', handleResize);
 });
 
 async function openBuilder(templateId) {
@@ -175,7 +256,7 @@ async function openBuilder(templateId) {
       return;
     }
     sessionStorage.removeItem(reloadKey);
-    alert('Errore di caricamento del template. Riprova tra qualche secondo.');
+    toast.error('Errore di caricamento del template. Riprova tra qualche secondo.');
     return;
   }
   sessionStorage.removeItem('olo_reload_' + templateId);
@@ -183,6 +264,9 @@ async function openBuilder(templateId) {
   if (builderStore.currentTemplate.content) {
     tilesStore.setCanvasTiles(builderStore.currentTemplate.content);
   }
+  // Sincronizza widget globali: aggiorna istanze locali dal master DB
+  await tilesStore.fetchGlobalWidgets();
+  tilesStore.syncGlobalWidgetsOnLoad();
   currentView.value = 'builder';
 }
 

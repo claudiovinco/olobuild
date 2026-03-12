@@ -1,12 +1,38 @@
 <template>
   <div class="olo-form-preview" :style="containerStyle">
     <form @submit.prevent class="olo-form" :class="formClass">
+      <!-- Multi-step indicator -->
+      <div v-if="s.enable_multistep && totalSteps > 1" style="margin-bottom:16px;">
+        <!-- Progress bar style -->
+        <div v-if="s.step_style === 'progress'" style="display:flex;align-items:center;gap:4px;">
+          <div v-for="(step, i) in totalSteps" :key="i" style="flex:1;height:4px;border-radius:2px;"
+            :style="{ background: i <= currentStep ? (s.submit_bg || '#6366F1') : 'var(--olo-color-border, #E5E7EB)' }"></div>
+        </div>
+        <!-- Numbers style -->
+        <div v-else-if="s.step_style === 'numbers'" style="display:flex;justify-content:center;gap:12px;">
+          <div v-for="(step, i) in totalSteps" :key="i" style="display:flex;flex-direction:column;align-items:center;gap:4px;">
+            <span style="width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;"
+              :style="{ background: i <= currentStep ? (s.submit_bg || '#6366F1') : '#374151', color: '#fff' }">{{ i + 1 }}</span>
+            <span style="font-size:9px;color:#9ca3af;">{{ stepLabels[i] || 'Step ' + (i+1) }}</span>
+          </div>
+        </div>
+        <!-- Dots style -->
+        <div v-else style="display:flex;justify-content:center;gap:8px;">
+          <span v-for="(step, i) in totalSteps" :key="i" style="width:10px;height:10px;border-radius:50%;"
+            :style="{ background: i <= currentStep ? (s.submit_bg || '#6366F1') : 'var(--olo-color-border, #E5E7EB)' }"></span>
+        </div>
+      </div>
+
       <div class="olo-form-grid" :style="gridStyle">
         <div
-          v-for="(field, i) in formFields"
+          v-for="(field, i) in visibleFields"
           :key="field.id || i"
           :style="fieldWidthStyle(field)"
+          style="position:relative;"
         >
+          <!-- Conditional logic indicator -->
+          <span v-if="s.enable_conditions && field.condition_field" style="position:absolute;top:2px;right:2px;font-size:9px;color:var(--olo-color-primary, #6366F1);z-index:1;" title="Condizionale">&#9889;</span>
+
           <!-- Hidden -->
           <template v-if="field.field_type === 'hidden'">
             <div class="olo-form-hidden-badge">
@@ -34,7 +60,7 @@
                     :style="inputStyle"
                     :placeholder="s.form_layout === 'floating' ? ' ' : field.placeholder"
                     :required="field.required"
-                    disabled
+                    readonly
                   />
                 </div>
                 <!-- No icon -->
@@ -46,7 +72,7 @@
                   :style="inputStyle"
                   :placeholder="s.form_layout === 'floating' ? ' ' : field.placeholder"
                   :required="field.required"
-                  disabled
+                  readonly
                 />
                 <label v-if="s.form_layout === 'floating' && field.label" class="olo-form-float-label" :style="floatLabelStyle">
                   {{ field.label }}
@@ -71,7 +97,7 @@
                   :placeholder="s.form_layout === 'floating' ? ' ' : field.placeholder"
                   :required="field.required"
                   rows="4"
-                  disabled
+                  readonly
                 ></textarea>
                 <label v-if="s.form_layout === 'floating' && field.label" class="olo-form-float-label" :style="floatLabelStyle">
                   {{ field.label }}
@@ -126,6 +152,38 @@
               </div>
             </div>
           </template>
+
+          <!-- Datetime-local -->
+          <template v-else-if="field.field_type === 'datetime'">
+            <div class="olo-form-field">
+              <label v-if="s.form_layout === 'stacked' && field.label" class="olo-form-label" :style="labelStyle">
+                {{ field.label }}
+                <span v-if="field.required" class="olo-form-required">*</span>
+              </label>
+              <input type="datetime-local" class="olo-form-input" :class="inputSizeClass" :style="inputStyle" disabled />
+            </div>
+          </template>
+
+          <!-- File upload -->
+          <template v-else-if="field.field_type === 'file'">
+            <div class="olo-form-field">
+              <label v-if="field.label" class="olo-form-label" :style="labelStyle">
+                {{ field.label }}
+                <span v-if="field.required" class="olo-form-required">*</span>
+              </label>
+              <div class="olo-form-input olo-form-file-drop" :style="{ ...inputStyle, display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', padding: '12px 14px' }">
+                <span style="font-size:18px;">&#128206;</span>
+                <span style="font-size:12px;opacity:0.7;">Scegli file... (max {{ s.file_max_size }}MB)</span>
+              </div>
+            </div>
+          </template>
+
+          <!-- Step separator -->
+          <template v-else-if="field.field_type === 'step'">
+            <div style="grid-column:1/-1;border-top:2px dashed var(--olo-color-border, #E5E7EB);margin:8px 0;position:relative;width:100%;">
+              <span style="position:absolute;top:-10px;left:16px;background:var(--olo-color-background, #FFFFFF);padding:0 8px;font-size:10px;color:var(--olo-color-primary, #6366F1);font-weight:600;">STEP</span>
+            </div>
+          </template>
         </div>
       </div>
 
@@ -137,8 +195,27 @@
         </label>
       </div>
 
-      <!-- Submit -->
-      <div :style="submitWrapStyle">
+      <!-- Multi-step navigation -->
+      <div v-if="s.enable_multistep && totalSteps > 1" :style="{ marginTop: (gap + 4) + 'px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }">
+        <button
+          v-if="currentStep > 0"
+          type="button"
+          class="olo-form-submit"
+          :style="{ ...submitStyle, opacity: '0.8', fontSize: '13px', padding: '10px 20px' }"
+          @click="currentStep--"
+        >&#8592; Indietro</button>
+        <span v-else></span>
+        <button
+          v-if="currentStep < totalSteps - 1"
+          type="button"
+          class="olo-form-submit"
+          :style="{ ...submitStyle, fontSize: '13px', padding: '10px 20px' }"
+          @click="currentStep++"
+        >Avanti &#8594;</button>
+      </div>
+
+      <!-- Submit (hidden during intermediate steps in multistep) -->
+      <div v-if="!s.enable_multistep || totalSteps <= 1 || currentStep === totalSteps - 1" :style="submitWrapStyle">
         <button
           type="button"
           class="olo-form-submit"
@@ -147,7 +224,7 @@
           @mouseleave="submitHover = false"
         >
           <span v-if="s.submit_icon && s.submit_icon_pos !== 'right'" class="olo-form-submit-icon">{{ s.submit_icon }}</span>
-          {{ s.submit_text || 'Invia' }}
+          <span data-olo-editable="submit_text">{{ s.submit_text || 'Invia' }}</span>
           <span v-if="s.submit_icon && s.submit_icon_pos === 'right'" class="olo-form-submit-icon">{{ s.submit_icon }}</span>
         </button>
       </div>
@@ -162,13 +239,89 @@ const props = defineProps({
   settings: { type: Object, default: () => ({}) },
 });
 
-const s = computed(() => props.settings);
+const defaults = {
+  form_layout: 'stacked',
+  form_max_width: '0',
+  form_align: 'left',
+  label_color: 'var(--olo-color-text, #374151)',
+  label_size: '14',
+  label_weight: '500',
+  input_bg: 'var(--olo-color-background, #FFFFFF)',
+  input_color: 'var(--olo-color-text, #374151)',
+  input_border_color: 'var(--olo-color-border, #E5E7EB)',
+  input_border_width: '1',
+  input_radius: '6',
+  input_size: 'default',
+  gap: '16',
+  submit_text: 'Invia messaggio',
+  submit_icon: '',
+  submit_icon_pos: 'left',
+  submit_alignment: 'left',
+  submit_full_width: false,
+  submit_bg: '',
+  submit_color: '#FFFFFF',
+  submit_radius: '6',
+  submit_padding_x: '32',
+  submit_padding_y: '14',
+  submit_font_size: '16',
+  submit_font_weight: '600',
+  submit_hover_bg: '',
+  submit_border_width: '0',
+  submit_border_color: '',
+  submit_hover_border_color: '',
+  submit_letter_spacing: '0.3',
+  submit_text_transform: 'none',
+  check_accent_color: '',
+  check_bg: '',
+  check_border_color: '',
+  check_size: '18',
+  check_label_gap: '8',
+  privacy_checkbox: false,
+  privacy_text: '',
+  enable_multistep: false,
+  step_style: 'progress',
+  step_labels: '',
+  enable_conditions: false,
+  file_max_size: '5',
+  file_types: '.pdf,.doc,.docx,.jpg,.png',
+  store_submissions: false,
+};
+const s = computed(() => ({ ...defaults, ...props.settings }));
 const submitHover = ref(false);
 
 const formFields = computed(() => {
   const raw = s.value.fields;
   if (Array.isArray(raw)) return raw;
   return [];
+});
+
+// Multi-step
+const currentStep = ref(0);
+
+const steps = computed(() => {
+  if (!s.value.enable_multistep) return [formFields.value];
+  const result = [[]];
+  for (const f of formFields.value) {
+    if (f.field_type === 'step') {
+      result.push([]);
+    } else {
+      result[result.length - 1].push(f);
+    }
+  }
+  return result.filter(st => st.length > 0);
+});
+
+const stepLabels = computed(() => {
+  const raw = s.value.step_labels || '';
+  return raw.split('\n').map(l => l.trim()).filter(Boolean);
+});
+
+const totalSteps = computed(() => steps.value.length);
+
+const visibleFields = computed(() => {
+  if (!s.value.enable_multistep || totalSteps.value <= 1) return formFields.value;
+  const idx = Math.min(currentStep.value, totalSteps.value - 1);
+  return steps.value[idx] || [];
 });
 
 const gap = computed(() => parseInt(s.value.gap) || 16);
@@ -215,7 +368,7 @@ const gridStyle = computed(() => ({
 }));
 
 const labelStyle = computed(() => ({
-  color: s.value.label_color || '#D1D5DB',
+  color: s.value.label_color || 'var(--olo-color-text, #374151)',
   fontSize: (parseInt(s.value.label_size) || 14) + 'px',
   fontWeight: s.value.label_weight || '500',
   marginBottom: '6px',
@@ -223,17 +376,17 @@ const labelStyle = computed(() => ({
 }));
 
 const floatLabelStyle = computed(() => ({
-  color: s.value.label_color || '#D1D5DB',
+  color: s.value.label_color || 'var(--olo-color-text, #374151)',
   fontSize: (parseInt(s.value.label_size) || 14) + 'px',
 }));
 
 const inputStyle = computed(() => {
   const bw = parseInt(s.value.input_border_width) || 1;
   return {
-    backgroundColor: s.value.input_bg || '#1F2937',
-    color: s.value.input_color || '#F3F4F6',
-    border: bw + 'px solid ' + (s.value.input_border_color || '#374151'),
-    borderRadius: (parseInt(s.value.input_radius) || 6) + 'px',
+    backgroundColor: s.value.input_bg || 'var(--olo-color-background, #FFFFFF)',
+    color: s.value.input_color || 'var(--olo-color-text, #374151)',
+    border: bw + 'px solid ' + (s.value.input_border_color || 'var(--olo-color-border, #E5E7EB)'),
+    borderRadius: ((v => isNaN(v) ? 6 : v)(parseInt(s.value.input_radius))) + 'px',
     width: '100%',
     boxSizing: 'border-box',
   };
@@ -247,12 +400,12 @@ const inputSizeClass = computed(() => {
 });
 
 const iconStyle = computed(() => ({
-  color: s.value.input_color || '#F3F4F6',
+  color: s.value.input_color || 'var(--olo-color-text, #374151)',
   opacity: '0.5',
 }));
 
 const optionStyle = computed(() => ({
-  color: s.value.label_color || '#D1D5DB',
+  color: s.value.label_color || 'var(--olo-color-text, #374151)',
   fontSize: (parseInt(s.value.label_size) || 14) + 'px',
   gap: (parseInt(s.value.check_label_gap) || 8) + 'px',
 }));
@@ -287,7 +440,7 @@ const submitStyle = computed(() => {
       ? (s.value.submit_hover_bg || 'var(--olo-color-primary-dark, #4F46E5)')
       : (s.value.submit_bg || 'var(--olo-color-primary, #6366F1)'),
     color: s.value.submit_color || '#FFFFFF',
-    borderRadius: (parseInt(s.value.submit_radius) || 6) + 'px',
+    borderRadius: ((v => isNaN(v) ? 6 : v)(parseInt(s.value.submit_radius))) + 'px',
     padding: (parseInt(s.value.submit_padding_y) || 14) + 'px ' + (parseInt(s.value.submit_padding_x) || 32) + 'px',
     fontSize: (parseInt(s.value.submit_font_size) || 16) + 'px',
     fontWeight: s.value.submit_font_weight || '600',
@@ -385,7 +538,7 @@ const submitStyle = computed(() => {
 
 .olo-form-hidden-badge {
   padding: 8px 12px;
-  border: 1px dashed #4B5563;
+  border: 1px dashed var(--olo-color-border, #E5E7EB);
   border-radius: 6px;
   text-align: center;
   background: rgba(75, 85, 99, 0.1);
@@ -396,7 +549,7 @@ const submitStyle = computed(() => {
 }
 
 .olo-form-privacy :deep(a) {
-  color: #818CF8;
+  color: var(--olo-color-primary, #6366F1);
   text-decoration: underline;
 }
 

@@ -9,7 +9,7 @@ class Olo_SiteLogo_Tile extends Olo_Tile_Base {
     protected $type     = 'sitelogo';
     protected $name     = 'Logo sito';
     protected $icon     = 'dashicons-admin-home';
-    protected $category = 'header';
+    protected $category = 'navigation';
     protected $defaults = [
         'source'       => 'auto',
         'custom_image' => '',

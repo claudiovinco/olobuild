@@ -1,4 +1,4 @@
-import { borderFields, borderDefaults, shadowField } from './_shared.js';
+import { shadowField } from './_shared.js';
 
 export default {
   type: 'map',
@@ -56,14 +56,13 @@ export default {
     svc_popup_max_width: '280',
     svc_popup_img_height: '180',
     svc_popup_btn_text: 'Scopri e Prenota',
-    svc_popup_btn_color: '#3b82f6',
-    svc_popup_bg: '#ffffff',
-    svc_popup_color: '#333333',
+    svc_popup_btn_color: '',
+    svc_popup_bg: '',
+    svc_popup_color: '',
     svc_popup_radius: '8',
     // Shared
     height: '400',
     shadow: 'none',
-    ...borderDefaults,
   },
   fields: [
     {
@@ -85,16 +84,15 @@ export default {
     // ── Campi modalità dynamic_service ──
     { key: 'zoom', label: 'Zoom', type: 'range', min: 1, max: 19, step: 1, condition: { field: 'mode', value: 'dynamic_service' } },
 
-    // ── Separatore ──
-    { type: 'separator', condition: { field: 'mode', value: 'locations' } },
-
     // ── Campi modalità sedi ──
+    { type: 'separator', label: 'Sorgente dati', condition: { field: 'mode', value: 'locations' } },
+
     { key: 'loc_post_type', label: 'Post Type (slug)', type: 'text', condition: { field: 'mode', value: 'locations' } },
     { key: 'loc_osm_field', label: 'Nome campo ACF OSM', type: 'text', condition: { field: 'mode', value: 'locations' } },
     { key: 'loc_taxonomy', label: 'Tassonomia (slug)', type: 'text', condition: { field: 'mode', value: 'locations' } },
     { key: 'loc_max_locations', label: 'Max sedi', type: 'range', min: 1, max: 500, step: 1, condition: { field: 'mode', value: 'locations' } },
 
-    { type: 'separator', condition: { field: 'mode', value: 'locations' } },
+    { type: 'separator', label: 'Stile mappa', condition: { field: 'mode', value: 'locations' } },
 
     { key: 'loc_tile_layer', label: 'Stile mappa', type: 'select', options: [
       { value: 'osm', label: 'OpenStreetMap' },
@@ -106,7 +104,7 @@ export default {
     { key: 'loc_fit_bounds', label: 'Adatta ai marker', type: 'toggle', condition: { field: 'mode', value: 'locations' } },
     { key: 'loc_cluster', label: 'Raggruppa marker', type: 'toggle', condition: { field: 'mode', value: 'locations' } },
 
-    { type: 'separator', condition: { field: 'mode', value: 'locations' } },
+    { type: 'separator', label: 'Filtri', condition: { field: 'mode', value: 'locations' } },
 
     { key: 'loc_show_filters', label: 'Mostra filtri tassonomia', type: 'toggle', condition: { field: 'mode', value: 'locations' } },
     { key: 'loc_filter_style', label: 'Stile filtri', type: 'select', options: [
@@ -120,14 +118,14 @@ export default {
       { value: 'right', label: 'Destra' },
     ], condition: { field: 'mode', value: 'locations' } },
 
-    { type: 'separator', condition: { field: 'mode', value: 'locations' } },
+    { type: 'separator', label: 'Popup', condition: { field: 'mode', value: 'locations' } },
 
-    { key: 'loc_popup_show_image', label: 'Popup: mostra immagine', type: 'toggle', condition: { field: 'mode', value: 'locations' } },
-    { key: 'loc_popup_show_excerpt', label: 'Popup: mostra riassunto', type: 'toggle', condition: { field: 'mode', value: 'locations' } },
-    { key: 'loc_popup_show_link', label: 'Popup: mostra link', type: 'toggle', condition: { field: 'mode', value: 'locations' } },
+    { key: 'loc_popup_show_image', label: 'Mostra immagine', type: 'toggle', condition: { field: 'mode', value: 'locations' } },
+    { key: 'loc_popup_show_excerpt', label: 'Mostra riassunto', type: 'toggle', condition: { field: 'mode', value: 'locations' } },
+    { key: 'loc_popup_show_link', label: 'Mostra link', type: 'toggle', condition: { field: 'mode', value: 'locations' } },
 
     // ── Campi modalità servizi ──
-    { type: 'separator', condition: { field: 'mode', value: 'services' } },
+    { type: 'separator', label: 'Tipo servizio', condition: { field: 'mode', value: 'services' } },
 
     { key: 'svc_booking_mode', label: 'Tipo servizio', type: 'select', options: [
       { value: 'accommodation', label: 'Alloggi (accommodation)' },
@@ -135,7 +133,7 @@ export default {
       { value: '', label: 'Tutti i tipi' },
     ], condition: { field: 'mode', value: 'services' } },
 
-    { type: 'separator', condition: { field: 'mode', value: 'services' } },
+    { type: 'separator', label: 'Stile mappa', condition: { field: 'mode', value: 'services' } },
 
     { key: 'svc_tile_layer', label: 'Stile mappa', type: 'select', options: [
       { value: 'osm', label: 'OpenStreetMap' },
@@ -147,7 +145,7 @@ export default {
     { key: 'svc_fit_bounds', label: 'Adatta ai marker', type: 'toggle', condition: { field: 'mode', value: 'services' } },
     { key: 'svc_cluster', label: 'Raggruppa marker', type: 'toggle', condition: { field: 'mode', value: 'services' } },
 
-    { type: 'separator', condition: { field: 'mode', value: 'services' } },
+    { type: 'separator', label: 'Filtri', condition: { field: 'mode', value: 'services' } },
 
     { key: 'svc_filter_style', label: 'Stile filtri', type: 'select', options: [
       { value: 'default', label: 'Default (pillole colorate)' },
@@ -197,31 +195,30 @@ export default {
       { value: 'bikes', label: 'Biciclette' },
     ] },
 
-    { type: 'separator', condition: { field: 'mode', value: 'services' } },
+    { type: 'separator', label: 'Contenuto popup', condition: { field: 'mode', value: 'services' } },
 
-    { key: 'svc_popup_show_image', label: 'Popup: mostra immagine', type: 'toggle', condition: { field: 'mode', value: 'services' } },
-    { key: 'svc_popup_show_excerpt', label: 'Popup: mostra descrizione', type: 'toggle', condition: { field: 'mode', value: 'services' } },
-    { key: 'svc_popup_show_price', label: 'Popup: mostra prezzo', type: 'toggle', condition: { field: 'mode', value: 'services' } },
-    { key: 'svc_popup_show_altitude', label: 'Popup: mostra altitudine', type: 'toggle', condition: { field: 'mode', value: 'services' } },
-    { key: 'svc_popup_show_specs', label: 'Popup: mostra specs (camere/bagni/ospiti)', type: 'toggle', condition: { field: 'mode', value: 'services' } },
-    { key: 'svc_popup_show_valley', label: 'Popup: mostra località/vallata', type: 'toggle', condition: { field: 'mode', value: 'services' } },
-    { key: 'svc_popup_show_amenities', label: 'Popup: mostra amenities', type: 'toggle', condition: { field: 'mode', value: 'services' } },
-    { key: 'svc_popup_show_gallery', label: 'Popup: mini gallery (4 thumb)', type: 'toggle', condition: { field: 'mode', value: 'services' } },
+    { key: 'svc_popup_show_image', label: 'Mostra immagine', type: 'toggle', condition: { field: 'mode', value: 'services' } },
+    { key: 'svc_popup_show_excerpt', label: 'Mostra descrizione', type: 'toggle', condition: { field: 'mode', value: 'services' } },
+    { key: 'svc_popup_show_price', label: 'Mostra prezzo', type: 'toggle', condition: { field: 'mode', value: 'services' } },
+    { key: 'svc_popup_show_altitude', label: 'Mostra altitudine', type: 'toggle', condition: { field: 'mode', value: 'services' } },
+    { key: 'svc_popup_show_specs', label: 'Mostra specs (camere/bagni/ospiti)', type: 'toggle', condition: { field: 'mode', value: 'services' } },
+    { key: 'svc_popup_show_valley', label: 'Mostra località/vallata', type: 'toggle', condition: { field: 'mode', value: 'services' } },
+    { key: 'svc_popup_show_amenities', label: 'Mostra amenities', type: 'toggle', condition: { field: 'mode', value: 'services' } },
+    { key: 'svc_popup_show_gallery', label: 'Mini gallery (4 thumb)', type: 'toggle', condition: { field: 'mode', value: 'services' } },
 
-    { type: 'separator', condition: { field: 'mode', value: 'services' } },
+    { type: 'separator', label: 'Stile popup', condition: { field: 'mode', value: 'services' } },
 
-    { key: 'svc_popup_max_width', label: 'Popup: larghezza max (px)', type: 'range', min: 200, max: 500, step: 10, condition: { field: 'mode', value: 'services' } },
-    { key: 'svc_popup_img_height', label: 'Popup: altezza immagine (px)', type: 'range', min: 80, max: 300, step: 10, condition: { field: 'mode', value: 'services' } },
-    { key: 'svc_popup_btn_text', label: 'Popup: testo pulsante CTA', type: 'text', condition: { field: 'mode', value: 'services' } },
-    { key: 'svc_popup_btn_color', label: 'Popup: colore pulsante', type: 'color', condition: { field: 'mode', value: 'services' } },
-    { key: 'svc_popup_bg', label: 'Popup: sfondo', type: 'color', condition: { field: 'mode', value: 'services' } },
-    { key: 'svc_popup_color', label: 'Popup: colore testo', type: 'color', condition: { field: 'mode', value: 'services' } },
-    { key: 'svc_popup_radius', label: 'Popup: border radius', type: 'range', min: 0, max: 20, step: 1, condition: { field: 'mode', value: 'services' } },
+    { key: 'svc_popup_max_width', label: 'Larghezza max (px)', type: 'range', min: 200, max: 500, step: 10, condition: { field: 'mode', value: 'services' } },
+    { key: 'svc_popup_img_height', label: 'Altezza immagine (px)', type: 'range', min: 80, max: 300, step: 10, condition: { field: 'mode', value: 'services' } },
+    { key: 'svc_popup_btn_text', label: 'Testo pulsante CTA', type: 'text', condition: { field: 'mode', value: 'services' } },
+    { key: 'svc_popup_btn_color', label: 'Colore pulsante', type: 'color', condition: { field: 'mode', value: 'services' } },
+    { key: 'svc_popup_bg', label: 'Sfondo', type: 'color', condition: { field: 'mode', value: 'services' } },
+    { key: 'svc_popup_color', label: 'Colore testo', type: 'color', condition: { field: 'mode', value: 'services' } },
+    { key: 'svc_popup_radius', label: 'Border radius', type: 'border-radius', condition: { field: 'mode', value: 'services' } },
 
     // ── Condivisi ──
-    { type: 'separator' },
+    { type: 'separator', label: 'Dimensioni' },
     { key: 'height', label: 'Altezza (px)', type: 'range', min: 150, max: 800, step: 10 },
-    shadowField,
-    ...borderFields,
+    ...shadowField,
   ],
 };

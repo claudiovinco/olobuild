@@ -12,6 +12,9 @@ class Olo_Gallery_Tile extends Olo_Tile_Base {
     protected $category = 'media';
     protected $defaults = [
         'images'              => [],
+        'layout'              => 'grid',
+        'filter_bar'          => false,
+        'random_order'        => false,
         'columns'             => 3,
         'rows'                => 0,
         'gap'                 => 8,
@@ -55,13 +58,19 @@ class Olo_Gallery_Tile extends Olo_Tile_Base {
         $images = is_array( $s['images'] ) ? $s['images'] : [];
 
         if ( empty( $images ) ) {
-            return '<div style="padding:40px;text-align:center;color:#9ca3af">Aggiungi immagini alla galleria</div>';
+            return '<div style="padding:40px;text-align:center;color:var(--olo-color-text-muted, #9CA3AF)">Aggiungi immagini alla galleria</div>';
         }
 
-        $cols     = max( 2, min( 6, absint( $s['columns'] ) ) );
+        // Random order
+        if ( ! empty( $s['random_order'] ) ) {
+            shuffle( $images );
+        }
+
+        $layout   = in_array( $s['layout'], [ 'grid', 'masonry', 'justified' ], true ) ? $s['layout'] : 'grid';
+        $cols     = max( 2, min( 12, absint( $s['columns'] ) ) );
         $rows     = absint( $s['rows'] );
         $gap      = absint( $s['gap'] );
-        $radius   = absint( $s['thumb_radius'] );
+        $radius   = Olo_Tile_Utils::border_radius( $s['thumb_radius'] ?? 0 );
         $uid      = 'olo-gal-' . wp_rand( 10000, 99999 );
         $mob_cols = max( 1, min( 4, absint( $s['mobile_columns'] ) ) );
 
@@ -87,6 +96,53 @@ class Olo_Gallery_Tile extends Olo_Tile_Base {
         ob_start();
         ?>
         <style>
+            <?php if ( $layout === 'masonry' ) : ?>
+            .<?php echo $uid; ?> {
+                column-count: <?php echo $cols; ?>;
+                column-gap: <?php echo $gap; ?>px;
+            }
+            .<?php echo $uid; ?> .olo-gal-item {
+                position: relative;
+                display: block;
+                border-radius: <?php echo $radius; ?>;
+                overflow: hidden;
+                cursor: pointer;
+                break-inside: avoid;
+                margin-bottom: <?php echo $gap; ?>px;
+            }
+            .<?php echo $uid; ?> .olo-gal-item img {
+                width: 100%;
+                height: auto;
+                object-fit: <?php echo $object_fit; ?>;
+                display: block;
+                transition: transform 0.5s cubic-bezier(.25,.46,.45,.94), filter 0.5s ease;
+                will-change: transform;
+            }
+            <?php elseif ( $layout === 'justified' ) : ?>
+            .<?php echo $uid; ?> {
+                display: flex;
+                flex-wrap: wrap;
+                gap: <?php echo $gap; ?>px;
+            }
+            .<?php echo $uid; ?> .olo-gal-item {
+                position: relative;
+                display: block;
+                border-radius: <?php echo $radius; ?>;
+                overflow: hidden;
+                height: <?php echo $img_height; ?>;
+                cursor: pointer;
+                flex-grow: 1;
+                min-width: 120px;
+            }
+            .<?php echo $uid; ?> .olo-gal-item img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                display: block;
+                transition: transform 0.5s cubic-bezier(.25,.46,.45,.94), filter 0.5s ease;
+                will-change: transform;
+            }
+            <?php else : ?>
             .<?php echo $uid; ?> {
                 display: grid;
                 grid-template-columns: repeat(<?php echo $cols; ?>, 1fr);
@@ -95,7 +151,7 @@ class Olo_Gallery_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .olo-gal-item {
                 position: relative;
                 display: block;
-                border-radius: <?php echo $radius; ?>px;
+                border-radius: <?php echo $radius; ?>;
                 overflow: hidden;
                 height: <?php echo $img_height; ?>;
                 cursor: pointer;
@@ -107,6 +163,31 @@ class Olo_Gallery_Tile extends Olo_Tile_Base {
                 display: block;
                 transition: transform 0.5s cubic-bezier(.25,.46,.45,.94), filter 0.5s ease;
                 will-change: transform;
+            }
+            <?php endif; ?>
+
+            /* Filter bar */
+            .<?php echo $uid; ?>-filter {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 6px;
+                margin-bottom: 12px;
+            }
+            .<?php echo $uid; ?>-filter button {
+                padding: 4px 14px;
+                border: 1px solid var(--olo-color-border, #E5E7EB);
+                border-radius: 4px;
+                background: transparent;
+                font-size: 13px;
+                cursor: pointer;
+                transition: background 0.2s, color 0.2s;
+                color: var(--olo-color-text, #374151);
+            }
+            .<?php echo $uid; ?>-filter button:hover,
+            .<?php echo $uid; ?>-filter button.active {
+                background: var(--olo-color-secondary, #1F2937);
+                color: var(--olo-color-secondary-contrast, #FFFFFF);
+                border-color: var(--olo-color-secondary, #1F2937);
             }
 
             /* Ken Burns */
@@ -152,7 +233,7 @@ class Olo_Gallery_Tile extends Olo_Tile_Base {
                 content: '';
                 position: absolute;
                 inset: 0;
-                border-radius: <?php echo $radius; ?>px;
+                border-radius: <?php echo $radius; ?>;
                 box-shadow: inset 0 0 <?php echo $vig_str * 2; ?>px <?php echo $vig_str; ?>px rgba(0,0,0,0.<?php echo min( 45, $vig_str ); ?>);
                 pointer-events: none;
                 z-index: 2;
@@ -180,7 +261,7 @@ class Olo_Gallery_Tile extends Olo_Tile_Base {
                 position: absolute;
                 inset: 0;
                 z-index: 1;
-                background: <?php echo esc_attr( $s['fx_tint_color'] ); ?>;
+                background: <?php echo $this->safe_color_css( $s['fx_tint_color'] ); ?>;
                 opacity: 0.<?php echo str_pad( $tint_opa, 2, '0', STR_PAD_LEFT ); ?>;
                 mix-blend-mode: <?php echo esc_attr( $s['fx_tint_blend'] ); ?>;
                 pointer-events: none;
@@ -199,14 +280,14 @@ class Olo_Gallery_Tile extends Olo_Tile_Base {
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                background: <?php echo esc_attr( $s['more_bg'] ); ?>;
-                color: <?php echo esc_attr( $s['more_color'] ); ?>;
+                background: <?php echo $this->safe_color_css( $s['more_bg'] ); ?>;
+                color: <?php echo $this->safe_color_css( $s['more_color'] ); ?>;
                 font-size: <?php echo $more_size; ?>px;
                 font-weight: 700;
                 letter-spacing: -0.5px;
                 pointer-events: none;
                 transition: background 0.3s ease;
-                border-radius: <?php echo $radius; ?>px;
+                border-radius: <?php echo $radius; ?>;
             }
             .<?php echo $uid; ?> .olo-gal-item:hover .olo-gal-more {
                 background: rgba(0,0,0,0.4);
@@ -224,12 +305,44 @@ class Olo_Gallery_Tile extends Olo_Tile_Base {
 
             /* Mobile */
             @media (max-width: 640px) {
+                <?php if ( $layout === 'masonry' ) : ?>
+                .<?php echo $uid; ?> {
+                    column-count: <?php echo $mob_cols; ?>;
+                }
+                <?php elseif ( $layout === 'justified' ) : ?>
+                .<?php echo $uid; ?> .olo-gal-item {
+                    min-width: 80px;
+                    height: <?php echo intval( $img_height ) > 0 ? max( 100, intval( $img_height ) - 60 ) . 'px' : '140px'; ?>;
+                }
+                <?php else : ?>
                 .<?php echo $uid; ?> {
                     grid-template-columns: repeat(<?php echo $mob_cols; ?>, 1fr);
                 }
+                <?php endif; ?>
             }
         </style>
-        <div class="<?php echo esc_attr( $uid ); ?>" uk-lightbox="animation: <?php echo $lb_anim; ?>">
+        <?php
+        // Build categories from image alt text for filter bar
+        $categories = [];
+        if ( ! empty( $s['filter_bar'] ) ) {
+            foreach ( $images as $img ) {
+                $cat = is_array( $img ) ? trim( $img['category'] ?? $img['alt'] ?? '' ) : '';
+                if ( $cat !== '' ) {
+                    $categories[ $cat ] = true;
+                }
+            }
+            $categories = array_keys( $categories );
+        }
+        ?>
+        <?php if ( ! empty( $s['filter_bar'] ) ) : ?>
+        <div class="<?php echo esc_attr( $uid ); ?>-filter" id="<?php echo esc_attr( $uid ); ?>-filter">
+            <button class="active" data-filter="*">Tutti</button>
+            <?php foreach ( $categories as $cat ) : ?>
+            <button data-filter="<?php echo esc_attr( sanitize_title( $cat ) ); ?>"><?php echo esc_html( $cat ); ?></button>
+            <?php endforeach; ?>
+        </div>
+        <?php endif; ?>
+        <div class="<?php echo esc_attr( $uid ); ?>" id="<?php echo esc_attr( $uid ); ?>" uk-lightbox="animation: <?php echo $lb_anim; ?>">
             <?php
             $i = 0;
             foreach ( $images as $img ) :
@@ -237,6 +350,7 @@ class Olo_Gallery_Tile extends Olo_Tile_Base {
                 $alt     = is_array( $img ) ? ( $img['alt'] ?? '' ) : '';
                 $caption = is_array( $img ) ? ( $img['caption'] ?? '' ) : '';
                 $att_id  = is_array( $img ) ? absint( $img['id'] ?? 0 ) : 0;
+                $cat_slug = ! empty( $s['filter_bar'] ) ? sanitize_title( is_array( $img ) ? trim( $img['category'] ?? $img['alt'] ?? '' ) : '' ) : '';
                 if ( ! $url ) continue;
                 $i++;
 
@@ -245,9 +359,10 @@ class Olo_Gallery_Tile extends Olo_Tile_Base {
                 $caption_attr = ( $show_caption && ! empty( $caption ) )
                     ? ' data-caption="' . esc_attr( $caption ) . '"'
                     : ( $extra > 0 ? ' data-caption="' . $i . '/' . $total . '"' : '' );
+                $cat_attr = $cat_slug ? ' data-category="' . esc_attr( $cat_slug ) . '"' : '';
             ?>
                 <?php if ( $is_visible ) : ?>
-                <a class="olo-gal-item" href="<?php echo esc_url( $url ); ?>"<?php echo $caption_attr; ?>>
+                <a class="olo-gal-item" href="<?php echo esc_url( $url ); ?>"<?php echo $caption_attr . $cat_attr; ?>>
                     <?php echo Olo_Tile_Utils::img_srcset( $att_id, $url, $alt ); ?>
                     <?php if ( ! empty( $s['fx_tint'] ) ) : ?><div class="olo-gal-tint"></div><?php endif; ?>
                     <?php if ( ! empty( $s['fx_grain'] ) ) : ?><div class="olo-gal-grain"></div><?php endif; ?>
@@ -256,10 +371,41 @@ class Olo_Gallery_Tile extends Olo_Tile_Base {
                     <?php endif; ?>
                 </a>
                 <?php else : ?>
-                <a class="olo-gal-hidden" href="<?php echo esc_url( $url ); ?>"<?php echo $caption_attr; ?>></a>
+                <a class="olo-gal-hidden" href="<?php echo esc_url( $url ); ?>"<?php echo $caption_attr . $cat_attr; ?>></a>
                 <?php endif; ?>
             <?php endforeach; ?>
         </div>
+        <?php if ( ! empty( $s['filter_bar'] ) ) : ?>
+        <script>
+        (function(){
+            var filterBar = document.getElementById('<?php echo $uid; ?>-filter');
+            var gallery = document.getElementById('<?php echo $uid; ?>');
+            if(!filterBar){return}
+            if(!gallery){return}
+            var buttons = filterBar.querySelectorAll('button');
+            buttons.forEach(function(btn){
+                btn.addEventListener('click', function(){
+                    buttons.forEach(function(b){ b.classList.remove('active'); });
+                    btn.classList.add('active');
+                    var f = btn.getAttribute('data-filter');
+                    var items = gallery.querySelectorAll('.olo-gal-item');
+                    items.forEach(function(item){
+                        if(f === '*'){
+                            item.style.display = '';
+                        } else {
+                            var cat = item.getAttribute('data-category');
+                            if(cat === f){
+                                item.style.display = '';
+                            } else {
+                                item.style.display = 'none';
+                            }
+                        }
+                    });
+                });
+            });
+        })();
+        </script>
+        <?php endif; ?>
         <?php
         return ob_get_clean();
     }

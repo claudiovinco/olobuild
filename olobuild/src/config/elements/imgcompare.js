@@ -14,7 +14,7 @@ export default {
     // Slider
     start_position: '50',
     orientation: 'horizontal',
-    handle_color: '#FFFFFF',
+    handle_color: '',
     handle_size: '40',
     handle_border: '3',
     line_width: '3',
@@ -24,7 +24,7 @@ export default {
     border_radius: '8',
     object_fit: 'cover',
     card_border_width: '0',
-    card_border_color: '#374151',
+    card_border_color: '',
     card_shadow: 'none',
 
     // Autoplay
@@ -55,7 +55,7 @@ export default {
     // ── Aspetto ──
     { type: 'separator', label: 'Aspetto' },
     { key: 'height', label: 'Altezza (px)', type: 'range', min: 200, max: 800, step: 10 },
-    { key: 'border_radius', label: 'Raggio bordo (px)', type: 'range', min: 0, max: 30 },
+    { key: 'border_radius', label: 'Raggio bordo (px)', type: 'border-radius' },
     { key: 'object_fit', label: 'Adattamento immagini', type: 'select', options: [
       { value: 'cover', label: 'Riempi (cover)' },
       { value: 'contain', label: 'Contieni' },
@@ -68,7 +68,20 @@ export default {
       { value: 'md', label: 'Media' },
       { value: 'lg', label: 'Grande' },
       { value: 'xl', label: 'Extra grande' },
+      { value: 'custom', label: 'Personalizzata' },
     ]},
+    { key: 'card_shadow_h', label: 'Offset H (px)', type: 'range', min: -50, max: 50, step: 1,
+      condition: { field: 'card_shadow', op: 'eq', value: 'custom' } },
+    { key: 'card_shadow_v', label: 'Offset V (px)', type: 'range', min: -50, max: 50, step: 1,
+      condition: { field: 'card_shadow', op: 'eq', value: 'custom' } },
+    { key: 'card_shadow_blur', label: 'Sfocatura (px)', type: 'range', min: 0, max: 100, step: 1,
+      condition: { field: 'card_shadow', op: 'eq', value: 'custom' } },
+    { key: 'card_shadow_spread', label: 'Espansione (px)', type: 'range', min: -50, max: 50, step: 1,
+      condition: { field: 'card_shadow', op: 'eq', value: 'custom' } },
+    { key: 'card_shadow_color', label: 'Colore ombra', type: 'color',
+      condition: { field: 'card_shadow', op: 'eq', value: 'custom' } },
+    { key: 'card_shadow_inset', label: 'Ombra interna', type: 'toggle',
+      condition: { field: 'card_shadow', op: 'eq', value: 'custom' } },
 
     // ── Autoplay ──
     { type: 'separator', label: 'Autoplay' },

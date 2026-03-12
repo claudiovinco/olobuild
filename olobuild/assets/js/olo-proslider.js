@@ -37,7 +37,7 @@
   };
 
   /* ── Helpers ───────────────────────────────────────────── */
-  function qsa(parent, sel) { return Array.prototype.slice.call(parent.querySelectorAll(sel)); }
+  function qsa(parent, sel) { return Array.from(parent.querySelectorAll(sel)); }
   function qs(parent, sel)  { return parent.querySelector(sel); }
 
   /* ── Init all sliders on the page ─────────────────────── */

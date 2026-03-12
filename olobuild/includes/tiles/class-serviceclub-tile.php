@@ -39,7 +39,7 @@ class Olo_ServiceClub_Tile extends Olo_Tile_Base {
 
         global $post;
         if ( ! $post || ! is_singular() ) {
-            return '<div style="padding:24px;text-align:center;color:#9ca3af;background:#f9fafb;border-radius:8px">'
+            return '<div style="padding:24px;text-align:center;color:var(--olo-color-text-muted, #9CA3AF);background:var(--olo-color-muted, #F3F4F6);border-radius:8px">'
                  . '<p style="margin:0">Inserisci in un template single.</p></div>';
         }
 
@@ -96,9 +96,9 @@ class Olo_ServiceClub_Tile extends Olo_Tile_Base {
             $wrap_style = 'display:flex;';
             $wrap_style .= $is_horiz ? 'flex-direction:row;align-items:center;' : 'flex-direction:column;align-items:' . $align . ';';
             $wrap_style .= 'gap:' . absint( $s['gap'] ) . 'px;';
-            if ( $s['bg_color'] )      $wrap_style .= 'background:' . $this->safe_color( $s['bg_color'] ) . ';';
-            if ( $s['border_color'] )  $wrap_style .= 'border:1px solid ' . $this->safe_color( $s['border_color'] ) . ';';
-            if ( $s['border_radius'] ) $wrap_style .= 'border-radius:' . absint( $s['border_radius'] ) . 'px;';
+            if ( $s['bg_color'] )      $wrap_style .= 'background:' . $this->safe_color_css( $s['bg_color'] ) . ';';
+            if ( $s['border_color'] )  $wrap_style .= 'border:1px solid ' . $this->safe_color_css( $s['border_color'] ) . ';';
+            if ( $s['border_radius'] ) $wrap_style .= 'border-radius:' . Olo_Tile_Utils::border_radius( $s['border_radius'] ) . ';';
             if ( $s['padding'] )       $wrap_style .= 'padding:' . absint( $s['padding'] ) . 'px;';
 
             $has_url = ! empty( $club['url'] );
@@ -114,13 +114,13 @@ class Olo_ServiceClub_Tile extends Olo_Tile_Base {
 
                 <div style="display:flex;flex-direction:column;gap:2px">
                     <?php if ( $s['show_category'] && $club['category'] ) : ?>
-                        <span style="font-size:<?php echo absint( $s['text_size'] ); ?>px;font-weight:<?php echo esc_attr( $s['text_weight'] ); ?>;color:<?php echo esc_attr( $s['text_color'] ); ?>">
+                        <span style="font-size:<?php echo absint( $s['text_size'] ); ?>px;font-weight:<?php echo esc_attr( $s['text_weight'] ); ?>;color:<?php echo $this->safe_color_css( $s['text_color'] ); ?>">
                             <?php echo esc_html( $club['category'] ); ?>
                         </span>
                     <?php endif; ?>
 
                     <?php if ( $s['show_group'] && $club['name'] ) : ?>
-                        <span style="font-size:<?php echo absint( $s['group_size'] ); ?>px;color:<?php echo esc_attr( $s['group_color'] ); ?>">
+                        <span style="font-size:<?php echo absint( $s['group_size'] ); ?>px;color:<?php echo $this->safe_color_css( $s['group_color'] ); ?>">
                             <?php echo esc_html( $club['name'] ); ?>
                         </span>
                     <?php endif; ?>

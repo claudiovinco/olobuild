@@ -1,10 +1,10 @@
-import { borderFields, borderDefaults, shadowField } from './_shared.js';
+import { shadowField } from './_shared.js';
 
 export default {
   type: 'marquee',
   name: 'Nastro Scorrevole',
   icon: 'dashicons-slides',
-  category: 'content',
+  category: 'media',
   defaults: {
     // Contenuto
     content_type: 'text',
@@ -20,8 +20,8 @@ export default {
     gap: '60',
 
     // Aspetto
-    bg_color: '#111827',
-    text_color: '#FFFFFF',
+    bg_color: '',
+    text_color: '',
     font_size: '16',
     font_weight: '500',
     letter_spacing: '1',
@@ -30,9 +30,8 @@ export default {
     full_width: true,
     border_top: '0',
     border_bottom: '0',
-    border_color: '#374151',
+    border_color: '',
     shadow: 'none',
-    ...borderDefaults,
   },
   fields: [
     // ── Contenuto ──
@@ -40,7 +39,7 @@ export default {
       { value: 'text', label: 'Testo' },
       { value: 'images', label: 'Immagini' },
     ]},
-    { key: 'text_items', label: 'Testo', type: 'editor', mode: 'inline',
+    { key: 'text_items', label: 'Testo', type: 'text',
       condition: { field: 'content_type', value: 'text' } },
     { key: 'separator', label: 'Separatore', type: 'text',
       condition: { field: 'content_type', value: 'text' } },
@@ -85,7 +84,6 @@ export default {
     { key: 'border_top', label: 'Bordo superiore (px)', type: 'range', min: 0, max: 4 },
     { key: 'border_bottom', label: 'Bordo inferiore (px)', type: 'range', min: 0, max: 4 },
     { key: 'border_color', label: 'Colore bordo', type: 'color' },
-    shadowField,
-    ...borderFields,
+    ...shadowField,
   ],
 };

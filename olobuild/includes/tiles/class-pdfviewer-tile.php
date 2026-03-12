@@ -28,7 +28,7 @@ class Olo_PdfViewer_Tile extends Olo_Tile_Base {
         'show_search'     => false,
         'show_thumbnails' => false,
         'border_width'    => '0',
-        'border_color'    => '#e5e7eb',
+        'border_color'    => '',
         'border_radius'   => [ 'tl' => 0, 'tr' => 0, 'br' => 0, 'bl' => 0 ],
     ];
 
@@ -46,13 +46,13 @@ class Olo_PdfViewer_Tile extends Olo_Tile_Base {
 
         $uid    = 'olo-pdfv-' . wp_unique_id();
         $height = max( 200, (int) $s['viewer_height'] );
-        $bg     = $this->safe_color( $s['bg_color'] );
+        $bg     = $this->safe_color_css( $s['bg_color'] );
         $theme  = in_array( $s['theme'], [ 'light', 'dark' ], true ) ? $s['theme'] : 'light';
         $mode   = in_array( $s['mode'], [ 'flipbook', 'single', 'double', 'scroll' ], true ) ? $s['mode'] : 'flipbook';
 
         // Border
         $bw      = absint( $s['border_width'] );
-        $bc      = $this->safe_color( $s['border_color'] );
+        $bc      = $this->safe_color_css( $s['border_color'] ) ?: 'var(--olo-color-border, #E5E7EB)';
         $rad_raw = $s['border_radius'];
         $rad_css = '0px';
         if ( is_array( $rad_raw ) ) {

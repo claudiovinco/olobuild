@@ -95,7 +95,7 @@ function removeDynamic() {
   border: none;
   border-radius: 3px;
   background: transparent;
-  color: #6b7280;
+  color: #9CA3AF;
   font-size: 11px;
   cursor: pointer;
   padding: 0;
@@ -158,4 +158,5 @@ function removeDynamic() {
   background: #dc2626;
   color: #fff;
 }
+
 </style>

@@ -8,13 +8,13 @@
     <!-- After image (bottom layer) -->
     <div class="olo-ic-layer">
       <img v-if="s.after_image" :src="s.after_image" alt="Dopo" :style="imgStyle" />
-      <div v-else class="olo-ic-placeholder" style="background:#374151">Dopo</div>
+      <div v-else class="olo-ic-placeholder" style="background:var(--olo-color-muted, #F3F4F6)">Dopo</div>
     </div>
 
     <!-- Before image (top layer, clipped) -->
     <div class="olo-ic-layer" :style="beforeClipStyle">
       <img v-if="s.before_image" :src="s.before_image" alt="Prima" :style="imgStyle" />
-      <div v-else class="olo-ic-placeholder" style="background:#1F2937">Prima</div>
+      <div v-else class="olo-ic-placeholder" style="background:var(--olo-color-background, #FFFFFF)">Prima</div>
     </div>
 
     <!-- Divider line -->
@@ -33,8 +33,8 @@
     </div>
 
     <!-- Labels -->
-    <span v-if="s.show_labels && s.before_label" class="olo-ic-label" :style="labelBeforeStyle">{{ s.before_label }}</span>
-    <span v-if="s.show_labels && s.after_label" class="olo-ic-label" :style="labelAfterStyle">{{ s.after_label }}</span>
+    <span v-if="s.show_labels && s.before_label" class="olo-ic-label" :style="labelBeforeStyle" data-olo-editable="before_label">{{ s.before_label }}</span>
+    <span v-if="s.show_labels && s.after_label" class="olo-ic-label" :style="labelAfterStyle" data-olo-editable="after_label">{{ s.after_label }}</span>
   </div>
 </template>
 
@@ -61,7 +61,7 @@ const s = computed(() => ({
   border_radius: '8',
   object_fit: 'cover',
   card_border_width: '0',
-  card_border_color: '#374151',
+  card_border_color: 'var(--olo-color-border, #E5E7EB)',
   card_shadow: 'none',
   autoplay: false,
   autoplay_delay: '3',
@@ -98,7 +98,7 @@ const containerStyle = computed(() => {
     cursor: isVert.value ? 'row-resize' : 'col-resize',
     userSelect: 'none',
   };
-  if (bw > 0) st.border = `${bw}px solid ${s.value.card_border_color || '#374151'}`;
+  if (bw > 0) st.border = `${bw}px solid ${s.value.card_border_color || 'var(--olo-color-border, #E5E7EB)'}`;
   const sh = shadowMap[s.value.card_shadow];
   if (sh && sh !== 'none') st.boxShadow = sh;
   return st;

@@ -173,7 +173,7 @@ class Olo_Location_Single {
                 ];
                 foreach ( $access as $a ) {
                     if ( isset( $badge_labels[ $a ] ) ) {
-                        echo '<span class="olo-loc-badge">' . $badge_labels[ $a ] . '</span>';
+                        echo '<span class="olo-loc-badge">' . esc_html( $badge_labels[ $a ] ) . '</span>';
                     }
                 }
                 ?>
@@ -359,7 +359,7 @@ class Olo_Location_Single {
                 <div class="olo-loc-rental-amenities-grid">
                     <?php foreach ( $amenities as $a ) :
                         if ( isset( $amenity_labels[ $a ] ) ) : ?>
-                            <span class="olo-loc-badge"><?php echo $amenity_labels[ $a ]; ?></span>
+                            <span class="olo-loc-badge"><?php echo esc_html( $amenity_labels[ $a ] ); ?></span>
                         <?php endif;
                     endforeach; ?>
                 </div>
@@ -373,7 +373,7 @@ class Olo_Location_Single {
                 <div class="olo-loc-rental-rules-list">
                     <?php foreach ( $rules as $r ) :
                         if ( isset( $rule_labels[ $r ] ) ) : ?>
-                            <span class="olo-loc-badge"><?php echo $rule_labels[ $r ]; ?></span>
+                            <span class="olo-loc-badge"><?php echo esc_html( $rule_labels[ $r ] ); ?></span>
                         <?php endif;
                     endforeach; ?>
                 </div>

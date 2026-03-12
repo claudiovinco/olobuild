@@ -1,4 +1,4 @@
-import { borderFields, borderDefaults, shadowField } from './_shared.js';
+import { shadowField } from './_shared.js';
 
 export default {
   type: 'hero',
@@ -9,7 +9,25 @@ export default {
     // Contenuto
     title: 'Benvenuto nel nostro sito',
     subtitle: 'Scopri qualcosa di straordinario',
-    text_color: '#FFFFFF',
+    text_color: '',
+
+    // Titolo tipografia
+    title_tag: 'h1',
+    title_font_family: '',
+    title_font_size: '',
+    title_font_weight: '700',
+    title_letter_spacing: '0',
+    title_line_height: '1.2',
+    title_text_transform: 'none',
+    title_color: '',
+    title_text_shadow: '',
+
+    // Sottotitolo tipografia
+    subtitle_font_size: '',
+    subtitle_font_weight: '400',
+    subtitle_letter_spacing: '0',
+    subtitle_color: '',
+    subtitle_max_width: '',
 
     // Layout
     min_height: '500px',
@@ -22,9 +40,9 @@ export default {
 
     // Sfondo
     bg_type: 'color',
-    bg_color: '#6366F1',
-    bg_gradient_from: '#6366F1',
-    bg_gradient_to: '#8B5CF6',
+    bg_color: '',
+    bg_gradient_from: '',
+    bg_gradient_to: '',
     bg_gradient_angle: '135',
     bg_image: '',
     bg_video: '',
@@ -44,7 +62,7 @@ export default {
     cta_text: 'Inizia ora',
     cta_url: '#',
     cta_target: '_self',
-    cta_bg_color: '#FFFFFF',
+    cta_bg_color: '',
     cta_text_color: '',
     cta_radius: '6',
     cta_size: '15',
@@ -54,20 +72,80 @@ export default {
     cta2_text: '',
     cta2_url: '#',
     cta2_target: '_self',
-    cta2_bg_color: 'transparent',
-    cta2_text_color: '#FFFFFF',
+    cta2_bg_color: '',
+    cta2_text_color: '',
     cta2_style: 'outline',
 
     // Avanzato
     full_bleed: false,
     shadow: 'none',
-    ...borderDefaults,
   },
   fields: [
     // ── Contenuto ──
-    { key: 'title', label: 'Titolo', type: 'editor', mode: 'inline' },
-    { key: 'subtitle', label: 'Sottotitolo', type: 'editor', mode: 'inline' },
-    { key: 'text_color', label: 'Colore testo', type: 'color' },
+    { key: 'title', label: 'Titolo', type: 'text' },
+    { key: 'subtitle', label: 'Sottotitolo', type: 'text' },
+    { key: 'text_color', label: 'Colore testo generale', type: 'color' },
+
+    // ── Tipografia titolo ──
+    { type: 'separator', label: 'Tipografia titolo' },
+    { key: 'title_tag', label: 'Tag HTML', type: 'select', options: [
+      { value: 'h1', label: 'H1' },
+      { value: 'h2', label: 'H2' },
+      { value: 'h3', label: 'H3' },
+      { value: 'p', label: 'Paragrafo' },
+      { value: 'span', label: 'Span' },
+    ]},
+    { key: 'title_font_family', label: 'Font family', type: 'font-family' },
+    { key: 'title_font_size', label: 'Dimensione (px)', type: 'range', responsive: true, min: 14, max: 120, step: 1 },
+    { key: 'title_font_weight', label: 'Peso', type: 'select', options: [
+      { value: '300', label: 'Light' },
+      { value: '400', label: 'Regular' },
+      { value: '500', label: 'Medium' },
+      { value: '600', label: 'Semibold' },
+      { value: '700', label: 'Bold' },
+      { value: '800', label: 'Extra Bold' },
+      { value: '900', label: 'Black' },
+    ]},
+    { key: 'title_letter_spacing', label: 'Spaziatura lettere (px)', type: 'range', min: -5, max: 20, step: 0.5 },
+    { key: 'title_line_height', label: 'Interlinea', type: 'range', min: 0.8, max: 2, step: 0.05 },
+    { key: 'title_text_transform', label: 'Trasformazione', type: 'select', options: [
+      { value: 'none', label: 'Nessuna' },
+      { value: 'uppercase', label: 'MAIUSCOLO' },
+      { value: 'lowercase', label: 'minuscolo' },
+      { value: 'capitalize', label: 'Capitalizza' },
+    ]},
+    { key: 'title_color', label: 'Colore titolo', type: 'color' },
+    { key: 'title_text_shadow', label: 'Ombra testo', type: 'select', options: [
+      { value: '', label: 'Nessuna' },
+      { value: '2px 2px 4px rgba(0,0,0,0.3)', label: 'Leggera' },
+      { value: '3px 3px 8px rgba(0,0,0,0.5)', label: 'Media' },
+      { value: '4px 4px 12px rgba(0,0,0,0.6)', label: 'Forte' },
+      { value: '0 0 20px rgba(0,0,0,0.8)', label: 'Alone scuro' },
+      { value: '0 0 30px rgba(255,255,255,0.6)', label: 'Alone chiaro' },
+      { value: 'custom', label: 'Personalizzata' },
+    ]},
+    { key: 'title_text_shadow_h', label: 'Offset H (px)', type: 'range', min: -20, max: 20, step: 1,
+      condition: { field: 'title_text_shadow', op: 'eq', value: 'custom' } },
+    { key: 'title_text_shadow_v', label: 'Offset V (px)', type: 'range', min: -20, max: 20, step: 1,
+      condition: { field: 'title_text_shadow', op: 'eq', value: 'custom' } },
+    { key: 'title_text_shadow_blur', label: 'Sfocatura (px)', type: 'range', min: 0, max: 40, step: 1,
+      condition: { field: 'title_text_shadow', op: 'eq', value: 'custom' } },
+    { key: 'title_text_shadow_color', label: 'Colore ombra', type: 'color',
+      condition: { field: 'title_text_shadow', op: 'eq', value: 'custom' } },
+
+    // ── Tipografia sottotitolo ──
+    { type: 'separator', label: 'Tipografia sottotitolo' },
+    { key: 'subtitle_font_size', label: 'Dimensione (px)', type: 'range', responsive: true, min: 12, max: 48, step: 1 },
+    { key: 'subtitle_font_weight', label: 'Peso', type: 'select', options: [
+      { value: '300', label: 'Light' },
+      { value: '400', label: 'Regular' },
+      { value: '500', label: 'Medium' },
+      { value: '600', label: 'Semibold' },
+      { value: '700', label: 'Bold' },
+    ]},
+    { key: 'subtitle_letter_spacing', label: 'Spaziatura lettere (px)', type: 'range', min: -2, max: 10, step: 0.5 },
+    { key: 'subtitle_color', label: 'Colore sottotitolo', type: 'color' },
+    { key: 'subtitle_max_width', label: 'Larghezza max (px)', type: 'range', min: 200, max: 1000, step: 10 },
 
     // ── Layout ──
     { type: 'separator', label: 'Layout' },
@@ -156,7 +234,7 @@ export default {
     { key: 'cta_size', label: 'Dimensione (px)', type: 'range', min: 12, max: 24, step: 1 },
     { key: 'cta_bg_color', label: 'Colore sfondo CTA', type: 'color' },
     { key: 'cta_text_color', label: 'Colore testo CTA', type: 'color' },
-    { key: 'cta_radius', label: 'Raggio bordo CTA (px)', type: 'range', min: 0, max: 50, step: 1 },
+    { key: 'cta_radius', label: 'Raggio bordo CTA (px)', type: 'border-radius' },
 
     // ── CTA Secondario ──
     { type: 'separator', label: 'CTA Secondario' },
@@ -177,7 +255,6 @@ export default {
     // ── Avanzato ──
     { type: 'separator', label: 'Avanzato' },
     { key: 'full_bleed', label: 'Full width (100vw)', type: 'toggle' },
-    shadowField,
-    ...borderFields,
+    ...shadowField,
   ],
 };

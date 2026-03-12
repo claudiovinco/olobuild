@@ -9,7 +9,7 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
     protected $type     = 'timeline';
     protected $name     = 'Timeline';
     protected $icon     = 'dashicons-backup';
-    protected $category = 'content';
+    protected $category = 'interactive';
     protected $defaults = [
         'items' => [
             [ 'title' => 'Primo evento', 'description' => 'Descrizione del primo evento.', 'date' => '2024', 'image' => '', 'icon' => 'star', 'icon_color' => '' ],
@@ -18,27 +18,27 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
         ],
         'layout'              => 'vertical-center',
         'mobile_layout'       => 'vertical-left',
-        'line_color'          => '#374151',
+        'line_color'          => '',
         'line_width'          => '3',
         'line_style'          => 'solid',
         'line_progress'       => false,
-        'line_progress_color' => '#6366F1',
+        'line_progress_color' => '',
         'line_progress_width' => '',
         'marker_type'         => 'dot',
         'marker_size'         => '20',
-        'marker_color'        => '#6366F1',
-        'marker_bg'           => '#1e1e2e',
+        'marker_color'        => '',
+        'marker_bg'           => '',
         'marker_border_width' => '3',
-        'marker_border_color' => '#6366F1',
+        'marker_border_color' => '',
         'marker_shape'        => 'circle',
         'marker_pulse'        => false,
-        'card_bg'             => '#111827',
-        'card_text_color'     => '#F3F4F6',
+        'card_bg'             => '',
+        'card_text_color'     => '',
         'card_padding'        => '20',
         'card_border_radius'  => '12',
         'card_shadow'         => 'md',
         'card_border_width'   => '0',
-        'card_border_color'   => '#374151',
+        'card_border_color'   => '',
         'card_hover'          => 'lift',
         'card_arrow'          => true,
         'card_max_width'      => '',
@@ -46,7 +46,7 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
         'card_media_margin'   => '0',
         'card_media_radius'   => '4',
         'date_position'       => 'outside',
-        'date_color'          => '#9CA3AF',
+        'date_color'          => '',
         'date_size'           => '14',
         'date_weight'         => '600',
         'title_size'          => '18',
@@ -65,8 +65,8 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
         'h_card_width'        => '300',
         'h_visible_items'     => '3',
         'h_gap'               => '24',
-        'h_arrow_color'       => '#F3F4F6',
-        'h_arrow_bg'          => '#374151',
+        'h_arrow_color'       => '',
+        'h_arrow_bg'          => '',
     ];
 
     public function get_controls() { return []; }
@@ -162,37 +162,37 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
 
     private function render_styles( $uid, $s, $layout, $count ) {
         $line_w    = intval( $s['line_width'] ) ?: 3;
-        $line_clr  = $this->safe_color( $s['line_color'] ) ?: '#374151';
+        $line_clr  = $this->safe_color_css( $s['line_color'] ) ?: 'var(--olo-color-border, #E5E7EB)';
         $line_stl  = in_array( $s['line_style'], [ 'solid', 'dashed', 'dotted' ] ) ? $s['line_style'] : 'solid';
         $mk_size   = intval( $s['marker_size'] ) ?: 20;
-        $mk_clr    = $this->safe_color( $s['marker_color'] ) ?: '#6366F1';
-        $mk_bg     = $this->safe_color( $s['marker_bg'] ) ?: '#1e1e2e';
+        $mk_clr    = $this->safe_color_css( $s['marker_color'] ) ?: 'var(--olo-color-primary, #6366F1)';
+        $mk_bg     = $this->safe_color_css( $s['marker_bg'] ) ?: 'var(--olo-color-background, #FFFFFF)';
         $mk_bw     = intval( $s['marker_border_width'] );
-        $mk_bc     = $this->safe_color( $s['marker_border_color'] ) ?: $mk_clr;
+        $mk_bc     = $this->safe_color_css( $s['marker_border_color'] ) ?: $mk_clr;
         $mk_shape  = $s['marker_shape'] ?: 'circle';
         $mk_pulse  = ! empty( $s['marker_pulse'] );
         $mk_type   = $s['marker_type'] ?: 'dot';
 
-        $c_bg      = $this->safe_color( $s['card_bg'] ) ?: '#111827';
-        $c_text    = $this->safe_color( $s['card_text_color'] ) ?: '#F3F4F6';
+        $c_bg      = $this->safe_color_css( $s['card_bg'] ) ?: 'var(--olo-color-muted, #F3F4F6)';
+        $c_text    = $this->safe_color_css( $s['card_text_color'] ) ?: 'var(--olo-color-text, #374151)';
         $c_pad     = intval( $s['card_padding'] ) ?: 20;
-        $c_rad     = intval( $s['card_border_radius'] );
+        $c_rad     = Olo_Tile_Utils::border_radius( $s['card_border_radius'] ?? 0 );
         $c_bw      = intval( $s['card_border_width'] );
-        $c_bc      = $this->safe_color( $s['card_border_color'] ) ?: '#374151';
+        $c_bc      = $this->safe_color_css( $s['card_border_color'] ) ?: 'var(--olo-color-border, #E5E7EB)';
         $c_hover   = $s['card_hover'] ?: 'none';
         $c_maxw    = intval( $s['card_max_width'] ?? 0 );
 
         $c_shadow = Olo_Tile_Utils::shadow( $s['card_shadow'] ?? 'none' );
 
-        $d_clr   = $this->safe_color( $s['date_color'] ) ?: '#9CA3AF';
+        $d_clr   = $this->safe_color_css( $s['date_color'] ) ?: 'var(--olo-color-text-muted, #9CA3AF)';
         $d_size  = intval( $s['date_size'] ) ?: 14;
         $d_wt    = intval( $s['date_weight'] ) ?: 600;
 
         $t_size  = intval( $s['title_size'] ) ?: 18;
         $t_wt    = intval( $s['title_weight'] ) ?: 600;
-        $t_clr   = $this->safe_color( $s['title_color'] );
+        $t_clr   = $this->safe_color_css( $s['title_color'] );
         $desc_sz = intval( $s['description_size'] ) ?: 14;
-        $desc_cl = $this->safe_color( $s['description_color'] );
+        $desc_cl = $this->safe_color_css( $s['description_color'] );
 
         $anim      = $s['animation'] ?: 'none';
         $anim_dur  = intval( $s['animation_duration'] ) ?: 600;
@@ -201,7 +201,7 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
         $mobile_layout = $s['mobile_layout'] ?: 'vertical-left';
 
         $progress     = ! empty( $s['line_progress'] );
-        $progress_clr = $this->safe_color( $s['line_progress_color'] ) ?: '#6366F1';
+        $progress_clr = $this->safe_color_css( $s['line_progress_color'] ) ?: 'var(--olo-color-primary, #6366F1)';
         $progress_w   = intval( $s['line_progress_width'] ?? 0 ) ?: ( $line_w + 4 );
 
         $mk_radius = $mk_shape === 'circle' ? '50%' : '4px';
@@ -210,8 +210,8 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
         // End marker
         $end_marker = ! empty( $s['end_marker'] );
         $end_icon   = sanitize_text_field( $s['end_marker_icon'] ?? 'flag' );
-        $end_clr    = $this->safe_color( $s['end_marker_color'] ?? '' ) ?: $mk_clr;
-        $end_bg     = $this->safe_color( $s['end_marker_bg'] ?? '' ) ?: $mk_bg;
+        $end_clr    = $this->safe_color_css( $s['end_marker_color'] ?? '' ) ?: $mk_clr;
+        $end_bg     = $this->safe_color_css( $s['end_marker_bg'] ?? '' ) ?: $mk_bg;
         $end_size   = intval( $s['end_marker_size'] ?? 0 ) ?: $mk_size;
 
         // Card arrow
@@ -220,13 +220,13 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
         // Media
         $m_ratio  = $s['card_media_ratio'] ?: 'auto';
         $m_margin = intval( $s['card_media_margin'] ?? 0 );
-        $m_radius = intval( $s['card_media_radius'] ?? 4 );
+        $m_radius = Olo_Tile_Utils::border_radius( $s['card_media_radius'] ?? 4 );
 
         // Horizontal
         $h_gap    = intval( $s['h_gap'] ) ?: 24;
         $h_cw     = intval( $s['h_card_width'] ) ?: 300;
-        $h_arr_c  = $this->safe_color( $s['h_arrow_color'] ) ?: '#F3F4F6';
-        $h_arr_bg = $this->safe_color( $s['h_arrow_bg'] ) ?: '#374151';
+        $h_arr_c  = $this->safe_color_css( $s['h_arrow_color'] ) ?: 'var(--olo-color-muted, #F3F4F6)';
+        $h_arr_bg = $this->safe_color_css( $s['h_arrow_bg'] ) ?: 'var(--olo-color-text, #374151)';
 
         ?>
         <style>
@@ -352,7 +352,7 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
                 background: <?php echo $c_bg; ?>;
                 color: <?php echo $c_text; ?>;
                 padding: <?php echo $c_pad; ?>px;
-                border-radius: <?php echo $c_rad; ?>px;
+                border-radius: <?php echo $c_rad; ?>;
                 box-shadow: <?php echo $c_shadow; ?>;
                 position: relative;
                 transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -371,7 +371,7 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
             }
             <?php elseif ( $c_hover === 'glow' ) : ?>
             .<?php echo $uid; ?> .olo-tl-card:hover {
-                box-shadow: 0 0 20px <?php echo $mk_clr; ?>40;
+                box-shadow: 0 0 20px color-mix(in srgb, <?php echo $mk_clr; ?> 25%, transparent);
             }
             <?php elseif ( $c_hover === 'scale' ) : ?>
             .<?php echo $uid; ?> .olo-tl-card:hover {
@@ -382,7 +382,7 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
             /* === Media === */
             .<?php echo $uid; ?> .olo-tl-media {
                 overflow: hidden;
-                border-radius: <?php echo $m_radius; ?>px;
+                border-radius: <?php echo $m_radius; ?>;
                 margin-bottom: 8px;
                 <?php if ( $m_ratio !== 'auto' ) : ?>
                 aspect-ratio: <?php echo esc_attr( $m_ratio ); ?>;
@@ -698,9 +698,9 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
 
         $end_marker = ! empty( $s['end_marker'] );
         $end_icon   = sanitize_text_field( $s['end_marker_icon'] ?? 'flag' );
-        $mk_clr     = $this->safe_color( $s['marker_color'] ) ?: '#6366F1';
-        $mk_bg      = $this->safe_color( $s['marker_bg'] ) ?: '#1e1e2e';
-        $end_clr    = $this->safe_color( $s['end_marker_color'] ?? '' ) ?: $mk_clr;
+        $mk_clr     = $this->safe_color_css( $s['marker_color'] ) ?: 'var(--olo-color-primary, #6366F1)';
+        $mk_bg      = $this->safe_color_css( $s['marker_bg'] ) ?: 'var(--olo-color-background, #FFFFFF)';
+        $end_clr    = $this->safe_color_css( $s['end_marker_color'] ?? '' ) ?: $mk_clr;
 
         $scrollspy = '';
         if ( $anim !== 'none' ) {
@@ -742,7 +742,7 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
                     <div class="olo-tl-marker-wrap">
                         <div class="olo-tl-marker">
                             <?php if ( $mk_type === 'icon' && ! empty( $item['icon'] ) ) : ?>
-                                <span uk-icon="icon: <?php echo esc_attr( $item['icon'] ); ?>" <?php if ( ! empty( $item['icon_color'] ) ) echo 'style="color:' . esc_attr( $item['icon_color'] ) . '"'; ?>></span>
+                                <span uk-icon="icon: <?php echo esc_attr( $item['icon'] ); ?>" <?php if ( ! empty( $item['icon_color'] ) ) echo 'style="color:' . $this->safe_color_css( $item['icon_color'] ) . '"'; ?>></span>
                             <?php elseif ( $mk_type === 'number' ) : ?>
                                 <?php echo $i + 1; ?>
                             <?php endif; ?>
@@ -765,8 +765,8 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
                             <div class="olo-tl-date" style="margin-bottom:4px"><?php echo esc_html( $item['date'] ); ?></div>
                             <?php endif; ?>
 
-                            <h4 class="olo-tl-title"><?php echo wp_kses_post( $item['title'] ); ?></h4>
-                            <div class="olo-tl-desc"><?php echo wp_kses_post( $item['description'] ); ?></div>
+                            <h4 class="olo-tl-title"><?php echo esc_html( wp_strip_all_tags( $item['title'] ) ); ?></h4>
+                            <div class="olo-tl-desc"><?php echo nl2br( esc_html( wp_strip_all_tags( $item['description'] ) ) ); ?></div>
                         </div>
 
                         <?php if ( $layout !== 'vertical-center' && $date_pos === 'outside' && ! empty( $item['date'] ) ) : ?>
@@ -784,7 +784,7 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
                     <div class="olo-tl-end-marker olo-tl-marker-wrap">
                         <div class="olo-tl-marker">
                             <?php if ( ! empty( $end_icon ) ) : ?>
-                                <span uk-icon="icon: <?php echo esc_attr( $end_icon ); ?>" style="color:<?php echo esc_attr( $end_clr ); ?>"></span>
+                                <span uk-icon="icon: <?php echo esc_attr( $end_icon ); ?>" style="color:<?php echo $end_clr; ?>"></span>
                             <?php endif; ?>
                         </div>
                     </div>
@@ -835,8 +835,8 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
 
         $end_marker = ! empty( $s['end_marker'] );
         $end_icon   = sanitize_text_field( $s['end_marker_icon'] ?? 'flag' );
-        $mk_clr     = $this->safe_color( $s['marker_color'] ) ?: '#6366F1';
-        $end_clr    = $this->safe_color( $s['end_marker_color'] ?? '' ) ?: $mk_clr;
+        $mk_clr     = $this->safe_color_css( $s['marker_color'] ) ?: 'var(--olo-color-primary, #6366F1)';
+        $end_clr    = $this->safe_color_css( $s['end_marker_color'] ?? '' ) ?: $mk_clr;
 
         $scrollspy = '';
         if ( $anim !== 'none' ) {
@@ -855,7 +855,7 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
                         <div class="olo-tl-h-item olo-tl-item">
                             <div class="olo-tl-marker">
                                 <?php if ( $mk_type === 'icon' && ! empty( $item['icon'] ) ) : ?>
-                                    <span uk-icon="icon: <?php echo esc_attr( $item['icon'] ); ?>" <?php if ( ! empty( $item['icon_color'] ) ) echo 'style="color:' . esc_attr( $item['icon_color'] ) . '"'; ?>></span>
+                                    <span uk-icon="icon: <?php echo esc_attr( $item['icon'] ); ?>" <?php if ( ! empty( $item['icon_color'] ) ) echo 'style="color:' . $this->safe_color_css( $item['icon_color'] ) . '"'; ?>></span>
                                 <?php elseif ( $mk_type === 'number' ) : ?>
                                     <?php echo $i + 1; ?>
                                 <?php endif; ?>
@@ -867,8 +867,8 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
                                 <div class="olo-tl-date" style="margin-bottom:4px"><?php echo esc_html( $item['date'] ); ?></div>
                                 <?php endif; ?>
 
-                                <h4 class="olo-tl-title"><?php echo wp_kses_post( $item['title'] ); ?></h4>
-                                <div class="olo-tl-desc"><?php echo wp_kses_post( $item['description'] ); ?></div>
+                                <h4 class="olo-tl-title"><?php echo esc_html( wp_strip_all_tags( $item['title'] ) ); ?></h4>
+                                <div class="olo-tl-desc"><?php echo nl2br( esc_html( wp_strip_all_tags( $item['description'] ) ) ); ?></div>
                             </div>
                             <?php if ( $date_pos === 'outside' && ! empty( $item['date'] ) ) : ?>
                             <div class="olo-tl-date"><?php echo esc_html( $item['date'] ); ?></div>
@@ -883,7 +883,7 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
                             <div class="olo-tl-end-marker">
                                 <div class="olo-tl-marker">
                                     <?php if ( ! empty( $end_icon ) ) : ?>
-                                        <span uk-icon="icon: <?php echo esc_attr( $end_icon ); ?>" style="color:<?php echo esc_attr( $end_clr ); ?>"></span>
+                                        <span uk-icon="icon: <?php echo esc_attr( $end_icon ); ?>" style="color:<?php echo $end_clr; ?>"></span>
                                     <?php endif; ?>
                                 </div>
                             </div>
@@ -901,7 +901,7 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
                     <div class="olo-tl-marker-wrap">
                         <div class="olo-tl-marker">
                             <?php if ( $mk_type === 'icon' && ! empty( $item['icon'] ) ) : ?>
-                                <span uk-icon="icon: <?php echo esc_attr( $item['icon'] ); ?>" <?php if ( ! empty( $item['icon_color'] ) ) echo 'style="color:' . esc_attr( $item['icon_color'] ) . '"'; ?>></span>
+                                <span uk-icon="icon: <?php echo esc_attr( $item['icon'] ); ?>" <?php if ( ! empty( $item['icon_color'] ) ) echo 'style="color:' . $this->safe_color_css( $item['icon_color'] ) . '"'; ?>></span>
                             <?php elseif ( $mk_type === 'number' ) : ?>
                                 <?php echo $i + 1; ?>
                             <?php endif; ?>
@@ -915,8 +915,8 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
                             <div class="olo-tl-date" style="margin-bottom:4px"><?php echo esc_html( $item['date'] ); ?></div>
                             <?php endif; ?>
 
-                            <h4 class="olo-tl-title"><?php echo wp_kses_post( $item['title'] ); ?></h4>
-                            <div class="olo-tl-desc"><?php echo wp_kses_post( $item['description'] ); ?></div>
+                            <h4 class="olo-tl-title"><?php echo esc_html( wp_strip_all_tags( $item['title'] ) ); ?></h4>
+                            <div class="olo-tl-desc"><?php echo nl2br( esc_html( wp_strip_all_tags( $item['description'] ) ) ); ?></div>
                         </div>
                     </div>
                 </div>
@@ -927,7 +927,7 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
                     <div class="olo-tl-end-marker olo-tl-marker-wrap">
                         <div class="olo-tl-marker">
                             <?php if ( ! empty( $end_icon ) ) : ?>
-                                <span uk-icon="icon: <?php echo esc_attr( $end_icon ); ?>" style="color:<?php echo esc_attr( $end_clr ); ?>"></span>
+                                <span uk-icon="icon: <?php echo esc_attr( $end_icon ); ?>" style="color:<?php echo $end_clr; ?>"></span>
                             <?php endif; ?>
                         </div>
                     </div>

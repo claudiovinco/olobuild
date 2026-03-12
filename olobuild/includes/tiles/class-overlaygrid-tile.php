@@ -9,7 +9,7 @@ class Olo_OverlayGrid_Tile extends Olo_Tile_Base {
     protected $type     = 'overlaygrid';
     protected $name     = 'Overlay Grid';
     protected $icon     = 'dashicons-grid-view';
-    protected $category = 'content';
+    protected $category = 'interactive';
     protected $defaults = [
         'items' => [
             [ 'id' => 'og-1', 'image' => '', 'title' => 'Elemento 1', 'subtitle' => '', 'link' => '' ],
@@ -46,7 +46,7 @@ class Olo_OverlayGrid_Tile extends Olo_Tile_Base {
 
         $items = is_array( $s['items'] ) ? $s['items'] : [];
         if ( empty( $items ) ) {
-            return '<div class="olo-overlaygrid" style="padding:40px;text-align:center;color:#6b7280;">No items added</div>';
+            return '<div class="olo-overlaygrid" style="padding:40px;text-align:center;color:var(--olo-color-text-muted, #9CA3AF);">No items added</div>';
         }
 
         $columns   = absint( $s['columns'] ) ?: 3;
@@ -96,8 +96,8 @@ class Olo_OverlayGrid_Tile extends Olo_Tile_Base {
 
         // Ribbon
         $ribbon_position = esc_attr( $s['ribbon_position'] ?? 'top-right' );
-        $ribbon_bg       = esc_attr( $s['ribbon_bg'] ?? '#e11d48' );
-        $ribbon_color    = esc_attr( $s['ribbon_color'] ?? '#ffffff' );
+        $ribbon_bg       = $this->safe_color_css( $s['ribbon_bg'] ?? '#e11d48' );
+        $ribbon_color    = $this->safe_color_css( $s['ribbon_color'] ?? '#ffffff' );
 
         $uid = 'mos-og-' . wp_rand( 10000, 99999 );
 
@@ -141,7 +141,7 @@ class Olo_OverlayGrid_Tile extends Olo_Tile_Base {
                                 echo $this->render_hover_wrap( $og_img, $item['hover_image'] ?? '', $item['hover_video'] ?? '' );
                                 ?>
                             <?php else : ?>
-                                <div style="height:<?php echo $height; ?>px;background:#1f2937;width:100%;"></div>
+                                <div style="height:<?php echo $height; ?>px;background:var(--olo-color-secondary, #1F2937);width:100%;"></div>
                             <?php endif; ?>
                             <?php if ( ! empty( $item['ribbon'] ) ) : ?>
                                 <span class="mos-og-ribbon mos-og-ribbon--<?php echo $ribbon_position; ?>"><?php echo esc_html( $item['ribbon'] ); ?></span>

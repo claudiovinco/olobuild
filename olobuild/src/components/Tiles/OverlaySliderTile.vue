@@ -13,21 +13,21 @@
       >
         <!-- Overlay -->
         <div class="olo-os-overlay" :class="[...overlayClasses, hoverOverlayClass]" :style="overlayPadStyle">
-          <component :is="titleTag" class="mb-font-bold mb-text-white mb-m-0" :style="titleFontStyle">{{ slide.title }}</component>
-          <div v-if="slide.subtitle" class="mb-text-xs mb-text-gray-200 mb-mt-1">{{ slide.subtitle }}</div>
+          <component :is="titleTag" class="mb-font-bold mb-text-white mb-m-0" :style="titleFontStyle" :data-olo-editable="'slides.' + i + '.title'">{{ slide.title }}</component>
+          <div v-if="slide.subtitle" class="mb-text-xs mb-text-gray-200 mb-mt-1" :data-olo-editable="'slides.' + i + '.subtitle'">{{ slide.subtitle }}</div>
           <div v-if="slide.link" class="mb-text-[10px] mb-text-blue-300 mb-mt-1 mb-opacity-70">&#128279; {{ slide.link }}</div>
         </div>
       </div>
     </div>
 
     <!-- Arrows -->
-    <template v-if="settings.show_arrows !== false && slides.length > 1">
+    <template v-if="s.show_arrows !== false && slides.length > 1">
       <button class="olo-os-arrow olo-os-prev" @click="prev" aria-label="Precedente">&#10094;</button>
       <button class="olo-os-arrow olo-os-next" @click="next" aria-label="Successivo">&#10095;</button>
     </template>
 
     <!-- Dots -->
-    <div v-if="settings.show_dots !== false && slides.length > 1" class="olo-os-dots">
+    <div v-if="s.show_dots !== false && slides.length > 1" class="olo-os-dots">
       <button
         v-for="(_, i) in slides"
         :key="i"
@@ -47,10 +47,24 @@ const props = defineProps({
   settings: { type: Object, default: () => ({}) },
 });
 
+const defaults = {
+  columns: '1',
+  height: '400',
+  overlay_position: 'bottom',
+  overlay_horizontal: 'left',
+  overlay_padding: 'medium',
+  title_size: 'h3',
+  hover_effect: 'none',
+  hover_overlay: 'always',
+  show_arrows: true,
+  show_dots: true,
+};
+const s = computed(() => ({ ...defaults, ...props.settings }));
+
 const current = ref(0);
 
 const slides = computed(() => {
-  const raw = props.settings.slides;
+  const raw = s.value.slides;
   if (Array.isArray(raw) && raw.length) return raw;
   return [
     { id: 'os-1', image: '', title: 'Slide 1', subtitle: '' },
@@ -58,7 +72,7 @@ const slides = computed(() => {
   ];
 });
 
-const slideHeight = computed(() => parseInt(props.settings.height) || 400);
+const slideHeight = computed(() => parseInt(s.value.height) || 400);
 
 const trackStyle = computed(() => ({
   display: 'flex',
@@ -68,8 +82,8 @@ const trackStyle = computed(() => ({
 }));
 
 const overlayClasses = computed(() => {
-  const pos = props.settings.overlay_position || 'bottom';
-  const align = props.settings.overlay_horizontal || 'left';
+  const pos = s.value.overlay_position || 'bottom';
+  const align = s.value.overlay_horizontal || 'left';
   const classes = ['olo-os-overlay--' + pos];
   if (align === 'center') classes.push('olo-os-align-center');
   if (align === 'right') classes.push('olo-os-align-right');
@@ -77,31 +91,31 @@ const overlayClasses = computed(() => {
 });
 
 const overlayPadStyle = computed(() => {
-  const pad = props.settings.overlay_padding || 'medium';
+  const pad = s.value.overlay_padding || 'medium';
   if (pad === 'small') return { padding: '8px 12px' };
   if (pad === 'large') return { padding: '24px 32px' };
   return { padding: '12px 16px' };
 });
 
 const titleTag = computed(() => {
-  const tag = props.settings.title_size || 'h3';
+  const tag = s.value.title_size || 'h3';
   return ['h1', 'h2', 'h3', 'h4'].includes(tag) ? tag : 'h3';
 });
 
 const titleFontStyle = computed(() => {
-  const tag = props.settings.title_size || 'h3';
+  const tag = s.value.title_size || 'h3';
   const sizes = { h1: '28px', h2: '22px', h3: '16px', h4: '14px' };
   return { fontSize: sizes[tag] || '16px', lineHeight: 1.3 };
 });
 
 const hoverImageClass = computed(() => {
-  const fx = props.settings.hover_effect || 'none';
-  return fx !== 'none' ? 'mos-os-hover-' + fx : '';
+  const fx = s.value.hover_effect || 'none';
+  return fx !== 'none' ? 'olo-os-hover-' + fx : '';
 });
 
 const hoverOverlayClass = computed(() => {
-  const ov = props.settings.hover_overlay || 'always';
-  return ov !== 'always' ? 'mos-os-ov-' + ov : '';
+  const ov = s.value.hover_overlay || 'always';
+  return ov !== 'always' ? 'olo-os-ov-' + ov : '';
 });
 
 function slideStyle(slide) {
@@ -175,26 +189,26 @@ function prev() { goTo(current.value - 1); }
 
 /* Hover image effects */
 .olo-os-slide { transition: transform 0.5s ease, filter 0.5s ease; }
-.mos-os-hover-zoom:hover { transform: scale(1.08); }
-.mos-os-hover-zoom-rotate:hover { transform: scale(1.08) rotate(2deg); }
-.mos-os-hover-brightness { filter: brightness(0.7); }
-.mos-os-hover-brightness:hover { filter: brightness(1); }
-.mos-os-hover-desaturate { filter: grayscale(100%); }
-.mos-os-hover-desaturate:hover { filter: grayscale(0%); }
-.mos-os-hover-blur-in { filter: blur(3px); }
-.mos-os-hover-blur-in:hover { filter: blur(0); }
+.olo-os-hover-zoom:hover { transform: scale(1.08); }
+.olo-os-hover-zoom-rotate:hover { transform: scale(1.08) rotate(2deg); }
+.olo-os-hover-brightness { filter: brightness(0.7); }
+.olo-os-hover-brightness:hover { filter: brightness(1); }
+.olo-os-hover-desaturate { filter: grayscale(100%); }
+.olo-os-hover-desaturate:hover { filter: grayscale(0%); }
+.olo-os-hover-blur-in { filter: blur(3px); }
+.olo-os-hover-blur-in:hover { filter: blur(0); }
 
 /* Hover overlay effects */
-.mos-os-ov-fade { opacity: 0; transition: opacity 0.3s ease; }
-.olo-os-slide:hover .mos-os-ov-fade { opacity: 1; }
-.mos-os-ov-slide-bottom { transform: translateY(100%); transition: transform 0.3s ease; }
-.olo-os-slide:hover .mos-os-ov-slide-bottom { transform: translateY(0); }
-.mos-os-ov-slide-top { transform: translateY(-100%); transition: transform 0.3s ease; }
-.olo-os-slide:hover .mos-os-ov-slide-top { transform: translateY(0); }
-.mos-os-ov-slide-left { transform: translateX(-100%); transition: transform 0.3s ease; }
-.olo-os-slide:hover .mos-os-ov-slide-left { transform: translateX(0); }
-.mos-os-ov-slide-right { transform: translateX(100%); transition: transform 0.3s ease; }
-.olo-os-slide:hover .mos-os-ov-slide-right { transform: translateX(0); }
+.olo-os-ov-fade { opacity: 0; transition: opacity 0.3s ease; }
+.olo-os-slide:hover .olo-os-ov-fade { opacity: 1; }
+.olo-os-ov-slide-bottom { transform: translateY(100%); transition: transform 0.3s ease; }
+.olo-os-slide:hover .olo-os-ov-slide-bottom { transform: translateY(0); }
+.olo-os-ov-slide-top { transform: translateY(-100%); transition: transform 0.3s ease; }
+.olo-os-slide:hover .olo-os-ov-slide-top { transform: translateY(0); }
+.olo-os-ov-slide-left { transform: translateX(-100%); transition: transform 0.3s ease; }
+.olo-os-slide:hover .olo-os-ov-slide-left { transform: translateX(0); }
+.olo-os-ov-slide-right { transform: translateX(100%); transition: transform 0.3s ease; }
+.olo-os-slide:hover .olo-os-ov-slide-right { transform: translateX(0); }
 
 .olo-os-arrow {
   position: absolute;

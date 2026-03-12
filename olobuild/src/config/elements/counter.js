@@ -4,17 +4,17 @@ export default {
   type: 'counter',
   name: 'Contatore',
   icon: 'dashicons-performance',
-  category: 'content',
+  category: 'marketing',
   defaults: {
     number: '1250',
     label: 'Clienti soddisfatti',
     prefix: '',
     suffix: '+',
-    icon_emoji: '🏆',
+    icon_emoji: 'bolt',
     icon_size: '40',
 
     // Tipografia
-    text_color: '#F3F4F6',
+    text_color: '',
     number_font_size: '48',
     number_font_weight: '700',
     label_color: '',
@@ -34,13 +34,13 @@ export default {
     padding: '32',
     border_radius: '0',
     border_width: '0',
-    border_color: '#374151',
+    border_color: '',
     shadow: 'none',
   },
   fields: [
     // ── Contenuto ──
     { key: 'number', label: 'Numero', type: 'text' },
-    { key: 'label', label: 'Etichetta', type: 'editor', mode: 'inline' },
+    { key: 'label', label: 'Etichetta', type: 'text' },
     { key: 'prefix', label: 'Prefisso', type: 'text' },
     { key: 'suffix', label: 'Suffisso', type: 'text' },
     { key: 'icon_emoji', label: 'Icona / Emoji', type: 'icon' },
@@ -93,10 +93,10 @@ export default {
     // ── Tile ──
     { type: 'separator', label: 'Aspetto tile' },
     { key: 'padding', label: 'Padding (px)', type: 'range', min: 0, max: 80, step: 4 },
-    { key: 'border_radius', label: 'Arrotondamento (px)', type: 'range', min: 0, max: 30, step: 1 },
+    { key: 'border_radius', label: 'Arrotondamento (px)', type: 'border-radius' },
     { key: 'border_width', label: 'Bordo tile (px)', type: 'range', min: 0, max: 5, step: 1 },
     { key: 'border_color', label: 'Colore bordo tile', type: 'color',
       condition: { field: 'border_width', operator: '>', value: '0' } },
-    shadowField,
+    ...shadowField,
   ],
 };

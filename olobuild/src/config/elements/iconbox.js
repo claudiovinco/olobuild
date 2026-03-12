@@ -1,4 +1,4 @@
-import { borderFields, borderDefaults, shadowField } from './_shared.js';
+import { shadowField } from './_shared.js';
 
 export default {
   type: 'iconbox',
@@ -6,26 +6,29 @@ export default {
   icon: 'dashicons-star-filled',
   category: 'content',
   defaults: {
-    icon_emoji: '\uD83D\uDE80',
+    icon_emoji: 'star',
     title: 'Titolo funzionalità',
     description: 'Una breve descrizione.',
     link_url: '',
     link_text: 'Scopri di più',
     alignment: 'center',
-    text_color: '#F3F4F6',
+    text_color: '',
     icon_size: '3',
+    icon_position: 'top',
+    icon_bg_color: '',
+    icon_bg_shape: 'circle',
+    icon_color: '',
     title_font_size: '20',
     title_font_weight: '600',
-    link_color: '#6366F1',
+    link_color: '',
     shadow: 'none',
-    ...borderDefaults,
   },
   fields: [
     { key: 'icon_emoji', label: 'Icona / Emoji', type: 'icon' },
-    { key: 'title', label: 'Titolo', type: 'editor', mode: 'inline' },
-    { key: 'description', label: 'Descrizione', type: 'editor', mode: 'block' },
+    { key: 'title', label: 'Titolo', type: 'text' },
+    { key: 'description', label: 'Descrizione', type: 'textarea' },
     { key: 'link_url', label: 'URL link', type: 'text' },
-    { key: 'link_text', label: 'Testo link', type: 'editor', mode: 'inline' },
+    { key: 'link_text', label: 'Testo link', type: 'text' },
     { key: 'alignment', label: 'Allineamento', type: 'select', options: [
       { value: 'left', label: 'Sinistra' },
       { value: 'center', label: 'Centro' },
@@ -33,6 +36,19 @@ export default {
     ]},
     { type: 'separator', label: 'Tipografia' },
     { key: 'icon_size', label: 'Dimensione icona (em)', type: 'range', min: 1, max: 8, step: 0.5 },
+    { key: 'icon_position', label: 'Posizione icona', type: 'select', options: [
+      { value: 'top', label: 'Sopra' },
+      { value: 'left', label: 'Sinistra' },
+      { value: 'right', label: 'Destra' },
+    ]},
+    { key: 'icon_color', label: 'Colore icona', type: 'color' },
+    { key: 'icon_bg_color', label: 'Sfondo icona', type: 'color' },
+    { key: 'icon_bg_shape', label: 'Forma sfondo icona', type: 'select', options: [
+      { value: 'circle', label: 'Cerchio' },
+      { value: 'square', label: 'Quadrato' },
+      { value: 'rounded', label: 'Arrotondato' },
+    ],
+      condition: { field: 'icon_bg_color', operator: '!=', value: '' } },
     { key: 'title_font_size', label: 'Dimensione titolo (px)', type: 'range', min: 14, max: 48, step: 1 },
     { key: 'title_font_weight', label: 'Peso titolo', type: 'select', options: [
       { value: '400', label: 'Normale' },
@@ -43,7 +59,6 @@ export default {
     { type: 'separator', label: 'Colori' },
     { key: 'text_color', label: 'Colore testo', type: 'color' },
     { key: 'link_color', label: 'Colore link', type: 'color' },
-    shadowField,
-    ...borderFields,
+    ...shadowField,
   ],
 };

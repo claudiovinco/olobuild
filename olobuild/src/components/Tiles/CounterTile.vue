@@ -3,8 +3,15 @@
     <!-- Bg image -->
     <div v-if="s.bg_type === 'image' && s.bg_image" class="mb-absolute mb-inset-0"
       :style="{ backgroundImage: `url(${s.bg_image})`, backgroundSize: 'cover', backgroundPosition: 'center' }"></div>
-    <!-- Bg video badge -->
-    <div v-if="s.bg_type === 'video'" class="mb-absolute mb-inset-0 mb-flex mb-items-center mb-justify-center mb-bg-gray-900">
+    <!-- Bg video -->
+    <video
+      v-if="s.bg_type === 'video' && s.bg_video"
+      class="mb-absolute mb-inset-0"
+      :src="s.bg_video"
+      autoplay loop muted playsinline
+      style="width:100%;height:100%;object-fit:cover"
+    ></video>
+    <div v-if="s.bg_type === 'video' && !s.bg_video" class="mb-absolute mb-inset-0 mb-flex mb-items-center mb-justify-center mb-bg-gray-900">
       <div class="mb-text-gray-500 mb-text-xs">&#9654; Video</div>
     </div>
     <!-- Overlay -->
@@ -17,9 +24,9 @@
         <template v-else>{{ s.icon_emoji }}</template>
       </div>
       <div :style="numberStyle">
-        {{ s.prefix }}{{ s.number || '0' }}{{ s.suffix }}
+        <span v-if="s.prefix" data-olo-editable="prefix">{{ s.prefix }}</span>{{ s.number || '0' }}<span v-if="s.suffix" data-olo-editable="suffix">{{ s.suffix }}</span>
       </div>
-      <div v-if="s.label" :style="labelStyle" v-html="s.label"></div>
+      <div v-if="s.label" :style="labelStyle" data-olo-editable="label">{{ s.label }}</div>
     </div>
   </div>
 </template>
@@ -35,11 +42,11 @@ const props = defineProps({
 const s = computed(() => ({
   number: '1250', label: 'Clienti soddisfatti', prefix: '', suffix: '+',
   icon_emoji: '🏆', icon_size: '40',
-  text_color: '#F3F4F6', number_font_size: '48', number_font_weight: '700',
+  text_color: 'var(--olo-color-text, #374151)', number_font_size: '48', number_font_weight: '700',
   label_color: '', label_font_size: '14', label_font_weight: '400',
   bg_type: 'color', bg_color: '', bg_image: '', bg_video: '',
   overlay: false, overlay_color: '#000000', overlay_opacity: '50',
-  padding: '32', border_radius: '0', border_width: '0', border_color: '#374151',
+  padding: '32', border_radius: '0', border_width: '0', border_color: 'var(--olo-color-border, #E5E7EB)',
   ...props.settings,
 }));
 
@@ -57,13 +64,13 @@ const wrapStyle = computed(() => {
   const st = {
     padding: pad + 'px',
     borderRadius: (parseInt(s.value.border_radius) || 0) + 'px',
-    color: s.value.text_color || '#F3F4F6',
+    color: s.value.text_color || 'var(--olo-color-text, #374151)',
     minHeight: '80px',
   };
   if (s.value.bg_type === 'color' && s.value.bg_color) {
     st.background = s.value.bg_color;
   }
-  if (bw > 0) st.border = `${bw}px solid ${s.value.border_color || '#374151'}`;
+  if (bw > 0) st.border = `${bw}px solid ${s.value.border_color || 'var(--olo-color-border, #E5E7EB)'}`;
   return st;
 });
 
@@ -86,7 +93,7 @@ const numberStyle = computed(() => ({
 }));
 
 const labelStyle = computed(() => {
-  const fg = s.value.text_color || '#F3F4F6';
+  const fg = s.value.text_color || 'var(--olo-color-text, #374151)';
   const lc = s.value.label_color || '';
   return {
     fontSize: (parseInt(s.value.label_font_size) || 14) + 'px',

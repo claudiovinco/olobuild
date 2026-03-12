@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3 style="font-size:16px;font-weight:700;color:#1f2937;margin:0 0 10px">Condividi</h3>
+    <h3 style="font-size:16px;font-weight:700;color:var(--olo-color-text, #374151);margin:0 0 10px">Condividi</h3>
     <div style="display:flex;gap:8px;flex-wrap:wrap">
       <span v-for="btn in buttons" :key="btn.label" :style="{...btnStyle, background: btn.bg}">{{ btn.label }}</span>
     </div>

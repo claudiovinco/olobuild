@@ -1,10 +1,10 @@
-import { borderFields, borderDefaults, shadowField } from './_shared.js';
+import { shadowField } from './_shared.js';
 
 export default {
   type: 'panelslider',
   name: 'Panel Slider',
   icon: 'dashicons-slides',
-  category: 'content',
+  category: 'interactive',
   defaults: {
     panels: [
       { id: 'ps-1', title: 'Card 1', content: 'Contenuto...', image: '' },
@@ -18,7 +18,6 @@ export default {
     autoplay: false,
     autoplay_interval: '5000',
     shadow: 'none',
-    ...borderDefaults,
   },
   fields: [
     { key: 'panels', label: 'Pannelli', type: 'content-items', supportsDynamic: true,
@@ -56,7 +55,6 @@ export default {
     { key: 'show_arrows', label: 'Mostra frecce', type: 'toggle' },
     { key: 'autoplay', label: 'Autoplay', type: 'toggle' },
     { key: 'autoplay_interval', label: 'Intervallo autoplay (ms)', type: 'range', min: 1000, max: 10000, step: 500 },
-    shadowField,
-    ...borderFields,
+    ...shadowField,
   ],
 };

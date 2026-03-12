@@ -9,6 +9,24 @@ class Olo_Footer_Integration {
     public function init() {
         add_filter( 'render_block', [ $this, 'replace_footer_block' ], 10, 2 );
         add_action( 'wp_enqueue_scripts', [ $this, 'maybe_enqueue_global_assets' ], 5 );
+        add_filter( 'body_class', [ $this, 'add_footer_body_class' ] );
+    }
+
+    /**
+     * Add body class when Olobuild footer is active (sticky footer CSS).
+     */
+    public function add_footer_body_class( $classes ) {
+        $override = 0;
+        if ( is_singular() ) {
+            $override = (int) get_post_meta( get_queried_object_id(), '_olo_footer_id', true );
+        }
+        $footer_id = $override ?: (int) get_option( 'olo_active_footer', 0 );
+
+        if ( $footer_id ) {
+            $classes[] = 'olo-has-footer';
+        }
+
+        return $classes;
     }
 
     /**
@@ -52,7 +70,7 @@ class Olo_Footer_Integration {
         $renderer   = new Olo_Frontend_Renderer();
         $inner_html = $renderer->render_shortcode( [ 'id' => $template_id ] );
 
-        return '<footer class="olo-site-footer">' . $inner_html . '</footer>';
+        return '<footer class="olo-site-footer alignfull" role="contentinfo">' . $inner_html . '</footer>';
     }
 
     /**

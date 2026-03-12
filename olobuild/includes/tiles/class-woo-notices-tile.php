@@ -1,0 +1,90 @@
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+class Olo_Woo_Notices_Tile extends Olo_Tile_Base {
+
+    protected $type     = 'woo_notices';
+    protected $name     = 'Notifiche WooCommerce';
+    protected $icon     = 'dashicons-info';
+    protected $category = 'woocommerce';
+    protected $defaults = [
+        'show_success'  => true,
+        'show_error'    => true,
+        'show_info'     => true,
+        'border_radius' => 8,
+        'font_size'     => 14,
+    ];
+
+    public function get_controls() {
+        return [];
+    }
+
+    public function render( $settings ) {
+        if ( ! class_exists( 'WooCommerce' ) ) {
+            return '<div style="padding:40px;text-align:center;color:#92400E;background:#FEF3C7;border:1px solid #F59E0B;border-radius:8px;">'
+                 . esc_html( olo_t( 'WooCommerce non attivo. Installa e attiva WooCommerce per utilizzare questo elemento.' ) )
+                 . '</div>';
+        }
+
+        $s = wp_parse_args( $settings, $this->defaults );
+
+        $uid = 'olo-woo-ntc-' . wp_rand( 10000, 99999 );
+
+        // Styles
+        $radius    = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
+        $font_size = max( 10, min( 24, absint( $s['font_size'] ) ) );
+
+        ob_start();
+        ?>
+        <style>
+            .<?php echo $uid; ?> .woocommerce-message,
+            .<?php echo $uid; ?> .woocommerce-error,
+            .<?php echo $uid; ?> .woocommerce-info {
+                border-radius: <?php echo $radius; ?>;
+                font-size: <?php echo $font_size; ?>px;
+                padding: 12px 18px;
+                margin: 0 0 12px 0;
+                list-style: none;
+            }
+            <?php if ( empty( $s['show_success'] ) ) : ?>
+            .<?php echo $uid; ?> .woocommerce-message { display: none; }
+            <?php endif; ?>
+            <?php if ( empty( $s['show_error'] ) ) : ?>
+            .<?php echo $uid; ?> .woocommerce-error { display: none; }
+            <?php endif; ?>
+            <?php if ( empty( $s['show_info'] ) ) : ?>
+            .<?php echo $uid; ?> .woocommerce-info { display: none; }
+            <?php endif; ?>
+        </style>
+        <div class="<?php echo esc_attr( $uid ); ?>">
+            <?php
+            // Output existing WooCommerce notices
+            if ( function_exists( 'wc_print_notices' ) ) {
+                wc_print_notices();
+            }
+
+            // If no notices, check for stored notices
+            $all_notices = WC()->session ? WC()->session->get( 'wc_notices', [] ) : [];
+            $has_notices = false;
+            foreach ( $all_notices as $type => $notices ) {
+                if ( ! empty( $notices ) ) {
+                    $has_notices = true;
+                    break;
+                }
+            }
+
+            // If truly no notices, output hidden placeholder so tile is visible in editor
+            if ( ! $has_notices ) :
+            ?>
+            <div class="olo-woo-notices-empty" style="padding:20px;text-align:center;color:var(--olo-color-text-muted, #9CA3AF);font-size:<?php echo $font_size; ?>px;border:1px dashed var(--olo-color-border, #E5E7EB);border-radius:<?php echo $radius; ?>;">
+                <?php echo esc_html( olo_t( 'Le notifiche WooCommerce appariranno qui quando presenti' ) ); ?>
+            </div>
+            <?php endif; ?>
+        </div>
+        <?php
+        return ob_get_clean();
+    }
+}

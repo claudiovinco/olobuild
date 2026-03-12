@@ -99,7 +99,7 @@ class Olo_ProSlider_Tile extends Olo_Tile_Base {
 
         $slides = is_array( $s['slides'] ) ? $s['slides'] : [];
         if ( empty( $slides ) ) {
-            return '<div class="olo-proslider" style="padding:60px;text-align:center;color:#6b7280;">No slides configured — open the Slider Editor</div>';
+            return '<div class="olo-proslider" style="padding:60px;text-align:center;color:var(--olo-color-text-muted, #9CA3AF);">No slides configured — open the Slider Editor</div>';
         }
 
         $uid        = 'mps-' . wp_unique_id();
@@ -187,7 +187,7 @@ class Olo_ProSlider_Tile extends Olo_Tile_Base {
                 <?php echo $this->render_bg( $bg ); ?>
                 <?php
                 $bg_type    = $bg['type'] ?? 'color';
-                $ov_color   = $this->safe_color( $bg['overlay'] ?? '#000000' );
+                $ov_color   = $this->safe_color_css( $bg['overlay'] ?? '#000000' );
                 $ov_opacity = isset( $bg['overlayOpacity'] ) ? floatval( $bg['overlayOpacity'] ) : 0.3;
                 if ( $bg_type !== 'transparent' && $ov_opacity > 0 && $ov_color ) :
                 ?>
@@ -241,14 +241,14 @@ class Olo_ProSlider_Tile extends Olo_Tile_Base {
 
         // Gradient
         if ( $type === 'gradient' ) {
-            $from  = $this->safe_color( $bg['gradientFrom'] ?? '#1e293b' );
-            $to    = $this->safe_color( $bg['gradientTo'] ?? '#0f172a' );
+            $from  = $this->safe_color_css( $bg['gradientFrom'] ?? '#1e293b' );
+            $to    = $this->safe_color_css( $bg['gradientTo'] ?? '#0f172a' );
             $angle = absint( $bg['gradientAngle'] ?? 180 );
             return '<div style="width:100%;height:100%;background:linear-gradient(' . $angle . 'deg,' . $from . ',' . $to . ');"></div>';
         }
 
         // Color fallback
-        $color = $this->safe_color( $bg['color'] ?? '#1e293b' );
+        $color = $this->safe_color_css( $bg['color'] ?? '#1e293b' );
         return '<div style="width:100%;height:100%;background:' . ( $color ?: '#1e293b' ) . ';"></div>';
     }
 
@@ -289,10 +289,10 @@ class Olo_ProSlider_Tile extends Olo_Tile_Base {
     private function render_layer_content( $layer, $type ) {
         $font_size   = absint( $layer['fontSize'] ?? 24 ) . 'px';
         $font_weight = esc_attr( $layer['fontWeight'] ?? '700' );
-        $color       = $this->safe_color( $layer['color'] ?? '#ffffff' );
+        $color       = $this->safe_color_css( $layer['color'] ?? '#ffffff' );
         $text_align  = esc_attr( $layer['textAlign'] ?? 'left' );
-        $bg_color    = $this->safe_color( $layer['bgColor'] ?? '' );
-        $radius      = absint( $layer['borderRadius'] ?? 0 ) . 'px';
+        $bg_color    = $this->safe_color_css( $layer['bgColor'] ?? '' );
+        $radius      = Olo_Tile_Utils::border_radius( $layer['borderRadius'] ?? 0 );
         $padding     = absint( $layer['padding'] ?? 0 ) . 'px';
         $opacity     = isset( $layer['opacity'] ) ? floatval( $layer['opacity'] ) / 100 : 1;
 
@@ -326,7 +326,7 @@ class Olo_ProSlider_Tile extends Olo_Tile_Base {
             case 'icon':
                 $icon_name = esc_attr( $layer['iconName'] ?? 'star' );
                 $ratio     = max( 1, round( absint( $layer['fontSize'] ?? 24 ) / 20 ) );
-                return '<span style="color:' . esc_attr( $color ) . ';" uk-icon="icon: ' . $icon_name . '; ratio: ' . $ratio . '"></span>';
+                return '<span style="color:' . $color . ';" uk-icon="icon: ' . $icon_name . '; ratio: ' . $ratio . '"></span>';
 
             case 'video':
                 $video_src = $layer['videoSrc'] ?? '';
@@ -349,7 +349,7 @@ class Olo_ProSlider_Tile extends Olo_Tile_Base {
 
             case 'shape':
                 $shape_style = 'width:100%;height:100%;min-width:40px;min-height:40px;';
-                $shape_style .= $bg_color ? 'background:' . $bg_color . ';' : 'background:#3b82f6;';
+                $shape_style .= $bg_color ? 'background:' . $bg_color . ';' : 'background:var(--olo-color-primary, #6366F1);';
                 $shape_style .= 'border-radius:' . $radius . ';';
                 if ( $opacity < 1 ) {
                     $shape_style .= 'opacity:' . $opacity . ';';

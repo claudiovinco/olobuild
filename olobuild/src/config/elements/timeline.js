@@ -2,7 +2,7 @@ export default {
   type: 'timeline',
   name: 'Timeline',
   icon: 'dashicons-backup',
-  category: 'content',
+  category: 'interactive',
   defaults: {
     // Items
     items: [
@@ -16,20 +16,20 @@ export default {
     mobile_layout: 'vertical-left',
 
     // Linea
-    line_color: '#374151',
+    line_color: '',
     line_width: '3',
     line_style: 'solid',
     line_progress: false,
-    line_progress_color: '#6366F1',
+    line_progress_color: '',
     line_progress_width: '',
 
     // Marker
     marker_type: 'dot',
     marker_size: '20',
-    marker_color: '#6366F1',
-    marker_bg: '#1e1e2e',
+    marker_color: '',
+    marker_bg: '',
     marker_border_width: '3',
-    marker_border_color: '#6366F1',
+    marker_border_color: '',
     marker_shape: 'circle',
     marker_pulse: false,
 
@@ -41,13 +41,13 @@ export default {
     end_marker_size: '',
 
     // Card
-    card_bg: '#111827',
-    card_text_color: '#F3F4F6',
+    card_bg: '',
+    card_text_color: '',
     card_padding: '20',
     card_border_radius: '12',
     card_shadow: 'md',
     card_border_width: '0',
-    card_border_color: '#374151',
+    card_border_color: '',
     card_hover: 'lift',
     card_arrow: true,
     card_max_width: '',
@@ -57,7 +57,7 @@ export default {
 
     // Data
     date_position: 'outside',
-    date_color: '#9CA3AF',
+    date_color: '',
     date_size: '14',
     date_weight: '600',
 
@@ -77,15 +77,15 @@ export default {
     h_card_width: '300',
     h_visible_items: '3',
     h_gap: '24',
-    h_arrow_color: '#F3F4F6',
-    h_arrow_bg: '#374151',
+    h_arrow_color: '',
+    h_arrow_bg: '',
   },
   fields: [
     // ── Items ──
     { key: 'items', label: 'Eventi', type: 'content-items',
       itemFields: [
-        { key: 'title', label: 'Titolo', type: 'editor', mode: 'inline' },
-        { key: 'description', label: 'Descrizione', type: 'editor', mode: 'block' },
+        { key: 'title', label: 'Titolo', type: 'text' },
+        { key: 'description', label: 'Descrizione', type: 'textarea' },
         { key: 'date', label: 'Data / etichetta', type: 'text' },
         { key: 'image', label: 'Immagine', type: 'image' },
         { key: 'video', label: 'Video', type: 'media' },
@@ -161,13 +161,26 @@ export default {
     { key: 'card_bg', label: 'Sfondo card', type: 'color' },
     { key: 'card_text_color', label: 'Colore testo card', type: 'color' },
     { key: 'card_padding', label: 'Padding card (px)', type: 'range', min: 8, max: 40, step: 2 },
-    { key: 'card_border_radius', label: 'Arrotondamento (px)', type: 'range', min: 0, max: 24, step: 1 },
+    { key: 'card_border_radius', label: 'Arrotondamento (px)', type: 'border-radius' },
     { key: 'card_shadow', label: 'Ombra', type: 'select', options: [
       { value: 'none', label: 'Nessuna' },
       { value: 'sm', label: 'Leggera' },
       { value: 'md', label: 'Media' },
       { value: 'lg', label: 'Grande' },
+      { value: 'custom', label: 'Personalizzata' },
     ]},
+    { key: 'card_shadow_h', label: 'Offset H (px)', type: 'range', min: -50, max: 50, step: 1,
+      condition: { field: 'card_shadow', op: 'eq', value: 'custom' } },
+    { key: 'card_shadow_v', label: 'Offset V (px)', type: 'range', min: -50, max: 50, step: 1,
+      condition: { field: 'card_shadow', op: 'eq', value: 'custom' } },
+    { key: 'card_shadow_blur', label: 'Sfocatura (px)', type: 'range', min: 0, max: 100, step: 1,
+      condition: { field: 'card_shadow', op: 'eq', value: 'custom' } },
+    { key: 'card_shadow_spread', label: 'Espansione (px)', type: 'range', min: -50, max: 50, step: 1,
+      condition: { field: 'card_shadow', op: 'eq', value: 'custom' } },
+    { key: 'card_shadow_color', label: 'Colore ombra', type: 'color',
+      condition: { field: 'card_shadow', op: 'eq', value: 'custom' } },
+    { key: 'card_shadow_inset', label: 'Ombra interna', type: 'toggle',
+      condition: { field: 'card_shadow', op: 'eq', value: 'custom' } },
     { key: 'card_border_width', label: 'Bordo card (px)', type: 'range', min: 0, max: 4, step: 1 },
     { key: 'card_border_color', label: 'Colore bordo card', type: 'color',
       condition: { field: 'card_border_width', operator: '>', value: '0' } },
@@ -188,7 +201,7 @@ export default {
       { value: '2/1', label: '2:1' },
     ]},
     { key: 'card_media_margin', label: 'Margine media (px)', type: 'range', min: -20, max: 20, step: 1 },
-    { key: 'card_media_radius', label: 'Arrotondamento media (px)', type: 'range', min: 0, max: 20, step: 1 },
+    { key: 'card_media_radius', label: 'Arrotondamento media (px)', type: 'border-radius' },
 
     // ── Data ──
     { type: 'separator', label: 'Etichetta data' },

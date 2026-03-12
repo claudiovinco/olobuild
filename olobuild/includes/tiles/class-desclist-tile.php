@@ -9,20 +9,20 @@ class Olo_DescList_Tile extends Olo_Tile_Base {
     protected $type     = 'desclist';
     protected $name     = 'Lista descrittiva';
     protected $icon     = 'dashicons-editor-justify';
-    protected $category = 'content';
+    protected $category = 'text';
     protected $defaults = [
         'items'                => [],
         'layout'               => 'stacked',
         'show_icon'            => true,
-        'icon_color'           => '#6366F1',
+        'icon_color'           => '',
         'icon_size'            => '20',
-        'term_color'           => '#F3F4F6',
+        'term_color'           => '',
         'term_font_size'       => '15',
         'term_font_weight'     => '600',
-        'definition_color'     => '#9CA3AF',
+        'definition_color'     => '',
         'definition_font_size' => '14',
         'separator'            => true,
-        'border_color'         => '#374151',
+        'border_color'         => '',
         'spacing'              => '16',
         'striped'              => false,
         'striped_color'        => 'rgba(255,255,255,0.03)',
@@ -47,16 +47,16 @@ class Olo_DescList_Tile extends Olo_Tile_Base {
         $items = $this->parse_items( $s['items'] );
 
         if ( empty( $items ) ) {
-            return '<div class="olo-desclist" style="padding:20px;text-align:center;color:#6b7280;">Nessun elemento definito</div>';
+            return '<div class="olo-desclist" style="padding:20px;text-align:center;color:var(--olo-color-text-muted, #9CA3AF);">Nessun elemento definito</div>';
         }
 
         $uid    = 'mdl-' . wp_rand( 10000, 99999 );
         $layout = in_array( $s['layout'], [ 'stacked', 'inline', 'grid' ], true ) ? $s['layout'] : 'stacked';
 
-        $term_clr    = $this->safe_color( $s['term_color'] );
-        $def_clr     = $this->safe_color( $s['definition_color'] );
-        $brd_clr     = $this->safe_color( $s['border_color'] ) ?: '#374151';
-        $icon_clr    = $this->safe_color( $s['icon_color'] ) ?: '#6366F1';
+        $term_clr    = $this->safe_color_css( $s['term_color'] );
+        $def_clr     = $this->safe_color_css( $s['definition_color'] );
+        $brd_clr     = $this->safe_color_css( $s['border_color'] ) ?: 'var(--olo-color-border, #E5E7EB)';
+        $icon_clr    = $this->safe_color_css( $s['icon_color'] ) ?: 'var(--olo-color-primary, #6366F1)';
         $icon_size   = absint( $s['icon_size'] );
         $show_icon   = ! empty( $s['show_icon'] );
         $show_sep    = ! empty( $s['separator'] );
@@ -164,8 +164,8 @@ class Olo_DescList_Tile extends Olo_Tile_Base {
                             </span>
                         <?php endif; ?>
                         <div class="mdl-text">
-                            <dt class="mdl-term"><?php echo wp_kses_post( $item['term'] ); ?></dt>
-                            <dd class="mdl-def"><?php echo wp_kses_post( $item['definition'] ); ?></dd>
+                            <dt class="mdl-term"><?php echo esc_html( wp_strip_all_tags( $item['term'] ) ); ?></dt>
+                            <dd class="mdl-def"><?php echo nl2br( esc_html( wp_strip_all_tags( $item['definition'] ) ) ); ?></dd>
                         </div>
                     </div>
                 <?php elseif ( $layout === 'inline' ) : ?>
@@ -175,8 +175,8 @@ class Olo_DescList_Tile extends Olo_Tile_Base {
                                 <?php echo $this->render_icon( $icon, $icon_size ); ?>
                             </span>
                         <?php endif; ?>
-                        <dt class="mdl-term"><?php echo wp_kses_post( $item['term'] ); ?></dt>
-                        <dd class="mdl-def"><?php echo wp_kses_post( $item['definition'] ); ?></dd>
+                        <dt class="mdl-term"><?php echo esc_html( wp_strip_all_tags( $item['term'] ) ); ?></dt>
+                        <dd class="mdl-def"><?php echo nl2br( esc_html( wp_strip_all_tags( $item['definition'] ) ) ); ?></dd>
                     </div>
                 <?php elseif ( $layout === 'grid' ) : ?>
                     <div class="mdl-row">
@@ -185,8 +185,8 @@ class Olo_DescList_Tile extends Olo_Tile_Base {
                                 <?php echo $this->render_icon( $icon, $icon_size ); ?>
                             </span>
                         <?php endif; ?>
-                        <dt class="mdl-term"><?php echo wp_kses_post( $item['term'] ); ?></dt>
-                        <dd class="mdl-def"><?php echo wp_kses_post( $item['definition'] ); ?></dd>
+                        <dt class="mdl-term"><?php echo esc_html( wp_strip_all_tags( $item['term'] ) ); ?></dt>
+                        <dd class="mdl-def"><?php echo nl2br( esc_html( wp_strip_all_tags( $item['definition'] ) ) ); ?></dd>
                     </div>
                 <?php endif; ?>
             </div>

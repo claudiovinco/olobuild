@@ -2,7 +2,7 @@ export default {
   type: 'sitelogo',
   name: 'Logo sito',
   icon: 'dashicons-admin-home',
-  category: 'header',
+  category: 'navigation',
   defaults: {
     source: 'auto',
     custom_image: '',

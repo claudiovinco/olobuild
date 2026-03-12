@@ -12,6 +12,9 @@ abstract class Olo_Tile_Base {
     protected $category = 'general';
     protected $defaults = [];
 
+    /** Tracks whether the delegated-events footer script has been enqueued. */
+    private static $delegated_events_enqueued = false;
+
     public function get_type() {
         return $this->type;
     }
@@ -63,7 +66,8 @@ abstract class Olo_Tile_Base {
 
     /**
      * Return escaped color value or empty string.
-     * Use in scoped <style> blocks: only output the CSS rule if color is non-empty.
+     * Use in HTML attribute context (data-color="...").
+     * For CSS inline context (style="color:...") use safe_color_css() instead.
      */
     protected function safe_color( $value ) {
         $v = trim( (string) $value );
@@ -71,10 +75,48 @@ abstract class Olo_Tile_Base {
     }
 
     /**
+     * Validate and return a CSS-safe color value, or empty string.
+     * Use inside style="" attributes and <style> blocks.
+     * Prevents CSS injection by allowing only valid color formats.
+     */
+    protected function safe_color_css( $value ) {
+        $v = trim( (string) $value );
+        if ( $v === '' ) return '';
+        // Allow: #hex, rgb(), rgba(), hsl(), hsla(), CSS variables, named colors, transparent/inherit/initial/currentColor
+        if ( preg_match( '/^(#[0-9a-fA-F]{3,8}|rgba?\(\s*[\d\s,.%\/]+\)|hsla?\(\s*[\d\s,.%\/deg]+\)|var\(\s*--[\w-]+(?:\s*,\s*[^)]+)?\)|transparent|inherit|initial|currentColor|[a-zA-Z]{3,20})$/', $v ) ) {
+            return $v;
+        }
+        return '';
+    }
+
+    /**
      * Sanitize rich text from TipTap editor.
      * Strips block-level tags (<p>), converts rgb() colors to hex
      * (WordPress safecss_filter_attr doesn't support rgb()), then sanitizes.
      */
+    /**
+     * Render an icon — supports both UIkit icons and custom SVG icons.
+     * Custom icons are stored with prefix "custom:" and saved in olo_custom_icons option.
+     *
+     * @param string $icon_name  e.g. "star" or "custom:my-logo"
+     * @param float  $ratio      UIkit icon ratio (default 1)
+     * @param string $extra_attr Extra HTML attributes
+     * @return string  HTML for the icon
+     */
+    protected function render_icon_html( $icon_name, $ratio = 1, $extra_attr = '' ) {
+        if ( empty( $icon_name ) ) return '';
+        if ( strpos( $icon_name, 'custom:' ) === 0 ) {
+            $name = substr( $icon_name, 7 );
+            $icons = get_option( 'olo_custom_icons', [] );
+            if ( isset( $icons[ $name ] ) ) {
+                $size = round( 20 * $ratio );
+                return '<span class="olo-custom-icon" style="display:inline-flex;width:' . $size . 'px;height:' . $size . 'px;" ' . $extra_attr . '>' . $icons[ $name ] . '</span>';
+            }
+            return '';
+        }
+        return '<span ' . $extra_attr . ' uk-icon="icon: ' . esc_attr( $icon_name ) . '; ratio: ' . esc_attr( $ratio ) . '"></span>';
+    }
+
     /**
      * Wrap an image in a hover-media container for image swap / video on hover.
      *
@@ -97,7 +139,8 @@ abstract class Olo_Tile_Base {
 
         $vid_attrs = '';
         if ( ! empty( $hover_video ) ) {
-            $vid_attrs = " onmouseenter=\"var v=this.querySelector('.olo-hover-media video');if(v)v.play()\" onmouseleave=\"var v=this.querySelector('.olo-hover-media video');if(v){v.pause();v.currentTime=0}\"";
+            $vid_attrs = ' data-olo-hover-video="1"';
+            self::enqueue_delegated_events();
         }
 
         return '<div class="olo-hover-wrap"' . $vid_attrs . '>'
@@ -116,5 +159,54 @@ abstract class Olo_Tile_Base {
             $html
         );
         return wp_kses_post( $html );
+    }
+
+    /**
+     * Enqueue a single footer script that handles all delegated tile events.
+     * Replaces inline onmouseenter/onmouseleave/onclick handlers with
+     * data-attribute-based event delegation (CSP-friendly).
+     */
+    public static function enqueue_delegated_events() {
+        if ( self::$delegated_events_enqueued ) {
+            return;
+        }
+        self::$delegated_events_enqueued = true;
+        add_action( 'wp_footer', [ __CLASS__, 'print_delegated_events_script' ], 99 );
+    }
+
+    /**
+     * Print the delegated events script in the footer.
+     */
+    public static function print_delegated_events_script() {
+        ?>
+        <script>
+        (function(){
+            /* Hover video: play on mouseenter, pause+rewind on mouseleave */
+            document.addEventListener('mouseenter',function(e){
+                var el=e.target.closest('[data-olo-hover-video]');
+                if(!el)return;
+                var v=el.querySelector('.olo-hover-media video');
+                if(v)v.play();
+            },true);
+            document.addEventListener('mouseleave',function(e){
+                var el=e.target.closest('[data-olo-hover-video]');
+                if(!el)return;
+                var v=el.querySelector('.olo-hover-media video');
+                if(v){v.pause();v.currentTime=0}
+            },true);
+            /* ServiceVideo play button */
+            document.addEventListener('click',function(e){
+                var btn=e.target.closest('[data-olo-svid-play]');
+                if(!btn)return;
+                var wrap=btn.parentElement;
+                if(wrap){
+                    wrap.classList.add('olo-svid-playing');
+                    var v=wrap.querySelector('video');
+                    if(v)v.play();
+                }
+            },false);
+        })();
+        </script>
+        <?php
     }
 }

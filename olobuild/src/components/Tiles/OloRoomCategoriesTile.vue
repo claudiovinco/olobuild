@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3 style="font-size:18px;font-weight:700;color:#1f2937;margin:0 0 12px">Tipi di struttura</h3>
+    <h3 style="font-size:18px;font-weight:700;color:var(--olo-color-text, #374151);margin:0 0 12px">Tipi di struttura</h3>
     <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
       <div v-for="cat in categories" :key="cat.name" :style="{background:cat.bg,borderRadius:'10px',padding:'16px',textAlign:'center',color:'#fff'}">
         <div style="font-size:24px;margin-bottom:4px">{{ cat.icon }}</div>

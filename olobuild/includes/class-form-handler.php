@@ -6,8 +6,82 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Olo_Form_Handler {
 
+    /**
+     * Secret key used to sign form tokens (HMAC).
+     * Derived from WordPress AUTH_SALT for uniqueness per-site.
+     *
+     * NOTA: non includiamo user_id nel secret perché questo è un form pubblico
+     * (contact form) — gli utenti non loggati avrebbero sempre user_id = 0,
+     * rendendo inutile il binding per-session. Il token è protetto da:
+     * - HMAC con salt unico per sito (wp_salt)
+     * - Scadenza temporale (12h)
+     * - Rate limiting per IP (configurabile)
+     */
+    private static function get_token_secret() {
+        return wp_salt( 'auth' ) . '|olo_form_token';
+    }
+
+    /**
+     * Generate a time-limited token for a form.
+     * Token = timestamp:hmac(timestamp, secret)
+     * Valid for 12 hours.
+     */
+    public static function generate_token() {
+        $timestamp = time();
+        $hmac      = hash_hmac( 'sha256', (string) $timestamp, self::get_token_secret() );
+        return $timestamp . ':' . $hmac;
+    }
+
+    /**
+     * Validate a form token. Returns true if valid and not expired (12h).
+     */
+    private function validate_token( $token ) {
+        if ( empty( $token ) || ! is_string( $token ) ) {
+            return false;
+        }
+
+        $parts = explode( ':', $token, 2 );
+        if ( count( $parts ) !== 2 ) {
+            return false;
+        }
+
+        list( $timestamp, $hmac ) = $parts;
+        $timestamp = (int) $timestamp;
+
+        // Check expiration (12 hours)
+        if ( abs( time() - $timestamp ) > 12 * HOUR_IN_SECONDS ) {
+            return false;
+        }
+
+        // Verify HMAC
+        $expected = hash_hmac( 'sha256', (string) $timestamp, self::get_token_secret() );
+        return hash_equals( $expected, $hmac );
+    }
+
+    /**
+     * Get the client IP, checking proxy headers (sanitized) first.
+     */
+    private function get_client_ip() {
+        // Check X-Forwarded-For (first IP in the chain is the client)
+        if ( ! empty( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) {
+            $ips = explode( ',', $_SERVER['HTTP_X_FORWARDED_FOR'] );
+            $ip  = trim( $ips[0] );
+            if ( filter_var( $ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE ) ) {
+                return sanitize_text_field( $ip );
+            }
+        }
+
+        return sanitize_text_field( $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0' );
+    }
+
     public function init() {
         add_action( 'rest_api_init', [ $this, 'register_routes' ] );
+
+        // Schedule cleanup of old uploads (every day)
+        add_action( 'olo_cleanup_form_uploads', [ __CLASS__, 'cleanup_old_uploads' ] );
+        if ( ! wp_next_scheduled( 'olo_cleanup_form_uploads' ) ) {
+            wp_schedule_event( time(), 'daily', 'olo_cleanup_form_uploads' );
+        }
     }
 
     public function register_routes() {
@@ -16,15 +90,45 @@ class Olo_Form_Handler {
             'callback'            => [ $this, 'handle_submit' ],
             'permission_callback' => '__return_true', // Public endpoint (contact form)
         ] );
+
+        register_rest_route( 'olo/v1', '/submissions/export', [
+            'methods'             => 'GET',
+            'callback'            => [ $this, 'export_csv' ],
+            'permission_callback' => function () {
+                return current_user_can( 'manage_options' );
+            },
+            'args' => [
+                'form_id' => [
+                    'required' => false,
+                    'type'     => 'string',
+                ],
+            ],
+        ] );
     }
 
     /**
      * Handle form submission.
      */
     public function handle_submit( $request ) {
-        // 1. Decode form config
-        $config_raw = $request->get_param( '_olo_form_config' );
-        $config     = json_decode( base64_decode( $config_raw ), true );
+        // 1. Validate token (anti-CSRF / anti-replay)
+        $token = $request->get_param( '_olo_form_token' );
+        if ( ! $this->validate_token( $token ) ) {
+            return new WP_REST_Response( [
+                'success' => false,
+                'data'    => [ 'message' => 'Token non valido o scaduto. Ricarica la pagina e riprova.' ],
+            ], 403 );
+        }
+
+        // 2. Decode form config — validate base64 before json_decode
+        $config_raw    = $request->get_param( '_olo_form_config' );
+        $config_decoded = base64_decode( $config_raw, true ); // strict mode
+        if ( $config_decoded === false ) {
+            return new WP_REST_Response( [
+                'success' => false,
+                'data'    => [ 'message' => 'Configurazione form non valida.' ],
+            ], 400 );
+        }
+        $config = json_decode( $config_decoded, true );
         if ( ! is_array( $config ) ) {
             return new WP_REST_Response( [
                 'success' => false,
@@ -32,7 +136,7 @@ class Olo_Form_Handler {
             ], 400 );
         }
 
-        // 3. Honeypot check
+        // 3. Honeypot checks
         if ( ! empty( $config['honeypot'] ) ) {
             $honeypot_value = $request->get_param( 'olo_website_url' );
             if ( ! empty( $honeypot_value ) ) {
@@ -44,9 +148,19 @@ class Olo_Form_Handler {
             }
         }
 
+        // Secondary honeypot field (hidden field named olo_hp_field)
+        $hp_field_value = $request->get_param( 'olo_hp_field' );
+        if ( ! empty( $hp_field_value ) ) {
+            // Bot filled in the hidden field — silently reject
+            return new WP_REST_Response( [
+                'success' => true,
+                'data'    => [ 'message' => $config['success_message'] ?? 'Inviato!' ],
+            ], 200 );
+        }
+
         // 4. Rate limiting
         if ( ! empty( $config['rate_limit'] ) ) {
-            $ip       = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
+            $ip       = $this->get_client_ip();
             $key      = 'olo_form_rl_' . md5( $ip );
             $max      = absint( $config['rate_limit_max'] ?? 5 );
             $window   = absint( $config['rate_limit_window'] ?? 60 ) * MINUTE_IN_SECONDS;
@@ -60,6 +174,36 @@ class Olo_Form_Handler {
             }
 
             set_transient( $key, $count + 1, $window );
+        }
+
+        // 4b. reCAPTCHA v3 verification
+        if ( ! empty( $config['recaptcha_enabled'] ) ) {
+            $recaptcha_secret = get_option( 'olo_recaptcha_secret_key', '' );
+            $recaptcha_token  = sanitize_text_field( $request->get_param( '_olo_recaptcha_token' ) ?? '' );
+            if ( $recaptcha_secret ) {
+                if ( empty( $recaptcha_token ) ) {
+                    return new WP_REST_Response( [
+                        'success' => false,
+                        'data'    => [ 'message' => 'Verifica reCAPTCHA mancante. Ricarica la pagina.' ],
+                    ], 403 );
+                }
+                $verify = wp_remote_post( 'https://www.google.com/recaptcha/api/siteverify', [
+                    'body' => [
+                        'secret'   => $recaptcha_secret,
+                        'response' => $recaptcha_token,
+                        'remoteip' => $this->get_client_ip(),
+                    ],
+                ] );
+                if ( ! is_wp_error( $verify ) ) {
+                    $body = json_decode( wp_remote_retrieve_body( $verify ), true );
+                    if ( empty( $body['success'] ) || ( isset( $body['score'] ) && $body['score'] < 0.5 ) ) {
+                        return new WP_REST_Response( [
+                            'success' => false,
+                            'data'    => [ 'message' => 'Verifica anti-spam non superata. Riprova.' ],
+                        ], 403 );
+                    }
+                }
+            }
         }
 
         // 5. Get fields
@@ -80,6 +224,106 @@ class Olo_Form_Handler {
                 $sanitized[ $clean_key ] = array_map( 'sanitize_text_field', $value );
             } else {
                 $sanitized[ $clean_key ] = sanitize_textarea_field( $value );
+            }
+        }
+
+        // 6b. Handle file uploads
+        if ( ! empty( $_FILES ) ) {
+            require_once ABSPATH . 'wp-admin/includes/file.php';
+            require_once ABSPATH . 'wp-admin/includes/media.php';
+            require_once ABSPATH . 'wp-admin/includes/image.php';
+
+            // Ensure upload directory exists
+            $upload_dir = wp_upload_dir();
+            $olo_upload_path = $upload_dir['basedir'] . '/olobuild-uploads';
+            wp_mkdir_p( $olo_upload_path );
+
+            // Add .htaccess to prevent direct execution of uploaded files
+            $htaccess_path = $olo_upload_path . '/.htaccess';
+            if ( ! file_exists( $htaccess_path ) ) {
+                file_put_contents( $htaccess_path, "Options -ExecCGI\nAddHandler cgi-script .php .php3 .php4 .php5 .phtml .pl .py .jsp .asp .htm .shtml .sh .cgi\n<Files *.php>\ndeny from all\n</Files>" );
+            }
+
+            // Also add index.php for directory listing protection
+            $index_path = $olo_upload_path . '/index.php';
+            if ( ! file_exists( $index_path ) ) {
+                file_put_contents( $index_path, '<?php // Silence is golden.' );
+            }
+
+            // Global fallback settings
+            $global_max_size = absint( $config['file_max_size'] ?? 5 ) * 1024 * 1024;
+            $global_allowed  = array_map( 'trim', explode( ',', $config['file_types'] ?? '.pdf,.jpg,.png' ) );
+
+            foreach ( $_FILES as $file_key => $file_data ) {
+                // Handle both single and multiple file uploads
+                $is_multi = is_array( $file_data['name'] );
+                $files_to_process = [];
+
+                if ( $is_multi ) {
+                    for ( $fi = 0; $fi < count( $file_data['name'] ); $fi++ ) {
+                        if ( $file_data['error'][ $fi ] !== UPLOAD_ERR_OK ) {
+                            continue;
+                        }
+                        $files_to_process[] = [
+                            'name'     => $file_data['name'][ $fi ],
+                            'type'     => $file_data['type'][ $fi ],
+                            'tmp_name' => $file_data['tmp_name'][ $fi ],
+                            'error'    => $file_data['error'][ $fi ],
+                            'size'     => $file_data['size'][ $fi ],
+                        ];
+                    }
+                } else {
+                    if ( $file_data['error'] === UPLOAD_ERR_OK ) {
+                        $files_to_process[] = $file_data;
+                    }
+                }
+
+                $uploaded_urls = [];
+                foreach ( $files_to_process as $single_file ) {
+                    // Validate file size
+                    if ( $single_file['size'] > $global_max_size ) {
+                        continue;
+                    }
+
+                    // Validate file extension
+                    $ext = '.' . strtolower( pathinfo( $single_file['name'], PATHINFO_EXTENSION ) );
+                    if ( ! in_array( $ext, $global_allowed, true ) ) {
+                        continue;
+                    }
+
+                    // Validate MIME type matches extension
+                    $mime_check = wp_check_filetype( $single_file['name'] );
+                    if ( ! $mime_check['type'] ) {
+                        continue;
+                    }
+                    // Block dangerous file types regardless of extension
+                    $dangerous_mimes = [ 'application/x-httpd-php', 'application/x-php', 'text/x-php', 'application/x-executable', 'application/x-msdownload' ];
+                    $real_mime = '';
+                    if ( function_exists( 'mime_content_type' ) ) {
+                        $real_mime = mime_content_type( $single_file['tmp_name'] );
+                    }
+                    if ( $real_mime && in_array( $real_mime, $dangerous_mimes, true ) ) {
+                        continue;
+                    }
+
+                    // Sanitize filename
+                    $safe_name = wp_unique_filename( $olo_upload_path, sanitize_file_name( $single_file['name'] ) );
+                    $dest_path = $olo_upload_path . '/' . $safe_name;
+
+                    // Move uploaded file
+                    if ( move_uploaded_file( $single_file['tmp_name'], $dest_path ) ) {
+                        $file_url = $upload_dir['baseurl'] . '/olobuild-uploads/' . $safe_name;
+                        $uploaded_urls[] = esc_url_raw( $file_url );
+                    }
+                }
+
+                // Store in sanitized data
+                $clean_key = sanitize_key( str_replace( '[]', '', $file_key ) );
+                if ( count( $uploaded_urls ) === 1 ) {
+                    $sanitized[ $clean_key ] = $uploaded_urls[0];
+                } elseif ( count( $uploaded_urls ) > 1 ) {
+                    $sanitized[ $clean_key ] = $uploaded_urls;
+                }
             }
         }
 
@@ -126,7 +370,7 @@ class Olo_Form_Handler {
 
         $body_lines[] = '';
         $body_lines[] = str_repeat( '─', 40 );
-        $body_lines[] = 'IP: ' . ( $_SERVER['REMOTE_ADDR'] ?? 'N/A' );
+        $body_lines[] = 'IP: ' . $this->get_client_ip();
         $body_lines[] = 'Data: ' . wp_date( 'd/m/Y H:i:s' );
         $body_lines[] = 'Pagina: ' . wp_get_referer();
 
@@ -186,6 +430,76 @@ class Olo_Form_Handler {
             }
         }
 
+        // 11. Mailchimp integration
+        if ( ! empty( $config['mailchimp_enabled'] ) ) {
+            $this->send_to_mailchimp( $sanitized, $config );
+        }
+
+        // 12. Webhook integration
+        if ( ! empty( $config['webhook_enabled'] ) ) {
+            $this->send_webhook( $sanitized, $config );
+        }
+
+        // 12b. HubSpot integration
+        $hubspot_enabled = ! empty( $config['hubspot_enabled'] );
+        $hubspot_portal  = $config['hubspot_portal_id'] ?? '';
+        $hubspot_form    = $config['hubspot_form_guid'] ?? '';
+        if ( $hubspot_enabled ) {
+            if ( $hubspot_portal !== '' ) {
+                if ( $hubspot_form !== '' ) {
+                    $hubspot_fields = [];
+                    foreach ( $sanitized as $key => $value ) {
+                        if ( is_string( $value ) ) {
+                            $hubspot_fields[] = [
+                                'name'  => $key,
+                                'value' => $value,
+                            ];
+                        }
+                    }
+                    $hubspot_url = 'https://api.hsforms.com/submissions/v3/integration/submit/'
+                        . sanitize_text_field( $hubspot_portal ) . '/' . sanitize_text_field( $hubspot_form );
+                    $hubspot_body = [
+                        'fields'  => $hubspot_fields,
+                        'context' => [
+                            'pageUri'   => wp_get_referer(),
+                            'pageName'  => get_the_title(),
+                            'ipAddress' => $this->get_client_ip(),
+                        ],
+                    ];
+                    wp_remote_post( $hubspot_url, [
+                        'headers' => [ 'Content-Type' => 'application/json' ],
+                        'body'    => wp_json_encode( $hubspot_body ),
+                        'timeout' => 10,
+                    ] );
+                }
+            }
+        }
+
+        // 12c. ActiveCampaign integration
+        if ( ! empty( $config['activecampaign_enabled'] ) ) {
+            $this->send_to_activecampaign( $sanitized, $config );
+        }
+
+        // 12d. ConvertKit integration
+        if ( ! empty( $config['convertkit_enabled'] ) ) {
+            $this->send_to_convertkit( $sanitized, $config );
+        }
+
+        // 12e. Brevo (Sendinblue) integration
+        if ( ! empty( $config['brevo_enabled'] ) ) {
+            $this->send_to_brevo( $sanitized, $config );
+        }
+
+        // 13. Store submission in database if enabled
+        $form_id = sanitize_text_field( $request->get_param( '_olo_form_id' ) ?? '' );
+        $this->store_submission( $form_id, $sanitized, $config );
+
+        // 14. Store in form submissions dashboard table
+        if ( class_exists( 'Olo_Form_Submissions' ) ) {
+            $form_name = $form_id ?: sanitize_text_field( $config['email_subject'] ?? 'Form' );
+            Olo_Form_Submissions::save_submission( $form_name, $sanitized, $this->get_client_ip() );
+        }
+
         if ( $sent ) {
             return new WP_REST_Response( [
                 'success' => true,
@@ -200,5 +514,343 @@ class Olo_Form_Handler {
             'success' => false,
             'data'    => [ 'message' => $config['error_message'] ?? 'Errore durante l\'invio. Riprova.' ],
         ], 500 );
+    }
+
+    /**
+     * Store form submission in the database if enabled.
+     */
+    private function store_submission( $form_id, $data, $form_settings ) {
+        if ( empty( $form_settings['store_submissions'] ) ) {
+            return;
+        }
+
+        global $wpdb;
+        $table = $wpdb->prefix . 'olo_submissions';
+
+        $wpdb->insert( $table, [
+            'form_id'    => sanitize_text_field( $form_id ),
+            'data'       => wp_json_encode( $data ),
+            'ip_address' => $this->get_client_ip(),
+            'created_at' => current_time( 'mysql' ),
+        ], [ '%s', '%s', '%s', '%s' ] );
+    }
+
+    /**
+     * Send subscriber to Mailchimp via API v3.
+     */
+    private function send_to_mailchimp( $form_data, $config ) {
+        $api_key = get_option( 'olo_mailchimp_api_key', '' );
+        $list_id = sanitize_text_field( $config['mailchimp_list_id'] ?? '' );
+        if ( empty( $api_key ) || empty( $list_id ) ) {
+            return;
+        }
+
+        // Extract data center from API key (last part after dash)
+        $dc = '';
+        if ( strpos( $api_key, '-' ) !== false ) {
+            $dc = substr( $api_key, strpos( $api_key, '-' ) + 1 );
+        }
+        if ( empty( $dc ) ) {
+            return;
+        }
+
+        // Get email from form data
+        $email_field = sanitize_key( $config['mailchimp_email_field'] ?? 'email' );
+        $email       = sanitize_email( $form_data[ $email_field ] ?? '' );
+        if ( empty( $email ) ) {
+            return;
+        }
+
+        // Parse merge fields mapping (format: field_name=MERGE_TAG per line)
+        $merge_fields = [];
+        $mapping_raw  = $config['mailchimp_merge_fields'] ?? '';
+        if ( $mapping_raw ) {
+            $lines = array_filter( array_map( 'trim', explode( "\n", $mapping_raw ) ) );
+            foreach ( $lines as $line ) {
+                $parts = explode( '=', $line, 2 );
+                if ( count( $parts ) === 2 ) {
+                    $field_name = sanitize_key( trim( $parts[0] ) );
+                    $merge_tag  = strtoupper( trim( $parts[1] ) );
+                    if ( isset( $form_data[ $field_name ] ) ) {
+                        $val = $form_data[ $field_name ];
+                        $merge_fields[ $merge_tag ] = is_array( $val ) ? implode( ', ', $val ) : $val;
+                    }
+                }
+            }
+        }
+
+        $body = [
+            'email_address' => $email,
+            'status_if_new' => 'subscribed',
+            'status'        => 'subscribed',
+        ];
+        if ( ! empty( $merge_fields ) ) {
+            $body['merge_fields'] = $merge_fields;
+        }
+
+        $url = "https://{$dc}.api.mailchimp.com/3.0/lists/{$list_id}/members/" . md5( strtolower( $email ) );
+
+        wp_remote_request( $url, [
+            'method'  => 'PUT',
+            'headers' => [
+                'Authorization' => 'Basic ' . base64_encode( 'anystring:' . $api_key ),
+                'Content-Type'  => 'application/json',
+            ],
+            'body'    => wp_json_encode( $body ),
+            'timeout' => 10,
+        ] );
+    }
+
+    /**
+     * Send form data to external webhook.
+     */
+    private function send_webhook( $form_data, $config ) {
+        $url    = esc_url_raw( $config['webhook_url'] ?? '' );
+        $method = in_array( $config['webhook_method'] ?? 'POST', [ 'POST', 'PUT' ], true ) ? $config['webhook_method'] : 'POST';
+
+        if ( empty( $url ) ) {
+            return;
+        }
+
+        wp_remote_request( $url, [
+            'method'  => $method,
+            'headers' => [
+                'Content-Type' => 'application/json',
+            ],
+            'body'    => wp_json_encode( [
+                'form_data'  => $form_data,
+                'submitted'  => current_time( 'c' ),
+                'site'       => get_bloginfo( 'name' ),
+                'page'       => wp_get_referer(),
+                'ip'         => $this->get_client_ip(),
+            ] ),
+            'timeout' => 10,
+        ] );
+    }
+
+    /**
+     * Send contact to ActiveCampaign via API v3.
+     */
+    private function send_to_activecampaign( $form_data, $config ) {
+        $api_url = rtrim( get_option( 'olo_activecampaign_url', '' ), '/' );
+        $api_key = get_option( 'olo_activecampaign_key', '' );
+        $list_id = sanitize_text_field( $config['activecampaign_list_id'] ?? '' );
+
+        if ( empty( $api_url ) || empty( $api_key ) ) return;
+
+        $email_field = sanitize_key( $config['activecampaign_email_field'] ?? 'email' );
+        $email = sanitize_email( $form_data[ $email_field ] ?? '' );
+        if ( empty( $email ) ) return;
+
+        $contact = [ 'email' => $email ];
+        if ( ! empty( $form_data['first_name'] ) ) $contact['firstName'] = $form_data['first_name'];
+        if ( ! empty( $form_data['last_name'] ) )  $contact['lastName']  = $form_data['last_name'];
+        if ( ! empty( $form_data['name'] ) ) {
+            $parts = explode( ' ', $form_data['name'], 2 );
+            $contact['firstName'] = $parts[0];
+            if ( isset( $parts[1] ) ) $contact['lastName'] = $parts[1];
+        }
+        if ( ! empty( $form_data['phone'] ) ) $contact['phone'] = $form_data['phone'];
+
+        // Create/update contact
+        $response = wp_remote_post( $api_url . '/api/3/contact/sync', [
+            'headers' => [
+                'Api-Token'    => $api_key,
+                'Content-Type' => 'application/json',
+            ],
+            'body'    => wp_json_encode( [ 'contact' => $contact ] ),
+            'timeout' => 10,
+        ] );
+
+        // Add to list if list_id provided
+        if ( ! is_wp_error( $response ) && ! empty( $list_id ) ) {
+            $body = json_decode( wp_remote_retrieve_body( $response ), true );
+            $contact_id = $body['contact']['id'] ?? null;
+            if ( $contact_id ) {
+                wp_remote_post( $api_url . '/api/3/contactLists', [
+                    'headers' => [
+                        'Api-Token'    => $api_key,
+                        'Content-Type' => 'application/json',
+                    ],
+                    'body'    => wp_json_encode( [ 'contactList' => [ 'list' => (int) $list_id, 'contact' => (int) $contact_id, 'status' => 1 ] ] ),
+                    'timeout' => 10,
+                ] );
+            }
+        }
+    }
+
+    /**
+     * Send subscriber to ConvertKit via API v3.
+     */
+    private function send_to_convertkit( $form_data, $config ) {
+        $api_key = get_option( 'olo_convertkit_key', '' );
+        $form_id = sanitize_text_field( $config['convertkit_form_id'] ?? '' );
+
+        if ( empty( $api_key ) || empty( $form_id ) ) return;
+
+        $email_field = sanitize_key( $config['convertkit_email_field'] ?? 'email' );
+        $email = sanitize_email( $form_data[ $email_field ] ?? '' );
+        if ( empty( $email ) ) return;
+
+        $body = [
+            'api_key'    => $api_key,
+            'email'      => $email,
+        ];
+        if ( ! empty( $form_data['first_name'] ) ) $body['first_name'] = $form_data['first_name'];
+        if ( ! empty( $form_data['name'] ) ) {
+            $body['first_name'] = explode( ' ', $form_data['name'] )[0];
+        }
+
+        wp_remote_post( "https://api.convertkit.com/v3/forms/{$form_id}/subscribe", [
+            'headers' => [ 'Content-Type' => 'application/json' ],
+            'body'    => wp_json_encode( $body ),
+            'timeout' => 10,
+        ] );
+    }
+
+    /**
+     * Send contact to Brevo (Sendinblue) via API v3.
+     */
+    private function send_to_brevo( $form_data, $config ) {
+        $api_key = get_option( 'olo_brevo_key', '' );
+        $list_id = (int) ( $config['brevo_list_id'] ?? 0 );
+
+        if ( empty( $api_key ) ) return;
+
+        $email_field = sanitize_key( $config['brevo_email_field'] ?? 'email' );
+        $email = sanitize_email( $form_data[ $email_field ] ?? '' );
+        if ( empty( $email ) ) return;
+
+        $body = [ 'email' => $email, 'updateEnabled' => true ];
+        $attrs = [];
+        if ( ! empty( $form_data['first_name'] ) ) $attrs['FIRSTNAME'] = $form_data['first_name'];
+        if ( ! empty( $form_data['last_name'] ) )  $attrs['LASTNAME']  = $form_data['last_name'];
+        if ( ! empty( $form_data['name'] ) ) {
+            $parts = explode( ' ', $form_data['name'], 2 );
+            $attrs['FIRSTNAME'] = $parts[0];
+            if ( isset( $parts[1] ) ) $attrs['LASTNAME'] = $parts[1];
+        }
+        if ( ! empty( $attrs ) ) $body['attributes'] = $attrs;
+        if ( $list_id > 0 ) $body['listIds'] = [ $list_id ];
+
+        wp_remote_post( 'https://api.brevo.com/v3/contacts', [
+            'headers' => [
+                'api-key'      => $api_key,
+                'Content-Type' => 'application/json',
+            ],
+            'body'    => wp_json_encode( $body ),
+            'timeout' => 10,
+        ] );
+    }
+
+    /**
+     * Clean up uploaded files older than 30 days.
+     * Runs via WP-Cron daily.
+     */
+    public static function cleanup_old_uploads() {
+        $upload_dir = wp_upload_dir();
+        $olo_dir    = $upload_dir['basedir'] . '/olobuild-uploads';
+
+        if ( ! is_dir( $olo_dir ) ) {
+            return;
+        }
+
+        $max_age = 30 * DAY_IN_SECONDS;
+        $now     = time();
+        $files   = glob( $olo_dir . '/*' );
+
+        if ( ! is_array( $files ) ) {
+            return;
+        }
+
+        foreach ( $files as $file ) {
+            if ( is_file( $file ) ) {
+                $basename = basename( $file );
+                // Skip .htaccess and index.php
+                if ( $basename === '.htaccess' ) { continue; }
+                if ( $basename === 'index.php' ) { continue; }
+
+                if ( ( $now - filemtime( $file ) ) > $max_age ) {
+                    @unlink( $file );
+                }
+            }
+        }
+    }
+
+    /**
+     * Export submissions as CSV (REST endpoint).
+     */
+    public function export_csv( $request ) {
+        global $wpdb;
+        $table   = $wpdb->prefix . 'olo_submissions';
+        $form_id = sanitize_text_field( $request->get_param( 'form_id' ) ?? '' );
+
+        if ( $form_id ) {
+            $rows = $wpdb->get_results(
+                $wpdb->prepare( "SELECT * FROM $table WHERE form_id = %s ORDER BY created_at DESC", $form_id ),
+                ARRAY_A
+            );
+        } else {
+            $rows = $wpdb->get_results( "SELECT * FROM $table ORDER BY created_at DESC", ARRAY_A );
+        }
+
+        if ( empty( $rows ) ) {
+            return new WP_REST_Response( [
+                'success' => false,
+                'data'    => [ 'message' => 'Nessuna submission trovata.' ],
+            ], 404 );
+        }
+
+        // Collect all field keys across all submissions
+        $all_keys = [];
+        $decoded_rows = [];
+        foreach ( $rows as $row ) {
+            $fields = json_decode( $row['data'], true );
+            if ( ! is_array( $fields ) ) {
+                $fields = [];
+            }
+            $decoded_rows[] = [
+                'id'         => $row['id'],
+                'form_id'    => $row['form_id'],
+                'fields'     => $fields,
+                'ip_address' => $row['ip_address'],
+                'created_at' => $row['created_at'],
+            ];
+            foreach ( array_keys( $fields ) as $k ) {
+                if ( ! in_array( $k, $all_keys, true ) ) {
+                    $all_keys[] = $k;
+                }
+            }
+        }
+
+        // Build CSV
+        header( 'Content-Type: text/csv; charset=UTF-8' );
+        header( 'Content-Disposition: attachment; filename="submissions-' . ( $form_id ?: 'all' ) . '.csv"' );
+
+        $out = fopen( 'php://output', 'w' );
+        // BOM for Excel UTF-8
+        fwrite( $out, "\xEF\xBB\xBF" );
+
+        // Header row
+        $header = array_merge( [ 'ID', 'Form ID' ], array_map( 'ucfirst', $all_keys ), [ 'IP', 'Data' ] );
+        fputcsv( $out, $header, ';' );
+
+        // Data rows
+        foreach ( $decoded_rows as $dr ) {
+            $row_data = [ $dr['id'], $dr['form_id'] ];
+            foreach ( $all_keys as $k ) {
+                $val = $dr['fields'][ $k ] ?? '';
+                if ( is_array( $val ) ) {
+                    $val = implode( ', ', $val );
+                }
+                $row_data[] = $val;
+            }
+            $row_data[] = $dr['ip_address'];
+            $row_data[] = $dr['created_at'];
+            fputcsv( $out, $row_data, ';' );
+        }
+
+        fclose( $out );
+        exit;
     }
 }

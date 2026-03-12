@@ -1,11 +1,11 @@
 <template>
   <div>
-    <h3 style="font-size:18px;font-weight:700;color:#1f2937;margin:0 0 12px">Sale nella stessa zona</h3>
+    <h3 style="font-size:18px;font-weight:700;color:var(--olo-color-text, #374151);margin:0 0 12px">Sale nella stessa zona</h3>
     <div :style="gridStyle">
       <div v-for="room in rooms" :key="room.name" style="border:1px solid #e5e7eb;border-radius:10px;overflow:hidden">
         <div :style="{height:'100px',background:room.bg}"></div>
         <div style="padding:10px">
-          <div style="font-size:14px;font-weight:600;color:#1f2937">{{ room.name }}</div>
+          <div style="font-size:14px;font-weight:600;color:var(--olo-color-text, #374151)">{{ room.name }}</div>
           <div style="font-size:12px;color:#6b7280;margin-top:2px">{{ room.info }}</div>
         </div>
       </div>

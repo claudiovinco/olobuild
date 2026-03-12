@@ -1,0 +1,240 @@
+<template>
+  <div class="olo-carousel" style="position:relative;">
+    <!-- Track -->
+    <div class="olo-carousel-track" :style="trackStyle">
+      <div
+        v-for="(slide, i) in visibleSlides"
+        :key="slide.id || i"
+        class="olo-carousel-slide"
+        :style="slideStyle"
+      >
+        <img
+          v-if="slide.image_url"
+          :src="slide.image_url"
+          :alt="slide.image_alt || ''"
+          :style="imgStyle"
+        />
+        <div v-else :style="{ ...placeholderStyle, color: 'var(--olo-color-text-muted, #9CA3AF)' }">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="3" y="3" width="18" height="18" rx="2" />
+            <circle cx="8.5" cy="8.5" r="1.5" />
+            <path d="m21 15-5-5L5 21" />
+          </svg>
+        </div>
+        <!-- Caption -->
+        <div
+          v-if="s.show_caption && slide.caption"
+          :style="captionStyle"
+          :data-olo-editable="`slides.${i}.caption`"
+        >
+          {{ slide.caption }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Arrows -->
+    <template v-if="s.show_arrows && slides.length > slidesToShow">
+      <button class="olo-carousel-arrow olo-carousel-prev" :style="arrowStyle" aria-label="Precedente" @click="prevSlide">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <button class="olo-carousel-arrow olo-carousel-next" :style="arrowStyle" aria-label="Successivo" @click="nextSlide">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </template>
+
+    <!-- Dots -->
+    <div v-if="s.show_dots && slides.length > slidesToShow" class="olo-carousel-dots" :style="dotsWrapStyle">
+      <span
+        v-for="(_, i) in dotCount"
+        :key="i"
+        class="olo-carousel-dot"
+        :style="dotStyle(i)"
+      ></span>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { computed, ref } from 'vue';
+
+const props = defineProps({
+  settings: { type: Object, default: () => ({}) },
+  tileId: { type: String, default: '' },
+});
+
+const defaults = {
+  slides_to_show: '3',
+  gap: '16',
+  autoplay: false,
+  autoplay_speed: '4000',
+  show_arrows: true,
+  show_dots: true,
+  loop: true,
+  pause_on_hover: true,
+  slide_height: 'auto',
+  fixed_height: '300',
+  border_radius: '8',
+  arrow_color: '#FFFFFF',
+  arrow_bg: 'rgba(0,0,0,0.5)',
+  dot_color: 'var(--olo-color-primary, #6366F1)',
+  dot_inactive_color: 'var(--olo-color-border, #E5E7EB)',
+  show_caption: false,
+  caption_color: '#FFFFFF',
+  caption_bg: 'rgba(0,0,0,0.6)',
+  object_fit: 'cover',
+  mobile_slides: '1',
+};
+
+const s = computed(() => ({ ...defaults, ...props.settings }));
+
+const slides = computed(() => {
+  const raw = s.value.slides;
+  if (Array.isArray(raw) && raw.length) return raw;
+  return [
+    { id: 'ph-1', image_url: '', image_alt: '', caption: '' },
+    { id: 'ph-2', image_url: '', image_alt: '', caption: '' },
+    { id: 'ph-3', image_url: '', image_alt: '', caption: '' },
+  ];
+});
+
+const slidesToShow = computed(() => Math.max(1, Math.min(6, parseInt(s.value.slides_to_show) || 3)));
+const gap = computed(() => parseInt(s.value.gap) || 16);
+const radius = computed(() => (v => isNaN(v) ? 8 : v)(parseInt(s.value.border_radius)));
+
+const currentOffset = ref(0);
+const visibleSlides = computed(() => {
+  const start = currentOffset.value;
+  const end = start + slidesToShow.value;
+  return slides.value.slice(start, end);
+});
+
+function nextSlide() {
+  if (currentOffset.value + slidesToShow.value < slides.value.length) currentOffset.value++;
+  else if (s.value.loop) currentOffset.value = 0;
+}
+function prevSlide() {
+  if (currentOffset.value > 0) currentOffset.value--;
+  else if (s.value.loop) currentOffset.value = Math.max(0, slides.value.length - slidesToShow.value);
+}
+
+const dotCount = computed(() => Math.max(1, Math.ceil(slides.value.length / slidesToShow.value)));
+
+const trackStyle = computed(() => ({
+  display: 'flex',
+  gap: gap.value + 'px',
+  overflow: 'hidden',
+}));
+
+const slideStyle = computed(() => {
+  const n = slidesToShow.value;
+  const g = gap.value;
+  return {
+    flex: `0 0 calc((100% - ${g * (n - 1)}px) / ${n})`,
+    minWidth: '0',
+    position: 'relative',
+    borderRadius: radius.value + 'px',
+    overflow: 'hidden',
+  };
+});
+
+const imgStyle = computed(() => {
+  const st = {
+    width: '100%',
+    display: 'block',
+    objectFit: s.value.object_fit || 'cover',
+    borderRadius: radius.value + 'px',
+  };
+  if (s.value.slide_height === 'fixed') {
+    st.height = (parseInt(s.value.fixed_height) || 300) + 'px';
+  } else {
+    st.height = 'auto';
+    st.aspectRatio = '16/10';
+  }
+  return st;
+});
+
+const placeholderStyle = computed(() => {
+  const st = {
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    background: 'var(--olo-color-muted, #F3F4F6)',
+    borderRadius: radius.value + 'px',
+  };
+  if (s.value.slide_height === 'fixed') {
+    st.height = (parseInt(s.value.fixed_height) || 300) + 'px';
+  } else {
+    st.aspectRatio = '16/10';
+  }
+  return st;
+});
+
+const arrowStyle = computed(() => ({
+  color: s.value.arrow_color || '#FFFFFF',
+  background: s.value.arrow_bg || 'rgba(0,0,0,0.5)',
+}));
+
+const dotsWrapStyle = computed(() => ({
+  display: 'flex',
+  justifyContent: 'center',
+  gap: '8px',
+  marginTop: '12px',
+}));
+
+function dotStyle(index) {
+  return {
+    width: '10px',
+    height: '10px',
+    borderRadius: '50%',
+    background: index === currentOffset.value ? (s.value.dot_color || 'var(--olo-color-primary, #6366F1)') : (s.value.dot_inactive_color || 'var(--olo-color-border, #E5E7EB)'),
+    transition: 'background 0.2s',
+  };
+}
+
+const captionStyle = computed(() => ({
+  position: 'absolute',
+  bottom: '0',
+  left: '0',
+  right: '0',
+  padding: '6px 10px',
+  fontSize: '12px',
+  color: s.value.caption_color || '#FFFFFF',
+  background: s.value.caption_bg || 'rgba(0,0,0,0.6)',
+  borderRadius: `0 0 ${radius.value}px ${radius.value}px`,
+}));
+</script>
+
+<style scoped>
+.olo-carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  transition: opacity 0.2s;
+}
+
+.olo-carousel-arrow:hover {
+  opacity: 0.85;
+}
+
+.olo-carousel-prev {
+  left: 8px;
+}
+
+.olo-carousel-next {
+  right: 8px;
+}
+</style>

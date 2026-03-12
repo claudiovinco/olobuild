@@ -9,7 +9,7 @@ class Olo_SwitcherPanel_Tile extends Olo_Tile_Base {
     protected $type     = 'switcherpanel';
     protected $name     = 'Switcher Panel';
     protected $icon     = 'dashicons-images-alt';
-    protected $category = 'content';
+    protected $category = 'interactive';
     protected $defaults = [
         'items' => [
             [ 'id' => 'sp-1', 'nav_label' => 'About Us', 'title' => 'About Us', 'text' => 'Lorem ipsum dolor sit amet.', 'button_text' => 'READ MORE', 'button_url' => '#', 'image' => '' ],
@@ -105,8 +105,8 @@ class Olo_SwitcherPanel_Tile extends Olo_Tile_Base {
                     <div class="olo-sp-panel uk-grid-medium <?php echo $img_position === 'left' ? 'uk-flex-row-reverse' : ''; ?>" uk-grid>
                         <div class="uk-width-expand">
                             <div class="olo-sp-panel-body">
-                                <<?php echo $title_tag; ?> class="olo-sp-panel__title"><?php echo wp_kses_post( $item['title'] ); ?></<?php echo $title_tag; ?>>
-                                <div class="olo-sp-panel__text"><?php echo wp_kses_post( $item['text'] ); ?></div>
+                                <<?php echo $title_tag; ?> class="olo-sp-panel__title"><?php echo esc_html( wp_strip_all_tags( $item['title'] ) ); ?></<?php echo $title_tag; ?>>
+                                <div class="olo-sp-panel__text"><?php echo nl2br( esc_html( wp_strip_all_tags( $item['text'] ) ) ); ?></div>
                                 <?php if ( ! empty( $item['button_text'] ) ) : ?>
                                     <a href="<?php echo esc_url( $item['button_url'] ); ?>" class="<?php echo esc_attr( $btn_class ); ?>">
                                         <?php echo esc_html( $item['button_text'] ); ?>

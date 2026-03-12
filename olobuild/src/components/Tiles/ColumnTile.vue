@@ -12,10 +12,19 @@
 import { computed } from 'vue';
 import { useTilesStore } from '@/stores/tiles';
 
+const defaults = {
+  width_default: '',
+  width_small: '',
+  width_medium: '',
+  width_large: '',
+};
+
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
   tileId: { type: String, default: '' },
 });
+
+const s = computed(() => ({ ...defaults, ...props.settings }));
 
 const tilesStore = useTilesStore();
 

@@ -32,7 +32,7 @@
               <!-- Marker -->
               <div :style="markerStyle(item, i)" class="olo-tl-marker">
                 <template v-if="s.marker_type === 'icon' && item.icon">
-                  <span :uk-icon="'icon: ' + item.icon" :style="{ color: item.icon_color || s.marker_color || '#6366F1' }"></span>
+                  <span :uk-icon="'icon: ' + item.icon" :style="{ color: item.icon_color || s.marker_color || 'var(--olo-color-primary, #6366F1)' }"></span>
                 </template>
                 <template v-else-if="s.marker_type === 'number'">
                   {{ i + 1 }}
@@ -45,13 +45,13 @@
                   <iframe v-else-if="isEmbedVideo(item.video)" :src="getEmbedUrl(item.video)" :style="mediaInnerStyle" frameborder="0" allow="autoplay" allowfullscreen></iframe>
                   <video v-else-if="item.video" :src="item.video" :style="mediaInnerStyle" controls preload="metadata"></video>
                 </div>
-                <div v-if="item.date && s.date_position === 'above'" :style="dateStyle" style="margin-bottom:4px">{{ item.date }}</div>
-                <div v-if="item.date && s.date_position === 'inside'" :style="dateStyle" style="margin-bottom:4px">{{ item.date }}</div>
-                <h4 :style="titleStyle" v-html="item.title || 'Titolo'"></h4>
-                <div :style="descStyle" v-html="item.description || ''"></div>
+                <div v-if="item.date && s.date_position === 'above'" :style="dateStyle" style="margin-bottom:4px" :data-olo-editable="'items.' + i + '.date'">{{ item.date }}</div>
+                <div v-if="item.date && s.date_position === 'inside'" :style="dateStyle" style="margin-bottom:4px" :data-olo-editable="'items.' + i + '.date'">{{ item.date }}</div>
+                <h4 :style="titleStyle" :data-olo-editable="'items.' + i + '.title'">{{ item.title || 'Titolo' }}</h4>
+                <div :style="{ ...descStyle, whiteSpace: 'pre-wrap' }" :data-olo-editable="'items.' + i + '.description'" data-olo-multiline>{{ item.description || '' }}</div>
               </div>
               <!-- Date below marker -->
-              <div v-if="item.date && s.date_position === 'outside'" :style="dateStyle" style="margin-top:8px;text-align:center">
+              <div v-if="item.date && s.date_position === 'outside'" :style="dateStyle" style="margin-top:8px;text-align:center" :data-olo-editable="'items.' + i + '.date'">
                 {{ item.date }}
               </div>
             </div>
@@ -78,14 +78,14 @@
             class="olo-tl-v-date"
             :style="vDateWrapStyle(i)"
           >
-            <span v-if="item.date && s.date_position === 'outside'" :style="dateStyle">{{ item.date }}</span>
+            <span v-if="item.date && s.date_position === 'outside'" :style="dateStyle" :data-olo-editable="'items.' + i + '.date'">{{ item.date }}</span>
           </div>
 
           <!-- Marker -->
           <div class="olo-tl-v-marker" :style="vMarkerWrapStyle">
             <div :style="markerStyle(item, i)" class="olo-tl-marker">
               <template v-if="s.marker_type === 'icon' && item.icon">
-                <span :uk-icon="'icon: ' + item.icon" :style="{ color: item.icon_color || s.marker_color || '#6366F1' }"></span>
+                <span :uk-icon="'icon: ' + item.icon" :style="{ color: item.icon_color || s.marker_color || 'var(--olo-color-primary, #6366F1)' }"></span>
               </template>
               <template v-else-if="s.marker_type === 'number'">
                 {{ i + 1 }}
@@ -95,7 +95,7 @@
 
           <!-- Card -->
           <div class="olo-tl-v-card" :style="vCardWrapStyle(i)">
-            <div v-if="item.date && s.date_position === 'above'" :style="dateStyle" style="margin-bottom:6px">{{ item.date }}</div>
+            <div v-if="item.date && s.date_position === 'above'" :style="dateStyle" style="margin-bottom:6px" :data-olo-editable="'items.' + i + '.date'">{{ item.date }}</div>
             <div :style="cardStyle" class="olo-tl-card">
               <!-- Arrow -->
               <div v-if="s.card_arrow" :style="cardArrowStyle(i)" class="olo-tl-card-arrow"></div>
@@ -105,12 +105,12 @@
                 <iframe v-else-if="isEmbedVideo(item.video)" :src="getEmbedUrl(item.video)" :style="mediaInnerStyle" frameborder="0" allow="autoplay" allowfullscreen></iframe>
                 <video v-else-if="item.video" :src="item.video" :style="mediaInnerStyle" controls preload="metadata"></video>
               </div>
-              <div v-if="item.date && s.date_position === 'inside'" :style="dateStyle" style="margin-bottom:4px">{{ item.date }}</div>
-              <h4 :style="titleStyle" v-html="item.title || 'Titolo'"></h4>
-              <div :style="descStyle" v-html="item.description || ''"></div>
+              <div v-if="item.date && s.date_position === 'inside'" :style="dateStyle" style="margin-bottom:4px" :data-olo-editable="'items.' + i + '.date'">{{ item.date }}</div>
+              <h4 :style="titleStyle" :data-olo-editable="'items.' + i + '.title'">{{ item.title || 'Titolo' }}</h4>
+              <div :style="{ ...descStyle, whiteSpace: 'pre-wrap' }" :data-olo-editable="'items.' + i + '.description'" data-olo-multiline>{{ item.description || '' }}</div>
             </div>
             <!-- Date outside for non-center layouts -->
-            <div v-if="!isCenter && item.date && s.date_position === 'outside'" :style="dateStyle" style="margin-top:6px">
+            <div v-if="!isCenter && item.date && s.date_position === 'outside'" :style="dateStyle" style="margin-top:6px" :data-olo-editable="'items.' + i + '.date'">
               {{ item.date }}
             </div>
           </div>
@@ -138,7 +138,52 @@ const props = defineProps({
   settings: { type: Object, default: () => ({}) },
 });
 
-const s = computed(() => props.settings);
+const defaults = {
+  layout: 'vertical-center',
+  line_color: 'var(--olo-color-border, #E5E7EB)',
+  line_width: '3',
+  line_style: 'solid',
+  marker_type: 'dot',
+  marker_size: '20',
+  marker_color: 'var(--olo-color-primary, #6366F1)',
+  marker_bg: 'var(--olo-color-background, #FFFFFF)',
+  marker_border_width: '3',
+  marker_border_color: 'var(--olo-color-primary, #6366F1)',
+  marker_shape: 'circle',
+  end_marker: true,
+  end_marker_icon: 'flag',
+  end_marker_color: '',
+  end_marker_bg: '',
+  end_marker_size: '',
+  card_bg: 'var(--olo-color-background, #FFFFFF)',
+  card_text_color: 'var(--olo-color-text, #374151)',
+  card_padding: '20',
+  card_border_radius: '12',
+  card_shadow: 'md',
+  card_border_width: '0',
+  card_border_color: 'var(--olo-color-border, #E5E7EB)',
+  card_hover: 'lift',
+  card_arrow: true,
+  card_max_width: '',
+  card_media_ratio: 'auto',
+  card_media_margin: '0',
+  card_media_radius: '4',
+  date_position: 'outside',
+  date_color: '#9CA3AF',
+  date_size: '14',
+  date_weight: '600',
+  title_size: '18',
+  title_weight: '600',
+  title_color: '',
+  description_size: '14',
+  description_color: '',
+  h_card_width: '300',
+  h_visible_items: '3',
+  h_gap: '24',
+  h_arrow_color: 'var(--olo-color-text, #374151)',
+  h_arrow_bg: 'var(--olo-color-muted, #F3F4F6)',
+};
+const s = computed(() => ({ ...defaults, ...props.settings }));
 
 const items = computed(() => {
   const raw = s.value.items;
@@ -179,8 +224,8 @@ function markerStyle(item, i) {
     flexShrink: '0',
     fontSize: (size * 0.45) + 'px',
     fontWeight: '700',
-    color: item.icon_color || s.value.marker_color || '#6366F1',
-    background: s.value.marker_bg || '#1e1e2e',
+    color: item.icon_color || s.value.marker_color || 'var(--olo-color-primary, #6366F1)',
+    background: s.value.marker_bg || 'var(--olo-color-background, #FFFFFF)',
     borderRadius: shape === 'circle' ? '50%' : shape === 'diamond' ? '4px' : '4px',
     transform: shape === 'diamond' ? 'rotate(45deg)' : 'none',
     position: 'relative',
@@ -188,10 +233,10 @@ function markerStyle(item, i) {
   };
   const bw = parseInt(s.value.marker_border_width) || 0;
   if (bw > 0) {
-    st.border = `${bw}px solid ${s.value.marker_border_color || s.value.marker_color || '#6366F1'}`;
+    st.border = `${bw}px solid ${s.value.marker_border_color || s.value.marker_color || 'var(--olo-color-primary, #6366F1)'}`;
   }
   if (s.value.marker_type === 'dot') {
-    st.background = s.value.marker_color || '#6366F1';
+    st.background = s.value.marker_color || 'var(--olo-color-primary, #6366F1)';
   }
   return st;
 }
@@ -199,11 +244,11 @@ function markerStyle(item, i) {
 // --- Card ---
 const cardStyle = computed(() => {
   const pad = parseInt(s.value.card_padding) || 20;
-  const radius = parseInt(s.value.card_border_radius) || 12;
+  const radius = (v => isNaN(v) ? 12 : v)(parseInt(s.value.card_border_radius));
   const bw = parseInt(s.value.card_border_width) || 0;
   const st = {
-    background: s.value.card_bg || '#111827',
-    color: s.value.card_text_color || '#F3F4F6',
+    background: s.value.card_bg || 'var(--olo-color-background, #FFFFFF)',
+    color: s.value.card_text_color || 'var(--olo-color-text, #374151)',
     padding: pad + 'px',
     borderRadius: radius + 'px',
     boxShadow: shadowMap[s.value.card_shadow] || 'none',
@@ -216,7 +261,7 @@ const cardStyle = computed(() => {
     st.maxWidth = mw + 'px';
   }
   if (bw > 0) {
-    st.border = `${bw}px solid ${s.value.card_border_color || '#374151'}`;
+    st.border = `${bw}px solid ${s.value.card_border_color || 'var(--olo-color-border, #E5E7EB)'}`;
   }
   return st;
 });
@@ -312,7 +357,7 @@ const vLineStyle = computed(() => {
     top: '0',
     bottom: '0',
     width: w + 'px',
-    background: s.value.line_color || '#374151',
+    background: s.value.line_color || 'var(--olo-color-border, #E5E7EB)',
     borderStyle: s.value.line_style || 'solid',
     zIndex: '1',
   };
@@ -320,7 +365,7 @@ const vLineStyle = computed(() => {
     st.background = 'none';
     st.borderLeftWidth = w + 'px';
     st.borderLeftStyle = s.value.line_style;
-    st.borderLeftColor = s.value.line_color || '#374151';
+    st.borderLeftColor = s.value.line_color || 'var(--olo-color-border, #E5E7EB)';
     st.width = '0';
   }
   if (layout === 'vertical-center') {
@@ -379,7 +424,7 @@ function vDateWrapStyle(i) {
 
 function cardArrowStyle(i) {
   const layout = s.value.layout || 'vertical-center';
-  const bg = s.value.card_bg || '#111827';
+  const bg = s.value.card_bg || 'var(--olo-color-background, #FFFFFF)';
   const size = 8;
   const base = {
     position: 'absolute',
@@ -423,8 +468,8 @@ const endMarkerStyle = computed(() => {
     justifyContent: 'center',
     flexShrink: '0',
     fontSize: (size * 0.5) + 'px',
-    color: s.value.end_marker_color || s.value.marker_color || '#6366F1',
-    background: s.value.end_marker_bg || s.value.marker_bg || '#1e1e2e',
+    color: s.value.end_marker_color || s.value.marker_color || 'var(--olo-color-primary, #6366F1)',
+    background: s.value.end_marker_bg || s.value.marker_bg || 'var(--olo-color-background, #FFFFFF)',
     borderRadius: shape === 'circle' ? '50%' : '4px',
     transform: shape === 'diamond' ? 'rotate(45deg)' : 'none',
     position: 'relative',
@@ -432,12 +477,12 @@ const endMarkerStyle = computed(() => {
   };
   const bw = parseInt(s.value.marker_border_width) || 0;
   if (bw > 0) {
-    st.border = `${bw}px solid ${s.value.marker_border_color || s.value.marker_color || '#6366F1'}`;
+    st.border = `${bw}px solid ${s.value.marker_border_color || s.value.marker_color || 'var(--olo-color-primary, #6366F1)'}`;
   }
   return st;
 });
 
-const endIconColor = computed(() => s.value.end_marker_color || s.value.marker_color || '#6366F1');
+const endIconColor = computed(() => s.value.end_marker_color || s.value.marker_color || 'var(--olo-color-primary, #6366F1)');
 
 const endItemStyle = computed(() => ({
   display: 'flex',
@@ -480,7 +525,7 @@ const hLineStyle = computed(() => ({
   left: '0',
   right: '0',
   height: lineW.value + 'px',
-  background: s.value.line_color || '#374151',
+  background: s.value.line_color || 'var(--olo-color-border, #E5E7EB)',
   zIndex: '1',
 }));
 
@@ -517,8 +562,8 @@ const arrowStyle = computed(() => ({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  color: s.value.h_arrow_color || '#F3F4F6',
-  background: s.value.h_arrow_bg || '#374151',
+  color: s.value.h_arrow_color || 'var(--olo-color-text, #374151)',
+  background: s.value.h_arrow_bg || 'var(--olo-color-muted, #F3F4F6)',
 }));
 </script>
 

@@ -9,12 +9,12 @@ class Olo_List_Tile extends Olo_Tile_Base {
     protected $type     = 'list';
     protected $name     = 'Lista';
     protected $icon     = 'dashicons-editor-ul';
-    protected $category = 'content';
+    protected $category = 'text';
     protected $defaults = [
         'items'        => "check|Feature one included\ncheck|Feature two included\ncheck|Feature three included\ncheck|Feature four included",
         'icon_default' => 'check',
         'icon_color'   => '#22C55E',
-        'text_color'   => '#F3F4F6',
+        'text_color'   => '',
         'spacing'      => '12',
         'icon_size'    => '18',
     ];
@@ -39,7 +39,7 @@ class Olo_List_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
-        <?php $list_text_clr = $this->safe_color( $s['text_color'] ); ?>
+        <?php $list_text_clr = $this->safe_color_css( $s['text_color'] ); ?>
         <ul class="olo-list uk-list" style="padding:16px;<?php if ( $list_text_clr ) echo 'color:' . $list_text_clr . ';'; ?>">
             <?php foreach ( $items as $i => $item ) :
                 $svg = $this->get_icon_svg( $item['icon'], $s['icon_color'], $isize );
@@ -56,6 +56,7 @@ class Olo_List_Tile extends Olo_Tile_Base {
 
     private function parse_items( $text, $default_icon ) {
         $items = [];
+        $text  = is_array( $text ) ? implode( "\n", $text ) : (string) $text;
         $lines = array_filter( array_map( 'trim', explode( "\n", $text ) ) );
         foreach ( $lines as $line ) {
             $parts = explode( '|', $line, 2 );
@@ -69,7 +70,7 @@ class Olo_List_Tile extends Olo_Tile_Base {
     }
 
     private function get_icon_svg( $icon, $color, $size ) {
-        $c = esc_attr( $color );
+        $c = $this->safe_color_css( $color ) ?: 'currentColor';
         $s = intval( $size );
         switch ( $icon ) {
             case 'check':

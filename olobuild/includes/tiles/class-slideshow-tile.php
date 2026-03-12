@@ -12,9 +12,7 @@ class Olo_Slideshow_Tile extends Olo_Tile_Base {
     protected $category = 'media';
     protected $defaults = [
         'slides' => [
-            [ 'id' => 's-1', 'image' => '', 'title' => 'Slide One', 'subtitle' => 'First slide description', 'link' => '' ],
-            [ 'id' => 's-2', 'image' => '', 'title' => 'Slide Two', 'subtitle' => 'Second slide description', 'link' => '' ],
-            [ 'id' => 's-3', 'image' => '', 'title' => 'Slide Three', 'subtitle' => 'Third slide description', 'link' => '' ],
+            [ 'id' => 's-1', 'image' => '', 'title' => 'Prima slide', 'subtitle' => 'Prima slide', 'link' => '' ],
         ],
         'autoplay'       => true,
         'autoplay_speed'  => '5000',
@@ -24,6 +22,10 @@ class Olo_Slideshow_Tile extends Olo_Tile_Base {
         'overlay_color'  => '#000000',
         'text_color'     => '#FFFFFF',
         'transition'     => 'slide',
+        'shadow'         => 'none',
+        'border_width'   => '0',
+        'border_color'   => '',
+        'border_radius'  => '0',
     ];
 
     public function get_controls() {
@@ -44,7 +46,7 @@ class Olo_Slideshow_Tile extends Olo_Tile_Base {
         $id = 'olo-ss-' . wp_unique_id();
 
         $slides = is_array( $s['slides'] ) ? $s['slides'] : [];
-        if ( empty( $slides ) ) return '<div class="olo-slideshow" style="padding:40px;text-align:center;color:#6b7280;">No slides added</div>';
+        if ( empty( $slides ) ) return '<div class="olo-slideshow" style="padding:40px;text-align:center;color:var(--olo-color-text-muted, #9CA3AF);">Nessuna slide aggiunta</div>';
 
         $h     = absint( $s['slide_height'] );
         $count = count( $slides );
@@ -60,9 +62,9 @@ class Olo_Slideshow_Tile extends Olo_Tile_Base {
                         <?php if ( ! empty( $slide['image'] ) ) : ?>
                             <?php echo Olo_Tile_Utils::img_srcset( absint( $slide['image_id'] ?? 0 ), $slide['image'], $slide['title'] ?? '', '', 'full', 'uk-cover' ); ?>
                         <?php else : ?>
-                            <div style="position:absolute;inset:0;background:#1f2937;" uk-cover></div>
+                            <div style="position:absolute;inset:0;background:var(--olo-color-secondary, #1F2937);" uk-cover></div>
                         <?php endif; ?>
-                        <?php $sl_bg = $this->safe_color( $s['overlay_color'] ); $sl_fg = $this->safe_color( $s['text_color'] ); ?>
+                        <?php $sl_bg = $this->safe_color_css( $s['overlay_color'] ); $sl_fg = $this->safe_color_css( $s['text_color'] ); ?>
                         <div class="uk-position-cover" style="<?php if ( $sl_bg ) echo 'background:' . $sl_bg . ';'; ?>opacity:0.45;"></div>
                         <div class="uk-position-center uk-text-center" style="<?php if ( $sl_fg ) echo 'color:' . $sl_fg . ';'; ?>z-index:1;padding:24px;">
                             <?php if ( ! empty( $slide['title'] ) ) : ?>

@@ -6,77 +6,171 @@
     <template v-else>
       <!-- Grid -->
       <div v-if="layout === 'grid'" :style="gridStyle">
-        <div v-for="(img, i) in visibleImages" :key="i" :style="itemStyle(i)">
+        <div v-for="(img, i) in visibleImages" :key="img.id || img.url || i" :style="itemStyle(i)">
           <img :src="imgUrl(img)" :alt="imgAlt(img)" :style="imgStyle" />
+          <div v-if="isVideoItem(visibleImages[i])" :style="playBadgeStyle"></div>
           <div v-if="isLastVisible(i)" :style="moreOverlayStyle">+{{ extraCount }}</div>
         </div>
       </div>
 
       <!-- Masonry -->
       <div v-else-if="layout === 'masonry'" :style="masonryStyle">
-        <div v-for="(img, i) in visibleImages" :key="i" :style="masonryItemStyle(i)">
+        <div v-for="(img, i) in visibleImages" :key="img.id || img.url || i" :style="masonryItemStyle(i)">
           <img :src="imgUrl(img)" :alt="imgAlt(img)" style="width:100%;display:block;object-fit:cover" :style="{ borderRadius: radius + 'px' }" />
+          <div v-if="isVideoItem(visibleImages[i])" :style="playBadgeStyle"></div>
           <div v-if="isLastVisible(i)" :style="moreOverlayStyle">+{{ extraCount }}</div>
         </div>
       </div>
 
       <!-- Scattered -->
       <div v-else-if="layout === 'scattered'" :style="scatteredContainerStyle">
-        <div v-for="(img, i) in visibleImages" :key="i" :style="scatteredItemStyle(i)">
+        <div v-for="(img, i) in visibleImages" :key="img.id || img.url || i" :style="scatteredItemStyle(i)">
           <img :src="imgUrl(img)" :alt="imgAlt(img)" :style="imgStyle" />
+          <div v-if="isVideoItem(visibleImages[i])" :style="playBadgeStyle"></div>
+        </div>
+      </div>
+
+      <!-- Parallax -->
+      <div v-else-if="layout === 'parallax'" :style="parallaxContainerStyle">
+        <div v-for="(img, i) in visibleImages" :key="img.id || img.url || i" :style="parallaxItemStyle(i)">
+          <img :src="imgUrl(img)" :alt="imgAlt(img)" :style="imgStyle" />
+          <div v-if="isVideoItem(visibleImages[i])" :style="playBadgeStyle"></div>
         </div>
       </div>
 
       <!-- Collage -->
       <div v-else-if="layout === 'collage'" :style="collageStyle">
-        <div v-for="(img, i) in visibleImages" :key="i" :style="collageItemStyle(i)">
+        <div v-for="(img, i) in visibleImages" :key="img.id || img.url || i" :style="collageItemStyle(i)">
           <img :src="imgUrl(img)" :alt="imgAlt(img)" :style="imgStyle" />
+          <div v-if="isVideoItem(visibleImages[i])" :style="playBadgeStyle"></div>
           <div v-if="isLastVisible(i)" :style="moreOverlayStyle">+{{ extraCount }}</div>
         </div>
       </div>
 
-      <!-- Filmstrip -->
-      <div v-else-if="layout === 'filmstrip'" :style="filmstripStyle">
-        <div v-for="(img, i) in visibleImages" :key="i" :style="filmstripItemStyle">
+      <!-- Coverflow 3D preview -->
+      <div v-else-if="layout === 'strip_coverflow'" :style="filmstripWrapStyle">
+        <div :style="filmstripStyle">
+          <div v-for="(img, i) in visibleImages" :key="img.id || img.url || i" :style="filmstripItemStyle(i)">
+            <img :src="imgUrl(img)" :alt="imgAlt(img)" :style="imgStyle" />
+            <div v-if="isVideoItem(visibleImages[i])" :style="playBadgeStyle"></div>
+          </div>
+        </div>
+        <div :style="filmArrowStyle('left')">&#8249;</div>
+        <div :style="filmArrowStyle('right')">&#8250;</div>
+        <!-- Dots / Lines -->
+        <div v-if="filmDotsStyle === 'dots' || filmDotsStyle === 'lines'" :style="filmDotsContainerStyle">
+          <span v-for="(img, i) in visibleImages" :key="'d'+i"
+            :style="filmDotStyle(i)"></span>
+        </div>
+        <!-- Progress bar -->
+        <div v-else-if="filmDotsStyle === 'progress'" :style="filmProgressWrapStyle">
+          <div :style="filmProgressTrackStyle">
+            <div :style="filmProgressFillStyle"></div>
+          </div>
+        </div>
+        <!-- Fraction -->
+        <div v-else-if="filmDotsStyle === 'fraction'" :style="filmFractionStyle">
+          {{ filmFractionText }}
+        </div>
+      </div>
+
+      <!-- Strip (nastro orizzontale, drag-to-scroll) -->
+      <div v-else-if="layout === 'strip'" :style="stripWrapStyle">
+        <div v-for="(img, i) in visibleImages" :key="img.id || img.url || i" :style="stripItemStyle(i)">
           <img :src="imgUrl(img)" :alt="imgAlt(img)" :style="imgStyle" />
+          <div v-if="isVideoItem(visibleImages[i])" :style="playBadgeStyle"></div>
+        </div>
+      </div>
+
+      <!-- Strip Collage (altezze variabili) -->
+      <div v-else-if="layout === 'strip_collage'" :style="stripWrapStyle">
+        <div v-for="(img, i) in visibleImages" :key="img.id || img.url || i" :style="stripCollageItemStyle(i)">
+          <img :src="imgUrl(img)" :alt="imgAlt(img)" :style="imgStyle" />
+          <div v-if="isVideoItem(visibleImages[i])" :style="playBadgeStyle"></div>
+        </div>
+      </div>
+
+      <!-- Strip Multi-riga -->
+      <div v-else-if="layout === 'strip_multi'" :style="stripMultiStyle">
+        <div v-for="(img, i) in visibleImages" :key="img.id || img.url || i" :style="stripMultiItemStyle">
+          <img :src="imgUrl(img)" :alt="imgAlt(img)" :style="imgStyle" />
+          <div v-if="isVideoItem(visibleImages[i])" :style="playBadgeStyle"></div>
+        </div>
+      </div>
+
+      <!-- Strip Marquee (auto-scroll) -->
+      <div v-else-if="layout === 'strip_marquee'" :style="stripWrapStyle">
+        <div v-for="(img, i) in visibleImages" :key="img.id || img.url || i" :style="stripItemStyle(i)">
+          <img :src="imgUrl(img)" :alt="imgAlt(img)" :style="imgStyle" />
+          <div v-if="isVideoItem(visibleImages[i])" :style="playBadgeStyle"></div>
+        </div>
+      </div>
+
+      <!-- Strip Split (due righe, direzioni opposte) -->
+      <div v-else-if="layout === 'strip_split'" style="display:flex;flex-direction:column;gap:8px">
+        <div :style="stripWrapStyle">
+          <div v-for="(img, i) in evenImages" :key="'a'+i" :style="stripItemStyle(i*2)">
+            <img :src="imgUrl(img)" :alt="imgAlt(img)" :style="imgStyle" />
+            <div v-if="isVideoItem(evenImages[i])" :style="playBadgeStyle"></div>
+          </div>
+        </div>
+        <div :style="stripWrapStyle">
+          <div v-for="(img, i) in oddImages" :key="'b'+i" :style="stripItemStyle(i*2+1)">
+            <img :src="imgUrl(img)" :alt="imgAlt(img)" :style="imgStyle" />
+            <div v-if="isVideoItem(oddImages[i])" :style="playBadgeStyle"></div>
+          </div>
         </div>
       </div>
 
       <!-- Mosaic -->
       <div v-else-if="layout === 'mosaic'" :style="mosaicStyle">
-        <div v-for="(img, i) in visibleImages" :key="i" :style="mosaicItemStyle(i)">
+        <div v-for="(img, i) in visibleImages" :key="img.id || img.url || i" :style="mosaicItemStyle(i)">
           <img :src="imgUrl(img)" :alt="imgAlt(img)" :style="imgStyle" />
+          <div v-if="isVideoItem(visibleImages[i])" :style="playBadgeStyle"></div>
           <div v-if="isLastVisible(i)" :style="moreOverlayStyle">+{{ extraCount }}</div>
         </div>
       </div>
 
       <!-- Honeycomb -->
       <div v-else-if="layout === 'honeycomb'" :style="honeycombStyle">
-        <div v-for="(img, i) in visibleImages" :key="i" :style="honeycombItemStyle">
+        <div v-for="(img, i) in visibleImages" :key="img.id || img.url || i" :style="honeycombItemStyle">
           <img :src="imgUrl(img)" :alt="imgAlt(img)" style="width:100%;height:100%;object-fit:cover" />
+          <div v-if="isVideoItem(visibleImages[i])" :style="playBadgeStyle"></div>
         </div>
       </div>
 
       <!-- Hex Grid (tessellating) -->
       <div v-else-if="layout === 'hexgrid'" :style="hexGridContainerStyle">
-        <div v-for="(img, i) in visibleImages" :key="i" :style="hexGridItemStyle(i)">
+        <div v-for="(img, i) in visibleImages" :key="img.id || img.url || i" :style="hexGridItemStyle(i)">
           <img :src="imgUrl(img)" :alt="imgAlt(img)" style="width:100%;height:100%;object-fit:cover" />
+          <div v-if="isVideoItem(visibleImages[i])" :style="playBadgeStyle"></div>
           <div v-if="isLastVisible(i)" :style="moreOverlayStyle">+{{ extraCount }}</div>
         </div>
       </div>
 
       <!-- Puzzle -->
       <div v-else-if="layout === 'puzzle'" :style="puzzleContainerStyle">
-        <div v-for="(img, i) in visibleImages" :key="i" :style="puzzleItemStyle(i)">
+        <div v-for="(img, i) in visibleImages" :key="img.id || img.url || i" :style="puzzleItemStyle(i)">
           <img :src="imgUrl(img)" :alt="imgAlt(img)" :style="puzzleImgStyle" />
+          <div v-if="isVideoItem(visibleImages[i])" :style="playBadgeStyle"></div>
           <div v-if="isLastVisible(i)" :style="moreOverlayStyle">+{{ extraCount }}</div>
         </div>
       </div>
 
       <!-- Diagonal -->
       <div v-else-if="layout === 'diagonal'" :style="gridStyle">
-        <div v-for="(img, i) in visibleImages" :key="i" :style="diagonalItemStyle(i)">
+        <div v-for="(img, i) in visibleImages" :key="img.id || img.url || i" :style="diagonalItemStyle(i)">
           <img :src="imgUrl(img)" :alt="imgAlt(img)" :style="imgStyle" />
+          <div v-if="isVideoItem(visibleImages[i])" :style="playBadgeStyle"></div>
+          <div v-if="isLastVisible(i)" :style="moreOverlayStyle">+{{ extraCount }}</div>
+        </div>
+      </div>
+
+      <!-- Expand (spotlight) -->
+      <div v-else-if="layout === 'expand'" :style="expandStyle">
+        <div v-for="(img, i) in visibleImages" :key="img.id || img.url || i" :style="expandItemStyle">
+          <img :src="imgUrl(img)" :alt="imgAlt(img)" :style="expandImgStyle" />
+          <div v-if="isVideoItem(visibleImages[i])" :style="playBadgeStyle"></div>
           <div v-if="isLastVisible(i)" :style="moreOverlayStyle">+{{ extraCount }}</div>
         </div>
       </div>
@@ -84,7 +178,7 @@
       <!-- Effect badges (builder only) -->
       <div v-if="hasBadges" style="display:flex;gap:4px;margin-top:4px;flex-wrap:wrap">
         <span v-if="s.entrance && s.entrance !== 'none'" :style="badgeStyle">Entrance: {{ s.entrance }}</span>
-        <span v-if="s.continuous && s.continuous !== 'none'" :style="badgeStyle">Anim: {{ s.continuous }}</span>
+        <span v-if="continuousLabel" :style="badgeStyle">Anim: {{ continuousLabel }}</span>
         <span v-if="s.hover_effect && s.hover_effect !== 'none'" :style="badgeStyle">Hover: {{ s.hover_effect }}</span>
         <span v-if="s.filter && s.filter !== 'none'" :style="badgeStyle">Filtro: {{ s.filter }}</span>
         <span v-if="s.frame && s.frame !== 'none'" :style="badgeStyle">Cornice: {{ s.frame }}</span>
@@ -100,18 +194,46 @@ const props = defineProps({
   settings: { type: Object, default: () => ({}) },
 });
 
-const s = computed(() => props.settings);
+const defaults = {
+  images: [], layout: 'grid', layout_family: 'classic', puzzle_style: 'classic',
+  columns: '3', gap: '8', img_height: '250px', object_fit: 'cover', thumb_radius: '8',
+  rows: '0', mobile_columns: '2', expand_ratio: '4', expand_shrink: '0.5', expand_speed: '500',
+  parallax_height: '1500', parallax_intensity: '50',
+  filmstrip_item_width: '280', filmstrip_center_zoom: '1.15', filmstrip_side_tilt: '35',
+  filmstrip_speed: '4', filmstrip_dots: 'dots',
+  strip_height: '280', strip_item_width: '300', strip_rows: '2', strip_speed: '30',
+  strip_pause_hover: true, strip_direction: 'left', strip_fade_edges: true,
+  entrance: 'none', entrance_stagger: '120', entrance_duration: '600',
+  hover_effect: 'zoom', hover_zoom_scale: '1.08', hover_tilt_angle: '10',
+  hover_magnetic_strength: '24', hover_glow_color: '#6366f1', hover_glow_spread: '20',
+  hover_caption: 'none', hover_caption_bg: 'rgba(0,0,0,0.6)', hover_caption_color: '#ffffff',
+  continuous: '', continuous_speed: '20',
+  filter: 'none', duotone_dark: '#1a1a2e', duotone_light: '#e94560', duotone_intensity: '80',
+  frame: 'none', frame_color: '#ffffff', frame_inset_padding: '10',
+  anim_border: 'none', anim_border_color: '#ffffff', anim_border_thickness: '2',
+  lightbox: true, lightbox_animation: 'slide', lightbox_thumbs: 'none',
+  more_bg: 'rgba(0,0,0,0.55)', more_color: '#ffffff', more_size: '28',
+  shadow: 'none', video_preview: 'poster',
+};
+const s = computed(() => ({ ...defaults, ...props.settings }));
 
-const layout = computed(() => s.value.layout || 'grid');
+const layout = computed(() => {
+  const l = s.value.layout || 'grid';
+  return l === 'filmstrip' ? 'strip_coverflow' : l;
+});
 const cols = computed(() => Math.max(2, Math.min(6, parseInt(s.value.columns) || 3)));
 const gap = computed(() => parseInt(s.value.gap) || 8);
-const radius = computed(() => parseInt(s.value.thumb_radius) || 8);
+const radius = computed(() => (v => isNaN(v) ? 8 : v)(parseInt(s.value.thumb_radius)));
 const imgHeight = computed(() => s.value.img_height || '250px');
 const objectFit = computed(() => s.value.object_fit || 'cover');
 
 const images = computed(() => {
   const imgs = s.value.images;
-  return Array.isArray(imgs) ? imgs.filter(i => imgUrl(i)) : [];
+  if (!Array.isArray(imgs)) return [];
+  return imgs.filter(i => {
+    if (i && i.type === 'video') return !!(i.url || i.embed || i.poster);
+    return !!imgUrl(i);
+  });
 });
 
 const maxVisible = computed(() => {
@@ -128,10 +250,14 @@ function isLastVisible(i) {
 }
 
 function imgUrl(img) {
+  if (img && img.type === 'video') return img.poster || '';
   return typeof img === 'string' ? img : (img?.url || '');
 }
 function imgAlt(img) {
   return typeof img === 'string' ? '' : (img?.alt || '');
+}
+function isVideoItem(img) {
+  return img?.type === 'video';
 }
 
 function seededRandom(seed) {
@@ -230,6 +356,45 @@ function scatteredItemStyle(i) {
   };
 }
 
+// ─── Parallax (builder preview — static depth) ───
+const parallaxContainerStyle = computed(() => ({
+  position: 'relative',
+  height: '500px',
+  overflow: 'hidden',
+}));
+
+function parallaxItemStyle(i) {
+  const total = visibleImages.value.length;
+  const colsNum = Math.min(4, Math.ceil(Math.sqrt(total)));
+  const rowsNum = Math.ceil(total / colsNum);
+  const col = i % colsNum;
+  const row = Math.floor(i / colsNum);
+  const cellW = 100 / colsNum;
+  const cellH = 100 / rowsNum;
+  const depth = seededRandom(i + 3);
+  const size = 0.50 + depth * 0.45;
+  const offX = (seededRandom(i + 7) - 0.5) * 15;
+  const offY = (seededRandom(i + 13) - 0.5) * 15;
+  const rot = (seededRandom(i + 21) - 0.5) * 8;
+  const shadowBlur = Math.round(4 + depth * 20);
+  const shadowAlpha = (0.1 + depth * 0.2).toFixed(2);
+  const op = (0.7 + depth * 0.3).toFixed(2);
+  const zi = Math.round(depth * 20);
+  return {
+    position: 'absolute',
+    left: (col * cellW + offX) + '%',
+    top: (row * cellH + offY) + '%',
+    width: (cellW * size) + '%',
+    transform: `rotate(${rot.toFixed(1)}deg)`,
+    overflow: 'hidden',
+    borderRadius: radius.value + 'px',
+    boxShadow: `0 ${Math.round(shadowBlur/2)}px ${shadowBlur}px rgba(0,0,0,${shadowAlpha})`,
+    opacity: op,
+    zIndex: zi,
+    ...filterStyle.value,
+  };
+}
+
 // ─── Collage ───
 const collageStyle = computed(() => ({
   display: 'grid',
@@ -252,22 +417,224 @@ function collageItemStyle(i) {
   return base;
 }
 
-// ─── Filmstrip ───
+// ─── Filmstrip (Coverflow) ───
+const filmWidth = computed(() => Math.max(180, Math.min(450, parseInt(s.value.filmstrip_item_width) || 280)));
+const filmZoom = computed(() => Math.max(1.0, Math.min(1.5, parseFloat(s.value.filmstrip_center_zoom) || 1.15)));
+const filmTilt = computed(() => Math.max(0, Math.min(25, parseInt(s.value.filmstrip_side_tilt) || 8)));
+
+const filmstripWrapStyle = computed(() => ({
+  position: 'relative',
+  overflow: 'hidden',
+}));
+
 const filmstripStyle = computed(() => ({
   display: 'flex',
   gap: gap.value + 'px',
-  overflowX: 'auto',
-  paddingBottom: '4px',
+  overflowX: 'hidden',
+  padding: '20px 0',
+  justifyContent: 'center',
 }));
 
-const filmstripItemStyle = computed(() => ({
-  flex: '0 0 auto',
-  width: '250px',
-  height: imgHeight.value,
+function filmstripItemStyle(i) {
+  const total = visibleImages.value.length;
+  const mid = Math.floor(total / 2);
+  const dist = i - mid;
+  const absD = Math.abs(dist);
+  const maxD = Math.max(1, Math.floor(total / 2));
+  const ratio = Math.min(absD / maxD, 1);
+  const sc = filmZoom.value - (filmZoom.value - 1) * ratio;
+  const ry = (dist / maxD) * filmTilt.value;
+  const op = 1 - ratio * 0.25;
+  const zi = 100 - Math.round(ratio * 50);
+  return {
+    flex: '0 0 auto',
+    width: filmWidth.value + 'px',
+    height: imgHeight.value,
+    overflow: 'hidden',
+    borderRadius: radius.value + 'px',
+    transform: `perspective(800px) scale(${sc.toFixed(3)}) rotateY(${ry.toFixed(1)}deg)`,
+    opacity: op.toFixed(2),
+    zIndex: zi,
+    transition: 'transform .35s ease',
+    ...filterStyle.value,
+  };
+}
+
+function filmArrowStyle(side) {
+  return {
+    position: 'absolute',
+    top: '50%',
+    transform: 'translateY(-50%)',
+    [side === 'left' ? 'left' : 'right']: '4px',
+    width: '28px',
+    height: '28px',
+    borderRadius: '50%',
+    background: 'rgba(0,0,0,.35)',
+    color: '#fff',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize: '16px',
+    lineHeight: '1',
+    cursor: 'default',
+    opacity: '0.6',
+    pointerEvents: 'none',
+  };
+}
+
+const filmDotsStyle = computed(() => s.value.filmstrip_dots || 'dots');
+const filmDotsColor = computed(() => s.value.filmstrip_dots_color || '');
+
+const filmDotsContainerStyle = computed(() => {
+  const isLines = filmDotsStyle.value === 'lines';
+  return {
+    display: 'flex',
+    justifyContent: 'center',
+    gap: isLines ? '3px' : '4px',
+    padding: '4px 0',
+    alignItems: isLines ? 'center' : undefined,
+  };
+});
+
+function filmDotStyle(i) {
+  const total = visibleImages.value.length;
+  const mid = Math.floor(total / 2);
+  const isActive = i === mid;
+  const isLines = filmDotsStyle.value === 'lines';
+  const activeClr = filmDotsColor.value || 'rgba(0,0,0,.7)';
+  const inactClr = filmDotsColor.value || 'rgba(0,0,0,.2)';
+  if (isLines) return {
+    width: isActive ? '18px' : '10px',
+    height: '2px',
+    borderRadius: '1px',
+    background: isActive ? activeClr : inactClr,
+    opacity: isActive ? 1 : (filmDotsColor.value ? 0.35 : 1),
+    transition: 'width .2s ease',
+  };
+  return {
+    width: '6px',
+    height: '6px',
+    borderRadius: '50%',
+    background: isActive ? activeClr : inactClr,
+    opacity: isActive ? 1 : (filmDotsColor.value ? 0.35 : 1),
+    transform: isActive ? 'scale(1.3)' : 'scale(1)',
+  };
+}
+
+// Progress bar preview
+const filmProgressWrapStyle = computed(() => ({
+  padding: '6px 0',
+  width: '60%',
+  maxWidth: '200px',
+  margin: '0 auto',
+}));
+const filmProgressTrackStyle = computed(() => ({
+  height: '3px',
+  borderRadius: '2px',
+  background: filmDotsColor.value || 'rgba(0,0,0,.15)',
+  opacity: filmDotsColor.value ? 0.25 : 1,
+  overflow: 'hidden',
+  position: 'relative',
+}));
+const filmProgressFillStyle = computed(() => {
+  const total = visibleImages.value.length;
+  const mid = Math.floor(total / 2);
+  const pct = total > 1 ? (mid / (total - 1)) * 100 : 100;
+  return {
+    height: '100%',
+    borderRadius: '2px',
+    background: filmDotsColor.value || 'rgba(0,0,0,.55)',
+    width: pct + '%',
+  };
+});
+
+// Fraction preview
+const filmFractionStyle = computed(() => ({
+  textAlign: 'center',
+  padding: '4px 0',
+  fontSize: '11px',
+  fontWeight: '600',
+  color: filmDotsColor.value || 'rgba(0,0,0,.5)',
+  fontVariantNumeric: 'tabular-nums',
+  letterSpacing: '0.05em',
+}));
+const filmFractionText = computed(() => {
+  const total = visibleImages.value.length;
+  const mid = Math.floor(total / 2) + 1;
+  return mid + ' / ' + total;
+});
+
+// ─── Strip (nastro) ───
+const stripHeight = computed(() => Math.max(150, Math.min(500, parseInt(s.value.strip_height) || 280)));
+const stripItemW = computed(() => Math.max(150, Math.min(500, parseInt(s.value.strip_item_width) || 300)));
+const stripRows = computed(() => Math.max(2, Math.min(3, parseInt(s.value.strip_rows) || 2)));
+const stripFade = computed(() => !!s.value.strip_fade_edges);
+
+const stripWrapStyle = computed(() => {
+  const base = {
+    display: 'flex',
+    gap: gap.value + 'px',
+    overflow: 'hidden',
+    alignItems: 'center',
+  };
+  if (stripFade.value) {
+    base.maskImage = 'linear-gradient(to right, transparent, black 6%, black 94%, transparent)';
+    base.webkitMaskImage = base.maskImage;
+  }
+  return base;
+});
+
+function stripItemStyle() {
+  return {
+    flex: '0 0 auto',
+    width: stripItemW.value + 'px',
+    height: stripHeight.value + 'px',
+    overflow: 'hidden',
+    borderRadius: radius.value + 'px',
+    ...filterStyle.value,
+  };
+}
+
+function stripCollageItemStyle(i) {
+  const base = stripHeight.value;
+  const variation = 50;
+  const rand = seededRandom(i + 42);
+  const h = Math.round(base - variation + rand * variation * 2);
+  return {
+    flex: '0 0 auto',
+    width: stripItemW.value + 'px',
+    height: h + 'px',
+    overflow: 'hidden',
+    borderRadius: radius.value + 'px',
+    ...filterStyle.value,
+  };
+}
+
+const stripMultiStyle = computed(() => {
+  const base = {
+    display: 'grid',
+    gridTemplateRows: `repeat(${stripRows.value}, 1fr)`,
+    gridAutoFlow: 'column',
+    gridAutoColumns: stripItemW.value + 'px',
+    gap: gap.value + 'px',
+    overflow: 'hidden',
+    height: stripHeight.value + 'px',
+  };
+  if (stripFade.value) {
+    base.maskImage = 'linear-gradient(to right, transparent, black 6%, black 94%, transparent)';
+    base.webkitMaskImage = base.maskImage;
+  }
+  return base;
+});
+
+const stripMultiItemStyle = computed(() => ({
   overflow: 'hidden',
   borderRadius: radius.value + 'px',
   ...filterStyle.value,
 }));
+
+const evenImages = computed(() => visibleImages.value.filter((_, i) => i % 2 === 0));
+const oddImages = computed(() => visibleImages.value.filter((_, i) => i % 2 !== 0));
 
 // ─── Mosaic ───
 const mosaicStyle = computed(() => ({
@@ -702,6 +1069,45 @@ function diagonalItemStyle(i) {
   };
 }
 
+// ─── Expand (spotlight) — builder preview: griglia statica, effetto solo frontend ───
+const expandStyle = computed(() => ({
+  display: 'grid',
+  gridTemplateColumns: `repeat(${cols.value}, 1fr)`,
+  gap: gap.value + 'px',
+}));
+
+const expandItemStyle = computed(() => ({
+  position: 'relative',
+  overflow: 'hidden',
+  borderRadius: radius.value + 'px',
+  height: imgHeight.value,
+  ...filterStyle.value,
+}));
+
+const expandImgStyle = computed(() => ({
+  width: '100%',
+  height: '100%',
+  objectFit: 'cover',
+  display: 'block',
+  borderRadius: radius.value + 'px',
+}));
+
+// ─── Play badge (video) ───
+const playSvg = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpolygon points='8,5 19,12 8,19'/%3E%3C/svg%3E";
+const playBadgeStyle = {
+  position: 'absolute',
+  inset: '0',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  pointerEvents: 'none',
+  zIndex: '2',
+  backgroundImage: `radial-gradient(circle, rgba(0,0,0,0.4) 0%, transparent 60%), url("${playSvg}")`,
+  backgroundPosition: 'center, center',
+  backgroundRepeat: 'no-repeat, no-repeat',
+  backgroundSize: '100% 100%, 28px 28px',
+};
+
 // ─── "+N" overlay ───
 const moreOverlayStyle = computed(() => ({
   position: 'absolute',
@@ -718,9 +1124,16 @@ const moreOverlayStyle = computed(() => ({
 }));
 
 // ─── Badges ───
+const continuousLabel = computed(() => {
+  const c = s.value.continuous;
+  if (!c || c === 'none') return '';
+  // comma-separated string from multi_pills
+  return c;
+});
+
 const hasBadges = computed(() =>
   (s.value.entrance && s.value.entrance !== 'none') ||
-  (s.value.continuous && s.value.continuous !== 'none') ||
+  !!continuousLabel.value ||
   (s.value.hover_effect && s.value.hover_effect !== 'none') ||
   (s.value.filter && s.value.filter !== 'none') ||
   (s.value.frame && s.value.frame !== 'none')

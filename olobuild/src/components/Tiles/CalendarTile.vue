@@ -81,7 +81,51 @@ const props = defineProps({
   settings: { type: Object, default: () => ({}) },
 });
 
-const s = computed(() => props.settings);
+const defaults = {
+  default_view: 'dayGridMonth',
+  show_toolbar: true,
+  show_today_btn: true,
+  show_month_view: true,
+  show_week_view: true,
+  show_day_view: true,
+  show_list_view: true,
+  show_category_filter: true,
+  filter_style: 'pills',
+  filter_gap: '8',
+  filter_margin_bottom: '16',
+  toolbar_bg: '',
+  toolbar_border_color: '',
+  toolbar_border_width: '0',
+  toolbar_padding_x: '4',
+  toolbar_padding_y: '10',
+  toolbar_margin_bottom: '0',
+  toolbar_radius: '0',
+  toolbar_title_size: '20',
+  toolbar_title_weight: '600',
+  toolbar_title_color: '',
+  toolbar_title_transform: 'capitalize',
+  toolbar_btn_bg: '',
+  toolbar_btn_color: '',
+  toolbar_btn_active_bg: '',
+  toolbar_btn_active_color: '',
+  toolbar_btn_radius: '8',
+  toolbar_btn_padding_x: '14',
+  toolbar_btn_padding_y: '6',
+  toolbar_btn_font_size: '13',
+  toolbar_btn_font_weight: '500',
+  toolbar_btn_text_transform: 'capitalize',
+  toolbar_btn_border_width: '0',
+  toolbar_btn_border_color: '',
+  toolbar_btn_shadow: false,
+  header_bg: '',
+  header_color: '',
+  today_bg: '',
+  day_number_size: '13',
+  border_color: '',
+  event_radius: '4',
+  event_font_size: '12',
+};
+const s = computed(() => ({ ...defaults, ...props.settings }));
 
 const isPills = computed(() => (s.value.filter_style || 'pills') === 'pills');
 const isCheckboxes = computed(() => s.value.filter_style === 'checkboxes');
@@ -177,7 +221,7 @@ const titleStyle = computed(() => ({
   textTransform: s.value.toolbar_title_transform || 'capitalize',
 }));
 
-const btnRadius = computed(() => (parseInt(s.value.toolbar_btn_radius) || 8) + 'px');
+const btnRadius = computed(() => ((v => isNaN(v) ? 8 : v)(parseInt(s.value.toolbar_btn_radius))) + 'px');
 
 const btnStyle = computed(() => {
   const st = {
@@ -228,7 +272,7 @@ const dayNumStyle = computed(() => ({
 function eventStyle(ev) {
   return {
     backgroundColor: ev.color,
-    borderRadius: (parseInt(s.value.event_radius) || 4) + 'px',
+    borderRadius: ((v => isNaN(v) ? 4 : v)(parseInt(s.value.event_radius))) + 'px',
     fontSize: (parseInt(s.value.event_font_size) || 12) + 'px',
   };
 }

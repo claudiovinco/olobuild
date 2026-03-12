@@ -1,0 +1,91 @@
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+class Olo_Woo_Breadcrumbs_Tile extends Olo_Tile_Base {
+
+    protected $type     = 'woo_breadcrumbs';
+    protected $name     = 'Breadcrumbs WooCommerce';
+    protected $icon     = 'dashicons-admin-links';
+    protected $category = 'woocommerce';
+    protected $defaults = [
+        'separator'  => '/',
+        'text_color' => '#6B7280',
+        'link_color' => '#6366F1',
+        'font_size'  => 14,
+        'alignment'  => 'left',
+    ];
+
+    public function get_controls() {
+        return [];
+    }
+
+    public function render( $settings ) {
+        if ( ! class_exists( 'WooCommerce' ) ) {
+            return '<div style="padding:40px;text-align:center;color:#92400E;background:#FEF3C7;border:1px solid #F59E0B;border-radius:8px;">'
+                 . esc_html( olo_t( 'WooCommerce non attivo. Installa e attiva WooCommerce per utilizzare questo elemento.' ) )
+                 . '</div>';
+        }
+
+        $s = wp_parse_args( $settings, $this->defaults );
+
+        $uid = 'olo-woo-bc-' . wp_rand( 10000, 99999 );
+
+        // Colors
+        $text_color = $this->safe_color_css( $s['text_color'] );
+        $link_color = $this->safe_color_css( $s['link_color'] );
+
+        // Font
+        $font_size = max( 10, min( 24, absint( $s['font_size'] ) ) );
+        $alignment = in_array( $s['alignment'], [ 'left', 'center', 'right' ], true ) ? $s['alignment'] : 'left';
+
+        // Separator
+        $sep_map = [
+            '/'  => ' / ',
+            '>'  => ' &gt; ',
+            '-'  => ' - ',
+            '>>' => ' &raquo; ',
+        ];
+        $separator = isset( $sep_map[ $s['separator'] ] ) ? $sep_map[ $s['separator'] ] : ' / ';
+
+        ob_start();
+        ?>
+        <style>
+            .<?php echo $uid; ?> {
+                text-align: <?php echo $alignment; ?>;
+                font-size: <?php echo $font_size; ?>px;
+                padding: 8px 0;
+            }
+            .<?php echo $uid; ?> .woocommerce-breadcrumb {
+                color: <?php echo $text_color; ?>;
+                font-size: <?php echo $font_size; ?>px;
+                margin: 0;
+                padding: 0;
+            }
+            .<?php echo $uid; ?> .woocommerce-breadcrumb a {
+                color: <?php echo $link_color; ?>;
+                text-decoration: none;
+                transition: opacity 0.2s ease;
+            }
+            .<?php echo $uid; ?> .woocommerce-breadcrumb a:hover {
+                opacity: 0.7;
+            }
+        </style>
+        <div class="<?php echo esc_attr( $uid ); ?>">
+            <?php
+            woocommerce_breadcrumb( [
+                'delimiter'   => '<span class="olo-bc-sep">' . $separator . '</span>',
+                'wrap_before' => '<nav class="woocommerce-breadcrumb" aria-label="' . esc_attr( olo_t( 'Breadcrumb' ) ) . '">',
+                'wrap_after'  => '</nav>',
+                'before'      => '<span>',
+                'after'       => '</span>',
+                'home'        => olo_t( 'Home' ),
+            ] );
+            ?>
+        </div>
+        <?php
+        return ob_get_clean();
+    }
+}

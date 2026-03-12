@@ -8,10 +8,10 @@ export default {
     show_legend: true,
     show_navigation: true,
     months_ahead: '3',
-    color_free: '#32d296',
-    color_partial: '#f0ad4e',
-    color_full: '#f0506e',
-    color_closed: '#e0e0e0',
+    color_free: '',
+    color_partial: '',
+    color_full: '',
+    color_closed: '',
     card_style: true,
     day_radius: '4',
   },
@@ -35,7 +35,7 @@ export default {
 
     { type: 'separator', label: 'Aspetto' },
     { key: 'card_style', label: 'Stile card con sfondo', type: 'toggle' },
-    { key: 'day_radius', label: 'Raggio celle giorno (px)', type: 'range', min: 0, max: 20, step: 1 },
+    { key: 'day_radius', label: 'Raggio celle giorno (px)', type: 'border-radius' },
 
     { type: 'separator', label: 'Colori stato' },
     { key: 'color_free', label: 'Libero', type: 'color' },

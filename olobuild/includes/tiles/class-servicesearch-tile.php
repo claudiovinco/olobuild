@@ -70,7 +70,7 @@ class Olo_ServiceSearch_Tile extends Olo_Tile_Base {
                 'towels' => 'Asciugamani', 'pool' => 'Piscina', 'hiking' => 'Escursioni',
             ];
 
-        $border_radius = intval( $s['border_radius'] );
+        $border_radius = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
         $filter_bg     = $s['filter_bg'] ?: '#ffffff';
         $filter_border = $s['filter_border'] ?: '#e5e7eb';
         $is_overlap    = ! empty( $s['overlap'] );
@@ -78,7 +78,7 @@ class Olo_ServiceSearch_Tile extends Olo_Tile_Base {
         $overlap_shadow = ! empty( $s['overlap_shadow'] );
         $overlap_max_w  = max( 600, min( 1400, absint( $s['overlap_max_width'] ?? 1100 ) ) );
 
-        $wrap_style = 'border-radius:' . $border_radius . 'px;';
+        $wrap_style = 'border-radius:' . $border_radius . ';';
         $wrap_style .= 'background:' . esc_attr( $filter_bg ) . ';';
         $wrap_style .= 'border:1px solid ' . esc_attr( $filter_border ) . ';';
 
@@ -225,7 +225,7 @@ class Olo_ServiceSearch_Tile extends Olo_Tile_Base {
             <div class="olo-svsearch-actions">
                 <button type="button" class="olo-svsearch-btn"
                     <?php if ( ! empty( $s['button_bg'] ) ) : ?>
-                    style="background:<?php echo esc_attr( $s['button_bg'] ); ?>;color:<?php echo esc_attr( $s['button_color'] ); ?>;"
+                    style="background:<?php echo $this->safe_color_css( $s['button_bg'] ); ?>;color:<?php echo $this->safe_color_css( $s['button_color'] ); ?>;"
                     <?php endif; ?>
                 >
                     <?php echo esc_html( $s['button_text'] ?: olo_t( 'Cerca' ) ); ?>

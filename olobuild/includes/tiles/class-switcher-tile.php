@@ -9,7 +9,7 @@ class Olo_Switcher_Tile extends Olo_Tile_Base {
     protected $type     = 'switcher';
     protected $name     = 'Switcher';
     protected $icon     = 'dashicons-welcome-widgets-menus';
-    protected $category = 'content';
+    protected $category = 'interactive';
     protected $defaults = [
         'items'     => [
             [ 'title' => 'Tab 1', 'content' => 'Tab content for the first item.' ],
@@ -57,14 +57,14 @@ class Olo_Switcher_Tile extends Olo_Tile_Base {
                 <div class="uk-width-auto">
                     <ul class="uk-tab-left" uk-tab="connect: .olo-switcher-content; <?php echo esc_attr( $switcher_attr ); ?>">
                         <?php foreach ( $items as $i => $item ) : ?>
-                        <li<?php echo $i === 0 ? ' class="uk-active"' : ''; ?>><a href="#"><?php echo wp_kses_post( $item['title'] ); ?></a></li>
+                        <li<?php echo $i === 0 ? ' class="uk-active"' : ''; ?>><a href="#"><?php echo esc_html( wp_strip_all_tags( $item['title'] ) ); ?></a></li>
                         <?php endforeach; ?>
                     </ul>
                 </div>
                 <div class="uk-width-expand">
                     <ul class="uk-switcher olo-switcher-content">
                         <?php foreach ( $items as $item ) : ?>
-                        <li><?php echo wp_kses_post( $item['content'] ); ?></li>
+                        <li><?php echo nl2br( esc_html( wp_strip_all_tags( $item['content'] ) ) ); ?></li>
                         <?php endforeach; ?>
                     </ul>
                 </div>
@@ -72,19 +72,19 @@ class Olo_Switcher_Tile extends Olo_Tile_Base {
             <?php
         else :
             // Horizontal layout
-            $nav_class = 'uk-' . esc_attr( $nav_style );
+            $nav_class = $nav_style === 'tab-underline' ? 'uk-tab olo-tab-underline' : ( 'uk-' . esc_attr( $nav_style ) );
             // For subnav styles, the connect attribute goes on the nav element
-            if ( $nav_style === 'tab' ) :
+            if ( $nav_style === 'tab' || $nav_style === 'tab-underline' ) :
                 ?>
                 <div class="olo-switcher">
                     <ul class="<?php echo esc_attr( $nav_class ); ?>" uk-tab="connect: .olo-switcher-content; <?php echo esc_attr( $switcher_attr ); ?>">
                         <?php foreach ( $items as $i => $item ) : ?>
-                        <li<?php echo $i === 0 ? ' class="uk-active"' : ''; ?>><a href="#"><?php echo wp_kses_post( $item['title'] ); ?></a></li>
+                        <li<?php echo $i === 0 ? ' class="uk-active"' : ''; ?>><a href="#"><?php echo esc_html( wp_strip_all_tags( $item['title'] ) ); ?></a></li>
                         <?php endforeach; ?>
                     </ul>
                     <ul class="uk-switcher olo-switcher-content">
                         <?php foreach ( $items as $item ) : ?>
-                        <li><?php echo wp_kses_post( $item['content'] ); ?></li>
+                        <li><?php echo nl2br( esc_html( wp_strip_all_tags( $item['content'] ) ) ); ?></li>
                         <?php endforeach; ?>
                     </ul>
                 </div>
@@ -95,12 +95,12 @@ class Olo_Switcher_Tile extends Olo_Tile_Base {
                 <div class="olo-switcher">
                     <ul class="<?php echo esc_attr( $nav_class ); ?>" uk-switcher="<?php echo esc_attr( $switcher_attr ); ?>">
                         <?php foreach ( $items as $i => $item ) : ?>
-                        <li<?php echo $i === 0 ? ' class="uk-active"' : ''; ?>><a href="#"><?php echo wp_kses_post( $item['title'] ); ?></a></li>
+                        <li<?php echo $i === 0 ? ' class="uk-active"' : ''; ?>><a href="#"><?php echo esc_html( wp_strip_all_tags( $item['title'] ) ); ?></a></li>
                         <?php endforeach; ?>
                     </ul>
                     <ul class="uk-switcher">
                         <?php foreach ( $items as $item ) : ?>
-                        <li><?php echo wp_kses_post( $item['content'] ); ?></li>
+                        <li><?php echo nl2br( esc_html( wp_strip_all_tags( $item['content'] ) ) ); ?></li>
                         <?php endforeach; ?>
                     </ul>
                 </div>

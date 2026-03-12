@@ -1,42 +1,153 @@
 <template>
-  <div class="mb-px-4 mb-py-6" :style="{ textAlign: settings.alignment || 'center' }">
+  <div :style="{ textAlign: effectiveAlignment }">
     <!-- Line decoration -->
-    <div v-if="settings.decoration === 'line'" class="mb-flex mb-items-center mb-gap-4 mb-mb-4" :style="{ justifyContent: alignJustify }">
-      <span v-if="settings.alignment !== 'left'" class="mb-flex-1" style="max-width:80px;height:3px;border-radius:2px;" :style="{ background: settings.decoration_color }"></span>
-      <component :is="settings.tag || 'h2'" class="mb-m-0 mb-font-bold mb-leading-tight" :style="headingStyle" v-html="settings.heading"></component>
-      <span v-if="settings.alignment !== 'right'" class="mb-flex-1" style="max-width:80px;height:3px;border-radius:2px;" :style="{ background: settings.decoration_color }"></span>
+    <div v-if="s.decoration === 'line'" class="mb-flex mb-items-center mb-gap-4 mb-mb-1" :style="{ justifyContent: alignJustify }">
+      <span v-if="effectiveAlignment !== 'left'" class="mb-flex-1" style="height:1px;" :style="{ background: decoColor }"></span>
+      <component :is="s.tag" class="mb-m-0 mb-leading-tight mb-whitespace-nowrap" :style="headingStyle" data-olo-editable="heading">{{ headingText }}</component>
+      <span v-if="effectiveAlignment !== 'right'" class="mb-flex-1" style="height:1px;" :style="{ background: decoColor }"></span>
     </div>
 
-    <!-- Other decorations -->
+    <!-- Divider decoration -->
+    <template v-else-if="s.decoration === 'divider'">
+      <component :is="s.tag" class="mb-m-0 mb-leading-tight mb-pb-3 mb-mb-1" style="border-bottom:1px solid;" :style="{ ...headingStyle, borderColor: decoColor }" data-olo-editable="heading">{{ headingText }}</component>
+    </template>
+
+    <!-- Other decorations (dot, star, none) -->
     <template v-else>
-      <div v-if="settings.decoration === 'dot'" class="mb-mb-3">
-        <span class="mb-inline-block mb-rounded-full" style="width:10px;height:10px;" :style="{ background: settings.decoration_color }"></span>
+      <div v-if="s.decoration === 'dot'" class="mb-mb-3" :style="{ display: 'flex', justifyContent: alignJustify, gap: (s.decoration_spacing || 6) + 'px' }">
+        <span v-for="n in decoCount" :key="n" class="mb-inline-block mb-rounded-full" style="width:10px;height:10px;" :style="{ background: decoColor }"></span>
       </div>
-      <div v-if="settings.decoration === 'star'" class="mb-mb-2" style="font-size:1.5em;" :style="{ color: settings.decoration_color }">&#x2605;</div>
-      <component :is="settings.tag || 'h2'" class="mb-m-0 mb-font-bold mb-leading-tight" :style="headingStyle" v-html="settings.heading"></component>
+      <div v-if="s.decoration === 'star'" class="mb-mb-2" :style="{ display: 'flex', justifyContent: alignJustify, gap: (s.decoration_spacing || 6) + 'px', fontSize: '1.5em', color: decoColor }">
+        <span v-for="n in decoCount" :key="n">&#x2605;</span>
+      </div>
+      <component :is="s.tag" class="mb-m-0 mb-leading-tight" :style="headingStyle" data-olo-editable="heading">{{ headingText }}</component>
     </template>
 
     <!-- Subtitle -->
-    <p v-if="settings.subtitle" class="mb-mt-3 mb-text-base mb-leading-relaxed" :style="{ color: settings.subtitle_color, margin: '12px 0 0' }" v-html="settings.subtitle"></p>
+    <p v-if="s.subtitle" class="mb-text-base mb-leading-relaxed" :style="subtitleStyle" data-olo-editable="subtitle">{{ s.subtitle }}</p>
   </div>
 </template>
 
 <script setup>
 import { computed } from 'vue';
+import { useBuilderStore } from '@/stores/builder';
+import { rv } from '@/composables/useResponsiveValue';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
 });
 
+const builderStore = useBuilderStore();
+
+const defaults = {
+  heading: 'Titolo sezione',
+  subtitle: '',
+  tag: 'h2',
+  alignment: 'center',
+  heading_size: 'lg',
+  heading_color: '',
+  heading_italic: false,
+  heading_uppercase: false,
+  decoration: 'line',
+  decoration_color: '',
+  decoration_count: 3,
+  decoration_spacing: 6,
+  subtitle_color: '',
+  text_stroke: '0',
+  text_stroke_color: '',
+  text_shadow: '',
+  gradient_text: false,
+  gradient_from: '',
+  gradient_to: '',
+  gradient_angle: '90',
+  blend_mode: 'normal',
+};
+const s = computed(() => ({ ...defaults, ...props.settings }));
+
 const sizeMap = { sm: '1.25em', md: '1.75em', lg: '2.25em', xl: '3em' };
 
-const headingStyle = computed(() => ({
-  color: props.settings.heading_color || '#F3F4F6',
-  fontSize: sizeMap[props.settings.heading_size] || '2.25em',
-}));
+// Strip any legacy HTML tags from heading (old editor content)
+const headingText = computed(() => {
+  const text = s.value.heading || '';
+  return text.replace(/<[^>]*>/g, '');
+});
+
+// Responsive alignment
+const effectiveAlignment = computed(() => rv(props.settings, 'alignment', s.value.alignment, builderStore.viewMode));
+
+// Decoration color with fallback
+const decoColor = computed(() => s.value.decoration_color || 'var(--olo-color-primary, #6366F1)');
+const decoCount = computed(() => Math.max(1, Math.min(9, parseInt(s.value.decoration_count) || 3)));
+
+const headingStyle = computed(() => {
+  const mode = builderStore.viewMode;
+  const headingSize = rv(props.settings, 'heading_size', s.value.heading_size, mode);
+  const st = {
+    fontSize: sizeMap[headingSize] || '2.25em',
+    fontWeight: 'bold',
+  };
+
+  // Italic
+  if (s.value.heading_italic) {
+    st.fontStyle = 'italic';
+  }
+
+  // Uppercase
+  if (s.value.heading_uppercase) {
+    st.textTransform = 'uppercase';
+    st.letterSpacing = '0.05em';
+  }
+
+  // Gradient wins over heading_color
+  if (s.value.gradient_text) {
+    const angle = parseInt(s.value.gradient_angle) || 90;
+    const from = s.value.gradient_from || 'var(--olo-color-primary, #6366F1)';
+    const to = s.value.gradient_to || '#EC4899';
+    st.background = `linear-gradient(${angle}deg, ${from}, ${to})`;
+    st.WebkitBackgroundClip = 'text';
+    st.WebkitTextFillColor = 'transparent';
+    st.backgroundClip = 'text';
+  } else if (s.value.heading_color) {
+    st.color = s.value.heading_color;
+  }
+
+  // Text stroke
+  const stroke = parseInt(s.value.text_stroke) || 0;
+  if (stroke > 0) {
+    st.WebkitTextStroke = stroke + 'px ' + (s.value.text_stroke_color || '#000');
+  }
+
+  // Text shadow
+  if (s.value.text_shadow) {
+    if (s.value.text_shadow === 'custom') {
+      const th = parseInt(s.value.text_shadow_h, 10) || 0;
+      const tv = parseInt(s.value.text_shadow_v, 10) || 0;
+      const tb = parseInt(s.value.text_shadow_blur, 10) || 0;
+      const tc = s.value.text_shadow_color || 'rgba(0,0,0,0.3)';
+      st.textShadow = `${th}px ${tv}px ${tb}px ${tc}`;
+    } else {
+      st.textShadow = s.value.text_shadow;
+    }
+  }
+
+  // Blend mode
+  if (s.value.blend_mode && s.value.blend_mode !== 'normal') {
+    st.mixBlendMode = s.value.blend_mode;
+  }
+
+  return st;
+});
+
+const subtitleStyle = computed(() => {
+  const st = { margin: '12px 0 0' };
+  if (s.value.subtitle_color) {
+    st.color = s.value.subtitle_color;
+  }
+  return st;
+});
 
 const alignJustify = computed(() => {
   const m = { left: 'flex-start', center: 'center', right: 'flex-end' };
-  return m[props.settings.alignment] || 'center';
+  return m[effectiveAlignment.value] || 'center';
 });
 </script>

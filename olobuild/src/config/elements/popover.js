@@ -1,10 +1,10 @@
-import { borderFields, borderDefaults, shadowField } from './_shared.js';
+import { shadowField } from './_shared.js';
 
 export default {
   type: 'popover',
   name: 'Popover',
   icon: 'dashicons-location-alt',
-  category: 'content',
+  category: 'interactive',
   defaults: {
     image: '',
     markers: [
@@ -13,15 +13,14 @@ export default {
     ],
     image_alt: '',
     image_height: '0',
-    marker_color: '#6366F1',
-    popup_bg: '#ffffff',
-    popup_color: '#333333',
+    marker_color: '',
+    popup_bg: '',
+    popup_color: '',
     popup_radius: '8',
     popup_img_height: '120',
     popup_hover_effect: 'none',
-    popup_hover_color: '#6366F1',
+    popup_hover_color: '',
     shadow: 'none',
-    ...borderDefaults,
   },
   fields: [
     { key: 'image', label: 'Immagine', type: 'image' },
@@ -44,7 +43,7 @@ export default {
     { key: 'marker_color', label: 'Colore marcatore', type: 'color' },
     { key: 'popup_bg', label: 'Sfondo popup', type: 'color' },
     { key: 'popup_color', label: 'Colore testo popup', type: 'color' },
-    { key: 'popup_radius', label: 'Arrotondamento popup (px)', type: 'range', min: 0, max: 20, step: 1 },
+    { key: 'popup_radius', label: 'Arrotondamento popup (px)', type: 'border-radius' },
 
     { type: 'separator', label: 'Immagine popup' },
 
@@ -60,7 +59,6 @@ export default {
     ]},
     { key: 'popup_hover_color', label: 'Colore overlay hover', type: 'color',
       condition: { field: 'popup_hover_effect', value: 'color-overlay' } },
-    shadowField,
-    ...borderFields,
+    ...shadowField,
   ],
 };

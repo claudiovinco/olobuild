@@ -1,6 +1,6 @@
 /**
  * Olobuild LiveSearch — frontend vanilla JS.
- * Modes: expanded, compact, modal.
+ * Modes: expanded, compact, modal, inline.
  */
 (function () {
   'use strict';
@@ -37,41 +37,70 @@
     var isOpen        = false;
     var isExpanded    = cfg.mode !== 'compact';
 
+    // ═══ ANIMATED PLACEHOLDER ═══
+    if (cfg.animPh) {
+      if (cfg.animPh.length > 0) {
+        var phIdx = 0;
+        setInterval(function () {
+          phIdx = (phIdx + 1) % cfg.animPh.length;
+          input.setAttribute('placeholder', cfg.animPh[phIdx]);
+        }, 2500);
+      }
+    }
+
     // ═══ MODAL MODE ═══
     var modalIsOpen = false;
 
-    if (cfg.mode === 'modal' && overlay && trigger) {
-      // Sposta overlay in <body> per evitare clip da parent overflow/z-index
-      document.body.appendChild(overlay);
+    if (cfg.mode === 'modal') {
+      if (overlay) {
+        if (trigger) {
+          // Sposta overlay in <body> per evitare clip da parent overflow/z-index
+          document.body.appendChild(overlay);
 
-      // Re-query gli elementi perché ora sono in <body>
-      input     = overlay.querySelector('.olo-ls-input');
-      clearBtn  = overlay.querySelector('.olo-ls-clear');
-      dropdown  = overlay.querySelector('.olo-ls-dropdown');
-      resultsEl = overlay.querySelector('.olo-ls-results');
-      footerEl  = overlay.querySelector('.olo-ls-footer');
-      emptyEl   = overlay.querySelector('.olo-ls-empty');
-      backdrop  = overlay.querySelector('.olo-ls-backdrop');
+          // Re-query gli elementi perche ora sono in <body>
+          input     = overlay.querySelector('.olo-ls-input');
+          clearBtn  = overlay.querySelector('.olo-ls-clear');
+          dropdown  = overlay.querySelector('.olo-ls-dropdown');
+          resultsEl = overlay.querySelector('.olo-ls-results');
+          footerEl  = overlay.querySelector('.olo-ls-footer');
+          emptyEl   = overlay.querySelector('.olo-ls-empty');
+          backdrop  = overlay.querySelector('.olo-ls-backdrop');
 
-      trigger.addEventListener('click', function () {
-        openModal();
-      });
+          trigger.addEventListener('click', function () {
+            openModal();
+          });
 
-      backdrop.addEventListener('click', function () {
-        closeModal();
-      });
+          if (backdrop) {
+            backdrop.addEventListener('click', function () {
+              closeModal();
+            });
+          }
 
-      document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape' && modalIsOpen) {
-          closeModal();
+          document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+              if (modalIsOpen) {
+                closeModal();
+              }
+            }
+          });
+
+          // Re-setup animated placeholder for modal input
+          if (cfg.animPh) {
+            if (cfg.animPh.length > 0) {
+              var mPhIdx = 0;
+              setInterval(function () {
+                mPhIdx = (mPhIdx + 1) % cfg.animPh.length;
+                input.setAttribute('placeholder', cfg.animPh[mPhIdx]);
+              }, 2500);
+            }
+          }
         }
-      });
+      }
     }
 
     function openModal() {
       modalIsOpen = true;
       document.body.style.overflow = 'hidden';
-      // Frame 1: rende visibile (visibility), frame 2: anima (opacity/transform)
       requestAnimationFrame(function () {
         overlay.classList.add('olo-ls-overlay--open');
         setTimeout(function () { input.focus(); }, 200);
@@ -94,25 +123,33 @@
     }
 
     // ═══ COMPACT MODE ═══
-    if (cfg.mode === 'compact' && trigger && fieldWrap) {
-      trigger.addEventListener('click', function () {
-        isExpanded = true;
-        fieldWrap.classList.remove('olo-ls-field--hidden');
-        trigger.hidden = true;
-        input.focus();
-      });
+    if (cfg.mode === 'compact') {
+      if (trigger) {
+        if (fieldWrap) {
+          trigger.addEventListener('click', function () {
+            isExpanded = true;
+            fieldWrap.classList.remove('olo-ls-field--hidden');
+            trigger.hidden = true;
+            input.focus();
+          });
 
-      input.addEventListener('blur', function () {
-        if (cfg.mode === 'compact' && input.value.trim() === '' && !isOpen) {
-          setTimeout(function () {
-            if (!isOpen && input.value.trim() === '') {
-              isExpanded = false;
-              fieldWrap.classList.add('olo-ls-field--hidden');
-              trigger.hidden = false;
+          input.addEventListener('blur', function () {
+            if (input.value.trim() === '') {
+              if (!isOpen) {
+                setTimeout(function () {
+                  if (!isOpen) {
+                    if (input.value.trim() === '') {
+                      isExpanded = false;
+                      fieldWrap.classList.add('olo-ls-field--hidden');
+                      trigger.hidden = false;
+                    }
+                  }
+                }, 200);
+              }
             }
-          }, 200);
+          });
         }
-      });
+      }
     }
 
     // ─── Input events ───
@@ -162,9 +199,11 @@
         highlightItem(items);
       } else if (e.key === 'Enter') {
         e.preventDefault();
-        if (activeIndex >= 0 && items[activeIndex]) {
-          var link = items[activeIndex].querySelector('a');
-          if (link) window.location.href = link.href;
+        if (activeIndex >= 0) {
+          if (items[activeIndex]) {
+            var link = items[activeIndex].querySelector('a');
+            if (link) window.location.href = link.href;
+          }
         }
       }
     });
@@ -182,6 +221,12 @@
     function doSearch(q) {
       if (controller) controller.abort();
       controller = new AbortController();
+
+      // Show loading state
+      resultsEl.innerHTML = '<div class="olo-ls-loading"><span class="olo-ls-spinner"></span></div>';
+      if (emptyEl) emptyEl.hidden = true;
+      if (footerEl) footerEl.hidden = true;
+      openDropdown();
 
       var url = cfg.restUrl +
         '?q=' + encodeURIComponent(q) +
@@ -204,6 +249,7 @@
 
     // ─── Render ───
     var isGrid = (cfg.columns || 1) > 1;
+    var showExcerpt = cfg.showExcerpt !== false;
 
     function renderResults(data, query) {
       resultsEl.innerHTML = '';
@@ -231,18 +277,22 @@
         div.setAttribute('data-index', idx);
 
         var linkClass = isGrid ? 'olo-ls-item-link olo-ls-item-link--card' : 'olo-ls-item-link';
-        var html = '<a href="' + escHtml(item.url) + '" class="' + linkClass + '">';
+        var html = '<a href="' + oloUtils.escHtml(item.url) + '" class="' + linkClass + '">';
 
-        if (cfg.showThumb && item.thumbnail) {
-          html += '<img class="olo-ls-thumb" src="' + escHtml(item.thumbnail) + '" alt="" loading="lazy">';
-        } else if (cfg.showThumb) {
-          html += '<span class="olo-ls-thumb olo-ls-thumb--empty"></span>';
+        if (cfg.showThumb) {
+          if (item.thumbnail) {
+            html += '<img class="olo-ls-thumb" src="' + oloUtils.escHtml(item.thumbnail) + '" alt="" loading="lazy">';
+          } else {
+            html += '<span class="olo-ls-thumb olo-ls-thumb--empty"></span>';
+          }
         }
 
         html += '<span class="olo-ls-item-text">';
         html += '<span class="olo-ls-item-title">' + highlightMatch(item.title, query) + '</span>';
-        if (item.excerpt) {
-          html += '<span class="olo-ls-item-excerpt">' + escHtml(item.excerpt) + '</span>';
+        if (showExcerpt) {
+          if (item.excerpt) {
+            html += '<span class="olo-ls-item-excerpt">' + oloUtils.escHtml(item.excerpt) + '</span>';
+          }
         }
         html += '</span></a>';
 
@@ -250,19 +300,25 @@
         resultsEl.appendChild(div);
       });
 
-      if (footerEl && cfg.showAllUrl && total > results.length) {
-        var allUrl = cfg.showAllUrl;
-        if (allUrl.indexOf('?') === -1) {
-          allUrl += '?s=' + encodeURIComponent(query);
+      if (footerEl) {
+        if (cfg.showAllUrl) {
+          if (total > results.length) {
+            var allUrl = cfg.showAllUrl;
+            if (allUrl.indexOf('?') === -1) {
+              allUrl += '?s=' + encodeURIComponent(query);
+            } else {
+              allUrl += '&s=' + encodeURIComponent(query);
+            }
+            footerEl.innerHTML = '<a href="' + oloUtils.escHtml(allUrl) + '">' +
+              oloUtils.escHtml(cfg.showAllText || 'Vedi tutti i risultati') +
+              ' <span class="olo-ls-total">(' + total + ')</span></a>';
+            footerEl.hidden = false;
+          } else {
+            footerEl.hidden = true;
+          }
         } else {
-          allUrl += '&s=' + encodeURIComponent(query);
+          footerEl.hidden = true;
         }
-        footerEl.innerHTML = '<a href="' + escHtml(allUrl) + '">' +
-          escHtml(cfg.showAllText || 'Vedi tutti i risultati') +
-          ' <span class="olo-ls-total">(' + total + ')</span></a>';
-        footerEl.hidden = false;
-      } else if (footerEl) {
-        footerEl.hidden = true;
       }
 
       openDropdown();
@@ -299,17 +355,10 @@
     }
 
     function highlightMatch(text, query) {
-      if (!query) return escHtml(text);
-      var safe  = escHtml(text);
+      if (!query) return oloUtils.escHtml(text);
+      var safe  = oloUtils.escHtml(text);
       var regex = new RegExp('(' + escRegex(query) + ')', 'gi');
       return safe.replace(regex, '<mark>$1</mark>');
-    }
-
-    function escHtml(str) {
-      if (!str) return '';
-      var div = document.createElement('div');
-      div.appendChild(document.createTextNode(str));
-      return div.innerHTML;
     }
 
     function escRegex(str) {

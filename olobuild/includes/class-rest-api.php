@@ -66,6 +66,20 @@ class Olo_Rest_Api {
             'permission_callback' => [ $this, 'check_permission' ],
         ] );
 
+        // Template revisions
+        register_rest_route( $this->namespace, '/templates/(?P<id>\d+)/revisions', [
+            'methods'             => 'GET',
+            'callback'            => [ $this, 'get_revisions' ],
+            'permission_callback' => [ $this, 'check_permission' ],
+        ] );
+
+        // Single revision (full content)
+        register_rest_route( $this->namespace, '/revisions/(?P<rev_id>\d+)', [
+            'methods'             => 'GET',
+            'callback'            => [ $this, 'get_revision' ],
+            'permission_callback' => [ $this, 'check_permission' ],
+        ] );
+
         // Menu items (L1 only) for a given menu
         register_rest_route( $this->namespace, '/menu-items/(?P<menu_id>\d+)', [
             'methods'             => 'GET',
@@ -152,6 +166,178 @@ class Olo_Rest_Api {
             ],
         ] );
 
+        // Custom Fonts
+        register_rest_route( $this->namespace, '/fonts', [
+            [
+                'methods'             => 'GET',
+                'callback'            => [ $this, 'get_fonts' ],
+                'permission_callback' => function () { return current_user_can( 'manage_options' ); },
+            ],
+            [
+                'methods'             => 'POST',
+                'callback'            => [ $this, 'upload_font' ],
+                'permission_callback' => function () { return current_user_can( 'manage_options' ); },
+            ],
+        ] );
+
+        register_rest_route( $this->namespace, '/fonts/(?P<id>[a-zA-Z0-9_-]+)', [
+            'methods'             => 'DELETE',
+            'callback'            => [ $this, 'delete_font' ],
+            'permission_callback' => function () { return current_user_can( 'manage_options' ); },
+        ] );
+
+        // Custom icons
+        register_rest_route( $this->namespace, '/custom-icons', [
+            [
+                'methods'             => 'GET',
+                'callback'            => [ $this, 'get_custom_icons' ],
+                'permission_callback' => [ $this, 'check_permission' ],
+            ],
+            [
+                'methods'             => 'POST',
+                'callback'            => [ $this, 'upload_custom_icon' ],
+                'permission_callback' => function () { return current_user_can( 'manage_options' ); },
+            ],
+        ] );
+
+        register_rest_route( $this->namespace, '/custom-icons/(?P<name>[a-zA-Z0-9_-]+)', [
+            'methods'             => 'DELETE',
+            'callback'            => [ $this, 'delete_custom_icon' ],
+            'permission_callback' => function () { return current_user_can( 'manage_options' ); },
+        ] );
+
+        // Global widgets CRUD
+        register_rest_route( $this->namespace, '/global-widgets', [
+            [
+                'methods'             => 'GET',
+                'callback'            => [ $this, 'get_global_widgets' ],
+                'permission_callback' => [ $this, 'check_permission' ],
+            ],
+            [
+                'methods'             => 'POST',
+                'callback'            => [ $this, 'create_global_widget' ],
+                'permission_callback' => [ $this, 'check_permission' ],
+            ],
+        ] );
+
+        register_rest_route( $this->namespace, '/global-widgets/(?P<id>\d+)', [
+            [
+                'methods'             => 'PUT',
+                'callback'            => [ $this, 'update_global_widget' ],
+                'permission_callback' => [ $this, 'check_permission' ],
+            ],
+            [
+                'methods'             => 'DELETE',
+                'callback'            => [ $this, 'delete_global_widget' ],
+                'permission_callback' => [ $this, 'check_permission' ],
+            ],
+        ] );
+
+        // Global Colors
+        register_rest_route( $this->namespace, '/global-colors', [
+            [
+                'methods'             => 'GET',
+                'callback'            => [ $this, 'get_global_colors' ],
+                'permission_callback' => [ $this, 'check_permission' ],
+            ],
+            [
+                'methods'             => 'PUT',
+                'callback'            => [ $this, 'save_global_colors' ],
+                'permission_callback' => [ $this, 'check_permission' ],
+            ],
+        ] );
+
+        // Global Typography
+        register_rest_route( $this->namespace, '/global-typography', [
+            [
+                'methods'             => 'GET',
+                'callback'            => [ $this, 'get_global_typography' ],
+                'permission_callback' => [ $this, 'check_permission' ],
+            ],
+            [
+                'methods'             => 'PUT',
+                'callback'            => [ $this, 'save_global_typography' ],
+                'permission_callback' => [ $this, 'check_permission' ],
+            ],
+        ] );
+
+        // Design Presets
+        register_rest_route( $this->namespace, '/design-presets', [
+            [
+                'methods'             => 'GET',
+                'callback'            => [ $this, 'get_design_presets' ],
+                'permission_callback' => [ $this, 'check_permission' ],
+            ],
+            [
+                'methods'             => 'POST',
+                'callback'            => [ $this, 'create_design_preset' ],
+                'permission_callback' => [ $this, 'check_permission' ],
+            ],
+        ] );
+
+        register_rest_route( $this->namespace, '/design-presets/(?P<id>[a-zA-Z0-9_-]+)', [
+            [
+                'methods'             => 'PUT',
+                'callback'            => [ $this, 'update_design_preset' ],
+                'permission_callback' => [ $this, 'check_permission' ],
+            ],
+            [
+                'methods'             => 'DELETE',
+                'callback'            => [ $this, 'delete_design_preset' ],
+                'permission_callback' => [ $this, 'check_permission' ],
+            ],
+        ] );
+
+        // Template Library
+        register_rest_route( $this->namespace, '/template-library', [
+            'methods'             => 'GET',
+            'callback'            => [ $this, 'get_template_library' ],
+            'permission_callback' => [ $this, 'check_permission' ],
+        ] );
+        register_rest_route( $this->namespace, '/template-library/(?P<id>[a-zA-Z0-9_-]+)', [
+            'methods'             => 'GET',
+            'callback'            => [ $this, 'get_library_template' ],
+            'permission_callback' => [ $this, 'check_permission' ],
+        ] );
+        register_rest_route( $this->namespace, '/template-library/save', [
+            'methods'             => 'POST',
+            'callback'            => [ $this, 'save_user_template' ],
+            'permission_callback' => [ $this, 'check_permission' ],
+        ] );
+        register_rest_route( $this->namespace, '/template-library/user/(?P<id>[a-zA-Z0-9_-]+)', [
+            'methods'             => 'DELETE',
+            'callback'            => [ $this, 'delete_user_template' ],
+            'permission_callback' => [ $this, 'check_permission' ],
+        ] );
+
+        // Design Presets Built-in
+        register_rest_route( $this->namespace, '/design-presets/builtin', [
+            'methods'             => 'GET',
+            'callback'            => [ $this, 'get_builtin_presets' ],
+            'permission_callback' => [ $this, 'check_permission' ],
+        ] );
+
+        // Design Tokens Export
+        register_rest_route( $this->namespace, '/design-tokens', [
+            'methods'             => 'GET',
+            'callback'            => [ $this, 'export_design_tokens' ],
+            'permission_callback' => [ $this, 'check_permission' ],
+        ] );
+
+        // Custom Code (head/body/footer snippets)
+        register_rest_route( $this->namespace, '/custom-code', [
+            [
+                'methods'             => 'GET',
+                'callback'            => [ $this, 'get_custom_code' ],
+                'permission_callback' => function () { return current_user_can( 'manage_options' ); },
+            ],
+            [
+                'methods'             => 'PUT',
+                'callback'            => [ $this, 'save_custom_code' ],
+                'permission_callback' => function () { return current_user_can( 'manage_options' ); },
+            ],
+        ] );
+
         // Footer activation
         register_rest_route( $this->namespace, '/footer/activate', [
             [
@@ -170,10 +356,170 @@ class Olo_Rest_Api {
                 'permission_callback' => [ $this, 'check_permission' ],
             ],
         ] );
+
+        // Archive template activation (per post_type + generic fallback)
+        register_rest_route( $this->namespace, '/archive/activate', [
+            [
+                'methods'             => 'PUT',
+                'callback'            => [ $this, 'activate_archive' ],
+                'permission_callback' => [ $this, 'check_permission' ],
+            ],
+            [
+                'methods'             => 'DELETE',
+                'callback'            => [ $this, 'deactivate_archive' ],
+                'permission_callback' => [ $this, 'check_permission' ],
+            ],
+            [
+                'methods'             => 'GET',
+                'callback'            => [ $this, 'get_active_archives' ],
+                'permission_callback' => [ $this, 'check_permission' ],
+            ],
+        ] );
+
+        // 404 template activation
+        register_rest_route( $this->namespace, '/404/activate', [
+            [
+                'methods'             => 'PUT',
+                'callback'            => [ $this, 'activate_404' ],
+                'permission_callback' => [ $this, 'check_permission' ],
+            ],
+            [
+                'methods'             => 'DELETE',
+                'callback'            => [ $this, 'deactivate_404' ],
+                'permission_callback' => [ $this, 'check_permission' ],
+            ],
+            [
+                'methods'             => 'GET',
+                'callback'            => [ $this, 'get_active_404' ],
+                'permission_callback' => [ $this, 'check_permission' ],
+            ],
+        ] );
+
+        // Maintenance mode
+        register_rest_route( $this->namespace, '/maintenance', [
+            [
+                'methods'             => 'GET',
+                'callback'            => [ $this, 'get_maintenance' ],
+                'permission_callback' => function () { return current_user_can( 'manage_options' ); },
+            ],
+            [
+                'methods'             => 'PUT',
+                'callback'            => [ $this, 'save_maintenance' ],
+                'permission_callback' => function () { return current_user_can( 'manage_options' ); },
+            ],
+        ] );
+
+        // ─── Analytics Settings ──────────────────────────────────────
+        register_rest_route( $this->namespace, '/analytics', [
+            [
+                'methods'             => 'GET',
+                'callback'            => [ $this, 'get_analytics' ],
+                'permission_callback' => function () { return current_user_can( 'manage_options' ); },
+            ],
+            [
+                'methods'             => 'PUT',
+                'callback'            => [ $this, 'save_analytics' ],
+                'permission_callback' => function () { return current_user_can( 'manage_options' ); },
+            ],
+        ] );
+
+        // ─── Critical CSS ────────────────────────────────────────────
+        register_rest_route( $this->namespace, '/critical-css/generate', [
+            'methods'             => 'POST',
+            'callback'            => [ $this, 'generate_critical_css' ],
+            'permission_callback' => function () { return current_user_can( 'manage_options' ); },
+        ] );
+
+        register_rest_route( $this->namespace, '/critical-css/regenerate-all', [
+            'methods'             => 'POST',
+            'callback'            => [ $this, 'regenerate_all_critical_css' ],
+            'permission_callback' => function () { return current_user_can( 'manage_options' ); },
+        ] );
+
+        register_rest_route( $this->namespace, '/critical-css/purge', [
+            'methods'             => 'DELETE',
+            'callback'            => [ $this, 'purge_critical_css' ],
+            'permission_callback' => function () { return current_user_can( 'manage_options' ); },
+        ] );
+
+        register_rest_route( $this->namespace, '/critical-css/status', [
+            'methods'             => 'GET',
+            'callback'            => [ $this, 'get_critical_css_status' ],
+            'permission_callback' => function () { return current_user_can( 'manage_options' ); },
+        ] );
+
+        // Site export/import
+        register_rest_route( $this->namespace, '/site/export', [
+            'methods'             => 'GET',
+            'callback'            => [ $this, 'site_export' ],
+            'permission_callback' => function () { return current_user_can( 'manage_options' ); },
+        ] );
+
+        register_rest_route( $this->namespace, '/site/import', [
+            'methods'             => 'POST',
+            'callback'            => [ $this, 'site_import' ],
+            'permission_callback' => function () { return current_user_can( 'manage_options' ); },
+        ] );
+
+        // Lottie animation search (LottieFiles proxy)
+        register_rest_route( $this->namespace, '/lottie/search', [
+            'methods'             => 'POST',
+            'callback'            => [ $this, 'lottie_search' ],
+            'permission_callback' => [ $this, 'check_permission' ],
+        ] );
+
+        // Search results template activation
+        register_rest_route( $this->namespace, '/search/activate', [
+            [
+                'methods'             => 'PUT',
+                'callback'            => [ $this, 'activate_search' ],
+                'permission_callback' => [ $this, 'check_permission' ],
+            ],
+            [
+                'methods'             => 'DELETE',
+                'callback'            => [ $this, 'deactivate_search' ],
+                'permission_callback' => [ $this, 'check_permission' ],
+            ],
+            [
+                'methods'             => 'GET',
+                'callback'            => [ $this, 'get_active_search' ],
+                'permission_callback' => [ $this, 'check_permission' ],
+            ],
+        ] );
+
+        // Template preview render (returns HTML)
+        register_rest_route( $this->namespace, '/templates/(?P<id>\d+)/render', [
+            'methods'             => 'GET',
+            'callback'            => [ $this, 'render_template_preview' ],
+            'permission_callback' => [ $this, 'check_permission' ],
+        ] );
     }
 
-    public function check_permission() {
-        return current_user_can( 'edit_posts' );
+    public function check_permission( $request = null ) {
+        if ( ! current_user_can( 'edit_pages' ) ) {
+            return false;
+        }
+
+        // Verify WP REST nonce for write operations
+        if ( $request && in_array( $request->get_method(), [ 'POST', 'PUT', 'DELETE' ], true ) ) {
+            $nonce = $request->get_header( 'x-wp-nonce' );
+            if ( ! $nonce || ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
+                return new WP_Error( 'rest_forbidden', 'Nonce non valido.', array( 'status' => 403 ) );
+            }
+        }
+
+        // Rate limiting: max 120 requests per minute per user
+        $user_id = get_current_user_id();
+        $key     = 'olo_api_rl_' . $user_id;
+        $count   = (int) get_transient( $key );
+
+        if ( $count > 120 ) {
+            return new WP_Error( 'rate_limited', 'Too many requests', array( 'status' => 429 ) );
+        }
+
+        set_transient( $key, $count + 1, MINUTE_IN_SECONDS );
+
+        return true;
     }
 
     /**
@@ -182,6 +528,9 @@ class Olo_Rest_Api {
      * JS treats [] as Array, losing non-indexed properties on stringify.
      */
     private function prepare_template( $template ) {
+        if ( isset( $template['id'] ) ) {
+            $template['id'] = (int) $template['id'];
+        }
         if ( isset( $template['settings'] ) && is_array( $template['settings'] ) && empty( $template['settings'] ) ) {
             $template['settings'] = new stdClass;
         }
@@ -206,11 +555,26 @@ class Olo_Rest_Api {
         $db   = new Olo_Database();
         $body = $request->get_json_params();
 
+        // Validate content — must be an array (list of sections/rows)
+        $content = $body['content'] ?? [];
+        if ( ! is_array( $content ) ) {
+            return new WP_Error( 'invalid_content', 'Il campo content deve essere un array.', [ 'status' => 400 ] );
+        }
+
+        // Validate settings — must be an array or object (associative array)
+        $settings = $body['settings'] ?? [];
+        if ( ! is_array( $settings ) && ! is_object( $settings ) ) {
+            return new WP_Error( 'invalid_settings', 'Il campo settings deve essere un oggetto.', [ 'status' => 400 ] );
+        }
+        if ( is_object( $settings ) ) {
+            $settings = (array) $settings;
+        }
+
         $id = $db->create_template( [
             'title'    => sanitize_text_field( $body['title'] ?? 'Senza titolo' ),
             'type'     => sanitize_text_field( $body['type'] ?? 'page' ),
-            'content'  => $body['content'] ?? [],
-            'settings' => $body['settings'] ?? [],
+            'content'  => $content,
+            'settings' => $settings,
             'status'   => sanitize_text_field( $body['status'] ?? 'draft' ),
         ] );
 
@@ -254,10 +618,16 @@ class Olo_Rest_Api {
             $update_data['type'] = $body['type'];
         }
         if ( isset( $body['content'] ) ) {
+            if ( ! is_array( $body['content'] ) ) {
+                return new WP_Error( 'invalid_content', 'Il campo content deve essere un array.', [ 'status' => 400 ] );
+            }
             $update_data['content'] = $body['content'];
         }
         if ( isset( $body['settings'] ) ) {
-            $update_data['settings'] = $body['settings'];
+            if ( ! is_array( $body['settings'] ) && ! is_object( $body['settings'] ) ) {
+                return new WP_Error( 'invalid_settings', 'Il campo settings deve essere un oggetto.', [ 'status' => 400 ] );
+            }
+            $update_data['settings'] = is_object( $body['settings'] ) ? (array) $body['settings'] : $body['settings'];
         }
         if ( isset( $body['status'] ) ) {
             $update_data['status'] = $body['status'];
@@ -362,6 +732,11 @@ class Olo_Rest_Api {
         $source  = sanitize_text_field( $body['source'] ?? '' );
         $field   = sanitize_text_field( $body['field'] ?? '' );
         $post_id = absint( $body['post_id'] ?? 0 );
+
+        // Verify the user can read the requested post
+        if ( $post_id && ! current_user_can( 'read_post', $post_id ) ) {
+            return new WP_Error( 'forbidden', 'Cannot preview this post', array( 'status' => 403 ) );
+        }
 
         if ( ! $source || ! $field ) {
             return new WP_Error( 'missing_params', 'source and field are required.', [ 'status' => 400 ] );
@@ -494,6 +869,133 @@ class Olo_Rest_Api {
         return rest_ensure_response( $result );
     }
 
+    // ─── Archive template activation ──────────────────────────────────
+
+    public function activate_archive( $request ) {
+        $body      = $request->get_json_params();
+        $id        = absint( $body['id'] ?? 0 );
+        $post_type = sanitize_key( $body['post_type'] ?? '' );
+
+        if ( ! $id ) {
+            return new WP_Error( 'missing_id', 'ID template obbligatorio.', [ 'status' => 400 ] );
+        }
+
+        $db  = new Olo_Database();
+        $tpl = $db->get_template( $id );
+        if ( ! $tpl ) {
+            return new WP_Error( 'not_found', 'Template non trovato.', [ 'status' => 404 ] );
+        }
+
+        if ( $post_type ) {
+            // Post-type-specific archive template
+            update_option( "olo_active_archive_{$post_type}", $id );
+            return rest_ensure_response( [ 'post_type' => $post_type, 'template_id' => $id ] );
+        }
+
+        // Generic archive template (fallback)
+        update_option( 'olo_active_archive', $id );
+        return rest_ensure_response( [ 'active_archive' => $id ] );
+    }
+
+    public function deactivate_archive( $request ) {
+        $body      = $request->get_json_params();
+        $post_type = sanitize_key( $body['post_type'] ?? '' );
+
+        if ( $post_type ) {
+            delete_option( "olo_active_archive_{$post_type}" );
+            return rest_ensure_response( [ 'post_type' => $post_type, 'template_id' => 0 ] );
+        }
+
+        delete_option( 'olo_active_archive' );
+        return rest_ensure_response( [ 'active_archive' => 0 ] );
+    }
+
+    public function get_active_archives() {
+        $post_types = get_post_types( [ 'public' => true ], 'names' );
+        $result     = [];
+
+        // Generic archive fallback
+        $generic = (int) get_option( 'olo_active_archive', 0 );
+        if ( $generic ) {
+            $result['_generic'] = $generic;
+        }
+
+        // Per-post-type archive templates
+        foreach ( $post_types as $pt ) {
+            if ( in_array( $pt, [ 'page', 'attachment' ], true ) ) continue;
+            $tpl_id = (int) get_option( "olo_active_archive_{$pt}", 0 );
+            if ( $tpl_id ) {
+                $result[ $pt ] = $tpl_id;
+            }
+        }
+
+        return rest_ensure_response( $result );
+    }
+
+    // ─── 404 template activation ──────────────────────────────────────
+
+    public function activate_404( $request ) {
+        $body = $request->get_json_params();
+        $id   = absint( $body['id'] ?? 0 );
+
+        if ( ! $id ) {
+            return new WP_Error( 'missing_id', 'ID template obbligatorio.', [ 'status' => 400 ] );
+        }
+
+        $db  = new Olo_Database();
+        $tpl = $db->get_template( $id );
+        if ( ! $tpl ) {
+            return new WP_Error( 'not_found', 'Template non trovato.', [ 'status' => 404 ] );
+        }
+
+        update_option( 'olo_active_404', $id );
+
+        return rest_ensure_response( [ 'active_404' => $id ] );
+    }
+
+    public function deactivate_404() {
+        delete_option( 'olo_active_404' );
+        return rest_ensure_response( [ 'active_404' => 0 ] );
+    }
+
+    public function get_active_404() {
+        return rest_ensure_response( [
+            'active_404' => (int) get_option( 'olo_active_404', 0 ),
+        ] );
+    }
+
+    // ─── Search results template activation ───────────────────────────
+
+    public function activate_search( $request ) {
+        $body = $request->get_json_params();
+        $id   = absint( $body['id'] ?? 0 );
+
+        if ( ! $id ) {
+            return new WP_Error( 'missing_id', 'ID template obbligatorio.', [ 'status' => 400 ] );
+        }
+
+        $db  = new Olo_Database();
+        $tpl = $db->get_template( $id );
+        if ( ! $tpl ) {
+            return new WP_Error( 'not_found', 'Template non trovato.', [ 'status' => 404 ] );
+        }
+
+        update_option( 'olo_active_search', $id );
+
+        return rest_ensure_response( [ 'active_search' => $id ] );
+    }
+
+    public function deactivate_search() {
+        delete_option( 'olo_active_search' );
+        return rest_ensure_response( [ 'active_search' => 0 ] );
+    }
+
+    public function get_active_search() {
+        return rest_ensure_response( [
+            'active_search' => (int) get_option( 'olo_active_search', 0 ),
+        ] );
+    }
+
     public function export_template( $request ) {
         $db       = new Olo_Database();
         $template = $db->get_template( (int) $request['id'] );
@@ -526,12 +1028,25 @@ class Olo_Rest_Api {
             return new WP_Error( 'invalid_file', 'File non valido: non è un export Olobuild template.', [ 'status' => 400 ] );
         }
 
+        // Validate content/settings on import too
+        $import_content = $body['content'] ?? [];
+        if ( ! is_array( $import_content ) ) {
+            return new WP_Error( 'invalid_content', 'Il campo content deve essere un array.', [ 'status' => 400 ] );
+        }
+        $import_settings = $body['settings'] ?? [];
+        if ( ! is_array( $import_settings ) && ! is_object( $import_settings ) ) {
+            return new WP_Error( 'invalid_settings', 'Il campo settings deve essere un oggetto.', [ 'status' => 400 ] );
+        }
+        if ( is_object( $import_settings ) ) {
+            $import_settings = (array) $import_settings;
+        }
+
         $db = new Olo_Database();
         $id = $db->create_template( [
             'title'    => sanitize_text_field( $body['title'] ?? 'Importato' ),
             'type'     => sanitize_text_field( $body['type'] ?? 'page' ),
-            'content'  => $body['content'] ?? [],
-            'settings' => $body['settings'] ?? [],
+            'content'  => $import_content,
+            'settings' => $import_settings,
             'status'   => 'draft',
         ] );
 
@@ -541,5 +1056,794 @@ class Olo_Rest_Api {
 
         $template = $db->get_template( $id );
         return rest_ensure_response( $this->prepare_template( $template ) );
+    }
+
+    // ── Custom Fonts ────────────────────────────────────────
+
+    public function get_fonts() {
+        return new WP_REST_Response( Olo_Custom_Fonts::get_fonts(), 200 );
+    }
+
+    public function upload_font( $request ) {
+        $name   = sanitize_text_field( $request->get_param( 'font_name' ) ?? '' );
+        $weight = sanitize_text_field( $request->get_param( 'font_weight' ) ?? '400' );
+        $style  = sanitize_text_field( $request->get_param( 'font_style' ) ?? 'normal' );
+
+        if ( empty( $name ) ) {
+            return new WP_REST_Response( [ 'message' => 'Nome font obbligatorio.' ], 400 );
+        }
+
+        if ( empty( $_FILES['font_file'] ) ) {
+            return new WP_REST_Response( [ 'message' => 'Nessun file caricato.' ], 400 );
+        }
+
+        $url = Olo_Custom_Fonts::upload_font_file( $_FILES['font_file'] );
+        if ( is_wp_error( $url ) ) {
+            return new WP_REST_Response( [ 'message' => $url->get_error_message() ], 400 );
+        }
+
+        // Add or update font in the list
+        $fonts = Olo_Custom_Fonts::get_fonts();
+        $font_id = sanitize_title( $name );
+        $found = false;
+        foreach ( $fonts as &$f ) {
+            if ( $f['id'] === $font_id ) {
+                $f['variants'][] = [ 'weight' => $weight, 'style' => $style, 'file' => $url ];
+                $found = true;
+                break;
+            }
+        }
+        unset( $f );
+
+        if ( ! $found ) {
+            $fonts[] = [
+                'id'       => $font_id,
+                'name'     => $name,
+                'variants' => [ [ 'weight' => $weight, 'style' => $style, 'file' => $url ] ],
+            ];
+        }
+
+        Olo_Custom_Fonts::save_fonts( $fonts );
+        return new WP_REST_Response( [ 'success' => true, 'fonts' => $fonts ], 200 );
+    }
+
+    public function delete_font( $request ) {
+        $id = sanitize_text_field( $request->get_param( 'id' ) );
+        Olo_Custom_Fonts::delete_font( $id );
+        return new WP_REST_Response( [ 'success' => true, 'fonts' => Olo_Custom_Fonts::get_fonts() ], 200 );
+    }
+
+    // === Custom Icons ===
+
+    public function get_custom_icons() {
+        $icons = get_option( 'olo_custom_icons', [] );
+        return new WP_REST_Response( $icons, 200 );
+    }
+
+    public function upload_custom_icon( $request ) {
+        $files = $request->get_file_params();
+        $file = $files['file'] ?? null;
+        if ( ! $file || $file['error'] ) {
+            return new WP_Error( 'no_file', 'Nessun file caricato', [ 'status' => 400 ] );
+        }
+        $ext = strtolower( pathinfo( $file['name'], PATHINFO_EXTENSION ) );
+        if ( $ext !== 'svg' ) {
+            return new WP_Error( 'invalid_type', 'Solo file SVG sono supportati', [ 'status' => 400 ] );
+        }
+        $svg_content = file_get_contents( $file['tmp_name'] );
+        // Basic SVG sanitization - remove script tags
+        $svg_content = preg_replace( '/<script\b[^>]*>.*?<\/script>/is', '', $svg_content );
+        $svg_content = preg_replace( '/\bon\w+\s*=/i', 'data-removed=', $svg_content );
+
+        $name = sanitize_file_name( pathinfo( $file['name'], PATHINFO_FILENAME ) );
+        $name = preg_replace( '/[^a-zA-Z0-9_-]/', '', $name );
+
+        $icons = get_option( 'olo_custom_icons', [] );
+        $icons[ $name ] = $svg_content;
+        update_option( 'olo_custom_icons', $icons );
+
+        return new WP_REST_Response( [ 'success' => true, 'name' => $name, 'svg' => $svg_content, 'icons' => $icons ], 200 );
+    }
+
+    public function delete_custom_icon( $request ) {
+        $name = sanitize_text_field( $request->get_param( 'name' ) );
+        $icons = get_option( 'olo_custom_icons', [] );
+        unset( $icons[ $name ] );
+        update_option( 'olo_custom_icons', $icons );
+        return new WP_REST_Response( [ 'success' => true, 'icons' => $icons ], 200 );
+    }
+
+    // === Global Widgets ===
+
+    public function get_global_widgets() {
+        global $wpdb;
+        $table = $wpdb->prefix . 'olo_global_widgets';
+        $rows = $wpdb->get_results( "SELECT * FROM $table ORDER BY name ASC", ARRAY_A );
+        return new WP_REST_Response( $rows ?: [], 200 );
+    }
+
+    public function create_global_widget( $request ) {
+        global $wpdb;
+        $table = $wpdb->prefix . 'olo_global_widgets';
+        $name = sanitize_text_field( $request->get_param( 'name' ) ?? 'Widget globale' );
+        $tile_data = $request->get_param( 'tile_data' );
+        if ( ! is_string( $tile_data ) ) {
+            $tile_data = wp_json_encode( $tile_data );
+        }
+        $wpdb->insert( $table, [
+            'name'       => $name,
+            'tile_data'  => $tile_data,
+            'created_at' => current_time( 'mysql' ),
+            'updated_at' => current_time( 'mysql' ),
+        ], [ '%s', '%s', '%s', '%s' ] );
+        $id = $wpdb->insert_id;
+        return new WP_REST_Response( [ 'id' => $id, 'name' => $name ], 201 );
+    }
+
+    public function update_global_widget( $request ) {
+        global $wpdb;
+        $table = $wpdb->prefix . 'olo_global_widgets';
+        $id = absint( $request->get_param( 'id' ) );
+        $data = [];
+        $formats = [];
+        if ( $request->get_param( 'name' ) !== null ) {
+            $data['name'] = sanitize_text_field( $request->get_param( 'name' ) );
+            $formats[] = '%s';
+        }
+        if ( $request->get_param( 'tile_data' ) !== null ) {
+            $td = $request->get_param( 'tile_data' );
+            $data['tile_data'] = is_string( $td ) ? $td : wp_json_encode( $td );
+            $formats[] = '%s';
+        }
+        if ( empty( $data ) ) {
+            return new WP_REST_Response( [ 'message' => 'Nessun dato da aggiornare.' ], 400 );
+        }
+        $data['updated_at'] = current_time( 'mysql' );
+        $formats[] = '%s';
+        $wpdb->update( $table, $data, [ 'id' => $id ], $formats, [ '%d' ] );
+        return new WP_REST_Response( [ 'success' => true ], 200 );
+    }
+
+    public function delete_global_widget( $request ) {
+        global $wpdb;
+        $table = $wpdb->prefix . 'olo_global_widgets';
+        $id = absint( $request->get_param( 'id' ) );
+        $wpdb->delete( $table, [ 'id' => $id ], [ '%d' ] );
+        return new WP_REST_Response( [ 'success' => true ], 200 );
+    }
+
+    // === Global Colors ===
+
+    public function get_global_colors() {
+        $colors = get_option( 'olo_global_colors', [] );
+        if ( ! is_array( $colors ) ) {
+            $colors = [];
+        }
+        return rest_ensure_response( $colors );
+    }
+
+    public function save_global_colors( $request ) {
+        $body = $request->get_json_params();
+
+        if ( ! is_array( $body ) ) {
+            return new WP_Error( 'invalid_data', 'I dati devono essere un array di colori.', [ 'status' => 400 ] );
+        }
+
+        $sanitized = [];
+        foreach ( $body as $color ) {
+            if ( ! is_array( $color ) || empty( $color['id'] ) ) {
+                continue;
+            }
+            $sanitized[] = [
+                'id'    => sanitize_key( $color['id'] ),
+                'label' => sanitize_text_field( $color['label'] ?? '' ),
+                'value' => sanitize_text_field( $color['value'] ?? '#000000' ),
+            ];
+        }
+
+        update_option( 'olo_global_colors', $sanitized, false );
+
+        return rest_ensure_response( $sanitized );
+    }
+
+    // === Global Typography ===
+
+    public function get_global_typography() {
+        $sets = get_option( 'olo_global_typography', [] );
+        if ( ! is_array( $sets ) ) {
+            $sets = [];
+        }
+        return rest_ensure_response( $sets );
+    }
+
+    public function save_global_typography( $request ) {
+        $body = $request->get_json_params();
+
+        if ( ! is_array( $body ) ) {
+            return new WP_Error( 'invalid_data', 'I dati devono essere un array di set tipografici.', [ 'status' => 400 ] );
+        }
+
+        $sanitized = [];
+        foreach ( $body as $set ) {
+            if ( ! is_array( $set ) || empty( $set['id'] ) ) {
+                continue;
+            }
+            $sanitized[] = [
+                'id'             => sanitize_key( $set['id'] ),
+                'label'          => sanitize_text_field( $set['label'] ?? '' ),
+                'family'         => sanitize_text_field( $set['family'] ?? '' ),
+                'weight'         => sanitize_text_field( $set['weight'] ?? '400' ),
+                'transform'      => sanitize_text_field( $set['transform'] ?? 'none' ),
+                'line_height'    => sanitize_text_field( $set['line_height'] ?? '1.5' ),
+                'letter_spacing' => sanitize_text_field( $set['letter_spacing'] ?? '0' ),
+            ];
+        }
+
+        update_option( 'olo_global_typography', $sanitized, false );
+
+        return rest_ensure_response( $sanitized );
+    }
+
+    // === Custom Code Snippets ===
+
+    public function get_custom_code() {
+        return rest_ensure_response( [
+            'head'   => get_option( 'olo_custom_code_head', '' ),
+            'body'   => get_option( 'olo_custom_code_body', '' ),
+            'footer' => get_option( 'olo_custom_code_footer', '' ),
+        ] );
+    }
+
+    public function save_custom_code( $request ) {
+        $body = $request->get_json_params();
+
+        if ( isset( $body['head'] ) ) {
+            update_option( 'olo_custom_code_head', $body['head'], false );
+        }
+        if ( isset( $body['body'] ) ) {
+            update_option( 'olo_custom_code_body', $body['body'], false );
+        }
+        if ( isset( $body['footer'] ) ) {
+            update_option( 'olo_custom_code_footer', $body['footer'], false );
+        }
+
+        return rest_ensure_response( [
+            'head'   => get_option( 'olo_custom_code_head', '' ),
+            'body'   => get_option( 'olo_custom_code_body', '' ),
+            'footer' => get_option( 'olo_custom_code_footer', '' ),
+        ] );
+    }
+
+    // === Maintenance Mode ===
+
+    public function get_maintenance() {
+        return rest_ensure_response( [
+            'mode'         => get_option( 'olo_maintenance_mode', 'off' ),
+            'template_id'  => (int) get_option( 'olo_maintenance_template_id', 0 ),
+            'bypass_roles' => get_option( 'olo_maintenance_bypass_roles', [ 'administrator' ] ),
+            'bypass_secret' => get_option( 'olo_maintenance_bypass_secret', '' ),
+        ] );
+    }
+
+    public function save_maintenance( $request ) {
+        $body = $request->get_json_params();
+
+        if ( isset( $body['mode'] ) ) {
+            $allowed = [ 'off', 'maintenance', 'coming_soon' ];
+            $mode = in_array( $body['mode'], $allowed, true ) ? $body['mode'] : 'off';
+            update_option( 'olo_maintenance_mode', $mode, false );
+        }
+
+        if ( isset( $body['template_id'] ) ) {
+            update_option( 'olo_maintenance_template_id', absint( $body['template_id'] ), false );
+        }
+
+        if ( isset( $body['bypass_roles'] ) ) {
+            $roles = [];
+            if ( is_array( $body['bypass_roles'] ) ) {
+                foreach ( $body['bypass_roles'] as $role ) {
+                    $roles[] = sanitize_key( $role );
+                }
+            }
+            update_option( 'olo_maintenance_bypass_roles', $roles, false );
+        }
+
+        if ( isset( $body['bypass_secret'] ) ) {
+            update_option( 'olo_maintenance_bypass_secret', sanitize_text_field( $body['bypass_secret'] ), false );
+        }
+
+        return rest_ensure_response( [
+            'mode'          => get_option( 'olo_maintenance_mode', 'off' ),
+            'template_id'   => (int) get_option( 'olo_maintenance_template_id', 0 ),
+            'bypass_roles'  => get_option( 'olo_maintenance_bypass_roles', [ 'administrator' ] ),
+            'bypass_secret' => get_option( 'olo_maintenance_bypass_secret', '' ),
+        ] );
+    }
+
+    // === Revisions ===
+
+    public function get_revisions( $request ) {
+        $db  = new Olo_Database();
+        $id  = (int) $request['id'];
+        $tpl = $db->get_template( $id );
+
+        if ( ! $tpl ) {
+            return new WP_Error( 'not_found', 'Template non trovato.', [ 'status' => 404 ] );
+        }
+
+        $revisions = $db->get_revisions( $id, 50 );
+
+        return rest_ensure_response( $revisions );
+    }
+
+    public function get_revision( $request ) {
+        $db  = new Olo_Database();
+        $rev = $db->get_revision( (int) $request['rev_id'] );
+
+        if ( ! $rev ) {
+            return new WP_Error( 'not_found', 'Revisione non trovata.', [ 'status' => 404 ] );
+        }
+
+        return rest_ensure_response( $rev );
+    }
+
+    // === Design Presets ===
+
+    public function get_design_presets() {
+        $presets = get_option( 'olo_design_presets', [] );
+        if ( ! is_array( $presets ) ) {
+            $presets = [];
+        }
+        return rest_ensure_response( $presets );
+    }
+
+    public function create_design_preset( $request ) {
+        $body = $request->get_json_params();
+        $name = sanitize_text_field( $body['name'] ?? 'Preset' );
+        $style = $body['style'] ?? [];
+
+        if ( ! is_array( $style ) ) {
+            return new WP_Error( 'invalid_style', 'Lo stile deve essere un oggetto.', [ 'status' => 400 ] );
+        }
+
+        $presets = get_option( 'olo_design_presets', [] );
+        if ( ! is_array( $presets ) ) {
+            $presets = [];
+        }
+
+        $new_preset = [
+            'id'         => 'dp-' . wp_rand( 10000, 99999 ) . '-' . time(),
+            'name'       => $name,
+            'style'      => $style,
+            'created_at' => current_time( 'mysql' ),
+        ];
+
+        $presets[] = $new_preset;
+        update_option( 'olo_design_presets', $presets, false );
+
+        return rest_ensure_response( $new_preset );
+    }
+
+    public function update_design_preset( $request ) {
+        $id   = sanitize_text_field( $request['id'] );
+        $body = $request->get_json_params();
+
+        $presets = get_option( 'olo_design_presets', [] );
+        if ( ! is_array( $presets ) ) {
+            $presets = [];
+        }
+
+        $found = false;
+        foreach ( $presets as &$preset ) {
+            if ( $preset['id'] === $id ) {
+                if ( isset( $body['name'] ) ) {
+                    $preset['name'] = sanitize_text_field( $body['name'] );
+                }
+                if ( isset( $body['style'] ) ) {
+                    if ( is_array( $body['style'] ) ) {
+                        $preset['style'] = $body['style'];
+                    }
+                }
+                $found = true;
+                break;
+            }
+        }
+        unset( $preset );
+
+        if ( ! $found ) {
+            return new WP_Error( 'not_found', 'Preset non trovato.', [ 'status' => 404 ] );
+        }
+
+        update_option( 'olo_design_presets', $presets, false );
+
+        return rest_ensure_response( [ 'success' => true ] );
+    }
+
+    public function delete_design_preset( $request ) {
+        $id = sanitize_text_field( $request['id'] );
+
+        $presets = get_option( 'olo_design_presets', [] );
+        if ( ! is_array( $presets ) ) {
+            $presets = [];
+        }
+
+        $new_presets = [];
+        $found = false;
+        foreach ( $presets as $preset ) {
+            if ( $preset['id'] === $id ) {
+                $found = true;
+                continue;
+            }
+            $new_presets[] = $preset;
+        }
+
+        if ( ! $found ) {
+            return new WP_Error( 'not_found', 'Preset non trovato.', [ 'status' => 404 ] );
+        }
+
+        update_option( 'olo_design_presets', $new_presets, false );
+
+        return rest_ensure_response( [ 'success' => true ] );
+    }
+
+    // === Template Library ===
+
+    public function get_template_library( $request ) {
+        $lib = Olo_Template_Library::instance();
+        $category = sanitize_text_field( $request->get_param( 'category' ) ?? '' );
+        $templates = $lib->get_all_templates();
+        if ( $category ) {
+            $templates = array_values( array_filter( $templates, function( $t ) use ( $category ) {
+                return ( $t['category'] ?? '' ) === $category;
+            } ) );
+        }
+        // Strip heavy content for listing (send only metadata)
+        $list = array_map( function( $t ) {
+            return [
+                'id'                  => $t['id'] ?? '',
+                'name'                => $t['name'] ?? '',
+                'category'            => $t['category'] ?? '',
+                'preview_description' => $t['preview_description'] ?? '',
+                'is_user'             => ! empty( $t['is_user'] ),
+            ];
+        }, $templates );
+        return rest_ensure_response( $list );
+    }
+
+    public function get_library_template( $request ) {
+        $id  = sanitize_text_field( $request['id'] );
+        $lib = Olo_Template_Library::instance();
+        // Check built-in first
+        $tpl = $lib->get_template( $id );
+        if ( ! $tpl ) {
+            // Check user templates
+            $user = get_option( 'olo_user_templates', [] );
+            foreach ( (array) $user as $u ) {
+                if ( ( $u['id'] ?? '' ) === $id ) {
+                    $tpl = $u;
+                    break;
+                }
+            }
+        }
+        if ( ! $tpl ) {
+            return new WP_Error( 'not_found', 'Template non trovato.', [ 'status' => 404 ] );
+        }
+        return rest_ensure_response( $tpl );
+    }
+
+    public function save_user_template( $request ) {
+        $body = $request->get_json_params();
+        $name     = sanitize_text_field( $body['name'] ?? '' );
+        $category = sanitize_text_field( $body['category'] ?? 'custom' );
+        $content  = $body['content'] ?? [];
+        if ( empty( $name ) || empty( $content ) ) {
+            return new WP_Error( 'invalid', 'Nome e contenuto richiesti.', [ 'status' => 400 ] );
+        }
+        $lib = Olo_Template_Library::instance();
+        $id  = $lib->save_user_template( $name, $category, $content );
+        return rest_ensure_response( [ 'id' => $id, 'success' => true ] );
+    }
+
+    public function delete_user_template( $request ) {
+        $id  = sanitize_text_field( $request['id'] );
+        $lib = Olo_Template_Library::instance();
+        $ok  = $lib->delete_user_template( $id );
+        if ( ! $ok ) {
+            return new WP_Error( 'not_found', 'Template non trovato.', [ 'status' => 404 ] );
+        }
+        return rest_ensure_response( [ 'success' => true ] );
+    }
+
+    // === Built-in Design Presets ===
+
+    public function get_builtin_presets() {
+        $style_system = Olo_Style_System::instance();
+        return rest_ensure_response( $style_system->get_presets() );
+    }
+
+    // === Design Tokens Export ===
+
+    public function export_design_tokens() {
+        $style_system = Olo_Style_System::instance();
+        $styles = $style_system->get_styles();
+
+        $tokens = [
+            'version' => '1.0',
+            'colors' => [
+                'primary'   => $styles['color_primary'] ?? '#6366F1',
+                'secondary' => $styles['color_secondary'] ?? '#8B5CF6',
+                'success'   => $styles['color_success'] ?? '#22C55E',
+                'warning'   => $styles['color_warning'] ?? '#F59E0B',
+                'danger'    => $styles['color_danger'] ?? '#EF4444',
+                'muted'     => $styles['color_muted'] ?? '#F3F4F6',
+                'emphasis'  => $styles['color_emphasis'] ?? '#111827',
+                'text'      => $styles['color_text'] ?? '#374151',
+            ],
+            'typography' => [
+                'font_body'    => $styles['font_body'] ?? 'Inter',
+                'font_heading' => $styles['font_heading'] ?? 'Inter',
+                'font_size'    => ( $styles['font_size'] ?? '16' ) . 'px',
+                'line_height'  => $styles['line_height'] ?? '1.6',
+                'h1_size'      => ( $styles['h1_size'] ?? '40' ) . 'px',
+                'h2_size'      => ( $styles['h2_size'] ?? '32' ) . 'px',
+                'h3_size'      => ( $styles['h3_size'] ?? '24' ) . 'px',
+                'h4_size'      => ( $styles['h4_size'] ?? '20' ) . 'px',
+            ],
+            'spacing' => [
+                'global_gap' => ( $styles['global_gap'] ?? '30' ) . 'px',
+            ],
+            'borders' => [
+                'radius' => ( $styles['border_radius'] ?? '4' ) . 'px',
+            ],
+            'css_custom_properties' => $this->generate_tokens_css( $styles ),
+        ];
+
+        // Global colors
+        $global_colors = get_option( 'olo_global_colors', [] );
+        if ( ! empty( $global_colors ) && is_array( $global_colors ) ) {
+            $tokens['global_colors'] = $global_colors;
+        }
+
+        return rest_ensure_response( $tokens );
+    }
+
+    private function generate_tokens_css( $styles ) {
+        $lines = [ ':root {' ];
+        $map = [
+            '--olo-color-primary'   => $styles['color_primary'] ?? '#6366F1',
+            '--olo-color-secondary' => $styles['color_secondary'] ?? '#8B5CF6',
+            '--olo-color-success'   => $styles['color_success'] ?? '#22C55E',
+            '--olo-color-warning'   => $styles['color_warning'] ?? '#F59E0B',
+            '--olo-color-danger'    => $styles['color_danger'] ?? '#EF4444',
+            '--olo-color-text'      => $styles['color_text'] ?? '#374151',
+            '--olo-color-muted'     => $styles['color_muted'] ?? '#F3F4F6',
+            '--olo-font-body'       => $styles['font_body'] ?? 'Inter',
+            '--olo-font-heading'    => $styles['font_heading'] ?? 'Inter',
+            '--olo-font-size'       => ( $styles['font_size'] ?? '16' ) . 'px',
+            '--olo-border-radius'   => ( $styles['border_radius'] ?? '4' ) . 'px',
+        ];
+        foreach ( $map as $prop => $val ) {
+            $lines[] = "  {$prop}: {$val};";
+        }
+        $lines[] = '}';
+        return implode( "\n", $lines );
+    }
+
+    // === Analytics Settings ===
+
+    public function get_analytics() {
+        return rest_ensure_response( [
+            'ga_measurement_id' => get_option( 'olo_ga_measurement_id', '' ),
+            'fb_pixel_id'       => get_option( 'olo_fb_pixel_id', '' ),
+            'gtm_container_id'  => get_option( 'olo_gtm_container_id', '' ),
+        ] );
+    }
+
+    public function save_analytics( $request ) {
+        $body = $request->get_json_params();
+
+        if ( isset( $body['ga_measurement_id'] ) ) {
+            update_option( 'olo_ga_measurement_id', sanitize_text_field( $body['ga_measurement_id'] ), false );
+        }
+        if ( isset( $body['fb_pixel_id'] ) ) {
+            update_option( 'olo_fb_pixel_id', sanitize_text_field( $body['fb_pixel_id'] ), false );
+        }
+        if ( isset( $body['gtm_container_id'] ) ) {
+            update_option( 'olo_gtm_container_id', sanitize_text_field( $body['gtm_container_id'] ), false );
+        }
+
+        return rest_ensure_response( [
+            'ga_measurement_id' => get_option( 'olo_ga_measurement_id', '' ),
+            'fb_pixel_id'       => get_option( 'olo_fb_pixel_id', '' ),
+            'gtm_container_id'  => get_option( 'olo_gtm_container_id', '' ),
+        ] );
+    }
+
+    // === Critical CSS ===
+
+    public function generate_critical_css( $request ) {
+        $body    = $request->get_json_params();
+        $post_id = absint( $body['post_id'] ?? 0 );
+
+        if ( ! $post_id ) {
+            return new WP_Error( 'missing_post_id', 'post_id obbligatorio.', [ 'status' => 400 ] );
+        }
+
+        if ( ! class_exists( 'Olo_Critical_CSS' ) ) {
+            return new WP_Error( 'not_available', 'Critical CSS non disponibile.', [ 'status' => 500 ] );
+        }
+
+        $css = Olo_Critical_CSS::generate_critical_css( $post_id );
+
+        return rest_ensure_response( [
+            'post_id' => $post_id,
+            'css'     => $css,
+            'size'    => strlen( $css ),
+        ] );
+    }
+
+    public function regenerate_all_critical_css() {
+        if ( ! class_exists( 'Olo_Critical_CSS' ) ) {
+            return new WP_Error( 'not_available', 'Critical CSS non disponibile.', [ 'status' => 500 ] );
+        }
+
+        $result = Olo_Critical_CSS::regenerate_all();
+
+        return rest_ensure_response( $result );
+    }
+
+    public function purge_critical_css() {
+        if ( ! class_exists( 'Olo_Critical_CSS' ) ) {
+            return new WP_Error( 'not_available', 'Critical CSS non disponibile.', [ 'status' => 500 ] );
+        }
+
+        $purged = Olo_Critical_CSS::purge_all();
+
+        return rest_ensure_response( [ 'purged' => $purged ] );
+    }
+
+    public function get_critical_css_status() {
+        if ( ! class_exists( 'Olo_Critical_CSS' ) ) {
+            return rest_ensure_response( [ 'enabled' => false, 'cached_count' => 0 ] );
+        }
+
+        return rest_ensure_response( Olo_Critical_CSS::get_status() );
+    }
+
+    /**
+     * Export all Olobuild site data as JSON.
+     */
+    public function site_export() {
+        if ( ! class_exists( 'Olo_Site_Export' ) ) {
+            require_once OLO_PATH . 'includes/class-site-export.php';
+        }
+
+        $data = Olo_Site_Export::export_site();
+
+        return rest_ensure_response( $data );
+    }
+
+    /**
+     * Import Olobuild site data from JSON body.
+     */
+    public function site_import( $request ) {
+        if ( ! class_exists( 'Olo_Site_Export' ) ) {
+            require_once OLO_PATH . 'includes/class-site-export.php';
+        }
+
+        $body = $request->get_json_params();
+        if ( empty( $body ) ) {
+            return new WP_Error( 'invalid_data', 'Empty or invalid JSON body.', [ 'status' => 400 ] );
+        }
+
+        $result = Olo_Site_Export::import_site( $body );
+
+        return rest_ensure_response( $result );
+    }
+
+    /**
+     * Proxy search for LottieFiles animations via public GraphQL API.
+     */
+    public function lottie_search( $request ) {
+        $params = $request->get_json_params();
+        $query  = sanitize_text_field( $params['query'] ?? '' );
+        $cursor = sanitize_text_field( $params['cursor'] ?? '' );
+
+        if ( empty( $query ) ) {
+            return new WP_Error( 'missing_query', 'Query parameter is required.', [ 'status' => 400 ] );
+        }
+
+        $per_page = 24;
+        $after    = $cursor ? ', after: "' . $cursor . '"' : '';
+        $gql      = 'query { searchPublicAnimations(first: ' . $per_page . $after . ', query: "' . addslashes( $query ) . '") { edges { node { id name jsonUrl gifUrl } cursor } totalCount pageInfo { hasNextPage endCursor } } }';
+
+        $response = wp_remote_post( 'https://graphql.lottiefiles.com/', [
+            'timeout' => 15,
+            'headers' => [
+                'Content-Type' => 'application/json',
+            ],
+            'body' => wp_json_encode( [ 'query' => $gql ] ),
+        ] );
+
+        if ( is_wp_error( $response ) ) {
+            return new WP_Error( 'fetch_error', $response->get_error_message(), [ 'status' => 502 ] );
+        }
+
+        $body = json_decode( wp_remote_retrieve_body( $response ), true );
+        $search = $body['data']['searchPublicAnimations'] ?? null;
+
+        if ( ! $search ) {
+            return new WP_Error( 'parse_error', 'Risposta non valida da LottieFiles.', [ 'status' => 502 ] );
+        }
+
+        $results = [];
+        foreach ( $search['edges'] as $edge ) {
+            $node = $edge['node'];
+            $json_url = $node['jsonUrl'] ?? '';
+            if ( ! $json_url ) continue;
+
+            $results[] = [
+                'id'      => $node['id'] ?? wp_rand(),
+                'name'    => $node['name'] ?? 'Untitled',
+                'url'     => $json_url,
+                'preview' => $node['gifUrl'] ?? '',
+            ];
+        }
+
+        $page_info = $search['pageInfo'] ?? [];
+
+        return rest_ensure_response( [
+            'results'    => $results,
+            'has_more'   => ! empty( $page_info['hasNextPage'] ),
+            'end_cursor' => $page_info['endCursor'] ?? '',
+            'total'      => $search['totalCount'] ?? 0,
+            'query'      => $query,
+        ] );
+    }
+
+    /**
+     * Render a template as HTML for builder preview (header/footer).
+     */
+    public function render_template_preview( $request ) {
+        $id = absint( $request['id'] );
+        if ( ! $id ) {
+            return new WP_Error( 'invalid_id', 'ID template non valido', [ 'status' => 400 ] );
+        }
+
+        $db       = new Olo_Database();
+        $template = $db->get_template( $id );
+        if ( ! $template ) {
+            return new WP_Error( 'not_found', 'Template non trovato', [ 'status' => 404 ] );
+        }
+
+        $tiles = $template['content'];
+        if ( empty( $tiles ) || ! is_array( $tiles ) ) {
+            return rest_ensure_response( [ 'html' => '', 'css' => [], 'inline_css' => '' ] );
+        }
+
+        // Use the frontend renderer to produce HTML
+        $renderer = new Olo_Frontend_Renderer();
+        ob_start();
+        $renderer->render_tiles_array( $tiles, $template['settings'] ?? [] );
+        $html = ob_get_clean();
+
+        // Collect CSS needed for proper rendering
+        $css_urls = [
+            OLO_URL . 'assets/vendor/uikit/css/uikit.min.css',
+            OLO_URL . 'assets/css/frontend.css?v=' . OLO_VERSION,
+            OLO_URL . 'assets/css/olo-livesearch.css?v=' . OLO_VERSION,
+        ];
+
+        // Style System inline CSS (custom properties, fonts, etc.)
+        $inline_css = '';
+        if ( class_exists( 'Olo_Style_System' ) ) {
+            $inline_css = Olo_Style_System::instance()->generate_css();
+        }
+
+        return rest_ensure_response( [
+            'html'       => $html,
+            'css'        => $css_urls,
+            'inline_css' => $inline_css,
+        ] );
     }
 }

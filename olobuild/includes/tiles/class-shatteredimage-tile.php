@@ -37,7 +37,7 @@ class Olo_ShatteredImage_Tile extends Olo_Tile_Base {
         'border_radius_outer' => 0,
         'shadow'              => 'none',
         'border_width'        => '0',
-        'border_color'        => '#e5e7eb',
+        'border_color'        => '',
     ];
 
     public function get_controls() {
@@ -402,7 +402,7 @@ class Olo_ShatteredImage_Tile extends Olo_Tile_Base {
 
         $image_url = esc_url( $s['image_url'] );
         if ( empty( $image_url ) ) {
-            return '<div class="olo-shattered"><p style="text-align:center;color:#9ca3af;padding:40px 0">Seleziona un\'immagine</p></div>';
+            return '<div class="olo-shattered"><p style="text-align:center;color:var(--olo-color-text-muted, #9CA3AF);padding:40px 0">Seleziona un\'immagine</p></div>';
         }
 
         $preset_key   = $s['preset'] ?: 'shards';
@@ -426,15 +426,15 @@ class Olo_ShatteredImage_Tile extends Olo_Tile_Base {
         }
         $height     = esc_attr( $s['height'] ?: '400px' );
         $position   = esc_attr( $s['image_position'] ?: 'center center' );
-        $gap_color  = $this->safe_color( $s['gap_color'] ) ?: 'transparent';
-        $radius     = max( 0, min( 48, intval( $s['border_radius_outer'] ) ) );
+        $gap_color  = $this->safe_color_css( $s['gap_color'] ) ?: 'transparent';
+        $radius     = Olo_Tile_Utils::border_radius( $s['border_radius_outer'] ?? 0 );
         $bw         = max( 0, min( 10, intval( $s['border_width'] ) ) );
-        $bc         = $this->safe_color( $s['border_color'] ) ?: '#e5e7eb';
+        $bc         = $this->safe_color_css( $s['border_color'] ) ?: 'var(--olo-color-border, #E5E7EB)';
         $kb_on      = ! empty( $s['kenburns'] );
         $kb_dur     = max( 10, min( 40, intval( $s['kenburns_duration'] ) ) );
         $kb_int     = max( 1.10, min( 1.40, floatval( $s['kenburns_intensity'] ) ) );
         $ov_on      = ! empty( $s['overlay'] );
-        $ov_color   = $this->safe_color( $s['overlay_color'] ) ?: '#000000';
+        $ov_color   = $this->safe_color_css( $s['overlay_color'] ) ?: '#000000';
         $ov_opacity = max( 5, min( 90, intval( $s['overlay_opacity'] ) ) ) / 100;
 
         $shadow_map = [
@@ -502,7 +502,7 @@ class Olo_ShatteredImage_Tile extends Olo_Tile_Base {
             'width'         => '100%',
             'height'        => $height,
             'overflow'      => 'hidden',
-            'border-radius' => $radius . 'px',
+            'border-radius' => $radius,
             'background'    => $gap_color,
             'box-shadow'    => $shadow,
             'border'        => $bw > 0 ? "{$bw}px solid {$bc}" : '',

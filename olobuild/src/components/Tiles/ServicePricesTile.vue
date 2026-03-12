@@ -16,7 +16,7 @@ const defaults = {
   accent_color: '', amount_size: '26', label_size: '14', label_color: '#6B7280', hover_border: true,
 };
 const s = computed(() => ({ ...defaults, ...props.settings }));
-const accent = computed(() => s.value.accent_color || '#6366F1');
+const accent = computed(() => s.value.accent_color || 'var(--olo-color-primary, #6366F1)');
 
 const prices = [
   { amount: '\u20AC 75', label: '/ notte' },

@@ -117,7 +117,7 @@ class Olo_Header_Integration {
             $inline_css .= 'header.olo-site-header:not(.olo-header-classic) + main > .wp-block-group:first-child { display: none !important; }';
         } else {
             // Classic: hide TT4 hero/title section + collapse gaps (same as overlay)
-            $inline_css .= 'header.olo-site-header { margin: 0 !important; margin-block: 0 !important; }';
+            $inline_css .= 'header.olo-site-header { margin-top: 0 !important; margin-bottom: 0 !important; }';
             $inline_css .= 'header.olo-site-header + main { margin-block-start: 0 !important; margin-top: 0 !important; }';
             $inline_css .= 'header.olo-site-header + main > .wp-block-group:first-child { display: none !important; }';
             $inline_css .= 'header.olo-site-header + main > .wp-block-group:first-child + * { margin-block-start: 0 !important; margin-top: 0 !important; }';
@@ -131,7 +131,7 @@ class Olo_Header_Integration {
         $inline_css .= '</style>';
 
         $mode_class = ( $header_mode === 'classic' ) ? 'olo-header-classic' : 'olo-header-overlay';
-        return '<header class="olo-site-header ' . $mode_class . '">' . $inline_css . $inner_html . '</header>';
+        return '<header class="olo-site-header alignfull ' . $mode_class . '">' . $inline_css . $inner_html . '</header>';
     }
 
     /**

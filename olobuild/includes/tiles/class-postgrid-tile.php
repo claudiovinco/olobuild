@@ -28,7 +28,7 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
         'match_height'    => false,
         'masonry'         => false,
         'card_style'      => 'default',
-        'card_primary_bg' => '#6366F1',
+        'card_primary_bg' => '',
         'image_height'    => '200',
         'image_radius'    => '0',
         'card_radius'     => '4',
@@ -92,17 +92,19 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
 
         $post_type = sanitize_key( $s['post_type'] );
         if ( ! post_type_exists( $post_type ) ) {
-            return '<p style="color:#999;text-align:center;">Tipo di contenuto "' . esc_html( $post_type ) . '" non trovato.</p>';
+            return '<p style="color:var(--olo-color-text-muted, #9CA3AF);text-align:center;">Tipo di contenuto "' . esc_html( $post_type ) . '" non trovato.</p>';
         }
 
         // Query
         $query_args = [
-            'post_type'      => $post_type,
-            'posts_per_page' => min( 100, absint( $s['posts_per_page'] ) ),
-            'post_status'    => 'publish',
-            'no_found_rows'  => true,
-            'orderby'        => sanitize_key( $s['orderby'] ),
-            'order'          => strtoupper( $s['order'] ) === 'ASC' ? 'ASC' : 'DESC',
+            'post_type'              => $post_type,
+            'posts_per_page'         => min( 100, absint( $s['posts_per_page'] ) ),
+            'post_status'            => 'publish',
+            'no_found_rows'          => true,
+            'update_post_meta_cache' => true,
+            'update_post_term_cache' => true,
+            'orderby'                => sanitize_key( $s['orderby'] ),
+            'order'                  => strtoupper( $s['order'] ) === 'ASC' ? 'ASC' : 'DESC',
         ];
 
         if ( in_array( $s['orderby'], [ 'meta_value_num', 'meta_value' ], true ) && ! empty( $s['meta_key'] ) ) {
@@ -123,8 +125,13 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
 
         if ( ! $query->have_posts() ) {
             wp_reset_postdata();
-            return '<p style="color:#999;text-align:center;">Nessun articolo trovato.</p>';
+            return '<p style="color:var(--olo-color-text-muted, #9CA3AF);text-align:center;">Nessun articolo trovato.</p>';
         }
+
+        // Batch pre-fetch: thumbnails, meta, and terms in single queries
+        // instead of N+1 individual queries per post in the loop below.
+        update_post_thumbnail_cache( $query );
+        update_post_caches( $query->posts, $post_type, true, true );
 
         // Collect posts data
         $taxonomy = sanitize_key( $s['taxonomy'] );
@@ -248,8 +255,8 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
 
         $uid          = 'olo-postgrid-' . wp_rand( 10000, 99999 );
         $image_height = absint( $s['image_height'] ) ?: 200;
-        $image_radius = absint( $s['image_radius'] ?? 0 );
-        $card_radius  = absint( $s['card_radius'] ?? 4 );
+        $image_radius = Olo_Tile_Utils::border_radius( $s['image_radius'] ?? 0 );
+        $card_radius  = Olo_Tile_Utils::border_radius( $s['card_radius'] ?? 4 );
 
         // Sort config for JS
         $sort_enabled      = ! empty( $s['show_sort'] );
@@ -298,17 +305,17 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
         // Ribbon
         $ribbon_field    = $s['ribbon_field'] ?? '';
         $ribbon_position = $s['ribbon_position'] ?? 'top-right';
-        $ribbon_bg       = $s['ribbon_bg'] ?? '#e11d48';
-        $ribbon_color    = $s['ribbon_color'] ?? '#ffffff';
+        $ribbon_bg       = $this->safe_color_css( $s['ribbon_bg'] ?? '#e11d48' );
+        $ribbon_color    = $this->safe_color_css( $s['ribbon_color'] ?? '#ffffff' );
 
         ob_start();
         ?>
         <style>
-            .<?php echo $uid; ?> .olo-pg-img { transition: transform 0.5s ease, filter 0.5s ease; width: 100%; height: <?php echo $image_height; ?>px; object-fit: cover; display: block; border-radius: <?php echo $image_radius; ?>px; }
-            .<?php echo $uid; ?> .olo-card-minimal__img { border-radius: <?php echo $image_radius; ?>px; }
-            .<?php echo $uid; ?> .uk-card-media-top { border-radius: <?php echo $image_radius; ?>px <?php echo $image_radius; ?>px 0 0; overflow: hidden; }
-            .<?php echo $uid; ?> .uk-card { border-radius: <?php echo $card_radius; ?>px; overflow: hidden; }
-            .<?php echo $uid; ?> .olo-card-minimal { border-radius: <?php echo $card_radius; ?>px; overflow: hidden; }
+            .<?php echo $uid; ?> .olo-pg-img { transition: transform 0.5s ease, filter 0.5s ease; width: 100%; height: <?php echo $image_height; ?>px; object-fit: cover; display: block; border-radius: <?php echo $image_radius; ?>; }
+            .<?php echo $uid; ?> .olo-card-minimal__img { border-radius: <?php echo $image_radius; ?>; }
+            .<?php echo $uid; ?> .uk-card-media-top { border-radius: <?php echo $image_radius; ?>; border-bottom-left-radius: 0; border-bottom-right-radius: 0; overflow: hidden; }
+            .<?php echo $uid; ?> .uk-card { border-radius: <?php echo $card_radius; ?>; overflow: hidden; }
+            .<?php echo $uid; ?> .olo-card-minimal { border-radius: <?php echo $card_radius; ?>; overflow: hidden; }
             .<?php echo $uid; ?> .uk-card:hover .olo-pg-hover-zoom, .<?php echo $uid; ?> .olo-card-minimal:hover .olo-pg-hover-zoom { transform: scale(1.08); }
             .<?php echo $uid; ?> .uk-card:hover .olo-pg-hover-zoom-rotate, .<?php echo $uid; ?> .olo-card-minimal:hover .olo-pg-hover-zoom-rotate { transform: scale(1.08) rotate(2deg); }
             .<?php echo $uid; ?> .olo-pg-hover-brightness { filter: brightness(0.7); }
@@ -317,7 +324,7 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .uk-card:hover .olo-pg-hover-desaturate, .<?php echo $uid; ?> .olo-card-minimal:hover .olo-pg-hover-desaturate { filter: grayscale(0%); }
             .<?php echo $uid; ?> .olo-pg-hover-blur-in { filter: blur(3px); }
             .<?php echo $uid; ?> .uk-card:hover .olo-pg-hover-blur-in, .<?php echo $uid; ?> .olo-card-minimal:hover .olo-pg-hover-blur-in { filter: blur(0); }
-            .<?php echo $uid; ?> .olo-pg-ribbon { position: absolute; z-index: 2; font-size: 11px; font-weight: 700; padding: 4px 12px; text-transform: uppercase; letter-spacing: 0.5px; background: <?php echo esc_attr( $ribbon_bg ); ?>; color: <?php echo esc_attr( $ribbon_color ); ?>; }
+            .<?php echo $uid; ?> .olo-pg-ribbon { position: absolute; z-index: 2; font-size: 11px; font-weight: 700; padding: 4px 12px; text-transform: uppercase; letter-spacing: 0.5px; background: <?php echo $ribbon_bg; ?>; color: <?php echo $ribbon_color; ?>; }
             .<?php echo $uid; ?> .olo-pg-ribbon--top-right { top: 0; right: 14px; border-radius: 0 0 4px 4px; }
             .<?php echo $uid; ?> .olo-pg-ribbon--top-left { top: 0; left: 14px; border-radius: 0 0 4px 4px; }
             /* Stile testo */
@@ -328,15 +335,15 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .olo-postgrid-excerpt { font-size: <?php echo $excerpt_size; ?>em; }
             .<?php echo $uid; ?> .olo-card-minimal__text { font-size: <?php echo $excerpt_size; ?>em; }
             <?php if ( $title_color ) : ?>
-            .<?php echo $uid; ?> .uk-card-title, .<?php echo $uid; ?> .uk-card-title a { color: <?php echo esc_attr( $title_color ); ?> !important; }
-            .<?php echo $uid; ?> .olo-card-minimal__title, .<?php echo $uid; ?> .olo-card-minimal__title a { color: <?php echo esc_attr( $title_color ); ?> !important; }
+            .<?php echo $uid; ?> .uk-card-title, .<?php echo $uid; ?> .uk-card-title a { color: <?php echo $this->safe_color_css( $title_color ); ?> !important; }
+            .<?php echo $uid; ?> .olo-card-minimal__title, .<?php echo $uid; ?> .olo-card-minimal__title a { color: <?php echo $this->safe_color_css( $title_color ); ?> !important; }
             <?php endif; ?>
             <?php if ( $excerpt_color ) : ?>
-            .<?php echo $uid; ?> .olo-postgrid-excerpt { color: <?php echo esc_attr( $excerpt_color ); ?> !important; }
-            .<?php echo $uid; ?> .olo-card-minimal__text { color: <?php echo esc_attr( $excerpt_color ); ?> !important; }
+            .<?php echo $uid; ?> .olo-postgrid-excerpt { color: <?php echo $this->safe_color_css( $excerpt_color ); ?> !important; }
+            .<?php echo $uid; ?> .olo-card-minimal__text { color: <?php echo $this->safe_color_css( $excerpt_color ); ?> !important; }
             <?php endif; ?>
             <?php if ( $meta_color ) : ?>
-            .<?php echo $uid; ?> .olo-postgrid-meta { color: <?php echo esc_attr( $meta_color ); ?> !important; }
+            .<?php echo $uid; ?> .olo-postgrid-meta { color: <?php echo $this->safe_color_css( $meta_color ); ?> !important; }
             <?php endif; ?>
             <?php if ( $body_bg ) :
                 $bg_r = hexdec( substr( $body_bg, 1, 2 ) );
@@ -374,7 +381,7 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .olo-postgrid-item > .uk-card > .uk-card-body { flex: 1; }
             <?php endif; ?>
             <?php if ( $s['card_style'] === 'primary' ) :
-                $primary_bg = esc_attr( $s['card_primary_bg'] ?? '#6366F1' );
+                $primary_bg = $this->safe_color_css( $s['card_primary_bg'] ?? '' ) ?: 'var(--olo-color-primary, #6366F1)';
             ?>
             .<?php echo $uid; ?> .uk-card-primary { background-color: <?php echo $primary_bg; ?> !important; }
             .<?php echo $uid; ?> .uk-card-primary .uk-card-title,
@@ -436,7 +443,7 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
                                     $op_bg = ( stripos( $item['service_opening'], 'stagionale' ) !== false )
                                         ? $s['opening_bg_seasonal']
                                         : $s['opening_bg_annual'];
-                                ?><span class="olo-pg-opening" style="background:<?php echo esc_attr( $op_bg ); ?>;font-size:<?php echo absint( $s['opening_size'] ); ?>px"><?php echo esc_html( $item['service_opening'] ); ?></span>
+                                ?><span class="olo-pg-opening" style="background:<?php echo $this->safe_color_css( $op_bg ); ?>;font-size:<?php echo absint( $s['opening_size'] ); ?>px"><?php echo esc_html( $item['service_opening'] ); ?></span>
                             <?php endif; ?>
                         </div>
                         <?php endif; ?>
@@ -504,7 +511,7 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
                                     $op_bg = ( stripos( $item['service_opening'], 'stagionale' ) !== false )
                                         ? $s['opening_bg_seasonal']
                                         : $s['opening_bg_annual'];
-                                ?><span class="olo-pg-opening" style="background:<?php echo esc_attr( $op_bg ); ?>;font-size:<?php echo absint( $s['opening_size'] ); ?>px"><?php echo esc_html( $item['service_opening'] ); ?></span>
+                                ?><span class="olo-pg-opening" style="background:<?php echo $this->safe_color_css( $op_bg ); ?>;font-size:<?php echo absint( $s['opening_size'] ); ?>px"><?php echo esc_html( $item['service_opening'] ); ?></span>
                             <?php endif; ?>
                         </div>
                         <?php endif; ?>
@@ -550,6 +557,74 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
             </div>
 
             <?php if ( $pagination_on ) : ?>
+                <?php if ( $pagination_style === 'infinite' ) : ?>
+                <?php
+                    $total_items = count( $posts );
+                    $total_pages = (int) ceil( $total_items / $items_per_page );
+                    $has_more    = $total_pages > 1;
+                ?>
+                <?php if ( $has_more ) : ?>
+                <div class="olo-pg-sentinel" data-olo-pg-sentinel
+                     data-total-pages="<?php echo $total_pages; ?>"
+                     data-items-per-page="<?php echo $items_per_page; ?>"
+                     data-grid-id="<?php echo esc_attr( $uid ); ?>"
+                     style="display:flex;justify-content:center;padding:20px 0;">
+                    <div class="olo-pg-spinner" style="width:32px;height:32px;border:3px solid rgba(150,150,150,0.2);border-top-color:#888;border-radius:50%;animation:olo-pg-spin 0.8s linear infinite;display:none;"></div>
+                </div>
+                <style>
+                    @keyframes olo-pg-spin { to { transform: rotate(360deg); } }
+                </style>
+                <script>
+                (function(){
+                    var sentinel = document.querySelector('#<?php echo esc_attr( $uid ); ?> .olo-pg-sentinel');
+                    if(!sentinel) return;
+                    var grid = document.querySelector('#<?php echo esc_attr( $uid ); ?> .olo-postgrid-grid');
+                    if(!grid) return;
+                    var allItems = grid.querySelectorAll('.olo-postgrid-item');
+                    var perPage = <?php echo $items_per_page; ?>;
+                    var totalItems = allItems.length;
+                    var shown = perPage;
+                    var spinner = sentinel.querySelector('.olo-pg-spinner');
+
+                    /* Nasconde gli item oltre la prima pagina */
+                    for(var i = perPage; i < totalItems; i++){
+                        allItems[i].style.display = 'none';
+                    }
+
+                    if(shown >= totalItems){
+                        sentinel.style.display = 'none';
+                        return;
+                    }
+
+                    var loading = false;
+                    var observer = new IntersectionObserver(function(entries){
+                        if(!entries[0].isIntersecting) return;
+                        if(loading) return;
+                        loading = true;
+                        if(spinner){ spinner.style.display = 'block'; }
+
+                        setTimeout(function(){
+                            var end = shown + perPage;
+                            if(end > totalItems){ end = totalItems; }
+                            for(var j = shown; j < end; j++){
+                                allItems[j].style.display = '';
+                            }
+                            shown = end;
+                            if(spinner){ spinner.style.display = 'none'; }
+                            loading = false;
+
+                            if(shown >= totalItems){
+                                observer.disconnect();
+                                sentinel.style.display = 'none';
+                            }
+                        }, 300);
+                    }, { rootMargin: '200px' });
+
+                    observer.observe(sentinel);
+                })();
+                </script>
+                <?php endif; ?>
+                <?php else : ?>
             <div class="olo-pg-pagination" data-pagination-style="<?php echo esc_attr( $pagination_style ); ?>">
                 <?php if ( $pagination_style === 'arrows' ) : ?>
                     <button class="olo-pg-page-btn olo-pg-prev" aria-label="Pagina precedente" disabled>&lsaquo;</button>
@@ -561,6 +636,7 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
                     <!-- dots/numbers generati via JS -->
                 <?php endif; ?>
             </div>
+                <?php endif; ?>
             <?php endif; ?>
 
             <div class="olo-postgrid-empty" style="display:none;">

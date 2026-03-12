@@ -13,7 +13,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Olo_Unsplash {
 
-    const ACCESS_KEY = 'mAtcGSa97BuefUN55vaORLV6YvFH4SHjdcCFbq_gJ84';
+    /**
+     * Restituisce la Access Key Unsplash da wp_options (con fallback hardcoded).
+     */
+    private static function get_access_key() {
+        return get_option( 'olo_unsplash_api_key', 'mAtcGSa97BuefUN55vaORLV6YvFH4SHjdcCFbq_gJ84' );
+    }
 
     public function init() {
         add_action( 'rest_api_init', [ $this, 'register_routes' ] );
@@ -27,9 +32,10 @@ class Olo_Unsplash {
                 return current_user_can( 'upload_files' );
             },
             'args' => [
-                'query'    => [ 'required' => true, 'type' => 'string', 'sanitize_callback' => 'sanitize_text_field' ],
-                'page'     => [ 'default' => 1, 'type' => 'integer', 'sanitize_callback' => 'absint' ],
-                'per_page' => [ 'default' => 30, 'type' => 'integer', 'sanitize_callback' => 'absint' ],
+                'query'       => [ 'required' => true, 'type' => 'string', 'sanitize_callback' => 'sanitize_text_field' ],
+                'page'        => [ 'default' => 1, 'type' => 'integer', 'sanitize_callback' => 'absint' ],
+                'per_page'    => [ 'default' => 30, 'type' => 'integer', 'sanitize_callback' => 'absint' ],
+                'orientation' => [ 'default' => '', 'type' => 'string', 'sanitize_callback' => 'sanitize_text_field' ],
             ],
         ] );
 
@@ -46,16 +52,24 @@ class Olo_Unsplash {
      * Proxy ricerca Unsplash.
      */
     public function search( $request ) {
-        $query    = $request->get_param( 'query' );
-        $page     = $request->get_param( 'page' ) ?: 1;
-        $per_page = min( $request->get_param( 'per_page' ) ?: 30, 30 );
+        $query       = $request->get_param( 'query' );
+        $page        = $request->get_param( 'page' ) ?: 1;
+        $per_page    = min( $request->get_param( 'per_page' ) ?: 30, 30 );
+        $orientation = sanitize_text_field( $request->get_param( 'orientation' ) );
 
-        $response = wp_remote_get( 'https://api.unsplash.com/search/photos?' . http_build_query( [
+        $params = [
             'query'    => $query,
             'page'     => $page,
             'per_page' => $per_page,
-        ] ), [
-            'headers' => [ 'Authorization' => 'Client-ID ' . self::ACCESS_KEY ],
+        ];
+        // Unsplash: landscape, portrait, squarish
+        $ori_map = [ 'landscape' => 'landscape', 'portrait' => 'portrait', 'square' => 'squarish' ];
+        if ( ! empty( $orientation ) && isset( $ori_map[ $orientation ] ) ) {
+            $params['orientation'] = $ori_map[ $orientation ];
+        }
+
+        $response = wp_remote_get( 'https://api.unsplash.com/search/photos?' . http_build_query( $params ), [
+            'headers' => [ 'Authorization' => 'Client-ID ' . self::get_access_key() ],
             'timeout' => 15,
         ] );
 
@@ -113,7 +127,7 @@ class Olo_Unsplash {
         // 1. Tracking download (richiesto da Unsplash guidelines)
         if ( $download_location ) {
             wp_remote_get( $download_location, [
-                'headers' => [ 'Authorization' => 'Client-ID ' . self::ACCESS_KEY ],
+                'headers' => [ 'Authorization' => 'Client-ID ' . self::get_access_key() ],
                 'timeout' => 5,
             ] );
         }
@@ -126,6 +140,17 @@ class Olo_Unsplash {
         $tmp_file = download_url( $regular_url, 30 );
         if ( is_wp_error( $tmp_file ) ) {
             return new WP_Error( 'download_failed', $tmp_file->get_error_message(), [ 'status' => 502 ] );
+        }
+
+        // Validate MIME type
+        $mime = wp_check_filetype( $tmp_file );
+        if ( empty( $mime['type'] ) ) {
+            $finfo_mime = function_exists('mime_content_type') ? mime_content_type( $tmp_file ) : '';
+            $allowed = [ 'image/jpeg', 'image/png', 'image/webp', 'image/gif', 'video/mp4', 'video/webm' ];
+            if ( $finfo_mime && ! in_array( $finfo_mime, $allowed, true ) ) {
+                @unlink( $tmp_file );
+                return new WP_Error( 'invalid_mime', 'Il file scaricato non è un tipo media valido.' );
+            }
         }
 
         // 3. Crea attachment nel WP Media Library

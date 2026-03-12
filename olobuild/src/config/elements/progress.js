@@ -1,22 +1,31 @@
-import { borderFields, borderDefaults, shadowField } from './_shared.js';
+import { shadowField } from './_shared.js';
 
 export default {
   type: 'progress',
   name: 'Barra progresso',
   icon: 'dashicons-chart-bar',
-  category: 'content',
+  category: 'marketing',
   defaults: {
     bars: 'HTML|90\nJavaScript|80\nVue.js|75',
-    bar_color: '#6366F1',
-    bar_bg: '#1F2937',
-    text_color: '#F3F4F6',
+    bar_color: '',
+    bar_bg: '',
+    text_color: '',
     height: '20',
     show_percentage: true,
     animated: true,
+    layout: 'bar',
+    circle_size: '120',
+    circle_width: '8',
+    inner_text: '',
+    animate_counter: true,
+    animation_duration: '1500',
     shadow: 'none',
-    ...borderDefaults,
   },
   fields: [
+    { key: 'layout', label: 'Layout', type: 'select', options: [
+      { value: 'bar', label: 'Barra' },
+      { value: 'circle', label: 'Cerchio' },
+    ]},
     { key: 'bars', label: 'Barre (etichetta|valore per riga)', type: 'textarea' },
     { key: 'bar_color', label: 'Colore barra', type: 'color' },
     { key: 'bar_bg', label: 'Sfondo barra', type: 'color' },
@@ -24,7 +33,13 @@ export default {
     { key: 'height', label: 'Altezza (px)', type: 'range', min: 10, max: 600, step: 5 },
     { key: 'show_percentage', label: 'Mostra percentuale', type: 'toggle' },
     { key: 'animated', label: 'Animata', type: 'toggle' },
-    shadowField,
-    ...borderFields,
+    { key: 'circle_size', label: 'Dimensione cerchio (px)', type: 'range', min: 60, max: 200, step: 10,
+      condition: { field: 'layout', operator: '==', value: 'circle' } },
+    { key: 'circle_width', label: 'Spessore cerchio (px)', type: 'range', min: 2, max: 20, step: 1,
+      condition: { field: 'layout', operator: '==', value: 'circle' } },
+    { key: 'inner_text', label: 'Testo interno (vuoto = percentuale)', type: 'text' },
+    { key: 'animate_counter', label: 'Anima contatore', type: 'toggle' },
+    { key: 'animation_duration', label: 'Durata animazione (ms)', type: 'range', min: 500, max: 3000, step: 100 },
+    ...shadowField,
   ],
 };

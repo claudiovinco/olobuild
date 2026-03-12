@@ -1,4 +1,4 @@
-import { borderFields, borderDefaults, shadowField } from './_shared.js';
+import { shadowField } from './_shared.js';
 
 export default {
   type: 'progallery',
@@ -8,8 +8,10 @@ export default {
 
   defaults: {
     images: [],
+    video_preview: 'poster',
     // Layout
     layout: 'grid',
+    layout_family: 'classic',
     puzzle_style: 'classic',
     columns: '3',
     gap: '8',
@@ -18,6 +20,31 @@ export default {
     thumb_radius: '8',
     rows: '0',
     mobile_columns: '2',
+    expand_ratio: '4',
+    expand_shrink: '0.5',
+    expand_speed: '500',
+    parallax_height: '1500',
+    parallax_intensity: '50',
+    filmstrip_item_width: '280',
+    filmstrip_center_zoom: '1.15',
+    filmstrip_side_tilt: '35',
+    filmstrip_autoplay: false,
+    filmstrip_speed: '4',
+    filmstrip_dots: 'dots',
+    filmstrip_dots_color: '',
+    // Strip (nastro)
+    strip_arrows: false,
+    strip_arrows_style: 'chevron',
+    strip_arrows_size: '36',
+    strip_arrows_color: '',
+    strip_arrows_bg: '',
+    strip_height: '280',
+    strip_item_width: '300',
+    strip_rows: '2',
+    strip_speed: '30',
+    strip_pause_hover: true,
+    strip_direction: 'left',
+    strip_fade_edges: true,
     // Entrance
     entrance: 'none',
     entrance_stagger: '120',
@@ -27,51 +54,90 @@ export default {
     hover_zoom_scale: '1.08',
     hover_tilt_angle: '10',
     hover_magnetic_strength: '24',
+    hover_glow_color: '',
+    hover_glow_spread: '20',
+    hover_frame_in: false,
     hover_caption: 'none',
     hover_caption_bg: 'rgba(0,0,0,0.6)',
-    hover_caption_color: '#ffffff',
+    hover_caption_color: '',
+    hover_caption_weight: '700',
+    hover_frame_inset: '10',
     // Continuous
-    continuous: 'none',
+    continuous: '',
     continuous_speed: '20',
     // Filter
     filter: 'none',
     filter_hover_restore: false,
-    duotone_dark: '#1a1a2e',
-    duotone_light: '#e94560',
+    duotone_dark: '',
+    duotone_light: '',
+    duotone_intensity: '80',
     // Frame
     frame: 'none',
-    frame_color: '#ffffff',
+    frame_color: '',
+    frame_inset_padding: '10',
+    // Animated borders
+    anim_border: 'none',
+    anim_border_color: '',
+    anim_border_thickness: '2',
+    anim_border_inset: '20',
+    anim_border_speed: '3',
     // Lightbox
     lightbox: true,
     lightbox_animation: 'slide',
+    lightbox_thumbs: 'none',
+    lightbox_thumbs_rows: '1',
     show_caption: false,
     // "+N" overlay
     more_bg: 'rgba(0,0,0,0.55)',
-    more_color: '#ffffff',
+    more_color: '',
     more_size: '28',
     // Avanzato
     shadow: 'none',
-    ...borderDefaults,
   },
 
   fields: [
-    // ─── Immagini ───
-    { key: 'images', label: 'Immagini', type: 'gallery' },
+    // ─── Media ───
+    { key: 'images', label: 'Media', type: 'gallery' },
+    { type: 'separator', label: 'Video', show: s => s.images?.some(i => i.type === 'video') },
+    { key: 'video_preview', label: 'Preview video', type: 'select', options: [
+      { value: 'poster', label: 'Poster statico' },
+      { value: 'autoplay', label: 'Autoplay muted' },
+    ], show: s => s.images?.some(i => i.type === 'video') },
 
     // ─── Layout ───
     { type: 'separator', label: 'Layout' },
-    { key: 'layout', label: 'Schema', type: 'select', options: [
-      { value: 'grid', label: 'Griglia' },
-      { value: 'masonry', label: 'Masonry' },
-      { value: 'scattered', label: 'Sparso' },
-      { value: 'collage', label: 'Collage' },
-      { value: 'filmstrip', label: 'Pellicola' },
-      { value: 'mosaic', label: 'Mosaico' },
-      { value: 'honeycomb', label: 'Esagoni' },
-      { value: 'hexgrid', label: 'Esagoni incastro' },
-      { value: 'puzzle', label: 'Puzzle' },
-      { value: 'diagonal', label: 'Diagonale' },
+    { key: 'layout_family', label: 'Famiglia', type: 'select', options: [
+      { value: 'classic', label: 'Classica' },
+      { value: 'strip', label: 'Nastro' },
     ]},
+    { key: 'layout', label: 'Schema', type: 'select', optionsFn: s => {
+      let family = s.layout_family || 'classic';
+      if (family === 'classic') {
+        const lay = s.layout || 'grid';
+        if (lay.startsWith('strip') || lay === 'filmstrip') family = 'strip';
+      }
+      if (family === 'strip') return [
+        { value: 'strip', label: 'Nastro' },
+        { value: 'strip_collage', label: 'Nastro collage' },
+        { value: 'strip_multi', label: 'Nastro multi-riga' },
+        { value: 'strip_marquee', label: 'Nastro automatico' },
+        { value: 'strip_split', label: 'Nastro doppio' },
+        { value: 'strip_coverflow', label: 'Coverflow 3D' },
+      ];
+      return [
+        { value: 'grid', label: 'Griglia' },
+        { value: 'masonry', label: 'Masonry' },
+        { value: 'scattered', label: 'Sparso' },
+        { value: 'collage', label: 'Collage' },
+        { value: 'mosaic', label: 'Mosaico' },
+        { value: 'honeycomb', label: 'Esagoni' },
+        { value: 'hexgrid', label: 'Esagoni incastro' },
+        { value: 'puzzle', label: 'Puzzle' },
+        { value: 'diagonal', label: 'Diagonale' },
+        { value: 'parallax', label: 'Parallasse' },
+        { value: 'expand', label: 'Espandi (spotlight)' },
+      ];
+    }},
     { key: 'puzzle_style', label: 'Stile puzzle', type: 'select', options: [
       { value: 'classic', label: 'Classico' },
       { value: 'zigzag', label: 'Zigzag' },
@@ -79,16 +145,89 @@ export default {
       { value: 'castle', label: 'Castello' },
       { value: 'fir', label: 'Abeti' },
     ], show: s => s.layout === 'puzzle' },
-    { key: 'columns', label: 'Colonne', type: 'range', min: 2, max: 6, step: 1 },
+    { key: 'columns', label: 'Colonne', type: 'range', min: 2, max: 6, step: 1,
+      show: s => !(s.layout && s.layout.startsWith('strip')) },
     { key: 'gap', label: 'Gap (px)', type: 'range', min: 0, max: 24, step: 2 },
-    { key: 'img_height', label: 'Altezza immagine', type: 'text' },
+    { key: 'img_height', label: 'Altezza immagine', type: 'text',
+      show: s => !(s.layout && s.layout.startsWith('strip')) },
     { key: 'object_fit', label: 'Adattamento', type: 'select', options: [
       { value: 'cover', label: 'Riempi' },
       { value: 'contain', label: 'Contieni' },
     ]},
-    { key: 'thumb_radius', label: 'Raggio bordi (px)', type: 'range', min: 0, max: 32, step: 2 },
-    { key: 'rows', label: 'Righe visibili (0 = tutte)', type: 'range', min: 0, max: 5, step: 1 },
-    { key: 'mobile_columns', label: 'Colonne mobile', type: 'range', min: 1, max: 4, step: 1 },
+    { key: 'thumb_radius', label: 'Raggio bordi (px)', type: 'border-radius' },
+    { key: 'rows', label: 'Righe visibili (0 = tutte)', type: 'range', min: 0, max: 5, step: 1,
+      show: s => !(s.layout && s.layout.startsWith('strip')) },
+    { key: 'mobile_columns', label: 'Colonne mobile', type: 'range', min: 1, max: 4, step: 1,
+      show: s => !(s.layout && s.layout.startsWith('strip')) },
+    { key: 'expand_ratio', label: 'Rapporto espansione', type: 'range', min: 2, max: 6, step: 0.5,
+      show: s => s.layout === 'expand' },
+    { key: 'expand_shrink', label: 'Compressione altri', type: 'range', min: 0.2, max: 1, step: 0.1,
+      show: s => s.layout === 'expand' },
+    { key: 'expand_speed', label: 'Velocità (ms)', type: 'range', min: 200, max: 1000, step: 50,
+      show: s => s.layout === 'expand' },
+    { key: 'parallax_height', label: 'Altezza area (px)', type: 'range', min: 800, max: 3000, step: 100,
+      show: s => s.layout === 'parallax' },
+    { key: 'parallax_intensity', label: 'Intensità parallasse', type: 'range', min: 10, max: 100, step: 5,
+      show: s => s.layout === 'parallax' },
+
+    // ─── Coverflow 3D ───
+    { type: 'separator', label: 'Coverflow 3D',
+      show: s => s.layout === 'strip_coverflow' || s.layout === 'filmstrip' },
+    { key: 'filmstrip_item_width', label: 'Larghezza foto (px)', type: 'range', min: 180, max: 450, step: 10,
+      show: s => s.layout === 'strip_coverflow' || s.layout === 'filmstrip' },
+    { key: 'filmstrip_center_zoom', label: 'Zoom centro', type: 'range', min: 1.0, max: 1.5, step: 0.05,
+      show: s => s.layout === 'strip_coverflow' || s.layout === 'filmstrip' },
+    { key: 'filmstrip_side_tilt', label: 'Rotazione 3D laterali (deg)', type: 'range', min: 0, max: 60, step: 1,
+      show: s => s.layout === 'strip_coverflow' || s.layout === 'filmstrip' },
+    { key: 'filmstrip_autoplay', label: 'Auto-avanzamento', type: 'toggle',
+      show: s => s.layout === 'strip_coverflow' || s.layout === 'filmstrip' },
+    { key: 'filmstrip_speed', label: 'Intervallo (s)', type: 'range', min: 2, max: 8, step: 0.5,
+      show: s => (s.layout === 'strip_coverflow' || s.layout === 'filmstrip') && !!s.filmstrip_autoplay },
+    { key: 'filmstrip_dots', label: 'Indicatore posizione', type: 'select', options: [
+      { value: 'dots', label: 'Pallini' },
+      { value: 'lines', label: 'Linee' },
+      { value: 'progress', label: 'Barra progresso' },
+      { value: 'fraction', label: 'Frazione (3/12)' },
+      { value: 'none', label: 'Nessuno' },
+    ], show: s => s.layout === 'strip_coverflow' || s.layout === 'filmstrip' },
+    { key: 'filmstrip_dots_color', label: 'Colore indicatore', type: 'color',
+      show: s => (s.layout === 'strip_coverflow' || s.layout === 'filmstrip') && s.filmstrip_dots && s.filmstrip_dots !== 'none' },
+
+    // ─── Nastro ───
+    { type: 'separator', label: 'Nastro',
+      show: s => s.layout && s.layout.startsWith('strip') },
+    { key: 'strip_height', label: 'Altezza nastro (px)', type: 'range', min: 150, max: 500, step: 10,
+      show: s => s.layout && s.layout.startsWith('strip') && s.layout !== 'strip_coverflow' },
+    { key: 'strip_item_width', label: 'Larghezza foto (px)', type: 'range', min: 150, max: 500, step: 10,
+      show: s => s.layout && s.layout.startsWith('strip') && s.layout !== 'strip_multi' && s.layout !== 'strip_coverflow' },
+    { key: 'strip_rows', label: 'Righe', type: 'range', min: 2, max: 3, step: 1,
+      show: s => s.layout === 'strip_multi' },
+    { key: 'strip_fade_edges', label: 'Sfumatura bordi', type: 'toggle',
+      show: s => s.layout && s.layout.startsWith('strip') },
+    { key: 'strip_speed', label: 'Durata ciclo (s)', type: 'range', min: 10, max: 60, step: 2,
+      show: s => s.layout === 'strip_marquee' || s.layout === 'strip_split' },
+    { key: 'strip_pause_hover', label: 'Pausa al passaggio mouse', type: 'toggle',
+      show: s => s.layout === 'strip_marquee' || s.layout === 'strip_split' },
+    { key: 'strip_direction', label: 'Direzione', type: 'select', options: [
+      { value: 'left', label: 'Sinistra' },
+      { value: 'right', label: 'Destra' },
+    ], show: s => s.layout === 'strip_marquee' },
+    { key: 'strip_arrows', label: 'Frecce navigazione', type: 'toggle',
+      show: s => s.layout && s.layout.startsWith('strip') && s.layout !== 'strip_coverflow' },
+    { key: 'strip_arrows_style', label: 'Stile frecce', type: 'select', options: [
+      { value: 'chevron', label: 'Chevron' },
+      { value: 'arrow', label: 'Freccia' },
+      { value: 'circle', label: 'Cerchio' },
+      { value: 'square', label: 'Quadrato' },
+      { value: 'pill', label: 'Pillola' },
+      { value: 'minimal', label: 'Minimale' },
+    ], show: s => s.layout && s.layout.startsWith('strip') && s.layout !== 'strip_coverflow' && !!s.strip_arrows },
+    { key: 'strip_arrows_size', label: 'Dimensione frecce (px)', type: 'range', min: 24, max: 60, step: 2,
+      show: s => s.layout && s.layout.startsWith('strip') && s.layout !== 'strip_coverflow' && !!s.strip_arrows },
+    { key: 'strip_arrows_color', label: 'Colore frecce', type: 'color',
+      show: s => s.layout && s.layout.startsWith('strip') && s.layout !== 'strip_coverflow' && !!s.strip_arrows },
+    { key: 'strip_arrows_bg', label: 'Sfondo frecce', type: 'color',
+      show: s => s.layout && s.layout.startsWith('strip') && s.layout !== 'strip_coverflow' && !!s.strip_arrows },
 
     // ─── Entrance ───
     { type: 'separator', label: 'Animazione ingresso (solo frontend)' },
@@ -122,29 +261,43 @@ export default {
       show: s => s.hover_effect === 'tilt3d' },
     { key: 'hover_magnetic_strength', label: 'Intensità magnetismo', type: 'range', min: 8, max: 60, step: 2,
       show: s => s.hover_effect === 'magnetic' },
+    { key: 'hover_glow_color', label: 'Colore bagliore', type: 'color',
+      show: s => s.hover_effect === 'glow' },
+    { key: 'hover_glow_spread', label: 'Intensità bagliore (px)', type: 'range', min: 8, max: 50, step: 2,
+      show: s => s.hover_effect === 'glow' },
     { key: 'hover_caption', label: 'Didascalia hover', type: 'select', options: [
       { value: 'none', label: 'Nessuna' },
       { value: 'slide-up', label: 'Scorrimento dal basso' },
       { value: 'fade', label: 'Dissolvenza' },
       { value: 'overlay', label: 'Overlay pieno' },
+      { value: 'frame', label: 'Cornice elegante' },
+      { value: 'centered', label: 'Testo centrato' },
     ]},
     { key: 'hover_caption_bg', label: 'Sfondo didascalia', type: 'color',
-      show: s => s.hover_caption && s.hover_caption !== 'none' },
+      show: s => s.hover_caption && s.hover_caption !== 'none' && s.hover_caption !== 'centered' },
     { key: 'hover_caption_color', label: 'Colore testo didascalia', type: 'color',
       show: s => s.hover_caption && s.hover_caption !== 'none' },
+    { key: 'hover_caption_weight', label: 'Peso testo', type: 'select', options: [
+      { value: '400', label: 'Normale' },
+      { value: '600', label: 'Semi-bold' },
+      { value: '700', label: 'Bold' },
+      { value: '900', label: 'Extra bold' },
+    ], show: s => s.hover_caption === 'centered' },
+    { key: 'hover_frame_inset', label: 'Padding cornice (px)', type: 'range', min: 4, max: 40, step: 2,
+      show: s => s.hover_caption === 'frame' },
 
     // ─── Animazione continua ───
     { type: 'separator', label: 'Animazione continua' },
-    { key: 'continuous', label: 'Effetto', type: 'select', options: [
-      { value: 'none', label: 'Nessuno' },
+    { key: 'continuous', label: 'Effetti', type: 'multi_pills', options: [
       { value: 'float', label: 'Galleggiamento' },
       { value: 'drift', label: 'Deriva' },
       { value: 'breathe', label: 'Respiro' },
       { value: 'rotate-slow', label: 'Rotazione lenta' },
       { value: 'kenburns', label: 'Ken Burns' },
+      { value: 'shimmer', label: 'Shimmer' },
     ]},
     { key: 'continuous_speed', label: 'Durata ciclo (s)', type: 'range', min: 10, max: 40, step: 1,
-      show: s => s.continuous && s.continuous !== 'none' },
+      show: s => !!s.continuous && s.continuous !== 'none' },
 
     // ─── Filtro ───
     { type: 'separator', label: 'Filtro immagine' },
@@ -164,6 +317,8 @@ export default {
       show: s => s.filter === 'duotone' },
     { key: 'duotone_light', label: 'Colore chiaro', type: 'color',
       show: s => s.filter === 'duotone' },
+    { key: 'duotone_intensity', label: 'Intensità duotone (%)', type: 'range', min: 0, max: 100, step: 5,
+      show: s => s.filter === 'duotone' },
 
     // ─── Cornice ───
     { type: 'separator', label: 'Cornice' },
@@ -174,9 +329,32 @@ export default {
       { value: 'shadow-box', label: 'Riquadro ombra' },
       { value: 'torn', label: 'Strappata' },
       { value: 'tape', label: 'Nastro adesivo' },
+      { value: 'inset', label: 'Interna' },
     ]},
     { key: 'frame_color', label: 'Colore cornice', type: 'color',
-      show: s => s.frame === 'polaroid' || s.frame === 'shadow-box' },
+      show: s => s.frame === 'polaroid' || s.frame === 'shadow-box' || s.frame === 'inset' },
+    { key: 'frame_inset_padding', label: 'Distanza dal bordo (px)', type: 'range', min: 3, max: 40, step: 1,
+      show: s => s.frame === 'inset' },
+
+    // ─── Bordi animati ───
+    { type: 'separator', label: 'Bordi animati' },
+    { key: 'anim_border', label: 'Tipo bordo animato', type: 'select', options: [
+      { value: 'none', label: 'Nessuno' },
+      { value: 'frame-in', label: 'Cornice entrante' },
+      { value: 'neon', label: 'Neon' },
+      { value: 'ants', label: 'Formiche' },
+      { value: 'corners', label: 'Angoli' },
+      { value: 'pulse', label: 'Pulsazione' },
+      { value: 'radar', label: 'Radar' },
+    ]},
+    { key: 'anim_border_color', label: 'Colore', type: 'color',
+      show: s => s.anim_border && s.anim_border !== 'none' },
+    { key: 'anim_border_thickness', label: 'Spessore (px)', type: 'range', min: 1, max: 6, step: 1,
+      show: s => s.anim_border && s.anim_border !== 'none' && s.anim_border !== 'frame-in' },
+    { key: 'anim_border_inset', label: 'Distanza dal bordo (px)', type: 'range', min: 4, max: 50, step: 2,
+      show: s => s.anim_border === 'frame-in' },
+    { key: 'anim_border_speed', label: 'Velocità (s)', type: 'range', min: 1, max: 10, step: 0.5,
+      show: s => s.anim_border && s.anim_border !== 'none' && s.anim_border !== 'frame-in' && s.anim_border !== 'corners' },
 
     // ─── Lightbox ───
     { type: 'separator', label: 'Lightbox' },
@@ -185,7 +363,17 @@ export default {
       { value: 'slide', label: 'Scorrimento' },
       { value: 'fade', label: 'Dissolvenza' },
       { value: 'scale', label: 'Scala' },
+    ], show: s => !!s.lightbox && s.lightbox_thumbs === 'none' },
+    { key: 'lightbox_thumbs', label: 'Miniature lightbox', type: 'select', options: [
+      { value: 'none', label: 'Nessuna (UIKit)' },
+      { value: 'bottom', label: 'Sotto' },
+      { value: 'right', label: 'Destra' },
+      { value: 'left', label: 'Sinistra' },
     ], show: s => !!s.lightbox },
+    { key: 'lightbox_thumbs_rows', label: 'Righe/Colonne miniature', type: 'select', options: [
+      { value: '1', label: '1' },
+      { value: '2', label: '2' },
+    ], show: s => !!s.lightbox && s.lightbox_thumbs && s.lightbox_thumbs !== 'none' },
     { key: 'show_caption', label: 'Mostra didascalie', type: 'toggle',
       show: s => !!s.lightbox },
 
@@ -196,7 +384,6 @@ export default {
     { key: 'more_size', label: 'Dimensione testo (px)', type: 'range', min: 16, max: 48, step: 2 },
 
     // ─── Avanzato ───
-    shadowField,
-    ...borderFields,
+    ...shadowField,
   ],
 };

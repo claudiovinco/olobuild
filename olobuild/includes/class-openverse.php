@@ -27,9 +27,11 @@ class Olo_Openverse {
                 return current_user_can( 'upload_files' );
             },
             'args' => [
-                'query'    => [ 'required' => true, 'type' => 'string', 'sanitize_callback' => 'sanitize_text_field' ],
-                'page'     => [ 'default' => 1, 'type' => 'integer', 'sanitize_callback' => 'absint' ],
-                'per_page' => [ 'default' => 30, 'type' => 'integer', 'sanitize_callback' => 'absint' ],
+                'query'       => [ 'required' => true, 'type' => 'string', 'sanitize_callback' => 'sanitize_text_field' ],
+                'page'        => [ 'default' => 1, 'type' => 'integer', 'sanitize_callback' => 'absint' ],
+                'per_page'    => [ 'default' => 30, 'type' => 'integer', 'sanitize_callback' => 'absint' ],
+                'orientation' => [ 'default' => '', 'type' => 'string', 'sanitize_callback' => 'sanitize_text_field' ],
+                'size'        => [ 'default' => '', 'type' => 'string', 'sanitize_callback' => 'sanitize_text_field' ],
             ],
         ] );
 
@@ -46,16 +48,29 @@ class Olo_Openverse {
      * Proxy ricerca Openverse.
      */
     public function search( $request ) {
-        $query    = $request->get_param( 'query' );
-        $page     = $request->get_param( 'page' ) ?: 1;
-        $per_page = min( $request->get_param( 'per_page' ) ?: 20, 20 );
+        $query       = $request->get_param( 'query' );
+        $page        = $request->get_param( 'page' ) ?: 1;
+        $per_page    = min( $request->get_param( 'per_page' ) ?: 20, 20 );
+        $orientation = sanitize_text_field( $request->get_param( 'orientation' ) );
+        $size        = sanitize_text_field( $request->get_param( 'size' ) );
 
-        $response = wp_remote_get( self::API_BASE . '/images/?' . http_build_query( [
+        $params = [
             'q'         => $query,
             'page'      => $page,
             'page_size' => $per_page,
             'mature'    => 'false',
-        ] ), [
+        ];
+        // Openverse: tall, wide, square
+        $ori_map = [ 'landscape' => 'wide', 'portrait' => 'tall', 'square' => 'square' ];
+        if ( ! empty( $orientation ) && isset( $ori_map[ $orientation ] ) ) {
+            $params['aspect_ratio'] = $ori_map[ $orientation ];
+        }
+        // Openverse: small, medium, large
+        if ( in_array( $size, [ 'small', 'medium', 'large' ], true ) ) {
+            $params['size'] = $size;
+        }
+
+        $response = wp_remote_get( self::API_BASE . '/images/?' . http_build_query( $params ), [
             'timeout' => 15,
             'headers' => [
                 'User-Agent' => 'Olobuild/1.0 (WordPress Plugin)',
@@ -80,7 +95,7 @@ class Olo_Openverse {
             // Build a usable thumbnail: for Flickr images, replace _b suffix with _n (320px).
             $full_url = $photo['url'] ?? '';
             $thumb_url = $full_url;
-            if ( strpos( $full_url, 'staticflickr.com' ) !== false ) {
+            if ( ! empty( $full_url ) && strpos( $full_url, 'staticflickr.com' ) !== false ) {
                 $thumb_url = preg_replace( '/_[a-z](\.\w+)$/i', '_n$1', $full_url );
             }
 

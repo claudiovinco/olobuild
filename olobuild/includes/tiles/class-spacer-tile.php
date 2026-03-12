@@ -9,7 +9,7 @@ class Olo_Spacer_Tile extends Olo_Tile_Base {
     protected $type     = 'spacer';
     protected $name     = 'Spaziatore';
     protected $icon     = 'dashicons-arrows-alt';
-    protected $category = 'layout';
+    protected $category = 'essential';
     protected $defaults = [
         'height'                    => '60',
         'shape_top'                 => 'none',
@@ -40,8 +40,8 @@ class Olo_Spacer_Tile extends Olo_Tile_Base {
         'shape_bottom_layer2_opacity'=> '30',
         'bg_color'                  => '',
         'bg_gradient'               => false,
-        'bg_gradient_from'          => '#6366F1',
-        'bg_gradient_to'            => '#8B5CF6',
+        'bg_gradient_from'          => '',
+        'bg_gradient_to'            => '',
         'bg_gradient_angle'         => '180',
         'full_bleed'                => false,
         'overlap_top'               => '0',
@@ -49,7 +49,7 @@ class Olo_Spacer_Tile extends Olo_Tile_Base {
         'custom_svg'                => '',
         'show_divider'              => false,
         'divider_style'             => 'solid',
-        'divider_color'             => '#374151',
+        'divider_color'             => '',
         'divider_width'             => '100',
         'divider_thickness'         => '1',
     ];
@@ -90,13 +90,13 @@ class Olo_Spacer_Tile extends Olo_Tile_Base {
         $path     = $paths[ $shape_key ];
         $shape_h  = absint( $s[ $prefix . '_height' ] ) ?: 80;
         $fill     = $s[ $prefix . '_fill' ] ?? 'color';
-        $color    = $this->safe_color( $s[ $prefix . '_color' ] ) ?: '#ffffff';
+        $color    = $this->safe_color_css( $s[ $prefix . '_color' ] ) ?: '#ffffff';
         $opacity  = max( 0.1, min( 1, absint( $s[ $prefix . '_opacity' ] ) / 100 ) );
         $flip     = ! empty( $s[ $prefix . '_flip' ] );
         $invert   = ! empty( $s[ $prefix . '_invert' ] );
         $scale_x  = absint( $s[ $prefix . '_scale_x' ] ?? 100 ) ?: 100;
         $layer2   = ! empty( $s[ $prefix . '_layer2' ] );
-        $l2_color = $this->safe_color( $s[ $prefix . '_layer2_color' ] ) ?: '#000000';
+        $l2_color = $this->safe_color_css( $s[ $prefix . '_layer2_color' ] ) ?: '#000000';
         $l2_opacity = max( 0.05, min( 1, absint( $s[ $prefix . '_layer2_opacity' ] ) / 100 ) );
         $fill_image = $s[ $prefix . '_fill_image' ] ?? '';
         $fill_video = $s[ $prefix . '_fill_video' ] ?? '';
@@ -132,7 +132,7 @@ class Olo_Spacer_Tile extends Olo_Tile_Base {
                     </clipPath>
                 </defs>
                 <?php if ( $layer2 ) : ?>
-                <path d="<?php echo esc_attr( $path ); ?>" fill="<?php echo esc_attr( $l2_color ); ?>" opacity="<?php echo esc_attr( $l2_opacity ); ?>" transform="translate(-30, 8) scale(1.05, 1)" />
+                <path d="<?php echo esc_attr( $path ); ?>" fill="<?php echo $l2_color; ?>" opacity="<?php echo esc_attr( $l2_opacity ); ?>" transform="translate(-30, 8) scale(1.05, 1)" />
                 <?php endif; ?>
                 <foreignObject x="0" y="0" width="1200" height="120" clip-path="url(#<?php echo esc_attr( $block_id ); ?>-clip)">
                     <video xmlns="http://www.w3.org/1999/xhtml"
@@ -150,7 +150,7 @@ class Olo_Spacer_Tile extends Olo_Tile_Base {
                     </clipPath>
                 </defs>
                 <?php if ( $layer2 ) : ?>
-                <path d="<?php echo esc_attr( $path ); ?>" fill="<?php echo esc_attr( $l2_color ); ?>" opacity="<?php echo esc_attr( $l2_opacity ); ?>" transform="translate(-30, 8) scale(1.05, 1)" />
+                <path d="<?php echo esc_attr( $path ); ?>" fill="<?php echo $l2_color; ?>" opacity="<?php echo esc_attr( $l2_opacity ); ?>" transform="translate(-30, 8) scale(1.05, 1)" />
                 <?php endif; ?>
                 <image href="<?php echo esc_url( $fill_image ); ?>" x="0" y="0" width="1200" height="120" preserveAspectRatio="xMidYMid slice" clip-path="url(#<?php echo esc_attr( $block_id ); ?>-clip)" />
             </svg>
@@ -158,9 +158,9 @@ class Olo_Spacer_Tile extends Olo_Tile_Base {
             <svg preserveAspectRatio="none" viewBox="0 0 1200 120" xmlns="http://www.w3.org/2000/svg"
                  style="width:100%;height:<?php echo $shape_h; ?>px;display:block;<?php echo $transform_css; ?>">
                 <?php if ( $layer2 ) : ?>
-                <path d="<?php echo esc_attr( $path ); ?>" fill="<?php echo esc_attr( $l2_color ); ?>" opacity="<?php echo esc_attr( $l2_opacity ); ?>" transform="translate(-30, 8) scale(1.05, 1)" />
+                <path d="<?php echo esc_attr( $path ); ?>" fill="<?php echo $l2_color; ?>" opacity="<?php echo esc_attr( $l2_opacity ); ?>" transform="translate(-30, 8) scale(1.05, 1)" />
                 <?php endif; ?>
-                <path d="<?php echo esc_attr( $path ); ?>" fill="<?php echo esc_attr( $color ); ?>" opacity="<?php echo esc_attr( $opacity ); ?>" />
+                <path d="<?php echo esc_attr( $path ); ?>" fill="<?php echo $color; ?>" opacity="<?php echo esc_attr( $opacity ); ?>" />
             </svg>
         <?php endif; ?>
         </div>
@@ -181,17 +181,17 @@ class Olo_Spacer_Tile extends Olo_Tile_Base {
         $bg_css = '';
         if ( ! empty( $s['bg_gradient'] ) ) {
             $angle = absint( $s['bg_gradient_angle'] ) % 360;
-            $from  = $this->safe_color( $s['bg_gradient_from'] ) ?: '#6366F1';
-            $to    = $this->safe_color( $s['bg_gradient_to'] ) ?: '#8B5CF6';
+            $from  = $this->safe_color_css( $s['bg_gradient_from'] ) ?: 'var(--olo-color-primary, #6366F1)';
+            $to    = $this->safe_color_css( $s['bg_gradient_to'] ) ?: '#8B5CF6';
             $bg_css = "background: linear-gradient({$angle}deg, {$from}, {$to});";
         } elseif ( ! empty( $s['bg_color'] ) ) {
-            $bg_css = 'background-color: ' . ( $this->safe_color( $s['bg_color'] ) ) . ';';
+            $bg_css = 'background-color: ' . ( $this->safe_color_css( $s['bg_color'] ) ) . ';';
         }
 
         // Divider
         $show_divider = ! empty( $s['show_divider'] );
         $div_style    = in_array( $s['divider_style'], [ 'solid', 'dashed', 'dotted', 'double' ], true ) ? $s['divider_style'] : 'solid';
-        $div_color    = $this->safe_color( $s['divider_color'] ) ?: '#374151';
+        $div_color    = $this->safe_color_css( $s['divider_color'] ) ?: 'var(--olo-color-text, #374151)';
         $div_width    = absint( $s['divider_width'] ) ?: 100;
         $div_thick    = absint( $s['divider_thickness'] ) ?: 1;
 

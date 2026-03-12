@@ -1,0 +1,306 @@
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+class Olo_Pagination_Tile extends Olo_Tile_Base {
+
+    protected $type     = 'pagination';
+    protected $name     = 'Paginazione';
+    protected $icon     = 'dashicons-ellipsis';
+    protected $category = 'dynamic';
+    protected $defaults = [
+        'style'              => 'both',
+        'alignment'          => 'center',
+        'show_first_last'    => false,
+        'prev_text'          => "\xC2\xAB Precedente",
+        'next_text'          => "Successivo \xC2\xBB",
+        'gap'                => '8',
+        'button_padding'     => '8 16',
+        'text_color'         => '',
+        'active_color'       => '#1e87f0',
+        'active_text_color'  => '#ffffff',
+        'background_color'   => '',
+        'active_background'  => '#1e87f0',
+        'border_radius'      => '4',
+        'hover_background'   => '',
+        'font_size'          => '14',
+        'border_color'       => '#e5e7eb',
+        'border_width'       => '1',
+    ];
+
+    public function get_controls() {
+        return [
+            [ 'key' => 'style',           'type' => 'select', 'label' => 'Stile' ],
+            [ 'key' => 'alignment',        'type' => 'select', 'label' => 'Allineamento' ],
+            [ 'key' => 'show_first_last',  'type' => 'toggle', 'label' => 'Primo/Ultimo' ],
+            [ 'key' => 'prev_text',        'type' => 'text',   'label' => 'Testo Precedente' ],
+            [ 'key' => 'next_text',        'type' => 'text',   'label' => 'Testo Successivo' ],
+            [ 'key' => 'gap',              'type' => 'range',  'label' => 'Distanza' ],
+            [ 'key' => 'button_padding',   'type' => 'text',   'label' => 'Padding' ],
+            [ 'key' => 'font_size',        'type' => 'range',  'label' => 'Dim. testo' ],
+            [ 'key' => 'border_radius',    'type' => 'range',  'label' => 'Raggio bordo' ],
+            [ 'key' => 'border_width',     'type' => 'range',  'label' => 'Spessore bordo' ],
+        ];
+    }
+
+    public function render( $settings ) {
+        $s = wp_parse_args( $settings, $this->defaults );
+
+        $uid = 'olo-pgn-' . wp_rand( 10000, 99999 );
+
+        // Sanitize
+        $style_mode  = in_array( $s['style'], [ 'numbered', 'prev-next', 'both' ], true ) ? $s['style'] : 'both';
+        $alignment   = in_array( $s['alignment'], [ 'left', 'center', 'right' ], true ) ? $s['alignment'] : 'center';
+        $show_fl     = ! empty( $s['show_first_last'] );
+        $prev_text   = esc_html( $s['prev_text'] ?: olo_t( "\xC2\xAB Precedente" ) );
+        $next_text   = esc_html( $s['next_text'] ?: olo_t( "Successivo \xC2\xBB" ) );
+        $gap         = max( 0, absint( $s['gap'] ) );
+        $font_size   = max( 10, min( 24, absint( $s['font_size'] ) ) );
+        $radius      = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
+        $bw          = max( 0, min( 4, absint( $s['border_width'] ) ) );
+
+        // Sanitize padding
+        $raw_padding = preg_replace( '/[^0-9\s]/', '', $s['button_padding'] );
+        $pad_parts   = preg_split( '/\s+/', trim( $raw_padding ) );
+        $padding_css = '';
+        if ( count( $pad_parts ) === 1 ) {
+            $padding_css = absint( $pad_parts[0] ) . 'px';
+        } elseif ( count( $pad_parts ) >= 2 ) {
+            $padding_css = absint( $pad_parts[0] ) . 'px ' . absint( $pad_parts[1] ) . 'px';
+        } else {
+            $padding_css = '8px 16px';
+        }
+
+        // Colors
+        $text_color      = $this->safe_color_css( $s['text_color'] );
+        $active_color    = $this->safe_color_css( $s['active_color'] ?: '#1e87f0' );
+        $active_text     = $this->safe_color_css( $s['active_text_color'] ?: '#ffffff' );
+        $bg_color        = $this->safe_color_css( $s['background_color'] );
+        $active_bg       = $this->safe_color_css( $s['active_background'] ?: '#1e87f0' );
+        $hover_bg        = $this->safe_color_css( $s['hover_background'] );
+        $border_color    = $this->safe_color_css( $s['border_color'] ?: '#e5e7eb' );
+
+        // Alignment map
+        $align_map = [ 'left' => 'flex-start', 'center' => 'center', 'right' => 'flex-end' ];
+        $justify   = $align_map[ $alignment ] ?? 'center';
+
+        // Detect context: singular (multi-page post) vs archive
+        $is_singular = is_singular();
+
+        // For singular posts with <!--nextpage-->
+        if ( $is_singular ) {
+            global $page, $numpages, $multipage;
+            if ( ! $multipage ) {
+                return '';
+            }
+
+            ob_start();
+            $this->render_styles( $uid, $justify, $gap, $font_size, $radius, $bw, $padding_css,
+                $text_color, $bg_color, $border_color, $active_text, $active_bg, $hover_bg );
+            ?>
+            <nav class="olo-pagination <?php echo $uid; ?>" role="navigation" aria-label="<?php echo esc_attr( olo_t( 'Paginazione' ) ); ?>">
+            <?php
+            $show_numbers = ( $style_mode === 'numbered' || $style_mode === 'both' );
+            $show_pn      = ( $style_mode === 'prev-next' || $style_mode === 'both' );
+
+            // Prev
+            if ( $show_pn ) {
+                if ( $page > 1 ) {
+                    echo '<a class="olo-pagination-link olo-pagination-prev" href="' . esc_url( $this->get_pagenum_link_singular( $page - 1 ) ) . '">' . $prev_text . '</a>';
+                }
+            }
+
+            // First
+            if ( $show_fl ) {
+                if ( $show_numbers ) {
+                    if ( $page > 2 ) {
+                        echo '<a class="olo-pagination-link olo-pagination-first" href="' . esc_url( $this->get_pagenum_link_singular( 1 ) ) . '">&laquo;</a>';
+                    }
+                }
+            }
+
+            // Numbered pages
+            if ( $show_numbers ) {
+                for ( $i = 1; $i <= $numpages; $i++ ) {
+                    if ( $i === $page ) {
+                        echo '<span class="olo-pagination-current">' . $i . '</span>';
+                    } else {
+                        echo '<a class="olo-pagination-link" href="' . esc_url( $this->get_pagenum_link_singular( $i ) ) . '">' . $i . '</a>';
+                    }
+                }
+            }
+
+            // Last
+            if ( $show_fl ) {
+                if ( $show_numbers ) {
+                    if ( $page < ( $numpages - 1 ) ) {
+                        echo '<a class="olo-pagination-link olo-pagination-last" href="' . esc_url( $this->get_pagenum_link_singular( $numpages ) ) . '">&raquo;</a>';
+                    }
+                }
+            }
+
+            // Next
+            if ( $show_pn ) {
+                if ( $page < $numpages ) {
+                    echo '<a class="olo-pagination-link olo-pagination-next" href="' . esc_url( $this->get_pagenum_link_singular( $page + 1 ) ) . '">' . $next_text . '</a>';
+                }
+            }
+            ?>
+            </nav>
+            <?php
+            return ob_get_clean();
+        }
+
+        // Archive / search pagination
+        global $wp_query;
+        $total_pages = (int) ( $wp_query->max_num_pages ?? 1 );
+
+        if ( $total_pages <= 1 ) {
+            return '';
+        }
+
+        $current_page = max( 1, get_query_var( 'paged', 1 ) );
+
+        ob_start();
+        $this->render_styles( $uid, $justify, $gap, $font_size, $radius, $bw, $padding_css,
+            $text_color, $bg_color, $border_color, $active_text, $active_bg, $hover_bg );
+        ?>
+        <nav class="olo-pagination <?php echo $uid; ?>" role="navigation" aria-label="<?php echo esc_attr( olo_t( 'Paginazione' ) ); ?>">
+        <?php
+        $show_numbers = ( $style_mode === 'numbered' || $style_mode === 'both' );
+        $show_pn      = ( $style_mode === 'prev-next' || $style_mode === 'both' );
+
+        // Prev
+        if ( $show_pn ) {
+            if ( $current_page > 1 ) {
+                echo '<a class="olo-pagination-link olo-pagination-prev" href="' . esc_url( get_pagenum_link( $current_page - 1 ) ) . '">' . $prev_text . '</a>';
+            }
+        }
+
+        // First
+        if ( $show_fl ) {
+            if ( $show_numbers ) {
+                if ( $current_page > 2 ) {
+                    echo '<a class="olo-pagination-link olo-pagination-first" href="' . esc_url( get_pagenum_link( 1 ) ) . '">&laquo;</a>';
+                }
+            }
+        }
+
+        // Numbered
+        if ( $show_numbers ) {
+            $paginate = paginate_links( [
+                'total'     => $total_pages,
+                'current'   => $current_page,
+                'type'      => 'array',
+                'prev_next' => false,
+                'end_size'  => 1,
+                'mid_size'  => 2,
+            ] );
+
+            if ( $paginate ) {
+                foreach ( $paginate as $link ) {
+                    // paginate_links returns <a> or <span class="current"> elements
+                    // Replace classes for our styling
+                    $link = str_replace( 'page-numbers current', 'olo-pagination-current', $link );
+                    $link = str_replace( 'page-numbers dots', 'olo-pagination-dots', $link );
+                    $link = str_replace( 'page-numbers', 'olo-pagination-link', $link );
+                    echo $link;
+                }
+            }
+        }
+
+        // Last
+        if ( $show_fl ) {
+            if ( $show_numbers ) {
+                if ( $current_page < ( $total_pages - 1 ) ) {
+                    echo '<a class="olo-pagination-link olo-pagination-last" href="' . esc_url( get_pagenum_link( $total_pages ) ) . '">&raquo;</a>';
+                }
+            }
+        }
+
+        // Next
+        if ( $show_pn ) {
+            if ( $current_page < $total_pages ) {
+                echo '<a class="olo-pagination-link olo-pagination-next" href="' . esc_url( get_pagenum_link( $current_page + 1 ) ) . '">' . $next_text . '</a>';
+            }
+        }
+        ?>
+        </nav>
+        <?php
+        return ob_get_clean();
+    }
+
+    /**
+     * Render shared CSS styles
+     */
+    private function render_styles( $uid, $justify, $gap, $font_size, $radius, $bw, $padding_css,
+        $text_color, $bg_color, $border_color, $active_text, $active_bg, $hover_bg ) {
+        ?>
+        <style>
+            .<?php echo $uid; ?> {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: <?php echo $justify; ?>;
+                gap: <?php echo $gap; ?>px;
+                padding: 8px 0;
+            }
+            .<?php echo $uid; ?> .olo-pagination-link,
+            .<?php echo $uid; ?> .olo-pagination-current,
+            .<?php echo $uid; ?> .olo-pagination-dots {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                padding: <?php echo $padding_css; ?>;
+                font-size: <?php echo $font_size; ?>px;
+                line-height: 1;
+                min-width: 32px;
+                text-align: center;
+                border-radius: <?php echo $radius; ?>;
+                text-decoration: none;
+                transition: background 0.2s ease, color 0.2s ease;
+                box-sizing: border-box;
+            }
+            .<?php echo $uid; ?> .olo-pagination-link {
+                <?php if ( $text_color ) : ?>color: <?php echo $text_color; ?>;<?php endif; ?>
+                <?php if ( $bg_color ) : ?>background: <?php echo $bg_color; ?>;<?php else : ?>background: transparent;<?php endif; ?>
+                <?php if ( $bw > 0 ) : ?>border: <?php echo $bw; ?>px solid <?php echo $border_color; ?>;<?php else : ?>border: none;<?php endif; ?>
+                cursor: pointer;
+            }
+            <?php if ( $hover_bg ) : ?>
+            .<?php echo $uid; ?> .olo-pagination-link:hover {
+                background: <?php echo $hover_bg; ?>;
+            }
+            <?php endif; ?>
+            .<?php echo $uid; ?> .olo-pagination-current {
+                color: <?php echo $active_text; ?>;
+                background: <?php echo $active_bg; ?>;
+                border: <?php echo $bw; ?>px solid <?php echo $active_bg; ?>;
+                font-weight: 600;
+                cursor: default;
+            }
+            .<?php echo $uid; ?> .olo-pagination-dots {
+                <?php if ( $text_color ) : ?>color: <?php echo $text_color; ?>;<?php endif; ?>
+                background: transparent;
+                border: none;
+                cursor: default;
+            }
+        </style>
+        <?php
+    }
+
+    /**
+     * Get page link for singular multi-page posts
+     */
+    private function get_pagenum_link_singular( $page_num ) {
+        global $post;
+        if ( $page_num <= 1 ) {
+            return get_permalink( $post->ID );
+        }
+        if ( get_option( 'permalink_structure' ) ) {
+            return trailingslashit( get_permalink( $post->ID ) ) . $page_num . '/';
+        }
+        return add_query_arg( 'page', $page_num, get_permalink( $post->ID ) );
+    }
+}

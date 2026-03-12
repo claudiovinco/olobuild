@@ -26,12 +26,12 @@
 
       <!-- Cards -->
       <div :style="{flex:'1',minWidth:'0'}">
-        <div style="font-size:11px;color:#6b7280;margin-bottom:6px"><strong style="color:#1f2937">3</strong> / 9 sale</div>
+        <div style="font-size:11px;color:#6b7280;margin-bottom:6px"><strong style="color:var(--olo-color-text, #374151)">3</strong> / 9 sale</div>
         <div :style="gridStyle">
           <div v-for="room in rooms" :key="room.name" style="border:1px solid #e5e7eb;border-radius:8px;overflow:hidden">
             <div v-if="s.card_image !== false" :style="{height:'100px',background:room.bg}"></div>
             <div style="padding:10px 12px">
-              <div style="font-size:13px;font-weight:700;color:#1f2937">{{ room.name }}</div>
+              <div style="font-size:13px;font-weight:700;color:var(--olo-color-text, #374151)">{{ room.name }}</div>
               <span style="font-size:9px;font-weight:600;color:#1e87f0;background:rgba(30,135,240,.08);padding:1px 6px;border-radius:3px">{{ room.type }}</span>
               <div style="font-size:11px;color:#6b7280;margin-top:3px">{{ room.addr }}</div>
               <div style="display:flex;gap:8px;font-size:11px;color:#4b5563;margin-top:4px">
@@ -67,7 +67,7 @@ const pins = [
   { x: 35, y: 40 }, { x: 55, y: 30 }, { x: 45, y: 60 }, { x: 65, y: 50 }, { x: 30, y: 55 },
 ];
 
-const selStyle = { padding: '7px 10px', border: '1px solid #d1d5db', borderRadius: '8px', fontSize: '12px', flex: '1', minWidth: '120px', background: '#fff', color: '#1f2937' };
+const selStyle = { padding: '7px 10px', border: '1px solid #d1d5db', borderRadius: '8px', fontSize: '12px', flex: '1', minWidth: '120px', background: '#fff', color: 'var(--olo-color-text, #374151)' };
 const pillStyle = { padding: '4px 12px', borderRadius: '999px', fontSize: '11px', fontWeight: '500', background: '#f3f4f6', color: '#4b5563', cursor: 'pointer', border: '1px solid transparent' };
 const activePill = { background: '#1e87f0', color: '#fff', borderColor: '#1e87f0' };
 

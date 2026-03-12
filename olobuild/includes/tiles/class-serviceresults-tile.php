@@ -146,8 +146,8 @@ class Olo_ServiceResults_Tile extends Olo_Tile_Base {
             'gap'               => $s['gap'],
             'cardStyle'         => $s['card_style'],
             'imageHeight'       => intval( $s['image_height'] ),
-            'imageRadius'       => intval( $s['image_radius'] ),
-            'cardRadius'        => intval( $s['card_radius'] ),
+            'imageRadius'       => Olo_Tile_Utils::border_radius( $s['image_radius'] ?? 0 ),
+            'cardRadius'        => Olo_Tile_Utils::border_radius( $s['card_radius'] ?? 8 ),
             'showExcerpt'       => isset( $cc['excerpt'] ),
             'excerptLength'     => intval( $s['excerpt_length'] ),
             'showStats'         => isset( $cc['stats'] ),
@@ -206,9 +206,9 @@ class Olo_ServiceResults_Tile extends Olo_Tile_Base {
         $kenburns_on    = ! empty( $s['fx_kenburns'] );
         $kenburns_speed = max( 10, min( 40, absint( $s['fx_kenburns_speed'] ?? 20 ) ) );
         $kenburns_scale = max( 1.05, min( 1.25, floatval( $s['fx_kenburns_scale'] ?? 1.12 ) ) );
-        $image_radius   = max( 0, absint( $s['image_radius'] ?? 0 ) );
+        $image_radius   = Olo_Tile_Utils::border_radius( $s['image_radius'] ?? 0 );
         $image_height   = max( 100, absint( $s['image_height'] ?? 180 ) );
-        $card_radius    = max( 0, absint( $s['card_radius'] ?? 8 ) );
+        $card_radius    = Olo_Tile_Utils::border_radius( $s['card_radius'] ?? 8 );
         $body_padding   = max( 0, min( 40, absint( $s['body_padding'] ?? 15 ) ) );
         $title_size     = max( 0.7, min( 2.5, floatval( $s['title_size'] ?? 1 ) ) );
         $excerpt_size   = max( 0.7, min( 1.5, floatval( $s['excerpt_size'] ?? 0.92 ) ) );
@@ -252,14 +252,14 @@ class Olo_ServiceResults_Tile extends Olo_Tile_Base {
             #<?php echo $uid; ?> .olo-svr-ribbon--top-right { top: 0; right: 14px; border-radius: 0 0 4px 4px; }
             #<?php echo $uid; ?> .olo-svr-ribbon--top-left { top: 0; left: 14px; border-radius: 0 0 4px 4px; }
             /* Opening badge */
-            #<?php echo $uid; ?> .olo-svr-opening { position: absolute; bottom: 8px; left: 8px; z-index: 2; color: #fff; font-weight: 600; padding: 2px 10px; border-radius: 4px; line-height: 1.4; }
+            #<?php echo $uid; ?> .olo-svr-opening { position: absolute; bottom: 8px; left: 8px; z-index: 2; color: var(--olo-color-primary-contrast, #FFFFFF); font-weight: 600; padding: 2px 10px; border-radius: 4px; line-height: 1.4; }
             <?php if ( ! empty( $s['match_height'] ) ) : ?>
             #<?php echo $uid; ?> .olo-svresults-card { display: flex; flex-direction: column; height: 100%; }
             #<?php echo $uid; ?> .olo-svresults-card-body { flex: 1; display: flex; flex-direction: column; }
             #<?php echo $uid; ?> .olo-svresults-card-footer { margin-top: auto; }
             <?php endif; ?>
             <?php if ( $s['card_style'] === 'primary' ) :
-                $primary_bg = esc_attr( $s['card_primary_bg'] ?? '#6366F1' );
+                $primary_bg = $this->safe_color_css( $s['card_primary_bg'] ?? '#6366F1' );
             ?>
             #<?php echo $uid; ?> .olo-svresults-card--primary { background-color: <?php echo $primary_bg; ?> !important; border-color: <?php echo $primary_bg; ?>; }
             #<?php echo $uid; ?> .olo-svresults-card--primary .olo-svresults-card-title,

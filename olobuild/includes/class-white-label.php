@@ -1,0 +1,253 @@
+<?php
+/**
+ * Olo_White_Label — Rename plugin name/icon, hide credits,
+ * custom welcome screen, hide menu for non-admins.
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+class Olo_White_Label {
+
+    private static $instance = null;
+
+    public static function instance() {
+        if ( null === self::$instance ) {
+            self::$instance = new self();
+        }
+        return self::$instance;
+    }
+
+    public function init() {
+        $settings = $this->get_settings();
+        if ( empty( $settings['enabled'] ) ) {
+            return;
+        }
+
+        // Rename plugin in admin
+        add_filter( 'all_plugins', [ $this, 'rename_plugin' ] );
+
+        // Change admin menu
+        add_action( 'admin_menu', [ $this, 'modify_admin_menu' ], 999 );
+
+        // Hide for non-admins
+        if ( ! empty( $settings['hide_for_non_admins'] ) ) {
+            add_action( 'admin_menu', [ $this, 'hide_menu_for_non_admins' ], 1000 );
+        }
+
+        // Filter builder brand name
+        add_filter( 'olo_brand_name', [ $this, 'get_brand_name' ] );
+
+        // REST API for settings
+        add_action( 'rest_api_init', [ $this, 'register_routes' ] );
+
+        // Admin page
+        add_action( 'admin_menu', [ $this, 'add_admin_page' ] );
+    }
+
+    /* ─────────────────────────────────────────────
+     * Filters
+     * ───────────────────────────────────────────── */
+
+    public function rename_plugin( $plugins ) {
+        $settings = $this->get_settings();
+        $key = 'olobuild/olobuild.php';
+
+        if ( isset( $plugins[ $key ] ) && ! empty( $settings['plugin_name'] ) ) {
+            $plugins[ $key ]['Name']   = $settings['plugin_name'];
+            $plugins[ $key ]['Title']  = $settings['plugin_name'];
+
+            if ( ! empty( $settings['plugin_description'] ) ) {
+                $plugins[ $key ]['Description'] = $settings['plugin_description'];
+            }
+            if ( ! empty( $settings['author_name'] ) ) {
+                $plugins[ $key ]['Author']     = $settings['author_name'];
+                $plugins[ $key ]['AuthorName'] = $settings['author_name'];
+            }
+            if ( ! empty( $settings['author_url'] ) ) {
+                $plugins[ $key ]['AuthorURI'] = $settings['author_url'];
+            }
+        }
+
+        return $plugins;
+    }
+
+    public function modify_admin_menu() {
+        global $menu, $submenu;
+        $settings = $this->get_settings();
+
+        if ( empty( $settings['plugin_name'] ) ) {
+            return;
+        }
+
+        // Rename main menu item
+        foreach ( $menu as &$item ) {
+            if ( isset( $item[2] ) && $item[2] === 'olobuild' ) {
+                $item[0] = esc_html( $settings['plugin_name'] );
+                break;
+            }
+        }
+    }
+
+    public function hide_menu_for_non_admins() {
+        if ( ! current_user_can( 'manage_options' ) ) {
+            // Hide white label settings page
+            remove_submenu_page( 'olobuild', 'olo-white-label' );
+        }
+    }
+
+    public function get_brand_name( $default ) {
+        $settings = $this->get_settings();
+        return ! empty( $settings['plugin_name'] ) ? $settings['plugin_name'] : $default;
+    }
+
+    /* ─────────────────────────────────────────────
+     * Settings
+     * ───────────────────────────────────────────── */
+
+    public function get_settings() {
+        return get_option( 'olo_white_label', [
+            'enabled'            => false,
+            'plugin_name'        => '',
+            'plugin_description' => '',
+            'author_name'        => '',
+            'author_url'         => '',
+            'hide_for_non_admins' => false,
+            'hide_credits'       => false,
+        ] );
+    }
+
+    /* ─────────────────────────────────────────────
+     * REST API
+     * ───────────────────────────────────────────── */
+
+    public function register_routes() {
+        register_rest_route( 'olo/v1', '/white-label', [
+            [
+                'methods'             => 'GET',
+                'callback'            => function() {
+                    return rest_ensure_response( $this->get_settings() );
+                },
+                'permission_callback' => function() {
+                    return current_user_can( 'manage_options' );
+                },
+            ],
+            [
+                'methods'             => 'POST',
+                'callback'            => [ $this, 'save_settings' ],
+                'permission_callback' => function() {
+                    return current_user_can( 'manage_options' );
+                },
+            ],
+        ] );
+    }
+
+    public function save_settings( $request ) {
+        $data = $request->get_json_params();
+        if ( ! is_array( $data ) ) {
+            return new WP_Error( 'invalid', 'Dati non validi', [ 'status' => 400 ] );
+        }
+
+        $clean = [
+            'enabled'             => ! empty( $data['enabled'] ),
+            'plugin_name'         => sanitize_text_field( $data['plugin_name'] ?? '' ),
+            'plugin_description'  => sanitize_text_field( $data['plugin_description'] ?? '' ),
+            'author_name'         => sanitize_text_field( $data['author_name'] ?? '' ),
+            'author_url'          => esc_url_raw( $data['author_url'] ?? '' ),
+            'hide_for_non_admins' => ! empty( $data['hide_for_non_admins'] ),
+            'hide_credits'        => ! empty( $data['hide_credits'] ),
+        ];
+
+        update_option( 'olo_white_label', $clean );
+        return rest_ensure_response( [ 'success' => true ] );
+    }
+
+    /* ─────────────────────────────────────────────
+     * Admin Page
+     * ───────────────────────────────────────────── */
+
+    public function add_admin_page() {
+        if ( ! current_user_can( 'manage_options' ) ) {
+            return;
+        }
+
+        add_submenu_page(
+            'olobuild',
+            'White Label',
+            'White Label',
+            'manage_options',
+            'olo-white-label',
+            [ $this, 'render_admin_page' ]
+        );
+    }
+
+    public function render_admin_page() {
+        $s = $this->get_settings();
+        ?>
+        <div class="wrap">
+            <h1>White Label — Olobuild</h1>
+            <p>Personalizza il nome e l'aspetto del plugin per i tuoi clienti.</p>
+
+            <table class="form-table" style="max-width:600px">
+                <tr>
+                    <th>Attiva White Label</th>
+                    <td><input type="checkbox" id="wl_enabled" <?php checked( $s['enabled'] ); ?> /></td>
+                </tr>
+                <tr>
+                    <th>Nome plugin</th>
+                    <td><input type="text" id="wl_name" value="<?php echo esc_attr( $s['plugin_name'] ); ?>" class="regular-text" placeholder="Olobuild" /></td>
+                </tr>
+                <tr>
+                    <th>Descrizione</th>
+                    <td><input type="text" id="wl_desc" value="<?php echo esc_attr( $s['plugin_description'] ); ?>" class="regular-text" placeholder="Page builder professionale" /></td>
+                </tr>
+                <tr>
+                    <th>Nome autore</th>
+                    <td><input type="text" id="wl_author" value="<?php echo esc_attr( $s['author_name'] ); ?>" class="regular-text" /></td>
+                </tr>
+                <tr>
+                    <th>URL autore</th>
+                    <td><input type="url" id="wl_url" value="<?php echo esc_attr( $s['author_url'] ); ?>" class="regular-text" /></td>
+                </tr>
+                <tr>
+                    <th>Nascondi per non-admin</th>
+                    <td><input type="checkbox" id="wl_hide" <?php checked( $s['hide_for_non_admins'] ); ?> /> <span class="description">Nasconde le impostazioni White Label per utenti non amministratori</span></td>
+                </tr>
+                <tr>
+                    <th>Nascondi credits</th>
+                    <td><input type="checkbox" id="wl_credits" <?php checked( $s['hide_credits'] ); ?> /> <span class="description">Rimuove la scritta "Powered by Olobuild"</span></td>
+                </tr>
+            </table>
+
+            <p><button class="button button-primary" id="wl-save">Salva</button> <span id="wl-msg" style="margin-left:10px;color:#059669;display:none">Salvato!</span></p>
+
+            <script>
+            document.getElementById('wl-save').addEventListener('click', function() {
+                var data = {
+                    enabled: document.getElementById('wl_enabled').checked,
+                    plugin_name: document.getElementById('wl_name').value,
+                    plugin_description: document.getElementById('wl_desc').value,
+                    author_name: document.getElementById('wl_author').value,
+                    author_url: document.getElementById('wl_url').value,
+                    hide_for_non_admins: document.getElementById('wl_hide').checked,
+                    hide_credits: document.getElementById('wl_credits').checked
+                };
+                fetch('<?php echo esc_js( rest_url( 'olo/v1/white-label' ) ); ?>', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': '<?php echo esc_js( wp_create_nonce( 'wp_rest' ) ); ?>' },
+                    body: JSON.stringify(data)
+                })
+                .then(function(r) { return r.json(); })
+                .then(function(d) {
+                    var msg = document.getElementById('wl-msg');
+                    msg.style.display = 'inline';
+                    msg.textContent = d.success ? 'Salvato!' : 'Errore';
+                    setTimeout(function() { msg.style.display = 'none'; }, 3000);
+                });
+            });
+            </script>
+        </div>
+        <?php
+    }
+}

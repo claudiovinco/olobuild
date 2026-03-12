@@ -2,13 +2,32 @@
   <div
     class="ols-switcher-preview"
     :class="[
-      'ols-style--' + (settings.style || 'flags'),
-      'ols-layout--' + (settings.layout || 'inline'),
+      'ols-style--' + s.style,
+      'ols-layout--' + s.layout,
+      { 'ols-compact': s.compact },
     ]"
     :style="wrapperStyle"
   >
+    <!-- Tabs (linguette) -->
+    <template v-if="s.layout === 'tabs'">
+      <div class="ols-tabs-preview" :class="'ols-tabs--' + (s.tabs_edge || 'top')">
+        <div
+          v-for="lang in languages"
+          :key="lang.code"
+          class="ols-tab-item"
+          :class="{ 'ols-active': lang.code === defaultLang }"
+          :style="tabItemStyle(lang.code === defaultLang)"
+        >
+          <span v-if="hasFlag" class="ols-flag" :style="flagDisplayStyle">{{ lang.flag }}</span>
+          <span v-if="isCircle" class="ols-circle-flag" :style="circleStyle">{{ lang.flag }}</span>
+          <span v-if="showCode" class="ols-code">{{ lang.code.toUpperCase() }}</span>
+        </div>
+      </div>
+      <span class="ols-tabs-badge">linguette {{ s.tabs_edge || 'top' }}</span>
+    </template>
+
     <!-- Inline / Floating -->
-    <template v-if="settings.layout !== 'dropdown'">
+    <template v-else-if="s.layout !== 'dropdown'">
       <div
         v-for="lang in languages"
         :key="lang.code"
@@ -16,31 +35,29 @@
         :class="{ 'ols-active': lang.code === defaultLang }"
         :style="itemStyle(lang.code === defaultLang)"
       >
-        <span v-if="showFlag" class="ols-flag" :style="flagStyle">{{ lang.flag }}</span>
+        <span v-if="hasFlag" class="ols-flag" :style="flagDisplayStyle">{{ lang.flag }}</span>
+        <span v-if="isCircle" class="ols-circle-flag" :style="circleStyle">{{ lang.flag }}</span>
         <span v-if="showCode" class="ols-code">{{ lang.code.toUpperCase() }}</span>
         <span v-if="showName" class="ols-name-label">{{ lang.name }}</span>
-        <span v-if="settings.show_label && settings.style === 'flags'" class="ols-sublabel">
-          {{ settings.label_format === 'code' ? lang.code.toUpperCase() : lang.name }}
+        <span v-if="s.show_label && (s.style === 'flags' || s.style === 'flags_circle')" class="ols-sublabel">
+          {{ s.label_format === 'code' ? lang.code.toUpperCase() : lang.name }}
         </span>
       </div>
+      <div v-if="s.layout === 'floating'" class="ols-float-badge">{{ s.floating_pos || 'bottom-right' }}</div>
     </template>
 
     <!-- Dropdown -->
     <template v-else>
       <div class="ols-dropdown-preview" :style="itemStyle(false)">
-        <span v-if="showFlag" class="ols-flag" :style="flagStyle">{{ currentLang.flag }}</span>
+        <span v-if="hasFlag" class="ols-flag" :style="flagDisplayStyle">{{ currentLang.flag }}</span>
+        <span v-if="isCircle" class="ols-circle-flag" :style="circleStyle">{{ currentLang.flag }}</span>
         <span v-if="showCode" class="ols-code">{{ currentLang.code.toUpperCase() }}</span>
         <span v-if="showName" class="ols-name-label">{{ currentLang.name }}</span>
-        <svg v-if="settings.show_dropdown_arrow" class="ols-arrow" width="12" height="12" viewBox="0 0 12 12">
+        <svg v-if="s.show_dropdown_arrow" class="ols-arrow" width="12" height="12" viewBox="0 0 12 12">
           <path d="M2 4l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5"/>
         </svg>
       </div>
     </template>
-
-    <!-- Floating badge -->
-    <div v-if="settings.layout === 'floating'" class="ols-float-badge">
-      {{ settings.floating_pos || 'bottom-right' }}
-    </div>
   </div>
 </template>
 
@@ -51,44 +68,72 @@ const props = defineProps({
   settings: { type: Object, default: () => ({}) },
 });
 
-const flags = {
-  it: '🇮🇹', en: '🇬🇧', de: '🇩🇪', fr: '🇫🇷', es: '🇪🇸', pt: '🇵🇹',
+const defaults = {
+  style: 'flags', flag_shape: 'circle', flag_size: 24, show_label: false,
+  label_format: 'name', layout: 'inline', floating_pos: 'bottom-right',
+  gap: 8, active_bg: '', active_color: '', bg: '', color: '',
+  border_color: '', border_radius: 8, show_dropdown_arrow: true,
+  tabs_edge: 'top', tabs_offset: 20, tabs_size: 'normal', compact: false,
+  circle_bg: '', circle_border: '', circle_size: 36,
 };
+const s = computed(() => ({ ...defaults, ...props.settings }));
 
-// Simula le lingue attive (nel builder non abbiamo accesso al PHP)
+const flags = { it: '🇮🇹', en: '🇬🇧', de: '🇩🇪', fr: '🇫🇷', es: '🇪🇸', pt: '🇵🇹' };
+
 const languages = computed(() => [
-  { code: 'it', name: 'Italiano', flag: flags.it || '🏳️' },
-  { code: 'en', name: 'English', flag: flags.en || '🏳️' },
-  { code: 'de', name: 'Deutsch', flag: flags.de || '🏳️' },
+  { code: 'it', name: 'Italiano', flag: flags.it },
+  { code: 'en', name: 'English', flag: flags.en },
+  { code: 'de', name: 'Deutsch', flag: flags.de },
 ]);
 
 const defaultLang = 'it';
 const currentLang = computed(() => languages.value[0]);
 
-const showFlag = computed(() =>
-  props.settings.style === 'flags' || props.settings.style === 'flags_text'
-);
-const showCode = computed(() =>
-  props.settings.style === 'codes' || props.settings.style === 'flags_text'
-);
-const showName = computed(() => props.settings.style === 'names');
+const hasFlag = computed(() => s.value.style === 'flags' || s.value.style === 'flags_text');
+const isCircle = computed(() => s.value.style === 'flags_circle');
+const showCode = computed(() => s.value.style === 'codes' || s.value.style === 'flags_text');
+const showName = computed(() => s.value.style === 'names');
 
-const flagStyle = computed(() => ({
-  fontSize: (props.settings.flag_size || 24) + 'px',
+const flagDisplayStyle = computed(() => ({
+  fontSize: (s.value.flag_size || 24) + 'px',
   lineHeight: 1,
 }));
 
+const circleStyle = computed(() => {
+  const sz = parseInt(s.value.circle_size) || 36;
+  return {
+    width: sz + 'px',
+    height: sz + 'px',
+    fontSize: Math.round(sz * 0.55) + 'px',
+    background: s.value.circle_bg || 'rgba(255,255,255,0.1)',
+    borderColor: s.value.circle_border || 'rgba(255,255,255,0.2)',
+  };
+});
+
 const wrapperStyle = computed(() => ({
-  gap: (props.settings.gap || 8) + 'px',
+  gap: (s.value.gap || 8) + 'px',
 }));
 
 function itemStyle(isActive) {
-  const s = props.settings;
+  const v = s.value;
+  const base = {
+    background: isActive ? (v.active_bg || '#6366F1') : (v.bg || '#ffffff'),
+    color: isActive ? (v.active_color || '#ffffff') : (v.color || '#374151'),
+    borderColor: v.border_color || '#e5e7eb',
+    borderRadius: (v.border_radius || 8) + 'px',
+  };
+  if (v.compact) {
+    base.padding = '3px 6px';
+    base.fontSize = '11px';
+  }
+  return base;
+}
+
+function tabItemStyle(isActive) {
+  const v = s.value;
   return {
-    background: isActive ? (s.active_bg || '#6366F1') : (s.bg || '#ffffff'),
-    color: isActive ? (s.active_color || '#ffffff') : (s.color || '#374151'),
-    borderColor: s.border_color || '#e5e7eb',
-    borderRadius: (s.border_radius || 8) + 'px',
+    background: isActive ? (v.active_bg || '#6366F1') : (v.bg || 'rgba(255,255,255,0.9)'),
+    color: isActive ? (v.active_color || '#fff') : (v.color || '#374151'),
   };
 }
 </script>
@@ -98,7 +143,7 @@ function itemStyle(isActive) {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  min-height: 32px;
+  min-height: 28px;
 }
 .ols-item-preview {
   display: flex;
@@ -110,7 +155,11 @@ function itemStyle(isActive) {
   font-size: 13px;
   font-weight: 500;
   transition: all 0.15s;
-  flex-direction: row;
+}
+.ols-compact .ols-item-preview {
+  padding: 3px 6px;
+  font-size: 11px;
+  gap: 4px;
 }
 .ols-item-preview .ols-sublabel {
   font-size: 10px;
@@ -126,6 +175,10 @@ function itemStyle(isActive) {
   font-size: 13px;
   font-weight: 500;
 }
+.ols-compact .ols-dropdown-preview {
+  padding: 3px 6px;
+  font-size: 11px;
+}
 .ols-dropdown-preview .ols-arrow {
   margin-left: 2px;
   opacity: 0.6;
@@ -135,10 +188,22 @@ function itemStyle(isActive) {
   align-items: center;
   justify-content: center;
 }
+.ols-circle-flag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 2px solid;
+  flex-shrink: 0;
+  line-height: 1;
+}
 .ols-code {
   font-weight: 700;
   font-size: 12px;
   letter-spacing: 0.5px;
+}
+.ols-compact .ols-code {
+  font-size: 10px;
 }
 .ols-name-label {
   font-weight: 400;
@@ -151,11 +216,59 @@ function itemStyle(isActive) {
   padding: 2px 6px;
   border-radius: 4px;
 }
-
-/* Layout floating preview */
 .ols-layout--floating {
   border: 1px dashed #6366F1;
   padding: 4px;
+  border-radius: 6px;
+}
+/* Tabs preview */
+.ols-tabs-preview {
+  display: flex;
+  gap: 2px;
+}
+.ols-tabs--top .ols-tab-item {
+  padding: 4px 8px;
+  border-radius: 0 0 6px 6px;
+  font-size: 12px;
+}
+.ols-tabs--right .ols-tab-item,
+.ols-tabs--left .ols-tab-item {
+  padding: 6px 4px;
+  writing-mode: vertical-lr;
+  font-size: 11px;
+}
+.ols-tabs--right {
+  flex-direction: column;
+}
+.ols-tabs--left {
+  flex-direction: column;
+}
+.ols-tabs--left .ols-tab-item {
+  border-radius: 6px 0 0 6px;
+}
+.ols-tabs--right .ols-tab-item {
+  border-radius: 0 6px 6px 0;
+}
+.ols-tab-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  cursor: default;
+  font-weight: 600;
+  transition: all 0.15s;
+}
+.ols-tab-item .ols-circle-flag {
+  writing-mode: horizontal-tb;
+}
+.ols-tabs-badge {
+  font-size: 10px;
+  color: #9ca3af;
+  margin-left: 8px;
+}
+.ols-layout--tabs {
+  border: 1px dashed #8b5cf6;
+  padding: 6px;
   border-radius: 6px;
 }
 </style>

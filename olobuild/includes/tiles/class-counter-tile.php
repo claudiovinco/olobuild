@@ -9,15 +9,15 @@ class Olo_Counter_Tile extends Olo_Tile_Base {
     protected $type     = 'counter';
     protected $name     = 'Contatore';
     protected $icon     = 'dashicons-performance';
-    protected $category = 'content';
+    protected $category = 'marketing';
     protected $defaults = [
         'number'             => '1250',
         'label'              => 'Clienti soddisfatti',
         'prefix'             => '',
         'suffix'             => '+',
-        'icon_emoji'         => "\xF0\x9F\x8F\x86",
+        'icon_emoji'         => 'bolt',
         'icon_size'          => '40',
-        'text_color'         => '#F3F4F6',
+        'text_color'         => '',
         'number_font_size'   => '48',
         'number_font_weight' => '700',
         'label_color'        => '',
@@ -33,7 +33,7 @@ class Olo_Counter_Tile extends Olo_Tile_Base {
         'padding'            => '32',
         'border_radius'      => '0',
         'border_width'       => '0',
-        'border_color'       => '#374151',
+        'border_color'       => '',
     ];
 
     public function get_controls() { return []; }
@@ -42,22 +42,22 @@ class Olo_Counter_Tile extends Olo_Tile_Base {
         $s   = wp_parse_args( $settings, $this->defaults );
         $uid = 'olo-cnt-' . wp_rand( 10000, 99999 );
 
-        $fg       = $this->safe_color( $s['text_color'] ) ?: '#F3F4F6';
-        $lbl_clr  = $this->safe_color( $s['label_color'] ) ?: '';
+        $fg       = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-text, #374151)';
+        $lbl_clr  = $this->safe_color_css( $s['label_color'] ) ?: '';
         $num_fs   = absint( $s['number_font_size'] ) ?: 48;
         $num_fw   = absint( $s['number_font_weight'] ) ?: 700;
         $lbl_fs   = absint( $s['label_font_size'] ) ?: 14;
         $lbl_fw   = absint( $s['label_font_weight'] ) ?: 400;
         $icon_sz  = absint( $s['icon_size'] ) ?: 40;
         $pad      = absint( $s['padding'] );
-        $tile_r   = intval( $s['border_radius'] );
+        $tile_r   = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
         $tile_bw  = intval( $s['border_width'] );
-        $tile_bc  = $this->safe_color( $s['border_color'] ) ?: '#374151';
+        $tile_bc  = $this->safe_color_css( $s['border_color'] ) ?: 'var(--olo-color-text, #374151)';
 
         $bg_type  = $s['bg_type'] ?: 'color';
-        $bg_color = $this->safe_color( $s['bg_color'] ) ?: '';
+        $bg_color = $this->safe_color_css( $s['bg_color'] ) ?: '';
 
-        $label    = $this->sanitize_richtext( $s['label'] );
+        $label    = esc_html( wp_strip_all_tags( $s['label'] ) );
 
         ob_start();
         ?>
@@ -65,7 +65,7 @@ class Olo_Counter_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> {
                 position: relative; overflow: hidden; text-align: center;
                 padding: <?php echo $pad; ?>px;
-                border-radius: <?php echo $tile_r; ?>px;
+                border-radius: <?php echo $tile_r; ?>;
                 color: <?php echo $fg; ?>;
                 <?php if ( $bg_type === 'color' && $bg_color ) : ?>
                 background: <?php echo $bg_color; ?>;
@@ -89,7 +89,7 @@ class Olo_Counter_Tile extends Olo_Tile_Base {
             <?php if ( filter_var( $s['overlay'], FILTER_VALIDATE_BOOLEAN ) && $bg_type !== 'color' ) : ?>
             .<?php echo $uid; ?> .olo-cnt-overlay {
                 position: absolute; inset: 0; z-index: 1;
-                background: <?php echo $this->safe_color( $s['overlay_color'] ) ?: '#000'; ?>;
+                background: <?php echo $this->safe_color_css( $s['overlay_color'] ) ?: '#000'; ?>;
                 opacity: <?php echo ( intval( $s['overlay_opacity'] ) ?: 50 ) / 100; ?>;
             }
             <?php endif; ?>

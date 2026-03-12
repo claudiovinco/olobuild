@@ -1,6 +1,6 @@
 <template>
   <div :style="wrapStyle">
-    <h3 :style="{fontSize:'16px',fontWeight:'700',color:'#1f2937',margin:'0 0 10px'}">{{ s.title || 'Contatti' }}</h3>
+    <h3 :style="{fontSize:'16px',fontWeight:'700',color:'var(--olo-color-text, #374151)',margin:'0 0 10px'}" data-olo-editable="title">{{ s.title || 'Contatti' }}</h3>
     <div style="display:flex;flex-direction:column;gap:6px;font-size:13px;color:#374151">
       <div style="display:flex;align-items:center;gap:8px">
         <span style="color:#1e87f0;font-size:15px">&#9742;</span>

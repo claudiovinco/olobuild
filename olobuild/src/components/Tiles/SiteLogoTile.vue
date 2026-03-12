@@ -5,7 +5,7 @@
       v-if="logoUrl"
       :src="logoUrl"
       :alt="siteName"
-      :style="{ maxHeight: (settings.max_height || 50) + 'px', width: 'auto', display: 'block' }"
+      :style="{ maxHeight: (s.max_height || 50) + 'px', width: 'auto', display: 'block' }"
     />
     <!-- Text fallback -->
     <span
@@ -14,7 +14,7 @@
     >{{ siteName }}</span>
 
     <!-- Tagline -->
-    <p v-if="settings.show_tagline" class="olo-sitelogo-tagline">
+    <p v-if="s.show_tagline" class="olo-sitelogo-tagline">
       {{ siteTagline }}
     </p>
   </div>
@@ -27,6 +27,15 @@ const props = defineProps({
   settings: { type: Object, default: () => ({}) },
 });
 
+const defaults = {
+  source: 'auto',
+  custom_image: '',
+  max_height: 50,
+  link_home: true,
+  show_tagline: false,
+};
+const s = computed(() => ({ ...defaults, ...props.settings }));
+
 const oloData = window.oloData || {};
 const siteInfo = oloData.siteInfo || {};
 
@@ -34,8 +43,8 @@ const siteName = computed(() => siteInfo.name || 'Site Name');
 const siteTagline = computed(() => siteInfo.tagline || '');
 
 const logoUrl = computed(() => {
-  if (props.settings.source === 'custom_image' && props.settings.custom_image) {
-    return props.settings.custom_image;
+  if (s.value.source === 'custom_image' && s.value.custom_image) {
+    return s.value.custom_image;
   }
   // Auto: use WP site logo if available
   return siteInfo.logo_url || '';

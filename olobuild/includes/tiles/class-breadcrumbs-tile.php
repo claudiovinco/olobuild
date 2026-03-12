@@ -9,7 +9,7 @@ class Olo_Breadcrumbs_Tile extends Olo_Tile_Base {
     protected $type     = 'breadcrumbs';
     protected $name     = 'Breadcrumbs';
     protected $icon     = 'dashicons-arrow-right-alt2';
-    protected $category = 'content';
+    protected $category = 'navigation';
     protected $defaults = [
         'separator'    => '/',
         'home_label'   => 'Home',

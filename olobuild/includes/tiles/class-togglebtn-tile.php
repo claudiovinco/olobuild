@@ -9,7 +9,7 @@ class Olo_ToggleBtn_Tile extends Olo_Tile_Base {
     protected $type     = 'togglebtn';
     protected $name     = 'Pulsante Toggle';
     protected $icon     = 'dashicons-hidden';
-    protected $category = 'content';
+    protected $category = 'interactive';
     protected $defaults = [
         'text_show'         => 'Mostra di più',
         'text_hide'         => 'Mostra di meno',
@@ -23,10 +23,10 @@ class Olo_ToggleBtn_Tile extends Olo_Tile_Base {
         'duration'          => '400',
 
         'btn_bg'            => 'transparent',
-        'btn_color'         => '#6366F1',
-        'btn_hover_bg'      => 'rgba(99,102,241,0.1)',
+        'btn_color'         => '',
+        'btn_hover_bg'      => '',
         'btn_border_width'  => '2',
-        'btn_border_color'  => '#6366F1',
+        'btn_border_color'  => '',
         'btn_border_radius' => '8',
         'btn_padding_x'     => '24',
         'btn_padding_y'     => '12',
@@ -46,7 +46,7 @@ class Olo_ToggleBtn_Tile extends Olo_Tile_Base {
 
         $target_id   = sanitize_html_class( $s['target_id'] );
         if ( empty( $target_id ) ) {
-            return '<p style="color:#EF4444;font-size:13px;text-align:center;">⚠ Toggle Button: imposta l\'ID della sezione target nell\'inspector.</p>';
+            return '<p style="color:var(--olo-color-danger, #EF4444);font-size:13px;text-align:center;">⚠ Toggle Button: imposta l\'ID della sezione target nell\'inspector.</p>';
         }
 
         $text_show   = esc_html( $s['text_show'] );
@@ -61,11 +61,11 @@ class Olo_ToggleBtn_Tile extends Olo_Tile_Base {
 
         // Button styles
         $bg          = $s['btn_bg'] ?: 'transparent';
-        $color       = $this->safe_color( $s['btn_color'] ) ?: '#6366F1';
-        $hover_bg    = $s['btn_hover_bg'] ?: 'rgba(99,102,241,0.1)';
+        $color       = $this->safe_color_css( $s['btn_color'] ) ?: 'var(--olo-color-primary, #6366F1)';
+        $hover_bg    = $s['btn_hover_bg'] ?: 'color-mix(in srgb, var(--olo-color-primary, #6366F1) 10%, transparent)';
         $bw          = max( 0, intval( $s['btn_border_width'] ) );
-        $bc          = $this->safe_color( $s['btn_border_color'] ) ?: '#6366F1';
-        $radius      = intval( $s['btn_border_radius'] );
+        $bc          = $this->safe_color_css( $s['btn_border_color'] ) ?: 'var(--olo-color-primary, #6366F1)';
+        $radius      = Olo_Tile_Utils::border_radius( $s['btn_border_radius'] ?? 0 );
         $px          = intval( $s['btn_padding_x'] );
         $py          = intval( $s['btn_padding_y'] );
         $fsize       = max( 12, intval( $s['btn_font_size'] ) );
@@ -91,7 +91,7 @@ class Olo_ToggleBtn_Tile extends Olo_Tile_Base {
                 line-height: 1.2;
                 padding: <?php echo $py; ?>px <?php echo $px; ?>px;
                 <?php if ( $bw > 0 ) : ?>border: <?php echo $bw; ?>px solid <?php echo $bc; ?>;<?php endif; ?>
-                <?php if ( $radius > 0 ) : ?>border-radius: <?php echo $radius; ?>px;<?php endif; ?>
+                <?php if ( $radius && $radius !== '0px' ) : ?>border-radius: <?php echo $radius; ?>;<?php endif; ?>
                 cursor: pointer;
                 transition: background 0.2s, transform 0.15s;
                 user-select: none;

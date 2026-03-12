@@ -2,7 +2,7 @@ export default {
   type: 'killnextprev',
   name: 'Kill Next/Prev',
   icon: 'dashicons-hidden',
-  category: 'layout',
+  category: 'navigation',
   defaults: {},
   sections: [
     {

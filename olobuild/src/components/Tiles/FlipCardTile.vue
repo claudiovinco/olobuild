@@ -20,18 +20,18 @@
           class="olo-fc-overlay"
           :style="{ background: s.front_overlay }"
         ></div>
-        <div v-if="s.front_video && !s.front_image" class="olo-fc-bg" style="display:flex;align-items:center;justify-content:center;background:#111827">
-          <div class="mb-text-center mb-text-gray-400">
-            <div class="mb-text-2xl mb-mb-1">&#9654;</div>
-            <div class="mb-text-xs">Video</div>
-          </div>
-        </div>
+        <video
+          v-if="s.front_video && !s.front_image"
+          class="olo-fc-bg"
+          :src="s.front_video"
+          autoplay loop muted playsinline
+        ></video>
         <div class="olo-fc-content" :style="frontContentStyle">
           <div v-if="s.front_icon" class="olo-fc-icon" :style="frontIconStyle">
             <span :uk-icon="'icon: ' + s.front_icon + '; width: ' + (parseInt(s.front_icon_size)||40) + '; height: ' + (parseInt(s.front_icon_size)||40)"></span>
           </div>
-          <div v-if="s.front_title" class="olo-fc-title" :style="titleStyle" v-html="s.front_title"></div>
-          <div v-if="s.front_description" class="olo-fc-desc" :style="descStyle" v-html="s.front_description"></div>
+          <div v-if="s.front_title" class="olo-fc-title" :style="titleStyle" data-olo-editable="front_title">{{ s.front_title }}</div>
+          <div v-if="s.front_description" class="olo-fc-desc" :style="{ ...descStyle, whiteSpace: 'pre-wrap' }" data-olo-editable="front_description" data-olo-multiline>{{ s.front_description }}</div>
         </div>
       </div>
 
@@ -48,20 +48,20 @@
           class="olo-fc-overlay"
           :style="{ background: s.back_overlay }"
         ></div>
-        <div v-if="s.back_video && !s.back_image" class="olo-fc-bg" style="display:flex;align-items:center;justify-content:center;background:#111827">
-          <div class="mb-text-center mb-text-gray-400">
-            <div class="mb-text-2xl mb-mb-1">&#9654;</div>
-            <div class="mb-text-xs">Video</div>
-          </div>
-        </div>
+        <video
+          v-if="s.back_video && !s.back_image"
+          class="olo-fc-bg"
+          :src="s.back_video"
+          autoplay loop muted playsinline
+        ></video>
         <div class="olo-fc-content" :style="backContentStyle">
           <div v-if="s.back_icon" class="olo-fc-icon" :style="backIconStyle">
             <span :uk-icon="'icon: ' + s.back_icon + '; width: ' + (parseInt(s.back_icon_size)||40) + '; height: ' + (parseInt(s.back_icon_size)||40)"></span>
           </div>
-          <div v-if="s.back_title" class="olo-fc-title" :style="titleStyle" v-html="s.back_title"></div>
-          <div v-if="s.back_description" class="olo-fc-desc" :style="descStyle" v-html="s.back_description"></div>
+          <div v-if="s.back_title" class="olo-fc-title" :style="titleStyle" data-olo-editable="back_title">{{ s.back_title }}</div>
+          <div v-if="s.back_description" class="olo-fc-desc" :style="{ ...descStyle, whiteSpace: 'pre-wrap' }" data-olo-editable="back_description" data-olo-multiline>{{ s.back_description }}</div>
           <div v-if="s.back_cta_text">
-            <span class="olo-fc-cta" :style="ctaStyle">{{ s.back_cta_text }}</span>
+            <span class="olo-fc-cta" :style="ctaStyle" data-olo-editable="back_cta_text">{{ s.back_cta_text }}</span>
           </div>
         </div>
       </div>
@@ -84,9 +84,9 @@ const s = computed(() => ({
   front_icon_color: '',
   front_title: 'Titolo fronte',
   front_description: 'Descrizione della card visibile.',
-  front_bg: '#1e1e2e',
+  front_bg: 'var(--olo-color-muted, #F3F4F6)',
   front_overlay: 'rgba(0,0,0,0.3)',
-  front_text_color: '#F3F4F6',
+  front_text_color: 'var(--olo-color-text, #374151)',
   front_text_align: 'center',
   front_valign: 'center',
 
@@ -97,7 +97,7 @@ const s = computed(() => ({
   back_icon_color: '',
   back_title: 'Titolo retro',
   back_description: 'Contenuto retro con dettagli.',
-  back_bg: '#6366F1',
+  back_bg: 'var(--olo-color-primary, #6366F1)',
   back_overlay: '',
   back_text_color: '#FFFFFF',
   back_text_align: 'center',
@@ -106,7 +106,7 @@ const s = computed(() => ({
   back_cta_url: '',
   back_cta_target: false,
   back_cta_bg: '#FFFFFF',
-  back_cta_color: '#6366F1',
+  back_cta_color: 'var(--olo-color-primary, #6366F1)',
   back_cta_radius: '6',
 
   flip_direction: 'horizontal',
@@ -118,7 +118,7 @@ const s = computed(() => ({
   card_border_radius: '12',
   card_shadow: 'md',
   card_border_width: '0',
-  card_border_color: '#374151',
+  card_border_color: 'var(--olo-color-border, #E5E7EB)',
   card_padding: '24',
 
   title_size: '22',
@@ -161,7 +161,7 @@ const containerStyle = computed(() => {
     height: h + 'px',
     borderRadius: r + 'px',
     boxShadow: shadowMap[s.value.card_shadow] || shadowMap.md,
-    border: bw > 0 ? `${bw}px solid ${s.value.card_border_color || '#374151'}` : 'none',
+    border: bw > 0 ? `${bw}px solid ${s.value.card_border_color || 'var(--olo-color-border, #E5E7EB)'}` : 'none',
     cursor: 'pointer',
   };
 });
@@ -210,8 +210,8 @@ const backTransform = computed(() => {
 const frontStyle = computed(() => {
   const r = parseInt(s.value.card_border_radius) || 0;
   const st = {
-    backgroundColor: s.value.front_bg || '#1e1e2e',
-    color: s.value.front_text_color || '#F3F4F6',
+    backgroundColor: s.value.front_bg || 'var(--olo-color-muted, #F3F4F6)',
+    color: s.value.front_text_color || 'var(--olo-color-text, #374151)',
     borderRadius: r + 'px',
   };
   if (s.value.flip_direction === 'cube') {
@@ -223,7 +223,7 @@ const frontStyle = computed(() => {
 const backFaceStyle = computed(() => {
   const r = parseInt(s.value.card_border_radius) || 0;
   return {
-    backgroundColor: s.value.back_bg || '#6366F1',
+    backgroundColor: s.value.back_bg || 'var(--olo-color-primary, #6366F1)',
     color: s.value.back_text_color || '#FFFFFF',
     borderRadius: r + 'px',
     transform: backTransform.value,
@@ -268,8 +268,8 @@ const ctaStyle = computed(() => ({
   marginTop: '16px',
   padding: '10px 24px',
   background: s.value.back_cta_bg || '#FFFFFF',
-  color: s.value.back_cta_color || '#6366F1',
-  borderRadius: (parseInt(s.value.back_cta_radius) || 6) + 'px',
+  color: s.value.back_cta_color || 'var(--olo-color-primary, #6366F1)',
+  borderRadius: ((v => isNaN(v) ? 6 : v)(parseInt(s.value.back_cta_radius))) + 'px',
   textDecoration: 'none',
   fontWeight: '600',
   fontSize: (parseInt(s.value.desc_size) || 14) + 'px',
@@ -280,6 +280,9 @@ const ctaStyle = computed(() => ({
 <style scoped>
 .olo-fc-preview {
   position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 .olo-fc-face {
   position: absolute;

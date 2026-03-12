@@ -1,0 +1,277 @@
+<?php
+/**
+ * Olo_Performance_Hints — Resource hints (preload, preconnect, dns-prefetch),
+ * fetchpriority for hero images, video facade, font preloading, srcset helper.
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+class Olo_Performance_Hints {
+
+    private static $instance = null;
+
+    /** @var bool Has hero image been marked with fetchpriority */
+    private $hero_marked = false;
+
+    /** @var array Fonts that need preloading */
+    private $preload_fonts = [];
+
+    public static function instance() {
+        if ( null === self::$instance ) {
+            self::$instance = new self();
+        }
+        return self::$instance;
+    }
+
+    public function init() {
+        // Resource hints in <head>
+        add_action( 'wp_head', [ $this, 'output_resource_hints' ], 2 );
+
+        // Font preload
+        add_action( 'wp_head', [ $this, 'output_font_preload' ], 3 );
+
+        // fetchpriority on above-fold images
+        add_filter( 'olo_image_attributes', [ $this, 'add_fetchpriority' ], 10, 2 );
+
+        // Video facade filter
+        add_filter( 'olo_video_embed', [ $this, 'video_facade' ], 10, 2 );
+
+        // CSS static file instead of inline for templates
+        add_filter( 'olo_template_css_output', [ $this, 'css_to_file' ], 10, 2 );
+    }
+
+    /* ─────────────────────────────────────────────
+     * Resource Hints
+     * ───────────────────────────────────────────── */
+
+    public function output_resource_hints() {
+        $hints = [];
+
+        // DNS prefetch for common external resources
+        $hints[] = '<link rel="dns-prefetch" href="//fonts.googleapis.com" />';
+        $hints[] = '<link rel="dns-prefetch" href="//fonts.gstatic.com" />';
+
+        // Preconnect for services likely used
+        $hints[] = '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />';
+
+        // YouTube/Vimeo preconnect only if video tiles detected
+        if ( $this->page_has_video_tile() ) {
+            $hints[] = '<link rel="dns-prefetch" href="//www.youtube.com" />';
+            $hints[] = '<link rel="dns-prefetch" href="//player.vimeo.com" />';
+            $hints[] = '<link rel="dns-prefetch" href="//i.ytimg.com" />';
+        }
+
+        echo implode( "\n", $hints ) . "\n";
+    }
+
+    /* ─────────────────────────────────────────────
+     * Font Preload
+     * ───────────────────────────────────────────── */
+
+    public function output_font_preload() {
+        // Preload custom fonts that are used in the global style system
+        $styles = get_option( 'olo_styles', [] );
+        if ( ! is_array( $styles ) ) {
+            return;
+        }
+
+        $body_font    = $styles['body_font'] ?? '';
+        $heading_font = $styles['heading_font'] ?? '';
+
+        // If custom fonts are woff2 URLs, preload them
+        $custom_fonts = get_option( 'olo_custom_fonts', [] );
+        if ( is_array( $custom_fonts ) ) {
+            foreach ( $custom_fonts as $font ) {
+                $name = $font['name'] ?? '';
+                $url  = $font['url'] ?? '';
+                if ( empty( $url ) ) {
+                    continue;
+                }
+                // Only preload fonts that are actually used as body or heading
+                if ( $name === $body_font || $name === $heading_font ) {
+                    $type = 'font/woff2';
+                    if ( strpos( $url, '.woff2' ) !== false ) {
+                        $type = 'font/woff2';
+                    } elseif ( strpos( $url, '.woff' ) !== false ) {
+                        $type = 'font/woff';
+                    } elseif ( strpos( $url, '.ttf' ) !== false ) {
+                        $type = 'font/ttf';
+                    }
+                    echo '<link rel="preload" href="' . esc_url( $url ) . '" as="font" type="' . esc_attr( $type ) . '" crossorigin />' . "\n";
+                }
+            }
+        }
+    }
+
+    /* ─────────────────────────────────────────────
+     * fetchpriority for hero images
+     * ───────────────────────────────────────────── */
+
+    /**
+     * Add fetchpriority="high" to the first (hero) image on the page.
+     * Remove loading="lazy" from above-fold images.
+     *
+     * @param array $attrs Image attributes
+     * @param array $context ['position' => int, 'is_hero' => bool]
+     * @return array Modified attributes
+     */
+    public function add_fetchpriority( $attrs, $context = [] ) {
+        $is_hero = ! empty( $context['is_hero'] );
+        $pos     = $context['position'] ?? 99;
+
+        // First image or explicitly hero
+        if ( ! $this->hero_marked ) {
+            if ( $is_hero || $pos <= 1 ) {
+                $attrs['fetchpriority'] = 'high';
+                // Remove lazy loading from above-fold content
+                unset( $attrs['loading'] );
+                $this->hero_marked = true;
+            }
+        }
+
+        return $attrs;
+    }
+
+    /* ─────────────────────────────────────────────
+     * Video Facade (lazy-load iframes)
+     * ───────────────────────────────────────────── */
+
+    /**
+     * Replace video iframe with a facade (thumbnail + play button).
+     * The iframe loads only when user clicks play.
+     *
+     * @param string $html   Original iframe HTML
+     * @param array  $settings Video settings (url, thumbnail, etc.)
+     * @return string Facade HTML or original
+     */
+    public function video_facade( $html, $settings = [] ) {
+        $url = $settings['url'] ?? '';
+        if ( empty( $url ) ) {
+            return $html;
+        }
+
+        // Only facade YouTube and Vimeo
+        $thumb = '';
+        $embed_url = '';
+
+        if ( preg_match( '/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/', $url, $m ) ) {
+            $video_id  = $m[1];
+            $thumb     = "https://i.ytimg.com/vi/{$video_id}/hqdefault.jpg";
+            $embed_url = "https://www.youtube.com/embed/{$video_id}?autoplay=1";
+        } elseif ( preg_match( '/vimeo\.com\/(\d+)/', $url, $m ) ) {
+            $video_id = $m[1];
+            // Vimeo requires API call for thumbnail, use placeholder
+            $embed_url = "https://player.vimeo.com/video/{$video_id}?autoplay=1";
+        }
+
+        // If custom thumbnail provided, use it
+        if ( ! empty( $settings['thumbnail'] ) ) {
+            $thumb = $settings['thumbnail'];
+        }
+
+        // If no thumbnail available, return original iframe
+        if ( empty( $thumb ) || empty( $embed_url ) ) {
+            return $html;
+        }
+
+        $uid = 'olo-vf-' . wp_unique_id();
+
+        ob_start();
+        ?>
+        <div id="<?php echo esc_attr( $uid ); ?>" class="olo-video-facade" style="position:relative;cursor:pointer;aspect-ratio:16/9;background:#000;overflow:hidden" role="button" aria-label="<?php echo esc_attr__( 'Riproduci video', 'olobuilder' ); ?>" tabindex="0">
+            <img src="<?php echo esc_url( $thumb ); ?>" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;opacity:.85" />
+            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center">
+                <svg width="68" height="48" viewBox="0 0 68 48" aria-hidden="true"><path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55C3.97 2.33 2.27 4.81 1.48 7.74.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z" fill="red"/><path d="M45 24L27 14v20" fill="white"/></svg>
+            </div>
+        </div>
+        <script>
+        (function(){
+            var el=document.getElementById('<?php echo esc_js( $uid ); ?>');
+            if(!el)return;
+            function load(){
+                var iframe=document.createElement('iframe');
+                iframe.src='<?php echo esc_js( $embed_url ); ?>';
+                iframe.style.cssText='position:absolute;inset:0;width:100%;height:100%;border:0';
+                iframe.allow='accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture';
+                iframe.allowFullscreen=true;
+                el.innerHTML='';
+                el.style.position='relative';
+                el.appendChild(iframe);
+            }
+            el.addEventListener('click',load);
+            el.addEventListener('keydown',function(e){if(e.key==='Enter'){load()}});
+        })();
+        </script>
+        <?php
+        return ob_get_clean();
+    }
+
+    /* ─────────────────────────────────────────────
+     * CSS to static file
+     * ───────────────────────────────────────────── */
+
+    /**
+     * Convert inline CSS to a cached static file.
+     *
+     * @param string $css         Raw CSS string
+     * @param int    $template_id Template ID
+     * @return string URL of CSS file or empty string to use inline fallback
+     */
+    public function css_to_file( $css, $template_id ) {
+        if ( empty( $css ) || empty( $template_id ) ) {
+            return '';
+        }
+
+        $url = Olo_Asset_Optimizer::cache_css( $css, $template_id );
+        return $url ? $url : '';
+    }
+
+    /* ─────────────────────────────────────────────
+     * Helpers
+     * ───────────────────────────────────────────── */
+
+    /**
+     * Check if current page has video tiles (for preconnect hints).
+     */
+    private function page_has_video_tile() {
+        global $post;
+        if ( ! is_a( $post, 'WP_Post' ) ) {
+            return false;
+        }
+
+        // Quick check in post content for video-related shortcodes/meta
+        $template_id = get_post_meta( $post->ID, '_olo_template_id', true );
+        if ( ! $template_id ) {
+            return false;
+        }
+
+        // Check cached flag (set during rendering)
+        $has_video = get_transient( "olo_has_video_{$template_id}" );
+        return ! empty( $has_video );
+    }
+
+    /**
+     * Generate responsive srcset string for an image URL.
+     *
+     * @param int    $attachment_id WP attachment ID
+     * @param string $sizes        Sizes attribute value
+     * @return array ['srcset' => string, 'sizes' => string]
+     */
+    public static function get_responsive_image_attrs( $attachment_id, $sizes = '100vw' ) {
+        if ( ! $attachment_id ) {
+            return [];
+        }
+
+        $srcset = wp_get_attachment_image_srcset( $attachment_id, 'full' );
+        if ( ! $srcset ) {
+            return [];
+        }
+
+        return [
+            'srcset' => $srcset,
+            'sizes'  => $sizes,
+        ];
+    }
+}

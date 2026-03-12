@@ -112,14 +112,14 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         }
 
         if ( ! $lat && ! $lng ) {
-            return '<div style="padding:24px;text-align:center;color:#9ca3af;background:#f9fafb;border-radius:8px">'
+            return '<div style="padding:24px;text-align:center;color:var(--olo-color-text-muted, #9CA3AF);background:var(--olo-color-muted, #F3F4F6);border-radius:8px">'
                  . '<p style="margin:0">Nessuna coordinata GPS impostata per questo servizio.</p>'
                  . '</div>';
         }
 
         $zoom   = absint( $s['zoom'] ) ?: 13;
         $height = absint( $s['height'] ) ?: 400;
-        $radius = absint( $s['border_radius'] ?? 8 );
+        $radius = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 8 );
 
         $src = "https://www.openstreetmap.org/export/embed.html?bbox="
              . ( $lng - 0.02 ) . ',' . ( $lat - 0.01 ) . ','
@@ -128,7 +128,7 @@ class Olo_Map_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
-        <div class="olo-map olo-map-dynamic" style="border-radius: <?php echo $radius; ?>px; overflow: hidden;">
+        <div class="olo-map olo-map-dynamic" style="border-radius: <?php echo $radius; ?>; overflow: hidden;">
             <iframe
                 src="<?php echo esc_url( $src ); ?>"
                 style="width: 100%; height: <?php echo $height; ?>px; border: 0;"
@@ -148,7 +148,7 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         $address = $s['address'];
         $zoom    = absint( $s['zoom'] );
         $height  = absint( $s['height'] );
-        $radius  = absint( $s['border_radius'] ?? 8 );
+        $radius  = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 8 );
 
         $coords = $this->parse_coords( $address );
 
@@ -164,7 +164,7 @@ class Olo_Map_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
-        <div class="olo-map" style="border-radius: <?php echo $radius; ?>px; overflow: hidden;">
+        <div class="olo-map" style="border-radius: <?php echo $radius; ?>; overflow: hidden;">
             <iframe
                 src="<?php echo esc_url( $src ); ?>"
                 style="width: 100%; height: <?php echo $height; ?>px; border: 0;"
@@ -181,7 +181,7 @@ class Olo_Map_Tile extends Olo_Tile_Base {
      */
     private function render_locations( $s ) {
         $height = absint( $s['height'] );
-        $radius = absint( $s['border_radius'] ?? 8 );
+        $radius = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 8 );
         $map_id = 'olo-map-' . wp_unique_id();
 
         $locations = $this->query_locations( $s );
@@ -217,7 +217,7 @@ class Olo_Map_Tile extends Olo_Tile_Base {
             <div
                 id="<?php echo esc_attr( $map_id ); ?>"
                 class="olo-map-canvas"
-                style="height: <?php echo $height; ?>px; border-radius: <?php echo $radius; ?>px; overflow: hidden;"
+                style="height: <?php echo $height; ?>px; border-radius: <?php echo $radius; ?>; overflow: hidden;"
                 data-map-config="<?php echo esc_attr( wp_json_encode( $config ) ); ?>"
             ></div>
         </div>
@@ -434,7 +434,7 @@ class Olo_Map_Tile extends Olo_Tile_Base {
                 <?php foreach ( $terms as $term ) : ?>
                     <button class="olo-map-filter-pill" data-filter="<?php echo esc_attr( $term['slug'] ); ?>">
                         <?php if ( ! empty( $term['color'] ) ) : ?>
-                            <span class="olo-map-filter-dot" style="background:<?php echo esc_attr( $term['color'] ); ?>"></span>
+                            <span class="olo-map-filter-dot" style="background:<?php echo $this->safe_color_css( $term['color'] ); ?>"></span>
                         <?php endif; ?>
                         <?php echo esc_html( $term['name'] ); ?>
                     </button>
@@ -449,7 +449,7 @@ class Olo_Map_Tile extends Olo_Tile_Base {
      */
     private function render_services( $s ) {
         $height = absint( $s['height'] );
-        $radius = absint( $s['border_radius'] ?? 8 );
+        $radius = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 8 );
         $map_id = 'olo-map-' . wp_unique_id();
 
         $locations = $this->query_services( $s );
@@ -483,7 +483,7 @@ class Olo_Map_Tile extends Olo_Tile_Base {
             'popupBtnColor'     => $s['svc_popup_btn_color'] ?: '#3b82f6',
             'popupBg'           => $s['svc_popup_bg'] ?: '#ffffff',
             'popupColor'        => $s['svc_popup_color'] ?: '#333333',
-            'popupRadius'       => absint( $s['svc_popup_radius'] ),
+            'popupRadius'       => Olo_Tile_Utils::border_radius( $s['svc_popup_radius'] ?? 0 ),
             'popupLink'         => true,
         ];
 
@@ -510,7 +510,7 @@ class Olo_Map_Tile extends Olo_Tile_Base {
                 <div
                     id="<?php echo esc_attr( $map_id ); ?>"
                     class="olo-map-canvas"
-                    style="height: <?php echo $height; ?>px; border-radius: <?php echo $radius; ?>px; overflow: hidden;"
+                    style="height: <?php echo $height; ?>px; border-radius: <?php echo $radius; ?>; overflow: hidden;"
                     data-map-config="<?php echo esc_attr( wp_json_encode( $config ) ); ?>"
                 ></div>
             </div>

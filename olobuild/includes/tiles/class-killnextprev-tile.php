@@ -9,7 +9,7 @@ class Olo_KillNextPrev_Tile extends Olo_Tile_Base {
     protected $type     = 'killnextprev';
     protected $name     = 'Kill Next/Prev';
     protected $icon     = 'dashicons-hidden';
-    protected $category = 'layout';
+    protected $category = 'navigation';
     protected $defaults = [];
 
     public function get_controls() {

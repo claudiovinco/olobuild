@@ -1,20 +1,19 @@
-import { borderFields, borderDefaults, shadowField } from './_shared.js';
+import { shadowField } from './_shared.js';
 
 export default {
   type: 'quotation',
   name: 'Citazione',
   icon: 'dashicons-format-quote',
-  category: 'content',
+  category: 'text',
   defaults: {
     content: 'La vita è quello che ti succede mentre sei impegnato a fare altri progetti.',
     author: 'John Lennon',
     style: 'default',
     alignment: 'left',
     shadow: 'none',
-    ...borderDefaults,
   },
   fields: [
-    { key: 'content', label: 'Citazione', type: 'editor', mode: 'block' },
+    { key: 'content', label: 'Citazione', type: 'textarea' },
     { key: 'author', label: 'Autore', type: 'text' },
     { key: 'style', label: 'Stile', type: 'select', options: [
       { value: 'default', label: 'Predefinito' },
@@ -25,7 +24,6 @@ export default {
       { value: 'center', label: 'Centro' },
       { value: 'right', label: 'Destra' },
     ]},
-    shadowField,
-    ...borderFields,
+    ...shadowField,
   ],
 };

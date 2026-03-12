@@ -16,6 +16,16 @@ for (const path in modules) {
   }
 }
 
+// External elements registered by other plugins via oloExternalData
+if (window.oloExternalData && window.oloExternalData.elements) {
+  const ext = window.oloExternalData.elements;
+  for (const key in ext) {
+    if (ext[key] && ext[key].type) {
+      elements[ext[key].type] = ext[key];
+    }
+  }
+}
+
 /**
  * Get element definition by type
  * @param {string} type - Element type (e.g. 'hero', 'button')

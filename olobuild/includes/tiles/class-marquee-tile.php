@@ -9,7 +9,7 @@ class Olo_Marquee_Tile extends Olo_Tile_Base {
     protected $type     = 'marquee';
     protected $name     = 'Nastro Scorrevole';
     protected $icon     = 'dashicons-slides';
-    protected $category = 'content';
+    protected $category = 'media';
     protected $defaults = [
         'content_type'   => 'text',
         'text_items'     => 'Testo scorrevole di esempio',
@@ -22,7 +22,7 @@ class Olo_Marquee_Tile extends Olo_Tile_Base {
         'pause_hover'    => true,
         'gap'            => '60',
 
-        'bg_color'       => '#111827',
+        'bg_color'       => '',
         'text_color'     => '#FFFFFF',
         'font_size'      => '16',
         'font_weight'    => '500',
@@ -32,7 +32,7 @@ class Olo_Marquee_Tile extends Olo_Tile_Base {
         'full_width'     => true,
         'border_top'     => '0',
         'border_bottom'  => '0',
-        'border_color'   => '#374151',
+        'border_color'   => '',
     ];
 
     public function get_controls() {
@@ -48,15 +48,15 @@ class Olo_Marquee_Tile extends Olo_Tile_Base {
         $direction   = $s['direction'] === 'right' ? 'right' : 'left';
         $pause       = ! empty( $s['pause_hover'] );
         $gap         = max( 0, intval( $s['gap'] ) );
-        $bg          = $this->safe_color( $s['bg_color'] ) ?: '#111827';
+        $bg          = $this->safe_color_css( $s['bg_color'] ) ?: 'var(--olo-color-secondary, #1F2937)';
         $height      = max( 20, intval( $s['height'] ) );
         $full_width  = ! empty( $s['full_width'] );
         $bt          = max( 0, intval( $s['border_top'] ) );
         $bb          = max( 0, intval( $s['border_bottom'] ) );
-        $bc          = $this->safe_color( $s['border_color'] ) ?: '#374151';
+        $bc          = $this->safe_color_css( $s['border_color'] ) ?: 'var(--olo-color-text, #374151)';
 
         // Text settings
-        $text_color  = $this->safe_color( $s['text_color'] ) ?: '#FFFFFF';
+        $text_color  = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-secondary-contrast, #FFFFFF)';
         $font_size   = max( 10, intval( $s['font_size'] ) );
         $font_weight = in_array( $s['font_weight'], [ '400', '500', '600', '700', '900' ] ) ? $s['font_weight'] : '500';
         $ls          = max( 0, intval( $s['letter_spacing'] ) );
@@ -69,7 +69,7 @@ class Olo_Marquee_Tile extends Olo_Tile_Base {
         // Build the inner content HTML (will be duplicated for seamless loop)
         $inner_html = '';
         if ( $is_text ) {
-            $text = wp_kses_post( $s['text_items'] );
+            $text = esc_html( wp_strip_all_tags( $s['text_items'] ) );
             $sep  = esc_html( $s['separator'] );
             // Repeat text+separator enough times for a wide strip
             for ( $i = 0; $i < 10; $i++ ) {

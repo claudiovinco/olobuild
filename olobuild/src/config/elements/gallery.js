@@ -1,4 +1,4 @@
-import { borderFields, borderDefaults, shadowField } from './_shared.js';
+import { shadowField } from './_shared.js';
 
 export default {
   type: 'gallery',
@@ -7,7 +7,11 @@ export default {
   category: 'media',
   defaults: {
     images: [],
+    layout: 'grid',
+    filter_bar: false,
+    random_order: false,
     columns: '3',
+    max_columns: '6',
     rows: '0',
     gap: '8',
     img_height: '200px',
@@ -30,23 +34,30 @@ export default {
     fx_grain: false,
     fx_grain_opacity: '6',
     fx_tint: false,
-    fx_tint_color: '#1E3A5F',
+    fx_tint_color: '',
     fx_tint_opacity: '10',
     fx_tint_blend: 'multiply',
     // "+N" overlay
     more_bg: 'rgba(0,0,0,0.55)',
-    more_color: '#FFFFFF',
+    more_color: '',
     more_size: '28',
     // Mobile
     mobile_columns: '2',
     shadow: 'none',
-    ...borderDefaults,
   },
   fields: [
     { key: 'images', label: 'Immagini', type: 'gallery' },
 
+    { key: 'layout', label: 'Layout', type: 'select', options: [
+      { value: 'grid', label: 'Griglia' },
+      { value: 'masonry', label: 'Masonry' },
+      { value: 'justified', label: 'Giustificato' },
+    ]},
+    { key: 'filter_bar', label: 'Barra filtro', type: 'toggle' },
+    { key: 'random_order', label: 'Ordine casuale', type: 'toggle' },
+
     { type: 'separator', label: 'Griglia' },
-    { key: 'columns', label: 'Colonne', type: 'range', min: 2, max: 6, step: 1 },
+    { key: 'columns', label: 'Colonne', type: 'range', min: 2, max: 12, step: 1 },
     { key: 'rows', label: 'Righe visibili (0 = tutte)', type: 'range', min: 0, max: 5, step: 1 },
     { key: 'gap', label: 'Gap (px)', type: 'range', min: 0, max: 32, step: 2 },
     { key: 'img_height', label: 'Altezza immagine', type: 'text' },
@@ -55,7 +66,7 @@ export default {
       { value: 'contain', label: 'Contieni' },
       { value: 'fill', label: 'Riempi (deforma)' },
     ]},
-    { key: 'thumb_radius', label: 'Raggio bordi (px)', type: 'range', min: 0, max: 24, step: 2 },
+    { key: 'thumb_radius', label: 'Raggio bordi (px)', type: 'border-radius' },
     { key: 'mobile_columns', label: 'Colonne mobile', type: 'range', min: 1, max: 4, step: 1 },
 
     { type: 'separator', label: 'Effetti automatici' },
@@ -105,7 +116,6 @@ export default {
       { value: 'scale', label: 'Scala' },
     ]},
     { key: 'show_caption', label: 'Mostra didascalie', type: 'toggle' },
-    shadowField,
-    ...borderFields,
+    ...shadowField,
   ],
 };

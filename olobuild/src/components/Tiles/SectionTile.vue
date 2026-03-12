@@ -2,17 +2,35 @@
   <div class="olo-section-tile">
     <div class="olo-section-header">
       <span class="olo-section-label">Section</span>
-      <span v-if="settings.style && settings.style !== 'default'" class="olo-section-badge">{{ settings.style }}</span>
+      <span v-if="s.style && s.style !== 'default'" class="olo-section-badge">{{ s.style }}</span>
+      <span v-if="s.scroll_snap" class="olo-section-badge" style="background:rgba(16,185,129,0.15);color:#10B981">snap</span>
     </div>
     <!-- Section children (rows) are rendered by the recursive canvas, not here -->
   </div>
 </template>
 
 <script setup>
-defineProps({
+import { computed } from 'vue';
+
+const defaults = {
+  style: 'default',
+  width: 'default',
+  padding: 'default',
+  sticky_effect: 'none',
+  sticky_top: '',
+  scroll_snap: false,
+  snap_dots: false,
+  snap_dot_color: '#ffffff',
+  snap_dot_active_color: '',
+  snap_dot_position: 'right',
+};
+
+const props = defineProps({
   settings: { type: Object, default: () => ({}) },
   tileId: { type: String, default: '' },
 });
+
+const s = computed(() => ({ ...defaults, ...props.settings }));
 </script>
 
 <style scoped>

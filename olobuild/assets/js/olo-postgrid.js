@@ -21,7 +21,7 @@
     // Parse config
     var configStr = container.getAttribute('data-postgrid-config');
     var config = {};
-    try { config = JSON.parse(configStr); } catch (e) {}
+    try { config = JSON.parse(configStr); } catch (e) { console.warn('PostGrid config parse error:', e); }
     container._pgConfig = config;
 
     initFilters(container);
@@ -236,7 +236,7 @@
 
     // Trigger UIkit update for masonry
     if (typeof UIkit !== 'undefined') {
-      try { UIkit.update(); } catch (e) {}
+      try { UIkit.update(); } catch (e) { console.warn('UIkit update error:', e); }
     }
   }
 

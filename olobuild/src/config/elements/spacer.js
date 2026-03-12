@@ -1,4 +1,3 @@
-import { borderFields, borderDefaults } from './_shared.js';
 
 const shapeOptions = [
   { value: 'none', label: 'Nessuna' },
@@ -55,14 +54,14 @@ export default {
   type: 'spacer',
   name: 'Spaziatore',
   icon: 'dashicons-arrows-alt',
-  category: 'layout',
+  category: 'essential',
   defaults: {
     height: '60',
 
     // Top shape
     shape_top: 'none',
     shape_top_height: '80',
-    shape_top_color: '#ffffff',
+    shape_top_color: '',
     shape_top_opacity: '100',
     shape_top_fill: 'color',
     shape_top_fill_image: '',
@@ -71,13 +70,13 @@ export default {
     shape_top_invert: false,
     shape_top_scale_x: '100',
     shape_top_layer2: false,
-    shape_top_layer2_color: '#000000',
+    shape_top_layer2_color: '',
     shape_top_layer2_opacity: '30',
 
     // Bottom shape
     shape_bottom: 'none',
     shape_bottom_height: '80',
-    shape_bottom_color: '#ffffff',
+    shape_bottom_color: '',
     shape_bottom_opacity: '100',
     shape_bottom_fill: 'color',
     shape_bottom_fill_image: '',
@@ -86,14 +85,14 @@ export default {
     shape_bottom_invert: false,
     shape_bottom_scale_x: '100',
     shape_bottom_layer2: false,
-    shape_bottom_layer2_color: '#000000',
+    shape_bottom_layer2_color: '',
     shape_bottom_layer2_opacity: '30',
 
     // Background
     bg_color: '',
     bg_gradient: false,
-    bg_gradient_from: '#6366F1',
-    bg_gradient_to: '#8B5CF6',
+    bg_gradient_from: '',
+    bg_gradient_to: '',
     bg_gradient_angle: '180',
 
     // Layout
@@ -107,10 +106,9 @@ export default {
     // Classic divider line
     show_divider: false,
     divider_style: 'solid',
-    divider_color: '#374151',
+    divider_color: '',
     divider_width: '100',
     divider_thickness: '1',
-    ...borderDefaults,
   },
   fields: [
     { key: 'height', label: 'Altezza (px)', type: 'range', min: 0, max: 300, step: 5 },
@@ -154,6 +152,5 @@ export default {
       condition: { field: 'show_divider', value: true } },
     { key: 'divider_thickness', label: 'Spessore linea (px)', type: 'range', min: 1, max: 10, step: 1,
       condition: { field: 'show_divider', value: true } },
-    ...borderFields,
   ],
 };

@@ -65,14 +65,13 @@
 </template>
 
 <script setup>
-import { computed, ref, defineAsyncComponent } from 'vue';
+import { computed, ref } from 'vue';
 import draggable from 'vuedraggable';
 import { useTilesStore } from '@/stores/tiles';
 import { useBuilderStore } from '@/stores/builder';
 import { useDragDrop } from '@/composables/useDragDrop';
 
-// Async import to break circular dependency: GridCell → TileBase → InnerColumnsTile → GridCell
-const GridCell = defineAsyncComponent(() => import('../Grid/GridCell.vue'));
+import GridCell from '../Grid/GridCell.vue';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
@@ -161,7 +160,7 @@ function onChange() {
 }
 
 .olo-ic-column {
-  border: 2px dashed #374151;
+  border: 2px dashed var(--olo-color-border, #E5E7EB);
   min-height: 60px;
   transition: border-color 0.2s, background-color 0.2s;
   position: relative;
@@ -203,14 +202,14 @@ function onChange() {
   padding: 2px 8px;
   font-size: 10px;
   border-radius: 4px;
-  border: 1px solid #374151;
+  border: 1px solid var(--olo-color-border, #E5E7EB);
   background: none;
   color: #6B7280;
   cursor: pointer;
   transition: all 0.15s;
 }
 .olo-ic-preset-btn:hover {
-  border-color: #4B5563;
+  border-color: var(--olo-color-border, #E5E7EB);
   color: #9CA3AF;
 }
 .olo-ic-preset-btn--active {

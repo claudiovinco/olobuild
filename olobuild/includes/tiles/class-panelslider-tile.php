@@ -9,7 +9,7 @@ class Olo_PanelSlider_Tile extends Olo_Tile_Base {
     protected $type     = 'panelslider';
     protected $name     = 'Panel Slider';
     protected $icon     = 'dashicons-slides';
-    protected $category = 'content';
+    protected $category = 'interactive';
     protected $defaults = [
         'panels' => [
             [ 'id' => 'ps-1', 'title' => 'Card 1', 'content' => 'Content...', 'image' => '' ],
@@ -41,7 +41,7 @@ class Olo_PanelSlider_Tile extends Olo_Tile_Base {
 
         $panels = is_array( $s['panels'] ) ? $s['panels'] : [];
         if ( empty( $panels ) ) {
-            return '<div class="olo-panelslider" style="padding:40px;text-align:center;color:#6b7280;">No panels added</div>';
+            return '<div class="olo-panelslider" style="padding:40px;text-align:center;color:var(--olo-color-text-muted, #9CA3AF);">No panels added</div>';
         }
 
         $columns  = absint( $s['columns'] ) ?: 3;

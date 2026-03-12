@@ -26,7 +26,7 @@ class Olo_ImgCompare_Tile extends Olo_Tile_Base {
         'border_radius'     => '8',
         'object_fit'        => 'cover',
         'card_border_width' => '0',
-        'card_border_color' => '#374151',
+        'card_border_color' => '',
         'card_shadow'       => 'none',
         'autoplay'          => false,
         'autoplay_delay'    => '3',
@@ -47,9 +47,9 @@ class Olo_ImgCompare_Tile extends Olo_Tile_Base {
         $is_vert     = $orientation === 'vertical';
         $start       = max( 0, min( 100, intval( $s['start_position'] ) ) );
         $height      = intval( $s['height'] ) ?: 400;
-        $radius      = intval( $s['border_radius'] );
+        $radius      = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
         $fit         = in_array( $s['object_fit'], [ 'cover', 'contain' ] ) ? $s['object_fit'] : 'cover';
-        $handle_c    = $this->safe_color( $s['handle_color'] ) ?: '#FFFFFF';
+        $handle_c    = $this->safe_color_css( $s['handle_color'] ) ?: '#FFFFFF';
         $handle_sz   = intval( $s['handle_size'] ) ?: 40;
         $handle_bw   = intval( $s['handle_border'] ) ?: 3;
         $line_w      = intval( $s['line_width'] ) ?: 3;
@@ -57,8 +57,8 @@ class Olo_ImgCompare_Tile extends Olo_Tile_Base {
         $before_lbl  = esc_html( $s['before_label'] );
         $after_lbl   = esc_html( $s['after_label'] );
         $cbw         = intval( $s['card_border_width'] );
-        $cbc         = $this->safe_color( $s['card_border_color'] ) ?: '#374151';
-        $shadow      = $this->get_shadow_css( $s['card_shadow'] );
+        $cbc         = $this->safe_color_css( $s['card_border_color'] ) ?: 'var(--olo-color-text, #374151)';
+        $shadow      = Olo_Tile_Utils::shadow_value( $s, 'card_shadow' );
         $autoplay    = ! empty( $s['autoplay'] );
         $ap_delay    = max( 1, intval( $s['autoplay_delay'] ) );
         $ap_speed    = max( 1, intval( $s['autoplay_speed'] ) );
@@ -80,9 +80,9 @@ class Olo_ImgCompare_Tile extends Olo_Tile_Base {
                 position: relative;
                 overflow: hidden;
                 height: <?php echo $height; ?>px;
-                <?php if ( $radius > 0 ) : ?>border-radius: <?php echo $radius; ?>px;<?php endif; ?>
+                <?php if ( $radius && $radius !== '0px' ) : ?>border-radius: <?php echo $radius; ?>;<?php endif; ?>
                 <?php if ( $cbw > 0 ) : ?>border: <?php echo $cbw; ?>px solid <?php echo $cbc; ?>;<?php endif; ?>
-                <?php if ( $shadow ) : ?>box-shadow: <?php echo $shadow; ?>;<?php endif; ?>
+                <?php if ( $shadow && $shadow !== 'none' ) : ?>box-shadow: <?php echo $shadow; ?>;<?php endif; ?>
                 cursor: <?php echo $is_vert ? 'row-resize' : 'col-resize'; ?>;
                 user-select: none;
                 -webkit-user-select: none;
@@ -234,14 +234,14 @@ class Olo_ImgCompare_Tile extends Olo_Tile_Base {
                 <?php if ( $after_url ) : ?>
                     <img src="<?php echo $after_url; ?>" alt="<?php echo esc_attr( $after_lbl ); ?>" draggable="false" loading="lazy" />
                 <?php else : ?>
-                    <div style="width:100%;height:100%;background:#374151;display:flex;align-items:center;justify-content:center;color:#9CA3AF;font-size:14px;">Dopo</div>
+                    <div style="width:100%;height:100%;background:var(--olo-color-text, #374151);display:flex;align-items:center;justify-content:center;color:var(--olo-color-text-muted, #9CA3AF);font-size:14px;">Dopo</div>
                 <?php endif; ?>
             </div>
             <div class="olo-ic-before">
                 <?php if ( $before_url ) : ?>
                     <img src="<?php echo $before_url; ?>" alt="<?php echo esc_attr( $before_lbl ); ?>" draggable="false" loading="lazy" />
                 <?php else : ?>
-                    <div style="width:100%;height:100%;background:#1F2937;display:flex;align-items:center;justify-content:center;color:#9CA3AF;font-size:14px;">Prima</div>
+                    <div style="width:100%;height:100%;background:var(--olo-color-secondary, #1F2937);display:flex;align-items:center;justify-content:center;color:var(--olo-color-text-muted, #9CA3AF);font-size:14px;">Prima</div>
                 <?php endif; ?>
             </div>
             <div class="olo-ic-line"></div>
@@ -398,14 +398,4 @@ class Olo_ImgCompare_Tile extends Olo_Tile_Base {
         return ob_get_clean();
     }
 
-    private function get_shadow_css( $size ) {
-        $map = [
-            'none' => '',
-            'sm'   => '0 1px 2px rgba(0,0,0,0.05)',
-            'md'   => '0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1)',
-            'lg'   => '0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1)',
-            'xl'   => '0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1)',
-        ];
-        return $map[ $size ] ?? '';
-    }
 }

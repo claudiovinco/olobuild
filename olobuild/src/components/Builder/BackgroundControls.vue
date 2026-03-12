@@ -58,61 +58,16 @@
       ></div>
     </div>
 
-    <!-- Gradient -->
+    <!-- Gradient (multi-stop) -->
     <div v-if="bg.type === 'gradient'" class="mb-space-y-3">
-      <div>
-        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">Angolo</label>
-        <div class="mb-flex mb-items-center mb-gap-2">
-          <input
-            type="range"
-            :value="bg.gradient_angle || 180"
-            @input="updateField('gradient_angle', parseInt($event.target.value))"
-            min="0" max="360" step="15"
-            class="mb-flex-1"
-          />
-          <span class="mb-text-xs mb-text-gray-400 mb-w-10 mb-text-right">{{ bg.gradient_angle || 180 }}&deg;</span>
-        </div>
-      </div>
-      <div class="mb-grid mb-grid-cols-2 mb-gap-2">
-        <div>
-          <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">Da</label>
-          <div class="mb-flex mb-gap-1">
-            <input
-              type="color"
-              :value="bg.gradient_from || '#ffffff'"
-              @input="updateField('gradient_from', $event.target.value)"
-              class="mb-w-7 mb-h-7 mb-rounded mb-cursor-pointer mb-border-0"
-            />
-            <input
-              type="text"
-              :value="bg.gradient_from || '#ffffff'"
-              @change="updateField('gradient_from', $event.target.value)"
-              class="mb-flex-1 mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-1.5 mb-py-0.5 mb-text-[11px] mb-text-gray-900"
-            />
-          </div>
-        </div>
-        <div>
-          <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">A</label>
-          <div class="mb-flex mb-gap-1">
-            <input
-              type="color"
-              :value="bg.gradient_to || '#000000'"
-              @input="updateField('gradient_to', $event.target.value)"
-              class="mb-w-7 mb-h-7 mb-rounded mb-cursor-pointer mb-border-0"
-            />
-            <input
-              type="text"
-              :value="bg.gradient_to || '#000000'"
-              @change="updateField('gradient_to', $event.target.value)"
-              class="mb-flex-1 mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-1.5 mb-py-0.5 mb-text-[11px] mb-text-gray-900"
-            />
-          </div>
-        </div>
-      </div>
+      <FieldGradient
+        :modelValue="gradientModel"
+        @update:modelValue="onGradientUpdate"
+      />
       <!-- Gradient preview -->
       <div
         class="mb-h-6 mb-rounded-md mb-border mb-border-gray-600"
-        :style="{ background: `linear-gradient(${bg.gradient_angle || 180}deg, ${bg.gradient_from || '#ffffff'}, ${bg.gradient_to || '#000000'})` }"
+        :style="{ background: gradientPreview }"
       ></div>
     </div>
 
@@ -230,6 +185,21 @@
         {{ bg.video_poster ? 'Cambia poster' : 'Seleziona poster' }}
       </button>
 
+      <!-- Fit mode -->
+      <div>
+        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">Adattamento</label>
+        <select
+          :value="bg.video_fit || 'cover'"
+          @change="updateField('video_fit', $event.target.value)"
+          class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1 mb-text-sm mb-text-gray-900"
+        >
+          <option value="cover">Cover</option>
+          <option value="contain">Contain</option>
+          <option value="fill">Riempi</option>
+          <option value="none">Nessuno (dimensione originale)</option>
+        </select>
+      </div>
+
       <!-- Position -->
       <div>
         <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">Posizione</label>
@@ -314,6 +284,7 @@
 import { computed } from 'vue';
 import { useMediaPicker } from '@/composables/useMediaPicker';
 import ParallaxEditor from './ParallaxEditor.vue';
+import FieldGradient from './fields/FieldGradient.vue';
 
 const bgParallaxProperties = [
   { key: 'bgx', label: 'Spostamento X', min: -800, max: 800, step: 10, unit: 'px' },
@@ -343,6 +314,7 @@ const defaultBg = {
   image_position: 'center center',
   video_url: '',
   video_poster: '',
+  video_fit: 'cover',
   parallax: false,
   parallax_speed: 0.3,
   parallax_bgy: -200,
@@ -382,11 +354,48 @@ const solidPreview = computed(() => {
 
 function hexToRgba(hex, alpha) {
   const h = hex.replace('#', '');
-  const r = parseInt(h.substring(0, 2), 16) || 0;
-  const g = parseInt(h.substring(2, 4), 16) || 0;
-  const b = parseInt(h.substring(4, 6), 16) || 0;
+  const rp = parseInt(h.substring(0, 2), 16); const r = isNaN(rp) ? 0 : rp;
+  const gp = parseInt(h.substring(2, 4), 16); const g = isNaN(gp) ? 0 : gp;
+  const bp = parseInt(h.substring(4, 6), 16); const b = isNaN(bp) ? 0 : bp;
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
+
+// Gradient multi-stop model (backward-compat with old gradient_from/gradient_to)
+const gradientModel = computed(() => {
+  const b = bg.value;
+  // New format: bg.gradient object with { type, angle, stops }
+  if (b.gradient && typeof b.gradient === 'object' && Array.isArray(b.gradient.stops)) {
+    return b.gradient;
+  }
+  // Migrate from old 2-color format
+  return {
+    type: 'linear',
+    angle: parseInt(b.gradient_angle) || 180,
+    stops: [
+      { color: b.gradient_from || '#ffffff', position: 0 },
+      { color: b.gradient_to || '#000000', position: 100 },
+    ],
+  };
+});
+
+function onGradientUpdate(newGrad) {
+  // Save as new gradient object + keep old keys for backward compat
+  const stops = newGrad.stops || [];
+  emit('update:modelValue', {
+    ...bg.value,
+    gradient: newGrad,
+    gradient_angle: newGrad.angle,
+    gradient_from: stops[0]?.color || '#ffffff',
+    gradient_to: stops[stops.length - 1]?.color || '#000000',
+  });
+}
+
+const gradientPreview = computed(() => {
+  const g = gradientModel.value;
+  const stops = (g.stops || []).map(s => `${s.color} ${s.position}%`).join(', ');
+  if (g.type === 'radial') return `radial-gradient(circle, ${stops})`;
+  return `linear-gradient(${g.angle || 180}deg, ${stops})`;
+});
 
 function updateField(key, value) {
   emit('update:modelValue', { ...bg.value, [key]: value });

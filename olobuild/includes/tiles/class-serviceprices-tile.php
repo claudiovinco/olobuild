@@ -33,7 +33,7 @@ class Olo_ServicePrices_Tile extends Olo_Tile_Base {
 
         global $post;
         if ( ! $post || ! is_singular() ) {
-            return '<div style="padding:24px;text-align:center;color:#9ca3af;background:#f9fafb;border-radius:8px">'
+            return '<div style="padding:24px;text-align:center;color:var(--olo-color-text-muted, #9CA3AF);background:var(--olo-color-muted, #F3F4F6);border-radius:8px">'
                  . '<p style="margin:0">Inserisci in un template single.</p></div>';
         }
 
@@ -54,19 +54,19 @@ class Olo_ServicePrices_Tile extends Olo_Tile_Base {
 
         $cols   = absint( $s['columns'] ) ?: 3;
         $gap    = absint( $s['gap'] );
-        $radius = absint( $s['card_radius'] );
+        $radius = Olo_Tile_Utils::border_radius( $s['card_radius'] ?? 0 );
         $uid    = 'olo-sprices-' . wp_rand( 10000, 99999 );
 
         ob_start();
         ?>
         <style>
             .<?php echo $uid; ?> { display:grid; grid-template-columns:repeat(<?php echo $cols; ?>,1fr); gap:<?php echo $gap; ?>px; }
-            .<?php echo $uid; ?> .olo-sp-card { border:2px solid <?php echo esc_attr( $s['card_border'] ); ?>; border-radius:<?php echo $radius; ?>px; padding:<?php echo absint( $s['card_padding'] ); ?>px 16px; text-align:center; transition:border-color 0.2s; }
+            .<?php echo $uid; ?> .olo-sp-card { border:2px solid <?php echo $this->safe_color_css( $s['card_border'] ); ?>; border-radius:<?php echo $radius; ?>; padding:<?php echo absint( $s['card_padding'] ); ?>px 16px; text-align:center; transition:border-color 0.2s; }
             <?php if ( ! empty( $s['hover_border'] ) ) : ?>
-            .<?php echo $uid; ?> .olo-sp-card:hover { border-color:<?php echo esc_attr( $accent ); ?>; }
+            .<?php echo $uid; ?> .olo-sp-card:hover { border-color:<?php echo $this->safe_color_css( $accent ); ?>; }
             <?php endif; ?>
-            .<?php echo $uid; ?> .olo-sp-amount { font-size:<?php echo absint( $s['amount_size'] ); ?>px; font-weight:700; color:<?php echo esc_attr( $accent ); ?>; }
-            .<?php echo $uid; ?> .olo-sp-label { font-size:<?php echo absint( $s['label_size'] ); ?>px; color:<?php echo esc_attr( $s['label_color'] ); ?>; margin-top:4px; }
+            .<?php echo $uid; ?> .olo-sp-amount { font-size:<?php echo absint( $s['amount_size'] ); ?>px; font-weight:700; color:<?php echo $this->safe_color_css( $accent ); ?>; }
+            .<?php echo $uid; ?> .olo-sp-label { font-size:<?php echo absint( $s['label_size'] ); ?>px; color:<?php echo $this->safe_color_css( $s['label_color'] ); ?>; margin-top:4px; }
             @media (max-width:640px) { .<?php echo $uid; ?> { grid-template-columns:1fr; } }
         </style>
         <div class="<?php echo esc_attr( $uid ); ?>">

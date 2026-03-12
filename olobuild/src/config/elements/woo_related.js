@@ -1,0 +1,48 @@
+export default {
+  type: 'woo_related',
+  name: 'Prodotti Correlati',
+  icon: 'dashicons-networking',
+  category: 'woocommerce',
+  placeholder: 'Griglia prodotti correlati WooCommerce',
+  defaults: {
+    posts_per_page: '4',
+    columns: '4',
+    show_image: true,
+    show_title: true,
+    show_price: true,
+    card_style: 'shadow',
+    gap: '24',
+    columns_tablet: '2',
+    columns_mobile: '1',
+    title_color: '',
+    price_color: '',
+    heading_text: 'Prodotti correlati',
+    show_heading: true,
+  },
+  fields: [
+    { type: 'separator', label: 'Query' },
+    { key: 'posts_per_page', label: 'Numero prodotti', type: 'range', min: 1, max: 12, step: 1 },
+    { key: 'columns', label: 'Colonne', type: 'range', min: 1, max: 6, step: 1 },
+
+    { type: 'separator', label: 'Elementi visibili' },
+    { key: 'show_heading', label: 'Mostra titolo sezione', type: 'toggle' },
+    { key: 'heading_text', label: 'Testo titolo', type: 'text', condition: { key: 'show_heading', value: true } },
+    { key: 'show_image', label: 'Mostra immagine', type: 'toggle' },
+    { key: 'show_title', label: 'Mostra titolo', type: 'toggle' },
+    { key: 'show_price', label: 'Mostra prezzo', type: 'toggle' },
+
+    { type: 'separator', label: 'Layout' },
+    { key: 'gap', label: 'Gap (px)', type: 'range', min: 0, max: 48, step: 4 },
+    { key: 'card_style', label: 'Stile card', type: 'select', options: [
+      { value: 'none', label: 'Nessuno' },
+      { value: 'shadow', label: 'Ombra' },
+      { value: 'border', label: 'Bordo' },
+    ]},
+    { key: 'columns_tablet', label: 'Colonne tablet', type: 'range', min: 1, max: 4, step: 1 },
+    { key: 'columns_mobile', label: 'Colonne mobile', type: 'range', min: 1, max: 2, step: 1 },
+
+    { type: 'separator', label: 'Colori' },
+    { key: 'title_color', label: 'Colore titolo', type: 'color' },
+    { key: 'price_color', label: 'Colore prezzo', type: 'color' },
+  ],
+};

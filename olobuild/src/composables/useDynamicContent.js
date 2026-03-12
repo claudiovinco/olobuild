@@ -1,4 +1,4 @@
-import { ref, readonly } from 'vue';
+import { ref, readonly, watch } from 'vue';
 
 const oloData = window.oloData || {};
 
@@ -32,12 +32,12 @@ export function useDynamicContent() {
     if (sourcesLoading.value) {
       // Wait for ongoing fetch
       return new Promise((resolve) => {
-        const check = setInterval(() => {
-          if (!sourcesLoading.value) {
-            clearInterval(check);
+        const unwatch = watch(sourcesLoading, (val) => {
+          if (!val) {
+            unwatch();
             resolve(sourcesCache);
           }
-        }, 100);
+        }, { immediate: true });
       });
     }
 

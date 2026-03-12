@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3 :style="{fontSize:'16px',fontWeight:'700',color:'#1f2937',margin:'0 0 10px'}">Dotazioni</h3>
+    <h3 :style="{fontSize:'16px',fontWeight:'700',color:'var(--olo-color-text, #374151)',margin:'0 0 10px'}">Dotazioni</h3>
     <div :style="gridStyle">
       <div v-for="item in equipment" :key="item" :style="itemStyle">
         <span style="color:#1e87f0;font-size:14px;flex-shrink:0">&#10003;</span>

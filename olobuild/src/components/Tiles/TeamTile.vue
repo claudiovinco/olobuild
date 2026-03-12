@@ -16,10 +16,10 @@
     <!-- Info box -->
     <div :style="infoWrapStyle">
       <div :style="infoStyle">
-        <h3 :style="nameStyle" v-html="s.name || 'Nome'"></h3>
-        <div :style="roleStyle" v-html="s.role || 'Ruolo'"></div>
-        <div v-if="s.bio" :style="bioStyle" v-html="s.bio"></div>
-        <div v-if="s.link_url" :style="linkStyle">
+        <h3 :style="nameStyle" data-olo-editable="name">{{ s.name || 'Nome' }}</h3>
+        <div :style="roleStyle" data-olo-editable="role">{{ s.role || 'Ruolo' }}</div>
+        <div v-if="s.bio" :style="{ ...bioStyle, whiteSpace: 'pre-wrap' }" data-olo-editable="bio" data-olo-multiline>{{ s.bio }}</div>
+        <div v-if="s.link_url" :style="linkStyle" data-olo-editable="link_text">
           {{ s.link_text || 'Profilo' }} &rarr;
         </div>
       </div>
@@ -42,14 +42,14 @@ const s = computed(() => ({
   photo_size: '120', photo_shape: 'circle', photo_radius: '12',
   photo_border_width: '3', photo_border_color: '#FFFFFF',
   photo_shadow: 'md', photo_gap: '12',
-  info_bg_color: '#6366F1', info_text_color: '#FFFFFF', info_padding: '24',
+  info_bg_color: 'var(--olo-color-primary, #6366F1)', info_text_color: '#FFFFFF', info_padding: '24',
   info_width: '100', info_margin: '0',
-  info_radius: '16', info_border_width: '0', info_border_color: '#4B5563',
+  info_radius: '16', info_border_width: '0', info_border_color: 'var(--olo-color-border, #E5E7EB)',
   info_align: 'center',
   name_size: '20', name_weight: '600',
   role_size: '14', role_color: '', bio_size: '14',
   bg_color: '', tile_padding: '16',
-  border_radius: '16', border_width: '0', border_color: '#374151',
+  border_radius: '16', border_width: '0', border_color: 'var(--olo-color-border, #E5E7EB)',
   ...props.settings,
 }));
 
@@ -71,7 +71,7 @@ const tileStyle = computed(() => {
     padding: tp + 'px',
     minHeight: '80px',
   };
-  if (bw > 0) st.border = `${bw}px solid ${s.value.border_color || '#374151'}`;
+  if (bw > 0) st.border = `${bw}px solid ${s.value.border_color || 'var(--olo-color-border, #E5E7EB)'}`;
   return st;
 });
 
@@ -96,7 +96,7 @@ const photoOuterStyle = computed(() => {
   } else {
     st.background = bw > 0 ? (s.value.photo_border_color || '#FFF') : 'transparent';
     if (shape === 'circle') st.borderRadius = '50%';
-    else if (shape === 'rounded') st.borderRadius = (parseInt(s.value.photo_radius) || 12) + 'px';
+    else if (shape === 'rounded') st.borderRadius = ((v => isNaN(v) ? 12 : v)(parseInt(s.value.photo_radius))) + 'px';
     else st.borderRadius = '0';
     const sh = shadowMap[s.value.photo_shadow];
     if (sh && sh !== 'none') st.filter = `drop-shadow(${sh})`;
@@ -112,13 +112,13 @@ const photoInnerStyle = computed(() => {
   };
   if (shape === 'hexagon') st.clipPath = hexClip;
   else if (shape === 'circle') st.borderRadius = '50%';
-  else if (shape === 'rounded') st.borderRadius = Math.max((parseInt(s.value.photo_radius) || 12) - photoBw.value, 0) + 'px';
+  else if (shape === 'rounded') st.borderRadius = Math.max(((v => isNaN(v) ? 12 : v)(parseInt(s.value.photo_radius))) - photoBw.value, 0) + 'px';
   else st.borderRadius = '0';
   return st;
 });
 
 const photoPlaceholderStyle = computed(() => ({
-  width: '100%', height: '100%', background: '#374151',
+  width: '100%', height: '100%', background: 'var(--olo-color-muted, #F3F4F6)',
   display: 'flex', alignItems: 'center', justifyContent: 'center',
   fontSize: (photoSize.value * 0.4) + 'px',
 }));
@@ -144,7 +144,7 @@ const infoStyle = computed(() => {
     width: w + '%',
   };
   if (s.value.info_bg_color) st.background = s.value.info_bg_color;
-  if (ibw > 0) st.border = `${ibw}px solid ${s.value.info_border_color || '#4B5563'}`;
+  if (ibw > 0) st.border = `${ibw}px solid ${s.value.info_border_color || 'var(--olo-color-border, #E5E7EB)'}`;
   return st;
 });
 

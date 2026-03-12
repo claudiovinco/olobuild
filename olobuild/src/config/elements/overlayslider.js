@@ -1,10 +1,10 @@
-import { borderFields, borderDefaults, shadowField } from './_shared.js';
+import { shadowField } from './_shared.js';
 
 export default {
   type: 'overlayslider',
   name: 'Overlay Slider',
   icon: 'dashicons-format-gallery',
-  category: 'content',
+  category: 'interactive',
   defaults: {
     slides: [
       { id: 'os-1', image: '', title: 'Slide 1', subtitle: '', link: '' },
@@ -22,10 +22,9 @@ export default {
     show_arrows: true,
     show_dots: true,
     ribbon_position: 'top-right',
-    ribbon_bg: '#e11d48',
-    ribbon_color: '#ffffff',
+    ribbon_bg: '',
+    ribbon_color: '',
     shadow: 'none',
-    ...borderDefaults,
   },
   fields: [
     { key: 'slides', label: 'Slide', type: 'content-items', supportsDynamic: true,
@@ -108,7 +107,6 @@ export default {
     ]},
     { key: 'ribbon_bg', label: 'Sfondo ribbon', type: 'color' },
     { key: 'ribbon_color', label: 'Testo ribbon', type: 'color' },
-    shadowField,
-    ...borderFields,
+    ...shadowField,
   ],
 };

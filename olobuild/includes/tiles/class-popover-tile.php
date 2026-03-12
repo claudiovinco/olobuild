@@ -9,7 +9,7 @@ class Olo_Popover_Tile extends Olo_Tile_Base {
     protected $type     = 'popover';
     protected $name     = 'Popover';
     protected $icon     = 'dashicons-location-alt';
-    protected $category = 'content';
+    protected $category = 'interactive';
     protected $defaults = [
         'image'              => '',
         'markers'            => [
@@ -18,13 +18,13 @@ class Olo_Popover_Tile extends Olo_Tile_Base {
         ],
         'image_alt'          => '',
         'image_height'       => '0',
-        'marker_color'       => '#6366F1',
+        'marker_color'       => '',
         'popup_bg'           => '#ffffff',
         'popup_color'        => '#333333',
         'popup_radius'       => '8',
         'popup_img_height'   => '120',
         'popup_hover_effect' => 'none',
-        'popup_hover_color'  => '#6366F1',
+        'popup_hover_color'  => '',
     ];
 
     public function get_controls() {
@@ -35,14 +35,14 @@ class Olo_Popover_Tile extends Olo_Tile_Base {
         $s = wp_parse_args( $settings, $this->defaults );
 
         $markers          = is_array( $s['markers'] ) ? $s['markers'] : [];
-        $color            = esc_attr( $s['marker_color'] ?: '#6366F1' );
+        $color            = $this->safe_color_css( $s['marker_color'] ?? '' ) ?: 'var(--olo-color-primary, #6366F1)';
         $image_height     = absint( $s['image_height'] ?? 0 );
-        $popup_bg         = esc_attr( $s['popup_bg'] ?? '#ffffff' );
-        $popup_color      = esc_attr( $s['popup_color'] ?? '#333333' );
-        $popup_radius     = absint( $s['popup_radius'] ?? 8 );
+        $popup_bg         = $this->safe_color_css( $s['popup_bg'] ?? '#ffffff' );
+        $popup_color      = $this->safe_color_css( $s['popup_color'] ?? '#333333' );
+        $popup_radius     = Olo_Tile_Utils::border_radius( $s['popup_radius'] ?? 8 );
         $popup_img_height = absint( $s['popup_img_height'] ?? 120 );
         $hover_effect     = $s['popup_hover_effect'] ?? 'none';
-        $hover_color      = esc_attr( $s['popup_hover_color'] ?? '#6366F1' );
+        $hover_color      = $this->safe_color_css( $s['popup_hover_color'] ?? '' ) ?: 'var(--olo-color-primary, #6366F1)';
 
         $uid = 'olo-pop-' . wp_rand( 10000, 99999 );
 
@@ -52,8 +52,8 @@ class Olo_Popover_Tile extends Olo_Tile_Base {
             $img_style .= 'height:' . $image_height . 'px;object-fit:cover;';
         }
 
-        // Popup image top radius
-        $img_top_radius = $popup_radius > 0 ? $popup_radius . 'px ' . $popup_radius . 'px 0 0' : '0';
+        // Popup image top radius — inherit top corners from popup_radius, zero out bottom
+        $img_top_radius = ( $popup_radius && $popup_radius !== '0px' ) ? $popup_radius . '; border-bottom-left-radius: 0; border-bottom-right-radius: 0' : '0';
 
         ob_start();
         ?>
@@ -61,7 +61,7 @@ class Olo_Popover_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .olo-popover-drop {
                 background: <?php echo $popup_bg; ?>;
                 color: <?php echo $popup_color; ?>;
-                border-radius: <?php echo $popup_radius; ?>px;
+                border-radius: <?php echo $popup_radius; ?>;
                 box-shadow: 0 5px 20px rgba(0,0,0,0.15);
                 overflow: hidden;
                 min-width: 240px;
@@ -112,7 +112,7 @@ class Olo_Popover_Tile extends Olo_Tile_Base {
             <?php if ( ! empty( $s['image'] ) ) : ?>
                 <?php echo Olo_Tile_Utils::img_srcset( absint( $s['image_id'] ?? 0 ), $s['image'], $s['image_alt'] ?? '', '', 'full', 'style="' . esc_attr( $img_style ) . '"' ); ?>
             <?php else : ?>
-                <div style="width:100%;<?php echo $image_height > 0 ? 'height:' . $image_height . 'px;' : 'padding-bottom:56.25%;'; ?>background:#1f2937;"></div>
+                <div style="width:100%;<?php echo $image_height > 0 ? 'height:' . $image_height . 'px;' : 'padding-bottom:56.25%;'; ?>background:var(--olo-color-secondary, #1F2937);"></div>
             <?php endif; ?>
 
             <?php foreach ( $markers as $i => $marker ) :

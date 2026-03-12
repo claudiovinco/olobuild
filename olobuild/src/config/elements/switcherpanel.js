@@ -2,7 +2,7 @@ export default {
   type: 'switcherpanel',
   name: 'Switcher Panel',
   icon: 'dashicons-images-alt',
-  category: 'content',
+  category: 'interactive',
   defaults: {
     items: [
       { id: 'sp-1', nav_label: 'About Us', title: 'About Us', text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', button_text: 'READ MORE', button_url: '#', image: '' },
@@ -26,8 +26,8 @@ export default {
       type: 'content-items',
       itemFields: [
         { key: 'nav_label', label: 'Etichetta navigazione', type: 'text' },
-        { key: 'title', label: 'Titolo', type: 'editor', mode: 'inline' },
-        { key: 'text', label: 'Testo', type: 'editor', mode: 'block' },
+        { key: 'title', label: 'Titolo', type: 'text' },
+        { key: 'text', label: 'Testo', type: 'textarea' },
         { key: 'button_text', label: 'Testo pulsante', type: 'text' },
         { key: 'button_url', label: 'URL pulsante', type: 'text' },
         { key: 'image', label: 'Immagine', type: 'image' },

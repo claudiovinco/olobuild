@@ -1,4 +1,4 @@
-import { borderFields, borderDefaults, shadowField } from './_shared.js';
+import { shadowField } from './_shared.js';
 
 export default {
   type: 'slideshow',
@@ -15,10 +15,9 @@ export default {
     show_dots: true,
     slide_height: '400',
     overlay_color: '#000000',
-    text_color: '#FFFFFF',
+    text_color: '',
     transition: 'slide',
     shadow: 'none',
-    ...borderDefaults,
   },
   fields: [
     { key: 'slides', label: 'Slide', type: 'content-items', supportsDynamic: true,
@@ -42,7 +41,6 @@ export default {
       { value: 'slide', label: 'Slide' },
       { value: 'fade', label: 'Fade' },
     ]},
-    shadowField,
-    ...borderFields,
+    ...shadowField,
   ],
 };

@@ -78,7 +78,7 @@ class Olo_Calendar_Tile extends Olo_Tile_Base {
         $s = wp_parse_args( $settings, $this->defaults );
 
         if ( ! class_exists( 'Olo_Calendar_Frontend' ) ) {
-            return '<div style="padding:32px;text-align:center;color:#9ca3af;background:#f9fafb;border-radius:8px">'
+            return '<div style="padding:32px;text-align:center;color:var(--olo-color-text-muted, #9CA3AF);background:var(--olo-color-muted, #F3F4F6);border-radius:8px">'
                  . '<p style="font-size:1.1em;margin:0">Installa e attiva il plugin <strong>Olo Calendar</strong> per visualizzare il calendario.</p>'
                  . '</div>';
         }
@@ -127,26 +127,26 @@ class Olo_Calendar_Tile extends Olo_Tile_Base {
         $u = ".{$uid}";
 
         // ── Toolbar container ──
-        $tb_bg     = $this->safe_color( $s['toolbar_bg'] );
-        $tb_border = $this->safe_color( $s['toolbar_border_color'] );
+        $tb_bg     = $this->safe_color_css( $s['toolbar_bg'] );
+        $tb_border = $this->safe_color_css( $s['toolbar_border_color'] );
         $tb_bw     = absint( $s['toolbar_border_width'] );
         $tb_px     = absint( $s['toolbar_padding_x'] );
         $tb_py     = absint( $s['toolbar_padding_y'] );
         $tb_mb     = absint( $s['toolbar_margin_bottom'] );
-        $tb_radius = absint( $s['toolbar_radius'] );
+        $tb_radius = Olo_Tile_Utils::border_radius( $s['toolbar_radius'] ?? 0 );
 
         $toolbar_rules = [];
         if ( $tb_bg )     $toolbar_rules[] = "background-color:{$tb_bg}";
         if ( $tb_border && $tb_bw ) $toolbar_rules[] = "border-bottom:{$tb_bw}px solid {$tb_border}";
         $toolbar_rules[] = "padding:{$tb_py}px {$tb_px}px";
         if ( $tb_mb )     $toolbar_rules[] = "margin-bottom:{$tb_mb}px";
-        if ( $tb_radius ) $toolbar_rules[] = "border-radius:{$tb_radius}px";
+        if ( $tb_radius && $tb_radius !== '0px' ) $toolbar_rules[] = "border-radius:{$tb_radius}";
         $css .= "{$u} .fc .fc-toolbar.fc-header-toolbar{" . implode( ';', $toolbar_rules ) . "}";
 
         // ── Toolbar title ──
         $tt_size  = absint( $s['toolbar_title_size'] );
         $tt_wt    = esc_attr( $s['toolbar_title_weight'] );
-        $tt_color = $this->safe_color( $s['toolbar_title_color'] );
+        $tt_color = $this->safe_color_css( $s['toolbar_title_color'] );
         $tt_trans = esc_attr( $s['toolbar_title_transform'] );
 
         $title_rules = [];
@@ -157,25 +157,26 @@ class Olo_Calendar_Tile extends Olo_Tile_Base {
         if ( $title_rules ) $css .= "{$u} .fc .fc-toolbar-title{" . implode( ';', $title_rules ) . "}";
 
         // ── Toolbar buttons ──
-        $btn_bg     = $this->safe_color( $s['toolbar_btn_bg'] );
-        $btn_color  = $this->safe_color( $s['toolbar_btn_color'] );
-        $btn_hbg    = $this->safe_color( $s['toolbar_btn_hover_bg'] );
-        $btn_abg    = $this->safe_color( $s['toolbar_btn_active_bg'] );
-        $btn_acolor = $this->safe_color( $s['toolbar_btn_active_color'] );
-        $btn_radius = absint( $s['toolbar_btn_radius'] );
+        $btn_bg     = $this->safe_color_css( $s['toolbar_btn_bg'] );
+        $btn_color  = $this->safe_color_css( $s['toolbar_btn_color'] );
+        $btn_hbg    = $this->safe_color_css( $s['toolbar_btn_hover_bg'] );
+        $btn_abg    = $this->safe_color_css( $s['toolbar_btn_active_bg'] );
+        $btn_acolor = $this->safe_color_css( $s['toolbar_btn_active_color'] );
+        $btn_radius = Olo_Tile_Utils::border_radius( $s['toolbar_btn_radius'] ?? 0 );
+        $btn_radius_raw = absint( $s['toolbar_btn_radius'] ?? 0 );
         $btn_px     = absint( $s['toolbar_btn_padding_x'] );
         $btn_py     = absint( $s['toolbar_btn_padding_y'] );
         $btn_fs     = absint( $s['toolbar_btn_font_size'] );
         $btn_fw     = esc_attr( $s['toolbar_btn_font_weight'] );
         $btn_bw     = absint( $s['toolbar_btn_border_width'] );
-        $btn_bc     = $this->safe_color( $s['toolbar_btn_border_color'] );
+        $btn_bc     = $this->safe_color_css( $s['toolbar_btn_border_color'] );
         $btn_tt     = esc_attr( $s['toolbar_btn_text_transform'] );
         $btn_shadow = ! empty( $s['toolbar_btn_shadow'] );
 
         $btn_rules = [];
         if ( $btn_bg )    { $btn_rules[] = "background-color:{$btn_bg}"; $btn_rules[] = "border-color:{$btn_bg}"; }
         if ( $btn_color ) $btn_rules[] = "color:{$btn_color}";
-        if ( $btn_radius ) $btn_rules[] = "border-radius:{$btn_radius}px !important";
+        if ( $btn_radius && $btn_radius !== '0px' ) $btn_rules[] = "border-radius:{$btn_radius} !important";
         $btn_rules[] = "padding:{$btn_py}px {$btn_px}px";
         if ( $btn_fs ) $btn_rules[] = "font-size:{$btn_fs}px";
         if ( $btn_fw ) $btn_rules[] = "font-weight:{$btn_fw}";
@@ -185,10 +186,10 @@ class Olo_Calendar_Tile extends Olo_Tile_Base {
         $css .= "{$u} .fc .fc-button{" . implode( ';', $btn_rules ) . "}";
 
         // Button group radius
-        if ( $btn_radius ) {
+        if ( $btn_radius_raw ) {
             $css .= "{$u} .fc .fc-button-group>.fc-button{border-radius:0 !important}";
-            $css .= "{$u} .fc .fc-button-group>.fc-button:first-child{border-radius:{$btn_radius}px 0 0 {$btn_radius}px !important}";
-            $css .= "{$u} .fc .fc-button-group>.fc-button:last-child{border-radius:0 {$btn_radius}px {$btn_radius}px 0 !important}";
+            $css .= "{$u} .fc .fc-button-group>.fc-button:first-child{border-radius:{$btn_radius_raw}px 0 0 {$btn_radius_raw}px !important}";
+            $css .= "{$u} .fc .fc-button-group>.fc-button:last-child{border-radius:0 {$btn_radius_raw}px {$btn_radius_raw}px 0 !important}";
         }
 
         // Hover
@@ -211,24 +212,24 @@ class Olo_Calendar_Tile extends Olo_Tile_Base {
         if ( $f_mb )   $css .= "{$u} .olo-cal-filters{margin-bottom:{$f_mb}px}";
 
         // ── Calendar grid ──
-        $hdr_bg    = $this->safe_color( $s['header_bg'] );
-        $hdr_color = $this->safe_color( $s['header_color'] );
+        $hdr_bg    = $this->safe_color_css( $s['header_bg'] );
+        $hdr_color = $this->safe_color_css( $s['header_color'] );
         if ( $hdr_bg )    $css .= "{$u} .fc .fc-col-header-cell{background-color:{$hdr_bg}}";
         if ( $hdr_color ) $css .= "{$u} .fc .fc-col-header-cell-cushion{color:{$hdr_color}}";
 
-        $today_bg = $this->safe_color( $s['today_bg'] );
+        $today_bg = $this->safe_color_css( $s['today_bg'] );
         if ( $today_bg ) $css .= "{$u} .fc .fc-day-today{background-color:{$today_bg} !important}";
 
         $day_size = absint( $s['day_number_size'] );
         if ( $day_size ) $css .= "{$u} .fc .fc-daygrid-day-number{font-size:{$day_size}px}";
 
-        $border = $this->safe_color( $s['border_color'] );
+        $border = $this->safe_color_css( $s['border_color'] );
         if ( $border ) $css .= "{$u} .fc{--fc-border-color:{$border}}";
 
         // ── Events ──
-        $ev_radius = absint( $s['event_radius'] );
+        $ev_radius = Olo_Tile_Utils::border_radius( $s['event_radius'] ?? 0 );
         $ev_size   = absint( $s['event_font_size'] );
-        if ( $ev_radius ) $css .= "{$u} .fc .fc-daygrid-event{border-radius:{$ev_radius}px}";
+        if ( $ev_radius && $ev_radius !== '0px' ) $css .= "{$u} .fc .fc-daygrid-event{border-radius:{$ev_radius}}";
         if ( $ev_size )   $css .= "{$u} .fc .fc-daygrid-event{font-size:{$ev_size}px}";
 
         return $css;

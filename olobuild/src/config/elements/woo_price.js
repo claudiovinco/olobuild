@@ -1,0 +1,46 @@
+export default {
+  type: 'woo_price',
+  name: 'Prezzo Prodotto',
+  icon: 'dashicons-tag',
+  category: 'woocommerce',
+  placeholder: 'Prezzo prodotto WooCommerce',
+  defaults: {
+    show_regular: true,
+    show_sale: true,
+    show_suffix: false,
+    price_color: '',
+    sale_color: '',
+    regular_color: '',
+    font_size: '24',
+    font_weight: '700',
+    text_align: 'left',
+    prefix: '',
+    suffix: '',
+  },
+  fields: [
+    { key: 'show_regular', label: 'Mostra prezzo originale', type: 'toggle' },
+    { key: 'show_sale', label: 'Mostra prezzo scontato', type: 'toggle' },
+    { key: 'show_suffix', label: 'Mostra suffisso prezzo', type: 'toggle' },
+    { key: 'prefix', label: 'Prefisso', type: 'text', placeholder: 'es. A partire da' },
+    { key: 'suffix', label: 'Suffisso', type: 'text', placeholder: 'es. + IVA' },
+
+    { type: 'separator', label: 'Stile' },
+    { key: 'font_size', label: 'Dimensione (px)', type: 'range', min: 12, max: 72, step: 2 },
+    { key: 'font_weight', label: 'Peso font', type: 'select', options: [
+      { value: '400', label: 'Normale' },
+      { value: '600', label: 'Semi-bold' },
+      { value: '700', label: 'Bold' },
+      { value: '800', label: 'Extra-bold' },
+    ]},
+    { key: 'text_align', label: 'Allineamento', type: 'select', options: [
+      { value: 'left', label: 'Sinistra' },
+      { value: 'center', label: 'Centro' },
+      { value: 'right', label: 'Destra' },
+    ]},
+
+    { type: 'separator', label: 'Colori' },
+    { key: 'price_color', label: 'Colore prezzo', type: 'color' },
+    { key: 'sale_color', label: 'Colore saldo', type: 'color' },
+    { key: 'regular_color', label: 'Colore prezzo barrato', type: 'color' },
+  ],
+};

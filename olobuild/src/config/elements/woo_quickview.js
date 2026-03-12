@@ -1,0 +1,67 @@
+import { shadowField } from './_shared.js';
+
+export default {
+  type: 'woo_quickview',
+  name: 'WC Quick View',
+  icon: 'dashicons-visibility',
+  category: 'woocommerce',
+  placeholder: 'Quick View prodotto WooCommerce',
+  defaults: {
+    button_text: 'Quick View',
+    button_style: 'default',
+    show_gallery: true,
+    show_add_to_cart: true,
+    show_description: true,
+    modal_size: '',
+    show_price: true,
+    show_rating: true,
+    show_sku: false,
+    show_categories: true,
+    overlay_color: 'rgba(0,0,0,0.5)',
+    modal_bg: '',
+    title_color: '',
+    price_color: '',
+    button_color: '',
+    button_bg: '',
+    close_color: '',
+    shadow: 'none',
+  },
+  fields: [
+    { type: 'separator', label: 'Pulsante trigger' },
+    { key: 'button_text', label: 'Testo pulsante', type: 'text' },
+    { key: 'button_style', label: 'Stile pulsante', type: 'select', options: [
+      { value: 'default', label: 'Default' },
+      { value: 'outline', label: 'Outline' },
+      { value: 'icon-only', label: 'Solo icona' },
+      { value: 'text', label: 'Solo testo' },
+    ]},
+
+    { type: 'separator', label: 'Contenuto modale' },
+    { key: 'show_gallery', label: 'Mostra galleria', type: 'toggle' },
+    { key: 'show_add_to_cart', label: 'Mostra aggiungi al carrello', type: 'toggle' },
+    { key: 'show_description', label: 'Mostra descrizione', type: 'toggle' },
+    { key: 'show_price', label: 'Mostra prezzo', type: 'toggle' },
+    { key: 'show_rating', label: 'Mostra valutazione', type: 'toggle' },
+    { key: 'show_sku', label: 'Mostra SKU', type: 'toggle' },
+    { key: 'show_categories', label: 'Mostra categorie', type: 'toggle' },
+
+    { type: 'separator', label: 'Layout modale' },
+    { key: 'modal_size', label: 'Dimensione modale', type: 'select', options: [
+      { value: '', label: 'Default' },
+      { value: 'small', label: 'Piccolo' },
+      { value: 'large', label: 'Grande' },
+      { value: 'full', label: 'Full width' },
+    ]},
+
+    { type: 'separator', label: 'Colori' },
+    { key: 'overlay_color', label: 'Colore overlay', type: 'color' },
+    { key: 'modal_bg', label: 'Sfondo modale', type: 'color' },
+    { key: 'title_color', label: 'Colore titolo', type: 'color' },
+    { key: 'price_color', label: 'Colore prezzo', type: 'color' },
+    { key: 'button_color', label: 'Colore testo pulsante', type: 'color' },
+    { key: 'button_bg', label: 'Sfondo pulsante', type: 'color' },
+    { key: 'close_color', label: 'Colore icona chiudi', type: 'color' },
+
+    ...shadowField,
+  ],
+};

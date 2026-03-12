@@ -73,16 +73,16 @@ class Olo_Overlay_Tile extends Olo_Tile_Base {
             <?php if ( ! empty( $s['image_url'] ) ) : ?>
                 <?php echo Olo_Tile_Utils::img_srcset( absint( $s['image_url_id'] ?? 0 ), $s['image_url'], $s['title'] ?? '', '', 'full', 'uk-cover' ); ?>
             <?php else : ?>
-                <div style="background:#374151;" uk-cover></div>
+                <div style="background:var(--olo-color-secondary, #1F2937);" uk-cover></div>
             <?php endif; ?>
-            <?php $ov_bg = $this->safe_color( $s['overlay_color'] ); $ov_fg = $this->safe_color( $s['text_color'] ); ?>
+            <?php $ov_bg = $this->safe_color_css( $s['overlay_color'] ); $ov_fg = $this->safe_color_css( $s['text_color'] ); ?>
             <div class="uk-overlay uk-overlay-primary uk-position-cover <?php echo esc_attr( $uk_effect ); ?>" style="<?php if ( $ov_bg ) echo 'background:' . $ov_bg . ';'; ?>opacity:<?php echo $opa; ?>;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;">
                 <div style="<?php if ( $ov_fg ) echo 'color:' . $ov_fg . ';'; ?>">
                     <?php if ( ! empty( $s['title'] ) ) : ?>
-                        <div style="font-size:1.5em;font-weight:700;margin-bottom:8px;"><?php echo wp_kses_post( $s['title'] ); ?></div>
+                        <div style="font-size:1.5em;font-weight:700;margin-bottom:8px;"><?php echo esc_html( wp_strip_all_tags( $s['title'] ) ); ?></div>
                     <?php endif; ?>
                     <?php if ( ! empty( $s['description'] ) ) : ?>
-                        <div style="font-size:0.9em;opacity:0.9;line-height:1.5;"><?php echo wp_kses_post( $s['description'] ); ?></div>
+                        <div style="font-size:0.9em;opacity:0.9;line-height:1.5;"><?php echo nl2br( esc_html( wp_strip_all_tags( $s['description'] ) ) ); ?></div>
                     <?php endif; ?>
                 </div>
             </div>

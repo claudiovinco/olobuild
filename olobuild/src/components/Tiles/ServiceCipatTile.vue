@@ -3,10 +3,10 @@
     <!-- Icon -->
     <span v-if="s.show_icon" style="display:flex;align-items:center;flex-shrink:0">
       <svg :width="iconSz" :height="iconSz" viewBox="0 0 24 24" fill="none">
-        <rect x="3" y="3" width="18" height="18" rx="3" :stroke="s.icon_color" stroke-width="1.8"/>
-        <path d="M7 8h10M7 12h6" :stroke="s.icon_color" stroke-width="1.5" stroke-linecap="round"/>
-        <circle cx="16.5" cy="15.5" r="2.5" :stroke="s.icon_color" stroke-width="1.5"/>
-        <path d="M15.5 17.5L15 20l1.5-1 1.5 1-.5-2.5" :stroke="s.icon_color" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+        <rect x="3" y="3" width="18" height="18" rx="3" :stroke="iconC" stroke-width="1.8"/>
+        <path d="M7 8h10M7 12h6" :stroke="iconC" stroke-width="1.5" stroke-linecap="round"/>
+        <circle cx="16.5" cy="15.5" r="2.5" :stroke="iconC" stroke-width="1.5"/>
+        <path d="M15.5 17.5L15 20l1.5-1 1.5 1-.5-2.5" :stroke="iconC" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
     </span>
     <!-- Text -->
@@ -24,10 +24,11 @@ const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 const defaults = {
   layout: 'inline', show_icon: true, show_label: true, label_text: 'Codice CIPAT',
   font_size: '14', code_weight: '600',
-  label_color: '#6B7280', code_color: '#1F2937', icon_color: '#6366F1',
+  label_color: '', code_color: '', icon_color: '',
   bg_color: '', border_color: '', border_radius: '8', padding: '12', align: 'left',
 };
 const s = computed(() => ({ ...defaults, ...props.settings }));
+const iconC = computed(() => s.value.icon_color || '#6366F1');
 
 const iconSz = computed(() => Math.min(parseInt(s.value.font_size) || 14, 18) + 2);
 const isBlock = computed(() => s.value.layout === 'block');
@@ -59,13 +60,13 @@ const textWrapStyle = computed(() => ({
 
 const labelStyle = computed(() => ({
   fontSize: Math.max(8, Math.min(parseInt(s.value.font_size) || 14, 14) - 3) + 'px',
-  color: s.value.label_color, fontWeight: '500',
+  color: s.value.label_color || 'var(--olo-color-text-muted, #9CA3AF)', fontWeight: '500',
   textTransform: 'uppercase', letterSpacing: '0.5px', lineHeight: '1.2',
 }));
 
 const codeStyle = computed(() => ({
   fontSize: Math.min(parseInt(s.value.font_size) || 14, 18) + 'px',
-  fontWeight: s.value.code_weight, color: s.value.code_color,
+  fontWeight: s.value.code_weight, color: s.value.code_color || 'var(--olo-color-text, #374151)',
   letterSpacing: '0.3px', lineHeight: '1.3',
 }));
 </script>

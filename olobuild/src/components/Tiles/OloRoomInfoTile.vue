@@ -1,10 +1,10 @@
 <template>
   <div :style="wrapStyle">
-    <h3 style="font-size:16px;font-weight:700;color:#1f2937;margin:0 0 10px">Informazioni sala</h3>
+    <h3 style="font-size:16px;font-weight:700;color:var(--olo-color-text, #374151);margin:0 0 10px">Informazioni sala</h3>
     <div :style="gridStyle">
       <div v-for="item in items" :key="item.label" style="display:flex;flex-direction:column;gap:2px">
         <span style="font-size:11px;color:#9ca3af;font-weight:600;text-transform:uppercase">{{ item.label }}</span>
-        <span style="font-size:14px;color:#1f2937;font-weight:500">{{ item.value }}</span>
+        <span style="font-size:14px;color:var(--olo-color-text, #374151);font-weight:500">{{ item.value }}</span>
       </div>
     </div>
   </div>

@@ -4,7 +4,7 @@ export default {
   type: 'accordion',
   name: 'Fisarmonica',
   icon: 'dashicons-list-view',
-  category: 'content',
+  category: 'interactive',
   defaults: {
     panels: [
       { id: 'p-1', title: 'Cos\'è Olobuild?', content: 'Un potente page builder.', image: '', video: '', icon: '' },
@@ -20,12 +20,12 @@ export default {
     media_align: 'right',
     media_width: '35',
     media_radius: '8',
-    header_bg: '#111827',
-    header_bg_active: '#1a2332',
-    header_text_color: '#F3F4F6',
-    content_bg: '#0d1117',
-    border_color: '#374151',
-    text_color: '#d1d5db',
+    header_bg: '',
+    header_bg_active: '',
+    header_text_color: '',
+    content_bg: '',
+    border_color: '',
+    text_color: '',
     gap: '0',
     border_radius: '8',
     faq_schema: false,
@@ -35,9 +35,9 @@ export default {
   fields: [
     { key: 'panels', label: 'Pannelli', type: 'content-items', supportsDynamic: true,
       itemFields: [
-        { key: 'title', label: 'Titolo', type: 'editor', mode: 'inline' },
+        { key: 'title', label: 'Titolo', type: 'text' },
         { key: 'icon', label: 'Icona intestazione', type: 'icon' },
-        { key: 'content', label: 'Contenuto', type: 'editor', mode: 'block' },
+        { key: 'content', label: 'Contenuto', type: 'textarea' },
         { key: 'video', label: 'Video URL', type: 'text', placeholder: 'https://...mp4 o YouTube/Vimeo' },
         { key: 'image', label: 'Immagine', type: 'image' },
         { key: 'hover_image', label: 'Immagine hover', type: 'image' },
@@ -75,7 +75,7 @@ export default {
       { value: 'left', label: 'Sinistra' },
     ]},
     { key: 'media_width', label: 'Larghezza media (%)', type: 'range', min: 20, max: 50, step: 5 },
-    { key: 'media_radius', label: 'Raggio bordo (px)', type: 'range', min: 0, max: 24, step: 2 },
+    { key: 'media_radius', label: 'Raggio bordo (px)', type: 'border-radius' },
     { key: 'separator_style', label: 'Separatore', type: 'select', options: [
       { value: 'border', label: 'Bordo' },
       { value: 'shadow', label: 'Ombra' },
@@ -90,6 +90,6 @@ export default {
     { key: 'gap', label: 'Gap (px)', type: 'range', min: 0, max: 48, step: 4 },
     { key: 'border_radius', label: 'Border Radius', type: 'border-radius' },
     { key: 'faq_schema', label: 'Schema FAQ', type: 'toggle' },
-    shadowField,
+    ...shadowField,
   ],
 };

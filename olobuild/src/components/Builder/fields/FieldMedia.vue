@@ -45,6 +45,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { useToast } from '../../../composables/useToast.js';
 
 const props = defineProps({
   modelValue: { type: String, default: '' },
@@ -63,8 +64,9 @@ const fileName = computed(() => {
 });
 
 function pickMedia() {
+  const toast = useToast();
   if (!window.wp || !window.wp.media) {
-    alert('Libreria Media di WordPress non disponibile.');
+    toast.error('Libreria Media di WordPress non disponibile.');
     return;
   }
   const frame = wp.media({

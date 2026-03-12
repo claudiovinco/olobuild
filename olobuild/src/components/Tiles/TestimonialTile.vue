@@ -43,10 +43,10 @@ const s = computed(() => ({
   author_role: 'CEO',
   avatar: '',
   rating: '5',
-  bg_color: '#1F2937',
-  text_color: '#F3F4F6',
+  bg_color: 'var(--olo-color-muted, #F3F4F6)',
+  text_color: 'var(--olo-color-text, #374151)',
   show_line: true,
-  line_color: '#6366F1',
+  line_color: 'var(--olo-color-primary, #6366F1)',
   author_position: 'bottom-left',
   avatar_size: '48',
   avatar_shape: 'circle',
@@ -57,7 +57,7 @@ const s = computed(() => ({
   avatar_filter: 'none',
   border_radius: '12',
   border_width: '0',
-  border_color: '#374151',
+  border_color: 'var(--olo-color-border, #E5E7EB)',
   ...props.settings,
 }));
 
@@ -66,13 +66,13 @@ const rating = computed(() => parseInt(s.value.rating) || 0);
 const wrapStyle = computed(() => {
   const bw = parseInt(s.value.border_width) || 0;
   const st = {
-    background: s.value.bg_color || '#1F2937',
-    color: s.value.text_color || '#F3F4F6',
+    background: s.value.bg_color || 'var(--olo-color-muted, #F3F4F6)',
+    color: s.value.text_color || 'var(--olo-color-text, #374151)',
     minHeight: '80px',
     borderRadius: (parseInt(s.value.border_radius) || 0) + 'px',
   };
   if (bw > 0) {
-    st.border = `${bw}px solid ${s.value.border_color || '#374151'}`;
+    st.border = `${bw}px solid ${s.value.border_color || 'var(--olo-color-border, #E5E7EB)'}`;
   }
   return st;
 });
@@ -98,7 +98,7 @@ const avatarStyle = computed(() => {
   const st = {
     width: size,
     height: size,
-    borderRadius: isSquare ? (parseInt(s.value.avatar_radius) || 6) + 'px' : '50%',
+    borderRadius: isSquare ? ((v => isNaN(v) ? 6 : v)(parseInt(s.value.avatar_radius))) + 'px' : '50%',
     objectFit: 'cover',
   };
   const shadow = shadowMap[s.value.avatar_shadow] || 'none';
@@ -114,7 +114,7 @@ const lineStyle = computed(() => {
     return { borderLeft: 'none', paddingLeft: '0' };
   }
   return {
-    borderLeft: `3px solid ${s.value.line_color || '#6366F1'}`,
+    borderLeft: `3px solid ${s.value.line_color || 'var(--olo-color-primary, #6366F1)'}`,
     paddingLeft: '16px',
   };
 });
@@ -148,10 +148,12 @@ const QuoteBlock = {
         class: 'mb-text-lg mb-italic mb-leading-relaxed mb-opacity-95',
         style: {
           margin: 0,
+          whiteSpace: 'pre-wrap',
           ...p.lineStyle,
         },
-        innerHTML: p.s.quote || 'Aggiungi qui la tua citazione.',
-      }),
+        'data-olo-editable': 'quote',
+        'data-olo-multiline': '',
+      }, p.s.quote || 'Aggiungi qui la tua citazione.'),
     ]);
   },
 };
@@ -164,9 +166,9 @@ const AuthorBlock = {
         ? h('img', { src: p.s.avatar, alt: '', style: p.avatarStyle })
         : null;
       const info = h('div', [
-        h('div', { class: 'mb-font-semibold', innerHTML: p.s.author_name || 'Nome Autore' }),
+        h('div', { class: 'mb-font-semibold', 'data-olo-editable': 'author_name' }, p.s.author_name || 'Nome Autore'),
         p.s.author_role
-          ? h('div', { class: 'mb-text-sm mb-opacity-70', innerHTML: p.s.author_role })
+          ? h('div', { class: 'mb-text-sm mb-opacity-70', 'data-olo-editable': 'author_role' }, p.s.author_role)
           : null,
       ]);
 

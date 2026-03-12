@@ -2,7 +2,7 @@
   <div class="olo-popover" style="position:relative;">
     <!-- Image -->
     <div
-      v-if="settings.image"
+      v-if="s.image"
       class="olo-popover-img"
       :style="imgStyle"
     ></div>
@@ -22,21 +22,21 @@
       :style="{
         left: marker.x + '%',
         top: marker.y + '%',
-        background: settings.marker_color || '#6366F1',
+        background: s.marker_color || '#6366F1',
       }"
       :title="marker.title"
       @click="activeMarker = activeMarker === i ? -1 : i"
     >
-      <span class="olo-popover-marker-pulse" :style="{ borderColor: settings.marker_color || '#6366F1' }"></span>
+      <span class="olo-popover-marker-pulse" :style="{ borderColor: s.marker_color || '#6366F1' }"></span>
       <!-- Mini popup preview -->
       <div v-if="activeMarker === i" class="pop-preview" :style="popStyle" @click.stop>
         <div v-if="marker.image" class="pop-preview__media" :style="{ height: popImgH + 'px' }">
           <img :src="marker.image" alt="" class="pop-preview__img" :class="hoverClass" />
-          <div v-if="settings.popup_hover_effect === 'color-overlay'" class="pop-preview__overlay" :style="{ background: settings.popup_hover_color || '#6366F1' }"></div>
+          <div v-if="s.popup_hover_effect === 'color-overlay'" class="pop-preview__overlay" :style="{ background: s.popup_hover_color || '#6366F1' }"></div>
         </div>
         <div class="pop-preview__body">
-          <div class="pop-preview__title">{{ marker.title }}</div>
-          <div class="pop-preview__text">{{ (marker.content || '').substring(0, 60) }}…</div>
+          <div class="pop-preview__title" :data-olo-editable="'markers.' + i + '.title'">{{ marker.title }}</div>
+          <div class="pop-preview__text" :data-olo-editable="'markers.' + i + '.content'">{{ (marker.content || '').substring(0, 60) }}…</div>
         </div>
       </div>
     </div>
@@ -50,10 +50,23 @@ const props = defineProps({
   settings: { type: Object, default: () => ({}) },
 });
 
+const defaults = {
+  image: '',
+  image_height: '0',
+  marker_color: '#6366F1',
+  popup_bg: '#ffffff',
+  popup_color: '#333333',
+  popup_radius: '8',
+  popup_img_height: '120',
+  popup_hover_effect: 'none',
+  popup_hover_color: '#6366F1',
+};
+const s = computed(() => ({ ...defaults, ...props.settings }));
+
 const activeMarker = ref(-1);
 
 const markers = computed(() => {
-  const raw = props.settings.markers;
+  const raw = s.value.markers;
   if (Array.isArray(raw) && raw.length) return raw;
   return [
     { id: 'mk-1', x: 25, y: 30, title: 'Point 1', content: 'Description...', image: '' },
@@ -61,41 +74,41 @@ const markers = computed(() => {
   ];
 });
 
-const imgHeight = computed(() => parseInt(props.settings.image_height) || 0);
+const imgHeight = computed(() => parseInt(s.value.image_height) || 0);
 
 const imgStyle = computed(() => {
-  const s = { background: `url(${props.settings.image}) center/cover no-repeat`, width: '100%' };
+  const st = { background: `url(${s.value.image}) center/cover no-repeat`, width: '100%' };
   if (imgHeight.value > 0) {
-    s.height = Math.min(imgHeight.value, 300) + 'px';
+    st.height = Math.min(imgHeight.value, 300) + 'px';
   } else {
-    s.paddingBottom = '56.25%';
+    st.paddingBottom = '56.25%';
   }
-  return s;
+  return st;
 });
 
 const placeholderStyle = computed(() => {
-  const s = { position: 'relative', borderRadius: '6px' };
+  const st = { position: 'relative', borderRadius: '6px' };
   if (imgHeight.value > 0) {
-    s.height = Math.min(imgHeight.value, 300) + 'px';
+    st.height = Math.min(imgHeight.value, 300) + 'px';
   } else {
-    s.paddingBottom = '56.25%';
+    st.paddingBottom = '56.25%';
   }
-  return s;
+  return st;
 });
 
 const popStyle = computed(() => ({
-  background: props.settings.popup_bg || '#ffffff',
-  color: props.settings.popup_color || '#333333',
-  borderRadius: (parseInt(props.settings.popup_radius) || 8) + 'px',
+  background: s.value.popup_bg || '#ffffff',
+  color: s.value.popup_color || '#333333',
+  borderRadius: ((v => isNaN(v) ? 8 : v)(parseInt(s.value.popup_radius))) + 'px',
 }));
 
 const popImgH = computed(() => {
-  const h = parseInt(props.settings.popup_img_height) || 120;
+  const h = parseInt(s.value.popup_img_height) || 120;
   return Math.min(h, 80);
 });
 
 const hoverClass = computed(() => {
-  const fx = props.settings.popup_hover_effect || 'none';
+  const fx = s.value.popup_hover_effect || 'none';
   return fx !== 'none' && fx !== 'color-overlay' ? 'pop-hover-' + fx : '';
 });
 </script>

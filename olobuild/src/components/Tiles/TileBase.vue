@@ -96,6 +96,83 @@ import LiveSearchTile from './LiveSearchTile.vue';
 import ShatteredImageTile from './ShatteredImageTile.vue';
 import ProGalleryTile from './ProGalleryTile.vue';
 import PdfViewerTile from './PdfViewerTile.vue';
+import PdfProTile from './PdfProTile.vue';
+import StarratingTile from './StarratingTile.vue';
+import IconlistTile from './IconlistTile.vue';
+import AnimatedheadingTile from './AnimatedheadingTile.vue';
+import TocTile from './TocTile.vue';
+import LottieTile from './LottieTile.vue';
+import SharebuttonsTile from './SharebuttonsTile.vue';
+import ScrollprogressTile from './ScrollprogressTile.vue';
+import NewstickerTile from './NewstickerTile.vue';
+import HotspotTile from './HotspotTile.vue';
+import LoginformTile from './LoginformTile.vue';
+import VideoplaylistTile from './VideoplaylistTile.vue';
+import TextpathTile from './TextpathTile.vue';
+import OffcanvasTile from './OffcanvasTile.vue';
+import ChartTile from './ChartTile.vue';
+import AudioTile from './AudioTile.vue';
+import ShapedividerTile from './ShapedividerTile.vue';
+import CountercircleTile from './CountercircleTile.vue';
+import PostmetaTile from './PostmetaTile.vue';
+import RelatedpostsTile from './RelatedpostsTile.vue';
+import SoundcloudTile from './SoundcloudTile.vue';
+import TagcloudTile from './TagcloudTile.vue';
+import WpcommentsTile from './WpcommentsTile.vue';
+import PaginationTile from './PaginationTile.vue';
+import CarouselTile from './CarouselTile.vue';
+import AuthorboxTile from './AuthorboxTile.vue';
+import ViewscounterTile from './ViewscounterTile.vue';
+import MenuanchorTile from './MenuanchorTile.vue';
+import OsmmapTile from './OsmmapTile.vue';
+import InstagramTile from './InstagramTile.vue';
+import FacebookpageTile from './FacebookpageTile.vue';
+import TwitterfeedTile from './TwitterfeedTile.vue';
+import PostnavigationTile from './PostnavigationTile.vue';
+import PricelistTile from './PricelistTile.vue';
+import ProgresstrackerTile from './ProgresstrackerTile.vue';
+import SitemapTile from './SitemapTile.vue';
+import LinkinbioTile from './LinkinbioTile.vue';
+import ShortcodeTile from './ShortcodeTile.vue';
+import TemplateembedTile from './TemplateembedTile.vue';
+import PaymentbuttonsTile from './PaymentbuttonsTile.vue';
+import TextmaskTile from './TextmaskTile.vue';
+import BlendtextTile from './BlendtextTile.vue';
+import PagetitlebarTile from './PagetitlebarTile.vue';
+import PortfolioTile from './PortfolioTile.vue';
+
+// WooCommerce tiles
+import WooProductsTile from './WooProductsTile.vue';
+import WooPriceTile from './WooPriceTile.vue';
+import WooMinicartTile from './WooMinicartTile.vue';
+import WooAddtocartTile from './WooAddtocartTile.vue';
+import WooCategoriesTile from './WooCategoriesTile.vue';
+import WooRatingTile from './WooRatingTile.vue';
+import WooProductTabsTile from './WooProductTabsTile.vue';
+import WooRelatedTile from './WooRelatedTile.vue';
+import WooUpsellsTile from './WooUpsellsTile.vue';
+import WooCartTile from './WooCartTile.vue';
+import WooCheckoutTile from './WooCheckoutTile.vue';
+import WooProductTitleTile from './WooProductTitleTile.vue';
+import WooProductImageTile from './WooProductImageTile.vue';
+import WooProductDescriptionTile from './WooProductDescriptionTile.vue';
+import WooProductMetaTile from './WooProductMetaTile.vue';
+import WooProductStockTile from './WooProductStockTile.vue';
+import WooOrderTrackingTile from './WooOrderTrackingTile.vue';
+import WooBreadcrumbsTile from './WooBreadcrumbsTile.vue';
+import WooNoticesTile from './WooNoticesTile.vue';
+import WooProductNavigationTile from './WooProductNavigationTile.vue';
+import WooSaleBadgeTile from './WooSaleBadgeTile.vue';
+import WooCrossSellsTile from './WooCrossSellsTile.vue';
+import WooRecentlyViewedTile from './WooRecentlyViewedTile.vue';
+import WooProductBundleTile from './WooProductBundleTile.vue';
+import WooProductFilterTile from './WooProductFilterTile.vue';
+import WooQuickviewTile from './WooQuickviewTile.vue';
+import WooWishlistTile from './WooWishlistTile.vue';
+import WooProductGallerySliderTile from './WooProductGallerySliderTile.vue';
+import WooCheckoutMultistepTile from './WooCheckoutMultistepTile.vue';
+import WooMyaccountTile from './WooMyaccountTile.vue';
+import WooComparisonTile from './WooComparisonTile.vue';
 
 // Olo Space tiles
 import OloRoomHeroTile from './OloRoomHeroTile.vue';
@@ -125,6 +202,7 @@ import OloRoomCategoriesTile from './OloRoomCategoriesTile.vue';
 import OloRoomDistrictsTile from './OloRoomDistrictsTile.vue';
 import OloRoomStatsPublicTile from './OloRoomStatsPublicTile.vue';
 import OloRoomCtaTile from './OloRoomCtaTile.vue';
+import ExternalTilePlaceholder from './ExternalTilePlaceholder.vue';
 
 const props = defineProps({
   tile: { type: Object, required: true },
@@ -221,6 +299,83 @@ const tileComponents = {
   shatteredimage: ShatteredImageTile,
   progallery: ProGalleryTile,
   pdfviewer: PdfViewerTile,
+  pdfpro: PdfProTile,
+  starrating: StarratingTile,
+  iconlist: IconlistTile,
+  animatedheading: AnimatedheadingTile,
+  toc: TocTile,
+  lottie: LottieTile,
+  sharebuttons: SharebuttonsTile,
+  scrollprogress: ScrollprogressTile,
+  newsticker: NewstickerTile,
+  hotspot: HotspotTile,
+  loginform: LoginformTile,
+  videoplaylist: VideoplaylistTile,
+  textpath: TextpathTile,
+  offcanvas: OffcanvasTile,
+  chart: ChartTile,
+  audio: AudioTile,
+  shapedivider: ShapedividerTile,
+  countercircle: CountercircleTile,
+  postmeta: PostmetaTile,
+  relatedposts: RelatedpostsTile,
+  soundcloud: SoundcloudTile,
+  tagcloud: TagcloudTile,
+  wpcomments: WpcommentsTile,
+  pagination: PaginationTile,
+  carousel: CarouselTile,
+  authorbox: AuthorboxTile,
+  viewscounter: ViewscounterTile,
+  menuanchor: MenuanchorTile,
+  osmmap: OsmmapTile,
+  instagram: InstagramTile,
+  facebookpage: FacebookpageTile,
+  twitterfeed: TwitterfeedTile,
+  postnavigation: PostnavigationTile,
+  pricelist: PricelistTile,
+  progresstracker: ProgresstrackerTile,
+  sitemap: SitemapTile,
+  linkinbio: LinkinbioTile,
+  shortcode: ShortcodeTile,
+  templateembed: TemplateembedTile,
+  paymentbuttons: PaymentbuttonsTile,
+  textmask: TextmaskTile,
+  blendtext: BlendtextTile,
+  pagetitlebar: PagetitlebarTile,
+  portfolio: PortfolioTile,
+
+  // WooCommerce tiles
+  woo_products: WooProductsTile,
+  woo_price: WooPriceTile,
+  woo_minicart: WooMinicartTile,
+  woo_addtocart: WooAddtocartTile,
+  woo_categories: WooCategoriesTile,
+  woo_rating: WooRatingTile,
+  woo_product_tabs: WooProductTabsTile,
+  woo_related: WooRelatedTile,
+  woo_upsells: WooUpsellsTile,
+  woo_cart: WooCartTile,
+  woo_checkout: WooCheckoutTile,
+  woo_product_title: WooProductTitleTile,
+  woo_product_image: WooProductImageTile,
+  woo_product_description: WooProductDescriptionTile,
+  woo_product_meta: WooProductMetaTile,
+  woo_product_stock: WooProductStockTile,
+  woo_order_tracking: WooOrderTrackingTile,
+  woo_breadcrumbs: WooBreadcrumbsTile,
+  woo_notices: WooNoticesTile,
+  woo_product_navigation: WooProductNavigationTile,
+  woo_sale_badge: WooSaleBadgeTile,
+  woo_cross_sells: WooCrossSellsTile,
+  woo_recently_viewed: WooRecentlyViewedTile,
+  woo_product_bundle: WooProductBundleTile,
+  woo_product_filter: WooProductFilterTile,
+  woo_quickview: WooQuickviewTile,
+  woo_wishlist: WooWishlistTile,
+  woo_product_gallery_slider: WooProductGallerySliderTile,
+  woo_checkout_multistep: WooCheckoutMultistepTile,
+  woo_myaccount: WooMyaccountTile,
+  woo_comparison: WooComparisonTile,
 
   // Olo Space tiles
   olo_room_hero: OloRoomHeroTile,
@@ -253,7 +408,7 @@ const tileComponents = {
 };
 
 const tileComponent = computed(() => {
-  return tileComponents[props.tile.type] || null;
+  return tileComponents[props.tile.type] || ExternalTilePlaceholder;
 });
 
 const tileWrapStyle = computed(() => {

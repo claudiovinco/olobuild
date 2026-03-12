@@ -9,17 +9,25 @@ class Olo_Testimonial_Tile extends Olo_Tile_Base {
     protected $type     = 'testimonial';
     protected $name     = 'Testimonianza';
     protected $icon     = 'dashicons-format-quote';
-    protected $category = 'content';
+    protected $category = 'marketing';
     protected $defaults = [
-        'quote'           => 'This is an amazing product! Highly recommended.',
-        'author_name'     => 'John Doe',
-        'author_role'     => 'CEO, Company',
+        'quote'           => 'Un prodotto fantastico!',
+        'author_name'     => 'Mario Rossi',
+        'author_role'     => 'CEO',
         'avatar'          => '',
         'rating'          => '5',
-        'bg_color'        => '#1F2937',
-        'text_color'      => '#F3F4F6',
+        'bg_color'        => '',
+        'text_color'      => '',
+        'layout'          => 'single',
+        'autoplay'        => false,
+        'autoplay_interval' => 5,
+        'slides_to_show'  => 1,
+        'show_dots'       => true,
+        'show_arrows'     => true,
+        'grid_columns'    => 2,
+        'items'           => [],
         'show_line'       => true,
-        'line_color'      => '#6366F1',
+        'line_color'      => '',
         'author_position' => 'bottom-left',
         'avatar_size'     => '48',
         'avatar_shape'    => 'circle',
@@ -30,7 +38,7 @@ class Olo_Testimonial_Tile extends Olo_Tile_Base {
         'avatar_filter'      => 'none',
         'border_radius'      => '12',
         'border_width'    => '0',
-        'border_color'    => '#374151',
+        'border_color'    => '',
     ];
 
     public function get_controls() {
@@ -38,13 +46,14 @@ class Olo_Testimonial_Tile extends Olo_Tile_Base {
     }
 
     public function render( $settings ) {
-        $s   = wp_parse_args( $settings, $this->defaults );
-        $uid = 'olo-test-' . wp_rand( 10000, 99999 );
+        $s      = wp_parse_args( $settings, $this->defaults );
+        $uid    = 'olo-test-' . wp_rand( 10000, 99999 );
+        $layout = in_array( $s['layout'], [ 'single', 'carousel', 'grid' ], true ) ? $s['layout'] : 'single';
 
-        $rating      = absint( $s['rating'] );
-        $bg          = $this->safe_color( $s['bg_color'] ) ?: '#1F2937';
-        $fg          = $this->safe_color( $s['text_color'] ) ?: '#F3F4F6';
-        $line_col    = $this->safe_color( $s['line_color'] ) ?: '#6366F1';
+        // Preparazione stili comuni
+        $bg          = $this->safe_color_css( $s['bg_color'] ) ?: 'var(--olo-color-muted, #F3F4F6)';
+        $fg          = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-text, #374151)';
+        $line_col    = $this->safe_color_css( $s['line_color'] ) ?: 'var(--olo-color-primary, #6366F1)';
         $show_line   = filter_var( $s['show_line'], FILTER_VALIDATE_BOOLEAN );
         $valid_pos   = [ 'bottom-left', 'bottom-center', 'bottom-right', 'left', 'right' ];
         $position    = in_array( $s['author_position'], $valid_pos ) ? $s['author_position'] : 'bottom-left';
@@ -52,31 +61,42 @@ class Olo_Testimonial_Tile extends Olo_Tile_Base {
         $av_size     = intval( $s['avatar_size'] ) ?: 48;
         $is_square   = $s['avatar_shape'] === 'square';
         $av_radius   = $is_square ? ( intval( $s['avatar_radius'] ) . 'px' ) : '50%';
-        $tile_radius = intval( $s['border_radius'] );
-
-        $quote       = $this->sanitize_richtext( $s['quote'] );
-        $author_name = $this->sanitize_richtext( $s['author_name'] );
-        $author_role = $this->sanitize_richtext( $s['author_role'] );
+        $tile_radius = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
 
         $star_svg = '<svg width="18" height="18" viewBox="0 0 20 20" fill="#FBBF24" style="vertical-align:-2px;display:inline-block"><polygon points="10,1.5 12.5,7 18.5,7.6 14,11.5 15.3,17.5 10,14.5 4.7,17.5 6,11.5 1.5,7.6 7.5,7"/></svg>';
 
-        // Bottom alignment
         $bottom_jc = 'flex-start';
         if ( $position === 'bottom-center' ) $bottom_jc = 'center';
         if ( $position === 'bottom-right' )  $bottom_jc = 'flex-end';
 
         ob_start();
+
+        // CSS comune
+        $this->render_common_styles( $uid, $bg, $fg, $line_col, $show_line, $is_bottom, $position, $av_size, $av_radius, $tile_radius, $bottom_jc, $s );
+
+        if ( $layout === 'single' ) {
+            $this->render_single( $uid, $s, $star_svg, $is_bottom, $position );
+        } elseif ( $layout === 'carousel' ) {
+            $this->render_carousel( $uid, $s, $star_svg, $is_bottom );
+        } elseif ( $layout === 'grid' ) {
+            $this->render_grid( $uid, $s, $star_svg, $is_bottom );
+        }
+
+        return ob_get_clean();
+    }
+
+    private function render_common_styles( $uid, $bg, $fg, $line_col, $show_line, $is_bottom, $position, $av_size, $av_radius, $tile_radius, $bottom_jc, $s ) {
         ?>
         <style>
-            .<?php echo $uid; ?> {
+            .<?php echo $uid; ?> .olo-test-card {
                 background: <?php echo $bg; ?>;
                 color: <?php echo $fg; ?>;
-                border-radius: <?php echo $tile_radius; ?>px;
+                border-radius: <?php echo $tile_radius; ?>;
                 padding: 24px;
                 <?php
                 $bw = intval( $s['border_width'] );
                 if ( $bw > 0 ) :
-                    $bc = $this->safe_color( $s['border_color'] ) ?: '#374151';
+                    $bc = $this->safe_color_css( $s['border_color'] ) ?: 'var(--olo-color-text, #374151)';
                 ?>
                 border: <?php echo $bw; ?>px solid <?php echo $bc; ?>;
                 <?php endif; ?>
@@ -114,7 +134,7 @@ class Olo_Testimonial_Tile extends Olo_Tile_Base {
                 <?php
                 $abw = intval( $s['avatar_border_width'] );
                 if ( $abw > 0 ) :
-                    $abc = $this->safe_color( $s['avatar_border_color'] ) ?: '#FFFFFF';
+                    $abc = $this->safe_color_css( $s['avatar_border_color'] ) ?: '#FFFFFF';
                 ?>
                 border: <?php echo $abw; ?>px solid <?php echo $abc; ?>;
                 <?php endif; ?>
@@ -166,26 +186,141 @@ class Olo_Testimonial_Tile extends Olo_Tile_Base {
             }
             <?php endif; ?>
         </style>
+        <?php
+    }
+
+    private function render_single( $uid, $s, $star_svg, $is_bottom, $position ) {
+        $rating      = absint( $s['rating'] );
+        $quote       = nl2br( esc_html( wp_strip_all_tags( $s['quote'] ) ) );
+        $author_name = esc_html( wp_strip_all_tags( $s['author_name'] ) );
+        $author_role = esc_html( wp_strip_all_tags( $s['author_role'] ) );
+        ?>
         <div class="olo-testimonial <?php echo esc_attr( $uid ); ?>">
-            <?php if ( ! $is_bottom ) : ?>
-                <div class="olo-test-layout">
-                    <div class="olo-test-author">
-                        <?php echo $this->render_author( $s, $author_name, $author_role ); ?>
+            <div class="olo-test-card">
+                <?php echo $this->render_card_inner( $s, $rating, $star_svg, $quote, $author_name, $author_role, $is_bottom, $position ); ?>
+            </div>
+        </div>
+        <?php
+    }
+
+    private function render_carousel( $uid, $s, $star_svg, $is_bottom ) {
+        $items = $this->parse_items( $s['items'] ?? [] );
+        if ( empty( $items ) ) {
+            // Fallback: mostra singola card
+            $this->render_single( $uid, $s, $star_svg, $is_bottom, $s['author_position'] ?? 'bottom-left' );
+            return;
+        }
+
+        $autoplay     = filter_var( $s['autoplay'], FILTER_VALIDATE_BOOLEAN );
+        $interval     = max( 1, min( 30, absint( $s['autoplay_interval'] ) ) ) * 1000;
+        $slides       = max( 1, min( 4, absint( $s['slides_to_show'] ) ) );
+        $show_dots    = filter_var( $s['show_dots'], FILTER_VALIDATE_BOOLEAN );
+        $show_arrows  = filter_var( $s['show_arrows'], FILTER_VALIDATE_BOOLEAN );
+
+        $autoplay_attr = $autoplay ? 'true' : 'false';
+        ?>
+        <style>
+            .<?php echo $uid; ?> .uk-slider-items > li { padding: 0 8px; box-sizing: border-box; }
+            .<?php echo $uid; ?> .olo-test-slider-nav { display: flex; justify-content: center; align-items: center; gap: 16px; margin-top: 16px; }
+            .<?php echo $uid; ?> .olo-test-slider-nav a { color: inherit; }
+            .<?php echo $uid; ?> .uk-dotnav > * > * { background: var(--olo-color-border, #E5E7EB); }
+            .<?php echo $uid; ?> .uk-dotnav > .uk-active > * { background: var(--olo-color-primary, #6366F1); }
+        </style>
+        <div class="olo-testimonial <?php echo esc_attr( $uid ); ?>"
+             uk-slider="autoplay: <?php echo $autoplay_attr; ?>; autoplay-interval: <?php echo $interval; ?>">
+            <ul class="uk-slider-items uk-child-width-1-<?php echo $slides; ?>@m uk-child-width-1-1">
+                <?php foreach ( $items as $item ) : ?>
+                <li>
+                    <div class="olo-test-card">
+                        <?php
+                        $rating      = absint( $item['rating'] ?? 0 );
+                        $quote       = nl2br( esc_html( wp_strip_all_tags( $item['quote'] ?? '' ) ) );
+                        $author_name = esc_html( $item['author_name'] ?? '' );
+                        $author_role = esc_html( $item['author_role'] ?? '' );
+                        $item_s      = array_merge( $s, $item );
+                        echo $this->render_card_inner( $item_s, $rating, $star_svg, $quote, $author_name, $author_role, $is_bottom, $s['author_position'] ?? 'bottom-left' );
+                        ?>
                     </div>
-                    <div class="olo-test-quote">
-                        <?php echo $this->render_quote( $rating, $star_svg, $quote ); ?>
-                    </div>
-                </div>
-            <?php else : ?>
-                <?php echo $this->render_quote( $rating, $star_svg, $quote ); ?>
-                <div class="olo-test-author-wrap">
-                    <div class="olo-test-author">
-                        <?php echo $this->render_author( $s, $author_name, $author_role ); ?>
-                    </div>
-                </div>
+                </li>
+                <?php endforeach; ?>
+            </ul>
+
+            <?php if ( $show_arrows || $show_dots ) : ?>
+            <div class="olo-test-slider-nav">
+                <?php if ( $show_arrows ) : ?>
+                <a href="#" uk-slidenav-previous uk-slider-item="previous"></a>
+                <?php endif; ?>
+                <?php if ( $show_dots ) : ?>
+                <ul class="uk-dotnav uk-slider-nav"></ul>
+                <?php endif; ?>
+                <?php if ( $show_arrows ) : ?>
+                <a href="#" uk-slidenav-next uk-slider-item="next"></a>
+                <?php endif; ?>
+            </div>
             <?php endif; ?>
         </div>
         <?php
+    }
+
+    private function render_grid( $uid, $s, $star_svg, $is_bottom ) {
+        $items   = $this->parse_items( $s['items'] ?? [] );
+        if ( empty( $items ) ) {
+            $this->render_single( $uid, $s, $star_svg, $is_bottom, $s['author_position'] ?? 'bottom-left' );
+            return;
+        }
+
+        $columns = max( 1, min( 4, absint( $s['grid_columns'] ) ) );
+        ?>
+        <style>
+            .<?php echo $uid; ?> .olo-test-grid {
+                display: grid;
+                grid-template-columns: repeat(<?php echo $columns; ?>, 1fr);
+                gap: 20px;
+            }
+            @media (max-width: 640px) {
+                .<?php echo $uid; ?> .olo-test-grid {
+                    grid-template-columns: 1fr;
+                }
+            }
+        </style>
+        <div class="olo-testimonial <?php echo esc_attr( $uid ); ?>">
+            <div class="olo-test-grid">
+                <?php foreach ( $items as $item ) : ?>
+                <div class="olo-test-card">
+                    <?php
+                    $rating      = absint( $item['rating'] ?? 0 );
+                    $quote       = nl2br( esc_html( wp_strip_all_tags( $item['quote'] ?? '' ) ) );
+                    $author_name = esc_html( $item['author_name'] ?? '' );
+                    $author_role = esc_html( $item['author_role'] ?? '' );
+                    $item_s      = array_merge( $s, $item );
+                    echo $this->render_card_inner( $item_s, $rating, $star_svg, $quote, $author_name, $author_role, $is_bottom, $s['author_position'] ?? 'bottom-left' );
+                    ?>
+                </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+        <?php
+    }
+
+    private function render_card_inner( $s, $rating, $star_svg, $quote, $author_name, $author_role, $is_bottom, $position ) {
+        ob_start();
+        if ( ! $is_bottom ) : ?>
+            <div class="olo-test-layout">
+                <div class="olo-test-author">
+                    <?php echo $this->render_author( $s, $author_name, $author_role ); ?>
+                </div>
+                <div class="olo-test-quote">
+                    <?php echo $this->render_quote( $rating, $star_svg, $quote ); ?>
+                </div>
+            </div>
+        <?php else : ?>
+            <?php echo $this->render_quote( $rating, $star_svg, $quote ); ?>
+            <div class="olo-test-author-wrap">
+                <div class="olo-test-author">
+                    <?php echo $this->render_author( $s, $author_name, $author_role ); ?>
+                </div>
+            </div>
+        <?php endif;
         return ob_get_clean();
     }
 
@@ -205,10 +340,21 @@ class Olo_Testimonial_Tile extends Olo_Tile_Base {
         }
         $out .= '<div>';
         $out .= '<div class="olo-test-author-name">' . $author_name . '</div>';
-        if ( ! empty( $s['author_role'] ) ) {
+        if ( ! empty( $author_role ) ) {
             $out .= '<div class="olo-test-author-role">' . $author_role . '</div>';
         }
         $out .= '</div>';
         return $out;
+    }
+
+    private function parse_items( $raw ) {
+        if ( ! is_array( $raw ) ) {
+            $decoded = json_decode( $raw, true );
+            if ( is_array( $decoded ) ) {
+                return $decoded;
+            }
+            return [];
+        }
+        return $raw;
     }
 }

@@ -12,16 +12,17 @@
           class="sp-nav__btn"
           :class="{ 'sp-nav__btn--active': activeIndex === i }"
           @click="activeIndex = i"
+          :data-olo-editable="'items.' + i + '.nav_label'"
         >{{ item.nav_label || 'Tab ' + (i + 1) }}</button>
       </div>
     </div>
 
     <!-- Active panel content -->
-    <div v-if="activeItem" class="sp-panel" :class="{ 'sp-panel--img-left': s.image_position === 'left' }">
+    <div v-if="activeItem" class="sp-panel" :class="{ 'sp-panel--img-left': s.image_position === 'left' }" :style="{ padding: (parseInt(s.content_padding) || 12) + 'px' }">
       <div class="sp-panel__content">
-        <div class="sp-panel__title" v-html="activeItem.title || 'Titolo'"></div>
-        <div class="sp-panel__text" v-html="activeItem.text || 'Testo del pannello...'"></div>
-        <div v-if="activeItem.button_text" class="sp-panel__btn" :class="'sp-btn--' + (s.button_style || 'default')">
+        <component :is="s.title_tag || 'div'" class="sp-panel__title" :data-olo-editable="'items.' + activeIndex + '.title'">{{ activeItem.title || 'Titolo' }}</component>
+        <div class="sp-panel__text" style="white-space:pre-wrap;" :data-olo-editable="'items.' + activeIndex + '.text'" data-olo-multiline>{{ activeItem.text || 'Testo del pannello...' }}</div>
+        <div v-if="activeItem.button_text" class="sp-panel__btn" :class="'sp-btn--' + (s.button_style || 'default')" :data-olo-editable="'items.' + activeIndex + '.button_text'">
           {{ activeItem.button_text }}
         </div>
       </div>
@@ -162,7 +163,7 @@ const navClass = computed(() => {
 .sp-panel__title {
   font-size: 12px;
   font-weight: 700;
-  color: #1f2937;
+  color: var(--olo-color-text, #374151);
   margin-bottom: 4px;
 }
 .sp-panel__text {
@@ -182,8 +183,8 @@ const navClass = computed(() => {
   text-transform: uppercase;
   letter-spacing: 0.05em;
   padding: 4px 12px;
-  border: 1px solid #374151;
-  color: #374151;
+  border: 1px solid var(--olo-color-border, #E5E7EB);
+  color: var(--olo-color-text, #374151);
   border-radius: 0;
 }
 .sp-btn--primary {
@@ -192,8 +193,8 @@ const navClass = computed(() => {
   color: #fff;
 }
 .sp-btn--secondary {
-  background: #111827;
-  border-color: #111827;
+  background: var(--olo-color-text, #374151);
+  border-color: var(--olo-color-text, #374151);
   color: #fff;
 }
 .sp-btn--text {

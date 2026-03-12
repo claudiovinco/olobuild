@@ -9,7 +9,7 @@ class Olo_Grid_Tile extends Olo_Tile_Base {
     protected $type     = 'grid';
     protected $name     = 'Griglia';
     protected $icon     = 'dashicons-grid-view';
-    protected $category = 'content';
+    protected $category = 'layout';
     protected $defaults = [
         'items'       => [
             [ 'title' => 'Item 1', 'content' => 'Description for item one.', 'image' => '', 'tag' => 'all' ],
@@ -114,8 +114,8 @@ class Olo_Grid_Tile extends Olo_Tile_Base {
                         echo $this->render_hover_wrap( $grid_min_img, $item['hover_image'] ?? '', $item['hover_video'] ?? '' );
                         ?>
                         <?php endif; ?>
-                        <h3 class="olo-card-minimal__title"><?php echo wp_kses_post( $item['title'] ); ?></h3>
-                        <p class="olo-card-minimal__text"><?php echo wp_kses_post( $item['content'] ); ?></p>
+                        <h3 class="olo-card-minimal__title"><?php echo esc_html( wp_strip_all_tags( $item['title'] ) ); ?></h3>
+                        <p class="olo-card-minimal__text"><?php echo nl2br( esc_html( wp_strip_all_tags( $item['content'] ) ) ); ?></p>
                     </div>
                     <?php else : ?>
                     <div class="uk-card uk-card-default uk-card-body">
@@ -127,8 +127,8 @@ class Olo_Grid_Tile extends Olo_Tile_Base {
                             ?>
                         </div>
                         <?php endif; ?>
-                        <h3 class="uk-card-title"><?php echo wp_kses_post( $item['title'] ); ?></h3>
-                        <p><?php echo wp_kses_post( $item['content'] ); ?></p>
+                        <h3 class="uk-card-title"><?php echo esc_html( wp_strip_all_tags( $item['title'] ) ); ?></h3>
+                        <p><?php echo nl2br( esc_html( wp_strip_all_tags( $item['content'] ) ) ); ?></p>
                     </div>
                     <?php endif; ?>
                 </div>

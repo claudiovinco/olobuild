@@ -10,9 +10,12 @@ export default defineConfig({
   build: {
     outDir: 'assets',
     emptyOutDir: false,
+    assetsInlineLimit: 8192,
     rollupOptions: {
       input: path.resolve(__dirname, 'src/main.js'),
       output: {
+        format: 'iife',
+        name: 'OlobuildApp',
         entryFileNames: 'js/builder.js',
         assetFileNames: (assetInfo) => {
           if (assetInfo.name && assetInfo.name.endsWith('.css')) {
@@ -20,6 +23,7 @@ export default defineConfig({
           }
           return 'js/[name].[ext]';
         },
+        inlineDynamicImports: true,
       },
     },
   },

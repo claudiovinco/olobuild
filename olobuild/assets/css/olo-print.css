@@ -1,0 +1,17 @@
+@media print {
+  /* Nascondi elementi interattivi non stampabili */
+  .olo-nav-bar,
+  .olo-livesearch,
+  video,
+  .olo-lb-overlay { display: none !important; }
+
+  /* Assicura che le immagini si ridimensionino */
+  .olo-section img { max-width: 100% !important; height: auto !important; }
+
+  /* Evita page break dentro le sezioni e le righe */
+  .olo-section { break-inside: avoid; }
+  .olo-row { break-inside: avoid; }
+
+  /* Sfondo bianco e testo nero per leggibilità */
+  .olo-template { background: white !important; color: black !important; }
+}

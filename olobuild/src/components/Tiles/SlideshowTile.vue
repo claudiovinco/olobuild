@@ -11,22 +11,22 @@
         class="olo-ss-slide"
         :style="slideStyle(slide)"
       >
-        <div class="olo-ss-overlay" :style="{ background: settings.overlay_color, opacity: 0.45 }"></div>
-        <div class="olo-ss-content" :style="{ color: settings.text_color }">
-          <div v-if="slide.title" class="mb-text-3xl mb-font-bold mb-mb-2">{{ slide.title }}</div>
-          <div v-if="slide.subtitle" class="mb-text-lg" style="opacity:0.85;">{{ slide.subtitle }}</div>
+        <div class="olo-ss-overlay" :style="{ background: s.overlay_color, opacity: (parseInt(s.overlay_opacity) || 45) / 100 }"></div>
+        <div class="olo-ss-content" :style="{ color: s.text_color }">
+          <div v-if="slide.title" class="mb-text-3xl mb-font-bold mb-mb-2" :data-olo-editable="'slides.' + i + '.title'">{{ slide.title }}</div>
+          <div v-if="slide.subtitle" class="mb-text-lg" style="opacity:0.85;" :data-olo-editable="'slides.' + i + '.subtitle'">{{ slide.subtitle }}</div>
         </div>
       </div>
     </div>
 
     <!-- Arrows -->
-    <template v-if="settings.show_arrows !== false && slides.length > 1">
+    <template v-if="s.show_arrows !== false && slides.length > 1">
       <button class="olo-ss-arrow olo-ss-prev" @click="prev" aria-label="Precedente">&#10094;</button>
       <button class="olo-ss-arrow olo-ss-next" @click="next" aria-label="Successivo">&#10095;</button>
     </template>
 
     <!-- Dots -->
-    <div v-if="settings.show_dots !== false && slides.length > 1" class="olo-ss-dots">
+    <div v-if="s.show_dots !== false && slides.length > 1" class="olo-ss-dots">
       <button
         v-for="(_, i) in slides"
         :key="i"
@@ -46,27 +46,40 @@ const props = defineProps({
   settings: { type: Object, default: () => ({}) },
 });
 
+const defaults = {
+  autoplay: true,
+  autoplay_speed: '5000',
+  show_arrows: true,
+  show_dots: true,
+  slide_height: '400',
+  overlay_color: '#000000',
+  overlay_opacity: '45',
+  text_color: '#FFFFFF',
+  transition: 'slide',
+};
+const s = computed(() => ({ ...defaults, ...props.settings }));
+
 const current = ref(0);
 let autoTimer = null;
 
 const slides = computed(() => {
-  const raw = props.settings.slides;
+  const raw = s.value.slides;
   if (Array.isArray(raw) && raw.length) return raw;
   return [{ id: 'empty', image: '', title: 'Slide 1', subtitle: 'Aggiungi slide nell\'inspector' }];
 });
 
-const slideHeight = computed(() => parseInt(props.settings.slide_height) || 400);
+const slideHeight = computed(() => parseInt(s.value.slide_height) || 400);
 
 const trackStyle = computed(() => ({
   display: 'flex',
   height: '100%',
-  transition: props.settings.transition === 'fade' ? 'none' : 'transform 0.5s ease',
-  transform: props.settings.transition === 'fade' ? 'none' : `translateX(-${current.value * 100}%)`,
+  transition: s.value.transition === 'fade' ? 'none' : 'transform 0.5s ease',
+  transform: s.value.transition === 'fade' ? 'none' : `translateX(-${current.value * 100}%)`,
 }));
 
 function slideStyle(slide) {
-  const bg = slide.image ? `url(${slide.image}) center/cover no-repeat` : '#1f2937';
-  const opacity = props.settings.transition === 'fade'
+  const bg = slide.image ? `url(${slide.image}) center/cover no-repeat` : 'var(--olo-color-muted, #F3F4F6)';
+  const opacity = s.value.transition === 'fade'
     ? (slides.value.indexOf(slide) === current.value ? 1 : 0)
     : 1;
   const base = {
@@ -75,7 +88,7 @@ function slideStyle(slide) {
     position: 'relative',
     background: bg,
   };
-  if (props.settings.transition === 'fade') {
+  if (s.value.transition === 'fade') {
     base.position = 'absolute';
     base.top = '0';
     base.left = '0';
@@ -95,8 +108,8 @@ function next() { goTo(current.value + 1); }
 function prev() { goTo(current.value - 1); }
 
 function startAuto() {
-  if (props.settings.autoplay && slides.value.length > 1) {
-    autoTimer = setInterval(() => goTo(current.value + 1), parseInt(props.settings.autoplay_speed) || 5000);
+  if (s.value.autoplay && slides.value.length > 1) {
+    autoTimer = setInterval(() => goTo(current.value + 1), parseInt(s.value.autoplay_speed) || 5000);
   }
 }
 
@@ -108,8 +121,8 @@ function resetAuto() {
 onMounted(() => startAuto());
 onUnmounted(() => clearInterval(autoTimer));
 
-watch(() => props.settings.autoplay, () => { clearInterval(autoTimer); startAuto(); });
-watch(() => props.settings.autoplay_speed, () => { clearInterval(autoTimer); startAuto(); });
+watch(() => s.value.autoplay, () => { clearInterval(autoTimer); startAuto(); });
+watch(() => s.value.autoplay_speed, () => { clearInterval(autoTimer); startAuto(); });
 </script>
 
 <style scoped>

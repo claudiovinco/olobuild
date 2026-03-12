@@ -1,0 +1,73 @@
+import { shadowField } from './_shared.js';
+
+export default {
+  type: 'woo_wishlist',
+  name: 'WC Wishlist',
+  icon: 'dashicons-heart',
+  category: 'woocommerce',
+  placeholder: 'Wishlist WooCommerce',
+  defaults: {
+    icon: 'heart',
+    style: 'icon',
+    show_count: true,
+    columns: '4',
+    empty_text: 'La wishlist \u00e8 vuota',
+    show_price: true,
+    show_add_to_cart: true,
+    show_remove: true,
+    card_style: 'default',
+    gap: '24',
+    icon_color: '',
+    icon_color_active: '',
+    title_color: '',
+    price_color: '',
+    empty_color: '',
+    button_color: '',
+    button_bg: '',
+    columns_tablet: '2',
+    columns_mobile: '1',
+    shadow: 'none',
+  },
+  fields: [
+    { type: 'separator', label: 'Pulsante wishlist' },
+    { key: 'icon', label: 'Icona', type: 'select', options: [
+      { value: 'heart', label: 'Cuore' },
+      { value: 'star', label: 'Stella' },
+      { value: 'bookmark', label: 'Segnalibro' },
+    ]},
+    { key: 'style', label: 'Stile', type: 'select', options: [
+      { value: 'icon', label: 'Solo icona' },
+      { value: 'icon-text', label: 'Icona + testo' },
+      { value: 'button', label: 'Pulsante' },
+    ]},
+    { key: 'show_count', label: 'Mostra conteggio', type: 'toggle' },
+
+    { type: 'separator', label: 'Griglia wishlist' },
+    { key: 'columns', label: 'Colonne', type: 'range', min: 1, max: 6, step: 1 },
+    { key: 'gap', label: 'Gap (px)', type: 'range', min: 0, max: 48, step: 4 },
+    { key: 'card_style', label: 'Stile card', type: 'select', options: [
+      { value: 'default', label: 'Default' },
+      { value: 'shadow', label: 'Ombra' },
+      { value: 'border', label: 'Bordo' },
+    ]},
+    { key: 'columns_tablet', label: 'Colonne tablet', type: 'range', min: 1, max: 4, step: 1 },
+    { key: 'columns_mobile', label: 'Colonne mobile', type: 'range', min: 1, max: 2, step: 1 },
+
+    { type: 'separator', label: 'Elementi visibili' },
+    { key: 'show_price', label: 'Mostra prezzo', type: 'toggle' },
+    { key: 'show_add_to_cart', label: 'Mostra aggiungi al carrello', type: 'toggle' },
+    { key: 'show_remove', label: 'Mostra rimuovi', type: 'toggle' },
+    { key: 'empty_text', label: 'Testo wishlist vuota', type: 'text' },
+
+    { type: 'separator', label: 'Colori' },
+    { key: 'icon_color', label: 'Colore icona', type: 'color' },
+    { key: 'icon_color_active', label: 'Colore icona attiva', type: 'color' },
+    { key: 'title_color', label: 'Colore titolo', type: 'color' },
+    { key: 'price_color', label: 'Colore prezzo', type: 'color' },
+    { key: 'empty_color', label: 'Colore testo vuoto', type: 'color' },
+    { key: 'button_color', label: 'Colore testo pulsante', type: 'color' },
+    { key: 'button_bg', label: 'Sfondo pulsante', type: 'color' },
+
+    ...shadowField,
+  ],
+};

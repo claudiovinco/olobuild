@@ -19,10 +19,15 @@ export const useStylesStore = defineStore('styles', {
     generatedCss: oloData.stylesCss || '',
     isDirty: false,
     isSaving: false,
+    globalColors: JSON.parse(JSON.stringify(oloData.globalColors || [])),
+    globalTypography: JSON.parse(JSON.stringify(oloData.globalTypography || [])),
+    globalColorsDirty: false,
+    globalTypographyDirty: false,
   }),
 
   getters: {
     colors: (state) => state.styles.colors || {},
+    darkColors: (state) => state.styles.dark_colors || {},
     typography: (state) => state.styles.typography || {},
     layout: (state) => state.styles.layout || {},
     googleFonts: (state) => state.styles.google_fonts || [],
@@ -64,10 +69,58 @@ export const useStylesStore = defineStore('styles', {
       css += `  --olo-border-radius: ${cssRadius(l.border_radius, '4px')};\n`;
       css += `  --olo-border-radius-large: ${cssRadius(l.border_radius_large, '8px')};\n`;
       css += `  --olo-container-max-width: ${l.container_max_width || '1200px'};\n`;
-      // Shadows
-      css += '  --olo-shadow-small: 0 1px 2px 0 rgba(0,0,0,0.05);\n';
-      css += '  --olo-shadow-medium: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1);\n';
-      css += '  --olo-shadow-large: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1);\n';
+      // Spacing scale
+      const sp = s.spacing || {};
+      css += `  --olo-space-xs: ${sp.xs || '4px'};\n`;
+      css += `  --olo-space-sm: ${sp.sm || '8px'};\n`;
+      css += `  --olo-space-md: ${sp.md || '16px'};\n`;
+      css += `  --olo-space-lg: ${sp.lg || '24px'};\n`;
+      css += `  --olo-space-xl: ${sp.xl || '32px'};\n`;
+      css += `  --olo-space-2xl: ${sp['2xl'] || '48px'};\n`;
+      css += `  --olo-space-3xl: ${sp['3xl'] || '64px'};\n`;
+      css += `  --olo-space-4xl: ${sp['4xl'] || '96px'};\n`;
+      // Border radius scale
+      const br = s.border_radius_scale || {};
+      css += `  --olo-radius-none: 0;\n`;
+      css += `  --olo-radius-sm: ${br.sm || '4px'};\n`;
+      css += `  --olo-radius-md: ${br.md || '8px'};\n`;
+      css += `  --olo-radius-lg: ${br.lg || '16px'};\n`;
+      css += `  --olo-radius-full: ${br.full || '9999px'};\n`;
+      // Global shadows
+      const sh = s.shadows || {};
+      css += `  --olo-shadow-none: none;\n`;
+      css += `  --olo-shadow-sm: ${sh.sm || '0 1px 2px 0 rgba(0,0,0,0.05)'};\n`;
+      css += `  --olo-shadow-md: ${sh.md || '0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1)'};\n`;
+      css += `  --olo-shadow-lg: ${sh.lg || '0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1)'};\n`;
+      css += `  --olo-shadow-xl: ${sh.xl || '0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1)'};\n`;
+      // Legacy aliases
+      css += '  --olo-shadow-small: var(--olo-shadow-sm);\n';
+      css += '  --olo-shadow-medium: var(--olo-shadow-md);\n';
+      css += '  --olo-shadow-large: var(--olo-shadow-lg);\n';
+
+      // Global Colors
+      if (state.globalColors && state.globalColors.length > 0) {
+        css += '  /* Global Color Palette */\n';
+        for (const gc of state.globalColors) {
+          if (gc.id && gc.value) {
+            css += `  --olo-color-${gc.id}: ${gc.value};\n`;
+          }
+        }
+      }
+
+      // Global Typography
+      if (state.globalTypography && state.globalTypography.length > 0) {
+        css += '  /* Global Typography Sets */\n';
+        for (const gt of state.globalTypography) {
+          if (!gt.id) continue;
+          if (gt.family) css += `  --olo-font-${gt.id}-family: '${gt.family}', sans-serif;\n`;
+          css += `  --olo-font-${gt.id}-weight: ${gt.weight || '400'};\n`;
+          css += `  --olo-font-${gt.id}-transform: ${gt.transform || 'none'};\n`;
+          css += `  --olo-font-${gt.id}-line-height: ${gt.line_height || '1.5'};\n`;
+          css += `  --olo-font-${gt.id}-letter-spacing: ${gt.letter_spacing || '0'}px;\n`;
+        }
+      }
+
       css += '}\n\n';
 
       // UIkit overrides – bg WITHOUT !important so inline styles (custom bg) can win
@@ -77,16 +130,13 @@ export const useStylesStore = defineStore('styles', {
       css += '.olo-template .uk-section-secondary :where(a) { color: var(--olo-color-secondary-contrast) !important; }\n';
       css += '.olo-template .uk-section-muted { background-color: var(--olo-color-muted); color: var(--olo-color-muted-contrast) !important; }\n';
 
-      // Typography overrides
-      css += '.olo-template { background-color: var(--olo-color-background); font-size: var(--olo-font-size-base); line-height: var(--olo-line-height); color: var(--olo-color-text); }\n';
-      if (t.font_family) css += '.olo-template { font-family: var(--olo-font-family); }\n';
+      // Typography overrides — fallback to UIkit's font stack when no custom font
+      const uikitFontStack = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif';
+      css += `.olo-template { background-color: var(--olo-color-background); font-size: var(--olo-font-size-base); line-height: var(--olo-line-height); color: var(--olo-color-text); font-family: var(--olo-font-family, ${uikitFontStack}); }\n`;
       for (let i = 1; i <= 6; i++) {
         css += `.olo-template h${i}, .olo-template .uk-h${i} { font-size: var(--olo-font-size-h${i}); }\n`;
       }
-      css += '.olo-template h1, .olo-template h2, .olo-template h3, .olo-template h4, .olo-template h5, .olo-template h6 { font-weight: var(--olo-font-weight-heading); }\n';
-      if (t.font_family_heading) {
-        css += '.olo-template h1, .olo-template h2, .olo-template h3, .olo-template h4, .olo-template h5, .olo-template h6 { font-family: var(--olo-font-family-heading); }\n';
-      }
+      css += `.olo-template h1, .olo-template h2, .olo-template h3, .olo-template h4, .olo-template h5, .olo-template h6 { font-weight: var(--olo-font-weight-heading); font-family: var(--olo-font-family-heading, var(--olo-font-family, ${uikitFontStack})); }\n`;
 
       // Links, buttons, etc.
       css += '.olo-template a { color: var(--olo-color-link); }\n';
@@ -105,6 +155,19 @@ export const useStylesStore = defineStore('styles', {
       css += '.olo-template .uk-box-shadow-large { box-shadow: var(--olo-shadow-large) !important; }\n';
       css += '.olo-template .uk-container { max-width: var(--olo-container-max-width); }\n';
 
+      // Dark Mode overrides
+      const dc = s.dark_colors || {};
+      const hasDark = Object.values(dc).some(v => v);
+      if (hasDark) {
+        css += '\n/* Dark Mode */\nhtml.olo-dark-mode .olo-template {\n';
+        for (const [key, value] of Object.entries(dc)) {
+          if (!value) continue;
+          const prop = key.replace(/_/g, '-');
+          css += `  --olo-color-${prop}: ${value};\n`;
+        }
+        css += '}\n';
+      }
+
       return css;
     },
   },
@@ -113,6 +176,12 @@ export const useStylesStore = defineStore('styles', {
     updateColor(key, value) {
       if (!this.styles.colors) this.styles.colors = {};
       this.styles.colors[key] = value;
+      this.isDirty = true;
+    },
+
+    updateDarkColor(key, value) {
+      if (!this.styles.dark_colors) this.styles.dark_colors = {};
+      this.styles.dark_colors[key] = value;
       this.isDirty = true;
     },
 
@@ -128,12 +197,71 @@ export const useStylesStore = defineStore('styles', {
       this.isDirty = true;
     },
 
+    updateSpacing(key, value) {
+      if (!this.styles.spacing) this.styles.spacing = {};
+      this.styles.spacing[key] = value;
+      this.isDirty = true;
+    },
+
+    updateRadiusScale(key, value) {
+      if (!this.styles.border_radius_scale) this.styles.border_radius_scale = {};
+      this.styles.border_radius_scale[key] = value;
+      this.isDirty = true;
+    },
+
+    updateShadow(key, value) {
+      if (!this.styles.shadows) this.styles.shadows = {};
+      this.styles.shadows[key] = value;
+      this.isDirty = true;
+    },
+
+    exportDesignTokens() {
+      const tokens = {
+        colors: this.styles.colors || {},
+        dark_colors: this.styles.dark_colors || {},
+        typography: this.styles.typography || {},
+        layout: this.styles.layout || {},
+        spacing: this.styles.spacing || {},
+        border_radius_scale: this.styles.border_radius_scale || {},
+        shadows: this.styles.shadows || {},
+        google_fonts: this.styles.google_fonts || [],
+        global_colors: this.globalColors || [],
+        global_typography: this.globalTypography || [],
+      };
+      const blob = new Blob([JSON.stringify(tokens, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'olobuild-design-tokens.json';
+      a.click();
+      URL.revokeObjectURL(url);
+    },
+
+    importDesignTokens(tokens) {
+      if (tokens.colors) this.styles.colors = { ...tokens.colors };
+      if (tokens.dark_colors) this.styles.dark_colors = { ...tokens.dark_colors };
+      if (tokens.typography) this.styles.typography = { ...tokens.typography };
+      if (tokens.layout) this.styles.layout = { ...tokens.layout };
+      if (tokens.spacing) this.styles.spacing = { ...tokens.spacing };
+      if (tokens.border_radius_scale) this.styles.border_radius_scale = { ...tokens.border_radius_scale };
+      if (tokens.shadows) this.styles.shadows = { ...tokens.shadows };
+      if (tokens.google_fonts) this.styles.google_fonts = [...tokens.google_fonts];
+      if (tokens.global_colors) this.globalColors = [...tokens.global_colors];
+      if (tokens.global_typography) this.globalTypography = [...tokens.global_typography];
+      this.isDirty = true;
+      this.globalColorsDirty = true;
+      this.globalTypographyDirty = true;
+    },
+
     applyPreset(presetKey) {
       const preset = this.presets[presetKey];
       if (!preset) return;
       this.styles.colors = { ...preset.colors };
       this.styles.typography = { ...preset.typography };
       this.styles.layout = { ...preset.layout };
+      if (preset.spacing) this.styles.spacing = { ...preset.spacing };
+      if (preset.border_radius_scale) this.styles.border_radius_scale = { ...preset.border_radius_scale };
+      if (preset.shadows) this.styles.shadows = { ...preset.shadows };
       this.isDirty = true;
     },
 
@@ -194,6 +322,92 @@ export const useStylesStore = defineStore('styles', {
         console.error('resetStyles error:', err);
       } finally {
         this.isSaving = false;
+      }
+    },
+
+    // === Global Colors ===
+
+    setGlobalColors(colors) {
+      this.globalColors = colors;
+      this.globalColorsDirty = true;
+    },
+
+    async saveGlobalColors() {
+      if (this.isSaving) return;
+      this.isSaving = true;
+      try {
+        const res = await fetch(`${oloData.restUrl}/global-colors`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-WP-Nonce': oloData.nonce,
+          },
+          body: JSON.stringify(this.globalColors),
+        });
+        if (!res.ok) throw new Error('Failed to save global colors');
+        const data = await res.json();
+        this.globalColors = data;
+        this.globalColorsDirty = false;
+      } catch (err) {
+        console.error('saveGlobalColors error:', err);
+      } finally {
+        this.isSaving = false;
+      }
+    },
+
+    async loadGlobalColors() {
+      try {
+        const res = await fetch(`${oloData.restUrl}/global-colors`, {
+          headers: { 'X-WP-Nonce': oloData.nonce },
+        });
+        if (res.ok) {
+          this.globalColors = await res.json();
+        }
+      } catch (err) {
+        console.error('loadGlobalColors error:', err);
+      }
+    },
+
+    // === Global Typography ===
+
+    setGlobalTypography(sets) {
+      this.globalTypography = sets;
+      this.globalTypographyDirty = true;
+    },
+
+    async saveGlobalTypography() {
+      if (this.isSaving) return;
+      this.isSaving = true;
+      try {
+        const res = await fetch(`${oloData.restUrl}/global-typography`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-WP-Nonce': oloData.nonce,
+          },
+          body: JSON.stringify(this.globalTypography),
+        });
+        if (!res.ok) throw new Error('Failed to save global typography');
+        const data = await res.json();
+        this.globalTypography = data;
+        this.globalTypographyDirty = false;
+      } catch (err) {
+        console.error('saveGlobalTypography error:', err);
+      } finally {
+        this.isSaving = false;
+      }
+    },
+
+    async loadGlobalTypography() {
+      try {
+        const res = await fetch(`${oloData.restUrl}/global-typography`, {
+          headers: { 'X-WP-Nonce': oloData.nonce },
+        });
+        if (res.ok) {
+          this.globalTypography = await res.json();
+        }
+      } catch (err) {
+        console.error('loadGlobalTypography error:', err);
       }
     },
   },
