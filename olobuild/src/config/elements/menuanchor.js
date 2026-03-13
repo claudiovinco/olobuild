@@ -2,7 +2,7 @@ export default {
   type: 'menuanchor',
   name: 'Ancora Menu',
   icon: 'dashicons-admin-links',
-  category: 'layout',
+  category: 'navigation',
   defaults: {
     anchor_id: '',
     offset: '0',

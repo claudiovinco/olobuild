@@ -2,7 +2,7 @@ export default {
   type: 'pagination',
   name: 'Paginazione',
   icon: 'dashicons-ellipsis',
-  category: 'dynamic',
+  category: 'navigation',
   defaults: {
     style: 'both',
     alignment: 'center',

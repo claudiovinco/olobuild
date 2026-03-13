@@ -7,16 +7,16 @@
         @click.self="close"
         @keydown.escape="close"
       >
-        <div class="mb-absolute mb-inset-0 mb-bg-black/60" @click="close"></div>
+        <div class="mb-absolute mb-inset-0 mb-bg-black/25" @click="close"></div>
 
         <div
-          class="mb-relative mb-w-full mb-max-w-lg mb-bg-gray-800 mb-rounded-xl mb-shadow-2xl mb-border mb-border-gray-700 mb-overflow-hidden"
+          class="finder-dialog mb-relative mb-w-full mb-max-w-lg mb-rounded-xl mb-shadow-2xl mb-border mb-overflow-hidden"
           role="dialog"
           aria-label="Cerca elementi"
         >
           <!-- Input ricerca -->
-          <div class="mb-flex mb-items-center mb-gap-2 mb-px-4 mb-py-3 mb-border-b mb-border-gray-700">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="mb-text-gray-400 mb-shrink-0">
+          <div class="finder-header mb-flex mb-items-center mb-gap-2 mb-px-4 mb-py-3 mb-border-b">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="mb-shrink-0" style="color: #999">
               <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
             </svg>
             <input
@@ -24,12 +24,12 @@
               v-model="query"
               type="text"
               :placeholder="targetColumnId ? 'Cerca elemento da inserire...' : 'Cerca elemento da aggiungere o tile nel canvas...'"
-              class="mb-flex-1 mb-bg-transparent mb-text-sm mb-text-gray-100 mb-outline-none placeholder:mb-text-gray-500"
+              class="finder-input mb-flex-1 mb-bg-transparent mb-text-sm mb-outline-none"
               @keydown.down.prevent="moveSelection(1)"
               @keydown.up.prevent="moveSelection(-1)"
               @keydown.enter.prevent="selectCurrent"
             />
-            <kbd class="mb-text-[10px] mb-text-gray-500 mb-bg-gray-700 mb-px-1.5 mb-py-0.5 mb-rounded mb-font-mono">ESC</kbd>
+            <kbd class="finder-kbd mb-text-[10px] mb-px-1.5 mb-py-0.5 mb-rounded mb-font-mono">ESC</kbd>
           </div>
 
           <!-- Risultati -->
@@ -37,21 +37,21 @@
             <!-- Vuoto -->
             <div
               v-if="allResults.length === 0 && query.length > 0"
-              class="mb-px-4 mb-py-6 mb-text-center mb-text-sm mb-text-gray-500"
+              class="mb-px-4 mb-py-6 mb-text-center mb-text-sm" style="color: #999"
             >
               Nessun risultato per "{{ query }}"
             </div>
 
             <div
               v-if="allResults.length === 0 && query.length === 0"
-              class="mb-px-4 mb-py-6 mb-text-center mb-text-sm mb-text-gray-500"
+              class="mb-px-4 mb-py-6 mb-text-center mb-text-sm" style="color: #999"
             >
               Digita per cercare elementi da aggiungere o tile nel canvas
             </div>
 
             <!-- Sezione: Aggiungi elemento -->
             <template v-if="addResults.length > 0">
-              <div class="mb-px-4 mb-py-1.5 mb-text-[10px] mb-font-semibold mb-text-gray-500 mb-uppercase mb-tracking-wider mb-border-b mb-border-gray-700/50">
+              <div class="finder-section-label mb-px-4 mb-py-1.5 mb-text-[10px] mb-font-semibold mb-uppercase mb-tracking-wider mb-border-b">
                 Aggiungi elemento
               </div>
               <button
@@ -60,23 +60,21 @@
                 @click="addElement(item.type)"
                 @mouseenter="selectedIndex = idx"
                 :class="[
-                  'mb-w-full mb-flex mb-items-center mb-gap-3 mb-px-4 mb-py-2 mb-text-left mb-transition-colors',
-                  idx === selectedIndex
-                    ? 'mb-bg-primary-600/20 mb-text-gray-100'
-                    : 'mb-text-gray-300 hover:mb-bg-gray-700/50'
+                  'finder-result mb-w-full mb-flex mb-items-center mb-gap-3 mb-px-4 mb-py-2 mb-text-left mb-transition-colors',
+                  idx === selectedIndex ? 'finder-result--active' : ''
                 ]"
               >
-                <span class="mb-w-6 mb-h-6 mb-flex mb-items-center mb-justify-center mb-rounded mb-bg-primary-600/20 mb-text-xs mb-text-primary-400 mb-shrink-0">+</span>
+                <span class="mb-w-6 mb-h-6 mb-flex mb-items-center mb-justify-center mb-rounded mb-text-xs mb-shrink-0" style="background: rgba(232,98,42,0.12); color: #e8622a">+</span>
                 <div class="mb-flex-1 mb-min-w-0">
                   <div class="mb-text-sm mb-font-medium">{{ item.name }}</div>
-                  <div class="mb-text-xs mb-text-gray-500">{{ item.categoryLabel }}</div>
+                  <div class="mb-text-xs" style="color: #999">{{ item.categoryLabel }}</div>
                 </div>
               </button>
             </template>
 
             <!-- Sezione: Tile nel canvas -->
             <template v-if="canvasResults.length > 0">
-              <div class="mb-px-4 mb-py-1.5 mb-text-[10px] mb-font-semibold mb-text-gray-500 mb-uppercase mb-tracking-wider mb-border-b mb-border-gray-700/50" :class="addResults.length > 0 ? 'mb-mt-1 mb-border-t mb-border-gray-700/50' : ''">
+              <div class="finder-section-label mb-px-4 mb-py-1.5 mb-text-[10px] mb-font-semibold mb-uppercase mb-tracking-wider mb-border-b" :class="addResults.length > 0 ? 'mb-mt-1 mb-border-t' : ''">
                 {{ targetColumnId ? 'Copia tile dal canvas' : 'Tile nel canvas' }}
               </div>
               <button
@@ -85,33 +83,31 @@
                 @click="selectCanvasTile(item)"
                 @mouseenter="selectedIndex = addResults.length + idx"
                 :class="[
-                  'mb-w-full mb-flex mb-items-center mb-gap-3 mb-px-4 mb-py-2 mb-text-left mb-transition-colors',
-                  (addResults.length + idx) === selectedIndex
-                    ? 'mb-bg-primary-600/20 mb-text-gray-100'
-                    : 'mb-text-gray-300 hover:mb-bg-gray-700/50'
+                  'finder-result mb-w-full mb-flex mb-items-center mb-gap-3 mb-px-4 mb-py-2 mb-text-left mb-transition-colors',
+                  (addResults.length + idx) === selectedIndex ? 'finder-result--active' : ''
                 ]"
               >
-                <span class="mb-w-6 mb-h-6 mb-flex mb-items-center mb-justify-center mb-rounded mb-bg-gray-700 mb-text-xs mb-text-gray-400 mb-shrink-0 mb-font-mono">
+                <span class="finder-type-icon mb-w-6 mb-h-6 mb-flex mb-items-center mb-justify-center mb-rounded mb-text-xs mb-shrink-0 mb-font-mono">
                   {{ typeIcon(item.type) }}
                 </span>
                 <div class="mb-flex-1 mb-min-w-0">
                   <div class="mb-text-sm mb-font-medium mb-truncate">{{ item.label }}</div>
-                  <div class="mb-text-xs mb-text-gray-500 mb-truncate">{{ item.typeName }} &middot; {{ item.id.substring(0, 8) }}</div>
+                  <div class="mb-text-xs mb-truncate" style="color: #999">{{ item.typeName }} &middot; {{ item.id.substring(0, 8) }}</div>
                 </div>
                 <span
                   v-if="item.preview"
-                  class="mb-text-xs mb-text-gray-500 mb-truncate mb-max-w-[140px]"
+                  class="mb-text-xs mb-truncate mb-max-w-[140px]" style="color: #999"
                 >{{ item.preview }}</span>
               </button>
             </template>
           </div>
 
           <!-- Footer -->
-          <div class="mb-flex mb-items-center mb-justify-between mb-px-4 mb-py-2 mb-border-t mb-border-gray-700 mb-text-[10px] mb-text-gray-500">
+          <div class="finder-footer mb-flex mb-items-center mb-justify-between mb-px-4 mb-py-2 mb-border-t mb-text-[10px]">
             <span>{{ allResults.length }} risultati</span>
             <span>
-              <kbd class="mb-bg-gray-700 mb-px-1 mb-rounded mb-font-mono">&#8593;&#8595;</kbd> naviga
-              <kbd class="mb-bg-gray-700 mb-px-1 mb-rounded mb-font-mono mb-ml-1">&#9166;</kbd> seleziona
+              <kbd class="finder-kbd mb-px-1 mb-rounded mb-font-mono">&#8593;&#8595;</kbd> naviga
+              <kbd class="finder-kbd mb-px-1 mb-rounded mb-font-mono mb-ml-1">&#9166;</kbd> seleziona
             </span>
           </div>
         </div>
@@ -365,5 +361,51 @@ defineExpose({ open, close, toggle });
 .finder-fade-enter-from,
 .finder-fade-leave-to {
   opacity: 0;
+}
+
+/* ── Light / Glass theme ── */
+.finder-dialog {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border-color: rgba(0, 0, 0, 0.1);
+  color: #1a1a1a;
+}
+.finder-header {
+  border-color: rgba(0, 0, 0, 0.08);
+}
+.finder-input {
+  color: #1a1a1a;
+}
+.finder-input::placeholder {
+  color: #999;
+}
+.finder-kbd {
+  background: rgba(0, 0, 0, 0.06);
+  color: #888;
+}
+.finder-section-label {
+  color: #999;
+  border-color: rgba(0, 0, 0, 0.06);
+}
+.finder-result {
+  color: #333;
+  background: transparent;
+  border: none;
+}
+.finder-result:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+.finder-result--active {
+  background: rgba(232, 98, 42, 0.1) !important;
+  color: #1a1a1a;
+}
+.finder-type-icon {
+  background: rgba(0, 0, 0, 0.06);
+  color: #888;
+}
+.finder-footer {
+  border-color: rgba(0, 0, 0, 0.08);
+  color: #999;
 }
 </style>

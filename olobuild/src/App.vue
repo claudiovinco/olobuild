@@ -16,9 +16,9 @@
     <div class="mb-flex mb-flex-1 mb-overflow-hidden">
       <BuilderSidebar v-if="!builderStore.previewMode && !sidebarCollapsed" :style="{ width: sidebarWidth + 'px', flexShrink: 0 }" role="complementary" aria-label="Pannello elementi" @save-as-template="section => templateLibraryRef?.openSaveDialog(section)" />
       <!-- Resize handle + collapse toggle -->
-      <div v-if="!builderStore.previewMode" style="flex-shrink:0;display:flex;flex-direction:column;align-items:center;background:#1f2937;border-right:1px solid #374151">
+      <div v-if="!builderStore.previewMode" style="flex-shrink:0;display:flex;flex-direction:column;align-items:center;background:rgba(255,255,255,0.5);border-right:1px solid rgba(0,0,0,0.06)">
         <button @click="toggleSidebar" @mousedown.stop
-          style="width:16px;height:24px;background:none;border:none;color:#6B7280;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;margin:4px 0 0"
+          style="width:16px;height:24px;background:none;border:none;color:#aaa;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;margin:4px 0 0"
           :title="sidebarCollapsed ? 'Espandi sidebar' : 'Comprimi sidebar'"
           :aria-label="sidebarCollapsed ? 'Espandi sidebar' : 'Comprimi sidebar'"
         >
@@ -30,9 +30,9 @@
       </div>
       <BuilderCanvas id="olo-canvas" role="main" aria-label="Area di lavoro" />
       <!-- Inspector resize handle + collapse toggle -->
-      <div v-if="!builderStore.previewMode" style="flex-shrink:0;display:flex;flex-direction:column;align-items:center;background:#1f2937;border-left:1px solid #374151">
+      <div v-if="!builderStore.previewMode" style="flex-shrink:0;display:flex;flex-direction:column;align-items:center;background:rgba(255,255,255,0.5);border-left:1px solid rgba(0,0,0,0.06)">
         <button @click="toggleInspector" @mousedown.stop
-          style="width:16px;height:24px;background:none;border:none;color:#6B7280;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;margin:4px 0 0"
+          style="width:16px;height:24px;background:none;border:none;color:#aaa;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;margin:4px 0 0"
           :title="inspectorCollapsed ? 'Espandi pannello' : 'Comprimi pannello'"
           :aria-label="inspectorCollapsed ? 'Espandi pannello' : 'Comprimi pannello'"
         >
@@ -182,13 +182,12 @@ function startInspectorResize(event) {
   document.addEventListener('mouseup', onUp);
 }
 
-// Auto-expand inspector when tile selected / page settings / style panel opened
+// Auto-expand inspector when tile selected / page settings opened
 watch([
   function() { return builderStore.selectedTileId; },
-  function() { return builderStore.pageSettingsOpen; },
-  function() { return builderStore.stylePanelOpen; }
+  function() { return builderStore.pageSettingsOpen; }
 ], function() {
-  if (inspectorCollapsed.value && (builderStore.selectedTileId || builderStore.pageSettingsOpen || builderStore.stylePanelOpen)) {
+  if (inspectorCollapsed.value && (builderStore.selectedTileId || builderStore.pageSettingsOpen)) {
     inspectorCollapsed.value = false;
     localStorage.setItem(INSPECTOR_C_KEY, '');
   }
@@ -245,6 +244,13 @@ onUnmounted(() => {
 });
 
 async function openBuilder(templateId) {
+  // If we're in the admin shell (list mode), navigate to fullscreen editor URL
+  const oloData = window.oloData || {};
+  if (!parseInt(oloData.templateId)) {
+    window.location.href = `admin.php?page=olobuilder-templates&template_id=${templateId}`;
+    return;
+  }
+
   const success = await builderStore.loadTemplate(templateId);
   if (!success || !builderStore.currentTemplate) {
     console.error('[Olobuild] Impossibile caricare il template', templateId, '— ricarico la pagina.');
@@ -306,6 +312,11 @@ async function createAndOpenBuilder(typeOrObj = 'page') {
     });
     if (res.ok) {
       const tpl = await res.json();
+      // If in admin shell (list mode), redirect to fullscreen editor
+      if (!parseInt(oloData.templateId) && tpl.id) {
+        window.location.href = `admin.php?page=olobuilder-templates&template_id=${tpl.id}`;
+        return;
+      }
       builderStore.currentTemplate = tpl;
       tilesStore.setCanvasTiles([]);
       builderStore.isDirty = false;
@@ -322,6 +333,12 @@ async function createAndOpenBuilder(typeOrObj = 'page') {
 function goToList() {
   if (builderStore.isDirty) {
     if (!confirm('Hai modifiche non salvate. Uscire comunque?')) return;
+  }
+  // If in fullscreen editor mode (template_id in URL), redirect to list page
+  const oloData = window.oloData || {};
+  if (parseInt(oloData.templateId)) {
+    window.location.href = 'admin.php?page=olobuilder-templates';
+    return;
   }
   builderStore.deselectTile();
   builderStore.previewMode = false;

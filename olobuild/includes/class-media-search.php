@@ -26,83 +26,79 @@ class Olo_Media_Search {
             'googlesv'  => $vtour_active,
         ];
         ?>
-        <div class="wrap olo-ms-wrap">
-            <h1 class="olo-ms-title">
-                <img src="<?php echo OLO_URL; ?>assets/img/olobuild-logo-200.png" alt="" style="height:28px;vertical-align:middle;margin-right:10px;">
-                Ricerca Media
-            </h1>
+        <?php Olo_Builder::page_shell_open( 'Ricerca Media', 'olo-ms-wrap' ); ?>
 
             <!-- Tabs -->
-            <div class="olo-ms-tabs">
-                <button class="olo-ms-tab active" data-tab="photo">Foto</button>
-                <button class="olo-ms-tab" data-tab="video">Video</button>
-                <button class="olo-ms-tab" data-tab="photo360">Foto 360</button>
-                <button class="olo-ms-tab" data-tab="video360">Video 360</button>
-                <button class="olo-ms-tab" data-tab="audio">Audio</button>
+            <div class="olo-admin-tabs">
+                <button class="olo-admin-tab olo-ms-tab active" data-tab="photo">Foto</button>
+                <button class="olo-admin-tab olo-ms-tab" data-tab="video">Video</button>
+                <button class="olo-admin-tab olo-ms-tab" data-tab="photo360">Foto 360</button>
+                <button class="olo-admin-tab olo-ms-tab" data-tab="video360">Video 360</button>
+                <button class="olo-admin-tab olo-ms-tab" data-tab="audio">Audio</button>
             </div>
 
             <!-- Search bar -->
             <div class="olo-ms-search-bar">
                 <div class="olo-ms-providers" id="olo-ms-providers"></div>
                 <div class="olo-ms-input-wrap">
-                    <input type="text" id="olo-ms-query" placeholder="Cerca foto, video, audio..." autocomplete="off" />
-                    <button id="olo-ms-search-btn" class="button button-primary">Cerca</button>
+                    <input type="text" id="olo-ms-query" class="olo-field-input olo-ms-query" placeholder="Cerca foto, video, audio..." autocomplete="off" />
+                    <button id="olo-ms-search-btn" class="olo-btn-save olo-btn-sm">Cerca</button>
                 </div>
             </div>
 
             <!-- Google SV panel (hidden by default) -->
-            <div id="olo-ms-gsv-panel" style="display:none;">
-                <div class="olo-ms-gsv-info">
+            <div id="olo-ms-gsv-panel" class="olo-ms-gsv-panel">
+                <div class="olo-msg info">
                     Incolla un URL Google Maps, coordinate (lat,lng) o un pano_id per scaricare un panorama Street View.
                 </div>
-                <div class="olo-ms-input-wrap" style="margin-top:12px;">
-                    <input type="text" id="olo-ms-gsv-input" placeholder="https://www.google.com/maps/@45.4642,9.1900,3a... oppure 45.4642,9.1900" autocomplete="off" style="flex:1;padding:8px 14px;font-size:14px;border:1px solid #ddd;border-radius:4px;max-width:600px;" />
-                    <select id="olo-ms-gsv-zoom" style="padding:8px;border:1px solid #ddd;border-radius:4px;font-size:13px;">
+                <div class="olo-ms-input-wrap olo-ms-gsv-inputs">
+                    <input type="text" id="olo-ms-gsv-input" class="olo-field-input olo-ms-gsv-field" placeholder="https://www.google.com/maps/@45.4642,9.1900,3a... oppure 45.4642,9.1900" autocomplete="off" />
+                    <select id="olo-ms-gsv-zoom" class="olo-field-input olo-ms-gsv-select">
                         <option value="2">Zoom 2 (bassa)</option>
                         <option value="3" selected>Zoom 3 (media)</option>
                         <option value="4">Zoom 4 (alta)</option>
                     </select>
-                    <button id="olo-ms-gsv-btn" class="button button-primary">Cerca panorama</button>
+                    <button id="olo-ms-gsv-btn" class="olo-btn-save olo-btn-sm">Cerca panorama</button>
                 </div>
             </div>
 
             <!-- Photo filters (orientation + size + min dims) -->
-            <div id="olo-ms-photo-filters" style="display:none;margin-bottom:16px;">
-                <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
-                    <span class="olo-ms-pf" data-pf="orientation" style="display:flex;gap:6px;align-items:center;">
-                        <span style="font-size:13px;font-weight:500;color:#1d2327;">Orientamento:</span>
-                        <select id="olo-ms-orientation" style="padding:6px 10px;border:1px solid #ddd;border-radius:4px;font-size:13px;">
+            <div id="olo-ms-photo-filters" class="olo-ms-filters">
+                <div class="olo-ms-filters-row">
+                    <span class="olo-ms-pf olo-ms-filter-group" data-pf="orientation">
+                        <label class="olo-ms-filter-label">Orientamento:</label>
+                        <select id="olo-ms-orientation" class="olo-field-input olo-ms-filter-select">
                             <option value="">Qualsiasi</option>
                             <option value="landscape">Orizzontale</option>
                             <option value="portrait">Verticale</option>
                             <option value="square">Quadrato</option>
                         </select>
                     </span>
-                    <span class="olo-ms-pf" data-pf="size" style="display:flex;gap:6px;align-items:center;">
-                        <span style="font-size:13px;font-weight:500;color:#1d2327;">Dimensione:</span>
-                        <select id="olo-ms-size" style="padding:6px 10px;border:1px solid #ddd;border-radius:4px;font-size:13px;">
+                    <span class="olo-ms-pf olo-ms-filter-group" data-pf="size">
+                        <label class="olo-ms-filter-label">Dimensione:</label>
+                        <select id="olo-ms-size" class="olo-field-input olo-ms-filter-select">
                             <option value="">Qualsiasi</option>
                             <option value="small">Piccola</option>
                             <option value="medium">Media</option>
                             <option value="large">Grande</option>
                         </select>
                     </span>
-                    <span class="olo-ms-pf" data-pf="min_width" style="display:flex;gap:6px;align-items:center;">
-                        <span style="font-size:13px;font-weight:500;color:#1d2327;">Min larghezza:</span>
-                        <input type="number" id="olo-ms-min-width" placeholder="px" min="0" step="100" style="width:80px;padding:6px 8px;border:1px solid #ddd;border-radius:4px;font-size:13px;" />
+                    <span class="olo-ms-pf olo-ms-filter-group" data-pf="min_width">
+                        <label class="olo-ms-filter-label">Min larghezza:</label>
+                        <input type="number" id="olo-ms-min-width" class="olo-field-input olo-ms-filter-num" placeholder="px" min="0" step="100" />
                     </span>
-                    <span class="olo-ms-pf" data-pf="min_height" style="display:flex;gap:6px;align-items:center;">
-                        <span style="font-size:13px;font-weight:500;color:#1d2327;">Min altezza:</span>
-                        <input type="number" id="olo-ms-min-height" placeholder="px" min="0" step="100" style="width:80px;padding:6px 8px;border:1px solid #ddd;border-radius:4px;font-size:13px;" />
+                    <span class="olo-ms-pf olo-ms-filter-group" data-pf="min_height">
+                        <label class="olo-ms-filter-label">Min altezza:</label>
+                        <input type="number" id="olo-ms-min-height" class="olo-field-input olo-ms-filter-num" placeholder="px" min="0" step="100" />
                     </span>
                 </div>
             </div>
 
             <!-- Duration filters (audio + video) -->
-            <div id="olo-ms-duration-filters" style="display:none;margin-bottom:16px;">
-                <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
-                    <span style="font-size:13px;font-weight:500;color:#1d2327;">Durata:</span>
-                    <select id="olo-ms-dur-preset" style="padding:6px 10px;border:1px solid #ddd;border-radius:4px;font-size:13px;">
+            <div id="olo-ms-duration-filters" class="olo-ms-filters">
+                <div class="olo-ms-filters-row">
+                    <label class="olo-ms-filter-label">Durata:</label>
+                    <select id="olo-ms-dur-preset" class="olo-field-input olo-ms-filter-select">
                         <option value="">Qualsiasi</option>
                         <option value="0,5">Brevissimo (&lt; 5s)</option>
                         <option value="0,15">Breve (&lt; 15s)</option>
@@ -112,11 +108,11 @@ class Olo_Media_Search {
                         <option value="60,300">1 — 5 minuti</option>
                         <option value="300,">Lungo (&gt; 5 min)</option>
                     </select>
-                    <span style="font-size:12px;color:#646970;">oppure</span>
-                    <input type="number" id="olo-ms-dur-min" placeholder="min sec" min="0" style="width:80px;padding:6px 8px;border:1px solid #ddd;border-radius:4px;font-size:13px;" />
-                    <span style="font-size:13px;">—</span>
-                    <input type="number" id="olo-ms-dur-max" placeholder="max sec" min="0" style="width:80px;padding:6px 8px;border:1px solid #ddd;border-radius:4px;font-size:13px;" />
-                    <span style="font-size:12px;color:#646970;">secondi</span>
+                    <span class="olo-ms-filter-sep">oppure</span>
+                    <input type="number" id="olo-ms-dur-min" class="olo-field-input olo-ms-filter-num" placeholder="min sec" min="0" />
+                    <span class="olo-ms-filter-dash">&mdash;</span>
+                    <input type="number" id="olo-ms-dur-max" class="olo-field-input olo-ms-filter-num" placeholder="max sec" min="0" />
+                    <span class="olo-ms-filter-sep">secondi</span>
                 </div>
             </div>
 
@@ -130,51 +126,66 @@ class Olo_Media_Search {
             <div id="olo-ms-pagination" class="olo-ms-pagination"></div>
 
             <!-- Preview Modal -->
-            <div id="olo-ms-modal" class="olo-ms-modal" style="display:none;">
+            <div id="olo-ms-modal" class="olo-ms-modal">
                 <div class="olo-ms-modal-overlay"></div>
                 <div class="olo-ms-modal-content">
                     <button class="olo-ms-modal-close">&times;</button>
                     <div id="olo-ms-modal-body"></div>
                 </div>
             </div>
-        </div>
+        <?php Olo_Builder::page_shell_close(); ?>
 
         <style>
-            .olo-ms-wrap { max-width: 1400px; }
-            .olo-ms-title { display: flex; align-items: center; margin-bottom: 20px; font-size: 23px; font-weight: 400; }
-            .olo-ms-tabs { display: flex; gap: 0; margin-bottom: 20px; border-bottom: 2px solid #ddd; }
-            .olo-ms-tab {
-                padding: 10px 24px; border: none; background: none; cursor: pointer;
-                font-size: 14px; font-weight: 600; color: #646970;
-                border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all .15s;
-            }
-            .olo-ms-tab:hover { color: #2271b1; }
-            .olo-ms-tab.active { color: #2271b1; border-bottom-color: #2271b1; }
-
+            /* ── Media Search — page-specific overrides ── */
+            /* Search bar */
             .olo-ms-search-bar { margin-bottom: 20px; }
             .olo-ms-providers { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
             .olo-ms-provider {
-                padding: 6px 16px; border-radius: 20px; border: 1px solid #ddd;
-                background: #fff; cursor: pointer; font-size: 13px; font-weight: 500;
+                padding: 6px 16px; border-radius: 20px; border: 1.5px solid #eaeaea;
+                background: #fff; cursor: pointer; font-size: 13px; font-weight: 600;
                 transition: all .15s; display: flex; align-items: center; gap: 6px;
+                font-family: inherit;
             }
-            .olo-ms-provider:hover { border-color: #2271b1; color: #2271b1; }
-            .olo-ms-provider.active { background: #2271b1; color: #fff; border-color: #2271b1; }
+            .olo-ms-provider:hover { border-color: #1a1a1a; color: #1a1a1a; }
+            .olo-ms-provider.active { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
             .olo-ms-provider.disabled { opacity: .4; cursor: not-allowed; }
             .olo-ms-provider .olo-ms-dot { width: 8px; height: 8px; border-radius: 50%; }
-            .olo-ms-dot-ok { background: #00a32a; }
-            .olo-ms-dot-no { background: #d63638; }
+            .olo-ms-dot-ok { background: #059669; }
+            .olo-ms-dot-no { background: #dc2626; }
 
-            .olo-ms-input-wrap { display: flex; gap: 8px; }
-            #olo-ms-query {
-                flex: 1; padding: 8px 14px; font-size: 14px; border: 1px solid #ddd;
-                border-radius: 4px; outline: none; max-width: 600px;
+            .olo-ms-input-wrap { display: flex; gap: 8px; align-items: center; }
+            .olo-ms-query { flex: 1; max-width: 600px; width: auto !important; }
+
+            /* Filters */
+            .olo-ms-filters { display: none; margin-bottom: 16px; }
+            .olo-ms-filters-row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+            .olo-ms-filter-group { display: flex; gap: 6px; align-items: center; }
+            .olo-ms-filter-label { font-size: 13px; font-weight: 600; color: #1a1a1a; white-space: nowrap; }
+            .olo-ms-filter-select { width: auto !important; padding: 7px 12px !important; }
+            .olo-ms-filter-num { width: 80px !important; padding: 7px 10px !important; text-align: center; }
+            .olo-ms-filter-sep { font-size: 12px; color: #999; }
+            .olo-ms-filter-dash { font-size: 13px; color: #999; }
+
+            /* GSV panel */
+            .olo-ms-gsv-panel { display: none; }
+            .olo-ms-gsv-inputs { margin-top: 12px; }
+            .olo-ms-gsv-field { flex: 1; max-width: 600px; width: auto !important; }
+            .olo-ms-gsv-select { width: auto !important; padding: 9px 12px !important; }
+            .olo-ms-gsv-preview {
+                display: flex; gap: 20px; padding: 20px; background: #fff;
+                border: 1px solid #eaeaea; border-radius: 14px; margin-top: 16px; align-items: flex-start;
             }
-            #olo-ms-query:focus { border-color: #2271b1; box-shadow: 0 0 0 1px #2271b1; }
+            .olo-ms-gsv-preview img { max-width: 400px; border-radius: 10px; }
+            .olo-ms-gsv-meta { flex: 1; font-size: 13px; }
+            .olo-ms-gsv-meta p { margin: 4px 0; color: #666; }
+            .olo-ms-gsv-meta strong { color: #1a1a1a; }
 
-            .olo-ms-status { margin-bottom: 16px; font-size: 13px; color: #646970; }
-            .olo-ms-status .olo-ms-loading { color: #2271b1; font-weight: 500; }
+            /* Status */
+            .olo-ms-status { margin-bottom: 16px; font-size: 13px; color: #999; }
+            .olo-ms-status .olo-ms-loading { color: #e8622a; font-weight: 600; }
+            .olo-ms-status .olo-ms-error { color: #dc2626; }
 
+            /* Results grid */
             .olo-ms-results {
                 display: grid; gap: 16px;
                 grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -186,101 +197,90 @@ class Olo_Media_Search {
 
             /* Photo/Video card */
             .olo-ms-card {
-                position: relative; border-radius: 8px; overflow: hidden;
-                background: #f0f0f0; cursor: pointer; transition: transform .15s, box-shadow .15s;
+                position: relative; border-radius: 14px; overflow: hidden;
+                background: #f5f5f5; cursor: pointer; transition: transform .15s, box-shadow .15s;
                 aspect-ratio: 4/3;
             }
-            .olo-ms-card:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,.15); }
+            .olo-ms-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.12); }
             .olo-ms-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
             .olo-ms-card video { width: 100%; height: 100%; object-fit: cover; display: block; }
             .olo-ms-card-info {
                 position: absolute; bottom: 0; left: 0; right: 0;
-                padding: 24px 10px 8px; font-size: 11px; color: #fff;
+                padding: 28px 12px 10px; font-size: 11px; color: #fff;
                 background: linear-gradient(transparent, rgba(0,0,0,.7));
             }
             .olo-ms-card-info .photographer { font-weight: 600; }
             .olo-ms-card-badge {
-                position: absolute; top: 8px; right: 8px;
-                background: rgba(0,0,0,.6); color: #fff; font-size: 10px;
-                padding: 2px 8px; border-radius: 10px; font-weight: 600;
+                position: absolute; top: 10px; right: 10px;
+                background: rgba(26,26,26,.7); color: #fff; font-size: 10px;
+                padding: 3px 10px; border-radius: 20px; font-weight: 600;
+                backdrop-filter: blur(4px);
             }
             .olo-ms-card-tags {
-                position: absolute; top: 8px; left: 8px;
+                position: absolute; top: 10px; left: 10px;
                 display: flex; gap: 4px; flex-wrap: wrap;
             }
             .olo-ms-card-tag {
-                background: rgba(0,0,0,.5); color: #fff; font-size: 9px;
-                padding: 2px 6px; border-radius: 8px;
+                background: rgba(26,26,26,.6); color: #fff; font-size: 9px;
+                padding: 2px 8px; border-radius: 20px; backdrop-filter: blur(4px);
             }
 
             /* Audio card */
             .olo-ms-audio-card {
-                display: flex; gap: 12px; padding: 12px 16px; border: 1px solid #e0e0e0;
-                border-radius: 8px; background: #fff; align-items: center;
+                display: flex; gap: 14px; padding: 14px 18px; border: 1px solid #eaeaea;
+                border-radius: 14px; background: #fff; align-items: center;
                 transition: border-color .15s;
             }
-            .olo-ms-audio-card:hover { border-color: #2271b1; }
+            .olo-ms-audio-card:hover { border-color: #1a1a1a; }
             .olo-ms-audio-play {
-                width: 44px; height: 44px; border-radius: 50%; background: #2271b1;
+                width: 44px; height: 44px; border-radius: 50%; background: #1a1a1a;
                 color: #fff; border: none; cursor: pointer; font-size: 16px;
                 display: flex; align-items: center; justify-content: center; flex-shrink: 0;
                 transition: background .15s;
             }
-            .olo-ms-audio-play:hover { background: #135e96; }
-            .olo-ms-audio-play.playing { background: #d63638; }
+            .olo-ms-audio-play:hover { background: #333; }
+            .olo-ms-audio-play.playing { background: #e8622a; }
             .olo-ms-audio-info { flex: 1; min-width: 0; }
-            .olo-ms-audio-name { font-weight: 600; font-size: 13px; margin-bottom: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-            .olo-ms-audio-meta { font-size: 11px; color: #646970; display: flex; gap: 12px; flex-wrap: wrap; }
-            .olo-ms-audio-wave { width: 200px; height: 40px; flex-shrink: 0; border-radius: 4px; object-fit: cover; }
+            .olo-ms-audio-name { font-weight: 700; font-size: 13px; color: #1a1a1a; margin-bottom: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+            .olo-ms-audio-meta { font-size: 11px; color: #999; display: flex; gap: 12px; flex-wrap: wrap; }
+            .olo-ms-audio-wave { width: 200px; height: 40px; flex-shrink: 0; border-radius: 8px; object-fit: cover; }
             .olo-ms-audio-actions { flex-shrink: 0; }
             .olo-ms-import-btn {
-                padding: 6px 14px; border-radius: 4px; border: 1px solid #2271b1;
-                background: #2271b1; color: #fff; cursor: pointer; font-size: 12px;
-                font-weight: 600; transition: background .15s;
+                padding: 6px 14px; border-radius: 8px; border: none;
+                background: #1a1a1a; color: #fff; cursor: pointer; font-size: 12px;
+                font-weight: 600; transition: all .15s; font-family: inherit;
             }
-            .olo-ms-import-btn:hover { background: #135e96; }
-            .olo-ms-import-btn:disabled { opacity: .5; cursor: wait; }
-            .olo-ms-import-btn.imported { background: #00a32a; border-color: #00a32a; }
-
-            /* GSV panel */
-            .olo-ms-gsv-info {
-                padding: 12px 16px; background: #f0f6fc; border: 1px solid #c3c4c7;
-                border-radius: 4px; font-size: 13px; color: #1d2327;
-            }
-            .olo-ms-gsv-preview {
-                display: flex; gap: 20px; padding: 20px; background: #fff;
-                border: 1px solid #e0e0e0; border-radius: 8px; margin-top: 16px; align-items: flex-start;
-            }
-            .olo-ms-gsv-preview img { max-width: 400px; border-radius: 6px; }
-            .olo-ms-gsv-meta { flex: 1; font-size: 13px; }
-            .olo-ms-gsv-meta p { margin: 4px 0; }
-            .olo-ms-gsv-meta strong { color: #1d2327; }
+            .olo-ms-import-btn:hover { background: #333; box-shadow: 0 4px 12px rgba(0,0,0,.15); }
+            .olo-ms-import-btn:disabled { opacity: .4; cursor: wait; }
+            .olo-ms-import-btn.imported { background: #059669; }
 
             /* Pagination */
-            .olo-ms-pagination { display: flex; gap: 8px; justify-content: center; margin-top: 24px; }
+            .olo-ms-pagination { display: flex; gap: 6px; justify-content: center; margin-top: 24px; }
             .olo-ms-pagination button {
-                padding: 6px 14px; border: 1px solid #ddd; background: #fff;
-                cursor: pointer; border-radius: 4px; font-size: 13px;
+                padding: 7px 14px; border: 1.5px solid #eaeaea; background: #fff;
+                cursor: pointer; border-radius: 10px; font-size: 13px; font-weight: 600;
+                color: #666; transition: all .15s; font-family: inherit;
             }
-            .olo-ms-pagination button:hover { border-color: #2271b1; color: #2271b1; }
-            .olo-ms-pagination button.active { background: #2271b1; color: #fff; border-color: #2271b1; }
+            .olo-ms-pagination button:hover { border-color: #1a1a1a; color: #1a1a1a; }
+            .olo-ms-pagination button.active { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
             .olo-ms-pagination button:disabled { opacity: .4; cursor: not-allowed; }
 
             /* Modal */
-            .olo-ms-modal { position: fixed; inset: 0; z-index: 100000; display: flex; align-items: center; justify-content: center; }
-            .olo-ms-modal-overlay { position: absolute; inset: 0; background: rgba(0,0,0,.7); }
+            .olo-ms-modal { position: fixed; inset: 0; z-index: 100000; display: none; align-items: center; justify-content: center; }
+            .olo-ms-modal-overlay { position: absolute; inset: 0; background: rgba(0,0,0,.6); backdrop-filter: blur(4px); }
             .olo-ms-modal-content {
-                position: relative; background: #fff; border-radius: 12px;
-                max-width: 800px; width: 90%; max-height: 85vh; overflow: auto; padding: 24px;
+                position: relative; background: #fff; border-radius: 16px;
+                max-width: 800px; width: 90%; max-height: 85vh; overflow: auto; padding: 28px;
+                box-shadow: 0 20px 60px rgba(0,0,0,.2);
             }
             .olo-ms-modal-close {
-                position: absolute; top: 12px; right: 12px; background: none; border: none;
-                font-size: 24px; cursor: pointer; color: #646970; z-index: 1;
+                position: absolute; top: 14px; right: 14px; background: none; border: none;
+                font-size: 24px; cursor: pointer; color: #999; z-index: 1; transition: color .15s;
             }
-            .olo-ms-modal-close:hover { color: #d63638; }
-            .olo-ms-modal-img { width: 100%; border-radius: 8px; margin-bottom: 16px; }
-            .olo-ms-modal-info { font-size: 13px; color: #646970; }
-            .olo-ms-modal-info strong { color: #1d2327; }
+            .olo-ms-modal-close:hover { color: #dc2626; }
+            .olo-ms-modal-img { width: 100%; border-radius: 12px; margin-bottom: 16px; }
+            .olo-ms-modal-info { font-size: 13px; color: #999; }
+            .olo-ms-modal-info strong { color: #1a1a1a; }
             .olo-ms-modal-actions { margin-top: 16px; display: flex; gap: 10px; }
         </style>
 
@@ -799,7 +799,7 @@ class Olo_Media_Search {
                     const src = item.regular || item.thumb || '';
                     mediaHtml = '<video src="' + esc(src) + '" controls class="olo-ms-modal-img" style="max-height:400px;"></video>';
                 } else {
-                    mediaHtml = '<img src="' + esc(item.regular || item.thumb) + '" class="olo-ms-modal-img" />';
+                    mediaHtml = '<img src="' + esc(item.large || item.regular || item.thumb) + '" class="olo-ms-modal-img" />';
                 }
 
                 body.innerHTML = mediaHtml +

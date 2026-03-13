@@ -35,7 +35,7 @@ class Olo_Page_Integration {
         $template_id = get_post_meta( $post_id, '_olo_template_id', true );
 
         if ( $template_id ) {
-            return admin_url( 'admin.php?page=olobuilder&template_id=' . $template_id . '&post_id=' . $post_id );
+            return admin_url( 'admin.php?page=olobuilder-templates&template_id=' . $template_id . '&post_id=' . $post_id );
         }
 
         // Check for CPT single template (olo_active_single_{post_type})
@@ -43,13 +43,13 @@ class Olo_Page_Integration {
         if ( $post_type && $post_type !== 'page' && $post_type !== 'post' ) {
             $single_tpl = (int) get_option( "olo_active_single_{$post_type}", 0 );
             if ( $single_tpl ) {
-                return admin_url( 'admin.php?page=olobuilder&template_id=' . $single_tpl . '&post_id=' . $post_id );
+                return admin_url( 'admin.php?page=olobuilder-templates&template_id=' . $single_tpl . '&post_id=' . $post_id );
             }
         }
 
         // No template linked yet → URL to create one
         return wp_nonce_url(
-            admin_url( 'admin.php?page=olobuilder&action=olo_create&post_id=' . $post_id ),
+            admin_url( 'admin.php?page=olobuilder-templates&action=olo_create&post_id=' . $post_id ),
             'olo_create_' . $post_id
         );
     }

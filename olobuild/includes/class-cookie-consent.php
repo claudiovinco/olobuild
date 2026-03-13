@@ -242,20 +242,16 @@ class Olo_Cookie_Consent {
             'consent_log' => __( 'Log Consensi', 'olobuilder' ),
         ];
         ?>
-        <div class="wrap olo-ck-wrap">
-            <h1>
-                <span class="dashicons dashicons-shield" style="margin-right:8px;color:#2271b1"></span>
-                <?php esc_html_e( 'Cookie Consent', 'olobuilder' ); ?>
-            </h1>
+        <?php Olo_Builder::page_shell_open( 'Cookie Consent', 'olo-ck-page' ); ?>
 
-            <nav class="nav-tab-wrapper olo-ck-tabs">
+            <div class="olo-admin-tabs">
                 <?php foreach ( $tabs as $slug => $label ) : ?>
                     <a href="<?php echo esc_url( admin_url( 'admin.php?page=olo-cookie-consent&tab=' . $slug ) ); ?>"
-                       class="nav-tab <?php echo $tab === $slug ? 'nav-tab-active' : ''; ?>">
+                       class="olo-admin-tab <?php echo $tab === $slug ? 'active' : ''; ?>">
                         <?php echo esc_html( $label ); ?>
                     </a>
                 <?php endforeach; ?>
-            </nav>
+            </div>
 
             <?php if ( $tab !== 'consent_log' ) : ?>
             <form method="post" action="options.php" class="olo-ck-form">
@@ -273,14 +269,17 @@ class Olo_Cookie_Consent {
                 }
                 ?>
 
-                <?php submit_button( __( 'Salva impostazioni', 'olobuilder' ) ); ?>
+                <div class="olo-actions">
+                    <button type="submit" class="olo-btn-save">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                        <?php esc_html_e( 'Salva impostazioni', 'olobuilder' ); ?>
+                    </button>
+                </div>
             </form>
             <?php else : ?>
-                <div class="olo-ck-form">
-                    <?php $this->render_tab_consent_log(); ?>
-                </div>
+                <?php $this->render_tab_consent_log(); ?>
             <?php endif; ?>
-        </div>
+        <?php Olo_Builder::page_shell_close(); ?>
         <?php
     }
 
@@ -334,101 +333,119 @@ class Olo_Cookie_Consent {
     private function render_tab_general( $opts ) {
         $n = self::OPT;
         ?>
-        <div class="olo-ck-section">
-            <h2><?php esc_html_e( 'Impostazioni generali', 'olobuilder' ); ?></h2>
-            <table class="form-table olo-ck-table">
-                <tr>
-                    <th><?php esc_html_e( 'Abilita Cookie Banner', 'olobuilder' ); ?></th>
-                    <td>
-                        <label class="olo-ck-toggle">
-                            <input type="checkbox" name="<?php echo $n; ?>[enabled]" value="1" <?php checked( $opts['enabled'] ); ?> />
-                            <span class="olo-ck-toggle-slider"></span>
-                        </label>
-                    </td>
-                </tr>
-                <tr>
-                    <th><?php esc_html_e( 'Layout', 'olobuilder' ); ?></th>
-                    <td>
-                        <select name="<?php echo $n; ?>[layout]">
+        <div class="olo-card">
+            <div class="olo-card-head">
+                <div class="olo-card-icon black">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+                </div>
+                <div>
+                    <h3><?php esc_html_e( 'Impostazioni generali', 'olobuilder' ); ?></h3>
+                    <p><?php esc_html_e( 'Configura il comportamento del cookie banner', 'olobuilder' ); ?></p>
+                </div>
+            </div>
+            <div class="olo-card-body">
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label><?php esc_html_e( 'Abilita Cookie Banner', 'olobuilder' ); ?></label>
+                    </div>
+                    <label class="olo-toggle">
+                        <input type="checkbox" name="<?php echo $n; ?>[enabled]" value="1" <?php checked( $opts['enabled'] ); ?> />
+                        <span class="olo-toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label><?php esc_html_e( 'Layout', 'olobuilder' ); ?></label>
+                    </div>
+                    <div class="olo-field-input-wrap">
+                        <select name="<?php echo $n; ?>[layout]" class="olo-field-input">
                             <option value="bar" <?php selected( $opts['layout'], 'bar' ); ?>><?php esc_html_e( 'Barra', 'olobuilder' ); ?></option>
                             <option value="box" <?php selected( $opts['layout'], 'box' ); ?>><?php esc_html_e( 'Box laterale', 'olobuilder' ); ?></option>
                             <option value="fullwidth" <?php selected( $opts['layout'], 'fullwidth' ); ?>><?php esc_html_e( 'Full-width', 'olobuilder' ); ?></option>
                         </select>
-                    </td>
-                </tr>
-                <tr>
-                    <th><?php esc_html_e( 'Posizione', 'olobuilder' ); ?></th>
-                    <td>
-                        <select name="<?php echo $n; ?>[position]">
+                    </div>
+                </div>
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label><?php esc_html_e( 'Posizione', 'olobuilder' ); ?></label>
+                    </div>
+                    <div class="olo-field-input-wrap">
+                        <select name="<?php echo $n; ?>[position]" class="olo-field-input">
                             <option value="bottom" <?php selected( $opts['position'], 'bottom' ); ?>><?php esc_html_e( 'In basso', 'olobuilder' ); ?></option>
                             <option value="top" <?php selected( $opts['position'], 'top' ); ?>><?php esc_html_e( 'In alto', 'olobuilder' ); ?></option>
                         </select>
-                    </td>
-                </tr>
-                <tr>
-                    <th><?php esc_html_e( 'Mostra "Rifiuta tutti"', 'olobuilder' ); ?></th>
-                    <td>
-                        <label class="olo-ck-toggle">
-                            <input type="checkbox" name="<?php echo $n; ?>[show_reject_all]" value="1" <?php checked( $opts['show_reject_all'] ); ?> />
-                            <span class="olo-ck-toggle-slider"></span>
-                        </label>
-                        <p class="description"><?php esc_html_e( 'Richiesto dalle linee guida CNIL/Garante Privacy italiano.', 'olobuilder' ); ?></p>
-                    </td>
-                </tr>
-                <tr>
-                    <th><?php esc_html_e( 'Mostra "Personalizza"', 'olobuilder' ); ?></th>
-                    <td>
-                        <label class="olo-ck-toggle">
-                            <input type="checkbox" name="<?php echo $n; ?>[show_preferences]" value="1" <?php checked( $opts['show_preferences'] ); ?> />
-                            <span class="olo-ck-toggle-slider"></span>
-                        </label>
-                        <p class="description"><?php esc_html_e( 'Pulsante per aprire il pannello preferenze con le categorie.', 'olobuilder' ); ?></p>
-                    </td>
-                </tr>
-                <tr>
-                    <th><?php esc_html_e( 'Durata consenso', 'olobuilder' ); ?></th>
-                    <td>
-                        <input type="number" name="<?php echo $n; ?>[consent_duration]" value="<?php echo esc_attr( $opts['consent_duration'] ); ?>" min="1" max="730" class="small-text" />
-                        <span><?php esc_html_e( 'giorni', 'olobuilder' ); ?></span>
-                        <p class="description"><?php esc_html_e( 'GDPR raccomanda max 6 mesi (180 giorni). Molti usano 365.', 'olobuilder' ); ?></p>
-                    </td>
-                </tr>
-                <tr>
-                    <th><?php esc_html_e( 'Richiedere nuovamente dopo', 'olobuilder' ); ?></th>
-                    <td>
-                        <input type="number" name="<?php echo $n; ?>[reshow_days]" value="<?php echo esc_attr( $opts['reshow_days'] ); ?>" min="0" max="365" class="small-text" />
-                        <span><?php esc_html_e( 'giorni (0 = mai)', 'olobuilder' ); ?></span>
-                        <p class="description"><?php esc_html_e( 'Se la cookie policy cambia, puoi forzare la ripresentazione del banner.', 'olobuilder' ); ?></p>
-                    </td>
-                </tr>
-                <tr>
-                    <th><?php esc_html_e( 'Google Consent Mode v2', 'olobuilder' ); ?></th>
-                    <td>
-                        <label class="olo-ck-toggle">
-                            <input type="checkbox" name="<?php echo $n; ?>[gcm_enabled]" value="1" <?php checked( $opts['gcm_enabled'] ); ?> />
-                            <span class="olo-ck-toggle-slider"></span>
-                        </label>
-                        <p class="description"><?php esc_html_e( 'Invia segnali gtag("consent") a Google. Richiesto da Google Ads dal marzo 2024 per EEA/UK.', 'olobuilder' ); ?></p>
-                    </td>
-                </tr>
-                <tr>
-                    <th><?php esc_html_e( 'Blocco iframe', 'olobuilder' ); ?></th>
-                    <td>
-                        <label class="olo-ck-toggle">
-                            <input type="checkbox" name="<?php echo $n; ?>[block_iframes]" value="1" <?php checked( $opts['block_iframes'] ); ?> />
-                            <span class="olo-ck-toggle-slider"></span>
-                        </label>
-                        <p class="description"><?php esc_html_e( 'Blocca iframe di YouTube, Vimeo, Google Maps fino al consenso. Mostra un placeholder con pulsante "Carica contenuto".', 'olobuilder' ); ?></p>
-                    </td>
-                </tr>
-                <tr>
-                    <th><?php esc_html_e( 'Versione banner', 'olobuilder' ); ?></th>
-                    <td>
-                        <input type="number" name="<?php echo $n; ?>[banner_version]" value="<?php echo esc_attr( $opts['banner_version'] ); ?>" min="1" class="small-text" />
-                        <p class="description"><?php esc_html_e( 'Incrementa quando cambi la cookie policy. I visitatori che hanno dato il consenso a una versione precedente vedranno di nuovo il banner.', 'olobuilder' ); ?></p>
-                    </td>
-                </tr>
-            </table>
+                    </div>
+                </div>
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label><?php esc_html_e( 'Mostra "Rifiuta tutti"', 'olobuilder' ); ?></label>
+                        <div class="olo-field-hint"><?php esc_html_e( 'Richiesto dalle linee guida CNIL/Garante Privacy italiano.', 'olobuilder' ); ?></div>
+                    </div>
+                    <label class="olo-toggle">
+                        <input type="checkbox" name="<?php echo $n; ?>[show_reject_all]" value="1" <?php checked( $opts['show_reject_all'] ); ?> />
+                        <span class="olo-toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label><?php esc_html_e( 'Mostra "Personalizza"', 'olobuilder' ); ?></label>
+                        <div class="olo-field-hint"><?php esc_html_e( 'Pulsante per aprire il pannello preferenze con le categorie.', 'olobuilder' ); ?></div>
+                    </div>
+                    <label class="olo-toggle">
+                        <input type="checkbox" name="<?php echo $n; ?>[show_preferences]" value="1" <?php checked( $opts['show_preferences'] ); ?> />
+                        <span class="olo-toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label><?php esc_html_e( 'Durata consenso', 'olobuilder' ); ?></label>
+                        <div class="olo-field-hint"><?php esc_html_e( 'GDPR raccomanda max 6 mesi (180 giorni). Molti usano 365.', 'olobuilder' ); ?></div>
+                    </div>
+                    <div class="olo-field-input-wrap olo-field-input-short">
+                        <input type="number" name="<?php echo $n; ?>[consent_duration]" value="<?php echo esc_attr( $opts['consent_duration'] ); ?>" min="1" max="730" class="olo-field-input" />
+                        <span class="olo-field-suffix"><?php esc_html_e( 'giorni', 'olobuilder' ); ?></span>
+                    </div>
+                </div>
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label><?php esc_html_e( 'Richiedere nuovamente dopo', 'olobuilder' ); ?></label>
+                        <div class="olo-field-hint"><?php esc_html_e( 'Se la cookie policy cambia, puoi forzare la ripresentazione del banner.', 'olobuilder' ); ?></div>
+                    </div>
+                    <div class="olo-field-input-wrap olo-field-input-short">
+                        <input type="number" name="<?php echo $n; ?>[reshow_days]" value="<?php echo esc_attr( $opts['reshow_days'] ); ?>" min="0" max="365" class="olo-field-input" />
+                        <span class="olo-field-suffix"><?php esc_html_e( 'giorni (0 = mai)', 'olobuilder' ); ?></span>
+                    </div>
+                </div>
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label><?php esc_html_e( 'Google Consent Mode v2', 'olobuilder' ); ?></label>
+                        <div class="olo-field-hint"><?php esc_html_e( 'Invia segnali gtag("consent") a Google. Richiesto da Google Ads dal marzo 2024 per EEA/UK.', 'olobuilder' ); ?></div>
+                    </div>
+                    <label class="olo-toggle">
+                        <input type="checkbox" name="<?php echo $n; ?>[gcm_enabled]" value="1" <?php checked( $opts['gcm_enabled'] ); ?> />
+                        <span class="olo-toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label><?php esc_html_e( 'Blocco iframe', 'olobuilder' ); ?></label>
+                        <div class="olo-field-hint"><?php esc_html_e( 'Blocca iframe di YouTube, Vimeo, Google Maps fino al consenso. Mostra un placeholder con pulsante "Carica contenuto".', 'olobuilder' ); ?></div>
+                    </div>
+                    <label class="olo-toggle">
+                        <input type="checkbox" name="<?php echo $n; ?>[block_iframes]" value="1" <?php checked( $opts['block_iframes'] ); ?> />
+                        <span class="olo-toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label><?php esc_html_e( 'Versione banner', 'olobuilder' ); ?></label>
+                        <div class="olo-field-hint"><?php esc_html_e( 'Incrementa quando cambi la cookie policy. I visitatori con consenso a una versione precedente vedranno di nuovo il banner.', 'olobuilder' ); ?></div>
+                    </div>
+                    <div class="olo-field-input-wrap olo-field-input-short">
+                        <input type="number" name="<?php echo $n; ?>[banner_version]" value="<?php echo esc_attr( $opts['banner_version'] ); ?>" min="1" class="olo-field-input" />
+                    </div>
+                </div>
+            </div>
         </div>
         <?php
     }
@@ -438,60 +455,112 @@ class Olo_Cookie_Consent {
     private function render_tab_texts( $opts ) {
         $n = self::OPT;
         ?>
-        <div class="olo-ck-section">
-            <h2><?php esc_html_e( 'Testi del banner', 'olobuilder' ); ?></h2>
-            <table class="form-table olo-ck-table">
-                <tr>
-                    <th><?php esc_html_e( 'Titolo', 'olobuilder' ); ?></th>
-                    <td><input type="text" name="<?php echo $n; ?>[banner_title]" value="<?php echo esc_attr( $opts['banner_title'] ); ?>" class="regular-text" /></td>
-                </tr>
-                <tr>
-                    <th><?php esc_html_e( 'Messaggio', 'olobuilder' ); ?></th>
-                    <td><textarea name="<?php echo $n; ?>[banner_message]" rows="3" class="large-text"><?php echo esc_textarea( $opts['banner_message'] ); ?></textarea></td>
-                </tr>
-                <tr>
-                    <th><?php esc_html_e( 'Pulsante "Accetta tutti"', 'olobuilder' ); ?></th>
-                    <td><input type="text" name="<?php echo $n; ?>[accept_all_text]" value="<?php echo esc_attr( $opts['accept_all_text'] ); ?>" class="regular-text" /></td>
-                </tr>
-                <tr>
-                    <th><?php esc_html_e( 'Pulsante "Rifiuta tutti"', 'olobuilder' ); ?></th>
-                    <td><input type="text" name="<?php echo $n; ?>[reject_all_text]" value="<?php echo esc_attr( $opts['reject_all_text'] ); ?>" class="regular-text" /></td>
-                </tr>
-                <tr>
-                    <th><?php esc_html_e( 'Pulsante "Personalizza"', 'olobuilder' ); ?></th>
-                    <td><input type="text" name="<?php echo $n; ?>[preferences_text]" value="<?php echo esc_attr( $opts['preferences_text'] ); ?>" class="regular-text" /></td>
-                </tr>
-                <tr>
-                    <th><?php esc_html_e( 'Pulsante "Salva preferenze"', 'olobuilder' ); ?></th>
-                    <td><input type="text" name="<?php echo $n; ?>[save_text]" value="<?php echo esc_attr( $opts['save_text'] ); ?>" class="regular-text" /></td>
-                </tr>
-            </table>
+        <div class="olo-card">
+            <div class="olo-card-head">
+                <div class="olo-card-icon black">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                </div>
+                <div>
+                    <h3><?php esc_html_e( 'Testi del banner', 'olobuilder' ); ?></h3>
+                    <p><?php esc_html_e( 'Personalizza i testi mostrati nel cookie banner', 'olobuilder' ); ?></p>
+                </div>
+            </div>
+            <div class="olo-card-body">
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label><?php esc_html_e( 'Titolo', 'olobuilder' ); ?></label>
+                    </div>
+                    <div class="olo-field-input-wrap">
+                        <input type="text" name="<?php echo $n; ?>[banner_title]" value="<?php echo esc_attr( $opts['banner_title'] ); ?>" class="olo-field-input" />
+                    </div>
+                </div>
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label><?php esc_html_e( 'Messaggio', 'olobuilder' ); ?></label>
+                    </div>
+                    <div class="olo-field-input-wrap">
+                        <textarea name="<?php echo $n; ?>[banner_message]" rows="3" class="olo-field-input"><?php echo esc_textarea( $opts['banner_message'] ); ?></textarea>
+                    </div>
+                </div>
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label><?php esc_html_e( 'Pulsante "Accetta tutti"', 'olobuilder' ); ?></label>
+                    </div>
+                    <div class="olo-field-input-wrap">
+                        <input type="text" name="<?php echo $n; ?>[accept_all_text]" value="<?php echo esc_attr( $opts['accept_all_text'] ); ?>" class="olo-field-input" />
+                    </div>
+                </div>
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label><?php esc_html_e( 'Pulsante "Rifiuta tutti"', 'olobuilder' ); ?></label>
+                    </div>
+                    <div class="olo-field-input-wrap">
+                        <input type="text" name="<?php echo $n; ?>[reject_all_text]" value="<?php echo esc_attr( $opts['reject_all_text'] ); ?>" class="olo-field-input" />
+                    </div>
+                </div>
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label><?php esc_html_e( 'Pulsante "Personalizza"', 'olobuilder' ); ?></label>
+                    </div>
+                    <div class="olo-field-input-wrap">
+                        <input type="text" name="<?php echo $n; ?>[preferences_text]" value="<?php echo esc_attr( $opts['preferences_text'] ); ?>" class="olo-field-input" />
+                    </div>
+                </div>
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label><?php esc_html_e( 'Pulsante "Salva preferenze"', 'olobuilder' ); ?></label>
+                    </div>
+                    <div class="olo-field-input-wrap">
+                        <input type="text" name="<?php echo $n; ?>[save_text]" value="<?php echo esc_attr( $opts['save_text'] ); ?>" class="olo-field-input" />
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="olo-ck-section">
-            <h2><?php esc_html_e( 'Link policy', 'olobuilder' ); ?></h2>
-            <table class="form-table olo-ck-table">
-                <tr>
-                    <th><?php esc_html_e( 'URL Privacy Policy', 'olobuilder' ); ?></th>
-                    <td>
-                        <input type="url" name="<?php echo $n; ?>[privacy_url]" value="<?php echo esc_url( $opts['privacy_url'] ); ?>" class="regular-text" placeholder="https://..." />
-                    </td>
-                </tr>
-                <tr>
-                    <th><?php esc_html_e( 'Testo link Privacy', 'olobuilder' ); ?></th>
-                    <td><input type="text" name="<?php echo $n; ?>[privacy_text]" value="<?php echo esc_attr( $opts['privacy_text'] ); ?>" class="regular-text" /></td>
-                </tr>
-                <tr>
-                    <th><?php esc_html_e( 'URL Cookie Policy', 'olobuilder' ); ?></th>
-                    <td>
-                        <input type="url" name="<?php echo $n; ?>[cookie_policy_url]" value="<?php echo esc_url( $opts['cookie_policy_url'] ); ?>" class="regular-text" placeholder="https://..." />
-                    </td>
-                </tr>
-                <tr>
-                    <th><?php esc_html_e( 'Testo link Cookie Policy', 'olobuilder' ); ?></th>
-                    <td><input type="text" name="<?php echo $n; ?>[cookie_policy_text]" value="<?php echo esc_attr( $opts['cookie_policy_text'] ); ?>" class="regular-text" /></td>
-                </tr>
-            </table>
+        <div class="olo-card">
+            <div class="olo-card-head">
+                <div class="olo-card-icon orange">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+                </div>
+                <div>
+                    <h3><?php esc_html_e( 'Link policy', 'olobuilder' ); ?></h3>
+                    <p><?php esc_html_e( 'URL e testi dei link alle pagine di policy', 'olobuilder' ); ?></p>
+                </div>
+            </div>
+            <div class="olo-card-body">
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label><?php esc_html_e( 'URL Privacy Policy', 'olobuilder' ); ?></label>
+                    </div>
+                    <div class="olo-field-input-wrap">
+                        <input type="url" name="<?php echo $n; ?>[privacy_url]" value="<?php echo esc_url( $opts['privacy_url'] ); ?>" class="olo-field-input" placeholder="https://..." />
+                    </div>
+                </div>
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label><?php esc_html_e( 'Testo link Privacy', 'olobuilder' ); ?></label>
+                    </div>
+                    <div class="olo-field-input-wrap">
+                        <input type="text" name="<?php echo $n; ?>[privacy_text]" value="<?php echo esc_attr( $opts['privacy_text'] ); ?>" class="olo-field-input" />
+                    </div>
+                </div>
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label><?php esc_html_e( 'URL Cookie Policy', 'olobuilder' ); ?></label>
+                    </div>
+                    <div class="olo-field-input-wrap">
+                        <input type="url" name="<?php echo $n; ?>[cookie_policy_url]" value="<?php echo esc_url( $opts['cookie_policy_url'] ); ?>" class="olo-field-input" placeholder="https://..." />
+                    </div>
+                </div>
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label><?php esc_html_e( 'Testo link Cookie Policy', 'olobuilder' ); ?></label>
+                    </div>
+                    <div class="olo-field-input-wrap">
+                        <input type="text" name="<?php echo $n; ?>[cookie_policy_text]" value="<?php echo esc_attr( $opts['cookie_policy_text'] ); ?>" class="olo-field-input" />
+                    </div>
+                </div>
+            </div>
         </div>
         <?php
     }
@@ -501,51 +570,113 @@ class Olo_Cookie_Consent {
     private function render_tab_appearance( $opts ) {
         $n = self::OPT;
         ?>
-        <div class="olo-ck-section">
-            <h2><?php esc_html_e( 'Colori e stile', 'olobuilder' ); ?></h2>
-            <table class="form-table olo-ck-table">
-                <tr>
-                    <th><?php esc_html_e( 'Sfondo banner', 'olobuilder' ); ?></th>
-                    <td><input type="color" name="<?php echo $n; ?>[bg_color]" value="<?php echo esc_attr( $opts['bg_color'] ); ?>" /></td>
-                </tr>
-                <tr>
-                    <th><?php esc_html_e( 'Colore testo', 'olobuilder' ); ?></th>
-                    <td><input type="color" name="<?php echo $n; ?>[text_color]" value="<?php echo esc_attr( $opts['text_color'] ); ?>" /></td>
-                </tr>
-                <tr>
-                    <th><?php esc_html_e( 'Pulsante primario — sfondo', 'olobuilder' ); ?></th>
-                    <td><input type="color" name="<?php echo $n; ?>[btn_primary_bg]" value="<?php echo esc_attr( $opts['btn_primary_bg'] ); ?>" /></td>
-                </tr>
-                <tr>
-                    <th><?php esc_html_e( 'Pulsante primario — testo', 'olobuilder' ); ?></th>
-                    <td><input type="color" name="<?php echo $n; ?>[btn_primary_text]" value="<?php echo esc_attr( $opts['btn_primary_text'] ); ?>" /></td>
-                </tr>
-                <tr>
-                    <th><?php esc_html_e( 'Pulsante secondario — sfondo', 'olobuilder' ); ?></th>
-                    <td><input type="color" name="<?php echo $n; ?>[btn_secondary_bg]" value="<?php echo esc_attr( $opts['btn_secondary_bg'] ); ?>" /></td>
-                </tr>
-                <tr>
-                    <th><?php esc_html_e( 'Pulsante secondario — testo', 'olobuilder' ); ?></th>
-                    <td><input type="color" name="<?php echo $n; ?>[btn_secondary_text]" value="<?php echo esc_attr( $opts['btn_secondary_text'] ); ?>" /></td>
-                </tr>
-                <tr>
-                    <th><?php esc_html_e( 'Overlay scuro', 'olobuilder' ); ?></th>
-                    <td>
-                        <label class="olo-ck-toggle">
-                            <input type="checkbox" name="<?php echo $n; ?>[overlay]" value="1" <?php checked( $opts['overlay'] ); ?> />
-                            <span class="olo-ck-toggle-slider"></span>
-                        </label>
-                        <p class="description"><?php esc_html_e( 'Oscura la pagina dietro il banner per attirare l\'attenzione.', 'olobuilder' ); ?></p>
-                    </td>
-                </tr>
-                <tr>
-                    <th><?php esc_html_e( 'Border radius', 'olobuilder' ); ?></th>
-                    <td>
-                        <input type="number" name="<?php echo $n; ?>[border_radius]" value="<?php echo esc_attr( $opts['border_radius'] ); ?>" min="0" max="30" class="small-text" />
-                        <span>px</span>
-                    </td>
-                </tr>
-            </table>
+        <div class="olo-card">
+            <div class="olo-card-head">
+                <div class="olo-card-icon black">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/></svg>
+                </div>
+                <div>
+                    <h3><?php esc_html_e( 'Colori banner', 'olobuilder' ); ?></h3>
+                    <p><?php esc_html_e( 'Sfondo e testo del cookie banner', 'olobuilder' ); ?></p>
+                </div>
+            </div>
+            <div class="olo-card-body">
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label><?php esc_html_e( 'Sfondo banner', 'olobuilder' ); ?></label>
+                    </div>
+                    <div class="olo-field-input-wrap">
+                        <input type="color" name="<?php echo $n; ?>[bg_color]" value="<?php echo esc_attr( $opts['bg_color'] ); ?>" class="olo-field-color" />
+                    </div>
+                </div>
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label><?php esc_html_e( 'Colore testo', 'olobuilder' ); ?></label>
+                    </div>
+                    <div class="olo-field-input-wrap">
+                        <input type="color" name="<?php echo $n; ?>[text_color]" value="<?php echo esc_attr( $opts['text_color'] ); ?>" class="olo-field-color" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="olo-card">
+            <div class="olo-card-head">
+                <div class="olo-card-icon orange">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M12 8v8"/><path d="M8 12h8"/></svg>
+                </div>
+                <div>
+                    <h3><?php esc_html_e( 'Colori pulsanti', 'olobuilder' ); ?></h3>
+                    <p><?php esc_html_e( 'Personalizza i colori dei pulsanti "Accetta" e "Rifiuta"', 'olobuilder' ); ?></p>
+                </div>
+            </div>
+            <div class="olo-card-body">
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label><?php esc_html_e( 'Pulsante primario — sfondo', 'olobuilder' ); ?></label>
+                    </div>
+                    <div class="olo-field-input-wrap">
+                        <input type="color" name="<?php echo $n; ?>[btn_primary_bg]" value="<?php echo esc_attr( $opts['btn_primary_bg'] ); ?>" class="olo-field-color" />
+                    </div>
+                </div>
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label><?php esc_html_e( 'Pulsante primario — testo', 'olobuilder' ); ?></label>
+                    </div>
+                    <div class="olo-field-input-wrap">
+                        <input type="color" name="<?php echo $n; ?>[btn_primary_text]" value="<?php echo esc_attr( $opts['btn_primary_text'] ); ?>" class="olo-field-color" />
+                    </div>
+                </div>
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label><?php esc_html_e( 'Pulsante secondario — sfondo', 'olobuilder' ); ?></label>
+                    </div>
+                    <div class="olo-field-input-wrap">
+                        <input type="color" name="<?php echo $n; ?>[btn_secondary_bg]" value="<?php echo esc_attr( $opts['btn_secondary_bg'] ); ?>" class="olo-field-color" />
+                    </div>
+                </div>
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label><?php esc_html_e( 'Pulsante secondario — testo', 'olobuilder' ); ?></label>
+                    </div>
+                    <div class="olo-field-input-wrap">
+                        <input type="color" name="<?php echo $n; ?>[btn_secondary_text]" value="<?php echo esc_attr( $opts['btn_secondary_text'] ); ?>" class="olo-field-color" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="olo-card">
+            <div class="olo-card-head">
+                <div class="olo-card-icon black">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                </div>
+                <div>
+                    <h3><?php esc_html_e( 'Stile', 'olobuilder' ); ?></h3>
+                    <p><?php esc_html_e( 'Overlay e border radius del banner', 'olobuilder' ); ?></p>
+                </div>
+            </div>
+            <div class="olo-card-body">
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label><?php esc_html_e( 'Overlay scuro', 'olobuilder' ); ?></label>
+                        <div class="olo-field-hint"><?php esc_html_e( 'Oscura la pagina dietro il banner per attirare l\'attenzione.', 'olobuilder' ); ?></div>
+                    </div>
+                    <label class="olo-toggle">
+                        <input type="checkbox" name="<?php echo $n; ?>[overlay]" value="1" <?php checked( $opts['overlay'] ); ?> />
+                        <span class="olo-toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label><?php esc_html_e( 'Border radius', 'olobuilder' ); ?></label>
+                    </div>
+                    <div class="olo-field-input-wrap olo-field-input-short">
+                        <input type="number" name="<?php echo $n; ?>[border_radius]" value="<?php echo esc_attr( $opts['border_radius'] ); ?>" min="0" max="30" class="olo-field-input" />
+                        <span class="olo-field-suffix">px</span>
+                    </div>
+                </div>
+            </div>
         </div>
         <?php
     }
@@ -555,37 +686,57 @@ class Olo_Cookie_Consent {
     private function render_tab_categories( $opts ) {
         $n = self::OPT;
         $cats = [
-            'necessary'   => [ 'icon' => 'admin-network',   'locked' => true ],
-            'analytics'   => [ 'icon' => 'chart-area',      'locked' => false ],
-            'marketing'   => [ 'icon' => 'megaphone',       'locked' => false ],
-            'preferences' => [ 'icon' => 'admin-settings',  'locked' => false ],
+            'necessary'   => [ 'icon' => '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>', 'locked' => true ],
+            'analytics'   => [ 'icon' => '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>', 'locked' => false ],
+            'marketing'   => [ 'icon' => '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>', 'locked' => false ],
+            'preferences' => [ 'icon' => '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>', 'locked' => false ],
         ];
         ?>
-        <div class="olo-ck-section">
-            <h2><?php esc_html_e( 'Categorie cookie', 'olobuilder' ); ?></h2>
-            <p class="description"><?php esc_html_e( 'Personalizza nome e descrizione di ogni categoria mostrata nel pannello preferenze.', 'olobuilder' ); ?></p>
-
-            <?php foreach ( $cats as $cat => $meta ) : ?>
-            <div class="olo-ck-cat-card">
-                <div class="olo-ck-cat-header">
-                    <span class="dashicons dashicons-<?php echo esc_attr( $meta['icon'] ); ?>"></span>
-                    <strong><?php echo esc_html( ucfirst( $cat ) ); ?></strong>
-                    <?php if ( $meta['locked'] ) : ?>
-                        <span class="olo-ck-badge"><?php esc_html_e( 'Sempre attivo', 'olobuilder' ); ?></span>
-                    <?php endif; ?>
+        <div class="olo-card">
+            <div class="olo-card-head">
+                <div class="olo-card-icon black">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
                 </div>
-                <table class="form-table olo-ck-table" style="margin-top:0">
-                    <tr>
-                        <th style="width:120px"><?php esc_html_e( 'Etichetta', 'olobuilder' ); ?></th>
-                        <td><input type="text" name="<?php echo $n; ?>[cat_<?php echo $cat; ?>_label]" value="<?php echo esc_attr( $opts[ "cat_{$cat}_label" ] ); ?>" class="regular-text" /></td>
-                    </tr>
-                    <tr>
-                        <th style="width:120px"><?php esc_html_e( 'Descrizione', 'olobuilder' ); ?></th>
-                        <td><textarea name="<?php echo $n; ?>[cat_<?php echo $cat; ?>_desc]" rows="2" class="large-text"><?php echo esc_textarea( $opts[ "cat_{$cat}_desc" ] ); ?></textarea></td>
-                    </tr>
-                </table>
+                <div>
+                    <h3><?php esc_html_e( 'Categorie cookie', 'olobuilder' ); ?></h3>
+                    <p><?php esc_html_e( 'Personalizza nome e descrizione di ogni categoria mostrata nel pannello preferenze.', 'olobuilder' ); ?></p>
+                </div>
             </div>
-            <?php endforeach; ?>
+            <div class="olo-card-body">
+                <?php foreach ( $cats as $cat => $meta ) : ?>
+                <div class="olo-card" style="margin:0 0 16px;box-shadow:none;border:1px solid #e5e0db">
+                    <div class="olo-card-head" style="padding:14px 18px">
+                        <div class="olo-card-icon <?php echo $meta['locked'] ? 'orange' : 'black'; ?>">
+                            <?php echo $meta['icon']; ?>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:10px">
+                            <strong><?php echo esc_html( ucfirst( $cat ) ); ?></strong>
+                            <?php if ( $meta['locked'] ) : ?>
+                                <span class="olo-badge green"><?php esc_html_e( 'Sempre attivo', 'olobuilder' ); ?></span>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                    <div class="olo-card-body" style="padding:12px 18px">
+                        <div class="olo-field-row">
+                            <div class="olo-field-info">
+                                <label><?php esc_html_e( 'Etichetta', 'olobuilder' ); ?></label>
+                            </div>
+                            <div class="olo-field-input-wrap">
+                                <input type="text" name="<?php echo $n; ?>[cat_<?php echo $cat; ?>_label]" value="<?php echo esc_attr( $opts[ "cat_{$cat}_label" ] ); ?>" class="olo-field-input" />
+                            </div>
+                        </div>
+                        <div class="olo-field-row">
+                            <div class="olo-field-info">
+                                <label><?php esc_html_e( 'Descrizione', 'olobuilder' ); ?></label>
+                            </div>
+                            <div class="olo-field-input-wrap">
+                                <textarea name="<?php echo $n; ?>[cat_<?php echo $cat; ?>_desc]" rows="2" class="olo-field-input"><?php echo esc_textarea( $opts[ "cat_{$cat}_desc" ] ); ?></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <?php endforeach; ?>
+            </div>
         </div>
         <?php
     }
@@ -595,42 +746,55 @@ class Olo_Cookie_Consent {
     private function render_tab_blocking( $opts ) {
         $n = self::OPT;
         ?>
-        <div class="olo-ck-section">
-            <h2><?php esc_html_e( 'Blocco automatico script', 'olobuilder' ); ?></h2>
-            <p class="description">
-                <?php esc_html_e( 'Blocca automaticamente script di terze parti finché l\'utente non accetta la categoria corrispondente.', 'olobuilder' ); ?>
-            </p>
-
-            <table class="form-table olo-ck-table">
-                <tr>
-                    <th><?php esc_html_e( 'Abilita auto-blocco', 'olobuilder' ); ?></th>
-                    <td>
-                        <label class="olo-ck-toggle">
-                            <input type="checkbox" name="<?php echo $n; ?>[auto_block]" value="1" <?php checked( $opts['auto_block'] ); ?> />
-                            <span class="olo-ck-toggle-slider"></span>
-                        </label>
-                        <p class="description"><?php esc_html_e( 'Converte gli script corrispondenti in type="text/plain" finché il consenso non è dato.', 'olobuilder' ); ?></p>
-                    </td>
-                </tr>
-                <tr>
-                    <th><?php esc_html_e( 'Pattern da bloccare', 'olobuilder' ); ?></th>
-                    <td>
-                        <textarea name="<?php echo $n; ?>[block_patterns]" rows="10" class="large-text code"><?php echo esc_textarea( $opts['block_patterns'] ); ?></textarea>
-                        <p class="description"><?php esc_html_e( 'Un dominio/pattern per riga. Gli script il cui src contiene uno di questi pattern vengono bloccati. Assegnati di default alla categoria "analytics" per google*, "marketing" per facebook/linkedin/tiktok/pinterest/snapchat.', 'olobuilder' ); ?></p>
-                    </td>
-                </tr>
-            </table>
+        <div class="olo-card">
+            <div class="olo-card-head">
+                <div class="olo-card-icon black">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+                </div>
+                <div>
+                    <h3><?php esc_html_e( 'Blocco automatico script', 'olobuilder' ); ?></h3>
+                    <p><?php esc_html_e( 'Blocca automaticamente script di terze parti finché l\'utente non accetta la categoria corrispondente.', 'olobuilder' ); ?></p>
+                </div>
+            </div>
+            <div class="olo-card-body">
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label><?php esc_html_e( 'Abilita auto-blocco', 'olobuilder' ); ?></label>
+                        <div class="olo-field-hint"><?php esc_html_e( 'Converte gli script corrispondenti in type="text/plain" finché il consenso non è dato.', 'olobuilder' ); ?></div>
+                    </div>
+                    <label class="olo-toggle">
+                        <input type="checkbox" name="<?php echo $n; ?>[auto_block]" value="1" <?php checked( $opts['auto_block'] ); ?> />
+                        <span class="olo-toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="olo-field-row olo-field-row-stack">
+                    <div class="olo-field-info">
+                        <label><?php esc_html_e( 'Pattern da bloccare', 'olobuilder' ); ?></label>
+                        <div class="olo-field-hint"><?php esc_html_e( 'Un dominio/pattern per riga. Gli script il cui src contiene uno di questi pattern vengono bloccati.', 'olobuilder' ); ?></div>
+                    </div>
+                    <div class="olo-field-input-wrap" style="flex:1 1 100%">
+                        <textarea name="<?php echo $n; ?>[block_patterns]" rows="10" class="olo-field-input olo-field-code"><?php echo esc_textarea( $opts['block_patterns'] ); ?></textarea>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="olo-ck-section">
-            <h2><?php esc_html_e( 'Blocco manuale', 'olobuilder' ); ?></h2>
-            <p class="description">
-                <?php esc_html_e( 'Puoi anche bloccare script manualmente nel tuo HTML aggiungendo:', 'olobuilder' ); ?>
-            </p>
-            <pre class="olo-ck-code">&lt;script type="text/plain" data-cookiecategory="analytics" src="..."&gt;&lt;/script&gt;
+        <div class="olo-card">
+            <div class="olo-card-head">
+                <div class="olo-card-icon orange">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                </div>
+                <div>
+                    <h3><?php esc_html_e( 'Blocco manuale', 'olobuilder' ); ?></h3>
+                    <p><?php esc_html_e( 'Puoi anche bloccare script manualmente nel tuo HTML aggiungendo:', 'olobuilder' ); ?></p>
+                </div>
+            </div>
+            <div class="olo-card-body">
+                <pre class="olo-ck-code">&lt;script type="text/plain" data-cookiecategory="analytics" src="..."&gt;&lt;/script&gt;
 &lt;script type="text/plain" data-cookiecategory="marketing"&gt;
   // inline script bloccato finché l'utente non accetta "marketing"
 &lt;/script&gt;</pre>
+            </div>
         </div>
         <?php
     }
@@ -641,48 +805,55 @@ class Olo_Cookie_Consent {
         $n    = self::OPT;
         $rows = $opts['cookie_table'];
         ?>
-        <div class="olo-ck-section">
-            <h2><?php esc_html_e( 'Dichiarazione cookie', 'olobuilder' ); ?></h2>
-            <p class="description">
-                <?php esc_html_e( 'Elenca i cookie utilizzati dal sito. Questi vengono mostrati nel pannello preferenze.', 'olobuilder' ); ?>
-            </p>
+        <div class="olo-card">
+            <div class="olo-card-head">
+                <div class="olo-card-icon black">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                </div>
+                <div>
+                    <h3><?php esc_html_e( 'Dichiarazione cookie', 'olobuilder' ); ?></h3>
+                    <p><?php esc_html_e( 'Elenca i cookie utilizzati dal sito. Questi vengono mostrati nel pannello preferenze.', 'olobuilder' ); ?></p>
+                </div>
+            </div>
+            <div class="olo-card-body">
+                <table class="olo-table" id="olo-ck-decl">
+                    <thead>
+                        <tr>
+                            <th><?php esc_html_e( 'Nome cookie', 'olobuilder' ); ?></th>
+                            <th><?php esc_html_e( 'Provider', 'olobuilder' ); ?></th>
+                            <th><?php esc_html_e( 'Scopo', 'olobuilder' ); ?></th>
+                            <th><?php esc_html_e( 'Scadenza', 'olobuilder' ); ?></th>
+                            <th><?php esc_html_e( 'Categoria', 'olobuilder' ); ?></th>
+                            <th style="width:40px"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if ( ! empty( $rows ) ) : ?>
+                            <?php foreach ( $rows as $i => $row ) : ?>
+                                <tr>
+                                    <td><input type="text" name="<?php echo $n; ?>[cookie_table][<?php echo $i; ?>][name]" value="<?php echo esc_attr( $row['name'] ); ?>" class="olo-field-input" /></td>
+                                    <td><input type="text" name="<?php echo $n; ?>[cookie_table][<?php echo $i; ?>][provider]" value="<?php echo esc_attr( $row['provider'] ); ?>" class="olo-field-input" /></td>
+                                    <td><input type="text" name="<?php echo $n; ?>[cookie_table][<?php echo $i; ?>][purpose]" value="<?php echo esc_attr( $row['purpose'] ); ?>" class="olo-field-input" /></td>
+                                    <td><input type="text" name="<?php echo $n; ?>[cookie_table][<?php echo $i; ?>][expiry]" value="<?php echo esc_attr( $row['expiry'] ); ?>" class="olo-field-input" style="width:100px" /></td>
+                                    <td>
+                                        <select name="<?php echo $n; ?>[cookie_table][<?php echo $i; ?>][category]" class="olo-field-input">
+                                            <?php foreach ( self::CATEGORIES as $c ) : ?>
+                                                <option value="<?php echo $c; ?>" <?php selected( $row['category'], $c ); ?>><?php echo esc_html( $opts[ "cat_{$c}_label" ] ); ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </td>
+                                    <td><button type="button" class="olo-btn-danger olo-btn-sm olo-ck-remove-row" title="<?php esc_attr_e( 'Rimuovi', 'olobuilder' ); ?>">&times;</button></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
 
-            <table class="widefat olo-ck-decl-table" id="olo-ck-decl">
-                <thead>
-                    <tr>
-                        <th><?php esc_html_e( 'Nome cookie', 'olobuilder' ); ?></th>
-                        <th><?php esc_html_e( 'Provider', 'olobuilder' ); ?></th>
-                        <th><?php esc_html_e( 'Scopo', 'olobuilder' ); ?></th>
-                        <th><?php esc_html_e( 'Scadenza', 'olobuilder' ); ?></th>
-                        <th><?php esc_html_e( 'Categoria', 'olobuilder' ); ?></th>
-                        <th style="width:40px"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php if ( ! empty( $rows ) ) : ?>
-                        <?php foreach ( $rows as $i => $row ) : ?>
-                            <tr>
-                                <td><input type="text" name="<?php echo $n; ?>[cookie_table][<?php echo $i; ?>][name]" value="<?php echo esc_attr( $row['name'] ); ?>" class="widefat" /></td>
-                                <td><input type="text" name="<?php echo $n; ?>[cookie_table][<?php echo $i; ?>][provider]" value="<?php echo esc_attr( $row['provider'] ); ?>" class="widefat" /></td>
-                                <td><input type="text" name="<?php echo $n; ?>[cookie_table][<?php echo $i; ?>][purpose]" value="<?php echo esc_attr( $row['purpose'] ); ?>" class="widefat" /></td>
-                                <td><input type="text" name="<?php echo $n; ?>[cookie_table][<?php echo $i; ?>][expiry]" value="<?php echo esc_attr( $row['expiry'] ); ?>" class="widefat" style="width:100px" /></td>
-                                <td>
-                                    <select name="<?php echo $n; ?>[cookie_table][<?php echo $i; ?>][category]" class="widefat">
-                                        <?php foreach ( self::CATEGORIES as $c ) : ?>
-                                            <option value="<?php echo $c; ?>" <?php selected( $row['category'], $c ); ?>><?php echo esc_html( $opts[ "cat_{$c}_label" ] ); ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                </td>
-                                <td><button type="button" class="button olo-ck-remove-row" title="<?php esc_attr_e( 'Rimuovi', 'olobuilder' ); ?>">&times;</button></td>
-                            </tr>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
-                </tbody>
-            </table>
-
-            <button type="button" class="button" id="olo-ck-add-row" style="margin-top:8px">
-                + <?php esc_html_e( 'Aggiungi cookie', 'olobuilder' ); ?>
-            </button>
+                <button type="button" class="olo-btn-orange olo-btn-sm" id="olo-ck-add-row" style="margin-top:12px">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    <?php esc_html_e( 'Aggiungi cookie', 'olobuilder' ); ?>
+                </button>
+            </div>
         </div>
 
         <script>
@@ -696,12 +867,12 @@ class Olo_Cookie_Consent {
                 var tr = document.createElement('tr');
                 var catOpts = '';
                 cats.forEach(function(c){ catOpts += '<option value="'+c.value+'">'+c.label+'</option>'; });
-                tr.innerHTML = '<td><input type="text" name="'+n+'[cookie_table]['+idx+'][name]" class="widefat" /></td>'
-                    + '<td><input type="text" name="'+n+'[cookie_table]['+idx+'][provider]" class="widefat" /></td>'
-                    + '<td><input type="text" name="'+n+'[cookie_table]['+idx+'][purpose]" class="widefat" /></td>'
-                    + '<td><input type="text" name="'+n+'[cookie_table]['+idx+'][expiry]" class="widefat" style="width:100px" /></td>'
-                    + '<td><select name="'+n+'[cookie_table]['+idx+'][category]" class="widefat">'+catOpts+'</select></td>'
-                    + '<td><button type="button" class="button olo-ck-remove-row">&times;</button></td>';
+                tr.innerHTML = '<td><input type="text" name="'+n+'[cookie_table]['+idx+'][name]" class="olo-field-input" /></td>'
+                    + '<td><input type="text" name="'+n+'[cookie_table]['+idx+'][provider]" class="olo-field-input" /></td>'
+                    + '<td><input type="text" name="'+n+'[cookie_table]['+idx+'][purpose]" class="olo-field-input" /></td>'
+                    + '<td><input type="text" name="'+n+'[cookie_table]['+idx+'][expiry]" class="olo-field-input" style="width:100px" /></td>'
+                    + '<td><select name="'+n+'[cookie_table]['+idx+'][category]" class="olo-field-input">'+catOpts+'</select></td>'
+                    + '<td><button type="button" class="olo-btn-danger olo-btn-sm olo-ck-remove-row">&times;</button></td>';
                 tbody.appendChild(tr);
                 idx++;
             });
@@ -740,92 +911,102 @@ class Olo_Cookie_Consent {
         }
 
         ?>
-        <div class="olo-ck-section">
-            <h2><?php esc_html_e( 'Log dei consensi', 'olobuilder' ); ?></h2>
-            <p class="description">
-                <?php
-                printf(
-                    esc_html__( '%d consensi registrati. Il GDPR richiede di poter dimostrare il consenso raccolto.', 'olobuilder' ),
-                    $total
-                );
-                ?>
-            </p>
-
-            <div style="margin-bottom:12px;display:flex;gap:8px">
-                <button type="button" class="button" id="olo-ck-export-log">
-                    <span class="dashicons dashicons-download" style="margin-top:4px"></span>
-                    <?php esc_html_e( 'Esporta CSV', 'olobuilder' ); ?>
-                </button>
-                <button type="button" class="button" id="olo-ck-clear-log">
-                    <span class="dashicons dashicons-trash" style="margin-top:4px"></span>
-                    <?php esc_html_e( 'Svuota log', 'olobuilder' ); ?>
-                </button>
-                <span id="olo-ck-log-msg" class="olo-ck-msg"></span>
+        <div class="olo-card">
+            <div class="olo-card-head">
+                <div class="olo-card-icon black">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                </div>
+                <div>
+                    <h3><?php esc_html_e( 'Log dei consensi', 'olobuilder' ); ?></h3>
+                    <p>
+                        <?php
+                        printf(
+                            esc_html__( '%d consensi registrati. Il GDPR richiede di poter dimostrare il consenso raccolto.', 'olobuilder' ),
+                            $total
+                        );
+                        ?>
+                    </p>
+                </div>
             </div>
+            <div class="olo-card-body">
+                <div class="olo-ck-log-actions">
+                    <button type="button" class="olo-btn-reset" id="olo-ck-export-log">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                        <?php esc_html_e( 'Esporta CSV', 'olobuilder' ); ?>
+                    </button>
+                    <button type="button" class="olo-btn-reset" id="olo-ck-clear-log">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+                        <?php esc_html_e( 'Svuota log', 'olobuilder' ); ?>
+                    </button>
+                    <span id="olo-ck-log-msg" class="olo-msg"></span>
+                </div>
 
-            <?php if ( ! empty( $rows ) ) : ?>
-            <table class="widefat striped">
-                <thead>
-                    <tr>
-                        <th><?php esc_html_e( 'ID Consenso', 'olobuilder' ); ?></th>
-                        <th><?php esc_html_e( 'Data', 'olobuilder' ); ?></th>
-                        <th><?php esc_html_e( 'Azione', 'olobuilder' ); ?></th>
-                        <th><?php esc_html_e( 'Ver.', 'olobuilder' ); ?></th>
-                        <th><?php esc_html_e( 'IP (hash)', 'olobuilder' ); ?></th>
-                        <th><?php esc_html_e( 'Categorie accettate', 'olobuilder' ); ?></th>
-                        <th><?php esc_html_e( 'User Agent', 'olobuilder' ); ?></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ( $rows as $row ) : ?>
-                    <tr>
-                        <td><code><?php echo esc_html( substr( $row['consent_id'], 0, 12 ) ); ?>...</code></td>
-                        <td><?php echo esc_html( $row['created_at'] ); ?></td>
-                        <td>
-                            <?php
-                            $at = $row['action_type'] ?? 'initial';
-                            $at_labels = [ 'initial' => 'Primo consenso', 'update' => 'Modifica', 'revoke' => 'Revoca' ];
-                            $at_colors = [ 'initial' => '#28a745', 'update' => '#ffc107', 'revoke' => '#dc3545' ];
-                            echo '<span style="color:' . ( $at_colors[ $at ] ?? '#666' ) . ';font-weight:600">' . esc_html( $at_labels[ $at ] ?? $at ) . '</span>';
-                            ?>
-                        </td>
-                        <td><?php echo intval( $row['banner_version'] ?? 1 ); ?></td>
-                        <td><code><?php echo esc_html( substr( $row['ip_hash'], 0, 16 ) ); ?>...</code></td>
-                        <td>
-                            <?php
-                            $cats = json_decode( $row['categories'], true );
-                            if ( is_array( $cats ) ) {
-                                foreach ( $cats as $c => $v ) {
-                                    if ( $v ) {
-                                        echo '<span class="olo-ck-cat-pill">' . esc_html( $c ) . '</span> ';
+                <?php if ( ! empty( $rows ) ) : ?>
+                <div class="olo-ck-log-table-wrap">
+                    <table class="olo-ck-log-table">
+                        <thead>
+                            <tr>
+                                <th><?php esc_html_e( 'ID Consenso', 'olobuilder' ); ?></th>
+                                <th><?php esc_html_e( 'Data', 'olobuilder' ); ?></th>
+                                <th><?php esc_html_e( 'Azione', 'olobuilder' ); ?></th>
+                                <th><?php esc_html_e( 'Ver.', 'olobuilder' ); ?></th>
+                                <th><?php esc_html_e( 'IP (hash)', 'olobuilder' ); ?></th>
+                                <th><?php esc_html_e( 'Categorie accettate', 'olobuilder' ); ?></th>
+                                <th><?php esc_html_e( 'User Agent', 'olobuilder' ); ?></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ( $rows as $row ) : ?>
+                            <tr>
+                                <td><code><?php echo esc_html( substr( $row['consent_id'], 0, 12 ) ); ?>...</code></td>
+                                <td><?php echo esc_html( $row['created_at'] ); ?></td>
+                                <td>
+                                    <?php
+                                    $at = $row['action_type'] ?? 'initial';
+                                    $at_labels = [ 'initial' => 'Primo consenso', 'update' => 'Modifica', 'revoke' => 'Revoca' ];
+                                    $at_classes = [ 'initial' => 'olo-ck-action-initial', 'update' => 'olo-ck-action-update', 'revoke' => 'olo-ck-action-revoke' ];
+                                    echo '<span class="' . ( $at_classes[ $at ] ?? '' ) . '">' . esc_html( $at_labels[ $at ] ?? $at ) . '</span>';
+                                    ?>
+                                </td>
+                                <td><?php echo intval( $row['banner_version'] ?? 1 ); ?></td>
+                                <td><code><?php echo esc_html( substr( $row['ip_hash'], 0, 16 ) ); ?>...</code></td>
+                                <td>
+                                    <?php
+                                    $cats = json_decode( $row['categories'], true );
+                                    if ( is_array( $cats ) ) {
+                                        foreach ( $cats as $c => $v ) {
+                                            if ( $v ) {
+                                                echo '<span class="olo-ck-cat-pill">' . esc_html( $c ) . '</span> ';
+                                            }
+                                        }
                                     }
-                                }
-                            }
-                            ?>
-                        </td>
-                        <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="<?php echo esc_attr( $row['user_agent'] ); ?>"><?php echo esc_html( $row['user_agent'] ); ?></td>
-                    </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
+                                    ?>
+                                </td>
+                                <td class="olo-ck-ua-cell" title="<?php echo esc_attr( $row['user_agent'] ); ?>"><?php echo esc_html( $row['user_agent'] ); ?></td>
+                            </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
 
-            <?php
-            // Pagination
-            $total_pages = ceil( $total / $per_page );
-            if ( $total_pages > 1 ) {
-                echo '<div class="tablenav"><div class="tablenav-pages">';
-                echo paginate_links( [
-                    'base'    => add_query_arg( 'paged', '%#%' ),
-                    'format'  => '',
-                    'current' => $page,
-                    'total'   => $total_pages,
-                ] );
-                echo '</div></div>';
-            }
-            ?>
-            <?php else : ?>
-                <p style="color:#666"><em><?php esc_html_e( 'Nessun consenso registrato.', 'olobuilder' ); ?></em></p>
-            <?php endif; ?>
+                <?php
+                // Pagination
+                $total_pages = ceil( $total / $per_page );
+                if ( $total_pages > 1 ) {
+                    echo '<div class="tablenav"><div class="tablenav-pages">';
+                    echo paginate_links( [
+                        'base'    => add_query_arg( 'paged', '%#%' ),
+                        'format'  => '',
+                        'current' => $page,
+                        'total'   => $total_pages,
+                    ] );
+                    echo '</div></div>';
+                }
+                ?>
+                <?php else : ?>
+                    <p class="olo-ck-empty"><?php esc_html_e( 'Nessun consenso registrato.', 'olobuilder' ); ?></p>
+                <?php endif; ?>
+            </div>
         </div>
 
         <script>

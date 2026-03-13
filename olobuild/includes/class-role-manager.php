@@ -268,144 +268,183 @@ class Olobuild_Role_Manager {
         $content_only    = $this->get_content_only_roles();
         $design_only     = get_option( 'olo_design_only_roles', [] );
         ?>
-        <div class="wrap">
-            <h1>Permessi Utente — Olobuild</h1>
-            <p>Gestisci chi puo accedere al builder e con quali permessi.</p>
+        <?php Olo_Builder::page_shell_open( 'Permessi Utente' ); ?>
 
-            <table class="widefat" style="max-width:800px;margin-top:20px">
-                <thead>
-                    <tr>
-                        <th>Ruolo</th>
-                        <th style="text-align:center">Accesso completo</th>
-                        <th style="text-align:center">Solo design</th>
-                        <th style="text-align:center">Solo contenuti</th>
-                        <th style="text-align:center">Nessun accesso</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ( $roles as $role ) :
-                        $slug = $role['value'];
-                        $is_admin = ( $slug === 'administrator' );
-                        $level = 'none';
-                        if ( in_array( $slug, $allowed, true ) ) {
-                            if ( in_array( $slug, $content_only, true ) ) {
-                                $level = 'content';
-                            } elseif ( in_array( $slug, $design_only, true ) ) {
-                                $level = 'design';
-                            } else {
-                                $level = 'full';
-                            }
-                        }
-                    ?>
-                    <tr>
-                        <td><strong><?php echo esc_html( $role['label'] ); ?></strong></td>
-                        <td style="text-align:center"><input type="radio" name="olo_role_<?php echo esc_attr( $slug ); ?>" value="full" <?php checked( $level, 'full' ); ?><?php if ( $is_admin ) echo ' checked disabled'; ?> class="olo-role-radio" data-role="<?php echo esc_attr( $slug ); ?>" /></td>
-                        <td style="text-align:center"><input type="radio" name="olo_role_<?php echo esc_attr( $slug ); ?>" value="design" <?php checked( $level, 'design' ); ?><?php if ( $is_admin ) echo ' disabled'; ?> class="olo-role-radio" data-role="<?php echo esc_attr( $slug ); ?>" /></td>
-                        <td style="text-align:center"><input type="radio" name="olo_role_<?php echo esc_attr( $slug ); ?>" value="content" <?php checked( $level, 'content' ); ?><?php if ( $is_admin ) echo ' disabled'; ?> class="olo-role-radio" data-role="<?php echo esc_attr( $slug ); ?>" /></td>
-                        <td style="text-align:center"><input type="radio" name="olo_role_<?php echo esc_attr( $slug ); ?>" value="none" <?php checked( $level, 'none' ); ?><?php if ( $is_admin ) echo ' disabled'; ?> class="olo-role-radio" data-role="<?php echo esc_attr( $slug ); ?>" /></td>
-                    </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
+            <div id="olo-roles-msg-box"></div>
 
-            <div style="margin-top:15px">
-                <p><strong>Accesso completo:</strong> Puo modificare struttura, design e contenuti</p>
-                <p><strong>Solo design:</strong> Puo modificare stili e layout, ma non aggiungere/rimuovere elementi</p>
-                <p><strong>Solo contenuti:</strong> Puo modificare solo testo e immagini</p>
+            <div class="olo-card">
+                <div class="olo-card-head">
+                    <div class="olo-card-icon black">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                    </div>
+                    <div>
+                        <h3>Livelli di Accesso</h3>
+                        <p>Assegna un livello di accesso per ciascun ruolo WordPress</p>
+                    </div>
+                </div>
+                <div class="olo-card-body" style="padding:0">
+                    <table class="olo-table">
+                        <thead>
+                            <tr>
+                                <th>Ruolo</th>
+                                <th style="text-align:center">Accesso completo</th>
+                                <th style="text-align:center">Solo design</th>
+                                <th style="text-align:center">Solo contenuti</th>
+                                <th style="text-align:center">Nessun accesso</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ( $roles as $role ) :
+                                $slug = $role['value'];
+                                $is_admin = ( $slug === 'administrator' );
+                                $level = 'none';
+                                if ( in_array( $slug, $allowed, true ) ) {
+                                    if ( in_array( $slug, $content_only, true ) ) {
+                                        $level = 'content';
+                                    } elseif ( in_array( $slug, $design_only, true ) ) {
+                                        $level = 'design';
+                                    } else {
+                                        $level = 'full';
+                                    }
+                                }
+                            ?>
+                            <tr>
+                                <td><strong><?php echo esc_html( $role['label'] ); ?></strong></td>
+                                <td style="text-align:center"><input type="radio" name="olo_role_<?php echo esc_attr( $slug ); ?>" value="full" <?php checked( $level, 'full' ); ?><?php if ( $is_admin ) echo ' checked disabled'; ?> class="olo-role-radio" data-role="<?php echo esc_attr( $slug ); ?>" style="accent-color:#1a1a1a" /></td>
+                                <td style="text-align:center"><input type="radio" name="olo_role_<?php echo esc_attr( $slug ); ?>" value="design" <?php checked( $level, 'design' ); ?><?php if ( $is_admin ) echo ' disabled'; ?> class="olo-role-radio" data-role="<?php echo esc_attr( $slug ); ?>" style="accent-color:#1a1a1a" /></td>
+                                <td style="text-align:center"><input type="radio" name="olo_role_<?php echo esc_attr( $slug ); ?>" value="content" <?php checked( $level, 'content' ); ?><?php if ( $is_admin ) echo ' disabled'; ?> class="olo-role-radio" data-role="<?php echo esc_attr( $slug ); ?>" style="accent-color:#1a1a1a" /></td>
+                                <td style="text-align:center"><input type="radio" name="olo_role_<?php echo esc_attr( $slug ); ?>" value="none" <?php checked( $level, 'none' ); ?><?php if ( $is_admin ) echo ' disabled'; ?> class="olo-role-radio" data-role="<?php echo esc_attr( $slug ); ?>" style="accent-color:#1a1a1a" /></td>
+                            </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
-            <p style="margin-top:20px">
-                <button class="button button-primary" id="olo-save-roles">Salva Permessi</button>
-                <span id="olo-roles-msg" style="margin-left:10px;color:#059669;display:none">Salvato!</span>
-            </p>
+            <div class="olo-msg info" style="margin-bottom:20px">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                <div>
+                    <strong>Completo:</strong> struttura + design + contenuti &nbsp;&bull;&nbsp;
+                    <strong>Design:</strong> stili e layout &nbsp;&bull;&nbsp;
+                    <strong>Contenuti:</strong> solo testo e immagini
+                </div>
+            </div>
+
+            <div class="olo-actions" style="margin-bottom:30px">
+                <button class="olo-btn-save" id="olo-save-roles">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                    Salva Permessi
+                </button>
+            </div>
 
             <?php
-            // Granular restrictions section
             $restriction_opts = self::get_restriction_options();
             $all_restrictions = get_option( 'olo_role_restrictions', [] );
             $non_admin_roles  = array_filter( $roles, function( $r ) { return $r['value'] !== 'administrator'; } );
             ?>
-            <h2 style="margin-top:40px">Restrizioni Granulari per Pannello</h2>
-            <p>Seleziona quali pannelli e funzioni nascondere per ogni ruolo.</p>
 
-            <table class="widefat" style="max-width:900px;margin-top:15px">
-                <thead>
-                    <tr>
-                        <th>Restrizione</th>
-                        <?php foreach ( $non_admin_roles as $role ) : ?>
-                            <th style="text-align:center;font-size:12px"><?php echo esc_html( $role['label'] ); ?></th>
-                        <?php endforeach; ?>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ( $restriction_opts as $key => $label ) : ?>
-                    <tr>
-                        <td><?php echo esc_html( $label ); ?></td>
-                        <?php foreach ( $non_admin_roles as $role ) :
-                            $slug = $role['value'];
-                            $role_res = $all_restrictions[ $slug ] ?? [];
-                            $is_checked = in_array( $key, $role_res, true );
-                        ?>
-                            <td style="text-align:center">
-                                <input type="checkbox" class="olo-restriction-cb" data-role="<?php echo esc_attr( $slug ); ?>" data-restriction="<?php echo esc_attr( $key ); ?>" <?php checked( $is_checked ); ?> />
-                            </td>
-                        <?php endforeach; ?>
-                    </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
+            <div class="olo-card">
+                <div class="olo-card-head">
+                    <div class="olo-card-icon orange">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    </div>
+                    <div>
+                        <h3>Restrizioni Granulari per Pannello</h3>
+                        <p>Seleziona quali pannelli e funzioni nascondere per ogni ruolo</p>
+                    </div>
+                </div>
+                <div class="olo-card-body" style="padding:0">
+                    <table class="olo-table">
+                        <thead>
+                            <tr>
+                                <th>Restrizione</th>
+                                <?php foreach ( $non_admin_roles as $role ) : ?>
+                                    <th style="text-align:center;font-size:11px"><?php echo esc_html( $role['label'] ); ?></th>
+                                <?php endforeach; ?>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ( $restriction_opts as $key => $label ) : ?>
+                            <tr>
+                                <td><?php echo esc_html( $label ); ?></td>
+                                <?php foreach ( $non_admin_roles as $role ) :
+                                    $slug = $role['value'];
+                                    $role_res = $all_restrictions[ $slug ] ?? [];
+                                    $is_checked = in_array( $key, $role_res, true );
+                                ?>
+                                    <td style="text-align:center">
+                                        <input type="checkbox" class="olo-restriction-cb" data-role="<?php echo esc_attr( $slug ); ?>" data-restriction="<?php echo esc_attr( $key ); ?>" <?php checked( $is_checked ); ?> style="accent-color:#1a1a1a" />
+                                    </td>
+                                <?php endforeach; ?>
+                            </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
-            <p style="margin-top:15px">
-                <button class="button" id="olo-save-restrictions">Salva Restrizioni</button>
-                <span id="olo-restrictions-msg" style="margin-left:10px;color:#059669;display:none">Salvato!</span>
-            </p>
+            <div class="olo-actions">
+                <button class="olo-btn-reset" id="olo-save-restrictions">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                    Salva Restrizioni
+                </button>
+            </div>
 
             <script>
-            document.getElementById('olo-save-roles').addEventListener('click', function() {
-                var data = {};
-                document.querySelectorAll('.olo-role-radio:checked').forEach(function(r) {
-                    data[r.dataset.role] = r.value;
-                });
-                data['administrator'] = 'full';
+            (function(){
+                function showMsg(text, ok) {
+                    var box = document.getElementById('olo-roles-msg-box');
+                    box.className = 'olo-msg ' + (ok ? 'success' : 'error');
+                    box.innerHTML = (ok ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> ' : '') + text;
+                    setTimeout(function() { box.className = ''; box.innerHTML = ''; }, 3000);
+                }
 
-                fetch('<?php echo esc_js( rest_url( 'olo/v1/role-manager' ) ); ?>', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': '<?php echo esc_js( wp_create_nonce( 'wp_rest' ) ); ?>' },
-                    body: JSON.stringify(data)
-                })
-                .then(function(r) { return r.json(); })
-                .then(function(d) {
-                    var msg = document.getElementById('olo-roles-msg');
-                    msg.style.display = 'inline';
-                    msg.textContent = d.success ? 'Salvato!' : 'Errore';
-                    setTimeout(function() { msg.style.display = 'none'; }, 3000);
-                });
-            });
+                document.getElementById('olo-save-roles').addEventListener('click', function() {
+                    var btn = this;
+                    btn.disabled = true;
+                    var data = {};
+                    document.querySelectorAll('.olo-role-radio:checked').forEach(function(r) {
+                        data[r.dataset.role] = r.value;
+                    });
+                    data['administrator'] = 'full';
 
-            document.getElementById('olo-save-restrictions').addEventListener('click', function() {
-                var data = {};
-                document.querySelectorAll('.olo-restriction-cb').forEach(function(cb) {
-                    var role = cb.dataset.role;
-                    var key = cb.dataset.restriction;
-                    if (!data[role]) { data[role] = []; }
-                    if (cb.checked) { data[role].push(key); }
+                    fetch('<?php echo esc_js( rest_url( 'olo/v1/role-manager' ) ); ?>', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': '<?php echo esc_js( wp_create_nonce( 'wp_rest' ) ); ?>' },
+                        body: JSON.stringify(data)
+                    })
+                    .then(function(r) { return r.json(); })
+                    .then(function(d) {
+                        showMsg(d.success ? 'Permessi salvati' : 'Errore nel salvataggio', d.success);
+                    })
+                    .finally(function() { btn.disabled = false; });
                 });
 
-                fetch('<?php echo esc_js( rest_url( 'olo/v1/role-restrictions' ) ); ?>', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': '<?php echo esc_js( wp_create_nonce( 'wp_rest' ) ); ?>' },
-                    body: JSON.stringify(data)
-                })
-                .then(function(r) { return r.json(); })
-                .then(function(d) {
-                    var msg = document.getElementById('olo-restrictions-msg');
-                    msg.style.display = 'inline';
-                    msg.textContent = d.success ? 'Salvato!' : 'Errore';
-                    setTimeout(function() { msg.style.display = 'none'; }, 3000);
+                document.getElementById('olo-save-restrictions').addEventListener('click', function() {
+                    var btn = this;
+                    btn.disabled = true;
+                    var data = {};
+                    document.querySelectorAll('.olo-restriction-cb').forEach(function(cb) {
+                        var role = cb.dataset.role;
+                        var key = cb.dataset.restriction;
+                        if (!data[role]) { data[role] = []; }
+                        if (cb.checked) { data[role].push(key); }
+                    });
+
+                    fetch('<?php echo esc_js( rest_url( 'olo/v1/role-restrictions' ) ); ?>', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': '<?php echo esc_js( wp_create_nonce( 'wp_rest' ) ); ?>' },
+                        body: JSON.stringify(data)
+                    })
+                    .then(function(r) { return r.json(); })
+                    .then(function(d) {
+                        showMsg(d.success ? 'Restrizioni salvate' : 'Errore nel salvataggio', d.success);
+                    })
+                    .finally(function() { btn.disabled = false; });
                 });
-            });
+            })();
             </script>
-        </div>
+        <?php Olo_Builder::page_shell_close(); ?>
         <?php
     }
 

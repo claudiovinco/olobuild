@@ -21,7 +21,7 @@
     <button
       type="button"
       @click="showPicker = true"
-      class="mb-px-2 mb-py-1.5 mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded mb-text-[10px] mb-text-gray-300 hover:mb-bg-gray-600 mb-whitespace-nowrap"
+      class="mb-px-2 mb-py-1.5 mb-bg-gray-100 mb-border mb-border-gray-300 mb-rounded mb-text-[10px] mb-text-gray-600 hover:mb-bg-gray-200 mb-whitespace-nowrap"
       aria-label="Sfoglia libreria icone"
     >Sfoglia</button>
 
@@ -87,15 +87,16 @@ function onSelect(name) {
   justify-content: center;
   width: 28px;
   height: 28px;
-  background: #374151;
-  border-radius: 4px;
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
   flex-shrink: 0;
 }
 .field-icon-preview :deep(svg) {
   width: 20px;
   height: 20px;
-  fill: #d1d5db;
-  stroke: #d1d5db;
+  fill: #374151;
+  stroke: #374151;
 }
 .field-icon-empty {
   color: #9CA3AF;

@@ -3,15 +3,14 @@
     <button
       @click="open = !open"
       :aria-expanded="open"
-      class="mb-flex mb-items-center mb-justify-between mb-w-full mb-px-3 mb-py-2 mb-text-[11px] mb-font-bold mb-uppercase mb-tracking-wider mb-rounded-md mb-transition-colors"
-      :class="open
-        ? 'mb-bg-gray-600/60 mb-text-gray-200'
-        : 'mb-bg-gray-700/40 mb-text-gray-400 hover:mb-bg-gray-700/70 hover:mb-text-gray-300'"
+      class="collapse-head mb-flex mb-items-center mb-justify-between mb-w-full mb-px-3 mb-py-2 mb-text-[11px] mb-font-bold mb-uppercase mb-tracking-wider mb-rounded-md mb-transition-colors"
+      :class="open ? 'collapse-head--open' : ''"
     >
       <span>{{ title }}</span>
       <svg
-        :class="['mb-transition-transform mb-duration-200 mb-text-gray-500', open ? 'mb-rotate-180' : '']"
+        :class="['mb-transition-transform mb-duration-200', open ? 'mb-rotate-180' : '']"
         width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+        style="color: rgba(255,255,255,0.6)"
       >
         <path d="M3 4.5L6 7.5L9 4.5" />
       </svg>
@@ -32,3 +31,19 @@ const props = defineProps({
 
 const open = ref(props.defaultOpen);
 </script>
+
+<style scoped>
+.collapse-head {
+  background: rgba(0, 0, 0, 0.35);
+  color: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(4px);
+}
+.collapse-head:hover {
+  background: rgba(0, 0, 0, 0.42);
+  color: #fff;
+}
+.collapse-head--open {
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+}
+</style>

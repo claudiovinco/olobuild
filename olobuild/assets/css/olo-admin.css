@@ -1,0 +1,665 @@
+/* ═══ Olobuild Admin Design System ═══ */
+/* Shared across all Olobuild admin pages */
+/* Palette: #1a1a1a (nero), #e8622a (arancione), #f5f0eb (warm gray), #eaeaea (bordi) */
+
+/* ── Page wrapper ── */
+.olo-admin-wrap {
+    max-width: 960px;
+    margin: 30px auto 40px;
+    padding: 0 20px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+}
+.olo-admin-wrap * { box-sizing: border-box; }
+
+/* ── Topbar (logo + breadcrumb) ── */
+.olo-admin-topbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 28px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #f0f0f0;
+}
+.olo-admin-topbar-logo {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    flex-shrink: 0;
+}
+.olo-admin-topbar-logo img {
+    height: 28px;
+    width: auto;
+}
+.olo-admin-topbar-sep {
+    color: #d0d0d0;
+    flex-shrink: 0;
+}
+.olo-admin-topbar-page {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+.olo-admin-topbar-version {
+    margin-left: auto;
+    font-size: 11px;
+    color: #ccc;
+    font-weight: 500;
+    flex-shrink: 0;
+}
+
+/* ── Page header ── */
+.olo-admin-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 28px;
+}
+.olo-admin-header-icon {
+    width: 42px;
+    height: 42px;
+    background: #1a1a1a;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    flex-shrink: 0;
+}
+.olo-admin-header h1 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0;
+    padding: 0;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+}
+.olo-admin-header p {
+    font-size: 13px;
+    color: #999;
+    margin: 2px 0 0;
+}
+.olo-admin-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 10px;
+    background: #f5f0eb;
+    color: #1a1a1a;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    margin-left: auto;
+    flex-shrink: 0;
+}
+
+/* ── Cards ── */
+.olo-card {
+    background: #fff;
+    border: 1px solid #eaeaea;
+    border-radius: 14px;
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+.olo-card-head {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 20px 24px;
+    border-bottom: 1px solid #f5f5f5;
+}
+.olo-card-head h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0 0 2px;
+    letter-spacing: -0.01em;
+}
+.olo-card-head p {
+    font-size: 13px;
+    color: #999;
+    margin: 0;
+    line-height: 1.4;
+}
+.olo-card-head p a {
+    color: #e8622a;
+    text-decoration: none;
+}
+.olo-card-head p a:hover {
+    text-decoration: underline;
+}
+.olo-card-body {
+    padding: 20px 24px;
+}
+.olo-card-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.olo-card-icon.black { background: #1a1a1a; color: #fff; }
+.olo-card-icon.orange { background: #e8622a; color: #fff; }
+.olo-card-icon.warm { background: #f5f0eb; color: #1a1a1a; }
+.olo-card-icon.light { background: #f0f0f0; color: #1a1a1a; }
+.olo-card-icon.media { background: #1a1a1a; color: #fff; }
+.olo-card-icon.security { background: #e8622a; color: #fff; }
+.olo-card-icon.mail { background: #f5f0eb; color: #1a1a1a; }
+.olo-card-icon.responsive { background: #f0f0f0; color: #1a1a1a; }
+
+/* ── Fields / Form rows ── */
+.olo-field-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 14px 0;
+    border-bottom: 1px solid #f5f5f5;
+}
+.olo-field-row:last-child { border-bottom: none; padding-bottom: 0; }
+.olo-field-row:first-child { padding-top: 0; }
+.olo-field-info label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin: 0;
+}
+.olo-field-hint {
+    font-size: 12px;
+    color: #aaa;
+    margin: 2px 0 0;
+}
+.olo-field-hint a {
+    color: #e8622a;
+    text-decoration: none;
+}
+.olo-field-hint a:hover { text-decoration: underline; }
+.olo-field-input-wrap {
+    position: relative;
+    flex-shrink: 0;
+}
+.olo-field-input {
+    width: 280px;
+    padding: 9px 14px;
+    border: 1.5px solid #e8e8e8;
+    border-radius: 10px;
+    font-size: 13px;
+    color: #1a1a1a;
+    background: #fafafa;
+    transition: all .15s;
+    font-family: inherit;
+}
+.olo-field-input:focus {
+    outline: none;
+    border-color: #1a1a1a;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(0,0,0,.05);
+}
+.olo-field-input::placeholder { color: #ccc; }
+.olo-field-input.wide { width: 100%; }
+.olo-field-status {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+}
+.olo-field-status.ok { color: #2ecc71; }
+
+/* ── Select ── */
+.olo-admin-wrap select,
+select.olo-field-input {
+    cursor: pointer;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+    padding-right: 36px;
+    background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 12px center !important;
+}
+.olo-admin-wrap select::ms-expand { display: none; }
+
+/* ── Textarea ── */
+textarea.olo-field-input {
+    width: 100%;
+    min-height: 80px;
+    resize: vertical;
+}
+
+/* ── Buttons ── */
+.olo-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 4px;
+}
+.olo-btn-save {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 10px 24px;
+    background: #1a1a1a;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .15s;
+    font-family: inherit;
+}
+.olo-btn-save:hover {
+    background: #333;
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(0,0,0,.15);
+}
+.olo-btn-save:disabled {
+    opacity: .4;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+.olo-btn-reset {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 20px;
+    background: #fff;
+    color: #666;
+    border: 1.5px solid #e8e8e8;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .15s;
+    font-family: inherit;
+}
+.olo-btn-reset:hover {
+    background: #fafafa;
+    color: #1a1a1a;
+    border-color: #ccc;
+}
+.olo-btn-orange {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 10px 24px;
+    background: #e8622a;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .15s;
+    font-family: inherit;
+}
+.olo-btn-orange:hover {
+    background: #d4561f;
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(232,98,42,.25);
+}
+.olo-btn-danger {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: #fff;
+    color: #ef4444;
+    border: 1.5px solid #fecaca;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .15s;
+    font-family: inherit;
+}
+.olo-btn-danger:hover {
+    background: #fef2f2;
+    border-color: #ef4444;
+}
+.olo-btn-sm {
+    padding: 6px 14px;
+    font-size: 12px;
+    border-radius: 8px;
+}
+
+/* ── Tabs ── */
+.olo-admin-tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 24px;
+    background: #f5f5f5;
+    padding: 4px;
+    border-radius: 12px;
+}
+.olo-admin-tab {
+    padding: 9px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #999;
+    background: none;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all .15s;
+    font-family: inherit;
+    text-decoration: none;
+    white-space: nowrap;
+}
+.olo-admin-tab:hover {
+    color: #1a1a1a;
+    background: rgba(255,255,255,.5);
+}
+.olo-admin-tab.active {
+    background: #1a1a1a;
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,.1);
+}
+
+/* ── Toggle switch ── */
+.olo-toggle {
+    position: relative;
+    display: inline-block;
+    width: 42px;
+    height: 24px;
+    flex-shrink: 0;
+}
+.olo-toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    position: absolute;
+}
+.olo-toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: #e5e7eb;
+    border-radius: 24px;
+    transition: .2s;
+}
+.olo-toggle-slider::before {
+    content: "";
+    position: absolute;
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background: #fff;
+    border-radius: 50%;
+    transition: .2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,.15);
+}
+.olo-toggle input:checked + .olo-toggle-slider {
+    background: #1a1a1a;
+}
+.olo-toggle input:checked + .olo-toggle-slider::before {
+    transform: translateX(18px);
+}
+
+/* ── Status cards ── */
+.olo-status-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px;
+    margin-bottom: 20px;
+}
+.olo-status-card {
+    background: #fafafa;
+    border: 1px solid #f0f0f0;
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+}
+.olo-status-card-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 10px;
+    background: #f0f0f0;
+    color: #666;
+}
+.olo-status-card-value {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 2px;
+}
+.olo-status-card-label {
+    font-size: 12px;
+    color: #999;
+    font-weight: 500;
+}
+
+/* ── Table ── */
+.olo-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 13px;
+}
+.olo-table thead th {
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    padding: 10px 14px;
+    border-bottom: 2px solid #f0f0f0;
+    background: none;
+}
+.olo-table tbody td {
+    padding: 12px 14px;
+    border-bottom: 1px solid #f5f5f5;
+    color: #1a1a1a;
+    vertical-align: middle;
+}
+.olo-table tbody tr:last-child td { border-bottom: none; }
+.olo-table tbody tr:hover td { background: #fafafa; }
+
+/* ── Badge / Pill ── */
+.olo-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+}
+.olo-badge.green { background: #ecfdf5; color: #059669; }
+.olo-badge.orange { background: #fff7ed; color: #e8622a; }
+.olo-badge.red { background: #fef2f2; color: #dc2626; }
+.olo-badge.gray { background: #f5f5f5; color: #666; }
+.olo-badge.black { background: #1a1a1a; color: #fff; }
+
+/* ── Spinner ── */
+.olo-spinner {
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(255,255,255,.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: olo-spin .6s linear infinite;
+    display: inline-block;
+}
+.olo-spinner.dark {
+    border-color: rgba(0,0,0,.15);
+    border-top-color: #1a1a1a;
+}
+@keyframes olo-spin { to { transform: rotate(360deg); } }
+
+/* ── Toast / Alert messages ── */
+.olo-msg {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 18px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 16px;
+}
+.olo-msg.success {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    color: #15803d;
+}
+.olo-msg.error {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #dc2626;
+}
+.olo-msg.info {
+    background: #f5f0eb;
+    border: 1px solid #e8e0d6;
+    color: #1a1a1a;
+}
+
+/* ── Two-column grid ── */
+.olo-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+@media (max-width: 782px) {
+    .olo-grid-2 { grid-template-columns: 1fr; }
+}
+
+/* ── Empty state ── */
+.olo-empty {
+    text-align: center;
+    padding: 40px 20px;
+    color: #999;
+}
+.olo-empty-icon {
+    width: 48px;
+    height: 48px;
+    background: #f5f5f5;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 14px;
+    color: #ccc;
+}
+.olo-empty p {
+    font-size: 13px;
+    margin: 0;
+}
+
+/* ── Modal / Overlay ── */
+.olo-modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,.4);
+    z-index: 100000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.olo-modal {
+    background: #fff;
+    border-radius: 16px;
+    padding: 28px;
+    width: 480px;
+    max-width: 90vw;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0,0,0,.2);
+}
+.olo-modal h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0 0 16px;
+}
+.olo-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 20px;
+}
+
+/* ── Checkbox row ── */
+.olo-check-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+}
+.olo-check-row label {
+    font-size: 13px;
+    color: #1a1a1a;
+    cursor: pointer;
+}
+.olo-check-row input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #1a1a1a;
+    cursor: pointer;
+}
+
+/* ── Breakpoints ── */
+.olo-bp-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 14px 0;
+    border-bottom: 1px solid #f5f5f5;
+}
+.olo-bp-row:last-child { border-bottom: none; padding-bottom: 0; }
+.olo-bp-row:first-child { padding-top: 0; }
+.olo-bp-device {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.olo-bp-device-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: #f5f5f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+    flex-shrink: 0;
+}
+.olo-bp-device label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin: 0;
+    display: block;
+}
+.olo-bp-control {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.olo-bp-input { width: 100px !important; text-align: center; }
+.olo-bp-unit { font-size: 12px; color: #aaa; font-weight: 600; }
+
+/* ── Progress / Log box ── */
+.olo-log-box {
+    background: #1a1a1a;
+    color: #a3e635;
+    border-radius: 10px;
+    padding: 16px;
+    font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+    font-size: 12px;
+    line-height: 1.6;
+    max-height: 250px;
+    overflow-y: auto;
+    margin-top: 12px;
+}
+
+/* ── WP overrides for Olobuild admin pages ── */
+.olo-admin-wrap h2.wp-heading-inline { display: none; }
+.olo-admin-wrap .subsubsub { display: none; }

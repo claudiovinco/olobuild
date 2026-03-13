@@ -1709,7 +1709,8 @@ class Olo_Frontend_Renderer {
         $advanced = $node['advanced'] ?? [];
         $gap    = absint( $s['gap'] ?? 16 );
         $valign = $s['vertical_align'] ?? 'stretch';
-        $stack  = ! empty( $s['stack_mobile'] );
+        $stack        = ! empty( $s['stack_mobile'] );
+        $stack_tablet = ! empty( $s['stack_tablet'] );
 
         // Background handling
         $tile_bg      = $this->get_effective_bg( $style );
@@ -1867,6 +1868,21 @@ class Olo_Frontend_Renderer {
             $html .= '.' . $nostack_class . '{flex-wrap:nowrap!important}';
             $html .= '.' . $nostack_class . '>*{flex:1 1 auto}';
             $html .= '.' . $nostack_class . '>[class*="uk-width-expand"]{flex:1 1 0%}';
+            $html .= '</style>';
+        }
+
+        // Stack on tablet: force columns to 100% width between 960px and 1200px
+        if ( $stack_tablet ) {
+            $stack_tab_class = $nostack_class ?: ( 'olo-nostack-' . substr( md5( $node['id'] ?? wp_rand() ), 0, 6 ) );
+            if ( ! $nostack_class ) {
+                $classes[] = $stack_tab_class;
+                $pre_class_attr_classes[] = $stack_tab_class;
+            }
+            $html .= '<style>';
+            $html .= '@container olo-tpl (max-width:1199px){';
+            $html .= '.' . $stack_tab_class . '{flex-wrap:wrap!important}';
+            $html .= '.' . $stack_tab_class . '>*{width:100%!important;flex:0 0 100%!important}';
+            $html .= '}';
             $html .= '</style>';
         }
 
@@ -2342,6 +2358,14 @@ class Olo_Frontend_Renderer {
             $inline_styles[] = "border: {$bw}px {$bs} {$bc}";
         }
 
+        // Sticky column support
+        if ( ! empty( $s['sticky'] ) ) {
+            $sticky_offset = intval( $s['sticky_offset'] ?? 20 );
+            $inline_styles[] = 'position: sticky';
+            $inline_styles[] = 'top: ' . $sticky_offset . 'px';
+            $inline_styles[] = 'align-self: flex-start';
+        }
+
         // ID for hover CSS support
         $tile_counter++;
         $icol_css_id = ! empty( $advanced['html_id'] ) ? $advanced['html_id'] : 'mci-' . $template_id . '-' . $tile_counter;
@@ -2641,8 +2665,9 @@ class Olo_Frontend_Renderer {
         $elem_el_parallax_attr = $this->build_element_parallax_attr( $advanced );
 
         // Sticky attribute (UIkit uk-sticky) — skip if tile is already fixed-positioned
+        // Also skip for megamenu tiles — they handle header stickiness via their own JS
         $elem_sticky_attr = '';
-        if ( ! empty( $settings['sticky'] ) && $pos_mode !== 'fixed' ) {
+        if ( ! empty( $settings['sticky'] ) && $pos_mode !== 'fixed' && $type !== 'megamenu' ) {
             $sticky_pos    = esc_attr( $settings['sticky_position'] ?? 'top' );
             $sticky_offset = intval( $settings['sticky_offset'] ?? 0 );
             $sticky_mobile = $settings['sticky_on_mobile'] ?? true;

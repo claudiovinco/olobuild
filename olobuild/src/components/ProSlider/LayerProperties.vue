@@ -164,10 +164,7 @@
           </div>
           <div>
             <label class="mps-label">Colore</label>
-            <div class="mb-flex mb-gap-2">
-              <input type="color" :value="layer.color" @input="up('color', $event.target.value)" class="mb-w-8 mb-h-8 mb-rounded mb-cursor-pointer mb-border-0" />
-              <input :value="layer.color" @input="up('color', $event.target.value)" class="mps-input mb-flex-1" />
-            </div>
+            <FieldColor :modelValue="layer.color || '#ffffff'" @update:modelValue="up('color', $event)" />
           </div>
           <div>
             <label class="mps-label">Allineamento testo</label>
@@ -180,10 +177,7 @@
           </div>
           <div>
             <label class="mps-label">Sfondo</label>
-            <div class="mb-flex mb-gap-2">
-              <input type="color" :value="layer.bgColor || '#000000'" @input="up('bgColor', $event.target.value)" class="mb-w-8 mb-h-8 mb-rounded mb-cursor-pointer mb-border-0" />
-              <input :value="layer.bgColor" @input="up('bgColor', $event.target.value)" class="mps-input mb-flex-1" placeholder="transparent" />
-            </div>
+            <FieldColor :modelValue="layer.bgColor || '#000000'" @update:modelValue="up('bgColor', $event)" />
           </div>
           <div>
             <label class="mps-label">Raggio bordo (px)</label>
@@ -276,6 +270,7 @@
 import { ref } from 'vue';
 import IconPicker from './IconPicker.vue';
 import iconsSvg from './uikitIconsSvg.js';
+import FieldColor from '@/components/Builder/fields/FieldColor.vue';
 
 const props = defineProps({
   layer: { type: Object, default: null },

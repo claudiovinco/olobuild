@@ -16,6 +16,7 @@ export const useStylesStore = defineStore('styles', {
   state: () => ({
     styles: JSON.parse(JSON.stringify(oloData.styles || {})),
     presets: oloData.presets || {},
+    customPresets: [],
     generatedCss: oloData.stylesCss || '',
     isDirty: false,
     isSaving: false,
@@ -396,6 +397,74 @@ export const useStylesStore = defineStore('styles', {
       } finally {
         this.isSaving = false;
       }
+    },
+
+    // === Custom Presets ===
+
+    async loadCustomPresets() {
+      try {
+        const res = await fetch(`${oloData.restUrl}/design-presets`, {
+          headers: { 'X-WP-Nonce': oloData.nonce },
+        });
+        if (res.ok) {
+          this.customPresets = await res.json();
+        }
+      } catch (err) {
+        console.error('loadCustomPresets error:', err);
+      }
+    },
+
+    async saveCurrentAsPreset(name) {
+      try {
+        const style = {
+          colors: { ...(this.styles.colors || {}) },
+          typography: { ...(this.styles.typography || {}) },
+          layout: { ...(this.styles.layout || {}) },
+          spacing: { ...(this.styles.spacing || {}) },
+          border_radius_scale: { ...(this.styles.border_radius_scale || {}) },
+          shadows: { ...(this.styles.shadows || {}) },
+        };
+        const res = await fetch(`${oloData.restUrl}/design-presets`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-WP-Nonce': oloData.nonce,
+          },
+          body: JSON.stringify({ name, style }),
+        });
+        if (!res.ok) throw new Error('Failed to save preset');
+        const newPreset = await res.json();
+        this.customPresets.push(newPreset);
+        return newPreset;
+      } catch (err) {
+        console.error('saveCurrentAsPreset error:', err);
+        throw err;
+      }
+    },
+
+    async deleteCustomPreset(id) {
+      try {
+        const res = await fetch(`${oloData.restUrl}/design-presets/${id}`, {
+          method: 'DELETE',
+          headers: { 'X-WP-Nonce': oloData.nonce },
+        });
+        if (!res.ok) throw new Error('Failed to delete preset');
+        this.customPresets = this.customPresets.filter(p => p.id !== id);
+      } catch (err) {
+        console.error('deleteCustomPreset error:', err);
+        throw err;
+      }
+    },
+
+    applyCustomPreset(preset) {
+      const s = preset.style || {};
+      if (s.colors) this.styles.colors = { ...s.colors };
+      if (s.typography) this.styles.typography = { ...s.typography };
+      if (s.layout) this.styles.layout = { ...s.layout };
+      if (s.spacing) this.styles.spacing = { ...s.spacing };
+      if (s.border_radius_scale) this.styles.border_radius_scale = { ...s.border_radius_scale };
+      if (s.shadows) this.styles.shadows = { ...s.shadows };
+      this.isDirty = true;
     },
 
     async loadGlobalTypography() {

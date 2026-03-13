@@ -561,14 +561,14 @@ function removeItem(index) {
 }
 
 .cie-item {
-  border: 1px solid #374151;
-  border-radius: 6px;
-  background: #1f2937;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.7);
   overflow: hidden;
 }
 
 .cie-item--open {
-  border-color: var(--olo-color-primary, #6366f1);
+  border-color: var(--olo-color-primary, #e8622a);
 }
 
 .cie-header {
@@ -581,12 +581,12 @@ function removeItem(index) {
 }
 
 .cie-header:hover {
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(0, 0, 0, 0.03);
 }
 
 .cie-grip {
   cursor: grab;
-  color: #9CA3AF;
+  color: #aaa;
   font-size: 14px;
   flex-shrink: 0;
 }
@@ -601,7 +601,7 @@ function removeItem(index) {
   border-radius: 3px;
   overflow: hidden;
   flex-shrink: 0;
-  background: #374151;
+  background: rgba(0, 0, 0, 0.06);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -616,7 +616,7 @@ function removeItem(index) {
 .cie-title {
   flex: 1;
   font-size: 12px;
-  color: #d1d5db;
+  color: #1a1a1a;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -639,15 +639,15 @@ function removeItem(index) {
   border: none;
   border-radius: 4px;
   background: transparent;
-  color: #9ca3af;
+  color: #999;
   cursor: pointer;
   font-size: 14px;
   padding: 0;
 }
 
 .cie-btn:hover {
-  background: #374151;
-  color: #fff;
+  background: rgba(0, 0, 0, 0.08);
+  color: #333;
 }
 
 .cie-btn--delete:hover {
@@ -662,12 +662,12 @@ function removeItem(index) {
 
 .cie-btn:disabled:hover {
   background: transparent;
-  color: #9ca3af;
+  color: #999;
 }
 
 .cie-chevron {
   font-size: 8px;
-  color: #9CA3AF;
+  color: #aaa;
   transition: transform 0.2s;
   margin-left: 2px;
 }
@@ -678,7 +678,7 @@ function removeItem(index) {
 
 .cie-body {
   padding: 8px;
-  border-top: 1px solid #374151;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -693,7 +693,7 @@ function removeItem(index) {
 .cie-label {
   font-size: 10px;
   font-weight: 600;
-  color: #9ca3af;
+  color: #666;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -710,7 +710,7 @@ function removeItem(index) {
 
 .cie-input:focus {
   outline: none;
-  border-color: var(--olo-color-primary, #6366f1);
+  border-color: var(--olo-color-primary, #e8622a);
 }
 
 .cie-textarea {
@@ -731,7 +731,7 @@ function removeItem(index) {
 
 .cie-range-val {
   font-size: 11px;
-  color: #9ca3af;
+  color: #666;
   min-width: 28px;
   text-align: right;
 }
@@ -790,16 +790,17 @@ function removeItem(index) {
 .cie-image-btn {
   width: 100%;
   padding: 5px;
-  background: #374151;
-  border: 1px solid #4b5563;
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 4px;
-  color: #d1d5db;
+  color: #555;
   font-size: 11px;
   cursor: pointer;
 }
 
 .cie-image-btn:hover {
-  background: #4b5563;
+  background: rgba(0, 0, 0, 0.08);
+  color: #333;
 }
 
 .cie-media-video-badge {
@@ -807,8 +808,8 @@ function removeItem(index) {
   align-items: center;
   gap: 6px;
   padding: 8px;
-  background: #1f2937;
-  color: #9ca3af;
+  background: rgba(0, 0, 0, 0.04);
+  color: #888;
   height: 60px;
 }
 .cie-media-filename {
@@ -822,32 +823,32 @@ function removeItem(index) {
   width: 100%;
   margin-top: 6px;
   padding: 7px 0;
-  border: 1px dashed #4b5563;
+  border: 1px dashed rgba(0, 0, 0, 0.15);
   border-radius: 6px;
   background: transparent;
-  color: #9ca3af;
+  color: #999;
   font-size: 12px;
   cursor: pointer;
   transition: border-color 0.15s, color 0.15s;
 }
 
 .cie-add:hover {
-  border-color: var(--olo-color-primary, #6366f1);
-  color: #c7d2fe;
+  border-color: var(--olo-color-primary, #e8622a);
+  color: #e8622a;
 }
 
 .cie-ghost {
   opacity: 0.4;
-  border: 1px dashed var(--olo-color-primary, #6366f1) !important;
+  border: 1px dashed var(--olo-color-primary, #e8622a) !important;
 }
 
 .cie-dynamic-info {
   padding: 10px 12px;
-  background: rgb(var(--olo-primary-rgb, 99 102 241) / 0.1);
-  border: 1px solid rgb(var(--olo-primary-rgb, 99 102 241) / 0.25);
+  background: rgb(var(--olo-primary-rgb, 232 98 42) / 0.08);
+  border: 1px solid rgb(var(--olo-primary-rgb, 232 98 42) / 0.2);
   border-radius: 6px;
   font-size: 12px;
-  color: #c7d2fe;
+  color: #e8622a;
   text-align: center;
 }
 
@@ -862,18 +863,18 @@ function removeItem(index) {
   justify-content: center;
   width: 26px;
   height: 26px;
-  background: #374151;
+  background: rgba(0, 0, 0, 0.06);
   border-radius: 4px;
   flex-shrink: 0;
 }
 .cie-icon-preview :deep(svg) {
   width: 18px;
   height: 18px;
-  fill: #d1d5db;
-  stroke: #d1d5db;
+  fill: #555;
+  stroke: #555;
 }
 .cie-icon-empty {
-  color: #9CA3AF;
+  color: #999;
   font-size: 11px;
 }
 .cie-icon-input {
@@ -882,17 +883,18 @@ function removeItem(index) {
 }
 .cie-icon-btn {
   padding: 5px 8px;
-  background: #374151;
-  border: 1px solid #4b5563;
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 4px;
-  color: #d1d5db;
+  color: #555;
   font-size: 10px;
   cursor: pointer;
   white-space: nowrap;
   flex-shrink: 0;
 }
 .cie-icon-btn:hover {
-  background: #4b5563;
+  background: rgba(0, 0, 0, 0.08);
+  color: #333;
 }
 
 .cie-toggle {
@@ -905,20 +907,20 @@ function removeItem(index) {
 .cie-toggle input[type="checkbox"] {
   width: 16px;
   height: 16px;
-  accent-color: var(--olo-color-primary, #6366f1);
+  accent-color: var(--olo-color-primary, #e8622a);
   cursor: pointer;
 }
 
 .cie-toggle-label {
   font-size: 11px;
-  color: #9ca3af;
+  color: #666;
 }
 
 /* Placer button */
 .cie-placer-btn {
   width: 100%;
   padding: 6px 10px;
-  background: #4f46e5;
+  background: var(--olo-color-primary, #e8622a);
   border: none;
   border-radius: 5px;
   color: #fff;
@@ -927,7 +929,7 @@ function removeItem(index) {
   cursor: pointer;
   transition: background 0.15s;
 }
-.cie-placer-btn:hover { background: #4338ca; }
+.cie-placer-btn:hover { background: #d4571f; }
 
 /* Placer modal */
 .cie-placer-overlay {

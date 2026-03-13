@@ -153,43 +153,41 @@ class Olo_Seo_Settings {
         ];
 
         ?>
-        <div class="wrap olo-seo-wrap">
-            <h1>
-                <img src="<?php echo esc_url( OLO_URL . 'assets/img/ob-menu.png' ); ?>" style="width:24px;height:24px;vertical-align:middle;margin-right:8px;" alt="">
-                Olobuild SEO
-            </h1>
+        <?php Olo_Builder::page_shell_open( 'SEO', 'olo-seo-wrap' ); ?>
 
-            <nav class="nav-tab-wrapper olo-seo-tabs">
+            <div class="olo-admin-tabs olo-seo-tabs">
                 <?php foreach ( $tabs as $slug => $label ) : ?>
                     <a
                         href="<?php echo esc_url( admin_url( 'admin.php?page=olo-seo&tab=' . $slug ) ); ?>"
-                        class="nav-tab <?php echo $active_tab === $slug ? 'nav-tab-active' : ''; ?>"
+                        class="olo-admin-tab <?php echo $active_tab === $slug ? 'active' : ''; ?>"
                     >
                         <?php echo $this->tab_icon( $slug ); ?>
                         <?php echo $label; ?>
                     </a>
                 <?php endforeach; ?>
-            </nav>
+            </div>
 
             <form method="post" action="options.php" class="olo-seo-form">
                 <?php
                 settings_fields( 'olo_seo_group' );
                 $this->{'render_tab_' . $active_tab}();
-                submit_button( 'Salva Impostazioni' );
                 ?>
+                <div style="margin-top:24px;">
+                    <button type="submit" class="olo-btn-save">Salva Impostazioni</button>
+                </div>
             </form>
-        </div>
+        <?php Olo_Builder::page_shell_close(); ?>
         <?php
     }
 
     private function tab_icon( $slug ) {
         $icons = [
-            'titles'    => '<span class="dashicons dashicons-edit" style="font-size:16px;line-height:1.8;margin-right:4px;"></span>',
-            'social'    => '<span class="dashicons dashicons-share" style="font-size:16px;line-height:1.8;margin-right:4px;"></span>',
-            'schema'    => '<span class="dashicons dashicons-admin-home" style="font-size:16px;line-height:1.8;margin-right:4px;"></span>',
-            'webmaster' => '<span class="dashicons dashicons-admin-tools" style="font-size:16px;line-height:1.8;margin-right:4px;"></span>',
-            'sitemap'   => '<span class="dashicons dashicons-networking" style="font-size:16px;line-height:1.8;margin-right:4px;"></span>',
-            'advanced'  => '<span class="dashicons dashicons-admin-generic" style="font-size:16px;line-height:1.8;margin-right:4px;"></span>',
+            'titles'    => '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px;"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>',
+            'social'    => '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px;"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>',
+            'schema'    => '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px;"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>',
+            'webmaster' => '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px;"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>',
+            'sitemap'   => '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px;"><rect x="9" y="2" width="6" height="6" rx="1"/><rect x="2" y="16" width="6" height="6" rx="1"/><rect x="16" y="16" width="6" height="6" rx="1"/><path d="M12 8v4"/><path d="M5 16v-2a2 2 0 012-2h10a2 2 0 012 2v2"/></svg>',
+            'advanced'  => '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px;"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>',
         ];
         return $icons[ $slug ] ?? '';
     }
@@ -202,14 +200,24 @@ class Olo_Seo_Settings {
 
         $separators = [ '-', '–', '—', '|', '·', '/', '»', '«', ':', '•' ];
         ?>
-        <div class="olo-seo-section">
-            <h2>Formato Titoli</h2>
-            <p class="description">Definisci il formato predefinito dei titoli per ogni tipo di contenuto. Variabili disponibili: <code>%title%</code>, <code>%sitename%</code>, <code>%sep%</code>, <code>%tagline%</code>, <code>%category%</code>, <code>%tag%</code>, <code>%search_query%</code>, <code>%page%</code>, <code>%date%</code>, <code>%author%</code></p>
-
-            <table class="form-table olo-seo-table">
-                <tr>
-                    <th>Separatore</th>
-                    <td>
+        <!-- Formato Titoli -->
+        <div class="olo-card">
+            <div class="olo-card-head">
+                <div class="olo-card-icon black">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                </div>
+                <div>
+                    <h3>Formato Titoli</h3>
+                    <p>Definisci il formato predefinito dei titoli per ogni tipo di contenuto. Variabili: <code>%title%</code>, <code>%sitename%</code>, <code>%sep%</code>, <code>%tagline%</code>, <code>%category%</code>, <code>%tag%</code>, <code>%search_query%</code>, <code>%page%</code>, <code>%date%</code>, <code>%author%</code></p>
+                </div>
+            </div>
+            <div class="olo-card-body">
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label>Separatore</label>
+                        <div class="olo-field-hint">Il carattere usato per separare titolo e nome sito.</div>
+                    </div>
+                    <div class="olo-field-input-wrap">
                         <div class="olo-seo-separator-picker">
                             <?php foreach ( $separators as $s ) : ?>
                                 <label class="olo-seo-sep-option <?php echo $sep === $s ? 'active' : ''; ?>">
@@ -218,8 +226,8 @@ class Olo_Seo_Settings {
                                 </label>
                             <?php endforeach; ?>
                         </div>
-                    </td>
-                </tr>
+                    </div>
+                </div>
                 <?php
                 $title_fields = [
                     'homepage_title'  => [ 'Homepage — Titolo',      '%sitename% %sep% %tagline%' ],
@@ -240,45 +248,63 @@ class Olo_Seo_Settings {
                     $val = $opts[ $key ] ?? $info[1];
                     $is_desc = strpos( $key, '_desc' ) !== false;
                     ?>
-                    <tr>
-                        <th><?php echo esc_html( $info[0] ); ?></th>
-                        <td>
+                    <div class="olo-field-row">
+                        <div class="olo-field-info">
+                            <label><?php echo esc_html( $info[0] ); ?></label>
+                        </div>
+                        <div class="olo-field-input-wrap">
                             <?php if ( $is_desc ) : ?>
-                                <textarea name="<?php echo self::OPT_TITLES; ?>[<?php echo $key; ?>]" class="large-text" rows="2" placeholder="<?php echo esc_attr( $info[1] ); ?>"><?php echo esc_textarea( $val ); ?></textarea>
+                                <textarea name="<?php echo self::OPT_TITLES; ?>[<?php echo $key; ?>]" class="olo-field-input" rows="2" placeholder="<?php echo esc_attr( $info[1] ); ?>"><?php echo esc_textarea( $val ); ?></textarea>
                             <?php else : ?>
-                                <input type="text" name="<?php echo self::OPT_TITLES; ?>[<?php echo $key; ?>]" value="<?php echo esc_attr( $val ); ?>" class="large-text" placeholder="<?php echo esc_attr( $info[1] ); ?>">
+                                <input type="text" name="<?php echo self::OPT_TITLES; ?>[<?php echo $key; ?>]" value="<?php echo esc_attr( $val ); ?>" class="olo-field-input" placeholder="<?php echo esc_attr( $info[1] ); ?>">
                             <?php endif; ?>
-                        </td>
-                    </tr>
+                        </div>
+                    </div>
                 <?php endforeach; ?>
-            </table>
+            </div>
         </div>
 
-        <div class="olo-seo-section">
-            <h2>Knowledge Graph</h2>
-            <p class="description">Queste informazioni vengono usate per il markup JSON-LD del Knowledge Graph di Google.</p>
-            <table class="form-table olo-seo-table">
-                <tr>
-                    <th>Tipo entità</th>
-                    <td>
-                        <select name="<?php echo self::OPT_TITLES; ?>[kg_type]">
+        <!-- Knowledge Graph -->
+        <div class="olo-card">
+            <div class="olo-card-head">
+                <div class="olo-card-icon orange">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                </div>
+                <div>
+                    <h3>Knowledge Graph</h3>
+                    <p>Queste informazioni vengono usate per il markup JSON-LD del Knowledge Graph di Google.</p>
+                </div>
+            </div>
+            <div class="olo-card-body">
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label>Tipo entità</label>
+                    </div>
+                    <div class="olo-field-input-wrap">
+                        <select name="<?php echo self::OPT_TITLES; ?>[kg_type]" class="olo-field-input">
                             <option value="Organization" <?php selected( $opts['kg_type'] ?? 'Organization', 'Organization' ); ?>>Organizzazione</option>
                             <option value="Person" <?php selected( $opts['kg_type'] ?? '', 'Person' ); ?>>Persona</option>
                         </select>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Nome</th>
-                    <td><input type="text" name="<?php echo self::OPT_TITLES; ?>[kg_name]" value="<?php echo esc_attr( $opts['kg_name'] ?? get_bloginfo( 'name' ) ); ?>" class="regular-text"></td>
-                </tr>
-                <tr>
-                    <th>Logo / Foto (URL)</th>
-                    <td>
-                        <input type="text" id="olo-seo-kg-logo" name="<?php echo self::OPT_TITLES; ?>[kg_logo]" value="<?php echo esc_attr( $opts['kg_logo'] ?? '' ); ?>" class="regular-text">
-                        <button type="button" class="button olo-seo-upload-btn" data-target="olo-seo-kg-logo">Seleziona</button>
-                    </td>
-                </tr>
-            </table>
+                    </div>
+                </div>
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label>Nome</label>
+                    </div>
+                    <div class="olo-field-input-wrap">
+                        <input type="text" name="<?php echo self::OPT_TITLES; ?>[kg_name]" value="<?php echo esc_attr( $opts['kg_name'] ?? get_bloginfo( 'name' ) ); ?>" class="olo-field-input">
+                    </div>
+                </div>
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label>Logo / Foto (URL)</label>
+                    </div>
+                    <div class="olo-field-input-wrap">
+                        <input type="text" id="olo-seo-kg-logo" name="<?php echo self::OPT_TITLES; ?>[kg_logo]" value="<?php echo esc_attr( $opts['kg_logo'] ?? '' ); ?>" class="olo-field-input">
+                        <button type="button" class="button olo-seo-upload-btn" data-target="olo-seo-kg-logo" style="margin-top:6px;">Seleziona</button>
+                    </div>
+                </div>
+            </div>
         </div>
         <?php
     }
@@ -287,62 +313,98 @@ class Olo_Seo_Settings {
 
     private function render_tab_social() {
         $opts = self::get( self::OPT_SOCIAL );
+
+        $social_icons = [
+            'facebook_url'   => '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>',
+            'twitter_user'   => '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg>',
+            'instagram_url'  => '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>',
+            'linkedin_url'   => '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>',
+            'youtube_url'    => '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 00-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 00-1.94 2A29 29 0 001 11.75a29 29 0 00.46 5.33A2.78 2.78 0 003.4 19.1c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 001.94-2 29 29 0 00.46-5.25 29 29 0 00-.46-5.43z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/></svg>',
+            'pinterest_url'  => '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="17" x2="12" y2="22"/><path d="M5 12V8a7 7 0 0114 0v4"/><circle cx="12" cy="12" r="3"/></svg>',
+            'tiktok_url'     => '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12a4 4 0 104 4V4a5 5 0 005 5"/></svg>',
+        ];
         ?>
-        <div class="olo-seo-section">
-            <h2>Profili Social</h2>
-            <p class="description">Usati nel markup JSON-LD <code>sameAs</code> per collegare il sito ai profili social.</p>
-            <table class="form-table olo-seo-table">
+        <!-- Profili Social -->
+        <div class="olo-card">
+            <div class="olo-card-head">
+                <div class="olo-card-icon black">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                </div>
+                <div>
+                    <h3>Profili Social</h3>
+                    <p>Usati nel markup JSON-LD <code>sameAs</code> per collegare il sito ai profili social.</p>
+                </div>
+            </div>
+            <div class="olo-card-body">
                 <?php
                 $social_fields = [
-                    'facebook_url'   => [ 'Facebook', 'https://facebook.com/...', 'dashicons-facebook-alt' ],
-                    'twitter_user'   => [ 'X (Twitter)', '@username', 'dashicons-twitter' ],
-                    'instagram_url'  => [ 'Instagram', 'https://instagram.com/...', 'dashicons-instagram' ],
-                    'linkedin_url'   => [ 'LinkedIn', 'https://linkedin.com/...', 'dashicons-linkedin' ],
-                    'youtube_url'    => [ 'YouTube', 'https://youtube.com/...', 'dashicons-video-alt3' ],
-                    'pinterest_url'  => [ 'Pinterest', 'https://pinterest.com/...', 'dashicons-pinterest' ],
-                    'tiktok_url'     => [ 'TikTok', 'https://tiktok.com/@...', 'dashicons-share' ],
+                    'facebook_url'   => [ 'Facebook', 'https://facebook.com/...' ],
+                    'twitter_user'   => [ 'X (Twitter)', '@username' ],
+                    'instagram_url'  => [ 'Instagram', 'https://instagram.com/...' ],
+                    'linkedin_url'   => [ 'LinkedIn', 'https://linkedin.com/...' ],
+                    'youtube_url'    => [ 'YouTube', 'https://youtube.com/...' ],
+                    'pinterest_url'  => [ 'Pinterest', 'https://pinterest.com/...' ],
+                    'tiktok_url'     => [ 'TikTok', 'https://tiktok.com/@...' ],
                 ];
                 foreach ( $social_fields as $key => $info ) :
                     ?>
-                    <tr>
-                        <th>
-                            <span class="dashicons <?php echo esc_attr( $info[2] ); ?>" style="margin-right:4px;color:#666;"></span>
-                            <?php echo esc_html( $info[0] ); ?>
-                        </th>
-                        <td><input type="text" name="<?php echo self::OPT_SOCIAL; ?>[<?php echo $key; ?>]" value="<?php echo esc_attr( $opts[ $key ] ?? '' ); ?>" class="regular-text" placeholder="<?php echo esc_attr( $info[1] ); ?>"></td>
-                    </tr>
+                    <div class="olo-field-row">
+                        <div class="olo-field-info">
+                            <label><?php echo $social_icons[ $key ]; ?> <?php echo esc_html( $info[0] ); ?></label>
+                        </div>
+                        <div class="olo-field-input-wrap">
+                            <input type="text" name="<?php echo self::OPT_SOCIAL; ?>[<?php echo $key; ?>]" value="<?php echo esc_attr( $opts[ $key ] ?? '' ); ?>" class="olo-field-input" placeholder="<?php echo esc_attr( $info[1] ); ?>">
+                        </div>
+                    </div>
                 <?php endforeach; ?>
-            </table>
+            </div>
         </div>
 
-        <div class="olo-seo-section">
-            <h2>Open Graph — Impostazioni Predefinite</h2>
-            <table class="form-table olo-seo-table">
-                <tr>
-                    <th>Immagine OG predefinita</th>
-                    <td>
-                        <input type="text" id="olo-seo-og-default" name="<?php echo self::OPT_SOCIAL; ?>[og_default_image]" value="<?php echo esc_attr( $opts['og_default_image'] ?? '' ); ?>" class="regular-text">
-                        <button type="button" class="button olo-seo-upload-btn" data-target="olo-seo-og-default">Seleziona</button>
+        <!-- Open Graph -->
+        <div class="olo-card">
+            <div class="olo-card-head">
+                <div class="olo-card-icon orange">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                </div>
+                <div>
+                    <h3>Open Graph — Impostazioni Predefinite</h3>
+                    <p>Configurazione per la condivisione su Facebook, Twitter e altri social network.</p>
+                </div>
+            </div>
+            <div class="olo-card-body">
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label>Immagine OG predefinita</label>
+                        <div class="olo-field-hint">Usata quando un post/pagina non ha immagine in evidenza. Dimensione consigliata: 1200x630px.</div>
+                    </div>
+                    <div class="olo-field-input-wrap">
+                        <input type="text" id="olo-seo-og-default" name="<?php echo self::OPT_SOCIAL; ?>[og_default_image]" value="<?php echo esc_attr( $opts['og_default_image'] ?? '' ); ?>" class="olo-field-input">
+                        <button type="button" class="button olo-seo-upload-btn" data-target="olo-seo-og-default" style="margin-top:6px;">Seleziona</button>
                         <?php if ( ! empty( $opts['og_default_image'] ) ) : ?>
                             <br><img src="<?php echo esc_url( $opts['og_default_image'] ); ?>" style="max-width:200px;margin-top:8px;border-radius:4px;">
                         <?php endif; ?>
-                        <p class="description">Usata quando un post/pagina non ha immagine in evidenza. Dimensione consigliata: 1200×630px.</p>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Facebook App ID</th>
-                    <td><input type="text" name="<?php echo self::OPT_SOCIAL; ?>[fb_app_id]" value="<?php echo esc_attr( $opts['fb_app_id'] ?? '' ); ?>" class="regular-text" placeholder="Es. 123456789012345"></td>
-                </tr>
-                <tr>
-                    <th>Twitter Card Type</th>
-                    <td>
-                        <select name="<?php echo self::OPT_SOCIAL; ?>[twitter_card_type]">
+                    </div>
+                </div>
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label>Facebook App ID</label>
+                    </div>
+                    <div class="olo-field-input-wrap">
+                        <input type="text" name="<?php echo self::OPT_SOCIAL; ?>[fb_app_id]" value="<?php echo esc_attr( $opts['fb_app_id'] ?? '' ); ?>" class="olo-field-input" placeholder="Es. 123456789012345">
+                    </div>
+                </div>
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label>Twitter Card Type</label>
+                    </div>
+                    <div class="olo-field-input-wrap">
+                        <select name="<?php echo self::OPT_SOCIAL; ?>[twitter_card_type]" class="olo-field-input">
                             <option value="summary_large_image" <?php selected( $opts['twitter_card_type'] ?? 'summary_large_image', 'summary_large_image' ); ?>>Summary con immagine grande</option>
                             <option value="summary" <?php selected( $opts['twitter_card_type'] ?? '', 'summary' ); ?>>Summary</option>
                         </select>
-                    </td>
-                </tr>
-            </table>
+                    </div>
+                </div>
+            </div>
         </div>
         <?php
     }
@@ -352,14 +414,24 @@ class Olo_Seo_Settings {
     private function render_tab_schema() {
         $opts = self::get( self::OPT_LOCAL );
         ?>
-        <div class="olo-seo-section">
-            <h2>Local Business / Organizzazione</h2>
-            <p class="description">Schema markup LocalBusiness per Google. Se il nome è vuoto, questo schema non viene generato.</p>
-            <table class="form-table olo-seo-table">
-                <tr>
-                    <th>Tipo attività</th>
-                    <td>
-                        <select name="<?php echo self::OPT_LOCAL; ?>[type]">
+        <!-- Local Business / Organizzazione -->
+        <div class="olo-card">
+            <div class="olo-card-head">
+                <div class="olo-card-icon black">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                </div>
+                <div>
+                    <h3>Local Business / Organizzazione</h3>
+                    <p>Schema markup LocalBusiness per Google. Se il nome è vuoto, questo schema non viene generato.</p>
+                </div>
+            </div>
+            <div class="olo-card-body">
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label>Tipo attività</label>
+                    </div>
+                    <div class="olo-field-input-wrap">
+                        <select name="<?php echo self::OPT_LOCAL; ?>[type]" class="olo-field-input">
                             <?php
                             $types = [
                                 'LocalBusiness'       => 'Attività locale (generico)',
@@ -397,77 +469,128 @@ class Olo_Seo_Settings {
                                 <option value="<?php echo esc_attr( $val ); ?>" <?php selected( $opts['type'] ?? 'LocalBusiness', $val ); ?>><?php echo esc_html( $label ); ?></option>
                             <?php endforeach; ?>
                         </select>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Nome attività</th>
-                    <td><input type="text" name="<?php echo self::OPT_LOCAL; ?>[name]" value="<?php echo esc_attr( $opts['name'] ?? '' ); ?>" class="regular-text"></td>
-                </tr>
-                <tr>
-                    <th>Descrizione</th>
-                    <td><textarea name="<?php echo self::OPT_LOCAL; ?>[description]" class="large-text" rows="2"><?php echo esc_textarea( $opts['description'] ?? '' ); ?></textarea></td>
-                </tr>
-                <tr>
-                    <th>Via / Indirizzo</th>
-                    <td><input type="text" name="<?php echo self::OPT_LOCAL; ?>[address][street]" value="<?php echo esc_attr( $opts['address']['street'] ?? '' ); ?>" class="regular-text"></td>
-                </tr>
-                <tr>
-                    <th>Città</th>
-                    <td><input type="text" name="<?php echo self::OPT_LOCAL; ?>[address][city]" value="<?php echo esc_attr( $opts['address']['city'] ?? '' ); ?>" class="regular-text"></td>
-                </tr>
-                <tr>
-                    <th>Provincia / Stato</th>
-                    <td><input type="text" name="<?php echo self::OPT_LOCAL; ?>[address][state]" value="<?php echo esc_attr( $opts['address']['state'] ?? '' ); ?>" class="regular-text"></td>
-                </tr>
-                <tr>
-                    <th>CAP</th>
-                    <td><input type="text" name="<?php echo self::OPT_LOCAL; ?>[address][zip]" value="<?php echo esc_attr( $opts['address']['zip'] ?? '' ); ?>" class="small-text"></td>
-                </tr>
-                <tr>
-                    <th>Paese</th>
-                    <td><input type="text" name="<?php echo self::OPT_LOCAL; ?>[address][country]" value="<?php echo esc_attr( $opts['address']['country'] ?? 'IT' ); ?>" class="small-text" placeholder="IT"></td>
-                </tr>
-                <tr>
-                    <th>Telefono</th>
-                    <td><input type="text" name="<?php echo self::OPT_LOCAL; ?>[phone]" value="<?php echo esc_attr( $opts['phone'] ?? '' ); ?>" class="regular-text" placeholder="+39 ..."></td>
-                </tr>
-                <tr>
-                    <th>Email</th>
-                    <td><input type="email" name="<?php echo self::OPT_LOCAL; ?>[email]" value="<?php echo esc_attr( $opts['email'] ?? '' ); ?>" class="regular-text"></td>
-                </tr>
-                <tr>
-                    <th>Coordinate GPS</th>
-                    <td>
-                        <input type="text" name="<?php echo self::OPT_LOCAL; ?>[geo_lat]" value="<?php echo esc_attr( $opts['geo_lat'] ?? '' ); ?>" class="small-text" placeholder="Lat"> &nbsp;
-                        <input type="text" name="<?php echo self::OPT_LOCAL; ?>[geo_lng]" value="<?php echo esc_attr( $opts['geo_lng'] ?? '' ); ?>" class="small-text" placeholder="Lng">
-                    </td>
-                </tr>
-                <tr>
-                    <th>Fascia di prezzo</th>
-                    <td>
-                        <select name="<?php echo self::OPT_LOCAL; ?>[price_range]">
+                    </div>
+                </div>
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label>Nome attività</label>
+                    </div>
+                    <div class="olo-field-input-wrap">
+                        <input type="text" name="<?php echo self::OPT_LOCAL; ?>[name]" value="<?php echo esc_attr( $opts['name'] ?? '' ); ?>" class="olo-field-input">
+                    </div>
+                </div>
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label>Descrizione</label>
+                    </div>
+                    <div class="olo-field-input-wrap">
+                        <textarea name="<?php echo self::OPT_LOCAL; ?>[description]" class="olo-field-input" rows="2"><?php echo esc_textarea( $opts['description'] ?? '' ); ?></textarea>
+                    </div>
+                </div>
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label>Via / Indirizzo</label>
+                    </div>
+                    <div class="olo-field-input-wrap">
+                        <input type="text" name="<?php echo self::OPT_LOCAL; ?>[address][street]" value="<?php echo esc_attr( $opts['address']['street'] ?? '' ); ?>" class="olo-field-input">
+                    </div>
+                </div>
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label>Città</label>
+                    </div>
+                    <div class="olo-field-input-wrap">
+                        <input type="text" name="<?php echo self::OPT_LOCAL; ?>[address][city]" value="<?php echo esc_attr( $opts['address']['city'] ?? '' ); ?>" class="olo-field-input">
+                    </div>
+                </div>
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label>Provincia / Stato</label>
+                    </div>
+                    <div class="olo-field-input-wrap">
+                        <input type="text" name="<?php echo self::OPT_LOCAL; ?>[address][state]" value="<?php echo esc_attr( $opts['address']['state'] ?? '' ); ?>" class="olo-field-input">
+                    </div>
+                </div>
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label>CAP</label>
+                    </div>
+                    <div class="olo-field-input-wrap">
+                        <input type="text" name="<?php echo self::OPT_LOCAL; ?>[address][zip]" value="<?php echo esc_attr( $opts['address']['zip'] ?? '' ); ?>" class="olo-field-input" style="max-width:120px;">
+                    </div>
+                </div>
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label>Paese</label>
+                    </div>
+                    <div class="olo-field-input-wrap">
+                        <input type="text" name="<?php echo self::OPT_LOCAL; ?>[address][country]" value="<?php echo esc_attr( $opts['address']['country'] ?? 'IT' ); ?>" class="olo-field-input" style="max-width:80px;" placeholder="IT">
+                    </div>
+                </div>
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label>Telefono</label>
+                    </div>
+                    <div class="olo-field-input-wrap">
+                        <input type="text" name="<?php echo self::OPT_LOCAL; ?>[phone]" value="<?php echo esc_attr( $opts['phone'] ?? '' ); ?>" class="olo-field-input" placeholder="+39 ...">
+                    </div>
+                </div>
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label>Email</label>
+                    </div>
+                    <div class="olo-field-input-wrap">
+                        <input type="email" name="<?php echo self::OPT_LOCAL; ?>[email]" value="<?php echo esc_attr( $opts['email'] ?? '' ); ?>" class="olo-field-input">
+                    </div>
+                </div>
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label>Coordinate GPS</label>
+                    </div>
+                    <div class="olo-field-input-wrap" style="display:flex;gap:8px;align-items:center;">
+                        <input type="text" name="<?php echo self::OPT_LOCAL; ?>[geo_lat]" value="<?php echo esc_attr( $opts['geo_lat'] ?? '' ); ?>" class="olo-field-input" style="max-width:140px;" placeholder="Lat">
+                        <span style="color:#999;">&mdash;</span>
+                        <input type="text" name="<?php echo self::OPT_LOCAL; ?>[geo_lng]" value="<?php echo esc_attr( $opts['geo_lng'] ?? '' ); ?>" class="olo-field-input" style="max-width:140px;" placeholder="Lng">
+                    </div>
+                </div>
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label>Fascia di prezzo</label>
+                    </div>
+                    <div class="olo-field-input-wrap">
+                        <select name="<?php echo self::OPT_LOCAL; ?>[price_range]" class="olo-field-input">
                             <option value="" <?php selected( $opts['price_range'] ?? '', '' ); ?>>— Non specificato —</option>
                             <option value="$" <?php selected( $opts['price_range'] ?? '', '$' ); ?>>$ — Economico</option>
                             <option value="$$" <?php selected( $opts['price_range'] ?? '', '$$' ); ?>>$$ — Moderato</option>
                             <option value="$$$" <?php selected( $opts['price_range'] ?? '', '$$$' ); ?>>$$$ — Costoso</option>
                             <option value="$$$$" <?php selected( $opts['price_range'] ?? '', '$$$$' ); ?>>$$$$ — Lusso</option>
                         </select>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Immagine attività (URL)</th>
-                    <td>
-                        <input type="text" id="olo-seo-biz-image" name="<?php echo self::OPT_LOCAL; ?>[image]" value="<?php echo esc_attr( $opts['image'] ?? '' ); ?>" class="regular-text">
-                        <button type="button" class="button olo-seo-upload-btn" data-target="olo-seo-biz-image">Seleziona</button>
-                    </td>
-                </tr>
-            </table>
+                    </div>
+                </div>
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label>Immagine attività (URL)</label>
+                    </div>
+                    <div class="olo-field-input-wrap">
+                        <input type="text" id="olo-seo-biz-image" name="<?php echo self::OPT_LOCAL; ?>[image]" value="<?php echo esc_attr( $opts['image'] ?? '' ); ?>" class="olo-field-input">
+                        <button type="button" class="button olo-seo-upload-btn" data-target="olo-seo-biz-image" style="margin-top:6px;">Seleziona</button>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="olo-seo-section">
-            <h2>Orari di apertura</h2>
-            <p class="description">Inserisci gli orari nel formato <code>HH:MM</code>. Lascia vuoto per i giorni di chiusura.</p>
-            <table class="form-table olo-seo-table">
+        <!-- Orari di apertura -->
+        <div class="olo-card">
+            <div class="olo-card-head">
+                <div class="olo-card-icon orange">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                </div>
+                <div>
+                    <h3>Orari di apertura</h3>
+                    <p>Inserisci gli orari nel formato <code>HH:MM</code>. Lascia vuoto per i giorni di chiusura.</p>
+                </div>
+            </div>
+            <div class="olo-card-body">
                 <?php
                 $days = [
                     'monday'    => 'Lunedì',
@@ -483,15 +606,18 @@ class Olo_Seo_Settings {
                     $open  = $hours[ $key ]['open'] ?? '';
                     $close = $hours[ $key ]['close'] ?? '';
                     ?>
-                    <tr>
-                        <th><?php echo esc_html( $label ); ?></th>
-                        <td>
-                            <input type="text" name="<?php echo self::OPT_LOCAL; ?>[hours][<?php echo $key; ?>][open]" value="<?php echo esc_attr( $open ); ?>" class="small-text" placeholder="09:00"> —
-                            <input type="text" name="<?php echo self::OPT_LOCAL; ?>[hours][<?php echo $key; ?>][close]" value="<?php echo esc_attr( $close ); ?>" class="small-text" placeholder="18:00">
-                        </td>
-                    </tr>
+                    <div class="olo-field-row">
+                        <div class="olo-field-info">
+                            <label><?php echo esc_html( $label ); ?></label>
+                        </div>
+                        <div class="olo-field-input-wrap" style="display:flex;gap:8px;align-items:center;">
+                            <input type="text" name="<?php echo self::OPT_LOCAL; ?>[hours][<?php echo $key; ?>][open]" value="<?php echo esc_attr( $open ); ?>" class="olo-field-input" style="max-width:100px;" placeholder="09:00">
+                            <span style="color:#999;">&mdash;</span>
+                            <input type="text" name="<?php echo self::OPT_LOCAL; ?>[hours][<?php echo $key; ?>][close]" value="<?php echo esc_attr( $close ); ?>" class="olo-field-input" style="max-width:100px;" placeholder="18:00">
+                        </div>
+                    </div>
                 <?php endforeach; ?>
-            </table>
+            </div>
         </div>
         <?php
     }
@@ -501,27 +627,51 @@ class Olo_Seo_Settings {
     private function render_tab_webmaster() {
         $opts = self::get( self::OPT_WEBMASTER );
         ?>
-        <div class="olo-seo-section">
-            <h2>Verifica Motori di Ricerca</h2>
-            <p class="description">Inserisci il codice di verifica (solo il valore del <code>content</code>, non l'intero meta tag).</p>
-            <table class="form-table olo-seo-table">
-                <tr>
-                    <th>Google Search Console</th>
-                    <td><input type="text" name="<?php echo self::OPT_WEBMASTER; ?>[google]" value="<?php echo esc_attr( $opts['google'] ?? '' ); ?>" class="regular-text" placeholder="Es. 1a2b3c4d5e..."></td>
-                </tr>
-                <tr>
-                    <th>Bing Webmaster Tools</th>
-                    <td><input type="text" name="<?php echo self::OPT_WEBMASTER; ?>[bing]" value="<?php echo esc_attr( $opts['bing'] ?? '' ); ?>" class="regular-text"></td>
-                </tr>
-                <tr>
-                    <th>Pinterest</th>
-                    <td><input type="text" name="<?php echo self::OPT_WEBMASTER; ?>[pinterest]" value="<?php echo esc_attr( $opts['pinterest'] ?? '' ); ?>" class="regular-text"></td>
-                </tr>
-                <tr>
-                    <th>Yandex</th>
-                    <td><input type="text" name="<?php echo self::OPT_WEBMASTER; ?>[yandex]" value="<?php echo esc_attr( $opts['yandex'] ?? '' ); ?>" class="regular-text"></td>
-                </tr>
-            </table>
+        <!-- Verifica Motori di Ricerca -->
+        <div class="olo-card">
+            <div class="olo-card-head">
+                <div class="olo-card-icon black">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+                </div>
+                <div>
+                    <h3>Verifica Motori di Ricerca</h3>
+                    <p>Inserisci il codice di verifica (solo il valore del <code>content</code>, non l'intero meta tag).</p>
+                </div>
+            </div>
+            <div class="olo-card-body">
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label>Google Search Console</label>
+                    </div>
+                    <div class="olo-field-input-wrap">
+                        <input type="text" name="<?php echo self::OPT_WEBMASTER; ?>[google]" value="<?php echo esc_attr( $opts['google'] ?? '' ); ?>" class="olo-field-input" placeholder="Es. 1a2b3c4d5e...">
+                    </div>
+                </div>
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label>Bing Webmaster Tools</label>
+                    </div>
+                    <div class="olo-field-input-wrap">
+                        <input type="text" name="<?php echo self::OPT_WEBMASTER; ?>[bing]" value="<?php echo esc_attr( $opts['bing'] ?? '' ); ?>" class="olo-field-input">
+                    </div>
+                </div>
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label>Pinterest</label>
+                    </div>
+                    <div class="olo-field-input-wrap">
+                        <input type="text" name="<?php echo self::OPT_WEBMASTER; ?>[pinterest]" value="<?php echo esc_attr( $opts['pinterest'] ?? '' ); ?>" class="olo-field-input">
+                    </div>
+                </div>
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label>Yandex</label>
+                    </div>
+                    <div class="olo-field-input-wrap">
+                        <input type="text" name="<?php echo self::OPT_WEBMASTER; ?>[yandex]" value="<?php echo esc_attr( $opts['yandex'] ?? '' ); ?>" class="olo-field-input">
+                    </div>
+                </div>
+            </div>
         </div>
         <?php
     }
@@ -533,69 +683,99 @@ class Olo_Seo_Settings {
         $public_pts = get_post_types( [ 'public' => true ], 'objects' );
         $public_tax = get_taxonomies( [ 'public' => true ], 'objects' );
         ?>
-        <div class="olo-seo-section">
-            <h2>Sitemap XML</h2>
-            <p class="description">
-                URL della sitemap: <a href="<?php echo esc_url( home_url( '/?olo_sitemap=1' ) ); ?>" target="_blank"><code><?php echo esc_html( home_url( '/?olo_sitemap=1' ) ); ?></code></a>
-            </p>
-            <table class="form-table olo-seo-table">
-                <tr>
-                    <th>Sitemap attiva</th>
-                    <td>
-                        <label>
-                            <input type="checkbox" name="<?php echo self::OPT_SITEMAP; ?>[enabled]" value="1" <?php checked( $opts['enabled'] ?? '1', '1' ); ?>>
-                            Genera la sitemap XML
-                        </label>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Numero max URL per sitemap</th>
-                    <td><input type="number" name="<?php echo self::OPT_SITEMAP; ?>[max_urls]" value="<?php echo esc_attr( $opts['max_urls'] ?? 1000 ); ?>" class="small-text" min="100" max="50000"></td>
-                </tr>
-                <tr>
-                    <th>Includi immagini</th>
-                    <td>
-                        <label>
-                            <input type="checkbox" name="<?php echo self::OPT_SITEMAP; ?>[include_images]" value="1" <?php checked( $opts['include_images'] ?? '1', '1' ); ?>>
-                            Aggiungi tag <code>&lt;image:image&gt;</code> nella sitemap
-                        </label>
-                    </td>
-                </tr>
-            </table>
+        <!-- Sitemap XML -->
+        <div class="olo-card">
+            <div class="olo-card-head">
+                <div class="olo-card-icon black">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="6" rx="1"/><rect x="2" y="16" width="6" height="6" rx="1"/><rect x="16" y="16" width="6" height="6" rx="1"/><path d="M12 8v4"/><path d="M5 16v-2a2 2 0 012-2h10a2 2 0 012 2v2"/></svg>
+                </div>
+                <div>
+                    <h3>Sitemap XML</h3>
+                    <p>URL della sitemap: <a href="<?php echo esc_url( home_url( '/?olo_sitemap=1' ) ); ?>" target="_blank"><code><?php echo esc_html( home_url( '/?olo_sitemap=1' ) ); ?></code></a></p>
+                </div>
+            </div>
+            <div class="olo-card-body">
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label>Sitemap attiva</label>
+                        <div class="olo-field-hint">Genera la sitemap XML per i motori di ricerca.</div>
+                    </div>
+                    <label class="olo-toggle">
+                        <input type="checkbox" name="<?php echo self::OPT_SITEMAP; ?>[enabled]" value="1" <?php checked( $opts['enabled'] ?? '1', '1' ); ?>>
+                        <span class="olo-toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label>Numero max URL per sitemap</label>
+                    </div>
+                    <div class="olo-field-input-wrap">
+                        <input type="number" name="<?php echo self::OPT_SITEMAP; ?>[max_urls]" value="<?php echo esc_attr( $opts['max_urls'] ?? 1000 ); ?>" class="olo-field-input" style="max-width:120px;" min="100" max="50000">
+                    </div>
+                </div>
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label>Includi immagini</label>
+                        <div class="olo-field-hint">Aggiungi tag <code>&lt;image:image&gt;</code> nella sitemap.</div>
+                    </div>
+                    <label class="olo-toggle">
+                        <input type="checkbox" name="<?php echo self::OPT_SITEMAP; ?>[include_images]" value="1" <?php checked( $opts['include_images'] ?? '1', '1' ); ?>>
+                        <span class="olo-toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
         </div>
 
-        <div class="olo-seo-section">
-            <h2>Post Type nella Sitemap</h2>
-            <table class="form-table olo-seo-table">
+        <!-- Post Type nella Sitemap -->
+        <div class="olo-card">
+            <div class="olo-card-head">
+                <div class="olo-card-icon orange">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                </div>
+                <div>
+                    <h3>Post Type nella Sitemap</h3>
+                    <p>Seleziona quali tipi di contenuto includere nella sitemap.</p>
+                </div>
+            </div>
+            <div class="olo-card-body">
                 <?php foreach ( $public_pts as $pt ) : ?>
-                    <tr>
-                        <th><?php echo esc_html( $pt->labels->name ); ?> <code><?php echo esc_html( $pt->name ); ?></code></th>
-                        <td>
-                            <label>
-                                <input type="checkbox" name="<?php echo self::OPT_SITEMAP; ?>[pt][<?php echo esc_attr( $pt->name ); ?>]" value="1" <?php checked( $opts['pt'][ $pt->name ] ?? '1', '1' ); ?>>
-                                Includi
-                            </label>
-                        </td>
-                    </tr>
+                    <div class="olo-field-row">
+                        <div class="olo-field-info">
+                            <label><?php echo esc_html( $pt->labels->name ); ?> <code><?php echo esc_html( $pt->name ); ?></code></label>
+                        </div>
+                        <label class="olo-toggle">
+                            <input type="checkbox" name="<?php echo self::OPT_SITEMAP; ?>[pt][<?php echo esc_attr( $pt->name ); ?>]" value="1" <?php checked( $opts['pt'][ $pt->name ] ?? '1', '1' ); ?>>
+                            <span class="olo-toggle-slider"></span>
+                        </label>
+                    </div>
                 <?php endforeach; ?>
-            </table>
+            </div>
         </div>
 
-        <div class="olo-seo-section">
-            <h2>Tassonomie nella Sitemap</h2>
-            <table class="form-table olo-seo-table">
+        <!-- Tassonomie nella Sitemap -->
+        <div class="olo-card">
+            <div class="olo-card-head">
+                <div class="olo-card-icon orange">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+                </div>
+                <div>
+                    <h3>Tassonomie nella Sitemap</h3>
+                    <p>Seleziona quali tassonomie includere nella sitemap.</p>
+                </div>
+            </div>
+            <div class="olo-card-body">
                 <?php foreach ( $public_tax as $tax ) : ?>
-                    <tr>
-                        <th><?php echo esc_html( $tax->labels->name ); ?> <code><?php echo esc_html( $tax->name ); ?></code></th>
-                        <td>
-                            <label>
-                                <input type="checkbox" name="<?php echo self::OPT_SITEMAP; ?>[tax][<?php echo esc_attr( $tax->name ); ?>]" value="1" <?php checked( $opts['tax'][ $tax->name ] ?? '1', '1' ); ?>>
-                                Includi
-                            </label>
-                        </td>
-                    </tr>
+                    <div class="olo-field-row">
+                        <div class="olo-field-info">
+                            <label><?php echo esc_html( $tax->labels->name ); ?> <code><?php echo esc_html( $tax->name ); ?></code></label>
+                        </div>
+                        <label class="olo-toggle">
+                            <input type="checkbox" name="<?php echo self::OPT_SITEMAP; ?>[tax][<?php echo esc_attr( $tax->name ); ?>]" value="1" <?php checked( $opts['tax'][ $tax->name ] ?? '1', '1' ); ?>>
+                            <span class="olo-toggle-slider"></span>
+                        </label>
+                    </div>
                 <?php endforeach; ?>
-            </table>
+            </div>
         </div>
         <?php
     }
@@ -606,75 +786,186 @@ class Olo_Seo_Settings {
         $opts = self::get( self::OPT_ADVANCED );
         $public_pts = get_post_types( [ 'public' => true ], 'objects' );
         ?>
-        <div class="olo-seo-section">
-            <h2>Robots Meta</h2>
-            <p class="description">Controlla le direttive robots globali. Queste possono essere sovrascritte per singolo post/pagina.</p>
-            <table class="form-table olo-seo-table">
-                <tr>
-                    <th>Noindex — Archivi</th>
-                    <td>
-                        <label><input type="checkbox" name="<?php echo self::OPT_ADVANCED; ?>[noindex_categories]" value="1" <?php checked( $opts['noindex_categories'] ?? '', '1' ); ?>> Categorie</label><br>
-                        <label><input type="checkbox" name="<?php echo self::OPT_ADVANCED; ?>[noindex_tags]" value="1" <?php checked( $opts['noindex_tags'] ?? '', '1' ); ?>> Tag</label><br>
-                        <label><input type="checkbox" name="<?php echo self::OPT_ADVANCED; ?>[noindex_author]" value="1" <?php checked( $opts['noindex_author'] ?? '', '1' ); ?>> Archivi autore</label><br>
-                        <label><input type="checkbox" name="<?php echo self::OPT_ADVANCED; ?>[noindex_date]" value="1" <?php checked( $opts['noindex_date'] ?? '', '1' ); ?>> Archivi per data</label><br>
-                        <label><input type="checkbox" name="<?php echo self::OPT_ADVANCED; ?>[noindex_search]" value="1" <?php checked( $opts['noindex_search'] ?? '1', '1' ); ?>> Pagine di ricerca</label>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Noindex — Post Type</th>
-                    <td>
-                        <?php foreach ( $public_pts as $pt ) : ?>
-                            <label><input type="checkbox" name="<?php echo self::OPT_ADVANCED; ?>[noindex_pt][<?php echo esc_attr( $pt->name ); ?>]" value="1" <?php checked( $opts['noindex_pt'][ $pt->name ] ?? '', '1' ); ?>> <?php echo esc_html( $pt->labels->name ); ?></label><br>
-                        <?php endforeach; ?>
-                    </td>
-                </tr>
-            </table>
-        </div>
-
-        <div class="olo-seo-section">
-            <h2>Link</h2>
-            <table class="form-table olo-seo-table">
-                <tr>
-                    <th>Nofollow link esterni</th>
-                    <td>
-                        <label>
-                            <input type="checkbox" name="<?php echo self::OPT_ADVANCED; ?>[nofollow_external]" value="1" <?php checked( $opts['nofollow_external'] ?? '', '1' ); ?>>
-                            Aggiungi <code>rel="nofollow"</code> ai link esterni nel contenuto
+        <!-- Robots Meta -->
+        <div class="olo-card">
+            <div class="olo-card-head">
+                <div class="olo-card-icon black">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                </div>
+                <div>
+                    <h3>Robots Meta</h3>
+                    <p>Controlla le direttive robots globali. Queste possono essere sovrascritte per singolo post/pagina.</p>
+                </div>
+            </div>
+            <div class="olo-card-body">
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label>Noindex — Categorie</label>
+                    </div>
+                    <label class="olo-toggle">
+                        <input type="checkbox" name="<?php echo self::OPT_ADVANCED; ?>[noindex_categories]" value="1" <?php checked( $opts['noindex_categories'] ?? '', '1' ); ?>>
+                        <span class="olo-toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label>Noindex — Tag</label>
+                    </div>
+                    <label class="olo-toggle">
+                        <input type="checkbox" name="<?php echo self::OPT_ADVANCED; ?>[noindex_tags]" value="1" <?php checked( $opts['noindex_tags'] ?? '', '1' ); ?>>
+                        <span class="olo-toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label>Noindex — Archivi autore</label>
+                    </div>
+                    <label class="olo-toggle">
+                        <input type="checkbox" name="<?php echo self::OPT_ADVANCED; ?>[noindex_author]" value="1" <?php checked( $opts['noindex_author'] ?? '', '1' ); ?>>
+                        <span class="olo-toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label>Noindex — Archivi per data</label>
+                    </div>
+                    <label class="olo-toggle">
+                        <input type="checkbox" name="<?php echo self::OPT_ADVANCED; ?>[noindex_date]" value="1" <?php checked( $opts['noindex_date'] ?? '', '1' ); ?>>
+                        <span class="olo-toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label>Noindex — Pagine di ricerca</label>
+                    </div>
+                    <label class="olo-toggle">
+                        <input type="checkbox" name="<?php echo self::OPT_ADVANCED; ?>[noindex_search]" value="1" <?php checked( $opts['noindex_search'] ?? '1', '1' ); ?>>
+                        <span class="olo-toggle-slider"></span>
+                    </label>
+                </div>
+                <?php foreach ( $public_pts as $pt ) : ?>
+                    <div class="olo-field-row">
+                        <div class="olo-field-info">
+                            <label>Noindex — <?php echo esc_html( $pt->labels->name ); ?></label>
+                        </div>
+                        <label class="olo-toggle">
+                            <input type="checkbox" name="<?php echo self::OPT_ADVANCED; ?>[noindex_pt][<?php echo esc_attr( $pt->name ); ?>]" value="1" <?php checked( $opts['noindex_pt'][ $pt->name ] ?? '', '1' ); ?>>
+                            <span class="olo-toggle-slider"></span>
                         </label>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Apri in nuova tab</th>
-                    <td>
-                        <label>
-                            <input type="checkbox" name="<?php echo self::OPT_ADVANCED; ?>[external_new_tab]" value="1" <?php checked( $opts['external_new_tab'] ?? '', '1' ); ?>>
-                            Aggiungi <code>target="_blank"</code> ai link esterni
-                        </label>
-                    </td>
-                </tr>
-            </table>
+                    </div>
+                <?php endforeach; ?>
+            </div>
         </div>
 
-        <div class="olo-seo-section">
-            <h2>Pulizia &lt;head&gt;</h2>
-            <table class="form-table olo-seo-table">
-                <tr>
-                    <th>Rimuovi</th>
-                    <td>
-                        <label><input type="checkbox" name="<?php echo self::OPT_ADVANCED; ?>[remove_shortlink]" value="1" <?php checked( $opts['remove_shortlink'] ?? '', '1' ); ?>> Shortlink <code>rel="shortlink"</code></label><br>
-                        <label><input type="checkbox" name="<?php echo self::OPT_ADVANCED; ?>[remove_rsd]" value="1" <?php checked( $opts['remove_rsd'] ?? '', '1' ); ?>> RSD link <code>EditURI</code></label><br>
-                        <label><input type="checkbox" name="<?php echo self::OPT_ADVANCED; ?>[remove_wlw]" value="1" <?php checked( $opts['remove_wlw'] ?? '', '1' ); ?>> Windows Live Writer link</label><br>
-                        <label><input type="checkbox" name="<?php echo self::OPT_ADVANCED; ?>[remove_generator]" value="1" <?php checked( $opts['remove_generator'] ?? '', '1' ); ?>> Meta <code>generator</code> (versione WP)</label><br>
-                        <label><input type="checkbox" name="<?php echo self::OPT_ADVANCED; ?>[remove_feed_links]" value="1" <?php checked( $opts['remove_feed_links'] ?? '', '1' ); ?>> Feed RSS extra (commenti, categorie)</label>
-                    </td>
-                </tr>
-            </table>
+        <!-- Link -->
+        <div class="olo-card">
+            <div class="olo-card-head">
+                <div class="olo-card-icon orange">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+                </div>
+                <div>
+                    <h3>Link</h3>
+                    <p>Gestione attributi per i link esterni nel contenuto.</p>
+                </div>
+            </div>
+            <div class="olo-card-body">
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label>Nofollow link esterni</label>
+                        <div class="olo-field-hint">Aggiungi <code>rel="nofollow"</code> ai link esterni nel contenuto.</div>
+                    </div>
+                    <label class="olo-toggle">
+                        <input type="checkbox" name="<?php echo self::OPT_ADVANCED; ?>[nofollow_external]" value="1" <?php checked( $opts['nofollow_external'] ?? '', '1' ); ?>>
+                        <span class="olo-toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label>Apri in nuova tab</label>
+                        <div class="olo-field-hint">Aggiungi <code>target="_blank"</code> ai link esterni.</div>
+                    </div>
+                    <label class="olo-toggle">
+                        <input type="checkbox" name="<?php echo self::OPT_ADVANCED; ?>[external_new_tab]" value="1" <?php checked( $opts['external_new_tab'] ?? '', '1' ); ?>>
+                        <span class="olo-toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
         </div>
 
-        <div class="olo-seo-section">
-            <h2>Robots.txt personalizzato</h2>
-            <p class="description">Aggiungi righe personalizzate al file <code>robots.txt</code> virtuale di WordPress. Una regola per riga.</p>
-            <textarea name="<?php echo self::OPT_ADVANCED; ?>[robots_txt]" class="large-text code" rows="8" placeholder="User-agent: *&#10;Disallow: /wp-admin/&#10;Allow: /wp-admin/admin-ajax.php"><?php echo esc_textarea( $opts['robots_txt'] ?? '' ); ?></textarea>
+        <!-- Pulizia <head> -->
+        <div class="olo-card">
+            <div class="olo-card-head">
+                <div class="olo-card-icon black">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                </div>
+                <div>
+                    <h3>Pulizia &lt;head&gt;</h3>
+                    <p>Rimuovi tag non necessari dall'header HTML per un codice più pulito.</p>
+                </div>
+            </div>
+            <div class="olo-card-body">
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label>Shortlink <code>rel="shortlink"</code></label>
+                    </div>
+                    <label class="olo-toggle">
+                        <input type="checkbox" name="<?php echo self::OPT_ADVANCED; ?>[remove_shortlink]" value="1" <?php checked( $opts['remove_shortlink'] ?? '', '1' ); ?>>
+                        <span class="olo-toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label>RSD link <code>EditURI</code></label>
+                    </div>
+                    <label class="olo-toggle">
+                        <input type="checkbox" name="<?php echo self::OPT_ADVANCED; ?>[remove_rsd]" value="1" <?php checked( $opts['remove_rsd'] ?? '', '1' ); ?>>
+                        <span class="olo-toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label>Windows Live Writer link</label>
+                    </div>
+                    <label class="olo-toggle">
+                        <input type="checkbox" name="<?php echo self::OPT_ADVANCED; ?>[remove_wlw]" value="1" <?php checked( $opts['remove_wlw'] ?? '', '1' ); ?>>
+                        <span class="olo-toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label>Meta <code>generator</code> (versione WP)</label>
+                    </div>
+                    <label class="olo-toggle">
+                        <input type="checkbox" name="<?php echo self::OPT_ADVANCED; ?>[remove_generator]" value="1" <?php checked( $opts['remove_generator'] ?? '', '1' ); ?>>
+                        <span class="olo-toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label>Feed RSS extra (commenti, categorie)</label>
+                    </div>
+                    <label class="olo-toggle">
+                        <input type="checkbox" name="<?php echo self::OPT_ADVANCED; ?>[remove_feed_links]" value="1" <?php checked( $opts['remove_feed_links'] ?? '', '1' ); ?>>
+                        <span class="olo-toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Robots.txt personalizzato -->
+        <div class="olo-card">
+            <div class="olo-card-head">
+                <div class="olo-card-icon orange">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                </div>
+                <div>
+                    <h3>Robots.txt personalizzato</h3>
+                    <p>Aggiungi righe personalizzate al file <code>robots.txt</code> virtuale di WordPress. Una regola per riga.</p>
+                </div>
+            </div>
+            <div class="olo-card-body">
+                <textarea name="<?php echo self::OPT_ADVANCED; ?>[robots_txt]" class="olo-field-input" rows="8" style="min-height:120px;font-family:monospace;" placeholder="User-agent: *&#10;Disallow: /wp-admin/&#10;Allow: /wp-admin/admin-ajax.php"><?php echo esc_textarea( $opts['robots_txt'] ?? '' ); ?></textarea>
+            </div>
         </div>
         <?php
     }

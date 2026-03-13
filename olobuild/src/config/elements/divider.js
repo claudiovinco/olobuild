@@ -9,8 +9,10 @@ export default {
     thickness: '1',
     color: '',
     alignment: 'center',
+    spacing: '16',
     text: '',
     text_color: '',
+    text_size: '14',
     icon_emoji: '',
   },
   fields: [
@@ -20,6 +22,12 @@ export default {
       { value: 'dotted', label: 'Puntinata' },
       { value: 'double', label: 'Doppia' },
       { value: 'gradient', label: 'Gradiente' },
+      { value: 'fade', label: 'Sfumata' },
+      { value: 'shadow', label: 'Con ombra' },
+      { value: 'wave', label: 'Onda' },
+      { value: 'zigzag', label: 'Zigzag' },
+      { value: 'dots', label: 'Puntini decorativi' },
+      { value: 'diamonds', label: 'Diamanti' },
     ]},
     { key: 'width', label: 'Larghezza (%)', type: 'range', min: 10, max: 100, step: 5 },
     { key: 'thickness', label: 'Spessore (px)', type: 'range', min: 1, max: 10, step: 1 },
@@ -29,11 +37,13 @@ export default {
       { value: 'center', label: 'Centro' },
       { value: 'right', label: 'Destra' },
     ]},
+    { key: 'spacing', label: 'Spaziatura (px)', type: 'range', min: 0, max: 80, step: 4 },
 
     { type: 'separator', label: 'Contenuto centrale' },
 
     { key: 'text', label: 'Testo centrale', type: 'text' },
     { key: 'text_color', label: 'Colore testo', type: 'color' },
+    { key: 'text_size', label: 'Dimensione testo (px)', type: 'range', min: 10, max: 32, step: 1 },
     { key: 'icon_emoji', label: 'Emoji / icona centrale', type: 'text' },
   ],
 };

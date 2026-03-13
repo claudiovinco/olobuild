@@ -9,7 +9,7 @@ class Olo_Menuanchor_Tile extends Olo_Tile_Base {
     protected $type     = 'menuanchor';
     protected $name     = 'Ancora Menu';
     protected $icon     = 'dashicons-admin-links';
-    protected $category = 'layout';
+    protected $category = 'navigation';
     protected $defaults = [
         'anchor_id' => '',
         'offset'    => '0',

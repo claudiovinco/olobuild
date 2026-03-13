@@ -16,7 +16,8 @@
         v-for="(img, idx) in visibleImages"
         :key="idx"
         :style="thumbStyle(idx)"
-        :class="{ 'olo-gallery-hover-zoom': s.fx_hover_zoom }"
+        :class="thumbClasses"
+        @mouseenter="onTiltEnter" @mouseleave="onTiltLeave" @mousemove="onTiltMove"
       >
         <img
           :src="typeof img === 'string' ? img : img.url"
@@ -38,7 +39,8 @@
         v-for="(img, idx) in visibleImages"
         :key="idx"
         :style="thumbStyle(idx)"
-        :class="{ 'olo-gallery-hover-zoom': s.fx_hover_zoom }"
+        :class="thumbClasses"
+        @mouseenter="onTiltEnter" @mouseleave="onTiltLeave" @mousemove="onTiltMove"
       >
         <img
           :src="typeof img === 'string' ? img : img.url"
@@ -60,7 +62,8 @@
         v-for="(img, idx) in visibleImages"
         :key="idx"
         :style="justifiedThumbStyle"
-        :class="{ 'olo-gallery-hover-zoom': s.fx_hover_zoom }"
+        :class="thumbClasses"
+        @mouseenter="onTiltEnter" @mouseleave="onTiltLeave" @mousemove="onTiltMove"
       >
         <img
           :src="typeof img === 'string' ? img : img.url"
@@ -141,6 +144,7 @@ const thumbStyle = (index) => {
     position: 'relative',
     borderRadius: (s.value.thumb_radius || '8') + 'px',
     overflow: 'hidden',
+    '--olo-gallery-zoom-scale': String(zoomScale.value),
   };
   if (s.value.layout === 'masonry') {
     base.height = masonryHeight(index);
@@ -159,6 +163,7 @@ const justifiedThumbStyle = computed(() => ({
   overflow: 'hidden',
   flexGrow: 1,
   minWidth: '120px',
+  '--olo-gallery-zoom-scale': String(zoomScale.value),
 }));
 
 const imgInnerStyle = computed(() => {
@@ -202,6 +207,34 @@ const moreStyle = computed(() => ({
   fontWeight: '700', letterSpacing: '-0.5px',
   borderRadius: (s.value.thumb_radius || '8') + 'px',
 }));
+
+const thumbClasses = computed(() => ({
+  'olo-gallery-hover-zoom': s.value.fx_hover_zoom,
+  'olo-gallery-tilt': s.value.fx_hover_tilt,
+}));
+
+const zoomScale = computed(() => parseFloat(s.value.fx_hover_zoom_scale) || 1.08);
+
+// 3D Tilt handlers
+function onTiltEnter(e) {
+  if (!s.value.fx_hover_tilt) return;
+  e.currentTarget.style.transition = 'transform 0.15s ease';
+}
+function onTiltLeave(e) {
+  if (!s.value.fx_hover_tilt) return;
+  e.currentTarget.style.transition = 'transform 0.4s ease';
+  e.currentTarget.style.transform = 'perspective(600px) rotateX(0deg) rotateY(0deg)';
+}
+function onTiltMove(e) {
+  if (!s.value.fx_hover_tilt) return;
+  const el = e.currentTarget;
+  const rect = el.getBoundingClientRect();
+  const x = (e.clientX - rect.left) / rect.width - 0.5;
+  const y = (e.clientY - rect.top) / rect.height - 0.5;
+  const rotY = x * 20;
+  const rotX = -y * 20;
+  el.style.transform = `perspective(600px) rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+}
 </script>
 
 <style>
@@ -212,8 +245,20 @@ const moreStyle = computed(() => ({
 .olo-gallery-kb {
   will-change: transform;
 }
+.olo-gallery-hover-zoom {
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+.olo-gallery-hover-zoom:hover {
+  transform: scale(var(--olo-gallery-zoom-scale, 1.08));
+  box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+  z-index: 2;
+}
 .olo-gallery-hover-zoom:hover img {
-  transform: scale(1.08) !important;
+  transform: scale(1) !important;
+}
+.olo-gallery-tilt {
+  transform-style: preserve-3d;
+  will-change: transform;
 }
 .olo-gallery-grain {
   position: absolute;

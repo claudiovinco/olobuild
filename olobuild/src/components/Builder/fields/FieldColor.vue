@@ -1,34 +1,50 @@
 <template>
   <div class="mb-space-y-1">
     <!-- Global Colors swatches -->
-    <div v-if="globalColors.length" class="fc-global">
-      <div class="fc-global-label">Colori globali</div>
+    <div class="fc-global">
       <div class="fc-global-swatches">
-        <button
+        <span
           v-for="gc in globalColors"
           :key="gc.id"
+          class="fc-swatch-wrap"
+        >
+          <button
+            type="button"
+            class="fc-swatch"
+            :class="{ 'fc-swatch--active': isGlobalSelected(gc.id) }"
+            :style="{ background: gc.value }"
+            :title="gc.label + ' — var(--olo-color-' + gc.id + ')'"
+            @click="selectGlobalColor(gc.id)"
+          ></button>
+          <button
+            v-if="gc.quick"
+            type="button"
+            class="fc-swatch-del"
+            title="Rimuovi colore"
+            @click.stop="removeQuickColor(gc.id)"
+          >&times;</button>
+        </span>
+        <button
           type="button"
-          class="fc-swatch"
-          :class="{ 'fc-swatch--active': isGlobalSelected(gc.id) }"
-          :style="{ background: gc.value }"
-          :title="gc.label + ' — var(--olo-color-' + gc.id + ')'"
-          @click="selectGlobalColor(gc.id)"
-        ></button>
+          class="fc-swatch fc-swatch--add"
+          title="Aggiungi colore corrente ai globali"
+          @click="addCurrentAsGlobal"
+        >+</button>
       </div>
     </div>
 
-    <div class="mb-flex mb-gap-2">
+    <div class="fc-hex-wrap">
       <input
         type="color"
         :value="hexPart"
         @input="onHexChange($event.target.value)"
-        class="mb-w-8 mb-h-8 mb-rounded mb-cursor-pointer mb-border-0"
+        class="fc-swatch-inline"
       />
       <input
         type="text"
         :value="displayValue"
         @change="onTextChange($event.target.value)"
-        class="mb-flex-1 mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1 mb-text-sm mb-text-gray-900"
+        class="fc-hex-input"
       />
     </div>
     <div class="mb-flex mb-items-center mb-gap-2">
@@ -162,6 +178,42 @@ function onTextChange(val) {
   // Accept hex, rgba, and var(--olo-color-*) typed manually
   emit('update:modelValue', val);
 }
+
+/**
+ * Add the current color as a new global color and persist immediately.
+ */
+async function addCurrentAsGlobal() {
+  const hex = parsed.value.hex;
+  // Check if this hex already exists in globals
+  const existing = (stylesStore.globalColors || []).find(
+    gc => gc.value.toLowerCase() === hex.toLowerCase()
+  );
+  if (existing) {
+    // Already exists — just select it
+    selectGlobalColor(existing.id);
+    return;
+  }
+  const id = 'c' + Date.now().toString(36);
+  const label = hex.toUpperCase();
+  const newColors = [...(stylesStore.globalColors || []), { id, label, value: hex, quick: true }];
+  stylesStore.setGlobalColors(newColors);
+  await stylesStore.saveGlobalColors();
+  // Auto-select the newly added color
+  selectGlobalColor(id);
+}
+
+/**
+ * Remove a quick-added global color and persist.
+ */
+async function removeQuickColor(colorId) {
+  const newColors = (stylesStore.globalColors || []).filter(gc => gc.id !== colorId);
+  stylesStore.setGlobalColors(newColors);
+  await stylesStore.saveGlobalColors();
+  // If this color was selected, revert to its resolved hex
+  if (isGlobalSelected(colorId)) {
+    emit('update:modelValue', parsed.value.hex);
+  }
+}
 </script>
 
 <style scoped>
@@ -181,18 +233,47 @@ function onTextChange(val) {
 .fc-global-swatches {
   display: flex;
   flex-wrap: wrap;
-  gap: 4px;
+  gap: 3px;
+  align-items: flex-start;
+}
+
+.fc-swatch-wrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.fc-swatch-del {
+  display: none;
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #ef4444;
+  color: #fff;
+  font-size: 8px;
+  line-height: 1;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+.fc-swatch-wrap:hover .fc-swatch-del {
+  display: flex;
 }
 
 .fc-swatch {
-  width: 22px;
-  height: 22px;
-  border-radius: 4px;
-  border: 2px solid transparent;
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  border: 1.5px solid transparent;
   cursor: pointer;
   padding: 0;
   transition: border-color 0.15s, transform 0.1s;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 0 0.5px rgba(0, 0, 0, 0.12);
 }
 
 .fc-swatch:hover {
@@ -203,5 +284,61 @@ function onTextChange(val) {
 .fc-swatch--active {
   border-color: var(--olo-color-primary, #6366f1);
   box-shadow: 0 0 0 1px var(--olo-color-primary, #6366f1);
+}
+
+.fc-swatch--add {
+  background: #f3f4f6;
+  color: #9ca3af;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: none;
+  border: 1px dashed #d1d5db;
+}
+.fc-swatch--add:hover {
+  background: #e5e7eb;
+  color: #374151;
+  border-color: #9ca3af;
+  transform: scale(1.15);
+}
+
+/* ── Hex wrap (swatch inline + text input) ── */
+.fc-hex-wrap {
+  display: flex;
+  align-items: center;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #fff;
+}
+.fc-swatch-inline {
+  width: 32px;
+  height: 32px;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  background: none;
+  flex-shrink: 0;
+}
+.fc-swatch-inline::-webkit-color-swatch-wrapper {
+  padding: 2px;
+}
+.fc-swatch-inline::-webkit-color-swatch {
+  border: none;
+  border-radius: 3px;
+}
+.fc-hex-input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  padding: 4px 8px 4px 0;
+  font-size: 13px;
+  color: #374151;
+  outline: none;
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
 }
 </style>

@@ -309,7 +309,8 @@ class Olo_Seo_Redirects {
         if ( $hook !== 'olobuild_page_olo-redirects' ) {
             return;
         }
-        wp_enqueue_style( 'olo-seo-admin', OLO_URL . 'assets/css/seo-admin.css', [], OLO_VERSION );
+        wp_enqueue_style( 'olo-admin', OLO_URL . 'assets/css/olo-admin.css', [], OLO_VERSION );
+        wp_enqueue_style( 'olo-seo-admin', OLO_URL . 'assets/css/seo-admin.css', [ 'olo-admin' ], OLO_VERSION );
     }
 
     public function render_page() {
@@ -320,40 +321,37 @@ class Olo_Seo_Redirects {
         $active_tab = sanitize_text_field( $_GET['tab'] ?? 'redirects' );
         global $wpdb;
 
-        ?>
-        <div class="wrap olo-seo-wrap">
-            <h1>
-                <img src="<?php echo esc_url( OLO_URL . 'assets/img/ob-menu.png' ); ?>" style="width:24px;height:24px;vertical-align:middle;margin-right:8px;" alt="">
-                Redirect &amp; Monitor 404
-            </h1>
+        $redirect_count = intval( $wpdb->get_var( "SELECT COUNT(*) FROM {$this->table_redirects()}" ) );
+        $monitor_count  = intval( $wpdb->get_var( "SELECT COUNT(*) FROM {$this->table_404_log()}" ) );
 
-            <nav class="nav-tab-wrapper olo-seo-tabs">
-                <a href="<?php echo esc_url( admin_url( 'admin.php?page=olo-redirects&tab=redirects' ) ); ?>" class="nav-tab <?php echo $active_tab === 'redirects' ? 'nav-tab-active' : ''; ?>">
-                    <span class="dashicons dashicons-randomize" style="font-size:16px;line-height:1.8;margin-right:4px;"></span>
-                    Redirect (<?php echo intval( $wpdb->get_var( "SELECT COUNT(*) FROM {$this->table_redirects()}" ) ); ?>)
+        ?>
+        <?php Olo_Builder::page_shell_open( 'Redirect & 404' ); ?>
+
+            <div class="olo-admin-tabs">
+                <a href="<?php echo esc_url( admin_url( 'admin.php?page=olo-redirects&tab=redirects' ) ); ?>" class="olo-admin-tab <?php echo $active_tab === 'redirects' ? 'active' : ''; ?>">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/><polyline points="9 21 3 21 3 15"/></svg>
+                    Redirect (<?php echo $redirect_count; ?>)
                 </a>
-                <a href="<?php echo esc_url( admin_url( 'admin.php?page=olo-redirects&tab=monitor' ) ); ?>" class="nav-tab <?php echo $active_tab === 'monitor' ? 'nav-tab-active' : ''; ?>">
-                    <span class="dashicons dashicons-warning" style="font-size:16px;line-height:1.8;margin-right:4px;"></span>
-                    Monitor 404 (<?php echo intval( $wpdb->get_var( "SELECT COUNT(*) FROM {$this->table_404_log()}" ) ); ?>)
+                <a href="<?php echo esc_url( admin_url( 'admin.php?page=olo-redirects&tab=monitor' ) ); ?>" class="olo-admin-tab <?php echo $active_tab === 'monitor' ? 'active' : ''; ?>">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                    Monitor 404 (<?php echo $monitor_count; ?>)
                 </a>
-                <a href="<?php echo esc_url( admin_url( 'admin.php?page=olo-redirects&tab=indexnow' ) ); ?>" class="nav-tab <?php echo $active_tab === 'indexnow' ? 'nav-tab-active' : ''; ?>">
-                    <span class="dashicons dashicons-megaphone" style="font-size:16px;line-height:1.8;margin-right:4px;"></span>
+                <a href="<?php echo esc_url( admin_url( 'admin.php?page=olo-redirects&tab=indexnow' ) ); ?>" class="olo-admin-tab <?php echo $active_tab === 'indexnow' ? 'active' : ''; ?>">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
                     IndexNow
                 </a>
-            </nav>
-
-            <div class="olo-seo-form" style="padding:20px;">
-                <?php
-                if ( $active_tab === 'redirects' ) {
-                    $this->render_tab_redirects();
-                } elseif ( $active_tab === 'monitor' ) {
-                    $this->render_tab_monitor();
-                } elseif ( $active_tab === 'indexnow' ) {
-                    $this->render_tab_indexnow();
-                }
-                ?>
             </div>
-        </div>
+
+            <?php
+            if ( $active_tab === 'redirects' ) {
+                $this->render_tab_redirects();
+            } elseif ( $active_tab === 'monitor' ) {
+                $this->render_tab_monitor();
+            } elseif ( $active_tab === 'indexnow' ) {
+                $this->render_tab_indexnow();
+            }
+            ?>
+        <?php Olo_Builder::page_shell_close(); ?>
         <?php
     }
 
@@ -363,67 +361,109 @@ class Olo_Seo_Redirects {
         global $wpdb;
         $redirects = $wpdb->get_results( "SELECT * FROM {$this->table_redirects()} ORDER BY created_at DESC LIMIT 200" );
         ?>
-        <div class="olo-seo-section">
-            <h2>Aggiungi Redirect</h2>
-            <table class="form-table" id="olo-new-redirect-form">
-                <tr>
-                    <th style="width:80px;">Da URL</th>
-                    <td><input type="text" id="olo-redir-from" class="regular-text" placeholder="/vecchio-percorso/" style="width:100%;"></td>
-                </tr>
-                <tr>
-                    <th>A URL</th>
-                    <td><input type="text" id="olo-redir-to" class="regular-text" placeholder="/nuovo-percorso/ oppure https://..." style="width:100%;"></td>
-                </tr>
-                <tr>
-                    <th>Tipo</th>
-                    <td>
-                        <select id="olo-redir-type">
-                            <option value="301">301 — Permanente (consigliato)</option>
-                            <option value="302">302 — Temporaneo</option>
-                            <option value="307">307 — Temporaneo (strict)</option>
-                            <option value="410">410 — Risorsa rimossa (Gone)</option>
+        <!-- Add redirect card -->
+        <div class="olo-card">
+            <div class="olo-card-head">
+                <div class="olo-card-icon black">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                </div>
+                <div>
+                    <h3>Aggiungi Redirect</h3>
+                    <p>Prefisso <code>~</code> per regex. Es: <code>~/vecchio/(.*)</code> &rarr; <code>/nuovo/$1</code></p>
+                </div>
+            </div>
+            <div class="olo-card-body" id="olo-new-redirect-form">
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label>Da URL</label>
+                        <span class="olo-field-hint">Percorso relativo o regex con prefisso ~</span>
+                    </div>
+                    <div class="olo-field-input-wrap">
+                        <input type="text" id="olo-redir-from" class="olo-field-input" placeholder="/vecchio-percorso/">
+                    </div>
+                </div>
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label>A URL</label>
+                        <span class="olo-field-hint">Percorso relativo o URL assoluto</span>
+                    </div>
+                    <div class="olo-field-input-wrap">
+                        <input type="text" id="olo-redir-to" class="olo-field-input" placeholder="/nuovo-percorso/">
+                    </div>
+                </div>
+                <div class="olo-field-row">
+                    <div class="olo-field-info">
+                        <label>Tipo</label>
+                    </div>
+                    <div class="olo-field-input-wrap">
+                        <select id="olo-redir-type" class="olo-field-input">
+                            <option value="301">301 &mdash; Permanente (consigliato)</option>
+                            <option value="302">302 &mdash; Temporaneo</option>
+                            <option value="307">307 &mdash; Temporaneo (strict)</option>
+                            <option value="410">410 &mdash; Risorsa rimossa (Gone)</option>
                         </select>
-                        &nbsp;
-                        <button type="button" class="button button-primary" onclick="oloSaveRedirect()">Aggiungi</button>
-                    </td>
-                </tr>
-            </table>
-            <p class="description">Prefisso <code>~</code> per regex. Es: <code>~/vecchio/(.*)</code> → <code>/nuovo/$1</code></p>
+                    </div>
+                </div>
+                <div class="olo-actions" style="margin-top:16px;">
+                    <button type="button" class="olo-btn-save" onclick="oloSaveRedirect()">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                        Aggiungi Redirect
+                    </button>
+                </div>
+            </div>
         </div>
 
-        <div class="olo-seo-section">
-            <h2>Redirect attivi (<?php echo count( $redirects ); ?>)</h2>
-            <?php if ( empty( $redirects ) ) : ?>
-                <p style="color:#999;">Nessun redirect configurato.</p>
-            <?php else : ?>
-                <table class="wp-list-table widefat striped" style="margin-top:8px;">
-                    <thead>
-                        <tr>
-                            <th>Da</th>
-                            <th>A</th>
-                            <th style="width:60px;">Tipo</th>
-                            <th style="width:60px;">Hit</th>
-                            <th style="width:80px;">Data</th>
-                            <th style="width:60px;"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ( $redirects as $r ) : ?>
-                            <tr id="olo-redir-row-<?php echo intval( $r->id ); ?>">
-                                <td><code style="font-size:12px;"><?php echo esc_html( $r->from_url ); ?></code></td>
-                                <td><code style="font-size:12px;"><?php echo esc_html( $r->to_url ); ?></code></td>
-                                <td>
-                                    <span class="<?php echo $r->type == 301 ? 'dashicons dashicons-migrate' : ( $r->type == 410 ? 'dashicons dashicons-no' : 'dashicons dashicons-randomize' ); ?>" style="font-size:14px;color:<?php echo $r->type == 301 ? '#00a32a' : ( $r->type == 410 ? '#d63638' : '#dba617' ); ?>;"></span>
-                                    <?php echo intval( $r->type ); ?>
-                                </td>
-                                <td><?php echo intval( $r->hits ); ?></td>
-                                <td style="font-size:12px;color:#666;"><?php echo esc_html( wp_date( 'd/m/Y', strtotime( $r->created_at ) ) ); ?></td>
-                                <td><button type="button" class="button button-link-delete" onclick="oloDeleteRedirect(<?php echo intval( $r->id ); ?>)">Elimina</button></td>
+        <!-- Active redirects card -->
+        <div class="olo-card">
+            <div class="olo-card-head">
+                <div class="olo-card-icon orange">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/><polyline points="9 21 3 21 3 15"/></svg>
+                </div>
+                <div>
+                    <h3>Redirect attivi (<?php echo count( $redirects ); ?>)</h3>
+                    <p>Tutti i redirect configurati, ordinati per data di creazione</p>
+                </div>
+            </div>
+            <div class="olo-card-body">
+                <?php if ( empty( $redirects ) ) : ?>
+                    <div class="olo-empty">
+                        <div class="olo-empty-icon">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/><polyline points="9 21 3 21 3 15"/></svg>
+                        </div>
+                        <p>Nessun redirect configurato.</p>
+                    </div>
+                <?php else : ?>
+                    <table class="olo-table">
+                        <thead>
+                            <tr>
+                                <th>Da</th>
+                                <th>A</th>
+                                <th style="width:70px;">Tipo</th>
+                                <th style="width:60px;">Hit</th>
+                                <th style="width:90px;">Data</th>
+                                <th style="width:70px;"></th>
                             </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            <?php endif; ?>
+                        </thead>
+                        <tbody>
+                            <?php foreach ( $redirects as $r ) :
+                                $type_val = intval( $r->type );
+                                if ( $type_val === 301 ) { $badge_class = 'green'; }
+                                elseif ( $type_val === 410 ) { $badge_class = 'red'; }
+                                else { $badge_class = 'orange'; }
+                            ?>
+                                <tr id="olo-redir-row-<?php echo intval( $r->id ); ?>">
+                                    <td><code class="olo-seo-url-code"><?php echo esc_html( $r->from_url ); ?></code></td>
+                                    <td><code class="olo-seo-url-code"><?php echo esc_html( $r->to_url ); ?></code></td>
+                                    <td><span class="olo-badge <?php echo $badge_class; ?>"><?php echo $type_val; ?></span></td>
+                                    <td><?php echo intval( $r->hits ); ?></td>
+                                    <td class="olo-seo-date"><?php echo esc_html( wp_date( 'd/m/Y', strtotime( $r->created_at ) ) ); ?></td>
+                                    <td><button type="button" class="olo-btn-danger olo-btn-sm" onclick="oloDeleteRedirect(<?php echo intval( $r->id ); ?>)">Elimina</button></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                <?php endif; ?>
+            </div>
         </div>
 
         <script>
@@ -475,65 +515,82 @@ class Olo_Seo_Redirects {
         global $wpdb;
         $entries = $wpdb->get_results( "SELECT * FROM {$this->table_404_log()} ORDER BY hits DESC, last_hit DESC LIMIT 100" );
         ?>
-        <div class="olo-seo-section">
-            <h2>
-                URL che generano errore 404
+        <div class="olo-card">
+            <div class="olo-card-head">
+                <div class="olo-card-icon orange">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                </div>
+                <div>
+                    <h3>URL che generano errore 404</h3>
+                    <p>Monitora gli URL visitati che non esistono. Puoi convertirli in redirect con un click.</p>
+                </div>
                 <?php if ( ! empty( $entries ) ) : ?>
-                    <button type="button" class="button" onclick="oloClear404Log()" style="margin-left:12px;font-size:12px;">Svuota log</button>
+                    <button type="button" class="olo-btn-danger olo-btn-sm" onclick="oloClear404Log()" style="margin-left:auto;">Svuota log</button>
                 <?php endif; ?>
-            </h2>
-            <p class="description">Monitora gli URL visitati che non esistono. Puoi convertirli in redirect con un click.</p>
-
-            <?php if ( empty( $entries ) ) : ?>
-                <p style="color:#999;margin-top:16px;">Nessun errore 404 registrato. Le visite a URL inesistenti appariranno qui.</p>
-            <?php else : ?>
-                <table class="wp-list-table widefat striped" style="margin-top:12px;">
-                    <thead>
-                        <tr>
-                            <th>URL</th>
-                            <th style="width:60px;">Hit</th>
-                            <th style="width:130px;">Ultimo accesso</th>
-                            <th>Referrer</th>
-                            <th style="width:160px;">Azioni</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ( $entries as $e ) : ?>
-                            <tr id="olo-404-row-<?php echo intval( $e->id ); ?>">
-                                <td><code style="font-size:12px;"><?php echo esc_html( $e->url ); ?></code></td>
-                                <td>
-                                    <span style="background:<?php echo $e->hits > 10 ? '#d63638' : ( $e->hits > 3 ? '#dba617' : '#999' ); ?>;color:#fff;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">
-                                        <?php echo intval( $e->hits ); ?>
-                                    </span>
-                                </td>
-                                <td style="font-size:12px;color:#666;"><?php echo esc_html( wp_date( 'd/m/Y H:i', strtotime( $e->last_hit ) ) ); ?></td>
-                                <td style="font-size:11px;color:#888;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="<?php echo esc_attr( $e->referer ); ?>"><?php echo esc_html( $e->referer ?: '—' ); ?></td>
-                                <td>
-                                    <button type="button" class="button button-small" onclick="olo404ToRedirect(<?php echo intval( $e->id ); ?>, '<?php echo esc_js( $e->url ); ?>')">
-                                        &rarr; Redirect
-                                    </button>
-                                    <button type="button" class="button button-small button-link-delete" onclick="oloDelete404(<?php echo intval( $e->id ); ?>)">
-                                        &times;
-                                    </button>
-                                </td>
+            </div>
+            <div class="olo-card-body">
+                <?php if ( empty( $entries ) ) : ?>
+                    <div class="olo-empty">
+                        <div class="olo-empty-icon">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                        </div>
+                        <p>Nessun errore 404 registrato. Le visite a URL inesistenti appariranno qui.</p>
+                    </div>
+                <?php else : ?>
+                    <table class="olo-table">
+                        <thead>
+                            <tr>
+                                <th>URL</th>
+                                <th style="width:60px;">Hit</th>
+                                <th style="width:130px;">Ultimo accesso</th>
+                                <th>Referrer</th>
+                                <th style="width:140px;">Azioni</th>
                             </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            <?php endif; ?>
+                        </thead>
+                        <tbody>
+                            <?php foreach ( $entries as $e ) :
+                                $hits = intval( $e->hits );
+                                if ( $hits > 10 ) { $hit_badge = 'red'; }
+                                elseif ( $hits > 3 ) { $hit_badge = 'orange'; }
+                                else { $hit_badge = 'gray'; }
+                            ?>
+                                <tr id="olo-404-row-<?php echo intval( $e->id ); ?>">
+                                    <td><code class="olo-seo-url-code"><?php echo esc_html( $e->url ); ?></code></td>
+                                    <td><span class="olo-badge <?php echo $hit_badge; ?>"><?php echo $hits; ?></span></td>
+                                    <td class="olo-seo-date"><?php echo esc_html( wp_date( 'd/m/Y H:i', strtotime( $e->last_hit ) ) ); ?></td>
+                                    <td class="olo-seo-referrer" title="<?php echo esc_attr( $e->referer ); ?>"><?php echo esc_html( $e->referer ?: '—' ); ?></td>
+                                    <td class="olo-seo-actions-cell">
+                                        <button type="button" class="olo-btn-orange olo-btn-sm" onclick="olo404ToRedirect(<?php echo intval( $e->id ); ?>, '<?php echo esc_js( $e->url ); ?>')">
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><line x1="21" y1="3" x2="14" y2="10"/></svg>
+                                            Redirect
+                                        </button>
+                                        <button type="button" class="olo-btn-danger olo-btn-sm" onclick="oloDelete404(<?php echo intval( $e->id ); ?>)">
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                                        </button>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                <?php endif; ?>
+            </div>
         </div>
 
         <!-- Modal per creare redirect da 404 -->
-        <div id="olo-404-redirect-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:100000;display:none;align-items:center;justify-content:center;">
-            <div style="background:#fff;border-radius:8px;padding:24px;width:480px;max-width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
-                <h3 style="margin-top:0;">Crea redirect da 404</h3>
+        <div id="olo-404-redirect-modal" class="olo-modal-overlay" style="display:none;">
+            <div class="olo-modal">
+                <h3>Crea redirect da 404</h3>
                 <p>Da: <code id="olo-404-modal-from"></code></p>
-                <label style="display:block;margin:12px 0 4px;font-weight:600;">Destinazione:</label>
-                <input type="text" id="olo-404-modal-to" style="width:100%;" placeholder="/pagina-corretta/">
+                <div class="olo-field-row" style="flex-direction:column;align-items:stretch;">
+                    <div class="olo-field-info">
+                        <label>Destinazione</label>
+                    </div>
+                    <input type="text" id="olo-404-modal-to" class="olo-field-input wide" placeholder="/pagina-corretta/">
+                </div>
                 <input type="hidden" id="olo-404-modal-id">
-                <div style="margin-top:16px;text-align:right;">
-                    <button type="button" class="button" onclick="olo404ModalClose()">Annulla</button>
-                    <button type="button" class="button button-primary" onclick="olo404ModalSave()">Crea Redirect 301</button>
+                <div class="olo-modal-actions">
+                    <button type="button" class="olo-btn-reset" onclick="olo404ModalClose()">Annulla</button>
+                    <button type="button" class="olo-btn-save" onclick="olo404ModalSave()">Crea Redirect 301</button>
                 </div>
             </div>
         </div>
@@ -609,39 +666,55 @@ class Olo_Seo_Redirects {
         $adv = get_option( 'olo_seo_advanced', [] );
         $key = $adv['indexnow_key'] ?? '';
         ?>
-        <div class="olo-seo-section">
-            <h2>IndexNow</h2>
-            <p class="description">IndexNow notifica istantaneamente i motori di ricerca (Bing, Yandex, Naver, Seznam) quando pubblichi o aggiorni un contenuto. Google non supporta ancora IndexNow direttamente ma riceve i dati tramite Bing.</p>
+        <div class="olo-card">
+            <div class="olo-card-head">
+                <div class="olo-card-icon black">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                </div>
+                <div>
+                    <h3>IndexNow</h3>
+                    <p>Notifica istantaneamente i motori di ricerca (Bing, Yandex, Naver, Seznam) quando pubblichi o aggiorni un contenuto</p>
+                </div>
+                <?php if ( $key ) : ?>
+                    <span class="olo-badge green" style="margin-left:auto;">Attivo</span>
+                <?php else : ?>
+                    <span class="olo-badge gray" style="margin-left:auto;">Non configurato</span>
+                <?php endif; ?>
+            </div>
+            <div class="olo-card-body">
+                <form method="post" action="options.php">
+                    <?php settings_fields( 'olo_seo_group' ); ?>
+                    <div class="olo-field-row">
+                        <div class="olo-field-info">
+                            <label>API Key</label>
+                            <span class="olo-field-hint">Genera una chiave casuale e inseriscila qui</span>
+                        </div>
+                        <div class="olo-field-input-wrap">
+                            <input type="text" name="olo_seo_advanced[indexnow_key]" value="<?php echo esc_attr( $key ); ?>" class="olo-field-input" placeholder="Chiave alfanumerica">
+                        </div>
+                    </div>
 
-            <form method="post" action="options.php">
-                <?php settings_fields( 'olo_seo_group' ); ?>
-                <table class="form-table olo-seo-table">
-                    <tr>
-                        <th>API Key</th>
-                        <td>
-                            <input type="text" name="olo_seo_advanced[indexnow_key]" value="<?php echo esc_attr( $key ); ?>" class="regular-text" placeholder="Genera una chiave alfanumerica">
-                            <p class="description">
-                                Genera una chiave casuale (es. <code><?php echo esc_html( substr( md5( home_url() . AUTH_KEY ), 0, 32 ) ); ?></code>) e inseriscila qui.<br>
-                                Crea anche un file <code><?php echo esc_html( home_url( '/' ) ); ?><strong>{chiave}.txt</strong></code> nella root del sito con la chiave come contenuto.
-                            </p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Stato</th>
-                        <td>
-                            <?php if ( $key ) : ?>
-                                <span style="color:#00a32a;font-weight:600;">Attivo</span> — ogni pubblicazione/aggiornamento invia un ping IndexNow.
-                                <br><br>
-                                <strong>File di verifica:</strong> <code><?php echo esc_html( home_url( '/' . $key . '.txt' ) ); ?></code>
-                                <br><small>Deve contenere solo: <code><?php echo esc_html( $key ); ?></code></small>
-                            <?php else : ?>
-                                <span style="color:#999;">Non configurato</span>
-                            <?php endif; ?>
-                        </td>
-                    </tr>
-                </table>
-                <?php submit_button( 'Salva' ); ?>
-            </form>
+                    <div class="olo-seo-indexnow-help">
+                        <p>Chiave suggerita: <code><?php echo esc_html( substr( md5( home_url() . AUTH_KEY ), 0, 32 ) ); ?></code></p>
+                        <p>Crea anche un file <code><?php echo esc_html( home_url( '/' ) ); ?><strong>{chiave}.txt</strong></code> nella root del sito con la chiave come contenuto.</p>
+                    </div>
+
+                    <?php if ( $key ) : ?>
+                        <div class="olo-msg info" style="margin-top:16px;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                            Ogni pubblicazione/aggiornamento invia un ping IndexNow.
+                            File di verifica: <code><?php echo esc_html( home_url( '/' . $key . '.txt' ) ); ?></code>
+                        </div>
+                    <?php endif; ?>
+
+                    <div class="olo-actions" style="margin-top:20px;">
+                        <button type="submit" class="olo-btn-save">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                            Salva
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
         <?php
     }

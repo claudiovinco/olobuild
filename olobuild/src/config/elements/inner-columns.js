@@ -10,6 +10,7 @@ export default {
     gap: '16',
     vertical_align: 'stretch',
     stack_mobile: true,
+    stack_tablet: false,
     ...flexContainerDefaults,
   },
   fields: [
@@ -28,6 +29,7 @@ export default {
       { value: 'end', label: 'Basso' },
     ] },
     { key: 'stack_mobile', label: 'Impila su mobile', type: 'toggle' },
+    { key: 'stack_tablet', label: 'Impila su tablet', type: 'toggle' },
     ...flexContainerFields,
   ],
 };

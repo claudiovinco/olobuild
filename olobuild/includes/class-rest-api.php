@@ -1234,11 +1234,15 @@ class Olo_Rest_Api {
             if ( ! is_array( $color ) || empty( $color['id'] ) ) {
                 continue;
             }
-            $sanitized[] = [
+            $entry = [
                 'id'    => sanitize_key( $color['id'] ),
                 'label' => sanitize_text_field( $color['label'] ?? '' ),
                 'value' => sanitize_text_field( $color['value'] ?? '#000000' ),
             ];
+            if ( ! empty( $color['quick'] ) ) {
+                $entry['quick'] = true;
+            }
+            $sanitized[] = $entry;
         }
 
         update_option( 'olo_global_colors', $sanitized, false );

@@ -1,15 +1,12 @@
 <template>
   <transition name="slide">
     <div
-      v-if="selectedTile || builderStore.pageSettingsOpen || builderStore.stylePanelOpen"
+      v-if="selectedTile || builderStore.pageSettingsOpen"
       class="mb-w-72 mb-bg-gray-800 mb-border-l mb-border-gray-700 mb-overflow-y-auto mb-shrink-0"
     >
       <div class="mb-p-4">
-        <!-- Style Panel -->
-        <StylePanel v-if="builderStore.stylePanelOpen" />
-
         <!-- Page Settings Panel -->
-        <PageSettingsPanel v-if="builderStore.pageSettingsOpen && !selectedTile && !builderStore.stylePanelOpen" />
+        <PageSettingsPanel v-if="builderStore.pageSettingsOpen && !selectedTile" />
 
         <!-- Tile Inspector -->
         <template v-if="selectedTile">
@@ -1500,7 +1497,6 @@ import { useTilesStore } from '@/stores/tiles';
 import { getElementDef, getElementFields } from '@/config/elementRegistry';
 import BackgroundControls from './BackgroundControls.vue';
 import PageSettingsPanel from './PageSettingsPanel.vue';
-import StylePanel from './StylePanel.vue';
 import ContentItemsEditor from './ContentItemsEditor.vue';
 import InspectorField from './InspectorField.vue';
 import FieldBorderRadius from './fields/FieldBorderRadius.vue';

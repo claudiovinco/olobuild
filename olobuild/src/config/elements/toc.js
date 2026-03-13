@@ -4,7 +4,7 @@ export default {
   type: 'toc',
   name: 'Indice contenuti',
   icon: 'dashicons-list-view',
-  category: 'text',
+  category: 'navigation',
   defaults: {
     title: 'Sommario',
     max_depth: '3',

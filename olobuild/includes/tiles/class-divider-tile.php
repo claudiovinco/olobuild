@@ -16,8 +16,10 @@ class Olo_Divider_Tile extends Olo_Tile_Base {
         'thickness'  => '1',
         'color'      => '',
         'alignment'  => 'center',
+        'spacing'    => '16',
         'text'       => '',
         'text_color' => '',
+        'text_size'  => '14',
         'icon_emoji' => '',
     ];
 
@@ -28,8 +30,10 @@ class Olo_Divider_Tile extends Olo_Tile_Base {
             [ 'key' => 'thickness',  'type' => 'range',  'label' => 'Thickness' ],
             [ 'key' => 'color',      'type' => 'color',  'label' => 'Color' ],
             [ 'key' => 'alignment',  'type' => 'select', 'label' => 'Alignment' ],
+            [ 'key' => 'spacing',    'type' => 'range',  'label' => 'Spacing' ],
             [ 'key' => 'text',       'type' => 'text',   'label' => 'Center Text' ],
             [ 'key' => 'text_color', 'type' => 'color',  'label' => 'Text Color' ],
+            [ 'key' => 'text_size',  'type' => 'range',  'label' => 'Text Size' ],
             [ 'key' => 'icon_emoji', 'type' => 'text',   'label' => 'Center Emoji' ],
         ];
     }
@@ -37,56 +41,145 @@ class Olo_Divider_Tile extends Olo_Tile_Base {
     public function render( $settings ) {
         $s = wp_parse_args( $settings, $this->defaults );
 
-        $w     = min( max( absint( $s['width'] ), 10 ), 100 );
-        $thick = min( max( absint( $s['thickness'] ), 1 ), 10 );
+        $w       = min( max( absint( $s['width'] ), 10 ), 100 );
+        $thick   = min( max( absint( $s['thickness'] ), 1 ), 10 );
+        $spacing = min( max( absint( $s['spacing'] ), 0 ), 80 );
+        $txt_sz  = min( max( absint( $s['text_size'] ), 10 ), 32 );
         $align_map = [ 'left' => 'flex-start', 'center' => 'center', 'right' => 'flex-end' ];
         $justify   = $align_map[ $s['alignment'] ] ?? 'center';
 
-        $line_clr = $this->safe_color_css( $s['color'] ) ?: 'var(--olo-color-text, #374151)';
-        $txt_clr  = $this->safe_color_css( $s['text_color'] );
+        $line_clr = $this->safe_color_css( $s['color'] ) ?: 'var(--olo-color-text, #d1d5db)';
+        $txt_clr  = $this->safe_color_css( $s['text_color'] ) ?: '#6b7280';
         $has_center = ! empty( $s['text'] ) || ! empty( $s['icon_emoji'] );
 
-        // Use UIkit divider classes for simple cases, custom styling for complex ones
-        if ( ! $has_center && $w === 100 && $s['style'] === 'solid' ) {
-            ob_start();
-            ?>
-            <div class="olo-divider" style="padding:16px;">
-                <hr class="uk-divider-small" style="border-top-color:<?php echo $line_clr; ?>;border-top-width:<?php echo $thick; ?>px;">
-            </div>
-            <?php
-            return ob_get_clean();
-        }
-
-        // Complex cases: keep custom styling
-        if ( $s['style'] === 'gradient' ) {
-            $line_style = 'border:none;height:' . $thick . 'px;background:linear-gradient(90deg, transparent, ' . $line_clr . ', transparent);';
-        } else {
-            $line_style = 'border:none;border-top:' . $thick . 'px ' . esc_attr( $s['style'] ) . ' ' . $line_clr . ';';
-        }
+        $style_type = $s['style'];
+        $wrap_style = "display:flex;justify-content:{$justify};padding:{$spacing}px 16px;";
 
         ob_start();
-        ?>
-        <div class="olo-divider" style="display:flex;justify-content:<?php echo esc_attr( $justify ); ?>;padding:16px;">
-            <?php if ( $has_center ) : ?>
-                <div style="display:flex;align-items:center;gap:16px;width:<?php echo $w; ?>%;">
-                    <hr style="flex:1;margin:0;<?php echo $line_style; ?>" />
-                    <span style="<?php if ( $txt_clr ) echo 'color:' . $txt_clr . ';'; ?>font-size:0.875em;white-space:nowrap;">
-                        <?php if ( ! empty( $s['icon_emoji'] ) ) :
-                            if ( preg_match( '/^[a-z][a-z0-9-]*$/', $s['icon_emoji'] ) ) : ?>
-                                <span uk-icon="icon: <?php echo esc_attr( $s['icon_emoji'] ); ?>"></span>
-                            <?php else :
-                                echo esc_html( $s['icon_emoji'] ) . ' ';
-                            endif;
-                        endif;
-                        echo esc_html( $s['text'] ); ?>
-                    </span>
-                    <hr style="flex:1;margin:0;<?php echo $line_style; ?>" />
-                </div>
-            <?php else : ?>
-                <hr style="width:<?php echo $w; ?>%;margin:0;<?php echo $line_style; ?>" />
-            <?php endif; ?>
-        </div>
-        <?php
+
+        echo '<div class="olo-divider" style="' . esc_attr( $wrap_style ) . '">';
+
+        if ( $has_center ) {
+            $this->render_center( $s, $w, $thick, $style_type, $line_clr, $txt_clr, $txt_sz );
+        } elseif ( in_array( $style_type, [ 'wave', 'zigzag', 'dots', 'diamonds' ], true ) ) {
+            $this->render_decorative( $style_type, $w, $thick, $line_clr );
+        } elseif ( $style_type === 'shadow' ) {
+            $this->render_shadow( $w, $thick, $line_clr );
+        } elseif ( $style_type === 'fade' ) {
+            $this->render_fade( $w, $thick, $line_clr );
+        } elseif ( $style_type === 'gradient' ) {
+            $this->render_gradient( $w, $thick, $line_clr );
+        } else {
+            // solid, dashed, dotted, double
+            $radius = $thick > 1 ? 'border-radius:' . round( $thick / 2 ) . 'px;' : '';
+            echo '<span style="display:block;width:' . $w . '%;border:none;border-top:' . $thick . 'px ' . esc_attr( $style_type ) . ' ' . $line_clr . ';' . $radius . '"></span>';
+        }
+
+        echo '</div>';
+
         return ob_get_clean();
+    }
+
+    private function render_center( $s, $w, $thick, $style_type, $line_clr, $txt_clr, $txt_sz ) {
+        if ( $style_type === 'gradient' ) {
+            $line_css = "display:block;flex:1;min-width:20px;border:none;height:{$thick}px;background:linear-gradient(90deg, transparent, {$line_clr}, transparent);";
+        } else {
+            $bstyle = in_array( $style_type, [ 'solid', 'dashed', 'dotted', 'double' ], true ) ? $style_type : 'solid';
+            $line_css = "display:block;flex:1;min-width:20px;border:none;border-top:{$thick}px {$bstyle} {$line_clr};";
+        }
+
+        echo '<div style="display:flex;align-items:center;gap:12px;width:' . $w . '%;">';
+        echo '<span style="' . esc_attr( $line_css ) . '"></span>';
+        echo '<span style="color:' . esc_attr( $txt_clr ) . ';font-size:' . $txt_sz . 'px;white-space:nowrap;line-height:1.2;padding:0 4px;">';
+
+        if ( ! empty( $s['icon_emoji'] ) ) {
+            if ( preg_match( '/^[a-z][a-z0-9-]*$/', $s['icon_emoji'] ) ) {
+                echo '<span uk-icon="icon: ' . esc_attr( $s['icon_emoji'] ) . '"></span> ';
+            } else {
+                echo esc_html( $s['icon_emoji'] ) . ' ';
+            }
+        }
+        echo esc_html( $s['text'] );
+
+        echo '</span>';
+        echo '<span style="' . esc_attr( $line_css ) . '"></span>';
+        echo '</div>';
+    }
+
+    private function render_gradient( $w, $thick, $line_clr ) {
+        $radius = $thick > 1 ? 'border-radius:' . round( $thick / 2 ) . 'px;' : '';
+        echo '<span style="display:block;width:' . $w . '%;height:' . $thick . 'px;background:linear-gradient(90deg, transparent, ' . $line_clr . ', transparent);' . $radius . '"></span>';
+    }
+
+    private function render_fade( $w, $thick, $line_clr ) {
+        $radius = $thick > 1 ? 'border-radius:' . round( $thick / 2 ) . 'px;' : '';
+        echo '<div style="width:' . $w . '%;height:' . $thick . 'px;background:linear-gradient(90deg, transparent, ' . $line_clr . ' 20%, ' . $line_clr . ' 80%, transparent);' . $radius . '"></div>';
+    }
+
+    private function render_shadow( $w, $thick, $line_clr ) {
+        $blur1 = $thick * 3;
+        $blur2 = $thick * 2;
+        $radius = $thick > 1 ? 'border-radius:' . round( $thick / 2 ) . 'px;' : '';
+        echo '<div style="width:' . $w . '%;"><div style="height:' . $thick . 'px;background:' . $line_clr . ';box-shadow:0 2px ' . $blur1 . 'px ' . $line_clr . '40, 0 1px ' . $blur2 . 'px ' . $line_clr . '25;' . $radius . '"></div></div>';
+    }
+
+    private function render_decorative( $style_type, $w, $thick, $line_clr ) {
+        $svg_h = $thick * 3 + 12;
+        echo '<div style="width:' . $w . '%;display:flex;align-items:center;">';
+
+        if ( $style_type === 'wave' ) {
+            $amp = max( $thick * 2, 4 );
+            $mid = 12;
+            $d = "M 0 {$mid}";
+            for ( $x = 0; $x < 1200; $x += 60 ) {
+                $x15 = $x + 15; $x30 = $x + 30; $x45 = $x + 45; $x60 = $x + 60;
+                $top = $mid - $amp; $bot = $mid + $amp;
+                $d .= " C {$x15} {$top}, {$x30} {$top}, {$x30} {$mid}";
+                $d .= " C {$x30} {$mid}, {$x45} {$bot}, {$x60} {$mid}";
+            }
+            echo '<svg viewBox="0 0 1200 24" preserveAspectRatio="none" style="width:100%;height:' . $svg_h . 'px;display:block;">';
+            echo '<path d="' . $d . '" fill="none" stroke="' . esc_attr( $line_clr ) . '" stroke-width="' . $thick . '" stroke-linecap="round"/>';
+            echo '</svg>';
+
+        } elseif ( $style_type === 'zigzag' ) {
+            $amp = max( $thick * 2, 4 );
+            $mid = 12;
+            $d = "M 0 {$mid}";
+            for ( $x = 0; $x < 1200; $x += 24 ) {
+                $x12 = $x + 12; $x24 = $x + 24;
+                $top = $mid - $amp;
+                $d .= " L {$x12} {$top} L {$x24} {$mid}";
+            }
+            echo '<svg viewBox="0 0 1200 24" preserveAspectRatio="none" style="width:100%;height:' . $svg_h . 'px;display:block;">';
+            echo '<path d="' . $d . '" fill="none" stroke="' . esc_attr( $line_clr ) . '" stroke-width="' . $thick . '" stroke-linejoin="round" stroke-linecap="round"/>';
+            echo '</svg>';
+
+        } elseif ( $style_type === 'dots' ) {
+            $r = min( $thick, 5 );
+            echo '<svg viewBox="0 0 1200 12" preserveAspectRatio="none" style="width:100%;height:' . max( $svg_h, 12 ) . 'px;display:block;">';
+            echo '<defs><pattern id="olo-dot-' . $this->get_unique_id() . '" x="0" y="0" width="24" height="12" patternUnits="userSpaceOnUse">';
+            echo '<circle cx="6" cy="6" r="' . $r . '" fill="' . esc_attr( $line_clr ) . '"/>';
+            echo '</pattern></defs>';
+            echo '<rect width="1200" height="12" fill="url(#olo-dot-' . $this->get_unique_id() . ')"/>';
+            echo '</svg>';
+
+        } elseif ( $style_type === 'diamonds' ) {
+            echo '<svg viewBox="0 0 1200 16" preserveAspectRatio="none" style="width:100%;height:' . max( $svg_h, 16 ) . 'px;display:block;">';
+            echo '<defs><pattern id="olo-dia-' . $this->get_unique_id() . '" x="0" y="0" width="28" height="16" patternUnits="userSpaceOnUse">';
+            echo '<polygon points="14,1 27,8 14,15 1,8" fill="none" stroke="' . esc_attr( $line_clr ) . '" stroke-width="' . max( $thick, 1 ) . '"/>';
+            echo '</pattern></defs>';
+            echo '<rect width="1200" height="16" fill="url(#olo-dia-' . $this->get_unique_id() . ')"/>';
+            echo '</svg>';
+        }
+
+        echo '</div>';
+    }
+
+    private $unique_counter = 0;
+    private function get_unique_id() {
+        if ( ! $this->unique_counter ) {
+            $this->unique_counter = wp_rand( 1000, 9999 );
+        }
+        return $this->unique_counter;
     }
 }

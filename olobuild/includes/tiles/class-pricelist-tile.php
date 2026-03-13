@@ -31,9 +31,13 @@ class Olo_Pricelist_Tile extends Olo_Tile_Base {
         'badge_border_color'   => '',
         'badge_border_width'   => '0',
         'badge_border_style'   => 'solid',
-        'badge_border_radius'  => '4',
-        'gap'                  => '16',
-        'padding'              => '12',
+        'badge_border_radius'  => '6',
+        'gap'                  => '12',
+        'padding'              => '14',
+        'card_bg'              => '',
+        'card_border_radius'   => '12',
+        'card_border_color'    => '',
+        'hover_lift'           => true,
     ];
 
     public function get_controls() { return []; }
@@ -49,23 +53,28 @@ class Olo_Pricelist_Tile extends Olo_Tile_Base {
         $uid = 'olo-pl-' . wp_rand( 10000, 99999 );
 
         $sep_style   = in_array( $s['separator_style'], [ 'dotted', 'dashed', 'solid', 'none' ] ) ? $s['separator_style'] : 'dotted';
-        $sep_color   = $this->safe_color_css( $s['separator_color'] ) ?: 'var(--olo-color-border, #E5E7EB)';
-        $title_clr   = $this->safe_color_css( $s['title_color'] ) ?: 'var(--olo-color-text, #374151)';
-        $price_clr   = $this->safe_color_css( $s['price_color'] ) ?: 'var(--olo-color-primary, #6366F1)';
-        $desc_clr    = $this->safe_color_css( $s['description_color'] ) ?: 'var(--olo-color-text-muted, #9CA3AF)';
+        $sep_color   = $this->safe_color_css( $s['separator_color'] ) ?: 'rgba(0, 0, 0, 0.06)';
+        $title_clr   = $this->safe_color_css( $s['title_color'] ) ?: 'var(--olo-color-text, #1a1a1a)';
+        $price_clr   = $this->safe_color_css( $s['price_color'] ) ?: 'var(--olo-color-primary, #e8622a)';
+        $desc_clr    = $this->safe_color_css( $s['description_color'] ) ?: 'var(--olo-color-text-muted, #888)';
         $img_size    = intval( $s['image_size'] ) ?: 60;
         $img_radius  = Olo_Tile_Utils::border_radius( $s['image_border_radius'] ?? 0 );
         $show_image  = filter_var( $s['show_image'], FILTER_VALIDATE_BOOLEAN );
         $price_pos   = $s['price_position'] ?: 'right';
-        $hl_bg       = $this->safe_color_css( $s['highlighted_bg'] ) ?: 'var(--olo-color-muted, #F3F4F6)';
-        $badge_bg    = $this->safe_color_css( $s['badge_bg'] ) ?: 'var(--olo-color-primary, #6366F1)';
-        $badge_clr   = $this->safe_color_css( $s['badge_color'] ) ?: 'var(--olo-color-primary-contrast, #FFFFFF)';
+        $hl_bg       = $this->safe_color_css( $s['highlighted_bg'] ) ?: 'rgba(232, 98, 42, 0.06)';
+        $badge_bg    = $this->safe_color_css( $s['badge_bg'] ) ?: 'var(--olo-color-primary, #e8622a)';
+        $badge_clr   = $this->safe_color_css( $s['badge_color'] ) ?: '#fff';
         $badge_bw    = intval( $s['badge_border_width'] );
         $badge_bs    = in_array( $s['badge_border_style'], [ 'solid', 'dashed', 'dotted' ] ) ? $s['badge_border_style'] : 'solid';
-        $badge_bc    = $this->safe_color_css( $s['badge_border_color'] ) ?: 'var(--olo-color-primary, #6366F1)';
-        $badge_br    = intval( $s['badge_border_radius'] ?? 4 );
-        $gap         = intval( $s['gap'] ) ?: 16;
-        $padding     = intval( $s['padding'] ) ?: 12;
+        $badge_bc    = $this->safe_color_css( $s['badge_border_color'] ) ?: 'var(--olo-color-primary, #e8622a)';
+        $badge_br    = intval( $s['badge_border_radius'] ?? 6 );
+        $gap         = intval( $s['gap'] ) ?: 12;
+        $padding     = intval( $s['padding'] ) ?: 14;
+        $card_bg     = $this->safe_color_css( $s['card_bg'] ?? '' ) ?: 'rgba(255, 255, 255, 0.8)';
+        $card_radius = intval( $s['card_border_radius'] ?? 12 );
+        $card_border = $this->safe_color_css( $s['card_border_color'] ?? '' ) ?: 'rgba(0, 0, 0, 0.06)';
+        $hover_lift  = filter_var( $s['hover_lift'] ?? true, FILTER_VALIDATE_BOOLEAN );
+        $hl_border   = $this->safe_color_css( $s['highlighted_bg'] ) ? $this->safe_color_css( $s['highlighted_bg'] ) : 'rgba(232, 98, 42, 0.2)';
 
         ob_start();
         ?>
@@ -75,17 +84,34 @@ class Olo_Pricelist_Tile extends Olo_Tile_Base {
                 flex-direction: column;
                 gap: <?php echo $gap; ?>px;
             }
-            .<?php echo $uid; ?> .olo-pl-item {
+            .<?php echo $uid; ?> .olo-pl-card {
                 display: flex;
                 align-items: center;
-                gap: 12px;
+                gap: 14px;
                 padding: <?php echo $padding; ?>px;
-                border-radius: 6px;
-                transition: background 0.2s;
+                border-radius: <?php echo $card_radius; ?>px;
+                background: <?php echo $card_bg; ?>;
+                border: 1px solid <?php echo $card_border; ?>;
+                transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+                position: relative;
+                overflow: hidden;
             }
-            .<?php echo $uid; ?> .olo-pl-item--hl {
+            <?php if ( $hover_lift ) : ?>
+            .<?php echo $uid; ?> .olo-pl-card:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+                border-color: rgba(0, 0, 0, 0.12);
+            }
+            <?php endif; ?>
+            .<?php echo $uid; ?> .olo-pl-card--hl {
                 background: <?php echo $hl_bg; ?>;
+                border-color: <?php echo $hl_border; ?>;
             }
+            <?php if ( $hover_lift ) : ?>
+            .<?php echo $uid; ?> .olo-pl-card--hl:hover {
+                border-color: rgba(232, 98, 42, 0.35);
+            }
+            <?php endif; ?>
             <?php if ( $show_image ) : ?>
             .<?php echo $uid; ?> .olo-pl-img {
                 width: <?php echo $img_size; ?>px;
@@ -93,6 +119,7 @@ class Olo_Pricelist_Tile extends Olo_Tile_Base {
                 border-radius: <?php echo $img_radius; ?>;
                 overflow: hidden;
                 flex-shrink: 0;
+                background: rgba(0, 0, 0, 0.03);
             }
             .<?php echo $uid; ?> .olo-pl-img img {
                 width: 100%;
@@ -101,66 +128,78 @@ class Olo_Pricelist_Tile extends Olo_Tile_Base {
                 display: block;
             }
             <?php endif; ?>
-            .<?php echo $uid; ?> .olo-pl-content {
+            .<?php echo $uid; ?> .olo-pl-body {
                 flex: 1;
                 min-width: 0;
+            }
+            .<?php echo $uid; ?> .olo-pl-top {
+                display: flex;
+                align-items: flex-start;
+                justify-content: space-between;
+                gap: 12px;
             }
             .<?php echo $uid; ?> .olo-pl-title {
                 font-weight: 600;
                 font-size: 15px;
                 color: <?php echo $title_clr; ?>;
                 display: inline;
+                letter-spacing: -0.01em;
             }
             .<?php echo $uid; ?> .olo-pl-desc {
                 font-size: 13px;
                 color: <?php echo $desc_clr; ?>;
-                margin-top: 2px;
-                line-height: 1.4;
+                margin-top: 4px;
+                line-height: 1.5;
             }
             .<?php echo $uid; ?> .olo-pl-badge {
-                display: inline-block;
+                display: inline-flex;
+                align-items: center;
                 background: <?php echo $badge_bg; ?>;
                 color: <?php echo $badge_clr; ?>;
                 font-size: 9px;
                 font-weight: 700;
-                padding: 2px 6px;
+                padding: 3px 7px;
                 border-radius: <?php echo $badge_br; ?>px;
                 text-transform: uppercase;
-                margin-left: 6px;
+                margin-left: 8px;
                 vertical-align: middle;
                 line-height: 1;
+                letter-spacing: 0.04em;
                 <?php if ( $badge_bw > 0 ) : ?>
                 border: <?php echo $badge_bw; ?>px <?php echo $badge_bs; ?> <?php echo $badge_bc; ?>;
                 <?php endif; ?>
             }
-            <?php if ( $price_pos === 'right' ) : ?>
-            .<?php echo $uid; ?> .olo-pl-sep {
-                flex: 1;
-                min-width: 20px;
-                align-self: center;
-                <?php if ( $sep_style !== 'none' ) : ?>
-                border-bottom: 1px <?php echo $sep_style; ?> <?php echo $sep_color; ?>;
-                <?php endif; ?>
-            }
-            <?php endif; ?>
             .<?php echo $uid; ?> .olo-pl-price {
                 color: <?php echo $price_clr; ?>;
                 font-weight: 700;
-                font-size: 16px;
+                font-size: 17px;
                 white-space: nowrap;
                 flex-shrink: 0;
+                letter-spacing: -0.02em;
             }
             .<?php echo $uid; ?> .olo-pl-price--below {
-                color: <?php echo $price_clr; ?>;
-                font-weight: 700;
                 font-size: 15px;
-                margin-top: 4px;
+                margin-top: 6px;
             }
+            <?php if ( $sep_style !== 'none' ) : ?>
+            .<?php echo $uid; ?> .olo-pl-sep {
+                position: absolute;
+                bottom: 0;
+                left: <?php echo $padding; ?>px;
+                right: <?php echo $padding; ?>px;
+                border-bottom: 1px <?php echo $sep_style; ?> <?php echo $sep_color; ?>;
+                pointer-events: none;
+            }
+            .<?php echo $uid; ?> .olo-pl-card:last-child .olo-pl-sep {
+                display: none;
+            }
+            <?php endif; ?>
             @media (max-width: 480px) {
-                .<?php echo $uid; ?> .olo-pl-sep {
-                    display: none;
+                .<?php echo $uid; ?> .olo-pl-top {
+                    flex-direction: column;
+                    gap: 4px;
                 }
-                .<?php echo $uid; ?> .olo-pl-item {
+                .<?php echo $uid; ?> .olo-pl-card {
                     flex-wrap: wrap;
                 }
             }
@@ -168,9 +207,9 @@ class Olo_Pricelist_Tile extends Olo_Tile_Base {
         <div class="olo-pricelist <?php echo esc_attr( $uid ); ?>">
             <?php foreach ( $items as $item ) :
                 $highlighted = filter_var( $item['highlighted'], FILTER_VALIDATE_BOOLEAN );
-                $hl_class    = $highlighted ? ' olo-pl-item--hl' : '';
+                $hl_class    = $highlighted ? ' olo-pl-card--hl' : '';
             ?>
-            <div class="olo-pl-item<?php echo $hl_class; ?>">
+            <div class="olo-pl-card<?php echo $hl_class; ?>">
                 <?php if ( $show_image ) : ?>
                 <div class="olo-pl-img">
                     <?php if ( ! empty( $item['image_url'] ) ) : ?>
@@ -179,26 +218,28 @@ class Olo_Pricelist_Tile extends Olo_Tile_Base {
                 </div>
                 <?php endif; ?>
 
-                <div class="olo-pl-content">
-                    <div>
-                        <span class="olo-pl-title"><?php echo esc_html( $item['title'] ); ?></span>
-                        <?php if ( ! empty( $item['badge'] ) ) : ?>
-                            <span class="olo-pl-badge"><?php echo esc_html( $item['badge'] ); ?></span>
+                <div class="olo-pl-body">
+                    <div class="olo-pl-top">
+                        <div class="olo-pl-info">
+                            <span class="olo-pl-title"><?php echo esc_html( $item['title'] ); ?></span>
+                            <?php if ( ! empty( $item['badge'] ) ) : ?>
+                                <span class="olo-pl-badge"><?php echo esc_html( $item['badge'] ); ?></span>
+                            <?php endif; ?>
+                        </div>
+                        <?php if ( $price_pos === 'right' ) : ?>
+                            <div class="olo-pl-price"><?php echo esc_html( $item['price'] ); ?></div>
                         <?php endif; ?>
                     </div>
                     <?php if ( ! empty( $item['description'] ) ) : ?>
                     <div class="olo-pl-desc"><?php echo esc_html( $item['description'] ); ?></div>
                     <?php endif; ?>
                     <?php if ( $price_pos === 'below' ) : ?>
-                    <div class="olo-pl-price--below"><?php echo esc_html( $item['price'] ); ?></div>
+                    <div class="olo-pl-price olo-pl-price--below"><?php echo esc_html( $item['price'] ); ?></div>
                     <?php endif; ?>
                 </div>
 
-                <?php if ( $price_pos === 'right' ) : ?>
-                    <?php if ( $sep_style !== 'none' ) : ?>
-                    <div class="olo-pl-sep"></div>
-                    <?php endif; ?>
-                    <div class="olo-pl-price"><?php echo esc_html( $item['price'] ); ?></div>
+                <?php if ( $sep_style !== 'none' ) : ?>
+                <div class="olo-pl-sep"></div>
                 <?php endif; ?>
             </div>
             <?php endforeach; ?>

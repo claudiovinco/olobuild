@@ -140,6 +140,11 @@ import TextmaskTile from './TextmaskTile.vue';
 import BlendtextTile from './BlendtextTile.vue';
 import PagetitlebarTile from './PagetitlebarTile.vue';
 import PortfolioTile from './PortfolioTile.vue';
+import TextBlockTile from './TextBlockTile.vue';
+import QueryloopTile from './QueryloopTile.vue';
+import ReadingtimeTile from './ReadingtimeTile.vue';
+import DarkmodeTile from './DarkmodeTile.vue';
+import LightboxTile from './LightboxTile.vue';
 
 // WooCommerce tiles
 import WooProductsTile from './WooProductsTile.vue';
@@ -343,6 +348,11 @@ const tileComponents = {
   blendtext: BlendtextTile,
   pagetitlebar: PagetitlebarTile,
   portfolio: PortfolioTile,
+  'text-block': TextBlockTile,
+  queryloop: QueryloopTile,
+  readingtime: ReadingtimeTile,
+  darkmode: DarkmodeTile,
+  lightbox: LightboxTile,
 
   // WooCommerce tiles
   woo_products: WooProductsTile,

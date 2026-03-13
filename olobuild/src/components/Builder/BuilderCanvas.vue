@@ -1,25 +1,5 @@
 <template>
   <div class="mb-flex mb-flex-col mb-flex-1 mb-overflow-hidden">
-    <!-- Style system color bar (visible when style panel is open) -->
-    <div
-      v-if="builderStore.stylePanelOpen"
-      class="mb-flex mb-items-center mb-gap-3 mb-px-4 mb-py-1.5 mb-bg-gray-100 mb-border-b mb-border-gray-200 mb-shrink-0"
-    >
-      <span class="mb-text-[10px] mb-text-gray-500">Anteprima:</span>
-      <div
-        v-for="(color, key) in previewColors"
-        :key="key"
-        class="mb-flex mb-items-center mb-gap-1"
-        :title="key"
-      >
-        <span
-          class="mb-w-4 mb-h-4 mb-rounded-sm mb-border mb-border-gray-600"
-          :style="{ backgroundColor: color }"
-        ></span>
-        <span class="mb-text-[9px] mb-text-gray-500">{{ key }}</span>
-      </div>
-    </div>
-
     <!-- Canvas area -->
     <div
       ref="canvasRef"
@@ -191,14 +171,6 @@ onUnmounted(() => {
 });
 
 const pageBg = computed(() => builderStore.pageSettings.page_bg);
-
-const previewColors = computed(() => ({
-  primary: stylesStore.colors.primary,
-  secondary: stylesStore.colors.secondary,
-  background: stylesStore.colors.background,
-  text: stylesStore.colors.text,
-  muted: stylesStore.colors.muted,
-}));
 
 const canvasClasses = computed(() => {
   const maxW = builderStore.pageSettings.content_max_width || 1200;

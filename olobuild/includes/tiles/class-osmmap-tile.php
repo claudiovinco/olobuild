@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Olo_Osmmap_Tile extends Olo_Tile_Base {
 
     protected $type     = 'osmmap';
-    protected $name     = 'OpenStreetMap';
+    protected $name     = 'Mappa';
     protected $icon     = 'dashicons-location-alt';
     protected $category = 'content';
     protected $defaults = [
@@ -39,17 +39,23 @@ class Olo_Osmmap_Tile extends Olo_Tile_Base {
         $scroll_zoom     = filter_var( $s['scroll_wheel_zoom'], FILTER_VALIDATE_BOOLEAN );
         $dragging        = filter_var( $s['dragging'], FILTER_VALIDATE_BOOLEAN );
         $popup_text      = esc_js( wp_strip_all_tags( $s['marker_popup'] ) );
-        $tile_layer      = in_array( $s['tile_layer'], [ 'standard', 'toner', 'watercolor', 'dark' ], true ) ? $s['tile_layer'] : 'standard';
+        $tile_layer      = in_array( $s['tile_layer'], [ 'standard', 'hot', 'positron', 'voyager', 'dark', 'satellite', 'topo', 'esri_street', 'gray', 'opentopomap' ], true ) ? $s['tile_layer'] : 'standard';
         $marker_color    = $this->safe_color_css( $s['marker_color'] ) ?: '#e74c3c';
 
         $map_id = 'olo-osm-' . wp_rand( 10000, 99999 );
 
         // Tile layer URLs
         $tile_urls = [
-            'standard'   => 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-            'toner'      => 'https://tiles.stadiamaps.com/tiles/stamen_toner/{z}/{x}/{y}.png',
-            'watercolor' => 'https://tiles.stadiamaps.com/tiles/stamen_watercolor/{z}/{x}/{y}.png',
-            'dark'       => 'https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}.png',
+            'standard'    => 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+            'hot'         => 'https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
+            'positron'    => 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
+            'voyager'     => 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
+            'dark'        => 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+            'satellite'   => 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+            'topo'        => 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}',
+            'esri_street' => 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',
+            'gray'        => 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}',
+            'opentopomap' => 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
         ];
 
         $tile_url = esc_js( $tile_urls[ $tile_layer ] );

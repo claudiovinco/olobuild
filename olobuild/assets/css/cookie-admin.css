@@ -1,176 +1,120 @@
-/* Olobuild Cookie Consent — Admin Page */
+/* Olobuild Cookie Consent — Page-specific admin styles */
 
-.olo-ck-wrap {
-    max-width: 900px;
+/* Form wrapper (no border-top, connects to tabs) */
+.olo-ck-page .olo-ck-form {
+    margin-top: 0;
 }
 
-.olo-ck-wrap h1 {
+/* Number input with suffix (giorni, px) */
+.olo-ck-page .olo-field-input-short {
     display: flex;
     align-items: center;
-    font-size: 22px;
-    font-weight: 600;
-    margin-bottom: 16px;
+    gap: 8px;
+    max-width: 180px;
 }
 
-/* Tabs */
-.olo-ck-tabs {
-    margin-bottom: 0 !important;
-    border-bottom: 1px solid #c3c4c7;
+.olo-ck-page .olo-field-input-short .olo-field-input {
+    width: 90px;
 }
 
-.olo-ck-tabs .nav-tab {
+.olo-ck-page .olo-field-suffix {
     font-size: 13px;
-    padding: 8px 14px;
-}
-
-.olo-ck-tabs .nav-tab-active {
-    background: #fff;
-    border-bottom-color: #fff;
-}
-
-/* Form */
-.olo-ck-form {
-    background: #fff;
-    border: 1px solid #c3c4c7;
-    border-top: none;
-    padding: 24px;
-    margin-bottom: 20px;
-}
-
-/* Sections */
-.olo-ck-section {
-    margin-bottom: 32px;
-    padding-bottom: 24px;
-    border-bottom: 1px solid #eee;
-}
-
-.olo-ck-section:last-of-type {
-    border-bottom: none;
-    margin-bottom: 0;
-    padding-bottom: 0;
-}
-
-.olo-ck-section h2 {
-    font-size: 16px;
-    font-weight: 600;
-    margin: 0 0 4px;
-    padding: 0;
-    color: #1d2327;
-}
-
-.olo-ck-section > .description {
-    margin-top: 0;
-    margin-bottom: 16px;
     color: #666;
+    white-space: nowrap;
 }
 
-/* Table */
-.olo-ck-table th {
-    width: 200px;
-    font-weight: 500;
-    color: #1d2327;
-    vertical-align: top;
-    padding-top: 14px;
+/* Stacked field row (textarea full-width below label) */
+.olo-ck-page .olo-field-row-stack {
+    flex-wrap: wrap;
 }
 
-.olo-ck-table td {
-    padding-top: 10px;
-    padding-bottom: 10px;
+/* Code textarea */
+.olo-ck-page .olo-field-code {
+    font-family: Consolas, Monaco, 'Courier New', monospace;
+    font-size: 12.5px;
+    line-height: 1.6;
 }
 
-.olo-ck-table input.regular-text {
-    width: 400px;
-    max-width: 100%;
-}
-
-.olo-ck-table input.small-text {
-    width: 80px;
-}
-
-.olo-ck-table textarea.large-text {
-    width: 100%;
-    max-width: 600px;
-}
-
-/* Toggle */
-.olo-ck-toggle {
-    position: relative;
-    display: inline-block;
+/* Color input */
+.olo-ck-page .olo-field-color {
     width: 44px;
-    height: 24px;
+    height: 36px;
+    padding: 2px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
     cursor: pointer;
+    background: none;
 }
 
-.olo-ck-toggle input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
-
-.olo-ck-toggle-slider {
-    position: absolute;
-    inset: 0;
-    background: #ccc;
-    border-radius: 24px;
-    transition: 0.25s;
-}
-
-.olo-ck-toggle-slider::before {
-    content: '';
-    position: absolute;
-    width: 18px;
-    height: 18px;
-    left: 3px;
-    bottom: 3px;
-    background: #fff;
-    border-radius: 50%;
-    transition: 0.25s;
-}
-
-.olo-ck-toggle input:checked + .olo-ck-toggle-slider {
-    background: #2271b1;
-}
-
-.olo-ck-toggle input:checked + .olo-ck-toggle-slider::before {
-    transform: translateX(20px);
-}
-
-/* Category cards */
+/* Category cards inside olo-card-body */
 .olo-ck-cat-card {
     background: #f9f9f9;
-    border: 1px solid #e0e0e0;
+    border: 1px solid #eee;
     border-radius: 8px;
     padding: 16px 20px;
     margin-bottom: 12px;
 }
 
+.olo-ck-cat-card:last-child {
+    margin-bottom: 0;
+}
+
 .olo-ck-cat-header {
     display: flex;
     align-items: center;
-    gap: 8px;
-    margin-bottom: 8px;
+    gap: 10px;
+    margin-bottom: 12px;
 }
 
-.olo-ck-cat-header .dashicons {
-    color: #2271b1;
+.olo-ck-cat-header strong {
+    font-size: 14px;
+    color: #1a1a1a;
 }
 
 .olo-ck-badge {
     font-size: 11px;
-    background: #d4edda;
-    color: #155724;
-    padding: 2px 8px;
+    background: #e8622a;
+    color: #fff;
+    padding: 2px 10px;
     border-radius: 10px;
     font-weight: 600;
 }
 
-/* Declaration table */
-.olo-ck-decl-table th,
-.olo-ck-decl-table td {
-    padding: 6px 8px;
+.olo-ck-cat-card .olo-field-row {
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
 }
 
-.olo-ck-decl-table input.widefat {
+.olo-ck-cat-card .olo-field-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+/* Declaration table */
+.olo-ck-decl-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 12px;
+}
+
+.olo-ck-decl-table th {
+    text-align: left;
+    font-size: 12px;
+    font-weight: 600;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 8px 6px;
+    border-bottom: 2px solid #eee;
+}
+
+.olo-ck-decl-table td {
+    padding: 6px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.olo-ck-decl-table .olo-field-input {
+    width: 100%;
     min-width: 80px;
 }
 
@@ -179,57 +123,132 @@
     font-size: 18px !important;
     line-height: 1 !important;
     padding: 2px 8px !important;
+    border-color: transparent !important;
+    background: transparent !important;
 }
 
-/* Code block */
+.olo-ck-remove-row:hover {
+    background: #fef2f2 !important;
+    border-color: #dc3545 !important;
+}
+
+.olo-ck-add-btn {
+    margin-top: 4px;
+    font-size: 13px;
+}
+
+/* Code block (manual blocking instructions) */
 .olo-ck-code {
-    background: #f4f4f4;
-    border: 1px solid #ddd;
-    padding: 12px 16px;
-    border-radius: 6px;
-    font-family: Consolas, Monaco, monospace;
-    font-size: 12px;
+    background: #1a1a1a;
+    color: #e0e0e0;
+    padding: 16px 20px;
+    border-radius: 8px;
+    font-family: Consolas, Monaco, 'Courier New', monospace;
+    font-size: 12.5px;
+    line-height: 1.6;
     overflow-x: auto;
     white-space: pre;
+    margin: 0;
 }
 
-/* Log pills */
+/* Log actions bar */
+.olo-ck-log-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+/* Log table */
+.olo-ck-log-table-wrap {
+    overflow-x: auto;
+}
+
+.olo-ck-log-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.olo-ck-log-table th {
+    text-align: left;
+    font-size: 12px;
+    font-weight: 600;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 10px 8px;
+    border-bottom: 2px solid #eee;
+}
+
+.olo-ck-log-table td {
+    padding: 10px 8px;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 13px;
+}
+
+.olo-ck-log-table tbody tr:hover {
+    background: #fafafa;
+}
+
+.olo-ck-log-table code {
+    font-size: 12px;
+    background: #f4f4f4;
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: #1a1a1a;
+}
+
+/* Action type badges */
+.olo-ck-action-initial {
+    color: #16a34a;
+    font-weight: 600;
+}
+
+.olo-ck-action-update {
+    color: #d97706;
+    font-weight: 600;
+}
+
+.olo-ck-action-revoke {
+    color: #dc3545;
+    font-weight: 600;
+}
+
+/* Category pills */
 .olo-ck-cat-pill {
     display: inline-block;
     font-size: 11px;
-    background: #e8f0fe;
-    color: #2271b1;
+    background: #1a1a1a;
+    color: #fff;
     padding: 2px 8px;
     border-radius: 10px;
     font-weight: 600;
     margin: 1px 2px;
 }
 
-/* Message */
-.olo-ck-msg {
-    font-size: 13px;
-    font-weight: 500;
+/* User agent cell */
+.olo-ck-ua-cell {
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
-/* Submit */
-.olo-ck-form .submit {
-    margin-top: 16px;
-    padding-top: 16px;
-    border-top: 1px solid #eee;
+/* Empty state */
+.olo-ck-empty {
+    color: #999;
+    font-style: italic;
+    padding: 20px 0;
 }
 
 /* Responsive */
 @media screen and (max-width: 782px) {
-    .olo-ck-table th {
-        width: auto;
-        display: block;
-        padding-bottom: 4px;
-    }
-    .olo-ck-table td {
-        display: block;
-        padding-top: 0;
-    }
-    .olo-ck-table input.regular-text {
-        width: 100%;
+    .olo-ck-decl-table th:nth-child(2),
+    .olo-ck-decl-table td:nth-child(2),
+    .olo-ck-log-table th:nth-child(5),
+    .olo-ck-log-table td:nth-child(5),
+    .olo-ck-log-table th:nth-child(7),
+    .olo-ck-log-table td:nth-child(7) {
+        display: none;
     }
 }

@@ -51,19 +51,6 @@
     <!-- Center: Page Settings + Viewport controls -->
     <div class="mb-flex mb-items-center mb-gap-2">
       <button
-        @click="builderStore.toggleStylePanel()"
-        :class="[
-          'mb-px-2 mb-py-1.5 mb-rounded-md mb-transition-colors',
-          builderStore.stylePanelOpen
-            ? 'mb-bg-primary-600/20 mb-text-primary-300'
-            : 'mb-text-gray-400 hover:mb-text-gray-200 hover:mb-bg-gray-700'
-        ]"
-        title="Sistema stili"
-        aria-label="Sistema stili"
-      >
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" x2="4" y1="21" y2="14"/><line x1="4" x2="4" y1="10" y2="3"/><line x1="12" x2="12" y1="21" y2="12"/><line x1="12" x2="12" y1="8" y2="3"/><line x1="20" x2="20" y1="21" y2="16"/><line x1="20" x2="20" y1="12" y2="3"/><line x1="1" x2="7" y1="14" y2="14"/><line x1="9" x2="15" y1="8" y2="8"/><line x1="17" x2="23" y1="16" y2="16"/></svg>
-      </button>
-      <button
         @click="builderStore.togglePageSettings()"
         :class="[
           'mb-px-2 mb-py-1.5 mb-rounded-md mb-transition-colors',

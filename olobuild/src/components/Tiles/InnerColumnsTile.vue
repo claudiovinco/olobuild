@@ -9,7 +9,7 @@
     <!-- Sub-columns flex container -->
     <div
       class="olo-ic-columns"
-      :class="{ 'olo-ic-stack': settings.stack_mobile !== false }"
+      :class="{ 'olo-ic-stack': shouldStack() }"
       :style="{
         gap: (settings.gap || 16) + 'px',
         alignItems: alignMap[settings.vertical_align] || 'stretch'
@@ -81,6 +81,15 @@ const props = defineProps({
 const tilesStore = useTilesStore();
 const builderStore = useBuilderStore();
 const { handleDropIntoColumn } = useDragDrop();
+
+function shouldStack() {
+  const m = builderStore.viewMode;
+  const isMob = m === 'mobile' || m === 'mobile_landscape';
+  const isTab = m === 'tablet' || m === 'tablet_landscape';
+  if (isMob && props.settings.stack_mobile !== false) return true;
+  if (isTab && props.settings.stack_tablet) return true;
+  return false;
+}
 
 const dragOverColId = ref(null);
 

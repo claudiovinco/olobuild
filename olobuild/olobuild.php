@@ -3,7 +3,7 @@
  * Plugin Name: Olobuild
  * Plugin URI:  https://example.com/olobuild
  * Description: Page builder professionale olonico con sistema a griglia (tile drag & drop).
- * Version:     2.23.47
+ * Version:     2.25.20
  * Author:      Claudio
  * Author URI:  https://example.com
  * Text Domain: olobuilder
@@ -15,9 +15,33 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'OLO_VERSION', '2.23.47' );
+define( 'OLO_VERSION', '2.25.20' );
 define( 'OLO_PATH', plugin_dir_path( __FILE__ ) );
 define( 'OLO_URL', plugin_dir_url( __FILE__ ) );
+
+/**
+ * Abilita upload di file JSON/Lottie e SVG nella Media Library.
+ */
+add_filter( 'upload_mimes', function( $mimes ) {
+    $mimes['json'] = 'application/json';
+    $mimes['svg']  = 'image/svg+xml';
+    $mimes['lottie'] = 'application/json';
+    return $mimes;
+} );
+
+// Bypass la validazione MIME reale di WP per JSON (wp_check_filetype_and_ext restituisce vuoto)
+add_filter( 'wp_check_filetype_and_ext', function( $data, $file, $filename, $mimes ) {
+    $ext = strtolower( pathinfo( $filename, PATHINFO_EXTENSION ) );
+    if ( $ext === 'json' ) {
+        $data['ext']  = 'json';
+        $data['type'] = 'application/json';
+    }
+    if ( $ext === 'svg' ) {
+        $data['ext']  = 'svg';
+        $data['type'] = 'image/svg+xml';
+    }
+    return $data;
+}, 10, 4 );
 
 /**
  * Traduzione stringhe tile — equivalente di __() per Olobuild.

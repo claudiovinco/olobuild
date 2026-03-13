@@ -373,10 +373,10 @@ onBeforeUnmount(() => {
 
 .ff-dropdown {
   z-index: 99999;
-  background: #1f2937;
-  border: 1px solid #374151;
+  background: #fff;
+  border: 1px solid #e5e7eb;
   border-radius: 8px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -385,16 +385,16 @@ onBeforeUnmount(() => {
 
 .ff-search-wrap {
   padding: 8px;
-  border-bottom: 1px solid #374151;
+  border-bottom: 1px solid #e5e7eb;
 }
 .ff-search {
   width: 100%;
-  background: #111827;
-  border: 1px solid #4b5563;
+  background: #f9fafb;
+  border: 1px solid #d1d5db;
   border-radius: 4px;
   padding: 6px 8px;
   font-size: 12px;
-  color: #e5e7eb;
+  color: #1f2937;
   outline: none;
 }
 .ff-search:focus {
@@ -422,15 +422,15 @@ onBeforeUnmount(() => {
 .ff-item {
   padding: 6px 12px;
   font-size: 13px;
-  color: #d1d5db;
+  color: #374151;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 .ff-item:hover {
-  background: #374151;
-  color: #fff;
+  background: #f3f4f6;
+  color: #1a1a1a;
 }
 .ff-item--active {
   background: var(--olo-color-primary, #6366F1);
@@ -467,4 +467,10 @@ onBeforeUnmount(() => {
   color: #9CA3AF;
   font-size: 12px;
 }
+
+/* ── Scrollbar leggera ── */
+.ff-list::-webkit-scrollbar { width: 6px; }
+.ff-list::-webkit-scrollbar-track { background: transparent; }
+.ff-list::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
+.ff-list::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
 </style>

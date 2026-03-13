@@ -116,12 +116,32 @@ class Olo_Pexels {
             return new WP_Error( 'pexels_api', $msg, [ 'status' => $code ] );
         }
 
+        // Scegli quale URL servire come "regular" in base al filtro size.
+        // Pexels restituisce sempre tutte le varianti; qui scegliamo quella
+        // corrispondente alla dimensione richiesta dall'utente.
+        // Pexels src variants:
+        //   small  ~130px h  |  medium ~350px h  |  large ~940px w
+        //   large2x ~1880px w  |  original = full resolution
+        $size_map = [
+            'small'  => 'medium',   // ~350px — ragionevole come "piccola"
+            'medium' => 'large',    // ~940px — standard web
+            'large'  => 'original', // full resolution
+        ];
+        $src_key = isset( $size_map[ $size ] ) ? $size_map[ $size ] : 'large';
+
         $results = [];
         foreach ( $body['photos'] ?? [] as $photo ) {
+            $src = $photo['src'] ?? [];
+            $regular_url = $src[ $src_key ] ?? $src['large'] ?? '';
             $results[] = [
                 'id'               => $photo['id'],
-                'thumb'            => $photo['src']['medium'] ?? '',
-                'regular'          => $photo['src']['large'] ?? '',
+                'thumb'            => $src['medium'] ?? '',
+                'regular'          => $regular_url,
+                'small'            => $src['small'] ?? '',
+                'medium'           => $src['medium'] ?? '',
+                'large'            => $src['large'] ?? '',
+                'large2x'          => $src['large2x'] ?? '',
+                'original'         => $src['original'] ?? '',
                 'alt'              => $photo['alt'] ?? '',
                 'photographer'     => $photo['photographer'] ?? '',
                 'photographer_url' => $photo['photographer_url'] ?? '',

@@ -423,13 +423,26 @@ class Olo_Global_Popups {
             ];
         }
         ?>
-        <div class="wrap">
-            <h1>Popup Globali — Olobuild</h1>
-            <p>Configura popup che appaiono automaticamente in base a condizioni di visualizzazione.</p>
+        <?php Olo_Builder::page_shell_open( 'Popup Globali' ); ?>
 
-            <div id="olo-global-popups-app">
-                <noscript>JavaScript richiesto.</noscript>
+            <div class="olo-card" style="margin-bottom:24px">
+                <div class="olo-card-head">
+                    <div class="olo-card-icon orange">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+                    </div>
+                    <div>
+                        <strong>Popup Globali</strong>
+                        <p style="margin:2px 0 0;color:#888;font-size:13px">Configura popup che appaiono automaticamente in base a condizioni di visualizzazione.</p>
+                    </div>
+                </div>
+                <div class="olo-card-body">
+                    <div id="olo-global-popups-app">
+                        <noscript>JavaScript richiesto.</noscript>
+                    </div>
+                </div>
             </div>
+
+            <div id="olo-gpop-msg"></div>
 
             <script>
             (function(){
@@ -475,70 +488,119 @@ class Olo_Global_Popups {
 
                 function render(){
                     var html = '';
+
+                    if(popups.length === 0){
+                        html += '<div class="olo-empty">';
+                        html += '<div class="olo-empty-icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>';
+                        html += '<p>Nessun popup configurato</p>';
+                        html += '</div>';
+                    }
+
                     popups.forEach(function(p,i){
-                        html += '<div style="border:1px solid #ccd0d4;padding:15px;margin:10px 0;background:#fff;border-radius:4px">';
-                        html += '<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">';
-                        html += '<label><input type="checkbox" '+(p.enabled?'checked':'')+' onchange="oloGPToggle('+i+',this.checked)"> Attivo</label>';
-                        html += '<input type="text" value="'+escHtml(p.name||'')+'" placeholder="Nome popup" style="flex:1" onchange="oloGPField('+i+',\'name\',this.value)">';
-                        html += '<button class="button" onclick="oloGPRemove('+i+')">Rimuovi</button>';
+                        var statusBadge = p.enabled ? '<span class="olo-badge green">Attivo</span>' : '<span class="olo-badge gray">Disattivato</span>';
+
+                        html += '<div class="olo-card" style="margin-bottom:16px">';
+                        html += '<div class="olo-card-head">';
+                        html += '<div class="olo-card-icon black"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>';
+                        html += '<div style="flex:1;min-width:0">';
+                        html += '<div style="display:flex;align-items:center;gap:8px">';
+                        html += '<strong>' + escHtml(p.name || 'Popup #'+(i+1)) + '</strong> ' + statusBadge;
+                        html += '</div>';
+                        html += '</div>';
+                        html += '<div style="display:flex;align-items:center;gap:10px">';
+                        html += '<label class="olo-toggle"><input type="checkbox" '+(p.enabled?'checked':'')+' onchange="oloGPToggle('+i+',this.checked)"><span class="olo-toggle-slider"></span></label>';
+                        html += '<button class="olo-btn-danger" onclick="oloGPRemove('+i+')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg> Rimuovi</button>';
+                        html += '</div>';
                         html += '</div>';
 
-                        html += '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">';
-                        html += '<label>Template:<br><select onchange="oloGPField('+i+',\'template_id\',this.value)">';
-                        html += '<option value="0">— Seleziona —</option>';
+                        html += '<div class="olo-card-body">';
+
+                        // Nome popup
+                        html += '<div class="olo-field-row">';
+                        html += '<div class="olo-field-info"><label>Nome popup</label></div>';
+                        html += '<div class="olo-field-input-wrap"><input type="text" class="olo-field-input" value="'+escHtml(p.name||'')+'" placeholder="Nome popup" onchange="oloGPField('+i+',\'name\',this.value)"></div>';
+                        html += '</div>';
+
+                        // Template
+                        html += '<div class="olo-field-row">';
+                        html += '<div class="olo-field-info"><label>Template</label></div>';
+                        html += '<div class="olo-field-input-wrap"><select class="olo-field-input" onchange="oloGPField('+i+',\'template_id\',this.value)">';
+                        html += '<option value="0">\u2014 Seleziona \u2014</option>';
                         templates.forEach(function(t){
                             html += '<option value="'+t.id+'"'+(p.template_id==t.id?' selected':'')+'>'+escHtml(t.name)+' ('+t.type+')</option>';
                         });
-                        html += '</select></label>';
+                        html += '</select></div>';
+                        html += '</div>';
 
-                        html += '<label>Trigger:<br><select onchange="oloGPField('+i+',\'trigger\',this.value)">';
+                        // Trigger
+                        html += '<div class="olo-field-row">';
+                        html += '<div class="olo-field-info"><label>Trigger</label></div>';
+                        html += '<div class="olo-field-input-wrap"><select class="olo-field-input" onchange="oloGPField('+i+',\'trigger\',this.value)">';
                         triggerOptions.forEach(function(o){
                             html += '<option value="'+o.v+'"'+(p.trigger===o.v?' selected':'')+'>'+o.l+'</option>';
                         });
-                        html += '</select></label>';
+                        html += '</select></div>';
+                        html += '</div>';
 
-                        html += '<label>Frequenza:<br><select onchange="oloGPField('+i+',\'frequency\',this.value)">';
+                        // Frequenza
+                        html += '<div class="olo-field-row">';
+                        html += '<div class="olo-field-info"><label>Frequenza</label></div>';
+                        html += '<div class="olo-field-input-wrap"><select class="olo-field-input" onchange="oloGPField('+i+',\'frequency\',this.value)">';
                         freqOptions.forEach(function(o){
                             html += '<option value="'+o.v+'"'+(p.frequency===o.v?' selected':'')+'>'+o.l+'</option>';
                         });
-                        html += '</select></label>';
+                        html += '</select></div>';
                         html += '</div>';
 
-                        html += '<div style="margin-top:10px"><strong>Condizioni:</strong> ';
-                        html += '<select onchange="oloGPField('+i+',\'conditions_logic\',this.value)" style="margin:0 5px">';
+                        // Condizioni
+                        html += '<div class="olo-field-row" style="align-items:flex-start">';
+                        html += '<div class="olo-field-info"><label>Condizioni</label></div>';
+                        html += '<div class="olo-field-input-wrap">';
+                        html += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">';
+                        html += '<select class="olo-field-input" style="width:auto" onchange="oloGPField('+i+',\'conditions_logic\',this.value)">';
                         html += '<option value="OR"'+(p.conditions_logic!=='AND'?' selected':'')+'>OR (almeno una)</option>';
                         html += '<option value="AND"'+(p.conditions_logic==='AND'?' selected':'')+'>AND (tutte)</option>';
                         html += '</select>';
-                        html += '<button class="button button-small" onclick="oloGPAddCond('+i+')">+ Condizione</button>';
+                        html += '<button class="olo-btn-orange" onclick="oloGPAddCond('+i+')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg> Condizione</button>';
                         html += '</div>';
 
                         if(p.conditions){if(p.conditions.length>0){
-                            html += '<div style="margin-top:5px;padding-left:10px">';
                             p.conditions.forEach(function(c,ci){
-                                html += '<div style="display:flex;gap:5px;margin:3px 0;align-items:center">';
-                                html += '<label><input type="checkbox" '+(c.negate?'checked':'')+' onchange="oloGPCondField('+i+','+ci+',\'negate\',this.checked)"> NON</label>';
-                                html += '<select onchange="oloGPCondField('+i+','+ci+',\'type\',this.value)">';
+                                html += '<div style="display:flex;gap:6px;margin:6px 0;align-items:center">';
+                                html += '<label class="olo-toggle" style="min-width:auto"><input type="checkbox" '+(c.negate?'checked':'')+' onchange="oloGPCondField('+i+','+ci+',\'negate\',this.checked)"><span class="olo-toggle-slider"></span></label>';
+                                html += '<span style="font-size:12px;color:#888;min-width:30px">NON</span>';
+                                html += '<select class="olo-field-input" onchange="oloGPCondField('+i+','+ci+',\'type\',this.value)">';
                                 conditionTypes.forEach(function(ct){
                                     html += '<option value="'+ct.v+'"'+(c.type===ct.v?' selected':'')+'>'+ct.l+'</option>';
                                 });
                                 html += '</select>';
-                                html += '<input type="text" value="'+escHtml(c.value||'')+'" placeholder="Valore (ID, slug)" style="width:120px" onchange="oloGPCondField('+i+','+ci+',\'value\',this.value)">';
-                                html += '<button class="button button-small" onclick="oloGPRemoveCond('+i+','+ci+')">x</button>';
+                                html += '<input type="text" class="olo-field-input" value="'+escHtml(c.value||'')+'" placeholder="Valore (ID, slug)" style="width:130px" onchange="oloGPCondField('+i+','+ci+',\'value\',this.value)">';
+                                html += '<button class="olo-btn-danger" style="padding:4px 8px;font-size:12px" onclick="oloGPRemoveCond('+i+','+ci+')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>';
                                 html += '</div>';
                             });
-                            html += '</div>';
                         }}
 
                         html += '</div>';
+                        html += '</div>';
+
+                        html += '</div>'; // card-body
+                        html += '</div>'; // card
                     });
 
-                    html += '<p><button class="button button-primary" onclick="oloGPAdd()">+ Aggiungi Popup</button> ';
-                    html += '<button class="button button-primary" onclick="oloGPSave()" style="margin-left:10px">Salva Tutto</button></p>';
+                    html += '<div style="display:flex;gap:10px;margin-top:20px">';
+                    html += '<button class="olo-btn-orange" onclick="oloGPAdd()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg> Aggiungi Popup</button>';
+                    html += '<button class="olo-btn-save" onclick="oloGPSave()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Salva Tutto</button>';
+                    html += '</div>';
 
                     app.innerHTML = html;
                 }
 
                 function escHtml(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML}
+
+                function showMsg(type, text){
+                    var msgEl = document.getElementById('olo-gpop-msg');
+                    if(msgEl){ msgEl.innerHTML = '<div class="olo-msg '+type+'">'+text+'</div>'; setTimeout(function(){ msgEl.innerHTML=''; }, 4000); }
+                }
 
                 window.oloGPToggle = function(i,v){ popups[i].enabled=v; render(); };
                 window.oloGPField = function(i,k,v){ popups[i][k]=v; render(); };
@@ -557,14 +619,14 @@ class Olo_Global_Popups {
                 window.oloGPSave = function(){
                     fetch(restUrl,{method:'POST',headers:{'Content-Type':'application/json','X-WP-Nonce':nonce},body:JSON.stringify(popups)})
                     .then(function(r){return r.json()})
-                    .then(function(d){if(d.success){alert('Salvato!')}else{alert('Errore: '+JSON.stringify(d))}})
-                    .catch(function(e){alert('Errore: '+e.message)});
+                    .then(function(d){if(d.success){showMsg('success','Popup salvati con successo!')}else{showMsg('error','Errore: '+JSON.stringify(d))}})
+                    .catch(function(e){showMsg('error','Errore: '+e.message)});
                 };
 
                 render();
             })();
             </script>
-        </div>
+        <?php Olo_Builder::page_shell_close(); ?>
         <?php
     }
 }

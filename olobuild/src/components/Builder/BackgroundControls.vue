@@ -23,20 +23,10 @@
     <!-- Solid color -->
     <div v-if="bg.type === 'solid'" class="mb-space-y-2">
       <label class="mb-block mb-text-[10px] mb-text-gray-400">Colore</label>
-      <div class="mb-flex mb-gap-2">
-        <input
-          type="color"
-          :value="bg.color || '#ffffff'"
-          @input="updateField('color', $event.target.value)"
-          class="mb-w-8 mb-h-8 mb-rounded mb-cursor-pointer mb-border-0"
-        />
-        <input
-          type="text"
-          :value="bg.color || '#ffffff'"
-          @change="updateField('color', $event.target.value)"
-          class="mb-flex-1 mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1 mb-text-sm mb-text-gray-900"
-        />
-      </div>
+      <FieldColor
+        :modelValue="bg.color || '#ffffff'"
+        @update:modelValue="updateField('color', $event)"
+      />
       <div>
         <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">Opacità sfondo</label>
         <div class="mb-flex mb-items-center mb-gap-2">
@@ -256,25 +246,20 @@
     <!-- Overlay (for all types except none) -->
     <div v-if="bg.type && bg.type !== 'none'" class="mb-space-y-2 mb-pt-2 mb-border-t mb-border-gray-700">
       <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300">Sovrapposizione</label>
-      <div class="mb-flex mb-gap-2">
+      <FieldColor
+        :modelValue="bg.overlay_color || '#000000'"
+        @update:modelValue="updateField('overlay_color', $event)"
+      />
+      <div class="mb-flex mb-items-center mb-gap-2">
+        <span class="mb-text-[10px] mb-text-gray-400 mb-shrink-0">Opacità</span>
         <input
-          type="color"
-          :value="bg.overlay_color || '#000000'"
-          @input="updateField('overlay_color', $event.target.value)"
-          class="mb-w-7 mb-h-7 mb-rounded mb-cursor-pointer mb-border-0"
+          type="range"
+          :value="bg.overlay_opacity || 0"
+          @input="updateField('overlay_opacity', parseInt($event.target.value))"
+          min="0" max="100" step="5"
+          class="mb-flex-1"
         />
-        <div class="mb-flex-1">
-          <div class="mb-flex mb-items-center mb-gap-2">
-            <input
-              type="range"
-              :value="bg.overlay_opacity || 0"
-              @input="updateField('overlay_opacity', parseInt($event.target.value))"
-              min="0" max="100" step="5"
-              class="mb-flex-1"
-            />
-            <span class="mb-text-xs mb-text-gray-400 mb-w-10 mb-text-right">{{ bg.overlay_opacity || 0 }}%</span>
-          </div>
-        </div>
+        <span class="mb-text-xs mb-text-gray-400 mb-w-10 mb-text-right">{{ bg.overlay_opacity || 0 }}%</span>
       </div>
     </div>
   </div>
@@ -285,6 +270,7 @@ import { computed } from 'vue';
 import { useMediaPicker } from '@/composables/useMediaPicker';
 import ParallaxEditor from './ParallaxEditor.vue';
 import FieldGradient from './fields/FieldGradient.vue';
+import FieldColor from './fields/FieldColor.vue';
 
 const bgParallaxProperties = [
   { key: 'bgx', label: 'Spostamento X', min: -800, max: 800, step: 10, unit: 'px' },

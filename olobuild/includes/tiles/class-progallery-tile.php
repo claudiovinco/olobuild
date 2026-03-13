@@ -285,7 +285,11 @@ class Olo_ProGallery_Tile extends Olo_Tile_Base {
         echo '<style>';
 
         // Base layout
-        if ( $layout === 'masonry' ) {
+        if ( $layout === 'justified' ) {
+            echo ".{$uid}{display:flex;flex-wrap:wrap;gap:{$gap}px}";
+            echo ".{$uid} .olo-pg-item{position:relative;overflow:hidden;border-radius:{$radius};height:{$img_height};flex-grow:1;min-width:120px}";
+            echo ".{$uid} .olo-pg-item img{width:100%;height:100%;object-fit:cover;display:block}";
+        } elseif ( $layout === 'masonry' ) {
             echo ".{$uid}{column-count:{$cols};column-gap:{$gap}px}";
             echo ".{$uid} .olo-pg-item{break-inside:avoid;display:inline-block;width:100%;margin-bottom:{$gap}px;position:relative;overflow:hidden;border-radius:{$radius}}";
             echo ".{$uid} .olo-pg-item img{width:100%;display:block;object-fit:cover}";
@@ -688,6 +692,8 @@ class Olo_ProGallery_Tile extends Olo_Tile_Base {
             echo "@media(max-width:640px){.{$uid}{column-count:{$mob_cols}}}";
         } elseif ( $layout === 'expand' ) {
             echo "@media(max-width:640px){.{$uid}{grid-template-columns:repeat({$mob_cols},1fr);grid-template-rows:none;height:auto;transition:none}.{$uid} .olo-pg-item{height:{$img_height}}}";
+        } elseif ( $layout === 'justified' ) {
+            echo "@media(max-width:640px){.{$uid} .olo-pg-item{min-width:80px;height:" . ( intval( $img_height ) > 0 ? max( 100, intval( $img_height ) - 60 ) . 'px' : '140px' ) . "}}";
         } elseif ( ! $is_coverflow && $layout !== 'scattered' && $layout !== 'parallax' && $layout !== 'honeycomb' && $layout !== 'hexgrid' && $layout !== 'puzzle' && ! $is_strip ) {
             echo "@media(max-width:640px){.{$uid}{grid-template-columns:repeat({$mob_cols},1fr)}}";
         }

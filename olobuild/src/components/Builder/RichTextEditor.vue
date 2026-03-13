@@ -231,7 +231,7 @@ watch(() => props.modelValue, (newVal) => {
 
 // Computed states for toolbar
 const currentColor = computed(() => {
-  return editor.value?.getAttributes('textStyle')?.color || '#ffffff';
+  return editor.value?.getAttributes('textStyle')?.color || '#1a1a1a';
 });
 
 const currentHighlight = computed(() => {

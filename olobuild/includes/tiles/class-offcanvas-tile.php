@@ -7,9 +7,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Olo_Offcanvas_Tile extends Olo_Tile_Base {
 
     protected $type     = 'offcanvas';
-    protected $name     = 'Off-Canvas';
+    protected $name     = 'Menu Burger';
     protected $icon     = 'dashicons-slides';
-    protected $category = 'interactive';
+    protected $category = 'navigation';
     protected $defaults = [
         'mode'                => 'right',
         'panel_width'         => '320',
@@ -139,8 +139,10 @@ class Olo_Offcanvas_Tile extends Olo_Tile_Base {
         $content_html = '';
         $template_id  = intval( $s['template_id'] );
         if ( $template_id > 0 ) {
+            $GLOBALS['olo_in_offcanvas'] = true;
             $renderer     = new Olo_Frontend_Renderer();
             $content_html = $renderer->render_shortcode( [ 'id' => $template_id ] );
+            unset( $GLOBALS['olo_in_offcanvas'] );
             if ( empty( $content_html ) || strpos( $content_html, '<!-- Olobuilder' ) === 0 ) {
                 $content_html = '';
             }

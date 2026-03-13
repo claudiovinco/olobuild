@@ -205,25 +205,24 @@ class Olo_Gallery_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .olo-gal-item:nth-child(3n) img { animation-delay: -<?php echo round( $kb_speed * 2 / 3 ); ?>s; }
             <?php endif; ?>
 
-            /* Hover zoom */
+            /* Hover zoom — applied to container (no tilt) */
             <?php if ( ! empty( $s['fx_hover_zoom'] ) && empty( $s['fx_hover_tilt'] ) ) : ?>
-            .<?php echo $uid; ?> .olo-gal-item:hover img {
+            .<?php echo $uid; ?> .olo-gal-item {
+                transition: transform 0.4s ease, box-shadow 0.4s ease;
+            }
+            .<?php echo $uid; ?> .olo-gal-item:hover {
                 transform: scale(<?php echo $hz_scale; ?>);
+                box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+                z-index: 2;
             }
             <?php endif; ?>
 
-            /* Hover tilt 3D */
+            /* Tilt 3D (JS-driven) — base styles */
             <?php if ( ! empty( $s['fx_hover_tilt'] ) ) : ?>
             .<?php echo $uid; ?> .olo-gal-item {
-                perspective: 500px;
                 transform-style: preserve-3d;
-            }
-            .<?php echo $uid; ?> .olo-gal-item img {
-                transform-origin: center center;
-            }
-            .<?php echo $uid; ?> .olo-gal-item:hover img {
-                transform: scale(1.05) rotateX(<?php echo $tilt_ang; ?>deg) rotateY(-<?php echo $tilt_ang; ?>deg);
-                box-shadow: <?php echo $tilt_ang; ?>px <?php echo $tilt_ang; ?>px <?php echo $tilt_ang * 3; ?>px rgba(0,0,0,0.3);
+                will-change: transform;
+                transition: transform 0.4s ease, box-shadow 0.4s ease;
             }
             <?php endif; ?>
 
@@ -401,6 +400,40 @@ class Olo_Gallery_Tile extends Olo_Tile_Base {
                             }
                         }
                     });
+                });
+            });
+        })();
+        </script>
+        <?php endif; ?>
+        <?php if ( ! empty( $s['fx_hover_tilt'] ) ) : ?>
+        <script>
+        (function(){
+            var gallery = document.getElementById('<?php echo $uid; ?>');
+            if(!gallery){return}
+            var doZoom = <?php echo ! empty( $s['fx_hover_zoom'] ) ? 'true' : 'false'; ?>;
+            var zoomScale = <?php echo $hz_scale; ?>;
+            var items = gallery.querySelectorAll('.olo-gal-item');
+            items.forEach(function(el){
+                el.addEventListener('mouseenter', function(){
+                    el.style.transition = 'transform 0.15s ease, box-shadow 0.15s ease';
+                });
+                el.addEventListener('mouseleave', function(){
+                    el.style.transition = 'transform 0.4s ease, box-shadow 0.4s ease';
+                    el.style.transform = '';
+                    el.style.boxShadow = '';
+                    el.style.zIndex = '';
+                });
+                el.addEventListener('mousemove', function(e){
+                    var rect = el.getBoundingClientRect();
+                    var x = (e.clientX - rect.left) / rect.width - 0.5;
+                    var y = (e.clientY - rect.top) / rect.height - 0.5;
+                    var rotY = x * 20;
+                    var rotX = -y * 20;
+                    var t = 'perspective(600px) rotateX(' + rotX + 'deg) rotateY(' + rotY + 'deg)';
+                    if(doZoom){ t += ' scale(' + zoomScale + ')'; }
+                    el.style.transform = t;
+                    el.style.boxShadow = '0 8px 25px rgba(0,0,0,0.3)';
+                    el.style.zIndex = '2';
                 });
             });
         })();

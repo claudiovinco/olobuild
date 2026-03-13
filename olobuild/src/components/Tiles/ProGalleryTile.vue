@@ -13,6 +13,15 @@
         </div>
       </div>
 
+      <!-- Justified -->
+      <div v-else-if="layout === 'justified'" :style="justifiedStyle">
+        <div v-for="(img, i) in visibleImages" :key="img.id || img.url || i" :style="justifiedItemStyle">
+          <img :src="imgUrl(img)" :alt="imgAlt(img)" :style="imgStyle" />
+          <div v-if="isVideoItem(visibleImages[i])" :style="playBadgeStyle"></div>
+          <div v-if="isLastVisible(i)" :style="moreOverlayStyle">+{{ extraCount }}</div>
+        </div>
+      </div>
+
       <!-- Masonry -->
       <div v-else-if="layout === 'masonry'" :style="masonryStyle">
         <div v-for="(img, i) in visibleImages" :key="img.id || img.url || i" :style="masonryItemStyle(i)">
@@ -304,6 +313,23 @@ function itemStyle() {
     ...filterStyle.value,
   };
 }
+
+// ─── Justified ───
+const justifiedStyle = computed(() => ({
+  display: 'flex',
+  flexWrap: 'wrap',
+  gap: gap.value + 'px',
+}));
+
+const justifiedItemStyle = computed(() => ({
+  position: 'relative',
+  overflow: 'hidden',
+  borderRadius: radius.value + 'px',
+  height: imgHeight.value,
+  flexGrow: 1,
+  minWidth: '120px',
+  ...filterStyle.value,
+}));
 
 // ─── Masonry ───
 const masonryStyle = computed(() => ({
@@ -1121,6 +1147,7 @@ const moreOverlayStyle = computed(() => ({
   fontWeight: '700',
   borderRadius: radius.value + 'px',
   zIndex: 5,
+  pointerEvents: 'none',
 }));
 
 // ─── Badges ───

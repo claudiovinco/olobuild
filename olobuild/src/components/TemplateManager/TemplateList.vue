@@ -1,245 +1,110 @@
 <template>
-  <div class="mb-min-h-screen mb-bg-gray-900 mb-text-gray-100 mb-p-8">
-    <!-- Header -->
-    <div class="mb-max-w-5xl mb-mx-auto">
-      <div class="mb-flex mb-items-center mb-justify-between mb-mb-8">
-        <div class="mb-flex mb-items-center mb-gap-4">
-          <a
-            :href="wpAdminUrl"
-            class="mb-text-gray-400 hover:mb-text-gray-200 mb-text-lg mb-transition-colors"
-            title="Torna a WordPress"
-          >
-            &larr;
-          </a>
-          <div>
-            <img
-              :src="pluginUrl + 'assets/img/olobuild-logo-200.png'"
-              alt="Olobuild"
-              class="mb-h-10 mb-object-contain"
-            />
-            <p class="mb-text-sm mb-text-gray-400 mb-mt-1">Gestisci i tuoi template</p>
-          </div>
-        </div>
-        <div class="mb-flex mb-items-center mb-gap-3">
-          <a
-            :href="wpAdminUrl"
-            class="mb-px-4 mb-py-2.5 mb-border mb-border-gray-600 mb-text-gray-300 mb-rounded-lg mb-font-medium mb-text-sm hover:mb-bg-gray-700 mb-transition-colors mb-no-underline"
-          >
-            &larr; WordPress
-          </a>
-          <!-- Import template -->
-          <button
-            @click="triggerImport"
-            class="mb-px-4 mb-py-2.5 mb-border mb-border-gray-600 mb-text-gray-300 mb-rounded-lg mb-font-medium mb-text-sm hover:mb-bg-gray-700 mb-transition-colors"
-          >
-            &#8593; Importa
+  <div class="tpl-page">
+    <div class="tpl-container">
+      <!-- Actions bar -->
+      <div class="tpl-header-actions">
+        <button @click="triggerImport" class="tpl-btn tpl-btn-outline">&#8593; Importa</button>
+        <input
+          ref="importFileRef"
+          type="file"
+          accept=".json"
+          style="display:none"
+          @change="handleImportFile"
+        />
+        <!-- New template dropdown -->
+        <div class="tpl-dropdown" ref="dropdownRef">
+          <button @click="showNewMenu = !showNewMenu" class="tpl-btn tpl-btn-primary">
+            + Nuovo Template
           </button>
-          <input
-            ref="importFileRef"
-            type="file"
-            accept=".json"
-            class="mb-hidden"
-            @change="handleImportFile"
-          />
-          <!-- New template dropdown -->
-          <div class="mb-relative" ref="dropdownRef">
+          <div v-if="showNewMenu" class="tpl-dropdown-menu">
+            <button @click="createNew('page')" class="tpl-dropdown-item">Nuova Pagina</button>
+            <button @click="createNew('header')" class="tpl-dropdown-item">Nuovo Header</button>
+            <button @click="createNew('footer')" class="tpl-dropdown-item">Nuovo Footer</button>
+            <button @click="createNew('megapanel')" class="tpl-dropdown-item">Nuovo Mega Panel</button>
+            <button @click="createNew('404')" class="tpl-dropdown-item">Nuova 404</button>
+            <div class="tpl-dropdown-sep"></div>
+            <div class="tpl-dropdown-label">Template Single</div>
             <button
-              @click="showNewMenu = !showNewMenu"
-              class="mb-px-5 mb-py-2.5 mb-bg-primary-600 mb-text-white mb-rounded-lg mb-font-medium mb-text-sm hover:mb-bg-primary-700 mb-transition-colors"
+              v-for="pt in postTypes"
+              :key="pt.value"
+              @click="createNewSingle(pt.value)"
+              class="tpl-dropdown-item"
             >
-              + Nuovo Template
+              Single: {{ pt.label }}
             </button>
-            <div
-              v-if="showNewMenu"
-              class="mb-absolute mb-right-0 mb-mt-1 mb-w-44 mb-bg-gray-800 mb-border mb-border-gray-600 mb-rounded-lg mb-shadow-lg mb-z-10 mb-overflow-hidden"
-            >
-              <button
-                @click="createNew('page')"
-                class="mb-block mb-w-full mb-text-left mb-px-4 mb-py-2.5 mb-text-sm mb-text-gray-200 hover:mb-bg-gray-700 mb-transition-colors"
-              >
-                Nuova Pagina
-              </button>
-              <button
-                @click="createNew('header')"
-                class="mb-block mb-w-full mb-text-left mb-px-4 mb-py-2.5 mb-text-sm mb-text-gray-200 hover:mb-bg-gray-700 mb-transition-colors"
-              >
-                Nuovo Header
-              </button>
-              <button
-                @click="createNew('footer')"
-                class="mb-block mb-w-full mb-text-left mb-px-4 mb-py-2.5 mb-text-sm mb-text-gray-200 hover:mb-bg-gray-700 mb-transition-colors"
-              >
-                Nuovo Footer
-              </button>
-              <button
-                @click="createNew('megapanel')"
-                class="mb-block mb-w-full mb-text-left mb-px-4 mb-py-2.5 mb-text-sm mb-text-gray-200 hover:mb-bg-gray-700 mb-transition-colors"
-              >
-                Nuovo Mega Panel
-              </button>
-              <button
-                @click="createNew('404')"
-                class="mb-block mb-w-full mb-text-left mb-px-4 mb-py-2.5 mb-text-sm mb-text-gray-200 hover:mb-bg-gray-700 mb-transition-colors"
-              >
-                Nuova 404
-              </button>
-              <div class="mb-border-t mb-border-gray-700"></div>
-              <div class="mb-px-4 mb-py-2 mb-text-[10px] mb-text-gray-500 mb-uppercase mb-font-bold">Template Single</div>
-              <button
-                v-for="pt in postTypes"
-                :key="pt.value"
-                @click="createNewSingle(pt.value)"
-                class="mb-block mb-w-full mb-text-left mb-px-4 mb-py-2.5 mb-text-sm mb-text-gray-200 hover:mb-bg-gray-700 mb-transition-colors"
-              >
-                Single: {{ pt.label }}
-              </button>
-            </div>
           </div>
         </div>
       </div>
 
       <!-- Tab filter -->
-      <div class="mb-flex mb-gap-1 mb-mb-6 mb-bg-gray-800 mb-rounded-lg mb-p-1 mb-w-fit">
+      <div class="tpl-tabs">
         <button
           v-for="tab in tabs"
           :key="tab.value"
           @click="activeTab = tab.value"
-          :class="[
-            'mb-px-4 mb-py-1.5 mb-rounded-md mb-text-sm mb-font-medium mb-transition-colors',
-            activeTab === tab.value
-              ? 'mb-bg-primary-600 mb-text-white'
-              : 'mb-text-gray-400 hover:mb-text-gray-200'
-          ]"
+          :class="['tpl-tab', { active: activeTab === tab.value }]"
         >
           {{ tab.label }}
         </button>
       </div>
 
       <!-- Loading state -->
-      <div v-if="loading" class="mb-text-center mb-py-16 mb-text-gray-500">
-        <p class="mb-text-lg">Caricamento template...</p>
+      <div v-if="loading" class="tpl-loading">
+        <p>Caricamento template...</p>
       </div>
 
       <!-- Empty state -->
-      <div
-        v-else-if="filteredTemplates.length === 0"
-        class="mb-text-center mb-py-16 mb-bg-gray-800 mb-rounded-xl mb-border mb-border-gray-700"
-      >
-        <span class="mb-text-5xl mb-block mb-mb-4 mb-opacity-30">&#x1F9E9;</span>
-        <h2 class="mb-text-lg mb-font-medium mb-text-gray-300 mb-mb-2">
+      <div v-else-if="filteredTemplates.length === 0" class="tpl-empty">
+        <div class="tpl-empty-icon">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
+        </div>
+        <h2>
           {{ activeTab === 'header' ? 'Nessun header' : activeTab === 'footer' ? 'Nessun footer' : activeTab === 'single' ? 'Nessun template single' : activeTab === '404' ? 'Nessuna pagina 404' : 'Nessun template' }}
         </h2>
-        <p class="mb-text-sm mb-text-gray-500 mb-mb-6">
+        <p>
           {{ activeTab === 'header' ? 'Crea il tuo primo template header.' : activeTab === 'footer' ? 'Crea il tuo primo template footer.' : activeTab === 'single' ? 'Crea un template single per un custom post type.' : activeTab === '404' ? 'Crea la tua pagina 404 personalizzata.' : 'Crea il tuo primo template per iniziare.' }}
         </p>
         <button
           v-if="activeTab !== 'single'"
           @click="createNew(activeTab === 'all' ? 'page' : activeTab)"
-
-          class="mb-px-5 mb-py-2.5 mb-bg-primary-600 mb-text-white mb-rounded-lg mb-font-medium mb-text-sm hover:mb-bg-primary-700 mb-transition-colors"
+          class="tpl-btn tpl-btn-primary"
         >
           {{ activeTab === 'header' ? 'Crea Header' : activeTab === 'footer' ? 'Crea Footer' : activeTab === '404' ? 'Crea 404' : 'Crea Template' }}
         </button>
       </div>
 
       <!-- Template grid -->
-      <div v-else class="mb-grid mb-grid-cols-1 md:mb-grid-cols-2 lg:mb-grid-cols-3 mb-gap-4">
+      <div v-else class="tpl-grid">
         <div
           v-for="tpl in filteredTemplates"
           :key="tpl.id"
-          class="mb-bg-gray-800 mb-rounded-xl mb-border mb-border-gray-700 mb-overflow-hidden mb-group hover:mb-border-gray-600 mb-transition-colors"
+          class="tpl-card"
         >
           <!-- Preview area -->
-          <div class="mb-h-40 mb-bg-gray-750 mb-flex mb-items-center mb-justify-center mb-border-b mb-border-gray-700 mb-relative">
-            <div class="mb-text-gray-600 mb-text-sm">
-              {{ countElements(tpl.content) }} elementi
-            </div>
+          <div class="tpl-card-preview">
+            <div class="tpl-card-count">{{ countElements(tpl.content) }} elementi</div>
             <!-- Type badge -->
-            <span
-              v-if="tpl.type === 'header'"
-              class="mb-absolute mb-top-2 mb-left-2 mb-px-2 mb-py-0.5 mb-text-[10px] mb-font-bold mb-uppercase mb-rounded mb-bg-purple-600/20 mb-text-purple-300 mb-border mb-border-purple-500/30"
-            >
-              Header
-            </span>
-            <span
-              v-if="tpl.type === 'footer'"
-              class="mb-absolute mb-top-2 mb-left-2 mb-px-2 mb-py-0.5 mb-text-[10px] mb-font-bold mb-uppercase mb-rounded mb-bg-teal-600/20 mb-text-teal-300 mb-border mb-border-teal-500/30"
-            >
-              Footer
-            </span>
-            <span
-              v-if="tpl.type === 'single'"
-              class="mb-absolute mb-top-2 mb-left-2 mb-px-2 mb-py-0.5 mb-text-[10px] mb-font-bold mb-uppercase mb-rounded mb-bg-amber-600/20 mb-text-amber-300 mb-border mb-border-amber-500/30"
-            >
-              Single: {{ getSinglePostType(tpl) }}
-            </span>
-            <span
-              v-if="tpl.type === 'megapanel'"
-              class="mb-absolute mb-top-2 mb-left-2 mb-px-2 mb-py-0.5 mb-text-[10px] mb-font-bold mb-uppercase mb-rounded mb-bg-indigo-600/20 mb-text-indigo-300 mb-border mb-border-indigo-500/30"
-            >
-              Mega Panel
-            </span>
-            <span
-              v-if="tpl.type === '404'"
-              class="mb-absolute mb-top-2 mb-left-2 mb-px-2 mb-py-0.5 mb-text-[10px] mb-font-bold mb-uppercase mb-rounded mb-bg-red-600/20 mb-text-red-300 mb-border mb-border-red-500/30"
-            >
-              404
-            </span>
-            <!-- Active header indicator -->
-            <span
-              v-if="tpl.type === 'header' && tpl.id === activeHeaderId"
-              class="mb-absolute mb-top-2 mb-right-2 mb-px-2 mb-py-0.5 mb-text-[10px] mb-font-bold mb-uppercase mb-rounded mb-bg-green-600/20 mb-text-green-300 mb-border mb-border-green-500/30"
-            >
-              Attivo
-            </span>
-            <!-- Active footer indicator -->
-            <span
-              v-if="tpl.type === 'footer' && tpl.id === activeFooterId"
-              class="mb-absolute mb-top-2 mb-right-2 mb-px-2 mb-py-0.5 mb-text-[10px] mb-font-bold mb-uppercase mb-rounded mb-bg-green-600/20 mb-text-green-300 mb-border mb-border-green-500/30"
-            >
-              Attivo
-            </span>
-            <!-- Active single indicator -->
-            <span
-              v-if="tpl.type === 'single' && isActiveSingle(tpl)"
-              class="mb-absolute mb-top-2 mb-right-2 mb-px-2 mb-py-0.5 mb-text-[10px] mb-font-bold mb-uppercase mb-rounded mb-bg-green-600/20 mb-text-green-300 mb-border mb-border-green-500/30"
-            >
-              Attivo
-            </span>
-            <!-- Active 404 indicator -->
-            <span
-              v-if="tpl.type === '404' && tpl.id === active404Id"
-              class="mb-absolute mb-top-2 mb-right-2 mb-px-2 mb-py-0.5 mb-text-[10px] mb-font-bold mb-uppercase mb-rounded mb-bg-green-600/20 mb-text-green-300 mb-border mb-border-green-500/30"
-            >
-              Attivo
-            </span>
+            <span v-if="tpl.type === 'header'" class="tpl-type-badge purple">Header</span>
+            <span v-if="tpl.type === 'footer'" class="tpl-type-badge teal">Footer</span>
+            <span v-if="tpl.type === 'single'" class="tpl-type-badge amber">Single: {{ getSinglePostType(tpl) }}</span>
+            <span v-if="tpl.type === 'megapanel'" class="tpl-type-badge indigo">Mega Panel</span>
+            <span v-if="tpl.type === '404'" class="tpl-type-badge red">404</span>
+            <!-- Active indicators -->
+            <span v-if="tpl.type === 'header' && tpl.id === activeHeaderId" class="tpl-active-badge">Attivo</span>
+            <span v-if="tpl.type === 'footer' && tpl.id === activeFooterId" class="tpl-active-badge">Attivo</span>
+            <span v-if="tpl.type === 'single' && isActiveSingle(tpl)" class="tpl-active-badge">Attivo</span>
+            <span v-if="tpl.type === '404' && tpl.id === active404Id" class="tpl-active-badge">Attivo</span>
             <!-- Hover overlay -->
-            <div class="mb-absolute mb-inset-0 mb-bg-black/50 mb-flex mb-items-center mb-justify-center mb-gap-3 mb-opacity-0 group-hover:mb-opacity-100 mb-transition-opacity">
-              <button
-                @click="$emit('edit', tpl.id)"
-                class="mb-px-4 mb-py-2 mb-bg-primary-600 mb-text-white mb-rounded-lg mb-text-sm mb-font-medium hover:mb-bg-primary-700"
-              >
-                Modifica
-              </button>
-              <button
-                @click="duplicateTemplate(tpl.id)"
-                class="mb-px-4 mb-py-2 mb-bg-gray-600 mb-text-white mb-rounded-lg mb-text-sm mb-font-medium hover:mb-bg-gray-500"
-              >
-                Duplica
-              </button>
-              <button
-                @click="exportTemplate(tpl.id)"
-                class="mb-px-4 mb-py-2 mb-bg-gray-600 mb-text-white mb-rounded-lg mb-text-sm mb-font-medium hover:mb-bg-gray-500"
-              >
-                Esporta
-              </button>
+            <div class="tpl-card-overlay">
+              <button @click="$emit('edit', tpl.id)" class="tpl-btn tpl-btn-primary tpl-btn-sm">Modifica</button>
+              <button @click="duplicateTemplate(tpl.id)" class="tpl-btn tpl-btn-outline-light tpl-btn-sm">Duplica</button>
+              <button @click="exportTemplate(tpl.id)" class="tpl-btn tpl-btn-outline-light tpl-btn-sm">Esporta</button>
             </div>
           </div>
           <!-- Info -->
-          <div class="mb-p-4">
-            <div class="mb-flex mb-items-start mb-justify-between">
-              <div class="mb-flex-1 mb-min-w-0">
-                <!-- Inline rename -->
+          <div class="tpl-card-info">
+            <div class="tpl-card-info-top">
+              <div class="tpl-card-info-left">
                 <input
                   v-if="renamingId === tpl.id"
                   :ref="el => { if (el) renameInputRef = el }"
@@ -247,34 +112,22 @@
                   @blur="confirmRename(tpl)"
                   @keydown.enter="confirmRename(tpl)"
                   @keydown.escape="cancelRename"
-                  class="mb-w-full mb-bg-gray-700 mb-border mb-border-primary-500 mb-rounded mb-px-2 mb-py-0.5 mb-text-sm mb-text-gray-200 mb-font-medium mb-outline-none"
+                  class="tpl-rename-input"
                 />
-                <h3 v-else class="mb-font-medium mb-text-gray-200 mb-text-sm mb-truncate">{{ tpl.title || 'Senza titolo' }}</h3>
-                <p class="mb-text-xs mb-text-gray-500 mb-mt-1">
+                <h3 v-else class="tpl-card-title">{{ tpl.title || 'Senza titolo' }}</h3>
+                <p class="tpl-card-meta">
                   <span :class="statusClass(tpl.status)">{{ tpl.status }}</span>
                   &middot; {{ formatDate(tpl.updated_at) }}
                 </p>
               </div>
-              <div class="mb-flex mb-items-center mb-gap-1 mb-shrink-0">
-                <button
-                  @click="startRename(tpl)"
-                  class="mb-text-gray-600 hover:mb-text-primary-400 mb-transition-colors mb-text-xs"
-                  title="Rinomina"
-                >
-                  &#9998;
-                </button>
-                <button
-                  @click="deleteTemplate(tpl.id, tpl.title)"
-                  class="mb-text-gray-600 hover:mb-text-red-400 mb-transition-colors mb-text-lg mb-leading-none"
-                  title="Elimina"
-                >
-                  &times;
-                </button>
+              <div class="tpl-card-actions-mini">
+                <button @click="startRename(tpl)" class="tpl-icon-btn" title="Rinomina">&#9998;</button>
+                <button @click="deleteTemplate(tpl.id, tpl.title)" class="tpl-icon-btn tpl-icon-btn-danger" title="Elimina">&times;</button>
               </div>
             </div>
-            <div class="mb-mt-3 mb-flex mb-items-center mb-gap-2">
+            <div class="tpl-card-bottom">
               <!-- Shortcode for pages -->
-              <code v-if="tpl.type !== 'header' && tpl.type !== 'footer' && tpl.type !== 'single' && tpl.type !== 'megapanel' && tpl.type !== '404'" class="mb-text-[10px] mb-text-gray-500 mb-bg-gray-700 mb-px-2 mb-py-0.5 mb-rounded">
+              <code v-if="tpl.type !== 'header' && tpl.type !== 'footer' && tpl.type !== 'single' && tpl.type !== 'megapanel' && tpl.type !== '404'" class="tpl-shortcode">
                 [olo_template id="{{ tpl.id }}"]
               </code>
               <!-- Activate/Deactivate for headers -->
@@ -282,96 +135,60 @@
                 <button
                   v-if="tpl.id === activeHeaderId"
                   @click="deactivateHeader"
-                  class="mb-text-[11px] mb-px-3 mb-py-1 mb-rounded mb-bg-green-600/20 mb-text-green-300 mb-border mb-border-green-500/30 hover:mb-bg-red-600/20 hover:mb-text-red-300 hover:mb-border-red-500/30 mb-transition-colors"
-                >
-                  Disattiva
-                </button>
+                  class="tpl-activate-btn active"
+                >Disattiva</button>
                 <button
                   v-else
                   @click="activateHeader(tpl.id)"
                   :disabled="tpl.status !== 'published'"
-                  :class="[
-                    'mb-text-[11px] mb-px-3 mb-py-1 mb-rounded mb-border mb-transition-colors',
-                    tpl.status === 'published'
-                      ? 'mb-bg-gray-700 mb-text-gray-300 mb-border-gray-600 hover:mb-bg-primary-600/20 hover:mb-text-primary-300 hover:mb-border-primary-500/30'
-                      : 'mb-bg-gray-700/50 mb-text-gray-600 mb-border-gray-700 mb-cursor-not-allowed'
-                  ]"
+                  :class="['tpl-activate-btn', { disabled: tpl.status !== 'published' }]"
                   :title="tpl.status !== 'published' ? 'Pubblica prima di attivare' : 'Imposta come header attivo'"
-                >
-                  Attiva
-                </button>
+                >Attiva</button>
               </template>
               <!-- Activate/Deactivate for footers -->
               <template v-if="tpl.type === 'footer'">
                 <button
                   v-if="tpl.id === activeFooterId"
                   @click="deactivateFooter"
-                  class="mb-text-[11px] mb-px-3 mb-py-1 mb-rounded mb-bg-green-600/20 mb-text-green-300 mb-border mb-border-green-500/30 hover:mb-bg-red-600/20 hover:mb-text-red-300 hover:mb-border-red-500/30 mb-transition-colors"
-                >
-                  Disattiva
-                </button>
+                  class="tpl-activate-btn active"
+                >Disattiva</button>
                 <button
                   v-else
                   @click="activateFooter(tpl.id)"
                   :disabled="tpl.status !== 'published'"
-                  :class="[
-                    'mb-text-[11px] mb-px-3 mb-py-1 mb-rounded mb-border mb-transition-colors',
-                    tpl.status === 'published'
-                      ? 'mb-bg-gray-700 mb-text-gray-300 mb-border-gray-600 hover:mb-bg-teal-600/20 hover:mb-text-teal-300 hover:mb-border-teal-500/30'
-                      : 'mb-bg-gray-700/50 mb-text-gray-600 mb-border-gray-700 mb-cursor-not-allowed'
-                  ]"
+                  :class="['tpl-activate-btn', { disabled: tpl.status !== 'published' }]"
                   :title="tpl.status !== 'published' ? 'Pubblica prima di attivare' : 'Imposta come footer attivo'"
-                >
-                  Attiva
-                </button>
+                >Attiva</button>
               </template>
               <!-- Activate/Deactivate for singles -->
               <template v-if="tpl.type === 'single'">
                 <button
                   v-if="isActiveSingle(tpl)"
                   @click="deactivateSingle(getSinglePostType(tpl))"
-                  class="mb-text-[11px] mb-px-3 mb-py-1 mb-rounded mb-bg-green-600/20 mb-text-green-300 mb-border mb-border-green-500/30 hover:mb-bg-red-600/20 hover:mb-text-red-300 hover:mb-border-red-500/30 mb-transition-colors"
-                >
-                  Disattiva
-                </button>
+                  class="tpl-activate-btn active"
+                >Disattiva</button>
                 <button
                   v-else
                   @click="activateSingle(tpl.id, getSinglePostType(tpl))"
                   :disabled="tpl.status !== 'published'"
-                  :class="[
-                    'mb-text-[11px] mb-px-3 mb-py-1 mb-rounded mb-border mb-transition-colors',
-                    tpl.status === 'published'
-                      ? 'mb-bg-gray-700 mb-text-gray-300 mb-border-gray-600 hover:mb-bg-amber-600/20 hover:mb-text-amber-300 hover:mb-border-amber-500/30'
-                      : 'mb-bg-gray-700/50 mb-text-gray-600 mb-border-gray-700 mb-cursor-not-allowed'
-                  ]"
+                  :class="['tpl-activate-btn', { disabled: tpl.status !== 'published' }]"
                   :title="tpl.status !== 'published' ? 'Pubblica prima di attivare' : 'Imposta come template single attivo'"
-                >
-                  Attiva
-                </button>
+                >Attiva</button>
               </template>
               <!-- Activate/Deactivate for 404 -->
               <template v-if="tpl.type === '404'">
                 <button
                   v-if="tpl.id === active404Id"
                   @click="deactivate404"
-                  class="mb-text-[11px] mb-px-3 mb-py-1 mb-rounded mb-bg-green-600/20 mb-text-green-300 mb-border mb-border-green-500/30 hover:mb-bg-red-600/20 hover:mb-text-red-300 hover:mb-border-red-500/30 mb-transition-colors"
-                >
-                  Disattiva
-                </button>
+                  class="tpl-activate-btn active"
+                >Disattiva</button>
                 <button
                   v-else
                   @click="activate404(tpl.id)"
                   :disabled="tpl.status !== 'published'"
-                  :class="[
-                    'mb-text-[11px] mb-px-3 mb-py-1 mb-rounded mb-border mb-transition-colors',
-                    tpl.status === 'published'
-                      ? 'mb-bg-gray-700 mb-text-gray-300 mb-border-gray-600 hover:mb-bg-red-600/20 hover:mb-text-red-300 hover:mb-border-red-500/30'
-                      : 'mb-bg-gray-700/50 mb-text-gray-600 mb-border-gray-700 mb-cursor-not-allowed'
-                  ]"
+                  :class="['tpl-activate-btn', { disabled: tpl.status !== 'published' }]"
                   :title="tpl.status !== 'published' ? 'Pubblica prima di attivare' : 'Imposta come pagina 404 attiva'"
-                >
-                  Attiva
-                </button>
+                >Attiva</button>
               </template>
             </div>
           </div>
@@ -485,7 +302,6 @@ async function deleteTemplate(id, title) {
     });
     if (res.ok) {
       templates.value = templates.value.filter((t) => t.id !== id);
-      // If deleting active header, footer, or single, clear it
       if (id === activeHeaderId.value) {
         activeHeaderId.value = 0;
       }
@@ -495,7 +311,6 @@ async function deleteTemplate(id, title) {
       if (id === active404Id.value) {
         active404Id.value = 0;
       }
-      // Check if it was an active single template
       for (const [pt, tplId] of Object.entries(activeSingles.value)) {
         if (tplId === id) {
           const updated = { ...activeSingles.value };
@@ -731,7 +546,6 @@ function triggerImport() {
 async function handleImportFile(e) {
   const file = e.target.files?.[0];
   if (!file) return;
-  // Reset input so the same file can be re-selected
   e.target.value = '';
 
   try {
@@ -766,11 +580,11 @@ async function handleImportFile(e) {
 
 function statusClass(status) {
   const map = {
-    published: 'mb-text-green-400',
-    draft: 'mb-text-yellow-400',
-    archived: 'mb-text-gray-500',
+    published: 'status-published',
+    draft: 'status-draft',
+    archived: 'status-archived',
   };
-  return map[status] || 'mb-text-gray-400';
+  return map[status] || 'status-archived';
 }
 
 function countElements(content) {
@@ -804,3 +618,201 @@ onUnmounted(() => {
   document.removeEventListener('click', handleClickOutside);
 });
 </script>
+
+<style scoped>
+/* ═══ Template Manager — warm, minimal design ═══ */
+/* NOTE: !important needed to override Tailwind preflight (border-width:0, background:transparent on button/*, etc.) */
+.tpl-page {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: #1a1a1a !important;
+}
+.tpl-container { }
+
+/* ── Actions bar ── */
+.tpl-header-actions { display: flex; align-items: center; justify-content: flex-end; gap: 8px; margin-bottom: 20px; }
+
+/* ── Buttons ── */
+.tpl-btn {
+  display: inline-flex !important; align-items: center; gap: 6px;
+  padding: 9px 18px !important; border-radius: 10px !important; font-size: 13px !important; font-weight: 600;
+  cursor: pointer; transition: all .15s; font-family: inherit; border: none !important;
+  text-decoration: none !important; white-space: nowrap; line-height: 1.4 !important;
+}
+.tpl-btn-primary { background: #1a1a1a !important; color: #fff !important; }
+.tpl-btn-primary:hover { background: #333 !important; box-shadow: 0 4px 12px rgba(0,0,0,.15); }
+.tpl-btn-outline {
+  background: #fff !important; color: #666 !important; border: 1.5px solid #eaeaea !important;
+}
+.tpl-btn-outline:hover { background: #fafafa !important; color: #1a1a1a !important; border-color: #ccc !important; }
+.tpl-btn-outline-light {
+  background: rgba(255,255,255,.92) !important; color: #1a1a1a !important; border: 1.5px solid #eaeaea !important;
+}
+.tpl-btn-outline-light:hover { background: #fff !important; }
+.tpl-btn-sm { padding: 7px 14px !important; font-size: 12px !important; }
+
+/* ── Dropdown ── */
+.tpl-dropdown { position: relative; }
+.tpl-dropdown-menu {
+  position: absolute; right: 0; top: 100%; margin-top: 6px;
+  width: 200px; background: #fff !important; border: 1px solid #eaeaea !important;
+  border-radius: 12px !important; box-shadow: 0 12px 40px rgba(0,0,0,.12) !important;
+  z-index: 10; overflow: hidden;
+}
+.tpl-dropdown-item {
+  display: block; width: 100%; text-align: left; padding: 10px 16px;
+  font-size: 13px; color: #1a1a1a !important; background: none !important; border: none !important;
+  cursor: pointer; font-family: inherit; transition: background .1s;
+}
+.tpl-dropdown-item:hover { background: #f5f0eb !important; }
+.tpl-dropdown-sep { border-top: 1px solid #eaeaea !important; }
+.tpl-dropdown-label {
+  padding: 8px 16px 4px; font-size: 10px; text-transform: uppercase;
+  font-weight: 700; color: #999; letter-spacing: .05em;
+}
+
+/* ── Tabs ── */
+.tpl-tabs {
+  display: flex !important; gap: 4px; margin-bottom: 24px;
+  background: #fff !important; border-radius: 12px !important; padding: 4px !important;
+  width: fit-content; border: 1px solid #eaeaea !important;
+}
+.tpl-tab {
+  padding: 7px 16px !important; border-radius: 8px !important; font-size: 13px !important; font-weight: 600;
+  color: #999 !important; background: transparent !important; border: none !important; cursor: pointer;
+  font-family: inherit; transition: all .15s;
+}
+.tpl-tab:hover { color: #1a1a1a !important; }
+.tpl-tab.active { background: #1a1a1a !important; color: #fff !important; }
+
+/* ── Loading ── */
+.tpl-loading { text-align: center; padding: 64px 0; color: #999; font-size: 15px; }
+
+/* ── Empty state ── */
+.tpl-empty {
+  text-align: center; padding: 64px 24px;
+  background: #fff !important; border-radius: 14px !important; border: 1px solid #eaeaea !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,.04) !important;
+}
+.tpl-empty-icon {
+  width: 64px; height: 64px; margin: 0 auto 16px;
+  background: #f5f0eb !important; border-radius: 16px;
+  display: flex; align-items: center; justify-content: center; color: #999;
+}
+.tpl-empty h2 { font-size: 16px; font-weight: 600; color: #1a1a1a !important; margin: 0 0 6px; }
+.tpl-empty p { font-size: 13px; color: #999; margin: 0 0 20px; }
+
+/* ── Grid ── */
+.tpl-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+/* ── Card ── */
+.tpl-card {
+  background: #fff !important; border-radius: 14px !important; border: 1px solid #eaeaea !important;
+  overflow: hidden; transition: border-color .15s, box-shadow .15s;
+  box-shadow: 0 2px 8px rgba(0,0,0,.04) !important;
+}
+.tpl-card:hover { border-color: #ccc !important; box-shadow: 0 8px 24px rgba(0,0,0,.08) !important; }
+
+.tpl-card-preview {
+  height: 160px; background: #f5f0eb !important;
+  display: flex; align-items: center; justify-content: center;
+  border-bottom: 1px solid #eaeaea !important; position: relative;
+}
+.tpl-card-count { color: #bbb; font-size: 13px; }
+
+/* ── Type badges ── */
+.tpl-type-badge {
+  position: absolute; top: 10px; left: 10px;
+  padding: 3px 10px !important; font-size: 10px; font-weight: 700;
+  text-transform: uppercase; border-radius: 20px !important; letter-spacing: .02em;
+  border: none !important;
+}
+.tpl-type-badge.purple { background: #f0e6ff !important; color: #7c3aed !important; }
+.tpl-type-badge.teal { background: #e0faf4 !important; color: #0d9488 !important; }
+.tpl-type-badge.amber { background: #fff3e0 !important; color: #d97706 !important; }
+.tpl-type-badge.indigo { background: #e8eaf6 !important; color: #4f46e5 !important; }
+.tpl-type-badge.red { background: #fde8e8 !important; color: #dc2626 !important; }
+
+.tpl-active-badge {
+  position: absolute; top: 10px; right: 10px;
+  padding: 3px 10px !important; font-size: 10px; font-weight: 700;
+  text-transform: uppercase; border-radius: 20px !important;
+  background: #e6f9ee !important; color: #059669 !important;
+  border: none !important;
+}
+
+/* ── Overlay ── */
+.tpl-card-overlay {
+  position: absolute; inset: 0;
+  background: rgba(26, 26, 26, .6) !important; backdrop-filter: blur(2px);
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  opacity: 0; transition: opacity .2s;
+}
+.tpl-card:hover .tpl-card-overlay { opacity: 1; }
+
+/* ── Card info ── */
+.tpl-card-info { padding: 14px 16px; }
+.tpl-card-info-top { display: flex; align-items: flex-start; justify-content: space-between; }
+.tpl-card-info-left { flex: 1; min-width: 0; }
+.tpl-card-title {
+  font-size: 13px; font-weight: 600; color: #1a1a1a !important; margin: 0;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.tpl-card-meta { font-size: 11px; color: #999; margin: 4px 0 0; }
+.status-published { color: #059669 !important; }
+.status-draft { color: #d97706 !important; }
+.status-archived { color: #999 !important; }
+
+.tpl-card-actions-mini { display: flex; align-items: center; gap: 2px; flex-shrink: 0; }
+.tpl-icon-btn {
+  background: none !important; border: none !important; cursor: pointer; font-size: 13px;
+  color: #ccc !important; padding: 2px 4px; transition: color .15s;
+}
+.tpl-icon-btn:hover { color: #e8622a !important; }
+.tpl-icon-btn-danger:hover { color: #dc2626 !important; }
+
+.tpl-rename-input {
+  width: 100% !important; padding: 4px 8px !important; font-size: 13px; font-weight: 600;
+  border: 1.5px solid #e8622a !important; border-radius: 8px !important; background: #fff !important;
+  color: #1a1a1a !important; outline: none; font-family: inherit;
+}
+
+/* ── Bottom area ── */
+.tpl-card-bottom { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
+.tpl-shortcode {
+  font-size: 10px; color: #999 !important; background: #f5f5f5 !important;
+  padding: 3px 8px !important; border-radius: 6px !important; font-family: 'SF Mono', Monaco, monospace;
+  border: none !important;
+}
+
+/* ── Activate buttons ── */
+.tpl-activate-btn {
+  font-size: 11px !important; padding: 4px 12px !important; border-radius: 6px !important; font-weight: 600;
+  border: 1.5px solid #eaeaea !important; background: #fff !important; color: #666 !important;
+  cursor: pointer; transition: all .15s; font-family: inherit;
+}
+.tpl-activate-btn:hover { border-color: #1a1a1a !important; color: #1a1a1a !important; }
+.tpl-activate-btn.active {
+  background: #e6f9ee !important; color: #059669 !important; border-color: #b2e5cc !important;
+}
+.tpl-activate-btn.active:hover {
+  background: #fde8e8 !important; color: #dc2626 !important; border-color: #f5b7b7 !important;
+}
+.tpl-activate-btn.disabled {
+  opacity: .4; cursor: not-allowed;
+}
+.tpl-activate-btn.disabled:hover { border-color: #eaeaea !important; color: #666 !important; }
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .tpl-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+  .tpl-header-actions { flex-wrap: wrap; }
+  .tpl-grid { grid-template-columns: 1fr; }
+  .tpl-tabs { overflow-x: auto; width: 100%; }
+}
+</style>

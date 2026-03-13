@@ -805,10 +805,25 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
 
             function posPanel(li) {
                 var panel = li.querySelector(".olo-mm-panel-tpl") || (isFull ? li.querySelector(".olo-mm-panel") : null);
-                if (!panel) return;
-                var rect = li.getBoundingClientRect();
-                panel.style.left = (-rect.left) + "px";
-                panel.style.width = document.documentElement.clientWidth + "px";
+                if (panel) {
+                    var rect = li.getBoundingClientRect();
+                    panel.style.left = (-rect.left) + "px";
+                    panel.style.width = document.documentElement.clientWidth + "px";
+                    return;
+                }
+                /* Clamp non-full panels so they don't overflow right */
+                var cPanel = li.querySelector(".olo-mm-panel, .olo-mm-dropdown");
+                if (!cPanel) return;
+                cPanel.style.left = "0";
+                var pRect = cPanel.getBoundingClientRect();
+                var vw = document.documentElement.clientWidth;
+                if (pRect.right > vw - 8) {
+                    var shift = pRect.right - vw + 8;
+                    cPanel.style.left = (-shift) + "px";
+                }
+                if (pRect.left < 8) {
+                    cPanel.style.left = (-pRect.left + 8) + "px";
+                }
             }
 
             navItems.forEach(function(li) {
@@ -888,22 +903,43 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
                 header.classList.remove("olo-header-overlay", "olo-header-classic");
                 header.classList.add("olo-header-" + headerMode);
                 if (stickyEnabled) {
-                    var lastY = 0, hidden = false;
+                    var lastY = 0, hidden = false, ticking = false;
+                    var isClassic = (headerMode === "classic");
                     window.addEventListener("scroll", function() {
-                        var y = window.pageYOffset || document.documentElement.scrollTop;
-                        if (y > 10) {
-                            header.classList.add("olo-header-sticky");
-                        } else {
-                            header.classList.remove("olo-header-sticky");
-                        }
-                        if (showOnUp) {
-                            if (y > lastY && y > 200) {
-                                if (!hidden) { header.style.transform = "translateY(-100%)"; hidden = true; }
+                        if (ticking) return;
+                        ticking = true;
+                        requestAnimationFrame(function() {
+                            ticking = false;
+                            var y = window.pageYOffset || document.documentElement.scrollTop;
+                            if (y > 10) {
+                                header.classList.add("olo-header-sticky");
                             } else {
-                                if (hidden) { header.style.transform = ""; hidden = false; }
+                                header.classList.remove("olo-header-sticky");
+                                if (hidden) { header.style.top = ""; header.style.transform = ""; hidden = false; }
                             }
-                        }
-                        lastY = y;
+                            if (showOnUp) {
+                                var delta = y - lastY;
+                                if (delta > 5) {
+                                    if (y > 300) {
+                                        if (!hidden) {
+                                            if (isClassic) {
+                                                header.style.top = (-header.offsetHeight - 10) + "px";
+                                            } else {
+                                                header.style.transform = "translateY(-100%)";
+                                            }
+                                            hidden = true;
+                                        }
+                                    }
+                                } else if (delta < -5) {
+                                    if (hidden) {
+                                        header.style.top = "";
+                                        header.style.transform = "";
+                                        hidden = false;
+                                    }
+                                }
+                            }
+                            lastY = y;
+                        });
                     }, { passive: true });
                 }
             }

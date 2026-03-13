@@ -26,9 +26,13 @@ export default {
     badge_border_color: '',
     badge_border_width: '0',
     badge_border_style: 'solid',
-    badge_border_radius: '4',
-    gap: '16',
-    padding: '12',
+    badge_border_radius: '6',
+    gap: '12',
+    padding: '14',
+    card_bg: '',
+    card_border_radius: '12',
+    card_border_color: '',
+    hover_lift: true,
     shadow: 'none',
   },
   fields: [
@@ -45,6 +49,13 @@ export default {
       newItemDefaults: { title: 'Nuovo piatto', description: 'Descrizione del piatto', price: '€0', image_url: '', highlighted: false, badge: '' },
       itemLabel: 'Piatto',
     },
+
+    // ── Card ──
+    { type: 'separator', label: 'Card' },
+    { key: 'card_bg', label: 'Sfondo card', type: 'color' },
+    { key: 'card_border_color', label: 'Bordo card', type: 'color' },
+    { key: 'card_border_radius', label: 'Arrotondamento card (px)', type: 'range', min: 0, max: 24, step: 2 },
+    { key: 'hover_lift', label: 'Effetto hover', type: 'toggle' },
 
     // ── Separatore ──
     { type: 'separator', label: 'Separatore' },
@@ -71,8 +82,8 @@ export default {
       { value: 'right', label: 'A destra' },
       { value: 'below', label: 'Sotto il titolo' },
     ]},
-    { key: 'gap', label: 'Gap tra elementi (px)', type: 'range', min: 0, max: 32, step: 4 },
-    { key: 'padding', label: 'Padding elemento (px)', type: 'range', min: 4, max: 32, step: 4 },
+    { key: 'gap', label: 'Gap tra elementi (px)', type: 'range', min: 0, max: 32, step: 2 },
+    { key: 'padding', label: 'Padding elemento (px)', type: 'range', min: 4, max: 32, step: 2 },
 
     // ── Colori ──
     { type: 'separator', label: 'Colori' },

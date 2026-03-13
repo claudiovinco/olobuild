@@ -55,7 +55,7 @@
               <!-- Color -->
               <div v-if="currentBg.type === 'color'">
                 <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">Colore</label>
-                <input type="color" :value="currentBg.color" @input="updateBg('color', $event.target.value)" class="mb-w-8 mb-h-8 mb-rounded mb-border-0 mb-cursor-pointer" />
+                <FieldColor :modelValue="currentBg.color || '#ffffff'" @update:modelValue="updateBg('color', $event)" />
               </div>
               <!-- Image -->
               <div v-if="currentBg.type === 'image'" class="mb-flex mb-gap-2 mb-items-end">
@@ -83,11 +83,11 @@
               <template v-if="currentBg.type === 'gradient'">
                 <div>
                   <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">Da</label>
-                  <input type="color" :value="currentBg.gradientFrom" @input="updateBg('gradientFrom', $event.target.value)" class="mb-w-8 mb-h-8 mb-rounded mb-border-0 mb-cursor-pointer" />
+                  <FieldColor :modelValue="currentBg.gradientFrom || '#ffffff'" @update:modelValue="updateBg('gradientFrom', $event)" />
                 </div>
                 <div>
                   <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">A</label>
-                  <input type="color" :value="currentBg.gradientTo" @input="updateBg('gradientTo', $event.target.value)" class="mb-w-8 mb-h-8 mb-rounded mb-border-0 mb-cursor-pointer" />
+                  <FieldColor :modelValue="currentBg.gradientTo || '#000000'" @update:modelValue="updateBg('gradientTo', $event)" />
                 </div>
                 <div>
                   <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">Angolo</label>
@@ -109,9 +109,9 @@
               <!-- Overlay -->
               <div v-if="currentBg.type !== 'transparent'">
                 <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">Sovrapposizione</label>
-                <div class="mb-flex mb-gap-1 mb-items-center">
-                  <input type="color" :value="currentBg.overlay" @input="updateBg('overlay', $event.target.value)" class="mb-w-6 mb-h-6 mb-rounded mb-border-0 mb-cursor-pointer" />
-                  <input type="range" :value="(currentBg.overlayOpacity ?? 0.3) * 100" @input="updateBg('overlayOpacity', parseInt($event.target.value) / 100)" min="0" max="100" step="5" class="mb-w-16" />
+                <FieldColor :modelValue="currentBg.overlay || '#000000'" @update:modelValue="updateBg('overlay', $event)" />
+                <div class="mb-flex mb-gap-1 mb-items-center mb-mt-1">
+                  <input type="range" :value="(currentBg.overlayOpacity ?? 0.3) * 100" @input="updateBg('overlayOpacity', parseInt($event.target.value) / 100)" min="0" max="100" step="5" class="mb-flex-1" />
                   <span class="mb-text-[10px] mb-text-gray-400">{{ Math.round((currentBg.overlayOpacity ?? 0.3) * 100) }}%</span>
                 </div>
               </div>
@@ -174,6 +174,7 @@ import SliderCanvas from './SliderCanvas.vue';
 import LayerProperties from './LayerProperties.vue';
 import LayerBar from './LayerBar.vue';
 import SliderSettings from './SliderSettings.vue';
+import FieldColor from '@/components/Builder/fields/FieldColor.vue';
 
 const props = defineProps({
   tileId: { type: String, required: true },

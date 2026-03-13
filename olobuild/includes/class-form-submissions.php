@@ -263,19 +263,29 @@ class Olo_Form_Submissions {
         }
 
         ?>
-        <div class="wrap">
-            <h1 class="wp-heading-inline">Invii Form</h1>
-            <a href="<?php echo esc_url( $export_url ); ?>" class="page-title-action">Esporta CSV</a>
-            <hr class="wp-header-end">
+        <?php Olo_Builder::page_shell_open( 'Invii Form' ); ?>
 
-            <form method="get">
-                <input type="hidden" name="page" value="olo-form-submissions" />
-                <?php
-                $list_table->search_box( 'Cerca', 'olo-submissions-search' );
-                $list_table->display();
-                ?>
-            </form>
-        </div>
+            <div class="olo-card">
+                <div class="olo-card-head">
+                    <div class="olo-card-icon black">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                    </div>
+                    <div>
+                        <h3>Elenco invii</h3>
+                        <p>Tutti i messaggi ricevuti dai form del sito</p>
+                    </div>
+                </div>
+                <div class="olo-card-body" style="padding:0">
+                    <form method="get">
+                        <input type="hidden" name="page" value="olo-form-submissions" />
+                        <?php
+                        $list_table->search_box( 'Cerca', 'olo-submissions-search' );
+                        $list_table->display();
+                        ?>
+                    </form>
+                </div>
+            </div>
+        <?php Olo_Builder::page_shell_close(); ?>
         <?php
     }
 
@@ -288,7 +298,7 @@ class Olo_Form_Submissions {
         $row   = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $table WHERE id = %d", $id ), ARRAY_A );
 
         if ( ! $row ) {
-            echo '<div class="wrap"><h1>Invio non trovato</h1><p><a href="' . esc_url( admin_url( 'admin.php?page=olo-form-submissions' ) ) . '">&larr; Torna alla lista</a></p></div>';
+            echo '<div class="olo-admin-wrap"><div class="olo-admin-header"><div class="olo-admin-header-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></div><div><h1>Invio non trovato</h1></div></div><p><a href="' . esc_url( admin_url( 'admin.php?page=olo-form-submissions' ) ) . '">&larr; Torna alla lista</a></p></div>';
             return;
         }
 
@@ -302,66 +312,106 @@ class Olo_Form_Submissions {
             $fields = [];
         }
 
+        $back_url = admin_url( 'admin.php?page=olo-form-submissions' );
+
         ?>
-        <div class="wrap">
-            <h1>Dettaglio invio #<?php echo esc_html( $row['id'] ); ?></h1>
-            <p><a href="<?php echo esc_url( admin_url( 'admin.php?page=olo-form-submissions' ) ); ?>">&larr; Torna alla lista</a></p>
+        <div class="olo-admin-wrap">
+            <div class="olo-admin-header">
+                <div class="olo-admin-header-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/><path d="M8 10h8"/><path d="M8 14h4"/></svg>
+                </div>
+                <div>
+                    <h1>Invio #<?php echo esc_html( $row['id'] ); ?></h1>
+                    <p>Dettaglio del messaggio ricevuto</p>
+                </div>
+                <div style="margin-left:auto">
+                    <a href="<?php echo esc_url( $back_url ); ?>" class="olo-btn-reset" style="text-decoration:none;display:inline-flex;align-items:center;gap:6px">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+                        Torna alla lista
+                    </a>
+                </div>
+            </div>
 
-            <table class="widefat fixed" style="max-width: 800px;">
-                <tbody>
-                    <tr>
-                        <th style="width:160px">ID</th>
-                        <td><?php echo esc_html( $row['id'] ); ?></td>
-                    </tr>
-                    <tr>
-                        <th>Form</th>
-                        <td><code><?php echo esc_html( $row['form_name'] ?: '(senza nome)' ); ?></code></td>
-                    </tr>
-                    <tr>
-                        <th>Data invio</th>
-                        <td><?php echo esc_html( $row['submitted_at'] ); ?></td>
-                    </tr>
-                    <tr>
-                        <th>IP</th>
-                        <td><?php echo esc_html( $row['ip_address'] ); ?></td>
-                    </tr>
-                    <tr>
-                        <th>User Agent</th>
-                        <td style="word-break:break-all"><?php echo esc_html( $row['user_agent'] ); ?></td>
-                    </tr>
-                    <tr>
-                        <th>Stato</th>
-                        <td><?php echo $row['read_status'] ? '<span style="color:#46b450">&#10003; Letto</span>' : '<strong style="color:#d63638">Non letto</strong>'; ?></td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="olo-card">
+                <div class="olo-card-head">
+                    <div class="olo-card-icon black">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                    </div>
+                    <div>
+                        <h3>Informazioni invio</h3>
+                        <p>Metadati del messaggio</p>
+                    </div>
+                </div>
+                <div class="olo-card-body" style="padding:0">
+                    <table class="olo-table">
+                        <tbody>
+                            <tr>
+                                <th style="width:160px">ID</th>
+                                <td><?php echo esc_html( $row['id'] ); ?></td>
+                            </tr>
+                            <tr>
+                                <th>Form</th>
+                                <td><code><?php echo esc_html( $row['form_name'] ?: '(senza nome)' ); ?></code></td>
+                            </tr>
+                            <tr>
+                                <th>Data invio</th>
+                                <td><?php echo esc_html( $row['submitted_at'] ); ?></td>
+                            </tr>
+                            <tr>
+                                <th>IP</th>
+                                <td><code style="font-size:12px"><?php echo esc_html( $row['ip_address'] ); ?></code></td>
+                            </tr>
+                            <tr>
+                                <th>User Agent</th>
+                                <td style="word-break:break-all"><?php echo esc_html( $row['user_agent'] ); ?></td>
+                            </tr>
+                            <tr>
+                                <th>Stato</th>
+                                <td><?php echo $row['read_status'] ? '<span class="olo-badge green">Letto</span>' : '<span class="olo-badge orange">Non letto</span>'; ?></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
-            <h2 style="margin-top:24px">Campi compilati</h2>
-            <table class="widefat fixed striped" style="max-width: 800px;">
-                <thead>
-                    <tr>
-                        <th style="width:200px">Campo</th>
-                        <th>Valore</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ( $fields as $key => $value ) : ?>
-                        <tr>
-                            <td><strong><?php echo esc_html( ucfirst( str_replace( [ '_', '-' ], ' ', $key ) ) ); ?></strong></td>
-                            <td><?php
-                                if ( is_array( $value ) ) {
-                                    echo esc_html( implode( ', ', $value ) );
-                                } else {
-                                    echo nl2br( esc_html( $value ) );
-                                }
-                            ?></td>
-                        </tr>
-                    <?php endforeach; ?>
-                    <?php if ( empty( $fields ) ) : ?>
-                        <tr><td colspan="2"><em>Nessun campo.</em></td></tr>
-                    <?php endif; ?>
-                </tbody>
-            </table>
+            <div class="olo-card">
+                <div class="olo-card-head">
+                    <div class="olo-card-icon orange">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                    </div>
+                    <div>
+                        <h3>Campi compilati</h3>
+                        <p>Dati inseriti dall'utente nel form</p>
+                    </div>
+                </div>
+                <div class="olo-card-body" style="padding:0">
+                    <table class="olo-table">
+                        <thead>
+                            <tr>
+                                <th style="width:200px">Campo</th>
+                                <th>Valore</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ( $fields as $key => $value ) : ?>
+                                <tr>
+                                    <td><strong><?php echo esc_html( ucfirst( str_replace( [ '_', '-' ], ' ', $key ) ) ); ?></strong></td>
+                                    <td><?php
+                                        if ( is_array( $value ) ) {
+                                            echo esc_html( implode( ', ', $value ) );
+                                        } else {
+                                            echo nl2br( esc_html( $value ) );
+                                        }
+                                    ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                            <?php if ( empty( $fields ) ) : ?>
+                                <tr><td colspan="2"><em>Nessun campo.</em></td></tr>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
         <?php
     }

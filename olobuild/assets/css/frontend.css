@@ -41,6 +41,25 @@ body:has(.olo-template) .wp-site-blocks {
 }
 
 /* ========================================
+   Container width overrides (use global CSS variable)
+   ======================================== */
+.olo-template .uk-container {
+  max-width: var(--olo-container-max-width, 1200px);
+}
+.olo-template .uk-container-small {
+  max-width: calc(var(--olo-container-max-width, 1200px) * 0.75);
+}
+.olo-template .uk-container-large {
+  max-width: calc(var(--olo-container-max-width, 1200px) * 1.167);
+}
+.olo-template .uk-container-xlarge {
+  max-width: calc(var(--olo-container-max-width, 1200px) * 1.333);
+}
+.olo-template .uk-container-expand {
+  max-width: none;
+}
+
+/* ========================================
    Section full-bleed (edge to edge)
    ======================================== */
 .olo-section-fullbleed {
@@ -153,7 +172,7 @@ video.olo-tile-bg {
   max-width: 100vw !important;
   margin-left: calc(-50vw + 50%) !important;
   box-sizing: border-box;
-  z-index: 980;
+  z-index: 99999;
 }
 .olo-site-header .olo-template {
   width: 100%;
@@ -280,25 +299,28 @@ header.olo-site-header.olo-header-overlay + main > .wp-block-group:first-child {
    Sticky Header
    ======================================== */
 .olo-site-header {
-  transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s;
+  transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s, top 0.3s;
   margin-block-start: 0 !important;
 }
 .olo-header-sticky {
-  transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s;
+  transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s, top 0.3s;
 }
-/* Classic mode + sticky: when scrolled, switch to fixed */
+/* Classic mode + sticky: stays position:sticky, only visual changes (bg/shadow via tile CSS) */
 .olo-site-header.olo-header-classic.olo-header-sticky {
-  position: fixed;
-  top: 0;
+  /* no position change — stays sticky from .olo-header-classic */
 }
-/* Offset header below WP admin bar when logged in (overlay or fixed-sticky) */
-.admin-bar .olo-site-header.olo-header-overlay,
-.admin-bar .olo-site-header.olo-header-classic.olo-header-sticky {
+/* Offset header below WP admin bar when logged in */
+.admin-bar .olo-site-header.olo-header-overlay {
+  top: 32px !important;
+}
+.admin-bar .olo-site-header.olo-header-classic {
   top: 32px !important;
 }
 @media (max-width: 782px) {
-  .admin-bar .olo-site-header.olo-header-overlay,
-  .admin-bar .olo-site-header.olo-header-classic.olo-header-sticky {
+  .admin-bar .olo-site-header.olo-header-overlay {
+    top: 46px !important;
+  }
+  .admin-bar .olo-site-header.olo-header-classic {
     top: 46px !important;
   }
 }
@@ -1210,10 +1232,38 @@ header.olo-site-header.olo-header-overlay + main > .wp-block-group:first-child {
   color: #111;
   border-bottom-color: #aaa;
 }
-.olo-filter-minimal__btn--active,
-.uk-active > .olo-filter-minimal__btn {
+.olo-filter-minimal__btn.uk-active {
   color: var(--olo-color-primary, #6366F1);
   border-bottom-color: var(--olo-color-primary, #6366F1);
+}
+
+/* ── Grid filter: Buttons style ── */
+.olo-filter-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+  align-items: center;
+}
+.olo-filter-btn {
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: transparent;
+  padding: 6px 14px;
+  font-size: 0.82em;
+  font-weight: 600;
+  color: #555;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.olo-filter-btn:hover {
+  border-color: var(--olo-color-primary, #6366F1);
+  color: var(--olo-color-primary, #6366F1);
+}
+.olo-filter-btn.uk-active {
+  background: var(--olo-color-primary, #6366F1);
+  border-color: var(--olo-color-primary, #6366F1);
+  color: #fff;
 }
 
 /* ── Minimal card style (Grid + PostGrid) ── */

@@ -39,6 +39,23 @@
             :style="getOverlayStyle(section)"
           ></div>
 
+          <!-- Shape divider overlays (rendered at section level for proper overlap) -->
+          <div
+            v-for="sd in getShapeDividers(section)"
+            :key="'sd-' + sd.id"
+            class="olo-shapedivider-overlay"
+            :class="{
+              'olo-shapedivider-overlay--top': (sd.settings?.position || 'bottom') === 'top',
+              'olo-shapedivider-overlay--bottom': (sd.settings?.position || 'bottom') !== 'top',
+              'olo-grid-cell--selected': builderStore.selectedTileId === sd.id,
+            }"
+            :data-tile-id="sd.id"
+            @click.stop="selectTile(sd.id)"
+            @contextmenu.prevent="onTileContextMenu($event, sd.id)"
+          >
+            <ShapedividerTile :settings="sd.settings" :overlay-mode="true" />
+          </div>
+
           <!-- Section bar -->
           <div class="olo-section-bar" @click.stop="selectTile(section.id)" @contextmenu.prevent="onTileContextMenu($event, section.id)">
             <span class="olo-section-grip" title="Trascina per riordinare la sezione">&#x2630;</span>
@@ -107,13 +124,13 @@
                   <!-- Columns flex layout -->
                   <div
                     class="olo-row-columns"
-                    :class="{ 'olo-row-stack': row.settings?.stack_mobile !== false }"
+                    :class="{ 'olo-row-stack': shouldStack(row.settings) }"
                     :style="{
                       gap: rv(row.settings || {}, 'gap', 16, builderStore.viewMode) + 'px',
                       alignItems: alignMap[row.settings?.vertical_align] || 'stretch',
-                      flexDirection: row.settings?.flex_direction || undefined,
+                      flexDirection: (shouldStack(row.settings)) ? 'column' : (row.settings?.flex_direction || undefined),
                       justifyContent: row.settings?.flex_justify || undefined,
-                      flexWrap: row.settings?.flex_wrap || undefined,
+                      flexWrap: (shouldStack(row.settings)) ? 'wrap' : (row.settings?.flex_wrap || undefined),
                     }"
                   >
                     <template v-for="(col, colIdx) in (row.children || [])" :key="col.id">
@@ -133,7 +150,7 @@
                           'olo-column-block--dragover': dragOverColId === col.id
                         }"
                         :data-tile-id="col.id"
-                        :style="{ width: getColPercent(col) + '%', minWidth: 0, ...getNodeSpacingStyle(col) }"
+                        :style="{ width: (shouldStack(row.settings)) ? '100%' : getColPercent(col) + '%', minWidth: 0, ...getNodeSpacingStyle(col) }"
                         @click.stop="selectTile(col.id)"
                         @dragover.prevent.stop="dragOverColId = col.id"
                         @dragleave="onColDragLeave($event, col.id)"
@@ -245,13 +262,42 @@ import { useDragDrop } from '@/composables/useDragDrop';
 import { resolveNodeBg, buildBgStyle, buildOverlayStyle } from '@/composables/useBackgroundStyle';
 import { rv } from '@/composables/useResponsiveValue';
 import GridCell from './GridCell.vue';
+import ShapedividerTile from '@/components/Tiles/ShapedividerTile.vue';
 import ContextMenu from '@/components/Builder/ContextMenu.vue';
 
 const tilesStore = useTilesStore();
 const builderStore = useBuilderStore();
 const stylesStore = useStylesStore();
+
+const isMobileView = computed(() => {
+  const m = builderStore.viewMode;
+  return m === 'mobile' || m === 'mobile_landscape' || m === 'tablet' || m === 'tablet_landscape';
+});
+
+function shouldStack(rowSettings) {
+  const m = builderStore.viewMode;
+  const isMob = m === 'mobile' || m === 'mobile_landscape';
+  const isTab = m === 'tablet' || m === 'tablet_landscape';
+  if (isMob && rowSettings?.stack_mobile !== false) return true;
+  if (isTab && rowSettings?.stack_tablet) return true;
+  return false;
+}
 const openFinder = inject('openFinder', () => {});
 const { handleDropFromSidebar, handleDropIntoColumn, handleGlobalWidgetDrop, handleGlobalWidgetDropIntoColumn, createTileFromType } = useDragDrop();
+
+/**
+ * Extract shapedivider tiles from section tree for absolute overlay rendering.
+ */
+function getShapeDividers(section) {
+  const result = [];
+  function walk(node) {
+    if (!node) return;
+    if (node.type === 'shapedivider') result.push(node);
+    if (Array.isArray(node.children)) node.children.forEach(walk);
+  }
+  if (Array.isArray(section.children)) section.children.forEach(walk);
+  return result;
+}
 
 function getSectionColorStyle(section) {
   const sectionType = section.settings?.style || 'default';
@@ -624,8 +670,35 @@ function changeRowLayout(row, layoutKey) {
   margin-bottom: 12px;
   border: 1px solid #e5e7eb;
   background: rgba(0, 0, 0, 0.015);
-  overflow: hidden;
+  overflow: visible;
   position: relative;
+}
+
+/* Shape divider overlays — positioned absolutely at section edges */
+.olo-shapedivider-overlay {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  z-index: 10;
+  pointer-events: auto;
+  cursor: pointer;
+  transition: outline 0.15s;
+}
+.olo-shapedivider-overlay--top {
+  top: 0;
+  transform: translateY(-100%);
+}
+.olo-shapedivider-overlay--bottom {
+  bottom: 0;
+  transform: translateY(100%);
+}
+.olo-shapedivider-overlay:hover {
+  outline: 2px dashed rgba(99, 102, 241, 0.4);
+  outline-offset: -2px;
+}
+.olo-shapedivider-overlay.olo-grid-cell--selected {
+  outline: 2px solid var(--olo-color-primary, #6366F1);
+  outline-offset: -2px;
 }
 
 /* === Background preview layers === */
@@ -768,7 +841,7 @@ function changeRowLayout(row, layoutKey) {
   margin-bottom: 8px;
   border: 1px solid #d1d5db;
   background: rgba(0, 0, 0, 0.01);
-  overflow: hidden;
+  overflow: visible;
   position: relative;
 }
 .olo-row-block--selected {

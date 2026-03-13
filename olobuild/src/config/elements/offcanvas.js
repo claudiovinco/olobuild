@@ -2,9 +2,9 @@ import { shadowField } from './_shared.js';
 
 export default {
   type: 'offcanvas',
-  name: 'Off-Canvas',
+  name: 'Menu Burger',
   icon: 'dashicons-slides',
-  category: 'interactive',
+  category: 'navigation',
   defaults: {
     /* ─── Pannello ─── */
     mode: 'right',

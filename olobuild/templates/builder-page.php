@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <style>
-    #wpwrap { background: #1e1e2e; }
+    #wpwrap { background: #f5f0eb; }
     #wpcontent { padding-left: 0 !important; }
     #wpbody-content { padding-bottom: 0; }
     #wpfooter { display: none; }

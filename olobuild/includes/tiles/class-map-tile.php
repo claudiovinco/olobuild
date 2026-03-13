@@ -7,14 +7,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Olo_Map_Tile extends Olo_Tile_Base {
 
     protected $type     = 'map';
-    protected $name     = 'Mappa';
+    protected $name     = 'Mappa Pro';
     protected $icon     = 'dashicons-location';
     protected $category = 'media';
     protected $defaults = [
         'mode'                 => 'single',
-        'address'              => 'Roma, Italia',
+        'address'              => '',
+        'latitude'             => '41.9028',
+        'longitude'            => '12.4964',
         'zoom'                 => '13',
         'height'               => '400',
+        'tile_layer'           => 'standard',
+        'marker'               => true,
+        'marker_popup'         => '',
+        'marker_color'         => '#e74c3c',
         'loc_post_type'        => 'location',
         'loc_osm_field'        => 'location_map',
         'loc_taxonomy'         => '',
@@ -142,36 +148,98 @@ class Olo_Map_Tile extends Olo_Tile_Base {
     }
 
     /**
-     * Original single-address iframe mode.
+     * Get tile layer URL by key.
+     */
+    private function get_tile_layer_url( $key ) {
+        $urls = [
+            'standard'    => 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+            'osm'         => 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+            'hot'         => 'https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
+            'positron'    => 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
+            'voyager'     => 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
+            'dark'        => 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+            'satellite'   => 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+            'topo'        => 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}',
+            'esri_street' => 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',
+            'gray'        => 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}',
+            'opentopomap' => 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
+        ];
+        return $urls[ $key ] ?? $urls['standard'];
+    }
+
+    /**
+     * Single mode: Leaflet map with marker.
      */
     private function render_single( $s ) {
-        $address = $s['address'];
-        $zoom    = absint( $s['zoom'] );
-        $height  = absint( $s['height'] );
-        $radius  = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 8 );
+        $lat          = floatval( $s['latitude'] ) ?: 41.9028;
+        $lng          = floatval( $s['longitude'] ) ?: 12.4964;
+        $zoom         = absint( $s['zoom'] ) ?: 13;
+        $height       = absint( $s['height'] ) ?: 400;
+        $radius       = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
+        $show_marker  = filter_var( $s['marker'], FILTER_VALIDATE_BOOLEAN );
+        $scroll_zoom  = filter_var( $s['scroll_wheel_zoom'] ?? false, FILTER_VALIDATE_BOOLEAN );
+        $dragging     = filter_var( $s['dragging'] ?? true, FILTER_VALIDATE_BOOLEAN );
+        $popup_text   = esc_js( wp_strip_all_tags( $s['marker_popup'] ?? '' ) );
+        $marker_color = $this->safe_color_css( $s['marker_color'] ?? '' ) ?: '#e74c3c';
+        $tile_url     = esc_js( $this->get_tile_layer_url( $s['tile_layer'] ?? 'standard' ) );
 
-        $coords = $this->parse_coords( $address );
+        $scroll_zoom_js = $scroll_zoom ? 'true' : 'false';
+        $dragging_js    = $dragging ? 'true' : 'false';
+        $map_id         = 'olo-map-' . wp_rand( 10000, 99999 );
 
-        if ( $coords ) {
-            $src = "https://www.openstreetmap.org/export/embed.html?bbox="
-                 . ( $coords['lng'] - 0.02 ) . ',' . ( $coords['lat'] - 0.01 ) . ','
-                 . ( $coords['lng'] + 0.02 ) . ',' . ( $coords['lat'] + 0.01 )
-                 . "&layer=mapnik&marker=" . $coords['lat'] . ',' . $coords['lng'];
-        } else {
-            $bbox = $this->address_to_bbox( $address, $zoom );
-            $src = "https://www.openstreetmap.org/export/embed.html?bbox=" . esc_attr( $bbox ) . "&layer=mapnik";
-        }
+        wp_enqueue_style( 'leaflet', 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css', [], '1.9.4' );
+        wp_enqueue_script( 'leaflet', 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js', [], '1.9.4', true );
 
         ob_start();
         ?>
-        <div class="olo-map" style="border-radius: <?php echo $radius; ?>; overflow: hidden;">
-            <iframe
-                src="<?php echo esc_url( $src ); ?>"
-                style="width: 100%; height: <?php echo $height; ?>px; border: 0;"
-                loading="lazy"
-                referrerpolicy="no-referrer-when-downgrade"
-            ></iframe>
-        </div>
+
+        <div id="<?php echo esc_attr( $map_id ); ?>" class="olo-map" style="height:<?php echo $height; ?>px; border-radius:<?php echo $radius; ?>; overflow:hidden;"></div>
+
+        <script>
+        (function(){
+            var mapEl = document.getElementById('<?php echo esc_js( $map_id ); ?>');
+            if (!mapEl) return;
+
+            function initOloMap() {
+                if (typeof L === 'undefined') {
+                    setTimeout(initOloMap, 100);
+                    return;
+                }
+
+                var map = L.map('<?php echo esc_js( $map_id ); ?>', {
+                    scrollWheelZoom: <?php echo $scroll_zoom_js; ?>,
+                    dragging: <?php echo $dragging_js; ?>
+                }).setView([<?php echo $lat; ?>, <?php echo $lng; ?>], <?php echo $zoom; ?>);
+
+                L.tileLayer('<?php echo $tile_url; ?>', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                    maxZoom: 19
+                }).addTo(map);
+
+                <?php if ( $show_marker ) : ?>
+                var markerIcon = L.divIcon({
+                    html: '<svg xmlns="http://www.w3.org/2000/svg" width="28" height="40" viewBox="0 0 24 36"><path d="M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24C24 5.4 18.6 0 12 0zm0 16c-2.2 0-4-1.8-4-4s1.8-4 4-4 4 1.8 4 4-1.8 4-4 4z" fill="<?php echo esc_attr( $marker_color ); ?>"/></svg>',
+                    iconSize: [28, 40],
+                    iconAnchor: [14, 40],
+                    popupAnchor: [0, -40],
+                    className: 'olo-osm-marker'
+                });
+
+                var marker = L.marker([<?php echo $lat; ?>, <?php echo $lng; ?>], { icon: markerIcon }).addTo(map);
+                    <?php if ( ! empty( $popup_text ) ) : ?>
+                marker.bindPopup('<?php echo $popup_text; ?>');
+                    <?php endif; ?>
+                <?php endif; ?>
+            }
+
+            initOloMap();
+        })();
+        </script>
+
+        <style>
+        .olo-osm-marker { background: none !important; border: none !important; }
+        </style>
+
         <?php
         return ob_get_clean();
     }

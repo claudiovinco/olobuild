@@ -221,6 +221,31 @@
         </button>
       </div>
 
+      <!-- Geocode field: text + search button (Nominatim) -->
+      <div v-else-if="field.type === 'geocode'" class="mb-flex mb-flex-col mb-gap-1">
+        <div class="mb-flex mb-gap-1 mb-items-end">
+          <FieldText
+            class="mb-flex-1"
+            :modelValue="effectiveValue"
+            @update:modelValue="onFieldUpdate($event)"
+            @confirm="geocodeAddress"
+            placeholder="Via Roma 1, Milano..."
+          />
+          <button
+            class="mb-shrink-0 mb-px-2 mb-py-1.5 mb-bg-blue-600 hover:mb-bg-blue-500 mb-text-white mb-rounded mb-text-xs mb-transition-colors"
+            :class="{ 'mb-opacity-50 mb-cursor-wait': geocodeLoading }"
+            :disabled="geocodeLoading"
+            title="Cerca indirizzo"
+            @click="geocodeAddress"
+          >
+            <svg v-if="!geocodeLoading" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <span v-else class="mb-inline-block mb-animate-spin">⟳</span>
+          </button>
+        </div>
+        <div v-if="geocodeError" class="mb-text-[10px] mb-text-red-400">{{ geocodeError }}</div>
+        <div v-if="geocodeResult" class="mb-text-[10px] mb-text-green-400 mb-truncate" :title="geocodeResult">{{ geocodeResult }}</div>
+      </div>
+
       <FieldText
         v-else
         :modelValue="effectiveValue"
@@ -443,6 +468,43 @@ async function generateAiAlt() {
     console.error('AI alt generation failed:', e);
   } finally {
     aiAltLoading.value = false;
+  }
+}
+
+// ── Geocode (Nominatim) ──
+const geocodeLoading = ref(false);
+const geocodeError = ref('');
+const geocodeResult = ref('');
+
+async function geocodeAddress() {
+  const query = (props.field.type === 'geocode') ? (effectiveValue.value || '').trim() : '';
+  if (!query) return;
+  geocodeLoading.value = true;
+  geocodeError.value = '';
+  geocodeResult.value = '';
+  try {
+    const url = 'https://nominatim.openstreetmap.org/search?format=json&limit=1&q=' + encodeURIComponent(query);
+    const resp = await fetch(url, { headers: { 'Accept-Language': 'it' } });
+    const data = await resp.json();
+    if (data && data.length > 0) {
+      const place = data[0];
+      const targetLat = props.field.targetLat || 'latitude';
+      const targetLng = props.field.targetLng || 'longitude';
+      const targetZoom = props.field.targetZoom || 'zoom';
+      tilesStore.updateTile(props.tileId, {
+        [targetLat]: parseFloat(place.lat).toFixed(6),
+        [targetLng]: parseFloat(place.lon).toFixed(6),
+        [targetZoom]: '16',
+      });
+      geocodeResult.value = place.display_name;
+    } else {
+      geocodeError.value = 'Nessun risultato trovato';
+    }
+  } catch (e) {
+    geocodeError.value = 'Errore nella ricerca';
+    console.error('Geocode failed:', e);
+  } finally {
+    geocodeLoading.value = false;
   }
 }
 

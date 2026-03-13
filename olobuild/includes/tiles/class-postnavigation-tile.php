@@ -9,7 +9,7 @@ class Olo_Postnavigation_Tile extends Olo_Tile_Base {
     protected $type     = 'postnavigation';
     protected $name     = 'Navigazione articolo';
     protected $icon     = 'dashicons-arrow-left-alt';
-    protected $category = 'dynamic';
+    protected $category = 'navigation';
     protected $defaults = [
         'show_thumbnail'  => true,
         'show_label'      => true,

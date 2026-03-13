@@ -2,14 +2,21 @@ import { shadowField } from './_shared.js';
 
 export default {
   type: 'map',
-  name: 'Mappa',
+  name: 'Mappa Pro',
   icon: 'dashicons-location',
   category: 'media',
   defaults: {
     mode: 'single',
     // Single mode
-    address: 'Roma, Italia',
+    address: '',
+    latitude: '41.9028',
+    longitude: '12.4964',
     zoom: '13',
+    tile_layer: 'standard',
+    marker: true,
+    marker_popup: '',
+    marker_color: '#e74c3c',
+    border_radius: '0',
     // Locations mode
     loc_post_type: 'location',
     loc_osm_field: 'location_map',
@@ -78,8 +85,29 @@ export default {
     },
 
     // ── Campi modalità singola ──
-    { key: 'address', label: 'Indirizzo', type: 'text', condition: { field: 'mode', value: 'single' } },
+    { key: 'address', label: 'Cerca indirizzo', type: 'geocode', targetLat: 'latitude', targetLng: 'longitude', targetZoom: 'zoom', condition: { field: 'mode', value: 'single' } },
+    { key: 'latitude', label: 'Latitudine', type: 'text', condition: { field: 'mode', value: 'single' } },
+    { key: 'longitude', label: 'Longitudine', type: 'text', condition: { field: 'mode', value: 'single' } },
     { key: 'zoom', label: 'Zoom', type: 'range', min: 1, max: 19, step: 1, condition: { field: 'mode', value: 'single' } },
+
+    { type: 'separator', label: 'Marker', condition: { field: 'mode', value: 'single' } },
+    { key: 'marker', label: 'Mostra marker', type: 'toggle', condition: { field: 'mode', value: 'single' } },
+    { key: 'marker_popup', label: 'Testo popup marker', type: 'text', condition: { field: 'mode', value: 'single' } },
+    { key: 'marker_color', label: 'Colore marker', type: 'color', condition: { field: 'mode', value: 'single' } },
+
+    { type: 'separator', label: 'Stile mappa', condition: { field: 'mode', value: 'single' } },
+    { key: 'tile_layer', label: 'Stile mappa', type: 'select', condition: { field: 'mode', value: 'single' }, options: [
+      { value: 'standard', label: 'Standard' },
+      { value: 'hot', label: 'Humanitarian' },
+      { value: 'positron', label: 'Positron (chiaro)' },
+      { value: 'voyager', label: 'Voyager (colorato)' },
+      { value: 'dark', label: 'Dark Matter' },
+      { value: 'satellite', label: 'Satellite' },
+      { value: 'topo', label: 'Topografica' },
+      { value: 'esri_street', label: 'Esri Street' },
+      { value: 'gray', label: 'Grigio minimal' },
+      { value: 'opentopomap', label: 'OpenTopoMap' },
+    ]},
 
     // ── Campi modalità dynamic_service ──
     { key: 'zoom', label: 'Zoom', type: 'range', min: 1, max: 19, step: 1, condition: { field: 'mode', value: 'dynamic_service' } },
@@ -95,9 +123,16 @@ export default {
     { type: 'separator', label: 'Stile mappa', condition: { field: 'mode', value: 'locations' } },
 
     { key: 'loc_tile_layer', label: 'Stile mappa', type: 'select', options: [
-      { value: 'osm', label: 'OpenStreetMap' },
-      { value: 'positron', label: 'CartoDB Positron (Chiaro)' },
-      { value: 'dark', label: 'CartoDB Dark Matter' },
+      { value: 'osm', label: 'Standard' },
+      { value: 'hot', label: 'Humanitarian' },
+      { value: 'positron', label: 'Positron (chiaro)' },
+      { value: 'voyager', label: 'Voyager (colorato)' },
+      { value: 'dark', label: 'Dark Matter' },
+      { value: 'satellite', label: 'Satellite' },
+      { value: 'topo', label: 'Topografica' },
+      { value: 'esri_street', label: 'Esri Street' },
+      { value: 'gray', label: 'Grigio minimal' },
+      { value: 'opentopomap', label: 'OpenTopoMap' },
     ], condition: { field: 'mode', value: 'locations' } },
     { key: 'loc_default_center', label: 'Centro predefinito (lat, lng)', type: 'text', condition: { field: 'mode', value: 'locations' } },
     { key: 'loc_default_zoom', label: 'Zoom predefinito', type: 'range', min: 1, max: 19, step: 1, condition: { field: 'mode', value: 'locations' } },
@@ -136,9 +171,16 @@ export default {
     { type: 'separator', label: 'Stile mappa', condition: { field: 'mode', value: 'services' } },
 
     { key: 'svc_tile_layer', label: 'Stile mappa', type: 'select', options: [
-      { value: 'osm', label: 'OpenStreetMap' },
-      { value: 'positron', label: 'CartoDB Positron (Chiaro)' },
-      { value: 'dark', label: 'CartoDB Dark Matter' },
+      { value: 'osm', label: 'Standard' },
+      { value: 'hot', label: 'Humanitarian' },
+      { value: 'positron', label: 'Positron (chiaro)' },
+      { value: 'voyager', label: 'Voyager (colorato)' },
+      { value: 'dark', label: 'Dark Matter' },
+      { value: 'satellite', label: 'Satellite' },
+      { value: 'topo', label: 'Topografica' },
+      { value: 'esri_street', label: 'Esri Street' },
+      { value: 'gray', label: 'Grigio minimal' },
+      { value: 'opentopomap', label: 'OpenTopoMap' },
     ], condition: { field: 'mode', value: 'services' } },
     { key: 'svc_default_center', label: 'Centro predefinito (lat, lng)', type: 'text', condition: { field: 'mode', value: 'services' } },
     { key: 'svc_default_zoom', label: 'Zoom predefinito', type: 'range', min: 1, max: 19, step: 1, condition: { field: 'mode', value: 'services' } },
@@ -219,6 +261,7 @@ export default {
     // ── Condivisi ──
     { type: 'separator', label: 'Dimensioni' },
     { key: 'height', label: 'Altezza (px)', type: 'range', min: 150, max: 800, step: 10 },
+    { key: 'border_radius', label: 'Arrotondamento (px)', type: 'border-radius' },
     ...shadowField,
   ],
 };

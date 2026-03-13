@@ -26,18 +26,15 @@
           class="mb-w-full mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded mb-px-2 mb-py-1 mb-text-xs mb-text-gray-200" />
       </div>
     </div>
-    <div class="mb-flex mb-items-center mb-gap-2">
-      <div class="mb-flex-1">
-        <label class="mb-text-[10px] mb-text-gray-500">Colore</label>
-        <input type="color" :value="val.color || '#000000'" @input="update('color', $event.target.value)"
-          class="mb-w-full mb-h-7 mb-rounded mb-border mb-border-gray-600 mb-cursor-pointer" />
-      </div>
-      <label class="mb-flex mb-items-center mb-gap-1 mb-cursor-pointer mb-text-[10px] mb-text-gray-400">
-        <input type="checkbox" :checked="val.inset" @change="update('inset', $event.target.checked)"
-          class="mb-rounded mb-border-gray-600" />
-        Inset
-      </label>
+    <div>
+      <label class="mb-text-[10px] mb-text-gray-500">Colore</label>
+      <FieldColor :modelValue="val.color || '#000000'" @update:modelValue="update('color', $event)" />
     </div>
+    <label class="mb-flex mb-items-center mb-gap-1 mb-cursor-pointer mb-text-[10px] mb-text-gray-400">
+      <input type="checkbox" :checked="val.inset" @change="update('inset', $event.target.checked)"
+        class="mb-rounded mb-border-gray-600" />
+      Inset
+    </label>
     <div class="mb-text-[10px] mb-text-gray-500 mb-bg-gray-900 mb-rounded mb-px-2 mb-py-1 mb-font-mono">
       {{ previewText }}
     </div>
@@ -46,6 +43,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import FieldColor from './FieldColor.vue';
 
 const props = defineProps({
   modelValue: { type: Object, default: () => ({ h: 0, v: 4, blur: 10, spread: 0, color: 'rgba(0,0,0,0.15)', inset: false }) }

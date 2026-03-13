@@ -1,6 +1,6 @@
 export default {
   type: 'osmmap',
-  name: 'OpenStreetMap',
+  name: 'Mappa',
   icon: 'dashicons-location-alt',
   category: 'content',
   defaults: {
@@ -15,9 +15,11 @@ export default {
     tile_layer: 'standard',
     border_radius: '0',
     marker_color: '',
+    address: '',
   },
   fields: [
     // ── Posizione ──
+    { key: 'address', label: 'Cerca indirizzo', type: 'geocode', targetLat: 'latitude', targetLng: 'longitude', targetZoom: 'zoom' },
     { key: 'latitude', label: 'Latitudine', type: 'text' },
     { key: 'longitude', label: 'Longitudine', type: 'text' },
     { key: 'zoom', label: 'Zoom', type: 'range', min: 1, max: 19, step: 1 },
@@ -41,9 +43,15 @@ export default {
     { key: 'border_radius', label: 'Arrotondamento (px)', type: 'border-radius' },
     { key: 'tile_layer', label: 'Stile mappa', type: 'select', options: [
       { value: 'standard', label: 'Standard' },
-      { value: 'toner', label: 'Toner (B/N)' },
-      { value: 'watercolor', label: 'Acquerello' },
-      { value: 'dark', label: 'Scuro' },
+      { value: 'hot', label: 'Humanitarian' },
+      { value: 'positron', label: 'Positron (chiaro)' },
+      { value: 'voyager', label: 'Voyager (colorato)' },
+      { value: 'dark', label: 'Dark Matter' },
+      { value: 'satellite', label: 'Satellite' },
+      { value: 'topo', label: 'Topografica' },
+      { value: 'esri_street', label: 'Esri Street' },
+      { value: 'gray', label: 'Grigio minimal' },
+      { value: 'opentopomap', label: 'OpenTopoMap' },
     ]},
   ],
 };

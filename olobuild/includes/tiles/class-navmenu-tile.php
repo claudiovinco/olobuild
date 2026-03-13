@@ -201,7 +201,10 @@ class Olo_NavMenu_Tile extends Olo_Tile_Base {
             echo '<style>' . $scoped_css . '</style>';
         }
 
-        if ( $style === 'vertical' ) {
+        // When inside off-canvas, always render vertical (no hamburger/offcanvas nesting)
+        if ( ! empty( $GLOBALS['olo_in_offcanvas'] ) ) {
+            $this->render_vertical( $tree, $children, $grandchildren, $s, $nav_id );
+        } elseif ( $style === 'vertical' ) {
             $this->render_vertical( $tree, $children, $grandchildren, $s, $nav_id );
         } elseif ( $style === 'subnav' ) {
             $this->render_subnav( $tree, $alignment, $s, $nav_id );

@@ -17,14 +17,15 @@
       <span class="mb-text-[10px] mb-text-gray-400 mb-w-8 mb-text-right">{{ angle }}°</span>
     </div>
     <!-- Color stops -->
-    <div class="mb-space-y-1">
-      <div v-for="(stop, i) in stops" :key="i" class="mb-flex mb-items-center mb-gap-1">
-        <input type="color" :value="stop.color" @input="updateStop(i, 'color', $event.target.value)"
-          class="mb-w-7 mb-h-7 mb-rounded mb-border mb-border-gray-600 mb-cursor-pointer mb-shrink-0" />
-        <input type="number" :value="stop.position" @input="updateStop(i, 'position', $event.target.value)"
-          min="0" max="100" class="mb-w-14 mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded mb-px-1.5 mb-py-1 mb-text-[10px] mb-text-gray-200" />
-        <span class="mb-text-[10px] mb-text-gray-500">%</span>
-        <button v-if="stops.length > 2" @click="removeStop(i)" class="mb-text-gray-500 hover:mb-text-red-400 mb-text-xs">&times;</button>
+    <div class="mb-space-y-2">
+      <div v-for="(stop, i) in stops" :key="i" class="mb-space-y-1">
+        <div class="mb-flex mb-items-center mb-gap-1">
+          <span class="mb-text-[10px] mb-text-gray-500 mb-w-6">{{ stop.position }}%</span>
+          <input type="number" :value="stop.position" @input="updateStop(i, 'position', $event.target.value)"
+            min="0" max="100" class="mb-w-14 mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded mb-px-1.5 mb-py-1 mb-text-[10px] mb-text-gray-200" />
+          <button v-if="stops.length > 2" @click="removeStop(i)" class="mb-text-gray-500 hover:mb-text-red-400 mb-text-xs">&times;</button>
+        </div>
+        <FieldColor :modelValue="stop.color" @update:modelValue="updateStop(i, 'color', $event)" />
       </div>
     </div>
     <button @click="addStop" class="mb-w-full mb-py-1 mb-text-[10px] mb-text-gray-400 mb-bg-gray-700 mb-rounded hover:mb-bg-gray-600">
@@ -37,6 +38,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import FieldColor from './FieldColor.vue';
 
 const props = defineProps({
   modelValue: { type: Object, default: () => ({

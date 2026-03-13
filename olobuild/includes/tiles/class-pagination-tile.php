@@ -9,7 +9,7 @@ class Olo_Pagination_Tile extends Olo_Tile_Base {
     protected $type     = 'pagination';
     protected $name     = 'Paginazione';
     protected $icon     = 'dashicons-ellipsis';
-    protected $category = 'dynamic';
+    protected $category = 'navigation';
     protected $defaults = [
         'style'              => 'both',
         'alignment'          => 'center',

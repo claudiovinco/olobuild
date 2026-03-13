@@ -496,3 +496,463 @@
   font-style: italic;
   pointer-events: none;
 }
+
+// ═══════════════════════════════════════════════
+// LIGHT GLASS THEME — Olobuild Builder Chrome
+// Remaps Tailwind gray palette + primary accent
+// for a modern, minimal, glassmorphism look
+// ═══════════════════════════════════════════════
+
+#olobuilder-app {
+  // ── Primary accent: orange ──
+  --olo-color-primary: #e8622a;
+  --olo-primary-rgb: 232 98 42;
+
+  // ── Scrollbar: dark-on-light ──
+  ::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.10) !important;
+    &:hover { background: rgba(0, 0, 0, 0.18) !important; }
+  }
+
+  // ── Select dropdown: light theme ──
+  select option {
+    background: #fff !important;
+    color: #1a1a1a !important;
+  }
+  select optgroup {
+    background: #f5f0eb !important;
+    color: #888 !important;
+  }
+}
+
+// ────── Background overrides ──────
+#olobuilder-app {
+  // Main page bg (warm beige)
+  .mb-bg-gray-900 { background-color: #f5f0eb !important; }
+
+  // Panel backgrounds (glass)
+  .mb-bg-gray-800 {
+    background: rgba(255, 255, 255, 0.72) !important;
+    backdrop-filter: blur(20px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  }
+
+  // Control groups (tabs, viewport switcher)
+  .mb-bg-gray-700 { background-color: rgba(0, 0, 0, 0.04) !important; }
+  .mb-bg-gray-600 { background-color: rgba(0, 0, 0, 0.06) !important; }
+
+  // Hover backgrounds
+  .hover\:mb-bg-gray-700:hover { background-color: rgba(0, 0, 0, 0.06) !important; }
+  .hover\:mb-bg-gray-600:hover { background-color: rgba(0, 0, 0, 0.08) !important; }
+  .hover\:mb-bg-gray-500:hover { background-color: rgba(0, 0, 0, 0.10) !important; }
+}
+
+// ────── Border overrides ──────
+#olobuilder-app {
+  .mb-border-gray-700 { border-color: rgba(0, 0, 0, 0.08) !important; }
+  .mb-border-gray-600 { border-color: rgba(0, 0, 0, 0.12) !important; }
+  .mb-border-gray-500 { border-color: rgba(0, 0, 0, 0.15) !important; }
+}
+
+// ────── Text overrides ──────
+#olobuilder-app {
+  .mb-text-gray-100 { color: #1a1a1a !important; }
+  .mb-text-gray-200 { color: #333 !important; }
+  .mb-text-gray-300 { color: #555 !important; }
+  .mb-text-gray-400 { color: #888 !important; }
+  .mb-text-gray-500 { color: #aaa !important; }
+  .mb-text-gray-600 { color: #ccc !important; }
+  .mb-text-gray-700 { color: #ddd !important; }
+  .mb-text-white { color: #fff !important; }
+
+  // Hover text
+  .hover\:mb-text-gray-200:hover { color: #1a1a1a !important; }
+  .hover\:mb-text-gray-300:hover { color: #333 !important; }
+  .hover\:mb-text-white:hover { color: #1a1a1a !important; }
+}
+
+// ────── Primary button overrides ──────
+// Primary bg now uses the CSS var, so mb-bg-primary-600 = orange automatically.
+// But we need to ensure text on primary buttons stays white.
+#olobuilder-app {
+  // Active tab/button: primary on light needs white text
+  .mb-bg-primary-600 { color: #fff; }
+
+  // Disabled state on light
+  .mb-bg-gray-700.mb-text-gray-500 { color: #bbb !important; }
+
+  // Save button disabled
+  .mb-cursor-not-allowed.mb-bg-gray-700 {
+    background-color: rgba(0, 0, 0, 0.06) !important;
+    color: #bbb !important;
+  }
+}
+
+// ────── KBD / Shortcuts modal ──────
+#olobuilder-app {
+  .mb-bg-gray-700.mb-text-gray-300 {
+    // kbd keys in shortcuts modal
+    &.mb-px-2 {
+      background: rgba(0, 0, 0, 0.06) !important;
+      color: #555 !important;
+      border-color: rgba(0, 0, 0, 0.12) !important;
+    }
+  }
+
+  kbd.mb-bg-gray-700 {
+    background: rgba(0, 0, 0, 0.06) !important;
+    color: #555 !important;
+    border-color: rgba(0, 0, 0, 0.12) !important;
+  }
+}
+
+// ────── Modals: glass panels ──────
+#olobuilder-app {
+  .mb-bg-gray-800.mb-border.mb-rounded-xl {
+    background: rgba(255, 255, 255, 0.92) !important;
+    backdrop-filter: blur(24px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+    border-color: rgba(0, 0, 0, 0.10) !important;
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.04) !important;
+  }
+}
+
+// ────── Badge colors: keep vibrant on light ──────
+#olobuilder-app {
+  .mb-bg-purple-600\/20 { background: rgba(147, 51, 234, 0.12) !important; }
+  .mb-text-purple-300 { color: #7c3aed !important; }
+  .mb-border-purple-500\/30 { border-color: rgba(147, 51, 234, 0.25) !important; }
+
+  .mb-bg-teal-600\/20 { background: rgba(13, 148, 136, 0.12) !important; }
+  .mb-text-teal-300 { color: #0d9488 !important; }
+  .mb-border-teal-500\/30 { border-color: rgba(13, 148, 136, 0.25) !important; }
+
+  .mb-bg-amber-600\/20 { background: rgba(217, 119, 6, 0.12) !important; }
+  .mb-text-amber-300 { color: #d97706 !important; }
+  .mb-border-amber-500\/30 { border-color: rgba(217, 119, 6, 0.25) !important; }
+
+  .mb-bg-green-600\/20 { background: rgba(5, 150, 105, 0.12) !important; }
+  .mb-text-green-300, .mb-text-green-400 { color: #059669 !important; }
+  .mb-border-green-500, .mb-border-green-500\/30 { border-color: rgba(5, 150, 105, 0.3) !important; }
+
+  .mb-bg-red-600\/20 { background: rgba(220, 38, 38, 0.12) !important; }
+  .mb-text-red-300 { color: #dc2626 !important; }
+  .mb-border-red-500\/30 { border-color: rgba(220, 38, 38, 0.3) !important; }
+
+  // Publish button colors
+  .mb-border-green-500.mb-text-green-400 { color: #059669 !important; border-color: #059669 !important; }
+  .mb-border-yellow-500.mb-text-yellow-400 { color: #d97706 !important; border-color: #d97706 !important; }
+  .hover\:mb-bg-green-600\/20:hover { background: rgba(5, 150, 105, 0.1) !important; }
+  .hover\:mb-bg-yellow-600\/20:hover { background: rgba(217, 119, 6, 0.1) !important; }
+
+  // Toolbar accent buttons
+  .mb-text-cyan-400 { color: #0891b2 !important; }
+  .hover\:mb-text-cyan-200:hover { color: #06b6d4 !important; }
+  .mb-text-purple-400 { color: #9333ea !important; }
+  .hover\:mb-text-purple-200:hover { color: #a855f7 !important; }
+
+  // Emerald (real preview button)
+  .mb-border-emerald-600 { border-color: #059669 !important; }
+  .mb-text-emerald-400 { color: #059669 !important; }
+  .hover\:mb-bg-emerald-600\/20:hover { background: rgba(5, 150, 105, 0.1) !important; }
+}
+
+// ════════════════════════════════════════════════════
+// SCOPED COMPONENT OVERRIDES — Dark→Light remap
+// Vue scoped CSS hardcodes dark grays; we override
+// them here with #olobuilder-app ancestor (spec 1,x,0)
+// ════════════════════════════════════════════════════
+
+#olobuilder-app {
+
+  // ── RichTextEditor (inspector) ──
+  .rte-wrap {
+    border-color: rgba(0,0,0,0.12) !important;
+    background: #fff !important;
+    border-radius: 8px !important;
+  }
+  .rte-toolbar {
+    background: #f5f2ef !important;
+    border-bottom: 1px solid rgba(0,0,0,0.08) !important;
+    border-radius: 8px 8px 0 0 !important;
+  }
+  .rte-row > button {
+    color: #555 !important;
+    background: transparent !important;
+    &:hover {
+      background: rgba(0,0,0,0.06) !important;
+      color: #1a1a1a !important;
+    }
+    &.active {
+      background: var(--olo-color-primary, #e8622a) !important;
+      color: #fff !important;
+    }
+  }
+  .rte-sep {
+    background: rgba(0,0,0,0.10) !important;
+  }
+  .rte-color-btn:hover {
+    background: rgba(0,0,0,0.06) !important;
+  }
+  .rte-color-label {
+    color: #555 !important;
+  }
+  .rte-dropdown-btn {
+    background: #fff !important;
+    color: #555 !important;
+    border-color: rgba(0,0,0,0.12) !important;
+    &:hover {
+      background: rgba(0,0,0,0.04) !important;
+      color: #1a1a1a !important;
+    }
+  }
+  .rte-dropdown-menu {
+    background: #fff !important;
+    border-color: rgba(0,0,0,0.12) !important;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.10) !important;
+  }
+  .rte-dropdown-item {
+    color: #555 !important;
+    background: transparent !important;
+    &:hover {
+      background: rgba(0,0,0,0.04) !important;
+      color: #1a1a1a !important;
+    }
+    &.active {
+      background: var(--olo-color-primary, #e8622a) !important;
+      color: #fff !important;
+    }
+  }
+
+  // ── Floating Inline Toolbar (canvas rich-text editing) ──
+  .olo-inline-toolbar {
+    background: rgba(255,255,255,0.92) !important;
+    backdrop-filter: blur(20px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+    border-color: rgba(0,0,0,0.10) !important;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.12), 0 0 0 1px rgba(0,0,0,0.04) !important;
+
+    button {
+      color: #555 !important;
+      &:hover {
+        background: rgba(0,0,0,0.06) !important;
+        color: #1a1a1a !important;
+      }
+      &.active {
+        background: var(--olo-color-primary, #e8622a) !important;
+        color: #fff !important;
+      }
+    }
+  }
+  .olo-it-sep {
+    background: rgba(0,0,0,0.10) !important;
+  }
+  .olo-it-color:hover {
+    background: rgba(0,0,0,0.06) !important;
+  }
+  .olo-it-color-a {
+    color: #555 !important;
+  }
+
+  // ── ContextMenu ──
+  .olo-ctx-menu {
+    background: rgba(255,255,255,0.95) !important;
+    backdrop-filter: blur(16px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
+    border-color: rgba(0,0,0,0.10) !important;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.12), 0 0 0 1px rgba(0,0,0,0.04) !important;
+  }
+  .olo-ctx-item {
+    color: #555 !important;
+    &:hover:not(:disabled) {
+      background: rgba(0,0,0,0.05) !important;
+      color: #1a1a1a !important;
+    }
+  }
+  .olo-ctx-item--danger:hover:not(:disabled) {
+    background: rgba(220,38,38,0.08) !important;
+    color: #dc2626 !important;
+  }
+  .olo-ctx-sep {
+    background: rgba(0,0,0,0.08) !important;
+  }
+
+  // ── GLOBAL dark color remap for ALL scoped components ──
+  // These catch hardcoded dark colors in ContentItemsEditor,
+  // GlobalTypographyPanel, GlobalColorsPanel, DynamicQueryPanel,
+  // DynamicBindingPanel, FieldIcon, FieldFontFamily, FieldRange,
+  // FieldMultiPills, FieldLottiePicker, FieldBoxShadow, etc.
+
+  // ── ContentItemsEditor (.cie-*) ──
+  .cie-item {
+    border-color: rgba(0,0,0,0.08) !important;
+  }
+  .cie-header {
+    background: transparent !important;
+    &:hover { background: rgba(0,0,0,0.03) !important; }
+  }
+  .cie-body {
+    background: rgba(0,0,0,0.02) !important;
+    border-top-color: rgba(0,0,0,0.06) !important;
+  }
+  .cie-input,
+  .cie-textarea {
+    background: #fff !important;
+    color: #1a1a1a !important;
+    border-color: rgba(0,0,0,0.12) !important;
+  }
+  .cie-range {
+    background: rgba(0,0,0,0.08) !important;
+  }
+  .cie-image-picker {
+    background: rgba(0,0,0,0.03) !important;
+    border-color: rgba(0,0,0,0.10) !important;
+  }
+  .cie-btn {
+    background: rgba(0,0,0,0.04) !important;
+    color: #555 !important;
+    border-color: rgba(0,0,0,0.08) !important;
+    &:hover {
+      background: rgba(0,0,0,0.08) !important;
+      color: #1a1a1a !important;
+    }
+  }
+  .cie-btn--delete:hover {
+    background: rgba(220,38,38,0.08) !important;
+    color: #dc2626 !important;
+  }
+  .cie-grip {
+    color: #aaa !important;
+  }
+  .cie-color-swatch {
+    border-color: rgba(0,0,0,0.12) !important;
+  }
+  .cie-ghost {
+    opacity: 0.4 !important;
+  }
+
+  // ── FieldFontFamily dropdown ──
+  .ff-dropdown,
+  [class*="ff-dropdown"] {
+    background: #fff !important;
+    border-color: rgba(0,0,0,0.12) !important;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.10) !important;
+  }
+  .ff-option,
+  [class*="ff-option"] {
+    color: #555 !important;
+    &:hover {
+      background: rgba(0,0,0,0.04) !important;
+      color: #1a1a1a !important;
+    }
+    &.active, &.selected {
+      background: var(--olo-color-primary, #e8622a) !important;
+      color: #fff !important;
+    }
+  }
+  .ff-input,
+  [class*="ff-input"] {
+    background: #fff !important;
+    color: #1a1a1a !important;
+    border-color: rgba(0,0,0,0.12) !important;
+  }
+
+  // ── DynamicQueryPanel / DynamicBindingPanel ──
+  .dq-wrap, .db-wrap,
+  [class*="dq-panel"], [class*="db-panel"] {
+    background: rgba(0,0,0,0.02) !important;
+    border-color: rgba(0,0,0,0.08) !important;
+  }
+  .dq-header, .db-header {
+    background: transparent !important;
+  }
+  .dq-select, .db-select,
+  .dq-input, .db-input {
+    background: #fff !important;
+    color: #1a1a1a !important;
+    border-color: rgba(0,0,0,0.12) !important;
+  }
+  .dq-dropdown, .db-dropdown {
+    background: #fff !important;
+    border-color: rgba(0,0,0,0.12) !important;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.10) !important;
+  }
+  .dq-option, .db-option {
+    color: #555 !important;
+    &:hover {
+      background: rgba(0,0,0,0.04) !important;
+      color: #1a1a1a !important;
+    }
+  }
+
+  // ── GlobalTypographyPanel / GlobalColorsPanel ──
+  .gtp-input, .gcp-input {
+    background: #fff !important;
+    color: #1a1a1a !important;
+    border-color: rgba(0,0,0,0.12) !important;
+  }
+  .gtp-row, .gcp-row {
+    border-color: rgba(0,0,0,0.06) !important;
+  }
+  .gtp-swatch, .gcp-swatch {
+    border-color: rgba(0,0,0,0.12) !important;
+  }
+
+  // ── FieldIcon ──
+  .fi-grid,
+  [class*="icon-grid"] {
+    background: #fff !important;
+    border-color: rgba(0,0,0,0.12) !important;
+  }
+  .fi-item,
+  [class*="icon-item"] {
+    color: #555 !important;
+    background: rgba(0,0,0,0.02) !important;
+    &:hover {
+      background: rgba(0,0,0,0.06) !important;
+      color: #1a1a1a !important;
+    }
+    &.active, &.selected {
+      background: var(--olo-color-primary, #e8622a) !important;
+      color: #fff !important;
+    }
+  }
+
+  // ── FieldRange thumb ──
+  .fr-track,
+  [class*="range-track"] {
+    background: rgba(0,0,0,0.08) !important;
+  }
+
+  // ── FieldMultiPills ──
+  .fmp-pill,
+  [class*="pill"] {
+    border-color: rgba(0,0,0,0.10) !important;
+  }
+
+  // ── FieldBoxShadow ──
+  .fbs-row {
+    border-color: rgba(0,0,0,0.06) !important;
+  }
+
+  // ── Generic input/select/textarea styling ──
+  input[type="text"],
+  input[type="number"],
+  input[type="url"],
+  input[type="email"],
+  input[type="search"],
+  input[type="tel"],
+  input[type="password"],
+  textarea,
+  select {
+    &:not([class*="rte-"]):not(.tiptap):not([class*="olo-canvas"]) {
+      background: #fff !important;
+      color: #1a1a1a !important;
+      border-color: rgba(0,0,0,0.12) !important;
+    }
+  }
+}
+
+// ────── Canvas: no gray overrides inside actual content ──────
+// The canvas (.olo-canvas) uses mb-bg-white already.
+// The data-canvas-theme system handles canvas content colors.

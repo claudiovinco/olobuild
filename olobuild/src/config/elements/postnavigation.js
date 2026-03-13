@@ -4,7 +4,7 @@ export default {
   type: 'postnavigation',
   name: 'Navigazione articolo',
   icon: 'dashicons-arrow-left-alt',
-  category: 'dynamic',
+  category: 'navigation',
   defaults: {
     show_thumbnail: true,
     show_label: true,

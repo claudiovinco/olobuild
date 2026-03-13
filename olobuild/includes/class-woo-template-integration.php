@@ -213,20 +213,41 @@ class Olo_Woo_Template_Integration {
             }
         }
 
-        ?>
-        <div class="wrap">
-            <h1>Olobuild — WooCommerce Templates</h1>
-            <p>Assegna un template Olobuild a ciascuna pagina WooCommerce. Imposta a 0 o vuoto per usare il template predefinito di WooCommerce.</p>
+        $icons = [
+            'product_single'  => '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>',
+            'product_archive' => '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>',
+            'cart'            => '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>',
+            'checkout'        => '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>',
+            'myaccount'       => '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
+        ];
 
-            <table class="form-table" id="olo-woo-tpl-table">
-                <tbody>
+        ?>
+        <?php Olo_Builder::page_shell_open( 'WooCommerce' ); ?>
+
+            <div id="woo-msg-box"></div>
+
+            <div class="olo-card">
+                <div class="olo-card-head">
+                    <div class="olo-card-icon orange">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+                    </div>
+                    <div>
+                        <h3>Assegnazione Template</h3>
+                        <p>Seleziona un template Olobuild per ciascuna pagina WooCommerce. Lascia "Predefinito" per usare il template nativo.</p>
+                    </div>
+                </div>
+                <div class="olo-card-body">
                     <?php foreach ( $this->page_types as $key => $info ) :
                         $current = (int) get_option( "olo_woo_tpl_{$key}", 0 );
+                        $icon_class = ( $key === 'cart' || $key === 'checkout' ) ? 'orange' : 'black';
                     ?>
-                    <tr>
-                        <th scope="row"><?php echo esc_html( $info['label'] ); ?></th>
-                        <td>
-                            <select name="olo_woo_tpl_<?php echo esc_attr( $key ); ?>" class="olo-woo-tpl-select" data-key="<?php echo esc_attr( $key ); ?>">
+                    <div class="olo-field-row">
+                        <div class="olo-field-info" style="display:flex;align-items:center;gap:10px">
+                            <span style="width:32px;height:32px;border-radius:8px;background:#f5f5f5;display:flex;align-items:center;justify-content:center;color:#666;flex-shrink:0"><?php echo $icons[ $key ] ?? ''; ?></span>
+                            <label><?php echo esc_html( $info['label'] ); ?></label>
+                        </div>
+                        <div class="olo-field-input-wrap">
+                            <select class="olo-field-input olo-woo-tpl-select" data-key="<?php echo esc_attr( $key ); ?>">
                                 <option value="0">— Predefinito WooCommerce —</option>
                                 <?php foreach ( $templates as $tpl ) : ?>
                                 <option value="<?php echo $tpl['id']; ?>"<?php selected( $current, $tpl['id'] ); ?>>
@@ -234,39 +255,43 @@ class Olo_Woo_Template_Integration {
                                 </option>
                                 <?php endforeach; ?>
                             </select>
-                        </td>
-                    </tr>
+                        </div>
+                    </div>
                     <?php endforeach; ?>
-                </tbody>
-            </table>
+                </div>
+            </div>
 
-            <p>
-                <button type="button" id="olo-woo-tpl-save" class="button button-primary">Salva assegnazioni</button>
-                <span id="olo-woo-tpl-msg" style="margin-left:10px;color:#059669;display:none">Salvato!</span>
-            </p>
-        </div>
+            <div class="olo-actions">
+                <button type="button" id="olo-woo-tpl-save" class="olo-btn-save">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                    Salva assegnazioni
+                </button>
+            </div>
+        <?php Olo_Builder::page_shell_close(); ?>
 
         <script>
         (function(){
             var btn = document.getElementById('olo-woo-tpl-save');
-            var msg = document.getElementById('olo-woo-tpl-msg');
             if (!btn) return;
             btn.addEventListener('click', function(){
+                btn.disabled = true;
+                btn.innerHTML = '<span class="olo-spinner"></span> Salvataggio...';
                 var data = {};
-                var selects = document.querySelectorAll('.olo-woo-tpl-select');
-                selects.forEach(function(sel){
+                document.querySelectorAll('.olo-woo-tpl-select').forEach(function(sel){
                     data[sel.getAttribute('data-key')] = parseInt(sel.value) || 0;
                 });
                 fetch('<?php echo esc_url( rest_url( 'olo/v1/woo-templates' ) ); ?>', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-WP-Nonce': '<?php echo wp_create_nonce( 'wp_rest' ); ?>'
-                    },
+                    headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': '<?php echo wp_create_nonce( 'wp_rest' ); ?>' },
                     body: JSON.stringify(data)
                 }).then(function(r){ return r.json(); }).then(function(){
-                    msg.style.display = 'inline';
-                    setTimeout(function(){ msg.style.display = 'none'; }, 2000);
+                    var box = document.getElementById('woo-msg-box');
+                    box.className = 'olo-msg success';
+                    box.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Assegnazioni salvate';
+                    setTimeout(function(){ box.className = ''; box.innerHTML = ''; }, 3000);
+                }).finally(function(){
+                    btn.disabled = false;
+                    btn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Salva assegnazioni';
                 });
             });
         })();

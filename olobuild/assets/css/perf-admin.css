@@ -1,251 +1,74 @@
-/* Olobuild Performance — Admin Page */
+/* Olobuild Performance — Page-specific styles */
+/* Design system classes (.olo-admin-wrap, .olo-card, .olo-toggle, etc.) are in olo-admin.css */
 
-.olo-perf-wrap {
-    max-width: 900px;
+/* ── Form wrapper (no extra chrome, cards provide structure) ── */
+.olo-perf-form .submit { display: none; } /* hide WP default submit, we use .olo-btn-save */
+
+/* ── Number inputs ── */
+.olo-perf-number {
+    width: 80px !important;
+    text-align: center;
 }
 
-.olo-perf-wrap h1 {
+.olo-perf-number-wrap {
     display: flex;
     align-items: center;
-    font-size: 22px;
-    font-weight: 600;
-    margin-bottom: 16px;
-}
-
-/* Tabs */
-.olo-perf-tabs {
-    margin-bottom: 0 !important;
-    border-bottom: 1px solid #c3c4c7;
-}
-
-.olo-perf-tabs .nav-tab {
-    font-size: 13px;
-    padding: 8px 16px;
-}
-
-.olo-perf-tabs .nav-tab-active {
-    background: #fff;
-    border-bottom-color: #fff;
-}
-
-/* Form */
-.olo-perf-form {
-    background: #fff;
-    border: 1px solid #c3c4c7;
-    border-top: none;
-    padding: 24px;
-    margin-bottom: 20px;
-}
-
-/* Sections */
-.olo-perf-section {
-    margin-bottom: 32px;
-    padding-bottom: 24px;
-    border-bottom: 1px solid #eee;
-}
-
-.olo-perf-section:last-of-type {
-    border-bottom: none;
-    margin-bottom: 0;
-    padding-bottom: 0;
-}
-
-.olo-perf-section h2 {
-    font-size: 16px;
-    font-weight: 600;
-    margin: 0 0 4px;
-    padding: 0;
-    color: #1d2327;
-}
-
-.olo-perf-section > .description {
-    margin-top: 0;
-    margin-bottom: 16px;
-    color: #666;
-}
-
-/* Table */
-.olo-perf-table th {
-    width: 220px;
-    font-weight: 500;
-    color: #1d2327;
-    vertical-align: top;
-    padding-top: 16px;
-}
-
-.olo-perf-table td {
-    padding-top: 12px;
-    padding-bottom: 12px;
-}
-
-.olo-perf-table .small-text {
-    width: 80px;
-}
-
-.olo-perf-table textarea.large-text {
-    width: 100%;
-    max-width: 500px;
-}
-
-/* Toggle Switch */
-.olo-perf-toggle {
-    position: relative;
-    display: inline-block;
-    width: 44px;
-    height: 24px;
-    cursor: pointer;
-}
-
-.olo-perf-toggle input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
-
-.olo-perf-toggle-slider {
-    position: absolute;
-    inset: 0;
-    background: #ccc;
-    border-radius: 24px;
-    transition: 0.25s;
-}
-
-.olo-perf-toggle-slider::before {
-    content: '';
-    position: absolute;
-    width: 18px;
-    height: 18px;
-    left: 3px;
-    bottom: 3px;
-    background: #fff;
-    border-radius: 50%;
-    transition: 0.25s;
-}
-
-.olo-perf-toggle input:checked + .olo-perf-toggle-slider {
-    background: #2271b1;
-}
-
-.olo-perf-toggle input:checked + .olo-perf-toggle-slider::before {
-    transform: translateX(20px);
-}
-
-/* Status Grid */
-.olo-perf-status-grid {
-    display: flex;
-    gap: 16px;
-    flex-wrap: wrap;
-    margin-bottom: 16px;
-}
-
-.olo-perf-status-card {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    background: #f9f9f9;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    padding: 14px 20px;
-    min-width: 180px;
-}
-
-.olo-perf-status-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
+    gap: 8px;
     flex-shrink: 0;
 }
 
-.olo-perf-status-icon.active {
-    background: #d4edda;
-    color: #28a745;
+.olo-perf-number-unit {
+    font-size: 13px;
+    color: #999;
+    font-weight: 500;
 }
 
-.olo-perf-status-icon.inactive {
-    background: #f8d7da;
-    color: #dc3545;
+/* ── Textarea rows (domains) ── */
+.olo-perf-textarea-row {
+    margin-bottom: 18px;
 }
 
-.olo-perf-status-icon.info {
-    background: #e8f0fe;
-    color: #2271b1;
+.olo-perf-textarea-row:last-child {
+    margin-bottom: 0;
 }
 
-.olo-perf-status-icon .dashicons {
-    font-size: 22px;
-    width: 22px;
-    height: 22px;
-}
-
-.olo-perf-status-info {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-}
-
-.olo-perf-status-info strong {
-    font-size: 12px;
-    color: #666;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.olo-perf-status-info span {
-    font-size: 15px;
+.olo-perf-textarea-label {
+    display: block;
+    font-size: 13px;
     font-weight: 600;
-    color: #1d2327;
+    color: #1a1a1a;
+    margin-bottom: 6px;
 }
 
-/* Actions */
-.olo-perf-actions {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+.olo-perf-textarea-row .olo-field-hint {
+    display: block;
+    margin-top: 4px;
 }
 
-.olo-perf-actions .button {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-}
-
-/* Message */
-.olo-perf-msg {
+/* ── Inline action messages ── */
+.olo-perf-inline-msg {
     font-size: 13px;
     font-weight: 500;
     transition: color 0.3s;
+    color: #999;
 }
 
-.olo-perf-msg.success {
-    color: #28a745;
+.olo-perf-inline-msg.success {
+    color: #059669;
 }
 
-.olo-perf-msg.error {
-    color: #dc3545;
+.olo-perf-inline-msg.error {
+    color: #dc2626;
 }
 
-/* Submit */
-.olo-perf-form .submit {
-    margin-top: 16px;
-    padding-top: 16px;
-    border-top: 1px solid #eee;
+/* ── Status card value font-size tweak for text values ── */
+.olo-perf-page .olo-status-card-value {
+    font-size: 20px;
 }
 
-/* Responsive */
+/* ── Responsive ── */
 @media screen and (max-width: 782px) {
-    .olo-perf-table th {
-        width: auto;
-        display: block;
-        padding-bottom: 4px;
-    }
-    .olo-perf-table td {
-        display: block;
-        padding-top: 0;
-    }
-    .olo-perf-status-grid {
-        flex-direction: column;
+    .olo-perf-number-wrap {
+        flex-shrink: 1;
     }
 }

@@ -10,8 +10,9 @@
       <path :d="shapePath" :fill="s.color || '#ffffff'" />
     </svg>
 
-    <!-- Label -->
+    <!-- Label (only in cell mode, not overlay) -->
     <div
+      v-if="!overlayMode"
       class="mb-absolute mb-inset-0 mb-flex mb-items-center mb-justify-center mb-pointer-events-none"
       style="z-index:2"
     >
@@ -27,6 +28,7 @@ import { computed } from 'vue';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
+  overlayMode: { type: Boolean, default: false },
 });
 
 const defaults = {

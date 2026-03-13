@@ -1,170 +1,71 @@
-/* Olobuild SEO — Admin Settings Page */
+/* Olobuild SEO Redirects — Page-specific styles */
+/* Shared design system styles are in olo-admin.css */
 
-.olo-seo-wrap {
-    max-width: 900px;
-}
-
-.olo-seo-wrap h1 {
-    display: flex;
-    align-items: center;
-    font-size: 22px;
-    font-weight: 600;
-    margin-bottom: 16px;
-}
-
-/* Tabs */
-.olo-seo-tabs {
-    margin-bottom: 0 !important;
-    border-bottom: 1px solid #c3c4c7;
-}
-
-.olo-seo-tabs .nav-tab {
+/* ── Tabs: inline SVG icon alignment ── */
+.olo-admin-wrap .olo-admin-tab {
     display: inline-flex;
     align-items: center;
-    gap: 2px;
-    font-size: 13px;
-    padding: 8px 16px;
+    gap: 6px;
+}
+.olo-admin-wrap .olo-admin-tab svg {
+    flex-shrink: 0;
 }
 
-.olo-seo-tabs .nav-tab-active {
-    background: #fff;
-    border-bottom-color: #fff;
-}
-
-/* Form */
-.olo-seo-form {
-    background: #fff;
-    border: 1px solid #c3c4c7;
-    border-top: none;
-    padding: 24px;
-    margin-bottom: 20px;
-}
-
-/* Sections */
-.olo-seo-section {
-    margin-bottom: 32px;
-    padding-bottom: 24px;
-    border-bottom: 1px solid #eee;
-}
-
-.olo-seo-section:last-of-type {
-    border-bottom: none;
-    margin-bottom: 0;
-    padding-bottom: 0;
-}
-
-.olo-seo-section h2 {
-    font-size: 16px;
-    font-weight: 600;
-    margin: 0 0 4px;
-    padding: 0;
-    color: #1d2327;
-}
-
-.olo-seo-section > .description {
-    margin-top: 0;
-    margin-bottom: 16px;
-    color: #666;
-}
-
-/* Table */
-.olo-seo-table th {
-    width: 200px;
-    font-weight: 500;
-    color: #1d2327;
-    vertical-align: top;
-    padding-top: 14px;
-}
-
-.olo-seo-table td {
-    padding-top: 10px;
-    padding-bottom: 10px;
-}
-
-.olo-seo-table input.regular-text {
-    width: 400px;
-    max-width: 100%;
-}
-
-.olo-seo-table input.small-text {
-    width: 100px;
-}
-
-.olo-seo-table input.large-text,
-.olo-seo-table textarea.large-text {
-    width: 100%;
-    max-width: 600px;
-}
-
-.olo-seo-table textarea.code {
-    font-family: Consolas, Monaco, monospace;
-    font-size: 13px;
-}
-
-/* Separator picker */
-.olo-seo-separator-picker {
-    display: flex;
-    gap: 4px;
-    flex-wrap: wrap;
-}
-
-.olo-seo-sep-option {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 36px;
-    border: 2px solid #ddd;
+/* ── URL code snippets in tables ── */
+.olo-seo-url-code {
+    font-size: 12px;
+    font-family: 'SF Mono', Monaco, 'Cascadia Code', Consolas, monospace;
+    background: #f5f5f5;
+    padding: 3px 8px;
     border-radius: 6px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: 600;
-    color: #555;
-    background: #f9f9f9;
-    transition: all 0.15s;
+    color: #1a1a1a;
+    word-break: break-all;
 }
 
-.olo-seo-sep-option:hover {
-    border-color: #2271b1;
-    background: #f0f6fc;
+/* ── Date cells ── */
+.olo-seo-date {
+    font-size: 12px;
+    color: #999;
 }
 
-.olo-seo-sep-option.active,
-.olo-seo-sep-option:has(input:checked) {
-    border-color: #2271b1;
-    background: #2271b1;
-    color: #fff;
+/* ── Referrer cell (truncate) ── */
+.olo-seo-referrer {
+    font-size: 12px;
+    color: #999;
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
-.olo-seo-sep-option input {
-    display: none;
+/* ── Actions cell ── */
+.olo-seo-actions-cell {
+    display: flex;
+    gap: 6px;
+    align-items: center;
 }
 
-/* Upload button */
-.olo-seo-upload-btn {
-    margin-left: 8px !important;
-    vertical-align: middle;
-}
-
-/* Submit button area */
-.olo-seo-form .submit {
+/* ── IndexNow help block ── */
+.olo-seo-indexnow-help {
     margin-top: 16px;
-    padding-top: 16px;
-    border-top: 1px solid #eee;
+    padding: 14px 18px;
+    background: #fafafa;
+    border: 1px solid #f0f0f0;
+    border-radius: 10px;
+    font-size: 13px;
+    color: #666;
+    line-height: 1.6;
 }
-
-/* Responsive */
-@media screen and (max-width: 782px) {
-    .olo-seo-table th {
-        width: auto;
-        display: block;
-        padding-bottom: 4px;
-    }
-    .olo-seo-table td {
-        display: block;
-        padding-top: 0;
-    }
-    .olo-seo-table input.regular-text {
-        width: 100%;
-    }
+.olo-seo-indexnow-help p {
+    margin: 0 0 6px;
+}
+.olo-seo-indexnow-help p:last-child {
+    margin-bottom: 0;
+}
+.olo-seo-indexnow-help code {
+    font-size: 12px;
+    background: #fff;
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid #eaeaea;
 }

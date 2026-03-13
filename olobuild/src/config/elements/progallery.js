@@ -126,6 +126,7 @@ export default {
       ];
       return [
         { value: 'grid', label: 'Griglia' },
+        { value: 'justified', label: 'Giustificato' },
         { value: 'masonry', label: 'Masonry' },
         { value: 'scattered', label: 'Sparso' },
         { value: 'collage', label: 'Collage' },
