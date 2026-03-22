@@ -66,7 +66,8 @@ class Olo_Pagetitlebar_Tile extends Olo_Tile_Base {
         $overlay    = max( 0, min( 100, intval( $s['bg_overlay'] ) ) );
         $overlay_c  = $this->safe_color_css( $s['bg_overlay_color'] ) ?: '#000000';
         $min_h      = max( 0, intval( $s['min_height'] ) );
-        $pad_y      = max( 0, intval( $s['padding_y'] ) );
+        $_tp = $s['tile_padding'] ?? null;
+        $pad_y = is_array( $_tp ) ? max( 0, intval( $_tp['top'] ?? 40 ) ) : max( 0, intval( $s['padding_y'] ?? 40 ) );
         $max_w      = max( 0, intval( $s['content_width'] ) );
 
         $bc_color = $this->safe_color_css( $s['breadcrumb_color'] ) ?: '#9CA3AF';
@@ -90,7 +91,7 @@ class Olo_Pagetitlebar_Tile extends Olo_Tile_Base {
             <div style="position:absolute;inset:0;background:<?php echo $overlay_c; ?>;opacity:<?php echo round( $overlay / 100, 2 ); ?>;pointer-events:none" aria-hidden="true"></div>
             <?php endif; ?>
 
-            <div style="position:relative;z-index:1;width:100%;max-width:<?php echo $max_w; ?>px;margin:0 auto;padding:<?php echo $pad_y; ?>px 20px">
+            <div style="position:relative;z-index:1;width:100%;max-width:<?php echo $max_w; ?>px;margin:0 auto;padding:<?php echo $pad_y; ?>px <?php echo is_array( $_tp ) ? intval( $_tp['right'] ?? 20 ) : 20; ?>px <?php echo is_array( $_tp ) ? intval( $_tp['bottom'] ?? $pad_y ) : $pad_y; ?>px <?php echo is_array( $_tp ) ? intval( $_tp['left'] ?? 20 ) : 20; ?>px">
                 <<?php echo $tag; ?> style="color:<?php echo $title_c; ?>;font-size:<?php echo $title_size; ?>px;font-weight:<?php echo $title_w; ?>;margin:0;line-height:1.2">
                     <?php echo esc_html( $title ); ?>
                 </<?php echo $tag; ?>>

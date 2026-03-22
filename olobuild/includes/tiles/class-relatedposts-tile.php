@@ -110,7 +110,7 @@ class Olo_RelatedPosts_Tile extends Olo_Tile_Base {
         $columns       = max( 1, min( 4, absint( $s['columns'] ) ) );
         $gap           = max( 0, min( 40, absint( $s['gap'] ) ) );
         $card_bg       = $this->safe_color_css( $s['card_background'] );
-        $card_padding  = max( 0, min( 32, absint( $s['card_padding'] ) ) );
+        $card_padding = Olo_Tile_Utils::spacing_css( $s['tile_padding'] ?? $s['card_padding'] ?? 16, 16 );
         $card_radius   = Olo_Tile_Utils::border_radius( $s['card_border_radius'] ?? 0 );
         $title_color   = $this->safe_color_css( $s['title_color'] );
         $text_color    = $this->safe_color_css( $s['text_color'] );
@@ -150,7 +150,7 @@ class Olo_RelatedPosts_Tile extends Olo_Tile_Base {
                 </div>
                 <?php endif; ?>
 
-                <div style="padding:<?php echo $card_padding; ?>px;">
+                <div style="padding: <?php echo $card_padding; ?>;">
                     <?php if ( ! empty( $s['show_category'] ) ) :
                         $post_cats = get_the_category();
                         if ( $post_cats ) :

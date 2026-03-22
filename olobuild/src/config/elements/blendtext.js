@@ -17,10 +17,7 @@ export default {
     text_align: 'center',
     text_color: '#ffffff',
     blend_mode: 'difference',
-    padding_top: '40',
-    padding_bottom: '40',
-    padding_left: '20',
-    padding_right: '20',
+    bt_padding: { top: 40, right: 20, bottom: 40, left: 20 },
   },
   fields: [
     { key: 'text', label: 'Testo', type: 'text' },
@@ -79,9 +76,6 @@ export default {
       { value: 'right', label: 'Destra' },
     ]},
     { type: 'separator', label: 'Spaziatura' },
-    { key: 'padding_top', label: 'Padding sopra (px)', type: 'range', min: 0, max: 200, step: 5 },
-    { key: 'padding_bottom', label: 'Padding sotto (px)', type: 'range', min: 0, max: 200, step: 5 },
-    { key: 'padding_left', label: 'Padding sinistra (px)', type: 'range', min: 0, max: 200, step: 5 },
-    { key: 'padding_right', label: 'Padding destra (px)', type: 'range', min: 0, max: 200, step: 5 },
+    { key: 'bt_padding', label: 'Padding (px)', type: 'spacing', max: 200 },
   ],
 };

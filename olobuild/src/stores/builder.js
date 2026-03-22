@@ -14,14 +14,27 @@ export const useBuilderStore = defineStore('builder', {
     isSaving: false,
     viewMode: 'desktop', // desktop | widescreen | tablet_landscape | tablet | mobile_landscape | mobile
     previewMode: false,
+    wireframeMode: false,
+    livePreviewMode: true,  // iframe live preview (Divi-style)
+    _iframeContextMenu: null,
     previewHeaderContent: null,
     previewFooterContent: null,
     previewCssUrls: [],
     previewInlineCss: '',
+    cleanMode: false,
     pageSettingsOpen: false,
     stylePanelOpen: false,
     inlineEditingTileId: null,
     inlineEditingField: null,
+    // ── Unified Editing ──
+    activeZone: 'body',          // 'header' | 'body' | 'footer'
+    headerTemplate: null,        // Full template object for the active header
+    footerTemplate: null,        // Full template object for the active footer
+    headerDirty: false,
+    footerDirty: false,
+    unifiedMode: false,          // True when editing H+B+F together
+    insertAfterTileId: null,     // When set, next element added from sidebar goes after this tile
+    canvasZoom: 100,              // Canvas zoom percentage (25-200)
   }),
 
   getters: {
@@ -38,6 +51,12 @@ export const useBuilderStore = defineStore('builder', {
     },
     isEditing(state) {
       return state.currentTemplate !== null;
+    },
+    /**
+     * True if any zone (body, header, footer) has unsaved changes
+     */
+    isAnyDirty(state) {
+      return state.isDirty || state.headerDirty || state.footerDirty;
     },
     pageSettings(state) {
       const defaults = {
@@ -104,6 +123,11 @@ export const useBuilderStore = defineStore('builder', {
 
     async saveTemplate() {
       if (!this.currentTemplate || this.isSaving) return;
+
+      // In unified mode, save all zones at once
+      if (this.unifiedMode) {
+        return this.saveAllZones();
+      }
 
       this.isSaving = true;
       const olo = getOloData();
@@ -222,6 +246,20 @@ export const useBuilderStore = defineStore('builder', {
       this.inlineEditingField = null;
     },
 
+    setZoom(val) {
+      this.canvasZoom = Math.max(25, Math.min(200, val));
+    },
+    zoomIn() {
+      const steps = [25, 50, 75, 100, 125, 150, 175, 200];
+      const next = steps.find(s => s > this.canvasZoom);
+      this.canvasZoom = next || 200;
+    },
+    zoomOut() {
+      const steps = [25, 50, 75, 100, 125, 150, 175, 200];
+      const prev = [...steps].reverse().find(s => s < this.canvasZoom);
+      this.canvasZoom = prev || 25;
+    },
+
     togglePageSettings() {
       this.pageSettingsOpen = !this.pageSettingsOpen;
       if (this.pageSettingsOpen) {
@@ -258,6 +296,187 @@ export const useBuilderStore = defineStore('builder', {
 
     setViewMode(mode) {
       this.viewMode = mode;
+    },
+
+    // ── Unified Editing ──
+
+    setActiveZone(zone) {
+      if (['header', 'body', 'footer'].includes(zone)) {
+        this.activeZone = zone;
+      }
+    },
+
+    /**
+     * Load header and footer templates for unified editing.
+     * Called after the main template is loaded.
+     */
+    async loadUnifiedContext() {
+      const olo = getOloData();
+      const type = this.currentTemplate?.type;
+
+      // Only load H+F for page/single templates, not for header/footer themselves
+      if (type === 'header' || type === 'footer') {
+        this.unifiedMode = false;
+        return;
+      }
+
+      const tilesStore = useTilesStoreRef();
+      const headerId = olo.activeHeaderId;
+      const footerId = olo.activeFooterId;
+
+      // Load header template
+      if (headerId) {
+        try {
+          const res = await fetch(`${olo.restUrl}/templates/${headerId}`, {
+            headers: { 'X-WP-Nonce': olo.nonce },
+          });
+          if (res.ok) {
+            const tpl = await res.json();
+            if (!tpl.settings || Array.isArray(tpl.settings)) tpl.settings = {};
+            this.headerTemplate = tpl;
+            tilesStore.setHeaderTiles(tpl.content || []);
+          }
+        } catch (e) {
+          console.warn('[Olobuild] Failed to load header template:', e);
+        }
+      }
+
+      // Load footer template
+      if (footerId) {
+        try {
+          const res = await fetch(`${olo.restUrl}/templates/${footerId}`, {
+            headers: { 'X-WP-Nonce': olo.nonce },
+          });
+          if (res.ok) {
+            const tpl = await res.json();
+            if (!tpl.settings || Array.isArray(tpl.settings)) tpl.settings = {};
+            this.footerTemplate = tpl;
+            tilesStore.setFooterTiles(tpl.content || []);
+          }
+        } catch (e) {
+          console.warn('[Olobuild] Failed to load footer template:', e);
+        }
+      }
+
+      this.unifiedMode = true;
+      this.headerDirty = false;
+      this.footerDirty = false;
+      this.activeZone = 'body';
+    },
+
+    /**
+     * Save all dirty zones (body + header + footer) in unified mode
+     */
+    async saveAllZones() {
+      if (this.isSaving) return;
+      this.isSaving = true;
+
+      const olo = getOloData();
+      const tilesStore = useTilesStoreRef();
+
+      try {
+        // Sync global widgets across all zones
+        await tilesStore.syncGlobalWidgetsOnSave();
+
+        // Save body (main template)
+        if (this.isDirty && this.currentTemplate) {
+          const method = this.currentTemplate.id ? 'PUT' : 'POST';
+          const url = this.currentTemplate.id
+            ? `${olo.restUrl}/templates/${this.currentTemplate.id}`
+            : `${olo.restUrl}/templates`;
+
+          const res = await fetch(url, {
+            method,
+            headers: {
+              'Content-Type': 'application/json',
+              'X-WP-Nonce': olo.nonce,
+            },
+            body: JSON.stringify({
+              title: this.currentTemplate.title || 'Untitled',
+              type: this.currentTemplate.type || 'page',
+              content: tilesStore.canvasTiles,
+              settings: this.currentTemplate.settings || {},
+              status: this.currentTemplate.status || 'draft',
+            }),
+          });
+          if (res.ok) {
+            const saved = await res.json();
+            if (!saved.settings || Array.isArray(saved.settings)) saved.settings = {};
+            this.currentTemplate = saved;
+            this.isDirty = false;
+          }
+        }
+
+        // Save header
+        if (this.headerDirty && this.headerTemplate?.id) {
+          const res = await fetch(`${olo.restUrl}/templates/${this.headerTemplate.id}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-WP-Nonce': olo.nonce,
+            },
+            body: JSON.stringify({
+              title: this.headerTemplate.title || 'Header',
+              type: 'header',
+              content: tilesStore.headerTiles,
+              settings: this.headerTemplate.settings || {},
+              status: this.headerTemplate.status || 'published',
+            }),
+          });
+          if (res.ok) {
+            const saved = await res.json();
+            if (!saved.settings || Array.isArray(saved.settings)) saved.settings = {};
+            this.headerTemplate = saved;
+            this.headerDirty = false;
+          }
+        }
+
+        // Save footer
+        if (this.footerDirty && this.footerTemplate?.id) {
+          const res = await fetch(`${olo.restUrl}/templates/${this.footerTemplate.id}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-WP-Nonce': olo.nonce,
+            },
+            body: JSON.stringify({
+              title: this.footerTemplate.title || 'Footer',
+              type: 'footer',
+              content: tilesStore.footerTiles,
+              settings: this.footerTemplate.settings || {},
+              status: this.footerTemplate.status || 'published',
+            }),
+          });
+          if (res.ok) {
+            const saved = await res.json();
+            if (!saved.settings || Array.isArray(saved.settings)) saved.settings = {};
+            this.footerTemplate = saved;
+            this.footerDirty = false;
+          }
+        }
+
+        useToast().success('Tutto salvato');
+      } catch (err) {
+        console.error('saveAllZones error:', err);
+        useToast().error('Errore nel salvataggio');
+      } finally {
+        this.isSaving = false;
+      }
+    },
+
+    /**
+     * Mark the appropriate zone as dirty based on tile ID
+     */
+    markDirtyForTile(tileId) {
+      if (!this.unifiedMode) {
+        this.isDirty = true;
+        return;
+      }
+      const tilesStore = useTilesStoreRef();
+      const zone = tilesStore.getZoneForTile(tileId);
+      if (zone === 'header') this.headerDirty = true;
+      else if (zone === 'footer') this.footerDirty = true;
+      else this.isDirty = true;
     },
   },
 });

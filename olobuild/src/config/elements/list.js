@@ -17,13 +17,14 @@ export default {
     spacing: '12',
     icon_size: '18',
     icon_gap: '10',
-    padding: '16',
+    tile_padding: { top: 16, right: 16, bottom: 16, left: 16 },
     shadow: 'none',
   },
   fields: [
     { key: 'items', label: 'Elementi', type: 'content-items',
       itemFields: [
         { key: 'text', label: 'Testo', type: 'text' },
+        { key: 'link', label: 'Link', type: 'text', placeholder: 'https://...' },
         { key: 'icon', label: 'Icona', type: 'select', options: [
           { value: 'check', label: '✓ Spunta' },
           { value: 'arrow', label: '→ Freccia' },
@@ -56,7 +57,7 @@ export default {
     { key: 'spacing', label: 'Spaziatura (px)', type: 'range', min: 4, max: 32, step: 2 },
     { key: 'icon_size', label: 'Dim. icona (px)', type: 'range', min: 14, max: 32, step: 2 },
     { key: 'icon_gap', label: 'Spazio icona-testo (px)', type: 'range', min: 0, max: 32, step: 2 },
-    { key: 'padding', label: 'Padding (px)', type: 'range', min: 0, max: 48, step: 4 },
+    { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 48 },
     ...shadowField,
   ],
 };

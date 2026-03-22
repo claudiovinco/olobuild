@@ -32,6 +32,7 @@ class Olo_Video_Tile extends Olo_Tile_Base {
         'overlay_color'   => '#000000',
         'overlay_opacity' => '0',
         'caption'         => '',
+        'border_radius'   => 0,
         // Legacy compat
         'aspect_ratio'    => '16:9',
         'cover_mode'      => false,
@@ -53,7 +54,10 @@ class Olo_Video_Tile extends Olo_Tile_Base {
             }
         }
 
-        $is_file = $s['source_type'] === 'file' || $this->is_direct_video( $s['video_url'] );
+        $_br_css = $this->build_border_radius_css( $s["border_radius"] );
+        $this->_vbr = $_br_css ? "border-radius:" . $_br_css . ";overflow:hidden;" : "";
+
+        $is_file = $s["source_type"] === 'file' || $this->is_direct_video( $s['video_url'] );
         $is_cover = $s['display_mode'] === 'cover';
 
         if ( $is_cover ) {
@@ -90,7 +94,7 @@ class Olo_Video_Tile extends Olo_Tile_Base {
         ob_start();
         ?>
         <div class="olo-video uk-responsive-width">
-            <div class="uk-border-rounded" style="position: relative; padding-bottom: <?php echo esc_attr( $padding ); ?>; overflow: hidden;">
+            <div style="position: relative; padding-bottom: <?php echo esc_attr( $padding ); ?>; overflow: hidden; <?php echo $this->_vbr; ?>">
                 <?php if ( $has_poster ) : ?>
                     <?php
                     $icon_size  = absint( $s['play_icon_size'] ) ?: 80;
@@ -142,7 +146,7 @@ class Olo_Video_Tile extends Olo_Tile_Base {
         ob_start();
         ?>
         <div class="olo-video uk-responsive-width">
-            <div class="uk-border-rounded" style="position: relative; padding-bottom: <?php echo esc_attr( $padding ); ?>; overflow: hidden; background: var(--olo-color-secondary, #1F2937);">
+            <div style="position: relative; padding-bottom: <?php echo esc_attr( $padding ); ?>; overflow: hidden; <?php echo $this->_vbr; ?> background: var(--olo-color-secondary, #1F2937);">
                 <?php if ( $src ) : ?>
                     <video
                         style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;"
@@ -193,7 +197,7 @@ class Olo_Video_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
-        <div class="olo-video olo-video-cover uk-position-relative uk-overflow-hidden" style="height: <?php echo $height; ?>px;">
+        <div class="olo-video olo-video-cover uk-position-relative uk-overflow-hidden" style="height: <?php echo $height; ?>px; <?php echo $this->_vbr; ?>">
             <?php if ( $src ) : ?>
                 <video
                     class="uk-position-cover"

@@ -90,7 +90,7 @@ class Olo_HostCard_Tile extends Olo_Tile_Base {
         $variant     = $s['variant'] ?: 'card';
         $photo_size  = max( 60, min( 200, absint( $s['photo_size'] ) ) );
         $rounded     = ! empty( $s['photo_rounded'] );
-        $radius      = Olo_Tile_Utils::border_radius( $s['card_radius'] ?? 0 );
+        $radius      = $this->build_border_radius_css( $s["card_radius"] );
         $accent      = $this->safe_color_css( $s['accent_color'] ?? '' ) ?: 'var(--olo-color-primary, #6366F1)';
         $card_bg     = $this->safe_color_css( $s['card_bg'] ?? '' ) ?: 'var(--olo-color-background, #FFFFFF)';
         $shadow      = Olo_Tile_Utils::shadow( $s['modal_shadow'] ?? 'lg' );
@@ -248,7 +248,7 @@ class Olo_HostCard_Tile extends Olo_Tile_Base {
         $mini_size = min( $photo_size, 56 );
         $br = $rounded ? '50%' : '6px';
 
-        $html  = '<div class="olo-hostcard olo-hostcard--card" style="background:' . esc_attr( $card_bg ) . ';border-radius:' . $radius . ';'
+        $html  = '<div class="olo-hostcard olo-hostcard--card" style="background:' . esc_attr( $card_bg ) . ';border-radius:' . $radius . 'px;'
                . ( $shadow !== 'none' ? 'box-shadow:' . $shadow . ';' : '' ) . '">';
         $html .= '<a class="olo-hostcard-trigger" href="#" uk-toggle="target: #' . esc_attr( $uid ) . '-modal" style="text-decoration:none;color:inherit;display:flex;align-items:center;gap:14px;padding:16px;">';
 
@@ -278,7 +278,7 @@ class Olo_HostCard_Tile extends Olo_Tile_Base {
      * Variant: inline — all info visible directly, no modal.
      */
     private function render_inline_variant( $uid, $content_html, $card_bg, $radius, $shadow ) {
-        return '<div class="olo-hostcard olo-hostcard--inline" style="background:' . esc_attr( $card_bg ) . ';border-radius:' . $radius . ';padding:24px;'
+        return '<div class="olo-hostcard olo-hostcard--inline" style="background:' . esc_attr( $card_bg ) . ';border-radius:' . $radius . 'px;padding:24px;'
              . ( $shadow !== 'none' ? 'box-shadow:' . $shadow . ';' : '' ) . '">'
              . $content_html
              . '</div>';

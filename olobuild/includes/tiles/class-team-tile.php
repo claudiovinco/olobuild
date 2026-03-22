@@ -85,7 +85,7 @@ class Olo_Team_Tile extends Olo_Tile_Base {
 
         // Info
         $info_bg  = $this->safe_color_css( $s['info_bg_color'] ) ?: 'var(--olo-color-primary, #6366F1)';
-        $info_pad = intval( $s['info_padding'] ) ?: 24;
+        $info_pad = Olo_Tile_Utils::spacing_css( $s['tile_padding'] ?? $s['info_padding'] ?? 24, 24 );
         $info_w   = intval( $s['info_width'] ) ?: 100;
         $info_m   = intval( $s['info_margin'] );
         $info_r   = Olo_Tile_Utils::border_radius( $s['info_radius'] ?? 0 );
@@ -182,7 +182,7 @@ class Olo_Team_Tile extends Olo_Tile_Base {
             }
             .<?php echo $uid; ?> .olo-team-info {
                 width: <?php echo $info_w; ?>%;
-                padding: <?php echo $info_pad; ?>px;
+                padding: <?php echo $info_pad; ?>;
                 text-align: <?php echo $align; ?>;
                 color: <?php echo $fg; ?>;
                 border-radius: <?php echo $info_r; ?>;

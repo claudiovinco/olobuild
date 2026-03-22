@@ -32,6 +32,7 @@ export default {
       itemFields: [
         { key: 'term', label: 'Termine', type: 'text' },
         { key: 'definition', label: 'Definizione', type: 'textarea' },
+        { key: 'link', label: 'Link', type: 'text', placeholder: 'https://...' },
         { key: 'icon', label: 'Icona', type: 'icon' },
       ],
       newItemDefaults: { term: 'Nuovo termine', definition: 'Definizione.', icon: '' },

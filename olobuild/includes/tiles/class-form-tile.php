@@ -107,7 +107,7 @@ class Olo_Form_Tile extends Olo_Tile_Base {
         // ── Settings ──
         $gap         = absint( $s['gap'] ) ?: 16;
         $bw          = absint( $s['input_border_width'] );
-        $radius      = Olo_Tile_Utils::border_radius( $s['input_radius'] ?? 0 );
+        $radius      = $this->build_border_radius_css( $s["input_radius"] );
         $label_color = $this->safe_color_css( $s['label_color'] ) ?: 'var(--olo-color-text, #374151)';
         $label_size  = absint( $s['label_size'] ) ?: 14;
         $label_weight= $s['label_weight'] ?: '500';
@@ -120,7 +120,7 @@ class Olo_Form_Tile extends Olo_Tile_Base {
         $btn_bg      = $this->safe_color_css( $s['submit_bg'] );
         $btn_color   = $this->safe_color_css( $s['submit_color'] );
         $btn_hover   = $this->safe_color_css( $s['submit_hover_bg'] );
-        $btn_radius  = Olo_Tile_Utils::border_radius( $s['submit_radius'] ?? 0 );
+        $btn_radius  = $this->build_border_radius_css( $s["submit_radius"] );
         $btn_px      = absint( $s['submit_padding_x'] ) ?: 32;
         $btn_py      = absint( $s['submit_padding_y'] ) ?: 14;
         $btn_fs      = absint( $s['submit_font_size'] ) ?: 16;

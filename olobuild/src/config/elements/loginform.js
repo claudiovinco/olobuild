@@ -34,7 +34,7 @@ export default {
     password_require_special: false,
     password_min_strength: 0,
     tab_style: 'underline',
-    form_padding: '32',
+    tile_padding: { top: 32, right: 32, bottom: 32, left: 32 },
 
     // Termini e condizioni
     show_terms: false,
@@ -242,8 +242,8 @@ export default {
     //  ASPETTO FORM
     // ═══════════════════════════════════════
     { type: 'separator', label: 'Aspetto form' },
-    { key: 'form_padding', label: 'Padding (px)', type: 'range', min: 0, max: 64, step: 4 },
-    { key: 'input_padding', label: 'Padding input (px)', type: 'range', min: 4, max: 24, step: 1 },
+    { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 64 },
+    { key: 'input_padding', label: 'Padding input (px)', type: 'spacing', max: 24 },
     { key: 'input_radius', label: 'Raggio bordo input (px)', type: 'border-radius' },
     { key: 'submit_radius', label: 'Raggio bordo pulsante (px)', type: 'border-radius' },
     { key: 'border_radius', label: 'Raggio bordo form (px)', type: 'border-radius' },

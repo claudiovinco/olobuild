@@ -58,6 +58,22 @@
     <!-- Separator -->
     <div class="mb-border-t mb-border-gray-700"></div>
 
+    <!-- Favicon -->
+    <div>
+      <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300 mb-mb-2">Favicon</label>
+      <div v-if="faviconUrl" class="mb-relative mb-group mb-mb-2">
+        <img :src="faviconUrl" class="mb-w-8 mb-h-8 mb-rounded mb-border mb-border-gray-600" />
+        <button @click="removeFavicon" class="mb-absolute mb-top-0 mb-right-0 mb-bg-red-600 mb-text-white mb-rounded-full mb-w-4 mb-h-4 mb-text-[10px] mb-flex mb-items-center mb-justify-center mb-opacity-0 group-hover:mb-opacity-100">&times;</button>
+      </div>
+      <button @click="pickFavicon" class="mb-w-full mb-py-1.5 mb-px-3 mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-md mb-text-xs mb-text-gray-300 hover:mb-bg-gray-600">
+        {{ faviconUrl ? 'Cambia favicon' : 'Seleziona favicon' }}
+      </button>
+      <p class="mb-text-[10px] mb-text-gray-500 mb-mt-1">Imposta la favicon del sito (salvata in WordPress).</p>
+    </div>
+
+    <!-- Separator -->
+    <div class="mb-border-t mb-border-gray-700"></div>
+
     <!-- Scroll flash settings -->
     <div>
       <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300 mb-mb-1">Evidenziazione scroll</label>
@@ -127,15 +143,62 @@ import { computed, reactive, ref } from 'vue';
 import { useBuilderStore } from '@/stores/builder';
 import BackgroundControls from './BackgroundControls.vue';
 import { loadScrollFlashPrefs, saveScrollFlashPrefs } from '@/utils/scrollFlashPrefs';
+import { useMediaPicker } from '@/composables/useMediaPicker';
 import FieldColor from './fields/FieldColor.vue';
 
 const builderStore = useBuilderStore();
 const pageSettings = computed(() => builderStore.pageSettings);
 const sf = reactive(loadScrollFlashPrefs());
+const { openSingleImage } = useMediaPicker();
 
 function updateSf(key, value) {
   sf[key] = value;
   saveScrollFlashPrefs(sf);
+}
+
+// ── Favicon ──
+const faviconUrl = ref('');
+
+// Load current favicon on mount
+(async () => {
+  try {
+    const res = await fetch('/wp-json/wp/v2/settings', { credentials: 'same-origin', headers: { 'X-WP-Nonce': window.oloData?.nonce || '' } });
+    const data = await res.json();
+    if (data.site_icon) {
+      const mediaRes = await fetch('/wp-json/wp/v2/media/' + data.site_icon, { credentials: 'same-origin' });
+      const media = await mediaRes.json();
+      faviconUrl.value = media.source_url || '';
+    }
+  } catch (e) { /* ignore */ }
+})();
+
+function pickFavicon() {
+  openSingleImage(({ url, id }) => {
+    faviconUrl.value = url;
+    // Save to WordPress via REST API
+    fetch('/wp-json/wp/v2/settings', {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-WP-Nonce': window.oloData?.nonce || '',
+      },
+      body: JSON.stringify({ site_icon: id }),
+    }).catch(() => {});
+  });
+}
+
+function removeFavicon() {
+  faviconUrl.value = '';
+  fetch('/wp-json/wp/v2/settings', {
+    method: 'POST',
+    credentials: 'same-origin',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-WP-Nonce': window.oloData?.nonce || '',
+    },
+    body: JSON.stringify({ site_icon: 0 }),
+  }).catch(() => {});
 }
 const oloData = window.oloData || {};
 const postTypes = oloData.postTypes || [];

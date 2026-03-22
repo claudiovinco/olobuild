@@ -19,7 +19,7 @@ export default {
     text_color: '',
     date_color: '',
     card_background: '',
-    card_padding: '16',
+    tile_padding: { top: 16, right: 16, bottom: 16, left: 16 },
     card_border_radius: '8',
     hover_effect: 'shadow',
     fallback_text: 'Nessun articolo correlato',
@@ -73,7 +73,7 @@ export default {
     { key: 'text_color', label: 'Colore testo', type: 'color' },
     { key: 'date_color', label: 'Colore data', type: 'color' },
     { key: 'card_background', label: 'Sfondo card', type: 'color' },
-    { key: 'card_padding', label: 'Padding card (px)', type: 'range', min: 0, max: 32, step: 2 },
+    { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 32 },
     { key: 'card_border_radius', label: 'Raggio bordo (px)', type: 'border-radius' },
     { key: 'hover_effect', label: 'Effetto hover', type: 'select', options: [
       { value: 'none', label: 'Nessuno' },

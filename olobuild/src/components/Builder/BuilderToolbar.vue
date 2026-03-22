@@ -64,91 +64,58 @@
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
       </button>
     <div class="mb-flex mb-items-center mb-gap-1 mb-bg-gray-700 mb-rounded-lg mb-p-0.5">
-      <!-- Widescreen -->
       <button
-        @click="builderStore.setViewMode('widescreen')"
+        v-for="vp in visibleViewports"
+        :key="vp.key"
+        @click="builderStore.setViewMode(vp.key)"
         :class="[
           'mb-px-2.5 mb-py-1 mb-rounded-md mb-transition-colors',
-          builderStore.viewMode === 'widescreen'
+          builderStore.viewMode === vp.key
             ? 'mb-bg-primary-600 mb-text-white'
             : 'mb-text-gray-400 hover:mb-text-gray-200'
         ]"
-        title="Widescreen (1400px+)"
-        aria-label="Vista widescreen"
-      >
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="22" height="12" x="1" y="4" rx="2"/><line x1="8" x2="16" y1="20" y2="20"/><line x1="12" x2="12" y1="16" y2="20"/></svg>
-      </button>
-      <!-- Desktop -->
-      <button
-        @click="builderStore.setViewMode('desktop')"
-        :class="[
-          'mb-px-2.5 mb-py-1 mb-rounded-md mb-transition-colors',
-          builderStore.viewMode === 'desktop'
-            ? 'mb-bg-primary-600 mb-text-white'
-            : 'mb-text-gray-400 hover:mb-text-gray-200'
-        ]"
-        title="Desktop"
-        aria-label="Vista desktop"
-      >
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg>
-      </button>
-      <!-- Tablet Landscape -->
-      <button
-        @click="builderStore.setViewMode('tablet_landscape')"
-        :class="[
-          'mb-px-2.5 mb-py-1 mb-rounded-md mb-transition-colors',
-          builderStore.viewMode === 'tablet_landscape'
-            ? 'mb-bg-primary-600 mb-text-white'
-            : 'mb-text-gray-400 hover:mb-text-gray-200'
-        ]"
-        title="Tablet Landscape (1200px)"
-        aria-label="Vista tablet landscape"
-      >
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><line x1="12" x2="12.01" y1="12" y2="12"/></svg>
-      </button>
-      <!-- Tablet Portrait -->
-      <button
-        @click="builderStore.setViewMode('tablet')"
-        :class="[
-          'mb-px-2.5 mb-py-1 mb-rounded-md mb-transition-colors',
-          builderStore.viewMode === 'tablet'
-            ? 'mb-bg-primary-600 mb-text-white'
-            : 'mb-text-gray-400 hover:mb-text-gray-200'
-        ]"
-        title="Tablet Portrait (960px)"
-        aria-label="Vista tablet portrait"
-      >
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="12" x2="12.01" y1="18" y2="18"/></svg>
-      </button>
-      <!-- Mobile Landscape -->
-      <button
-        @click="builderStore.setViewMode('mobile_landscape')"
-        :class="[
-          'mb-px-2.5 mb-py-1 mb-rounded-md mb-transition-colors',
-          builderStore.viewMode === 'mobile_landscape'
-            ? 'mb-bg-primary-600 mb-text-white'
-            : 'mb-text-gray-400 hover:mb-text-gray-200'
-        ]"
-        title="Mobile Landscape (640px)"
-        aria-label="Vista mobile landscape"
-      >
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="12" x2="12.01" y1="12" y2="12"/></svg>
-      </button>
-      <!-- Mobile -->
-      <button
-        @click="builderStore.setViewMode('mobile')"
-        :class="[
-          'mb-px-2.5 mb-py-1 mb-rounded-md mb-transition-colors',
-          builderStore.viewMode === 'mobile'
-            ? 'mb-bg-primary-600 mb-text-white'
-            : 'mb-text-gray-400 hover:mb-text-gray-200'
-        ]"
-        title="Mobile (480px)"
-        aria-label="Vista mobile"
-      >
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2"/><line x1="12" x2="12.01" y1="18" y2="18"/></svg>
-      </button>
+        :title="vp.title"
+        :aria-label="'Vista ' + vp.label"
+        v-html="vp.svg"
+      ></button>
     </div>
+
+      <!-- Zoom controls -->
+      <div class="mb-flex mb-items-center mb-gap-0.5 mb-ml-2">
+        <button
+          @click="builderStore.zoomOut()"
+          class="mb-px-1.5 mb-py-1 mb-rounded mb-text-gray-400 hover:mb-text-gray-200 hover:mb-bg-gray-700 mb-transition-colors"
+          title="Riduci zoom"
+          :disabled="builderStore.canvasZoom <= 25"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+        </button>
+        <button
+          @click="showZoomMenu = !showZoomMenu"
+          class="mb-px-1.5 mb-py-0.5 mb-rounded mb-text-[11px] mb-font-bold mb-tabular-nums mb-min-w-[40px] mb-text-center mb-transition-colors"
+          :class="builderStore.canvasZoom !== 100 ? 'mb-text-primary-300 mb-bg-primary-600/20' : 'mb-text-gray-400 hover:mb-text-gray-200 hover:mb-bg-gray-700'"
+          title="Zoom canvas"
+        >{{ builderStore.canvasZoom }}%</button>
+        <button
+          @click="builderStore.zoomIn()"
+          class="mb-px-1.5 mb-py-1 mb-rounded mb-text-gray-400 hover:mb-text-gray-200 hover:mb-bg-gray-700 mb-transition-colors"
+          title="Aumenta zoom"
+          :disabled="builderStore.canvasZoom >= 200"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+        </button>
+      </div>
+      <!-- Zoom dropdown -->
+      <Teleport to="body">
+        <div v-if="showZoomMenu" class="mb-fixed mb-inset-0 mb-z-[9999]" @click="showZoomMenu = false">
+          <div class="mb-absolute mb-bg-gray-800 mb-border mb-border-gray-600 mb-rounded-lg mb-shadow-xl mb-py-1 mb-w-24" :style="zoomMenuStyle" @click.stop>
+            <button v-for="z in [25, 50, 75, 100, 125, 150, 175, 200]" :key="z"
+              @click="builderStore.setZoom(z); showZoomMenu = false"
+              :class="['mb-w-full mb-text-left mb-px-3 mb-py-1 mb-text-xs mb-transition-colors', builderStore.canvasZoom === z ? 'mb-text-primary-300 mb-font-bold' : 'mb-text-gray-300 hover:mb-bg-gray-700']"
+            >{{ z }}%</button>
+          </div>
+        </div>
+      </Teleport>
     </div>
 
     <!-- Right: Actions -->
@@ -162,9 +129,10 @@
       >
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M6 8h.001M10 8h.001M14 8h.001M18 8h.001M8 12h.001M12 12h.001M16 12h.001M7 16h10"/></svg>
       </button>
+      <Teleport to="body">
       <div
         v-if="showShortcuts"
-        class="mb-fixed mb-inset-0 mb-z-[9999] mb-flex mb-items-center mb-justify-center"
+        class="mb-fixed mb-inset-0 mb-z-[99999] mb-flex mb-items-center mb-justify-center"
         @click.self="showShortcuts = false"
         style="background:rgba(0,0,0,0.6)"
       >
@@ -258,6 +226,7 @@
           </div>
         </div>
       </div>
+      </Teleport>
       <!-- Libreria Template -->
       <button
         @click="$emit('open-library')"
@@ -266,6 +235,15 @@
         aria-label="Libreria Template"
       >
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+      </button>
+      <!-- Temi -->
+      <button
+        @click="$emit('open-themes')"
+        class="mb-px-2 mb-py-1.5 mb-rounded-md mb-transition-colors mb-text-amber-400 hover:mb-text-amber-200 hover:mb-bg-gray-700"
+        title="Temi sito"
+        aria-label="Temi sito"
+      >
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10H12V2Z"/><path d="M12 2a10 10 0 0 1 10 10"/><path d="M12 12l8-4"/></svg>
       </button>
       <!-- AI Assistant (solo se chiave API configurata) -->
       <button
@@ -342,16 +320,30 @@
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 7v6h-6"/><path d="M3 17a9 9 0 0 1 9-9 9 9 0 0 1 6 2.3L21 13"/></svg>
       </button>
       <button
-        @click="togglePreview"
+        @click="builderStore.cleanMode = !builderStore.cleanMode"
         :class="[
-          'mb-px-3 mb-py-1.5 mb-text-xs mb-text-gray-300 mb-rounded-md mb-border mb-transition-colors',
-          builderStore.previewMode
-            ? 'mb-border-primary-500 mb-bg-primary-600/20 mb-text-primary-300'
-            : 'mb-border-gray-600 hover:mb-bg-gray-700'
+          'mb-px-2 mb-py-1.5 mb-rounded-md mb-transition-colors',
+          builderStore.cleanMode
+            ? 'mb-bg-primary-600/20 mb-text-primary-300'
+            : 'mb-text-gray-400 hover:mb-text-gray-200 hover:mb-bg-gray-700'
         ]"
-        title="Anteprima nel builder"
+        title="Modalità pulita (WYSIWYG)"
+        aria-label="Modalità pulita"
       >
-        {{ builderStore.previewMode ? 'Modifica' : 'Anteprima' }}
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+      </button>
+      <button
+        @click="builderStore.wireframeMode = !builderStore.wireframeMode"
+        :class="[
+          'mb-px-3 mb-py-1.5 mb-text-xs mb-rounded-md mb-border mb-transition-colors mb-flex mb-items-center mb-gap-1.5',
+          builderStore.wireframeMode
+            ? 'mb-border-amber-500 mb-bg-amber-600/20 mb-text-amber-300'
+            : 'mb-border-gray-600 mb-text-gray-400 hover:mb-bg-gray-700'
+        ]"
+        title="Mostra gabbia di costruzione (bordi celle, righe, sezioni)"
+      >
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+        Gabbia
       </button>
       <button
         v-if="realPreviewUrl"
@@ -364,10 +356,10 @@
       </button>
       <button
         @click="builderStore.saveTemplate()"
-        :disabled="builderStore.isSaving || !builderStore.isDirty"
+        :disabled="builderStore.isSaving || !builderStore.isAnyDirty"
         :class="[
           'mb-px-4 mb-py-1.5 mb-text-xs mb-font-medium mb-rounded-md mb-transition-colors',
-          builderStore.isDirty
+          builderStore.isAnyDirty
             ? 'mb-bg-primary-600 mb-text-white hover:mb-bg-primary-700'
             : 'mb-bg-gray-700 mb-text-gray-500 mb-cursor-not-allowed'
         ]"
@@ -436,7 +428,7 @@ import { useTilesStore } from '@/stores/tiles';
 import { useHistory } from '@/composables/useHistory';
 import { useToast } from '@/composables/useToast';
 
-const emit = defineEmits(['back', 'open-revisions', 'open-finder', 'open-ai', 'open-library']);
+const emit = defineEmits(['back', 'open-revisions', 'open-finder', 'open-ai', 'open-library', 'open-themes']);
 
 function onOpenRevisions() {
   emit('open-revisions');
@@ -450,8 +442,34 @@ const toast = useToast();
 // AI availability
 const hasAiKey = !!(window.oloData && window.oloData.hasAiKey);
 
+// ─── Dynamic viewport buttons (only show enabled breakpoints) ───
+const allViewports = [
+  { key: 'widescreen', bpKey: 'widescreen', label: 'Widescreen', svg: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="22" height="12" x="1" y="4" rx="2"/><line x1="8" x2="16" y1="20" y2="20"/><line x1="12" x2="12" y1="16" y2="20"/></svg>' },
+  { key: 'desktop', bpKey: null, label: 'Desktop', svg: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg>' },
+  { key: 'tablet_landscape', bpKey: 'tablet_landscape', label: 'Tablet Landscape', svg: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><line x1="12" x2="12.01" y1="12" y2="12"/></svg>' },
+  { key: 'tablet', bpKey: 'tablet', label: 'Tablet', svg: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="12" x2="12.01" y1="18" y2="18"/></svg>' },
+  { key: 'mobile_landscape', bpKey: 'mobile_landscape', label: 'Mobile Landscape', svg: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="12" x2="12.01" y1="12" y2="12"/></svg>' },
+  { key: 'mobile', bpKey: 'mobile', label: 'Mobile', svg: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2"/><line x1="12" x2="12.01" y1="18" y2="18"/></svg>' },
+];
+
+const visibleViewports = computed(() => {
+  const bp = builderStore.pageSettings.breakpoints || {};
+  const bpEnabled = (window.oloData || {}).breakpointsEnabled || {};
+  return allViewports.filter(vp => {
+    if (!vp.bpKey) return true; // Desktop always visible
+    return bpEnabled[vp.bpKey] !== false;
+  }).map(vp => {
+    const px = vp.bpKey ? (bp[vp.bpKey] || '') : '';
+    return { ...vp, title: px ? `${vp.label} (${px}px)` : vp.label };
+  });
+});
+
 // Shortcuts panel
 const showShortcuts = ref(false);
+const showZoomMenu = ref(false);
+const zoomMenuStyle = computed(() => {
+  return { top: '48px', left: '50%', transform: 'translateX(-50%)' };
+});
 
 // ─── Global Keyboard Shortcuts (Copy/Paste Style) ───
 function onGlobalKeydown(e) {
@@ -674,10 +692,6 @@ async function toggleActivateSingle() {
   } catch (err) {
     console.error('Toggle single activation error:', err);
   }
-}
-
-function togglePreview() {
-  builderStore.togglePreview();
 }
 
 // ─── Real Preview ───

@@ -68,6 +68,9 @@ class Olo_Builder {
         // Initialize search results template integration
         Olo_Search_Results_Integration::instance();
 
+        // Builder iframe page (live preview)
+        add_action( 'template_redirect', [ $this, 'serve_builder_iframe' ] );
+
         // Register core tiles
         $this->register_core_tiles();
 
@@ -93,6 +96,18 @@ class Olo_Builder {
         // Freesound integration
         $freesound = new Olo_Freesound();
         $freesound->init();
+    }
+
+    /**
+     * Serve the builder iframe page for live preview.
+     */
+    public function serve_builder_iframe() {
+        if ( empty( $_GET['olo_builder_iframe'] ) ) return;
+        if ( ! current_user_can( 'edit_pages' ) ) {
+            wp_die( 'Unauthorized', 403 );
+        }
+        include OLO_PATH . 'templates/builder-iframe.php';
+        exit;
     }
 
     public function admin_menu() {
@@ -341,6 +356,13 @@ class Olo_Builder {
             'singlePostItems' => $this->get_single_post_items(),
             '_debug_tpl_id'   => absint( $_GET['template_id'] ?? 0 ),
             'hasAiKey'       => ! empty( get_option( 'olo_ai_anthropic_key', '' ) ),
+            'breakpointsEnabled' => wp_parse_args( get_option( 'olo_breakpoints_enabled', [] ), [
+                'widescreen'       => true,
+                'tablet_landscape' => false,
+                'tablet'           => true,
+                'mobile_landscape' => false,
+                'mobile'           => true,
+            ] ),
             'userRestrictions' => Olobuild_Role_Manager::instance()->get_current_user_restrictions(),
             'isContentOnly'    => Olobuild_Role_Manager::instance()->is_content_only(),
             'isDesignOnly'     => Olobuild_Role_Manager::instance()->is_design_only(),
@@ -767,6 +789,7 @@ class Olo_Builder {
 
     public function rest_get_breakpoints() {
         $bp = get_option( 'olo_default_breakpoints', [] );
+        $enabled = get_option( 'olo_breakpoints_enabled', [] );
         $defaults = [
             'widescreen'       => 1400,
             'tablet_landscape' => 1200,
@@ -774,19 +797,43 @@ class Olo_Builder {
             'mobile_landscape' => 640,
             'mobile'           => 480,
         ];
-        return rest_ensure_response( wp_parse_args( $bp, $defaults ) );
+        $enabled_defaults = [
+            'widescreen'       => true,
+            'tablet_landscape' => false,
+            'tablet'           => true,
+            'mobile_landscape' => false,
+            'mobile'           => true,
+        ];
+        return rest_ensure_response( [
+            'values'  => wp_parse_args( $bp, $defaults ),
+            'enabled' => wp_parse_args( $enabled, $enabled_defaults ),
+        ] );
     }
 
     public function rest_put_breakpoints( $request ) {
-        $body = $request->get_json_params();
+        $body    = $request->get_json_params();
         $allowed = [ 'widescreen', 'tablet_landscape', 'tablet', 'mobile_landscape', 'mobile' ];
-        $bp = [];
-        foreach ( $allowed as $k ) {
-            if ( isset( $body[ $k ] ) ) {
-                $bp[ $k ] = absint( $body[ $k ] );
+
+        // Save pixel values
+        if ( isset( $body['values'] ) && is_array( $body['values'] ) ) {
+            $bp = [];
+            foreach ( $allowed as $k ) {
+                if ( isset( $body['values'][ $k ] ) ) {
+                    $bp[ $k ] = absint( $body['values'][ $k ] );
+                }
             }
+            update_option( 'olo_default_breakpoints', $bp );
         }
-        update_option( 'olo_default_breakpoints', $bp );
+
+        // Save enabled states
+        if ( isset( $body['enabled'] ) && is_array( $body['enabled'] ) ) {
+            $en = [];
+            foreach ( $allowed as $k ) {
+                $en[ $k ] = ! empty( $body['enabled'][ $k ] );
+            }
+            update_option( 'olo_breakpoints_enabled', $en );
+        }
+
         return rest_ensure_response( [ 'success' => true ] );
     }
 
@@ -899,7 +946,7 @@ class Olo_Builder {
         require_once OLO_PATH . 'includes/tiles/class-loginform-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-videoplaylist-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-textpath-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-offcanvas-tile.php';
+
         require_once OLO_PATH . 'includes/tiles/class-chart-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-audio-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-shapedivider-tile.php';
@@ -1075,7 +1122,7 @@ class Olo_Builder {
         $manager->register_tile( new Olo_Loginform_Tile() );
         $manager->register_tile( new Olo_Videoplaylist_Tile() );
         $manager->register_tile( new Olo_Textpath_Tile() );
-        $manager->register_tile( new Olo_Offcanvas_Tile() );
+
         $manager->register_tile( new Olo_Chart_Tile() );
         $manager->register_tile( new Olo_Audio_Tile() );
         $manager->register_tile( new Olo_Shapedivider_Tile() );

@@ -20,6 +20,15 @@ export default {
     overlap_offset: '60',
     overlap_shadow: true,
     overlap_max_width: '1100',
+    // Larghezza campi (%)
+    width_valley: '',
+    width_checkin: '',
+    width_checkout: '',
+    width_guests: '',
+    width_bedrooms: '',
+    width_altitude: '',
+    width_type: '',
+    width_club: '',
   },
   fields: [
     // ─── Quali filtri mostrare ───
@@ -142,5 +151,24 @@ export default {
       key: 'border_radius',
       label: 'Arrotondamento (px)',
       type: 'border-radius' },
+
+    // ─── Larghezza campi ───
+    { type: 'separator', label: 'Larghezza campi (%)' },
+    { key: 'width_valley', label: 'Località / Valle (%)', type: 'range', min: 10, max: 50, step: 1,
+      condition: { field: 'layout', value: 'horizontal' } },
+    { key: 'width_checkin', label: 'Check-in (%)', type: 'range', min: 10, max: 40, step: 1,
+      condition: { field: 'layout', value: 'horizontal' } },
+    { key: 'width_checkout', label: 'Check-out (%)', type: 'range', min: 10, max: 40, step: 1,
+      condition: { field: 'layout', value: 'horizontal' } },
+    { key: 'width_guests', label: 'Ospiti (%)', type: 'range', min: 8, max: 30, step: 1,
+      condition: { field: 'layout', value: 'horizontal' } },
+    { key: 'width_bedrooms', label: 'Camere (%)', type: 'range', min: 8, max: 30, step: 1,
+      condition: { field: 'layout', value: 'horizontal' } },
+    { key: 'width_altitude', label: 'Altitudine (%)', type: 'range', min: 8, max: 30, step: 1,
+      condition: { field: 'layout', value: 'horizontal' } },
+    { key: 'width_type', label: 'Tipologia (%)', type: 'range', min: 10, max: 30, step: 1,
+      condition: { field: 'layout', value: 'horizontal' } },
+    { key: 'width_club', label: 'Club (%)', type: 'range', min: 10, max: 50, step: 1,
+      condition: { field: 'layout', value: 'horizontal' } },
   ],
 };

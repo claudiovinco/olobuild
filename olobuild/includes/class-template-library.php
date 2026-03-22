@@ -32,10 +32,24 @@ class Olo_Template_Library {
             return [];
         }
         // Support both flat array and {version, templates} wrapper
+        $templates = $data;
         if ( isset( $data['templates'] ) && is_array( $data['templates'] ) ) {
-            return $data['templates'];
+            $templates = $data['templates'];
         }
-        return $data;
+
+        // Load additional page templates from separate files
+        $pages_dir = OLO_PATH . 'assets/data/page-templates/';
+        if ( is_dir( $pages_dir ) ) {
+            foreach ( glob( $pages_dir . '*.json' ) as $page_file ) {
+                $page_json = file_get_contents( $page_file );
+                $page_data = json_decode( $page_json, true );
+                if ( is_array( $page_data ) && ! empty( $page_data['id'] ) ) {
+                    $templates[] = $page_data;
+                }
+            }
+        }
+
+        return $templates;
     }
 
     /**

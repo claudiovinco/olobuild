@@ -147,7 +147,7 @@ export default {
     ], condition: { field: 'show_legend', value: true } },
     { key: 'legend_box_width', label: 'Larghezza indicatore', type: 'range', min: 10, max: 60, step: 2,
       condition: { field: 'show_legend', value: true } },
-    { key: 'legend_padding', label: 'Padding', type: 'range', min: 0, max: 30, step: 1,
+    { key: 'legend_padding', label: 'Padding', type: 'spacing', max: 30,
       condition: { field: 'show_legend', value: true } },
     { key: 'legend_point_style', label: 'Indicatore circolare', type: 'toggle',
       condition: { field: 'show_legend', value: true } },
@@ -167,7 +167,7 @@ export default {
       { value: '700', label: 'Bold' },
       { value: '800', label: 'Extra Bold' },
     ], condition: { field: 'show_title', value: true } },
-    { key: 'title_padding', label: 'Padding titolo', type: 'range', min: 0, max: 40, step: 2,
+    { key: 'title_padding', label: 'Padding titolo', type: 'spacing', max: 40,
       condition: { field: 'show_title', value: true } },
 
     // ── Sottotitolo ──
@@ -194,7 +194,7 @@ export default {
       condition: { field: 'tooltip_enabled', value: true } },
     { key: 'tooltip_font_size', label: 'Dimensione font tooltip', type: 'range', min: 8, max: 18, step: 1,
       condition: { field: 'tooltip_enabled', value: true } },
-    { key: 'tooltip_padding', label: 'Padding tooltip', type: 'range', min: 4, max: 20, step: 1,
+    { key: 'tooltip_padding', label: 'Padding tooltip', type: 'spacing', max: 20,
       condition: { field: 'tooltip_enabled', value: true } },
 
     // ── Stile dati ──

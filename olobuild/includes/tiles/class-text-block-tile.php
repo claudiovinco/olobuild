@@ -16,7 +16,9 @@ class Olo_TextBlock_Tile extends Olo_Tile_Base {
         'font_size'   => '',
         'line_height' => '',
         'max_width'   => '',
-        'padding'     => '16',
+        'padding'    => '16',
+        'tb_padding' => [ 'top' => 16, 'right' => 16, 'bottom' => 16, 'left' => 16 ],
+        'tb_margin'  => [ 'top' => 0, 'right' => 0, 'bottom' => 0, 'left' => 0 ],
     ];
 
     public function get_controls() {
@@ -33,10 +35,29 @@ class Olo_TextBlock_Tile extends Olo_Tile_Base {
     public function render( $settings ) {
         $s = wp_parse_args( $settings, $this->defaults );
 
-        $pad = absint( $s['padding'] ?? 16 );
+        // Build inline style — padding e margini con FieldSpacing (oggetto {top,right,bottom,left})
+        $style = '';
 
-        // Build inline style
-        $style = 'padding:' . $pad . 'px;';
+        // Padding: usa tb_padding (nuovo) oppure padding (legacy)
+        $p = $s['tb_padding'] ?? null;
+        if ( is_array( $p ) ) {
+            $style .= 'padding:' . intval( $p['top'] ?? 0 ) . 'px ' . intval( $p['right'] ?? 0 ) . 'px ' . intval( $p['bottom'] ?? 0 ) . 'px ' . intval( $p['left'] ?? 0 ) . 'px;';
+        } else {
+            $pad = absint( $s['padding'] ?? 16 );
+            $style .= 'padding:' . $pad . 'px;';
+        }
+
+        // Margini
+        $m = $s['tb_margin'] ?? null;
+        if ( is_array( $m ) ) {
+            $mt = intval( $m['top'] ?? 0 );
+            $mr = intval( $m['right'] ?? 0 );
+            $mb = intval( $m['bottom'] ?? 0 );
+            $ml = intval( $m['left'] ?? 0 );
+            if ( $mt || $mr || $mb || $ml ) {
+                $style .= "margin:{$mt}px {$mr}px {$mb}px {$ml}px;";
+            }
+        }
 
         $txt_clr = $this->safe_color_css( $s['text_color'] ?? '' );
         if ( $txt_clr ) {

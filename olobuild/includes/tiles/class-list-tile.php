@@ -43,7 +43,7 @@ class Olo_List_Tile extends Olo_Tile_Base {
         $spacing = absint( $s['spacing'] );
         $isize   = absint( $s['icon_size'] );
         $igap    = absint( $s['icon_gap'] ?? 10 );
-        $pad     = absint( $s['padding'] ?? 16 );
+        $pad = Olo_Tile_Utils::spacing_css( $s['tile_padding'] ?? $s['padding'] ?? 16, 16 );
         $default_icon = $s['icon_default'] ?: 'check';
 
         // Shadow
@@ -70,18 +70,25 @@ class Olo_List_Tile extends Olo_Tile_Base {
         ob_start();
         ?>
         <?php $list_text_clr = $this->safe_color_css( $s['text_color'] ); ?>
-        <ul class="olo-list uk-list" style="padding:<?php echo $pad; ?>px;<?php echo $shadow_css; ?><?php if ( $list_text_clr ) echo 'color:' . $list_text_clr . ';'; ?>"><?php // kept on same line to avoid whitespace ?>
+        <ul class="olo-list uk-list" style="padding: <?php echo $pad; ?>;<?php echo $shadow_css; ?><?php if ( $list_text_clr ) echo 'color:' . $list_text_clr . ';'; ?>"><?php // kept on same line to avoid whitespace ?>
             <?php foreach ( $items as $i => $item ) :
                 $icon = ! empty( $item['icon'] ) ? $item['icon'] : $default_icon;
             ?>
-                <li style="display:flex;align-items:flex-start;gap:<?php echo $igap; ?>px;<?php echo $i > 0 ? 'margin-top:' . $spacing . 'px;' : ''; ?>">
+                <?php
+                    $has_link = ! empty( $item['link'] );
+                    $li_tag = $has_link
+                        ? '<a href="' . esc_url( $item['link'] ) . '" style="display:flex;align-items:flex-start;gap:' . $igap . 'px;text-decoration:none;color:inherit;' . ( $i > 0 ? 'margin-top:' . $spacing . 'px;' : '' ) . '">'
+                        : '<li style="display:flex;align-items:flex-start;gap:' . $igap . 'px;' . ( $i > 0 ? 'margin-top:' . $spacing . 'px;' : '' ) . '">';
+                    $li_close = $has_link ? '</a>' : '</li>';
+                ?>
+                <?php echo $li_tag; ?>
                     <?php if ( $icon === 'number' ) : ?>
                         <span style="flex-shrink:0;font-weight:700;line-height:normal;font-size:<?php echo $isize; ?>px;min-width:<?php echo $isize; ?>px;text-align:center;color:<?php echo esc_attr( $this->safe_color_css( $s['icon_color'] ) ?: 'currentColor' ); ?>;"><?php echo ( $i + 1 ); ?>.</span>
                     <?php else : ?>
                         <span style="flex-shrink:0;display:flex;align-items:center;line-height:1;"><?php echo $this->get_icon_svg( $icon, $s['icon_color'], $isize ); ?></span>
                     <?php endif; ?>
                     <span style="line-height:1.5;"><?php echo esc_html( $item['text'] ); ?></span>
-                </li>
+                <?php echo $li_close; ?>
             <?php endforeach; ?>
         </ul>
         <?php
@@ -100,6 +107,7 @@ class Olo_List_Tile extends Olo_Tile_Base {
                     $items[] = [
                         'icon' => $item['icon'] ?? $default_icon,
                         'text' => $item['text'],
+                        'link' => $item['link'] ?? '',
                     ];
                 }
             }

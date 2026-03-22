@@ -1,10 +1,11 @@
 import { defineStore } from 'pinia';
 import { getElementDefaults } from '../config/elementRegistry.js';
+import { TEMPLATES_MAP } from '../config/gridTemplates.js';
 
 const oloData = window.oloData || {};
 
 // Container types that hold children
-const CONTAINER_TYPES = ['section', 'row', 'column', 'inner-columns', 'inner-column'];
+const CONTAINER_TYPES = ['section', 'row', 'column', 'inner-columns', 'inner-column', 'floatingpanel'];
 
 function generateId() {
   if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
@@ -41,6 +42,37 @@ function findNodeById(nodes, id, _depth = 0) {
  * Find parent array and index of a node
  * Returns { parent: Array, index: number } or null
  */
+/**
+ * Find the ancestor path from root to a tile by ID.
+ * Returns an array of tile objects: [section, row, column, tile]
+ */
+function findAncestorPath(nodes, id, path = [], _depth = 0) {
+  if (_depth > 20) return null;
+  for (let i = 0; i < nodes.length; i++) {
+    const node = nodes[i];
+    const newPath = [...path, node];
+    if (node.id === id) return newPath;
+    if (Array.isArray(node.children)) {
+      const result = findAncestorPath(node.children, id, newPath, _depth + 1);
+      if (result) return result;
+    }
+    // Legacy columns_data support (row → columns → tiles)
+    if (node.type === 'row' && Array.isArray(node.settings?.columns_data)) {
+      for (let ci = 0; ci < node.settings.columns_data.length; ci++) {
+        const col = node.settings.columns_data[ci];
+        if (!Array.isArray(col?.tiles)) continue;
+        const colNode = { id: col.id || `col-${ci}`, type: 'column', _colIndex: ci, _parentRow: node };
+        for (let ti = 0; ti < col.tiles.length; ti++) {
+          if (col.tiles[ti].id === id) {
+            return [...newPath, colNode, col.tiles[ti]];
+          }
+        }
+      }
+    }
+  }
+  return null;
+}
+
 function findParentAndIndex(nodes, id, _depth = 0) {
   if (_depth > 20) return null; // Guard against circular references
   for (let i = 0; i < nodes.length; i++) {
@@ -57,6 +89,21 @@ function findParentAndIndex(nodes, id, _depth = 0) {
           if (idx !== -1) return { parent: col.tiles, index: idx };
         }
       }
+    }
+  }
+  return null;
+}
+
+/**
+ * Find the node whose .children IS the given array reference
+ */
+function findNodeWithChildrenArray(nodes, targetArray, _depth = 0) {
+  if (_depth > 20) return null;
+  for (const node of nodes) {
+    if (Array.isArray(node.children)) {
+      if (node.children === targetArray) return node;
+      const found = findNodeWithChildrenArray(node.children, targetArray, _depth + 1);
+      if (found) return found;
     }
   }
   return null;
@@ -246,7 +293,9 @@ export { generateId, createSection, createRow, createColumn, createInnerColumn, 
 export const useTilesStore = defineStore('tiles', {
   state: () => ({
     registeredTiles: [],
-    canvasTiles: [],    // Array of Section nodes (tree root)
+    canvasTiles: [],    // Array of Section nodes (tree root) — body zone
+    headerTiles: [],    // Array of Section nodes — header zone (unified editing)
+    footerTiles: [],    // Array of Section nodes — footer zone (unified editing)
     clipboardTile: null,   // Deep-cloned tile for copy/paste
     clipboardStyle: null,  // Copied style object for paste-style
     globalWidgets: [],     // Global widgets from DB
@@ -279,15 +328,29 @@ export const useTilesStore = defineStore('tiles', {
     },
 
     getTileById(state) {
-      return (id) => findNodeById(state.canvasTiles, id);
+      return (id) => {
+        // Search across all three zones (body, header, footer)
+        return findNodeById(state.canvasTiles, id)
+          || findNodeById(state.headerTiles, id)
+          || findNodeById(state.footerTiles, id);
+      };
     },
 
     totalElementCount(state) {
-      return countNodes(state.canvasTiles);
+      return countNodes(state.canvasTiles)
+        + countNodes(state.headerTiles)
+        + countNodes(state.footerTiles);
     },
   },
 
   actions: {
+    findSectionIndexForTile(tileId) {
+      for (let i = 0; i < this.canvasTiles.length; i++) {
+        if (findNodeById([this.canvasTiles[i]], tileId)) return i;
+      }
+      return -1;
+    },
+
     async fetchRegisteredTiles() {
       try {
         const res = await fetch(`${oloData.restUrl}/tiles`, {
@@ -351,6 +414,62 @@ export const useTilesStore = defineStore('tiles', {
       normalizeNodes(this.canvasTiles);
     },
 
+    /**
+     * Set header tiles for unified editing
+     */
+    setHeaderTiles(content) {
+      if (isLegacyFormat(content)) {
+        this.headerTiles = migrateLegacyContent(content);
+      } else {
+        this.headerTiles = content || [];
+      }
+      normalizeNodes(this.headerTiles);
+    },
+
+    /**
+     * Set footer tiles for unified editing
+     */
+    setFooterTiles(content) {
+      if (isLegacyFormat(content)) {
+        this.footerTiles = migrateLegacyContent(content);
+      } else {
+        this.footerTiles = content || [];
+      }
+      normalizeNodes(this.footerTiles);
+    },
+
+    /**
+     * Determine which zone a tile belongs to
+     * Returns 'header' | 'body' | 'footer' | null
+     */
+    getZoneForTile(tileId) {
+      if (findNodeById(this.headerTiles, tileId)) return 'header';
+      if (findNodeById(this.canvasTiles, tileId)) return 'body';
+      if (findNodeById(this.footerTiles, tileId)) return 'footer';
+      return null;
+    },
+
+    /**
+     * Get the ancestor path from root to a tile.
+     * Returns array of { id, type, label } objects.
+     */
+    getAncestorPath(tileId) {
+      if (!tileId) return [];
+      const path = findAncestorPath(this.headerTiles, tileId)
+        || findAncestorPath(this.canvasTiles, tileId)
+        || findAncestorPath(this.footerTiles, tileId);
+      return path || [];
+    },
+
+    /**
+     * Get the root tiles array for a given zone
+     */
+    getZoneTiles(zone) {
+      if (zone === 'header') return this.headerTiles;
+      if (zone === 'footer') return this.footerTiles;
+      return this.canvasTiles;
+    },
+
     // === CRUD Operations (tree-aware) ===
 
     addTile(tile) {
@@ -372,10 +491,12 @@ export const useTilesStore = defineStore('tiles', {
     },
 
     /**
-     * Remove tile from anywhere in the tree
+     * Remove tile from anywhere in the tree (searches all zones)
      */
     removeTile(tileId) {
-      const result = findParentAndIndex(this.canvasTiles, tileId);
+      const result = findParentAndIndex(this.canvasTiles, tileId)
+        || findParentAndIndex(this.headerTiles, tileId)
+        || findParentAndIndex(this.footerTiles, tileId);
       if (result) {
         result.parent.splice(result.index, 1);
       }
@@ -454,7 +575,9 @@ export const useTilesStore = defineStore('tiles', {
     },
 
     duplicateTile(tileId) {
-      const result = findParentAndIndex(this.canvasTiles, tileId);
+      const result = findParentAndIndex(this.canvasTiles, tileId)
+        || findParentAndIndex(this.headerTiles, tileId)
+        || findParentAndIndex(this.footerTiles, tileId);
       if (!result) return;
       const original = result.parent[result.index];
       const clone = deepCloneWithNewIds(original);
@@ -483,7 +606,11 @@ export const useTilesStore = defineStore('tiles', {
     copyStyle(tileId) {
       const tile = this.getTileById(tileId);
       if (tile) {
-        this.clipboardStyle = JSON.parse(JSON.stringify(tile.style || {}));
+        this.clipboardStyle = {
+          type: tile.type,
+          style: JSON.parse(JSON.stringify(tile.style || {})),
+          settings: JSON.parse(JSON.stringify(tile.settings || {})),
+        };
         try { localStorage.setItem('olo_clipboard_style', JSON.stringify(this.clipboardStyle)); } catch(e) {}
       }
     },
@@ -494,15 +621,18 @@ export const useTilesStore = defineStore('tiles', {
         try { const s = localStorage.getItem('olo_clipboard_style'); if (s) this.clipboardStyle = JSON.parse(s); } catch(e) {}
       }
       if (!tile || !this.clipboardStyle) return;
-      // Copy only visual style properties, not content
-      const s = this.clipboardStyle;
+
+      // Always paste style properties (margin, padding, bg, border, shadow, etc.)
+      const s = this.clipboardStyle.style || this.clipboardStyle;
       const existing = (!tile.style || Array.isArray(tile.style)) ? {} : { ...tile.style };
       const styleKeys = [
         'margin_top', 'margin_right', 'margin_bottom', 'margin_left',
         'padding_top', 'padding_right', 'padding_bottom', 'padding_left',
         'bg_type', 'bg_color', 'bg_gradient_from', 'bg_gradient_to', 'bg_gradient_angle',
+        'bg_image_url', 'bg_image_size', 'bg_image_position',
         'border_width', 'border_style', 'border_color', 'border_radius',
         'shadow', 'opacity', 'hover', 'transition',
+        'custom_css',
       ];
       for (const key of styleKeys) {
         if (s[key] !== undefined) {
@@ -510,20 +640,172 @@ export const useTilesStore = defineStore('tiles', {
         }
       }
       tile.style = existing;
+
+      // If same tile type, also paste settings (except content-specific ones)
+      if (this.clipboardStyle.type === tile.type && this.clipboardStyle.settings) {
+        const srcSettings = this.clipboardStyle.settings;
+        const tgtSettings = tile.settings || {};
+        // Keys to NEVER paste (content, not style)
+        const contentKeys = [
+          'images', 'items', 'slides', 'content', 'text', 'title', 'subtitle',
+          'description', 'html', 'url', 'link', 'href', 'video_url', 'file_url',
+          'embed', 'shortcode', 'icon', 'label', 'caption', 'alt',
+          'post_type', 'posts_per_page', 'query', 'taxonomy', 'terms',
+          'service_id', 'source_type', 'wp_menu_id',
+        ];
+        for (const key of Object.keys(srcSettings)) {
+          if (!contentKeys.includes(key)) {
+            tgtSettings[key] = JSON.parse(JSON.stringify(srcSettings[key]));
+          }
+        }
+        tile.settings = { ...tgtSettings };
+      }
     },
 
     moveUp(tileId) {
-      const result = findParentAndIndex(this.canvasTiles, tileId);
+      const result = findParentAndIndex(this.canvasTiles, tileId)
+        || findParentAndIndex(this.headerTiles, tileId)
+        || findParentAndIndex(this.footerTiles, tileId);
       if (!result || result.index === 0) return;
       const [item] = result.parent.splice(result.index, 1);
       result.parent.splice(result.index - 1, 0, item);
     },
 
     moveDown(tileId) {
-      const result = findParentAndIndex(this.canvasTiles, tileId);
+      const result = findParentAndIndex(this.canvasTiles, tileId)
+        || findParentAndIndex(this.headerTiles, tileId)
+        || findParentAndIndex(this.footerTiles, tileId);
       if (!result || result.index >= result.parent.length - 1) return;
       const [item] = result.parent.splice(result.index, 1);
       result.parent.splice(result.index + 1, 0, item);
+    },
+
+    /**
+     * Move a tile to the adjacent column (left or right).
+     * direction: -1 = previous column, +1 = next column
+     */
+    moveToSiblingColumn(tileId, direction) {
+      const allRoots = [this.canvasTiles, this.headerTiles, this.footerTiles];
+
+      // Find the tile and the column it's in
+      for (const root of allRoots) {
+        const tileResult = findParentAndIndex(root, tileId);
+        if (!tileResult) continue;
+
+        // The parent array is the column's children — find the column node
+        // Walk the tree to find the column that contains this parent array
+        const colInfo = findNodeWithChildrenArray(root, tileResult.parent);
+        if (!colInfo || (colInfo.type !== 'column' && colInfo.type !== 'inner-column')) continue;
+
+        // Now find the column's parent (the row) and its index
+        const colResult = findParentAndIndex(root, colInfo.id);
+        if (!colResult) continue;
+
+        const siblingIdx = colResult.index + direction;
+        if (siblingIdx < 0 || siblingIdx >= colResult.parent.length) return; // No sibling
+
+        const siblingCol = colResult.parent[siblingIdx];
+        if (!siblingCol || !Array.isArray(siblingCol.children)) return;
+
+        // Remove from current column
+        const [item] = tileResult.parent.splice(tileResult.index, 1);
+        // Add to sibling column (at the end)
+        siblingCol.children.push(item);
+        return;
+      }
+    },
+
+    /**
+     * Insert a tile after another tile (same parent array).
+     */
+    insertAfter(targetTileId, newTile) {
+      const allRoots = [this.canvasTiles, this.headerTiles, this.footerTiles];
+      for (const root of allRoots) {
+        const result = findParentAndIndex(root, targetTileId);
+        if (result) {
+          result.parent.splice(result.index + 1, 0, newTile);
+          return true;
+        }
+      }
+      return false;
+    },
+
+    /**
+     * Move a node near another node (before or after).
+     * Works across all zones and at any tree depth.
+     */
+    moveNodeNear(sourceId, targetId, before) {
+      const allRoots = [this.canvasTiles, this.headerTiles, this.footerTiles];
+
+      // Don't move structural containers (section, row, column) via grip drag
+      // to avoid breaking the tree structure
+      let sourceCheck = null;
+      for (const root of allRoots) {
+        sourceCheck = findNodeById(root, sourceId);
+        if (sourceCheck) break;
+      }
+      if (!sourceCheck) return;
+      const structuralTypes = ['section', 'row', 'column', 'inner-column'];
+
+      // Find target node to check its type
+      let targetNode = null;
+      for (const root of allRoots) {
+        targetNode = findNodeById(root, targetId);
+        if (targetNode) break;
+      }
+      if (!targetNode) return;
+
+      // If target is a column/inner-column and source is a regular element,
+      // insert INTO the column's children instead of next to it
+      if ((targetNode.type === 'column' || targetNode.type === 'inner-column') &&
+          !structuralTypes.includes(sourceCheck.type)) {
+        // Remove source from its current position
+        for (const root of allRoots) {
+          const result = findParentAndIndex(root, sourceId);
+          if (result) {
+            result.parent.splice(result.index, 1);
+            break;
+          }
+        }
+        if (!Array.isArray(targetNode.children)) targetNode.children = [];
+        if (before) {
+          targetNode.children.unshift(sourceCheck);
+        } else {
+          targetNode.children.push(sourceCheck);
+        }
+        return;
+      }
+
+      // If target is a section or row and source is a regular element, skip
+      // (don't insert elements at section/row level)
+      if ((targetNode.type === 'section' || targetNode.type === 'row') &&
+          !structuralTypes.includes(sourceCheck.type)) {
+        return;
+      }
+
+      // Find and remove source
+      let sourceNode = null;
+      for (const root of allRoots) {
+        const result = findParentAndIndex(root, sourceId);
+        if (result) {
+          sourceNode = result.parent.splice(result.index, 1)[0];
+          break;
+        }
+      }
+      if (!sourceNode) return;
+
+      // Find target and insert near it
+      for (const root of allRoots) {
+        const result = findParentAndIndex(root, targetId);
+        if (result) {
+          const idx = before ? result.index : result.index + 1;
+          result.parent.splice(idx, 0, sourceNode);
+          return;
+        }
+      }
+
+      // Fallback: put it back in canvasTiles
+      this.canvasTiles.push(sourceNode);
     },
 
     // === Row layout restructuring ===
@@ -568,6 +850,84 @@ export const useTilesStore = defineStore('tiles', {
       }
 
       row.children = newCols;
+    },
+
+    /**
+     * Switch a row to CSS Grid layout using a grid template.
+     * Preserves existing children content.
+     */
+    changeRowToGrid(rowId, templateId) {
+      const tpl = TEMPLATES_MAP[templateId];
+      if (!tpl) return;
+
+      const row = this.getTileById(rowId);
+      if (!row || row.type !== 'row') return;
+
+      const currentCols = row.children || [];
+      const cellCount = tpl.cells.length;
+
+      // Create new columns matching cell count
+      const newCols = tpl.cells.map((cell, i) => {
+        let col;
+        if (currentCols[i]) {
+          col = currentCols[i];
+        } else {
+          col = createColumn('1-1', []);
+        }
+        col.settings = {
+          ...col.settings,
+          grid_column: cell.gridColumn || '',
+          grid_row: cell.gridRow || '',
+        };
+        return col;
+      });
+
+      // If reducing cells, merge excess children into last cell
+      if (currentCols.length > cellCount) {
+        const lastCol = newCols[newCols.length - 1];
+        for (let i = cellCount; i < currentCols.length; i++) {
+          if (Array.isArray(currentCols[i].children)) {
+            lastCol.children = [...(lastCol.children || []), ...currentCols[i].children];
+          }
+        }
+      }
+
+      row.settings = {
+        ...row.settings,
+        layout_mode: 'grid',
+        grid_template: templateId,
+        grid_columns: tpl.gridTemplateColumns,
+        grid_rows: tpl.gridTemplateRows,
+      };
+      row.children = newCols;
+    },
+
+    /**
+     * Switch a grid row back to flex layout.
+     */
+    changeRowToFlex(rowId, layoutKey = '50-50') {
+      const row = this.getTileById(rowId);
+      if (!row || row.type !== 'row') return;
+
+      // Clear grid settings
+      row.settings = {
+        ...row.settings,
+        layout_mode: 'flex',
+        grid_template: '',
+        grid_columns: '',
+        grid_rows: '',
+      };
+
+      // Clear grid placement from columns
+      (row.children || []).forEach(col => {
+        if (col.settings) {
+          delete col.settings.grid_column;
+          delete col.settings.grid_row;
+        }
+      });
+
+      // Apply flex layout
+      this.changeRowLayout(rowId, layoutKey);
     },
 
     changeInnerLayout(innerColsId, layoutKey) {
@@ -832,6 +1192,8 @@ export const useTilesStore = defineStore('tiles', {
         }
       };
       walk(this.canvasTiles);
+      walk(this.headerTiles);
+      walk(this.footerTiles);
       for (const tile of globals) {
         await this.updateGlobalWidget(tile.global_id, tile.id);
       }
@@ -870,6 +1232,8 @@ export const useTilesStore = defineStore('tiles', {
         }
       };
       walk(this.canvasTiles);
+      walk(this.headerTiles);
+      walk(this.footerTiles);
     },
   },
 });

@@ -286,7 +286,9 @@
   }
 
   function initAll() {
-    document.querySelectorAll('.olo-postgrid').forEach(initPostGrid);
+    document.querySelectorAll('.olo-postgrid').forEach(function(pg) {
+      if (!pg._pgItems) initPostGrid(pg);
+    });
   }
 
   if (document.readyState === 'loading') {
@@ -294,4 +296,7 @@
   } else {
     initAll();
   }
+
+  // Re-init when builder iframe injects new HTML
+  document.addEventListener('olo:iframe-render', initAll);
 })();

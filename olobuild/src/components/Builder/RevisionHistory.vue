@@ -136,20 +136,61 @@ function renderModal() {
 async function restoreRevision(rev) {
   if (!confirm('Ripristinare questa revisione? Il template attuale verrà sovrascritto.')) return;
 
+  // Show loading state on button
+  const btn = modalEl ? modalEl.querySelector(`[data-action="restore"][data-rev-id="${rev.id}"]`) : null;
+  if (btn) {
+    btn.textContent = 'Ripristino...';
+    btn.disabled = true;
+    btn.style.opacity = '0.5';
+  }
+
   try {
-    const res = await fetch(
-      `${oloData.value.restUrl}/revisions/${rev.id}`,
-      { headers: { 'X-WP-Nonce': oloData.value.nonce } }
-    );
-    if (!res.ok) throw new Error('Failed to fetch revision');
+    console.log('[Revision] Fetching revision', rev.id);
+    const url = `${oloData.value.restUrl}/revisions/${rev.id}`;
+    console.log('[Revision] URL:', url);
+
+    const res = await fetch(url, {
+      headers: { 'X-WP-Nonce': oloData.value.nonce },
+      credentials: 'same-origin'
+    });
+
+    console.log('[Revision] Response status:', res.status);
+    if (!res.ok) {
+      const errBody = await res.text();
+      console.error('[Revision] Error body:', errBody);
+      throw new Error('HTTP ' + res.status + ': ' + errBody);
+    }
+
     const fullRev = await res.json();
+    console.log('[Revision] Got revision, content type:', typeof fullRev.content, 'length:', Array.isArray(fullRev.content) ? fullRev.content.length : 'N/A');
+
     const revContent = fullRev.content || [];
+
+    // Force clear + restore
+    tilesStore.canvasTiles = [];
+    await new Promise(r => setTimeout(r, 100));
     tilesStore.setCanvasTiles(revContent);
     builderStore.isDirty = true;
+
     close();
+
+    // Show success toast
+    showToast('✅ Revisione ripristinata con successo!');
+
   } catch (err) {
-    console.error('restoreRevision error:', err);
+    console.error('[Revision] restoreRevision error:', err);
+    if (btn) { btn.textContent = 'Ripristina'; btn.disabled = false; btn.style.opacity = '1'; }
+    showToast('❌ Errore: ' + (err.message || 'ripristino fallito'), true);
   }
+}
+
+function showToast(msg, isError) {
+  const toast = document.createElement('div');
+  toast.textContent = msg;
+  toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);padding:12px 24px;border-radius:8px;font-size:14px;font-weight:500;z-index:9999999;box-shadow:0 4px 20px rgba(0,0,0,0.3);transition:opacity 0.3s;'
+    + (isError ? 'background:#991B1B;color:#FEF2F2' : 'background:#065F46;color:#ECFDF5');
+  document.body.appendChild(toast);
+  setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 3000);
 }
 
 // ─── Apri/Chiudi ───

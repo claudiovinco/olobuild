@@ -3,13 +3,15 @@
     <!-- Line decoration -->
     <div v-if="s.decoration === 'line'" class="mb-flex mb-items-center mb-gap-4 mb-mb-1" :style="{ justifyContent: alignJustify }">
       <span v-if="effectiveAlignment !== 'left'" class="mb-flex-1" style="height:1px;" :style="{ background: decoColor }"></span>
-      <component :is="s.tag" class="mb-m-0 mb-leading-tight mb-whitespace-nowrap" :style="headingStyle" data-olo-editable="heading">{{ headingText }}</component>
+      <component :is="s.tag" v-if="isMultiline" class="mb-m-0 mb-leading-tight" :style="headingStyle" data-olo-editable="heading" v-html="headingText"></component>
+      <component :is="s.tag" v-else class="mb-m-0 mb-leading-tight mb-whitespace-nowrap" :style="headingStyle" data-olo-editable="heading">{{ headingText }}</component>
       <span v-if="effectiveAlignment !== 'right'" class="mb-flex-1" style="height:1px;" :style="{ background: decoColor }"></span>
     </div>
 
     <!-- Divider decoration -->
     <template v-else-if="s.decoration === 'divider'">
-      <component :is="s.tag" class="mb-m-0 mb-leading-tight mb-pb-3 mb-mb-1" style="border-bottom:1px solid;" :style="{ ...headingStyle, borderColor: decoColor }" data-olo-editable="heading">{{ headingText }}</component>
+      <component :is="s.tag" v-if="isMultiline" class="mb-m-0 mb-leading-tight mb-pb-3 mb-mb-1" style="border-bottom:1px solid;" :style="{ ...headingStyle, borderColor: decoColor }" data-olo-editable="heading" v-html="headingText"></component>
+      <component :is="s.tag" v-else class="mb-m-0 mb-leading-tight mb-pb-3 mb-mb-1" style="border-bottom:1px solid;" :style="{ ...headingStyle, borderColor: decoColor }" data-olo-editable="heading">{{ headingText }}</component>
     </template>
 
     <!-- Other decorations (dot, star, none) -->
@@ -20,7 +22,8 @@
       <div v-if="s.decoration === 'star'" class="mb-mb-2" :style="{ display: 'flex', justifyContent: alignJustify, gap: (s.decoration_spacing || 6) + 'px', fontSize: '1.5em', color: decoColor }">
         <span v-for="n in decoCount" :key="n">&#x2605;</span>
       </div>
-      <component :is="s.tag" class="mb-m-0 mb-leading-tight" :style="headingStyle" data-olo-editable="heading">{{ headingText }}</component>
+      <component :is="s.tag" v-if="isMultiline" class="mb-m-0 mb-leading-tight" :style="headingStyle" data-olo-editable="heading" v-html="headingText"></component>
+      <component :is="s.tag" v-else class="mb-m-0 mb-leading-tight" :style="headingStyle" data-olo-editable="heading">{{ headingText }}</component>
     </template>
 
     <!-- Subtitle -->
@@ -66,10 +69,17 @@ const s = computed(() => ({ ...defaults, ...props.settings }));
 
 const sizeMap = { sm: '1.25em', md: '1.75em', lg: '2.25em', xl: '3em' };
 
-// Strip any legacy HTML tags from heading (old editor content)
+// Strip any legacy HTML tags from heading, support multiline via \n or <br>
 const headingText = computed(() => {
-  const text = s.value.heading || '';
-  return text.replace(/<[^>]*>/g, '');
+  let text = (s.value.heading || '');
+  // Convert <br> to \n before stripping other tags
+  text = text.replace(/<br\s*\/?>/gi, '\n');
+  text = text.replace(/<[^>]*>/g, '').trim();
+  return text.includes('\n') ? text.replace(/\n/g, '<br>') : text;
+});
+const isMultiline = computed(() => {
+  const text = (s.value.heading || '');
+  return text.includes('\n') || /<br\s*\/?>/i.test(text);
 });
 
 // Responsive alignment

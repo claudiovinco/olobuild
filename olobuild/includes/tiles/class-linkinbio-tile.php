@@ -63,7 +63,7 @@ class Olo_LinkInBio_Tile extends Olo_Tile_Base {
         $max_width    = max( 300, min( 600, absint( $s['max_width'] ) ) );
         $gap          = max( 4, min( 24, absint( $s['gap'] ) ) );
         $radius       = Olo_Tile_Utils::border_radius( $s['link_border_radius'] ?? 0 );
-        $padding      = max( 8, min( 24, absint( $s['link_padding'] ) ) );
+        $padding = Olo_Tile_Utils::spacing_css( $s['tile_padding'] ?? $s['link_padding'] ?? 14, 14 );
         $text_align   = in_array( $s['text_align'], [ 'left', 'center', 'right' ], true ) ? $s['text_align'] : 'center';
 
         $link_color      = $this->safe_color_css( $s['link_color'] )      ?: 'var(--olo-color-primary, #6366F1)';
@@ -93,7 +93,7 @@ class Olo_LinkInBio_Tile extends Olo_Tile_Base {
             #<?php echo $uid; ?> .olo-lib-name { font-weight: 700; font-size: 1.2em; color: <?php echo $name_color; ?>; margin: 0 0 4px; }
             #<?php echo $uid; ?> .olo-lib-bio { color: <?php echo $bio_color; ?>; font-size: 0.9em; margin: 0 0 20px; }
             #<?php echo $uid; ?> .olo-lib-links { display: flex; flex-direction: column; gap: <?php echo $gap; ?>px; }
-            #<?php echo $uid; ?> .olo-lib-btn { display: block; width: 100%; text-align: <?php echo $text_align; ?>; padding: <?php echo $padding; ?>px; font-size: 0.95em; font-weight: 500; text-decoration: none; transition: all 0.2s ease; box-sizing: border-box; }
+            #<?php echo $uid; ?> .olo-lib-btn { display: block; width: 100%; text-align: <?php echo $text_align; ?>; padding: <?php echo $padding; ?>; font-size: 0.95em; font-weight: 500; text-decoration: none; transition: all 0.2s ease; box-sizing: border-box; }
             #<?php echo $uid; ?> .olo-lib-btn--filled { background: <?php echo $link_bg; ?>; color: <?php echo $link_color; ?>; border: 1px solid rgba(0,0,0,0.08); border-radius: <?php echo $radius; ?>; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
             #<?php echo $uid; ?> .olo-lib-btn--filled:hover { background: <?php echo $link_hover_bg; ?>; }
             #<?php echo $uid; ?> .olo-lib-btn--outline { background: transparent; color: <?php echo $link_color; ?>; border: 2px solid <?php echo $link_color; ?>; border-radius: <?php echo $radius; ?>; }

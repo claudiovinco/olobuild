@@ -105,7 +105,7 @@ class Olo_Loginform_Tile extends Olo_Tile_Base {
         $form_radius      = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
         $form_bw          = intval( $s['border_width'] );
         $form_bc          = $this->safe_color_css( $s['border_color'] );
-        $form_pad         = intval( $s['form_padding'] ) ?: 32;
+        $form_pad = Olo_Tile_Utils::spacing_css( $s['tile_padding'] ?? $s['form_padding'] ?? 32, 32 );
 
         $submit_bg_val    = $submit_bg ?: 'var(--olo-color-primary, #6366F1)';
         $text_color_val   = $text_color ?: 'var(--olo-color-text, #374151)';
@@ -189,7 +189,7 @@ class Olo_Loginform_Tile extends Olo_Tile_Base {
         ?>
         <style>
             .<?php echo $uid; ?> {
-                padding: <?php echo $form_pad; ?>px;
+                padding: <?php echo $form_pad; ?>;
                 border-radius: <?php echo $form_radius; ?>;
                 <?php if ( $form_bg ) : ?>background-color: <?php echo $form_bg; ?>;<?php endif; ?>
                 <?php if ( $form_bw > 0 ) : ?>border: <?php echo $form_bw; ?>px solid <?php echo $form_bc ?: $input_border_val; ?>;<?php endif; ?>

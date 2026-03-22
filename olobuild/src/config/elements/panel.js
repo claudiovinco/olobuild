@@ -17,6 +17,7 @@ export default {
     link_target: '_self',
     title_element: 'h3',
     shadow: 'none',
+    border_radius: '0',
   },
   fields: [
     { key: 'style', label: 'Stile', type: 'select', options: [
@@ -26,6 +27,7 @@ export default {
       { value: 'hover', label: 'Hover' },
     ]},
     { key: 'image', label: 'Immagine', type: 'image' },
+    { key: 'border_radius', label: 'Border Radius immagine', type: 'border-radius' },
     { key: 'hover_image', label: 'Immagine hover', type: 'image' },
     { key: 'hover_video', label: 'Video hover', type: 'media' },
     { key: 'title', label: 'Titolo', type: 'text' },

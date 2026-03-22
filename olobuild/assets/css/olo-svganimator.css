@@ -1,0 +1,40 @@
+/* ── Olobuild SVG Animator ── */
+.olo-svga {
+  position: relative;
+}
+.olo-svga-wrap {
+  display: inline-block;
+  width: 100%;
+}
+.olo-svga-wrap svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Replay button */
+.olo-svga-replay {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+  padding: 8px 20px;
+  background: var(--olo-color-primary, #3B82F6);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: opacity 0.2s, transform 0.2s;
+}
+.olo-svga-replay:hover {
+  opacity: 0.85;
+  transform: scale(1.02);
+}
+.olo-svga-replay svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+}

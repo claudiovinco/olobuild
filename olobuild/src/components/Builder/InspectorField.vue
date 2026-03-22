@@ -85,6 +85,14 @@
         @update:modelValue="onFieldUpdate($event)"
       />
 
+      <FieldSpacing
+        v-else-if="field.type === 'spacing'"
+        :modelValue="effectiveValue"
+        :min="field.min ?? 0"
+        :max="field.max ?? 200"
+        @update:modelValue="onFieldUpdate($event)"
+      />
+
       <FieldBorderRadius
         v-else-if="field.type === 'border-radius'"
         :modelValue="effectiveValue"
@@ -139,6 +147,13 @@
       <FieldMegaPanelMap
         v-else-if="field.type === 'megapanel-map'"
         :modelValue="effectiveValue"
+        @update:modelValue="onFieldUpdate($event)"
+      />
+
+      <FieldIconSelect
+        v-else-if="field.type === 'icon-select'"
+        :modelValue="effectiveValue"
+        :options="field.options || []"
         @update:modelValue="onFieldUpdate($event)"
       />
 
@@ -266,6 +281,7 @@ import FieldSelect from './fields/FieldSelect.vue';
 import FieldToggle from './fields/FieldToggle.vue';
 import FieldColor from './fields/FieldColor.vue';
 import FieldRange from './fields/FieldRange.vue';
+import FieldSpacing from './fields/FieldSpacing.vue';
 import FieldBorderRadius from './fields/FieldBorderRadius.vue';
 import FieldImage from './fields/FieldImage.vue';
 import FieldMedia from './fields/FieldMedia.vue';
@@ -281,6 +297,7 @@ import FieldFontFamily from './fields/FieldFontFamily.vue';
 import FieldDatetime from './fields/FieldDatetime.vue';
 import FieldDate from './fields/FieldDate.vue';
 import FieldTime from './fields/FieldTime.vue';
+import FieldIconSelect from './fields/FieldIconSelect.vue';
 import DynamicFieldToggle from './DynamicFieldToggle.vue';
 import { useTilesStore } from '@/stores/tiles';
 
@@ -420,6 +437,7 @@ const fieldComponent = computed(() => {
     case 'icon': return FieldIcon;
     case 'textarea': return FieldTextarea;
     case 'megapanel-map': return FieldMegaPanelMap;
+    case 'icon-select': return FieldIconSelect;
     case 'multi_pills': return FieldMultiPills;
     case 'box-shadow': return FieldBoxShadow;
     case 'gradient': return FieldGradient;
@@ -440,6 +458,7 @@ const fieldProps = computed(() => {
     case 'select': return { ...base, options: resolvedOptions.value };
     case 'range': return { ...base, min: props.field.min || 0, max: props.field.max || 100, step: props.field.step || 1 };
     case 'editor': return { ...base, mode: props.field.mode || 'inline' };
+    case 'icon-select': return { ...base, options: props.field.options || [] };
     case 'multi_pills': return { ...base, options: props.field.options || [] };
     case 'code': return { ...base, class: 'olo-field-code' };
     default: return base;

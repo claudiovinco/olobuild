@@ -39,7 +39,7 @@ class Olo_Popover_Tile extends Olo_Tile_Base {
         $image_height     = absint( $s['image_height'] ?? 0 );
         $popup_bg         = $this->safe_color_css( $s['popup_bg'] ?? '#ffffff' );
         $popup_color      = $this->safe_color_css( $s['popup_color'] ?? '#333333' );
-        $popup_radius     = Olo_Tile_Utils::border_radius( $s['popup_radius'] ?? 8 );
+        $popup_radius     = $this->build_border_radius_css( $s["popup_radius"] ?? 8 );
         $popup_img_height = absint( $s['popup_img_height'] ?? 120 );
         $hover_effect     = $s['popup_hover_effect'] ?? 'none';
         $hover_color      = $this->safe_color_css( $s['popup_hover_color'] ?? '' ) ?: 'var(--olo-color-primary, #6366F1)';
@@ -52,8 +52,8 @@ class Olo_Popover_Tile extends Olo_Tile_Base {
             $img_style .= 'height:' . $image_height . 'px;object-fit:cover;';
         }
 
-        // Popup image top radius — inherit top corners from popup_radius, zero out bottom
-        $img_top_radius = ( $popup_radius && $popup_radius !== '0px' ) ? $popup_radius . '; border-bottom-left-radius: 0; border-bottom-right-radius: 0' : '0';
+        // Popup image top radius
+        $img_top_radius = $popup_radius > 0 ? $popup_radius . 'px ' . $popup_radius . 'px 0 0' : '0';
 
         ob_start();
         ?>

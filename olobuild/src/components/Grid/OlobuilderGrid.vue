@@ -2,7 +2,7 @@
   <div ref="canvasRef" class="olo-canvas" :data-canvas-theme="canvasTheme" style="position: relative">
     <!-- Sections (top-level draggable) -->
     <draggable
-      v-model="tilesStore.canvasTiles"
+      v-model="zoneTiles"
       item-key="id"
       class="olo-sections-list"
       ghost-class="olo-ghost"
@@ -11,12 +11,19 @@
       handle=".olo-section-grip"
       @change="onChange"
     >
-      <template #item="{ element: section }">
-        <div
-          class="olo-section-block"
-          :class="{ 'olo-section-block--selected': builderStore.selectedTileId === section.id, 'olo-node-hidden-vp': isHiddenInViewport(section) }"
+      <template #item="{ element: section, index: sectionIdx }">
+        <div class="olo-section-wrap">
+          <!-- Quick insert "+" before first section -->
+          <div v-if="sectionIdx === 0" class="olo-quick-insert" @click.stop="onCleanInsert(0)">
+            <div class="olo-quick-insert__line"></div>
+            <button class="olo-quick-insert__btn" title="Inserisci sezione o modulo">+</button>
+            <div class="olo-quick-insert__line"></div>
+          </div>
+          <div
+            class="olo-section-block"
+          :class="{ 'olo-section-block--selected': builderStore.selectedTileId === section.id, 'olo-node-hidden-vp': isHiddenInViewport(section), 'olo-section-block--fullbleed': section.settings?.width === 'fullbleed' }"
           :data-tile-id="section.id"
-          :style="{ ...getSectionColorStyle(section), ...(getNodeBg(section).type === 'solid' ? getNodeBgStyle(section) : {}), ...getNodeSpacingStyle(section) }"
+          :style="getSectionBlockStyle(section)"
           @contextmenu.prevent="onTileContextMenu($event, section.id)"
         >
           <!-- Background preview layers -->
@@ -71,7 +78,7 @@
           </div>
 
           <!-- Section body: rows -->
-          <div class="olo-section-body">
+          <div class="olo-section-body" :style="getSectionBodyStyle(section)">
             <draggable
               :list="section.children"
               item-key="id"
@@ -81,7 +88,7 @@
               :group="{ name: 'rows' }"
               @change="onChange"
             >
-              <template #item="{ element: row }">
+              <template #item="{ element: row, index: rowIdx }">
                 <div
                   class="olo-row-block"
                   :class="{ 'olo-row-block--selected': builderStore.selectedTileId === row.id, 'olo-node-hidden-vp': isHiddenInViewport(row) }"
@@ -116,22 +123,73 @@
                     <span v-if="hasBgImage(row)" class="olo-bar-badge olo-bar-badge--bg">BG</span>
                     <span v-if="hasVideo(row)" class="olo-bar-badge olo-bar-badge--bg">VID</span>
                     <span v-if="hasParallax(row)" class="olo-bar-badge olo-bar-badge--parallax">&#x21C5;</span>
+                    <span v-if="row.settings?.loop_enabled" class="olo-bar-badge olo-bar-badge--loop" title="Loop attivo">&#x21BB; Loop</span>
                     <span class="olo-bar-spacer"></span>
                     <button class="olo-bar-btn" title="Duplica" @click.stop="duplicateItem(row.id)">&#x2398;</button>
                     <button class="olo-bar-btn olo-bar-btn--delete" title="Elimina" @click.stop="removeItem(row.id)">&#x2715;</button>
                   </div>
 
-                  <!-- Columns flex layout -->
+                  <!-- CSS Grid layout mode -->
                   <div
+                    v-if="isGridRow(row)"
+                    class="olo-row-columns olo-row-columns--grid"
+                    :style="getGridStyle(row)"
+                  >
+                    <div
+                      v-for="col in (row.children || [])"
+                      :key="col.id"
+                      class="olo-column-block"
+                      :class="{
+                        'olo-column-block--selected': builderStore.selectedTileId === col.id,
+                        'olo-column-block--dragover': dragOverColId === col.id
+                      }"
+                      :data-tile-id="col.id"
+                      :style="{ ...getCellGridStyle(col), ...getNodeSpacingStyle(col) }"
+                      @click.stop="selectTile(col.id)"
+                      @dragover.prevent.stop="dragOverColId = col.id"
+                      @dragleave="onColDragLeave($event, col.id)"
+                      @drop.prevent.stop="onDropIntoColumn($event, col.id)"
+                    >
+                      <draggable
+                        :list="col.children"
+                        item-key="id"
+                        ghost-class="olo-ghost"
+                        animation="150"
+                        :group="{ name: 'elements' }"
+                        class="olo-column-elements"
+                        @change="onChange"
+                      >
+                        <template #item="{ element: tile }">
+                          <GridCell :tile="tile" @contextmenu="onTileContextMenu">
+                            <template v-if="tile.type === 'floatingpanel'" #after>
+                              <div class="olo-fp-children-zone">
+                                <draggable :list="tile.children || []" item-key="id" ghost-class="olo-ghost" animation="150" :group="{ name: 'elements' }" class="olo-fp-children-list" @change="onChange">
+                                  <template #item="{ element: child }">
+                                    <GridCell :tile="child" @contextmenu="onTileContextMenu" />
+                                  </template>
+                                </draggable>
+                                <div v-if="!tile.children || tile.children.length === 0" class="olo-fp-empty" @click.stop="openFinder(tile.id)">
+                                  <span class="olo-column-plus">+</span>
+                                  <span>Trascina tile qui</span>
+                                </div>
+                              </div>
+                            </template>
+                          </GridCell>
+                        </template>
+                      </draggable>
+                      <div v-if="!col.children || col.children.length === 0" class="olo-column-empty" @click.stop="openFinder(col.id)" style="cursor:pointer">
+                        <span class="olo-column-plus">+</span>
+                        <span>Rilascia qui</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Flex layout mode (classic) -->
+                  <div
+                    v-else
                     class="olo-row-columns"
                     :class="{ 'olo-row-stack': shouldStack(row.settings) }"
-                    :style="{
-                      gap: rv(row.settings || {}, 'gap', 16, builderStore.viewMode) + 'px',
-                      alignItems: alignMap[row.settings?.vertical_align] || 'stretch',
-                      flexDirection: (shouldStack(row.settings)) ? 'column' : (row.settings?.flex_direction || undefined),
-                      justifyContent: row.settings?.flex_justify || undefined,
-                      flexWrap: (shouldStack(row.settings)) ? 'wrap' : (row.settings?.flex_wrap || undefined),
-                    }"
+                    :style="getRowFlexStyle(row)"
                   >
                     <template v-for="(col, colIdx) in (row.children || [])" :key="col.id">
                       <!-- Resize handle between columns -->
@@ -167,7 +225,30 @@
                           @change="onChange"
                         >
                           <template #item="{ element: tile }">
-                            <GridCell :tile="tile" @contextmenu="onTileContextMenu" />
+                            <GridCell :tile="tile" @contextmenu="onTileContextMenu">
+                              <!-- Floating panel children drop zone -->
+                              <template v-if="tile.type === 'floatingpanel'" #after>
+                                <div class="olo-fp-children-zone">
+                                  <draggable
+                                    :list="tile.children || []"
+                                    item-key="id"
+                                    ghost-class="olo-ghost"
+                                    animation="150"
+                                    :group="{ name: 'elements' }"
+                                    class="olo-fp-children-list"
+                                    @change="onChange"
+                                  >
+                                    <template #item="{ element: child }">
+                                      <GridCell :tile="child" @contextmenu="onTileContextMenu" />
+                                    </template>
+                                  </draggable>
+                                  <div v-if="!tile.children || tile.children.length === 0" class="olo-fp-empty" @click.stop="openFinder(tile.id)">
+                                    <span class="olo-column-plus">+</span>
+                                    <span>Trascina tile qui</span>
+                                  </div>
+                                </div>
+                              </template>
+                            </GridCell>
                           </template>
                         </draggable>
 
@@ -186,8 +267,16 @@
                       v-for="preset in layoutPresets"
                       :key="preset.key"
                       @click.stop="changeRowLayout(row, preset.key)"
-                      :class="['olo-preset-btn', { 'olo-preset-btn--active': (row.settings?.layout || '50-50') === preset.key }]"
+                      :class="['olo-preset-btn', { 'olo-preset-btn--active': !isGridRow(row) && (row.settings?.layout || '50-50') === preset.key }]"
                     >{{ preset.label }}</button>
+                    <button
+                      @click.stop="openGridPicker(row.id)"
+                      :class="['olo-preset-btn olo-preset-btn--grid', { 'olo-preset-btn--active': isGridRow(row) }]"
+                      title="CSS Grid Layout"
+                    >
+                      <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/><rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg>
+                      Grid
+                    </button>
                   </div>
                   <!-- Custom widths input -->
                   <div
@@ -209,14 +298,24 @@
               </template>
             </draggable>
 
-            <!-- Add row zone -->
+            <!-- Quick insert "+" for new row at bottom of section -->
             <div
-              class="olo-add-row"
+              class="olo-quick-insert olo-quick-insert--row"
+              @click.stop="addRowToSection(section)"
               @dragover.prevent
               @drop.prevent.stop="onDropIntoSection($event, section)"
             >
-              <button @click="addRowToSection(section)">+ Aggiungi riga</button>
+              <div class="olo-quick-insert__line"></div>
+              <button class="olo-quick-insert__btn olo-quick-insert__btn--row" title="Aggiungi riga">+</button>
+              <div class="olo-quick-insert__line"></div>
             </div>
+          </div>
+          </div>
+          <!-- Quick insert "+" after section -->
+          <div class="olo-quick-insert" @click.stop="onCleanInsert(sectionIdx + 1)">
+            <div class="olo-quick-insert__line"></div>
+            <button class="olo-quick-insert__btn" title="Inserisci sezione o modulo">+</button>
+            <div class="olo-quick-insert__line"></div>
           </div>
         </div>
       </template>
@@ -224,7 +323,7 @@
 
     <!-- Empty canvas state -->
     <div
-      v-if="tilesStore.canvasTiles.length === 0"
+      v-if="zoneTiles.length === 0"
       class="olo-canvas-empty"
       @dragover.prevent
       @drop.prevent.stop="onDropCanvas"
@@ -249,13 +348,23 @@
 
     <!-- Context menu -->
     <ContextMenu ref="contextMenuRef" />
+
+    <!-- Grid Layout Picker -->
+    <GridLayoutPicker
+      v-if="gridPickerRowId"
+      :currentLayout="tilesStore.getTileById(gridPickerRowId)?.settings?.grid_template || tilesStore.getTileById(gridPickerRowId)?.settings?.layout || '50-50'"
+      :currentMode="tilesStore.getTileById(gridPickerRowId)?.settings?.layout_mode || 'flex'"
+      @close="closeGridPicker"
+      @select-grid="onSelectGrid"
+      @select-flex="onSelectFlex"
+    />
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount, inject } from 'vue';
 import draggable from 'vuedraggable';
-import { useTilesStore, createRow, createColumn } from '@/stores/tiles';
+import { useTilesStore, createSection, createRow, createColumn } from '@/stores/tiles';
 import { useBuilderStore } from '@/stores/builder';
 import { useStylesStore } from '@/stores/styles';
 import { useDragDrop } from '@/composables/useDragDrop';
@@ -264,10 +373,33 @@ import { rv } from '@/composables/useResponsiveValue';
 import GridCell from './GridCell.vue';
 import ShapedividerTile from '@/components/Tiles/ShapedividerTile.vue';
 import ContextMenu from '@/components/Builder/ContextMenu.vue';
+import GridLayoutPicker from '@/components/Builder/GridLayoutPicker.vue';
+import { TEMPLATES_MAP } from '@/config/gridTemplates.js';
+
+const props = defineProps({
+  zone: { type: String, default: '' }, // 'header' | 'body' | 'footer' | '' (legacy)
+});
 
 const tilesStore = useTilesStore();
 const builderStore = useBuilderStore();
 const stylesStore = useStylesStore();
+
+/**
+ * Computed ref to the correct tiles array based on zone prop.
+ * Returns the reactive array directly so v-model on draggable works.
+ */
+const zoneTiles = computed({
+  get() {
+    if (props.zone === 'header') return tilesStore.headerTiles;
+    if (props.zone === 'footer') return tilesStore.footerTiles;
+    return tilesStore.canvasTiles;
+  },
+  set(val) {
+    if (props.zone === 'header') tilesStore.headerTiles = val;
+    else if (props.zone === 'footer') tilesStore.footerTiles = val;
+    else tilesStore.canvasTiles = val;
+  },
+});
 
 const isMobileView = computed(() => {
   const m = builderStore.viewMode;
@@ -283,6 +415,7 @@ function shouldStack(rowSettings) {
   return false;
 }
 const openFinder = inject('openFinder', () => {});
+const openInsertPanel = inject('openInsertPanel', () => {});
 const { handleDropFromSidebar, handleDropIntoColumn, handleGlobalWidgetDrop, handleGlobalWidgetDropIntoColumn, createTileFromType } = useDragDrop();
 
 /**
@@ -297,6 +430,37 @@ function getShapeDividers(section) {
   }
   if (Array.isArray(section.children)) section.children.forEach(walk);
   return result;
+}
+
+/**
+ * Apply container width constraints to section body to match frontend rendering.
+ * fullbleed = edge-to-edge (no container), expand = full width, default/small/large/xlarge = max-width centered.
+ */
+function getSectionBodyStyle(section) {
+  const w = section.settings?.width || 'default';
+  if (w === 'fullbleed' || w === 'expand') return {};
+  const baseMax = parseInt(window.oloData?.containerMaxWidth) || 1200;
+  const widthMap = { small: 0.75, default: 1, large: 1.167, xlarge: 1.333 };
+  const factor = widthMap[w] || 1;
+  const maxW = Math.round(baseMax * factor);
+  return { maxWidth: maxW + 'px', marginLeft: 'auto', marginRight: 'auto' };
+}
+
+/**
+ * For fullbleed sections, use negative margins to break out of canvas padding.
+ */
+function getSectionBlockStyle(section) {
+  const base = { ...getSectionColorStyle(section), ...(getNodeBg(section).type === 'solid' ? getNodeBgStyle(section) : {}), ...getNodeSpacingStyle(section) };
+  const w = section.settings?.width || 'default';
+  if (w === 'fullbleed') {
+    // Negative margins to cancel canvas padding (16px in normal mode, 0 in clean mode)
+    if (!builderStore.cleanMode) {
+      base.marginLeft = '-16px';
+      base.marginRight = '-16px';
+      base.marginBottom = '12px';
+    }
+  }
+  return base;
 }
 
 function getSectionColorStyle(section) {
@@ -458,6 +622,112 @@ const canvasTheme = computed(() => {
   return isLightColor(bg) ? 'light' : 'dark';
 });
 
+// --- Grid Layout Picker ---
+const gridPickerRowId = ref(null);
+function openGridPicker(rowId) { gridPickerRowId.value = rowId; }
+function closeGridPicker() { gridPickerRowId.value = null; }
+function onSelectGrid(templateId) {
+  if (gridPickerRowId.value) {
+    tilesStore.changeRowToGrid(gridPickerRowId.value, templateId);
+    builderStore.isDirty = true;
+  }
+  closeGridPicker();
+}
+function onSelectFlex(layoutKey) {
+  if (gridPickerRowId.value) {
+    const row = tilesStore.getTileById(gridPickerRowId.value);
+    if (row && row.settings?.layout_mode === 'grid') {
+      tilesStore.changeRowToFlex(gridPickerRowId.value, layoutKey);
+    } else {
+      tilesStore.changeRowLayout(gridPickerRowId.value, layoutKey);
+    }
+    builderStore.isDirty = true;
+  }
+  closeGridPicker();
+}
+
+function isGridRow(row) {
+  return row.settings?.layout_mode === 'grid';
+}
+
+function getRowFlexStyle(row) {
+  const s = row.settings || {};
+  const style = {};
+  const mode = builderStore.viewMode;
+  // Flex gap — prefer separate column/row gap, fallback to legacy flex_gap, then base gap
+  const fcg = parseInt(s.flex_column_gap || 0);
+  const frg = parseInt(s.flex_row_gap || 0);
+  const fgLegacy = parseInt(s.flex_gap || 0);
+  if (fcg > 0 || frg > 0) {
+    if (fcg > 0) style.columnGap = fcg + 'px';
+    if (frg > 0) style.rowGap = frg + 'px';
+  } else if (fgLegacy > 0) {
+    style.gap = fgLegacy + 'px';
+  } else {
+    style.gap = rv(s, 'gap', 16, mode) + 'px';
+  }
+  style.alignItems = alignMap[s.vertical_align] || 'stretch';
+  if (shouldStack(s)) {
+    style.flexDirection = 'column';
+    style.flexWrap = 'wrap';
+  } else {
+    if (s.flex_direction) style.flexDirection = s.flex_direction;
+    if (s.flex_wrap) style.flexWrap = s.flex_wrap;
+  }
+  if (s.flex_justify) style.justifyContent = s.flex_justify;
+  return style;
+}
+
+function getGridStyle(row) {
+  const s = row.settings || {};
+  const style = {
+    display: 'grid',
+    gridTemplateColumns: s.grid_columns || '1fr 1fr',
+    gridTemplateRows: s.grid_rows || 'auto',
+  };
+  // Separate column/row gaps or unified gap
+  const colGap = s.grid_column_gap;
+  const rowGap = s.grid_row_gap;
+  if (colGap !== '' && colGap != null && rowGap !== '' && rowGap != null) {
+    style.columnGap = colGap + 'px';
+    style.rowGap = rowGap + 'px';
+  } else if (colGap !== '' && colGap != null) {
+    style.columnGap = colGap + 'px';
+    style.rowGap = rv(s, 'gap', 16, builderStore.viewMode) + 'px';
+  } else if (rowGap !== '' && rowGap != null) {
+    style.columnGap = rv(s, 'gap', 16, builderStore.viewMode) + 'px';
+    style.rowGap = rowGap + 'px';
+  } else {
+    style.gap = rv(s, 'gap', 16, builderStore.viewMode) + 'px';
+  }
+  // Grid auto-flow (direction + density)
+  let autoFlow = s.grid_auto_flow || 'row';
+  if (s.grid_auto_flow_dense) autoFlow += ' dense';
+  if (autoFlow !== 'row') style.gridAutoFlow = autoFlow;
+  // Justify content
+  if (s.grid_justify_content && s.grid_justify_content !== 'stretch') {
+    style.justifyContent = s.grid_justify_content;
+  }
+  // Align items
+  const ai = s.grid_align_items || s.vertical_align || 'stretch';
+  if (ai && ai !== 'stretch') style.alignItems = ai;
+  // Align content
+  if (s.grid_align_content && s.grid_align_content !== 'stretch') {
+    style.alignContent = s.grid_align_content;
+  }
+  return style;
+}
+
+function getCellGridStyle(col) {
+  const s = col.settings || {};
+  const style = {};
+  if (s.grid_column) style.gridColumn = s.grid_column;
+  if (s.grid_row) style.gridRow = s.grid_row;
+  style.minWidth = 0;
+  style.minHeight = '40px';
+  return style;
+}
+
 // --- Layout data ---
 
 const layoutPresets = [
@@ -546,6 +816,10 @@ function startColResize(event, row, colIdx) {
 
 function selectTile(id) {
   builderStore.selectTile(id);
+  // In unified mode, auto-switch active zone based on tile location
+  if (props.zone) {
+    builderStore.setActiveZone(props.zone);
+  }
 }
 
 function duplicateItem(id) {
@@ -560,7 +834,10 @@ function removeItem(id) {
 }
 
 function onChange() {
-  builderStore.isDirty = true;
+  // Mark the correct zone as dirty in unified mode
+  if (props.zone === 'header') builderStore.headerDirty = true;
+  else if (props.zone === 'footer') builderStore.footerDirty = true;
+  else builderStore.isDirty = true;
 }
 
 // --- Column drag from sidebar ---
@@ -630,6 +907,10 @@ function onDropIntoSection(event, section) {
 
 // --- Add empty row to section ---
 
+function onCleanInsert(sectionIndex) {
+  openInsertPanel(sectionIndex);
+}
+
 function addRowToSection(section) {
   const col1 = createColumn('1-2', []);
   const col2 = createColumn('1-2', []);
@@ -638,6 +919,34 @@ function addRowToSection(section) {
   section.children.push(row);
   builderStore.isDirty = true;
   builderStore.selectTile(row.id);
+}
+
+// --- Insert section at specific index ---
+function insertSectionAt(index) {
+  const col1 = createColumn('1-2', []);
+  const col2 = createColumn('1-2', []);
+  const row = createRow('50-50', [col1, col2]);
+  const section = createSection([row]);
+  zoneTiles.value.splice(index, 0, section);
+  markDirty();
+  builderStore.selectTile(section.id);
+}
+
+// --- Insert row at specific index within section ---
+function insertRowAt(section, index) {
+  const col1 = createColumn('1-2', []);
+  const col2 = createColumn('1-2', []);
+  const row = createRow('50-50', [col1, col2]);
+  if (!Array.isArray(section.children)) section.children = [];
+  section.children.splice(index, 0, row);
+  markDirty();
+  builderStore.selectTile(row.id);
+}
+
+function markDirty() {
+  if (props.zone === 'header') builderStore.headerDirty = true;
+  else if (props.zone === 'footer') builderStore.footerDirty = true;
+  else builderStore.isDirty = true;
 }
 
 // --- Change row layout ---
@@ -798,6 +1107,11 @@ function changeRowLayout(row, layoutKey) {
   background: rgba(245, 158, 11, 0.15);
   color: #FBBF24;
 }
+.olo-bar-badge--loop {
+  background: rgba(34, 197, 94, 0.15);
+  color: #4ADE80;
+  font-weight: 600;
+}
 .olo-bar-badge--sticky {
   background: rgba(168, 85, 247, 0.15);
   color: #C084FC;
@@ -922,6 +1236,31 @@ function changeRowLayout(row, layoutKey) {
   line-height: 1;
 }
 
+/* === Floating Panel children zone === */
+.olo-fp-children-zone {
+  margin-top: 4px;
+  border: 2px dashed #818cf8;
+  border-radius: 8px;
+  padding: 6px;
+  min-height: 40px;
+  background: rgba(129, 140, 248, 0.04);
+}
+.olo-fp-children-list {
+  min-height: 30px;
+}
+.olo-fp-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 50px;
+  color: #818cf8;
+  font-size: 11px;
+  gap: 2px;
+  user-select: none;
+  cursor: pointer;
+}
+
 /* === Layout presets === */
 .olo-row-presets {
   display: flex;
@@ -947,6 +1286,28 @@ function changeRowLayout(row, layoutKey) {
   border-color: var(--olo-color-primary, #6366F1);
   color: var(--olo-color-primary, #6366F1);
   background: rgba(107, 114, 128, 0.1);
+}
+.olo-preset-btn--grid {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-weight: 600;
+  border-color: #e8910c;
+  color: #d97706;
+}
+.olo-preset-btn--grid:hover {
+  border-color: #d97706;
+  color: #b45309;
+}
+.olo-preset-btn--grid.olo-preset-btn--active {
+  border-color: #d97706;
+  color: #d97706;
+  background: rgba(217, 119, 6, 0.1);
+}
+
+/* Grid mode columns */
+.olo-row-columns--grid {
+  display: grid !important;
 }
 
 /* === Add row === */
@@ -1098,4 +1459,5 @@ function changeRowLayout(row, layoutKey) {
   border-color: #f59e0b !important;
   border-style: dashed !important;
 }
+
 </style>

@@ -67,7 +67,7 @@ class Olo_Hotspot_Tile extends Olo_Tile_Base {
                 width: 100%;
                 height: <?php echo $img_height; ?>px;
                 overflow: hidden;
-                border-radius: 8px;
+                border-radius: <?php echo $this->build_border_radius_css( $s['border_radius'] ?? '0' ) ?: '8px'; ?>;
             }
             .<?php echo esc_attr( $uid ); ?> > img {
                 width: 100%;

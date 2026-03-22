@@ -113,8 +113,14 @@ class Olo_Hero_Tile extends Olo_Tile_Base {
         $v_align       = $this->map_align( $s['vertical_align'], 'v' );
         $h_align       = $this->map_align( $s['horizontal_align'], 'h' );
         $text_align    = in_array( $s['text_align'], [ 'left', 'center', 'right' ] ) ? $s['text_align'] : 'center';
-        $pad_y         = intval( $s['padding_y'] );
-        $pad_x         = intval( $s['padding_x'] );
+        $_tp = $s['tile_padding'] ?? null;
+        if ( is_array( $_tp ) ) {
+            $pad_y = intval( $_tp['top'] ?? 0 );
+            $pad_x = intval( $_tp['right'] ?? 0 );
+        } else {
+            $pad_y = intval( $s['padding_y'] ?? 80 );
+            $pad_x = intval( $s['padding_x'] ?? 30 );
+        }
         $border_radius = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
 
         // Background

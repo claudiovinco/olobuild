@@ -44,10 +44,13 @@
 
 <script setup>
 import { computed } from 'vue';
+import { useBuilderStore } from '@/stores/builder';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
 });
+
+const builderStore = useBuilderStore();
 
 const visibleFilters = computed(() => {
   const raw = props.settings.visible_filters || '';
@@ -65,11 +68,26 @@ const amenitiesList = computed(() => {
 
 const wrapStyle = computed(() => {
   const s = props.settings;
-  return {
+  const style = {
     borderRadius: (s.border_radius || 8) + 'px',
     background: s.filter_bg || '#ffffff',
     border: '1px solid ' + (s.filter_border || '#e5e7eb'),
   };
+  // In clean mode, apply overlap styles like the frontend
+  if (builderStore.cleanMode && s.overlap) {
+    const offset = Math.max(20, Math.min(200, parseInt(s.overlap_offset) || 60));
+    const maxW = Math.max(600, Math.min(1400, parseInt(s.overlap_max_width) || 1100));
+    style.position = 'relative';
+    style.zIndex = 10;
+    style.marginTop = `-${offset}px`;
+    style.maxWidth = `${maxW}px`;
+    style.marginLeft = 'auto';
+    style.marginRight = 'auto';
+    if (s.overlap_shadow !== false) {
+      style.boxShadow = '0 8px 30px rgba(0,0,0,0.15)';
+    }
+  }
+  return style;
 });
 
 const btnStyle = computed(() => {

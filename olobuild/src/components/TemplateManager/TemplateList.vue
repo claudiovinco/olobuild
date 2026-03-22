@@ -196,6 +196,26 @@
       </div>
     </div>
   </div>
+
+  <!-- Export dialog -->
+  <Teleport to="body">
+    <div v-if="exportDialogVisible" class="tpl-export-overlay" @click.self="exportDialogVisible = false">
+      <div class="tpl-export-dialog">
+        <h3 style="margin:0 0 16px;font-size:16px;font-weight:600">Esporta template</h3>
+        <label style="display:flex;align-items:center;gap:10px;cursor:pointer;margin-bottom:20px">
+          <input type="checkbox" v-model="exportIncludeMedia" style="width:18px;height:18px;accent-color:var(--olo-color-primary, #6366F1)" />
+          <span style="font-size:14px">Includi media (immagini, video, PDF)</span>
+        </label>
+        <p style="font-size:12px;color:#888;margin:0 0 20px">Attiva questa opzione se devi trasferire il template su un altro sito WordPress.</p>
+        <div style="display:flex;gap:10px;justify-content:flex-end">
+          <button @click="exportDialogVisible = false" class="tpl-btn tpl-btn-outline" style="padding:8px 20px;font-size:13px">Annulla</button>
+          <button @click="doExport" :disabled="exportLoading" class="tpl-btn tpl-btn-primary" style="padding:8px 20px;font-size:13px">
+            {{ exportLoading ? 'Esportazione...' : 'Esporta' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </Teleport>
 </template>
 
 <script setup>
@@ -519,9 +539,26 @@ function createNewSingle(postType) {
   emit('create', { type: 'single', postType });
 }
 
-async function exportTemplate(id) {
+const exportDialogVisible = ref(false);
+const exportDialogId = ref(null);
+const exportIncludeMedia = ref(true);
+const exportLoading = ref(false);
+
+function exportTemplate(id) {
+  exportDialogId.value = id;
+  exportIncludeMedia.value = true;
+  exportDialogVisible.value = true;
+}
+
+async function doExport() {
+  const id = exportDialogId.value;
+  const includeMedia = exportIncludeMedia.value;
+  exportLoading.value = true;
   try {
-    const res = await fetch(`${oloData.restUrl}/templates/${id}/export`, {
+    const endpoint = includeMedia
+      ? `${oloData.restUrl}/export-template/${id}?include_media=1`
+      : `${oloData.restUrl}/templates/${id}/export`;
+    const res = await fetch(endpoint, {
       headers: { 'X-WP-Nonce': oloData.nonce },
     });
     if (!res.ok) throw new Error('Export failed');
@@ -530,12 +567,15 @@ async function exportTemplate(id) {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `template-${(data.title || 'export').replace(/[^a-z0-9]/gi, '-').toLowerCase()}.json`;
+    a.download = `template-${(data.title || data.name || 'export').replace(/[^a-z0-9]/gi, '-').toLowerCase()}.json`;
     a.click();
     URL.revokeObjectURL(url);
+    exportDialogVisible.value = false;
   } catch (err) {
     console.error('exportTemplate error:', err);
     alert('Errore durante l\'esportazione del template.');
+  } finally {
+    exportLoading.value = false;
   }
 }
 
@@ -552,12 +592,20 @@ async function handleImportFile(e) {
     const text = await file.text();
     const json = JSON.parse(text);
 
-    if (json.olo_export !== 'template') {
+    // Support both old format (olo_export) and new format (format: olobuild-template)
+    const isOldFormat = json.olo_export === 'template';
+    const isNewFormat = json.format === 'olobuild-template';
+    if (!isOldFormat && !isNewFormat) {
       alert('File non valido: non è un export Olobuild template.');
       return;
     }
 
-    const res = await fetch(`${oloData.restUrl}/templates/import`, {
+    // New format with media: use the import-template endpoint
+    const endpoint = isNewFormat
+      ? `${oloData.restUrl}/import-template`
+      : `${oloData.restUrl}/templates/import`;
+
+    const res = await fetch(endpoint, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -814,5 +862,24 @@ onUnmounted(() => {
   .tpl-header-actions { flex-wrap: wrap; }
   .tpl-grid { grid-template-columns: 1fr; }
   .tpl-tabs { overflow-x: auto; width: 100%; }
+}
+
+/* Export dialog */
+.tpl-export-overlay {
+  position: fixed !important;
+  inset: 0 !important;
+  background: rgba(0,0,0,0.5) !important;
+  z-index: 999999 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+.tpl-export-dialog {
+  background: #fff !important;
+  border-radius: 12px !important;
+  padding: 28px 32px !important;
+  max-width: 420px !important;
+  width: 90% !important;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3) !important;
 }
 </style>

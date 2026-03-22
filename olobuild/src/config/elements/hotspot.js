@@ -10,6 +10,7 @@ export default {
       { id: 'hs-1', pos_x: '30', pos_y: '40', title: 'Punto di interesse', description: 'Descrizione del primo hotspot.', icon: 'pin', tooltip_position: 'top' },
       { id: 'hs-2', pos_x: '65', pos_y: '55', title: 'Secondo punto', description: 'Descrizione del secondo hotspot.', icon: 'pin', tooltip_position: 'bottom' },
     ],
+    border_radius: '0',
     marker_color: '',
     marker_size: '24',
     pulse_animation: true,
@@ -19,6 +20,7 @@ export default {
   },
   fields: [
     { key: 'image', label: 'Immagine', type: 'image' },
+    { key: 'border_radius', label: 'Border Radius immagine', type: 'border-radius' },
     { key: 'image_height', label: 'Altezza immagine (px)', type: 'range', min: 200, max: 800, step: 10 },
     { key: 'markers', label: 'Marker', type: 'content-items',
       itemFields: [

@@ -128,9 +128,9 @@ const isDark = computed(() => {
   const full = hex.length === 3
     ? hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2]
     : hex;
-  const r = parseInt(full.substr(0, 2), 16) || 0;
-  const g = parseInt(full.substr(2, 2), 16) || 0;
-  const b = parseInt(full.substr(4, 2), 16) || 0;
+  const rp = parseInt(full.substr(0, 2), 16); const r = !isNaN(rp) ? rp : 0;
+  const gp = parseInt(full.substr(2, 2), 16); const g = !isNaN(gp) ? gp : 0;
+  const bp = parseInt(full.substr(4, 2), 16); const b = !isNaN(bp) ? bp : 0;
   return (0.299 * r + 0.587 * g + 0.114 * b) < 128;
 });
 

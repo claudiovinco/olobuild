@@ -17,7 +17,7 @@
     </div>
     <!-- Content -->
     <div :style="isHorizontal ? { flex: 1 } : {}">
-      <h3 class="mb-text-xl mb-font-semibold mb-mb-2" :style="{ fontSize: s.title_font_size + 'px', fontWeight: s.title_font_weight }" data-olo-editable="title">{{ s.title }}</h3>
+      <h3 class="mb-text-xl mb-font-semibold mb-mb-2" :style="{ fontSize: s.title_font_size + 'px', fontWeight: s.title_font_weight, color: s.title_color || undefined }" data-olo-editable="title">{{ s.title }}</h3>
       <div class="mb-opacity-80 mb-leading-relaxed mb-mb-4" style="white-space:pre-wrap" data-olo-editable="description" data-olo-multiline>{{ s.description }}</div>
       <span v-if="s.link_url" class="mb-font-medium" :style="{ color: s.link_color }" data-olo-editable="link_text">
         {{ s.link_text }} &rarr;

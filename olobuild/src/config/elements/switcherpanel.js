@@ -14,7 +14,7 @@ export default {
     image_position: 'right',
     nav_style: 'minimal',
     animation: 'fade',
-    content_padding: '40',
+    tile_padding: { top: 40, right: 40, bottom: 40, left: 40 },
     title_tag: 'h3',
     button_style: 'default',
   },
@@ -64,7 +64,7 @@ export default {
       { value: 'slide-top', label: 'Scorrimento alto' },
       { value: 'slide-bottom', label: 'Scorrimento basso' },
     ]},
-    { key: 'content_padding', label: 'Padding contenuto (px)', type: 'range', min: 10, max: 80, step: 5 },
+    { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 80 },
     { key: 'title_tag', label: 'Tag titolo', type: 'select', options: [
       { value: 'h2', label: 'H2' },
       { value: 'h3', label: 'H3' },

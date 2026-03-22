@@ -128,7 +128,7 @@ class Olo_Authorbox_Tile extends Olo_Tile_Base {
         $bio_size   = max( 11, min( 18, absint( $s['bio_size'] ) ) );
         $role_size  = max( 10, min( 18, absint( $s['role_size'] ) ) );
         $gap        = absint( $s['gap'] );
-        $padding    = absint( $s['padding'] );
+        $padding = Olo_Tile_Utils::spacing_css( $s['tile_padding'] ?? $s['padding'] ?? 20, 20 );
         $radius     = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
         $av_radius  = max( 0, min( 50, absint( $s['avatar_border_radius'] ) ) );
         $text_align = in_array( $s['text_align'], [ 'left', 'center', 'right' ], true ) ? $s['text_align'] : 'left';
@@ -139,7 +139,7 @@ class Olo_Authorbox_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> {
                 background: <?php echo $bg_col; ?>;
                 border-radius: <?php echo $radius; ?>;
-                padding: <?php echo $padding; ?>px;
+                padding: <?php echo $padding; ?>;
                 <?php
                 $bw = absint( $s['border_width'] );
                 if ( $bw > 0 ) :

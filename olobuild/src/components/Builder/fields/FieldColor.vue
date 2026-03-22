@@ -38,6 +38,7 @@
         type="color"
         :value="hexPart"
         @input="onHexChange($event.target.value)"
+        @change="onHexChange($event.target.value)"
         class="fc-swatch-inline"
       />
       <input
@@ -83,14 +84,23 @@ const globalColors = computed(() => stylesStore.globalColors || []);
  * Check if a global color is currently selected.
  */
 function isGlobalSelected(colorId) {
-  return props.modelValue === `var(--olo-color-${colorId})`;
+  const gc = (stylesStore.globalColors || []).find(c => c.id === colorId);
+  if (!gc) return false;
+  const gcHex = gc.value?.toLowerCase();
+  const cur = props.modelValue?.toLowerCase();
+  return cur === `var(--olo-color-${colorId})` || cur === gcHex;
 }
 
 /**
- * Select a global color — stores the CSS variable reference.
+ * Select a global color — stores the resolved hex value directly.
  */
 function selectGlobalColor(colorId) {
-  emit('update:modelValue', `var(--olo-color-${colorId})`);
+  const gc = (stylesStore.globalColors || []).find(c => c.id === colorId);
+  if (gc && gc.value) {
+    emit('update:modelValue', gc.value);
+  } else {
+    emit('update:modelValue', `var(--olo-color-${colorId})`);
+  }
 }
 
 /**

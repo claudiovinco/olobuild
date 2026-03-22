@@ -19,7 +19,7 @@ export default {
     divider_color: '',
     item_bg: '',
     item_border_radius: '8',
-    item_padding: '0',
+    item_tile_padding: { top: 0, right: 0, bottom: 0, left: 0 },
     item_border_color: '',
     bg_color: '',
     border_radius: '0',
@@ -60,11 +60,11 @@ export default {
     { key: 'item_bg', label: 'Sfondo singolo item', type: 'color' },
     { key: 'item_border_color', label: 'Bordo item', type: 'color' },
     { key: 'item_border_radius', label: 'Raggio bordi item (px)', type: 'border-radius' },
-    { key: 'item_padding', label: 'Padding item (px)', type: 'range', min: 0, max: 24, step: 2 },
+    { key: 'item_padding', label: 'Padding item (px)', type: 'spacing', max: 24 },
 
     { type: 'separator', label: 'Contenitore' },
     { key: 'bg_color', label: 'Sfondo contenitore', type: 'color' },
     { key: 'border_radius', label: 'Raggio bordi (px)', type: 'border-radius' },
-    { key: 'padding', label: 'Padding (px)', type: 'range', min: 0, max: 32, step: 4 },
+    { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 32 },
   ],
 };

@@ -315,6 +315,12 @@ export const customCssDefault = {
 };
 
 
+// ─── Image Border Radius field (shared) ───
+export const imageRadiusField = [
+  { key: 'border_radius', label: 'Border Radius', type: 'border-radius' },
+];
+export const imageRadiusDefault = { border_radius: '0' };
+
 // ═══════════════════════════════════════════════════════════════════
 //  NEW SHARED PRESETS
 // ═══════════════════════════════════════════════════════════════════
@@ -727,7 +733,8 @@ export const flexContainerFields = [
     { value: 'wrap', label: 'Sì' },
     { value: 'wrap-reverse', label: 'Sì (inverso)' },
   ]},
-  { key: 'flex_gap', label: 'Spazio tra elementi (px)', type: 'range', min: 0, max: 100, step: 1 },
+  { key: 'flex_column_gap', label: 'Gap orizzontale (px)', type: 'range', min: 0, max: 100, step: 1 },
+  { key: 'flex_row_gap', label: 'Gap verticale (px)', type: 'range', min: 0, max: 100, step: 1 },
 ];
 
 export const flexContainerDefaults = {
@@ -735,7 +742,8 @@ export const flexContainerDefaults = {
   flex_justify: 'flex-start',
   flex_align: 'stretch',
   flex_wrap: 'nowrap',
-  flex_gap: '0',
+  flex_column_gap: '0',
+  flex_row_gap: '0',
 };
 
 // ─── 15. CSS Grid controls ───

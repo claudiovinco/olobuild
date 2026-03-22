@@ -28,7 +28,7 @@ export default {
     badge_border_style: 'solid',
     badge_border_radius: '6',
     gap: '12',
-    padding: '14',
+    tile_padding: { top: 14, right: 14, bottom: 14, left: 14 },
     card_bg: '',
     card_border_radius: '12',
     card_border_color: '',
@@ -83,7 +83,7 @@ export default {
       { value: 'below', label: 'Sotto il titolo' },
     ]},
     { key: 'gap', label: 'Gap tra elementi (px)', type: 'range', min: 0, max: 32, step: 2 },
-    { key: 'padding', label: 'Padding elemento (px)', type: 'range', min: 4, max: 32, step: 2 },
+    { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 32 },
 
     // ── Colori ──
     { type: 'separator', label: 'Colori' },

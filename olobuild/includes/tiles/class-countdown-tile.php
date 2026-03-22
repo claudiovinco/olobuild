@@ -83,7 +83,7 @@ class Olo_Countdown_Tile extends Olo_Tile_Base {
         $lbl_fw  = absint( $s['label_font_weight'] );
         $sep_fs  = absint( $s['separator_font_size'] );
         $min_w   = absint( $s['item_min_width'] );
-        $pad     = absint( $s['padding'] );
+        $pad = Olo_Tile_Utils::spacing_css( $s['tile_padding'] ?? $s['padding'] ?? 32, 32 );
         $bg      = $this->safe_color_css( $s['bg_color'] );
         $fg      = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-text, #374151)';
         $accent  = $this->safe_color_css( $s['accent_color'] ) ?: 'var(--olo-color-primary, #6366F1)';
@@ -288,7 +288,7 @@ class Olo_Countdown_Tile extends Olo_Tile_Base {
         ?>
         <style>
             .<?php echo $uid; ?> {
-                padding: <?php echo $pad; ?>px;
+                padding: <?php echo $pad; ?>;
                 background: <?php echo $bg; ?>;
                 color: <?php echo $fg; ?>;
             }

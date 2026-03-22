@@ -17,7 +17,7 @@ class Olo_Lightbox_Tile extends Olo_Tile_Base {
         $cols    = absint( $settings['columns'] ?? 3 );
         $gap     = absint( $settings['gap'] ?? 15 );
         $ratio   = $settings['thumb_ratio'] ?? '1:1';
-        $radius  = Olo_Tile_Utils::border_radius( $settings['thumb_radius'] ?? 8 );
+        $radius  = $this->build_border_radius_css( $settings["thumb_radius"] ?? 8 );
         $overlay = $settings['overlay_style'] ?? 'dark';
         $caption = ! empty( $settings['show_caption'] );
         $anim    = $settings['animation'] ?? 'fade';
@@ -41,7 +41,7 @@ class Olo_Lightbox_Tile extends Olo_Tile_Base {
             $data_cap = $caption && $cap ? ' data-caption="' . $cap . '"' : '';
 
             $html .= '<a href="' . $url . '" data-type="' . esc_attr( $type ) . '"' . $data_cap . ' class="olo-lb-item"'
-                   . ' style="display:block;position:relative;overflow:hidden;border-radius:' . $radius . '">';
+                   . ' style="display:block;position:relative;overflow:hidden;border-radius:' . $radius . 'px">';
 
             if ( $padding ) {
                 $html .= '<div style="padding-bottom:' . $padding . ';position:relative">';

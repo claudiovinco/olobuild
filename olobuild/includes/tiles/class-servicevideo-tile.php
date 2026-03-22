@@ -69,7 +69,7 @@ class Olo_ServiceVideo_Tile extends Olo_Tile_Base {
         }
 
         $uid    = 'olo-svid-' . wp_rand( 10000, 99999 );
-        $radius = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
+        $radius = $this->build_border_radius_css( $s["border_radius"] );
         $ratio  = esc_attr( $s['aspect_ratio'] ?: '16/9' );
         $max_w  = ! empty( $s['max_width'] ) ? 'max-width:' . absint( $s['max_width'] ) . 'px;margin:0 auto;' : '';
 

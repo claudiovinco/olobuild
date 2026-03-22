@@ -3,7 +3,7 @@
  * Plugin Name: Olobuild
  * Plugin URI:  https://example.com/olobuild
  * Description: Page builder professionale olonico con sistema a griglia (tile drag & drop).
- * Version:     2.25.20
+ * Version:     2.43.48
  * Author:      Claudio
  * Author URI:  https://example.com
  * Text Domain: olobuilder
@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'OLO_VERSION', '2.25.20' );
+define( 'OLO_VERSION', '2.43.48' );
 define( 'OLO_PATH', plugin_dir_path( __FILE__ ) );
 define( 'OLO_URL', plugin_dir_url( __FILE__ ) );
 
@@ -196,6 +196,11 @@ register_activation_hook( __FILE__, function () {
         unset( $locations['mosaic_header'] );
         set_theme_mod( 'nav_menu_locations', $locations );
     }
+
+    // Set transient for first-run wizard redirect
+    if ( ! get_option( 'olo_setup_complete' ) ) {
+        set_transient( 'olo_activating', true, 60 );
+    }
 } );
 
 // Deactivation hook
@@ -203,6 +208,10 @@ register_deactivation_hook( __FILE__, function () {
     // Cleanup transients if needed
     delete_transient( 'olo_builder_activated' );
 } );
+
+// Setup Wizard (first-run experience)
+require_once OLO_PATH . 'includes/class-setup-wizard.php';
+( new Olo_Setup_Wizard() )->init();
 
 // Preconnect hints for Google Fonts
 add_action( 'wp_head', function() {
@@ -245,6 +254,21 @@ add_action( 'olo_register_external_tiles', function ( $manager ) {
 
     require_once OLO_PATH . 'includes/tiles/class-lightbox-tile.php';
     $manager->register_tile( new Olo_Lightbox_Tile() );
+
+    require_once OLO_PATH . 'includes/tiles/class-floatingpanel-tile.php';
+    $manager->register_tile( new Olo_Floatingpanel_Tile() );
+
+    require_once OLO_PATH . 'includes/tiles/class-mobilebar-tile.php';
+    $manager->register_tile( new Olo_Mobilebar_Tile() );
+
+    require_once OLO_PATH . 'includes/tiles/class-svganimator-tile.php';
+    $manager->register_tile( new Olo_Svganimator_Tile() );
+
+    require_once OLO_PATH . 'includes/tiles/class-newsletter-tile.php';
+    $manager->register_tile( new Olo_Newsletter_Tile() );
+
+    require_once OLO_PATH . 'includes/tiles/class-viewer360-tile.php';
+    $manager->register_tile( new Olo_Viewer360_Tile() );
 
     // WooCommerce tiles — only load if WooCommerce is active
     if ( class_exists( 'WooCommerce' ) ) {

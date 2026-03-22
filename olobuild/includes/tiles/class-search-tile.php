@@ -66,12 +66,12 @@ class Olo_Search_Tile extends Olo_Tile_Base {
         $focus_c       = $this->safe_color_css( $s['focus_border_color'] ) ?: '#6366F1';
         $btn_bg        = $this->safe_color_css( $s['button_bg'] ) ?: '#6366F1';
         $btn_color     = $this->safe_color_css( $s['button_color'] ) ?: '#FFFFFF';
-        $btn_radius    = Olo_Tile_Utils::border_radius( $s['button_radius'] ?? 0 );
+        $btn_radius    = $this->build_border_radius_css( $s["button_radius"] );
         $input_shadow  = ! empty( $s['input_shadow'] );
         $focus_shadow  = ! empty( $s['focus_shadow'] );
 
         // Radius
-        $radius = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
+        $radius = absint( $s['border_radius'] ) . 'px';
         if ( $style === 'pill' ) $radius = '50px';
         if ( $style === 'hero' ) $radius = '16px';
 

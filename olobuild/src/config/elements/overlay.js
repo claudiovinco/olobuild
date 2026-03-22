@@ -17,9 +17,11 @@ export default {
     overlay_opacity: '70',
     height: '300',
     shadow: 'none',
+    border_radius: '0',
   },
   fields: [
     { key: 'image_url', label: 'Immagine', type: 'image' },
+    { key: 'border_radius', label: 'Border Radius', type: 'border-radius' },
     { key: 'title', label: 'Titolo', type: 'text' },
     { key: 'description', label: 'Descrizione', type: 'textarea' },
     { key: 'link_url', label: 'URL link', type: 'text' },

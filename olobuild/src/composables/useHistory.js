@@ -103,6 +103,18 @@ export function useHistory() {
         builderStore.saveTemplate();
       }
     }
+    // Delete / Backspace: elimina tile selezionato
+    if (event.key === 'Delete' || event.key === 'Backspace') {
+      // Non eliminare se si sta editando testo
+      const tag = event.target.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || event.target.isContentEditable) return;
+      const selectedId = builderStore.selectedTileId;
+      if (selectedId) {
+        event.preventDefault();
+        tilesStore.removeTile(selectedId);
+        builderStore.selectedTileId = null;
+      }
+    }
   }
 
   return {

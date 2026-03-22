@@ -175,7 +175,7 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
 
         $c_bg      = $this->safe_color_css( $s['card_bg'] ) ?: 'var(--olo-color-muted, #F3F4F6)';
         $c_text    = $this->safe_color_css( $s['card_text_color'] ) ?: 'var(--olo-color-text, #374151)';
-        $c_pad     = intval( $s['card_padding'] ) ?: 20;
+        $c_pad = Olo_Tile_Utils::spacing_css( $s['tile_padding'] ?? $s['card_padding'] ?? 20, 20 );
         $c_rad     = Olo_Tile_Utils::border_radius( $s['card_border_radius'] ?? 0 );
         $c_bw      = intval( $s['card_border_width'] );
         $c_bc      = $this->safe_color_css( $s['card_border_color'] ) ?: 'var(--olo-color-border, #E5E7EB)';
@@ -351,7 +351,7 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .olo-tl-card {
                 background: <?php echo $c_bg; ?>;
                 color: <?php echo $c_text; ?>;
-                padding: <?php echo $c_pad; ?>px;
+                padding: <?php echo $c_pad; ?>;
                 border-radius: <?php echo $c_rad; ?>;
                 box-shadow: <?php echo $c_shadow; ?>;
                 position: relative;

@@ -17,7 +17,7 @@ class Olo_ServiceCheckin_Tile extends Olo_Tile_Base {
         'label_color'   => '',
         'border_color'  => '#E5E7EB',
         'border_radius' => 12,
-        'padding'       => 16,
+        'tile_padding' => ['top' => 16, 'right' => 16, 'bottom' => 16, 'left' => 16],
         'font_size'     => 14,
     ];
 

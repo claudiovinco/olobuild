@@ -3,9 +3,19 @@ export default {
   name: 'Mega Menu',
   icon: 'dashicons-menu-alt3',
   category: 'navigation',
+
   defaults: {
     // Menu
     menu_id: 0,
+
+    // Logo
+    logo_image: '',
+    logo_width: '140',
+    logo_min_height: '0',
+    logo_position: 'left',
+    logo_link: '',
+    logo_sticky: '',
+    logo_gap: '4',
 
     // Navbar
     layout: 'left',
@@ -20,6 +30,18 @@ export default {
     letter_spacing: '0',
     item_gap: '15',
 
+    // Bar Spacing
+    bar_width: 'full',
+    bar_padding: '16',
+    bar_gap: '20',
+    logo_margin_right: '0',
+
+    // Hover Effects
+    hover_effect: 'none',
+    hover_effect_color: '',
+    hover_effect_height: '2',
+    hover_effect_padding: '8',
+
     // Mega Panel
     panel_templates: {},
     mega_mode: 'auto',
@@ -33,6 +55,10 @@ export default {
     panel_border_top: '3',
     panel_border_color: '',
     panel_animation: 'fade',
+    panel_offset_top: '0',
+    panel_origin: 'nav',
+    panel_size: 'auto',
+    panel_open_animation: 'fade',
     show_dividers: false,
 
     // Panel Typography
@@ -53,21 +79,83 @@ export default {
     btn_color: '',
     btn_radius: '6',
     btn_hover_bg: '',
+    btn_padding_v: '8',
+    btn_padding_h: '20',
+    btn_margin_left: '0',
+    btn_margin_right: '0',
+    btn_border_width: '0',
+    btn_border_color: '',
 
-    // Ricerca integrata (tile reference)
+    // Search
+    search_icon: true,
+    search_position: 'navbar',
+    search_style: 'expand',
+    search_icon_style: 'lens',
     search_tile_id: '',
     search_position: 'after',
 
+    // Social Icons
+    social_facebook: '',
+    social_instagram: '',
+    social_x: '',
+    social_linkedin: '',
+    social_youtube: '',
+    social_tiktok: '',
+    social_pinterest: '',
+    social_whatsapp: '',
+    social_position: 'bar-right+mobile-bottom',
+    social_in_navbar: true,
+    social_navbar_side: 'right',
+    social_in_topbar: false,
+    social_topbar_side: 'right',
+    social_in_mobile: true,
+    social_mobile_pos: 'bottom',
+    social_size: '20',
+    social_color: '',
+    social_hover_color: '',
+    social_style: 'plain',
+
     // Mobile
     mobile_breakpoint: '1024',
+    mobile_style: 'offcanvas',
     mobile_side: 'left',
+    mobile_slide_direction: 'left',
+    offcanvas_fullscreen: false,
+    fullscreen_animation: 'fade',
+    menu_items_animation: 'none',
+    menu_items_stagger: '80',
+    hamburger_style: 'classic',
+    hamburger_size: '28',
     hamburger_color: '',
     mobile_bg: '',
     mobile_text_color: '',
     mobile_heading_color: '',
     mobile_accent_color: '',
+    mob_separator_style: 'line',
+    mob_toggle_style: 'chevron',
+    mob_toggle_position: 'right',
+    mob_toggle_size: '20',
+    mob_toggle_color: '',
+    mobile_font_size: '17',
+    mobile_item_padding: '16',
     mobile_logo: '',
     mobile_logo_height: '36',
+    mobile_bar_logo: true,
+    mobile_search: true,
+
+    // Extra links
+    extra_link_1_label: '',
+    extra_link_1_url: '',
+    extra_link_2_label: '',
+    extra_link_2_url: '',
+    extra_link_3_label: '',
+    extra_link_3_url: '',
+    extra_link_4_label: '',
+    extra_link_4_url: '',
+    extra_link_1_blank: false,
+    extra_link_2_blank: false,
+    extra_link_3_blank: false,
+    extra_link_4_blank: false,
 
     // Header
     header_mode: 'overlay',
@@ -75,14 +163,58 @@ export default {
     sticky_show_on_up: false,
     sticky_bg: '',
     sticky_shadow: true,
+    sticky_shrink: false,
+    sticky_text_color: '',
+    // Top Bar
+    topbar_enabled: false,
+    topbar_bg: '#1F2937',
+    topbar_text_color: '#9CA3AF',
+    topbar_link_color: '#FFFFFF',
+    topbar_height: '40',
+    topbar_font_size: '13',
+    topbar_hide_mobile: true,
+    topbar_hide_sticky: true,
+    topbar_left_content: 'none',
+    topbar_left_text: '',
+    topbar_left_menu_id: 0,
+    topbar_ticker_items: '',
+    topbar_ticker_label: 'TRENDING:',
+    topbar_ticker_speed: '5',
+    topbar_right_social: true,
+    topbar_right_search: true,
+    topbar_right_cart: false,
+    topbar_right_text: '',
+    topbar_right_cta_label: '',
+    topbar_right_cta_url: '',
+    topbar_right_cta_bg: '',
+    topbar_right_cta_color: '#FFFFFF',
+    topbar_border_bottom: true,
+    topbar_border_color: '',
   },
   fields: [
-    // -- Menu --
+    // ── Menu ──
     { key: 'menu_id', label: 'Menu WordPress', type: 'select', optionsSource: 'wpMenus' },
 
-    // -- Navbar --
+    // ── Logo ──
+    { type: 'separator', label: 'Logo' },
+    { key: 'logo_image', label: 'Logo desktop', type: 'image' },
+    { key: 'logo_width', label: 'Larghezza logo (px)', type: 'range', min: 60, max: 300, step: 5 },
+    { key: 'logo_min_height', label: 'Altezza logo (px)', type: 'range', min: 0, max: 120, step: 2 },
+    { key: 'logo_position', label: 'Posizione logo', type: 'select', options: [
+      { value: 'left', label: 'Sinistra' },
+      { value: 'center', label: 'Centro (sovrapposto)' },
+      { value: 'right', label: 'Destra' },
+      { value: 'stacked', label: 'Sopra il menu' },
+      { value: 'split', label: 'In mezzo (split nav)' },
+    ]},
+    { key: 'logo_link', label: 'Link logo (vuoto = home)', type: 'text' },
+    { key: 'logo_gap', label: 'Distanza logo-menu (px)', type: 'range', min: 0, max: 40, step: 2,
+      condition: { field: 'logo_position', op: 'eq', value: 'stacked' } },
+    { key: 'logo_sticky', label: 'Logo alternativo sticky', type: 'image' },
+
+    // ── Navbar ──
     { type: 'separator', label: 'Navbar' },
-    { key: 'layout', label: 'Allineamento', type: 'select', options: [
+    { key: 'layout', label: 'Allineamento menu', type: 'select', options: [
       { value: 'left', label: 'Sinistra' },
       { value: 'center', label: 'Centro' },
       { value: 'right', label: 'Destra' },
@@ -107,19 +239,58 @@ export default {
     { key: 'letter_spacing', label: 'Spaziatura lettere (px)', type: 'range', min: 0, max: 5, step: 0.5 },
     { key: 'item_gap', label: 'Gap tra voci (px)', type: 'range', min: 0, max: 40, step: 1 },
 
-    // -- Mega Panel --
+    // ── Spaziatura barra ──
+    { type: 'separator', label: 'Spaziatura barra' },
+    { key: 'bar_width', label: 'Larghezza barra', type: 'select', options: [
+      { value: 'full', label: 'Tutta larghezza' },
+      { value: 'wide', label: 'Wide (1400px)' },
+      { value: 'classic', label: 'Classica (1200px)' },
+    ]},
+    { key: 'bar_padding', label: 'Padding barra (px)', type: 'spacing', max: 60 },
+    { key: 'bar_gap', label: 'Gap elementi barra (px)', type: 'range', min: 0, max: 60, step: 2 },
+    { key: 'logo_margin_right', label: 'Margine destro logo (px)', type: 'spacing', max: 80 },
+
+    // ── Effetti Hover ──
+    { type: 'separator', label: 'Effetto hover voci' },
+    { key: 'hover_effect', label: 'Tipo effetto', type: 'select', options: [
+      { value: 'none', label: 'Underline base (default)' },
+      { value: 'underline', label: 'Underline (dal centro)' },
+      { value: 'overline', label: 'Overline (sopra)' },
+      { value: 'double-line', label: 'Doppia linea (sopra+sotto)' },
+      { value: 'background', label: 'Sfondo colorato' },
+      { value: 'framed', label: 'Cornice (bordo)' },
+      { value: 'dot', label: 'Pallino sotto' },
+      { value: 'bracket', label: 'Parentesi [voce]' },
+      { value: 'highlight', label: 'Highlight (gradiente scivola)' },
+      { value: 'fill-up', label: 'Fill Up (sfondo dal basso)' },
+      { value: 'flip', label: 'Flip (rotazione 3D)' },
+      { value: 'glitch', label: 'Glitch (doppio offset)' },
+      { value: 'magnetic', label: 'Magnetic (segue il mouse)' },
+      { value: 'underline-grow', label: 'Underline Grow (cresce)' },
+    ]},
+    { key: 'hover_effect_color', label: 'Colore effetto', type: 'color' },
+    { key: 'hover_effect_height', label: 'Spessore linea/bordo (px)', type: 'range', min: 1, max: 5, step: 1 },
+    { key: 'hover_effect_padding', label: 'Padding effetto (px)', type: 'spacing', max: 30 },
+
+    // ── Mega Panel ──
     { type: 'separator', label: 'Mega Panel' },
     { key: 'panel_templates', label: 'Template pannelli', type: 'megapanel-map' },
     { key: 'mega_mode', label: 'Attivazione mega', type: 'select', options: [
       { value: 'auto', label: 'Automatico (tutte con figli)' },
       { value: 'css-class', label: 'Solo classe mega-menu' },
     ]},
-    { key: 'panel_width', label: 'Larghezza panel', type: 'select', options: [
+    { key: 'panel_width', label: 'Larghezza panel (legacy)', type: 'select', options: [
       { value: 'container', label: 'Contenitore' },
       { value: 'full', label: 'Full-width' },
     ]},
-    { key: 'panel_max_width', label: 'Larghezza max (px)', type: 'range', min: 400, max: 1400, step: 10,
-      condition: { field: 'panel_width', op: 'eq', value: 'container' } },
+    { key: 'panel_size', label: 'Dimensione pannello', type: 'select', options: [
+      { value: 'auto', label: 'Automatica (adatta al contenuto)' },
+      { value: 'centered', label: 'Centrato sotto la voce' },
+      { value: 'section', label: 'Larghezza della barra' },
+      { value: 'container', label: 'Larghezza sezione (container)' },
+      { value: 'viewport', label: 'Larghezza viewport (full)' },
+    ]},
+    { key: 'panel_max_width', label: 'Larghezza max (px)', type: 'range', min: 400, max: 1400, step: 10 },
     { key: 'panel_columns', label: 'Colonne', type: 'range', min: 2, max: 6, step: 1 },
     { key: 'panel_bg', label: 'Sfondo panel', type: 'color' },
     { key: 'panel_shadow', label: 'Ombra', type: 'select', options: [
@@ -142,16 +313,27 @@ export default {
     { key: 'panel_shadow_inset', label: 'Ombra interna', type: 'toggle',
       condition: { field: 'panel_shadow', op: 'eq', value: 'custom' } },
     { key: 'panel_radius', label: 'Arrotondamento (px)', type: 'border-radius' },
-    { key: 'panel_padding', label: 'Padding (px)', type: 'range', min: 16, max: 60, step: 2 },
+    { key: 'panel_padding', label: 'Padding (px)', type: 'spacing', max: 60 },
     { key: 'panel_border_top', label: 'Linea accento top (px)', type: 'range', min: 0, max: 5, step: 1 },
     { key: 'panel_border_color', label: 'Colore linea accento', type: 'color' },
-    { key: 'panel_animation', label: 'Animazione', type: 'select', options: [
+    { key: 'panel_offset_top', label: 'Distanza dal nav (px)', type: 'range', min: 0, max: 30, step: 1 },
+    { key: 'panel_origin', label: 'Origine pannello', type: 'select', options: [
+      { value: 'nav', label: 'Dal nav item (sotto la voce)' },
+      { value: 'section', label: 'Dalla sezione (bordo inferiore header)' },
+    ]},
+    { key: 'panel_open_animation', label: 'Animazione apertura', type: 'select', options: [
       { value: 'fade', label: 'Dissolvenza' },
-      { value: 'slide-down', label: 'Scorrimento' },
+      { value: 'slide-down', label: 'Scorrimento giu' },
+      { value: 'slide-up', label: 'Scorrimento su' },
+      { value: 'scale', label: 'Scala (dall\'alto)' },
+      { value: 'scale-center', label: 'Scala (dal centro)' },
+      { value: 'flip', label: 'Flip 3D' },
+      { value: 'reveal', label: 'Reveal (clip-path)' },
+      { value: 'blur', label: 'Sfocatura → nitido' },
     ]},
     { key: 'show_dividers', label: 'Divisori tra colonne', type: 'toggle' },
 
-    // -- Tipografia Panel --
+    // ── Tipografia Panel ──
     { type: 'separator', label: 'Tipografia panel' },
     { key: 'heading_color', label: 'Colore intestazioni', type: 'color' },
     { key: 'heading_size', label: 'Dim. intestazioni (px)', type: 'range', min: 12, max: 20, step: 1 },
@@ -172,7 +354,7 @@ export default {
     { key: 'desc_color', label: 'Colore descrizioni', type: 'color',
       condition: { field: 'show_descriptions', value: true } },
 
-    // -- Pulsanti CTA --
+    // ── Pulsanti CTA ──
     { type: 'separator', label: 'Pulsanti CTA' },
     { key: 'button_mode', label: 'Modalita pulsanti', type: 'select', options: [
       { value: 'none', label: 'Nessuno' },
@@ -188,10 +370,36 @@ export default {
       condition: { field: 'button_mode', operator: '!=', value: 'none' } },
     { key: 'btn_hover_bg', label: 'Sfondo pulsante hover', type: 'color',
       condition: { field: 'button_mode', operator: '!=', value: 'none' } },
+    { key: 'btn_padding_v', label: 'Padding verticale pulsante (px)', type: 'spacing', max: 30,
+      condition: { field: 'button_mode', operator: '!=', value: 'none' } },
+    { key: 'btn_padding_h', label: 'Padding orizzontale pulsante (px)', type: 'spacing', max: 60,
+      condition: { field: 'button_mode', operator: '!=', value: 'none' } },
+    { key: 'btn_margin_left', label: 'Margine sinistro pulsante (px)', type: 'spacing', max: 40,
+      condition: { field: 'button_mode', operator: '!=', value: 'none' } },
+    { key: 'btn_margin_right', label: 'Margine destro pulsante (px)', type: 'spacing', max: 40,
+      condition: { field: 'button_mode', operator: '!=', value: 'none' } },
+    { key: 'btn_border_width', label: 'Bordo pulsante (px)', type: 'range', min: 0, max: 5, step: 1,
+      condition: { field: 'button_mode', operator: '!=', value: 'none' } },
+    { key: 'btn_border_color', label: 'Colore bordo pulsante', type: 'color',
+      condition: { field: 'button_mode', operator: '!=', value: 'none' } },
 
-    // -- Ricerca nel menu --
-    { type: 'separator', label: 'Ricerca nel menu' },
-    { key: 'search_tile_id', label: 'Tile ricerca', type: 'select',
+    // ── Ricerca ──
+    { type: 'separator', label: 'Ricerca' },
+    { key: 'search_icon', label: 'Mostra icona ricerca', type: 'toggle' },
+    { key: 'search_position', label: 'Posizione ricerca', type: 'select', options: [
+      { value: 'navbar', label: 'Navbar' },
+      { value: 'topbar', label: 'Top bar' },
+      { value: 'both', label: 'Entrambi' },
+    ], condition: { field: 'search_icon', value: true } },
+    { key: 'search_icon_style', label: 'Stile icona ricerca', type: 'select', options: [
+      { value: 'lens', label: 'Lente classica' },
+      { value: 'minimal', label: 'Cerchio minimal' },
+      { value: 'thin', label: 'Lente sottile' },
+      { value: 'target', label: 'Mirino' },
+      { value: 'binocular', label: 'Binocolo' },
+      { value: 'dot', label: 'Punto ricerca' },
+    ]},
+    { key: 'search_tile_id', label: 'Tile ricerca (opzionale)', type: 'select',
       optionsSource: 'searchTiles' },
     { key: 'search_position', label: 'Posizione', type: 'select',
       show: s => !!s.search_tile_id,
@@ -200,36 +408,237 @@ export default {
         { value: 'after', label: 'Dopo il menu (destra)' },
       ]},
 
-    // -- Mobile --
+    // ── Social Icons ──
+    { type: 'separator', label: 'Social Icons' },
+    { key: 'social_facebook', label: 'Facebook URL', type: 'text' },
+    { key: 'social_instagram', label: 'Instagram URL', type: 'text' },
+    { key: 'social_x', label: 'X (Twitter) URL', type: 'text' },
+    { key: 'social_linkedin', label: 'LinkedIn URL', type: 'text' },
+    { key: 'social_youtube', label: 'YouTube URL', type: 'text' },
+    { key: 'social_tiktok', label: 'TikTok URL', type: 'text' },
+    { key: 'social_pinterest', label: 'Pinterest URL', type: 'text' },
+    { key: 'social_whatsapp', label: 'WhatsApp URL', type: 'text' },
+    { key: 'social_in_navbar', label: 'Mostra nella navbar', type: 'toggle' },
+    { key: 'social_navbar_side', label: 'Lato navbar', type: 'select', options: [
+      { value: 'right', label: 'Destra' },
+      { value: 'left', label: 'Sinistra' },
+    ], condition: { field: 'social_in_navbar', value: true } },
+    { key: 'social_in_topbar', label: 'Mostra nella top bar', type: 'toggle' },
+    { key: 'social_topbar_side', label: 'Lato top bar', type: 'select', options: [
+      { value: 'right', label: 'Destra' },
+      { value: 'left', label: 'Sinistra' },
+    ], condition: { field: 'social_in_topbar', value: true } },
+    { key: 'social_in_mobile', label: 'Mostra nel menu mobile', type: 'toggle' },
+    { key: 'social_mobile_pos', label: 'Posizione mobile', type: 'select', options: [
+      { value: 'bottom', label: 'In basso' },
+      { value: 'top', label: 'In alto' },
+    ], condition: { field: 'social_in_mobile', value: true } },
+    { key: 'social_size', label: 'Dimensione icone (px)', type: 'range', min: 14, max: 36, step: 1 },
+    { key: 'social_color', label: 'Colore icone', type: 'color' },
+    { key: 'social_hover_color', label: 'Colore hover icone', type: 'color' },
+    { key: 'social_style', label: 'Stile icone', type: 'select', options: [
+      { value: 'plain', label: 'Solo icona' },
+      { value: 'circle', label: 'Cerchio' },
+      { value: 'rounded', label: 'Rettangolo arrotondato' },
+    ]},
+
+    // ── Link Extra ──
+    { type: 'separator', label: 'Link extra' },
+    { key: 'extra_link_1_label', label: 'Voce 1 — Testo', type: 'text' },
+    { key: 'extra_link_1_url', label: 'Voce 1 — URL', type: 'text' },
+    { key: 'extra_link_1_blank', label: 'Voce 1 — Apri in nuova finestra', type: 'toggle' },
+    { key: 'extra_link_2_label', label: 'Voce 2 — Testo', type: 'text' },
+    { key: 'extra_link_2_url', label: 'Voce 2 — URL', type: 'text' },
+    { key: 'extra_link_2_blank', label: 'Voce 2 — Apri in nuova finestra', type: 'toggle' },
+    { key: 'extra_link_3_label', label: 'Voce 3 — Testo', type: 'text' },
+    { key: 'extra_link_3_url', label: 'Voce 3 — URL', type: 'text' },
+    { key: 'extra_link_3_blank', label: 'Voce 3 — Apri in nuova finestra', type: 'toggle' },
+    { key: 'extra_link_4_label', label: 'Voce 4 — Testo', type: 'text' },
+    { key: 'extra_link_4_url', label: 'Voce 4 — URL', type: 'text' },
+    { key: 'extra_link_4_blank', label: 'Voce 4 — Apri in nuova finestra', type: 'toggle' },
+
+    // ── Mobile ──
     { type: 'separator', label: 'Mobile' },
-    { key: 'mobile_breakpoint', label: 'Breakpoint mobile', type: 'select', options: [
+    { key: 'mobile_breakpoint', label: 'Breakpoint', type: 'select', options: [
       { value: '768', label: '768px (Tablet)' },
       { value: '1024', label: '1024px (Desktop)' },
+      { value: '1200', label: '1200px (Desktop largo)' },
     ]},
-    { key: 'mobile_side', label: 'Lato off-canvas', type: 'select', options: [
-      { value: 'left', label: 'Sinistra' },
-      { value: 'right', label: 'Destra' },
+    { key: 'mobile_style', label: 'Stile menu mobile', type: 'select', options: [
+      { value: 'offcanvas', label: 'Off-canvas (pannello laterale)' },
+      { value: 'dropdown', label: 'Dropdown (scende dalla barra)' },
+      { value: 'fullscreen', label: 'Fullscreen (overlay completo)' },
     ]},
+    { key: 'mobile_side', label: 'Lato off-canvas', type: 'select',
+      condition: { field: 'mobile_style', op: 'eq', value: 'offcanvas' },
+      options: [
+        { value: 'left', label: 'Sinistra' },
+        { value: 'right', label: 'Destra' },
+      ]},
+    { key: 'mobile_slide_direction', label: 'Direzione apertura', type: 'select',
+      condition: { field: 'mobile_style', op: 'eq', value: 'offcanvas' },
+      options: [
+        { value: 'left', label: 'Da sinistra' },
+        { value: 'right', label: 'Da destra' },
+        { value: 'top', label: 'Dall\'alto' },
+      ]},
+    { key: 'offcanvas_fullscreen', label: 'Off-canvas a tutto schermo', type: 'toggle',
+      condition: { field: 'mobile_style', op: 'eq', value: 'offcanvas' } },
+
+    // ── Fullscreen Animazioni ──
+    { key: 'fullscreen_animation', label: 'Animazione fullscreen', type: 'select',
+      condition: { field: 'mobile_style', op: 'eq', value: 'fullscreen' },
+      options: [
+        { value: 'fade', label: 'Dissolvenza' },
+        { value: 'slide-left', label: 'Scorre da sinistra' },
+        { value: 'slide-right', label: 'Scorre da destra' },
+        { value: 'slide-up', label: 'Scorre dal basso' },
+        { value: 'curtain', label: 'Sipario (dal centro)' },
+        { value: 'circular', label: 'Cerchio (dal burger)' },
+        { value: 'diagonal', label: 'Diagonale (wipe)' },
+      ]},
+    { key: 'menu_items_animation', label: 'Animazione voci menu', type: 'select', options: [
+      { value: 'none', label: 'Nessuna' },
+      { value: 'fade-down', label: 'Fade dall\'alto' },
+      { value: 'fade-up', label: 'Fade dal basso' },
+      { value: 'slide-left', label: 'Slide da sinistra' },
+      { value: 'slide-right', label: 'Slide da destra' },
+      { value: 'scale', label: 'Scala' },
+      { value: 'blur', label: 'Sfocatura' },
+    ]},
+    { key: 'menu_items_stagger', label: 'Ritardo stagger (ms)', type: 'range', min: 30, max: 200, step: 10,
+      condition: { field: 'menu_items_animation', operator: '!=', value: 'none' } },
+
+    { type: 'separator', label: 'Hamburger' },
+    { key: 'hamburger_style', label: 'Stile hamburger', type: 'select', options: [
+      { value: 'classic', label: 'Classic (3 linee → X)' },
+      { value: 'squeeze', label: 'Squeeze (comprime → X)' },
+      { value: 'arrow', label: 'Arrow (→ freccia)' },
+      { value: 'minimal', label: 'Minimal (2 linee)' },
+      { value: 'dot-grid', label: 'Dot Grid (9 pallini)' },
+      { value: 'collapse', label: 'Collapse (centro scompare)' },
+      { value: 'rotate', label: 'Rotate (ruota 180° → X)' },
+      { value: 'elastic', label: 'Elastic (rimbalzo)' },
+      { value: 'morph', label: 'Morph (trasformazione fluida)' },
+      { value: 'magnetic', label: 'Magnetic (2 step → X)' },
+    ]},
+    { key: 'hamburger_size', label: 'Dimensione hamburger (px)', type: 'range', min: 20, max: 44, step: 2 },
     { key: 'hamburger_color', label: 'Colore hamburger', type: 'color' },
-    { key: 'mobile_bg', label: 'Sfondo off-canvas', type: 'color' },
+
+    { type: 'separator', label: 'Mobile — Barra' },
+    { key: 'mobile_bar_logo', label: 'Logo nella barra mobile', type: 'toggle' },
+    { key: 'mobile_search', label: 'Icona ricerca mobile', type: 'toggle' },
+
+    { type: 'separator', label: 'Mobile — Pannello' },
+    { key: 'mobile_bg', label: 'Sfondo pannello mobile', type: 'color' },
     { key: 'mobile_text_color', label: 'Colore testo mobile', type: 'color' },
     { key: 'mobile_heading_color', label: 'Colore intestazioni mobile', type: 'color' },
     { key: 'mobile_accent_color', label: 'Colore accento mobile', type: 'color' },
-    { key: 'mobile_logo', label: 'Logo off-canvas', type: 'image' },
-    { key: 'mobile_logo_height', label: 'Altezza logo (px)', type: 'range', min: 20, max: 60, step: 2 },
+    { key: 'mob_separator_style', label: 'Separatore tra voci', type: 'select', options: [
+      { value: 'line', label: 'Linea solida' },
+      { value: 'dotted', label: 'Puntinata' },
+      { value: 'dashed', label: 'Tratteggiata' },
+      { value: 'gradient', label: 'Sfumatura' },
+      { value: 'none', label: 'Nessuno' },
+    ]},
+    { key: 'mobile_font_size', label: 'Dimensione testo (px)', type: 'range', min: 14, max: 24, step: 1 },
+    { key: 'mobile_item_padding', label: 'Padding voci (px)', type: 'spacing', max: 30 },
+    { key: 'mobile_logo', label: 'Logo pannello mobile', type: 'image' },
+    { key: 'mobile_logo_height', label: 'Altezza logo mobile (px)', type: 'range', min: 20, max: 120, step: 2 },
 
-    // -- Header --
+    { type: 'separator', label: 'Mobile — Indicatore sottomenu' },
+    { key: 'mob_toggle_style', label: 'Stile indicatore', type: 'select', options: [
+      { value: 'chevron', label: 'Chevron (∨/∧)' },
+      { value: 'plus-minus', label: 'Plus / Minus (+/−)' },
+      { value: 'circle-plus', label: 'Cerchio plus (⊕/⊖)' },
+      { value: 'arrow', label: 'Freccia (→/↓)' },
+      { value: 'caret', label: 'Triangolo (▸/▾)' },
+      { value: 'bracket', label: 'Parentesi (〉/〈)' },
+      { value: 'dot-line', label: 'Punto/Linea (•/—)' },
+      { value: 'none', label: 'Nessuno' },
+    ]},
+    { key: 'mob_toggle_position', label: 'Posizione indicatore', type: 'select', options: [
+      { value: 'right', label: 'Destra' },
+      { value: 'left', label: 'Sinistra' },
+    ]},
+    { key: 'mob_toggle_size', label: 'Dimensione (px)', type: 'range', min: 12, max: 32, step: 1 },
+    { key: 'mob_toggle_color', label: 'Colore indicatore', type: 'color' },
+
+    // ── Header ──
     { type: 'separator', label: 'Header' },
     { key: 'header_mode', label: 'Modalita header', type: 'select', options: [
       { value: 'overlay', label: 'Sovrapposto (sopra la pagina)' },
       { value: 'classic', label: 'In linea (pagina inizia dopo)' },
     ]},
     { key: 'sticky', label: 'Header sticky', type: 'toggle' },
-    { key: 'sticky_show_on_up', label: 'Mostra su scroll up', type: 'toggle',
-      condition: { field: 'sticky', value: true } },
+    { key: 'sticky_show_on_up', label: 'Mostra su scroll up', type: 'toggle' },
     { key: 'sticky_bg', label: 'Sfondo sticky', type: 'color',
       condition: { field: 'sticky', value: true } },
     { key: 'sticky_shadow', label: 'Ombra sticky', type: 'toggle',
       condition: { field: 'sticky', value: true } },
+    { key: 'sticky_shrink', label: 'Riduci altezza in sticky', type: 'toggle',
+      condition: { field: 'sticky', value: true } },
+    { key: 'sticky_text_color', label: 'Colore testo sticky', type: 'color',
+      condition: { field: 'sticky', value: true } },
+
+    // ── TOP BAR ──
+    { type: 'separator', label: 'Top Bar' },
+    { key: 'topbar_enabled', label: 'Mostra top bar', type: 'toggle' },
+    { key: 'topbar_bg', label: 'Sfondo top bar', type: 'color',
+      condition: { field: 'topbar_enabled', value: true } },
+    { key: 'topbar_text_color', label: 'Colore testo', type: 'color',
+      condition: { field: 'topbar_enabled', value: true } },
+    { key: 'topbar_link_color', label: 'Colore link', type: 'color',
+      condition: { field: 'topbar_enabled', value: true } },
+    { key: 'topbar_height', label: 'Altezza (px)', type: 'range', min: 28, max: 60, step: 2,
+      condition: { field: 'topbar_enabled', value: true } },
+    { key: 'topbar_font_size', label: 'Dimensione testo (px)', type: 'range', min: 10, max: 16, step: 1,
+      condition: { field: 'topbar_enabled', value: true } },
+    { key: 'topbar_border_bottom', label: 'Bordo inferiore', type: 'toggle',
+      condition: { field: 'topbar_enabled', value: true } },
+    { key: 'topbar_border_color', label: 'Colore bordo', type: 'color',
+      condition: { field: 'topbar_enabled', value: true } },
+    { key: 'topbar_hide_mobile', label: 'Nascondi su mobile', type: 'toggle',
+      condition: { field: 'topbar_enabled', value: true } },
+    { key: 'topbar_hide_sticky', label: 'Nascondi in sticky', type: 'toggle',
+      condition: { field: 'topbar_enabled', value: true } },
+
+    // Top bar — Sinistra
+    { type: 'separator', label: 'Top Bar — Sinistra' },
+    { key: 'topbar_left_content', label: 'Contenuto sinistra', type: 'select', options: [
+      { value: 'none', label: 'Nessuno' },
+      { value: 'text', label: 'Testo personalizzato' },
+      { value: 'ticker', label: 'Newsticker scorrevole' },
+      { value: 'hamburger', label: 'Menu hamburger' },
+    ], condition: { field: 'topbar_enabled', value: true } },
+    { key: 'topbar_left_text', label: 'Testo', type: 'text', placeholder: 'es. Chiama: 0461 123456',
+      condition: { field: 'topbar_left_content', value: 'text' } },
+    { key: 'topbar_ticker_label', label: 'Etichetta ticker', type: 'text', placeholder: 'TRENDING:',
+      condition: { field: 'topbar_left_content', value: 'ticker' } },
+    { key: 'topbar_ticker_items', label: 'Elementi ticker (uno per riga)', type: 'textarea',
+      condition: { field: 'topbar_left_content', value: 'ticker' } },
+    { key: 'topbar_ticker_speed', label: 'Velocita ticker (sec)', type: 'range', min: 2, max: 15, step: 1,
+      condition: { field: 'topbar_left_content', value: 'ticker' } },
+    { key: 'topbar_left_menu_id', label: 'Menu hamburger', type: 'select', optionsSource: 'wpMenus',
+      condition: { field: 'topbar_left_content', value: 'hamburger' } },
+
+    // Top bar — Destra
+    { type: 'separator', label: 'Top Bar — Destra' },
+    { key: 'topbar_right_social', label: 'Icone social', type: 'toggle',
+      condition: { field: 'topbar_enabled', value: true } },
+    { key: 'topbar_right_search', label: 'Icona ricerca', type: 'toggle',
+      condition: { field: 'topbar_enabled', value: true } },
+    { key: 'topbar_right_cart', label: 'Carrello WooCommerce', type: 'toggle',
+      condition: { field: 'topbar_enabled', value: true } },
+    { key: 'topbar_right_text', label: 'Testo destro', type: 'text', placeholder: 'es. Spedizione gratuita!',
+      condition: { field: 'topbar_enabled', value: true } },
+    { key: 'topbar_right_cta_label', label: 'Pulsante CTA — testo', type: 'text', placeholder: 'es. Prenota ora',
+      condition: { field: 'topbar_enabled', value: true } },
+    { key: 'topbar_right_cta_url', label: 'Pulsante CTA — URL', type: 'text', placeholder: 'https://...',
+      condition: { field: 'topbar_enabled', value: true } },
+    { key: 'topbar_right_cta_bg', label: 'Pulsante CTA — sfondo', type: 'color',
+      condition: { field: 'topbar_enabled', value: true } },
+    { key: 'topbar_right_cta_color', label: 'Pulsante CTA — colore testo', type: 'color',
+      condition: { field: 'topbar_enabled', value: true } },
   ],
 };

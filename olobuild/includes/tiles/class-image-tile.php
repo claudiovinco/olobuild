@@ -34,6 +34,7 @@ class Olo_Image_Tile extends Olo_Tile_Base {
         'hover_filter_sepia'      => '',
         'hover_animation'  => 'none',
         'lightbox'         => false,
+        'border_radius'    => '0',
     ];
 
     public function get_controls() {
@@ -97,6 +98,9 @@ class Olo_Image_Tile extends Olo_Tile_Base {
         }
         $init_transform = $anim === 'zoom-out' ? 'transform:scale(1.05);' : '';
 
+        // Border radius
+        $br_css = $this->build_border_radius_css( $s['border_radius'] ?? '0' );
+
         ob_start();
 
         if ( $filter_css || $hover_filter_css || $hover_transform || $anim === 'blur-in' ) {
@@ -118,19 +122,36 @@ class Olo_Image_Tile extends Olo_Tile_Base {
             echo '</style>';
         }
         ?>
-        <figure class="olo-image <?php echo esc_attr( $uid ); ?>"<?php if ( ! empty( $s['lightbox'] ) && empty( $s['link_url'] ) ) echo ' data-uk-lightbox'; ?> style="margin: 0;">
+        <?php
+        $figure_style = 'margin: 0;';
+        if ( $br_css ) {
+            $figure_style .= ' border-radius: ' . esc_attr( $br_css ) . '; overflow: hidden;';
+        }
+        ?>
+        <figure class="olo-image <?php echo esc_attr( $uid ); ?>"<?php if ( ! empty( $s['lightbox'] ) && empty( $s['link_url'] ) ) echo ' data-uk-lightbox'; ?> style="<?php echo esc_attr( $figure_style ); ?>">
             <?php
             $att_id = absint( $s['image_url_id'] ?? 0 );
-            $extra  = 'uk-img style="width: 100%; height: ' . esc_attr( $s['height'] ) . '; object-fit: ' . esc_attr( $s['object_fit'] ) . '; display: block;"';
-            $img    = Olo_Tile_Utils::img_srcset( $att_id, $s['image_url'], $s['alt_text'], 'uk-border-rounded', 'full', $extra );
+            $img_style = 'width: 100%; height: ' . esc_attr( $s['height'] ) . '; object-fit: ' . esc_attr( $s['object_fit'] ) . '; display: block;';
+            if ( $br_css ) {
+                $img_style .= ' border-radius: ' . esc_attr( $br_css ) . ';';
+            }
+            $extra  = 'uk-img style="' . $img_style . '"';
+            $img_opts = [];
+            if ( ! empty( $s['_img_loading'] ) ) $img_opts['loading'] = $s['_img_loading'];
+            if ( ! empty( $s['_fetch_priority'] ) ) $img_opts['fetchpriority'] = $s['_fetch_priority'];
+            $img    = Olo_Tile_Utils::img_srcset( $att_id, $s['image_url'], $s['alt_text'], 'uk-border-rounded', 'full', $extra, $img_opts );
 
             $img = $this->render_hover_wrap( $img, $s['hover_image'] ?? '', $s['hover_video'] ?? '' );
 
             if ( ! empty( $s['link_url'] ) ) {
+                $link_rel = ! empty( $s['_link_rel'] ) ? ' rel="' . esc_attr( $s['_link_rel'] ) . '"' : '';
+                $link_title = ! empty( $s['_link_title'] ) ? ' title="' . esc_attr( $s['_link_title'] ) . '"' : '';
                 printf(
-                    '<a href="%s" target="%s" style="display: block;">%s</a>',
+                    '<a href="%s" target="%s"%s%s style="display: block;">%s</a>',
                     esc_url( $s['link_url'] ),
                     esc_attr( $s['link_target'] ),
+                    $link_rel,
+                    $link_title,
                     $img
                 );
             } elseif ( ! empty( $s['lightbox'] ) ) {

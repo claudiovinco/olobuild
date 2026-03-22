@@ -43,7 +43,7 @@ export default {
     // Card
     card_bg: '',
     card_text_color: '',
-    card_padding: '20',
+    tile_padding: { top: 20, right: 20, bottom: 20, left: 20 },
     card_border_radius: '12',
     card_shadow: 'md',
     card_border_width: '0',
@@ -160,7 +160,7 @@ export default {
     { type: 'separator', label: 'Card' },
     { key: 'card_bg', label: 'Sfondo card', type: 'color' },
     { key: 'card_text_color', label: 'Colore testo card', type: 'color' },
-    { key: 'card_padding', label: 'Padding card (px)', type: 'range', min: 8, max: 40, step: 2 },
+    { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 40 },
     { key: 'card_border_radius', label: 'Arrotondamento (px)', type: 'border-radius' },
     { key: 'card_shadow', label: 'Ombra', type: 'select', options: [
       { value: 'none', label: 'Nessuna' },
@@ -200,7 +200,7 @@ export default {
       { value: '1/1', label: '1:1' },
       { value: '2/1', label: '2:1' },
     ]},
-    { key: 'card_media_margin', label: 'Margine media (px)', type: 'range', min: -20, max: 20, step: 1 },
+    { key: 'card_media_margin', label: 'Margine media (px)', type: 'spacing', max: 20 },
     { key: 'card_media_radius', label: 'Arrotondamento media (px)', type: 'border-radius' },
 
     // ── Data ──

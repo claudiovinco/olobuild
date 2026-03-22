@@ -8,6 +8,9 @@
       @click.stop
       @contextmenu.prevent
     >
+      <button @click="close" class="olo-ctx-close" title="Chiudi">
+        <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 2l8 8M10 2l-8 8"/></svg>
+      </button>
       <button @click="doCopy" class="olo-ctx-item">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
         Copia
@@ -55,6 +58,36 @@
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
         Sgancia globale
       </button>
+      <!-- Row layout options -->
+      <template v-if="hasParentRow">
+        <div class="olo-ctx-sep"></div>
+        <div class="olo-ctx-label">Layout colonne</div>
+        <div class="olo-ctx-layouts">
+          <button v-for="l in rowLayouts" :key="l.key" class="olo-ctx-layout"
+            :class="{ 'olo-ctx-layout--active': !isParentGrid && currentRowLayout === l.key }"
+            :title="l.label" @click="doChangeLayout(l.key)">
+            <div class="olo-ctx-layout-preview">
+              <div v-for="(w, i) in l.cols" :key="i" class="olo-ctx-layout-col" :style="{ flex: w }"></div>
+            </div>
+          </button>
+        </div>
+        <template v-for="(cat, catIdx) in gridCategories" :key="catIdx">
+          <div class="olo-ctx-label">{{ cat.label }}</div>
+          <div class="olo-ctx-layouts">
+            <button v-for="g in cat.items" :key="g.id" class="olo-ctx-layout"
+              :class="{ 'olo-ctx-layout--active': isParentGrid && currentGridTemplate === g.id }"
+              :title="g.name" @click="doChangeGrid(g.id)">
+              <svg class="olo-ctx-grid-svg" viewBox="0 0 36 22">
+                <rect v-for="(r, ri) in g.preview.rects" :key="ri"
+                  :x="r.x * (36/g.preview.cols)" :y="r.y * (22/g.preview.rows)"
+                  :width="r.w * (36/g.preview.cols) - 1" :height="r.h * (22/g.preview.rows) - 1"
+                  rx="1" fill="currentColor" opacity="0.6"
+                />
+              </svg>
+            </button>
+          </div>
+        </template>
+      </template>
       <div class="olo-ctx-sep"></div>
       <button @click="doDelete" class="olo-ctx-item olo-ctx-item--danger">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
@@ -65,9 +98,10 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
+import { ref, computed, nextTick, onMounted, onBeforeUnmount } from 'vue';
 import { useTilesStore } from '@/stores/tiles';
 import { useBuilderStore } from '@/stores/builder';
+import { columns as gridColumns, multirow as gridMultirow, masonry as gridMasonry, sidebar as gridSidebar } from '@/config/gridTemplates.js';
 
 const tilesStore = useTilesStore();
 const builderStore = useBuilderStore();
@@ -90,16 +124,76 @@ const currentTileIsSection = computed(() => {
   return tile ? tile.type === 'section' : false;
 });
 
+const currentTileIsRow = computed(() => {
+  if (!tileId.value) return false;
+  const tile = tilesStore.getTileById(tileId.value);
+  return tile ? tile.type === 'row' : false;
+});
+
+// Find the nearest parent row for the selected tile
+const parentRow = computed(() => {
+  if (!tileId.value) return null;
+  const tile = tilesStore.getTileById(tileId.value);
+  if (!tile) return null;
+  if (tile.type === 'row') return tile;
+  // Walk up to find the row ancestor
+  return findAncestorOfType(tileId.value, 'row');
+});
+
+const hasParentRow = computed(() => !!parentRow.value);
+
+const currentRowLayout = computed(() => {
+  if (!parentRow.value) return '';
+  return parentRow.value.settings?.layout || '100';
+});
+
+const rowLayouts = [
+  { key: '100', label: '1 colonna', cols: [1] },
+  { key: '50-50', label: '1/2 + 1/2', cols: [1, 1] },
+  { key: '33-33-33', label: '1/3 x 3', cols: [1, 1, 1] },
+  { key: '25-25-25-25', label: '1/4 x 4', cols: [1, 1, 1, 1] },
+  { key: '66-33', label: '2/3 + 1/3', cols: [2, 1] },
+  { key: '33-66', label: '1/3 + 2/3', cols: [1, 2] },
+  { key: '25-50-25', label: '1/4 + 1/2 + 1/4', cols: [1, 2, 1] },
+  { key: '20-60-20', label: '1/5 + 3/5 + 1/5', cols: [1, 3, 1] },
+];
+
+// All grid templates organized by category
+const gridCategories = [
+  { label: 'Colonne', items: gridColumns },
+  { label: 'Multi-riga', items: gridMultirow },
+  { label: 'Masonry', items: gridMasonry },
+  { label: 'Sidebar', items: gridSidebar },
+];
+
+const isParentGrid = computed(() => {
+  return parentRow.value?.settings?.layout_mode === 'grid';
+});
+
+const currentGridTemplate = computed(() => {
+  return parentRow.value?.settings?.grid_template || '';
+});
+
 function open(event, id) {
   tileId.value = id;
-  // Select the tile on right-click
   builderStore.selectTile(id);
-  // Position clamped to viewport
   const mx = event.clientX;
   const my = event.clientY;
-  x.value = Math.min(mx, window.innerWidth - 200);
-  y.value = Math.min(my, window.innerHeight - 360);
+  x.value = Math.min(mx, window.innerWidth - 220);
+  y.value = my;
   visible.value = true;
+  // After render, clamp to viewport if menu overflows bottom
+  nextTick(() => {
+    const el = menuRef.value;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    if (rect.bottom > window.innerHeight - 8) {
+      y.value = Math.max(8, window.innerHeight - rect.height - 8);
+    }
+    if (rect.right > window.innerWidth - 8) {
+      x.value = Math.max(8, window.innerWidth - rect.width - 8);
+    }
+  });
 }
 
 function close() {
@@ -195,6 +289,69 @@ function doDetachGlobal() {
   close();
 }
 
+function doChangeLayout(layoutKey) {
+  const row = parentRow.value;
+  if (!row) { close(); return; }
+
+  // Switch back to flex mode if coming from grid
+  tilesStore.updateTile(tileId.value, 'settings.layout', layoutKey);
+  tilesStore.updateTile(tileId.value, 'settings.layout_mode', 'flex');
+  tilesStore.updateTile(tileId.value, 'settings.grid_template', '');
+  tilesStore.updateTile(tileId.value, 'settings.grid_columns', '');
+  tilesStore.updateTile(tileId.value, 'settings.grid_rows', '');
+
+  // Ensure correct number of columns
+  const colCounts = { '100': 1, '50-50': 2, '33-33-33': 3, '25-25-25-25': 4, '66-33': 2, '33-66': 2, '25-50-25': 3, '20-60-20': 3, '20-20-20-20-20': 5, '16-16-16-16-16-16': 6 };
+  const widthMaps = {
+    '100': ['1-1'], '50-50': ['1-2', '1-2'], '33-33-33': ['1-3', '1-3', '1-3'],
+    '25-25-25-25': ['1-4', '1-4', '1-4', '1-4'], '66-33': ['2-3', '1-3'],
+    '33-66': ['1-3', '2-3'], '25-50-25': ['1-4', '1-2', '1-4'],
+    '20-60-20': ['1-5', '3-5', '1-5'],
+  };
+  const needed = colCounts[layoutKey] || 1;
+  const widths = widthMaps[layoutKey] || ['1-1'];
+
+  if (!row.children) row.children = [];
+
+  // Add columns if needed
+  while (row.children.length < needed) {
+    row.children.push({ id: 'col-' + Math.random().toString(36).substr(2, 8), type: 'column', settings: {}, style: {}, advanced: {}, children: [] });
+  }
+
+  // If reducing columns, merge excess children into the last kept column
+  if (row.children.length > needed) {
+    const lastCol = row.children[needed - 1];
+    if (!lastCol.children) lastCol.children = [];
+    for (let i = needed; i < row.children.length; i++) {
+      if (Array.isArray(row.children[i].children)) {
+        lastCol.children = [...lastCol.children, ...row.children[i].children];
+      }
+    }
+    row.children.splice(needed);
+  }
+
+  // Update widths and clean grid settings from columns
+  for (let i = 0; i < needed; i++) {
+    if (row.children[i]) {
+      row.children[i].settings = row.children[i].settings || {};
+      row.children[i].settings.width_medium = widths[i] || '1-1';
+      delete row.children[i].settings.grid_column;
+      delete row.children[i].settings.grid_row;
+    }
+  }
+
+  builderStore.isDirty = true;
+  close();
+}
+
+function doChangeGrid(templateId) {
+  const row = parentRow.value;
+  if (!row) { close(); return; }
+  tilesStore.changeRowToGrid(row.id, templateId);
+  builderStore.isDirty = true;
+  close();
+}
+
 function doDelete() {
   if (tileId.value) {
     tilesStore.removeTile(tileId.value);
@@ -202,6 +359,36 @@ function doDelete() {
     builderStore.isDirty = true;
   }
   close();
+}
+
+// Utility: find ancestor of a specific type
+function findAncestorOfType(id, type, nodes) {
+  nodes = nodes || tilesStore.canvasTiles.concat(tilesStore.headerTiles || [], tilesStore.footerTiles || []);
+  for (const node of nodes) {
+    if (Array.isArray(node.children)) {
+      // Check if any child (at any depth) matches the id
+      const found = findNodeInTree(node.children, id);
+      if (found) {
+        // Is this node the type we want?
+        if (node.type === type) return node;
+        // Or search children
+        const deeper = findAncestorOfType(id, type, node.children);
+        if (deeper) return deeper;
+      }
+    }
+  }
+  return null;
+}
+
+function findNodeInTree(nodes, id) {
+  for (const n of nodes) {
+    if (n.id === id) return n;
+    if (n.children) {
+      const f = findNodeInTree(n.children, id);
+      if (f) return f;
+    }
+  }
+  return null;
 }
 
 // Utility: find parent node of a tile
@@ -244,13 +431,34 @@ defineExpose({ open, close });
 .olo-ctx-menu {
   position: fixed;
   z-index: 99999;
-  min-width: 180px;
+  min-width: 200px;
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
   background: #1f2937;
   border: 1px solid #374151;
   border-radius: 8px;
   padding: 4px;
   box-shadow: 0 10px 25px rgba(0,0,0,0.4);
   font-family: inherit;
+}
+.olo-ctx-close {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: #6b7280;
+  cursor: pointer;
+  border-radius: 4px;
+}
+.olo-ctx-close:hover {
+  background: #374151;
+  color: #fff;
 }
 .olo-ctx-item {
   display: flex;
@@ -282,5 +490,61 @@ defineExpose({ open, close });
   height: 1px;
   background: #374151;
   margin: 3px 6px;
+}
+.olo-ctx-label {
+  padding: 4px 10px 2px;
+  font-size: 10px;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+.olo-ctx-layouts {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3px;
+  padding: 2px 6px 4px;
+}
+.olo-ctx-layout {
+  display: flex;
+  align-items: center;
+  width: auto;
+  height: 22px;
+  padding: 2px;
+  border: 1px solid #4b5563;
+  border-radius: 3px;
+  background: transparent;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+.olo-ctx-layout:hover {
+  border-color: #818cf8;
+  background: rgba(99, 102, 241, 0.1);
+}
+.olo-ctx-layout--active {
+  border-color: #6366f1;
+  background: rgba(99, 102, 241, 0.2);
+}
+.olo-ctx-layout-preview {
+  display: flex;
+  gap: 1px;
+  width: 100%;
+  height: 100%;
+}
+.olo-ctx-layout-col {
+  background: #6b7280;
+  border-radius: 1px;
+  min-width: 3px;
+}
+.olo-ctx-layout--active .olo-ctx-layout-col {
+  background: #818cf8;
+}
+.olo-ctx-grid-svg {
+  width: 100%;
+  height: 100%;
+  color: #6b7280;
+}
+.olo-ctx-layout--active .olo-ctx-grid-svg {
+  color: #818cf8;
 }
 </style>

@@ -230,8 +230,8 @@ class Olo_Grid_Tile extends Olo_Tile_Base {
         $sel = '.' . $uid;
         $css = '';
 
-        $radius  = absint( $s['card_radius'] ?? 8 );
-        $padding = absint( $s['card_padding'] ?? 16 );
+        $radius  = $this->build_border_radius_css( $s["card_radius"] ?? 8 );
+        $padding = Olo_Tile_Utils::spacing_css( $s['tile_padding'] ?? $s['card_padding'] ?? 16, 16 );
         $card_style   = $s['card_style'] ?? 'default';
         $border_color = $s['card_border_color'] ?? '';
 
@@ -378,7 +378,7 @@ class Olo_Grid_Tile extends Olo_Tile_Base {
         if ( $card_style === 'minimal' ) {
             $css .= $sel . ' .olo-grid-body{padding:' . max( 4, intval( $padding / 4 ) ) . 'px 0 0;}';
         } else {
-            $css .= $sel . ' .olo-grid-body{padding:' . $padding . 'px;}';
+            $css .= $sel . ' .olo-grid-body{padding:' . $padding . ';}';
         }
 
         // Icon

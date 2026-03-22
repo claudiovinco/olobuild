@@ -81,13 +81,13 @@ class Olo_BookingPicker_Tile extends Olo_Tile_Base {
 
         $max_w  = absint( $s['widget_max_width'] ) ?: 480;
         $bg     = $this->safe_color_css( $s['widget_bg'] );
-        $radius = Olo_Tile_Utils::border_radius( $s['widget_border_radius'] ?? 0 );
+        $radius = absint( $s['widget_border_radius'] );
         $border = $this->safe_color_css( $s['widget_border_color'] );
         $shadow = Olo_Tile_Utils::shadow( $s['widget_shadow'] ?? 'none' );
 
         $css .= "{$u} .olob-widget{max-width:{$max_w}px";
         if ( $bg )     $css .= ";background:{$bg}";
-        if ( $radius && $radius !== '0px' ) $css .= ";border-radius:{$radius}";
+        if ( $radius ) $css .= ";border-radius:{$radius}px";
         if ( $border ) $css .= ";border-color:{$border}";
         if ( $shadow !== 'none' ) $css .= ";box-shadow:{$shadow}";
         $css .= "}";
@@ -99,18 +99,18 @@ class Olo_BookingPicker_Tile extends Olo_Tile_Base {
 
         $btn_bg    = $this->safe_color_css( $s['btn_bg'] );
         $btn_color = $this->safe_color_css( $s['btn_color'] );
-        $btn_r     = Olo_Tile_Utils::border_radius( $s['btn_radius'] ?? 0 );
+        $btn_r     = $this->build_border_radius_css( $s["btn_radius"] );
         if ( $btn_bg )    $css .= "{$u} .olob-btn{background:{$btn_bg}}";
         if ( $btn_color ) $css .= "{$u} .olob-btn{color:{$btn_color}}";
-        if ( $btn_r && $btn_r !== '0px' ) $css .= "{$u} .olob-btn{border-radius:{$btn_r}}";
+        if ( $btn_r )     $css .= "{$u} .olob-btn{border-radius:{$btn_r}px}";
 
         $avail = $this->safe_color_css( $s['available_color'] );
         $full  = $this->safe_color_css( $s['full_color'] );
         if ( $avail ) $css .= "{$u} .olob-day--available{background:{$avail}1a;color:{$avail}}";
         if ( $full )  $css .= "{$u} .olob-day--full{background:{$full}1a;color:{$full}}";
 
-        $slot_r = Olo_Tile_Utils::border_radius( $s['slot_border_radius'] ?? 0 );
-        if ( $slot_r && $slot_r !== '0px' ) $css .= "{$u} .olob-slot{border-radius:{$slot_r}}";
+        $slot_r = absint( $s['slot_border_radius'] );
+        if ( $slot_r ) $css .= "{$u} .olob-slot{border-radius:{$slot_r}px}";
 
         $t_size   = absint( $s['title_size'] );
         $t_weight = esc_attr( $s['title_weight'] );

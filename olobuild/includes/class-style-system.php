@@ -319,6 +319,13 @@ class Olo_Style_System {
             $prop = str_replace( '_', '-', $key );
             $css .= "  --olo-color-{$prop}: {$value};\n";
         }
+        // Global custom colors (user-defined swatches)
+        $global_colors = $this->get_global_colors();
+        foreach ( $global_colors as $gc ) {
+            if ( ! empty( $gc['id'] ) && ! empty( $gc['value'] ) ) {
+                $css .= "  --olo-color-" . sanitize_html_class( $gc['id'] ) . ": " . esc_attr( $gc['value'] ) . ";\n";
+            }
+        }
         // Typography
         if ( ! empty( $t['font_family'] ) ) {
             $css .= "  --olo-font-family: {$t['font_family']};\n";

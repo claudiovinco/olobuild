@@ -29,8 +29,7 @@ export default {
     separator: false,
     separator_color: '',
     gap: '4',
-    padding_x: '12',
-    padding_y: '8',
+    tile_padding: { top: 8, right: 12, bottom: 8, left: 12 },
     border_radius: '6',
     active_style: 'left-border',
     active_bg: '',
@@ -65,8 +64,7 @@ export default {
       { value: 'stretch', label: 'Espandi' },
     ]},
     { key: 'gap', label: 'Gap tra elementi (px)', type: 'range', min: 0, max: 24, step: 2 },
-    { key: 'padding_x', label: 'Padding orizzontale (px)', type: 'range', min: 0, max: 32, step: 2 },
-    { key: 'padding_y', label: 'Padding verticale (px)', type: 'range', min: 0, max: 24, step: 2 },
+    { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 32 },
 
     // --- STILE ---
     { key: '_section_style', label: 'STILE', type: 'separator' },

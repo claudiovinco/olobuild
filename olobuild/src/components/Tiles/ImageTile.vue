@@ -1,22 +1,23 @@
 <template>
-  <div class="mb-relative mb-overflow-hidden mb-rounded-lg">
+  <div class="mb-relative mb-overflow-hidden" :style="{ borderRadius: brStyle }">
     <img
       v-if="s.image_url"
       :src="s.image_url"
       :alt="s.alt_text"
-      class="mb-w-full mb-block mb-rounded-lg olo-img-anim"
+      class="mb-w-full mb-block olo-img-anim"
       :class="s.hover_animation !== 'none' ? 'olo-img-' + s.hover_animation : ''"
       :style="{
         height: s.height,
         objectFit: s.object_fit,
         filter: filterStyle || undefined,
+        borderRadius: brStyle,
         transition: 'filter 0.4s ease, transform 0.4s ease',
       }"
     />
     <div
       v-else
-      class="mb-flex mb-flex-col mb-items-center mb-justify-center mb-bg-gray-800 mb-rounded-lg mb-text-gray-500"
-      :style="{ height: s.height }"
+      class="mb-flex mb-flex-col mb-items-center mb-justify-center mb-bg-gray-800 mb-text-gray-500"
+      :style="{ height: s.height, borderRadius: brStyle }"
     >
       <span class="mb-text-4xl mb-mb-2">&#x1F5BC;</span>
       <span class="mb-text-sm">Click to add image</span>
@@ -60,8 +61,19 @@ const defaults = {
   filter_sepia: '0',
   hover_animation: 'none',
   lightbox: false,
+  border_radius: '0',
 };
 const s = computed(() => ({ ...defaults, ...props.settings }));
+
+const brStyle = computed(() => {
+  const v = s.value.border_radius;
+  if (!v || v === '0' || v === 0) return undefined;
+  if (v && typeof v === 'object') {
+    return `${v.tl || 0}px ${v.tr || 0}px ${v.br || 0}px ${v.bl || 0}px`;
+  }
+  const n = parseInt(String(v)) || 0;
+  return n > 0 ? `${n}px` : undefined;
+});
 
 const filterStyle = computed(() => {
   const parts = [];

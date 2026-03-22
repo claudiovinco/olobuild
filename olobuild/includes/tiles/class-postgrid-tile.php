@@ -255,8 +255,8 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
 
         $uid          = 'olo-postgrid-' . wp_rand( 10000, 99999 );
         $image_height = absint( $s['image_height'] ) ?: 200;
-        $image_radius = Olo_Tile_Utils::border_radius( $s['image_radius'] ?? 0 );
-        $card_radius  = Olo_Tile_Utils::border_radius( $s['card_radius'] ?? 4 );
+        $image_radius = $this->build_border_radius_css( $s["image_radius"] ?? 0 );
+        $card_radius  = $this->build_border_radius_css( $s["card_radius"] ?? 4 );
 
         // Sort config for JS
         $sort_enabled      = ! empty( $s['show_sort'] );
@@ -293,7 +293,7 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
         $overlay_height    = max( 20, min( 100, absint( $s['overlay_height'] ?? 50 ) ) );
 
         // Stile testo
-        $body_padding    = max( 0, min( 40, absint( $s['body_padding'] ?? 15 ) ) );
+        $body_padding = Olo_Tile_Utils::spacing_css( $s['tile_padding'] ?? $s['body_padding'] ?? 15, 15 );
         $title_size      = max( 0.7, min( 2.5, floatval( $s['title_size'] ?? 1 ) ) );
         $excerpt_size    = max( 0.7, min( 1.5, floatval( $s['excerpt_size'] ?? 0.92 ) ) );
         $title_color     = $s['title_color'] ?? '';
@@ -313,7 +313,7 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
         <style>
             .<?php echo $uid; ?> .olo-pg-img { transition: transform 0.5s ease, filter 0.5s ease; width: 100%; height: <?php echo $image_height; ?>px; object-fit: cover; display: block; border-radius: <?php echo $image_radius; ?>; }
             .<?php echo $uid; ?> .olo-card-minimal__img { border-radius: <?php echo $image_radius; ?>; }
-            .<?php echo $uid; ?> .uk-card-media-top { border-radius: <?php echo $image_radius; ?>; border-bottom-left-radius: 0; border-bottom-right-radius: 0; overflow: hidden; }
+            .<?php echo $uid; ?> .uk-card-media-top { border-radius: <?php echo $image_radius; ?>; overflow: hidden; }
             .<?php echo $uid; ?> .uk-card { border-radius: <?php echo $card_radius; ?>; overflow: hidden; }
             .<?php echo $uid; ?> .olo-card-minimal { border-radius: <?php echo $card_radius; ?>; overflow: hidden; }
             .<?php echo $uid; ?> .uk-card:hover .olo-pg-hover-zoom, .<?php echo $uid; ?> .olo-card-minimal:hover .olo-pg-hover-zoom { transform: scale(1.08); }
@@ -328,8 +328,8 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .olo-pg-ribbon--top-right { top: 0; right: 14px; border-radius: 0 0 4px 4px; }
             .<?php echo $uid; ?> .olo-pg-ribbon--top-left { top: 0; left: 14px; border-radius: 0 0 4px 4px; }
             /* Stile testo */
-            .<?php echo $uid; ?> .uk-card-body { padding: <?php echo $body_padding; ?>px; }
-            .<?php echo $uid; ?> .olo-card-minimal__body { padding: <?php echo $body_padding; ?>px; }
+            .<?php echo $uid; ?> .uk-card-body { padding: <?php echo $body_padding; ?>; }
+            .<?php echo $uid; ?> .olo-card-minimal__body { padding: <?php echo $body_padding; ?>; }
             .<?php echo $uid; ?> .uk-card-title { font-size: <?php echo $title_size; ?>em; }
             .<?php echo $uid; ?> .olo-card-minimal__title { font-size: <?php echo $title_size; ?>em; }
             .<?php echo $uid; ?> .olo-postgrid-excerpt { font-size: <?php echo $excerpt_size; ?>em; }

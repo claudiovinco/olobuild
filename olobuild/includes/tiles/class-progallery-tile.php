@@ -29,6 +29,16 @@ class Olo_ProGallery_Tile extends Olo_Tile_Base {
         'expand_speed'        => 500,
         'parallax_height'     => 1500,
         'parallax_intensity'  => 50,
+        // Drift
+        'drift_height'        => 1200,
+        'drift_intensity'     => 60,
+        'drift_rotation'      => 12,
+        // Cascade
+        'cascade_spread'      => 60,
+        'cascade_overlap'     => 40,
+        'cascade_rotation'    => 8,
+        // Metro
+        'metro_cell_height'   => 200,
         'filmstrip_item_width'  => 280,
         'filmstrip_center_zoom' => 1.15,
         'filmstrip_side_tilt'   => 35,
@@ -126,7 +136,8 @@ class Olo_ProGallery_Tile extends Olo_Tile_Base {
         $cols         = max( 2, min( 6, absint( $s['columns'] ) ) );
         $gap          = max( 0, min( 24, absint( $s['gap'] ) ) );
         $radius       = Olo_Tile_Utils::border_radius( $s['thumb_radius'] ?? 0 );
-        $radius_raw   = absint( $s['thumb_radius'] ?? 0 );
+        $radius_raw   = is_array( $s["thumb_radius"] ?? 0 ) ? intval( $s["thumb_radius"]["tl"] ?? 0 ) : absint( $s["thumb_radius"] ?? 0 );
+        $radius_css   = $this->build_border_radius_css( $s["thumb_radius"] ?? 0 );
         $img_height   = esc_attr( $s['img_height'] ?: '250px' );
         $object_fit   = esc_attr( $s['object_fit'] ?: 'cover' );
         $rows         = absint( $s['rows'] );
@@ -136,6 +147,16 @@ class Olo_ProGallery_Tile extends Olo_Tile_Base {
         $exp_speed    = max( 200, min( 1000, absint( $s['expand_speed'] ) ) );
         $plx_height   = max( 800, min( 3000, absint( $s['parallax_height'] ) ) );
         $plx_intensity = max( 10, min( 100, absint( $s['parallax_intensity'] ) ) );
+        // Drift
+        $drift_height    = max( 600, min( 2500, absint( $s['drift_height'] ) ) );
+        $drift_intensity = max( 10, min( 100, absint( $s['drift_intensity'] ) ) );
+        $drift_rotation  = max( 0, min( 25, absint( $s['drift_rotation'] ) ) );
+        // Cascade
+        $cascade_spread   = max( 20, min( 100, absint( $s['cascade_spread'] ) ) );
+        $cascade_overlap  = max( 10, min( 80, absint( $s['cascade_overlap'] ) ) );
+        $cascade_rotation = max( 0, min( 20, absint( $s['cascade_rotation'] ) ) );
+        // Metro
+        $metro_cell_h     = max( 100, min( 400, absint( $s['metro_cell_height'] ) ) );
         $film_width   = max( 180, min( 450, absint( $s['filmstrip_item_width'] ) ) );
         $film_zoom    = max( 1.0, min( 1.5, floatval( $s['filmstrip_center_zoom'] ) ) );
         $film_tilt    = max( 0, min( 60, absint( $s['filmstrip_side_tilt'] ) ) );
@@ -182,6 +203,23 @@ class Olo_ProGallery_Tile extends Olo_Tile_Base {
             $total_vis_p = min( $max_visible, $total );
             $cols_p      = min( 4, max( 2, (int) ceil( sqrt( $total_vis_p ) ) ) );
             $rows_p      = (int) ceil( $total_vis_p / $cols_p );
+        }
+
+        // Drift grid dimensions
+        if ( $layout === 'drift' ) {
+            $total_vis_d = min( $max_visible, $total );
+            $cols_d      = min( 4, max( 2, (int) ceil( sqrt( $total_vis_d ) ) ) );
+            $rows_d      = (int) ceil( $total_vis_d / $cols_d );
+        }
+
+        // Cascade dimensions
+        if ( $layout === 'cascade' ) {
+            $total_vis_c = min( $max_visible, $total );
+        }
+
+        // Metro pattern: compute grid areas
+        if ( $layout === 'metro' ) {
+            $total_vis_m = min( $max_visible, $total );
         }
 
         // Entrance
@@ -308,6 +346,23 @@ class Olo_ProGallery_Tile extends Olo_Tile_Base {
             echo ".{$uid}{position:relative;height:{$plx_height}px;overflow:visible}";
             echo ".{$uid} .olo-pg-item{position:absolute;overflow:hidden;border-radius:{$radius};will-change:transform;transition:transform 0.1s linear}";
             echo ".{$uid} .olo-pg-item img{width:100%;height:auto;display:block}";
+        } elseif ( $layout === 'drift' ) {
+            echo ".{$uid}{position:relative;height:{$drift_height}px;overflow:visible}";
+            echo ".{$uid} .olo-pg-item{position:absolute;overflow:hidden;border-radius:{$radius};will-change:transform;transition:transform 0.15s linear}";
+            echo ".{$uid} .olo-pg-item img{width:100%;height:auto;display:block}";
+        } elseif ( $layout === 'cascade' ) {
+            $cascade_h = max( 400, $total_vis_c * 80 + 300 );
+            echo ".{$uid}{position:relative;height:{$cascade_h}px;overflow:visible;perspective:1200px}";
+            echo ".{$uid} .olo-pg-item{position:absolute;overflow:hidden;border-radius:{$radius};will-change:transform;transition:transform 0.2s ease-out;box-shadow:0 8px 30px rgba(0,0,0,.2)}";
+            echo ".{$uid} .olo-pg-item img{width:100%;height:100%;object-fit:{$object_fit};display:block}";
+        } elseif ( $layout === 'metro' ) {
+            echo ".{$uid}{display:grid;grid-template-columns:repeat({$cols},1fr);grid-auto-rows:{$metro_cell_h}px;grid-auto-flow:dense;gap:{$gap}px}";
+            echo ".{$uid} .olo-pg-item{position:relative;overflow:hidden;border-radius:{$radius}}";
+            echo ".{$uid} .olo-pg-item img{width:100%;height:100%;object-fit:{$object_fit};display:block}";
+            // Pattern: certi item occupano 2x2, 2x1, 1x2
+            echo ".{$uid} .olo-pg-item:nth-child(7n+1){grid-column:span 2;grid-row:span 2}";
+            echo ".{$uid} .olo-pg-item:nth-child(7n+4){grid-column:span 2}";
+            echo ".{$uid} .olo-pg-item:nth-child(7n+6){grid-row:span 2}";
         } elseif ( $is_coverflow ) {
             // Wrapper
             echo ".{$uid}-wrap{position:relative}";
@@ -629,30 +684,92 @@ class Olo_ProGallery_Tile extends Olo_Tile_Base {
         // ─── Hidden lightbox items ───
         echo ".{$uid} .olo-pg-hidden{position:absolute;width:0;height:0;overflow:hidden;pointer-events:none;opacity:0}";
 
+        // ─── Entrance: overflow visible per permettere animazioni off-screen ───
+        if ( $entrance !== 'none' && ! $is_coverflow && ! $is_strip ) {
+            echo ".{$uid}{overflow:visible}";
+            // Dopo l'animazione, ripristina overflow hidden per evitare scrollbar
+            echo ".{$uid}.olo-pg-visible{overflow:hidden}";
+        }
+
         // ─── Entrance animation ───
         if ( $entrance !== 'none' ) {
             $dur_s = number_format( $ent_dur / 1000, 2 );
             $initial_transform = 'translateY(24px)';
             $initial_extra = '';
 
+            $is_special_entrance = in_array( $entrance, [ 'split-sides', 'fall', 'wind', 'zoom-center', 'land' ], true );
+
             if ( $entrance === 'fade-up' ) {
-                $initial_transform = 'translateY(24px)';
+                $initial_transform = 'translateY(100vh)';
             } elseif ( $entrance === 'fade-scale' ) {
-                $initial_transform = 'translateY(12px) scale(.92)';
+                $initial_transform = 'translateY(60vh) scale(.7)';
             } elseif ( $entrance === 'flip' ) {
-                $initial_transform = 'perspective(600px) rotateX(60deg)';
+                $initial_transform = 'perspective(600px) rotateX(90deg) translateY(40vh)';
                 $initial_extra = 'transform-origin:center bottom;';
             } elseif ( $entrance === 'slide-in' ) {
-                $initial_transform = 'translateX(-30px)';
+                $initial_transform = 'translateX(-100vw)';
             } elseif ( $entrance === 'blur-in' ) {
-                $initial_transform = 'translateY(8px)';
+                $initial_transform = 'translateY(60vh)';
+                $initial_extra = 'filter:blur(12px);';
+            } elseif ( $entrance === 'split-sides' ) {
+                $initial_transform = 'translateX(-100vw) rotate(-8deg)';
+            } elseif ( $entrance === 'fall' ) {
+                $initial_transform = 'translateY(-100vh) rotate(12deg) scale(.8)';
+            } elseif ( $entrance === 'wind' ) {
+                $initial_transform = 'translateX(100vw) rotate(18deg) scale(.85)';
+                $initial_extra = 'filter:blur(6px);';
+            } elseif ( $entrance === 'zoom-center' ) {
+                $initial_transform = 'scale(.08)';
                 $initial_extra = 'filter:blur(8px);';
+            } elseif ( $entrance === 'land' ) {
+                $initial_transform = 'perspective(800px) translateZ(600px) translateY(-60vh) scale(1.8)';
+                $initial_extra = 'filter:blur(4px);';
             }
 
             // Coverflow / Strip: entrance solo con opacity (transform gestito dal JS o dal CSS animation)
             if ( $is_coverflow || $is_strip ) {
                 echo ".{$uid} .olo-pg-item{opacity:0;transition:opacity {$dur_s}s ease}";
                 echo ".{$uid}.olo-pg-visible .olo-pg-item{opacity:1}";
+            } elseif ( $is_special_entrance ) {
+                // ─── Split sides ───
+                if ( $entrance === 'split-sides' ) {
+                    echo ".{$uid} .olo-pg-item{opacity:0;transition:opacity {$dur_s}s ease,transform {$dur_s}s cubic-bezier(.25,.46,.45,.94)}";
+                    // Dispari: entrano da sinistra fuori schermo
+                    echo ".{$uid} .olo-pg-item:nth-child(odd){transform:translateX(-100vw) rotate(-8deg)}";
+                    // Pari: entrano da destra fuori schermo
+                    echo ".{$uid} .olo-pg-item:nth-child(even){transform:translateX(100vw) rotate(8deg)}";
+                    echo ".{$uid}.olo-pg-visible .olo-pg-item{opacity:1;transform:translateX(0) rotate(0deg)}";
+                }
+                // ─── Fall (caduta da fuori schermo con bounce) ───
+                if ( $entrance === 'fall' ) {
+                    $bounce_dur = number_format( $ent_dur / 1000 * 1.5, 2 );
+                    echo "@keyframes {$uid}-fall{0%{opacity:0;transform:translateY(-100vh) rotate(12deg) scale(.8)}45%{opacity:1;transform:translateY(12px) rotate(-2deg) scale(1.03)}65%{transform:translateY(-6px) rotate(1deg) scale(1)}80%{transform:translateY(3px) rotate(0deg)}100%{opacity:1;transform:translateY(0) rotate(0deg) scale(1)}}";
+                    echo ".{$uid} .olo-pg-item{opacity:0;transform:translateY(-100vh) rotate(12deg) scale(.8)}";
+                    echo ".{$uid}.olo-pg-visible .olo-pg-item{animation:{$uid}-fall {$bounce_dur}s cubic-bezier(.22,.68,.36,1) forwards}";
+                }
+                // ─── Wind (soffiate dal vento da fuori schermo) ───
+                if ( $entrance === 'wind' ) {
+                    $wind_dur = number_format( $ent_dur / 1000 * 1.4, 2 );
+                    echo "@keyframes {$uid}-wind{0%{opacity:0;transform:translateX(100vw) rotate(18deg) scale(.85);filter:blur(6px)}55%{opacity:1;transform:translateX(-12px) rotate(-3deg) scale(1.02);filter:blur(0)}75%{transform:translateX(5px) rotate(1deg) scale(1)}100%{opacity:1;transform:translateX(0) rotate(0deg) scale(1);filter:blur(0)}}";
+                    echo ".{$uid} .olo-pg-item{opacity:0;transform:translateX(100vw) rotate(18deg) scale(.85);filter:blur(6px)}";
+                    echo ".{$uid}.olo-pg-visible .olo-pg-item{animation:{$uid}-wind {$wind_dur}s cubic-bezier(.25,.46,.45,.94) forwards}";
+                }
+                // ─── Zoom center (arrivano da un punto distante al centro) ───
+                if ( $entrance === 'zoom-center' ) {
+                    $zc_dur = number_format( $ent_dur / 1000 * 1.3, 2 );
+                    // Ogni item converge dal centro assoluto della galleria verso la sua posizione finale
+                    // Usiamo scale molto piccola + translate che porta al centro
+                    echo "@keyframes {$uid}-zc{0%{opacity:0;transform:scale(.05);filter:blur(10px)}40%{opacity:.6;filter:blur(3px)}70%{opacity:1;transform:scale(1.04);filter:blur(0)}85%{transform:scale(.98)}100%{opacity:1;transform:scale(1);filter:blur(0)}}";
+                    echo ".{$uid} .olo-pg-item{opacity:0;transform:scale(.05);filter:blur(10px);transform-origin:center center}";
+                    echo ".{$uid}.olo-pg-visible .olo-pg-item{animation:{$uid}-zc {$zc_dur}s cubic-bezier(.16,1,.3,1) forwards}";
+                }
+                // ─── Land (atterrano sullo schermo da fuori, con prospettiva 3D) ───
+                if ( $entrance === 'land' ) {
+                    $land_dur = number_format( $ent_dur / 1000 * 1.6, 2 );
+                    echo "@keyframes {$uid}-land{0%{opacity:0;transform:perspective(800px) translateZ(600px) translateY(-80vh) rotateX(-15deg) scale(1.6);filter:blur(6px)}35%{opacity:.8;filter:blur(2px)}55%{opacity:1;transform:perspective(800px) translateZ(0) translateY(6px) rotateX(2deg) scale(1.02);filter:blur(0)}72%{transform:perspective(800px) translateZ(0) translateY(-3px) rotateX(-1deg) scale(1)}86%{transform:perspective(800px) translateZ(0) translateY(1px) rotateX(0) scale(1)}100%{opacity:1;transform:perspective(800px) translateZ(0) translateY(0) rotateX(0) scale(1);filter:blur(0)}}";
+                    echo ".{$uid} .olo-pg-item{opacity:0;transform:perspective(800px) translateZ(600px) translateY(-80vh) rotateX(-15deg) scale(1.6);filter:blur(6px)}";
+                    echo ".{$uid}.olo-pg-visible .olo-pg-item{animation:{$uid}-land {$land_dur}s cubic-bezier(.22,.68,.36,1) forwards}";
+                }
             } else {
                 echo ".{$uid} .olo-pg-item{opacity:0;transform:{$initial_transform};{$initial_extra}transition:opacity {$dur_s}s ease,transform {$dur_s}s ease,filter {$dur_s}s ease,box-shadow {$dur_s}s ease}";
                 echo ".{$uid}.olo-pg-visible .olo-pg-item{opacity:1;filter:none}";
@@ -670,7 +787,12 @@ class Olo_ProGallery_Tile extends Olo_Tile_Base {
             $vis_count = min( $max_visible, $total );
             for ( $i = 0; $i < $vis_count && $i < 30; $i++ ) {
                 $delay_s = number_format( ( $ent_stagger * $i ) / 1000, 2 );
-                echo ".{$uid} .olo-pg-item:nth-child(" . ( $i + 1 ) . "){transition-delay:{$delay_s}s}";
+                // Per fall e wind: animation-delay invece di transition-delay
+                if ( in_array( $entrance, [ 'fall', 'wind', 'zoom-center', 'land' ], true ) ) {
+                    echo ".{$uid} .olo-pg-item:nth-child(" . ( $i + 1 ) . "){animation-delay:{$delay_s}s}";
+                } else {
+                    echo ".{$uid} .olo-pg-item:nth-child(" . ( $i + 1 ) . "){transition-delay:{$delay_s}s}";
+                }
             }
 
             // Restore hover transitions after entrance completes (override entrance slow transition)
@@ -694,7 +816,7 @@ class Olo_ProGallery_Tile extends Olo_Tile_Base {
             echo "@media(max-width:640px){.{$uid}{grid-template-columns:repeat({$mob_cols},1fr);grid-template-rows:none;height:auto;transition:none}.{$uid} .olo-pg-item{height:{$img_height}}}";
         } elseif ( $layout === 'justified' ) {
             echo "@media(max-width:640px){.{$uid} .olo-pg-item{min-width:80px;height:" . ( intval( $img_height ) > 0 ? max( 100, intval( $img_height ) - 60 ) . 'px' : '140px' ) . "}}";
-        } elseif ( ! $is_coverflow && $layout !== 'scattered' && $layout !== 'parallax' && $layout !== 'honeycomb' && $layout !== 'hexgrid' && $layout !== 'puzzle' && ! $is_strip ) {
+        } elseif ( ! $is_coverflow && $layout !== 'scattered' && $layout !== 'parallax' && $layout !== 'drift' && $layout !== 'cascade' && $layout !== 'honeycomb' && $layout !== 'hexgrid' && $layout !== 'puzzle' && ! $is_strip ) {
             echo "@media(max-width:640px){.{$uid}{grid-template-columns:repeat({$mob_cols},1fr)}}";
         }
 
@@ -702,6 +824,17 @@ class Olo_ProGallery_Tile extends Olo_Tile_Base {
         if ( $layout === 'parallax' ) {
             $mob_plx_h = max( 600, (int) round( $plx_height * 0.55 ) );
             echo "@media(max-width:640px){.{$uid}{height:{$mob_plx_h}px}}";
+        }
+
+        // ─── Drift mobile ───
+        if ( $layout === 'drift' ) {
+            $mob_drift_h = max( 500, (int) round( $drift_height * 0.55 ) );
+            echo "@media(max-width:640px){.{$uid}{height:{$mob_drift_h}px}}";
+        }
+
+        // ─── Cascade mobile ───
+        if ( $layout === 'cascade' ) {
+            echo "@media(max-width:640px){.{$uid}{height:auto;perspective:none}.{$uid} .olo-pg-item{position:relative;width:85%;left:auto;top:auto;margin:12px auto;transform:none!important}}";
         }
 
         // ─── Strip mobile ───
@@ -719,7 +852,7 @@ class Olo_ProGallery_Tile extends Olo_Tile_Base {
         if ( $is_strip_auto ) {
             echo ".{$uid}-track{transform:none!important}";
         }
-        if ( $layout === 'parallax' ) {
+        if ( $layout === 'parallax' || $layout === 'drift' || $layout === 'cascade' ) {
             echo ".{$uid} .olo-pg-item{will-change:auto!important}";
         }
         echo "}";
@@ -740,7 +873,9 @@ class Olo_ProGallery_Tile extends Olo_Tile_Base {
         $needs_expand   = ( $layout === 'expand' );
         $needs_strip    = $is_strip_drag;
         $needs_parallax = ( $layout === 'parallax' );
-        self::maybe_output_script( $needs_tilt3d, $needs_magnetic, $needs_entrance, $needs_filmstrip, $needs_expand, $needs_strip, $needs_parallax );
+        $needs_drift    = ( $layout === 'drift' );
+        $needs_cascade  = ( $layout === 'cascade' );
+        self::maybe_output_script( $needs_tilt3d, $needs_magnetic, $needs_entrance, $needs_filmstrip, $needs_expand, $needs_strip, $needs_parallax, $needs_drift, $needs_cascade );
 
         // ─── Container attrs ───
         $container_class = esc_attr( $uid );
@@ -775,6 +910,12 @@ class Olo_ProGallery_Tile extends Olo_Tile_Base {
         }
         if ( $needs_parallax ) {
             $data_attrs .= ' data-pg-parallax="1" data-pg-plx-intensity="' . $plx_intensity . '"';
+        }
+        if ( $needs_drift ) {
+            $data_attrs .= ' data-pg-drift="1" data-pg-drift-intensity="' . $drift_intensity . '" data-pg-drift-rotation="' . $drift_rotation . '"';
+        }
+        if ( $needs_cascade ) {
+            $data_attrs .= ' data-pg-cascade="1" data-pg-cascade-spread="' . $cascade_spread . '"';
         }
 
         // Lightbox wrapper
@@ -1107,6 +1248,48 @@ class Olo_ProGallery_Tile extends Olo_Tile_Base {
                 $rot_r   = round( $rot, 1 );
                 $inline_style = "left:{$left}%;top:{$top}%;width:{$w}%;transform:rotate({$rot_r}deg);box-shadow:0 {$shHalf}px {$shBlur}px rgba(0,0,0,{$shAlpha});opacity:{$op};z-index:{$zi}";
                 $plx_item_data = ' data-speed="' . $speed . '" data-base-transform="rotate(' . $rot_r . 'deg)"';
+            }
+
+            // Drift layout: multi-directional parallax with X, Y, rotation
+            if ( $layout === 'drift' && $is_visible ) {
+                $col_i   = ( $i - 1 ) % $cols_d;
+                $row_i   = (int) floor( ( $i - 1 ) / $cols_d );
+                $cw      = 100 / $cols_d;
+                $ch      = 100 / $rows_d;
+                $depth   = $this->seeded_random( $i + 5 );
+                $size    = 0.45 + $depth * 0.50;
+                $ox      = ( $this->seeded_random( $i + 11 ) - 0.5 ) * 18;
+                $oy      = ( $this->seeded_random( $i + 17 ) - 0.5 ) * 18;
+                $rot     = ( $this->seeded_random( $i + 23 ) - 0.5 ) * 10;
+                $left    = round( $col_i * $cw + $ox, 1 );
+                $top     = round( $row_i * $ch + $oy, 1 );
+                $w       = round( $cw * $size, 1 );
+                $shBlur  = (int) round( 4 + $depth * 18 );
+                $shHalf  = (int) round( $shBlur / 2 );
+                $shAlpha = round( 0.1 + $depth * 0.18, 2 );
+                $op      = round( 0.75 + $depth * 0.25, 2 );
+                $zi      = (int) round( $depth * 20 );
+                // Velocità X e Y diverse per ogni item + direzione casuale
+                $speed_y = round( ( $depth - 0.4 ) * ( $drift_intensity / 100 ), 3 );
+                $speed_x = round( ( $this->seeded_random( $i + 31 ) - 0.5 ) * ( $drift_intensity / 100 ) * 0.7, 3 );
+                $speed_r = round( ( $this->seeded_random( $i + 37 ) - 0.5 ) * ( $drift_rotation / 10 ), 3 );
+                $rot_r   = round( $rot, 1 );
+                $inline_style = "left:{$left}%;top:{$top}%;width:{$w}%;transform:rotate({$rot_r}deg);box-shadow:0 {$shHalf}px {$shBlur}px rgba(0,0,0,{$shAlpha});opacity:{$op};z-index:{$zi}";
+                $plx_item_data = ' data-drift-sx="' . $speed_x . '" data-drift-sy="' . $speed_y . '" data-drift-sr="' . $speed_r . '" data-base-transform="rotate(' . $rot_r . 'deg)"';
+            }
+
+            // Cascade layout: stacked cards that spread on scroll
+            if ( $layout === 'cascade' && $is_visible ) {
+                $stack_offset = ( $i - 1 ) * ( $cascade_overlap / $total_vis_c );
+                $rot_c = round( ( $this->seeded_random( $i + 9 ) - 0.5 ) * $cascade_rotation * 2, 1 );
+                $shift_x = round( ( $this->seeded_random( $i + 15 ) - 0.5 ) * 30, 1 );
+                $zi = $total_vis_c - $i + 1;
+                $w_c = max( 35, 60 - ( $total_vis_c > 6 ? ( $i - 1 ) * 2 : 0 ) );
+                $h_c = max( 200, 350 - ( $total_vis_c > 6 ? ( $i - 1 ) * 15 : 0 ) );
+                $left_c = round( 50 - $w_c / 2 + $shift_x, 1 );
+                $top_c = round( $stack_offset, 1 );
+                $inline_style = "left:{$left_c}%;top:{$top_c}%;width:{$w_c}%;height:{$h_c}px;z-index:{$zi};transform:rotate({$rot_c}deg)";
+                $plx_item_data = ' data-cascade-idx="' . ( $i - 1 ) . '" data-cascade-rot="' . $rot_c . '" data-cascade-sx="' . $shift_x . '"';
             }
 
             // Strip collage: varying height per item
@@ -1690,9 +1873,9 @@ class Olo_ProGallery_Tile extends Olo_Tile_Base {
     /**
      * Output shared JS once per page for: tilt3d, magnetic, entrance reveal, filmstrip, expand, strip kinetic.
      */
-    private static function maybe_output_script( $tilt, $magnetic, $entrance, $filmstrip, $expand = false, $strip = false, $parallax = false ) {
+    private static function maybe_output_script( $tilt, $magnetic, $entrance, $filmstrip, $expand = false, $strip = false, $parallax = false, $drift = false, $cascade = false ) {
         if ( self::$script_output ) return;
-        if ( ! $tilt && ! $magnetic && ! $entrance && ! $filmstrip && ! $expand && ! $strip && ! $parallax ) return;
+        if ( ! $tilt && ! $magnetic && ! $entrance && ! $filmstrip && ! $expand && ! $strip && ! $parallax && ! $drift && ! $cascade ) return;
         self::$script_output = true;
 
         echo '<script>';
@@ -1982,8 +2165,67 @@ class Olo_ProGallery_Tile extends Olo_Tile_Base {
         echo '});';
         echo '}';
 
+        // ── Drift (multi-directional scroll parallax) ──
+        echo 'function initDrift(){';
+        echo 'if(rm)return;';
+        echo 'document.querySelectorAll("[data-pg-drift]").forEach(function(container){';
+        echo 'var items=container.querySelectorAll(".olo-pg-item[data-drift-sx]");';
+        echo 'if(!items.length)return;';
+        echo 'items.forEach(function(it){if(!it.dataset.baseTransform){it.dataset.baseTransform=it.style.transform||""}});';
+        echo 'var raf=0;';
+        echo 'function update(){';
+        echo 'var rect=container.getBoundingClientRect();';
+        echo 'var ctrY=rect.top+rect.height/2;';
+        echo 'var vpCtr=window.innerHeight/2;';
+        echo 'var delta=ctrY-vpCtr;';
+        echo 'items.forEach(function(it){';
+        echo 'var sx=parseFloat(it.dataset.driftSx)||0;';
+        echo 'var sy=parseFloat(it.dataset.driftSy)||0;';
+        echo 'var sr=parseFloat(it.dataset.driftSr)||0;';
+        echo 'var tx=Math.round(delta*sx);';
+        echo 'var ty=Math.round(delta*sy);';
+        echo 'var r=Math.round(delta*sr*0.02*10)/10;';
+        echo 'var base=it.dataset.baseTransform||"";';
+        echo 'it.style.transform="translate("+tx+"px,"+ty+"px) rotate("+r+"deg)";';
+        echo '});';
+        echo '}';
+        echo 'window.addEventListener("scroll",function(){if(!raf){raf=requestAnimationFrame(function(){update();raf=0})}},{passive:true});';
+        echo 'update();';
+        echo '});';
+        echo '}';
+
+        // ── Cascade (stacked cards that spread on scroll) ──
+        echo 'function initCascade(){';
+        echo 'if(rm)return;';
+        echo 'document.querySelectorAll("[data-pg-cascade]").forEach(function(container){';
+        echo 'var spread=parseFloat(container.dataset.pgCascadeSpread)||60;';
+        echo 'var items=container.querySelectorAll(".olo-pg-item[data-cascade-idx]");';
+        echo 'if(!items.length)return;';
+        echo 'var total=items.length;';
+        echo 'var raf=0;';
+        echo 'function update(){';
+        echo 'var rect=container.getBoundingClientRect();';
+        echo 'var vpH=window.innerHeight;';
+        // progress: 0 = top of container at bottom of viewport, 1 = bottom at top
+        echo 'var progress=Math.max(0,Math.min(1,(vpH-rect.top)/(vpH+rect.height)));';
+        echo 'items.forEach(function(it){';
+        echo 'var idx=parseInt(it.dataset.cascadeIdx)||0;';
+        echo 'var baseRot=parseFloat(it.dataset.cascadeRot)||0;';
+        echo 'var baseSx=parseFloat(it.dataset.cascadeSx)||0;';
+        // Ogni carta si sparge in direzione diversa con il progresso dello scroll
+        echo 'var spreadY=progress*spread*idx;';
+        echo 'var spreadX=progress*baseSx*spread/15;';
+        echo 'var rot=baseRot*(0.3+progress*0.7);';
+        echo 'it.style.transform="translate("+Math.round(spreadX)+"px,"+Math.round(spreadY)+"px) rotate("+rot.toFixed(1)+"deg)";';
+        echo '});';
+        echo '}';
+        echo 'window.addEventListener("scroll",function(){if(!raf){raf=requestAnimationFrame(function(){update();raf=0})}},{passive:true});';
+        echo 'update();';
+        echo '});';
+        echo '}';
+
         // ── Init ──
-        echo 'function init(){initReveal();initTilt();initMagnetic();initFilmstrip();initExpand();initStrip();initStripArrows();initParallax()}';
+        echo 'function init(){initReveal();initTilt();initMagnetic();initFilmstrip();initExpand();initStrip();initStripArrows();initParallax();initDrift();initCascade()}';
         echo 'if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",init)}else{init()}';
         echo '})();';
         echo '</script>';

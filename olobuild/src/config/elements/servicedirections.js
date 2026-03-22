@@ -16,7 +16,7 @@ export default {
     bg_color: '',
     border_color: '',
     border_radius: '8',
-    padding: '16',
+    tile_padding: { top: 16, right: 16, bottom: 16, left: 16 },
   },
   fields: [
     { type: 'separator', label: 'Sorgente dati' },
@@ -39,6 +39,6 @@ export default {
     { key: 'bg_color', label: 'Sfondo', type: 'color' },
     { key: 'border_color', label: 'Bordo', type: 'color' },
     { key: 'border_radius', label: 'Raggio bordi (px)', type: 'border-radius' },
-    { key: 'padding', label: 'Padding (px)', type: 'range', min: 0, max: 24, step: 2 },
+    { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 24 },
   ],
 };

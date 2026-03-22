@@ -25,6 +25,13 @@ export default {
     expand_speed: '500',
     parallax_height: '1500',
     parallax_intensity: '50',
+    drift_height: '1200',
+    drift_intensity: '60',
+    drift_rotation: '12',
+    cascade_spread: '60',
+    cascade_overlap: '40',
+    cascade_rotation: '8',
+    metro_cell_height: '200',
     filmstrip_item_width: '280',
     filmstrip_center_zoom: '1.15',
     filmstrip_side_tilt: '35',
@@ -136,6 +143,9 @@ export default {
         { value: 'puzzle', label: 'Puzzle' },
         { value: 'diagonal', label: 'Diagonale' },
         { value: 'parallax', label: 'Parallasse' },
+        { value: 'drift', label: 'Deriva (multi-dir)' },
+        { value: 'cascade', label: 'Cascata (sovrapposti)' },
+        { value: 'metro', label: 'Metro (dimensioni miste)' },
         { value: 'expand', label: 'Espandi (spotlight)' },
       ];
     }},
@@ -170,6 +180,23 @@ export default {
       show: s => s.layout === 'parallax' },
     { key: 'parallax_intensity', label: 'Intensità parallasse', type: 'range', min: 10, max: 100, step: 5,
       show: s => s.layout === 'parallax' },
+    // Drift
+    { key: 'drift_height', label: 'Altezza area (px)', type: 'range', min: 600, max: 2500, step: 100,
+      show: s => s.layout === 'drift' },
+    { key: 'drift_intensity', label: 'Intensità movimento', type: 'range', min: 10, max: 100, step: 5,
+      show: s => s.layout === 'drift' },
+    { key: 'drift_rotation', label: 'Rotazione max (deg)', type: 'range', min: 0, max: 25, step: 1,
+      show: s => s.layout === 'drift' },
+    // Cascade
+    { key: 'cascade_spread', label: 'Distanza separazione', type: 'range', min: 20, max: 100, step: 5,
+      show: s => s.layout === 'cascade' },
+    { key: 'cascade_overlap', label: 'Sovrapposizione iniziale (%)', type: 'range', min: 10, max: 80, step: 5,
+      show: s => s.layout === 'cascade' },
+    { key: 'cascade_rotation', label: 'Rotazione carte (deg)', type: 'range', min: 0, max: 20, step: 1,
+      show: s => s.layout === 'cascade' },
+    // Metro
+    { key: 'metro_cell_height', label: 'Altezza cella (px)', type: 'range', min: 100, max: 400, step: 10,
+      show: s => s.layout === 'metro' },
 
     // ─── Coverflow 3D ───
     { type: 'separator', label: 'Coverflow 3D',
@@ -239,6 +266,11 @@ export default {
       { value: 'flip', label: 'Flip' },
       { value: 'slide-in', label: 'Scorrimento' },
       { value: 'blur-in', label: 'Sfocatura' },
+      { value: 'split-sides', label: 'Lati alterni' },
+      { value: 'fall', label: 'Caduta (bounce)' },
+      { value: 'wind', label: 'Soffio di vento' },
+      { value: 'zoom-center', label: 'Zoom dal centro' },
+      { value: 'land', label: 'Atterraggio 3D' },
     ]},
     { key: 'entrance_stagger', label: 'Stagger (ms)', type: 'range', min: 80, max: 400, step: 20,
       show: s => s.entrance && s.entrance !== 'none' },
@@ -284,7 +316,7 @@ export default {
       { value: '700', label: 'Bold' },
       { value: '900', label: 'Extra bold' },
     ], show: s => s.hover_caption === 'centered' },
-    { key: 'hover_frame_inset', label: 'Padding cornice (px)', type: 'range', min: 4, max: 40, step: 2,
+    { key: 'hover_frame_inset', label: 'Padding cornice (px)', type: 'spacing', max: 40,
       show: s => s.hover_caption === 'frame' },
 
     // ─── Animazione continua ───
@@ -334,8 +366,7 @@ export default {
     ]},
     { key: 'frame_color', label: 'Colore cornice', type: 'color',
       show: s => s.frame === 'polaroid' || s.frame === 'shadow-box' || s.frame === 'inset' },
-    { key: 'frame_inset_padding', label: 'Distanza dal bordo (px)', type: 'range', min: 3, max: 40, step: 1,
-      show: s => s.frame === 'inset' },
+    { key: 'frame_inset_padding', label: 'Distanza dal bordo (px)', type: 'spacing', max: 40 },
 
     // ─── Bordi animati ───
     { type: 'separator', label: 'Bordi animati' },

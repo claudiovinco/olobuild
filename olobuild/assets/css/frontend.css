@@ -14,6 +14,9 @@
  * left-50%/translateX(-50%) trick and clip overflow so
  * the scrollbar doesn't cause an asymmetric shift.
  */
+body:has(.olo-template) {
+  overflow-x: clip;
+}
 body:has(.olo-template) .wp-site-blocks {
   overflow-x: clip;
 }
@@ -193,10 +196,9 @@ video.olo-tile-bg {
   pointer-events: auto;
 }
 
-/* --- Classic mode: in flow + sticks to top on scroll --- */
+/* --- Classic mode: in document flow, sticky only when JS enables it --- */
 .olo-site-header.olo-header-classic {
-  position: sticky;
-  top: 0;
+  position: relative;
   margin-top: 0 !important;
   margin-bottom: 0 !important;
 }
@@ -215,6 +217,10 @@ video.olo-tile-bg {
 .wp-site-blocks > .olo-site-header.olo-header-classic + * {
   margin-block-start: 0 !important;
   margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+/* Remove gap between classic header and first page section */
+.olo-site-header.olo-header-classic ~ main .olo-template > .olo-frontend-grid > section:first-child {
   padding-top: 0 !important;
 }
 
@@ -292,7 +298,7 @@ header.olo-site-header.olo-header-overlay + main > .wp-block-group:first-child {
 
 /* Offcanvas menu z-index above header */
 .olo-navmenu .uk-offcanvas {
-  z-index: 990;
+  z-index: 100000;
 }
 
 /* ========================================
@@ -305,22 +311,23 @@ header.olo-site-header.olo-header-overlay + main > .wp-block-group:first-child {
 .olo-header-sticky {
   transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s, top 0.3s;
 }
-/* Classic mode + sticky: stays position:sticky, only visual changes (bg/shadow via tile CSS) */
+/* Classic mode + sticky: JS sets position:sticky, CSS adds visual changes */
 .olo-site-header.olo-header-classic.olo-header-sticky {
-  /* no position change — stays sticky from .olo-header-classic */
+  position: sticky;
+  top: 0;
 }
 /* Offset header below WP admin bar when logged in */
 .admin-bar .olo-site-header.olo-header-overlay {
   top: 32px !important;
 }
-.admin-bar .olo-site-header.olo-header-classic {
+.admin-bar .olo-site-header.olo-header-classic.olo-header-sticky {
   top: 32px !important;
 }
 @media (max-width: 782px) {
   .admin-bar .olo-site-header.olo-header-overlay {
     top: 46px !important;
   }
-  .admin-bar .olo-site-header.olo-header-classic {
+  .admin-bar .olo-site-header.olo-header-classic.olo-header-sticky {
     top: 46px !important;
   }
 }
@@ -2236,4 +2243,43 @@ header.olo-site-header.olo-header-overlay + main > .wp-block-group:first-child {
   .olo-template .olo-hover-wrap .olo-hover-media {
     transition: none !important;
   }
+}
+
+/* ── Row stack responsive ── */
+@media (max-width: 639px) {
+  .olo-row--stack-mobile {
+    flex-direction: column !important;
+  }
+  .olo-row--stack-mobile > .olo-row-col {
+    width: 100% !important;
+  }
+}
+@media (max-width: 959px) {
+  .olo-row--stack-tablet {
+    flex-direction: column !important;
+  }
+  .olo-row--stack-tablet > .olo-row-col {
+    width: 100% !important;
+  }
+}
+/* Legacy compat: old class name */
+@media (max-width: 639px) {
+  .olo-row--stack {
+    flex-direction: column !important;
+  }
+  .olo-row--stack > .olo-row-col {
+    width: 100% !important;
+  }
+}
+
+/* ── Override WP block theme heading sizes (TT4 etc.) ── */
+.olo-template .uk-heading-small { font-size: 2rem !important; }
+.olo-template .uk-heading-medium { font-size: 2.8875rem !important; }
+.olo-template .uk-heading-large { font-size: 3.4rem !important; }
+.olo-template .uk-heading-xlarge { font-size: 4rem !important; }
+@media (min-width: 960px) {
+  .olo-template .uk-heading-small { font-size: 2.6rem !important; }
+  .olo-template .uk-heading-medium { font-size: 3.5rem !important; }
+  .olo-template .uk-heading-large { font-size: 4rem !important; }
+  .olo-template .uk-heading-xlarge { font-size: 5.5rem !important; }
 }

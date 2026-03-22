@@ -12,7 +12,7 @@
     <a href="#olo-canvas" class="mb-sr-only focus:mb-not-sr-only focus:mb-fixed focus:mb-top-2 focus:mb-left-2 focus:mb-z-50 focus:mb-bg-gray-800 focus:mb-text-white focus:mb-px-4 focus:mb-py-2 focus:mb-rounded">
       Salta al contenuto
     </a>
-    <BuilderToolbar @back="goToList" @open-revisions="onOpenRevisions" @open-finder="openFinder" @open-ai="aiAssistantRef?.open()" @open-library="templateLibraryRef?.open()" />
+    <BuilderToolbar @back="goToList" @open-revisions="onOpenRevisions" @open-finder="openFinder" @open-ai="aiAssistantRef?.open()" @open-library="templateLibraryRef?.open()" @open-themes="themeSelectorRef?.open()" />
     <div class="mb-flex mb-flex-1 mb-overflow-hidden">
       <BuilderSidebar v-if="!builderStore.previewMode && !sidebarCollapsed" :style="{ width: sidebarWidth + 'px', flexShrink: 0 }" role="complementary" aria-label="Pannello elementi" @save-as-template="section => templateLibraryRef?.openSaveDialog(section)" />
       <!-- Resize handle + collapse toggle -->
@@ -52,6 +52,10 @@
     <AIAssistant ref="aiAssistantRef" />
     <!-- Libreria Template -->
     <TemplateLibrary ref="templateLibraryRef" />
+    <!-- Temi -->
+    <ThemeSelector ref="themeSelectorRef" />
+    <!-- Insert Panel (clean mode) -->
+    <InsertPanel ref="insertPanelRef" @open-library="templateLibraryRef?.open()" />
   </div>
 </template>
 
@@ -70,6 +74,8 @@ import BuilderFinder from './components/Builder/BuilderFinder.vue';
 import RevisionHistory from './components/Builder/RevisionHistory.vue';
 import AIAssistant from './components/Builder/AIAssistant.vue';
 import TemplateLibrary from './components/Builder/TemplateLibrary.vue';
+import ThemeSelector from './components/Builder/ThemeSelector.vue';
+import InsertPanel from './components/Builder/InsertPanel.vue';
 
 const builderStore = useBuilderStore();
 const tilesStore = useTilesStore();
@@ -79,6 +85,8 @@ const revisionHistoryRef = ref(null);
 const builderFinderRef = ref(null);
 const aiAssistantRef = ref(null);
 const templateLibraryRef = ref(null);
+const themeSelectorRef = ref(null);
+const insertPanelRef = ref(null);
 
 function onOpenRevisions() {
   if (revisionHistoryRef.value) {
@@ -90,18 +98,29 @@ function openFinder(columnId) {
   builderFinderRef.value?.open(columnId);
 }
 
+function onOpenFinderAfter() {
+  builderFinderRef.value?.open();
+}
+
 provide('openFinder', openFinder);
+
+function openInsertPanel(sectionIndex) {
+  insertPanelRef.value?.open(sectionIndex);
+}
+provide('openInsertPanel', openInsertPanel);
+window.__oloOpenInsertPanel = openInsertPanel;
 
 // Dirty state: warn on page leave + title indicator
 function onBeforeUnload(e) {
-  if (builderStore.isDirty) {
+  if (builderStore.isDirty || builderStore.headerDirty || builderStore.footerDirty) {
     e.preventDefault();
     e.returnValue = '';
   }
 }
-watch(() => builderStore.isDirty, (dirty) => {
+watch([() => builderStore.isDirty, () => builderStore.headerDirty, () => builderStore.footerDirty], () => {
   const base = builderStore.currentTemplate?.title || 'Olobuild';
-  document.title = dirty ? '\u2022 ' + base + ' — Olobuild' : base + ' — Olobuild';
+  const anyDirty = builderStore.isDirty || builderStore.headerDirty || builderStore.footerDirty;
+  document.title = anyDirty ? '\u2022 ' + base + ' — Olobuild' : base + ' — Olobuild';
 });
 
 const currentView = ref('list'); // 'list' | 'builder'
@@ -225,6 +244,7 @@ onMounted(async () => {
   document.addEventListener('olo:load-template', onLoadTemplate);
   window.addEventListener('beforeunload', onBeforeUnload);
   window.addEventListener('resize', handleResize);
+  window.addEventListener('olo:open-finder-after', onOpenFinderAfter);
   handleResize(); // check iniziale
 
   // Auto-open builder if templateId is passed from WordPress
@@ -241,6 +261,7 @@ onUnmounted(() => {
   document.removeEventListener('olo:load-template', onLoadTemplate);
   window.removeEventListener('beforeunload', onBeforeUnload);
   window.removeEventListener('resize', handleResize);
+  window.removeEventListener('olo:open-finder-after', onOpenFinderAfter);
 });
 
 async function openBuilder(templateId) {
@@ -273,6 +294,10 @@ async function openBuilder(templateId) {
   // Sincronizza widget globali: aggiorna istanze locali dal master DB
   await tilesStore.fetchGlobalWidgets();
   tilesStore.syncGlobalWidgetsOnLoad();
+
+  // Load header + footer for unified editing (page/single templates only)
+  await builderStore.loadUnifiedContext();
+
   currentView.value = 'builder';
 }
 
@@ -331,7 +356,7 @@ async function createAndOpenBuilder(typeOrObj = 'page') {
 }
 
 function goToList() {
-  if (builderStore.isDirty) {
+  if (builderStore.isDirty || builderStore.headerDirty || builderStore.footerDirty) {
     if (!confirm('Hai modifiche non salvate. Uscire comunque?')) return;
   }
   // If in fullscreen editor mode (template_id in URL), redirect to list page

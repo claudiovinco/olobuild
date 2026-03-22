@@ -321,9 +321,6 @@ class Olo_NavMenu_Tile extends Olo_Tile_Base {
             if ( $sticky_bg ) {
                 $sticky_decls[] = "background-color: {$sticky_bg}";
             }
-            if ( ! empty( $s['sticky_shadow'] ) ) {
-                $sticky_decls[] = "box-shadow: 0 2px 12px rgba(0,0,0,0.12)";
-            }
             if ( ! empty( $sticky_decls ) ) {
                 $rules[] = ".olo-header-sticky { " . implode( '; ', $sticky_decls ) . "; }";
             }

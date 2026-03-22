@@ -10,6 +10,34 @@
 
         <!-- Tile Inspector -->
         <template v-if="selectedTile">
+        <!-- Zone badge (unified editing) -->
+        <div v-if="builderStore.unifiedMode && tileZone" class="mb-mb-2 mb-flex mb-items-center mb-gap-1.5">
+          <span class="mb-text-[10px] mb-font-semibold mb-uppercase mb-tracking-wide mb-px-1.5 mb-py-0.5 mb-rounded"
+            :class="{
+              'mb-bg-blue-500/15 mb-text-blue-400': tileZone === 'header',
+              'mb-bg-purple-500/15 mb-text-purple-400': tileZone === 'body',
+              'mb-bg-emerald-500/15 mb-text-emerald-400': tileZone === 'footer',
+            }"
+          >{{ tileZone === 'body' ? 'Body' : tileZone === 'header' ? 'Header' : 'Footer' }}</span>
+        </div>
+        <!-- Breadcrumb -->
+        <div v-if="ancestorPath.length > 1" class="mb-mb-2 mb-flex mb-items-center mb-flex-wrap mb-gap-0.5 mb-text-[10px]">
+          <template v-for="(crumb, idx) in ancestorPath" :key="crumb.id">
+            <span v-if="idx > 0" class="mb-text-gray-600">›</span>
+            <button
+              v-if="idx < ancestorPath.length - 1"
+              @click="builderStore.selectTile(crumb.id)"
+              class="mb-text-gray-500 hover:mb-text-primary-400 mb-transition-colors mb-cursor-pointer mb-truncate mb-max-w-[80px]"
+              :title="crumbLabel(crumb)"
+            >{{ crumbLabel(crumb) }}</button>
+            <span
+              v-else
+              class="mb-text-gray-300 mb-font-medium mb-truncate mb-max-w-[80px]"
+              :title="crumbLabel(crumb)"
+            >{{ crumbLabel(crumb) }}</span>
+          </template>
+        </div>
+
         <!-- Header -->
         <div class="mb-flex mb-items-center mb-justify-between mb-mb-4">
           <h3 class="mb-text-sm mb-font-semibold mb-text-gray-200">
@@ -52,9 +80,15 @@
               Apri editor slider
             </button>
             <p class="mb-text-[10px] mb-text-gray-400">{{ (selectedTile.settings?.slides || []).length }} slide configurate</p>
+
+            <!-- Height mode selector -->
+            <HeightModeSelector
+              :settings="selectedTile.settings || {}"
+              @update="updateSetting"
+            />
           </div>
 
-          <template v-if="elementFields.length > 0 && elementDef?.customEditor !== 'proslider'">
+          <template v-if="elementFields.length > 0">
             <template v-for="(section, sIdx) in groupedSections" :key="'sec-' + sIdx">
               <!-- Section without label (fields before first separator) — always open -->
               <template v-if="section.label === null">
@@ -223,7 +257,7 @@
           <!-- Spacing breakpoint switcher -->
           <div class="mb-flex mb-gap-1 mb-bg-gray-700 mb-rounded-lg mb-p-0.5 mb-mb-1">
             <button
-              v-for="bp in spacingBreakpoints"
+              v-for="bp in responsiveBreakpoints"
               :key="bp.key"
               @click="spacingBp = bp.key"
               :class="[
@@ -1074,6 +1108,118 @@
             </div>
           </CollapseSection>
 
+          <!-- SEO & Accessibility -->
+          <CollapseSection title="SEO & Accessibilità">
+            <div class="mb-space-y-3">
+              <!-- ARIA Label -->
+              <div>
+                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Aria Label</label>
+                <input
+                  type="text"
+                  :value="tileAdvanced.aria_label || ''"
+                  @input="updateAdvanced('aria_label', $event.target.value)"
+                  placeholder="Descrizione per screen reader"
+                  class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-sm mb-text-gray-900"
+                />
+              </div>
+              <!-- ARIA Role -->
+              <div>
+                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Role</label>
+                <select
+                  :value="tileAdvanced.aria_role || ''"
+                  @change="updateAdvanced('aria_role', $event.target.value)"
+                  class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-sm mb-text-gray-900"
+                >
+                  <option value="">Automatico</option>
+                  <option value="region">Region</option>
+                  <option value="navigation">Navigation</option>
+                  <option value="complementary">Complementary</option>
+                  <option value="banner">Banner</option>
+                  <option value="contentinfo">Content Info</option>
+                  <option value="main">Main</option>
+                  <option value="search">Search</option>
+                  <option value="form">Form</option>
+                  <option value="none">None (decorativo)</option>
+                </select>
+              </div>
+              <!-- Link Rel (for tiles with links) -->
+              <div v-if="tileHasLink">
+                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Link Rel</label>
+                <div class="mb-flex mb-flex-wrap mb-gap-2">
+                  <label v-for="rel in linkRelOptions" :key="rel.value" class="mb-flex mb-items-center mb-gap-1 mb-cursor-pointer">
+                    <input
+                      type="checkbox"
+                      :checked="(tileAdvanced.link_rel || '').includes(rel.value)"
+                      @change="toggleLinkRel(rel.value)"
+                      class="mb-w-3.5 mb-h-3.5 mb-rounded mb-accent-primary-600"
+                    />
+                    <span class="mb-text-[11px] mb-text-gray-300">{{ rel.label }}</span>
+                  </label>
+                </div>
+              </div>
+              <!-- Link Title (for tiles with links) -->
+              <div v-if="tileHasLink">
+                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Link Title</label>
+                <input
+                  type="text"
+                  :value="tileAdvanced.link_title || ''"
+                  @input="updateAdvanced('link_title', $event.target.value)"
+                  placeholder="Tooltip al passaggio del mouse"
+                  class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-sm mb-text-gray-900"
+                />
+              </div>
+              <!-- Image Loading Strategy -->
+              <div v-if="tileHasImage">
+                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Caricamento immagine</label>
+                <select
+                  :value="tileAdvanced.img_loading || 'lazy'"
+                  @change="updateAdvanced('img_loading', $event.target.value)"
+                  class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-sm mb-text-gray-900"
+                >
+                  <option value="lazy">Lazy (default — carica quando visibile)</option>
+                  <option value="eager">Eager (carica subito — per above the fold)</option>
+                </select>
+              </div>
+              <!-- Fetch Priority -->
+              <div v-if="tileHasImage">
+                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Fetch Priority</label>
+                <select
+                  :value="tileAdvanced.fetch_priority || 'auto'"
+                  @change="updateAdvanced('fetch_priority', $event.target.value)"
+                  class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-sm mb-text-gray-900"
+                >
+                  <option value="auto">Auto (default)</option>
+                  <option value="high">High (LCP — hero, slider, prima immagine)</option>
+                  <option value="low">Low (sotto il fold)</option>
+                </select>
+              </div>
+              <!-- Schema.org Type -->
+              <div v-if="schemaOptions.length">
+                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Schema.org</label>
+                <select
+                  :value="tileAdvanced.schema_type || ''"
+                  @change="updateAdvanced('schema_type', $event.target.value)"
+                  class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-sm mb-text-gray-900"
+                >
+                  <option value="">Nessuno</option>
+                  <option v-for="opt in schemaOptions" :key="opt.value" :value="opt.value">{{ opt.label }}</option>
+                </select>
+              </div>
+              <!-- Data attributes -->
+              <div>
+                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Data Attributes</label>
+                <input
+                  type="text"
+                  :value="tileAdvanced.data_attrs || ''"
+                  @input="updateAdvanced('data_attrs', $event.target.value)"
+                  placeholder="key=value, key2=value2"
+                  class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-sm mb-text-gray-900"
+                />
+                <p class="mb-text-[10px] mb-text-gray-500 mb-mt-1">Aggiunge data-key="value" al wrapper</p>
+              </div>
+            </div>
+          </CollapseSection>
+
           <!-- Entrance Animation (olo-entrance-*) -->
           <CollapseSection title="Animazione di ingresso">
             <div class="mb-space-y-3">
@@ -1394,43 +1540,59 @@
                 </select>
               </div>
               <template v-if="tileAdvanced.position_mode && tileAdvanced.position_mode !== 'static'">
+                <!-- Position breakpoint switcher -->
+                <div class="mb-flex mb-gap-1 mb-bg-gray-700 mb-rounded-lg mb-p-0.5">
+                  <button
+                    v-for="bp in responsiveBreakpoints"
+                    :key="bp.key"
+                    @click="positionBp = bp.key"
+                    :class="[
+                      'mb-flex-1 mb-py-1 mb-text-[10px] mb-font-medium mb-rounded-md mb-transition-colors mb-flex mb-items-center mb-justify-center mb-gap-1',
+                      positionBp === bp.key
+                        ? 'mb-bg-primary-600 mb-text-white'
+                        : 'mb-text-gray-400 hover:mb-text-gray-300'
+                    ]"
+                    :title="bp.label"
+                    v-html="bp.icon"
+                  ></button>
+                </div>
                 <div class="mb-grid mb-grid-cols-2 mb-gap-2">
                   <div>
-                    <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">Top</label>
+                    <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">Top <span v-if="positionBp !== 'desktop'" class="mb-text-amber-400">{{ positionBpLabel }}</span></label>
                     <input
                       type="text"
-                      :value="tileAdvanced.position_top ?? ''"
-                      @change="updateAdvanced('position_top', $event.target.value)"
+                      :value="tileAdvanced[positionKey('position_top')] ?? ''"
+                      @change="updateAdvanced(positionKey('position_top'), $event.target.value)"
                       placeholder="auto"
                       class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-0.5 mb-text-[11px] mb-text-gray-900"
                     />
                   </div>
                   <div>
-                    <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">Left</label>
+                    <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">Left <span v-if="positionBp !== 'desktop'" class="mb-text-amber-400">{{ positionBpLabel }}</span></label>
                     <input
                       type="text"
-                      :value="tileAdvanced.position_left ?? ''"
-                      @change="updateAdvanced('position_left', $event.target.value)"
+                      :value="tileAdvanced[positionKey('position_left')] ?? ''"
+                      @change="updateAdvanced(positionKey('position_left'), $event.target.value)"
                       placeholder="auto"
                       class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-0.5 mb-text-[11px] mb-text-gray-900"
                     />
                   </div>
                   <div>
-                    <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">Bottom</label>
+                    <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">Bottom <span v-if="positionBp !== 'desktop'" class="mb-text-amber-400">{{ positionBpLabel }}</span></label>
                     <input
                       type="text"
-                      :value="tileAdvanced.position_bottom ?? ''"
-                      @change="updateAdvanced('position_bottom', $event.target.value)"
+                      :value="tileAdvanced[positionKey('position_bottom')] ?? ''"
+                      @change="updateAdvanced(positionKey('position_bottom'), $event.target.value)"
                       placeholder="auto"
                       class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-0.5 mb-text-[11px] mb-text-gray-900"
                     />
                   </div>
                   <div>
-                    <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">Right</label>
+                    <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">Right <span v-if="positionBp !== 'desktop'" class="mb-text-amber-400">{{ positionBpLabel }}</span></label>
                     <input
                       type="text"
-                      :value="tileAdvanced.position_right ?? ''"
-                      @change="updateAdvanced('position_right', $event.target.value)"
+                      :value="tileAdvanced[positionKey('position_right')] ?? ''"
+                      @change="updateAdvanced(positionKey('position_right'), $event.target.value)"
                       placeholder="auto"
                       class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-0.5 mb-text-[11px] mb-text-gray-900"
                     />
@@ -1438,21 +1600,21 @@
                 </div>
                 <div class="mb-grid mb-grid-cols-2 mb-gap-2">
                   <div>
-                    <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">Larghezza</label>
+                    <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">Larghezza <span v-if="positionBp !== 'desktop'" class="mb-text-amber-400">{{ positionBpLabel }}</span></label>
                     <input
                       type="text"
-                      :value="tileAdvanced.position_width ?? ''"
-                      @change="updateAdvanced('position_width', $event.target.value)"
+                      :value="tileAdvanced[positionKey('position_width')] ?? ''"
+                      @change="updateAdvanced(positionKey('position_width'), $event.target.value)"
                       placeholder="auto"
                       class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-0.5 mb-text-[11px] mb-text-gray-900"
                     />
                   </div>
                   <div>
-                    <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">z-index</label>
+                    <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">z-index <span v-if="positionBp !== 'desktop'" class="mb-text-amber-400">{{ positionBpLabel }}</span></label>
                     <input
                       type="number"
-                      :value="tileAdvanced.position_zindex ?? ''"
-                      @change="updateAdvanced('position_zindex', $event.target.value === '' ? '' : parseInt($event.target.value))"
+                      :value="tileAdvanced[positionKey('position_zindex')] ?? ''"
+                      @change="updateAdvanced(positionKey('position_zindex'), $event.target.value === '' ? '' : parseInt($event.target.value))"
                       placeholder="auto"
                       class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-0.5 mb-text-[11px] mb-text-gray-900"
                     />
@@ -1506,6 +1668,7 @@ import FieldBoxShadow from './fields/FieldBoxShadow.vue';
 import FieldTransform from './fields/FieldTransform.vue';
 import ParallaxEditor from './ParallaxEditor.vue';
 import ProSliderEditor from '../ProSlider/ProSliderEditor.vue';
+import HeightModeSelector from '../ProSlider/HeightModeSelector.vue';
 
 const elementParallaxProperties = [
   { key: 'x', label: 'Traslazione X', min: -1000, max: 1000, step: 10, unit: 'px' },
@@ -1557,6 +1720,101 @@ const selectedTile = computed(() => {
   return tilesStore.getTileById(builderStore.selectedTileId);
 });
 
+const tileZone = computed(() => {
+  if (!builderStore.selectedTileId) return null;
+  return tilesStore.getZoneForTile(builderStore.selectedTileId);
+});
+
+const ancestorPath = computed(() => {
+  if (!builderStore.selectedTileId) return [];
+  return tilesStore.getAncestorPath(builderStore.selectedTileId);
+});
+
+// ─── SEO & Accessibility ───
+const tilesWithLinks = ['button', 'image', 'icon', 'content', 'grid', 'carousel', 'card', 'flipcard', 'iconbox', 'overlay', 'overlayslider', 'team', 'linkinbio', 'nav', 'navmenu'];
+const tilesWithImages = ['image', 'gallery', 'progallery', 'slideshow', 'proslider', 'carousel', 'hero', 'servicehero', 'servicegallery', 'overlay', 'overlayslider', 'shatteredimage', 'imgcompare', 'lightbox'];
+
+const tileHasLink = computed(() => tilesWithLinks.includes(currentTileType.value));
+const tileHasImage = computed(() => tilesWithImages.includes(currentTileType.value));
+
+const linkRelOptions = [
+  { value: 'nofollow', label: 'nofollow' },
+  { value: 'sponsored', label: 'sponsored' },
+  { value: 'ugc', label: 'ugc' },
+  { value: 'noopener', label: 'noopener' },
+  { value: 'noreferrer', label: 'noreferrer' },
+];
+
+const schemaMap = {
+  testimonial: [
+    { value: 'Review', label: 'Review (recensione)' },
+    { value: 'Testimonial', label: 'Testimonial' },
+  ],
+  accordion: [
+    { value: 'FAQPage', label: 'FAQ Page (già attivo)' },
+  ],
+  pricelist: [
+    { value: 'Product', label: 'Product (prodotto)' },
+    { value: 'Offer', label: 'Offer (offerta)' },
+  ],
+  pricing: [
+    { value: 'Product', label: 'Product' },
+    { value: 'Offer', label: 'Offer' },
+  ],
+  breadcrumbs: [
+    { value: 'BreadcrumbList', label: 'BreadcrumbList' },
+  ],
+  team: [
+    { value: 'Person', label: 'Person' },
+  ],
+  form: [
+    { value: 'ContactPoint', label: 'ContactPoint' },
+  ],
+  postgrid: [
+    { value: 'Article', label: 'Article' },
+    { value: 'BlogPosting', label: 'BlogPosting' },
+  ],
+  counter: [
+    { value: 'QuantitativeValue', label: 'QuantitativeValue' },
+  ],
+  section: [
+    { value: 'WebPageElement', label: 'WebPageElement' },
+  ],
+};
+
+const schemaOptions = computed(() => schemaMap[currentTileType.value] || []);
+
+function toggleLinkRel(relValue) {
+  const current = (selectedTile.value?.advanced?.link_rel || '').split(' ').filter(Boolean);
+  const idx = current.indexOf(relValue);
+  if (idx === -1) {
+    current.push(relValue);
+  } else {
+    current.splice(idx, 1);
+  }
+  updateAdvanced('link_rel', current.join(' '));
+}
+
+const typeLabels = {
+  section: 'Sezione',
+  row: 'Riga',
+  column: 'Colonna',
+  grid: 'Griglia',
+  hero: 'Hero',
+  fragment: 'Frammento',
+};
+
+function crumbLabel(node) {
+  if (!node) return '';
+  const def = getElementDef(node.type);
+  if (def?.name) return def.name;
+  if (typeLabels[node.type]) return typeLabels[node.type];
+  if (node.type === 'column') {
+    return 'Col ' + ((node._colIndex ?? 0) + 1);
+  }
+  return node.type;
+}
+
 // Local ref for custom_widths input (avoids reactive re-render overwriting user input)
 const customWidthsLocal = ref('');
 const customWidthsEditing = ref(false);
@@ -1586,7 +1844,7 @@ function applyCustomWidthsFromInspector() {
   if (!builderStore.selectedTileId || !customWidthsLocal.value.trim()) return;
   const result = tilesStore.applyCustomWidths(builderStore.selectedTileId, customWidthsLocal.value);
   if (result) customWidthsLocal.value = result;
-  builderStore.isDirty = true;
+  builderStore.markDirtyForTile(builderStore.selectedTileId);
 }
 
 const currentTileType = computed(() => selectedTile.value?.type || '');
@@ -1598,7 +1856,7 @@ const elementDef = computed(() => getElementDef(currentTileType.value));
 const elementFields = computed(() => getElementFields(currentTileType.value));
 
 // Fallback: filtered settings for elements without definition
-const hiddenKeys = ['columns_data'];
+const hiddenKeys = ['columns_data', 'slides', 'globalBackground', 'globalLayers'];
 const filteredSettings = computed(() => {
   if (!selectedTile.value?.settings) return {};
   const result = {};
@@ -1654,6 +1912,15 @@ function inferField(key, value) {
 function evaluateCondition(condition, settings) {
   if (!condition || !settings) return true;
   const val = settings[condition.field];
+  // Support op shorthand (notEmpty, empty, eq, neq)
+  if (condition.op) {
+    switch (condition.op) {
+      case 'notEmpty': return val !== undefined && val !== null && val !== '' && val !== false;
+      case 'empty':    return val === undefined || val === null || val === '' || val === false;
+      case 'eq':       return val === condition.value;
+      case 'neq':      return val !== condition.value;
+    }
+  }
   if (condition.operator) {
     const nv = parseFloat(val);
     const nc = parseFloat(condition.value);
@@ -1732,18 +1999,31 @@ function sectionHasVisibleFields(section) {
 
 const tileStyle = computed(() => selectedTile.value?.style || {});
 
-// Responsive spacing breakpoints
-const spacingBp = ref('desktop');
-const spacingBreakpoints = [
+// Responsive breakpoints (shared definition) — filtered by enabled state
+const _allBps = [
   { key: 'desktop', label: 'Desktop', icon: '<svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="16" height="11" rx="1"/><path d="M6 17h8M10 14v3"/></svg>' },
   { key: 'tablet_landscape', label: 'Tab L', icon: '<svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="4" width="18" height="13" rx="1.5"/><circle cx="10" cy="10" r="0.5" fill="currentColor"/></svg>' },
   { key: 'tablet', label: 'Tab P', icon: '<svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="2" width="12" height="16" rx="1.5"/><circle cx="10" cy="16" r="0.5" fill="currentColor"/></svg>' },
   { key: 'mobile_landscape', label: 'Mob L', icon: '<svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="5" width="18" height="10" rx="1.5"/><circle cx="10" cy="10" r="0.5" fill="currentColor"/></svg>' },
   { key: 'mobile', label: 'Mobile', icon: '<svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="2" width="10" height="16" rx="1.5"/><circle cx="10" cy="16" r="0.5" fill="currentColor"/></svg>' },
 ];
-const spacingBpLabel = computed(() => spacingBreakpoints.find(b => b.key === spacingBp.value)?.label || '');
+const _bpEnabled = (window.oloData || {}).breakpointsEnabled || {};
+const responsiveBreakpoints = _allBps.filter(bp =>
+  bp.key === 'desktop' || _bpEnabled[bp.key] !== false
+);
+
+// Spacing breakpoints
+const spacingBp = ref('desktop');
+const spacingBpLabel = computed(() => responsiveBreakpoints.find(b => b.key === spacingBp.value)?.label || '');
 function spacingKey(base) {
   return spacingBp.value === 'desktop' ? base : base + '_' + spacingBp.value;
+}
+
+// Positioning breakpoints
+const positionBp = ref('desktop');
+const positionBpLabel = computed(() => responsiveBreakpoints.find(b => b.key === positionBp.value)?.label || '');
+function positionKey(base) {
+  return positionBp.value === 'desktop' ? base : base + '_' + positionBp.value;
 }
 
 // Margin linked/unlinked
@@ -1983,7 +2263,7 @@ function updateSetting(key, value) {
   // Row layout change: restructure columns via store action
   if (tile && tile.type === 'row' && key === 'layout') {
     tilesStore.changeRowLayout(builderStore.selectedTileId, value);
-    builderStore.isDirty = true;
+    builderStore.markDirtyForTile(builderStore.selectedTileId);
     return;
   }
   // ProGallery: when changing layout_family, auto-set layout to first of new family
@@ -1993,25 +2273,25 @@ function updateSetting(key, value) {
   }
   // Row custom_widths: handled by dedicated inline input, not here
   tilesStore.updateTile(builderStore.selectedTileId, { [key]: value });
-  builderStore.isDirty = true;
+  builderStore.markDirtyForTile(builderStore.selectedTileId);
 }
 
 function updateStyle(key, value) {
   if (!builderStore.selectedTileId) return;
   tilesStore.updateTileStyle(builderStore.selectedTileId, { [key]: value });
-  builderStore.isDirty = true;
+  builderStore.markDirtyForTile(builderStore.selectedTileId);
 }
 
 function onTileBgUpdate(newBg) {
   if (!builderStore.selectedTileId) return;
   tilesStore.updateTileStyle(builderStore.selectedTileId, { bg: newBg });
-  builderStore.isDirty = true;
+  builderStore.markDirtyForTile(builderStore.selectedTileId);
 }
 
 function updateAdvanced(key, value) {
   if (!builderStore.selectedTileId) return;
   tilesStore.updateTileAdvanced(builderStore.selectedTileId, { [key]: value });
-  builderStore.isDirty = true;
+  builderStore.markDirtyForTile(builderStore.selectedTileId);
 }
 
 // --- Hover styles ---
@@ -2023,20 +2303,20 @@ const tileTransition = computed(() => selectedTile.value?.style?.transition || {
 function updateHover(key, value) {
   if (!builderStore.selectedTileId) return;
   tilesStore.updateTileHover(builderStore.selectedTileId, { [key]: value });
-  builderStore.isDirty = true;
+  builderStore.markDirtyForTile(builderStore.selectedTileId);
 }
 
 function resetHover(key) {
   if (!builderStore.selectedTileId) return;
   const resetVal = (key === 'opacity' || key === 'transform_scale' || key === 'transform_translateY' || key === 'transform_rotate') ? null : '';
   tilesStore.updateTileHover(builderStore.selectedTileId, { [key]: resetVal });
-  builderStore.isDirty = true;
+  builderStore.markDirtyForTile(builderStore.selectedTileId);
 }
 
 function updateTransition(key, value) {
   if (!builderStore.selectedTileId) return;
   tilesStore.updateTileTransition(builderStore.selectedTileId, { [key]: value });
-  builderStore.isDirty = true;
+  builderStore.markDirtyForTile(builderStore.selectedTileId);
 }
 
 watch(() => builderStore.selectedTileId, () => {
@@ -2055,19 +2335,19 @@ function onDynamicFieldUpdate(dynamicUpdate, isRemove) {
   } else {
     tilesStore.updateTileDynamic(builderStore.selectedTileId, dynamicUpdate);
   }
-  builderStore.isDirty = true;
+  builderStore.markDirtyForTile(builderStore.selectedTileId);
 }
 
 function updateDynamicQuery(queryConfig) {
   if (!builderStore.selectedTileId) return;
   tilesStore.updateTileDynamic(builderStore.selectedTileId, { _query: queryConfig });
-  builderStore.isDirty = true;
+  builderStore.markDirtyForTile(builderStore.selectedTileId);
 }
 
 function updateDynamicItemMap(itemMap) {
   if (!builderStore.selectedTileId) return;
   tilesStore.updateTileDynamic(builderStore.selectedTileId, { _itemMap: itemMap });
-  builderStore.isDirty = true;
+  builderStore.markDirtyForTile(builderStore.selectedTileId);
 }
 </script>
 

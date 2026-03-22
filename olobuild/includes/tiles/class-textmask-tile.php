@@ -70,8 +70,14 @@ class Olo_Textmask_Tile extends Olo_Tile_Base {
         $lh         = floatval( $s['line_height'] ) ?: 1;
         $ta         = esc_attr( $s['text_align'] ) ?: 'center';
         $min_h      = esc_attr( $s['min_height'] ) ?: '100vh';
-        $py         = intval( $s['padding_y'] );
-        $px         = intval( $s['padding_x'] );
+        $_tp = $s['tile_padding'] ?? null;
+        if ( is_array( $_tp ) ) {
+            $py = intval( $_tp['top'] ?? 0 );
+            $px = intval( $_tp['right'] ?? 0 );
+        } else {
+            $py = intval( $s['padding_y'] ?? 0 );
+            $px = intval( $s['padding_x'] ?? 0 );
+        }
         $bg_color   = $s['bg_color'] ?: '#000000';
         $va         = $s['vertical_align'] ?: 'center';
         $mode       = $s['mask_mode'] ?: 'text_reveals_video';

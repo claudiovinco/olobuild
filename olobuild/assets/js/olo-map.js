@@ -639,4 +639,11 @@
   } else {
     initAll();
   }
+
+  // Re-init when builder iframe injects new HTML
+  document.addEventListener('olo:iframe-render', function() {
+    document.querySelectorAll('.olo-map-canvas[data-map-config]').forEach(function(c) {
+      if (!c._oloMap) initMap(c);
+    });
+  });
 })();

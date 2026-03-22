@@ -362,7 +362,7 @@ class Olo_ServiceRelated_Tile extends Olo_Tile_Base {
     /* ─── Shared Styles ─── */
 
     private function render_styles( $uid, $s ) {
-        $radius  = Olo_Tile_Utils::border_radius( $s['card_radius'] ?? 0 );
+        $radius  = $this->build_border_radius_css( $s["card_radius"] );
         $bg      = $this->safe_color_css( $s['card_bg'] ) ?: 'var(--olo-color-background, #FFFFFF)';
         $shadow  = Olo_Tile_Utils::shadow( $s['card_shadow'] ?? 'none' );
         $hover   = $s['card_hover_effect'];
@@ -372,7 +372,7 @@ class Olo_ServiceRelated_Tile extends Olo_Tile_Base {
         $p_color = $this->safe_color_css( $s['price_color'] ) ?: 'var(--olo-color-primary, #6366F1)';
         $btn_bg  = $this->safe_color_css( $s['btn_bg'] ) ?: 'var(--olo-color-primary, #6366F1)';
         $btn_c   = $this->safe_color_css( $s['btn_color'] ) ?: 'var(--olo-color-primary-contrast, #FFFFFF)';
-        $btn_r   = Olo_Tile_Utils::border_radius( $s['btn_radius'] ?? 0 );
+        $btn_r   = $this->build_border_radius_css( $s["btn_radius"] );
         ?>
         <style>
             .<?php echo $uid; ?>-card{display:block;text-decoration:none;color:inherit;background:<?php echo $bg; ?>;border-radius:<?php echo $radius; ?>;box-shadow:<?php echo $shadow; ?>;overflow:hidden;transition:transform .3s ease,box-shadow .3s ease}

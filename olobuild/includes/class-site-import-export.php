@@ -97,7 +97,8 @@ class Olo_Site_Import_Export {
             return new WP_Error( 'not_found', 'Template non trovato', [ 'status' => 404 ] );
         }
 
-        $data = json_decode( $template->data, true );
+        // get_template() returns assoc array with 'content' already decoded
+        $data = $template['content'] ?? null;
         if ( ! is_array( $data ) ) {
             return new WP_Error( 'invalid', 'Dati template non validi', [ 'status' => 400 ] );
         }
@@ -105,10 +106,10 @@ class Olo_Site_Import_Export {
         $export = [
             'format'     => 'olobuild-template',
             'version'    => OLO_VERSION,
-            'name'       => $template->name ?? ( 'Template #' . $id ),
-            'type'       => $template->type ?? 'page',
+            'name'       => $template['title'] ?? ( 'Template #' . $id ),
+            'type'       => $template['type'] ?? 'page',
             'data'       => $data,
-            'styles'     => json_decode( $template->styles ?? '{}', true ),
+            'styles'     => $template['settings'] ?? [],
             'exported_at' => gmdate( 'Y-m-d\TH:i:s\Z' ),
         ];
 
@@ -128,20 +129,24 @@ class Olo_Site_Import_Export {
         $include_media = ! empty( $request['include_media'] );
 
         $db        = new Olo_Database();
-        $templates = $db->get_templates();
+        $result    = $db->list_templates( [ 'per_page' => 999 ] );
+        $templates = $result['items'] ?? $result;
+        if ( ! is_array( $templates ) ) {
+            $templates = [];
+        }
         $exported  = [];
 
         foreach ( $templates as $tpl ) {
-            $tpl_data = json_decode( $tpl->data, true );
+            $tpl_data = $tpl['content'] ?? null;
             if ( ! is_array( $tpl_data ) ) {
                 continue;
             }
             $exported[] = [
-                'id'     => intval( $tpl->id ),
-                'name'   => $tpl->name ?? '',
-                'type'   => $tpl->type ?? 'page',
+                'id'     => intval( $tpl['id'] ?? 0 ),
+                'name'   => $tpl['title'] ?? '',
+                'type'   => $tpl['type'] ?? 'page',
                 'data'   => $tpl_data,
-                'styles' => json_decode( $tpl->styles ?? '{}', true ),
+                'styles' => $tpl['settings'] ?? [],
             ];
         }
 
@@ -201,7 +206,13 @@ class Olo_Site_Import_Export {
         $type = sanitize_text_field( $json['type'] ?? 'page' );
         $styles = $json['styles'] ?? [];
 
-        $new_id = $db->save_template( 0, $name, $type, wp_json_encode( $data ), wp_json_encode( $styles ) );
+        $new_id = $db->create_template( [
+            'title'    => $name,
+            'type'     => $type,
+            'content'  => $data,
+            'settings' => $styles,
+            'status'   => 'publish',
+        ] );
 
         if ( ! $new_id ) {
             return new WP_Error( 'save_failed', 'Errore salvataggio template', [ 'status' => 500 ] );
@@ -255,7 +266,13 @@ class Olo_Site_Import_Export {
             $type    = sanitize_text_field( $tpl['type'] ?? 'page' );
             $styles  = $tpl['styles'] ?? [];
 
-            $new_id = $db->save_template( 0, $name, $type, wp_json_encode( $tpl_data ), wp_json_encode( $styles ) );
+            $new_id = $db->create_template( [
+                'title'    => $name,
+                'type'     => $type,
+                'content'  => $tpl_data,
+                'settings' => $styles,
+                'status'   => 'publish',
+            ] );
 
             if ( $new_id ) {
                 $old_id = intval( $tpl['id'] ?? 0 );
@@ -309,10 +326,11 @@ class Olo_Site_Import_Export {
         $upload_dir = wp_get_upload_dir();
         $base_url = $upload_dir['baseurl'];
 
-        $json_str = wp_json_encode( $data );
+        // Use unescaped JSON (JSON_UNESCAPED_SLASHES) so URLs don't have \/
+        $json_str = json_encode( $data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
 
         // Match URLs pointing to wp-content/uploads
-        if ( preg_match_all( '#https?://[^"\'\\\\]+/wp-content/uploads/[^"\'\\\\]+\.(?:jpg|jpeg|png|gif|webp|svg|mp4|webm|pdf|mp3|ogg)#i', $json_str, $matches ) ) {
+        if ( preg_match_all( '#https?://[^"\'\\s]+/wp-content/uploads/[^"\'\\s]+\.(?:jpg|jpeg|png|gif|webp|svg|mp4|webm|pdf|mp3|ogg)#i', $json_str, $matches ) ) {
             $urls = array_unique( $matches[0] );
         }
 
@@ -677,7 +695,16 @@ class Olo_Site_Import_Export {
                             headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': nonce },
                             body: JSON.stringify(data)
                         })
-                        .then(function(r) { return r.json(); })
+                        .then(function(r) {
+                            if (!r.ok) {
+                                return r.text().then(function(txt) {
+                                    var detail = '';
+                                    try { var j = JSON.parse(txt); detail = j.message || j.data?.status || ''; } catch(e) { detail = txt.substring(0, 200); }
+                                    throw new Error('HTTP ' + r.status + (detail ? ': ' + detail : ''));
+                                });
+                            }
+                            return r.json();
+                        })
                         .then(function(d) {
                             if (d.success) {
                                 var info = '';
@@ -692,7 +719,7 @@ class Olo_Site_Import_Export {
                                 log.innerHTML += '<div style="color:#059669;font-weight:600">Completato! ' + info + '</div>';
                                 showMsg('Importazione completata!', true);
                             } else {
-                                log.innerHTML += '<div style="color:#dc2626">Errore: ' + (d.message || 'sconosciuto') + '</div>';
+                                log.innerHTML += '<div style="color:#dc2626">Errore: ' + (d.message || d.code || 'sconosciuto') + '</div>';
                                 showMsg('Errore importazione', false);
                             }
                             btn.disabled = false;

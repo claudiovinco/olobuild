@@ -8,7 +8,7 @@ export default {
     acc_max_width: '900',
     acc_card_radius: '16',
     acc_card_shadow: 'lg',
-    acc_body_padding: '32',
+    tile_padding: { top: 32, right: 32, bottom: 32, left: 32 },
     acc_title_size: '30',
     acc_show_gallery: true,
     acc_gallery_columns: '4',
@@ -46,7 +46,7 @@ export default {
       condition: { field: 'acc_card_shadow', op: 'eq', value: 'custom' } },
     { key: 'acc_card_shadow_inset', label: 'Ombra interna', type: 'toggle',
       condition: { field: 'acc_card_shadow', op: 'eq', value: 'custom' } },
-    { key: 'acc_body_padding', label: 'Padding corpo (px)', type: 'range', min: 16, max: 48, step: 4 },
+    { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 48 },
     { key: 'acc_title_size', label: 'Dimensione titolo (px)', type: 'range', min: 20, max: 42, step: 1 },
     { key: 'acc_accent_color', label: 'Colore accento', type: 'color' },
 

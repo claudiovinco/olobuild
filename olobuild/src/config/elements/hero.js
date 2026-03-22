@@ -35,8 +35,7 @@ export default {
     vertical_align: 'center',
     horizontal_align: 'center',
     text_align: 'center',
-    padding_y: '80',
-    padding_x: '30',
+    tile_padding: { top: 60, right: 20, bottom: 60, left: 20 },
 
     // Sfondo
     bg_type: 'color',
@@ -166,8 +165,7 @@ export default {
       { value: 'center', label: 'Centro' },
       { value: 'right', label: 'Destra' },
     ]},
-    { key: 'padding_y', label: 'Padding verticale (px)', type: 'range', min: 0, max: 200, step: 10 },
-    { key: 'padding_x', label: 'Padding orizzontale (px)', type: 'range', min: 0, max: 100, step: 10 },
+    { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 200 },
 
     // ── Sfondo ──
     { type: 'separator', label: 'Sfondo' },

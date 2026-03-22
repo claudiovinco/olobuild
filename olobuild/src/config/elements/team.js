@@ -26,7 +26,7 @@ export default {
     // Contenitore info
     info_bg_color: '',
     info_text_color: '',
-    info_padding: '24',
+    tile_padding: { top: 24, right: 24, bottom: 24, left: 24 },
     info_width: '100',
     info_margin: '0',
     info_radius: '16',
@@ -99,8 +99,8 @@ export default {
     { key: 'info_bg_color', label: 'Sfondo contenitore', type: 'color' },
     { key: 'info_text_color', label: 'Colore testo', type: 'color' },
     { key: 'info_width', label: 'Larghezza contenitore (%)', type: 'range', min: 50, max: 100, step: 5 },
-    { key: 'info_margin', label: 'Margine dal tile (px)', type: 'range', min: 0, max: 40, step: 4 },
-    { key: 'info_padding', label: 'Padding interno (px)', type: 'range', min: 8, max: 48, step: 4 },
+    { key: 'info_margin', label: 'Margine dal tile (px)', type: 'spacing', max: 40 },
+    { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 48 },
     { key: 'info_radius', label: 'Arrotondamento (px)', type: 'border-radius' },
     { key: 'info_border_width', label: 'Bordo contenitore (px)', type: 'range', min: 0, max: 5, step: 1 },
     { key: 'info_border_color', label: 'Colore bordo contenitore', type: 'color',
@@ -127,7 +127,7 @@ export default {
     // ── Tile ──
     { type: 'separator', label: 'Aspetto tile' },
     { key: 'bg_color', label: 'Colore sfondo tile', type: 'color' },
-    { key: 'tile_padding', label: 'Padding tile (px)', type: 'range', min: 0, max: 40, step: 4 },
+    { key: 'tile_padding', label: 'Padding tile (px)', type: 'spacing', max: 40 },
     { key: 'border_radius', label: 'Arrotondamento tile (px)', type: 'border-radius' },
     { key: 'border_width', label: 'Bordo tile (px)', type: 'range', min: 0, max: 5, step: 1 },
     { key: 'border_color', label: 'Colore bordo tile', type: 'color',

@@ -20,14 +20,14 @@ export default {
     gap: '60',
 
     // Aspetto
-    bg_color: '',
+    bg_color: '#1F2937',
     text_color: '',
     font_size: '16',
     font_weight: '500',
     letter_spacing: '1',
     text_transform: 'uppercase',
     height: '50',
-    full_width: true,
+    full_width: false,
     border_top: '0',
     border_bottom: '0',
     border_color: '',

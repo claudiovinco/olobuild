@@ -24,7 +24,7 @@ export default {
     count_color: '',
     background_color: '',
     border_radius: '8',
-    padding: '20',
+    tile_padding: { top: 20, right: 20, bottom: 20, left: 20 },
     avatar_border_radius: '50',
     avatar_border_width: '0',
     avatar_border_color: '',
@@ -90,7 +90,7 @@ export default {
     { key: 'background_color', label: 'Sfondo', type: 'color' },
 
     { type: 'separator', label: 'Aspetto' },
-    { key: 'padding', label: 'Padding (px)', type: 'range', min: 0, max: 48, step: 4 },
+    { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 48 },
     { key: 'border_radius', label: 'Raggio bordi (px)', type: 'border-radius' },
     { key: 'border_width', label: 'Bordo (px)', type: 'range', min: 0, max: 5, step: 1 },
     { key: 'border_color', label: 'Colore bordo', type: 'color',

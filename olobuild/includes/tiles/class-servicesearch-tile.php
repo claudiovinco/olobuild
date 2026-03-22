@@ -27,6 +27,15 @@ class Olo_ServiceSearch_Tile extends Olo_Tile_Base {
         'overlap_offset'    => '60',
         'overlap_shadow'    => true,
         'overlap_max_width' => '1100',
+        // Larghezza campi (%)
+        'width_valley'   => '',
+        'width_checkin'  => '',
+        'width_checkout' => '',
+        'width_guests'   => '',
+        'width_bedrooms' => '',
+        'width_altitude' => '',
+        'width_type'     => '',
+        'width_club'     => '',
     ];
 
     public function get_controls() {
@@ -92,6 +101,15 @@ class Olo_ServiceSearch_Tile extends Olo_Tile_Base {
             }
         }
 
+        // Field widths: build inline style for flex-basis
+        $field_widths = [];
+        foreach ( [ 'valley', 'checkin', 'checkout', 'guests', 'bedrooms', 'altitude', 'type', 'club' ] as $fk ) {
+            $w = absint( $s[ 'width_' . $fk ] ?? 0 );
+            if ( $w > 0 && $layout === 'horizontal' ) {
+                $field_widths[ $fk ] = 'flex:0 0 calc(' . $w . '% - 10px);min-width:0;';
+            }
+        }
+
         $config = [
             'resultsUrl' => esc_url( $results_url ),
         ];
@@ -106,7 +124,7 @@ class Olo_ServiceSearch_Tile extends Olo_Tile_Base {
             <div class="olo-svsearch-fields">
 
                 <?php if ( isset( $vf['valley'] ) && ! empty( $valleys ) ) : ?>
-                <div class="olo-svsearch-field">
+                <div class="olo-svsearch-field"<?php if ( ! empty( $field_widths['valley'] ) ) echo ' style="' . esc_attr( $field_widths['valley'] ) . '"'; ?>>
                     <label class="olo-svsearch-label"><?php echo esc_html( olo_t( 'Località' ) ); ?></label>
                     <select class="olo-svsearch-select" data-param="valley">
                         <option value=""><?php echo esc_html( olo_t( 'Tutte le località' ) ); ?></option>
@@ -118,18 +136,18 @@ class Olo_ServiceSearch_Tile extends Olo_Tile_Base {
                 <?php endif; ?>
 
                 <?php if ( isset( $vf['checkin'] ) ) : ?>
-                <div class="olo-svsearch-field">
+                <div class="olo-svsearch-field"<?php if ( ! empty( $field_widths['checkin'] ) ) echo ' style="' . esc_attr( $field_widths['checkin'] ) . '"'; ?>>
                     <label class="olo-svsearch-label"><?php echo esc_html( olo_t( 'Check-in' ) ); ?></label>
                     <input type="date" class="olo-svsearch-input" data-param="checkin">
                 </div>
-                <div class="olo-svsearch-field">
+                <div class="olo-svsearch-field"<?php if ( ! empty( $field_widths['checkout'] ) ) echo ' style="' . esc_attr( $field_widths['checkout'] ) . '"'; ?>>
                     <label class="olo-svsearch-label"><?php echo esc_html( olo_t( 'Check-out' ) ); ?></label>
                     <input type="date" class="olo-svsearch-input" data-param="checkout">
                 </div>
                 <?php endif; ?>
 
                 <?php if ( isset( $vf['guests'] ) && ! empty( $guests_ranges ) ) : ?>
-                <div class="olo-svsearch-field">
+                <div class="olo-svsearch-field"<?php if ( ! empty( $field_widths['guests'] ) ) echo ' style="' . esc_attr( $field_widths['guests'] ) . '"'; ?>>
                     <label class="olo-svsearch-label"><?php echo esc_html( olo_t( 'Ospiti' ) ); ?></label>
                     <select class="olo-svsearch-select" data-param="guests">
                         <option value=""><?php echo esc_html( olo_t( 'Qualsiasi' ) ); ?></option>
@@ -147,7 +165,7 @@ class Olo_ServiceSearch_Tile extends Olo_Tile_Base {
                 <?php endif; ?>
 
                 <?php if ( isset( $vf['bedrooms'] ) ) : ?>
-                <div class="olo-svsearch-field">
+                <div class="olo-svsearch-field"<?php if ( ! empty( $field_widths['bedrooms'] ) ) echo ' style="' . esc_attr( $field_widths['bedrooms'] ) . '"'; ?>>
                     <label class="olo-svsearch-label"><?php echo esc_html( olo_t( 'Camere' ) ); ?></label>
                     <select class="olo-svsearch-select" data-param="bedrooms">
                         <option value=""><?php echo esc_html( olo_t( 'Qualsiasi' ) ); ?></option>
@@ -160,7 +178,7 @@ class Olo_ServiceSearch_Tile extends Olo_Tile_Base {
                 <?php endif; ?>
 
                 <?php if ( isset( $vf['altitude'] ) && ! empty( $alt_ranges ) ) : ?>
-                <div class="olo-svsearch-field">
+                <div class="olo-svsearch-field"<?php if ( ! empty( $field_widths['altitude'] ) ) echo ' style="' . esc_attr( $field_widths['altitude'] ) . '"'; ?>>
                     <label class="olo-svsearch-label"><?php echo esc_html( olo_t( 'Altitudine' ) ); ?></label>
                     <select class="olo-svsearch-select" data-param="altitude">
                         <option value=""><?php echo esc_html( olo_t( 'Qualsiasi' ) ); ?></option>
@@ -180,7 +198,7 @@ class Olo_ServiceSearch_Tile extends Olo_Tile_Base {
                 <?php endif; ?>
 
                 <?php if ( isset( $vf['type'] ) ) : ?>
-                <div class="olo-svsearch-field">
+                <div class="olo-svsearch-field"<?php if ( ! empty( $field_widths['type'] ) ) echo ' style="' . esc_attr( $field_widths['type'] ) . '"'; ?>>
                     <label class="olo-svsearch-label"><?php echo esc_html( olo_t( 'Tipologia' ) ); ?></label>
                     <select class="olo-svsearch-select" data-param="type">
                         <option value=""><?php echo esc_html( olo_t( 'Tutte' ) ); ?></option>
@@ -193,7 +211,7 @@ class Olo_ServiceSearch_Tile extends Olo_Tile_Base {
                 <?php endif; ?>
 
                 <?php if ( isset( $vf['club'] ) && ! empty( $club_cats ) ) : ?>
-                <div class="olo-svsearch-field">
+                <div class="olo-svsearch-field"<?php if ( ! empty( $field_widths['club'] ) ) echo ' style="' . esc_attr( $field_widths['club'] ) . '"'; ?>>
                     <label class="olo-svsearch-label"><?php echo esc_html( olo_t( 'Club di Prodotto' ) ); ?></label>
                     <select class="olo-svsearch-select" data-param="club">
                         <option value=""><?php echo esc_html( olo_t( 'Tutti i club' ) ); ?></option>

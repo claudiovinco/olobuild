@@ -109,7 +109,7 @@ import HotspotTile from './HotspotTile.vue';
 import LoginformTile from './LoginformTile.vue';
 import VideoplaylistTile from './VideoplaylistTile.vue';
 import TextpathTile from './TextpathTile.vue';
-import OffcanvasTile from './OffcanvasTile.vue';
+
 import ChartTile from './ChartTile.vue';
 import AudioTile from './AudioTile.vue';
 import ShapedividerTile from './ShapedividerTile.vue';
@@ -145,6 +145,8 @@ import QueryloopTile from './QueryloopTile.vue';
 import ReadingtimeTile from './ReadingtimeTile.vue';
 import DarkmodeTile from './DarkmodeTile.vue';
 import LightboxTile from './LightboxTile.vue';
+import FloatingpanelTile from './FloatingpanelTile.vue';
+import MobilebarTile from './MobilebarTile.vue';
 
 // WooCommerce tiles
 import WooProductsTile from './WooProductsTile.vue';
@@ -317,7 +319,7 @@ const tileComponents = {
   loginform: LoginformTile,
   videoplaylist: VideoplaylistTile,
   textpath: TextpathTile,
-  offcanvas: OffcanvasTile,
+
   chart: ChartTile,
   audio: AudioTile,
   shapedivider: ShapedividerTile,
@@ -353,6 +355,8 @@ const tileComponents = {
   readingtime: ReadingtimeTile,
   darkmode: DarkmodeTile,
   lightbox: LightboxTile,
+  floatingpanel: FloatingpanelTile,
+  mobilebar: MobilebarTile,
 
   // WooCommerce tiles
   woo_products: WooProductsTile,

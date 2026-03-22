@@ -277,8 +277,8 @@
     display: none !important;
   }
 
-  // Hide "Add Row" button
-  .olo-add-row {
+  // Hide quick insert buttons
+  .olo-quick-insert {
     display: none !important;
   }
 
@@ -306,6 +306,155 @@
   // Remove section body padding
   .olo-section-body {
     padding: 0 !important;
+  }
+}
+
+// ============================================
+// Clean Edit Mode — WYSIWYG editing without
+// structural chrome, borders appear on hover
+// ============================================
+.clean-mode {
+  // Hide structural chrome
+  .olo-section-bar { display: none !important; }
+  .olo-row-bar { display: none !important; }
+  .olo-row-presets { display: none !important; }
+  .olo-quick-insert { display: none !important; }
+  .olo-canvas-bottom-drop { display: none !important; }
+  .olo-custom-input-row { display: none !important; }
+  .olo-column-empty { display: none !important; }
+  .olo-fullwidth-badge { display: none !important; }
+  .olo-global-badge { display: none !important; }
+  .olo-position-badge { display: none !important; }
+  .olo-hidden-vp-badge { display: none !important; }
+  .olo-col-resize-handle { display: none !important; }
+
+  // Hide tile-level info/debug bars — not visible in frontend
+  .mpg-info { display: none !important; }            // PostGrid info bar
+  .mps-preview-badge { display: none !important; }    // ProSlider badge
+  .olo-mm-info { display: none !important; }          // MegaMenu info
+  .olo-mbp-info { display: none !important; }         // MobileBar info
+  .ql-info { display: none !important; }              // QueryLoop info
+  .ofp-badge { display: none !important; }            // FloatingPanel badge
+  .ofp-trigger-badge { display: none !important; }    // FloatingPanel trigger badge
+  .ofp-children-info { display: none !important; }    // FloatingPanel children info
+  .olo-ic-layout-badge { display: none !important; }  // InnerColumns layout badge
+  .olo-pdfpro-mode-badge { display: none !important; } // PdfPro mode badge
+  .olo-pdfpro-hs-badge { display: none !important; }  // PdfPro hotspot badge
+
+  // Remove structural backgrounds and borders
+  .olo-section-block {
+    border: none !important;
+    background: transparent; // no !important — inline user backgrounds prevail
+    margin-bottom: 0 !important;
+    overflow: visible !important;
+  }
+  .olo-row-block {
+    border: none !important;
+    background: transparent; // no !important — inline user backgrounds prevail
+    margin-bottom: 0 !important;
+    overflow: visible !important;
+  }
+  .olo-column-block {
+    border: none !important;
+    min-height: 0 !important;
+  }
+
+  // Remove ALL structural padding — pixel-perfect frontend match
+  .olo-canvas { padding: 0 !important; }
+  .olo-section-body { padding: 0 !important; }
+  .olo-row-columns { padding: 0 !important; min-height: 0 !important; }
+  .olo-column-elements { padding: 0 !important; min-height: 0 !important; }
+
+  // Grid cell: no border, no decoration — clean like frontend
+  .olo-grid-cell {
+    border: none !important;
+    box-shadow: none !important;
+
+    &:hover {
+      outline: 2px solid rgba(99, 102, 241, 0.5);
+      outline-offset: -2px;
+    }
+
+    &--selected {
+      outline: 2px solid var(--olo-color-primary, #6366F1) !important;
+      outline-offset: -2px;
+    }
+
+    // In clean mode, allow real positioning (no forced static)
+    &--positioned {
+      position: static; // override only in non-clean (handled by JS)
+    }
+  }
+
+  // Remove fullwidth left border accent
+  .olo-grid-cell--fullwidth {
+    border-left: none !important;
+  }
+
+  // Cell toolbar: position inside element on hover
+  .olo-cell-toolbar {
+    top: 4px;
+    right: 4px;
+    z-index: 50;
+    background: rgba(255,255,255,0.95) !important;
+    backdrop-filter: blur(8px);
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    padding: 2px;
+  }
+
+  // Section hover: very subtle outline
+  .olo-section-block:hover {
+    outline: 1px dashed rgba(99, 102, 241, 0.2);
+    outline-offset: -1px;
+  }
+
+  // Sections list: no min-height
+  .olo-sections-list { min-height: 0 !important; }
+
+  // "+" insertion circles
+  .olo-clean-insert-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid #d1d5db;
+    background: white;
+    color: #9CA3AF;
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    transition: all 0.2s;
+    opacity: 0;
+    transform: scale(0.7);
+    position: relative;
+    z-index: 20;
+
+    &:hover {
+      opacity: 1 !important;
+      transform: scale(1);
+      border-color: var(--olo-color-primary, #6366F1);
+      color: var(--olo-color-primary, #6366F1);
+      box-shadow: 0 2px 8px rgba(99, 102, 241, 0.25);
+    }
+  }
+
+  // Show insert buttons on section hover
+  .olo-clean-insert-zone {
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 20;
+
+    &:hover .olo-clean-insert-btn {
+      opacity: 0.7;
+      transform: scale(0.9);
+    }
   }
 }
 
@@ -956,3 +1105,69 @@
 // ────── Canvas: no gray overrides inside actual content ──────
 // The canvas (.olo-canvas) uses mb-bg-white already.
 // The data-canvas-theme system handles canvas content colors.
+
+// ────── Quick insert "+" buttons (between sections & rows) ──────
+.olo-quick-insert {
+  display: flex !important;
+  align-items: center;
+  gap: 0;
+  padding: 8px 0;
+  cursor: pointer;
+  position: relative;
+  z-index: 50;
+
+  &__line {
+    flex: 1;
+    height: 2px;
+    background: #e5e7eb;
+    transition: background 0.2s;
+  }
+
+  &__btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid #d1d5db;
+    background: #fff;
+    color: #9CA3AF;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.2s;
+    margin: 0 4px;
+  }
+
+  &:hover &__line {
+    background: var(--olo-color-primary, #6366F1);
+  }
+  &:hover &__btn {
+    border-color: var(--olo-color-primary, #6366F1);
+    color: #fff;
+    background: var(--olo-color-primary, #6366F1);
+    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+    transform: scale(1.15);
+  }
+
+  &__btn--row {
+    width: 22px;
+    height: 22px;
+    font-size: 15px;
+  }
+  &:hover &__btn--row {
+    border-color: #10B981;
+    background: #10B981;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+  }
+
+  &--row {
+    padding: 4px 8px;
+  }
+  &--row:hover &__line {
+    background: #10B981;
+  }
+}

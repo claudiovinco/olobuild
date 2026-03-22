@@ -28,7 +28,7 @@ export default {
     shadow: 'none',
   },
   fields: [
-    { key: 'heading', label: 'Titolo', type: 'text' },
+    { key: 'heading', label: 'Titolo', type: 'textarea' },
     { key: 'subtitle', label: 'Sottotitolo', type: 'textarea' },
     { type: 'separator', label: 'Aspetto titolo' },
     { key: 'tag', label: 'Tag HTML', type: 'select', options: [

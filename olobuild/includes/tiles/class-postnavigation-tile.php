@@ -75,7 +75,7 @@ class Olo_Postnavigation_Tile extends Olo_Tile_Base {
         $layout     = $s['layout'] === 'stacked' ? 'column' : 'row';
         $gap        = intval( $s['gap'] ) ?: 20;
         $thumb_size = intval( $s['thumbnail_size'] ) ?: 60;
-        $padding    = intval( $s['padding'] ) ?: 16;
+        $padding = Olo_Tile_Utils::spacing_css( $s['tile_padding'] ?? $s['padding'] ?? 16, 16 );
         $radius     = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
 
         $text_clr   = $this->safe_color_css( $s['text_color'] ) ?: '#F3F4F6';
@@ -97,7 +97,7 @@ class Olo_Postnavigation_Tile extends Olo_Tile_Base {
                 gap: 12px;
                 flex: 1;
                 min-width: 0;
-                padding: <?php echo $padding; ?>px;
+                padding: <?php echo $padding; ?>;
                 border-radius: <?php echo $radius; ?>;
                 background: <?php echo $bg_clr; ?>;
                 text-decoration: none !important;

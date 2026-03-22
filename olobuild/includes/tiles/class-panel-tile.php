@@ -60,11 +60,15 @@ class Olo_Panel_Tile extends Olo_Tile_Base {
         ob_start();
         ?>
         <div class="olo-panel <?php echo esc_attr( $card_class ); ?>">
-            <?php if ( ! empty( $s['image'] ) ) : ?>
-                <div class="uk-card-media-top">
+            <?php if ( ! empty( $s['image'] ) ) :
+                $br_css = $this->build_border_radius_css( $s['border_radius'] ?? '0' );
+                $media_style = $br_css ? 'overflow:hidden;border-radius:' . esc_attr( $br_css ) . ';' : '';
+            ?>
+                <div class="uk-card-media-top"<?php if ( $media_style ) echo ' style="' . $media_style . '"'; ?>>
                     <?php
                     $att_id    = absint( $s['image_id'] ?? 0 );
-                    $panel_img = Olo_Tile_Utils::img_srcset( $att_id, $s['image'], $s['title'] ?? '', '', 'full', 'style="width: 100%; display: block;"' );
+                    $img_extra = 'style="width: 100%; display: block;' . ( $br_css ? ' border-radius:' . esc_attr( $br_css ) . ';' : '' ) . '"';
+                    $panel_img = Olo_Tile_Utils::img_srcset( $att_id, $s['image'], $s['title'] ?? '', '', 'full', $img_extra );
                     echo $this->render_hover_wrap( $panel_img, $s['hover_image'] ?? '', $s['hover_video'] ?? '' );
                     ?>
                 </div>

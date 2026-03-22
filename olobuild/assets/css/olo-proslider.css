@@ -89,6 +89,113 @@
   transform: scale(1);
 }
 
+/* Transition: crossFade */
+.olo-proslider[data-transition="crossFade"] .olo-proslider-slide {
+  transition: opacity var(--mps-trans-dur, 800ms) ease;
+}
+.olo-proslider[data-transition="crossFade"] .olo-proslider-slide.mps-active ~ .mps-crossfade-old {
+  opacity: 1; visibility: visible; z-index: 0;
+}
+
+/* Transition: slideOver */
+.olo-proslider[data-transition="slideOver"] .olo-proslider-slide {
+  transform: translateX(100%);
+  opacity: 1; visibility: visible;
+  transition: transform var(--mps-trans-dur, 800ms) ease;
+}
+.olo-proslider[data-transition="slideOver"] .olo-proslider-slide.mps-active {
+  transform: translateX(0); z-index: 2;
+}
+
+/* Transition: fadeThroughDark */
+.olo-proslider[data-transition="fadeThroughDark"] .olo-proslider-slide {
+  transition: opacity calc(var(--mps-trans-dur, 800ms) / 2) ease;
+}
+
+/* Transition: blur */
+.olo-proslider[data-transition="blur"] .olo-proslider-slide {
+  transition: opacity var(--mps-trans-dur, 800ms) ease,
+              filter var(--mps-trans-dur, 800ms) ease;
+  filter: blur(20px);
+}
+.olo-proslider[data-transition="blur"] .olo-proslider-slide.mps-active {
+  filter: blur(0);
+}
+
+/* Transition: flipH */
+.olo-proslider[data-transition="flipH"] .olo-proslider-track {
+  perspective: 1200px;
+}
+.olo-proslider[data-transition="flipH"] .olo-proslider-slide {
+  transform: rotateY(-90deg);
+  opacity: 1; visibility: visible;
+  backface-visibility: hidden;
+  transition: transform var(--mps-trans-dur, 800ms) ease;
+}
+.olo-proslider[data-transition="flipH"] .olo-proslider-slide.mps-active {
+  transform: rotateY(0);
+}
+.olo-proslider[data-transition="flipH"] .olo-proslider-slide.mps-exit-left {
+  transform: rotateY(90deg);
+}
+
+/* Transition: flipV */
+.olo-proslider[data-transition="flipV"] .olo-proslider-track {
+  perspective: 1200px;
+}
+.olo-proslider[data-transition="flipV"] .olo-proslider-slide {
+  transform: rotateX(90deg);
+  opacity: 1; visibility: visible;
+  backface-visibility: hidden;
+  transition: transform var(--mps-trans-dur, 800ms) ease;
+}
+.olo-proslider[data-transition="flipV"] .olo-proslider-slide.mps-active {
+  transform: rotateX(0);
+}
+.olo-proslider[data-transition="flipV"] .olo-proslider-slide.mps-exit-left {
+  transform: rotateX(-90deg);
+}
+
+/* Transition: cubeH */
+.olo-proslider[data-transition="cubeH"] .olo-proslider-track {
+  perspective: 1200px;
+}
+.olo-proslider[data-transition="cubeH"] .olo-proslider-slide {
+  transform: rotateY(90deg);
+  transform-origin: left center;
+  opacity: 1; visibility: visible;
+  backface-visibility: hidden;
+  transition: transform var(--mps-trans-dur, 800ms) ease;
+}
+.olo-proslider[data-transition="cubeH"] .olo-proslider-slide.mps-active {
+  transform: rotateY(0);
+  transform-origin: right center;
+}
+.olo-proslider[data-transition="cubeH"] .olo-proslider-slide.mps-exit-left {
+  transform: rotateY(-90deg);
+  transform-origin: right center;
+}
+
+/* Transition: cubeV */
+.olo-proslider[data-transition="cubeV"] .olo-proslider-track {
+  perspective: 1200px;
+}
+.olo-proslider[data-transition="cubeV"] .olo-proslider-slide {
+  transform: rotateX(-90deg);
+  transform-origin: center top;
+  opacity: 1; visibility: visible;
+  backface-visibility: hidden;
+  transition: transform var(--mps-trans-dur, 800ms) ease;
+}
+.olo-proslider[data-transition="cubeV"] .olo-proslider-slide.mps-active {
+  transform: rotateX(0);
+  transform-origin: center bottom;
+}
+.olo-proslider[data-transition="cubeV"] .olo-proslider-slide.mps-exit-left {
+  transform: rotateX(90deg);
+  transform-origin: center bottom;
+}
+
 /* --- Background ----------------------------------------------- */
 .olo-proslider-bg {
   position: absolute;
@@ -118,6 +225,20 @@
   z-index: 1;
 }
 
+/* --- Layers Wrapper (proportional responsive scaling) ---------- */
+.mps-layers-wrap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  transform-origin: top left;
+  pointer-events: none;
+  will-change: transform;
+}
+.mps-layers-wrap .olo-proslider-layer {
+  pointer-events: auto;
+}
+
 /* --- Layer ---------------------------------------------------- */
 .olo-proslider-layer {
   position: absolute;
@@ -125,7 +246,38 @@
   opacity: 0;
   box-sizing: border-box;
 }
+/* Blend-mode layers: fuori dal wrapper scalato per preservare mix-blend-mode */
+.mps-blend-layer {
+  z-index: 3;
+  pointer-events: auto;
+}
 .olo-proslider-layer.mps-anim-visible {
+  opacity: 1;
+}
+/* Icon SVG custom properties */
+.mps-icon-wrap svg path,
+.mps-icon-wrap svg polygon,
+.mps-icon-wrap svg circle,
+.mps-icon-wrap svg rect,
+.mps-icon-wrap svg line,
+.mps-icon-wrap svg polyline,
+.mps-icon-wrap svg ellipse {
+  fill: var(--icon-fill, currentColor);
+  stroke: var(--icon-stroke, currentColor);
+  stroke-width: var(--icon-stroke-width, inherit);
+  stroke-dasharray: var(--icon-stroke-dash, none);
+}
+/* Character animation units */
+.mps-char {
+  display: inline-block;
+  opacity: 0;
+}
+/* Timeline keyframe layers: position managed by left/top in @keyframes */
+.olo-proslider-layer[data-timeline-name] {
+  transform-origin: center center;
+}
+/* Timeline layers: char spans must be visible (timeline manages the whole layer) */
+.olo-proslider-layer[data-timeline-name] .mps-char {
   opacity: 1;
 }
 
@@ -183,6 +335,44 @@
 .olo-proslider-dot.mps-dot-active {
   background: #fff;
   border-color: #fff;
+}
+
+/* --- Arrow Styles ----------------------------------------- */
+/* minimal = default (circle, semi-transparent) */
+.mps-arrow-rounded { border-radius: 50%; background: rgba(255,255,255,0.2); backdrop-filter: blur(8px); }
+.mps-arrow-rounded:hover { background: rgba(255,255,255,0.35); }
+.mps-arrow-boxed { border-radius: 4px; background: rgba(0,0,0,0.6); }
+.mps-arrow-boxed:hover { background: rgba(0,0,0,0.85); }
+.mps-arrow-outline { border-radius: 50%; background: transparent; border: 2px solid rgba(255,255,255,0.7); }
+.mps-arrow-outline:hover { border-color: #fff; background: rgba(255,255,255,0.1); }
+
+/* --- Dot Styles ------------------------------------------- */
+/* circles = default */
+.mps-dots-bars .olo-proslider-dot { width: 24px; height: 4px; border-radius: 2px; border: none; background: rgba(255,255,255,0.4); }
+.mps-dots-bars .olo-proslider-dot:hover { background: rgba(255,255,255,0.7); }
+.mps-dots-bars .olo-proslider-dot.mps-dot-active { background: #fff; }
+
+.mps-dots-numbers .olo-proslider-dot { width: auto; height: auto; border-radius: 0; border: none; background: transparent; color: rgba(255,255,255,0.5); font-size: 13px; font-weight: 600; padding: 2px 6px; }
+.mps-dots-numbers .olo-proslider-dot:hover { color: rgba(255,255,255,0.8); }
+.mps-dots-numbers .olo-proslider-dot.mps-dot-active { color: #fff; border-bottom: 2px solid #fff; }
+
+.mps-dots-dash .olo-proslider-dot { width: 32px; height: 3px; border-radius: 0; border: none; background: rgba(255,255,255,0.3); }
+.mps-dots-dash .olo-proslider-dot:hover { background: rgba(255,255,255,0.6); }
+.mps-dots-dash .olo-proslider-dot.mps-dot-active { background: #fff; }
+
+/* --- Progress Bar ----------------------------------------- */
+.olo-proslider-progressbar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 11;
+  background: rgba(255,255,255,0.15);
+}
+.olo-proslider-progressbar-fill {
+  width: 0%;
+  height: 100%;
+  border-radius: 0;
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -270,6 +460,426 @@
 }
 /* rotateOut */
 @keyframes mpsRotateOut { from { opacity:1; transform:rotate(0) } to { opacity:0; transform:rotate(200deg) } }
+
+/* ═══════════════════════════════════════════════════════════
+   Layer Animation Library — Slide Short (8)
+   ═══════════════════════════════════════════════════════════ */
+@keyframes mpsSlideShortFromTop { from { opacity:0; transform:translateY(-50px) } to { opacity:1; transform:translateY(0) } }
+@keyframes mpsSlideShortFromBottom { from { opacity:0; transform:translateY(50px) } to { opacity:1; transform:translateY(0) } }
+@keyframes mpsSlideShortFromLeft { from { opacity:0; transform:translateX(-50px) } to { opacity:1; transform:translateX(0) } }
+@keyframes mpsSlideShortFromRight { from { opacity:0; transform:translateX(50px) } to { opacity:1; transform:translateX(0) } }
+@keyframes mpsSmoothSlideFromBottom { from { opacity:0; transform:translateY(100%) } to { opacity:1; transform:translateY(0) } }
+@keyframes mpsSmoothSlideFromTop { from { opacity:0; transform:translateY(-100%) } to { opacity:1; transform:translateY(0) } }
+@keyframes mpsSmoothSlideFromLeft { from { opacity:0; transform:translateX(-100%) } to { opacity:1; transform:translateX(0) } }
+@keyframes mpsSmoothSlideFromRight { from { opacity:0; transform:translateX(100%) } to { opacity:1; transform:translateX(0) } }
+/* exits */
+@keyframes mpsSlideShortOutTop { from { opacity:1; transform:translateY(0) } to { opacity:0; transform:translateY(-50px) } }
+@keyframes mpsSlideShortOutBottom { from { opacity:1; transform:translateY(0) } to { opacity:0; transform:translateY(50px) } }
+@keyframes mpsSlideShortOutLeft { from { opacity:1; transform:translateX(0) } to { opacity:0; transform:translateX(-50px) } }
+@keyframes mpsSlideShortOutRight { from { opacity:1; transform:translateX(0) } to { opacity:0; transform:translateX(50px) } }
+@keyframes mpsSmoothSlideOutBottom { from { opacity:1; transform:translateY(0) } to { opacity:0; transform:translateY(100%) } }
+@keyframes mpsSmoothSlideOutTop { from { opacity:1; transform:translateY(0) } to { opacity:0; transform:translateY(-100%) } }
+@keyframes mpsSmoothSlideOutLeft { from { opacity:1; transform:translateX(0) } to { opacity:0; transform:translateX(-100%) } }
+@keyframes mpsSmoothSlideOutRight { from { opacity:1; transform:translateX(0) } to { opacity:0; transform:translateX(100%) } }
+
+/* ═══════════════════════════════════════════════════════════
+   Layer Animation Library — Skew (4+4)
+   ═══════════════════════════════════════════════════════════ */
+@keyframes mpsSkewFromLeft { from { opacity:0; transform:skewX(45deg) translateX(-100%) } to { opacity:1; transform:skewX(0) translateX(0) } }
+@keyframes mpsSkewFromRight { from { opacity:0; transform:skewX(-45deg) translateX(100%) } to { opacity:1; transform:skewX(0) translateX(0) } }
+@keyframes mpsSkewShortFromLeft { from { opacity:0; transform:skewX(25deg) translateX(-60px) } to { opacity:1; transform:skewX(0) translateX(0) } }
+@keyframes mpsSkewShortFromRight { from { opacity:0; transform:skewX(-25deg) translateX(60px) } to { opacity:1; transform:skewX(0) translateX(0) } }
+@keyframes mpsSkewOutLeft { from { opacity:1; transform:skewX(0) translateX(0) } to { opacity:0; transform:skewX(45deg) translateX(-100%) } }
+@keyframes mpsSkewOutRight { from { opacity:1; transform:skewX(0) translateX(0) } to { opacity:0; transform:skewX(-45deg) translateX(100%) } }
+@keyframes mpsSkewShortOutLeft { from { opacity:1; transform:skewX(0) translateX(0) } to { opacity:0; transform:skewX(25deg) translateX(-60px) } }
+@keyframes mpsSkewShortOutRight { from { opacity:1; transform:skewX(0) translateX(0) } to { opacity:0; transform:skewX(-25deg) translateX(60px) } }
+
+/* ═══════════════════════════════════════════════════════════
+   Layer Animation Library — Flip 3D (4+4)
+   ═══════════════════════════════════════════════════════════ */
+@keyframes mpsFlipFromTop { from { opacity:0; transform:perspective(800px) rotateX(70deg) } to { opacity:1; transform:perspective(800px) rotateX(0) } }
+@keyframes mpsFlipFromBottom { from { opacity:0; transform:perspective(800px) rotateX(-70deg) } to { opacity:1; transform:perspective(800px) rotateX(0) } }
+@keyframes mpsFlipFromLeft { from { opacity:0; transform:perspective(800px) rotateY(-70deg) } to { opacity:1; transform:perspective(800px) rotateY(0) } }
+@keyframes mpsFlipFromRight { from { opacity:0; transform:perspective(800px) rotateY(70deg) } to { opacity:1; transform:perspective(800px) rotateY(0) } }
+@keyframes mpsFlipOutTop { from { opacity:1; transform:perspective(800px) rotateX(0) } to { opacity:0; transform:perspective(800px) rotateX(70deg) } }
+@keyframes mpsFlipOutBottom { from { opacity:1; transform:perspective(800px) rotateX(0) } to { opacity:0; transform:perspective(800px) rotateX(-70deg) } }
+@keyframes mpsFlipOutLeft { from { opacity:1; transform:perspective(800px) rotateY(0) } to { opacity:0; transform:perspective(800px) rotateY(-70deg) } }
+@keyframes mpsFlipOutRight { from { opacity:1; transform:perspective(800px) rotateY(0) } to { opacity:0; transform:perspective(800px) rotateY(70deg) } }
+
+/* ═══════════════════════════════════════════════════════════
+   Layer Animation Library — Rotate 3D (4+4)
+   ═══════════════════════════════════════════════════════════ */
+@keyframes mpsRotateInFromBottom { from { opacity:0; transform:rotate(70deg) scale(2) translateY(100%) } to { opacity:1; transform:rotate(0) scale(1) translateY(0) } }
+@keyframes mpsRotate3D { from { opacity:0; transform:perspective(800px) rotateX(-20deg) rotateY(-20deg) scale(0.8) } to { opacity:1; transform:perspective(800px) rotateX(0) rotateY(0) scale(1) } }
+@keyframes mpsRotateInFromLeft { from { opacity:0; transform:rotate(-90deg) translateX(-100%) } to { opacity:1; transform:rotate(0) translateX(0) } }
+@keyframes mpsRotateInFromRight { from { opacity:0; transform:rotate(90deg) translateX(100%) } to { opacity:1; transform:rotate(0) translateX(0) } }
+@keyframes mpsRotateOutToBottom { from { opacity:1; transform:rotate(0) scale(1) translateY(0) } to { opacity:0; transform:rotate(70deg) scale(2) translateY(100%) } }
+@keyframes mpsRotateOut3D { from { opacity:1; transform:perspective(800px) rotateX(0) rotateY(0) scale(1) } to { opacity:0; transform:perspective(800px) rotateX(20deg) rotateY(20deg) scale(0.8) } }
+@keyframes mpsRotateOutToLeft { from { opacity:1; transform:rotate(0) translateX(0) } to { opacity:0; transform:rotate(-90deg) translateX(-100%) } }
+@keyframes mpsRotateOutToRight { from { opacity:1; transform:rotate(0) translateX(0) } to { opacity:0; transform:rotate(90deg) translateX(100%) } }
+
+/* ═══════════════════════════════════════════════════════════
+   Layer Animation Library — Pop/Bounce (4+4)
+   ═══════════════════════════════════════════════════════════ */
+@keyframes mpsPopUpSmooth {
+  0%   { opacity:0; transform:scale(0.9) }
+  100% { opacity:1; transform:scale(1) }
+}
+@keyframes mpsPopUpBack {
+  0%   { opacity:0; transform:scale(0) }
+  70%  { opacity:1; transform:scale(1.1) }
+  100% { transform:scale(1) }
+}
+@keyframes mpsBounceInUp {
+  0%   { opacity:0; transform:translateY(80px) }
+  60%  { opacity:1; transform:translateY(-15px) }
+  80%  { transform:translateY(8px) }
+  100% { transform:translateY(0) }
+}
+@keyframes mpsBounceInDown {
+  0%   { opacity:0; transform:translateY(-80px) }
+  60%  { opacity:1; transform:translateY(15px) }
+  80%  { transform:translateY(-8px) }
+  100% { transform:translateY(0) }
+}
+@keyframes mpsPopOutSmooth {
+  0%   { opacity:1; transform:scale(1) }
+  100% { opacity:0; transform:scale(0.9) }
+}
+@keyframes mpsPopOutBack {
+  0%   { transform:scale(1) }
+  30%  { opacity:1; transform:scale(1.1) }
+  100% { opacity:0; transform:scale(0) }
+}
+@keyframes mpsBounceOutUp {
+  0%   { transform:translateY(0) }
+  20%  { transform:translateY(8px) }
+  40%  { opacity:1; transform:translateY(-15px) }
+  100% { opacity:0; transform:translateY(-80px) }
+}
+@keyframes mpsBounceOutDown {
+  0%   { transform:translateY(0) }
+  20%  { transform:translateY(-8px) }
+  40%  { opacity:1; transform:translateY(15px) }
+  100% { opacity:0; transform:translateY(80px) }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Layer Animation Library — Mask/Reveal (6+6) — clip-path
+   ═══════════════════════════════════════════════════════════ */
+@keyframes mpsMaskFromLeft { from { clip-path:inset(0 100% 0 0); opacity:1 } to { clip-path:inset(0 0 0 0); opacity:1 } }
+@keyframes mpsMaskFromRight { from { clip-path:inset(0 0 0 100%); opacity:1 } to { clip-path:inset(0 0 0 0); opacity:1 } }
+@keyframes mpsMaskFromTop { from { clip-path:inset(0 0 100% 0); opacity:1 } to { clip-path:inset(0 0 0 0); opacity:1 } }
+@keyframes mpsMaskFromBottom { from { clip-path:inset(100% 0 0 0); opacity:1 } to { clip-path:inset(0 0 0 0); opacity:1 } }
+@keyframes mpsMaskZoomOut { from { clip-path:inset(30% 30% 30% 30%); opacity:0; transform:scale(2) } to { clip-path:inset(0 0 0 0); opacity:1; transform:scale(1) } }
+@keyframes mpsMaskCenter { from { clip-path:inset(50% 50% 50% 50%); opacity:1 } to { clip-path:inset(0 0 0 0); opacity:1 } }
+@keyframes mpsMaskOutLeft { from { clip-path:inset(0 0 0 0); opacity:1 } to { clip-path:inset(0 100% 0 0); opacity:1 } }
+@keyframes mpsMaskOutRight { from { clip-path:inset(0 0 0 0); opacity:1 } to { clip-path:inset(0 0 0 100%); opacity:1 } }
+@keyframes mpsMaskOutTop { from { clip-path:inset(0 0 0 0); opacity:1 } to { clip-path:inset(0 0 100% 0); opacity:1 } }
+@keyframes mpsMaskOutBottom { from { clip-path:inset(0 0 0 0); opacity:1 } to { clip-path:inset(100% 0 0 0); opacity:1 } }
+@keyframes mpsMaskZoomIn { from { clip-path:inset(0 0 0 0); opacity:1; transform:scale(1) } to { clip-path:inset(30% 30% 30% 30%); opacity:0; transform:scale(2) } }
+@keyframes mpsMaskOutCenter { from { clip-path:inset(0 0 0 0); opacity:1 } to { clip-path:inset(50% 50% 50% 50%); opacity:1 } }
+
+/* ═══════════════════════════════════════════════════════════
+   Layer Animation Library — Loop Animations (21)
+   ═══════════════════════════════════════════════════════════ */
+@keyframes mpsPendulum { 0%,100% { transform:rotate(-20deg) } 50% { transform:rotate(20deg) } }
+@keyframes mpsPendulumBelow { 0%,100% { transform:rotate(-20deg); transform-origin:center -200% } 50% { transform:rotate(20deg); transform-origin:center -200% } }
+@keyframes mpsPendulumAbove { 0%,100% { transform:rotate(-20deg); transform-origin:center 200% } 50% { transform:rotate(20deg); transform-origin:center 200% } }
+@keyframes mpsPendulumLeft { 0%,100% { transform:rotate(-20deg); transform-origin:150% center } 50% { transform:rotate(20deg); transform-origin:150% center } }
+@keyframes mpsPendulumRight { 0%,100% { transform:rotate(-20deg); transform-origin:-50% center } 50% { transform:rotate(20deg); transform-origin:-50% center } }
+@keyframes mpsWaveSmallLeft { 0% { transform:translate(0,0) } 25% { transform:translate(-30px,-30px) } 50% { transform:translate(0,-60px) } 75% { transform:translate(30px,-30px) } 100% { transform:translate(0,0) } }
+@keyframes mpsWaveSmallRight { 0% { transform:translate(0,0) } 25% { transform:translate(30px,-30px) } 50% { transform:translate(0,-60px) } 75% { transform:translate(-30px,-30px) } 100% { transform:translate(0,0) } }
+@keyframes mpsWaveBigLeft { 0% { transform:translate(0,0) } 25% { transform:translate(-70px,-70px) } 50% { transform:translate(0,-140px) } 75% { transform:translate(70px,-70px) } 100% { transform:translate(0,0) } }
+@keyframes mpsWaveBigRight { 0% { transform:translate(0,0) } 25% { transform:translate(70px,-70px) } 50% { transform:translate(0,-140px) } 75% { transform:translate(-70px,-70px) } 100% { transform:translate(0,0) } }
+@keyframes mpsWiggleY { 0%,100% { transform:perspective(800px) rotateY(-20deg) } 50% { transform:perspective(800px) rotateY(20deg) } }
+@keyframes mpsWiggleX { 0%,100% { transform:perspective(800px) rotateX(-20deg) } 50% { transform:perspective(800px) rotateX(20deg) } }
+@keyframes mpsWiggle3D { 0%,100% { transform:perspective(800px) rotateX(-15deg) rotateY(-15deg) } 50% { transform:perspective(800px) rotateX(15deg) rotateY(15deg) } }
+@keyframes mpsCrazyWiggle { 0% { transform:rotate(0) scale(1) } 25% { transform:rotate(5deg) scale(1.05) } 50% { transform:rotate(-5deg) scale(0.95) } 75% { transform:rotate(3deg) scale(1.02) } 100% { transform:rotate(0) scale(1) } }
+@keyframes mpsSpinCW { from { transform:rotate(0) } to { transform:rotate(360deg) } }
+@keyframes mpsSpinCCW { from { transform:rotate(0) } to { transform:rotate(-360deg) } }
+@keyframes mpsBlinkLoop { 0%,100% { opacity:1 } 50% { opacity:0 } }
+@keyframes mpsFloatLoop { 0%,100% { transform:translateY(0) } 50% { transform:translateY(-15px) } }
+@keyframes mpsPulseLoop { 0%,100% { transform:scale(1) } 50% { transform:scale(1.08) } }
+@keyframes mpsBreathLoop { 0%,100% { opacity:1; transform:scale(1) } 50% { opacity:0.7; transform:scale(0.97) } }
+@keyframes mpsSlideHLoop { 0%,100% { transform:translateX(0) } 50% { transform:translateX(50px) } }
+@keyframes mpsHoverLoop { 0%,100% { transform:translateY(0) } 50% { transform:translateY(-10px) } }
+
+/* ═══════════════════════════════════════════════════════════
+   Sizing Modes
+   ═══════════════════════════════════════════════════════════ */
+.mps-fullwidth {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.mps-fullscreen {
+  width: 100vw;
+  height: 100vh !important;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Global Layers
+   ═══════════════════════════════════════════════════════════ */
+.olo-proslider-global-layers {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.olo-proslider-global-layers .olo-proslider-layer {
+  pointer-events: auto;
+}
+.olo-proslider-global-back { z-index: 0; }
+.olo-proslider-global-front { z-index: 5; }
+
+/* ═══════════════════════════════════════════════════════════
+   Scroll Effects
+   ═══════════════════════════════════════════════════════════ */
+.olo-proslider.mps-scroll-fade { transition: opacity 0.3s ease; }
+.olo-proslider.mps-scroll-blur { transition: filter 0.3s ease; }
+.olo-proslider.mps-scroll-fadeBlur { transition: opacity 0.3s ease, filter 0.3s ease; }
+
+/* ═══════════════════════════════════════════════════════════
+   Slide Transitions — Extended
+   ═══════════════════════════════════════════════════════════ */
+/* push: new slide pushes old out */
+.olo-proslider[data-transition="push"] .olo-proslider-slide {
+  transform: translateX(100%); opacity:1; visibility:visible;
+  transition: transform var(--mps-trans-dur, 800ms) cubic-bezier(.4,0,.2,1);
+}
+.olo-proslider[data-transition="push"] .olo-proslider-slide.mps-active { transform: translateX(0); }
+.olo-proslider[data-transition="push"] .olo-proslider-slide.mps-exit-left { transform: translateX(-100%); }
+
+/* pushDown */
+.olo-proslider[data-transition="pushDown"] .olo-proslider-slide {
+  transform: translateY(-100%); opacity:1; visibility:visible;
+  transition: transform var(--mps-trans-dur, 800ms) cubic-bezier(.4,0,.2,1);
+}
+.olo-proslider[data-transition="pushDown"] .olo-proslider-slide.mps-active { transform: translateY(0); }
+.olo-proslider[data-transition="pushDown"] .olo-proslider-slide.mps-exit-left { transform: translateY(100%); }
+
+/* stack: new zooms in over old */
+.olo-proslider[data-transition="stack"] .olo-proslider-slide {
+  transform: scale(0.8); opacity:0;
+  transition: opacity var(--mps-trans-dur, 800ms) ease, transform var(--mps-trans-dur, 800ms) ease;
+}
+.olo-proslider[data-transition="stack"] .olo-proslider-slide.mps-active {
+  transform: scale(1); opacity:1; z-index:2;
+}
+
+/* paperCut: diagonal clip */
+.olo-proslider[data-transition="paperCut"] .olo-proslider-slide {
+  clip-path: polygon(100% 0, 100% 0, 100% 100%, 100% 100%); opacity:1; visibility:visible;
+  transition: clip-path var(--mps-trans-dur, 800ms) cubic-bezier(.4,0,.2,1);
+}
+.olo-proslider[data-transition="paperCut"] .olo-proslider-slide.mps-active {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+}
+
+/* zoomFade: zoom + fade combo */
+.olo-proslider[data-transition="zoomFade"] .olo-proslider-slide {
+  transform: scale(1.15); opacity:0;
+  transition: opacity var(--mps-trans-dur, 800ms) ease, transform var(--mps-trans-dur, 800ms) ease;
+}
+.olo-proslider[data-transition="zoomFade"] .olo-proslider-slide.mps-active {
+  transform: scale(1); opacity:1;
+}
+
+/* rotateSlide: rotate around center */
+.olo-proslider[data-transition="rotateSlide"] .olo-proslider-track { perspective: 1500px; }
+.olo-proslider[data-transition="rotateSlide"] .olo-proslider-slide {
+  transform: rotateY(-45deg) scale(0.8); opacity:0;
+  transition: all var(--mps-trans-dur, 800ms) cubic-bezier(.4,0,.2,1);
+}
+.olo-proslider[data-transition="rotateSlide"] .olo-proslider-slide.mps-active {
+  transform: rotateY(0) scale(1); opacity:1;
+}
+
+/* curtain3D: 3D curtain fold */
+.olo-proslider[data-transition="curtain3D"] .olo-proslider-track { perspective: 1000px; }
+.olo-proslider[data-transition="curtain3D"] .olo-proslider-slide {
+  transform: rotateY(90deg); transform-origin: center center;
+  opacity:1; visibility:visible;
+  transition: transform var(--mps-trans-dur, 800ms) cubic-bezier(.4,0,.2,1);
+}
+.olo-proslider[data-transition="curtain3D"] .olo-proslider-slide.mps-active { transform: rotateY(0); }
+.olo-proslider[data-transition="curtain3D"] .olo-proslider-slide.mps-exit-left { transform: rotateY(-90deg); }
+
+/* slideUp */
+.olo-proslider[data-transition="slideUp"] .olo-proslider-slide {
+  transform: translateY(100%); opacity:1; visibility:visible;
+  transition: transform var(--mps-trans-dur, 800ms) ease;
+}
+.olo-proslider[data-transition="slideUp"] .olo-proslider-slide.mps-active { transform: translateY(0); }
+.olo-proslider[data-transition="slideUp"] .olo-proslider-slide.mps-exit-left { transform: translateY(-100%); }
+
+/* slideDown */
+.olo-proslider[data-transition="slideDown"] .olo-proslider-slide {
+  transform: translateY(-100%); opacity:1; visibility:visible;
+  transition: transform var(--mps-trans-dur, 800ms) ease;
+}
+.olo-proslider[data-transition="slideDown"] .olo-proslider-slide.mps-active { transform: translateY(0); }
+.olo-proslider[data-transition="slideDown"] .olo-proslider-slide.mps-exit-left { transform: translateY(100%); }
+
+/* ═══════════════════════════════════════════════════════════
+   SFX Block Reveal (8 animations)
+   ═══════════════════════════════════════════════════════════ */
+@keyframes mpsBlockFromLeft { 0% { clip-path:inset(0 100% 0 0) } 49.9% { clip-path:inset(0 0 0 0) } 50% { clip-path:inset(0 0 0 0) } 100% { clip-path:inset(0 0 0 0) } }
+@keyframes mpsBlockFromRight { 0% { clip-path:inset(0 0 0 100%) } 50% { clip-path:inset(0 0 0 0) } 100% { clip-path:inset(0 0 0 0) } }
+@keyframes mpsBlockFromTop { 0% { clip-path:inset(0 0 100% 0) } 50% { clip-path:inset(0 0 0 0) } 100% { clip-path:inset(0 0 0 0) } }
+@keyframes mpsBlockFromBottom { 0% { clip-path:inset(100% 0 0 0) } 50% { clip-path:inset(0 0 0 0) } 100% { clip-path:inset(0 0 0 0) } }
+/* SFX with colored block overlay — uses pseudo-element in PHP */
+.mps-sfx-block { position:relative; overflow:hidden; }
+.mps-sfx-block::after {
+  content:''; position:absolute; inset:0; z-index:10;
+  background: var(--mps-sfx-color, #fff);
+  transform: translateX(-101%);
+  animation: var(--mps-sfx-anim, mpsSfxBlockRight) var(--mps-sfx-dur, 800ms) var(--mps-sfx-easing, cubic-bezier(.4,0,.2,1)) var(--mps-sfx-delay, 0ms) both;
+}
+@keyframes mpsSfxBlockRight { 0% { transform:translateX(-101%) } 50% { transform:translateX(0) } 100% { transform:translateX(101%) } }
+@keyframes mpsSfxBlockLeft { 0% { transform:translateX(101%) } 50% { transform:translateX(0) } 100% { transform:translateX(-101%) } }
+@keyframes mpsSfxBlockDown { 0% { transform:translateY(-101%) } 50% { transform:translateY(0) } 100% { transform:translateY(101%) } }
+@keyframes mpsSfxBlockUp { 0% { transform:translateY(101%) } 50% { transform:translateY(0) } 100% { transform:translateY(-101%) } }
+
+/* ═══════════════════════════════════════════════════════════
+   Ken Burns Advanced (blur + pan)
+   ═══════════════════════════════════════════════════════════ */
+.olo-proslider-kenburns-adv {
+  animation: mpsKenBurnsAdv var(--mps-kb-dur, 8000ms) ease forwards;
+}
+@keyframes mpsKenBurnsAdv {
+  from {
+    transform: scale(var(--mps-kb-start-scale, 1)) translate(var(--mps-kb-start-x, 0px), var(--mps-kb-start-y, 0px));
+    filter: blur(var(--mps-kb-start-blur, 0px));
+  }
+  to {
+    transform: scale(var(--mps-kb-end-scale, 1.2)) translate(var(--mps-kb-end-x, 0px), var(--mps-kb-end-y, 0px));
+    filter: blur(var(--mps-kb-end-blur, 0px));
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Carousel Mode
+   ═══════════════════════════════════════════════════════════ */
+.olo-proslider.mps-carousel { overflow: visible; }
+.olo-proslider.mps-carousel .olo-proslider-track {
+  display: flex;
+  transition: transform var(--mps-trans-dur, 800ms) cubic-bezier(.4,0,.2,1);
+}
+.olo-proslider.mps-carousel .olo-proslider-slide {
+  position: relative;
+  inset: auto;
+  opacity: 1;
+  visibility: visible;
+  flex: 0 0 var(--mps-carousel-width, 80%);
+  margin: 0 var(--mps-carousel-gap, 10px);
+  transform: scale(var(--mps-carousel-side-scale, 0.85));
+  transition: transform var(--mps-trans-dur, 800ms) ease, opacity var(--mps-trans-dur, 800ms) ease, filter var(--mps-trans-dur, 800ms) ease;
+  filter: brightness(0.7);
+}
+.olo-proslider.mps-carousel .olo-proslider-slide.mps-active {
+  transform: scale(1);
+  z-index: 2;
+  filter: brightness(1);
+}
+/* Carousel 3D */
+.olo-proslider.mps-carousel-3d .olo-proslider-track { perspective: 1200px; }
+.olo-proslider.mps-carousel-3d .olo-proslider-slide {
+  transform: scale(0.85) rotateY(var(--mps-carousel-rotate, -25deg));
+  filter: brightness(0.6);
+}
+.olo-proslider.mps-carousel-3d .olo-proslider-slide.mps-active {
+  transform: scale(1) rotateY(0);
+  filter: brightness(1);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Thumbnail Navigation
+   ═══════════════════════════════════════════════════════════ */
+.olo-proslider-thumbs {
+  position: absolute;
+  bottom: 0;
+  left: 0; right: 0;
+  z-index: 12;
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  padding: 8px;
+  background: linear-gradient(transparent, rgba(0,0,0,0.6));
+}
+.olo-proslider-thumb {
+  width: 80px; height: 50px;
+  border: 2px solid transparent;
+  border-radius: 4px;
+  overflow: hidden;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.25s, border-color 0.25s, transform 0.25s;
+  flex-shrink: 0;
+}
+.olo-proslider-thumb:hover { opacity: 0.9; transform: scale(1.05); }
+.olo-proslider-thumb.mps-thumb-active { opacity: 1; border-color: #fff; }
+.olo-proslider-thumb img { width:100%; height:100%; object-fit:cover; display:block; pointer-events:none; }
+/* Thumbs position variants */
+.mps-thumbs-top { top:0; bottom:auto; background: linear-gradient(rgba(0,0,0,0.6), transparent); }
+.mps-thumbs-left, .mps-thumbs-right {
+  top:0; bottom:0; left:auto; right:auto;
+  flex-direction: column;
+  width: auto;
+  background: linear-gradient(to right, rgba(0,0,0,0.6), transparent);
+  justify-content: flex-start;
+  overflow-y: auto;
+}
+.mps-thumbs-right { right:0; left:auto; background: linear-gradient(to left, rgba(0,0,0,0.6), transparent); }
+.mps-thumbs-left { left:0; }
+
+/* ═══════════════════════════════════════════════════════════
+   Tab Navigation
+   ═══════════════════════════════════════════════════════════ */
+.olo-proslider-tabs {
+  position: absolute;
+  bottom: 0;
+  left: 0; right: 0;
+  z-index: 12;
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  background: rgba(0,0,0,0.7);
+}
+.olo-proslider-tab {
+  padding: 12px 20px;
+  color: rgba(255,255,255,0.6);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: color 0.25s, border-color 0.25s, background 0.25s;
+  white-space: nowrap;
+}
+.olo-proslider-tab:hover { color: rgba(255,255,255,0.9); background: rgba(255,255,255,0.05); }
+.olo-proslider-tab.mps-tab-active {
+  color: #fff;
+  border-bottom-color: var(--olo-color-primary, #6366f1);
+}
+/* Tabs position: top */
+.mps-tabs-top { top:0; bottom:auto; border-bottom: 1px solid rgba(255,255,255,0.15); }
+.mps-tabs-top .olo-proslider-tab { border-bottom:none; border-top: 3px solid transparent; }
+.mps-tabs-top .olo-proslider-tab.mps-tab-active { border-top-color: var(--olo-color-primary, #6366f1); }
+
+/* ═══════════════════════════════════════════════════════════
+   Scroll-Fixed Timeline (pin slider during scroll)
+   ═══════════════════════════════════════════════════════════ */
+.mps-scroll-fixed-wrapper {
+  position: relative;
+}
+.mps-scroll-fixed-wrapper .olo-proslider {
+  position: sticky;
+  top: 0;
+}
 
 /* ═══════════════════════════════════════════════════════════
    Responsive

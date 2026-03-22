@@ -39,9 +39,12 @@
     <div v-if="positionBadge" class="olo-position-badge">{{ positionBadge }}</div>
 
     <!-- Tile content -->
-    <div :class="{ 'olo-cell-content-z': hasBgImage || hasOverlay }">
+    <div :class="{ 'olo-cell-content-z': hasBgImage || hasOverlay }" :style="contentFilterStyle">
       <TileBase :tile="tile" />
     </div>
+
+    <!-- Container children slot (for floatingpanel etc.) -->
+    <slot name="after" />
 
     <!-- Dynamic hover styles -->
     <component v-if="hoverCssTag" is="style" v-text="hoverCssTag" />
@@ -54,7 +57,7 @@ import { useBuilderStore } from '@/stores/builder';
 import { useTilesStore } from '@/stores/tiles';
 import TileBase from '@/components/Tiles/TileBase.vue';
 import { useBackgroundStyle } from '@/composables/useBackgroundStyle';
-import { getShadowValue } from '@/composables/useShadowMap';
+import { getShadowValue, getDropShadowValue } from '@/composables/useShadowMap';
 import { rv } from '@/composables/useResponsiveValue';
 
 const props = defineProps({
@@ -96,7 +99,7 @@ const cellClasses = computed(() => {
   if (hasBgImage.value || hasOverlay.value) classes.push('olo-grid-cell--has-bg');
   if (isHiddenInViewport.value) classes.push('olo-grid-cell--hidden-vp');
   const pm = (props.tile.advanced || {}).position_mode;
-  if (pm && pm !== 'static' && pm !== 'relative') classes.push('olo-grid-cell--positioned');
+  if (pm && pm !== 'static' && pm !== 'relative' && !builderStore.cleanMode) classes.push('olo-grid-cell--positioned');
   return classes;
 });
 
@@ -138,9 +141,9 @@ const cellStyle = computed(() => {
   // Background (solid & gradient via composable; image handled via bgImageStyle layer)
   Object.assign(style, bgInlineStyle.value);
 
-  // Border radius (responsive)
+  // Border radius (responsive) — il check !== undefined gestisce anche il valore 0
   const brVal = rv(s, 'border_radius', undefined, mode);
-  if (brVal) {
+  if (brVal !== undefined && brVal !== null && brVal !== '') {
     if (typeof brVal === 'object') {
       style.borderRadius = `${brVal.tl||0}px ${brVal.tr||0}px ${brVal.br||0}px ${brVal.bl||0}px`;
     } else {
@@ -155,10 +158,15 @@ const cellStyle = computed(() => {
     style.borderColor = s.border_color || '#374151';
   }
 
-  // Shadow
+  // Shadow — box-shadow solo per elementi con sfondo (segue border-radius del div).
+  // Per elementi trasparenti, l'ombra va applicata sul div contenuto (contentFilterStyle).
   if (s.shadow && s.shadow !== 'none') {
-    const sv = getShadowValue(s);
-    if (sv !== 'none') style.boxShadow = sv;
+    const cellHasBg = !!(bgInlineStyle.value?.backgroundColor || hasBgImage.value);
+    if (cellHasBg) {
+      const sv = getShadowValue(s);
+      if (sv !== 'none') style.boxShadow = sv;
+    }
+    // Altrimenti: drop-shadow via contentFilterStyle (applicato al div contenuto)
   }
 
   // Opacity
@@ -187,19 +195,28 @@ const cellStyle = computed(() => {
   const fjVal = rv(s, 'flex_justify', undefined, mode);
   const faVal = rv(s, 'flex_align', undefined, mode);
   const fwVal = rv(s, 'flex_wrap', undefined, mode);
-  const fgVal = rv(s, 'flex_gap', undefined, mode);
-  if (fdVal || fjVal || faVal || fwVal || fgVal) {
+  const fcgVal = rv(s, 'flex_column_gap', undefined, mode);
+  const frgVal = rv(s, 'flex_row_gap', undefined, mode);
+  // backward compat: read old flex_gap if new fields are empty
+  const fgLegacy = (!fcgVal && !frgVal) ? rv(s, 'flex_gap', undefined, mode) : undefined;
+  const hasFlexGap = fcgVal || frgVal || fgLegacy;
+  if (fdVal || fjVal || faVal || fwVal || hasFlexGap) {
     style.display = 'flex';
     if (fdVal) style.flexDirection = fdVal;
     if (fjVal) style.justifyContent = fjVal;
     if (faVal) style.alignItems = faVal;
     if (fwVal) style.flexWrap = fwVal;
-    if (fgVal) style.gap = `${fgVal}px`;
+    if (fgLegacy) {
+      style.gap = `${fgLegacy}px`;
+    } else {
+      if (fcgVal) style.columnGap = `${fcgVal}px`;
+      if (frgVal) style.rowGap = `${frgVal}px`;
+    }
   }
 
   // Gap (responsive) — standalone gap for non-flex contexts
   const gapVal = rv(s, 'gap', undefined, mode);
-  if (gapVal && !fgVal) style.gap = `${gapVal}px`;
+  if (gapVal && !hasFlexGap) style.gap = `${gapVal}px`;
 
   // Transform (responsive)
   const transforms = [];
@@ -216,20 +233,31 @@ const cellStyle = computed(() => {
     style.gridColumn = '1 / -1';
   }
 
-  // Positioning — in the builder, keep tiles in flow (no absolute/fixed/sticky).
-  // Only apply relative offset and width. Position is shown via a badge.
+  // Positioning — in clean mode, apply real positioning (like frontend).
+  // In normal mode, keep tiles in flow (no absolute/fixed/sticky).
   if (adv.position_mode && adv.position_mode !== 'static') {
     const posMode = adv.position_mode;
-    if (posMode === 'relative') {
-      style.position = 'relative';
+    const isClean = builderStore.cleanMode;
+    if (isClean) {
+      // Clean mode: apply real CSS positioning
+      style.position = posMode;
       if (adv.position_top) style.top = adv.position_top.toString().match(/^\d+$/) ? `${adv.position_top}px` : adv.position_top;
+      if (adv.position_right) style.right = adv.position_right.toString().match(/^\d+$/) ? `${adv.position_right}px` : adv.position_right;
+      if (adv.position_bottom) style.bottom = adv.position_bottom.toString().match(/^\d+$/) ? `${adv.position_bottom}px` : adv.position_bottom;
       if (adv.position_left) style.left = adv.position_left.toString().match(/^\d+$/) ? `${adv.position_left}px` : adv.position_left;
+      if (adv.position_zindex) style.zIndex = adv.position_zindex;
+    } else {
+      if (posMode === 'relative') {
+        style.position = 'relative';
+        if (adv.position_top) style.top = adv.position_top.toString().match(/^\d+$/) ? `${adv.position_top}px` : adv.position_top;
+        if (adv.position_left) style.left = adv.position_left.toString().match(/^\d+$/) ? `${adv.position_left}px` : adv.position_left;
+      }
     }
     if (adv.position_width) style.width = adv.position_width.toString().match(/^\d+$/) ? `${adv.position_width}px` : adv.position_width;
   }
 
-  // Mask shape
-  const maskVal = s.mask || s.mask_type || '';
+  // Mask shape (da style o advanced)
+  const maskVal = s.mask || s.mask_type || adv.mask_type || '';
   if (maskVal && maskVal !== 'none') {
     const svgMap = {
       circle: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="black"/></svg>',
@@ -242,15 +270,22 @@ const cellStyle = computed(() => {
     };
     const svg = svgMap[maskVal];
     if (svg) {
+      const maskSize = s.mask_size || adv.mask_size || 'contain';
+      const maskPos = s.mask_position || adv.mask_position || 'center';
+      const maskRep = s.mask_repeat || adv.mask_repeat || 'no-repeat';
       const url = `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
       style.WebkitMaskImage = url;
       style.maskImage = url;
-      style.WebkitMaskSize = 'contain';
-      style.maskSize = 'contain';
-      style.WebkitMaskPosition = 'center';
-      style.maskPosition = 'center';
-      style.WebkitMaskRepeat = 'no-repeat';
-      style.maskRepeat = 'no-repeat';
+      style.WebkitMaskSize = maskSize;
+      style.maskSize = maskSize;
+      style.WebkitMaskPosition = maskPos;
+      style.maskPosition = maskPos;
+      style.WebkitMaskRepeat = maskRep;
+      style.maskRepeat = maskRep;
+    } else if (maskVal === 'custom' && adv.mask_custom) {
+      // Clip-path personalizzato (es. polygon, circle, ellipse)
+      style.clipPath = adv.mask_custom;
+      style.WebkitClipPath = adv.mask_custom;
     }
   }
 
@@ -269,14 +304,28 @@ const cellStyle = computed(() => {
   return style;
 });
 
+// Stile per il div contenuto — applica drop-shadow quando la cella NON ha sfondo.
+// drop-shadow sul div contenuto segue la forma visibile del tile (SVG stelle, icone, ecc.)
+// perché toolbar e badge sono FUORI da questo div.
+const contentFilterStyle = computed(() => {
+  const s = props.tile.style || {};
+  if (!s.shadow || s.shadow === 'none') return null;
+  const cellHasBg = !!(bgInlineStyle.value?.backgroundColor || hasBgImage.value);
+  if (cellHasBg) return null; // box-shadow è già sul div esterno
+  const ds = getDropShadowValue(s);
+  if (ds === 'none') return null;
+  return { filter: ds };
+});
+
 const hoverCssTag = computed(() => {
   const hover = props.tile.style?.hover;
   if (!hover) return '';
 
-  const trans = props.tile.style?.transition || { duration: 300, easing: 'ease' };
+  const s = props.tile.style || {};
+  const advH = props.tile.advanced || {};
+  const trans = s.transition || { duration: 300, easing: 'ease' };
   const sel = `[data-tile-id="${props.tile.id}"]`;
-  const isFullWidth = !!props.tile.style?.full_width;
-
+  const isFullWidth = !!s.full_width;
   // Collect hover declarations
   const hoverDecls = [];
   if (hover.bg_color) hoverDecls.push(`background-color: ${hover.bg_color}`);

@@ -27,6 +27,12 @@
       </button>
     </div>
 
+    <!-- Insert-after banner -->
+    <div v-if="builderStore.insertAfterTileId" class="tp-insert-banner">
+      <span>⊕ Seleziona un elemento da inserire</span>
+      <button class="tp-insert-cancel" @click="builderStore.insertAfterTileId = null">✕</button>
+    </div>
+
     <!-- Tiles tab -->
     <div v-if="activeTab === 'tiles'" class="tp-root">
       <div v-for="(tiles, category) in tilesByCategory" :key="category" class="tp-group">
@@ -101,12 +107,22 @@ import { ref, computed, onMounted } from 'vue';
 import { useTilesStore } from '@/stores/tiles';
 import { useBuilderStore } from '@/stores/builder';
 import { useDragDrop } from '@/composables/useDragDrop';
-import { createSection, createRow, createColumn } from '@/stores/tiles';
+import { createSection, createRow, createColumn, generateId } from '@/stores/tiles';
 import StructureTree from './StructureTree.vue';
 
 const tilesStore = useTilesStore();
 const builderStore = useBuilderStore();
 const { handleDropFromSidebar } = useDragDrop();
+
+import { onUnmounted } from 'vue';
+
+function onOpenElementsPanel() {
+  activeTab.value = 'tiles';
+}
+window.addEventListener('olo:open-elements-panel', onOpenElementsPanel);
+onUnmounted(() => {
+  window.removeEventListener('olo:open-elements-panel', onOpenElementsPanel);
+});
 
 onMounted(() => {
   tilesStore.fetchGlobalWidgets();
@@ -304,6 +320,81 @@ const tileIcons = {
   'textmask':     '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="2" y="4" w="20" h="16" rx="2"/><path d="M6 12h4M14 12h4M10 8v8"/></svg>',
   'pagetitlebar': '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="2" y="4" w="20" h="6" rx="2"/><path d="M6 7h8M6 14h16M6 18h10"/></svg>',
   'column':       '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="8" y="2" w="8" h="20" rx="2"/></svg>',
+  // Aliases
+  'heading':      '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><path d="M4 4v16M20 4v16M4 12h16"/></svg>',
+  'textblock':    '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><path d="M4 6h16M4 10h16M4 14h10"/></svg>',
+  'slider':       '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="3" y="4" w="18" h="16" rx="2"/><path d="M8 12l3 3 3-3"/></svg>',
+  // Header / Marketing extras
+  'floatingpanel':'<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="5" y="5" w="14" h="14" rx="2"/><path d="M5 9h14"/><circle cx="8" cy="7" r=".8" fill="currentColor"/><circle cx="10.5" cy="7" r=".8" fill="currentColor"/></svg>',
+  'mobilebar':    '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="5" y="2" w="14" h="20" rx="2"/><path d="M8 18h8"/></svg>',
+  // Booking / Service
+  'booking':      '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="3" y="4" w="18" h="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="M8 14l3 3 5-5"/></svg>',
+  'bookingpicker':'<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="3" y="4" w="18" h="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><circle cx="12" cy="16" r="2" fill="currentColor"/></svg>',
+  'calendar':     '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="3" y="4" w="18" h="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>',
+  'hostcard':     '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="3" y="3" w="18" h="18" rx="2"/><circle cx="9" cy="10" r="3"/><path d="M14 8h5M14 12h5"/><path d="M6 18c0-2 1.5-3 3-3s3 1 3 3"/></svg>',
+  'servicesearch':'<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><circle cx="10" cy="10" r="7"/><path d="M21 21l-4.35-4.35" sw="2"/></svg>',
+  'serviceresults':'<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="3" y="3" w="8" h="8" rx="1"/><rect x="13" y="3" w="8" h="8" rx="1"/><rect x="3" y="13" w="8" h="8" rx="1"/><rect x="13" y="13" w="8" h="8" rx="1"/></svg>',
+  'servicelist':  '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="3" y="4" w="18" h="5" rx="1"/><rect x="3" y="11" w="18" h="5" rx="1"/><rect x="3" y="18" w="18" h="5" rx="1" stroke-dasharray="3 2"/></svg>',
+  'servicestats': '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="3" y="14" w="4" h="7" rx="1"/><rect x="10" y="8" w="4" h="13" rx="1"/><rect x="17" y="3" w="4" h="18" rx="1"/></svg>',
+  'servicehero':  '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="2" y="3" w="20" h="18" rx="2"/><path d="M6 14h12M6 18h8"/></svg>',
+  'servicegallery':'<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="3" y="3" w="8" h="8" rx="1"/><rect x="13" y="3" w="8" h="8" rx="1"/><rect x="3" y="13" w="18" h="8" rx="1"/></svg>',
+  'serviceinfo':  '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01" sw="2.5"/><path d="M12 12v4"/></svg>',
+  'serviceprices':'<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><path d="M12 2v20M9 5.5h4.5a2.5 2.5 0 010 5H9h5.5a2.5 2.5 0 010 5H9"/></svg>',
+  'serviceaddress':'<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>',
+  'serviceamenities':'<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><path d="M3.5 5l1.5 1.5 3-3M3.5 11l1.5 1.5 3-3M3.5 17l1.5 1.5 3-3"/><path d="M11 6h10M11 12h8M11 18h10"/></svg>',
+  'servicedescription':'<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><path d="M4 5h16M4 9h12M4 13h16M4 17h8"/></svg>',
+  'serviceexcerpt':'<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><path d="M4 5h16M4 9h12M4 13h8"/></svg>',
+  'servicedirections':'<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><path d="M3 12h18M18 8l4 4-4 4"/><circle cx="5" cy="12" r="2"/></svg>',
+  'servicerules': '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="5" y="3" w="14" h="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/></svg>',
+  'servicerelated':'<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="2" y="5" w="6" h="8" rx="1"/><rect x="9" y="5" w="6" h="8" rx="1"/><rect x="16" y="5" w="6" h="8" rx="1"/></svg>',
+  'servicevideo': '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="2" y="4" w="20" h="16" rx="2"/><path d="M10 9l5 3-5 3z"/></svg>',
+  'servicecheckin':'<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="3" y="4" w="18" h="18" rx="2"/><path d="M16 2v4M8 2v4"/><path d="M8 14l3 3 5-5"/></svg>',
+  'servicecipat': '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="4" y="3" w="16" h="18" rx="2"/><path d="M8 8h8M8 12h6M8 16h4"/></svg>',
+  'serviceclub':  '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
+  'servicemushrooms':'<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><path d="M8 16c0-5 2-9 4-9s4 4 4 9"/><path d="M5 16h14" sw="2"/><path d="M10 16v4M14 16v4"/></svg>',
+  // OLO Room
+  'olo_room_availability':'<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="3" y="4" w="18" h="18" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/><path d="M8 14l3 3 5-5"/></svg>',
+  'olo_room_calendar':'<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="3" y="4" w="18" h="18" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/></svg>',
+  'olo_room_contacts':'<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="3" y="5" w="18" h="14" rx="2"/><path d="M3 7l9 5 9-5"/></svg>',
+  'olo_room_description':'<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><path d="M4 5h16M4 9h12M4 13h16M4 17h8"/></svg>',
+  'olo_room_gallery':'<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="3" y="3" w="8" h="8" rx="1"/><rect x="13" y="3" w="8" h="8" rx="1"/><rect x="3" y="13" w="18" h="8" rx="1"/></svg>',
+  'olo_room_grid':'<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="3" y="3" w="8" h="8" rx="1"/><rect x="13" y="3" w="8" h="8" rx="1"/><rect x="3" y="13" w="8" h="8" rx="1"/><rect x="13" y="13" w="8" h="8" rx="1"/></svg>',
+  'olo_room_hero':'<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="2" y="3" w="20" h="18" rx="2"/><path d="M6 14h12M6 18h8"/></svg>',
+  'olo_room_info':'<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01" sw="2.5"/><path d="M12 12v4"/></svg>',
+  'olo_room_pricing':'<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><path d="M12 2v20M9 5.5h4.5a2.5 2.5 0 010 5H9h5.5a2.5 2.5 0 010 5H9"/></svg>',
+  'olo_room_related':'<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="2" y="5" w="6" h="8" rx="1"/><rect x="9" y="5" w="6" h="8" rx="1"/><rect x="16" y="5" w="6" h="8" rx="1"/></svg>',
+  // WooCommerce
+  'woo_products': '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="3" y="3" w="8" h="8" rx="1"/><rect x="13" y="3" w="8" h="8" rx="1"/><rect x="3" y="13" w="8" h="8" rx="1"/><rect x="13" y="13" w="8" h="8" rx="1"/></svg>',
+  'woo_cart':     '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>',
+  'woo_minicart': '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18"/><path d="M16 10a4 4 0 01-8 0"/></svg>',
+  'woo_checkout': '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="3" y="3" w="18" h="18" rx="2"/><path d="M8 10l3 3 5-5"/></svg>',
+  'woo_checkout_multistep':'<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><circle cx="5" cy="6" r="2.5" fill="currentColor" opacity=".3"/><circle cx="12" cy="6" r="2.5"/><circle cx="19" cy="6" r="2.5"/><path d="M7.5 6h2M14.5 6h2"/><rect x="3" y="11" w="18" h="10" rx="2"/></svg>',
+  'woo_myaccount':'<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><circle cx="12" cy="8" r="4"/><path d="M5 20c0-4 3-6 7-6s7 2 7 6"/></svg>',
+  'woo_price':    '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><path d="M12 2v20M9 5.5h4.5a2.5 2.5 0 010 5H9h5.5a2.5 2.5 0 010 5H9"/></svg>',
+  'woo_product_image':'<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="3" y="3" w="18" h="18" rx="2"/><circle cx="8.5" cy="8.5" r="2"/><path d="M3 16l5-5 4 4 4-6 5 7"/></svg>',
+  'woo_product_title':'<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><path d="M4 4v16M20 4v16M4 12h16"/></svg>',
+  'woo_product_description':'<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><path d="M4 5h16M4 9h12M4 13h16M4 17h8"/></svg>',
+  'woo_product_tabs':'<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="3" y="7" w="18" h="14" rx="2"/><path d="M3 11h18M7 7V4h4v3M13 7V4h4v3"/></svg>',
+  'woo_product_meta':'<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><path d="M4 7h4M12 7h4M4 12h8M4 17h6"/><circle cx="10" cy="7" r="1.5"/></svg>',
+  'woo_product_gallery_slider':'<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="3" y="3" w="18" h="12" rx="2"/><rect x="3" y="17" w="5" h="4" rx="1"/><rect x="10" y="17" w="5" h="4" rx="1"/><rect x="17" y="17" w="4" h="4" rx="1"/></svg>',
+  'woo_rating':   '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
+  'woo_addtocart':'<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/><path d="M12 9v4M10 11h4"/></svg>',
+  'woo_breadcrumbs':'<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><path d="M4 12h3M11 12h3M18 12h3"/><path d="M8 9l3 3-3 3M15 9l3 3-3 3"/></svg>',
+  'woo_categories':'<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="3" y="3" w="8" h="8" rx="2"/><rect x="13" y="3" w="8" h="8" rx="2"/><rect x="3" y="13" w="8" h="8" rx="2"/><rect x="13" y="13" w="8" h="8" rx="2"/></svg>',
+  'woo_sale_badge':'<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><circle cx="12" cy="12" r="9"/><text x="7" y="16" font-size="9" font-family="sans-serif" fill="currentColor" stroke="none" font-weight="700">%</text></svg>',
+  'woo_notices':  '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="3" y="5" w="18" h="14" rx="2"/><path d="M12 9v3M12 15h.01" sw="2"/></svg>',
+  'woo_wishlist': '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 000-7.78z"/></svg>',
+  'woo_comparison':'<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="3" y="3" w="8" h="18" rx="2"/><rect x="13" y="3" w="8" h="18" rx="2"/><path d="M5 9h4M15 9h4M5 13h4M15 13h4"/></svg>',
+  'woo_quickview':'<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>',
+  'woo_recently_viewed':'<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/><path d="M3 12h2"/></svg>',
+  'woo_related':  '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="2" y="5" w="6" h="8" rx="1"/><rect x="9" y="5" w="6" h="8" rx="1"/><rect x="16" y="5" w="6" h="8" rx="1"/></svg>',
+  'woo_cross_sells':'<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="2" y="5" w="6" h="8" rx="1"/><rect x="9" y="5" w="6" h="8" rx="1"/><rect x="16" y="5" w="6" h="8" rx="1"/><path d="M5 16h14"/></svg>',
+  'woo_upsells':  '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="2" y="5" w="6" h="8" rx="1"/><rect x="9" y="5" w="6" h="8" rx="1"/><rect x="16" y="5" w="6" h="8" rx="1"/><path d="M12 16v4M10 18l2-2 2 2"/></svg>',
+  'woo_product_stock':'<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="3" y="6" w="18" h="15" rx="2"/><path d="M8 6V4M16 6V4"/><path d="M8 13l3 3 5-5"/></svg>',
+  'woo_product_bundle':'<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="3" y="8" w="7" h="7" rx="1"/><rect x="14" y="8" w="7" h="7" rx="1"/><rect x="8" y="3" w="8" h="5" rx="1"/><path d="M12 15v6"/></svg>',
+  'woo_product_filter':'<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><path d="M4 6h16M8 12h8M10 18h4"/></svg>',
+  'woo_product_navigation':'<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><path d="M3 12h18M6 8l-4 4 4 4M18 8l4 4-4 4"/></svg>',
+  'woo_order_tracking':'<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="3" y="5" w="18" h="14" rx="2"/><path d="M3 10h18"/><path d="M7 15h3M14 15h3"/></svg>',
 };
 
 function tileIcon(type) {
@@ -329,7 +420,27 @@ function onDragStart(event, tileType) {
 
 function addTile(tileType) {
   if (Date.now() - lastDragStart < 1000) return;
-  handleDropFromSidebar(tileType);
+  const afterId = builderStore.insertAfterTileId;
+  if (afterId) {
+    // Insert directly after the target tile (same column, no wrapping)
+    const newTile = {
+      id: generateId(),
+      type: tileType,
+      settings: JSON.parse(JSON.stringify(
+        (tilesStore.registeredTiles.find(t => t.type === tileType) || {}).defaults || {}
+      )),
+      style: {},
+      advanced: {},
+    };
+    const inserted = tilesStore.insertAfter(afterId, newTile);
+    if (inserted) {
+      builderStore.isDirty = true;
+      builderStore.selectTile(newTile.id);
+    }
+    builderStore.insertAfterTileId = null;
+  } else {
+    handleDropFromSidebar(tileType);
+  }
 }
 
 function onGlobalDragStart(event, globalId) {
@@ -384,6 +495,38 @@ async function deleteGlobal(globalId, name) {
 .sidebar-tab--active {
   color: #1a1a1a;
   border-bottom-color: var(--olo-color-primary, #e8622a);
+}
+
+/* Insert-after banner */
+.tp-insert-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  margin: 6px 6px 0;
+  background: rgba(34, 197, 94, 0.15);
+  border: 1px solid rgba(34, 197, 94, 0.4);
+  border-radius: 6px;
+  color: #22c55e;
+  font-size: 12px;
+  font-weight: 600;
+  animation: tp-insert-pulse 1.5s ease-in-out infinite;
+}
+@keyframes tp-insert-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+.tp-insert-cancel {
+  background: none;
+  border: none;
+  color: #22c55e;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 0 4px;
+  opacity: 0.6;
+}
+.tp-insert-cancel:hover {
+  opacity: 1;
 }
 
 /* Tile palette — light glass */

@@ -26,7 +26,7 @@ class Olo_ServiceCipat_Tile extends Olo_Tile_Base {
         'bg_color'       => '',
         'border_color'   => '',
         'border_radius'  => 8,
-        'padding'        => 12,
+        'tile_padding' => ['top' => 12, 'right' => 12, 'bottom' => 12, 'left' => 12],
         'align'          => 'left',
     ];
 

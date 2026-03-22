@@ -54,7 +54,7 @@ class Olo_ServicePrices_Tile extends Olo_Tile_Base {
 
         $cols   = absint( $s['columns'] ) ?: 3;
         $gap    = absint( $s['gap'] );
-        $radius = Olo_Tile_Utils::border_radius( $s['card_radius'] ?? 0 );
+        $radius = $this->build_border_radius_css( $s["card_radius"] );
         $uid    = 'olo-sprices-' . wp_rand( 10000, 99999 );
 
         ob_start();

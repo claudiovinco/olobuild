@@ -25,7 +25,7 @@ class Olo_ServiceMushrooms_Tile extends Olo_Tile_Base {
         'align'          => 'left',
         'bg_color'       => '',
         'border_radius'  => 0,
-        'padding'        => 0,
+        'tile_padding' => ['top' => 0, 'right' => 0, 'bottom' => 0, 'left' => 0],
     ];
 
     public function get_controls() {

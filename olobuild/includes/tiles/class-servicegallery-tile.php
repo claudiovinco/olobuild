@@ -73,7 +73,7 @@ class Olo_ServiceGallery_Tile extends Olo_Tile_Base {
         $rows    = max( 1, min( 5, absint( $s['rows'] ) ) );
         $gap     = absint( $s['gap'] );
         $th      = absint( $s['thumb_height'] ) ?: 200;
-        $radius  = Olo_Tile_Utils::border_radius( $s['thumb_radius'] ?? 0 );
+        $radius  = $this->build_border_radius_css( $s["thumb_radius"] );
         $uid     = 'olo-sgal-' . wp_rand( 10000, 99999 );
         $mob_cols = max( 1, min( 4, absint( $s['mobile_columns'] ) ) );
 

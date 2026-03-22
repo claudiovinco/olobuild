@@ -146,8 +146,8 @@ class Olo_ServiceResults_Tile extends Olo_Tile_Base {
             'gap'               => $s['gap'],
             'cardStyle'         => $s['card_style'],
             'imageHeight'       => intval( $s['image_height'] ),
-            'imageRadius'       => Olo_Tile_Utils::border_radius( $s['image_radius'] ?? 0 ),
-            'cardRadius'        => Olo_Tile_Utils::border_radius( $s['card_radius'] ?? 8 ),
+            'imageRadius'       => intval( $s['image_radius'] ),
+            'cardRadius'        => intval( $s['card_radius'] ),
             'showExcerpt'       => isset( $cc['excerpt'] ),
             'excerptLength'     => intval( $s['excerpt_length'] ),
             'showStats'         => isset( $cc['stats'] ),
@@ -206,9 +206,9 @@ class Olo_ServiceResults_Tile extends Olo_Tile_Base {
         $kenburns_on    = ! empty( $s['fx_kenburns'] );
         $kenburns_speed = max( 10, min( 40, absint( $s['fx_kenburns_speed'] ?? 20 ) ) );
         $kenburns_scale = max( 1.05, min( 1.25, floatval( $s['fx_kenburns_scale'] ?? 1.12 ) ) );
-        $image_radius   = Olo_Tile_Utils::border_radius( $s['image_radius'] ?? 0 );
+        $image_radius   = $this->build_border_radius_css( $s["image_radius"] ?? 0 );
         $image_height   = max( 100, absint( $s['image_height'] ?? 180 ) );
-        $card_radius    = Olo_Tile_Utils::border_radius( $s['card_radius'] ?? 8 );
+        $card_radius    = $this->build_border_radius_css( $s["card_radius"] ?? 8 );
         $body_padding   = max( 0, min( 40, absint( $s['body_padding'] ?? 15 ) ) );
         $title_size     = max( 0.7, min( 2.5, floatval( $s['title_size'] ?? 1 ) ) );
         $excerpt_size   = max( 0.7, min( 1.5, floatval( $s['excerpt_size'] ?? 0.92 ) ) );

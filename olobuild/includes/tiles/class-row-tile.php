@@ -16,6 +16,7 @@ class Olo_Row_Tile extends Olo_Tile_Base {
         'column_gap'     => 'default',
         'vertical_align' => 'stretch',
         'stack_mobile'   => true,
+        'stack_tablet'   => false,
     ];
 
     public function get_controls() {
@@ -61,7 +62,8 @@ class Olo_Row_Tile extends Olo_Tile_Base {
         $columns_data = is_array( $s['columns_data'] ) ? $s['columns_data'] : [];
         $manager = Olo_Tile_Manager::instance();
 
-        $stack_class = ! empty( $s['stack_mobile'] ) ? ' olo-row--stack' : '';
+        $stack_class  = ! empty( $s['stack_mobile'] ) ? ' olo-row--stack-mobile olo-row--stack' : '';
+        $stack_class .= ! empty( $s['stack_tablet'] ) ? ' olo-row--stack-tablet' : '';
 
         ob_start();
         ?>

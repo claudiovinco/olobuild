@@ -61,18 +61,25 @@
               <p class="mb-text-sm mb-text-gray-500">Nessun template trovato</p>
             </div>
 
-            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+            <div :style="gridStyle">
               <div
                 v-for="tpl in filteredTemplates"
                 :key="tpl.id"
                 class="olo-tpl-card"
                 style="background:#374151;border-radius:8px;border:1px solid #4B5563;cursor:pointer;overflow:hidden;transition:border-color 0.15s, box-shadow 0.15s"
-                @click="insertTemplate(tpl)"
+                @click="onCardClick(tpl)"
                 @mouseenter="$event.currentTarget.style.borderColor='#6366F1';$event.currentTarget.style.boxShadow='0 4px 12px rgba(99,102,241,0.15)'"
                 @mouseleave="$event.currentTarget.style.borderColor='#4B5563';$event.currentTarget.style.boxShadow='none'"
               >
-                <!-- SVG Preview -->
-                <div style="position:relative;overflow:hidden;border-bottom:1px solid #4B5563" @mouseenter="$event.currentTarget.querySelector('.olo-tpl-hover').style.opacity='1'" @mouseleave="$event.currentTarget.querySelector('.olo-tpl-hover').style.opacity='0'">
+                <!-- Thumbnail image (for page templates with thumbnail) -->
+                <div v-if="tpl.thumbnail" style="position:relative;overflow:hidden;border-bottom:1px solid #4B5563" @mouseenter="$event.currentTarget.querySelector('.olo-tpl-hover').style.opacity='1'" @mouseleave="$event.currentTarget.querySelector('.olo-tpl-hover').style.opacity='0'">
+                  <img :src="oloData.pluginUrl + tpl.thumbnail" :alt="tpl.name" style="display:block;width:100%;height:auto;aspect-ratio:16/10;object-fit:cover" loading="lazy" @error="$event.target.style.display='none'" />
+                  <div class="olo-tpl-hover" style="position:absolute;inset:0;background:rgba(0,0,0,0.75);display:flex;align-items:center;justify-content:center;padding:12px;opacity:0;transition:opacity 0.15s">
+                    <span style="color:#D1D5DB;font-size:11px;text-align:center;line-height:1.5">{{ tpl.preview_description }}</span>
+                  </div>
+                </div>
+                <!-- SVG Preview (fallback) -->
+                <div v-else style="position:relative;overflow:hidden;border-bottom:1px solid #4B5563" @mouseenter="$event.currentTarget.querySelector('.olo-tpl-hover').style.opacity='1'" @mouseleave="$event.currentTarget.querySelector('.olo-tpl-hover').style.opacity='0'">
                   <svg :viewBox="'0 0 260 120'" width="100%" style="display:block;background-color:var(--tpl-bg)" :style="{ '--tpl-bg': getPreviewBg(tpl) }">
                     <g v-for="(el, i) in getSvgElements(tpl)" :key="i">
                       <rect v-if="el.shape === 'rect'" :x="el.x" :y="el.y" :width="el.w" :height="el.h" :rx="el.rx || 0" :fill="el.fill" :opacity="el.opacity || 1" />
@@ -90,6 +97,7 @@
                   <div style="min-width:0;flex:1">
                     <div style="display:flex;align-items:center;gap:4px">
                       <span style="font-size:11px;font-weight:500;color:#E5E7EB;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ tpl.name }}</span>
+                      <span v-if="tpl.category === 'page'" style="font-size:8px;padding:1px 5px;background:rgba(99,102,241,0.15);color:#A5B4FC;border-radius:3px;flex-shrink:0">Pagina</span>
                       <span v-if="tpl.is_user" style="font-size:8px;padding:1px 4px;background:rgba(245,158,11,0.15);color:#FCD34D;border-radius:3px;flex-shrink:0">Personale</span>
                     </div>
                     <span style="font-size:9px;text-transform:capitalize" :style="{ color: getCategoryColor(tpl.category) }">{{ getCategoryLabel(tpl.category) }}</span>
@@ -234,6 +242,32 @@
         </div>
       </div>
     </transition>
+
+    <!-- Page template insert confirmation dialog -->
+    <transition name="fade">
+      <div v-if="pageInsertMode === 'ask'" style="position:fixed;inset:0;z-index:99500;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center" @click.self="cancelPageInsert">
+        <div style="background:#1F2937;border:1px solid #374151;border-radius:12px;padding:24px;max-width:400px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.5)" @click.stop>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#A5B4FC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+            <span style="color:#E5E7EB;font-size:14px;font-weight:600">Inserisci pagina completa</span>
+          </div>
+          <p style="color:#9CA3AF;font-size:12px;line-height:1.5;margin:0 0 16px">
+            Il canvas contiene già del contenuto. Come vuoi procedere con il template <strong style="color:#E5E7EB">{{ pendingPageTpl?.name }}</strong>?
+          </p>
+          <div style="display:flex;gap:8px">
+            <button @click="confirmPageInsert('replace')" style="flex:1;padding:8px 12px;background:#4F46E5;color:#fff;border:none;border-radius:6px;font-size:12px;font-weight:500;cursor:pointer;transition:background 0.15s" @mouseenter="$event.target.style.background='#4338CA'" @mouseleave="$event.target.style.background='#4F46E5'">
+              Sostituisci tutto
+            </button>
+            <button @click="confirmPageInsert('append')" style="flex:1;padding:8px 12px;background:#374151;color:#E5E7EB;border:1px solid #4B5563;border-radius:6px;font-size:12px;font-weight:500;cursor:pointer;transition:background 0.15s" @mouseenter="$event.target.style.background='#4B5563'" @mouseleave="$event.target.style.background='#374151'">
+              Aggiungi in fondo
+            </button>
+            <button @click="cancelPageInsert" style="padding:8px 12px;background:transparent;color:#9CA3AF;border:1px solid #4B5563;border-radius:6px;font-size:12px;cursor:pointer;transition:color 0.15s" @mouseenter="$event.target.style.color='#E5E7EB'" @mouseleave="$event.target.style.color='#9CA3AF'">
+              Annulla
+            </button>
+          </div>
+        </div>
+      </div>
+    </transition>
 </template>
 
 <script setup>
@@ -326,6 +360,41 @@ const filteredTemplates = computed(() => {
   }
   return list;
 });
+
+// Grid columns: 2 for page templates, 3 for others
+const gridStyle = computed(() => {
+  const isPage = activeCategory.value === 'page';
+  return {
+    display: 'grid',
+    gridTemplateColumns: isPage ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)',
+    gap: isPage ? '16px' : '12px',
+  };
+});
+
+const pageInsertMode = ref(null); // null, 'replace', 'append'
+const pendingPageTpl = ref(null);
+
+function onCardClick(tpl) {
+  if (tpl.category === 'page' && tilesStore.canvasTiles.length > 0) {
+    pendingPageTpl.value = tpl;
+    pageInsertMode.value = 'ask';
+  } else {
+    insertTemplate(tpl, 'replace');
+  }
+}
+
+function confirmPageInsert(mode) {
+  if (pendingPageTpl.value) {
+    insertTemplate(pendingPageTpl.value, mode);
+  }
+  pendingPageTpl.value = null;
+  pageInsertMode.value = null;
+}
+
+function cancelPageInsert() {
+  pendingPageTpl.value = null;
+  pageInsertMode.value = null;
+}
 
 function getCategoryColor(cat) {
   return categoryDefs.find(c => c.key === cat)?.color || '#6B7280';
@@ -564,7 +633,7 @@ async function fetchTemplates() {
   }
 }
 
-async function insertTemplate(tpl) {
+async function insertTemplate(tpl, mode = 'append') {
   try {
     const res = await fetch(`${oloData.restUrl}/template-library/${tpl.id}`, {
       headers: { 'X-WP-Nonce': oloData.nonce },
@@ -584,6 +653,12 @@ async function insertTemplate(tpl) {
     }
 
     const nodes = regenerateIds(content);
+
+    if (mode === 'replace') {
+      // Clear existing canvas content
+      tilesStore.canvasTiles.splice(0, tilesStore.canvasTiles.length);
+    }
+
     for (const node of nodes) {
       tilesStore.canvasTiles.push(node);
     }

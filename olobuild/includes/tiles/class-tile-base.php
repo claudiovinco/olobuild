@@ -95,6 +95,28 @@ abstract class Olo_Tile_Base {
      * (WordPress safecss_filter_attr doesn't support rgb()), then sanitizes.
      */
     /**
+     * Build a CSS border-radius string from the border_radius setting.
+     * Handles both uniform (number/string) and per-corner (object) values.
+     *
+     * @param mixed $br  Border radius value — number, string, or array { tl, tr, br, bl }
+     * @return string    CSS value like "8px" or "8px 0px 12px 4px", or empty string
+     */
+    protected function build_border_radius_css( $br ) {
+        if ( is_array( $br ) ) {
+            $tl  = intval( $br['tl'] ?? 0 );
+            $tr  = intval( $br['tr'] ?? 0 );
+            $brr = intval( $br['br'] ?? 0 );
+            $bl  = intval( $br['bl'] ?? 0 );
+            if ( $tl || $tr || $brr || $bl ) {
+                return "{$tl}px {$tr}px {$brr}px {$bl}px";
+            }
+            return '';
+        }
+        $n = intval( $br );
+        return $n > 0 ? "{$n}px" : '';
+    }
+
+    /**
      * Render an icon — supports both UIkit icons and custom SVG icons.
      * Custom icons are stored with prefix "custom:" and saved in olo_custom_icons option.
      *

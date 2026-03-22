@@ -1,0 +1,301 @@
+/**
+ * Olobuild iframe builder — overlay styles for live preview canvas.
+ */
+
+/* Tile hover outline */
+[data-olo-tile-id] {
+  cursor: pointer;
+  transition: outline 0.15s ease, outline-offset 0.15s ease;
+  outline: 2px solid transparent;
+  outline-offset: -2px;
+}
+
+[data-olo-tile-id].olo-builder-hover {
+  outline-color: rgba(99, 102, 241, 0.35);
+}
+
+/* Selected tile */
+[data-olo-tile-id].olo-builder-selected {
+  outline-color: #6366f1;
+  outline-offset: -2px;
+  z-index: 1;
+  position: relative;
+}
+
+/* Preview mode: no outlines */
+body.olo-preview-mode [data-olo-tile-id] {
+  cursor: default;
+  outline: none !important;
+}
+
+/* Prevent links from navigating */
+a {
+  pointer-events: auto;
+}
+
+/* Drop indicator */
+.olo-drop-indicator {
+  display: none;
+  position: fixed;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: #6366f1;
+  z-index: 99999;
+  pointer-events: none;
+  box-shadow: 0 0 8px rgba(99, 102, 241, 0.5);
+}
+
+/* Zone wrappers — remove gap between header/body/footer */
+header.olo-site-header {
+  position: relative;
+  z-index: 1000;
+  overflow: visible !important;
+  margin: 0 !important;
+  padding: 0;
+}
+header.olo-site-header .olo-template {
+  width: 100%;
+  left: 0;
+  transform: none;
+  margin: 0;
+  padding: 0;
+}
+header.olo-site-header .uk-section-default {
+  background: transparent;
+}
+main[data-olo-zone="body"] {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+main[data-olo-zone="body"] > .olo-frontend-grid > section:first-child,
+main[data-olo-zone="body"] .olo-template > .olo-frontend-grid > section:first-child {
+  padding-top: 0 !important;
+}
+footer.olo-site-footer {
+  margin: 0 !important;
+}
+
+/* ── Add section buttons (overlay, no layout shift) ── */
+.olo-iframe-add-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 0;
+  position: relative;
+  z-index: 100;
+  overflow: visible;
+  pointer-events: none;
+}
+.olo-iframe-add-circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 2px solid #6366f1;
+  background: #fff;
+  color: #6366f1;
+  cursor: pointer;
+  position: relative;
+  z-index: 10;
+  pointer-events: auto;
+  transition: background 0.15s, transform 0.15s, opacity 0.2s;
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.25);
+  opacity: 0;
+  transform: translateY(-50%);
+}
+.olo-iframe-add-btn:hover .olo-iframe-add-circle,
+.olo-iframe-add-circle:hover {
+  opacity: 1;
+}
+.olo-iframe-add-circle:hover {
+  background: #6366f1;
+  color: #fff;
+  transform: translateY(-50%) scale(1.15);
+}
+/* Clickable hover zone around the button (invisible, no layout shift) */
+.olo-iframe-add-btn::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -14px;
+  height: 28px;
+  pointer-events: auto;
+  z-index: 5;
+}
+/* Horizontal line appears on hover */
+.olo-iframe-add-btn::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 2px;
+  background: rgba(99, 102, 241, 0.4);
+  transform: translateY(-50%);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.olo-iframe-add-btn:hover::before {
+  opacity: 1;
+}
+/* Always show when it's the only element (empty page) */
+.olo-frontend-grid > .olo-iframe-add-btn:only-child {
+  height: 60px;
+  pointer-events: auto;
+}
+.olo-frontend-grid > .olo-iframe-add-btn:only-child .olo-iframe-add-circle {
+  opacity: 1;
+  transform: none;
+}
+
+/* ── Hover toolbar ── */
+.olo-iframe-toolbar {
+  display: none;
+  position: absolute;
+  z-index: 1000;
+  background: #1e1e2e;
+  color: #fff;
+  border-radius: 6px;
+  padding: 0 4px;
+  align-items: center;
+  gap: 2px;
+  font-size: 11px;
+  font-family: system-ui, -apple-system, sans-serif;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  height: 26px;
+  pointer-events: auto;
+}
+/* Grip handle */
+.olo-iframe-tb-grip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 24px;
+  cursor: grab;
+  opacity: 0.5;
+  transition: opacity 0.15s;
+  color: #fff;
+  flex-shrink: 0;
+  border-right: 1px solid rgba(255,255,255,0.1);
+  margin-right: 2px;
+}
+.olo-iframe-tb-grip:hover {
+  opacity: 1;
+  color: #fbbf24;
+}
+.olo-iframe-tb-grip:active {
+  cursor: grabbing;
+}
+
+/* Drag ghost */
+.olo-grip-ghost {
+  position: fixed;
+  z-index: 100001;
+  padding: 6px 14px;
+  background: rgba(99, 102, 241, 0.9);
+  color: #fff;
+  font: 600 12px/1 system-ui, sans-serif;
+  border-radius: 6px;
+  pointer-events: none;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 300px;
+  height: auto !important;
+}
+
+/* Drop indicator line */
+.olo-grip-indicator {
+  position: fixed;
+  z-index: 100000;
+  height: 3px;
+  background: #6366f1;
+  display: none;
+  pointer-events: none;
+  border-radius: 2px;
+  box-shadow: 0 0 8px rgba(99, 102, 241, 0.6);
+}
+.olo-grip-indicator::before,
+.olo-grip-indicator::after {
+  content: '';
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: #6366f1;
+  border-radius: 50%;
+  top: -3px;
+}
+.olo-grip-indicator::before { left: -4px; }
+.olo-grip-indicator::after { right: -4px; }
+
+.olo-iframe-tb-sep {
+  width: 1px;
+  height: 14px;
+  background: rgba(255,255,255,0.15);
+  margin: 0 2px;
+  flex-shrink: 0;
+}
+.olo-iframe-toolbar-label {
+  padding: 0 8px;
+  opacity: 0.7;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.olo-iframe-tb-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+  border-radius: 4px;
+  opacity: 0.6;
+  transition: opacity 0.15s, background 0.15s;
+}
+.olo-iframe-tb-btn:hover {
+  opacity: 1;
+  background: rgba(255,255,255,0.1);
+}
+.olo-iframe-tb-btn[data-action="delete"]:hover {
+  background: rgba(239, 68, 68, 0.3);
+  color: #fca5a5;
+}
+.olo-iframe-tb-btn.olo-tb-add {
+  background: rgba(34, 197, 94, 0.25);
+  opacity: 0.8;
+  color: #86efac;
+}
+.olo-iframe-tb-btn.olo-tb-add:hover {
+  background: rgba(34, 197, 94, 0.5);
+  opacity: 1;
+  color: #fff;
+}
+
+/* Preview mode: hide controls */
+body.olo-preview-mode .olo-iframe-add-btn,
+body.olo-preview-mode .olo-iframe-toolbar {
+  display: none !important;
+}
+
+/* Empty state */
+.olo-iframe-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  color: #9CA3AF;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 14px;
+}

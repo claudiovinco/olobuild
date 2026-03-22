@@ -49,7 +49,7 @@ class Olo_Counter_Tile extends Olo_Tile_Base {
         $lbl_fs   = absint( $s['label_font_size'] ) ?: 14;
         $lbl_fw   = absint( $s['label_font_weight'] ) ?: 400;
         $icon_sz  = absint( $s['icon_size'] ) ?: 40;
-        $pad      = absint( $s['padding'] );
+        $pad = Olo_Tile_Utils::spacing_css( $s['tile_padding'] ?? $s['padding'] ?? 32, 32 );
         $tile_r   = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
         $tile_bw  = intval( $s['border_width'] );
         $tile_bc  = $this->safe_color_css( $s['border_color'] ) ?: 'var(--olo-color-text, #374151)';
@@ -64,7 +64,7 @@ class Olo_Counter_Tile extends Olo_Tile_Base {
         <style>
             .<?php echo $uid; ?> {
                 position: relative; overflow: hidden; text-align: center;
-                padding: <?php echo $pad; ?>px;
+                padding: <?php echo $pad; ?>;
                 border-radius: <?php echo $tile_r; ?>;
                 color: <?php echo $fg; ?>;
                 <?php if ( $bg_type === 'color' && $bg_color ) : ?>

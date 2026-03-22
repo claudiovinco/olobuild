@@ -34,9 +34,11 @@ export default {
     // Lightbox
     lightbox: false,
     shadow: 'none',
+    border_radius: '0',
   },
   fields: [
     { key: 'image_url', label: 'Immagine', type: 'image' },
+    { key: 'border_radius', label: 'Border Radius', type: 'border-radius' },
     { key: 'hover_image', label: 'Immagine hover', type: 'image' },
     { key: 'hover_video', label: 'Video hover', type: 'media' },
     { key: 'alt_text', label: 'Testo alternativo', type: 'text', aiGenerate: 'alt' },

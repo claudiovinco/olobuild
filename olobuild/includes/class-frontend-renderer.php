@@ -19,12 +19,25 @@ class Olo_Frontend_Renderer {
         'xl' => '0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1)',
     ];
 
+    /** drop-shadow filter equivalents — per elementi con mask/clip-path */
+    private $drop_shadow_map = [
+        'sm' => 'drop-shadow(0 1px 2px rgba(0,0,0,0.05))',
+        'md' => 'drop-shadow(0 4px 6px rgba(0,0,0,0.1)) drop-shadow(0 2px 4px rgba(0,0,0,0.1))',
+        'lg' => 'drop-shadow(0 10px 15px rgba(0,0,0,0.1)) drop-shadow(0 4px 6px rgba(0,0,0,0.1))',
+        'xl' => 'drop-shadow(0 20px 25px rgba(0,0,0,0.1)) drop-shadow(0 8px 10px rgba(0,0,0,0.1))',
+    ];
+
     private $align_map = [
         'stretch' => 'stretch',
         'start'   => 'flex-start',
         'center'  => 'center',
         'end'     => 'flex-end',
     ];
+
+    /**
+     * Builder mode: adds data-olo-tile-id attributes for iframe live preview.
+     */
+    public $builder_mode = false;
 
     /**
      * Static tile registry — stores all tile nodes from templates being rendered
@@ -541,18 +554,25 @@ class Olo_Frontend_Renderer {
         $fj = $settings['flex_justify'] ?? '';
         $fa = $settings['flex_align'] ?? '';
         $fw = $settings['flex_wrap'] ?? '';
-        $fg = $settings['flex_gap'] ?? '';
+        $fcg = $settings['flex_column_gap'] ?? '';
+        $frg = $settings['flex_row_gap'] ?? '';
+        $fg  = $settings['flex_gap'] ?? ''; // legacy
+        $has_flex_gap = ( $fcg && intval( $fcg ) > 0 ) || ( $frg && intval( $frg ) > 0 ) || ( $fg && intval( $fg ) > 0 );
         // Emit display:flex only when at least one property differs from CSS flex defaults
-        // (row, flex-start, stretch, nowrap are CSS defaults — emitting flex with all defaults
-        //  changes nothing useful but breaks uk-container block layout inside sections)
-        $has_flex = ( $fd && $fd !== 'row' ) || ( $fj && $fj !== 'flex-start' ) || ( $fa && $fa !== 'stretch' ) || ( $fw && $fw !== 'nowrap' ) || ( $fg && intval( $fg ) > 0 );
+        $has_flex = ( $fd && $fd !== 'row' ) || ( $fj && $fj !== 'flex-start' ) || ( $fa && $fa !== 'stretch' ) || ( $fw && $fw !== 'nowrap' ) || $has_flex_gap;
         if ( $has_flex ) {
             $decls[] = 'display: flex';
             if ( $fd && $fd !== 'row' )         $decls[] = 'flex-direction: ' . esc_attr( $fd );
             if ( $fj && $fj !== 'flex-start' )  $decls[] = 'justify-content: ' . esc_attr( $fj );
             if ( $fa && $fa !== 'stretch' )     $decls[] = 'align-items: ' . esc_attr( $fa );
             if ( $fw && $fw !== 'nowrap' )      $decls[] = 'flex-wrap: ' . esc_attr( $fw );
-            if ( $fg && intval( $fg ) > 0 )     $decls[] = 'gap: ' . intval( $fg ) . 'px';
+            // Separate column/row gap, fallback to legacy flex_gap
+            if ( ( $fcg && intval( $fcg ) > 0 ) || ( $frg && intval( $frg ) > 0 ) ) {
+                if ( $fcg && intval( $fcg ) > 0 ) $decls[] = 'column-gap: ' . intval( $fcg ) . 'px';
+                if ( $frg && intval( $frg ) > 0 ) $decls[] = 'row-gap: ' . intval( $frg ) . 'px';
+            } elseif ( $fg && intval( $fg ) > 0 ) {
+                $decls[] = 'gap: ' . intval( $fg ) . 'px';
+            }
         }
         return $decls;
     }
@@ -694,6 +714,45 @@ class Olo_Frontend_Renderer {
             $color  = esc_attr( $style['shadow_color'] ?? 'rgba(0,0,0,0.2)' );
             $inset  = ! empty( $style['shadow_inset'] ) ? 'inset ' : '';
             return "box-shadow: {$inset}{$h}px {$v}px {$blur}px {$spread}px {$color}";
+        }
+
+        return '';
+    }
+
+    /**
+     * Build filter: drop-shadow() CSS declaration from style array.
+     * Usato al posto di box-shadow quando l'elemento ha una mask/clip-path,
+     * perché drop-shadow segue la forma visibile.
+     * Nota: inset e spread vengono ignorati (non supportati da drop-shadow).
+     */
+    private function build_drop_shadow_css( $style ) {
+        $shadow = $style['shadow'] ?? 'none';
+        if ( ! $shadow || $shadow === 'none' ) {
+            return '';
+        }
+
+        // Custom
+        if ( $shadow === 'custom' ) {
+            $h     = intval( $style['shadow_h'] ?? 0 );
+            $v     = intval( $style['shadow_v'] ?? 0 );
+            $blur  = intval( $style['shadow_blur'] ?? 0 );
+            $color = esc_attr( $style['shadow_color'] ?? 'rgba(0,0,0,0.15)' );
+            return "drop-shadow({$h}px {$v}px {$blur}px {$color})";
+        }
+
+        // Preset
+        if ( isset( $this->drop_shadow_map[ $shadow ] ) ) {
+            return $this->drop_shadow_map[ $shadow ];
+        }
+
+        // Legacy
+        $shadow_type = $style['shadow_type'] ?? '';
+        if ( $shadow_type === 'custom' ) {
+            $h     = intval( $style['shadow_h'] ?? 0 );
+            $v     = intval( $style['shadow_v'] ?? 0 );
+            $blur  = intval( $style['shadow_blur'] ?? 0 );
+            $color = esc_attr( $style['shadow_color'] ?? 'rgba(0,0,0,0.2)' );
+            return "drop-shadow({$h}px {$v}px {$blur}px {$color})";
         }
 
         return '';
@@ -1309,26 +1368,63 @@ class Olo_Frontend_Renderer {
     /**
      * Render a node (recursive dispatcher).
      */
-    private function render_node( $node, $manager, $template_id, &$hover_css_rules, &$tile_counter ) {
+    private function render_node( $node, $manager, $template_id, &$hover_css_rules, &$tile_counter, $parent_is_grid = false ) {
         if ( ! $this->should_render_node( $node ) ) return '';
 
         $type = $node['type'] ?? '';
         switch ( $type ) {
             case 'section':
-                return $this->render_section_node( $node, $manager, $template_id, $hover_css_rules, $tile_counter );
+                $html = $this->render_section_node( $node, $manager, $template_id, $hover_css_rules, $tile_counter );
+                break;
             case 'row':
-                return $this->render_row_node( $node, $manager, $template_id, $hover_css_rules, $tile_counter );
+                $html = $this->render_row_node( $node, $manager, $template_id, $hover_css_rules, $tile_counter );
+                break;
             case 'column':
-                return $this->render_column_node( $node, $manager, $template_id, $hover_css_rules, $tile_counter );
+                $html = $this->render_column_node( $node, $manager, $template_id, $hover_css_rules, $tile_counter, $parent_is_grid );
+                break;
             case 'inner-columns':
-                return $this->render_inner_columns_node( $node, $manager, $template_id, $hover_css_rules, $tile_counter );
+                $html = $this->render_inner_columns_node( $node, $manager, $template_id, $hover_css_rules, $tile_counter );
+                break;
             case 'inner-column':
-                return $this->render_inner_column_node( $node, $manager, $template_id, $hover_css_rules, $tile_counter );
+                $html = $this->render_inner_column_node( $node, $manager, $template_id, $hover_css_rules, $tile_counter );
+                break;
+            case 'floatingpanel':
+                $html = $this->render_floatingpanel_node( $node, $manager, $template_id, $hover_css_rules, $tile_counter );
+                break;
             default:
                 $html = $this->render_element_node( $node, $manager, $template_id, $hover_css_rules, $tile_counter );
                 $adv  = $node['advanced'] ?? [];
-                return $this->maybe_lazy_wrap( $html, $type, $adv );
+                $html = $this->maybe_lazy_wrap( $html, $type, $adv );
+                break;
         }
+
+        // In builder mode, inject data-olo-tile-id on the first HTML tag
+        if ( $this->builder_mode && ! empty( $node['id'] ) && $html ) {
+            $tile_id_attr = ' data-olo-tile-id="' . esc_attr( $node['id'] ) . '" data-olo-tile-type="' . esc_attr( $type ) . '"';
+            $html = preg_replace( '/^(\s*<\w+)/', '$1' . $tile_id_attr, $html, 1 );
+
+            // Add data-olo-editable to text elements for inline editing
+            $editable_map = [
+                'headline'    => [ 'h1|h2|h3|h4|h5|h6' => 'heading' ],
+                'text'        => [ 'p' => 'content' ],
+                'button'      => [ 'a|button' => 'text' ],
+                'iconbox'     => [ 'h3|h4|h5' => 'title', 'p' => 'description' ],
+                'testimonial' => [ 'blockquote|q|p.olo-testi-quote' => 'quote' ],
+                'counter'     => [ 'span.olo-counter-label|p' => 'label' ],
+                'newsletter'  => [ 'h3' => 'title' ],
+            ];
+            if ( isset( $editable_map[ $type ] ) ) {
+                foreach ( $editable_map[ $type ] as $tags => $field ) {
+                    foreach ( explode( '|', $tags ) as $tag ) {
+                        // Add data-olo-editable to first matching tag
+                        $pattern = '/(<' . preg_quote( $tag, '/' ) . '(?:\s[^>]*)?)>/i';
+                        $html = preg_replace( $pattern, '$1 data-olo-editable="' . $field . '">', $html, 1 );
+                    }
+                }
+            }
+        }
+
+        return $html;
     }
 
     /**
@@ -1337,11 +1433,14 @@ class Olo_Frontend_Renderer {
      * The first 3 element tiles are rendered immediately (above the fold).
      */
     private function maybe_lazy_wrap( $html, $type, $advanced = [] ) {
+        // Builder mode: no lazy loading (iframe needs all tiles visible)
+        if ( $this->builder_mode ) return $html;
+
         // Types that must NOT be lazy-loaded (interactive, form-based, or map)
         static $no_lazy = [
             'form', 'map', 'search', 'livesearch', 'servicesearch', 'booking',
             'bookingpicker', 'calendar', 'loginform', 'scrollprogress',
-            'popup', 'megamenu', 'navmenu', 'togglebtn', 'offcanvas',
+            'popup', 'megamenu', 'navmenu', 'togglebtn',
         ];
         if ( in_array( $type, $no_lazy, true ) ) {
             return $html;
@@ -1367,6 +1466,12 @@ class Olo_Frontend_Renderer {
      * Render a Section container using UIkit classes.
      */
     private function render_section_node( $node, $manager, $template_id, &$hover_css_rules, &$tile_counter ) {
+        // Floating panel bypass: if section contains only a floatingpanel (inside row>column),
+        // render the floatingpanel directly without section/row/column wrappers to avoid empty gap.
+        if ( $this->section_has_only_floatingpanel( $node ) ) {
+            return $this->extract_and_render_floatingpanel( $node, $manager, $template_id, $hover_css_rules, $tile_counter );
+        }
+
         $s = $node['settings'] ?? [];
         $style    = $node['style'] ?? [];
         $advanced = $node['advanced'] ?? [];
@@ -1512,7 +1617,7 @@ class Olo_Frontend_Renderer {
             }
         }
 
-        // Complete box shadow (replaces preset shadow for 'custom' type)
+        // Box shadow (segue border-radius del div)
         $box_shadow = $this->build_box_shadow_css( $style );
         if ( $box_shadow ) {
             $inline_styles[] = $box_shadow;
@@ -1549,6 +1654,26 @@ class Olo_Frontend_Renderer {
             $inline_styles[] = $advanced['custom_css'];
         }
 
+        // Positioning (absolute/fixed/relative) for sections
+        $pos_mode = $advanced['position_mode'] ?? 'static';
+        if ( $pos_mode && $pos_mode !== 'static' ) {
+            $inline_styles[] = 'position: ' . esc_attr( $pos_mode );
+            foreach ( [ 'top', 'left', 'bottom', 'right' ] as $dir ) {
+                $val = $advanced[ 'position_' . $dir ] ?? '';
+                if ( $val !== '' ) {
+                    $inline_styles[] = $dir . ': ' . ( is_numeric( $val ) ? $val . 'px' : esc_attr( $val ) );
+                }
+            }
+            $w = $advanced['position_width'] ?? '';
+            if ( $w !== '' ) {
+                $inline_styles[] = 'width: ' . ( is_numeric( $w ) ? $w . 'px' : esc_attr( $w ) );
+            }
+            $z = $advanced['position_zindex'] ?? '';
+            if ( $z !== '' ) {
+                $inline_styles[] = 'z-index: ' . intval( $z );
+            }
+        }
+
         // HTML ID (always generate for hover CSS support)
         $tile_counter++;
         $css_id  = ! empty( $advanced['html_id'] ) ? $advanced['html_id'] : 'ms-' . $template_id . '-' . $tile_counter;
@@ -1556,7 +1681,7 @@ class Olo_Frontend_Renderer {
 
         // Hover CSS rules
         $this->collect_hover_css( $style, $css_id, false, $hover_css_rules );
-        $this->collect_responsive_css( $style, $css_id );
+        $this->collect_responsive_css( $style, $css_id, $advanced );
 
         // Infinite animation
         $inf_anim_css = $this->build_infinite_animation_css( $s, $css_id );
@@ -1752,14 +1877,35 @@ class Olo_Frontend_Renderer {
             $row_spacing_styles[] = 'min-height: ' . intval( $tile_bg['cover_height'] ) . 'px';
         }
 
+        // Positioning (absolute/fixed/relative) for rows
+        $pos_mode = $advanced['position_mode'] ?? 'static';
+        if ( $pos_mode && $pos_mode !== 'static' ) {
+            $row_spacing_styles[] = 'position: ' . esc_attr( $pos_mode );
+            foreach ( [ 'top', 'left', 'bottom', 'right' ] as $dir ) {
+                $val = $advanced[ 'position_' . $dir ] ?? '';
+                if ( $val !== '' ) {
+                    $row_spacing_styles[] = $dir . ': ' . ( is_numeric( $val ) ? $val . 'px' : esc_attr( $val ) );
+                }
+            }
+            $w = $advanced['position_width'] ?? '';
+            if ( $w !== '' ) {
+                $row_spacing_styles[] = 'width: ' . ( is_numeric( $w ) ? $w . 'px' : esc_attr( $w ) );
+            }
+            $z = $advanced['position_zindex'] ?? '';
+            if ( $z !== '' ) {
+                $row_spacing_styles[] = 'z-index: ' . intval( $z );
+            }
+        }
+
         // Wrapper for row background or spacing
         $has_border_radius = ! empty( $style['border_radius'] );
         $has_border = ! empty( $style['border_width'] ) && intval( $style['border_width'] ) > 0;
         $has_opacity = ! empty( $style['opacity'] ) && intval( $style['opacity'] ) < 100;
         $has_shadow = ! empty( $style['shadow'] );
         $has_spacing = ! empty( $row_spacing_styles );
+        $has_positioning = $pos_mode && $pos_mode !== 'static';
         $has_hover   = ! empty( $style['hover'] ) && is_array( $style['hover'] ) && array_filter( $style['hover'], function( $v ) { return $v !== null && $v !== '' && $v !== false; } );
-        $needs_wrapper = $has_bg_image || $has_bg_video || $has_overlay || ( $tile_bg['type'] !== 'none' ) || $has_spacing || $has_border_radius || $has_border || $has_opacity || $has_shadow || $has_hover;
+        $needs_wrapper = $has_bg_image || $has_bg_video || $has_overlay || ( $tile_bg['type'] !== 'none' ) || $has_spacing || $has_border_radius || $has_border || $has_opacity || $has_shadow || $has_hover || $has_positioning;
 
         // ID for hover CSS support
         $tile_counter++;
@@ -1767,7 +1913,7 @@ class Olo_Frontend_Renderer {
 
         // Hover CSS rules
         $this->collect_hover_css( $style, $row_css_id, false, $hover_css_rules );
-        $this->collect_responsive_css( $style, $row_css_id );
+        $this->collect_responsive_css( $style, $row_css_id, $advanced );
 
         // Custom CSS per riga (campo settings.custom_css)
         $this->collect_custom_css( $s, $row_css_id, $hover_css_rules );
@@ -1990,8 +2136,15 @@ class Olo_Frontend_Renderer {
         if ( $rfa && $rfa !== 'stretch' )     $row_flex_styles[] = 'align-items: ' . esc_attr( $rfa );
         $rfw = $s['flex_wrap'] ?? '';
         if ( $rfw && $rfw !== 'nowrap' )      $row_flex_styles[] = 'flex-wrap: ' . esc_attr( $rfw );
-        $rfg = $s['flex_gap'] ?? '';
-        if ( $rfg && intval( $rfg ) > 0 )     $row_flex_styles[] = 'gap: ' . intval( $rfg ) . 'px';
+        $rfcg = $s['flex_column_gap'] ?? '';
+        $rfrg = $s['flex_row_gap'] ?? '';
+        $rfg  = $s['flex_gap'] ?? ''; // legacy
+        if ( ( $rfcg && intval( $rfcg ) > 0 ) || ( $rfrg && intval( $rfrg ) > 0 ) ) {
+            if ( $rfcg && intval( $rfcg ) > 0 ) $row_flex_styles[] = 'column-gap: ' . intval( $rfcg ) . 'px';
+            if ( $rfrg && intval( $rfrg ) > 0 ) $row_flex_styles[] = 'row-gap: ' . intval( $rfrg ) . 'px';
+        } elseif ( $rfg && intval( $rfg ) > 0 ) {
+            $row_flex_styles[] = 'gap: ' . intval( $rfg ) . 'px';
+        }
 
         // Grid — if no wrapper, put scrollspy/parallax on the grid div itself
         $grid_extra_attrs = $needs_wrapper ? '' : ( $row_scrollspy_attr . $row_el_parallax_attr );
@@ -2000,14 +2153,128 @@ class Olo_Frontend_Renderer {
             $grid_style_parts[] = 'position: relative';
             $grid_style_parts[] = 'z-index: 1';
         }
-        $grid_style_attr = ! empty( $grid_style_parts ) ? ' style="' . esc_attr( implode( '; ', $grid_style_parts ) ) . '"' : '';
-        $html .= '<div' . $class_attr . ' ' . $uk_grid . $grid_style_attr . $grid_extra_attrs . '>';
+        // === CSS Grid mode ===
+        $is_css_grid = ( ( $s['layout_mode'] ?? '' ) === 'grid' );
+        if ( $is_css_grid ) {
+            $grid_css_parts = [];
+            $grid_css_parts[] = 'display: grid';
+            if ( ! empty( $s['grid_columns'] ) ) {
+                $grid_css_parts[] = 'grid-template-columns: ' . esc_attr( $s['grid_columns'] );
+            }
+            if ( ! empty( $s['grid_rows'] ) ) {
+                $grid_css_parts[] = 'grid-template-rows: ' . esc_attr( $s['grid_rows'] );
+            }
+            // Separate column/row gaps or unified gap
+            $g_col_gap = $s['grid_column_gap'] ?? '';
+            $g_row_gap = $s['grid_row_gap'] ?? '';
+            if ( $g_col_gap !== '' && $g_row_gap !== '' ) {
+                $grid_css_parts[] = 'column-gap: ' . intval( $g_col_gap ) . 'px';
+                $grid_css_parts[] = 'row-gap: ' . intval( $g_row_gap ) . 'px';
+            } elseif ( $g_col_gap !== '' ) {
+                $grid_css_parts[] = 'column-gap: ' . intval( $g_col_gap ) . 'px';
+                $grid_css_parts[] = 'row-gap: ' . $gap . 'px';
+            } elseif ( $g_row_gap !== '' ) {
+                $grid_css_parts[] = 'column-gap: ' . $gap . 'px';
+                $grid_css_parts[] = 'row-gap: ' . intval( $g_row_gap ) . 'px';
+            } else {
+                $grid_css_parts[] = 'gap: ' . $gap . 'px';
+            }
+            // Grid auto-flow (direction + density)
+            $g_auto_flow = $s['grid_auto_flow'] ?? 'row';
+            if ( ! empty( $s['grid_auto_flow_dense'] ) ) {
+                $g_auto_flow .= ' dense';
+            }
+            if ( $g_auto_flow !== 'row' ) {
+                $grid_css_parts[] = 'grid-auto-flow: ' . esc_attr( $g_auto_flow );
+            }
+            // Justify content
+            $g_jc = $s['grid_justify_content'] ?? '';
+            if ( $g_jc && $g_jc !== 'stretch' ) {
+                $grid_css_parts[] = 'justify-content: ' . esc_attr( $g_jc );
+            }
+            // Align items
+            $g_ai = $s['grid_align_items'] ?? $valign;
+            if ( $g_ai && $g_ai !== 'stretch' ) {
+                $grid_css_parts[] = 'align-items: ' . esc_attr( $g_ai );
+            }
+            // Align content
+            $g_ac = $s['grid_align_content'] ?? '';
+            if ( $g_ac && $g_ac !== 'stretch' ) {
+                $grid_css_parts[] = 'align-content: ' . esc_attr( $g_ac );
+            }
+            if ( $needs_wrapper && ( $has_bg_image || $has_bg_video || $has_overlay ) ) {
+                $grid_css_parts[] = 'position: relative';
+                $grid_css_parts[] = 'z-index: 1';
+            }
+            $grid_extra_attrs = $needs_wrapper ? '' : ( $row_scrollspy_attr . $row_el_parallax_attr );
+            $grid_class_list = [];
+            if ( $stack ) $grid_class_list[] = 'olo-grid-stack';
+            $grid_class_attr = ! empty( $grid_class_list ) ? ' class="' . esc_attr( implode( ' ', $grid_class_list ) ) . '"' : '';
+            $html .= '<div' . $grid_class_attr . ' style="' . esc_attr( implode( '; ', $grid_css_parts ) ) . '"' . $grid_extra_attrs . '>';
 
-        foreach ( $node['children'] ?? [] as $child ) {
-            $html .= $this->render_node( $child, $manager, $template_id, $hover_css_rules, $tile_counter );
+            // Loop mode: repeat children for each post from WP_Query
+            $loop_enabled = ! empty( $s['loop_enabled'] );
+            if ( $loop_enabled ) {
+                $loop_posts = $this->run_row_loop_query( $s );
+                if ( ! empty( $loop_posts ) ) {
+                    global $post;
+                    $old_post = $post;
+                    foreach ( $loop_posts as $loop_post ) {
+                        $post = $loop_post;
+                        setup_postdata( $post );
+                        foreach ( $node['children'] ?? [] as $child ) {
+                            $html .= $this->render_node( $child, $manager, $template_id, $hover_css_rules, $tile_counter, true );
+                        }
+                    }
+                    $post = $old_post;
+                    if ( $old_post ) { setup_postdata( $old_post ); } else { wp_reset_postdata(); }
+                }
+            } else {
+                foreach ( $node['children'] ?? [] as $child ) {
+                    $html .= $this->render_node( $child, $manager, $template_id, $hover_css_rules, $tile_counter, true );
+                }
+            }
+
+            $html .= '</div>';
+
+            // Stack on mobile: override grid to 1 column
+            if ( $stack ) {
+                $grid_id = 'olo-g-' . substr( md5( $node['id'] ?? wp_rand() ), 0, 6 );
+                $html = str_replace( '<div' . $grid_class_attr, '<div class="' . esc_attr( trim( implode( ' ', $grid_class_list ) . ' ' . $grid_id ) ) . '"', $html );
+                $bp_mobile = intval( $this->breakpoints['tablet'] ?? 960 );
+                $html .= '<style>@media(max-width:' . $bp_mobile . 'px){.' . $grid_id . '{grid-template-columns:1fr!important;grid-template-rows:auto!important}.' . $grid_id . '>*{grid-column:auto!important;grid-row:auto!important}}</style>';
+            }
+        } else {
+            // === Classic Flexbox mode ===
+            $grid_style_attr = ! empty( $grid_style_parts ) ? ' style="' . esc_attr( implode( '; ', $grid_style_parts ) ) . '"' : '';
+            $grid_extra_attrs = $needs_wrapper ? '' : ( $row_scrollspy_attr . $row_el_parallax_attr );
+            $html .= '<div' . $class_attr . ' ' . $uk_grid . $grid_style_attr . $grid_extra_attrs . '>';
+
+            // Loop mode: repeat children for each post from WP_Query
+            $loop_enabled_flex = ! empty( $s['loop_enabled'] );
+            if ( $loop_enabled_flex ) {
+                $loop_posts_flex = $this->run_row_loop_query( $s );
+                if ( ! empty( $loop_posts_flex ) ) {
+                    global $post;
+                    $old_post_flex = $post;
+                    foreach ( $loop_posts_flex as $loop_post ) {
+                        $post = $loop_post;
+                        setup_postdata( $post );
+                        foreach ( $node['children'] ?? [] as $child ) {
+                            $html .= $this->render_node( $child, $manager, $template_id, $hover_css_rules, $tile_counter );
+                        }
+                    }
+                    $post = $old_post_flex;
+                    if ( $old_post_flex ) { setup_postdata( $old_post_flex ); } else { wp_reset_postdata(); }
+                }
+            } else {
+                foreach ( $node['children'] ?? [] as $child ) {
+                    $html .= $this->render_node( $child, $manager, $template_id, $hover_css_rules, $tile_counter );
+                }
+            }
+
+            $html .= '</div>';
         }
-
-        $html .= '</div>';
 
         // Close row wrapper
         if ( $needs_wrapper ) {
@@ -2018,48 +2285,151 @@ class Olo_Frontend_Renderer {
     }
 
     /**
+     * Build and run a WP_Query for row loop mode.
+     *
+     * @param array $s  Row settings containing loop_* keys.
+     * @return WP_Post[]  Array of post objects, or empty array.
+     */
+    private function run_row_loop_query( $s ) {
+        $post_type = sanitize_key( $s['loop_post_type'] ?? 'post' );
+        if ( ! post_type_exists( $post_type ) ) {
+            $post_type = 'post';
+        }
+
+        $args = [
+            'post_type'      => $post_type,
+            'posts_per_page' => absint( $s['loop_posts_per_page'] ?? 6 ),
+            'orderby'        => sanitize_key( $s['loop_orderby'] ?? 'date' ),
+            'order'          => strtoupper( $s['loop_order'] ?? 'DESC' ) === 'ASC' ? 'ASC' : 'DESC',
+            'post_status'    => 'publish',
+        ];
+
+        // Offset
+        $offset = absint( $s['loop_offset'] ?? 0 );
+        if ( $offset > 0 ) {
+            $args['offset'] = $offset;
+        }
+
+        // Exclude current post
+        if ( ! empty( $s['loop_exclude_current'] ) ) {
+            $current_id = get_the_ID();
+            if ( $current_id ) {
+                $args['post__not_in'] = [ $current_id ];
+            }
+        }
+
+        // Taxonomy include filter
+        $taxonomy  = sanitize_text_field( $s['loop_taxonomy'] ?? '' );
+        $terms_str = sanitize_text_field( $s['loop_terms'] ?? '' );
+        $tax_query = [];
+        if ( $taxonomy !== '' ) {
+            if ( $terms_str !== '' ) {
+                $term_slugs = array_map( 'trim', explode( ',', $terms_str ) );
+                $tax_query[] = [
+                    'taxonomy' => $taxonomy,
+                    'field'    => 'slug',
+                    'terms'    => $term_slugs,
+                    'operator' => 'IN',
+                ];
+            }
+            // Taxonomy exclude filter
+            $terms_exclude = sanitize_text_field( $s['loop_terms_exclude'] ?? '' );
+            if ( $terms_exclude !== '' ) {
+                $exclude_slugs = array_map( 'trim', explode( ',', $terms_exclude ) );
+                $tax_query[] = [
+                    'taxonomy' => $taxonomy,
+                    'field'    => 'slug',
+                    'terms'    => $exclude_slugs,
+                    'operator' => 'NOT IN',
+                ];
+            }
+            if ( count( $tax_query ) > 1 ) {
+                $tax_query['relation'] = 'AND';
+            }
+        }
+        if ( ! empty( $tax_query ) ) {
+            $args['tax_query'] = $tax_query;
+        }
+
+        // Meta query
+        $meta_key = sanitize_text_field( $s['loop_meta_key'] ?? '' );
+        if ( $meta_key !== '' ) {
+            $meta_value   = sanitize_text_field( $s['loop_meta_value'] ?? '' );
+            $meta_compare = $s['loop_meta_compare'] ?? '=';
+            $valid_cmp    = [ '=', '!=', '>', '<', 'LIKE', 'EXISTS', 'NOT EXISTS' ];
+            if ( ! in_array( $meta_compare, $valid_cmp, true ) ) $meta_compare = '=';
+
+            $mq = [
+                'key'     => $meta_key,
+                'compare' => $meta_compare,
+            ];
+            if ( ! in_array( $meta_compare, [ 'EXISTS', 'NOT EXISTS' ], true ) ) {
+                $mq['value'] = $meta_value;
+            }
+            $args['meta_query'] = [ $mq ];
+
+            // Orderby meta
+            $orderby = $s['loop_orderby'] ?? 'date';
+            if ( in_array( $orderby, [ 'meta_value', 'meta_value_num' ], true ) ) {
+                $args['meta_key'] = $meta_key;
+            }
+        }
+
+        $query = new WP_Query( $args );
+        return $query->posts;
+    }
+
+    /**
      * Render a Column using UIkit width classes.
      */
-    private function render_column_node( $node, $manager, $template_id, &$hover_css_rules, &$tile_counter ) {
+    private function render_column_node( $node, $manager, $template_id, &$hover_css_rules, &$tile_counter, $parent_is_grid = false ) {
         $s        = $node['settings'] ?? [];
         $style    = $node['style'] ?? [];
         $advanced = $node['advanced'] ?? [];
 
-        // UIkit width classes per breakpoint: uk-width-{fraction}@{breakpoint}
         $classes = [];
+        $inline_styles = [];
 
-        $width_custom  = $s['width_custom'] ?? '';
-        $width_default = $s['width_default'] ?? '';
-        $width_small   = $s['width_small'] ?? '';
-        $width_medium  = $s['width_medium'] ?? '';
-        $width_large   = $s['width_large'] ?? '';
-
-        if ( $width_custom !== '' && floatval( $width_custom ) > 0 ) {
-            // Custom percentage column: use 1-1 for mobile stack, desktop width handled by parent row <style>
-            $classes[] = 'uk-width-1-1';
+        if ( $parent_is_grid ) {
+            // === CSS Grid cell: use grid-column / grid-row placement ===
+            if ( ! empty( $s['grid_column'] ) ) {
+                $inline_styles[] = 'grid-column: ' . esc_attr( $s['grid_column'] );
+            }
+            if ( ! empty( $s['grid_row'] ) ) {
+                $inline_styles[] = 'grid-row: ' . esc_attr( $s['grid_row'] );
+            }
+            $inline_styles[] = 'min-width: 0';
         } else {
-            // Map fraction notation to UIkit: '1-2' → 'uk-width-1-2', '2-3' → 'uk-width-2-3'
-            if ( $width_default && isset( $this->fraction_map[ $width_default ] ) ) {
-                $classes[] = 'uk-width-' . $width_default;
-            }
-            if ( $width_small && isset( $this->fraction_map[ $width_small ] ) ) {
-                $classes[] = 'uk-width-' . $width_small . '@s';
-            }
-            if ( $width_medium && isset( $this->fraction_map[ $width_medium ] ) ) {
-                $classes[] = 'uk-width-' . $width_medium . '@m';
-            }
-            if ( $width_large && isset( $this->fraction_map[ $width_large ] ) ) {
-                $classes[] = 'uk-width-' . $width_large . '@l';
-            }
+            // === Classic Flexbox: UIkit width classes ===
+            $width_custom  = $s['width_custom'] ?? '';
+            $width_default = $s['width_default'] ?? '';
+            $width_small   = $s['width_small'] ?? '';
+            $width_medium  = $s['width_medium'] ?? '';
+            $width_large   = $s['width_large'] ?? '';
 
-            // Fallback: if no classes set, use auto-expand
-            if ( empty( $classes ) ) {
-                $classes[] = 'uk-width-expand';
+            if ( $width_custom !== '' && floatval( $width_custom ) > 0 ) {
+                $classes[] = 'uk-width-1-1';
+            } else {
+                if ( $width_default && isset( $this->fraction_map[ $width_default ] ) ) {
+                    $classes[] = 'uk-width-' . $width_default;
+                }
+                if ( $width_small && isset( $this->fraction_map[ $width_small ] ) ) {
+                    $classes[] = 'uk-width-' . $width_small . '@s';
+                }
+                if ( $width_medium && isset( $this->fraction_map[ $width_medium ] ) ) {
+                    $classes[] = 'uk-width-' . $width_medium . '@m';
+                }
+                if ( $width_large && isset( $this->fraction_map[ $width_large ] ) ) {
+                    $classes[] = 'uk-width-' . $width_large . '@l';
+                }
+
+                if ( empty( $classes ) ) {
+                    $classes[] = 'uk-width-expand';
+                }
             }
         }
 
         // Column margin/padding
-        $inline_styles = [];
         if ( ! empty( $style['margin_top'] ) )    $inline_styles[] = "margin-top: {$style['margin_top']}px";
         if ( ! empty( $style['margin_right'] ) )  $inline_styles[] = "margin-right: {$style['margin_right']}px";
         if ( ! empty( $style['margin_bottom'] ) ) $inline_styles[] = "margin-bottom: {$style['margin_bottom']}px";
@@ -2107,7 +2477,7 @@ class Olo_Frontend_Renderer {
             }
         }
 
-        // Complete box shadow (replaces preset shadow for 'custom' type)
+        // Box shadow (segue border-radius del div)
         $box_shadow = $this->build_box_shadow_css( $style );
         if ( $box_shadow ) {
             $inline_styles[] = $box_shadow;
@@ -2156,13 +2526,33 @@ class Olo_Frontend_Renderer {
             $inline_styles[] = 'overflow: clip';
         }
 
+        // Positioning (absolute/fixed/relative) for columns
+        $pos_mode = $advanced['position_mode'] ?? 'static';
+        if ( $pos_mode && $pos_mode !== 'static' ) {
+            $inline_styles[] = 'position: ' . esc_attr( $pos_mode );
+            foreach ( [ 'top', 'left', 'bottom', 'right' ] as $dir ) {
+                $val = $advanced[ 'position_' . $dir ] ?? '';
+                if ( $val !== '' ) {
+                    $inline_styles[] = $dir . ': ' . ( is_numeric( $val ) ? $val . 'px' : esc_attr( $val ) );
+                }
+            }
+            $w = $advanced['position_width'] ?? '';
+            if ( $w !== '' ) {
+                $inline_styles[] = 'width: ' . ( is_numeric( $w ) ? $w . 'px' : esc_attr( $w ) );
+            }
+            $z = $advanced['position_zindex'] ?? '';
+            if ( $z !== '' ) {
+                $inline_styles[] = 'z-index: ' . intval( $z );
+            }
+        }
+
         // ID for hover CSS support
         $tile_counter++;
         $col_css_id = ! empty( $advanced['html_id'] ) ? $advanced['html_id'] : 'mc-' . $template_id . '-' . $tile_counter;
 
         // Hover CSS rules
         $this->collect_hover_css( $style, $col_css_id, false, $hover_css_rules );
-        $this->collect_responsive_css( $style, $col_css_id );
+        $this->collect_responsive_css( $style, $col_css_id, $advanced );
 
         // Custom CSS per colonna (campo settings.custom_css)
         $this->collect_custom_css( $s, $col_css_id, $hover_css_rules );
@@ -2385,6 +2775,62 @@ class Olo_Frontend_Renderer {
     }
 
     /**
+     * Render a floating panel container node.
+     * Uses the tile's render() for the opening wrapper, then injects children, then render_closing().
+     */
+    private function render_floatingpanel_node( $node, $manager, $template_id, &$hover_css_rules, &$tile_counter ) {
+        $tile_instance = $manager->get_tile( 'floatingpanel' );
+        if ( ! $tile_instance ) return '';
+
+        $settings = $node['settings'] ?? [];
+
+        // Render opening wrapper (panel div with styles, trigger button, close button)
+        $html = $tile_instance->render( $settings );
+
+        // Render children inside the panel
+        foreach ( $node['children'] ?? [] as $child ) {
+            $html .= $this->render_node( $child, $manager, $template_id, $hover_css_rules, $tile_counter );
+        }
+
+        // Render closing wrapper + JS
+        $html .= $tile_instance->render_closing( $settings );
+
+        return $html;
+    }
+
+    /**
+     * Check if a section node contains only a single floatingpanel tile
+     * (inside row > column), with no other content.
+     */
+    private function section_has_only_floatingpanel( $node ) {
+        $rows = $node['children'] ?? [];
+        if ( count( $rows ) !== 1 ) return false;
+
+        $row = $rows[0];
+        if ( ( $row['type'] ?? '' ) !== 'row' ) return false;
+
+        $cols = $row['children'] ?? [];
+        if ( count( $cols ) !== 1 ) return false;
+
+        $col = $cols[0];
+        if ( ( $col['type'] ?? '' ) !== 'column' ) return false;
+
+        $tiles = $col['children'] ?? [];
+        if ( count( $tiles ) !== 1 ) return false;
+
+        return ( $tiles[0]['type'] ?? '' ) === 'floatingpanel';
+    }
+
+    /**
+     * Extract and render only the floatingpanel from a section>row>column structure,
+     * skipping all parent wrappers to avoid empty section gap.
+     */
+    private function extract_and_render_floatingpanel( $node, $manager, $template_id, &$hover_css_rules, &$tile_counter ) {
+        $fp_node = $node['children'][0]['children'][0]['children'][0];
+        return $this->render_floatingpanel_node( $fp_node, $manager, $template_id, $hover_css_rules, $tile_counter );
+    }
+
+    /**
      * Render an element (leaf tile) with full wrapper (bg, margin, padding, hover).
      * Uses UIkit utility classes where possible.
      */
@@ -2516,9 +2962,10 @@ class Olo_Frontend_Renderer {
             $inline_styles[] = "border: {$bw}px {$bs} {$bc}";
         }
 
-        // UIkit shadow classes
+        // UIkit shadow classes — solo per elementi con sfondo (box-shadow segue border-radius)
+        // Per elementi trasparenti il drop-shadow viene applicato via inline filter
         $shadow_class = '';
-        if ( ! empty( $style['shadow'] ) ) {
+        if ( ! empty( $style['shadow'] ) && $has_bg_any ) {
             $uk_shadow_map = [
                 'sm' => 'uk-box-shadow-small',
                 'md' => 'uk-box-shadow-medium',
@@ -2549,10 +2996,18 @@ class Olo_Frontend_Renderer {
             }
         }
 
-        // Complete box shadow (replaces preset shadow for 'custom' type)
-        $box_shadow = $this->build_box_shadow_css( $style );
-        if ( $box_shadow ) {
-            $inline_styles[] = $box_shadow;
+        // Shadow — box-shadow per elementi con sfondo (segue border-radius),
+        // filter: drop-shadow per elementi trasparenti (segue forma del contenuto: SVG, icone)
+        if ( $has_bg_any ) {
+            $box_shadow = $this->build_box_shadow_css( $style );
+            if ( $box_shadow ) {
+                $inline_styles[] = $box_shadow;
+            }
+        } else {
+            $drop_shadow = $this->build_drop_shadow_css( $style );
+            if ( $drop_shadow ) {
+                $inline_styles[] = 'filter: ' . $drop_shadow;
+            }
         }
 
         // Text shadow
@@ -2654,8 +3109,8 @@ class Olo_Frontend_Renderer {
         $id_attr = ' id="' . esc_attr( $css_id ) . '"';
 
         // Hover CSS rules
-        $this->collect_hover_css( $style, $css_id, $is_fullwidth, $hover_css_rules );
-        $this->collect_responsive_css( $style, $css_id );
+        $this->collect_hover_css( $style, $css_id, $is_fullwidth, $hover_css_rules, $advanced );
+        $this->collect_responsive_css( $style, $css_id, $advanced );
 
         // Custom CSS per elemento (campo settings.custom_css)
         $this->collect_custom_css( $settings, $css_id, $hover_css_rules );
@@ -2731,10 +3186,49 @@ class Olo_Frontend_Renderer {
         // Developer hook: before tile render
         do_action( 'olo_before_tile_render', $node, $settings, $type );
 
+        // SEO & Accessibility attributes
+        $seo_attrs = '';
+        if ( ! empty( $advanced['aria_label'] ) ) {
+            $seo_attrs .= ' aria-label="' . esc_attr( $advanced['aria_label'] ) . '"';
+        }
+        if ( ! empty( $advanced['aria_role'] ) && $advanced['aria_role'] !== 'none' ) {
+            $seo_attrs .= ' role="' . esc_attr( $advanced['aria_role'] ) . '"';
+        } elseif ( ! empty( $advanced['aria_role'] ) && $advanced['aria_role'] === 'none' ) {
+            $seo_attrs .= ' role="presentation" aria-hidden="true"';
+        }
+        if ( ! empty( $advanced['data_attrs'] ) ) {
+            foreach ( explode( ',', $advanced['data_attrs'] ) as $pair ) {
+                $pair = trim( $pair );
+                if ( strpos( $pair, '=' ) !== false ) {
+                    list( $dk, $dv ) = array_map( 'trim', explode( '=', $pair, 2 ) );
+                    $seo_attrs .= ' data-' . esc_attr( $dk ) . '="' . esc_attr( $dv ) . '"';
+                }
+            }
+        }
+
+        // Schema.org
+        if ( ! empty( $advanced['schema_type'] ) ) {
+            $seo_attrs .= ' itemscope itemtype="https://schema.org/' . esc_attr( $advanced['schema_type'] ) . '"';
+        }
+
+        // Pass loading/fetchpriority to tile via settings override
+        if ( ! empty( $advanced['img_loading'] ) && $advanced['img_loading'] !== 'lazy' ) {
+            $settings['_img_loading'] = $advanced['img_loading'];
+        }
+        if ( ! empty( $advanced['fetch_priority'] ) && $advanced['fetch_priority'] !== 'auto' ) {
+            $settings['_fetch_priority'] = $advanced['fetch_priority'];
+        }
+        if ( ! empty( $advanced['link_rel'] ) ) {
+            $settings['_link_rel'] = $advanced['link_rel'];
+        }
+        if ( ! empty( $advanced['link_title'] ) ) {
+            $settings['_link_title'] = $advanced['link_title'];
+        }
+
         // Render
         ob_start();
         ?>
-        <div class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>"<?php echo $id_attr; ?> style="<?php echo esc_attr( $style_attr ); ?>"<?php echo $elem_scrollspy_attr . $elem_el_parallax_attr . $elem_sticky_attr . $elem_mouse_attrs . $elem_scroll_fx_attr . $ab_test_attrs; ?>>
+        <div class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>"<?php echo $id_attr; ?> style="<?php echo esc_attr( $style_attr ); ?>"<?php echo $elem_scrollspy_attr . $elem_el_parallax_attr . $elem_sticky_attr . $elem_mouse_attrs . $elem_scroll_fx_attr . $ab_test_attrs . $seo_attrs; ?>>
             <?php if ( $has_bg_image ) :
                 $bg_size = esc_attr( $tile_bg['image_size'] ?? 'cover' );
                 $bg_pos  = esc_attr( $tile_bg['image_position'] ?? 'center center' );
@@ -2778,7 +3272,7 @@ class Olo_Frontend_Renderer {
         // Other tiles start hidden and appear when scrolling past sentinel.
         if ( $pos_mode === 'fixed' ) {
             $js_id = esc_js( $css_id );
-            $always_visible = in_array( $type, [ 'megamenu', 'navmenu', 'togglebtn', 'offcanvas' ], true );
+            $always_visible = in_array( $type, [ 'megamenu', 'navmenu', 'togglebtn' ], true );
 
             if ( $always_visible ) {
                 // Menu tiles: just move to body, always visible
@@ -2862,7 +3356,7 @@ class Olo_Frontend_Renderer {
     /**
      * Collect hover CSS rules for an element.
      */
-    private function collect_hover_css( $style, $css_id, $is_fullwidth, &$hover_css_rules ) {
+    private function collect_hover_css( $style, $css_id, $is_fullwidth, &$hover_css_rules, $advanced = [] ) {
         $hover = $style['hover'] ?? [];
         $transition_cfg = $style['transition'] ?? [];
         $has_hover = false;
@@ -2891,6 +3385,8 @@ class Olo_Frontend_Renderer {
             }
             $has_hover = true;
         }
+        // Hover shadow — box-shadow
+        $hover_drop_shadow = '';
         if ( ! empty( $hover['shadow'] ) ) {
             if ( $hover['shadow'] === 'custom' ) {
                 $hh  = intval( $hover['shadow_h'] ?? 0 );
@@ -2979,8 +3475,11 @@ class Olo_Frontend_Renderer {
             $has_hover = true;
         }
 
-        // CSS filters on hover
+        // CSS filters on hover — combina con drop-shadow se mask attiva
         $h_filter_parts = [];
+        if ( ! empty( $hover_drop_shadow ) ) {
+            $h_filter_parts[] = $hover_drop_shadow;
+        }
         if ( isset( $hover['filter_blur'] ) && intval( $hover['filter_blur'] ) != 0 ) {
             $h_filter_parts[] = 'blur(' . intval( $hover['filter_blur'] ) . 'px)';
         }
@@ -3028,7 +3527,7 @@ class Olo_Frontend_Renderer {
      * - gap
      * - border_radius (simple numeric or {tl,tr,br,bl} array)
      */
-    private function collect_responsive_css( $style, $css_id ) {
+    private function collect_responsive_css( $style, $css_id, $advanced = [] ) {
         // Widescreen breakpoint uses min-width, others use max-width
         $widescreen_decls = [];
         $ws_props = [ 'margin', 'padding' ];
@@ -3150,6 +3649,26 @@ class Olo_Frontend_Renderer {
             $ta_key = "text_align_{$bp}";
             if ( isset( $style[ $ta_key ] ) && $style[ $ta_key ] !== '' && $style[ $ta_key ] !== null ) {
                 $decls[] = 'text-align: ' . esc_attr( $style[ $ta_key ] );
+            }
+
+            // Positioning overrides (from advanced)
+            if ( ! empty( $advanced ) ) {
+                foreach ( [ 'top', 'left', 'bottom', 'right' ] as $dir ) {
+                    $pk = "position_{$dir}_{$bp}";
+                    if ( isset( $advanced[ $pk ] ) && $advanced[ $pk ] !== '' && $advanced[ $pk ] !== null ) {
+                        $pv = $advanced[ $pk ];
+                        $decls[] = $dir . ': ' . ( is_numeric( $pv ) ? $pv . 'px' : esc_attr( $pv ) );
+                    }
+                }
+                $pw_key = "position_width_{$bp}";
+                if ( isset( $advanced[ $pw_key ] ) && $advanced[ $pw_key ] !== '' && $advanced[ $pw_key ] !== null ) {
+                    $pw_val = $advanced[ $pw_key ];
+                    $decls[] = 'width: ' . ( is_numeric( $pw_val ) ? $pw_val . 'px' : esc_attr( $pw_val ) );
+                }
+                $pz_key = "position_zindex_{$bp}";
+                if ( isset( $advanced[ $pz_key ] ) && $advanced[ $pz_key ] !== '' && $advanced[ $pz_key ] !== null ) {
+                    $decls[] = 'z-index: ' . intval( $advanced[ $pz_key ] );
+                }
             }
 
             if ( ! empty( $decls ) ) {
@@ -3502,6 +4021,17 @@ class Olo_Frontend_Renderer {
             wp_localize_script( 'olo-pdfpro-js', 'oloPdfProData', [
                 'workerUrl' => OLO_URL . 'assets/vendor/pdfjs/pdf.worker.min.js',
             ] );
+        }
+
+        // SVG Animator
+        if ( $this->check_tile_recursive( $tiles, 'svganimator' ) ) {
+            wp_enqueue_style( 'olo-svganimator-css', OLO_URL . 'assets/css/olo-svganimator.css', [], OLO_VERSION );
+            wp_enqueue_script( 'olo-svganimator-js', OLO_URL . 'assets/js/olo-svganimator.js', [], OLO_VERSION, true );
+        }
+
+        // Viewer 360
+        if ( $this->check_tile_recursive( $tiles, 'viewer360' ) ) {
+            wp_enqueue_script( 'olo-viewer360-js', OLO_URL . 'assets/js/olo-viewer360.js', [], OLO_VERSION, true );
         }
 
         $manager = Olo_Tile_Manager::instance();
@@ -4049,6 +4579,43 @@ class Olo_Frontend_Renderer {
 
             return str_replace( '<img', '<img' . $insert, $tag );
         }, $html );
+    }
+
+    /**
+     * Public wrapper for render_node (used by REST API for single tile rendering).
+     */
+    public function render_node_public( $node, $manager, $template_id, &$hover_css_rules, &$tile_counter, $parent_is_grid = false ) {
+        return $this->render_node( $node, $manager, $template_id, $hover_css_rules, $tile_counter, $parent_is_grid );
+    }
+
+    /**
+     * Render for builder iframe: sets builder_mode and returns HTML + CSS.
+     */
+    public function render_for_builder( $tiles, $page_settings = [] ) {
+        $this->builder_mode = true;
+
+        ob_start();
+        $this->render_tiles_array( $tiles, $page_settings );
+        $html = ob_get_clean();
+
+        $css_urls = [
+            OLO_URL . 'assets/vendor/uikit/css/uikit.min.css',
+            OLO_URL . 'assets/css/frontend.css?v=' . OLO_VERSION,
+            OLO_URL . 'assets/css/olo-proslider.css?v=' . OLO_VERSION,
+        ];
+
+        $inline_css = '';
+        if ( class_exists( 'Olo_Style_System' ) ) {
+            $inline_css = Olo_Style_System::instance()->generate_css();
+        }
+
+        $this->builder_mode = false;
+
+        return [
+            'html'       => $html,
+            'css'        => $css_urls,
+            'inline_css' => $inline_css,
+        ];
     }
 
     /**

@@ -69,7 +69,7 @@ class Olo_Pricelist_Tile extends Olo_Tile_Base {
         $badge_bc    = $this->safe_color_css( $s['badge_border_color'] ) ?: 'var(--olo-color-primary, #e8622a)';
         $badge_br    = intval( $s['badge_border_radius'] ?? 6 );
         $gap         = intval( $s['gap'] ) ?: 12;
-        $padding     = intval( $s['padding'] ) ?: 14;
+        $padding = Olo_Tile_Utils::spacing_css( $s['tile_padding'] ?? $s['padding'] ?? 14, 14 );
         $card_bg     = $this->safe_color_css( $s['card_bg'] ?? '' ) ?: 'rgba(255, 255, 255, 0.8)';
         $card_radius = intval( $s['card_border_radius'] ?? 12 );
         $card_border = $this->safe_color_css( $s['card_border_color'] ?? '' ) ?: 'rgba(0, 0, 0, 0.06)';
@@ -88,7 +88,7 @@ class Olo_Pricelist_Tile extends Olo_Tile_Base {
                 display: flex;
                 align-items: center;
                 gap: 14px;
-                padding: <?php echo $padding; ?>px;
+                padding: <?php echo $padding; ?>;
                 border-radius: <?php echo $card_radius; ?>px;
                 background: <?php echo $card_bg; ?>;
                 border: 1px solid <?php echo $card_border; ?>;

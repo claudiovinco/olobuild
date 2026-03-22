@@ -261,6 +261,18 @@ class Olo_Rest_Api {
             ],
         ] );
 
+        // Themes
+        register_rest_route( $this->namespace, '/themes', [
+            'methods'             => 'GET',
+            'callback'            => [ $this, 'get_themes' ],
+            'permission_callback' => [ $this, 'check_permission' ],
+        ] );
+        register_rest_route( $this->namespace, '/themes/(?P<theme_id>[a-zA-Z0-9_-]+)/import', [
+            'methods'             => 'POST',
+            'callback'            => [ $this, 'import_theme' ],
+            'permission_callback' => [ $this, 'check_permission' ],
+        ] );
+
         // Design Presets
         register_rest_route( $this->namespace, '/design-presets', [
             [
@@ -493,6 +505,27 @@ class Olo_Rest_Api {
             'callback'            => [ $this, 'render_template_preview' ],
             'permission_callback' => [ $this, 'check_permission' ],
         ] );
+
+        // Builder live render (accepts tiles in POST body, returns HTML with data-olo-tile-id)
+        register_rest_route( $this->namespace, '/builder/render', [
+            'methods'             => 'POST',
+            'callback'            => [ $this, 'builder_render' ],
+            'permission_callback' => [ $this, 'check_permission' ],
+        ] );
+
+        // Builder render single tile (for incremental updates)
+        register_rest_route( $this->namespace, '/builder/render-tile', [
+            'methods'             => 'POST',
+            'callback'            => [ $this, 'builder_render_tile' ],
+            'permission_callback' => [ $this, 'check_permission' ],
+        ] );
+
+        // PostGrid live preview (returns lightweight post data for builder canvas)
+        register_rest_route( $this->namespace, '/postgrid-preview', [
+            'methods'             => 'GET',
+            'callback'            => [ $this, 'get_postgrid_preview' ],
+            'permission_callback' => [ $this, 'check_permission' ],
+        ] );
     }
 
     public function check_permission( $request = null ) {
@@ -508,12 +541,12 @@ class Olo_Rest_Api {
             }
         }
 
-        // Rate limiting: max 120 requests per minute per user
+        // Rate limiting: max 300 requests per minute per user (higher for builder iframe renders)
         $user_id = get_current_user_id();
         $key     = 'olo_api_rl_' . $user_id;
         $count   = (int) get_transient( $key );
 
-        if ( $count > 120 ) {
+        if ( $count > 300 ) {
             return new WP_Error( 'rate_limited', 'Too many requests', array( 'status' => 429 ) );
         }
 
@@ -1391,6 +1424,20 @@ class Olo_Rest_Api {
         return rest_ensure_response( $rev );
     }
 
+    // === Themes ===
+
+    public function get_themes() {
+        require_once OLO_PATH . 'includes/class-theme-importer.php';
+        return rest_ensure_response( Olo_Theme_Importer::get_themes() );
+    }
+
+    public function import_theme( $request ) {
+        require_once OLO_PATH . 'includes/class-theme-importer.php';
+        $result = Olo_Theme_Importer::import_theme( $request['theme_id'] );
+        if ( is_wp_error( $result ) ) return $result;
+        return rest_ensure_response( $result );
+    }
+
     // === Design Presets ===
 
     public function get_design_presets() {
@@ -1808,6 +1855,221 @@ class Olo_Rest_Api {
     /**
      * Render a template as HTML for builder preview (header/footer).
      */
+    /**
+     * Builder live render: accepts tiles JSON in POST body, returns HTML with data-olo-tile-id.
+     */
+    public function builder_render( $request ) {
+        $body = $request->get_json_params();
+        $tiles = $body['tiles'] ?? [];
+        $header_tiles = $body['header_tiles'] ?? [];
+        $footer_tiles = $body['footer_tiles'] ?? [];
+        $page_settings = $body['page_settings'] ?? [];
+        $template_type = $body['template_type'] ?? 'page';
+        $preview_post_id = $body['preview_post_id'] ?? 0;
+
+        if ( empty( $tiles ) && empty( $header_tiles ) && empty( $footer_tiles ) ) {
+            return rest_ensure_response( [ 'html' => '', 'css' => [], 'inline_css' => '' ] );
+        }
+
+        // For single templates, set up a post context so dynamic tiles work
+        $original_post = null;
+        if ( $template_type === 'single' ) {
+            global $post, $wp_query;
+            $original_post = $post;
+
+            if ( $preview_post_id ) {
+                $post = get_post( $preview_post_id );
+            } else {
+                // Find a published post with actual content (skip empty test posts)
+                $post_type = $body['post_type'] ?? 'post';
+                $sample = get_posts( [
+                    'post_type'      => $post_type,
+                    'posts_per_page' => 10,
+                    'post_status'    => 'publish',
+                    'orderby'        => 'date',
+                    'order'          => 'DESC',
+                ] );
+                // Prefer a post with content
+                $best = null;
+                foreach ( $sample as $s ) {
+                    if ( ! empty( $s->post_content ) ) {
+                        $best = $s;
+                        break;
+                    }
+                }
+                if ( ! $best && ! empty( $sample ) ) {
+                    $best = $sample[0]; // Fallback to first even if empty
+                }
+                if ( $best ) {
+                    $post = $best;
+                }
+            }
+
+            if ( $post ) {
+                setup_postdata( $post );
+                // Trick is_singular() into returning true
+                if ( $wp_query ) {
+                    $wp_query->is_singular = true;
+                    $wp_query->is_single   = true;
+                    $wp_query->is_page     = false;
+                }
+            }
+        }
+
+        $renderer = new Olo_Frontend_Renderer();
+        $renderer->builder_mode = true;
+
+        $parts = [];
+
+        // Header
+        if ( ! empty( $header_tiles ) && is_array( $header_tiles ) ) {
+            ob_start();
+            echo '<header class="olo-site-header olo-header-classic" data-olo-zone="header">';
+            $renderer->render_tiles_array( $header_tiles, $page_settings );
+            echo '</header>';
+            $parts[] = ob_get_clean();
+        }
+
+        // Body
+        if ( ! empty( $tiles ) && is_array( $tiles ) ) {
+            ob_start();
+            echo '<main data-olo-zone="body">';
+            $renderer->render_tiles_array( $tiles, $page_settings );
+            echo '</main>';
+            $parts[] = ob_get_clean();
+        }
+
+        // Footer
+        if ( ! empty( $footer_tiles ) && is_array( $footer_tiles ) ) {
+            ob_start();
+            echo '<footer class="olo-site-footer" data-olo-zone="footer">';
+            $renderer->render_tiles_array( $footer_tiles, $page_settings );
+            echo '</footer>';
+            $parts[] = ob_get_clean();
+        }
+
+        $html = implode( '', $parts );
+
+        $css_urls = [
+            OLO_URL . 'assets/vendor/uikit/css/uikit.min.css',
+            OLO_URL . 'assets/css/frontend.css?v=' . OLO_VERSION,
+            OLO_URL . 'assets/css/olo-proslider.css?v=' . OLO_VERSION,
+        ];
+
+        $inline_css = '';
+        if ( class_exists( 'Olo_Style_System' ) ) {
+            $inline_css = Olo_Style_System::instance()->generate_css();
+        }
+
+        $renderer->builder_mode = false;
+
+        // Restore original post context
+        if ( $template_type === 'single' && $original_post !== null ) {
+            global $post, $wp_query;
+            $post = $original_post;
+            if ( $post ) {
+                setup_postdata( $post );
+            }
+            if ( $wp_query ) {
+                $wp_query->is_singular = false;
+                $wp_query->is_single   = false;
+            }
+        }
+
+        return rest_ensure_response( [
+            'html'       => $html,
+            'css'        => $css_urls,
+            'inline_css' => $inline_css,
+        ] );
+    }
+
+    /**
+     * Builder render single tile: accepts a tile node, returns rendered HTML.
+     */
+    public function builder_render_tile( $request ) {
+        $body = $request->get_json_params();
+        $tile = $body['tile'] ?? null;
+        $page_settings = $body['page_settings'] ?? [];
+        $template_type = $body['template_type'] ?? 'page';
+
+        if ( empty( $tile ) || empty( $tile['type'] ) ) {
+            return rest_ensure_response( [ 'html' => '' ] );
+        }
+
+        // Set up post context for single templates
+        $original_post = null;
+        if ( $template_type === 'single' ) {
+            global $post, $wp_query;
+            $original_post = $post;
+            $preview_post_id = $body['preview_post_id'] ?? 0;
+
+            if ( $preview_post_id ) {
+                $post = get_post( $preview_post_id );
+            } else {
+                $post_type = $body['post_type'] ?? 'post';
+                $sample = get_posts( [
+                    'post_type'      => $post_type,
+                    'posts_per_page' => 10,
+                    'post_status'    => 'publish',
+                    'orderby'        => 'date',
+                    'order'          => 'DESC',
+                ] );
+                $best = null;
+                foreach ( $sample as $s ) {
+                    if ( ! empty( $s->post_content ) ) {
+                        $best = $s;
+                        break;
+                    }
+                }
+                if ( ! $best && ! empty( $sample ) ) {
+                    $best = $sample[0];
+                }
+                if ( $best ) {
+                    $post = $best;
+                }
+            }
+            if ( $post ) {
+                setup_postdata( $post );
+                if ( $wp_query ) {
+                    $wp_query->is_singular = true;
+                    $wp_query->is_single   = true;
+                }
+            }
+        }
+
+        $renderer = new Olo_Frontend_Renderer();
+        $renderer->builder_mode = true;
+
+        $renderer->breakpoints = wp_parse_args( $page_settings['breakpoints'] ?? [], [
+            'widescreen'       => 1400,
+            'tablet_landscape' => 1200,
+            'tablet'           => 960,
+            'mobile_landscape' => 640,
+            'mobile'           => 480,
+        ] );
+
+        $manager = Olo_Tile_Manager::instance();
+        $hover_css = [];
+        $counter = 0;
+
+        ob_start();
+        echo $renderer->render_node_public( $tile, $manager, 0, $hover_css, $counter );
+        $html = ob_get_clean();
+
+        // Restore post context
+        if ( $template_type === 'single' && $original_post !== null ) {
+            global $post, $wp_query;
+            $post = $original_post;
+            if ( $post ) { setup_postdata( $post ); }
+            if ( $wp_query ) {
+                $wp_query->is_singular = false;
+                $wp_query->is_single   = false;
+            }
+        }
+
+        return rest_ensure_response( [ 'html' => $html ] );
+    }
+
     public function render_template_preview( $request ) {
         $id = absint( $request['id'] );
         if ( ! $id ) {
@@ -1849,5 +2111,110 @@ class Olo_Rest_Api {
             'css'        => $css_urls,
             'inline_css' => $inline_css,
         ] );
+    }
+
+    /**
+     * PostGrid preview — returns lightweight post data for the builder canvas.
+     */
+    public function get_postgrid_preview( $request ) {
+        $post_type      = sanitize_key( $request->get_param( 'post_type' ) ?: 'post' );
+        $posts_per_page = min( 50, absint( $request->get_param( 'posts_per_page' ) ?: 12 ) );
+        $orderby        = sanitize_key( $request->get_param( 'orderby' ) ?: 'date' );
+        $order          = strtoupper( $request->get_param( 'order' ) ?: 'DESC' ) === 'ASC' ? 'ASC' : 'DESC';
+        $meta_key_param = sanitize_key( $request->get_param( 'meta_key' ) ?: '' );
+        $meta_filter    = sanitize_text_field( $request->get_param( 'meta_filter' ) ?: '' );
+        $excerpt_length = absint( $request->get_param( 'excerpt_length' ) ?: 20 );
+        $price_field    = sanitize_key( $request->get_param( 'price_field' ) ?: '' );
+
+        if ( ! post_type_exists( $post_type ) ) {
+            return rest_ensure_response( [] );
+        }
+
+        $query_args = [
+            'post_type'              => $post_type,
+            'posts_per_page'         => $posts_per_page,
+            'post_status'            => 'publish',
+            'no_found_rows'          => true,
+            'update_post_meta_cache' => true,
+            'update_post_term_cache' => true,
+            'orderby'                => $orderby,
+            'order'                  => $order,
+        ];
+
+        if ( in_array( $orderby, [ 'meta_value_num', 'meta_value' ], true ) ) {
+            if ( $meta_key_param ) {
+                $query_args['meta_key'] = $meta_key_param;
+            }
+        }
+
+        if ( $meta_filter && strpos( $meta_filter, '=' ) !== false ) {
+            list( $mf_key, $mf_val ) = array_map( 'trim', explode( '=', $meta_filter, 2 ) );
+            if ( $mf_key && $mf_val ) {
+                $query_args['meta_query'] = [
+                    [ 'key' => sanitize_key( $mf_key ), 'value' => sanitize_text_field( $mf_val ) ],
+                ];
+            }
+        }
+
+        $query = new WP_Query( $query_args );
+        if ( ! $query->have_posts() ) {
+            wp_reset_postdata();
+            return rest_ensure_response( [] );
+        }
+
+        update_post_thumbnail_cache( $query );
+        update_post_caches( $query->posts, $post_type, true, true );
+
+        $results = [];
+        foreach ( $query->posts as $post ) {
+            $item = [
+                'id'       => $post->ID,
+                'title'    => get_the_title( $post ),
+                'date_fmt' => get_the_date( '', $post ),
+                'author'   => get_the_author_meta( 'display_name', $post->post_author ),
+                'image'    => get_the_post_thumbnail_url( $post->ID, 'medium' ) ?: '',
+            ];
+
+            // Excerpt
+            $item['excerpt'] = has_excerpt( $post->ID )
+                ? wp_trim_words( get_the_excerpt( $post->ID ), $excerpt_length, '...' )
+                : wp_trim_words( $post->post_content, $excerpt_length, '...' );
+
+            // Category (first term of first taxonomy)
+            $taxonomies = get_object_taxonomies( $post_type, 'names' );
+            if ( ! empty( $taxonomies ) ) {
+                $terms = get_the_terms( $post->ID, $taxonomies[0] );
+                if ( $terms && ! is_wp_error( $terms ) ) {
+                    $item['category'] = $terms[0]->name;
+                }
+            }
+
+            // Price
+            if ( $price_field ) {
+                $pv = get_post_meta( $post->ID, $price_field, true );
+                if ( $pv !== '' && $pv !== false ) {
+                    $item['price'] = is_numeric( $pv ) ? floatval( $pv ) : $pv;
+                }
+            }
+
+            // Service stats (olo_service)
+            if ( $post_type === 'olo_service' ) {
+                $item['service_capacity']  = get_post_meta( $post->ID, '_olo_service_capacity', true );
+                $item['service_bedrooms']  = get_post_meta( $post->ID, '_olo_service_bedrooms', true );
+                $item['service_bathrooms'] = get_post_meta( $post->ID, '_olo_service_bathrooms', true );
+                $item['service_altitude']  = get_post_meta( $post->ID, '_olo_service_altitude', true );
+                $item['service_club']      = get_post_meta( $post->ID, '_olo_service_club', true );
+                $item['service_stars']     = get_post_meta( $post->ID, '_olo_service_stars', true );
+                $opening = get_post_meta( $post->ID, '_olo_service_opening_type', true );
+                if ( $opening ) {
+                    $item['opening_type'] = $opening;
+                }
+            }
+
+            $results[] = $item;
+        }
+
+        wp_reset_postdata();
+        return rest_ensure_response( $results );
     }
 }

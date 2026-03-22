@@ -20,7 +20,10 @@ class Olo_FlipCard_Tile extends Olo_Tile_Base {
         'front_title'      => 'Titolo fronte',
         'front_description'=> 'Descrizione della card visibile.',
         'front_bg'         => '#1e1e2e',
-        'front_overlay'    => 'rgba(0,0,0,0.3)',
+        'front_overlay'    => '',
+        'front_image_fit'     => 'cover',
+        'front_image_padding' => '0',
+        'front_image_radius'  => '0',
         'front_text_color' => '',
         'front_text_align' => 'center',
         'front_valign'     => 'center',
@@ -35,6 +38,9 @@ class Olo_FlipCard_Tile extends Olo_Tile_Base {
         'back_description' => 'Contenuto retro con dettagli.',
         'back_bg'          => '',
         'back_overlay'     => '',
+        'back_image_fit'      => 'cover',
+        'back_image_padding'  => '0',
+        'back_image_radius'   => '0',
         'back_text_color'  => '#FFFFFF',
         'back_text_align'  => 'center',
         'back_valign'      => 'center',
@@ -82,7 +88,7 @@ class Olo_FlipCard_Tile extends Olo_Tile_Base {
         $shadow   = Olo_Tile_Utils::shadow_value( $s, 'card_shadow' );
         $bw       = intval( $s['card_border_width'] );
         $bc       = $this->safe_color_css( $s['card_border_color'] ) ?: 'var(--olo-color-text, #374151)';
-        $padding  = intval( $s['card_padding'] );
+        $padding = Olo_Tile_Utils::spacing_css( $s['tile_padding'] ?? $s['card_padding'] ?? 24, 24 );
         $halfH    = round( $height / 2 );
 
         // Tipografia
@@ -196,7 +202,7 @@ class Olo_FlipCard_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .olo-fc-content {
                 position: relative;
                 z-index: 2;
-                padding: <?php echo $padding; ?>px;
+                padding: <?php echo $padding; ?>;
                 flex: 1;
                 display: flex;
                 flex-direction: column;
@@ -244,7 +250,15 @@ class Olo_FlipCard_Tile extends Olo_Tile_Base {
                 text-decoration: none !important;
             }
 
+            @media (max-width: 959px) {
+                .<?php echo $uid; ?> {
+                    height: <?php echo max( 200, round( $height * 0.75 ) ); ?>px;
+                }
+            }
             @media (max-width: 767px) {
+                .<?php echo $uid; ?> {
+                    height: <?php echo max( 180, round( $height * 0.6 ) ); ?>px;
+                }
                 .<?php echo $uid; ?>:hover .olo-fc-inner {
                     transform: none !important;
                 }
@@ -294,7 +308,29 @@ class Olo_FlipCard_Tile extends Olo_Tile_Base {
 
         // Background image
         if ( ! empty( $s[ $prefix . 'image' ] ) ) {
-            $html .= Olo_Tile_Utils::img_srcset( absint( $s[ $prefix . 'image_id' ] ?? 0 ), $s[ $prefix . 'image' ], ucfirst( $side ) . ' side', 'olo-fc-bg' );
+            $img_pad = intval( $s[ $prefix . 'image_padding' ] ?? 0 );
+            $img_rad = intval( $s[ $prefix . 'image_radius' ] ?? 0 );
+            $img_fit = in_array( $s[ $prefix . 'image_fit' ] ?? 'cover', [ 'cover', 'contain', 'fill' ] ) ? $s[ $prefix . 'image_fit' ] : 'cover';
+            $img_obj_fit = "object-fit:{$img_fit};";
+            if ( $img_fit === 'contain' ) {
+                $img_obj_fit .= 'object-position:center;background:inherit;';
+            }
+            if ( $img_pad > 0 || $img_rad > 0 ) {
+                $wrap_style = 'position:absolute;z-index:0;overflow:hidden;';
+                if ( $img_pad > 0 ) {
+                    $wrap_style .= "inset:{$img_pad}px;";
+                } else {
+                    $wrap_style .= 'inset:0;';
+                }
+                if ( $img_rad > 0 ) {
+                    $wrap_style .= "border-radius:{$img_rad}px;";
+                }
+                $html .= '<div style="' . esc_attr( $wrap_style ) . '">';
+                $html .= Olo_Tile_Utils::img_srcset( absint( $s[ $prefix . 'image_id' ] ?? 0 ), $s[ $prefix . 'image' ], ucfirst( $side ) . ' side', 'olo-fc-bg', 'full', 'style="position:absolute;inset:0;width:100%;height:100%;' . esc_attr( $img_obj_fit ) . '"' );
+                $html .= '</div>';
+            } else {
+                $html .= Olo_Tile_Utils::img_srcset( absint( $s[ $prefix . 'image_id' ] ?? 0 ), $s[ $prefix . 'image' ], ucfirst( $side ) . ' side', 'olo-fc-bg', 'full', 'style="' . esc_attr( $img_obj_fit ) . '"' );
+            }
         }
 
         // Background video

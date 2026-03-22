@@ -132,7 +132,21 @@ class Olo_ServiceInfo_Tile extends Olo_Tile_Base {
         // Settings
         $hero_h    = absint( $s['acc_hero_height'] ) ?: 400;
         $max_w     = absint( $s['acc_max_width'] ) ?: 900;
-        $radius    = Olo_Tile_Utils::border_radius( $s['acc_card_radius'] ?? 0 );
+        // Build per-corner radius for hero (top) and body (bottom)
+        $_rad_raw = $s["acc_card_radius"];
+        $radius = $this->build_border_radius_css( $_rad_raw );
+        if ( is_array( $_rad_raw ) ) {
+            $_rtl = intval( $_rad_raw["tl"] ?? 0 );
+            $_rtr = intval( $_rad_raw["tr"] ?? 0 );
+            $_rbr = intval( $_rad_raw["br"] ?? 0 );
+            $_rbl = intval( $_rad_raw["bl"] ?? 0 );
+            $radius_top = "{$_rtl}px {$_rtr}px 0 0";
+            $radius_bot = "0 0 {$_rbr}px {$_rbl}px";
+        } else {
+            $_rv = intval( $_rad_raw );
+            $radius_top = "{$_rv}px {$_rv}px 0 0";
+            $radius_bot = "0 0 {$_rv}px {$_rv}px";
+        }
         $shadow    = Olo_Tile_Utils::shadow( $s['acc_card_shadow'] ?? 'lg' );
         $padding   = absint( $s['acc_body_padding'] ) ?: 32;
         $title_sz  = absint( $s['acc_title_size'] ) ?: 30;
@@ -146,12 +160,12 @@ class Olo_ServiceInfo_Tile extends Olo_Tile_Base {
         ?>
         <style>
             .<?php echo $uid; ?> { max-width: <?php echo $max_w; ?>px; margin: 0 auto; }
-            .<?php echo $uid; ?> .olo-si-hero { position: relative; height: <?php echo $hero_h; ?>px; overflow: hidden; border-radius: <?php echo $radius; ?>; border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+            .<?php echo $uid; ?> .olo-si-hero { position: relative; height: <?php echo $hero_h; ?>px; overflow: hidden; border-radius: <?php echo $radius_top; ?>; }
             .<?php echo $uid; ?> .olo-si-hero img { width: 100%; height: 100%; object-fit: cover; display: block; }
             .<?php echo $uid; ?> .olo-si-hero-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.02) 50%, rgba(0,0,0,0.35) 100%); }
             .<?php echo $uid; ?> .olo-si-badges { position: absolute; top: 16px; right: 16px; display: flex; gap: 8px; z-index: 2; }
             .<?php echo $uid; ?> .olo-si-badge { background: rgba(30,41,59,0.75); backdrop-filter: blur(6px); color: var(--olo-color-primary-contrast, #FFFFFF); padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 5px; }
-            .<?php echo $uid; ?> .olo-si-body { padding: <?php echo $padding; ?>px; background: var(--olo-color-background, #FFFFFF); box-shadow: <?php echo $shadow; ?>; border-radius: <?php echo $radius; ?>; border-top-left-radius: 0; border-top-right-radius: 0; }
+            .<?php echo $uid; ?> .olo-si-body { padding: <?php echo $padding; ?>px; background: var(--olo-color-background, #FFFFFF); box-shadow: <?php echo $shadow; ?>; border-radius: <?php echo $radius_bot; ?>; }
             .<?php echo $uid; ?> .olo-si-title { font-size: <?php echo $title_sz; ?>px; font-weight: 700; color: var(--olo-color-text, #374151); margin: 0 0 24px; line-height: 1.2; }
             .<?php echo $uid; ?> .olo-si-stats { display: grid; gap: 16px; margin-bottom: 28px; text-align: center; }
             .<?php echo $uid; ?> .olo-si-stat-icon { font-size: 22px; margin-bottom: 4px; color: var(--olo-color-text-muted, #9CA3AF); }
@@ -168,7 +182,7 @@ class Olo_ServiceInfo_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .olo-si-amenities { display: grid; grid-template-columns: repeat(<?php echo $amenity_cols; ?>, 1fr); gap: 10px 24px; margin-bottom: 32px; }
             .<?php echo $uid; ?> .olo-si-amenity { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--olo-color-text, #374151); padding: 4px 0; }
             .<?php echo $uid; ?> .olo-si-amenity-check { color: <?php echo $accent; ?>; font-size: 16px; flex-shrink: 0; }
-            .<?php echo $uid; ?> .olo-si-checkin-bar { background: var(--olo-color-muted, #F3F4F6); border-top: 1px solid var(--olo-color-border, #E5E7EB); margin: 0 -<?php echo $padding; ?>px -<?php echo $padding; ?>px; padding: 16px <?php echo $padding; ?>px; border-radius: <?php echo $radius; ?>; border-top-left-radius: 0; border-top-right-radius: 0; font-size: 14px; color: var(--olo-color-text, #374151); }
+            .<?php echo $uid; ?> .olo-si-checkin-bar { background: var(--olo-color-muted, #F3F4F6); border-top: 1px solid var(--olo-color-border, #E5E7EB); margin: 0 -<?php echo $padding; ?>px -<?php echo $padding; ?>px; padding: 16px <?php echo $padding; ?>px; border-radius: <?php echo $radius_bot; ?>; font-size: 14px; color: var(--olo-color-text, #374151); }
             .<?php echo $uid; ?> .olo-si-checkin-bar strong { color: var(--olo-color-secondary, #1F2937); }
             .<?php echo $uid; ?> .olo-si-gallery { display: grid; grid-template-columns: repeat(<?php echo $gallery_cols; ?>, 1fr); gap: 8px; margin-bottom: 32px; }
             .<?php echo $uid; ?> .olo-si-gallery a { display: block; border-radius: 8px; overflow: hidden; height: <?php echo $gallery_h; ?>px; }

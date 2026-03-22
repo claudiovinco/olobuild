@@ -118,7 +118,7 @@
 
 <script setup>
 import { ref, computed, watch, nextTick, onMounted, onUnmounted } from 'vue';
-import { useTilesStore, deepCloneWithNewIds } from '../../stores/tiles';
+import { useTilesStore, deepCloneWithNewIds, generateId as oloGenerateId } from '../../stores/tiles';
 import { useBuilderStore } from '../../stores/builder';
 import { useDragDrop } from '../../composables/useDragDrop';
 import { getAllElements, getElementDef } from '../../config/elementRegistry';
@@ -264,7 +264,21 @@ function typeIcon(type) {
 
 // ─── Azioni ───
 function addElement(tileType) {
-  if (targetColumnId.value) {
+  const afterId = builderStore.insertAfterTileId;
+  if (afterId) {
+    const reg = tilesStore.registeredTiles.find(t => t.type === tileType);
+    const newTile = {
+      id: oloGenerateId(),
+      type: tileType,
+      settings: JSON.parse(JSON.stringify((reg || {}).defaults || {})),
+      style: {},
+      advanced: {},
+    };
+    tilesStore.insertAfter(afterId, newTile);
+    builderStore.isDirty = true;
+    builderStore.selectTile(newTile.id);
+    builderStore.insertAfterTileId = null;
+  } else if (targetColumnId.value) {
     handleDropIntoColumn(tileType, targetColumnId.value);
   } else {
     handleDropFromSidebar(tileType);

@@ -81,19 +81,19 @@ class Olo_ServiceList_Tile extends Olo_Tile_Base {
         $is_list = ( $s['style'] === 'list' );
         $shadow = Olo_Tile_Utils::shadow( $s['card_shadow'] ?? 'none' );
         $h_shadow = Olo_Tile_Utils::shadow( $s['card_hover_shadow'] ?? 'none' );
-        $radius = Olo_Tile_Utils::border_radius( $s['card_border_radius'] ?? 0 );
+        $radius = absint( $s['card_border_radius'] );
         $padding = absint( $s['card_padding'] );
         $bg     = $this->safe_color_css( $s['card_bg'] );
         $border = $this->safe_color_css( $s['card_border_color'] );
         $img_h  = absint( $s['image_height'] ) ?: 200;
-        $img_r  = Olo_Tile_Utils::border_radius( $s['image_radius'] ?? 0 );
+        $img_r  = $this->build_border_radius_css( $s["image_radius"] );
         $bar_h  = absint( $s['color_bar_height'] ) ?: 4;
 
         ob_start();
         ?>
         <style>
             .<?php echo $uid; ?>{display:<?php echo $is_list ? 'flex;flex-direction:column' : 'grid;grid-template-columns:repeat(' . $cols . ',1fr)'; ?>;gap:<?php echo $gap; ?>px}
-            .<?php echo $uid; ?> .olo-sl-card{background:<?php echo $bg ?: 'var(--olo-color-background, #FFFFFF)'; ?>;border-radius:<?php echo $radius; ?>;border:1px solid <?php echo $border ?: 'var(--olo-color-border, #E5E7EB)'; ?>;box-shadow:<?php echo $shadow; ?>;overflow:hidden;transition:box-shadow 0.25s ease,transform 0.25s ease}
+            .<?php echo $uid; ?> .olo-sl-card{background:<?php echo $bg ?: 'var(--olo-color-background, #FFFFFF)'; ?>;border-radius:<?php echo $radius; ?>px;border:1px solid <?php echo $border ?: 'var(--olo-color-border, #E5E7EB)'; ?>;box-shadow:<?php echo $shadow; ?>;overflow:hidden;transition:box-shadow 0.25s ease,transform 0.25s ease}
             .<?php echo $uid; ?> .olo-sl-card:hover{box-shadow:<?php echo $h_shadow; ?>;transform:translateY(-2px)}
             .<?php echo $uid; ?> .olo-sl-bar{height:<?php echo $bar_h; ?>px}
             .<?php echo $uid; ?> .olo-sl-img{height:<?php echo $img_h; ?>px;position:relative;overflow:hidden;background:var(--olo-color-muted, #F3F4F6)}
@@ -104,7 +104,7 @@ class Olo_ServiceList_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .olo-sl-duration{color:<?php echo $this->safe_color_css( $s['duration_color'] ) ?: 'var(--olo-color-text-muted, #9CA3AF)'; ?>}
             .<?php echo $uid; ?> .olo-sl-price{font-size:<?php echo absint( $s['price_size'] ) ?: 16; ?>px;font-weight:600;color:<?php echo $this->safe_color_css( $s['price_color'] ) ?: 'var(--olo-color-primary, #6366F1)'; ?>}
             .<?php echo $uid; ?> .olo-sl-excerpt{font-size:<?php echo absint( $s['excerpt_size'] ) ?: 14; ?>px;color:<?php echo $this->safe_color_css( $s['excerpt_color'] ) ?: 'var(--olo-color-text-muted, #9CA3AF)'; ?>;line-height:1.5;margin:0 0 14px}
-            .<?php echo $uid; ?> .olo-sl-btn{display:<?php echo ! empty( $s['btn_full_width'] ) ? 'block;width:100%' : 'inline-block'; ?>;padding:10px 20px;background:<?php echo $this->safe_color_css( $s['btn_bg'] ) ?: 'var(--olo-color-primary, #6366F1)'; ?>;color:<?php echo $this->safe_color_css( $s['btn_color'] ) ?: 'var(--olo-color-primary-contrast, #FFFFFF)'; ?>;border-radius:<?php echo Olo_Tile_Utils::border_radius( $s['btn_radius'] ?? 0 ); ?>;text-align:center;font-weight:600;font-size:14px;text-decoration:none;transition:opacity 0.2s}
+            .<?php echo $uid; ?> .olo-sl-btn{display:<?php echo ! empty( $s['btn_full_width'] ) ? 'block;width:100%' : 'inline-block'; ?>;padding:10px 20px;background:<?php echo $this->safe_color_css( $s['btn_bg'] ) ?: 'var(--olo-color-primary, #6366F1)'; ?>;color:<?php echo $this->safe_color_css( $s['btn_color'] ) ?: 'var(--olo-color-primary-contrast, #FFFFFF)'; ?>;border-radius:<?php echo absint( $s['btn_radius'] ); ?>px;text-align:center;font-weight:600;font-size:14px;text-decoration:none;transition:opacity 0.2s}
             .<?php echo $uid; ?> .olo-sl-btn:hover{opacity:0.85}
             @media(max-width:767px){.<?php echo $uid; ?>{grid-template-columns:1fr}}
         </style>
@@ -133,7 +133,7 @@ class Olo_ServiceList_Tile extends Olo_Tile_Base {
                 <?php endif; ?>
 
                 <?php if ( ! empty( $s['show_image'] ) ) : ?>
-                    <div class="olo-sl-img"<?php if ( ! $s['color_bar'] && $img_r ) : ?> style="border-radius:<?php echo $img_r; ?>px <?php echo $img_r; ?>px 0 0"<?php endif; ?>>
+                    <div class="olo-sl-img"<?php if ( ! $s['color_bar'] && $img_r ) : ?> style="border-radius:<?php echo $img_r; ?>"<?php endif; ?>>
                         <?php if ( $thumb ) : ?>
                             <img src="<?php echo esc_url( $thumb ); ?>" alt="<?php echo esc_attr( $svc->post_title ); ?>" loading="lazy" />
                         <?php else : ?>

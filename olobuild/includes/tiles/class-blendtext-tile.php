@@ -51,10 +51,19 @@ class Olo_Blendtext_Tile extends Olo_Tile_Base {
         $ta         = esc_attr( $s['text_align'] ) ?: 'center';
         $color      = $s['text_color'] ?: '#ffffff';
         $blend      = esc_attr( $s['blend_mode'] ) ?: 'difference';
-        $pt         = intval( $s['padding_top'] );
-        $pb         = intval( $s['padding_bottom'] );
-        $pl         = intval( $s['padding_left'] );
-        $pr         = intval( $s['padding_right'] );
+        // Padding: nuovo formato spacing oggetto o legacy singoli
+        $pad_obj    = $s['bt_padding'] ?? null;
+        if ( is_array( $pad_obj ) ) {
+            $pt = intval( $pad_obj['top'] ?? 0 );
+            $pr = intval( $pad_obj['right'] ?? 0 );
+            $pb = intval( $pad_obj['bottom'] ?? 0 );
+            $pl = intval( $pad_obj['left'] ?? 0 );
+        } else {
+            $pt = intval( $s['padding_top'] ?? 40 );
+            $pb = intval( $s['padding_bottom'] ?? 40 );
+            $pl = intval( $s['padding_left'] ?? 20 );
+            $pr = intval( $s['padding_right'] ?? 20 );
+        }
 
         // NO z-index, NO position:relative on wrapper — so blend composites with parent stacking context
         $css  = "#{$uid}{mix-blend-mode:{$blend};padding:{$pt}px {$pr}px {$pb}px {$pl}px}";

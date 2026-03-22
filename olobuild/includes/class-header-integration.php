@@ -109,6 +109,8 @@ class Olo_Header_Integration {
 
         // Inline CSS for header mode — nasconde titolo pagina WP e resetta margini
         $inline_css = '<style>';
+        $inline_css .= 'header.olo-site-header { position: relative; z-index: 1000; overflow: visible !important; }';
+        $inline_css .= '.wp-site-blocks { overflow: visible !important; }';
         if ( $header_mode === 'overlay' ) {
             $inline_css .= 'header.olo-site-header.olo-header-overlay + main { margin-block-start: 0 !important; margin-top: 0 !important; }';
             $inline_css .= 'header.olo-site-header.olo-header-overlay + main > .wp-block-group:first-child { display: none !important; }';

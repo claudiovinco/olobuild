@@ -22,14 +22,14 @@ class Olo_Marquee_Tile extends Olo_Tile_Base {
         'pause_hover'    => true,
         'gap'            => '60',
 
-        'bg_color'       => '',
+        'bg_color'       => '#1F2937',
         'text_color'     => '#FFFFFF',
         'font_size'      => '16',
         'font_weight'    => '500',
         'letter_spacing' => '1',
         'text_transform' => 'uppercase',
         'height'         => '50',
-        'full_width'     => true,
+        'full_width'     => false,
         'border_top'     => '0',
         'border_bottom'  => '0',
         'border_color'   => '',
@@ -48,7 +48,7 @@ class Olo_Marquee_Tile extends Olo_Tile_Base {
         $direction   = $s['direction'] === 'right' ? 'right' : 'left';
         $pause       = ! empty( $s['pause_hover'] );
         $gap         = max( 0, intval( $s['gap'] ) );
-        $bg          = $this->safe_color_css( $s['bg_color'] ) ?: 'var(--olo-color-secondary, #1F2937)';
+        $bg          = $this->safe_color_css( $s['bg_color'] ) ?: '#1F2937';
         $height      = max( 20, intval( $s['height'] ) );
         $full_width  = ! empty( $s['full_width'] );
         $bt          = max( 0, intval( $s['border_top'] ) );
@@ -110,12 +110,22 @@ class Olo_Marquee_Tile extends Olo_Tile_Base {
                 background: <?php echo $bg; ?>;
                 height: <?php echo $height; ?>px;
                 overflow: hidden;
+                width: 100%;
                 <?php if ( $full_width ) : ?>
                 width: 100vw;
                 position: relative;
                 left: 50%;
                 margin-left: -50vw;
                 <?php endif; ?>
+            }
+            /* Annulla breakout quando il nastro è dentro una cella di griglia */
+            .uk-grid > * .<?php echo $uid; ?>,
+            [class*="uk-width-"] .<?php echo $uid; ?>,
+            .uk-panel .<?php echo $uid; ?> {
+                width: 100%;
+                left: auto;
+                margin-left: 0;
+                position: static;
                 <?php if ( $bt > 0 ) : ?>border-top: <?php echo $bt; ?>px solid <?php echo $bc; ?>;<?php endif; ?>
                 <?php if ( $bb > 0 ) : ?>border-bottom: <?php echo $bb; ?>px solid <?php echo $bc; ?>;<?php endif; ?>
             }

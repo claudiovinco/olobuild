@@ -1,0 +1,131 @@
+import { shadowField } from './_shared.js';
+
+export default {
+  type: 'svganimator',
+  name: 'SVG Animator',
+  icon: 'dashicons-art',
+  category: 'media',
+  defaults: {
+    source_type: 'upload',
+    svg_url: '',
+    svg_code: '',
+    anim_type: 'draw',
+    anim_sequence: 'delayed',
+    trigger: 'viewport',
+    duration: 1500,
+    delay: 0,
+    easing: 'ease',
+    easing_custom: '0.42, 0, 0.58, 1',
+    stagger_delay: 100,
+    stroke_width: '',
+    stroke_color: '',
+    stroke_linecap: '',
+    stroke_linejoin: '',
+    show_fill: true,
+    fill_color: '',
+    fill_delay: 300,
+    fill_duration: 500,
+    reverse: false,
+    erase_on_leave: false,
+    loop: false,
+    loop_pause: 500,
+    replay_button: false,
+    replay_button_label: 'Replay',
+    max_width: '',
+    alignment: 'center',
+    shadow: 'none',
+  },
+  fields: [
+    // ── SORGENTE ──
+    { type: 'separator', label: 'Sorgente' },
+    { key: 'source_type', label: 'Tipo sorgente', type: 'select', options: [
+      { value: 'upload', label: 'Carica file SVG' },
+      { value: 'code', label: 'Codice SVG' },
+    ]},
+    { key: 'svg_url', label: 'File SVG', type: 'image', condition: { field: 'source_type', value: 'upload' } },
+    { key: 'svg_code', label: 'Codice SVG', type: 'textarea', rows: 8, placeholder: '<svg viewBox="0 0 100 100">...</svg>', condition: { field: 'source_type', value: 'code' } },
+
+    // ── ANIMAZIONE ──
+    { type: 'separator', label: 'Animazione' },
+    { key: 'anim_type', label: 'Tipo animazione', type: 'select', options: [
+      { value: 'draw', label: 'Disegna (stroke draw)' },
+      { value: 'fill', label: 'Riempi dopo disegno' },
+      { value: 'fade', label: 'Comparsa graduale (fade)' },
+      { value: 'loop-draw', label: 'Disegno continuo (loop)' },
+    ]},
+    { key: 'anim_sequence', label: 'Sequenza', type: 'select', options: [
+      { value: 'sync', label: 'Tutti insieme' },
+      { value: 'delayed', label: 'Con ritardo (stagger)' },
+      { value: 'one-by-one', label: 'Uno alla volta' },
+      { value: 'random', label: 'Ordine casuale' },
+    ]},
+    { key: 'trigger', label: 'Trigger', type: 'select', options: [
+      { value: 'auto', label: 'Automatico' },
+      { value: 'viewport', label: 'Quando visibile' },
+      { value: 'hover', label: 'Al passaggio mouse' },
+      { value: 'click', label: 'Al click' },
+    ]},
+    { key: 'duration', label: 'Durata (ms)', type: 'range', min: 200, max: 5000, step: 100 },
+    { key: 'delay', label: 'Ritardo iniziale (ms)', type: 'range', min: 0, max: 3000, step: 100 },
+    { key: 'stagger_delay', label: 'Ritardo tra elementi (ms)', type: 'range', min: 0, max: 500, step: 10,
+      condition: { field: 'anim_sequence', value: ['delayed', 'one-by-one', 'random'] } },
+    { key: 'easing', label: 'Easing', type: 'select', options: [
+      { value: 'linear', label: 'Linear' },
+      { value: 'ease', label: 'Ease' },
+      { value: 'ease-in', label: 'Ease In' },
+      { value: 'ease-out', label: 'Ease Out' },
+      { value: 'ease-in-out', label: 'Ease In Out' },
+      { value: 'custom', label: 'Custom (cubic-bezier)' },
+    ]},
+    { key: 'easing_custom', label: 'Cubic Bezier', type: 'text', placeholder: '0.42, 0, 0.58, 1',
+      condition: { field: 'easing', value: 'custom' } },
+
+    // ── STILE TRACCIATO ──
+    { type: 'separator', label: 'Stile tracciato' },
+    { key: 'stroke_width', label: 'Spessore linea (px)', type: 'range', min: 0, max: 20, step: 0.5 },
+    { key: 'stroke_color', label: 'Colore linea', type: 'color' },
+    { key: 'stroke_linecap', label: 'Terminazione linea', type: 'select', options: [
+      { value: '', label: 'Default SVG' },
+      { value: 'butt', label: 'Butt (taglio netto)' },
+      { value: 'round', label: 'Round (arrotondato)' },
+      { value: 'square', label: 'Square (quadrato)' },
+    ]},
+    { key: 'stroke_linejoin', label: 'Giunzione linee', type: 'select', options: [
+      { value: '', label: 'Default SVG' },
+      { value: 'miter', label: 'Miter (angolo)' },
+      { value: 'round', label: 'Round (arrotondato)' },
+      { value: 'bevel', label: 'Bevel (smussato)' },
+    ]},
+
+    // ── RIEMPIMENTO ──
+    { type: 'separator', label: 'Riempimento' },
+    { key: 'show_fill', label: 'Mostra riempimento', type: 'toggle' },
+    { key: 'fill_color', label: 'Colore riempimento', type: 'color',
+      condition: { field: 'show_fill', value: true } },
+    { key: 'fill_delay', label: 'Ritardo fill dopo disegno (ms)', type: 'range', min: 0, max: 2000, step: 50,
+      condition: { field: 'show_fill', value: true } },
+    { key: 'fill_duration', label: 'Durata transizione fill (ms)', type: 'range', min: 100, max: 2000, step: 50,
+      condition: { field: 'show_fill', value: true } },
+
+    // ── COMPORTAMENTO ──
+    { type: 'separator', label: 'Comportamento' },
+    { key: 'reverse', label: 'Direzione inversa', type: 'toggle' },
+    { key: 'erase_on_leave', label: 'Cancella quando esce dal viewport', type: 'toggle' },
+    { key: 'loop', label: 'Loop continuo', type: 'toggle' },
+    { key: 'loop_pause', label: 'Pausa tra cicli (ms)', type: 'range', min: 0, max: 3000, step: 100,
+      condition: { field: 'loop', value: true } },
+    { key: 'replay_button', label: 'Pulsante replay', type: 'toggle' },
+    { key: 'replay_button_label', label: 'Testo pulsante', type: 'text',
+      condition: { field: 'replay_button', value: true } },
+
+    // ── LAYOUT ──
+    { type: 'separator', label: 'Layout' },
+    { key: 'max_width', label: 'Larghezza max (px, vuoto = 100%)', type: 'text' },
+    { key: 'alignment', label: 'Allineamento', type: 'select', options: [
+      { value: 'left', label: 'Sinistra' },
+      { value: 'center', label: 'Centro' },
+      { value: 'right', label: 'Destra' },
+    ]},
+    ...shadowField,
+  ],
+};

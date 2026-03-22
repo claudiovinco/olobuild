@@ -26,8 +26,7 @@ export default {
 
     // Layout
     min_height: '100vh',
-    padding_y: '0',
-    padding_x: '0',
+    tile_padding: { top: 40, right: 20, bottom: 40, left: 20 },
     vertical_align: 'center',
     bg_color: '',
 
@@ -102,8 +101,7 @@ export default {
     // ── Layout ──
     { type: 'separator', label: 'Layout' },
     { key: 'min_height', label: 'Altezza minima (es. 100vh, 600px)', type: 'text' },
-    { key: 'padding_y', label: 'Padding verticale (px)', type: 'range', min: 0, max: 200, step: 10 },
-    { key: 'padding_x', label: 'Padding orizzontale (px)', type: 'range', min: 0, max: 200, step: 10 },
+    { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 200 },
     { key: 'vertical_align', label: 'Allineamento verticale', type: 'select', options: [
       { value: 'top', label: 'Alto' },
       { value: 'center', label: 'Centro' },

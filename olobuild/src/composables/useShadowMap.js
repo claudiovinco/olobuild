@@ -48,3 +48,46 @@ export function getShadowValue(style, prefix = 'shadow') {
 
   return 'none';
 }
+
+/**
+ * Mappa preset → filter: drop-shadow() (per elementi con mask/clip-path).
+ * drop-shadow NON supporta spread e inset, quindi i valori vengono omessi.
+ * Ombre multiple diventano drop-shadow() concatenati.
+ */
+const DROP_SHADOW_MAP = {
+  none: 'none',
+  sm: 'drop-shadow(0 1px 2px rgba(0,0,0,0.05))',
+  md: 'drop-shadow(0 4px 6px rgba(0,0,0,0.1)) drop-shadow(0 2px 4px rgba(0,0,0,0.1))',
+  lg: 'drop-shadow(0 10px 15px rgba(0,0,0,0.1)) drop-shadow(0 4px 6px rgba(0,0,0,0.1))',
+  xl: 'drop-shadow(0 20px 25px rgba(0,0,0,0.1)) drop-shadow(0 8px 10px rgba(0,0,0,0.1))',
+};
+
+/**
+ * Ritorna valore CSS filter: drop-shadow() leggendo lo style di un tile.
+ * Usare al posto di getShadowValue quando l'elemento ha una mask/clip-path,
+ * perché drop-shadow segue la forma visibile (non il rettangolo).
+ *
+ * Nota: inset e spread vengono ignorati (non supportati da drop-shadow).
+ *
+ * @param {Object} style — oggetto style del tile
+ * @param {string} [prefix='shadow'] — prefisso dei campi
+ * @returns {string} valore CSS drop-shadow per filter, oppure 'none'
+ */
+export function getDropShadowValue(style, prefix = 'shadow') {
+  const key = style?.[prefix];
+  if (!key || key === 'none') return 'none';
+
+  // Preset
+  if (DROP_SHADOW_MAP[key]) return DROP_SHADOW_MAP[key];
+
+  // Custom (inset e spread ignorati)
+  if (key === 'custom') {
+    const h     = parseInt(style[`${prefix}_h`], 10) || 0;
+    const v     = parseInt(style[`${prefix}_v`], 10) || 0;
+    const blur  = parseInt(style[`${prefix}_blur`], 10) || 0;
+    const color = style[`${prefix}_color`] || 'rgba(0,0,0,0.15)';
+    return `drop-shadow(${h}px ${v}px ${blur}px ${color})`;
+  }
+
+  return 'none';
+}

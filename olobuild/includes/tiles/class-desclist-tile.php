@@ -154,8 +154,11 @@ class Olo_DescList_Tile extends Olo_Tile_Base {
             <?php foreach ( $items as $item ) :
                 $icon = $item['icon'] ?? '';
                 $has_icon = $show_icon && ! empty( $icon );
+                $has_link = ! empty( $item['link'] );
+                $item_tag  = $has_link ? '<a href="' . esc_url( $item['link'] ) . '" class="mdl-item" style="text-decoration:none;color:inherit;display:block;">' : '<div class="mdl-item">';
+                $item_close = $has_link ? '</a>' : '</div>';
             ?>
-            <div class="mdl-item">
+            <?php echo $item_tag; ?>
                 <?php if ( $layout === 'stacked' ) : ?>
                     <div class="mdl-row">
                         <?php if ( $has_icon ) : ?>
@@ -189,7 +192,7 @@ class Olo_DescList_Tile extends Olo_Tile_Base {
                         <dd class="mdl-def"><?php echo nl2br( esc_html( wp_strip_all_tags( $item['definition'] ) ) ); ?></dd>
                     </div>
                 <?php endif; ?>
-            </div>
+            <?php echo $item_close; ?>
             <?php endforeach; ?>
         </div>
         <?php
@@ -220,6 +223,7 @@ class Olo_DescList_Tile extends Olo_Tile_Base {
                         'term'       => $item['term'],
                         'definition' => $item['definition'] ?? '',
                         'icon'       => $item['icon'] ?? '',
+                        'link'       => $item['link'] ?? '',
                     ];
                 }
             }

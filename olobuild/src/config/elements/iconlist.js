@@ -28,9 +28,10 @@ export default {
       itemFields: [
         { key: 'icon', label: 'Icona', type: 'icon' },
         { key: 'text', label: 'Testo', type: 'text' },
+        { key: 'link', label: 'Link', type: 'text', placeholder: 'https://...' },
         { key: 'color', label: 'Colore icona (override)', type: 'color' },
       ],
-      itemDefaults: { icon: 'check', text: 'Nuova voce', color: '' },
+      itemDefaults: { icon: 'check', text: 'Nuova voce', color: '', link: '' },
     },
     { type: 'separator', label: 'Stile icone' },
     { key: 'icon_color', label: 'Colore icone', type: 'color' },

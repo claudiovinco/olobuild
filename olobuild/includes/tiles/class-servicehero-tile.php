@@ -78,7 +78,7 @@ class Olo_ServiceHero_Tile extends Olo_Tile_Base {
         $opening  = get_post_meta( $pid, $pfx . 'opening', true );
 
         $h      = absint( $s['hero_height'] ) ?: 400;
-        $radius = Olo_Tile_Utils::border_radius( $s['hero_radius'] ?? 0 );
+        $radius_css = $this->build_border_radius_css( $s["hero_radius"] );
         $uid    = 'olo-shero-' . wp_rand( 10000, 99999 );
 
         // Overlay
@@ -121,7 +121,7 @@ class Olo_ServiceHero_Tile extends Olo_Tile_Base {
         ob_start();
         ?>
         <style>
-            .<?php echo $uid; ?> { position:relative; height:<?php echo $h; ?>px; overflow:hidden; border-radius:<?php echo $radius; ?>; }
+            .<?php echo $uid; ?> { position:relative; height:<?php echo $h; ?>px; overflow:hidden; border-radius:<?php echo $radius_css; ?>; }
             .<?php echo $uid; ?> .olo-shero-img { width:100%; height:100%; object-fit:cover; display:block; transition:transform 0.6s cubic-bezier(.25,.46,.45,.94),filter 0.6s ease; will-change:transform; }
 
             /* Ken Burns */
@@ -152,7 +152,7 @@ class Olo_ServiceHero_Tile extends Olo_Tile_Base {
 
             /* Vignette */
             <?php if ( ! empty( $s['fx_vignette'] ) ) : ?>
-            .<?php echo $uid; ?>::after { content:''; position:absolute; inset:0; border-radius:<?php echo $radius; ?>; box-shadow:inset 0 0 <?php echo $vig_str * 2; ?>px <?php echo $vig_str; ?>px rgba(0,0,0,0.<?php echo min( 60, $vig_str ); ?>); pointer-events:none; z-index:1; }
+            .<?php echo $uid; ?>::after { content:''; position:absolute; inset:0; border-radius:<?php echo $radius_css; ?>; box-shadow:inset 0 0 <?php echo $vig_str * 2; ?>px <?php echo $vig_str; ?>px rgba(0,0,0,0.<?php echo min( 60, $vig_str ); ?>); pointer-events:none; z-index:1; }
             <?php endif; ?>
 
             /* Shimmer */

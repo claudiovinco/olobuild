@@ -29,6 +29,7 @@
       >
         <span class="mb-opacity-60">{{ typeIcon(layer.type) }}</span>
         <span class="mb-max-w-24 mb-truncate">{{ layerLabel(layer) }}</span>
+        <span v-if="hasResponsiveOverride(layer)" class="mb-w-1.5 mb-h-1.5 mb-rounded-full mb-bg-yellow-400 mb-shrink-0" title="Override responsive"></span>
 
         <!-- Move up (toward front / higher z-index) -->
         <button
@@ -67,9 +68,16 @@ const props = defineProps({
   layers: { type: Array, default: () => [] },
   selectedId: { type: String, default: null },
   hiddenIds: { type: Set, default: () => new Set() },
+  activeBreakpoint: { type: String, default: 'desktop' },
 });
 
 defineEmits(['add-layer', 'select', 'remove', 'toggle-visibility', 'move-up', 'move-down']);
+
+function hasResponsiveOverride(layer) {
+  if (props.activeBreakpoint === 'desktop') return false;
+  const ov = layer.responsive?.[props.activeBreakpoint];
+  return ov && Object.keys(ov).length > 0;
+}
 
 const layerTypes = [
   { type: 'text', label: 'Testo', icon: 'T' },
@@ -78,6 +86,7 @@ const layerTypes = [
   { type: 'button', label: 'Pulsante', icon: '▢' },
   { type: 'icon', label: 'Icona', icon: '★' },
   { type: 'shape', label: 'Forma', icon: '◆' },
+  { type: 'audio', label: 'Audio', icon: '♫' },
 ];
 
 const reversedLayers = computed(() => [...props.layers].reverse());

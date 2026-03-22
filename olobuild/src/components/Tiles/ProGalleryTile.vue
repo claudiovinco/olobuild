@@ -42,8 +42,33 @@
       <!-- Parallax -->
       <div v-else-if="layout === 'parallax'" :style="parallaxContainerStyle">
         <div v-for="(img, i) in visibleImages" :key="img.id || img.url || i" :style="parallaxItemStyle(i)">
+          <img :src="imgUrl(img)" :alt="imgAlt(img)" :style="imgStyleAuto" />
+          <div v-if="isVideoItem(visibleImages[i])" :style="playBadgeStyle"></div>
+        </div>
+      </div>
+
+      <!-- Drift (multi-directional parallax) -->
+      <div v-else-if="layout === 'drift'" :style="driftContainerStyle">
+        <div v-for="(img, i) in visibleImages" :key="img.id || img.url || i" :style="driftItemStyle(i)">
+          <img :src="imgUrl(img)" :alt="imgAlt(img)" :style="imgStyleAuto" />
+          <div v-if="isVideoItem(visibleImages[i])" :style="playBadgeStyle"></div>
+        </div>
+      </div>
+
+      <!-- Cascade (stacked cards) -->
+      <div v-else-if="layout === 'cascade'" :style="cascadeContainerStyle">
+        <div v-for="(img, i) in visibleImages" :key="img.id || img.url || i" :style="cascadeItemStyle(i)">
           <img :src="imgUrl(img)" :alt="imgAlt(img)" :style="imgStyle" />
           <div v-if="isVideoItem(visibleImages[i])" :style="playBadgeStyle"></div>
+        </div>
+      </div>
+
+      <!-- Metro (mixed sizes) -->
+      <div v-else-if="layout === 'metro'" :style="metroStyle">
+        <div v-for="(img, i) in visibleImages" :key="img.id || img.url || i" :style="metroItemStyle(i)">
+          <img :src="imgUrl(img)" :alt="imgAlt(img)" :style="imgStyle" />
+          <div v-if="isVideoItem(visibleImages[i])" :style="playBadgeStyle"></div>
+          <div v-if="isLastVisible(i)" :style="moreOverlayStyle">+{{ extraCount }}</div>
         </div>
       </div>
 
@@ -208,6 +233,9 @@ const defaults = {
   columns: '3', gap: '8', img_height: '250px', object_fit: 'cover', thumb_radius: '8',
   rows: '0', mobile_columns: '2', expand_ratio: '4', expand_shrink: '0.5', expand_speed: '500',
   parallax_height: '1500', parallax_intensity: '50',
+  drift_height: '1200', drift_intensity: '60', drift_rotation: '12',
+  cascade_spread: '60', cascade_overlap: '40', cascade_rotation: '8',
+  metro_cell_height: '200',
   filmstrip_item_width: '280', filmstrip_center_zoom: '1.15', filmstrip_side_tilt: '35',
   filmstrip_speed: '4', filmstrip_dots: 'dots',
   strip_height: '280', strip_item_width: '300', strip_rows: '2', strip_speed: '30',
@@ -278,6 +306,14 @@ const imgStyle = computed(() => ({
   width: '100%',
   height: '100%',
   objectFit: objectFit.value,
+  display: 'block',
+  borderRadius: radius.value + 'px',
+}));
+
+// Per layout con item senza altezza esplicita (parallax, drift, scattered)
+const imgStyleAuto = computed(() => ({
+  width: '100%',
+  height: 'auto',
   display: 'block',
   borderRadius: radius.value + 'px',
 }));
@@ -419,6 +455,111 @@ function parallaxItemStyle(i) {
     zIndex: zi,
     ...filterStyle.value,
   };
+}
+
+// ─── Drift (builder preview — static, similar to parallax but with X offset) ───
+const driftContainerStyle = computed(() => ({
+  position: 'relative',
+  height: '500px',
+  overflow: 'hidden',
+}));
+
+function driftItemStyle(i) {
+  const total = visibleImages.value.length;
+  const colsNum = Math.min(4, Math.ceil(Math.sqrt(total)));
+  const rowsNum = Math.ceil(total / colsNum);
+  const col = i % colsNum;
+  const row = Math.floor(i / colsNum);
+  const cellW = 100 / colsNum;
+  const cellH = 100 / rowsNum;
+  const depth = seededRandom(i + 5);
+  const size = 0.45 + depth * 0.50;
+  const offX = (seededRandom(i + 11) - 0.5) * 18;
+  const offY = (seededRandom(i + 17) - 0.5) * 18;
+  const rot = (seededRandom(i + 23) - 0.5) * 10;
+  const shadowBlur = Math.round(4 + depth * 18);
+  const shadowAlpha = (0.1 + depth * 0.18).toFixed(2);
+  const op = (0.75 + depth * 0.25).toFixed(2);
+  const zi = Math.round(depth * 20);
+  return {
+    position: 'absolute',
+    left: (col * cellW + offX) + '%',
+    top: (row * cellH + offY) + '%',
+    width: (cellW * size) + '%',
+    transform: `rotate(${rot.toFixed(1)}deg)`,
+    overflow: 'hidden',
+    borderRadius: radius.value + 'px',
+    boxShadow: `0 ${Math.round(shadowBlur/2)}px ${shadowBlur}px rgba(0,0,0,${shadowAlpha})`,
+    opacity: op,
+    zIndex: zi,
+    ...filterStyle.value,
+  };
+}
+
+// ─── Cascade (builder preview — stacked cards) ───
+const cascadeContainerStyle = computed(() => {
+  const total = visibleImages.value.length;
+  const h = Math.max(400, total * 80 + 300);
+  return {
+    position: 'relative',
+    height: h + 'px',
+    overflow: 'hidden',
+    perspective: '1200px',
+  };
+});
+
+function cascadeItemStyle(i) {
+  const total = visibleImages.value.length;
+  const overlap = parseInt(s.value.cascade_overlap) || 40;
+  const rotMax = parseInt(s.value.cascade_rotation) || 8;
+  const stackOffset = i * (overlap / total);
+  const rot = (seededRandom(i + 9) - 0.5) * rotMax * 2;
+  const shiftX = (seededRandom(i + 15) - 0.5) * 30;
+  const w = Math.max(35, 60 - (total > 6 ? i * 2 : 0));
+  const h = Math.max(200, 350 - (total > 6 ? i * 15 : 0));
+  const left = 50 - w / 2 + shiftX;
+  const zi = total - i;
+  return {
+    position: 'absolute',
+    left: left + '%',
+    top: stackOffset + '%',
+    width: w + '%',
+    height: h + 'px',
+    zIndex: zi,
+    transform: `rotate(${rot.toFixed(1)}deg)`,
+    overflow: 'hidden',
+    borderRadius: radius.value + 'px',
+    boxShadow: '0 8px 30px rgba(0,0,0,.2)',
+    ...filterStyle.value,
+  };
+}
+
+// ─── Metro (builder preview — mixed tile sizes) ───
+const metroStyle = computed(() => ({
+  display: 'grid',
+  gridTemplateColumns: `repeat(${cols.value}, 1fr)`,
+  gridAutoRows: (parseInt(s.value.metro_cell_height) || 200) + 'px',
+  gridAutoFlow: 'dense',
+  gap: gap.value + 'px',
+}));
+
+function metroItemStyle(i) {
+  const mod = i % 7;
+  const style = {
+    position: 'relative',
+    overflow: 'hidden',
+    borderRadius: radius.value + 'px',
+    ...filterStyle.value,
+  };
+  if (mod === 0) {
+    style.gridColumn = 'span 2';
+    style.gridRow = 'span 2';
+  } else if (mod === 3) {
+    style.gridColumn = 'span 2';
+  } else if (mod === 5) {
+    style.gridRow = 'span 2';
+  }
+  return style;
 }
 
 // ─── Collage ───

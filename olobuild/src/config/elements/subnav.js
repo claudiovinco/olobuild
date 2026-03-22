@@ -30,8 +30,7 @@ export default {
     hover_bg: '',
     active_bg: '',
     border_radius: '4',
-    padding_x: '12',
-    padding_y: '6',
+    tile_padding: { top: 8, right: 12, bottom: 8, left: 12 },
     highlight_current: true,
     shadow: 'none',
   },
@@ -80,8 +79,7 @@ export default {
     ]},
     { key: 'divider', label: 'Separatore', type: 'toggle' },
     { key: 'gap', label: 'Gap (px)', type: 'range', min: 0, max: 32, step: 2 },
-    { key: 'padding_x', label: 'Padding H (px)', type: 'range', min: 0, max: 24, step: 2 },
-    { key: 'padding_y', label: 'Padding V (px)', type: 'range', min: 0, max: 16, step: 2 },
+    { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 24 },
     { key: 'border_radius', label: 'Raggio bordo (px)', type: 'border-radius' },
 
     // --- TIPOGRAFIA ---

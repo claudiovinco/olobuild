@@ -108,8 +108,14 @@ class Olo_Headline_Tile extends Olo_Tile_Base {
         // Unique ID for scoped styles
         $uid = 'olo-hl-' . wp_rand( 10000, 99999 );
 
-        // Heading text — strip ALL HTML tags (legacy editor content)
-        $heading_text  = esc_html( wp_strip_all_tags( $s['heading'] ) );
+        // Heading text — support multiline via \n or <br>
+        $raw = $s['heading'];
+        // Convert <br> / <br/> / <br /> to \n before stripping
+        $raw = preg_replace( '/<br\s*\/?>/i', "\n", $raw );
+        $raw = trim( wp_strip_all_tags( $raw ) );
+        $heading_text = strpos( $raw, "\n" ) !== false
+            ? nl2br( esc_html( $raw ) )
+            : esc_html( $raw );
         $heading_extra = $has_gradient ? ' olo-hl-grad' : '';
 
         // Decoration color fallback

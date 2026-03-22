@@ -44,7 +44,7 @@ class Olo_SwitcherPanel_Tile extends Olo_Tile_Base {
         $img_position = $s['image_position'] === 'left' ? 'left' : 'right';
         $nav_style    = $s['nav_style'] ?? 'minimal';
         $animation    = $s['animation'] ?? 'fade';
-        $padding      = absint( $s['content_padding'] ?? 40 );
+        $padding = Olo_Tile_Utils::spacing_css( $s['tile_padding'] ?? $s['content_padding'] ?? 40, 40 );
         $title_tag    = in_array( $s['title_tag'], [ 'h2', 'h3', 'h4' ], true ) ? $s['title_tag'] : 'h3';
         $btn_style    = $s['button_style'] ?? 'default';
 
@@ -77,7 +77,7 @@ class Olo_SwitcherPanel_Tile extends Olo_Tile_Base {
         ?>
         <style>
             .<?php echo $uid; ?> .olo-sp-hero { height: <?php echo $hero_height; ?>px; }
-            .<?php echo $uid; ?> .olo-sp-panel-body { padding: <?php echo $padding; ?>px; }
+            .<?php echo $uid; ?> .olo-sp-panel-body { padding: <?php echo $padding; ?>; }
         </style>
         <div class="olo-switcherpanel <?php echo $uid; ?>">
             <!-- Hero image with nav overlay -->

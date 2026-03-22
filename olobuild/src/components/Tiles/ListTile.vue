@@ -11,6 +11,7 @@
       <!-- SVG icon -->
       <span v-else class="olo-list-icon-svg" v-html="getIcon(resolveIcon(item))"></span>
       <span class="olo-list-text" :data-olo-editable="'items.' + i + '.text'">{{ item.text }}</span>
+      <span v-if="item.link" class="olo-list-link-badge" title="Link">&#x1F517;</span>
     </li>
   </ul>
 </template>
@@ -128,5 +129,11 @@ function getIcon(icon) {
 }
 .olo-list-text {
   line-height: 1.5;
+}
+.olo-list-link-badge {
+  flex-shrink: 0;
+  font-size: 12px;
+  opacity: 0.5;
+  margin-left: auto;
 }
 </style>

@@ -59,6 +59,7 @@ class Olo_Iconlist_Tile extends Olo_Tile_Base {
                 $item_icon = $item['icon'] ?? 'check';
                 $item_text = $item['text'] ?? '';
                 $item_clr  = $this->safe_color_css($item['color'] ?? '') ?: $icon_clr;
+                $has_link  = ! empty( $item['link'] );
                 $icon_style = "color:{$item_clr};flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;";
                 if ($shape !== 'none') {
                     $w = $icon_size + 16;
@@ -68,9 +69,14 @@ class Olo_Iconlist_Tile extends Olo_Tile_Base {
                 if ($divider && !$is_horiz) {
                     $item_style .= "padding-bottom:{$gap}px;border-bottom:1px solid {$div_clr};";
                 }
+                if ($has_link) {
+                    $item_style .= 'text-decoration:none;color:inherit;';
+                }
                 $ratio = $icon_size > 0 ? round($icon_size / 20, 2) : 1;
+                $tag_open  = $has_link ? '<a href="' . esc_url( $item['link'] ) . '" style="' . $item_style . '">' : '<div style="' . $item_style . '">';
+                $tag_close = $has_link ? '</a>' : '</div>';
                 ?>
-                <div style="<?php echo $item_style; ?>">
+                <?php echo $tag_open; ?>
                     <span style="<?php echo $icon_style; ?>">
                         <?php if (preg_match('/^[a-z][a-z0-9-]*$/', $item_icon)) : ?>
                             <span uk-icon="icon: <?php echo esc_attr($item_icon); ?>; ratio: <?php echo $ratio; ?>"></span>
@@ -81,7 +87,7 @@ class Olo_Iconlist_Tile extends Olo_Tile_Base {
                     <span style="color:<?php echo $text_clr; ?>;font-size:<?php echo $text_size; ?>px;line-height:1.4;">
                         <?php echo wp_kses_post($item_text); ?>
                     </span>
-                </div>
+                <?php echo $tag_close; ?>
             <?php endforeach; ?>
         </div>
         <?php

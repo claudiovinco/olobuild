@@ -45,7 +45,7 @@ const s = computed(() => ({
   direction: 'left',
   pause_hover: true,
   gap: '60',
-  bg_color: 'var(--olo-color-muted, #F3F4F6)',
+  bg_color: '#1F2937',
   text_color: 'var(--olo-color-text, #374151)',
   font_size: '16',
   font_weight: '500',
@@ -67,7 +67,7 @@ const imgList = computed(() => {
 
 const containerStyle = computed(() => {
   const st = {
-    background: s.value.bg_color || 'var(--olo-color-muted, #F3F4F6)',
+    background: s.value.bg_color || '#1F2937',
     height: (parseInt(s.value.height) || 50) + 'px',
     overflow: 'hidden',
   };

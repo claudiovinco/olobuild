@@ -52,90 +52,10 @@
         </template>
       </div>
     </div>
-    <div v-else class="mb-mb-1">
+    <div v-else>
       <button @click="showGlobalBg = true" class="mb-text-[10px] mb-text-gray-400 hover:mb-text-gray-300">
         Sfondo globale &darr;
       </button>
-    </div>
-
-    <div class="mb-flex mb-items-center mb-gap-4 mb-flex-wrap">
-      <!-- Height -->
-      <div class="mb-flex mb-items-center mb-gap-1">
-        <label class="mb-text-[10px] mb-text-gray-400">Altezza</label>
-        <input type="number" :value="settings.height" @input="up('height', parseInt($event.target.value) || 600)" min="200" max="1200" step="10" class="mps-num-input mb-w-16" />
-      </div>
-
-      <!-- Autoplay -->
-      <label class="mb-flex mb-items-center mb-gap-1 mb-cursor-pointer">
-        <button @click="up('autoplay', !settings.autoplay)" :class="['mps-toggle', settings.autoplay ? 'mps-toggle-on' : 'mps-toggle-off']">
-          <span :class="['mps-toggle-dot', settings.autoplay ? 'mps-toggle-dot-on' : 'mps-toggle-dot-off']"></span>
-        </button>
-        <span class="mb-text-[10px] mb-text-gray-400">Riproduzione automatica</span>
-      </label>
-
-      <!-- Speed -->
-      <div v-if="settings.autoplay" class="mb-flex mb-items-center mb-gap-1">
-        <label class="mb-text-[10px] mb-text-gray-400">Velocita</label>
-        <input type="number" :value="settings.autoplaySpeed" @input="up('autoplaySpeed', parseInt($event.target.value) || 5000)" min="1000" max="20000" step="500" class="mps-num-input mb-w-16" />
-      </div>
-
-      <!-- Pause on hover -->
-      <label v-if="settings.autoplay" class="mb-flex mb-items-center mb-gap-1 mb-cursor-pointer">
-        <button @click="up('pauseOnHover', !settings.pauseOnHover)" :class="['mps-toggle', settings.pauseOnHover ? 'mps-toggle-on' : 'mps-toggle-off']">
-          <span :class="['mps-toggle-dot', settings.pauseOnHover ? 'mps-toggle-dot-on' : 'mps-toggle-dot-off']"></span>
-        </button>
-        <span class="mb-text-[10px] mb-text-gray-400">Pausa hover</span>
-      </label>
-
-      <!-- Transition -->
-      <div class="mb-flex mb-items-center mb-gap-1">
-        <label class="mb-text-[10px] mb-text-gray-400">Trans.</label>
-        <select :value="settings.transition" @change="up('transition', $event.target.value)" class="mps-select-sm">
-          <option value="fade">Dissolvenza</option>
-          <option value="slide">Scorrimento</option>
-          <option value="zoom">Zoom</option>
-        </select>
-      </div>
-
-      <!-- Arrows -->
-      <label class="mb-flex mb-items-center mb-gap-1 mb-cursor-pointer">
-        <button @click="up('showArrows', !settings.showArrows)" :class="['mps-toggle', settings.showArrows ? 'mps-toggle-on' : 'mps-toggle-off']">
-          <span :class="['mps-toggle-dot', settings.showArrows ? 'mps-toggle-dot-on' : 'mps-toggle-dot-off']"></span>
-        </button>
-        <span class="mb-text-[10px] mb-text-gray-400">Frecce</span>
-      </label>
-
-      <!-- Dots -->
-      <label class="mb-flex mb-items-center mb-gap-1 mb-cursor-pointer">
-        <button @click="up('showDots', !settings.showDots)" :class="['mps-toggle', settings.showDots ? 'mps-toggle-on' : 'mps-toggle-off']">
-          <span :class="['mps-toggle-dot', settings.showDots ? 'mps-toggle-dot-on' : 'mps-toggle-dot-off']"></span>
-        </button>
-        <span class="mb-text-[10px] mb-text-gray-400">Punti</span>
-      </label>
-
-      <!-- Keyboard -->
-      <label class="mb-flex mb-items-center mb-gap-1 mb-cursor-pointer">
-        <button @click="up('keyboard', !settings.keyboard)" :class="['mps-toggle', settings.keyboard ? 'mps-toggle-on' : 'mps-toggle-off']">
-          <span :class="['mps-toggle-dot', settings.keyboard ? 'mps-toggle-dot-on' : 'mps-toggle-dot-off']"></span>
-        </button>
-        <span class="mb-text-[10px] mb-text-gray-400">Tastiera</span>
-      </label>
-
-      <!-- Swipe -->
-      <label class="mb-flex mb-items-center mb-gap-1 mb-cursor-pointer">
-        <button @click="up('swipe', !settings.swipe)" :class="['mps-toggle', settings.swipe ? 'mps-toggle-on' : 'mps-toggle-off']">
-          <span :class="['mps-toggle-dot', settings.swipe ? 'mps-toggle-dot-on' : 'mps-toggle-dot-off']"></span>
-        </button>
-        <span class="mb-text-[10px] mb-text-gray-400">Swipe</span>
-      </label>
-
-      <!-- Loop -->
-      <label class="mb-flex mb-items-center mb-gap-1 mb-cursor-pointer">
-        <button @click="up('loop', !settings.loop)" :class="['mps-toggle', settings.loop ? 'mps-toggle-on' : 'mps-toggle-off']">
-          <span :class="['mps-toggle-dot', settings.loop ? 'mps-toggle-dot-on' : 'mps-toggle-dot-off']"></span>
-        </button>
-        <span class="mb-text-[10px] mb-text-gray-400">Ripeti</span>
-      </label>
     </div>
   </div>
 </template>
@@ -155,10 +75,6 @@ const globalBg = computed(() => props.settings.globalBackground || {
   type: 'color', color: '#1e293b', image: '', video: '',
   gradientFrom: '#1e293b', gradientTo: '#0f172a', gradientAngle: 180,
 });
-
-function up(key, val) {
-  emit('update', key, val);
-}
 
 function updateGlobalBg(key, val) {
   const current = JSON.parse(JSON.stringify(globalBg.value));
@@ -205,28 +121,4 @@ function pickGlobalBgVideo() {
   font-size: 11px;
   color: #111827;
 }
-.mps-toggle {
-  position: relative;
-  width: 28px;
-  height: 16px;
-  border-radius: 9999px;
-  transition: background-color 0.2s;
-  flex-shrink: 0;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-}
-.mps-toggle-on  { background: var(--olo-color-primary, #6366f1); }
-.mps-toggle-off { background: #4b5563; }
-.mps-toggle-dot {
-  position: absolute;
-  top: 2px;
-  width: 12px;
-  height: 12px;
-  border-radius: 9999px;
-  background: #fff;
-  transition: left 0.2s;
-}
-.mps-toggle-dot-on  { left: 14px; }
-.mps-toggle-dot-off { left: 2px; }
 </style>

@@ -73,7 +73,7 @@ export default {
     overlay_direction: 'bottom',
     overlay_height: '50',
     // Testo
-    body_padding: '14',
+    tile_padding: { top: 14, right: 14, bottom: 14, left: 14 },
     title_size: '1',
     title_color: '',
     excerpt_size: '0.85',
@@ -398,7 +398,7 @@ export default {
     // 10. Testo
     // ═══════════════════════════════════════════
     { type: 'separator', label: 'Stile testo' },
-    { key: 'body_padding', label: 'Padding area testo (px)', type: 'range', min: 0, max: 40, step: 1 },
+    { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 40 },
     { key: 'title_size', label: 'Dimensione titolo (em)', type: 'range', min: 0.7, max: 2.5, step: 0.05 },
     { key: 'title_color', label: 'Colore titolo', type: 'color' },
     { key: 'excerpt_size', label: 'Dimensione estratto (em)', type: 'range', min: 0.7, max: 1.5, step: 0.05 },

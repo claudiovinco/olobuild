@@ -1,5 +1,5 @@
 <template>
-  <div class="mb-w-64 mb-bg-gray-900 mb-border-l mb-border-gray-700 mb-overflow-y-auto mb-flex mb-flex-col">
+  <div class="mb-bg-gray-900 mb-border-l mb-border-gray-700 mb-overflow-y-auto mb-flex mb-flex-col mb-h-full">
     <template v-if="layer">
       <!-- Header -->
       <div class="mb-p-2 mb-border-b mb-border-gray-700 mb-text-xs mb-font-semibold mb-text-gray-300">
@@ -103,96 +103,656 @@
               <span class="mb-text-[11px] mb-text-gray-400">Loop</span>
             </label>
           </template>
+          <!-- Audio -->
+          <template v-if="layer.type === 'audio'">
+            <div>
+              <label class="mps-label">URL Audio</label>
+              <div class="mb-flex mb-gap-1">
+                <input :value="layer.audioSrc" @input="up('audioSrc', $event.target.value)" class="mps-input mb-flex-1" placeholder="mp3 o url audio" />
+                <button @click="pickAudio" class="mb-px-2 mb-bg-gray-600 mb-rounded mb-text-xs mb-text-gray-300 hover:mb-bg-gray-500">Sfoglia</button>
+              </div>
+            </div>
+            <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
+              <input type="checkbox" :checked="layer.audioAutoplay" @change="up('audioAutoplay', $event.target.checked)" class="mb-rounded" />
+              <span class="mb-text-[11px] mb-text-gray-400">Autoplay</span>
+            </label>
+            <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
+              <input type="checkbox" :checked="layer.audioLoop" @change="up('audioLoop', $event.target.checked)" class="mb-rounded" />
+              <span class="mb-text-[11px] mb-text-gray-400">Loop</span>
+            </label>
+          </template>
+
+          <!-- Layer Action (tutti i tipi) -->
+          <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
+          <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">Azione Click</p>
+          <div>
+            <label class="mps-label">Tipo azione</label>
+            <select :value="layer.action?.type || 'none'" @change="setAction('type', $event.target.value)" class="mps-select">
+              <option value="none">Nessuna</option>
+              <option value="nextSlide">Slide successiva</option>
+              <option value="prevSlide">Slide precedente</option>
+              <option value="goToSlide">Vai a slide N</option>
+              <option value="openUrl">Apri URL</option>
+              <option value="scrollBelow">Scroll sotto slider</option>
+              <option value="toggleLayer">Toggle visibilita layer</option>
+            </select>
+          </div>
+          <template v-if="layer.action?.type === 'goToSlide'">
+            <div>
+              <label class="mps-label">Indice slide (da 0)</label>
+              <input type="number" :value="layer.action.target || 0" @input="setAction('target', parseInt($event.target.value))" min="0" class="mps-input mb-w-full" />
+            </div>
+          </template>
+          <template v-if="layer.action?.type === 'openUrl'">
+            <div>
+              <label class="mps-label">URL</label>
+              <input :value="layer.action.url || ''" @input="setAction('url', $event.target.value)" class="mps-input mb-w-full" placeholder="https://..." />
+            </div>
+            <div>
+              <label class="mps-label">Destinazione</label>
+              <select :value="layer.action.urlTarget || '_self'" @change="setAction('urlTarget', $event.target.value)" class="mps-select">
+                <option value="_self">Stessa scheda</option>
+                <option value="_blank">Nuova scheda</option>
+              </select>
+            </div>
+          </template>
+          <template v-if="layer.action?.type === 'toggleLayer'">
+            <div>
+              <label class="mps-label">ID layer target</label>
+              <input :value="layer.action.target || ''" @input="setAction('target', $event.target.value)" class="mps-input mb-w-full" placeholder="ID layer" />
+            </div>
+          </template>
+
+          <!-- Parallax depth -->
+          <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
+          <div>
+            <label class="mps-label">Parallax depth</label>
+            <div class="mb-flex mb-items-center mb-gap-2">
+              <input type="range" :value="layer.parallaxDepth || 0" @input="up('parallaxDepth', parseInt($event.target.value))" min="0" max="10" class="mb-flex-1" />
+              <span class="mps-val">{{ layer.parallaxDepth || 0 }}</span>
+            </div>
+          </div>
         </template>
 
         <!-- ===== POSIZIONE ===== -->
         <template v-if="activeTab === 'Posizione'">
+          <!-- Breakpoint indicator -->
+          <div v-if="activeBreakpoint !== 'desktop'" class="mb-bg-yellow-900/30 mb-border mb-border-yellow-700/50 mb-rounded mb-p-2 mb-mb-2">
+            <div class="mb-flex mb-items-center mb-justify-between">
+              <span class="mb-text-[10px] mb-text-yellow-400">Override per {{ activeBreakpoint }} — valori non impostati ereditano dal livello superiore</span>
+              <button
+                v-if="hasAnyOverride"
+                @click="clearAllOverrides"
+                class="mb-text-[10px] mb-text-yellow-500 hover:mb-text-yellow-300 mb-whitespace-nowrap mb-ml-2"
+              >Reset tutti</button>
+            </div>
+          </div>
+          <!-- Visibility toggle per breakpoint -->
+          <div v-if="activeBreakpoint !== 'desktop'" class="mb-mb-2">
+            <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
+              <input type="checkbox" :checked="rv('visible') !== false" @change="up('visible', $event.target.checked)" class="mb-rounded" />
+              <span class="mps-label mb-mb-0">Visibile su {{ activeBreakpoint }}</span>
+            </label>
+          </div>
           <div>
-            <label class="mps-label">X (%)</label>
+            <label class="mps-label" :class="{ 'mb-text-yellow-400': isOverridden('x') }">X (%)</label>
             <div class="mb-flex mb-items-center mb-gap-2">
-              <input type="range" :value="layer.x" @input="up('x', parseFloat($event.target.value))" min="0" max="100" step="0.5" class="mb-flex-1" />
-              <span class="mps-val">{{ layer.x }}</span>
+              <input type="range" :value="rv('x')" @input="up('x', parseFloat($event.target.value))" min="0" max="100" step="0.5" class="mb-flex-1" />
+              <span class="mps-val">{{ rv('x') }}</span>
+              <button v-if="isOverridden('x')" @click="clearOverride('x')" class="mb-text-yellow-500 mb-text-[10px]" title="Reset">&times;</button>
             </div>
           </div>
           <div>
-            <label class="mps-label">Y (%)</label>
+            <label class="mps-label" :class="{ 'mb-text-yellow-400': isOverridden('y') }">Y (%)</label>
             <div class="mb-flex mb-items-center mb-gap-2">
-              <input type="range" :value="layer.y" @input="up('y', parseFloat($event.target.value))" min="0" max="100" step="0.5" class="mb-flex-1" />
-              <span class="mps-val">{{ layer.y }}</span>
+              <input type="range" :value="rv('y')" @input="up('y', parseFloat($event.target.value))" min="0" max="100" step="0.5" class="mb-flex-1" />
+              <span class="mps-val">{{ rv('y') }}</span>
+              <button v-if="isOverridden('y')" @click="clearOverride('y')" class="mb-text-yellow-500 mb-text-[10px]" title="Reset">&times;</button>
             </div>
           </div>
           <div>
-            <label class="mps-label">Larghezza (%)</label>
+            <label class="mps-label" :class="{ 'mb-text-yellow-400': isOverridden('width') }">Larghezza (%)</label>
             <div class="mb-flex mb-items-center mb-gap-2">
               <label class="mb-flex mb-items-center mb-gap-1 mb-text-[10px] mb-text-gray-400">
-                <input type="checkbox" :checked="layer.width === 'auto'" @change="up('width', $event.target.checked ? 'auto' : 50)" class="mb-rounded" /> Auto
+                <input type="checkbox" :checked="rv('width') === 'auto'" @change="up('width', $event.target.checked ? 'auto' : 50)" class="mb-rounded" /> Auto
               </label>
-              <template v-if="layer.width !== 'auto'">
-                <input type="range" :value="layer.width" @input="up('width', parseFloat($event.target.value))" min="5" max="100" step="0.5" class="mb-flex-1" />
-                <span class="mps-val">{{ layer.width }}</span>
+              <template v-if="rv('width') !== 'auto'">
+                <input type="range" :value="rv('width')" @input="up('width', parseFloat($event.target.value))" min="5" max="100" step="0.5" class="mb-flex-1" />
+                <span class="mps-val">{{ rv('width') }}</span>
               </template>
+              <button v-if="isOverridden('width')" @click="clearOverride('width')" class="mb-text-yellow-500 mb-text-[10px]" title="Reset">&times;</button>
             </div>
           </div>
           <div>
-            <label class="mps-label">Altezza (%)</label>
+            <label class="mps-label" :class="{ 'mb-text-yellow-400': isOverridden('height') }">Altezza (%)</label>
             <div class="mb-flex mb-items-center mb-gap-2">
               <label class="mb-flex mb-items-center mb-gap-1 mb-text-[10px] mb-text-gray-400">
-                <input type="checkbox" :checked="layer.height === 'auto'" @change="up('height', $event.target.checked ? 'auto' : 30)" class="mb-rounded" /> Auto
+                <input type="checkbox" :checked="rv('height') === 'auto'" @change="up('height', $event.target.checked ? 'auto' : 30)" class="mb-rounded" /> Auto
               </label>
-              <template v-if="layer.height !== 'auto'">
-                <input type="range" :value="layer.height" @input="up('height', parseFloat($event.target.value))" min="5" max="100" step="0.5" class="mb-flex-1" />
-                <span class="mps-val">{{ layer.height }}</span>
+              <template v-if="rv('height') !== 'auto'">
+                <input type="range" :value="rv('height')" @input="up('height', parseFloat($event.target.value))" min="5" max="100" step="0.5" class="mb-flex-1" />
+                <span class="mps-val">{{ rv('height') }}</span>
               </template>
+              <button v-if="isOverridden('height')" @click="clearOverride('height')" class="mb-text-yellow-500 mb-text-[10px]" title="Reset">&times;</button>
+            </div>
+          </div>
+          <div v-if="layer.type === 'text' || layer.type === 'button' || layer.type === 'icon'">
+            <label class="mps-label" :class="{ 'mb-text-yellow-400': isOverridden('fontSize') }">Font size (px)</label>
+            <div class="mb-flex mb-items-center mb-gap-2">
+              <input type="range" :value="rv('fontSize')" @input="up('fontSize', parseInt($event.target.value))" min="8" max="200" class="mb-flex-1" />
+              <span class="mps-val">{{ rv('fontSize') }}</span>
+              <button v-if="isOverridden('fontSize')" @click="clearOverride('fontSize')" class="mb-text-yellow-500 mb-text-[10px]" title="Reset">&times;</button>
             </div>
           </div>
         </template>
 
         <!-- ===== STILE ===== -->
         <template v-if="activeTab === 'Stile'">
+
+          <!-- ── Tipografia (text/button) ── -->
+          <template v-if="layer.type === 'text' || layer.type === 'button'">
+            <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">Tipografia</p>
+            <div>
+              <label class="mps-label">Font</label>
+              <select :value="layer.fontFamily || ''" @change="up('fontFamily', $event.target.value)" class="mps-select">
+                <option value="">Default</option>
+                <optgroup label="Sans-serif">
+                  <option v-for="f in fontsSans" :key="f" :value="f">{{ f }}</option>
+                </optgroup>
+                <optgroup label="Serif">
+                  <option v-for="f in fontsSerif" :key="f" :value="f">{{ f }}</option>
+                </optgroup>
+                <optgroup label="Mono">
+                  <option v-for="f in fontsMono" :key="f" :value="f">{{ f }}</option>
+                </optgroup>
+                <optgroup label="Display">
+                  <option v-for="f in fontsDisplay" :key="f" :value="f">{{ f }}</option>
+                </optgroup>
+              </select>
+            </div>
+            <div>
+              <label class="mps-label">Dimensione font (px)</label>
+              <div class="mb-flex mb-items-center mb-gap-2">
+                <input type="range" :value="layer.fontSize" @input="up('fontSize', parseFloat($event.target.value))" min="8" max="200" step="1" class="mb-flex-1" />
+                <span class="mps-val">{{ layer.fontSize }}</span>
+              </div>
+            </div>
+            <div>
+              <label class="mps-label">Peso font</label>
+              <select :value="layer.fontWeight" @change="up('fontWeight', $event.target.value)" class="mps-select">
+                <option v-for="w in ['300','400','500','600','700','800','900']" :key="w" :value="w">{{ w }}</option>
+              </select>
+            </div>
+            <div>
+              <label class="mps-label">Stile font</label>
+              <select :value="layer.fontStyle || 'normal'" @change="up('fontStyle', $event.target.value)" class="mps-select">
+                <option value="normal">Normale</option>
+                <option value="italic">Corsivo</option>
+              </select>
+            </div>
+            <div>
+              <label class="mps-label">Colore</label>
+              <FieldColor :modelValue="layer.color || '#ffffff'" @update:modelValue="up('color', $event)" />
+            </div>
+            <div>
+              <label class="mps-label">Allineamento testo</label>
+              <div class="mb-flex mb-gap-1">
+                <button v-for="a in ['left','center','right']" :key="a"
+                  @click="up('textAlign', a)"
+                  :class="['mb-flex-1 mb-py-1 mb-rounded mb-text-xs', layer.textAlign === a ? 'mb-bg-primary-600 mb-text-white' : 'mb-bg-gray-700 mb-text-gray-400']"
+                >{{ a }}</button>
+              </div>
+            </div>
+            <div>
+              <label class="mps-label">Line-height</label>
+              <div class="mb-flex mb-items-center mb-gap-2">
+                <input type="range" :value="layer.lineHeight ?? 1.2" @input="up('lineHeight', parseFloat($event.target.value))" min="0.8" max="3" step="0.1" class="mb-flex-1" />
+                <span class="mps-val">{{ (layer.lineHeight ?? 1.2).toFixed(1) }}</span>
+              </div>
+            </div>
+            <div>
+              <label class="mps-label">Letter-spacing (px)</label>
+              <div class="mb-flex mb-items-center mb-gap-2">
+                <input type="range" :value="layer.letterSpacing ?? 0" @input="up('letterSpacing', parseFloat($event.target.value))" min="-5" max="20" step="0.5" class="mb-flex-1" />
+                <span class="mps-val">{{ layer.letterSpacing ?? 0 }}</span>
+              </div>
+            </div>
+            <div>
+              <label class="mps-label">Trasformazione</label>
+              <select :value="layer.textTransform || 'none'" @change="up('textTransform', $event.target.value)" class="mps-select">
+                <option value="none">Nessuna</option>
+                <option value="uppercase">MAIUSCOLO</option>
+                <option value="lowercase">minuscolo</option>
+                <option value="capitalize">Capitalizzato</option>
+              </select>
+            </div>
+            <div>
+              <label class="mps-label">Decorazione</label>
+              <select :value="layer.textDecoration || 'none'" @change="up('textDecoration', $event.target.value)" class="mps-select">
+                <option value="none">Nessuna</option>
+                <option value="underline">Sottolineato</option>
+                <option value="line-through">Barrato</option>
+                <option value="overline">Sopralineato</option>
+              </select>
+            </div>
+            <!-- Text Stroke -->
+            <div>
+              <label class="mps-label">Text stroke (px)</label>
+              <div class="mb-flex mb-items-center mb-gap-2">
+                <input type="range" :value="layer.textStrokeWidth ?? 0" @input="up('textStrokeWidth', parseFloat($event.target.value))" min="0" max="10" step="0.5" class="mb-flex-1" />
+                <span class="mps-val">{{ layer.textStrokeWidth ?? 0 }}</span>
+              </div>
+            </div>
+            <template v-if="(layer.textStrokeWidth ?? 0) > 0">
+              <div>
+                <label class="mps-label">Colore stroke</label>
+                <FieldColor :modelValue="layer.textStrokeColor || '#000000'" @update:modelValue="up('textStrokeColor', $event)" />
+              </div>
+            </template>
+            <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
+              <input type="checkbox" :checked="layer.selectableText" @change="up('selectableText', $event.target.checked)" class="mb-rounded" />
+              <span class="mb-text-[11px] mb-text-gray-400">Testo selezionabile</span>
+            </label>
+          </template>
+
+          <!-- ── Dimensione font (icon) ── -->
+          <template v-if="layer.type === 'icon'">
+            <div>
+              <label class="mps-label">Dimensione icona (px)</label>
+              <div class="mb-flex mb-items-center mb-gap-2">
+                <input type="range" :value="layer.fontSize" @input="up('fontSize', parseFloat($event.target.value))" min="8" max="200" step="1" class="mb-flex-1" />
+                <span class="mps-val">{{ layer.fontSize }}</span>
+              </div>
+            </div>
+            <div>
+              <label class="mps-label">Colore fill</label>
+              <FieldColor :modelValue="layer.color || '#ffffff'" @update:modelValue="up('color', $event)" />
+            </div>
+            <div>
+              <label class="mps-label">Colore fill (override)</label>
+              <FieldColor :modelValue="layer.iconFillColor || ''" @update:modelValue="up('iconFillColor', $event)" />
+            </div>
+            <div>
+              <label class="mps-label">Colore stroke</label>
+              <FieldColor :modelValue="layer.iconStrokeColor || ''" @update:modelValue="up('iconStrokeColor', $event)" />
+            </div>
+            <div>
+              <label class="mps-label">Stroke width (px)</label>
+              <div class="mb-flex mb-items-center mb-gap-2">
+                <input type="range" :value="layer.iconStrokeWidth ?? 0" @input="up('iconStrokeWidth', parseFloat($event.target.value))" min="0" max="10" step="0.5" class="mb-flex-1" />
+                <span class="mps-val">{{ layer.iconStrokeWidth ?? 0 }}</span>
+              </div>
+            </div>
+            <div>
+              <label class="mps-label">Stroke dash</label>
+              <div class="mb-flex mb-items-center mb-gap-2">
+                <input type="range" :value="layer.iconStrokeDash ?? 0" @input="up('iconStrokeDash', parseFloat($event.target.value))" min="0" max="50" step="1" class="mb-flex-1" />
+                <span class="mps-val">{{ layer.iconStrokeDash ?? 0 }}</span>
+              </div>
+            </div>
+          </template>
+
+          <!-- ── Sfondo e raggio ── -->
+          <template v-if="layer.type !== 'image' && layer.type !== 'video'">
+            <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
+            <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">Sfondo</p>
+          </template>
+
+          <!-- Shape gradient toggle -->
+          <template v-if="layer.type === 'shape'">
+            <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
+              <input type="checkbox" :checked="!!layer.shapeGradient" @change="toggleShapeGradient($event.target.checked)" class="mb-rounded" />
+              <span class="mb-text-[11px] mb-text-gray-400">Gradiente</span>
+            </label>
+            <template v-if="layer.shapeGradient">
+              <div>
+                <label class="mps-label">Colore da</label>
+                <FieldColor :modelValue="layer.shapeGradient.from || '#3b82f6'" @update:modelValue="upShapeGrad('from', $event)" />
+              </div>
+              <div>
+                <label class="mps-label">Colore a</label>
+                <FieldColor :modelValue="layer.shapeGradient.to || '#8b5cf6'" @update:modelValue="upShapeGrad('to', $event)" />
+              </div>
+              <div>
+                <label class="mps-label">Angolo</label>
+                <div class="mb-flex mb-items-center mb-gap-2">
+                  <input type="range" :value="layer.shapeGradient.angle ?? 180" @input="upShapeGrad('angle', parseInt($event.target.value))" min="0" max="360" step="15" class="mb-flex-1" />
+                  <span class="mps-val">{{ layer.shapeGradient.angle ?? 180 }}°</span>
+                </div>
+              </div>
+            </template>
+            <template v-else>
+              <div>
+                <label class="mps-label">Sfondo</label>
+                <FieldColor :modelValue="layer.bgColor || '#3b82f6'" @update:modelValue="up('bgColor', $event)" />
+              </div>
+            </template>
+          </template>
+          <template v-else-if="layer.type !== 'image' && layer.type !== 'video'">
+            <div>
+              <label class="mps-label">Sfondo</label>
+              <FieldColor :modelValue="layer.bgColor || '#000000'" @update:modelValue="up('bgColor', $event)" />
+            </div>
+          </template>
+
           <div>
-            <label class="mps-label">Dimensione font (px)</label>
+            <div class="mb-flex mb-items-center mb-justify-between">
+              <label class="mps-label mb-mb-0">Raggio bordo (px)</label>
+              <button @click="up('borderRadiusLinked', !layer.borderRadiusLinked)" :class="['mb-text-[10px] mb-px-1.5 mb-rounded', layer.borderRadiusLinked !== false ? 'mb-bg-primary-600 mb-text-white' : 'mb-bg-gray-700 mb-text-gray-400']" title="Lega/slega angoli">&#x1F517;</button>
+            </div>
+            <template v-if="layer.borderRadiusLinked !== false">
+              <div class="mb-flex mb-items-center mb-gap-2">
+                <input type="range" :value="layer.borderRadius" @input="up('borderRadius', parseFloat($event.target.value))" min="0" max="200" step="1" class="mb-flex-1" />
+                <span class="mps-val">{{ layer.borderRadius }}</span>
+              </div>
+            </template>
+            <template v-else>
+              <div class="mb-grid mb-grid-cols-2 mb-gap-2">
+                <div>
+                  <label class="mps-label">TL</label>
+                  <div class="mb-flex mb-items-center mb-gap-1">
+                    <input type="range" :value="layer.borderRadiusTL ?? 0" @input="up('borderRadiusTL', parseFloat($event.target.value))" min="0" max="200" step="1" class="mb-flex-1" />
+                    <span class="mps-val">{{ layer.borderRadiusTL ?? 0 }}</span>
+                  </div>
+                </div>
+                <div>
+                  <label class="mps-label">TR</label>
+                  <div class="mb-flex mb-items-center mb-gap-1">
+                    <input type="range" :value="layer.borderRadiusTR ?? 0" @input="up('borderRadiusTR', parseFloat($event.target.value))" min="0" max="200" step="1" class="mb-flex-1" />
+                    <span class="mps-val">{{ layer.borderRadiusTR ?? 0 }}</span>
+                  </div>
+                </div>
+                <div>
+                  <label class="mps-label">BL</label>
+                  <div class="mb-flex mb-items-center mb-gap-1">
+                    <input type="range" :value="layer.borderRadiusBL ?? 0" @input="up('borderRadiusBL', parseFloat($event.target.value))" min="0" max="200" step="1" class="mb-flex-1" />
+                    <span class="mps-val">{{ layer.borderRadiusBL ?? 0 }}</span>
+                  </div>
+                </div>
+                <div>
+                  <label class="mps-label">BR</label>
+                  <div class="mb-flex mb-items-center mb-gap-1">
+                    <input type="range" :value="layer.borderRadiusBR ?? 0" @input="up('borderRadiusBR', parseFloat($event.target.value))" min="0" max="200" step="1" class="mb-flex-1" />
+                    <span class="mps-val">{{ layer.borderRadiusBR ?? 0 }}</span>
+                  </div>
+                </div>
+              </div>
+            </template>
+          </div>
+
+          <!-- ── Bordo ── -->
+          <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
+          <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">Bordo</p>
+          <div>
+            <div class="mb-flex mb-items-center mb-justify-between">
+              <label class="mps-label mb-mb-0">Larghezza (px)</label>
+              <button @click="up('borderWidthLinked', !layer.borderWidthLinked)" :class="['mb-text-[10px] mb-px-1.5 mb-rounded', layer.borderWidthLinked !== false ? 'mb-bg-primary-600 mb-text-white' : 'mb-bg-gray-700 mb-text-gray-400']" title="Lega/slega lati">&#x1F517;</button>
+            </div>
+            <template v-if="layer.borderWidthLinked !== false">
+              <div class="mb-flex mb-items-center mb-gap-2">
+                <input type="range" :value="layer.borderWidth ?? 0" @input="up('borderWidth', parseFloat($event.target.value))" min="0" max="20" step="1" class="mb-flex-1" />
+                <span class="mps-val">{{ layer.borderWidth ?? 0 }}</span>
+              </div>
+            </template>
+            <template v-else>
+              <div class="mb-grid mb-grid-cols-2 mb-gap-2">
+                <div v-for="side in ['Top','Right','Bottom','Left']" :key="side">
+                  <label class="mps-label">{{ side }}</label>
+                  <div class="mb-flex mb-items-center mb-gap-1">
+                    <input type="range" :value="layer['borderWidth' + side] ?? 0" @input="up('borderWidth' + side, parseFloat($event.target.value))" min="0" max="20" step="1" class="mb-flex-1" />
+                    <span class="mps-val">{{ layer['borderWidth' + side] ?? 0 }}</span>
+                  </div>
+                </div>
+              </div>
+            </template>
+          </div>
+          <template v-if="(layer.borderWidth ?? 0) > 0 || (layer.borderWidthLinked === false && ((layer.borderWidthTop ?? 0) > 0 || (layer.borderWidthRight ?? 0) > 0 || (layer.borderWidthBottom ?? 0) > 0 || (layer.borderWidthLeft ?? 0) > 0))">
+            <div>
+              <label class="mps-label">Stile</label>
+              <select :value="layer.borderStyle || 'solid'" @change="up('borderStyle', $event.target.value)" class="mps-select">
+                <option value="solid">Solido</option>
+                <option value="dashed">Tratteggiato</option>
+                <option value="dotted">Puntinato</option>
+                <option value="double">Doppio</option>
+              </select>
+            </div>
+            <div>
+              <label class="mps-label">Colore</label>
+              <FieldColor :modelValue="layer.borderColor || '#ffffff'" @update:modelValue="up('borderColor', $event)" />
+            </div>
+          </template>
+
+          <!-- ── Spaziatura ── -->
+          <template v-if="layer.type !== 'image' && layer.type !== 'video'">
+            <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
+            <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">Spaziatura</p>
+            <div>
+              <div class="mb-flex mb-items-center mb-justify-between">
+                <label class="mps-label mb-mb-0">Padding (px)</label>
+                <button @click="up('paddingLinked', !layer.paddingLinked)" :class="['mb-text-[10px] mb-px-1.5 mb-rounded', layer.paddingLinked !== false ? 'mb-bg-primary-600 mb-text-white' : 'mb-bg-gray-700 mb-text-gray-400']" title="Lega/slega lati">&#x1F517;</button>
+              </div>
+              <template v-if="layer.paddingLinked !== false">
+                <div class="mb-flex mb-items-center mb-gap-2">
+                  <input type="range" :value="layer.padding" @input="up('padding', parseFloat($event.target.value))" min="0" max="80" step="1" class="mb-flex-1" />
+                  <span class="mps-val">{{ layer.padding }}</span>
+                </div>
+              </template>
+              <template v-else>
+                <div class="mb-grid mb-grid-cols-2 mb-gap-2">
+                  <div v-for="side in ['Top','Right','Bottom','Left']" :key="side">
+                    <label class="mps-label">{{ side }}</label>
+                    <div class="mb-flex mb-items-center mb-gap-1">
+                      <input type="range" :value="layer['padding' + side] ?? 0" @input="up('padding' + side, parseFloat($event.target.value))" min="0" max="80" step="1" class="mb-flex-1" />
+                      <span class="mps-val">{{ layer['padding' + side] ?? 0 }}</span>
+                    </div>
+                  </div>
+                </div>
+              </template>
+            </div>
+          </template>
+
+          <!-- ── Immagine (solo image) ── -->
+          <template v-if="layer.type === 'image'">
+            <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
+            <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">Immagine</p>
+            <div>
+              <label class="mps-label">Adattamento</label>
+              <select :value="layer.objectFit || 'cover'" @change="up('objectFit', $event.target.value)" class="mps-select">
+                <option value="cover">Cover</option>
+                <option value="contain">Contain</option>
+                <option value="fill">Fill</option>
+                <option value="none">Nessuno</option>
+              </select>
+            </div>
+            <div>
+              <label class="mps-label">Posizione</label>
+              <select :value="layer.objectPosition || 'center'" @change="up('objectPosition', $event.target.value)" class="mps-select">
+                <option value="center">Centro</option>
+                <option value="top">Alto</option>
+                <option value="bottom">Basso</option>
+                <option value="left">Sinistra</option>
+                <option value="right">Destra</option>
+                <option value="top left">Alto Sinistra</option>
+                <option value="top right">Alto Destra</option>
+                <option value="bottom left">Basso Sinistra</option>
+                <option value="bottom right">Basso Destra</option>
+              </select>
+            </div>
+          </template>
+
+          <!-- ── Filtri CSS (image/video) ── -->
+          <template v-if="layer.type === 'image' || layer.type === 'video'">
+            <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
+            <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">Filtri</p>
+            <div>
+              <label class="mps-label">Luminosita (%)</label>
+              <div class="mb-flex mb-items-center mb-gap-2">
+                <input type="range" :value="layer.filterBrightness ?? 100" @input="up('filterBrightness', parseFloat($event.target.value))" min="0" max="200" step="5" class="mb-flex-1" />
+                <span class="mps-val">{{ layer.filterBrightness ?? 100 }}</span>
+              </div>
+            </div>
+            <div>
+              <label class="mps-label">Contrasto (%)</label>
+              <div class="mb-flex mb-items-center mb-gap-2">
+                <input type="range" :value="layer.filterContrast ?? 100" @input="up('filterContrast', parseFloat($event.target.value))" min="0" max="200" step="5" class="mb-flex-1" />
+                <span class="mps-val">{{ layer.filterContrast ?? 100 }}</span>
+              </div>
+            </div>
+            <div>
+              <label class="mps-label">Saturazione (%)</label>
+              <div class="mb-flex mb-items-center mb-gap-2">
+                <input type="range" :value="layer.filterSaturate ?? 100" @input="up('filterSaturate', parseFloat($event.target.value))" min="0" max="200" step="5" class="mb-flex-1" />
+                <span class="mps-val">{{ layer.filterSaturate ?? 100 }}</span>
+              </div>
+            </div>
+            <div>
+              <label class="mps-label">Scala di grigi (%)</label>
+              <div class="mb-flex mb-items-center mb-gap-2">
+                <input type="range" :value="layer.filterGrayscale ?? 0" @input="up('filterGrayscale', parseFloat($event.target.value))" min="0" max="100" step="5" class="mb-flex-1" />
+                <span class="mps-val">{{ layer.filterGrayscale ?? 0 }}</span>
+              </div>
+            </div>
+            <div>
+              <label class="mps-label">Rotazione tinta</label>
+              <div class="mb-flex mb-items-center mb-gap-2">
+                <input type="range" :value="layer.filterHueRotate ?? 0" @input="up('filterHueRotate', parseFloat($event.target.value))" min="0" max="360" step="5" class="mb-flex-1" />
+                <span class="mps-val">{{ layer.filterHueRotate ?? 0 }}°</span>
+              </div>
+            </div>
+            <div>
+              <label class="mps-label">Sfocatura (px)</label>
+              <div class="mb-flex mb-items-center mb-gap-2">
+                <input type="range" :value="layer.filterBlur ?? 0" @input="up('filterBlur', parseFloat($event.target.value))" min="0" max="20" step="0.5" class="mb-flex-1" />
+                <span class="mps-val">{{ layer.filterBlur ?? 0 }}</span>
+              </div>
+            </div>
+            <div>
+              <label class="mps-label">Seppia (%)</label>
+              <div class="mb-flex mb-items-center mb-gap-2">
+                <input type="range" :value="layer.filterSepia ?? 0" @input="up('filterSepia', parseFloat($event.target.value))" min="0" max="100" step="5" class="mb-flex-1" />
+                <span class="mps-val">{{ layer.filterSepia ?? 0 }}</span>
+              </div>
+            </div>
+            <div>
+              <label class="mps-label">Inverti (%)</label>
+              <div class="mb-flex mb-items-center mb-gap-2">
+                <input type="range" :value="layer.filterInvert ?? 0" @input="up('filterInvert', parseFloat($event.target.value))" min="0" max="100" step="5" class="mb-flex-1" />
+                <span class="mps-val">{{ layer.filterInvert ?? 0 }}</span>
+              </div>
+            </div>
+          </template>
+
+          <!-- ── Backdrop Filter (tutti i tipi) ── -->
+          <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
+          <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">Backdrop Filter</p>
+          <div>
+            <label class="mps-label">Backdrop blur (px)</label>
             <div class="mb-flex mb-items-center mb-gap-2">
-              <input type="range" :value="layer.fontSize" @input="up('fontSize', parseFloat($event.target.value))" min="8" max="200" step="1" class="mb-flex-1" />
-              <span class="mps-val">{{ layer.fontSize }}</span>
+              <input type="range" :value="layer.backdropBlur ?? 0" @input="up('backdropBlur', parseFloat($event.target.value))" min="0" max="20" step="1" class="mb-flex-1" />
+              <span class="mps-val">{{ layer.backdropBlur ?? 0 }}</span>
             </div>
           </div>
           <div>
-            <label class="mps-label">Peso font</label>
-            <select :value="layer.fontWeight" @change="up('fontWeight', $event.target.value)" class="mps-select">
-              <option v-for="w in ['300','400','500','600','700','800','900']" :key="w" :value="w">{{ w }}</option>
-            </select>
-          </div>
-          <div>
-            <label class="mps-label">Colore</label>
-            <FieldColor :modelValue="layer.color || '#ffffff'" @update:modelValue="up('color', $event)" />
-          </div>
-          <div>
-            <label class="mps-label">Allineamento testo</label>
-            <div class="mb-flex mb-gap-1">
-              <button v-for="a in ['left','center','right']" :key="a"
-                @click="up('textAlign', a)"
-                :class="['mb-flex-1 mb-py-1 mb-rounded mb-text-xs', layer.textAlign === a ? 'mb-bg-primary-600 mb-text-white' : 'mb-bg-gray-700 mb-text-gray-400']"
-              >{{ a }}</button>
-            </div>
-          </div>
-          <div>
-            <label class="mps-label">Sfondo</label>
-            <FieldColor :modelValue="layer.bgColor || '#000000'" @update:modelValue="up('bgColor', $event)" />
-          </div>
-          <div>
-            <label class="mps-label">Raggio bordo (px)</label>
+            <label class="mps-label">Backdrop luminosita (%)</label>
             <div class="mb-flex mb-items-center mb-gap-2">
-              <input type="range" :value="layer.borderRadius" @input="up('borderRadius', parseFloat($event.target.value))" min="0" max="100" step="1" class="mb-flex-1" />
-              <span class="mps-val">{{ layer.borderRadius }}</span>
+              <input type="range" :value="layer.backdropBrightness ?? 100" @input="up('backdropBrightness', parseFloat($event.target.value))" min="0" max="200" step="5" class="mb-flex-1" />
+              <span class="mps-val">{{ layer.backdropBrightness ?? 100 }}</span>
             </div>
           </div>
           <div>
-            <label class="mps-label">Padding (px)</label>
+            <label class="mps-label">Backdrop scala grigi (%)</label>
             <div class="mb-flex mb-items-center mb-gap-2">
-              <input type="range" :value="layer.padding" @input="up('padding', parseFloat($event.target.value))" min="0" max="80" step="1" class="mb-flex-1" />
-              <span class="mps-val">{{ layer.padding }}</span>
+              <input type="range" :value="layer.backdropGrayscale ?? 0" @input="up('backdropGrayscale', parseFloat($event.target.value))" min="0" max="100" step="5" class="mb-flex-1" />
+              <span class="mps-val">{{ layer.backdropGrayscale ?? 0 }}</span>
             </div>
           </div>
+
+          <!-- ── Ombre ── -->
+          <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
+          <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">Ombre</p>
+
+          <!-- Box shadow (tutti) -->
+          <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
+            <input type="checkbox" :checked="!!layer.boxShadow" @change="toggleBoxShadow($event.target.checked)" class="mb-rounded" />
+            <span class="mb-text-[11px] mb-text-gray-400">Box shadow</span>
+          </label>
+          <template v-if="layer.boxShadow">
+            <div class="mb-grid mb-grid-cols-2 mb-gap-2">
+              <div>
+                <label class="mps-label">X</label>
+                <div class="mb-flex mb-items-center mb-gap-1">
+                  <input type="range" :value="layer.boxShadow.x ?? 0" @input="upBoxShadow('x', parseInt($event.target.value))" min="-30" max="30" step="1" class="mb-flex-1" />
+                  <span class="mps-val">{{ layer.boxShadow.x ?? 0 }}</span>
+                </div>
+              </div>
+              <div>
+                <label class="mps-label">Y</label>
+                <div class="mb-flex mb-items-center mb-gap-1">
+                  <input type="range" :value="layer.boxShadow.y ?? 4" @input="upBoxShadow('y', parseInt($event.target.value))" min="-30" max="30" step="1" class="mb-flex-1" />
+                  <span class="mps-val">{{ layer.boxShadow.y ?? 4 }}</span>
+                </div>
+              </div>
+              <div>
+                <label class="mps-label">Blur</label>
+                <div class="mb-flex mb-items-center mb-gap-1">
+                  <input type="range" :value="layer.boxShadow.blur ?? 10" @input="upBoxShadow('blur', parseInt($event.target.value))" min="0" max="60" step="1" class="mb-flex-1" />
+                  <span class="mps-val">{{ layer.boxShadow.blur ?? 10 }}</span>
+                </div>
+              </div>
+              <div>
+                <label class="mps-label">Spread</label>
+                <div class="mb-flex mb-items-center mb-gap-1">
+                  <input type="range" :value="layer.boxShadow.spread ?? 0" @input="upBoxShadow('spread', parseInt($event.target.value))" min="-20" max="20" step="1" class="mb-flex-1" />
+                  <span class="mps-val">{{ layer.boxShadow.spread ?? 0 }}</span>
+                </div>
+              </div>
+            </div>
+            <div>
+              <label class="mps-label">Colore ombra</label>
+              <FieldColor :modelValue="layer.boxShadow.color || 'rgba(0,0,0,0.3)'" @update:modelValue="upBoxShadow('color', $event)" />
+            </div>
+          </template>
+
+          <!-- Text shadow (solo text/button) -->
+          <template v-if="layer.type === 'text' || layer.type === 'button'">
+            <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer mb-mt-2">
+              <input type="checkbox" :checked="!!layer.textShadow" @change="toggleTextShadow($event.target.checked)" class="mb-rounded" />
+              <span class="mb-text-[11px] mb-text-gray-400">Text shadow</span>
+            </label>
+            <template v-if="layer.textShadow">
+              <div class="mb-grid mb-grid-cols-2 mb-gap-2">
+                <div>
+                  <label class="mps-label">X</label>
+                  <div class="mb-flex mb-items-center mb-gap-1">
+                    <input type="range" :value="layer.textShadow.x ?? 2" @input="upTextShadow('x', parseInt($event.target.value))" min="-20" max="20" step="1" class="mb-flex-1" />
+                    <span class="mps-val">{{ layer.textShadow.x ?? 2 }}</span>
+                  </div>
+                </div>
+                <div>
+                  <label class="mps-label">Y</label>
+                  <div class="mb-flex mb-items-center mb-gap-1">
+                    <input type="range" :value="layer.textShadow.y ?? 2" @input="upTextShadow('y', parseInt($event.target.value))" min="-20" max="20" step="1" class="mb-flex-1" />
+                    <span class="mps-val">{{ layer.textShadow.y ?? 2 }}</span>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <label class="mps-label">Blur</label>
+                <div class="mb-flex mb-items-center mb-gap-2">
+                  <input type="range" :value="layer.textShadow.blur ?? 4" @input="upTextShadow('blur', parseInt($event.target.value))" min="0" max="30" step="1" class="mb-flex-1" />
+                  <span class="mps-val">{{ layer.textShadow.blur ?? 4 }}</span>
+                </div>
+              </div>
+              <div>
+                <label class="mps-label">Colore ombra</label>
+                <FieldColor :modelValue="layer.textShadow.color || '#000000'" @update:modelValue="upTextShadow('color', $event)" />
+              </div>
+            </template>
+          </template>
+
+          <!-- ── Effetti ── -->
+          <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
+          <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">Effetti</p>
           <div>
             <label class="mps-label">Opacita (%)</label>
             <div class="mb-flex mb-items-center mb-gap-2">
@@ -200,60 +760,603 @@
               <span class="mps-val">{{ layer.opacity ?? 100 }}</span>
             </div>
           </div>
+          <div>
+            <label class="mps-label">Blend Mode</label>
+            <select :value="layer.blendMode || 'normal'" @change="up('blendMode', $event.target.value)" class="mps-select">
+              <option v-for="bm in blendModes" :key="bm" :value="bm">{{ bm }}</option>
+            </select>
+          </div>
+
+          <!-- SFX Block Reveal (solo text/button/icon) -->
+          <template v-if="layer.type === 'text' || layer.type === 'button' || layer.type === 'icon'">
+          <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
+          <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">SFX Block Reveal</p>
+          <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
+            <input type="checkbox" :checked="!!layer.sfx" @change="toggleSfx($event.target.checked)" class="mb-rounded" />
+            <span class="mb-text-[11px] mb-text-gray-400">Attivo</span>
+          </label>
+          <template v-if="layer.sfx">
+            <div>
+              <label class="mps-label">Effetto</label>
+              <select :value="layer.sfx.effect || 'blockRight'" @change="upSfx('effect', $event.target.value)" class="mps-select">
+                <option value="blockRight">Block da destra</option>
+                <option value="blockLeft">Block da sinistra</option>
+                <option value="blockDown">Block dall'alto</option>
+                <option value="blockUp">Block dal basso</option>
+              </select>
+            </div>
+            <div>
+              <label class="mps-label">Colore blocco</label>
+              <FieldColor :modelValue="layer.sfx.color || '#ffffff'" @update:modelValue="upSfx('color', $event)" />
+            </div>
+            <div>
+              <label class="mps-label">Durata (ms)</label>
+              <div class="mb-flex mb-items-center mb-gap-2">
+                <input type="range" :value="layer.sfx.duration || 800" @input="upSfx('duration', parseInt($event.target.value))" min="200" max="2000" step="50" class="mb-flex-1" />
+                <span class="mps-val">{{ layer.sfx.duration || 800 }}</span>
+              </div>
+            </div>
+          </template>
+          </template>
+
+          <!-- ── Cursore ── -->
+          <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
+          <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">Cursore</p>
+          <div>
+            <label class="mps-label">Mouse cursor</label>
+            <select :value="layer.cursor || 'auto'" @change="up('cursor', $event.target.value)" class="mps-select">
+              <option value="auto">Auto</option>
+              <option value="pointer">Pointer</option>
+              <option value="default">Default</option>
+              <option value="move">Move</option>
+              <option value="crosshair">Crosshair</option>
+              <option value="text">Text</option>
+              <option value="grab">Grab</option>
+              <option value="none">Nascosto</option>
+            </select>
+          </div>
+
+          <!-- ── Attributi personalizzati ── -->
+          <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
+          <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">Attributi</p>
+          <div>
+            <label class="mps-label">ID personalizzato</label>
+            <input :value="layer.customId || ''" @input="up('customId', $event.target.value)" class="mps-input" placeholder="es. hero-title" />
+          </div>
+          <div>
+            <label class="mps-label">Classi CSS</label>
+            <input :value="layer.customClass || ''" @input="up('customClass', $event.target.value)" class="mps-input" placeholder="es. my-class another-class" />
+          </div>
+          <div>
+            <label class="mps-label">CSS personalizzato</label>
+            <textarea :value="layer.customCSS || ''" @input="up('customCSS', $event.target.value)" rows="3"
+              class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded mb-px-2 mb-py-1 mb-text-[10px] mb-text-gray-900 mb-resize-y mb-font-mono" placeholder="color: red; transform: rotate(5deg);"></textarea>
+          </div>
         </template>
 
         <!-- ===== ANIMAZIONE ===== -->
         <template v-if="activeTab === 'Animazione'">
-          <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">Entrata</p>
-          <div>
-            <label class="mps-label">Animazione entrata</label>
-            <select :value="layer.animIn" @change="up('animIn', $event.target.value)" class="mps-select">
-              <option v-for="a in animationsIn" :key="a" :value="a">{{ a }}</option>
-            </select>
-          </div>
-          <div>
-            <label class="mps-label">Durata (ms)</label>
-            <div class="mb-flex mb-items-center mb-gap-2">
-              <input type="range" :value="layer.animInDuration" @input="up('animInDuration', parseFloat($event.target.value))" min="100" max="3000" step="50" class="mb-flex-1" />
-              <span class="mps-val">{{ layer.animInDuration }}</span>
-            </div>
-          </div>
-          <div>
-            <label class="mps-label">Ritardo (ms)</label>
-            <div class="mb-flex mb-items-center mb-gap-2">
-              <input type="range" :value="layer.animInDelay" @input="up('animInDelay', parseFloat($event.target.value))" min="0" max="3000" step="50" class="mb-flex-1" />
-              <span class="mps-val">{{ layer.animInDelay }}</span>
-            </div>
+          <!-- Toggle Semplice / Timeline -->
+          <div class="mb-flex mb-bg-gray-800 mb-rounded mb-p-0.5 mb-mb-3">
+            <button
+              @click="setAnimMode('simple')"
+              :class="['mb-flex-1 mb-py-1 mb-rounded mb-text-[10px] mb-font-medium mb-transition-colors',
+                !hasTimeline ? 'mb-bg-primary-600 mb-text-white' : 'mb-text-gray-400 hover:mb-text-gray-300']"
+            >Semplice</button>
+            <button
+              @click="setAnimMode('timeline')"
+              :class="['mb-flex-1 mb-py-1 mb-rounded mb-text-[10px] mb-font-medium mb-transition-colors',
+                hasTimeline ? 'mb-bg-primary-600 mb-text-white' : 'mb-text-gray-400 hover:mb-text-gray-300']"
+            >Timeline</button>
           </div>
 
-          <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
-          <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">Uscita</p>
-          <div>
-            <label class="mps-label">Animazione uscita</label>
-            <select :value="layer.animOut" @change="up('animOut', $event.target.value)" class="mps-select">
-              <option v-for="a in animationsOut" :key="a" :value="a">{{ a }}</option>
-            </select>
-          </div>
-          <div>
-            <label class="mps-label">Durata (ms)</label>
-            <div class="mb-flex mb-items-center mb-gap-2">
-              <input type="range" :value="layer.animOutDuration" @input="up('animOutDuration', parseFloat($event.target.value))" min="100" max="3000" step="50" class="mb-flex-1" />
-              <span class="mps-val">{{ layer.animOutDuration }}</span>
+          <!-- Modo SEMPLICE -->
+          <template v-if="!hasTimeline">
+            <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">Entrata</p>
+            <div>
+              <label class="mps-label">Animazione entrata</label>
+              <select :value="layer.animIn" @change="up('animIn', $event.target.value)" class="mps-select">
+                <optgroup v-for="g in animationsInGroups" :key="g.label" :label="g.label">
+                  <option v-for="a in g.options" :key="a.value" :value="a.value">{{ a.label }}</option>
+                </optgroup>
+              </select>
             </div>
-          </div>
-          <div>
-            <label class="mps-label">Ritardo (ms)</label>
-            <div class="mb-flex mb-items-center mb-gap-2">
-              <input type="range" :value="layer.animOutDelay" @input="up('animOutDelay', parseFloat($event.target.value))" min="0" max="3000" step="50" class="mb-flex-1" />
-              <span class="mps-val">{{ layer.animOutDelay }}</span>
+            <div>
+              <label class="mps-label">Durata (ms)</label>
+              <div class="mb-flex mb-items-center mb-gap-2">
+                <input type="range" :value="layer.animInDuration" @input="up('animInDuration', parseFloat($event.target.value))" min="100" max="3000" step="50" class="mb-flex-1" />
+                <span class="mps-val">{{ layer.animInDuration }}</span>
+              </div>
             </div>
-          </div>
-          <div>
-            <label class="mps-label">Curva di easing</label>
-            <select :value="layer.animEasing" @change="up('animEasing', $event.target.value)" class="mps-select">
-              <option v-for="e in ['ease','ease-in','ease-out','ease-in-out','linear']" :key="e" :value="e">{{ e }}</option>
-            </select>
-          </div>
+            <div>
+              <label class="mps-label">Ritardo (ms)</label>
+              <div class="mb-flex mb-items-center mb-gap-2">
+                <input type="range" :value="layer.animInDelay" @input="up('animInDelay', parseFloat($event.target.value))" min="0" max="3000" step="50" class="mb-flex-1" />
+                <span class="mps-val">{{ layer.animInDelay }}</span>
+              </div>
+            </div>
+
+            <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
+            <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">Uscita</p>
+            <div>
+              <label class="mps-label">Animazione uscita</label>
+              <select :value="layer.animOut" @change="up('animOut', $event.target.value)" class="mps-select">
+                <optgroup v-for="g in animationsOutGroups" :key="g.label" :label="g.label">
+                  <option v-for="a in g.options" :key="a.value" :value="a.value">{{ a.label }}</option>
+                </optgroup>
+              </select>
+            </div>
+            <div>
+              <label class="mps-label">Durata (ms)</label>
+              <div class="mb-flex mb-items-center mb-gap-2">
+                <input type="range" :value="layer.animOutDuration" @input="up('animOutDuration', parseFloat($event.target.value))" min="100" max="3000" step="50" class="mb-flex-1" />
+                <span class="mps-val">{{ layer.animOutDuration }}</span>
+              </div>
+            </div>
+            <div>
+              <label class="mps-label">Ritardo (ms)</label>
+              <div class="mb-flex mb-items-center mb-gap-2">
+                <input type="range" :value="layer.animOutDelay" @input="up('animOutDelay', parseFloat($event.target.value))" min="0" max="3000" step="50" class="mb-flex-1" />
+                <span class="mps-val">{{ layer.animOutDelay }}</span>
+              </div>
+            </div>
+            <div>
+              <label class="mps-label">Curva di easing</label>
+              <select :value="layer.animEasing" @change="up('animEasing', $event.target.value)" class="mps-select">
+                <option v-for="e in ['ease','ease-in','ease-out','ease-in-out','linear']" :key="e" :value="e">{{ e }}</option>
+              </select>
+            </div>
+
+            <!-- Character Animation (solo per text) -->
+            <template v-if="layer.type === 'text'">
+              <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
+              <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">Animazione Testo</p>
+              <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
+                <input type="checkbox" :checked="!!layer.charAnim" @change="toggleCharAnim($event.target.checked)" class="mb-rounded" />
+                <span class="mb-text-[11px] mb-text-gray-400">Anima caratteri/parole</span>
+              </label>
+              <template v-if="layer.charAnim">
+                <div>
+                  <label class="mps-label">Dividi per</label>
+                  <select :value="layer.charAnim.split || 'chars'" @change="upCharAnim('split', $event.target.value)" class="mps-select">
+                    <option value="chars">Caratteri</option>
+                    <option value="words">Parole</option>
+                    <option value="lines">Righe</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="mps-label">Direzione</label>
+                  <select :value="layer.charAnim.direction || 'forward'" @change="upCharAnim('direction', $event.target.value)" class="mps-select">
+                    <option value="forward">Avanti</option>
+                    <option value="backward">Indietro</option>
+                    <option value="random">Casuale</option>
+                    <option value="middletoedge">Centro → Bordi</option>
+                    <option value="edgetomiddle">Bordi → Centro</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="mps-label">Stagger (ms)</label>
+                  <div class="mb-flex mb-items-center mb-gap-2">
+                    <input type="range" :value="layer.charAnim.stagger || 30" @input="upCharAnim('stagger', parseFloat($event.target.value))" min="5" max="200" step="5" class="mb-flex-1" />
+                    <span class="mps-val">{{ layer.charAnim.stagger || 30 }}</span>
+                  </div>
+                </div>
+                <div>
+                  <label class="mps-label">Offset X (px)</label>
+                  <div class="mb-flex mb-items-center mb-gap-2">
+                    <input type="range" :value="layer.charAnim.offsetX || 0" @input="upCharAnim('offsetX', parseFloat($event.target.value))" min="-100" max="100" step="5" class="mb-flex-1" />
+                    <span class="mps-val">{{ layer.charAnim.offsetX || 0 }}</span>
+                  </div>
+                </div>
+                <div>
+                  <label class="mps-label">Offset Y (px)</label>
+                  <div class="mb-flex mb-items-center mb-gap-2">
+                    <input type="range" :value="layer.charAnim.offsetY || 0" @input="upCharAnim('offsetY', parseFloat($event.target.value))" min="-100" max="100" step="5" class="mb-flex-1" />
+                    <span class="mps-val">{{ layer.charAnim.offsetY || 0 }}</span>
+                  </div>
+                </div>
+                <div>
+                  <label class="mps-label">Rotazione (deg)</label>
+                  <div class="mb-flex mb-items-center mb-gap-2">
+                    <input type="range" :value="layer.charAnim.rotation || 0" @input="upCharAnim('rotation', parseFloat($event.target.value))" min="-180" max="180" step="5" class="mb-flex-1" />
+                    <span class="mps-val">{{ layer.charAnim.rotation || 0 }}</span>
+                  </div>
+                </div>
+                <div>
+                  <label class="mps-label">Scala iniziale</label>
+                  <div class="mb-flex mb-items-center mb-gap-2">
+                    <input type="range" :value="layer.charAnim.scale ?? 1" @input="upCharAnim('scale', parseFloat($event.target.value))" min="0" max="3" step="0.1" class="mb-flex-1" />
+                    <span class="mps-val">{{ layer.charAnim.scale ?? 1 }}</span>
+                  </div>
+                </div>
+                <div>
+                  <label class="mps-label">Opacità iniziale (%)</label>
+                  <div class="mb-flex mb-items-center mb-gap-2">
+                    <input type="range" :value="layer.charAnim.opacity ?? 0" @input="upCharAnim('opacity', parseFloat($event.target.value))" min="0" max="100" step="5" class="mb-flex-1" />
+                    <span class="mps-val">{{ layer.charAnim.opacity ?? 0 }}</span>
+                  </div>
+                </div>
+                <div>
+                  <label class="mps-label">Blur iniziale (px)</label>
+                  <div class="mb-flex mb-items-center mb-gap-2">
+                    <input type="range" :value="layer.charAnim.blur || 0" @input="upCharAnim('blur', parseFloat($event.target.value))" min="0" max="20" step="1" class="mb-flex-1" />
+                    <span class="mps-val">{{ layer.charAnim.blur || 0 }}</span>
+                  </div>
+                </div>
+                <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
+                  <input type="checkbox" :checked="layer.charAnim.yoyo" @change="upCharAnim('yoyo', $event.target.checked)" class="mb-rounded" />
+                  <span class="mb-text-[11px] mb-text-gray-400">Yoyo (andata e ritorno)</span>
+                </label>
+              </template>
+            </template>
+
+            <!-- Loop Animation -->
+            <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
+            <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">Loop</p>
+            <div>
+              <label class="mps-label">Animazione continua</label>
+              <select :value="layer.animLoop || 'none'" @change="up('animLoop', $event.target.value)" class="mps-select">
+                <optgroup v-for="g in loopAnimGroups" :key="g.label" :label="g.label">
+                  <option v-for="a in g.options" :key="a.value" :value="a.value">{{ a.label }}</option>
+                </optgroup>
+              </select>
+            </div>
+            <template v-if="layer.animLoop && layer.animLoop !== 'none'">
+              <div>
+                <label class="mps-label">Durata loop (ms)</label>
+                <div class="mb-flex mb-items-center mb-gap-2">
+                  <input type="range" :value="layer.animLoopDuration || 3000" @input="up('animLoopDuration', parseFloat($event.target.value))" min="500" max="10000" step="100" class="mb-flex-1" />
+                  <span class="mps-val">{{ layer.animLoopDuration || 3000 }}</span>
+                </div>
+              </div>
+              <div>
+                <label class="mps-label">Easing loop</label>
+                <select :value="layer.animLoopEasing || 'ease-in-out'" @change="up('animLoopEasing', $event.target.value)" class="mps-select">
+                  <option v-for="e in ['ease','ease-in','ease-out','ease-in-out','linear']" :key="e" :value="e">{{ e }}</option>
+                </select>
+              </div>
+            </template>
+
+            <!-- Hover Effects -->
+            <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
+            <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">Hover</p>
+            <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
+              <input type="checkbox" :checked="!!layer.hover" @change="toggleHover($event.target.checked)" class="mb-rounded" />
+              <span class="mb-text-[11px] mb-text-gray-400">Effetto hover attivo</span>
+            </label>
+            <template v-if="layer.hover">
+              <!-- Transform -->
+              <p class="mb-text-[9px] mb-text-gray-500 mb-uppercase mb-mt-1">Transform</p>
+              <div class="mb-grid mb-grid-cols-2 mb-gap-2">
+                <div>
+                  <label class="mps-label">Scala</label>
+                  <div class="mb-flex mb-items-center mb-gap-1">
+                    <input type="range" :value="layer.hover.scale ?? 1" @input="upHover('scale', parseFloat($event.target.value))" min="0.5" max="2" step="0.05" class="mb-flex-1" />
+                    <span class="mps-val">{{ layer.hover.scale ?? 1 }}</span>
+                  </div>
+                </div>
+                <div>
+                  <label class="mps-label">Rotazione Z</label>
+                  <div class="mb-flex mb-items-center mb-gap-1">
+                    <input type="range" :value="layer.hover.rotation ?? 0" @input="upHover('rotation', parseFloat($event.target.value))" min="-45" max="45" step="1" class="mb-flex-1" />
+                    <span class="mps-val">{{ layer.hover.rotation ?? 0 }}</span>
+                  </div>
+                </div>
+                <div>
+                  <label class="mps-label">Rotazione X</label>
+                  <div class="mb-flex mb-items-center mb-gap-1">
+                    <input type="range" :value="layer.hover.rotateX ?? 0" @input="upHover('rotateX', parseFloat($event.target.value))" min="-90" max="90" step="5" class="mb-flex-1" />
+                    <span class="mps-val">{{ layer.hover.rotateX ?? 0 }}</span>
+                  </div>
+                </div>
+                <div>
+                  <label class="mps-label">Rotazione Y</label>
+                  <div class="mb-flex mb-items-center mb-gap-1">
+                    <input type="range" :value="layer.hover.rotateY ?? 0" @input="upHover('rotateY', parseFloat($event.target.value))" min="-90" max="90" step="5" class="mb-flex-1" />
+                    <span class="mps-val">{{ layer.hover.rotateY ?? 0 }}</span>
+                  </div>
+                </div>
+                <div>
+                  <label class="mps-label">Skew X</label>
+                  <div class="mb-flex mb-items-center mb-gap-1">
+                    <input type="range" :value="layer.hover.skewX ?? 0" @input="upHover('skewX', parseFloat($event.target.value))" min="-30" max="30" step="1" class="mb-flex-1" />
+                    <span class="mps-val">{{ layer.hover.skewX ?? 0 }}</span>
+                  </div>
+                </div>
+                <div>
+                  <label class="mps-label">Skew Y</label>
+                  <div class="mb-flex mb-items-center mb-gap-1">
+                    <input type="range" :value="layer.hover.skewY ?? 0" @input="upHover('skewY', parseFloat($event.target.value))" min="-30" max="30" step="1" class="mb-flex-1" />
+                    <span class="mps-val">{{ layer.hover.skewY ?? 0 }}</span>
+                  </div>
+                </div>
+                <div>
+                  <label class="mps-label">Offset X (%)</label>
+                  <div class="mb-flex mb-items-center mb-gap-1">
+                    <input type="range" :value="layer.hover.x ?? 0" @input="upHover('x', parseFloat($event.target.value))" min="-20" max="20" step="1" class="mb-flex-1" />
+                    <span class="mps-val">{{ layer.hover.x ?? 0 }}</span>
+                  </div>
+                </div>
+                <div>
+                  <label class="mps-label">Offset Y (%)</label>
+                  <div class="mb-flex mb-items-center mb-gap-1">
+                    <input type="range" :value="layer.hover.y ?? 0" @input="upHover('y', parseFloat($event.target.value))" min="-20" max="20" step="1" class="mb-flex-1" />
+                    <span class="mps-val">{{ layer.hover.y ?? 0 }}</span>
+                  </div>
+                </div>
+              </div>
+              <!-- Aspetto -->
+              <p class="mb-text-[9px] mb-text-gray-500 mb-uppercase mb-mt-2">Aspetto</p>
+              <div>
+                <label class="mps-label">Opacita (%)</label>
+                <div class="mb-flex mb-items-center mb-gap-2">
+                  <input type="range" :value="layer.hover.opacity ?? 100" @input="upHover('opacity', parseFloat($event.target.value))" min="0" max="100" step="5" class="mb-flex-1" />
+                  <span class="mps-val">{{ layer.hover.opacity ?? 100 }}</span>
+                </div>
+              </div>
+              <template v-if="layer.type === 'text' || layer.type === 'button'">
+                <div>
+                  <label class="mps-label">Colore testo hover</label>
+                  <FieldColor :modelValue="layer.hover.color || ''" @update:modelValue="upHover('color', $event)" />
+                </div>
+              </template>
+              <div>
+                <label class="mps-label">Sfondo hover</label>
+                <FieldColor :modelValue="layer.hover.bgColor || ''" @update:modelValue="upHover('bgColor', $event)" />
+              </div>
+              <div>
+                <label class="mps-label">Bordo hover</label>
+                <FieldColor :modelValue="layer.hover.borderColor || ''" @update:modelValue="upHover('borderColor', $event)" />
+              </div>
+              <div>
+                <label class="mps-label">Border radius hover</label>
+                <div class="mb-flex mb-items-center mb-gap-2">
+                  <input type="range" :value="layer.hover.borderRadius ?? ''" @input="upHover('borderRadius', $event.target.value ? parseFloat($event.target.value) : '')" min="0" max="200" step="1" class="mb-flex-1" />
+                  <span class="mps-val">{{ layer.hover.borderRadius ?? '-' }}</span>
+                </div>
+              </div>
+              <!-- Filtri hover -->
+              <p class="mb-text-[9px] mb-text-gray-500 mb-uppercase mb-mt-2">Filtri hover</p>
+              <div class="mb-grid mb-grid-cols-2 mb-gap-2">
+                <div>
+                  <label class="mps-label">Blur (px)</label>
+                  <div class="mb-flex mb-items-center mb-gap-1">
+                    <input type="range" :value="layer.hover.blur ?? 0" @input="upHover('blur', parseFloat($event.target.value))" min="0" max="20" step="1" class="mb-flex-1" />
+                    <span class="mps-val">{{ layer.hover.blur ?? 0 }}</span>
+                  </div>
+                </div>
+                <div>
+                  <label class="mps-label">Luminosita (%)</label>
+                  <div class="mb-flex mb-items-center mb-gap-1">
+                    <input type="range" :value="layer.hover.brightness ?? 100" @input="upHover('brightness', parseFloat($event.target.value))" min="0" max="200" step="5" class="mb-flex-1" />
+                    <span class="mps-val">{{ layer.hover.brightness ?? 100 }}</span>
+                  </div>
+                </div>
+                <div>
+                  <label class="mps-label">Scala grigi (%)</label>
+                  <div class="mb-flex mb-items-center mb-gap-1">
+                    <input type="range" :value="layer.hover.grayscale ?? 0" @input="upHover('grayscale', parseFloat($event.target.value))" min="0" max="100" step="5" class="mb-flex-1" />
+                    <span class="mps-val">{{ layer.hover.grayscale ?? 0 }}</span>
+                  </div>
+                </div>
+              </div>
+              <!-- Transizione -->
+              <p class="mb-text-[9px] mb-text-gray-500 mb-uppercase mb-mt-2">Transizione</p>
+              <div>
+                <label class="mps-label">Durata (ms)</label>
+                <div class="mb-flex mb-items-center mb-gap-2">
+                  <input type="range" :value="layer.hover.duration ?? 300" @input="upHover('duration', parseFloat($event.target.value))" min="100" max="1000" step="50" class="mb-flex-1" />
+                  <span class="mps-val">{{ layer.hover.duration ?? 300 }}</span>
+                </div>
+              </div>
+              <div>
+                <label class="mps-label">Easing</label>
+                <select :value="layer.hover.easing || 'ease'" @change="upHover('easing', $event.target.value)" class="mps-select">
+                  <option v-for="e in ['ease','ease-in','ease-out','ease-in-out','linear']" :key="e" :value="e">{{ e }}</option>
+                </select>
+              </div>
+              <div>
+                <label class="mps-label">Cursore hover</label>
+                <select :value="layer.hover.cursor || ''" @change="upHover('cursor', $event.target.value)" class="mps-select">
+                  <option value="">Nessun cambio</option>
+                  <option value="pointer">Pointer</option>
+                  <option value="default">Default</option>
+                  <option value="grab">Grab</option>
+                </select>
+              </div>
+            </template>
+
+            <!-- Mask / Clip-Path -->
+            <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
+            <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">Mask (Clip-Path)</p>
+            <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
+              <input type="checkbox" :checked="!!layer.mask" @change="toggleMask($event.target.checked)" class="mb-rounded" />
+              <span class="mb-text-[11px] mb-text-gray-400">Maschera attiva</span>
+            </label>
+            <template v-if="layer.mask">
+              <div>
+                <label class="mps-label">Preset</label>
+                <select :value="layer.mask.preset || 'custom'" @change="applyMaskPreset($event.target.value)" class="mps-select">
+                  <option value="custom">Personalizzato</option>
+                  <option value="revealRight">Reveal da destra</option>
+                  <option value="revealLeft">Reveal da sinistra</option>
+                  <option value="revealDown">Reveal dall'alto</option>
+                  <option value="revealUp">Reveal dal basso</option>
+                  <option value="curtainH">Sipario orizzontale</option>
+                  <option value="curtainV">Sipario verticale</option>
+                </select>
+              </div>
+              <div class="mb-grid mb-grid-cols-2 mb-gap-2">
+                <div>
+                  <label class="mps-label">Top (%)</label>
+                  <div class="mb-flex mb-items-center mb-gap-1">
+                    <input type="range" :value="layer.mask.top ?? 0" @input="upMask('top', parseFloat($event.target.value))" min="0" max="100" step="1" class="mb-flex-1" />
+                    <span class="mps-val">{{ layer.mask.top ?? 0 }}</span>
+                  </div>
+                </div>
+                <div>
+                  <label class="mps-label">Right (%)</label>
+                  <div class="mb-flex mb-items-center mb-gap-1">
+                    <input type="range" :value="layer.mask.right ?? 0" @input="upMask('right', parseFloat($event.target.value))" min="0" max="100" step="1" class="mb-flex-1" />
+                    <span class="mps-val">{{ layer.mask.right ?? 0 }}</span>
+                  </div>
+                </div>
+                <div>
+                  <label class="mps-label">Bottom (%)</label>
+                  <div class="mb-flex mb-items-center mb-gap-1">
+                    <input type="range" :value="layer.mask.bottom ?? 0" @input="upMask('bottom', parseFloat($event.target.value))" min="0" max="100" step="1" class="mb-flex-1" />
+                    <span class="mps-val">{{ layer.mask.bottom ?? 0 }}</span>
+                  </div>
+                </div>
+                <div>
+                  <label class="mps-label">Left (%)</label>
+                  <div class="mb-flex mb-items-center mb-gap-1">
+                    <input type="range" :value="layer.mask.left ?? 0" @input="upMask('left', parseFloat($event.target.value))" min="0" max="100" step="1" class="mb-flex-1" />
+                    <span class="mps-val">{{ layer.mask.left ?? 0 }}</span>
+                  </div>
+                </div>
+              </div>
+            </template>
+
+            <!-- Ken Burns per Layer -->
+            <template v-if="layer.type === 'image'">
+              <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
+              <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">Ken Burns</p>
+              <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
+                <input type="checkbox" :checked="!!layer.kenBurns" @change="toggleKenBurns($event.target.checked)" class="mb-rounded" />
+                <span class="mb-text-[11px] mb-text-gray-400">Attivo</span>
+              </label>
+              <template v-if="layer.kenBurns">
+                <div>
+                  <label class="mps-label">Tipo</label>
+                  <select :value="layer.kenBurns.type || 'zoomIn'" @change="upKenBurns('type', $event.target.value)" class="mps-select">
+                    <option value="zoomIn">Zoom In</option>
+                    <option value="zoomOut">Zoom Out</option>
+                    <option value="panLeft">Pan Sinistra</option>
+                    <option value="panRight">Pan Destra</option>
+                    <option value="panUp">Pan Alto</option>
+                    <option value="panDown">Pan Basso</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="mps-label">Intensita (%)</label>
+                  <div class="mb-flex mb-items-center mb-gap-2">
+                    <input type="range" :value="layer.kenBurns.intensity ?? 20" @input="upKenBurns('intensity', parseFloat($event.target.value))" min="5" max="50" step="5" class="mb-flex-1" />
+                    <span class="mps-val">{{ layer.kenBurns.intensity ?? 20 }}</span>
+                  </div>
+                </div>
+                <div>
+                  <label class="mps-label">Durata (ms)</label>
+                  <div class="mb-flex mb-items-center mb-gap-2">
+                    <input type="range" :value="layer.kenBurns.duration ?? 5000" @input="upKenBurns('duration', parseFloat($event.target.value))" min="1000" max="20000" step="500" class="mb-flex-1" />
+                    <span class="mps-val">{{ layer.kenBurns.duration ?? 5000 }}</span>
+                  </div>
+                </div>
+              </template>
+            </template>
+
+            <!-- Motion Path -->
+            <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
+            <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">Motion Path</p>
+            <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
+              <input type="checkbox" :checked="!!layer.motionPath" @change="toggleMotionPath($event.target.checked)" class="mb-rounded" />
+              <span class="mb-text-[11px] mb-text-gray-400">Anima lungo percorso</span>
+            </label>
+            <template v-if="layer.motionPath">
+              <div>
+                <label class="mps-label">Preset percorso</label>
+                <select :value="layer.motionPath.preset || 'circle'" @change="applyMotionPreset($event.target.value)" class="mps-select">
+                  <option value="circle">Cerchio</option>
+                  <option value="figure8">Otto</option>
+                  <option value="wave">Onda</option>
+                  <option value="zigzag">Zigzag</option>
+                  <option value="arc">Arco</option>
+                  <option value="custom">SVG personalizzato</option>
+                </select>
+              </div>
+              <template v-if="layer.motionPath.preset === 'custom'">
+                <div>
+                  <label class="mps-label">SVG Path (d="")</label>
+                  <textarea :value="layer.motionPath.path" @input="upMotionPath('path', $event.target.value)" rows="2"
+                    class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded mb-px-2 mb-py-1 mb-text-[10px] mb-text-gray-900 mb-resize-y mb-font-mono" placeholder="M0,0 C50,0 50,100 100,100"></textarea>
+                </div>
+              </template>
+              <div>
+                <label class="mps-label">Durata (ms)</label>
+                <div class="mb-flex mb-items-center mb-gap-2">
+                  <input type="range" :value="layer.motionPath.duration ?? 3000" @input="upMotionPath('duration', parseFloat($event.target.value))" min="500" max="20000" step="500" class="mb-flex-1" />
+                  <span class="mps-val">{{ layer.motionPath.duration ?? 3000 }}</span>
+                </div>
+              </div>
+              <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
+                <input type="checkbox" :checked="layer.motionPath.autoRotate" @change="upMotionPath('autoRotate', $event.target.checked)" class="mb-rounded" />
+                <span class="mb-text-[11px] mb-text-gray-400">Ruota lungo il percorso</span>
+              </label>
+              <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
+                <input type="checkbox" :checked="layer.motionPath.loop !== false" @change="upMotionPath('loop', $event.target.checked)" class="mb-rounded" />
+                <span class="mb-text-[11px] mb-text-gray-400">Loop</span>
+              </label>
+              <div>
+                <label class="mps-label">Easing</label>
+                <select :value="layer.motionPath.easing || 'linear'" @change="upMotionPath('easing', $event.target.value)" class="mps-select">
+                  <option v-for="e in ['linear','ease','ease-in','ease-out','ease-in-out']" :key="e" :value="e">{{ e }}</option>
+                </select>
+              </div>
+            </template>
+
+            <!-- Parallax Layer -->
+            <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
+            <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">Parallax Layer</p>
+            <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
+              <input type="checkbox" :checked="!!layer.parallax" @change="toggleParallax($event.target.checked)" class="mb-rounded" />
+              <span class="mb-text-[11px] mb-text-gray-400">Parallax attivo</span>
+            </label>
+            <template v-if="layer.parallax">
+              <div>
+                <label class="mps-label">Tipo</label>
+                <select :value="layer.parallax.type || 'mouse'" @change="upParallax('type', $event.target.value)" class="mps-select">
+                  <option value="mouse">Mouse</option>
+                  <option value="scroll">Scroll</option>
+                  <option value="both">Mouse + Scroll</option>
+                </select>
+              </div>
+              <div>
+                <label class="mps-label">Profondita (1-20)</label>
+                <div class="mb-flex mb-items-center mb-gap-2">
+                  <input type="range" :value="layer.parallax.depth ?? 5" @input="upParallax('depth', parseFloat($event.target.value))" min="1" max="20" step="1" class="mb-flex-1" />
+                  <span class="mps-val">{{ layer.parallax.depth ?? 5 }}</span>
+                </div>
+              </div>
+              <template v-if="layer.parallax.type === 'mouse' || layer.parallax.type === 'both'">
+                <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
+                  <input type="checkbox" :checked="layer.parallax.tilt3d" @change="upParallax('tilt3d', $event.target.checked)" class="mb-rounded" />
+                  <span class="mb-text-[11px] mb-text-gray-400">Tilt 3D</span>
+                </label>
+              </template>
+              <template v-if="layer.parallax.type === 'scroll' || layer.parallax.type === 'both'">
+                <div>
+                  <label class="mps-label">Velocita scroll</label>
+                  <div class="mb-flex mb-items-center mb-gap-2">
+                    <input type="range" :value="layer.parallax.scrollSpeed ?? 0.5" @input="upParallax('scrollSpeed', parseFloat($event.target.value))" min="0.1" max="2" step="0.1" class="mb-flex-1" />
+                    <span class="mps-val">{{ (layer.parallax.scrollSpeed ?? 0.5).toFixed(1) }}</span>
+                  </div>
+                </div>
+              </template>
+            </template>
+          </template>
+
+          <!-- Modo TIMELINE -->
+          <template v-else>
+            <p class="mb-text-[10px] mb-text-gray-500 mb-italic mb-mb-2">
+              Usa la timeline sotto il canvas per aggiungere e spostare i keyframe.
+            </p>
+            <KeyframeProperties
+              :keyframe="selectedKeyframe"
+              :timeline="layer.timeline"
+              @update-keyframe="(id, updates) => $emit('update-keyframe', id, updates)"
+              @capture-from-canvas="$emit('capture-from-canvas')"
+            />
+          </template>
         </template>
 
       </div>
@@ -267,37 +1370,285 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import IconPicker from './IconPicker.vue';
 import iconsSvg from './uikitIconsSvg.js';
 import FieldColor from '@/components/Builder/fields/FieldColor.vue';
+import KeyframeProperties from './KeyframeProperties.vue';
+import { defaultTimeline } from './timelineUtils.js';
 
 const props = defineProps({
   layer: { type: Object, default: null },
+  selectedKeyframeId: { type: String, default: null },
+  activeBreakpoint: { type: String, default: 'desktop' },
 });
 
-const emit = defineEmits(['update']);
+const emit = defineEmits(['update', 'update-keyframe', 'capture-from-canvas']);
+
+const hasTimeline = computed(() => {
+  return !!(props.layer?.timeline?.keyframes?.length);
+});
+
+const selectedKeyframe = computed(() => {
+  if (!hasTimeline.value || !props.selectedKeyframeId) return null;
+  return props.layer.timeline.keyframes.find(kf => kf.id === props.selectedKeyframeId) || null;
+});
+
+function setAnimMode(mode) {
+  if (mode === 'timeline' && !hasTimeline.value) {
+    // Attiva timeline con valori default basati sulla posizione corrente del layer
+    up('timeline', defaultTimeline(props.layer));
+  } else if (mode === 'simple' && hasTimeline.value) {
+    // Disattiva timeline
+    up('timeline', null);
+  }
+}
 
 const showIconPicker = ref(false);
 
 const activeTab = ref('Contenuto');
 const tabs = ['Contenuto', 'Posizione', 'Stile', 'Animazione'];
 
-const animationsIn = [
-  'none',
-  'fadeIn', 'fadeInUp', 'fadeInDown', 'fadeInLeft', 'fadeInRight',
-  'slideInLeft', 'slideInRight', 'slideInUp', 'slideInDown',
-  'zoomIn', 'bounceIn', 'rotateIn',
+// Responsive: risolve il valore effettivo per il breakpoint attivo
+function rv(key) {
+  if (!props.layer) return undefined;
+  const bp = props.activeBreakpoint;
+  if (bp !== 'desktop') {
+    const chain = ['notebook', 'tablet', 'mobile'];
+    const idx = chain.indexOf(bp);
+    for (let i = idx; i >= 0; i--) {
+      const ov = props.layer.responsive?.[chain[i]];
+      if (ov && ov[key] !== undefined && ov[key] !== null) return ov[key];
+    }
+  }
+  return props.layer[key];
+}
+
+function isOverridden(key) {
+  const bp = props.activeBreakpoint;
+  if (bp === 'desktop') return false;
+  return props.layer?.responsive?.[bp]?.[key] !== undefined && props.layer?.responsive?.[bp]?.[key] !== null;
+}
+
+function clearOverride(key) {
+  const bp = props.activeBreakpoint;
+  if (bp === 'desktop' || !props.layer?.responsive?.[bp]) return;
+  delete props.layer.responsive[bp][key];
+}
+
+const hasAnyOverride = computed(() => {
+  const bp = props.activeBreakpoint;
+  if (bp === 'desktop') return false;
+  const ov = props.layer?.responsive?.[bp];
+  return ov && Object.keys(ov).length > 0;
+});
+
+function clearAllOverrides() {
+  const bp = props.activeBreakpoint;
+  if (bp === 'desktop' || !props.layer?.responsive) return;
+  props.layer.responsive[bp] = null;
+}
+
+const animationsInGroups = [
+  { label: 'Base', options: [
+    { value: 'none', label: 'Nessuna' },
+    { value: 'fadeIn', label: 'Fade In' },
+  ]},
+  { label: 'Fade', options: [
+    { value: 'fadeInUp', label: 'Fade In Up' },
+    { value: 'fadeInDown', label: 'Fade In Down' },
+    { value: 'fadeInLeft', label: 'Fade In Left' },
+    { value: 'fadeInRight', label: 'Fade In Right' },
+  ]},
+  { label: 'Slide', options: [
+    { value: 'slideInLeft', label: 'Slide In Left' },
+    { value: 'slideInRight', label: 'Slide In Right' },
+    { value: 'slideInUp', label: 'Slide In Up' },
+    { value: 'slideInDown', label: 'Slide In Down' },
+    { value: 'slideShortFromTop', label: 'Slide Short Top' },
+    { value: 'slideShortFromBottom', label: 'Slide Short Bottom' },
+    { value: 'slideShortFromLeft', label: 'Slide Short Left' },
+    { value: 'slideShortFromRight', label: 'Slide Short Right' },
+    { value: 'smoothSlideFromBottom', label: 'Smooth Slide Bottom' },
+    { value: 'smoothSlideFromTop', label: 'Smooth Slide Top' },
+    { value: 'smoothSlideFromLeft', label: 'Smooth Slide Left' },
+    { value: 'smoothSlideFromRight', label: 'Smooth Slide Right' },
+  ]},
+  { label: 'Skew', options: [
+    { value: 'skewFromLeft', label: 'Skew From Left' },
+    { value: 'skewFromRight', label: 'Skew From Right' },
+    { value: 'skewShortFromLeft', label: 'Skew Short Left' },
+    { value: 'skewShortFromRight', label: 'Skew Short Right' },
+  ]},
+  { label: 'Flip 3D', options: [
+    { value: 'flipFromTop', label: 'Flip From Top' },
+    { value: 'flipFromBottom', label: 'Flip From Bottom' },
+    { value: 'flipFromLeft', label: 'Flip From Left' },
+    { value: 'flipFromRight', label: 'Flip From Right' },
+  ]},
+  { label: 'Rotate', options: [
+    { value: 'rotateIn', label: 'Rotate In' },
+    { value: 'rotateInFromBottom', label: 'Rotate In Bottom' },
+    { value: 'rotate3D', label: 'Rotate 3D' },
+    { value: 'rotateInFromLeft', label: 'Rotate In Left' },
+    { value: 'rotateInFromRight', label: 'Rotate In Right' },
+  ]},
+  { label: 'Pop/Bounce', options: [
+    { value: 'zoomIn', label: 'Zoom In' },
+    { value: 'bounceIn', label: 'Bounce In' },
+    { value: 'popUpSmooth', label: 'Pop Up Smooth' },
+    { value: 'popUpBack', label: 'Pop Up Back' },
+    { value: 'bounceInUp', label: 'Bounce In Up' },
+    { value: 'bounceInDown', label: 'Bounce In Down' },
+  ]},
+  { label: 'Mask/Reveal', options: [
+    { value: 'maskFromLeft', label: 'Mask From Left' },
+    { value: 'maskFromRight', label: 'Mask From Right' },
+    { value: 'maskFromTop', label: 'Mask From Top' },
+    { value: 'maskFromBottom', label: 'Mask From Bottom' },
+    { value: 'maskZoomOut', label: 'Mask Zoom Out' },
+    { value: 'maskCenter', label: 'Mask Center' },
+  ]},
 ];
-const animationsOut = [
-  'none',
-  'fadeOut', 'fadeOutUp', 'fadeOutDown', 'fadeOutLeft', 'fadeOutRight',
-  'slideOutLeft', 'slideOutRight', 'slideOutUp', 'slideOutDown',
-  'zoomOut', 'bounceOut', 'rotateOut',
+
+const animationsOutGroups = [
+  { label: 'Base', options: [
+    { value: 'none', label: 'Nessuna' },
+    { value: 'fadeOut', label: 'Fade Out' },
+  ]},
+  { label: 'Fade', options: [
+    { value: 'fadeOutUp', label: 'Fade Out Up' },
+    { value: 'fadeOutDown', label: 'Fade Out Down' },
+    { value: 'fadeOutLeft', label: 'Fade Out Left' },
+    { value: 'fadeOutRight', label: 'Fade Out Right' },
+  ]},
+  { label: 'Slide', options: [
+    { value: 'slideOutLeft', label: 'Slide Out Left' },
+    { value: 'slideOutRight', label: 'Slide Out Right' },
+    { value: 'slideOutUp', label: 'Slide Out Up' },
+    { value: 'slideOutDown', label: 'Slide Out Down' },
+    { value: 'slideShortOutTop', label: 'Slide Short Top' },
+    { value: 'slideShortOutBottom', label: 'Slide Short Bottom' },
+    { value: 'slideShortOutLeft', label: 'Slide Short Left' },
+    { value: 'slideShortOutRight', label: 'Slide Short Right' },
+    { value: 'smoothSlideOutBottom', label: 'Smooth Slide Bottom' },
+    { value: 'smoothSlideOutTop', label: 'Smooth Slide Top' },
+    { value: 'smoothSlideOutLeft', label: 'Smooth Slide Left' },
+    { value: 'smoothSlideOutRight', label: 'Smooth Slide Right' },
+  ]},
+  { label: 'Skew', options: [
+    { value: 'skewOutLeft', label: 'Skew Out Left' },
+    { value: 'skewOutRight', label: 'Skew Out Right' },
+    { value: 'skewShortOutLeft', label: 'Skew Short Left' },
+    { value: 'skewShortOutRight', label: 'Skew Short Right' },
+  ]},
+  { label: 'Flip 3D', options: [
+    { value: 'flipOutTop', label: 'Flip Out Top' },
+    { value: 'flipOutBottom', label: 'Flip Out Bottom' },
+    { value: 'flipOutLeft', label: 'Flip Out Left' },
+    { value: 'flipOutRight', label: 'Flip Out Right' },
+  ]},
+  { label: 'Rotate', options: [
+    { value: 'rotateOut', label: 'Rotate Out' },
+    { value: 'rotateOutToBottom', label: 'Rotate Out Bottom' },
+    { value: 'rotateOut3D', label: 'Rotate Out 3D' },
+    { value: 'rotateOutToLeft', label: 'Rotate Out Left' },
+    { value: 'rotateOutToRight', label: 'Rotate Out Right' },
+  ]},
+  { label: 'Pop/Bounce', options: [
+    { value: 'zoomOut', label: 'Zoom Out' },
+    { value: 'bounceOut', label: 'Bounce Out' },
+    { value: 'popOutSmooth', label: 'Pop Out Smooth' },
+    { value: 'popOutBack', label: 'Pop Out Back' },
+    { value: 'bounceOutUp', label: 'Bounce Out Up' },
+    { value: 'bounceOutDown', label: 'Bounce Out Down' },
+  ]},
+  { label: 'Mask/Reveal', options: [
+    { value: 'maskOutLeft', label: 'Mask Out Left' },
+    { value: 'maskOutRight', label: 'Mask Out Right' },
+    { value: 'maskOutTop', label: 'Mask Out Top' },
+    { value: 'maskOutBottom', label: 'Mask Out Bottom' },
+    { value: 'maskZoomIn', label: 'Mask Zoom In' },
+    { value: 'maskOutCenter', label: 'Mask Out Center' },
+  ]},
+];
+
+const loopAnimGroups = [
+  { label: 'Nessuno', options: [{ value: 'none', label: 'Nessun loop' }] },
+  { label: 'Pendolo', options: [
+    { value: 'pendulum', label: 'Pendolo' },
+    { value: 'pendulumBelow', label: 'Pendolo basso' },
+    { value: 'pendulumAbove', label: 'Pendolo alto' },
+    { value: 'pendulumLeft', label: 'Pendolo sinistra' },
+    { value: 'pendulumRight', label: 'Pendolo destra' },
+  ]},
+  { label: 'Onda', options: [
+    { value: 'waveSmallLeft', label: 'Onda piccola SX' },
+    { value: 'waveSmallRight', label: 'Onda piccola DX' },
+    { value: 'waveBigLeft', label: 'Onda grande SX' },
+    { value: 'waveBigRight', label: 'Onda grande DX' },
+  ]},
+  { label: 'Wiggle', options: [
+    { value: 'wiggleY', label: 'Wiggle Y' },
+    { value: 'wiggleX', label: 'Wiggle X' },
+    { value: 'wiggle3D', label: 'Wiggle 3D' },
+    { value: 'crazyWiggle', label: 'Crazy Wiggle' },
+  ]},
+  { label: 'Rotazione', options: [
+    { value: 'spinCW', label: 'Spin orario' },
+    { value: 'spinCCW', label: 'Spin antiorario' },
+  ]},
+  { label: 'Effetto', options: [
+    { value: 'blinkLoop', label: 'Lampeggio' },
+    { value: 'floatLoop', label: 'Galleggiamento' },
+    { value: 'pulseLoop', label: 'Pulsazione' },
+    { value: 'breathLoop', label: 'Respiro' },
+    { value: 'slideHLoop', label: 'Slide orizzontale' },
+    { value: 'hoverLoop', label: 'Hover dolce' },
+  ]},
 ];
 
 function up(key, val) {
   emit('update', key, val);
+}
+
+function setAction(field, value) {
+  const current = props.layer?.action || { type: 'none' };
+  if (field === 'type') {
+    if (value === 'none') {
+      up('action', null);
+    } else {
+      up('action', { ...current, type: value });
+    }
+  } else {
+    up('action', { ...current, [field]: value });
+  }
+}
+
+function toggleCharAnim(enabled) {
+  if (enabled) {
+    up('charAnim', { split: 'chars', direction: 'forward', stagger: 30 });
+  } else {
+    up('charAnim', null);
+  }
+}
+
+function upCharAnim(key, val) {
+  if (!props.layer?.charAnim) return;
+  up('charAnim', { ...props.layer.charAnim, [key]: val });
+}
+
+function toggleHover(enabled) {
+  if (enabled) {
+    up('hover', { scale: 1, rotation: 0, rotateX: 0, rotateY: 0, skewX: 0, skewY: 0, opacity: 100, x: 0, y: 0, duration: 300, easing: 'ease', color: '', bgColor: '', borderColor: '', borderRadius: '', blur: 0, brightness: 100, grayscale: 0, cursor: '' });
+  } else {
+    up('hover', null);
+  }
+}
+
+function upHover(key, val) {
+  if (!props.layer?.hover) return;
+  up('hover', { ...props.layer.hover, [key]: val });
 }
 
 function pickImage() {
@@ -318,6 +1669,124 @@ function pickVideo() {
     up('videoSrc', url);
   });
   frame.open();
+}
+
+function pickAudio() {
+  if (!window.wp?.media) return;
+  const frame = wp.media({ title: 'Seleziona audio', multiple: false, library: { type: 'audio' } });
+  frame.on('select', () => {
+    const url = frame.state().get('selection').first().toJSON().url;
+    up('audioSrc', url);
+  });
+  frame.open();
+}
+
+const blendModes = ['normal','multiply','screen','overlay','darken','lighten','color-dodge','color-burn','hard-light','soft-light','difference','exclusion','hue','saturation','color','luminosity'];
+
+// Font families
+const fontsSans = ['Inter', 'Roboto', 'Open Sans', 'Lato', 'Montserrat', 'Poppins', 'Nunito', 'Raleway', 'Source Sans 3', 'Work Sans', 'DM Sans', 'Manrope'];
+const fontsSerif = ['Playfair Display', 'Merriweather', 'Lora', 'PT Serif', 'Libre Baskerville', 'Cormorant Garamond', 'Crimson Text', 'Noto Serif'];
+const fontsMono = ['JetBrains Mono', 'Fira Code', 'Source Code Pro', 'IBM Plex Mono', 'Space Mono'];
+const fontsDisplay = ['Bebas Neue', 'Oswald', 'Anton', 'Permanent Marker', 'Abril Fatface', 'Righteous', 'Pacifico', 'Dancing Script', 'Lobster', 'Satisfy'];
+
+function toggleSfx(enabled) {
+  if (enabled) {
+    up('sfx', { effect: 'blockRight', color: '#ffffff', duration: 800 });
+  } else {
+    up('sfx', null);
+  }
+}
+
+function upSfx(key, val) {
+  if (!props.layer?.sfx) return;
+  up('sfx', { ...props.layer.sfx, [key]: val });
+}
+
+// Box shadow helpers
+function toggleBoxShadow(enabled) {
+  up('boxShadow', enabled ? { x: 0, y: 4, blur: 10, spread: 0, color: 'rgba(0,0,0,0.3)' } : null);
+}
+function upBoxShadow(key, val) {
+  if (!props.layer?.boxShadow) return;
+  up('boxShadow', { ...props.layer.boxShadow, [key]: val });
+}
+
+// Text shadow helpers
+function toggleTextShadow(enabled) {
+  up('textShadow', enabled ? { x: 2, y: 2, blur: 4, color: '#000000' } : null);
+}
+function upTextShadow(key, val) {
+  if (!props.layer?.textShadow) return;
+  up('textShadow', { ...props.layer.textShadow, [key]: val });
+}
+
+// Shape gradient helpers
+function toggleShapeGradient(enabled) {
+  up('shapeGradient', enabled ? { from: '#3b82f6', to: '#8b5cf6', angle: 180 } : null);
+}
+function upShapeGrad(key, val) {
+  if (!props.layer?.shapeGradient) return;
+  up('shapeGradient', { ...props.layer.shapeGradient, [key]: val });
+}
+
+// Mask (clip-path) helpers
+function toggleMask(enabled) {
+  up('mask', enabled ? { preset: 'custom', top: 0, right: 0, bottom: 0, left: 0 } : null);
+}
+function upMask(key, val) {
+  if (!props.layer?.mask) return;
+  up('mask', { ...props.layer.mask, [key]: val, preset: 'custom' });
+}
+function applyMaskPreset(preset) {
+  const presets = {
+    custom:     { top: 0, right: 0, bottom: 0, left: 0 },
+    revealRight:{ top: 0, right: 100, bottom: 0, left: 0 },
+    revealLeft: { top: 0, right: 0, bottom: 0, left: 100 },
+    revealDown: { top: 100, right: 0, bottom: 0, left: 0 },
+    revealUp:   { top: 0, right: 0, bottom: 100, left: 0 },
+    curtainH:   { top: 0, right: 50, bottom: 0, left: 50 },
+    curtainV:   { top: 50, right: 0, bottom: 50, left: 0 },
+  };
+  up('mask', { preset, ...(presets[preset] || presets.custom) });
+}
+
+// Ken Burns per layer helpers
+function toggleKenBurns(enabled) {
+  up('kenBurns', enabled ? { type: 'zoomIn', intensity: 20, duration: 5000 } : null);
+}
+function upKenBurns(key, val) {
+  if (!props.layer?.kenBurns) return;
+  up('kenBurns', { ...props.layer.kenBurns, [key]: val });
+}
+
+// Motion Path helpers
+const MOTION_PRESETS = {
+  circle:  'M50,0 A50,50 0 1,1 50,100 A50,50 0 1,1 50,0 Z',
+  figure8: 'M50,50 C75,0 100,0 100,50 C100,100 75,100 50,50 C25,0 0,0 0,50 C0,100 25,100 50,50 Z',
+  wave:    'M0,50 Q25,0 50,50 Q75,100 100,50',
+  zigzag:  'M0,50 L25,10 L50,90 L75,10 L100,50',
+  arc:     'M0,100 Q50,-20 100,100',
+};
+function toggleMotionPath(enabled) {
+  up('motionPath', enabled ? { preset: 'circle', path: MOTION_PRESETS.circle, duration: 3000, autoRotate: false, loop: true, easing: 'linear' } : null);
+}
+function applyMotionPreset(preset) {
+  if (!props.layer?.motionPath) return;
+  const path = MOTION_PRESETS[preset] || props.layer.motionPath.path || '';
+  up('motionPath', { ...props.layer.motionPath, preset, path });
+}
+function upMotionPath(key, val) {
+  if (!props.layer?.motionPath) return;
+  up('motionPath', { ...props.layer.motionPath, [key]: val });
+}
+
+// Parallax layer helpers
+function toggleParallax(enabled) {
+  up('parallax', enabled ? { type: 'mouse', depth: 5, tilt3d: false, scrollSpeed: 0.5 } : null);
+}
+function upParallax(key, val) {
+  if (!props.layer?.parallax) return;
+  up('parallax', { ...props.layer.parallax, [key]: val });
 }
 </script>
 

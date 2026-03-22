@@ -20,7 +20,7 @@ export default {
     hover_color: '',
     background_color: '',
     border_radius: '8',
-    padding: '16',
+    tile_padding: { top: 16, right: 16, bottom: 16, left: 16 },
     same_taxonomy: false,
     taxonomy: 'category',
     shadow: 'none',
@@ -43,7 +43,7 @@ export default {
     { key: 'gap', label: 'Gap (px)', type: 'range', min: 0, max: 40, step: 4 },
     { key: 'thumbnail_size', label: 'Dimensione miniatura (px)', type: 'range', min: 30, max: 120, step: 5,
       condition: { field: 'show_thumbnail', value: true } },
-    { key: 'padding', label: 'Padding (px)', type: 'range', min: 8, max: 40, step: 4 },
+    { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 40 },
     { key: 'border_radius', label: 'Arrotondamento card (px)', type: 'border-radius' },
 
     // ── Colori ──

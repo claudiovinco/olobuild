@@ -18,6 +18,7 @@ class Olo_IconBox_Tile extends Olo_Tile_Base {
         'link_text'         => 'Learn more',
         'alignment'         => 'center',
         'text_color'        => '',
+        'title_color'       => '',
         'icon_size'         => '3',
         'icon_position'     => 'top',
         'icon_bg_color'     => '',
@@ -45,6 +46,7 @@ class Olo_IconBox_Tile extends Olo_Tile_Base {
         $uid = 'mib-' . wp_rand( 10000, 99999 );
 
         $fg         = $this->safe_color_css( $s['text_color'] );
+        $title_clr  = $this->safe_color_css( $s['title_color'] ?? '' );
         $link_clr   = $this->safe_color_css( $s['link_color'] ) ?: 'var(--olo-color-primary, #6366F1)';
         $icon_size  = floatval( $s['icon_size'] ) ?: 3;
         $title_fs   = absint( $s['title_font_size'] ) ?: 20;
@@ -77,6 +79,7 @@ class Olo_IconBox_Tile extends Olo_Tile_Base {
                 font-size: <?php echo $title_fs; ?>px;
                 font-weight: <?php echo $title_fw; ?>;
                 margin: 0 0 8px;
+                <?php if ( $title_clr ) : ?>color: <?php echo $title_clr; ?>;<?php endif; ?>
             }
             .<?php echo $uid; ?> .mib-link {
                 color: <?php echo $link_clr; ?> !important;

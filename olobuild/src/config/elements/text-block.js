@@ -10,6 +10,8 @@ export default {
     line_height: '',
     max_width: '',
     padding: '16',
+    tb_padding: { top: 16, right: 16, bottom: 16, left: 16 },
+    tb_margin: { top: 0, right: 0, bottom: 0, left: 0 },
   },
   fields: [
     { key: 'content', label: 'Contenuto', type: 'editor', mode: 'block' },
@@ -30,6 +32,8 @@ export default {
     { type: 'separator', label: 'Layout' },
     { key: 'max_width', label: 'Larghezza max (px)', type: 'range', min: 0, max: 1200, step: 10,
       description: '0 = nessun limite' },
-    { key: 'padding', label: 'Padding (px)', type: 'range', min: 0, max: 48, step: 4 },
+
+    { key: 'tb_padding', label: 'Padding (px)', type: 'spacing', max: 100 },
+    { key: 'tb_margin', label: 'Margine (px)', type: 'spacing', min: -50, max: 100 },
   ],
 };

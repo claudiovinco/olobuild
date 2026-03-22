@@ -102,8 +102,8 @@ export default {
         { key: 'btn_bg', label: 'Sfondo pulsante', type: 'color' },
         { key: 'btn_color', label: 'Colore testo', type: 'color' },
         // Spaziatura interna
-        { key: 'btn_padding_v', label: 'Padding verticale (px)', type: 'range', min: 0, max: 30, step: 1 },
-        { key: 'btn_padding_h', label: 'Padding orizzontale (px)', type: 'range', min: 0, max: 50, step: 1 },
+        { key: 'btn_padding_v', label: 'Padding verticale (px)', type: 'spacing', max: 30 },
+        { key: 'btn_padding_h', label: 'Padding orizzontale (px)', type: 'spacing', max: 50 },
         // Bordo
         { key: 'btn_radius', label: 'Raggio angoli (px)', type: 'border-radius' },
         { key: 'btn_border_width', label: 'Spessore bordo (px)', type: 'range', min: 0, max: 5, step: 1 },

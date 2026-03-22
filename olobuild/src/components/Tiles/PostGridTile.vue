@@ -1,14 +1,18 @@
 <template>
   <div class="olo-postgrid-preview">
+    <!-- Loading overlay -->
+    <div v-if="loading" class="mpg-loading">
+      <span class="mpg-spinner"></span>
+    </div>
     <div class="mpg-grid" :style="gridStyle">
-      <div v-for="n in cardCount" :key="n" class="mpg-card" :class="cardClasses" :style="cardStyle">
+      <div v-for="(item, idx) in displayItems" :key="idx" class="mpg-card" :class="cardClasses" :style="cardStyle">
         <!-- Image area -->
         <div v-if="settings.show_image !== false" class="mpg-img-wrap" :style="{ height: imgHeight + 'px' }">
-          <div :class="['mpg-img-bg', hoverImgClass, kenburnsClass]" :style="kenburnsStyle"></div>
+          <div :class="['mpg-img-bg', hoverImgClass, kenburnsClass]" :style="{ ...kenburnsStyle, ...(item.image ? { backgroundImage: 'url(' + item.image + ')', backgroundSize: 'cover', backgroundPosition: 'center' } : {}) }"></div>
           <!-- Overlay gradient -->
           <div v-if="settings.overlay_gradient" class="mpg-overlay" :style="overlayStyle"></div>
           <!-- Category badge -->
-          <span v-if="settings.show_category !== false" class="mpg-category">Categoria</span>
+          <span v-if="settings.show_category !== false" class="mpg-category">{{ item.category || 'Categoria' }}</span>
           <!-- Ribbon -->
           <span
             v-if="settings.ribbon_field"
@@ -17,37 +21,39 @@
             :style="{ background: settings.ribbon_bg || '#e11d48', color: settings.ribbon_color || '#fff' }"
           >Ribbon</span>
           <!-- Opening badge -->
-          <span v-if="settings.show_service_opening" class="mpg-opening" :style="{ background: n % 2 === 1 ? (settings.opening_bg_annual || '#059669') : (settings.opening_bg_seasonal || '#d97706'), fontSize: (parseInt(settings.opening_size) || 11) * 0.65 + 'px' }">{{ n % 2 === 1 ? 'Annuale' : 'Stagionale' }}</span>
+          <span v-if="settings.show_service_opening && item.opening_type" class="mpg-opening" :style="{ background: item.opening_type === 'annual' ? (settings.opening_bg_annual || '#059669') : (settings.opening_bg_seasonal || '#d97706'), fontSize: (parseInt(settings.opening_size) || 11) * 0.65 + 'px' }">{{ item.opening_type === 'annual' ? 'Annuale' : 'Stagionale' }}</span>
+          <span v-else-if="settings.show_service_opening && !hasRealData" class="mpg-opening" :style="{ background: idx % 2 === 0 ? (settings.opening_bg_annual || '#059669') : (settings.opening_bg_seasonal || '#d97706'), fontSize: (parseInt(settings.opening_size) || 11) * 0.65 + 'px' }">{{ idx % 2 === 0 ? 'Annuale' : 'Stagionale' }}</span>
         </div>
         <!-- Card body -->
         <div class="mpg-body" :style="bodyStyle">
-          <div class="mpg-title" :style="{ fontSize: titleSize, color: settings.title_color || undefined }">{{ fakeTitles[(n - 1) % fakeTitles.length] }}</div>
-          <div v-if="settings.show_meta !== false" class="mpg-meta" :style="{ color: settings.meta_color || undefined }">{{ fakeDates[(n - 1) % fakeDates.length] }} · {{ fakeAuthors[(n - 1) % fakeAuthors.length] }}</div>
-          <div v-if="settings.show_excerpt !== false" class="mpg-excerpt" :style="{ fontSize: excerptSize, color: settings.excerpt_color || undefined }">{{ fakeExcerpts[(n - 1) % fakeExcerpts.length] }}</div>
+          <div class="mpg-title" :style="{ fontSize: titleSize, color: settings.title_color || undefined }">{{ item.title }}</div>
+          <div v-if="settings.show_meta !== false" class="mpg-meta" :style="{ color: settings.meta_color || undefined }">{{ item.date_fmt }} · {{ item.author }}</div>
+          <div v-if="settings.show_excerpt !== false" class="mpg-excerpt" :style="{ fontSize: excerptSize, color: settings.excerpt_color || undefined }">{{ item.excerpt }}</div>
           <!-- Service stats preview -->
           <div v-if="settings.show_service_stats" class="mpg-service-stats">
             <span class="mpg-stat" title="Ospiti">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><circle cx="9" cy="7" r="3" stroke="currentColor" stroke-width="2"/><path d="M3 20C3 16.6863 5.68629 14 9 14C12.3137 14 15 16.6863 15 20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> 6
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><circle cx="9" cy="7" r="3" stroke="currentColor" stroke-width="2"/><path d="M3 20C3 16.6863 5.68629 14 9 14C12.3137 14 15 16.6863 15 20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> {{ item.service_capacity || '6' }}
             </span>
             <span class="mpg-stat" title="Camere">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M3 18V12C3 10.3431 4.34315 9 6 9H18C19.6569 9 21 10.3431 21 12V18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M3 18V20M21 18V20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> 3
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M3 18V12C3 10.3431 4.34315 9 6 9H18C19.6569 9 21 10.3431 21 12V18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M3 18V20M21 18V20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> {{ item.service_bedrooms || '3' }}
             </span>
             <span class="mpg-stat" title="Bagni">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M4 12H20V15C20 17.2091 18.2091 19 16 19H8C5.79086 19 4 17.2091 4 15V12Z" stroke="currentColor" stroke-width="2"/></svg> 2
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M4 12H20V15C20 17.2091 18.2091 19 16 19H8C5.79086 19 4 17.2091 4 15V12Z" stroke="currentColor" stroke-width="2"/></svg> {{ item.service_bathrooms || '2' }}
             </span>
-            <span class="mpg-stat" title="Altitudine">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M12 3L20 19H4L12 3Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg> 1450m
+            <span v-if="item.service_altitude" class="mpg-stat" title="Altitudine">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M12 3L20 19H4L12 3Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg> {{ item.service_altitude }}m
             </span>
           </div>
           <!-- Service club preview -->
-          <div v-if="settings.show_service_club" class="mpg-service-club">Dolomiti · 3 stelle</div>
-          <div v-if="settings.show_price" class="mpg-price">{{ settings.price_prefix || '€' }}99{{ settings.price_suffix || '' }}</div>
+          <div v-if="settings.show_service_club" class="mpg-service-club">{{ item.service_club ? (item.service_club + (item.service_stars ? ' · ' + item.service_stars + ' stelle' : '')) : 'Dolomiti · 3 stelle' }}</div>
+          <div v-if="settings.show_price && item.price != null" class="mpg-price">{{ settings.price_prefix || '€' }}{{ item.price }}{{ settings.price_suffix || '' }}</div>
+          <div v-else-if="settings.show_price" class="mpg-price">{{ settings.price_prefix || '€' }}99{{ settings.price_suffix || '' }}</div>
           <div v-if="settings.link_style === 'button'" class="mpg-btn" data-olo-editable="link_text">{{ settings.link_text || 'Vedi' }}</div>
           <div v-else-if="settings.link_style === 'text'" class="mpg-link" data-olo-editable="link_text">{{ settings.link_text || 'Vedi' }} →</div>
         </div>
       </div>
     </div>
-    <!-- Pagination preview -->
+    <!-- Pagination preview (matches frontend .olo-pg-pagination) -->
     <div v-if="settings.pagination" class="mpg-pagination">
       <template v-if="paginationStyle === 'dots'">
         <span v-for="i in pagPageCount" :key="i" class="mpg-pag-dot" :class="{ 'mpg-pag-active': i === 1 }"></span>
@@ -56,9 +62,9 @@
         <span v-for="i in pagPageCount" :key="i" class="mpg-pag-num" :class="{ 'mpg-pag-active': i === 1 }">{{ i }}</span>
       </template>
       <template v-else-if="paginationStyle === 'arrows'">
-        <span class="mpg-pag-arrow" style="opacity:0.35">‹</span>
+        <span class="mpg-pag-btn" style="opacity:0.35">‹</span>
         <span class="mpg-pag-info">1 / {{ pagPageCount }}</span>
-        <span class="mpg-pag-arrow">›</span>
+        <span class="mpg-pag-btn">›</span>
       </template>
       <template v-else-if="paginationStyle === 'loadmore'">
         <span class="mpg-pag-loadmore">Carica altri</span>
@@ -66,25 +72,120 @@
     </div>
     <!-- Info bar -->
     <div class="mpg-info">
-      {{ settings.post_type || 'post' }} · {{ settings.posts_per_page || 12 }} articoli · {{ cols }} colonne<template v-if="settings.pagination"> · {{ settings.items_per_page || 6 }}/pagina</template>
+      {{ settings.post_type || 'post' }} · {{ settings.posts_per_page || 12 }} articoli · {{ cols }} colonne<template v-if="settings.pagination"> · {{ settings.items_per_page || 6 }}/pagina</template><template v-if="hasRealData"> · <span class="mpg-live-badge">anteprima reale</span></template>
     </div>
   </div>
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed, ref, watch, inject, onMounted } from 'vue';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
 });
 
+const oloData = inject('oloData', { restUrl: '/wp-json/olo/v1', nonce: '' });
+
+// Fake data fallback
 const fakeTitles = ['Come migliorare le performance', 'Guida completa al design', 'Le ultime novità del settore', 'Consigli pratici per iniziare', 'Tendenze e ispirazioni', 'Strategie per il successo'];
 const fakeDates = ['12 Feb 2026', '8 Gen 2026', '23 Mar 2026', '5 Apr 2026', '17 Nov 2025', '30 Dic 2025'];
 const fakeAuthors = ['Marco B.', 'Sara L.', 'Luca R.', 'Anna M.', 'Giorgio P.', 'Elena T.'];
 const fakeExcerpts = ['Scopri le tecniche più efficaci per ottimizzare ogni aspetto del tuo progetto...', 'Una panoramica completa su strumenti, metodi e best practice da adottare...', 'Le novità più interessanti e come possono influenzare il tuo lavoro quotidiano...', 'Passi concreti e suggerimenti utili per chi vuole partire col piede giusto...', 'Esplora le tendenze emergenti e lasciati ispirare da esempi reali...', 'Approcci collaudati per raggiungere obiettivi ambiziosi con efficacia...'];
 
+// Real data state
+const realPosts = ref([]);
+const loading = ref(false);
+const hasRealData = computed(() => realPosts.value.length > 0);
+
+// Query key for debounced fetch
+const queryKey = computed(() => JSON.stringify({
+  post_type: props.settings.post_type || 'post',
+  posts_per_page: props.settings.posts_per_page || '12',
+  orderby: props.settings.orderby || 'date',
+  order: props.settings.order || 'DESC',
+  meta_key: props.settings.meta_key || '',
+  meta_filter: props.settings.meta_filter || '',
+  excerpt_length: props.settings.excerpt_length || '20',
+  price_field: props.settings.price_field || '',
+}));
+
+let fetchTimer = null;
+const fetchCache = {};
+
+async function fetchPosts() {
+  const s = props.settings;
+  const params = new URLSearchParams({
+    post_type: s.post_type || 'post',
+    posts_per_page: s.posts_per_page || '12',
+    orderby: s.orderby || 'date',
+    order: s.order || 'DESC',
+    excerpt_length: s.excerpt_length || '20',
+  });
+  if (s.meta_key) params.set('meta_key', s.meta_key);
+  if (s.meta_filter) params.set('meta_filter', s.meta_filter);
+  if (s.price_field) params.set('price_field', s.price_field);
+
+  const cacheKey = params.toString();
+  if (fetchCache[cacheKey]) {
+    realPosts.value = fetchCache[cacheKey];
+    return;
+  }
+
+  loading.value = true;
+  try {
+    const url = `${oloData.restUrl}/postgrid-preview?${params}`;
+    const res = await fetch(url, {
+      headers: { 'X-WP-Nonce': oloData.nonce },
+    });
+    if (res.ok) {
+      const data = await res.json();
+      if (Array.isArray(data) && data.length > 0) {
+        realPosts.value = data;
+        fetchCache[cacheKey] = data;
+      } else {
+        realPosts.value = [];
+      }
+    }
+  } catch (e) {
+    // Silently fall back to fake data
+    realPosts.value = [];
+  } finally {
+    loading.value = false;
+  }
+}
+
+watch(queryKey, () => {
+  clearTimeout(fetchTimer);
+  fetchTimer = setTimeout(fetchPosts, 600);
+});
+
+onMounted(() => {
+  fetchTimer = setTimeout(fetchPosts, 300);
+});
+
+// Display items: real or fake
 const cols = computed(() => parseInt(props.settings.columns) || 3);
 const cardCount = computed(() => Math.min(parseInt(props.settings.posts_per_page) || 6, cols.value * 2));
+
+const displayItems = computed(() => {
+  const count = cardCount.value;
+  if (hasRealData.value) {
+    return realPosts.value.slice(0, count);
+  }
+  // Fake data fallback
+  const items = [];
+  for (let i = 0; i < count; i++) {
+    items.push({
+      title: fakeTitles[i % fakeTitles.length],
+      date_fmt: fakeDates[i % fakeDates.length],
+      author: fakeAuthors[i % fakeAuthors.length],
+      excerpt: fakeExcerpts[i % fakeExcerpts.length],
+      image: '',
+      category: '',
+    });
+  }
+  return items;
+});
 
 const imgHeight = computed(() => {
   const h = parseInt(props.settings.image_height) || 200;
@@ -153,7 +254,6 @@ const overlayStyle = computed(() => {
   const dirMap = { bottom: 'to top', top: 'to bottom', left: 'to right', right: 'to left' };
   const cssDir = dirMap[dir] || 'to top';
 
-  const posMap = { bottom: 'bottom:0;left:0;right:0;', top: 'top:0;left:0;right:0;', left: 'top:0;left:0;bottom:0;', right: 'top:0;right:0;bottom:0;' };
   const isHoriz = dir === 'left' || dir === 'right';
 
   return {
@@ -194,6 +294,7 @@ const pagPageCount = computed(() => {
 <style scoped>
 .olo-postgrid-preview {
   min-height: 120px;
+  position: relative;
 }
 .mpg-grid {
   display: grid;
@@ -224,6 +325,32 @@ const pagPageCount = computed(() => {
 }
 .mpg-card--primary .mpg-link {
   color: #fff;
+}
+
+/* Loading */
+.mpg-loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.6);
+  z-index: 10;
+  border-radius: 4px;
+}
+.mpg-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #e5e7eb;
+  border-top-color: var(--olo-color-primary, #6366F1);
+  border-radius: 50%;
+  animation: mpg-spin 0.6s linear infinite;
+}
+@keyframes mpg-spin {
+  to { transform: rotate(360deg); }
 }
 
 /* Image area */
@@ -348,22 +475,26 @@ const pagPageCount = computed(() => {
 }
 
 /* Pagination preview */
+/* Pagination — matches frontend .olo-pg-pagination */
 .mpg-pagination {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 5px;
-  margin-top: 8px;
+  gap: 8px;
+  margin-top: 24px;
   flex-wrap: wrap;
 }
 .mpg-pag-dot {
   display: inline-block;
-  width: 7px;
-  height: 7px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
-  border: 1.5px solid #d1d5db;
+  border: 2px solid #d1d5db;
   background: transparent;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
 }
+.mpg-pag-dot:hover { border-color: #9ca3af; }
 .mpg-pag-dot.mpg-pag-active {
   background: var(--olo-color-primary, #6366F1);
   border-color: var(--olo-color-primary, #6366F1);
@@ -372,42 +503,56 @@ const pagPageCount = computed(() => {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 18px;
-  height: 18px;
-  font-size: 8px;
+  min-width: 32px;
+  height: 32px;
+  padding: 0 8px;
+  font-size: 0.85em;
   font-weight: 500;
   border: 1px solid #d1d5db;
-  border-radius: 3px;
-  color: #6b7280;
+  border-radius: 4px;
+  color: inherit;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
 }
+.mpg-pag-num:hover { background: rgba(0,0,0,0.05); border-color: #9ca3af; }
 .mpg-pag-num.mpg-pag-active {
   background: var(--olo-color-primary, #6366F1);
   border-color: var(--olo-color-primary, #6366F1);
   color: #fff;
 }
-.mpg-pag-arrow {
+.mpg-pag-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 20px;
-  height: 20px;
-  border: 1px solid #d1d5db;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
-  font-size: 10px;
-  color: #6b7280;
+  border: 1px solid #d1d5db;
+  background: transparent;
+  font-size: 1.2em;
+  color: inherit;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
 }
+.mpg-pag-btn:hover { background: rgba(0,0,0,0.05); border-color: #9ca3af; }
 .mpg-pag-info {
-  font-size: 8px;
-  color: #9ca3af;
+  font-size: 0.85em;
+  color: #6b7280;
+  min-width: 50px;
+  text-align: center;
 }
 .mpg-pag-loadmore {
   display: inline-block;
-  padding: 4px 14px;
+  padding: 8px 24px;
   border: 1px solid #d1d5db;
   border-radius: 999px;
-  font-size: 8px;
+  font-size: 0.85em;
+  font-weight: 500;
   color: #6b7280;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
 }
+.mpg-pag-loadmore:hover { background: rgba(0,0,0,0.05); border-color: #9ca3af; }
 
 /* Service stats preview */
 .mpg-service-stats {
@@ -455,5 +600,9 @@ const pagPageCount = computed(() => {
   padding: 4px;
   background: rgba(0,0,0,0.05);
   border-radius: 3px;
+}
+.mpg-live-badge {
+  color: #059669;
+  font-weight: 600;
 }
 </style>

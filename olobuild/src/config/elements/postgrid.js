@@ -45,7 +45,7 @@ export default {
     ribbon_color: '',
     meta_filter: '',
     // Stile testo
-    body_padding: '15',
+    tile_padding: { top: 15, right: 15, bottom: 15, left: 15 },
     title_size: '1',
     excerpt_size: '0.92',
     title_color: '',
@@ -199,7 +199,7 @@ export default {
     { type: 'separator', label: 'Stile testo' },
 
     // ── Stile testo ──
-    { key: 'body_padding', label: 'Padding area testo (px)', type: 'range', min: 0, max: 40, step: 1 },
+    { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 40 },
     { key: 'title_size', label: 'Dimensione titolo (em)', type: 'range', min: 0.7, max: 2.5, step: 0.05 },
     { key: 'title_color', label: 'Colore titolo', type: 'color' },
     { key: 'excerpt_size', label: 'Dimensione estratto (em)', type: 'range', min: 0.7, max: 1.5, step: 0.05 },

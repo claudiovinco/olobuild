@@ -9,7 +9,7 @@ export default {
     gap: '16',
     card_radius: '12',
     card_border: '',
-    card_padding: '20',
+    tile_padding: { top: 20, right: 20, bottom: 20, left: 20 },
     accent_color: '',
     amount_size: '26',
     label_size: '14',
@@ -24,7 +24,7 @@ export default {
     { key: 'columns', label: 'Colonne', type: 'range', min: 1, max: 4, step: 1 },
     { key: 'gap', label: 'Gap (px)', type: 'range', min: 8, max: 32, step: 4 },
     { key: 'card_radius', label: 'Raggio card (px)', type: 'border-radius' },
-    { key: 'card_padding', label: 'Padding card (px)', type: 'range', min: 8, max: 32, step: 4 },
+    { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 32 },
 
     { type: 'separator', label: 'Colori' },
     { key: 'accent_color', label: 'Colore accento', type: 'color' },

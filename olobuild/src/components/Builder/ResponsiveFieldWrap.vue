@@ -50,13 +50,18 @@ const props = defineProps({
   target: { type: String, default: 'settings' },
 });
 
-const breakpoints = [
+const allBreakpoints = [
   { key: 'desktop', label: 'Desktop', short: 'DT' },
   { key: 'tablet_landscape', label: 'Tablet L', short: 'TL' },
   { key: 'tablet', label: 'Tablet', short: 'TP' },
   { key: 'mobile_landscape', label: 'Mobile L', short: 'ML' },
   { key: 'mobile', label: 'Mobile', short: 'MB' },
 ];
+
+const bpEnabled = (window.oloData || {}).breakpointsEnabled || {};
+const breakpoints = allBreakpoints.filter(bp =>
+  bp.key === 'desktop' || bpEnabled[bp.key] !== false
+);
 
 const open = ref(false);
 const activeBp = ref('desktop');

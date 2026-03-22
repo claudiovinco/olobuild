@@ -52,7 +52,7 @@ class Olo_Icon_Tile extends Olo_Tile_Base {
         $view   = $s['view'] ?? 'default';
         $bg_clr = $this->safe_color_css( $s['bg_color'] ) ?: 'var(--olo-color-primary, #6366F1)';
         $shape  = $s['bg_shape'] ?? 'circle';
-        $pad    = absint( $s['padding'] ?? 20 );
+        $pad = Olo_Tile_Utils::spacing_css( $s['tile_padding'] ?? $s['padding'] ?? 20, 20 );
         $rot    = intval( $s['rotation'] ?? 0 );
         $anim   = $s['hover_animation'] ?? 'none';
 

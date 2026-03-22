@@ -12,7 +12,7 @@ export default {
     view: 'default',
     bg_color: '',
     bg_shape: 'circle',
-    padding: '20',
+    tile_padding: { top: 20, right: 20, bottom: 20, left: 20 },
     hover_animation: 'none',
     rotation: '0',
     secondary_color: '',
@@ -36,7 +36,7 @@ export default {
       { value: 'square', label: 'Quadrato' },
       { value: 'rounded', label: 'Arrotondato' },
     ]},
-    { key: 'padding', label: 'Padding (px)', type: 'range', min: 8, max: 60, step: 4 },
+    { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 60 },
     { key: 'hover_animation', label: 'Animazione hover', type: 'select', options: [
       { value: 'none', label: 'Nessuna' },
       { value: 'grow', label: 'Ingrandisci' },

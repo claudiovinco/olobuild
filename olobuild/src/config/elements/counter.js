@@ -31,7 +31,7 @@ export default {
     overlay_opacity: '50',
 
     // Tile
-    padding: '32',
+    tile_padding: { top: 32, right: 32, bottom: 32, left: 32 },
     border_radius: '0',
     border_width: '0',
     border_color: '',
@@ -92,7 +92,7 @@ export default {
 
     // ── Tile ──
     { type: 'separator', label: 'Aspetto tile' },
-    { key: 'padding', label: 'Padding (px)', type: 'range', min: 0, max: 80, step: 4 },
+    { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 80 },
     { key: 'border_radius', label: 'Arrotondamento (px)', type: 'border-radius' },
     { key: 'border_width', label: 'Bordo tile (px)', type: 'range', min: 0, max: 5, step: 1 },
     { key: 'border_color', label: 'Colore bordo tile', type: 'color',

@@ -19,7 +19,7 @@ export default {
     card_border_radius: '12',
     card_border_color: '',
     card_shadow: 'sm',
-    card_padding: '24',
+    tile_padding: { top: 24, right: 24, bottom: 24, left: 24 },
     card_hover_shadow: 'md',
     title_size: '18',
     title_weight: '600',
@@ -75,7 +75,7 @@ export default {
     { key: 'card_bg', label: 'Sfondo card', type: 'color' },
     { key: 'card_border_radius', label: 'Radius card (px)', type: 'border-radius' },
     { key: 'card_border_color', label: 'Bordo colore', type: 'color' },
-    { key: 'card_padding', label: 'Padding (px)', type: 'range', min: 0, max: 48, step: 4 },
+    { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 48 },
     { key: 'card_shadow', label: 'Ombra', type: 'select', options: [
       { value: 'none', label: 'Nessuna' },
       { value: 'sm', label: 'Leggera' },

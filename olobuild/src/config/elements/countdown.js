@@ -35,7 +35,7 @@ export default {
     label_font_weight: '500',
     separator_font_size: '32',
     item_min_width: '70',
-    padding: '32',
+    tile_padding: { top: 32, right: 32, bottom: 32, left: 32 },
     shadow: 'none',
   },
   fields: [
@@ -101,7 +101,7 @@ export default {
     ]},
     { key: 'separator_font_size', label: 'Dim. separatore (px)', type: 'range', min: 12, max: 80, step: 2 },
     { key: 'item_min_width', label: 'Largh. min elemento (px)', type: 'range', min: 40, max: 160, step: 5 },
-    { key: 'padding', label: 'Padding (px)', type: 'range', min: 8, max: 64, step: 4 },
+    { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 64 },
     { type: 'separator', label: 'Colori' },
     { key: 'bg_color', label: 'Colore sfondo', type: 'color' },
     { key: 'text_color', label: 'Colore testo', type: 'color' },

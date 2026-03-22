@@ -174,12 +174,17 @@ class Olo_Tile_Utils {
      * @param string $extra_attrs  Additional HTML attributes string.
      * @return string <img> HTML tag.
      */
-    public static function img_srcset( $attachment_id, $url, $alt = '', $class = '', $size = 'full', $extra_attrs = '' ) {
+    public static function img_srcset( $attachment_id, $url, $alt = '', $class = '', $size = 'full', $extra_attrs = '', $options = [] ) {
         $att_id = absint( $attachment_id );
         $src    = esc_url( $url );
         $alt_s  = esc_attr( $alt );
         $cls    = $class ? ' class="' . esc_attr( $class ) . '"' : '';
         $extra  = $extra_attrs ? ' ' . $extra_attrs : '';
+
+        // Loading strategy & fetch priority
+        $loading   = ! empty( $options['loading'] ) ? $options['loading'] : 'lazy';
+        $priority  = ! empty( $options['fetchpriority'] ) ? ' fetchpriority="' . esc_attr( $options['fetchpriority'] ) . '"' : '';
+        $load_attr = ' loading="' . esc_attr( $loading ) . '" decoding="async"' . $priority;
 
         // If no attachment ID, try to resolve from URL
         if ( $att_id <= 0 && $src ) {
@@ -201,15 +206,34 @@ class Olo_Tile_Utils {
             }
 
             if ( $srcset ) {
-                // Use responsive sizes that adapt to container width
                 $responsive_sizes = $sizes ?: '(max-width: 480px) 100vw, (max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw';
-                return '<img src="' . $src . '" srcset="' . esc_attr( $srcset ) . '" sizes="' . esc_attr( $responsive_sizes ) . '" alt="' . $alt_s . '"' . $cls . $w_attr . $h_attr . ' loading="lazy" decoding="async"' . $extra . ' />';
+                return '<img src="' . $src . '" srcset="' . esc_attr( $srcset ) . '" sizes="' . esc_attr( $responsive_sizes ) . '" alt="' . $alt_s . '"' . $cls . $w_attr . $h_attr . $load_attr . $extra . ' />';
             }
 
-            // Has attachment but no srcset (e.g. SVG) — still add dimensions
-            return '<img src="' . $src . '" alt="' . $alt_s . '"' . $cls . $w_attr . $h_attr . ' loading="lazy" decoding="async"' . $extra . ' />';
+            return '<img src="' . $src . '" alt="' . $alt_s . '"' . $cls . $w_attr . $h_attr . $load_attr . $extra . ' />';
         }
 
-        return '<img src="' . $src . '" alt="' . $alt_s . '"' . $cls . ' loading="lazy" decoding="async"' . $extra . ' />';
+        return '<img src="' . $src . '" alt="' . $alt_s . '"' . $cls . $load_attr . $extra . ' />';
+    }
+
+    /**
+     * Parse a spacing value (from FieldSpacing) to CSS shorthand.
+     * Accepts: array {top,right,bottom,left}, string 'N', int N.
+     * Falls back to $fallback (int) if value is missing/invalid.
+     *
+     * @param  mixed  $val      The spacing value from tile settings.
+     * @param  int    $fallback Default uniform value if $val is empty.
+     * @return string CSS shorthand, e.g. "16px 20px 16px 20px".
+     */
+    public static function spacing_css( $val, $fallback = 0 ) {
+        if ( is_array( $val ) ) {
+            $t = intval( $val['top'] ?? $fallback );
+            $r = intval( $val['right'] ?? $fallback );
+            $b = intval( $val['bottom'] ?? $fallback );
+            $l = intval( $val['left'] ?? $fallback );
+            return "{$t}px {$r}px {$b}px {$l}px";
+        }
+        $n = ( $val !== '' && $val !== null ) ? intval( $val ) : $fallback;
+        return "{$n}px";
     }
 }
