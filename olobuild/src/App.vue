@@ -136,11 +136,19 @@ function toggleSidebar() {
   localStorage.setItem(SIDEBAR_C_KEY, sidebarCollapsed.value ? '1' : '');
 }
 
+function blockIframes() {
+  document.querySelectorAll('iframe').forEach(f => { f.style.pointerEvents = 'none'; });
+}
+function unblockIframes() {
+  document.querySelectorAll('iframe').forEach(f => { f.style.pointerEvents = ''; });
+}
+
 function startResize(event) {
   var startX = event.clientX;
   var startW = sidebarWidth.value;
   document.body.style.cursor = 'col-resize';
   document.body.style.userSelect = 'none';
+  blockIframes();
   function onMove(e) {
     var w = startW + (e.clientX - startX);
     if (w < 100) {
@@ -155,6 +163,7 @@ function startResize(event) {
   function onUp() {
     document.body.style.cursor = '';
     document.body.style.userSelect = '';
+    unblockIframes();
     localStorage.setItem(SIDEBAR_W_KEY, String(sidebarWidth.value));
     document.removeEventListener('mousemove', onMove);
     document.removeEventListener('mouseup', onUp);
@@ -179,6 +188,7 @@ function startInspectorResize(event) {
   var startW = inspectorWidth.value;
   document.body.style.cursor = 'col-resize';
   document.body.style.userSelect = 'none';
+  blockIframes();
   function onMove(e) {
     var w = startW - (e.clientX - startX);
     if (w < 100) {
@@ -193,6 +203,7 @@ function startInspectorResize(event) {
   function onUp() {
     document.body.style.cursor = '';
     document.body.style.userSelect = '';
+    unblockIframes();
     localStorage.setItem(INSPECTOR_W_KEY, String(inspectorWidth.value));
     document.removeEventListener('mousemove', onMove);
     document.removeEventListener('mouseup', onUp);

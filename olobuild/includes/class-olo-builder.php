@@ -275,6 +275,7 @@ class Olo_Builder {
                 'nonce'            => wp_create_nonce( 'wp_rest' ),
                 'pluginUrl'        => OLO_URL,
                 'version'          => OLO_VERSION,
+                'locale'           => get_locale(),
                 'styles'           => $style_system->get_styles(),
                 'presets'          => $style_system->get_presets(),
                 'globalColors'     => $style_system->get_global_colors(),
@@ -366,6 +367,7 @@ class Olo_Builder {
             'userRestrictions' => Olobuild_Role_Manager::instance()->get_current_user_restrictions(),
             'isContentOnly'    => Olobuild_Role_Manager::instance()->is_content_only(),
             'isDesignOnly'     => Olobuild_Role_Manager::instance()->is_design_only(),
+            'locale'         => get_locale(),
             'siteInfo'       => [
                 'name'     => get_bloginfo( 'name' ),
                 'tagline'  => get_bloginfo( 'description' ),
@@ -389,7 +391,7 @@ class Olo_Builder {
             include OLO_PATH . 'templates/builder-page.php';
         } else {
             // Template list mode — use the shared admin shell
-            self::page_shell_open( 'Gestione Template' );
+            self::page_shell_open( __( 'Gestione Template', 'olobuilder' ) );
             echo '<div id="olobuilder-app"></div>';
             self::page_shell_close();
         }

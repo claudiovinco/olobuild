@@ -1,6 +1,6 @@
 <template>
   <div
-    class="mb-py-8 mb-px-6"
+    class="olo-iconbox-tile"
     :style="containerStyle"
   >
     <!-- Icon -->
@@ -67,8 +67,54 @@ const containerStyle = computed(() => {
     st.display = 'flex';
     st.flexDirection = s.value.icon_position === 'right' ? 'row-reverse' : 'row';
     st.alignItems = 'flex-start';
-    st.gap = '16px';
+    st.gap = (s.value.icon_gap || 16) + 'px';
     st.textAlign = 'left';
+  }
+  // Tile background (mutually exclusive via bg_type)
+  const bgType = s.value.bg_type || 'none';
+  if (bgType === 'color' && s.value.bg_color) {
+    st.backgroundColor = s.value.bg_color;
+  } else if (bgType === 'gradient' && s.value.bg_gradient) {
+    const g = s.value.bg_gradient;
+    if (g && g.stops && g.stops.length) {
+      const stops = g.stops.map(s => s.color + ' ' + s.position + '%').join(', ');
+      st.background = (g.type === 'radial' ? 'radial-gradient(circle, ' : 'linear-gradient(' + (g.angle || 180) + 'deg, ') + stops + ')';
+    }
+  } else if (bgType === 'image' && s.value.bg_image) {
+    st.backgroundImage = 'url(' + s.value.bg_image + ')';
+    st.backgroundSize = s.value.bg_image_size || 'cover';
+    st.backgroundPosition = s.value.bg_image_position || 'center center';
+    st.backgroundRepeat = 'no-repeat';
+  }
+  // Tile padding
+  const tp = s.value.tile_padding;
+  if (tp && typeof tp === 'object') {
+    st.padding = (tp.top || 24) + 'px ' + (tp.right || 24) + 'px ' + (tp.bottom || 24) + 'px ' + (tp.left || 24) + 'px';
+  }
+  // Border
+  const bw = parseInt(s.value.border_width) || 0;
+  if (bw > 0) {
+    st.border = bw + 'px ' + (s.value.border_style || 'solid') + ' ' + (s.value.border_color || '#e5e7eb');
+  }
+  // Border radius
+  const br = s.value.border_radius;
+  if (br && typeof br === 'object') {
+    st.borderRadius = (br.tl || 0) + 'px ' + (br.tr || 0) + 'px ' + (br.br || 0) + 'px ' + (br.bl || 0) + 'px';
+  } else if (parseInt(br) > 0) {
+    st.borderRadius = parseInt(br) + 'px';
+  }
+  // Shadow
+  const sh = s.value.shadow;
+  if (sh && sh !== 'none') {
+    const shadowMap = { sm: '0 1px 3px rgba(0,0,0,0.1)', md: '0 4px 10px rgba(0,0,0,0.12)', lg: '0 8px 25px rgba(0,0,0,0.15)', xl: '0 12px 40px rgba(0,0,0,0.2)' };
+    if (sh === 'custom') {
+      const h = s.value.shadow_h || 0, v = s.value.shadow_v || 4, bl = s.value.shadow_blur || 10, sp = s.value.shadow_spread || 0;
+      const col = s.value.shadow_color || 'rgba(0,0,0,0.15)';
+      const ins = s.value.shadow_inset ? 'inset ' : '';
+      st.boxShadow = ins + h + 'px ' + v + 'px ' + bl + 'px ' + sp + 'px ' + col;
+    } else if (shadowMap[sh]) {
+      st.boxShadow = shadowMap[sh];
+    }
   }
   return st;
 });

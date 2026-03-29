@@ -28,7 +28,7 @@
         >
           <!-- Background preview layers -->
           <div
-            v-if="getNodeBg(section).type === 'image' || getNodeBg(section).type === 'gradient'"
+            v-if="getNodeBg(section).type === 'image' || getNodeBg(section).type === 'gradient' || getNodeBg(section).type === 'gallery'"
             class="olo-bg-preview"
             :style="getNodeBgStyle(section)"
           ></div>
@@ -93,11 +93,11 @@
                   class="olo-row-block"
                   :class="{ 'olo-row-block--selected': builderStore.selectedTileId === row.id, 'olo-node-hidden-vp': isHiddenInViewport(row) }"
                   :data-tile-id="row.id"
-                  :style="{ ...(getNodeBg(row).type === 'solid' ? getNodeBgStyle(row) : {}), ...getNodeSpacingStyle(row) }"
+                  :style="{ ...(getNodeBg(row).type === 'solid' ? getNodeBgStyle(row) : {}), ...getNodeSpacingStyle(row), ...(hasBgImage(row) ? { overflow: 'clip' } : {}) }"
                 >
                   <!-- Background preview layers -->
                   <div
-                    v-if="getNodeBg(row).type === 'image' || getNodeBg(row).type === 'gradient'"
+                    v-if="getNodeBg(row).type === 'image' || getNodeBg(row).type === 'gradient' || getNodeBg(row).type === 'gallery'"
                     class="olo-bg-preview"
                     :style="getNodeBgStyle(row)"
                   ></div>
@@ -450,7 +450,9 @@ function getSectionBodyStyle(section) {
  * For fullbleed sections, use negative margins to break out of canvas padding.
  */
 function getSectionBlockStyle(section) {
-  const base = { ...getSectionColorStyle(section), ...(getNodeBg(section).type === 'solid' ? getNodeBgStyle(section) : {}), ...getNodeSpacingStyle(section) };
+  const bgType = getNodeBg(section).type;
+  const applyInline = bgType === 'solid' || (bgType === 'gallery' && !(getNodeBg(section).gallery_images?.length));
+  const base = { ...getSectionColorStyle(section), ...(applyInline ? getNodeBgStyle(section) : {}), ...getNodeSpacingStyle(section) };
   const w = section.settings?.width || 'default';
   if (w === 'fullbleed') {
     // Negative margins to cancel canvas padding (16px in normal mode, 0 in clean mode)
@@ -485,7 +487,7 @@ function getNodeBgStyle(node) {
 
 function hasBgImage(node) {
   const bg = getNodeBg(node);
-  return (bg.type === 'image' && !!bg.image_url) || (bg.type === 'video' && !!bg.video_url);
+  return (bg.type === 'image' && !!bg.image_url) || (bg.type === 'video' && !!bg.video_url) || (bg.type === 'gallery' && bg.gallery_images?.length > 0);
 }
 
 function hasVideo(node) {

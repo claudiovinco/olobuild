@@ -35,6 +35,54 @@
 
     <!-- Tiles tab -->
     <div v-if="activeTab === 'tiles'" class="tp-root">
+      <!-- RECENTI -->
+      <div v-if="recentTilesList.length > 0" class="tp-group">
+        <button class="tp-cat-head" @click="toggleCategory('_recent')">
+          <span class="tp-cat-dot" style="background: #8B5CF6"></span>
+          <span class="tp-cat-label">Recenti</span>
+          <span class="tp-cat-count">{{ recentTilesList.length }}</span>
+          <svg class="tp-chevron" :class="{ 'tp-chevron--open': isCategoryOpen('_recent') }" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="tp-drawer" :class="{ 'tp-drawer--open': isCategoryOpen('_recent') }">
+          <div class="tp-grid">
+            <button
+              v-for="tile in recentTilesList"
+              :key="'recent-' + tile.type"
+              class="tp-btn"
+              :style="{ '--cat-color': '#8B5CF6' }"
+              draggable="true"
+              @dragstart="onDragStart($event, tile.type)"
+              @click="addTile(tile.type)"
+              :title="tile.name"
+            ><span class="tp-btn-icon" v-html="tileIcon(tile.type)"></span><span class="tp-btn-label">{{ tile.name }}</span><span class="tp-fav-star" :class="{ 'tp-fav-star--active': isFavorite(tile.type) }" @click.stop="toggleFavorite(tile.type)">&#9733;</span></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- PREFERITI -->
+      <div v-if="favoriteTilesList.length > 0" class="tp-group">
+        <button class="tp-cat-head" @click="toggleCategory('_favorites')">
+          <span class="tp-cat-dot" style="background: #EAB308"></span>
+          <span class="tp-cat-label">Preferiti</span>
+          <span class="tp-cat-count">{{ favoriteTilesList.length }}</span>
+          <svg class="tp-chevron" :class="{ 'tp-chevron--open': isCategoryOpen('_favorites') }" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="tp-drawer" :class="{ 'tp-drawer--open': isCategoryOpen('_favorites') }">
+          <div class="tp-grid">
+            <button
+              v-for="tile in favoriteTilesList"
+              :key="'fav-' + tile.type"
+              class="tp-btn"
+              :style="{ '--cat-color': '#EAB308' }"
+              draggable="true"
+              @dragstart="onDragStart($event, tile.type)"
+              @click="addTile(tile.type)"
+              :title="tile.name"
+            ><span class="tp-btn-icon" v-html="tileIcon(tile.type)"></span><span class="tp-btn-label">{{ tile.name }}</span><span class="tp-fav-star tp-fav-star--active" @click.stop="toggleFavorite(tile.type)">&#9733;</span></button>
+          </div>
+        </div>
+      </div>
+
       <div v-for="(tiles, category) in tilesByCategory" :key="category" class="tp-group">
         <button class="tp-cat-head" @click="toggleCategory(category)">
           <span class="tp-cat-dot" :style="{ background: catColor(category) }"></span>
@@ -53,7 +101,7 @@
               @dragstart="onDragStart($event, tile.type)"
               @click="addTile(tile.type)"
               :title="tile.name"
-            ><span class="tp-btn-icon" v-html="tileIcon(tile.type)"></span><span class="tp-btn-label">{{ tile.name }}</span></button>
+            ><span class="tp-btn-icon" v-html="tileIcon(tile.type)"></span><span class="tp-btn-label">{{ tile.name }}</span><span class="tp-fav-star" :class="{ 'tp-fav-star--active': isFavorite(tile.type) }" @click.stop="toggleFavorite(tile.type)">&#9733;</span></button>
           </div>
         </div>
       </div>
@@ -130,6 +178,44 @@ onMounted(() => {
 
 const activeTab = ref('tiles');
 const tilesByCategory = computed(() => tilesStore.tilesByCategory);
+
+// ── Favorites ──
+const FAV_KEY = 'olo_favorite_tiles';
+const favorites = ref(new Set(JSON.parse(localStorage.getItem(FAV_KEY) || '[]')));
+
+function isFavorite(type) { return favorites.value.has(type); }
+
+function toggleFavorite(type) {
+  const s = new Set(favorites.value);
+  if (s.has(type)) { s.delete(type); } else { s.add(type); }
+  favorites.value = s;
+  try { localStorage.setItem(FAV_KEY, JSON.stringify([...s])); } catch {}
+}
+
+const favoriteTilesList = computed(() => {
+  const all = tilesStore.registeredTiles || [];
+  return all.filter(t => favorites.value.has(t.type));
+});
+
+// ── Recent tiles ──
+const RECENT_KEY = 'olo_recent_tiles';
+const MAX_RECENT = 8;
+const recentTypes = ref(JSON.parse(localStorage.getItem(RECENT_KEY) || '[]'));
+
+function trackRecent(type) {
+  const arr = recentTypes.value.filter(t => t !== type);
+  arr.unshift(type);
+  if (arr.length > MAX_RECENT) arr.length = MAX_RECENT;
+  recentTypes.value = arr;
+  try { localStorage.setItem(RECENT_KEY, JSON.stringify(arr)); } catch {}
+}
+
+const recentTilesList = computed(() => {
+  const all = tilesStore.registeredTiles || [];
+  const map = {};
+  all.forEach(t => { map[t.type] = t; });
+  return recentTypes.value.map(type => map[type]).filter(Boolean);
+});
 
 // Collapsible categories — persisted in localStorage
 const STORAGE_KEY = 'olo_sidebar_collapsed';
@@ -419,6 +505,7 @@ function onDragStart(event, tileType) {
 }
 
 function addTile(tileType) {
+  trackRecent(tileType);
   if (Date.now() - lastDragStart < 1000) return;
   const afterId = builderStore.insertAfterTileId;
   if (afterId) {
@@ -710,4 +797,19 @@ async function deleteGlobal(globalId, name) {
   text-align: center;
   margin-top: 8px;
 }
+.tp-fav-star {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  font-size: 12px;
+  color: transparent;
+  cursor: pointer;
+  transition: color 0.15s, opacity 0.15s;
+  opacity: 0;
+  line-height: 1;
+}
+.tp-btn { position: relative; }
+.tp-btn:hover .tp-fav-star { opacity: 1; color: #d1d5db; }
+.tp-fav-star--active { opacity: 1 !important; color: #EAB308 !important; }
+.tp-fav-star:hover { color: #EAB308 !important; }
 </style>

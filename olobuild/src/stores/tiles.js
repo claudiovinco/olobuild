@@ -603,6 +603,19 @@ export const useTilesStore = defineStore('tiles', {
       return clone;
     },
 
+    pasteAfterTile(tileId) {
+      if (!this.clipboardTile) return null;
+      const result = findParentAndIndex(this.canvasTiles, tileId)
+        || findParentAndIndex(this.headerTiles, tileId)
+        || findParentAndIndex(this.footerTiles, tileId);
+      if (result) {
+        const clone = deepCloneWithNewIds(this.clipboardTile);
+        result.parent.splice(result.index + 1, 0, clone);
+        return clone;
+      }
+      return this.pasteTile(null);
+    },
+
     copyStyle(tileId) {
       const tile = this.getTileById(tileId);
       if (tile) {

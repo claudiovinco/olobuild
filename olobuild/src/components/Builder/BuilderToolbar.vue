@@ -183,6 +183,22 @@
               </div>
             </div>
             <div class="mb-flex mb-items-center mb-justify-between">
+              <span class="mb-text-gray-300 mb-text-sm">Copia tile</span>
+              <div class="mb-flex mb-gap-1">
+                <kbd class="mb-bg-gray-700 mb-text-gray-300 mb-px-2 mb-py-0.5 mb-rounded mb-text-xs mb-font-mono mb-border mb-border-gray-600">Ctrl</kbd>
+                <span class="mb-text-gray-500 mb-text-xs">+</span>
+                <kbd class="mb-bg-gray-700 mb-text-gray-300 mb-px-2 mb-py-0.5 mb-rounded mb-text-xs mb-font-mono mb-border mb-border-gray-600">C</kbd>
+              </div>
+            </div>
+            <div class="mb-flex mb-items-center mb-justify-between">
+              <span class="mb-text-gray-300 mb-text-sm">Incolla tile</span>
+              <div class="mb-flex mb-gap-1">
+                <kbd class="mb-bg-gray-700 mb-text-gray-300 mb-px-2 mb-py-0.5 mb-rounded mb-text-xs mb-font-mono mb-border mb-border-gray-600">Ctrl</kbd>
+                <span class="mb-text-gray-500 mb-text-xs">+</span>
+                <kbd class="mb-bg-gray-700 mb-text-gray-300 mb-px-2 mb-py-0.5 mb-rounded mb-text-xs mb-font-mono mb-border mb-border-gray-600">V</kbd>
+              </div>
+            </div>
+            <div class="mb-flex mb-items-center mb-justify-between">
               <span class="mb-text-gray-300 mb-text-sm">Copia stile</span>
               <div class="mb-flex mb-gap-1">
                 <kbd class="mb-bg-gray-700 mb-text-gray-300 mb-px-2 mb-py-0.5 mb-rounded mb-text-xs mb-font-mono mb-border mb-border-gray-600">Ctrl</kbd>
@@ -473,25 +489,84 @@ const zoomMenuStyle = computed(() => {
 
 // ─── Global Keyboard Shortcuts (Copy/Paste Style) ───
 function onGlobalKeydown(e) {
+  const tag = e.target?.tagName || 'DIV';
+  const isEditing = tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || e.target?.isContentEditable;
+
+  // Ctrl+Z → Undo / Ctrl+Shift+Z → Redo
+  if ((e.ctrlKey || e.metaKey) && (e.key === 'z' || e.code === 'KeyZ')) {
+    e.preventDefault();
+    if (e.shiftKey) { history.redo(); } else { history.undo(); }
+    return;
+  }
+  // Ctrl+S → Save
+  if ((e.ctrlKey || e.metaKey) && (e.key === 's' || e.code === 'KeyS') && !e.altKey) {
+    e.preventDefault();
+    if (builderStore.isDirty) { builderStore.saveTemplate(); }
+    return;
+  }
+
+  // Delete / Backspace → elimina tile selezionato
+  if ((e.key === 'Delete' || e.key === 'Backspace') && !isEditing) {
+    const id = builderStore.selectedTileId;
+    if (id) {
+      e.preventDefault();
+      tilesStore.removeTile(id);
+      builderStore.selectedTileId = null;
+      builderStore.isDirty = true;
+    }
+  }
+  // Ctrl+C → Copia tile
+  if ((e.ctrlKey || e.metaKey) && e.key === 'c' && !e.altKey && !e.shiftKey && !isEditing) {
+    const id = builderStore.selectedTileId;
+    if (id) {
+      e.preventDefault();
+      tilesStore.copyTile(id);
+    }
+  }
+  // Ctrl+V → Incolla tile
+  if ((e.ctrlKey || e.metaKey) && e.key === 'v' && !e.altKey && !e.shiftKey && !isEditing) {
+    if (tilesStore.clipboardTile) {
+      e.preventDefault();
+      const id = builderStore.selectedTileId;
+      tilesStore.pasteAfterTile(id);
+      builderStore.isDirty = true;
+    }
+  }
   // Ctrl+Alt+C → Copy Style
-  if (e.ctrlKey && e.altKey && e.key === 'c') {
+  if (e.ctrlKey && e.altKey && (e.key === 'c' || e.code === 'KeyC')) {
     e.preventDefault();
     const id = builderStore.selectedTileId;
     if (id) tilesStore.copyStyle(id);
+    return;
   }
   // Ctrl+Alt+V → Paste Style
-  if (e.ctrlKey && e.altKey && e.key === 'v') {
+  if (e.ctrlKey && e.altKey && (e.key === 'v' || e.code === 'KeyV')) {
     e.preventDefault();
     const id = builderStore.selectedTileId;
     if (id && tilesStore.clipboardStyle) {
       tilesStore.pasteStyle(id);
       builderStore.isDirty = true;
     }
+    return;
   }
 }
 
-onMounted(() => document.addEventListener('keydown', onGlobalKeydown));
-onBeforeUnmount(() => document.removeEventListener('keydown', onGlobalKeydown));
+onMounted(() => {
+  document.addEventListener('keydown', onGlobalKeydown);
+  window.addEventListener('message', onIframeKey);
+});
+onBeforeUnmount(() => {
+  document.removeEventListener('keydown', onGlobalKeydown);
+  window.removeEventListener('message', onIframeKey);
+});
+
+function onIframeKey(e) {
+  if (e.data && e.data.type === 'olo:keydown') {
+    // Create a fake event with preventDefault
+    const fakeEvent = { ...e.data, target: { tagName: 'DIV', isContentEditable: false }, preventDefault() {} };
+    onGlobalKeydown(fakeEvent);
+  }
+}
 
 // ─── Template Import/Export ───
 async function exportTemplate() {

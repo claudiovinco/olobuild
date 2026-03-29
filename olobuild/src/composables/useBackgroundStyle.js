@@ -84,6 +84,18 @@ export function buildBgStyle(bg) {
     return { backgroundColor: '#1a1a2e' };
   }
 
+  if (bg.type === 'gallery') {
+    if (bg.gallery_images?.length) {
+      return {
+        backgroundImage: `url(${bg.gallery_images[0].url})`,
+        backgroundSize: bg.image_size || 'cover',
+        backgroundPosition: bg.image_position || 'center center',
+        backgroundRepeat: 'no-repeat',
+      };
+    }
+    return { backgroundColor: '#f3f4f6' };
+  }
+
   return {};
 }
 
@@ -116,7 +128,7 @@ export function useBackgroundStyle(bgGetter) {
 
   const hasBgImage = computed(() => {
     const bg = effectiveBg.value;
-    return bg.type === 'image' && !!bg.image_url;
+    return (bg.type === 'image' && !!bg.image_url) || (bg.type === 'gallery' && bg.gallery_images?.length > 0);
   });
 
   const hasOverlay = computed(() => {
@@ -126,16 +138,29 @@ export function useBackgroundStyle(bgGetter) {
 
   const bgImageStyle = computed(() => {
     const bg = effectiveBg.value;
-    if (bg.type !== 'image' || !bg.image_url) return {};
-    return {
-      position: 'absolute',
-      inset: '0',
-      zIndex: 0,
-      backgroundImage: `url(${bg.image_url})`,
-      backgroundSize: bg.image_size || 'cover',
-      backgroundPosition: bg.image_position || 'center center',
-      backgroundRepeat: 'no-repeat',
-    };
+    if (bg.type === 'image' && bg.image_url) {
+      return {
+        position: 'absolute',
+        inset: '0',
+        zIndex: 0,
+        backgroundImage: `url(${bg.image_url})`,
+        backgroundSize: bg.image_size || 'cover',
+        backgroundPosition: bg.image_position || 'center center',
+        backgroundRepeat: 'no-repeat',
+      };
+    }
+    if (bg.type === 'gallery' && bg.gallery_images?.length) {
+      return {
+        position: 'absolute',
+        inset: '0',
+        zIndex: 0,
+        backgroundImage: `url(${bg.gallery_images[0].url})`,
+        backgroundSize: bg.image_size || 'cover',
+        backgroundPosition: bg.image_position || 'center center',
+        backgroundRepeat: 'no-repeat',
+      };
+    }
+    return {};
   });
 
   const overlayStyle = computed(() => {

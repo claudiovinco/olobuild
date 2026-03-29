@@ -41,7 +41,7 @@
         <!-- Header -->
         <div class="mb-flex mb-items-center mb-justify-between mb-mb-4">
           <h3 class="mb-text-sm mb-font-semibold mb-text-gray-200">
-            Impostazioni {{ elementDef ? elementDef.name : selectedTile.type }}
+            {{ t('Impostazioni') }} {{ elementDef ? t(elementDef.name) : selectedTile.type }}
           </h3>
           <button
             @click="builderStore.deselectTile()"
@@ -64,7 +64,7 @@
                 : 'mb-text-gray-400 hover:mb-text-gray-300'
             ]"
           >
-            {{ tab }}
+            {{ t(tab) }}
           </button>
         </div>
 
@@ -95,7 +95,7 @@
                 <template v-for="(field, fIdx) in section.fields" :key="field.key || ('f-' + sIdx + '-' + fIdx)">
                   <template v-if="isFieldVisible(field)">
                     <div v-if="field.type === 'content-items'">
-                      <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ field.label }}</label>
+                      <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t(field.label) }}</label>
                       <ContentItemsEditor
                         :modelValue="ensureContentItems(selectedTile, field)"
                         :itemFields="field.itemFields"
@@ -111,7 +111,7 @@
                       />
                     </div>
                     <div v-else-if="field.key === 'custom_widths' && selectedTile.type === 'row'">
-                      <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ field.label }}</label>
+                      <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t(field.label) }}</label>
                       <input
                         type="text"
                         :value="customWidthsLocal"
@@ -142,13 +142,13 @@
               <!-- Named section — collapsible, hidden if no visible fields -->
               <CollapseSection
                 v-else-if="sectionHasVisibleFields(section)"
-                :title="section.label"
+                :title="t(section.label)"
                 :defaultOpen="sIdx <= 1"
               >
                 <template v-for="(field, fIdx) in section.fields" :key="field.key || ('f-' + sIdx + '-' + fIdx)">
                   <template v-if="isFieldVisible(field)">
                     <div v-if="field.type === 'content-items'">
-                      <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ field.label }}</label>
+                      <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t(field.label) }}</label>
                       <ContentItemsEditor
                         :modelValue="ensureContentItems(selectedTile, field)"
                         :itemFields="field.itemFields"
@@ -164,7 +164,7 @@
                       />
                     </div>
                     <div v-else-if="field.key === 'custom_widths' && selectedTile.type === 'row'">
-                      <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ field.label }}</label>
+                      <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t(field.label) }}</label>
                       <input
                         type="text"
                         :value="customWidthsLocal"
@@ -219,7 +219,7 @@
                   ? 'mb-bg-primary-600 mb-text-white'
                   : 'mb-text-gray-400 hover:mb-text-gray-300'
               ]"
-            >Normale</button>
+            >{{ t('Normale') }}</button>
             <button
               @click="styleState = 'hover'"
               :class="[
@@ -228,7 +228,7 @@
                   ? 'mb-bg-amber-600 mb-text-white'
                   : 'mb-text-gray-400 hover:mb-text-gray-300'
               ]"
-            >Hover</button>
+            >{{ t('Hover') }}</button>
           </div>
 
           <!-- === NORMAL state controls === -->
@@ -250,9 +250,36 @@
                   ]"
                 ></span>
               </button>
-              <span class="mb-text-xs mb-font-semibold mb-text-gray-300">Larghezza piena</span>
+              <span class="mb-text-xs mb-font-semibold mb-text-gray-300">{{ t('Larghezza piena') }}</span>
             </label>
           </div>
+
+          <!-- Tile Width -->
+          <InspectorField
+            :field="{ key: 'tile_width', label: t('Larghezza'), type: 'text', responsive: true, placeholder: t('auto (es. 25%, 200px)') }"
+            :modelValue="tileStyle.tile_width || ''"
+            :tileSettings="tileStyle"
+            @update:modelValue="updateStyle('tile_width', $event)"
+            @update:responsiveValue="updateStyle($event.key, $event.value)"
+          />
+
+          <!-- Tile Max-Width -->
+          <InspectorField
+            :field="{ key: 'tile_max_width', label: t('Larghezza massima'), type: 'text', responsive: true, placeholder: t('none (es. 600px, 80%)') }"
+            :modelValue="tileStyle.tile_max_width || ''"
+            :tileSettings="tileStyle"
+            @update:modelValue="updateStyle('tile_max_width', $event)"
+            @update:responsiveValue="updateStyle($event.key, $event.value)"
+          />
+
+          <!-- Tile Min-Height -->
+          <InspectorField
+            :field="{ key: 'tile_min_height', label: t('Altezza minima'), type: 'text', responsive: true, placeholder: 'auto (es. 300px, 50vh)' }"
+            :modelValue="tileStyle.tile_min_height || ''"
+            :tileSettings="tileStyle"
+            @update:modelValue="updateStyle('tile_min_height', $event)"
+            @update:responsiveValue="updateStyle($event.key, $event.value)"
+          />
 
           <!-- Spacing breakpoint switcher -->
           <div class="mb-flex mb-gap-1 mb-bg-gray-700 mb-rounded-lg mb-p-0.5 mb-mb-1">
@@ -273,7 +300,7 @@
 
           <!-- Margin -->
           <div>
-            <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300 mb-mb-2">Margine (px) <span v-if="spacingBp !== 'desktop'" class="mb-text-amber-400 mb-text-[10px]">{{ spacingBpLabel }}</span></label>
+            <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300 mb-mb-2">{{ t('Margine (px)') }} <span v-if="spacingBp !== 'desktop'" class="mb-text-amber-400 mb-text-[10px]">{{ spacingBpLabel }}</span></label>
             <FieldSpacing
               :modelValue="marginObj"
               @update:modelValue="onMarginUpdate"
@@ -283,7 +310,7 @@
 
           <!-- Padding -->
           <div>
-            <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300 mb-mb-2">Padding (px) <span v-if="spacingBp !== 'desktop'" class="mb-text-amber-400 mb-text-[10px]">{{ spacingBpLabel }}</span></label>
+            <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300 mb-mb-2">{{ t('Padding (px)') }} <span v-if="spacingBp !== 'desktop'" class="mb-text-amber-400 mb-text-[10px]">{{ spacingBpLabel }}</span></label>
             <FieldSpacing
               :modelValue="paddingObj"
               @update:modelValue="onPaddingUpdate"
@@ -293,7 +320,7 @@
 
           <!-- Background -->
           <div>
-            <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300 mb-mb-2">Sfondo</label>
+            <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300 mb-mb-2">{{ t('Sfondo') }}</label>
             <BackgroundControls
               :modelValue="tileBg"
               :showParallax="true"
@@ -1372,10 +1399,34 @@
 
           <!-- Element Parallax -->
           <CollapseSection title="Parallax allo scroll">
+            <template #header-right>
+              <span class="mb-text-[10px] mb-mr-2" :class="hasElementParallax ? 'mb-text-primary-400' : 'mb-text-gray-500'">{{ hasElementParallax ? 'ATTIVO' : 'OFF' }}</span>
+              <button
+                @click.stop="toggleParallax"
+                :class="['mb-relative mb-w-10 mb-h-5 mb-rounded-full mb-transition-colors mb-shrink-0', hasElementParallax ? 'mb-bg-primary-600' : 'mb-bg-gray-600']"
+              ><span :class="['mb-absolute mb-top-0.5 mb-w-4 mb-h-4 mb-rounded-full mb-bg-white mb-transition-transform', hasElementParallax ? 'mb-left-5' : 'mb-left-0.5']"></span></button>
+            </template>
             <ParallaxEditor
+              v-if="hasElementParallax"
               :modelValue="elementParallaxData"
               :properties="elementParallaxProperties"
               @update:modelValue="updateAdvanced('parallax', $event)"
+            />
+          </CollapseSection>
+
+          <!-- Bezier Path -->
+          <CollapseSection title="Percorso Bezier allo scroll" :headerRight="true">
+            <template #header-right>
+              <span class="mb-text-[10px] mb-mr-2" :class="tileAdvanced.bezier_path ? 'mb-text-primary-400' : 'mb-text-gray-500'">{{ tileAdvanced.bezier_path ? 'ATTIVO' : 'OFF' }}</span>
+              <button
+                @click.stop="toggleBezier"
+                :class="['mb-relative mb-w-10 mb-h-5 mb-rounded-full mb-transition-colors mb-shrink-0', tileAdvanced.bezier_path ? 'mb-bg-primary-600' : 'mb-bg-gray-600']"
+              ><span :class="['mb-absolute mb-top-0.5 mb-w-4 mb-h-4 mb-rounded-full mb-bg-white mb-transition-transform', tileAdvanced.bezier_path ? 'mb-left-5' : 'mb-left-0.5']"></span></button>
+            </template>
+            <BezierPathEditor
+              v-if="tileAdvanced.bezier_path"
+              :modelValue="tileAdvanced.bezier_path"
+              @update:modelValue="updateAdvanced('bezier_path', $event)"
             />
           </CollapseSection>
 
@@ -1654,6 +1705,7 @@
 
 <script setup>
 import { ref, computed, watch } from 'vue';
+import { t } from '@/i18n';
 import { useBuilderStore } from '@/stores/builder';
 import { useTilesStore } from '@/stores/tiles';
 import { getElementDef, getElementFields } from '@/config/elementRegistry';
@@ -1667,6 +1719,7 @@ import CollapseSection from './CollapseSection.vue';
 import FieldBoxShadow from './fields/FieldBoxShadow.vue';
 import FieldTransform from './fields/FieldTransform.vue';
 import ParallaxEditor from './ParallaxEditor.vue';
+import BezierPathEditor from './BezierPathEditor.vue';
 import ProSliderEditor from '../ProSlider/ProSliderEditor.vue';
 import HeightModeSelector from '../ProSlider/HeightModeSelector.vue';
 
@@ -2228,6 +2281,13 @@ watch(() => builderStore.selectedTileId, () => {
 }, { immediate: true });
 
 // Migrate old flat parallax format to new multi-stop object
+const hasElementParallax = computed(() => {
+  const adv = tileAdvanced.value;
+  if (adv.parallax && typeof adv.parallax === 'object') return true;
+  if (adv.parallax_y_start || adv.parallax_y_end || adv.parallax_opacity_start != null) return true;
+  return false;
+});
+
 const elementParallaxData = computed(() => {
   const adv = tileAdvanced.value;
   // Already new format
@@ -2292,6 +2352,24 @@ function updateAdvanced(key, value) {
   if (!builderStore.selectedTileId) return;
   tilesStore.updateTileAdvanced(builderStore.selectedTileId, { [key]: value });
   builderStore.markDirtyForTile(builderStore.selectedTileId);
+}
+
+function toggleParallax() {
+  if (hasElementParallax.value) {
+    updateAdvanced('parallax', null);
+  } else {
+    updateAdvanced('bezier_path', null);
+    updateAdvanced('parallax', { x:[], y:[], scale:[], rotate:[], opacity:[], blur:[], nomobile:true });
+  }
+}
+
+function toggleBezier() {
+  if (tileAdvanced.value.bezier_path) {
+    updateAdvanced('bezier_path', null);
+  } else {
+    updateAdvanced('parallax', null);
+    updateAdvanced('bezier_path', { keyframes: [{pct:0,x:0,y:0},{pct:100,x:0,y:-100}] });
+  }
 }
 
 // --- Hover styles ---

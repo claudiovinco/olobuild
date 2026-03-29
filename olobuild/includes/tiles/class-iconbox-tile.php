@@ -58,6 +58,63 @@ class Olo_IconBox_Tile extends Olo_Tile_Base {
         $icon_clr   = $this->safe_color_css( $s['icon_color'] );
         $icon_shape = in_array( $s['icon_bg_shape'], [ 'circle', 'square', 'rounded' ], true ) ? $s['icon_bg_shape'] : 'circle';
 
+        // Tile background (mutually exclusive via bg_type)
+        $tile_bg_css = '';
+        $bg_type = $s['bg_type'] ?? 'none';
+        if ( $bg_type === 'color' ) {
+            $c = $this->safe_color_css( $s['bg_color'] ?? '' );
+            if ( $c ) $tile_bg_css = 'background-color:' . $c . ';';
+        } elseif ( $bg_type === 'gradient' ) {
+            $g = $s['bg_gradient'] ?? null;
+            if ( is_array( $g ) ) {
+                $stops = [];
+                foreach ( ($g['stops'] ?? []) as $stop ) {
+                    $stops[] = esc_attr( $stop['color'] ?? '#000' ) . ' ' . intval( $stop['position'] ?? 0 ) . '%';
+                }
+                if ( $stops ) {
+                    $gtype = ($g['type'] ?? 'linear') === 'radial' ? 'radial-gradient(circle, ' : 'linear-gradient(' . intval( $g['angle'] ?? 180 ) . 'deg, ';
+                    $tile_bg_css = 'background:' . $gtype . implode(', ', $stops) . ');';
+                }
+            }
+        } elseif ( $bg_type === 'image' ) {
+            $img = $s['bg_image'] ?? '';
+            if ( $img ) {
+                $tile_bg_css = 'background-image:url(' . esc_url( $img ) . ');';
+                $tile_bg_css .= 'background-size:' . esc_attr( $s['bg_image_size'] ?? 'cover' ) . ';';
+                $tile_bg_css .= 'background-position:' . esc_attr( $s['bg_image_position'] ?? 'center center' ) . ';';
+                $tile_bg_css .= 'background-repeat:no-repeat;';
+            }
+        }
+
+        // Tile padding
+        $tile_padding_css = '';
+        $tp = $s['tile_padding'] ?? null;
+        if ( is_array( $tp ) ) {
+            $tile_padding_css = 'padding:' . intval($tp['top'] ?? 24) . 'px ' . intval($tp['right'] ?? 24) . 'px ' . intval($tp['bottom'] ?? 24) . 'px ' . intval($tp['left'] ?? 24) . 'px;';
+        } elseif ( is_numeric( $tp ) ) {
+            $tile_padding_css = 'padding:' . intval($tp) . 'px;';
+        }
+
+        // Tile border
+        $tile_border_css = '';
+        $bw = intval( $s['border_width'] ?? 0 );
+        if ( $bw > 0 ) {
+            $tile_border_css = 'border:' . $bw . 'px ' . esc_attr( $s['border_style'] ?? 'solid' ) . ' ' . ( $this->safe_color_css( $s['border_color'] ?? '' ) ?: '#e5e7eb' ) . ';';
+        }
+
+        // Border radius
+        $br_val = $this->build_border_radius_css( $s['border_radius'] ?? null );
+        $tile_radius_css = $br_val ? 'border-radius:' . $br_val . ';' : '';
+
+        // Shadow
+        $shadow_val = Olo_Tile_Utils::shadow_value( $s, 'shadow' );
+        $tile_shadow_css = ( $shadow_val && $shadow_val !== 'none' ) ? 'box-shadow:' . $shadow_val . ';' : '';
+
+        // Icon/title/text spacing
+        $icon_gap = intval( $s['icon_gap'] ?? 16 );
+        $title_gap = intval( $s['title_gap'] ?? 8 );
+        $desc_gap = intval( $s['desc_gap'] ?? 16 );
+
         ob_start();
         ?>
         <style>
@@ -69,7 +126,7 @@ class Olo_IconBox_Tile extends Olo_Tile_Base {
                 display: flex;
                 flex-direction: <?php echo $icon_pos === 'right' ? 'row-reverse' : 'row'; ?>;
                 align-items: flex-start;
-                gap: 16px;
+                gap: <?php echo $icon_gap; ?>px;
                 text-align: left;
             }
             .<?php echo $uid; ?> .mib-icon-col { flex-shrink: 0; }
@@ -78,7 +135,7 @@ class Olo_IconBox_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .mib-title {
                 font-size: <?php echo $title_fs; ?>px;
                 font-weight: <?php echo $title_fw; ?>;
-                margin: 0 0 8px;
+                margin: 0 0 <?php echo $title_gap; ?>px;
                 <?php if ( $title_clr ) : ?>color: <?php echo $title_clr; ?>;<?php endif; ?>
             }
             .<?php echo $uid; ?> .mib-link {
@@ -100,11 +157,11 @@ class Olo_IconBox_Tile extends Olo_Tile_Base {
             }
             <?php endif; ?>
         </style>
-        <div class="olo-iconbox uk-card uk-card-body <?php echo $align_class; ?> <?php echo esc_attr( $uid ); ?>">
+        <div class="olo-iconbox <?php echo $align_class; ?> <?php echo esc_attr( $uid ); ?>" style="<?php echo $tile_bg_css . $tile_padding_css . $tile_border_css . $tile_radius_css . $tile_shadow_css; ?>">
           <?php if ( $is_horiz ) : ?><div class="mib-flex"><?php endif; ?>
 
             <?php if ( ! empty( $s['icon_emoji'] ) ) : ?>
-                <div class="<?php echo $is_horiz ? 'mib-icon-col' : ''; ?>" style="<?php echo $is_horiz ? '' : 'margin-bottom:16px;'; ?>">
+                <div class="<?php echo $is_horiz ? 'mib-icon-col' : ''; ?>" style="<?php echo $is_horiz ? '' : 'margin-bottom:' . $icon_gap . 'px;'; ?>">
                     <?php
                     $icon_inline = 'font-size:' . esc_attr( $icon_size ) . 'em;line-height:1;';
                     if ( $icon_clr ) { $icon_inline .= 'color:' . $icon_clr . ';'; }
@@ -121,7 +178,7 @@ class Olo_IconBox_Tile extends Olo_Tile_Base {
 
             <?php if ( $is_horiz ) : ?><div class="mib-content-col"><?php endif; ?>
                 <h3 class="mib-title"><?php echo esc_html( wp_strip_all_tags( $s['title'] ) ); ?></h3>
-                <div style="margin: 0 0 16px; opacity: 0.8; line-height: 1.6;"><?php echo nl2br( esc_html( wp_strip_all_tags( $s['description'] ) ) ); ?></div>
+                <div style="margin: 0 0 <?php echo $desc_gap; ?>px; opacity: 0.8; line-height: 1.6;"><?php echo nl2br( esc_html( wp_strip_all_tags( $s['description'] ) ) ); ?></div>
                 <?php if ( ! empty( $s['link_url'] ) ) : ?>
                     <a href="<?php echo esc_url( $s['link_url'] ); ?>" class="mib-link" style="color:<?php echo $link_clr; ?>"><?php echo esc_html( wp_strip_all_tags( $s['link_text'] ) ); ?> &rarr;</a>
                 <?php endif; ?>

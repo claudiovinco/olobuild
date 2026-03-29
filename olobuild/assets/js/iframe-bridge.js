@@ -890,6 +890,18 @@
 
   observeHeight();
 
+    // Forward key events to parent so shortcuts (Delete, Ctrl+C/V) work
+  document.addEventListener('keydown', function(e) {
+    // Skip if editing text
+    var tag = e.target.tagName;
+    if (tag === 'INPUT' || tag === 'TEXTAREA' || e.target.isContentEditable) return;
+    // Forward Delete, Backspace, Ctrl+C, Ctrl+V, Ctrl+Alt+C, Ctrl+Alt+V
+    if (e.key === 'Delete' || e.key === 'Backspace' || (e.ctrlKey && (e.key === 'c' || e.key === 'v' || e.key === 'z' || e.key === 's' || e.code === 'KeyC' || e.code === 'KeyV'))) {
+      e.preventDefault();
+      parent.postMessage({ type: 'olo:keydown', key: e.key, code: e.code, ctrlKey: e.ctrlKey, shiftKey: e.shiftKey, altKey: e.altKey, metaKey: e.metaKey }, '*');
+    }
+  });
+
   // Signal ready to parent
   post('olo:ready');
 

@@ -948,6 +948,96 @@ class Olo_Frontend_Renderer {
         return 'tile-' . uniqid() . '-' . substr( md5( mt_rand() ), 0, 8 );
     }
 
+    /**
+     * Render gallery background slideshow.
+     */
+    private function render_bg_gallery( $bg ) {
+        $images = $bg['gallery_images'] ?? [];
+        if ( empty( $images ) || ! is_array( $images ) ) return '';
+
+        $size       = esc_attr( $bg['image_size'] ?? 'cover' );
+        $pos        = esc_attr( $bg['image_position'] ?? 'center center' );
+        $loop       = ( $bg['gallery_loop'] ?? true ) !== false;
+        $duration   = intval( $bg['gallery_duration'] ?? 5000 );
+        $transition = esc_attr( $bg['gallery_transition'] ?? 'fade' );
+        $trans_ms   = intval( $bg['gallery_transition_ms'] ?? 500 );
+        $lazyload   = ( $bg['gallery_lazyload'] ?? true ) !== false;
+        $kenburns   = ! empty( $bg['gallery_kenburns'] );
+        $kb_dir     = esc_attr( $bg['gallery_kenburns_dir'] ?? 'in' );
+
+        $config = wp_json_encode( [
+            'duration'   => $duration,
+            'transition' => $transition,
+            'transMs'    => $trans_ms,
+            'loop'       => $loop,
+            'kenburns'   => $kenburns,
+            'kbDir'      => $kb_dir,
+        ] );
+
+        $kb_class = $kenburns ? ' olo-bg-gallery--kb-' . $kb_dir : '';
+        $kb_dur   = $kenburns ? ( $duration + $trans_ms ) : 0;
+
+        $style_parts = [];
+        if ( $kb_dur ) $style_parts[] = '--olo-kb-dur:' . $kb_dur . 'ms';
+        $style_parts[] = '--olo-gallery-trans-ms:' . $trans_ms . 'ms';
+        $style_attr = ' style="' . implode( ';', $style_parts ) . '"';
+
+        $html = '<div class="olo-bg-gallery' . $kb_class . '" data-olo-bg-gallery=\'' . $config . '\''
+              . ' data-transition="' . $transition . '"' . $style_attr . '>';
+
+        foreach ( $images as $i => $img ) {
+            $url   = esc_url( $img['url'] ?? '' );
+            $alt   = esc_attr( $img['alt'] ?? '' );
+            $active = $i === 0 ? ' olo-bg-gallery--active' : '';
+            $even   = ( $i % 2 === 0 ) ? '' : ' olo-bg-gallery--even';
+            $lazy   = ( $i > 0 ) ? ( $lazyload ? ' loading="lazy"' : '' ) : '';
+            $html .= '<img class="olo-bg-gallery-slide' . $active . $even . '" src="' . $url . '" alt="' . $alt . '"'
+                   . ' style="object-fit:' . $size . ';object-position:' . $pos . '"' . $lazy . '>';
+        }
+
+        $html .= '</div>';
+
+        // Enqueue gallery slideshow script once
+        if ( ! self::$gallery_script_enqueued ) {
+            self::$gallery_script_enqueued = true;
+            add_action( 'wp_footer', [ __CLASS__, 'print_gallery_script' ], 99 );
+        }
+
+        return $html;
+    }
+
+    private static $gallery_script_enqueued = false;
+
+    /**
+     * Print gallery background slideshow script in footer (once).
+     */
+    public static function print_gallery_script() {
+        ?>
+        <script>
+        (function(){
+          document.querySelectorAll('[data-olo-bg-gallery]').forEach(function(el){
+            var cfg=JSON.parse(el.getAttribute('data-olo-bg-gallery'));
+            var slides=el.querySelectorAll('.olo-bg-gallery-slide');
+            if(slides.length<2)return;
+            var idx=0,dur=cfg.duration||5000,transMs=cfg.transMs||500;
+            var loop=cfg.loop!==false,trans=cfg.transition||'fade';
+            var hasSlide=trans==='slide'||trans==='slide-up';
+            function next(){
+              var prev=idx;
+              idx=(idx+1)%slides.length;
+              if(!loop){if(idx===0)return}
+              if(hasSlide){slides[prev].classList.add('olo-bg-gallery--leaving')}
+              slides[prev].classList.remove('olo-bg-gallery--active');
+              slides[idx].classList.add('olo-bg-gallery--active');
+              if(hasSlide){setTimeout(function(){slides[prev].classList.remove('olo-bg-gallery--leaving')},transMs+50)}
+            }
+            setInterval(next,dur);
+          });
+        })();
+        </script>
+        <?php
+    }
+
     // =========================================================================
     // Migration: legacy flat format → tree (Section > Row > Column > Element)
     // =========================================================================
@@ -1534,12 +1624,13 @@ class Olo_Frontend_Renderer {
 
         // Background handling
         $tile_bg = $this->get_effective_bg( $style );
-        $has_bg_image = ( $tile_bg['type'] === 'image' && ! empty( $tile_bg['image_url'] ) );
-        $has_bg_video = ( $tile_bg['type'] === 'video' && ! empty( $tile_bg['video_url'] ) );
-        $has_bg_any   = ( $tile_bg['type'] !== 'none' );
-        $has_overlay  = ( $has_bg_any && ! empty( $tile_bg['overlay_opacity'] ) && intval( $tile_bg['overlay_opacity'] ) > 0 );
+        $has_bg_image   = ( $tile_bg['type'] === 'image' && ! empty( $tile_bg['image_url'] ) );
+        $has_bg_video   = ( $tile_bg['type'] === 'video' && ! empty( $tile_bg['video_url'] ) );
+        $has_bg_gallery = ( $tile_bg['type'] === 'gallery' && ! empty( $tile_bg['gallery_images'] ) && is_array( $tile_bg['gallery_images'] ) );
+        $has_bg_any     = ( $tile_bg['type'] !== 'none' );
+        $has_overlay    = ( $has_bg_any && ! empty( $tile_bg['overlay_opacity'] ) && intval( $tile_bg['overlay_opacity'] ) > 0 );
 
-        if ( $has_bg_image || $has_bg_video ) {
+        if ( $has_bg_image || $has_bg_video || $has_bg_gallery ) {
             $classes[] = 'uk-position-relative';
             $inline_styles[] = 'overflow: clip';
         } elseif ( $tile_bg['type'] !== 'none' ) {
@@ -1770,6 +1861,11 @@ class Olo_Frontend_Renderer {
             $html .= '><source src="' . $vid_url . '" type="' . $this->get_video_mime( $vid_url ) . '"></video>';
         }
 
+        // Gallery background slideshow
+        if ( $has_bg_gallery ) {
+            $html .= $this->render_bg_gallery( $tile_bg );
+        }
+
         // Overlay layer
         if ( $has_overlay ) {
             $ov_color   = esc_attr( $tile_bg['overlay_color'] ?? '#000000' );
@@ -1796,7 +1892,7 @@ class Olo_Frontend_Renderer {
             }
         }
 
-        if ( $has_bg_image || $has_bg_video || $has_overlay ) {
+        if ( $has_bg_image || $has_bg_video || $has_bg_gallery || $has_overlay ) {
             $container_class .= ' uk-position-relative';
             $html .= '<div class="' . esc_attr( $container_class ) . '" style="z-index: 1">';
         } else {
@@ -1839,10 +1935,11 @@ class Olo_Frontend_Renderer {
 
         // Background handling
         $tile_bg      = $this->get_effective_bg( $style );
-        $has_bg_image = ( $tile_bg['type'] === 'image' && ! empty( $tile_bg['image_url'] ) );
-        $has_bg_video = ( $tile_bg['type'] === 'video' && ! empty( $tile_bg['video_url'] ) );
-        $has_bg_any   = ( $tile_bg['type'] !== 'none' );
-        $has_overlay  = ( $has_bg_any && ! empty( $tile_bg['overlay_opacity'] ) && intval( $tile_bg['overlay_opacity'] ) > 0 );
+        $has_bg_image   = ( $tile_bg['type'] === 'image' && ! empty( $tile_bg['image_url'] ) );
+        $has_bg_video   = ( $tile_bg['type'] === 'video' && ! empty( $tile_bg['video_url'] ) );
+        $has_bg_gallery = ( $tile_bg['type'] === 'gallery' && ! empty( $tile_bg['gallery_images'] ) && is_array( $tile_bg['gallery_images'] ) );
+        $has_bg_any     = ( $tile_bg['type'] !== 'none' );
+        $has_overlay    = ( $has_bg_any && ! empty( $tile_bg['overlay_opacity'] ) && intval( $tile_bg['overlay_opacity'] ) > 0 );
 
         // Row margin/padding
         $row_spacing_styles = [];
@@ -1905,7 +2002,7 @@ class Olo_Frontend_Renderer {
         $has_spacing = ! empty( $row_spacing_styles );
         $has_positioning = $pos_mode && $pos_mode !== 'static';
         $has_hover   = ! empty( $style['hover'] ) && is_array( $style['hover'] ) && array_filter( $style['hover'], function( $v ) { return $v !== null && $v !== '' && $v !== false; } );
-        $needs_wrapper = $has_bg_image || $has_bg_video || $has_overlay || ( $tile_bg['type'] !== 'none' ) || $has_spacing || $has_border_radius || $has_border || $has_opacity || $has_shadow || $has_hover || $has_positioning;
+        $needs_wrapper = $has_bg_image || $has_bg_video || $has_bg_gallery || $has_overlay || ( $tile_bg['type'] !== 'none' ) || $has_spacing || $has_border_radius || $has_border || $has_opacity || $has_shadow || $has_hover || $has_positioning;
 
         // ID for hover CSS support
         $tile_counter++;
@@ -1922,7 +2019,7 @@ class Olo_Frontend_Renderer {
         $wrapper_classes = [];
 
         if ( $needs_wrapper ) {
-            if ( $has_bg_image || $has_bg_video ) {
+            if ( $has_bg_image || $has_bg_video || $has_bg_gallery ) {
                 $wrapper_classes[] = 'uk-position-relative';
                 $wrapper_styles[] = 'overflow: clip';
             } elseif ( $tile_bg['type'] !== 'none' ) {
@@ -2118,6 +2215,11 @@ class Olo_Frontend_Renderer {
                 $html .= '><source src="' . $vid_url . '" type="' . $this->get_video_mime( $vid_url ) . '"></video>';
             }
 
+            // Gallery background slideshow (row)
+            if ( $has_bg_gallery ) {
+                $html .= $this->render_bg_gallery( $tile_bg );
+            }
+
             // Overlay layer
             if ( $has_overlay ) {
                 $ov_color   = esc_attr( $tile_bg['overlay_color'] ?? '#000000' );
@@ -2149,7 +2251,7 @@ class Olo_Frontend_Renderer {
         // Grid — if no wrapper, put scrollspy/parallax on the grid div itself
         $grid_extra_attrs = $needs_wrapper ? '' : ( $row_scrollspy_attr . $row_el_parallax_attr );
         $grid_style_parts = $row_flex_styles;
-        if ( $needs_wrapper && ( $has_bg_image || $has_bg_video || $has_overlay ) ) {
+        if ( $needs_wrapper && ( $has_bg_image || $has_bg_video || $has_bg_gallery || $has_overlay ) ) {
             $grid_style_parts[] = 'position: relative';
             $grid_style_parts[] = 'z-index: 1';
         }
@@ -2202,7 +2304,7 @@ class Olo_Frontend_Renderer {
             if ( $g_ac && $g_ac !== 'stretch' ) {
                 $grid_css_parts[] = 'align-content: ' . esc_attr( $g_ac );
             }
-            if ( $needs_wrapper && ( $has_bg_image || $has_bg_video || $has_overlay ) ) {
+            if ( $needs_wrapper && ( $has_bg_image || $has_bg_video || $has_bg_gallery || $has_overlay ) ) {
                 $grid_css_parts[] = 'position: relative';
                 $grid_css_parts[] = 'z-index: 1';
             }
@@ -3067,7 +3169,7 @@ class Olo_Frontend_Renderer {
         $classes = [ 'olo-frontend-tile' ];
         if ( $shadow_class ) $classes[] = $shadow_class;
         if ( $is_fullwidth ) $classes[] = 'olo-tile-fullwidth';
-        if ( $has_bg_image || $has_bg_video || $has_overlay ) { $classes[] = 'uk-position-relative'; $inline_styles[] = 'overflow: clip'; }
+        if ( $has_bg_image || $has_bg_video || $has_bg_gallery || $has_overlay ) { $classes[] = 'uk-position-relative'; $inline_styles[] = 'overflow: clip'; }
         if ( ! empty( $style['border_radius'] ) ) $inline_styles[] = 'overflow: clip';
         if ( ! empty( $advanced['css_classes'] ) ) {
             $classes[] = esc_attr( $advanced['css_classes'] );
@@ -3256,7 +3358,7 @@ class Olo_Frontend_Renderer {
                 <div class="uk-position-cover" style="background-color: <?php echo $ov_color; ?>; opacity: <?php echo $ov_opacity; ?>; pointer-events: none" aria-hidden="true"></div>
             <?php endif; ?>
 
-            <?php if ( $has_bg_image || $has_bg_video || $has_overlay ) : ?>
+            <?php if ( $has_bg_image || $has_bg_video || $has_bg_gallery || $has_overlay ) : ?>
                 <div class="uk-position-relative" style="z-index: 1">
                     <?php echo $tile_instance->render( $settings ); ?>
                 </div>

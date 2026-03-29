@@ -1,0 +1,3189 @@
+# English (US) translation for Olobuild
+# Copyright (C) 2026 Claudio
+# This file is distributed under the same license as the Olobuild plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: Olobuild 2.51.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-03-29 10:09+0000\n"
+"PO-Revision-Date: 2026-03-28\n"
+"Last-Translator: Claudio\n"
+"Language-Team: English\n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: includes/class-accessibility.php:44
+msgid "Vai al contenuto principale"
+msgstr "Skip to main content"
+
+#: includes/class-analytics-tracking.php:76
+#: includes/class-analytics-tracking.php:77 includes/class-olo-builder.php:480
+msgid "Analytics"
+msgstr "Analytics"
+
+#: includes/class-analytics-tracking.php:139
+#: includes/class-cookie-consent.php:823 includes/class-cookie-consent.php:1355
+msgid "Provider"
+msgstr "Providers"
+
+#: includes/class-analytics-tracking.php:140
+msgid "Eventi"
+msgstr "Events"
+
+#: includes/class-analytics-tracking.php:141
+msgid "Impostazioni"
+msgstr "Settings"
+
+#: includes/class-analytics-tracking.php:142
+#: includes/class-analytics-tracking.php:430
+msgid "Script personalizzati"
+msgstr "Custom Scripts"
+
+#: includes/class-analytics-tracking.php:146
+msgid "Analytics & Tracking"
+msgstr "Analytics & Tracking"
+
+#: includes/class-analytics-tracking.php:173
+#: includes/class-cookie-consent.php:275
+#: includes/class-performance-settings.php:191
+#: includes/class-white-label.php:271 includes/class-white-label.php:308
+msgid "Salva impostazioni"
+msgstr "Save Settings"
+
+#: includes/class-analytics-tracking.php:218
+msgid ""
+"Measurement ID di GA4. Lo trovi in Amministrazione &rarr; Flussi di dati."
+msgstr "GA4 Measurement ID. Find it in Admin &rarr; Data Streams."
+
+#: includes/class-analytics-tracking.php:226
+msgid ""
+"Container ID di GTM. Se usi GTM per gestire GA4, non inserire anche il "
+"Measurement ID sopra."
+msgstr ""
+"GTM Container ID. If you use GTM to manage GA4, do not also enter the "
+"Measurement ID above."
+
+#: includes/class-analytics-tracking.php:234
+msgid ""
+"Pixel ID di Meta/Facebook. Lo trovi in Events Manager &rarr; Impostazioni."
+msgstr "Meta/Facebook Pixel ID. Find it in Events Manager &rarr; Settings."
+
+#: includes/class-analytics-tracking.php:242
+msgid "Project ID di Clarity. Heatmap e session recording gratuiti."
+msgstr "Clarity Project ID. Free heatmaps and session recordings."
+
+#: includes/class-analytics-tracking.php:250
+msgid "Site ID di Hotjar. Lo trovi in Settings &rarr; Sites & Organizations."
+msgstr "Hotjar Site ID. Find it in Settings &rarr; Sites & Organizations."
+
+#: includes/class-analytics-tracking.php:263
+#: includes/class-global-popups.php:500
+#: includes/class-performance-settings.php:272
+#: includes/class-seo-redirects.php:679
+msgid "Attivo"
+msgstr "Active"
+
+#: includes/class-analytics-tracking.php:265
+#: includes/class-seo-redirects.php:681
+msgid "Non configurato"
+msgstr "Not configured"
+
+#: includes/class-analytics-tracking.php:271
+msgid "ID"
+msgstr "ID"
+
+#: includes/class-analytics-tracking.php:291
+msgid "Click sui pulsanti"
+msgstr "Button clicks"
+
+#: includes/class-analytics-tracking.php:292
+msgid "Invio form"
+msgstr "Form submissions"
+
+#: includes/class-analytics-tracking.php:293
+msgid "Riproduzione video"
+msgstr "Video playback"
+
+#: includes/class-analytics-tracking.php:294
+msgid "Profondità di scroll"
+msgstr "Scroll depth"
+
+#: includes/class-analytics-tracking.php:295
+msgid "Click su pricing CTA"
+msgstr "Pricing CTA clicks"
+
+#: includes/class-analytics-tracking.php:296
+msgid "Download file"
+msgstr "File downloads"
+
+#: includes/class-analytics-tracking.php:297
+msgid "Link esterni"
+msgstr "Outbound links"
+
+#: includes/class-analytics-tracking.php:306
+msgid "Auto-tracking eventi"
+msgstr "Event auto-tracking"
+
+#: includes/class-analytics-tracking.php:307
+msgid ""
+"Scegli quali eventi tracciare automaticamente. Vengono inviati a tutti i "
+"provider configurati."
+msgstr ""
+"Choose which events to track automatically. They are sent to all configured "
+"providers."
+
+#: includes/class-analytics-tracking.php:334
+msgid "Parametri eventi"
+msgstr "Event parameters"
+
+#: includes/class-analytics-tracking.php:335
+msgid "Configura i dettagli degli eventi di scroll e download."
+msgstr "Configure the details of scroll and download events."
+
+#: includes/class-analytics-tracking.php:341
+msgid "Milestone scroll (%)"
+msgstr "Scroll milestones (%)"
+
+#: includes/class-analytics-tracking.php:342
+msgid "Percentuali di scroll a cui inviare un evento (separate da virgola)."
+msgstr "Scroll percentages at which to fire an event (comma-separated)."
+
+#: includes/class-analytics-tracking.php:350
+msgid "Estensioni download"
+msgstr "Download extensions"
+
+#: includes/class-analytics-tracking.php:351
+msgid "Estensioni file da tracciare come download (separate da virgola)."
+msgstr "File extensions to track as downloads (comma-separated)."
+
+#: includes/class-analytics-tracking.php:369
+msgid "Richiedi consenso cookie"
+msgstr "Require cookie consent"
+
+#: includes/class-analytics-tracking.php:370
+msgid ""
+"Blocca gli script di tracking finché l'utente non accetta i cookie analitici/"
+"marketing dal banner Cookie Consent. Richiesto per GDPR."
+msgstr ""
+"Block tracking scripts until the user accepts analytics/marketing cookies from the Cookie Consent banner. Required for GDPR."
+
+#: includes/class-analytics-tracking.php:374
+msgid "Anonimizza IP"
+msgstr "Anonymize IP"
+
+#: includes/class-analytics-tracking.php:375
+msgid ""
+"GA4 anonimizza l'IP di default, ma questa opzione aggiunge il parametro "
+"esplicito per conformità."
+msgstr ""
+"GA4 anonymizes IP by default, but this option adds the explicit parameter for compliance."
+
+#: includes/class-analytics-tracking.php:379
+msgid "Rispetta Do Not Track"
+msgstr "Respect Do Not Track"
+
+#: includes/class-analytics-tracking.php:380
+msgid "Non caricare gli script se il browser invia l'header Do Not Track."
+msgstr "Do not load scripts if the browser sends the Do Not Track header."
+
+#: includes/class-analytics-tracking.php:384
+msgid "Escludi amministratori"
+msgstr "Exclude administrators"
+
+#: includes/class-analytics-tracking.php:385
+msgid "Non tracciare le visite degli utenti con ruolo Amministratore."
+msgstr "Do not track visits from users with the Administrator role."
+
+#: includes/class-analytics-tracking.php:395
+msgid "Privacy e conformità"
+msgstr "Privacy & compliance"
+
+#: includes/class-analytics-tracking.php:396
+msgid "Opzioni di privacy, GDPR e gestione del consenso."
+msgstr "Privacy, GDPR and consent management options."
+
+#: includes/class-analytics-tracking.php:431
+msgid ""
+"Inserisci script di tracking aggiuntivi. Verranno bloccati dal consenso "
+"cookie se abilitato."
+msgstr ""
+"Enter additional tracking scripts. They will be blocked by cookie consent if "
+"enabled."
+
+#: includes/class-analytics-tracking.php:437
+msgid "Script nel <head>"
+msgstr "Scripts in <head>"
+
+#: includes/class-analytics-tracking.php:438
+msgid ""
+"Inseriti prima della chiusura di </head>. Utile per snippet di tracking non "
+"supportati nativamente."
+msgstr ""
+"Inserted before the closing </head>. Useful for tracking snippets not "
+"natively supported."
+
+#: includes/class-analytics-tracking.php:446
+msgid "Script nel <body>"
+msgstr "Scripts in <body>"
+
+#: includes/class-analytics-tracking.php:447
+msgid "Inseriti prima della chiusura di </body>."
+msgstr "Inserted before the closing </body>."
+
+#: includes/class-cookie-consent.php:139 includes/class-cookie-consent.php:140
+#: includes/class-cookie-consent.php:245 includes/class-olo-builder.php:487
+msgid "Cookie Consent"
+msgstr "Cookie Consent"
+
+#: includes/class-cookie-consent.php:236
+msgid "Generale"
+msgstr "General"
+
+#: includes/class-cookie-consent.php:237
+msgid "Testi"
+msgstr "Texts"
+
+#: includes/class-cookie-consent.php:238
+msgid "Aspetto"
+msgstr "Appearance"
+
+#: includes/class-cookie-consent.php:239 includes/class-seo-settings.php:803
+msgid "Categorie"
+msgstr "Categories"
+
+#: includes/class-cookie-consent.php:240
+msgid "Blocco Script"
+msgstr "Script Blocking"
+
+#: includes/class-cookie-consent.php:241
+msgid "Dichiarazione Cookie"
+msgstr "Cookie Declaration"
+
+#: includes/class-cookie-consent.php:242
+msgid "Log Consensi"
+msgstr "Consent Log"
+
+#: includes/class-cookie-consent.php:342
+msgid "Impostazioni generali"
+msgstr "General settings"
+
+#: includes/class-cookie-consent.php:343
+msgid "Configura il comportamento del cookie banner"
+msgstr "Configure the cookie banner behavior"
+
+#: includes/class-cookie-consent.php:349
+msgid "Abilita Cookie Banner"
+msgstr "Enable Cookie Banner"
+
+#: includes/class-cookie-consent.php:358
+msgid "Layout"
+msgstr "Layout"
+
+#: includes/class-cookie-consent.php:362
+msgid "Barra"
+msgstr "Bar"
+
+#: includes/class-cookie-consent.php:363
+msgid "Box laterale"
+msgstr "Side box"
+
+#: includes/class-cookie-consent.php:364
+msgid "Full-width"
+msgstr "Full-width"
+
+#: includes/class-cookie-consent.php:370
+msgid "Posizione"
+msgstr "Position"
+
+#: includes/class-cookie-consent.php:374
+msgid "In basso"
+msgstr "Bottom"
+
+#: includes/class-cookie-consent.php:375
+msgid "In alto"
+msgstr "Top"
+
+#: includes/class-cookie-consent.php:381
+msgid "Mostra \"Rifiuta tutti\""
+msgstr "Show \"Reject All\""
+
+#: includes/class-cookie-consent.php:382
+msgid "Richiesto dalle linee guida CNIL/Garante Privacy italiano."
+msgstr "Required by CNIL/Italian Privacy Authority guidelines."
+
+#: includes/class-cookie-consent.php:391
+msgid "Mostra \"Personalizza\""
+msgstr "Show \"Customize\""
+
+#: includes/class-cookie-consent.php:392
+msgid "Pulsante per aprire il pannello preferenze con le categorie."
+msgstr "Button to open the preferences panel with categories."
+
+#: includes/class-cookie-consent.php:401
+msgid "Durata consenso"
+msgstr "Consent duration"
+
+#: includes/class-cookie-consent.php:402
+msgid "GDPR raccomanda max 6 mesi (180 giorni). Molti usano 365."
+msgstr "GDPR recommends max 6 months (180 days). Many use 365."
+
+#: includes/class-cookie-consent.php:406
+#: includes/class-performance-settings.php:236
+msgid "giorni"
+msgstr "days"
+
+#: includes/class-cookie-consent.php:411
+msgid "Richiedere nuovamente dopo"
+msgstr "Re-ask after"
+
+#: includes/class-cookie-consent.php:412
+msgid "Se la cookie policy cambia, puoi forzare la ripresentazione del banner."
+msgstr ""
+"If the cookie policy changes, you can force the banner to be shown again."
+
+#: includes/class-cookie-consent.php:416
+msgid "giorni (0 = mai)"
+msgstr "days (0 = never)"
+
+#: includes/class-cookie-consent.php:421
+msgid "Google Consent Mode v2"
+msgstr "Google Consent Mode v2"
+
+#: includes/class-cookie-consent.php:422
+msgid ""
+"Invia segnali gtag(\"consent\") a Google. Richiesto da Google Ads dal marzo "
+"2024 per EEA/UK."
+msgstr ""
+"Send gtag(\"consent\") signals to Google. Required by Google Ads since March "
+"2024 for EEA/UK."
+
+#: includes/class-cookie-consent.php:431
+msgid "Blocco iframe"
+msgstr "Iframe blocking"
+
+#: includes/class-cookie-consent.php:432
+msgid ""
+"Blocca iframe di YouTube, Vimeo, Google Maps fino al consenso. Mostra un "
+"placeholder con pulsante \"Carica contenuto\"."
+msgstr ""
+"Block YouTube, Vimeo, Google Maps iframes until consent. Shows a placeholder "
+"with a \"Load content\" button."
+
+#: includes/class-cookie-consent.php:441
+msgid "Versione banner"
+msgstr "Banner version"
+
+#: includes/class-cookie-consent.php:442
+msgid ""
+"Incrementa quando cambi la cookie policy. I visitatori con consenso a una "
+"versione precedente vedranno di nuovo il banner."
+msgstr ""
+"Increment when you change the cookie policy. Visitors who consented to a "
+"previous version will see the banner again."
+
+#: includes/class-cookie-consent.php:464
+msgid "Testi del banner"
+msgstr "Banner texts"
+
+#: includes/class-cookie-consent.php:465
+msgid "Personalizza i testi mostrati nel cookie banner"
+msgstr "Customize the texts shown in the cookie banner"
+
+#: includes/class-cookie-consent.php:471
+msgid "Titolo"
+msgstr "Title"
+
+#: includes/class-cookie-consent.php:479
+msgid "Messaggio"
+msgstr "Message"
+
+#: includes/class-cookie-consent.php:487
+msgid "Pulsante \"Accetta tutti\""
+msgstr "\"Accept All\" button"
+
+#: includes/class-cookie-consent.php:495
+msgid "Pulsante \"Rifiuta tutti\""
+msgstr "\"Reject All\" button"
+
+#: includes/class-cookie-consent.php:503
+msgid "Pulsante \"Personalizza\""
+msgstr "\"Customize\" button"
+
+#: includes/class-cookie-consent.php:511
+msgid "Pulsante \"Salva preferenze\""
+msgstr "\"Save Preferences\" button"
+
+#: includes/class-cookie-consent.php:526
+msgid "Link policy"
+msgstr "Policy links"
+
+#: includes/class-cookie-consent.php:527
+msgid "URL e testi dei link alle pagine di policy"
+msgstr "URLs and texts for policy page links"
+
+#: includes/class-cookie-consent.php:533
+msgid "URL Privacy Policy"
+msgstr "Privacy Policy URL"
+
+#: includes/class-cookie-consent.php:541
+msgid "Testo link Privacy"
+msgstr "Privacy link text"
+
+#: includes/class-cookie-consent.php:549
+msgid "URL Cookie Policy"
+msgstr "Cookie Policy URL"
+
+#: includes/class-cookie-consent.php:557
+msgid "Testo link Cookie Policy"
+msgstr "Cookie Policy link text"
+
+#: includes/class-cookie-consent.php:579
+msgid "Colori banner"
+msgstr "Banner colors"
+
+#: includes/class-cookie-consent.php:580
+msgid "Sfondo e testo del cookie banner"
+msgstr "Cookie banner background and text"
+
+#: includes/class-cookie-consent.php:586
+msgid "Sfondo banner"
+msgstr "Banner background"
+
+#: includes/class-cookie-consent.php:594
+msgid "Colore testo"
+msgstr "Text color"
+
+#: includes/class-cookie-consent.php:609
+msgid "Colori pulsanti"
+msgstr "Button colors"
+
+#: includes/class-cookie-consent.php:610
+msgid "Personalizza i colori dei pulsanti \"Accetta\" e \"Rifiuta\""
+msgstr "Customize the colors of the \"Accept\" and \"Reject\" buttons"
+
+#: includes/class-cookie-consent.php:616
+msgid "Pulsante primario — sfondo"
+msgstr "Primary button — background"
+
+#: includes/class-cookie-consent.php:624
+msgid "Pulsante primario — testo"
+msgstr "Primary button — text"
+
+#: includes/class-cookie-consent.php:632
+msgid "Pulsante secondario — sfondo"
+msgstr "Secondary button — background"
+
+#: includes/class-cookie-consent.php:640
+msgid "Pulsante secondario — testo"
+msgstr "Secondary button — text"
+
+#: includes/class-cookie-consent.php:655
+msgid "Stile"
+msgstr "Style"
+
+#: includes/class-cookie-consent.php:656
+msgid "Overlay e border radius del banner"
+msgstr "Banner overlay and border radius"
+
+#: includes/class-cookie-consent.php:662
+msgid "Overlay scuro"
+msgstr "Dark overlay"
+
+#: includes/class-cookie-consent.php:663
+msgid "Oscura la pagina dietro il banner per attirare l'attenzione."
+msgstr "Darkens the page behind the banner to draw attention."
+
+#: includes/class-cookie-consent.php:672
+msgid "Border radius"
+msgstr "Border radius"
+
+#: includes/class-cookie-consent.php:701
+msgid "Categorie cookie"
+msgstr "Cookie categories"
+
+#: includes/class-cookie-consent.php:702
+msgid ""
+"Personalizza nome e descrizione di ogni categoria mostrata nel pannello "
+"preferenze."
+msgstr ""
+"Customize the name and description of each category shown in the preferences "
+"panel."
+
+#: includes/class-cookie-consent.php:715 includes/class-cookie-consent.php:1336
+msgid "Sempre attivo"
+msgstr "Always active"
+
+#: includes/class-cookie-consent.php:722
+msgid "Etichetta"
+msgstr "Label"
+
+#: includes/class-cookie-consent.php:730 includes/class-seo-settings.php:484
+#: includes/class-white-label.php:223
+msgid "Descrizione"
+msgstr "Description"
+
+#: includes/class-cookie-consent.php:755
+msgid "Blocco automatico script"
+msgstr "Automatic script blocking"
+
+#: includes/class-cookie-consent.php:756
+msgid ""
+"Blocca automaticamente script di terze parti finché l'utente non accetta la "
+"categoria corrispondente."
+msgstr ""
+"Automatically block third-party scripts until the user accepts the corresponding category."
+
+#: includes/class-cookie-consent.php:762
+msgid "Abilita auto-blocco"
+msgstr "Enable auto-blocking"
+
+#: includes/class-cookie-consent.php:763
+msgid ""
+"Converte gli script corrispondenti in type=\"text/plain\" finché il consenso "
+"non è dato."
+msgstr ""
+"Converts matching scripts to type=\"text/plain\" until consent is given."
+
+#: includes/class-cookie-consent.php:772
+msgid "Pattern da bloccare"
+msgstr "Patterns to block"
+
+#: includes/class-cookie-consent.php:773
+msgid ""
+"Un dominio/pattern per riga. Gli script il cui src contiene uno di questi "
+"pattern vengono bloccati."
+msgstr ""
+"One domain/pattern per line. Scripts whose src contains one of these "
+"patterns will be blocked."
+
+#: includes/class-cookie-consent.php:788
+msgid "Blocco manuale"
+msgstr "Manual blocking"
+
+#: includes/class-cookie-consent.php:789
+msgid "Puoi anche bloccare script manualmente nel tuo HTML aggiungendo:"
+msgstr "You can also block scripts manually in your HTML by adding:"
+
+#: includes/class-cookie-consent.php:814
+msgid "Dichiarazione cookie"
+msgstr "Cookie declaration"
+
+#: includes/class-cookie-consent.php:815
+msgid ""
+"Elenca i cookie utilizzati dal sito. Questi vengono mostrati nel pannello "
+"preferenze."
+msgstr ""
+"List the cookies used by the site. These are shown in the preferences panel."
+
+#: includes/class-cookie-consent.php:822
+msgid "Nome cookie"
+msgstr "Cookie name"
+
+#: includes/class-cookie-consent.php:824 includes/class-cookie-consent.php:1356
+msgid "Scopo"
+msgstr "Purpose"
+
+#: includes/class-cookie-consent.php:825 includes/class-cookie-consent.php:1357
+msgid "Scadenza"
+msgstr "Expiry"
+
+#: includes/class-cookie-consent.php:826 includes/class-global-popups.php:480
+msgid "Categoria"
+msgstr "Category"
+
+#: includes/class-cookie-consent.php:845 includes/class-global-popups.php:512
+msgid "Rimuovi"
+msgstr "Remove"
+
+#: includes/class-cookie-consent.php:854
+msgid "Aggiungi cookie"
+msgstr "Add cookie"
+
+#: includes/class-cookie-consent.php:920
+msgid "Log dei consensi"
+msgstr "Consent log"
+
+#: includes/class-cookie-consent.php:924
+#, php-format
+msgid ""
+"%d consensi registrati. Il GDPR richiede di poter dimostrare il consenso "
+"raccolto."
+msgstr ""
+"%d consents recorded. GDPR requires that you can demonstrate collected "
+"consent."
+
+#: includes/class-cookie-consent.php:935
+msgid "Esporta CSV"
+msgstr "Export CSV"
+
+#: includes/class-cookie-consent.php:939 includes/class-seo-redirects.php:528
+msgid "Svuota log"
+msgstr "Clear log"
+
+#: includes/class-cookie-consent.php:949
+msgid "ID Consenso"
+msgstr "Consent ID"
+
+#: includes/class-cookie-consent.php:950
+#: includes/class-form-submissions.php:181 includes/class-seo-redirects.php:443
+msgid "Data"
+msgstr "Date"
+
+#: includes/class-cookie-consent.php:951
+msgid "Azione"
+msgstr "Action"
+
+#: includes/class-cookie-consent.php:952
+msgid "Ver."
+msgstr "Ver."
+
+#: includes/class-cookie-consent.php:953
+msgid "IP (hash)"
+msgstr "IP (hash)"
+
+#: includes/class-cookie-consent.php:954
+msgid "Categorie accettate"
+msgstr "Accepted categories"
+
+#: includes/class-cookie-consent.php:955
+msgid "User Agent"
+msgstr "User Agent"
+
+#: includes/class-cookie-consent.php:966
+msgid "Primo consenso"
+msgstr "First consent"
+
+#: includes/class-cookie-consent.php:966
+msgid "Modifica"
+msgstr "Edit"
+
+#: includes/class-cookie-consent.php:966
+msgid "Revoca"
+msgstr "Revoke"
+
+#: includes/class-cookie-consent.php:1007
+msgid "Nessun consenso registrato."
+msgstr "No consents recorded."
+
+#: includes/class-cookie-consent.php:1018
+msgid "Svuotare tutti i log dei consensi?"
+msgstr "Clear all consent logs?"
+
+#: includes/class-cookie-consent.php:1326
+msgid "Preferenze cookie"
+msgstr "Cookie preferences"
+
+#: includes/class-cookie-consent.php:1327
+msgid "Chiudi"
+msgstr "Close"
+
+#: includes/class-cookie-consent.php:1329
+msgid ""
+"Scegli quali categorie di cookie accettare. Puoi modificare le tue "
+"preferenze in qualsiasi momento."
+msgstr ""
+"Choose which cookie categories to accept. You can change your preferences at "
+"any time."
+
+#: includes/class-cookie-consent.php:1350
+msgid "Dettaglio cookie utilizzati"
+msgstr "Cookie details"
+
+#: includes/class-cookie-consent.php:1354
+msgid "Cookie"
+msgstr "Cookie"
+
+#: includes/class-cookie-consent.php:1509
+msgid "Questo contenuto richiede il consenso ai cookie"
+msgstr "This content requires cookie consent"
+
+#: includes/class-cookie-consent.php:1510
+msgid "Accetta e carica"
+msgstr "Accept and load"
+
+#: includes/class-cookie-consent.php:1783
+msgid "Gestisci cookie"
+msgstr "Manage cookies"
+
+#: includes/class-form-submissions.php:124
+#: includes/class-form-submissions.php:232
+msgid "Non autorizzato."
+msgstr "Unauthorized."
+
+#: includes/class-form-submissions.php:143
+#: includes/class-form-submissions.php:758
+msgid "Nessun invio trovato."
+msgstr "No submissions found."
+
+#: includes/class-form-submissions.php:181
+#: includes/class-form-submissions.php:369
+#: includes/class-form-submissions.php:497
+#: includes/class-performance-settings.php:273
+msgid "Stato"
+msgstr "Status"
+
+#: includes/class-form-submissions.php:196
+#: includes/class-form-submissions.php:370
+#: includes/class-form-submissions.php:634
+msgid "Letto"
+msgstr "Read"
+
+#: includes/class-form-submissions.php:196
+#: includes/class-form-submissions.php:370
+#: includes/class-form-submissions.php:636
+msgid "Non letto"
+msgstr "Unread"
+
+#: includes/class-form-submissions.php:210
+msgid "Invii per pagina"
+msgstr "Submissions per page"
+
+#: includes/class-form-submissions.php:266 includes/class-olo-builder.php:163
+#: includes/class-olo-builder.php:164 includes/class-olo-builder.php:473
+msgid "Invii Form"
+msgstr "Form Submissions"
+
+#: includes/class-form-submissions.php:274
+msgid "Elenco invii"
+msgstr "Submission list"
+
+#: includes/class-form-submissions.php:275
+msgid "Tutti i messaggi ricevuti dai form del sito"
+msgstr "All messages received from site forms"
+
+#: includes/class-form-submissions.php:282 includes/class-media-search.php:45
+msgid "Cerca"
+msgstr "Search"
+
+#: includes/class-form-submissions.php:301
+msgid "Invio non trovato"
+msgstr "Submission not found"
+
+#: includes/class-form-submissions.php:301
+#: includes/class-form-submissions.php:330
+msgid "Torna alla lista"
+msgstr "Back to list"
+
+#: includes/class-form-submissions.php:324
+#, php-format
+msgid "Invio #%s"
+msgstr "Submission #%s"
+
+#: includes/class-form-submissions.php:325
+msgid "Dettaglio del messaggio ricevuto"
+msgstr "Received message details"
+
+#: includes/class-form-submissions.php:341
+msgid "Informazioni invio"
+msgstr "Submission info"
+
+#: includes/class-form-submissions.php:342
+msgid "Metadati del messaggio"
+msgstr "Message metadata"
+
+#: includes/class-form-submissions.php:353
+msgid "Form"
+msgstr "Form"
+
+#: includes/class-form-submissions.php:354
+#: includes/class-form-submissions.php:575
+msgid "(senza nome)"
+msgstr "(unnamed)"
+
+#: includes/class-form-submissions.php:357
+#: includes/class-form-submissions.php:495
+msgid "Data invio"
+msgstr "Submission date"
+
+#: includes/class-form-submissions.php:383
+msgid "Campi compilati"
+msgstr "Filled fields"
+
+#: includes/class-form-submissions.php:384
+msgid "Dati inseriti dall'utente nel form"
+msgstr "Data entered by the user in the form"
+
+#: includes/class-form-submissions.php:391
+msgid "Campo"
+msgstr "Field"
+
+#: includes/class-form-submissions.php:392
+msgid "Valore"
+msgstr "Value"
+
+#: includes/class-form-submissions.php:409
+msgid "Nessun campo."
+msgstr "No fields."
+
+#: includes/class-form-submissions.php:430
+msgid "Invio eliminato."
+msgstr "Submission deleted."
+
+#: includes/class-form-submissions.php:437
+msgid "Segnato come letto."
+msgstr "Marked as read."
+
+#: includes/class-form-submissions.php:452
+#, php-format
+msgid "%d invii eliminati."
+msgstr "%d submissions deleted."
+
+#: includes/class-form-submissions.php:456
+#, php-format
+msgid "%d invii segnati come letti."
+msgstr "%d submissions marked as read."
+
+#: includes/class-form-submissions.php:460
+#, php-format
+msgid "%d invii segnati come non letti."
+msgstr "%d submissions marked as unread."
+
+#: includes/class-form-submissions.php:494
+msgid "Dati"
+msgstr "Data"
+
+#: includes/class-form-submissions.php:518
+msgid "Segna come letto"
+msgstr "Mark as read"
+
+#: includes/class-form-submissions.php:519
+msgid "Segna come non letto"
+msgstr "Mark as unread"
+
+#: includes/class-form-submissions.php:520
+#: includes/class-form-submissions.php:560 includes/class-seo-redirects.php:460
+msgid "Elimina"
+msgstr "Delete"
+
+#: includes/class-form-submissions.php:559
+msgid "Visualizza"
+msgstr "View"
+
+#: includes/class-form-submissions.php:560
+msgid "Eliminare questo invio?"
+msgstr "Delete this submission?"
+
+#: includes/class-form-submissions.php:564
+msgid "Segna letto"
+msgstr "Mark read"
+
+#: includes/class-form-submissions.php:597
+#, php-format
+msgid "%d campi"
+msgstr "%d fields"
+
+#: includes/class-form-submissions.php:636
+msgid "Nuovo"
+msgstr "New"
+
+#: includes/class-form-submissions.php:666
+msgid "Tutti i form"
+msgstr "All forms"
+
+#: includes/class-form-submissions.php:673
+msgid "Filtra"
+msgstr "Filter"
+
+#: includes/class-global-popups.php:352 includes/class-role-manager.php:476
+#: includes/class-role-manager.php:518 includes/class-white-label.php:149
+msgid "Dati non validi"
+msgstr "Invalid data"
+
+#: includes/class-global-popups.php:405 includes/class-global-popups.php:406
+#: includes/class-global-popups.php:426 includes/class-global-popups.php:434
+msgid "Popup Globali"
+msgstr "Global Popups"
+
+#: includes/class-global-popups.php:435
+msgid ""
+"Configura popup che appaiono automaticamente in base a condizioni di "
+"visualizzazione."
+msgstr "Configure popups that appear automatically based on display conditions."
+
+#: includes/class-global-popups.php:440
+msgid "JavaScript richiesto."
+msgstr "JavaScript required."
+
+#: includes/class-global-popups.php:458
+msgid "Caricamento pagina"
+msgstr "Page load"
+
+#: includes/class-global-popups.php:462
+msgid "Inattivita'"
+msgstr "Inactivity"
+
+#: includes/class-global-popups.php:466
+msgid "Sempre"
+msgstr "Always"
+
+#: includes/class-global-popups.php:467
+msgid "1 volta per sessione"
+msgstr "Once per session"
+
+#: includes/class-global-popups.php:468
+msgid "1 volta al giorno"
+msgstr "Once per day"
+
+#: includes/class-global-popups.php:469
+msgid "1 volta a settimana"
+msgstr "Once per week"
+
+#: includes/class-global-popups.php:470
+msgid "Solo 1 volta"
+msgstr "Only once"
+
+#: includes/class-global-popups.php:474
+msgid "Tutto il sito"
+msgstr "Entire site"
+
+#: includes/class-global-popups.php:475
+msgid "Homepage"
+msgstr "Homepage"
+
+#: includes/class-global-popups.php:476
+msgid "Pagina specifica"
+msgstr "Specific page"
+
+#: includes/class-global-popups.php:477
+msgid "Articolo specifico"
+msgstr "Specific post"
+
+#: includes/class-global-popups.php:478
+msgid "Tipo contenuto"
+msgstr "Content type"
+
+#: includes/class-global-popups.php:479
+msgid "Archivio"
+msgstr "Archive"
+
+#: includes/class-global-popups.php:481
+msgid "Utente loggato"
+msgstr "Logged-in user"
+
+#: includes/class-global-popups.php:482
+msgid "Utente non loggato"
+msgstr "Logged-out user"
+
+#: includes/class-global-popups.php:485
+msgid "Pagina 404"
+msgstr "404 Page"
+
+#: includes/class-global-popups.php:486
+msgid "Ricerca"
+msgstr "Search"
+
+#: includes/class-global-popups.php:495
+msgid "Nessun popup configurato"
+msgstr "No popups configured"
+
+#: includes/class-global-popups.php:500
+msgid "Disattivato"
+msgstr "Disabled"
+
+#: includes/class-global-popups.php:520 includes/class-global-popups.php:521
+msgid "Nome popup"
+msgstr "Popup name"
+
+#: includes/class-global-popups.php:528 includes/class-seo-settings.php:304
+#: includes/class-seo-settings.php:382 includes/class-seo-settings.php:576
+msgid "Seleziona"
+msgstr "Select"
+
+#: includes/class-global-popups.php:537
+msgid "Trigger"
+msgstr "Trigger"
+
+#: includes/class-global-popups.php:547
+msgid "Frequenza"
+msgstr "Frequency"
+
+#: includes/class-global-popups.php:557
+msgid "Condizioni"
+msgstr "Conditions"
+
+#: includes/class-global-popups.php:561
+msgid "OR (almeno una)"
+msgstr "OR (at least one)"
+
+#: includes/class-global-popups.php:562
+msgid "AND (tutte)"
+msgstr "AND (all)"
+
+#: includes/class-global-popups.php:564
+msgid "Condizione"
+msgstr "Condition"
+
+#: includes/class-global-popups.php:577
+msgid "Valore (ID, slug)"
+msgstr "Value (ID, slug)"
+
+#: includes/class-global-popups.php:591
+msgid "Aggiungi Popup"
+msgstr "Add Popup"
+
+#: includes/class-global-popups.php:592
+msgid "Salva Tutto"
+msgstr "Save All"
+
+#: includes/class-global-popups.php:622
+msgid "Popup salvati con successo!"
+msgstr "Popups saved successfully!"
+
+#: includes/class-global-popups.php:622 includes/class-global-popups.php:623
+#: includes/class-media-search.php:312
+#: includes/class-performance-settings.php:333
+#: includes/class-site-import-export.php:606
+#: includes/class-site-import-export.php:612
+#: includes/class-site-import-export.php:634
+#: includes/class-site-import-export.php:640
+#: includes/class-site-import-export.php:722
+#: includes/class-site-import-export.php:729
+msgid "Errore"
+msgstr "Error"
+
+#: includes/class-header-integration.php:24
+msgid "Header Olobuild"
+msgstr "Olobuild Header"
+
+#: includes/class-media-search.php:29 includes/class-olo-builder.php:154
+#: includes/class-olo-builder.php:155 includes/class-olo-builder.php:466
+msgid "Ricerca Media"
+msgstr "Media Search"
+
+#: includes/class-media-search.php:33
+msgid "Foto"
+msgstr "Photos"
+
+#: includes/class-media-search.php:34
+msgid "Video"
+msgstr "Video"
+
+#: includes/class-media-search.php:35
+msgid "Foto 360"
+msgstr "360 Photos"
+
+#: includes/class-media-search.php:36
+msgid "Video 360"
+msgstr "360 Video"
+
+#: includes/class-media-search.php:37
+msgid "Audio"
+msgstr "Audio"
+
+#: includes/class-media-search.php:44
+msgid "Cerca foto, video, audio..."
+msgstr "Search photos, videos, audio..."
+
+#: includes/class-media-search.php:52
+msgid ""
+"Incolla un URL Google Maps, coordinate (lat,lng) o un pano_id per scaricare "
+"un panorama Street View."
+msgstr ""
+"Paste a Google Maps URL, coordinates (lat,lng) or a pano_id to download a Street View panorama."
+
+#: includes/class-media-search.php:57
+msgid "Zoom 2 (bassa)"
+msgstr "Zoom 2 (low)"
+
+#: includes/class-media-search.php:58
+msgid "Zoom 3 (media)"
+msgstr "Zoom 3 (medium)"
+
+#: includes/class-media-search.php:59
+msgid "Zoom 4 (alta)"
+msgstr "Zoom 4 (high)"
+
+#: includes/class-media-search.php:61
+msgid "Cerca panorama"
+msgstr "Search panorama"
+
+#: includes/class-media-search.php:69
+msgid "Orientamento:"
+msgstr "Orientation:"
+
+#: includes/class-media-search.php:71 includes/class-media-search.php:80
+#: includes/class-media-search.php:102
+msgid "Qualsiasi"
+msgstr "Any"
+
+#: includes/class-media-search.php:72
+msgid "Orizzontale"
+msgstr "Landscape"
+
+#: includes/class-media-search.php:73
+msgid "Verticale"
+msgstr "Portrait"
+
+#: includes/class-media-search.php:74
+msgid "Quadrato"
+msgstr "Square"
+
+#: includes/class-media-search.php:78
+msgid "Dimensione:"
+msgstr "Size:"
+
+#: includes/class-media-search.php:81
+msgid "Piccola"
+msgstr "Small"
+
+#: includes/class-media-search.php:82
+msgid "Media"
+msgstr "Medium"
+
+#: includes/class-media-search.php:83
+msgid "Grande"
+msgstr "Large"
+
+#: includes/class-media-search.php:87
+msgid "Min larghezza:"
+msgstr "Min width:"
+
+#: includes/class-media-search.php:91
+msgid "Min altezza:"
+msgstr "Min height:"
+
+#: includes/class-media-search.php:100
+msgid "Durata:"
+msgstr "Duration:"
+
+#: includes/class-media-search.php:103
+msgid "Brevissimo"
+msgstr "Very short"
+
+#: includes/class-media-search.php:104
+msgid "Breve"
+msgstr "Short"
+
+#: includes/class-media-search.php:105 includes/class-media-search.php:115
+msgid "secondi"
+msgstr "seconds"
+
+#: includes/class-media-search.php:106
+msgid "minuto"
+msgstr "minute"
+
+#: includes/class-media-search.php:107 includes/class-media-search.php:108
+msgid "minuti"
+msgstr "minutes"
+
+#: includes/class-media-search.php:109
+msgid "Lungo"
+msgstr "Long"
+
+#: includes/class-media-search.php:111
+msgid "oppure"
+msgstr "or"
+
+#: includes/class-media-search.php:294
+msgid "Ricerca in corso..."
+msgstr "Searching..."
+
+#: includes/class-media-search.php:295
+msgid "Ricerca panorama Street View..."
+msgstr "Searching Street View panorama..."
+
+#: includes/class-media-search.php:296
+msgid "risultati trovati"
+msgstr "results found"
+
+#: includes/class-media-search.php:297
+msgid "Pagina"
+msgstr "Page"
+
+#: includes/class-media-search.php:298
+msgid "di"
+msgstr "of"
+
+#: includes/class-media-search.php:299
+msgid "Prec"
+msgstr "Prev"
+
+#: includes/class-media-search.php:300
+msgid "Succ"
+msgstr "Next"
+
+#: includes/class-media-search.php:301
+msgid "Autore:"
+msgstr "Author:"
+
+#: includes/class-media-search.php:302
+msgid "Dimensioni:"
+msgstr "Dimensions:"
+
+#: includes/class-media-search.php:303
+msgid "Descrizione:"
+msgstr "Description:"
+
+#: includes/class-media-search.php:304 includes/class-media-search.php:316
+msgid "Licenza:"
+msgstr "License:"
+
+#: includes/class-media-search.php:305
+msgid "Importa nella Media Library"
+msgstr "Import to Media Library"
+
+#: includes/class-media-search.php:306
+msgid "Importa JPG nella Media Library"
+msgstr "Import JPG to Media Library"
+
+#: includes/class-media-search.php:307
+msgid "Scarica e importa nella Media Library"
+msgstr "Download and import to Media Library"
+
+#: includes/class-media-search.php:308
+#: includes/class-site-import-export.php:542
+#: includes/class-site-import-export.php:557
+#: includes/class-site-import-export.php:670
+#: includes/class-site-import-export.php:677
+#: includes/class-site-import-export.php:726
+#: includes/class-site-import-export.php:732
+msgid "Importa"
+msgstr "Import"
+
+#: includes/class-media-search.php:309
+msgid "Importato!"
+msgstr "Imported!"
+
+#: includes/class-media-search.php:310
+msgid "Download..."
+msgstr "Downloading..."
+
+#: includes/class-media-search.php:311
+msgid "Download tile in corso..."
+msgstr "Downloading tile..."
+
+#: includes/class-media-search.php:313
+msgid "Sconosciuto"
+msgstr "Unknown"
+
+#: includes/class-media-search.php:314 includes/class-seo-settings.php:1127
+#: includes/class-seo-settings.php:1268
+msgid "Nessuna immagine"
+msgstr "No image"
+
+#: includes/class-media-search.php:315
+msgid "Nome:"
+msgstr "Name:"
+
+#: includes/class-media-search.php:317
+msgid "Tags:"
+msgstr "Tags:"
+
+#: includes/class-media-search.php:318
+msgid "Pano ID:"
+msgstr "Pano ID:"
+
+#: includes/class-media-search.php:319
+msgid "Luogo:"
+msgstr "Location:"
+
+#: includes/class-media-search.php:320
+msgid "Coordinate:"
+msgstr "Coordinates:"
+
+#: includes/class-media-search.php:321
+msgid "Copyright:"
+msgstr "Copyright:"
+
+#: includes/class-media-search.php:322
+msgid "Data:"
+msgstr "Date:"
+
+#: includes/class-media-search.php:323
+msgid "Zoom max:"
+msgstr "Max zoom:"
+
+#: includes/class-media-search.php:324
+msgid "Timeline:"
+msgstr "Timeline:"
+
+#: includes/class-olo-builder.php:115 includes/class-olo-builder.php:116
+msgid "Olobuild"
+msgstr "Olobuild"
+
+#: includes/class-olo-builder.php:127 includes/class-olo-builder.php:128
+msgid "Dashboard"
+msgstr "Dashboard"
+
+#: includes/class-olo-builder.php:136 includes/class-olo-builder.php:137
+#: includes/class-olo-builder.php:393 includes/class-olo-builder.php:452
+msgid "Gestione Template"
+msgstr "Template Management"
+
+#: includes/class-olo-builder.php:145 includes/class-olo-builder.php:146
+#: includes/class-olo-builder.php:459 includes/class-olo-builder.php:744
+msgid "Configurazione"
+msgstr "Settings"
+
+#: includes/class-olo-builder.php:453
+msgid "Crea e modifica i tuoi template"
+msgstr "Create and edit your templates"
+
+#: includes/class-olo-builder.php:460
+msgid "Stili, colori, tipografia e API"
+msgstr "Styles, colors, typography and API"
+
+#: includes/class-olo-builder.php:467
+msgid "Cerca foto, video e audio stock"
+msgstr "Search stock photos, videos and audio"
+
+#: includes/class-olo-builder.php:474
+msgid "Visualizza i messaggi ricevuti"
+msgstr "View received messages"
+
+#: includes/class-olo-builder.php:481
+msgid "Tracking e statistiche"
+msgstr "Tracking and statistics"
+
+#: includes/class-olo-builder.php:488
+msgid "Banner GDPR e consenso cookie"
+msgstr "GDPR banner and cookie consent"
+
+#: includes/class-olo-builder.php:494 includes/class-seo-settings.php:55
+#: includes/class-seo-settings.php:56 includes/class-seo-settings.php:156
+msgid "SEO"
+msgstr "SEO"
+
+#: includes/class-olo-builder.php:495
+msgid "Meta tag, Open Graph e sitemap"
+msgstr "Meta tags, Open Graph and sitemap"
+
+#: includes/class-olo-builder.php:501 includes/class-seo-redirects.php:300
+#: includes/class-seo-redirects.php:301 includes/class-seo-redirects.php:328
+msgid "Redirect & 404"
+msgstr "Redirect & 404"
+
+#: includes/class-olo-builder.php:502
+msgid "Gestisci redirect e pagine 404"
+msgstr "Manage redirects and 404 pages"
+
+#: includes/class-olo-builder.php:508
+#: includes/class-performance-settings.php:79
+#: includes/class-performance-settings.php:80
+#: includes/class-performance-settings.php:154
+msgid "Performance"
+msgstr "Performance"
+
+#: includes/class-olo-builder.php:509
+msgid "Cache, lazy load e ottimizzazione"
+msgstr "Cache, lazy load and optimization"
+
+#: includes/class-olo-builder.php:515
+#: includes/class-woo-template-integration.php:232
+msgid "WooCommerce"
+msgstr "WooCommerce"
+
+#: includes/class-olo-builder.php:516
+msgid "Template per prodotti e shop"
+msgstr "Templates for products and shop"
+
+#: includes/class-olo-builder.php:524
+msgid "Più di un page builder."
+msgstr "More than a page builder."
+
+#: includes/class-olo-builder.php:571
+msgid "API Keys — Stock Media"
+msgstr "API Keys — Stock Media"
+
+#: includes/class-olo-builder.php:573
+msgid ""
+"Inserisci le chiavi API per i servizi di immagini/video stock. Se lasci un "
+"campo vuoto, verrà usata la chiave predefinita."
+msgstr ""
+"Enter the API keys for stock image/video services. If you leave a field "
+"empty, the default key will be used."
+
+#: includes/class-olo-builder.php:586
+msgid "Pexels API Key"
+msgstr "Pexels API Key"
+
+#: includes/class-olo-builder.php:592 includes/class-olo-builder.php:613
+#: includes/class-olo-builder.php:634 includes/class-olo-builder.php:655
+#: includes/class-olo-builder.php:727
+#, php-format
+msgid "Ottieni una chiave su %s"
+msgstr "Get a key at %s"
+
+#: includes/class-olo-builder.php:608
+msgid "Pixabay API Key"
+msgstr "Pixabay API Key"
+
+#: includes/class-olo-builder.php:629
+msgid "Unsplash Access Key"
+msgstr "Unsplash Access Key"
+
+#: includes/class-olo-builder.php:650
+msgid "Freesound API Key"
+msgstr "Freesound API Key"
+
+#: includes/class-olo-builder.php:666
+msgid "reCAPTCHA v3"
+msgstr "reCAPTCHA v3"
+
+#: includes/class-olo-builder.php:668
+msgid ""
+"Google reCAPTCHA v3 per la protezione dei form. Ottieni le chiavi su google."
+"com/recaptcha"
+msgstr ""
+"Google reCAPTCHA v3 for form protection. Get your keys at google.com/"
+"recaptcha"
+
+#: includes/class-olo-builder.php:680
+msgid "Chiave sito"
+msgstr "Site Key"
+
+#: includes/class-olo-builder.php:696
+msgid "Chiave segreta"
+msgstr "Secret Key"
+
+#: includes/class-olo-builder.php:708
+msgid "Mailchimp"
+msgstr "Mailchimp"
+
+#: includes/class-olo-builder.php:710
+msgid "API key Mailchimp per le integrazioni dei form contatti."
+msgstr "Mailchimp API key for contact form integrations."
+
+#: includes/class-olo-builder.php:722
+msgid "Mailchimp API Key"
+msgstr "Mailchimp API Key"
+
+#: includes/class-performance-hints.php:183
+msgid "Riproduci video"
+msgstr "Play video"
+
+#: includes/class-performance-settings.php:137
+#: includes/class-performance-settings.php:213
+msgid "Critical CSS"
+msgstr "Critical CSS"
+
+#: includes/class-performance-settings.php:138
+msgid "Ottimizzatore Asset"
+msgstr "Asset Optimizer"
+
+#: includes/class-performance-settings.php:139
+msgid "Suggerimenti Prestazioni"
+msgstr "Performance Hints"
+
+#: includes/class-performance-settings.php:140
+msgid "Pulizia Head"
+msgstr "Head Cleanup"
+
+#: includes/class-performance-settings.php:141
+msgid "Transizioni Vista"
+msgstr "View Transitions"
+
+#: includes/class-performance-settings.php:214
+msgid ""
+"Genera automaticamente il CSS above-the-fold e lo inietta inline nel <head>. "
+"Il foglio di stile principale viene caricato in modo asincrono."
+msgstr ""
+"Automatically generates above-the-fold CSS and injects it inline in <head>. "
+"The main stylesheet is loaded asynchronously."
+
+#: includes/class-performance-settings.php:220
+msgid "Abilita Critical CSS"
+msgstr "Enable Critical CSS"
+
+#: includes/class-performance-settings.php:221
+msgid "Migliora FCP e LCP inlinando il CSS critico e deferendo il resto."
+msgstr "Improves FCP and LCP by inlining critical CSS and deferring the rest."
+
+#: includes/class-performance-settings.php:230
+msgid "Durata cache"
+msgstr "Cache duration"
+
+#: includes/class-performance-settings.php:231
+msgid ""
+"Il CSS critico viene rigenerato automaticamente alla scadenza. Invalidato "
+"quando salvi un template."
+msgstr ""
+"Critical CSS is automatically regenerated on expiry. Invalidated when you "
+"save a template."
+
+#: includes/class-performance-settings.php:241
+msgid "Sezioni above-the-fold"
+msgstr "Above-the-fold sections"
+
+#: includes/class-performance-settings.php:242
+msgid ""
+"Quante sezioni del template analizzare per il CSS critico. 2 è il valore "
+"consigliato."
+msgstr ""
+"How many template sections to analyze for critical CSS. 2 is the recommended "
+"value."
+
+#: includes/class-performance-settings.php:257
+msgid "Stato cache"
+msgstr "Cache status"
+
+#: includes/class-performance-settings.php:272
+msgid "Off"
+msgstr "Off"
+
+#: includes/class-performance-settings.php:281
+msgid "Pagine in cache"
+msgstr "Cached pages"
+
+#: includes/class-performance-settings.php:293
+msgid "Mai"
+msgstr "Never"
+
+#: includes/class-performance-settings.php:297
+msgid "Ultima generazione"
+msgstr "Last generation"
+
+#: includes/class-performance-settings.php:304
+msgid "Rigenera tutto"
+msgstr "Regenerate all"
+
+#: includes/class-performance-settings.php:308
+msgid "Svuota cache"
+msgstr "Clear cache"
+
+#: includes/class-performance-settings.php:322
+msgid "Rigenerazione in corso..."
+msgstr "Regenerating..."
+
+#: includes/class-performance-settings.php:341
+msgid "Svuotare tutta la cache Critical CSS?"
+msgstr "Clear all Critical CSS cache?"
+
+#: includes/class-performance-settings.php:374
+msgid "Ottimizzazione Asset"
+msgstr "Asset Optimization"
+
+#: includes/class-performance-settings.php:375
+msgid "Controlla come vengono caricati JavaScript e CSS nel frontend."
+msgstr "Control how JavaScript and CSS are loaded on the frontend."
+
+#: includes/class-performance-settings.php:381
+msgid "Defer JavaScript"
+msgstr "Defer JavaScript"
+
+#: includes/class-performance-settings.php:382
+msgid ""
+"Aggiunge l'attributo defer agli script frontend di Olobuild. Non blocca il "
+"rendering della pagina."
+msgstr ""
+"Adds the defer attribute to Olobuild frontend scripts. Does not block page rendering."
+
+#: includes/class-performance-settings.php:391
+msgid "Cache CSS su file"
+msgstr "Cache CSS to file"
+
+#: includes/class-performance-settings.php:392
+msgid ""
+"Salva il CSS generato dai template come file statici invece di iniettarlo "
+"inline. Migliora il caching del browser."
+msgstr ""
+"Save template-generated CSS as static files instead of injecting inline. "
+"Improves browser caching."
+
+#: includes/class-performance-settings.php:401
+msgid "Minifica CSS"
+msgstr "Minify CSS"
+
+#: includes/class-performance-settings.php:402
+msgid "Rimuove commenti, spazi e newline dal CSS generato."
+msgstr "Removes comments, spaces and newlines from generated CSS."
+
+#: includes/class-performance-settings.php:419
+msgid "Cache CSS"
+msgstr "CSS Cache"
+
+#: includes/class-performance-settings.php:429
+msgid "File in cache"
+msgstr "Cached files"
+
+#: includes/class-performance-settings.php:436
+msgid "Dimensione totale"
+msgstr "Total size"
+
+#: includes/class-performance-settings.php:443
+msgid "Svuota cache CSS"
+msgstr "Clear CSS cache"
+
+#: includes/class-performance-settings.php:454
+msgid "Svuotare la cache CSS? I file verranno rigenerati automaticamente."
+msgstr "Clear the CSS cache? Files will be regenerated automatically."
+
+#: includes/class-performance-settings.php:486
+msgid "Resource Hints"
+msgstr "Resource Hints"
+
+#: includes/class-performance-settings.php:487
+msgid ""
+"Suggerimenti al browser per precaricare risorse e velocizzare il caricamento."
+msgstr "Browser hints to preload resources and speed up loading."
+
+#: includes/class-performance-settings.php:493
+msgid "DNS Prefetch & Preconnect"
+msgstr "DNS Prefetch & Preconnect"
+
+#: includes/class-performance-settings.php:494
+msgid ""
+"Aggiunge dns-prefetch e preconnect per Google Fonts, YouTube, Vimeo e altri "
+"domini esterni."
+msgstr ""
+"Adds dns-prefetch and preconnect for Google Fonts, YouTube, Vimeo and other "
+"external domains."
+
+#: includes/class-performance-settings.php:503
+msgid "Preload font"
+msgstr "Preload fonts"
+
+#: includes/class-performance-settings.php:504
+msgid ""
+"Precarica i font custom usati come body/heading per evitare FOUT (Flash of "
+"Unstyled Text)."
+msgstr ""
+"Preloads custom fonts used as body/heading to avoid FOUT (Flash of Unstyled "
+"Text)."
+
+#: includes/class-performance-settings.php:513
+msgid "Video facade"
+msgstr "Video facade"
+
+#: includes/class-performance-settings.php:514
+msgid ""
+"Mostra un'anteprima statica dei video YouTube/Vimeo. L'iframe si carica solo "
+"al click. Risparmia ~500KB per video."
+msgstr ""
+"Shows a static preview of YouTube/Vimeo videos. The iframe loads only on click. Saves ~500KB per video."
+
+#: includes/class-performance-settings.php:523
+msgid "fetchpriority hero image"
+msgstr "fetchpriority hero image"
+
+#: includes/class-performance-settings.php:524
+msgid ""
+"Aggiunge fetchpriority=\"high\" alla prima immagine della pagina e rimuove "
+"lazy loading dagli elementi above-fold."
+msgstr ""
+"Adds fetchpriority=\"high\" to the first image on the page and removes lazy "
+"loading from above-fold elements."
+
+#: includes/class-performance-settings.php:533
+msgid "Lazy loading immagini"
+msgstr "Image lazy loading"
+
+#: includes/class-performance-settings.php:534
+msgid ""
+"Aggiunge loading=\"lazy\" alle immagini below-the-fold. Riduce il peso "
+"iniziale della pagina."
+msgstr ""
+"Adds loading=\"lazy\" to below-the-fold images. Reduces initial page weight."
+
+#: includes/class-performance-settings.php:551
+msgid "Domini personalizzati"
+msgstr "Custom domains"
+
+#: includes/class-performance-settings.php:552
+msgid ""
+"Aggiungi domini per dns-prefetch e preconnect personalizzati (uno per riga, "
+"con https://)."
+msgstr ""
+"Add domains for custom dns-prefetch and preconnect (one per line, with "
+"https://)."
+
+#: includes/class-performance-settings.php:557
+msgid "DNS Prefetch"
+msgstr "DNS Prefetch"
+
+#: includes/class-performance-settings.php:560
+msgid "Risolve il DNS in anticipo. Utile per CDN e servizi esterni."
+msgstr "Resolves DNS in advance. Useful for CDNs and external services."
+
+#: includes/class-performance-settings.php:563
+msgid "Preconnect"
+msgstr "Preconnect"
+
+#: includes/class-performance-settings.php:566
+msgid ""
+"Apre connessione completa (DNS + TCP + TLS). Più aggressivo del dns-"
+"prefetch, usare solo per risorse critiche."
+msgstr ""
+"Opens a full connection (DNS + TCP + TLS). More aggressive than dns-"
+"prefetch, use only for critical resources."
+
+#: includes/class-performance-settings.php:586
+msgid "Pulizia head"
+msgstr "Head cleanup"
+
+#: includes/class-performance-settings.php:587
+msgid ""
+"Rimuovi risorse non necessarie dal <head> per ridurre richieste e peso della "
+"pagina."
+msgstr ""
+"Remove unnecessary resources from <head> to reduce requests and page weight."
+
+#: includes/class-performance-settings.php:593
+msgid "Rimuovi jQuery Migrate"
+msgstr "Remove jQuery Migrate"
+
+#: includes/class-performance-settings.php:594
+msgid ""
+"Rimuove jquery-migrate.js (~10KB). Necessario solo per compatibilità con "
+"plugin molto vecchi."
+msgstr ""
+"Removes jquery-migrate.js (~10KB). Only needed for compatibility with very "
+"old plugins."
+
+#: includes/class-performance-settings.php:603
+msgid "Rimuovi emoji scripts"
+msgstr "Remove emoji scripts"
+
+#: includes/class-performance-settings.php:604
+msgid ""
+"Rimuove wp-emoji-release.min.js e relativi stili inline. I browser moderni "
+"supportano emoji nativamente."
+msgstr ""
+"Removes wp-emoji-release.min.js and related inline styles. Modern browsers "
+"support emoji natively."
+
+#: includes/class-performance-settings.php:613
+msgid "Rimuovi Block CSS"
+msgstr "Remove Block CSS"
+
+#: includes/class-performance-settings.php:614
+msgid ""
+"Rimuove wp-block-library-css (~30KB). Attiva solo se non usi blocchi "
+"Gutenberg nel frontend."
+msgstr ""
+"Removes wp-block-library-css (~30KB). Enable only if you don't use Gutenberg "
+"blocks on the frontend."
+
+#: includes/class-performance-settings.php:623
+msgid "Rimuovi Classic Theme CSS"
+msgstr "Remove Classic Theme CSS"
+
+#: includes/class-performance-settings.php:624
+msgid "Rimuove classic-theme-styles-css. Inutile se non usi un tema classico."
+msgstr ""
+"Removes classic-theme-styles-css. Unnecessary if you don't use a classic "
+"theme."
+
+#: includes/class-performance-settings.php:649
+msgid "View Transitions API"
+msgstr "View Transitions API"
+
+#: includes/class-performance-settings.php:650
+msgid ""
+"Transizioni fluide tra le pagine del sito con la View Transitions API nativa "
+"del browser. Supportata da Chrome 111+, Edge 111+ e Opera 97+."
+msgstr ""
+"Smooth transitions between site pages using the browser's native View "
+"Transitions API. Supported by Chrome 111+, Edge 111+ and Opera 97+."
+
+#: includes/class-performance-settings.php:656
+msgid "Abilita View Transitions"
+msgstr "Enable View Transitions"
+
+#: includes/class-performance-settings.php:657
+msgid ""
+"Aggiunge un effetto fade+scale alla navigazione tra pagine. Funziona solo su "
+"browser compatibili, gli altri navigano normalmente."
+msgstr ""
+"Adds a fade+scale effect to page navigation. Only works on compatible "
+"browsers, others navigate normally."
+
+#: includes/class-performance-settings.php:676
+#: includes/class-performance-settings.php:697
+#: includes/class-performance-settings.php:713
+msgid "Permesso negato"
+msgstr "Permission denied"
+
+#: includes/class-performance-settings.php:680
+#: includes/class-performance-settings.php:701
+msgid "Critical CSS non disponibile"
+msgstr "Critical CSS not available"
+
+#: includes/class-performance-settings.php:686
+#, php-format
+msgid "Rigenerato %d su %d pagine (%d errori)"
+msgstr "Regenerated %d of %d pages (%d errors)"
+
+#: includes/class-performance-settings.php:706
+#, php-format
+msgid "Svuotati %d transient Critical CSS"
+msgstr "Cleared %d Critical CSS transients"
+
+#: includes/class-performance-settings.php:721
+msgid "Cache CSS svuotata. I file verranno rigenerati al prossimo caricamento."
+msgstr "CSS cache cleared. Files will be regenerated on next load."
+
+#: includes/class-role-manager.php:166
+msgid "Nascondi pannello Stile"
+msgstr "Hide Style panel"
+
+#: includes/class-role-manager.php:167
+msgid "Nascondi pannello Avanzate"
+msgstr "Hide Advanced panel"
+
+#: includes/class-role-manager.php:168
+msgid "Nascondi pannello Animazioni"
+msgstr "Hide Animations panel"
+
+#: includes/class-role-manager.php:169
+msgid "Blocca aggiunta elementi"
+msgstr "Lock element adding"
+
+#: includes/class-role-manager.php:170
+msgid "Blocca rimozione elementi"
+msgstr "Lock element removal"
+
+#: includes/class-role-manager.php:171
+msgid "Blocca riordinamento"
+msgstr "Lock reordering"
+
+#: includes/class-role-manager.php:172
+msgid "Blocca impostazioni section/row"
+msgstr "Lock section/row settings"
+
+#: includes/class-role-manager.php:173
+msgid "Nascondi impostazioni pagina"
+msgstr "Hide page settings"
+
+#: includes/class-role-manager.php:174
+msgid "Nascondi stili globali"
+msgstr "Hide global styles"
+
+#: includes/class-role-manager.php:175
+msgid "Nascondi libreria template"
+msgstr "Hide template library"
+
+#: includes/class-role-manager.php:257 includes/class-role-manager.php:271
+msgid "Permessi Utente"
+msgstr "User Permissions"
+
+#: includes/class-role-manager.php:258
+msgid "Permessi"
+msgstr "Permissions"
+
+#: includes/class-role-manager.php:281
+msgid "Livelli di Accesso"
+msgstr "Access Levels"
+
+#: includes/class-role-manager.php:282
+msgid "Assegna un livello di accesso per ciascun ruolo WordPress"
+msgstr "Assign an access level for each WordPress role"
+
+#: includes/class-role-manager.php:289
+msgid "Ruolo"
+msgstr "Role"
+
+#: includes/class-role-manager.php:290
+msgid "Accesso completo"
+msgstr "Full access"
+
+#: includes/class-role-manager.php:291
+msgid "Solo design"
+msgstr "Design only"
+
+#: includes/class-role-manager.php:292
+msgid "Solo contenuti"
+msgstr "Content only"
+
+#: includes/class-role-manager.php:293
+msgid "Nessun accesso"
+msgstr "No access"
+
+#: includes/class-role-manager.php:327
+msgid "Completo"
+msgstr "Full"
+
+#: includes/class-role-manager.php:327
+msgid "struttura + design + contenuti"
+msgstr "structure + design + content"
+
+#: includes/class-role-manager.php:328
+msgid "Design"
+msgstr "Design"
+
+#: includes/class-role-manager.php:328
+msgid "stili e layout"
+msgstr "styles and layout"
+
+#: includes/class-role-manager.php:329
+msgid "Contenuti"
+msgstr "Content"
+
+#: includes/class-role-manager.php:329
+msgid "solo testo e immagini"
+msgstr "text and images only"
+
+#: includes/class-role-manager.php:336
+msgid "Salva Permessi"
+msgstr "Save Permissions"
+
+#: includes/class-role-manager.php:352
+msgid "Restrizioni Granulari per Pannello"
+msgstr "Granular Panel Restrictions"
+
+#: includes/class-role-manager.php:353
+msgid "Seleziona quali pannelli e funzioni nascondere per ogni ruolo"
+msgstr "Select which panels and features to hide for each role"
+
+#: includes/class-role-manager.php:360
+msgid "Restrizione"
+msgstr "Restriction"
+
+#: includes/class-role-manager.php:389
+msgid "Salva Restrizioni"
+msgstr "Save Restrictions"
+
+#: includes/class-role-manager.php:418
+msgid "Permessi salvati"
+msgstr "Permissions saved"
+
+#: includes/class-role-manager.php:418 includes/class-role-manager.php:441
+#: includes/class-white-label.php:302
+msgid "Errore nel salvataggio"
+msgstr "Error saving"
+
+#: includes/class-role-manager.php:441
+msgid "Restrizioni salvate"
+msgstr "Restrictions saved"
+
+#: includes/class-seo-redirects.php:181
+msgid "Questa risorsa non è più disponibile."
+msgstr "This resource is no longer available."
+
+#: includes/class-seo-redirects.php:371 includes/class-seo-redirects.php:410
+msgid "Aggiungi Redirect"
+msgstr "Add Redirect"
+
+#: includes/class-seo-redirects.php:372
+msgid ""
+"Prefisso <code>~</code> per regex. Es: <code>~/vecchio/(.*)</code> &rarr; "
+"<code>/nuovo/$1</code>"
+msgstr ""
+"Prefix <code>~</code> for regex. E.g.: <code>~/old/(.*)</code> &rarr; <code>/new/$1</code>"
+
+#: includes/class-seo-redirects.php:378
+msgid "Da URL"
+msgstr "From URL"
+
+#: includes/class-seo-redirects.php:379
+msgid "Percorso relativo o regex con prefisso ~"
+msgstr "Relative path or regex with ~ prefix"
+
+#: includes/class-seo-redirects.php:387
+msgid "A URL"
+msgstr "To URL"
+
+#: includes/class-seo-redirects.php:388
+msgid "Percorso relativo o URL assoluto"
+msgstr "Relative path or absolute URL"
+
+#: includes/class-seo-redirects.php:396 includes/class-seo-redirects.php:441
+msgid "Tipo"
+msgstr "Type"
+
+#: includes/class-seo-redirects.php:400
+msgid "Permanente (consigliato)"
+msgstr "Permanent (recommended)"
+
+#: includes/class-seo-redirects.php:401
+msgid "Temporaneo"
+msgstr "Temporary"
+
+#: includes/class-seo-redirects.php:402
+msgid "Temporaneo (strict)"
+msgstr "Temporary (strict)"
+
+#: includes/class-seo-redirects.php:403
+msgid "Risorsa rimossa (Gone)"
+msgstr "Resource removed (Gone)"
+
+#: includes/class-seo-redirects.php:423
+#, php-format
+msgid "Redirect attivi (%d)"
+msgstr "Active redirects (%d)"
+
+#: includes/class-seo-redirects.php:424
+msgid "Tutti i redirect configurati, ordinati per data di creazione"
+msgstr "All configured redirects, sorted by creation date"
+
+#: includes/class-seo-redirects.php:433
+msgid "Nessun redirect configurato."
+msgstr "No redirects configured."
+
+#: includes/class-seo-redirects.php:439
+msgid "Da"
+msgstr "From"
+
+#: includes/class-seo-redirects.php:440
+msgid "A"
+msgstr "To"
+
+#: includes/class-seo-redirects.php:442 includes/class-seo-redirects.php:544
+msgid "Hit"
+msgstr "Hits"
+
+#: includes/class-seo-redirects.php:474
+msgid "Inserisci URL di origine."
+msgstr "Enter the source URL."
+
+#: includes/class-seo-redirects.php:475 includes/class-seo-redirects.php:612
+msgid "Inserisci URL di destinazione."
+msgstr "Enter the destination URL."
+
+#: includes/class-seo-redirects.php:493
+msgid "Eliminare questo redirect?"
+msgstr "Delete this redirect?"
+
+#: includes/class-seo-redirects.php:524
+msgid "URL che generano errore 404"
+msgstr "URLs generating 404 errors"
+
+#: includes/class-seo-redirects.php:525
+msgid ""
+"Monitora gli URL visitati che non esistono. Puoi convertirli in redirect con "
+"un click."
+msgstr ""
+"Monitors visited URLs that do not exist. You can convert them to redirects with one click."
+
+#: includes/class-seo-redirects.php:537
+msgid ""
+"Nessun errore 404 registrato. Le visite a URL inesistenti appariranno qui."
+msgstr "No 404 errors logged. Visits to non-existent URLs will appear here."
+
+#: includes/class-seo-redirects.php:543
+msgid "URL"
+msgstr "URL"
+
+#: includes/class-seo-redirects.php:545
+msgid "Ultimo accesso"
+msgstr "Last access"
+
+#: includes/class-seo-redirects.php:546
+msgid "Referrer"
+msgstr "Referrer"
+
+#: includes/class-seo-redirects.php:547
+msgid "Azioni"
+msgstr "Actions"
+
+#: includes/class-seo-redirects.php:582
+msgid "Crea redirect da 404"
+msgstr "Create redirect from 404"
+
+#: includes/class-seo-redirects.php:583
+msgid "Da:"
+msgstr "From:"
+
+#: includes/class-seo-redirects.php:586
+msgid "Destinazione"
+msgstr "Destination"
+
+#: includes/class-seo-redirects.php:592
+msgid "Annulla"
+msgstr "Cancel"
+
+#: includes/class-seo-redirects.php:593
+msgid "Crea Redirect 301"
+msgstr "Create 301 Redirect"
+
+#: includes/class-seo-redirects.php:648
+msgid "Svuotare tutto il log 404?"
+msgstr "Clear all 404 logs?"
+
+#: includes/class-seo-redirects.php:676
+msgid ""
+"Notifica istantaneamente i motori di ricerca (Bing, Yandex, Naver, Seznam) "
+"quando pubblichi o aggiorni un contenuto"
+msgstr ""
+"Instantly notify search engines (Bing, Yandex, Naver, Seznam) when you publish or update content"
+
+#: includes/class-seo-redirects.php:690
+msgid "Genera una chiave casuale e inseriscila qui"
+msgstr "Generate a random key and enter it here"
+
+#: includes/class-seo-redirects.php:698
+msgid "Chiave suggerita:"
+msgstr "Suggested key:"
+
+#: includes/class-seo-redirects.php:699
+msgid "Crea anche un file <code>"
+msgstr "Also create a <code>"
+
+#: includes/class-seo-redirects.php:705
+msgid "Ogni pubblicazione/aggiornamento invia un ping IndexNow."
+msgstr "Every publish/update sends an IndexNow ping."
+
+#: includes/class-seo-redirects.php:713
+msgid "Salva"
+msgstr "Save"
+
+#: includes/class-seo-redirects.php:729 includes/class-seo-redirects.php:765
+#: includes/class-seo-redirects.php:782 includes/class-seo-redirects.php:799
+#: includes/class-seo-redirects.php:811
+msgid "Permesso negato."
+msgstr "Permission denied."
+
+#: includes/class-seo-redirects.php:737
+msgid "URL di origine obbligatorio."
+msgstr "Source URL is required."
+
+#: includes/class-seo-redirects.php:748
+msgid "Redirect per questo URL esiste già."
+msgstr "A redirect for this URL already exists."
+
+#: includes/class-seo-redirects.php:770
+msgid "ID obbligatorio."
+msgstr "ID is required."
+
+#: includes/class-seo-redirects.php:818
+msgid "Dati mancanti."
+msgstr "Missing data."
+
+#: includes/class-seo-redirects.php:828
+msgid "Voce non trovata."
+msgstr "Entry not found."
+
+#: includes/class-seo-settings.php:147
+msgid "Titoli &amp; Meta"
+msgstr "Titles &amp; Meta"
+
+#: includes/class-seo-settings.php:148
+msgid "Social"
+msgstr "Social"
+
+#: includes/class-seo-settings.php:149
+msgid "Schema / Local SEO"
+msgstr "Schema / Local SEO"
+
+#: includes/class-seo-settings.php:150
+msgid "Webmaster Tools"
+msgstr "Webmaster Tools"
+
+#: includes/class-seo-settings.php:151
+msgid "Sitemap"
+msgstr "Sitemap"
+
+#: includes/class-seo-settings.php:152 includes/class-seo-settings.php:1068
+msgid "Avanzate"
+msgstr "Advanced"
+
+#: includes/class-seo-settings.php:176
+msgid "Salva Impostazioni"
+msgstr "Save Settings"
+
+#: includes/class-seo-settings.php:210
+msgid "Formato Titoli"
+msgstr "Title Format"
+
+#: includes/class-seo-settings.php:211
+msgid ""
+"Definisci il formato predefinito dei titoli per ogni tipo di contenuto. "
+"Variabili: <code>%title%</code>, <code>%sitename%</code>, <code>%sep%</"
+"code>, <code>%tagline%</code>, <code>%category%</code>, <code>%tag%</code>, "
+"<code>%search_query%</code>, <code>%page%</code>, <code>%date%</code>, "
+"<code>%author%</code>"
+msgstr ""
+"Define the default title format for each content type. Variables: <code>%title%</code>, <code>%sitename%</code>, <code>%sep%</code>, <code>%tagline%</code>, <code>%category%</code>, <code>%tag%</code>, <code>%search_query%</code>, <code>%page%</code>, <code>%date%</code>, <code>%author%</code>"
+
+#: includes/class-seo-settings.php:217
+msgid "Separatore"
+msgstr "Separator"
+
+#: includes/class-seo-settings.php:218
+msgid "Il carattere usato per separare titolo e nome sito."
+msgstr "The character used to separate title and site name."
+
+#: includes/class-seo-settings.php:233
+msgid "Homepage — Titolo"
+msgstr "Homepage — Title"
+
+#: includes/class-seo-settings.php:234
+msgid "Homepage — Descrizione"
+msgstr "Homepage — Description"
+
+#: includes/class-seo-settings.php:235
+msgid "Articoli — Titolo"
+msgstr "Posts — Title"
+
+#: includes/class-seo-settings.php:236
+msgid "Articoli — Descrizione"
+msgstr "Posts — Description"
+
+#: includes/class-seo-settings.php:237
+msgid "Pagine — Titolo"
+msgstr "Pages — Title"
+
+#: includes/class-seo-settings.php:238
+msgid "Pagine — Descrizione"
+msgstr "Pages — Description"
+
+#: includes/class-seo-settings.php:239
+msgid "Categorie — Titolo"
+msgstr "Categories — Title"
+
+#: includes/class-seo-settings.php:240
+msgid "Categorie — Descrizione"
+msgstr "Categories — Description"
+
+#: includes/class-seo-settings.php:241
+msgid "Tag — Titolo"
+msgstr "Tags — Title"
+
+#: includes/class-seo-settings.php:242
+msgid "Autore — Titolo"
+msgstr "Author — Title"
+
+#: includes/class-seo-settings.php:243
+msgid "Ricerca — Titolo"
+msgstr "Search — Title"
+
+#: includes/class-seo-settings.php:244
+msgid "404 — Titolo"
+msgstr "404 — Title"
+
+#: includes/class-seo-settings.php:274
+msgid "Knowledge Graph"
+msgstr "Knowledge Graph"
+
+#: includes/class-seo-settings.php:275
+msgid ""
+"Queste informazioni vengono usate per il markup JSON-LD del Knowledge Graph "
+"di Google."
+msgstr "This information is used for the Google Knowledge Graph JSON-LD markup."
+
+#: includes/class-seo-settings.php:281
+msgid "Tipo entità"
+msgstr "Entity type"
+
+#: includes/class-seo-settings.php:285
+msgid "Organizzazione"
+msgstr "Organization"
+
+#: includes/class-seo-settings.php:286
+msgid "Persona"
+msgstr "Person"
+
+#: includes/class-seo-settings.php:292
+msgid "Nome"
+msgstr "Name"
+
+#: includes/class-seo-settings.php:300
+msgid "Logo / Foto (URL)"
+msgstr "Logo / Photo (URL)"
+
+#: includes/class-seo-settings.php:334
+msgid "Profili Social"
+msgstr "Social Profiles"
+
+#: includes/class-seo-settings.php:335
+msgid ""
+"Usati nel markup JSON-LD <code>sameAs</code> per collegare il sito ai "
+"profili social."
+msgstr ""
+"Used in <code>sameAs</code> JSON-LD markup to link the site to social profiles."
+
+#: includes/class-seo-settings.php:370
+msgid "Open Graph — Impostazioni Predefinite"
+msgstr "Open Graph — Default Settings"
+
+#: includes/class-seo-settings.php:371
+msgid ""
+"Configurazione per la condivisione su Facebook, Twitter e altri social "
+"network."
+msgstr "Settings for sharing on Facebook, Twitter and other social networks."
+
+#: includes/class-seo-settings.php:377
+msgid "Immagine OG predefinita"
+msgstr "Default OG Image"
+
+#: includes/class-seo-settings.php:378
+msgid ""
+"Usata quando un post/pagina non ha immagine in evidenza. Dimensione "
+"consigliata: 1200x630px."
+msgstr "Used when a post/page has no featured image. Recommended size: 1200x630px."
+
+#: includes/class-seo-settings.php:402
+msgid "Summary con immagine grande"
+msgstr "Summary with large image"
+
+#: includes/class-seo-settings.php:424
+msgid "Local Business / Organizzazione"
+msgstr "Local Business / Organization"
+
+#: includes/class-seo-settings.php:425
+msgid ""
+"Schema markup LocalBusiness per Google. Se il nome è vuoto, questo schema "
+"non viene generato."
+msgstr ""
+"LocalBusiness schema markup for Google. If the name is empty, this schema is not generated."
+
+#: includes/class-seo-settings.php:431
+msgid "Tipo attività"
+msgstr "Business type"
+
+#: includes/class-seo-settings.php:437
+msgid "Attività locale (generico)"
+msgstr "Local business (generic)"
+
+#: includes/class-seo-settings.php:438
+msgid "Ristorante"
+msgstr "Restaurant"
+
+#: includes/class-seo-settings.php:439
+msgid "Hotel"
+msgstr "Hotel"
+
+#: includes/class-seo-settings.php:440
+msgid "Bar / Pub"
+msgstr "Bar / Pub"
+
+#: includes/class-seo-settings.php:441
+msgid "Caffè / Coffee Shop"
+msgstr "Cafe / Coffee Shop"
+
+#: includes/class-seo-settings.php:442
+msgid "Negozio (generico)"
+msgstr "Store (generic)"
+
+#: includes/class-seo-settings.php:443
+msgid "Negozio abbigliamento"
+msgstr "Clothing store"
+
+#: includes/class-seo-settings.php:444
+msgid "Alimentari / Supermercato"
+msgstr "Grocery / Supermarket"
+
+#: includes/class-seo-settings.php:445
+msgid "Negozio articoli sportivi"
+msgstr "Sporting goods store"
+
+#: includes/class-seo-settings.php:446
+msgid "Officina auto"
+msgstr "Auto repair shop"
+
+#: includes/class-seo-settings.php:447
+msgid "Salone di bellezza"
+msgstr "Beauty salon"
+
+#: includes/class-seo-settings.php:448
+msgid "Dentista"
+msgstr "Dentist"
+
+#: includes/class-seo-settings.php:449
+msgid "Clinica medica"
+msgstr "Medical clinic"
+
+#: includes/class-seo-settings.php:450
+msgid "Farmacia"
+msgstr "Pharmacy"
+
+#: includes/class-seo-settings.php:451
+msgid "Studio legale"
+msgstr "Law firm"
+
+#: includes/class-seo-settings.php:452
+msgid "Commercialista"
+msgstr "Accountant"
+
+#: includes/class-seo-settings.php:453
+msgid "Agenzia immobiliare"
+msgstr "Real estate agency"
+
+#: includes/class-seo-settings.php:454
+msgid "Agenzia viaggi"
+msgstr "Travel agency"
+
+#: includes/class-seo-settings.php:455
+msgid "Servizi finanziari"
+msgstr "Financial services"
+
+#: includes/class-seo-settings.php:456
+msgid "Agenzia assicurazioni"
+msgstr "Insurance agency"
+
+#: includes/class-seo-settings.php:457
+msgid "Palestra / Centro fitness"
+msgstr "Gym / Fitness center"
+
+#: includes/class-seo-settings.php:458
+msgid "Spa / Centro benessere"
+msgstr "Spa / Wellness center"
+
+#: includes/class-seo-settings.php:459
+msgid "Campeggio"
+msgstr "Campground"
+
+#: includes/class-seo-settings.php:460
+msgid "Bed & Breakfast"
+msgstr "Bed & Breakfast"
+
+#: includes/class-seo-settings.php:461
+msgid "Ostello"
+msgstr "Hostel"
+
+#: includes/class-seo-settings.php:462
+msgid "Struttura ricettiva (generico)"
+msgstr "Lodging (generic)"
+
+#: includes/class-seo-settings.php:463
+msgid "Servizio professionale"
+msgstr "Professional service"
+
+#: includes/class-seo-settings.php:464
+msgid "Ente educativo"
+msgstr "Educational institution"
+
+#: includes/class-seo-settings.php:465
+msgid "Ufficio pubblico"
+msgstr "Government office"
+
+#: includes/class-seo-settings.php:476
+msgid "Nome attività"
+msgstr "Business name"
+
+#: includes/class-seo-settings.php:492
+msgid "Via / Indirizzo"
+msgstr "Street / Address"
+
+#: includes/class-seo-settings.php:500
+msgid "Città"
+msgstr "City"
+
+#: includes/class-seo-settings.php:508
+msgid "Provincia / Stato"
+msgstr "Province / State"
+
+#: includes/class-seo-settings.php:516
+msgid "CAP"
+msgstr "ZIP Code"
+
+#: includes/class-seo-settings.php:524
+msgid "Paese"
+msgstr "Country"
+
+#: includes/class-seo-settings.php:532
+msgid "Telefono"
+msgstr "Phone"
+
+#: includes/class-seo-settings.php:548
+msgid "Coordinate GPS"
+msgstr "GPS Coordinates"
+
+#: includes/class-seo-settings.php:558
+msgid "Fascia di prezzo"
+msgstr "Price range"
+
+#: includes/class-seo-settings.php:562
+msgid "Non specificato"
+msgstr "Not specified"
+
+#: includes/class-seo-settings.php:563
+msgid "Economico"
+msgstr "Budget"
+
+#: includes/class-seo-settings.php:564
+msgid "Moderato"
+msgstr "Moderate"
+
+#: includes/class-seo-settings.php:565
+msgid "Costoso"
+msgstr "Expensive"
+
+#: includes/class-seo-settings.php:566
+msgid "Lusso"
+msgstr "Luxury"
+
+#: includes/class-seo-settings.php:572
+msgid "Immagine attività (URL)"
+msgstr "Business image (URL)"
+
+#: includes/class-seo-settings.php:589
+msgid "Orari di apertura"
+msgstr "Opening hours"
+
+#: includes/class-seo-settings.php:590
+msgid ""
+"Inserisci gli orari nel formato <code>HH:MM</code>. Lascia vuoto per i "
+"giorni di chiusura."
+msgstr "Enter times in <code>HH:MM</code> format. Leave blank for closed days."
+
+#: includes/class-seo-settings.php:596
+msgid "Lunedì"
+msgstr "Monday"
+
+#: includes/class-seo-settings.php:597
+msgid "Martedì"
+msgstr "Tuesday"
+
+#: includes/class-seo-settings.php:598
+msgid "Mercoledì"
+msgstr "Wednesday"
+
+#: includes/class-seo-settings.php:599
+msgid "Giovedì"
+msgstr "Thursday"
+
+#: includes/class-seo-settings.php:600
+msgid "Venerdì"
+msgstr "Friday"
+
+#: includes/class-seo-settings.php:601
+msgid "Sabato"
+msgstr "Saturday"
+
+#: includes/class-seo-settings.php:602
+msgid "Domenica"
+msgstr "Sunday"
+
+#: includes/class-seo-settings.php:637
+msgid "Verifica Motori di Ricerca"
+msgstr "Search Engine Verification"
+
+#: includes/class-seo-settings.php:638
+msgid ""
+"Inserisci il codice di verifica (solo il valore del <code>content</code>, "
+"non l'intero meta tag)."
+msgstr ""
+"Enter the verification code (only the <code>content</code> value, not the entire meta tag)."
+
+#: includes/class-seo-settings.php:700
+msgid "Sitemap attiva"
+msgstr "Active sitemap"
+
+#: includes/class-seo-settings.php:701
+msgid "Genera la sitemap XML per i motori di ricerca."
+msgstr "Generate the XML sitemap for search engines."
+
+#: includes/class-seo-settings.php:710
+msgid "Numero max URL per sitemap"
+msgstr "Max URLs per sitemap"
+
+#: includes/class-seo-settings.php:718
+msgid "Includi immagini"
+msgstr "Include images"
+
+#: includes/class-seo-settings.php:719
+msgid "Aggiungi tag <code>&lt;image:image&gt;</code> nella sitemap."
+msgstr "Add <code>&lt;image:image&gt;</code> tags to the sitemap."
+
+#: includes/class-seo-settings.php:736
+msgid "Post Type nella Sitemap"
+msgstr "Post Types in Sitemap"
+
+#: includes/class-seo-settings.php:737
+msgid "Seleziona quali tipi di contenuto includere nella sitemap."
+msgstr "Select which content types to include in the sitemap."
+
+#: includes/class-seo-settings.php:762
+msgid "Tassonomie nella Sitemap"
+msgstr "Taxonomies in Sitemap"
+
+#: includes/class-seo-settings.php:763
+msgid "Seleziona quali tassonomie includere nella sitemap."
+msgstr "Select which taxonomies to include in the sitemap."
+
+#: includes/class-seo-settings.php:796
+msgid "Robots Meta"
+msgstr "Robots Meta"
+
+#: includes/class-seo-settings.php:797
+msgid ""
+"Controlla le direttive robots globali. Queste possono essere sovrascritte "
+"per singolo post/pagina."
+msgstr "Control global robots directives. These can be overridden per post/page."
+
+#: includes/class-seo-settings.php:812
+msgid "Tag"
+msgstr "Tags"
+
+#: includes/class-seo-settings.php:821
+msgid "Archivi autore"
+msgstr "Author archives"
+
+#: includes/class-seo-settings.php:830
+msgid "Archivi per data"
+msgstr "Date archives"
+
+#: includes/class-seo-settings.php:839
+msgid "Pagine di ricerca"
+msgstr "Search pages"
+
+#: includes/class-seo-settings.php:867
+msgid "Link"
+msgstr "Links"
+
+#: includes/class-seo-settings.php:868
+msgid "Gestione attributi per i link esterni nel contenuto."
+msgstr "Manage attributes for external links in content."
+
+#: includes/class-seo-settings.php:874
+msgid "Nofollow link esterni"
+msgstr "Nofollow external links"
+
+#: includes/class-seo-settings.php:875
+msgid "Aggiungi <code>rel=\"nofollow\"</code> ai link esterni nel contenuto."
+msgstr "Add <code>rel=\"nofollow\"</code> to external links in content."
+
+#: includes/class-seo-settings.php:884
+msgid "Apri in nuova tab"
+msgstr "Open in new tab"
+
+#: includes/class-seo-settings.php:885
+msgid "Aggiungi <code>target=\"_blank\"</code> ai link esterni."
+msgstr "Add <code>target=\"_blank\"</code> to external links."
+
+#: includes/class-seo-settings.php:902
+msgid "Pulizia &lt;head&gt;"
+msgstr "&lt;head&gt; Cleanup"
+
+#: includes/class-seo-settings.php:903
+msgid "Rimuovi tag non necessari dall'header HTML per un codice più pulito."
+msgstr "Remove unnecessary tags from the HTML header for cleaner code."
+
+#: includes/class-seo-settings.php:945
+msgid "Feed RSS extra (commenti, categorie)"
+msgstr "Extra RSS feeds (comments, categories)"
+
+#: includes/class-seo-settings.php:962
+msgid "Robots.txt personalizzato"
+msgstr "Custom robots.txt"
+
+#: includes/class-seo-settings.php:963
+msgid ""
+"Aggiungi righe personalizzate al file <code>robots.txt</code> virtuale di "
+"WordPress. Una regola per riga."
+msgstr ""
+"Add custom lines to the WordPress virtual <code>robots.txt</code> file. One rule per line."
+
+#: includes/class-seo-settings.php:1008
+msgid "Titolo pagina"
+msgstr "Page title"
+
+#: includes/class-seo-settings.php:1117
+msgid "Descrivi questa pagina in 120-160 caratteri..."
+msgstr "Describe this page in 120-160 characters..."
+
+#: includes/class-seo-settings.php:1137
+msgid "Usa il titolo SEO se vuoto"
+msgstr "Use SEO title if empty"
+
+#: includes/class-seo-settings.php:1141
+msgid "Usa la meta description se vuoto"
+msgstr "Use meta description if empty"
+
+#: includes/class-seo-settings.php:1146 includes/class-seo-settings.php:1267
+msgid "Seleziona immagine"
+msgstr "Select image"
+
+#: includes/class-seo-settings.php:1153
+msgid "Usa OG Title se vuoto"
+msgstr "Use OG Title if empty"
+
+#: includes/class-seo-settings.php:1157
+msgid "Usa OG Description se vuoto"
+msgstr "Use OG Description if empty"
+
+#: includes/class-seo-settings.php:1166
+msgid "Lascia vuoto per usare l'URL predefinito."
+msgstr "Leave blank to use the default URL."
+
+#: includes/class-seo-settings.php:1173
+msgid "non indicizzare questa pagina"
+msgstr "do not index this page"
+
+#: includes/class-seo-settings.php:1177
+msgid "non seguire i link"
+msgstr "do not follow links"
+
+#: includes/class-seo-settings.php:1184
+msgid "Automatico (predefinito)"
+msgstr "Automatic (default)"
+
+#: includes/class-seo-settings.php:1195
+msgid "Nessuno schema"
+msgstr "No schema"
+
+#: includes/class-seo-settings.php:1201
+msgid "FAQ Schema (domande e risposte)"
+msgstr "FAQ Schema (questions and answers)"
+
+#: includes/class-seo-settings.php:1202
+msgid ""
+"Aggiungi coppie domanda/risposta per generare markup FAQPage. Ottiene rich "
+"results su Google."
+msgstr ""
+"Add question/answer pairs to generate FAQPage markup. Gets rich results on Google."
+
+#: includes/class-seo-settings.php:1212 includes/class-seo-settings.php:1265
+msgid "Domanda"
+msgstr "Question"
+
+#: includes/class-seo-settings.php:1216 includes/class-seo-settings.php:1266
+msgid "Risposta"
+msgstr "Answer"
+
+#: includes/class-seo-settings.php:1222
+msgid "Aggiungi FAQ"
+msgstr "Add FAQ"
+
+#: includes/class-seo-settings.php:1228
+msgid ""
+"Usa <code>[olo_breadcrumb]</code> per inserire breadcrumb SEO-friendly con "
+"markup JSON-LD. Parametri opzionali: <code>separator=\"&raquo;\"</code>, "
+"<code>class=\"my-breadcrumb\"</code>"
+msgstr ""
+"Use <code>[olo_breadcrumb]</code> to insert SEO-friendly breadcrumbs with "
+"JSON-LD markup. Optional parameters: <code>separator=\"&raquo;\"</code>, "
+"<code>class=\"my-breadcrumb\"</code>"
+
+#: includes/class-seo-settings.php:1236
+msgid "Focus keyword presente nel titolo SEO"
+msgstr "Focus keyword found in SEO title"
+
+#: includes/class-seo-settings.php:1237
+msgid "Focus keyword non trovata nel titolo SEO"
+msgstr "Focus keyword not found in SEO title"
+
+#: includes/class-seo-settings.php:1238
+msgid "Focus keyword presente nella meta description"
+msgstr "Focus keyword found in meta description"
+
+#: includes/class-seo-settings.php:1239
+msgid "Focus keyword non trovata nella meta description"
+msgstr "Focus keyword not found in meta description"
+
+#: includes/class-seo-settings.php:1240
+msgid "Focus keyword presente nell'URL"
+msgstr "Focus keyword found in URL"
+
+#: includes/class-seo-settings.php:1241
+msgid "Focus keyword non trovata nell'URL"
+msgstr "Focus keyword not found in URL"
+
+#: includes/class-seo-settings.php:1242
+msgid "Lunghezza titolo ottimale"
+msgstr "Optimal title length"
+
+#: includes/class-seo-settings.php:1243
+msgid "Lunghezza titolo:"
+msgstr "Title length:"
+
+#: includes/class-seo-settings.php:1244
+msgid "caratteri"
+msgstr "characters"
+
+#: includes/class-seo-settings.php:1245
+msgid "ideale:"
+msgstr "ideal:"
+
+#: includes/class-seo-settings.php:1246
+msgid "Lunghezza description ottimale"
+msgstr "Optimal description length"
+
+#: includes/class-seo-settings.php:1247
+msgid "Lunghezza description:"
+msgstr "Description length:"
+
+#: includes/class-seo-settings.php:1248
+msgid "Meta description mancante"
+msgstr "Meta description missing"
+
+#: includes/class-seo-settings.php:1249
+msgid "Lunghezza contenuto buona"
+msgstr "Good content length"
+
+#: includes/class-seo-settings.php:1250
+msgid "Contenuto breve:"
+msgstr "Short content:"
+
+#: includes/class-seo-settings.php:1251
+msgid "parole"
+msgstr "words"
+
+#: includes/class-seo-settings.php:1252
+msgid "consigliato:"
+msgstr "recommended:"
+
+#: includes/class-seo-settings.php:1253
+msgid "Keyword density:"
+msgstr "Keyword density:"
+
+#: includes/class-seo-settings.php:1254
+msgid "occorrenze"
+msgstr "occurrences"
+
+#: includes/class-seo-settings.php:1255
+msgid "Focus keyword non trovata nel contenuto"
+msgstr "Focus keyword not found in content"
+
+#: includes/class-seo-settings.php:1256
+msgid "Focus keyword presente nel primo paragrafo"
+msgstr "Focus keyword found in first paragraph"
+
+#: includes/class-seo-settings.php:1257
+msgid "Focus keyword assente dal primo paragrafo"
+msgstr "Focus keyword missing from first paragraph"
+
+#: includes/class-seo-settings.php:1258
+msgid "Leggibilità buona (media"
+msgstr "Good readability (average"
+
+#: includes/class-seo-settings.php:1259
+msgid "Frasi lunghe: media"
+msgstr "Long sentences: average"
+
+#: includes/class-seo-settings.php:1260
+msgid "parole/frase)"
+msgstr "words/sentence)"
+
+#: includes/class-seo-settings.php:1261
+msgid "parole/frase (ideale: max 20)"
+msgstr "words/sentence (ideal: max 20)"
+
+#: includes/class-seo-settings.php:1262
+msgid "Buono"
+msgstr "Good"
+
+#: includes/class-seo-settings.php:1263
+msgid "Migliorabile"
+msgstr "Can be improved"
+
+#: includes/class-seo-settings.php:1264
+msgid "Da migliorare"
+msgstr "Needs improvement"
+
+#: includes/class-seo-settings.php:1616
+msgid "Nessun dato SEO configurato"
+msgstr "No SEO data configured"
+
+#: includes/class-seo-settings.php:1620
+#, php-format
+msgid "%1$d/%2$d campi SEO compilati"
+msgstr "%1$d/%2$d SEO fields filled"
+
+#: includes/class-site-import-export.php:97
+msgid "Template non trovato"
+msgstr "Template not found"
+
+#: includes/class-site-import-export.php:103
+msgid "Dati template non validi"
+msgstr "Invalid template data"
+
+#: includes/class-site-import-export.php:184
+msgid "Formato non valido. Richiesto olobuild-template."
+msgstr "Invalid format. Required: olobuild-template."
+
+#: includes/class-site-import-export.php:189
+msgid "Template vuoto"
+msgstr "Empty template"
+
+#: includes/class-site-import-export.php:205
+#: includes/class-site-import-export.php:265
+msgid "Template importato"
+msgstr "Template imported"
+
+#: includes/class-site-import-export.php:218
+msgid "Errore salvataggio template"
+msgstr "Error saving template"
+
+#: includes/class-site-import-export.php:236
+msgid "Formato non valido. Richiesto olobuild-site."
+msgstr "Invalid format. Required: olobuild-site."
+
+#: includes/class-site-import-export.php:469
+#: includes/class-site-import-export.php:470
+msgid "Import/Export"
+msgstr "Import/Export"
+
+#: includes/class-site-import-export.php:481
+msgid "Import / Export"
+msgstr "Import / Export"
+
+#: includes/class-site-import-export.php:494
+msgid "Esporta"
+msgstr "Export"
+
+#: includes/class-site-import-export.php:495
+msgid "Scarica template e media in formato JSON"
+msgstr "Download templates and media in JSON format"
+
+#: includes/class-site-import-export.php:501
+msgid "Singolo template"
+msgstr "Single template"
+
+#: includes/class-site-import-export.php:513
+msgid "Includi media (immagini, video, PDF)"
+msgstr "Include media (images, videos, PDF)"
+
+#: includes/class-site-import-export.php:518
+#: includes/class-site-import-export.php:609
+#: includes/class-site-import-export.php:614
+msgid "Esporta Template"
+msgstr "Export Template"
+
+#: includes/class-site-import-export.php:525
+msgid "Esporta tutto il sito"
+msgstr "Export entire site"
+
+#: includes/class-site-import-export.php:526
+msgid "Include tutti i template, header, footer e stili globali"
+msgstr "Includes all templates, header, footer and global styles"
+
+#: includes/class-site-import-export.php:530
+#: includes/class-site-import-export.php:637
+#: includes/class-site-import-export.php:642
+msgid "Esporta Sito Completo"
+msgstr "Export Full Site"
+
+#: includes/class-site-import-export.php:543
+msgid "Carica un file .json esportato da Olobuild"
+msgstr "Upload a .json file exported from Olobuild"
+
+#: includes/class-site-import-export.php:552
+msgid "Importa media (scarica e ricarica immagini)"
+msgstr "Import media (download and re-upload images)"
+
+#: includes/class-site-import-export.php:593
+#: includes/class-site-import-export.php:622
+msgid "Esportazione..."
+msgstr "Exporting..."
+
+#: includes/class-site-import-export.php:604
+msgid "Template esportato!"
+msgstr "Template exported!"
+
+#: includes/class-site-import-export.php:606
+#: includes/class-site-import-export.php:634
+#: includes/class-site-import-export.php:722
+msgid "sconosciuto"
+msgstr "unknown"
+
+#: includes/class-site-import-export.php:632
+msgid "Sito esportato!"
+msgstr "Site exported!"
+
+#: includes/class-site-import-export.php:658
+msgid "Importazione..."
+msgstr "Importing..."
+
+#: includes/class-site-import-export.php:660
+msgid "Lettura file..."
+msgstr "Reading file..."
+
+#: includes/class-site-import-export.php:668
+msgid "File JSON non valido"
+msgstr "Invalid JSON file"
+
+#: includes/class-site-import-export.php:675
+msgid "Formato non riconosciuto"
+msgstr "Unrecognized format"
+
+#: includes/class-site-import-export.php:687
+msgid "Invio dati al server..."
+msgstr "Sending data to server..."
+
+#: includes/class-site-import-export.php:690
+msgid "Scaricamento"
+msgstr "Downloading"
+
+#: includes/class-site-import-export.php:690
+msgid "file media..."
+msgstr "media files..."
+
+#: includes/class-site-import-export.php:712
+msgid "template importati"
+msgstr "templates imported"
+
+#: includes/class-site-import-export.php:714
+msgid "importato"
+msgstr "imported"
+
+#: includes/class-site-import-export.php:717
+msgid "media importati"
+msgstr "media imported"
+
+#: includes/class-site-import-export.php:719
+msgid "Completato!"
+msgstr "Completed!"
+
+#: includes/class-site-import-export.php:720
+msgid "Importazione completata!"
+msgstr "Import completed!"
+
+#: includes/class-site-import-export.php:723
+#: includes/class-site-import-export.php:730
+msgid "Errore importazione"
+msgstr "Import error"
+
+#: includes/class-white-label.php:177 includes/class-white-label.php:178
+#: includes/class-white-label.php:188
+msgid "White Label"
+msgstr "White Label"
+
+#: includes/class-white-label.php:198
+msgid "Impostazioni White Label"
+msgstr "White Label Settings"
+
+#: includes/class-white-label.php:199
+msgid "Rinomina plugin, nascondi credits e impostazioni per i non-admin"
+msgstr "Rename plugin, hide credits and settings for non-admins"
+
+#: includes/class-white-label.php:205
+msgid "Attiva White Label"
+msgstr "Enable White Label"
+
+#: includes/class-white-label.php:206
+msgid "Abilita la personalizzazione del brand"
+msgstr "Enable brand customization"
+
+#: includes/class-white-label.php:215
+msgid "Nome plugin"
+msgstr "Plugin name"
+
+#: includes/class-white-label.php:226
+msgid "Page builder professionale"
+msgstr "Professional page builder"
+
+#: includes/class-white-label.php:231
+msgid "Nome autore"
+msgstr "Author name"
+
+#: includes/class-white-label.php:239
+msgid "URL autore"
+msgstr "Author URL"
+
+#: includes/class-white-label.php:247
+msgid "Nascondi per non-admin"
+msgstr "Hide for non-admins"
+
+#: includes/class-white-label.php:248
+msgid "Nasconde le impostazioni White Label per utenti non amministratori"
+msgstr "Hides White Label settings for non-administrator users"
+
+#: includes/class-white-label.php:257
+msgid "Nascondi credits"
+msgstr "Hide credits"
+
+#: includes/class-white-label.php:258
+msgid "Rimuove la scritta \"Powered by Olobuild\""
+msgstr "Removes the \"Powered by Olobuild\" text"
+
+#: includes/class-white-label.php:279
+#: includes/class-woo-template-integration.php:285
+msgid "Salvataggio..."
+msgstr "Saving..."
+
+#: includes/class-white-label.php:299
+msgid "Impostazioni salvate con successo"
+msgstr "Settings saved successfully"
+
+#: includes/class-woo-template-integration.php:40
+msgid "Singolo Prodotto"
+msgstr "Single Product"
+
+#: includes/class-woo-template-integration.php:41
+msgid "Archivio Prodotti"
+msgstr "Product Archive"
+
+#: includes/class-woo-template-integration.php:42
+msgid "Carrello"
+msgstr "Cart"
+
+#: includes/class-woo-template-integration.php:43
+msgid "Checkout"
+msgstr "Checkout"
+
+#: includes/class-woo-template-integration.php:44
+msgid "My Account"
+msgstr "My Account"
+
+#: includes/class-woo-template-integration.php:242
+msgid "Assegnazione Template"
+msgstr "Template Assignment"
+
+#: includes/class-woo-template-integration.php:243
+msgid ""
+"Seleziona un template Olobuild per ciascuna pagina WooCommerce. Lascia "
+"\"Predefinito\" per usare il template nativo."
+msgstr ""
+"Select an Olobuild template for each WooCommerce page. Leave \"Default\" to "
+"use the native template."
+
+#: includes/class-woo-template-integration.php:258
+msgid "Predefinito WooCommerce"
+msgstr "WooCommerce Default"
+
+#: includes/class-woo-template-integration.php:274
+#: includes/class-woo-template-integration.php:301
+msgid "Salva assegnazioni"
+msgstr "Save assignments"
+
+#: includes/class-woo-template-integration.php:297
+msgid "Assegnazioni salvate"
+msgstr "Assignments saved"
+
+#~ msgid ""
+#~ "Page builder professionale olonico con sistema a griglia (tile drag & "
+#~ "drop)."
+#~ msgstr ""
+#~ "Professional holonic page builder with grid system (tile drag & drop)."
+
+#~ msgid "Claudio"
+#~ msgstr "Claudio"
+
+#~ msgid "Risultati ricerca"
+#~ msgstr "Search Results"
+
+#~ msgid "Pagina non trovata"
+#~ msgstr "Page Not Found"
+
+#~ msgid "Navigation"
+#~ msgstr "Navigation"
+
+#~ msgid "Main menu"
+#~ msgstr "Main menu"
+
+#~ msgid "Open menu"
+#~ msgstr "Open menu"
+
+#~ msgid "Mobile menu"
+#~ msgstr "Mobile menu"
+
+#~ msgid "Close menu"
+#~ msgstr "Close menu"
+
+#~ msgid "Vertical menu"
+#~ msgstr "Vertical menu"
+
+#~ msgid "Sub navigation"
+#~ msgstr "Sub navigation"
+
+#~ msgid "Embedded video"
+#~ msgstr "Embedded video"
+
+#~ msgid "Inserisci un URL video"
+#~ msgstr "Enter a video URL"
+
+#~ msgid "Seleziona un file video"
+#~ msgstr "Select a video file"
+
+#~ msgid "Background video"
+#~ msgstr "Background video"
+
+#~ msgid "Seleziona una sorgente video"
+#~ msgstr "Select a video source"
+
+#~ msgid "Apri ricerca"
+#~ msgstr "Open search"
+
+#~ msgid "Cancella"
+#~ msgstr "Clear"
+
+#~ msgid "Tutti"
+#~ msgstr "All"
+
+#~ msgid "Ordina per…"
+#~ msgstr "Sort by..."

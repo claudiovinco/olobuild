@@ -5,17 +5,17 @@
       <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300 mb-mb-2">Tipo di sfondo</label>
       <div class="mb-flex mb-gap-1 mb-bg-gray-700 mb-rounded-lg mb-p-0.5">
         <button
-          v-for="t in types"
-          :key="t.value"
-          @click="updateField('type', t.value)"
+          v-for="bgType in types"
+          :key="bgType.value"
+          @click="updateField('type', bgType.value)"
           :class="[
             'mb-flex-1 mb-py-1.5 mb-text-[10px] mb-font-medium mb-rounded-md mb-transition-colors',
-            bg.type === t.value
+            bg.type === bgType.value
               ? 'mb-bg-primary-600 mb-text-white'
               : 'mb-text-gray-400 hover:mb-text-gray-300'
           ]"
         >
-          {{ t.label }}
+          {{ t(bgType.label) }}
         </button>
       </div>
     </div>
@@ -243,6 +243,126 @@
       </div>
     </div>
 
+    <!-- Gallery slideshow -->
+    <div v-if="bg.type === 'gallery'" class="mb-space-y-3">
+      <!-- Image picker -->
+      <div>
+        <div class="mb-flex mb-items-center mb-justify-between mb-mb-2">
+          <span class="mb-text-[10px] mb-text-gray-400">{{ (bg.gallery_images || []).length }} {{ t('immagini selezionate') }}</span>
+          <button
+            v-if="(bg.gallery_images || []).length"
+            @click="updateField('gallery_images', [])"
+            class="mb-text-gray-500 hover:mb-text-red-400 mb-text-sm"
+          >&#128465;</button>
+        </div>
+        <div v-if="(bg.gallery_images || []).length" class="mb-flex mb-flex-wrap mb-gap-1 mb-mb-2">
+          <div v-for="(img, idx) in bg.gallery_images" :key="idx" class="mb-relative mb-group">
+            <img :src="img.url" :alt="img.alt" class="mb-w-16 mb-h-12 mb-object-cover mb-rounded mb-border mb-border-gray-600" />
+            <button
+              @click="removeGalleryImage(idx)"
+              class="mb-absolute mb-top-0 mb-right-0 mb-bg-red-600 mb-text-white mb-rounded-full mb-w-4 mb-h-4 mb-text-[9px] mb-flex mb-items-center mb-justify-center mb-opacity-0 group-hover:mb-opacity-100 mb-transition-opacity mb-leading-none"
+            >&times;</button>
+          </div>
+        </div>
+        <button
+          @click="pickGalleryImages"
+          class="mb-w-full mb-py-1.5 mb-px-3 mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-md mb-text-xs mb-text-gray-300 hover:mb-bg-gray-600"
+        >{{ (bg.gallery_images || []).length ? t('Cambia immagini') : t('Seleziona immagini') }}</button>
+      </div>
+
+      <!-- Loop -->
+      <div class="mb-flex mb-items-center mb-justify-between">
+        <span class="mb-text-[10px] mb-text-gray-400">{{ t('Ciclo infinito') }}</span>
+        <button
+          @click="updateField('gallery_loop', !(bg.gallery_loop !== false))"
+          :class="['mb-relative mb-w-10 mb-h-5 mb-rounded-full mb-transition-colors mb-shrink-0', (bg.gallery_loop !== false) ? 'mb-bg-primary-600' : 'mb-bg-gray-600']"
+        ><span :class="['mb-absolute mb-top-0.5 mb-w-4 mb-h-4 mb-rounded-full mb-bg-white mb-transition-transform', (bg.gallery_loop !== false) ? 'mb-left-5' : 'mb-left-0.5']"></span></button>
+      </div>
+
+      <!-- Duration -->
+      <div class="mb-flex mb-items-center mb-justify-between">
+        <span class="mb-text-[10px] mb-text-gray-400">{{ t('Durata (ms)') }}</span>
+        <input type="number" :value="bg.gallery_duration || 5000" @change="updateField('gallery_duration', parseInt($event.target.value))" min="1000" max="30000" step="500"
+          class="mb-w-20 mb-bg-white mb-border mb-border-gray-300 mb-rounded mb-px-2 mb-py-1 mb-text-xs mb-text-gray-900 mb-text-right" />
+      </div>
+
+      <!-- Transition type -->
+      <div class="mb-flex mb-items-center mb-justify-between">
+        <span class="mb-text-[10px] mb-text-gray-400">{{ t('Transizione') }}</span>
+        <select :value="bg.gallery_transition || 'fade'" @change="updateField('gallery_transition', $event.target.value)"
+          class="mb-w-28 mb-bg-white mb-border mb-border-gray-300 mb-rounded mb-px-2 mb-py-1 mb-text-xs mb-text-gray-900">
+          <option value="fade">Fade</option>
+          <option value="crossfade">Crossfade</option>
+          <option value="slide">Slide</option>
+          <option value="slide-up">Slide Up</option>
+          <option value="zoom">Zoom</option>
+          <option value="blur">Blur</option>
+          <option value="flip">Flip</option>
+          <option value="none">{{ t('Nessuna') }}</option>
+        </select>
+      </div>
+
+      <!-- Transition duration -->
+      <div class="mb-flex mb-items-center mb-justify-between">
+        <span class="mb-text-[10px] mb-text-gray-400">{{ t('Durata della transizione (ms)') }}</span>
+        <input type="number" :value="bg.gallery_transition_ms || 500" @change="updateField('gallery_transition_ms', parseInt($event.target.value))" min="100" max="3000" step="100"
+          class="mb-w-20 mb-bg-white mb-border mb-border-gray-300 mb-rounded mb-px-2 mb-py-1 mb-text-xs mb-text-gray-900 mb-text-right" />
+      </div>
+
+      <!-- Size -->
+      <div class="mb-flex mb-items-center mb-justify-between">
+        <span class="mb-text-[10px] mb-text-gray-400">{{ t('Dimensione sfondo') }}</span>
+        <select :value="bg.image_size || 'cover'" @change="updateField('image_size', $event.target.value)"
+          class="mb-w-28 mb-bg-white mb-border mb-border-gray-300 mb-rounded mb-px-2 mb-py-1 mb-text-xs mb-text-gray-900">
+          <option value="cover">Cover</option>
+          <option value="contain">Contain</option>
+          <option value="auto">Auto</option>
+        </select>
+      </div>
+
+      <!-- Position -->
+      <div class="mb-flex mb-items-center mb-justify-between">
+        <span class="mb-text-[10px] mb-text-gray-400">{{ t('Posizione sfondo') }}</span>
+        <select :value="bg.image_position || 'center center'" @change="updateField('image_position', $event.target.value)"
+          class="mb-w-28 mb-bg-white mb-border mb-border-gray-300 mb-rounded mb-px-2 mb-py-1 mb-text-xs mb-text-gray-900">
+          <option value="center center">{{ t('Centro') }}</option>
+          <option value="top center">{{ t('Alto') }}</option>
+          <option value="bottom center">{{ t('Basso') }}</option>
+          <option value="left center">{{ t('Sinistra') }}</option>
+          <option value="right center">{{ t('Destra') }}</option>
+        </select>
+      </div>
+
+      <!-- Lazyload -->
+      <div class="mb-flex mb-items-center mb-justify-between">
+        <span class="mb-text-[10px] mb-text-gray-400">Lazyload</span>
+        <button
+          @click="updateField('gallery_lazyload', !(bg.gallery_lazyload !== false))"
+          :class="['mb-relative mb-w-10 mb-h-5 mb-rounded-full mb-transition-colors mb-shrink-0', (bg.gallery_lazyload !== false) ? 'mb-bg-primary-600' : 'mb-bg-gray-600']"
+        ><span :class="['mb-absolute mb-top-0.5 mb-w-4 mb-h-4 mb-rounded-full mb-bg-white mb-transition-transform', (bg.gallery_lazyload !== false) ? 'mb-left-5' : 'mb-left-0.5']"></span></button>
+      </div>
+
+      <!-- Ken Burns -->
+      <div class="mb-flex mb-items-center mb-justify-between">
+        <span class="mb-text-[10px] mb-text-gray-400">{{ t('Effetto Ken Burns') }}</span>
+        <button
+          @click="updateField('gallery_kenburns', !bg.gallery_kenburns)"
+          :class="['mb-relative mb-w-10 mb-h-5 mb-rounded-full mb-transition-colors mb-shrink-0', bg.gallery_kenburns ? 'mb-bg-primary-600' : 'mb-bg-gray-600']"
+        ><span :class="['mb-absolute mb-top-0.5 mb-w-4 mb-h-4 mb-rounded-full mb-bg-white mb-transition-transform', bg.gallery_kenburns ? 'mb-left-5' : 'mb-left-0.5']"></span></button>
+      </div>
+
+      <!-- Ken Burns direction -->
+      <div v-if="bg.gallery_kenburns" class="mb-flex mb-items-center mb-justify-between">
+        <span class="mb-text-[10px] mb-text-gray-400">{{ t('Direzione') }}</span>
+        <select :value="bg.gallery_kenburns_dir || 'in'" @change="updateField('gallery_kenburns_dir', $event.target.value)"
+          class="mb-w-28 mb-bg-white mb-border mb-border-gray-300 mb-rounded mb-px-2 mb-py-1 mb-text-xs mb-text-gray-900">
+          <option value="in">{{ t('Dentro') }} (Zoom in)</option>
+          <option value="out">{{ t('Fuori') }} (Zoom out)</option>
+          <option value="alternate">{{ t('Alternato') }}</option>
+        </select>
+      </div>
+    </div>
+
     <!-- Overlay (for all types except none) -->
     <div v-if="bg.type && bg.type !== 'none'" class="mb-space-y-2 mb-pt-2 mb-border-t mb-border-gray-700">
       <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300">Sovrapposizione</label>
@@ -267,6 +387,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { t } from '@/i18n';
 import { useMediaPicker } from '@/composables/useMediaPicker';
 import ParallaxEditor from './ParallaxEditor.vue';
 import FieldGradient from './fields/FieldGradient.vue';
@@ -287,7 +408,7 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue']);
 
-const { openSingleImage } = useMediaPicker();
+const { openSingleImage, openGallery } = useMediaPicker();
 
 const defaultBg = {
   type: 'none',
@@ -320,6 +441,14 @@ const defaultBg = {
   overlay_color: '#000000',
   overlay_opacity: 0,
   color_opacity: 100,
+  gallery_images: [],
+  gallery_loop: true,
+  gallery_duration: 5000,
+  gallery_transition: 'fade',
+  gallery_transition_ms: 500,
+  gallery_lazyload: true,
+  gallery_kenburns: true,
+  gallery_kenburns_dir: 'in',
 };
 
 const types = [
@@ -328,6 +457,7 @@ const types = [
   { value: 'gradient', label: 'Gradiente' },
   { value: 'image', label: 'Immagine' },
   { value: 'video', label: 'Video' },
+  { value: 'gallery', label: 'Galleria' },
 ];
 
 const bg = computed(() => ({ ...defaultBg, ...props.modelValue }));
@@ -391,6 +521,18 @@ function pickBgImage() {
   openSingleImage(({ url }) => {
     updateField('image_url', url);
   });
+}
+
+function pickGalleryImages() {
+  openGallery((images) => {
+    updateField('gallery_images', images);
+  });
+}
+
+function removeGalleryImage(idx) {
+  const imgs = [...(bg.value.gallery_images || [])];
+  imgs.splice(idx, 1);
+  updateField('gallery_images', imgs);
 }
 
 function removeVideo() {

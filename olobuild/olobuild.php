@@ -3,7 +3,7 @@
  * Plugin Name: Olobuild
  * Plugin URI:  https://example.com/olobuild
  * Description: Page builder professionale olonico con sistema a griglia (tile drag & drop).
- * Version:     2.43.48
+ * Version:     2.43.51
  * Author:      Claudio
  * Author URI:  https://example.com
  * Text Domain: olobuilder
@@ -15,9 +15,24 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'OLO_VERSION', '2.43.48' );
+define( 'OLO_VERSION', '2.43.51' );
 define( 'OLO_PATH', plugin_dir_path( __FILE__ ) );
 define( 'OLO_URL', plugin_dir_url( __FILE__ ) );
+
+/**
+ * Load plugin text domain for translations.
+ * Force-load MO for all non-Italian locales (plugin source strings are in Italian).
+ */
+add_action( 'init', function() {
+    $locale = determine_locale();
+    if ( ! str_starts_with( $locale, 'it' ) ) {
+        $mo = OLO_PATH . 'languages/olobuilder-' . $locale . '.mo';
+        if ( ! file_exists( $mo ) ) {
+            $mo = OLO_PATH . 'languages/olobuilder-en_US.mo';
+        }
+        load_textdomain( 'olobuilder', $mo );
+    }
+} );
 
 /**
  * Abilita upload di file JSON/Lottie e SVG nella Media Library.
