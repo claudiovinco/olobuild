@@ -4631,7 +4631,7 @@ class Olo_Frontend_Renderer {
      * by resolving the attachment ID from the src URL.
      */
     private function add_srcset_to_images( $html ) {
-        if ( strpos( $html, '<img' ) === false ) {
+        if ( ! str_contains( $html, '<img' ) ) {
             return $html;
         }
 
@@ -4651,7 +4651,7 @@ class Olo_Frontend_Renderer {
             $src = $src_m[1];
 
             // Only process local uploads
-            if ( strpos( $src, '/wp-content/uploads/' ) === false ) {
+            if ( ! str_contains( $src, '/wp-content/uploads/' ) ) {
                 return $tag;
             }
 

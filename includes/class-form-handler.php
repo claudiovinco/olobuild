@@ -238,16 +238,25 @@ class Olo_Form_Handler {
             $olo_upload_path = $upload_dir['basedir'] . '/olobuild-uploads';
             wp_mkdir_p( $olo_upload_path );
 
-            // Add .htaccess to prevent direct execution of uploaded files
+            // Protect upload directory from direct execution
+            // .htaccess for Apache
             $htaccess_path = $olo_upload_path . '/.htaccess';
             if ( ! file_exists( $htaccess_path ) ) {
                 file_put_contents( $htaccess_path, "Options -ExecCGI\nAddHandler cgi-script .php .php3 .php4 .php5 .phtml .pl .py .jsp .asp .htm .shtml .sh .cgi\n<Files *.php>\ndeny from all\n</Files>" );
             }
 
-            // Also add index.php for directory listing protection
+            // index.php for directory listing protection (works on both Apache and Nginx)
             $index_path = $olo_upload_path . '/index.php';
             if ( ! file_exists( $index_path ) ) {
                 file_put_contents( $index_path, '<?php // Silence is golden.' );
+            }
+
+            // Nginx: write a note file reminding server admins to block PHP execution
+            // Nginx ignores .htaccess — admins must add this to their server block:
+            // location ~* /wp-content/uploads/olobuild-uploads/.*\.php$ { deny all; }
+            $nginx_note = $olo_upload_path . '/NGINX-SECURITY.txt';
+            if ( ! file_exists( $nginx_note ) ) {
+                file_put_contents( $nginx_note, "# Nginx does not use .htaccess — add this rule to your server block:\n# location ~* /wp-content/uploads/olobuild-uploads/.*\\.php$ { deny all; }\n" );
             }
 
             // Global fallback settings

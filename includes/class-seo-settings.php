@@ -141,8 +141,6 @@ class Olo_Seo_Settings {
             return;
         }
 
-        $active_tab = sanitize_text_field( $_GET['tab'] ?? 'titles' );
-
         $tabs = [
             'titles'    => 'Titoli &amp; Meta',
             'social'    => 'Social',
@@ -151,6 +149,11 @@ class Olo_Seo_Settings {
             'sitemap'   => 'Sitemap',
             'advanced'  => 'Avanzate',
         ];
+
+        $active_tab = sanitize_text_field( $_GET['tab'] ?? 'titles' );
+        if ( ! array_key_exists( $active_tab, $tabs ) ) {
+            $active_tab = 'titles';
+        }
 
         ?>
         <?php Olo_Builder::page_shell_open( 'SEO', 'olo-seo-wrap' ); ?>

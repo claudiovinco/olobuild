@@ -568,7 +568,7 @@ class Olo_Dynamic_Content {
      * @return string Text with tokens replaced.
      */
     public static function resolve_tokens( $text ) {
-        if ( ! is_string( $text ) || strpos( $text, '{' ) === false ) {
+        if ( ! is_string( $text ) || ! str_contains( $text, '{' ) ) {
             return $text;
         }
 
@@ -824,7 +824,7 @@ class Olo_Dynamic_Content {
      */
     private function resolve_menu( $field ) {
         // field format: "menu_name:Primary" or "menu_item_count:Primary"
-        if ( strpos( $field, ':' ) === false ) return '';
+        if ( ! str_contains( $field, ':' ) ) return '';
         list( $prop, $menu_slug ) = explode( ':', $field, 2 );
         $menu_slug = trim( $menu_slug );
 

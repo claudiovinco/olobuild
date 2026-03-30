@@ -264,7 +264,7 @@ class Olo_Countdown_Tile extends Olo_Tile_Base {
         $date = $s['target_date'];
         if ( strlen( $date ) === 16 ) {
             $date .= ':00+00:00';
-        } elseif ( strlen( $date ) === 19 && strpos( $date, '+' ) === false && strpos( $date, 'Z' ) === false ) {
+        } elseif ( strlen( $date ) === 19 && ! str_contains( $date, '+' ) && ! str_contains( $date, 'Z' ) ) {
             $date .= '+00:00';
         }
 

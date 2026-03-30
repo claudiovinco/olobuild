@@ -128,7 +128,7 @@ class Olo_Freesound {
         }
 
         // Validate URL is from Freesound CDN
-        if ( strpos( $preview_url, 'freesound.org' ) === false ) {
+        if ( ! str_contains( $preview_url, 'freesound.org' ) ) {
             return new WP_Error( 'invalid_url', 'URL non valido.', [ 'status' => 400 ] );
         }
 

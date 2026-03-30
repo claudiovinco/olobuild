@@ -601,14 +601,14 @@ class Olo_AI_Assistant {
         // Chiave Anthropic: salva se nuova, cancella se vuota
         if ( empty( $anthropic_key ) ) {
             delete_option( 'olo_ai_anthropic_key' );
-        } elseif ( strpos( $anthropic_key, '*' ) === false ) {
+        } elseif ( ! str_contains( $anthropic_key, '*' ) ) {
             update_option( 'olo_ai_anthropic_key', sanitize_text_field( $anthropic_key ) );
         }
 
         // Chiave OpenAI: salva se nuova, cancella se vuota
         if ( empty( $openai_key ) ) {
             delete_option( 'olo_ai_openai_key' );
-        } elseif ( strpos( $openai_key, '*' ) === false ) {
+        } elseif ( ! str_contains( $openai_key, '*' ) ) {
             update_option( 'olo_ai_openai_key', sanitize_text_field( $openai_key ) );
         }
 

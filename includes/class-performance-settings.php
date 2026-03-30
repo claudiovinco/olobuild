@@ -89,7 +89,7 @@ class Olo_Performance_Settings {
     }
 
     public function enqueue_assets( $hook ) {
-        if ( strpos( $hook, 'olo-performance' ) === false ) {
+        if ( ! str_contains( $hook, 'olo-performance' ) ) {
             return;
         }
         wp_enqueue_style( 'olo-perf-admin', OLO_URL . 'assets/css/perf-admin.css', [], OLO_VERSION );

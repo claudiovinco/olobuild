@@ -139,7 +139,7 @@ class Olo_Accessibility {
 
     private function aria_accordion( $html ) {
         // Add aria-expanded to accordion toggle buttons if missing
-        if ( strpos( $html, 'aria-expanded' ) === false ) {
+        if ( ! str_contains( $html, 'aria-expanded' ) ) {
             $html = preg_replace(
                 '/(<a[^>]*class="[^"]*uk-accordion-title[^"]*")/i',
                 '$1 role="button" aria-expanded="false"',
@@ -151,7 +151,7 @@ class Olo_Accessibility {
 
     private function aria_tabs( $html ) {
         // Add role="tablist" if missing
-        if ( strpos( $html, 'role="tablist"' ) === false ) {
+        if ( ! str_contains( $html, 'role="tablist"' ) ) {
             $html = preg_replace(
                 '/(<ul[^>]*class="[^"]*uk-tab[^"]*")/i',
                 '$1 role="tablist"',
@@ -163,7 +163,7 @@ class Olo_Accessibility {
 
     private function aria_dialog( $html ) {
         // Add role="dialog" and aria-modal if missing
-        if ( strpos( $html, 'role="dialog"' ) === false ) {
+        if ( ! str_contains( $html, 'role="dialog"' ) ) {
             $html = preg_replace(
                 '/(<div[^>]*class="[^"]*uk-modal-dialog[^"]*")/i',
                 '$1 role="dialog" aria-modal="true"',
@@ -175,7 +175,7 @@ class Olo_Accessibility {
 
     private function aria_nav( $html, $settings ) {
         // Ensure <nav> has aria-label
-        if ( strpos( $html, 'aria-label' ) === false ) {
+        if ( ! str_contains( $html, 'aria-label' ) ) {
             $label = ! empty( $settings['aria_label'] ) ? $settings['aria_label'] : 'Navigazione';
             $html = preg_replace(
                 '/(<nav[^>]*)>/i',
@@ -189,7 +189,7 @@ class Olo_Accessibility {
 
     private function aria_carousel( $html ) {
         // Add carousel ARIA to wrapper
-        if ( strpos( $html, 'aria-roledescription' ) === false ) {
+        if ( ! str_contains( $html, 'aria-roledescription' ) ) {
             $html = preg_replace(
                 '/(<div[^>]*class="[^"]*olo-(?:slideshow|proslider|overlayslider|panelslider)[^"]*")/i',
                 '$1 role="region" aria-roledescription="carousel" aria-label="Slideshow"',
@@ -205,7 +205,7 @@ class Olo_Accessibility {
         $alt = $settings['alt_text'] ?? '';
         if ( empty( $alt ) ) {
             // Add empty alt="" for decorative images (WCAG compliant)
-            if ( strpos( $html, 'alt=""' ) === false ) {
+            if ( ! str_contains( $html, 'alt=""' ) ) {
                 $html = preg_replace(
                     '/<img(?![^>]*alt=)/i',
                     '<img alt=""',

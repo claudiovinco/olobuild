@@ -151,7 +151,7 @@ class Olo_Cookie_Consent {
     }
 
     public function enqueue_admin_assets( $hook ) {
-        if ( strpos( $hook, 'olo-cookie-consent' ) === false ) {
+        if ( ! str_contains( $hook, 'olo-cookie-consent' ) ) {
             return;
         }
         wp_enqueue_style( 'olo-cookie-admin', OLO_URL . 'assets/css/cookie-admin.css', [], OLO_VERSION );
@@ -1761,7 +1761,7 @@ class Olo_Cookie_Consent {
                 $tag = str_replace( "type='text/javascript'", "type='text/plain'", $tag );
                 $tag = str_replace( 'type="text/javascript"', 'type="text/plain"', $tag );
                 // If no type attribute, add one
-                if ( strpos( $tag, 'type=' ) === false ) {
+                if ( ! str_contains( $tag, 'type=' ) ) {
                     $tag = str_replace( '<script ', '<script type="text/plain" ', $tag );
                 }
                 // Add category attribute

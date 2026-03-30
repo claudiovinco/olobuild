@@ -88,7 +88,7 @@ class Olo_Analytics_Tracking {
     }
 
     public static function enqueue_admin( $hook ) {
-        if ( strpos( $hook, 'olo-analytics' ) === false ) {
+        if ( ! str_contains( $hook, 'olo-analytics' ) ) {
             return;
         }
         wp_enqueue_style( 'olo-admin', OLO_URL . 'assets/css/olo-admin.css', [], OLO_VERSION );

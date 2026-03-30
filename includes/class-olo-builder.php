@@ -176,9 +176,8 @@ class Olo_Builder {
         if ( ! $screen ) return;
         // Only on Olobuild pages
         $id = $screen->id;
-        if ( strpos( $id, 'olobuild' ) === false
-            && strpos( $id, 'olo-' ) === false
-            && strpos( $id, 'olobuild' ) === false ) {
+        if ( ! str_contains( $id, 'olobuild' )
+            && ! str_contains( $id, 'olo-' ) ) {
             return;
         }
 
