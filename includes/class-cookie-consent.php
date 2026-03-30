@@ -1071,7 +1071,7 @@ class Olo_Cookie_Consent {
         global $wpdb;
 
         $consent_id   = sanitize_text_field( $_POST['consent_id'] ?? '' );
-        $categories   = $_POST['categories'] ?? '';
+        $categories   = sanitize_text_field( $_POST['categories'] ?? '' );
         $action_type  = sanitize_text_field( $_POST['action_type'] ?? 'initial' );
         $bv           = intval( $_POST['banner_version'] ?? 1 );
 

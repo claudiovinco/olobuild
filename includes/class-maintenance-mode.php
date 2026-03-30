@@ -68,7 +68,7 @@ class Olo_Maintenance_Mode {
         if ( ! empty( $bypass_secret ) ) {
             // If the secret is in the URL, set a bypass cookie for 24 hours
             if ( isset( $_GET['bypass'] ) ) {
-                if ( $_GET['bypass'] === $bypass_secret ) {
+                if ( sanitize_text_field( wp_unslash( $_GET['bypass'] ) ) === $bypass_secret ) {
                     setcookie( 'olo_maintenance_bypass', md5( $bypass_secret ), time() + DAY_IN_SECONDS, '/' );
                     return;
                 }

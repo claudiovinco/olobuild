@@ -1132,7 +1132,7 @@ class Olo_Loginform_Tile extends Olo_Tile_Base {
      */
     public static function handle_ajax_login() {
         $user = sanitize_text_field( $_POST['log'] ?? '' );
-        $pass = $_POST['pwd'] ?? '';
+        $pass = wp_unslash( $_POST['pwd'] ?? '' );
         $remember = ! empty( $_POST['rememberme'] );
 
         if ( empty( $user ) ) {
@@ -1167,7 +1167,7 @@ class Olo_Loginform_Tile extends Olo_Tile_Base {
 
         $username = sanitize_user( $_POST['user_login'] ?? '' );
         $email    = sanitize_email( $_POST['user_email'] ?? '' );
-        $password = $_POST['user_pass'] ?? '';
+        $password = wp_unslash( $_POST['user_pass'] ?? '' );
 
         if ( empty( $username ) ) {
             wp_send_json_error( 'Compila tutti i campi.' );
@@ -1181,7 +1181,7 @@ class Olo_Loginform_Tile extends Olo_Tile_Base {
 
         // Confirm password check
         if ( isset( $_POST['user_pass_confirm'] ) ) {
-            if ( $_POST['user_pass_confirm'] !== $password ) {
+            if ( wp_unslash( $_POST['user_pass_confirm'] ) !== $password ) {
                 wp_send_json_error( 'Le password non corrispondono.' );
             }
         }
