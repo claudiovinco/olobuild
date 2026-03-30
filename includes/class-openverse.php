@@ -95,7 +95,7 @@ class Olo_Openverse {
             // Build a usable thumbnail: for Flickr images, replace _b suffix with _n (320px).
             $full_url = $photo['url'] ?? '';
             $thumb_url = $full_url;
-            if ( ! empty( $full_url ) && strpos( $full_url, 'staticflickr.com' ) !== false ) {
+            if ( ! empty( $full_url ) && str_contains( $full_url, 'staticflickr.com' ) ) {
                 $thumb_url = preg_replace( '/_[a-z](\.\w+)$/i', '_n$1', $full_url );
             }
 

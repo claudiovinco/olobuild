@@ -1236,7 +1236,7 @@ class Olo_Frontend_Renderer {
             case 'url_contains':
                 $str = $settings['cond_url_contains'] ?? '';
                 if ( $str === '' ) return true;
-                return ( strpos( $_SERVER['REQUEST_URI'], $str ) !== false );
+                return ( str_contains( $_SERVER['REQUEST_URI'], $str ) );
             case 'day_of_week':
                 $cond_day = strtolower( $settings['cond_day'] ?? '' );
                 if ( $cond_day === '' ) return true;
@@ -1252,12 +1252,12 @@ class Olo_Frontend_Renderer {
                 $cond_ref = $settings['cond_referrer'] ?? '';
                 if ( $cond_ref === '' ) return true;
                 $referrer = isset( $_SERVER['HTTP_REFERER'] ) ? $_SERVER['HTTP_REFERER'] : '';
-                return ( strpos( $referrer, $cond_ref ) !== false );
+                return ( str_contains( $referrer, $cond_ref ) );
             case 'browser':
                 $cond_browser = strtolower( $settings['cond_browser'] ?? '' );
                 if ( $cond_browser === '' ) return true;
                 $ua = strtolower( isset( $_SERVER['HTTP_USER_AGENT'] ) ? $_SERVER['HTTP_USER_AGENT'] : '' );
-                return ( strpos( $ua, $cond_browser ) !== false );
+                return ( str_contains( $ua, $cond_browser ) );
             case 'woo_cart_empty':
                 if ( ! function_exists( 'WC' ) ) return true;
                 $wc = WC();
@@ -1298,7 +1298,7 @@ class Olo_Frontend_Renderer {
                 $acf_value = $settings['cond_acf_value'] ?? '';
                 if ( $acf_key === '' ) return true;
                 if ( ! function_exists( 'get_field' ) ) return true;
-                return ( strpos( (string) get_field( $acf_key ), $acf_value ) !== false );
+                return ( str_contains( (string) get_field( $acf_key ), $acf_value ) );
             case 'acf_field_greater':
                 $acf_key   = $settings['cond_acf_field'] ?? '';
                 $acf_value = $settings['cond_acf_value'] ?? '';
@@ -3301,7 +3301,7 @@ class Olo_Frontend_Renderer {
         if ( ! empty( $advanced['data_attrs'] ) ) {
             foreach ( explode( ',', $advanced['data_attrs'] ) as $pair ) {
                 $pair = trim( $pair );
-                if ( strpos( $pair, '=' ) !== false ) {
+                if ( str_contains( $pair, '=' ) ) {
                     list( $dk, $dv ) = array_map( 'trim', explode( '=', $pair, 2 ) );
                     $seo_attrs .= ' data-' . esc_attr( $dk ) . '="' . esc_attr( $dv ) . '"';
                 }

@@ -162,7 +162,7 @@ class Olo_Style_System {
                 intval( $val['br'] ?? 0 ), intval( $val['bl'] ?? 0 ) );
         }
         $s = strval( $val );
-        if ( strpos( $s, 'px' ) !== false ) return $s;
+        if ( str_contains( $s, 'px' ) ) return $s;
         if ( $s !== '' && $s !== '0' ) return $s . 'px';
         return $fallback;
     }

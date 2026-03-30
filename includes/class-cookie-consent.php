@@ -1121,7 +1121,8 @@ class Olo_Cookie_Consent {
         }
 
         global $wpdb;
-        $wpdb->query( "TRUNCATE TABLE " . $wpdb->prefix . self::LOG_TABLE );
+        // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- table name from constant
+        $wpdb->query( "TRUNCATE TABLE `" . $wpdb->prefix . self::LOG_TABLE . "`" );
         wp_send_json_success();
     }
 
@@ -1132,7 +1133,8 @@ class Olo_Cookie_Consent {
         }
 
         global $wpdb;
-        $rows = $wpdb->get_results( "SELECT * FROM " . $wpdb->prefix . self::LOG_TABLE . " ORDER BY created_at DESC", ARRAY_A );
+        // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- table name from constant
+        $rows = $wpdb->get_results( "SELECT * FROM `" . $wpdb->prefix . self::LOG_TABLE . "` ORDER BY created_at DESC", ARRAY_A );
 
         header( 'Content-Type: text/csv; charset=utf-8' );
         header( 'Content-Disposition: attachment; filename=consent-log-' . date( 'Y-m-d' ) . '.csv' );

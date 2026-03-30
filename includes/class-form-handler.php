@@ -560,7 +560,7 @@ class Olo_Form_Handler {
 
         // Extract data center from API key (last part after dash)
         $dc = '';
-        if ( strpos( $api_key, '-' ) !== false ) {
+        if ( str_contains( $api_key, '-' ) ) {
             $dc = substr( $api_key, strpos( $api_key, '-' ) + 1 );
         }
         if ( empty( $dc ) ) {

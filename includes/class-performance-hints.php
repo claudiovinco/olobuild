@@ -92,11 +92,11 @@ class Olo_Performance_Hints {
                 // Only preload fonts that are actually used as body or heading
                 if ( $name === $body_font || $name === $heading_font ) {
                     $type = 'font/woff2';
-                    if ( strpos( $url, '.woff2' ) !== false ) {
+                    if ( str_contains( $url, '.woff2' ) ) {
                         $type = 'font/woff2';
-                    } elseif ( strpos( $url, '.woff' ) !== false ) {
+                    } elseif ( str_contains( $url, '.woff' ) ) {
                         $type = 'font/woff';
-                    } elseif ( strpos( $url, '.ttf' ) !== false ) {
+                    } elseif ( str_contains( $url, '.ttf' ) ) {
                         $type = 'font/ttf';
                     }
                     echo '<link rel="preload" href="' . esc_url( $url ) . '" as="font" type="' . esc_attr( $type ) . '" crossorigin />' . "\n";

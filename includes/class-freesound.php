@@ -147,7 +147,7 @@ class Olo_Freesound {
 
         // Determine extension from URL
         $ext = '.mp3';
-        if ( strpos( $preview_url, '.ogg' ) !== false ) {
+        if ( str_contains( $preview_url, '.ogg' ) ) {
             $ext = '.ogg';
         }
 

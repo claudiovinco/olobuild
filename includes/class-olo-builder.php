@@ -248,7 +248,7 @@ class Olo_Builder {
 
     public function admin_enqueue_scripts( $hook ) {
         // Shared admin CSS for ALL Olobuild pages
-        if ( strpos( $hook, 'olobuild' ) !== false || strpos( $hook, 'olo-' ) !== false ) {
+        if ( str_contains( $hook, 'olobuild' ) || str_contains( $hook, 'olo-' ) ) {
             wp_enqueue_style(
                 'olo-admin-css',
                 OLO_URL . 'assets/css/olo-admin.css',

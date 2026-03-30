@@ -112,7 +112,7 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
         }
 
         // Meta filter: "key=value" pre-filters query
-        if ( ! empty( $s['meta_filter'] ) && strpos( $s['meta_filter'], '=' ) !== false ) {
+        if ( ! empty( $s['meta_filter'] ) && str_contains( $s['meta_filter'], '=' ) ) {
             list( $mf_key, $mf_val ) = array_map( 'trim', explode( '=', $s['meta_filter'], 2 ) );
             if ( $mf_key && $mf_val ) {
                 $query_args['meta_query'] = [

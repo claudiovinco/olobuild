@@ -194,7 +194,7 @@ class Olo_LiveSearch_Tile extends Olo_Tile_Base {
                 $title_lower = mb_strtolower( $p->post_title );
                 $skip = false;
                 foreach ( $exclude_words as $ew ) {
-                    if ( mb_strpos( $title_lower, $ew ) !== false ) {
+                    if ( str_contains( $title_lower, $ew ) ) {
                         $skip = true;
                         break;
                     }

@@ -124,7 +124,7 @@ class Olo_ServiceList_Tile extends Olo_Tile_Base {
                     $link = get_permalink( $svc_id );
                 } elseif ( $s['link_to'] === 'booking_page' ) {
                     $base = $s['booking_page_url'] ?: '/prenota';
-                    $link = $base . ( strpos( $base, '?' ) !== false ? '&' : '?' ) . 'service=' . $svc_id;
+                    $link = $base . ( str_contains( $base, '?' ) ? '&' : '?' ) . 'service=' . $svc_id;
                 }
             ?>
             <div class="olo-sl-card">

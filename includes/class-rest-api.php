@@ -2147,7 +2147,7 @@ class Olo_Rest_Api {
             }
         }
 
-        if ( $meta_filter && strpos( $meta_filter, '=' ) !== false ) {
+        if ( $meta_filter && str_contains( $meta_filter, '=' ) ) {
             list( $mf_key, $mf_val ) = array_map( 'trim', explode( '=', $meta_filter, 2 ) );
             if ( $mf_key && $mf_val ) {
                 $query_args['meta_query'] = [

@@ -450,11 +450,11 @@ class Olo_AI_Assistant {
 
         // Determina il media type
         $media_type = 'image/jpeg';
-        if ( strpos( $content_type, 'png' ) !== false ) {
+        if ( str_contains( $content_type, 'png' ) ) {
             $media_type = 'image/png';
-        } elseif ( strpos( $content_type, 'gif' ) !== false ) {
+        } elseif ( str_contains( $content_type, 'gif' ) ) {
             $media_type = 'image/gif';
-        } elseif ( strpos( $content_type, 'webp' ) !== false ) {
+        } elseif ( str_contains( $content_type, 'webp' ) ) {
             $media_type = 'image/webp';
         }
 

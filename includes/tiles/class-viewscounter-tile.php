@@ -44,7 +44,7 @@ class Olo_Viewscounter_Tile extends Olo_Tile_Base {
         }
         $ua = strtolower( $_SERVER['HTTP_USER_AGENT'] );
         foreach ( self::$bot_patterns as $pattern ) {
-            if ( strpos( $ua, $pattern ) !== false ) {
+            if ( str_contains( $ua, $pattern ) ) {
                 return true;
             }
         }

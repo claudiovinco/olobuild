@@ -113,7 +113,7 @@ class Olo_Headline_Tile extends Olo_Tile_Base {
         // Convert <br> / <br/> / <br /> to \n before stripping
         $raw = preg_replace( '/<br\s*\/?>/i', "\n", $raw );
         $raw = trim( wp_strip_all_tags( $raw ) );
-        $heading_text = strpos( $raw, "\n" ) !== false
+        $heading_text = str_contains( $raw, "\n" )
             ? nl2br( esc_html( $raw ) )
             : esc_html( $raw );
         $heading_extra = $has_gradient ? ' olo-hl-grad' : '';

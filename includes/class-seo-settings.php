@@ -109,7 +109,7 @@ class Olo_Seo_Settings {
                 $clean[ $k ] = $this->deep_sanitize( $v );
             } else {
                 // Permetti HTML nei campi di verifica webmaster (meta tag)
-                if ( strpos( $k, 'verification' ) !== false ) {
+                if ( str_contains( $k, 'verification' ) ) {
                     $clean[ $k ] = sanitize_text_field( $v );
                 } else {
                     $clean[ $k ] = sanitize_text_field( $v );
@@ -249,7 +249,7 @@ class Olo_Seo_Settings {
 
                 foreach ( $title_fields as $key => $info ) :
                     $val = $opts[ $key ] ?? $info[1];
-                    $is_desc = strpos( $key, '_desc' ) !== false;
+                    $is_desc = str_contains( $key, '_desc' );
                     ?>
                     <div class="olo-field-row">
                         <div class="olo-field-info">

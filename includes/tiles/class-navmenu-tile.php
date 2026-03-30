@@ -307,10 +307,10 @@ class Olo_NavMenu_Tile extends Olo_Tile_Base {
         // Fixed position
         if ( $h_pos !== 'inline' ) {
             $pos_css = "position:fixed;z-index:10050;";
-            if ( strpos( $h_pos, 'top' ) !== false )    $pos_css .= "top:{$h_oy}px;";
-            if ( strpos( $h_pos, 'bottom' ) !== false ) $pos_css .= "bottom:{$h_oy}px;";
-            if ( strpos( $h_pos, 'left' ) !== false )   $pos_css .= "left:{$h_ox}px;";
-            if ( strpos( $h_pos, 'right' ) !== false )  $pos_css .= "right:{$h_ox}px;";
+            if ( str_contains( $h_pos, 'top' ) )    $pos_css .= "top:{$h_oy}px;";
+            if ( str_contains( $h_pos, 'bottom' ) ) $pos_css .= "bottom:{$h_oy}px;";
+            if ( str_contains( $h_pos, 'left' ) )   $pos_css .= "left:{$h_ox}px;";
+            if ( str_contains( $h_pos, 'right' ) )  $pos_css .= "right:{$h_ox}px;";
             $rules[] = "{$sel} .olo-nav-toggle { {$pos_css} }";
         }
 

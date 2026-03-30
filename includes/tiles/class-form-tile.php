@@ -178,7 +178,7 @@ class Olo_Form_Tile extends Olo_Tile_Base {
         $step_labels_arr = [];
         if ( $is_multistep ) {
             $raw_labels = $s['step_labels'] ?? '';
-            if ( strpos( $raw_labels, "\n" ) !== false ) {
+            if ( str_contains( $raw_labels, "\n" ) ) {
                 $step_labels_arr = array_map( 'trim', explode( "\n", $raw_labels ) );
             } else {
                 $step_labels_arr = array_map( 'trim', explode( ',', $raw_labels ) );

@@ -150,7 +150,8 @@ class Olo_AB_Testing {
     public static function get_tests() {
         global $wpdb;
         $table = self::table();
-        $rows  = $wpdb->get_results( "SELECT * FROM $table ORDER BY created_at DESC", ARRAY_A );
+        // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $table built from $wpdb->prefix constant
+        $rows  = $wpdb->get_results( "SELECT * FROM `$table` ORDER BY created_at DESC", ARRAY_A );
 
         if ( ! is_array( $rows ) ) {
             $rows = [];
