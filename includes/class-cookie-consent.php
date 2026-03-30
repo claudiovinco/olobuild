@@ -1045,8 +1045,10 @@ class Olo_Cookie_Consent {
         $charset = $wpdb->get_charset_collate();
 
         // dbDelta handles both CREATE and ALTER (adding new columns)
+        // NOTE: dbDelta requires PRIMARY KEY on its own line (not inline) to avoid
+        // "Multiple primary key defined" error on subsequent runs.
         $sql = "CREATE TABLE $table (
-            id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
             consent_id VARCHAR(64) NOT NULL,
             ip_hash VARCHAR(64) NOT NULL DEFAULT '',
             categories TEXT NOT NULL,
@@ -1054,6 +1056,7 @@ class Olo_Cookie_Consent {
             banner_version INT UNSIGNED NOT NULL DEFAULT 1,
             user_agent VARCHAR(512) NOT NULL DEFAULT '',
             created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY  (id),
             INDEX idx_consent_id (consent_id),
             INDEX idx_created (created_at)
         ) $charset;";

@@ -1316,7 +1316,9 @@
       "Bash(\"/c/Program Files/nodejs/node.exe\" ./node_modules/vite/bin/vite.js build --config vite.config.admin.js)",
       "Bash(\"C:/Windows/System32/OpenSSH/ssh.exe\" -i \"C:/Users/claudio/.ssh/claude_mosaic_key2\" -o StrictHostKeyChecking=no root@192.168.1.70 \"grep -r ''PHP Fatal\\\\|PHP Error'' /var/log/apache2/error.log 2>/dev/null | grep -i olobuild | tail -5 || echo ''Nessun errore fatale Olobuild''\")",
       "Bash(\"C:/Windows/System32/OpenSSH/ssh.exe\" -i \"C:/Users/claudio/.ssh/claude_mosaic_key2\" -o StrictHostKeyChecking=no root@192.168.1.70 \"grep -c ''build_spacing_css'' /var/www/wordpress/wp-content/plugins/olobuild/includes/tiles/class-iconbox-tile.php\")",
-      "Bash(\"C:/Windows/System32/OpenSSH/ssh.exe\" -i \"C:/Users/claudio/.ssh/claude_mosaic_key2\" -o StrictHostKeyChecking=no root@192.168.1.70 \"curl -skI https://mosaic.clod.eu/ | head -10\")"
+      "Bash(\"C:/Windows/System32/OpenSSH/ssh.exe\" -i \"C:/Users/claudio/.ssh/claude_mosaic_key2\" -o StrictHostKeyChecking=no root@192.168.1.70 \"curl -skI https://mosaic.clod.eu/ | head -10\")",
+      "Bash(\"C:/Windows/System32/OpenSSH/ssh.exe\" -i \"C:/Users/claudio/.ssh/claude_mosaic_key2\" -o StrictHostKeyChecking=no root@192.168.1.70 \"echo ''=== Asset sizes ==='' && ls -lhS /var/www/wordpress/wp-content/plugins/olobuild/assets/js/ && echo ''=== CSS sizes ==='' && ls -lhS /var/www/wordpress/wp-content/plugins/olobuild/assets/css/ && echo ''=== PHP version ==='' && php -v | head -1 && echo ''=== PHP errors after deploy ==='' && grep -c ''olobuild'' /var/log/apache2/error.log 2>/dev/null && grep ''olobuild'' /var/log/apache2/error.log 2>/dev/null | tail -1 | cut -c1-120\")",
+      "Bash(\"C:/Windows/System32/OpenSSH/ssh.exe\" -i \"C:/Users/claudio/.ssh/claude_mosaic_key2\" -o StrictHostKeyChecking=no root@192.168.1.70 \"cd /var/www/wordpress/wp-content/plugins/olobuild/assets/js && echo ''=== Removing stale chunks ==='' && rm -v tiptap-*.js vendor-*.js draggable-*.js FieldEditor-*.js 2>&1 && echo ''=== After cleanup ==='' && ls -lhS && echo ''=== Saved ==='' && echo ''Removed ~1.1MB of stale chunks''\")"
     ]
   }
 }
