@@ -299,7 +299,11 @@ class Olo_Form_Handler {
                     // Block dangerous file types regardless of extension
                     $dangerous_mimes = [ 'application/x-httpd-php', 'application/x-php', 'text/x-php', 'application/x-executable', 'application/x-msdownload' ];
                     $real_mime = '';
-                    if ( function_exists( 'mime_content_type' ) ) {
+                    if ( function_exists( 'finfo_open' ) ) {
+                        $finfo     = finfo_open( FILEINFO_MIME_TYPE );
+                        $real_mime = finfo_file( $finfo, $single_file['tmp_name'] );
+                        finfo_close( $finfo );
+                    } elseif ( function_exists( 'mime_content_type' ) ) {
                         $real_mime = mime_content_type( $single_file['tmp_name'] );
                     }
                     if ( $real_mime && in_array( $real_mime, $dangerous_mimes, true ) ) {

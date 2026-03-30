@@ -894,8 +894,9 @@ class Olo_Cookie_Consent {
         $table = $wpdb->prefix . self::LOG_TABLE;
 
         $total = 0;
-        if ( $wpdb->get_var( "SHOW TABLES LIKE '$table'" ) === $table ) {
-            $total = (int) $wpdb->get_var( "SELECT COUNT(*) FROM $table" );
+        if ( $wpdb->get_var( $wpdb->prepare( "SHOW TABLES LIKE %s", $table ) ) === $table ) {
+            // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $table is built from $wpdb->prefix constant
+            $total = (int) $wpdb->get_var( "SELECT COUNT(*) FROM `$table`" );
         }
 
         $page     = max( 1, intval( $_GET['paged'] ?? 1 ) );
@@ -1104,9 +1105,10 @@ class Olo_Cookie_Consent {
         ] );
 
         // Auto-prune: keep max 10000 entries
-        $count = (int) $wpdb->get_var( "SELECT COUNT(*) FROM $table" );
+        // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $table is built from $wpdb->prefix constant
+        $count = (int) $wpdb->get_var( "SELECT COUNT(*) FROM `$table`" );
         if ( $count > 10000 ) {
-            $wpdb->query( "DELETE FROM $table ORDER BY created_at ASC LIMIT " . ( $count - 10000 ) );
+            $wpdb->query( $wpdb->prepare( "DELETE FROM `$table` ORDER BY created_at ASC LIMIT %d", $count - 10000 ) );
         }
 
         wp_send_json_success();
@@ -1702,7 +1704,8 @@ class Olo_Cookie_Consent {
 
         // Don't block if consent already given
         if ( isset( $_COOKIE['olo_cc'] ) ) {
-            $consent = json_decode( urldecode( $_COOKIE['olo_cc'] ), true );
+            $consent = json_decode( wp_unslash( $_COOKIE['olo_cc'] ), true );
+            if ( json_last_error() !== JSON_ERROR_NONE ) { $consent = []; }
             if ( is_array( $consent ) ) {
                 // If all accepted, don't block anything
                 $all = true;
@@ -1745,7 +1748,8 @@ class Olo_Cookie_Consent {
 
                 // Check if this specific category is consented
                 if ( isset( $_COOKIE['olo_cc'] ) ) {
-                    $consent = json_decode( urldecode( $_COOKIE['olo_cc'] ), true );
+                    $consent = json_decode( wp_unslash( $_COOKIE['olo_cc'] ), true );
+                    if ( json_last_error() !== JSON_ERROR_NONE ) { $consent = []; }
                     if ( is_array( $consent ) ) {
                         if ( ! empty( $consent[ $category ] ) ) {
                             return $tag; // Already consented for this category

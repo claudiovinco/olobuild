@@ -2278,6 +2278,7 @@ function stopAbStatsPolling() {
 watch(() => builderStore.selectedTileId, () => {
   stopAbStatsPolling();
   loadAbTest();
+  styleState.value = 'normal';
 }, { immediate: true });
 
 // Migrate old flat parallax format to new multi-stop object
@@ -2397,9 +2398,7 @@ function updateTransition(key, value) {
   builderStore.markDirtyForTile(builderStore.selectedTileId);
 }
 
-watch(() => builderStore.selectedTileId, () => {
-  styleState.value = 'normal';
-});
+// styleState reset is handled in the watcher above (with AB test polling)
 
 // --- Dynamic content ---
 function onDynamicFieldUpdate(dynamicUpdate, isRemove) {

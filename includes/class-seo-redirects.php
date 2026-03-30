@@ -141,7 +141,15 @@ class Olo_Seo_Redirects {
             );
             foreach ( $regex_redirects as $r ) {
                 $pattern = substr( $r->from_url, 1 );
-                if ( @preg_match( '#' . $pattern . '#i', $request_path, $matches ) ) {
+                $result = preg_match( '#' . $pattern . '#i', $request_path, $matches );
+                if ( $result === false ) {
+                    // Invalid regex pattern — skip to avoid ReDoS and log for debug
+                    if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+                        error_log( 'Olobuild: invalid redirect regex pattern: ' . $pattern );
+                    }
+                    continue;
+                }
+                if ( $result === 1 ) {
                     $redirect = $r;
                     // Replace $1, $2 etc in target
                     if ( ! empty( $matches ) ) {

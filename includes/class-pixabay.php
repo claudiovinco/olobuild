@@ -166,7 +166,7 @@ class Olo_Pixabay {
         // Validate MIME type
         $mime = wp_check_filetype( $tmp_file );
         if ( empty( $mime['type'] ) ) {
-            $finfo_mime = function_exists('mime_content_type') ? mime_content_type( $tmp_file ) : '';
+            $finfo_mime = function_exists( 'finfo_open' ) ? finfo_file( finfo_open( FILEINFO_MIME_TYPE ), $tmp_file ) : ( function_exists( 'mime_content_type' ) ? mime_content_type( $tmp_file ) : '' );
             $allowed = [ 'image/jpeg', 'image/png', 'image/webp', 'image/gif', 'video/mp4', 'video/webm' ];
             if ( $finfo_mime && ! in_array( $finfo_mime, $allowed, true ) ) {
                 @unlink( $tmp_file );
@@ -318,7 +318,7 @@ class Olo_Pixabay {
         // Validate MIME type
         $mime = wp_check_filetype( $tmp_file );
         if ( empty( $mime['type'] ) ) {
-            $finfo_mime = function_exists('mime_content_type') ? mime_content_type( $tmp_file ) : '';
+            $finfo_mime = function_exists( 'finfo_open' ) ? finfo_file( finfo_open( FILEINFO_MIME_TYPE ), $tmp_file ) : ( function_exists( 'mime_content_type' ) ? mime_content_type( $tmp_file ) : '' );
             $allowed = [ 'image/jpeg', 'image/png', 'image/webp', 'image/gif', 'video/mp4', 'video/webm' ];
             if ( $finfo_mime && ! in_array( $finfo_mime, $allowed, true ) ) {
                 @unlink( $tmp_file );

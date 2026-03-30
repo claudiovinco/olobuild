@@ -511,7 +511,8 @@ class Olo_Analytics_Tracking {
 
         // Check the consent cookie
         if ( isset( $_COOKIE['olo_cc'] ) ) {
-            $consent = json_decode( urldecode( $_COOKIE['olo_cc'] ), true );
+            $consent = json_decode( wp_unslash( $_COOKIE['olo_cc'] ), true );
+            if ( json_last_error() !== JSON_ERROR_NONE ) { $consent = []; }
             if ( is_array( $consent ) ) {
                 if ( ! empty( $consent[ $category ] ) ) {
                     return 'text/javascript';

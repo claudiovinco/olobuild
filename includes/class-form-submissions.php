@@ -653,7 +653,8 @@ class Olo_Form_Submissions_List_Table extends WP_List_Table {
 
         global $wpdb;
         $table     = $wpdb->prefix . 'olo_form_submissions';
-        $form_names = $wpdb->get_col( "SELECT DISTINCT form_name FROM $table WHERE form_name != '' ORDER BY form_name" );
+        // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $table is built from $wpdb->prefix constant
+        $form_names = $wpdb->get_col( "SELECT DISTINCT form_name FROM `$table` WHERE form_name != '' ORDER BY form_name" );
 
         if ( empty( $form_names ) ) {
             return;
@@ -735,7 +736,7 @@ class Olo_Form_Submissions_List_Table extends WP_List_Table {
         if ( ! empty( $where_values ) ) {
             $total = (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM $table $where_sql", ...$where_values ) );
         } else {
-            $total = (int) $wpdb->get_var( "SELECT COUNT(*) FROM $table $where_sql" );
+            $total = (int) $wpdb->get_var( "SELECT COUNT(*) FROM $table" );
         }
 
         // Fetch rows

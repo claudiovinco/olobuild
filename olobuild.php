@@ -19,6 +19,13 @@ define( 'OLO_VERSION', '3.1.0' );
 define( 'OLO_PATH', plugin_dir_path( __FILE__ ) );
 define( 'OLO_URL', plugin_dir_url( __FILE__ ) );
 
+// Polyfill str_contains() for PHP < 8.0
+if ( ! function_exists( 'str_contains' ) ) {
+    function str_contains( string $haystack, string $needle ): bool {
+        return '' === $needle || false !== strpos( $haystack, $needle );
+    }
+}
+
 /**
  * Load plugin text domain for translations.
  * Force-load MO for all non-Italian locales (plugin source strings are in Italian).
@@ -44,8 +51,17 @@ add_filter( 'upload_mimes', function( $mimes ) {
     return $mimes;
 } );
 
-// Bypass la validazione MIME reale di WP per JSON (wp_check_filetype_and_ext restituisce vuoto)
+// Bypass la validazione MIME reale di WP per JSON/SVG (wp_check_filetype_and_ext restituisce vuoto)
 add_filter( 'wp_check_filetype_and_ext', function( $data, $file, $filename, $mimes ) {
+    if ( ! current_user_can( 'upload_files' ) ) {
+        return $data;
+    }
+    // Validate: only allow single extension (prevent double-ext attacks like .json.php)
+    $basename = basename( $filename );
+    $parts    = explode( '.', $basename );
+    if ( count( $parts ) > 2 ) {
+        return $data; // Reject double extensions
+    }
     $ext = strtolower( pathinfo( $filename, PATHINFO_EXTENSION ) );
     if ( $ext === 'json' ) {
         $data['ext']  = 'json';
@@ -161,10 +177,10 @@ register_activation_hook( __FILE__, function () {
     $new_revisions  = $wpdb->prefix . 'olo_revisions';
 
     // Rename tables if old ones exist and new ones don't
-    if ( $wpdb->get_var( "SHOW TABLES LIKE '{$old_templates}'" ) && ! $wpdb->get_var( "SHOW TABLES LIKE '{$new_templates}'" ) ) {
+    if ( $wpdb->get_var( $wpdb->prepare( "SHOW TABLES LIKE %s", $old_templates ) ) && ! $wpdb->get_var( $wpdb->prepare( "SHOW TABLES LIKE %s", $new_templates ) ) ) {
         $wpdb->query( "RENAME TABLE `{$old_templates}` TO `{$new_templates}`" );
     }
-    if ( $wpdb->get_var( "SHOW TABLES LIKE '{$old_revisions}'" ) && ! $wpdb->get_var( "SHOW TABLES LIKE '{$new_revisions}'" ) ) {
+    if ( $wpdb->get_var( $wpdb->prepare( "SHOW TABLES LIKE %s", $old_revisions ) ) && ! $wpdb->get_var( $wpdb->prepare( "SHOW TABLES LIKE %s", $new_revisions ) ) ) {
         $wpdb->query( "RENAME TABLE `{$old_revisions}` TO `{$new_revisions}`" );
     }
 
@@ -200,9 +216,9 @@ register_activation_hook( __FILE__, function () {
     }
 
     // Migrate post meta
-    $wpdb->query( "UPDATE {$wpdb->postmeta} SET meta_key = '_olo_template_id' WHERE meta_key = '_mosaic_template_id'" );
-    $wpdb->query( "UPDATE {$wpdb->postmeta} SET meta_key = '_olo_header_id' WHERE meta_key = '_mosaic_header_id'" );
-    $wpdb->query( "UPDATE {$wpdb->postmeta} SET meta_key = '_olo_footer_id' WHERE meta_key = '_mosaic_footer_id'" );
+    $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->postmeta} SET meta_key = %s WHERE meta_key = %s", '_olo_template_id', '_mosaic_template_id' ) );
+    $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->postmeta} SET meta_key = %s WHERE meta_key = %s", '_olo_header_id', '_mosaic_header_id' ) );
+    $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->postmeta} SET meta_key = %s WHERE meta_key = %s", '_olo_footer_id', '_mosaic_footer_id' ) );
 
     // Migrate nav menu location assignment
     $locations = get_theme_mod( 'nav_menu_locations', [] );

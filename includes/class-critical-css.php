@@ -230,7 +230,11 @@ class Olo_Critical_CSS {
         global $wpdb;
 
         $count = $wpdb->query(
-            "DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_olo_critical_css_%' OR option_name LIKE '_transient_timeout_olo_critical_css_%'"
+            $wpdb->prepare(
+                "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s OR option_name LIKE %s",
+                '_transient_olo_critical_css_%',
+                '_transient_timeout_olo_critical_css_%'
+            )
         );
 
         return intval( $count / 2 ); // Each transient has 2 rows (value + timeout)
@@ -245,11 +249,18 @@ class Olo_Critical_CSS {
         global $wpdb;
 
         $cached_count = (int) $wpdb->get_var(
-            "SELECT COUNT(*) FROM {$wpdb->options} WHERE option_name LIKE '_transient_olo_critical_css_%' AND option_name NOT LIKE '_transient_timeout_%'"
+            $wpdb->prepare(
+                "SELECT COUNT(*) FROM {$wpdb->options} WHERE option_name LIKE %s AND option_name NOT LIKE %s",
+                '_transient_olo_critical_css_%',
+                '_transient_timeout_%'
+            )
         );
 
         $last_generated = $wpdb->get_var(
-            "SELECT option_value FROM {$wpdb->options} WHERE option_name LIKE '_transient_timeout_olo_critical_css_%' ORDER BY option_value DESC LIMIT 1"
+            $wpdb->prepare(
+                "SELECT option_value FROM {$wpdb->options} WHERE option_name LIKE %s ORDER BY option_value DESC LIMIT 1",
+                '_transient_timeout_olo_critical_css_%'
+            )
         );
 
         return [
