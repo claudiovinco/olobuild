@@ -3018,7 +3018,7 @@ class Olo_Frontend_Renderer {
             // Single field bindings
             foreach ( $dynamic as $field_key => $binding ) {
                 if ( ! is_array( $binding ) ) continue;
-                if ( strpos( $field_key, '_' ) === 0 ) continue; // skip _query, _itemMap
+                if ( str_starts_with( $field_key, '_' ) ) continue; // skip _query, _itemMap
                 $source = $binding['source'] ?? '';
                 $field  = $binding['field'] ?? '';
                 if ( $source && $field ) {

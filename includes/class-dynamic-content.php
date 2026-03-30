@@ -362,7 +362,7 @@ class Olo_Dynamic_Content {
 
             default:
                 // Support request_param:param_name format
-                if ( strpos( $field, 'request_param:' ) === 0 ) {
+                if ( str_starts_with( $field, 'request_param:' ) ) {
                     $param_name = substr( $field, 14 );
                     return isset( $_GET[ $param_name ] ) ? sanitize_text_field( wp_unslash( $_GET[ $param_name ] ) ) : '';
                 }
@@ -417,7 +417,7 @@ class Olo_Dynamic_Content {
         if ( ! class_exists( 'WooCommerce' ) ) return null;
 
         // Cart-level fields
-        if ( strpos( $field, 'cart_' ) === 0 ) {
+        if ( str_starts_with( $field, 'cart_' ) ) {
             $wc = WC();
             if ( ! $wc || ! $wc->cart ) return '';
             switch ( $field ) {

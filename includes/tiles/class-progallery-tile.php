@@ -175,7 +175,7 @@ class Olo_ProGallery_Tile extends Olo_Tile_Base {
         $strip_dir      = ( $s['strip_direction'] === 'right' ) ? 'right' : 'left';
         $strip_fade     = ! empty( $s['strip_fade_edges'] );
         $video_preview  = in_array( $s['video_preview'] ?? '', [ 'poster', 'autoplay' ], true ) ? $s['video_preview'] : 'poster';
-        $is_strip       = ( strpos( $layout, 'strip' ) === 0 );
+        $is_strip       = ( str_starts_with( $layout, 'strip' ) );
         $is_strip_drag  = in_array( $layout, [ 'strip', 'strip_collage', 'strip_multi' ], true );
         $is_strip_auto  = in_array( $layout, [ 'strip_marquee', 'strip_split' ], true );
         $is_coverflow   = ( $layout === 'strip_coverflow' );

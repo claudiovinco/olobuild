@@ -127,7 +127,7 @@ abstract class Olo_Tile_Base {
      */
     protected function render_icon_html( $icon_name, $ratio = 1, $extra_attr = '' ) {
         if ( empty( $icon_name ) ) return '';
-        if ( strpos( $icon_name, 'custom:' ) === 0 ) {
+        if ( str_starts_with( $icon_name, 'custom:' ) ) {
             $name = substr( $icon_name, 7 );
             $icons = get_option( 'olo_custom_icons', [] );
             if ( isset( $icons[ $name ] ) ) {

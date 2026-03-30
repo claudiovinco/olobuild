@@ -19,10 +19,15 @@ define( 'OLO_VERSION', '3.1.0' );
 define( 'OLO_PATH', plugin_dir_path( __FILE__ ) );
 define( 'OLO_URL', plugin_dir_url( __FILE__ ) );
 
-// Polyfill str_contains() for PHP < 8.0
+// Polyfill str_contains() and str_starts_with() for PHP < 8.0
 if ( ! function_exists( 'str_contains' ) ) {
     function str_contains( string $haystack, string $needle ): bool {
         return '' === $needle || false !== strpos( $haystack, $needle );
+    }
+}
+if ( ! function_exists( 'str_starts_with' ) ) {
+    function str_starts_with( string $haystack, string $needle ): bool {
+        return 0 === strncmp( $haystack, $needle, strlen( $needle ) );
     }
 }
 

@@ -57,7 +57,7 @@ class Olo_Testimonial_Tile extends Olo_Tile_Base {
         $show_line   = filter_var( $s['show_line'], FILTER_VALIDATE_BOOLEAN );
         $valid_pos   = [ 'bottom-left', 'bottom-center', 'bottom-right', 'left', 'right' ];
         $position    = in_array( $s['author_position'], $valid_pos ) ? $s['author_position'] : 'bottom-left';
-        $is_bottom   = strpos( $position, 'bottom' ) === 0;
+        $is_bottom   = str_starts_with( $position, 'bottom' );
         $av_size     = intval( $s['avatar_size'] ) ?: 48;
         $is_square   = $s['avatar_shape'] === 'square';
         $av_radius   = $is_square ? ( intval( $s['avatar_radius'] ) . 'px' ) : '50%';

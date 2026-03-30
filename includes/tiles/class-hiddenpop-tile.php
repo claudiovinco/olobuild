@@ -401,7 +401,7 @@ class Olo_Hiddenpop_Tile extends Olo_Tile_Base {
         }
         $renderer = new Olo_Frontend_Renderer();
         $output   = $renderer->render_shortcode( [ 'id' => $template_id ] );
-        if ( empty( $output ) || strpos( $output, '<!-- Olobuilder' ) === 0 ) {
+        if ( empty( $output ) || str_starts_with( $output, '<!-- Olobuilder' ) ) {
             return '<p><em>Template non disponibile.</em></p>';
         }
         return $output;

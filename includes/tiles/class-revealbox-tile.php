@@ -95,8 +95,8 @@ class Olo_Revealbox_Tile extends Olo_Tile_Base {
         $safe_overlay       = preg_replace( '/[^a-zA-Z0-9#\(\)\,\.\s\%]/', '', $s['overlay_color'] );
         $safe_reveal_ov     = preg_replace( '/[^a-zA-Z0-9#\(\)\,\.\s\%]/', '', $s['reveal_overlay_color'] );
 
-        $is_slide = strpos( $effect, 'slide-' ) === 0;
-        $is_flip  = strpos( $effect, 'flip-' ) === 0;
+        $is_slide = str_starts_with( $effect, 'slide-' );
+        $is_flip  = str_starts_with( $effect, 'flip-' );
         $is_stack = in_array( $effect, [ 'fade', 'zoom-in', 'zoom-out', 'rotate-in' ], true );
         $is_horiz = $effect === 'slide-left' || $effect === 'slide-right';
 

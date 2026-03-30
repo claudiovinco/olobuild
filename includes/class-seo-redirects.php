@@ -201,7 +201,7 @@ class Olo_Seo_Redirects {
 
         // Remove WordPress subdirectory if any
         $home_path = wp_parse_url( home_url(), PHP_URL_PATH ) ?: '';
-        if ( $home_path && strpos( $path, $home_path ) === 0 ) {
+        if ( $home_path && str_starts_with( $path, $home_path ) ) {
             $path = substr( $path, strlen( $home_path ) );
         }
 

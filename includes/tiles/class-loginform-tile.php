@@ -1060,7 +1060,7 @@ class Olo_Loginform_Tile extends Olo_Tile_Base {
      * Renderizza il valore della colonna.
      */
     public static function render_user_column( $value, $column_name, $user_id ) {
-        if ( strpos( $column_name, 'olo_olo_cf_' ) === 0 ) {
+        if ( str_starts_with( $column_name, 'olo_olo_cf_' ) ) {
             $meta_key = substr( $column_name, 4 ); // rimuove 'olo_'
             return esc_html( get_user_meta( $user_id, $meta_key, true ) );
         }
@@ -1084,7 +1084,7 @@ class Olo_Loginform_Tile extends Olo_Tile_Base {
     public static function sort_user_columns( $query ) {
         if ( ! is_admin() ) return;
         $orderby = $query->get( 'orderby' );
-        if ( $orderby && strpos( $orderby, 'olo_cf_' ) === 0 ) {
+        if ( $orderby && str_starts_with( $orderby, 'olo_cf_' ) ) {
             $query->set( 'meta_key', $orderby );
             $query->set( 'orderby', 'meta_value' );
         }
@@ -1121,7 +1121,7 @@ class Olo_Loginform_Tile extends Olo_Tile_Base {
         if ( empty( $_POST['olo_profile_meta'] ) || ! is_array( $_POST['olo_profile_meta'] ) ) return;
         foreach ( $_POST['olo_profile_meta'] as $key => $value ) {
             $safe_key = sanitize_key( $key );
-            if ( strpos( $safe_key, 'olo_cf_' ) === 0 ) {
+            if ( str_starts_with( $safe_key, 'olo_cf_' ) ) {
                 update_user_meta( $user_id, $safe_key, sanitize_text_field( $value ) );
             }
         }

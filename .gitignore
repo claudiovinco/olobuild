@@ -6,3 +6,7 @@ Thumbs.db
 dist/
 src_backup_*/
 --no-same-owner
+test-*.php
+check_config.py
+tmp_deploy/
+*.tar.gz
