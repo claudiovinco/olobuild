@@ -12,20 +12,7 @@ class Olo_Frontend_Renderer {
         '3-5' => 60, '4-5' => 80, '1-6' => 16.66, '5-6' => 83.33,
     ];
 
-    private $shadow_map = [
-        'sm' => '0 1px 2px 0 rgba(0,0,0,0.05)',
-        'md' => '0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1)',
-        'lg' => '0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1)',
-        'xl' => '0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1)',
-    ];
-
-    /** drop-shadow filter equivalents — per elementi con mask/clip-path */
-    private $drop_shadow_map = [
-        'sm' => 'drop-shadow(0 1px 2px rgba(0,0,0,0.05))',
-        'md' => 'drop-shadow(0 4px 6px rgba(0,0,0,0.1)) drop-shadow(0 2px 4px rgba(0,0,0,0.1))',
-        'lg' => 'drop-shadow(0 10px 15px rgba(0,0,0,0.1)) drop-shadow(0 4px 6px rgba(0,0,0,0.1))',
-        'xl' => 'drop-shadow(0 20px 25px rgba(0,0,0,0.1)) drop-shadow(0 8px 10px rgba(0,0,0,0.1))',
-    ];
+    // shadow_map and drop_shadow_map moved to Olo_CSS_Builder
 
     private $align_map = [
         'stretch' => 'stretch',
@@ -38,6 +25,17 @@ class Olo_Frontend_Renderer {
      * Builder mode: adds data-olo-tile-id attributes for iframe live preview.
      */
     public $builder_mode = false;
+
+    /** @var Olo_CSS_Builder */
+    private $css;
+
+    /** @var Olo_Animation_Builder */
+    private $anim;
+
+    public function __construct() {
+        $this->css  = new Olo_CSS_Builder();
+        $this->anim = new Olo_Animation_Builder();
+    }
 
     /**
      * Static tile registry — stores all tile nodes from templates being rendered
@@ -234,719 +232,8 @@ class Olo_Frontend_Renderer {
     /**
      * Get effective background config for a tile.
      */
-    private function get_effective_bg( $style ) {
-        if ( ! empty( $style['bg'] ) && ! empty( $style['bg']['type'] ) && $style['bg']['type'] !== 'none' ) {
-            return $style['bg'];
-        }
-        if ( ! empty( $style['bg_color'] ) ) {
-            return [ 'type' => 'solid', 'color' => $style['bg_color'] ];
-        }
-        return [ 'type' => 'none' ];
-    }
+    // --- CSS builder and animation builder methods moved to Olo_CSS_Builder and Olo_Animation_Builder ---
 
-    /**
-     * Generate inline background CSS from a bg config.
-     */
-    private function get_bg_inline_css( $bg ) {
-        if ( $bg['type'] === 'solid' && ! empty( $bg['color'] ) ) {
-            $color   = $bg['color'];
-            $opacity = isset( $bg['color_opacity'] ) ? intval( $bg['color_opacity'] ) : 100;
-            if ( $opacity < 100 && preg_match( '/^#([0-9a-fA-F]{6})$/', $color, $m ) ) {
-                $r = hexdec( substr( $m[1], 0, 2 ) );
-                $g = hexdec( substr( $m[1], 2, 2 ) );
-                $b = hexdec( substr( $m[1], 4, 2 ) );
-                $a = round( $opacity / 100, 2 );
-                return "background-color: rgba({$r}, {$g}, {$b}, {$a})";
-            }
-            return 'background-color: ' . esc_attr( $color );
-        }
-        if ( $bg['type'] === 'gradient' ) {
-            return $this->build_gradient_css( $bg );
-        }
-        return '';
-    }
-
-    /**
-     * Build uk-parallax attribute string from a multi-stop parallax object.
-     * Supports property keys: x, y, scale, rotate, opacity, blur, bgx, bgy.
-     * Each property has an array of {value, position} stops.
-     */
-    private function build_parallax_attr_from_object( $parallax ) {
-        $prop_keys = [ 'x', 'y', 'scale', 'rotate', 'opacity', 'blur', 'bgx', 'bgy' ];
-        $parts = [];
-
-        foreach ( $prop_keys as $key ) {
-            if ( empty( $parallax[ $key ] ) || ! is_array( $parallax[ $key ] ) ) {
-                continue;
-            }
-
-            $stops = $parallax[ $key ];
-            // Sort by position
-            usort( $stops, function( $a, $b ) {
-                return ( $a['position'] ?? 0 ) - ( $b['position'] ?? 0 );
-            });
-
-            $count = count( $stops );
-            if ( $count === 0 ) {
-                continue;
-            }
-
-            // Build value segments — append % when position differs from default (first=0, last=100)
-            $segments = [];
-            foreach ( $stops as $i => $s ) {
-                $v   = $this->format_parallax_value( $s['value'] );
-                $pos = intval( $s['position'] ?? ( $i === $count - 1 ? 100 : 0 ) );
-
-                $need_pct = false;
-                if ( $i === 0 && $pos !== 0 ) {
-                    $need_pct = true;
-                } elseif ( $i === $count - 1 && $pos !== 100 ) {
-                    $need_pct = true;
-                } elseif ( $i > 0 && $i < $count - 1 ) {
-                    $need_pct = true;
-                }
-
-                $segments[] = $need_pct ? $v . ' ' . $pos . '%' : $v;
-            }
-            $parts[] = $key . ': ' . implode( ',', $segments );
-        }
-
-        if ( empty( $parts ) ) {
-            return '';
-        }
-
-        // Advanced options
-        if ( ! empty( $parallax['start'] ) ) {
-            $parts[] = 'start: ' . esc_attr( $parallax['start'] );
-        }
-        if ( ! empty( $parallax['end'] ) ) {
-            $parts[] = 'end: ' . esc_attr( $parallax['end'] );
-        }
-        if ( isset( $parallax['easing'] ) && $parallax['easing'] !== null && $parallax['easing'] !== '' ) {
-            $parts[] = 'easing: ' . floatval( $parallax['easing'] );
-        }
-
-        $nomobile = $parallax['nomobile'] ?? true;
-        if ( $nomobile ) {
-            $parts[] = 'media: @m';
-        }
-
-        return ' uk-parallax="' . implode( '; ', $parts ) . '"';
-    }
-
-    /**
-     * Format a parallax value: integers as int, floats with minimal decimals.
-     */
-    private function format_parallax_value( $val ) {
-        $f = floatval( $val );
-        if ( $f == intval( $f ) ) {
-            return strval( intval( $f ) );
-        }
-        return rtrim( rtrim( number_format( $f, 4, '.', '' ), '0' ), '.' );
-    }
-
-    /**
-     * Build uk-parallax attribute value from a bg config.
-     * Returns empty string if parallax is not enabled.
-     */
-    private function build_uk_parallax_attr( $bg ) {
-        if ( empty( $bg['parallax'] ) ) {
-            return '';
-        }
-
-        // New multi-stop format: parallax is an object/array
-        if ( is_array( $bg['parallax'] ) ) {
-            return $this->build_parallax_attr_from_object( $bg['parallax'] );
-        }
-
-        // Legacy boolean format
-        $parts = [];
-
-        $bgy = isset( $bg['parallax_bgy'] ) ? intval( $bg['parallax_bgy'] ) : -200;
-        if ( $bgy !== 0 ) {
-            $parts[] = 'bgy: ' . $bgy;
-        }
-
-        $bgx = isset( $bg['parallax_bgx'] ) ? intval( $bg['parallax_bgx'] ) : 0;
-        if ( $bgx !== 0 ) {
-            $parts[] = 'bgx: ' . $bgx;
-        }
-
-        if ( ! empty( $bg['parallax_opacity'] ) ) {
-            $start = floatval( $bg['parallax_opacity_start'] ?? 0.3 );
-            $end   = floatval( $bg['parallax_opacity_end'] ?? 1 );
-            $parts[] = 'opacity: ' . $start . ',' . $end;
-        }
-
-        if ( ! empty( $bg['parallax_scale'] ) ) {
-            $start = floatval( $bg['parallax_scale_start'] ?? 1 );
-            $end   = floatval( $bg['parallax_scale_end'] ?? 1.2 );
-            $parts[] = 'scale: ' . $start . ',' . $end;
-        }
-
-        if ( ! empty( $bg['parallax_blur'] ) ) {
-            $start = intval( $bg['parallax_blur_start'] ?? 5 );
-            $end   = intval( $bg['parallax_blur_end'] ?? 0 );
-            $parts[] = 'blur: ' . $start . ',' . $end;
-        }
-
-        $nomobile = $bg['parallax_nomobile'] ?? true;
-        if ( $nomobile ) {
-            $parts[] = 'media: @m';
-        }
-
-        if ( empty( $parts ) ) {
-            return '';
-        }
-
-        return ' uk-parallax="' . implode( '; ', $parts ) . '"';
-    }
-
-    /**
-     * Build uk-scrollspy attribute from advanced config.
-     * Supports stagger mode: animates direct children with incremental delay.
-     */
-    private function build_scrollspy_attr( $advanced ) {
-        $animation = $advanced['scrollspy_animation'] ?? '';
-        if ( empty( $animation ) ) {
-            return '';
-        }
-
-        $stagger = intval( $advanced['scrollspy_stagger'] ?? 0 );
-
-        $parts = [ 'cls: uk-animation-' . esc_attr( $animation ) ];
-
-        $delay = intval( $advanced['scrollspy_delay'] ?? 0 );
-        if ( $delay > 0 ) {
-            $parts[] = 'delay: ' . $delay;
-        }
-
-        $repeat = ! empty( $advanced['scrollspy_repeat'] );
-        if ( $repeat ) {
-            $parts[] = 'repeat: true';
-        }
-
-        // Stagger mode: target direct children for sequential animation
-        if ( $stagger > 0 ) {
-            $parts[] = 'target: > *';
-            $parts[] = 'delay: ' . $stagger;
-        }
-
-        return ' uk-scrollspy="' . implode( '; ', $parts ) . '"';
-    }
-
-    /**
-     * Build uk-parallax attribute for element-level parallax (translate, opacity, scale, etc.).
-     */
-    private function build_element_parallax_attr( $advanced ) {
-        // New multi-stop format: parallax is an object/array
-        if ( isset( $advanced['parallax'] ) && is_array( $advanced['parallax'] ) ) {
-            return $this->build_parallax_attr_from_object( $advanced['parallax'] );
-        }
-
-        // Legacy flat keys format
-        $parts = [];
-
-        $y_start = intval( $advanced['parallax_y_start'] ?? 0 );
-        $y_end   = intval( $advanced['parallax_y_end'] ?? 0 );
-        if ( $y_start !== 0 || $y_end !== 0 ) {
-            $parts[] = 'y: ' . $y_start . ',' . $y_end;
-        }
-
-        $op_start = $advanced['parallax_opacity_start'] ?? '';
-        $op_end   = $advanced['parallax_opacity_end'] ?? '';
-        if ( $op_start !== '' && $op_end !== '' ) {
-            $parts[] = 'opacity: ' . floatval( $op_start ) . ',' . floatval( $op_end );
-        }
-
-        $sc_start = $advanced['parallax_scale_start'] ?? '';
-        $sc_end   = $advanced['parallax_scale_end'] ?? '';
-        if ( $sc_start !== '' && $sc_end !== '' ) {
-            $parts[] = 'scale: ' . floatval( $sc_start ) . ',' . floatval( $sc_end );
-        }
-
-        if ( empty( $parts ) ) {
-            return '';
-        }
-
-        $nomobile = $advanced['parallax_nomobile'] ?? true;
-        if ( $nomobile !== false ) {
-            $parts[] = 'media: @m';
-        }
-
-        return ' uk-parallax="' . implode( '; ', $parts ) . '"';
-    }
-
-    /**
-     * Build data attributes for mouse tracking effects (3D tilt + cursor follow).
-     */
-    private function build_mouse_attrs( $advanced ) {
-        $attrs = '';
-        if ( ! empty( $advanced['mouse_tilt'] ) ) {
-            $intensity = intval( $advanced['mouse_tilt_intensity'] ?? 15 );
-            $attrs .= ' data-olo-tilt="' . $intensity . '"';
-        }
-        if ( ! empty( $advanced['mouse_track'] ) ) {
-            $speed = intval( $advanced['mouse_track_speed'] ?? 3 );
-            $attrs .= ' data-olo-track="' . $speed . '"';
-        }
-        return $attrs;
-    }
-
-    /**
-     * Build inline CSS for infinite (looping) animation (legacy element-level).
-     */
-    private function build_inline_animation_css( $advanced ) {
-        $anim = $advanced['infinite_animation'] ?? 'none';
-        if ( $anim === 'none' || $anim === '' ) {
-            return '';
-        }
-        $speed = floatval( $advanced['infinite_speed'] ?? 3 );
-        $dir   = $advanced['infinite_direction'] ?? 'normal';
-        $name  = 'olo-anim-' . sanitize_html_class( $anim );
-        return "animation: {$name} {$speed}s {$dir} infinite";
-    }
-
-    /**
-     * Build clip-path CSS for mask/shape effects (legacy element-level).
-     */
-    private function build_inline_mask_css( $advanced ) {
-        $mask = $advanced['mask_type'] ?? 'none';
-        if ( $mask === 'none' || $mask === '' ) {
-            return '';
-        }
-        $shapes = [
-            'circle'   => 'circle(50% at 50% 50%)',
-            'ellipse'  => 'ellipse(50% 40% at 50% 50%)',
-            'triangle' => 'polygon(50% 0%, 100% 100%, 0% 100%)',
-            'hexagon'  => 'polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)',
-            'star'     => 'polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)',
-            'diamond'  => 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)',
-            'blob'     => 'polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)',
-        ];
-        if ( $mask === 'custom' ) {
-            $custom = $advanced['mask_custom'] ?? '';
-            if ( $custom === '' ) return '';
-            return 'clip-path: ' . $custom;
-        }
-        if ( ! isset( $shapes[ $mask ] ) ) return '';
-        return 'clip-path: ' . $shapes[ $mask ];
-    }
-
-    /**
-     * Build border-radius CSS value from number or {tl,tr,br,bl} array.
-     */
-    private function build_border_radius_css( $val ) {
-        if ( is_array( $val ) ) {
-            return sprintf( 'border-radius: %dpx %dpx %dpx %dpx',
-                intval( $val['tl'] ?? 0 ), intval( $val['tr'] ?? 0 ),
-                intval( $val['br'] ?? 0 ), intval( $val['bl'] ?? 0 ) );
-        }
-        return "border-radius: {$val}px";
-    }
-
-    /**
-     * Build flex container CSS declarations from settings array.
-     */
-    private function build_flex_container_css( $settings ) {
-        $decls = [];
-        $fd = $settings['flex_direction'] ?? '';
-        $fj = $settings['flex_justify'] ?? '';
-        $fa = $settings['flex_align'] ?? '';
-        $fw = $settings['flex_wrap'] ?? '';
-        $fcg = $settings['flex_column_gap'] ?? '';
-        $frg = $settings['flex_row_gap'] ?? '';
-        $fg  = $settings['flex_gap'] ?? ''; // legacy
-        $has_flex_gap = ( $fcg && intval( $fcg ) > 0 ) || ( $frg && intval( $frg ) > 0 ) || ( $fg && intval( $fg ) > 0 );
-        // Emit display:flex only when at least one property differs from CSS flex defaults
-        $has_flex = ( $fd && $fd !== 'row' ) || ( $fj && $fj !== 'flex-start' ) || ( $fa && $fa !== 'stretch' ) || ( $fw && $fw !== 'nowrap' ) || $has_flex_gap;
-        if ( $has_flex ) {
-            $decls[] = 'display: flex';
-            if ( $fd && $fd !== 'row' )         $decls[] = 'flex-direction: ' . esc_attr( $fd );
-            if ( $fj && $fj !== 'flex-start' )  $decls[] = 'justify-content: ' . esc_attr( $fj );
-            if ( $fa && $fa !== 'stretch' )     $decls[] = 'align-items: ' . esc_attr( $fa );
-            if ( $fw && $fw !== 'nowrap' )      $decls[] = 'flex-wrap: ' . esc_attr( $fw );
-            // Separate column/row gap, fallback to legacy flex_gap
-            if ( ( $fcg && intval( $fcg ) > 0 ) || ( $frg && intval( $frg ) > 0 ) ) {
-                if ( $fcg && intval( $fcg ) > 0 ) $decls[] = 'column-gap: ' . intval( $fcg ) . 'px';
-                if ( $frg && intval( $frg ) > 0 ) $decls[] = 'row-gap: ' . intval( $frg ) . 'px';
-            } elseif ( $fg && intval( $fg ) > 0 ) {
-                $decls[] = 'gap: ' . intval( $fg ) . 'px';
-            }
-        }
-        return $decls;
-    }
-
-    /**
-     * Build CSS Grid layout declarations from settings.
-     */
-    private function build_css_grid_css( $settings ) {
-        $decls = [];
-        $mode = $settings['layout_mode'] ?? 'flex';
-        if ( $mode !== 'grid' ) {
-            return $decls;
-        }
-        $decls[] = 'display: grid';
-        $cols = $settings['grid_columns'] ?? '';
-        if ( $cols ) {
-            $decls[] = 'grid-template-columns: ' . esc_attr( $cols );
-        }
-        $rows = $settings['grid_rows'] ?? '';
-        if ( $rows && $rows !== 'auto' ) {
-            $decls[] = 'grid-template-rows: ' . esc_attr( $rows );
-        }
-        $gap = intval( $settings['grid_gap'] ?? 0 );
-        $col_gap = intval( $settings['grid_column_gap'] ?? 0 );
-        $row_gap = intval( $settings['grid_row_gap'] ?? 0 );
-        if ( $col_gap > 0 || $row_gap > 0 ) {
-            $decls[] = 'column-gap: ' . ( $col_gap > 0 ? $col_gap : $gap ) . 'px';
-            $decls[] = 'row-gap: ' . ( $row_gap > 0 ? $row_gap : $gap ) . 'px';
-        } elseif ( $gap > 0 ) {
-            $decls[] = 'gap: ' . $gap . 'px';
-        }
-        $ai = $settings['grid_align_items'] ?? 'stretch';
-        if ( $ai && $ai !== 'stretch' ) {
-            $decls[] = 'align-items: ' . esc_attr( $ai );
-        }
-        $ji = $settings['grid_justify_items'] ?? 'stretch';
-        if ( $ji && $ji !== 'stretch' ) {
-            $decls[] = 'justify-items: ' . esc_attr( $ji );
-        }
-        return $decls;
-    }
-
-    /**
-     * Build CSS transform declarations from style array.
-     * Returns array of CSS declarations (transform, transform-origin).
-     */
-    private function build_transform_css( $style ) {
-        $parts = [];
-
-        // Support nested transform object from FieldTransform
-        $tf = isset( $style['transform'] ) && is_array( $style['transform'] ) ? $style['transform'] : null;
-
-        $rotate = $tf ? floatval( $tf['rotate'] ?? 0 ) : ( isset( $style['transform_rotate'] ) ? floatval( $style['transform_rotate'] ) : 0 );
-        if ( $rotate != 0 ) {
-            $parts[] = 'rotate(' . $rotate . 'deg)';
-        }
-        $rotateX = isset( $style['transform_rotateX'] ) ? floatval( $style['transform_rotateX'] ) : 0;
-        if ( $rotateX != 0 ) {
-            $parts[] = 'rotate3d(1,0,0,' . $rotateX . 'deg)';
-        }
-        $rotateY = isset( $style['transform_rotateY'] ) ? floatval( $style['transform_rotateY'] ) : 0;
-        if ( $rotateY != 0 ) {
-            $parts[] = 'rotate3d(0,1,0,' . $rotateY . 'deg)';
-        }
-        $scale = $tf ? floatval( $tf['scale'] ?? 1 ) : ( isset( $style['transform_scale'] ) ? floatval( $style['transform_scale'] ) : 1 );
-        if ( $scale != 1 ) {
-            $parts[] = 'scale(' . $scale . ')';
-        }
-        $tx = $tf ? floatval( $tf['translateX'] ?? 0 ) : ( isset( $style['transform_translateX'] ) ? floatval( $style['transform_translateX'] ) : 0 );
-        if ( $tx != 0 ) {
-            $parts[] = 'translateX(' . $tx . 'px)';
-        }
-        $ty = $tf ? floatval( $tf['translateY'] ?? 0 ) : ( isset( $style['transform_translateY'] ) ? floatval( $style['transform_translateY'] ) : 0 );
-        if ( $ty != 0 ) {
-            $parts[] = 'translateY(' . $ty . 'px)';
-        }
-        $skewX = $tf ? floatval( $tf['skewX'] ?? 0 ) : ( isset( $style['transform_skewX'] ) ? floatval( $style['transform_skewX'] ) : 0 );
-        if ( $skewX != 0 ) {
-            $parts[] = 'skewX(' . $skewX . 'deg)';
-        }
-        $skewY = $tf ? floatval( $tf['skewY'] ?? 0 ) : ( isset( $style['transform_skewY'] ) ? floatval( $style['transform_skewY'] ) : 0 );
-        if ( $skewY != 0 ) {
-            $parts[] = 'skewY(' . $skewY . 'deg)';
-        }
-
-        // Determine transform-origin
-        $origin = $tf ? ( $tf['origin'] ?? '' ) : ( $style['transform_origin'] ?? '' );
-
-        if ( empty( $parts ) ) {
-            if ( $origin !== '' && $origin !== 'center' && $origin !== 'center center' ) {
-                return [ 'transform-origin: ' . esc_attr( $origin ) ];
-            }
-            return [];
-        }
-
-        $decls = [];
-        $decls[] = 'transform: ' . implode( ' ', $parts );
-
-        if ( $origin !== '' && $origin !== 'center' && $origin !== 'center center' ) {
-            $decls[] = 'transform-origin: ' . esc_attr( $origin );
-        }
-
-        return $decls;
-    }
-
-    /**
-     * Build box-shadow CSS declaration from style array.
-     * Supports: preset (sm/md/lg/xl), custom (shadow_h/v/blur/spread/color/inset), none.
-     */
-    private function build_box_shadow_css( $style ) {
-        $shadow = $style['shadow'] ?? 'none';
-        if ( ! $shadow || $shadow === 'none' ) {
-            return '';
-        }
-
-        // Custom shadow — flat fields (shadow_h, shadow_v, shadow_blur, shadow_spread, shadow_color, shadow_inset)
-        if ( $shadow === 'custom' ) {
-            $h      = intval( $style['shadow_h'] ?? 0 );
-            $v      = intval( $style['shadow_v'] ?? 0 );
-            $blur   = intval( $style['shadow_blur'] ?? 0 );
-            $spread = intval( $style['shadow_spread'] ?? 0 );
-            $color  = esc_attr( $style['shadow_color'] ?? 'rgba(0,0,0,0.15)' );
-            $inset  = ! empty( $style['shadow_inset'] ) ? 'inset ' : '';
-            return "box-shadow: {$inset}{$h}px {$v}px {$blur}px {$spread}px {$color}";
-        }
-
-        // Preset (sm/md/lg/xl)
-        if ( isset( $this->shadow_map[ $shadow ] ) ) {
-            return 'box-shadow: ' . $this->shadow_map[ $shadow ];
-        }
-
-        // Legacy shadow_type support
-        $shadow_type = $style['shadow_type'] ?? '';
-        if ( $shadow_type === 'custom' ) {
-            $h      = intval( $style['shadow_h'] ?? 0 );
-            $v      = intval( $style['shadow_v'] ?? 0 );
-            $blur   = intval( $style['shadow_blur'] ?? 0 );
-            $spread = intval( $style['shadow_spread'] ?? 0 );
-            $color  = esc_attr( $style['shadow_color'] ?? 'rgba(0,0,0,0.2)' );
-            $inset  = ! empty( $style['shadow_inset'] ) ? 'inset ' : '';
-            return "box-shadow: {$inset}{$h}px {$v}px {$blur}px {$spread}px {$color}";
-        }
-
-        return '';
-    }
-
-    /**
-     * Build filter: drop-shadow() CSS declaration from style array.
-     * Usato al posto di box-shadow quando l'elemento ha una mask/clip-path,
-     * perché drop-shadow segue la forma visibile.
-     * Nota: inset e spread vengono ignorati (non supportati da drop-shadow).
-     */
-    private function build_drop_shadow_css( $style ) {
-        $shadow = $style['shadow'] ?? 'none';
-        if ( ! $shadow || $shadow === 'none' ) {
-            return '';
-        }
-
-        // Custom
-        if ( $shadow === 'custom' ) {
-            $h     = intval( $style['shadow_h'] ?? 0 );
-            $v     = intval( $style['shadow_v'] ?? 0 );
-            $blur  = intval( $style['shadow_blur'] ?? 0 );
-            $color = esc_attr( $style['shadow_color'] ?? 'rgba(0,0,0,0.15)' );
-            return "drop-shadow({$h}px {$v}px {$blur}px {$color})";
-        }
-
-        // Preset
-        if ( isset( $this->drop_shadow_map[ $shadow ] ) ) {
-            return $this->drop_shadow_map[ $shadow ];
-        }
-
-        // Legacy
-        $shadow_type = $style['shadow_type'] ?? '';
-        if ( $shadow_type === 'custom' ) {
-            $h     = intval( $style['shadow_h'] ?? 0 );
-            $v     = intval( $style['shadow_v'] ?? 0 );
-            $blur  = intval( $style['shadow_blur'] ?? 0 );
-            $color = esc_attr( $style['shadow_color'] ?? 'rgba(0,0,0,0.2)' );
-            return "drop-shadow({$h}px {$v}px {$blur}px {$color})";
-        }
-
-        return '';
-    }
-
-    /**
-     * Build text-shadow CSS declaration from style array.
-     */
-    private function build_text_shadow_css( $style ) {
-        $h_val = $style['text_shadow_h'] ?? null;
-        $v_val = $style['text_shadow_v'] ?? null;
-        $blur_val = $style['text_shadow_blur'] ?? null;
-        // If none of the text shadow values are set, return empty
-        if ( $h_val === null && $v_val === null && $blur_val === null && empty( $style['text_shadow_enabled'] ) ) {
-            // Also check if any value is non-zero
-            if ( empty( $style['text_shadow_color'] ) ) {
-                return '';
-            }
-        }
-        // Support legacy text_shadow_enabled flag
-        if ( isset( $style['text_shadow_enabled'] ) && empty( $style['text_shadow_enabled'] ) ) {
-            return '';
-        }
-        // If at least one value is non-zero/non-default, generate CSS
-        $h = intval( $h_val ?? 0 );
-        $v = intval( $v_val ?? 0 );
-        $b = intval( $blur_val ?? 0 );
-        if ( $h === 0 && $v === 0 && $b === 0 ) {
-            return '';
-        }
-        $color = esc_attr( $style['text_shadow_color'] ?? 'rgba(0,0,0,0.3)' );
-        return "text-shadow: {$h}px {$v}px {$b}px {$color}";
-    }
-
-    /**
-     * Build backdrop-filter CSS declarations from style array.
-     * Returns array with standard + webkit prefix.
-     */
-    private function build_backdrop_filter_css( $style ) {
-        $parts = [];
-        $blur       = isset( $style['backdrop_blur'] ) ? intval( $style['backdrop_blur'] ) : 0;
-        $brightness = isset( $style['backdrop_brightness'] ) ? intval( $style['backdrop_brightness'] ) : 100;
-        $contrast   = isset( $style['backdrop_contrast'] ) ? intval( $style['backdrop_contrast'] ) : 100;
-        $saturate   = isset( $style['backdrop_saturate'] ) ? intval( $style['backdrop_saturate'] ) : 100;
-
-        if ( $blur != 0 )        $parts[] = 'blur(' . $blur . 'px)';
-        if ( $brightness != 100 ) $parts[] = 'brightness(' . $brightness . '%)';
-        if ( $contrast != 100 )   $parts[] = 'contrast(' . $contrast . '%)';
-        if ( $saturate != 100 )   $parts[] = 'saturate(' . $saturate . '%)';
-
-        if ( empty( $parts ) ) {
-            return [];
-        }
-
-        $val = implode( ' ', $parts );
-        return [
-            '-webkit-backdrop-filter: ' . $val,
-            'backdrop-filter: ' . $val,
-        ];
-    }
-
-    /**
-     * Build infinite animation CSS (keyframes + animation rule).
-     * Returns CSS string to be injected into <style> block, or empty string.
-     */
-    private function build_infinite_animation_css( $settings, $css_id ) {
-        $anim = $settings['infinite_animation'] ?? '';
-        if ( $anim === '' || $anim === 'none' ) {
-            return '';
-        }
-
-        $keyframes_map = [
-            'float'   => '0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)}',
-            'pulse'   => '0%,100%{transform:scale(1)} 50%{transform:scale(1.05)}',
-            'spin'    => '0%{transform:rotate(0)} 100%{transform:rotate(360deg)}',
-            'wiggle'  => '0%,100%{transform:rotate(0)} 25%{transform:rotate(-5deg)} 75%{transform:rotate(5deg)}',
-            'bounce'  => '0%,100%{transform:translateY(0)} 50%{transform:translateY(-15px)}',
-            'swing'   => '0%,100%{transform:rotate(0)} 25%{transform:rotate(10deg)} 75%{transform:rotate(-10deg)}',
-            'breathe' => '0%,100%{opacity:1} 50%{opacity:0.6}',
-        ];
-
-        if ( ! isset( $keyframes_map[ $anim ] ) ) {
-            return '';
-        }
-
-        $speed = isset( $settings['infinite_speed'] ) ? intval( $settings['infinite_speed'] ) : 5;
-        $speed = max( 1, min( 10, $speed ) );
-        $duration = 10 - $speed + 1; // speed 1 = 10s, speed 10 = 1s
-
-        $direction = $settings['infinite_direction'] ?? 'normal';
-        if ( ! in_array( $direction, [ 'normal', 'reverse', 'alternate', 'alternate-reverse' ], true ) ) {
-            $direction = 'normal';
-        }
-
-        $safe_id = preg_replace( '/[^a-zA-Z0-9_-]/', '', $css_id );
-        $kf_name = 'olo-inf-' . $safe_id;
-
-        $css  = '@keyframes ' . $kf_name . '{' . $keyframes_map[ $anim ] . '} ';
-        $css .= '#' . esc_attr( $css_id ) . '{animation:' . $kf_name . ' ' . $duration . 's ' . $direction . ' infinite}';
-
-        return $css;
-    }
-
-    /**
-     * Build mask CSS declarations from style array.
-     * Returns array of CSS declarations with standard + webkit prefix.
-     */
-    private function build_mask_css( $style ) {
-        $mask_type = $style['mask_type'] ?? ( $style['mask'] ?? '' );
-        if ( $mask_type === '' || $mask_type === 'none' ) {
-            return [];
-        }
-
-        $svg_map = [
-            'circle'   => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="black"/></svg>',
-            'ellipse'  => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 80"><ellipse cx="50" cy="40" rx="50" ry="40" fill="black"/></svg>',
-            'triangle' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><polygon points="50,0 100,100 0,100" fill="black"/></svg>',
-            'hexagon'  => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><polygon points="50,0 93.3,25 93.3,75 50,100 6.7,75 6.7,25" fill="black"/></svg>',
-            'star'     => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><polygon points="50,0 61,35 98,35 68,57 79,91 50,70 21,91 32,57 2,35 39,35" fill="black"/></svg>',
-            'diamond'  => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><polygon points="50,0 100,50 50,100 0,50" fill="black"/></svg>',
-            'blob'     => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><path d="M44.7,-76.4C58.8,-69.2,71.8,-59.1,79.6,-45.8C87.4,-32.6,90,-16.3,88.5,-0.9C87,14.6,81.4,29.1,73.1,41.8C64.8,54.4,53.8,65.2,40.8,72.4C27.8,79.6,12.8,83.3,-1.6,86.1C-16,88.8,-32,90.6,-44.6,83.7C-57.2,76.8,-66.4,61.2,-74.2,45.7C-82,30.2,-88.4,14.8,-87.9,0.3C-87.4,-14.2,-80,-28.5,-71,-40.7C-62,-53,-51.4,-63.3,-39,-71.1C-26.6,-78.9,-12.3,-84.2,1.8,-87.4C15.8,-90.6,30.6,-83.6,44.7,-76.4Z" transform="translate(100 100)" fill="black"/></svg>',
-            'wave'     => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M0,30 Q25,0 50,30 T100,30 L100,100 L0,100 Z" fill="black"/></svg>',
-        ];
-
-        if ( ! isset( $svg_map[ $mask_type ] ) ) {
-            return [];
-        }
-
-        $svg_encoded = 'data:image/svg+xml,' . rawurlencode( $svg_map[ $mask_type ] );
-        $size     = esc_attr( $style['mask_size'] ?? 'contain' );
-        $position = esc_attr( $style['mask_position'] ?? 'center' );
-        $repeat   = esc_attr( $style['mask_repeat'] ?? 'no-repeat' );
-
-        return [
-            '-webkit-mask-image: url("' . $svg_encoded . '")',
-            '-webkit-mask-size: ' . $size,
-            '-webkit-mask-position: ' . $position,
-            '-webkit-mask-repeat: ' . $repeat,
-            'mask-image: url("' . $svg_encoded . '")',
-            'mask-size: ' . $size,
-            'mask-position: ' . $position,
-            'mask-repeat: ' . $repeat,
-        ];
-    }
-
-    /**
-     * Build gradient CSS with multi-stop support.
-     * Falls back to simple gradient_from/gradient_to if no gradient_stops.
-     */
-    private function build_gradient_css( $bg ) {
-        $gradient_type = $bg['gradient_type'] ?? 'linear';
-
-        // New format: bg.gradient = { type, angle, stops: [{color, position}, ...] }
-        $gradient_obj = $bg['gradient'] ?? null;
-        if ( is_array( $gradient_obj ) && ! empty( $gradient_obj['stops'] ) ) {
-            $gradient_type = $gradient_obj['type'] ?? 'linear';
-            $bg['gradient_stops'] = $gradient_obj['stops'];
-            $bg['gradient_angle'] = $gradient_obj['angle'] ?? 180;
-        }
-
-        // Multi-stop gradient
-        if ( ! empty( $bg['gradient_stops'] ) && is_array( $bg['gradient_stops'] ) ) {
-            $stops = [];
-            foreach ( $bg['gradient_stops'] as $stop ) {
-                $color = esc_attr( $stop['color'] ?? '#000000' );
-                $pos   = isset( $stop['position'] ) ? intval( $stop['position'] ) : null;
-                $stops[] = $pos !== null ? "{$color} {$pos}%" : $color;
-            }
-            $stop_str = implode( ', ', $stops );
-
-            if ( $gradient_type === 'radial' ) {
-                return 'background: radial-gradient(circle, ' . $stop_str . ')';
-            }
-            $angle = intval( $bg['gradient_angle'] ?? 180 );
-            return 'background: linear-gradient(' . $angle . 'deg, ' . $stop_str . ')';
-        }
-
-        // Fallback: simple two-color gradient
-        $from  = esc_attr( $bg['gradient_from'] ?? '#ffffff' );
-        $to    = esc_attr( $bg['gradient_to'] ?? '#000000' );
-
-        if ( $gradient_type === 'radial' ) {
-            return 'background: radial-gradient(circle, ' . $from . ', ' . $to . ')';
-        }
-        $angle = intval( $bg['gradient_angle'] ?? 180 );
-        return "background: linear-gradient({$angle}deg, {$from}, {$to})";
-    }
-
-    private function generate_id() {
-        if ( function_exists( 'wp_generate_uuid4' ) ) {
-            return wp_generate_uuid4();
-        }
-        return 'tile-' . uniqid() . '-' . substr( md5( mt_rand() ), 0, 8 );
-    }
 
     /**
      * Render gallery background slideshow.
@@ -1093,7 +380,7 @@ class Olo_Frontend_Renderer {
                     $col_data  = $columns_data[ $i ] ?? [ 'tiles' => [] ];
                     $children  = is_array( $col_data['tiles'] ?? null ) ? $col_data['tiles'] : [];
                     $columns[] = [
-                        'id'       => $this->generate_id(),
+                        'id'       => $this->css->generate_id(),
                         'type'     => 'column',
                         'settings' => [ 'width_default' => '', 'width_small' => '', 'width_medium' => $w, 'width_large' => '' ],
                         'style'    => [],
@@ -1103,7 +390,7 @@ class Olo_Frontend_Renderer {
                 }
 
                 $row = [
-                    'id'       => $tile['id'] ?? $this->generate_id(),
+                    'id'       => $tile['id'] ?? $this->css->generate_id(),
                     'type'     => 'row',
                     'settings' => $settings,
                     'style'    => $tile['style'] ?? [],
@@ -1112,7 +399,7 @@ class Olo_Frontend_Renderer {
                 ];
 
                 $sections[] = [
-                    'id'       => $this->generate_id(),
+                    'id'       => $this->css->generate_id(),
                     'type'     => 'section',
                     'settings' => [ 'style' => 'default', 'width' => 'default', 'padding' => 'default' ],
                     'style'    => [],
@@ -1122,7 +409,7 @@ class Olo_Frontend_Renderer {
             } else {
                 // Wrap element in Section > Row > Column(1/1)
                 $column = [
-                    'id'       => $this->generate_id(),
+                    'id'       => $this->css->generate_id(),
                     'type'     => 'column',
                     'settings' => [ 'width_default' => '', 'width_small' => '', 'width_medium' => '1-1', 'width_large' => '' ],
                     'style'    => [],
@@ -1130,7 +417,7 @@ class Olo_Frontend_Renderer {
                     'children' => [ $tile ],
                 ];
                 $row = [
-                    'id'       => $this->generate_id(),
+                    'id'       => $this->css->generate_id(),
                     'type'     => 'row',
                     'settings' => [ 'layout' => '100', 'gap' => '16', 'column_gap' => 'default', 'vertical_align' => 'stretch', 'stack_mobile' => true ],
                     'style'    => [],
@@ -1138,7 +425,7 @@ class Olo_Frontend_Renderer {
                     'children' => [ $column ],
                 ];
                 $sections[] = [
-                    'id'       => $this->generate_id(),
+                    'id'       => $this->css->generate_id(),
                     'type'     => 'section',
                     'settings' => [ 'style' => 'default', 'width' => 'default', 'padding' => 'default' ],
                     'style'    => [],
@@ -1623,7 +910,7 @@ class Olo_Frontend_Renderer {
         }
 
         // Background handling
-        $tile_bg = $this->get_effective_bg( $style );
+        $tile_bg = $this->css->get_effective_bg( $style );
         $has_bg_image   = ( $tile_bg['type'] === 'image' && ! empty( $tile_bg['image_url'] ) );
         $has_bg_video   = ( $tile_bg['type'] === 'video' && ! empty( $tile_bg['video_url'] ) );
         $has_bg_gallery = ( $tile_bg['type'] === 'gallery' && ! empty( $tile_bg['gallery_images'] ) && is_array( $tile_bg['gallery_images'] ) );
@@ -1634,7 +921,7 @@ class Olo_Frontend_Renderer {
             $classes[] = 'uk-position-relative';
             $inline_styles[] = 'overflow: clip';
         } elseif ( $tile_bg['type'] !== 'none' ) {
-            $bg_css = $this->get_bg_inline_css( $tile_bg );
+            $bg_css = $this->css->get_bg_inline_css( $tile_bg );
             if ( $bg_css ) $inline_styles[] = $bg_css;
         }
 
@@ -1654,7 +941,7 @@ class Olo_Frontend_Renderer {
         if ( ! empty( $style['padding_left'] ) )   $inline_styles[] = "padding-left: {$style['padding_left']}px";
 
         // Border radius
-        if ( ! empty( $style['border_radius'] ) )  $inline_styles[] = $this->build_border_radius_css( $style['border_radius'] );
+        if ( ! empty( $style['border_radius'] ) )  $inline_styles[] = $this->css->build_border_radius_css( $style['border_radius'] );
 
         // Border
         if ( ! empty( $style['border_width'] ) && intval( $style['border_width'] ) > 0 ) {
@@ -1684,13 +971,13 @@ class Olo_Frontend_Renderer {
         }
 
         // Flex container settings
-        $flex_css = $this->build_flex_container_css( $s );
+        $flex_css = $this->css->build_flex_container_css( $s );
         foreach ( $flex_css as $decl ) {
             $inline_styles[] = $decl;
         }
 
         // CSS Grid layout (overrides flex if layout_mode=grid)
-        $grid_css = $this->build_css_grid_css( $s );
+        $grid_css = $this->css->build_css_grid_css( $s );
         foreach ( $grid_css as $decl ) {
             $inline_styles[] = $decl;
         }
@@ -1701,7 +988,7 @@ class Olo_Frontend_Renderer {
         }
 
         // CSS Transform (normal state)
-        $transform_css = $this->build_transform_css( $style );
+        $transform_css = $this->css->build_transform_css( $style );
         if ( $transform_css ) {
             foreach ( $transform_css as $decl ) {
                 $inline_styles[] = $decl;
@@ -1709,19 +996,19 @@ class Olo_Frontend_Renderer {
         }
 
         // Box shadow (segue border-radius del div)
-        $box_shadow = $this->build_box_shadow_css( $style );
+        $box_shadow = $this->css->build_box_shadow_css( $style );
         if ( $box_shadow ) {
             $inline_styles[] = $box_shadow;
         }
 
         // Text shadow
-        $text_shadow = $this->build_text_shadow_css( $style );
+        $text_shadow = $this->css->build_text_shadow_css( $style );
         if ( $text_shadow ) {
             $inline_styles[] = $text_shadow;
         }
 
         // Backdrop filter
-        $backdrop = $this->build_backdrop_filter_css( $style );
+        $backdrop = $this->css->build_backdrop_filter_css( $style );
         if ( $backdrop ) {
             foreach ( $backdrop as $decl ) {
                 $inline_styles[] = $decl;
@@ -1734,7 +1021,7 @@ class Olo_Frontend_Renderer {
         }
 
         // Mask
-        $mask_css = $this->build_mask_css( $style );
+        $mask_css = $this->css->build_mask_css( $style );
         if ( $mask_css ) {
             foreach ( $mask_css as $decl ) {
                 $inline_styles[] = $decl;
@@ -1775,7 +1062,7 @@ class Olo_Frontend_Renderer {
         $this->collect_responsive_css( $style, $css_id, $advanced );
 
         // Infinite animation
-        $inf_anim_css = $this->build_infinite_animation_css( $s, $css_id );
+        $inf_anim_css = $this->css->build_infinite_animation_css( $s, $css_id );
         if ( $inf_anim_css ) {
             $hover_css_rules[] = $inf_anim_css;
         }
@@ -1803,14 +1090,14 @@ class Olo_Frontend_Renderer {
         }
 
         // Scrollspy & element parallax attributes
-        $scrollspy_attr = $this->build_scrollspy_attr( $advanced );
-        $el_parallax_attr = $this->build_element_parallax_attr( $advanced );
-        $mouse_attrs = $this->build_mouse_attrs( $advanced );
+        $scrollspy_attr = $this->anim->build_scrollspy_attr( $advanced );
+        $el_parallax_attr = $this->anim->build_element_parallax_attr( $advanced );
+        $mouse_attrs = $this->anim->build_mouse_attrs( $advanced );
 
         // Infinite animation & mask (inline style for elements)
-        $inf_anim_css = $this->build_inline_animation_css( $advanced );
+        $inf_anim_css = $this->anim->build_inline_animation_css( $advanced );
         if ( $inf_anim_css ) $inline_styles[] = $inf_anim_css;
-        $mask_css = $this->build_inline_mask_css( $advanced );
+        $mask_css = $this->anim->build_inline_mask_css( $advanced );
         if ( $mask_css ) $inline_styles[] = $mask_css;
 
         // Snap dots data attributes
@@ -1839,7 +1126,7 @@ class Olo_Frontend_Renderer {
             $bg_pos  = esc_attr( $tile_bg['image_position'] ?? 'center center' );
 
             $html .= '<div class="uk-position-cover" style="background-image: url(' . esc_url( $tile_bg['image_url'] ) . '); background-size: ' . $bg_size . '; background-position: ' . $bg_pos . '; background-repeat: no-repeat"';
-            $html .= $this->build_uk_parallax_attr( $tile_bg );
+            $html .= $this->anim->build_uk_parallax_attr( $tile_bg );
             $html .= '></div>';
         }
 
@@ -1934,7 +1221,7 @@ class Olo_Frontend_Renderer {
         $stack_tablet = ! empty( $s['stack_tablet'] );
 
         // Background handling
-        $tile_bg      = $this->get_effective_bg( $style );
+        $tile_bg      = $this->css->get_effective_bg( $style );
         $has_bg_image   = ( $tile_bg['type'] === 'image' && ! empty( $tile_bg['image_url'] ) );
         $has_bg_video   = ( $tile_bg['type'] === 'video' && ! empty( $tile_bg['video_url'] ) );
         $has_bg_gallery = ( $tile_bg['type'] === 'gallery' && ! empty( $tile_bg['gallery_images'] ) && is_array( $tile_bg['gallery_images'] ) );
@@ -1953,7 +1240,7 @@ class Olo_Frontend_Renderer {
         if ( ! empty( $style['padding_left'] ) )   $row_spacing_styles[] = "padding-left: {$style['padding_left']}px";
 
         // Border radius
-        if ( ! empty( $style['border_radius'] ) )  $row_spacing_styles[] = $this->build_border_radius_css( $style['border_radius'] );
+        if ( ! empty( $style['border_radius'] ) )  $row_spacing_styles[] = $this->css->build_border_radius_css( $style['border_radius'] );
 
         // Border
         if ( ! empty( $style['border_width'] ) && intval( $style['border_width'] ) > 0 ) {
@@ -2023,7 +1310,7 @@ class Olo_Frontend_Renderer {
                 $wrapper_classes[] = 'uk-position-relative';
                 $wrapper_styles[] = 'overflow: clip';
             } elseif ( $tile_bg['type'] !== 'none' ) {
-                $bg_css = $this->get_bg_inline_css( $tile_bg );
+                $bg_css = $this->css->get_bg_inline_css( $tile_bg );
                 if ( $bg_css ) $wrapper_styles[] = $bg_css;
             }
             if ( $has_spacing ) {
@@ -2175,9 +1462,9 @@ class Olo_Frontend_Renderer {
         }
 
         // Scrollspy & element parallax attributes for row
-        $row_scrollspy_attr = $this->build_scrollspy_attr( $advanced );
-        $row_el_parallax_attr = $this->build_element_parallax_attr( $advanced );
-        $row_mouse_attrs = $this->build_mouse_attrs( $advanced );
+        $row_scrollspy_attr = $this->anim->build_scrollspy_attr( $advanced );
+        $row_el_parallax_attr = $this->anim->build_element_parallax_attr( $advanced );
+        $row_mouse_attrs = $this->anim->build_mouse_attrs( $advanced );
 
         // Open row wrapper (for background)
         if ( $needs_wrapper ) {
@@ -2193,7 +1480,7 @@ class Olo_Frontend_Renderer {
                 $bg_pos  = esc_attr( $tile_bg['image_position'] ?? 'center center' );
 
                 $html .= '<div class="uk-position-cover" style="background-image: url(' . esc_url( $tile_bg['image_url'] ) . '); background-size: ' . $bg_size . '; background-position: ' . $bg_pos . '; background-repeat: no-repeat"';
-                $html .= $this->build_uk_parallax_attr( $tile_bg );
+                $html .= $this->anim->build_uk_parallax_attr( $tile_bg );
                 $html .= '></div>';
             }
 
@@ -2542,7 +1829,7 @@ class Olo_Frontend_Renderer {
         if ( ! empty( $style['padding_left'] ) )   $inline_styles[] = "padding-left: {$style['padding_left']}px";
 
         // Border radius
-        if ( ! empty( $style['border_radius'] ) )  $inline_styles[] = $this->build_border_radius_css( $style['border_radius'] );
+        if ( ! empty( $style['border_radius'] ) )  $inline_styles[] = $this->css->build_border_radius_css( $style['border_radius'] );
 
         // Border
         if ( ! empty( $style['border_width'] ) && intval( $style['border_width'] ) > 0 ) {
@@ -2572,7 +1859,7 @@ class Olo_Frontend_Renderer {
         }
 
         // CSS Transform (normal state)
-        $transform_css = $this->build_transform_css( $style );
+        $transform_css = $this->css->build_transform_css( $style );
         if ( $transform_css ) {
             foreach ( $transform_css as $decl ) {
                 $inline_styles[] = $decl;
@@ -2580,19 +1867,19 @@ class Olo_Frontend_Renderer {
         }
 
         // Box shadow (segue border-radius del div)
-        $box_shadow = $this->build_box_shadow_css( $style );
+        $box_shadow = $this->css->build_box_shadow_css( $style );
         if ( $box_shadow ) {
             $inline_styles[] = $box_shadow;
         }
 
         // Text shadow
-        $text_shadow = $this->build_text_shadow_css( $style );
+        $text_shadow = $this->css->build_text_shadow_css( $style );
         if ( $text_shadow ) {
             $inline_styles[] = $text_shadow;
         }
 
         // Backdrop filter
-        $backdrop = $this->build_backdrop_filter_css( $style );
+        $backdrop = $this->css->build_backdrop_filter_css( $style );
         if ( $backdrop ) {
             foreach ( $backdrop as $decl ) {
                 $inline_styles[] = $decl;
@@ -2605,7 +1892,7 @@ class Olo_Frontend_Renderer {
         }
 
         // Mask
-        $mask_css = $this->build_mask_css( $style );
+        $mask_css = $this->css->build_mask_css( $style );
         if ( $mask_css ) {
             foreach ( $mask_css as $decl ) {
                 $inline_styles[] = $decl;
@@ -2613,14 +1900,14 @@ class Olo_Frontend_Renderer {
         }
 
         // Background handling for column
-        $col_bg      = $this->get_effective_bg( $style );
+        $col_bg      = $this->css->get_effective_bg( $style );
         $has_col_bg_image = ( $col_bg['type'] === 'image' && ! empty( $col_bg['image_url'] ) );
         $has_col_bg_video = ( $col_bg['type'] === 'video' && ! empty( $col_bg['video_url'] ) );
         $has_col_bg_any   = ( $col_bg['type'] !== 'none' );
         $has_col_overlay  = ( $has_col_bg_any && ! empty( $col_bg['overlay_opacity'] ) && intval( $col_bg['overlay_opacity'] ) > 0 );
 
         if ( ! $has_col_bg_image && ! $has_col_bg_video && $col_bg['type'] !== 'none' ) {
-            $bg_css = $this->get_bg_inline_css( $col_bg );
+            $bg_css = $this->css->get_bg_inline_css( $col_bg );
             if ( $bg_css ) $inline_styles[] = $bg_css;
         }
         if ( $has_col_bg_image || $has_col_bg_video ) {
@@ -2672,8 +1959,8 @@ class Olo_Frontend_Renderer {
         }
 
         // Scrollspy & element parallax attributes for column
-        $col_scrollspy_attr = $this->build_scrollspy_attr( $advanced );
-        $col_el_parallax_attr = $this->build_element_parallax_attr( $advanced );
+        $col_scrollspy_attr = $this->anim->build_scrollspy_attr( $advanced );
+        $col_el_parallax_attr = $this->anim->build_element_parallax_attr( $advanced );
 
         $html = '<div id="' . esc_attr( $col_css_id ) . '" class="' . esc_attr( implode( ' ', $classes ) ) . '"';
         if ( ! empty( $inline_styles ) ) {
@@ -2686,7 +1973,7 @@ class Olo_Frontend_Renderer {
             $bg_size = esc_attr( $col_bg['image_size'] ?? 'cover' );
             $bg_pos  = esc_attr( $col_bg['image_position'] ?? 'center center' );
             $html .= '<div class="uk-position-cover" style="background-image: url(' . esc_url( $col_bg['image_url'] ) . '); background-size: ' . $bg_size . '; background-position: ' . $bg_pos . '; background-repeat: no-repeat"';
-            $html .= $this->build_uk_parallax_attr( $col_bg );
+            $html .= $this->anim->build_uk_parallax_attr( $col_bg );
             $html .= '></div>';
         }
         // Background video cover for column
@@ -2757,14 +2044,14 @@ class Olo_Frontend_Renderer {
         if ( ! empty( $style['padding_left'] ) )   $inline_styles[] = "padding-left: {$style['padding_left']}px";
 
         // Background
-        $tile_bg = $this->get_effective_bg( $style );
+        $tile_bg = $this->css->get_effective_bg( $style );
         if ( $tile_bg['type'] !== 'none' && $tile_bg['type'] !== 'image' && $tile_bg['type'] !== 'video' ) {
-            $bg_css = $this->get_bg_inline_css( $tile_bg );
+            $bg_css = $this->css->get_bg_inline_css( $tile_bg );
             if ( $bg_css ) $inline_styles[] = $bg_css;
         }
 
         // Border radius
-        if ( ! empty( $style['border_radius'] ) ) $inline_styles[] = $this->build_border_radius_css( $style['border_radius'] );
+        if ( ! empty( $style['border_radius'] ) ) $inline_styles[] = $this->css->build_border_radius_css( $style['border_radius'] );
 
         // Border
         if ( ! empty( $style['border_width'] ) && intval( $style['border_width'] ) > 0 ) {
@@ -2833,14 +2120,14 @@ class Olo_Frontend_Renderer {
         if ( ! empty( $style['padding_left'] ) )   $inline_styles[] = "padding-left: {$style['padding_left']}px";
 
         // Background
-        $tile_bg = $this->get_effective_bg( $style );
+        $tile_bg = $this->css->get_effective_bg( $style );
         if ( $tile_bg['type'] !== 'none' && $tile_bg['type'] !== 'image' && $tile_bg['type'] !== 'video' ) {
-            $bg_css = $this->get_bg_inline_css( $tile_bg );
+            $bg_css = $this->css->get_bg_inline_css( $tile_bg );
             if ( $bg_css ) $inline_styles[] = $bg_css;
         }
 
         // Border radius
-        if ( ! empty( $style['border_radius'] ) ) $inline_styles[] = $this->build_border_radius_css( $style['border_radius'] );
+        if ( ! empty( $style['border_radius'] ) ) $inline_styles[] = $this->css->build_border_radius_css( $style['border_radius'] );
 
         // Border
         if ( ! empty( $style['border_width'] ) && intval( $style['border_width'] ) > 0 ) {
@@ -3030,7 +2317,7 @@ class Olo_Frontend_Renderer {
             }
         }
 
-        $tile_bg      = $this->get_effective_bg( $style );
+        $tile_bg      = $this->css->get_effective_bg( $style );
         $is_fullwidth = ! empty( $style['full_width'] );
         $has_bg_image = ( $tile_bg['type'] === 'image' && ! empty( $tile_bg['image_url'] ) );
         $has_bg_video = ( $tile_bg['type'] === 'video' && ! empty( $tile_bg['video_url'] ) );
@@ -3051,11 +2338,11 @@ class Olo_Frontend_Renderer {
         if ( ! empty( $style['padding_left'] ) )   $inline_styles[] = "padding-left: {$style['padding_left']}px";
 
         if ( ! $has_bg_image && ! $has_bg_video ) {
-            $bg_css = $this->get_bg_inline_css( $tile_bg );
+            $bg_css = $this->css->get_bg_inline_css( $tile_bg );
             if ( $bg_css ) $inline_styles[] = $bg_css;
         }
 
-        if ( ! empty( $style['border_radius'] ) )  $inline_styles[] = $this->build_border_radius_css( $style['border_radius'] );
+        if ( ! empty( $style['border_radius'] ) )  $inline_styles[] = $this->css->build_border_radius_css( $style['border_radius'] );
 
         if ( ! empty( $style['border_width'] ) && intval( $style['border_width'] ) > 0 ) {
             $bw = intval( $style['border_width'] );
@@ -3085,13 +2372,13 @@ class Olo_Frontend_Renderer {
         }
 
         // Flex container settings (for elements that use flexContainerFields)
-        $flex_css = $this->build_flex_container_css( $settings );
+        $flex_css = $this->css->build_flex_container_css( $settings );
         foreach ( $flex_css as $decl ) {
             $inline_styles[] = $decl;
         }
 
         // CSS Transform (normal state)
-        $transform_css = $this->build_transform_css( $style );
+        $transform_css = $this->css->build_transform_css( $style );
         if ( $transform_css ) {
             foreach ( $transform_css as $decl ) {
                 $inline_styles[] = $decl;
@@ -3101,25 +2388,25 @@ class Olo_Frontend_Renderer {
         // Shadow — box-shadow per elementi con sfondo (segue border-radius),
         // filter: drop-shadow per elementi trasparenti (segue forma del contenuto: SVG, icone)
         if ( $has_bg_any ) {
-            $box_shadow = $this->build_box_shadow_css( $style );
+            $box_shadow = $this->css->build_box_shadow_css( $style );
             if ( $box_shadow ) {
                 $inline_styles[] = $box_shadow;
             }
         } else {
-            $drop_shadow = $this->build_drop_shadow_css( $style );
+            $drop_shadow = $this->css->build_drop_shadow_css( $style );
             if ( $drop_shadow ) {
                 $inline_styles[] = 'filter: ' . $drop_shadow;
             }
         }
 
         // Text shadow
-        $text_shadow = $this->build_text_shadow_css( $style );
+        $text_shadow = $this->css->build_text_shadow_css( $style );
         if ( $text_shadow ) {
             $inline_styles[] = $text_shadow;
         }
 
         // Backdrop filter
-        $backdrop = $this->build_backdrop_filter_css( $style );
+        $backdrop = $this->css->build_backdrop_filter_css( $style );
         if ( $backdrop ) {
             foreach ( $backdrop as $decl ) {
                 $inline_styles[] = $decl;
@@ -3132,7 +2419,7 @@ class Olo_Frontend_Renderer {
         }
 
         // Mask
-        $mask_css = $this->build_mask_css( $style );
+        $mask_css = $this->css->build_mask_css( $style );
         if ( $mask_css ) {
             foreach ( $mask_css as $decl ) {
                 $inline_styles[] = $decl;
@@ -3218,8 +2505,8 @@ class Olo_Frontend_Renderer {
         $this->collect_custom_css( $settings, $css_id, $hover_css_rules );
 
         // Scrollspy & element parallax attributes (skip for fixed tiles — handled by sentinel JS)
-        $elem_scrollspy_attr = ( $pos_mode === 'fixed' ) ? '' : $this->build_scrollspy_attr( $advanced );
-        $elem_el_parallax_attr = $this->build_element_parallax_attr( $advanced );
+        $elem_scrollspy_attr = ( $pos_mode === 'fixed' ) ? '' : $this->anim->build_scrollspy_attr( $advanced );
+        $elem_el_parallax_attr = $this->anim->build_element_parallax_attr( $advanced );
 
         // Sticky attribute (UIkit uk-sticky) — skip if tile is already fixed-positioned
         // Also skip for megamenu tiles — they handle header stickiness via their own JS
@@ -3241,6 +2528,12 @@ class Olo_Frontend_Renderer {
         if ( ! empty( $settings['mouse_track'] ) ) {
             $track_speed = intval( $settings['mouse_track_speed'] ?? 3 );
             $elem_mouse_attrs .= ' data-olo-track="' . $track_speed . '"';
+        }
+
+        // Bezier path scroll animation
+        $elem_bezier_attr = '';
+        if ( ! empty( $advanced['bezier_path'] ) && is_array( $advanced['bezier_path'] ) ) {
+            $elem_bezier_attr = " data-olo-bezier-parallax='" . wp_json_encode( $advanced['bezier_path'] ) . "'";
         }
 
         // Scroll-linked effects data attribute
@@ -3330,11 +2623,11 @@ class Olo_Frontend_Renderer {
         // Render
         ob_start();
         ?>
-        <div class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>"<?php echo $id_attr; ?> style="<?php echo esc_attr( $style_attr ); ?>"<?php echo $elem_scrollspy_attr . $elem_el_parallax_attr . $elem_sticky_attr . $elem_mouse_attrs . $elem_scroll_fx_attr . $ab_test_attrs . $seo_attrs; ?>>
+        <div class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>"<?php echo $id_attr; ?> style="<?php echo esc_attr( $style_attr ); ?>"<?php echo $elem_scrollspy_attr . $elem_el_parallax_attr . $elem_sticky_attr . $elem_mouse_attrs . $elem_bezier_attr . $elem_scroll_fx_attr . $ab_test_attrs . $seo_attrs; ?>>
             <?php if ( $has_bg_image ) :
                 $bg_size = esc_attr( $tile_bg['image_size'] ?? 'cover' );
                 $bg_pos  = esc_attr( $tile_bg['image_position'] ?? 'center center' );
-                $parallax_attr = $this->build_uk_parallax_attr( $tile_bg );
+                $parallax_attr = $this->anim->build_uk_parallax_attr( $tile_bg );
             ?>
                 <div class="uk-position-cover"
                     style="background-image: url(<?php echo esc_url( $tile_bg['image_url'] ); ?>); background-size: <?php echo $bg_size; ?>; background-position: <?php echo $bg_pos; ?>; background-repeat: no-repeat"
@@ -3863,6 +3156,23 @@ class Olo_Frontend_Renderer {
     }
 
     /**
+     * Check if any tile has a bezier_path in advanced settings.
+     */
+    private function check_bezier_recursive( $nodes ) {
+        foreach ( $nodes as $node ) {
+            if ( ! empty( $node['advanced']['bezier_path'] ) ) {
+                return true;
+            }
+            if ( ! empty( $node['children'] ) && is_array( $node['children'] ) ) {
+                if ( $this->check_bezier_recursive( $node['children'] ) ) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
      * Check for progallery with custom lightbox (thumbs) recursively.
      */
     private function check_progallery_lightbox_recursive( $nodes ) {
@@ -4136,9 +3446,14 @@ class Olo_Frontend_Renderer {
             wp_enqueue_script( 'olo-viewer360-js', OLO_URL . 'assets/js/olo-viewer360.js', [], OLO_VERSION, true );
         }
 
+        // Bezier path scroll animation
+        if ( $this->check_bezier_recursive( $tiles ) ) {
+            wp_enqueue_script( 'olo-bezier-parallax-js', OLO_URL . 'assets/js/olo-bezier-parallax.js', [], OLO_VERSION, true );
+        }
+
         $manager = Olo_Tile_Manager::instance();
 
-        $page_bg_css = $this->get_bg_inline_css( $page_bg );
+        $page_bg_css = $this->css->get_bg_inline_css( $page_bg );
         $hover_css_rules = [];
         $this->responsive_css_rules = [];
         $tile_counter = 0;
@@ -4157,7 +3472,7 @@ class Olo_Frontend_Renderer {
             if ( $page_bg['type'] === 'image' && ! empty( $page_bg['image_url'] ) ) :
                 $pg_size = esc_attr( $page_bg['image_size'] ?? 'cover' );
                 $pg_pos  = esc_attr( $page_bg['image_position'] ?? 'center center' );
-                $pg_parallax_attr = $this->build_uk_parallax_attr( $page_bg );
+                $pg_parallax_attr = $this->anim->build_uk_parallax_attr( $page_bg );
             ?>
                 <div class="olo-tile-bg"
                     style="background-image: url(<?php echo esc_url( $page_bg['image_url'] ); ?>); background-size: <?php echo $pg_size; ?>; background-position: <?php echo $pg_pos; ?>; background-repeat: no-repeat"

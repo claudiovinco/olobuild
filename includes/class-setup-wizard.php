@@ -108,8 +108,8 @@ class Olo_Setup_Wizard {
         <body>
             <div class="wizard">
                 <div class="wizard-logo">
-                    <?php if ( file_exists( OLO_PATH . 'assets/img/olobuild-logo-200.png' ) ) : ?>
-                        <img src="<?php echo esc_url( OLO_URL . 'assets/img/olobuild-logo-200.png' ); ?>" alt="Olobuild">
+                    <?php if ( file_exists( OLO_PATH . 'assets/img/olobuild-logo-200-v2.png' ) ) : ?>
+                        <img src="<?php echo esc_url( OLO_URL . 'assets/img/olobuild-logo-200-v2.png' ); ?>" alt="Olobuild">
                     <?php endif; ?>
                     <h1>Benvenuto in Olobuild</h1>
                     <p>Configuriamo il tuo sito in pochi secondi.<br>Potrai personalizzare tutto in seguito.</p>

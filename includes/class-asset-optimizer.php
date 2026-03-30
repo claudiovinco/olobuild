@@ -44,19 +44,36 @@ class Olo_Asset_Optimizer {
         // Only defer olobuild frontend scripts (not builder scripts)
         $defer_handles = [
             'olo-frontend',
-            'olo-postgrid',
-            'olo-proslider',
             'olo-map',
             'olo-livesearch',
             'olo-serviceresults',
             'olo-pdfviewer',
-            'olo-progallery-lightbox',
-            'olo-utils',
         ];
         if ( in_array( $handle, $defer_handles, true ) ) {
             if ( false === strpos( $tag, 'defer' ) ) {
                 $tag = str_replace( ' src=', ' defer src=', $tag );
             }
+        }
+        return $tag;
+    }
+
+    /**
+     * Add type="module" to ES module scripts.
+     * Modules are deferred by spec, so defer attribute is removed.
+     */
+    public static function module_scripts( $tag, $handle ) {
+        $module_handles = [
+            'olo-utils',
+            'olo-postgrid-js',
+            'olo-proslider-js',
+            'olo-servicesearch-js',
+            'olo-progallery-lightbox-js',
+            'olo-svganimator-js',
+            'olo-bezier-parallax-js',
+        ];
+        if ( in_array( $handle, $module_handles, true ) ) {
+            $tag = str_replace( ' src=', ' type="module" src=', $tag );
+            $tag = str_replace( ' defer', '', $tag );
         }
         return $tag;
     }
@@ -176,6 +193,8 @@ class Olo_Asset_Optimizer {
     public static function init() {
         // Defer frontend scripts
         add_filter( 'script_loader_tag', [ __CLASS__, 'defer_scripts' ], 10, 2 );
+        // ES module scripts (priority 11 = after defer)
+        add_filter( 'script_loader_tag', [ __CLASS__, 'module_scripts' ], 11, 2 );
 
         // Clean cache on template save
         add_action( 'olo_template_saved', [ __CLASS__, 'warm_cache' ] );

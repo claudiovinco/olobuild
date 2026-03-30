@@ -875,6 +875,36 @@
       case 'olo:drag-leave':
         hideDropIndicator();
         break;
+
+      case 'olo:bezier-preview':
+        if (d.tileId) {
+          var bpEl = findTileEl(d.tileId);
+          if (bpEl) {
+            if (d.reset) {
+              bpEl.style.transform = '';
+              bpEl.style.opacity = '';
+              bpEl.style.filter = '';
+            } else {
+              var parts = [];
+              if (d.x !== undefined && d.x !== 0) parts.push('translateX(' + d.x + 'px)');
+              if (d.y !== undefined && d.y !== 0) parts.push('translateY(' + d.y + 'px)');
+              if (d.scale !== undefined && d.scale !== 1) parts.push('scale(' + d.scale + ')');
+              if (d.rotate !== undefined && d.rotate !== 0) parts.push('rotate(' + d.rotate + 'deg)');
+              bpEl.style.transform = parts.length ? parts.join(' ') : '';
+              if (d.opacity !== undefined && d.opacity !== 1) {
+                bpEl.style.opacity = d.opacity;
+              } else {
+                bpEl.style.opacity = '';
+              }
+              if (d.blur !== undefined && d.blur > 0) {
+                bpEl.style.filter = 'blur(' + d.blur + 'px)';
+              } else {
+                bpEl.style.filter = '';
+              }
+            }
+          }
+        }
+        break;
     }
   }
 

@@ -61,10 +61,10 @@ body { min-height: 100vh; }
 <script src="<?php echo esc_url( OLO_URL . 'assets/vendor/uikit/js/uikit-icons.min.js' ); ?>"></script>
 <!-- Tile JS (ProSlider, PostGrid, etc.) -->
 <?php if ( file_exists( OLO_PATH . 'assets/js/olo-proslider.js' ) ) : ?>
-<script src="<?php echo esc_url( OLO_URL . 'assets/js/olo-proslider.js?v=' . OLO_VERSION ); ?>"></script>
+<script type="module" src="<?php echo esc_url( OLO_URL . 'assets/js/olo-proslider.js?v=' . OLO_VERSION ); ?>"></script>
 <?php endif; ?>
 <?php if ( file_exists( OLO_PATH . 'assets/js/olo-postgrid.js' ) ) : ?>
-<script src="<?php echo esc_url( OLO_URL . 'assets/js/olo-postgrid.js?v=' . OLO_VERSION ); ?>"></script>
+<script type="module" src="<?php echo esc_url( OLO_URL . 'assets/js/olo-postgrid.js?v=' . OLO_VERSION ); ?>"></script>
 <?php endif; ?>
 <!-- Leaflet (maps) -->
 <script src="<?php echo esc_url( $leaflet_url . 'leaflet.js' ); ?>"></script>
@@ -74,7 +74,7 @@ body { min-height: 100vh; }
 <?php endif; ?>
 <!-- SVG Animator -->
 <?php if ( file_exists( OLO_PATH . 'assets/js/olo-svganimator.js' ) ) : ?>
-<script src="<?php echo esc_url( OLO_URL . 'assets/js/olo-svganimator.js?v=' . OLO_VERSION ); ?>"></script>
+<script type="module" src="<?php echo esc_url( OLO_URL . 'assets/js/olo-svganimator.js?v=' . OLO_VERSION ); ?>"></script>
 <?php endif; ?>
 <!-- Viewer 360 -->
 <?php if ( file_exists( OLO_PATH . 'assets/js/olo-viewer360.js' ) ) : ?>
@@ -82,7 +82,7 @@ body { min-height: 100vh; }
 <?php endif; ?>
 <!-- Frontend utils (entrance animations, scroll effects, etc.) -->
 <?php if ( file_exists( OLO_PATH . 'assets/js/olo-utils.js' ) ) : ?>
-<script src="<?php echo esc_url( OLO_URL . 'assets/js/olo-utils.js?v=' . OLO_VERSION ); ?>"></script>
+<script type="module" src="<?php echo esc_url( OLO_URL . 'assets/js/olo-utils.js?v=' . OLO_VERSION ); ?>"></script>
 <?php endif; ?>
 <!-- Olo Booking JS -->
 <?php if ( file_exists( $booking_path . 'assets/js/booking-front.js' ) ) : ?>

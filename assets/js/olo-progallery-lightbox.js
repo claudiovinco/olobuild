@@ -1,10 +1,10 @@
 /**
  * Olobuild — ProGallery custom lightbox with thumbnail strip.
  * Supports images, video files (MP4/WebM), and embed (YouTube/Vimeo).
- * Vanilla JS, IIFE, no dependencies.
+ * Vanilla JS, ES module, no dependencies.
  */
-(function () {
-  if (window._oloLightbox) return;
+
+if (!window._oloLightbox) {
   window._oloLightbox = 1;
 
   /* ── helpers ─────────────────────────────────────────── */
@@ -323,4 +323,6 @@
   } else {
     init();
   }
-})();
+}
+
+export { };

@@ -117,7 +117,7 @@ class Olo_Builder {
             'edit_posts',
             'olobuilder',
             [ $this, 'render_dashboard_page' ],
-            OLO_URL . 'assets/img/ob-menu.png',
+            OLO_URL . 'assets/img/ob-menu-v2.png',
             30
         );
 
@@ -401,7 +401,7 @@ class Olo_Builder {
      * Call this at the start of every Olobuild admin page render method.
      */
     public static function page_shell_open( $page_title = '', $extra_class = '' ) {
-        $logo_url = OLO_URL . 'assets/img/olobuild-logo-200.png';
+        $logo_url = OLO_URL . 'assets/img/olobuild-logo-200-v2.png';
         $cls = 'olo-admin-wrap' . ( $extra_class ? ' ' . esc_attr( $extra_class ) : '' );
         echo '<div class="wrap"><div class="' . $cls . '">';
         echo '<div class="olo-admin-topbar">';

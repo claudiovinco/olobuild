@@ -1426,6 +1426,7 @@
             <BezierPathEditor
               v-if="tileAdvanced.bezier_path"
               :modelValue="tileAdvanced.bezier_path"
+              :tileId="selectedTile.id"
               @update:modelValue="updateAdvanced('bezier_path', $event)"
             />
           </CollapseSection>
