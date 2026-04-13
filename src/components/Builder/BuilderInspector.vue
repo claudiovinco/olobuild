@@ -51,12 +51,26 @@
           </button>
         </div>
 
+        <!-- Search settings -->
+        <div class="insp-search">
+          <svg class="insp-search-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          <input v-model="settingsSearch" class="insp-search-input" type="text" placeholder="Cerca impostazione..." />
+          <button v-if="settingsSearch" class="insp-search-clear" @click="settingsSearch = ''">&times;</button>
+        </div>
+
         <!-- Tabs -->
-        <div class="mb-flex mb-gap-1 mb-mb-4 mb-bg-gray-700 mb-rounded-lg mb-p-0.5">
+        <div class="mb-flex mb-gap-1 mb-mb-4 mb-bg-gray-700 mb-rounded-lg mb-p-0.5" role="tablist" :aria-label="t('Inspector')">
           <button
             v-for="tab in tabs"
             :key="tab"
             @click="activeTab = tab"
+            @keydown.arrow-right.prevent="navigateTab(1)"
+            @keydown.arrow-left.prevent="navigateTab(-1)"
+            role="tab"
+            :id="'inspector-tab-' + tab"
+            :aria-selected="activeTab === tab"
+            :aria-controls="'inspector-panel-' + tab"
+            :tabindex="activeTab === tab ? 0 : -1"
             :class="[
               'mb-flex-1 mb-py-1.5 mb-text-xs mb-font-medium mb-rounded-md mb-transition-colors',
               activeTab === tab
@@ -69,7 +83,7 @@
         </div>
 
         <!-- ============ Content tab (data-driven) ============ -->
-        <div v-if="activeTab === 'Contenuto'" class="mb-space-y-3">
+        <div v-if="activeTab === 'Contenuto'" class="mb-space-y-3" role="tabpanel" id="inspector-panel-Contenuto" :aria-labelledby="'inspector-tab-Contenuto'">
           <!-- Custom editor: ProSlider -->
           <div v-if="elementDef?.customEditor === 'proslider'" class="mb-space-y-3">
             <p class="mb-text-xs mb-text-gray-400">Configura slide, livelli e animazioni nell'editor visuale.</p>
@@ -208,7 +222,7 @@
         </div>
 
         <!-- ============ Style tab ============ -->
-        <div v-else-if="activeTab === 'Stile'" class="mb-space-y-4">
+        <div v-else-if="activeTab === 'Stile'" class="mb-space-y-4" role="tabpanel" id="inspector-panel-Stile" :aria-labelledby="'inspector-tab-Stile'">
           <!-- Normal / Hover toggle -->
           <div class="mb-flex mb-gap-1 mb-bg-gray-700 mb-rounded-lg mb-p-0.5">
             <button
@@ -873,7 +887,7 @@
         </div>
 
         <!-- ============ Advanced tab ============ -->
-        <div v-else class="mb-space-y-4">
+        <div v-else class="mb-space-y-4" role="tabpanel" id="inspector-panel-Avanzate" :aria-labelledby="'inspector-tab-Avanzate'">
           <!-- HTML ID -->
           <div>
             <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300 mb-mb-1">HTML ID</label>
@@ -1705,7 +1719,7 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue';
+import { ref, computed, watch, nextTick } from 'vue';
 import { t } from '@/i18n';
 import { useBuilderStore } from '@/stores/builder';
 import { useTilesStore } from '@/stores/tiles';
@@ -1759,6 +1773,18 @@ const tilesStore = useTilesStore();
 
 const activeTab = ref('Contenuto');
 const tabs = ['Contenuto', 'Stile', 'Avanzate'];
+const settingsSearch = ref('');
+
+// A11y: keyboard arrow navigation for tab buttons
+function navigateTab(dir) {
+  const idx = tabs.indexOf(activeTab.value);
+  const next = (idx + dir + tabs.length) % tabs.length;
+  activeTab.value = tabs[next];
+  nextTick(() => {
+    const btn = document.getElementById('inspector-tab-' + tabs[next]);
+    if (btn) btn.focus();
+  });
+}
 const showProSliderEditor = ref(false);
 const sides = ['top', 'right', 'bottom', 'left'];
 const viewports = [
@@ -2018,6 +2044,11 @@ function isFieldVisible(field) {
   const settings = selectedTile.value?.settings || {};
   if (field.condition && !evaluateCondition(field.condition, settings)) return false;
   if (typeof field.show === 'function' && !field.show(settings)) return false;
+  // Search filter
+  const q = settingsSearch.value.trim().toLowerCase();
+  if (q && field.label) {
+    return field.label.toLowerCase().includes(q) || (field.key || '').toLowerCase().includes(q);
+  }
   return true;
 }
 
@@ -2276,6 +2307,9 @@ function stopAbStatsPolling() {
   if (abStatsTimer) { clearInterval(abStatsTimer); abStatsTimer = null; }
 }
 
+// styleState must be declared before this watcher (TDZ fix)
+const styleState = ref('normal');
+
 watch(() => builderStore.selectedTileId, () => {
   stopAbStatsPolling();
   loadAbTest();
@@ -2375,7 +2409,7 @@ function toggleBezier() {
 }
 
 // --- Hover styles ---
-const styleState = ref('normal');
+// styleState already declared above (before the selectedTileId watcher)
 
 const tileHover = computed(() => selectedTile.value?.style?.hover || {});
 const tileTransition = computed(() => selectedTile.value?.style?.transition || { duration: 300, easing: 'ease' });
@@ -2439,4 +2473,50 @@ function updateDynamicItemMap(itemMap) {
   transform: translateX(100%);
   opacity: 0;
 }
+
+/* Inspector search */
+.insp-search {
+  position: relative;
+  margin-bottom: 12px;
+}
+.insp-search-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6B7280;
+  pointer-events: none;
+}
+.insp-search-input {
+  width: 100%;
+  padding: 7px 28px 7px 30px;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+  background: rgba(255,255,255,0.06);
+  color: #E5E7EB;
+  font-size: 12px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s, background 0.2s;
+  box-sizing: border-box;
+}
+.insp-search-input::placeholder { color: #6B7280; }
+.insp-search-input:focus {
+  border-color: var(--olo-color-primary, #6366F1);
+  background: rgba(255,255,255,0.1);
+}
+.insp-search-clear {
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #6B7280;
+  font-size: 15px;
+  cursor: pointer;
+  padding: 2px 6px;
+  line-height: 1;
+}
+.insp-search-clear:hover { color: #D1D5DB; }
 </style>

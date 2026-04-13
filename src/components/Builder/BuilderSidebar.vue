@@ -35,6 +35,31 @@
 
     <!-- Tiles tab -->
     <div v-if="activeTab === 'tiles'" class="tp-root">
+      <!-- Search -->
+      <div class="tp-search">
+        <svg class="tp-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input v-model="tileSearch" class="tp-search-input" type="text" placeholder="Cerca elemento..." />
+        <button v-if="tileSearch" class="tp-search-clear" @click="tileSearch = ''">&times;</button>
+      </div>
+
+      <!-- Search results -->
+      <div v-if="tileSearch.trim()" class="tp-group">
+        <div class="tp-grid">
+          <button
+            v-for="tile in searchResults"
+            :key="'search-' + tile.type"
+            class="tp-btn"
+            :style="{ '--cat-color': '#3B82F6' }"
+            draggable="true"
+            @dragstart="onDragStart($event, tile.type)"
+            @click="addTile(tile.type)"
+            :title="tile.name"
+          ><span class="tp-btn-icon" v-html="tileIcon(tile.type)"></span><span class="tp-btn-label">{{ tile.name }}</span></button>
+        </div>
+        <div v-if="!searchResults.length" class="tp-search-empty">Nessun elemento trovato</div>
+      </div>
+
+      <template v-if="!tileSearch.trim()">
       <!-- RECENTI -->
       <div v-if="recentTilesList.length > 0" class="tp-group">
         <button class="tp-cat-head" @click="toggleCategory('_recent')">
@@ -110,8 +135,9 @@
         Caricamento tile...
       </div>
 
+      </template>
       <!-- Global Widgets section -->
-      <div v-if="tilesStore.globalWidgets.length > 0" class="tp-group">
+      <div v-if="tilesStore.globalWidgets.length > 0 && !tileSearch.trim()" class="tp-group">
         <button class="tp-cat-head" @click="toggleCategory('_global')">
           <span class="tp-cat-dot" style="background: #D97706"></span>
           <span class="tp-cat-label">Widget Globali</span>
@@ -161,6 +187,14 @@ import StructureTree from './StructureTree.vue';
 const tilesStore = useTilesStore();
 const builderStore = useBuilderStore();
 const { handleDropFromSidebar } = useDragDrop();
+
+const tileSearch = ref('');
+const searchResults = computed(() => {
+  const q = tileSearch.value.trim().toLowerCase();
+  if (!q) return [];
+  const all = tilesStore.registeredTiles || [];
+  return all.filter(t => (t.name || '').toLowerCase().includes(q) || (t.type || '').toLowerCase().includes(q));
+});
 
 import { onUnmounted } from 'vue';
 
@@ -481,6 +515,29 @@ const tileIcons = {
   'woo_product_filter':'<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><path d="M4 6h16M8 12h8M10 18h4"/></svg>',
   'woo_product_navigation':'<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><path d="M3 12h18M6 8l-4 4 4 4M18 8l4 4-4 4"/></svg>',
   'woo_order_tracking':'<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="3" y="5" w="18" h="14" rx="2"/><path d="M3 10h18"/><path d="M7 15h3M14 15h3"/></svg>',
+
+  // ── Real Estate tiles ──
+  'propertygrid':       '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="2" y="2" w="9" h="9" rx="1"/><rect x="13" y="2" w="9" h="9" rx="1"/><rect x="2" y="13" w="9" h="9" rx="1"/><rect x="13" y="13" w="9" h="9" rx="1"/></svg>',
+  'propertysearch':     '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><circle cx="10" cy="10" r="7"/><path d="M21 21l-4.35-4.35"/><path d="M7 8l3 2 3-4"/></svg>',
+  'propertymap':        '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><circle cx="12" cy="11" r="2"/></svg>',
+  'propertymapsearch':  '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="1" y="3" w="10" h="18" rx="1"/><path d="M14 6h7M14 10h7M14 14h5"/><circle cx="6" cy="10" r="2"/></svg>',
+  'propertycard':       '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="3" y="3" w="18" h="18" rx="2"/><path d="M3 12h18"/><path d="M8 16h4"/><path d="M8 19h8"/></svg>',
+  'propertyfeatured':   '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 16.8l-6.2 4.5 2.4-7.4L2 9.4h7.6z"/></svg>',
+  'propertystats':      '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="4" y="14" w="4" h="8" rx="1"/><rect x="10" y="8" w="4" h="14" rx="1"/><rect x="16" y="4" w="4" h="18" rx="1"/></svg>',
+  'propertycta':        '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><circle cx="12" cy="7" r="4"/><path d="M5.5 21a8.38 8.38 0 0 1 13 0"/><rect x="14" y="17" w="8" h="4" rx="2"/></svg>',
+  'propertyhero':       '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="2" y="4" w="20" h="16" rx="2"/><path d="M2 14l5-5 4 4 3-3 8 8"/><circle cx="8" cy="9" r="1.5"/></svg>',
+  'propertyheroscroll': '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="1" y="6" w="8" h="12" rx="1"/><rect x="11" y="6" w="8" h="12" rx="1"/><path d="M21 12h2M1 12H0"/><path d="M19 9l3 3-3 3"/></svg>',
+  'propertyinfo':       '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M9 13l2 2 4-4"/><path d="M9 18h6"/></svg>',
+  'propertygallery':    '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="2" y="2" w="9" h="9" rx="1"/><rect x="13" y="2" w="9" h="5" rx="1"/><rect x="13" y="9" w="9" h="5" rx="1"/><rect x="2" y="13" w="9" h="9" rx="1"/><rect x="13" y="16" w="9" h="6" rx="1"/></svg>',
+  'propertyprice':      '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>',
+  'propertyspecs':      '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="3" y="3" w="7" h="7" rx="1.5"/><rect x="14" y="3" w="7" h="7" rx="1.5"/><rect x="3" y="14" w="7" h="7" rx="1.5"/><rect x="14" y="14" w="7" h="7" rx="1.5"/><circle cx="6.5" cy="6.5" r="1"/><circle cx="17.5" cy="6.5" r="1"/><circle cx="6.5" cy="17.5" r="1"/><circle cx="17.5" cy="17.5" r="1"/></svg>',
+  'propertydescription':'<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><path d="M4 6h16M4 10h16M4 14h12M4 18h8"/></svg>',
+  'propertyaddress':    '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>',
+  'propertyfeatures':   '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><polyline points="9 6 9 6"/><path d="M4 6h2m4 0h10"/><polyline points="9 12 9 12"/><path d="M4 12h2m4 0h10"/><polyline points="9 18 9 18"/><path d="M4 18h2m4 0h6"/><circle cx="9" cy="6" r="1.5" f="currentColor"/><circle cx="9" cy="12" r="1.5" f="currentColor"/><circle cx="9" cy="18" r="1.5" f="currentColor"/></svg>',
+  'propertyvideo':      '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="2" y="4" w="20" h="16" rx="2"/><polygon points="10 8 16 12 10 16 10 8" f="currentColor" sw="0"/></svg>',
+  'propertyexcerpt':    '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><path d="M4 6h16M4 10h16M4 14h10"/><path d="M3 20l3-3 3 3"/></svg>',
+  'propertyrules':      '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>',
+  'propertycontactform':'<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><rect x="2" y="4" w="20" h="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/><path d="M8 14h3M8 17h5"/></svg>',
 };
 
 function tileIcon(type) {
@@ -502,6 +559,16 @@ function onDragStart(event, tileType) {
   lastDragStart = Date.now();
   event.dataTransfer.setData('tile-type', tileType);
   event.dataTransfer.effectAllowed = 'copy';
+  builderStore.isSidebarDragging = true;
+  builderStore.dropTargetColumnId = null;
+  builderStore.dropInsertIndex = null;
+  // Request fresh layout snapshot from iframe
+  const iframe = document.querySelector('.olo-live-iframe');
+  if (iframe && iframe.contentWindow) {
+    iframe.contentWindow.postMessage({ type: 'olo:request-layout' }, '*');
+  }
+  // Reset on dragend
+  event.target.addEventListener('dragend', () => { builderStore.isSidebarDragging = false; }, { once: true });
 }
 
 function addTile(tileType) {
@@ -620,6 +687,54 @@ async function deleteGlobal(globalId, name) {
 .tp-root {
   padding: 8px 6px;
   container-type: inline-size;
+}
+/* Search */
+.tp-search {
+  position: relative;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+}
+.tp-search-icon {
+  position: absolute;
+  left: 10px;
+  color: #6B7280;
+  pointer-events: none;
+}
+.tp-search-input {
+  width: 100%;
+  padding: 8px 30px 8px 32px;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+  background: rgba(255,255,255,0.06);
+  color: #E5E7EB;
+  font-size: 12px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s, background 0.2s;
+}
+.tp-search-input::placeholder { color: #6B7280; }
+.tp-search-input:focus {
+  border-color: var(--olo-color-primary, #6366F1);
+  background: rgba(255,255,255,0.1);
+}
+.tp-search-clear {
+  position: absolute;
+  right: 6px;
+  background: none;
+  border: none;
+  color: #6B7280;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 2px 6px;
+  line-height: 1;
+}
+.tp-search-clear:hover { color: #D1D5DB; }
+.tp-search-empty {
+  padding: 16px;
+  text-align: center;
+  color: #6B7280;
+  font-size: 12px;
 }
 .tp-group {
   margin-bottom: 2px;

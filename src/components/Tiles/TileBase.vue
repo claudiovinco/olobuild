@@ -209,6 +209,37 @@ import OloRoomCategoriesTile from './OloRoomCategoriesTile.vue';
 import OloRoomDistrictsTile from './OloRoomDistrictsTile.vue';
 import OloRoomStatsPublicTile from './OloRoomStatsPublicTile.vue';
 import OloRoomCtaTile from './OloRoomCtaTile.vue';
+
+// Real Estate tiles (OLO Booking)
+import PropertyGridTile from './PropertyGridTile.vue';
+import PropertySearchTile from './PropertySearchTile.vue';
+import PropertyMapTile from './PropertyMapTile.vue';
+import PropertyCardTile from './PropertyCardTile.vue';
+import PropertyFeaturedTile from './PropertyFeaturedTile.vue';
+import PropertyStatsTile from './PropertyStatsTile.vue';
+import PropertyCtaTile from './PropertyCtaTile.vue';
+import PropertyHeroTile from './PropertyHeroTile.vue';
+import PropertyInfoTile from './PropertyInfoTile.vue';
+import PropertyGalleryTile from './PropertyGalleryTile.vue';
+import PropertyDescriptionTile from './PropertyDescriptionTile.vue';
+import PropertyAddressTile from './PropertyAddressTile.vue';
+import PropertyFeaturesTile from './PropertyFeaturesTile.vue';
+import PropertyPriceTile from './PropertyPriceTile.vue';
+import PropertySpecsTile from './PropertySpecsTile.vue';
+import PropertyMapSearchTile from './PropertyMapSearchTile.vue';
+import PropertyContactFormTile from './PropertyContactFormTile.vue';
+import PropertyHeroScrollTile from './PropertyHeroScrollTile.vue';
+import PropertyVideoTile from './PropertyVideoTile.vue';
+import PropertyExcerptTile from './PropertyExcerptTile.vue';
+import PropertyRulesTile from './PropertyRulesTile.vue';
+
+// OLO Booking vertical tiles
+import RentalInventoryTile from './RentalInventoryTile.vue';
+import EventListTile from './EventListTile.vue';
+import AppointmentGridTile from './AppointmentGridTile.vue';
+import RestaurantOpeningHoursTile from './RestaurantOpeningHoursTile.vue';
+import RestaurantBookingFormTile from './RestaurantBookingFormTile.vue';
+
 import ExternalTilePlaceholder from './ExternalTilePlaceholder.vue';
 
 const props = defineProps({
@@ -419,6 +450,36 @@ const tileComponents = {
   olo_room_districts: OloRoomDistrictsTile,
   olo_room_stats_public: OloRoomStatsPublicTile,
   olo_room_cta: OloRoomCtaTile,
+
+  // Real Estate tiles (OLO Booking)
+  propertygrid: PropertyGridTile,
+  propertysearch: PropertySearchTile,
+  propertymap: PropertyMapTile,
+  propertycard: PropertyCardTile,
+  propertyfeatured: PropertyFeaturedTile,
+  propertystats: PropertyStatsTile,
+  propertycta: PropertyCtaTile,
+  propertyhero: PropertyHeroTile,
+  propertyinfo: PropertyInfoTile,
+  propertygallery: PropertyGalleryTile,
+  propertydescription: PropertyDescriptionTile,
+  propertyaddress: PropertyAddressTile,
+  propertyfeatures: PropertyFeaturesTile,
+  propertyprice: PropertyPriceTile,
+  propertyspecs: PropertySpecsTile,
+  propertymapsearch: PropertyMapSearchTile,
+  propertycontactform: PropertyContactFormTile,
+  propertyheroscroll: PropertyHeroScrollTile,
+  propertyvideo: PropertyVideoTile,
+  propertyexcerpt: PropertyExcerptTile,
+  propertyrules: PropertyRulesTile,
+
+  // OLO Booking vertical tiles
+  rentalinventory: RentalInventoryTile,
+  eventlist: EventListTile,
+  appointmentgrid: AppointmentGridTile,
+  restaurantopeninghours: RestaurantOpeningHoursTile,
+  restaurantbookingform: RestaurantBookingFormTile,
 };
 
 const tileComponent = computed(() => {

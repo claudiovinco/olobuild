@@ -35,6 +35,10 @@ export const useBuilderStore = defineStore('builder', {
     unifiedMode: false,          // True when editing H+B+F together
     insertAfterTileId: null,     // When set, next element added from sidebar goes after this tile
     canvasZoom: 100,              // Canvas zoom percentage (25-200)
+    isSidebarDragging: false,     // True while dragging a tile from sidebar
+    dropTargetColumnId: null,    // Column ID from parent-side hit-testing
+    dropInsertIndex: null,       // Section insertion index from parent-side hit-testing
+    iframeLayout: { sections: [], columns: [] },  // Cached layout snapshot from iframe
   }),
 
   getters: {

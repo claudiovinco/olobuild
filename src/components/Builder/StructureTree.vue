@@ -862,7 +862,7 @@ watch(function() { return builderStore.selectedTileId; }, function(newId) {
   transition: background-color 0.1s;
 }
 .st-row:hover {
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(0, 0, 0, 0.04);
 }
 .st-row--active {
   background: rgb(var(--olo-primary-rgb, 99 102 241) / 0.1);
@@ -889,10 +889,10 @@ watch(function() { return builderStore.selectedTileId; }, function(newId) {
   transition: color 0.15s;
 }
 .st-row:hover .st-grip {
-  color: #6B7280;
+  color: #9CA3AF;
 }
 .st-grip:hover {
-  color: #9CA3AF !important;
+  color: #6B7280 !important;
 }
 .st-grip-ph {
   flex-shrink: 0;
@@ -909,14 +909,14 @@ watch(function() { return builderStore.selectedTileId; }, function(newId) {
   justify-content: center;
   background: none;
   border: none;
-  color: #6B7280;
+  color: #94A3B8;
   cursor: pointer;
   padding: 0;
   border-radius: 2px;
   transition: color 0.15s, transform 0.15s;
 }
 .st-toggle:hover {
-  color: #9CA3AF;
+  color: #475569;
 }
 .st-toggle--open {
   transform: rotate(90deg);
@@ -934,26 +934,27 @@ watch(function() { return builderStore.selectedTileId; }, function(newId) {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #B0B5BC;
+  color: #94A3B8;
 }
 .st-row--active .st-icon {
-  color: #D1D5DB;
+  color: #6366F1;
 }
 
 /* Label */
 .st-name {
   flex: 1;
   min-width: 0;
-  font-size: 11px;
-  color: #D1D5DB;
+  font-size: 12px;
+  color: #475569;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   line-height: 1;
-  font-weight: 400;
+  font-weight: 450;
 }
 .st-row--active .st-name {
-  color: #F3F4F6;
+  color: #1E293B;
+  font-weight: 600;
 }
 
 /* Hover actions */
@@ -975,15 +976,15 @@ watch(function() { return builderStore.selectedTileId; }, function(newId) {
   height: 18px;
   background: none;
   border: none;
-  color: #6B7280;
+  color: #94A3B8;
   cursor: pointer;
-  border-radius: 2px;
+  border-radius: 3px;
   padding: 0;
   transition: color 0.1s, background-color 0.1s;
 }
 .st-actions button:hover {
-  color: #D1D5DB;
-  background: rgba(255, 255, 255, 0.08);
+  color: #1E293B;
+  background: rgba(0, 0, 0, 0.06);
 }
 
 /* Subtree (children) */

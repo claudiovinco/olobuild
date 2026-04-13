@@ -1,18 +1,23 @@
 <template>
   <div class="mb-flex mb-flex-col mb-flex-1 mb-overflow-hidden">
     <!-- ═══ LIVE IFRAME PREVIEW ═══ -->
-    <div v-if="builderStore.livePreviewMode" class="mb-flex-1 mb-relative mb-overflow-hidden" style="background: #f3f4f6"
-      @dragover.prevent="onIframeDragOver"
-      @dragleave="onIframeDragLeave"
-      @drop.prevent="onIframeDrop"
-    >
+    <div v-if="builderStore.livePreviewMode" class="mb-flex-1 mb-relative mb-overflow-hidden" style="background: #f3f4f6">
       <iframe
         ref="iframeRef"
         :src="iframeSrc"
         class="olo-live-iframe"
+        :class="{ 'olo-iframe-no-drag': builderStore.isSidebarDragging }"
         :style="iframeStyle"
         allow="autoplay"
       ></iframe>
+      <!-- Transparent drag overlay — sole drop target during drag -->
+      <div
+        v-if="builderStore.isSidebarDragging"
+        class="olo-drag-overlay"
+        @dragover.prevent="onIframeDragOver"
+        @dragleave="onIframeDragLeave"
+        @drop.prevent.stop="onIframeDrop"
+      ></div>
       <ContextMenu ref="iframeContextMenuRef" />
     </div>
 
@@ -261,7 +266,7 @@ useInlineEdit(canvasRef);
 const builderStore = useBuilderStore();
 const tilesStore = useTilesStore();
 const stylesStore = useStylesStore();
-const { handleDropFromSidebar } = useDragDrop();
+const { handleDropFromSidebar, handleDropIntoColumn } = useDragDrop();
 
 // ── Live iframe preview ──
 const { iframeReady, iframeHeight, postToIframe } = useIframeBridge(iframeRef);
@@ -298,25 +303,95 @@ const iframeStyle = computed(() => {
   return style;
 });
 
+/**
+ * Synchronous hit-testing against cached iframe layout.
+ * Returns { columnId, insertIndex } based on cursor position.
+ */
+function hitTest(clientX, clientY) {
+  const iframe = iframeRef.value;
+  if (!iframe) return { columnId: null, insertIndex: null };
+
+  const iframeRect = iframe.getBoundingClientRect();
+  const zoom = builderStore.canvasZoom / 100;
+  const x = (clientX - iframeRect.left) / zoom;
+  const y = (clientY - iframeRect.top) / zoom;
+
+  const layout = builderStore.iframeLayout;
+
+  // Check if cursor is inside a column
+  let columnId = null;
+  let colRect = null;
+  for (const col of layout.columns) {
+    if (x >= col.left && x <= col.right && y >= col.top && y <= col.bottom) {
+      columnId = col.id;
+      colRect = col;
+      break;
+    }
+  }
+
+  // Calculate section insertion index
+  let insertIndex = layout.sections.length;
+  let lineY = 0;
+  const sects = layout.sections;
+  if (sects.length === 0) {
+    lineY = iframeRect.height / 2;
+  } else {
+    let found = false;
+    for (let i = 0; i < sects.length; i++) {
+      const midY = (sects[i].top + sects[i].bottom) / 2;
+      if (y < midY) {
+        insertIndex = i;
+        lineY = sects[i].top;
+        found = true;
+        break;
+      }
+    }
+    if (!found) {
+      lineY = sects[sects.length - 1].bottom;
+    }
+  }
+
+  return { columnId, colRect, insertIndex, lineY, x, y };
+}
+
 function onIframeDragOver(e) {
   e.dataTransfer.dropEffect = 'copy';
-  // Forward coordinates to iframe for drop indicator
-  const iframe = iframeRef.value;
-  if (iframe) {
-    const rect = iframe.getBoundingClientRect();
-    postToIframe('olo:drag-over', { y: e.clientY - rect.top });
+
+  const result = hitTest(e.clientX, e.clientY);
+  builderStore.dropTargetColumnId = result.columnId;
+  builderStore.dropInsertIndex = result.insertIndex;
+
+  // Send visual feedback to iframe
+  if (result.columnId && result.colRect) {
+    postToIframe('olo:drag-over', { y: result.y, colRect: result.colRect });
+  } else {
+    postToIframe('olo:drag-over', { y: result.y, lineY: result.lineY });
   }
 }
 
 function onIframeDragLeave() {
   postToIframe('olo:drag-leave');
+  builderStore.dropTargetColumnId = null;
+  builderStore.dropInsertIndex = null;
 }
 
 function onIframeDrop(e) {
+  builderStore.isSidebarDragging = false;
   postToIframe('olo:drag-leave');
   const tileType = e.dataTransfer.getData('tile-type');
-  if (tileType) {
-    handleDropFromSidebar(tileType);
+  if (!tileType) return;
+
+  const columnId = builderStore.dropTargetColumnId;
+  const insertIdx = builderStore.dropInsertIndex;
+  const hasLayout = builderStore.iframeLayout.sections.length > 0;
+  builderStore.dropTargetColumnId = null;
+  builderStore.dropInsertIndex = null;
+
+  if (columnId && tileType !== 'section' && tileType !== 'row') {
+    handleDropIntoColumn(tileType, columnId);
+  } else {
+    // Only use insertIndex if we have a valid layout snapshot; otherwise append to end
+    handleDropFromSidebar(tileType, hasLayout && typeof insertIdx === 'number' ? insertIdx : undefined);
   }
 }
 
@@ -697,6 +772,28 @@ function onDrop(event) {
   border: none;
   display: block;
   background: #fff;
+}
+
+/* Disable iframe pointer events during sidebar drag */
+.olo-iframe-no-drag {
+  pointer-events: none !important;
+}
+
+/* Drag overlay — covers iframe during drag to prevent forbidden cursor */
+.olo-drag-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  background: rgba(37, 99, 235, 0.04);
+  border: 2px dashed rgba(37, 99, 235, 0.3);
+  border-radius: 8px;
+  cursor: copy;
+  pointer-events: auto;
+  animation: olo-drag-pulse 1.5s ease-in-out infinite;
+}
+@keyframes olo-drag-pulse {
+  0%, 100% { border-color: rgba(37, 99, 235, 0.3); }
+  50% { border-color: rgba(37, 99, 235, 0.6); }
 }
 
 /* === Wireframe / Gabbia mode === */
