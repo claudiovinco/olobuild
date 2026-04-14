@@ -71,6 +71,21 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         'svc_popup_color'          => '#333333',
         'svc_popup_radius'         => '8',
         'border_radius'        => '8',
+        // ── Infrastructure (all modes) ──
+        'fullscreen_btn'       => true,
+        'marker_shape'         => 'pin',
+        // ── Multi-marker UI (locations + services) ──
+        'view_mode'            => 'list',
+        'grid_columns'         => 2,
+        'sort_default'         => 'default',
+        'results_per_page'     => 10,
+        'card_max_height'      => 0,
+        'card_border_radius'   => 8,
+        'show_location_search' => true,
+        'show_radius'          => false,
+        'radius_default'       => 5,
+        // ── SEO Schema ──
+        'emit_schema'          => true,
     ];
 
     public function get_controls() {
@@ -132,9 +147,12 @@ class Olo_Map_Tile extends Olo_Tile_Base {
              . ( $lng + 0.02 ) . ',' . ( $lat + 0.01 )
              . "&layer=mapnik&marker=" . $lat . ',' . $lng;
 
+        $fs_enabled = ! empty( $s['fullscreen_btn'] );
+        $uid = 'olo-map-dyn-' . wp_unique_id();
+
         ob_start();
         ?>
-        <div class="olo-map olo-map-dynamic" style="border-radius: <?php echo $radius; ?>; overflow: hidden;">
+        <div class="olo-map olo-map-dynamic <?php echo esc_attr( $uid ); ?>" style="position:relative; border-radius: <?php echo $radius; ?>; overflow: hidden;">
             <iframe
                 src="<?php echo esc_url( $src ); ?>"
                 style="width: 100%; height: <?php echo $height; ?>px; border: 0;"
@@ -142,6 +160,39 @@ class Olo_Map_Tile extends Olo_Tile_Base {
                 referrerpolicy="no-referrer-when-downgrade"
                 title="<?php echo esc_attr( $title ); ?>"
             ></iframe>
+            <?php if ( $fs_enabled ) : ?>
+                <?php echo $this->build_fullscreen_btn( $uid ); ?>
+                <style>
+                .<?php echo esc_attr( $uid ); ?> .olo-map-fs-btn {
+                    position: absolute; top: 10px; right: 10px; z-index: 1000;
+                    width: 34px; height: 34px;
+                    background: rgba(255,255,255,0.95);
+                    border: 1px solid rgba(0,0,0,0.15);
+                    border-radius: 6px; cursor: pointer; padding: 6px;
+                    box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+                    display: flex; align-items: center; justify-content: center;
+                    color: #374151;
+                }
+                .<?php echo esc_attr( $uid ); ?> .olo-map-fs-btn:hover { background: #fff; }
+                </style>
+                <script>
+                (function(){
+                    var root = document.querySelector('.<?php echo esc_js( $uid ); ?>');
+                    if (!root) return;
+                    var btn = root.querySelector('.olo-map-fs-btn');
+                    if (!btn) return;
+                    btn.addEventListener('click', function() {
+                        if (!document.fullscreenElement) {
+                            if (root.requestFullscreen) root.requestFullscreen();
+                            else if (root.webkitRequestFullscreen) root.webkitRequestFullscreen();
+                        } else {
+                            if (document.exitFullscreen) document.exitFullscreen();
+                            else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+                        }
+                    });
+                })();
+                </script>
+            <?php endif; ?>
         </div>
         <?php
         return ob_get_clean();
@@ -181,11 +232,22 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         $dragging     = filter_var( $s['dragging'] ?? true, FILTER_VALIDATE_BOOLEAN );
         $popup_text   = esc_js( wp_strip_all_tags( $s['marker_popup'] ?? '' ) );
         $marker_color = $this->safe_color_css( $s['marker_color'] ?? '' ) ?: '#e74c3c';
+        $marker_type  = sanitize_key( $s['marker_type'] ?? 'pin' );
+        $marker_image = esc_url( $s['marker_image'] ?? '' );
+        $marker_size  = absint( $s['marker_size'] ?? 36 ) ?: 36;
         $tile_url     = esc_js( $this->get_tile_layer_url( $s['tile_layer'] ?? 'standard' ) );
+
+        // If user didn't override marker_type but set marker_shape, adopt it
+        $shape_override = sanitize_key( $s['marker_shape'] ?? 'pin' );
+        if ( empty( $s['marker_type'] ) && $shape_override && $shape_override !== 'pin' ) {
+            $marker_type = $shape_override;
+        }
 
         $scroll_zoom_js = $scroll_zoom ? 'true' : 'false';
         $dragging_js    = $dragging ? 'true' : 'false';
         $map_id         = 'olo-map-' . wp_rand( 10000, 99999 );
+        $uid            = 'olo-map-single-' . wp_unique_id();
+        $fs_enabled     = ! empty( $s['fullscreen_btn'] );
 
         wp_enqueue_style( 'leaflet', 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css', [], '1.9.4' );
         wp_enqueue_script( 'leaflet', 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js', [], '1.9.4', true );
@@ -193,7 +255,53 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         ob_start();
         ?>
 
+        <div class="olo-map-wrap <?php echo esc_attr( $uid ); ?>" style="position:relative;">
         <div id="<?php echo esc_attr( $map_id ); ?>" class="olo-map" style="height:<?php echo $height; ?>px; border-radius:<?php echo $radius; ?>; overflow:hidden;"></div>
+        <?php if ( $fs_enabled ) : ?>
+            <?php echo $this->build_fullscreen_btn( $map_id ); ?>
+            <style>
+            .<?php echo esc_attr( $uid ); ?> .olo-map-fs-btn {
+                position: absolute; top: 10px; right: 10px; z-index: 1000;
+                width: 34px; height: 34px;
+                background: rgba(255,255,255,0.95);
+                border: 1px solid rgba(0,0,0,0.15);
+                border-radius: 6px; cursor: pointer; padding: 6px;
+                box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+                display: flex; align-items: center; justify-content: center;
+                color: #374151;
+            }
+            .<?php echo esc_attr( $uid ); ?> .olo-map-fs-btn:hover { background: #fff; }
+            .<?php echo esc_attr( $uid ); ?>:fullscreen .olo-map,
+            .<?php echo esc_attr( $uid ); ?>:-webkit-full-screen .olo-map { height: 100vh !important; border-radius: 0 !important; }
+            </style>
+            <script>
+            (function(){
+                var root = document.querySelector('.<?php echo esc_js( $uid ); ?>');
+                if (!root) return;
+                var btn = root.querySelector('.olo-map-fs-btn');
+                if (!btn) return;
+                btn.addEventListener('click', function() {
+                    if (!document.fullscreenElement) {
+                        if (root.requestFullscreen) root.requestFullscreen();
+                        else if (root.webkitRequestFullscreen) root.webkitRequestFullscreen();
+                    } else {
+                        if (document.exitFullscreen) document.exitFullscreen();
+                        else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+                    }
+                });
+                document.addEventListener('fullscreenchange', function() {
+                    var el = document.getElementById('<?php echo esc_js( $map_id ); ?>');
+                    setTimeout(function() {
+                        if (el && el._oloMap && el._oloMap.invalidateSize) el._oloMap.invalidateSize();
+                        else if (window.L && el && el.classList.contains('leaflet-container')) {
+                            // noop, handled elsewhere
+                        }
+                    }, 200);
+                });
+            })();
+            </script>
+        <?php endif; ?>
+        </div>
 
         <script>
         (function(){
@@ -217,13 +325,42 @@ class Olo_Map_Tile extends Olo_Tile_Base {
                 }).addTo(map);
 
                 <?php if ( $show_marker ) : ?>
-                var markerIcon = L.divIcon({
-                    html: '<svg xmlns="http://www.w3.org/2000/svg" width="28" height="40" viewBox="0 0 24 36"><path d="M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24C24 5.4 18.6 0 12 0zm0 16c-2.2 0-4-1.8-4-4s1.8-4 4-4 4 1.8 4 4-1.8 4-4 4z" fill="<?php echo esc_attr( $marker_color ); ?>"/></svg>',
-                    iconSize: [28, 40],
-                    iconAnchor: [14, 40],
-                    popupAnchor: [0, -40],
+                var markerIcon;
+                <?php if ( $marker_type === 'image' && $marker_image ) : ?>
+                markerIcon = L.icon({
+                    iconUrl: '<?php echo $marker_image; ?>',
+                    iconSize: [<?php echo $marker_size; ?>, <?php echo $marker_size; ?>],
+                    iconAnchor: [<?php echo $marker_size / 2; ?>, <?php echo $marker_size; ?>],
+                    popupAnchor: [0, -<?php echo $marker_size; ?>],
+                    className: 'olo-osm-marker-img'
+                });
+                <?php else :
+                    $ms = $marker_size;
+                    $c  = esc_attr( $marker_color );
+                    $svgs = [
+                        'pin'     => '<svg xmlns="http://www.w3.org/2000/svg" width="' . $ms . '" height="' . round( $ms * 1.43 ) . '" viewBox="0 0 24 36"><path d="M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24C24 5.4 18.6 0 12 0zm0 16c-2.2 0-4-1.8-4-4s1.8-4 4-4 4 1.8 4 4-1.8 4-4 4z" fill="' . $c . '" stroke="#fff" stroke-width="0.8"/></svg>',
+                        'drop'    => '<svg xmlns="http://www.w3.org/2000/svg" width="' . $ms . '" height="' . round( $ms * 1.43 ) . '" viewBox="0 0 24 34"><path d="M12 0C5.4 0 0 5.4 0 12c0 8 12 22 12 22s12-14 12-22C24 5.4 18.6 0 12 0z" fill="' . $c . '" stroke="#fff" stroke-width="1"/></svg>',
+                        'circle'  => '<svg xmlns="http://www.w3.org/2000/svg" width="' . $ms . '" height="' . $ms . '" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="' . $c . '" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="#fff"/></svg>',
+                        'square'  => '<svg xmlns="http://www.w3.org/2000/svg" width="' . $ms . '" height="' . $ms . '" viewBox="0 0 24 24"><rect x="1" y="1" width="22" height="22" rx="4" fill="' . $c . '" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="#fff"/></svg>',
+                        'diamond' => '<svg xmlns="http://www.w3.org/2000/svg" width="' . $ms . '" height="' . $ms . '" viewBox="0 0 24 24"><path d="M12 1L23 12 12 23 1 12z" fill="' . $c . '" stroke="#fff" stroke-width="1.5"/><circle cx="12" cy="12" r="3.5" fill="#fff"/></svg>',
+                        'star'    => '<svg xmlns="http://www.w3.org/2000/svg" width="' . $ms . '" height="' . $ms . '" viewBox="0 0 24 24"><path d="M12 1l3.09 6.26L22 8.27l-5 4.87 1.18 6.88L12 16.77 5.82 20.02 7 13.14 2 8.27l6.91-1.01z" fill="' . $c . '" stroke="#fff" stroke-width="0.8"/></svg>',
+                        'flag'    => '<svg xmlns="http://www.w3.org/2000/svg" width="' . $ms . '" height="' . round( $ms * 1.2 ) . '" viewBox="0 0 24 30"><line x1="4" y1="2" x2="4" y2="28" stroke="' . $c . '" stroke-width="2.5" stroke-linecap="round"/><path d="M4 3h16l-4 5.5 4 5.5H4z" fill="' . $c . '" opacity="0.9"/></svg>',
+                        'flag-wave' => '<svg xmlns="http://www.w3.org/2000/svg" width="' . $ms . '" height="' . round( $ms * 1.3 ) . '" viewBox="0 0 30 38"><line x1="4" y1="2" x2="4" y2="36" stroke="#555" stroke-width="2" stroke-linecap="round"/><circle cx="4" cy="2" r="1.8" fill="#888"/><path fill="' . $c . '" opacity="0.92" d="M4 4 Q14 2 20 6 Q26 10 24 14 L4 14Z"><animate attributeName="d" dur="1.2s" repeatCount="indefinite" values="M4 4 Q14 2 20 6 Q26 10 24 14 L4 14Z;M4 4 Q10 7 18 5 Q24 3 26 8 Q28 13 24 14 L4 14Z;M4 4 Q14 2 20 6 Q26 10 24 14 L4 14Z"/></path><path fill="' . $c . '" opacity="0.65" d="M4 4 Q14 1 22 5 Q28 9 26 14 L4 14Z"><animate attributeName="d" dur="1.2s" begin="0.15s" repeatCount="indefinite" values="M4 4 Q14 1 22 5 Q28 9 26 14 L4 14Z;M4 4 Q9 6 16 4 Q22 2 26 7 Q29 12 26 14 L4 14Z;M4 4 Q14 1 22 5 Q28 9 26 14 L4 14Z"/></path></svg>',
+                        'heart'   => '<svg xmlns="http://www.w3.org/2000/svg" width="' . $ms . '" height="' . round( $ms * 0.9 ) . '" viewBox="0 0 24 22"><path d="M12 21C12 21 2 13.5 2 7.5 2 4.46 4.46 2 7.5 2c1.74 0 3.41.81 4.5 2.09A5.99 5.99 0 0116.5 2C19.54 2 22 4.46 22 7.5 22 13.5 12 21 12 21z" fill="' . $c . '" stroke="#fff" stroke-width="1"/></svg>',
+                    ];
+                    $svg = $svgs[ $marker_type ] ?? $svgs['pin'];
+                    $is_tall = in_array( $marker_type, [ 'pin', 'drop', 'flag', 'flag-wave' ], true );
+                    $icon_h  = $is_tall ? round( $ms * 1.43 ) : ( $marker_type === 'heart' ? round( $ms * 0.9 ) : $ms );
+                    $anchor_y = $is_tall ? $icon_h : round( $icon_h / 2 );
+                ?>
+                markerIcon = L.divIcon({
+                    html: '<?php echo $svg; ?>',
+                    iconSize: [<?php echo $ms; ?>, <?php echo $icon_h; ?>],
+                    iconAnchor: [<?php echo round( $ms / 2 ); ?>, <?php echo $anchor_y; ?>],
+                    popupAnchor: [0, -<?php echo $anchor_y; ?>],
                     className: 'olo-osm-marker'
                 });
+                <?php endif; ?>
 
                 var marker = L.marker([<?php echo $lat; ?>, <?php echo $lng; ?>], { icon: markerIcon }).addTo(map);
                     <?php if ( ! empty( $popup_text ) ) : ?>
@@ -251,6 +388,7 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         $height = absint( $s['height'] );
         $radius = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 8 );
         $map_id = 'olo-map-' . wp_unique_id();
+        $uid    = 'olo-map-loc-' . wp_unique_id();
 
         $locations = $this->query_locations( $s );
         $terms     = $this->get_taxonomy_terms( $s, $locations );
@@ -274,21 +412,100 @@ class Olo_Map_Tile extends Olo_Tile_Base {
             'popupLink'    => (bool) $s['loc_popup_show_link'],
         ];
 
+        // New enhancement defaults
+        $fs_enabled    = ! empty( $s['fullscreen_btn'] );
+        $view_mode     = in_array( $s['view_mode'] ?? 'list', [ 'list', 'grid' ], true ) ? $s['view_mode'] : 'list';
+        $grid_cols     = max( 1, min( 4, absint( $s['grid_columns'] ?? 2 ) ) );
+        $sort_default  = in_array( $s['sort_default'] ?? 'default', [ 'default', 'title_asc', 'title_desc', 'newest', 'distance' ], true ) ? $s['sort_default'] : 'default';
+        $per_page      = max( 0, absint( $s['results_per_page'] ?? 10 ) );
+        $card_mh       = max( 0, absint( $s['card_max_height'] ?? 0 ) );
+        $card_r        = max( 0, absint( $s['card_border_radius'] ?? 8 ) );
+        $show_search   = ! empty( $s['show_location_search'] );
+        $show_radius   = ! empty( $s['show_radius'] );
+        $radius_d      = max( 1, min( 50, absint( $s['radius_default'] ?? 5 ) ) );
+        $cluster_color = $this->safe_hex( $s['loc_marker_color'] ?? $s['marker_color'] ?? '', '#3b82f6' );
+        $emit_schema   = ! empty( $s['emit_schema'] );
+
+        // JS config for enhancement script
+        $enhance_cfg = [
+            'uid'            => $uid,
+            'mapId'          => $map_id,
+            'viewMode'       => $view_mode,
+            'sortDefault'    => $sort_default,
+            'perPage'        => $per_page,
+            'searchEnabled'  => $show_search,
+            'radiusEnabled'  => $show_radius,
+            'radiusDefault'  => $radius_d,
+        ];
+
         ob_start();
         ?>
-        <div class="olo-map olo-map-locations">
+        <style><?php echo $this->build_common_enhance_css( $uid, $cluster_color, $card_r, $card_mh, $grid_cols ); ?></style>
+        <div class="olo-map olo-map-locations <?php echo esc_attr( $uid ); ?>" role="region" aria-label="Mappa luoghi con risultati">
             <?php
             if ( ! empty( $s['loc_show_filters'] ) && ! empty( $terms ) ) {
                 $this->render_filters( $terms, $s['loc_filter_style'], $map_id, $s['loc_filter_align'] ?? 'left' );
             }
             ?>
-            <div
-                id="<?php echo esc_attr( $map_id ); ?>"
-                class="olo-map-canvas"
-                style="height: <?php echo $height; ?>px; border-radius: <?php echo $radius; ?>; overflow: hidden;"
-                data-map-config="<?php echo esc_attr( wp_json_encode( $config ) ); ?>"
-            ></div>
+            <?php if ( $show_search ) : ?>
+                <div class="olo-map-search-wrap">
+                    <input type="text" class="olo-map-search-input" data-search-for="<?php echo esc_attr( $map_id ); ?>" placeholder="Cerca citt&agrave;, zona, indirizzo..." autocomplete="off" aria-label="Cerca localit&agrave;" />
+                    <ul class="olo-map-ac-list" data-ac-for="<?php echo esc_attr( $map_id ); ?>"></ul>
+                </div>
+            <?php endif; ?>
+            <?php if ( $show_radius ) : ?>
+                <div class="olo-map-radius-wrap">
+                    <label>Raggio</label>
+                    <input type="range" class="olo-map-radius-slider" data-radius-for="<?php echo esc_attr( $map_id ); ?>" min="1" max="50" value="<?php echo esc_attr( $radius_d ); ?>" />
+                    <span class="olo-map-radius-val" data-radius-for="<?php echo esc_attr( $map_id ); ?>"><?php echo esc_html( $radius_d ); ?> km</span>
+                </div>
+            <?php endif; ?>
+            <div style="position:relative;">
+                <div
+                    id="<?php echo esc_attr( $map_id ); ?>"
+                    class="olo-map-canvas"
+                    style="height: <?php echo $height; ?>px; border-radius: <?php echo $radius; ?>; overflow: hidden;"
+                    data-map-config="<?php echo esc_attr( wp_json_encode( $config ) ); ?>"
+                ></div>
+                <?php if ( $fs_enabled ) : ?>
+                    <?php echo $this->build_fullscreen_btn( $map_id ); ?>
+                <?php endif; ?>
+            </div>
+            <div class="olo-map-toolbar" role="region" aria-label="Controlli elenco risultati">
+                <span class="olo-map-count" data-count-for="<?php echo esc_attr( $map_id ); ?>"><strong><?php echo count( $locations ); ?></strong> risultat<?php echo count( $locations ) === 1 ? 'o' : 'i'; ?></span>
+                <div class="olo-map-toolbar-right">
+                    <select class="olo-map-sort" data-sort-for="<?php echo esc_attr( $map_id ); ?>" aria-label="Ordina risultati">
+                        <option value="default" <?php selected( $sort_default, 'default' ); ?>>Ordine predefinito</option>
+                        <option value="title_asc" <?php selected( $sort_default, 'title_asc' ); ?>>Titolo A-Z</option>
+                        <option value="title_desc" <?php selected( $sort_default, 'title_desc' ); ?>>Titolo Z-A</option>
+                        <option value="newest" <?php selected( $sort_default, 'newest' ); ?>>Pi&ugrave; recenti</option>
+                        <?php if ( $show_search ) : ?>
+                            <option value="distance" <?php selected( $sort_default, 'distance' ); ?>>Distanza</option>
+                        <?php endif; ?>
+                    </select>
+                    <div class="olo-map-view-toggles" role="group" aria-label="Tipo di vista">
+                        <button type="button" class="olo-map-view-btn<?php echo $view_mode === 'list' ? ' is-active' : ''; ?>" data-view="list" data-view-for="<?php echo esc_attr( $map_id ); ?>" aria-label="Vista lista" title="Vista lista">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="4" cy="6" r="1" fill="currentColor"/><circle cx="4" cy="12" r="1" fill="currentColor"/><circle cx="4" cy="18" r="1" fill="currentColor"/></svg>
+                        </button>
+                        <button type="button" class="olo-map-view-btn<?php echo $view_mode === 'grid' ? ' is-active' : ''; ?>" data-view="grid" data-view-for="<?php echo esc_attr( $map_id ); ?>" aria-label="Vista griglia" title="Vista griglia">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="olo-map-results<?php echo $view_mode === 'grid' ? ' is-grid' : ''; ?>" data-list-for="<?php echo esc_attr( $map_id ); ?>"></div>
+            <?php if ( $per_page > 0 ) : ?>
+                <div class="olo-map-pagination" data-pag-for="<?php echo esc_attr( $map_id ); ?>">
+                    <button type="button" class="olo-map-page-btn" data-page="prev">&larr; Precedente</button>
+                    <span class="olo-map-page-info">1 di 1</span>
+                    <button type="button" class="olo-map-page-btn" data-page="next">Successivo &rarr;</button>
+                </div>
+            <?php endif; ?>
         </div>
+        <?php if ( $emit_schema && ! empty( $locations ) ) : ?>
+            <script type="application/ld+json"><?php echo wp_json_encode( $this->build_multi_schema( $locations, 'Place' ), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ); ?></script>
+        <?php endif; ?>
+        <?php echo $this->build_multi_enhance_js( $uid, $map_id, $enhance_cfg ); ?>
         <?php
         return ob_get_clean();
     }
@@ -519,6 +736,7 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         $height = absint( $s['height'] );
         $radius = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 8 );
         $map_id = 'olo-map-' . wp_unique_id();
+        $uid    = 'olo-map-svc-' . wp_unique_id();
 
         $locations = $this->query_services( $s );
 
@@ -555,6 +773,31 @@ class Olo_Map_Tile extends Olo_Tile_Base {
             'popupLink'         => true,
         ];
 
+        // New enhancement defaults (services)
+        $fs_enabled    = ! empty( $s['fullscreen_btn'] );
+        $view_mode     = in_array( $s['view_mode'] ?? 'list', [ 'list', 'grid' ], true ) ? $s['view_mode'] : 'list';
+        $grid_cols     = max( 1, min( 4, absint( $s['grid_columns'] ?? 2 ) ) );
+        $sort_default  = in_array( $s['sort_default'] ?? 'default', [ 'default', 'title_asc', 'title_desc', 'newest', 'distance' ], true ) ? $s['sort_default'] : 'default';
+        $per_page      = max( 0, absint( $s['results_per_page'] ?? 10 ) );
+        $card_mh       = max( 0, absint( $s['card_max_height'] ?? 0 ) );
+        $card_r        = max( 0, absint( $s['card_border_radius'] ?? 8 ) );
+        $show_search   = ! empty( $s['show_location_search'] );
+        $show_radius_k = ! empty( $s['show_radius'] );
+        $radius_d      = max( 1, min( 50, absint( $s['radius_default'] ?? 5 ) ) );
+        $cluster_color = $this->safe_hex( $s['svc_marker_color'] ?? $s['marker_color'] ?? '', $config['popupBtnColor'] ?: '#3b82f6' );
+        $emit_schema   = ! empty( $s['emit_schema'] );
+
+        $enhance_cfg = [
+            'uid'            => $uid,
+            'mapId'          => $map_id,
+            'viewMode'       => $view_mode,
+            'sortDefault'    => $sort_default,
+            'perPage'        => $per_page,
+            'searchEnabled'  => $show_search,
+            'radiusEnabled'  => $show_radius_k,
+            'radiusDefault'  => $radius_d,
+        ];
+
         ob_start();
         ?>
         <?php
@@ -569,23 +812,78 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         $filter_style = $s['svc_filter_style'] ?? 'default';
         $filter_pos   = $s['svc_filter_position'] ?? 'top';
         $is_side      = in_array( $filter_pos, [ 'left', 'right' ], true );
+
+        // Determine schema item type based on booking mode
+        $booking_mode = $s['svc_booking_mode'] ?? 'accommodation';
+        $schema_item_type = ( $booking_mode === 'accommodation' ) ? 'LodgingBusiness' : 'LocalBusiness';
         ?>
-        <div class="olo-map olo-map-services<?php echo $is_side && $has_filters ? ' olo-map-layout-side olo-map-layout-' . esc_attr( $filter_pos ) : ''; ?>">
+        <style><?php echo $this->build_common_enhance_css( $uid, $cluster_color, $card_r, $card_mh, $grid_cols ); ?></style>
+        <div class="olo-map olo-map-services <?php echo esc_attr( $uid ); ?><?php echo $is_side && $has_filters ? ' olo-map-layout-side olo-map-layout-' . esc_attr( $filter_pos ) : ''; ?>" role="region" aria-label="Mappa servizi con risultati">
             <?php if ( $has_filters && ( $filter_pos === 'top' || $filter_pos === 'left' ) ) : ?>
                 <?php $this->render_filter_bar( $filter_style, $s, $locations, $map_id ); ?>
             <?php endif; ?>
-            <div class="olo-map-canvas-wrap"<?php echo $is_side ? ' style="flex:1;min-width:0"' : ''; ?>>
+            <?php if ( $show_search ) : ?>
+                <div class="olo-map-search-wrap">
+                    <input type="text" class="olo-map-search-input" data-search-for="<?php echo esc_attr( $map_id ); ?>" placeholder="Cerca citt&agrave;, zona, indirizzo..." autocomplete="off" aria-label="Cerca localit&agrave;" />
+                    <ul class="olo-map-ac-list" data-ac-for="<?php echo esc_attr( $map_id ); ?>"></ul>
+                </div>
+            <?php endif; ?>
+            <?php if ( $show_radius_k ) : ?>
+                <div class="olo-map-radius-wrap">
+                    <label>Raggio</label>
+                    <input type="range" class="olo-map-radius-slider" data-radius-for="<?php echo esc_attr( $map_id ); ?>" min="1" max="50" value="<?php echo esc_attr( $radius_d ); ?>" />
+                    <span class="olo-map-radius-val" data-radius-for="<?php echo esc_attr( $map_id ); ?>"><?php echo esc_html( $radius_d ); ?> km</span>
+                </div>
+            <?php endif; ?>
+            <div class="olo-map-canvas-wrap"<?php echo $is_side ? ' style="flex:1;min-width:0"' : ''; ?> style="position:relative;">
                 <div
                     id="<?php echo esc_attr( $map_id ); ?>"
                     class="olo-map-canvas"
                     style="height: <?php echo $height; ?>px; border-radius: <?php echo $radius; ?>; overflow: hidden;"
                     data-map-config="<?php echo esc_attr( wp_json_encode( $config ) ); ?>"
                 ></div>
+                <?php if ( $fs_enabled ) : ?>
+                    <?php echo $this->build_fullscreen_btn( $map_id ); ?>
+                <?php endif; ?>
             </div>
             <?php if ( $has_filters && ( $filter_pos === 'bottom' || $filter_pos === 'right' ) ) : ?>
                 <?php $this->render_filter_bar( $filter_style, $s, $locations, $map_id ); ?>
             <?php endif; ?>
+            <div class="olo-map-toolbar" role="region" aria-label="Controlli elenco risultati">
+                <span class="olo-map-count" data-count-for="<?php echo esc_attr( $map_id ); ?>"><strong><?php echo count( $locations ); ?></strong> risultat<?php echo count( $locations ) === 1 ? 'o' : 'i'; ?></span>
+                <div class="olo-map-toolbar-right">
+                    <select class="olo-map-sort" data-sort-for="<?php echo esc_attr( $map_id ); ?>" aria-label="Ordina risultati">
+                        <option value="default" <?php selected( $sort_default, 'default' ); ?>>Ordine predefinito</option>
+                        <option value="title_asc" <?php selected( $sort_default, 'title_asc' ); ?>>Titolo A-Z</option>
+                        <option value="title_desc" <?php selected( $sort_default, 'title_desc' ); ?>>Titolo Z-A</option>
+                        <option value="newest" <?php selected( $sort_default, 'newest' ); ?>>Pi&ugrave; recenti</option>
+                        <?php if ( $show_search ) : ?>
+                            <option value="distance" <?php selected( $sort_default, 'distance' ); ?>>Distanza</option>
+                        <?php endif; ?>
+                    </select>
+                    <div class="olo-map-view-toggles" role="group" aria-label="Tipo di vista">
+                        <button type="button" class="olo-map-view-btn<?php echo $view_mode === 'list' ? ' is-active' : ''; ?>" data-view="list" data-view-for="<?php echo esc_attr( $map_id ); ?>" aria-label="Vista lista" title="Vista lista">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="4" cy="6" r="1" fill="currentColor"/><circle cx="4" cy="12" r="1" fill="currentColor"/><circle cx="4" cy="18" r="1" fill="currentColor"/></svg>
+                        </button>
+                        <button type="button" class="olo-map-view-btn<?php echo $view_mode === 'grid' ? ' is-active' : ''; ?>" data-view="grid" data-view-for="<?php echo esc_attr( $map_id ); ?>" aria-label="Vista griglia" title="Vista griglia">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="olo-map-results<?php echo $view_mode === 'grid' ? ' is-grid' : ''; ?>" data-list-for="<?php echo esc_attr( $map_id ); ?>"></div>
+            <?php if ( $per_page > 0 ) : ?>
+                <div class="olo-map-pagination" data-pag-for="<?php echo esc_attr( $map_id ); ?>">
+                    <button type="button" class="olo-map-page-btn" data-page="prev">&larr; Precedente</button>
+                    <span class="olo-map-page-info">1 di 1</span>
+                    <button type="button" class="olo-map-page-btn" data-page="next">Successivo &rarr;</button>
+                </div>
+            <?php endif; ?>
         </div>
+        <?php if ( $emit_schema && ! empty( $locations ) ) : ?>
+            <script type="application/ld+json"><?php echo wp_json_encode( $this->build_multi_schema( $locations, $schema_item_type ), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ); ?></script>
+        <?php endif; ?>
+        <?php echo $this->build_multi_enhance_js( $uid, $map_id, $enhance_cfg ); ?>
         <?php
         return ob_get_clean();
     }
@@ -1096,6 +1394,671 @@ class Olo_Map_Tile extends Olo_Tile_Base {
             return [ 'lat' => floatval( $m[1] ), 'lng' => floatval( $m[2] ) ];
         }
         return null;
+    }
+
+    /**
+     * Safe color fallback (class may extend Olo_Tile_Base that provides safe_color_css,
+     * but guard here in case of environments where it's missing).
+     */
+    private function safe_hex( $c, $fallback = '#e74c3c' ) {
+        if ( method_exists( $this, 'safe_color_css' ) ) {
+            $sanitized = $this->safe_color_css( $c );
+            if ( $sanitized ) {
+                return $sanitized;
+            }
+        }
+        if ( is_string( $c ) && preg_match( '/^#[0-9a-fA-F]{3,8}$/', $c ) ) {
+            return $c;
+        }
+        return $fallback;
+    }
+
+    /**
+     * Build an SVG string for a marker shape colored with $color.
+     * Shapes: pin, drop, circle, square, diamond, star, flag, heart.
+     * Returns [ 'svg' => string, 'w' => int, 'h' => int, 'anchor_y' => int ].
+     */
+    private function build_marker_shape_svg( $shape, $color, $size = 32 ) {
+        $ms = absint( $size ) ?: 32;
+        $c  = esc_attr( $color );
+        $tall_h = (int) round( $ms * 1.43 );
+        $heart_h = (int) round( $ms * 0.9 );
+        $flag_h  = (int) round( $ms * 1.2 );
+
+        $svgs = [
+            'pin'     => '<svg xmlns="http://www.w3.org/2000/svg" width="' . $ms . '" height="' . $tall_h . '" viewBox="0 0 24 36"><path d="M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24C24 5.4 18.6 0 12 0zm0 16c-2.2 0-4-1.8-4-4s1.8-4 4-4 4 1.8 4 4-1.8 4-4 4z" fill="' . $c . '" stroke="#fff" stroke-width="0.8"/></svg>',
+            'drop'    => '<svg xmlns="http://www.w3.org/2000/svg" width="' . $ms . '" height="' . $tall_h . '" viewBox="0 0 24 34"><path d="M12 0C5.4 0 0 5.4 0 12c0 8 12 22 12 22s12-14 12-22C24 5.4 18.6 0 12 0z" fill="' . $c . '" stroke="#fff" stroke-width="1"/></svg>',
+            'circle'  => '<svg xmlns="http://www.w3.org/2000/svg" width="' . $ms . '" height="' . $ms . '" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="' . $c . '" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="#fff"/></svg>',
+            'square'  => '<svg xmlns="http://www.w3.org/2000/svg" width="' . $ms . '" height="' . $ms . '" viewBox="0 0 24 24"><rect x="1" y="1" width="22" height="22" rx="4" fill="' . $c . '" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="#fff"/></svg>',
+            'diamond' => '<svg xmlns="http://www.w3.org/2000/svg" width="' . $ms . '" height="' . $ms . '" viewBox="0 0 24 24"><path d="M12 1L23 12 12 23 1 12z" fill="' . $c . '" stroke="#fff" stroke-width="1.5"/><circle cx="12" cy="12" r="3.5" fill="#fff"/></svg>',
+            'star'    => '<svg xmlns="http://www.w3.org/2000/svg" width="' . $ms . '" height="' . $ms . '" viewBox="0 0 24 24"><path d="M12 1l3.09 6.26L22 8.27l-5 4.87 1.18 6.88L12 16.77 5.82 20.02 7 13.14 2 8.27l6.91-1.01z" fill="' . $c . '" stroke="#fff" stroke-width="0.8"/></svg>',
+            'flag'    => '<svg xmlns="http://www.w3.org/2000/svg" width="' . $ms . '" height="' . $flag_h . '" viewBox="0 0 24 30"><line x1="4" y1="2" x2="4" y2="28" stroke="' . $c . '" stroke-width="2.5" stroke-linecap="round"/><path d="M4 3h16l-4 5.5 4 5.5H4z" fill="' . $c . '" opacity="0.9"/></svg>',
+            'heart'   => '<svg xmlns="http://www.w3.org/2000/svg" width="' . $ms . '" height="' . $heart_h . '" viewBox="0 0 24 22"><path d="M12 21C12 21 2 13.5 2 7.5 2 4.46 4.46 2 7.5 2c1.74 0 3.41.81 4.5 2.09A5.99 5.99 0 0116.5 2C19.54 2 22 4.46 22 7.5 22 13.5 12 21 12 21z" fill="' . $c . '" stroke="#fff" stroke-width="1"/></svg>',
+        ];
+
+        $shape = isset( $svgs[ $shape ] ) ? $shape : 'pin';
+        $svg   = $svgs[ $shape ];
+
+        $is_tall = in_array( $shape, [ 'pin', 'drop', 'flag' ], true );
+        if ( $shape === 'heart' ) {
+            $h = $heart_h;
+        } elseif ( $shape === 'flag' ) {
+            $h = $flag_h;
+        } elseif ( $is_tall ) {
+            $h = $tall_h;
+        } else {
+            $h = $ms;
+        }
+        $anchor_y = $is_tall ? $h : (int) round( $h / 2 );
+
+        return [
+            'svg'       => $svg,
+            'w'         => $ms,
+            'h'         => $h,
+            'anchor_y'  => $anchor_y,
+            'is_tall'   => $is_tall,
+        ];
+    }
+
+    /**
+     * Build cluster CSS overrides scoped to a given uid and colored with $color.
+     * Uses $color + alpha hex suffix to tint the cluster background.
+     */
+    private function build_cluster_css( $uid, $color ) {
+        $c = $this->safe_hex( $color, '#3b82f6' );
+        $sel = '.' . $uid;
+        return $sel . ' .marker-cluster-small { background-color: ' . $c . '33; }'
+             . $sel . ' .marker-cluster-small div { background-color: ' . $c . '; color: #fff; }'
+             . $sel . ' .marker-cluster-medium { background-color: ' . $c . '44; }'
+             . $sel . ' .marker-cluster-medium div { background-color: ' . $c . '; color: #fff; }'
+             . $sel . ' .marker-cluster-large { background-color: ' . $c . '55; }'
+             . $sel . ' .marker-cluster-large div { background-color: ' . $c . '; color: #fff; }';
+    }
+
+    /**
+     * Build JSON-LD ItemList schema for a list of locations/services.
+     * $item_type: 'Place' | 'LodgingBusiness' | 'LocalBusiness'.
+     */
+    private function build_multi_schema( $locations, $item_type = 'Place' ) {
+        $item_type = in_array( $item_type, [ 'Place', 'LodgingBusiness', 'LocalBusiness' ], true ) ? $item_type : 'Place';
+        $list_items = [];
+        foreach ( $locations as $i => $loc ) {
+            $schema_item = [
+                '@type' => $item_type,
+                'name'  => isset( $loc['title'] ) ? $loc['title'] : '',
+            ];
+            if ( ! empty( $loc['url'] ) ) {
+                $schema_item['url'] = $loc['url'];
+            }
+            if ( ! empty( $loc['image'] ) ) {
+                $schema_item['image'] = $loc['image'];
+            }
+            if ( isset( $loc['lat'], $loc['lng'] ) ) {
+                $schema_item['geo'] = [
+                    '@type'     => 'GeoCoordinates',
+                    'latitude'  => floatval( $loc['lat'] ),
+                    'longitude' => floatval( $loc['lng'] ),
+                ];
+            }
+            if ( ! empty( $loc['address'] ) ) {
+                $schema_item['address'] = [
+                    '@type'         => 'PostalAddress',
+                    'streetAddress' => $loc['address'],
+                ];
+            }
+            if ( ! empty( $loc['price'] ) && $item_type !== 'Place' ) {
+                $schema_item['priceRange'] = '€' . $loc['price'];
+            }
+            $list_items[] = [
+                '@type'    => 'ListItem',
+                'position' => $i + 1,
+                'item'     => $schema_item,
+            ];
+        }
+        return [
+            '@context'        => 'https://schema.org',
+            '@type'           => 'ItemList',
+            'itemListElement' => $list_items,
+        ];
+    }
+
+    /**
+     * Build the fullscreen toggle button HTML.
+     */
+    private function build_fullscreen_btn( $uid ) {
+        ob_start();
+        ?>
+        <button type="button" class="olo-map-fs-btn" data-fs-for="<?php echo esc_attr( $uid ); ?>" title="Schermo intero" aria-label="Attiva o disattiva schermo intero">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3"/></svg>
+        </button>
+        <?php
+        return ob_get_clean();
+    }
+
+    /**
+     * Common CSS block for fullscreen button + new enhancements, scoped to $uid.
+     */
+    private function build_common_enhance_css( $uid, $color, $card_radius = 8, $card_max_h = 0, $grid_cols = 2 ) {
+        $c = $this->safe_hex( $color, '#3b82f6' );
+        $uid_sel = '.' . $uid;
+        ob_start();
+        ?>
+        <?php echo $uid_sel; ?> { position: relative; }
+        <?php echo $uid_sel; ?> .olo-map-fs-btn {
+            position: absolute; top: 10px; right: 10px; z-index: 1000;
+            width: 34px; height: 34px;
+            background: rgba(255,255,255,0.95);
+            border: 1px solid rgba(0,0,0,0.15);
+            border-radius: 6px; cursor: pointer;
+            padding: 6px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+            display: flex; align-items: center; justify-content: center;
+            color: #374151;
+            transition: background 0.15s;
+        }
+        <?php echo $uid_sel; ?> .olo-map-fs-btn:hover { background: #fff; }
+        <?php echo $uid_sel; ?>:fullscreen .olo-map-canvas,
+        <?php echo $uid_sel; ?>:-webkit-full-screen .olo-map-canvas { height: 100vh !important; border-radius: 0 !important; }
+        <?php echo $this->build_cluster_css( $uid, $c ); ?>
+        <?php echo $uid_sel; ?> .leaflet-popup-content img { max-width: 100%; height: auto; }
+
+        /* ── Multi-marker UI (locations/services) ── */
+        <?php echo $uid_sel; ?> .olo-map-toolbar {
+            display: flex; align-items: center; justify-content: space-between;
+            gap: 8px; padding: 8px 10px; background: #fff;
+            border: 1px solid #E5E7EB; border-radius: 6px;
+            margin-bottom: 8px; flex-wrap: wrap;
+        }
+        <?php echo $uid_sel; ?> .olo-map-toolbar .olo-map-count { font-size: 13px; color: #374151; font-weight: 600; }
+        <?php echo $uid_sel; ?> .olo-map-toolbar .olo-map-count strong { color: <?php echo $c; ?>; }
+        <?php echo $uid_sel; ?> .olo-map-toolbar-right { display: flex; gap: 8px; align-items: center; }
+        <?php echo $uid_sel; ?> .olo-map-sort {
+            padding: 5px 8px; border: 1px solid #D1D5DB; border-radius: 4px;
+            font-size: 12px; color: #374151; background: #fff; font-family: inherit;
+        }
+        <?php echo $uid_sel; ?> .olo-map-view-toggles { display: flex; gap: 0; }
+        <?php echo $uid_sel; ?> .olo-map-view-btn {
+            width: 30px; height: 30px; border: 1px solid #D1D5DB; background: #fff;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            padding: 0; color: #9CA3AF;
+        }
+        <?php echo $uid_sel; ?> .olo-map-view-btn:first-child { border-radius: 4px 0 0 4px; }
+        <?php echo $uid_sel; ?> .olo-map-view-btn:last-child  { border-radius: 0 4px 4px 0; border-left: 0; }
+        <?php echo $uid_sel; ?> .olo-map-view-btn.is-active {
+            background: <?php echo $c; ?>; border-color: <?php echo $c; ?>; color: #fff;
+        }
+
+        /* Location search autocomplete */
+        <?php echo $uid_sel; ?> .olo-map-search-wrap { position: relative; margin-bottom: 8px; }
+        <?php echo $uid_sel; ?> .olo-map-search-input {
+            width: 100%; padding: 8px 12px; border: 1px solid #D1D5DB;
+            border-radius: 6px; font-size: 13px; box-sizing: border-box; font-family: inherit;
+        }
+        <?php echo $uid_sel; ?> .olo-map-search-input:focus {
+            outline: none; border-color: <?php echo $c; ?>;
+            box-shadow: 0 0 0 3px <?php echo $c; ?>22;
+        }
+        <?php echo $uid_sel; ?> .olo-map-ac-list {
+            display: none; position: absolute; z-index: 1100; top: 100%; left: 0; right: 0;
+            margin: 2px 0 0; padding: 4px 0; list-style: none;
+            background: #fff; border: 1px solid #D1D5DB; border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12); max-height: 220px; overflow-y: auto;
+        }
+        <?php echo $uid_sel; ?> .olo-map-ac-list.is-open { display: block; }
+        <?php echo $uid_sel; ?> .olo-map-ac-item {
+            padding: 8px 12px; font-size: 13px; color: #374151; cursor: pointer;
+            line-height: 1.35;
+        }
+        <?php echo $uid_sel; ?> .olo-map-ac-item:hover,
+        <?php echo $uid_sel; ?> .olo-map-ac-item.is-active { background: #F3F4F6; }
+
+        /* Radius slider */
+        <?php echo $uid_sel; ?> .olo-map-radius-wrap {
+            display: flex; align-items: center; gap: 8px; margin-bottom: 8px;
+            padding: 6px 10px; background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 6px;
+        }
+        <?php echo $uid_sel; ?> .olo-map-radius-wrap label {
+            font-size: 11px; font-weight: 600; color: #6B7280;
+            text-transform: uppercase; letter-spacing: 0.04em;
+        }
+        <?php echo $uid_sel; ?> .olo-map-radius-wrap input[type="range"] {
+            flex: 1; accent-color: <?php echo $c; ?>; height: 4px;
+        }
+        <?php echo $uid_sel; ?> .olo-map-radius-val {
+            font-size: 12px; font-weight: 600; color: #374151; min-width: 52px; text-align: right;
+        }
+
+        /* Results list */
+        <?php echo $uid_sel; ?> .olo-map-results {
+            margin-top: 10px; display: flex; flex-direction: column; gap: 8px;
+        }
+        <?php echo $uid_sel; ?> .olo-map-results.is-grid {
+            display: grid; gap: 10px;
+            grid-template-columns: repeat(<?php echo absint( $grid_cols ) ?: 2; ?>, 1fr);
+        }
+        <?php echo $uid_sel; ?> .olo-map-card {
+            display: grid; grid-template-columns: 38% 1fr;
+            border: 1px solid #E5E7EB; background: #fff;
+            border-radius: <?php echo absint( $card_radius ); ?>px;
+            overflow: hidden;
+            <?php if ( absint( $card_max_h ) > 0 ) : ?>max-height: <?php echo absint( $card_max_h ); ?>px;<?php endif; ?>
+            cursor: pointer; text-decoration: none; color: inherit;
+            transition: box-shadow 0.2s, transform 0.15s;
+        }
+        <?php echo $uid_sel; ?> .olo-map-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateY(-1px);
+        }
+        <?php echo $uid_sel; ?> .olo-map-card.is-highlighted {
+            box-shadow: 0 0 0 2px <?php echo $c; ?>, 0 4px 12px rgba(0,0,0,0.1);
+        }
+        <?php echo $uid_sel; ?> .olo-map-card-img {
+            background: #E5E7EB; min-height: 110px; position: relative; overflow: hidden;
+        }
+        <?php echo $uid_sel; ?> .olo-map-card-img img {
+            width: 100%; height: 100%; object-fit: cover; display: block;
+        }
+        <?php echo $uid_sel; ?> .olo-map-card-body {
+            padding: 10px 12px; display: flex; flex-direction: column; gap: 4px; min-width: 0;
+        }
+        <?php echo $uid_sel; ?> .olo-map-card-title {
+            font-size: 13px; font-weight: 700; color: #1F2937; margin: 0; line-height: 1.3;
+            overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+        }
+        <?php echo $uid_sel; ?> .olo-map-card-sub { font-size: 12px; color: #6B7280; margin: 0; }
+        <?php echo $uid_sel; ?> .olo-map-card-price {
+            font-size: 14px; font-weight: 700; color: <?php echo $c; ?>; margin-top: auto;
+        }
+
+        /* Grid mode: image background + gradient overlay + white text */
+        <?php echo $uid_sel; ?> .olo-map-results.is-grid .olo-map-card {
+            display: flex; flex-direction: column; position: relative; min-height: 200px;
+        }
+        <?php echo $uid_sel; ?> .olo-map-results.is-grid .olo-map-card-img {
+            position: absolute; inset: 0; height: 100%;
+        }
+        <?php echo $uid_sel; ?> .olo-map-results.is-grid .olo-map-card-body {
+            position: relative; z-index: 2; margin-top: auto;
+            background: linear-gradient(0deg, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.45) 70%, transparent 100%);
+            padding: 40px 12px 10px;
+        }
+        <?php echo $uid_sel; ?> .olo-map-results.is-grid .olo-map-card-title { color: #fff; }
+        <?php echo $uid_sel; ?> .olo-map-results.is-grid .olo-map-card-sub { color: rgba(255,255,255,0.85); }
+        <?php echo $uid_sel; ?> .olo-map-results.is-grid .olo-map-card-price { color: #fff; }
+
+        /* Pagination */
+        <?php echo $uid_sel; ?> .olo-map-pagination {
+            display: flex; justify-content: center; align-items: center;
+            gap: 8px; padding: 10px; margin-top: 10px;
+            background: #fff; border: 1px solid #E5E7EB; border-radius: 6px;
+        }
+        <?php echo $uid_sel; ?> .olo-map-page-btn {
+            padding: 6px 14px; border: 1px solid #D1D5DB; border-radius: 4px;
+            background: #fff; color: #374151; font-size: 13px; cursor: pointer;
+            font-family: inherit;
+        }
+        <?php echo $uid_sel; ?> .olo-map-page-btn:hover { background: #F3F4F6; }
+        <?php echo $uid_sel; ?> .olo-map-page-btn:disabled { opacity: 0.4; cursor: default; }
+        <?php echo $uid_sel; ?> .olo-map-page-info { font-size: 12px; color: #6B7280; }
+
+        @media (max-width: 600px) {
+            <?php echo $uid_sel; ?> .olo-map-results.is-grid { grid-template-columns: 1fr; }
+            <?php echo $uid_sel; ?> .olo-map-card { grid-template-columns: 1fr; }
+        }
+        <?php
+        return ob_get_clean();
+    }
+
+    /**
+     * Build the shared JS that enhances an already-initialized map (via external olo-map.js).
+     * Adds: fullscreen, cluster color (handled via CSS), view toggle, sort, pagination,
+     * location search (Nominatim), radius filter, bidirectional marker↔card sync.
+     * The script hooks after the canvas has been initialized by olo-map.js.
+     */
+    private function build_multi_enhance_js( $uid, $map_id, $config ) {
+        $cfg_json = wp_json_encode( $config, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
+        ob_start();
+        ?>
+        <script>
+        (function(){
+            var CFG = <?php echo $cfg_json; ?>;
+            var UID = CFG.uid, MAP_ID = CFG.mapId;
+            var PER_PAGE = parseInt(CFG.perPage, 10) || 0; // 0 = all
+            var CAN_SEARCH = !!CFG.searchEnabled;
+            var CAN_RADIUS = !!CFG.radiusEnabled;
+            var RADIUS_DEFAULT = parseFloat(CFG.radiusDefault) || 5;
+
+            function init() {
+                var canvas = document.getElementById(MAP_ID);
+                var root   = document.querySelector('.' + UID);
+                if (!canvas || !root) return;
+                // Wait until olo-map.js has built the map & markers.
+                if (!canvas._oloMap || !canvas._oloMarkers) {
+                    return setTimeout(init, 100);
+                }
+
+                var map     = canvas._oloMap;
+                var markers = canvas._oloMarkers;
+                var locs    = (canvas._oloConfig && canvas._oloConfig.locations) || [];
+
+                /* state */
+                var filtered    = locs.slice();
+                var page        = 1;
+                var geocoded    = null;
+                var radiusKm    = RADIUS_DEFAULT;
+                var isGridView  = (CFG.viewMode === 'grid');
+                var highlightId = null;
+
+                /* ── Haversine ── */
+                function haversine(lat1, lng1, lat2, lng2) {
+                    var R = 6371;
+                    var dLat = (lat2 - lat1) * Math.PI / 180;
+                    var dLng = (lng2 - lng1) * Math.PI / 180;
+                    var a = Math.sin(dLat/2)*Math.sin(dLat/2)
+                          + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)
+                          * Math.sin(dLng/2)*Math.sin(dLng/2);
+                    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+                }
+
+                function escHtml(str) {
+                    var d = document.createElement('div');
+                    d.textContent = str == null ? '' : String(str);
+                    return d.innerHTML;
+                }
+
+                /* ── Fullscreen ── */
+                var fsBtn = root.querySelector('.olo-map-fs-btn[data-fs-for="' + MAP_ID + '"]');
+                if (fsBtn) {
+                    fsBtn.addEventListener('click', function() {
+                        var el = root;
+                        if (!document.fullscreenElement) {
+                            if (el.requestFullscreen) el.requestFullscreen();
+                            else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+                        } else {
+                            if (document.exitFullscreen) document.exitFullscreen();
+                            else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+                        }
+                    });
+                    document.addEventListener('fullscreenchange', function() {
+                        setTimeout(function(){ try { map.invalidateSize(); } catch(e) {} }, 200);
+                    });
+                }
+
+                /* ── Marker↔Card sync ── */
+                var markerById = {};
+                markers.forEach(function(m) {
+                    if (m._oloId != null) markerById[m._oloId] = m;
+                    m.on('click', function() {
+                        highlight(m._oloId);
+                        scrollToCard(m._oloId);
+                    });
+                });
+
+                /* ── Location search autocomplete ── */
+                var searchInput = root.querySelector('.olo-map-search-input[data-search-for="' + MAP_ID + '"]');
+                var acList      = root.querySelector('.olo-map-ac-list[data-ac-for="' + MAP_ID + '"]');
+                var acTimer = null, acIdx = -1;
+
+                function acShow(items) {
+                    if (!acList) return;
+                    if (!items.length) { acHide(); return; }
+                    acList.innerHTML = items.map(function(it) {
+                        return '<li class="olo-map-ac-item" data-lat="' + it.lat + '" data-lng="' + it.lon + '">' + escHtml(it.display_name) + '</li>';
+                    }).join('');
+                    acList.classList.add('is-open');
+                    acIdx = -1;
+                }
+                function acHide() {
+                    if (!acList) return;
+                    acList.classList.remove('is-open');
+                    acList.innerHTML = '';
+                    acIdx = -1;
+                }
+                function acSearch(q) {
+                    if (!q || q.length < 2) { acHide(); return; }
+                    var url = 'https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&limit=5&q=' + encodeURIComponent(q);
+                    fetch(url).then(function(r){ return r.json(); })
+                              .then(function(data){ acShow(data || []); })
+                              .catch(function(){ acHide(); });
+                }
+                if (searchInput && CAN_SEARCH) {
+                    searchInput.addEventListener('input', function() {
+                        clearTimeout(acTimer);
+                        var v = searchInput.value.trim();
+                        acTimer = setTimeout(function(){ acSearch(v); }, 300);
+                    });
+                    searchInput.addEventListener('keydown', function(e) {
+                        if (!acList || !acList.classList.contains('is-open')) return;
+                        var items = acList.querySelectorAll('.olo-map-ac-item');
+                        if (!items.length) return;
+                        if (e.key === 'ArrowDown') { e.preventDefault(); acIdx = Math.min(acIdx+1, items.length-1); items.forEach(function(it,i){ it.classList.toggle('is-active', i===acIdx); }); }
+                        else if (e.key === 'ArrowUp') { e.preventDefault(); acIdx = Math.max(acIdx-1, 0); items.forEach(function(it,i){ it.classList.toggle('is-active', i===acIdx); }); }
+                        else if (e.key === 'Enter') { e.preventDefault(); if (acIdx >= 0 && items[acIdx]) items[acIdx].click(); }
+                        else if (e.key === 'Escape') { acHide(); }
+                    });
+                    if (acList) {
+                        acList.addEventListener('click', function(e) {
+                            var it = e.target.closest('.olo-map-ac-item');
+                            if (!it) return;
+                            var lat = parseFloat(it.getAttribute('data-lat'));
+                            var lng = parseFloat(it.getAttribute('data-lng'));
+                            geocoded = { lat: lat, lng: lng };
+                            var lbl = it.textContent || '';
+                            searchInput.value = lbl;
+                            acHide();
+                            try { map.setView([lat, lng], 13); } catch(e) {}
+                            applyFilters();
+                        });
+                    }
+                    document.addEventListener('click', function(e) {
+                        if (!searchInput.contains(e.target) && (!acList || !acList.contains(e.target))) acHide();
+                    });
+                }
+
+                /* ── Radius slider ── */
+                var radiusInput = root.querySelector('.olo-map-radius-slider[data-radius-for="' + MAP_ID + '"]');
+                var radiusVal   = root.querySelector('.olo-map-radius-val[data-radius-for="' + MAP_ID + '"]');
+                if (radiusInput && CAN_RADIUS) {
+                    radiusInput.addEventListener('input', function() {
+                        radiusKm = parseFloat(radiusInput.value) || RADIUS_DEFAULT;
+                        if (radiusVal) radiusVal.textContent = radiusKm + ' km';
+                        applyFilters();
+                    });
+                }
+
+                /* ── Filter logic (distance-only client-side; taxonomy/range filters already handled by olo-map.js) ── */
+                function applyFilters() {
+                    filtered = locs.filter(function(p) {
+                        if (geocoded && CAN_RADIUS) {
+                            var d = haversine(geocoded.lat, geocoded.lng, p.lat, p.lng);
+                            if (d > radiusKm) return false;
+                        } else if (geocoded && CAN_SEARCH && !CAN_RADIUS) {
+                            // search without radius: no distance cap, just re-sort by distance if applicable
+                        }
+                        return true;
+                    });
+                    applySort();
+                    page = 1;
+                    updateMapVisibility();
+                    renderList();
+                    updatePagination();
+                    updateCount();
+                }
+
+                /* ── Sort ── */
+                var sortEl = root.querySelector('.olo-map-sort[data-sort-for="' + MAP_ID + '"]');
+                function applySort() {
+                    var mode = sortEl ? sortEl.value : (CFG.sortDefault || 'default');
+                    if (mode === 'title_asc')  filtered.sort(function(a,b){ return (a.title||'').localeCompare(b.title||''); });
+                    else if (mode === 'title_desc') filtered.sort(function(a,b){ return (b.title||'').localeCompare(a.title||''); });
+                    else if (mode === 'newest') filtered.sort(function(a,b){ return (b.id||0) - (a.id||0); });
+                    else if (mode === 'distance') {
+                        var ref = geocoded || { lat: map.getCenter().lat, lng: map.getCenter().lng };
+                        filtered.sort(function(a,b){ return haversine(ref.lat, ref.lng, a.lat, a.lng) - haversine(ref.lat, ref.lng, b.lat, b.lng); });
+                    }
+                }
+                if (sortEl) {
+                    sortEl.addEventListener('change', function() {
+                        applySort(); page = 1; renderList(); updatePagination();
+                    });
+                }
+
+                /* ── Map visibility update based on distance filter ── */
+                function updateMapVisibility() {
+                    if (!geocoded || !CAN_RADIUS) return; // only distance filter uses this path
+                    var visibleIds = {};
+                    filtered.forEach(function(p) { visibleIds[p.id] = true; });
+                    var group = canvas._oloGroup;
+                    if (group && typeof group.clearLayers === 'function') {
+                        group.clearLayers();
+                        markers.forEach(function(m){
+                            if (visibleIds[m._oloId]) group.addLayer(m);
+                        });
+                    }
+                }
+
+                /* ── Rendering the results list ── */
+                var listEl = root.querySelector('.olo-map-results[data-list-for="' + MAP_ID + '"]');
+                var pagEl  = root.querySelector('.olo-map-pagination[data-pag-for="' + MAP_ID + '"]');
+                var countEl = root.querySelector('.olo-map-count[data-count-for="' + MAP_ID + '"]');
+
+                function renderList() {
+                    if (!listEl) return;
+                    var items;
+                    if (PER_PAGE > 0) {
+                        var start = (page - 1) * PER_PAGE;
+                        items = filtered.slice(start, start + PER_PAGE);
+                    } else {
+                        items = filtered;
+                    }
+                    if (!items.length) {
+                        listEl.innerHTML = '<div style="padding:16px;text-align:center;color:#9CA3AF;font-size:13px">Nessun risultato</div>';
+                        return;
+                    }
+                    listEl.classList.toggle('is-grid', isGridView);
+                    var html = items.map(function(p) {
+                        var h = '<a href="' + (p.url || '#') + '" class="olo-map-card' + (highlightId === p.id ? ' is-highlighted' : '') + '" data-result-id="' + escHtml(p.id) + '">';
+                        h += '<div class="olo-map-card-img">';
+                        if (p.image) h += '<img src="' + p.image + '" alt="' + escHtml(p.title) + '" loading="lazy" decoding="async" />';
+                        h += '</div>';
+                        h += '<div class="olo-map-card-body">';
+                        h += '<h4 class="olo-map-card-title">' + escHtml(p.title) + '</h4>';
+                        var sub = [];
+                        if (p.valley)   sub.push(escHtml(p.valley));
+                        if (p.address)  sub.push(escHtml(p.address));
+                        if (p.altitude !== undefined) sub.push((+p.altitude).toLocaleString('it-IT') + ' m');
+                        if (sub.length) h += '<p class="olo-map-card-sub">' + sub.join(' &middot; ') + '</p>';
+                        if (p.price)    h += '<div class="olo-map-card-price">&euro; ' + escHtml(p.price) + '</div>';
+                        else if (p.price_night) h += '<div class="olo-map-card-price">&euro; ' + escHtml(p.price_night) + '</div>';
+                        h += '</div></a>';
+                        return h;
+                    }).join('');
+                    listEl.innerHTML = html;
+
+                    listEl.querySelectorAll('.olo-map-card').forEach(function(card) {
+                        card.addEventListener('click', function(e) {
+                            var id = card.getAttribute('data-result-id');
+                            var intId = parseInt(id, 10);
+                            var mk = markerById[intId] != null ? markerById[intId] : markerById[id];
+                            if (mk) {
+                                e.preventDefault();
+                                map.panTo(mk.getLatLng(), { animate: true, duration: 0.3 });
+                                map.setZoom(Math.max(map.getZoom(), 14));
+                                if (mk.openPopup) mk.openPopup();
+                                highlight(intId);
+                                if (card.href && card.getAttribute('href') !== '#') {
+                                    setTimeout(function(){ window.location.href = card.href; }, 600);
+                                }
+                            }
+                        });
+                    });
+                }
+
+                function updatePagination() {
+                    if (!pagEl) return;
+                    if (PER_PAGE <= 0) { pagEl.style.display = 'none'; return; }
+                    pagEl.style.display = '';
+                    var totalPages = Math.max(1, Math.ceil(filtered.length / PER_PAGE));
+                    var prev = pagEl.querySelector('[data-page="prev"]');
+                    var next = pagEl.querySelector('[data-page="next"]');
+                    var info = pagEl.querySelector('.olo-map-page-info');
+                    if (prev) prev.disabled = page <= 1;
+                    if (next) next.disabled = page >= totalPages;
+                    if (info) info.textContent = page + ' di ' + totalPages;
+                }
+
+                function updateCount() {
+                    if (countEl) countEl.innerHTML = '<strong>' + filtered.length + '</strong> risultat' + (filtered.length === 1 ? 'o' : 'i');
+                }
+
+                function highlight(id) {
+                    highlightId = id;
+                    if (!listEl) return;
+                    listEl.querySelectorAll('.olo-map-card').forEach(function(c) {
+                        var cid = c.getAttribute('data-result-id');
+                        c.classList.toggle('is-highlighted', String(cid) === String(id));
+                    });
+                }
+
+                function scrollToCard(id) {
+                    if (!listEl || PER_PAGE <= 0) {
+                        if (!listEl) return;
+                        var card = listEl.querySelector('[data-result-id="' + id + '"]');
+                        if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        return;
+                    }
+                    for (var i = 0; i < filtered.length; i++) {
+                        if (String(filtered[i].id) === String(id)) {
+                            var targetPage = Math.floor(i / PER_PAGE) + 1;
+                            if (targetPage !== page) { page = targetPage; renderList(); updatePagination(); }
+                            break;
+                        }
+                    }
+                    setTimeout(function(){
+                        if (!listEl) return;
+                        var card = listEl.querySelector('[data-result-id="' + id + '"]');
+                        if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }, 100);
+                }
+
+                /* ── Pagination click ── */
+                if (pagEl) {
+                    pagEl.addEventListener('click', function(e) {
+                        var btn = e.target.closest('[data-page]');
+                        if (!btn || btn.disabled) return;
+                        var tp = PER_PAGE > 0 ? Math.max(1, Math.ceil(filtered.length / PER_PAGE)) : 1;
+                        if (btn.getAttribute('data-page') === 'prev' && page > 1) page--;
+                        else if (btn.getAttribute('data-page') === 'next' && page < tp) page++;
+                        renderList(); updatePagination();
+                        if (listEl) listEl.scrollTop = 0;
+                    });
+                }
+
+                /* ── View toggle ── */
+                root.querySelectorAll('.olo-map-view-btn[data-view-for="' + MAP_ID + '"]').forEach(function(btn) {
+                    btn.addEventListener('click', function() {
+                        root.querySelectorAll('.olo-map-view-btn[data-view-for="' + MAP_ID + '"]').forEach(function(b){ b.classList.remove('is-active'); });
+                        btn.classList.add('is-active');
+                        isGridView = btn.getAttribute('data-view') === 'grid';
+                        renderList();
+                    });
+                });
+
+                /* ── Initial sort + render ── */
+                applySort();
+                renderList();
+                updatePagination();
+                updateCount();
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', init);
+            } else {
+                setTimeout(init, 50);
+            }
+        })();
+        </script>
+        <?php
+        return ob_get_clean();
     }
 
     private function address_to_bbox( $address, $zoom ) {
