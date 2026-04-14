@@ -16,6 +16,9 @@ export default {
     marker: true,
     marker_popup: '',
     marker_color: '#e74c3c',
+    marker_type: 'pin',
+    marker_image: '',
+    marker_size: '36',
     border_radius: '0',
     // Locations mode
     loc_post_type: 'location',
@@ -67,6 +70,25 @@ export default {
     svc_popup_bg: '',
     svc_popup_color: '',
     svc_popup_radius: '8',
+    // Shared split-view layout (locations + services)
+    map_position: 'left',
+    map_width: '55',
+    filter_columns: '2',
+    fullscreen_btn: true,
+    view_mode: 'list',
+    grid_columns: '2',
+    sort_default: 'default',
+    results_per_page: '10',
+    card_max_height: '0',
+    card_border_radius: '8',
+    show_location_search: true,
+    show_radius: false,
+    radius_default: '5',
+    marker_shape: 'pin',
+    emit_schema: true,
+    btn_text: 'Ricerca',
+    btn_bg: '#2563EB',
+    btn_color: '#FFFFFF',
     // Shared
     height: '400',
     shadow: 'none',
@@ -93,7 +115,21 @@ export default {
     { type: 'separator', label: 'Marker', condition: { field: 'mode', value: 'single' } },
     { key: 'marker', label: 'Mostra marker', type: 'toggle', condition: { field: 'mode', value: 'single' } },
     { key: 'marker_popup', label: 'Testo popup marker', type: 'text', condition: { field: 'mode', value: 'single' } },
+    { key: 'marker_type', label: 'Tipo marker', type: 'select', options: [
+      { value: 'pin', label: 'Pin classico' },
+      { value: 'drop', label: 'Goccia' },
+      { value: 'circle', label: 'Cerchio' },
+      { value: 'square', label: 'Quadrato' },
+      { value: 'diamond', label: 'Diamante' },
+      { value: 'star', label: 'Stella' },
+      { value: 'flag', label: 'Bandiera' },
+      { value: 'flag-wave', label: 'Bandiera animata' },
+      { value: 'heart', label: 'Cuore' },
+      { value: 'image', label: 'Immagine personalizzata' },
+    ], condition: { field: 'mode', value: 'single' } },
     { key: 'marker_color', label: 'Colore marker', type: 'color', condition: { field: 'mode', value: 'single' } },
+    { key: 'marker_size', label: 'Dimensione marker (px)', type: 'range', min: 20, max: 64, step: 2, condition: { field: 'mode', value: 'single' } },
+    { key: 'marker_image', label: 'Immagine marker', type: 'image', condition: { field: 'marker_type', value: 'image' } },
 
     { type: 'separator', label: 'Stile mappa', condition: { field: 'mode', value: 'single' } },
     { key: 'tile_layer', label: 'Stile mappa', type: 'select', condition: { field: 'mode', value: 'single' }, options: [
@@ -257,6 +293,105 @@ export default {
     { key: 'svc_popup_bg', label: 'Sfondo', type: 'color', condition: { field: 'mode', value: 'services' } },
     { key: 'svc_popup_color', label: 'Colore testo', type: 'color', condition: { field: 'mode', value: 'services' } },
     { key: 'svc_popup_radius', label: 'Border radius', type: 'border-radius', condition: { field: 'mode', value: 'services' } },
+
+    // ══════ LAYOUT SPLIT-VIEW (locations + services) ══════
+    // Il layout split-view ha mappa su un lato e pannello risultati (filtri + lista) dall'altro.
+    // Queste opzioni si applicano solo alle modalità multi-marker.
+
+    { type: 'separator', label: 'Layout split-view', condition: { field: 'mode', value: 'locations' } },
+    { key: 'map_position', label: 'Posizione mappa', type: 'select', options: [
+      { value: 'left',  label: 'Sinistra' },
+      { value: 'right', label: 'Destra' },
+    ], condition: { field: 'mode', value: 'locations' } },
+    { key: 'map_width', label: 'Larghezza mappa (% del totale)', type: 'range', min: 20, max: 80, step: 1, condition: { field: 'mode', value: 'locations' } },
+    { key: 'filter_columns', label: 'Colonne filtri', type: 'range', min: 1, max: 4, step: 1, condition: { field: 'mode', value: 'locations' } },
+    { key: 'fullscreen_btn', label: 'Pulsante schermo intero', type: 'toggle', condition: { field: 'mode', value: 'locations' } },
+    { key: 'show_location_search', label: 'Ricerca località (Nominatim)', type: 'toggle', condition: { field: 'mode', value: 'locations' } },
+    { key: 'show_radius', label: 'Filtro raggio (km)', type: 'toggle', condition: { field: 'mode', value: 'locations' } },
+    { key: 'radius_default', label: 'Raggio predefinito (km)', type: 'range', min: 1, max: 50, step: 1, condition: { field: 'show_radius', value: true } },
+    { key: 'marker_shape', label: 'Forma marker', type: 'select', options: [
+      { value: 'pin',     label: 'Pin classico' },
+      { value: 'drop',    label: 'Goccia' },
+      { value: 'circle',  label: 'Cerchio' },
+      { value: 'square',  label: 'Quadrato' },
+      { value: 'diamond', label: 'Diamante' },
+      { value: 'star',    label: 'Stella' },
+      { value: 'flag',    label: 'Bandiera' },
+      { value: 'heart',   label: 'Cuore' },
+    ], condition: { field: 'mode', value: 'locations' } },
+    { key: 'marker_color', label: 'Colore marker/cluster', type: 'color', condition: { field: 'mode', value: 'locations' } },
+
+    { type: 'separator', label: 'Elenco risultati', condition: { field: 'mode', value: 'locations' } },
+    { key: 'view_mode', label: 'Vista predefinita', type: 'select', options: [
+      { value: 'list', label: 'Lista' },
+      { value: 'grid', label: 'Griglia' },
+    ], condition: { field: 'mode', value: 'locations' } },
+    { key: 'grid_columns', label: 'Colonne griglia', type: 'range', min: 1, max: 4, step: 1, condition: { field: 'view_mode', value: 'grid' } },
+    { key: 'sort_default', label: 'Ordinamento predefinito', type: 'select', options: [
+      { value: 'default',    label: 'Predefinito' },
+      { value: 'title_asc',  label: 'Titolo A-Z' },
+      { value: 'title_desc', label: 'Titolo Z-A' },
+      { value: 'newest',     label: 'Più recenti' },
+      { value: 'distance',   label: 'Distanza' },
+    ], condition: { field: 'mode', value: 'locations' } },
+    { key: 'results_per_page', label: 'Risultati per pagina (0 = tutti)', type: 'range', min: 0, max: 50, step: 1, condition: { field: 'mode', value: 'locations' } },
+    { key: 'card_max_height', label: 'Altezza max card (px, 0 = auto)', type: 'range', min: 0, max: 400, step: 10, condition: { field: 'mode', value: 'locations' } },
+    { key: 'card_border_radius', label: 'Raggio angoli card', type: 'range', min: 0, max: 24, step: 2, condition: { field: 'mode', value: 'locations' } },
+
+    { type: 'separator', label: 'Pulsante ricerca', condition: { field: 'mode', value: 'locations' } },
+    { key: 'btn_text',  label: 'Testo pulsante',  type: 'text',  condition: { field: 'mode', value: 'locations' } },
+    { key: 'btn_bg',    label: 'Colore sfondo',   type: 'color', condition: { field: 'mode', value: 'locations' } },
+    { key: 'btn_color', label: 'Colore testo',    type: 'color', condition: { field: 'mode', value: 'locations' } },
+
+    { key: 'emit_schema', label: 'Schema.org JSON-LD (SEO)', type: 'toggle', condition: { field: 'mode', value: 'locations' } },
+
+    // ── Stessi controlli per modalità services ──
+    { type: 'separator', label: 'Layout split-view', condition: { field: 'mode', value: 'services' } },
+    { key: 'map_position', label: 'Posizione mappa', type: 'select', options: [
+      { value: 'left',  label: 'Sinistra' },
+      { value: 'right', label: 'Destra' },
+    ], condition: { field: 'mode', value: 'services' } },
+    { key: 'map_width', label: 'Larghezza mappa (% del totale)', type: 'range', min: 20, max: 80, step: 1, condition: { field: 'mode', value: 'services' } },
+    { key: 'filter_columns', label: 'Colonne filtri', type: 'range', min: 1, max: 4, step: 1, condition: { field: 'mode', value: 'services' } },
+    { key: 'fullscreen_btn', label: 'Pulsante schermo intero', type: 'toggle', condition: { field: 'mode', value: 'services' } },
+    { key: 'show_location_search', label: 'Ricerca località (Nominatim)', type: 'toggle', condition: { field: 'mode', value: 'services' } },
+    { key: 'show_radius', label: 'Filtro raggio (km)', type: 'toggle', condition: { field: 'mode', value: 'services' } },
+    { key: 'radius_default', label: 'Raggio predefinito (km)', type: 'range', min: 1, max: 50, step: 1, condition: { field: 'show_radius', value: true } },
+    { key: 'marker_shape', label: 'Forma marker', type: 'select', options: [
+      { value: 'pin',     label: 'Pin classico' },
+      { value: 'drop',    label: 'Goccia' },
+      { value: 'circle',  label: 'Cerchio' },
+      { value: 'square',  label: 'Quadrato' },
+      { value: 'diamond', label: 'Diamante' },
+      { value: 'star',    label: 'Stella' },
+      { value: 'flag',    label: 'Bandiera' },
+      { value: 'heart',   label: 'Cuore' },
+    ], condition: { field: 'mode', value: 'services' } },
+    { key: 'marker_color', label: 'Colore marker/cluster', type: 'color', condition: { field: 'mode', value: 'services' } },
+
+    { type: 'separator', label: 'Elenco risultati', condition: { field: 'mode', value: 'services' } },
+    { key: 'view_mode', label: 'Vista predefinita', type: 'select', options: [
+      { value: 'list', label: 'Lista' },
+      { value: 'grid', label: 'Griglia' },
+    ], condition: { field: 'mode', value: 'services' } },
+    { key: 'grid_columns', label: 'Colonne griglia', type: 'range', min: 1, max: 4, step: 1, condition: { field: 'view_mode', value: 'grid' } },
+    { key: 'sort_default', label: 'Ordinamento predefinito', type: 'select', options: [
+      { value: 'default',    label: 'Predefinito' },
+      { value: 'title_asc',  label: 'Titolo A-Z' },
+      { value: 'title_desc', label: 'Titolo Z-A' },
+      { value: 'newest',     label: 'Più recenti' },
+      { value: 'distance',   label: 'Distanza' },
+    ], condition: { field: 'mode', value: 'services' } },
+    { key: 'results_per_page', label: 'Risultati per pagina (0 = tutti)', type: 'range', min: 0, max: 50, step: 1, condition: { field: 'mode', value: 'services' } },
+    { key: 'card_max_height', label: 'Altezza max card (px, 0 = auto)', type: 'range', min: 0, max: 400, step: 10, condition: { field: 'mode', value: 'services' } },
+    { key: 'card_border_radius', label: 'Raggio angoli card', type: 'range', min: 0, max: 24, step: 2, condition: { field: 'mode', value: 'services' } },
+
+    { type: 'separator', label: 'Pulsante ricerca', condition: { field: 'mode', value: 'services' } },
+    { key: 'btn_text',  label: 'Testo pulsante',  type: 'text',  condition: { field: 'mode', value: 'services' } },
+    { key: 'btn_bg',    label: 'Colore sfondo',   type: 'color', condition: { field: 'mode', value: 'services' } },
+    { key: 'btn_color', label: 'Colore testo',    type: 'color', condition: { field: 'mode', value: 'services' } },
+
+    { key: 'emit_schema', label: 'Schema.org JSON-LD (SEO)', type: 'toggle', condition: { field: 'mode', value: 'services' } },
 
     // ── Condivisi ──
     { type: 'separator', label: 'Dimensioni' },

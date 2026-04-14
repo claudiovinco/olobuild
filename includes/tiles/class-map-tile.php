@@ -405,7 +405,7 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         $map_id        = 'olo-plm-map-' . wp_rand( 10000, 99999 );
         $uid           = 'olo-plm-loc-' . wp_rand( 10000, 99999 );
         $map_pos       = ( ($s['map_position'] ?? 'left') === 'right' ) ? 'right' : 'left';
-        $map_w         = preg_match( '/^\d+(%|px)$/', $s['map_width'] ?? '55%' ) ? $s['map_width'] : '55%';
+        $map_w         = $this->normalize_map_width( $s['map_width'] ?? '55%' );
         $f_cols        = max( 1, min( 4, absint( $s['filter_columns'] ?? 2 ) ) );
         $grid_cols     = max( 1, min( 4, absint( $s['grid_columns'] ?? 2 ) ) );
         $view_mode     = in_array( $s['view_mode'] ?? 'list', [ 'list', 'grid' ], true ) ? $s['view_mode'] : 'list';
@@ -797,7 +797,7 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         $map_id        = 'olo-plm-map-' . wp_rand( 10000, 99999 );
         $uid           = 'olo-plm-svc-' . wp_rand( 10000, 99999 );
         $map_pos       = ( ($s['map_position'] ?? 'left') === 'right' ) ? 'right' : 'left';
-        $map_w         = preg_match( '/^\d+(%|px)$/', $s['map_width'] ?? '55%' ) ? $s['map_width'] : '55%';
+        $map_w         = $this->normalize_map_width( $s['map_width'] ?? '55%' );
         $f_cols        = max( 1, min( 4, absint( $s['filter_columns'] ?? 2 ) ) );
         $grid_cols     = max( 1, min( 4, absint( $s['grid_columns'] ?? 2 ) ) );
         $view_mode     = in_array( $s['view_mode'] ?? 'list', [ 'list', 'grid' ], true ) ? $s['view_mode'] : 'list';
@@ -1573,6 +1573,26 @@ class Olo_Map_Tile extends Olo_Tile_Base {
     }
 
     /**
+     * Normalize map_width: accepts "55", "55%", "400px". Plain numbers get "%" appended.
+     * Falls back to 55% when invalid or out of range (10-95).
+     */
+    private function normalize_map_width( $v ) {
+        $v = trim( (string) $v );
+        if ( preg_match( '/^(\d+)(%|px)$/', $v, $m ) ) {
+            if ( $m[2] === '%' ) {
+                $n = max( 10, min( 95, (int) $m[1] ) );
+                return $n . '%';
+            }
+            return $v;
+        }
+        if ( preg_match( '/^\d+$/', $v ) ) {
+            $n = max( 10, min( 95, (int) $v ) );
+            return $n . '%';
+        }
+        return '55%';
+    }
+
+    /**
      * Safe color fallback (class may extend Olo_Tile_Base that provides safe_color_css,
      * but guard here in case of environments where it's missing).
      */
@@ -1740,10 +1760,12 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         $sel = '.' . $uid;
         $order_map = $map_pos === 'right' ? '2' : '1';
         $order_res = $map_pos === 'right' ? '1' : '2';
-        $grid_cols = $map_pos === 'right' ? '1fr ' . $map_w : $map_w . ' 1fr';
+        // Use minmax(0,1fr) for the results column so long inner content
+        // cannot push the grid beyond the viewport width.
+        $grid_cols = $map_pos === 'right' ? 'minmax(0,1fr) ' . $map_w : $map_w . ' minmax(0,1fr)';
         ob_start();
         ?>
-        <?php echo $sel; ?> { display: grid; grid-template-columns: <?php echo $grid_cols; ?>; height: <?php echo $height; ?>px; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, sans-serif; }
+        <?php echo $sel; ?> { display: grid; grid-template-columns: <?php echo $grid_cols; ?>; width: 100%; max-width: 100%; height: <?php echo $height; ?>px; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, sans-serif; box-sizing: border-box; }
         <?php echo $sel; ?> .plm-map-panel { position: relative; order: <?php echo $order_map; ?>; min-height: 100%; }
         <?php echo $sel; ?> .plm-map { width: 100%; height: 100%; z-index: 1; }
         <?php echo $sel; ?> .plm-fullscreen-btn { position: absolute; top: 10px; right: 10px; z-index: 1000; width: 34px; height: 34px; background: #fff; border: 2px solid rgba(0,0,0,0.2); border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; color: #374151; }
@@ -1893,6 +1915,13 @@ class Olo_Map_Tile extends Olo_Tile_Base {
 
                 var map = L.map(mapEl, { scrollWheelZoom: true }).setView(CENTER, ZOOM);
                 L.tileLayer(D.tileUrl, { attribution: D.tileAttr, maxZoom: 19 }).addTo(map);
+                // Force recompute once layout is settled, avoids 400x200 default when
+                // the grid assigns the panel size after Leaflet has already measured.
+                setTimeout(function(){ try { map.invalidateSize(); } catch(e) {} }, 100);
+                setTimeout(function(){ try { map.invalidateSize(); } catch(e) {} }, 500);
+                if (window.ResizeObserver) {
+                    try { new ResizeObserver(function(){ map.invalidateSize(); }).observe(mapEl); } catch(e) {}
+                }
 
                 function makeIcon() {
                     return L.divIcon({
@@ -2323,7 +2352,19 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         })();
         </script>
         <?php
-        return ob_get_clean();
+        $raw = ob_get_clean();
+
+        // WordPress filters (wpautop / wptexturize / wp_kses or similar) can convert
+        // `&` into `&#038;` inside the rendered tile output, breaking the inline JS
+        // (e.g. `if (a && b)` becomes `if (a &#038;&#038; b)` — SyntaxError).
+        // Extract the script body and wrap it with a base64 bootstrap so no character
+        // passes through any HTML-encoding filter.
+        if ( preg_match( '/<script>([\s\S]*?)<\/script>/', $raw, $m ) ) {
+            $encoded = base64_encode( $m[1] );
+            return '<script>(new Function(atob("' . $encoded . '")))();</script>';
+        }
+
+        return $raw;
     }
 
     /**
