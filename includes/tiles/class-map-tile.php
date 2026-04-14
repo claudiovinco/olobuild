@@ -490,50 +490,50 @@ class Olo_Map_Tile extends Olo_Tile_Base {
                 <?php endif; ?>
             </div>
 
-            <div class="plm-filters" id="<?php echo esc_attr( $uid ); ?>-filters">
-                <div class="plm-filters-grid">
-                    <?php if ( $show_search ) : ?>
-                        <div class="plm-filter-group plm-filter-group--full">
-                            <span class="plm-filter-label">Localit&agrave;</span>
-                            <div class="plm-autocomplete-wrap">
-                                <input type="text" class="plm-filter-input" data-filter="location" placeholder="Cerca citt&agrave;, zona, indirizzo..." autocomplete="off" />
-                                <ul class="plm-autocomplete-list" id="<?php echo esc_attr( $uid ); ?>-ac"></ul>
-                            </div>
-                        </div>
-                    <?php endif; ?>
-
-                    <?php if ( $show_radius ) : ?>
-                        <div class="plm-filter-group plm-filter-group--full">
-                            <span class="plm-filter-label">Raggio di ricerca</span>
-                            <div class="plm-radius-wrap">
-                                <input type="range" min="1" max="50" value="<?php echo esc_attr( $radius_d ); ?>" data-filter="radius" />
-                                <span class="plm-radius-val"><?php echo esc_html( $radius_d ); ?> km</span>
-                            </div>
-                        </div>
-                    <?php endif; ?>
-
-                    <?php if ( $show_filters ) : ?>
-                        <div class="plm-filter-group plm-filter-group--full">
-                            <span class="plm-filter-label">Categoria</span>
-                            <select class="plm-filter-select" data-filter="taxonomy">
-                                <option value="">Tutte</option>
-                                <?php foreach ( $terms as $term ) : ?>
-                                    <option value="<?php echo esc_attr( $term['slug'] ); ?>"><?php echo esc_html( $term['name'] ); ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                    <?php endif; ?>
-                </div>
-
-                <div class="plm-actions">
-                    <button type="button" class="plm-btn-search" id="<?php echo esc_attr( $uid ); ?>-search"><?php echo esc_html( $btn_text ); ?></button>
-                    <button type="button" class="plm-btn-reset" id="<?php echo esc_attr( $uid ); ?>-reset" title="Azzera filtri" aria-label="Azzera filtri">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 019-9 9.75 9.75 0 016.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 01-9 9 9.75 9.75 0 01-6.74-2.74L3 16"/><path d="M3 21v-5h5"/></svg>
-                    </button>
-                </div>
-            </div>
-
             <div class="plm-results-panel">
+                <div class="plm-filters" id="<?php echo esc_attr( $uid ); ?>-filters">
+                    <div class="plm-filters-grid">
+                        <?php if ( $show_search ) : ?>
+                            <div class="plm-filter-group plm-filter-group--full">
+                                <span class="plm-filter-label">Localit&agrave;</span>
+                                <div class="plm-autocomplete-wrap">
+                                    <input type="text" class="plm-filter-input" data-filter="location" placeholder="Cerca citt&agrave;, zona, indirizzo..." autocomplete="off" />
+                                    <ul class="plm-autocomplete-list" id="<?php echo esc_attr( $uid ); ?>-ac"></ul>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+
+                        <?php if ( $show_radius ) : ?>
+                            <div class="plm-filter-group plm-filter-group--full">
+                                <span class="plm-filter-label">Raggio di ricerca</span>
+                                <div class="plm-radius-wrap">
+                                    <input type="range" min="1" max="50" value="<?php echo esc_attr( $radius_d ); ?>" data-filter="radius" />
+                                    <span class="plm-radius-val"><?php echo esc_html( $radius_d ); ?> km</span>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+
+                        <?php if ( $show_filters ) : ?>
+                            <div class="plm-filter-group plm-filter-group--full">
+                                <span class="plm-filter-label">Categoria</span>
+                                <select class="plm-filter-select" data-filter="taxonomy">
+                                    <option value="">Tutte</option>
+                                    <?php foreach ( $terms as $term ) : ?>
+                                        <option value="<?php echo esc_attr( $term['slug'] ); ?>"><?php echo esc_html( $term['name'] ); ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+
+                    <div class="plm-actions">
+                        <button type="button" class="plm-btn-search" id="<?php echo esc_attr( $uid ); ?>-search"><?php echo esc_html( $btn_text ); ?></button>
+                        <button type="button" class="plm-btn-reset" id="<?php echo esc_attr( $uid ); ?>-reset" title="Azzera filtri" aria-label="Azzera filtri">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 019-9 9.75 9.75 0 016.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 01-9 9 9.75 9.75 0 01-6.74-2.74L3 16"/><path d="M3 21v-5h5"/></svg>
+                        </button>
+                    </div>
+                </div>
+
                 <div class="plm-results-header">
                     <span class="plm-results-count" id="<?php echo esc_attr( $uid ); ?>-count"><strong>0</strong> Risultati</span>
                     <div class="plm-sort-wrap">
@@ -904,40 +904,40 @@ class Olo_Map_Tile extends Olo_Tile_Base {
                 <?php endif; ?>
             </div>
 
-            <div class="plm-filters" id="<?php echo esc_attr( $uid ); ?>-filters">
-                <div class="plm-filters-grid">
-                    <?php if ( $show_search ) : ?>
-                        <div class="plm-filter-group plm-filter-group--full">
-                            <span class="plm-filter-label">Localit&agrave;</span>
-                            <div class="plm-autocomplete-wrap">
-                                <input type="text" class="plm-filter-input" data-filter="location" placeholder="Cerca citt&agrave;, zona, indirizzo..." autocomplete="off" />
-                                <ul class="plm-autocomplete-list" id="<?php echo esc_attr( $uid ); ?>-ac"></ul>
-                            </div>
-                        </div>
-                    <?php endif; ?>
-
-                    <?php if ( $show_radius ) : ?>
-                        <div class="plm-filter-group plm-filter-group--full">
-                            <span class="plm-filter-label">Raggio di ricerca</span>
-                            <div class="plm-radius-wrap">
-                                <input type="range" min="1" max="50" value="<?php echo esc_attr( $radius_d ); ?>" data-filter="radius" />
-                                <span class="plm-radius-val"><?php echo esc_html( $radius_d ); ?> km</span>
-                            </div>
-                        </div>
-                    <?php endif; ?>
-
-                    <?php $this->render_svc_filters_in_grid( $s, $locations ); ?>
-                </div>
-
-                <div class="plm-actions">
-                    <button type="button" class="plm-btn-search" id="<?php echo esc_attr( $uid ); ?>-search"><?php echo esc_html( $btn_text ); ?></button>
-                    <button type="button" class="plm-btn-reset" id="<?php echo esc_attr( $uid ); ?>-reset" title="Azzera filtri" aria-label="Azzera filtri">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 019-9 9.75 9.75 0 016.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 01-9 9 9.75 9.75 0 01-6.74-2.74L3 16"/><path d="M3 21v-5h5"/></svg>
-                    </button>
-                </div>
-            </div>
-
             <div class="plm-results-panel">
+                <div class="plm-filters" id="<?php echo esc_attr( $uid ); ?>-filters">
+                    <div class="plm-filters-grid">
+                        <?php if ( $show_search ) : ?>
+                            <div class="plm-filter-group plm-filter-group--full">
+                                <span class="plm-filter-label">Localit&agrave;</span>
+                                <div class="plm-autocomplete-wrap">
+                                    <input type="text" class="plm-filter-input" data-filter="location" placeholder="Cerca citt&agrave;, zona, indirizzo..." autocomplete="off" />
+                                    <ul class="plm-autocomplete-list" id="<?php echo esc_attr( $uid ); ?>-ac"></ul>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+
+                        <?php if ( $show_radius ) : ?>
+                            <div class="plm-filter-group plm-filter-group--full">
+                                <span class="plm-filter-label">Raggio di ricerca</span>
+                                <div class="plm-radius-wrap">
+                                    <input type="range" min="1" max="50" value="<?php echo esc_attr( $radius_d ); ?>" data-filter="radius" />
+                                    <span class="plm-radius-val"><?php echo esc_html( $radius_d ); ?> km</span>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+
+                        <?php $this->render_svc_filters_in_grid( $s, $locations ); ?>
+                    </div>
+
+                    <div class="plm-actions">
+                        <button type="button" class="plm-btn-search" id="<?php echo esc_attr( $uid ); ?>-search"><?php echo esc_html( $btn_text ); ?></button>
+                        <button type="button" class="plm-btn-reset" id="<?php echo esc_attr( $uid ); ?>-reset" title="Azzera filtri" aria-label="Azzera filtri">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 019-9 9.75 9.75 0 016.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 01-9 9 9.75 9.75 0 01-6.74-2.74L3 16"/><path d="M3 21v-5h5"/></svg>
+                        </button>
+                    </div>
+                </div>
+
                 <div class="plm-results-header">
                     <span class="plm-results-count" id="<?php echo esc_attr( $uid ); ?>-count"><strong>0</strong> Risultati</span>
                     <div class="plm-sort-wrap">
@@ -1781,37 +1781,24 @@ class Olo_Map_Tile extends Olo_Tile_Base {
     private function build_plm_css( $uid, $map_pos, $map_w, $height, $f_cols, $g_cols, $card_r, $card_mh, $color, $btn_bg, $btn_color, $filter_pos = 'right', $filter_w = '280px' ) {
         $sel = '.' . $uid;
 
-        // Build grid-template-areas + columns + rows based on filter_position.
-        // Three areas: F (filters), M (map), R (results-panel).
-        // filter_position:
-        //   right   → [M][R][F]                        (filters column on the right)
-        //   left    → [F][M][R]                        (filters column on the left)
-        //   top     → [F F]  /  [M R]  (two rows)      (filters band on top)
-        //   bottom  → [M R]  /  [F F]  (two rows)      (filters band on bottom)
-        // $map_pos still swaps M and R inside their row.
-        // Use minmax(0,*) on the results column so long content cannot push the grid.
-        $map_is_right  = ( $map_pos === 'right' );
-        $mr_cols       = $map_is_right ? 'minmax(0,1fr) ' . $map_w : $map_w . ' minmax(0,1fr)';
-        $mr_areas      = $map_is_right ? 'R M' : 'M R';
-        $filter_border = 'border: none; border-bottom: 1px solid #E5E7EB;';
-
-        if ( $filter_pos === 'left' ) {
-            $grid_template   = 'grid-template-columns: ' . $filter_w . ' ' . $mr_cols . '; grid-template-rows: 100%; grid-template-areas: "F ' . $mr_areas . '";';
-            $filter_border   = 'border: none; border-right: 1px solid #E5E7EB;';
-            $filter_scroll   = 'overflow-y: auto;';
-        } elseif ( $filter_pos === 'right' ) {
-            $grid_template   = 'grid-template-columns: ' . $mr_cols . ' ' . $filter_w . '; grid-template-rows: 100%; grid-template-areas: "' . $mr_areas . ' F";';
-            $filter_border   = 'border: none; border-left: 1px solid #E5E7EB;';
-            $filter_scroll   = 'overflow-y: auto;';
-        } elseif ( $filter_pos === 'bottom' ) {
-            $grid_template   = 'grid-template-columns: ' . $mr_cols . '; grid-template-rows: 1fr auto; grid-template-areas: "' . $mr_areas . '" "F F";';
-            $filter_border   = 'border: none; border-top: 1px solid #E5E7EB;';
-            $filter_scroll   = '';
-        } else { // top
-            $filter_pos      = 'top';
-            $grid_template   = 'grid-template-columns: ' . $mr_cols . '; grid-template-rows: auto 1fr; grid-template-areas: "F F" "' . $mr_areas . '";';
-            $filter_border   = 'border: none; border-bottom: 1px solid #E5E7EB;';
-            $filter_scroll   = '';
+        // Two areas: M (map) and R (results-panel which contains filters + list + pag).
+        // filter_position moves the entire R block around the map:
+        //   right  → "M R"              (horizontal split, R on the right)
+        //   left   → "R M"              (horizontal split, R on the left)
+        //   top    → "R" / "M"          (R row on top, M row on bottom)
+        //   bottom → "M" / "R"          (M row on top, R row on bottom)
+        // $map_w controls the map's share of the flexible dimension:
+        //   horizontal layout → map column width
+        //   vertical layout   → map row height
+        if ( $filter_pos === 'right' ) {
+            $grid_template = 'grid-template-columns: ' . $map_w . ' minmax(0,1fr); grid-template-rows: 100%; grid-template-areas: "M R";';
+        } elseif ( $filter_pos === 'left' ) {
+            $grid_template = 'grid-template-columns: minmax(0,1fr) ' . $map_w . '; grid-template-rows: 100%; grid-template-areas: "R M";';
+        } elseif ( $filter_pos === 'top' ) {
+            $grid_template = 'grid-template-columns: 100%; grid-template-rows: minmax(0,1fr) ' . $map_w . '; grid-template-areas: "R" "M";';
+        } else { // bottom
+            $filter_pos    = 'bottom';
+            $grid_template = 'grid-template-columns: 100%; grid-template-rows: ' . $map_w . ' minmax(0,1fr); grid-template-areas: "M" "R";';
         }
 
         ob_start();
@@ -1822,7 +1809,7 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         <?php echo $sel; ?> .plm-fullscreen-btn { position: absolute; top: 10px; right: 10px; z-index: 1000; width: 34px; height: 34px; background: #fff; border: 2px solid rgba(0,0,0,0.2); border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; color: #374151; }
         <?php echo $sel; ?> .plm-fullscreen-btn:hover { background: #f4f4f4; }
         <?php echo $sel; ?> .plm-results-panel { grid-area: R; display: flex; flex-direction: column; overflow: hidden; background: #FAFBFC; min-height: 0; min-width: 0; }
-        <?php echo $sel; ?> .plm-filters { grid-area: F; padding: 16px 20px; background: #fff; <?php echo $filter_border; ?> <?php echo $filter_scroll; ?> min-width: 0; box-sizing: border-box; }
+        <?php echo $sel; ?> .plm-filters { padding: 16px 20px; background: #fff; border-bottom: 1px solid #E5E7EB; flex-shrink: 0; min-width: 0; box-sizing: border-box; }
         <?php echo $sel; ?> .plm-filters-grid { display: grid; grid-template-columns: repeat(<?php echo $f_cols; ?>, 1fr); gap: 10px; }
         <?php echo $sel; ?> .plm-filter-group { display: flex; flex-direction: column; gap: 3px; }
         <?php echo $sel; ?> .plm-filter-group--full { grid-column: 1 / -1; }
@@ -1900,11 +1887,10 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         @media (max-width: 900px) {
             <?php echo $sel; ?> {
                 grid-template-columns: 1fr;
-                grid-template-rows: auto 350px 500px;
-                grid-template-areas: "F" "M" "R";
+                grid-template-rows: 350px 500px;
+                grid-template-areas: "M" "R";
                 height: auto;
             }
-            <?php echo $sel; ?> .plm-filters { border-left: none; border-right: none; border-top: none; border-bottom: 1px solid #E5E7EB; max-height: 280px; overflow-y: auto; }
             <?php echo $sel; ?> .plm-map-panel { height: 350px; }
             <?php echo $sel; ?> .plm-results-panel { height: 500px; }
             <?php echo $sel; ?> .plm-results-list.plm-grid-view { grid-template-columns: 1fr; }

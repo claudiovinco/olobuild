@@ -301,18 +301,13 @@ export default {
     // Queste opzioni si applicano solo alle modalità multi-marker.
 
     { type: 'separator', label: 'Layout split-view', condition: { field: 'mode', value: 'locations' } },
-    { key: 'map_position', label: 'Posizione mappa', type: 'select', options: [
-      { value: 'left',  label: 'Sinistra' },
-      { value: 'right', label: 'Destra' },
-    ], condition: { field: 'mode', value: 'locations' } },
-    { key: 'map_width', label: 'Larghezza mappa (% del totale)', type: 'range', min: 20, max: 80, step: 1, condition: { field: 'mode', value: 'locations' } },
+    { key: 'map_width', label: 'Dimensione mappa (% — larghezza o altezza)', type: 'range', min: 20, max: 80, step: 1, condition: { field: 'mode', value: 'locations' } },
     { key: 'filter_position', label: 'Posizione filtri', type: 'select', options: [
       { value: 'top',    label: 'Sopra (riga in alto)' },
       { value: 'bottom', label: 'Sotto (riga in basso)' },
       { value: 'left',   label: 'Sinistra (colonna)' },
       { value: 'right',  label: 'Destra (colonna)' },
     ], condition: { field: 'mode', value: 'locations' } },
-    { key: 'filter_width', label: 'Larghezza filtri (px, solo sinistra/destra)', type: 'range', min: 200, max: 450, step: 10, condition: { field: 'mode', value: 'locations' } },
     { key: 'filter_columns', label: 'Colonne filtri', type: 'range', min: 1, max: 4, step: 1, condition: { field: 'mode', value: 'locations' } },
     { key: 'fullscreen_btn', label: 'Pulsante schermo intero', type: 'toggle', condition: { field: 'mode', value: 'locations' } },
     { key: 'show_location_search', label: 'Ricerca località (Nominatim)', type: 'toggle', condition: { field: 'mode', value: 'locations' } },
@@ -356,18 +351,13 @@ export default {
 
     // ── Stessi controlli per modalità services ──
     { type: 'separator', label: 'Layout split-view', condition: { field: 'mode', value: 'services' } },
-    { key: 'map_position', label: 'Posizione mappa', type: 'select', options: [
-      { value: 'left',  label: 'Sinistra' },
-      { value: 'right', label: 'Destra' },
-    ], condition: { field: 'mode', value: 'services' } },
-    { key: 'map_width', label: 'Larghezza mappa (% del totale)', type: 'range', min: 20, max: 80, step: 1, condition: { field: 'mode', value: 'services' } },
+    { key: 'map_width', label: 'Dimensione mappa (% — larghezza o altezza)', type: 'range', min: 20, max: 80, step: 1, condition: { field: 'mode', value: 'services' } },
     { key: 'filter_position', label: 'Posizione filtri', type: 'select', options: [
       { value: 'top',    label: 'Sopra (riga in alto)' },
       { value: 'bottom', label: 'Sotto (riga in basso)' },
       { value: 'left',   label: 'Sinistra (colonna)' },
       { value: 'right',  label: 'Destra (colonna)' },
     ], condition: { field: 'mode', value: 'services' } },
-    { key: 'filter_width', label: 'Larghezza filtri (px, solo sinistra/destra)', type: 'range', min: 200, max: 450, step: 10, condition: { field: 'mode', value: 'services' } },
     { key: 'filter_columns', label: 'Colonne filtri', type: 'range', min: 1, max: 4, step: 1, condition: { field: 'mode', value: 'services' } },
     { key: 'fullscreen_btn', label: 'Pulsante schermo intero', type: 'toggle', condition: { field: 'mode', value: 'services' } },
     { key: 'show_location_search', label: 'Ricerca località (Nominatim)', type: 'toggle', condition: { field: 'mode', value: 'services' } },
