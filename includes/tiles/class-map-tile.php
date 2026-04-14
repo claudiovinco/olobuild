@@ -88,10 +88,10 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         'emit_schema'          => true,
         // ── Split-view layout (locations + services) ──
         'map_position'         => 'left',
-        'map_width'            => '55%',
+        'map_width'            => '',         // legacy; if set, determines map dim. filter_width takes precedence.
         'filter_columns'       => 2,
         'filter_position'      => '',         // top | bottom | left | right (empty = fall back to legacy svc_filter_position, then 'right')
-        'filter_width'         => '280px',   // used when filter_position is left|right
+        'filter_width'         => '45',       // % of the tile taken by the filters+results panel (20-80). Map takes the rest.
         'btn_text'             => 'Ricerca',
         'btn_bg'               => '#2563EB',
         'btn_color'            => '#FFFFFF',
@@ -225,6 +225,30 @@ class Olo_Map_Tile extends Olo_Tile_Base {
             'opentopomap' => 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
         ];
         return $urls[ $key ] ?? $urls['standard'];
+    }
+
+    /**
+     * Return the correct attribution string for a given tile layer key.
+     */
+    private function get_tile_layer_attr( $key ) {
+        $osm   = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>';
+        $carto = $osm . ' &copy; <a href="https://carto.com/">CARTO</a>';
+        $esri  = 'Tiles &copy; Esri';
+        $topo  = $osm . ', SRTM | &copy; <a href="https://opentopomap.org">OpenTopoMap</a>';
+        $attrs = [
+            'standard'    => $osm,
+            'osm'         => $osm,
+            'hot'         => $osm . ' | HOT',
+            'positron'    => $carto,
+            'voyager'     => $carto,
+            'dark'        => $carto,
+            'satellite'   => $esri,
+            'topo'        => $esri,
+            'esri_street' => $esri,
+            'gray'        => $esri,
+            'opentopomap' => $topo,
+        ];
+        return $attrs[ $key ] ?? $osm;
     }
 
     /**
@@ -413,16 +437,9 @@ class Olo_Map_Tile extends Olo_Tile_Base {
             ? $s['filter_position']
             : ( ! empty( $s['svc_filter_position'] ) ? $s['svc_filter_position'] : 'right' );
         $filter_pos = in_array( $filter_pos_raw, [ 'top', 'bottom', 'left', 'right' ], true ) ? $filter_pos_raw : 'right';
-        // Accept "280", "280px", "25%". Plain numbers → px. Clamp 120-500 for px, 10-60 for %.
-        $fw_raw = trim( (string) ( $s['filter_width'] ?? '280px' ) );
-        if ( preg_match( '/^(\d+)%$/', $fw_raw, $m ) ) {
-            $filter_w = max( 10, min( 60, (int) $m[1] ) ) . '%';
-        } elseif ( preg_match( '/^(\d+)(px)?$/', $fw_raw, $m ) ) {
-            $filter_w = max( 120, min( 500, (int) $m[1] ) ) . 'px';
-        } else {
-            $filter_w = '280px';
-        }
-        $map_w         = $this->normalize_map_width( $s['map_width'] ?? '55%' );
+        // filter_width is the primary control (user picks panel size, map fills the rest).
+        // map_width stays as legacy fallback. Both accepted as plain number ("45"), percent ("45%") or px.
+        list( $map_w, $filter_w ) = $this->resolve_dims( $s );
         $f_cols        = max( 1, min( 4, absint( $s['filter_columns'] ?? 2 ) ) );
         $grid_cols     = max( 1, min( 4, absint( $s['grid_columns'] ?? 2 ) ) );
         $view_mode     = in_array( $s['view_mode'] ?? 'list', [ 'list', 'grid' ], true ) ? $s['view_mode'] : 'list';
@@ -444,8 +461,9 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         $emit_schema   = ! empty( $s['emit_schema'] );
         $marker_shape  = sanitize_key( $s['marker_shape'] ?? 'pin' );
         if ( $marker_shape === 'image' ) $marker_shape = 'pin';
-        $tile_url      = $this->get_tile_layer_url( $s['loc_tile_layer'] ?? 'osm' );
-        $tile_attr     = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>';
+        $tile_key      = ! empty( $s['loc_tile_layer'] ) ? $s['loc_tile_layer'] : 'osm';
+        $tile_url      = $this->get_tile_layer_url( $tile_key );
+        $tile_attr     = $this->get_tile_layer_attr( $tile_key );
         $zoom          = absint( $s['loc_default_zoom'] ) ?: 13;
 
         $this->enqueue_leaflet( $use_cluster );
@@ -820,16 +838,9 @@ class Olo_Map_Tile extends Olo_Tile_Base {
             ? $s['filter_position']
             : ( ! empty( $s['svc_filter_position'] ) ? $s['svc_filter_position'] : 'right' );
         $filter_pos = in_array( $filter_pos_raw, [ 'top', 'bottom', 'left', 'right' ], true ) ? $filter_pos_raw : 'right';
-        // Accept "280", "280px", "25%". Plain numbers → px. Clamp 120-500 for px, 10-60 for %.
-        $fw_raw = trim( (string) ( $s['filter_width'] ?? '280px' ) );
-        if ( preg_match( '/^(\d+)%$/', $fw_raw, $m ) ) {
-            $filter_w = max( 10, min( 60, (int) $m[1] ) ) . '%';
-        } elseif ( preg_match( '/^(\d+)(px)?$/', $fw_raw, $m ) ) {
-            $filter_w = max( 120, min( 500, (int) $m[1] ) ) . 'px';
-        } else {
-            $filter_w = '280px';
-        }
-        $map_w         = $this->normalize_map_width( $s['map_width'] ?? '55%' );
+        // filter_width is the primary control (user picks panel size, map fills the rest).
+        // map_width stays as legacy fallback. Both accepted as plain number ("45"), percent ("45%") or px.
+        list( $map_w, $filter_w ) = $this->resolve_dims( $s );
         $f_cols        = max( 1, min( 4, absint( $s['filter_columns'] ?? 2 ) ) );
         $grid_cols     = max( 1, min( 4, absint( $s['grid_columns'] ?? 2 ) ) );
         $view_mode     = in_array( $s['view_mode'] ?? 'list', [ 'list', 'grid' ], true ) ? $s['view_mode'] : 'list';
@@ -850,8 +861,9 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         $emit_schema   = ! empty( $s['emit_schema'] );
         $marker_shape  = sanitize_key( $s['marker_shape'] ?? 'pin' );
         if ( $marker_shape === 'image' ) $marker_shape = 'pin';
-        $tile_url      = $this->get_tile_layer_url( $s['svc_tile_layer'] ?? 'positron' );
-        $tile_attr     = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>';
+        $tile_key      = ! empty( $s['svc_tile_layer'] ) ? $s['svc_tile_layer'] : 'positron';
+        $tile_url      = $this->get_tile_layer_url( $tile_key );
+        $tile_attr     = $this->get_tile_layer_attr( $tile_key );
         $zoom          = absint( $s['svc_default_zoom'] ) ?: 10;
 
         $booking_mode     = $s['svc_booking_mode'] ?? 'accommodation';
@@ -1605,23 +1617,64 @@ class Olo_Map_Tile extends Olo_Tile_Base {
     }
 
     /**
-     * Normalize map_width: accepts "55", "55%", "400px". Plain numbers get "%" appended.
-     * Falls back to 55% when invalid or out of range (10-95).
+     * Normalize a single dimension: accepts "55", "55%", "400px". Plain numbers → "%".
+     * Falls back to $fallback when invalid or out of range (10-95 for %).
      */
-    private function normalize_map_width( $v ) {
+    private function normalize_dim( $v, $fallback = '55%' ) {
         $v = trim( (string) $v );
         if ( preg_match( '/^(\d+)(%|px)$/', $v, $m ) ) {
             if ( $m[2] === '%' ) {
                 $n = max( 10, min( 95, (int) $m[1] ) );
                 return $n . '%';
             }
-            return $v;
+            return $v; // keep "Xpx" untouched
         }
         if ( preg_match( '/^\d+$/', $v ) ) {
             $n = max( 10, min( 95, (int) $v ) );
             return $n . '%';
         }
-        return '55%';
+        return $fallback;
+    }
+
+    /**
+     * Legacy alias kept for BC (some code paths may still call this).
+     */
+    private function normalize_map_width( $v ) {
+        return $this->normalize_dim( $v, '55%' );
+    }
+
+    /**
+     * Resolve map vs filter dimensions.
+     * Priority:
+     *   1. filter_width set → panel takes that %, map takes the rest
+     *   2. map_width set    → legacy; map takes that %, panel takes the rest
+     *   3. default          → map 55%, panel 45%
+     * Returns [ $map_w_css, $filter_w_css ] both as percent strings like "45%".
+     */
+    private function resolve_dims( $s ) {
+        $fw_raw = trim( (string) ( $s['filter_width'] ?? '' ) );
+        $mw_raw = trim( (string) ( $s['map_width'] ?? '' ) );
+
+        if ( $fw_raw !== '' ) {
+            $filter_w = $this->normalize_dim( $fw_raw, '45%' );
+            // Complement as percent if filter is percent; otherwise 1fr fallback
+            if ( preg_match( '/^(\d+)%$/', $filter_w, $m ) ) {
+                $map_w = ( 100 - (int) $m[1] ) . '%';
+            } else {
+                $map_w = '1fr'; // fixed filter px → map flexible
+            }
+            return [ $map_w, $filter_w ];
+        }
+        if ( $mw_raw !== '' ) {
+            $map_w = $this->normalize_dim( $mw_raw, '55%' );
+            if ( preg_match( '/^(\d+)%$/', $map_w, $m ) ) {
+                $filter_w = ( 100 - (int) $m[1] ) . '%';
+            } else {
+                $filter_w = '1fr';
+            }
+            return [ $map_w, $filter_w ];
+        }
+        return [ '55%', '45%' ];
     }
 
     /**
@@ -1788,27 +1841,21 @@ class Olo_Map_Tile extends Olo_Tile_Base {
     /**
      * Build split-view CSS scoped to a unique id. Mirrors the PropertyMapSearch layout.
      */
-    private function build_plm_css( $uid, $map_pos, $map_w, $height, $f_cols, $g_cols, $card_r, $card_mh, $color, $btn_bg, $btn_color, $filter_pos = 'right', $filter_w = '280px' ) {
+    private function build_plm_css( $uid, $map_pos, $map_w, $height, $f_cols, $g_cols, $card_r, $card_mh, $color, $btn_bg, $btn_color, $filter_pos = 'right', $filter_w = '45%' ) {
         $sel = '.' . $uid;
 
         // Two areas: M (map) and R (results-panel which contains filters + list + pag).
-        // filter_position moves the entire R block around the map:
-        //   right  → "M R"              (horizontal split, R on the right)
-        //   left   → "R M"              (horizontal split, R on the left)
-        //   top    → "R" / "M"          (R row on top, M row on bottom)
-        //   bottom → "M" / "R"          (M row on top, R row on bottom)
-        // $map_w controls the map's share of the flexible dimension:
-        //   horizontal layout → map column width
-        //   vertical layout   → map row height
+        // $map_w and $filter_w are both defined — map and panel share the flexible dimension.
+        // Both are already percent strings (or "1fr" if px-based).
         if ( $filter_pos === 'right' ) {
-            $grid_template = 'grid-template-columns: ' . $map_w . ' minmax(0,1fr); grid-template-rows: 100%; grid-template-areas: "M R";';
+            $grid_template = 'grid-template-columns: ' . $map_w . ' ' . $filter_w . '; grid-template-rows: 100%; grid-template-areas: "M R";';
         } elseif ( $filter_pos === 'left' ) {
-            $grid_template = 'grid-template-columns: minmax(0,1fr) ' . $map_w . '; grid-template-rows: 100%; grid-template-areas: "R M";';
+            $grid_template = 'grid-template-columns: ' . $filter_w . ' ' . $map_w . '; grid-template-rows: 100%; grid-template-areas: "R M";';
         } elseif ( $filter_pos === 'top' ) {
-            $grid_template = 'grid-template-columns: 100%; grid-template-rows: minmax(0,1fr) ' . $map_w . '; grid-template-areas: "R" "M";';
+            $grid_template = 'grid-template-columns: 100%; grid-template-rows: ' . $filter_w . ' ' . $map_w . '; grid-template-areas: "R" "M";';
         } else { // bottom
             $filter_pos    = 'bottom';
-            $grid_template = 'grid-template-columns: 100%; grid-template-rows: ' . $map_w . ' minmax(0,1fr); grid-template-areas: "M" "R";';
+            $grid_template = 'grid-template-columns: 100%; grid-template-rows: ' . $map_w . ' ' . $filter_w . '; grid-template-areas: "M" "R";';
         }
 
         ob_start();

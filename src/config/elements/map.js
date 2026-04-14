@@ -72,10 +72,10 @@ export default {
     svc_popup_radius: '8',
     // Shared split-view layout (locations + services)
     map_position: 'left',
-    map_width: '55',
+    map_width: '',
     filter_columns: '2',
     filter_position: 'right',
-    filter_width: '280',
+    filter_width: '45',
     fullscreen_btn: true,
     view_mode: 'list',
     grid_columns: '2',
@@ -301,7 +301,7 @@ export default {
     // Queste opzioni si applicano solo alle modalità multi-marker.
 
     { type: 'separator', label: 'Layout split-view', condition: { field: 'mode', value: 'locations' } },
-    { key: 'map_width', label: 'Dimensione mappa (% — larghezza o altezza)', type: 'range', min: 20, max: 80, step: 1, condition: { field: 'mode', value: 'locations' } },
+    { key: 'filter_width', label: 'Dimensione blocco filtri (% — la mappa prende il resto)', type: 'range', min: 20, max: 80, step: 1, condition: { field: 'mode', value: 'locations' } },
     { key: 'filter_position', label: 'Posizione filtri', type: 'select', options: [
       { value: 'top',    label: 'Sopra (riga in alto)' },
       { value: 'bottom', label: 'Sotto (riga in basso)' },
@@ -351,7 +351,7 @@ export default {
 
     // ── Stessi controlli per modalità services ──
     { type: 'separator', label: 'Layout split-view', condition: { field: 'mode', value: 'services' } },
-    { key: 'map_width', label: 'Dimensione mappa (% — larghezza o altezza)', type: 'range', min: 20, max: 80, step: 1, condition: { field: 'mode', value: 'services' } },
+    { key: 'filter_width', label: 'Dimensione blocco filtri (% — la mappa prende il resto)', type: 'range', min: 20, max: 80, step: 1, condition: { field: 'mode', value: 'services' } },
     { key: 'filter_position', label: 'Posizione filtri', type: 'select', options: [
       { value: 'top',    label: 'Sopra (riga in alto)' },
       { value: 'bottom', label: 'Sotto (riga in basso)' },
