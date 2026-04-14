@@ -86,6 +86,13 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         'radius_default'       => 5,
         // ── SEO Schema ──
         'emit_schema'          => true,
+        // ── Split-view layout (locations + services) ──
+        'map_position'         => 'left',
+        'map_width'            => '55%',
+        'filter_columns'       => 2,
+        'btn_text'             => 'Ricerca',
+        'btn_bg'               => '#2563EB',
+        'btn_color'            => '#FFFFFF',
     ];
 
     public function get_controls() {
@@ -382,130 +389,175 @@ class Olo_Map_Tile extends Olo_Tile_Base {
     }
 
     /**
-     * Locations mode: Leaflet map with markers from CPT.
+     * Locations mode: split-view Leaflet map with filters + results panel.
      */
     private function render_locations( $s ) {
-        $height = absint( $s['height'] );
-        $radius = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 8 );
-        $map_id = 'olo-map-' . wp_unique_id();
-        $uid    = 'olo-map-loc-' . wp_unique_id();
-
         $locations = $this->query_locations( $s );
         $terms     = $this->get_taxonomy_terms( $s, $locations );
 
-        // Parse default center
         $center = [ 41.9028, 12.4964 ];
         $center_match = $this->parse_coords( $s['loc_default_center'] );
         if ( $center_match ) {
             $center = [ $center_match['lat'], $center_match['lng'] ];
         }
 
-        $config = [
-            'locations'  => $locations,
-            'center'     => $center,
-            'zoom'       => absint( $s['loc_default_zoom'] ),
-            'tileLayer'  => $s['loc_tile_layer'],
-            'cluster'    => (bool) $s['loc_cluster'],
-            'fitBounds'  => (bool) $s['loc_fit_bounds'],
-            'popupImage'   => (bool) $s['loc_popup_show_image'],
-            'popupExcerpt' => (bool) $s['loc_popup_show_excerpt'],
-            'popupLink'    => (bool) $s['loc_popup_show_link'],
-        ];
-
-        // New enhancement defaults
-        $fs_enabled    = ! empty( $s['fullscreen_btn'] );
-        $view_mode     = in_array( $s['view_mode'] ?? 'list', [ 'list', 'grid' ], true ) ? $s['view_mode'] : 'list';
+        $height        = absint( $s['height'] ) ?: 700;
+        $map_id        = 'olo-plm-map-' . wp_rand( 10000, 99999 );
+        $uid           = 'olo-plm-loc-' . wp_rand( 10000, 99999 );
+        $map_pos       = ( ($s['map_position'] ?? 'left') === 'right' ) ? 'right' : 'left';
+        $map_w         = preg_match( '/^\d+(%|px)$/', $s['map_width'] ?? '55%' ) ? $s['map_width'] : '55%';
+        $f_cols        = max( 1, min( 4, absint( $s['filter_columns'] ?? 2 ) ) );
         $grid_cols     = max( 1, min( 4, absint( $s['grid_columns'] ?? 2 ) ) );
+        $view_mode     = in_array( $s['view_mode'] ?? 'list', [ 'list', 'grid' ], true ) ? $s['view_mode'] : 'list';
         $sort_default  = in_array( $s['sort_default'] ?? 'default', [ 'default', 'title_asc', 'title_desc', 'newest', 'distance' ], true ) ? $s['sort_default'] : 'default';
-        $per_page      = max( 0, absint( $s['results_per_page'] ?? 10 ) );
+        $per_page      = max( 1, absint( $s['results_per_page'] ?? 10 ) );
         $card_mh       = max( 0, absint( $s['card_max_height'] ?? 0 ) );
         $card_r        = max( 0, absint( $s['card_border_radius'] ?? 8 ) );
         $show_search   = ! empty( $s['show_location_search'] );
         $show_radius   = ! empty( $s['show_radius'] );
         $radius_d      = max( 1, min( 50, absint( $s['radius_default'] ?? 5 ) ) );
-        $cluster_color = $this->safe_hex( $s['loc_marker_color'] ?? $s['marker_color'] ?? '', '#3b82f6' );
+        $show_filters  = ! empty( $s['loc_show_filters'] ) && ! empty( $terms );
+        $color         = $this->safe_hex( $s['loc_marker_color'] ?? $s['marker_color'] ?? '', '#2563EB' );
+        $btn_bg        = $this->safe_hex( $s['btn_bg'] ?? '', '#2563EB' );
+        $btn_color     = $this->safe_hex( $s['btn_color'] ?? '', '#FFFFFF' );
+        $btn_text      = $s['btn_text'] ?: 'Ricerca';
+        $use_cluster   = ! empty( $s['loc_cluster'] );
+        $fit_bounds    = ! empty( $s['loc_fit_bounds'] );
+        $fs_enabled    = ! empty( $s['fullscreen_btn'] );
         $emit_schema   = ! empty( $s['emit_schema'] );
+        $marker_shape  = sanitize_key( $s['marker_shape'] ?? 'pin' );
+        if ( $marker_shape === 'image' ) $marker_shape = 'pin';
+        $tile_url      = $this->get_tile_layer_url( $s['loc_tile_layer'] ?? 'osm' );
+        $tile_attr     = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>';
+        $zoom          = absint( $s['loc_default_zoom'] ) ?: 13;
 
-        // JS config for enhancement script
-        $enhance_cfg = [
-            'uid'            => $uid,
-            'mapId'          => $map_id,
-            'viewMode'       => $view_mode,
-            'sortDefault'    => $sort_default,
-            'perPage'        => $per_page,
-            'searchEnabled'  => $show_search,
-            'radiusEnabled'  => $show_radius,
-            'radiusDefault'  => $radius_d,
+        $this->enqueue_leaflet( $use_cluster );
+
+        $marker_info = $this->build_marker_shape_svg( $marker_shape, $color, 32 );
+
+        $js_data = [
+            'uid'           => $uid,
+            'mapId'         => $map_id,
+            'items'         => array_values( $locations ),
+            'center'        => $center,
+            'zoom'          => $zoom,
+            'color'         => $color,
+            'perPage'       => $per_page,
+            'useCluster'    => $use_cluster,
+            'fitBounds'     => $fit_bounds,
+            'popupImage'    => (bool) $s['loc_popup_show_image'],
+            'popupExcerpt'  => (bool) $s['loc_popup_show_excerpt'],
+            'popupLink'     => (bool) $s['loc_popup_show_link'],
+            'showRadius'    => $show_radius,
+            'radiusDefault' => $radius_d,
+            'sortDefault'   => $sort_default,
+            'viewMode'      => $view_mode,
+            'showFilters'   => $show_filters,
+            'tileUrl'       => $tile_url,
+            'tileAttr'      => $tile_attr,
+            'markerSvg'     => $marker_info['svg'],
+            'markerW'       => $marker_info['w'],
+            'markerH'       => $marker_info['h'],
+            'markerAnchorY' => $marker_info['anchor_y'],
+            'mode'          => 'locations',
         ];
 
         ob_start();
         ?>
-        <style><?php echo $this->build_common_enhance_css( $uid, $cluster_color, $card_r, $card_mh, $grid_cols ); ?></style>
-        <div class="olo-map olo-map-locations <?php echo esc_attr( $uid ); ?>" role="region" aria-label="Mappa luoghi con risultati">
-            <?php
-            if ( ! empty( $s['loc_show_filters'] ) && ! empty( $terms ) ) {
-                $this->render_filters( $terms, $s['loc_filter_style'], $map_id, $s['loc_filter_align'] ?? 'left' );
-            }
-            ?>
-            <?php if ( $show_search ) : ?>
-                <div class="olo-map-search-wrap">
-                    <input type="text" class="olo-map-search-input" data-search-for="<?php echo esc_attr( $map_id ); ?>" placeholder="Cerca citt&agrave;, zona, indirizzo..." autocomplete="off" aria-label="Cerca localit&agrave;" />
-                    <ul class="olo-map-ac-list" data-ac-for="<?php echo esc_attr( $map_id ); ?>"></ul>
-                </div>
-            <?php endif; ?>
-            <?php if ( $show_radius ) : ?>
-                <div class="olo-map-radius-wrap">
-                    <label>Raggio</label>
-                    <input type="range" class="olo-map-radius-slider" data-radius-for="<?php echo esc_attr( $map_id ); ?>" min="1" max="50" value="<?php echo esc_attr( $radius_d ); ?>" />
-                    <span class="olo-map-radius-val" data-radius-for="<?php echo esc_attr( $map_id ); ?>"><?php echo esc_html( $radius_d ); ?> km</span>
-                </div>
-            <?php endif; ?>
-            <div style="position:relative;">
-                <div
-                    id="<?php echo esc_attr( $map_id ); ?>"
-                    class="olo-map-canvas"
-                    style="height: <?php echo $height; ?>px; border-radius: <?php echo $radius; ?>; overflow: hidden;"
-                    data-map-config="<?php echo esc_attr( wp_json_encode( $config ) ); ?>"
-                ></div>
+        <style>
+        <?php echo $this->build_plm_css( $uid, $map_pos, $map_w, $height, $f_cols, $grid_cols, $card_r, $card_mh, $color, $btn_bg, $btn_color ); ?>
+        </style>
+
+        <div class="olo-tile olo-tile--plm <?php echo esc_attr( $uid ); ?>" role="region" aria-label="Mappa luoghi">
+            <div class="plm-map-panel">
+                <div class="plm-map" id="<?php echo esc_attr( $map_id ); ?>"></div>
                 <?php if ( $fs_enabled ) : ?>
-                    <?php echo $this->build_fullscreen_btn( $map_id ); ?>
+                    <button type="button" class="plm-fullscreen-btn" id="<?php echo esc_attr( $uid ); ?>-fs" title="Schermo intero" aria-label="Attiva o disattiva schermo intero">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3"/></svg>
+                    </button>
                 <?php endif; ?>
             </div>
-            <div class="olo-map-toolbar" role="region" aria-label="Controlli elenco risultati">
-                <span class="olo-map-count" data-count-for="<?php echo esc_attr( $map_id ); ?>"><strong><?php echo count( $locations ); ?></strong> risultat<?php echo count( $locations ) === 1 ? 'o' : 'i'; ?></span>
-                <div class="olo-map-toolbar-right">
-                    <select class="olo-map-sort" data-sort-for="<?php echo esc_attr( $map_id ); ?>" aria-label="Ordina risultati">
-                        <option value="default" <?php selected( $sort_default, 'default' ); ?>>Ordine predefinito</option>
-                        <option value="title_asc" <?php selected( $sort_default, 'title_asc' ); ?>>Titolo A-Z</option>
-                        <option value="title_desc" <?php selected( $sort_default, 'title_desc' ); ?>>Titolo Z-A</option>
-                        <option value="newest" <?php selected( $sort_default, 'newest' ); ?>>Pi&ugrave; recenti</option>
+
+            <div class="plm-results-panel">
+                <div class="plm-filters" id="<?php echo esc_attr( $uid ); ?>-filters">
+                    <div class="plm-filters-grid">
                         <?php if ( $show_search ) : ?>
-                            <option value="distance" <?php selected( $sort_default, 'distance' ); ?>>Distanza</option>
+                            <div class="plm-filter-group plm-filter-group--full">
+                                <span class="plm-filter-label">Localit&agrave;</span>
+                                <div class="plm-autocomplete-wrap">
+                                    <input type="text" class="plm-filter-input" data-filter="location" placeholder="Cerca citt&agrave;, zona, indirizzo..." autocomplete="off" />
+                                    <ul class="plm-autocomplete-list" id="<?php echo esc_attr( $uid ); ?>-ac"></ul>
+                                </div>
+                            </div>
                         <?php endif; ?>
-                    </select>
-                    <div class="olo-map-view-toggles" role="group" aria-label="Tipo di vista">
-                        <button type="button" class="olo-map-view-btn<?php echo $view_mode === 'list' ? ' is-active' : ''; ?>" data-view="list" data-view-for="<?php echo esc_attr( $map_id ); ?>" aria-label="Vista lista" title="Vista lista">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="4" cy="6" r="1" fill="currentColor"/><circle cx="4" cy="12" r="1" fill="currentColor"/><circle cx="4" cy="18" r="1" fill="currentColor"/></svg>
-                        </button>
-                        <button type="button" class="olo-map-view-btn<?php echo $view_mode === 'grid' ? ' is-active' : ''; ?>" data-view="grid" data-view-for="<?php echo esc_attr( $map_id ); ?>" aria-label="Vista griglia" title="Vista griglia">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+
+                        <?php if ( $show_radius ) : ?>
+                            <div class="plm-filter-group plm-filter-group--full">
+                                <span class="plm-filter-label">Raggio di ricerca</span>
+                                <div class="plm-radius-wrap">
+                                    <input type="range" min="1" max="50" value="<?php echo esc_attr( $radius_d ); ?>" data-filter="radius" />
+                                    <span class="plm-radius-val"><?php echo esc_html( $radius_d ); ?> km</span>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+
+                        <?php if ( $show_filters ) : ?>
+                            <div class="plm-filter-group plm-filter-group--full">
+                                <span class="plm-filter-label">Categoria</span>
+                                <select class="plm-filter-select" data-filter="taxonomy">
+                                    <option value="">Tutte</option>
+                                    <?php foreach ( $terms as $term ) : ?>
+                                        <option value="<?php echo esc_attr( $term['slug'] ); ?>"><?php echo esc_html( $term['name'] ); ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+
+                    <div class="plm-actions">
+                        <button type="button" class="plm-btn-search" id="<?php echo esc_attr( $uid ); ?>-search"><?php echo esc_html( $btn_text ); ?></button>
+                        <button type="button" class="plm-btn-reset" id="<?php echo esc_attr( $uid ); ?>-reset" title="Azzera filtri" aria-label="Azzera filtri">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 019-9 9.75 9.75 0 016.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 01-9 9 9.75 9.75 0 01-6.74-2.74L3 16"/><path d="M3 21v-5h5"/></svg>
                         </button>
                     </div>
                 </div>
-            </div>
-            <div class="olo-map-results<?php echo $view_mode === 'grid' ? ' is-grid' : ''; ?>" data-list-for="<?php echo esc_attr( $map_id ); ?>"></div>
-            <?php if ( $per_page > 0 ) : ?>
-                <div class="olo-map-pagination" data-pag-for="<?php echo esc_attr( $map_id ); ?>">
-                    <button type="button" class="olo-map-page-btn" data-page="prev">&larr; Precedente</button>
-                    <span class="olo-map-page-info">1 di 1</span>
-                    <button type="button" class="olo-map-page-btn" data-page="next">Successivo &rarr;</button>
+
+                <div class="plm-results-header">
+                    <span class="plm-results-count" id="<?php echo esc_attr( $uid ); ?>-count"><strong>0</strong> Risultati</span>
+                    <div class="plm-sort-wrap">
+                        <select class="plm-sort-select" id="<?php echo esc_attr( $uid ); ?>-sort">
+                            <option value="default" <?php selected( $sort_default, 'default' ); ?>>Ordine predefinito</option>
+                            <option value="title_asc" <?php selected( $sort_default, 'title_asc' ); ?>>Titolo A-Z</option>
+                            <option value="title_desc" <?php selected( $sort_default, 'title_desc' ); ?>>Titolo Z-A</option>
+                            <option value="newest" <?php selected( $sort_default, 'newest' ); ?>>Pi&ugrave; recenti</option>
+                            <option value="distance" <?php selected( $sort_default, 'distance' ); ?>>Distanza</option>
+                        </select>
+                        <div class="plm-view-toggles" role="group" aria-label="Tipo di vista">
+                            <button type="button" class="plm-view-btn<?php echo $view_mode === 'list' ? ' is-active' : ''; ?>" data-view="list" aria-label="Vista lista" title="Vista lista">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="4" cy="6" r="1" fill="currentColor"/><circle cx="4" cy="12" r="1" fill="currentColor"/><circle cx="4" cy="18" r="1" fill="currentColor"/></svg>
+                            </button>
+                            <button type="button" class="plm-view-btn<?php echo $view_mode === 'grid' ? ' is-active' : ''; ?>" data-view="grid" aria-label="Vista griglia" title="Vista griglia">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+                            </button>
+                        </div>
+                    </div>
                 </div>
-            <?php endif; ?>
+
+                <div class="plm-results-list<?php echo $view_mode === 'grid' ? ' plm-grid-view' : ''; ?>" id="<?php echo esc_attr( $uid ); ?>-list"></div>
+
+                <div class="plm-pagination" id="<?php echo esc_attr( $uid ); ?>-pagination">
+                    <button type="button" class="plm-page-btn" data-page="prev">&larr; Precedente</button>
+                    <span class="plm-page-info" id="<?php echo esc_attr( $uid ); ?>-pageinfo">1 / 1</span>
+                    <button type="button" class="plm-page-btn" data-page="next">Successivo &rarr;</button>
+                </div>
+            </div>
         </div>
+
         <?php if ( $emit_schema && ! empty( $locations ) ) : ?>
             <script type="application/ld+json"><?php echo wp_json_encode( $this->build_multi_schema( $locations, 'Place' ), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ); ?></script>
         <?php endif; ?>
-        <?php echo $this->build_multi_enhance_js( $uid, $map_id, $enhance_cfg ); ?>
+
+        <?php echo $this->build_plm_js( $js_data ); ?>
         <?php
         return ob_get_clean();
     }
@@ -733,159 +785,283 @@ class Olo_Map_Tile extends Olo_Tile_Base {
      * Services mode: Leaflet map with markers from olo_service CPT.
      */
     private function render_services( $s ) {
-        $height = absint( $s['height'] );
-        $radius = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 8 );
-        $map_id = 'olo-map-' . wp_unique_id();
-        $uid    = 'olo-map-svc-' . wp_unique_id();
-
         $locations = $this->query_services( $s );
 
-        // Parse default center
         $center = [ 46.07, 11.12 ];
         $center_match = $this->parse_coords( $s['svc_default_center'] );
         if ( $center_match ) {
             $center = [ $center_match['lat'], $center_match['lng'] ];
         }
 
-        $config = [
-            'mode'              => 'services',
-            'locations'         => $locations,
-            'center'            => $center,
-            'zoom'              => absint( $s['svc_default_zoom'] ),
-            'tileLayer'         => $s['svc_tile_layer'],
-            'cluster'           => (bool) $s['svc_cluster'],
-            'fitBounds'         => (bool) $s['svc_fit_bounds'],
-            'popupImage'        => (bool) $s['svc_popup_show_image'],
-            'popupExcerpt'      => (bool) $s['svc_popup_show_excerpt'],
-            'popupPrice'        => (bool) $s['svc_popup_show_price'],
-            'popupAltitude'     => (bool) $s['svc_popup_show_altitude'],
-            'popupShowSpecs'    => (bool) $s['svc_popup_show_specs'],
-            'popupShowAmenities'=> (bool) $s['svc_popup_show_amenities'],
-            'popupShowGallery'  => (bool) $s['svc_popup_show_gallery'],
-            'popupShowValley'   => (bool) $s['svc_popup_show_valley'],
-            'popupMaxWidth'     => absint( $s['svc_popup_max_width'] ) ?: 280,
-            'popupImgHeight'    => absint( $s['svc_popup_img_height'] ) ?: 180,
-            'popupBtnText'      => $s['svc_popup_btn_text'] ?: 'Scopri e Prenota',
-            'popupBtnColor'     => $s['svc_popup_btn_color'] ?: '#3b82f6',
-            'popupBg'           => $s['svc_popup_bg'] ?: '#ffffff',
-            'popupColor'        => $s['svc_popup_color'] ?: '#333333',
-            'popupRadius'       => Olo_Tile_Utils::border_radius( $s['svc_popup_radius'] ?? 0 ),
-            'popupLink'         => true,
-        ];
-
-        // New enhancement defaults (services)
-        $fs_enabled    = ! empty( $s['fullscreen_btn'] );
-        $view_mode     = in_array( $s['view_mode'] ?? 'list', [ 'list', 'grid' ], true ) ? $s['view_mode'] : 'list';
+        $height        = absint( $s['height'] ) ?: 700;
+        $map_id        = 'olo-plm-map-' . wp_rand( 10000, 99999 );
+        $uid           = 'olo-plm-svc-' . wp_rand( 10000, 99999 );
+        $map_pos       = ( ($s['map_position'] ?? 'left') === 'right' ) ? 'right' : 'left';
+        $map_w         = preg_match( '/^\d+(%|px)$/', $s['map_width'] ?? '55%' ) ? $s['map_width'] : '55%';
+        $f_cols        = max( 1, min( 4, absint( $s['filter_columns'] ?? 2 ) ) );
         $grid_cols     = max( 1, min( 4, absint( $s['grid_columns'] ?? 2 ) ) );
+        $view_mode     = in_array( $s['view_mode'] ?? 'list', [ 'list', 'grid' ], true ) ? $s['view_mode'] : 'list';
         $sort_default  = in_array( $s['sort_default'] ?? 'default', [ 'default', 'title_asc', 'title_desc', 'newest', 'distance' ], true ) ? $s['sort_default'] : 'default';
-        $per_page      = max( 0, absint( $s['results_per_page'] ?? 10 ) );
+        $per_page      = max( 1, absint( $s['results_per_page'] ?? 10 ) );
         $card_mh       = max( 0, absint( $s['card_max_height'] ?? 0 ) );
         $card_r        = max( 0, absint( $s['card_border_radius'] ?? 8 ) );
         $show_search   = ! empty( $s['show_location_search'] );
-        $show_radius_k = ! empty( $s['show_radius'] );
+        $show_radius   = ! empty( $s['show_radius'] );
         $radius_d      = max( 1, min( 50, absint( $s['radius_default'] ?? 5 ) ) );
-        $cluster_color = $this->safe_hex( $s['svc_marker_color'] ?? $s['marker_color'] ?? '', $config['popupBtnColor'] ?: '#3b82f6' );
+        $color         = $this->safe_hex( $s['svc_marker_color'] ?? $s['marker_color'] ?? '', '#2563EB' );
+        $btn_bg        = $this->safe_hex( $s['btn_bg'] ?? '', '#2563EB' );
+        $btn_color     = $this->safe_hex( $s['btn_color'] ?? '', '#FFFFFF' );
+        $btn_text      = $s['btn_text'] ?: 'Ricerca';
+        $use_cluster   = ! empty( $s['svc_cluster'] );
+        $fit_bounds    = ! empty( $s['svc_fit_bounds'] );
+        $fs_enabled    = ! empty( $s['fullscreen_btn'] );
         $emit_schema   = ! empty( $s['emit_schema'] );
+        $marker_shape  = sanitize_key( $s['marker_shape'] ?? 'pin' );
+        if ( $marker_shape === 'image' ) $marker_shape = 'pin';
+        $tile_url      = $this->get_tile_layer_url( $s['svc_tile_layer'] ?? 'positron' );
+        $tile_attr     = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>';
+        $zoom          = absint( $s['svc_default_zoom'] ) ?: 10;
 
-        $enhance_cfg = [
-            'uid'            => $uid,
-            'mapId'          => $map_id,
-            'viewMode'       => $view_mode,
-            'sortDefault'    => $sort_default,
-            'perPage'        => $per_page,
-            'searchEnabled'  => $show_search,
-            'radiusEnabled'  => $show_radius_k,
-            'radiusDefault'  => $radius_d,
+        $booking_mode     = $s['svc_booking_mode'] ?? 'accommodation';
+        $schema_item_type = ( $booking_mode === 'accommodation' ) ? 'LodgingBusiness' : 'LocalBusiness';
+
+        $this->enqueue_leaflet( $use_cluster );
+
+        $marker_info = $this->build_marker_shape_svg( $marker_shape, $color, 32 );
+
+        $js_data = [
+            'uid'           => $uid,
+            'mapId'         => $map_id,
+            'items'         => array_values( $locations ),
+            'center'        => $center,
+            'zoom'          => $zoom,
+            'color'         => $color,
+            'perPage'       => $per_page,
+            'useCluster'    => $use_cluster,
+            'fitBounds'     => $fit_bounds,
+            'popupImage'    => (bool) $s['svc_popup_show_image'],
+            'popupExcerpt'  => (bool) $s['svc_popup_show_excerpt'],
+            'popupPrice'    => (bool) $s['svc_popup_show_price'],
+            'popupAltitude' => (bool) $s['svc_popup_show_altitude'],
+            'popupSpecs'    => (bool) $s['svc_popup_show_specs'],
+            'popupValley'   => (bool) $s['svc_popup_show_valley'],
+            'popupMaxWidth' => absint( $s['svc_popup_max_width'] ) ?: 280,
+            'popupImgHeight'=> absint( $s['svc_popup_img_height'] ) ?: 180,
+            'popupBtnText'  => $s['svc_popup_btn_text'] ?: 'Scopri e Prenota',
+            'popupBtnColor' => $this->safe_hex( $s['svc_popup_btn_color'] ?? '', '#3b82f6' ),
+            'popupBg'       => $this->safe_hex( $s['svc_popup_bg'] ?? '', '#ffffff' ),
+            'popupColor'    => $this->safe_hex( $s['svc_popup_color'] ?? '', '#333333' ),
+            'popupRadius'   => absint( $s['svc_popup_radius'] ?? 8 ),
+            'popupLink'     => true,
+            'showRadius'    => $show_radius,
+            'radiusDefault' => $radius_d,
+            'sortDefault'   => $sort_default,
+            'viewMode'      => $view_mode,
+            'tileUrl'       => $tile_url,
+            'tileAttr'      => $tile_attr,
+            'markerSvg'     => $marker_info['svg'],
+            'markerW'       => $marker_info['w'],
+            'markerH'       => $marker_info['h'],
+            'markerAnchorY' => $marker_info['anchor_y'],
+            'mode'          => 'services',
         ];
 
         ob_start();
         ?>
-        <?php
-        $has_filters = ! empty( $locations ) && (
-            ! empty( $s['svc_show_altitude_filter'] )
-            || ! empty( $s['svc_show_locality_filter'] )
-            || ! empty( $s['svc_show_guests_filter'] )
-            || ! empty( $s['svc_show_price_filter'] )
-            || ! empty( $s['svc_show_bedrooms_filter'] )
-            || ! empty( $s['svc_show_amenities_filter'] )
-        );
-        $filter_style = $s['svc_filter_style'] ?? 'default';
-        $filter_pos   = $s['svc_filter_position'] ?? 'top';
-        $is_side      = in_array( $filter_pos, [ 'left', 'right' ], true );
+        <style>
+        <?php echo $this->build_plm_css( $uid, $map_pos, $map_w, $height, $f_cols, $grid_cols, $card_r, $card_mh, $color, $btn_bg, $btn_color ); ?>
+        </style>
 
-        // Determine schema item type based on booking mode
-        $booking_mode = $s['svc_booking_mode'] ?? 'accommodation';
-        $schema_item_type = ( $booking_mode === 'accommodation' ) ? 'LodgingBusiness' : 'LocalBusiness';
-        ?>
-        <style><?php echo $this->build_common_enhance_css( $uid, $cluster_color, $card_r, $card_mh, $grid_cols ); ?></style>
-        <div class="olo-map olo-map-services <?php echo esc_attr( $uid ); ?><?php echo $is_side && $has_filters ? ' olo-map-layout-side olo-map-layout-' . esc_attr( $filter_pos ) : ''; ?>" role="region" aria-label="Mappa servizi con risultati">
-            <?php if ( $has_filters && ( $filter_pos === 'top' || $filter_pos === 'left' ) ) : ?>
-                <?php $this->render_filter_bar( $filter_style, $s, $locations, $map_id ); ?>
-            <?php endif; ?>
-            <?php if ( $show_search ) : ?>
-                <div class="olo-map-search-wrap">
-                    <input type="text" class="olo-map-search-input" data-search-for="<?php echo esc_attr( $map_id ); ?>" placeholder="Cerca citt&agrave;, zona, indirizzo..." autocomplete="off" aria-label="Cerca localit&agrave;" />
-                    <ul class="olo-map-ac-list" data-ac-for="<?php echo esc_attr( $map_id ); ?>"></ul>
-                </div>
-            <?php endif; ?>
-            <?php if ( $show_radius_k ) : ?>
-                <div class="olo-map-radius-wrap">
-                    <label>Raggio</label>
-                    <input type="range" class="olo-map-radius-slider" data-radius-for="<?php echo esc_attr( $map_id ); ?>" min="1" max="50" value="<?php echo esc_attr( $radius_d ); ?>" />
-                    <span class="olo-map-radius-val" data-radius-for="<?php echo esc_attr( $map_id ); ?>"><?php echo esc_html( $radius_d ); ?> km</span>
-                </div>
-            <?php endif; ?>
-            <div class="olo-map-canvas-wrap"<?php echo $is_side ? ' style="flex:1;min-width:0"' : ''; ?> style="position:relative;">
-                <div
-                    id="<?php echo esc_attr( $map_id ); ?>"
-                    class="olo-map-canvas"
-                    style="height: <?php echo $height; ?>px; border-radius: <?php echo $radius; ?>; overflow: hidden;"
-                    data-map-config="<?php echo esc_attr( wp_json_encode( $config ) ); ?>"
-                ></div>
+        <div class="olo-tile olo-tile--plm <?php echo esc_attr( $uid ); ?>" role="region" aria-label="Mappa servizi">
+            <div class="plm-map-panel">
+                <div class="plm-map" id="<?php echo esc_attr( $map_id ); ?>"></div>
                 <?php if ( $fs_enabled ) : ?>
-                    <?php echo $this->build_fullscreen_btn( $map_id ); ?>
+                    <button type="button" class="plm-fullscreen-btn" id="<?php echo esc_attr( $uid ); ?>-fs" title="Schermo intero" aria-label="Attiva o disattiva schermo intero">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3"/></svg>
+                    </button>
                 <?php endif; ?>
             </div>
-            <?php if ( $has_filters && ( $filter_pos === 'bottom' || $filter_pos === 'right' ) ) : ?>
-                <?php $this->render_filter_bar( $filter_style, $s, $locations, $map_id ); ?>
-            <?php endif; ?>
-            <div class="olo-map-toolbar" role="region" aria-label="Controlli elenco risultati">
-                <span class="olo-map-count" data-count-for="<?php echo esc_attr( $map_id ); ?>"><strong><?php echo count( $locations ); ?></strong> risultat<?php echo count( $locations ) === 1 ? 'o' : 'i'; ?></span>
-                <div class="olo-map-toolbar-right">
-                    <select class="olo-map-sort" data-sort-for="<?php echo esc_attr( $map_id ); ?>" aria-label="Ordina risultati">
-                        <option value="default" <?php selected( $sort_default, 'default' ); ?>>Ordine predefinito</option>
-                        <option value="title_asc" <?php selected( $sort_default, 'title_asc' ); ?>>Titolo A-Z</option>
-                        <option value="title_desc" <?php selected( $sort_default, 'title_desc' ); ?>>Titolo Z-A</option>
-                        <option value="newest" <?php selected( $sort_default, 'newest' ); ?>>Pi&ugrave; recenti</option>
+
+            <div class="plm-results-panel">
+                <div class="plm-filters" id="<?php echo esc_attr( $uid ); ?>-filters">
+                    <div class="plm-filters-grid">
                         <?php if ( $show_search ) : ?>
-                            <option value="distance" <?php selected( $sort_default, 'distance' ); ?>>Distanza</option>
+                            <div class="plm-filter-group plm-filter-group--full">
+                                <span class="plm-filter-label">Localit&agrave;</span>
+                                <div class="plm-autocomplete-wrap">
+                                    <input type="text" class="plm-filter-input" data-filter="location" placeholder="Cerca citt&agrave;, zona, indirizzo..." autocomplete="off" />
+                                    <ul class="plm-autocomplete-list" id="<?php echo esc_attr( $uid ); ?>-ac"></ul>
+                                </div>
+                            </div>
                         <?php endif; ?>
-                    </select>
-                    <div class="olo-map-view-toggles" role="group" aria-label="Tipo di vista">
-                        <button type="button" class="olo-map-view-btn<?php echo $view_mode === 'list' ? ' is-active' : ''; ?>" data-view="list" data-view-for="<?php echo esc_attr( $map_id ); ?>" aria-label="Vista lista" title="Vista lista">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="4" cy="6" r="1" fill="currentColor"/><circle cx="4" cy="12" r="1" fill="currentColor"/><circle cx="4" cy="18" r="1" fill="currentColor"/></svg>
-                        </button>
-                        <button type="button" class="olo-map-view-btn<?php echo $view_mode === 'grid' ? ' is-active' : ''; ?>" data-view="grid" data-view-for="<?php echo esc_attr( $map_id ); ?>" aria-label="Vista griglia" title="Vista griglia">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+
+                        <?php if ( $show_radius ) : ?>
+                            <div class="plm-filter-group plm-filter-group--full">
+                                <span class="plm-filter-label">Raggio di ricerca</span>
+                                <div class="plm-radius-wrap">
+                                    <input type="range" min="1" max="50" value="<?php echo esc_attr( $radius_d ); ?>" data-filter="radius" />
+                                    <span class="plm-radius-val"><?php echo esc_html( $radius_d ); ?> km</span>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+
+                        <?php $this->render_svc_filters_in_grid( $s, $locations ); ?>
+                    </div>
+
+                    <div class="plm-actions">
+                        <button type="button" class="plm-btn-search" id="<?php echo esc_attr( $uid ); ?>-search"><?php echo esc_html( $btn_text ); ?></button>
+                        <button type="button" class="plm-btn-reset" id="<?php echo esc_attr( $uid ); ?>-reset" title="Azzera filtri" aria-label="Azzera filtri">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 019-9 9.75 9.75 0 016.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 01-9 9 9.75 9.75 0 01-6.74-2.74L3 16"/><path d="M3 21v-5h5"/></svg>
                         </button>
                     </div>
                 </div>
-            </div>
-            <div class="olo-map-results<?php echo $view_mode === 'grid' ? ' is-grid' : ''; ?>" data-list-for="<?php echo esc_attr( $map_id ); ?>"></div>
-            <?php if ( $per_page > 0 ) : ?>
-                <div class="olo-map-pagination" data-pag-for="<?php echo esc_attr( $map_id ); ?>">
-                    <button type="button" class="olo-map-page-btn" data-page="prev">&larr; Precedente</button>
-                    <span class="olo-map-page-info">1 di 1</span>
-                    <button type="button" class="olo-map-page-btn" data-page="next">Successivo &rarr;</button>
+
+                <div class="plm-results-header">
+                    <span class="plm-results-count" id="<?php echo esc_attr( $uid ); ?>-count"><strong>0</strong> Risultati</span>
+                    <div class="plm-sort-wrap">
+                        <select class="plm-sort-select" id="<?php echo esc_attr( $uid ); ?>-sort">
+                            <option value="default" <?php selected( $sort_default, 'default' ); ?>>Ordine predefinito</option>
+                            <option value="title_asc" <?php selected( $sort_default, 'title_asc' ); ?>>Titolo A-Z</option>
+                            <option value="title_desc" <?php selected( $sort_default, 'title_desc' ); ?>>Titolo Z-A</option>
+                            <option value="newest" <?php selected( $sort_default, 'newest' ); ?>>Pi&ugrave; recenti</option>
+                            <option value="distance" <?php selected( $sort_default, 'distance' ); ?>>Distanza</option>
+                        </select>
+                        <div class="plm-view-toggles" role="group" aria-label="Tipo di vista">
+                            <button type="button" class="plm-view-btn<?php echo $view_mode === 'list' ? ' is-active' : ''; ?>" data-view="list" aria-label="Vista lista" title="Vista lista">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="4" cy="6" r="1" fill="currentColor"/><circle cx="4" cy="12" r="1" fill="currentColor"/><circle cx="4" cy="18" r="1" fill="currentColor"/></svg>
+                            </button>
+                            <button type="button" class="plm-view-btn<?php echo $view_mode === 'grid' ? ' is-active' : ''; ?>" data-view="grid" aria-label="Vista griglia" title="Vista griglia">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+                            </button>
+                        </div>
+                    </div>
                 </div>
-            <?php endif; ?>
+
+                <div class="plm-results-list<?php echo $view_mode === 'grid' ? ' plm-grid-view' : ''; ?>" id="<?php echo esc_attr( $uid ); ?>-list"></div>
+
+                <div class="plm-pagination" id="<?php echo esc_attr( $uid ); ?>-pagination">
+                    <button type="button" class="plm-page-btn" data-page="prev">&larr; Precedente</button>
+                    <span class="plm-page-info" id="<?php echo esc_attr( $uid ); ?>-pageinfo">1 / 1</span>
+                    <button type="button" class="plm-page-btn" data-page="next">Successivo &rarr;</button>
+                </div>
+            </div>
         </div>
+
         <?php if ( $emit_schema && ! empty( $locations ) ) : ?>
             <script type="application/ld+json"><?php echo wp_json_encode( $this->build_multi_schema( $locations, $schema_item_type ), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ); ?></script>
         <?php endif; ?>
-        <?php echo $this->build_multi_enhance_js( $uid, $map_id, $enhance_cfg ); ?>
+
+        <?php echo $this->build_plm_js( $js_data ); ?>
         <?php
         return ob_get_clean();
+    }
+
+    /**
+     * Render service-specific filters inside the split-view filters grid.
+     * Uses simple select dropdowns so they fit the unified filter layout.
+     */
+    private function render_svc_filters_in_grid( $s, $locations ) {
+        // Altitude
+        if ( ! empty( $s['svc_show_altitude_filter'] ) ) {
+            $ranges = array_filter( array_map( 'trim', explode( ',', $s['svc_altitude_ranges'] ) ) );
+            if ( $ranges ) {
+                echo '<div class="plm-filter-group"><span class="plm-filter-label">Altitudine</span>';
+                echo '<select class="plm-filter-select" data-filter="altitude"><option value="">Tutte</option>';
+                foreach ( $ranges as $range ) {
+                    $parts = explode( '-', $range );
+                    if ( count( $parts ) !== 2 ) continue;
+                    $min = intval( $parts[0] );
+                    $max = intval( $parts[1] );
+                    if ( $min === 0 ) $lbl = '< ' . number_format( $max, 0, ',', '.' ) . 'm';
+                    elseif ( $max >= 9000 ) $lbl = '> ' . number_format( $min, 0, ',', '.' ) . 'm';
+                    else $lbl = number_format( $min, 0, ',', '.' ) . ' - ' . number_format( $max, 0, ',', '.' ) . 'm';
+                    echo '<option value="' . esc_attr( $range ) . '">' . esc_html( $lbl ) . '</option>';
+                }
+                echo '</select></div>';
+            }
+        }
+        // Locality / Valley
+        if ( ! empty( $s['svc_show_locality_filter'] ) ) {
+            $localities = [];
+            foreach ( $locations as $loc ) {
+                if ( ! empty( $loc['valley'] ) ) $localities[ $loc['valley'] ] = true;
+            }
+            if ( $localities ) {
+                $names = array_keys( $localities );
+                sort( $names );
+                echo '<div class="plm-filter-group"><span class="plm-filter-label">Localit&agrave;</span>';
+                echo '<select class="plm-filter-select" data-filter="valley"><option value="">Tutte</option>';
+                foreach ( $names as $n ) {
+                    echo '<option value="' . esc_attr( $n ) . '">' . esc_html( $n ) . '</option>';
+                }
+                echo '</select></div>';
+            }
+        }
+        // Guests
+        if ( ! empty( $s['svc_show_guests_filter'] ) ) {
+            $ranges = array_filter( array_map( 'trim', explode( ',', $s['svc_guests_ranges'] ) ) );
+            if ( $ranges ) {
+                echo '<div class="plm-filter-group"><span class="plm-filter-label">Ospiti</span>';
+                echo '<select class="plm-filter-select" data-filter="guests"><option value="">Tutti</option>';
+                foreach ( $ranges as $range ) {
+                    $parts = explode( '-', $range );
+                    if ( count( $parts ) !== 2 ) continue;
+                    $min = intval( $parts[0] );
+                    $max = intval( $parts[1] );
+                    $lbl = $max >= 99 ? $min . '+' : $min . '-' . $max;
+                    echo '<option value="' . esc_attr( $range ) . '">' . esc_html( $lbl ) . '</option>';
+                }
+                echo '</select></div>';
+            }
+        }
+        // Price
+        if ( ! empty( $s['svc_show_price_filter'] ) ) {
+            $ranges = array_filter( array_map( 'trim', explode( ',', $s['svc_price_ranges'] ) ) );
+            if ( $ranges ) {
+                echo '<div class="plm-filter-group"><span class="plm-filter-label">Prezzo / notte</span>';
+                echo '<select class="plm-filter-select" data-filter="price"><option value="">Tutti</option>';
+                foreach ( $ranges as $range ) {
+                    $parts = explode( '-', $range );
+                    if ( count( $parts ) !== 2 ) continue;
+                    $min = intval( $parts[0] );
+                    $max = intval( $parts[1] );
+                    if ( $min === 0 ) $lbl = '< €' . $max;
+                    elseif ( $max >= 9000 ) $lbl = '€' . $min . '+';
+                    else $lbl = '€' . $min . ' - €' . $max;
+                    echo '<option value="' . esc_attr( $range ) . '">' . esc_html( $lbl ) . '</option>';
+                }
+                echo '</select></div>';
+            }
+        }
+        // Bedrooms
+        if ( ! empty( $s['svc_show_bedrooms_filter'] ) ) {
+            $has = false;
+            foreach ( $locations as $loc ) {
+                if ( isset( $loc['bedrooms'] ) ) { $has = true; break; }
+            }
+            if ( $has ) {
+                echo '<div class="plm-filter-group"><span class="plm-filter-label">Camere</span>';
+                echo '<select class="plm-filter-select" data-filter="bedrooms"><option value="">Qualsiasi</option>';
+                echo '<option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4+">4+</option>';
+                echo '</select></div>';
+            }
+        }
+        // Amenities (multi-select as comma list)
+        if ( ! empty( $s['svc_show_amenities_filter'] ) ) {
+            $amenities = array_filter( array_map( 'trim', explode( ',', $s['svc_amenities_list'] ) ) );
+            if ( $amenities ) {
+                $labels = class_exists( 'Olo_Amenities_Catalog' )
+                    ? Olo_Amenities_Catalog::get_all_labels()
+                    : [];
+                echo '<div class="plm-filter-group plm-filter-group--full"><span class="plm-filter-label">Servizi</span>';
+                echo '<div class="plm-amenities-pills">';
+                foreach ( $amenities as $slug ) {
+                    $lbl = $labels[ $slug ] ?? ucfirst( $slug );
+                    echo '<button type="button" class="plm-amenity-pill" data-amenity="' . esc_attr( $slug ) . '">' . esc_html( $lbl ) . '</button>';
+                }
+                echo '</div></div>';
+            }
+        }
     }
 
     /**
@@ -1531,6 +1707,621 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         <button type="button" class="olo-map-fs-btn" data-fs-for="<?php echo esc_attr( $uid ); ?>" title="Schermo intero" aria-label="Attiva o disattiva schermo intero">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3"/></svg>
         </button>
+        <?php
+        return ob_get_clean();
+    }
+
+    /**
+     * Enqueue Leaflet (and MarkerCluster if requested).
+     */
+    private function enqueue_leaflet( $cluster ) {
+        $vendor = defined( 'OLO_URL' ) ? OLO_URL . 'assets/vendor/leaflet/' : 'https://unpkg.com/leaflet@1.9.4/dist/';
+        if ( ! wp_style_is( 'leaflet', 'enqueued' ) && ! wp_style_is( 'leaflet-css', 'enqueued' ) ) {
+            wp_enqueue_style( 'leaflet', $vendor . 'leaflet.css', [], '1.9.4' );
+        }
+        if ( ! wp_script_is( 'leaflet', 'enqueued' ) ) {
+            wp_enqueue_script( 'leaflet', $vendor . 'leaflet.js', [], '1.9.4', true );
+        }
+        if ( $cluster ) {
+            if ( ! wp_style_is( 'leaflet-markercluster-css', 'enqueued' ) ) {
+                wp_enqueue_style( 'leaflet-markercluster-css', $vendor . 'leaflet.markercluster.css', [ 'leaflet' ], '1.5.3' );
+                wp_enqueue_style( 'leaflet-markercluster-default-css', $vendor . 'leaflet.markercluster-default.css', [ 'leaflet-markercluster-css' ], '1.5.3' );
+            }
+            if ( ! wp_script_is( 'leaflet-markercluster-js', 'enqueued' ) ) {
+                wp_enqueue_script( 'leaflet-markercluster-js', $vendor . 'leaflet.markercluster.js', [ 'leaflet' ], '1.5.3', true );
+            }
+        }
+    }
+
+    /**
+     * Build split-view CSS scoped to a unique id. Mirrors the PropertyMapSearch layout.
+     */
+    private function build_plm_css( $uid, $map_pos, $map_w, $height, $f_cols, $g_cols, $card_r, $card_mh, $color, $btn_bg, $btn_color ) {
+        $sel = '.' . $uid;
+        $order_map = $map_pos === 'right' ? '2' : '1';
+        $order_res = $map_pos === 'right' ? '1' : '2';
+        $grid_cols = $map_pos === 'right' ? '1fr ' . $map_w : $map_w . ' 1fr';
+        ob_start();
+        ?>
+        <?php echo $sel; ?> { display: grid; grid-template-columns: <?php echo $grid_cols; ?>; height: <?php echo $height; ?>px; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, sans-serif; }
+        <?php echo $sel; ?> .plm-map-panel { position: relative; order: <?php echo $order_map; ?>; min-height: 100%; }
+        <?php echo $sel; ?> .plm-map { width: 100%; height: 100%; z-index: 1; }
+        <?php echo $sel; ?> .plm-fullscreen-btn { position: absolute; top: 10px; right: 10px; z-index: 1000; width: 34px; height: 34px; background: #fff; border: 2px solid rgba(0,0,0,0.2); border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; color: #374151; }
+        <?php echo $sel; ?> .plm-fullscreen-btn:hover { background: #f4f4f4; }
+        <?php echo $sel; ?> .plm-results-panel { order: <?php echo $order_res; ?>; display: flex; flex-direction: column; overflow: hidden; background: #FAFBFC; min-height: 0; }
+        <?php echo $sel; ?> .plm-filters { padding: 16px 20px; background: #fff; border-bottom: 1px solid #E5E7EB; overflow: visible; flex-shrink: 0; }
+        <?php echo $sel; ?> .plm-filters-grid { display: grid; grid-template-columns: repeat(<?php echo $f_cols; ?>, 1fr); gap: 10px; }
+        <?php echo $sel; ?> .plm-filter-group { display: flex; flex-direction: column; gap: 3px; }
+        <?php echo $sel; ?> .plm-filter-group--full { grid-column: 1 / -1; }
+        <?php echo $sel; ?> .plm-filter-label { font-size: 11px; font-weight: 600; color: #6B7280; text-transform: uppercase; letter-spacing: 0.04em; }
+        <?php echo $sel; ?> .plm-filter-input, <?php echo $sel; ?> .plm-filter-select { padding: 8px 10px; border: 1px solid #D1D5DB; border-radius: 6px; font-size: 13px; color: #374151; background: #fff; width: 100%; box-sizing: border-box; font-family: inherit; transition: border-color 0.15s; }
+        <?php echo $sel; ?> .plm-filter-input:focus, <?php echo $sel; ?> .plm-filter-select:focus { outline: none; border-color: <?php echo $color; ?>; box-shadow: 0 0 0 3px <?php echo $color; ?>22; }
+        <?php echo $sel; ?> .plm-radius-wrap { display: flex; align-items: center; gap: 8px; }
+        <?php echo $sel; ?> .plm-radius-wrap input[type="range"] { flex: 1; accent-color: <?php echo $color; ?>; height: 4px; }
+        <?php echo $sel; ?> .plm-radius-val { font-size: 12px; font-weight: 600; color: #374151; min-width: 40px; text-align: right; }
+        <?php echo $sel; ?> .plm-amenities-pills { display: flex; flex-wrap: wrap; gap: 6px; }
+        <?php echo $sel; ?> .plm-amenity-pill { padding: 5px 10px; border: 1px solid #D1D5DB; border-radius: 999px; background: #fff; font-size: 11px; color: #374151; cursor: pointer; font-family: inherit; transition: all 0.15s; }
+        <?php echo $sel; ?> .plm-amenity-pill:hover { background: #F3F4F6; }
+        <?php echo $sel; ?> .plm-amenity-pill.is-active { background: <?php echo $color; ?>; border-color: <?php echo $color; ?>; color: #fff; }
+        <?php echo $sel; ?> .plm-actions { display: flex; gap: 8px; margin-top: 12px; align-items: center; }
+        <?php echo $sel; ?> .plm-btn-search { flex: 1; padding: 10px 16px; background: <?php echo $btn_bg; ?>; color: <?php echo $btn_color; ?>; border: none; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: opacity 0.2s; font-family: inherit; }
+        <?php echo $sel; ?> .plm-btn-search:hover { opacity: 0.88; }
+        <?php echo $sel; ?> .plm-btn-reset { padding: 10px 14px; background: transparent; color: #6B7280; border: 1px solid #D1D5DB; border-radius: 6px; font-size: 13px; cursor: pointer; font-family: inherit; transition: background 0.15s; }
+        <?php echo $sel; ?> .plm-btn-reset:hover { background: #F3F4F6; }
+        <?php echo $sel; ?> .plm-results-header { display: flex; align-items: center; justify-content: space-between; padding: 10px 20px; background: #fff; border-bottom: 1px solid #E5E7EB; flex-shrink: 0; gap: 8px; flex-wrap: wrap; }
+        <?php echo $sel; ?> .plm-results-count { font-size: 13px; font-weight: 600; color: #374151; }
+        <?php echo $sel; ?> .plm-results-count strong { color: <?php echo $color; ?>; }
+        <?php echo $sel; ?> .plm-sort-wrap { display: flex; align-items: center; gap: 8px; }
+        <?php echo $sel; ?> .plm-sort-select { padding: 5px 8px; border: 1px solid #D1D5DB; border-radius: 4px; font-size: 12px; color: #374151; background: #fff; font-family: inherit; }
+        <?php echo $sel; ?> .plm-view-toggles { display: flex; gap: 2px; }
+        <?php echo $sel; ?> .plm-view-btn { width: 30px; height: 30px; border: 1px solid #D1D5DB; background: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; color: #9CA3AF; transition: background 0.15s, color 0.15s; }
+        <?php echo $sel; ?> .plm-view-btn:first-child { border-radius: 4px 0 0 4px; }
+        <?php echo $sel; ?> .plm-view-btn:last-child { border-radius: 0 4px 4px 0; }
+        <?php echo $sel; ?> .plm-view-btn.is-active { background: <?php echo $color; ?>; border-color: <?php echo $color; ?>; color: #fff; }
+        <?php echo $sel; ?> .plm-results-list { flex: 1; overflow-y: auto; padding: 12px 16px; min-height: 0; }
+        <?php echo $sel; ?> .plm-card { display: grid; grid-template-columns: 38% 1fr; border: 1px solid #E5E7EB; border-radius: <?php echo $card_r; ?>px; overflow: hidden;<?php if ( $card_mh > 0 ) echo ' max-height: ' . $card_mh . 'px;'; ?> background: #fff; margin-bottom: 10px; transition: box-shadow 0.2s, transform 0.15s; cursor: pointer; text-decoration: none; color: inherit; }
+        <?php echo $sel; ?> .plm-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateY(-1px); }
+        <?php echo $sel; ?> .plm-card.is-highlighted { box-shadow: 0 0 0 2px <?php echo $color; ?>, 0 4px 12px rgba(0,0,0,0.1); }
+        <?php echo $sel; ?> .plm-results-list.plm-grid-view { display: grid; grid-template-columns: repeat(<?php echo $g_cols; ?>, 1fr); gap: 10px; padding: 12px 16px; align-content: start; }
+        <?php echo $sel; ?> .plm-results-list.plm-grid-view .plm-card { display: flex; flex-direction: column; margin-bottom: 0; position: relative; min-height: 220px; }
+        <?php echo $sel; ?> .plm-results-list.plm-grid-view .plm-card-img { position: absolute; inset: 0; height: 100%; }
+        <?php echo $sel; ?> .plm-results-list.plm-grid-view .plm-card-body { position: relative; z-index: 2; margin-top: auto; background: linear-gradient(0deg, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.45) 70%, transparent 100%); padding: 40px 12px 10px; border-radius: 0 0 <?php echo $card_r; ?>px <?php echo $card_r; ?>px; }
+        <?php echo $sel; ?> .plm-results-list.plm-grid-view .plm-card-title,
+        <?php echo $sel; ?> .plm-results-list.plm-grid-view .plm-card-sub,
+        <?php echo $sel; ?> .plm-results-list.plm-grid-view .plm-card-price { color: #fff; }
+        <?php echo $sel; ?> .plm-card-img { position: relative; overflow: hidden; background: #E5E7EB; min-height: 110px; }
+        <?php echo $sel; ?> .plm-card-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.3s; }
+        <?php echo $sel; ?> .plm-card:hover .plm-card-img img { transform: scale(1.05); }
+        <?php echo $sel; ?> .plm-card-img-ph { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 28px; color: #9CA3AF; }
+        <?php echo $sel; ?> .plm-card-body { padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+        <?php echo $sel; ?> .plm-card-title { font-size: 14px; font-weight: 700; color: #1F2937; margin: 0; line-height: 1.3; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        <?php echo $sel; ?> .plm-card-sub { font-size: 12px; color: #6B7280; margin: 0; }
+        <?php echo $sel; ?> .plm-card-specs { display: flex; gap: 10px; font-size: 11px; color: #6B7280; flex-wrap: wrap; margin-top: 4px; }
+        <?php echo $sel; ?> .plm-card-specs span { display: inline-flex; align-items: center; gap: 3px; white-space: nowrap; }
+        <?php echo $sel; ?> .plm-card-price { font-size: 16px; font-weight: 700; color: <?php echo $color; ?>; margin-top: auto; padding-top: 4px; text-align: right; }
+        <?php echo $sel; ?> .plm-pagination { display: flex; justify-content: center; align-items: center; gap: 8px; padding: 10px 20px; background: #fff; border-top: 1px solid #E5E7EB; flex-shrink: 0; }
+        <?php echo $sel; ?> .plm-page-btn { padding: 6px 14px; border: 1px solid #D1D5DB; border-radius: 4px; background: #fff; color: #374151; font-size: 13px; cursor: pointer; font-family: inherit; transition: background 0.15s; }
+        <?php echo $sel; ?> .plm-page-btn:hover { background: #F3F4F6; }
+        <?php echo $sel; ?> .plm-page-btn:disabled { opacity: 0.4; cursor: default; }
+        <?php echo $sel; ?> .plm-page-info { font-size: 12px; color: #6B7280; }
+        <?php echo $sel; ?> .plm-no-results { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; color: #9CA3AF; text-align: center; gap: 8px; }
+        <?php echo $sel; ?> .plm-no-results-title { font-size: 15px; font-weight: 600; color: #6B7280; }
+        <?php echo $sel; ?> .plm-autocomplete-wrap { position: relative; }
+        <?php echo $sel; ?> .plm-autocomplete-list { display: none; position: absolute; z-index: 1000; top: 100%; left: 0; right: 0; margin: 2px 0 0; padding: 4px 0; list-style: none; background: #fff; border: 1px solid #D1D5DB; border-radius: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.12); max-height: 220px; overflow-y: auto; }
+        <?php echo $sel; ?> .plm-autocomplete-list.is-open { display: block; }
+        <?php echo $sel; ?> .plm-ac-item { padding: 8px 12px; font-size: 13px; color: #374151; cursor: pointer; line-height: 1.35; }
+        <?php echo $sel; ?> .plm-ac-item:hover, <?php echo $sel; ?> .plm-ac-item.is-active { background: #F3F4F6; }
+        <?php echo $sel; ?> .plm-popup { font-family: inherit; min-width: 200px; }
+        <?php echo $sel; ?> .plm-popup img { width: 100%; height: auto; object-fit: cover; border-radius: 4px; margin-bottom: 6px; display: block; }
+        <?php echo $sel; ?> .plm-popup h4 { margin: 0 0 2px; font-size: 13px; font-weight: 700; color: #1F2937; }
+        <?php echo $sel; ?> .plm-popup .plm-popup-sub { font-size: 11px; color: #6B7280; margin: 2px 0 4px; }
+        <?php echo $sel; ?> .plm-popup .plm-popup-price { font-size: 15px; font-weight: 700; color: <?php echo $color; ?>; margin: 0 0 6px; }
+        <?php echo $sel; ?> .plm-popup a.plm-popup-link { display: inline-block; padding: 4px 12px; background: <?php echo $color; ?>; color: #fff; border-radius: 4px; font-size: 11px; font-weight: 600; text-decoration: none; }
+        <?php echo $sel; ?> .plm-marker-icon { background: none !important; border: none !important; }
+        <?php echo $sel; ?> .marker-cluster-small { background-color: <?php echo $color; ?>33; }
+        <?php echo $sel; ?> .marker-cluster-small div { background-color: <?php echo $color; ?>; color: #fff; }
+        <?php echo $sel; ?> .marker-cluster-medium { background-color: <?php echo $color; ?>44; }
+        <?php echo $sel; ?> .marker-cluster-medium div { background-color: <?php echo $color; ?>; color: #fff; }
+        <?php echo $sel; ?> .marker-cluster-large { background-color: <?php echo $color; ?>55; }
+        <?php echo $sel; ?> .marker-cluster-large div { background-color: <?php echo $color; ?>; color: #fff; }
+        @media (max-width: 900px) {
+            <?php echo $sel; ?> { grid-template-columns: 1fr; height: auto; }
+            <?php echo $sel; ?> .plm-map-panel { order: 1 !important; height: 350px; }
+            <?php echo $sel; ?> .plm-results-panel { order: 2 !important; height: 500px; }
+            <?php echo $sel; ?> .plm-results-list.plm-grid-view { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 600px) {
+            <?php echo $sel; ?> .plm-filters-grid { grid-template-columns: 1fr; }
+            <?php echo $sel; ?> .plm-card { grid-template-columns: 1fr; }
+            <?php echo $sel; ?> .plm-card-img { height: 160px; }
+        }
+        <?php
+        return ob_get_clean();
+    }
+
+    /**
+     * Build the inline JS that initializes the Leaflet map + filters + list.
+     * Self-contained IIFE that waits for L global; clones PropertyMapSearch behavior.
+     */
+    private function build_plm_js( $data ) {
+        $json = wp_json_encode( $data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
+        ob_start();
+        ?>
+        <script>
+        (function(){
+            var D = <?php echo $json; ?>;
+            function ready(fn) {
+                if (document.readyState !== 'loading') return fn();
+                document.addEventListener('DOMContentLoaded', fn);
+            }
+            function waitL(fn, tries) {
+                tries = tries || 0;
+                if (typeof L !== 'undefined') return fn();
+                if (tries > 100) return;
+                setTimeout(function(){ waitL(fn, tries + 1); }, 50);
+            }
+            ready(function(){ waitL(function(){ init(D); }); });
+
+            function init(D) {
+                var UID = D.uid, MAP_ID = D.mapId;
+                var ITEMS = D.items || [];
+                var CENTER = D.center, ZOOM = D.zoom, COLOR = D.color;
+                var PER_PAGE = D.perPage;
+                var USE_CLUSTER = D.useCluster && typeof L.markerClusterGroup === 'function';
+                var IS_SVC = D.mode === 'services';
+
+                var root    = document.querySelector('.' + UID);
+                if (!root) return;
+                var mapEl   = document.getElementById(MAP_ID);
+                var listEl  = document.getElementById(UID + '-list');
+                var countEl = document.getElementById(UID + '-count');
+                var sortEl  = document.getElementById(UID + '-sort');
+                var searchBtn = document.getElementById(UID + '-search');
+                var resetBtn  = document.getElementById(UID + '-reset');
+                var pageInfoEl = document.getElementById(UID + '-pageinfo');
+                var pagEl = document.getElementById(UID + '-pagination');
+                var fsBtn = document.getElementById(UID + '-fs');
+                if (!mapEl) return;
+
+                var filtered = ITEMS.slice();
+                var page = 1;
+                var geocoded = null;
+                var markerMap = {};
+                var highlightId = null;
+                var isGridView = D.viewMode === 'grid';
+                var activeAmenities = [];
+
+                var map = L.map(mapEl, { scrollWheelZoom: true }).setView(CENTER, ZOOM);
+                L.tileLayer(D.tileUrl, { attribution: D.tileAttr, maxZoom: 19 }).addTo(map);
+
+                function makeIcon() {
+                    return L.divIcon({
+                        className: 'plm-marker-icon',
+                        html: D.markerSvg,
+                        iconSize: [D.markerW, D.markerH],
+                        iconAnchor: [Math.round(D.markerW / 2), D.markerAnchorY],
+                        popupAnchor: [0, -D.markerAnchorY]
+                    });
+                }
+                var icon = makeIcon();
+                var clusterGroup = USE_CLUSTER ? L.markerClusterGroup({ maxClusterRadius: 50 }) : null;
+
+                function escHtml(str) {
+                    var d = document.createElement('div');
+                    d.textContent = str == null ? '' : String(str);
+                    return d.innerHTML;
+                }
+
+                function buildPopup(p) {
+                    var html = '<div class="plm-popup"'
+                        + ' style="max-width:' + (D.popupMaxWidth || 280) + 'px;'
+                        + (IS_SVC ? 'background:' + D.popupBg + ';color:' + D.popupColor + ';border-radius:' + D.popupRadius + 'px;padding:8px;' : '')
+                        + '">';
+                    if (D.popupImage && p.image) {
+                        html += '<img src="' + p.image + '" alt="' + escHtml(p.title) + '" loading="lazy" decoding="async" ';
+                        if (D.popupImgHeight) html += 'style="height:' + D.popupImgHeight + 'px;" ';
+                        html += '/>';
+                    }
+                    html += '<h4>' + escHtml(p.title) + '</h4>';
+                    var sub = [];
+                    if (IS_SVC) {
+                        if (D.popupValley && p.valley) sub.push(escHtml(p.valley));
+                        if (D.popupAltitude && p.altitude !== undefined) sub.push((+p.altitude).toLocaleString('it-IT') + ' m');
+                        if (D.popupSpecs) {
+                            if (p.bedrooms) sub.push(p.bedrooms + ' cam.');
+                            if (p.bathrooms) sub.push(p.bathrooms + ' bagni');
+                            if (p.sqm) sub.push(p.sqm + ' m\u00B2');
+                        }
+                    } else {
+                        if (p.address) sub.push(escHtml(p.address));
+                        if (D.popupExcerpt && p.excerpt) sub.push(escHtml(p.excerpt));
+                    }
+                    if (sub.length) html += '<div class="plm-popup-sub">' + sub.join(' &middot; ') + '</div>';
+                    if (IS_SVC && D.popupPrice && p.price) {
+                        html += '<div class="plm-popup-price" style="color:' + (D.popupBtnColor || COLOR) + '">&euro; ' + escHtml(p.price) + '</div>';
+                    }
+                    if ((IS_SVC ? D.popupLink : D.popupLink) && p.url) {
+                        var btnText = IS_SVC ? (D.popupBtnText || 'Scopri') : 'Dettagli';
+                        var btnBg = IS_SVC ? (D.popupBtnColor || COLOR) : COLOR;
+                        html += '<a class="plm-popup-link" href="' + p.url + '" style="background:' + btnBg + '">' + escHtml(btnText) + '</a>';
+                    }
+                    html += '</div>';
+                    return html;
+                }
+
+                ITEMS.forEach(function(p) {
+                    var mk = L.marker([p.lat, p.lng], { icon: icon });
+                    mk.bindPopup(buildPopup(p));
+                    mk.on('click', function(){ highlightCard(p.id); scrollToCard(p.id); });
+                    markerMap[p.id] = mk;
+                    if (clusterGroup) clusterGroup.addLayer(mk);
+                    else mk.addTo(map);
+                });
+                if (clusterGroup) map.addLayer(clusterGroup);
+
+                function fitBoundsToVisible(items) {
+                    if (!items.length || !D.fitBounds) return;
+                    if (items.length === 1) { map.setView([items[0].lat, items[0].lng], 15); return; }
+                    var b = items.map(function(p){ return [p.lat, p.lng]; });
+                    map.fitBounds(b, { padding: [40, 40], maxZoom: 16 });
+                }
+                fitBoundsToVisible(ITEMS);
+
+                function haversine(la1, ln1, la2, ln2) {
+                    var R = 6371, dLat = (la2-la1)*Math.PI/180, dLng = (ln2-ln1)*Math.PI/180;
+                    var a = Math.sin(dLat/2)*Math.sin(dLat/2) + Math.cos(la1*Math.PI/180)*Math.cos(la2*Math.PI/180)*Math.sin(dLng/2)*Math.sin(dLng/2);
+                    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+                }
+
+                function getFilters() {
+                    var f = {};
+                    root.querySelectorAll('[data-filter]').forEach(function(el) {
+                        var k = el.getAttribute('data-filter');
+                        if (el.type === 'range') f[k] = parseFloat(el.value) || 0;
+                        else f[k] = (el.value || '').trim();
+                    });
+                    return f;
+                }
+
+                function rangeTest(val, range) {
+                    if (!range) return true;
+                    var parts = range.split('-');
+                    if (parts.length !== 2) return true;
+                    var min = parseFloat(parts[0]), max = parseFloat(parts[1]);
+                    var v = parseFloat(val);
+                    return v >= min && v <= max;
+                }
+
+                function applyFilters() {
+                    var f = getFilters();
+                    var radius = f.radius || D.radiusDefault;
+
+                    filtered = ITEMS.filter(function(p) {
+                        if (geocoded && f.location && D.showRadius) {
+                            if (haversine(geocoded.lat, geocoded.lng, p.lat, p.lng) > radius) return false;
+                        }
+                        if (f.taxonomy && (!p.terms || p.terms.indexOf(f.taxonomy) === -1)) return false;
+                        if (IS_SVC) {
+                            if (f.altitude && p.altitude !== undefined && !rangeTest(p.altitude, f.altitude)) return false;
+                            if (f.valley && p.valley !== f.valley) return false;
+                            if (f.guests && p.capacity !== undefined && !rangeTest(p.capacity, f.guests)) return false;
+                            if (f.price && p.price !== undefined && !rangeTest(p.price, f.price)) return false;
+                            if (f.bedrooms) {
+                                if (f.bedrooms === '4+') { if (!(p.bedrooms >= 4)) return false; }
+                                else if (parseInt(p.bedrooms, 10) !== parseInt(f.bedrooms, 10)) return false;
+                            }
+                            if (activeAmenities.length && p.amenities) {
+                                for (var i = 0; i < activeAmenities.length; i++) {
+                                    if (p.amenities.indexOf(activeAmenities[i]) === -1) return false;
+                                }
+                            } else if (activeAmenities.length && !p.amenities) return false;
+                        }
+                        return true;
+                    });
+                    applySort();
+                    page = 1;
+                    updateMap();
+                    renderList();
+                    updateCount();
+                    updatePagination();
+                }
+
+                function applySort() {
+                    var s = sortEl ? sortEl.value : (D.sortDefault || 'default');
+                    if (s === 'title_asc') filtered.sort(function(a,b){ return (a.title||'').localeCompare(b.title||''); });
+                    else if (s === 'title_desc') filtered.sort(function(a,b){ return (b.title||'').localeCompare(a.title||''); });
+                    else if (s === 'newest') filtered.sort(function(a,b){ return (b.id||0) - (a.id||0); });
+                    else if (s === 'distance') {
+                        var ref = geocoded || { lat: CENTER[0], lng: CENTER[1] };
+                        filtered.sort(function(a,b){ return haversine(ref.lat, ref.lng, a.lat, a.lng) - haversine(ref.lat, ref.lng, b.lat, b.lng); });
+                    }
+                }
+
+                function updateMap() {
+                    var vis = {};
+                    filtered.forEach(function(p){ vis[p.id] = true; });
+                    if (clusterGroup) {
+                        clusterGroup.clearLayers();
+                        ITEMS.forEach(function(p){ if (vis[p.id]) clusterGroup.addLayer(markerMap[p.id]); });
+                    } else {
+                        ITEMS.forEach(function(p){
+                            var m = markerMap[p.id];
+                            if (vis[p.id]) { if (!map.hasLayer(m)) m.addTo(map); }
+                            else { if (map.hasLayer(m)) map.removeLayer(m); }
+                        });
+                    }
+                    fitBoundsToVisible(filtered);
+                }
+
+                function renderList() {
+                    if (!listEl) return;
+                    var start = (page - 1) * PER_PAGE, end = start + PER_PAGE;
+                    var items = filtered.slice(start, end);
+                    if (!items.length) {
+                        listEl.innerHTML = '<div class="plm-no-results">'
+                          + '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>'
+                          + '<div class="plm-no-results-title">Nessun risultato trovato</div>'
+                          + '<div style="font-size:13px">Prova a modificare i filtri</div></div>';
+                        return;
+                    }
+                    var html = '';
+                    items.forEach(function(p) {
+                        html += '<a href="' + (p.url || '#') + '" class="plm-card' + (highlightId === p.id ? ' is-highlighted' : '') + '" data-prop-id="' + escHtml(p.id) + '">';
+                        html += '<div class="plm-card-img">';
+                        if (p.image) html += '<img src="' + p.image + '" alt="' + escHtml(p.title) + '" loading="lazy" decoding="async" />';
+                        else html += '<div class="plm-card-img-ph" aria-hidden="true">&#127968;</div>';
+                        html += '</div><div class="plm-card-body">';
+                        html += '<h4 class="plm-card-title">' + escHtml(p.title) + '</h4>';
+                        var sub = [];
+                        if (p.valley) sub.push(escHtml(p.valley));
+                        else if (p.address) sub.push(escHtml(p.address));
+                        if (p.altitude !== undefined) sub.push((+p.altitude).toLocaleString('it-IT') + ' m');
+                        if (sub.length) html += '<p class="plm-card-sub">' + sub.join(' &middot; ') + '</p>';
+                        if (IS_SVC && D.popupSpecs) {
+                            var specs = [];
+                            if (p.bedrooms) specs.push('<span>' + p.bedrooms + ' cam.</span>');
+                            if (p.bathrooms) specs.push('<span>' + p.bathrooms + ' bagni</span>');
+                            if (p.sqm) specs.push('<span>' + p.sqm + ' m\u00B2</span>');
+                            if (specs.length) html += '<div class="plm-card-specs">' + specs.join('') + '</div>';
+                        }
+                        var priceVal = p.price || p.price_night;
+                        if (priceVal) html += '<div class="plm-card-price">&euro; ' + escHtml(priceVal) + (IS_SVC ? ' / notte' : '') + '</div>';
+                        html += '</div></a>';
+                    });
+                    listEl.innerHTML = html;
+
+                    listEl.querySelectorAll('.plm-card').forEach(function(card) {
+                        card.addEventListener('click', function(e) {
+                            e.preventDefault();
+                            var id = card.getAttribute('data-prop-id');
+                            var numId = parseInt(id, 10);
+                            var mk = markerMap[numId] != null ? markerMap[numId] : markerMap[id];
+                            if (mk) {
+                                map.panTo(mk.getLatLng(), { animate: true, duration: 0.3 });
+                                map.setZoom(Math.max(map.getZoom(), 15));
+                                mk.openPopup();
+                                highlightCard(numId);
+                            }
+                            var link = card.getAttribute('href');
+                            if (link && link !== '#') setTimeout(function(){ window.location.href = link; }, 600);
+                        });
+                    });
+                }
+
+                function updateCount() {
+                    if (!countEl) return;
+                    var n = filtered.length;
+                    countEl.innerHTML = '<strong>' + n + '</strong> Risultat' + (n === 1 ? 'o' : 'i');
+                }
+
+                function updatePagination() {
+                    if (!pagEl) return;
+                    var total = Math.max(1, Math.ceil(filtered.length / PER_PAGE));
+                    var prev = pagEl.querySelector('[data-page="prev"]');
+                    var next = pagEl.querySelector('[data-page="next"]');
+                    if (prev) prev.disabled = page <= 1;
+                    if (next) next.disabled = page >= total;
+                    if (pageInfoEl) pageInfoEl.textContent = page + ' / ' + total;
+                }
+
+                function highlightCard(id) {
+                    highlightId = id;
+                    if (!listEl) return;
+                    listEl.querySelectorAll('.plm-card').forEach(function(c) {
+                        c.classList.toggle('is-highlighted', String(c.getAttribute('data-prop-id')) === String(id));
+                    });
+                }
+                function scrollToCard(id) {
+                    for (var i = 0; i < filtered.length; i++) {
+                        if (String(filtered[i].id) === String(id)) {
+                            var tp = Math.floor(i / PER_PAGE) + 1;
+                            if (tp !== page) { page = tp; renderList(); updatePagination(); }
+                            break;
+                        }
+                    }
+                    setTimeout(function(){
+                        if (!listEl) return;
+                        var c = listEl.querySelector('[data-prop-id="' + id + '"]');
+                        if (c) { c.scrollIntoView({ behavior:'smooth', block:'center' }); highlightCard(id); }
+                    }, 100);
+                }
+
+                /* Geocoding */
+                function geocode(q, cb) {
+                    if (!q) { geocoded = null; cb(); return; }
+                    fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q=' + encodeURIComponent(q))
+                        .then(function(r){ return r.json(); })
+                        .then(function(data){
+                            if (data && data.length) geocoded = { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) };
+                            else geocoded = null;
+                            cb();
+                        })
+                        .catch(function(){ geocoded = null; cb(); });
+                }
+
+                /* Autocomplete */
+                var acList = document.getElementById(UID + '-ac');
+                var locInput = root.querySelector('[data-filter="location"]');
+                var acTimer, acIdx = -1;
+                function acShow(items) {
+                    if (!acList) return;
+                    if (!items.length) { acHide(); return; }
+                    acList.innerHTML = items.map(function(it){
+                        return '<li class="plm-ac-item" data-lat="' + it.lat + '" data-lng="' + it.lon + '">' + escHtml(it.display_name) + '</li>';
+                    }).join('');
+                    acList.classList.add('is-open'); acIdx = -1;
+                }
+                function acHide() { if (acList) { acList.classList.remove('is-open'); acList.innerHTML = ''; acIdx = -1; } }
+                function acSearch(q) {
+                    if (!q || q.length < 2) { acHide(); return; }
+                    fetch('https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&limit=5&q=' + encodeURIComponent(q))
+                        .then(function(r){ return r.json(); })
+                        .then(function(data){ acShow(data || []); })
+                        .catch(function(){ acHide(); });
+                }
+                if (locInput) {
+                    locInput.addEventListener('input', function(){
+                        clearTimeout(acTimer);
+                        var v = locInput.value.trim();
+                        acTimer = setTimeout(function(){ acSearch(v); }, 300);
+                    });
+                    locInput.addEventListener('keydown', function(e) {
+                        if (!acList || !acList.classList.contains('is-open')) return;
+                        var items = acList.querySelectorAll('.plm-ac-item');
+                        if (!items.length) return;
+                        if (e.key === 'ArrowDown') { e.preventDefault(); acIdx = Math.min(acIdx+1, items.length-1); items.forEach(function(it,i){ it.classList.toggle('is-active', i === acIdx); }); }
+                        else if (e.key === 'ArrowUp') { e.preventDefault(); acIdx = Math.max(acIdx-1, 0); items.forEach(function(it,i){ it.classList.toggle('is-active', i === acIdx); }); }
+                        else if (e.key === 'Enter') { e.preventDefault(); if (acIdx >= 0 && items[acIdx]) items[acIdx].click(); }
+                        else if (e.key === 'Escape') { acHide(); }
+                    });
+                    if (acList) {
+                        acList.addEventListener('click', function(e){
+                            var it = e.target.closest('.plm-ac-item');
+                            if (!it) return;
+                            var lat = parseFloat(it.getAttribute('data-lat'));
+                            var lng = parseFloat(it.getAttribute('data-lng'));
+                            geocoded = { lat: lat, lng: lng };
+                            locInput.value = it.textContent || '';
+                            acHide();
+                            try { map.setView([lat, lng], 13); } catch(e){}
+                            applyFilters();
+                        });
+                    }
+                    document.addEventListener('click', function(e) {
+                        if (!locInput.contains(e.target) && (!acList || !acList.contains(e.target))) acHide();
+                    });
+                }
+
+                /* Search button */
+                if (searchBtn) {
+                    searchBtn.addEventListener('click', function(){
+                        var v = locInput ? locInput.value.trim() : '';
+                        if (v) {
+                            searchBtn.disabled = true;
+                            var orig = searchBtn.textContent;
+                            searchBtn.textContent = 'Ricerca...';
+                            geocode(v, function(){
+                                searchBtn.disabled = false;
+                                searchBtn.textContent = orig;
+                                applyFilters();
+                            });
+                        } else {
+                            geocoded = null; applyFilters();
+                        }
+                    });
+                }
+
+                /* Reset */
+                if (resetBtn) {
+                    resetBtn.addEventListener('click', function(){
+                        root.querySelectorAll('[data-filter]').forEach(function(el) {
+                            if (el.type === 'range') {
+                                el.value = D.radiusDefault;
+                                var w = el.closest('.plm-radius-wrap');
+                                if (w) { var s = w.querySelector('.plm-radius-val'); if (s) s.textContent = D.radiusDefault + ' km'; }
+                            } else el.value = '';
+                        });
+                        root.querySelectorAll('.plm-amenity-pill.is-active').forEach(function(p){ p.classList.remove('is-active'); });
+                        activeAmenities = [];
+                        geocoded = null;
+                        if (sortEl) sortEl.value = D.sortDefault || 'default';
+                        filtered = ITEMS.slice();
+                        page = 1;
+                        updateMap(); renderList(); updateCount(); updatePagination();
+                    });
+                }
+
+                /* Sort */
+                if (sortEl) {
+                    sortEl.addEventListener('change', function(){ applySort(); page = 1; renderList(); updatePagination(); });
+                }
+
+                /* Radius slider label update */
+                var radiusInput = root.querySelector('[data-filter="radius"]');
+                if (radiusInput) {
+                    radiusInput.addEventListener('input', function(){
+                        var w = radiusInput.closest('.plm-radius-wrap');
+                        if (w) { var s = w.querySelector('.plm-radius-val'); if (s) s.textContent = radiusInput.value + ' km'; }
+                    });
+                }
+
+                /* Amenity toggles */
+                root.querySelectorAll('.plm-amenity-pill').forEach(function(pill) {
+                    pill.addEventListener('click', function(){
+                        var slug = pill.getAttribute('data-amenity');
+                        var idx = activeAmenities.indexOf(slug);
+                        if (idx >= 0) { activeAmenities.splice(idx, 1); pill.classList.remove('is-active'); }
+                        else { activeAmenities.push(slug); pill.classList.add('is-active'); }
+                    });
+                });
+
+                /* Taxonomy/filter change → live apply (select) */
+                root.querySelectorAll('.plm-filter-select').forEach(function(sel){
+                    sel.addEventListener('change', function(){ applyFilters(); });
+                });
+
+                /* Pagination */
+                if (pagEl) {
+                    pagEl.addEventListener('click', function(e) {
+                        var btn = e.target.closest('[data-page]');
+                        if (!btn || btn.disabled) return;
+                        var total = Math.max(1, Math.ceil(filtered.length / PER_PAGE));
+                        if (btn.getAttribute('data-page') === 'prev' && page > 1) page--;
+                        else if (btn.getAttribute('data-page') === 'next' && page < total) page++;
+                        renderList(); updatePagination();
+                        if (listEl) listEl.scrollTop = 0;
+                    });
+                }
+
+                /* View toggle */
+                root.querySelectorAll('.plm-view-btn').forEach(function(btn) {
+                    btn.addEventListener('click', function(){
+                        root.querySelectorAll('.plm-view-btn').forEach(function(b){ b.classList.remove('is-active'); });
+                        btn.classList.add('is-active');
+                        isGridView = btn.getAttribute('data-view') === 'grid';
+                        if (listEl) listEl.classList.toggle('plm-grid-view', isGridView);
+                    });
+                });
+
+                /* Fullscreen */
+                if (fsBtn) {
+                    fsBtn.addEventListener('click', function(){
+                        if (!document.fullscreenElement) {
+                            if (root.requestFullscreen) root.requestFullscreen();
+                            else if (root.webkitRequestFullscreen) root.webkitRequestFullscreen();
+                        } else {
+                            if (document.exitFullscreen) document.exitFullscreen();
+                            else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+                        }
+                    });
+                    document.addEventListener('fullscreenchange', function(){ setTimeout(function(){ try{ map.invalidateSize(); } catch(e){} }, 200); });
+                }
+
+                /* Initial render */
+                applyFilters();
+            }
+        })();
+        </script>
         <?php
         return ob_get_clean();
     }
