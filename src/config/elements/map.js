@@ -74,7 +74,7 @@ export default {
     map_position: 'left',
     map_width: '',
     filter_columns: '2',
-    filter_position: 'right',
+    filter_position: '',
     filter_width: '45',
     fullscreen_btn: true,
     view_mode: 'list',
@@ -180,16 +180,8 @@ export default {
     { type: 'separator', label: 'Filtri', condition: { field: 'mode', value: 'locations' } },
 
     { key: 'loc_show_filters', label: 'Mostra filtri tassonomia', type: 'toggle', condition: { field: 'mode', value: 'locations' } },
-    { key: 'loc_filter_style', label: 'Stile filtri', type: 'select', options: [
-      { value: 'pills', label: 'Pillole (pulsanti)' },
-      { value: 'minimal', label: 'Minimale (sottolineatura)' },
-      { value: 'dropdown', label: 'Menu a tendina' },
-    ], condition: { field: 'mode', value: 'locations' } },
-    { key: 'loc_filter_align', label: 'Allineamento filtri', type: 'select', options: [
-      { value: 'left', label: 'Sinistra' },
-      { value: 'center', label: 'Centro' },
-      { value: 'right', label: 'Destra' },
-    ], condition: { field: 'mode', value: 'locations' } },
+    // Nota: loc_filter_style e loc_filter_align (legacy) rimossi.
+    // La disposizione dei filtri è determinata dal "Layout split-view" più in basso.
 
     { type: 'separator', label: 'Popup', condition: { field: 'mode', value: 'locations' } },
 
@@ -226,20 +218,9 @@ export default {
     { key: 'svc_cluster', label: 'Raggruppa marker', type: 'toggle', condition: { field: 'mode', value: 'services' } },
 
     { type: 'separator', label: 'Filtri', condition: { field: 'mode', value: 'services' } },
-
-    { key: 'svc_filter_style', label: 'Stile filtri', type: 'select', options: [
-      { value: 'default', label: 'Default (pillole colorate)' },
-      { value: 'minimal', label: 'Minimale' },
-      { value: 'elegant', label: 'Elegante' },
-      { value: 'modern', label: 'Moderno' },
-      { value: 'compact', label: 'Compatto (dropdown)' },
-    ], condition: { field: 'mode', value: 'services' } },
-    { key: 'svc_filter_position', label: 'Posizione filtri', type: 'select', options: [
-      { value: 'top', label: 'Sopra la mappa' },
-      { value: 'bottom', label: 'Sotto la mappa' },
-      { value: 'left', label: 'Sinistra' },
-      { value: 'right', label: 'Destra' },
-    ], condition: { field: 'mode', value: 'services' } },
+    // Nota: svc_filter_style e svc_filter_position (legacy) rimossi dall'UI.
+    // La posizione del pannello filtri è ora controllata da "filter_position"
+    // più in basso nella sezione "Layout split-view".
 
     { key: 'svc_show_altitude_filter', label: 'Mostra filtro altitudine', type: 'toggle', condition: { field: 'mode', value: 'services' } },
     { key: 'svc_altitude_ranges', label: 'Fasce altitudine (min-max,...)', type: 'text', condition: { field: 'mode', value: 'services' } },
