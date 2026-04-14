@@ -90,7 +90,7 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         'map_position'         => 'left',
         'map_width'            => '55%',
         'filter_columns'       => 2,
-        'filter_position'      => 'right',   // top | bottom | left | right
+        'filter_position'      => '',         // top | bottom | left | right (empty = fall back to legacy svc_filter_position, then 'right')
         'filter_width'         => '280px',   // used when filter_position is left|right
         'btn_text'             => 'Ricerca',
         'btn_bg'               => '#2563EB',
@@ -407,7 +407,12 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         $map_id        = 'olo-plm-map-' . wp_rand( 10000, 99999 );
         $uid           = 'olo-plm-loc-' . wp_rand( 10000, 99999 );
         $map_pos       = ( ($s['map_position'] ?? 'left') === 'right' ) ? 'right' : 'left';
-        $filter_pos    = in_array( $s['filter_position'] ?? 'right', [ 'top', 'bottom', 'left', 'right' ], true ) ? $s['filter_position'] : 'right';
+        // filter_position: new setting takes precedence (when non-empty).
+        // Fall back to legacy svc_filter_position for BC, then default 'right'.
+        $filter_pos_raw = ! empty( $s['filter_position'] )
+            ? $s['filter_position']
+            : ( ! empty( $s['svc_filter_position'] ) ? $s['svc_filter_position'] : 'right' );
+        $filter_pos = in_array( $filter_pos_raw, [ 'top', 'bottom', 'left', 'right' ], true ) ? $filter_pos_raw : 'right';
         // Accept "280", "280px", "25%". Plain numbers → px. Clamp 120-500 for px, 10-60 for %.
         $fw_raw = trim( (string) ( $s['filter_width'] ?? '280px' ) );
         if ( preg_match( '/^(\d+)%$/', $fw_raw, $m ) ) {
@@ -809,7 +814,12 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         $map_id        = 'olo-plm-map-' . wp_rand( 10000, 99999 );
         $uid           = 'olo-plm-svc-' . wp_rand( 10000, 99999 );
         $map_pos       = ( ($s['map_position'] ?? 'left') === 'right' ) ? 'right' : 'left';
-        $filter_pos    = in_array( $s['filter_position'] ?? 'right', [ 'top', 'bottom', 'left', 'right' ], true ) ? $s['filter_position'] : 'right';
+        // filter_position: new setting takes precedence (when non-empty).
+        // Fall back to legacy svc_filter_position for BC, then default 'right'.
+        $filter_pos_raw = ! empty( $s['filter_position'] )
+            ? $s['filter_position']
+            : ( ! empty( $s['svc_filter_position'] ) ? $s['svc_filter_position'] : 'right' );
+        $filter_pos = in_array( $filter_pos_raw, [ 'top', 'bottom', 'left', 'right' ], true ) ? $filter_pos_raw : 'right';
         // Accept "280", "280px", "25%". Plain numbers → px. Clamp 120-500 for px, 10-60 for %.
         $fw_raw = trim( (string) ( $s['filter_width'] ?? '280px' ) );
         if ( preg_match( '/^(\d+)%$/', $fw_raw, $m ) ) {
