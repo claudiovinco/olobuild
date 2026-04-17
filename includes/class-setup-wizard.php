@@ -9,30 +9,44 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 class Olo_Setup_Wizard {
 
     public function init() {
-        // Check if setup is needed on admin_init
-        add_action( 'admin_init', [ $this, 'maybe_redirect_to_wizard' ] );
-
-        // Register wizard page
+        // Register wizard page (no auto-redirect to avoid potential loops on restrictive installs)
         add_action( 'admin_menu', [ $this, 'register_wizard_page' ] );
+
+        // Show activation notice with link to wizard (safer than auto-redirect)
+        add_action( 'admin_notices', [ $this, 'show_activation_notice' ] );
 
         // AJAX handlers
         add_action( 'wp_ajax_olo_setup_install_theme', [ $this, 'ajax_install_theme' ] );
         add_action( 'wp_ajax_olo_setup_import_theme', [ $this, 'ajax_import_theme' ] );
         add_action( 'wp_ajax_olo_setup_skip', [ $this, 'ajax_skip' ] );
+
+        // Consume activation transient silently
+        add_action( 'admin_init', function() {
+            if ( get_transient( 'olo_activating' ) ) {
+                delete_transient( 'olo_activating' );
+            }
+        } );
     }
 
     /**
-     * Redirect to wizard on first activation.
+     * Show a dismissible admin notice after activation (replaces auto-redirect).
      */
-    public function maybe_redirect_to_wizard() {
+    public function show_activation_notice() {
+        if ( ! current_user_can( 'manage_options' ) ) return;
         if ( get_option( 'olo_setup_complete' ) ) return;
-        if ( get_transient( 'olo_activating' ) ) {
-            delete_transient( 'olo_activating' );
-            if ( ! isset( $_GET['page'] ) || $_GET['page'] !== 'olo-setup' ) {
-                wp_safe_redirect( admin_url( 'admin.php?page=olo-setup' ) );
-                exit;
-            }
-        }
+        if ( isset( $_GET['page'] ) && $_GET['page'] === 'olo-setup' ) return;
+
+        $wizard_url = admin_url( 'admin.php?page=olo-setup' );
+        ?>
+        <div class="notice notice-info is-dismissible">
+            <p>
+                <strong>Olobuild</strong> — <?php esc_html_e( 'Configurazione iniziale disponibile', 'olobuilder' ); ?>
+                <a href="<?php echo esc_url( $wizard_url ); ?>" class="button button-primary" style="margin-left:12px;">
+                    <?php esc_html_e( 'Avvia configurazione', 'olobuilder' ); ?>
+                </a>
+            </p>
+        </div>
+        <?php
     }
 
     /**

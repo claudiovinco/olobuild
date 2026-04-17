@@ -114,10 +114,12 @@ class Olo_Builder {
     }
 
     public function admin_menu() {
+        // Use 'manage_options' as primary capability — admins always have it.
+        // 'edit_posts' can be missing on sites with custom role plugins (Tutor LMS, etc.)
         add_menu_page(
             __( 'Olobuild', 'olobuilder' ),
             __( 'Olobuild', 'olobuilder' ),
-            'edit_posts',
+            'manage_options',
             'olobuilder',
             [ $this, 'render_dashboard_page' ],
             OLO_URL . 'assets/img/ob-menu-v2.png',
@@ -129,7 +131,7 @@ class Olo_Builder {
             'olobuilder',
             __( 'Dashboard', 'olobuilder' ),
             __( 'Dashboard', 'olobuilder' ),
-            'edit_posts',
+            'manage_options',
             'olobuilder',
             [ $this, 'render_dashboard_page' ]
         );
@@ -138,7 +140,7 @@ class Olo_Builder {
             'olobuilder',
             __( 'Gestione Template', 'olobuilder' ),
             __( 'Gestione Template', 'olobuilder' ),
-            'edit_posts',
+            'manage_options',
             'olobuilder-templates',
             [ $this, 'render_builder_page' ]
         );
