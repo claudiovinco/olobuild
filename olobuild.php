@@ -3,7 +3,7 @@
  * Plugin Name: Olobuild
  * Plugin URI:  https://olotheme.com
  * Description: Page builder professionale olonico con sistema a griglia (tile drag & drop).
- * Version:     3.7.3
+ * Version:     3.7.4
  * Author:      Claudio Vinco
  * Author URI:  https://clod.eu
  * Text Domain: olobuilder
@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'OLO_VERSION', '3.7.3' );
+define( 'OLO_VERSION', '3.7.4' );
 define( 'OLO_PATH', plugin_dir_path( __FILE__ ) );
 define( 'OLO_URL', plugin_dir_url( __FILE__ ) );
 
@@ -317,6 +317,8 @@ require_once OLO_PATH . 'includes/class-custom-code.php';
 require_once OLO_PATH . 'includes/class-form-submissions.php';
 require_once OLO_PATH . 'includes/class-maintenance-mode.php';
 require_once OLO_PATH . 'includes/class-analytics-tracking.php';
+require_once OLO_PATH . 'includes/class-diagnostics.php';
+Olo_Diagnostics::init();
 require_once OLO_PATH . 'includes/class-critical-css.php';
 require_once OLO_PATH . 'includes/class-ab-testing.php';
 require_once OLO_PATH . 'includes/class-cookie-consent.php';
@@ -337,6 +339,28 @@ require_once OLO_PATH . 'includes/class-tools.php';
 require_once OLO_PATH . 'includes/class-debug-bar.php';
 require_once OLO_PATH . 'includes/class-woo-template-integration.php';
 require_once OLO_PATH . 'includes/class-olo-builder.php';
+
+/**
+ * Safety net: ensure administrators always have the capabilities needed by Olobuild,
+ * even on sites where role-management plugins (Tutor LMS, Members, etc.) may have
+ * altered or removed default capabilities.
+ *
+ * Uses 'user_has_cap' filter which runs on every capability check — adds missing
+ * caps on-the-fly only for users with the 'administrator' role.
+ */
+add_filter( 'user_has_cap', function ( $allcaps, $caps, $args, $user ) {
+    if ( ! $user || empty( $user->roles ) || ! in_array( 'administrator', (array) $user->roles, true ) ) {
+        return $allcaps;
+    }
+    // Guarantee these caps for administrators (Olobuild menu requirements)
+    $required = [ 'manage_options', 'edit_posts', 'edit_pages', 'upload_files', 'switch_themes', 'unfiltered_html' ];
+    foreach ( $required as $cap ) {
+        if ( empty( $allcaps[ $cap ] ) ) {
+            $allcaps[ $cap ] = true;
+        }
+    }
+    return $allcaps;
+}, 10, 4 );
 
 // Activation hook
 register_activation_hook( __FILE__, function () {
