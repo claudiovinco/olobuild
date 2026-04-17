@@ -39,8 +39,10 @@ class Olo_Setup_Wizard {
      * Register hidden admin page for the wizard.
      */
     public function register_wizard_page() {
+        // Use 'options.php' as parent to avoid WP 6.x "Unauthorized" bug with parent=null
+        // The page is still hidden from the menu (no visible link)
         add_submenu_page(
-            null, // Hidden
+            'options.php',
             'Olobuild Setup',
             'Olobuild Setup',
             'manage_options',
