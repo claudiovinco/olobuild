@@ -288,6 +288,31 @@
     if (dropIndicator) dropIndicator.style.display = 'none';
   }
 
+  /**
+   * Send a snapshot of section/column bounding boxes to the parent.
+   * The parent uses this for synchronous hit-testing during drag.
+   */
+  function sendLayoutSnapshot() {
+    var grid = root.querySelector('[data-olo-zone="body"] .olo-frontend-grid') || root.querySelector('.olo-frontend-grid');
+    if (!grid) { post('olo:layout-snapshot', { sections: [], columns: [] }); return; }
+
+    var sectionEls = grid.querySelectorAll(':scope > [data-olo-tile-id]');
+    var sects = [];
+    for (var i = 0; i < sectionEls.length; i++) {
+      var r = sectionEls[i].getBoundingClientRect();
+      sects.push({ id: sectionEls[i].getAttribute('data-olo-tile-id'), top: r.top, bottom: r.bottom, left: r.left, right: r.right, index: i });
+    }
+
+    var columnEls = root.querySelectorAll('[data-olo-tile-type="column"]');
+    var cols = [];
+    for (var j = 0; j < columnEls.length; j++) {
+      var cr = columnEls[j].getBoundingClientRect();
+      cols.push({ id: columnEls[j].getAttribute('data-olo-tile-id'), top: cr.top, bottom: cr.bottom, left: cr.left, right: cr.right });
+    }
+
+    post('olo:layout-snapshot', { sections: sects, columns: cols });
+  }
+
   // ── Height observer ──
 
   var resizeObserver = null;
@@ -390,6 +415,12 @@
         delete window[keys[i]];
       }
     }
+    // Destroy existing Leaflet map instances to prevent "already initialized" errors
+    root.querySelectorAll('.olo-map-canvas, [id^="olo-map-"]').forEach(function(el) {
+      if (el._leaflet_id) {
+        try { el._leaflet = null; delete el._leaflet_id; } catch(e) {}
+      }
+    });
   }
 
   // ── Overlay controls: "+" add buttons between sections ──
@@ -704,16 +735,26 @@
   }
 
   function executeInlineScripts(container) {
-    var scripts = container.querySelectorAll('script');
+    var scripts = container.querySelectorAll('script:not([data-olo-executed])');
     for (var i = 0; i < scripts.length; i++) {
       var oldScript = scripts[i];
+      // Skip non-JS scripts (JSON-LD, application/json, etc.)
+      var scriptType = (oldScript.getAttribute('type') || '').toLowerCase();
+      if (scriptType && scriptType !== 'text/javascript' && scriptType !== 'module') {
+        continue;
+      }
       var newScript = document.createElement('script');
+      newScript.setAttribute('data-olo-executed', '1');
       if (oldScript.src) {
         newScript.src = oldScript.src;
       } else {
         newScript.textContent = oldScript.textContent;
       }
-      oldScript.parentNode.replaceChild(newScript, oldScript);
+      try {
+        oldScript.parentNode.replaceChild(newScript, oldScript);
+      } catch (e) {
+        // Silently skip scripts that fail to execute
+      }
     }
   }
 
@@ -773,10 +814,11 @@
             if (el) el.classList.add('olo-builder-selected');
           }
         }, 50);
-        // Report height
+        // Report height + layout snapshot for drag-and-drop hit-testing
         setTimeout(function() {
           post('olo:height', { height: root.scrollHeight });
-        }, 100);
+          sendLayoutSnapshot();
+        }, 150);
         break;
 
       case 'olo:patch':
@@ -856,30 +898,28 @@
         break;
 
       case 'olo:drag-over':
-        // Show drop indicator at the closest insertion point
-        if (d.y !== undefined) {
-          var sections = root.querySelectorAll('[data-olo-tile-id]');
-          var closest = null;
-          var closestDist = Infinity;
-          sections.forEach(function(s) {
-            var rect = s.getBoundingClientRect();
-            var midY = rect.top + rect.height / 2;
-            var dist = Math.abs(d.y - midY);
-            if (dist < closestDist) {
-              closestDist = dist;
-              closest = s;
-            }
-          });
-          if (closest) {
-            var rect = closest.getBoundingClientRect();
-            var indicator = getDropIndicator();
-            var insertBefore = d.y < rect.top + rect.height / 2;
-            indicator.style.display = 'block';
-            indicator.style.top = (insertBefore ? rect.top : rect.bottom) + 'px';
-            indicator.style.left = '0';
-            indicator.style.width = '100%';
-          }
+        // Visual feedback only — hit-testing is done parent-side via layout snapshot
+        var ind = getDropIndicator();
+        if (d.y !== undefined && d.colRect) {
+          // Highlight target column
+          var cr = d.colRect;
+          var w = (cr.right || 0) - (cr.left || 0);
+          var h = (cr.bottom || 0) - (cr.top || 0);
+          ind.style.cssText = 'display:block;position:fixed;z-index:999999;pointer-events:none;' +
+            'top:' + cr.top + 'px;left:' + cr.left + 'px;width:' + w + 'px;height:' + h + 'px;' +
+            'border:2px dashed rgba(37,99,235,0.6);border-radius:6px;background:rgba(37,99,235,0.06);' +
+            'transition:top .15s ease,left .15s ease,width .15s ease,height .15s ease;';
+        } else if (d.y !== undefined && typeof d.lineY === 'number') {
+          // Show insertion line between sections
+          ind.style.cssText = 'display:block;position:fixed;z-index:999999;pointer-events:none;' +
+            'top:' + (d.lineY - 2) + 'px;left:5%;width:90%;height:4px;' +
+            'background:linear-gradient(90deg,transparent,#2563EB 10%,#2563EB 90%,transparent);' +
+            'border-radius:2px;box-shadow:0 0 12px rgba(37,99,235,0.4);transition:top .15s ease;';
         }
+        break;
+
+      case 'olo:request-layout':
+        sendLayoutSnapshot();
         break;
 
       case 'olo:drag-leave':

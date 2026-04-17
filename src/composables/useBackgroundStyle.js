@@ -85,8 +85,14 @@ export function buildBgStyle(bg) {
     return { backgroundColor: '#1a1a2e' };
   }
 
-  if (bg.type === 'pattern') {
-    return getPatternCSS(bg.pattern_type || 'dots', bg.pattern_color || '#000000', bg.pattern_bg_color || '#ffffff', bg.pattern_size || 20, bg.pattern_opacity ?? 1);
+  if (bg.type === 'pattern' && bg.pattern_type) {
+    return getPatternCSS(
+      bg.pattern_type,
+      bg.pattern_color || '#000000',
+      bg.pattern_bg_color || '#ffffff',
+      bg.pattern_size || 20,
+      (bg.pattern_opacity ?? 50) / 100
+    );
   }
 
   if (bg.type === 'gallery') {

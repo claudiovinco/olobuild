@@ -365,62 +365,38 @@
 
     <!-- Pattern -->
     <div v-if="bg.type === 'pattern'" class="mb-space-y-3">
-      <!-- Pattern grid -->
       <div>
         <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Pattern') }}</label>
-        <div class="mb-grid mb-grid-cols-4 mb-gap-1 mb-max-h-48 mb-overflow-y-auto mb-pr-1">
-          <button
-            v-for="p in patternList"
-            :key="p.value"
-            @click="updateField('pattern_type', p.value)"
-            :title="p.label"
-            :class="[
-              'mb-h-12 mb-rounded mb-border mb-transition-all mb-cursor-pointer',
-              bg.pattern_type === p.value
-                ? 'mb-border-primary-500 mb-ring-1 mb-ring-primary-500'
-                : 'mb-border-gray-600 hover:mb-border-gray-400'
-            ]"
-            :style="getPatternPreviewStyle(p.value)"
-          ></button>
+        <select
+          :value="bg.pattern_type || 'dots'"
+          @change="updateField('pattern_type', $event.target.value)"
+          class="mb-w-full mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded mb-px-2 mb-py-1.5 mb-text-xs mb-text-white"
+        >
+          <optgroup v-for="group in patternGroups" :key="group.label" :label="group.label">
+            <option v-for="p in group.items" :key="p.value" :value="p.value">{{ p.label }}</option>
+          </optgroup>
+        </select>
+      </div>
+      <!-- Preview -->
+      <div class="mb-h-16 mb-rounded mb-border mb-border-gray-600" :style="patternPreviewStyle"></div>
+      <div class="mb-grid mb-grid-cols-2 mb-gap-2">
+        <div>
+          <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Colore pattern') }}</label>
+          <FieldColor :modelValue="bg.pattern_color || '#000000'" @update:modelValue="updateField('pattern_color', $event)" />
+        </div>
+        <div>
+          <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Colore sfondo') }}</label>
+          <FieldColor :modelValue="bg.pattern_bg_color || '#ffffff'" @update:modelValue="updateField('pattern_bg_color', $event)" />
         </div>
       </div>
-      <!-- Pattern color -->
       <div>
-        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Colore pattern') }}</label>
-        <FieldColor
-          :modelValue="bg.pattern_color || '#000000'"
-          @update:modelValue="updateField('pattern_color', $event)"
-        />
+        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Dimensione') }} ({{ bg.pattern_size || 20 }}px)</label>
+        <input type="range" :value="bg.pattern_size || 20" @input="updateField('pattern_size', parseInt($event.target.value))" min="8" max="100" step="1" class="mb-w-full" />
       </div>
-      <!-- Background color -->
       <div>
-        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Colore sfondo') }}</label>
-        <FieldColor
-          :modelValue="bg.pattern_bg_color || '#ffffff'"
-          @update:modelValue="updateField('pattern_bg_color', $event)"
-        />
+        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Opacità') }} ({{ bg.pattern_opacity ?? 50 }}%)</label>
+        <input type="range" :value="bg.pattern_opacity ?? 50" @input="updateField('pattern_opacity', parseInt($event.target.value))" min="5" max="100" step="5" class="mb-w-full" />
       </div>
-      <!-- Size -->
-      <div>
-        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Dimensione') }}</label>
-        <div class="mb-flex mb-items-center mb-gap-2">
-          <input type="range" :value="bg.pattern_size || 20" @input="updateField('pattern_size', parseInt($event.target.value))" min="5" max="100" step="1" class="mb-flex-1" />
-          <span class="mb-text-xs mb-text-gray-400 mb-w-10 mb-text-right">{{ bg.pattern_size || 20 }}px</span>
-        </div>
-      </div>
-      <!-- Opacity -->
-      <div>
-        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Opacità') }}</label>
-        <div class="mb-flex mb-items-center mb-gap-2">
-          <input type="range" :value="Math.round((bg.pattern_opacity ?? 1) * 100)" @input="updateField('pattern_opacity', parseInt($event.target.value) / 100)" min="0" max="100" step="5" class="mb-flex-1" />
-          <span class="mb-text-xs mb-text-gray-400 mb-w-10 mb-text-right">{{ Math.round((bg.pattern_opacity ?? 1) * 100) }}%</span>
-        </div>
-      </div>
-      <!-- Pattern preview -->
-      <div
-        class="mb-h-16 mb-rounded-md mb-border mb-border-gray-600"
-        :style="getPatternPreviewStyle(bg.pattern_type || 'dots', bg.pattern_color, bg.pattern_bg_color, bg.pattern_size, bg.pattern_opacity)"
-      ></div>
     </div>
 
     <!-- Overlay (for all types except none) -->
@@ -522,6 +498,28 @@ const types = [
   { value: 'gallery', label: 'Galleria' },
 ];
 
+// Pattern groups for select optgroup
+const patternGroups = [
+  { label: 'Linee', items: patternList.filter(p => ['horizontal-lines','vertical-lines','diagonal-lines','diagonal-lines-reverse','crosshatch','diagonal-crosshatch'].includes(p.value)) },
+  { label: 'Punti', items: patternList.filter(p => ['dots','dots-large','dots-grid','polka-dots'].includes(p.value)) },
+  { label: 'Geometrici', items: patternList.filter(p => ['checkerboard','triangles','diamonds','hexagons','zigzag','chevrons','herringbone'].includes(p.value)) },
+  { label: 'Onde & Organici', items: patternList.filter(p => ['waves','wavy-lines','scales','circles','concentric-circles'].includes(p.value)) },
+  { label: 'Texture', items: patternList.filter(p => ['carbon-fiber','graph-paper','lined-paper','blueprint','noise','brick','wood-grain'].includes(p.value)) },
+  { label: 'Decorativi', items: patternList.filter(p => ['stars','crosses','plus-signs','hearts'].includes(p.value)) },
+];
+
+const patternPreviewStyle = computed(() => {
+  const b = bg.value;
+  if (b.type !== 'pattern') return {};
+  return getPatternCSS(
+    b.pattern_type || 'dots',
+    b.pattern_color || '#000000',
+    b.pattern_bg_color || '#ffffff',
+    b.pattern_size || 20,
+    (b.pattern_opacity ?? 50) / 100
+  );
+});
+
 const bg = computed(() => ({ ...defaultBg, ...props.modelValue }));
 
 const solidPreview = computed(() => {
@@ -577,10 +575,6 @@ const gradientPreview = computed(() => {
 
 function updateField(key, value) {
   emit('update:modelValue', { ...bg.value, [key]: value });
-}
-
-function getPatternPreviewStyle(type, color, bgColor, size, opacity) {
-  return getPatternCSS(type || 'dots', color || '#000000', bgColor || '#ffffff', size || 20, opacity ?? 1);
 }
 
 function pickBgImage() {

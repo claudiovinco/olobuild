@@ -16,7 +16,7 @@ function deepClone(obj) { return JSON.parse(JSON.stringify(obj)); }
 export function useIframeBridge(iframeRef) {
   const tilesStore = useTilesStore();
   const builderStore = useBuilderStore();
-  const { handleDropFromSidebar } = useDragDrop();
+  const { handleDropFromSidebar, handleDropIntoColumn } = useDragDrop();
   const iframeReady = ref(false);
   const iframeHeight = ref(800);
 
@@ -51,7 +51,6 @@ export function useIframeBridge(iframeRef) {
       const tpl = builderStore.currentTemplate;
       if (tpl && tpl.type === 'single') {
         body.template_type = 'single';
-        // Extract post_type from template settings or conditions
         body.post_type = tpl.settings?.single_post_type || tpl.settings?.post_type || tpl.post_type || 'post';
         if (tpl.settings?.preview_post_id) {
           body.preview_post_id = tpl.settings.preview_post_id;
@@ -217,6 +216,10 @@ export function useIframeBridge(iframeRef) {
         }
         break;
 
+      case 'olo:layout-snapshot':
+        builderStore.iframeLayout = { sections: d.sections || [], columns: d.columns || [] };
+        break;
+
       case 'olo:add-section':
         if (d.index !== undefined) {
           const openInsertPanel = window.__oloOpenInsertPanel;
@@ -245,7 +248,6 @@ export function useIframeBridge(iframeRef) {
 
       case 'olo:add-column':
         if (d.tileId) {
-          // Find the row containing this tile and add a column after the current one
           tilesStore.addColumnForTile(d.tileId);
           builderStore.isDirty = true;
         }
@@ -295,9 +297,18 @@ export function useIframeBridge(iframeRef) {
     }
   });
 
+  // Use tilesVersion counter instead of deep watchers for better performance
+  // tilesVersion is incremented on structural changes (add/remove/move)
+  watch(() => tilesStore.tilesVersion, () => {
+    onTilesChange(tilesStore.canvasTiles);
+    if (iframeReady.value) scheduleFullRender();
+  });
+
+  // Still need deep watch on canvasTiles for property-level changes (settings, style)
+  // but throttled with a shallow check first
   watch(() => tilesStore.canvasTiles, onTilesChange, { deep: true });
 
-  // Header/footer changes → full re-render
+  // Header/footer/page settings → full re-render (deep needed for setting edits)
   watch(() => tilesStore.headerTiles, () => {
     if (iframeReady.value) scheduleFullRender();
   }, { deep: true });

@@ -51,24 +51,26 @@
           </button>
         </div>
 
-        <!-- Settings search (all tabs) -->
-        <div class="mb-relative mb-mb-3">
-          <svg class="mb-absolute mb-left-2 mb-top-1/2 -mb-translate-y-1/2 mb-text-gray-500 mb-pointer-events-none" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-          <input
-            v-model="inspectorSearch"
-            type="text"
-            :placeholder="t('Cerca impostazioni...')"
-            class="mb-w-full mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-md mb-pl-8 mb-pr-7 mb-py-1.5 mb-text-xs mb-text-gray-300 focus:mb-border-primary-500 mb-outline-none mb-transition-colors"
-          />
-          <button v-if="inspectorSearch" @click="inspectorSearch = ''" class="mb-absolute mb-right-2 mb-top-1/2 -mb-translate-y-1/2 mb-text-gray-500 hover:mb-text-gray-300 mb-text-sm">&times;</button>
+        <!-- Search settings -->
+        <div class="insp-search">
+          <svg class="insp-search-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          <input v-model="settingsSearch" class="insp-search-input" type="text" placeholder="Cerca impostazione..." />
+          <button v-if="settingsSearch" class="insp-search-clear" @click="settingsSearch = ''">&times;</button>
         </div>
 
         <!-- Tabs -->
-        <div class="mb-flex mb-gap-1 mb-mb-4 mb-bg-gray-700 mb-rounded-lg mb-p-0.5">
+        <div class="mb-flex mb-gap-1 mb-mb-4 mb-bg-gray-700 mb-rounded-lg mb-p-0.5" role="tablist" :aria-label="t('Inspector')">
           <button
             v-for="tab in tabs"
             :key="tab"
             @click="activeTab = tab"
+            @keydown.arrow-right.prevent="navigateTab(1)"
+            @keydown.arrow-left.prevent="navigateTab(-1)"
+            role="tab"
+            :id="'inspector-tab-' + tab"
+            :aria-selected="activeTab === tab"
+            :aria-controls="'inspector-panel-' + tab"
+            :tabindex="activeTab === tab ? 0 : -1"
             :class="[
               'mb-flex-1 mb-py-1.5 mb-text-xs mb-font-medium mb-rounded-md mb-transition-colors',
               activeTab === tab
@@ -81,7 +83,7 @@
         </div>
 
         <!-- ============ Content tab (data-driven) ============ -->
-        <div v-if="activeTab === 'Contenuto'" class="mb-space-y-3">
+        <div v-if="activeTab === 'Contenuto'" class="mb-space-y-3" role="tabpanel" id="inspector-panel-Contenuto" :aria-labelledby="'inspector-tab-Contenuto'">
           <!-- Custom editor: ProSlider -->
           <div v-if="elementDef?.customEditor === 'proslider'" class="mb-space-y-3">
             <p class="mb-text-xs mb-text-gray-400">Configura slide, livelli e animazioni nell'editor visuale.</p>
@@ -220,7 +222,7 @@
         </div>
 
         <!-- ============ Style tab ============ -->
-        <div v-else-if="activeTab === 'Stile'" class="mb-space-y-4">
+        <div v-else-if="activeTab === 'Stile'" class="mb-space-y-4" role="tabpanel" id="inspector-panel-Stile" :aria-labelledby="'inspector-tab-Stile'">
           <!-- Normal / Hover toggle -->
           <div class="mb-flex mb-gap-1 mb-bg-gray-700 mb-rounded-lg mb-p-0.5">
             <button
@@ -246,7 +248,7 @@
           <!-- === NORMAL state controls === -->
           <template v-if="styleState === 'normal'">
           <!-- Full Width -->
-          <div v-show="matchSearch('larghezza piena', 'full width')">
+          <div>
             <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
               <button
                 @click="updateStyle('full_width', !tileStyle.full_width)"
@@ -267,7 +269,7 @@
           </div>
 
           <!-- Tile Width -->
-          <InspectorField v-show="matchSearch('larghezza', 'width')"
+          <InspectorField
             :field="{ key: 'tile_width', label: t('Larghezza'), type: 'text', responsive: true, placeholder: t('auto (es. 25%, 200px)') }"
             :modelValue="tileStyle.tile_width || ''"
             :tileSettings="tileStyle"
@@ -276,7 +278,7 @@
           />
 
           <!-- Tile Max-Width -->
-          <InspectorField v-show="matchSearch('larghezza massima', 'max width')"
+          <InspectorField
             :field="{ key: 'tile_max_width', label: t('Larghezza massima'), type: 'text', responsive: true, placeholder: t('none (es. 600px, 80%)') }"
             :modelValue="tileStyle.tile_max_width || ''"
             :tileSettings="tileStyle"
@@ -285,7 +287,7 @@
           />
 
           <!-- Tile Min-Height -->
-          <InspectorField v-show="matchSearch('altezza minima', 'min height')"
+          <InspectorField
             :field="{ key: 'tile_min_height', label: t('Altezza minima'), type: 'text', responsive: true, placeholder: 'auto (es. 300px, 50vh)' }"
             :modelValue="tileStyle.tile_min_height || ''"
             :tileSettings="tileStyle"
@@ -294,7 +296,7 @@
           />
 
           <!-- Spacing breakpoint switcher -->
-          <div v-show="matchSearch('margine', 'padding', 'spaziatura', 'margin', 'spacing')" class="mb-flex mb-gap-1 mb-bg-gray-700 mb-rounded-lg mb-p-0.5 mb-mb-1">
+          <div class="mb-flex mb-gap-1 mb-bg-gray-700 mb-rounded-lg mb-p-0.5 mb-mb-1">
             <button
               v-for="bp in responsiveBreakpoints"
               :key="bp.key"
@@ -311,7 +313,7 @@
           </div>
 
           <!-- Margin -->
-          <div v-show="matchSearch('margine', 'margin', 'spaziatura')">
+          <div>
             <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300 mb-mb-2">{{ t('Margine (px)') }} <span v-if="spacingBp !== 'desktop'" class="mb-text-amber-400 mb-text-[10px]">{{ spacingBpLabel }}</span></label>
             <FieldSpacing
               :modelValue="marginObj"
@@ -321,7 +323,7 @@
           </div>
 
           <!-- Padding -->
-          <div v-show="matchSearch('padding', 'spaziatura')">
+          <div>
             <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300 mb-mb-2">{{ t('Padding (px)') }} <span v-if="spacingBp !== 'desktop'" class="mb-text-amber-400 mb-text-[10px]">{{ spacingBpLabel }}</span></label>
             <FieldSpacing
               :modelValue="paddingObj"
@@ -331,7 +333,7 @@
           </div>
 
           <!-- Background -->
-          <div v-show="matchSearch('sfondo', 'background', 'pattern', 'gradiente')">
+          <div>
             <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300 mb-mb-2">{{ t('Sfondo') }}</label>
             <BackgroundControls
               :modelValue="tileBg"
@@ -341,7 +343,7 @@
           </div>
 
           <!-- Border Radius -->
-          <div v-show="matchSearch('border radius', 'bordo', 'raggio', 'angoli')">
+          <div>
             <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300 mb-mb-2">Border radius (px)</label>
             <FieldBorderRadius
               :modelValue="tileStyle.border_radius || 0"
@@ -350,7 +352,7 @@
           </div>
 
           <!-- Border -->
-          <div v-show="matchSearch('bordo', 'border')">
+          <div>
             <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300 mb-mb-2">Bordo</label>
             <div class="mb-space-y-2">
               <div class="mb-flex mb-gap-2">
@@ -396,7 +398,7 @@
           </div>
 
           <!-- Box Shadow -->
-          <div v-show="matchSearch('ombra', 'shadow')">
+          <div>
             <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300 mb-mb-2">Ombra</label>
             <select
               :value="tileStyle.shadow || 'none'"
@@ -419,7 +421,7 @@
           </div>
 
           <!-- Opacity -->
-          <div v-show="matchSearch('opacità', 'opacity')">
+          <div>
             <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300 mb-mb-2">Opacità</label>
             <div class="mb-flex mb-items-center mb-gap-2">
               <input
@@ -434,7 +436,7 @@
           </div>
 
           <!-- Transform -->
-          <div v-show="matchSearch('trasformazione', 'transform')">
+          <div>
             <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300 mb-mb-2">Trasformazione</label>
             <FieldTransform
               :modelValue="tileStyle.transform || {}"
@@ -443,7 +445,7 @@
           </div>
 
           <!-- Text Shadow -->
-          <div v-show="matchSearch('ombra testo', 'text shadow')">
+          <div>
             <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300 mb-mb-2">Ombra testo</label>
             <div class="mb-flex mb-gap-2">
               <div class="mb-flex-1">
@@ -470,7 +472,7 @@
           </div>
 
           <!-- Backdrop Filter -->
-          <div v-show="matchSearch('filtro sfondo', 'glassmorphism', 'backdrop', 'blur')">
+          <div>
             <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300 mb-mb-2">Filtro sfondo (glassmorphism)</label>
             <div class="mb-space-y-2">
               <div class="mb-flex mb-items-center mb-gap-2">
@@ -495,7 +497,7 @@
           </div>
 
           <!-- Overflow -->
-          <div v-show="matchSearch('overflow')">
+          <div>
             <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300 mb-mb-2">Overflow</label>
             <select
               :value="tileStyle.overflow || 'visible'"
@@ -509,7 +511,7 @@
           </div>
 
           <!-- Mask -->
-          <div v-show="matchSearch('maschera', 'mask')">
+          <div>
             <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300 mb-mb-2">Maschera</label>
             <select
               :value="tileStyle.mask || 'none'"
@@ -885,7 +887,7 @@
         </div>
 
         <!-- ============ Advanced tab ============ -->
-        <div v-else class="mb-space-y-4">
+        <div v-else class="mb-space-y-4" role="tabpanel" id="inspector-panel-Avanzate" :aria-labelledby="'inspector-tab-Avanzate'">
           <!-- HTML ID -->
           <div>
             <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300 mb-mb-1">HTML ID</label>
@@ -1717,7 +1719,7 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue';
+import { ref, computed, watch, nextTick } from 'vue';
 import { t } from '@/i18n';
 import { useBuilderStore } from '@/stores/builder';
 import { useTilesStore } from '@/stores/tiles';
@@ -1770,13 +1772,19 @@ const builderStore = useBuilderStore();
 const tilesStore = useTilesStore();
 
 const activeTab = ref('Contenuto');
-const inspectorSearch = ref('');
-function matchSearch(...keywords) {
-  const q = inspectorSearch.value.trim().toLowerCase();
-  if (!q) return true;
-  return keywords.some(k => k.toLowerCase().includes(q));
-}
 const tabs = ['Contenuto', 'Stile', 'Avanzate'];
+const settingsSearch = ref('');
+
+// A11y: keyboard arrow navigation for tab buttons
+function navigateTab(dir) {
+  const idx = tabs.indexOf(activeTab.value);
+  const next = (idx + dir + tabs.length) % tabs.length;
+  activeTab.value = tabs[next];
+  nextTick(() => {
+    const btn = document.getElementById('inspector-tab-' + tabs[next]);
+    if (btn) btn.focus();
+  });
+}
 const showProSliderEditor = ref(false);
 const sides = ['top', 'right', 'bottom', 'left'];
 const viewports = [
@@ -1894,7 +1902,6 @@ const customWidthsEditing = ref(false);
 // Only sync from store when tile selection changes, NOT while user is editing
 watch(() => builderStore.selectedTileId, () => {
   customWidthsEditing.value = false;
-  inspectorSearch.value = '';
   const tile = selectedTile.value;
   customWidthsLocal.value = tile?.settings?.custom_widths || '';
   // ProGallery: backward compat migration (filmstrip → strip_coverflow, auto-detect family)
@@ -2037,6 +2044,11 @@ function isFieldVisible(field) {
   const settings = selectedTile.value?.settings || {};
   if (field.condition && !evaluateCondition(field.condition, settings)) return false;
   if (typeof field.show === 'function' && !field.show(settings)) return false;
+  // Search filter
+  const q = settingsSearch.value.trim().toLowerCase();
+  if (q && field.label) {
+    return field.label.toLowerCase().includes(q) || (field.key || '').toLowerCase().includes(q);
+  }
   return true;
 }
 
@@ -2060,17 +2072,7 @@ const groupedSections = computed(() => {
   if (current.fields.length > 0) {
     sections.push(current);
   }
-  // Filter by inspectorSearch
-  const q = inspectorSearch.value.trim().toLowerCase();
-  if (!q) return sections;
-  return sections.map(sec => ({
-    ...sec,
-    fields: sec.fields.filter(f => {
-      const label = (f.label || '').toLowerCase();
-      const key = (f.key || '').toLowerCase();
-      return label.includes(q) || key.includes(q);
-    }),
-  })).filter(sec => sec.fields.length > 0);
+  return sections;
 });
 
 /**
@@ -2305,6 +2307,9 @@ function stopAbStatsPolling() {
   if (abStatsTimer) { clearInterval(abStatsTimer); abStatsTimer = null; }
 }
 
+// styleState must be declared before this watcher (TDZ fix)
+const styleState = ref('normal');
+
 watch(() => builderStore.selectedTileId, () => {
   stopAbStatsPolling();
   loadAbTest();
@@ -2404,7 +2409,7 @@ function toggleBezier() {
 }
 
 // --- Hover styles ---
-const styleState = ref('normal');
+// styleState already declared above (before the selectedTileId watcher)
 
 const tileHover = computed(() => selectedTile.value?.style?.hover || {});
 const tileTransition = computed(() => selectedTile.value?.style?.transition || { duration: 300, easing: 'ease' });
@@ -2468,4 +2473,50 @@ function updateDynamicItemMap(itemMap) {
   transform: translateX(100%);
   opacity: 0;
 }
+
+/* Inspector search */
+.insp-search {
+  position: relative;
+  margin-bottom: 12px;
+}
+.insp-search-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6B7280;
+  pointer-events: none;
+}
+.insp-search-input {
+  width: 100%;
+  padding: 7px 28px 7px 30px;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+  background: rgba(255,255,255,0.06);
+  color: #E5E7EB;
+  font-size: 12px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s, background 0.2s;
+  box-sizing: border-box;
+}
+.insp-search-input::placeholder { color: #6B7280; }
+.insp-search-input:focus {
+  border-color: var(--olo-color-primary, #6366F1);
+  background: rgba(255,255,255,0.1);
+}
+.insp-search-clear {
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #6B7280;
+  font-size: 15px;
+  cursor: pointer;
+  padding: 2px 6px;
+  line-height: 1;
+}
+.insp-search-clear:hover { color: #D1D5DB; }
 </style>
