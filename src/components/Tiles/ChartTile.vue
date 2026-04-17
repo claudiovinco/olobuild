@@ -9,9 +9,21 @@
 
 <script setup>
 import { ref, computed, watch, onMounted, onBeforeUnmount, nextTick } from 'vue';
-import { Chart, registerables } from 'chart.js';
+// Tree-shake chart.js: import only needed modules instead of all registerables (~200KB savings)
+import {
+  Chart,
+  BarController, LineController, PieController, DoughnutController, RadarController, PolarAreaController,
+  CategoryScale, LinearScale, RadialLinearScale,
+  BarElement, LineElement, PointElement, ArcElement,
+  Title, Tooltip, Legend, Filler
+} from 'chart.js';
 
-Chart.register(...registerables);
+Chart.register(
+  BarController, LineController, PieController, DoughnutController, RadarController, PolarAreaController,
+  CategoryScale, LinearScale, RadialLinearScale,
+  BarElement, LineElement, PointElement, ArcElement,
+  Title, Tooltip, Legend, Filler
+);
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },

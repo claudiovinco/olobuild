@@ -7,6 +7,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Olo_Database {
 
     /**
+     * Singleton instance.
+     */
+    private static $instance = null;
+
+    /**
+     * Get singleton instance.
+     */
+    public static function instance() {
+        if ( null === self::$instance ) {
+            self::$instance = new self();
+        }
+        return self::$instance;
+    }
+
+    /**
      * Cache group for all Olo queries.
      */
     private $cache_group = 'olo';
@@ -53,7 +68,8 @@ class Olo_Database {
             content LONGTEXT NOT NULL,
             created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
             PRIMARY KEY (id),
-            KEY idx_template_id (template_id)
+            KEY idx_template_id (template_id),
+            KEY idx_template_created (template_id, created_at)
         ) $charset_collate;";
 
         // Form submissions table
@@ -77,7 +93,8 @@ class Olo_Database {
             tile_data longtext NOT NULL,
             created_at datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
             updated_at datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-            PRIMARY KEY (id)
+            PRIMARY KEY (id),
+            KEY idx_name (name)
         ) $charset_collate;";
 
         // A/B tests table
@@ -214,13 +231,17 @@ class Olo_Database {
 
     public function delete_template( $id ) {
         global $wpdb;
-        // Delete revisions first
+        // Use transaction to ensure atomicity (revisions + template deleted together)
+        $wpdb->query( 'START TRANSACTION' );
         $wpdb->delete( $this->table_revisions(), [ 'template_id' => $id ], [ '%d' ] );
         $result = $wpdb->delete( $this->table_templates(), [ 'id' => $id ], [ '%d' ] );
 
         if ( false !== $result ) {
+            $wpdb->query( 'COMMIT' );
             wp_cache_delete( 'olo_template_' . (int) $id, $this->cache_group );
             $this->flush_list_cache();
+        } else {
+            $wpdb->query( 'ROLLBACK' );
         }
 
         return $result;
@@ -385,5 +406,22 @@ class Olo_Database {
             $row['content'] = json_decode( $row['content'], true );
         }
         return $row;
+    }
+
+    /**
+     * Clean up orphaned revisions (revisions whose template no longer exists).
+     * Called by WP cron weekly.
+     */
+    public function cleanup_orphaned_revisions() {
+        global $wpdb;
+        $revisions_table = $this->table_revisions();
+        $templates_table = $this->table_templates();
+        $deleted = $wpdb->query(
+            "DELETE r FROM $revisions_table r LEFT JOIN $templates_table t ON r.template_id = t.id WHERE t.id IS NULL"
+        );
+        if ( $deleted > 0 ) {
+            error_log( '[Olobuild] Cleaned up ' . $deleted . ' orphaned revisions.' );
+        }
+        return $deleted;
     }
 }

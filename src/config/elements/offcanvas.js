@@ -1,0 +1,67 @@
+import { shadowField } from './_shared.js';
+
+export default {
+  type: 'offcanvas',
+  name: 'Off-Canvas',
+  icon: 'dashicons-slides',
+  category: 'interactive',
+  hasChildren: true,
+  defaults: {
+    trigger_selector: '',
+    position: 'right',
+    transition: 'slide',
+    width: '300',
+    height: '300',
+    overlay: true,
+    overlay_color: '#000000',
+    overlay_opacity: '50',
+    close_button: true,
+    close_color: '',
+    bg_color: '',
+    text_color: '',
+    trigger_text: 'Apri pannello',
+    trigger_icon: 'menu',
+    show_trigger: true,
+    shadow: 'none',
+  },
+  fields: [
+    { type: 'separator', label: 'Trigger' },
+    { key: 'show_trigger', label: 'Mostra pulsante trigger', type: 'toggle' },
+    { key: 'trigger_text', label: 'Testo trigger', type: 'text',
+      condition: { field: 'show_trigger', value: true } },
+    { key: 'trigger_icon', label: 'Icona trigger', type: 'icon',
+      condition: { field: 'show_trigger', value: true } },
+    { key: 'trigger_selector', label: 'Selettore CSS trigger esterno', type: 'text' },
+
+    { type: 'separator', label: 'Pannello' },
+    { key: 'position', label: 'Posizione', type: 'select', options: [
+      { value: 'left', label: 'Sinistra' },
+      { value: 'right', label: 'Destra' },
+      { value: 'top', label: 'Alto' },
+      { value: 'bottom', label: 'Basso' },
+    ]},
+    { key: 'transition', label: 'Transizione', type: 'select', options: [
+      { value: 'slide', label: 'Slide' },
+      { value: 'push', label: 'Push' },
+      { value: 'reveal', label: 'Reveal' },
+    ]},
+    { key: 'width', label: 'Larghezza (px)', type: 'range', min: 200, max: 600, step: 10 },
+    { key: 'height', label: 'Altezza (px)', type: 'range', min: 200, max: 600, step: 10 },
+    { key: 'bg_color', label: 'Sfondo pannello', type: 'color' },
+    { key: 'text_color', label: 'Colore testo', type: 'color' },
+
+    { type: 'separator', label: 'Overlay' },
+    { key: 'overlay', label: 'Mostra overlay', type: 'toggle' },
+    { key: 'overlay_color', label: 'Colore overlay', type: 'color',
+      condition: { field: 'overlay', value: true } },
+    { key: 'overlay_opacity', label: 'Opacita overlay (%)', type: 'range', min: 0, max: 100, step: 5,
+      condition: { field: 'overlay', value: true } },
+
+    { type: 'separator', label: 'Chiusura' },
+    { key: 'close_button', label: 'Pulsante chiudi', type: 'toggle' },
+    { key: 'close_color', label: 'Colore pulsante chiudi', type: 'color',
+      condition: { field: 'close_button', value: true } },
+
+    shadowField,
+  ],
+};

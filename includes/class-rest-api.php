@@ -579,6 +579,27 @@ class Olo_Rest_Api {
             'type'     => $request->get_param( 'type' ),
         ] );
         if ( isset( $result['items'] ) ) {
+            // Batch-fetch instance counts (posts using each template)
+            global $wpdb;
+            $instance_counts = [];
+            $rows = $wpdb->get_results(
+                "SELECT meta_value AS tpl_id, COUNT(*) AS cnt FROM {$wpdb->postmeta} WHERE meta_key = '_olo_template_id' GROUP BY meta_value"
+            );
+            foreach ( $rows as $row ) {
+                $instance_counts[ (int) $row->tpl_id ] = (int) $row->cnt;
+            }
+
+            foreach ( $result['items'] as &$item ) {
+                $tpl_id = isset( $item['id'] ) ? (int) $item['id'] : 0;
+                $item['instances'] = $instance_counts[ $tpl_id ] ?? 0;
+
+                // Resolve author display name
+                $author_id = isset( $item['author_id'] ) ? (int) $item['author_id'] : 0;
+                $user = $author_id ? get_userdata( $author_id ) : false;
+                $item['author_name'] = $user ? $user->display_name : '';
+            }
+            unset( $item );
+
             $result['items'] = array_map( [ $this, 'prepare_template' ], $result['items'] );
         }
         return rest_ensure_response( $result );
@@ -1164,9 +1185,11 @@ class Olo_Rest_Api {
             return new WP_Error( 'invalid_type', 'Solo file SVG sono supportati', [ 'status' => 400 ] );
         }
         $svg_content = file_get_contents( $file['tmp_name'] );
-        // Basic SVG sanitization - remove script tags
-        $svg_content = preg_replace( '/<script\b[^>]*>.*?<\/script>/is', '', $svg_content );
-        $svg_content = preg_replace( '/\bon\w+\s*=/i', 'data-removed=', $svg_content );
+        // Robust SVG sanitization (XSS, XXE, SSRF prevention)
+        $svg_content = olo_sanitize_svg( $svg_content );
+        if ( empty( $svg_content ) ) {
+            return new WP_Error( 'invalid_svg', 'Il file SVG non è valido o contiene elementi non sicuri', [ 'status' => 400 ] );
+        }
 
         $name = sanitize_file_name( pathinfo( $file['name'], PATHINFO_FILENAME ) );
         $name = preg_replace( '/[^a-zA-Z0-9_-]/', '', $name );
@@ -1191,7 +1214,8 @@ class Olo_Rest_Api {
     public function get_global_widgets() {
         global $wpdb;
         $table = $wpdb->prefix . 'olo_global_widgets';
-        $rows = $wpdb->get_results( "SELECT * FROM $table ORDER BY name ASC", ARRAY_A );
+        // Safe: $table is constructed from $wpdb->prefix (not user input)
+        $rows = $wpdb->get_results( "SELECT * FROM {$table} ORDER BY name ASC", ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL
         return new WP_REST_Response( $rows ?: [], 200 );
     }
 
@@ -1355,10 +1379,11 @@ class Olo_Rest_Api {
 
     public function get_maintenance() {
         return rest_ensure_response( [
-            'mode'         => get_option( 'olo_maintenance_mode', 'off' ),
-            'template_id'  => (int) get_option( 'olo_maintenance_template_id', 0 ),
-            'bypass_roles' => get_option( 'olo_maintenance_bypass_roles', [ 'administrator' ] ),
-            'bypass_secret' => get_option( 'olo_maintenance_bypass_secret', '' ),
+            'mode'                   => get_option( 'olo_maintenance_mode', 'off' ),
+            'template_id'            => (int) get_option( 'olo_maintenance_template_id', 0 ),
+            'coming_soon_template_id' => (int) get_option( 'olo_coming_soon_template_id', 0 ),
+            'bypass_roles'           => get_option( 'olo_maintenance_bypass_roles', [ 'administrator' ] ),
+            'bypass_secret'          => get_option( 'olo_maintenance_bypass_secret', '' ),
         ] );
     }
 
@@ -1373,6 +1398,10 @@ class Olo_Rest_Api {
 
         if ( isset( $body['template_id'] ) ) {
             update_option( 'olo_maintenance_template_id', absint( $body['template_id'] ), false );
+        }
+
+        if ( isset( $body['coming_soon_template_id'] ) ) {
+            update_option( 'olo_coming_soon_template_id', absint( $body['coming_soon_template_id'] ), false );
         }
 
         if ( isset( $body['bypass_roles'] ) ) {
@@ -1390,10 +1419,11 @@ class Olo_Rest_Api {
         }
 
         return rest_ensure_response( [
-            'mode'          => get_option( 'olo_maintenance_mode', 'off' ),
-            'template_id'   => (int) get_option( 'olo_maintenance_template_id', 0 ),
-            'bypass_roles'  => get_option( 'olo_maintenance_bypass_roles', [ 'administrator' ] ),
-            'bypass_secret' => get_option( 'olo_maintenance_bypass_secret', '' ),
+            'mode'                   => get_option( 'olo_maintenance_mode', 'off' ),
+            'template_id'            => (int) get_option( 'olo_maintenance_template_id', 0 ),
+            'coming_soon_template_id' => (int) get_option( 'olo_coming_soon_template_id', 0 ),
+            'bypass_roles'           => get_option( 'olo_maintenance_bypass_roles', [ 'administrator' ] ),
+            'bypass_secret'          => get_option( 'olo_maintenance_bypass_secret', '' ),
         ] );
     }
 
@@ -1805,15 +1835,19 @@ class Olo_Rest_Api {
         }
 
         $per_page = 24;
-        $after    = $cursor ? ', after: "' . $cursor . '"' : '';
-        $gql      = 'query { searchPublicAnimations(first: ' . $per_page . $after . ', query: "' . addslashes( $query ) . '") { edges { node { id name jsonUrl gifUrl } cursor } totalCount pageInfo { hasNextPage endCursor } } }';
+        // Use GraphQL variables to prevent injection (never interpolate user input into query string)
+        $gql      = 'query SearchAnimations($query: String!, $first: Int!, $after: String) { searchPublicAnimations(first: $first, after: $after, query: $query) { edges { node { id name jsonUrl gifUrl } cursor } totalCount pageInfo { hasNextPage endCursor } } }';
+        $variables = [ 'query' => $query, 'first' => $per_page ];
+        if ( $cursor ) {
+            $variables['after'] = $cursor;
+        }
 
         $response = wp_remote_post( 'https://graphql.lottiefiles.com/', [
             'timeout' => 15,
             'headers' => [
                 'Content-Type' => 'application/json',
             ],
-            'body' => wp_json_encode( [ 'query' => $gql ] ),
+            'body' => wp_json_encode( [ 'query' => $gql, 'variables' => $variables ] ),
         ] );
 
         if ( is_wp_error( $response ) ) {
@@ -1882,23 +1916,52 @@ class Olo_Rest_Api {
             } else {
                 // Find a published post with actual content (skip empty test posts)
                 $post_type = $body['post_type'] ?? 'post';
-                $sample = get_posts( [
+                $query_args = [
                     'post_type'      => $post_type,
                     'posts_per_page' => 10,
                     'post_status'    => 'publish',
                     'orderby'        => 'date',
                     'order'          => 'DESC',
-                ] );
-                // Prefer a post with content
+                ];
+
+                // For olo_service with active module, filter by service type
+                if ( $post_type === 'olo_service' && class_exists( 'Olo_Module_Registry' ) ) {
+                    $module = Olo_Module_Registry::get_active_module();
+                    if ( $module ) {
+                        $svc_type_map = [
+                            'real-estate'   => 'property',
+                            'accommodation' => 'accommodation',
+                            'appointments'  => 'service',
+                            'rentals'       => 'service',
+                            'events'        => 'service',
+                            'restaurants'   => 'service',
+                        ];
+                        $svc_type = $svc_type_map[ $module->get_id() ] ?? '';
+                        if ( $svc_type ) {
+                            $query_args['meta_query'] = [
+                                [ 'key' => '_olo_service_type', 'value' => $svc_type ],
+                            ];
+                        }
+                    }
+                }
+
+                $sample = get_posts( $query_args );
+                // Prefer a post with content + gallery (better preview)
                 $best = null;
                 foreach ( $sample as $s ) {
-                    if ( ! empty( $s->post_content ) ) {
+                    if ( ! empty( $s->post_content ) && get_post_thumbnail_id( $s->ID ) ) {
                         $best = $s;
                         break;
                     }
                 }
+                // Fallback: any with content
+                if ( ! $best ) {
+                    foreach ( $sample as $s ) {
+                        if ( ! empty( $s->post_content ) ) { $best = $s; break; }
+                    }
+                }
                 if ( ! $best && ! empty( $sample ) ) {
-                    $best = $sample[0]; // Fallback to first even if empty
+                    $best = $sample[0];
                 }
                 if ( $best ) {
                     $post = $best;

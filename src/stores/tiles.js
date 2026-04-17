@@ -21,6 +21,8 @@ export const useTilesStore = defineStore('tiles', {
     clipboardTile: null,   // Deep-cloned tile for copy/paste
     clipboardStyle: null,  // Copied style object for paste-style
     globalWidgets: [],     // Global widgets from DB
+    tilesVersion: 0,       // Incremented on structural changes — watchers use this instead of deep watch
+    _tileIndex: new Map(), // id → node index for O(1) lookups
   }),
 
   getters: {
@@ -51,10 +53,18 @@ export const useTilesStore = defineStore('tiles', {
 
     getTileById(state) {
       return (id) => {
-        // Search across all three zones (body, header, footer)
-        return findNodeById(state.canvasTiles, id)
+        // Fast path: O(1) lookup from index
+        if (state._tileIndex.has(id)) {
+          const cached = state._tileIndex.get(id);
+          // Verify node is still valid (id matches)
+          if (cached && cached.id === id) return cached;
+        }
+        // Slow path: tree traversal + cache result
+        const node = findNodeById(state.canvasTiles, id)
           || findNodeById(state.headerTiles, id)
           || findNodeById(state.footerTiles, id);
+        if (node) state._tileIndex.set(id, node);
+        return node;
       };
     },
 
@@ -192,10 +202,17 @@ export const useTilesStore = defineStore('tiles', {
       return this.canvasTiles;
     },
 
+    // Invalidate tile index and bump version counter (call after structural changes)
+    _bumpVersion() {
+      this._tileIndex.clear();
+      this.tilesVersion++;
+    },
+
     // === CRUD Operations (tree-aware) ===
 
     addTile(tile) {
       this.canvasTiles.push(tile);
+      this._bumpVersion();
     },
 
     /**
@@ -210,6 +227,7 @@ export const useTilesStore = defineStore('tiles', {
       } else {
         parent.children.push(child);
       }
+      this._bumpVersion();
     },
 
     /**
@@ -221,6 +239,7 @@ export const useTilesStore = defineStore('tiles', {
         || findParentAndIndex(this.footerTiles, tileId);
       if (result) {
         result.parent.splice(result.index, 1);
+        this._bumpVersion();
       }
     },
 
@@ -585,6 +604,72 @@ export const useTilesStore = defineStore('tiles', {
       }
 
       row.children = newCols;
+    },
+
+    /**
+     * Add a new empty column to a row after the specified column index.
+     * Redistributes column widths equally.
+     */
+    addColumnToRow(rowId, afterColIndex) {
+      const row = this.getTileById(rowId);
+      if (!row || row.type !== 'row') return;
+
+      const cols = row.children || [];
+      const newCol = createColumn('', []);
+      cols.splice(afterColIndex + 1, 0, newCol);
+
+      // Redistribute widths equally using standard layouts when possible
+      const count = cols.length;
+      const equalLayouts = { 1: '100', 2: '50-50', 3: '33-33-33', 4: '25-25-25-25' };
+      const layoutKey = equalLayouts[count];
+
+      if (layoutKey) {
+        this.changeRowLayout(rowId, layoutKey);
+      } else {
+        // 5+ columns: set custom equal widths
+        const pct = (100 / count).toFixed(1);
+        row.settings = { ...row.settings, layout: 'custom', custom_widths: Array(count).fill(pct).join(',') };
+        for (const col of cols) {
+          col.settings = { ...col.settings, width_medium: '', width_custom: pct };
+        }
+      }
+      if (typeof this._bumpVersion === 'function') this._bumpVersion();
+    },
+
+    /**
+     * Find the row containing a tile and add a column after the tile's column.
+     */
+    addColumnForTile(tileId) {
+      const allRoots = [this.canvasTiles, this.headerTiles, this.footerTiles];
+      for (const root of allRoots) {
+        const result = this._findRowAndColForTile(root, tileId);
+        if (result) {
+          this.addColumnToRow(result.rowId, result.colIndex);
+          return;
+        }
+      }
+    },
+
+    /**
+     * Helper: find the row and column index containing a tile.
+     */
+    _findRowAndColForTile(nodes, tileId, _depth = 0) {
+      if (_depth > 20) return null;
+      for (const node of nodes) {
+        if (node.type === 'row' && Array.isArray(node.children)) {
+          for (let ci = 0; ci < node.children.length; ci++) {
+            const col = node.children[ci];
+            if (col.id === tileId || (Array.isArray(col.children) && findNodeById(col.children, tileId))) {
+              return { rowId: node.id, colIndex: ci };
+            }
+          }
+        }
+        if (Array.isArray(node.children)) {
+          const r = this._findRowAndColForTile(node.children, tileId, _depth + 1);
+          if (r) return r;
+        }
+      }
+      return null;
     },
 
     /**

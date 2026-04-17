@@ -35,6 +35,9 @@ class Olo_Builder {
         // Submenu icons via CSS
         add_action( 'admin_head', [ $this, 'admin_submenu_icons' ] );
 
+        // Admin body class for Olobuild shell layout
+        add_filter( 'admin_body_class', [ $this, 'admin_body_class' ] );
+
         // Initialize REST API
         $rest_api = new Olo_Rest_Api();
         $rest_api->init();
@@ -197,6 +200,7 @@ class Olo_Builder {
             'olo-role-manager'    => '\f110', // dashicons-admin-users
             'olo-import-export'   => '\f316', // dashicons-download
             'olo-white-label'     => '\f323', // dashicons-tag
+            'olo-tools'           => '\f533', // dashicons-admin-tools
         ];
 
         echo '<style>';
@@ -301,7 +305,7 @@ class Olo_Builder {
             'olobuilder-js',
             OLO_URL . 'assets/js/builder.js',
             [ 'media-views' ],
-            OLO_VERSION . '.' . time(),
+            OLO_VERSION,
             true
         );
 
@@ -397,30 +401,177 @@ class Olo_Builder {
     }
 
     /**
-     * Open the shared admin page shell: wrap + topbar (logo + breadcrumb + version).
-     * Call this at the start of every Olobuild admin page render method.
+     * Add body class on Olobuild admin pages for shell layout.
+     */
+    public function admin_body_class( $classes ) {
+        $screen = get_current_screen();
+        if ( $screen && ( str_contains( $screen->id, 'olobuild' ) || str_contains( $screen->id, 'olo-' ) ) ) {
+            $classes .= ' olo-admin-shell';
+        }
+        return $classes;
+    }
+
+    /**
+     * Open the shared admin page shell: top bar + sidebar + content area.
      */
     public static function page_shell_open( $page_title = '', $extra_class = '' ) {
-        $logo_url = OLO_URL . 'assets/img/olobuild-logo-200-v2.png';
+        $logo_url  = OLO_URL . 'assets/img/olobuild-logo-200-v2.png';
+        $white_url = OLO_URL . 'assets/img/olobuild-logo-200-white.png';
         $cls = 'olo-admin-wrap' . ( $extra_class ? ' ' . esc_attr( $extra_class ) : '' );
-        echo '<div class="wrap"><div class="' . $cls . '">';
-        echo '<div class="olo-admin-topbar">';
-        echo '<a href="' . esc_url( admin_url( 'admin.php?page=olobuilder' ) ) . '" class="olo-admin-topbar-logo">';
-        echo '<img src="' . esc_url( $logo_url ) . '" alt="Olobuild" />';
-        echo '</a>';
-        if ( $page_title ) {
-            echo '<svg class="olo-admin-topbar-sep" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>';
-            echo '<span class="olo-admin-topbar-page">' . esc_html( $page_title ) . '</span>';
-        }
-        echo '<span class="olo-admin-topbar-version">v' . OLO_VERSION . '</span>';
-        echo '</div>';
+        $current   = sanitize_key( $_GET['page'] ?? '' );
+        ?>
+        <div class="olo-shell">
+            <!-- Top bar -->
+            <div class="olo-shell-topbar">
+                <div class="olo-shell-topbar-brand">
+                    <a href="<?php echo esc_url( admin_url( 'admin.php?page=olobuilder' ) ); ?>">
+                        <img src="<?php echo esc_url( $white_url ); ?>" alt="Olobuild" />
+                    </a>
+                    <span class="olo-shell-topbar-label">website builder</span>
+                </div>
+                <div class="olo-shell-topbar-actions">
+                    <span class="olo-shell-topbar-version">v<?php echo OLO_VERSION; ?></span>
+                </div>
+            </div>
+
+            <div class="olo-shell-body">
+                <!-- Sidebar -->
+                <?php self::render_sidebar( $current ); ?>
+
+                <!-- Content -->
+                <div class="olo-shell-content">
+                    <?php if ( $page_title ) : ?>
+                        <h1 class="olo-shell-page-title"><?php echo esc_html( $page_title ); ?></h1>
+                    <?php endif; ?>
+                    <div class="<?php echo esc_attr( $cls ); ?>">
+        <?php
     }
 
     /**
      * Close the shared admin page shell.
      */
     public static function page_shell_close() {
-        echo '</div></div>';
+        ?>
+                    </div><!-- .olo-admin-wrap -->
+                </div><!-- .olo-shell-content -->
+            </div><!-- .olo-shell-body -->
+        </div><!-- .olo-shell -->
+        <?php
+    }
+
+    /**
+     * Render the Olobuild sidebar navigation.
+     */
+    private static function render_sidebar( $current_page ) {
+        $base = admin_url( 'admin.php?page=' );
+
+        $menu = [
+            [ 'slug' => 'olobuilder',           'label' => 'Avvio Rapido',  'icon' => 'rocket' ],
+            [ 'slug' => 'olobuilder-settings',   'label' => 'Impostazioni',  'icon' => 'gear' ],
+            [ 'slug' => 'olo-tools',             'label' => 'Strumenti',     'icon' => 'wrench' ],
+            [ 'slug' => 'olo-role-manager',      'label' => 'Role Manager',  'icon' => 'users' ],
+            [ 'slug' => 'olo-form-submissions',  'label' => 'Submissions',   'icon' => 'email' ],
+            [
+                'group' => 'Template',
+                'icon'  => 'layout',
+                'items' => [
+                    [ 'slug' => 'olobuilder-templates', 'label' => 'Template Salvati' ],
+                    [ 'slug' => 'olo-import-export',    'label' => 'Template Website' ],
+                    [ 'slug' => 'olo-global-popups',    'label' => 'Popups' ],
+                ],
+            ],
+            [
+                'group' => 'Marketing',
+                'icon'  => 'chart',
+                'items' => [
+                    [ 'slug' => 'olo-analytics',       'label' => 'Analytics' ],
+                    [ 'slug' => 'olo-cookie-consent',   'label' => 'Cookie Consent' ],
+                    [ 'slug' => 'olo-seo',              'label' => 'SEO' ],
+                    [ 'slug' => 'olo-redirects',         'label' => 'Redirect & 404' ],
+                ],
+            ],
+            [
+                'group' => 'Personalizzazione',
+                'icon'  => 'palette',
+                'items' => [
+                    [ 'slug' => 'olo-media-search',    'label' => 'Ricerca Media' ],
+                    [ 'slug' => 'olo-performance',     'label' => 'Performance' ],
+                    [ 'slug' => 'olo-woo-templates',   'label' => 'WooCommerce' ],
+                ],
+            ],
+            [
+                'group' => 'Sistema',
+                'icon'  => 'settings',
+                'items' => [
+                    [ 'slug' => 'olo-white-label',     'label' => 'White Label' ],
+                ],
+            ],
+        ];
+
+        $icons = [
+            'rocket'   => '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 00-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 012-3.95A12.88 12.88 0 0122 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 01-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>',
+            'gear'     => '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>',
+            'wrench'   => '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>',
+            'users'    => '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>',
+            'email'    => '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>',
+            'layout'   => '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>',
+            'chart'    => '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>',
+            'palette'  => '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.93 0 1.5-.63 1.5-1.36 0-.35-.14-.69-.38-.96-.22-.25-.34-.54-.34-.9 0-.74.6-1.28 1.34-1.28H16c3.31 0 6-2.69 6-6 0-5.52-4.48-10-10-10z"/><circle cx="7.5" cy="11.5" r="1.5" fill="currentColor"/><circle cx="10.5" cy="7.5" r="1.5" fill="currentColor"/><circle cx="14.5" cy="7.5" r="1.5" fill="currentColor"/><circle cx="17.5" cy="11.5" r="1.5" fill="currentColor"/></svg>',
+            'settings' => '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>',
+        ];
+
+        // Determine which group should be open
+        $group_slugs = [];
+        foreach ( $menu as $item ) {
+            if ( isset( $item['group'] ) ) {
+                foreach ( $item['items'] as $sub ) {
+                    $group_slugs[ $sub['slug'] ] = $item['group'];
+                }
+            }
+        }
+        $active_group = $group_slugs[ $current_page ] ?? '';
+
+        ?>
+        <nav class="olo-shell-sidebar">
+            <div class="olo-shell-sidebar-head">
+                <span class="olo-shell-sidebar-title">Editor</span>
+            </div>
+            <ul class="olo-shell-nav">
+                <?php foreach ( $menu as $item ) : ?>
+                    <?php if ( isset( $item['group'] ) ) :
+                        $is_open = $active_group === $item['group'];
+                        $group_id = 'olo-nav-' . sanitize_key( $item['group'] );
+                    ?>
+                        <li class="olo-shell-nav-group <?php echo $is_open ? 'open' : ''; ?>">
+                            <button class="olo-shell-nav-group-btn" onclick="this.parentElement.classList.toggle('open')" type="button">
+                                <span class="olo-shell-nav-icon"><?php echo $icons[ $item['icon'] ] ?? ''; ?></span>
+                                <span><?php echo esc_html( $item['group'] ); ?></span>
+                                <svg class="olo-shell-nav-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                            </button>
+                            <ul class="olo-shell-nav-sub">
+                                <?php foreach ( $item['items'] as $sub ) : ?>
+                                    <li>
+                                        <a href="<?php echo esc_url( $base . $sub['slug'] ); ?>"
+                                           class="<?php echo $current_page === $sub['slug'] ? 'active' : ''; ?>">
+                                            <?php echo esc_html( $sub['label'] ); ?>
+                                        </a>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        </li>
+                    <?php else : ?>
+                        <li>
+                            <a href="<?php echo esc_url( $base . $item['slug'] ); ?>"
+                               class="olo-shell-nav-item <?php echo $current_page === $item['slug'] ? 'active' : ''; ?>">
+                                <span class="olo-shell-nav-icon"><?php echo $icons[ $item['icon'] ] ?? ''; ?></span>
+                                <span><?php echo esc_html( $item['label'] ); ?></span>
+                            </a>
+                        </li>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            </ul>
+        </nav>
+        <?php
     }
 
     public function render_dashboard_page() {
@@ -488,6 +639,13 @@ class Olo_Builder {
                 'icon'  => '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>',
                 'url'   => admin_url( 'admin.php?page=olo-performance' ),
                 'color' => '#f97316',
+            ],
+            [
+                'title' => 'Strumenti',
+                'desc'  => 'Cache, manutenzione, URL, versioni',
+                'icon'  => '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>',
+                'url'   => admin_url( 'admin.php?page=olo-tools' ),
+                'color' => '#64748b',
             ],
             [
                 'title' => 'WooCommerce',

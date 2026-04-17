@@ -363,6 +363,66 @@
       </div>
     </div>
 
+    <!-- Pattern -->
+    <div v-if="bg.type === 'pattern'" class="mb-space-y-3">
+      <!-- Pattern grid -->
+      <div>
+        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Pattern') }}</label>
+        <div class="mb-grid mb-grid-cols-4 mb-gap-1 mb-max-h-48 mb-overflow-y-auto mb-pr-1">
+          <button
+            v-for="p in patternList"
+            :key="p.value"
+            @click="updateField('pattern_type', p.value)"
+            :title="p.label"
+            :class="[
+              'mb-h-12 mb-rounded mb-border mb-transition-all mb-cursor-pointer',
+              bg.pattern_type === p.value
+                ? 'mb-border-primary-500 mb-ring-1 mb-ring-primary-500'
+                : 'mb-border-gray-600 hover:mb-border-gray-400'
+            ]"
+            :style="getPatternPreviewStyle(p.value)"
+          ></button>
+        </div>
+      </div>
+      <!-- Pattern color -->
+      <div>
+        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Colore pattern') }}</label>
+        <FieldColor
+          :modelValue="bg.pattern_color || '#000000'"
+          @update:modelValue="updateField('pattern_color', $event)"
+        />
+      </div>
+      <!-- Background color -->
+      <div>
+        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Colore sfondo') }}</label>
+        <FieldColor
+          :modelValue="bg.pattern_bg_color || '#ffffff'"
+          @update:modelValue="updateField('pattern_bg_color', $event)"
+        />
+      </div>
+      <!-- Size -->
+      <div>
+        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Dimensione') }}</label>
+        <div class="mb-flex mb-items-center mb-gap-2">
+          <input type="range" :value="bg.pattern_size || 20" @input="updateField('pattern_size', parseInt($event.target.value))" min="5" max="100" step="1" class="mb-flex-1" />
+          <span class="mb-text-xs mb-text-gray-400 mb-w-10 mb-text-right">{{ bg.pattern_size || 20 }}px</span>
+        </div>
+      </div>
+      <!-- Opacity -->
+      <div>
+        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Opacità') }}</label>
+        <div class="mb-flex mb-items-center mb-gap-2">
+          <input type="range" :value="Math.round((bg.pattern_opacity ?? 1) * 100)" @input="updateField('pattern_opacity', parseInt($event.target.value) / 100)" min="0" max="100" step="5" class="mb-flex-1" />
+          <span class="mb-text-xs mb-text-gray-400 mb-w-10 mb-text-right">{{ Math.round((bg.pattern_opacity ?? 1) * 100) }}%</span>
+        </div>
+      </div>
+      <!-- Pattern preview -->
+      <div
+        class="mb-h-16 mb-rounded-md mb-border mb-border-gray-600"
+        :style="getPatternPreviewStyle(bg.pattern_type || 'dots', bg.pattern_color, bg.pattern_bg_color, bg.pattern_size, bg.pattern_opacity)"
+      ></div>
+    </div>
+
     <!-- Overlay (for all types except none) -->
     <div v-if="bg.type && bg.type !== 'none'" class="mb-space-y-2 mb-pt-2 mb-border-t mb-border-gray-700">
       <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300">Sovrapposizione</label>
@@ -389,6 +449,7 @@
 import { computed } from 'vue';
 import { t } from '@/i18n';
 import { useMediaPicker } from '@/composables/useMediaPicker';
+import { patternList, getPatternCSS } from '@/utils/patternCSS';
 import ParallaxEditor from './ParallaxEditor.vue';
 import FieldGradient from './fields/FieldGradient.vue';
 import FieldColor from './fields/FieldColor.vue';
@@ -455,6 +516,7 @@ const types = [
   { value: 'none', label: 'Nessuno' },
   { value: 'solid', label: 'Tinta unita' },
   { value: 'gradient', label: 'Gradiente' },
+  { value: 'pattern', label: 'Pattern' },
   { value: 'image', label: 'Immagine' },
   { value: 'video', label: 'Video' },
   { value: 'gallery', label: 'Galleria' },
@@ -515,6 +577,10 @@ const gradientPreview = computed(() => {
 
 function updateField(key, value) {
   emit('update:modelValue', { ...bg.value, [key]: value });
+}
+
+function getPatternPreviewStyle(type, color, bgColor, size, opacity) {
+  return getPatternCSS(type || 'dots', color || '#000000', bgColor || '#ffffff', size || 20, opacity ?? 1);
 }
 
 function pickBgImage() {

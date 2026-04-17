@@ -663,3 +663,209 @@ textarea.olo-field-input {
 /* ── WP overrides for Olobuild admin pages ── */
 .olo-admin-wrap h2.wp-heading-inline { display: none; }
 .olo-admin-wrap .subsubsub { display: none; }
+
+/* ═══════════════════════════════════════════════════════════
+ * SHELL LAYOUT — Elementor-style admin (top bar + sidebar)
+ * Applied when body has .olo-admin-shell
+ * ═══════════════════════════════════════════════════════════ */
+
+/* Keep WP sidebar visible — Olobuild shell sits inside #wpcontent */
+body.olo-admin-shell #wpbody-content > .wrap { margin: 0; padding: 0; max-width: none; }
+
+/* Remove default .olo-admin-wrap centering — now full-width inside shell */
+body.olo-admin-shell .olo-admin-wrap {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* Hide old topbar — replaced by shell topbar */
+body.olo-admin-shell .olo-admin-topbar { display: none; }
+
+/* ── Shell container ── */
+.olo-shell { display: flex; flex-direction: column; min-height: calc(100vh - 32px); }
+
+/* ── Top bar ── */
+.olo-shell-topbar {
+    height: 48px;
+    background: #0c0d0e;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    position: sticky;
+    top: 32px; /* below WP admin bar */
+    z-index: 999;
+    flex-shrink: 0;
+}
+.olo-shell-topbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.olo-shell-topbar-brand a { display: flex; align-items: center; }
+.olo-shell-topbar-brand img { height: 22px; opacity: 0.95; }
+.olo-shell-topbar-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.7);
+    letter-spacing: 0.3px;
+}
+.olo-shell-topbar-actions { display: flex; align-items: center; gap: 12px; }
+.olo-shell-topbar-version {
+    font-size: 11px;
+    color: rgba(255,255,255,0.4);
+    font-weight: 500;
+}
+
+/* ── Body = sidebar + content ── */
+.olo-shell-body {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+}
+
+/* ── Sidebar ── */
+.olo-shell-sidebar {
+    width: 240px;
+    flex-shrink: 0;
+    background: #fff;
+    border-right: 1px solid rgba(0,0,0,0.08);
+    overflow-y: auto;
+    position: sticky;
+    top: 80px; /* 32px admin bar + 48px topbar */
+    height: calc(100vh - 80px);
+}
+.olo-shell-sidebar-head {
+    padding: 20px 20px 12px;
+    border-bottom: 1px solid #f0f0f0;
+    margin-bottom: 8px;
+}
+.olo-shell-sidebar-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1a1a1a;
+    letter-spacing: 0.2px;
+}
+
+/* ── Nav items ── */
+.olo-shell-nav {
+    list-style: none;
+    margin: 0;
+    padding: 4px 8px;
+}
+.olo-shell-nav li { margin: 0; }
+.olo-shell-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    color: #555;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    border-radius: 6px;
+    transition: all 0.15s;
+}
+.olo-shell-nav-item:hover {
+    background: #f5f0eb;
+    color: #1a1a1a;
+}
+.olo-shell-nav-item.active {
+    background: #f5f0eb;
+    color: #e8622a;
+    font-weight: 600;
+}
+.olo-shell-nav-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    opacity: 0.6;
+}
+.olo-shell-nav-item.active .olo-shell-nav-icon,
+.olo-shell-nav-item:hover .olo-shell-nav-icon { opacity: 1; }
+
+/* ── Nav groups (expandable) ── */
+.olo-shell-nav-group { margin-top: 4px; }
+.olo-shell-nav-group-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 8px 12px;
+    background: none;
+    border: none;
+    color: #555;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.15s;
+    text-align: left;
+}
+.olo-shell-nav-group-btn:hover { background: #f5f0eb; color: #1a1a1a; }
+.olo-shell-nav-arrow {
+    margin-left: auto;
+    transition: transform 0.2s;
+    opacity: 0.4;
+}
+.olo-shell-nav-group.open .olo-shell-nav-arrow { transform: rotate(180deg); }
+
+.olo-shell-nav-sub {
+    list-style: none;
+    margin: 0;
+    padding: 0 0 0 38px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.25s ease;
+}
+.olo-shell-nav-group.open .olo-shell-nav-sub { max-height: 300px; }
+.olo-shell-nav-sub li { margin: 0; }
+.olo-shell-nav-sub a {
+    display: block;
+    padding: 6px 12px;
+    color: #777;
+    text-decoration: none;
+    font-size: 13px;
+    border-radius: 4px;
+    transition: all 0.15s;
+}
+.olo-shell-nav-sub a:hover { color: #1a1a1a; background: #f9f6f3; }
+.olo-shell-nav-sub a.active { color: #e8622a; font-weight: 600; background: #fef6f2; }
+
+/* ── Content area ── */
+.olo-shell-content {
+    flex: 1;
+    padding: 24px 32px 40px;
+    background: #f9f6f3;
+    min-width: 0;
+    overflow-y: auto;
+}
+.olo-shell-page-title {
+    font-size: 22px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin: 0 0 20px;
+    padding: 0;
+    line-height: 1.3;
+}
+
+/* ── Responsive ── */
+@media (max-width: 960px) {
+    .olo-shell-sidebar { width: 200px; }
+    .olo-shell-content { padding: 20px 16px; }
+}
+@media (max-width: 782px) {
+    .olo-shell-body { flex-direction: column; }
+    .olo-shell-sidebar {
+        width: 100%; height: auto;
+        position: static;
+        border-right: none;
+        border-bottom: 1px solid rgba(0,0,0,0.08);
+    }
+    .olo-shell-topbar { top: 0; } /* no WP admin bar on mobile */
+}

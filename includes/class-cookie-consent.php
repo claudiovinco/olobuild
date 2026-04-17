@@ -1070,7 +1070,15 @@ class Olo_Cookie_Consent {
      * ═══════════════════════════════════════════════════ */
 
     public function ajax_log_consent() {
-        // No nonce for frontend (anonymous users)
+        // Rate limiting for anonymous consent logging (5 per IP per hour to prevent flooding)
+        $ip_raw = sanitize_text_field( $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0' );
+        $rl_key = 'olo_consent_rl_' . md5( $ip_raw );
+        $rl_count = intval( get_transient( $rl_key ) );
+        if ( $rl_count >= 5 ) {
+            wp_send_json_error( 'Rate limited' );
+        }
+        set_transient( $rl_key, $rl_count + 1, HOUR_IN_SECONDS );
+
         global $wpdb;
 
         $consent_id   = sanitize_text_field( $_POST['consent_id'] ?? '' );

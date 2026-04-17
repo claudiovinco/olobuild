@@ -20,6 +20,10 @@ class Olo_White_Label {
     }
 
     public function init() {
+        // REST API + admin page: always registered (even if white label is disabled)
+        add_action( 'rest_api_init', [ $this, 'register_routes' ] );
+        add_action( 'admin_menu', [ $this, 'add_admin_page' ] );
+
         $settings = $this->get_settings();
         if ( empty( $settings['enabled'] ) ) {
             return;
@@ -38,12 +42,6 @@ class Olo_White_Label {
 
         // Filter builder brand name
         add_filter( 'olo_brand_name', [ $this, 'get_brand_name' ] );
-
-        // REST API for settings
-        add_action( 'rest_api_init', [ $this, 'register_routes' ] );
-
-        // Admin page
-        add_action( 'admin_menu', [ $this, 'add_admin_page' ] );
     }
 
     /* ─────────────────────────────────────────────
@@ -91,9 +89,11 @@ class Olo_White_Label {
     }
 
     public function hide_menu_for_non_admins() {
+        // Non-admins: hide from WP menu via CSS (don't remove — breaks page registration)
         if ( ! current_user_can( 'manage_options' ) ) {
-            // Hide white label settings page
-            remove_submenu_page( 'olobuild', 'olo-white-label' );
+            add_action( 'admin_head', function () {
+                echo '<style>#adminmenu a[href*="olo-white-label"] { display: none !important; }</style>';
+            } );
         }
     }
 
@@ -168,10 +168,6 @@ class Olo_White_Label {
      * ───────────────────────────────────────────── */
 
     public function add_admin_page() {
-        if ( ! current_user_can( 'manage_options' ) ) {
-            return;
-        }
-
         add_submenu_page(
             'olobuild',
             'White Label',

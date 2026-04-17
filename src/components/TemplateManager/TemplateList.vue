@@ -36,16 +36,26 @@
         </div>
       </div>
 
-      <!-- Tab filter -->
-      <div class="tpl-tabs">
-        <button
-          v-for="tab in tabs"
-          :key="tab.value"
-          @click="activeTab = tab.value"
-          :class="['tpl-tab', { active: activeTab === tab.value }]"
-        >
-          {{ tab.label }}
-        </button>
+      <!-- Tab filter + view toggle -->
+      <div class="tpl-tabs-row">
+        <div class="tpl-tabs">
+          <button
+            v-for="tab in tabs"
+            :key="tab.value"
+            @click="activeTab = tab.value"
+            :class="['tpl-tab', { active: activeTab === tab.value }]"
+          >
+            {{ tab.label }}
+          </button>
+        </div>
+        <div class="tpl-view-toggle">
+          <button @click="viewMode = 'grid'" :class="['tpl-view-btn', { active: viewMode === 'grid' }]" title="Griglia">
+            <svg width="14" height="14" viewBox="0 0 14 14"><rect x="0" y="0" width="6" height="6" rx="1" fill="currentColor"/><rect x="8" y="0" width="6" height="6" rx="1" fill="currentColor"/><rect x="0" y="8" width="6" height="6" rx="1" fill="currentColor"/><rect x="8" y="8" width="6" height="6" rx="1" fill="currentColor"/></svg>
+          </button>
+          <button @click="viewMode = 'table'" :class="['tpl-view-btn', { active: viewMode === 'table' }]" title="Tabella">
+            <svg width="14" height="14" viewBox="0 0 14 14"><rect x="0" y="1" width="14" height="2" rx="0.5" fill="currentColor"/><rect x="0" y="6" width="14" height="2" rx="0.5" fill="currentColor"/><rect x="0" y="11" width="14" height="2" rx="0.5" fill="currentColor"/></svg>
+          </button>
+        </div>
       </div>
 
       <!-- Loading state -->
@@ -74,7 +84,7 @@
       </div>
 
       <!-- Template grid -->
-      <div v-else class="tpl-grid">
+      <div v-else-if="viewMode === 'grid'" class="tpl-grid">
         <div
           v-for="tpl in filteredTemplates"
           :key="tpl.id"
@@ -194,6 +204,48 @@
           </div>
         </div>
       </div>
+
+      <!-- Template table -->
+      <table v-else class="tpl-table">
+        <thead>
+          <tr>
+            <th>Titolo</th>
+            <th>Tipo</th>
+            <th>Istanze</th>
+            <th>Autore</th>
+            <th>Data</th>
+            <th>Shortcode</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="tpl in filteredTemplates" :key="tpl.id">
+            <td class="tpl-table-title">
+              <a @click.prevent="editTemplate(tpl.id)" href="#">{{ tpl.title || 'Senza titolo' }}</a>
+            </td>
+            <td><span class="tpl-badge" :class="'tpl-badge--' + tpl.type">{{ typeLabel(tpl.type) }}</span></td>
+            <td>{{ tpl.instances ?? '\u2014' }}</td>
+            <td>{{ tpl.author_name ?? '\u2014' }}</td>
+            <td>{{ formatDate(tpl.updated_at) }}</td>
+            <td>
+              <code v-if="tpl.type === 'page'" class="tpl-shortcode-sm">[olo_template id="{{ tpl.id }}"]</code>
+              <span v-else>\u2014</span>
+            </td>
+            <td class="tpl-table-actions">
+              <button @click="editTemplate(tpl.id)" class="tpl-table-action-btn" title="Modifica">
+                <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M11.5 1.5l3 3L5 14H2v-3z"/></svg>
+              </button>
+              <button @click="duplicateTemplate(tpl.id)" class="tpl-table-action-btn" title="Duplica">
+                <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="5" width="9" height="9" rx="1"/><path d="M3 11V2h9"/></svg>
+              </button>
+              <button @click="deleteTemplate(tpl.id, tpl.title)" class="tpl-table-action-btn tpl-table-action-btn--danger" title="Elimina">
+                <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 4h10M6 4V2h4v2M5 4v9h6V4"/></svg>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
     </div>
   </div>
 
@@ -227,6 +279,7 @@ const oloData = window.oloData || {};
 const wpAdminUrl = (oloData.restUrl || '').replace('/wp-json/olo/v1', '/wp-admin/');
 const pluginUrl = oloData.pluginUrl || '';
 
+const viewMode = ref('grid');
 const loading = ref(true);
 const templates = ref([]);
 const showNewMenu = ref(false);
@@ -647,6 +700,15 @@ function countElements(content) {
   return count;
 }
 
+function typeLabel(type) {
+  const labels = { page: 'Pagina', header: 'Header', footer: 'Footer', single: 'Single', megapanel: 'Mega Panel', '404': '404' };
+  return labels[type] || type;
+}
+
+function editTemplate(id) {
+  emit('edit', id);
+}
+
 function formatDate(dateStr) {
   if (!dateStr) return '';
   const d = new Date(dateStr);
@@ -720,7 +782,7 @@ onUnmounted(() => {
 
 /* ── Tabs ── */
 .tpl-tabs {
-  display: flex !important; gap: 4px; margin-bottom: 24px;
+  display: flex !important; gap: 4px;
   background: #fff !important; border-radius: 12px !important; padding: 4px !important;
   width: fit-content; border: 1px solid #eaeaea !important;
 }
@@ -853,6 +915,44 @@ onUnmounted(() => {
   opacity: .4; cursor: not-allowed;
 }
 .tpl-activate-btn.disabled:hover { border-color: #eaeaea !important; color: #666 !important; }
+
+/* ── Tabs row (tabs + view toggle) ── */
+.tpl-tabs-row { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+.tpl-tabs-row .tpl-tabs { margin-bottom: 0; }
+
+/* ── View toggle ── */
+.tpl-view-toggle { display: inline-flex; gap: 2px; }
+.tpl-view-btn {
+  width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;
+  border: 1px solid #eaeaea !important; border-radius: 6px !important; background: #fff !important;
+  cursor: pointer; color: #bbb !important; transition: all .15s;
+}
+.tpl-view-btn:hover { color: #666 !important; border-color: #ccc !important; }
+.tpl-view-btn.active { background: #f5f0eb !important; color: #1a1a1a !important; border-color: #d5d0cb !important; }
+
+/* ── Table view ── */
+.tpl-table { width: 100%; border-collapse: collapse; font-size: 13px; background: #fff !important; border-radius: 12px !important; overflow: hidden; border: 1px solid #eaeaea !important; }
+.tpl-table th { text-align: left; padding: 10px 14px; color: #999 !important; font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid #eaeaea !important; background: #fafafa !important; }
+.tpl-table td { padding: 10px 14px; border-bottom: 1px solid #f5f5f5 !important; vertical-align: middle; color: #1a1a1a !important; }
+.tpl-table tr:hover td { background: #faf8f6 !important; }
+.tpl-table-title a { color: #1a1a1a !important; font-weight: 600; text-decoration: none !important; }
+.tpl-table-title a:hover { color: var(--olo-color-primary, #e8622a) !important; }
+.tpl-table-actions { display: flex; gap: 4px; }
+.tpl-table-action-btn {
+  background: none !important; border: 1px solid #eaeaea !important; border-radius: 5px !important;
+  padding: 4px 6px !important; cursor: pointer; color: #999 !important; transition: all .15s;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.tpl-table-action-btn:hover { background: #f5f0eb !important; color: #1a1a1a !important; border-color: #ccc !important; }
+.tpl-table-action-btn--danger:hover { color: #dc2626 !important; border-color: #f5b7b7 !important; background: #fde8e8 !important; }
+.tpl-shortcode-sm { font-size: 10px; background: #f5f5f5 !important; padding: 2px 6px !important; border-radius: 4px !important; font-family: 'SF Mono', Monaco, monospace; user-select: all; color: #999 !important; border: none !important; }
+.tpl-badge { display: inline-block; padding: 2px 8px !important; border-radius: 10px !important; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .02em; border: none !important; }
+.tpl-badge--page { background: #dbeafe !important; color: #1d4ed8 !important; }
+.tpl-badge--header { background: #f0e6ff !important; color: #7c3aed !important; }
+.tpl-badge--footer { background: #e0faf4 !important; color: #0d9488 !important; }
+.tpl-badge--single { background: #fff3e0 !important; color: #d97706 !important; }
+.tpl-badge--megapanel { background: #e8eaf6 !important; color: #4f46e5 !important; }
+.tpl-badge--404 { background: #fde8e8 !important; color: #dc2626 !important; }
 
 /* ── Responsive ── */
 @media (max-width: 900px) {

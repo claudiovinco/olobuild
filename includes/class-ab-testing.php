@@ -397,16 +397,14 @@ class Olo_AB_Testing {
             return new WP_Error( 'invalid_event', 'event deve essere "view" o "conversion".', [ 'status' => 400 ] );
         }
 
-        // Rate limiting for views: max 1 per IP per test per hour
-        if ( $event === 'view' ) {
-            $ip  = sanitize_text_field( $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0' );
-            $key = 'olo_ab_rl_' . md5( $ip . '_' . $test_id );
-            $existing = get_transient( $key );
-            if ( $existing ) {
-                return rest_ensure_response( [ 'tracked' => false, 'reason' => 'rate_limited' ] );
-            }
-            set_transient( $key, 1, HOUR_IN_SECONDS );
+        // Rate limiting: max 1 per IP per test per event type per hour
+        $ip  = sanitize_text_field( $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0' );
+        $key = 'olo_ab_rl_' . md5( $ip . '_' . $test_id . '_' . $event );
+        $existing = get_transient( $key );
+        if ( $existing ) {
+            return rest_ensure_response( [ 'tracked' => false, 'reason' => 'rate_limited' ] );
         }
+        set_transient( $key, 1, HOUR_IN_SECONDS );
 
         global $wpdb;
         $table = self::table();
@@ -455,12 +453,19 @@ class Olo_AB_Testing {
         }
 
         // Assign random variant (50/50)
-        $variant = mt_rand( 0, 1 ) === 0 ? 'a' : 'b';
+        $variant = wp_rand( 0, 1 ) === 0 ? 'a' : 'b';
 
-        // Set cookie for 30 days
+        // Set cookie for 30 days (HttpOnly + SameSite=Lax for security)
         // NOTA: NO && — uso if annidati
         if ( ! headers_sent() ) {
-            setcookie( $cookie_name, $variant, time() + self::COOKIE_DURATION, '/', '', is_ssl(), false );
+            setcookie( $cookie_name, $variant, [
+                'expires'  => time() + self::COOKIE_DURATION,
+                'path'     => '/',
+                'domain'   => '',
+                'secure'   => is_ssl(),
+                'httponly'  => true,
+                'samesite'  => 'Lax',
+            ] );
         }
 
         return $variant;

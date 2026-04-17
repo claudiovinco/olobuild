@@ -93,6 +93,17 @@ class Olo_Headline_Tile extends Olo_Tile_Base {
 
         // Heading inline style
         $heading_style = 'margin:0;font-weight:bold;';
+
+        // Apply global typography preset if set
+        $tp = sanitize_text_field( $s['typography_preset'] ?? '' );
+        if ( $tp ) {
+            $heading_style .= "font-family:var(--olo-font-{$tp}-family);";
+            $heading_style .= "font-weight:var(--olo-font-{$tp}-weight);";
+            $heading_style .= "text-transform:var(--olo-font-{$tp}-transform);";
+            $heading_style .= "line-height:var(--olo-font-{$tp}-line-height);";
+            $heading_style .= "letter-spacing:var(--olo-font-{$tp}-letter-spacing);";
+        }
+
         if ( ! empty( $s['heading_italic'] ) ) {
             $heading_style .= 'font-style:italic;';
         }

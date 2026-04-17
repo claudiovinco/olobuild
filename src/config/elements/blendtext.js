@@ -17,7 +17,7 @@ export default {
     text_align: 'center',
     text_color: '#ffffff',
     blend_mode: 'difference',
-    bt_padding: { top: 40, right: 20, bottom: 40, left: 20 },
+    tile_padding: { top: 40, right: 20, bottom: 40, left: 20 },
   },
   fields: [
     { key: 'text', label: 'Testo', type: 'text' },
@@ -76,6 +76,6 @@ export default {
       { value: 'right', label: 'Destra' },
     ]},
     { type: 'separator', label: 'Spaziatura' },
-    { key: 'bt_padding', label: 'Padding (px)', type: 'spacing', max: 200 },
+    { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 200 },
   ],
 };

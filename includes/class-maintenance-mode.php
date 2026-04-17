@@ -69,7 +69,13 @@ class Olo_Maintenance_Mode {
             // If the secret is in the URL, set a bypass cookie for 24 hours
             if ( isset( $_GET['bypass'] ) ) {
                 if ( sanitize_text_field( wp_unslash( $_GET['bypass'] ) ) === $bypass_secret ) {
-                    setcookie( 'olo_maintenance_bypass', md5( $bypass_secret ), time() + DAY_IN_SECONDS, '/' );
+                    setcookie( 'olo_maintenance_bypass', md5( $bypass_secret ), [
+                        'expires'  => time() + DAY_IN_SECONDS,
+                        'path'     => '/',
+                        'secure'   => is_ssl(),
+                        'httponly' => true,
+                        'samesite' => 'Lax',
+                    ] );
                     return;
                 }
             }
@@ -90,8 +96,13 @@ class Olo_Maintenance_Mode {
             status_header( 200 );
         }
 
-        // Try to render the Olobuild template
-        $template_id = (int) get_option( 'olo_maintenance_template_id', 0 );
+        // Try to render the Olobuild template — separate template per mode
+        if ( $mode === 'coming_soon' ) {
+            $template_id = (int) get_option( 'olo_coming_soon_template_id', 0 );
+        }
+        if ( empty( $template_id ) ) {
+            $template_id = (int) get_option( 'olo_maintenance_template_id', 0 );
+        }
 
         if ( $template_id ) {
             $this->render_template( $template_id );

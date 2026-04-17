@@ -351,7 +351,7 @@ class Olo_Dynamic_Content {
         switch ( $field ) {
             case 'request_url':
                 $protocol = is_ssl() ? 'https://' : 'http://';
-                return $protocol . ( $_SERVER['HTTP_HOST'] ?? '' ) . ( $_SERVER['REQUEST_URI'] ?? '' );
+                return $protocol . sanitize_text_field( $_SERVER['HTTP_HOST'] ?? '' ) . esc_url_raw( $_SERVER['REQUEST_URI'] ?? '' );
 
             case 'request_param':
                 // Field config should pass the param name as the field key in format "request_param:name"

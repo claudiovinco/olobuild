@@ -13,6 +13,7 @@ export default {
     full_width: false,
 
     // Style
+    typography_preset: '',
     bg_color: '',
     text_color: '',
     border_radius: '6',
@@ -59,6 +60,7 @@ export default {
 
     { type: 'separator', label: 'Stile' },
 
+    { key: 'typography_preset', label: 'Stile tipografico', type: 'select', optionsSource: 'globalTypography' },
     { key: 'bg_color', label: 'Colore sfondo', type: 'color' },
     { key: 'text_color', label: 'Colore testo', type: 'color' },
     { key: 'border_radius', label: 'Border Radius', type: 'border-radius' },

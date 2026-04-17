@@ -63,7 +63,14 @@ class Olo_Svganimator_Tile extends Olo_Tile_Base {
                 }
             }
             if ( empty( $svg_content ) ) {
-                $svg_content = @file_get_contents( $s['svg_url'] );
+                // Use wp_remote_get instead of file_get_contents to prevent SSRF
+                $url = esc_url_raw( $s['svg_url'] );
+                if ( $url && wp_http_validate_url( $url ) ) {
+                    $response = wp_remote_get( $url, [ 'timeout' => 10 ] );
+                    if ( ! is_wp_error( $response ) && wp_remote_retrieve_response_code( $response ) === 200 ) {
+                        $svg_content = wp_remote_retrieve_body( $response );
+                    }
+                }
             }
         }
 

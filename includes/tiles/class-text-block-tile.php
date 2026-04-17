@@ -16,9 +16,9 @@ class Olo_TextBlock_Tile extends Olo_Tile_Base {
         'font_size'   => '',
         'line_height' => '',
         'max_width'   => '',
-        'padding'    => '16',
-        'tb_padding' => [ 'top' => 16, 'right' => 16, 'bottom' => 16, 'left' => 16 ],
-        'tb_margin'  => [ 'top' => 0, 'right' => 0, 'bottom' => 0, 'left' => 0 ],
+        'padding'      => '16',
+        'tile_padding' => [ 'top' => 16, 'right' => 16, 'bottom' => 16, 'left' => 16 ],
+        'tile_margin'  => [ 'top' => 0, 'right' => 0, 'bottom' => 0, 'left' => 0 ],
     ];
 
     public function get_controls() {
@@ -38,8 +38,8 @@ class Olo_TextBlock_Tile extends Olo_Tile_Base {
         // Build inline style — padding e margini con FieldSpacing (oggetto {top,right,bottom,left})
         $style = '';
 
-        // Padding: usa tb_padding (nuovo) oppure padding (legacy)
-        $p = $s['tb_padding'] ?? null;
+        // Padding: usa tile_padding (standard) oppure tb_padding/padding (legacy)
+        $p = $s['tile_padding'] ?? $s['tb_padding'] ?? null;
         if ( is_array( $p ) ) {
             $style .= 'padding:' . intval( $p['top'] ?? 0 ) . 'px ' . intval( $p['right'] ?? 0 ) . 'px ' . intval( $p['bottom'] ?? 0 ) . 'px ' . intval( $p['left'] ?? 0 ) . 'px;';
         } else {
@@ -47,8 +47,8 @@ class Olo_TextBlock_Tile extends Olo_Tile_Base {
             $style .= 'padding:' . $pad . 'px;';
         }
 
-        // Margini
-        $m = $s['tb_margin'] ?? null;
+        // Margini: usa tile_margin (standard) oppure tb_margin (legacy)
+        $m = $s['tile_margin'] ?? $s['tb_margin'] ?? null;
         if ( is_array( $m ) ) {
             $mt = intval( $m['top'] ?? 0 );
             $mr = intval( $m['right'] ?? 0 );
@@ -57,6 +57,16 @@ class Olo_TextBlock_Tile extends Olo_Tile_Base {
             if ( $mt || $mr || $mb || $ml ) {
                 $style .= "margin:{$mt}px {$mr}px {$mb}px {$ml}px;";
             }
+        }
+
+        // Apply global typography preset if set
+        $tp = sanitize_text_field( $s['typography_preset'] ?? '' );
+        if ( $tp ) {
+            $style .= "font-family:var(--olo-font-{$tp}-family);";
+            $style .= "font-weight:var(--olo-font-{$tp}-weight);";
+            $style .= "text-transform:var(--olo-font-{$tp}-transform);";
+            $style .= "line-height:var(--olo-font-{$tp}-line-height);";
+            $style .= "letter-spacing:var(--olo-font-{$tp}-letter-spacing);";
         }
 
         $txt_clr = $this->safe_color_css( $s['text_color'] ?? '' );

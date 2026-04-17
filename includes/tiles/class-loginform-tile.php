@@ -483,6 +483,7 @@ class Olo_Loginform_Tile extends Olo_Tile_Base {
                 <div class="olo-lf-msg" id="<?php echo esc_attr( $uid ); ?>-login-msg"></div>
                 <form method="post" class="olo-lf-form" data-olo-loginform="login" data-olo-uid="<?php echo esc_attr( $uid ); ?>">
                     <input type="hidden" name="olo_login_nonce" value="<?php echo esc_attr( $nonce ); ?>" />
+                    <input type="hidden" name="olo_uid" value="<?php echo esc_attr( $uid ); ?>" />
                     <input type="hidden" name="redirect_to" value="<?php echo esc_attr( $redirect_to ); ?>" />
                     <div class="olo-lf-field">
                         <label class="olo-lf-label" for="<?php echo esc_attr( $uid ); ?>-user">Nome utente o email</label>
@@ -547,14 +548,21 @@ class Olo_Loginform_Tile extends Olo_Tile_Base {
 
                 <div class="olo-lf-msg" id="<?php echo esc_attr( $uid ); ?>-reg-msg"></div>
                 <?php if ( get_option( 'users_can_register' ) ) : ?>
+                <?php
+                // Encode password config server-side to prevent client-side bypass
+                $pw_config = base64_encode( wp_json_encode( [
+                    'pw_min_length'  => $pw_min_length,
+                    'pw_req_upper'   => $pw_req_upper,
+                    'pw_req_number'  => $pw_req_number,
+                    'pw_req_special' => $pw_req_special,
+                    'pw_min_strength' => $pw_min_strength,
+                ] ) );
+                ?>
                 <form method="post" class="olo-lf-form" data-olo-loginform="register" data-olo-uid="<?php echo esc_attr( $uid ); ?>">
                     <input type="hidden" name="olo_register_nonce" value="<?php echo esc_attr( $nonce ); ?>" />
+                    <input type="hidden" name="olo_uid" value="<?php echo esc_attr( $uid ); ?>" />
                     <input type="hidden" name="redirect_to" value="<?php echo esc_attr( $reg_redirect ); ?>" />
-                    <input type="hidden" name="olo_pw_min_length" value="<?php echo esc_attr( $pw_min_length ); ?>" />
-                    <input type="hidden" name="olo_pw_req_upper" value="<?php echo $pw_req_upper ? '1' : '0'; ?>" />
-                    <input type="hidden" name="olo_pw_req_number" value="<?php echo $pw_req_number ? '1' : '0'; ?>" />
-                    <input type="hidden" name="olo_pw_req_special" value="<?php echo $pw_req_special ? '1' : '0'; ?>" />
-                    <input type="hidden" name="olo_pw_min_strength" value="<?php echo esc_attr( $pw_min_strength ); ?>" />
+                    <input type="hidden" name="_olo_form_config" value="<?php echo esc_attr( $pw_config ); ?>" />
                     <div class="olo-lf-custom-row">
                     <?php foreach ( $register_fields as $rf_idx => $rf ) :
                         $rf_type  = sanitize_key( $rf['field_type'] ?? 'text' );
@@ -1131,6 +1139,13 @@ class Olo_Loginform_Tile extends Olo_Tile_Base {
      * AJAX login handler.
      */
     public static function handle_ajax_login() {
+        // CSRF protection — nonce was generated as olo_loginform_{uid}
+        $nonce_val = sanitize_text_field( $_POST['olo_login_nonce'] ?? '' );
+        $uid       = sanitize_text_field( $_POST['olo_uid'] ?? '' );
+        if ( ! $uid || ! wp_verify_nonce( $nonce_val, 'olo_loginform_' . $uid ) ) {
+            wp_send_json_error( 'Sessione scaduta. Ricarica la pagina.' );
+        }
+
         $user = sanitize_text_field( $_POST['log'] ?? '' );
         $pass = wp_unslash( $_POST['pwd'] ?? '' );
         $remember = ! empty( $_POST['rememberme'] );
@@ -1161,6 +1176,13 @@ class Olo_Loginform_Tile extends Olo_Tile_Base {
      * AJAX register handler.
      */
     public static function handle_ajax_register() {
+        // CSRF protection — nonce was generated as olo_loginform_{uid}
+        $nonce_val = sanitize_text_field( $_POST['olo_register_nonce'] ?? '' );
+        $uid       = sanitize_text_field( $_POST['olo_uid'] ?? '' );
+        if ( ! $uid || ! wp_verify_nonce( $nonce_val, 'olo_loginform_' . $uid ) ) {
+            wp_send_json_error( 'Sessione scaduta. Ricarica la pagina.' );
+        }
+
         if ( ! get_option( 'users_can_register' ) ) {
             wp_send_json_error( 'La registrazione non è attiva.' );
         }
@@ -1186,12 +1208,14 @@ class Olo_Loginform_Tile extends Olo_Tile_Base {
             }
         }
 
-        // Password complexity validation
-        $pw_min_len  = max( 1, intval( $_POST['olo_pw_min_length'] ?? 8 ) );
-        $pw_req_up   = ! empty( $_POST['olo_pw_req_upper'] ) && $_POST['olo_pw_req_upper'] === '1';
-        $pw_req_num  = ! empty( $_POST['olo_pw_req_number'] ) && $_POST['olo_pw_req_number'] === '1';
-        $pw_req_spec = ! empty( $_POST['olo_pw_req_special'] ) && $_POST['olo_pw_req_special'] === '1';
-        $pw_min_str  = max( 0, min( 4, intval( $_POST['olo_pw_min_strength'] ?? 0 ) ) );
+        // Password complexity validation — read from saved config (NEVER from $_POST to prevent client-side bypass)
+        $form_config_b64 = sanitize_text_field( $_POST['_olo_form_config'] ?? '' );
+        $form_config     = $form_config_b64 ? json_decode( base64_decode( $form_config_b64 ), true ) : [];
+        $pw_min_len  = max( 1, intval( $form_config['pw_min_length'] ?? 8 ) );
+        $pw_req_up   = ! empty( $form_config['pw_req_upper'] );
+        $pw_req_num  = ! empty( $form_config['pw_req_number'] );
+        $pw_req_spec = ! empty( $form_config['pw_req_special'] );
+        $pw_min_str  = max( 0, min( 4, intval( $form_config['pw_min_strength'] ?? 0 ) ) );
 
         if ( strlen( $password ) < $pw_min_len ) {
             wp_send_json_error( 'La password deve avere almeno ' . $pw_min_len . ' caratteri.' );
@@ -1235,13 +1259,14 @@ class Olo_Loginform_Tile extends Olo_Tile_Base {
             wp_send_json_error( 'Errore nella registrazione. Riprova.' );
         }
 
-        // Save custom fields as user meta
+        // Save custom fields as user meta — only allow olo_cf_ prefixed keys to prevent privilege escalation
         if ( ! empty( $_POST['olo_custom'] ) ) {
             if ( is_array( $_POST['olo_custom'] ) ) {
                 foreach ( $_POST['olo_custom'] as $meta_key => $meta_value ) {
                     $safe_key   = sanitize_key( $meta_key );
                     $safe_value = sanitize_text_field( $meta_value );
-                    if ( $safe_key ) {
+                    // SECURITY: only allow olo_cf_ prefixed keys — block wp_capabilities, wp_user_level etc.
+                    if ( $safe_key && str_starts_with( $safe_key, 'olo_cf_' ) ) {
                         update_user_meta( $user_id, $safe_key, $safe_value );
                     }
                 }

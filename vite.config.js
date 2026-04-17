@@ -24,8 +24,6 @@ export default defineConfig({
           }
           return 'js/[name].[ext]';
         },
-        // NOTE: inlineDynamicImports is required for IIFE format with single entry point.
-        // To enable code splitting, switch format to 'es' and load chunks separately.
         inlineDynamicImports: true,
       },
     },

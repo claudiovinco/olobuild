@@ -19,6 +19,7 @@ class Olo_Button_Tile extends Olo_Tile_Base {
         'bg_color'           => '',
         'text_color'         => '',
         'border_radius'      => '6',
+        'tile_padding'       => [ 'top' => 14, 'right' => 32, 'bottom' => 14, 'left' => 32 ],
         'padding_x'          => '32',
         'padding_y'          => '14',
         'font_size'          => '16',
@@ -63,9 +64,30 @@ class Olo_Button_Tile extends Olo_Tile_Base {
             $rad_css = absint( $rad_raw ) . 'px';
         }
 
-        // Dimensions
-        $py = absint( $s['padding_y'] );
-        $px = absint( $s['padding_x'] );
+        // Typography preset (global style)
+        $tp = sanitize_text_field( $s['typography_preset'] ?? '' );
+        $tp_css = '';
+        if ( $tp ) {
+            $tp_css .= "font-family: var(--olo-font-{$tp}-family);\n";
+            $tp_css .= "font-weight: var(--olo-font-{$tp}-weight);\n";
+            $tp_css .= "text-transform: var(--olo-font-{$tp}-transform);\n";
+            $tp_css .= "line-height: var(--olo-font-{$tp}-line-height);\n";
+            $tp_css .= "letter-spacing: var(--olo-font-{$tp}-letter-spacing);\n";
+        }
+
+        // Padding: tile_padding (standard spacing object) with backward compat for padding_x/padding_y
+        $tp = $s['tile_padding'] ?? null;
+        if ( is_array( $tp ) ) {
+            $pt = absint( $tp['top'] ?? 14 );
+            $pr = absint( $tp['right'] ?? 32 );
+            $pb = absint( $tp['bottom'] ?? 14 );
+            $pl = absint( $tp['left'] ?? 32 );
+        } else {
+            $py_val = absint( $s['padding_y'] ?? 14 );
+            $px_val = absint( $s['padding_x'] ?? 32 );
+            $pt = $pb = $py_val;
+            $pr = $pl = $px_val;
+        }
         $fs = absint( $s['font_size'] );
         $fw_width = ! empty( $s['full_width'] ) ? 'width: 100%;' : '';
         $font_weight = absint( $s['font_weight'] ) ?: 600;
@@ -106,12 +128,13 @@ class Olo_Button_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .olo-btn-link {
                 display: inline-block;
                 <?php echo $fw_width; ?>
-                padding: <?php echo $py; ?>px <?php echo $px; ?>px;
+                padding: <?php echo $pt; ?>px <?php echo $pr; ?>px <?php echo $pb; ?>px <?php echo $pl; ?>px;
                 background-color: <?php echo $bg; ?> !important;
                 color: <?php echo $fg; ?> !important;
                 border-radius: <?php echo $rad_css; ?>;
                 font-size: <?php echo $fs; ?>px;
                 font-weight: <?php echo $font_weight; ?>;
+                <?php if ( $tp_css ) : echo $tp_css; endif; ?>
                 text-decoration: none !important;
                 text-align: center;
                 cursor: pointer;

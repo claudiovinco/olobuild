@@ -395,6 +395,15 @@ class Olo_Site_Import_Export {
                 continue;
             }
 
+            // Validate URL: only allow http/https and block internal/private IPs (SSRF prevention)
+            if ( ! wp_http_validate_url( $old_url ) ) {
+                continue;
+            }
+            $scheme = wp_parse_url( $old_url, PHP_URL_SCHEME );
+            if ( ! in_array( $scheme, [ 'http', 'https' ], true ) ) {
+                continue;
+            }
+
             // Check if this URL already exists on this site
             $existing = attachment_url_to_postid( $old_url );
             if ( $existing ) {
@@ -402,7 +411,7 @@ class Olo_Site_Import_Export {
                 continue;
             }
 
-            // Download the file
+            // Download the file (30s timeout)
             $tmp_file = download_url( $old_url, 30 );
             if ( is_wp_error( $tmp_file ) ) {
                 continue;
@@ -448,15 +457,34 @@ class Olo_Site_Import_Export {
 
     /**
      * Recursively replace URLs in template data.
+     * Uses targeted replacement only on valid URL strings to prevent data corruption.
      */
     private function remap_urls( $data, $url_map ) {
-        $json = wp_json_encode( $data );
-
-        foreach ( $url_map as $old => $new ) {
-            $json = str_replace( $old, $new, $json );
+        if ( is_string( $data ) ) {
+            // Only replace full URL values (not partial matches inside other strings)
+            foreach ( $url_map as $old => $new ) {
+                if ( $data === $old ) {
+                    return $new;
+                }
+                // Replace URL occurrences in HTML content strings
+                if ( str_contains( $data, $old ) ) {
+                    $data = str_replace(
+                        esc_url( $old ),
+                        esc_url( $new ),
+                        str_replace( $old, $new, $data )
+                    );
+                }
+            }
+            return $data;
         }
 
-        return json_decode( $json, true );
+        if ( is_array( $data ) ) {
+            foreach ( $data as $key => $value ) {
+                $data[ $key ] = $this->remap_urls( $value, $url_map );
+            }
+        }
+
+        return $data;
     }
 
     /* ─────────────────────────────────────────────
@@ -476,7 +504,7 @@ class Olo_Site_Import_Export {
 
     public function render_admin_page() {
         $db        = new Olo_Database();
-        $templates = $db->get_templates();
+        $templates = $db->list_templates();
         ?>
         <?php Olo_Builder::page_shell_open( 'Import / Export' ); ?>
 

@@ -282,6 +282,16 @@ footer.olo-site-footer {
   opacity: 1;
   color: #fff;
 }
+.olo-iframe-tb-btn.olo-tb-addcol {
+  background: rgba(99, 102, 241, 0.25);
+  opacity: 0.8;
+  color: #a5b4fc;
+}
+.olo-iframe-tb-btn.olo-tb-addcol:hover {
+  background: rgba(99, 102, 241, 0.5);
+  opacity: 1;
+  color: #fff;
+}
 
 /* Preview mode: hide controls */
 body.olo-preview-mode .olo-iframe-add-btn,

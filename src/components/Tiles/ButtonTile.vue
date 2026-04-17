@@ -42,8 +42,7 @@ const s = computed(() => ({
   bg_color: '#6366F1',
   text_color: '#FFFFFF',
   border_radius: '6',
-  padding_x: '32',
-  padding_y: '14',
+  tile_padding: { top: 14, right: 32, bottom: 14, left: 32 },
   font_size: '16',
   font_weight: '600',
   letter_spacing: '0',
@@ -80,14 +79,26 @@ const btnStyle = computed(() => {
   }
 
   const fontSize = rv(props.settings, 'font_size', s.value.font_size, mode);
-  const padX = rv(props.settings, 'padding_x', s.value.padding_x, mode);
-  const padY = rv(props.settings, 'padding_y', s.value.padding_y, mode);
+
+  // tile_padding (standard spacing object) with backward compat for legacy padding_x/padding_y
+  const tp = s.value.tile_padding;
+  let padTop = 14, padRight = 32, padBottom = 14, padLeft = 32;
+  if (typeof tp === 'object' && tp !== null) {
+    padTop = parseInt(tp.top) || 14;
+    padRight = parseInt(tp.right) || 32;
+    padBottom = parseInt(tp.bottom) || 14;
+    padLeft = parseInt(tp.left) || 32;
+  } else if (s.value.padding_y !== undefined || s.value.padding_x !== undefined) {
+    // Legacy: padding_x / padding_y
+    padTop = padBottom = parseInt(s.value.padding_y) || 14;
+    padRight = padLeft = parseInt(s.value.padding_x) || 32;
+  }
 
   const style = {
     display: 'inline-block',
     width: s.value.full_width ? '100%' : 'auto',
     textAlign: 'center',
-    padding: `${padY || 14}px ${padX || 32}px`,
+    padding: `${padTop}px ${padRight}px ${padBottom}px ${padLeft}px`,
     backgroundColor: s.value.bg_color || '#6366F1',
     color: s.value.text_color || '#FFFFFF',
     borderRadius,

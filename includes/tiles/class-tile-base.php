@@ -132,7 +132,9 @@ abstract class Olo_Tile_Base {
             $icons = get_option( 'olo_custom_icons', [] );
             if ( isset( $icons[ $name ] ) ) {
                 $size = round( 20 * $ratio );
-                return '<span class="olo-custom-icon" style="display:inline-flex;width:' . $size . 'px;height:' . $size . 'px;" ' . $extra_attr . '>' . $icons[ $name ] . '</span>';
+                // Sanitize SVG output to prevent stored XSS
+                $safe_svg = function_exists( 'olo_sanitize_svg' ) ? olo_sanitize_svg( $icons[ $name ] ) : wp_kses_post( $icons[ $name ] );
+                return '<span class="olo-custom-icon" style="display:inline-flex;width:' . $size . 'px;height:' . $size . 'px;" ' . $extra_attr . '>' . $safe_svg . '</span>';
             }
             return '';
         }

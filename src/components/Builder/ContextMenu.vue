@@ -4,57 +4,62 @@
       v-if="visible"
       ref="menuRef"
       class="olo-ctx-menu"
+      role="menu"
+      :aria-label="t('Menu contestuale')"
       :style="{ left: x + 'px', top: y + 'px' }"
       @click.stop
       @contextmenu.prevent
+      @keydown.escape="close"
+      @keydown.arrow-down.prevent="focusNextItem"
+      @keydown.arrow-up.prevent="focusPrevItem"
     >
       <button @click="close" class="olo-ctx-close" title="Chiudi">
         <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 2l8 8M10 2l-8 8"/></svg>
       </button>
-      <button @click="doCopy" class="olo-ctx-item">
+      <button @click="doCopy" class="olo-ctx-item" role="menuitem">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
         Copia
       </button>
-      <button @click="doPaste" :disabled="!tilesStore.clipboardTile" class="olo-ctx-item">
+      <button @click="doPaste" :disabled="!tilesStore.clipboardTile" class="olo-ctx-item" role="menuitem">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 2H9a1 1 0 0 0-1 1v2c0 .6.4 1 1 1h6c.6 0 1-.4 1-1V3c0-.6-.4-1-1-1Z"/><path d="M8 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2"/></svg>
         Incolla
       </button>
       <div class="olo-ctx-sep"></div>
-      <button @click="doCopyStyle" class="olo-ctx-item">
+      <button @click="doCopyStyle" class="olo-ctx-item" role="menuitem">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.9 12.1a1 1 0 0 1-1 .9H4.8a1 1 0 0 1-1-.8L2 3"/><path d="M6.2 15h11.7"/><path d="M13 3v12"/></svg>
         Copia stile
       </button>
-      <button @click="doPasteStyle" :disabled="!tilesStore.clipboardStyle" class="olo-ctx-item">
+      <button @click="doPasteStyle" :disabled="!tilesStore.clipboardStyle" class="olo-ctx-item" role="menuitem">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.9 12.1a1 1 0 0 1-1 .9H4.8a1 1 0 0 1-1-.8L2 3"/><path d="M6.2 15h11.7"/><path d="M13 3v12"/></svg>
         Incolla stile
       </button>
       <div class="olo-ctx-sep"></div>
-      <button @click="doDuplicate" class="olo-ctx-item">
+      <button @click="doDuplicate" class="olo-ctx-item" role="menuitem">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="13" height="13" rx="2"/><rect x="9" y="9" width="13" height="13" rx="2"/></svg>
         Duplica
       </button>
-      <button @click="doMoveUp" class="olo-ctx-item">
+      <button @click="doMoveUp" class="olo-ctx-item" role="menuitem">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m18 15-6-6-6 6"/></svg>
         Sposta su
       </button>
-      <button @click="doMoveDown" class="olo-ctx-item">
+      <button @click="doMoveDown" class="olo-ctx-item" role="menuitem">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
         Sposta giù
       </button>
       <div class="olo-ctx-sep"></div>
-      <button v-if="currentTileIsSection" @click="doSaveAsTemplate" class="olo-ctx-item">
+      <button v-if="currentTileIsSection" @click="doSaveAsTemplate" class="olo-ctx-item" role="menuitem">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
         Salva sezione come template
       </button>
-      <button v-if="currentTileIsSection" @click="doLoadTemplate" class="olo-ctx-item">
+      <button v-if="currentTileIsSection" @click="doLoadTemplate" class="olo-ctx-item" role="menuitem">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 15v4c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
         Carica template sezione
       </button>
-      <button @click="doSaveGlobal" class="olo-ctx-item">
+      <button @click="doSaveGlobal" class="olo-ctx-item" role="menuitem">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5Z"/><path d="m2 17 10 5 10-5"/><path d="m2 12 10 5 10-5"/></svg>
         Salva come globale
       </button>
-      <button @click="doDetachGlobal" :disabled="!currentTileIsGlobal" class="olo-ctx-item">
+      <button @click="doDetachGlobal" :disabled="!currentTileIsGlobal" class="olo-ctx-item" role="menuitem">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
         Sgancia globale
       </button>
@@ -102,6 +107,7 @@ import { ref, computed, nextTick, onMounted, onBeforeUnmount } from 'vue';
 import { useTilesStore } from '@/stores/tiles';
 import { useBuilderStore } from '@/stores/builder';
 import { columns as gridColumns, multirow as gridMultirow, masonry as gridMasonry, sidebar as gridSidebar } from '@/config/gridTemplates.js';
+import { t } from '@/i18n/index.js';
 
 const tilesStore = useTilesStore();
 const builderStore = useBuilderStore();
@@ -199,6 +205,24 @@ function open(event, id) {
 function close() {
   visible.value = false;
   tileId.value = null;
+}
+
+// A11y: arrow key navigation for menu items
+function focusNextItem() {
+  if (!menuRef.value) return;
+  const items = menuRef.value.querySelectorAll('[role="menuitem"]:not(:disabled)');
+  const current = document.activeElement;
+  let idx = Array.from(items).indexOf(current);
+  idx = (idx + 1) % items.length;
+  items[idx]?.focus();
+}
+function focusPrevItem() {
+  if (!menuRef.value) return;
+  const items = menuRef.value.querySelectorAll('[role="menuitem"]:not(:disabled)');
+  const current = document.activeElement;
+  let idx = Array.from(items).indexOf(current);
+  idx = (idx - 1 + items.length) % items.length;
+  items[idx]?.focus();
 }
 
 function doCopy() {

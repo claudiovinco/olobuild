@@ -11,6 +11,7 @@
  *      import { resolveNodeBg, buildBgStyle, buildOverlayStyle } from '@/composables/useBackgroundStyle';
  */
 import { computed } from 'vue';
+import { getPatternCSS } from '@/utils/patternCSS';
 
 // ────────────────────────────────────────────
 // Funzioni imperative (usate anche internamente dai computed)
@@ -82,6 +83,10 @@ export function buildBgStyle(bg) {
 
   if (bg.type === 'video') {
     return { backgroundColor: '#1a1a2e' };
+  }
+
+  if (bg.type === 'pattern') {
+    return getPatternCSS(bg.pattern_type || 'dots', bg.pattern_color || '#000000', bg.pattern_bg_color || '#ffffff', bg.pattern_size || 20, bg.pattern_opacity ?? 1);
   }
 
   if (bg.type === 'gallery') {
@@ -181,6 +186,7 @@ export function useBackgroundStyle(bgGetter) {
     const bg = effectiveBg.value;
     if (bg.type === 'solid') return buildBgStyle(bg);
     if (bg.type === 'gradient') return buildBgStyle(bg);
+    if (bg.type === 'pattern') return buildBgStyle(bg);
     return {};
   });
 

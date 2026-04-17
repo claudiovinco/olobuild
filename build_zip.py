@@ -1,0 +1,127 @@
+"""
+Build installable ZIP for a WordPress plugin.
+Creates a ZIP with Linux-style forward-slash paths, safe for WordPress install.
+
+Usage: python build_zip.py [plugin_name]
+If plugin_name is omitted, defaults to 'olobuild'.
+"""
+import os
+import sys
+import zipfile
+from pathlib import Path
+
+PLUGIN = sys.argv[1] if len(sys.argv) > 1 else "olobuild"
+PROJECT_ROOT = Path(f"D:/TECNICA/{PLUGIN}")
+OUTPUT_DIR = Path("D:/TECNICA/olobuild/dist")
+
+# Read version from main PHP file
+main_php = PROJECT_ROOT / f"{PLUGIN}.php"
+version = "0.0.0"
+if main_php.exists():
+    with open(main_php, "r", encoding="utf-8") as f:
+        for line in f:
+            if line.strip().startswith("* Version:"):
+                version = line.split(":", 1)[1].strip()
+                break
+OUTPUT_ZIP = OUTPUT_DIR / f"{PLUGIN}-{version}.zip"
+
+# Exclusions
+EXCLUDE_DIRS = {
+    "node_modules", ".git", ".claude", "tmp_deploy", "dist",
+    "docs", ".vscode", ".idea", "__pycache__",
+}
+EXCLUDE_FILES = {
+    "CLAUDE.md", ".gitignore", ".gitattributes", ".editorconfig",
+    "package.json", "package-lock.json", "yarn.lock",
+    "vite.config.js", "vite.config.admin.js",
+    "tailwind.config.js", "postcss.config.js",
+    "composer.json", "composer.lock",
+    "_build.cjs", "check_config.py", "build_zip.py",
+    ".DS_Store", "Thumbs.db",
+}
+EXCLUDE_EXT = {".log", ".po~", ".bak", ".tmp", ".swp"}
+EXCLUDE_PATTERN_PREFIXES = ("test-",)  # test-*.php files
+# Exclude files with .bak somewhere in the name
+def is_backup_file(name: str) -> bool:
+    return ".bak" in name
+
+# Include src folder or not (for production ZIP, don't include src)
+INCLUDE_SRC = False
+
+OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+
+if not PROJECT_ROOT.exists():
+    print(f"ERROR: project folder not found: {PROJECT_ROOT}")
+    sys.exit(1)
+
+print(f"Building {PLUGIN}-{version}.zip...")
+print(f"Source: {PROJECT_ROOT}")
+print(f"Output: {OUTPUT_ZIP}")
+
+# Build file list
+print("\n[1/2] Collecting files...")
+files_to_zip = []
+total_size = 0
+
+for root, dirs, files in os.walk(PROJECT_ROOT):
+    root_path = Path(root)
+    # Prune excluded dirs in-place
+    dirs[:] = [d for d in dirs if d not in EXCLUDE_DIRS and not d.startswith(".")]
+    if not INCLUDE_SRC and root_path == PROJECT_ROOT:
+        dirs[:] = [d for d in dirs if d != "src"]
+
+    for filename in files:
+        if filename in EXCLUDE_FILES:
+            continue
+        if any(filename.startswith(p) for p in EXCLUDE_PATTERN_PREFIXES) and filename.endswith(".php"):
+            continue
+        if Path(filename).suffix in EXCLUDE_EXT:
+            continue
+        if filename.startswith(".") and filename not in (".htaccess",):
+            continue
+        if is_backup_file(filename):
+            continue
+
+        abs_path = root_path / filename
+        rel_path = abs_path.relative_to(PROJECT_ROOT)
+
+        # Use forward slashes (Linux style)
+        arc_name = f"{PLUGIN}/" + rel_path.as_posix()
+
+        files_to_zip.append((abs_path, arc_name))
+        total_size += abs_path.stat().st_size
+
+print(f"  Files to archive: {len(files_to_zip)}")
+print(f"  Total source size: {total_size / 1024 / 1024:.1f} MB")
+
+# Sanity check
+main_in_zip = f"{PLUGIN}/{PLUGIN}.php"
+if not any(arc == main_in_zip for _, arc in files_to_zip):
+    print(f"ERROR: main file {main_in_zip} not included!")
+    sys.exit(1)
+
+# Create ZIP
+print(f"\n[2/2] Creating ZIP...")
+if OUTPUT_ZIP.exists():
+    OUTPUT_ZIP.unlink()
+
+with zipfile.ZipFile(OUTPUT_ZIP, "w", zipfile.ZIP_DEFLATED, compresslevel=6) as zf:
+    for abs_path, arc_name in files_to_zip:
+        zf.write(abs_path, arc_name)
+
+zip_size = OUTPUT_ZIP.stat().st_size
+print(f"  Output: {OUTPUT_ZIP}")
+print(f"  ZIP size: {zip_size / 1024 / 1024:.2f} MB")
+print(f"  Compression: {100 - (zip_size * 100 / total_size):.1f}%")
+
+# Verification
+print("\n[VERIFY] Structure:")
+with zipfile.ZipFile(OUTPUT_ZIP, "r") as zf:
+    names = zf.namelist()
+    top_dirs = sorted(set(n[len(PLUGIN)+1:].split("/")[0] for n in names if "/" in n[len(PLUGIN)+1:]))
+    top_files = sorted([n[len(PLUGIN)+1:] for n in names if "/" not in n[len(PLUGIN)+1:] and n != f"{PLUGIN}/"])
+    print(f"  Main PHP: {main_in_zip in names}")
+    print(f"  Top-level dirs: {', '.join(top_dirs)}")
+    print(f"  Total entries: {len(names)}")
+
+print("\nDone!")

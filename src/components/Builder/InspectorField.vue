@@ -300,6 +300,7 @@ import FieldTime from './fields/FieldTime.vue';
 import FieldIconSelect from './fields/FieldIconSelect.vue';
 import DynamicFieldToggle from './DynamicFieldToggle.vue';
 import { useTilesStore } from '@/stores/tiles';
+import { useStylesStore } from '@/stores/styles';
 
 import FieldEditor from './fields/FieldEditor.vue';
 
@@ -397,6 +398,14 @@ const resolvedOptions = computed(() => {
       };
       walk(tilesStore.canvasTiles || []);
       return results;
+    }
+    if (props.field.optionsSource === 'globalTypography') {
+      const stylesStore = useStylesStore();
+      const sets = stylesStore.globalTypography || [];
+      return [
+        { value: '', label: '— Nessuno —' },
+        ...sets.map(gt => ({ value: gt.id, label: gt.label || gt.id }))
+      ];
     }
     if (props.field.optionsSource === 'wpMenuItems') {
       const depKey = props.field.optionsDependOn || 'menu_id';

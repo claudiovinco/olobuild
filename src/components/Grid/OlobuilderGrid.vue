@@ -136,7 +136,7 @@
                     :style="getGridStyle(row)"
                   >
                     <div
-                      v-for="col in (row.children || [])"
+                      v-for="(col, colIdx) in (row.children || [])"
                       :key="col.id"
                       class="olo-column-block"
                       :class="{
@@ -276,6 +276,15 @@
                     >
                       <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/><rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg>
                       Grid
+                    </button>
+                    <span class="olo-preset-sep"></span>
+                    <button
+                      @click.stop="addColumnAfter(row, (row.children || []).length - 1)"
+                      class="olo-preset-btn olo-preset-btn--add"
+                      title="Aggiungi colonna"
+                    >
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+                      Col
                     </button>
                   </div>
                   <!-- Custom widths input -->
@@ -923,6 +932,12 @@ function addRowToSection(section) {
   builderStore.selectTile(row.id);
 }
 
+// --- Add column to row ---
+function addColumnAfter(row, afterColIdx) {
+  tilesStore.addColumnToRow(row.id, afterColIdx);
+  builderStore.isDirty = true;
+}
+
 // --- Insert section at specific index ---
 function insertSectionAt(index) {
   const col1 = createColumn('1-2', []);
@@ -1297,6 +1312,27 @@ function changeRowLayout(row, layoutKey) {
   border-color: #e8910c;
   color: #d97706;
 }
+.olo-preset-sep {
+  width: 1px;
+  height: 16px;
+  background: #e5e7eb;
+  margin: 0 2px;
+  display: inline-block;
+  vertical-align: middle;
+}
+.olo-preset-btn--add {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-weight: 600;
+  border-color: #10B981;
+  color: #10B981;
+}
+.olo-preset-btn--add:hover {
+  border-color: #059669;
+  color: #fff;
+  background: #10B981;
+}
 .olo-preset-btn--grid:hover {
   border-color: #d97706;
   color: #b45309;
@@ -1366,9 +1402,67 @@ function changeRowLayout(row, layoutKey) {
 /* === Drag states === */
 .olo-ghost {
   opacity: 0.3;
+  border: 2px dashed var(--olo-color-primary, #6366F1) !important;
+  border-radius: 4px;
+  background: rgba(99, 102, 241, 0.05) !important;
 }
 .olo-chosen {
   opacity: 0.8;
+  box-shadow: 0 0 0 2px var(--olo-color-primary, #6366F1);
+  border-radius: 4px;
+}
+
+/* Drop zone highlights — shown when dragging over valid targets */
+.sortable-drag ~ .olo-column-block,
+.sortable-drag ~ .olo-section-block {
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+.olo-column-block.sortable-ghost-adjacent,
+.olo-column-empty:not(:has(.olo-tile-wrapper)) {
+  border: 2px dashed rgba(99, 102, 241, 0.4);
+  background: rgba(99, 102, 241, 0.04);
+  border-radius: 4px;
+}
+
+/* Drag-over active state on columns */
+.olo-column-block:has(.sortable-ghost) {
+  border-color: var(--olo-color-primary, #6366F1) !important;
+  background: rgba(99, 102, 241, 0.06);
+}
+
+/* Visual cue for empty columns during drag */
+.olo-column-empty {
+  min-height: 60px;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+/* === Sidebar drag active: highlight all drop targets === */
+.olo-drag-active .olo-column-empty {
+  border: 2px dashed rgba(99, 102, 241, 0.35) !important;
+  background: rgba(99, 102, 241, 0.04);
+  min-height: 80px;
+}
+.olo-drag-active .olo-column-block {
+  border-color: rgba(99, 102, 241, 0.25) !important;
+  transition: border-color 0.15s ease;
+}
+.olo-drag-active .olo-canvas-bottom-drop {
+  border: 2px dashed rgba(99, 102, 241, 0.4);
+  background: rgba(99, 102, 241, 0.04);
+  padding: 24px;
+}
+/* Pulse animation on the empty canvas drop hint */
+.olo-drag-active .olo-canvas-bottom-drop::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 2px solid transparent;
+  border-radius: inherit;
+  animation: olo-drop-pulse 1.5s ease-in-out infinite;
+}
+@keyframes olo-drop-pulse {
+  0%, 100% { border-color: transparent; }
+  50% { border-color: rgba(99, 102, 241, 0.3); }
 }
 
 /* ========================================

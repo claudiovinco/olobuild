@@ -10,6 +10,7 @@ export default {
     subtitle: '',
     tag: 'h2',
     alignment: 'center',
+    typography_preset: '',
     heading_size: 'lg',
     heading_color: '',
     heading_italic: false,
@@ -31,6 +32,7 @@ export default {
     { key: 'heading', label: 'Titolo', type: 'textarea' },
     { key: 'subtitle', label: 'Sottotitolo', type: 'textarea' },
     { type: 'separator', label: 'Aspetto titolo' },
+    { key: 'typography_preset', label: 'Stile tipografico', type: 'select', optionsSource: 'globalTypography' },
     { key: 'tag', label: 'Tag HTML', type: 'select', options: [
       { value: 'h1', label: 'H1' },
       { value: 'h2', label: 'H2' },

@@ -32,9 +32,71 @@ class Olo_Frontend_Renderer {
     /** @var Olo_Animation_Builder */
     private $anim;
 
+    /**
+     * Whitelist of allowed CSS border-style values.
+     */
+    private static $allowed_border_styles = [ 'none', 'solid', 'dashed', 'dotted', 'double', 'groove', 'ridge', 'inset', 'outset' ];
+
     public function __construct() {
         $this->css  = new Olo_CSS_Builder();
         $this->anim = new Olo_Animation_Builder();
+    }
+
+    /**
+     * Sanitize a border-style value against whitelist.
+     */
+    private function safe_border_style( $val ) {
+        $val = strtolower( trim( $val ?? 'solid' ) );
+        return in_array( $val, self::$allowed_border_styles, true ) ? $val : 'solid';
+    }
+
+    /**
+     * Sanitize a CSS color value — allows hex, rgb, rgba, hsl, hsla, named colors, CSS variables.
+     */
+    private function safe_border_color( $val ) {
+        $val = trim( $val ?? '#374151' );
+        // Allow hex, rgb/rgba, hsl/hsla, named colors, CSS custom properties
+        if ( preg_match( '/^(#[0-9a-fA-F]{3,8}|rgba?\([^)]+\)|hsla?\([^)]+\)|var\(--[a-zA-Z0-9_-]+\)|[a-zA-Z]+)$/', $val ) ) {
+            return $val;
+        }
+        return '#374151';
+    }
+
+    /**
+     * Sanitize inline custom CSS — strip dangerous patterns.
+     * For inline style="" attributes, only allows CSS property declarations.
+     */
+    private function safe_inline_css( $css ) {
+        $css = trim( $css ?? '' );
+        if ( $css === '' ) return '';
+        // Remove anything that could break out of style attribute or inject HTML
+        $css = str_replace( [ '<', '>', '"', "'", '`' ], '', $css );
+        // Remove expression(), url(javascript:), url(data:), @import, behavior:
+        $css = preg_replace( '/expression\s*\(/i', '', $css );
+        $css = preg_replace( '/url\s*\(\s*(javascript|data)\s*:/i', 'url(blocked:', $css );
+        $css = preg_replace( '/@import/i', '', $css );
+        $css = preg_replace( '/behavior\s*:/i', '', $css );
+        $css = preg_replace( '/-moz-binding\s*:/i', '', $css );
+        return $css;
+    }
+
+    /**
+     * Sanitize custom CSS for <style> blocks — more permissive than inline but still safe.
+     */
+    private function safe_block_css( $css ) {
+        $css = trim( $css ?? '' );
+        if ( $css === '' ) return '';
+        // Remove </style> to prevent breaking out of style block
+        $css = preg_replace( '/<\/style\s*>/i', '', $css );
+        // Remove <script> tags
+        $css = preg_replace( '/<script/i', '', $css );
+        // Remove expression(), behavior, -moz-binding
+        $css = preg_replace( '/expression\s*\(/i', '', $css );
+        $css = preg_replace( '/behavior\s*:/i', '', $css );
+        $css = preg_replace( '/-moz-binding\s*:/i', '', $css );
+        $css = preg_replace( '/url\s*\(\s*(javascript|data)\s*:/i', 'url(blocked:', $css );
+        $css = preg_replace( '/@import\s+url/i', '', $css );
+        return $css;
     }
 
     /**
@@ -182,33 +244,41 @@ class Olo_Frontend_Renderer {
         }
 
         if ( $has_olo ) {
-            // UIkit 3 (CSS + JS + Icons) - only on frontend, NOT in builder admin
-            wp_enqueue_style(
-                'uikit-css',
-                OLO_URL . 'assets/vendor/uikit/css/uikit.min.css',
-                [],
-                '3.21.16'
-            );
-            wp_enqueue_script(
-                'uikit-js',
-                OLO_URL . 'assets/vendor/uikit/js/uikit.min.js',
-                [],
-                '3.21.16',
-                array( 'in_footer' => true, 'strategy' => 'defer' )
-            );
-            wp_enqueue_script(
-                'uikit-icons-js',
-                OLO_URL . 'assets/vendor/uikit/js/uikit-icons.min.js',
-                array( 'uikit-js' ),
-                '3.21.16',
-                array( 'in_footer' => true, 'strategy' => 'defer' )
-            );
+            $safe_mode = get_option( 'olo_safe_mode', false );
+
+            if ( $safe_mode ) {
+                add_filter( 'body_class', function( $classes ) { $classes[] = 'olo-safe-mode'; return $classes; } );
+            }
+
+            if ( ! $safe_mode ) {
+                // UIkit 3 (CSS + JS + Icons) - only on frontend, NOT in builder admin
+                wp_enqueue_style(
+                    'uikit-css',
+                    OLO_URL . 'assets/vendor/uikit/css/uikit.min.css',
+                    [],
+                    '3.21.16'
+                );
+                wp_enqueue_script(
+                    'uikit-js',
+                    OLO_URL . 'assets/vendor/uikit/js/uikit.min.js',
+                    [],
+                    '3.21.16',
+                    array( 'in_footer' => true, 'strategy' => 'defer' )
+                );
+                wp_enqueue_script(
+                    'uikit-icons-js',
+                    OLO_URL . 'assets/vendor/uikit/js/uikit-icons.min.js',
+                    array( 'uikit-js' ),
+                    '3.21.16',
+                    array( 'in_footer' => true, 'strategy' => 'defer' )
+                );
+            }
 
             // Olobuilder custom overrides (loaded after UIkit)
             wp_enqueue_style(
                 'olo-frontend-css',
                 OLO_URL . 'assets/css/frontend.css',
-                [ 'uikit-css' ],
+                $safe_mode ? [] : [ 'uikit-css' ],
                 OLO_VERSION
             );
 
@@ -946,8 +1016,8 @@ class Olo_Frontend_Renderer {
         // Border
         if ( ! empty( $style['border_width'] ) && intval( $style['border_width'] ) > 0 ) {
             $bw = intval( $style['border_width'] );
-            $bs = $style['border_style'] ?? 'solid';
-            $bc = $style['border_color'] ?? '#374151';
+            $bs = $this->safe_border_style( $style['border_style'] ?? 'solid' );
+            $bc = $this->safe_border_color( $style['border_color'] ?? '#374151' );
             $inline_styles[] = "border: {$bw}px {$bs} {$bc}";
         }
 
@@ -1029,7 +1099,7 @@ class Olo_Frontend_Renderer {
         }
 
         if ( ! empty( $advanced['custom_css'] ) ) {
-            $inline_styles[] = $advanced['custom_css'];
+            $inline_styles[] = $this->safe_inline_css( $advanced['custom_css'] );
         }
 
         // Positioning (absolute/fixed/relative) for sections
@@ -1245,8 +1315,8 @@ class Olo_Frontend_Renderer {
         // Border
         if ( ! empty( $style['border_width'] ) && intval( $style['border_width'] ) > 0 ) {
             $bw = intval( $style['border_width'] );
-            $bs = $style['border_style'] ?? 'solid';
-            $bc = $style['border_color'] ?? '#374151';
+            $bs = $this->safe_border_style( $style['border_style'] ?? 'solid' );
+            $bc = $this->safe_border_color( $style['border_color'] ?? '#374151' );
             $row_spacing_styles[] = "border: {$bw}px {$bs} {$bc}";
         }
 
@@ -1333,7 +1403,7 @@ class Olo_Frontend_Renderer {
                 $wrapper_styles[] = 'overflow: clip';
             }
             if ( ! empty( $advanced['custom_css'] ) ) {
-                $wrapper_styles[] = $advanced['custom_css'];
+                $wrapper_styles[] = $this->safe_inline_css( $advanced['custom_css'] );
             }
         }
 
@@ -1834,8 +1904,8 @@ class Olo_Frontend_Renderer {
         // Border
         if ( ! empty( $style['border_width'] ) && intval( $style['border_width'] ) > 0 ) {
             $bw = intval( $style['border_width'] );
-            $bs = $style['border_style'] ?? 'solid';
-            $bc = $style['border_color'] ?? '#374151';
+            $bs = $this->safe_border_style( $style['border_style'] ?? 'solid' );
+            $bc = $this->safe_border_color( $style['border_color'] ?? '#374151' );
             $inline_styles[] = "border: {$bw}px {$bs} {$bc}";
         }
 
@@ -2056,8 +2126,8 @@ class Olo_Frontend_Renderer {
         // Border
         if ( ! empty( $style['border_width'] ) && intval( $style['border_width'] ) > 0 ) {
             $bw = intval( $style['border_width'] );
-            $bs = $style['border_style'] ?? 'solid';
-            $bc = $style['border_color'] ?? '#374151';
+            $bs = $this->safe_border_style( $style['border_style'] ?? 'solid' );
+            $bc = $this->safe_border_color( $style['border_color'] ?? '#374151' );
             $inline_styles[] = "border: {$bw}px {$bs} {$bc}";
         }
 
@@ -2132,8 +2202,8 @@ class Olo_Frontend_Renderer {
         // Border
         if ( ! empty( $style['border_width'] ) && intval( $style['border_width'] ) > 0 ) {
             $bw = intval( $style['border_width'] );
-            $bs = $style['border_style'] ?? 'solid';
-            $bc = $style['border_color'] ?? '#374151';
+            $bs = $this->safe_border_style( $style['border_style'] ?? 'solid' );
+            $bc = $this->safe_border_color( $style['border_color'] ?? '#374151' );
             $inline_styles[] = "border: {$bw}px {$bs} {$bc}";
         }
 
@@ -2346,8 +2416,8 @@ class Olo_Frontend_Renderer {
 
         if ( ! empty( $style['border_width'] ) && intval( $style['border_width'] ) > 0 ) {
             $bw = intval( $style['border_width'] );
-            $bs = $style['border_style'] ?? 'solid';
-            $bc = $style['border_color'] ?? '#374151';
+            $bs = $this->safe_border_style( $style['border_style'] ?? 'solid' );
+            $bc = $this->safe_border_color( $style['border_color'] ?? '#374151' );
             $inline_styles[] = "border: {$bw}px {$bs} {$bc}";
         }
 
@@ -2427,7 +2497,7 @@ class Olo_Frontend_Renderer {
         }
 
         if ( ! empty( $advanced['custom_css'] ) ) {
-            $inline_styles[] = $advanced['custom_css'];
+            $inline_styles[] = $this->safe_inline_css( $advanced['custom_css'] );
         }
 
         // Positioning (absolute/fixed/relative)
@@ -3082,7 +3152,8 @@ class Olo_Frontend_Renderer {
         if ( $custom_css !== '' ) {
             $selector = '#' . esc_attr( $css_id );
             $custom_css = str_replace( 'selector', $selector, $custom_css );
-            $hover_css_rules[] = $custom_css;
+            // Sanitize CSS for <style> block injection prevention
+            $hover_css_rules[] = $this->safe_block_css( $custom_css );
         }
     }
 
@@ -3229,6 +3300,9 @@ class Olo_Frontend_Renderer {
             return '<!-- Olobuilder: Template not available -->';
         }
 
+        // Fire action after template validation succeeds
+        do_action( 'olo_template_rendered', $id, $template['title'], $template['type'] );
+
         $tiles = $template['content'];
         if ( empty( $tiles ) || ! is_array( $tiles ) ) {
             return '<!-- Olobuilder: Empty template -->';
@@ -3258,7 +3332,10 @@ class Olo_Frontend_Renderer {
             'mobile'           => 480,
         ] );
 
+        $safe_mode = get_option( 'olo_safe_mode', false );
+
         // Shared utilities (escHtml etc.) — loaded before all olo-*.js scripts
+        if ( ! $safe_mode ) {
         wp_enqueue_script(
             'olo-utils',
             OLO_URL . 'assets/js/olo-utils.js',
@@ -3450,6 +3527,7 @@ class Olo_Frontend_Renderer {
         if ( $this->check_bezier_recursive( $tiles ) ) {
             wp_enqueue_script( 'olo-bezier-parallax-js', OLO_URL . 'assets/js/olo-bezier-parallax.js', [], OLO_VERSION, true );
         }
+        } // end if ( ! $safe_mode ) — skip tile JS enqueue
 
         $manager = Olo_Tile_Manager::instance();
 

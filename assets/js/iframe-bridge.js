@@ -288,31 +288,6 @@
     if (dropIndicator) dropIndicator.style.display = 'none';
   }
 
-  /**
-   * Send a snapshot of section/column bounding boxes to the parent.
-   * The parent uses this for synchronous hit-testing during drag.
-   */
-  function sendLayoutSnapshot() {
-    var grid = root.querySelector('[data-olo-zone="body"] .olo-frontend-grid') || root.querySelector('.olo-frontend-grid');
-    if (!grid) { post('olo:layout-snapshot', { sections: [], columns: [] }); return; }
-
-    var sectionEls = grid.querySelectorAll(':scope > [data-olo-tile-id]');
-    var sects = [];
-    for (var i = 0; i < sectionEls.length; i++) {
-      var r = sectionEls[i].getBoundingClientRect();
-      sects.push({ id: sectionEls[i].getAttribute('data-olo-tile-id'), top: r.top, bottom: r.bottom, left: r.left, right: r.right, index: i });
-    }
-
-    var columnEls = root.querySelectorAll('[data-olo-tile-type="column"]');
-    var cols = [];
-    for (var j = 0; j < columnEls.length; j++) {
-      var cr = columnEls[j].getBoundingClientRect();
-      cols.push({ id: columnEls[j].getAttribute('data-olo-tile-id'), top: cr.top, bottom: cr.bottom, left: cr.left, right: cr.right });
-    }
-
-    post('olo:layout-snapshot', { sections: sects, columns: cols });
-  }
-
   // ── Height observer ──
 
   var resizeObserver = null;
@@ -380,6 +355,13 @@
       }
     });
 
+    // Re-init restaurant booking widgets (delay to ensure DOM settled)
+    setTimeout(function() {
+      if (typeof window.__oloRestInit === 'function') {
+        window.__oloRestInit();
+      }
+    }, 100);
+
     // Re-init SVG Animator
     if (typeof window.__oloSvgaInit === 'function') {
       window.__oloSvgaInit();
@@ -408,12 +390,6 @@
         delete window[keys[i]];
       }
     }
-    // Destroy existing Leaflet map instances to prevent "already initialized" errors
-    root.querySelectorAll('.olo-map-canvas, [id^="olo-map-"]').forEach(function(el) {
-      if (el._leaflet_id) {
-        try { el._leaflet = null; delete el._leaflet_id; } catch(e) {}
-      }
-    });
   }
 
   // ── Overlay controls: "+" add buttons between sections ──
@@ -495,7 +471,8 @@
         '<button class="olo-iframe-tb-btn" data-action="duplicate" title="Duplica"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button>' +
         '<button class="olo-iframe-tb-btn" data-action="delete" title="Elimina"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4h8v2M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6"/></svg></button>' +
         '<span class="olo-iframe-tb-sep"></span>' +
-        '<button class="olo-iframe-tb-btn olo-tb-add" data-action="addafter" title="Aggiungi elemento dopo"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg></button>';
+        '<button class="olo-iframe-tb-btn olo-tb-add" data-action="addafter" title="Aggiungi elemento dopo"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg></button>' +
+        '<button class="olo-iframe-tb-btn olo-tb-addcol" data-action="addcolumn" title="Aggiungi colonna"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="18" rx="1"/><rect x="14" y="3" width="7" height="18" rx="1" opacity="0.4"/><path d="M17.5 9v6M14.5 12h6" stroke-width="2"/></svg></button>';
       document.body.appendChild(hoverToolbar);
 
       hoverToolbar.addEventListener('click', function(e) {
@@ -509,6 +486,8 @@
           post('olo:tile-click', { tileId: tileId });
         } else if (action === 'addafter') {
           post('olo:add-tile-after', { tileId: tileId });
+        } else if (action === 'addcolumn') {
+          post('olo:add-column', { tileId: tileId });
         } else {
           post('olo:tile-action', { tileId: tileId, action: action });
         }
@@ -725,26 +704,16 @@
   }
 
   function executeInlineScripts(container) {
-    var scripts = container.querySelectorAll('script:not([data-olo-executed])');
+    var scripts = container.querySelectorAll('script');
     for (var i = 0; i < scripts.length; i++) {
       var oldScript = scripts[i];
-      // Skip non-JS scripts (JSON-LD, application/json, etc.)
-      var scriptType = (oldScript.getAttribute('type') || '').toLowerCase();
-      if (scriptType && scriptType !== 'text/javascript' && scriptType !== 'module') {
-        continue;
-      }
       var newScript = document.createElement('script');
-      newScript.setAttribute('data-olo-executed', '1');
       if (oldScript.src) {
         newScript.src = oldScript.src;
       } else {
         newScript.textContent = oldScript.textContent;
       }
-      try {
-        oldScript.parentNode.replaceChild(newScript, oldScript);
-      } catch (e) {
-        // Silently skip scripts that fail to execute
-      }
+      oldScript.parentNode.replaceChild(newScript, oldScript);
     }
   }
 
@@ -804,11 +773,10 @@
             if (el) el.classList.add('olo-builder-selected');
           }
         }, 50);
-        // Report height + layout snapshot for drag-and-drop hit-testing
+        // Report height
         setTimeout(function() {
           post('olo:height', { height: root.scrollHeight });
-          sendLayoutSnapshot();
-        }, 150);
+        }, 100);
         break;
 
       case 'olo:patch':
@@ -888,28 +856,30 @@
         break;
 
       case 'olo:drag-over':
-        // Visual feedback only — hit-testing is done parent-side via layout snapshot
-        var ind = getDropIndicator();
-        if (d.y !== undefined && d.colRect) {
-          // Highlight target column
-          var cr = d.colRect;
-          var w = (cr.right || 0) - (cr.left || 0);
-          var h = (cr.bottom || 0) - (cr.top || 0);
-          ind.style.cssText = 'display:block;position:fixed;z-index:999999;pointer-events:none;' +
-            'top:' + cr.top + 'px;left:' + cr.left + 'px;width:' + w + 'px;height:' + h + 'px;' +
-            'border:2px dashed rgba(37,99,235,0.6);border-radius:6px;background:rgba(37,99,235,0.06);' +
-            'transition:top .15s ease,left .15s ease,width .15s ease,height .15s ease;';
-        } else if (d.y !== undefined && typeof d.lineY === 'number') {
-          // Show insertion line between sections
-          ind.style.cssText = 'display:block;position:fixed;z-index:999999;pointer-events:none;' +
-            'top:' + (d.lineY - 2) + 'px;left:5%;width:90%;height:4px;' +
-            'background:linear-gradient(90deg,transparent,#2563EB 10%,#2563EB 90%,transparent);' +
-            'border-radius:2px;box-shadow:0 0 12px rgba(37,99,235,0.4);transition:top .15s ease;';
+        // Show drop indicator at the closest insertion point
+        if (d.y !== undefined) {
+          var sections = root.querySelectorAll('[data-olo-tile-id]');
+          var closest = null;
+          var closestDist = Infinity;
+          sections.forEach(function(s) {
+            var rect = s.getBoundingClientRect();
+            var midY = rect.top + rect.height / 2;
+            var dist = Math.abs(d.y - midY);
+            if (dist < closestDist) {
+              closestDist = dist;
+              closest = s;
+            }
+          });
+          if (closest) {
+            var rect = closest.getBoundingClientRect();
+            var indicator = getDropIndicator();
+            var insertBefore = d.y < rect.top + rect.height / 2;
+            indicator.style.display = 'block';
+            indicator.style.top = (insertBefore ? rect.top : rect.bottom) + 'px';
+            indicator.style.left = '0';
+            indicator.style.width = '100%';
+          }
         }
-        break;
-
-      case 'olo:request-layout':
-        sendLayoutSnapshot();
         break;
 
       case 'olo:drag-leave':

@@ -436,6 +436,11 @@ class Olo_AI_Assistant {
 
         $model = get_option( 'olo_ai_model', 'claude-sonnet-4-6' );
 
+        // Validate URL to prevent SSRF (no internal IPs, only http/https)
+        if ( ! wp_http_validate_url( $image_url ) ) {
+            return new WP_Error( 'invalid_url', 'URL immagine non valido.', [ 'status' => 400 ] );
+        }
+
         // Scarica l'immagine e convertila in base64 per Claude Vision
         $img_response = wp_remote_get( $image_url, [ 'timeout' => 30 ] );
         if ( is_wp_error( $img_response ) ) {

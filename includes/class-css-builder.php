@@ -64,6 +64,9 @@ class Olo_CSS_Builder {
         if ( $bg['type'] === 'gradient' ) {
             return $this->build_gradient_css( $bg );
         }
+        if ( $bg['type'] === 'pattern' && ! empty( $bg['pattern_type'] ) ) {
+            return $this->build_pattern_css( $bg );
+        }
         return '';
     }
 
@@ -110,6 +113,169 @@ class Olo_CSS_Builder {
         }
         $angle = intval( $bg['gradient_angle'] ?? 180 );
         return "background: linear-gradient({$angle}deg, {$from}, {$to})";
+    }
+
+    /**
+     * Build pattern background CSS (33 CSS-only patterns).
+     *
+     * @param array $bg Background config with pattern_type, pattern_color, pattern_bg_color, pattern_size, pattern_opacity.
+     * @return string CSS declarations for background-color, background-image, background-size.
+     */
+    public function build_pattern_css( $bg ) {
+        $type    = sanitize_text_field( $bg['pattern_type'] ?? 'dots' );
+        $color   = esc_attr( $bg['pattern_color'] ?? '#000000' );
+        $bg_clr  = esc_attr( $bg['pattern_bg_color'] ?? '#ffffff' );
+        $size    = max( 8, intval( $bg['pattern_size'] ?? 20 ) );
+        $opacity = max( 0.05, min( 1, ( intval( $bg['pattern_opacity'] ?? 50 ) ) / 100 ) );
+
+        // Convert hex color to rgba
+        $h = ltrim( $color, '#' );
+        $r = hexdec( substr( $h, 0, 2 ) ); $g = hexdec( substr( $h, 2, 2 ) ); $b = hexdec( substr( $h, 4, 2 ) );
+        if ( $r === false ) { $r = 0; }
+        if ( $g === false ) { $g = 0; }
+        if ( $b === false ) { $b = 0; }
+        $c = "rgba({$r},{$g},{$b},{$opacity})";
+
+        $bg_image = '';
+        $bg_size  = "{$size}px {$size}px";
+        $bg_pos   = '';
+
+        switch ( $type ) {
+            case 'horizontal-lines':
+                $bg_image = "repeating-linear-gradient(0deg,{$c} 0px,{$c} 1px,transparent 1px,transparent {$size}px)";
+                break;
+            case 'vertical-lines':
+                $bg_image = "repeating-linear-gradient(90deg,{$c} 0px,{$c} 1px,transparent 1px,transparent {$size}px)";
+                break;
+            case 'diagonal-lines':
+                $bg_image = "repeating-linear-gradient(45deg,{$c} 0px,{$c} 1px,transparent 1px,transparent {$size}px)";
+                break;
+            case 'diagonal-lines-reverse':
+                $bg_image = "repeating-linear-gradient(-45deg,{$c} 0px,{$c} 1px,transparent 1px,transparent {$size}px)";
+                break;
+            case 'crosshatch':
+                $bg_image = "repeating-linear-gradient(0deg,{$c} 0px,{$c} 1px,transparent 1px,transparent {$size}px),repeating-linear-gradient(90deg,{$c} 0px,{$c} 1px,transparent 1px,transparent {$size}px)";
+                break;
+            case 'diagonal-crosshatch':
+                $bg_image = "repeating-linear-gradient(45deg,{$c} 0px,{$c} 1px,transparent 1px,transparent {$size}px),repeating-linear-gradient(-45deg,{$c} 0px,{$c} 1px,transparent 1px,transparent {$size}px)";
+                break;
+            case 'dots':
+                $dr = max( 1, round( $size * 0.05 ) );
+                $bg_image = "radial-gradient(circle,{$c} {$dr}px,transparent {$dr}px)";
+                break;
+            case 'dots-large':
+                $dr = max( 2, round( $size * 0.15 ) );
+                $bg_image = "radial-gradient(circle,{$c} {$dr}px,transparent {$dr}px)";
+                break;
+            case 'dots-grid':
+                $dr = max( 1, round( $size * 0.08 ) );
+                $bg_image = "radial-gradient(circle,{$c} {$dr}px,transparent {$dr}px)";
+                break;
+            case 'checkerboard':
+                $half = $size / 2;
+                $bg_image = "linear-gradient(45deg,{$c} 25%,transparent 25%,transparent 75%,{$c} 75%,{$c}),linear-gradient(45deg,{$c} 25%,transparent 25%,transparent 75%,{$c} 75%,{$c})";
+                $bg_pos = "0 0,{$half}px {$half}px";
+                break;
+            case 'graph-paper':
+                $bg_image = "linear-gradient({$c} 1px,transparent 1px),linear-gradient(90deg,{$c} 1px,transparent 1px)";
+                break;
+            case 'carbon-fiber':
+                $half = $size / 2;
+                $bg_image = "radial-gradient(circle,{$c} 1px,transparent 1px),radial-gradient(circle,{$c} 1px,transparent 1px)";
+                $bg_pos = "0 0,{$half}px {$half}px";
+                break;
+            case 'polka-dots':
+                $dr = max( 2, round( $size * 0.2 ) );
+                $half = $size / 2;
+                $bg_image = "radial-gradient(circle {$dr}px,{$c} 100%,transparent 100%),radial-gradient(circle {$dr}px,{$c} 100%,transparent 100%)";
+                $bg_pos = "0 0,{$half}px {$half}px";
+                break;
+            case 'lined-paper':
+                $bg_image = "repeating-linear-gradient(0deg,{$c} 0px,{$c} 1px,transparent 1px,transparent {$size}px)";
+                break;
+            case 'blueprint':
+                $thin_opacity = round( $opacity * 0.5, 2 );
+                $c_thin = "rgba({$r},{$g},{$b},{$thin_opacity})";
+                $sub = max( 1, round( $size / 5 ) );
+                $bg_image = "linear-gradient({$c} 1px,transparent 1px),linear-gradient(90deg,{$c} 1px,transparent 1px),linear-gradient({$c_thin} 1px,transparent 1px),linear-gradient(90deg,{$c_thin} 1px,transparent 1px)";
+                $bg_size = "{$size}px {$size}px,{$size}px {$size}px,{$sub}px {$sub}px,{$sub}px {$sub}px";
+                break;
+            default:
+                // SVG-based patterns: generate SVG data URI for complex shapes
+                $svg = $this->build_pattern_svg( $type, $color, $opacity, $size );
+                if ( $svg ) {
+                    $bg_image = 'url("data:image/svg+xml,' . rawurlencode( $svg ) . '")';
+                } else {
+                    $bg_image = "radial-gradient(circle,{$c} 1px,transparent 1px)";
+                }
+                break;
+        }
+
+        $css = "background-color:{$bg_clr};background-image:{$bg_image};background-size:{$bg_size}";
+        if ( $bg_pos ) {
+            $css .= ";background-position:{$bg_pos}";
+        }
+        return $css;
+    }
+
+    /**
+     * Generate SVG markup for complex patterns (triangles, hexagons, waves, etc.).
+     */
+    private function build_pattern_svg( $type, $color, $opacity, $size ) {
+        $c = esc_attr( $color );
+        $o = floatval( $opacity );
+        $sz = intval( $size );
+
+        switch ( $type ) {
+            case 'triangles':
+                return '<svg xmlns="http://www.w3.org/2000/svg" width="' . $sz . '" height="' . $sz . '"><polygon points="' . ( $sz / 2 ) . ',' . ( $sz * 0.1 ) . ' ' . ( $sz * 0.1 ) . ',' . ( $sz * 0.9 ) . ' ' . ( $sz * 0.9 ) . ',' . ( $sz * 0.9 ) . '" fill="' . $c . '" fill-opacity="' . $o . '"/></svg>';
+            case 'diamonds':
+                $cx = $sz / 2; $cy = $sz / 2; $dx = $sz * 0.35; $dy = $sz * 0.45;
+                return '<svg xmlns="http://www.w3.org/2000/svg" width="' . $sz . '" height="' . $sz . '"><polygon points="' . $cx . ',' . ( $cy - $dy ) . ' ' . ( $cx + $dx ) . ',' . $cy . ' ' . $cx . ',' . ( $cy + $dy ) . ' ' . ( $cx - $dx ) . ',' . $cy . '" fill="' . $c . '" fill-opacity="' . $o . '"/></svg>';
+            case 'hexagons':
+                $h = round( $sz * 0.866 );
+                $pts = ( $sz * 0.25 ) . ',0 ' . ( $sz * 0.75 ) . ',0 ' . $sz . ',' . ( $h * 0.5 ) . ' ' . ( $sz * 0.75 ) . ',' . $h . ' ' . ( $sz * 0.25 ) . ',' . $h . ' 0,' . ( $h * 0.5 );
+                return '<svg xmlns="http://www.w3.org/2000/svg" width="' . $sz . '" height="' . $h . '"><polygon points="' . $pts . '" fill="none" stroke="' . $c . '" stroke-opacity="' . $o . '" stroke-width="1"/></svg>';
+            case 'zigzag':
+                return '<svg xmlns="http://www.w3.org/2000/svg" width="' . $sz . '" height="' . $sz . '"><polyline points="0,' . $sz . ' ' . ( $sz / 4 ) . ',0 ' . ( $sz / 2 ) . ',' . $sz . ' ' . ( $sz * 3 / 4 ) . ',0 ' . $sz . ',' . $sz . '" fill="none" stroke="' . $c . '" stroke-opacity="' . $o . '" stroke-width="1.5"/></svg>';
+            case 'chevrons':
+                return '<svg xmlns="http://www.w3.org/2000/svg" width="' . $sz . '" height="' . $sz . '"><polyline points="0,' . ( $sz * 0.75 ) . ' ' . ( $sz / 2 ) . ',' . ( $sz * 0.25 ) . ' ' . $sz . ',' . ( $sz * 0.75 ) . '" fill="none" stroke="' . $c . '" stroke-opacity="' . $o . '" stroke-width="1.5"/></svg>';
+            case 'herringbone':
+                return '<svg xmlns="http://www.w3.org/2000/svg" width="' . $sz . '" height="' . $sz . '"><path d="M0,' . ( $sz / 2 ) . ' L' . ( $sz / 2 ) . ',0 L' . $sz . ',' . ( $sz / 2 ) . ' M0,' . $sz . ' L' . ( $sz / 2 ) . ',' . ( $sz / 2 ) . ' L' . $sz . ',' . $sz . '" fill="none" stroke="' . $c . '" stroke-opacity="' . $o . '" stroke-width="1"/></svg>';
+            case 'waves':
+                $w = $sz * 2;
+                return '<svg xmlns="http://www.w3.org/2000/svg" width="' . $w . '" height="' . $sz . '"><path d="M0,' . ( $sz / 2 ) . ' Q' . ( $w / 4 ) . ',0 ' . ( $w / 2 ) . ',' . ( $sz / 2 ) . ' Q' . ( $w * 3 / 4 ) . ',' . $sz . ' ' . $w . ',' . ( $sz / 2 ) . '" fill="none" stroke="' . $c . '" stroke-opacity="' . $o . '" stroke-width="1.5"/></svg>';
+            case 'scales':
+                return '<svg xmlns="http://www.w3.org/2000/svg" width="' . $sz . '" height="' . $sz . '"><path d="M0,' . $sz . ' A' . ( $sz / 2 ) . ',' . ( $sz / 2 ) . ' 0 0,1 ' . ( $sz / 2 ) . ',' . ( $sz / 2 ) . ' A' . ( $sz / 2 ) . ',' . ( $sz / 2 ) . ' 0 0,1 ' . $sz . ',' . $sz . '" fill="none" stroke="' . $c . '" stroke-opacity="' . $o . '" stroke-width="1"/></svg>';
+            case 'circles':
+                $cr = round( $sz * 0.35 );
+                return '<svg xmlns="http://www.w3.org/2000/svg" width="' . $sz . '" height="' . $sz . '"><circle cx="' . ( $sz / 2 ) . '" cy="' . ( $sz / 2 ) . '" r="' . $cr . '" fill="none" stroke="' . $c . '" stroke-opacity="' . $o . '" stroke-width="1"/></svg>';
+            case 'concentric-circles':
+                return '<svg xmlns="http://www.w3.org/2000/svg" width="' . $sz . '" height="' . $sz . '"><circle cx="' . ( $sz / 2 ) . '" cy="' . ( $sz / 2 ) . '" r="' . round( $sz * 0.4 ) . '" fill="none" stroke="' . $c . '" stroke-opacity="' . $o . '" stroke-width="1"/><circle cx="' . ( $sz / 2 ) . '" cy="' . ( $sz / 2 ) . '" r="' . round( $sz * 0.2 ) . '" fill="none" stroke="' . $c . '" stroke-opacity="' . $o . '" stroke-width="1"/></svg>';
+            case 'brick':
+                $w = $sz * 2; $hh = $sz / 2;
+                return '<svg xmlns="http://www.w3.org/2000/svg" width="' . $w . '" height="' . $sz . '"><line x1="0" y1="' . $hh . '" x2="' . $w . '" y2="' . $hh . '" stroke="' . $c . '" stroke-opacity="' . $o . '" stroke-width="1"/><line x1="0" y1="0" x2="0" y2="' . $sz . '" stroke="' . $c . '" stroke-opacity="' . $o . '" stroke-width="1"/><line x1="' . ( $w / 2 ) . '" y1="' . $hh . '" x2="' . ( $w / 2 ) . '" y2="' . $sz . '" stroke="' . $c . '" stroke-opacity="' . $o . '" stroke-width="1"/></svg>';
+            case 'stars':
+                $cx = $sz / 2; $cy = $sz / 2; $outerR = $sz * 0.4; $innerR = $sz * 0.16;
+                $pts = '';
+                for ( $i = 0; $i < 5; $i++ ) {
+                    $oA = deg2rad( $i * 72 - 90 ); $iA = deg2rad( $i * 72 + 36 - 90 );
+                    $pts .= round( $cx + $outerR * cos( $oA ), 1 ) . ',' . round( $cy + $outerR * sin( $oA ), 1 ) . ' ';
+                    $pts .= round( $cx + $innerR * cos( $iA ), 1 ) . ',' . round( $cy + $innerR * sin( $iA ), 1 ) . ' ';
+                }
+                return '<svg xmlns="http://www.w3.org/2000/svg" width="' . $sz . '" height="' . $sz . '"><polygon points="' . trim( $pts ) . '" fill="' . $c . '" fill-opacity="' . $o . '"/></svg>';
+            case 'crosses':
+                $mid = $sz / 2; $arm = $sz * 0.3; $t = max( 1, round( $sz * 0.08 ) );
+                return '<svg xmlns="http://www.w3.org/2000/svg" width="' . $sz . '" height="' . $sz . '"><line x1="' . $mid . '" y1="' . ( $mid - $arm ) . '" x2="' . $mid . '" y2="' . ( $mid + $arm ) . '" stroke="' . $c . '" stroke-opacity="' . $o . '" stroke-width="' . $t . '"/><line x1="' . ( $mid - $arm ) . '" y1="' . $mid . '" x2="' . ( $mid + $arm ) . '" y2="' . $mid . '" stroke="' . $c . '" stroke-opacity="' . $o . '" stroke-width="' . $t . '"/></svg>';
+            case 'plus-signs':
+                $mid = $sz / 2; $arm = $sz * 0.25; $t = max( 2, round( $sz * 0.12 ) );
+                return '<svg xmlns="http://www.w3.org/2000/svg" width="' . $sz . '" height="' . $sz . '"><rect x="' . ( $mid - $t / 2 ) . '" y="' . ( $mid - $arm ) . '" width="' . $t . '" height="' . ( $arm * 2 ) . '" rx="0.5" fill="' . $c . '" fill-opacity="' . $o . '"/><rect x="' . ( $mid - $arm ) . '" y="' . ( $mid - $t / 2 ) . '" width="' . ( $arm * 2 ) . '" height="' . $t . '" rx="0.5" fill="' . $c . '" fill-opacity="' . $o . '"/></svg>';
+            case 'hearts':
+                $sc = $sz / 24;
+                return '<svg xmlns="http://www.w3.org/2000/svg" width="' . $sz . '" height="' . $sz . '"><g transform="translate(' . ( $sz / 2 - 12 * $sc ) . ',' . ( $sz / 2 - 10 * $sc ) . ') scale(' . $sc . ')"><path d="M12,21.35 L10.55,20.03 C5.4,15.36 2,12.28 2,8.5 C2,5.42 4.42,3 7.5,3 C9.24,3 10.91,3.81 12,5.09 C13.09,3.81 14.76,3 16.5,3 C19.58,3 22,5.42 22,8.5 C22,12.28 18.6,15.36 13.45,20.04 L12,21.35Z" fill="' . $c . '" fill-opacity="' . $o . '"/></g></svg>';
+            default:
+                return '';
+        }
     }
 
     /**

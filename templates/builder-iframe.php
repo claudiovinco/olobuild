@@ -88,6 +88,9 @@ body { min-height: 100vh; }
 <?php if ( file_exists( $booking_path . 'assets/js/booking-front.js' ) ) : ?>
 <script src="<?php echo esc_url( $booking_url . 'assets/js/booking-front.js?v=' . OLO_VERSION ); ?>"></script>
 <?php endif; ?>
+<?php if ( file_exists( $booking_path . 'assets/js/olo-restaurant-booking.js' ) ) : ?>
+<script src="<?php echo esc_url( $booking_url . 'assets/js/olo-restaurant-booking.js?v=' . OLO_VERSION ); ?>"></script>
+<?php endif; ?>
 <!-- Olo Virtual Tour JS -->
 <?php if ( file_exists( $vtour_path . 'assets/vendor/psv/psv-bundle.js' ) ) : ?>
 <script src="<?php echo esc_url( $vtour_url . 'assets/vendor/psv/psv-bundle.js' ); ?>"></script>

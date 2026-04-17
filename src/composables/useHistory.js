@@ -9,6 +9,8 @@ const maxHistory = 100;
 let isProgrammatic = false;
 let lastSnapshot = null;
 let initialized = false;
+let debounceTimer = null;
+const DEBOUNCE_MS = 400;
 
 export function useHistory() {
   const tilesStore = useTilesStore();
@@ -64,14 +66,18 @@ export function useHistory() {
       initialized = true;
       tilesStore.$subscribe(() => {
         if (isProgrammatic) return;
-        const current = snapshot();
-        if (current === lastSnapshot) return;
-        if (lastSnapshot !== null) {
-          undoStack.value.push(lastSnapshot);
-          if (undoStack.value.length > maxHistory) undoStack.value.shift();
-          redoStack.value = [];
-        }
-        lastSnapshot = current;
+        // Debounce snapshot to avoid JSON.stringify on every keystroke
+        if (debounceTimer) clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => {
+          const current = snapshot();
+          if (current === lastSnapshot) return;
+          if (lastSnapshot !== null) {
+            undoStack.value.push(lastSnapshot);
+            if (undoStack.value.length > maxHistory) undoStack.value.shift();
+            redoStack.value = [];
+          }
+          lastSnapshot = current;
+        }, DEBOUNCE_MS);
       });
     }
   }

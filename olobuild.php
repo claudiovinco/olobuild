@@ -3,7 +3,7 @@
  * Plugin Name: Olobuild
  * Plugin URI:  https://olotheme.com
  * Description: Page builder professionale olonico con sistema a griglia (tile drag & drop).
- * Version:     3.3.4
+ * Version:     3.7.0
  * Author:      Claudio Vinco
  * Author URI:  https://clod.eu
  * Text Domain: olobuilder
@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'OLO_VERSION', '3.3.4' );
+define( 'OLO_VERSION', '3.7.0' );
 define( 'OLO_PATH', plugin_dir_path( __FILE__ ) );
 define( 'OLO_URL', plugin_dir_url( __FILE__ ) );
 
@@ -48,13 +48,176 @@ add_action( 'init', function() {
 
 /**
  * Abilita upload di file JSON/Lottie e SVG nella Media Library.
+ * SVG upload requires unfiltered_html capability (admins only) to prevent XSS.
  */
 add_filter( 'upload_mimes', function( $mimes ) {
     $mimes['json'] = 'application/json';
-    $mimes['svg']  = 'image/svg+xml';
     $mimes['lottie'] = 'application/json';
+    // SVG only for users with unfiltered_html (prevents XSS from editor-role uploads)
+    if ( current_user_can( 'unfiltered_html' ) ) {
+        $mimes['svg'] = 'image/svg+xml';
+    }
     return $mimes;
 } );
+
+/**
+ * Sanitize SVG content — removes dangerous elements and attributes.
+ * Used globally for custom icon upload, SVG animator, etc.
+ *
+ * @param string $svg  Raw SVG content.
+ * @return string      Sanitized SVG or empty string if invalid.
+ */
+function olo_sanitize_svg( $svg ) {
+    if ( empty( $svg ) ) return '';
+
+    // Primary: use DOMDocument for proper XML parsing (prevents XXE, handles encodings)
+    if ( class_exists( 'DOMDocument' ) ) {
+        return olo_sanitize_svg_dom( $svg );
+    }
+
+    // Fallback: regex-based sanitization for hosts without DOMDocument
+    return olo_sanitize_svg_regex( $svg );
+}
+
+/**
+ * SVG sanitization via DOMDocument — XML-aware, handles encoded entities.
+ */
+function olo_sanitize_svg_dom( $svg ) {
+    // XXE prevention: LIBXML_NONET disables network access.
+    // libxml_disable_entity_loader() was removed in PHP 8.2 (entities disabled by default).
+    libxml_use_internal_errors( true );
+
+    $doc = new DOMDocument();
+    // Wrap in XML to handle encoding properly
+    $wrapped = '<?xml version="1.0" encoding="UTF-8"?>' . $svg;
+    if ( ! $doc->loadXML( $wrapped, LIBXML_NONET | LIBXML_NOENT ) ) {
+        // Try loading as HTML fragment if XML parsing fails
+        $doc = new DOMDocument();
+        if ( ! $doc->loadHTML( '<div>' . $svg . '</div>', LIBXML_NONET | LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD ) ) {
+            libxml_clear_errors();
+            return '';
+        }
+    }
+
+    // Dangerous elements to remove completely
+    $dangerous_tags = [ 'script', 'foreignObject', 'iframe', 'object', 'embed', 'applet', 'form', 'input', 'textarea', 'button' ];
+    foreach ( $dangerous_tags as $tag ) {
+        $nodes = $doc->getElementsByTagName( $tag );
+        $remove = [];
+        for ( $i = 0; $i < $nodes->length; $i++ ) {
+            $remove[] = $nodes->item( $i );
+        }
+        foreach ( $remove as $node ) {
+            $node->parentNode->removeChild( $node );
+        }
+    }
+
+    // Walk all elements: remove event handlers and dangerous attributes
+    $xpath = new DOMXPath( $doc );
+    $all   = $xpath->query( '//*' );
+    foreach ( $all as $el ) {
+        $attrs_to_remove = [];
+        foreach ( $el->attributes as $attr ) {
+            $name  = strtolower( $attr->name );
+            $value = strtolower( trim( $attr->value ) );
+
+            // Remove on* event handlers
+            if ( str_starts_with( $name, 'on' ) ) {
+                $attrs_to_remove[] = $attr->name;
+                continue;
+            }
+            // Remove javascript:/data: URIs in href, xlink:href, src
+            if ( in_array( $name, [ 'href', 'xlink:href', 'src', 'action', 'formaction' ], true ) ) {
+                if ( preg_match( '/^\s*(javascript|data|vbscript)\s*:/i', $attr->value ) ) {
+                    $attrs_to_remove[] = $attr->name;
+                }
+            }
+            // Remove style attributes with expression() or javascript:
+            if ( $name === 'style' ) {
+                if ( preg_match( '/(expression|javascript|vbscript|url\s*\(\s*["\']?\s*javascript)/i', $attr->value ) ) {
+                    $attrs_to_remove[] = $attr->name;
+                }
+            }
+        }
+        foreach ( $attrs_to_remove as $a ) {
+            $el->removeAttribute( $a );
+        }
+    }
+
+    // Remove <use> with external references (SSRF)
+    $uses = $doc->getElementsByTagName( 'use' );
+    $remove = [];
+    for ( $i = 0; $i < $uses->length; $i++ ) {
+        $use = $uses->item( $i );
+        $href = $use->getAttribute( 'href' ) ?: $use->getAttribute( 'xlink:href' );
+        if ( $href ) {
+            if ( preg_match( '#^https?://#i', $href ) ) {
+                $remove[] = $use;
+            }
+        }
+    }
+    foreach ( $remove as $node ) {
+        $node->parentNode->removeChild( $node );
+    }
+
+    // Extract the SVG element
+    $svgs = $doc->getElementsByTagName( 'svg' );
+    if ( $svgs->length === 0 ) {
+        libxml_clear_errors();
+        return '';
+    }
+
+    $result = $doc->saveXML( $svgs->item( 0 ) );
+    libxml_clear_errors();
+
+    return trim( $result );
+}
+
+/**
+ * SVG sanitization fallback via regex (for hosts without DOMDocument).
+ */
+function olo_sanitize_svg_regex( $svg ) {
+    // Remove XML declaration and DOCTYPE (prevent XXE)
+    $svg = preg_replace( '/<\?xml[^?]*\?>/i', '', $svg );
+    $svg = preg_replace( '/<!DOCTYPE[^>]*>/i', '', $svg );
+    $svg = preg_replace( '/<!ENTITY[^>]*>/i', '', $svg );
+    $svg = preg_replace( '/<!ATTLIST[^>]*>/i', '', $svg );
+    $svg = preg_replace( '/<!ELEMENT[^>]*>/i', '', $svg );
+
+    // Remove dangerous elements
+    $svg = preg_replace( '/<script[\s\S]*?<\/script>/i', '', $svg );
+    $svg = preg_replace( '/<foreignObject[\s\S]*?<\/foreignObject>/i', '', $svg );
+    $svg = preg_replace( '/<iframe[\s\S]*?<\/iframe>/i', '', $svg );
+    $svg = preg_replace( '/<object[\s\S]*?<\/object>/i', '', $svg );
+    $svg = preg_replace( '/<embed[^>]*\/?>/i', '', $svg );
+
+    // Remove on* event attributes (all quoting styles + unquoted)
+    $svg = preg_replace( '/\s+on\w+\s*=\s*"[^"]*"/i', '', $svg );
+    $svg = preg_replace( '/\s+on\w+\s*=\s*\'[^\']*\'/i', '', $svg );
+    $svg = preg_replace( '/\s+on\w+\s*=\s*[^\s>]*/i', '', $svg );
+
+    // Remove javascript: / data: / vbscript: URIs
+    $svg = preg_replace( '/(href|src|action)\s*=\s*"(javascript|data|vbscript):[^"]*"/i', '$1=""', $svg );
+    $svg = preg_replace( '/(href|src|action)\s*=\s*\'(javascript|data|vbscript):[^\']*\'/i', "$1=''", $svg );
+
+    // Remove <use> with external references (SSRF)
+    $svg = preg_replace( '/<use[^>]*(xlink:)?href\s*=\s*"https?:[^"]*"[^>]*\/?>/i', '', $svg );
+
+    // Remove animation event handlers
+    $svg = preg_replace( '/\s+(onbegin|onend|onrepeat)\s*=\s*"[^"]*"/i', '', $svg );
+    $svg = preg_replace( '/\s+(onbegin|onend|onrepeat)\s*=\s*\'[^\']*\'/i', '', $svg );
+
+    // Remove CSS expressions and javascript in style attributes
+    $svg = preg_replace( '/style\s*=\s*"[^"]*expression\s*\([^"]*"/i', '', $svg );
+    $svg = preg_replace( '/style\s*=\s*"[^"]*javascript:[^"]*"/i', '', $svg );
+    $svg = preg_replace( '/style\s*=\s*\'[^\']*expression\s*\([^\']*\'/i', '', $svg );
+    $svg = preg_replace( '/style\s*=\s*\'[^\']*javascript:[^\']*\'/i', '', $svg );
+
+    // Ensure it actually contains an SVG tag
+    if ( stripos( $svg, '<svg' ) === false ) return '';
+
+    return trim( $svg );
+}
 
 // Bypass la validazione MIME reale di WP per JSON/SVG (wp_check_filetype_and_ext restituisce vuoto)
 add_filter( 'wp_check_filetype_and_ext', function( $data, $file, $filename, $mimes ) {
@@ -170,6 +333,8 @@ require_once OLO_PATH . 'includes/class-performance-hints.php';
 require_once OLO_PATH . 'includes/class-performance-settings.php';
 require_once OLO_PATH . 'includes/class-white-label.php';
 require_once OLO_PATH . 'includes/class-site-import-export.php';
+require_once OLO_PATH . 'includes/class-tools.php';
+require_once OLO_PATH . 'includes/class-debug-bar.php';
 require_once OLO_PATH . 'includes/class-woo-template-integration.php';
 require_once OLO_PATH . 'includes/class-olo-builder.php';
 
@@ -243,22 +408,38 @@ register_activation_hook( __FILE__, function () {
 
 // Deactivation hook
 register_deactivation_hook( __FILE__, function () {
-    // Cleanup transients if needed
     delete_transient( 'olo_builder_activated' );
+    wp_clear_scheduled_hook( 'olo_weekly_cleanup' );
 } );
+
+// Weekly cron for orphaned revision cleanup
+add_action( 'olo_weekly_cleanup', function() {
+    $db = Olo_Database::instance();
+    $db->cleanup_orphaned_revisions();
+} );
+if ( ! wp_next_scheduled( 'olo_weekly_cleanup' ) ) {
+    wp_schedule_event( time(), 'weekly', 'olo_weekly_cleanup' );
+}
 
 // Setup Wizard (first-run experience)
 require_once OLO_PATH . 'includes/class-setup-wizard.php';
 ( new Olo_Setup_Wizard() )->init();
 
-// Preconnect hints for Google Fonts
+// Preconnect hints for Google Fonts — only on pages using Olobuild or custom fonts
 add_action( 'wp_head', function() {
-    echo '<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />';
-    echo '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />';
+    // Only output preconnect if Google Fonts or custom fonts are actually used
+    $styles = get_option( 'olo_styles', [] );
+    $has_google_font = ! empty( $styles['global_font'] ) || ! empty( $styles['heading_font'] );
+    if ( $has_google_font ) {
+        echo '<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />';
+        echo '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />';
+    }
 }, 1 );
 
-// Custom Fonts @font-face CSS
+// Custom Fonts @font-face CSS — only if custom fonts exist
 add_action( 'wp_head', function() {
+    $fonts = get_option( 'olo_custom_fonts', [] );
+    if ( empty( $fonts ) ) return;
     $css = Olo_Custom_Fonts::generate_css();
     if ( $css ) {
         echo '<style id="olo-custom-fonts">' . $css . '</style>';
@@ -431,6 +612,12 @@ add_action( 'plugins_loaded', function () {
 
     // Import/Export with media
     Olo_Site_Import_Export::instance()->init();
+
+    // Tools page (unified Strumenti)
+    Olo_Tools::instance()->init();
+
+    // Debug bar (template tracking in admin toolbar)
+    Olo_Debug_Bar::init();
 
     // WooCommerce Theme Builder integration
     Olo_Woo_Template_Integration::instance()->init();
