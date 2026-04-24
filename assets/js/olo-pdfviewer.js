@@ -1099,6 +1099,21 @@
     }, { passive: true });
   };
 
+  /* ───── Click-to-turn for single/double page ───── */
+  OloPdfViewer.prototype._bindClickNav = function () {
+    var self = this;
+    if (!this.canvasWrap) return;
+    this.canvasWrap.style.cursor = 'pointer';
+    this.canvasWrap.addEventListener('click', function (e) {
+      var t = e.target;
+      if (t && t.closest && t.closest('input, button, a, [role="button"], .olo-pdfv-hotspot, .olo-pdfv-thumbnails')) return;
+      var rect = self.canvasWrap.getBoundingClientRect();
+      var x = e.clientX - rect.left;
+      if (x < rect.width / 2) self.prevPage();
+      else self.nextPage();
+    });
+  };
+
   /* ───── Middle-mouse pan for zoomed flipbook ───── */
   OloPdfViewer.prototype._bindFlipbookPan = function () {
     var wrap = this.flipWrap;
@@ -1174,6 +1189,9 @@
         var nav = config.nav || {};
         if (nav.swipe !== false && config.mode !== 'flipbook') {
           viewer._bindSwipe(viewers[i]);
+        }
+        if (nav.click !== false && config.mode !== 'flipbook' && config.mode !== 'scroll') {
+          viewer._bindClickNav();
         }
       } catch (err) {
         console.error('OloPdfViewer init error:', err);
