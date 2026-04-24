@@ -115,6 +115,9 @@
     this.canvasWrap = el('div', 'olo-pdfv-canvas-wrap');
     this.body.appendChild(this.canvasWrap);
 
+    // Bottom progress bar (page slider + zoom + fullscreen)
+    this._buildBottomBar();
+
     // Setup PDF.js worker
     if (typeof pdfjsLib !== 'undefined') {
       var workerUrl = (window.oloPdfViewerData || {}).workerUrl || '';
@@ -997,7 +1000,61 @@
     if (this.pageTotal) {
       this.pageTotal.textContent = '/ ' + this.numPages;
     }
+    if (this.bbInfo && this.numPages) {
+      this.bbInfo.textContent = this.currentPage + ' / ' + this.numPages;
+    }
+    if (this.bbRange && this.numPages) {
+      this.bbRange.max = this.numPages;
+      this.bbRange.value = this.currentPage;
+    }
     this._updateThumbActive();
+  };
+
+  /* ───── Bottom progress bar ───── */
+  OloPdfViewer.prototype._buildBottomBar = function () {
+    var self = this;
+    this.bottomBar = el('div', 'olo-pdfv-bottombar');
+
+    this.bbInfo = el('span', 'olo-pdfv-bb-info', '1 / -');
+
+    this.bbRange = document.createElement('input');
+    this.bbRange.type = 'range';
+    this.bbRange.className = 'olo-pdfv-bb-range';
+    this.bbRange.min = '1';
+    this.bbRange.max = String(this.numPages || 1);
+    this.bbRange.value = String(this.currentPage || 1);
+    this.bbRange.step = '1';
+
+    this.bbZoomOut = document.createElement('button');
+    this.bbZoomOut.className = 'olo-pdfv-bb-btn';
+    this.bbZoomOut.title = 'Riduci';
+    this.bbZoomOut.innerHTML = ICONS.zoomOut;
+
+    this.bbZoomIn = document.createElement('button');
+    this.bbZoomIn.className = 'olo-pdfv-bb-btn';
+    this.bbZoomIn.title = 'Ingrandisci';
+    this.bbZoomIn.innerHTML = ICONS.zoomIn;
+
+    this.bbFullscreen = document.createElement('button');
+    this.bbFullscreen.className = 'olo-pdfv-bb-btn';
+    this.bbFullscreen.title = 'Schermo intero';
+    this.bbFullscreen.innerHTML = ICONS.fullscreen;
+
+    this.bottomBar.appendChild(this.bbInfo);
+    this.bottomBar.appendChild(this.bbRange);
+    this.bottomBar.appendChild(this.bbZoomOut);
+    this.bottomBar.appendChild(this.bbZoomIn);
+    this.bottomBar.appendChild(this.bbFullscreen);
+
+    this.bbRange.addEventListener('input', function () {
+      var p = parseInt(this.value, 10);
+      if (p >= 1 && p <= self.numPages) self.goToPage(p);
+    });
+    this.bbZoomOut.addEventListener('click', function () { self.zoomOut(); });
+    this.bbZoomIn.addEventListener('click', function () { self.zoomIn(); });
+    this.bbFullscreen.addEventListener('click', function () { self.toggleFullscreen(); });
+
+    this.root.appendChild(this.bottomBar);
   };
 
   OloPdfViewer.prototype._updateZoomLabel = function () {

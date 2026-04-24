@@ -102,6 +102,18 @@
 
     /* Hide hotspots during flip animation */
     '.olo-pdfv-flipping .olo-pdfv-hotspot-layer { visibility:hidden; }',
+
+    /* ── Bottom progress bar (page nav slider + zoom + fullscreen) ── */
+    '.olo-pdfv-bottombar { display:flex; align-items:center; gap:12px; padding:10px 14px; flex-shrink:0; background:#1e1e1e; color:#f0f0f0; border-radius:10px; margin:8px; user-select:none; }',
+    '.olo-pdfv-bottombar .olo-pdfv-bb-info { font-size:13px; font-variant-numeric:tabular-nums; white-space:nowrap; min-width:60px; }',
+    '.olo-pdfv-bottombar .olo-pdfv-bb-range { flex:1; appearance:none; -webkit-appearance:none; background:transparent; height:24px; cursor:pointer; padding:0; margin:0; }',
+    '.olo-pdfv-bottombar .olo-pdfv-bb-range::-webkit-slider-runnable-track { height:3px; background:rgba(255,255,255,.25); border-radius:2px; }',
+    '.olo-pdfv-bottombar .olo-pdfv-bb-range::-moz-range-track { height:3px; background:rgba(255,255,255,.25); border-radius:2px; }',
+    '.olo-pdfv-bottombar .olo-pdfv-bb-range::-webkit-slider-thumb { -webkit-appearance:none; appearance:none; width:14px; height:14px; border-radius:50%; background:#fff; margin-top:-5.5px; cursor:pointer; box-shadow:0 1px 3px rgba(0,0,0,.4); }',
+    '.olo-pdfv-bottombar .olo-pdfv-bb-range::-moz-range-thumb { width:14px; height:14px; border-radius:50%; background:#fff; border:none; cursor:pointer; box-shadow:0 1px 3px rgba(0,0,0,.4); }',
+    '.olo-pdfv-bottombar .olo-pdfv-bb-btn { background:none; border:none; color:#f0f0f0; cursor:pointer; padding:4px; display:inline-flex; align-items:center; justify-content:center; border-radius:4px; opacity:.85; transition:opacity .12s, background .12s; }',
+    '.olo-pdfv-bottombar .olo-pdfv-bb-btn:hover { opacity:1; background:rgba(255,255,255,.1); }',
+    '.olo-pdfv-bottombar .olo-pdfv-bb-btn:active { background:rgba(255,255,255,.18); }',
   ].join('\n');
 
   var styleEl = document.createElement('style');
@@ -231,6 +243,9 @@
     // Canvas area
     this.canvasWrap = el('div', 'olo-pdfv-canvas-wrap');
     this.body.appendChild(this.canvasWrap);
+
+    // Bottom progress bar (page slider + zoom + fullscreen)
+    this._buildBottomBar();
 
     // Setup PDF.js worker
     if (typeof pdfjsLib !== 'undefined') {
@@ -1140,6 +1155,13 @@
     if (this.pageTotal) {
       this.pageTotal.textContent = '/ ' + this.numPages;
     }
+    if (this.bbInfo && this.numPages) {
+      this.bbInfo.textContent = this.currentPage + ' / ' + this.numPages;
+    }
+    if (this.bbRange && this.numPages) {
+      this.bbRange.max = this.numPages;
+      this.bbRange.value = this.currentPage;
+    }
     this._updateThumbActive();
   };
 
@@ -1147,6 +1169,53 @@
     if (this.zoomLabel) {
       this.zoomLabel.textContent = Math.round(this.scale * 100) + '%';
     }
+  };
+
+  /* ───── Bottom progress bar ───── */
+  OloPdfPro.prototype._buildBottomBar = function () {
+    var self = this;
+    this.bottomBar = el('div', 'olo-pdfv-bottombar');
+
+    this.bbInfo = el('span', 'olo-pdfv-bb-info', '1 / -');
+
+    this.bbRange = document.createElement('input');
+    this.bbRange.type = 'range';
+    this.bbRange.className = 'olo-pdfv-bb-range';
+    this.bbRange.min = '1';
+    this.bbRange.max = String(this.numPages || 1);
+    this.bbRange.value = String(this.currentPage || 1);
+    this.bbRange.step = '1';
+
+    this.bbZoomOut = document.createElement('button');
+    this.bbZoomOut.className = 'olo-pdfv-bb-btn';
+    this.bbZoomOut.title = 'Riduci';
+    this.bbZoomOut.innerHTML = ICONS.zoomOut;
+
+    this.bbZoomIn = document.createElement('button');
+    this.bbZoomIn.className = 'olo-pdfv-bb-btn';
+    this.bbZoomIn.title = 'Ingrandisci';
+    this.bbZoomIn.innerHTML = ICONS.zoomIn;
+
+    this.bbFullscreen = document.createElement('button');
+    this.bbFullscreen.className = 'olo-pdfv-bb-btn';
+    this.bbFullscreen.title = 'Schermo intero';
+    this.bbFullscreen.innerHTML = ICONS.fullscreen;
+
+    this.bottomBar.appendChild(this.bbInfo);
+    this.bottomBar.appendChild(this.bbRange);
+    this.bottomBar.appendChild(this.bbZoomOut);
+    this.bottomBar.appendChild(this.bbZoomIn);
+    this.bottomBar.appendChild(this.bbFullscreen);
+
+    this.bbRange.addEventListener('input', function () {
+      var p = parseInt(this.value, 10);
+      if (p >= 1 && p <= self.numPages) self.goToPage(p);
+    });
+    this.bbZoomOut.addEventListener('click', function () { self.zoomOut(); });
+    this.bbZoomIn.addEventListener('click', function () { self.zoomIn(); });
+    this.bbFullscreen.addEventListener('click', function () { self.toggleFullscreen(); });
+
+    this.root.appendChild(this.bottomBar);
   };
 
   OloPdfPro.prototype._hideLoading = function () {
