@@ -2,7 +2,7 @@
  * useIframeBridge — manages postMessage communication between parent builder and preview iframe.
  */
 import { ref, watch, onMounted, onUnmounted } from 'vue';
-import { useTilesStore } from '@/stores/tiles';
+import { useTilesStore, createRow, createColumn } from '@/stores/tiles';
 import { useBuilderStore } from '@/stores/builder';
 import { useDragDrop } from '@/composables/useDragDrop';
 
@@ -250,6 +250,23 @@ export function useIframeBridge(iframeRef) {
         if (d.tileId) {
           tilesStore.addColumnForTile(d.tileId);
           builderStore.isDirty = true;
+        }
+        break;
+
+      case 'olo:add-row':
+        if (d.sectionId) {
+          const section = tilesStore.getTileById(d.sectionId);
+          if (section) {
+            const idx = typeof d.rowIndex === 'number' ? d.rowIndex : (section.children || []).length;
+            const col1 = createColumn('1-2', []);
+            const col2 = createColumn('1-2', []);
+            const newRow = createRow('50-50', [col1, col2]);
+            if (!Array.isArray(section.children)) section.children = [];
+            section.children.splice(idx, 0, newRow);
+            tilesStore._bumpVersion();
+            builderStore.markDirtyForTile(d.sectionId);
+            builderStore.selectTile(newRow.id);
+          }
         }
         break;
 

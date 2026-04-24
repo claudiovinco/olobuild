@@ -41,7 +41,14 @@
     selectedId = tileId;
     if (tileId) {
       var el = findTileEl(tileId);
-      if (el) el.classList.add('olo-builder-selected');
+      if (el) {
+        el.classList.add('olo-builder-selected');
+        // Mostra immediatamente la toolbar sulla tile selezionata, senza
+        // dover attendere un mouseover (fixing: toolbar appariva solo on hover).
+        showHoverToolbar(el, tileId);
+      }
+    } else {
+      hideHoverToolbar();
     }
   }
 
@@ -448,17 +455,19 @@
       var grid = zone.querySelector('.olo-frontend-grid');
       if (!grid) return;
       var sections = grid.querySelectorAll(':scope > section[data-olo-tile-id], :scope > [data-olo-tile-id]');
-      var zoneName = zone.getAttribute('data-olo-zone');
 
       // "+" between each section
       for (var i = 0; i <= sections.length; i++) {
-        var btn = createAddButton(zoneName, i);
+        var btn = createAddSectionButton(i);
         if (i < sections.length) {
           sections[i].parentNode.insertBefore(btn, sections[i]);
         } else {
           grid.appendChild(btn);
         }
       }
+
+      // "+" between rows inside each section
+      sections.forEach(injectRowButtons);
     });
 
     // If no zones (body-only), add to the main grid
@@ -467,28 +476,74 @@
       if (grid) {
         var sections = grid.querySelectorAll(':scope > section[data-olo-tile-id]');
         for (var i = 0; i <= sections.length; i++) {
-          var btn = createAddButton('body', i);
+          var btn = createAddSectionButton(i);
           if (i < sections.length) {
             sections[i].parentNode.insertBefore(btn, sections[i]);
           } else {
             grid.appendChild(btn);
           }
         }
+        sections.forEach(injectRowButtons);
       }
     }
   }
 
-  function createAddButton(zone, index) {
+  /**
+   * Insert "+" buttons between top-level rows inside a given section element.
+   * Top-level: rows that are NOT nested inside another row/column/inner-columns.
+   */
+  function injectRowButtons(sectionEl) {
+    var sectionId = sectionEl.getAttribute('data-olo-tile-id');
+    if (!sectionId) return;
+    var allRows = sectionEl.querySelectorAll('[data-olo-tile-type="row"]');
+    var topRows = [];
+    allRows.forEach(function(row) {
+      var p = row.parentElement;
+      var nested = false;
+      while (p && p !== sectionEl) {
+        var pt = p.getAttribute && p.getAttribute('data-olo-tile-type');
+        if (pt === 'row' || pt === 'column' || pt === 'inner-columns' || pt === 'inner-column') { nested = true; break; }
+        p = p.parentElement;
+      }
+      if (!nested) topRows.push(row);
+    });
+
+    for (var i = 0; i <= topRows.length; i++) {
+      var btn = createAddRowButton(sectionId, i);
+      if (i < topRows.length) {
+        topRows[i].parentNode.insertBefore(btn, topRows[i]);
+      } else if (topRows.length > 0) {
+        // dopo l'ultima riga, prima dei sibling controls (presets, ecc.)
+        topRows[topRows.length - 1].parentNode.appendChild(btn);
+      }
+    }
+  }
+
+  function createAddSectionButton(index) {
     var wrap = document.createElement('div');
-    wrap.className = 'olo-iframe-add-btn';
-    wrap.setAttribute('data-zone', zone);
+    wrap.className = 'olo-iframe-add-btn olo-iframe-add-btn--section';
     wrap.setAttribute('data-index', index);
     wrap.innerHTML = '<button class="olo-iframe-add-circle" title="Aggiungi sezione">' +
       '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="2" x2="7" y2="12"/><line x1="2" y1="7" x2="12" y2="7"/></svg>' +
       '</button>';
     wrap.querySelector('button').addEventListener('click', function(e) {
       e.stopPropagation();
-      post('olo:add-section', { zone: zone, index: index });
+      post('olo:add-section', { index: index });
+    });
+    return wrap;
+  }
+
+  function createAddRowButton(sectionId, rowIndex) {
+    var wrap = document.createElement('div');
+    wrap.className = 'olo-iframe-add-btn olo-iframe-add-btn--row';
+    wrap.setAttribute('data-section-id', sectionId);
+    wrap.setAttribute('data-row-index', rowIndex);
+    wrap.innerHTML = '<button class="olo-iframe-add-circle olo-iframe-add-circle--row" title="Aggiungi riga">' +
+      '<svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="2" x2="7" y2="12"/><line x1="2" y1="7" x2="12" y2="7"/></svg>' +
+      '</button>';
+    wrap.querySelector('button').addEventListener('click', function(e) {
+      e.stopPropagation();
+      post('olo:add-row', { sectionId: sectionId, rowIndex: rowIndex });
     });
     return wrap;
   }
