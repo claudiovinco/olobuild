@@ -1207,7 +1207,7 @@ function changeRowLayout(row, layoutKey) {
 /* === Columns layout === */
 .olo-row-columns {
   display: flex;
-  padding: 8px;
+  padding: 0;
   min-height: 80px;
 }
 
@@ -1241,22 +1241,26 @@ function changeRowLayout(row, layoutKey) {
 }
 
 .olo-column-block {
-  border: 2px dashed #d1d5db;
+  border: 2px dashed transparent;
   min-height: 80px;
   transition: border-color 0.2s, background-color 0.2s;
   position: relative;
 }
-.olo-column-block--selected {
+.olo-row-block:hover .olo-column-block {
+  border-color: #d1d5db;
+}
+.olo-column-block--selected,
+.olo-row-block:hover .olo-column-block--selected {
   border-color: var(--olo-color-primary, #6366F1);
 }
 .olo-column-block--dragover {
-  border-color: var(--olo-color-primary, #6366F1);
+  border-color: var(--olo-color-primary, #6366F1) !important;
   background: rgba(107, 114, 128, 0.08);
 }
 
 .olo-column-elements {
   min-height: 40px;
-  padding: 4px;
+  padding: 0;
 }
 
 .olo-column-empty {
