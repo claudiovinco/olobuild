@@ -40,7 +40,7 @@
         </div>
       </div>
       <div v-if="videos.length === 0" style="padding:16px;text-align:center;font-size:11px;opacity:0.5;">
-        Aggiungi video alla playlist
+        {{ t('Aggiungi video alla playlist') }}
       </div>
     </div>
   </div>
@@ -48,6 +48,7 @@
 
 <script setup>
 import { ref, computed } from 'vue';
+import { t } from '@/i18n';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },

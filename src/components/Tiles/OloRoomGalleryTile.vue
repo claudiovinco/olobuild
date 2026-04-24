@@ -4,10 +4,10 @@
       <div :style="{position:'absolute',inset:'0',background:'linear-gradient(135deg,#0891b2,#164e63)'}"></div>
       <div style="position:absolute;bottom:10px;right:10px;background:rgba(0,0,0,.6);color:#fff;padding:3px 10px;border-radius:12px;font-size:11px;z-index:1">1 / 8</div>
       <div v-if="s.show_arrows" style="position:absolute;top:50%;left:8px;z-index:1;transform:translateY(-50%)">
-        <span style="background:rgba(0,0,0,.4);color:#fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px">&lsaquo;</span>
+        <span style="background:rgba(0,0,0,.4);color:#fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px">{{ t('&lsaquo;') }}</span>
       </div>
       <div v-if="s.show_arrows" style="position:absolute;top:50%;right:8px;z-index:1;transform:translateY(-50%)">
-        <span style="background:rgba(0,0,0,.4);color:#fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px">&rsaquo;</span>
+        <span style="background:rgba(0,0,0,.4);color:#fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px">{{ t('&rsaquo;') }}</span>
       </div>
     </div>
     <div :style="thumbsStyle">
@@ -18,6 +18,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { t } from '@/i18n';
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 const defaults = { columns: 5, lightbox: true, main_height: 450, kenburns: true, autoplay: true, show_counter: true, show_arrows: true, show_dots: true, thumb_height: 80, transition: 'kenburns' };
 const s = computed(() => ({ ...defaults, ...props.settings }));

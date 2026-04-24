@@ -15,13 +15,13 @@
 
     <!-- Badges -->
     <div v-if="s.show_badges || s.show_opening" style="position:absolute;top:10px;right:10px;display:flex;gap:5px;z-index:3;flex-wrap:wrap;justify-content:flex-end">
-      <span v-if="s.show_opening" :style="openingBadgeStyle">Apertura annuale</span>
-      <span v-if="s.show_badges" :style="badgeStyle">&#9737; Località</span>
-      <span v-if="s.show_badges" :style="badgeStyle">&#9968; 1900 m</span>
+      <span v-if="s.show_opening" :style="openingBadgeStyle">{{ t('Apertura annuale') }}</span>
+      <span v-if="s.show_badges" :style="badgeStyle">{{ t('&#9737; Località') }}</span>
+      <span v-if="s.show_badges" :style="badgeStyle">{{ t('&#9968; 1900 m') }}</span>
     </div>
 
     <!-- Title -->
-    <div v-if="s.show_title" :style="titleStyle">Nome Baita / Servizio</div>
+    <div v-if="s.show_title" :style="titleStyle">{{ t('Nome Baita / Servizio') }}</div>
 
     <!-- Effect indicators -->
     <div v-if="activeEffects.length" style="position:absolute;bottom:6px;right:8px;z-index:4;display:flex;gap:3px">
@@ -31,6 +31,7 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { computed } from 'vue';
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 

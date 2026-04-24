@@ -9,7 +9,7 @@
       >{{ tag }}</span>
     </div>
     <div v-else-if="s.show_filter" class="mb-text-xs mb-text-gray-500 mb-mb-2 mb-italic">
-      Filtro attivo — aggiungi tag diversi agli elementi
+      {{ t('Filtro attivo — aggiungi tag diversi agli elementi') }}
     </div>
     <!-- Grid -->
     <div class="mb-grid" :style="gridStyle">
@@ -40,7 +40,7 @@
               :style="imageStyle"
               :class="imageAnimClass"
             />
-            <div v-else class="olo-grid-img-placeholder">IMG</div>
+            <div v-else class="olo-grid-img-placeholder">{{ t('IMG') }}</div>
 
             <!-- Overlay text on image -->
             <div v-if="s.overlay_text && item.image" class="olo-grid-overlay-preview" :class="'olo-grid-overlay--' + (s.overlay_position || 'bottom')">
@@ -63,7 +63,7 @@
               :style="contentTextStyle"
               :data-olo-editable="'items.' + i + '.content'"
             >{{ item.content }}</p>
-            <span v-if="item.link" class="olo-grid-link-hint">&#x1F517; Link</span>
+            <span v-if="item.link" class="olo-grid-link-hint">{{ t('&#x1F517; Link') }}</span>
           </div>
 
           <!-- Overlay with no image: show content normally -->
@@ -88,6 +88,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { t } from '@/i18n';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },

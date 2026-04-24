@@ -24,7 +24,7 @@
     >
       <div class="mb-text-center mb-text-gray-400">
         <div class="mb-text-3xl mb-mb-1">&#9654;</div>
-        <div class="mb-text-xs">Video Background</div>
+        <div class="mb-text-xs">{{ t('Video Background') }}</div>
       </div>
     </div>
 
@@ -66,6 +66,7 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { computed } from 'vue';
 
 const props = defineProps({

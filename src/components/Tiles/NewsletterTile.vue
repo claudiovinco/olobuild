@@ -29,7 +29,7 @@
 
       <!-- Content Lock indicator -->
       <div v-if="s.content_lock" class="mb-mt-4 mb-p-3 mb-bg-amber-50 mb-border mb-border-amber-200 mb-rounded-md mb-text-xs mb-text-amber-700">
-        🔒 Content Lock attivo — il contenuto successivo sarà bloccato fino all'iscrizione
+        {{ t('🔒 Content Lock attivo — il contenuto successivo sarà bloccato fino all\'iscrizione') }}
       </div>
     </div>
   </div>
@@ -37,6 +37,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { t } from '@/i18n';
 
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 

@@ -12,7 +12,7 @@
         <div
           class="finder-dialog mb-relative mb-w-full mb-max-w-lg mb-rounded-xl mb-shadow-2xl mb-border mb-overflow-hidden"
           role="dialog"
-          aria-label="Cerca elementi"
+          :aria-label="t('Cerca elementi')"
         >
           <!-- Input ricerca -->
           <div class="finder-header mb-flex mb-items-center mb-gap-2 mb-px-4 mb-py-3 mb-border-b">
@@ -46,13 +46,13 @@
               v-if="allResults.length === 0 && query.length === 0"
               class="mb-px-4 mb-py-6 mb-text-center mb-text-sm" style="color: #999"
             >
-              Digita per cercare elementi da aggiungere o tile nel canvas
+              {{ t('Digita per cercare elementi da aggiungere o tile nel canvas') }}
             </div>
 
             <!-- Sezione: Aggiungi elemento -->
             <template v-if="addResults.length > 0">
               <div class="finder-section-label mb-px-4 mb-py-1.5 mb-text-[10px] mb-font-semibold mb-uppercase mb-tracking-wider mb-border-b">
-                Aggiungi elemento
+                {{ t('Aggiungi elemento') }}
               </div>
               <button
                 v-for="(item, idx) in addResults"
@@ -117,6 +117,7 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { ref, computed, watch, nextTick, onMounted, onUnmounted } from 'vue';
 import { useTilesStore, deepCloneWithNewIds, generateId as oloGenerateId } from '../../stores/tiles';
 import { useBuilderStore } from '../../stores/builder';

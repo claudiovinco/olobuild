@@ -12,14 +12,14 @@
           <button
             @click="addStop(prop.key, prop)"
             class="mb-text-[10px] mb-text-primary-400 hover:mb-text-primary-300 mb-px-1"
-            title="Aggiungi stop"
+            :title="t('Aggiungi stop')"
           >+</button>
           <button
             v-if="getStops(prop.key).length"
             @click="clearStops(prop.key)"
             class="mb-text-[10px] mb-text-red-400 hover:mb-text-red-300 mb-px-1"
-            title="Rimuovi tutti"
-          >&times;</button>
+            :title="t('Rimuovi tutti')"
+          >{{ t('&times;') }}</button>
         </div>
       </div>
       <!-- Stops -->
@@ -50,7 +50,7 @@
             v-if="idx > 0 && idx < getStops(prop.key).length - 1"
             @click="removeStop(prop.key, idx)"
             class="mb-text-[10px] mb-text-red-400 hover:mb-text-red-300 mb-px-0.5"
-            title="Rimuovi stop"
+            :title="t('Rimuovi stop')"
           >&times;</button>
           <span v-else class="mb-w-3"></span>
         </div>
@@ -65,29 +65,29 @@
       <div class="mb-px-2 mb-py-2 mb-space-y-2 mb-border-t mb-border-gray-600">
         <!-- Start viewport -->
         <div>
-          <label class="mb-block mb-text-[9px] mb-text-gray-500 mb-mb-0.5">Start viewport</label>
+          <label class="mb-block mb-text-[9px] mb-text-gray-500 mb-mb-0.5">{{ t('Start viewport') }}</label>
           <input
             type="text"
             :value="data.start || ''"
             @change="updateOption('start', $event.target.value)"
-            placeholder="es. 100%, 50vh"
+            :placeholder="t('es. 100%, 50vh')"
             class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded mb-px-2 mb-py-0.5 mb-text-[11px] mb-text-gray-900"
           />
         </div>
         <!-- End viewport -->
         <div>
-          <label class="mb-block mb-text-[9px] mb-text-gray-500 mb-mb-0.5">End viewport</label>
+          <label class="mb-block mb-text-[9px] mb-text-gray-500 mb-mb-0.5">{{ t('End viewport') }}</label>
           <input
             type="text"
             :value="data.end || ''"
             @change="updateOption('end', $event.target.value)"
-            placeholder="es. 100%, 50vh"
+            :placeholder="t('es. 100%, 50vh')"
             class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded mb-px-2 mb-py-0.5 mb-text-[11px] mb-text-gray-900"
           />
         </div>
         <!-- Easing -->
         <div>
-          <label class="mb-block mb-text-[9px] mb-text-gray-500 mb-mb-0.5">Easing</label>
+          <label class="mb-block mb-text-[9px] mb-text-gray-500 mb-mb-0.5">{{ t('Easing') }}</label>
           <div class="mb-flex mb-items-center mb-gap-2">
             <input
               type="range"
@@ -116,7 +116,7 @@
                 ]"
               ></span>
             </button>
-            <span class="mb-text-[10px] mb-text-gray-400">Disattiva su mobile</span>
+            <span class="mb-text-[10px] mb-text-gray-400">{{ t('Disattiva su mobile') }}</span>
           </label>
         </div>
       </div>
@@ -125,6 +125,7 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { computed } from 'vue';
 
 const props = defineProps({

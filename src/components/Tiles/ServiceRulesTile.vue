@@ -8,12 +8,13 @@
       <span :style="{fontSize:titleSz+'px',fontWeight:'700',color:s.title_color || 'var(--olo-color-text, #374151)'}">{{ s.title_text || 'Regole della struttura' }}</span>
     </div>
     <div :style="{fontSize:textSz+'px',color:s.text_color || 'var(--olo-color-text, #374151)',lineHeight:'1.6'}">
-      Check-in dalle 15:00, check-out entro le 10:00. Non è consentito fumare all'interno. Animali ammessi su richiesta. Silenzio dopo le 22:00.
+      {{ t('Check-in dalle 15:00, check-out entro le 10:00. Non è consentito fumare all\'interno. Animali ammessi su richiesta. Silenzio dopo le 22:00.') }}
     </div>
   </div>
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { computed } from 'vue';
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 const defaults = {

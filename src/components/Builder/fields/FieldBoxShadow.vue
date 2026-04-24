@@ -4,30 +4,30 @@
       <div class="mb-flex-1">
         <label class="mb-text-[10px] mb-text-gray-500">H</label>
         <input type="number" :value="val.h" @input="update('h', $event.target.value)" min="-100" max="100"
-          aria-label="Offset orizzontale ombra (px)"
+          :aria-label="t('Offset orizzontale ombra (px)')"
           class="mb-w-full mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded mb-px-2 mb-py-1 mb-text-xs mb-text-gray-200" />
       </div>
       <div class="mb-flex-1">
         <label class="mb-text-[10px] mb-text-gray-500">V</label>
         <input type="number" :value="val.v" @input="update('v', $event.target.value)" min="-100" max="100"
-          aria-label="Offset verticale ombra (px)"
+          :aria-label="t('Offset verticale ombra (px)')"
           class="mb-w-full mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded mb-px-2 mb-py-1 mb-text-xs mb-text-gray-200" />
       </div>
       <div class="mb-flex-1">
-        <label class="mb-text-[10px] mb-text-gray-500">Blur</label>
+        <label class="mb-text-[10px] mb-text-gray-500">{{ t('Blur') }}</label>
         <input type="number" :value="val.blur" @input="update('blur', $event.target.value)" min="0" max="200"
-          aria-label="Sfocatura ombra (px)"
+          :aria-label="t('Sfocatura ombra (px)')"
           class="mb-w-full mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded mb-px-2 mb-py-1 mb-text-xs mb-text-gray-200" />
       </div>
       <div class="mb-flex-1">
-        <label class="mb-text-[10px] mb-text-gray-500">Spread</label>
+        <label class="mb-text-[10px] mb-text-gray-500">{{ t('Spread') }}</label>
         <input type="number" :value="val.spread" @input="update('spread', $event.target.value)" min="-100" max="100"
-          aria-label="Diffusione ombra (px)"
+          :aria-label="t('Diffusione ombra (px)')"
           class="mb-w-full mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded mb-px-2 mb-py-1 mb-text-xs mb-text-gray-200" />
       </div>
     </div>
     <div>
-      <label class="mb-text-[10px] mb-text-gray-500">Colore</label>
+      <label class="mb-text-[10px] mb-text-gray-500">{{ t('Colore') }}</label>
       <FieldColor :modelValue="val.color || '#000000'" @update:modelValue="update('color', $event)" />
     </div>
     <label class="mb-flex mb-items-center mb-gap-1 mb-cursor-pointer mb-text-[10px] mb-text-gray-400">
@@ -42,6 +42,7 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { computed } from 'vue';
 import FieldColor from './FieldColor.vue';
 

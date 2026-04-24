@@ -3,22 +3,22 @@
 
     <div v-if="visibleFilters.length > 0" class="olo-svresults-preview-filters">
       <div class="olo-svresults-preview-selects">
-        <span v-if="hasFilter('valley')" class="olo-svresults-preview-sel">Località</span>
-        <span v-if="hasFilter('guests')" class="olo-svresults-preview-sel">Ospiti</span>
-        <span v-if="hasFilter('bedrooms')" class="olo-svresults-preview-sel">Camere</span>
-        <span v-if="hasFilter('altitude')" class="olo-svresults-preview-sel">Altitudine</span>
-        <span v-if="hasFilter('type')" class="olo-svresults-preview-sel">Tipologia</span>
+        <span v-if="hasFilter('valley')" class="olo-svresults-preview-sel">{{ t('Località') }}</span>
+        <span v-if="hasFilter('guests')" class="olo-svresults-preview-sel">{{ t('Ospiti') }}</span>
+        <span v-if="hasFilter('bedrooms')" class="olo-svresults-preview-sel">{{ t('Camere') }}</span>
+        <span v-if="hasFilter('altitude')" class="olo-svresults-preview-sel">{{ t('Altitudine') }}</span>
+        <span v-if="hasFilter('type')" class="olo-svresults-preview-sel">{{ t('Tipologia') }}</span>
       </div>
       <div v-if="hasFilter('amenities')" class="olo-svresults-preview-amenities">
         <span v-for="a in amenitiesList" :key="a" class="olo-svresults-preview-pill">{{ a }}</span>
       </div>
-      <div class="olo-svresults-preview-counter">12 / 45 strutture</div>
+      <div class="olo-svresults-preview-counter">{{ t('12 / 45 strutture') }}</div>
     </div>
 
     <div class="olo-svresults-preview-body">
       <div v-if="settings.layout !== 'cards-only'" class="olo-svresults-preview-map" :style="{ height: (settings.map_height || 500) + 'px' }">
         <div class="olo-svresults-preview-map-placeholder">
-          <span>Mappa Leaflet</span>
+          <span>{{ t('Mappa Leaflet') }}</span>
           <small>{{ tileLayerLabel }} &middot; zoom {{ settings.default_zoom || 10 }}</small>
         </div>
       </div>
@@ -27,8 +27,8 @@
           <div class="olo-svresults-preview-card-img" :style="{ height: (settings.image_height || 180) + 'px' }"></div>
           <div class="olo-svresults-preview-card-body">
             <div class="olo-svresults-preview-card-title">Struttura {{ i }}</div>
-            <div v-if="hasContent('stats')" class="olo-svresults-preview-card-stats">4 ospiti &middot; 2 camere &middot; 1.200m</div>
-            <div v-if="hasContent('excerpt')" class="olo-svresults-preview-card-excerpt">Lorem ipsum dolor sit amet...</div>
+            <div v-if="hasContent('stats')" class="olo-svresults-preview-card-stats">{{ t('4 ospiti &middot; 2 camere &middot; 1.200m') }}</div>
+            <div v-if="hasContent('excerpt')" class="olo-svresults-preview-card-excerpt">{{ t('Lorem ipsum dolor sit amet...') }}</div>
             <div class="olo-svresults-preview-card-footer">
               <span v-if="hasContent('price')" class="olo-svresults-preview-card-price">{{ settings.price_prefix || '\u20ac' }}85{{ settings.price_suffix || '/notte' }}</span>
               <span class="olo-svresults-preview-card-link">{{ settings.link_text || 'Dettagli' }}</span>
@@ -63,6 +63,7 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { computed } from 'vue';
 
 const props = defineProps({

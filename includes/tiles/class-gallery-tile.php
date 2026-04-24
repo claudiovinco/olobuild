@@ -335,7 +335,7 @@ class Olo_Gallery_Tile extends Olo_Tile_Base {
         ?>
         <?php if ( ! empty( $s['filter_bar'] ) ) : ?>
         <div class="<?php echo esc_attr( $uid ); ?>-filter" id="<?php echo esc_attr( $uid ); ?>-filter">
-            <button class="active" data-filter="*">Tutti</button>
+            <button class="active" data-filter="*"><?php echo esc_html( olo_t( 'Tutti' ) ); ?></button>
             <?php foreach ( $categories as $cat ) : ?>
             <button data-filter="<?php echo esc_attr( sanitize_title( $cat ) ); ?>"><?php echo esc_html( $cat ); ?></button>
             <?php endforeach; ?>

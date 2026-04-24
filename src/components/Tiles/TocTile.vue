@@ -13,7 +13,7 @@
         </div>
       </div>
       <div style="margin-top:12px;font-size:10px;color:#6b7280;font-style:italic;">
-        Auto-generato dagli heading della pagina
+        {{ t('Auto-generato dagli heading della pagina') }}
       </div>
     </div>
   </div>
@@ -21,6 +21,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { t } from '@/i18n';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },

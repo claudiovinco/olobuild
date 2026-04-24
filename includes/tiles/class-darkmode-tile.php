@@ -221,10 +221,10 @@ class Olo_Darkmode_Tile extends Olo_Tile_Base {
              data-olo-darkmode="1"
              data-save="<?php echo $save_pref ? '1' : '0'; ?>"
              role="switch"
-             aria-label="Dark mode toggle">
+             aria-label="<?php echo esc_attr( olo_t( 'Dark mode toggle' ) ); ?>">
 
             <?php if ( $style === 'toggle' ) : ?>
-                <button type="button" class="olo-dm-track" aria-label="Toggle dark mode">
+                <button type="button" class="olo-dm-track" aria-label="<?php echo esc_attr( olo_t( 'Toggle dark mode' ) ); ?>">
                     <span class="olo-dm-thumb" style="position:relative;">
                         <span class="olo-dm-icon-sun"><?php echo $sun_sm; ?></span>
                         <span class="olo-dm-icon-moon"><?php echo $moon_sm; ?></span>
@@ -232,13 +232,13 @@ class Olo_Darkmode_Tile extends Olo_Tile_Base {
                 </button>
 
             <?php elseif ( $style === 'icon' ) : ?>
-                <button type="button" class="olo-dm-icon-btn" aria-label="Toggle dark mode" style="position:relative;">
+                <button type="button" class="olo-dm-icon-btn" aria-label="<?php echo esc_attr( olo_t( 'Toggle dark mode' ) ); ?>" style="position:relative;">
                     <span class="olo-dm-icon-sun"><?php echo $sun_svg; ?></span>
                     <span class="olo-dm-icon-moon"><?php echo $moon_svg; ?></span>
                 </button>
 
             <?php else : ?>
-                <button type="button" class="olo-dm-button" aria-label="Toggle dark mode">
+                <button type="button" class="olo-dm-button" aria-label="<?php echo esc_attr( olo_t( 'Toggle dark mode' ) ); ?>">
                     <span class="olo-dm-icon-sun"><?php echo $sun_svg; ?></span>
                     <span class="olo-dm-icon-moon"><?php echo $moon_svg; ?></span>
                     <span class="olo-dm-text-light"><?php echo esc_html( $s['button_text_light'] ); ?></span>

@@ -6,13 +6,13 @@
       class="mb-border-2 mb-border-dashed mb-border-gray-600 mb-rounded-lg mb-p-8 mb-text-center mb-text-gray-500"
     >
       <div class="mb-text-3xl mb-mb-2">[/]</div>
-      <div class="mb-text-sm">Inserisci uno shortcode</div>
+      <div class="mb-text-sm">{{ t('Inserisci uno shortcode') }}</div>
     </div>
 
     <!-- Shortcode preview -->
     <div v-else :style="codeBlockStyle">
       <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.5px;color:#9ca3af;margin-bottom:6px;">
-        Shortcode
+        {{ t('Shortcode') }}
       </div>
       <code :style="codeStyle">{{ s.shortcode_text }}</code>
     </div>
@@ -21,6 +21,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { t } from '@/i18n';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },

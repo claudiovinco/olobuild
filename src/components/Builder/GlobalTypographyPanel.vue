@@ -1,8 +1,8 @@
 <template>
   <div class="gtp-root">
     <div class="gtp-header">
-      <h3 class="gtp-title">Tipografia Globale</h3>
-      <p class="gtp-desc">Definisci set tipografici riutilizzabili tramite variabili CSS.</p>
+      <h3 class="gtp-title">{{ t('Tipografia Globale') }}</h3>
+      <p class="gtp-desc">{{ t('Definisci set tipografici riutilizzabili tramite variabili CSS.') }}</p>
     </div>
 
     <div class="gtp-list">
@@ -16,13 +16,13 @@
             type="text"
             :value="set.label"
             @input="updateField(index, 'label', $event.target.value)"
-            placeholder="Nome set"
+            :placeholder="t('Nome set')"
             class="gtp-input gtp-input--label"
           />
           <button
             class="gtp-remove"
             @click="removeSet(index)"
-            title="Rimuovi set"
+            :title="t('Rimuovi set')"
           >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
@@ -33,7 +33,7 @@
         <div class="gtp-fields">
           <!-- Font Family -->
           <div class="gtp-field">
-            <label class="gtp-field-label">Font family</label>
+            <label class="gtp-field-label">{{ t('Font family') }}</label>
             <FieldFontFamily
               :modelValue="set.family"
               @update:modelValue="updateField(index, 'family', $event)"
@@ -42,42 +42,42 @@
 
           <!-- Weight -->
           <div class="gtp-field">
-            <label class="gtp-field-label">Peso</label>
+            <label class="gtp-field-label">{{ t('Peso') }}</label>
             <select
               :value="set.weight"
               @change="updateField(index, 'weight', $event.target.value)"
               class="gtp-select"
             >
-              <option value="100">100 - Thin</option>
-              <option value="200">200 - Extra Light</option>
-              <option value="300">300 - Light</option>
-              <option value="400">400 - Regular</option>
-              <option value="500">500 - Medium</option>
-              <option value="600">600 - Semi Bold</option>
-              <option value="700">700 - Bold</option>
-              <option value="800">800 - Extra Bold</option>
-              <option value="900">900 - Black</option>
+              <option value="100">{{ t('100 - Thin') }}</option>
+              <option value="200">{{ t('200 - Extra Light') }}</option>
+              <option value="300">{{ t('300 - Light') }}</option>
+              <option value="400">{{ t('400 - Regular') }}</option>
+              <option value="500">{{ t('500 - Medium') }}</option>
+              <option value="600">{{ t('600 - Semi Bold') }}</option>
+              <option value="700">{{ t('700 - Bold') }}</option>
+              <option value="800">{{ t('800 - Extra Bold') }}</option>
+              <option value="900">{{ t('900 - Black') }}</option>
             </select>
           </div>
 
           <!-- Transform -->
           <div class="gtp-field">
-            <label class="gtp-field-label">Trasformazione</label>
+            <label class="gtp-field-label">{{ t('Trasformazione') }}</label>
             <select
               :value="set.transform"
               @change="updateField(index, 'transform', $event.target.value)"
               class="gtp-select"
             >
-              <option value="none">Nessuna</option>
-              <option value="uppercase">MAIUSCOLO</option>
+              <option value="none">{{ t('Nessuna') }}</option>
+              <option value="uppercase">{{ t('MAIUSCOLO') }}</option>
               <option value="lowercase">minuscolo</option>
-              <option value="capitalize">Capitalizza</option>
+              <option value="capitalize">{{ t('Capitalizza') }}</option>
             </select>
           </div>
 
           <!-- Line Height -->
           <div class="gtp-field">
-            <label class="gtp-field-label">Line height</label>
+            <label class="gtp-field-label">{{ t('Line height') }}</label>
             <input
               type="text"
               :value="set.line_height"
@@ -88,7 +88,7 @@
 
           <!-- Letter Spacing -->
           <div class="gtp-field">
-            <label class="gtp-field-label">Letter spacing (px)</label>
+            <label class="gtp-field-label">{{ t('Letter spacing (px)') }}</label>
             <input
               type="text"
               :value="set.letter_spacing"
@@ -114,7 +114,7 @@
             letterSpacing: set.letter_spacing + 'px',
           }"
         >
-          Anteprima del testo - Abc 123
+          {{ t('Anteprima del testo - Abc 123') }}
         </div>
       </div>
     </div>
@@ -139,6 +139,7 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { ref, watch, computed } from 'vue';
 import { useStylesStore } from '@/stores/styles';
 import { useToast } from '@/composables/useToast.js';
@@ -202,7 +203,7 @@ async function save() {
   stylesStore.setGlobalTypography(JSON.parse(JSON.stringify(localSets.value)));
   await stylesStore.saveGlobalTypography();
   isDirty.value = false;
-  toast.success('Tipografia globale salvata');
+  toast.success(t('Tipografia globale salvata'));
 }
 
 // Sync from store if it changes externally

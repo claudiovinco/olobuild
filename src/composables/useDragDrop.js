@@ -89,6 +89,7 @@ export function useDragDrop() {
 
     if (typeof index === 'number') {
       tilesStore.canvasTiles.splice(index, 0, tileToAdd);
+      tilesStore._bumpVersion();
     } else {
       tilesStore.addTile(tileToAdd);
     }
@@ -127,6 +128,7 @@ export function useDragDrop() {
 
     if (typeof index === 'number') {
       tilesStore.canvasTiles.splice(index, 0, tileToAdd);
+      tilesStore._bumpVersion();
     } else {
       tilesStore.addTile(tileToAdd);
     }

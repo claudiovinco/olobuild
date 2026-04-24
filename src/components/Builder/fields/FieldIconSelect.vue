@@ -4,7 +4,7 @@
       v-for="opt in options"
       :key="opt.value"
       :class="['olo-is-btn', { 'olo-is-btn--active': modelValue === opt.value }]"
-      :title="opt.label"
+      :title="t(opt.label)"
       @click="$emit('update:modelValue', opt.value)"
     >
       <svg viewBox="0 0 20 20" class="olo-is-icon">
@@ -110,6 +110,7 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 defineProps({
   modelValue: { type: String, default: '' },
   options: { type: Array, default: () => [] },

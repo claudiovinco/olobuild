@@ -28,7 +28,7 @@
             v-if="s.show_category"
             style="font-size:11px;text-transform:uppercase;letter-spacing:0.5px;opacity:0.7;"
             :style="{ color: s.text_color }"
-          >WordPress</span>
+          >{{ t('WordPress') }}</span>
 
           <!-- Title -->
           <component
@@ -42,14 +42,14 @@
             v-if="s.show_date"
             style="margin-top:6px;font-size:0.85em;"
             :style="{ color: s.date_color }"
-          >5 Mar 2026</div>
+          >{{ t('5 Mar 2026') }}</div>
 
           <!-- Excerpt -->
           <p
             v-if="s.show_excerpt"
             style="margin:8px 0 0;font-size:0.9em;line-height:1.5;"
             :style="{ color: s.text_color }"
-          >Questo è un estratto di esempio per l'anteprima dell'articolo correlato.</p>
+          >{{ t('Questo è un estratto di esempio per l\'anteprima dell\'articolo correlato.') }}</p>
         </div>
       </div>
     </div>
@@ -57,6 +57,7 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { computed } from 'vue';
 
 const props = defineProps({

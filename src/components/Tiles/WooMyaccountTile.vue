@@ -9,9 +9,9 @@
       </div>
       <!-- Content -->
       <div :style="contentStyle">
-        <h3 :style="{ margin: '0 0 16px', fontSize: '20px', fontWeight: 700, color: s.heading_color || 'var(--olo-color-text, #374151)' }">Dashboard</h3>
+        <h3 :style="{ margin: '0 0 16px', fontSize: '20px', fontWeight: 700, color: s.heading_color || 'var(--olo-color-text, #374151)' }">{{ t('Dashboard') }}</h3>
         <p :style="{ color: s.text_color || '#374151', fontSize: '14px', lineHeight: '1.6' }">
-          Benvenuto <strong>Mario Rossi</strong>. Dalla dashboard del tuo account puoi gestire i tuoi ordini recenti, indirizzi di spedizione e fatturazione e modificare la password e i dettagli del tuo account.
+          Benvenuto <strong>{{ t('Mario Rossi') }}</strong>. Dalla dashboard del tuo account puoi gestire i tuoi ordini recenti, indirizzi di spedizione e fatturazione e modificare la password e i dettagli del tuo account.
         </p>
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:20px;">
           <div v-for="stat in stats" :key="stat.label" :style="statCardStyle">
@@ -25,6 +25,7 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { computed } from 'vue';
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 const s = computed(() => props.settings || {});

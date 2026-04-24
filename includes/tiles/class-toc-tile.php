@@ -58,7 +58,7 @@ class Olo_Toc_Tile extends Olo_Tile_Base {
                 <div class="olo-toc-title"><?php echo esc_html($s['title']); ?></div>
             <?php endif; ?>
             <div class="olo-toc-list" data-tags="<?php echo esc_attr($tag_selector); ?>" data-indent="<?php echo $indent; ?>" data-list-style="<?php echo esc_attr($list_style); ?>">
-                <p style="font-size:13px;color:var(--olo-color-text-muted, #9CA3AF);font-style:italic;">Caricamento indice...</p>
+                <p style="font-size:13px;color:var(--olo-color-text-muted, #9CA3AF);font-style:italic;"><?php echo esc_html( olo_t( 'Caricamento indice...' ) ); ?></p>
             </div>
         </nav>
         <script>

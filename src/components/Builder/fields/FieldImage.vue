@@ -9,8 +9,8 @@
       <button
         @click="$emit('update:modelValue', ''); $emit('update:attachmentId', 0)"
         class="mb-absolute mb-top-1 mb-right-1 mb-bg-red-600 mb-text-white mb-rounded-full mb-w-5 mb-h-5 mb-text-xs mb-flex mb-items-center mb-justify-center mb-opacity-0 group-hover:mb-opacity-100 mb-transition-opacity"
-        title="Rimuovi immagine"
-      >&times;</button>
+        :title="t('Rimuovi immagine')"
+      >{{ t('&times;') }}</button>
     </div>
     <button
       @click="pickImage"
@@ -22,6 +22,7 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { useMediaPicker } from '@/composables/useMediaPicker';
 
 const props = defineProps({

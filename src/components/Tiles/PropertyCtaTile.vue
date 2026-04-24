@@ -3,8 +3,8 @@
     <div :style="{ display:'flex', alignItems:'center', gap:'16px', marginBottom:'16px' }">
       <div :style="avatarStyle"></div>
       <div>
-        <div :style="{ fontSize:'16px', fontWeight:'700', color:'#1F2937' }">Mario Rossi</div>
-        <div :style="{ fontSize:'13px', color:'#6B7280' }">Agente Immobiliare</div>
+        <div :style="{ fontSize:'16px', fontWeight:'700', color:'#1F2937' }">{{ t('Mario Rossi') }}</div>
+        <div :style="{ fontSize:'13px', color:'#6B7280' }">{{ t('Agente Immobiliare') }}</div>
       </div>
     </div>
     <div :style="{ display:'flex', flexDirection:'column', gap:'10px' }">
@@ -14,17 +14,18 @@
       </div>
       <div :style="infoRow">
         <span :style="{ fontSize:'16px' }">&#9993;</span>
-        <span>mario.rossi@agenzia.it</span>
+        <span>{{ t('mario.rossi@agenzia.it') }}</span>
       </div>
     </div>
     <div :style="whatsappStyle">
-      <span>&#128172; Contatta su WhatsApp</span>
+      <span>{{ t('&#128172; Contatta su WhatsApp') }}</span>
     </div>
   </div>
 </template>
 
 <script setup>
 import { computed } from 'vue';
+import { t } from '@/i18n';
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 const defaults = { max_width: 380, border_radius: 12, shadow: 'md', padding: 24, accent_color: '' };
 const s = computed(() => ({ ...defaults, ...props.settings }));

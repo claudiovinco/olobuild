@@ -3,7 +3,7 @@
     <div class="tpl-container">
       <!-- Actions bar -->
       <div class="tpl-header-actions">
-        <button @click="triggerImport" class="tpl-btn tpl-btn-outline">&#8593; Importa</button>
+        <button @click="triggerImport" class="tpl-btn tpl-btn-outline">{{ t('&#8593; Importa') }}</button>
         <input
           ref="importFileRef"
           type="file"
@@ -14,16 +14,16 @@
         <!-- New template dropdown -->
         <div class="tpl-dropdown" ref="dropdownRef">
           <button @click="showNewMenu = !showNewMenu" class="tpl-btn tpl-btn-primary">
-            + Nuovo Template
+            {{ t('+ Nuovo Template') }}
           </button>
           <div v-if="showNewMenu" class="tpl-dropdown-menu">
-            <button @click="createNew('page')" class="tpl-dropdown-item">Nuova Pagina</button>
-            <button @click="createNew('header')" class="tpl-dropdown-item">Nuovo Header</button>
-            <button @click="createNew('footer')" class="tpl-dropdown-item">Nuovo Footer</button>
-            <button @click="createNew('megapanel')" class="tpl-dropdown-item">Nuovo Mega Panel</button>
-            <button @click="createNew('404')" class="tpl-dropdown-item">Nuova 404</button>
+            <button @click="createNew('page')" class="tpl-dropdown-item">{{ t('Nuova Pagina') }}</button>
+            <button @click="createNew('header')" class="tpl-dropdown-item">{{ t('Nuovo Header') }}</button>
+            <button @click="createNew('footer')" class="tpl-dropdown-item">{{ t('Nuovo Footer') }}</button>
+            <button @click="createNew('megapanel')" class="tpl-dropdown-item">{{ t('Nuovo Mega Panel') }}</button>
+            <button @click="createNew('404')" class="tpl-dropdown-item">{{ t('Nuova 404') }}</button>
             <div class="tpl-dropdown-sep"></div>
-            <div class="tpl-dropdown-label">Template Single</div>
+            <div class="tpl-dropdown-label">{{ t('Template Single') }}</div>
             <button
               v-for="pt in postTypes"
               :key="pt.value"
@@ -60,7 +60,7 @@
 
       <!-- Loading state -->
       <div v-if="loading" class="tpl-loading">
-        <p>Caricamento template...</p>
+        <p>{{ t('Caricamento template...') }}</p>
       </div>
 
       <!-- Empty state -->
@@ -94,21 +94,21 @@
           <div class="tpl-card-preview">
             <div class="tpl-card-count">{{ countElements(tpl.content) }} elementi</div>
             <!-- Type badge -->
-            <span v-if="tpl.type === 'header'" class="tpl-type-badge purple">Header</span>
-            <span v-if="tpl.type === 'footer'" class="tpl-type-badge teal">Footer</span>
+            <span v-if="tpl.type === 'header'" class="tpl-type-badge purple">{{ t('Header') }}</span>
+            <span v-if="tpl.type === 'footer'" class="tpl-type-badge teal">{{ t('Footer') }}</span>
             <span v-if="tpl.type === 'single'" class="tpl-type-badge amber">Single: {{ getSinglePostType(tpl) }}</span>
-            <span v-if="tpl.type === 'megapanel'" class="tpl-type-badge indigo">Mega Panel</span>
+            <span v-if="tpl.type === 'megapanel'" class="tpl-type-badge indigo">{{ t('Mega Panel') }}</span>
             <span v-if="tpl.type === '404'" class="tpl-type-badge red">404</span>
             <!-- Active indicators -->
-            <span v-if="tpl.type === 'header' && tpl.id === activeHeaderId" class="tpl-active-badge">Attivo</span>
-            <span v-if="tpl.type === 'footer' && tpl.id === activeFooterId" class="tpl-active-badge">Attivo</span>
-            <span v-if="tpl.type === 'single' && isActiveSingle(tpl)" class="tpl-active-badge">Attivo</span>
-            <span v-if="tpl.type === '404' && tpl.id === active404Id" class="tpl-active-badge">Attivo</span>
+            <span v-if="tpl.type === 'header' && tpl.id === activeHeaderId" class="tpl-active-badge">{{ t('Attivo') }}</span>
+            <span v-if="tpl.type === 'footer' && tpl.id === activeFooterId" class="tpl-active-badge">{{ t('Attivo') }}</span>
+            <span v-if="tpl.type === 'single' && isActiveSingle(tpl)" class="tpl-active-badge">{{ t('Attivo') }}</span>
+            <span v-if="tpl.type === '404' && tpl.id === active404Id" class="tpl-active-badge">{{ t('Attivo') }}</span>
             <!-- Hover overlay -->
             <div class="tpl-card-overlay">
-              <button @click="$emit('edit', tpl.id)" class="tpl-btn tpl-btn-primary tpl-btn-sm">Modifica</button>
-              <button @click="duplicateTemplate(tpl.id)" class="tpl-btn tpl-btn-outline-light tpl-btn-sm">Duplica</button>
-              <button @click="exportTemplate(tpl.id)" class="tpl-btn tpl-btn-outline-light tpl-btn-sm">Esporta</button>
+              <button @click="$emit('edit', tpl.id)" class="tpl-btn tpl-btn-primary tpl-btn-sm">{{ t('Modifica') }}</button>
+              <button @click="duplicateTemplate(tpl.id)" class="tpl-btn tpl-btn-outline-light tpl-btn-sm">{{ t('Duplica') }}</button>
+              <button @click="exportTemplate(tpl.id)" class="tpl-btn tpl-btn-outline-light tpl-btn-sm">{{ t('Esporta') }}</button>
             </div>
           </div>
           <!-- Info -->
@@ -132,7 +132,7 @@
               </div>
               <div class="tpl-card-actions-mini">
                 <button @click="startRename(tpl)" class="tpl-icon-btn" title="Rinomina">&#9998;</button>
-                <button @click="deleteTemplate(tpl.id, tpl.title)" class="tpl-icon-btn tpl-icon-btn-danger" title="Elimina">&times;</button>
+                <button @click="deleteTemplate(tpl.id, tpl.title)" class="tpl-icon-btn tpl-icon-btn-danger" title="Elimina">{{ t('&times;') }}</button>
               </div>
             </div>
             <div class="tpl-card-bottom">
@@ -146,14 +146,14 @@
                   v-if="tpl.id === activeHeaderId"
                   @click="deactivateHeader"
                   class="tpl-activate-btn active"
-                >Disattiva</button>
+                >{{ t('Disattiva') }}</button>
                 <button
                   v-else
                   @click="activateHeader(tpl.id)"
                   :disabled="tpl.status !== 'published'"
                   :class="['tpl-activate-btn', { disabled: tpl.status !== 'published' }]"
                   :title="tpl.status !== 'published' ? 'Pubblica prima di attivare' : 'Imposta come header attivo'"
-                >Attiva</button>
+                >{{ t('Attiva') }}</button>
               </template>
               <!-- Activate/Deactivate for footers -->
               <template v-if="tpl.type === 'footer'">
@@ -271,6 +271,7 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue';
 
 const emit = defineEmits(['edit', 'create']);

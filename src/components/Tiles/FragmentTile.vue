@@ -6,14 +6,15 @@
     <span
       class="mb-absolute mb-top-0 mb-left-2 mb-text-[10px] mb-text-gray-600 mb-bg-gray-900 mb-px-1"
       style="transform: translateY(-50%);"
-    >FRAGMENT</span>
+    >{{ t('FRAGMENT') }}</span>
     <div class="mb-text-center mb-text-xs mb-text-gray-600 mb-py-2">
-      Invisible container
+      {{ t('Invisible container') }}
     </div>
   </div>
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 defineProps({
   settings: { type: Object, default: () => ({}) },
 });

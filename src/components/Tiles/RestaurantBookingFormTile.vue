@@ -2,44 +2,44 @@
   <div class="mb-font-sans">
     <div :style="cardWrapStyle">
       <div v-if="s.show_header" :style="headerStyle">
-        <div :style="{ fontSize:'18px', fontWeight:'700' }">Prenota un Tavolo</div>
-        <div :style="{ fontSize:'13px', opacity:0.85, marginTop:'2px' }">Compila il modulo per riservare</div>
+        <div :style="{ fontSize:'18px', fontWeight:'700' }">{{ t('Prenota un Tavolo') }}</div>
+        <div :style="{ fontSize:'13px', opacity:0.85, marginTop:'2px' }">{{ t('Compila il modulo per riservare') }}</div>
       </div>
       <div :style="formBodyStyle">
         <!-- Step badge -->
         <div :style="{ display:'flex', alignItems:'center', gap:'8px', marginBottom:'16px' }">
           <span :style="stepBadgeStyle">1</span>
-          <span :style="{ fontSize:'14px', fontWeight:'600', color:'#374151' }">Dettagli prenotazione</span>
+          <span :style="{ fontSize:'14px', fontWeight:'600', color:'#374151' }">{{ t('Dettagli prenotazione') }}</span>
         </div>
         <!-- Date / People / Service row -->
         <div :style="{ display:'flex', gap:'12px', marginBottom:'16px', flexWrap:'wrap' }">
           <div :style="{ flex:'1', minWidth:'120px' }">
-            <label :style="labelStyle">Data</label>
+            <label :style="labelStyle">{{ t('Data') }}</label>
             <div :style="inputStyle">{{ today }}</div>
           </div>
           <div :style="{ flex:'1', minWidth:'100px' }">
-            <label :style="labelStyle">Persone</label>
+            <label :style="labelStyle">{{ t('Persone') }}</label>
             <div :style="inputStyle">2</div>
           </div>
           <div :style="{ flex:'1', minWidth:'120px' }">
-            <label :style="labelStyle">Servizio</label>
-            <div :style="inputStyle">Cena</div>
+            <label :style="labelStyle">{{ t('Servizio') }}</label>
+            <div :style="inputStyle">{{ t('Cena') }}</div>
           </div>
         </div>
         <!-- Step badge 2 -->
         <div :style="{ display:'flex', alignItems:'center', gap:'8px', marginBottom:'16px' }">
           <span :style="stepBadgeStyle">2</span>
-          <span :style="{ fontSize:'14px', fontWeight:'600', color:'#374151' }">I tuoi dati</span>
+          <span :style="{ fontSize:'14px', fontWeight:'600', color:'#374151' }">{{ t('I tuoi dati') }}</span>
         </div>
         <!-- Name / Email row -->
         <div :style="{ display:'flex', gap:'12px', marginBottom:'20px', flexWrap:'wrap' }">
           <div :style="{ flex:'1', minWidth:'140px' }">
-            <label :style="labelStyle">Nome</label>
-            <div :style="inputStyle">Mario Rossi</div>
+            <label :style="labelStyle">{{ t('Nome') }}</label>
+            <div :style="inputStyle">{{ t('Mario Rossi') }}</div>
           </div>
           <div :style="{ flex:'1', minWidth:'140px' }">
-            <label :style="labelStyle">Email</label>
-            <div :style="inputStyle">mario@email.com</div>
+            <label :style="labelStyle">{{ t('Email') }}</label>
+            <div :style="inputStyle">{{ t('mario@email.com') }}</div>
           </div>
         </div>
         <!-- Submit button -->
@@ -53,6 +53,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { t } from '@/i18n';
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 const defaults = { show_header: true, header_bg: '#1F2937', header_text_color: '#fff', card_border_radius: 12, card_shadow: 'sm', accent_color: '', btn_text: 'Conferma Prenotazione', btn_bg: '', btn_color: '#fff', btn_radius: 8, btn_full_width: true, max_width: '', step_badge_color: '', label_color: '#6B7280', input_radius: 8 };
 const s = computed(() => ({ ...defaults, ...props.settings }));

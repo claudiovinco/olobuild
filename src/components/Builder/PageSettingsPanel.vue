@@ -2,24 +2,24 @@
   <div class="mb-space-y-4">
     <!-- Header -->
     <div class="mb-flex mb-items-center mb-justify-between">
-      <h3 class="mb-text-sm mb-font-semibold mb-text-gray-200">Impostazioni Pagina</h3>
+      <h3 class="mb-text-sm mb-font-semibold mb-text-gray-200">{{ t('Impostazioni Pagina') }}</h3>
       <button
         @click="builderStore.togglePageSettings()"
         class="mb-text-gray-500 hover:mb-text-gray-300 mb-text-lg"
       >
-        &times;
+        {{ t('&times;') }}
       </button>
     </div>
 
     <!-- Single Post Type selector (only for single templates) -->
     <div v-if="isSingleTemplate">
-      <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300 mb-mb-2">Post Type</label>
+      <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300 mb-mb-2">{{ t('Post Type') }}</label>
       <select
         :value="pageSettings.single_post_type || ''"
         @change="builderStore.updatePageSetting('single_post_type', $event.target.value)"
         class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-sm mb-text-gray-900"
       >
-        <option value="" disabled>Seleziona post type...</option>
+        <option value="" disabled>{{ t('Seleziona post type...') }}</option>
         <option v-for="pt in postTypes" :key="pt.value" :value="pt.value">{{ pt.label }}</option>
       </select>
     </div>
@@ -29,16 +29,16 @@
 
     <!-- Layout -->
     <div>
-      <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300 mb-mb-2">Larghezza max contenuto</label>
+      <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300 mb-mb-2">{{ t('Larghezza max contenuto') }}</label>
       <select
         :value="pageSettings.content_max_width"
         @change="builderStore.updatePageSetting('content_max_width', parseInt($event.target.value))"
         class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-sm mb-text-gray-900"
       >
-        <option :value="960">960px (Stretto)</option>
-        <option :value="1200">1200px (Predefinito)</option>
-        <option :value="1400">1400px (Largo)</option>
-        <option :value="9999">Larghezza piena</option>
+        <option :value="960">{{ t('960px (Stretto)') }}</option>
+        <option :value="1200">{{ t('1200px (Predefinito)') }}</option>
+        <option :value="1400">{{ t('1400px (Largo)') }}</option>
+        <option :value="9999">{{ t('Larghezza piena') }}</option>
       </select>
     </div>
 
@@ -47,7 +47,7 @@
 
     <!-- Background -->
     <div>
-      <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300 mb-mb-2">Sfondo pagina</label>
+      <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300 mb-mb-2">{{ t('Sfondo pagina') }}</label>
       <BackgroundControls
         :modelValue="pageSettings.page_bg"
         :showParallax="true"
@@ -60,15 +60,15 @@
 
     <!-- Favicon -->
     <div>
-      <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300 mb-mb-2">Favicon</label>
+      <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300 mb-mb-2">{{ t('Favicon') }}</label>
       <div v-if="faviconUrl" class="mb-relative mb-group mb-mb-2">
         <img :src="faviconUrl" class="mb-w-8 mb-h-8 mb-rounded mb-border mb-border-gray-600" />
-        <button @click="removeFavicon" class="mb-absolute mb-top-0 mb-right-0 mb-bg-red-600 mb-text-white mb-rounded-full mb-w-4 mb-h-4 mb-text-[10px] mb-flex mb-items-center mb-justify-center mb-opacity-0 group-hover:mb-opacity-100">&times;</button>
+        <button @click="removeFavicon" class="mb-absolute mb-top-0 mb-right-0 mb-bg-red-600 mb-text-white mb-rounded-full mb-w-4 mb-h-4 mb-text-[10px] mb-flex mb-items-center mb-justify-center mb-opacity-0 group-hover:mb-opacity-100">{{ t('&times;') }}</button>
       </div>
       <button @click="pickFavicon" class="mb-w-full mb-py-1.5 mb-px-3 mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-md mb-text-xs mb-text-gray-300 hover:mb-bg-gray-600">
         {{ faviconUrl ? 'Cambia favicon' : 'Seleziona favicon' }}
       </button>
-      <p class="mb-text-[10px] mb-text-gray-500 mb-mt-1">Imposta la favicon del sito (salvata in WordPress).</p>
+      <p class="mb-text-[10px] mb-text-gray-500 mb-mt-1">{{ t('Imposta la favicon del sito (salvata in WordPress).') }}</p>
     </div>
 
     <!-- Separator -->
@@ -76,31 +76,31 @@
 
     <!-- Scroll flash settings -->
     <div>
-      <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300 mb-mb-1">Evidenziazione scroll</label>
-      <p class="mb-text-[10px] mb-text-gray-500 mb-mb-3">Effetto visivo quando selezioni un tile dalla Struttura.</p>
+      <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300 mb-mb-1">{{ t('Evidenziazione scroll') }}</label>
+      <p class="mb-text-[10px] mb-text-gray-500 mb-mb-3">{{ t('Effetto visivo quando selezioni un tile dalla Struttura.') }}</p>
 
       <!-- Effect type -->
       <div class="mb-mb-3">
-        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">Tipo effetto</label>
+        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Tipo effetto') }}</label>
         <select
           :value="sf.effect"
           @change="updateSf('effect', $event.target.value)"
           class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-sm mb-text-gray-900"
         >
-          <option value="flash">Flash (singolo)</option>
-          <option value="pulse">Pulse (ripetuto)</option>
+          <option value="flash">{{ t('Flash (singolo)') }}</option>
+          <option value="pulse">{{ t('Pulse (ripetuto)') }}</option>
         </select>
       </div>
 
       <!-- Color -->
       <div class="mb-mb-3">
-        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">Colore</label>
+        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Colore') }}</label>
         <FieldColor :modelValue="sf.color" @update:modelValue="updateSf('color', $event)" />
       </div>
 
       <!-- Size -->
       <div class="mb-mb-3">
-        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">Dimensione effetto</label>
+        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Dimensione effetto') }}</label>
         <div class="mb-flex mb-items-center mb-gap-2">
           <input type="range" :value="sf.size" @input="updateSf('size', parseInt($event.target.value))" min="2" max="20" step="1" class="mb-flex-1" />
           <span class="mb-text-[10px] mb-text-gray-400 mb-w-8 mb-text-right">{{ sf.size }}px</span>
@@ -109,7 +109,7 @@
 
       <!-- Duration -->
       <div class="mb-mb-3">
-        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">Durata effetto</label>
+        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Durata effetto') }}</label>
         <div class="mb-flex mb-items-center mb-gap-2">
           <input type="range" :value="sf.duration" @input="updateSf('duration', parseInt($event.target.value))" min="300" max="3000" step="100" class="mb-flex-1" />
           <span class="mb-text-[10px] mb-text-gray-400 mb-w-12 mb-text-right">{{ sf.duration }}ms</span>
@@ -118,7 +118,7 @@
 
       <!-- Pulse count -->
       <div v-if="sf.effect === 'pulse'" class="mb-mb-3">
-        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">Ripetizioni pulse</label>
+        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Ripetizioni pulse') }}</label>
         <div class="mb-flex mb-items-center mb-gap-2">
           <input type="range" :value="sf.pulse_count" @input="updateSf('pulse_count', parseInt($event.target.value))" min="1" max="6" step="1" class="mb-flex-1" />
           <span class="mb-text-[10px] mb-text-gray-400 mb-w-6 mb-text-right">{{ sf.pulse_count }}x</span>
@@ -127,7 +127,7 @@
 
       <!-- Scroll speed -->
       <div>
-        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">Velocit&agrave; scorrimento</label>
+        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Velocit&agrave; scorrimento') }}</label>
         <div class="mb-flex mb-items-center mb-gap-2">
           <input type="range" :value="sf.scroll_ms" @input="updateSf('scroll_ms', parseInt($event.target.value))" min="0" max="1500" step="50" class="mb-flex-1" />
           <span class="mb-text-[10px] mb-text-gray-400 mb-w-12 mb-text-right">{{ sf.scroll_ms === 0 ? 'Istant.' : sf.scroll_ms + 'ms' }}</span>
@@ -139,6 +139,7 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { computed, reactive, ref } from 'vue';
 import { useBuilderStore } from '@/stores/builder';
 import BackgroundControls from './BackgroundControls.vue';

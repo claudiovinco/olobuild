@@ -21,7 +21,7 @@
       <div class="mb-px-4 mb-py-3" :style="{ background: s.theme === 'dark' ? '#15202b' : '#fff' }">
         <div v-if="s.url" class="mb-text-sm mb-truncate" :style="{ color: s.theme === 'dark' ? '#8899a6' : '#536471' }">{{ s.url }}</div>
         <div v-else class="mb-py-8 mb-text-center mb-text-sm" :style="{ color: s.theme === 'dark' ? '#8899a6' : '#536471' }">
-          Inserisci URL profilo X/Twitter
+          {{ t('Inserisci URL profilo X/Twitter') }}
         </div>
       </div>
 
@@ -53,6 +53,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { t } from '@/i18n';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },

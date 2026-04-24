@@ -3,9 +3,9 @@
     <div :style="heroStyle">
       <div :style="overlayStyle"></div>
       <div :style="{ position:'absolute', bottom:'0', left:'0', right:'0', padding:'32px', zIndex:2 }">
-        <span :style="badgeStyle">Vendita</span>
-        <div :style="{ fontSize:'28px', fontWeight:'800', color:'#fff', margin:'12px 0 6px' }">&euro; 325.000</div>
-        <div :style="{ fontSize:'15px', color:'rgba(255,255,255,0.9)', marginBottom:'14px' }">&#128205; Trento, Centro Storico</div>
+        <span :style="badgeStyle">{{ t('Vendita') }}</span>
+        <div :style="{ fontSize:'28px', fontWeight:'800', color:'#fff', margin:'12px 0 6px' }">{{ t('&euro; 325.000') }}</div>
+        <div :style="{ fontSize:'15px', color:'rgba(255,255,255,0.9)', marginBottom:'14px' }">{{ t('&#128205; Trento, Centro Storico') }}</div>
         <div :style="{ display:'flex', gap:'20px' }">
           <span v-for="spec in specs" :key="spec" :style="specStyle">{{ spec }}</span>
         </div>
@@ -16,6 +16,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { t } from '@/i18n';
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 const defaults = { height: 450, border_radius: 16, overlay_opacity: 0.4, accent_color: '' };
 const s = computed(() => ({ ...defaults, ...props.settings }));

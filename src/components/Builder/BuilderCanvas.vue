@@ -6,18 +6,12 @@
         ref="iframeRef"
         :src="iframeSrc"
         class="olo-live-iframe"
-        :class="{ 'olo-iframe-no-drag': builderStore.isSidebarDragging }"
+        :class="{ 'olo-iframe-no-drag': dndStore.isDragging }"
         :style="iframeStyle"
         allow="autoplay"
       ></iframe>
-      <!-- Transparent drag overlay — sole drop target during drag -->
-      <div
-        v-if="builderStore.isSidebarDragging"
-        class="olo-drag-overlay"
-        @dragover.prevent="onIframeDragOver"
-        @dragleave="onIframeDragLeave"
-        @drop.prevent.stop="onIframeDrop"
-      ></div>
+      <!-- Overlay parent-side Pragmatic: visibile solo durante drag dalla sidebar -->
+      <CanvasDragOverlay :iframe-ref="iframeRef" />
       <ContextMenu ref="iframeContextMenuRef" />
     </div>
 
@@ -25,8 +19,6 @@
     <div v-else
       ref="canvasRef"
       :class="['mb-flex-1 mb-bg-white', deviceFrame ? 'mb-overflow-hidden' : 'mb-overflow-y-auto', builderStore.cleanMode && !builderStore.previewMode ? 'mb-p-0' : 'mb-p-6']"
-      @dragover.prevent="onDragOver"
-      @drop.prevent="onDrop"
       @click.self="onCanvasClick"
     >
       <!-- Device frame wrapper for responsive modes -->
@@ -45,7 +37,7 @@
           >
             <div v-if="!builderStore.cleanMode" class="olo-zone-label">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="6" rx="2"/><line x1="3" y1="13" x2="21" y2="13" opacity="0.3"/><line x1="3" y1="17" x2="21" y2="17" opacity="0.3"/></svg>
-              <span>Header</span>
+              <span>{{ t('Header') }}</span>
             </div>
             <div :class="['olo-template', { 'clean-mode': builderStore.cleanMode }]">
               <OlobuilderGrid zone="header" />
@@ -63,7 +55,7 @@
           >
             <div v-if="!builderStore.cleanMode" class="olo-zone-label">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/></svg>
-              <span>Body</span>
+              <span>{{ t('Body') }}</span>
             </div>
             <div
               :class="[canvasClasses, { 'clean-mode': builderStore.cleanMode, 'wireframe-mode': builderStore.wireframeMode }]"
@@ -84,7 +76,7 @@
                   <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
                   <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
                 </svg>
-                <p class="mb-text-lg mb-font-medium">Trascina una tile qui per iniziare</p>
+                <p class="mb-text-lg mb-font-medium">{{ t('Trascina una tile qui per iniziare') }}</p>
               </div>
               <div v-else class="mb-relative" style="z-index: 2">
                 <OlobuilderGrid zone="body" />
@@ -111,7 +103,7 @@
                 <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
                 <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
               </svg>
-              <p class="mb-text-lg mb-font-medium">Trascina una tile qui per iniziare</p>
+              <p class="mb-text-lg mb-font-medium">{{ t('Trascina una tile qui per iniziare') }}</p>
             </div>
             <div v-else class="mb-relative" style="z-index: 2">
               <OlobuilderGrid />
@@ -126,7 +118,7 @@
           >
             <div v-if="!builderStore.cleanMode" class="olo-zone-label">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="6" rx="2" opacity="0.3"/><line x1="3" y1="13" x2="21" y2="13" opacity="0.3"/><rect x="3" y="17" width="18" height="4" rx="1"/></svg>
-              <span>Footer</span>
+              <span>{{ t('Footer') }}</span>
             </div>
             <div :class="['olo-template', { 'clean-mode': builderStore.cleanMode }]">
               <OlobuilderGrid zone="footer" />
@@ -151,7 +143,7 @@
         >
           <div v-if="!builderStore.cleanMode" class="olo-zone-label">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="6" rx="2"/><line x1="3" y1="13" x2="21" y2="13" opacity="0.3"/><line x1="3" y1="17" x2="21" y2="17" opacity="0.3"/></svg>
-            <span>Header</span>
+            <span>{{ t('Header') }}</span>
           </div>
           <div :class="['olo-template', { 'clean-mode': builderStore.cleanMode }]">
             <OlobuilderGrid zone="header" />
@@ -168,7 +160,7 @@
         >
           <div v-if="!builderStore.cleanMode" class="olo-zone-label">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/></svg>
-            <span>Body</span>
+            <span>{{ t('Body') }}</span>
           </div>
           <div
             :class="[canvasClasses, { 'clean-mode': builderStore.cleanMode, 'wireframe-mode': builderStore.wireframeMode }]"
@@ -189,8 +181,8 @@
                 <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
                 <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
               </svg>
-              <p class="mb-text-lg mb-font-medium">Trascina una tile qui per iniziare</p>
-              <p class="mb-text-sm mb-mt-1 mb-opacity-60">Trascina le tile dalla barra laterale a sinistra</p>
+              <p class="mb-text-lg mb-font-medium">{{ t('Trascina una tile qui per iniziare') }}</p>
+              <p class="mb-text-sm mb-mt-1 mb-opacity-60">{{ t('Trascina le tile dalla barra laterale a sinistra') }}</p>
             </div>
             <div v-else class="mb-relative" style="z-index: 2">
               <OlobuilderGrid zone="body" />
@@ -217,8 +209,8 @@
               <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
               <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
             </svg>
-            <p class="mb-text-lg mb-font-medium">Trascina una tile qui per iniziare</p>
-            <p class="mb-text-sm mb-mt-1 mb-opacity-60">Trascina le tile dalla barra laterale a sinistra</p>
+            <p class="mb-text-lg mb-font-medium">{{ t('Trascina una tile qui per iniziare') }}</p>
+            <p class="mb-text-sm mb-mt-1 mb-opacity-60">{{ t('Trascina le tile dalla barra laterale a sinistra') }}</p>
           </div>
           <div v-else class="mb-relative" style="z-index: 2">
             <OlobuilderGrid />
@@ -233,7 +225,7 @@
         >
           <div v-if="!builderStore.cleanMode" class="olo-zone-label">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="6" rx="2" opacity="0.3"/><line x1="3" y1="13" x2="21" y2="13" opacity="0.3"/><rect x="3" y="17" width="18" height="4" rx="1"/></svg>
-            <span>Footer</span>
+            <span>{{ t('Footer') }}</span>
           </div>
           <div :class="['olo-template', { 'clean-mode': builderStore.cleanMode }]">
             <OlobuilderGrid zone="footer" />
@@ -247,15 +239,18 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, watchEffect, onUnmounted } from 'vue';
+import { t } from '@/i18n';
+import { ref, computed, watch, watchEffect, onMounted, onUnmounted } from 'vue';
 import { useBuilderStore } from '@/stores/builder';
 import { useTilesStore } from '@/stores/tiles';
 import { useStylesStore } from '@/stores/styles';
-import { useDragDrop } from '@/composables/useDragDrop';
+import { useDnDStore } from '@/stores/dnd';
 import { useInlineEdit } from '@/composables/useInlineEdit';
 import { useIframeBridge } from '@/composables/useIframeBridge';
+import { useDragMonitor, installDnDSafetyNet, isOloData } from '@/composables/useDnD';
 import OlobuilderGrid from '@/components/Grid/OlobuilderGrid.vue';
 import ContextMenu from '@/components/Builder/ContextMenu.vue';
+import CanvasDragOverlay from '@/components/Builder/CanvasDragOverlay.vue';
 
 const canvasRef = ref(null);
 const iframeRef = ref(null);
@@ -266,7 +261,19 @@ useInlineEdit(canvasRef);
 const builderStore = useBuilderStore();
 const tilesStore = useTilesStore();
 const stylesStore = useStylesStore();
-const { handleDropFromSidebar, handleDropIntoColumn } = useDragDrop();
+const dndStore = useDnDStore();
+
+// Safety net globale DnD: Esc, blur, visibilitychange, pagehide, pointercancel
+installDnDSafetyNet();
+
+// Monitor globale Pragmatic: garantisce endDrag anche se il drop cade fuori
+// da tutti i drop target (utente rilascia nel vuoto).
+useDragMonitor({
+  canMonitor: ({ source }) => isOloData(source.data),
+  onDrop: () => {
+    if (!dndStore.isIdle) dndStore.endDrag();
+  },
+});
 
 // ── Live iframe preview ──
 const { iframeReady, iframeHeight, postToIframe } = useIframeBridge(iframeRef);
@@ -303,97 +310,8 @@ const iframeStyle = computed(() => {
   return style;
 });
 
-/**
- * Synchronous hit-testing against cached iframe layout.
- * Returns { columnId, insertIndex } based on cursor position.
- */
-function hitTest(clientX, clientY) {
-  const iframe = iframeRef.value;
-  if (!iframe) return { columnId: null, insertIndex: null };
-
-  const iframeRect = iframe.getBoundingClientRect();
-  const zoom = builderStore.canvasZoom / 100;
-  const x = (clientX - iframeRect.left) / zoom;
-  const y = (clientY - iframeRect.top) / zoom;
-
-  const layout = builderStore.iframeLayout;
-
-  // Check if cursor is inside a column
-  let columnId = null;
-  let colRect = null;
-  for (const col of layout.columns) {
-    if (x >= col.left && x <= col.right && y >= col.top && y <= col.bottom) {
-      columnId = col.id;
-      colRect = col;
-      break;
-    }
-  }
-
-  // Calculate section insertion index
-  let insertIndex = layout.sections.length;
-  let lineY = 0;
-  const sects = layout.sections;
-  if (sects.length === 0) {
-    lineY = iframeRect.height / 2;
-  } else {
-    let found = false;
-    for (let i = 0; i < sects.length; i++) {
-      const midY = (sects[i].top + sects[i].bottom) / 2;
-      if (y < midY) {
-        insertIndex = i;
-        lineY = sects[i].top;
-        found = true;
-        break;
-      }
-    }
-    if (!found) {
-      lineY = sects[sects.length - 1].bottom;
-    }
-  }
-
-  return { columnId, colRect, insertIndex, lineY, x, y };
-}
-
-function onIframeDragOver(e) {
-  e.dataTransfer.dropEffect = 'copy';
-
-  const result = hitTest(e.clientX, e.clientY);
-  builderStore.dropTargetColumnId = result.columnId;
-  builderStore.dropInsertIndex = result.insertIndex;
-
-  // Send visual feedback to iframe
-  if (result.columnId && result.colRect) {
-    postToIframe('olo:drag-over', { y: result.y, colRect: result.colRect });
-  } else {
-    postToIframe('olo:drag-over', { y: result.y, lineY: result.lineY });
-  }
-}
-
-function onIframeDragLeave() {
-  postToIframe('olo:drag-leave');
-  builderStore.dropTargetColumnId = null;
-  builderStore.dropInsertIndex = null;
-}
-
-function onIframeDrop(e) {
-  builderStore.isSidebarDragging = false;
-  postToIframe('olo:drag-leave');
-  const tileType = e.dataTransfer.getData('tile-type');
-  if (!tileType) return;
-
-  const columnId = builderStore.dropTargetColumnId;
-  const insertIdx = builderStore.dropInsertIndex;
-  const hasLayout = builderStore.iframeLayout.sections.length > 0;
-  builderStore.dropTargetColumnId = null;
-  builderStore.dropInsertIndex = null;
-
-  if (columnId && tileType !== 'section' && tileType !== 'row') {
-    handleDropIntoColumn(tileType, columnId);
-  } else {
-    // Only use insertIndex if we have a valid layout snapshot; otherwise append to end
-    handleDropFromSidebar(tileType, hasLayout && typeof insertIdx === 'number' ? insertIdx : undefined);
-  }
-}
+// Hit-test + drop handling spostati in CanvasDragOverlay.vue (il sistema Pragmatic
+// usa un overlay parent-side come drop target unico durante il drag sidebar→iframe).
 
 // ── Context menu from iframe ──
 watch(() => builderStore._iframeContextMenu, (ctx) => {
@@ -576,19 +494,6 @@ function onCanvasClick() {
 
 function onZoneClick(zone) {
   builderStore.setActiveZone(zone);
-}
-
-function onDragOver(event) {
-  if (builderStore.previewMode) return;
-  event.dataTransfer.dropEffect = 'copy';
-}
-
-function onDrop(event) {
-  if (builderStore.previewMode) return;
-  const tileType = event.dataTransfer.getData('tile-type');
-  if (tileType) {
-    handleDropFromSidebar(tileType);
-  }
 }
 </script>
 
@@ -777,23 +682,6 @@ function onDrop(event) {
 /* Disable iframe pointer events during sidebar drag */
 .olo-iframe-no-drag {
   pointer-events: none !important;
-}
-
-/* Drag overlay — covers iframe during drag to prevent forbidden cursor */
-.olo-drag-overlay {
-  position: absolute;
-  inset: 0;
-  z-index: 10;
-  background: rgba(37, 99, 235, 0.04);
-  border: 2px dashed rgba(37, 99, 235, 0.3);
-  border-radius: 8px;
-  cursor: copy;
-  pointer-events: auto;
-  animation: olo-drag-pulse 1.5s ease-in-out infinite;
-}
-@keyframes olo-drag-pulse {
-  0%, 100% { border-color: rgba(37, 99, 235, 0.3); }
-  50% { border-color: rgba(37, 99, 235, 0.6); }
 }
 
 /* === Wireframe / Gabbia mode === */

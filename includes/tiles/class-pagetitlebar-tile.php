@@ -103,7 +103,7 @@ class Olo_Pagetitlebar_Tile extends Olo_Tile_Base {
                 <?php endif; ?>
 
                 <?php if ( ! empty( $s['show_breadcrumbs'] ) ) : ?>
-                <nav class="olo-ptb-breadcrumbs" aria-label="Breadcrumb" style="margin-top:16px;font-size:13px;color:<?php echo $bc_color; ?>">
+                <nav class="olo-ptb-breadcrumbs" aria-label="<?php echo esc_attr( olo_t( 'Breadcrumb' ) ); ?>" style="margin-top:16px;font-size:13px;color:<?php echo $bc_color; ?>">
                     <?php echo $this->render_breadcrumbs( $bc_sep, $bc_color ); ?>
                 </nav>
                 <?php endif; ?>

@@ -3,8 +3,8 @@
     <!-- Marker badge -->
     <div :style="markerStyle">
       <div style="display:flex;align-items:center;gap:6px;">
-        <span style="font-size:16px;flex-shrink:0;">&#x1F6A9;</span>
-        <span style="font-weight:700;color:#fbbf24;font-size:13px;">Hidden Pop</span>
+        <span style="font-size:16px;flex-shrink:0;">{{ t('&#x1F6A9;') }}</span>
+        <span style="font-weight:700;color:#fbbf24;font-size:13px;">{{ t('Hidden Pop') }}</span>
       </div>
       <div style="color:#fde68a;font-size:11px;padding-left:22px;">
         Attivazione: scroll {{ s.trigger_direction === 'up' ? '\u2191' : s.trigger_direction === 'both' ? '\u2195' : '\u2193' }} al {{ s.trigger_threshold || 50 }}% viewport
@@ -16,14 +16,14 @@
 
     <!-- Mini popup preview -->
     <div :style="previewStyle">
-      <div style="position:absolute;top:-8px;left:12px;background:#78350f;padding:0 6px;font-size:9px;color:#fbbf24;font-weight:600;border-radius:3px;">POPUP PREVIEW</div>
+      <div style="position:absolute;top:-8px;left:12px;background:#78350f;padding:0 6px;font-size:9px;color:#fbbf24;font-weight:600;border-radius:3px;">{{ t('POPUP PREVIEW') }}</div>
 
       <!-- Close X -->
-      <div v-if="s.modal_close_button !== false" style="position:absolute;top:8px;right:10px;color:#9ca3af;font-size:16px;font-weight:bold;line-height:1;">&times;</div>
+      <div v-if="s.modal_close_button !== false" style="position:absolute;top:8px;right:10px;color:#9ca3af;font-size:16px;font-weight:bold;line-height:1;">{{ t('&times;') }}</div>
 
       <template v-if="s.mode === 'template'">
         <div style="font-size:11px;color:#9ca3af;text-align:center;padding:12px 0;">
-          Template Olobuild
+          {{ t('Template Olobuild') }}
         </div>
       </template>
       <template v-else>
@@ -53,6 +53,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { t } from '@/i18n';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },

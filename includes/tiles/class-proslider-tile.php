@@ -293,8 +293,8 @@ class Olo_ProSlider_Tile extends Olo_Tile_Base {
             <?php
             $arrow_style = isset( $s['arrowStyle'] ) && in_array( $s['arrowStyle'], [ 'minimal', 'rounded', 'boxed', 'outline' ], true ) ? $s['arrowStyle'] : 'minimal';
             if ( $s['showArrows'] && count( $slides ) > 1 ) : ?>
-                <button class="olo-proslider-arrow olo-proslider-prev mps-arrow-<?php echo $arrow_style; ?>" aria-label="Previous">&lsaquo;</button>
-                <button class="olo-proslider-arrow olo-proslider-next mps-arrow-<?php echo $arrow_style; ?>" aria-label="Next">&rsaquo;</button>
+                <button class="olo-proslider-arrow olo-proslider-prev mps-arrow-<?php echo $arrow_style; ?>" aria-label="<?php echo esc_attr( olo_t( 'Previous' ) ); ?>"><?php echo esc_html( olo_t( '&lsaquo;' ) ); ?></button>
+                <button class="olo-proslider-arrow olo-proslider-next mps-arrow-<?php echo $arrow_style; ?>" aria-label="<?php echo esc_attr( olo_t( 'Next' ) ); ?>"><?php echo esc_html( olo_t( '&rsaquo;' ) ); ?></button>
             <?php endif; ?>
 
             <?php

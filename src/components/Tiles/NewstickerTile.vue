@@ -12,7 +12,7 @@
         <span class="olo-newsticker-title" :data-olo-editable="`items.${currentIndex}.title`">{{ currentItem.title || 'Notizia...' }}</span>
       </div>
       <div v-else class="olo-newsticker-item" :style="itemStyle">
-        <span class="olo-newsticker-title" style="opacity:0.5">Aggiungi notizie...</span>
+        <span class="olo-newsticker-title" style="opacity:0.5">{{ t('Aggiungi notizie...') }}</span>
       </div>
     </div>
   </div>
@@ -20,6 +20,7 @@
 
 <script setup>
 import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue';
+import { t } from '@/i18n';
 
 const defaults = {
   items: [

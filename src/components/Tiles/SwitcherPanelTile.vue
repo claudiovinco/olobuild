@@ -3,7 +3,7 @@
     <!-- Hero area -->
     <div class="sp-hero" :style="heroStyle">
       <img v-if="s.hero_image" :src="s.hero_image" alt="" class="sp-hero__img" />
-      <div v-else class="sp-hero__placeholder">Immagine teaser</div>
+      <div v-else class="sp-hero__placeholder">{{ t('Immagine teaser') }}</div>
       <!-- Nav -->
       <div class="sp-nav" :class="navClass">
         <button
@@ -30,13 +30,14 @@
         <img :src="activeItem.image" alt="" class="sp-panel__img" />
       </div>
       <div v-else class="sp-panel__media sp-panel__media--empty">
-        <span>Immagine</span>
+        <span>{{ t('Immagine') }}</span>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { ref, computed, watch } from 'vue';
 
 const props = defineProps({

@@ -2,16 +2,16 @@
   <div>
     <!-- Header -->
     <div class="mb-flex mb-items-center mb-justify-between mb-mb-4">
-      <h3 class="mb-text-sm mb-font-semibold mb-text-gray-200">Sistema Stili</h3>
+      <h3 class="mb-text-sm mb-font-semibold mb-text-gray-200">{{ t('Sistema Stili') }}</h3>
       <button
         @click="builderStore.toggleStylePanel()"
         class="mb-text-gray-500 hover:mb-text-gray-300 mb-text-lg"
-      >&times;</button>
+      >{{ t('&times;') }}</button>
     </div>
 
     <!-- Preset bar -->
     <div class="mb-mb-4">
-      <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-400 mb-mb-2">Presets</label>
+      <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-400 mb-mb-2">{{ t('Presets') }}</label>
       <div class="mb-grid mb-grid-cols-3 mb-gap-1">
         <button
           v-for="(preset, key) in stylesStore.presets"
@@ -29,7 +29,7 @@
     </div>
 
     <!-- Sections -->
-    <CollapseSection title="Colori" :defaultOpen="true">
+    <CollapseSection :title="t('Colori')" :defaultOpen="true">
       <div class="mb-space-y-2.5">
         <div v-for="(value, key) in stylesStore.colors" :key="key">
           <label class="mb-block mb-text-[10px] mb-font-medium mb-text-gray-400 mb-mb-0.5">
@@ -43,8 +43,8 @@
       </div>
     </CollapseSection>
 
-    <CollapseSection title="Colori Dark Mode">
-      <p class="mb-text-[10px] mb-text-gray-500 mb-mb-3">Colori usati quando il Dark Mode Toggle è attivo. Sovrascrivono i colori base.</p>
+    <CollapseSection :title="t('Colori Dark Mode')">
+      <p class="mb-text-[10px] mb-text-gray-500 mb-mb-3">{{ t('Colori usati quando il Dark Mode Toggle è attivo. Sovrascrivono i colori base.') }}</p>
       <div class="mb-space-y-2.5">
         <div v-for="(value, key) in stylesStore.darkColors" :key="'dk-' + key">
           <label class="mb-block mb-text-[10px] mb-font-medium mb-text-gray-400 mb-mb-0.5">
@@ -58,11 +58,11 @@
       </div>
     </CollapseSection>
 
-    <CollapseSection title="Tipografia">
+    <CollapseSection :title="t('Tipografia')">
       <div class="mb-space-y-2.5">
         <!-- Font Family (body) -->
         <div>
-          <label class="mb-block mb-text-[10px] mb-font-medium mb-text-gray-400 mb-mb-0.5">Font corpo</label>
+          <label class="mb-block mb-text-[10px] mb-font-medium mb-text-gray-400 mb-mb-0.5">{{ t('Font corpo') }}</label>
           <FieldFontFamily
             :modelValue="stylesStore.typography.font_family"
             @update:modelValue="stylesStore.updateTypography('font_family', $event)"
@@ -70,7 +70,7 @@
         </div>
         <!-- Font Family (heading) -->
         <div>
-          <label class="mb-block mb-text-[10px] mb-font-medium mb-text-gray-400 mb-mb-0.5">Font titoli</label>
+          <label class="mb-block mb-text-[10px] mb-font-medium mb-text-gray-400 mb-mb-0.5">{{ t('Font titoli') }}</label>
           <FieldFontFamily
             :modelValue="stylesStore.typography.font_family_heading"
             @update:modelValue="stylesStore.updateTypography('font_family_heading', $event)"
@@ -78,7 +78,7 @@
         </div>
         <!-- Base font size -->
         <div>
-          <label class="mb-block mb-text-[10px] mb-font-medium mb-text-gray-400 mb-mb-0.5">Dimensione font base</label>
+          <label class="mb-block mb-text-[10px] mb-font-medium mb-text-gray-400 mb-mb-0.5">{{ t('Dimensione font base') }}</label>
           <FieldText
             :modelValue="stylesStore.typography.font_size_base"
             @update:modelValue="stylesStore.updateTypography('font_size_base', $event)"
@@ -94,7 +94,7 @@
         </div>
         <!-- Line Height -->
         <div>
-          <label class="mb-block mb-text-[10px] mb-font-medium mb-text-gray-400 mb-mb-0.5">Interlinea</label>
+          <label class="mb-block mb-text-[10px] mb-font-medium mb-text-gray-400 mb-mb-0.5">{{ t('Interlinea') }}</label>
           <FieldText
             :modelValue="stylesStore.typography.line_height"
             @update:modelValue="stylesStore.updateTypography('line_height', $event)"
@@ -102,7 +102,7 @@
         </div>
         <!-- Heading Weight -->
         <div>
-          <label class="mb-block mb-text-[10px] mb-font-medium mb-text-gray-400 mb-mb-0.5">Peso titoli</label>
+          <label class="mb-block mb-text-[10px] mb-font-medium mb-text-gray-400 mb-mb-0.5">{{ t('Peso titoli') }}</label>
           <FieldSelect
             :modelValue="stylesStore.typography.font_weight_heading"
             :options="weightOptions"
@@ -112,24 +112,24 @@
       </div>
     </CollapseSection>
 
-    <CollapseSection title="Layout">
+    <CollapseSection :title="t('Layout')">
       <div class="mb-space-y-2.5">
         <div>
-          <label class="mb-block mb-text-[10px] mb-font-medium mb-text-gray-400 mb-mb-0.5">Raggio bordi</label>
+          <label class="mb-block mb-text-[10px] mb-font-medium mb-text-gray-400 mb-mb-0.5">{{ t('Raggio bordi') }}</label>
           <FieldBorderRadius
             :modelValue="parseBorderRadius(stylesStore.layout.border_radius)"
             @update:modelValue="stylesStore.updateLayout('border_radius', $event)"
           />
         </div>
         <div>
-          <label class="mb-block mb-text-[10px] mb-font-medium mb-text-gray-400 mb-mb-0.5">Raggio bordi grande</label>
+          <label class="mb-block mb-text-[10px] mb-font-medium mb-text-gray-400 mb-mb-0.5">{{ t('Raggio bordi grande') }}</label>
           <FieldBorderRadius
             :modelValue="parseBorderRadius(stylesStore.layout.border_radius_large)"
             @update:modelValue="stylesStore.updateLayout('border_radius_large', $event)"
           />
         </div>
         <div>
-          <label class="mb-block mb-text-[10px] mb-font-medium mb-text-gray-400 mb-mb-0.5">Larghezza max contenitore</label>
+          <label class="mb-block mb-text-[10px] mb-font-medium mb-text-gray-400 mb-mb-0.5">{{ t('Larghezza max contenitore') }}</label>
           <FieldText
             :modelValue="stylesStore.layout.container_max_width"
             @update:modelValue="stylesStore.updateLayout('container_max_width', $event)"
@@ -138,8 +138,8 @@
       </div>
     </CollapseSection>
 
-    <CollapseSection title="Scala Spaziatura">
-      <p class="mb-text-[9px] mb-text-gray-500 mb-mb-2">8 livelli di spacing globali (CSS custom properties --olo-space-*)</p>
+    <CollapseSection :title="t('Scala Spaziatura')">
+      <p class="mb-text-[9px] mb-text-gray-500 mb-mb-2">{{ t('8 livelli di spacing globali (CSS custom properties --olo-space-*)') }}</p>
       <div class="mb-space-y-2">
         <div v-for="(lbl, key) in spacingLabels" :key="key">
           <label class="mb-block mb-text-[10px] mb-font-medium mb-text-gray-400 mb-mb-0.5">{{ lbl }}</label>
@@ -151,7 +151,7 @@
       </div>
     </CollapseSection>
 
-    <CollapseSection title="Scala Border Radius">
+    <CollapseSection :title="t('Scala Border Radius')">
       <div class="mb-space-y-2">
         <div v-for="(lbl, key) in radiusLabels" :key="key">
           <label class="mb-block mb-text-[10px] mb-font-medium mb-text-gray-400 mb-mb-0.5">{{ lbl }}</label>
@@ -163,7 +163,7 @@
       </div>
     </CollapseSection>
 
-    <CollapseSection title="Ombre Globali">
+    <CollapseSection :title="t('Ombre Globali')">
       <div class="mb-space-y-2">
         <div v-for="(lbl, key) in shadowLabels" :key="key">
           <label class="mb-block mb-text-[10px] mb-font-medium mb-text-gray-400 mb-mb-0.5">{{ lbl }}</label>
@@ -175,21 +175,21 @@
       </div>
     </CollapseSection>
 
-    <CollapseSection title="Design Tokens">
-      <p class="mb-text-[9px] mb-text-gray-500 mb-mb-2">Esporta/importa tutti gli stili come file JSON per riutilizzarli su altri siti.</p>
+    <CollapseSection :title="t('Design Tokens')">
+      <p class="mb-text-[9px] mb-text-gray-500 mb-mb-2">{{ t('Esporta/importa tutti gli stili come file JSON per riutilizzarli su altri siti.') }}</p>
       <div class="mb-flex mb-gap-2">
         <button
           @click="stylesStore.exportDesignTokens()"
           class="mb-flex-1 mb-py-1.5 mb-text-[10px] mb-font-medium mb-rounded-md mb-border mb-border-cyan-600 mb-text-cyan-400 hover:mb-bg-cyan-600/20 mb-transition-colors"
-        >Esporta JSON</button>
+        >{{ t('Esporta JSON') }}</button>
         <button
           @click="importTokens"
           class="mb-flex-1 mb-py-1.5 mb-text-[10px] mb-font-medium mb-rounded-md mb-border mb-border-gray-600 mb-text-gray-400 hover:mb-bg-gray-700 mb-transition-colors"
-        >Importa JSON</button>
+        >{{ t('Importa JSON') }}</button>
       </div>
     </CollapseSection>
 
-    <CollapseSection title="Google Fonts">
+    <CollapseSection :title="t('Google Fonts')">
       <div class="mb-space-y-2">
         <!-- Existing fonts -->
         <div
@@ -201,14 +201,14 @@
           <button
             @click="stylesStore.removeGoogleFont(font)"
             class="mb-text-gray-500 hover:mb-text-red-400 mb-text-sm"
-          >&times;</button>
+          >{{ t('&times;') }}</button>
         </div>
         <!-- Add new -->
         <div class="mb-flex mb-gap-1">
           <input
             v-model="newFontName"
             type="text"
-            placeholder="Nome font (es. Inter)"
+            :placeholder="t('Nome font (es. Inter)')"
             class="mb-flex-1 mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1 mb-text-xs mb-text-gray-900"
             @keyup.enter="addFont"
           />
@@ -239,13 +239,14 @@
         :disabled="stylesStore.isSaving"
         class="mb-px-3 mb-py-2 mb-text-xs mb-font-medium mb-rounded-md mb-border mb-border-gray-600 mb-text-gray-400 hover:mb-text-gray-200 hover:mb-border-gray-500 mb-transition-colors"
       >
-        Ripristina
+        {{ t('Ripristina') }}
       </button>
     </div>
   </div>
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { ref } from 'vue';
 import { useBuilderStore } from '@/stores/builder';
 import { useStylesStore } from '@/stores/styles';

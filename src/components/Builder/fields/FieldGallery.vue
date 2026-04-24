@@ -28,7 +28,7 @@
               :alt="img.alt || ''"
               class="mb-w-full mb-h-full mb-object-cover"
             />
-            <div v-else class="mb-w-full mb-h-full mb-flex mb-items-center mb-justify-center mb-text-gray-500 mb-text-[9px]">Video</div>
+            <div v-else class="mb-w-full mb-h-full mb-flex mb-items-center mb-justify-center mb-text-gray-500 mb-text-[9px]">{{ t('Video') }}</div>
             <!-- Play icon overlay -->
             <div class="mb-absolute mb-inset-0 mb-flex mb-items-center mb-justify-center mb-pointer-events-none">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="white" opacity="0.85"><polygon points="8,5 19,12 8,19"/></svg>
@@ -48,7 +48,7 @@
               type="text"
               :value="img.caption || ''"
               @input="updateCaption(idx, $event.target.value)"
-              placeholder="Didascalia..."
+              :placeholder="t('Didascalia...')"
               class="mb-w-full mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-md mb-px-2 mb-py-1 mb-text-xs mb-text-gray-200 mb-placeholder-gray-500"
             />
             <!-- Bottone poster per video -->
@@ -56,13 +56,13 @@
               v-if="isVideo(img)"
               @click="pickPoster(idx)"
               class="mb-text-[10px] mb-text-gray-400 hover:mb-text-gray-200 mb-transition-colors"
-            >Poster</button>
+            >{{ t('Poster') }}</button>
           </div>
           <button
             @click="removeImage(idx)"
             class="mb-bg-red-600 mb-text-white mb-rounded-full mb-w-5 mb-h-5 mb-text-[10px] mb-flex mb-items-center mb-justify-center mb-opacity-0 group-hover:mb-opacity-100 mb-transition-opacity mb-shrink-0"
-            title="Rimuovi"
-          >&times;</button>
+            :title="t('Rimuovi')"
+          >{{ t('&times;') }}</button>
         </div>
       </template>
     </draggable>
@@ -230,6 +230,7 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { ref, reactive, computed } from 'vue';
 import draggable from 'vuedraggable';
 import { useMediaPicker } from '@/composables/useMediaPicker';
@@ -404,7 +405,7 @@ async function searchStock(page = 1) {
     if (!resp.ok) {
       const errText = await resp.text().catch(() => '');
       console.error(`${svc.label} search HTTP ${resp.status}:`, errText);
-      toast.error(`Errore ${svc.label}: ${resp.status} — ${resp.statusText}`);
+      toast.error(t(`Errore ${svc.label}: ${resp.status} — ${resp.statusText}`));
       return;
     }
 
@@ -420,7 +421,7 @@ async function searchStock(page = 1) {
     st.totalPages = data.total_pages || 0;
   } catch (err) {
     console.error(`${svc.label} search error:`, err);
-    toast.error('Errore nella ricerca immagini. Riprova.');
+    toast.error(t('Errore nella ricerca immagini. Riprova.'));
   } finally {
     st.loading = false;
   }
@@ -464,7 +465,7 @@ async function downloadStockPhoto(photo) {
 
     if (!resp.ok) {
       console.error(`${svc.label} download HTTP ${resp.status}`);
-      toast.error(`Errore download da ${svc.label}: ${resp.status} — ${resp.statusText}`);
+      toast.error(t(`Errore download da ${svc.label}: ${resp.status} — ${resp.statusText}`));
       return;
     }
 
@@ -479,7 +480,7 @@ async function downloadStockPhoto(photo) {
     }
   } catch (err) {
     console.error(`${svc.label} download error:`, err);
-    toast.error('Errore nel download immagine. Riprova.');
+    toast.error(t('Errore nel download immagine. Riprova.'));
   } finally {
     downloadingIds.delete(photo.id);
   }
@@ -511,7 +512,7 @@ async function downloadStockVideo(video) {
 
     if (!resp.ok) {
       console.error(`${svc.label} video download HTTP ${resp.status}`);
-      toast.error(`Errore download video da ${svc.label}: ${resp.status} — ${resp.statusText}`);
+      toast.error(t(`Errore download video da ${svc.label}: ${resp.status} — ${resp.statusText}`));
       return;
     }
 
@@ -526,7 +527,7 @@ async function downloadStockVideo(video) {
     }
   } catch (err) {
     console.error(`${svc.label} video download error:`, err);
-    toast.error('Errore nel download video. Riprova.');
+    toast.error(t('Errore nel download video. Riprova.'));
   } finally {
     downloadingIds.delete(video.id);
   }

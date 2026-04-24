@@ -1,17 +1,17 @@
 <template>
   <div class="mb-font-sans" :style="cardStyle">
     <div :style="imageStyle">
-      <span :style="badgeStyle">Vendita</span>
+      <span :style="badgeStyle">{{ t('Vendita') }}</span>
     </div>
     <div :style="{ padding: s.padding+'px' }">
-      <div :style="{ fontSize: s.title_size+'px', fontWeight:'700', color:'#1F2937', marginBottom:'4px' }">Villa Panoramica</div>
-      <div :style="{ fontSize:'13px', color:'#6B7280', marginBottom:'12px' }">Pergine Valsugana, Lago</div>
+      <div :style="{ fontSize: s.title_size+'px', fontWeight:'700', color:'#1F2937', marginBottom:'4px' }">{{ t('Villa Panoramica') }}</div>
+      <div :style="{ fontSize:'13px', color:'#6B7280', marginBottom:'12px' }">{{ t('Pergine Valsugana, Lago') }}</div>
       <div :style="{ display:'flex', gap:'16px', fontSize:'13px', color:'#6B7280', marginBottom:'14px' }">
-        <span>220 m&sup2;</span><span>8 locali</span><span>4 camere</span><span>3 bagni</span>
+        <span>{{ t('220 m&sup2;') }}</span><span>{{ t('8 locali') }}</span><span>{{ t('4 camere') }}</span><span>{{ t('3 bagni') }}</span>
       </div>
       <div :style="{ display:'flex', justifyContent:'space-between', alignItems:'center' }">
-        <span :style="{ fontSize:'20px', fontWeight:'700', color: accent }">&euro; 520.000</span>
-        <span :style="btnStyle">Scopri</span>
+        <span :style="{ fontSize:'20px', fontWeight:'700', color: accent }">{{ t('&euro; 520.000') }}</span>
+        <span :style="btnStyle">{{ t('Scopri') }}</span>
       </div>
     </div>
   </div>
@@ -19,6 +19,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { t } from '@/i18n';
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 const defaults = { max_width: 380, border_radius: 12, shadow: 'md', padding: 20, title_size: 18, accent_color: '', btn_radius: 8 };
 const s = computed(() => ({ ...defaults, ...props.settings }));

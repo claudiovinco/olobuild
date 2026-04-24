@@ -1,4 +1,5 @@
 import { ref } from 'vue';
+import { t } from '../i18n';
 import { useToast } from './useToast.js';
 
 const clipboard = ref(null);
@@ -21,7 +22,7 @@ export function useClipboard() {
     try {
       localStorage.setItem('olo_clipboard', JSON.stringify(clone));
     } catch (e) {
-      toast.warning('Clipboard locale pieno — incolla disponibile solo in questa sessione.');
+      toast.warning(t('Clipboard locale pieno — incolla disponibile solo in questa sessione.'));
     }
   }
 

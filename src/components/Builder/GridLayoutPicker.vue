@@ -2,8 +2,8 @@
   <div class="glp-overlay" @click.self="$emit('close')">
     <div class="glp-panel">
       <div class="glp-header">
-        <h3 class="glp-title">Choose Layout</h3>
-        <button class="glp-close" @click="$emit('close')">&times;</button>
+        <h3 class="glp-title">{{ t('Choose Layout') }}</h3>
+        <button class="glp-close" @click="$emit('close')">{{ t('&times;') }}</button>
       </div>
 
       <!-- Tabs -->
@@ -22,7 +22,7 @@
         <template v-for="cat in visibleCategories" :key="cat.key">
           <div v-if="cat.templates.length > 0" class="glp-category">
             <div class="glp-cat-label">
-              <span class="glp-cat-badge">Grid</span>
+              <span class="glp-cat-badge">{{ t('Grid') }}</span>
               {{ cat.label }}
             </div>
             <div class="glp-grid">
@@ -81,6 +81,7 @@
 <script setup>
 import { ref, computed } from 'vue';
 import { columns, multirow, masonry, sidebar } from '@/config/gridTemplates.js';
+import { t } from '@/i18n';
 
 const props = defineProps({
   currentLayout: { type: String, default: '' },

@@ -7,14 +7,14 @@
   >
     <!-- After image (bottom layer) -->
     <div class="olo-ic-layer">
-      <img v-if="s.after_image" :src="s.after_image" alt="Dopo" :style="imgStyle" />
-      <div v-else class="olo-ic-placeholder" style="background:var(--olo-color-muted, #F3F4F6)">Dopo</div>
+      <img v-if="s.after_image" :src="s.after_image" :alt="t('Dopo')" :style="imgStyle" />
+      <div v-else class="olo-ic-placeholder" style="background:var(--olo-color-muted, #F3F4F6)">{{ t('Dopo') }}</div>
     </div>
 
     <!-- Before image (top layer, clipped) -->
     <div class="olo-ic-layer" :style="beforeClipStyle">
-      <img v-if="s.before_image" :src="s.before_image" alt="Prima" :style="imgStyle" />
-      <div v-else class="olo-ic-placeholder" style="background:var(--olo-color-background, #FFFFFF)">Prima</div>
+      <img v-if="s.before_image" :src="s.before_image" :alt="t('Prima')" :style="imgStyle" />
+      <div v-else class="olo-ic-placeholder" style="background:var(--olo-color-background, #FFFFFF)">{{ t('Prima') }}</div>
     </div>
 
     <!-- Divider line -->
@@ -39,6 +39,7 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 
 const props = defineProps({

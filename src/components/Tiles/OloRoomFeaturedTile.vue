@@ -1,10 +1,10 @@
 <template>
   <div>
-    <h3 style="font-size:18px;font-weight:700;color:var(--olo-color-text, #374151);margin:0 0 12px">Sale in evidenza</h3>
+    <h3 style="font-size:18px;font-weight:700;color:var(--olo-color-text, #374151);margin:0 0 12px">{{ t('Sale in evidenza') }}</h3>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
       <div v-for="room in rooms" :key="room.name" style="border:1px solid #e5e7eb;border-radius:10px;overflow:hidden">
         <div :style="{height:'110px',background:room.bg,position:'relative'}">
-          <span style="position:absolute;top:8px;right:8px;background:rgba(0,0,0,.5);color:#fbbf24;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700">&#9733; In evidenza</span>
+          <span style="position:absolute;top:8px;right:8px;background:rgba(0,0,0,.5);color:#fbbf24;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700">{{ t('&#9733; In evidenza') }}</span>
         </div>
         <div style="padding:10px">
           <div style="font-size:14px;font-weight:600;color:var(--olo-color-text, #374151)">{{ room.name }}</div>
@@ -16,6 +16,7 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 defineProps({ settings: { type: Object, default: () => ({}) } });
 const rooms = [
   { name: 'Auditorium Melotti', info: '200 posti · Rovereto', bg: 'linear-gradient(135deg,#7c3aed,#5b21b6)' },

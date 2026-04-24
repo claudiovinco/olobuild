@@ -31,7 +31,7 @@
           style="position:relative;"
         >
           <!-- Conditional logic indicator -->
-          <span v-if="s.enable_conditions && field.condition_field" style="position:absolute;top:2px;right:2px;font-size:9px;color:var(--olo-color-primary, #6366F1);z-index:1;" title="Condizionale">&#9889;</span>
+          <span v-if="s.enable_conditions && field.condition_field" style="position:absolute;top:2px;right:2px;font-size:9px;color:var(--olo-color-primary, #6366F1);z-index:1;" :title="t('Condizionale')">&#9889;</span>
 
           <!-- Hidden -->
           <template v-if="field.field_type === 'hidden'">
@@ -233,6 +233,7 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { computed, ref } from 'vue';
 
 const props = defineProps({

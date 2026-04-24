@@ -27,7 +27,7 @@
 
       <!-- Label -->
       <div class="mb-absolute mb-inset-0 mb-flex mb-flex-col mb-items-center mb-justify-center mb-text-xs mb-text-gray-500">
-        <span class="mb-font-semibold mb-text-gray-400">Off-Canvas</span>
+        <span class="mb-font-semibold mb-text-gray-400">{{ t('Off-Canvas') }}</span>
         <span class="mb-mt-1">{{ positionLabel }} &middot; {{ s.transition }}</span>
       </div>
     </div>
@@ -36,6 +36,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { t } from '@/i18n';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },

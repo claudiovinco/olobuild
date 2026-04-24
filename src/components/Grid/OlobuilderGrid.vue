@@ -1,17 +1,8 @@
 <template>
   <div ref="canvasRef" class="olo-canvas" :data-canvas-theme="canvasTheme" style="position: relative">
-    <!-- Sections (top-level draggable) -->
-    <draggable
-      v-model="zoneTiles"
-      item-key="id"
-      class="olo-sections-list"
-      ghost-class="olo-ghost"
-      chosen-class="olo-chosen"
-      animation="200"
-      handle=".olo-section-grip"
-      @change="onChange"
-    >
-      <template #item="{ element: section, index: sectionIdx }">
+    <!-- Sections (top-level) -->
+    <div class="olo-sections-list" v-olo-drop-target="listEndDrop('sections', null)">
+      <template v-for="(section, sectionIdx) in zoneTiles" :key="section.id">
         <div class="olo-section-wrap">
           <!-- Quick insert "+" before first section -->
           <div v-if="sectionIdx === 0" class="olo-quick-insert" @click.stop="onCleanInsert(0)">
@@ -24,6 +15,8 @@
           :class="{ 'olo-section-block--selected': builderStore.selectedTileId === section.id, 'olo-node-hidden-vp': isHiddenInViewport(section), 'olo-section-block--fullbleed': section.settings?.width === 'fullbleed' }"
           :data-tile-id="section.id"
           :style="getSectionBlockStyle(section)"
+          v-olo-draggable="sectionDraggable(section, sectionIdx)"
+          v-olo-drop-target="sectionDrop(section, sectionIdx)"
           @contextmenu.prevent="onTileContextMenu($event, section.id)"
         >
           <!-- Background preview layers -->
@@ -79,21 +72,15 @@
 
           <!-- Section body: rows -->
           <div class="olo-section-body" :style="getSectionBodyStyle(section)">
-            <draggable
-              :list="section.children"
-              item-key="id"
-              ghost-class="olo-ghost"
-              animation="150"
-              handle=".olo-row-grip"
-              :group="{ name: 'rows' }"
-              @change="onChange"
-            >
-              <template #item="{ element: row, index: rowIdx }">
+            <div class="olo-rows-list" v-olo-drop-target="listEndDrop('rows', section.id)">
+              <template v-for="(row, rowIdx) in (section.children || [])" :key="row.id">
                 <div
                   class="olo-row-block"
                   :class="{ 'olo-row-block--selected': builderStore.selectedTileId === row.id, 'olo-node-hidden-vp': isHiddenInViewport(row) }"
                   :data-tile-id="row.id"
                   :style="{ ...(getNodeBg(row).type === 'solid' ? getNodeBgStyle(row) : {}), ...getNodeSpacingStyle(row), ...(hasBgImage(row) ? { overflow: 'clip' } : {}) }"
+                  v-olo-draggable="rowDraggable(row, section.id, rowIdx)"
+                  v-olo-drop-target="rowDrop(row, section.id, rowIdx)"
                 >
                   <!-- Background preview layers -->
                   <div
@@ -140,43 +127,36 @@
                       :key="col.id"
                       class="olo-column-block"
                       :class="{
-                        'olo-column-block--selected': builderStore.selectedTileId === col.id,
-                        'olo-column-block--dragover': dragOverColId === col.id
+                        'olo-column-block--selected': builderStore.selectedTileId === col.id
                       }"
                       :data-tile-id="col.id"
                       :style="{ ...getCellGridStyle(col), ...getNodeSpacingStyle(col) }"
+                      v-olo-drop-target="columnDrop(col)"
                       @click.stop="selectTile(col.id)"
-                      @dragover.prevent.stop="dragOverColId = col.id"
-                      @dragleave="onColDragLeave($event, col.id)"
-                      @drop.prevent.stop="onDropIntoColumn($event, col.id)"
                     >
-                      <draggable
-                        :list="col.children"
-                        item-key="id"
-                        ghost-class="olo-ghost"
-                        animation="150"
-                        :group="{ name: 'elements' }"
-                        class="olo-column-elements"
-                        @change="onChange"
-                      >
-                        <template #item="{ element: tile }">
-                          <GridCell :tile="tile" @contextmenu="onTileContextMenu">
-                            <template v-if="tile.type === 'floatingpanel'" #after>
-                              <div class="olo-fp-children-zone">
-                                <draggable :list="tile.children || []" item-key="id" ghost-class="olo-ghost" animation="150" :group="{ name: 'elements' }" class="olo-fp-children-list" @change="onChange">
-                                  <template #item="{ element: child }">
-                                    <GridCell :tile="child" @contextmenu="onTileContextMenu" />
-                                  </template>
-                                </draggable>
-                                <div v-if="!tile.children || tile.children.length === 0" class="olo-fp-empty" @click.stop="openFinder(tile.id)">
-                                  <span class="olo-column-plus">+</span>
-                                  <span>Trascina tile qui</span>
+                      <div class="olo-column-elements" v-olo-drop-target="listEndDrop('elements', col.id)">
+                        <template v-for="(tile, elIdx) in (col.children || [])" :key="tile.id">
+                          <div v-olo-draggable="elementDraggable(tile, col.id, elIdx)" v-olo-drop-target="elementDrop(tile, col.id, elIdx)">
+                            <GridCell :tile="tile" @contextmenu="onTileContextMenu">
+                              <template v-if="tile.type === 'floatingpanel'" #after>
+                                <div class="olo-fp-children-zone">
+                                  <div class="olo-fp-children-list" v-olo-drop-target="listEndDrop('elements', tile.id)">
+                                    <template v-for="(child, chIdx) in (tile.children || [])" :key="child.id">
+                                      <div v-olo-draggable="elementDraggable(child, tile.id, chIdx)" v-olo-drop-target="elementDrop(child, tile.id, chIdx)">
+                                        <GridCell :tile="child" @contextmenu="onTileContextMenu" />
+                                      </div>
+                                    </template>
+                                  </div>
+                                  <div v-if="!tile.children || tile.children.length === 0" class="olo-fp-empty" @click.stop="openFinder(tile.id)">
+                                    <span class="olo-column-plus">+</span>
+                                    <span>Trascina tile qui</span>
+                                  </div>
                                 </div>
-                              </div>
-                            </template>
-                          </GridCell>
+                              </template>
+                            </GridCell>
+                          </div>
                         </template>
-                      </draggable>
+                      </div>
                       <div v-if="!col.children || col.children.length === 0" class="olo-column-empty" @click.stop="openFinder(col.id)" style="cursor:pointer">
                         <span class="olo-column-plus">+</span>
                         <span>Rilascia qui</span>
@@ -204,53 +184,38 @@
                       <div
                         class="olo-column-block"
                         :class="{
-                          'olo-column-block--selected': builderStore.selectedTileId === col.id,
-                          'olo-column-block--dragover': dragOverColId === col.id
+                          'olo-column-block--selected': builderStore.selectedTileId === col.id
                         }"
                         :data-tile-id="col.id"
                         :style="{ width: (shouldStack(row.settings)) ? '100%' : getColPercent(col) + '%', minWidth: 0, ...getNodeSpacingStyle(col) }"
+                        v-olo-drop-target="columnDrop(col)"
                         @click.stop="selectTile(col.id)"
-                        @dragover.prevent.stop="dragOverColId = col.id"
-                        @dragleave="onColDragLeave($event, col.id)"
-                        @drop.prevent.stop="onDropIntoColumn($event, col.id)"
                       >
                         <!-- Elements inside column -->
-                        <draggable
-                          :list="col.children"
-                          item-key="id"
-                          ghost-class="olo-ghost"
-                          animation="150"
-                          :group="{ name: 'elements' }"
-                          class="olo-column-elements"
-                          @change="onChange"
-                        >
-                          <template #item="{ element: tile }">
-                            <GridCell :tile="tile" @contextmenu="onTileContextMenu">
-                              <!-- Floating panel children drop zone -->
-                              <template v-if="tile.type === 'floatingpanel'" #after>
-                                <div class="olo-fp-children-zone">
-                                  <draggable
-                                    :list="tile.children || []"
-                                    item-key="id"
-                                    ghost-class="olo-ghost"
-                                    animation="150"
-                                    :group="{ name: 'elements' }"
-                                    class="olo-fp-children-list"
-                                    @change="onChange"
-                                  >
-                                    <template #item="{ element: child }">
-                                      <GridCell :tile="child" @contextmenu="onTileContextMenu" />
-                                    </template>
-                                  </draggable>
-                                  <div v-if="!tile.children || tile.children.length === 0" class="olo-fp-empty" @click.stop="openFinder(tile.id)">
-                                    <span class="olo-column-plus">+</span>
-                                    <span>Trascina tile qui</span>
+                        <div class="olo-column-elements" v-olo-drop-target="listEndDrop('elements', col.id)">
+                          <template v-for="(tile, elIdx) in (col.children || [])" :key="tile.id">
+                            <div v-olo-draggable="elementDraggable(tile, col.id, elIdx)" v-olo-drop-target="elementDrop(tile, col.id, elIdx)">
+                              <GridCell :tile="tile" @contextmenu="onTileContextMenu">
+                                <!-- Floating panel children drop zone -->
+                                <template v-if="tile.type === 'floatingpanel'" #after>
+                                  <div class="olo-fp-children-zone">
+                                    <div class="olo-fp-children-list" v-olo-drop-target="listEndDrop('elements', tile.id)">
+                                      <template v-for="(child, chIdx) in (tile.children || [])" :key="child.id">
+                                        <div v-olo-draggable="elementDraggable(child, tile.id, chIdx)" v-olo-drop-target="elementDrop(child, tile.id, chIdx)">
+                                          <GridCell :tile="child" @contextmenu="onTileContextMenu" />
+                                        </div>
+                                      </template>
+                                    </div>
+                                    <div v-if="!tile.children || tile.children.length === 0" class="olo-fp-empty" @click.stop="openFinder(tile.id)">
+                                      <span class="olo-column-plus">+</span>
+                                      <span>Trascina tile qui</span>
+                                    </div>
                                   </div>
-                                </div>
-                              </template>
-                            </GridCell>
+                                </template>
+                              </GridCell>
+                            </div>
                           </template>
-                        </draggable>
+                        </div>
 
                         <!-- Empty column placeholder -->
                         <div v-if="!col.children || col.children.length === 0" class="olo-column-empty" @click.stop="openFinder(col.id)" style="cursor:pointer">
@@ -305,14 +270,13 @@
                   </div>
                 </div>
               </template>
-            </draggable>
+            </div>
 
             <!-- Quick insert "+" for new row at bottom of section -->
             <div
               class="olo-quick-insert olo-quick-insert--row"
+              v-olo-drop-target="listEndDrop('rows', section.id)"
               @click.stop="addRowToSection(section)"
-              @dragover.prevent
-              @drop.prevent.stop="onDropIntoSection($event, section)"
             >
               <div class="olo-quick-insert__line"></div>
               <button class="olo-quick-insert__btn olo-quick-insert__btn--row" title="Aggiungi riga">+</button>
@@ -328,14 +292,13 @@
           </div>
         </div>
       </template>
-    </draggable>
+    </div>
 
     <!-- Empty canvas state -->
     <div
       v-if="zoneTiles.length === 0"
       class="olo-canvas-empty"
-      @dragover.prevent
-      @drop.prevent.stop="onDropCanvas"
+      v-olo-drop-target="listEndDrop('sections', null)"
       @click.stop="openFinder()"
       style="cursor:pointer"
     >
@@ -347,8 +310,7 @@
     <div
       v-else
       class="olo-canvas-bottom-drop"
-      @dragover.prevent
-      @drop.prevent.stop="onDropCanvas"
+      v-olo-drop-target="listEndDrop('sections', null)"
       @click.stop="openFinder()"
       style="cursor:pointer"
     >
@@ -372,11 +334,21 @@
 
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount, inject } from 'vue';
-import draggable from 'vuedraggable';
 import { useTilesStore, createSection, createRow, createColumn } from '@/stores/tiles';
 import { useBuilderStore } from '@/stores/builder';
+import { useDnDStore } from '@/stores/dnd';
 import { useStylesStore } from '@/stores/styles';
 import { useDragDrop } from '@/composables/useDragDrop';
+import { useHistory } from '@/composables/useHistory';
+import {
+  vOloDraggable,
+  vOloDropTarget,
+  useDragMonitor,
+  attachClosestEdge,
+  extractClosestEdge,
+  makeNodePayload,
+  isOloData,
+} from '@/composables/useDnD';
 import { resolveNodeBg, buildBgStyle, buildOverlayStyle } from '@/composables/useBackgroundStyle';
 import { rv } from '@/composables/useResponsiveValue';
 import GridCell from './GridCell.vue';
@@ -392,6 +364,8 @@ const props = defineProps({
 const tilesStore = useTilesStore();
 const builderStore = useBuilderStore();
 const stylesStore = useStylesStore();
+const dndStore = useDnDStore();
+const history = useHistory();
 
 /**
  * Computed ref to the correct tiles array based on zone prop.
@@ -426,6 +400,294 @@ function shouldStack(rowSettings) {
 const openFinder = inject('openFinder', () => {});
 const openInsertPanel = inject('openInsertPanel', () => {});
 const { handleDropFromSidebar, handleDropIntoColumn, handleGlobalWidgetDrop, handleGlobalWidgetDropIntoColumn, createTileFromType } = useDragDrop();
+
+// ═════════════════════════════════════════════════════════════════
+// DnD Pragmatic — drop targets & draggables
+// ═════════════════════════════════════════════════════════════════
+
+/**
+ * Helper: produce le opzioni per un draggable generico (sezione/riga/elemento).
+ * Il payload rappresenta il nodo nella sua posizione corrente (per reorder).
+ */
+function makeDraggableOpts(nodeKind, node, parentId, index, handleSelector) {
+  return {
+    dragHandle: handleSelector || undefined,
+    getInitialData: () => makeNodePayload(node.id, nodeKind, parentId, index),
+    onDragStart: () => dndStore.startDrag(makeNodePayload(node.id, nodeKind, parentId, index)),
+    onDrop: () => { if (!dndStore.isIdle) dndStore.endDrag(); },
+  };
+}
+
+function sectionDraggable(section, idx) {
+  return makeDraggableOpts('section', section, null, idx, '.olo-section-grip');
+}
+
+function rowDraggable(row, sectionId, idx) {
+  return makeDraggableOpts('row', row, sectionId, idx, '.olo-row-grip');
+}
+
+function elementDraggable(el, parentId, idx) {
+  return makeDraggableOpts('element', el, parentId, idx, undefined);
+}
+
+/**
+ * Drop target su un nodo (sezione/riga/elemento): permette reorder relativo
+ * usando attachClosestEdge per sapere se il pointer è sopra/sotto.
+ */
+function makeEdgeDrop(nodeKind, node, parentId, index, allowedEdges) {
+  return {
+    canDrop: ({ source }) => {
+      if (!isOloData(source.data)) return false;
+      const p = source.data;
+      // Reorder-only: stesso kind, stesso parent (sezioni top-level: parent=null)
+      if (p.kind === 'node') {
+        return p.nodeKind === nodeKind && p.fromParentId === parentId && p.nodeId !== node.id;
+      }
+      // Sidebar drop dentro elemento: solo se non è section/row e nodeKind è element
+      if (p.kind === 'tile-type' && nodeKind === 'element') {
+        return p.tileType !== 'section' && p.tileType !== 'row';
+      }
+      if (p.kind === 'tile-type' && nodeKind === 'section') return true;
+      if (p.kind === 'tile-type' && nodeKind === 'row') return p.tileType !== 'section';
+      if (p.kind === 'global-widget' && nodeKind === 'element') return true;
+      return false;
+    },
+    getData: ({ input, element }) => attachClosestEdge(
+      { _olo: true, kind: 'node-edge', nodeKind, nodeId: node.id, parentId, index },
+      { element, input, allowedEdges: allowedEdges || ['top', 'bottom'] }
+    ),
+    getIsSticky: () => true,
+    onDragEnter: ({ self }) => { self.element.classList.add('olo-dnd-over'); },
+    onDragLeave: ({ self }) => { self.element.classList.remove('olo-dnd-over'); },
+    onDrop: ({ self }) => { self.element.classList.remove('olo-dnd-over'); },
+  };
+}
+
+function sectionDrop(section, idx) {
+  return makeEdgeDrop('section', section, null, idx, ['top', 'bottom']);
+}
+
+function rowDrop(row, sectionId, idx) {
+  return makeEdgeDrop('row', row, sectionId, idx, ['top', 'bottom']);
+}
+
+function elementDrop(el, colId, idx) {
+  return makeEdgeDrop('element', el, colId, idx, ['top', 'bottom']);
+}
+
+/**
+ * Drop target su una COLONNA (accoglie tile dalla sidebar, spostamento
+ * elementi da altra colonna, e drop di nuovi elementi).
+ */
+const columnDrop = (col) => ({
+  canDrop: ({ source }) => {
+    if (!isOloData(source.data)) return false;
+    const p = source.data;
+    if (p.kind === 'tile-type') return p.tileType !== 'section' && p.tileType !== 'row';
+    if (p.kind === 'global-widget') return true;
+    if (p.kind === 'node' && p.nodeKind === 'element') return true;
+    return false;
+  },
+  getData: () => ({ _olo: true, kind: 'column-body', columnId: col.id }),
+  getIsSticky: () => true,
+  onDragEnter: ({ self }) => { self.element.classList.add('olo-column-block--dragover'); },
+  onDragLeave: ({ self }) => { self.element.classList.remove('olo-column-block--dragover'); },
+  onDrop: ({ self }) => { self.element.classList.remove('olo-column-block--dragover'); },
+});
+
+/**
+ * Drop target su container-list (sections-list, rows-list, elements-list):
+ * accoglie drop a fine lista quando il pointer non è su nessun item.
+ */
+const listEndDrop = (listKind, parentId) => ({
+  canDrop: ({ source }) => {
+    if (!isOloData(source.data)) return false;
+    const p = source.data;
+    if (listKind === 'sections') {
+      if (p.kind === 'tile-type') return true;
+      if (p.kind === 'global-widget') return true;
+      if (p.kind === 'node' && p.nodeKind === 'section') return true;
+    }
+    if (listKind === 'rows') {
+      if (p.kind === 'tile-type' && p.tileType !== 'section') return true;
+      if (p.kind === 'node' && p.nodeKind === 'row' && p.fromParentId === parentId) return true;
+    }
+    if (listKind === 'elements') {
+      if (p.kind === 'tile-type' && p.tileType !== 'section' && p.tileType !== 'row') return true;
+      if (p.kind === 'global-widget') return true;
+      if (p.kind === 'node' && p.nodeKind === 'element') return true;
+    }
+    return false;
+  },
+  getData: () => ({ _olo: true, kind: 'list-end', listKind, parentId }),
+  getIsSticky: () => false,
+});
+
+// ── Monitor centralizzato: applica le mutation in base al drop target ──
+useDragMonitor({
+  canMonitor: ({ source }) => isOloData(source.data),
+  onDrop: ({ source, location }) => {
+    const drops = location.current.dropTargets;
+    if (!drops || drops.length === 0) return;
+    // I drop target sono sorted dal più specifico al più generale.
+    // Usiamo il più specifico (primo) per decidere l'operazione.
+    const target = drops[0].data;
+    const payload = source.data;
+    if (!isOloData(target) || !isOloData(payload)) return;
+
+    // Snapshot atomico per undo
+    history.pushStateNow();
+    dndStore.markDropping();
+
+    try {
+      applyDrop(payload, target, drops);
+      markDirty();
+    } finally {
+      if (dndStore.phase === 'dropping') dndStore.endDrag();
+    }
+  },
+});
+
+/**
+ * Applica la mutation concreta al tilesStore a seconda del payload e del target.
+ */
+function applyDrop(payload, target, allTargets) {
+  // Case A: drop su edge di un nodo esistente
+  if (target.kind === 'node-edge') {
+    const edge = extractClosestEdge(target);
+    return applyDropOnNodeEdge(payload, target, edge);
+  }
+  // Case B: drop dentro il body di una colonna (tile va in fondo)
+  if (target.kind === 'column-body') {
+    return applyDropInColumn(payload, target.columnId);
+  }
+  // Case C: drop a fine lista
+  if (target.kind === 'list-end') {
+    return applyDropAtListEnd(payload, target.listKind, target.parentId);
+  }
+}
+
+function applyDropOnNodeEdge(payload, target, edge) {
+  // Reorder di nodo esistente
+  if (payload.kind === 'node') {
+    let newIndex = target.index;
+    if (edge === 'bottom' || edge === 'right') newIndex = target.index + 1;
+    // Nello stesso parent: se spostiamo dopo di noi, l'indice diminuisce di 1
+    if (payload.fromParentId === target.parentId && payload.fromIndex < newIndex) {
+      newIndex--;
+    }
+    tilesStore.moveNodeTo(payload.nodeId, target.parentId, newIndex);
+    return;
+  }
+  // Inserimento nuovo tile da sidebar: usa la logica wrap esistente
+  if (payload.kind === 'tile-type') {
+    const tileType = payload.tileType;
+    let insertIndex = target.index;
+    if (edge === 'bottom' || edge === 'right') insertIndex = target.index + 1;
+    if (target.nodeKind === 'section') {
+      handleDropFromSidebar(tileType, insertIndex);
+    } else if (target.nodeKind === 'row') {
+      // Drop before/after una row: wrapping come nuova row dentro la sezione del target
+      const parentSection = tilesStore.getTileById(target.parentId);
+      if (parentSection) insertElementRelativeToRow(tileType, parentSection, target.index, edge);
+    } else if (target.nodeKind === 'element') {
+      // Drop before/after un element: inserisci dentro la stessa colonna
+      const col = tilesStore.getTileById(target.parentId);
+      if (col) insertElementRelativeToElement(tileType, col, target.index, edge);
+    }
+    return;
+  }
+  if (payload.kind === 'global-widget') {
+    let insertIndex = target.index;
+    if (edge === 'bottom' || edge === 'right') insertIndex = target.index + 1;
+    if (target.nodeKind === 'section') handleGlobalWidgetDrop(payload.globalId, insertIndex);
+    else if (target.nodeKind === 'element') {
+      const col = tilesStore.getTileById(target.parentId);
+      if (col) insertGlobalWidgetRelativeToElement(payload.globalId, col, target.index, edge);
+    }
+    return;
+  }
+}
+
+function applyDropInColumn(payload, columnId) {
+  if (payload.kind === 'tile-type') {
+    handleDropIntoColumn(payload.tileType, columnId);
+  } else if (payload.kind === 'global-widget') {
+    handleGlobalWidgetDropIntoColumn(payload.globalId, columnId);
+  } else if (payload.kind === 'node' && payload.nodeKind === 'element') {
+    const col = tilesStore.getTileById(columnId);
+    if (col) {
+      const nextIndex = (col.children || []).length;
+      tilesStore.moveNodeTo(payload.nodeId, columnId, nextIndex);
+    }
+  }
+}
+
+function applyDropAtListEnd(payload, listKind, parentId) {
+  if (listKind === 'sections') {
+    if (payload.kind === 'tile-type') handleDropFromSidebar(payload.tileType);
+    else if (payload.kind === 'global-widget') handleGlobalWidgetDrop(payload.globalId);
+    else if (payload.kind === 'node' && payload.nodeKind === 'section') {
+      const arr = zoneTiles.value;
+      tilesStore.moveNodeTo(payload.nodeId, null, arr.length);
+    }
+  } else if (listKind === 'elements' && parentId) {
+    applyDropInColumn(payload, parentId);
+  } else if (listKind === 'rows' && parentId) {
+    if (payload.kind === 'tile-type' && payload.tileType !== 'section') {
+      const section = tilesStore.getTileById(parentId);
+      if (section) {
+        if (payload.tileType === 'row') {
+          addRowToSection(section);
+        } else {
+          const newTile = createTileFromType(payload.tileType);
+          if (!newTile) return;
+          const col = createColumn('1-1', [newTile]);
+          const row = createRow('100', [col]);
+          if (!Array.isArray(section.children)) section.children = [];
+          section.children.push(row);
+          builderStore.selectTile(newTile.id);
+        }
+      }
+    } else if (payload.kind === 'node' && payload.nodeKind === 'row') {
+      const section = tilesStore.getTileById(parentId);
+      const len = (section?.children || []).length;
+      tilesStore.moveNodeTo(payload.nodeId, parentId, len);
+    }
+  }
+}
+
+/**
+ * Inserisce un nuovo tile come nuova row dentro la sezione, prima/dopo l'indice.
+ */
+function insertElementRelativeToRow(tileType, section, rowIndex, edge) {
+  const newTile = createTileFromType(tileType);
+  if (!newTile) return;
+  const col = createColumn('1-1', [newTile]);
+  const row = createRow('100', [col]);
+  if (!Array.isArray(section.children)) section.children = [];
+  const at = edge === 'bottom' || edge === 'right' ? rowIndex + 1 : rowIndex;
+  section.children.splice(at, 0, row);
+  builderStore.selectTile(newTile.id);
+}
+
+function insertElementRelativeToElement(tileType, col, elIndex, edge) {
+  const newTile = createTileFromType(tileType);
+  if (!newTile) return;
+  if (!Array.isArray(col.children)) col.children = [];
+  const at = edge === 'bottom' || edge === 'right' ? elIndex + 1 : elIndex;
+  col.children.splice(at, 0, newTile);
+  builderStore.selectTile(newTile.id);
+}
+
+function insertGlobalWidgetRelativeToElement(globalId, col, elIndex, edge) {
+  const newTile = tilesStore.insertGlobalWidget(globalId);
+  if (!newTile) return;
+  if (!Array.isArray(col.children)) col.children = [];
+  const at = edge === 'bottom' || edge === 'right' ? elIndex + 1 : elIndex;
+  col.children.splice(at, 0, newTile);
+  builderStore.selectTile(newTile.id);
+}
 
 /**
  * Extract shapedivider tiles from section tree for absolute overlay rendering.
@@ -598,8 +860,6 @@ onMounted(() => {
 onBeforeUnmount(() => {
   document.removeEventListener('contextmenu', onDocumentContextMenu, true);
 });
-
-const dragOverColId = ref(null);
 
 // --- Custom layout editing state ---
 const customEditingRowId = ref(null);
@@ -844,77 +1104,7 @@ function removeItem(id) {
   builderStore.isDirty = true;
 }
 
-function onChange() {
-  // Mark the correct zone as dirty in unified mode
-  if (props.zone === 'header') builderStore.headerDirty = true;
-  else if (props.zone === 'footer') builderStore.footerDirty = true;
-  else builderStore.isDirty = true;
-}
-
-// --- Column drag from sidebar ---
-
-function onColDragLeave(event, colId) {
-  if (!event.currentTarget.contains(event.relatedTarget)) {
-    if (dragOverColId.value === colId) dragOverColId.value = null;
-  }
-}
-
-function onDropIntoColumn(event, colId) {
-  dragOverColId.value = null;
-  const globalId = event.dataTransfer.getData('global-widget-id');
-  if (globalId) {
-    handleGlobalWidgetDropIntoColumn(globalId, colId);
-    return;
-  }
-  const tileType = event.dataTransfer.getData('tile-type');
-  if (!tileType) return;
-  handleDropIntoColumn(tileType, colId);
-}
-
-// --- Drop on canvas (creates new section) ---
-
-function onDropCanvas(event) {
-  const globalId = event.dataTransfer.getData('global-widget-id');
-  if (globalId) {
-    handleGlobalWidgetDrop(globalId);
-    return;
-  }
-  const tileType = event.dataTransfer.getData('tile-type');
-  if (!tileType) return;
-  handleDropFromSidebar(tileType);
-}
-
-// --- Drop into section (adds row or element) ---
-
-function onDropIntoSection(event, section) {
-  const globalId = event.dataTransfer.getData('global-widget-id');
-  if (globalId) {
-    const newTile = tilesStore.insertGlobalWidget(globalId);
-    if (!newTile) return;
-    const col = createColumn('1-1', [newTile]);
-    const row = createRow('100', [col]);
-    if (!Array.isArray(section.children)) section.children = [];
-    section.children.push(row);
-    builderStore.isDirty = true;
-    builderStore.selectTile(newTile.id);
-    return;
-  }
-  const tileType = event.dataTransfer.getData('tile-type');
-  if (!tileType || tileType === 'section') return;
-
-  if (tileType === 'row') {
-    addRowToSection(section);
-  } else {
-    const newTile = createTileFromType(tileType);
-    if (!newTile) return;
-    const col = createColumn('1-1', [newTile]);
-    const row = createRow('100', [col]);
-    if (!Array.isArray(section.children)) section.children = [];
-    section.children.push(row);
-    builderStore.isDirty = true;
-    builderStore.selectTile(newTile.id);
-  }
-}
+// ─── DnD Pragmatic: le operazioni di drop sono centralizzate nel monitor (sopra). ───
 
 // --- Add empty row to section ---
 

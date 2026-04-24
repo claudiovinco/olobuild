@@ -2,7 +2,7 @@
   <div class="mb-space-y-3">
     <!-- Type selector -->
     <div>
-      <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300 mb-mb-2">Tipo di sfondo</label>
+      <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300 mb-mb-2">{{ t('Tipo di sfondo') }}</label>
       <div class="mb-flex mb-gap-1 mb-bg-gray-700 mb-rounded-lg mb-p-0.5">
         <button
           v-for="bgType in types"
@@ -22,13 +22,13 @@
 
     <!-- Solid color -->
     <div v-if="bg.type === 'solid'" class="mb-space-y-2">
-      <label class="mb-block mb-text-[10px] mb-text-gray-400">Colore</label>
+      <label class="mb-block mb-text-[10px] mb-text-gray-400">{{ t('Colore') }}</label>
       <FieldColor
         :modelValue="bg.color || '#ffffff'"
         @update:modelValue="updateField('color', $event)"
       />
       <div>
-        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">Opacità sfondo</label>
+        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Opacità sfondo') }}</label>
         <div class="mb-flex mb-items-center mb-gap-2">
           <input
             type="range"
@@ -39,7 +39,7 @@
           />
           <span class="mb-text-xs mb-text-gray-400 mb-w-10 mb-text-right">{{ bg.color_opacity ?? 100 }}%</span>
         </div>
-        <p class="mb-text-[9px] mb-text-gray-500 mb-mt-0.5">Solo lo sfondo diventa trasparente, non il contenuto</p>
+        <p class="mb-text-[9px] mb-text-gray-500 mb-mt-0.5">{{ t('Solo lo sfondo diventa trasparente, non il contenuto') }}</p>
       </div>
       <!-- Preview swatch -->
       <div
@@ -67,14 +67,14 @@
       <div v-if="bg.image_url" class="mb-relative mb-group">
         <img
           :src="bg.image_url"
-          alt="Background"
+          :alt="t('Background')"
           class="mb-w-full mb-h-20 mb-object-cover mb-rounded-md mb-border mb-border-gray-600"
         />
         <button
           @click="updateField('image_url', '')"
           class="mb-absolute mb-top-1 mb-right-1 mb-bg-red-600 mb-text-white mb-rounded-full mb-w-5 mb-h-5 mb-text-xs mb-flex mb-items-center mb-justify-center mb-opacity-0 group-hover:mb-opacity-100 mb-transition-opacity"
-          title="Rimuovi immagine"
-        >&times;</button>
+          :title="t('Rimuovi immagine')"
+        >{{ t('&times;') }}</button>
       </div>
       <button
         @click="pickBgImage"
@@ -85,35 +85,35 @@
 
       <!-- Size -->
       <div>
-        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">Dimensione</label>
+        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Dimensione') }}</label>
         <select
           :value="bg.image_size || 'cover'"
           @change="updateField('image_size', $event.target.value)"
           class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1 mb-text-sm mb-text-gray-900"
         >
-          <option value="cover">Cover</option>
-          <option value="contain">Contain</option>
-          <option value="auto">Auto</option>
+          <option value="cover">{{ t('Cover') }}</option>
+          <option value="contain">{{ t('Contain') }}</option>
+          <option value="auto">{{ t('Auto') }}</option>
         </select>
       </div>
 
       <!-- Position -->
       <div>
-        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">Posizione</label>
+        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Posizione') }}</label>
         <select
           :value="bg.image_position || 'center center'"
           @change="updateField('image_position', $event.target.value)"
           class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1 mb-text-sm mb-text-gray-900"
         >
-          <option value="center center">Centro</option>
-          <option value="top center">Alto</option>
-          <option value="bottom center">Basso</option>
-          <option value="left center">Sinistra</option>
-          <option value="right center">Destra</option>
-          <option value="top left">Alto sinistra</option>
-          <option value="top right">Alto destra</option>
-          <option value="bottom left">Basso sinistra</option>
-          <option value="bottom right">Basso destra</option>
+          <option value="center center">{{ t('Centro') }}</option>
+          <option value="top center">{{ t('Alto') }}</option>
+          <option value="bottom center">{{ t('Basso') }}</option>
+          <option value="left center">{{ t('Sinistra') }}</option>
+          <option value="right center">{{ t('Destra') }}</option>
+          <option value="top left">{{ t('Alto sinistra') }}</option>
+          <option value="top right">{{ t('Alto destra') }}</option>
+          <option value="bottom left">{{ t('Basso sinistra') }}</option>
+          <option value="bottom right">{{ t('Basso destra') }}</option>
         </select>
       </div>
 
@@ -134,7 +134,7 @@
               ]"
             ></span>
           </button>
-          <span class="mb-text-xs mb-text-gray-300">Parallasse</span>
+          <span class="mb-text-xs mb-text-gray-300">{{ t('Parallasse') }}</span>
         </label>
         <div v-if="isParallaxEnabled" class="mb-mt-2">
           <ParallaxEditor
@@ -151,14 +151,14 @@
       <!-- Video preview -->
       <div v-if="bg.video_url" class="mb-relative mb-group">
         <div class="mb-w-full mb-h-20 mb-rounded-md mb-border mb-border-gray-600 mb-bg-gray-800 mb-flex mb-items-center mb-justify-center mb-overflow-hidden">
-          <img v-if="bg.video_poster" :src="bg.video_poster" alt="Video poster" class="mb-w-full mb-h-20 mb-object-cover" />
-          <span v-else class="mb-text-2xl">&#x1F3AC;</span>
+          <img v-if="bg.video_poster" :src="bg.video_poster" :alt="t('Video poster')" class="mb-w-full mb-h-20 mb-object-cover" />
+          <span v-else class="mb-text-2xl">{{ t('&#x1F3AC;') }}</span>
         </div>
         <button
           @click="removeVideo"
           class="mb-absolute mb-top-1 mb-right-1 mb-bg-red-600 mb-text-white mb-rounded-full mb-w-5 mb-h-5 mb-text-xs mb-flex mb-items-center mb-justify-center mb-opacity-0 group-hover:mb-opacity-100 mb-transition-opacity"
-          title="Rimuovi video"
-        >&times;</button>
+          :title="t('Rimuovi video')"
+        >{{ t('&times;') }}</button>
       </div>
       <button
         @click="pickBgVideo"
@@ -177,42 +177,42 @@
 
       <!-- Fit mode -->
       <div>
-        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">Adattamento</label>
+        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Adattamento') }}</label>
         <select
           :value="bg.video_fit || 'cover'"
           @change="updateField('video_fit', $event.target.value)"
           class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1 mb-text-sm mb-text-gray-900"
         >
-          <option value="cover">Cover</option>
-          <option value="contain">Contain</option>
-          <option value="fill">Riempi</option>
-          <option value="none">Nessuno (dimensione originale)</option>
+          <option value="cover">{{ t('Cover') }}</option>
+          <option value="contain">{{ t('Contain') }}</option>
+          <option value="fill">{{ t('Riempi') }}</option>
+          <option value="none">{{ t('Nessuno (dimensione originale)') }}</option>
         </select>
       </div>
 
       <!-- Position -->
       <div>
-        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">Posizione</label>
+        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Posizione') }}</label>
         <select
           :value="bg.image_position || 'center center'"
           @change="updateField('image_position', $event.target.value)"
           class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1 mb-text-sm mb-text-gray-900"
         >
-          <option value="center center">Centro</option>
-          <option value="top center">Alto</option>
-          <option value="bottom center">Basso</option>
-          <option value="left center">Sinistra</option>
-          <option value="right center">Destra</option>
-          <option value="top left">Alto sinistra</option>
-          <option value="top right">Alto destra</option>
-          <option value="bottom left">Basso sinistra</option>
-          <option value="bottom right">Basso destra</option>
+          <option value="center center">{{ t('Centro') }}</option>
+          <option value="top center">{{ t('Alto') }}</option>
+          <option value="bottom center">{{ t('Basso') }}</option>
+          <option value="left center">{{ t('Sinistra') }}</option>
+          <option value="right center">{{ t('Destra') }}</option>
+          <option value="top left">{{ t('Alto sinistra') }}</option>
+          <option value="top right">{{ t('Alto destra') }}</option>
+          <option value="bottom left">{{ t('Basso sinistra') }}</option>
+          <option value="bottom right">{{ t('Basso destra') }}</option>
         </select>
       </div>
 
       <!-- Cover Height -->
       <div>
-        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">Altezza cover (px)</label>
+        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Altezza cover (px)') }}</label>
         <div class="mb-flex mb-items-center mb-gap-2">
           <input
             type="range"
@@ -223,12 +223,12 @@
           />
           <span class="mb-text-xs mb-text-gray-400 mb-w-10 mb-text-right">{{ bg.cover_height || 'auto' }}</span>
         </div>
-        <p class="mb-text-[9px] mb-text-gray-500 mb-mt-0.5">0 = auto (altezza contenuto)</p>
+        <p class="mb-text-[9px] mb-text-gray-500 mb-mt-0.5">{{ t('0 = auto (altezza contenuto)') }}</p>
       </div>
 
       <!-- Video Scale (zoom) -->
       <div>
-        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">Scala video (%)</label>
+        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Scala video (%)') }}</label>
         <div class="mb-flex mb-items-center mb-gap-2">
           <input
             type="range"
@@ -239,7 +239,7 @@
           />
           <span class="mb-text-xs mb-text-gray-400 mb-w-10 mb-text-right">{{ bg.video_scale || 100 }}%</span>
         </div>
-        <p class="mb-text-[9px] mb-text-gray-500 mb-mt-0.5">100% = normale, 200% = doppio</p>
+        <p class="mb-text-[9px] mb-text-gray-500 mb-mt-0.5">{{ t('100% = normale, 200% = doppio') }}</p>
       </div>
     </div>
 
@@ -261,7 +261,7 @@
             <button
               @click="removeGalleryImage(idx)"
               class="mb-absolute mb-top-0 mb-right-0 mb-bg-red-600 mb-text-white mb-rounded-full mb-w-4 mb-h-4 mb-text-[9px] mb-flex mb-items-center mb-justify-center mb-opacity-0 group-hover:mb-opacity-100 mb-transition-opacity mb-leading-none"
-            >&times;</button>
+            >{{ t('&times;') }}</button>
           </div>
         </div>
         <button
@@ -291,13 +291,13 @@
         <span class="mb-text-[10px] mb-text-gray-400">{{ t('Transizione') }}</span>
         <select :value="bg.gallery_transition || 'fade'" @change="updateField('gallery_transition', $event.target.value)"
           class="mb-w-28 mb-bg-white mb-border mb-border-gray-300 mb-rounded mb-px-2 mb-py-1 mb-text-xs mb-text-gray-900">
-          <option value="fade">Fade</option>
-          <option value="crossfade">Crossfade</option>
-          <option value="slide">Slide</option>
-          <option value="slide-up">Slide Up</option>
-          <option value="zoom">Zoom</option>
-          <option value="blur">Blur</option>
-          <option value="flip">Flip</option>
+          <option value="fade">{{ t('Fade') }}</option>
+          <option value="crossfade">{{ t('Crossfade') }}</option>
+          <option value="slide">{{ t('Slide') }}</option>
+          <option value="slide-up">{{ t('Slide Up') }}</option>
+          <option value="zoom">{{ t('Zoom') }}</option>
+          <option value="blur">{{ t('Blur') }}</option>
+          <option value="flip">{{ t('Flip') }}</option>
           <option value="none">{{ t('Nessuna') }}</option>
         </select>
       </div>
@@ -314,9 +314,9 @@
         <span class="mb-text-[10px] mb-text-gray-400">{{ t('Dimensione sfondo') }}</span>
         <select :value="bg.image_size || 'cover'" @change="updateField('image_size', $event.target.value)"
           class="mb-w-28 mb-bg-white mb-border mb-border-gray-300 mb-rounded mb-px-2 mb-py-1 mb-text-xs mb-text-gray-900">
-          <option value="cover">Cover</option>
-          <option value="contain">Contain</option>
-          <option value="auto">Auto</option>
+          <option value="cover">{{ t('Cover') }}</option>
+          <option value="contain">{{ t('Contain') }}</option>
+          <option value="auto">{{ t('Auto') }}</option>
         </select>
       </div>
 
@@ -335,7 +335,7 @@
 
       <!-- Lazyload -->
       <div class="mb-flex mb-items-center mb-justify-between">
-        <span class="mb-text-[10px] mb-text-gray-400">Lazyload</span>
+        <span class="mb-text-[10px] mb-text-gray-400">{{ t('Lazyload') }}</span>
         <button
           @click="updateField('gallery_lazyload', !(bg.gallery_lazyload !== false))"
           :class="['mb-relative mb-w-10 mb-h-5 mb-rounded-full mb-transition-colors mb-shrink-0', (bg.gallery_lazyload !== false) ? 'mb-bg-primary-600' : 'mb-bg-gray-600']"
@@ -401,13 +401,13 @@
 
     <!-- Overlay (for all types except none) -->
     <div v-if="bg.type && bg.type !== 'none'" class="mb-space-y-2 mb-pt-2 mb-border-t mb-border-gray-700">
-      <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300">Sovrapposizione</label>
+      <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300">{{ t('Sovrapposizione') }}</label>
       <FieldColor
         :modelValue="bg.overlay_color || '#000000'"
         @update:modelValue="updateField('overlay_color', $event)"
       />
       <div class="mb-flex mb-items-center mb-gap-2">
-        <span class="mb-text-[10px] mb-text-gray-400 mb-shrink-0">Opacità</span>
+        <span class="mb-text-[10px] mb-text-gray-400 mb-shrink-0">{{ t('Opacità') }}</span>
         <input
           type="range"
           :value="bg.overlay_opacity || 0"

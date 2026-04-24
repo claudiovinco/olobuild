@@ -35,7 +35,7 @@
 
     <!-- Marquee animation indicator -->
     <div v-if="settings.layout === 'marquee'" class="mb-text-center mb-text-xs mb-text-gray-500 mb-mt-2">
-      &#8592; nastro scorrevole continuo &#8594;
+      {{ t('&#8592; nastro scorrevole continuo &#8594;') }}
     </div>
     <!-- Slider indicator -->
     <div v-else-if="settings.layout === 'slider'" class="mb-flex mb-justify-between mb-mt-2">
@@ -47,6 +47,7 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { computed } from 'vue';
 
 const props = defineProps({

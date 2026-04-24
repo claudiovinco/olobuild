@@ -1,8 +1,8 @@
 <template>
   <div>
     <div v-if="!wooActive" class="olo-woo-notice">
-      <span class="olo-woo-notice-icon">&#x1F6D2;</span>
-      <span>WooCommerce richiesto</span>
+      <span class="olo-woo-notice-icon">{{ t('&#x1F6D2;') }}</span>
+      <span>{{ t('WooCommerce richiesto') }}</span>
     </div>
     <div v-else :style="wrapStyle">
       <span :style="badgeStyle" data-olo-editable="custom_text">{{ badgeLabel }}</span>
@@ -12,6 +12,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { t } from '@/i18n';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },

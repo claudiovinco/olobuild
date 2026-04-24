@@ -88,7 +88,7 @@ class Olo_Soundcloud_Tile extends Olo_Tile_Base {
                 scrolling="no"
                 frameborder="no"
                 allow="autoplay"
-                title="SoundCloud Player"
+                title="<?php echo esc_attr( olo_t( 'SoundCloud Player' ) ); ?>"
                 loading="lazy"
             ></iframe>
         </div>

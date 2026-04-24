@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3 style="font-size:16px;font-weight:700;color:var(--olo-color-text, #374151);margin:0 0 10px">Regole di prenotazione</h3>
+    <h3 style="font-size:16px;font-weight:700;color:var(--olo-color-text, #374151);margin:0 0 10px">{{ t('Regole di prenotazione') }}</h3>
     <div style="display:flex;flex-direction:column;gap:6px;font-size:13px;color:#374151">
       <div style="display:flex;align-items:center;gap:6px"><span style="color:#f59e0b">&#9888;</span> Anticipo minimo: 24 ore</div>
       <div style="display:flex;align-items:center;gap:6px"><span style="color:#f59e0b">&#9888;</span> Anticipo massimo: 30 giorni</div>
@@ -11,5 +11,6 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 defineProps({ settings: { type: Object, default: () => ({}) } });
 </script>

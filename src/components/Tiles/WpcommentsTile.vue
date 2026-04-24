@@ -20,16 +20,16 @@
             v-if="s.show_avatar"
             class="mb-flex-shrink-0 mb-bg-blue-500 mb-flex mb-items-center mb-justify-center mb-text-white mb-font-bold mb-text-sm"
             :style="avatarStyle"
-          >MR</div>
+          >{{ t('MR') }}</div>
           <div class="mb-flex-1 mb-min-w-0">
             <div class="mb-flex mb-items-center mb-gap-2 mb-mb-1">
-              <span class="mb-font-semibold mb-text-sm" :style="authorStyle">Mario Rossi</span>
-              <span v-if="s.show_date" class="mb-text-xs" :style="dateStyle">2 ore fa</span>
+              <span class="mb-font-semibold mb-text-sm" :style="authorStyle">{{ t('Mario Rossi') }}</span>
+              <span v-if="s.show_date" class="mb-text-xs" :style="dateStyle">{{ t('2 ore fa') }}</span>
             </div>
             <p class="mb-text-sm mb-leading-relaxed mb-mb-1" :style="textStyle">
-              Ottimo articolo, molto utile e ben scritto. Complimenti per la chiarezza espositiva.
+              {{ t('Ottimo articolo, molto utile e ben scritto. Complimenti per la chiarezza espositiva.') }}
             </p>
-            <a v-if="s.show_reply_link" href="#" class="mb-text-xs mb-no-underline" :style="linkStyle">Rispondi</a>
+            <a v-if="s.show_reply_link" href="#" class="mb-text-xs mb-no-underline" :style="linkStyle">{{ t('Rispondi') }}</a>
           </div>
         </div>
       </div>
@@ -41,16 +41,16 @@
             v-if="s.show_avatar"
             class="mb-flex-shrink-0 mb-bg-green-500 mb-flex mb-items-center mb-justify-center mb-text-white mb-font-bold mb-text-sm"
             :style="avatarStyle"
-          >LB</div>
+          >{{ t('LB') }}</div>
           <div class="mb-flex-1 mb-min-w-0">
             <div class="mb-flex mb-items-center mb-gap-2 mb-mb-1">
-              <span class="mb-font-semibold mb-text-sm" :style="authorStyle">Laura Bianchi</span>
-              <span v-if="s.show_date" class="mb-text-xs" :style="dateStyle">1 ora fa</span>
+              <span class="mb-font-semibold mb-text-sm" :style="authorStyle">{{ t('Laura Bianchi') }}</span>
+              <span v-if="s.show_date" class="mb-text-xs" :style="dateStyle">{{ t('1 ora fa') }}</span>
             </div>
             <p class="mb-text-sm mb-leading-relaxed mb-mb-1" :style="textStyle">
-              Concordo pienamente! Avrei una domanda riguardo al terzo punto.
+              {{ t('Concordo pienamente! Avrei una domanda riguardo al terzo punto.') }}
             </p>
-            <a v-if="s.show_reply_link" href="#" class="mb-text-xs mb-no-underline" :style="linkStyle">Rispondi</a>
+            <a v-if="s.show_reply_link" href="#" class="mb-text-xs mb-no-underline" :style="linkStyle">{{ t('Rispondi') }}</a>
           </div>
         </div>
       </div>
@@ -58,7 +58,7 @@
 
     <!-- Comment form preview -->
     <div v-if="s.show_form" class="mb-mt-6 mb-p-4 mb-rounded" :style="formStyle">
-      <h4 class="mb-font-semibold mb-mb-3 mb-text-sm" :style="titleStyle">Lascia un commento</h4>
+      <h4 class="mb-font-semibold mb-mb-3 mb-text-sm" :style="titleStyle">{{ t('Lascia un commento') }}</h4>
       <div class="mb-space-y-3">
         <div class="mb-h-20 mb-rounded mb-border mb-border-gray-600 mb-bg-gray-800/50"></div>
         <div class="mb-flex mb-gap-3">
@@ -67,13 +67,14 @@
         </div>
         <button
           class="mb-px-4 mb-py-2 mb-rounded mb-text-sm mb-font-medium mb-text-white mb-bg-blue-600 mb-cursor-default"
-        >Invia commento</button>
+        >{{ t('Invia commento') }}</button>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { computed } from 'vue';
 
 const props = defineProps({

@@ -14,7 +14,7 @@
       :value="modelValue"
       @input="$emit('update:modelValue', $event.target.value)"
       class="mb-flex-1 mb-bg-white mb-border mb-border-gray-300 mb-rounded mb-px-2 mb-py-1.5 mb-text-xs mb-text-gray-900"
-      placeholder="es. star, home, check"
+      :placeholder="t('es. star, home, check')"
     />
 
     <!-- Browse button -->
@@ -22,8 +22,8 @@
       type="button"
       @click="showPicker = true"
       class="mb-px-2 mb-py-1.5 mb-bg-gray-100 mb-border mb-border-gray-300 mb-rounded mb-text-[10px] mb-text-gray-600 hover:mb-bg-gray-200 mb-whitespace-nowrap"
-      aria-label="Sfoglia libreria icone"
-    >Sfoglia</button>
+      :aria-label="t('Sfoglia libreria icone')"
+    >{{ t('Sfoglia') }}</button>
 
     <!-- Icon picker modal -->
     <IconPicker
@@ -35,6 +35,7 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { ref, computed, watch } from 'vue';
 import iconsSvg from '../../ProSlider/uikitIconsSvg.js';
 import IconPicker from '../../ProSlider/IconPicker.vue';

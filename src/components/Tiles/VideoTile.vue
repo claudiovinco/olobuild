@@ -80,8 +80,8 @@
         v-else
         class="mb-absolute mb-inset-0 mb-flex mb-flex-col mb-items-center mb-justify-center mb-text-gray-500"
       >
-        <span class="mb-text-4xl mb-mb-2">&#x1F3AC;</span>
-        <span class="mb-text-sm">Inserisci un URL YouTube/Vimeo o un file video</span>
+        <span class="mb-text-4xl mb-mb-2">{{ t('&#x1F3AC;') }}</span>
+        <span class="mb-text-sm">{{ t('Inserisci un URL YouTube/Vimeo o un file video') }}</span>
       </div>
     </div>
 
@@ -94,6 +94,7 @@
 
 <script setup>
 import { computed, ref } from 'vue';
+import { t } from '@/i18n';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },

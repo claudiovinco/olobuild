@@ -7,7 +7,7 @@
         <path d="M2 17l10 5 10-5"/>
         <path d="M2 12l10 5 10-5"/>
       </svg>
-      <span class="mb-text-xs mb-text-gray-400 mb-mt-2">Inserisci un file SVG</span>
+      <span class="mb-text-xs mb-text-gray-400 mb-mt-2">{{ t('Inserisci un file SVG') }}</span>
     </div>
     <div v-if="s.replay_button && hasSvg" class="mb-mt-2">
       <span class="mb-text-xs mb-px-3 mb-py-1 mb-bg-blue-500 mb-text-white mb-rounded mb-cursor-pointer">{{ s.replay_button_label || 'Replay' }}</span>
@@ -17,6 +17,7 @@
 
 <script setup>
 import { computed, ref, watch, onMounted, nextTick } from 'vue';
+import { t } from '@/i18n';
 
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 

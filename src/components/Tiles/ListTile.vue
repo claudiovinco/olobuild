@@ -11,13 +11,14 @@
       <!-- SVG icon -->
       <span v-else class="olo-list-icon-svg" v-html="getIcon(resolveIcon(item))"></span>
       <span class="olo-list-text" :data-olo-editable="'items.' + i + '.text'">{{ item.text }}</span>
-      <span v-if="item.link" class="olo-list-link-badge" title="Link">&#x1F517;</span>
+      <span v-if="item.link" class="olo-list-link-badge" :title="t('Link')">{{ t('&#x1F517;') }}</span>
     </li>
   </ul>
 </template>
 
 <script setup>
 import { computed } from 'vue';
+import { t } from '@/i18n';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },

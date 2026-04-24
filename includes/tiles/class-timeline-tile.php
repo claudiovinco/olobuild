@@ -846,8 +846,8 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
         <div class="olo-timeline <?php echo esc_attr( $uid ); ?>"<?php echo $scrollspy; ?>>
             <!-- Desktop horizontal -->
             <div class="olo-tl-h-desktop olo-tl-h-wrap">
-                <button class="olo-tl-h-arrow olo-tl-h-arrow--prev" data-olo-prev>&lsaquo;</button>
-                <button class="olo-tl-h-arrow olo-tl-h-arrow--next" data-olo-next>&rsaquo;</button>
+                <button class="olo-tl-h-arrow olo-tl-h-arrow--prev" data-olo-prev><?php echo esc_html( olo_t( '&lsaquo;' ) ); ?></button>
+                <button class="olo-tl-h-arrow olo-tl-h-arrow--next" data-olo-next><?php echo esc_html( olo_t( '&rsaquo;' ) ); ?></button>
                 <div class="olo-tl-h-viewport">
                     <div class="olo-tl-line"></div>
                     <div class="olo-tl-h-track" data-olo-track>

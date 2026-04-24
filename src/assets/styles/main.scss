@@ -118,12 +118,33 @@
   }
 }
 
-// Drag ghost
+// ── Olobuild DnD (Pragmatic) ──
+// Pragmatic non applica classi automaticamente; questi stili sono per le
+// classi dichiarate nei composable/componenti (v-olo-draggable / v-olo-drop-target).
+.olo-dnd-dragging {
+  opacity: 0.4;
+  transition: opacity 0.15s;
+}
+
+.olo-dnd-drop-target--over {
+  outline: 2px dashed var(--olo-color-primary, #6366f1);
+  outline-offset: -2px;
+  background: rgba(99, 102, 241, 0.05);
+}
+
+.olo-dnd-drop-target--over-top {
+  box-shadow: 0 -3px 0 0 var(--olo-color-primary, #6366f1);
+}
+
+.olo-dnd-drop-target--over-bottom {
+  box-shadow: 0 3px 0 0 var(--olo-color-primary, #6366f1);
+}
+
+// Legacy sortable fallback (ancora usato da draggable residui fino a completion rewrite)
 .sortable-ghost {
   opacity: 0.4;
   border: 2px dashed var(--olo-color-primary, #6366f1) !important;
 }
-
 .sortable-chosen {
   cursor: grabbing;
 }

@@ -15,7 +15,7 @@
     <div v-if="hasDynamic" class="dft-badge">
       <span class="dft-badge-icon">&#9889;</span>
       <span class="dft-badge-label">{{ bindingLabel }}</span>
-      <button type="button" class="dft-badge-remove" title="Rimuovi collegamento" @click="removeDynamic">&times;</button>
+      <button type="button" class="dft-badge-remove" :title="t('Rimuovi collegamento')" @click="removeDynamic">{{ t('&times;') }}</button>
     </div>
 
     <!-- Static field (hidden when dynamic binding active) -->
@@ -33,6 +33,7 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { ref, computed, onMounted } from 'vue';
 import { useDynamicContent } from '@/composables/useDynamicContent';
 import DynamicBindingPanel from './DynamicBindingPanel.vue';

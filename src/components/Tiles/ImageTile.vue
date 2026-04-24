@@ -19,8 +19,8 @@
       class="mb-flex mb-flex-col mb-items-center mb-justify-center mb-bg-gray-800 mb-text-gray-500"
       :style="{ height: s.height, borderRadius: brStyle }"
     >
-      <span class="mb-text-4xl mb-mb-2">&#x1F5BC;</span>
-      <span class="mb-text-sm">Click to add image</span>
+      <span class="mb-text-4xl mb-mb-2">{{ t('&#x1F5BC;') }}</span>
+      <span class="mb-text-sm">{{ t('Click to add image') }}</span>
     </div>
     <!-- Hover indicator -->
     <div
@@ -28,7 +28,7 @@
       class="mb-absolute mb-top-1 mb-right-1 mb-bg-black/60 mb-text-white mb-text-xs mb-px-1.5 mb-py-0.5 mb-rounded"
       style="z-index:2"
     >{{ s.hover_video ? '▶ hover' : '⇄ hover' }}</div>
-    <div v-if="s.lightbox" class="mb-absolute mb-bottom-1 mb-right-1 mb-bg-black/60 mb-text-white mb-text-xs mb-px-1.5 mb-py-0.5 mb-rounded" style="z-index:2">&#x1F50D; lightbox</div>
+    <div v-if="s.lightbox" class="mb-absolute mb-bottom-1 mb-right-1 mb-bg-black/60 mb-text-white mb-text-xs mb-px-1.5 mb-py-0.5 mb-rounded" style="z-index:2">{{ t('&#x1F50D; lightbox') }}</div>
     <div
       v-if="s.caption"
       class="mb-text-sm mb-text-gray-400 mb-text-center mb-mt-2"
@@ -38,6 +38,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { t } from '@/i18n';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },

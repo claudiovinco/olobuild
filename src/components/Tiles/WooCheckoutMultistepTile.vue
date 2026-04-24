@@ -12,17 +12,18 @@
       <div :style="cardStyle">
         <h3 :style="{ margin: '0 0 16px', fontSize: '18px', fontWeight: 700, color: s.text_color || '#374151' }">{{ steps[0] || 'Dati' }}</h3>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
-          <input type="text" placeholder="Nome" :style="inputStyle" readonly />
-          <input type="text" placeholder="Cognome" :style="inputStyle" readonly />
+          <input type="text" :placeholder="t('Nome')" :style="inputStyle" readonly />
+          <input type="text" :placeholder="t('Cognome')" :style="inputStyle" readonly />
         </div>
-        <input type="text" placeholder="Email" :style="{ ...inputStyle, marginBottom: '12px' }" readonly />
-        <input type="text" placeholder="Telefono" :style="inputStyle" readonly />
+        <input type="text" :placeholder="t('Email')" :style="{ ...inputStyle, marginBottom: '12px' }" readonly />
+        <input type="text" :placeholder="t('Telefono')" :style="inputStyle" readonly />
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { computed } from 'vue';
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 const s = computed(() => props.settings || {});

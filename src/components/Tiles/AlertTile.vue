@@ -10,7 +10,7 @@
         <div v-if="s.title" class="mb-font-semibold mb-mb-1" :style="{ color: s.custom_text_color || 'var(--olo-color-text, #374151)' }" data-olo-editable="title">{{ s.title }}</div>
         <div class="mb-text-sm mb-opacity-90 mb-leading-relaxed" :style="{ color: s.custom_text_color || 'var(--olo-color-text, #374151)', whiteSpace: 'pre-wrap' }" data-olo-editable="message" data-olo-multiline>{{ s.message || 'Alert message here.' }}</div>
       </div>
-      <button v-if="s.dismissible" class="mb-flex-shrink-0 mb-text-white/60 mb-text-lg" style="background:none;border:none;cursor:pointer;line-height:1;padding:0 0 0 8px;">&times;</button>
+      <button v-if="s.dismissible" class="mb-flex-shrink-0 mb-text-white/60 mb-text-lg" style="background:none;border:none;cursor:pointer;line-height:1;padding:0 0 0 8px;">{{ t('&times;') }}</button>
     </div>
   </div>
 </template>
@@ -18,6 +18,7 @@
 <script setup>
 import { computed } from 'vue';
 import iconsSvg from '../ProSlider/uikitIconsSvg.js';
+import { t } from '@/i18n';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },

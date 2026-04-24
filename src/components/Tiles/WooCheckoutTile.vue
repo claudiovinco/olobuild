@@ -1,70 +1,70 @@
 <template>
   <div>
     <div v-if="!wooActive" class="olo-woo-notice">
-      <span class="olo-woo-notice-icon">&#x1F6D2;</span>
-      <span>WooCommerce richiesto</span>
+      <span class="olo-woo-notice-icon">{{ t('&#x1F6D2;') }}</span>
+      <span>{{ t('WooCommerce richiesto') }}</span>
     </div>
     <div v-else>
       <div :style="layoutStyle">
         <!-- Billing form -->
         <div>
-          <h3 :style="sectionTitleStyle">Dettagli di fatturazione</h3>
+          <h3 :style="sectionTitleStyle">{{ t('Dettagli di fatturazione') }}</h3>
           <div :style="formGridStyle">
             <div>
-              <label :style="labelStyle">Nome *</label>
-              <input type="text" placeholder="Mario" :style="inputStyle" readonly />
+              <label :style="labelStyle">{{ t('Nome *') }}</label>
+              <input type="text" :placeholder="t('Mario')" :style="inputStyle" readonly />
             </div>
             <div>
-              <label :style="labelStyle">Cognome *</label>
-              <input type="text" placeholder="Rossi" :style="inputStyle" readonly />
+              <label :style="labelStyle">{{ t('Cognome *') }}</label>
+              <input type="text" :placeholder="t('Rossi')" :style="inputStyle" readonly />
             </div>
           </div>
           <div style="margin-bottom:16px;">
-            <label :style="labelStyle">Azienda (opzionale)</label>
-            <input type="text" placeholder="Nome azienda" :style="inputStyle" readonly />
+            <label :style="labelStyle">{{ t('Azienda (opzionale)') }}</label>
+            <input type="text" :placeholder="t('Nome azienda')" :style="inputStyle" readonly />
           </div>
           <div style="margin-bottom:16px;">
-            <label :style="labelStyle">Paese/Regione *</label>
+            <label :style="labelStyle">{{ t('Paese/Regione *') }}</label>
             <select :style="inputStyle" disabled>
-              <option>Italia</option>
+              <option>{{ t('Italia') }}</option>
             </select>
           </div>
           <div style="margin-bottom:16px;">
-            <label :style="labelStyle">Indirizzo *</label>
-            <input type="text" placeholder="Via e numero civico" :style="inputStyle" readonly />
+            <label :style="labelStyle">{{ t('Indirizzo *') }}</label>
+            <input type="text" :placeholder="t('Via e numero civico')" :style="inputStyle" readonly />
           </div>
           <div :style="formGridStyle">
             <div>
-              <label :style="labelStyle">CAP *</label>
+              <label :style="labelStyle">{{ t('CAP *') }}</label>
               <input type="text" placeholder="00100" :style="inputStyle" readonly />
             </div>
             <div>
-              <label :style="labelStyle">Città *</label>
-              <input type="text" placeholder="Roma" :style="inputStyle" readonly />
+              <label :style="labelStyle">{{ t('Città *') }}</label>
+              <input type="text" :placeholder="t('Roma')" :style="inputStyle" readonly />
             </div>
           </div>
           <div style="margin-bottom:16px;">
-            <label :style="labelStyle">Telefono *</label>
+            <label :style="labelStyle">{{ t('Telefono *') }}</label>
             <input type="text" placeholder="+39 333 1234567" :style="inputStyle" readonly />
           </div>
           <div style="margin-bottom:16px;">
-            <label :style="labelStyle">Email *</label>
-            <input type="text" placeholder="mario@email.com" :style="inputStyle" readonly />
+            <label :style="labelStyle">{{ t('Email *') }}</label>
+            <input type="text" :placeholder="t('mario@email.com')" :style="inputStyle" readonly />
           </div>
           <div v-if="s.show_order_notes" style="margin-bottom:16px;">
-            <label :style="labelStyle">Note sull'ordine (opzionale)</label>
-            <textarea :style="{ ...inputStyle, height: '80px', resize: 'vertical' }" placeholder="Note riguardo il tuo ordine, ad es. istruzioni per la consegna" readonly></textarea>
+            <label :style="labelStyle">{{ t('Note sull\'ordine (opzionale)') }}</label>
+            <textarea :style="{ ...inputStyle, height: '80px', resize: 'vertical' }" :placeholder="t('Note riguardo il tuo ordine, ad es. istruzioni per la consegna')" readonly></textarea>
           </div>
         </div>
 
         <!-- Order summary -->
         <div>
-          <h3 :style="sectionTitleStyle">Il tuo ordine</h3>
+          <h3 :style="sectionTitleStyle">{{ t('Il tuo ordine') }}</h3>
           <table :style="orderTableStyle">
             <thead>
               <tr>
-                <th :style="orderThStyle">Prodotto</th>
-                <th :style="{ ...orderThStyle, textAlign: 'right' }">Subtotale</th>
+                <th :style="orderThStyle">{{ t('Prodotto') }}</th>
+                <th :style="{ ...orderThStyle, textAlign: 'right' }">{{ t('Subtotale') }}</th>
               </tr>
             </thead>
             <tbody>
@@ -73,15 +73,15 @@
                 <td :style="{ ...orderTdStyle, textAlign: 'right' }">&euro;{{ (item.price * item.qty).toFixed(2) }}</td>
               </tr>
               <tr>
-                <th :style="orderThTotalStyle">Subtotale</th>
+                <th :style="orderThTotalStyle">{{ t('Subtotale') }}</th>
                 <td :style="{ ...orderTdStyle, textAlign: 'right', fontWeight: 600 }">&euro;{{ subtotal.toFixed(2) }}</td>
               </tr>
               <tr>
-                <th :style="orderThTotalStyle">Spedizione</th>
-                <td :style="{ ...orderTdStyle, textAlign: 'right' }">Gratuita</td>
+                <th :style="orderThTotalStyle">{{ t('Spedizione') }}</th>
+                <td :style="{ ...orderTdStyle, textAlign: 'right' }">{{ t('Gratuita') }}</td>
               </tr>
               <tr>
-                <th :style="{ ...orderThTotalStyle, fontSize: '16px' }">Totale</th>
+                <th :style="{ ...orderThTotalStyle, fontSize: '16px' }">{{ t('Totale') }}</th>
                 <td :style="{ ...orderTdStyle, textAlign: 'right', fontSize: '18px', fontWeight: 700, color: s.heading_color }">&euro;{{ subtotal.toFixed(2) }}</td>
               </tr>
             </tbody>
@@ -91,15 +91,15 @@
           <div :style="paymentBoxStyle">
             <div :style="paymentOptionStyle">
               <input type="radio" checked readonly style="margin-right:8px;" />
-              <label :style="{ fontWeight: 600, color: s.heading_color, fontSize: '14px' }">Bonifico bancario</label>
+              <label :style="{ fontWeight: 600, color: s.heading_color, fontSize: '14px' }">{{ t('Bonifico bancario') }}</label>
             </div>
             <div :style="{ ...paymentOptionStyle, borderBottom: 'none' }">
               <input type="radio" readonly style="margin-right:8px;" />
-              <label :style="{ fontWeight: 600, color: s.heading_color, fontSize: '14px' }">PayPal</label>
+              <label :style="{ fontWeight: 600, color: s.heading_color, fontSize: '14px' }">{{ t('PayPal') }}</label>
             </div>
           </div>
 
-          <button :style="placeOrderStyle">Effettua ordine</button>
+          <button :style="placeOrderStyle">{{ t('Effettua ordine') }}</button>
         </div>
       </div>
     </div>
@@ -107,6 +107,7 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { computed } from 'vue';
 
 const props = defineProps({

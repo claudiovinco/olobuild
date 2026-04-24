@@ -8,7 +8,7 @@
         <rect x="3" y="14" width="7" height="7" rx="1"/>
         <rect x="14" y="14" width="7" height="7" rx="1"/>
       </svg>
-      <span>Nessun elemento</span>
+      <span>{{ t('Nessun elemento') }}</span>
     </div>
 
     <template v-else>
@@ -28,8 +28,8 @@
             <svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor"><path d="M2 1l4 3-4 3z"/></svg>
           </button>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="flex-shrink:0;color:#60A5FA"><rect x="3" y="3" width="18" height="6" rx="2"/><line x1="3" y1="13" x2="21" y2="13" opacity="0.3"/><line x1="3" y1="17" x2="21" y2="17" opacity="0.3"/></svg>
-          <span class="st-name" style="font-weight:600;color:#60A5FA">Header</span>
-          <span v-if="builderStore.headerDirty" style="width:6px;height:6px;border-radius:50%;background:#FBBF24;flex-shrink:0" title="Modifiche non salvate"></span>
+          <span class="st-name" style="font-weight:600;color:#60A5FA">{{ t('Header') }}</span>
+          <span v-if="builderStore.headerDirty" style="width:6px;height:6px;border-radius:50%;background:#FBBF24;flex-shrink:0" :title="t('Modifiche non salvate')"></span>
         </div>
         <div v-if="isExpanded('__zone_header')" class="st-sub" style="margin-left:10px;padding-left:5px">
           <draggable
@@ -43,7 +43,7 @@
             <template #item="{ element: section }">
               <div class="st-item">
                 <div class="st-row st-row--section" :class="{ 'st-row--active': builderStore.selectedTileId === section.id }" @click="selectTile(section.id, 'header')">
-                  <span class="st-grip" title="Trascina"><svg width="6" height="10" viewBox="0 0 6 10" fill="currentColor"><circle cx="1" cy="1" r="1"/><circle cx="5" cy="1" r="1"/><circle cx="1" cy="5" r="1"/><circle cx="5" cy="5" r="1"/><circle cx="1" cy="9" r="1"/><circle cx="5" cy="9" r="1"/></svg></span>
+                  <span class="st-grip" :title="t('Trascina')"><svg width="6" height="10" viewBox="0 0 6 10" fill="currentColor"><circle cx="1" cy="1" r="1"/><circle cx="5" cy="1" r="1"/><circle cx="1" cy="5" r="1"/><circle cx="5" cy="5" r="1"/><circle cx="1" cy="9" r="1"/><circle cx="5" cy="9" r="1"/></svg></span>
                   <button class="st-toggle" :class="{ 'st-toggle--open': isExpanded(section.id) }" @click.stop="toggle(section.id)"><svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor"><path d="M2 1l4 3-4 3z"/></svg></button>
                   <span class="st-icon" v-html="nodeIcon('section')"></span>
                   <span class="st-name" :title="section.settings?._label || 'Sezione'">{{ section.settings?._label || 'Sezione' }}</span>
@@ -53,7 +53,7 @@
                     <template #item="{ element: row }">
                       <div class="st-item">
                         <div class="st-row st-row--row" :class="{ 'st-row--active': builderStore.selectedTileId === row.id }" @click.stop="selectTile(row.id, 'header')">
-                          <span class="st-grip" title="Trascina"><svg width="6" height="10" viewBox="0 0 6 10" fill="currentColor"><circle cx="1" cy="1" r="1"/><circle cx="5" cy="1" r="1"/><circle cx="1" cy="5" r="1"/><circle cx="5" cy="5" r="1"/><circle cx="1" cy="9" r="1"/><circle cx="5" cy="9" r="1"/></svg></span>
+                          <span class="st-grip" :title="t('Trascina')"><svg width="6" height="10" viewBox="0 0 6 10" fill="currentColor"><circle cx="1" cy="1" r="1"/><circle cx="5" cy="1" r="1"/><circle cx="1" cy="5" r="1"/><circle cx="5" cy="5" r="1"/><circle cx="1" cy="9" r="1"/><circle cx="5" cy="9" r="1"/></svg></span>
                           <button class="st-toggle" :class="{ 'st-toggle--open': isExpanded(row.id) }" @click.stop="toggle(row.id)"><svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor"><path d="M2 1l4 3-4 3z"/></svg></button>
                           <span class="st-icon" v-html="nodeIcon('row')"></span>
                           <span class="st-name">{{ row.settings?._label || 'Row' }}</span>
@@ -72,7 +72,7 @@
                                 <template #item="{ element: tile }">
                                   <div class="st-item">
                                     <div class="st-row st-row--element" :class="{ 'st-row--active': builderStore.selectedTileId === tile.id }" @click.stop="selectTile(tile.id, 'header')">
-                                      <span class="st-grip" title="Trascina"><svg width="6" height="10" viewBox="0 0 6 10" fill="currentColor"><circle cx="1" cy="1" r="1"/><circle cx="5" cy="1" r="1"/><circle cx="1" cy="5" r="1"/><circle cx="5" cy="5" r="1"/><circle cx="1" cy="9" r="1"/><circle cx="5" cy="9" r="1"/></svg></span>
+                                      <span class="st-grip" :title="t('Trascina')"><svg width="6" height="10" viewBox="0 0 6 10" fill="currentColor"><circle cx="1" cy="1" r="1"/><circle cx="5" cy="1" r="1"/><circle cx="1" cy="5" r="1"/><circle cx="5" cy="5" r="1"/><circle cx="1" cy="9" r="1"/><circle cx="5" cy="9" r="1"/></svg></span>
                                       <span class="st-toggle-ph"></span>
                                       <span class="st-icon" v-html="nodeIcon(tile.type)"></span>
                                       <span class="st-name" :title="tileLabelFull(tile)">{{ tileLabelFull(tile) }}</span>
@@ -455,6 +455,7 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { ref, reactive, computed, nextTick, watch } from 'vue';
 import draggable from 'vuedraggable';
 import { useTilesStore } from '@/stores/tiles';

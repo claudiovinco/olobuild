@@ -65,6 +65,7 @@ import { useTilesStore } from './stores/tiles';
 import { useBuilderStore } from './stores/builder';
 import { useHistory } from './composables/useHistory';
 import { useToast } from './composables/useToast.js';
+import { t } from './i18n';
 import TemplateList from './components/TemplateManager/TemplateList.vue';
 import BuilderToolbar from './components/Builder/BuilderToolbar.vue';
 import BuilderSidebar from './components/Builder/BuilderSidebar.vue';
@@ -294,7 +295,7 @@ async function openBuilder(templateId) {
       return;
     }
     sessionStorage.removeItem(reloadKey);
-    toast.error('Errore di caricamento del template. Riprova tra qualche secondo.');
+    toast.error(t('Errore di caricamento del template. Riprova tra qualche secondo.'));
     return;
   }
   sessionStorage.removeItem('olo_reload_' + templateId);

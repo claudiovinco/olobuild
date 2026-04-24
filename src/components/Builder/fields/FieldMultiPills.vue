@@ -11,13 +11,14 @@
       @click="toggle(opt.value)"
     >
       <svg v-if="opt.icon && iconPaths[opt.icon]" class="fmp-pill-icon" width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path :d="iconPaths[opt.icon]" /></svg>
-      {{ opt.label }}
+      {{ t(opt.label) }}
     </button>
   </div>
 </template>
 
 <script setup>
 import { computed } from 'vue';
+import { t } from '@/i18n';
 
 const props = defineProps({
   modelValue: { type: String, default: '' },

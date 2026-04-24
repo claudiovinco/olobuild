@@ -288,8 +288,8 @@ class Olo_ServiceRelated_Tile extends Olo_Tile_Base {
                     $this->render_card( $uid, $s, $svc );
                 } ?>
             </div>
-            <button class="olo-sr-arrow olo-sr-prev" aria-label="Precedente">&#8249;</button>
-            <button class="olo-sr-arrow olo-sr-next" aria-label="Successivo">&#8250;</button>
+            <button class="olo-sr-arrow olo-sr-prev" aria-label="<?php echo esc_attr( olo_t( 'Precedente' ) ); ?>">&#8249;</button>
+            <button class="olo-sr-arrow olo-sr-next" aria-label="<?php echo esc_attr( olo_t( 'Successivo' ) ); ?>">&#8250;</button>
         </div>
         <style>
             .<?php echo $uid; ?>{position:relative;overflow:hidden}

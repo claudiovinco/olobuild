@@ -3,16 +3,16 @@
     <!-- Header -->
     <div v-if="s.show_header !== false" style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:16px;flex-wrap:wrap">
       <div>
-        <div style="font-size:11px;color:#94A3B8;font-family:monospace;letter-spacing:1px;margin-bottom:3px">RIF. CEDA-2024-001</div>
-        <h3 :style="{ fontSize:(s.title_size||16)+'px', fontWeight:700, color:s.title_color||'#0F172A', margin:'0 0 6px', lineHeight:'1.3' }">Trilocale Centro Storico</h3>
+        <div style="font-size:11px;color:#94A3B8;font-family:monospace;letter-spacing:1px;margin-bottom:3px">{{ t('RIF. CEDA-2024-001') }}</div>
+        <h3 :style="{ fontSize:(s.title_size||16)+'px', fontWeight:700, color:s.title_color||'#0F172A', margin:'0 0 6px', lineHeight:'1.3' }">{{ t('Trilocale Centro Storico') }}</h3>
         <div style="display:flex;gap:6px">
-          <span :style="{ padding:'3px 10px', borderRadius:'6px', fontSize:'11px', fontWeight:700, textTransform:'uppercase', background:(s.accent_color||'#2563EB')+'14', color:s.accent_color||'#2563EB' }">Vendita</span>
-          <span style="padding:3px 10px;border-radius:6px;font-size:11px;font-weight:700;background:#F1F5F9;color:#475569">Appartamento</span>
+          <span :style="{ padding:'3px 10px', borderRadius:'6px', fontSize:'11px', fontWeight:700, textTransform:'uppercase', background:(s.accent_color||'#2563EB')+'14', color:s.accent_color||'#2563EB' }">{{ t('Vendita') }}</span>
+          <span style="padding:3px 10px;border-radius:6px;font-size:11px;font-weight:700;background:#F1F5F9;color:#475569">{{ t('Appartamento') }}</span>
         </div>
       </div>
       <div style="text-align:right;flex-shrink:0">
-        <div :style="{ fontSize:'24px', fontWeight:800, color:s.accent_color||'#2563EB', letterSpacing:'-0.02em' }">&euro; 325.000</div>
-        <div style="font-size:12px;color:#94A3B8;margin-top:2px">&euro; 3.421/m&sup2;</div>
+        <div :style="{ fontSize:'24px', fontWeight:800, color:s.accent_color||'#2563EB', letterSpacing:'-0.02em' }">{{ t('&euro; 325.000') }}</div>
+        <div style="font-size:12px;color:#94A3B8;margin-top:2px">{{ t('&euro; 3.421/m&sup2;') }}</div>
       </div>
     </div>
 
@@ -52,7 +52,7 @@
     <!-- Energy -->
     <div v-show="showPanel('energy')">
       <div :style="{ height:'24px', borderRadius:'4px', overflow:'hidden', background:'#F1F5F9', marginBottom:'12px' }">
-        <div :style="{ width:'76%', height:'100%', borderRadius:'4px', background:'#BFD730', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'12px', fontWeight:800, color:'#fff' }">Classe A1</div>
+        <div :style="{ width:'76%', height:'100%', borderRadius:'4px', background:'#BFD730', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'12px', fontWeight:800, color:'#fff' }">{{ t('Classe A1') }}</div>
       </div>
       <div :style="gridStyle">
         <div v-for="item in energyItems" :key="item[0]" :style="rowStyle">
@@ -75,31 +75,32 @@
     <!-- Calculator -->
     <div v-show="showPanel('calculator')" v-if="s.show_calculator">
       <div style="background:#F8FAFC;border-radius:10px;padding:16px">
-        <div :style="{ fontSize:'22px', fontWeight:800, color:s.accent_color||'#2563EB', textAlign:'center', padding:'8px 0' }">&euro; 1.142 <span style="font-size:14px;font-weight:400;color:#94A3B8">/mese</span></div>
-        <div style="font-size:12px;color:#94A3B8;text-align:center">Rata stimata per un mutuo di &euro; 260.000 a 25 anni</div>
+        <div :style="{ fontSize:'22px', fontWeight:800, color:s.accent_color||'#2563EB', textAlign:'center', padding:'8px 0' }">&euro; 1.142 <span style="font-size:14px;font-weight:400;color:#94A3B8">{{ t('/mese') }}</span></div>
+        <div style="font-size:12px;color:#94A3B8;text-align:center">{{ t('Rata stimata per un mutuo di &euro; 260.000 a 25 anni') }}</div>
         <div style="display:flex;gap:10px;margin-top:12px">
-          <div style="flex:1"><div style="font-size:10px;font-weight:700;color:#94A3B8;text-transform:uppercase;margin-bottom:3px">Importo</div><div style="padding:7px 10px;border:1px solid #D1D5DB;border-radius:6px;font-size:13px;color:#6B7280;background:#fff">&euro; 325.000</div></div>
-          <div style="flex:1"><div style="font-size:10px;font-weight:700;color:#94A3B8;text-transform:uppercase;margin-bottom:3px">Anticipo</div><div style="padding:7px 10px;border:1px solid #D1D5DB;border-radius:6px;font-size:13px;color:#6B7280;background:#fff">&euro; 65.000</div></div>
+          <div style="flex:1"><div style="font-size:10px;font-weight:700;color:#94A3B8;text-transform:uppercase;margin-bottom:3px">{{ t('Importo') }}</div><div style="padding:7px 10px;border:1px solid #D1D5DB;border-radius:6px;font-size:13px;color:#6B7280;background:#fff">{{ t('&euro; 325.000') }}</div></div>
+          <div style="flex:1"><div style="font-size:10px;font-weight:700;color:#94A3B8;text-transform:uppercase;margin-bottom:3px">{{ t('Anticipo') }}</div><div style="padding:7px 10px;border:1px solid #D1D5DB;border-radius:6px;font-size:13px;color:#6B7280;background:#fff">{{ t('&euro; 65.000') }}</div></div>
         </div>
         <div style="display:flex;gap:10px;margin-top:8px">
-          <div style="flex:1"><div style="font-size:10px;font-weight:700;color:#94A3B8;text-transform:uppercase;margin-bottom:3px">Tasso</div><div style="padding:7px 10px;border:1px solid #D1D5DB;border-radius:6px;font-size:13px;color:#6B7280;background:#fff">3.5%</div></div>
-          <div style="flex:1"><div style="font-size:10px;font-weight:700;color:#94A3B8;text-transform:uppercase;margin-bottom:3px">Anni</div><div style="padding:7px 10px;border:1px solid #D1D5DB;border-radius:6px;font-size:13px;color:#6B7280;background:#fff">25</div></div>
+          <div style="flex:1"><div style="font-size:10px;font-weight:700;color:#94A3B8;text-transform:uppercase;margin-bottom:3px">{{ t('Tasso') }}</div><div style="padding:7px 10px;border:1px solid #D1D5DB;border-radius:6px;font-size:13px;color:#6B7280;background:#fff">3.5%</div></div>
+          <div style="flex:1"><div style="font-size:10px;font-weight:700;color:#94A3B8;text-transform:uppercase;margin-bottom:3px">{{ t('Anni') }}</div><div style="padding:7px 10px;border:1px solid #D1D5DB;border-radius:6px;font-size:13px;color:#6B7280;background:#fff">25</div></div>
         </div>
       </div>
     </div>
 
     <!-- Actions -->
     <div v-if="s.show_print !== false || s.show_share !== false" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:16px;padding-top:14px;border-top:1px solid #F1F5F9">
-      <span v-if="s.show_print !== false" style="padding:5px 12px;border-radius:8px;font-size:11px;font-weight:600;color:#94A3B8;background:#F1F5F9">Stampa scheda</span>
-      <span v-if="s.show_share !== false" style="padding:5px 12px;border-radius:8px;font-size:11px;font-weight:600;color:#94A3B8;background:#F1F5F9">WhatsApp</span>
-      <span v-if="s.show_share !== false" style="padding:5px 12px;border-radius:8px;font-size:11px;font-weight:600;color:#94A3B8;background:#F1F5F9">Email</span>
-      <span v-if="s.show_share !== false" style="padding:5px 12px;border-radius:8px;font-size:11px;font-weight:600;color:#94A3B8;background:#F1F5F9">Copia link</span>
+      <span v-if="s.show_print !== false" style="padding:5px 12px;border-radius:8px;font-size:11px;font-weight:600;color:#94A3B8;background:#F1F5F9">{{ t('Stampa scheda') }}</span>
+      <span v-if="s.show_share !== false" style="padding:5px 12px;border-radius:8px;font-size:11px;font-weight:600;color:#94A3B8;background:#F1F5F9">{{ t('WhatsApp') }}</span>
+      <span v-if="s.show_share !== false" style="padding:5px 12px;border-radius:8px;font-size:11px;font-weight:600;color:#94A3B8;background:#F1F5F9">{{ t('Email') }}</span>
+      <span v-if="s.show_share !== false" style="padding:5px 12px;border-radius:8px;font-size:11px;font-weight:600;color:#94A3B8;background:#F1F5F9">{{ t('Copia link') }}</span>
     </div>
   </div>
 </template>
 
 <script setup>
 import { ref, computed } from 'vue';
+import { t } from '@/i18n';
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 const s = computed(() => ({ ...props.settings }));
 const activeTab = ref('details');

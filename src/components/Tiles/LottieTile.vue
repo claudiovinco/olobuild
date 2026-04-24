@@ -8,13 +8,13 @@
         </div>
         <div v-if="loadingState === 'error'" style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,#1e293b,#0f172a);border-radius:8px;">
           <span style="font-size:28px;margin-bottom:6px;">&#9888;</span>
-          <span style="font-size:11px;color:#f87171;">Errore caricamento Lottie</span>
+          <span style="font-size:11px;color:#f87171;">{{ t('Errore caricamento Lottie') }}</span>
         </div>
       </div>
       <div v-else :style="placeholderStyle">
         <div style="font-size:40px;margin-bottom:8px;">&#127916;</div>
-        <div style="font-size:11px;color:#9ca3af;">Inserisci URL file .json Lottie</div>
-        <div style="font-size:9px;color:#6b7280;margin-top:4px;">Supporta LottieFiles.com</div>
+        <div style="font-size:11px;color:#9ca3af;">{{ t('Inserisci URL file .json Lottie') }}</div>
+        <div style="font-size:9px;color:#6b7280;margin-top:4px;">{{ t('Supporta LottieFiles.com') }}</div>
       </div>
       <!-- Trigger badge -->
       <div v-if="s.trigger !== 'autoplay'" style="position:absolute;bottom:4px;right:4px;background:rgba(0,0,0,0.6);color:#e5e7eb;font-size:9px;padding:1px 6px;border-radius:3px;">
@@ -26,6 +26,7 @@
 
 <script setup>
 import { computed, ref, watch, onMounted, onUnmounted } from 'vue';
+import { t } from '@/i18n';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },

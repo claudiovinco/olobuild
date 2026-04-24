@@ -1,8 +1,8 @@
 <template>
   <div>
     <div v-if="!wooActive" class="olo-woo-notice">
-      <span class="olo-woo-notice-icon">&#x1F6D2;</span>
-      <span>WooCommerce richiesto</span>
+      <span class="olo-woo-notice-icon">{{ t('&#x1F6D2;') }}</span>
+      <span>{{ t('WooCommerce richiesto') }}</span>
     </div>
     <div v-else>
       <!-- Cart table -->
@@ -10,10 +10,10 @@
         <thead>
           <tr>
             <th :style="thStyle" v-if="s.show_thumbnail" style="width:80px;"></th>
-            <th :style="thStyle">Prodotto</th>
-            <th :style="thStyle">Prezzo</th>
-            <th :style="thStyle" style="width:100px;">Quantità</th>
-            <th :style="thStyle">Subtotale</th>
+            <th :style="thStyle">{{ t('Prodotto') }}</th>
+            <th :style="thStyle">{{ t('Prezzo') }}</th>
+            <th :style="thStyle" style="width:100px;">{{ t('Quantità') }}</th>
+            <th :style="thStyle">{{ t('Subtotale') }}</th>
             <th :style="thStyle" style="width:40px;"></th>
           </tr>
         </thead>
@@ -42,7 +42,7 @@
             </td>
             <td :style="{ ...tdStyle, fontWeight: 600 }">&euro;{{ (item.price * item.qty).toFixed(2) }}</td>
             <td :style="tdStyle">
-              <span style="color:#EF4444;cursor:pointer;font-size:18px;">&times;</span>
+              <span style="color:#EF4444;cursor:pointer;font-size:18px;">{{ t('&times;') }}</span>
             </td>
           </tr>
         </tbody>
@@ -53,39 +53,40 @@
         <div style="display:flex;gap:8px;align-items:center;">
           <input
             type="text"
-            placeholder="Codice coupon"
+            :placeholder="t('Codice coupon')"
             :style="couponInputStyle"
             readonly
           />
-          <button :style="couponBtnStyle">Applica coupon</button>
+          <button :style="couponBtnStyle">{{ t('Applica coupon') }}</button>
         </div>
-        <button :style="updateBtnStyle">Aggiorna carrello</button>
+        <button :style="updateBtnStyle">{{ t('Aggiorna carrello') }}</button>
       </div>
 
       <!-- Totals -->
       <div v-if="s.show_totals" :style="totalsWrapStyle">
-        <h2 :style="totalsTitleStyle">Totali carrello</h2>
+        <h2 :style="totalsTitleStyle">{{ t('Totali carrello') }}</h2>
         <table :style="{ width: '100%', borderCollapse: 'collapse' }">
           <tr>
-            <th :style="totalsThStyle">Subtotale</th>
+            <th :style="totalsThStyle">{{ t('Subtotale') }}</th>
             <td :style="totalsTdStyle">&euro;{{ subtotal.toFixed(2) }}</td>
           </tr>
           <tr>
-            <th :style="totalsThStyle">Spedizione</th>
-            <td :style="totalsTdStyle">Spedizione gratuita</td>
+            <th :style="totalsThStyle">{{ t('Spedizione') }}</th>
+            <td :style="totalsTdStyle">{{ t('Spedizione gratuita') }}</td>
           </tr>
           <tr>
-            <th :style="{ ...totalsThStyle, fontSize: '16px' }">Totale</th>
+            <th :style="{ ...totalsThStyle, fontSize: '16px' }">{{ t('Totale') }}</th>
             <td :style="{ ...totalsTdStyle, fontSize: '18px', fontWeight: 700, color: s.heading_color }">&euro;{{ subtotal.toFixed(2) }}</td>
           </tr>
         </table>
-        <button :style="checkoutBtnStyle">Procedi al checkout</button>
+        <button :style="checkoutBtnStyle">{{ t('Procedi al checkout') }}</button>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { computed } from 'vue';
 
 const props = defineProps({

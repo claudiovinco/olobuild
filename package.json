@@ -11,6 +11,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@atlaskit/pragmatic-drag-and-drop": "^1.8.1",
+    "@atlaskit/pragmatic-drag-and-drop-auto-scroll": "^2.1.5",
+    "@atlaskit/pragmatic-drag-and-drop-flourish": "^2.0.14",
+    "@atlaskit/pragmatic-drag-and-drop-hitbox": "^1.1.0",
     "@tiptap/extension-color": "^3.19.0",
     "@tiptap/extension-highlight": "^3.19.0",
     "@tiptap/extension-text-align": "^3.19.0",

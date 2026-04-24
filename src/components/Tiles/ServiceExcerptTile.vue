@@ -2,12 +2,13 @@
   <div :style="wrapStyle">
     <h3 v-if="s.show_title && s.title_text" :style="{margin:'0 0 8px',fontSize:titleSz+'px',fontWeight:'700',color:s.title_color || 'var(--olo-color-text, #374151)'}">{{ s.title_text }}</h3>
     <p :style="{margin:0,fontSize:textSz+'px',color:s.text_color || 'var(--olo-color-text-muted, #9CA3AF)',lineHeight:s.line_height||'1.7',fontStyle:s.font_style||'italic',textAlign:s.text_align||'left'}">
-      Una breve descrizione della struttura che cattura l'essenza del luogo e invita il visitatore a scoprire di pi&ugrave;.
+      {{ t('Una breve descrizione della struttura che cattura l\'essenza del luogo e invita il visitatore a scoprire di pi&ugrave;.') }}
     </p>
   </div>
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { computed } from 'vue';
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 const defaults = {

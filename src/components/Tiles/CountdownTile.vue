@@ -2,7 +2,7 @@
   <div :style="wrapStyle">
     <!-- Badge evergreen -->
     <div v-if="isEvergreen" style="position:absolute;top:6px;right:8px;background:var(--olo-color-primary, #6366F1);color:#fff;font-size:10px;padding:2px 6px;border-radius:4px;z-index:2;">
-      &#9851; Evergreen
+      {{ t('&#9851; Evergreen') }}
     </div>
     <template v-if="!expired">
       <!-- Modalità inline -->
@@ -32,6 +32,7 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
+import { t } from '@/i18n';
 
 const defaults = {
   countdown_style: 'custom',

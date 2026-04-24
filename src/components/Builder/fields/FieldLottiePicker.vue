@@ -10,8 +10,8 @@
       <button
         @click="$emit('update:modelValue', '')"
         class="mb-absolute mb-top-1 mb-right-1 mb-bg-red-600 mb-text-white mb-rounded-full mb-w-5 mb-h-5 mb-text-xs mb-flex mb-items-center mb-justify-center mb-opacity-0 group-hover:mb-opacity-100 mb-transition-opacity"
-        title="Rimuovi"
-      >&times;</button>
+        :title="t('Rimuovi')"
+      >{{ t('&times;') }}</button>
     </div>
 
     <!-- Buttons -->
@@ -20,13 +20,13 @@
         @click="pickFromMedia"
         class="mb-flex-1 mb-py-1.5 mb-px-2 mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-md mb-text-xs mb-text-gray-300 hover:mb-bg-gray-600 mb-transition-colors"
       >
-        Media Library
+        {{ t('Media Library') }}
       </button>
       <button
         @click="showBrowser = true"
         class="mb-flex-1 mb-py-1.5 mb-px-2 mb-bg-purple-700 mb-border mb-border-purple-600 mb-rounded-md mb-text-xs mb-text-white hover:mb-bg-purple-600 mb-transition-colors"
       >
-        Sfoglia LottieFiles
+        {{ t('Sfoglia LottieFiles') }}
       </button>
     </div>
 
@@ -55,7 +55,7 @@
             <!-- Header -->
             <div class="mb-flex mb-items-center mb-justify-between mb-px-5 mb-py-3 mb-border-b mb-border-gray-700">
               <h3 class="mb-text-white mb-text-sm mb-font-semibold mb-m-0">Libreria Lottie Animations<span v-if="totalCount" class="mb-text-gray-500 mb-font-normal mb-ml-2">({{ totalCount.toLocaleString() }})</span></h3>
-              <button @click="showBrowser = false" class="mb-text-gray-400 hover:mb-text-white">&times;</button>
+              <button @click="showBrowser = false" class="mb-text-gray-400 hover:mb-text-white">{{ t('&times;') }}</button>
             </div>
 
             <!-- Search -->
@@ -65,7 +65,7 @@
                   v-model="searchQuery"
                   @keydown.enter="searchAnimations"
                   type="text"
-                  placeholder="Cerca animazioni... (es. loading, success, arrow, heart)"
+                  :placeholder="t('Cerca animazioni... (es. loading, success, arrow, heart)')"
                   class="mb-flex-1 mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-lg mb-px-3 mb-py-2 mb-text-sm mb-text-gray-200 mb-outline-none focus:mb-border-purple-500"
                 />
                 <button
@@ -98,7 +98,7 @@
             <div class="mb-flex-1 mb-overflow-y-auto mb-p-5">
               <div v-if="searching" class="mb-flex mb-items-center mb-justify-center mb-py-12">
                 <svg class="mb-animate-spin mb-text-purple-400" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
-                <span class="mb-ml-3 mb-text-gray-400 mb-text-sm">Ricerca in corso...</span>
+                <span class="mb-ml-3 mb-text-gray-400 mb-text-sm">{{ t('Ricerca in corso...') }}</span>
               </div>
 
               <div v-else-if="browserError" class="mb-text-center mb-py-12">
@@ -106,13 +106,13 @@
               </div>
 
               <div v-else-if="animations.length === 0 && hasSearched" class="mb-text-center mb-py-12">
-                <p class="mb-text-gray-500 mb-text-sm">Nessun risultato trovato. Prova un altro termine.</p>
+                <p class="mb-text-gray-500 mb-text-sm">{{ t('Nessun risultato trovato. Prova un altro termine.') }}</p>
               </div>
 
               <div v-else-if="animations.length === 0" class="mb-text-center mb-py-12">
                 <div class="mb-text-4xl mb-mb-3">&#127916;</div>
-                <p class="mb-text-gray-400 mb-text-sm">Cerca un'animazione o scegli una categoria</p>
-                <p class="mb-text-gray-600 mb-text-xs mb-mt-1">Le animazioni sono fornite da LottieFiles.com (Creative Commons)</p>
+                <p class="mb-text-gray-400 mb-text-sm">{{ t('Cerca un\'animazione o scegli una categoria') }}</p>
+                <p class="mb-text-gray-600 mb-text-xs mb-mt-1">{{ t('Le animazioni sono fornite da LottieFiles.com (Creative Commons)') }}</p>
               </div>
 
               <div v-else class="mb-grid mb-grid-cols-4 mb-gap-3">
@@ -145,7 +145,7 @@
                   :disabled="searching"
                   class="mb-px-4 mb-py-2 mb-bg-gray-700 mb-text-gray-300 mb-text-xs mb-rounded-lg hover:mb-bg-gray-600 disabled:mb-opacity-50 mb-transition-colors"
                 >
-                  Carica altri
+                  {{ t('Carica altri') }}
                 </button>
               </div>
             </div>
@@ -157,6 +157,7 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { ref, computed, watch, onMounted, onBeforeUnmount, nextTick } from 'vue';
 import { useToast } from '../../../composables/useToast.js';
 
@@ -205,7 +206,7 @@ onBeforeUnmount(() => { if (previewAnim) previewAnim.destroy(); });
 // ─── Media Library ───
 function pickFromMedia() {
   if (!window.wp || !window.wp.media) {
-    toast.error('Libreria Media di WordPress non disponibile.');
+    toast.error(t('Libreria Media di WordPress non disponibile.'));
     return;
   }
   const frame = wp.media({

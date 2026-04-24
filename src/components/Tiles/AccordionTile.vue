@@ -53,7 +53,7 @@
           <!-- Panel media -->
           <div v-if="panel.image || panel.video" class="olo-accordion-media" :style="mediaStyle">
             <img v-if="panel.image" :src="panel.image" alt="" class="olo-accordion-media-img" :style="{ borderRadius: (parseInt(s.media_radius) || 0) + 'px' }" />
-            <div v-else-if="panel.video" class="olo-accordion-media-video">&#x1F3AC; Video</div>
+            <div v-else-if="panel.video" class="olo-accordion-media-video">{{ t('&#x1F3AC; Video') }}</div>
           </div>
           <div
             class="olo-accordion-content"
@@ -70,6 +70,7 @@
 
 <script setup>
 import { ref, computed, watch } from 'vue';
+import { t } from '@/i18n';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },

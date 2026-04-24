@@ -14,7 +14,7 @@
           &larr; <span data-olo-editable="prev_label">{{ s.prev_label || 'Precedente' }}</span>
         </div>
         <div v-if="showTitle" :style="{ color: s.link_color || '#93C5FD', fontSize: '13px', fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }">
-          Titolo articolo precedente
+          {{ t('Titolo articolo precedente') }}
         </div>
       </div>
     </div>
@@ -26,7 +26,7 @@
           <span data-olo-editable="next_label">{{ s.next_label || 'Successivo' }}</span> &rarr;
         </div>
         <div v-if="showTitle" :style="{ color: s.link_color || '#93C5FD', fontSize: '13px', fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }">
-          Titolo articolo successivo
+          {{ t('Titolo articolo successivo') }}
         </div>
       </div>
       <div v-if="s.show_thumbnail" :style="thumbStyle" class="olo-postnav-thumb">
@@ -41,6 +41,7 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { computed } from 'vue';
 
 const defaults = {

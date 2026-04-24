@@ -34,12 +34,12 @@
 
     <!-- Arrows -->
     <template v-if="s.show_arrows && slides.length > slidesToShow">
-      <button class="olo-carousel-arrow olo-carousel-prev" :style="arrowStyle" aria-label="Precedente" @click="prevSlide">
+      <button class="olo-carousel-arrow olo-carousel-prev" :style="arrowStyle" :aria-label="t('Precedente')" @click="prevSlide">
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
           <path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </button>
-      <button class="olo-carousel-arrow olo-carousel-next" :style="arrowStyle" aria-label="Successivo" @click="nextSlide">
+      <button class="olo-carousel-arrow olo-carousel-next" :style="arrowStyle" :aria-label="t('Successivo')" @click="nextSlide">
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
           <path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
@@ -59,6 +59,7 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { computed, ref } from 'vue';
 
 const props = defineProps({

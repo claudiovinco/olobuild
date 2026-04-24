@@ -1,6 +1,6 @@
 <template>
   <div style="padding:10px;background:#f9fafb;border-radius:8px;min-height:60px;">
-    <div style="font-size:13px;font-weight:700;color:#374151;margin-bottom:10px;">Visti di recente</div>
+    <div style="font-size:13px;font-weight:700;color:#374151;margin-bottom:10px;">{{ t('Visti di recente') }}</div>
     <div :style="gridStyle">
       <div
         v-for="i in cols"
@@ -32,6 +32,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { t } from '@/i18n';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },

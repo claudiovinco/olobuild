@@ -1,27 +1,28 @@
 <template>
   <div>
     <div v-if="!wooActive" class="olo-woo-notice">
-      <span class="olo-woo-notice-icon">&#x1F6D2;</span>
-      <span>WooCommerce richiesto</span>
+      <span class="olo-woo-notice-icon">{{ t('&#x1F6D2;') }}</span>
+      <span>{{ t('WooCommerce richiesto') }}</span>
     </div>
     <div v-else :style="wrapStyle">
       <div v-if="s.show_success" :style="successStyle">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-        <span>Prodotto aggiunto al carrello con successo.</span>
+        <span>{{ t('Prodotto aggiunto al carrello con successo.') }}</span>
       </div>
       <div v-if="s.show_error" :style="errorStyle">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
-        <span>Si e verificato un errore durante l'elaborazione.</span>
+        <span>{{ t('Si e verificato un errore durante l\'elaborazione.') }}</span>
       </div>
       <div v-if="s.show_info" :style="infoStyle">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-        <span>Il codice coupon e stato applicato.</span>
+        <span>{{ t('Il codice coupon e stato applicato.') }}</span>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { computed } from 'vue';
 
 const props = defineProps({

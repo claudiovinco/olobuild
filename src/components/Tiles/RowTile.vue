@@ -1,7 +1,7 @@
 <template>
   <div class="olo-row-tile">
     <div class="olo-row-tile-label">
-      <span>Row</span>
+      <span>{{ t('Row') }}</span>
       <span class="olo-row-tile-layout">{{ s.layout }}</span>
     </div>
   </div>
@@ -9,6 +9,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { t } from '@/i18n';
 
 const defaults = {
   layout: '50-50',

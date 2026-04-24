@@ -11,7 +11,7 @@
       v-else
       style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:var(--olo-color-muted, #F3F4F6);color:var(--olo-color-text-muted, #9CA3AF);font-size:13px;"
     >
-      Seleziona un'immagine
+      {{ t('Seleziona un\'immagine') }}
     </div>
     <!-- Markers -->
     <div
@@ -35,6 +35,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { t } from '@/i18n';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },

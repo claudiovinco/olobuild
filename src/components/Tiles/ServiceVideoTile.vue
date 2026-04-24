@@ -11,10 +11,10 @@
     <!-- Info badges -->
     <div style="position:absolute;bottom:8px;left:8px;display:flex;gap:4px;z-index:3">
       <span :style="badgeStyle">Video {{ s.video_slot || '1' }}</span>
-      <span v-if="s.loop" :style="badgeStyle">Loop</span>
-      <span v-if="s.muted" :style="badgeStyle">Muto</span>
-      <span v-if="s.autoplay" :style="badgeStyle">Auto</span>
-      <span v-if="s.controls" :style="badgeStyle">Comandi</span>
+      <span v-if="s.loop" :style="badgeStyle">{{ t('Loop') }}</span>
+      <span v-if="s.muted" :style="badgeStyle">{{ t('Muto') }}</span>
+      <span v-if="s.autoplay" :style="badgeStyle">{{ t('Auto') }}</span>
+      <span v-if="s.controls" :style="badgeStyle">{{ t('Comandi') }}</span>
     </div>
     <!-- Aspect ratio label -->
     <div style="position:absolute;top:8px;right:8px;z-index:3">
@@ -24,6 +24,7 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { computed } from 'vue';
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 

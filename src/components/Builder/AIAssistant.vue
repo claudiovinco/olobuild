@@ -16,12 +16,12 @@
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mb-text-purple-400">
                 <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
               </svg>
-              <h3 class="mb-text-white mb-text-sm mb-font-semibold mb-m-0">Assistente AI</h3>
+              <h3 class="mb-text-white mb-text-sm mb-font-semibold mb-m-0">{{ t('Assistente AI') }}</h3>
             </div>
             <button
               @click="close"
               class="mb-text-gray-400 hover:mb-text-white mb-transition-colors"
-              aria-label="Chiudi"
+              :aria-label="t('Chiudi')"
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             </button>
@@ -51,43 +51,43 @@
             <div v-if="activeTab === 'generate'" class="mb-space-y-4">
               <div class="mb-grid mb-grid-cols-3 mb-gap-3">
                 <div>
-                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Tipo</label>
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Tipo') }}</label>
                   <select v-model="gen.type" class="mb-w-full mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-lg mb-px-3 mb-py-2 mb-text-sm mb-text-gray-200 mb-outline-none focus:mb-border-purple-500">
-                    <option value="headline">Titolo</option>
-                    <option value="paragraph">Paragrafo</option>
-                    <option value="list">Lista</option>
-                    <option value="cta">Call to Action</option>
-                    <option value="seo_description">Meta Description SEO</option>
+                    <option value="headline">{{ t('Titolo') }}</option>
+                    <option value="paragraph">{{ t('Paragrafo') }}</option>
+                    <option value="list">{{ t('Lista') }}</option>
+                    <option value="cta">{{ t('Call to Action') }}</option>
+                    <option value="seo_description">{{ t('Meta Description SEO') }}</option>
                   </select>
                 </div>
                 <div>
-                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Tono</label>
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Tono') }}</label>
                   <select v-model="gen.tone" class="mb-w-full mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-lg mb-px-3 mb-py-2 mb-text-sm mb-text-gray-200 mb-outline-none focus:mb-border-purple-500">
-                    <option value="professionale">Professionale</option>
-                    <option value="creativo">Creativo</option>
-                    <option value="informale">Informale</option>
-                    <option value="formale">Formale</option>
+                    <option value="professionale">{{ t('Professionale') }}</option>
+                    <option value="creativo">{{ t('Creativo') }}</option>
+                    <option value="informale">{{ t('Informale') }}</option>
+                    <option value="formale">{{ t('Formale') }}</option>
                   </select>
                 </div>
                 <div>
-                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Lingua</label>
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Lingua') }}</label>
                   <select v-model="gen.language" class="mb-w-full mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-lg mb-px-3 mb-py-2 mb-text-sm mb-text-gray-200 mb-outline-none focus:mb-border-purple-500">
-                    <option value="it">Italiano</option>
-                    <option value="en">English</option>
-                    <option value="de">Deutsch</option>
-                    <option value="fr">Fran&ccedil;ais</option>
-                    <option value="es">Espa&ntilde;ol</option>
+                    <option value="it">{{ t('Italiano') }}</option>
+                    <option value="en">{{ t('English') }}</option>
+                    <option value="de">{{ t('Deutsch') }}</option>
+                    <option value="fr">{{ t('Fran&ccedil;ais') }}</option>
+                    <option value="es">{{ t('Espa&ntilde;ol') }}</option>
                   </select>
                 </div>
               </div>
 
               <div>
-                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Descrivi cosa vuoi generare...</label>
+                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Descrivi cosa vuoi generare...') }}</label>
                 <textarea
                   v-model="gen.prompt"
                   rows="3"
                   class="mb-w-full mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-lg mb-px-3 mb-py-2 mb-text-sm mb-text-gray-200 mb-outline-none focus:mb-border-purple-500 mb-resize-none"
-                  placeholder="Es: Descrizione per un hotel di lusso con vista mare..."
+                  :placeholder="t('Es: Descrizione per un hotel di lusso con vista mare...')"
                 ></textarea>
               </div>
 
@@ -117,26 +117,26 @@
                   :disabled="loading.generate"
                   class="mb-px-4 mb-py-2 mb-bg-gray-700 mb-text-gray-300 mb-text-sm mb-rounded-lg hover:mb-bg-gray-600 disabled:mb-opacity-50 mb-transition-colors"
                 >
-                  Rigenera
+                  {{ t('Rigenera') }}
                 </button>
               </div>
 
               <!-- Risultato -->
               <div v-if="result.generate" class="mb-bg-gray-900 mb-border mb-border-gray-700 mb-rounded-lg mb-p-4">
-                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-500 mb-mb-2">Risultato:</label>
+                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-500 mb-mb-2">{{ t('Risultato:') }}</label>
                 <div class="mb-text-sm mb-text-gray-200 mb-whitespace-pre-wrap mb-leading-relaxed">{{ result.generate }}</div>
                 <div class="mb-flex mb-gap-2 mb-mt-3">
                   <button
                     @click="insertGeneratedText(result.generate)"
                     class="mb-px-3 mb-py-1.5 mb-bg-green-600 mb-text-white mb-text-xs mb-font-medium mb-rounded-lg hover:mb-bg-green-500 mb-transition-colors"
                   >
-                    Inserisci nella tile
+                    {{ t('Inserisci nella tile') }}
                   </button>
                   <button
                     @click="copyToClipboard(result.generate)"
                     class="mb-px-3 mb-py-1.5 mb-bg-gray-700 mb-text-gray-300 mb-text-xs mb-rounded-lg hover:mb-bg-gray-600 mb-transition-colors"
                   >
-                    Copia
+                    {{ t('Copia') }}
                   </button>
                 </div>
               </div>
@@ -145,17 +145,17 @@
             <!-- ====== TAB: Migliora Testo ====== -->
             <div v-if="activeTab === 'improve'" class="mb-space-y-4">
               <div>
-                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Testo da migliorare</label>
+                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Testo da migliorare') }}</label>
                 <textarea
                   v-model="improve.text"
                   rows="4"
                   class="mb-w-full mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-lg mb-px-3 mb-py-2 mb-text-sm mb-text-gray-200 mb-outline-none focus:mb-border-purple-500 mb-resize-none"
-                  placeholder="Incolla qui il testo da migliorare..."
+                  :placeholder="t('Incolla qui il testo da migliorare...')"
                 ></textarea>
               </div>
 
               <div>
-                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-2">Azione</label>
+                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-2">{{ t('Azione') }}</label>
                 <div class="mb-flex mb-flex-wrap mb-gap-2">
                   <button
                     v-for="action in improveActions"
@@ -181,20 +181,20 @@
 
               <!-- Risultato -->
               <div v-if="result.improve" class="mb-bg-gray-900 mb-border mb-border-gray-700 mb-rounded-lg mb-p-4">
-                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-500 mb-mb-2">Risultato:</label>
+                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-500 mb-mb-2">{{ t('Risultato:') }}</label>
                 <div class="mb-text-sm mb-text-gray-200 mb-whitespace-pre-wrap mb-leading-relaxed">{{ result.improve }}</div>
                 <div class="mb-flex mb-gap-2 mb-mt-3">
                   <button
                     @click="insertGeneratedText(result.improve)"
                     class="mb-px-3 mb-py-1.5 mb-bg-green-600 mb-text-white mb-text-xs mb-font-medium mb-rounded-lg hover:mb-bg-green-500 mb-transition-colors"
                   >
-                    Applica alla tile
+                    {{ t('Applica alla tile') }}
                   </button>
                   <button
                     @click="copyToClipboard(result.improve)"
                     class="mb-px-3 mb-py-1.5 mb-bg-gray-700 mb-text-gray-300 mb-text-xs mb-rounded-lg hover:mb-bg-gray-600 mb-transition-colors"
                   >
-                    Copia
+                    {{ t('Copia') }}
                   </button>
                 </div>
               </div>
@@ -202,31 +202,31 @@
 
             <!-- ====== TAB: Genera Immagine ====== -->
             <div v-if="activeTab === 'image'" class="mb-space-y-4">
-              <p class="mb-text-[10px] mb-text-amber-400/80 mb-m-0 mb-mb-1">Richiede chiave OpenAI separata (configurabile nelle impostazioni AI)</p>
+              <p class="mb-text-[10px] mb-text-amber-400/80 mb-m-0 mb-mb-1">{{ t('Richiede chiave OpenAI separata (configurabile nelle impostazioni AI)') }}</p>
               <div>
-                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Descrivi l'immagine da generare...</label>
+                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Descrivi l\'immagine da generare...') }}</label>
                 <textarea
                   v-model="img.prompt"
                   rows="3"
                   class="mb-w-full mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-lg mb-px-3 mb-py-2 mb-text-sm mb-text-gray-200 mb-outline-none focus:mb-border-purple-500 mb-resize-none"
-                  placeholder="Es: Un paesaggio montano al tramonto con un lago cristallino..."
+                  :placeholder="t('Es: Un paesaggio montano al tramonto con un lago cristallino...')"
                 ></textarea>
               </div>
 
               <div class="mb-grid mb-grid-cols-2 mb-gap-3">
                 <div>
-                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Dimensione</label>
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Dimensione') }}</label>
                   <select v-model="img.size" class="mb-w-full mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-lg mb-px-3 mb-py-2 mb-text-sm mb-text-gray-200 mb-outline-none focus:mb-border-purple-500">
-                    <option value="1024x1024">Quadrata (1024x1024)</option>
-                    <option value="1792x1024">Orizzontale (1792x1024)</option>
-                    <option value="1024x1792">Verticale (1024x1792)</option>
+                    <option value="1024x1024">{{ t('Quadrata (1024x1024)') }}</option>
+                    <option value="1792x1024">{{ t('Orizzontale (1792x1024)') }}</option>
+                    <option value="1024x1792">{{ t('Verticale (1024x1792)') }}</option>
                   </select>
                 </div>
                 <div>
-                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Stile</label>
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Stile') }}</label>
                   <select v-model="img.style" class="mb-w-full mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-lg mb-px-3 mb-py-2 mb-text-sm mb-text-gray-200 mb-outline-none focus:mb-border-purple-500">
-                    <option value="vivid">Vivido</option>
-                    <option value="natural">Naturale</option>
+                    <option value="vivid">{{ t('Vivido') }}</option>
+                    <option value="natural">{{ t('Naturale') }}</option>
                   </select>
                 </div>
               </div>
@@ -248,7 +248,7 @@
               <div v-if="result.image" class="mb-bg-gray-900 mb-border mb-border-gray-700 mb-rounded-lg mb-p-4">
                 <img
                   :src="result.image.url"
-                  alt="Immagine generata dall'AI"
+                  :alt="t('Immagine generata dall\'AI')"
                   class="mb-w-full mb-rounded-lg mb-mb-3"
                   style="max-height:400px;object-fit:contain"
                 />
@@ -258,13 +258,13 @@
                     @click="insertImageInTile(result.image)"
                     class="mb-px-3 mb-py-1.5 mb-bg-green-600 mb-text-white mb-text-xs mb-font-medium mb-rounded-lg hover:mb-bg-green-500 mb-transition-colors"
                   >
-                    Inserisci nella tile
+                    {{ t('Inserisci nella tile') }}
                   </button>
                   <button
                     @click="copyToClipboard(result.image.url)"
                     class="mb-px-3 mb-py-1.5 mb-bg-gray-700 mb-text-gray-300 mb-text-xs mb-rounded-lg hover:mb-bg-gray-600 mb-transition-colors"
                   >
-                    Copia URL
+                    {{ t('Copia URL') }}
                   </button>
                 </div>
               </div>
@@ -273,23 +273,23 @@
             <!-- ====== TAB: Traduci ====== -->
             <div v-if="activeTab === 'translate'" class="mb-space-y-4">
               <div>
-                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Testo da tradurre</label>
+                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Testo da tradurre') }}</label>
                 <textarea
                   v-model="translate.text"
                   rows="4"
                   class="mb-w-full mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-lg mb-px-3 mb-py-2 mb-text-sm mb-text-gray-200 mb-outline-none focus:mb-border-purple-500 mb-resize-none"
-                  placeholder="Incolla il testo da tradurre..."
+                  :placeholder="t('Incolla il testo da tradurre...')"
                 ></textarea>
               </div>
 
               <div>
-                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Lingua di destinazione</label>
+                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Lingua di destinazione') }}</label>
                 <select v-model="translate.targetLanguage" class="mb-w-full mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-lg mb-px-3 mb-py-2 mb-text-sm mb-text-gray-200 mb-outline-none focus:mb-border-purple-500">
-                  <option value="it">Italiano</option>
-                  <option value="en">English</option>
-                  <option value="de">Deutsch</option>
-                  <option value="fr">Fran&ccedil;ais</option>
-                  <option value="es">Espa&ntilde;ol</option>
+                  <option value="it">{{ t('Italiano') }}</option>
+                  <option value="en">{{ t('English') }}</option>
+                  <option value="de">{{ t('Deutsch') }}</option>
+                  <option value="fr">{{ t('Fran&ccedil;ais') }}</option>
+                  <option value="es">{{ t('Espa&ntilde;ol') }}</option>
                 </select>
               </div>
 
@@ -303,20 +303,20 @@
 
               <!-- Risultato -->
               <div v-if="result.translate" class="mb-bg-gray-900 mb-border mb-border-gray-700 mb-rounded-lg mb-p-4">
-                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-500 mb-mb-2">Traduzione:</label>
+                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-500 mb-mb-2">{{ t('Traduzione:') }}</label>
                 <div class="mb-text-sm mb-text-gray-200 mb-whitespace-pre-wrap mb-leading-relaxed">{{ result.translate }}</div>
                 <div class="mb-flex mb-gap-2 mb-mt-3">
                   <button
                     @click="insertGeneratedText(result.translate)"
                     class="mb-px-3 mb-py-1.5 mb-bg-green-600 mb-text-white mb-text-xs mb-font-medium mb-rounded-lg hover:mb-bg-green-500 mb-transition-colors"
                   >
-                    Applica alla tile
+                    {{ t('Applica alla tile') }}
                   </button>
                   <button
                     @click="copyToClipboard(result.translate)"
                     class="mb-px-3 mb-py-1.5 mb-bg-gray-700 mb-text-gray-300 mb-text-xs mb-rounded-lg hover:mb-bg-gray-600 mb-transition-colors"
                   >
-                    Copia
+                    {{ t('Copia') }}
                   </button>
                 </div>
               </div>
@@ -325,32 +325,32 @@
             <!-- ====== TAB: Genera Layout ====== -->
             <div v-if="activeTab === 'layout'" class="mb-space-y-4">
               <div>
-                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Descrivi il layout da generare...</label>
+                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Descrivi il layout da generare...') }}</label>
                 <textarea
                   v-model="layout.prompt"
                   rows="3"
                   class="mb-w-full mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-lg mb-px-3 mb-py-2 mb-text-sm mb-text-gray-200 mb-outline-none focus:mb-border-purple-500 mb-resize-none"
-                  placeholder="Es: Sezione hero con titolo grande, sottotitolo e due pulsanti CTA affiancati..."
+                  :placeholder="t('Es: Sezione hero con titolo grande, sottotitolo e due pulsanti CTA affiancati...')"
                 ></textarea>
               </div>
 
               <div class="mb-grid mb-grid-cols-2 mb-gap-3">
                 <div>
-                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Stile</label>
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Stile') }}</label>
                   <select v-model="layout.style" class="mb-w-full mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-lg mb-px-3 mb-py-2 mb-text-sm mb-text-gray-200 mb-outline-none focus:mb-border-purple-500">
-                    <option value="corporate">Corporate</option>
-                    <option value="creative">Creativo</option>
-                    <option value="minimal">Minimale</option>
-                    <option value="bold">Bold / Impattante</option>
+                    <option value="corporate">{{ t('Corporate') }}</option>
+                    <option value="creative">{{ t('Creativo') }}</option>
+                    <option value="minimal">{{ t('Minimale') }}</option>
+                    <option value="bold">{{ t('Bold / Impattante') }}</option>
                   </select>
                 </div>
                 <div>
-                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Colonne</label>
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Colonne') }}</label>
                   <select v-model="layout.columns" class="mb-w-full mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-lg mb-px-3 mb-py-2 mb-text-sm mb-text-gray-200 mb-outline-none focus:mb-border-purple-500">
-                    <option value="1">1 colonna</option>
-                    <option value="2">2 colonne</option>
-                    <option value="3">3 colonne</option>
-                    <option value="4">4 colonne</option>
+                    <option value="1">{{ t('1 colonna') }}</option>
+                    <option value="2">{{ t('2 colonne') }}</option>
+                    <option value="3">{{ t('3 colonne') }}</option>
+                    <option value="4">{{ t('4 colonne') }}</option>
                   </select>
                 </div>
               </div>
@@ -369,20 +369,20 @@
               </div>
 
               <div v-if="result.layout" class="mb-bg-gray-900 mb-border mb-border-gray-700 mb-rounded-lg mb-p-4">
-                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-500 mb-mb-2">Struttura generata:</label>
+                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-500 mb-mb-2">{{ t('Struttura generata:') }}</label>
                 <div class="mb-text-xs mb-text-gray-300 mb-font-mono mb-whitespace-pre-wrap mb-max-h-48 mb-overflow-y-auto mb-mb-3">{{ JSON.stringify(result.layout.structure, null, 2) }}</div>
                 <div class="mb-flex mb-gap-2">
                   <button
                     @click="insertLayout(result.layout.structure)"
                     class="mb-px-3 mb-py-1.5 mb-bg-green-600 mb-text-white mb-text-xs mb-font-medium mb-rounded-lg hover:mb-bg-green-500 mb-transition-colors"
                   >
-                    Inserisci nel builder
+                    {{ t('Inserisci nel builder') }}
                   </button>
                   <button
                     @click="copyToClipboard(JSON.stringify(result.layout.structure, null, 2))"
                     class="mb-px-3 mb-py-1.5 mb-bg-gray-700 mb-text-gray-300 mb-text-xs mb-rounded-lg hover:mb-bg-gray-600 mb-transition-colors"
                   >
-                    Copia JSON
+                    {{ t('Copia JSON') }}
                   </button>
                 </div>
               </div>
@@ -390,17 +390,17 @@
 
             <!-- ====== TAB: Suggerisci Stile ====== -->
             <div v-if="activeTab === 'style'" class="mb-space-y-4">
-              <p class="mb-text-xs mb-text-gray-400 mb-m-0">Analizza i colori e font attuali del sito e suggerisce palette alternative armoniche.</p>
+              <p class="mb-text-xs mb-text-gray-400 mb-m-0">{{ t('Analizza i colori e font attuali del sito e suggerisce palette alternative armoniche.') }}</p>
 
               <div>
-                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Tipo di palette</label>
+                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Tipo di palette') }}</label>
                 <select v-model="styleSuggest.palette" class="mb-w-full mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-lg mb-px-3 mb-py-2 mb-text-sm mb-text-gray-200 mb-outline-none focus:mb-border-purple-500">
-                  <option value="auto">Automatica (analisi colori attuali)</option>
-                  <option value="warm">Toni caldi</option>
-                  <option value="cool">Toni freddi</option>
-                  <option value="pastel">Pastello</option>
-                  <option value="dark">Dark mode</option>
-                  <option value="vibrant">Vivace / Bold</option>
+                  <option value="auto">{{ t('Automatica (analisi colori attuali)') }}</option>
+                  <option value="warm">{{ t('Toni caldi') }}</option>
+                  <option value="cool">{{ t('Toni freddi') }}</option>
+                  <option value="pastel">{{ t('Pastello') }}</option>
+                  <option value="dark">{{ t('Dark mode') }}</option>
+                  <option value="vibrant">{{ t('Vivace / Bold') }}</option>
                 </select>
               </div>
 
@@ -429,7 +429,7 @@
                     @click="applyStyleSuggestion(suggestion)"
                     class="mb-mt-2 mb-px-3 mb-py-1.5 mb-bg-purple-600 mb-text-white mb-text-xs mb-font-medium mb-rounded-lg hover:mb-bg-purple-500 mb-transition-colors"
                   >
-                    Applica palette
+                    {{ t('Applica palette') }}
                   </button>
                 </div>
               </div>
@@ -437,10 +437,10 @@
 
             <!-- ====== TAB: Alt Text SEO ====== -->
             <div v-if="activeTab === 'alt'" class="mb-space-y-4">
-              <p class="mb-text-xs mb-text-gray-400 mb-m-0">Genera alt text SEO-friendly per le immagini. Inserisci l'URL di un'immagine o seleziona una tile immagine.</p>
+              <p class="mb-text-xs mb-text-gray-400 mb-m-0">{{ t('Genera alt text SEO-friendly per le immagini. Inserisci l\'URL di un\'immagine o seleziona una tile immagine.') }}</p>
 
               <div>
-                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">URL immagine</label>
+                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('URL immagine') }}</label>
                 <div class="mb-flex mb-gap-2">
                   <input
                     v-model="alt.imageUrl"
@@ -452,19 +452,19 @@
                     @click="fillImageUrlFromTile"
                     class="mb-px-3 mb-py-2 mb-bg-gray-700 mb-text-gray-300 mb-text-xs mb-rounded-lg hover:mb-bg-gray-600 mb-border mb-border-gray-600 mb-transition-colors mb-whitespace-nowrap"
                   >
-                    Da tile
+                    {{ t('Da tile') }}
                   </button>
                 </div>
               </div>
 
               <div>
-                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Lingua</label>
+                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Lingua') }}</label>
                 <select v-model="alt.language" class="mb-w-full mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-lg mb-px-3 mb-py-2 mb-text-sm mb-text-gray-200 mb-outline-none focus:mb-border-purple-500">
-                  <option value="it">Italiano</option>
-                  <option value="en">English</option>
-                  <option value="de">Deutsch</option>
-                  <option value="fr">Fran&ccedil;ais</option>
-                  <option value="es">Espa&ntilde;ol</option>
+                  <option value="it">{{ t('Italiano') }}</option>
+                  <option value="en">{{ t('English') }}</option>
+                  <option value="de">{{ t('Deutsch') }}</option>
+                  <option value="fr">{{ t('Fran&ccedil;ais') }}</option>
+                  <option value="es">{{ t('Espa&ntilde;ol') }}</option>
                 </select>
               </div>
 
@@ -477,20 +477,20 @@
               </button>
 
               <div v-if="result.alt" class="mb-bg-gray-900 mb-border mb-border-gray-700 mb-rounded-lg mb-p-4">
-                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-500 mb-mb-2">Alt text generato:</label>
+                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-500 mb-mb-2">{{ t('Alt text generato:') }}</label>
                 <div class="mb-text-sm mb-text-gray-200 mb-leading-relaxed">{{ result.alt }}</div>
                 <div class="mb-flex mb-gap-2 mb-mt-3">
                   <button
                     @click="applyAltText(result.alt)"
                     class="mb-px-3 mb-py-1.5 mb-bg-green-600 mb-text-white mb-text-xs mb-font-medium mb-rounded-lg hover:mb-bg-green-500 mb-transition-colors"
                   >
-                    Applica alla tile
+                    {{ t('Applica alla tile') }}
                   </button>
                   <button
                     @click="copyToClipboard(result.alt)"
                     class="mb-px-3 mb-py-1.5 mb-bg-gray-700 mb-text-gray-300 mb-text-xs mb-rounded-lg hover:mb-bg-gray-600 mb-transition-colors"
                   >
-                    Copia
+                    {{ t('Copia') }}
                   </button>
                 </div>
               </div>
@@ -499,22 +499,22 @@
             <!-- ====== TAB: Genera CSS ====== -->
             <div v-if="activeTab === 'css'" class="mb-space-y-4">
               <div>
-                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Descrivi lo stile CSS che vuoi generare...</label>
+                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Descrivi lo stile CSS che vuoi generare...') }}</label>
                 <textarea
                   v-model="css.prompt"
                   rows="3"
                   class="mb-w-full mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-lg mb-px-3 mb-py-2 mb-text-sm mb-text-gray-200 mb-outline-none focus:mb-border-purple-500 mb-resize-none"
-                  placeholder="Es: Effetto glassmorphism con sfondo sfocato e bordo semi-trasparente..."
+                  :placeholder="t('Es: Effetto glassmorphism con sfondo sfocato e bordo semi-trasparente...')"
                 ></textarea>
               </div>
 
               <div>
-                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Selettore CSS (opzionale)</label>
+                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Selettore CSS (opzionale)') }}</label>
                 <input
                   v-model="css.selector"
                   type="text"
                   class="mb-w-full mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-lg mb-px-3 mb-py-2 mb-text-sm mb-text-gray-200 mb-outline-none focus:mb-border-purple-500"
-                  placeholder=".mia-classe oppure lascia vuoto per stile generico"
+                  :placeholder="t('.mia-classe oppure lascia vuoto per stile generico')"
                 />
               </div>
 
@@ -527,20 +527,20 @@
               </button>
 
               <div v-if="result.css" class="mb-bg-gray-900 mb-border mb-border-gray-700 mb-rounded-lg mb-p-4">
-                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-500 mb-mb-2">CSS generato:</label>
+                <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-500 mb-mb-2">{{ t('CSS generato:') }}</label>
                 <pre class="mb-text-xs mb-text-green-300 mb-font-mono mb-whitespace-pre-wrap mb-bg-gray-950 mb-rounded-lg mb-p-3 mb-m-0 mb-max-h-48 mb-overflow-y-auto">{{ result.css }}</pre>
                 <div class="mb-flex mb-gap-2 mb-mt-3">
                   <button
                     @click="applyCSSToTile(result.css)"
                     class="mb-px-3 mb-py-1.5 mb-bg-green-600 mb-text-white mb-text-xs mb-font-medium mb-rounded-lg hover:mb-bg-green-500 mb-transition-colors"
                   >
-                    Applica alla tile
+                    {{ t('Applica alla tile') }}
                   </button>
                   <button
                     @click="copyToClipboard(result.css)"
                     class="mb-px-3 mb-py-1.5 mb-bg-gray-700 mb-text-gray-300 mb-text-xs mb-rounded-lg hover:mb-bg-gray-600 mb-transition-colors"
                   >
-                    Copia
+                    {{ t('Copia') }}
                   </button>
                 </div>
               </div>
@@ -582,6 +582,7 @@ import { ref, reactive, onMounted, onBeforeUnmount, watch } from 'vue';
 import { useBuilderStore } from '@/stores/builder';
 import { useTilesStore } from '@/stores/tiles';
 import { useToast } from '@/composables/useToast.js';
+import { t } from '@/i18n';
 
 const builderStore = useBuilderStore();
 const tilesStore = useTilesStore();
@@ -806,7 +807,7 @@ async function generateLayout() {
 
 function insertLayout(structure) {
   if (!structure || !Array.isArray(structure)) {
-    toast.error('Struttura layout non valida.');
+    toast.error(t('Struttura layout non valida.'));
     return;
   }
   // Importa la struttura nel builder come nuove tile a livello root
@@ -824,9 +825,9 @@ function insertLayout(structure) {
     const tilesWithIds = assignIds(structure);
     tilesWithIds.forEach(tile => tilesStore.addTile(tile));
     builderStore.isDirty = true;
-    toast.success('Layout inserito nel builder');
+    toast.success(t('Layout inserito nel builder'));
   } catch (e) {
-    toast.error('Errore nell\'inserimento: ' + e.message);
+    toast.error(t('Errore nell\'inserimento') + ': ' + e.message);
   }
 }
 
@@ -874,7 +875,7 @@ function applyStyleSuggestion(suggestion) {
   if (colors[4]) lines.push('--olo-color-accent: ' + colors[4] + ';');
   const cssVars = ':root {\n  ' + lines.join('\n  ') + '\n}';
   copyToClipboard(cssVars);
-  toast.success('Palette copiata come CSS custom properties. Incollala nel Custom CSS del sito.');
+  toast.success(t('Palette copiata come CSS custom properties. Incollala nel Custom CSS del sito.'));
 }
 
 // ─── Alt Text SEO ───
@@ -882,7 +883,7 @@ function applyStyleSuggestion(suggestion) {
 function fillImageUrlFromTile() {
   const tileId = builderStore.selectedTileId;
   if (!tileId) {
-    toast.error('Seleziona una tile immagine.');
+    toast.error(t('Seleziona una tile immagine.'));
     return;
   }
   const tile = tilesStore.getTileById(tileId);
@@ -894,7 +895,7 @@ function fillImageUrlFromTile() {
       return;
     }
   }
-  toast.error('Nessun campo immagine trovato nella tile selezionata.');
+  toast.error(t('Nessun campo immagine trovato nella tile selezionata.'));
 }
 
 async function generateAltText() {
@@ -918,7 +919,7 @@ async function generateAltText() {
 function applyAltText(text) {
   const tileId = builderStore.selectedTileId;
   if (!tileId) {
-    toast.error('Seleziona una tile immagine.');
+    toast.error(t('Seleziona una tile immagine.'));
     return;
   }
   const tile = tilesStore.getTileById(tileId);
@@ -933,7 +934,7 @@ function applyAltText(text) {
   }
   tilesStore.updateTile(tileId, { [field]: text });
   builderStore.isDirty = true;
-  toast.success('Alt text applicato alla tile');
+  toast.success(t('Alt text applicato alla tile'));
 }
 
 // ─── Generate CSS ───
@@ -959,7 +960,7 @@ async function generateCSS() {
 function applyCSSToTile(cssCode) {
   const tileId = builderStore.selectedTileId;
   if (!tileId) {
-    toast.error('Seleziona una tile per applicare il CSS personalizzato.');
+    toast.error(t('Seleziona una tile per applicare il CSS personalizzato.'));
     return;
   }
   const tile = tilesStore.getTileById(tileId);
@@ -969,7 +970,7 @@ function applyCSSToTile(cssCode) {
   const newCss = existing ? existing + '\n\n' + cssCode : cssCode;
   tilesStore.updateTileAdvanced(tileId, { custom_css: newCss });
   builderStore.isDirty = true;
-  toast.success('CSS applicato alla tile');
+  toast.success(t('CSS applicato alla tile'));
 }
 
 // ─── Insert into tile ───
@@ -995,19 +996,19 @@ function getSelectedTileTextField() {
 function insertGeneratedText(text) {
   const tileId = builderStore.selectedTileId;
   if (!tileId) {
-    toast.error('Nessuna tile selezionata. Seleziona una tile prima di inserire il testo.');
+    toast.error(t('Nessuna tile selezionata. Seleziona una tile prima di inserire il testo.'));
     return;
   }
   const field = getSelectedTileTextField();
   tilesStore.updateTile(tileId, { [field]: text });
   builderStore.isDirty = true;
-  toast.success('Testo inserito nella tile');
+  toast.success(t('Testo inserito nella tile'));
 }
 
 function insertImageInTile(imageData) {
   const tileId = builderStore.selectedTileId;
   if (!tileId) {
-    toast.error('Nessuna tile selezionata. Seleziona una tile immagine prima di inserire.');
+    toast.error(t('Nessuna tile selezionata. Seleziona una tile immagine prima di inserire.'));
     return;
   }
   const tile = tilesStore.getTileById(tileId);
@@ -1031,7 +1032,7 @@ function insertImageInTile(imageData) {
 
   tilesStore.updateTile(tileId, updates);
   builderStore.isDirty = true;
-  toast.success('Immagine inserita nella tile');
+  toast.success(t('Immagine inserita nella tile'));
 }
 
 // ─── History ───
@@ -1056,7 +1057,7 @@ function applyHistoryItem(item) {
 async function copyToClipboard(text) {
   try {
     await navigator.clipboard.writeText(text);
-    toast.success('Copiato negli appunti');
+    toast.success(t('Copiato negli appunti'));
   } catch (e) {
     // Fallback
     const ta = document.createElement('textarea');
@@ -1067,7 +1068,7 @@ async function copyToClipboard(text) {
     ta.select();
     document.execCommand('copy');
     document.body.removeChild(ta);
-    toast.success('Copiato negli appunti');
+    toast.success(t('Copiato negli appunti'));
   }
 }
 

@@ -32,7 +32,7 @@
       ></div>
 
       <div v-if="s.link_url" class="mb-mt-4">
-        <span class="mb-text-primary-400 mb-text-sm mb-font-medium">Read more &rarr;</span>
+        <span class="mb-text-primary-400 mb-text-sm mb-font-medium">{{ t('Read more &rarr;') }}</span>
       </div>
     </div>
   </div>
@@ -40,6 +40,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { t } from '@/i18n';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },

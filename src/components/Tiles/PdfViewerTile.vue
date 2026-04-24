@@ -9,15 +9,15 @@
       </span>
       <!-- Individual toolbar toggles -->
       <div class="mb-flex mb-items-center mb-gap-1.5 mb-ml-2">
-        <span v-if="s.show_page_nav !== false" class="olo-pdf-tool" title="Navigazione pagine">&#9664; &#9654;</span>
-        <span v-if="s.show_zoom !== false" class="olo-pdf-tool" title="Zoom">&#128269;</span>
-        <span v-if="s.show_fullscreen !== false" class="olo-pdf-tool" title="Schermo intero">&#9974;</span>
-        <span v-if="s.show_search !== false" class="olo-pdf-tool" title="Cerca">&#128270;</span>
-        <span v-if="s.show_thumbnails !== false" class="olo-pdf-tool" title="Miniature">&#9638;</span>
-        <span v-if="s.show_download !== false" class="olo-pdf-tool" title="Download">&#11015;</span>
-        <span v-if="s.show_print !== false" class="olo-pdf-tool" title="Stampa">&#128424;</span>
+        <span v-if="s.show_page_nav !== false" class="olo-pdf-tool" :title="t('Navigazione pagine')">&#9664; &#9654;</span>
+        <span v-if="s.show_zoom !== false" class="olo-pdf-tool" :title="t('Zoom')">&#128269;</span>
+        <span v-if="s.show_fullscreen !== false" class="olo-pdf-tool" :title="t('Schermo intero')">&#9974;</span>
+        <span v-if="s.show_search !== false" class="olo-pdf-tool" :title="t('Cerca')">&#128270;</span>
+        <span v-if="s.show_thumbnails !== false" class="olo-pdf-tool" :title="t('Miniature')">&#9638;</span>
+        <span v-if="s.show_download !== false" class="olo-pdf-tool" :title="t('Download')">&#11015;</span>
+        <span v-if="s.show_print !== false" class="olo-pdf-tool" :title="t('Stampa')">&#128424;</span>
       </div>
-      <span class="mb-text-xs mb-text-gray-400 mb-ml-auto">PDF Viewer</span>
+      <span class="mb-text-xs mb-text-gray-400 mb-ml-auto">{{ t('PDF Viewer') }}</span>
     </div>
     <!-- Content area -->
     <div class="mb-flex mb-flex-col mb-items-center mb-justify-center mb-h-full mb-text-gray-400">
@@ -25,12 +25,13 @@
         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 1.5L18.5 9H13V3.5zM6 20V4h5v7h7v9H6z"/>
       </svg>
       <span v-if="fileName" class="mb-text-sm mb-font-medium mb-text-gray-500">{{ fileName }}</span>
-      <span v-else class="mb-text-sm mb-italic">Seleziona un file PDF</span>
+      <span v-else class="mb-text-sm mb-italic">{{ t('Seleziona un file PDF') }}</span>
     </div>
   </div>
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { computed } from 'vue';
 
 const props = defineProps({

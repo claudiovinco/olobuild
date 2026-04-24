@@ -4,7 +4,7 @@
       <span class="ql-icon">
         <span class="dashicons dashicons-database"></span>
       </span>
-      <span class="ql-label">Query Loop</span>
+      <span class="ql-label">{{ t('Query Loop') }}</span>
       <span class="ql-info">{{ settings.post_type || 'post' }} &middot; {{ settings.layout || 'grid' }} &middot; {{ settings.columns || 3 }} col</span>
     </div>
     <div class="ql-grid" :style="gridStyle">
@@ -16,13 +16,13 @@
       >
         <div v-if="settings.show_image !== false" class="ql-img" :style="imgStyle"></div>
         <div class="ql-body">
-          <div v-if="settings.show_category !== false" class="ql-cat">Categoria</div>
+          <div v-if="settings.show_category !== false" class="ql-cat">{{ t('Categoria') }}</div>
           <div v-if="settings.show_title !== false" class="ql-title" :style="{ color: settings.title_color || undefined }">Titolo articolo {{ n }}</div>
           <div v-if="settings.show_date !== false || settings.show_author" class="ql-meta" :style="{ color: settings.meta_color || undefined }">
-            <span v-if="settings.show_date !== false">5 Mar 2026</span>
-            <span v-if="settings.show_author"> &middot; Autore</span>
+            <span v-if="settings.show_date !== false">{{ t('5 Mar 2026') }}</span>
+            <span v-if="settings.show_author"> {{ t('&middot; Autore') }}</span>
           </div>
-          <div v-if="settings.show_excerpt !== false" class="ql-excerpt" :style="{ color: settings.text_color || undefined }">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor...</div>
+          <div v-if="settings.show_excerpt !== false" class="ql-excerpt" :style="{ color: settings.text_color || undefined }">{{ t('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor...') }}</div>
           <div v-if="settings.show_read_more !== false" class="ql-readmore" :style="{ color: settings.link_color || undefined }" data-olo-editable="read_more_text">{{ settings.read_more_text || 'Leggi tutto' }} &rarr;</div>
         </div>
       </div>
@@ -45,6 +45,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { t } from '@/i18n';
 
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 

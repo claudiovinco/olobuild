@@ -7,12 +7,13 @@
       <span :style="{fontSize:titleSz+'px',fontWeight:'700',color:s.title_color || 'var(--olo-color-text, #374151)'}">{{ s.title_text || 'Come arrivare' }}</span>
     </div>
     <div :style="{fontSize:textSz+'px',color:s.text_color || 'var(--olo-color-text, #374151)',lineHeight:'1.6'}">
-      Da Trento: prendere la SS47 in direzione Valsugana, uscita Val di Fassa. Proseguire sulla SS48 per circa 30 km fino a destinazione. Parcheggio gratuito disponibile.
+      {{ t('Da Trento: prendere la SS47 in direzione Valsugana, uscita Val di Fassa. Proseguire sulla SS48 per circa 30 km fino a destinazione. Parcheggio gratuito disponibile.') }}
     </div>
   </div>
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { computed } from 'vue';
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 const defaults = {

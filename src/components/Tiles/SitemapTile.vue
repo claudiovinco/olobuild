@@ -5,10 +5,10 @@
       <div v-if="s.show_pages" class="olo-sitemap-group">
         <component :is="s.title_tag" :style="titleStyle">Pagine</component>
         <ul :style="listStyle">
-          <li><a :style="linkStyle" href="#">Home</a></li>
-          <li><a :style="linkStyle" href="#">Chi siamo</a></li>
-          <li><a :style="linkStyle" href="#">Servizi</a></li>
-          <li><a :style="linkStyle" href="#">Contatti</a></li>
+          <li><a :style="linkStyle" href="#">{{ t('Home') }}</a></li>
+          <li><a :style="linkStyle" href="#">{{ t('Chi siamo') }}</a></li>
+          <li><a :style="linkStyle" href="#">{{ t('Servizi') }}</a></li>
+          <li><a :style="linkStyle" href="#">{{ t('Contatti') }}</a></li>
         </ul>
       </div>
 
@@ -16,9 +16,9 @@
       <div v-if="s.show_posts" class="olo-sitemap-group">
         <component :is="s.title_tag" :style="titleStyle">Articoli</component>
         <ul :style="listStyle">
-          <li><a :style="linkStyle" href="#">Primo articolo di esempio</a></li>
-          <li><a :style="linkStyle" href="#">Secondo articolo di esempio</a></li>
-          <li><a :style="linkStyle" href="#">Terzo articolo di esempio</a></li>
+          <li><a :style="linkStyle" href="#">{{ t('Primo articolo di esempio') }}</a></li>
+          <li><a :style="linkStyle" href="#">{{ t('Secondo articolo di esempio') }}</a></li>
+          <li><a :style="linkStyle" href="#">{{ t('Terzo articolo di esempio') }}</a></li>
         </ul>
       </div>
 
@@ -26,9 +26,9 @@
       <div v-if="s.show_categories" class="olo-sitemap-group">
         <component :is="s.title_tag" :style="titleStyle">Categorie</component>
         <ul :style="listStyle">
-          <li><a :style="linkStyle" href="#">Notizie</a></li>
-          <li><a :style="linkStyle" href="#">Tutorial</a></li>
-          <li><a :style="linkStyle" href="#">Risorse</a></li>
+          <li><a :style="linkStyle" href="#">{{ t('Notizie') }}</a></li>
+          <li><a :style="linkStyle" href="#">{{ t('Tutorial') }}</a></li>
+          <li><a :style="linkStyle" href="#">{{ t('Risorse') }}</a></li>
         </ul>
       </div>
 
@@ -36,8 +36,8 @@
       <div v-if="s.show_cpt" class="olo-sitemap-group">
         <component :is="s.title_tag" :style="titleStyle" data-olo-editable="cpt_names">{{ s.cpt_names || 'Custom Post Type' }}</component>
         <ul :style="listStyle">
-          <li><a :style="linkStyle" href="#">Elemento CPT 1</a></li>
-          <li><a :style="linkStyle" href="#">Elemento CPT 2</a></li>
+          <li><a :style="linkStyle" href="#">{{ t('Elemento CPT 1') }}</a></li>
+          <li><a :style="linkStyle" href="#">{{ t('Elemento CPT 2') }}</a></li>
         </ul>
       </div>
 
@@ -48,7 +48,7 @@
         style="grid-column: 1 / -1;"
       >
         <div class="mb-text-3xl mb-mb-2">&#128466;</div>
-        <div class="mb-text-sm">Seleziona almeno una sezione da mostrare</div>
+        <div class="mb-text-sm">{{ t('Seleziona almeno una sezione da mostrare') }}</div>
       </div>
     </div>
   </div>
@@ -56,6 +56,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { t } from '@/i18n';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },

@@ -3,21 +3,21 @@
     <!-- Header -->
     <div class="mb-flex mb-items-center mb-justify-between">
       <h4 class="mb-text-xs mb-font-semibold mb-text-gray-300 mb-uppercase mb-tracking-wider">
-        Design Presets
+        {{ t('Design Presets') }}
       </h4>
       <button
         v-if="builderStore.selectedTileId"
         @click="showSaveDialog = true"
         class="mb-text-[10px] mb-px-2 mb-py-1 mb-bg-primary-600 mb-text-white mb-rounded hover:mb-bg-primary-500 mb-transition-colors"
-        title="Salva stile corrente come preset"
+        :title="t('Salva stile corrente come preset')"
       >
-        + Salva
+        {{ t('+ Salva') }}
       </button>
     </div>
 
     <!-- Built-in presets -->
     <div v-if="builtinPresets.length > 0" class="mb-space-y-1 mb-mb-3">
-      <h5 class="mb-text-[10px] mb-font-semibold mb-text-gray-500 mb-uppercase mb-tracking-wider mb-mb-1">Preset integrati</h5>
+      <h5 class="mb-text-[10px] mb-font-semibold mb-text-gray-500 mb-uppercase mb-tracking-wider mb-mb-1">{{ t('Preset integrati') }}</h5>
       <div class="mb-grid mb-grid-cols-2 mb-gap-1">
         <button
           v-for="bp in builtinPresets"
@@ -35,14 +35,14 @@
 
     <!-- No presets message -->
     <div v-if="presets.length === 0 && !loading" class="mb-text-center mb-py-6">
-      <div class="mb-text-3xl mb-mb-2" style="opacity:0.4;">&#x1F3A8;</div>
-      <p class="mb-text-xs mb-text-gray-500">Nessun preset salvato</p>
-      <p class="mb-text-[10px] mb-text-gray-600 mb-mt-1">Seleziona una tile e salva il suo stile</p>
+      <div class="mb-text-3xl mb-mb-2" style="opacity:0.4;">{{ t('&#x1F3A8;') }}</div>
+      <p class="mb-text-xs mb-text-gray-500">{{ t('Nessun preset salvato') }}</p>
+      <p class="mb-text-[10px] mb-text-gray-600 mb-mt-1">{{ t('Seleziona una tile e salva il suo stile') }}</p>
     </div>
 
     <!-- Loading -->
     <div v-if="loading" class="mb-text-center mb-py-4">
-      <span class="mb-text-xs mb-text-gray-500">Caricamento...</span>
+      <span class="mb-text-xs mb-text-gray-500">{{ t('Caricamento...') }}</span>
     </div>
 
     <!-- Preset cards -->
@@ -59,12 +59,12 @@
             <div
               :style="swatchStyle(preset.style, 'bg')"
               class="mb-w-4 mb-h-4 mb-rounded mb-border mb-border-gray-500"
-              title="Background"
+              :title="t('Background')"
             ></div>
             <div
               :style="swatchStyle(preset.style, 'border')"
               class="mb-w-4 mb-h-4 mb-rounded mb-border mb-border-gray-500"
-              title="Bordo"
+              :title="t('Bordo')"
             ></div>
           </div>
           <!-- Editable name -->
@@ -81,7 +81,7 @@
             v-else
             @dblclick="startEditName(preset)"
             class="mb-flex-1 mb-text-xs mb-text-gray-300 mb-truncate mb-cursor-pointer"
-            title="Doppio click per rinominare"
+            :title="t('Doppio click per rinominare')"
           >
             {{ preset.name }}
           </span>
@@ -91,7 +91,7 @@
         <div class="mb-text-[10px] mb-text-gray-500 mb-mb-2">
           <span v-if="preset.style.padding_top || preset.style.padding_bottom">P</span>
           <span v-if="preset.style.margin_top || preset.style.margin_bottom"> M</span>
-          <span v-if="preset.style.bg_color || preset.style.bg_type"> BG</span>
+          <span v-if="preset.style.bg_color || preset.style.bg_type"> {{ t('BG') }}</span>
           <span v-if="preset.style.border_width && parseInt(preset.style.border_width) > 0"> B</span>
           <span v-if="preset.style.shadow && preset.style.shadow !== 'none'"> S</span>
         </div>
@@ -103,13 +103,13 @@
             @click="applyPreset(preset)"
             class="mb-flex-1 mb-text-[10px] mb-py-1 mb-bg-primary-600 mb-text-white mb-rounded hover:mb-bg-primary-500 mb-transition-colors"
           >
-            Applica
+            {{ t('Applica') }}
           </button>
           <button
             @click="confirmDelete(preset)"
             class="mb-px-2 mb-py-1 mb-text-[10px] mb-text-red-400 mb-bg-gray-600 mb-rounded hover:mb-bg-red-600 hover:mb-text-white mb-transition-colors"
           >
-            Elimina
+            {{ t('Elimina') }}
           </button>
         </div>
       </div>
@@ -123,11 +123,11 @@
       @click.self="showSaveDialog = false"
     >
       <div class="mb-bg-gray-800 mb-rounded-xl mb-p-5 mb-w-72 mb-border mb-border-gray-600 mb-shadow-xl">
-        <h4 class="mb-text-sm mb-font-semibold mb-text-gray-200 mb-mb-3">Salva Design Preset</h4>
+        <h4 class="mb-text-sm mb-font-semibold mb-text-gray-200 mb-mb-3">{{ t('Salva Design Preset') }}</h4>
         <input
           ref="saveNameInput"
           v-model="newPresetName"
-          placeholder="Nome preset..."
+          :placeholder="t('Nome preset...')"
           @keydown.enter="saveCurrentStyle"
           class="mb-w-full mb-text-sm mb-bg-gray-700 mb-text-gray-200 mb-px-3 mb-py-2 mb-rounded-lg mb-border mb-border-gray-600 mb-outline-none focus:mb-border-primary-500 mb-mb-3"
         />
@@ -136,14 +136,14 @@
             @click="showSaveDialog = false"
             class="mb-flex-1 mb-py-2 mb-text-xs mb-text-gray-400 mb-bg-gray-700 mb-rounded-lg hover:mb-bg-gray-600 mb-transition-colors"
           >
-            Annulla
+            {{ t('Annulla') }}
           </button>
           <button
             @click="saveCurrentStyle"
             :disabled="!newPresetName.trim()"
             class="mb-flex-1 mb-py-2 mb-text-xs mb-text-white mb-bg-primary-600 mb-rounded-lg hover:mb-bg-primary-500 mb-transition-colors disabled:mb-opacity-40"
           >
-            Salva
+            {{ t('Salva') }}
           </button>
         </div>
       </div>
@@ -157,7 +157,7 @@
       @click.self="deleteTarget = null"
     >
       <div class="mb-bg-gray-800 mb-rounded-xl mb-p-5 mb-w-72 mb-border mb-border-gray-600 mb-shadow-xl">
-        <h4 class="mb-text-sm mb-font-semibold mb-text-gray-200 mb-mb-2">Elimina preset</h4>
+        <h4 class="mb-text-sm mb-font-semibold mb-text-gray-200 mb-mb-2">{{ t('Elimina preset') }}</h4>
         <p class="mb-text-xs mb-text-gray-400 mb-mb-4">
           Vuoi eliminare il preset "{{ deleteTarget.name }}"?
         </p>
@@ -166,13 +166,13 @@
             @click="deleteTarget = null"
             class="mb-flex-1 mb-py-2 mb-text-xs mb-text-gray-400 mb-bg-gray-700 mb-rounded-lg hover:mb-bg-gray-600 mb-transition-colors"
           >
-            Annulla
+            {{ t('Annulla') }}
           </button>
           <button
             @click="doDelete"
             class="mb-flex-1 mb-py-2 mb-text-xs mb-text-white mb-bg-red-600 mb-rounded-lg hover:mb-bg-red-500 mb-transition-colors"
           >
-            Elimina
+            {{ t('Elimina') }}
           </button>
         </div>
       </div>
@@ -181,6 +181,7 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { ref, onMounted, nextTick } from 'vue';
 import { useTilesStore } from '@/stores/tiles';
 import { useBuilderStore } from '@/stores/builder';

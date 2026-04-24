@@ -9,29 +9,29 @@
         </span>
       </div>
       <div class="olo-pdfpro-toolbar__controls">
-        <span v-if="s.show_page_nav !== false" class="olo-pdfpro-tool" title="Navigazione pagine">
+        <span v-if="s.show_page_nav !== false" class="olo-pdfpro-tool" :title="t('Navigazione pagine')">
           <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M4.5 2l-4 6 4 6h3L3.5 8l4-6z"/><path d="M11.5 2l4 6-4 6h-3l4-6-4-6z"/></svg>
         </span>
-        <span v-if="s.show_zoom !== false" class="olo-pdfpro-tool" title="Zoom">
+        <span v-if="s.show_zoom !== false" class="olo-pdfpro-tool" :title="t('Zoom')">
           <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6.5" cy="6.5" r="4.5"/><line x1="10" y1="10" x2="14" y2="14"/></svg>
         </span>
-        <span v-if="s.show_fullscreen !== false" class="olo-pdfpro-tool" title="Schermo intero">
+        <span v-if="s.show_fullscreen !== false" class="olo-pdfpro-tool" :title="t('Schermo intero')">
           <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M2 2h5V0H0v7h2V2zM14 2h-5V0h7v7h-2V2zM2 14h5v2H0V9h2v5zM14 14h-5v2h7V9h-2v5z"/></svg>
         </span>
-        <span v-if="s.show_search" class="olo-pdfpro-tool" title="Cerca">
+        <span v-if="s.show_search" class="olo-pdfpro-tool" :title="t('Cerca')">
           <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6" cy="6" r="4"/><line x1="9" y1="9" x2="14" y2="14"/></svg>
         </span>
-        <span v-if="s.show_thumbnails" class="olo-pdfpro-tool" title="Miniature">
+        <span v-if="s.show_thumbnails" class="olo-pdfpro-tool" :title="t('Miniature')">
           <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/><rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg>
         </span>
-        <span v-if="s.show_download !== false" class="olo-pdfpro-tool" title="Download">
+        <span v-if="s.show_download !== false" class="olo-pdfpro-tool" :title="t('Download')">
           <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0v10M8 10l-3-3M8 10l3-3M2 13h12v2H2z"/></svg>
         </span>
-        <span v-if="s.show_print !== false" class="olo-pdfpro-tool" title="Stampa">
+        <span v-if="s.show_print !== false" class="olo-pdfpro-tool" :title="t('Stampa')">
           <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M4 0h8v4H4zM2 5h12a1 1 0 011 1v5H1V6a1 1 0 011-1zM4 12h8v4H4z"/></svg>
         </span>
       </div>
-      <span class="olo-pdfpro-label">PDF Pro</span>
+      <span class="olo-pdfpro-label">{{ t('PDF Pro') }}</span>
     </div>
 
     <!-- PDF viewer area -->
@@ -39,7 +39,7 @@
       <!-- Loading -->
       <div v-if="loading" class="olo-pdfpro-status">
         <span class="olo-pdfpro-spinner"></span>
-        <span>Caricamento PDF...</span>
+        <span>{{ t('Caricamento PDF...') }}</span>
       </div>
 
       <!-- Error -->
@@ -67,7 +67,7 @@
           <div class="olo-pdfpro-fold" :style="foldStyle"></div>
           <div class="olo-pdfpro-page-wrap">
             <img v-if="pageImages[1]" :src="pageImages[1]" class="olo-pdfpro-page-img" />
-            <div v-else class="olo-pdfpro-page-empty">Ultima pagina</div>
+            <div v-else class="olo-pdfpro-page-empty">{{ t('Ultima pagina') }}</div>
           </div>
         </template>
 
@@ -126,6 +126,7 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { ref, computed, watch, onMounted } from 'vue';
 
 const props = defineProps({

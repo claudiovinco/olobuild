@@ -1,23 +1,23 @@
 <template>
   <div>
     <div v-if="!wooActive" class="olo-woo-notice">
-      <span class="olo-woo-notice-icon">&#x1F6D2;</span>
-      <span>WooCommerce richiesto</span>
+      <span class="olo-woo-notice-icon">{{ t('&#x1F6D2;') }}</span>
+      <span>{{ t('WooCommerce richiesto') }}</span>
     </div>
     <div v-else>
       <component :is="s.title_tag" v-if="s.title" :style="titleStyle" data-olo-editable="title">{{ s.title }}</component>
       <div :style="formStyle">
         <div :style="fieldStyle">
-          <label :style="labelStyle">Numero ordine</label>
-          <input type="text" :style="inputStyle" placeholder="Inserisci il numero del tuo ordine" readonly />
+          <label :style="labelStyle">{{ t('Numero ordine') }}</label>
+          <input type="text" :style="inputStyle" :placeholder="t('Inserisci il numero del tuo ordine')" readonly />
         </div>
         <div :style="fieldStyle">
-          <label :style="labelStyle">Email di fatturazione</label>
-          <input type="email" :style="inputStyle" placeholder="Email usata per l'ordine" readonly />
+          <label :style="labelStyle">{{ t('Email di fatturazione') }}</label>
+          <input type="email" :style="inputStyle" :placeholder="t('Email usata per l\'ordine')" readonly />
         </div>
         <button :style="btnStyle">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <span>Traccia ordine</span>
+          <span>{{ t('Traccia ordine') }}</span>
         </button>
       </div>
     </div>
@@ -25,6 +25,7 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { computed } from 'vue';
 
 const props = defineProps({

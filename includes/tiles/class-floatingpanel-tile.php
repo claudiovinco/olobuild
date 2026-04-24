@@ -181,7 +181,7 @@ class Olo_Floatingpanel_Tile extends Olo_Tile_Base {
             <button class="<?php echo $uid; ?>-trigger <?php echo trim( $resp_class ); ?>"
                     style="<?php echo $t_pos_css; ?>width:<?php echo $t_size; ?>px;height:<?php echo $t_size; ?>px;background:<?php echo $t_bg; ?>;color:<?php echo $t_color; ?>;border:none;border-radius:<?php echo $t_radius; ?>%;cursor:pointer;display:flex;align-items:center;justify-content:center;<?php echo $t_shadow; ?>"
                     data-olo-fp-trigger="<?php echo $uid; ?>"
-                    aria-label="Apri pannello">
+                    aria-label="<?php echo esc_attr( olo_t( 'Apri pannello' ) ); ?>">
                 <?php echo $icon_svg; ?>
             </button>
             <?php
@@ -228,7 +228,7 @@ class Olo_Floatingpanel_Tile extends Olo_Tile_Base {
             <button class="olo-fp-close"
                     style="position:absolute;top:8px;right:8px;background:none;border:none;cursor:pointer;padding:4px;line-height:0;color:<?php echo $cc; ?>;z-index:2;"
                     data-olo-fp-close="<?php echo $uid; ?>"
-                    aria-label="Chiudi">
+                    aria-label="<?php echo esc_attr( olo_t( 'Chiudi' ) ); ?>">
                 <svg width="<?php echo $cs; ?>" height="<?php echo $cs; ?>" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             </button>
             <?php endif; ?>

@@ -6,12 +6,13 @@
       <span v-if="s.icon_position === 'right'" class="olo-tb-icon" v-html="currentIcon"></span>
     </button>
     <div v-if="!s.target_id" style="color:#EF4444;font-size:12px;margin-top:6px;text-align:center;">
-      Imposta l'ID della sezione target
+      {{ t('Imposta l\'ID della sezione target') }}
     </div>
   </div>
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { ref, computed } from 'vue';
 
 const props = defineProps({

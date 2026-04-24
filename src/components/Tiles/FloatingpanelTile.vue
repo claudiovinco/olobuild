@@ -8,13 +8,13 @@
 
     <!-- Trigger mode indicator -->
     <div v-if="settings.trigger_mode === 'button'" class="ofp-trigger-badge">
-      🔘 Con trigger
+      {{ t('🔘 Con trigger') }}
     </div>
 
     <!-- Children info -->
     <div class="ofp-children-info">
       <span v-if="childCount > 0" class="ofp-children-count">{{ childCount }} {{ childCount === 1 ? 'elemento' : 'elementi' }}</span>
-      <span v-else class="ofp-children-empty">Trascina tile qui ↓</span>
+      <span v-else class="ofp-children-empty">{{ t('Trascina tile qui ↓') }}</span>
     </div>
 
     <!-- Position type -->
@@ -25,6 +25,7 @@
 <script setup>
 import { computed, inject } from 'vue';
 import { useTilesStore } from '../../stores/tiles';
+import { t } from '@/i18n';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },

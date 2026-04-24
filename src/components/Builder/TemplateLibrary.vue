@@ -16,7 +16,7 @@
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mb-text-primary-400">
                 <rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/>
               </svg>
-              <h3 class="mb-text-white mb-text-sm mb-font-semibold mb-m-0">Libreria Template</h3>
+              <h3 class="mb-text-white mb-text-sm mb-font-semibold mb-m-0">{{ t('Libreria Template') }}</h3>
             </div>
             <!-- Search -->
             <div class="mb-flex mb-items-center mb-gap-3">
@@ -25,11 +25,11 @@
                 <input
                   v-model="searchQuery"
                   type="text"
-                  placeholder="Cerca template..."
+                  :placeholder="t('Cerca template...')"
                   class="mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-lg mb-text-xs mb-text-gray-200 mb-pl-8 mb-pr-3 mb-py-1.5 mb-w-48 focus:mb-outline-none focus:mb-border-primary-500 mb-placeholder-gray-500"
                 />
               </div>
-              <button @click="close" class="mb-text-gray-400 hover:mb-text-white mb-transition-colors" aria-label="Chiudi">
+              <button @click="close" class="mb-text-gray-400 hover:mb-text-white mb-transition-colors" :aria-label="t('Chiudi')">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
               </button>
             </div>
@@ -37,7 +37,7 @@
 
           <!-- Category filter -->
           <div style="display:flex;align-items:center;gap:10px;padding:8px 20px;background:#111827;border-bottom:1px solid #374151">
-            <label style="color:#9CA3AF;font-size:11px;white-space:nowrap">Categoria:</label>
+            <label style="color:#9CA3AF;font-size:11px;white-space:nowrap">{{ t('Categoria:') }}</label>
             <select
               v-model="activeCategory"
               style="flex:1;background:#374151;color:#E5E7EB;border:1px solid #4B5563;border-radius:6px;padding:5px 10px;font-size:12px;outline:none;cursor:pointer;max-width:220px"
@@ -54,11 +54,11 @@
           <!-- Templates grid -->
           <div class="mb-flex-1 mb-overflow-y-auto mb-p-5">
             <div v-if="loading" class="mb-text-center mb-py-8">
-              <span class="mb-text-sm mb-text-gray-400">Caricamento template...</span>
+              <span class="mb-text-sm mb-text-gray-400">{{ t('Caricamento template...') }}</span>
             </div>
 
             <div v-else-if="filteredTemplates.length === 0" class="mb-text-center mb-py-8">
-              <p class="mb-text-sm mb-text-gray-500">Nessun template trovato</p>
+              <p class="mb-text-sm mb-text-gray-500">{{ t('Nessun template trovato') }}</p>
             </div>
 
             <div :style="gridStyle">
@@ -97,15 +97,15 @@
                   <div style="min-width:0;flex:1">
                     <div style="display:flex;align-items:center;gap:4px">
                       <span style="font-size:11px;font-weight:500;color:#E5E7EB;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ tpl.name }}</span>
-                      <span v-if="tpl.category === 'page'" style="font-size:8px;padding:1px 5px;background:rgba(99,102,241,0.15);color:#A5B4FC;border-radius:3px;flex-shrink:0">Pagina</span>
-                      <span v-if="tpl.is_user" style="font-size:8px;padding:1px 4px;background:rgba(245,158,11,0.15);color:#FCD34D;border-radius:3px;flex-shrink:0">Personale</span>
+                      <span v-if="tpl.category === 'page'" style="font-size:8px;padding:1px 5px;background:rgba(99,102,241,0.15);color:#A5B4FC;border-radius:3px;flex-shrink:0">{{ t('Pagina') }}</span>
+                      <span v-if="tpl.is_user" style="font-size:8px;padding:1px 4px;background:rgba(245,158,11,0.15);color:#FCD34D;border-radius:3px;flex-shrink:0">{{ t('Personale') }}</span>
                     </div>
                     <span style="font-size:9px;text-transform:capitalize" :style="{ color: getCategoryColor(tpl.category) }">{{ getCategoryLabel(tpl.category) }}</span>
                   </div>
                   <!-- Delete button for user templates -->
                   <button
                     v-if="tpl.is_user"
-                    title="Elimina template"
+                    :title="t('Elimina template')"
                     style="flex-shrink:0;width:24px;height:24px;display:flex;align-items:center;justify-content:center;border-radius:4px;border:none;background:transparent;color:#EF4444;cursor:pointer;opacity:0.5;transition:opacity 0.15s"
                     @mouseenter="$event.currentTarget.style.opacity='1';$event.currentTarget.style.background='rgba(239,68,68,0.1)'"
                     @mouseleave="$event.currentTarget.style.opacity='0.5';$event.currentTarget.style.background='transparent'"
@@ -121,7 +121,7 @@
           <!-- Footer -->
           <div class="mb-px-5 mb-py-2 mb-border-t mb-border-gray-700 mb-bg-gray-900/50 mb-flex mb-items-center mb-justify-between">
             <span class="mb-text-[10px] mb-text-gray-500">{{ filteredTemplates.length }} / {{ templates.length }} template</span>
-            <button @click="close" class="mb-text-xs mb-text-gray-400 hover:mb-text-gray-200 mb-transition-colors">Chiudi</button>
+            <button @click="close" class="mb-text-xs mb-text-gray-400 hover:mb-text-gray-200 mb-transition-colors">{{ t('Chiudi') }}</button>
           </div>
         </div>
       </div>
@@ -142,17 +142,17 @@
           <!-- Header -->
           <div style="padding:16px 20px;border-bottom:1px solid #374151;display:flex;align-items:center;gap:8px">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6366F1" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-            <span style="color:#F3F4F6;font-size:14px;font-weight:600">Salva come template</span>
+            <span style="color:#F3F4F6;font-size:14px;font-weight:600">{{ t('Salva come template') }}</span>
           </div>
           <!-- Body -->
           <div style="padding:20px">
             <div style="margin-bottom:14px">
-              <label style="display:block;color:#9CA3AF;font-size:11px;margin-bottom:4px">Nome template</label>
+              <label style="display:block;color:#9CA3AF;font-size:11px;margin-bottom:4px">{{ t('Nome template') }}</label>
               <input
                 ref="saveNameInput"
                 v-model="saveName"
                 type="text"
-                placeholder="es. Hero con video e CTA"
+                :placeholder="t('es. Hero con video e CTA')"
                 style="width:100%;background:#374151;border:1px solid #4B5563;border-radius:6px;color:#E5E7EB;padding:8px 12px;font-size:13px;outline:none;box-sizing:border-box"
                 @focus="$event.target.style.borderColor='#6366F1'"
                 @blur="$event.target.style.borderColor='#4B5563'"
@@ -160,7 +160,7 @@
               />
             </div>
             <div style="margin-bottom:14px">
-              <label style="display:block;color:#9CA3AF;font-size:11px;margin-bottom:4px">Categoria</label>
+              <label style="display:block;color:#9CA3AF;font-size:11px;margin-bottom:4px">{{ t('Categoria') }}</label>
               <select
                 v-model="saveCategory"
                 style="width:100%;background:#374151;border:1px solid #4B5563;border-radius:6px;color:#E5E7EB;padding:8px 12px;font-size:13px;outline:none;cursor:pointer;box-sizing:border-box"
@@ -169,11 +169,11 @@
               </select>
             </div>
             <div style="margin-bottom:14px">
-              <label style="display:block;color:#9CA3AF;font-size:11px;margin-bottom:4px">Descrizione (opzionale)</label>
+              <label style="display:block;color:#9CA3AF;font-size:11px;margin-bottom:4px">{{ t('Descrizione (opzionale)') }}</label>
               <input
                 v-model="saveDescription"
                 type="text"
-                placeholder="Breve descrizione del template"
+                :placeholder="t('Breve descrizione del template')"
                 style="width:100%;background:#374151;border:1px solid #4B5563;border-radius:6px;color:#E5E7EB;padding:8px 12px;font-size:13px;outline:none;box-sizing:border-box"
                 @focus="$event.target.style.borderColor='#6366F1'"
                 @blur="$event.target.style.borderColor='#4B5563'"
@@ -181,7 +181,7 @@
             </div>
             <!-- Preview info -->
             <div v-if="saveSection" style="padding:8px 10px;background:#111827;border-radius:6px;margin-bottom:16px">
-              <span style="color:#6B7280;font-size:10px">Sezione: </span>
+              <span style="color:#6B7280;font-size:10px">{{ t('Sezione:') }} </span>
               <span style="color:#D1D5DB;font-size:11px">{{ saveSection.settings?._label || 'Sezione' }}</span>
               <span style="color:#6B7280;font-size:10px;margin-left:8px">{{ countElements(saveSection) }} elementi</span>
             </div>
@@ -191,7 +191,7 @@
             <button
               @click="closeSaveDialog"
               style="padding:7px 16px;border-radius:6px;border:1px solid #4B5563;background:transparent;color:#9CA3AF;font-size:12px;cursor:pointer"
-            >Annulla</button>
+            >{{ t('Annulla') }}</button>
             <button
               @click="doSave"
               :disabled="!saveName.trim() || saving"
@@ -221,8 +221,8 @@
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6"/><path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
               </div>
               <div>
-                <div style="color:#F3F4F6;font-size:14px;font-weight:600">Elimina template</div>
-                <div style="color:#9CA3AF;font-size:11px">Questa azione non può essere annullata</div>
+                <div style="color:#F3F4F6;font-size:14px;font-weight:600">{{ t('Elimina template') }}</div>
+                <div style="color:#9CA3AF;font-size:11px">{{ t('Questa azione non può essere annullata') }}</div>
               </div>
             </div>
             <p style="color:#D1D5DB;font-size:12px;margin:0 0 4px">Vuoi eliminare il template <strong style="color:#FCD34D">{{ deleteTarget?.name }}</strong>?</p>
@@ -231,7 +231,7 @@
             <button
               @click="deleteDialogVisible = false"
               style="padding:7px 16px;border-radius:6px;border:1px solid #4B5563;background:transparent;color:#9CA3AF;font-size:12px;cursor:pointer"
-            >Annulla</button>
+            >{{ t('Annulla') }}</button>
             <button
               @click="doDelete"
               :disabled="deleting"
@@ -249,20 +249,20 @@
         <div style="background:#1F2937;border:1px solid #374151;border-radius:12px;padding:24px;max-width:400px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.5)" @click.stop>
           <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#A5B4FC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
-            <span style="color:#E5E7EB;font-size:14px;font-weight:600">Inserisci pagina completa</span>
+            <span style="color:#E5E7EB;font-size:14px;font-weight:600">{{ t('Inserisci pagina completa') }}</span>
           </div>
           <p style="color:#9CA3AF;font-size:12px;line-height:1.5;margin:0 0 16px">
             Il canvas contiene già del contenuto. Come vuoi procedere con il template <strong style="color:#E5E7EB">{{ pendingPageTpl?.name }}</strong>?
           </p>
           <div style="display:flex;gap:8px">
             <button @click="confirmPageInsert('replace')" style="flex:1;padding:8px 12px;background:#4F46E5;color:#fff;border:none;border-radius:6px;font-size:12px;font-weight:500;cursor:pointer;transition:background 0.15s" @mouseenter="$event.target.style.background='#4338CA'" @mouseleave="$event.target.style.background='#4F46E5'">
-              Sostituisci tutto
+              {{ t('Sostituisci tutto') }}
             </button>
             <button @click="confirmPageInsert('append')" style="flex:1;padding:8px 12px;background:#374151;color:#E5E7EB;border:1px solid #4B5563;border-radius:6px;font-size:12px;font-weight:500;cursor:pointer;transition:background 0.15s" @mouseenter="$event.target.style.background='#4B5563'" @mouseleave="$event.target.style.background='#374151'">
-              Aggiungi in fondo
+              {{ t('Aggiungi in fondo') }}
             </button>
             <button @click="cancelPageInsert" style="padding:8px 12px;background:transparent;color:#9CA3AF;border:1px solid #4B5563;border-radius:6px;font-size:12px;cursor:pointer;transition:color 0.15s" @mouseenter="$event.target.style.color='#E5E7EB'" @mouseleave="$event.target.style.color='#9CA3AF'">
-              Annulla
+              {{ t('Annulla') }}
             </button>
           </div>
         </div>
@@ -271,6 +271,7 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { ref, computed, nextTick } from 'vue';
 import { useTilesStore } from '@/stores/tiles';
 import { useBuilderStore } from '@/stores/builder';
@@ -648,7 +649,7 @@ async function insertTemplate(tpl, mode = 'append') {
     }
 
     if (!content || content.length === 0) {
-      toast.error('Template vuoto o non valido');
+      toast.error(t('Template vuoto o non valido'));
       return;
     }
 
@@ -663,11 +664,11 @@ async function insertTemplate(tpl, mode = 'append') {
       tilesStore.canvasTiles.push(node);
     }
     builderStore.isDirty = true;
-    toast.success(`Template "${tpl.name}" inserito`);
+    toast.success(t(`Template "${tpl.name}" inserito`));
     close();
   } catch (err) {
     console.error('insertTemplate error:', err);
-    toast.error('Errore nell\'inserimento del template');
+    toast.error(t('Errore nell\'inserimento del template'));
   }
 }
 
@@ -748,7 +749,7 @@ async function doSave() {
     });
     if (!res.ok) throw new Error('Save failed');
     const result = await res.json();
-    toast.success('Template salvato!');
+    toast.success(t('Template salvato!'));
     closeSaveDialog();
     // Add to local list
     templates.value.push({
@@ -761,7 +762,7 @@ async function doSave() {
     });
   } catch (err) {
     console.error('doSave error:', err);
-    toast.error('Errore nel salvataggio del template');
+    toast.error(t('Errore nel salvataggio del template'));
   } finally {
     saving.value = false;
   }
@@ -783,13 +784,13 @@ async function doDelete() {
       headers: { 'X-WP-Nonce': oloData.nonce },
     });
     if (!res.ok) throw new Error('Delete failed');
-    toast.success('Template eliminato');
+    toast.success(t('Template eliminato'));
     templates.value = templates.value.filter(t => t.id !== deleteTarget.value.id);
     deleteDialogVisible.value = false;
     deleteTarget.value = null;
   } catch (err) {
     console.error('doDelete error:', err);
-    toast.error('Errore nell\'eliminazione');
+    toast.error(t('Errore nell\'eliminazione'));
   } finally {
     deleting.value = false;
   }

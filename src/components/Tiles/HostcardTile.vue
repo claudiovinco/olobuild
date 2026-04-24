@@ -21,7 +21,7 @@
           </svg>
         </div>
         <div style="flex:1;min-width:0;">
-          <div style="font-weight:600;font-size:15px;color:var(--olo-color-text, #374151);">Nome Gestore</div>
+          <div style="font-weight:600;font-size:15px;color:var(--olo-color-text, #374151);">{{ t('Nome Gestore') }}</div>
           <div v-if="s.label_role" style="font-size:13px;color:#6b7280;margin-top:2px;" data-olo-editable="label_role">{{ s.label_role }}</div>
         </div>
         <svg width="16" height="16" viewBox="0 0 20 20" fill="#9ca3af" style="flex-shrink:0;">
@@ -38,11 +38,11 @@
             <circle cx="10" cy="6" r="4"/><path d="M2 18c0-4.4 3.6-8 8-8s8 3.6 8 8"/>
           </svg>
         </div>
-        <div style="font-weight:700;font-size:18px;color:var(--olo-color-text, #374151);margin-top:12px;">Nome Gestore</div>
+        <div style="font-weight:700;font-size:18px;color:var(--olo-color-text, #374151);margin-top:12px;">{{ t('Nome Gestore') }}</div>
         <div v-if="s.label_role" style="font-size:14px;color:#6b7280;margin-top:4px;" data-olo-editable="label_role">{{ s.label_role }}</div>
       </div>
       <div v-if="s.show_bio" style="font-size:13px;color:#374151;line-height:1.6;margin-bottom:14px;text-align:center;">
-        Biografia del gestore della struttura...
+        {{ t('Biografia del gestore della struttura...') }}
       </div>
       <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;">
         <span v-if="s.show_phone" style="font-size:12px;color:#374151;display:flex;align-items:center;gap:4px;">
@@ -62,6 +62,7 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { computed } from 'vue';
 import { getShadowValue } from '@/composables/useShadowMap';
 
