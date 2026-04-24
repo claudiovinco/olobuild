@@ -634,7 +634,7 @@
       hoverToolbar = document.createElement('div');
       hoverToolbar.className = 'olo-iframe-toolbar';
       hoverToolbar.innerHTML =
-        '<span class="olo-iframe-tb-grip" title="Trascina per spostare"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3 3h-2v4h4v-2l3 3-3 3v-2h-4v4h2l-3 3-3-3h2v-4H8v2l-3-3 3-3v2h4V5H10l2-3z"/></svg></span>' +
+        '<span class="olo-iframe-tb-grip" title="Trascina per spostare"><svg width="10" height="16" viewBox="0 0 10 16" fill="currentColor" aria-hidden="true"><circle cx="2" cy="2" r="1.4"/><circle cx="8" cy="2" r="1.4"/><circle cx="2" cy="8" r="1.4"/><circle cx="8" cy="8" r="1.4"/><circle cx="2" cy="14" r="1.4"/><circle cx="8" cy="14" r="1.4"/></svg></span>' +
         '<span class="olo-iframe-toolbar-label"></span>' +
         '<button class="olo-iframe-tb-btn olo-tb-move" data-action="moveleft" title="Colonna precedente ←"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></button>' +
         '<button class="olo-iframe-tb-btn olo-tb-move" data-action="moveup" title="Sposta su ↑"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 15l-6-6-6 6"/></svg></button>' +
