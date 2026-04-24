@@ -606,32 +606,6 @@
       var gripDropBefore = true;
       var gripIndicator = null;
 
-      // Reusable drag-starter: usato sia dal grip toolbar sia dal border drag strip.
-      startTileDrag = function(tileId, el, labelText) {
-        gripDragging = true;
-        gripDragId = tileId;
-
-        gripGhost = document.createElement('div');
-        gripGhost.className = 'olo-grip-ghost';
-        var rect = el.getBoundingClientRect();
-        gripGhost.style.width = Math.min(rect.width, 300) + 'px';
-        gripGhost.style.height = Math.min(rect.height, 60) + 'px';
-        gripGhost.textContent = labelText || (hoverToolbar.querySelector('.olo-iframe-toolbar-label').textContent || 'Sposta');
-        document.body.appendChild(gripGhost);
-
-        if (!gripIndicator) {
-          gripIndicator = document.createElement('div');
-          gripIndicator.className = 'olo-grip-indicator';
-          document.body.appendChild(gripIndicator);
-        }
-
-        el.style.opacity = '0.3';
-        el.style.transition = 'opacity 0.2s';
-
-        hoverToolbar.style.display = 'none';
-        hideDragStrip();
-      };
-
       var grip = hoverToolbar.querySelector('.olo-iframe-tb-grip');
       if (grip) {
         grip.addEventListener('mousedown', function(e) {
@@ -640,7 +614,32 @@
           if (!el) return;
           e.preventDefault();
           e.stopPropagation();
-          startTileDrag(tileId, el);
+
+          gripDragging = true;
+          gripDragId = tileId;
+
+          // Create ghost
+          gripGhost = document.createElement('div');
+          gripGhost.className = 'olo-grip-ghost';
+          var rect = el.getBoundingClientRect();
+          gripGhost.style.width = Math.min(rect.width, 300) + 'px';
+          gripGhost.style.height = Math.min(rect.height, 60) + 'px';
+          gripGhost.textContent = hoverToolbar.querySelector('.olo-iframe-toolbar-label').textContent;
+          document.body.appendChild(gripGhost);
+
+          // Create drop indicator
+          if (!gripIndicator) {
+            gripIndicator = document.createElement('div');
+            gripIndicator.className = 'olo-grip-indicator';
+            document.body.appendChild(gripIndicator);
+          }
+
+          // Dim source element
+          el.style.opacity = '0.3';
+          el.style.transition = 'opacity 0.2s';
+
+          // Hide the toolbar during drag
+          hoverToolbar.style.display = 'none';
         });
       }
 
@@ -757,67 +756,10 @@
     });
   }
 
-  // ── Border drag strip (drag handle sui bordi della tile) ──
-  // Overlay singleton che appare ai bordi top/bottom della tile in hover/select.
-  // Mousedown → avvia lo stesso flow gripDrag del grip della toolbar.
-
-  var dragStripTop = null;
-  var dragStripBottom = null;
-  var startTileDrag = null; // assegnato in getHoverToolbar
-
-  function getDragStrip(which) {
-    var isTop = which === 'top';
-    var strip = isTop ? dragStripTop : dragStripBottom;
-    if (strip) return strip;
-    strip = document.createElement('div');
-    strip.className = 'olo-iframe-drag-strip olo-iframe-drag-strip--' + which;
-    strip.title = 'Trascina per spostare';
-    strip.innerHTML = '<svg width="24" height="6" viewBox="0 0 24 6" fill="currentColor" aria-hidden="true"><circle cx="3" cy="3" r="1.2"/><circle cx="9" cy="3" r="1.2"/><circle cx="15" cy="3" r="1.2"/><circle cx="21" cy="3" r="1.2"/></svg>';
-    strip.addEventListener('mousedown', function(e) {
-      var tileId = strip.getAttribute('data-for-tile');
-      var el = tileId ? findTileEl(tileId) : null;
-      if (!el || !startTileDrag) return;
-      e.preventDefault();
-      e.stopPropagation();
-      // Se la toolbar non è pronta, forziamo init chiamando getHoverToolbar
-      if (!hoverToolbar) getHoverToolbar();
-      startTileDrag(tileId, el);
-    });
-    document.body.appendChild(strip);
-    if (isTop) dragStripTop = strip; else dragStripBottom = strip;
-    return strip;
-  }
-
-  function showDragStrip(el, tileId) {
-    if (previewMode || gripDragging) return;
-    var rect = el.getBoundingClientRect();
-    var top = getDragStrip('top');
-    var bot = getDragStrip('bottom');
-    var stripH = 10;
-    top.setAttribute('data-for-tile', tileId);
-    top.style.left = (rect.left + window.scrollX) + 'px';
-    top.style.width = rect.width + 'px';
-    top.style.top = (rect.top + window.scrollY - 1) + 'px';
-    top.style.height = stripH + 'px';
-    top.style.display = 'flex';
-    bot.setAttribute('data-for-tile', tileId);
-    bot.style.left = (rect.left + window.scrollX) + 'px';
-    bot.style.width = rect.width + 'px';
-    bot.style.top = (rect.bottom + window.scrollY - stripH + 1) + 'px';
-    bot.style.height = stripH + 'px';
-    bot.style.display = 'flex';
-  }
-
-  function hideDragStrip() {
-    if (dragStripTop) dragStripTop.style.display = 'none';
-    if (dragStripBottom) dragStripBottom.style.display = 'none';
-  }
-
   function showHoverToolbar(el, tileId) {
     if (previewMode) return;
     clearTimeout(hoverToolbarTimeout);
     var tb = getHoverToolbar();
-    showDragStrip(el, tileId);
     var rect = el.getBoundingClientRect();
     var tileType = el.getAttribute('data-olo-tile-type') || '';
     var tileNames = {
@@ -856,7 +798,6 @@
   function hideHoverToolbar() {
     hoverToolbarTimeout = setTimeout(function() {
       if (hoverToolbar) hoverToolbar.style.display = 'none';
-      hideDragStrip();
     }, 400);
   }
 

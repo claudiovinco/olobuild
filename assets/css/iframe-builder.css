@@ -180,37 +180,6 @@ footer.olo-site-footer {
   50%      { box-shadow: 0 2px 10px rgba(16, 185, 129, 0.35), 0 0 0 8px rgba(16, 185, 129, 0); }
 }
 
-/* ── Border drag strip: drag handle che appare ai bordi top/bottom della tile ── */
-.olo-iframe-drag-strip {
-  position: absolute;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 999;
-  cursor: grab;
-  pointer-events: auto;
-  color: rgba(255, 255, 255, 0.95);
-  background: linear-gradient(90deg,
-    rgba(99, 102, 241, 0) 0%,
-    rgba(99, 102, 241, 0.9) 15%,
-    rgba(99, 102, 241, 0.9) 85%,
-    rgba(99, 102, 241, 0) 100%);
-  border-radius: 3px;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-  user-select: none;
-}
-.olo-iframe-drag-strip:hover {
-  transform: scaleY(1.35);
-  box-shadow: 0 0 10px rgba(99, 102, 241, 0.45);
-}
-.olo-iframe-drag-strip:active {
-  cursor: grabbing;
-}
-.olo-iframe-drag-strip svg {
-  opacity: 0.95;
-  pointer-events: none;
-}
-body.olo-preview-mode .olo-iframe-drag-strip { display: none !important; }
 
 /* ── Hover toolbar ── */
 .olo-iframe-toolbar {
