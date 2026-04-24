@@ -22,6 +22,9 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 <link rel="stylesheet" href="<?php echo esc_url( $leaflet_url . 'leaflet.markercluster.css' ); ?>">
 <link rel="stylesheet" href="<?php echo esc_url( $leaflet_url . 'leaflet.markercluster-default.css' ); ?>">
 <link rel="stylesheet" href="<?php echo esc_url( OLO_URL . 'assets/css/iframe-builder.css?v=' . OLO_VERSION ); ?>">
+<?php if ( file_exists( OLO_PATH . 'assets/css/olo-pdfviewer.css' ) ) : ?>
+<link rel="stylesheet" href="<?php echo esc_url( OLO_URL . 'assets/css/olo-pdfviewer.css?v=' . OLO_VERSION ); ?>">
+<?php endif; ?>
 <?php
 // Olo Booking CSS/JS (if plugin active)
 $booking_path = WP_PLUGIN_DIR . '/olo-booking/';
@@ -79,6 +82,23 @@ body { min-height: 100vh; }
 <!-- Viewer 360 -->
 <?php if ( file_exists( OLO_PATH . 'assets/js/olo-viewer360.js' ) ) : ?>
 <script src="<?php echo esc_url( OLO_URL . 'assets/js/olo-viewer360.js?v=' . OLO_VERSION ); ?>"></script>
+<?php endif; ?>
+<!-- PDF viewer runtimes (pdfjs + pageflip + olo-pdfviewer + olo-pdfpro) -->
+<?php if ( file_exists( OLO_PATH . 'assets/vendor/pdfjs/pdf.min.js' ) ) : ?>
+<script src="<?php echo esc_url( OLO_URL . 'assets/vendor/pdfjs/pdf.min.js' ); ?>"></script>
+<script>
+    window.oloPdfViewerData = { workerUrl: '<?php echo esc_url( OLO_URL . 'assets/vendor/pdfjs/pdf.worker.min.js' ); ?>' };
+    window.oloPdfProData = { workerUrl: '<?php echo esc_url( OLO_URL . 'assets/vendor/pdfjs/pdf.worker.min.js' ); ?>' };
+</script>
+<?php endif; ?>
+<?php if ( file_exists( OLO_PATH . 'assets/vendor/pageflip/page-flip.browser.js' ) ) : ?>
+<script src="<?php echo esc_url( OLO_URL . 'assets/vendor/pageflip/page-flip.browser.js' ); ?>"></script>
+<?php endif; ?>
+<?php if ( file_exists( OLO_PATH . 'assets/js/olo-pdfviewer.js' ) ) : ?>
+<script src="<?php echo esc_url( OLO_URL . 'assets/js/olo-pdfviewer.js?v=' . OLO_VERSION ); ?>"></script>
+<?php endif; ?>
+<?php if ( file_exists( OLO_PATH . 'assets/js/olo-pdfpro.js' ) ) : ?>
+<script src="<?php echo esc_url( OLO_URL . 'assets/js/olo-pdfpro.js?v=' . OLO_VERSION ); ?>"></script>
 <?php endif; ?>
 <!-- Frontend utils (entrance animations, scroll effects, etc.) -->
 <?php if ( file_exists( OLO_PATH . 'assets/js/olo-utils.js' ) ) : ?>

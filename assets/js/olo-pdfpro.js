@@ -1751,12 +1751,12 @@
   function initAll() {
     var viewers = document.querySelectorAll('[data-olo-pdfpro]');
     for (var i = 0; i < viewers.length; i++) {
+      if (viewers[i]._oloPdfInst) continue; // già inizializzato
       try {
         var config = JSON.parse(viewers[i].getAttribute('data-olo-pdfpro'));
         var viewer = new OloPdfPro(viewers[i], config);
-        viewers[i]._oloPdfInst = viewer; // ref for fullscreenchange listener
+        viewers[i]._oloPdfInst = viewer;
 
-        // Bind swipe on non-flipbook modes (flipbook has built-in touch)
         if (config.mode !== 'flipbook') {
           viewer._bindSwipe(viewers[i]);
         }
@@ -1765,6 +1765,9 @@
       }
     }
   }
+
+  // Esporta per chiamate manuali (es. re-init dopo render dinamico nell'iframe builder)
+  window.OloPdfPro = { initAll: initAll };
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initAll);

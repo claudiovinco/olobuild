@@ -492,6 +492,14 @@
       window.__oloV360Init();
     }
 
+    // Re-init PDF viewers (runtime presenti nel builder iframe)
+    if (window.OloPdfViewer && typeof window.OloPdfViewer.initAll === 'function') {
+      try { window.OloPdfViewer.initAll(); } catch(e) {}
+    }
+    if (window.OloPdfPro && typeof window.OloPdfPro.initAll === 'function') {
+      try { window.OloPdfPro.initAll(); } catch(e) {}
+    }
+
     // Re-init virtual tour viewer
     if (typeof window.__oloVtourBoot === 'function') {
       var vtourContainers = root.querySelectorAll('.olo-vtour-container[data-vtour-config]:not([data-vtour-init])');
