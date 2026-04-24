@@ -290,27 +290,39 @@
 
   /**
    * Send a snapshot of section/column bounding boxes to the parent.
-   * The parent uses this for synchronous hit-testing during drag.
+   * Coordinates are DOCUMENT-RELATIVE (include scrollY) so il parent può
+   * fare hit-test corretto anche dopo scroll dell'iframe.
    */
   function sendLayoutSnapshot() {
     var grid = root.querySelector('[data-olo-zone="body"] .olo-frontend-grid') || root.querySelector('.olo-frontend-grid');
-    if (!grid) { post('olo:layout-snapshot', { sections: [], columns: [] }); return; }
+    var scrollX = window.pageXOffset || document.documentElement.scrollLeft || 0;
+    var scrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
+    if (!grid) { post('olo:layout-snapshot', { sections: [], columns: [], scrollX: scrollX, scrollY: scrollY }); return; }
 
     var sectionEls = grid.querySelectorAll(':scope > [data-olo-tile-id]');
     var sects = [];
     for (var i = 0; i < sectionEls.length; i++) {
       var r = sectionEls[i].getBoundingClientRect();
-      sects.push({ id: sectionEls[i].getAttribute('data-olo-tile-id'), top: r.top, bottom: r.bottom, left: r.left, right: r.right, index: i });
+      sects.push({
+        id: sectionEls[i].getAttribute('data-olo-tile-id'),
+        top: r.top + scrollY, bottom: r.bottom + scrollY,
+        left: r.left + scrollX, right: r.right + scrollX,
+        index: i,
+      });
     }
 
     var columnEls = root.querySelectorAll('[data-olo-tile-type="column"]');
     var cols = [];
     for (var j = 0; j < columnEls.length; j++) {
       var cr = columnEls[j].getBoundingClientRect();
-      cols.push({ id: columnEls[j].getAttribute('data-olo-tile-id'), top: cr.top, bottom: cr.bottom, left: cr.left, right: cr.right });
+      cols.push({
+        id: columnEls[j].getAttribute('data-olo-tile-id'),
+        top: cr.top + scrollY, bottom: cr.bottom + scrollY,
+        left: cr.left + scrollX, right: cr.right + scrollX,
+      });
     }
 
-    post('olo:layout-snapshot', { sections: sects, columns: cols });
+    post('olo:layout-snapshot', { sections: sects, columns: cols, scrollX: scrollX, scrollY: scrollY });
   }
 
   // ── Height observer ──

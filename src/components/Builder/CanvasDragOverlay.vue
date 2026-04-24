@@ -137,15 +137,41 @@ function postScroll(delta) {
   iframe.contentWindow.postMessage({ type: 'olo:auto-scroll', delta }, '*');
 }
 
+// Listener scroll dentro l'iframe: forza re-render degli overlay positions.
+// Attaccato al contentWindow dell'iframe quando pronto.
+let scrollListenerAttached = false;
+function onIframeScroll() {
+  scrollTick.value = (scrollTick.value + 1) & 0xffff;
+}
+function tryAttachIframeScroll() {
+  if (scrollListenerAttached) return;
+  const iframe = getIframeEl();
+  try {
+    const w = iframe?.contentWindow;
+    if (w) {
+      w.addEventListener('scroll', onIframeScroll, { passive: true });
+      scrollListenerAttached = true;
+    }
+  } catch (e) { /* cross-origin, ignora */ }
+}
+
 onMounted(() => {
   document.addEventListener('dragstart', onNativeDragStart, true);
   document.addEventListener('dragend', onNativeDragEnd, true);
   document.addEventListener('drop', onNativeDragEnd, true);
+  // Prova subito + retry su un paio di tick (l'iframe carica async)
+  tryAttachIframeScroll();
+  setTimeout(tryAttachIframeScroll, 500);
+  setTimeout(tryAttachIframeScroll, 2000);
 });
 onBeforeUnmount(() => {
   document.removeEventListener('dragstart', onNativeDragStart, true);
   document.removeEventListener('dragend', onNativeDragEnd, true);
   document.removeEventListener('drop', onNativeDragEnd, true);
+  const iframe = getIframeEl();
+  try {
+    iframe?.contentWindow?.removeEventListener('scroll', onIframeScroll);
+  } catch (e) {}
 });
 
 // ── Hit-state reattivo (aggiornato in onDrag) ─────────────────
@@ -155,22 +181,30 @@ const hasHit = computed(() => hit.value !== null);
 const showLine = computed(() => hasHit.value && !hit.value.columnId);
 const showColumnHi = computed(() => hasHit.value && !!hit.value.columnId);
 
+// Le coordinate in hit sono DOCUMENT-relative nell'iframe; per piazzare
+// gli overlay viewport-relative sottraiamo lo scrollY/scrollX corrente.
+// Leggiamo ad ogni tick lo scroll dell'iframe (può cambiare anche durante drag).
+const scrollTick = ref(0); // forza reattività
+function readScroll() { return hit.value?.scroll || getIframeScroll(); }
+
 const dropLineStyle = computed(() => {
   if (!hit.value) return {};
-  // lineY è in coordinate iframe-interne (già divise per zoom); riconvertiamo
-  // in coordinate overlay (=iframe viewport) moltiplicando per zoom.
+  void scrollTick.value;
   const zoom = builderStore.canvasZoom / 100;
-  const top = hit.value.lineY * zoom;
+  const cur = getIframeScroll();
+  const top = (hit.value.lineY - cur.y) * zoom;
   return { top: `${top}px` };
 });
 
 const columnHiStyle = computed(() => {
   if (!hit.value || !hit.value.colRect) return {};
+  void scrollTick.value;
   const zoom = builderStore.canvasZoom / 100;
+  const cur = getIframeScroll();
   const r = hit.value.colRect;
   return {
-    top: `${r.top * zoom}px`,
-    left: `${r.left * zoom}px`,
+    top: `${(r.top - cur.y) * zoom}px`,
+    left: `${(r.left - cur.x) * zoom}px`,
     width: `${(r.right - r.left) * zoom}px`,
     height: `${(r.bottom - r.top) * zoom}px`,
   };
@@ -187,31 +221,51 @@ const labelText = computed(() => {
 
 const labelStyle = computed(() => {
   if (!hit.value) return {};
+  void scrollTick.value;
   const zoom = builderStore.canvasZoom / 100;
-  const y = hit.value.columnId
-    ? hit.value.colRect.top * zoom
-    : hit.value.lineY * zoom;
+  const cur = getIframeScroll();
+  const yDoc = hit.value.columnId ? hit.value.colRect.top : hit.value.lineY;
+  const y = (yDoc - cur.y) * zoom;
   return { top: `${Math.max(8, y - 28)}px`, left: '50%' };
 });
 
 // ── Hit-test contro iframeLayout snapshot ─────────────────────
-function hitTest(clientX, clientY) {
-  // Vue 3 può auto-unwrap i ref nelle prop; supportiamo entrambe le forme.
-  const iframe = (props.iframeRef && 'value' in props.iframeRef)
+// Le coordinate in layout.sections/columns sono DOCUMENT-RELATIVE (include
+// scrollY dell'iframe al momento dello snapshot). Per confrontarle con la
+// posizione del pointer bisogna aggiungere lo scrollY CORRENTE dell'iframe.
+function getIframeEl() {
+  return (props.iframeRef && 'value' in props.iframeRef)
     ? props.iframeRef.value
     : props.iframeRef;
+}
+function getIframeScroll() {
+  const iframe = getIframeEl();
+  try {
+    const w = iframe?.contentWindow;
+    return {
+      x: w?.pageXOffset || w?.scrollX || 0,
+      y: w?.pageYOffset || w?.scrollY || 0,
+    };
+  } catch (e) {
+    return { x: 0, y: 0 };
+  }
+}
+
+function hitTest(clientX, clientY) {
+  const iframe = getIframeEl();
   if (!iframe || typeof iframe.getBoundingClientRect !== 'function') return null;
   const iframeRect = iframe.getBoundingClientRect();
   const zoom = builderStore.canvasZoom / 100;
 
-  // Il pointer può essere fuori iframe (es. sopra sidebar); in quel caso niente hit
   if (
     clientX < iframeRect.left || clientX > iframeRect.right ||
     clientY < iframeRect.top || clientY > iframeRect.bottom
   ) return null;
 
-  const x = (clientX - iframeRect.left) / zoom;
-  const y = (clientY - iframeRect.top) / zoom;
+  const scroll = getIframeScroll();
+  // x/y in coordinate DOCUMENT dell'iframe (stesse usate in layout)
+  const x = (clientX - iframeRect.left) / zoom + scroll.x;
+  const y = (clientY - iframeRect.top) / zoom + scroll.y;
   const layout = builderStore.iframeLayout || { sections: [], columns: [] };
 
   // 1. Prova a matchare una colonna (più specifico)
@@ -231,10 +285,11 @@ function hitTest(clientX, clientY) {
 
   // 2. Calcola insertion index sezione
   let insertIndex = layout.sections.length;
-  let lineY = 0;
+  let lineY = 0; // document-relative nell'iframe
   const sects = layout.sections;
   if (sects.length === 0) {
-    lineY = iframeRect.height / zoom / 2;
+    // Iframe vuoto: centro viewport → converti in doc-relative
+    lineY = scroll.y + iframeRect.height / zoom / 2;
   } else {
     let found = false;
     for (let i = 0; i < sects.length; i++) {
@@ -249,7 +304,7 @@ function hitTest(clientX, clientY) {
     if (!found) lineY = sects[sects.length - 1].bottom;
   }
 
-  return { columnId, colRect, insertIndex, lineY, x, y, iframeRect };
+  return { columnId, colRect, insertIndex, lineY, x, y, iframeRect, scroll };
 }
 
 // ── Drop target options per Pragmatic (oggetto STABILE, no computed) ─────────
