@@ -91,9 +91,9 @@ footer.olo-site-footer {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
+  width: 34px;
+  height: 34px;
+  border-radius: 6px;
   border: 2px solid #6366f1;
   background: #fff;
   color: #6366f1;
@@ -101,7 +101,7 @@ footer.olo-site-footer {
   position: relative;
   z-index: 10;
   pointer-events: auto;
-  transition: background 0.15s, transform 0.15s, opacity 0.2s;
+  transition: background 0.15s, transform 0.15s, opacity 0.2s, box-shadow 0.2s;
   box-shadow: 0 2px 8px rgba(99, 102, 241, 0.25);
   opacity: 0;
   transform: translateY(-50%);
@@ -109,11 +109,16 @@ footer.olo-site-footer {
 .olo-iframe-add-btn:hover .olo-iframe-add-circle,
 .olo-iframe-add-circle:hover {
   opacity: 1;
+  animation: olo-add-pulse 1.4s ease-in-out infinite;
 }
 .olo-iframe-add-circle:hover {
   background: #6366f1;
   color: #fff;
-  transform: translateY(-50%) scale(1.15);
+  transform: translateY(-50%) scale(1.08);
+}
+@keyframes olo-add-pulse {
+  0%, 100% { box-shadow: 0 2px 8px rgba(99, 102, 241, 0.25), 0 0 0 0 rgba(99, 102, 241, 0.45); }
+  50%      { box-shadow: 0 2px 10px rgba(99, 102, 241, 0.35), 0 0 0 8px rgba(99, 102, 241, 0); }
 }
 /* Clickable hover zone around the button (invisible, no layout shift) */
 .olo-iframe-add-btn::after {
@@ -152,15 +157,17 @@ footer.olo-site-footer {
   transform: none;
 }
 
-/* ── Add ROW buttons (variant, smaller and green, inside sections) ── */
+/* ── Add ROW buttons (same size/shape as section, green accent) ── */
 .olo-iframe-add-btn--row .olo-iframe-add-circle--row {
-  width: 20px;
-  height: 20px;
   border-color: #10b981;
   color: #10b981;
-  box-shadow: 0 2px 6px rgba(16, 185, 129, 0.3);
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.25);
 }
 .olo-iframe-add-btn--row:hover .olo-iframe-add-circle--row,
+.olo-iframe-add-circle--row:hover {
+  opacity: 1;
+  animation: olo-add-pulse-row 1.4s ease-in-out infinite;
+}
 .olo-iframe-add-circle--row:hover {
   background: #10b981;
   color: #fff;
@@ -168,9 +175,9 @@ footer.olo-site-footer {
 .olo-iframe-add-btn--row::before {
   background: rgba(16, 185, 129, 0.4);
 }
-.olo-iframe-add-btn--row::after {
-  top: -10px;
-  height: 20px;
+@keyframes olo-add-pulse-row {
+  0%, 100% { box-shadow: 0 2px 8px rgba(16, 185, 129, 0.25), 0 0 0 0 rgba(16, 185, 129, 0.45); }
+  50%      { box-shadow: 0 2px 10px rgba(16, 185, 129, 0.35), 0 0 0 8px rgba(16, 185, 129, 0); }
 }
 
 /* ── Hover toolbar ── */
