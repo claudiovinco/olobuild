@@ -759,7 +759,7 @@ function onZoneClick(zone) {
 
 function draggableOpts(nodeKind, node, parentId, index) {
   return {
-    dragHandle: '.st-grip',
+    dragHandle: '.st-row',
     getInitialData: () => makeNodePayload(node.id, nodeKind, parentId, index),
     onDragStart: () => {},
   };
@@ -902,23 +902,29 @@ watch(function() { return builderStore.selectedTileId; }, function(newId) {
 /* Drag grip */
 .st-grip {
   flex-shrink: 0;
-  width: 12px;
+  width: 16px;
+  height: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: grab;
-  color: transparent;
-  transition: color 0.15s;
+  color: #9CA3AF;
+  transition: color 0.15s, background-color 0.15s;
+  border-radius: 3px;
+}
+.st-grip:active {
+  cursor: grabbing;
 }
 .st-row:hover .st-grip {
-  color: #9CA3AF;
+  color: #6B7280;
 }
 .st-grip:hover {
-  color: #6B7280 !important;
+  color: #374151 !important;
+  background: rgba(0, 0, 0, 0.06);
 }
 .st-grip-ph {
   flex-shrink: 0;
-  width: 12px;
+  width: 16px;
 }
 
 /* Expand toggle */
