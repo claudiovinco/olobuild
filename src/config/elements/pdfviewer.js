@@ -24,6 +24,9 @@ export default {
     show_bottombar_pages: true,
     show_bottombar_zoom: false,
     show_bottombar_fullscreen: false,
+    nav_click: true,
+    nav_swipe: true,
+    nav_keyboard: true,
   },
   fields: [
     { type: 'separator', label: 'Sorgente' },
@@ -74,6 +77,11 @@ export default {
       condition: { field: 'show_bottombar', value: true } },
     { key: 'show_bottombar_fullscreen', label: 'Schermo intero (barra inferiore)', type: 'toggle',
       condition: { field: 'show_bottombar', value: true } },
+
+    { type: 'separator', label: 'Navigazione pagine' },
+    { key: 'nav_click', label: 'Click su pagina (volta pagina)', type: 'toggle' },
+    { key: 'nav_swipe', label: 'Swipe touch (mobile)', type: 'toggle' },
+    { key: 'nav_keyboard', label: 'Frecce tastiera', type: 'toggle' },
 
   ],
 };

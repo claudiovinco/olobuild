@@ -32,6 +32,10 @@ class Olo_PdfPro_Tile extends Olo_Tile_Base {
         'show_bottombar_pages'      => true,
         'show_bottombar_zoom'       => false,
         'show_bottombar_fullscreen' => false,
+        // Sistemi di navigazione pagine
+        'nav_click'                 => true,
+        'nav_swipe'                 => true,
+        'nav_keyboard'              => true,
         'hotspots'        => [],
         'hotspot_color'   => '#EF4444',
         'hotspot_size'    => '14',
@@ -104,6 +108,11 @@ class Olo_PdfPro_Tile extends Olo_Tile_Base {
                 'pages'      => (bool) $s['show_bottombar_pages'],
                 'zoom'       => (bool) $s['show_bottombar_zoom'],
                 'fullscreen' => (bool) $s['show_bottombar_fullscreen'],
+            ],
+            'nav' => [
+                'click'    => (bool) $s['nav_click'],
+                'swipe'    => (bool) $s['nav_swipe'],
+                'keyboard' => (bool) $s['nav_keyboard'],
             ],
             'hotspots'     => $this->sanitize_hotspots( $s['hotspots'] ),
             'hotspotColor' => $this->safe_color_css( $s['hotspot_color'] ),

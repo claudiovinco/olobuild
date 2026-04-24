@@ -260,7 +260,8 @@
       self._hideLoading();
       self._initMode();
       self._initHotspots();
-      self._bindKeys();
+      var nav = (self.config && self.config.nav) || {};
+      if (nav.keyboard !== false) self._bindKeys();
       self._buildThumbnails();
     }).catch(function (err) {
       self._hideLoading();
@@ -730,6 +731,7 @@
     // Init PageFlip — showCover:false, blanks handle cover layout
     if (typeof St !== 'undefined' && St.PageFlip) {
       var self = this;
+      var _nav = (this.config && this.config.nav) || {};
       this.pageFlip = new St.PageFlip(this.flipContainer, {
         width: flipW,
         height: flipH,
@@ -743,9 +745,9 @@
         showCover: false,
         mobileScrollSupport: false,
         clickEventForward: false,
-        useMouseEvents: true,
-        swipeDistance: 30,
-        showPageCorners: true,
+        useMouseEvents: _nav.click !== false,
+        swipeDistance: _nav.swipe !== false ? 30 : 10000,
+        showPageCorners: _nav.click !== false,
       });
 
       this.pageFlip.loadFromHTML(allPages);
@@ -1757,7 +1759,8 @@
         var viewer = new OloPdfPro(viewers[i], config);
         viewers[i]._oloPdfInst = viewer;
 
-        if (config.mode !== 'flipbook') {
+        var nav = config.nav || {};
+        if (nav.swipe !== false && config.mode !== 'flipbook') {
           viewer._bindSwipe(viewers[i]);
         }
       } catch (err) {
