@@ -1020,6 +1020,7 @@ class Olo_Builder {
         require_once OLO_PATH . 'includes/tiles/class-alert-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-team-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-accordion-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-icontabs-tile.php';
 
         require_once OLO_PATH . 'includes/tiles/class-social-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-map-tile.php';
@@ -1196,6 +1197,7 @@ class Olo_Builder {
         $manager->register_tile( new Olo_Alert_Tile() );
         $manager->register_tile( new Olo_Team_Tile() );
         $manager->register_tile( new Olo_Accordion_Tile() );
+        $manager->register_tile( new Olo_IconTabs_Tile() );
 
         $manager->register_tile( new Olo_Social_Tile() );
         $manager->register_tile( new Olo_Map_Tile() );
