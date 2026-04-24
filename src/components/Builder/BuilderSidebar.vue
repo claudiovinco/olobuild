@@ -198,6 +198,7 @@ import { useBuilderStore } from '@/stores/builder';
 import { useDnDStore } from '@/stores/dnd';
 import { useDragDrop } from '@/composables/useDragDrop';
 import { vOloDraggable, makeSidebarPayload, makeGlobalWidgetPayload } from '@/composables/useDnD';
+import { setCustomNativeDragPreview } from '@atlaskit/pragmatic-drag-and-drop/element/set-custom-native-drag-preview';
 import { createSection, createRow, createColumn, generateId } from '@/stores/tiles';
 import StructureTree from './StructureTree.vue';
 import { t } from '@/i18n';
@@ -576,9 +577,59 @@ function tileIcon(type) {
  * Factory per le opzioni v-olo-draggable di un tile-type.
  * Richiede un layout snapshot aggiornato dall'iframe prima dell'hit-test.
  */
+/**
+ * Crea un elemento ghost custom per il drag — card con icona + label del tile,
+ * stile coerente con la sidebar ma più spiccato (ombra, rotazione).
+ */
+function makeTileGhost(iconHtml, labelText, catColor) {
+  const ghost = document.createElement('div');
+  ghost.className = 'olo-dnd-tile-preview';
+  ghost.style.cssText = [
+    'display:inline-flex',
+    'align-items:center',
+    'gap:8px',
+    'padding:8px 14px',
+    'border-radius:10px',
+    'background:#fff',
+    'border:2px solid ' + (catColor || '#6366F1'),
+    'box-shadow:0 10px 24px rgba(0,0,0,0.18),0 2px 6px rgba(0,0,0,0.1)',
+    'font-family:inherit',
+    'font-size:11px',
+    'font-weight:600',
+    'color:#1F2937',
+    'transform:rotate(-2deg)',
+    'white-space:nowrap',
+    'pointer-events:none',
+  ].join(';');
+  ghost.innerHTML = `
+    <span style="display:inline-flex;align-items:center;color:${catColor || '#6366F1'}">${iconHtml}</span>
+    <span>${labelText}</span>
+  `;
+  return ghost;
+}
+
 function draggableTileOpts(tileType) {
   return {
     getInitialData: () => makeSidebarPayload(tileType),
+    onGenerateDragPreview: ({ nativeSetDragImage, source }) => {
+      setCustomNativeDragPreview({
+        getOffset: () => ({ x: 16, y: 16 }),
+        render: ({ container }) => {
+          const srcEl = source.element;
+          const iconEl = srcEl.querySelector('.tp-btn-icon');
+          const labelEl = srcEl.querySelector('.tp-btn-label');
+          const catColor = getComputedStyle(srcEl).getPropertyValue('--cat-color').trim() || '#6366F1';
+          const ghost = makeTileGhost(
+            iconEl?.innerHTML || '',
+            labelEl?.textContent || tileType,
+            catColor
+          );
+          container.appendChild(ghost);
+          return () => { try { container.removeChild(ghost); } catch (e) {} };
+        },
+        nativeSetDragImage,
+      });
+    },
     onDragStart: () => {
       dndStore.startDrag(makeSidebarPayload(tileType));
       // Richiedi layout snapshot fresh dall'iframe
@@ -599,6 +650,23 @@ function draggableTileOpts(tileType) {
 function draggableGlobalWidgetOpts(globalId) {
   return {
     getInitialData: () => makeGlobalWidgetPayload(globalId),
+    onGenerateDragPreview: ({ nativeSetDragImage, source }) => {
+      setCustomNativeDragPreview({
+        getOffset: () => ({ x: 16, y: 16 }),
+        render: ({ container }) => {
+          const srcEl = source.element;
+          const labelEl = srcEl.querySelector('.tp-btn-label');
+          const ghost = makeTileGhost(
+            '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>',
+            labelEl?.textContent || 'Widget',
+            '#D97706'
+          );
+          container.appendChild(ghost);
+          return () => { try { container.removeChild(ghost); } catch (e) {} };
+        },
+        nativeSetDragImage,
+      });
+    },
     onDragStart: () => {
       dndStore.startDrag(makeGlobalWidgetPayload(globalId));
       const iframe = document.querySelector('.olo-live-iframe');

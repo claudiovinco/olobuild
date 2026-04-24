@@ -247,6 +247,7 @@ import { useStylesStore } from '@/stores/styles';
 import { useDnDStore } from '@/stores/dnd';
 import { useInlineEdit } from '@/composables/useInlineEdit';
 import { useIframeBridge } from '@/composables/useIframeBridge';
+import { useDragDrop } from '@/composables/useDragDrop';
 import { useDragMonitor, installDnDSafetyNet, isOloData } from '@/composables/useDnD';
 import OlobuilderGrid from '@/components/Grid/OlobuilderGrid.vue';
 import ContextMenu from '@/components/Builder/ContextMenu.vue';
@@ -262,15 +263,18 @@ const builderStore = useBuilderStore();
 const tilesStore = useTilesStore();
 const stylesStore = useStylesStore();
 const dndStore = useDnDStore();
+const { applyPragmaticDrop } = useDragDrop();
 
 // Safety net globale DnD: Esc, blur, visibilitychange, pagehide, pointercancel
 installDnDSafetyNet();
 
-// Monitor globale Pragmatic: garantisce endDrag anche se il drop cade fuori
-// da tutti i drop target (utente rilascia nel vuoto).
+// Monitor globale Pragmatic: dispatcher unificato per tutti i drop del canvas
+// (sidebar, Grid, StructureTree). Sempre montato perché BuilderCanvas
+// è sempre montato quando il builder è attivo.
 useDragMonitor({
   canMonitor: ({ source }) => isOloData(source.data),
-  onDrop: () => {
+  onDrop: (arg) => {
+    applyPragmaticDrop(arg);
     if (!dndStore.isIdle) dndStore.endDrag();
   },
 });

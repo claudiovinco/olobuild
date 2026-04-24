@@ -1,5 +1,8 @@
 import { useTilesStore, generateId, createSection, createRow, createColumn, createInnerColumn, CONTAINER_TYPES } from '@/stores/tiles';
 import { useBuilderStore } from '@/stores/builder';
+import { useDnDStore } from '@/stores/dnd';
+import { useHistory } from '@/composables/useHistory';
+import { extractClosestEdge, isOloData } from '@/composables/useDnD';
 
 export function useDragDrop() {
   const tilesStore = useTilesStore();
@@ -157,6 +160,178 @@ export function useDragDrop() {
     }
   }
 
+  // ═════════════════════════════════════════════════════════════════
+  // Pragmatic monitor drop dispatcher (condiviso Grid + StructureTree)
+  // ═════════════════════════════════════════════════════════════════
+
+  /**
+   * Aggiunge una nuova row vuota dentro una sezione (invocato da drop row-list).
+   */
+  function addRowToSection(section) {
+    const col1 = createColumn('1-2', []);
+    const col2 = createColumn('1-2', []);
+    const row = createRow('50-50', [col1, col2]);
+    if (!Array.isArray(section.children)) section.children = [];
+    section.children.push(row);
+    builderStore.selectTile(row.id);
+  }
+
+  function insertElementRelativeToRow(tileType, section, rowIndex, edge) {
+    const newTile = createTileFromType(tileType);
+    if (!newTile) return;
+    const col = createColumn('1-1', [newTile]);
+    const row = createRow('100', [col]);
+    if (!Array.isArray(section.children)) section.children = [];
+    const at = edge === 'bottom' || edge === 'right' ? rowIndex + 1 : rowIndex;
+    section.children.splice(at, 0, row);
+    builderStore.selectTile(newTile.id);
+  }
+
+  function insertElementRelativeToElement(tileType, col, elIndex, edge) {
+    const newTile = createTileFromType(tileType);
+    if (!newTile) return;
+    if (!Array.isArray(col.children)) col.children = [];
+    const at = edge === 'bottom' || edge === 'right' ? elIndex + 1 : elIndex;
+    col.children.splice(at, 0, newTile);
+    builderStore.selectTile(newTile.id);
+  }
+
+  function insertGlobalWidgetRelativeToElement(globalId, col, elIndex, edge) {
+    const newTile = tilesStore.insertGlobalWidget(globalId);
+    if (!newTile) return;
+    if (!Array.isArray(col.children)) col.children = [];
+    const at = edge === 'bottom' || edge === 'right' ? elIndex + 1 : elIndex;
+    col.children.splice(at, 0, newTile);
+    builderStore.selectTile(newTile.id);
+  }
+
+  function applyDropOnNodeEdge(payload, target, edge) {
+    if (payload.kind === 'node') {
+      let newIndex = target.index;
+      if (edge === 'bottom' || edge === 'right') newIndex = target.index + 1;
+      if (payload.fromParentId === target.parentId && payload.fromIndex < newIndex) {
+        newIndex--;
+      }
+      tilesStore.moveNodeTo(payload.nodeId, target.parentId, newIndex);
+      return;
+    }
+    if (payload.kind === 'tile-type') {
+      const tileType = payload.tileType;
+      let insertIndex = target.index;
+      if (edge === 'bottom' || edge === 'right') insertIndex = target.index + 1;
+      if (target.nodeKind === 'section') {
+        handleDropFromSidebar(tileType, insertIndex);
+      } else if (target.nodeKind === 'row') {
+        const parentSection = tilesStore.getTileById(target.parentId);
+        if (parentSection) insertElementRelativeToRow(tileType, parentSection, target.index, edge);
+      } else if (target.nodeKind === 'element') {
+        const col = tilesStore.getTileById(target.parentId);
+        if (col) insertElementRelativeToElement(tileType, col, target.index, edge);
+      }
+      return;
+    }
+    if (payload.kind === 'global-widget') {
+      let insertIndex = target.index;
+      if (edge === 'bottom' || edge === 'right') insertIndex = target.index + 1;
+      if (target.nodeKind === 'section') handleGlobalWidgetDrop(payload.globalId, insertIndex);
+      else if (target.nodeKind === 'element') {
+        const col = tilesStore.getTileById(target.parentId);
+        if (col) insertGlobalWidgetRelativeToElement(payload.globalId, col, target.index, edge);
+      }
+      return;
+    }
+  }
+
+  function applyDropInColumn(payload, columnId) {
+    if (payload.kind === 'tile-type') {
+      handleDropIntoColumn(payload.tileType, columnId);
+    } else if (payload.kind === 'global-widget') {
+      handleGlobalWidgetDropIntoColumn(payload.globalId, columnId);
+    } else if (payload.kind === 'node' && payload.nodeKind === 'element') {
+      const col = tilesStore.getTileById(columnId);
+      if (col) {
+        const nextIndex = (col.children || []).length;
+        tilesStore.moveNodeTo(payload.nodeId, columnId, nextIndex);
+      }
+    }
+  }
+
+  function applyDropAtListEnd(payload, listKind, parentId) {
+    if (listKind === 'sections') {
+      if (payload.kind === 'tile-type') handleDropFromSidebar(payload.tileType);
+      else if (payload.kind === 'global-widget') handleGlobalWidgetDrop(payload.globalId);
+      else if (payload.kind === 'node' && payload.nodeKind === 'section') {
+        // parentId=null → zone root del nodo corrente
+        const len = tilesStore.canvasTiles.length;
+        tilesStore.moveNodeTo(payload.nodeId, null, len);
+      }
+    } else if (listKind === 'elements' && parentId) {
+      applyDropInColumn(payload, parentId);
+    } else if (listKind === 'rows' && parentId) {
+      if (payload.kind === 'tile-type' && payload.tileType !== 'section') {
+        const section = tilesStore.getTileById(parentId);
+        if (section) {
+          if (payload.tileType === 'row') {
+            addRowToSection(section);
+          } else {
+            const newTile = createTileFromType(payload.tileType);
+            if (!newTile) return;
+            const col = createColumn('1-1', [newTile]);
+            const row = createRow('100', [col]);
+            if (!Array.isArray(section.children)) section.children = [];
+            section.children.push(row);
+            builderStore.selectTile(newTile.id);
+          }
+        }
+      } else if (payload.kind === 'node' && payload.nodeKind === 'row') {
+        const section = tilesStore.getTileById(parentId);
+        const len = (section?.children || []).length;
+        tilesStore.moveNodeTo(payload.nodeId, parentId, len);
+      }
+    }
+  }
+
+  /**
+   * Dispatcher unificato per il monitor Pragmatic.
+   * Chiamato dal useDragMonitor.onDrop: determina la mutation in base al target più specifico.
+   */
+  function applyPragmaticDrop({ source, location }) {
+    const drops = location.current.dropTargets;
+    if (!drops || drops.length === 0) return;
+    const target = drops[0].data;
+    const payload = source.data;
+    if (!isOloData(target) || !isOloData(payload)) return;
+
+    const history = useHistory();
+    const dndStore = useDnDStore();
+
+    history.pushStateNow();
+    dndStore.markDropping();
+
+    try {
+      let placedTileId = null;
+      if (target.kind === 'node-edge') {
+        const edge = extractClosestEdge(target);
+        applyDropOnNodeEdge(payload, target, edge);
+        placedTileId = payload.nodeId || builderStore.selectedTileId;
+      } else if (target.kind === 'column-body') {
+        applyDropInColumn(payload, target.columnId);
+        placedTileId = payload.nodeId || builderStore.selectedTileId;
+      } else if (target.kind === 'list-end') {
+        applyDropAtListEnd(payload, target.listKind, target.parentId);
+        placedTileId = builderStore.selectedTileId;
+      } else if (target.kind === 'canvas-overlay') {
+        // Gestito internamente da CanvasDragOverlay (hit-test + handleDropFromSidebar)
+        return;
+      }
+
+      if (placedTileId) builderStore.markDirtyForTile(placedTileId);
+      else builderStore.isDirty = true;
+    } finally {
+      if (dndStore.phase === 'dropping') dndStore.endDrag();
+    }
+  }
+
   return {
     generateId,
     createTileFromType,
@@ -165,5 +340,7 @@ export function useDragDrop() {
     handleGlobalWidgetDrop,
     handleGlobalWidgetDropIntoColumn,
     handleReorder,
+    applyPragmaticDrop,
+    addRowToSection,
   };
 }

@@ -336,16 +336,12 @@
 import { ref, computed, onMounted, onBeforeUnmount, inject } from 'vue';
 import { useTilesStore, createSection, createRow, createColumn } from '@/stores/tiles';
 import { useBuilderStore } from '@/stores/builder';
-import { useDnDStore } from '@/stores/dnd';
 import { useStylesStore } from '@/stores/styles';
 import { useDragDrop } from '@/composables/useDragDrop';
-import { useHistory } from '@/composables/useHistory';
 import {
   vOloDraggable,
   vOloDropTarget,
-  useDragMonitor,
   attachClosestEdge,
-  extractClosestEdge,
   makeNodePayload,
   isOloData,
 } from '@/composables/useDnD';
@@ -364,8 +360,6 @@ const props = defineProps({
 const tilesStore = useTilesStore();
 const builderStore = useBuilderStore();
 const stylesStore = useStylesStore();
-const dndStore = useDnDStore();
-const history = useHistory();
 
 /**
  * Computed ref to the correct tiles array based on zone prop.
@@ -523,171 +517,9 @@ const listEndDrop = (listKind, parentId) => ({
   getIsSticky: () => false,
 });
 
-// ── Monitor centralizzato: applica le mutation in base al drop target ──
-useDragMonitor({
-  canMonitor: ({ source }) => isOloData(source.data),
-  onDrop: ({ source, location }) => {
-    const drops = location.current.dropTargets;
-    if (!drops || drops.length === 0) return;
-    // I drop target sono sorted dal più specifico al più generale.
-    // Usiamo il più specifico (primo) per decidere l'operazione.
-    const target = drops[0].data;
-    const payload = source.data;
-    if (!isOloData(target) || !isOloData(payload)) return;
-
-    // Snapshot atomico per undo
-    history.pushStateNow();
-    dndStore.markDropping();
-
-    try {
-      applyDrop(payload, target, drops);
-      markDirty();
-    } finally {
-      if (dndStore.phase === 'dropping') dndStore.endDrag();
-    }
-  },
-});
-
-/**
- * Applica la mutation concreta al tilesStore a seconda del payload e del target.
- */
-function applyDrop(payload, target, allTargets) {
-  // Case A: drop su edge di un nodo esistente
-  if (target.kind === 'node-edge') {
-    const edge = extractClosestEdge(target);
-    return applyDropOnNodeEdge(payload, target, edge);
-  }
-  // Case B: drop dentro il body di una colonna (tile va in fondo)
-  if (target.kind === 'column-body') {
-    return applyDropInColumn(payload, target.columnId);
-  }
-  // Case C: drop a fine lista
-  if (target.kind === 'list-end') {
-    return applyDropAtListEnd(payload, target.listKind, target.parentId);
-  }
-}
-
-function applyDropOnNodeEdge(payload, target, edge) {
-  // Reorder di nodo esistente
-  if (payload.kind === 'node') {
-    let newIndex = target.index;
-    if (edge === 'bottom' || edge === 'right') newIndex = target.index + 1;
-    // Nello stesso parent: se spostiamo dopo di noi, l'indice diminuisce di 1
-    if (payload.fromParentId === target.parentId && payload.fromIndex < newIndex) {
-      newIndex--;
-    }
-    tilesStore.moveNodeTo(payload.nodeId, target.parentId, newIndex);
-    return;
-  }
-  // Inserimento nuovo tile da sidebar: usa la logica wrap esistente
-  if (payload.kind === 'tile-type') {
-    const tileType = payload.tileType;
-    let insertIndex = target.index;
-    if (edge === 'bottom' || edge === 'right') insertIndex = target.index + 1;
-    if (target.nodeKind === 'section') {
-      handleDropFromSidebar(tileType, insertIndex);
-    } else if (target.nodeKind === 'row') {
-      // Drop before/after una row: wrapping come nuova row dentro la sezione del target
-      const parentSection = tilesStore.getTileById(target.parentId);
-      if (parentSection) insertElementRelativeToRow(tileType, parentSection, target.index, edge);
-    } else if (target.nodeKind === 'element') {
-      // Drop before/after un element: inserisci dentro la stessa colonna
-      const col = tilesStore.getTileById(target.parentId);
-      if (col) insertElementRelativeToElement(tileType, col, target.index, edge);
-    }
-    return;
-  }
-  if (payload.kind === 'global-widget') {
-    let insertIndex = target.index;
-    if (edge === 'bottom' || edge === 'right') insertIndex = target.index + 1;
-    if (target.nodeKind === 'section') handleGlobalWidgetDrop(payload.globalId, insertIndex);
-    else if (target.nodeKind === 'element') {
-      const col = tilesStore.getTileById(target.parentId);
-      if (col) insertGlobalWidgetRelativeToElement(payload.globalId, col, target.index, edge);
-    }
-    return;
-  }
-}
-
-function applyDropInColumn(payload, columnId) {
-  if (payload.kind === 'tile-type') {
-    handleDropIntoColumn(payload.tileType, columnId);
-  } else if (payload.kind === 'global-widget') {
-    handleGlobalWidgetDropIntoColumn(payload.globalId, columnId);
-  } else if (payload.kind === 'node' && payload.nodeKind === 'element') {
-    const col = tilesStore.getTileById(columnId);
-    if (col) {
-      const nextIndex = (col.children || []).length;
-      tilesStore.moveNodeTo(payload.nodeId, columnId, nextIndex);
-    }
-  }
-}
-
-function applyDropAtListEnd(payload, listKind, parentId) {
-  if (listKind === 'sections') {
-    if (payload.kind === 'tile-type') handleDropFromSidebar(payload.tileType);
-    else if (payload.kind === 'global-widget') handleGlobalWidgetDrop(payload.globalId);
-    else if (payload.kind === 'node' && payload.nodeKind === 'section') {
-      const arr = zoneTiles.value;
-      tilesStore.moveNodeTo(payload.nodeId, null, arr.length);
-    }
-  } else if (listKind === 'elements' && parentId) {
-    applyDropInColumn(payload, parentId);
-  } else if (listKind === 'rows' && parentId) {
-    if (payload.kind === 'tile-type' && payload.tileType !== 'section') {
-      const section = tilesStore.getTileById(parentId);
-      if (section) {
-        if (payload.tileType === 'row') {
-          addRowToSection(section);
-        } else {
-          const newTile = createTileFromType(payload.tileType);
-          if (!newTile) return;
-          const col = createColumn('1-1', [newTile]);
-          const row = createRow('100', [col]);
-          if (!Array.isArray(section.children)) section.children = [];
-          section.children.push(row);
-          builderStore.selectTile(newTile.id);
-        }
-      }
-    } else if (payload.kind === 'node' && payload.nodeKind === 'row') {
-      const section = tilesStore.getTileById(parentId);
-      const len = (section?.children || []).length;
-      tilesStore.moveNodeTo(payload.nodeId, parentId, len);
-    }
-  }
-}
-
-/**
- * Inserisce un nuovo tile come nuova row dentro la sezione, prima/dopo l'indice.
- */
-function insertElementRelativeToRow(tileType, section, rowIndex, edge) {
-  const newTile = createTileFromType(tileType);
-  if (!newTile) return;
-  const col = createColumn('1-1', [newTile]);
-  const row = createRow('100', [col]);
-  if (!Array.isArray(section.children)) section.children = [];
-  const at = edge === 'bottom' || edge === 'right' ? rowIndex + 1 : rowIndex;
-  section.children.splice(at, 0, row);
-  builderStore.selectTile(newTile.id);
-}
-
-function insertElementRelativeToElement(tileType, col, elIndex, edge) {
-  const newTile = createTileFromType(tileType);
-  if (!newTile) return;
-  if (!Array.isArray(col.children)) col.children = [];
-  const at = edge === 'bottom' || edge === 'right' ? elIndex + 1 : elIndex;
-  col.children.splice(at, 0, newTile);
-  builderStore.selectTile(newTile.id);
-}
-
-function insertGlobalWidgetRelativeToElement(globalId, col, elIndex, edge) {
-  const newTile = tilesStore.insertGlobalWidget(globalId);
-  if (!newTile) return;
-  if (!Array.isArray(col.children)) col.children = [];
-  const at = edge === 'bottom' || edge === 'right' ? elIndex + 1 : elIndex;
-  col.children.splice(at, 0, newTile);
-  builderStore.selectTile(newTile.id);
-}
+// Il monitor Pragmatic è registrato centralmente in BuilderCanvas.vue (sempre montato).
+// Qui definiamo solo le factory di draggable/drop-target; la logica applicata al drop
+// è in useDragDrop.applyPragmaticDrop.
 
 /**
  * Extract shapedivider tiles from section tree for absolute overlay rendering.
