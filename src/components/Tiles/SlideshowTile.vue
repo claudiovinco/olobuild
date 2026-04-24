@@ -21,8 +21,8 @@
 
     <!-- Arrows -->
     <template v-if="s.show_arrows !== false && slides.length > 1">
-      <button class="olo-ss-arrow olo-ss-prev" @click="prev" aria-label="Precedente">&#10094;</button>
-      <button class="olo-ss-arrow olo-ss-next" @click="next" aria-label="Successivo">&#10095;</button>
+      <button class="olo-ss-arrow olo-ss-prev" @click="prev" :aria-label="t('Precedente')">&#10094;</button>
+      <button class="olo-ss-arrow olo-ss-next" @click="next" :aria-label="t('Successivo')">&#10095;</button>
     </template>
 
     <!-- Dots -->
@@ -41,6 +41,7 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
+import { t } from '@/i18n';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },

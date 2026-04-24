@@ -5,7 +5,7 @@
       <div :style="photoOuterStyle">
         <div :style="photoInnerStyle">
           <img v-if="s.photo" :src="s.photo" :alt="s.name" style="width:100%;height:100%;object-fit:cover;display:block" />
-          <div v-else :style="photoPlaceholderStyle">&#x1F464;</div>
+          <div v-else :style="photoPlaceholderStyle">{{ t('&#x1F464;') }}</div>
         </div>
       </div>
     </div>
@@ -28,6 +28,7 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { computed } from 'vue';
 
 const props = defineProps({

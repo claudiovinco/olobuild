@@ -20,7 +20,7 @@
           </div>
           <div :style="{ display:'flex', justifyContent:'space-between', alignItems:'center' }">
             <span :style="{ fontSize:'18px', fontWeight:'700', color: accent }">{{ p.price }}</span>
-            <span :style="btnStyle">Dettagli</span>
+            <span :style="btnStyle">{{ t('Dettagli') }}</span>
           </div>
         </div>
       </div>
@@ -30,6 +30,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { t } from '@/i18n';
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 const defaults = { columns: 3, gap: 24, card_radius: 12, card_shadow: 'sm', filter_bar: true, accent_color: '', btn_bg: '', btn_color: '#fff', btn_radius: 8 };
 const s = computed(() => ({ ...defaults, ...props.settings }));

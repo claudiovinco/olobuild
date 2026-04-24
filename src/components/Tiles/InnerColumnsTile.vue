@@ -2,7 +2,7 @@
   <div class="olo-inner-columns-tile">
     <!-- Label bar -->
     <div class="olo-ic-label">
-      <span>Colonne interne</span>
+      <span>{{ t('Colonne interne') }}</span>
       <span class="olo-ic-layout-badge">{{ settings.layout || '50-50' }}</span>
     </div>
 
@@ -65,6 +65,7 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { computed, ref } from 'vue';
 import draggable from 'vuedraggable';
 import { useTilesStore } from '@/stores/tiles';

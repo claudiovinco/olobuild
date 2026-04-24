@@ -9,7 +9,7 @@
         </div>
       </div>
       <div :style="{ display:'flex', alignItems: s.layout==='vertical' ? 'stretch' : 'flex-end' }">
-        <div :style="btnStyle">&#128269; Cerca</div>
+        <div :style="btnStyle">{{ t('&#128269; Cerca') }}</div>
       </div>
     </div>
   </div>
@@ -17,6 +17,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { t } from '@/i18n';
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 const defaults = { layout:'horizontal', bg:'#FFFFFF', border_radius:12, shadow:'md', padding:24, accent_color:'', btn_radius:8 };
 const s = computed(() => ({ ...defaults, ...props.settings }));

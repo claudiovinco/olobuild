@@ -426,7 +426,7 @@ class Olo_Mobilebar_Tile extends Olo_Tile_Base {
             <div class="olo-mb-bar">
                 <a class="olo-mb-logo" href="<?php echo $logo_link; ?>">
                     <?php if ( $logo_img ) : ?>
-                        <img src="<?php echo $logo_img; ?>" alt="Logo" style="max-width:<?php echo $logo_w; ?>px;">
+                        <img src="<?php echo $logo_img; ?>" alt="<?php echo esc_attr( olo_t( 'Logo' ) ); ?>" style="max-width:<?php echo $logo_w; ?>px;">
                     <?php else : ?>
                         <span style="color:#fff;font-weight:700;font-size:18px;">
                             <?php echo esc_html( get_bloginfo( 'name' ) ); ?>
@@ -437,12 +437,12 @@ class Olo_Mobilebar_Tile extends Olo_Tile_Base {
                 <div class="olo-mb-spacer"></div>
 
                 <?php if ( $search_on ) : ?>
-                <button class="olo-mb-icon-btn olo-mb-search-btn" aria-label="Cerca" type="button">
+                <button class="olo-mb-icon-btn olo-mb-search-btn" aria-label="<?php echo esc_attr( olo_t( 'Cerca' ) ); ?>" type="button">
                     <?php echo $search_svg; ?>
                 </button>
                 <?php endif; ?>
 
-                <button class="olo-mb-icon-btn olo-mb-hamburger olo-mb-ham-<?php echo $ham_style; ?>" aria-label="Menu" aria-expanded="false" type="button">
+                <button class="olo-mb-icon-btn olo-mb-hamburger olo-mb-ham-<?php echo $ham_style; ?>" aria-label="<?php echo esc_attr( olo_t( 'Menu' ) ); ?>" aria-expanded="false" type="button">
                     <?php for ( $i = 0; $i < $ham_spans; $i++ ) : ?><span></span><?php endfor; ?>
                 </button>
             </div>
@@ -452,14 +452,14 @@ class Olo_Mobilebar_Tile extends Olo_Tile_Base {
             <div class="olo-mb-search-panel">
                 <form class="olo-mb-search-form" action="<?php echo esc_url( home_url( '/' ) ); ?>" method="get" role="search">
                     <input type="search" name="s" placeholder="<?php echo $search_ph; ?>" autocomplete="off">
-                    <button type="submit" aria-label="Cerca"><?php echo $search_svg; ?></button>
+                    <button type="submit" aria-label="<?php echo esc_attr( olo_t( 'Cerca' ) ); ?>"><?php echo $search_svg; ?></button>
                 </form>
             </div>
             <?php endif; ?>
 
             <!-- Dropdown Menu Panel -->
             <div class="olo-mb-dropdown">
-                <nav class="olo-mb-nav" aria-label="Mobile navigation">
+                <nav class="olo-mb-nav" aria-label="<?php echo esc_attr( olo_t( 'Mobile navigation' ) ); ?>">
                     <?php $this->render_menu_items( $menu_id, $current_url, $chevron_svg ); ?>
                 </nav>
             </div>

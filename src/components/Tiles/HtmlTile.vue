@@ -2,8 +2,8 @@
   <div class="olo-html-tile">
     <!-- Empty state -->
     <div v-if="!s.html_content" class="mb-border-2 mb-border-dashed mb-border-gray-600 mb-rounded-lg mb-p-8 mb-text-center mb-text-gray-500">
-      <div class="mb-text-3xl mb-mb-2">&lt;/&gt;</div>
-      <div class="mb-text-sm">Custom HTML Block</div>
+      <div class="mb-text-3xl mb-mb-2">{{ t('&lt;/&gt;') }}</div>
+      <div class="mb-text-sm">{{ t('Custom HTML Block') }}</div>
     </div>
 
     <!-- Sandbox mode (iframe) -->
@@ -22,6 +22,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { t } from '@/i18n';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },

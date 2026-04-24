@@ -3,7 +3,7 @@
     <div :style="mapStyle">
       <div :style="{ position:'absolute', inset:0, display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', gap:'12px' }">
         <div :style="{ fontSize:'36px' }">&#128205;</div>
-        <span :style="{ background:'rgba(0,0,0,0.6)', color:'#fff', padding:'6px 16px', borderRadius:'20px', fontSize:'13px', fontWeight:'600' }">Mappa interattiva</span>
+        <span :style="{ background:'rgba(0,0,0,0.6)', color:'#fff', padding:'6px 16px', borderRadius:'20px', fontSize:'13px', fontWeight:'600' }">{{ t('Mappa interattiva') }}</span>
         <div :style="{ display:'flex', gap:'16px', marginTop:'8px' }">
           <div v-for="pin in pins" :key="pin.label" :style="pinStyle">
             <span :style="{ width:'8px', height:'8px', borderRadius:'50%', background: pin.color, display:'inline-block' }"></span>
@@ -18,6 +18,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { t } from '@/i18n';
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 const defaults = { height: 400, border_radius: 12, bg_color: '#E8F0FE' };
 const s = computed(() => ({ ...defaults, ...props.settings }));

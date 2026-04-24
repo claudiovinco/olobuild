@@ -11,7 +11,7 @@
     </div>
     <!-- Angle (linear only) -->
     <div v-if="type === 'linear'" class="mb-flex mb-items-center mb-gap-2">
-      <label class="mb-text-[10px] mb-text-gray-500 mb-w-12">Angolo</label>
+      <label class="mb-text-[10px] mb-text-gray-500 mb-w-12">{{ t('Angolo') }}</label>
       <input type="range" :value="angle" @input="updateAngle($event.target.value)" min="0" max="360"
         class="mb-flex-1 mb-h-1.5 mb-rounded-full mb-appearance-none mb-bg-gray-600" />
       <span class="mb-text-[10px] mb-text-gray-400 mb-w-8 mb-text-right">{{ angle }}°</span>
@@ -29,7 +29,7 @@
       </div>
     </div>
     <button @click="addStop" class="mb-w-full mb-py-1 mb-text-[10px] mb-text-gray-400 mb-bg-gray-700 mb-rounded hover:mb-bg-gray-600">
-      + Aggiungi colore
+      {{ t('+ Aggiungi colore') }}
     </button>
     <!-- Preview -->
     <div class="mb-h-6 mb-rounded mb-border mb-border-gray-600" :style="{ background: previewGradient }"></div>
@@ -39,6 +39,7 @@
 <script setup>
 import { computed } from 'vue';
 import FieldColor from './FieldColor.vue';
+import { t } from '@/i18n';
 
 const props = defineProps({
   modelValue: { type: Object, default: () => ({

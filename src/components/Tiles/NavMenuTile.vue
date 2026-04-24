@@ -2,7 +2,7 @@
   <div class="olo-navmenu-preview">
     <template v-if="selectedMenu">
       <!-- Sticky badge -->
-      <span v-if="s.sticky" class="olo-navmenu-badge olo-navmenu-badge--sticky">STICKY</span>
+      <span v-if="s.sticky" class="olo-navmenu-badge olo-navmenu-badge--sticky">{{ t('STICKY') }}</span>
 
       <!-- Vertical mode -->
       <template v-if="s.style === 'vertical'">
@@ -57,6 +57,7 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { computed } from 'vue';
 
 const props = defineProps({

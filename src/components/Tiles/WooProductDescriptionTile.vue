@@ -1,19 +1,19 @@
 <template>
   <div>
     <div v-if="!wooActive" class="olo-woo-notice">
-      <span class="olo-woo-notice-icon">&#x1F6D2;</span>
-      <span>WooCommerce richiesto</span>
+      <span class="olo-woo-notice-icon">{{ t('&#x1F6D2;') }}</span>
+      <span>{{ t('WooCommerce richiesto') }}</span>
     </div>
     <div v-else :style="descStyle">
       <p v-if="s.content_type === 'short'" style="margin:0;">
-        Questa maglietta in cotone biologico combina comfort e stile, perfetta per ogni occasione.
+        {{ t('Questa maglietta in cotone biologico combina comfort e stile, perfetta per ogni occasione.') }}
       </p>
       <template v-else>
         <p style="margin:0 0 1em;">
-          Questa maglietta premium in cotone biologico al 100% offre una vestibilita comoda e un tessuto traspirante, perfetta per l'uso quotidiano. Il design minimalista la rende versatile e adatta a qualsiasi stile.
+          {{ t('Questa maglietta premium in cotone biologico al 100% offre una vestibilita comoda e un tessuto traspirante, perfetta per l\'uso quotidiano. Il design minimalista la rende versatile e adatta a qualsiasi stile.') }}
         </p>
         <p style="margin:0;">
-          Disponibile in diverse taglie e colori. Lavabile in lavatrice a 30 gradi. Prodotto in modo sostenibile nel rispetto dell'ambiente.
+          {{ t('Disponibile in diverse taglie e colori. Lavabile in lavatrice a 30 gradi. Prodotto in modo sostenibile nel rispetto dell\'ambiente.') }}
         </p>
       </template>
     </div>
@@ -22,6 +22,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { t } from '@/i18n';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },

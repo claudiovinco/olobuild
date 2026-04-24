@@ -382,7 +382,7 @@ class Olo_Portfolio_Tile extends Olo_Tile_Base {
                         <img src="<?php echo esc_url( $item['image'] ); ?>" alt="<?php echo esc_attr( $item['title'] ); ?>" loading="lazy" />
                         <?php else : ?>
                         <div style="<?php if ( $ratio !== 'auto' ) : ?>position:absolute;inset:0;<?php endif; ?>display:flex;align-items:center;justify-content:center;background:var(--olo-color-secondary, #1F2937);min-height:120px;">
-                            <span style="font-size:32px;opacity:0.3;">&#x1F5BC;</span>
+                            <span style="font-size:32px;opacity:0.3;"><?php echo esc_html( olo_t( '&#x1F5BC;' ) ); ?></span>
                         </div>
                         <?php endif; ?>
                         <?php if ( $fx !== 'none' ) : ?>

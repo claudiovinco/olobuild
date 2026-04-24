@@ -1,15 +1,16 @@
 <template>
   <div :style="wrapStyle">
-    <img v-if="s.logo_url" :src="s.logo_url" alt="Club logo"
+    <img v-if="s.logo_url" :src="s.logo_url" :alt="t('Club logo')"
          :style="{ width: logoW + 'px', height: 'auto', flexShrink: 0 }" />
     <div style="display:flex;flex-direction:column;gap:2px">
-      <span v-if="s.show_category" :style="catStyle">Family</span>
-      <span v-if="s.show_group" :style="groupStyle">Trentino Marketing</span>
+      <span v-if="s.show_category" :style="catStyle">{{ t('Family') }}</span>
+      <span v-if="s.show_group" :style="groupStyle">{{ t('Trentino Marketing') }}</span>
     </div>
   </div>
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { computed } from 'vue';
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 

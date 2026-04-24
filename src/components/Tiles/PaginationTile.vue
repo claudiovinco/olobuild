@@ -6,7 +6,7 @@
         v-if="s.show_first_last && showNumbers"
         class="olo-pgn-btn"
         :style="btnStyle"
-      >&laquo;</span>
+      >{{ t('&laquo;') }}</span>
 
       <!-- Prev -->
       <span
@@ -44,6 +44,7 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { computed } from 'vue';
 
 const props = defineProps({

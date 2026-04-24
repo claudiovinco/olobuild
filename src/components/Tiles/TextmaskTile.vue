@@ -40,13 +40,14 @@
     <!-- Mode indicator -->
     <div class="mb-absolute mb-bottom-2 mb-right-2 mb-text-[9px] mb-text-white/50 mb-bg-black/40 mb-px-2 mb-py-0.5 mb-rounded">
       {{ modeLabel }}
-      <span v-if="s.scroll_animate" class="mb-ml-1">+ scroll</span>
+      <span v-if="s.scroll_animate" class="mb-ml-1">{{ t('+ scroll') }}</span>
     </div>
   </div>
 </template>
 
 <script setup>
 import { computed } from 'vue';
+import { t } from '@/i18n';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },

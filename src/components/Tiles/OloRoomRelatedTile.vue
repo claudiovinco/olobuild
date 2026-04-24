@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3 style="font-size:18px;font-weight:700;color:var(--olo-color-text, #374151);margin:0 0 12px">Sale nella stessa zona</h3>
+    <h3 style="font-size:18px;font-weight:700;color:var(--olo-color-text, #374151);margin:0 0 12px">{{ t('Sale nella stessa zona') }}</h3>
     <div :style="gridStyle">
       <div v-for="room in rooms" :key="room.name" style="border:1px solid #e5e7eb;border-radius:10px;overflow:hidden">
         <div :style="{height:'100px',background:room.bg}"></div>
@@ -15,6 +15,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { t } from '@/i18n';
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 const defaults = { count: 3, source: 'zone' };
 const s = computed(() => ({ ...defaults, ...props.settings }));

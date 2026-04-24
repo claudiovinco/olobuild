@@ -17,7 +17,7 @@
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8.5" cy="8.5" r="5.5"/><line x1="13" y1="13" x2="17" y2="17"/></svg>
           </div>
           <div style="flex:1;padding:16px 12px;font-size:18px" :style="{ color: (s.input_color || '#374151') + '88' }">{{ displayPlaceholder }}</div>
-          <div style="color:#d1d5db;font-size:18px">&times;</div>
+          <div style="color:#d1d5db;font-size:18px">{{ t('&times;') }}</div>
         </div>
         <!-- Risultati -->
         <div :style="resultsGridStyle">
@@ -83,7 +83,7 @@
           </svg>
         </div>
         <div style="height:36px;line-height:36px;padding-left:30px;padding-right:24px;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" :style="{ color: (s.input_color || '#374151') + '88' }">{{ displayPlaceholder }}</div>
-        <div style="position:absolute;right:8px;top:50%;transform:translateY(-50%);color:#d1d5db;font-size:12px;line-height:1">&times;</div>
+        <div style="position:absolute;right:8px;top:50%;transform:translateY(-50%);color:#d1d5db;font-size:12px;line-height:1">{{ t('&times;') }}</div>
       </div>
       <div style="margin-top:4px;overflow:hidden;border:1px solid;box-shadow:none" :style="{ borderColor: s.results_border_color || '#e5e7eb', background: s.results_bg || '#fff', borderRadius: '6px' }">
         <div v-for="(item, i) in fakeResults.slice(0, 3)" :key="'i'+i" style="display:flex;align-items:center;gap:8px;padding:6px 10px" :style="i === 0 ? { background: s.item_hover_bg || '#f3f4f6' } : {}">
@@ -106,7 +106,7 @@
           </svg>
         </div>
         <div :style="inputStyle">{{ displayPlaceholder }}</div>
-        <div style="position:absolute;right:10px;top:50%;transform:translateY(-50%);color:#d1d5db;font-size:14px;line-height:1">&times;</div>
+        <div style="position:absolute;right:10px;top:50%;transform:translateY(-50%);color:#d1d5db;font-size:14px;line-height:1">{{ t('&times;') }}</div>
       </div>
       <div style="margin-top:6px;overflow:hidden;box-shadow:0 10px 25px -5px rgba(0,0,0,.12);min-width:340px" :style="dropdownStyle">
         <div :style="resultsGridStyle">
@@ -134,6 +134,7 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { computed, ref, onMounted, onBeforeUnmount, watch } from 'vue';
 
 const props = defineProps({

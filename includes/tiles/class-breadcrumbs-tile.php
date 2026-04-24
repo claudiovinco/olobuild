@@ -72,7 +72,7 @@ class Olo_Breadcrumbs_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
-        <nav class="olo-breadcrumbs" aria-label="Breadcrumb">
+        <nav class="olo-breadcrumbs" aria-label="<?php echo esc_attr( olo_t( 'Breadcrumb' ) ); ?>">
             <ul class="uk-breadcrumb">
                 <?php echo implode( "\n", $items ); ?>
             </ul>

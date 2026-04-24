@@ -1,6 +1,6 @@
 <template>
   <div :style="wrapStyle">
-    <h3 style="font-size:16px;font-weight:700;color:var(--olo-color-text, #374151);margin:0 0 10px">Informazioni sala</h3>
+    <h3 style="font-size:16px;font-weight:700;color:var(--olo-color-text, #374151);margin:0 0 10px">{{ t('Informazioni sala') }}</h3>
     <div :style="gridStyle">
       <div v-for="item in items" :key="item.label" style="display:flex;flex-direction:column;gap:2px">
         <span style="font-size:11px;color:#9ca3af;font-weight:600;text-transform:uppercase">{{ item.label }}</span>
@@ -12,6 +12,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { t } from '@/i18n';
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 const defaults = { style: 'card' };
 const s = computed(() => ({ ...defaults, ...props.settings }));

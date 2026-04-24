@@ -6,9 +6,9 @@
     </div>
     <!-- Filter bar preview -->
     <div v-if="s.filter_bar" style="display:flex;gap:8px;margin-bottom:8px;padding:4px 0;">
-      <span style="font-size:9px;padding:2px 8px;background:rgba(255,255,255,0.15);border-radius:3px;color:#e5e7eb;font-weight:600;">Tutti</span>
-      <span style="font-size:9px;padding:2px 8px;color:#9ca3af;">Cat. 1</span>
-      <span style="font-size:9px;padding:2px 8px;color:#9ca3af;">Cat. 2</span>
+      <span style="font-size:9px;padding:2px 8px;background:rgba(255,255,255,0.15);border-radius:3px;color:#e5e7eb;font-weight:600;">{{ t('Tutti') }}</span>
+      <span style="font-size:9px;padding:2px 8px;color:#9ca3af;">{{ t('Cat. 1') }}</span>
+      <span style="font-size:9px;padding:2px 8px;color:#9ca3af;">{{ t('Cat. 2') }}</span>
     </div>
     <!-- Grid layout -->
     <div v-if="s.layout === 'grid'" :style="gridStyle">
@@ -84,12 +84,13 @@
     v-else
     class="mb-flex mb-flex-col mb-items-center mb-justify-center mb-py-12 mb-text-gray-500 mb-bg-gray-800 mb-rounded-lg"
   >
-    <span class="mb-text-4xl mb-mb-2">&#x1F5BC;&#x1F5BC;</span>
-    <span class="mb-text-sm">Aggiungi immagini alla galleria</span>
+    <span class="mb-text-4xl mb-mb-2">{{ t('&#x1F5BC;&#x1F5BC;') }}</span>
+    <span class="mb-text-sm">{{ t('Aggiungi immagini alla galleria') }}</span>
   </div>
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { computed } from 'vue';
 
 const props = defineProps({

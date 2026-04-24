@@ -1,7 +1,7 @@
 <template>
   <div class="olo-section-tile">
     <div class="olo-section-header">
-      <span class="olo-section-label">Section</span>
+      <span class="olo-section-label">{{ t('Section') }}</span>
       <span v-if="s.style && s.style !== 'default'" class="olo-section-badge">{{ s.style }}</span>
       <span v-if="s.scroll_snap" class="olo-section-badge" style="background:rgba(16,185,129,0.15);color:#10B981">snap</span>
     </div>
@@ -11,6 +11,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { t } from '@/i18n';
 
 const defaults = {
   style: 'default',

@@ -1910,7 +1910,7 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
                 <div class="olo-mm-topbar-left">
                     <?php $tb_left = $s['topbar_left_content'] ?? 'none'; ?>
                     <?php if ( $tb_left === 'hamburger' ) : ?>
-                        <button class="olo-mm-topbar-hamburger" style="background:none;border:none;color:inherit;cursor:pointer;padding:4px;position:relative" onclick="var p=this.nextElementSibling;if(p)p.style.display=p.style.display==='block'?'none':'block'" aria-label="Menu">
+                        <button class="olo-mm-topbar-hamburger" style="background:none;border:none;color:inherit;cursor:pointer;padding:4px;position:relative" onclick="var p=this.nextElementSibling;if(p)p.style.display=p.style.display==='block'?'none':'block'" aria-label="<?php echo esc_attr( olo_t( 'Menu' ) ); ?>">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
                         </button>
                         <?php
@@ -1969,11 +1969,11 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
                     $show_topbar_search = ! empty( $s['topbar_right_search'] ) || in_array( $s['search_position'] ?? 'navbar', ['topbar', 'both'] );
                     if ( $show_topbar_search ) : ?>
                         <div class="olo-mm-topbar-search-wrap" style="display:flex;align-items:center;gap:6px;position:relative">
-                            <span class="olo-mm-topbar-search" onclick="var f=this.nextElementSibling;if(f){if(f.style.display==='flex'){f.style.display='none'}else{f.style.display='flex';f.querySelector('input').focus()}}" title="Cerca" style="cursor:pointer;display:flex">
+                            <span class="olo-mm-topbar-search" onclick="var f=this.nextElementSibling;if(f){if(f.style.display==='flex'){f.style.display='none'}else{f.style.display='flex';f.querySelector('input').focus()}}" title="<?php echo esc_attr( olo_t( 'Cerca' ) ); ?>" style="cursor:pointer;display:flex">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
                             </span>
                             <form class="olo-mm-topbar-search-form" action="<?php echo esc_url( home_url( '/' ) ); ?>" method="get" style="display:none;position:absolute;right:0;top:100%;margin-top:8px;z-index:999;background:<?php echo esc_attr($s['topbar_bg'] ?: '#1F2937'); ?>;padding:8px;border-radius:6px;box-shadow:0 4px 12px rgba(0,0,0,.2)">
-                                <input type="search" name="s" placeholder="Cerca..." style="width:220px;padding:8px 12px;border:1px solid rgba(255,255,255,.2);border-radius:4px;background:rgba(255,255,255,.1);color:<?php echo esc_attr($s['topbar_link_color'] ?: '#fff'); ?>;font-size:13px;outline:none" />
+                                <input type="search" name="s" placeholder="<?php echo esc_attr( olo_t( 'Cerca...' ) ); ?>" style="width:220px;padding:8px 12px;border:1px solid rgba(255,255,255,.2);border-radius:4px;background:rgba(255,255,255,.1);color:<?php echo esc_attr($s['topbar_link_color'] ?: '#fff'); ?>;font-size:13px;outline:none" />
                             </form>
                         </div>
                     <?php endif; ?>
@@ -1994,13 +1994,13 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
                 <?php // Mobile logo (shown only on mobile via CSS) ?>
                 <?php if ( $mob_bar_logo ) : ?>
                 <a class="olo-mm-mobile-logo" href="<?php echo $logo_link; ?>">
-                    <img src="<?php echo $mob_logo ?: $logo_img; ?>" alt="Logo">
+                    <img src="<?php echo $mob_logo ?: $logo_img; ?>" alt="<?php echo esc_attr( olo_t( 'Logo' ) ); ?>">
                 </a>
                 <?php endif; ?>
 
                 <?php // Mobile search icon ?>
                 <?php if ( $mob_search ) : ?>
-                <button class="olo-mm-mobile-search olo-mm-icon-btn" aria-label="Cerca" type="button"><?php echo $search_svg; ?></button>
+                <button class="olo-mm-mobile-search olo-mm-icon-btn" aria-label="<?php echo esc_attr( olo_t( 'Cerca' ) ); ?>" type="button"><?php echo $search_svg; ?></button>
                 <?php endif; ?>
 
                 <?php // Mobile CTA buttons (visible only on mobile via CSS) ?>
@@ -2012,7 +2012,7 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
                 </div>
                 <?php endif; ?>
 
-                <button class="olo-mm-hamburger olo-mm-ham-<?php echo esc_attr( $ham_style_val ); ?>" aria-label="Menu" aria-expanded="false">
+                <button class="olo-mm-hamburger olo-mm-ham-<?php echo esc_attr( $ham_style_val ); ?>" aria-label="<?php echo esc_attr( olo_t( 'Menu' ) ); ?>" aria-expanded="false">
                     <?php echo $ham_svg; ?>
                 </button>
 
@@ -2023,8 +2023,8 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
                 ?>
                 <?php if ( $logo_img ) : ?>
                 <a class="olo-mm-logo" href="<?php echo $logo_link; ?>">
-                    <img class="olo-mm-logo-default" src="<?php echo $logo_img; ?>" alt="Logo">
-                    <?php if ( $logo_sticky ) : ?><img class="olo-mm-logo-sticky" src="<?php echo $logo_sticky; ?>" alt="Logo" style="display:none;"><?php endif; ?>
+                    <img class="olo-mm-logo-default" src="<?php echo $logo_img; ?>" alt="<?php echo esc_attr( olo_t( 'Logo' ) ); ?>">
+                    <?php if ( $logo_sticky ) : ?><img class="olo-mm-logo-sticky" src="<?php echo $logo_sticky; ?>" alt="<?php echo esc_attr( olo_t( 'Logo' ) ); ?>" style="display:none;"><?php endif; ?>
                 </a>
                 <?php endif; ?>
 
@@ -2116,10 +2116,10 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
 
                 <?php // Desktop search icon ?>
                 <?php if ( $search_icon ) : ?>
-                <button class="olo-mm-search-icon olo-mm-icon-btn" aria-label="Cerca" type="button"><?php echo $search_svg; ?></button>
+                <button class="olo-mm-search-icon olo-mm-icon-btn" aria-label="<?php echo esc_attr( olo_t( 'Cerca' ) ); ?>" type="button"><?php echo $search_svg; ?></button>
                 <div class="olo-mm-search-expand">
                     <form action="<?php echo esc_url( home_url('/') ); ?>" method="get" role="search" style="display:flex;">
-                        <input type="search" name="s" placeholder="Cerca..." autocomplete="off">
+                        <input type="search" name="s" placeholder="<?php echo esc_attr( olo_t( 'Cerca...' ) ); ?>" autocomplete="off">
                     </form>
                 </div>
                 <?php endif; ?>
@@ -2130,26 +2130,26 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
             <?php if ( $mob_search ) : ?>
             <div class="olo-mm-mob-search-panel">
                 <form action="<?php echo esc_url( home_url('/') ); ?>" method="get" role="search">
-                    <input type="search" name="s" placeholder="Cerca..." autocomplete="off">
-                    <button type="submit" aria-label="Cerca"><?php echo $search_svg; ?></button>
+                    <input type="search" name="s" placeholder="<?php echo esc_attr( olo_t( 'Cerca...' ) ); ?>" autocomplete="off">
+                    <button type="submit" aria-label="<?php echo esc_attr( olo_t( 'Cerca' ) ); ?>"><?php echo $search_svg; ?></button>
                 </form>
             </div>
             <?php endif; ?>
 
             <!-- Off-Canvas Mobile -->
             <div class="olo-mm-overlay"></div>
-            <nav class="olo-mm-offcanvas" aria-label="Mobile menu">
+            <nav class="olo-mm-offcanvas" aria-label="<?php echo esc_attr( olo_t( 'Mobile menu' ) ); ?>">
                 <div class="olo-mm-oc-header">
                     <?php if ( ! empty( $s['mobile_logo'] ) ) : ?>
-                        <div class="olo-mm-oc-logo"><img src="<?php echo esc_url( $s['mobile_logo'] ); ?>" alt="Logo" loading="lazy" /></div>
+                        <div class="olo-mm-oc-logo"><img src="<?php echo esc_url( $s['mobile_logo'] ); ?>" alt="<?php echo esc_attr( olo_t( 'Logo' ) ); ?>" loading="lazy" /></div>
                     <?php else : ?>
                         <div></div>
                     <?php endif; ?>
                     <div class="olo-mm-oc-actions">
                         <?php if ( $mob_search ) : ?>
-                        <button class="olo-mm-oc-search-btn olo-mm-icon-btn" type="button" aria-label="Cerca"><?php echo $search_svg; ?></button>
+                        <button class="olo-mm-oc-search-btn olo-mm-icon-btn" type="button" aria-label="<?php echo esc_attr( olo_t( 'Cerca' ) ); ?>"><?php echo $search_svg; ?></button>
                         <?php endif; ?>
-                        <button class="olo-mm-oc-close" type="button" aria-label="Chiudi">
+                        <button class="olo-mm-oc-close" type="button" aria-label="<?php echo esc_attr( olo_t( 'Chiudi' ) ); ?>">
                             <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                         </button>
                     </div>
@@ -2157,8 +2157,8 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
                 <?php if ( $mob_search ) : ?>
                 <div class="olo-mm-oc-search" style="display:none">
                     <form role="search" method="get" action="<?php echo esc_url( home_url( '/' ) ); ?>">
-                        <input type="search" name="s" placeholder="Cerca..." autocomplete="off" />
-                        <button type="submit" aria-label="Cerca"><?php echo $search_svg; ?></button>
+                        <input type="search" name="s" placeholder="<?php echo esc_attr( olo_t( 'Cerca...' ) ); ?>" autocomplete="off" />
+                        <button type="submit" aria-label="<?php echo esc_attr( olo_t( 'Cerca' ) ); ?>"><?php echo $search_svg; ?></button>
                     </form>
                 </div>
                 <?php endif; ?>
@@ -2220,22 +2220,22 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
                 <?php if ( $mob_style_val === 'fullscreen' ) : ?>
                 <div class="olo-mm-fs-header">
                     <?php if ( $logo_img ) : ?>
-                    <a class="olo-mm-fs-logo" href="<?php echo $logo_link; ?>"><img src="<?php echo $logo_img; ?>" alt="Logo" loading="lazy" /></a>
+                    <a class="olo-mm-fs-logo" href="<?php echo $logo_link; ?>"><img src="<?php echo $logo_img; ?>" alt="<?php echo esc_attr( olo_t( 'Logo' ) ); ?>" loading="lazy" /></a>
                     <?php else : ?><div></div><?php endif; ?>
-                    <button class="olo-mm-fs-close" type="button" aria-label="Chiudi" onclick="this.closest('.olo-megamenu').classList.remove('olo-mm-mob-active');this.closest('.olo-megamenu').querySelector('.olo-mm-hamburger').classList.remove('olo-mm-ham-open');document.body.style.overflow=''">
+                    <button class="olo-mm-fs-close" type="button" aria-label="<?php echo esc_attr( olo_t( 'Chiudi' ) ); ?>" onclick="this.closest('.olo-megamenu').classList.remove('olo-mm-mob-active');this.closest('.olo-megamenu').querySelector('.olo-mm-hamburger').classList.remove('olo-mm-ham-open');document.body.style.overflow=''">
                         <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                     </button>
                 </div>
                 <?php if ( $mob_search ) : ?>
                 <div class="olo-mm-fs-search">
                     <form action="<?php echo esc_url( home_url('/') ); ?>" method="get" role="search">
-                        <input type="search" name="s" placeholder="Cerca..." autocomplete="off">
-                        <button type="submit" aria-label="Cerca"><?php echo $search_svg; ?></button>
+                        <input type="search" name="s" placeholder="<?php echo esc_attr( olo_t( 'Cerca...' ) ); ?>" autocomplete="off">
+                        <button type="submit" aria-label="<?php echo esc_attr( olo_t( 'Cerca' ) ); ?>"><?php echo $search_svg; ?></button>
                     </form>
                 </div>
                 <?php endif; ?>
                 <?php endif; ?>
-                <nav aria-label="Mobile menu">
+                <nav aria-label="<?php echo esc_attr( olo_t( 'Mobile menu' ) ); ?>">
                     <ul class="<?php echo $mob_style_val === 'fullscreen' ? 'olo-mm-fs-nav' : 'olo-mm-dp-nav'; ?>">
                         <?php $dp_idx = 0; foreach ( $tree as $item ) :
                             if ( $this->is_button_item( $item, $dp_idx, $total, $s ) ) { $dp_idx++; continue; }
@@ -2252,7 +2252,7 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
                                 <?php if ( $has_sub ) : ?>
                                 <div class="olo-mm-dp-item">
                                     <a href="<?php echo esc_url( $item->url ); ?>"><?php echo esc_html( $item->title ); ?></a>
-                                    <button class="olo-mm-dp-chevron" type="button" aria-label="Espandi"><?php echo $toggle_svg; ?></button>
+                                    <button class="olo-mm-dp-chevron" type="button" aria-label="<?php echo esc_attr( olo_t( 'Espandi' ) ); ?>"><?php echo $toggle_svg; ?></button>
                                 </div>
                                 <ul class="olo-mm-dp-sub">
                                     <?php foreach ( $subs as $sub ) :

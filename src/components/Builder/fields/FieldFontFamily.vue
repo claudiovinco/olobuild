@@ -21,7 +21,7 @@
             ref="searchInput"
             v-model="search"
             type="text"
-            placeholder="Cerca font..."
+            :placeholder="t('Cerca font...')"
             class="ff-search"
           />
         </div>
@@ -33,11 +33,11 @@
             class="ff-item ff-item--default"
             :class="{ 'ff-item--active': !modelValue }"
             @click="selectFont('')"
-          >Predefinito (browser)</div>
+          >{{ t('Predefinito (browser)') }}</div>
 
           <!-- Custom Fonts (uploaded) -->
           <template v-if="filteredCustomFonts.length">
-            <div class="ff-group-label">Font personalizzati</div>
+            <div class="ff-group-label">{{ t('Font personalizzati') }}</div>
             <div
               v-for="font in filteredCustomFonts"
               :key="'cf-' + font.id"
@@ -47,7 +47,7 @@
               @click="selectFont(font.name)"
             >
               {{ font.name }}
-              <span class="ff-badge ff-badge--custom">CF</span>
+              <span class="ff-badge ff-badge--custom">{{ t('CF') }}</span>
             </div>
           </template>
 
@@ -105,6 +105,7 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { ref, computed, watch, nextTick, onMounted, onBeforeUnmount } from 'vue';
 import { useStylesStore } from '@/stores/styles';
 import { useFocusTrap } from '@/composables/useFocusTrap';

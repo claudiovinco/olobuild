@@ -8,7 +8,7 @@
           <path d="M4 15.5v-3c0-.28.22-.5.5-.5s.5.22.5.5v3c0 .28-.22.5-.5.5s-.5-.22-.5-.5zm2 1v-5c0-.28.22-.5.5-.5s.5.22.5.5v5c0 .28-.22.5-.5.5s-.5-.22-.5-.5zm2 .5v-7c0-.28.22-.5.5-.5s.5.22.5.5v7c0 .28-.22.5-.5.5s-.5-.22-.5-.5zm2-.5v-5.5c0-.28.22-.5.5-.5s.5.22.5.5v5.5c0 .28-.22.5-.5.5s-.5-.22-.5-.5zm2 .5v-7.5c0-.28.22-.5.5-.5s.5.22.5.5v7.5c0 .28-.22.5-.5.5s-.5-.22-.5-.5zm2-1v-5c0-.28.22-.5.5-.5s.5.22.5.5v5c0 .28-.22.5-.5.5s-.5-.22-.5-.5zm2.5 1.5c-1.1 0-2-.5-2.5-1v-6.5c.5-.5 1.4-1 2.5-1 1.93 0 3.5 1.57 3.5 3.5v1.5c0 1.93-1.57 3.5-3.5 3.5z" fill="#fff"/>
         </svg>
         <div class="mb-flex-1 mb-min-w-0">
-          <div class="mb-text-sm mb-font-semibold mb-text-white mb-truncate">SoundCloud</div>
+          <div class="mb-text-sm mb-font-semibold mb-text-white mb-truncate">{{ t('SoundCloud') }}</div>
           <div class="mb-text-xs mb-text-white mb-truncate" style="opacity:.7">{{ s.url }}</div>
         </div>
         <svg width="28" height="28" viewBox="0 0 24 24" fill="white" style="opacity:.8; flex-shrink:0;">
@@ -24,13 +24,14 @@
         <rect width="24" height="24" rx="4" fill="#ff5500" opacity=".2"/>
         <path d="M4 15.5v-3c0-.28.22-.5.5-.5s.5.22.5.5v3c0 .28-.22.5-.5.5s-.5-.22-.5-.5zm2 1v-5c0-.28.22-.5.5-.5s.5.22.5.5v5c0 .28-.22.5-.5.5s-.5-.22-.5-.5zm2 .5v-7c0-.28.22-.5.5-.5s.5.22.5.5v7c0 .28-.22.5-.5.5s-.5-.22-.5-.5zm2-.5v-5.5c0-.28.22-.5.5-.5s.5.22.5.5v5.5c0 .28-.22.5-.5.5s-.5-.22-.5-.5zm2 .5v-7.5c0-.28.22-.5.5-.5s.5.22.5.5v7.5c0 .28-.22.5-.5.5s-.5-.22-.5-.5zm2-1v-5c0-.28.22-.5.5-.5s.5.22.5.5v5c0 .28-.22.5-.5.5s-.5-.22-.5-.5zm2.5 1.5c-1.1 0-2-.5-2.5-1v-6.5c.5-.5 1.4-1 2.5-1 1.93 0 3.5 1.57 3.5 3.5v1.5c0 1.93-1.57 3.5-3.5 3.5z" fill="#ff5500" opacity=".5"/>
       </svg>
-      <div class="mb-text-sm" style="color:#ff5500; opacity:.8;">Inserisci URL SoundCloud</div>
+      <div class="mb-text-sm" style="color:#ff5500; opacity:.8;">{{ t('Inserisci URL SoundCloud') }}</div>
     </div>
   </div>
 </template>
 
 <script setup>
 import { computed } from 'vue';
+import { t } from '@/i18n';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },

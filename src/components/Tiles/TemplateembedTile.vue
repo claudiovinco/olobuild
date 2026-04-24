@@ -18,9 +18,9 @@
     <!-- Empty state -->
     <div v-else :style="emptyStyle">
       <div style="font-size:24px;margin-bottom:6px;opacity:0.5;">&#128196;</div>
-      <div style="font-size:0.85em;color:#9ca3af;">Seleziona un template</div>
+      <div style="font-size:0.85em;color:#9ca3af;">{{ t('Seleziona un template') }}</div>
       <div style="font-size:0.75em;color:#6b7280;margin-top:4px;">
-        Scegli un template dal menu a discesa nell'inspector
+        {{ t('Scegli un template dal menu a discesa nell\'inspector') }}
       </div>
     </div>
   </div>
@@ -28,6 +28,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { t } from '@/i18n';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },

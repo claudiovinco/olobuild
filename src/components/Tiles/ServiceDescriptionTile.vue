@@ -2,13 +2,14 @@
   <div :style="wrapStyle">
     <h3 v-if="s.show_title && s.title_text" :style="{margin:'0 0 12px',fontSize:titleSz+'px',fontWeight:'700',color:s.title_color || 'var(--olo-color-text, #374151)'}">{{ s.title_text }}</h3>
     <div :style="{fontSize:textSz+'px',color:s.text_color || 'var(--olo-color-text, #374151)',lineHeight:s.line_height||'1.7',textAlign:s.text_align||'left'}">
-      <p style="margin:0 0 1em">Immersa nel cuore delle Dolomiti, questa baita offre un rifugio autentico dove natura e comfort si fondono armoniosamente. Costruita in legno e pietra locale, la struttura conserva il fascino della tradizione alpina.</p>
-      <p style="margin:0">Gli interni sono stati recentemente rinnovati con materiali naturali e arredi di design, creando un'atmosfera calda e accogliente. La posizione privilegiata permette di godere di panorami mozzafiato sulle vette circostanti.</p>
+      <p style="margin:0 0 1em">{{ t('Immersa nel cuore delle Dolomiti, questa baita offre un rifugio autentico dove natura e comfort si fondono armoniosamente. Costruita in legno e pietra locale, la struttura conserva il fascino della tradizione alpina.') }}</p>
+      <p style="margin:0">{{ t('Gli interni sono stati recentemente rinnovati con materiali naturali e arredi di design, creando un\'atmosfera calda e accogliente. La posizione privilegiata permette di godere di panorami mozzafiato sulle vette circostanti.') }}</p>
     </div>
   </div>
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { computed } from 'vue';
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 const defaults = {

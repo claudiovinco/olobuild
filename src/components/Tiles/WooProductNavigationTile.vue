@@ -1,8 +1,8 @@
 <template>
   <div>
     <div v-if="!wooActive" class="olo-woo-notice">
-      <span class="olo-woo-notice-icon">&#x1F6D2;</span>
-      <span>WooCommerce richiesto</span>
+      <span class="olo-woo-notice-icon">{{ t('&#x1F6D2;') }}</span>
+      <span>{{ t('WooCommerce richiesto') }}</span>
     </div>
     <div v-else :style="wrapStyle">
       <!-- Previous -->
@@ -13,7 +13,7 @@
         <div v-if="s.show_thumbnail" :style="thumbStyle"></div>
         <div :style="textWrap('left')">
           <span v-if="s.show_label" :style="labelStyle" data-olo-editable="label_prev">{{ s.label_prev }}</span>
-          <span :style="nameStyle">Scarpe Running Pro</span>
+          <span :style="nameStyle">{{ t('Scarpe Running Pro') }}</span>
         </div>
       </div>
 
@@ -24,7 +24,7 @@
       <div :style="itemStyle('next')">
         <div :style="textWrap('right')">
           <span v-if="s.show_label" :style="labelStyle" data-olo-editable="label_next">{{ s.label_next }}</span>
-          <span :style="nameStyle">Zaino Trekking Ultra</span>
+          <span :style="nameStyle">{{ t('Zaino Trekking Ultra') }}</span>
         </div>
         <div v-if="s.show_thumbnail" :style="thumbStyleNext"></div>
         <span :style="arrowStyle">
@@ -37,6 +37,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { t } from '@/i18n';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },

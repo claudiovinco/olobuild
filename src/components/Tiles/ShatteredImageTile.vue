@@ -1,7 +1,7 @@
 <template>
   <div style="padding:4px">
     <div v-if="!s.image_url" style="display:flex;align-items:center;justify-content:center;height:200px;background:#f3f4f6;border-radius:8px;color:#9ca3af;font-size:13px">
-      Seleziona un'immagine
+      {{ t('Seleziona un\'immagine') }}
     </div>
     <template v-else>
       <component v-if="s.kenburns" :is="'style'" v-text="dynamicKeyframes"></component>
@@ -18,8 +18,8 @@
       </div>
       <!-- Scroll effects badge (builder only) -->
       <div v-if="s.scroll_parallax || s.scroll_reveal" style="position:absolute;bottom:6px;right:8px;display:flex;gap:4px;z-index:2">
-        <span v-if="s.scroll_parallax" style="background:rgba(99,102,241,.85);color:#fff;font-size:10px;padding:2px 6px;border-radius:4px;line-height:1.3">Parallax</span>
-        <span v-if="s.scroll_reveal" style="background:rgba(99,102,241,.85);color:#fff;font-size:10px;padding:2px 6px;border-radius:4px;line-height:1.3">Reveal</span>
+        <span v-if="s.scroll_parallax" style="background:rgba(99,102,241,.85);color:#fff;font-size:10px;padding:2px 6px;border-radius:4px;line-height:1.3">{{ t('Parallax') }}</span>
+        <span v-if="s.scroll_reveal" style="background:rgba(99,102,241,.85);color:#fff;font-size:10px;padding:2px 6px;border-radius:4px;line-height:1.3">{{ t('Reveal') }}</span>
       </div>
       </div>
     </template>
@@ -27,6 +27,7 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { computed } from 'vue';
 import { getShadowValue } from '@/composables/useShadowMap';
 

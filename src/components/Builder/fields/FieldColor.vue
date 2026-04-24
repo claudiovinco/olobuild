@@ -20,14 +20,14 @@
             v-if="gc.quick"
             type="button"
             class="fc-swatch-del"
-            title="Rimuovi colore"
+            :title="t('Rimuovi colore')"
             @click.stop="removeQuickColor(gc.id)"
-          >&times;</button>
+          >{{ t('&times;') }}</button>
         </span>
         <button
           type="button"
           class="fc-swatch fc-swatch--add"
-          title="Aggiungi colore corrente ai globali"
+          :title="t('Aggiungi colore corrente ai globali')"
           @click="addCurrentAsGlobal"
         >+</button>
       </div>
@@ -49,14 +49,14 @@
       />
     </div>
     <div class="mb-flex mb-items-center mb-gap-2">
-      <span class="mb-text-[10px] mb-text-gray-400 mb-shrink-0">Alfa</span>
+      <span class="mb-text-[10px] mb-text-gray-400 mb-shrink-0">{{ t('Alfa') }}</span>
       <input
         type="range"
         :value="alphaPct"
         @input="onAlphaChange(parseInt($event.target.value))"
         min="0" max="100" step="5"
         class="mb-flex-1"
-        aria-label="Opacità colore"
+        :aria-label="t('Opacità colore')"
         :aria-valuetext="alphaPct + '%'"
       />
       <span class="mb-text-[10px] mb-text-gray-400 mb-w-8 mb-text-right">{{ alphaPct }}%</span>
@@ -69,6 +69,7 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { computed } from 'vue';
 import { useStylesStore } from '@/stores/styles';
 

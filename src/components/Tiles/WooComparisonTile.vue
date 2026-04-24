@@ -6,7 +6,7 @@
           <th :style="headerCellStyle"></th>
           <th v-for="p in products" :key="p.name" :style="headerCellStyle">
             <div :style="{ width: '80px', height: '80px', background: '#F3F4F6', borderRadius: '8px', margin: '0 auto 8px', display: 'flex', alignItems: 'center', justifyContent: 'center' }">
-              <span style="font-size:28px;opacity:.3;">&#x1F4E6;</span>
+              <span style="font-size:28px;opacity:.3;">{{ t('&#x1F4E6;') }}</span>
             </div>
             <div :style="{ fontWeight: 600, fontSize: '14px' }">{{ p.name }}</div>
           </th>
@@ -14,15 +14,15 @@
       </thead>
       <tbody>
         <tr v-if="s.show_price !== false">
-          <td :style="labelCellStyle">Prezzo</td>
+          <td :style="labelCellStyle">{{ t('Prezzo') }}</td>
           <td v-for="p in products" :key="'price-'+p.name" :style="valueCellStyle">&euro;{{ p.price }}</td>
         </tr>
         <tr v-if="s.show_rating !== false">
-          <td :style="labelCellStyle">Valutazione</td>
+          <td :style="labelCellStyle">{{ t('Valutazione') }}</td>
           <td v-for="p in products" :key="'rating-'+p.name" :style="valueCellStyle">{{ '★'.repeat(p.rating) }}{{ '☆'.repeat(5-p.rating) }}</td>
         </tr>
         <tr v-if="s.show_stock !== false">
-          <td :style="labelCellStyle">Disponibilita</td>
+          <td :style="labelCellStyle">{{ t('Disponibilita') }}</td>
           <td v-for="p in products" :key="'stock-'+p.name" :style="valueCellStyle">
             <span :style="{ color: p.inStock ? '#059669' : '#DC2626' }">{{ p.inStock ? 'Disponibile' : 'Esaurito' }}</span>
           </td>
@@ -30,7 +30,7 @@
         <tr v-if="s.show_add_to_cart !== false">
           <td :style="labelCellStyle"></td>
           <td v-for="p in products" :key="'cart-'+p.name" :style="valueCellStyle">
-            <button :style="buttonStyle">Aggiungi</button>
+            <button :style="buttonStyle">{{ t('Aggiungi') }}</button>
           </td>
         </tr>
       </tbody>
@@ -39,6 +39,7 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { computed } from 'vue';
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 const s = computed(() => props.settings || {});

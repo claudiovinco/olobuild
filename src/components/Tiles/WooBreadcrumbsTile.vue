@@ -1,23 +1,24 @@
 <template>
   <div>
     <div v-if="!wooActive" class="olo-woo-notice">
-      <span class="olo-woo-notice-icon">&#x1F6D2;</span>
-      <span>WooCommerce richiesto</span>
+      <span class="olo-woo-notice-icon">{{ t('&#x1F6D2;') }}</span>
+      <span>{{ t('WooCommerce richiesto') }}</span>
     </div>
     <div v-else :style="wrapStyle">
-      <span :style="linkStyle">Home</span>
+      <span :style="linkStyle">{{ t('Home') }}</span>
       <span :style="sepStyle">{{ sepChar }}</span>
-      <span :style="linkStyle">Shop</span>
+      <span :style="linkStyle">{{ t('Shop') }}</span>
       <span :style="sepStyle">{{ sepChar }}</span>
-      <span :style="linkStyle">Categoria</span>
+      <span :style="linkStyle">{{ t('Categoria') }}</span>
       <span :style="sepStyle">{{ sepChar }}</span>
-      <span :style="textStyle">Prodotto esempio</span>
+      <span :style="textStyle">{{ t('Prodotto esempio') }}</span>
     </div>
   </div>
 </template>
 
 <script setup>
 import { computed } from 'vue';
+import { t } from '@/i18n';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },

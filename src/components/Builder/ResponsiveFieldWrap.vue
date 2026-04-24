@@ -8,7 +8,7 @@
         @click="open = !open"
         class="mb-text-gray-500 hover:mb-text-gray-300 mb-transition-colors mb-p-0.5 mb-rounded"
         :class="{ 'mb-text-primary-400': activeBp !== 'desktop' || open }"
-        title="Responsive"
+        :title="t('Responsive')"
       >
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg>
       </button>
@@ -41,6 +41,7 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { ref, computed } from 'vue';
 
 const props = defineProps({

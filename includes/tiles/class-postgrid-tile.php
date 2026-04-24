@@ -627,11 +627,11 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
                 <?php else : ?>
             <div class="olo-pg-pagination" data-pagination-style="<?php echo esc_attr( $pagination_style ); ?>">
                 <?php if ( $pagination_style === 'arrows' ) : ?>
-                    <button class="olo-pg-page-btn olo-pg-prev" aria-label="Pagina precedente" disabled>&lsaquo;</button>
+                    <button class="olo-pg-page-btn olo-pg-prev" aria-label="<?php echo esc_attr( olo_t( 'Pagina precedente' ) ); ?>" disabled><?php echo esc_html( olo_t( '&lsaquo;' ) ); ?></button>
                     <span class="olo-pg-page-info"></span>
-                    <button class="olo-pg-page-btn olo-pg-next" aria-label="Pagina successiva">&rsaquo;</button>
+                    <button class="olo-pg-page-btn olo-pg-next" aria-label="<?php echo esc_attr( olo_t( 'Pagina successiva' ) ); ?>"><?php echo esc_html( olo_t( '&rsaquo;' ) ); ?></button>
                 <?php elseif ( $pagination_style === 'loadmore' ) : ?>
-                    <button class="olo-pg-loadmore">Carica altri</button>
+                    <button class="olo-pg-loadmore"><?php echo esc_html( olo_t( 'Carica altri' ) ); ?></button>
                 <?php else : ?>
                     <!-- dots/numbers generati via JS -->
                 <?php endif; ?>
@@ -640,7 +640,7 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
             <?php endif; ?>
 
             <div class="olo-postgrid-empty" style="display:none;">
-                <p>Nessun risultato trovato.</p>
+                <p><?php echo esc_html( olo_t( 'Nessun risultato trovato.' ) ); ?></p>
             </div>
         </div>
         <?php

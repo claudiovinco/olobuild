@@ -4,7 +4,7 @@
     <div v-if="s.source === 'wp_menu'" class="mb-text-[10px] mb-text-gray-500 mb-mb-2 mb-flex mb-items-center mb-gap-1">
       <svg width="12" height="12" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="10" r="8"/><line x1="10" y1="9" x2="10" y2="14"/><circle cx="10" cy="6.5" r="0.5" fill="currentColor"/></svg>
       <span v-if="selectedMenu">Menu: {{ selectedMenu.name }} ({{ s.menu_depth === 'top' ? 'livello 1' : s.menu_depth === 'auto' ? 'auto' : 'figli ID ' + s.parent_item }})</span>
-      <span v-else>Seleziona un menu nell'Inspector</span>
+      <span v-else>{{ t('Seleziona un menu nell\'Inspector') }}</span>
     </div>
 
     <!-- Items preview -->
@@ -27,6 +27,7 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { computed, ref } from 'vue';
 
 const oloData = window.oloData || {};

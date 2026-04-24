@@ -108,7 +108,7 @@ class Olo_Twitterfeed_Tile extends Olo_Tile_Base {
                     class="twitter-timeline"
                     <?php echo $data_attrs; ?>
                     href="<?php echo esc_url( $url ); ?>"
-                >Tweets</a>
+                ><?php echo esc_html( olo_t( 'Tweets' ) ); ?></a>
                 <?php $this->enqueue_twitter_js(); ?>
             <?php endif; ?>
         </div>

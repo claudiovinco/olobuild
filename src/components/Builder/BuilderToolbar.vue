@@ -1,11 +1,11 @@
 <template>
-  <div class="mb-flex mb-items-center mb-justify-between mb-h-12 mb-px-4 mb-bg-gray-800 mb-border-b mb-border-gray-700 mb-shrink-0" role="toolbar" aria-label="Barra strumenti builder">
+  <div class="mb-flex mb-items-center mb-justify-between mb-h-12 mb-px-4 mb-bg-gray-800 mb-border-b mb-border-gray-700 mb-shrink-0" role="toolbar" :aria-label="t('Barra strumenti builder')">
     <!-- Left: Navigation + Logo -->
     <div class="mb-flex mb-items-center mb-gap-2">
       <a
         :href="wpAdminUrl"
         class="mb-px-2 mb-py-1 mb-text-gray-500 hover:mb-text-gray-200 mb-text-xs mb-transition-colors mb-no-underline"
-        title="Torna a WordPress"
+        :title="t('Torna a WordPress')"
       >
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
       </a>
@@ -13,9 +13,9 @@
       <button
         @click="$emit('back')"
         class="mb-text-gray-400 hover:mb-text-gray-200 mb-text-xs mb-transition-colors"
-        title="Torna ai template"
+        :title="t('Torna ai template')"
       >
-        Template
+        {{ t('Template') }}
       </button>
       <span class="mb-text-gray-600">/</span>
       <!-- Editable template title -->
@@ -32,16 +32,16 @@
         v-else
         @click="startEditTitle"
         class="mb-text-primary-400 mb-font-bold mb-text-sm mb-cursor-pointer hover:mb-underline"
-        title="Clicca per rinominare"
+        :title="t('Clicca per rinominare')"
       >{{ templateTitle }}</span>
       <span
         v-if="templateType === 'header'"
         class="mb-ml-2 mb-px-2 mb-py-0.5 mb-text-[10px] mb-font-bold mb-uppercase mb-rounded mb-bg-purple-600/20 mb-text-purple-300 mb-border mb-border-purple-500/30"
-      >Header</span>
+      >{{ t('Header') }}</span>
       <span
         v-if="templateType === 'footer'"
         class="mb-ml-2 mb-px-2 mb-py-0.5 mb-text-[10px] mb-font-bold mb-uppercase mb-rounded mb-bg-teal-600/20 mb-text-teal-300 mb-border mb-border-teal-500/30"
-      >Footer</span>
+      >{{ t('Footer') }}</span>
       <span
         v-if="templateType === 'single'"
         class="mb-ml-2 mb-px-2 mb-py-0.5 mb-text-[10px] mb-font-bold mb-uppercase mb-rounded mb-bg-amber-600/20 mb-text-amber-300 mb-border mb-border-amber-500/30"
@@ -58,8 +58,8 @@
             ? 'mb-bg-primary-600/20 mb-text-primary-300'
             : 'mb-text-gray-400 hover:mb-text-gray-200 hover:mb-bg-gray-700'
         ]"
-        title="Impostazioni pagina"
-        aria-label="Impostazioni pagina"
+        :title="t('Impostazioni pagina')"
+        :aria-label="t('Impostazioni pagina')"
       >
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
       </button>
@@ -85,7 +85,7 @@
         <button
           @click="builderStore.zoomOut()"
           class="mb-px-1.5 mb-py-1 mb-rounded mb-text-gray-400 hover:mb-text-gray-200 hover:mb-bg-gray-700 mb-transition-colors"
-          title="Riduci zoom"
+          :title="t('Riduci zoom')"
           :disabled="builderStore.canvasZoom <= 25"
         >
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
@@ -94,12 +94,12 @@
           @click="showZoomMenu = !showZoomMenu"
           class="mb-px-1.5 mb-py-0.5 mb-rounded mb-text-[11px] mb-font-bold mb-tabular-nums mb-min-w-[40px] mb-text-center mb-transition-colors"
           :class="builderStore.canvasZoom !== 100 ? 'mb-text-primary-300 mb-bg-primary-600/20' : 'mb-text-gray-400 hover:mb-text-gray-200 hover:mb-bg-gray-700'"
-          title="Zoom canvas"
+          :title="t('Zoom canvas')"
         >{{ builderStore.canvasZoom }}%</button>
         <button
           @click="builderStore.zoomIn()"
           class="mb-px-1.5 mb-py-1 mb-rounded mb-text-gray-400 hover:mb-text-gray-200 hover:mb-bg-gray-700 mb-transition-colors"
-          title="Aumenta zoom"
+          :title="t('Aumenta zoom')"
           :disabled="builderStore.canvasZoom >= 200"
         >
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
@@ -124,8 +124,8 @@
       <button
         @click="showShortcuts = !showShortcuts"
         class="mb-px-2 mb-py-1.5 mb-rounded-md mb-transition-colors mb-text-gray-400 hover:mb-text-gray-200 hover:mb-bg-gray-700 mb-text-xs mb-font-bold"
-        title="Scorciatoie tastiera"
-        aria-label="Scorciatoie tastiera"
+        :title="t('Scorciatoie tastiera')"
+        :aria-label="t('Scorciatoie tastiera')"
       >
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M6 8h.001M10 8h.001M14 8h.001M18 8h.001M8 12h.001M12 12h.001M16 12h.001M7 16h10"/></svg>
       </button>
@@ -138,18 +138,18 @@
       >
         <div class="mb-bg-gray-800 mb-border mb-border-gray-600 mb-rounded-xl mb-p-6 mb-shadow-2xl mb-w-[380px]" @click.stop>
           <div class="mb-flex mb-items-center mb-justify-between mb-mb-4">
-            <h3 class="mb-text-white mb-text-base mb-font-semibold mb-m-0">Scorciatoie tastiera</h3>
+            <h3 class="mb-text-white mb-text-base mb-font-semibold mb-m-0">{{ t('Scorciatoie tastiera') }}</h3>
             <button
               @click="showShortcuts = false"
               class="mb-text-gray-400 hover:mb-text-white mb-transition-colors"
-              aria-label="Chiudi"
+              :aria-label="t('Chiudi')"
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             </button>
           </div>
           <div class="mb-space-y-3">
             <div class="mb-flex mb-items-center mb-justify-between">
-              <span class="mb-text-gray-300 mb-text-sm">Annulla</span>
+              <span class="mb-text-gray-300 mb-text-sm">{{ t('Annulla') }}</span>
               <div class="mb-flex mb-gap-1">
                 <kbd class="mb-bg-gray-700 mb-text-gray-300 mb-px-2 mb-py-0.5 mb-rounded mb-text-xs mb-font-mono mb-border mb-border-gray-600">Ctrl</kbd>
                 <span class="mb-text-gray-500 mb-text-xs">+</span>
@@ -157,7 +157,7 @@
               </div>
             </div>
             <div class="mb-flex mb-items-center mb-justify-between">
-              <span class="mb-text-gray-300 mb-text-sm">Ripeti</span>
+              <span class="mb-text-gray-300 mb-text-sm">{{ t('Ripeti') }}</span>
               <div class="mb-flex mb-gap-1">
                 <kbd class="mb-bg-gray-700 mb-text-gray-300 mb-px-2 mb-py-0.5 mb-rounded mb-text-xs mb-font-mono mb-border mb-border-gray-600">Ctrl</kbd>
                 <span class="mb-text-gray-500 mb-text-xs">+</span>
@@ -167,7 +167,7 @@
               </div>
             </div>
             <div class="mb-flex mb-items-center mb-justify-between">
-              <span class="mb-text-gray-300 mb-text-sm">Salva</span>
+              <span class="mb-text-gray-300 mb-text-sm">{{ t('Salva') }}</span>
               <div class="mb-flex mb-gap-1">
                 <kbd class="mb-bg-gray-700 mb-text-gray-300 mb-px-2 mb-py-0.5 mb-rounded mb-text-xs mb-font-mono mb-border mb-border-gray-600">Ctrl</kbd>
                 <span class="mb-text-gray-500 mb-text-xs">+</span>
@@ -175,7 +175,7 @@
               </div>
             </div>
             <div class="mb-flex mb-items-center mb-justify-between">
-              <span class="mb-text-gray-300 mb-text-sm">Elimina tile selezionato</span>
+              <span class="mb-text-gray-300 mb-text-sm">{{ t('Elimina tile selezionato') }}</span>
               <div class="mb-flex mb-gap-1">
                 <kbd class="mb-bg-gray-700 mb-text-gray-300 mb-px-2 mb-py-0.5 mb-rounded mb-text-xs mb-font-mono mb-border mb-border-gray-600">Canc</kbd>
                 <span class="mb-text-gray-500 mb-text-xs">/</span>
@@ -183,7 +183,7 @@
               </div>
             </div>
             <div class="mb-flex mb-items-center mb-justify-between">
-              <span class="mb-text-gray-300 mb-text-sm">Copia tile</span>
+              <span class="mb-text-gray-300 mb-text-sm">{{ t('Copia tile') }}</span>
               <div class="mb-flex mb-gap-1">
                 <kbd class="mb-bg-gray-700 mb-text-gray-300 mb-px-2 mb-py-0.5 mb-rounded mb-text-xs mb-font-mono mb-border mb-border-gray-600">Ctrl</kbd>
                 <span class="mb-text-gray-500 mb-text-xs">+</span>
@@ -191,7 +191,7 @@
               </div>
             </div>
             <div class="mb-flex mb-items-center mb-justify-between">
-              <span class="mb-text-gray-300 mb-text-sm">Incolla tile</span>
+              <span class="mb-text-gray-300 mb-text-sm">{{ t('Incolla tile') }}</span>
               <div class="mb-flex mb-gap-1">
                 <kbd class="mb-bg-gray-700 mb-text-gray-300 mb-px-2 mb-py-0.5 mb-rounded mb-text-xs mb-font-mono mb-border mb-border-gray-600">Ctrl</kbd>
                 <span class="mb-text-gray-500 mb-text-xs">+</span>
@@ -199,7 +199,7 @@
               </div>
             </div>
             <div class="mb-flex mb-items-center mb-justify-between">
-              <span class="mb-text-gray-300 mb-text-sm">Copia stile</span>
+              <span class="mb-text-gray-300 mb-text-sm">{{ t('Copia stile') }}</span>
               <div class="mb-flex mb-gap-1">
                 <kbd class="mb-bg-gray-700 mb-text-gray-300 mb-px-2 mb-py-0.5 mb-rounded mb-text-xs mb-font-mono mb-border mb-border-gray-600">Ctrl</kbd>
                 <span class="mb-text-gray-500 mb-text-xs">+</span>
@@ -209,7 +209,7 @@
               </div>
             </div>
             <div class="mb-flex mb-items-center mb-justify-between">
-              <span class="mb-text-gray-300 mb-text-sm">Incolla stile</span>
+              <span class="mb-text-gray-300 mb-text-sm">{{ t('Incolla stile') }}</span>
               <div class="mb-flex mb-gap-1">
                 <kbd class="mb-bg-gray-700 mb-text-gray-300 mb-px-2 mb-py-0.5 mb-rounded mb-text-xs mb-font-mono mb-border mb-border-gray-600">Ctrl</kbd>
                 <span class="mb-text-gray-500 mb-text-xs">+</span>
@@ -219,7 +219,7 @@
               </div>
             </div>
             <div class="mb-flex mb-items-center mb-justify-between">
-              <span class="mb-text-gray-300 mb-text-sm">Cerca tile</span>
+              <span class="mb-text-gray-300 mb-text-sm">{{ t('Cerca tile') }}</span>
               <div class="mb-flex mb-gap-1">
                 <kbd class="mb-bg-gray-700 mb-text-gray-300 mb-px-2 mb-py-0.5 mb-rounded mb-text-xs mb-font-mono mb-border mb-border-gray-600">Ctrl</kbd>
                 <span class="mb-text-gray-500 mb-text-xs">+</span>
@@ -227,7 +227,7 @@
               </div>
             </div>
             <div v-if="hasAiKey" class="mb-flex mb-items-center mb-justify-between">
-              <span class="mb-text-gray-300 mb-text-sm">Assistente AI</span>
+              <span class="mb-text-gray-300 mb-text-sm">{{ t('Assistente AI') }}</span>
               <div class="mb-flex mb-gap-1">
                 <kbd class="mb-bg-gray-700 mb-text-gray-300 mb-px-2 mb-py-0.5 mb-rounded mb-text-xs mb-font-mono mb-border mb-border-gray-600">Ctrl</kbd>
                 <span class="mb-text-gray-500 mb-text-xs">+</span>
@@ -247,8 +247,8 @@
       <button
         @click="$emit('open-library')"
         class="mb-px-2 mb-py-1.5 mb-rounded-md mb-transition-colors mb-text-cyan-400 hover:mb-text-cyan-200 hover:mb-bg-gray-700"
-        title="Libreria Template"
-        aria-label="Libreria Template"
+        :title="t('Libreria Template')"
+        :aria-label="t('Libreria Template')"
       >
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
       </button>
@@ -256,8 +256,8 @@
       <button
         @click="$emit('open-themes')"
         class="mb-px-2 mb-py-1.5 mb-rounded-md mb-transition-colors mb-text-amber-400 hover:mb-text-amber-200 hover:mb-bg-gray-700"
-        title="Temi sito"
-        aria-label="Temi sito"
+        :title="t('Temi sito')"
+        :aria-label="t('Temi sito')"
       >
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10H12V2Z"/><path d="M12 2a10 10 0 0 1 10 10"/><path d="M12 12l8-4"/></svg>
       </button>
@@ -266,8 +266,8 @@
         v-if="hasAiKey"
         @click="$emit('open-ai')"
         class="mb-px-2 mb-py-1.5 mb-rounded-md mb-transition-colors mb-text-purple-400 hover:mb-text-purple-200 hover:mb-bg-gray-700"
-        title="Assistente AI (Ctrl+Shift+A)"
-        aria-label="Assistente AI"
+        :title="t('Assistente AI (Ctrl+Shift+A)')"
+        :aria-label="t('Assistente AI')"
       >
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
       </button>
@@ -275,16 +275,16 @@
       <button
         @click="exportTemplate"
         class="mb-px-2 mb-py-1.5 mb-rounded-md mb-transition-colors mb-text-gray-400 hover:mb-text-gray-200 hover:mb-bg-gray-700"
-        title="Esporta template JSON"
-        aria-label="Esporta template"
+        :title="t('Esporta template JSON')"
+        :aria-label="t('Esporta template')"
       >
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
       </button>
       <button
         @click="importTemplate"
         class="mb-px-2 mb-py-1.5 mb-rounded-md mb-transition-colors mb-text-gray-400 hover:mb-text-gray-200 hover:mb-bg-gray-700"
-        title="Importa template JSON"
-        aria-label="Importa template"
+        :title="t('Importa template JSON')"
+        :aria-label="t('Importa template')"
       >
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
       </button>
@@ -292,8 +292,8 @@
       <button
         @click="onOpenRevisions"
         class="mb-px-2 mb-py-1.5 mb-rounded-md mb-transition-colors mb-text-gray-400 hover:mb-text-gray-200 hover:mb-bg-gray-700"
-        title="Cronologia revisioni"
-        aria-label="Cronologia revisioni"
+        :title="t('Cronologia revisioni')"
+        :aria-label="t('Cronologia revisioni')"
       >
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg>
       </button>
@@ -301,8 +301,8 @@
       <button
         @click="$emit('open-finder')"
         class="mb-px-2 mb-py-1.5 mb-rounded-md mb-transition-colors mb-text-gray-400 hover:mb-text-gray-200 hover:mb-bg-gray-700"
-        title="Cerca tile (Ctrl+K)"
-        aria-label="Cerca tile"
+        :title="t('Cerca tile (Ctrl+K)')"
+        :aria-label="t('Cerca tile')"
       >
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
       </button>
@@ -316,8 +316,8 @@
             ? 'mb-text-gray-300 hover:mb-text-white hover:mb-bg-gray-700'
             : 'mb-text-gray-600 mb-cursor-not-allowed'
         ]"
-        title="Annulla (Ctrl+Z)"
-        aria-label="Annulla"
+        :title="t('Annulla (Ctrl+Z)')"
+        :aria-label="t('Annulla')"
       >
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"/></svg>
       </button>
@@ -330,8 +330,8 @@
             ? 'mb-text-gray-300 hover:mb-text-white hover:mb-bg-gray-700'
             : 'mb-text-gray-600 mb-cursor-not-allowed'
         ]"
-        title="Ripeti (Ctrl+Shift+Z)"
-        aria-label="Ripeti"
+        :title="t('Ripeti (Ctrl+Shift+Z)')"
+        :aria-label="t('Ripeti')"
       >
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 7v6h-6"/><path d="M3 17a9 9 0 0 1 9-9 9 9 0 0 1 6 2.3L21 13"/></svg>
       </button>
@@ -343,8 +343,8 @@
             ? 'mb-bg-primary-600/20 mb-text-primary-300'
             : 'mb-text-gray-400 hover:mb-text-gray-200 hover:mb-bg-gray-700'
         ]"
-        title="Modalità pulita (WYSIWYG)"
-        aria-label="Modalità pulita"
+        :title="t('Modalità pulita (WYSIWYG)')"
+        :aria-label="t('Modalità pulita')"
       >
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
       </button>
@@ -356,7 +356,7 @@
             ? 'mb-border-amber-500 mb-bg-amber-600/20 mb-text-amber-300'
             : 'mb-border-gray-600 mb-text-gray-400 hover:mb-bg-gray-700'
         ]"
-        title="Mostra gabbia di costruzione (bordi celle, righe, sezioni)"
+        :title="t('Mostra gabbia di costruzione (bordi celle, righe, sezioni)')"
       >
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
         Gabbia
@@ -365,7 +365,7 @@
         v-if="realPreviewUrl"
         @click="openRealPreview"
         class="mb-px-3 mb-py-1.5 mb-text-xs mb-rounded-md mb-border mb-border-emerald-600 mb-text-emerald-400 hover:mb-bg-emerald-600/20 mb-transition-colors mb-flex mb-items-center mb-gap-1"
-        title="Apri la pagina reale in un nuovo tab"
+        :title="t('Apri la pagina reale in un nuovo tab')"
       >
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>
         Reale
@@ -443,6 +443,7 @@ import { useBuilderStore } from '@/stores/builder';
 import { useTilesStore } from '@/stores/tiles';
 import { useHistory } from '@/composables/useHistory';
 import { useToast } from '@/composables/useToast';
+import { t } from '@/i18n';
 
 const emit = defineEmits(['back', 'open-revisions', 'open-finder', 'open-ai', 'open-library', 'open-themes']);
 
@@ -588,7 +589,7 @@ async function exportTemplate() {
     URL.revokeObjectURL(url);
   } catch (err) {
     console.error('Export error:', err);
-    toast.error('Errore durante l\'esportazione');
+    toast.error(t('Errore durante l\'esportazione'));
   }
 }
 
@@ -613,10 +614,10 @@ function importTemplate() {
       });
       if (!res.ok) throw new Error('Import failed');
       const result = await res.json();
-      toast.success('Template importato con successo');
+      toast.success(t('Template importato con successo'));
     } catch (err) {
       console.error('Import error:', err);
-      toast.error('Errore durante l\'importazione');
+      toast.error(t('Errore durante l\'importazione'));
     }
   };
   input.click();

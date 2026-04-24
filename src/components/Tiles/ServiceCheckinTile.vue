@@ -1,12 +1,13 @@
 <template>
   <div :style="barStyle">
-    <strong :style="{ color: s.label_color || 'var(--olo-color-text, #374151)' }">Check-in:</strong> dalle 15:00
-    &nbsp;| &nbsp;<strong :style="{ color: s.label_color || 'var(--olo-color-text, #374151)' }">Check-out:</strong> entro 10:00
-    <br><strong :style="{ color: s.label_color || 'var(--olo-color-text, #374151)' }">Soggiorno minimo:</strong> 2 notti
+    <strong :style="{ color: s.label_color || 'var(--olo-color-text, #374151)' }">{{ t('Check-in:') }}</strong> dalle 15:00
+    &nbsp;| &nbsp;<strong :style="{ color: s.label_color || 'var(--olo-color-text, #374151)' }">{{ t('Check-out:') }}</strong> entro 10:00
+    <br><strong :style="{ color: s.label_color || 'var(--olo-color-text, #374151)' }">{{ t('Soggiorno minimo:') }}</strong> 2 notti
   </div>
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { computed } from 'vue';
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 

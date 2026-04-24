@@ -184,7 +184,7 @@ class Olo_Headline_Tile extends Olo_Tile_Base {
                 <?php elseif ( $s['decoration'] === 'star' ) : ?>
                     <div style="display:flex;justify-content:<?php echo $jc; ?>;gap:<?php echo $deco_spacing; ?>px;font-size:1.5em;margin-bottom:8px;<?php if ( $dec_clr ) echo 'color:' . $dec_clr . ';'; ?>">
                     <?php for ( $di = 0; $di < $deco_count; $di++ ) : ?>
-                        <span>&#x2605;</span>
+                        <span><?php echo esc_html( olo_t( '&#x2605;' ) ); ?></span>
                     <?php endfor; ?>
                     </div>
                 <?php endif; ?>

@@ -8,14 +8,15 @@
     </span>
     <div style="display:flex;flex-direction:column;gap:2px">
       <span v-if="s.show_label" :style="labelStyle">{{ s.label_text || 'Indirizzo' }}</span>
-      <span :style="textStyle">Via Roma 12, 38032 Canazei (TN)</span>
-      <span v-if="s.show_locality" :style="{fontSize:(fs-1)+'px',color:s.label_color || 'var(--olo-color-text-muted, #9CA3AF)'}">Val di Fassa</span>
+      <span :style="textStyle">{{ t('Via Roma 12, 38032 Canazei (TN)') }}</span>
+      <span v-if="s.show_locality" :style="{fontSize:(fs-1)+'px',color:s.label_color || 'var(--olo-color-text-muted, #9CA3AF)'}">{{ t('Val di Fassa') }}</span>
       <span v-if="s.show_map_link" :style="{fontSize:(fs-2)+'px',color:s.link_color || 'var(--olo-color-primary, #6366F1)',marginTop:'3px'}">{{ s.map_link_text || 'Apri in Google Maps' }} ↗</span>
     </div>
   </div>
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { computed } from 'vue';
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 const defaults = {

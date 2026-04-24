@@ -12,12 +12,13 @@
     <!-- Text -->
     <span :style="textWrapStyle">
       <span v-if="s.show_label" :style="labelStyle">{{ s.label_text || 'Codice CIPAT' }}</span>
-      <span :style="codeStyle">CIPAT-012345-AT</span>
+      <span :style="codeStyle">{{ t('CIPAT-012345-AT') }}</span>
     </span>
   </div>
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { computed } from 'vue';
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 

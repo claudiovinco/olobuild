@@ -3,14 +3,14 @@
     <!-- Bar preview -->
     <div class="olo-mbp-bar">
       <div class="olo-mbp-logo">
-        <img v-if="s.logo_image" :src="s.logo_image" :style="{ maxWidth: logoW + 'px', maxHeight: '32px' }" alt="Logo">
-        <span v-else class="olo-mbp-logo-placeholder">Logo</span>
+        <img v-if="s.logo_image" :src="s.logo_image" :style="{ maxWidth: logoW + 'px', maxHeight: '32px' }" :alt="t('Logo')">
+        <span v-else class="olo-mbp-logo-placeholder">{{ t('Logo') }}</span>
       </div>
       <div class="olo-mbp-spacer"></div>
-      <div v-if="s.search_enabled" class="olo-mbp-icon" title="Ricerca">
+      <div v-if="s.search_enabled" class="olo-mbp-icon" :title="t('Ricerca')">
         <svg viewBox="0 0 24 24" :style="{ stroke: s.search_icon_color || '#fff' }"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       </div>
-      <div class="olo-mbp-icon olo-mbp-hamburger" title="Hamburger">
+      <div class="olo-mbp-icon olo-mbp-hamburger" :title="t('Hamburger')">
         <span :style="{ background: hamColor }"></span>
         <span :style="{ background: hamColor, width: hamStyle === 'minimal' ? '70%' : '100%' }"></span>
         <span v-if="hamStyle !== 'minimal'" :style="{ background: hamColor }"></span>
@@ -27,14 +27,14 @@
     <!-- Menu preview -->
     <div class="olo-mbp-menu-preview" :style="panelStyle">
       <div class="olo-mbp-menu-item" :style="itemStyle">
-        <span :style="{ color: panelActive }">Home</span>
+        <span :style="{ color: panelActive }">{{ t('Home') }}</span>
       </div>
       <div class="olo-mbp-menu-item" :style="itemStyle">
-        <span>Pagina 1</span>
+        <span>{{ t('Pagina 1') }}</span>
         <span class="olo-mbp-chev" :style="{ color: s.panel_chevron_color || '#999' }">›</span>
       </div>
       <div class="olo-mbp-menu-item" :style="itemStyle">
-        <span>Pagina 2</span>
+        <span>{{ t('Pagina 2') }}</span>
         <span class="olo-mbp-chev" :style="{ color: s.panel_chevron_color || '#999' }">›</span>
       </div>
     </div>
@@ -42,6 +42,7 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { computed } from 'vue';
 
 const props = defineProps({

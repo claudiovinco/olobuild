@@ -3,7 +3,7 @@
  * Plugin Name: Olobuild
  * Plugin URI:  https://olotheme.com
  * Description: Page builder professionale olonico con sistema a griglia (tile drag & drop).
- * Version:     3.7.4
+ * Version:     3.10.0
  * Author:      Claudio Vinco
  * Author URI:  https://clod.eu
  * Text Domain: olobuilder
@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'OLO_VERSION', '3.7.4' );
+define( 'OLO_VERSION', '3.10.0' );
 define( 'OLO_PATH', plugin_dir_path( __FILE__ ) );
 define( 'OLO_URL', plugin_dir_url( __FILE__ ) );
 
@@ -243,48 +243,67 @@ add_filter( 'wp_check_filetype_and_ext', function( $data, $file, $filename, $mim
 }, 10, 4 );
 
 /**
- * Traduzione stringhe tile — equivalente di __() per Olobuild.
+ * Traduzione stringhe Olobuild — equivalente di __() per il plugin.
  *
- * Se Olo Lang è attivo e la lingua corrente non è quella default,
- * cerca la traduzione nella mappa globale. Altrimenti ritorna l'originale.
- * Sicuro da usare anche se Olo Lang non è installato.
+ * Sistema dinamico: legge le traduzioni esclusivamente dal DB di Olo Lang
+ * (gestite via UI del plugin). Nessun dizionario hardcoded lato codice —
+ * aggiungere una lingua = installarla + tradurre le stringhe dal pannello.
  *
  * @param string $text Testo originale (italiano).
  * @return string Testo tradotto o originale.
  */
 function olo_t( $text ) {
+    $map = olo_get_translations_map();
+    return $map[ $text ] ?? $text;
+}
+
+/**
+ * Mappa traduzioni originale => tradotto per la lingua corrente.
+ * Cache statica nella request. Array vuoto se siamo nella lingua default
+ * o se Olo Lang non è attivo.
+ *
+ * @return array<string,string>
+ */
+function olo_get_translations_map() {
     static $map = null;
-    static $is_default = null;
+    if ( $map !== null ) return $map;
 
-    // Lazy init: determina lingua e carica mappa una sola volta
-    if ( $is_default === null ) {
-        if ( ! class_exists( 'Olo_Lang_Language' ) ) {
-            $is_default = true;
-        } else {
-            $lang    = Olo_Lang_Language::detect_current_lang();
-            $default = Olo_Lang_Language::get_default_lang();
-            $is_default = ( $lang === $default );
+    $map = [];
 
-            if ( ! $is_default ) {
-                $db  = new Olo_Lang_Database();
-                $raw = $db->get_translation_map( 0, $lang );
-                $map = [];
-                foreach ( $raw as $row ) {
-                    $orig = $row['original'] ?? '';
-                    $trans = trim( $row['translation'] ?? '' );
-                    if ( $orig !== '' && $trans !== '' && $orig !== $trans && $row['status'] !== 'bozza' ) {
-                        $map[ $orig ] = $trans;
-                    }
-                }
-            }
+    if ( ! class_exists( 'Olo_Lang_Language' ) || ! class_exists( 'Olo_Lang_Database' ) ) {
+        return $map;
+    }
+
+    $lang    = Olo_Lang_Language::detect_current_lang();
+    $default = Olo_Lang_Language::get_default_lang();
+    if ( $lang === $default ) return $map;
+
+    $db  = new Olo_Lang_Database();
+    $raw = $db->get_translation_map( 0, $lang );
+    foreach ( $raw as $row ) {
+        $orig  = $row['original'] ?? '';
+        $trans = trim( $row['translation'] ?? '' );
+        if ( $orig !== '' && $trans !== '' && $orig !== $trans && ( $row['status'] ?? '' ) !== 'bozza' ) {
+            $map[ $orig ] = $trans;
         }
     }
+    return $map;
+}
 
-    if ( $is_default || $map === null ) {
-        return $text;
+/**
+ * Ritorna il locale corrente (olo-lang > WP locale) in formato xx_XX.
+ */
+function olo_current_locale() {
+    if ( class_exists( 'Olo_Lang_Language' ) ) {
+        $code = Olo_Lang_Language::detect_current_lang();
+        $known = [
+            'en' => 'en_US', 'de' => 'de_DE', 'fr' => 'fr_FR', 'es' => 'es_ES',
+            'it' => 'it_IT', 'pt' => 'pt_BR', 'nl' => 'nl_NL', 'pl' => 'pl_PL',
+            'ja' => 'ja',    'ru' => 'ru_RU', 'zh' => 'zh_CN',
+        ];
+        return $known[ $code ] ?? $code;
     }
-
-    return $map[ $text ] ?? $text;
+    return get_locale();
 }
 
 require_once OLO_PATH . 'includes/class-database.php';

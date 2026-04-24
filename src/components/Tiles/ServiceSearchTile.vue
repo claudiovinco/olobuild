@@ -2,35 +2,35 @@
   <div class="olo-svsearch-preview" :class="'olo-svsearch-preview--' + (settings.layout || 'horizontal')" :style="wrapStyle">
     <div class="olo-svsearch-preview-fields">
       <div v-if="hasFilter('valley')" class="olo-svsearch-preview-field">
-        <span class="olo-svsearch-preview-label">Località</span>
-        <span class="olo-svsearch-preview-input">Tutte le località</span>
+        <span class="olo-svsearch-preview-label">{{ t('Località') }}</span>
+        <span class="olo-svsearch-preview-input">{{ t('Tutte le località') }}</span>
       </div>
       <div v-if="hasFilter('checkin')" class="olo-svsearch-preview-field">
-        <span class="olo-svsearch-preview-label">Check-in</span>
-        <span class="olo-svsearch-preview-input">gg/mm/aaaa</span>
+        <span class="olo-svsearch-preview-label">{{ t('Check-in') }}</span>
+        <span class="olo-svsearch-preview-input">{{ t('gg/mm/aaaa') }}</span>
       </div>
       <div v-if="hasFilter('checkin')" class="olo-svsearch-preview-field">
-        <span class="olo-svsearch-preview-label">Check-out</span>
-        <span class="olo-svsearch-preview-input">gg/mm/aaaa</span>
+        <span class="olo-svsearch-preview-label">{{ t('Check-out') }}</span>
+        <span class="olo-svsearch-preview-input">{{ t('gg/mm/aaaa') }}</span>
       </div>
       <div v-if="hasFilter('guests')" class="olo-svsearch-preview-field">
-        <span class="olo-svsearch-preview-label">Ospiti</span>
-        <span class="olo-svsearch-preview-input">Qualsiasi</span>
+        <span class="olo-svsearch-preview-label">{{ t('Ospiti') }}</span>
+        <span class="olo-svsearch-preview-input">{{ t('Qualsiasi') }}</span>
       </div>
       <div v-if="hasFilter('bedrooms')" class="olo-svsearch-preview-field">
-        <span class="olo-svsearch-preview-label">Camere</span>
-        <span class="olo-svsearch-preview-input">Qualsiasi</span>
+        <span class="olo-svsearch-preview-label">{{ t('Camere') }}</span>
+        <span class="olo-svsearch-preview-input">{{ t('Qualsiasi') }}</span>
       </div>
       <div v-if="hasFilter('altitude')" class="olo-svsearch-preview-field">
-        <span class="olo-svsearch-preview-label">Altitudine</span>
-        <span class="olo-svsearch-preview-input">Qualsiasi</span>
+        <span class="olo-svsearch-preview-label">{{ t('Altitudine') }}</span>
+        <span class="olo-svsearch-preview-input">{{ t('Qualsiasi') }}</span>
       </div>
       <div v-if="hasFilter('type')" class="olo-svsearch-preview-field">
-        <span class="olo-svsearch-preview-label">Tipologia</span>
-        <span class="olo-svsearch-preview-input">Tutte</span>
+        <span class="olo-svsearch-preview-label">{{ t('Tipologia') }}</span>
+        <span class="olo-svsearch-preview-input">{{ t('Tutte') }}</span>
       </div>
       <div v-if="hasFilter('amenities')" class="olo-svsearch-preview-field olo-svsearch-preview-field--wide">
-        <span class="olo-svsearch-preview-label">Servizi</span>
+        <span class="olo-svsearch-preview-label">{{ t('Servizi') }}</span>
         <div class="olo-svsearch-preview-pills">
           <span v-for="a in amenitiesList" :key="a" class="olo-svsearch-preview-pill">{{ a }}</span>
         </div>
@@ -43,6 +43,7 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { computed } from 'vue';
 import { useBuilderStore } from '@/stores/builder';
 

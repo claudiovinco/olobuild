@@ -12,7 +12,7 @@
       style="width:100%;height:100%;object-fit:cover"
     ></video>
     <div v-if="s.bg_type === 'video' && !s.bg_video" class="mb-absolute mb-inset-0 mb-flex mb-items-center mb-justify-center mb-bg-gray-900">
-      <div class="mb-text-gray-500 mb-text-xs">&#9654; Video</div>
+      <div class="mb-text-gray-500 mb-text-xs">{{ t('&#9654; Video') }}</div>
     </div>
     <!-- Overlay -->
     <div v-if="showOverlay" class="mb-absolute mb-inset-0" :style="overlayStyle"></div>
@@ -34,6 +34,7 @@
 <script setup>
 import { computed } from 'vue';
 import iconsSvg from '../ProSlider/uikitIconsSvg.js';
+import { t } from '@/i18n';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },

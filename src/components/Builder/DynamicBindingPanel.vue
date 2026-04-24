@@ -1,22 +1,22 @@
 <template>
   <div class="dbp-panel">
     <div class="dbp-header">
-      <span class="dbp-title">Collegamento dinamico</span>
-      <button type="button" class="dbp-close" @click="$emit('close')">&times;</button>
+      <span class="dbp-title">{{ t('Collegamento dinamico') }}</span>
+      <button type="button" class="dbp-close" @click="$emit('close')">{{ t('&times;') }}</button>
     </div>
 
     <!-- Step 1: Select source -->
     <div class="dbp-section">
-      <label class="dbp-label">Sorgente</label>
+      <label class="dbp-label">{{ t('Sorgente') }}</label>
       <select v-model="selectedSource" class="dbp-select" @change="selectedField = ''">
-        <option value="">Seleziona sorgente...</option>
+        <option value="">{{ t('Seleziona sorgente...') }}</option>
         <option v-for="s in bindingSources" :key="s.value" :value="s.value">{{ s.label }}</option>
       </select>
     </div>
 
     <!-- Step 2: Select field -->
     <div v-if="selectedSource" class="dbp-section">
-      <label class="dbp-label">Campo</label>
+      <label class="dbp-label">{{ t('Campo') }}</label>
 
       <!-- Manual input for custom_field -->
       <template v-if="fieldsForSource === 'manual'">
@@ -24,7 +24,7 @@
           v-model="selectedField"
           type="text"
           class="dbp-input"
-          placeholder="meta_key"
+          :placeholder="t('meta_key')"
         />
       </template>
 
@@ -75,6 +75,7 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { ref, computed, watch, onMounted } from 'vue';
 import { useDynamicContent } from '@/composables/useDynamicContent';
 

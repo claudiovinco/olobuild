@@ -7,7 +7,7 @@
           <span v-if="showIcon && item.icon" class="olo-dl-icon" :style="iconWrapStyle" v-html="renderIcon(item.icon)"></span>
           <dt class="olo-dl-term" :style="termStyle" :data-olo-editable="'items.' + i + '.term'">{{ item.term }}</dt>
           <dd class="olo-dl-def" :style="{ ...defStyle, flex: 1, minWidth: 0 }" :data-olo-editable="'items.' + i + '.definition'" data-olo-multiline>{{ item.definition }}</dd>
-          <span v-if="item.link" class="olo-dl-link-badge" title="Link">&#x1F517;</span>
+          <span v-if="item.link" class="olo-dl-link-badge" :title="t('Link')">{{ t('&#x1F517;') }}</span>
         </div>
       </div>
 
@@ -15,7 +15,7 @@
       <div v-else-if="s.layout === 'grid'" class="olo-dl-item" :style="itemStyle(i)">
         <div class="olo-dl-row" :style="gridRowStyle">
           <span v-if="showIcon && item.icon" class="olo-dl-icon" :style="{ ...iconWrapStyle, gridRow: 'span 2', alignSelf: 'start', paddingTop: '2px' }" v-html="renderIcon(item.icon)"></span>
-          <dt class="olo-dl-term" :style="termStyle" :data-olo-editable="'items.' + i + '.term'">{{ item.term }}<span v-if="item.link" class="olo-dl-link-badge" title="Link"> &#x1F517;</span></dt>
+          <dt class="olo-dl-term" :style="termStyle" :data-olo-editable="'items.' + i + '.term'">{{ item.term }}<span v-if="item.link" class="olo-dl-link-badge" :title="t('Link')"> {{ t('&#x1F517;') }}</span></dt>
           <dd class="olo-dl-def" :style="defStyle" :data-olo-editable="'items.' + i + '.definition'" data-olo-multiline>{{ item.definition }}</dd>
         </div>
       </div>
@@ -25,7 +25,7 @@
         <div class="olo-dl-row" style="display:flex;align-items:flex-start;gap:12px">
           <span v-if="showIcon && item.icon" class="olo-dl-icon" :style="iconWrapStyle" v-html="renderIcon(item.icon)"></span>
           <div style="flex:1;min-width:0">
-            <dt class="olo-dl-term" :style="termStyle" :data-olo-editable="'items.' + i + '.term'">{{ item.term }}<span v-if="item.link" class="olo-dl-link-badge" title="Link"> &#x1F517;</span></dt>
+            <dt class="olo-dl-term" :style="termStyle" :data-olo-editable="'items.' + i + '.term'">{{ item.term }}<span v-if="item.link" class="olo-dl-link-badge" :title="t('Link')"> {{ t('&#x1F517;') }}</span></dt>
             <dd class="olo-dl-def" :style="{ ...defStyle, marginTop: '4px' }" :data-olo-editable="'items.' + i + '.definition'" data-olo-multiline>{{ item.definition }}</dd>
           </div>
         </div>
@@ -37,6 +37,7 @@
 <script setup>
 import { computed } from 'vue';
 import iconsSvg from '../ProSlider/uikitIconsSvg.js';
+import { t } from '@/i18n';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },

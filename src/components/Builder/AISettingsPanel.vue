@@ -4,18 +4,18 @@
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mb-text-purple-400">
         <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
       </svg>
-      <h3 class="mb-text-sm mb-font-semibold mb-text-gray-200 mb-m-0">Impostazioni AI</h3>
+      <h3 class="mb-text-sm mb-font-semibold mb-text-gray-200 mb-m-0">{{ t('Impostazioni AI') }}</h3>
     </div>
 
     <!-- API Key Anthropic (principale) -->
     <div>
-      <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Chiave API Anthropic (Claude)</label>
+      <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Chiave API Anthropic (Claude)') }}</label>
       <div class="mb-flex mb-gap-1">
         <div class="mb-relative mb-flex-1">
           <input
             :type="showKey ? 'text' : 'password'"
             v-model="settings.anthropic_key"
-            placeholder="sk-ant-..."
+            :placeholder="t('sk-ant-...')"
             class="mb-w-full mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-lg mb-px-3 mb-py-2 mb-text-sm mb-text-gray-200 mb-outline-none focus:mb-border-purple-500 mb-pr-8"
           />
           <button
@@ -31,33 +31,33 @@
       </div>
       <p class="mb-text-[10px] mb-text-gray-500 mb-mt-1 mb-m-0">
         Chiave per testo, traduzioni, layout, stile, alt text e CSS. Ottienila su
-        <a href="https://console.anthropic.com/settings/keys" target="_blank" class="mb-text-purple-400 hover:mb-underline mb-no-underline">console.anthropic.com</a>
+        <a href="https://console.anthropic.com/settings/keys" target="_blank" class="mb-text-purple-400 hover:mb-underline mb-no-underline">{{ t('console.anthropic.com') }}</a>
       </p>
     </div>
 
     <!-- Modello testo -->
     <div>
-      <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Modello Claude</label>
+      <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Modello Claude') }}</label>
       <select v-model="settings.model" class="mb-w-full mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-lg mb-px-3 mb-py-2 mb-text-sm mb-text-gray-200 mb-outline-none focus:mb-border-purple-500">
-        <option value="claude-sonnet-4-6">Claude Sonnet 4.6 (bilanciato)</option>
-        <option value="claude-haiku-4-5-20251001">Claude Haiku 4.5 (veloce, economico)</option>
-        <option value="claude-opus-4-6">Claude Opus 4.6 (massima qualit&agrave;)</option>
+        <option value="claude-sonnet-4-6">{{ t('Claude Sonnet 4.6 (bilanciato)') }}</option>
+        <option value="claude-haiku-4-5-20251001">{{ t('Claude Haiku 4.5 (veloce, economico)') }}</option>
+        <option value="claude-opus-4-6">{{ t('Claude Opus 4.6 (massima qualit&agrave;)') }}</option>
       </select>
     </div>
 
     <!-- Separatore immagini -->
     <div class="mb-border-t mb-border-gray-700 mb-pt-3">
-      <p class="mb-text-[10px] mb-text-gray-500 mb-m-0 mb-mb-2">Opzionale: chiave OpenAI per generazione immagini (DALL-E)</p>
+      <p class="mb-text-[10px] mb-text-gray-500 mb-m-0 mb-mb-2">{{ t('Opzionale: chiave OpenAI per generazione immagini (DALL-E)') }}</p>
     </div>
 
     <!-- API Key OpenAI (opzionale, solo immagini) -->
     <div>
-      <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Chiave API OpenAI (opzionale)</label>
+      <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Chiave API OpenAI (opzionale)') }}</label>
       <div class="mb-relative">
         <input
           :type="showOpenaiKey ? 'text' : 'password'"
           v-model="settings.openai_key"
-          placeholder="sk-..."
+          :placeholder="t('sk-...')"
           class="mb-w-full mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-lg mb-px-3 mb-py-2 mb-text-sm mb-text-gray-200 mb-outline-none focus:mb-border-purple-500 mb-pr-8"
         />
         <button
@@ -73,10 +73,10 @@
 
     <!-- Modello immagine -->
     <div>
-      <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Modello immagine</label>
+      <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">{{ t('Modello immagine') }}</label>
       <select v-model="settings.image_model" class="mb-w-full mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-lg mb-px-3 mb-py-2 mb-text-sm mb-text-gray-200 mb-outline-none focus:mb-border-purple-500">
-        <option value="dall-e-3">DALL-E 3 (alta qualit&agrave;)</option>
-        <option value="dall-e-2">DALL-E 2 (pi&ugrave; economico)</option>
+        <option value="dall-e-3">{{ t('DALL-E 3 (alta qualit&agrave;)') }}</option>
+        <option value="dall-e-2">{{ t('DALL-E 2 (pi&ugrave; economico)') }}</option>
       </select>
     </div>
 
@@ -119,6 +119,7 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue';
 import { useToast } from '@/composables/useToast.js';
+import { t } from '@/i18n';
 
 const toast = useToast();
 
@@ -182,7 +183,7 @@ async function saveSettings() {
       statusMessage.value = 'Impostazioni salvate con successo.';
       statusType.value = 'success';
       hasKey.value = true;
-      toast.success('Impostazioni AI salvate');
+      toast.success(t('Impostazioni AI salvate'));
     } else {
       const data = await res.json();
       throw new Error(data.message || 'Errore nel salvataggio');

@@ -1,8 +1,8 @@
 <template>
   <div>
     <div v-if="!wooActive" class="olo-woo-notice">
-      <span class="olo-woo-notice-icon">&#x1F6D2;</span>
-      <span>WooCommerce richiesto</span>
+      <span class="olo-woo-notice-icon">{{ t('&#x1F6D2;') }}</span>
+      <span>{{ t('WooCommerce richiesto') }}</span>
     </div>
     <div v-else>
       <!-- Tab nav -->
@@ -17,8 +17,8 @@
       <!-- Tab content -->
       <div :style="{ color: s.text_color, fontSize: '14px', lineHeight: '1.7', padding: '4px 0' }">
         <div v-if="visibleTabs[activeTab]?.key === 'description'">
-          <p style="margin:0 0 12px;">Questa è la descrizione completa del prodotto. Include tutti i dettagli, le specifiche tecniche e le informazioni che il cliente deve conoscere prima dell'acquisto.</p>
-          <p style="margin:0;">Il prodotto è realizzato con materiali di alta qualità e offre prestazioni eccellenti in ogni condizione d'uso.</p>
+          <p style="margin:0 0 12px;">{{ t('Questa è la descrizione completa del prodotto. Include tutti i dettagli, le specifiche tecniche e le informazioni che il cliente deve conoscere prima dell\'acquisto.') }}</p>
+          <p style="margin:0;">{{ t('Il prodotto è realizzato con materiali di alta qualità e offre prestazioni eccellenti in ogni condizione d\'uso.') }}</p>
         </div>
         <div v-else-if="visibleTabs[activeTab]?.key === 'additional'">
           <table :style="tableStyle">
@@ -35,7 +35,7 @@
                 <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
               </svg>
             </div>
-            <span :style="{ fontSize: '13px', color: '#6B7280' }">Basato su 12 recensioni</span>
+            <span :style="{ fontSize: '13px', color: '#6B7280' }">{{ t('Basato su 12 recensioni') }}</span>
           </div>
           <div v-for="review in mockReviews" :key="review.name" :style="reviewStyle">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
@@ -56,6 +56,7 @@
 
 <script setup>
 import { computed, ref } from 'vue';
+import { t } from '@/i18n';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },

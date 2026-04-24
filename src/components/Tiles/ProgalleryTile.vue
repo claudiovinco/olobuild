@@ -1,7 +1,7 @@
 <template>
   <div style="padding:4px">
     <div v-if="!images.length" style="display:flex;align-items:center;justify-content:center;height:200px;background:#f3f4f6;border-radius:8px;color:#9ca3af;font-size:13px">
-      Aggiungi immagini alla Pro Gallery
+      {{ t('Aggiungi immagini alla Pro Gallery') }}
     </div>
     <template v-else>
       <!-- Grid -->
@@ -222,6 +222,7 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { computed } from 'vue';
 
 const props = defineProps({

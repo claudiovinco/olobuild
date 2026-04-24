@@ -25,14 +25,15 @@
 
     <!-- Arrows -->
     <template v-if="s.show_arrows !== false && panels.length > maxVisible">
-      <button class="olo-ps-arrow olo-ps-prev" @click="prev" aria-label="Precedente">&#10094;</button>
-      <button class="olo-ps-arrow olo-ps-next" @click="next" aria-label="Successivo">&#10095;</button>
+      <button class="olo-ps-arrow olo-ps-prev" @click="prev" :aria-label="t('Precedente')">&#10094;</button>
+      <button class="olo-ps-arrow olo-ps-next" @click="next" :aria-label="t('Successivo')">&#10095;</button>
     </template>
   </div>
 </template>
 
 <script setup>
 import { ref, computed } from 'vue';
+import { t } from '@/i18n';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },

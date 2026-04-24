@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3 style="font-size:16px;font-weight:700;color:var(--olo-color-text, #374151);margin:0 0 12px">Disponibilità — Febbraio 2026</h3>
+    <h3 style="font-size:16px;font-weight:700;color:var(--olo-color-text, #374151);margin:0 0 12px">{{ t('Disponibilità — Febbraio 2026') }}</h3>
     <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center">
       <span v-for="d in ['Lun','Mar','Mer','Gio','Ven','Sab','Dom']" :key="d" style="font-size:11px;font-weight:600;color:#9ca3af;padding:4px 0">{{ d }}</span>
       <span v-for="i in 5" :key="'e'+i" style="padding:6px"></span>
@@ -15,6 +15,7 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 defineProps({ settings: { type: Object, default: () => ({}) } });
 const calDays = [];
 for (let i = 1; i <= 28; i++) {

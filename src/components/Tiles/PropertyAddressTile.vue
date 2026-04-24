@@ -3,8 +3,8 @@
     <div :style="{ display:'flex', alignItems:'flex-start', gap:'10px', marginBottom: s.show_map ? '16px' : '0' }">
       <span :style="{ fontSize:'20px', flexShrink:0 }">&#128205;</span>
       <div>
-        <div :style="{ fontSize:'15px', fontWeight:'600', color:'#1F2937', marginBottom:'2px' }">Via Nazionale 45</div>
-        <div :style="{ fontSize:'14px', color:'#6B7280' }">Mattarello, Trento (TN) 38123</div>
+        <div :style="{ fontSize:'15px', fontWeight:'600', color:'#1F2937', marginBottom:'2px' }">{{ t('Via Nazionale 45') }}</div>
+        <div :style="{ fontSize:'14px', color:'#6B7280' }">{{ t('Mattarello, Trento (TN) 38123') }}</div>
       </div>
     </div>
     <div v-if="s.show_map" :style="mapStyle">
@@ -18,6 +18,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { t } from '@/i18n';
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 const defaults = { show_map: true, map_height: 200, border_radius: 10, map_bg: '#E8F0FE' };
 const s = computed(() => ({ ...defaults, ...props.settings }));

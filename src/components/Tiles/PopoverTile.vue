@@ -11,7 +11,7 @@
       class="olo-popover-placeholder mb-bg-gray-700 mb-flex mb-items-center mb-justify-center"
       :style="placeholderStyle"
     >
-      <span class="mb-text-gray-500 mb-text-sm" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);">Image Placeholder</span>
+      <span class="mb-text-gray-500 mb-text-sm" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);">{{ t('Image Placeholder') }}</span>
     </div>
 
     <!-- Markers -->
@@ -44,6 +44,7 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { ref, computed } from 'vue';
 
 const props = defineProps({

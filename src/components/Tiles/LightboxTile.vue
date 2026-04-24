@@ -21,7 +21,7 @@
             style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"
           />
           <div v-else style="position:absolute;inset:0;background:#334155;display:flex;align-items:center;justify-content:center">
-            <span style="font-size:24px;opacity:0.4">&#x1F5BC;</span>
+            <span style="font-size:24px;opacity:0.4">{{ t('&#x1F5BC;') }}</span>
           </div>
         </div>
         <img
@@ -43,13 +43,14 @@
       </div>
     </div>
     <p v-if="!settings.items || settings.items.length === 0" class="mb-text-xs mb-text-gray-500 mb-text-center mb-py-6">
-      Aggiungi elementi alla lightbox
+      {{ t('Aggiungi elementi alla lightbox') }}
     </p>
   </div>
 </template>
 
 <script setup>
 import { computed } from 'vue';
+import { t } from '@/i18n';
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 
 const ratioMap = { '1:1': '100%', '4:3': '75%', '16:9': '56.25%', 'auto': '0' };

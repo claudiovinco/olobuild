@@ -562,6 +562,48 @@ export const useTilesStore = defineStore('tiles', {
       this.canvasTiles.push(sourceNode);
     },
 
+    /**
+     * Move a node to a specific parent + index.
+     * parentId=null significa zone root (canvasTiles, headerTiles o footerTiles a seconda della zona originale).
+     * Usato dal sistema DnD Pragmatic per reorder deterministico.
+     */
+    moveNodeTo(sourceId, newParentId, newIndex) {
+      const allRoots = [this.canvasTiles, this.headerTiles, this.footerTiles];
+
+      // Rimuovi sorgente dalla sua posizione attuale
+      let sourceNode = null;
+      let sourceRoot = null;
+      for (const root of allRoots) {
+        const result = findParentAndIndex(root, sourceId);
+        if (result) {
+          sourceNode = result.parent.splice(result.index, 1)[0];
+          sourceRoot = root;
+          break;
+        }
+      }
+      if (!sourceNode) return;
+
+      // Inserisci nel nuovo parent
+      if (newParentId === null || newParentId === undefined) {
+        const arr = sourceRoot || this.canvasTiles;
+        const at = Math.max(0, Math.min(newIndex, arr.length));
+        arr.splice(at, 0, sourceNode);
+        return;
+      }
+      // Parent è un nodo (section/row/column)
+      for (const root of allRoots) {
+        const parentNode = findNodeById(root, newParentId);
+        if (parentNode) {
+          if (!Array.isArray(parentNode.children)) parentNode.children = [];
+          const at = Math.max(0, Math.min(newIndex, parentNode.children.length));
+          parentNode.children.splice(at, 0, sourceNode);
+          return;
+        }
+      }
+      // Fallback
+      this.canvasTiles.push(sourceNode);
+    },
+
     // === Row layout restructuring ===
 
     changeRowLayout(rowId, layoutKey) {

@@ -8,31 +8,31 @@
           type="button"
           @click="editor?.chain().focus().toggleBold().run()"
           :class="{ active: editor?.isActive('bold') }"
-          title="Bold"
+          :title="t('Bold')"
         ><strong>B</strong></button>
         <button
           type="button"
           @click="editor?.chain().focus().toggleItalic().run()"
           :class="{ active: editor?.isActive('italic') }"
-          title="Italic"
+          :title="t('Italic')"
         ><em>I</em></button>
         <button
           type="button"
           @click="editor?.chain().focus().toggleUnderline().run()"
           :class="{ active: editor?.isActive('underline') }"
-          title="Underline"
+          :title="t('Underline')"
         ><u>U</u></button>
         <button
           type="button"
           @click="editor?.chain().focus().toggleStrike().run()"
           :class="{ active: editor?.isActive('strike') }"
-          title="Strikethrough"
+          :title="t('Strikethrough')"
         ><s>S</s></button>
 
         <span class="rte-sep"></span>
 
         <!-- Text color -->
-        <label class="rte-color-btn" title="Text Color">
+        <label class="rte-color-btn" :title="t('Text Color')">
           <span class="rte-color-label" :style="{ color: currentColor }">A</span>
           <input
             type="color"
@@ -43,7 +43,7 @@
         </label>
 
         <!-- Highlight -->
-        <label class="rte-color-btn" title="Highlight">
+        <label class="rte-color-btn" :title="t('Highlight')">
           <span class="rte-highlight-label" :style="{ backgroundColor: currentHighlight }">H</span>
           <input
             type="color"
@@ -57,12 +57,12 @@
 
         <!-- Font size -->
         <div class="rte-dropdown">
-          <button type="button" class="rte-dropdown-btn" @click.stop="toggleDropdown('fontSize')" title="Font Size">
+          <button type="button" class="rte-dropdown-btn" @click.stop="toggleDropdown('fontSize')" :title="t('Font Size')">
             {{ currentFontSize || 'Size' }}
           </button>
           <div v-if="openDropdown === 'fontSize'" class="rte-dropdown-menu">
             <button type="button" class="rte-dropdown-item" :class="{ active: !currentFontSize }"
-              @click="setFontSize('')">Default</button>
+              @click="setFontSize('')">{{ t('Default') }}</button>
             <button v-for="s in fontSizes" :key="s" type="button" class="rte-dropdown-item"
               :class="{ active: currentFontSize === s }" @click="setFontSize(s)">{{ s }}</button>
           </div>
@@ -75,25 +75,25 @@
           type="button"
           @click="editor?.chain().focus().setTextAlign('left').run()"
           :class="{ active: editor?.isActive({ textAlign: 'left' }) }"
-          title="Align Left"
+          :title="t('Align Left')"
         >&#9776;</button>
         <button
           type="button"
           @click="editor?.chain().focus().setTextAlign('center').run()"
           :class="{ active: editor?.isActive({ textAlign: 'center' }) }"
-          title="Align Center"
+          :title="t('Align Center')"
         >&#9776;</button>
         <button
           type="button"
           @click="editor?.chain().focus().setTextAlign('right').run()"
           :class="{ active: editor?.isActive({ textAlign: 'right' }) }"
-          title="Align Right"
+          :title="t('Align Right')"
         >&#9776;</button>
         <button
           type="button"
           @click="editor?.chain().focus().setTextAlign('justify').run()"
           :class="{ active: editor?.isActive({ textAlign: 'justify' }) }"
-          title="Justify"
+          :title="t('Justify')"
         >&#9776;</button>
 
         <span class="rte-sep"></span>
@@ -102,26 +102,26 @@
           type="button"
           @click="editor?.chain().focus().toggleBulletList().run()"
           :class="{ active: editor?.isActive('bulletList') }"
-          title="Bullet List"
+          :title="t('Bullet List')"
         >&#8226;</button>
         <button
           type="button"
           @click="editor?.chain().focus().toggleOrderedList().run()"
           :class="{ active: editor?.isActive('orderedList') }"
-          title="Ordered List"
+          :title="t('Ordered List')"
         >1.</button>
         <button
           type="button"
           @click="editor?.chain().focus().toggleBlockquote().run()"
           :class="{ active: editor?.isActive('blockquote') }"
-          title="Blockquote"
+          :title="t('Blockquote')"
         >&#8220;</button>
 
         <span class="rte-sep"></span>
 
         <!-- Heading select -->
         <div class="rte-dropdown">
-          <button type="button" class="rte-dropdown-btn" @click.stop="toggleDropdown('heading')" title="Heading">
+          <button type="button" class="rte-dropdown-btn" @click.stop="toggleDropdown('heading')" :title="t('Heading')">
             {{ currentHeading === 'p' ? 'P' : 'H' + currentHeading }}
           </button>
           <div v-if="openDropdown === 'heading'" class="rte-dropdown-menu">
@@ -148,6 +148,7 @@ import { TextStyle, FontSize } from '@tiptap/extension-text-style';
 import Color from '@tiptap/extension-color';
 import Highlight from '@tiptap/extension-highlight';
 import TextAlign from '@tiptap/extension-text-align';
+import { t } from '@/i18n';
 
 const props = defineProps({
   modelValue: { type: String, default: '' },

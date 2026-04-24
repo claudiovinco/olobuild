@@ -13,7 +13,7 @@
       @keydown.arrow-down.prevent="focusNextItem"
       @keydown.arrow-up.prevent="focusPrevItem"
     >
-      <button @click="close" class="olo-ctx-close" title="Chiudi">
+      <button @click="close" class="olo-ctx-close" :title="t('Chiudi')">
         <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 2l8 8M10 2l-8 8"/></svg>
       </button>
       <button @click="doCopy" class="olo-ctx-item" role="menuitem">
@@ -66,7 +66,7 @@
       <!-- Row layout options -->
       <template v-if="hasParentRow">
         <div class="olo-ctx-sep"></div>
-        <div class="olo-ctx-label">Layout colonne</div>
+        <div class="olo-ctx-label">{{ t('Layout colonne') }}</div>
         <div class="olo-ctx-layouts">
           <button v-for="l in rowLayouts" :key="l.key" class="olo-ctx-layout"
             :class="{ 'olo-ctx-layout--active': !isParentGrid && currentRowLayout === l.key }"
@@ -103,11 +103,11 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { ref, computed, nextTick, onMounted, onBeforeUnmount } from 'vue';
 import { useTilesStore } from '@/stores/tiles';
 import { useBuilderStore } from '@/stores/builder';
 import { columns as gridColumns, multirow as gridMultirow, masonry as gridMasonry, sidebar as gridSidebar } from '@/config/gridTemplates.js';
-import { t } from '@/i18n/index.js';
 
 const tilesStore = useTilesStore();
 const builderStore = useBuilderStore();

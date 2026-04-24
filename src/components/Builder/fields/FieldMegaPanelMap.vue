@@ -1,8 +1,8 @@
 <template>
   <div class="mb-space-y-2">
-    <div v-if="loading" class="mb-text-xs mb-text-gray-500">Caricamento voci menu...</div>
+    <div v-if="loading" class="mb-text-xs mb-text-gray-500">{{ t('Caricamento voci menu...') }}</div>
     <div v-else-if="!menuItems.length" class="mb-text-xs mb-text-gray-500">
-      Seleziona prima un menu WordPress.
+      {{ t('Seleziona prima un menu WordPress.') }}
     </div>
     <div
       v-for="item in menuItems"
@@ -30,6 +30,7 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { ref, watch, onMounted } from 'vue';
 import { useBuilderStore } from '../../../stores/builder';
 import { useTilesStore } from '../../../stores/tiles';

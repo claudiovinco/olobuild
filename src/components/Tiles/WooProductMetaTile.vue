@@ -1,24 +1,24 @@
 <template>
   <div>
     <div v-if="!wooActive" class="olo-woo-notice">
-      <span class="olo-woo-notice-icon">&#x1F6D2;</span>
-      <span>WooCommerce richiesto</span>
+      <span class="olo-woo-notice-icon">{{ t('&#x1F6D2;') }}</span>
+      <span>{{ t('WooCommerce richiesto') }}</span>
     </div>
     <div v-else :style="wrapStyle">
       <!-- Stacked layout -->
       <template v-if="s.layout === 'stacked'">
         <span v-if="s.show_sku" :style="itemStyle">
-          <span :style="labelStyle">SKU:</span>
-          <span>WC-001</span>
+          <span :style="labelStyle">{{ t('SKU:') }}</span>
+          <span>{{ t('WC-001') }}</span>
         </span>
         <span v-if="s.show_categories" :style="itemStyle">
-          <span :style="labelStyle">Categoria:</span>
-          <span :style="linkStyle">Magliette</span>
+          <span :style="labelStyle">{{ t('Categoria:') }}</span>
+          <span :style="linkStyle">{{ t('Magliette') }}</span>
         </span>
         <span v-if="s.show_tags" :style="itemStyle">
-          <span :style="labelStyle">Tag:</span>
-          <span :style="linkStyle">Nuovo</span>,
-          <span :style="linkStyle">Cotone</span>
+          <span :style="labelStyle">{{ t('Tag:') }}</span>
+          <span :style="linkStyle">{{ t('Nuovo') }}</span>,
+          <span :style="linkStyle">{{ t('Cotone') }}</span>
         </span>
       </template>
       <!-- Inline layout -->
@@ -45,6 +45,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { t } from '@/i18n';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },

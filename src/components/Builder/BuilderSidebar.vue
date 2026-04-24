@@ -13,7 +13,7 @@
           <rect x="3" y="14" width="7" height="7" rx="1"/>
           <rect x="14" y="14" width="7" height="7" rx="1"/>
         </svg>
-        Elementi
+        {{ t('Elementi') }}
       </button>
       <button
         class="sidebar-tab"
@@ -23,13 +23,13 @@
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M3 12h4l3-9 4 18 3-9h4"/>
         </svg>
-        Struttura
+        {{ t('Struttura') }}
       </button>
     </div>
 
     <!-- Insert-after banner -->
     <div v-if="builderStore.insertAfterTileId" class="tp-insert-banner">
-      <span>⊕ Seleziona un elemento da inserire</span>
+      <span>⊕ {{ t('Seleziona un elemento da inserire') }}</span>
       <button class="tp-insert-cancel" @click="builderStore.insertAfterTileId = null">✕</button>
     </div>
 
@@ -38,25 +38,28 @@
       <!-- Search -->
       <div class="tp-search">
         <svg class="tp-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-        <input v-model="tileSearch" class="tp-search-input" type="text" placeholder="Cerca elemento..." />
-        <button v-if="tileSearch" class="tp-search-clear" @click="tileSearch = ''">&times;</button>
+        <input v-model="tileSearch" class="tp-search-input" type="text" :placeholder="t('Cerca elemento...')" />
+        <button v-if="tileSearch" class="tp-search-clear" @click="tileSearch = ''">{{ t('&times;') }}</button>
       </div>
 
       <!-- Search results -->
       <div v-if="tileSearch.trim()" class="tp-group">
         <div class="tp-grid">
-          <button
+          <div
             v-for="tile in searchResults"
             :key="'search-' + tile.type"
             class="tp-btn"
+            role="button"
+            tabindex="0"
             :style="{ '--cat-color': '#3B82F6' }"
-            draggable="true"
-            @dragstart="onDragStart($event, tile.type)"
+            v-olo-draggable="draggableTileOpts(tile.type)"
             @click="addTile(tile.type)"
-            :title="tile.name"
-          ><span class="tp-btn-icon" v-html="tileIcon(tile.type)"></span><span class="tp-btn-label">{{ tile.name }}</span></button>
+            @keydown.enter.prevent="addTile(tile.type)"
+            @keydown.space.prevent="addTile(tile.type)"
+            :title="t(tile.name)"
+          ><span class="tp-btn-icon" v-html="tileIcon(tile.type)"></span><span class="tp-btn-label">{{ t(tile.name) }}</span></div>
         </div>
-        <div v-if="!searchResults.length" class="tp-search-empty">Nessun elemento trovato</div>
+        <div v-if="!searchResults.length" class="tp-search-empty">{{ t('Nessun elemento trovato') }}</div>
       </div>
 
       <template v-if="!tileSearch.trim()">
@@ -64,22 +67,25 @@
       <div v-if="recentTilesList.length > 0" class="tp-group">
         <button class="tp-cat-head" @click="toggleCategory('_recent')">
           <span class="tp-cat-dot" style="background: #8B5CF6"></span>
-          <span class="tp-cat-label">Recenti</span>
+          <span class="tp-cat-label">{{ t('Recenti') }}</span>
           <span class="tp-cat-count">{{ recentTilesList.length }}</span>
           <svg class="tp-chevron" :class="{ 'tp-chevron--open': isCategoryOpen('_recent') }" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
         </button>
         <div class="tp-drawer" :class="{ 'tp-drawer--open': isCategoryOpen('_recent') }">
           <div class="tp-grid">
-            <button
+            <div
               v-for="tile in recentTilesList"
               :key="'recent-' + tile.type"
               class="tp-btn"
+              role="button"
+              tabindex="0"
               :style="{ '--cat-color': '#8B5CF6' }"
-              draggable="true"
-              @dragstart="onDragStart($event, tile.type)"
+              v-olo-draggable="draggableTileOpts(tile.type)"
               @click="addTile(tile.type)"
+              @keydown.enter.prevent="addTile(tile.type)"
+              @keydown.space.prevent="addTile(tile.type)"
               :title="tile.name"
-            ><span class="tp-btn-icon" v-html="tileIcon(tile.type)"></span><span class="tp-btn-label">{{ tile.name }}</span><span class="tp-fav-star" :class="{ 'tp-fav-star--active': isFavorite(tile.type) }" @click.stop="toggleFavorite(tile.type)">&#9733;</span></button>
+            ><span class="tp-btn-icon" v-html="tileIcon(tile.type)"></span><span class="tp-btn-label">{{ tile.name }}</span><span class="tp-fav-star" :class="{ 'tp-fav-star--active': isFavorite(tile.type) }" @click.stop="toggleFavorite(tile.type)">&#9733;</span></div>
           </div>
         </div>
       </div>
@@ -88,22 +94,25 @@
       <div v-if="favoriteTilesList.length > 0" class="tp-group">
         <button class="tp-cat-head" @click="toggleCategory('_favorites')">
           <span class="tp-cat-dot" style="background: #EAB308"></span>
-          <span class="tp-cat-label">Preferiti</span>
+          <span class="tp-cat-label">{{ t('Preferiti') }}</span>
           <span class="tp-cat-count">{{ favoriteTilesList.length }}</span>
           <svg class="tp-chevron" :class="{ 'tp-chevron--open': isCategoryOpen('_favorites') }" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
         </button>
         <div class="tp-drawer" :class="{ 'tp-drawer--open': isCategoryOpen('_favorites') }">
           <div class="tp-grid">
-            <button
+            <div
               v-for="tile in favoriteTilesList"
               :key="'fav-' + tile.type"
               class="tp-btn"
+              role="button"
+              tabindex="0"
               :style="{ '--cat-color': '#EAB308' }"
-              draggable="true"
-              @dragstart="onDragStart($event, tile.type)"
+              v-olo-draggable="draggableTileOpts(tile.type)"
               @click="addTile(tile.type)"
+              @keydown.enter.prevent="addTile(tile.type)"
+              @keydown.space.prevent="addTile(tile.type)"
               :title="tile.name"
-            ><span class="tp-btn-icon" v-html="tileIcon(tile.type)"></span><span class="tp-btn-label">{{ tile.name }}</span><span class="tp-fav-star tp-fav-star--active" @click.stop="toggleFavorite(tile.type)">&#9733;</span></button>
+            ><span class="tp-btn-icon" v-html="tileIcon(tile.type)"></span><span class="tp-btn-label">{{ tile.name }}</span><span class="tp-fav-star tp-fav-star--active" @click.stop="toggleFavorite(tile.type)">&#9733;</span></div>
           </div>
         </div>
       </div>
@@ -117,22 +126,25 @@
         </button>
         <div class="tp-drawer" :class="{ 'tp-drawer--open': isCategoryOpen(category) }">
           <div class="tp-grid">
-            <button
+            <div
               v-for="tile in tiles"
               :key="tile.type"
               class="tp-btn"
+              role="button"
+              tabindex="0"
               :style="{ '--cat-color': catColor(category) }"
-              draggable="true"
-              @dragstart="onDragStart($event, tile.type)"
+              v-olo-draggable="draggableTileOpts(tile.type)"
               @click="addTile(tile.type)"
+              @keydown.enter.prevent="addTile(tile.type)"
+              @keydown.space.prevent="addTile(tile.type)"
               :title="tile.name"
-            ><span class="tp-btn-icon" v-html="tileIcon(tile.type)"></span><span class="tp-btn-label">{{ tile.name }}</span><span class="tp-fav-star" :class="{ 'tp-fav-star--active': isFavorite(tile.type) }" @click.stop="toggleFavorite(tile.type)">&#9733;</span></button>
+            ><span class="tp-btn-icon" v-html="tileIcon(tile.type)"></span><span class="tp-btn-label">{{ tile.name }}</span><span class="tp-fav-star" :class="{ 'tp-fav-star--active': isFavorite(tile.type) }" @click.stop="toggleFavorite(tile.type)">&#9733;</span></div>
           </div>
         </div>
       </div>
 
       <div v-if="Object.keys(tilesByCategory).length === 0" class="tp-empty">
-        Caricamento tile...
+        {{ t('Caricamento tile...') }}
       </div>
 
       </template>
@@ -140,7 +152,7 @@
       <div v-if="tilesStore.globalWidgets.length > 0 && !tileSearch.trim()" class="tp-group">
         <button class="tp-cat-head" @click="toggleCategory('_global')">
           <span class="tp-cat-dot" style="background: #D97706"></span>
-          <span class="tp-cat-label">Widget Globali</span>
+          <span class="tp-cat-label">{{ t('Widget Globali') }}</span>
           <span class="tp-cat-count">{{ tilesStore.globalWidgets.length }}</span>
           <svg class="tp-chevron" :class="{ 'tp-chevron--open': isCategoryOpen('_global') }" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
         </button>
@@ -151,16 +163,19 @@
               :key="'gw-' + gw.id"
               class="tp-gw-wrap"
             >
-              <button
+              <div
                 class="tp-btn tp-btn--global"
-                draggable="true"
-                @dragstart="onGlobalDragStart($event, gw.id)"
+                role="button"
+                tabindex="0"
+                v-olo-draggable="draggableGlobalWidgetOpts(gw.id)"
                 @click="addGlobalWidget(gw.id)"
+                @keydown.enter.prevent="addGlobalWidget(gw.id)"
+                @keydown.space.prevent="addGlobalWidget(gw.id)"
                 :title="gw.name"
-              ><span class="tp-btn-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span><span class="tp-btn-label">{{ gw.name }}</span></button>
+              ><span class="tp-btn-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span><span class="tp-btn-label">{{ gw.name }}</span></div>
               <button
                 class="tp-gw-del"
-                title="Elimina widget globale"
+                :title="t('Elimina widget globale')"
                 @click.stop="deleteGlobal(gw.id, gw.name)"
               >&times;</button>
             </div>
@@ -168,7 +183,7 @@
         </div>
       </div>
 
-      <p class="tp-hint">Clicca o trascina per aggiungere</p>
+      <p class="tp-hint">{{ t('Clicca o trascina per aggiungere') }}</p>
     </div>
 
     <!-- Structure tab -->
@@ -180,12 +195,16 @@
 import { ref, computed, onMounted } from 'vue';
 import { useTilesStore } from '@/stores/tiles';
 import { useBuilderStore } from '@/stores/builder';
+import { useDnDStore } from '@/stores/dnd';
 import { useDragDrop } from '@/composables/useDragDrop';
+import { vOloDraggable, makeSidebarPayload, makeGlobalWidgetPayload } from '@/composables/useDnD';
 import { createSection, createRow, createColumn, generateId } from '@/stores/tiles';
 import StructureTree from './StructureTree.vue';
+import { t } from '@/i18n';
 
 const tilesStore = useTilesStore();
 const builderStore = useBuilderStore();
+const dndStore = useDnDStore();
 const { handleDropFromSidebar } = useDragDrop();
 
 const tileSearch = ref('');
@@ -309,7 +328,7 @@ const categoryLabels = {
 };
 
 function categoryLabel(category) {
-  return categoryLabels[category] || category;
+  return t(categoryLabels[category] || category);
 }
 
 function catColor(category) {
@@ -553,27 +572,49 @@ function tileIcon(type) {
     .replace(/ sw="/g, ' stroke-width="');
 }
 
-let lastDragStart = 0;
+/**
+ * Factory per le opzioni v-olo-draggable di un tile-type.
+ * Richiede un layout snapshot aggiornato dall'iframe prima dell'hit-test.
+ */
+function draggableTileOpts(tileType) {
+  return {
+    getInitialData: () => makeSidebarPayload(tileType),
+    onDragStart: () => {
+      dndStore.startDrag(makeSidebarPayload(tileType));
+      // Richiedi layout snapshot fresh dall'iframe
+      const iframe = document.querySelector('.olo-live-iframe');
+      if (iframe && iframe.contentWindow) {
+        iframe.contentWindow.postMessage({ type: 'olo:request-layout' }, '*');
+      }
+    },
+    onDrop: () => {
+      if (!dndStore.isIdle) dndStore.endDrag();
+    },
+  };
+}
 
-function onDragStart(event, tileType) {
-  lastDragStart = Date.now();
-  event.dataTransfer.setData('tile-type', tileType);
-  event.dataTransfer.effectAllowed = 'copy';
-  builderStore.isSidebarDragging = true;
-  builderStore.dropTargetColumnId = null;
-  builderStore.dropInsertIndex = null;
-  // Request fresh layout snapshot from iframe
-  const iframe = document.querySelector('.olo-live-iframe');
-  if (iframe && iframe.contentWindow) {
-    iframe.contentWindow.postMessage({ type: 'olo:request-layout' }, '*');
-  }
-  // Reset on dragend
-  event.target.addEventListener('dragend', () => { builderStore.isSidebarDragging = false; }, { once: true });
+/**
+ * Factory per le opzioni v-olo-draggable di un global widget.
+ */
+function draggableGlobalWidgetOpts(globalId) {
+  return {
+    getInitialData: () => makeGlobalWidgetPayload(globalId),
+    onDragStart: () => {
+      dndStore.startDrag(makeGlobalWidgetPayload(globalId));
+      const iframe = document.querySelector('.olo-live-iframe');
+      if (iframe && iframe.contentWindow) {
+        iframe.contentWindow.postMessage({ type: 'olo:request-layout' }, '*');
+      }
+    },
+    onDrop: () => {
+      if (!dndStore.isIdle) dndStore.endDrag();
+    },
+  };
 }
 
 function addTile(tileType) {
   trackRecent(tileType);
-  if (Date.now() - lastDragStart < 1000) return;
+  // Pragmatic sopprime il click dopo un drag: nessun flag temporale necessario.
   const afterId = builderStore.insertAfterTileId;
   if (afterId) {
     // Insert directly after the target tile (same column, no wrapping)
@@ -597,14 +638,7 @@ function addTile(tileType) {
   }
 }
 
-function onGlobalDragStart(event, globalId) {
-  lastDragStart = Date.now();
-  event.dataTransfer.setData('global-widget-id', String(globalId));
-  event.dataTransfer.effectAllowed = 'copy';
-}
-
 function addGlobalWidget(globalId) {
-  if (Date.now() - lastDragStart < 1000) return;
   const newTile = tilesStore.insertGlobalWidget(globalId);
   if (!newTile) return;
   // Wrap in Section > Row > Column
@@ -818,7 +852,7 @@ async function deleteGlobal(globalId, name) {
   height: 38px;
   padding: 0 8px;
   border-radius: 10px;
-  cursor: pointer;
+  cursor: grab;
   border: 1px solid rgba(0, 0, 0, 0.07);
   background: rgba(255, 255, 255, 0.7);
   font-size: 10px;
@@ -827,7 +861,15 @@ async function deleteGlobal(globalId, name) {
   font-family: inherit;
   line-height: 1;
   user-select: none;
+  -webkit-user-select: none;
+  /* Abilita esplicitamente HTML5 drag su WebKit/Blink (Safari/Chrome).
+     Il button HTML nativo con draggable=true spesso non inizia il drag
+     a causa di conflitti con :active state. Il div non ha questo problema. */
+  -webkit-user-drag: element;
   transition: background-color 0.12s, border-color 0.12s, color 0.12s, box-shadow 0.12s, transform 0.12s;
+}
+.tp-btn:active {
+  cursor: grabbing;
 }
 .tp-btn:hover {
   background: #fff;

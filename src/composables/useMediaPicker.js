@@ -9,7 +9,7 @@ export function useMediaPicker() {
 
   function checkWpMedia() {
     if (!window.wp || !window.wp.media) {
-      toast.error('Libreria Media di WordPress non disponibile.');
+      toast.error(t('Libreria Media di WordPress non disponibile.'));
       return false;
     }
     return true;

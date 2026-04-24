@@ -2,11 +2,11 @@
   <div ref="rootEl" class="olo-megamenu-preview" :class="{ 'olo-mm-clean': isClean, 'olo-mm-mobile': isMobile }" :style="rootStyle">
     <!-- Badges (hidden in clean mode) -->
     <div v-if="!isClean" class="olo-mm-badges">
-      <span v-if="s.sticky" class="olo-mm-badge olo-mm-badge--sticky">STICKY</span>
-      <span v-if="s.header_mode === 'overlay'" class="olo-mm-badge olo-mm-badge--overlay">OVERLAY</span>
-      <span v-if="s.panel_origin === 'section'" class="olo-mm-badge olo-mm-badge--origin">ORIGIN: SECTION</span>
+      <span v-if="s.sticky" class="olo-mm-badge olo-mm-badge--sticky">{{ t('STICKY') }}</span>
+      <span v-if="s.header_mode === 'overlay'" class="olo-mm-badge olo-mm-badge--overlay">{{ t('OVERLAY') }}</span>
+      <span v-if="s.panel_origin === 'section'" class="olo-mm-badge olo-mm-badge--origin">{{ t('ORIGIN: SECTION') }}</span>
       <span class="olo-mm-badge olo-mm-badge--mob">{{ mobileLabel }}</span>
-      <span v-if="isMobile" class="olo-mm-badge olo-mm-badge--responsive">📱 MOBILE</span>
+      <span v-if="isMobile" class="olo-mm-badge olo-mm-badge--responsive">{{ t('📱 MOBILE') }}</span>
     </div>
 
     <!-- ═══════ DESKTOP VIEW ═══════ -->
@@ -19,7 +19,7 @@
           class="olo-mm-logo-wrap"
           :style="logoWrapStyle"
         >
-          <img :src="s.logo_image" alt="Logo" :style="logoImgStyle" />
+          <img :src="s.logo_image" :alt="t('Logo')" :style="logoImgStyle" />
         </div>
 
         <!-- Nav Left (split) -->
@@ -40,7 +40,7 @@
 
         <!-- Logo center -->
         <div v-if="s.logo_image && s.logo_position === 'center'" class="olo-mm-logo-center">
-          <img :src="s.logo_image" alt="Logo" :style="logoImgStyle" />
+          <img :src="s.logo_image" :alt="t('Logo')" :style="logoImgStyle" />
         </div>
 
         <!-- Hamburger (SVG curato) — hidden in clean mode (desktop) -->
@@ -84,7 +84,7 @@
 
         <!-- Logo right -->
         <div v-if="s.logo_image && s.logo_position === 'right'" class="olo-mm-logo-wrap" :style="{ order: 99 }">
-          <img :src="s.logo_image" alt="Logo" :style="logoImgStyle" />
+          <img :src="s.logo_image" :alt="t('Logo')" :style="logoImgStyle" />
         </div>
       </nav>
 
@@ -103,7 +103,7 @@
               <div class="olo-mm-links">
                 <a v-for="(link, lIdx) in col.links" :key="lIdx" class="olo-mm-link" :style="linkStyleObj" href="javascript:void(0)">
                   {{ link }}
-                  <span v-if="s.show_descriptions" class="olo-mm-desc" :style="descStyleObj">Descrizione breve</span>
+                  <span v-if="s.show_descriptions" class="olo-mm-desc" :style="descStyleObj">{{ t('Descrizione breve') }}</span>
                 </a>
               </div>
             </div>
@@ -195,6 +195,7 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { computed, ref, h, onMounted, onUnmounted } from 'vue';
 import { getShadowValue } from '@/composables/useShadowMap';
 import { useBuilderStore } from '@/stores/builder';

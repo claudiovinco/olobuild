@@ -3,7 +3,7 @@
     <!-- Column children (elements) are rendered by the recursive canvas, not here -->
     <div v-if="!hasChildren" class="olo-column-empty">
       <span class="olo-column-plus">+</span>
-      <span>Drop element here</span>
+      <span>{{ t('Drop element here') }}</span>
     </div>
   </div>
 </template>
@@ -11,6 +11,7 @@
 <script setup>
 import { computed } from 'vue';
 import { useTilesStore } from '@/stores/tiles';
+import { t } from '@/i18n';
 
 const defaults = {
   width_default: '',

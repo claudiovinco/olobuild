@@ -82,7 +82,7 @@ class Olo_Viewer360_Tile extends Olo_Tile_Base {
              style="height:<?php echo $height; ?>px;<?php if ( $radius_css ) echo 'border-radius:' . $radius_css . ';'; ?>overflow:hidden;position:relative;background:#111"
              data-olo-v360='<?php echo esc_attr( wp_json_encode( $config ) ); ?>'>
             <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px">
-                <span>Caricamento 360°...</span>
+                <span><?php echo esc_html( olo_t( 'Caricamento 360°...' ) ); ?></span>
             </div>
         </div>
         <?php if ( ! empty( $s['caption'] ) ) : ?>

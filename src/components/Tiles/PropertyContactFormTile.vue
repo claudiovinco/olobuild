@@ -1,9 +1,9 @@
 <template>
   <div :style="cardStyle">
     <h3 :style="{ margin:'0 0 18px', fontSize: (s.title_size||20)+'px', fontWeight:700, color: s.title_color||'#0F172A', lineHeight:'1.35' }">{{ s.title_text || 'Vuoi avere più informazioni riguardo a questo immobile?' }}</h3>
-    <div v-if="s.show_name !== false" style="margin-bottom:12px"><input :style="inputStyle" placeholder="Nome" disabled /></div>
-    <div v-if="s.show_phone !== false" style="margin-bottom:12px"><input :style="inputStyle" placeholder="Telefono" disabled /></div>
-    <div v-if="s.show_email !== false" style="margin-bottom:12px"><input :style="inputStyle" placeholder="Email" disabled /></div>
+    <div v-if="s.show_name !== false" style="margin-bottom:12px"><input :style="inputStyle" :placeholder="t('Nome')" disabled /></div>
+    <div v-if="s.show_phone !== false" style="margin-bottom:12px"><input :style="inputStyle" :placeholder="t('Telefono')" disabled /></div>
+    <div v-if="s.show_email !== false" style="margin-bottom:12px"><input :style="inputStyle" :placeholder="t('Email')" disabled /></div>
     <div v-if="s.show_message !== false" style="margin-bottom:12px">
       <textarea :style="Object.assign({}, inputStyle, { minHeight:'80px', resize:'vertical' })" disabled>Buongiorno, sono interessato/a [TRILOCALE CENTRO STORICO]</textarea>
     </div>
@@ -26,6 +26,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { t } from '@/i18n';
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 const s = computed(() => ({ ...props.settings }));
 

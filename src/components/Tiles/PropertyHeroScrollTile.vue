@@ -8,13 +8,13 @@
     <div :style="{ position:'absolute',top:0,bottom:0,right:0,width:'80px',background:'linear-gradient(to left,'+bg+',transparent)',zIndex:2,pointerEvents:'none' }"></div>
     <!-- Overlay -->
     <div v-if="s.show_overlay !== false" :style="overlayStyle">
-      <div v-if="s.show_badges !== false" style="margin-bottom:6px"><span style="padding:3px 10px;border-radius:6px;font-size:11px;font-weight:700;text-transform:uppercase;background:#2563EB;color:#fff">Vendita</span></div>
-      <div v-if="s.show_title !== false" :style="{ fontSize:(s.title_size||26)+'px', fontWeight:700, color:s.title_color||'#fff', lineHeight:'1.25' }">Trilocale Centro Storico</div>
-      <div v-if="s.show_location !== false" style="font-size:13px;color:rgba(255,255,255,.7);margin-top:4px">Trento — Centro</div>
-      <div v-if="s.show_price !== false" :style="{ fontSize:(s.price_size||22)+'px', fontWeight:800, color:s.price_color||'#fff', marginTop:'6px' }">&euro; 325.000</div>
+      <div v-if="s.show_badges !== false" style="margin-bottom:6px"><span style="padding:3px 10px;border-radius:6px;font-size:11px;font-weight:700;text-transform:uppercase;background:#2563EB;color:#fff">{{ t('Vendita') }}</span></div>
+      <div v-if="s.show_title !== false" :style="{ fontSize:(s.title_size||26)+'px', fontWeight:700, color:s.title_color||'#fff', lineHeight:'1.25' }">{{ t('Trilocale Centro Storico') }}</div>
+      <div v-if="s.show_location !== false" style="font-size:13px;color:rgba(255,255,255,.7);margin-top:4px">{{ t('Trento — Centro') }}</div>
+      <div v-if="s.show_price !== false" :style="{ fontSize:(s.price_size||22)+'px', fontWeight:800, color:s.price_color||'#fff', marginTop:'6px' }">{{ t('&euro; 325.000') }}</div>
       <div v-if="s.show_specs !== false" style="display:flex;gap:8px;margin-top:6px">
-        <span style="padding:3px 8px;border-radius:6px;font-size:11px;font-weight:600;color:rgba(255,255,255,.85);background:rgba(255,255,255,.1)">95 m²</span>
-        <span style="padding:3px 8px;border-radius:6px;font-size:11px;font-weight:600;color:rgba(255,255,255,.85);background:rgba(255,255,255,.1)">4 locali</span>
+        <span style="padding:3px 8px;border-radius:6px;font-size:11px;font-weight:600;color:rgba(255,255,255,.85);background:rgba(255,255,255,.1)">{{ t('95 m²') }}</span>
+        <span style="padding:3px 8px;border-radius:6px;font-size:11px;font-weight:600;color:rgba(255,255,255,.85);background:rgba(255,255,255,.1)">{{ t('4 locali') }}</span>
       </div>
     </div>
   </div>
@@ -22,6 +22,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { t } from '@/i18n';
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 const s = computed(() => ({ ...props.settings }));
 const bg = computed(() => s.value.bg_color || '#0F172A');

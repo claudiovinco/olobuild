@@ -18,7 +18,7 @@
     <!-- Center -->
     <div class="mb-flex mb-items-center mb-justify-center mb-h-full mb-relative" style="z-index: 20;">
       <hr v-if="s.show_divider" class="mb-border-0 mb-m-0" :style="dividerStyle" />
-      <div v-if="s.custom_svg" class="mb-text-xs mb-text-blue-400 mb-bg-gray-800 mb-px-2 mb-py-0.5 mb-rounded">&lt;svg&gt;</div>
+      <div v-if="s.custom_svg" class="mb-text-xs mb-text-blue-400 mb-bg-gray-800 mb-px-2 mb-py-0.5 mb-rounded">{{ t('&lt;svg&gt;') }}</div>
       <span v-if="showLabel" class="mb-text-xs mb-text-gray-600 mb-bg-gray-900 mb-px-2 mb-relative mb-z-10">{{ labelText }}</span>
     </div>
 
@@ -44,6 +44,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { t } from '@/i18n';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },

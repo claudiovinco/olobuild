@@ -8,7 +8,7 @@
         <input v-if="isCheckboxes" type="checkbox" checked disabled />
         <span v-if="isPills || isMinimal" class="ocp-filter-dot"
               :style="{ background: 'var(--olo-color-primary, #6366F1)' }"></span>
-        <span>Tutti</span>
+        <span>{{ t('Tutti') }}</span>
       </span>
       <span v-for="cat in previewCats" :key="cat.name" class="ocp-filter-item ocp-filter-active"
             :class="{ 'ocp-filter-pill': isPills, 'ocp-filter-check': isCheckboxes }">
@@ -22,22 +22,22 @@
     <!-- Toolbar -->
     <div v-if="s.show_toolbar" class="ocp-toolbar" :style="toolbarContainerStyle">
       <div class="ocp-toolbar-left">
-        <span class="ocp-btn ocp-btn-nav" :style="btnStyle">&lsaquo;</span>
-        <span class="ocp-btn ocp-btn-nav" :style="btnStyle">&rsaquo;</span>
-        <span v-if="s.show_today_btn" class="ocp-btn" :style="btnStyle">Oggi</span>
+        <span class="ocp-btn ocp-btn-nav" :style="btnStyle">{{ t('&lsaquo;') }}</span>
+        <span class="ocp-btn ocp-btn-nav" :style="btnStyle">{{ t('&rsaquo;') }}</span>
+        <span v-if="s.show_today_btn" class="ocp-btn" :style="btnStyle">{{ t('Oggi') }}</span>
       </div>
       <div class="ocp-toolbar-center">
         <strong :style="titleStyle">{{ currentMonthLabel }}</strong>
       </div>
       <div class="ocp-toolbar-right">
         <span v-if="s.show_month_view" class="ocp-btn"
-              :style="s.default_view === 'dayGridMonth' ? btnActiveStyle : btnStyle">Mese</span>
+              :style="s.default_view === 'dayGridMonth' ? btnActiveStyle : btnStyle">{{ t('Mese') }}</span>
         <span v-if="s.show_week_view" class="ocp-btn"
-              :style="s.default_view === 'timeGridWeek' ? btnActiveStyle : btnStyle">Settimana</span>
+              :style="s.default_view === 'timeGridWeek' ? btnActiveStyle : btnStyle">{{ t('Settimana') }}</span>
         <span v-if="s.show_day_view" class="ocp-btn"
-              :style="s.default_view === 'timeGridDay' ? btnActiveStyle : btnStyle">Giorno</span>
+              :style="s.default_view === 'timeGridDay' ? btnActiveStyle : btnStyle">{{ t('Giorno') }}</span>
         <span v-if="s.show_list_view" class="ocp-btn"
-              :style="s.default_view === 'listMonth' ? btnActiveStyle : btnStyle">Lista</span>
+              :style="s.default_view === 'listMonth' ? btnActiveStyle : btnStyle">{{ t('Lista') }}</span>
       </div>
     </div>
 
@@ -75,6 +75,7 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { computed } from 'vue';
 
 const props = defineProps({

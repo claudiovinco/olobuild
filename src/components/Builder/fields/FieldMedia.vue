@@ -29,8 +29,8 @@
       <button
         @click="$emit('update:modelValue', ''); $emit('update:attachmentId', 0)"
         class="mb-absolute mb-top-1 mb-right-1 mb-bg-red-600 mb-text-white mb-rounded-full mb-w-5 mb-h-5 mb-text-xs mb-flex mb-items-center mb-justify-center mb-opacity-0 group-hover:mb-opacity-100 mb-transition-opacity"
-        title="Rimuovi media"
-      >&times;</button>
+        :title="t('Rimuovi media')"
+      >{{ t('&times;') }}</button>
     </div>
 
     <!-- Single picker button -->
@@ -44,6 +44,7 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { computed } from 'vue';
 import { useToast } from '../../../composables/useToast.js';
 
@@ -66,7 +67,7 @@ const fileName = computed(() => {
 function pickMedia() {
   const toast = useToast();
   if (!window.wp || !window.wp.media) {
-    toast.error('Libreria Media di WordPress non disponibile.');
+    toast.error(t('Libreria Media di WordPress non disponibile.'));
     return;
   }
   const frame = wp.media({

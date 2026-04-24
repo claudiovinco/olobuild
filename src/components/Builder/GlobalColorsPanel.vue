@@ -1,8 +1,8 @@
 <template>
   <div class="gcp-root">
     <div class="gcp-header">
-      <h3 class="gcp-title">Palette Colori Globale</h3>
-      <p class="gcp-desc">Definisci colori riutilizzabili ovunque tramite variabili CSS.</p>
+      <h3 class="gcp-title">{{ t('Palette Colori Globale') }}</h3>
+      <p class="gcp-desc">{{ t('Definisci colori riutilizzabili ovunque tramite variabili CSS.') }}</p>
     </div>
 
     <div class="gcp-list">
@@ -23,7 +23,7 @@
               type="text"
               :value="color.label"
               @input="updateColorLabel(index, $event.target.value)"
-              placeholder="Nome colore"
+              :placeholder="t('Nome colore')"
               class="gcp-input gcp-input--label"
             />
             <input
@@ -36,7 +36,7 @@
           <button
             class="gcp-remove"
             @click="removeColor(index)"
-            title="Rimuovi colore"
+            :title="t('Rimuovi colore')"
           >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
@@ -67,6 +67,7 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { ref, watch, computed } from 'vue';
 import { useStylesStore } from '@/stores/styles';
 import { useToast } from '@/composables/useToast.js';
@@ -134,7 +135,7 @@ async function save() {
   stylesStore.setGlobalColors(JSON.parse(JSON.stringify(localColors.value)));
   await stylesStore.saveGlobalColors();
   isDirty.value = false;
-  toast.success('Palette colori salvata');
+  toast.success(t('Palette colori salvata'));
 }
 
 // Sync from store if it changes externally

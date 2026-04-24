@@ -11,8 +11,8 @@
             {{ serviceLabel }}
           </div>
           <div :style="{ fontSize:'13px', color: s.meta_color, display:'flex', gap:'10px', marginTop:'2px' }">
-            <span v-if="s.show_duration">&#9201; 60 min</span>
-            <span v-if="s.show_price" :style="{ fontWeight:'600', color: s.primary_color }">&euro; 80,00</span>
+            <span v-if="s.show_duration">{{ t('&#9201; 60 min') }}</span>
+            <span v-if="s.show_price" :style="{ fontWeight:'600', color: s.primary_color }">{{ t('&euro; 80,00') }}</span>
           </div>
         </div>
       </div>
@@ -21,9 +21,9 @@
     <!-- Calendar mini -->
     <div style="padding:16px 20px">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-        <div :style="navBtnStyle">&lsaquo;</div>
-        <div style="font-size:15px;font-weight:700;text-transform:capitalize">Febbraio 2026</div>
-        <div :style="navBtnStyle">&rsaquo;</div>
+        <div :style="navBtnStyle">{{ t('&lsaquo;') }}</div>
+        <div style="font-size:15px;font-weight:700;text-transform:capitalize">{{ t('Febbraio 2026') }}</div>
+        <div :style="navBtnStyle">{{ t('&rsaquo;') }}</div>
       </div>
       <div style="display:grid;grid-template-columns:repeat(7,1fr);text-align:center;gap:4px">
         <span v-for="d in ['L','M','M','G','V','S','D']" :key="d" style="font-size:10px;font-weight:600;color:#9ca3af;text-transform:uppercase;padding:3px 0">{{ d }}</span>
@@ -36,12 +36,13 @@
 
     <!-- CTA -->
     <div style="padding:0 20px 20px">
-      <div :style="ctaStyle">Conferma prenotazione</div>
+      <div :style="ctaStyle">{{ t('Conferma prenotazione') }}</div>
     </div>
   </div>
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { computed } from 'vue';
 
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });

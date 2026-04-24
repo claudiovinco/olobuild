@@ -25,13 +25,14 @@
       </div>
       <!-- Description -->
       <div v-if="s.show_description" style="padding:8px 12px;font-size:12px;color:#6B7280;">
-        Descrizione breve della categoria...
+        {{ t('Descrizione breve della categoria...') }}
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { computed } from 'vue';
 
 const props = defineProps({

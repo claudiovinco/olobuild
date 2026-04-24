@@ -30,7 +30,7 @@
             style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;"
           />
           <div v-else :style="placeholderStyle">
-            <span style="font-size:24px;opacity:0.5;">&#x1F5BC;</span>
+            <span style="font-size:24px;opacity:0.5;">{{ t('&#x1F5BC;') }}</span>
           </div>
           <!-- Hover overlay preview -->
           <div
@@ -73,6 +73,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { t } from '@/i18n';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },

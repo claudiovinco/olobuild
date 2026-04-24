@@ -7,7 +7,7 @@
           <span v-else style="line-height:1;">{{ item.icon || '✓' }}</span>
         </span>
         <span :style="{ color: s.text_color || '#E5E7EB', fontSize: (parseInt(s.text_size) || 16) + 'px', lineHeight: '1.4' }" :data-olo-editable="'items.' + i + '.text'">{{ item.text || 'Voce' }}</span>
-        <span v-if="item.link" class="olo-il-link-badge" title="Link">&#x1F517;</span>
+        <span v-if="item.link" class="olo-il-link-badge" :title="t('Link')">{{ t('&#x1F517;') }}</span>
       </div>
     </div>
   </div>
@@ -16,6 +16,7 @@
 <script setup>
 import { computed } from 'vue';
 import iconsSvg from '../ProSlider/uikitIconsSvg.js';
+import { t } from '@/i18n';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },

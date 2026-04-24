@@ -179,7 +179,7 @@ class Olo_ServiceVideo_Tile extends Olo_Tile_Base {
             </video>
             <?php if ( ! empty( $s['show_play_btn'] ) && ! $autoplay ) : ?>
             <?php self::enqueue_delegated_events(); ?>
-            <button class="olo-svid-play" aria-label="Riproduci" data-olo-svid-play="1">
+            <button class="olo-svid-play" aria-label="<?php echo esc_attr( olo_t( 'Riproduci' ) ); ?>" data-olo-svid-play="1">
                 <svg viewBox="0 0 24 24" fill="<?php echo $play_btn_color; ?>"><polygon points="6,3 20,12 6,21"/></svg>
             </button>
             <?php endif; ?>

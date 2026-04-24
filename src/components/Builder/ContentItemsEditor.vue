@@ -12,7 +12,7 @@
 
     <!-- Dynamic source active message -->
     <div v-if="isDynamicQueryActive" class="cie-dynamic-info">
-      &#9889; Sorgente dinamica attiva — elementi generati dalla query
+      {{ t('&#9889; Sorgente dinamica attiva — elementi generati dalla query') }}
     </div>
 
     <!-- Static items list (hidden when query active) -->
@@ -29,7 +29,7 @@
         <div class="cie-item" :class="{ 'cie-item--open': expandedId === element.id }">
           <!-- Item header row -->
           <div class="cie-header" @click="toggleExpand(element.id)">
-            <span class="cie-grip" title="Trascina per riordinare">&#10303;</span>
+            <span class="cie-grip" :title="t('Trascina per riordinare')">&#10303;</span>
             <span v-if="thumbField && element[thumbField]" class="cie-thumb">
               <img :src="element[thumbField]" alt="" class="cie-thumb-img" />
             </span>
@@ -38,16 +38,16 @@
               <button
                 type="button"
                 class="cie-btn"
-                title="Duplica"
+                :title="t('Duplica')"
                 @click.stop="duplicateItem(index)"
               >&#10697;</button>
               <button
                 type="button"
                 class="cie-btn cie-btn--delete"
-                title="Elimina"
+                :title="t('Elimina')"
                 :disabled="localItems.length <= 1"
                 @click.stop="removeItem(index)"
-              >&times;</button>
+              >{{ t('&times;') }}</button>
               <span class="cie-chevron" :class="{ 'cie-chevron--open': expandedId === element.id }">&#9660;</span>
             </div>
           </div>
@@ -69,7 +69,7 @@
               <div v-else-if="field.type === 'image'" class="cie-image-picker">
                 <div v-if="element[field.key]" class="cie-image-preview">
                   <img :src="element[field.key]" alt="" />
-                  <button @click="updateField(index, field.key, ''); updateField(index, field.key + '_id', 0)" class="cie-image-remove">&times;</button>
+                  <button @click="updateField(index, field.key, ''); updateField(index, field.key + '_id', 0)" class="cie-image-remove">{{ t('&times;') }}</button>
                 </div>
                 <button @click="pickImage(index, field.key)" class="cie-image-btn">
                   {{ element[field.key] ? 'Cambia immagine' : 'Seleziona immagine' }}
@@ -84,7 +84,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25h-9A2.25 2.25 0 0 0 2.25 7.5v9a2.25 2.25 0 0 0 2.25 2.25Z" /></svg>
                     <span class="cie-media-filename">{{ element[field.key].split('/').pop() }}</span>
                   </div>
-                  <button @click="updateField(index, field.key, ''); updateField(index, field.key + '_id', 0)" class="cie-image-remove">&times;</button>
+                  <button @click="updateField(index, field.key, ''); updateField(index, field.key + '_id', 0)" class="cie-image-remove">{{ t('&times;') }}</button>
                 </div>
                 <button @click="pickMedia(index, field.key)" class="cie-image-btn">
                   {{ element[field.key] ? 'Cambia media' : 'Seleziona media' }}
@@ -168,13 +168,13 @@
                   :value="element[field.key] || ''"
                   @input="updateField(index, field.key, $event.target.value)"
                   class="cie-input cie-icon-input"
-                  placeholder="es. star, home"
+                  :placeholder="t('es. star, home')"
                 />
                 <button
                   type="button"
                   @click="openIconPicker(index, field.key)"
                   class="cie-icon-btn"
-                >Sfoglia</button>
+                >{{ t('Sfoglia') }}</button>
               </div>
 
               <!-- hotspot-position (visual placer) -->
@@ -183,7 +183,7 @@
                 type="button"
                 class="cie-placer-btn"
                 @click="openPlacer(index)"
-              >&#9678; Posiziona su PDF</button>
+              >{{ t('&#9678; Posiziona su PDF') }}</button>
 
               <!-- toggle (checkbox) -->
               <label
@@ -272,6 +272,7 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { ref, computed, watch } from 'vue';
 import draggable from 'vuedraggable';
 import RichTextEditor from './RichTextEditor.vue';
@@ -443,7 +444,7 @@ function loadPdfJs() {
 async function openPlacer(index) {
   const pdfUrl = props.tileSettings.pdf_url;
   const toast = useToast();
-  if (!pdfUrl) { toast.warning('Seleziona prima un file PDF'); return; }
+  if (!pdfUrl) { toast.warning(t('Seleziona prima un file PDF')); return; }
   placerItemIndex.value = index;
   placerPage.value = localItems.value[index]?.page || 1;
   placerOpen.value = true;

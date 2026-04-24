@@ -11,8 +11,8 @@
         v-if="s.show_copy_button"
         class="mb-text-xs mb-font-mono mb-cursor-pointer mb-select-none mb-px-2 mb-py-1 mb-rounded"
         :style="{ color: theme.text, opacity: 0.7, border: '1px solid ' + theme.line }"
-        title="Copia codice"
-      >Copy</span>
+        :title="t('Copia codice')"
+      >{{ t('Copy') }}</span>
     </div>
 
     <!-- Code block -->
@@ -24,6 +24,7 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { computed } from 'vue';
 import { useBuilderStore } from '@/stores/builder';
 import { rv } from '@/composables/useResponsiveValue';

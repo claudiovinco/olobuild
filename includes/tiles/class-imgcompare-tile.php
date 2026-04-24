@@ -258,7 +258,7 @@ class Olo_ImgCompare_Tile extends Olo_Tile_Base {
             <?php if ( $show_labels && $after_lbl ) : ?>
                 <span class="olo-ic-label olo-ic-label-after"><?php echo $after_lbl; ?></span>
             <?php endif; ?>
-            <input type="range" min="0" max="100" value="<?php echo $start; ?>" class="olo-ic-range" aria-label="Confronto immagini" />
+            <input type="range" min="0" max="100" value="<?php echo $start; ?>" class="olo-ic-range" aria-label="<?php echo esc_attr( olo_t( 'Confronto immagini' ) ); ?>" />
         </div>
         <script>
         (function(){

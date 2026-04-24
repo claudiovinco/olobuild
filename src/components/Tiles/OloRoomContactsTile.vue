@@ -8,7 +8,7 @@
       </div>
       <div style="display:flex;align-items:center;gap:8px">
         <span style="color:#1e87f0;font-size:15px">&#9993;</span>
-        <span>info@comune.rovereto.tn.it</span>
+        <span>{{ t('info@comune.rovereto.tn.it') }}</span>
       </div>
       <div style="display:flex;align-items:center;gap:8px">
         <span style="color:#1e87f0;font-size:15px">&#128438;</span>
@@ -20,6 +20,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { t } from '@/i18n';
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 const defaults = { style: 'card', title: 'Contatti' };
 const s = computed(() => ({ ...defaults, ...props.settings }));

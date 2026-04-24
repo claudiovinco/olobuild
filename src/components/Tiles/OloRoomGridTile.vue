@@ -2,9 +2,9 @@
   <div>
     <!-- Filters bar -->
     <div style="display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap;align-items:stretch">
-      <select :style="selStyle"><option>Tutti i tipi</option></select>
-      <select :style="selStyle"><option>Tutte le zone</option></select>
-      <input type="number" placeholder="Capienza min." :style="selStyle" />
+      <select :style="selStyle"><option>{{ t('Tutti i tipi') }}</option></select>
+      <select :style="selStyle"><option>{{ t('Tutte le zone') }}</option></select>
+      <input type="number" :placeholder="t('Capienza min.')" :style="selStyle" />
     </div>
     <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px">
       <span v-for="eq in equipment" :key="eq.n" :style="{...pillStyle, ...(eq.active ? activePill : {})}">{{ eq.n }}</span>
@@ -47,6 +47,7 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { computed } from 'vue';
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 const defaults = { layout: 'map-left', map_height: '500', tile_layer: 'positron', marker_color: '#e11d48', columns: '1', card_image: true };

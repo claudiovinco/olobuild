@@ -21,13 +21,13 @@
       <template v-if="field.responsive">
         <div class="mb-flex mb-items-center mb-justify-between mb-mb-1">
           <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400">
-            {{ field.label }}
+            {{ t(field.label) }}
           </label>
           <button
             @click="respOpen = !respOpen"
             class="mb-p-0.5 mb-rounded mb-transition-colors"
             :class="respBp !== 'desktop' || respOpen ? 'mb-text-primary-400' : 'mb-text-gray-500 hover:mb-text-gray-300'"
-            title="Responsive"
+            :title="t('Responsive')"
           >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg>
           </button>
@@ -43,17 +43,17 @@
                 ? 'mb-bg-primary-600 mb-text-white'
                 : 'mb-text-gray-500 hover:mb-text-gray-400'
             ]"
-            :title="bp.label"
+            :title="t(bp.label)"
           >{{ bp.short }}</button>
         </div>
         <div v-if="!respOpen && respBp !== 'desktop'" class="mb-mb-1">
           <span class="mb-text-[9px] mb-bg-primary-700 mb-text-primary-200 mb-px-1.5 mb-py-0.5 mb-rounded mb-font-medium">
-            {{ respBreakpoints.find(b => b.key === respBp)?.label }}
+            {{ t(respBreakpoints.find(b => b.key === respBp)?.label) }}
           </span>
         </div>
       </template>
       <label v-else class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">
-        {{ field.label }}
+        {{ t(field.label) }}
       </label>
 
       <FieldToggle
@@ -81,7 +81,7 @@
         :min="field.min || 0"
         :max="field.max || 100"
         :step="field.step || 1"
-        :placeholder="field.responsive && respBp !== 'desktop' ? 'Eredita' : ''"
+        :placeholder="field.responsive && respBp !== 'desktop' ? t('Eredita') : ''"
         @update:modelValue="onFieldUpdate($event)"
       />
 
@@ -228,7 +228,7 @@
           class="mb-shrink-0 mb-px-2 mb-py-1.5 mb-bg-purple-600 hover:mb-bg-purple-500 mb-text-white mb-rounded mb-text-xs mb-transition-colors"
           :class="{ 'mb-opacity-50 mb-cursor-wait': aiAltLoading }"
           :disabled="aiAltLoading"
-          title="Genera alt text con AI"
+          :title="t('Genera alt text con AI')"
           @click="generateAiAlt"
         >
           <svg v-if="!aiAltLoading" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
@@ -244,13 +244,13 @@
             :modelValue="effectiveValue"
             @update:modelValue="onFieldUpdate($event)"
             @confirm="geocodeAddress"
-            placeholder="Via Roma 1, Milano..."
+            :placeholder="t('Via Roma 1, Milano...')"
           />
           <button
             class="mb-shrink-0 mb-px-2 mb-py-1.5 mb-bg-blue-600 hover:mb-bg-blue-500 mb-text-white mb-rounded mb-text-xs mb-transition-colors"
             :class="{ 'mb-opacity-50 mb-cursor-wait': geocodeLoading }"
             :disabled="geocodeLoading"
-            title="Cerca indirizzo"
+            :title="t('Cerca indirizzo')"
             @click="geocodeAddress"
           >
             <svg v-if="!geocodeLoading" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
@@ -301,6 +301,7 @@ import FieldIconSelect from './fields/FieldIconSelect.vue';
 import DynamicFieldToggle from './DynamicFieldToggle.vue';
 import { useTilesStore } from '@/stores/tiles';
 import { useStylesStore } from '@/stores/styles';
+import { t } from '@/i18n';
 
 import FieldEditor from './fields/FieldEditor.vue';
 
@@ -379,19 +380,19 @@ const resolvedOptions = computed(() => {
     }
     if (props.field.optionsSource === 'serviceList') {
       const list = (md.serviceList || []);
-      return [{ value: '', label: '— Tutti i servizi —' }, ...list];
+      return [{ value: '', label: t('— Tutti i servizi —') }, ...list];
     }
     if (props.field.optionsSource === 'wpPages') {
       return md.wpPages || [];
     }
     if (props.field.optionsSource === 'searchTiles') {
       const tilesStore = useTilesStore();
-      const results = [{ value: '', label: '— Nessuna ricerca —' }];
+      const results = [{ value: '', label: t('— Nessuna ricerca —') }];
       const walk = (nodes) => {
         for (const node of nodes) {
           if (node.type === 'livesearch' || node.type === 'search') {
-            const lbl = node.settings?.placeholder || (node.type === 'livesearch' ? 'Ricerca Live' : 'Ricerca');
-            results.push({ value: node.id, label: (node.type === 'livesearch' ? 'Ricerca Live' : 'Ricerca') + ' — ' + lbl });
+            const lbl = node.settings?.placeholder || (node.type === 'livesearch' ? t('Ricerca Live') : t('Ricerca'));
+            results.push({ value: node.id, label: (node.type === 'livesearch' ? t('Ricerca Live') : t('Ricerca')) + ' — ' + lbl });
           }
           if (Array.isArray(node.children)) walk(node.children);
         }
@@ -403,7 +404,7 @@ const resolvedOptions = computed(() => {
       const stylesStore = useStylesStore();
       const sets = stylesStore.globalTypography || [];
       return [
-        { value: '', label: '— Nessuno —' },
+        { value: '', label: t('— Nessuno —') },
         ...sets.map(gt => ({ value: gt.id, label: gt.label || gt.id }))
       ];
     }
@@ -413,8 +414,8 @@ const resolvedOptions = computed(() => {
       const tile = props.tileId ? tilesStore.getTileById(props.tileId) : null;
       const menuId = parseInt(tile?.settings?.[depKey] || 0);
       const menu = (md.wpMenus || []).find(m => m.id === menuId);
-      if (!menu || !menu.items) return [{ value: '0', label: '— Seleziona —' }];
-      const opts = [{ value: '0', label: '— Seleziona —' }];
+      if (!menu || !menu.items) return [{ value: '0', label: t('— Seleziona —') }];
+      const opts = [{ value: '0', label: t('— Seleziona —') }];
       menu.items.forEach(item => {
         const indent = item.parent ? '— ' : '';
         opts.push({ value: String(item.id), label: indent + item.title });
@@ -526,10 +527,10 @@ async function geocodeAddress() {
       });
       geocodeResult.value = place.display_name;
     } else {
-      geocodeError.value = 'Nessun risultato trovato';
+      geocodeError.value = t('Nessun risultato trovato');
     }
   } catch (e) {
-    geocodeError.value = 'Errore nella ricerca';
+    geocodeError.value = t('Errore nella ricerca');
     console.error('Geocode failed:', e);
   } finally {
     geocodeLoading.value = false;

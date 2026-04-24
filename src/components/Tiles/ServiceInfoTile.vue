@@ -4,8 +4,8 @@
     <div :style="heroStyle">
       <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,0.02) 50%,rgba(0,0,0,0.35) 100%)"></div>
       <div style="position:absolute;top:16px;right:16px;display:flex;gap:8px;z-index:2">
-        <span :style="badgeStyle">&#9737; Località</span>
-        <span :style="badgeStyle">&#9968; 1900 m</span>
+        <span :style="badgeStyle">{{ t('&#9737; Località') }}</span>
+        <span :style="badgeStyle">{{ t('&#9968; 1900 m') }}</span>
       </div>
     </div>
 
@@ -13,7 +13,7 @@
     <div :style="bodyStyle">
       <!-- Title -->
       <h1 :style="{ fontSize: s.acc_title_size+'px', fontWeight:'700', color:'var(--olo-color-text, #374151)', margin:'0 0 20px', lineHeight:'1.2' }">
-        Nome Baita / Servizio
+        {{ t('Nome Baita / Servizio') }}
       </h1>
 
       <!-- Ordered sections -->
@@ -47,16 +47,16 @@
 
         <!-- Description -->
         <div v-if="sec === 'description' && s.acc_show_description" style="margin-bottom:28px">
-          <h3 style="font-size:17px;font-weight:700;color:var(--olo-color-text, #374151);margin:0 0 12px;font-style:italic">Descrizione</h3>
+          <h3 style="font-size:17px;font-weight:700;color:var(--olo-color-text, #374151);margin:0 0 12px;font-style:italic">{{ t('Descrizione') }}</h3>
           <div style="font-size:14px;line-height:1.7;color:#374151">
-            <p style="margin:0 0 10px">La baita è un piccolo gioiello nascosto a 1.900 metri di altitudine, affacciata sui laghi cristallini.</p>
-            <p style="margin:0">Completamente autonoma con pannelli solari e stufa a legna, offre 1 camera matrimoniale con vista lago.</p>
+            <p style="margin:0 0 10px">{{ t('La baita è un piccolo gioiello nascosto a 1.900 metri di altitudine, affacciata sui laghi cristallini.') }}</p>
+            <p style="margin:0">{{ t('Completamente autonoma con pannelli solari e stufa a legna, offre 1 camera matrimoniale con vista lago.') }}</p>
           </div>
         </div>
 
         <!-- Amenities -->
         <div v-if="sec === 'amenities' && s.acc_show_amenities" style="margin-bottom:28px">
-          <h3 style="font-size:17px;font-weight:700;color:var(--olo-color-text, #374151);margin:0 0 12px;font-style:italic">Servizi e comfort</h3>
+          <h3 style="font-size:17px;font-weight:700;color:var(--olo-color-text, #374151);margin:0 0 12px;font-style:italic">{{ t('Servizi e comfort') }}</h3>
           <div :style="amenitiesStyle">
             <div v-for="amenity in amenities" :key="amenity"
                  style="display:flex;align-items:center;gap:6px;font-size:13px;color:#374151;padding:3px 0">
@@ -69,9 +69,9 @@
         <!-- Check-in -->
         <div v-if="sec === 'checkin' && s.acc_show_checkin"
              :style="checkinStyle">
-          <strong style="color:var(--olo-color-text, #374151)">Check-in:</strong> dalle 15:00
-          &nbsp;| &nbsp;<strong style="color:var(--olo-color-text, #374151)">Check-out:</strong> entro 10:00
-          <br><strong style="color:var(--olo-color-text, #374151)">Soggiorno minimo:</strong> 2 notti
+          <strong style="color:var(--olo-color-text, #374151)">{{ t('Check-in:') }}</strong> dalle 15:00
+          &nbsp;| &nbsp;<strong style="color:var(--olo-color-text, #374151)">{{ t('Check-out:') }}</strong> entro 10:00
+          <br><strong style="color:var(--olo-color-text, #374151)">{{ t('Soggiorno minimo:') }}</strong> 2 notti
         </div>
       </template>
     </div>
@@ -79,6 +79,7 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { computed } from 'vue';
 import { getShadowValue } from '@/composables/useShadowMap';
 

@@ -19,22 +19,22 @@
 
         <!-- Role -->
         <div v-if="s.show_role" :style="roleStyle">
-          Amministratore
+          {{ t('Amministratore') }}
         </div>
 
         <!-- Bio -->
         <p v-if="s.show_bio" :style="bioStyle">
-          Breve biografia dell'autore del post. Questo testo viene estratto automaticamente dal profilo WordPress dell'autore.
+          {{ t('Breve biografia dell\'autore del post. Questo testo viene estratto automaticamente dal profilo WordPress dell\'autore.') }}
         </p>
 
         <!-- Post count -->
         <div v-if="s.show_post_count" :style="countStyle">
-          12 articoli pubblicati
+          {{ t('12 articoli pubblicati') }}
         </div>
 
         <!-- Website -->
         <div v-if="s.show_website" :style="linkStyle">
-          www.esempio.it
+          {{ t('www.esempio.it') }}
         </div>
       </div>
     </div>
@@ -42,6 +42,7 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { computed } from 'vue';
 
 const props = defineProps({

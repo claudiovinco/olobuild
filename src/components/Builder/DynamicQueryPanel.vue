@@ -13,7 +13,7 @@
         >
           <span class="dqp-switch-thumb"></span>
         </button>
-        <span>Sorgente dinamica</span>
+        <span>{{ t('Sorgente dinamica') }}</span>
       </label>
     </div>
 
@@ -21,7 +21,7 @@
     <div v-if="isEnabled" class="dqp-config">
       <!-- Post Type -->
       <div class="dqp-field">
-        <label class="dqp-label">Post Type</label>
+        <label class="dqp-label">{{ t('Post Type') }}</label>
         <select :value="localQuery.post_type" @change="updateQuery('post_type', $event.target.value)" class="dqp-select">
           <option v-for="pt in postTypes" :key="pt.value" :value="pt.value">{{ pt.label }}</option>
         </select>
@@ -29,7 +29,7 @@
 
       <!-- Posts per page -->
       <div class="dqp-field">
-        <label class="dqp-label">Numero di elementi</label>
+        <label class="dqp-label">{{ t('Numero di elementi') }}</label>
         <input
           type="number"
           :value="localQuery.posts_per_page"
@@ -43,36 +43,36 @@
       <!-- Order by -->
       <div class="dqp-row">
         <div class="dqp-field dqp-field--half">
-          <label class="dqp-label">Ordina per</label>
+          <label class="dqp-label">{{ t('Ordina per') }}</label>
           <select :value="localQuery.orderby" @change="updateQuery('orderby', $event.target.value)" class="dqp-select">
-            <option value="date">Data</option>
-            <option value="title">Titolo</option>
-            <option value="modified">Ultima modifica</option>
-            <option value="rand">Casuale</option>
-            <option value="menu_order">Ordine menu</option>
+            <option value="date">{{ t('Data') }}</option>
+            <option value="title">{{ t('Titolo') }}</option>
+            <option value="modified">{{ t('Ultima modifica') }}</option>
+            <option value="rand">{{ t('Casuale') }}</option>
+            <option value="menu_order">{{ t('Ordine menu') }}</option>
           </select>
         </div>
         <div class="dqp-field dqp-field--half">
-          <label class="dqp-label">Ordine</label>
+          <label class="dqp-label">{{ t('Ordine') }}</label>
           <select :value="localQuery.order" @change="updateQuery('order', $event.target.value)" class="dqp-select">
-            <option value="DESC">DESC</option>
-            <option value="ASC">ASC</option>
+            <option value="DESC">{{ t('DESC') }}</option>
+            <option value="ASC">{{ t('ASC') }}</option>
           </select>
         </div>
       </div>
 
       <!-- Taxonomy filter -->
       <div class="dqp-field">
-        <label class="dqp-label">Filtra per tassonomia</label>
+        <label class="dqp-label">{{ t('Filtra per tassonomia') }}</label>
         <select :value="localQuery.taxonomy" @change="onTaxonomyChange($event.target.value)" class="dqp-select">
-          <option value="">Nessuna</option>
+          <option value="">{{ t('Nessuna') }}</option>
           <option v-for="tax in taxonomies" :key="tax.value" :value="tax.value">{{ tax.label }}</option>
         </select>
       </div>
 
       <!-- Terms multi-select -->
       <div v-if="localQuery.taxonomy && selectedTaxTerms.length" class="dqp-field">
-        <label class="dqp-label">Termini</label>
+        <label class="dqp-label">{{ t('Termini') }}</label>
         <div class="dqp-terms">
           <label v-for="term in selectedTaxTerms" :key="term.value" class="dqp-term">
             <input
@@ -87,7 +87,7 @@
 
       <!-- Field Mapping -->
       <div class="dqp-mapping">
-        <label class="dqp-label dqp-label--section">Mappatura campi</label>
+        <label class="dqp-label dqp-label--section">{{ t('Mappatura campi') }}</label>
         <div v-for="field in itemFields" :key="field.key" class="dqp-map-row">
           <span class="dqp-map-key">{{ field.label }}</span>
           <select
@@ -95,7 +95,7 @@
             @change="updateItemMap(field.key, $event.target.value)"
             class="dqp-select dqp-select--small"
           >
-            <option value="">— Non mappato —</option>
+            <option value="">{{ t('— Non mappato —') }}</option>
             <option v-for="wf in wpFields" :key="wf.key" :value="wf.key">{{ wf.label }}</option>
           </select>
         </div>
@@ -105,6 +105,7 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { ref, computed, watch, onMounted } from 'vue';
 import { useDynamicContent } from '@/composables/useDynamicContent';
 

@@ -8,12 +8,12 @@
           class="olo-tl-h-arrow olo-tl-h-arrow--prev"
           :style="arrowStyle"
           @click="hPrev"
-        >&lsaquo;</button>
+        >{{ t('&lsaquo;') }}</button>
         <button
           class="olo-tl-h-arrow olo-tl-h-arrow--next"
           :style="arrowStyle"
           @click="hNext"
-        >&rsaquo;</button>
+        >{{ t('&rsaquo;') }}</button>
 
         <!-- Viewport -->
         <div class="olo-tl-h-viewport" :style="hViewportStyle">
@@ -132,6 +132,7 @@
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { ref, computed } from 'vue';
 
 const props = defineProps({

@@ -14,13 +14,13 @@
           ref="panelRef"
           class="ip-panel mb-relative"
           role="dialog"
-          aria-label="Inserisci modulo o riga"
+          :aria-label="t('Inserisci modulo o riga')"
           tabindex="-1"
         >
           <!-- Header -->
           <div class="ip-header">
-            <span class="ip-title">Insert Module Or Row</span>
-            <button class="ip-close" @click="close" aria-label="Chiudi">
+            <span class="ip-title">{{ t('Inserisci modulo o riga') }}</span>
+            <button class="ip-close" @click="close" :aria-label="t('Chiudi')">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
             </button>
           </div>
@@ -32,7 +32,7 @@
               :key="tab.key"
               :class="['ip-tab', { 'ip-tab--active': activeTab === tab.key }]"
               @click="activeTab = tab.key"
-            >{{ tab.label }}</button>
+            >{{ t(tab.label) }}</button>
           </div>
 
           <!-- Search -->
@@ -58,27 +58,27 @@
                 :key="el.type"
                 class="ip-module-card"
                 @click="insertModule(el.type)"
-                :title="el.name"
+                :title="t(el.name)"
               >
                 <span class="ip-module-icon" v-html="moduleIcon(el.type)"></span>
-                <span class="ip-module-name">{{ el.name }}</span>
+                <span class="ip-module-name">{{ t(el.name) }}</span>
               </button>
               <div v-if="filteredModules.length === 0" class="ip-empty">
-                Nessun modulo trovato
+                {{ t('Nessun modulo trovato') }}
               </div>
             </div>
 
             <!-- Tab: New Row -->
             <div v-if="activeTab === 'row'">
               <!-- Flex layouts -->
-              <div class="ip-section-label">Layout Flex</div>
+              <div class="ip-section-label">{{ t('Layout Flex') }}</div>
               <div class="ip-row-grid">
                 <button
                   v-for="layout in rowLayouts"
                   :key="layout.key"
                   class="ip-row-card"
                   @click="insertRow(layout.key)"
-                  :title="layout.label"
+                  :title="t(layout.label)"
                 >
                   <div class="ip-row-preview">
                     <div
@@ -88,23 +88,23 @@
                       :style="{ flex: w }"
                     ></div>
                   </div>
-                  <span class="ip-row-label">{{ layout.label }}</span>
+                  <span class="ip-row-label">{{ t(layout.label) }}</span>
                 </button>
               </div>
 
               <!-- Grid template categories -->
               <template v-for="cat in filteredGridCategories" :key="cat.key">
-                <div class="ip-section-label">{{ cat.label }} <span class="ip-section-badge">CSS Grid</span></div>
+                <div class="ip-section-label">{{ t(cat.label) }} <span class="ip-section-badge">{{ t('CSS Grid') }}</span></div>
                 <div class="ip-row-grid">
                   <button
                     v-for="tpl in cat.templates"
                     :key="tpl.id"
                     class="ip-row-card"
                     @click="insertGridRow(tpl.id)"
-                    :title="tpl.name"
+                    :title="t(tpl.name)"
                   >
                     <div class="ip-row-preview ip-row-preview--grid" v-html="gridPreviewSvg(tpl)"></div>
-                    <span class="ip-row-label">{{ tpl.name }}</span>
+                    <span class="ip-row-label">{{ t(tpl.name) }}</span>
                   </button>
                 </div>
               </template>
@@ -116,8 +116,8 @@
                 <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:#9CA3AF">
                   <rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/>
                 </svg>
-                <p>Apri la Libreria Template per importare sezioni salvate</p>
-                <button class="ip-library-btn" @click="openLibrary">Apri Libreria</button>
+                <p>{{ t('Apri la Libreria Template per importare sezioni salvate') }}</p>
+                <button class="ip-library-btn" @click="openLibrary">{{ t('Apri Libreria') }}</button>
               </div>
             </div>
           </div>
@@ -133,6 +133,7 @@ import { useTilesStore, createRow, createColumn, createSection } from '@/stores/
 import { useBuilderStore } from '@/stores/builder';
 import { useDragDrop } from '@/composables/useDragDrop';
 import { columns as gridColumns, multirow, masonry, sidebar, TEMPLATES_MAP } from '@/config/gridTemplates';
+import { t } from '@/i18n';
 
 const tilesStore = useTilesStore();
 const builderStore = useBuilderStore();
@@ -148,15 +149,15 @@ const panelRef = ref(null);
 const insertAtIndex = ref(null); // section index to insert at
 
 const tabs = [
-  { key: 'module', label: 'New Module' },
-  { key: 'row', label: 'New Row' },
-  { key: 'library', label: 'Add From Library' },
+  { key: 'module', label: 'Nuovo modulo' },
+  { key: 'row', label: 'Nuova riga' },
+  { key: 'library', label: 'Da libreria' },
 ];
 
 const searchPlaceholder = computed(() => {
-  if (activeTab.value === 'module') return 'Search for a module';
-  if (activeTab.value === 'row') return 'Search row layout';
-  return 'Search in library';
+  if (activeTab.value === 'module') return t('Cerca un modulo');
+  if (activeTab.value === 'row') return t('Cerca layout riga');
+  return t('Cerca in libreria');
 });
 
 // Structural types to exclude

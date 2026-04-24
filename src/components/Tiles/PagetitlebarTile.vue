@@ -5,15 +5,16 @@
       <component :is="titleTag" :style="titleStyle">{{ titleText }}</component>
       <p v-if="s.subtitle" :style="subtitleStyle" data-olo-editable="subtitle">{{ s.subtitle }}</p>
       <nav v-if="s.show_breadcrumbs" :style="{ marginTop: '16px', fontSize: '13px', color: bcColor }">
-        <span style="opacity:.7">Home</span>
+        <span style="opacity:.7">{{ t('Home') }}</span>
         <span :style="{ margin: '0 6px', opacity: '.5' }">{{ s.breadcrumb_separator || '/' }}</span>
-        <span>Titolo pagina</span>
+        <span>{{ t('Titolo pagina') }}</span>
       </nav>
     </div>
   </div>
 </template>
 
 <script setup>
+import { t } from '@/i18n';
 import { computed } from 'vue';
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 const s = computed(() => props.settings || {});
