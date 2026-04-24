@@ -317,7 +317,14 @@ const keyframes = ref([
 // Load from modelValue
 watch(() => props.modelValue, (val) => {
   if (val && val.keyframes && val.keyframes.length >= 2) {
-    keyframes.value = val.keyframes.map(kf => ({ ...kf }));
+    const kfs = val.keyframes.map(kf => ({ ...kf }));
+    // Retrocompat: se qualche pos è null/undefined, distribuisci equi-spaziati 0..100.
+    const missing = kfs.some(kf => kf.pos == null || isNaN(kf.pos));
+    if (missing) {
+      const n = kfs.length;
+      kfs.forEach((kf, i) => { kf.pos = n === 1 ? 0 : Math.round((i / (n - 1)) * 100); });
+    }
+    keyframes.value = kfs;
   }
   if (val) {
     noMobile.value = val.nomobile !== false;

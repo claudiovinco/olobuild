@@ -76,6 +76,13 @@ export function init() {
       var kf = config.keyframes || [];
       if (kf.length < 2) return;
 
+      // Back-compat: older saves may have pos == null for all keyframes.
+      // If ANY keyframe is missing pos, distribute them evenly 0..100.
+      var needsPos = kf.some(function (k) { return k.pos == null || isNaN(k.pos); });
+      if (needsPos) {
+        var n = kf.length;
+        kf.forEach(function (k, i) { k.pos = n === 1 ? 0 : Math.round((i / (n - 1)) * 100); });
+      }
       kf.sort(function (a, b) { return (a.pos || 0) - (b.pos || 0); });
 
       var prev = existing.get(el);
