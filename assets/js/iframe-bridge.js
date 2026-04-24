@@ -92,6 +92,13 @@
     if (previewMode) return;
     // Don't intercept clicks on builder controls
     if (e.target.closest('.olo-iframe-add-btn, .olo-iframe-toolbar, .olo-iframe-add-circle')) return;
+    // Suppress click that follows an edge-drag gesture
+    if (suppressNextClick) {
+      suppressNextClick = false;
+      e.preventDefault();
+      e.stopPropagation();
+      return;
+    }
     e.preventDefault();
     e.stopPropagation();
     var tileId = findTileId(e.target);
@@ -102,6 +109,75 @@
       selectTile(null);
       post('olo:canvas-click');
     }
+  }
+
+  // ── Edge-hotzone drag (afferra la tile dai bordi, no overlay che blocca click) ──
+
+  var EDGE_ZONE = 12;
+  var DRAG_THRESHOLD = 5;
+  var edgeDownState = null;
+  var cursorAppliedEl = null;
+  var suppressNextClick = false;
+  var startTileDrag = null; // assegnato in getHoverToolbar
+
+  function isBuilderChrome(target) {
+    return !!(target.closest && target.closest('.olo-iframe-add-btn, .olo-iframe-toolbar, .olo-iframe-add-circle, .olo-grip-ghost, .olo-grip-indicator'));
+  }
+
+  function nearBorderOf(el, clientX, clientY) {
+    var rect = el.getBoundingClientRect();
+    return (clientY - rect.top) < EDGE_ZONE
+        || (rect.bottom - clientY) < EDGE_ZONE
+        || (clientX - rect.left) < EDGE_ZONE
+        || (rect.right - clientX) < EDGE_ZONE;
+  }
+
+  function onEdgeMouseDown(e) {
+    if (previewMode || gripDragging) return;
+    if (e.button !== 0) return;
+    if (isBuilderChrome(e.target)) return;
+    // Skip editable text regions
+    if (e.target.closest('[data-olo-editable], [contenteditable="true"]')) return;
+    var tileId = findTileId(e.target);
+    if (!tileId) return;
+    var el = findTileEl(tileId);
+    if (!el) return;
+    if (!nearBorderOf(el, e.clientX, e.clientY)) return;
+    edgeDownState = { tileId: tileId, el: el, startX: e.clientX, startY: e.clientY };
+  }
+
+  function onEdgeMouseMove(e) {
+    // 1. Se abbiamo un mousedown pending, verifica threshold per avviare drag
+    if (edgeDownState && !gripDragging) {
+      var dx = e.clientX - edgeDownState.startX;
+      var dy = e.clientY - edgeDownState.startY;
+      if ((dx * dx + dy * dy) >= (DRAG_THRESHOLD * DRAG_THRESHOLD)) {
+        var s = edgeDownState;
+        edgeDownState = null;
+        suppressNextClick = true;
+        if (!hoverToolbar) getHoverToolbar();
+        if (typeof startTileDrag === 'function') startTileDrag(s.tileId, s.el);
+      }
+      return;
+    }
+    if (gripDragging || previewMode) return;
+    // 2. Cursor feedback: near-border → grab
+    if (isBuilderChrome(e.target)) return;
+    var tileId = findTileId(e.target);
+    var el = tileId ? findTileEl(tileId) : null;
+    if (!el || !nearBorderOf(el, e.clientX, e.clientY)) {
+      if (cursorAppliedEl) { cursorAppliedEl.style.cursor = ''; cursorAppliedEl = null; }
+      return;
+    }
+    if (cursorAppliedEl !== el) {
+      if (cursorAppliedEl) cursorAppliedEl.style.cursor = '';
+      el.style.cursor = 'grab';
+      cursorAppliedEl = el;
+    }
+  }
+
+  function onEdgeMouseUp() {
+    edgeDownState = null;
   }
 
   // ── Double-click (inline edit placeholder) ──
@@ -606,6 +682,36 @@
       var gripDropBefore = true;
       var gripIndicator = null;
 
+      // Reusable tile-drag starter — used by grip and by edge-hotzone drag.
+      startTileDrag = function(tileId, el, labelText) {
+        gripDragging = true;
+        gripDragId = tileId;
+
+        gripGhost = document.createElement('div');
+        gripGhost.className = 'olo-grip-ghost';
+        var rect = el.getBoundingClientRect();
+        gripGhost.style.width = Math.min(rect.width, 300) + 'px';
+        gripGhost.style.height = Math.min(rect.height, 60) + 'px';
+        var label = labelText;
+        if (!label && hoverToolbar) {
+          var lbl = hoverToolbar.querySelector('.olo-iframe-toolbar-label');
+          label = lbl ? lbl.textContent : 'Sposta';
+        }
+        gripGhost.textContent = label || 'Sposta';
+        document.body.appendChild(gripGhost);
+
+        if (!gripIndicator) {
+          gripIndicator = document.createElement('div');
+          gripIndicator.className = 'olo-grip-indicator';
+          document.body.appendChild(gripIndicator);
+        }
+
+        el.style.opacity = '0.3';
+        el.style.transition = 'opacity 0.2s';
+
+        if (hoverToolbar) hoverToolbar.style.display = 'none';
+      };
+
       var grip = hoverToolbar.querySelector('.olo-iframe-tb-grip');
       if (grip) {
         grip.addEventListener('mousedown', function(e) {
@@ -614,32 +720,7 @@
           if (!el) return;
           e.preventDefault();
           e.stopPropagation();
-
-          gripDragging = true;
-          gripDragId = tileId;
-
-          // Create ghost
-          gripGhost = document.createElement('div');
-          gripGhost.className = 'olo-grip-ghost';
-          var rect = el.getBoundingClientRect();
-          gripGhost.style.width = Math.min(rect.width, 300) + 'px';
-          gripGhost.style.height = Math.min(rect.height, 60) + 'px';
-          gripGhost.textContent = hoverToolbar.querySelector('.olo-iframe-toolbar-label').textContent;
-          document.body.appendChild(gripGhost);
-
-          // Create drop indicator
-          if (!gripIndicator) {
-            gripIndicator = document.createElement('div');
-            gripIndicator.className = 'olo-grip-indicator';
-            document.body.appendChild(gripIndicator);
-          }
-
-          // Dim source element
-          el.style.opacity = '0.3';
-          el.style.transition = 'opacity 0.2s';
-
-          // Hide the toolbar during drag
-          hoverToolbar.style.display = 'none';
+          startTileDrag(tileId, el);
         });
       }
 
@@ -1043,6 +1124,10 @@
   root.addEventListener('contextmenu', onContextMenu, true);
   root.addEventListener('mouseover', onMouseOver, true);
   root.addEventListener('mouseout', onMouseOut, true);
+  // Edge-hotzone drag: mousedown vicino ai bordi di una tile + movimento > 5px = drag
+  root.addEventListener('mousedown', onEdgeMouseDown, true);
+  document.addEventListener('mousemove', onEdgeMouseMove);
+  document.addEventListener('mouseup', onEdgeMouseUp, true);
   document.addEventListener('click', blockLinks, true);
   window.addEventListener('message', onMessage, false);
 
