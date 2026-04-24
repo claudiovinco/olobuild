@@ -32,16 +32,9 @@
           <span v-if="builderStore.headerDirty" style="width:6px;height:6px;border-radius:50%;background:#FBBF24;flex-shrink:0" :title="t('Modifiche non salvate')"></span>
         </div>
         <div v-if="isExpanded('__zone_header')" class="st-sub" style="margin-left:10px;padding-left:5px">
-          <draggable
-            v-model="tilesStore.headerTiles"
-            item-key="id"
-            ghost-class="st-ghost"
-            animation="150"
-            handle=".st-grip"
-            @change="onHeaderChange"
-          >
-            <template #item="{ element: section }">
-              <div class="st-item">
+          <div class="st-list" v-olo-drop-target="listEndDrop('sections', null)">
+            <template v-for="(section, sIdx) in tilesStore.headerTiles" :key="section.id">
+              <div class="st-item" v-olo-draggable="sectionDraggable(section, sIdx)" v-olo-drop-target="sectionDrop(section, sIdx)">
                 <div class="st-row st-row--section" :class="{ 'st-row--active': builderStore.selectedTileId === section.id }" @click="selectTile(section.id, 'header')">
                   <span class="st-grip" :title="t('Trascina')"><svg width="6" height="10" viewBox="0 0 6 10" fill="currentColor"><circle cx="1" cy="1" r="1"/><circle cx="5" cy="1" r="1"/><circle cx="1" cy="5" r="1"/><circle cx="5" cy="5" r="1"/><circle cx="1" cy="9" r="1"/><circle cx="5" cy="9" r="1"/></svg></span>
                   <button class="st-toggle" :class="{ 'st-toggle--open': isExpanded(section.id) }" @click.stop="toggle(section.id)"><svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor"><path d="M2 1l4 3-4 3z"/></svg></button>
@@ -49,9 +42,9 @@
                   <span class="st-name" :title="section.settings?._label || 'Sezione'">{{ section.settings?._label || 'Sezione' }}</span>
                 </div>
                 <div v-if="isExpanded(section.id)" class="st-sub" style="margin-left:10px;padding-left:5px">
-                  <draggable :list="section.children" item-key="id" ghost-class="st-ghost" :group="{ name: 'st-rows' }" animation="150" handle=".st-grip" @change="onHeaderChange">
-                    <template #item="{ element: row }">
-                      <div class="st-item">
+                  <div class="st-list" v-olo-drop-target="listEndDrop('rows', section.id)">
+                    <template v-for="(row, rIdx) in (section.children || [])" :key="row.id">
+                      <div class="st-item" v-olo-draggable="rowDraggable(row, section.id, rIdx)" v-olo-drop-target="rowDrop(row, section.id, rIdx)">
                         <div class="st-row st-row--row" :class="{ 'st-row--active': builderStore.selectedTileId === row.id }" @click.stop="selectTile(row.id, 'header')">
                           <span class="st-grip" :title="t('Trascina')"><svg width="6" height="10" viewBox="0 0 6 10" fill="currentColor"><circle cx="1" cy="1" r="1"/><circle cx="5" cy="1" r="1"/><circle cx="1" cy="5" r="1"/><circle cx="5" cy="5" r="1"/><circle cx="1" cy="9" r="1"/><circle cx="5" cy="9" r="1"/></svg></span>
                           <button class="st-toggle" :class="{ 'st-toggle--open': isExpanded(row.id) }" @click.stop="toggle(row.id)"><svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor"><path d="M2 1l4 3-4 3z"/></svg></button>
@@ -68,9 +61,9 @@
                               <span class="st-name">{{ col.settings?._label || 'Column' }}</span>
                             </div>
                             <div v-if="isExpanded(col.id) && col.children?.length" class="st-sub" style="margin-left:10px;padding-left:5px">
-                              <draggable :list="col.children" item-key="id" ghost-class="st-ghost" :group="{ name: 'st-elements' }" animation="150" handle=".st-grip" @change="onHeaderChange">
-                                <template #item="{ element: tile }">
-                                  <div class="st-item">
+                              <div class="st-list" v-olo-drop-target="listEndDrop('elements', col.id)">
+                                <template v-for="(tile, eIdx) in (col.children || [])" :key="tile.id">
+                                  <div class="st-item" v-olo-draggable="elementDraggable(tile, col.id, eIdx)" v-olo-drop-target="elementDrop(tile, col.id, eIdx)">
                                     <div class="st-row st-row--element" :class="{ 'st-row--active': builderStore.selectedTileId === tile.id }" @click.stop="selectTile(tile.id, 'header')">
                                       <span class="st-grip" :title="t('Trascina')"><svg width="6" height="10" viewBox="0 0 6 10" fill="currentColor"><circle cx="1" cy="1" r="1"/><circle cx="5" cy="1" r="1"/><circle cx="1" cy="5" r="1"/><circle cx="5" cy="5" r="1"/><circle cx="1" cy="9" r="1"/><circle cx="5" cy="9" r="1"/></svg></span>
                                       <span class="st-toggle-ph"></span>
@@ -79,17 +72,17 @@
                                     </div>
                                   </div>
                                 </template>
-                              </draggable>
+                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
                     </template>
-                  </draggable>
+                  </div>
                 </div>
               </div>
             </template>
-          </draggable>
+          </div>
         </div>
       </div>
 
@@ -111,16 +104,9 @@
       </div></div>
 
       <!-- Sections -->
-      <draggable
-        v-model="tilesStore.canvasTiles"
-        item-key="id"
-        ghost-class="st-ghost"
-        animation="150"
-        handle=".st-grip"
-        @change="onChange"
-      >
-        <template #item="{ element: section }">
-          <div class="st-item">
+      <div class="st-list" v-olo-drop-target="listEndDrop('sections', null)">
+        <template v-for="(section, sIdx) in tilesStore.canvasTiles" :key="section.id">
+          <div class="st-item" v-olo-draggable="sectionDraggable(section, sIdx)" v-olo-drop-target="sectionDrop(section, sIdx)">
             <!-- Section node -->
             <div
               class="st-row st-row--section"
@@ -162,17 +148,9 @@
 
             <!-- Section children: Rows -->
             <div v-if="isExpanded(section.id)" class="st-sub" style="margin-left:10px;padding-left:5px">
-              <draggable
-                :list="section.children"
-                item-key="id"
-                ghost-class="st-ghost"
-                :group="{ name: 'st-rows' }"
-                animation="150"
-                handle=".st-grip"
-                @change="onChange"
-              >
-                <template #item="{ element: row }">
-                  <div class="st-item">
+              <div class="st-list" v-olo-drop-target="listEndDrop('rows', section.id)">
+                <template v-for="(row, rIdx) in (section.children || [])" :key="row.id">
+                  <div class="st-item" v-olo-draggable="rowDraggable(row, section.id, rIdx)" v-olo-drop-target="rowDrop(row, section.id, rIdx)">
                     <!-- Row node -->
                     <div
                       class="st-row st-row--row"
@@ -230,20 +208,11 @@
                           <span v-else class="st-name" @click.stop="onNameClick(col)" :title="col.settings?._label || 'Column'">{{ col.settings?._label || 'Column' }}</span>
                         </div>
 
-                        <!-- Column children: Elements (always show draggable for drop target) -->
+                        <!-- Column children: Elements -->
                         <div v-if="isExpanded(col.id) || !(col.children && col.children.length)" class="st-sub" style="margin-left:10px;padding-left:5px">
-                          <draggable
-                            :list="col.children || (col.children = [])"
-                            item-key="id"
-                            ghost-class="st-ghost"
-                            :group="{ name: 'st-elements' }"
-                            animation="150"
-                            handle=".st-grip"
-                            class="st-dropzone"
-                            @change="onChange"
-                          >
-                            <template #item="{ element: tile }">
-                              <div class="st-item">
+                          <div class="st-list st-dropzone" v-olo-drop-target="listEndDrop('elements', col.id)">
+                            <template v-for="(tile, eIdx) in (col.children || (col.children = []))" :key="tile.id">
+                              <div class="st-item" v-olo-draggable="elementDraggable(tile, col.id, eIdx)" v-olo-drop-target="elementDrop(tile, col.id, eIdx)">
                                 <div
                                   class="st-row st-row--element"
                                   :class="{ 'st-row--active': builderStore.selectedTileId === tile.id }"
@@ -310,21 +279,14 @@
 
                                     <!-- Inner column children: elements -->
                                     <div v-if="isExpanded(icol.id) && icol.children?.length" class="st-sub" style="margin-left:10px;padding-left:5px">
-                                      <draggable
-                                        :list="icol.children"
-                                        item-key="id"
-                                        ghost-class="st-ghost"
-                                        :group="{ name: 'st-elements' }"
-                                        animation="150"
-                                        handle=".st-grip"
-                                        class="st-dropzone"
-                                        @change="onChange"
-                                      >
-                                        <template #item="{ element: innerTile }">
+                                      <div class="st-list st-dropzone" v-olo-drop-target="listEndDrop('elements', icol.id)">
+                                        <template v-for="(innerTile, iIdx) in (icol.children || [])" :key="innerTile.id">
                                           <div
                                             class="st-row st-row--element"
                                             :class="{ 'st-row--active': builderStore.selectedTileId === innerTile.id }"
                                             @click.stop="selectTile(innerTile.id)"
+                                            v-olo-draggable="elementDraggable(innerTile, icol.id, iIdx)"
+                                            v-olo-drop-target="elementDrop(innerTile, icol.id, iIdx)"
                                           >
                                             <span class="st-grip" title="Trascina per riordinare">
                                               <svg width="6" height="10" viewBox="0 0 6 10" fill="currentColor">
@@ -352,23 +314,23 @@
                                             </span>
                                           </div>
                                         </template>
-                                      </draggable>
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
                               </div>
                             </template>
-                          </draggable>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </template>
-              </draggable>
+              </div>
             </div>
           </div>
         </template>
-      </draggable>
+      </div>
 
       <!-- Close body wrapper in unified mode -->
       <template v-if="builderStore.unifiedMode">
@@ -389,16 +351,9 @@
           <span v-if="builderStore.footerDirty" style="width:6px;height:6px;border-radius:50%;background:#FBBF24;flex-shrink:0" title="Modifiche non salvate"></span>
         </div>
         <div v-if="isExpanded('__zone_footer')" class="st-sub" style="margin-left:10px;padding-left:5px">
-          <draggable
-            v-model="tilesStore.footerTiles"
-            item-key="id"
-            ghost-class="st-ghost"
-            animation="150"
-            handle=".st-grip"
-            @change="onFooterChange"
-          >
-            <template #item="{ element: section }">
-              <div class="st-item">
+          <div class="st-list" v-olo-drop-target="listEndDrop('sections', null)">
+            <template v-for="(section, sIdx) in tilesStore.footerTiles" :key="section.id">
+              <div class="st-item" v-olo-draggable="sectionDraggable(section, sIdx)" v-olo-drop-target="sectionDrop(section, sIdx)">
                 <div class="st-row st-row--section" :class="{ 'st-row--active': builderStore.selectedTileId === section.id }" @click="selectTile(section.id, 'footer')">
                   <span class="st-grip" title="Trascina"><svg width="6" height="10" viewBox="0 0 6 10" fill="currentColor"><circle cx="1" cy="1" r="1"/><circle cx="5" cy="1" r="1"/><circle cx="1" cy="5" r="1"/><circle cx="5" cy="5" r="1"/><circle cx="1" cy="9" r="1"/><circle cx="5" cy="9" r="1"/></svg></span>
                   <button class="st-toggle" :class="{ 'st-toggle--open': isExpanded(section.id) }" @click.stop="toggle(section.id)"><svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor"><path d="M2 1l4 3-4 3z"/></svg></button>
@@ -406,9 +361,9 @@
                   <span class="st-name" :title="section.settings?._label || 'Sezione'">{{ section.settings?._label || 'Sezione' }}</span>
                 </div>
                 <div v-if="isExpanded(section.id)" class="st-sub" style="margin-left:10px;padding-left:5px">
-                  <draggable :list="section.children" item-key="id" ghost-class="st-ghost" :group="{ name: 'st-rows' }" animation="150" handle=".st-grip" @change="onFooterChange">
-                    <template #item="{ element: row }">
-                      <div class="st-item">
+                  <div class="st-list" v-olo-drop-target="listEndDrop('rows', section.id)">
+                    <template v-for="(row, rIdx) in (section.children || [])" :key="row.id">
+                      <div class="st-item" v-olo-draggable="rowDraggable(row, section.id, rIdx)" v-olo-drop-target="rowDrop(row, section.id, rIdx)">
                         <div class="st-row st-row--row" :class="{ 'st-row--active': builderStore.selectedTileId === row.id }" @click.stop="selectTile(row.id, 'footer')">
                           <span class="st-grip" title="Trascina"><svg width="6" height="10" viewBox="0 0 6 10" fill="currentColor"><circle cx="1" cy="1" r="1"/><circle cx="5" cy="1" r="1"/><circle cx="1" cy="5" r="1"/><circle cx="5" cy="5" r="1"/><circle cx="1" cy="9" r="1"/><circle cx="5" cy="9" r="1"/></svg></span>
                           <button class="st-toggle" :class="{ 'st-toggle--open': isExpanded(row.id) }" @click.stop="toggle(row.id)"><svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor"><path d="M2 1l4 3-4 3z"/></svg></button>
@@ -425,9 +380,9 @@
                               <span class="st-name">{{ col.settings?._label || 'Column' }}</span>
                             </div>
                             <div v-if="isExpanded(col.id) && col.children?.length" class="st-sub" style="margin-left:10px;padding-left:5px">
-                              <draggable :list="col.children" item-key="id" ghost-class="st-ghost" :group="{ name: 'st-elements' }" animation="150" handle=".st-grip" @change="onFooterChange">
-                                <template #item="{ element: tile }">
-                                  <div class="st-item">
+                              <div class="st-list" v-olo-drop-target="listEndDrop('elements', col.id)">
+                                <template v-for="(tile, eIdx) in (col.children || [])" :key="tile.id">
+                                  <div class="st-item" v-olo-draggable="elementDraggable(tile, col.id, eIdx)" v-olo-drop-target="elementDrop(tile, col.id, eIdx)">
                                     <div class="st-row st-row--element" :class="{ 'st-row--active': builderStore.selectedTileId === tile.id }" @click.stop="selectTile(tile.id, 'footer')">
                                       <span class="st-grip" title="Trascina"><svg width="6" height="10" viewBox="0 0 6 10" fill="currentColor"><circle cx="1" cy="1" r="1"/><circle cx="5" cy="1" r="1"/><circle cx="1" cy="5" r="1"/><circle cx="5" cy="5" r="1"/><circle cx="1" cy="9" r="1"/><circle cx="5" cy="9" r="1"/></svg></span>
                                       <span class="st-toggle-ph"></span>
@@ -436,17 +391,17 @@
                                     </div>
                                   </div>
                                 </template>
-                              </draggable>
+                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
                     </template>
-                  </draggable>
+                  </div>
                 </div>
               </div>
             </template>
-          </draggable>
+          </div>
         </div>
       </div>
 
@@ -457,10 +412,16 @@
 <script setup>
 import { t } from '@/i18n';
 import { ref, reactive, computed, nextTick, watch } from 'vue';
-import draggable from 'vuedraggable';
 import { useTilesStore } from '@/stores/tiles';
 import { useBuilderStore } from '@/stores/builder';
 import { loadScrollFlashPrefs } from '@/utils/scrollFlashPrefs';
+import {
+  vOloDraggable,
+  vOloDropTarget,
+  attachClosestEdge,
+  makeNodePayload,
+  isOloData,
+} from '@/composables/useDnD';
 
 const emit = defineEmits(['save-as-template']);
 
@@ -787,21 +748,81 @@ function remove(id) {
   builderStore.isDirty = true;
 }
 
-function onChange() {
-  builderStore.isDirty = true;
-}
-
-function onHeaderChange() {
-  builderStore.headerDirty = true;
-}
-
-function onFooterChange() {
-  builderStore.footerDirty = true;
-}
-
 function onZoneClick(zone) {
   builderStore.setActiveZone(zone);
 }
+
+// ═════════════════════════════════════════════════════════════════
+// DnD Pragmatic — factory functions (stesso pattern di OlobuilderGrid).
+// Il monitor centralizzato vive in BuilderCanvas (useDragDrop.applyPragmaticDrop).
+// ═════════════════════════════════════════════════════════════════
+
+function draggableOpts(nodeKind, node, parentId, index) {
+  return {
+    dragHandle: '.st-grip',
+    getInitialData: () => makeNodePayload(node.id, nodeKind, parentId, index),
+    onDragStart: () => {},
+  };
+}
+function nodeEdgeDrop(nodeKind, node, parentId, index, allowedEdges) {
+  return {
+    canDrop: ({ source }) => {
+      if (!isOloData(source.data)) return false;
+      const p = source.data;
+      if (p.kind === 'node') {
+        return p.nodeKind === nodeKind && p.fromParentId === parentId && p.nodeId !== node.id;
+      }
+      if (p.kind === 'tile-type' && nodeKind === 'element') {
+        return p.tileType !== 'section' && p.tileType !== 'row';
+      }
+      if (p.kind === 'tile-type' && nodeKind === 'section') return true;
+      if (p.kind === 'tile-type' && nodeKind === 'row') return p.tileType !== 'section';
+      if (p.kind === 'global-widget' && nodeKind === 'element') return true;
+      return false;
+    },
+    getData: ({ input, element }) => attachClosestEdge(
+      { _olo: true, kind: 'node-edge', nodeKind, nodeId: node.id, parentId, index },
+      { element, input, allowedEdges: allowedEdges || ['top', 'bottom'] }
+    ),
+    getIsSticky: () => true,
+    onDragEnter: ({ self }) => { self.element.classList.add('st-dnd-over'); },
+    onDragLeave: ({ self }) => { self.element.classList.remove('st-dnd-over'); },
+    onDrop: ({ self }) => { self.element.classList.remove('st-dnd-over'); },
+  };
+}
+
+function listEndDrop(listKind, parentId) {
+  return {
+    canDrop: ({ source }) => {
+      if (!isOloData(source.data)) return false;
+      const p = source.data;
+      if (listKind === 'sections') {
+        if (p.kind === 'tile-type') return true;
+        if (p.kind === 'global-widget') return true;
+        if (p.kind === 'node' && p.nodeKind === 'section') return true;
+      }
+      if (listKind === 'rows') {
+        if (p.kind === 'tile-type' && p.tileType !== 'section') return true;
+        if (p.kind === 'node' && p.nodeKind === 'row' && p.fromParentId === parentId) return true;
+      }
+      if (listKind === 'elements') {
+        if (p.kind === 'tile-type' && p.tileType !== 'section' && p.tileType !== 'row') return true;
+        if (p.kind === 'global-widget') return true;
+        if (p.kind === 'node' && p.nodeKind === 'element') return true;
+      }
+      return false;
+    },
+    getData: () => ({ _olo: true, kind: 'list-end', listKind, parentId }),
+    getIsSticky: () => false,
+  };
+}
+
+const sectionDraggable = (section, idx) => draggableOpts('section', section, null, idx);
+const sectionDrop = (section, idx) => nodeEdgeDrop('section', section, null, idx, ['top', 'bottom']);
+const rowDraggable = (row, sectionId, idx) => draggableOpts('row', row, sectionId, idx);
+const rowDrop = (row, sectionId, idx) => nodeEdgeDrop('row', row, sectionId, idx, ['top', 'bottom']);
+const elementDraggable = (el, parentId, idx) => draggableOpts('element', el, parentId, idx);
+const elementDrop = (el, parentId, idx) => nodeEdgeDrop('element', el, parentId, idx, ['top', 'bottom']);
 
 // Expand ancestors of a tile so it's visible in the tree
 function expandAncestors(tileId) {

@@ -926,6 +926,17 @@
         hideDropIndicator();
         break;
 
+      case 'olo:auto-scroll':
+        // Parent invia delta positivo=down, negativo=up. Applichiamo immediatamente.
+        if (typeof d.delta === 'number') {
+          window.scrollBy({ top: d.delta, behavior: 'auto' });
+        }
+        break;
+
+      case 'olo:auto-scroll-stop':
+        // Nulla da fermare perché usiamo scroll istantaneo per-tick invece di RAF.
+        break;
+
       case 'olo:bezier-preview':
         if (d.tileId) {
           var bpEl = findTileEl(d.tileId);

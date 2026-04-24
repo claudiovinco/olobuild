@@ -78,10 +78,63 @@ function onNativeDragStart() {
 }
 function onNativeDragEnd() {
   nativeDragActive.value = false;
+  stopAutoScroll();
   if (overlayEl.value) {
     overlayEl.value.style.pointerEvents = '';
     overlayEl.value.style.opacity = '';
   }
+}
+
+// ── Auto-scroll iframe ────────────────────────────────────────
+// Quando il pointer è in una "hot zone" ai bordi superiore/inferiore dell'iframe,
+// invia un messaggio allo runtime iframe-side per scrollare il contenuto in quella
+// direzione. Il parent non può scrollare direttamente l'iframe (contenuto cross-doc).
+const AUTO_SCROLL_ZONE = 80; // px
+let autoScrollActive = false;
+let autoScrollDir = 0; // -1 = up, 0 = idle, +1 = down
+
+function updateAutoScroll(input) {
+  if (!input) { stopAutoScroll(); return; }
+  const iframe = (props.iframeRef && 'value' in props.iframeRef) ? props.iframeRef.value : props.iframeRef;
+  if (!iframe || typeof iframe.getBoundingClientRect !== 'function') { stopAutoScroll(); return; }
+  const rect = iframe.getBoundingClientRect();
+  const y = input.clientY;
+  let dir = 0;
+  let strength = 0;
+  if (y - rect.top < AUTO_SCROLL_ZONE) {
+    dir = -1;
+    strength = Math.max(0, (AUTO_SCROLL_ZONE - (y - rect.top)) / AUTO_SCROLL_ZONE);
+  } else if (rect.bottom - y < AUTO_SCROLL_ZONE) {
+    dir = 1;
+    strength = Math.max(0, (AUTO_SCROLL_ZONE - (rect.bottom - y)) / AUTO_SCROLL_ZONE);
+  }
+  if (dir === 0) { stopAutoScroll(); return; }
+
+  const speed = Math.round(4 + strength * 18); // 4–22 px per tick
+  if (autoScrollActive && autoScrollDir === dir) {
+    // già attivo nella stessa direzione: aggiorna solo la velocità
+    postScroll(speed * dir);
+    return;
+  }
+  autoScrollActive = true;
+  autoScrollDir = dir;
+  postScroll(speed * dir);
+}
+
+function stopAutoScroll() {
+  if (!autoScrollActive) return;
+  autoScrollActive = false;
+  autoScrollDir = 0;
+  const iframe = (props.iframeRef && 'value' in props.iframeRef) ? props.iframeRef.value : props.iframeRef;
+  if (iframe && iframe.contentWindow) {
+    iframe.contentWindow.postMessage({ type: 'olo:auto-scroll-stop' }, '*');
+  }
+}
+
+function postScroll(delta) {
+  const iframe = (props.iframeRef && 'value' in props.iframeRef) ? props.iframeRef.value : props.iframeRef;
+  if (!iframe || !iframe.contentWindow) return;
+  iframe.contentWindow.postMessage({ type: 'olo:auto-scroll', delta }, '*');
 }
 
 onMounted(() => {
@@ -216,7 +269,7 @@ const dropTargetOpts = {
     };
   },
   getIsSticky: () => true,
-  onDragEnter: ({ self }) => {
+  onDragEnter: ({ self, location }) => {
     hit.value = self.data.hit;
     dnd.setDropTarget(
       hit.value
@@ -224,8 +277,9 @@ const dropTargetOpts = {
         : null,
       hit.value?.colRect || null
     );
+    updateAutoScroll(location?.current?.input);
   },
-  onDrag: ({ self }) => {
+  onDrag: ({ self, location }) => {
     hit.value = self.data.hit;
     dnd.setDropTarget(
       hit.value
@@ -233,10 +287,12 @@ const dropTargetOpts = {
         : null,
       hit.value?.colRect || null
     );
+    updateAutoScroll(location?.current?.input);
   },
   onDragLeave: () => {
     hit.value = null;
     dnd.clearDropTarget();
+    stopAutoScroll();
   },
   onDrop: ({ source, self }) => {
     const data = source.data;
@@ -244,6 +300,7 @@ const dropTargetOpts = {
     hit.value = null;
     if (!target) return;
 
+    stopAutoScroll();
     pushStateNow();
     dnd.markDropping();
 
