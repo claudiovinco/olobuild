@@ -27,6 +27,10 @@ class Olo_PdfViewer_Tile extends Olo_Tile_Base {
         'show_print'      => true,
         'show_search'     => false,
         'show_thumbnails' => false,
+        'show_bottombar'            => true,
+        'show_bottombar_pages'      => true,
+        'show_bottombar_zoom'       => false,
+        'show_bottombar_fullscreen' => false,
         'border_width'    => '0',
         'border_color'    => '',
         'border_radius'   => [ 'tl' => 0, 'tr' => 0, 'br' => 0, 'bl' => 0 ],
@@ -81,6 +85,12 @@ class Olo_PdfViewer_Tile extends Olo_Tile_Base {
                 'print'      => (bool) $s['show_print'],
                 'search'     => (bool) $s['show_search'],
                 'thumbnails' => (bool) $s['show_thumbnails'],
+            ],
+            'bottombar' => [
+                'enabled'    => (bool) $s['show_bottombar'],
+                'pages'      => (bool) $s['show_bottombar_pages'],
+                'zoom'       => (bool) $s['show_bottombar_zoom'],
+                'fullscreen' => (bool) $s['show_bottombar_fullscreen'],
             ],
         ];
 

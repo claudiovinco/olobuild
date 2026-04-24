@@ -20,6 +20,10 @@ export default {
     show_print: true,
     show_search: false,
     show_thumbnails: false,
+    show_bottombar: true,
+    show_bottombar_pages: true,
+    show_bottombar_zoom: false,
+    show_bottombar_fullscreen: false,
   },
   fields: [
     { type: 'separator', label: 'Sorgente' },
@@ -61,6 +65,15 @@ export default {
       condition: { field: 'show_toolbar', value: true } },
     { key: 'show_thumbnails', label: 'Miniature', type: 'toggle',
       condition: { field: 'show_toolbar', value: true } },
+
+    { type: 'separator', label: 'Barra inferiore' },
+    { key: 'show_bottombar', label: 'Mostra barra inferiore', type: 'toggle' },
+    { key: 'show_bottombar_pages', label: 'Slider pagine', type: 'toggle',
+      condition: { field: 'show_bottombar', value: true } },
+    { key: 'show_bottombar_zoom', label: 'Zoom (barra inferiore)', type: 'toggle',
+      condition: { field: 'show_bottombar', value: true } },
+    { key: 'show_bottombar_fullscreen', label: 'Schermo intero (barra inferiore)', type: 'toggle',
+      condition: { field: 'show_bottombar', value: true } },
 
   ],
 };

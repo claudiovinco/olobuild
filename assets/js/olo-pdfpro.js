@@ -1174,46 +1174,53 @@
   /* ───── Bottom progress bar ───── */
   OloPdfPro.prototype._buildBottomBar = function () {
     var self = this;
+    var bb = this.config.bottombar || { enabled: true, pages: true, zoom: false, fullscreen: false };
+    if (!bb.enabled) return;
+    // Se nessun controllo è abilitato, non costruire la barra
+    if (!bb.pages && !bb.zoom && !bb.fullscreen) return;
+
     this.bottomBar = el('div', 'olo-pdfv-bottombar');
 
-    this.bbInfo = el('span', 'olo-pdfv-bb-info', '1 / -');
+    if (bb.pages) {
+      this.bbInfo = el('span', 'olo-pdfv-bb-info', '1 / -');
+      this.bbRange = document.createElement('input');
+      this.bbRange.type = 'range';
+      this.bbRange.className = 'olo-pdfv-bb-range';
+      this.bbRange.min = '1';
+      this.bbRange.max = String(this.numPages || 1);
+      this.bbRange.value = String(this.currentPage || 1);
+      this.bbRange.step = '1';
+      this.bottomBar.appendChild(this.bbInfo);
+      this.bottomBar.appendChild(this.bbRange);
+      this.bbRange.addEventListener('input', function () {
+        var p = parseInt(this.value, 10);
+        if (p >= 1 && p <= self.numPages) self.goToPage(p);
+      });
+    }
 
-    this.bbRange = document.createElement('input');
-    this.bbRange.type = 'range';
-    this.bbRange.className = 'olo-pdfv-bb-range';
-    this.bbRange.min = '1';
-    this.bbRange.max = String(this.numPages || 1);
-    this.bbRange.value = String(this.currentPage || 1);
-    this.bbRange.step = '1';
+    if (bb.zoom) {
+      this.bbZoomOut = document.createElement('button');
+      this.bbZoomOut.className = 'olo-pdfv-bb-btn';
+      this.bbZoomOut.title = 'Riduci';
+      this.bbZoomOut.innerHTML = ICONS.zoomOut;
+      this.bbZoomIn = document.createElement('button');
+      this.bbZoomIn.className = 'olo-pdfv-bb-btn';
+      this.bbZoomIn.title = 'Ingrandisci';
+      this.bbZoomIn.innerHTML = ICONS.zoomIn;
+      this.bottomBar.appendChild(this.bbZoomOut);
+      this.bottomBar.appendChild(this.bbZoomIn);
+      this.bbZoomOut.addEventListener('click', function () { self.zoomOut(); });
+      this.bbZoomIn.addEventListener('click', function () { self.zoomIn(); });
+    }
 
-    this.bbZoomOut = document.createElement('button');
-    this.bbZoomOut.className = 'olo-pdfv-bb-btn';
-    this.bbZoomOut.title = 'Riduci';
-    this.bbZoomOut.innerHTML = ICONS.zoomOut;
-
-    this.bbZoomIn = document.createElement('button');
-    this.bbZoomIn.className = 'olo-pdfv-bb-btn';
-    this.bbZoomIn.title = 'Ingrandisci';
-    this.bbZoomIn.innerHTML = ICONS.zoomIn;
-
-    this.bbFullscreen = document.createElement('button');
-    this.bbFullscreen.className = 'olo-pdfv-bb-btn';
-    this.bbFullscreen.title = 'Schermo intero';
-    this.bbFullscreen.innerHTML = ICONS.fullscreen;
-
-    this.bottomBar.appendChild(this.bbInfo);
-    this.bottomBar.appendChild(this.bbRange);
-    this.bottomBar.appendChild(this.bbZoomOut);
-    this.bottomBar.appendChild(this.bbZoomIn);
-    this.bottomBar.appendChild(this.bbFullscreen);
-
-    this.bbRange.addEventListener('input', function () {
-      var p = parseInt(this.value, 10);
-      if (p >= 1 && p <= self.numPages) self.goToPage(p);
-    });
-    this.bbZoomOut.addEventListener('click', function () { self.zoomOut(); });
-    this.bbZoomIn.addEventListener('click', function () { self.zoomIn(); });
-    this.bbFullscreen.addEventListener('click', function () { self.toggleFullscreen(); });
+    if (bb.fullscreen) {
+      this.bbFullscreen = document.createElement('button');
+      this.bbFullscreen.className = 'olo-pdfv-bb-btn';
+      this.bbFullscreen.title = 'Schermo intero';
+      this.bbFullscreen.innerHTML = ICONS.fullscreen;
+      this.bottomBar.appendChild(this.bbFullscreen);
+      this.bbFullscreen.addEventListener('click', function () { self.toggleFullscreen(); });
+    }
 
     this.root.appendChild(this.bottomBar);
   };
