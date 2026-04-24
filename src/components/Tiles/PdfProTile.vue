@@ -122,6 +122,24 @@
         {{ fileName }}
       </div>
     </div>
+
+    <!-- Bottom bar (preview dei toggle show_bottombar_*) -->
+    <div v-if="showBottomBar" class="olo-pdfpro-bottombar">
+      <span v-if="s.show_bottombar_pages !== false" class="olo-pdfpro-bb-info">{{ currentPage }} / {{ totalPages }}</span>
+      <div v-if="s.show_bottombar_pages !== false" class="olo-pdfpro-bb-range">
+        <div class="olo-pdfpro-bb-track"></div>
+        <div class="olo-pdfpro-bb-thumb" :style="{ left: thumbPercent + '%' }"></div>
+      </div>
+      <span v-if="s.show_bottombar_zoom" class="olo-pdfpro-bb-btn" :title="t('Riduci')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+      </span>
+      <span v-if="s.show_bottombar_zoom" class="olo-pdfpro-bb-btn" :title="t('Ingrandisci')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+      </span>
+      <span v-if="s.show_bottombar_fullscreen" class="olo-pdfpro-bb-btn" :title="t('Schermo intero')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+      </span>
+    </div>
   </div>
 </template>
 
@@ -149,6 +167,10 @@ const s = computed(() => ({
   show_print: true,
   show_search: false,
   show_thumbnails: false,
+  show_bottombar: true,
+  show_bottombar_pages: true,
+  show_bottombar_zoom: false,
+  show_bottombar_fullscreen: false,
   hotspots: [],
   hotspot_color: '#EF4444',
   hotspot_size: '14',
@@ -335,6 +357,23 @@ const fileName = computed(() => {
   const url = s.value.pdf_url;
   if (!url) return '';
   return url.split('/').pop().split('?')[0];
+});
+
+// Bottom bar preview state
+const showBottomBar = computed(() => {
+  if (!s.value.show_bottombar) return false;
+  return s.value.show_bottombar_pages || s.value.show_bottombar_zoom || s.value.show_bottombar_fullscreen;
+});
+const currentPage = computed(() => {
+  const p = parseInt(s.value.start_page) || 1;
+  return p;
+});
+const totalPages = computed(() => pageImages.value.length || (s.value.pdf_url ? '…' : 0));
+const thumbPercent = computed(() => {
+  const cur = currentPage.value;
+  const tot = pageImages.value.length;
+  if (!tot || tot < 2) return 0;
+  return Math.round(((cur - 1) / (tot - 1)) * 100);
 });
 </script>
 
@@ -532,4 +571,63 @@ const fileName = computed(() => {
   z-index: 5;
   white-space: nowrap;
 }
+
+/* Bottom bar preview */
+.olo-pdfpro-bottombar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  flex-shrink: 0;
+  background: #1e1e1e;
+  color: #f0f0f0;
+  border-radius: 8px;
+  margin: 6px 8px 8px;
+  user-select: none;
+  height: 36px;
+  box-sizing: border-box;
+}
+.olo-pdfpro-bb-info {
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  min-width: 50px;
+}
+.olo-pdfpro-bb-range {
+  flex: 1;
+  height: 14px;
+  position: relative;
+}
+.olo-pdfpro-bb-track {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: rgba(255,255,255,0.25);
+  border-radius: 2px;
+  transform: translateY(-50%);
+}
+.olo-pdfpro-bb-thumb {
+  position: absolute;
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+  transform: translate(-50%, -50%);
+}
+.olo-pdfpro-bb-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  color: inherit;
+  opacity: 0.85;
+  cursor: default;
+}
+.olo-pdfpro-bb-btn:hover { opacity: 1; background: rgba(255,255,255,0.1); }
 </style>
