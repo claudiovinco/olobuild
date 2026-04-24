@@ -280,7 +280,7 @@ class Olo_Critical_CSS {
             .uk-section{padding:40px 0;position:relative}
             .uk-container{max-width:1200px;margin:0 auto;padding:0 15px}
             .uk-grid{display:flex;flex-wrap:wrap;margin:0;padding:0;list-style:none}
-            .uk-grid>*{padding-left:30px}
+            .uk-grid>*{padding-left:0}
             .uk-width-1-1{width:100%}
             .uk-width-1-2{width:50%}
             .uk-width-1-3{width:33.333%}
