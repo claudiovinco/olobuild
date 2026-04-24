@@ -1186,7 +1186,7 @@ function changeRowLayout(row, layoutKey) {
 
 /* === Section body === */
 .olo-section-body {
-  padding: 8px;
+  padding: 0;
 }
 
 /* === Row block === */
