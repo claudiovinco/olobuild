@@ -266,14 +266,25 @@ function hitTest(clientX, clientY) {
   // x/y in coordinate DOCUMENT dell'iframe (stesse usate in layout)
   const x = (clientX - iframeRect.left) / zoom + scroll.x;
   const y = (clientY - iframeRect.top) / zoom + scroll.y;
-  const layout = builderStore.iframeLayout || { sections: [], columns: [] };
+  const layout = builderStore.iframeLayout || { sections: [], columns: [], containers: [] };
 
-  // 1. Prova a matchare una colonna (più specifico)
+  // 1a. Prova a matchare un container generico (floatingpanel) — più specifico delle colonne
   let columnId = null;
   let colRect = null;
   const payloadTile = dnd.payload?.tileType;
   const canDropInColumn = !(payloadTile === 'section' || payloadTile === 'row');
-  if (canDropInColumn) {
+  if (canDropInColumn && Array.isArray(layout.containers)) {
+    for (const cnr of layout.containers) {
+      if (x >= cnr.left && x <= cnr.right && y >= cnr.top && y <= cnr.bottom) {
+        columnId = cnr.id;
+        colRect = cnr;
+        break;
+      }
+    }
+  }
+
+  // 1b. Se non si è in un container, prova a matchare una colonna
+  if (canDropInColumn && !columnId) {
     for (const col of layout.columns) {
       if (x >= col.left && x <= col.right && y >= col.top && y <= col.bottom) {
         columnId = col.id;

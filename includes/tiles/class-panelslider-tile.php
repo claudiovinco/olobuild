@@ -16,12 +16,25 @@ class Olo_PanelSlider_Tile extends Olo_Tile_Base {
             [ 'id' => 'ps-2', 'title' => 'Card 2', 'content' => 'Content...', 'image' => '' ],
             [ 'id' => 'ps-3', 'title' => 'Card 3', 'content' => 'Content...', 'image' => '' ],
         ],
-        'columns'            => '3',
-        'gap'                => 'default',
-        'card_style'         => 'default',
-        'show_arrows'        => true,
-        'autoplay'           => false,
-        'autoplay_interval'  => '5000',
+        'columns'           => '3',
+        'gap'               => 'default',
+        'card_style'        => 'default',
+        'card_radius'       => '8',
+        'card_padding'      => [ 'top' => 16, 'right' => 16, 'bottom' => 16, 'left' => 16 ],
+        'equal_height'      => true,
+        'image_ratio'       => '4/3',
+        'image_height'      => '',
+        'image_fit'         => 'cover',
+        'image_zoom'        => false,
+        'show_arrows'       => true,
+        'arrow_style'       => 'circle',
+        'arrow_size'        => '40',
+        'arrow_color'       => '',
+        'arrow_bg'          => '',
+        'show_dots'         => false,
+        'autoplay'          => false,
+        'autoplay_interval' => '5000',
+        'shadow'            => 'none',
     ];
 
     public function get_controls() {
@@ -44,46 +57,250 @@ class Olo_PanelSlider_Tile extends Olo_Tile_Base {
             return '<div class="olo-panelslider" style="padding:40px;text-align:center;color:var(--olo-color-text-muted, #9CA3AF);">No panels added</div>';
         }
 
+        $uid      = 'ops-' . wp_unique_id();
         $columns  = absint( $s['columns'] ) ?: 3;
         $gap      = in_array( $s['gap'], [ 'collapse', 'small', 'default', 'medium', 'large' ], true ) ? $s['gap'] : 'default';
         $style    = in_array( $s['card_style'], [ 'default', 'primary', 'secondary', 'hover' ], true ) ? $s['card_style'] : 'default';
         $autoplay = ! empty( $s['autoplay'] ) ? 'true' : 'false';
         $interval = absint( $s['autoplay_interval'] ) ?: 5000;
 
-        $gap_class = $gap === 'collapse' ? 'uk-grid-collapse' : 'uk-grid-' . $gap;
+        $gap_class    = $gap === 'collapse' ? 'uk-grid-collapse' : 'uk-grid-' . $gap;
+        $equal_class  = ! empty( $s['equal_height'] ) ? ' uk-grid-match' : '';
+        $arrow_style  = $s['arrow_style'] ?? 'circle';
+        $show_arrows  = ! empty( $s['show_arrows'] ) && count( $panels ) > $columns;
+        $show_dots    = ! empty( $s['show_dots'] );
+
+        // Build scoped CSS
+        $css = $this->build_scoped_css( $uid, $s );
 
         ob_start();
         ?>
-        <div class="olo-panelslider" uk-slider="autoplay: <?php echo $autoplay; ?>; autoplay-interval: <?php echo $interval; ?>">
+        <style><?php echo $css; ?></style>
+        <div class="olo-panelslider <?php echo esc_attr( $uid ); ?> olo-ps-arrows-<?php echo esc_attr( $arrow_style ); ?>" uk-slider="autoplay: <?php echo $autoplay; ?>; autoplay-interval: <?php echo $interval; ?>; finite: <?php echo $autoplay === 'true' ? 'false' : 'true'; ?>">
             <div class="uk-position-relative">
-                <div class="uk-slider-container">
-                    <ul class="uk-slider-items uk-child-width-1-<?php echo $columns; ?>@m uk-grid <?php echo esc_attr( $gap_class ); ?>">
-                        <?php foreach ( $panels as $panel ) : ?>
+                <div class="uk-slider-container uk-slider-container-offset">
+                    <ul class="uk-slider-items uk-child-width-1-<?php echo $columns; ?>@m uk-grid <?php echo esc_attr( $gap_class . $equal_class ); ?>">
+                        <?php foreach ( $panels as $i => $panel ) :
+                            $has_link   = ! empty( $panel['link'] );
+                            $link_open  = '';
+                            $link_close = '';
+                            if ( $has_link ) {
+                                $tgt = ! empty( $panel['link_target'] ) ? ' target="_blank" rel="noopener noreferrer"' : '';
+                                $link_open  = '<a href="' . esc_url( $panel['link'] ) . '"' . $tgt . ' class="olo-ps-link" style="text-decoration:none;color:inherit;display:block;height:100%;">';
+                                $link_close = '</a>';
+                            }
+                        ?>
                             <li>
-                                <div class="uk-card uk-card-<?php echo esc_attr( $style ); ?> uk-card-body">
+                                <?php echo $link_open; ?>
+                                <div class="olo-ps-card uk-card uk-card-<?php echo esc_attr( $style ); ?>">
                                     <?php if ( ! empty( $panel['image'] ) ) : ?>
-                                        <div class="uk-card-media-top">
+                                        <div class="olo-ps-media">
                                             <?php
-                                            $ps_img = '<img src="' . esc_url( $panel['image'] ) . '" alt="' . esc_attr( $panel['title'] ?? '' ) . '" uk-img style="width:100%;display:block;">';
+                                            $ps_img = '<img class="olo-ps-img" src="' . esc_url( $panel['image'] ) . '" alt="' . esc_attr( $panel['title'] ?? '' ) . '" loading="lazy">';
                                             echo $this->render_hover_wrap( $ps_img, $panel['hover_image'] ?? '', $panel['hover_video'] ?? '' );
                                             ?>
                                         </div>
                                     <?php endif; ?>
-                                    <h3 class="uk-card-title"><?php echo esc_html( $panel['title'] ?? '' ); ?></h3>
-                                    <p><?php echo wp_kses_post( $panel['content'] ?? '' ); ?></p>
+                                    <div class="olo-ps-body">
+                                        <?php if ( ! empty( $panel['title'] ) ) : ?>
+                                        <h3 class="olo-ps-title uk-card-title"><?php echo esc_html( $panel['title'] ); ?></h3>
+                                        <?php endif; ?>
+                                        <?php if ( ! empty( $panel['content'] ) ) : ?>
+                                        <div class="olo-ps-text"><?php echo wp_kses_post( $panel['content'] ); ?></div>
+                                        <?php endif; ?>
+                                    </div>
                                 </div>
+                                <?php echo $link_close; ?>
                             </li>
                         <?php endforeach; ?>
                     </ul>
                 </div>
 
-                <?php if ( ! empty( $s['show_arrows'] ) && count( $panels ) > $columns ) : ?>
-                    <a class="uk-position-center-left-out" href uk-slidenav-previous uk-slider-item="previous"></a>
-                    <a class="uk-position-center-right-out" href uk-slidenav-next uk-slider-item="next"></a>
-                <?php endif; ?>
+                <?php if ( $show_arrows ) :
+                    echo $this->render_arrows( $arrow_style );
+                endif; ?>
             </div>
+
+            <?php if ( $show_dots ) : ?>
+            <ul class="uk-slider-nav uk-dotnav uk-flex-center uk-margin"></ul>
+            <?php endif; ?>
         </div>
         <?php
         return ob_get_clean();
+    }
+
+    /**
+     * Build scoped CSS for shadow, image ratio, equal height, arrows.
+     */
+    private function build_scoped_css( $uid, $s ) {
+        $sel = '.' . $uid;
+        $css = '';
+
+        // Card radius + padding
+        $radius  = $this->build_border_radius_css( $s['card_radius'] ?? 8 );
+        $padding = Olo_Tile_Utils::spacing_css( $s['card_padding'] ?? 16, 16 );
+        $radius_css = $radius ? 'border-radius:' . $radius . ';' : '';
+
+        // Shadow (preset or custom)
+        $shadow_val = Olo_Tile_Utils::shadow_value( $s, 'shadow' );
+        $shadow_css = ( $shadow_val && $shadow_val !== 'none' ) ? 'box-shadow:' . $shadow_val . ';' : '';
+
+        // Allow shadow to be visible: slider items must not clip
+        if ( $shadow_css ) {
+            $css .= $sel . ' .uk-slider-items > li{overflow:visible;}';
+        }
+
+        // Card base
+        $css .= $sel . ' .olo-ps-card{' . $radius_css . $shadow_css . 'overflow:hidden;background:#fff;display:flex;flex-direction:column;height:100%;transition:transform 0.35s cubic-bezier(.4,0,.2,1),box-shadow 0.35s ease;}';
+
+        // Equal-height: stretch li and inner content
+        if ( ! empty( $s['equal_height'] ) ) {
+            $css .= $sel . ' .uk-slider-items{align-items:stretch;}';
+            $css .= $sel . ' .uk-slider-items > li{display:flex;}';
+            $css .= $sel . ' .uk-slider-items > li > .olo-ps-link{width:100%;}';
+            $css .= $sel . ' .uk-slider-items > li .olo-ps-card{flex:1 1 auto;}';
+            $css .= $sel . ' .olo-ps-body{flex:1 1 auto;display:flex;flex-direction:column;}';
+        }
+
+        // Image ratio / height / fit
+        $img_ratio  = $s['image_ratio'] ?? '4/3';
+        $img_height = absint( $s['image_height'] ?? 0 );
+        $img_fit    = in_array( $s['image_fit'] ?? 'cover', [ 'cover', 'contain', 'fill' ], true ) ? $s['image_fit'] : 'cover';
+
+        $css .= $sel . ' .olo-ps-media{position:relative;overflow:hidden;width:100%;flex:0 0 auto;}';
+        if ( $img_ratio && $img_ratio !== 'auto' ) {
+            $css .= $sel . ' .olo-ps-media{aspect-ratio:' . esc_attr( $img_ratio ) . ';}';
+        } elseif ( $img_height > 0 ) {
+            $css .= $sel . ' .olo-ps-media{height:' . $img_height . 'px;}';
+        }
+        $css .= $sel . ' .olo-ps-img{width:100%;height:100%;object-fit:' . esc_attr( $img_fit ) . ';display:block;transition:transform 0.5s cubic-bezier(.4,0,.2,1);}';
+
+        if ( ! empty( $s['image_zoom'] ) ) {
+            $css .= $sel . ' .olo-ps-card:hover .olo-ps-img{transform:scale(1.06);}';
+        }
+
+        // Body padding
+        $css .= $sel . ' .olo-ps-body{padding:' . $padding . ';}';
+
+        // Title
+        $title_size = absint( $s['title_size'] ?? 0 );
+        $title_col  = $s['title_color'] ?? '';
+        $title_styles = '';
+        if ( $title_size > 0 ) { $title_styles .= 'font-size:' . $title_size . 'px;'; }
+        if ( $title_col )      { $title_styles .= 'color:' . esc_attr( $title_col ) . ';'; }
+        if ( $title_styles )   { $css .= $sel . ' .olo-ps-title{' . $title_styles . '}'; }
+
+        // Content
+        $content_size = absint( $s['content_size'] ?? 0 );
+        $content_col  = $s['content_color'] ?? '';
+        $content_styles = '';
+        if ( $content_size > 0 ) { $content_styles .= 'font-size:' . $content_size . 'px;'; }
+        if ( $content_col )      { $content_styles .= 'color:' . esc_attr( $content_col ) . ';'; }
+        if ( $content_styles )   { $css .= $sel . ' .olo-ps-text{' . $content_styles . '}'; }
+
+        // Arrows styling
+        $arrow_size  = absint( $s['arrow_size'] ?? 40 ) ?: 40;
+        $arrow_color = $s['arrow_color'] ?? '';
+        $arrow_bg    = $s['arrow_bg'] ?? '';
+        $arrow_style = $s['arrow_style'] ?? 'circle';
+
+        $css .= $this->build_arrow_css( $sel, $arrow_style, $arrow_size, $arrow_color, $arrow_bg );
+
+        return $css;
+    }
+
+    /**
+     * Generate CSS for arrow variants.
+     */
+    private function build_arrow_css( $sel, $style, $size, $color, $bg ) {
+        $css = '';
+        $color = $color ? esc_attr( $color ) : '#1f2937';
+        $bg    = $bg ? esc_attr( $bg ) : '#ffffff';
+        $half  = intval( $size / 2 );
+
+        // Common positioning + interaction
+        $css .= $sel . ' .olo-ps-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:5;display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;outline:none;transition:all 0.25s ease;text-decoration:none;}';
+        $css .= $sel . ' .olo-ps-arrow.olo-ps-prev{left:-' . ( $half + 4 ) . 'px;}';
+        $css .= $sel . ' .olo-ps-arrow.olo-ps-next{right:-' . ( $half + 4 ) . 'px;}';
+        $css .= '@media (max-width:960px){' . $sel . ' .olo-ps-arrow.olo-ps-prev{left:8px;}' . $sel . ' .olo-ps-arrow.olo-ps-next{right:8px;}}';
+        $css .= $sel . ' .olo-ps-arrow svg{width:50%;height:50%;display:block;pointer-events:none;}';
+        $css .= $sel . ' .olo-ps-arrow:hover{transform:translateY(-50%) scale(1.08);}';
+
+        switch ( $style ) {
+            case 'circle':
+                $css .= $sel . ' .olo-ps-arrow{width:' . $size . 'px;height:' . $size . 'px;border-radius:50%;background:' . $bg . ';color:' . $color . ';box-shadow:0 4px 12px rgba(0,0,0,0.15);}';
+                $css .= $sel . ' .olo-ps-arrow:hover{box-shadow:0 6px 18px rgba(0,0,0,0.22);}';
+                break;
+            case 'circle-outline':
+                $css .= $sel . ' .olo-ps-arrow{width:' . $size . 'px;height:' . $size . 'px;border-radius:50%;background:transparent;color:' . $color . ';border:2px solid ' . $color . ';}';
+                $css .= $sel . ' .olo-ps-arrow:hover{background:' . $color . ';color:' . $bg . ';}';
+                break;
+            case 'square':
+                $css .= $sel . ' .olo-ps-arrow{width:' . $size . 'px;height:' . $size . 'px;border-radius:6px;background:' . $bg . ';color:' . $color . ';box-shadow:0 4px 12px rgba(0,0,0,0.15);}';
+                break;
+            case 'minimal':
+                $css .= $sel . ' .olo-ps-arrow{width:' . $size . 'px;height:' . $size . 'px;background:transparent;color:' . $color . ';}';
+                $css .= $sel . ' .olo-ps-arrow svg{width:80%;height:80%;}';
+                $css .= $sel . ' .olo-ps-arrow:hover{opacity:0.7;}';
+                break;
+            case 'chevron-bold':
+                $css .= $sel . ' .olo-ps-arrow{width:' . $size . 'px;height:' . $size . 'px;background:transparent;color:' . $color . ';}';
+                $css .= $sel . ' .olo-ps-arrow svg{width:90%;height:90%;stroke-width:3;}';
+                break;
+            case 'arrow-long':
+                $css .= $sel . ' .olo-ps-arrow{width:' . ( $size + 12 ) . 'px;height:' . $size . 'px;background:' . $bg . ';color:' . $color . ';border-radius:' . intval( $size / 2 ) . 'px;box-shadow:0 4px 12px rgba(0,0,0,0.15);}';
+                $css .= $sel . ' .olo-ps-arrow svg{width:55%;height:55%;}';
+                break;
+            case 'fancy':
+                $css .= $sel . ' .olo-ps-arrow{width:' . $size . 'px;height:' . $size . 'px;border-radius:50%;background:linear-gradient(135deg,var(--olo-color-primary,#6366F1),#8b5cf6);color:#fff;box-shadow:0 6px 20px rgba(99,102,241,0.35);}';
+                $css .= $sel . ' .olo-ps-arrow:hover{box-shadow:0 10px 28px rgba(99,102,241,0.5);}';
+                break;
+            case 'uikit':
+            default:
+                // Uses native uk-slidenav, only positioning
+                $css .= $sel . ' .olo-ps-arrow{width:' . $size . 'px;height:' . $size . 'px;color:' . $color . ';}';
+                break;
+        }
+
+        // Dots styling
+        $css .= $sel . ' .uk-dotnav > * > *{width:10px;height:10px;border:2px solid ' . $color . ';background:transparent;}';
+        $css .= $sel . ' .uk-dotnav > .uk-active > *{background:' . $color . ';border-color:' . $color . ';}';
+
+        return $css;
+    }
+
+    /**
+     * Render arrow markup with correct SVG icons per style.
+     */
+    private function render_arrows( $style ) {
+        $prev_label = esc_attr__( 'Precedente', 'olobuilder' );
+        $next_label = esc_attr__( 'Successivo', 'olobuilder' );
+
+        if ( $style === 'uikit' ) {
+            return '<a class="olo-ps-arrow olo-ps-prev" href uk-slidenav-previous uk-slider-item="previous" aria-label="' . $prev_label . '"></a>'
+                 . '<a class="olo-ps-arrow olo-ps-next" href uk-slidenav-next uk-slider-item="next" aria-label="' . $next_label . '"></a>';
+        }
+
+        $svg_prev = $this->arrow_svg( $style, 'prev' );
+        $svg_next = $this->arrow_svg( $style, 'next' );
+
+        return '<button type="button" class="olo-ps-arrow olo-ps-prev" uk-slider-item="previous" aria-label="' . $prev_label . '">' . $svg_prev . '</button>'
+             . '<button type="button" class="olo-ps-arrow olo-ps-next" uk-slider-item="next" aria-label="' . $next_label . '">' . $svg_next . '</button>';
+    }
+
+    /**
+     * Return SVG markup for the arrow style and direction.
+     */
+    private function arrow_svg( $style, $dir ) {
+        $rotate = $dir === 'prev' ? ' style="transform:rotate(180deg);"' : '';
+
+        switch ( $style ) {
+            case 'arrow-long':
+                return '<svg' . $rotate . ' viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><line x1="3" y1="12" x2="20" y2="12"/><polyline points="14 6 20 12 14 18"/></svg>';
+            case 'chevron-bold':
+                return '<svg' . $rotate . ' viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><polyline points="9 6 15 12 9 18"/></svg>';
+            default:
+                return '<svg' . $rotate . ' viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><polyline points="9 6 15 12 9 18"/></svg>';
+        }
     }
 }

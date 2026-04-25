@@ -1984,30 +1984,40 @@ class Olo_Rest_Api {
 
         $parts = [];
 
-        // Header
+        // Resolve per-zone page_bg (so the .olo-template wrapper paints the same bg as in render_shortcode)
+        $header_bg = $body['header_page_bg'] ?? null;
+        $body_bg   = $page_settings['page_bg'] ?? null;
+        $footer_bg = $body['footer_page_bg'] ?? null;
+        $bg_inline = function( $bg ) use ( $renderer ) {
+            if ( ! is_array( $bg ) || empty( $bg['type'] ) || $bg['type'] === 'none' ) return '';
+            $css = $renderer->css->get_bg_inline_css( $bg );
+            return $css ? ' style="' . esc_attr( $css ) . '"' : '';
+        };
+
+        // Header (wrap in .olo-template so frontend.css container max-width rules apply consistently with the public site)
         if ( ! empty( $header_tiles ) && is_array( $header_tiles ) ) {
             ob_start();
-            echo '<header class="olo-site-header olo-header-classic" data-olo-zone="header">';
+            echo '<header class="olo-site-header olo-header-classic" data-olo-zone="header"><div class="olo-template"' . $bg_inline( $header_bg ) . '>';
             $renderer->render_tiles_array( $header_tiles, $page_settings );
-            echo '</header>';
+            echo '</div></header>';
             $parts[] = ob_get_clean();
         }
 
         // Body
         if ( ! empty( $tiles ) && is_array( $tiles ) ) {
             ob_start();
-            echo '<main data-olo-zone="body">';
+            echo '<main data-olo-zone="body"><div class="olo-template"' . $bg_inline( $body_bg ) . '>';
             $renderer->render_tiles_array( $tiles, $page_settings );
-            echo '</main>';
+            echo '</div></main>';
             $parts[] = ob_get_clean();
         }
 
         // Footer
         if ( ! empty( $footer_tiles ) && is_array( $footer_tiles ) ) {
             ob_start();
-            echo '<footer class="olo-site-footer" data-olo-zone="footer">';
+            echo '<footer class="olo-site-footer" data-olo-zone="footer"><div class="olo-template"' . $bg_inline( $footer_bg ) . '>';
             $renderer->render_tiles_array( $footer_tiles, $page_settings );
-            echo '</footer>';
+            echo '</div></footer>';
             $parts[] = ob_get_clean();
         }
 

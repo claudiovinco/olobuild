@@ -10,6 +10,15 @@
   var hoveredEl = null;
   var previewMode = false;
 
+  // Grip-drag state — declared in outer scope so edge-handlers (line ~145+) can read it.
+  // Set/cleared by the grip drag system inside getHoverToolbar() (line ~700+).
+  var gripDragging = false;
+  var gripDragId = null;
+  var gripGhost = null;
+  var gripDropTarget = null;
+  var gripDropBefore = true;
+  var gripIndicator = null;
+
   // ── Helpers ──
 
   function post(type, data) {
@@ -101,6 +110,15 @@
     }
     e.preventDefault();
     e.stopPropagation();
+    // Floating panel empty placeholder: open finder to insert into the panel
+    var emptyEl = e.target.closest && e.target.closest('[data-olo-fp-empty]');
+    if (emptyEl) {
+      var fpId = emptyEl.getAttribute('data-olo-fp-empty');
+      if (fpId) {
+        post('olo:open-finder-for', { tileId: fpId });
+        return;
+      }
+    }
     var tileId = findTileId(e.target);
     if (tileId) {
       selectTile(tileId);
@@ -380,7 +398,7 @@
     var grid = root.querySelector('[data-olo-zone="body"] .olo-frontend-grid') || root.querySelector('.olo-frontend-grid');
     var scrollX = window.pageXOffset || document.documentElement.scrollLeft || 0;
     var scrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
-    if (!grid) { post('olo:layout-snapshot', { sections: [], columns: [], scrollX: scrollX, scrollY: scrollY }); return; }
+    if (!grid) { post('olo:layout-snapshot', { sections: [], columns: [], containers: [], scrollX: scrollX, scrollY: scrollY }); return; }
 
     var sectionEls = grid.querySelectorAll(':scope > [data-olo-tile-id]');
     var sects = [];
@@ -405,7 +423,20 @@
       });
     }
 
-    post('olo:layout-snapshot', { sections: sects, columns: cols, scrollX: scrollX, scrollY: scrollY });
+    // Container tiles (floatingpanel, ecc.) — drop target più specifico delle colonne
+    var containerEls = root.querySelectorAll('[data-olo-tile-type="floatingpanel"]');
+    var containers = [];
+    for (var k = 0; k < containerEls.length; k++) {
+      var cnr = containerEls[k].getBoundingClientRect();
+      containers.push({
+        id: containerEls[k].getAttribute('data-olo-tile-id'),
+        type: containerEls[k].getAttribute('data-olo-tile-type'),
+        top: cnr.top + scrollY, bottom: cnr.bottom + scrollY,
+        left: cnr.left + scrollX, right: cnr.right + scrollX,
+      });
+    }
+
+    post('olo:layout-snapshot', { sections: sects, columns: cols, containers: containers, scrollX: scrollX, scrollY: scrollY });
   }
 
   // ── Height observer ──
@@ -683,12 +714,13 @@
       });
 
       // ── Grip drag system (mouse-based, not native drag) ──
-      var gripDragging = false;
-      var gripDragId = null;
-      var gripGhost = null;
-      var gripDropTarget = null;
-      var gripDropBefore = true;
-      var gripIndicator = null;
+      // Variables declared at outer IIFE scope so edge-handlers can read them.
+      gripDragging = false;
+      gripDragId = null;
+      gripGhost = null;
+      gripDropTarget = null;
+      gripDropBefore = true;
+      gripIndicator = null;
 
       // Reusable tile-drag starter — used by grip and by edge-hotzone drag.
       startTileDrag = function(tileId, el, labelText) {

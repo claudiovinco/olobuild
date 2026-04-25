@@ -65,8 +65,13 @@ class Olo_Blendtext_Tile extends Olo_Tile_Base {
             $pr = intval( $s['padding_right'] ?? 20 );
         }
 
-        // NO z-index, NO position:relative on wrapper — so blend composites with parent stacking context
-        $css  = "#{$uid}{mix-blend-mode:{$blend};padding:{$pt}px {$pr}px {$pb}px {$pl}px}";
+        // Apply mix-blend-mode to the OUTER .olo-frontend-tile wrapper using :has() selector
+        // (CSS-native, no JS timing issues with parallax). The parent .olo-frontend-tile is
+        // also the parallax target — putting mix-blend-mode on the SAME element as the
+        // transform/z-index avoids the descendant-isolation pitfall: the blend composites
+        // with the parent stacking context's backdrop (which contains the section bg image).
+        $css  = ".olo-frontend-tile:has(> #{$uid}){mix-blend-mode:{$blend};}";
+        $css .= "#{$uid}{padding:{$pt}px {$pr}px {$pb}px {$pl}px}";
         $css .= "#{$uid} .olo-bt-text{font-size:{$fs}px;font-weight:{$fw};font-family:{$ff};text-transform:{$tt};letter-spacing:{$ls}px;line-height:{$lh};text-align:{$ta};color:{$color};margin:0}";
         $css .= "@media(max-width:960px){#{$uid} .olo-bt-text{font-size:{$fs_tablet}px !important}}";
         $css .= "@media(max-width:640px){#{$uid} .olo-bt-text{font-size:{$fs_mobile}px !important}}";
@@ -81,15 +86,38 @@ class Olo_Blendtext_Tile extends Olo_Tile_Base {
         (function(){
             var el = document.getElementById('<?php echo esc_js( $uid ); ?>');
             if(!el) return;
-            var p = el.parentElement;
-            while(p){
-                if(p.tagName === 'SECTION') break;
-                var st = p.style;
-                if(st.zIndex){ st.zIndex = ''; }
-                var cs = getComputedStyle(p);
-                if(cs.isolation === 'isolate'){ st.isolation = 'auto'; }
+            // Strip stacking-context creators (z-index, isolation) from ancestors up to the section,
+            // so the blend on .olo-frontend-tile reaches the section background image.
+            var target = el.parentElement;
+            while (target && target.tagName !== 'SECTION') {
+                if (target.classList && target.classList.contains('olo-frontend-tile')) break;
+                target = target.parentElement;
+            }
+            var chain = [];
+            var p = (target && target.tagName !== 'SECTION') ? target.parentElement : el.parentElement;
+            while (p) {
+                if (p.tagName === 'SECTION') break;
+                chain.push(p);
                 p = p.parentElement;
             }
+            function clean(){
+                for (var i = 0; i < chain.length; i++) {
+                    var st = chain[i].style;
+                    if (st.zIndex) st.zIndex = '';
+                    var cs = getComputedStyle(chain[i]);
+                    if (cs.isolation === 'isolate') st.isolation = 'auto';
+                }
+            }
+            clean();
+            requestAnimationFrame(clean);
+            setTimeout(clean, 100);
+            setTimeout(clean, 500);
+            try {
+                var mo = new MutationObserver(clean);
+                for (var i = 0; i < chain.length; i++) {
+                    mo.observe(chain[i], { attributes: true, attributeFilter: ['style'] });
+                }
+            } catch(e){}
         })();
         </script>
         <?php

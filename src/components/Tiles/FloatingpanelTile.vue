@@ -1,29 +1,20 @@
 <template>
   <div class="olo-floatingpanel-preview" :style="previewStyle">
-    <!-- Position badge -->
-    <div class="ofp-badge">
-      <span class="ofp-badge-icon">{{ placementIcon }}</span>
-      <span class="ofp-badge-label">{{ placementLabel }}</span>
+    <div class="ofp-header">
+      <span class="ofp-icon">📌</span>
+      <span class="ofp-name">{{ t('Pannello flottante') }}</span>
+      <span class="ofp-pos">{{ placementIcon }} {{ placementLabel }}</span>
+      <span v-if="settings.trigger_mode === 'button'" class="ofp-trigger">{{ t('con trigger') }}</span>
     </div>
-
-    <!-- Trigger mode indicator -->
-    <div v-if="settings.trigger_mode === 'button'" class="ofp-trigger-badge">
-      {{ t('🔘 Con trigger') }}
+    <div class="ofp-meta">
+      <span class="ofp-pill">{{ positionLabel }}</span>
+      <span v-if="childCount > 0" class="ofp-count">{{ childCount }} {{ childCount === 1 ? t('elemento') : t('elementi') }}</span>
     </div>
-
-    <!-- Children info -->
-    <div class="ofp-children-info">
-      <span v-if="childCount > 0" class="ofp-children-count">{{ childCount }} {{ childCount === 1 ? 'elemento' : 'elementi' }}</span>
-      <span v-else class="ofp-children-empty">{{ t('Trascina tile qui ↓') }}</span>
-    </div>
-
-    <!-- Position type -->
-    <div class="ofp-pos-type">{{ positionLabel }}</div>
   </div>
 </template>
 
 <script setup>
-import { computed, inject } from 'vue';
+import { computed } from 'vue';
 import { useTilesStore } from '../../stores/tiles';
 import { t } from '@/i18n';
 
@@ -54,12 +45,8 @@ const placementMap = {
   'custom':        { icon: '✎', label: 'Personalizzato' },
 };
 
-const placementIcon = computed(() => {
-  return placementMap[props.settings.placement]?.icon || '↘';
-});
-const placementLabel = computed(() => {
-  return placementMap[props.settings.placement]?.label || 'Basso destra';
-});
+const placementIcon = computed(() => placementMap[props.settings.placement]?.icon || '↘');
+const placementLabel = computed(() => placementMap[props.settings.placement]?.label || 'Basso destra');
 
 const positionLabel = computed(() => {
   const map = { fixed: 'Fisso', absolute: 'Assoluto', sticky: 'Appiccicoso' };
@@ -74,64 +61,61 @@ const previewStyle = computed(() => {
   if (parseInt(s.border_width) > 0) {
     style.border = `${parseInt(s.border_width)}px solid ${s.border_color || '#e0e0e0'}`;
   }
-  if (s.shadow && s.shadow !== 'false') {
-    style.boxShadow = `0 ${parseInt(s.shadow_y) || 4}px ${parseInt(s.shadow_blur) || 20}px ${s.shadow_color || 'rgba(0,0,0,0.15)'}`;
-  }
   return style;
 });
 </script>
 
 <style scoped>
 .olo-floatingpanel-preview {
-  padding: 16px;
-  min-height: 80px;
+  padding: 10px 14px;
   border: 2px dashed #94a3b8;
+  border-radius: 6px;
+  background: #f8fafc;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  position: relative;
-  background: #ffffff;
+  gap: 6px;
 }
 
-.ofp-badge {
+.ofp-header {
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 14px;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.ofp-icon { font-size: 16px; }
+.ofp-name {
+  font-size: 13px;
   font-weight: 600;
   color: #334155;
 }
-.ofp-badge-icon {
-  font-size: 18px;
-}
-
-.ofp-trigger-badge {
+.ofp-pos {
   font-size: 11px;
+  color: #64748b;
+  margin-left: 4px;
+}
+.ofp-trigger {
+  font-size: 10px;
   color: #7c3aed;
   background: #ede9fe;
   padding: 2px 8px;
   border-radius: 10px;
+  font-weight: 600;
 }
 
-.ofp-children-info {
-  font-size: 12px;
-  color: #64748b;
-}
-.ofp-children-empty {
-  color: #94a3b8;
-  font-style: italic;
-}
-.ofp-children-count {
-  color: #059669;
-  font-weight: 500;
-}
-
-.ofp-pos-type {
+.ofp-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   font-size: 10px;
-  color: #94a3b8;
+}
+.ofp-pill {
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  color: #94a3b8;
+  font-weight: 600;
+}
+.ofp-count {
+  color: #059669;
+  font-weight: 600;
 }
 </style>

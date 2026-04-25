@@ -149,7 +149,7 @@
                                   </div>
                                   <div v-if="!tile.children || tile.children.length === 0" class="olo-fp-empty" @click.stop="openFinder(tile.id)">
                                     <span class="olo-column-plus">+</span>
-                                    <span>Trascina tile qui</span>
+                                    <span>Trascina qui un elemento o clicca per aprire il finder</span>
                                   </div>
                                 </div>
                               </template>
@@ -208,7 +208,7 @@
                                     </div>
                                     <div v-if="!tile.children || tile.children.length === 0" class="olo-fp-empty" @click.stop="openFinder(tile.id)">
                                       <span class="olo-column-plus">+</span>
-                                      <span>Trascina tile qui</span>
+                                      <span>Trascina qui un elemento o clicca per aprire il finder</span>
                                     </div>
                                   </div>
                                 </template>
@@ -1279,30 +1279,7 @@ function changeRowLayout(row, layoutKey) {
   line-height: 1;
 }
 
-/* === Floating Panel children zone === */
-.olo-fp-children-zone {
-  margin-top: 4px;
-  border: 2px dashed #818cf8;
-  border-radius: 8px;
-  padding: 6px;
-  min-height: 40px;
-  background: rgba(129, 140, 248, 0.04);
-}
-.olo-fp-children-list {
-  min-height: 30px;
-}
-.olo-fp-empty {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 50px;
-  color: #818cf8;
-  font-size: 11px;
-  gap: 2px;
-  user-select: none;
-  cursor: pointer;
-}
+/* Floating Panel children zone — moved to main.scss for non-scoped visibility */
 
 /* === Layout presets === */
 .olo-row-presets {

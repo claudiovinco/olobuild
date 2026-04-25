@@ -73,6 +73,28 @@ body:has(.olo-template) .wp-site-blocks {
 }
 
 /* ========================================
+   bg_scope='container': bg layers must align with content-box
+   (uk-position-cover stretches to padding-box; we offset by container padding
+   so bg width matches the actual content/uk-grid width).
+   ======================================== */
+.olo-bg-in-container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 15px;
+  right: 15px;
+  pointer-events: none;
+  z-index: 0;
+}
+.olo-bg-in-container > * { pointer-events: auto; }
+@media (min-width: 640px) {
+  .olo-bg-in-container { left: 30px; right: 30px; }
+}
+@media (min-width: 960px) {
+  .olo-bg-in-container { left: 40px; right: 40px; }
+}
+
+/* ========================================
    Element full-width (fills its column)
    ======================================== */
 .olo-tile-fullwidth {

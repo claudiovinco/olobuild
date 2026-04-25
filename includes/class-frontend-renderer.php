@@ -883,11 +883,13 @@ class Olo_Frontend_Renderer {
         // Builder mode: no lazy loading (iframe needs all tiles visible)
         if ( $this->builder_mode ) return $html;
 
-        // Types that must NOT be lazy-loaded (interactive, form-based, or map)
+        // Types that must NOT be lazy-loaded (interactive, form-based, map, or relying
+        // on inline scripts that won't re-run when cloned from <template>).
         static $no_lazy = [
             'form', 'map', 'search', 'livesearch', 'servicesearch', 'booking',
             'bookingpicker', 'calendar', 'loginform', 'scrollprogress',
             'popup', 'megamenu', 'navmenu', 'togglebtn',
+            'blendtext', 'textmask', 'shatteredimage', 'svganimator',
         ];
         if ( in_array( $type, $no_lazy, true ) ) {
             return $html;
@@ -915,7 +917,9 @@ class Olo_Frontend_Renderer {
     private function render_section_node( $node, $manager, $template_id, &$hover_css_rules, &$tile_counter ) {
         // Floating panel bypass: if section contains only a floatingpanel (inside row>column),
         // render the floatingpanel directly without section/row/column wrappers to avoid empty gap.
-        if ( $this->section_has_only_floatingpanel( $node ) ) {
+        // Skipped in builder mode: bypass would lose data-olo-tile-id for the floatingpanel
+        // (it would inherit the section's id instead), breaking drop-target hit-testing.
+        if ( ! $this->builder_mode && $this->section_has_only_floatingpanel( $node ) ) {
             return $this->extract_and_render_floatingpanel( $node, $manager, $template_id, $hover_css_rules, $tile_counter );
         }
 
@@ -1190,17 +1194,20 @@ class Olo_Frontend_Renderer {
         }
         $html .= $scrollspy_attr . $el_parallax_attr . $snap_data_attr . $mouse_attrs . '>';
 
-        // Background image layer (with optional UIkit parallax)
+        // Decide where to place bg/overlay layers: full section (default) or inside container.
+        // bg_scope='container' keeps the bg/overlay limited to the container max-width
+        // (useful when 'width' = default/small/etc. and the user doesn't want edge-to-edge bg).
+        $bg_scope = ( $s['bg_scope'] ?? 'section' ) === 'container' ? 'container' : 'section';
+        $has_any_bg = ( $has_bg_image || $has_bg_video || $has_bg_gallery || $has_overlay );
+
+        $bg_layers_html = '';
         if ( $has_bg_image ) {
             $bg_size = esc_attr( $tile_bg['image_size'] ?? 'cover' );
             $bg_pos  = esc_attr( $tile_bg['image_position'] ?? 'center center' );
-
-            $html .= '<div class="uk-position-cover" style="background-image: url(' . esc_url( $tile_bg['image_url'] ) . '); background-size: ' . $bg_size . '; background-position: ' . $bg_pos . '; background-repeat: no-repeat"';
-            $html .= $this->anim->build_uk_parallax_attr( $tile_bg );
-            $html .= '></div>';
+            $bg_layers_html .= '<div class="uk-position-cover" style="background-image: url(' . esc_url( $tile_bg['image_url'] ) . '); background-size: ' . $bg_size . '; background-position: ' . $bg_pos . '; background-repeat: no-repeat"';
+            $bg_layers_html .= $this->anim->build_uk_parallax_attr( $tile_bg );
+            $bg_layers_html .= '></div>';
         }
-
-        // Video background layer
         if ( $has_bg_video ) {
             $vid_url    = esc_url( $tile_bg['video_url'] );
             $vid_poster = ! empty( $tile_bg['video_poster'] ) ? esc_url( $tile_bg['video_poster'] ) : '';
@@ -1210,24 +1217,25 @@ class Olo_Frontend_Renderer {
             $vid_scale  = ( ! empty( $tile_bg['video_scale'] ) && intval( $tile_bg['video_scale'] ) > 100 ) ? intval( $tile_bg['video_scale'] ) / 100 : 0;
             $scale_css  = $vid_scale ? '; transform: scale(' . $vid_scale . '); transform-origin: ' . $vid_pos : '';
             if ( $vid_cover ) {
-                $html .= '<video aria-hidden="true" style="position: absolute; top: 0; left: 0; width: 100%; height: ' . $vid_cover . 'px; object-fit: ' . $vid_fit . '; object-position: ' . $vid_pos . '; pointer-events: none' . $scale_css . '" autoplay muted loop playsinline';
+                $bg_layers_html .= '<video aria-hidden="true" style="position: absolute; top: 0; left: 0; width: 100%; height: ' . $vid_cover . 'px; object-fit: ' . $vid_fit . '; object-position: ' . $vid_pos . '; pointer-events: none' . $scale_css . '" autoplay muted loop playsinline';
             } else {
-                $html .= '<video aria-hidden="true" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: ' . $vid_fit . '; object-position: ' . $vid_pos . '; pointer-events: none' . $scale_css . '" autoplay muted loop playsinline';
+                $bg_layers_html .= '<video aria-hidden="true" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: ' . $vid_fit . '; object-position: ' . $vid_pos . '; pointer-events: none' . $scale_css . '" autoplay muted loop playsinline';
             }
-            if ( $vid_poster ) $html .= ' poster="' . $vid_poster . '"';
-            $html .= '><source src="' . $vid_url . '" type="' . $this->get_video_mime( $vid_url ) . '"></video>';
+            if ( $vid_poster ) $bg_layers_html .= ' poster="' . $vid_poster . '"';
+            $bg_layers_html .= '><source src="' . $vid_url . '" type="' . $this->get_video_mime( $vid_url ) . '"></video>';
         }
-
-        // Gallery background slideshow
         if ( $has_bg_gallery ) {
-            $html .= $this->render_bg_gallery( $tile_bg );
+            $bg_layers_html .= $this->render_bg_gallery( $tile_bg );
         }
-
-        // Overlay layer
         if ( $has_overlay ) {
             $ov_color   = esc_attr( $tile_bg['overlay_color'] ?? '#000000' );
             $ov_opacity = intval( $tile_bg['overlay_opacity'] ) / 100;
-            $html .= '<div class="uk-position-cover" style="background-color: ' . $ov_color . '; opacity: ' . $ov_opacity . '; pointer-events: none" aria-hidden="true"></div>';
+            $bg_layers_html .= '<div class="uk-position-cover" style="background-color: ' . $ov_color . '; opacity: ' . $ov_opacity . '; pointer-events: none" aria-hidden="true"></div>';
+        }
+
+        // bg_scope=section: emit bg layers as siblings of the container (full edge-to-edge bg)
+        if ( $has_any_bg && $bg_scope === 'section' ) {
+            $html .= $bg_layers_html;
         }
 
         // Container width wrapper (relative for z-index above bg/overlay)
@@ -1249,11 +1257,18 @@ class Olo_Frontend_Renderer {
             }
         }
 
-        if ( $has_bg_image || $has_bg_video || $has_bg_gallery || $has_overlay ) {
+        if ( $has_any_bg ) {
             $container_class .= ' uk-position-relative';
             $html .= '<div class="' . esc_attr( $container_class ) . '" style="z-index: 1">';
         } else {
             $html .= '<div class="' . esc_attr( $container_class ) . '">';
+        }
+
+        // bg_scope=container: emit bg layers INSIDE the container (limited to container width).
+        // Wrap them so they align with the content-box (excluding container padding) — otherwise
+        // uk-position-cover would extend through the container padding and look wider than uk-grid content.
+        if ( $has_any_bg && $bg_scope === 'container' ) {
+            $html .= '<div class="olo-bg-in-container">' . $bg_layers_html . '</div>';
         }
 
         foreach ( $node['children'] ?? [] as $child ) {
@@ -2243,11 +2258,57 @@ class Olo_Frontend_Renderer {
 
         $settings = $node['settings'] ?? [];
 
+        // In builder mode, force panel always visible, in normal flow, so users can edit it.
+        // Also clear placement positioning (top/left/etc.) to keep panel inline.
+        if ( $this->builder_mode ) {
+            $settings = array_merge( $settings, [
+                'trigger_mode'  => 'always',
+                'position'      => 'relative',
+                'placement'     => 'top-left',
+                'offset_x'      => '0',
+                'offset_y'      => '0',
+                'custom_top'    => '',
+                'custom_left'   => '',
+                'custom_bottom' => '',
+                'custom_right'  => '',
+                'width'         => '100%',
+                'height'        => '',
+                'z_index'       => '0',
+                '_builder_mode' => true,
+            ] );
+        }
+
         // Render opening wrapper (panel div with styles, trigger button, close button)
         $html = $tile_instance->render( $settings );
 
+        $children = $node['children'] ?? [];
+
+        // Builder mode: identifying banner so users know this is a floating panel
+        // (in frontend it would be positioned/floating; in editor it's shown inline).
+        if ( $this->builder_mode ) {
+            $orig_placement = $node['settings']['placement'] ?? 'bottom-right';
+            $orig_position  = $node['settings']['position'] ?? 'fixed';
+            $pos_label = ucfirst( str_replace( '-', ' ', $orig_placement ) );
+            $mode_label = ucfirst( $orig_position );
+            $html .= '<div class="olo-fp-builder-banner" style="display:flex;align-items:center;gap:8px;padding:6px 10px;margin:-8px -8px 12px -8px;background:rgba(99,102,241,0.12);border-radius:6px;font-size:11px;font-weight:600;color:#4338CA;text-transform:uppercase;letter-spacing:0.5px;">'
+                   . '<span>📌 ' . esc_html__( 'Pannello flottante', 'olobuilder' ) . '</span>'
+                   . '<span style="opacity:0.6;font-weight:400;text-transform:none;letter-spacing:0;">→ ' . esc_html( $mode_label ) . ' · ' . esc_html( $pos_label ) . '</span>'
+                   . '</div>';
+        }
+
+        // Builder mode: when empty, inject a visible drop-zone placeholder so users can
+        // see where to drop tiles (the panel is otherwise an empty box).
+        if ( $this->builder_mode && empty( $children ) ) {
+            $fp_id = esc_attr( $node['id'] ?? '' );
+            $html .= '<div class="olo-fp-builder-empty" data-olo-fp-empty="' . $fp_id . '" style="min-height:120px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;border:2px dashed rgba(99,102,241,0.6);border-radius:8px;padding:20px;background:rgba(99,102,241,0.06);color:#6366F1;font-size:13px;font-weight:500;text-align:center;cursor:pointer;">'
+                   . '<span style="font-size:32px;font-weight:300;line-height:1;pointer-events:none;">+</span>'
+                   . '<span style="pointer-events:none;">' . esc_html__( 'Trascina qui contenuti del pannello', 'olobuilder' ) . '</span>'
+                   . '<span style="font-size:10px;opacity:0.7;text-transform:uppercase;letter-spacing:0.5px;pointer-events:none;">' . esc_html__( 'O clicca per aprire il finder', 'olobuilder' ) . '</span>'
+                   . '</div>';
+        }
+
         // Render children inside the panel
-        foreach ( $node['children'] ?? [] as $child ) {
+        foreach ( $children as $child ) {
             $html .= $this->render_node( $child, $manager, $template_id, $hover_css_rules, $tile_counter );
         }
 

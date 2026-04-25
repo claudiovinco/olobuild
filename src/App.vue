@@ -104,6 +104,7 @@ function onOpenFinderAfter() {
 }
 
 provide('openFinder', openFinder);
+window.__oloOpenFinder = openFinder;
 
 function openInsertPanel(sectionIndex) {
   insertPanelRef.value?.open(sectionIndex);

@@ -217,7 +217,15 @@ export function useIframeBridge(iframeRef) {
         break;
 
       case 'olo:layout-snapshot':
-        builderStore.iframeLayout = { sections: d.sections || [], columns: d.columns || [] };
+        builderStore.iframeLayout = { sections: d.sections || [], columns: d.columns || [], containers: d.containers || [] };
+        break;
+
+      case 'olo:open-finder-for':
+        if (d.tileId) {
+          builderStore.insertAfterTileId = null;
+          const openFinder = window.__oloOpenFinder;
+          if (openFinder) openFinder(d.tileId);
+        }
         break;
 
       case 'olo:add-section':

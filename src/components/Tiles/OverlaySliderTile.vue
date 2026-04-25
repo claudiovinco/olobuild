@@ -50,6 +50,10 @@ const props = defineProps({
 
 const defaults = {
   columns: '1',
+  gap: 'default',
+  image_ratio: 'auto',
+  image_height: '400',
+  image_fit: 'cover',
   height: '400',
   overlay_position: 'bottom',
   overlay_horizontal: 'left',
@@ -73,14 +77,33 @@ const slides = computed(() => {
   ];
 });
 
-const slideHeight = computed(() => parseInt(s.value.height) || 400);
+const slideHeight = computed(() => parseInt(s.value.image_height || s.value.height) || 400);
 
-const trackStyle = computed(() => ({
-  display: 'flex',
-  height: slideHeight.value + 'px',
-  transition: 'transform 0.5s ease',
-  transform: `translateX(-${current.value * 100}%)`,
-}));
+const useRatio = computed(() => s.value.image_ratio && s.value.image_ratio !== 'auto');
+
+const trackStyle = computed(() => {
+  const style = {
+    display: 'flex',
+    transition: 'transform 0.5s ease',
+    transform: `translateX(-${current.value * 100}%)`,
+  };
+  if (!useRatio.value) {
+    style.height = slideHeight.value + 'px';
+  }
+  return style;
+});
+
+const slideFrameStyle = computed(() => {
+  const style = { width: '100%', position: 'relative', overflow: 'hidden' };
+  if (useRatio.value) {
+    style.aspectRatio = (s.value.image_ratio || '16/9').replace('/', ' / ');
+  } else {
+    style.height = '100%';
+  }
+  return style;
+});
+
+const objectFit = computed(() => s.value.image_fit || 'cover');
 
 const overlayClasses = computed(() => {
   const pos = s.value.overlay_position || 'bottom';
@@ -120,13 +143,19 @@ const hoverOverlayClass = computed(() => {
 });
 
 function slideStyle(slide) {
-  const bg = slide.image ? `url(${slide.image}) center/cover no-repeat` : '#374151';
-  return {
+  const fit = objectFit.value;
+  const bg = slide.image ? `url(${slide.image}) center/${fit === 'cover' ? 'cover' : (fit === 'contain' ? 'contain' : '100% 100%')} no-repeat` : '#374151';
+  const style = {
     minWidth: '100%',
-    height: '100%',
     position: 'relative',
     background: bg,
   };
+  if (useRatio.value) {
+    style.aspectRatio = (s.value.image_ratio || '16/9').replace('/', ' / ');
+  } else {
+    style.height = '100%';
+  }
+  return style;
 }
 
 function goTo(index) {

@@ -96,7 +96,7 @@ class Olo_Floatingpanel_Tile extends Olo_Tile_Base {
         $uid = 'olo-fp-' . substr( md5( wp_json_encode( $s ) ), 0, 8 );
 
         // --- Position ---
-        $pos       = in_array( $s['position'], [ 'fixed', 'absolute', 'sticky' ], true ) ? $s['position'] : 'fixed';
+        $pos       = in_array( $s['position'], [ 'fixed', 'absolute', 'sticky', 'relative', 'static' ], true ) ? $s['position'] : 'fixed';
         $placement = $s['placement'];
         $ox        = intval( $s['offset_x'] );
         $oy        = intval( $s['offset_y'] );
@@ -189,8 +189,9 @@ class Olo_Floatingpanel_Tile extends Olo_Tile_Base {
         endif;
 
         // Everything inside a single wrapper div that gets moved to body
+        $wrapper_style = ! empty( $s['_builder_mode'] ) ? 'scroll-margin-top:140px;' : 'display:none;';
         ?>
-        <div class="olo-fp-wrapper" data-olo-fp-wrapper="<?php echo $uid; ?>" style="display:none;">
+        <div class="olo-fp-wrapper" data-olo-fp-wrapper="<?php echo $uid; ?>" style="<?php echo $wrapper_style; ?>">
         <style>
         .olo-fp-hide-desktop { display: none !important; }
         @media (max-width: 1024px) {
@@ -221,7 +222,10 @@ class Olo_Floatingpanel_Tile extends Olo_Tile_Base {
              style="<?php echo $pos_css; ?>"
              data-olo-fp-id="<?php echo $uid; ?>">
 
-            <?php if ( $is_trigger && ( ! empty( $s['show_close'] ) && $s['show_close'] !== 'false' ) ) :
+            <?php
+            $show_close = ( ! empty( $s['show_close'] ) && $s['show_close'] !== 'false' );
+            // Hide close button in builder mode (panel must stay visible for editing)
+            if ( $show_close && empty( $s['_builder_mode'] ) ) :
                 $cc = $this->safe_color_css( $s['close_color'] ) ?: '#666';
                 $cs = intval( $s['close_size'] );
             ?>
@@ -254,6 +258,11 @@ class Olo_Floatingpanel_Tile extends Olo_Tile_Base {
         $close_outside = $this->_close_outside ?? ( ! empty( $s['close_outside'] ) && $s['close_outside'] !== 'false' );
         $dur           = intval( $s['animation_duration'] );
 
+        // In builder mode: skip body-move JS (panel must stay in canvas iframe flow).
+        if ( ! empty( $s['_builder_mode'] ) ) {
+            return '</div><!-- .olo-floatingpanel --></div><!-- .olo-fp-wrapper -->';
+        }
+
         ob_start();
         ?>
         </div><!-- .olo-floatingpanel -->
@@ -270,28 +279,21 @@ class Olo_Floatingpanel_Tile extends Olo_Tile_Base {
             var panel = wrapper.querySelector('[data-olo-fp-id="<?php echo $uid; ?>"]');
             var trigger = wrapper.querySelector('[data-olo-fp-trigger="<?php echo $uid; ?>"]');
 
-            <?php if ( $is_trigger ) : ?>
             function showPanel() {
                 panel.classList.remove("olo-fp-hidden");
                 if (trigger) trigger.style.display = "none";
             }
             function hidePanel() {
                 panel.classList.add("olo-fp-hidden");
-                if (trigger) trigger.style.display = "";
+                if (trigger) trigger.style.display = "flex";
             }
+
+            <?php if ( $is_trigger ) : ?>
             if (trigger) {
                 trigger.addEventListener("click", function(e) {
                     e.preventDefault();
                     e.stopPropagation();
                     showPanel();
-                });
-            }
-            var closeBtn = panel.querySelector('[data-olo-fp-close="<?php echo $uid; ?>"]');
-            if (closeBtn) {
-                closeBtn.addEventListener("click", function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    hidePanel();
                 });
             }
             <?php if ( $close_outside ) : ?>
@@ -305,6 +307,16 @@ class Olo_Floatingpanel_Tile extends Olo_Tile_Base {
             });
             <?php endif; ?>
             <?php endif; ?>
+
+            // Close button (works in both 'always' and 'button' trigger modes)
+            var closeBtn = panel.querySelector('[data-olo-fp-close="<?php echo $uid; ?>"]');
+            if (closeBtn) {
+                closeBtn.addEventListener("click", function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    hidePanel();
+                });
+            }
         })();
         </script>
         </div><!-- .olo-fp-wrapper -->

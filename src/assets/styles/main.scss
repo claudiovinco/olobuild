@@ -61,6 +61,66 @@
   gap: 16px;
 }
 
+// ─── Floating Panel children drop zone (global, non-scoped) ───
+.olo-fp-children-zone {
+  margin-top: 8px;
+  border: 2px dashed #6366F1;
+  border-radius: 10px;
+  padding: 12px;
+  min-height: 80px;
+  background: rgba(99, 102, 241, 0.06);
+  transition: background 0.15s, border-color 0.15s;
+  position: relative;
+  z-index: 2;
+}
+.olo-fp-children-zone.olo-dnd-over {
+  background: rgba(99, 102, 241, 0.18);
+  border-color: #4338CA;
+  border-style: solid;
+}
+.olo-fp-children-zone::before {
+  content: 'CONTENUTI DEL PANNELLO';
+  position: absolute;
+  top: -10px;
+  left: 12px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  color: #6366F1;
+  background: #fff;
+  padding: 0 6px;
+  text-transform: uppercase;
+}
+.olo-fp-children-list {
+  min-height: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.olo-fp-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 70px;
+  color: #6366F1;
+  font-size: 13px;
+  font-weight: 500;
+  gap: 6px;
+  user-select: none;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background 0.15s;
+}
+.olo-fp-empty:hover {
+  background: rgba(99, 102, 241, 0.08);
+}
+.olo-fp-empty .olo-column-plus {
+  font-size: 28px;
+  line-height: 1;
+  font-weight: 300;
+}
+
 // Tile in canvas
 .olo-grid-cell {
   position: relative;

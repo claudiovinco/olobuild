@@ -53,6 +53,28 @@ html, body { margin: 0; padding: 0; background: #fff; }
 body { min-height: 100vh; }
 #olo-iframe-root { min-height: 100vh; }
 .olo-iframe-empty { display: flex; align-items: center; justify-content: center; min-height: 60vh; color: #9CA3AF; font-family: system-ui, sans-serif; font-size: 14px; }
+
+/* Builder mode: disable sticky headers/sections so content is never hidden behind a fixed header */
+.olo-site-header.olo-header-sticky,
+.olo-site-header.olo-header-classic.olo-header-sticky,
+.olo-sticky-cover,
+.olo-sticky-reveal {
+  position: relative !important;
+  top: auto !important;
+  z-index: auto !important;
+}
+/* Builder mode: .olo-template is used (in REST render) to apply container max-width rules from frontend.css.
+   Disable its break-out trick (width:100vw; transform) which is meant for theme escape, not iframe. */
+.olo-template {
+  width: 100% !important;
+  position: static !important;
+  left: auto !important;
+  transform: none !important;
+}
+.olo-floatingpanel,
+.olo-fp-wrapper {
+  scroll-margin-top: 80px;
+}
 </style>
 </head>
 <body>

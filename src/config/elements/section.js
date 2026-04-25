@@ -8,6 +8,7 @@ export default {
   defaults: {
     style: 'default',
     width: 'default',
+    bg_scope: 'section',
     padding: 'default',
     sticky_effect: 'none',
     sticky_top: '',
@@ -34,6 +35,10 @@ export default {
       { value: 'expand', label: 'Larghezza piena' },
       { value: 'fullbleed', label: 'Bordo a bordo' },
     ]},
+    { key: 'bg_scope', label: 'Larghezza sfondo', type: 'select', options: [
+      { value: 'section', label: 'Tutta la section (bordo a bordo)' },
+      { value: 'container', label: 'Limitato al container' },
+    ], description: 'Scegli se l\'immagine/video di sfondo riempie tutta la section o segue la larghezza del contenuto' },
     { key: 'padding', label: 'Padding', type: 'select', options: [
       { value: 'default', label: 'Predefinito' },
       { value: 'small', label: 'Piccolo' },

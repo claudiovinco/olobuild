@@ -16,6 +16,10 @@ class Olo_OverlaySlider_Tile extends Olo_Tile_Base {
             [ 'id' => 'os-2', 'image' => '', 'title' => 'Slide 2', 'subtitle' => '', 'link' => '' ],
         ],
         'columns'             => '1',
+        'gap'                 => 'default',
+        'image_ratio'         => 'auto',
+        'image_height'        => '400',
+        'image_fit'           => 'cover',
         'height'              => '400',
         'overlay_position'    => 'bottom',
         'overlay_horizontal'  => 'left',
@@ -52,7 +56,11 @@ class Olo_OverlaySlider_Tile extends Olo_Tile_Base {
         }
 
         $columns  = absint( $s['columns'] ) ?: 1;
-        $height   = absint( $s['height'] ) ?: 400;
+        $gap      = in_array( $s['gap'] ?? 'default', [ 'collapse', 'small', 'default', 'medium', 'large' ], true ) ? $s['gap'] : 'default';
+        $img_ratio  = $s['image_ratio'] ?? 'auto';
+        $img_fit    = in_array( $s['image_fit'] ?? 'cover', [ 'cover', 'contain', 'fill' ], true ) ? $s['image_fit'] : 'cover';
+        // Backward compat: image_height new field, fallback to legacy 'height'
+        $height   = absint( $s['image_height'] ?? $s['height'] ?? 400 ) ?: 400;
         $position = esc_attr( $s['overlay_position'] ?: 'bottom' );
         $style    = in_array( $s['overlay_style'], [ 'overlay-primary', 'overlay-default' ], true ) ? $s['overlay_style'] : 'overlay-primary';
         $count    = count( $slides );
@@ -95,8 +103,21 @@ class Olo_OverlaySlider_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
+        <?php
+        // Build slide-frame sizing CSS based on ratio/height/fit
+        $frame_css = '';
+        if ( $img_ratio && $img_ratio !== 'auto' ) {
+            $frame_css = 'aspect-ratio:' . esc_attr( $img_ratio ) . ';';
+        } else {
+            $frame_css = 'height:' . $height . 'px;';
+        }
+        $img_size_css = 'width:100%;height:100%;object-fit:' . esc_attr( $img_fit ) . ';display:block;';
+        ?>
         <style>
-            .<?php echo $uid; ?> .mos-os-img { transition: transform 0.5s ease, filter 0.5s ease; width: 100%; height: <?php echo $height; ?>px; object-fit: cover; }
+            .<?php echo $uid; ?> .mos-os-frame { position:relative; width:100%; <?php echo $frame_css; ?> overflow:hidden; }
+            .<?php echo $uid; ?> .mos-os-img { transition: transform 0.5s ease, filter 0.5s ease; <?php echo $img_size_css; ?> }
+            .<?php echo $uid; ?> .olo-hover-wrap { width:100%; height:100%; }
+            .<?php echo $uid; ?> .olo-hover-wrap img, .<?php echo $uid; ?> .olo-hover-wrap video { <?php echo $img_size_css; ?> }
             .<?php echo $uid; ?> .mos-os-hover-zoom:hover,
             .<?php echo $uid; ?> .uk-transition-toggle:hover .mos-os-hover-zoom { transform: scale(1.08); }
             .<?php echo $uid; ?> .mos-os-hover-zoom-rotate:hover,
@@ -117,7 +138,8 @@ class Olo_OverlaySlider_Tile extends Olo_Tile_Base {
         <div class="olo-overlayslider <?php echo $uid; ?>" uk-slider>
             <div class="uk-position-relative">
                 <div class="uk-slider-container">
-                    <ul class="uk-slider-items uk-child-width-1-<?php echo $columns; ?>@m">
+                    <?php $gap_class = $gap === 'collapse' ? 'uk-grid-collapse' : 'uk-grid-' . $gap; ?>
+                    <ul class="uk-slider-items uk-child-width-1-<?php echo $columns; ?>@m uk-grid <?php echo esc_attr( $gap_class ); ?>">
                         <?php foreach ( $slides as $slide ) :
                             $has_link   = ! empty( $slide['link'] );
                             $link_url   = $has_link ? esc_url( $slide['link'] ) : '';
@@ -129,14 +151,16 @@ class Olo_OverlaySlider_Tile extends Olo_Tile_Base {
                                 <?php else : ?>
                                 <div class="uk-panel<?php echo $toggle_cls; ?>" style="overflow:hidden;" tabindex="0">
                                 <?php endif; ?>
+                                    <div class="mos-os-frame">
                                     <?php if ( ! empty( $slide['image'] ) ) : ?>
                                         <?php
                                         $os_img = '<img src="' . esc_url( $slide['image'] ) . '" alt="' . esc_attr( $slide['title'] ?? '' ) . '" class="' . $img_class . '" loading="lazy">';
                                         echo $this->render_hover_wrap( $os_img, $slide['hover_image'] ?? '', $slide['hover_video'] ?? '' );
                                         ?>
                                     <?php else : ?>
-                                        <div style="height:<?php echo $height; ?>px;background:var(--olo-color-secondary, #1F2937);width:100%;"></div>
+                                        <div style="width:100%;height:100%;background:var(--olo-color-secondary, #1F2937);"></div>
                                     <?php endif; ?>
+                                    </div>
                                     <?php if ( ! empty( $slide['ribbon'] ) ) : ?>
                                         <span class="mos-os-ribbon mos-os-ribbon--<?php echo $ribbon_position; ?>"><?php echo esc_html( $slide['ribbon'] ); ?></span>
                                     <?php endif; ?>
