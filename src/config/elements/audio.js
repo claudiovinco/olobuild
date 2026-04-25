@@ -28,7 +28,7 @@ export default {
       { value: 'file', label: 'File (Media Library)' },
       { value: 'url', label: 'URL esterno' },
     ]},
-    { key: 'file_url', label: 'File audio', type: 'media',
+    { key: 'file_url', label: 'File audio', type: 'media', accept: 'audio',
       condition: { field: 'source_type', value: 'file' } },
     { key: 'audio_url', label: 'URL audio', type: 'text',
       condition: { field: 'source_type', value: 'url' } },

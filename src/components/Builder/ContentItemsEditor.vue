@@ -76,7 +76,7 @@
                 </button>
               </div>
 
-              <!-- media picker (image + video) -->
+              <!-- media picker (image + video, auto-filtered by field key) -->
               <div v-else-if="field.type === 'media'" class="cie-image-picker">
                 <div v-if="element[field.key]" class="cie-image-preview">
                   <img v-if="!/\.(mp4|webm|ogg)(\?.*)?$/i.test(element[field.key])" :src="element[field.key]" alt="" />
@@ -86,8 +86,9 @@
                   </div>
                   <button @click="updateField(index, field.key, ''); updateField(index, field.key + '_id', 0)" class="cie-image-remove">{{ t('&times;') }}</button>
                 </div>
-                <button @click="pickMedia(index, field.key)" class="cie-image-btn">
-                  {{ element[field.key] ? 'Cambia media' : 'Seleziona media' }}
+                <button @click="pickMedia(index, field.key)" class="cie-image-btn"
+                  :title="mediaPrimaryTitle(field)">
+                  {{ mediaButtonLabel(element[field.key], field) }}
                 </button>
               </div>
 
@@ -368,13 +369,53 @@ function pickImage(index, fieldKey) {
   });
 }
 
-function pickMedia(index, fieldKey) {
+function mediaButtonLabel(value, field) {
+  const type = detectMediaType(field.key, field);
+  const labels = {
+    image: { pick: 'Seleziona immagine', change: 'Cambia immagine' },
+    video: { pick: 'Seleziona video',    change: 'Cambia video' },
+    audio: { pick: 'Seleziona audio',    change: 'Cambia audio' },
+    'application/pdf': { pick: 'Seleziona PDF', change: 'Cambia PDF' },
+    all:   { pick: 'Seleziona media',    change: 'Cambia media' },
+  };
+  const l = labels[type] || labels.all;
+  return value ? l.change : l.pick;
+}
+
+function mediaPrimaryTitle(field) {
+  const type = detectMediaType(field.key, field);
+  const map = { image: 'immagini', video: 'video', audio: 'audio', 'application/pdf': 'PDF', all: 'tutti i media' };
+  return 'Apre la libreria filtrata su ' + (map[type] || 'media');
+}
+
+function detectMediaType(fieldKey, fieldDef) {
+  if (fieldDef && fieldDef.accept) return fieldDef.accept;
+  const k = String(fieldKey || '').toLowerCase();
+  if (/(^|_)(video)(_|$)|video_url|hover_video|bg_video|front_video|back_video/.test(k)) return 'video';
+  if (/(^|_)(audio|sound|music)(_|$)|audio_url/.test(k)) return 'audio';
+  if (/(^|_)(pdf)(_|$)|pdf_url/.test(k)) return 'application/pdf';
+  if (/(^|_)(image|img|photo|poster|bg_image|hover_image|cover)(_|$)/.test(k)) return 'image';
+  return 'all';
+}
+
+function pickMedia(index, fieldKey, forceType) {
   if (!window.wp || !window.wp.media) return;
-  const frame = wp.media({
-    title: 'Seleziona media',
+  const fieldDef = props.itemFields.find(f => f.key === fieldKey);
+  const type = forceType || detectMediaType(fieldKey, fieldDef);
+  const titles = {
+    image: 'Seleziona immagine',
+    video: 'Seleziona video',
+    audio: 'Seleziona audio',
+    'application/pdf': 'Seleziona PDF',
+    all: 'Seleziona media',
+  };
+  const frameOpts = {
+    title: titles[type] || titles.all,
     button: { text: 'Usa questo media' },
     multiple: false,
-  });
+  };
+  if (type !== 'all') frameOpts.library = { type };
+  const frame = wp.media(frameOpts);
   frame.on('select', () => {
     const attachment = frame.state().get('selection').first().toJSON();
     updateField(index, fieldKey, attachment.url);

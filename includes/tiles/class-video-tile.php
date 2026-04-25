@@ -28,11 +28,16 @@ class Olo_Video_Tile extends Olo_Tile_Base {
         'show_play_icon'  => true,
         'play_icon_size'  => '80',
         'play_icon_color' => '#ffffff',
-        'overlay_text'    => '',
-        'overlay_color'   => '#000000',
-        'overlay_opacity' => '0',
-        'caption'         => '',
-        'border_radius'   => 0,
+        'overlay_text'        => '',
+        'overlay_color'       => '#000000',
+        'overlay_opacity'     => '0',
+        'overlay_text_size'   => '32',
+        'overlay_text_color'  => '#ffffff',
+        'overlay_text_weight' => '700',
+        'overlay_text_align'  => 'center',
+        'caption'             => '',
+        'border_radius'       => 0,
+        'shadow'              => 'none',
         // Legacy compat
         'aspect_ratio'    => '16:9',
         'cover_mode'      => false,
@@ -56,6 +61,11 @@ class Olo_Video_Tile extends Olo_Tile_Base {
 
         $_br_css = $this->build_border_radius_css( $s["border_radius"] );
         $this->_vbr = $_br_css ? "border-radius:" . $_br_css . ";overflow:hidden;" : "";
+        // Shadow on the video wrapper
+        $shadow_val = Olo_Tile_Utils::shadow_value( $s, 'shadow' );
+        if ( $shadow_val && $shadow_val !== 'none' ) {
+            $this->_vbr .= 'box-shadow:' . $shadow_val . ';';
+        }
 
         $is_file = $s["source_type"] === 'file' || $this->is_direct_video( $s['video_url'] );
         $is_cover = $s['display_mode'] === 'cover';
@@ -246,9 +256,18 @@ class Olo_Video_Tile extends Olo_Tile_Base {
                 <div class="uk-position-cover" style="background-color: <?php echo $ov_color; ?>; opacity: <?php echo $ov_opacity / 100; ?>; pointer-events: none;"></div>
             <?php endif; ?>
 
-            <?php if ( ! empty( $s['overlay_text'] ) ) : ?>
+            <?php if ( ! empty( $s['overlay_text'] ) ) :
+                $ov_size   = max( 8, absint( $s['overlay_text_size'] ?? 32 ) );
+                $ov_color  = $this->safe_color_css( $s['overlay_text_color'] ?? '#ffffff' ) ?: '#ffffff';
+                $ov_weight = in_array( (string) ( $s['overlay_text_weight'] ?? '700' ), [ '300','400','500','600','700','800','900' ], true ) ? $s['overlay_text_weight'] : '700';
+                $ov_align  = in_array( $s['overlay_text_align'] ?? 'center', [ 'left', 'center', 'right' ], true ) ? $s['overlay_text_align'] : 'center';
+                $ov_text_style = sprintf(
+                    'text-align:%s;color:%s;padding:24px;max-width:800px;pointer-events:auto;font-size:%dpx;font-weight:%s;line-height:1.25;',
+                    esc_attr( $ov_align ), $ov_color, $ov_size, esc_attr( $ov_weight )
+                );
+            ?>
                 <div class="uk-position-cover uk-flex uk-flex-center uk-flex-middle" style="z-index: 2; pointer-events: none;">
-                    <div style="text-align: center; color: #fff; padding: 24px; max-width: 800px; pointer-events: auto;">
+                    <div style="<?php echo $ov_text_style; ?>">
                         <?php echo nl2br( esc_html( wp_strip_all_tags( $s['overlay_text'] ) ) ); ?>
                     </div>
                 </div>

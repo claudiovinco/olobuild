@@ -35,6 +35,8 @@ class Olo_Image_Tile extends Olo_Tile_Base {
         'hover_animation'  => 'none',
         'lightbox'         => false,
         'border_radius'    => '0',
+        'hover_border_radius' => '',
+        'hover_radius_duration' => '400',
     ];
 
     public function get_controls() {
@@ -98,12 +100,30 @@ class Olo_Image_Tile extends Olo_Tile_Base {
         }
         $init_transform = $anim === 'zoom-out' ? 'transform:scale(1.05);' : '';
 
-        // Border radius
-        $br_css = $this->build_border_radius_css( $s['border_radius'] ?? '0' );
+        // Border radius (base + optional hover)
+        $br_css        = $this->build_border_radius_css( $s['border_radius'] ?? '0' );
+        $hover_br_raw  = $s['hover_border_radius'] ?? '';
+        // hover is "set" whenever the user touched the field — i.e. it's an object
+        // (4 sides) or a non-empty scalar. All-zero values must still apply (override base).
+        $has_hover_br  = is_array( $hover_br_raw ) || ( $hover_br_raw !== '' && $hover_br_raw !== null );
+        $hover_br_css  = '';
+        if ( $has_hover_br ) {
+            if ( is_array( $hover_br_raw ) ) {
+                $h_tl = intval( $hover_br_raw['tl'] ?? 0 );
+                $h_tr = intval( $hover_br_raw['tr'] ?? 0 );
+                $h_br = intval( $hover_br_raw['br'] ?? 0 );
+                $h_bl = intval( $hover_br_raw['bl'] ?? 0 );
+                $hover_br_css = "{$h_tl}px {$h_tr}px {$h_br}px {$h_bl}px";
+            } else {
+                $h_n = max( 0, intval( $hover_br_raw ) );
+                $hover_br_css = "{$h_n}px";
+            }
+        }
+        $br_duration   = max( 50, intval( $s['hover_radius_duration'] ?? 400 ) );
 
         ob_start();
 
-        if ( $filter_css || $hover_filter_css || $hover_transform || $anim === 'blur-in' ) {
+        if ( $filter_css || $hover_filter_css || $hover_transform || $anim === 'blur-in' || $has_hover_br ) {
             echo '<style>';
             echo ".{$uid} img { transition: filter 0.4s ease, transform 0.4s ease;";
             if ( $filter_css ) echo "filter:{$filter_css};";
@@ -119,6 +139,11 @@ class Olo_Image_Tile extends Olo_Tile_Base {
                 echo ".{$uid} img { filter:" . ($filter_css ? $filter_css . ' ' : '') . "blur(3px); }";
                 echo ".{$uid}:hover img { filter:" . ($filter_css ?: '') . "blur(0); }";
             }
+            // Hover border-radius — applied to the figure wrapper (which has overflow:hidden + base radius)
+            if ( $has_hover_br ) {
+                echo ".{$uid}.olo-image{transition:border-radius {$br_duration}ms cubic-bezier(.4,0,.2,1);}";
+                echo ".{$uid}.olo-image:hover{border-radius:{$hover_br_css}!important;}";
+            }
             echo '</style>';
         }
         ?>
@@ -126,15 +151,18 @@ class Olo_Image_Tile extends Olo_Tile_Base {
         $figure_style = 'margin: 0;';
         if ( $br_css ) {
             $figure_style .= ' border-radius: ' . esc_attr( $br_css ) . '; overflow: hidden;';
+        } elseif ( $has_hover_br ) {
+            // Need overflow:hidden + explicit border-radius:0 for the hover transition to start from 0 and clip the image
+            $figure_style .= ' border-radius: 0; overflow: hidden;';
         }
         ?>
         <figure class="olo-image <?php echo esc_attr( $uid ); ?>"<?php if ( ! empty( $s['lightbox'] ) && empty( $s['link_url'] ) ) echo ' data-uk-lightbox'; ?> style="<?php echo esc_attr( $figure_style ); ?>">
             <?php
             $att_id = absint( $s['image_url_id'] ?? 0 );
+            // No border-radius on the <img>: figure has overflow:hidden + radius which clips correctly.
+            // Applying radius on both could conflict when the figure changes radius on :hover (the
+            // intersection of two different rounded shapes can leave residual sharp corners).
             $img_style = 'width: 100%; height: ' . esc_attr( $s['height'] ) . '; object-fit: ' . esc_attr( $s['object_fit'] ) . '; display: block;';
-            if ( $br_css ) {
-                $img_style .= ' border-radius: ' . esc_attr( $br_css ) . ';';
-            }
             $extra  = 'uk-img style="' . $img_style . '"';
             $img_opts = [];
             if ( ! empty( $s['_img_loading'] ) ) $img_opts['loading'] = $s['_img_loading'];

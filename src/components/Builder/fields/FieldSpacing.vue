@@ -6,15 +6,19 @@
         type="range"
         :value="uniformValue"
         @input="onUniformInput($event.target.value)"
+        @dblclick="onReset"
         :min="min" :max="max" :step="step"
         class="mb-flex-1"
+        :title="t('Doppio click per reimpostare al valore predefinito')"
       />
       <input
         type="number"
         :value="uniformValue"
         @input="onUniformInput($event.target.value)"
+        @dblclick="onReset"
         :min="min" :max="max" :step="step"
         class="mb-w-12 mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-1 mb-py-0.5 mb-text-xs mb-text-gray-900 mb-text-center"
+        :title="t('Doppio click per reimpostare al valore predefinito')"
       />
       <button
         @click="unlink"
@@ -94,6 +98,7 @@ const props = defineProps({
   min: { type: [Number, String], default: 0 },
   max: { type: [Number, String], default: 200 },
   step: { type: [Number, String], default: 1 },
+  defaultValue: { type: [Object, Number, String, null], default: null },
   labels: {
     type: Object,
     default: () => ({ top: 'Sopra', right: 'Destra', bottom: 'Sotto', left: 'Sinistra' }),
@@ -152,5 +157,25 @@ function relink() {
   const s = sides.value;
   const max = Math.max(s.top, s.right, s.bottom, s.left);
   emit('update:modelValue', { top: max, right: max, bottom: max, left: max });
+}
+
+function onReset() {
+  const d = props.defaultValue;
+  if (d && typeof d === 'object') {
+    emit('update:modelValue', {
+      top: parseInt(d.top) || 0,
+      right: parseInt(d.right) || 0,
+      bottom: parseInt(d.bottom) || 0,
+      left: parseInt(d.left) || 0,
+    });
+    return;
+  }
+  // Empty default ('' / null / undefined) → emit empty value to mean "inherit/unset"
+  if (d === null || d === undefined || d === '') {
+    emit('update:modelValue', '');
+    return;
+  }
+  const n = parseInt(d) || 0;
+  emit('update:modelValue', { top: n, right: n, bottom: n, left: n });
 }
 </script>

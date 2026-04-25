@@ -4,32 +4,56 @@
       type="range"
       :value="modelValue"
       @input="onInput($event)"
+      @dblclick="onReset"
       :min="min"
       :max="max"
       :step="step"
       class="field-range mb-flex-1"
+      :title="resetHint"
     />
     <input
       type="number"
       :value="modelValue"
       @change="onInput($event)"
+      @dblclick="onReset"
       :step="step"
       class="mb-w-14 mb-bg-white mb-border mb-border-gray-300 mb-rounded mb-px-1.5 mb-py-0.5 mb-text-xs mb-text-gray-900 mb-text-center"
+      :title="resetHint"
     />
   </div>
 </template>
 
 <script setup>
+import { computed } from 'vue';
+import { t } from '@/i18n';
+
 const props = defineProps({
   modelValue: { type: [String, Number], default: 0 },
   min: { type: Number, default: 0 },
   max: { type: Number, default: 100 },
   step: { type: Number, default: 1 },
+  defaultValue: { type: [String, Number, null], default: null },
 });
 const emit = defineEmits(['update:modelValue']);
 
+// Resolve the reset target: respect the explicit defaultValue verbatim
+// (including '' which means "no value / inherit / unfiltered").
+// Only fall back to min when no defaultValue was provided at all.
+const resetTarget = computed(() => {
+  if (props.defaultValue !== null && props.defaultValue !== undefined) {
+    return props.defaultValue;
+  }
+  return props.min ?? 0;
+});
+
+const resetHint = computed(() => t('Doppio click per reimpostare al valore predefinito'));
+
 function onInput(e) {
   emit('update:modelValue', e.target.value);
+}
+
+function onReset() {
+  emit('update:modelValue', resetTarget.value);
 }
 </script>
 

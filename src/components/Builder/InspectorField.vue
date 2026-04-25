@@ -81,6 +81,7 @@
         :min="field.min || 0"
         :max="field.max || 100"
         :step="field.step || 1"
+        :defaultValue="fieldDefaultValue"
         :placeholder="field.responsive && respBp !== 'desktop' ? t('Eredita') : ''"
         @update:modelValue="onFieldUpdate($event)"
       />
@@ -90,6 +91,7 @@
         :modelValue="effectiveValue"
         :min="field.min ?? 0"
         :max="field.max ?? 200"
+        :defaultValue="fieldDefaultValue"
         @update:modelValue="onFieldUpdate($event)"
       />
 
@@ -116,6 +118,7 @@
       <FieldMedia
         v-else-if="field.type === 'media'"
         :modelValue="effectiveValue"
+        :accept="mediaAccept"
         @update:modelValue="onFieldUpdate($event)"
         @update:attachmentId="$emit('update:attachmentId', $event)"
       />
@@ -462,11 +465,40 @@ const fieldComponent = computed(() => {
 
 const effectiveValue = computed(() => props.field.responsive ? respValue.value : props.modelValue);
 
+// Auto-detect media type for FieldMedia from explicit field.accept or by parsing field.key.
+// e.g. 'bg_video' / 'hover_video' / 'video_url' → 'video';  'pdf_url' → 'application/pdf'
+const mediaAccept = computed(() => {
+  if (props.field.accept) return props.field.accept;
+  const k = String(props.field.key || '').toLowerCase();
+  if (/(^|_)(video)(_|$)|video_url|hover_video|bg_video|front_video|back_video/.test(k)) return 'video';
+  if (/(^|_)(audio|sound|music)(_|$)|audio_url/.test(k)) return 'audio';
+  if (/(^|_)(pdf)(_|$)|pdf_url/.test(k)) return 'application/pdf';
+  if (/(^|_)(image|img|photo|poster|bg_image|hover_image|cover)(_|$)/.test(k)) return 'image';
+  return 'all';
+});
+
+// Resolve the default value for this field by looking up the registered tile defaults.
+// Used by FieldRange (and similar) for the "double-click to reset" feature.
+const fieldDefaultValue = computed(() => {
+  // Explicit per-field default has priority
+  if (Object.prototype.hasOwnProperty.call(props.field, 'default')) return props.field.default;
+  if (!props.tileId) return null;
+  const tilesStore = useTilesStore();
+  const tile = tilesStore.getTileById?.(props.tileId);
+  if (!tile?.type) return null;
+  const reg = tilesStore.registeredTiles?.find?.(t => t.type === tile.type);
+  const defaults = reg?.defaults;
+  if (!defaults) return null;
+  return Object.prototype.hasOwnProperty.call(defaults, props.field.key) ? defaults[props.field.key] : null;
+});
+
 const fieldProps = computed(() => {
   const base = { modelValue: effectiveValue.value };
   switch (props.field.type) {
     case 'select': return { ...base, options: resolvedOptions.value };
-    case 'range': return { ...base, min: props.field.min || 0, max: props.field.max || 100, step: props.field.step || 1 };
+    case 'range': return { ...base, min: props.field.min || 0, max: props.field.max || 100, step: props.field.step || 1, defaultValue: fieldDefaultValue.value };
+    case 'spacing': return { ...base, min: props.field.min ?? 0, max: props.field.max ?? 200, defaultValue: fieldDefaultValue.value };
+    case 'media': return { ...base, accept: mediaAccept.value };
     case 'editor': return { ...base, mode: props.field.mode || 'inline' };
     case 'icon-select': return { ...base, options: props.field.options || [] };
     case 'multi_pills': return { ...base, options: props.field.options || [] };
