@@ -70,6 +70,7 @@ class Olo_ServiceVideo_Tile extends Olo_Tile_Base {
 
         $uid    = 'olo-svid-' . wp_rand( 10000, 99999 );
         $radius = $this->build_border_radius_css( $s["border_radius"] );
+        $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
         $ratio  = esc_attr( $s['aspect_ratio'] ?: '16/9' );
         $max_w  = ! empty( $s['max_width'] ) ? 'max-width:' . absint( $s['max_width'] ) . 'px;margin:0 auto;' : '';
 
@@ -97,6 +98,7 @@ class Olo_ServiceVideo_Tile extends Olo_Tile_Base {
                 <?php echo $max_w; ?>
                 background: #000;
             }
+            <?php if ( $radius_hover_css !== '' ) : ?>.<?php echo $uid; ?>{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?>:hover{border-radius:<?php echo $radius_hover_css; ?> !important}<?php endif; ?>
             .<?php echo $uid; ?> video,
             .<?php echo $uid; ?> iframe {
                 width: 100%;

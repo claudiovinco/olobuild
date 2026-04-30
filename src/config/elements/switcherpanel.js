@@ -1,3 +1,4 @@
+import { textEffectsFields, textEffectsDefaults } from './_shared';
 export default {
   type: 'switcherpanel',
   name: 'Switcher Panel',
@@ -17,6 +18,7 @@ export default {
     tile_padding: { top: 40, right: 40, bottom: 40, left: 40 },
     title_tag: 'h3',
     button_style: 'default',
+    ...textEffectsDefaults,
   },
   fields: [
     // ── Items ──
@@ -76,5 +78,10 @@ export default {
       { value: 'secondary', label: 'Secondary' },
       { value: 'text', label: 'Solo testo' },
     ]},
+    ...textEffectsFields([
+      { value: 'title', label: 'Solo Titolo' },
+      { value: 'text', label: 'Solo Testo' },
+      { value: 'all', label: 'Tutti gli elementi testuali' },
+    ]),
   ],
 };

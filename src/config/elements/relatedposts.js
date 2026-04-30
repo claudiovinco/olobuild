@@ -75,6 +75,7 @@ export default {
     { key: 'card_background', label: 'Sfondo card', type: 'color' },
     { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 32 },
     { key: 'card_border_radius', label: 'Raggio bordo (px)', type: 'border-radius' },
+    { key: 'card_border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'hover_effect', label: 'Effetto hover', type: 'select', options: [
       { value: 'none', label: 'Nessuno' },
       { value: 'shadow', label: 'Ombra' },

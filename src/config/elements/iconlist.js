@@ -1,3 +1,4 @@
+import { textEffectsFields, textEffectsDefaults } from './_shared';
 import { shadowField } from './_shared.js';
 
 export default {
@@ -22,6 +23,7 @@ export default {
     divider_color: '',
     layout: 'vertical',
     shadow: 'none',
+    ...textEffectsDefaults,
   },
   fields: [
     { key: 'items', label: 'Voci lista', type: 'content-items',
@@ -57,5 +59,6 @@ export default {
     { key: 'divider_color', label: 'Colore separatore', type: 'color',
       condition: { field: 'divider', operator: '==', value: true } },
     ...shadowField,
+    ...textEffectsFields([ { value: 'text', label: 'Solo Testo' } ]),
   ],
 };

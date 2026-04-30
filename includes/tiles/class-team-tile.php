@@ -56,6 +56,7 @@ class Olo_Team_Tile extends Olo_Tile_Base {
         $bg       = $this->safe_color_css( $s['bg_color'] ) ?: 'transparent';
         $fg       = $this->safe_color_css( $s['info_text_color'] ) ?: '#FFFFFF';
         $tile_r   = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
+        $tile_r_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
         $tile_bw  = intval( $s['border_width'] );
         $tile_bc  = $this->safe_color_css( $s['border_color'] ) ?: 'var(--olo-color-text, #374151)';
         $tile_pad = intval( $s['tile_padding'] );
@@ -75,8 +76,9 @@ class Olo_Team_Tile extends Olo_Tile_Base {
             $outer_radius = '50%';
             $inner_radius = '50%';
         } elseif ( $ph_shape === 'rounded' ) {
-            $r = intval( $s['photo_radius'] );
+            $r = Olo_Tile_Utils::radius_int( $s['photo_radius'] );
             $outer_radius = Olo_Tile_Utils::border_radius( $s['photo_radius'] ?? 0 );
+            $outer_radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['photo_radius_hover'] ?? null );
             $inner_radius = max( $r - $ph_bw, 0 ) . 'px';
         } else {
             $outer_radius = '0';
@@ -89,6 +91,7 @@ class Olo_Team_Tile extends Olo_Tile_Base {
         $info_w   = intval( $s['info_width'] ) ?: 100;
         $info_m   = intval( $s['info_margin'] );
         $info_r   = Olo_Tile_Utils::border_radius( $s['info_radius'] ?? 0 );
+        $info_r_hover_css = Olo_Tile_Utils::radius_force_css( $s['info_radius_hover'] ?? null );
         $info_bw  = intval( $s['info_border_width'] );
         $info_bc  = $this->safe_color_css( $s['info_border_color'] ) ?: 'var(--olo-color-text, #374151)';
         $align    = in_array( $s['info_align'], [ 'left', 'center', 'right' ] ) ? $s['info_align'] : 'center';
@@ -125,6 +128,7 @@ class Olo_Team_Tile extends Olo_Tile_Base {
                 border: <?php echo $tile_bw; ?>px solid <?php echo $tile_bc; ?>;
                 <?php endif; ?>
             }
+            <?php if ( $tile_r_hover_css !== '' ) : ?>.<?php echo $uid; ?>{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?>:hover{border-radius:<?php echo $tile_r_hover_css; ?> !important}<?php endif; ?>
             .<?php echo $uid; ?> .olo-team-photo-wrap {
                 display: flex;
                 justify-content: <?php echo $jc; ?>;
@@ -148,6 +152,7 @@ class Olo_Team_Tile extends Olo_Tile_Base {
                 <?php endif; ?>
                 <?php endif; ?>
             }
+            <?php if ( $outer_radius_hover_css !== '' ) : ?>.<?php echo $uid; ?> .olo-team-photo-outer{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?> .olo-team-photo-outer:hover{border-radius:<?php echo $outer_radius_hover_css; ?> !important}<?php endif; ?>
             .<?php echo $uid; ?> .olo-team-photo-inner {
                 overflow: hidden;
                 width: <?php echo $ph_size; ?>px;
@@ -193,6 +198,7 @@ class Olo_Team_Tile extends Olo_Tile_Base {
                 border: <?php echo $info_bw; ?>px solid <?php echo $info_bc; ?>;
                 <?php endif; ?>
             }
+            <?php if ( $info_r_hover_css !== '' ) : ?>.<?php echo $uid; ?> .olo-team-info{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?> .olo-team-info:hover{border-radius:<?php echo $info_r_hover_css; ?> !important}<?php endif; ?>
             .<?php echo $uid; ?> .olo-team-name {
                 font-size: <?php echo $name_fs; ?>px;
                 font-weight: <?php echo $name_fw; ?>;
@@ -239,7 +245,8 @@ class Olo_Team_Tile extends Olo_Tile_Base {
             </div>
             <div class="olo-team-info-wrap">
                 <div class="olo-team-info">
-                    <h3 class="olo-team-name"><?php echo $name_html; ?></h3>
+                    <?php list( $tn_cls, $tn_data ) = $this->tfx_attrs( $s, 'name', wp_strip_all_tags( $name_html ) ); ?>
+                    <h3 class="olo-team-name<?php echo $tn_cls; ?>"<?php echo $tn_data; ?>><?php echo $name_html; ?></h3>
                     <div class="olo-team-role"><?php echo $role_html; ?></div>
                     <?php if ( ! empty( $s['bio'] ) ) : ?>
                         <div class="olo-team-bio"><?php echo $bio_html; ?></div>
@@ -251,6 +258,9 @@ class Olo_Team_Tile extends Olo_Tile_Base {
             </div>
         </div>
         <?php
+        $tfx_css = $this->tfx_css( $s, '.' . $uid );
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        $this->tfx_print_script();
         return ob_get_clean();
     }
 }

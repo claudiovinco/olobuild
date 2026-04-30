@@ -93,8 +93,10 @@ export default {
     { type: 'separator', label: 'Bordi' },
     { key: 'border_width', label: 'Spessore bordo (px)', type: 'range', min: 0, max: 4 },
     { key: 'border_radius', label: 'Arrotondamento (px)', type: 'border-radius' },
+    { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'button_radius', label: 'Arrotondamento pulsante (px)', type: 'border-radius',
       show: s => s.show_button },
+    { key: 'button_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
 
     { type: 'separator', label: 'Effetti' },
     { key: 'input_shadow', label: 'Ombra input', type: 'toggle' },

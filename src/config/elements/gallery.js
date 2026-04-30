@@ -67,6 +67,7 @@ export default {
       { value: 'fill', label: 'Riempi (deforma)' },
     ]},
     { key: 'thumb_radius', label: 'Raggio bordi (px)', type: 'border-radius' },
+    { key: 'thumb_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'mobile_columns', label: 'Colonne mobile', type: 'range', min: 1, max: 4, step: 1 },
 
     { type: 'separator', label: 'Effetti automatici' },

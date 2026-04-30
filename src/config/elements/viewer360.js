@@ -1,3 +1,4 @@
+import { textEffectsFields, textEffectsDefaults } from './_shared';
 import { shadowField } from './_shared.js';
 
 export default {
@@ -34,6 +35,7 @@ export default {
     caption: '',
     caption_position: 'bottom',
     shadow: 'none',
+    ...textEffectsDefaults,
   },
   fields: [
     // ── SORGENTE ──
@@ -79,7 +81,9 @@ export default {
     { type: 'separator', label: 'Layout' },
     { key: 'height', label: 'Altezza (px)', type: 'range', min: 200, max: 800, step: 10 },
     { key: 'border_radius', label: 'Raggio bordi (px)', type: 'border-radius' },
+    { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'caption', label: 'Didascalia', type: 'text' },
     ...shadowField,
+    ...textEffectsFields([ { value: 'caption', label: 'Solo Didascalia' } ]),
   ],
 };

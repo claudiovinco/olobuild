@@ -35,6 +35,7 @@ class Olo_Woo_Notices_Tile extends Olo_Tile_Base {
 
         // Styles
         $radius    = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
+        $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
         $font_size = max( 10, min( 24, absint( $s['font_size'] ) ) );
 
         ob_start();
@@ -49,6 +50,7 @@ class Olo_Woo_Notices_Tile extends Olo_Tile_Base {
                 margin: 0 0 12px 0;
                 list-style: none;
             }
+            <?php if ( $radius_hover_css !== '' ) : ?>.<?php echo $uid; ?> .woocommerce-info{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?> .woocommerce-info:hover{border-radius:<?php echo $radius_hover_css; ?> !important}<?php endif; ?>
             <?php if ( empty( $s['show_success'] ) ) : ?>
             .<?php echo $uid; ?> .woocommerce-message { display: none; }
             <?php endif; ?>

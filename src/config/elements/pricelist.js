@@ -1,3 +1,4 @@
+import { textEffectsFields, textEffectsDefaults } from './_shared';
 import { shadowField } from './_shared.js';
 
 export default {
@@ -34,6 +35,7 @@ export default {
     card_border_color: '',
     hover_lift: true,
     shadow: 'none',
+    ...textEffectsDefaults,
   },
   fields: [
     // ── Items ──
@@ -54,7 +56,8 @@ export default {
     { type: 'separator', label: 'Card' },
     { key: 'card_bg', label: 'Sfondo card', type: 'color' },
     { key: 'card_border_color', label: 'Bordo card', type: 'color' },
-    { key: 'card_border_radius', label: 'Arrotondamento card (px)', type: 'range', min: 0, max: 24, step: 2 },
+    { key: 'card_border_radius', label: 'Arrotondamento card (px)', type: 'border-radius'},
+    { key: 'card_border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'hover_lift', label: 'Effetto hover', type: 'toggle' },
 
     // ── Separatore ──
@@ -75,6 +78,7 @@ export default {
       condition: { field: 'show_image', value: true } },
     { key: 'image_border_radius', label: 'Arrotondamento immagine (px)', type: 'border-radius',
       condition: { field: 'show_image', value: true } },
+    { key: 'image_border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
 
     // ── Layout ──
     { type: 'separator', label: 'Layout' },
@@ -102,8 +106,14 @@ export default {
       { value: 'dashed', label: 'Tratteggiato' },
       { value: 'dotted', label: 'Puntinato' },
     ], condition: { field: 'badge_border_width', operator: '!=', value: '0' } },
-    { key: 'badge_border_radius', label: 'Arrotondamento (px)', type: 'range', min: 0, max: 20, step: 1 },
+    { key: 'badge_border_radius', label: 'Arrotondamento (px)', type: 'border-radius'},
+    { key: 'badge_border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
 
     ...shadowField,
+    ...textEffectsFields([
+      { value: 'title', label: 'Solo Titolo' },
+      { value: 'description', label: 'Solo Descrizione' },
+      { value: 'all', label: 'Tutti gli elementi testuali' },
+    ]),
   ],
 };

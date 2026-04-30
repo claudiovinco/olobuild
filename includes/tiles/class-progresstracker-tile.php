@@ -238,10 +238,10 @@ class Olo_Progresstracker_Tile extends Olo_Tile_Base {
                         <?php endif; ?>
                     </div>
                     <div class="olo-pt-h-label">
-                        <div class="olo-pt-title"><?php echo esc_html( $item['title'] ); ?></div>
+                        <?php list( $ptt_cls, $ptt_data ) = $this->tfx_attrs( $s, "title", $item["title"] ); ?><div class="olo-pt-title<?php echo $ptt_cls; ?>"<?php echo $ptt_data; ?>><?php echo esc_html( $item["title"] ); ?></div>
                         <?php if ( $show_desc ) : ?>
                             <?php if ( ! empty( $item['description'] ) ) : ?>
-                            <div class="olo-pt-desc"><?php echo esc_html( $item['description'] ); ?></div>
+                            <?php list( $ptd_cls, $ptd_data ) = $this->tfx_attrs( $s, "description", $item["description"] ); ?><div class="olo-pt-desc<?php echo $ptd_cls; ?>"<?php echo $ptd_data; ?>><?php echo esc_html( $item["description"] ); ?></div>
                             <?php endif; ?>
                         <?php endif; ?>
                     </div>
@@ -271,10 +271,10 @@ class Olo_Progresstracker_Tile extends Olo_Tile_Base {
                     <?php endif; ?>
                 </div>
                 <div class="olo-pt-v-content">
-                    <div class="olo-pt-title"><?php echo esc_html( $item['title'] ); ?></div>
+                    <?php list( $ptt_cls, $ptt_data ) = $this->tfx_attrs( $s, "title", $item["title"] ); ?><div class="olo-pt-title<?php echo $ptt_cls; ?>"<?php echo $ptt_data; ?>><?php echo esc_html( $item["title"] ); ?></div>
                     <?php if ( $show_desc ) : ?>
                         <?php if ( ! empty( $item['description'] ) ) : ?>
-                        <div class="olo-pt-desc"><?php echo esc_html( $item['description'] ); ?></div>
+                        <?php list( $ptd_cls, $ptd_data ) = $this->tfx_attrs( $s, "description", $item["description"] ); ?><div class="olo-pt-desc<?php echo $ptd_cls; ?>"<?php echo $ptd_data; ?>><?php echo esc_html( $item["description"] ); ?></div>
                         <?php endif; ?>
                     <?php endif; ?>
                 </div>
@@ -283,6 +283,9 @@ class Olo_Progresstracker_Tile extends Olo_Tile_Base {
         <?php endif; ?>
         </div>
         <?php
+        $tfx_css = $this->tfx_css( $s, '.' . $uid );
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        $this->tfx_print_script();
         return ob_get_clean();
     }
 

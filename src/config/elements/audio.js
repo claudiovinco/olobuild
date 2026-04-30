@@ -1,3 +1,4 @@
+import { textEffectsFields, textEffectsDefaults } from './_shared';
 import { shadowField } from './_shared.js';
 
 export default {
@@ -22,6 +23,7 @@ export default {
     artist: '',
     cover_image: '',
     shadow: 'none',
+    ...textEffectsDefaults,
   },
   fields: [
     { key: 'source_type', label: 'Sorgente', type: 'select', options: [
@@ -55,5 +57,6 @@ export default {
     { key: 'cover_image', label: 'Immagine copertina', type: 'image' },
 
     ...shadowField,
+    ...textEffectsFields([ { value: 'title', label: 'Solo Titolo' } ]),
   ],
 };

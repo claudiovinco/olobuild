@@ -1,3 +1,4 @@
+import { textEffectsFields, textEffectsDefaults } from './_shared';
 export default {
   type: 'text-block',
   name: 'Testo',
@@ -13,6 +14,7 @@ export default {
     padding: '16',
     tile_padding: { top: 16, right: 16, bottom: 16, left: 16 },
     tile_margin: { top: 0, right: 0, bottom: 0, left: 0 },
+    ...textEffectsDefaults,
   },
   fields: [
     { key: 'content', label: 'Contenuto', type: 'editor', mode: 'block' },
@@ -37,5 +39,6 @@ export default {
 
     { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 100 },
     { key: 'tile_margin', label: 'Margine (px)', type: 'spacing', min: -50, max: 100 },
+    ...textEffectsFields([ { value: 'content', label: 'Solo Contenuto' } ]),
   ],
 };

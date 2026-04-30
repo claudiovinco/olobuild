@@ -1,3 +1,4 @@
+import { textEffectsFields, textEffectsDefaults } from './_shared';
 export default {
   type: 'paymentbuttons',
   name: 'Pulsanti Pagamento',
@@ -25,6 +26,7 @@ export default {
     // Stripe
     stripe_key: '',
     stripe_price_id: '',
+    ...textEffectsDefaults,
   },
   fields: [
     { key: 'provider', label: 'Provider', type: 'select', options: [
@@ -66,7 +68,9 @@ export default {
     { key: 'bg_color', label: 'Colore sfondo', type: 'color' },
     { key: 'text_color', label: 'Colore testo', type: 'color' },
     { key: 'border_radius', label: 'Raggio bordo', type: 'border-radius' },
+    { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'font_size', label: 'Dim. carattere (px)', type: 'range', min: 12, max: 24, step: 1 },
     { key: 'full_width', label: 'Larghezza piena', type: 'toggle' },
+    ...textEffectsFields([ { value: 'description', label: 'Solo Descrizione' } ]),
   ],
 };

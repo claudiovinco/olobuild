@@ -190,9 +190,11 @@ class Olo_Grid_Tile extends Olo_Tile_Base {
                             if ( ! empty( $s['overlay_text'] ) ) {
                                 $ov_pos = $s['overlay_position'] ?? 'bottom';
                                 echo '<div class="olo-grid-overlay olo-grid-overlay--' . esc_attr( $ov_pos ) . '">';
-                                echo '<h3 class="olo-grid-title">' . esc_html( wp_strip_all_tags( $item['title'] ) ) . '</h3>';
+                                list( $gt_cls, $gt_data ) = $this->tfx_attrs( $s, 'title', wp_strip_all_tags( $item['title'] ) );
+                                list( $gc_cls, $gc_data ) = $this->tfx_attrs( $s, 'content', wp_strip_all_tags( $item['content'] ?? '' ) );
+                                echo '<h3 class="olo-grid-title' . $gt_cls . '"' . $gt_data . '>' . esc_html( wp_strip_all_tags( $item['title'] ) ) . '</h3>';
                                 if ( ! empty( $item['content'] ) ) {
-                                    echo '<p class="olo-grid-text">' . nl2br( esc_html( wp_strip_all_tags( $item['content'] ) ) ) . '</p>';
+                                    echo '<p class="olo-grid-text' . $gc_cls . '"' . $gc_data . '>' . nl2br( esc_html( wp_strip_all_tags( $item['content'] ) ) ) . '</p>';
                                 }
                                 echo '</div>';
                             }
@@ -220,6 +222,9 @@ class Olo_Grid_Tile extends Olo_Tile_Base {
 
         </div>
         <?php
+        $tfx_css = $this->tfx_css( $s, '.' . $uid );
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        $this->tfx_print_script();
         return ob_get_clean();
     }
 
@@ -231,6 +236,7 @@ class Olo_Grid_Tile extends Olo_Tile_Base {
         $css = '';
 
         $radius  = $this->build_border_radius_css( $s["card_radius"] ?? 8 );
+        $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['card_radius_hover'] ?? null );
         $padding = Olo_Tile_Utils::spacing_css( $s['tile_padding'] ?? $s['card_padding'] ?? 16, 16 );
         $card_style   = $s['card_style'] ?? 'default';
         $border_color = $s['card_border_color'] ?? '';
@@ -262,7 +268,10 @@ class Olo_Grid_Tile extends Olo_Tile_Base {
         }
 
         // Card base
-        $css .= $sel . ' .olo-grid-card{position:relative;border-radius:' . $radius . 'px;' . $shadow_css . 'transition:transform 0.35s cubic-bezier(.4,0,.2,1),box-shadow 0.35s ease,border-color 0.3s;}';
+        $css .= $sel . ' .olo-grid-card{position:relative;border-radius:' . $radius . 'px;' . $shadow_css . 'transition:transform 0.35s cubic-bezier(.4,0,.2,1),box-shadow 0.35s ease,border-color 0.3s,border-radius 400ms cubic-bezier(.4,0,.2,1);}';
+        if ( $radius_hover_css !== '' ) {
+            $css .= $sel . ' .olo-grid-card:hover{border-radius:' . $radius_hover_css . ' !important;}';
+        }
 
         // Card styles
         if ( $card_style === 'default' ) {

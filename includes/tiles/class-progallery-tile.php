@@ -136,8 +136,10 @@ class Olo_ProGallery_Tile extends Olo_Tile_Base {
         $cols         = max( 2, min( 6, absint( $s['columns'] ) ) );
         $gap          = max( 0, min( 24, absint( $s['gap'] ) ) );
         $radius       = Olo_Tile_Utils::border_radius( $s['thumb_radius'] ?? 0 );
-        $radius_raw   = is_array( $s["thumb_radius"] ?? 0 ) ? intval( $s["thumb_radius"]["tl"] ?? 0 ) : absint( $s["thumb_radius"] ?? 0 );
+        $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['thumb_radius_hover'] ?? null );
+        $radius_raw   = is_array( $s["thumb_radius"] ?? 0 ) ? intval( $s["thumb_radius"]["tl"] ?? 0 ) : Olo_Tile_Utils::radius_int( $s['thumb_radius'] ?? 0 );
         $radius_css   = $this->build_border_radius_css( $s["thumb_radius"] ?? 0 );
+        $radius_css_hover_css = Olo_Tile_Utils::radius_force_css( $s['thumb_radius_hover'] ?? null );
         $img_height   = esc_attr( $s['img_height'] ?: '250px' );
         $object_fit   = esc_attr( $s['object_fit'] ?: 'cover' );
         $rows         = absint( $s['rows'] );
@@ -321,6 +323,12 @@ class Olo_ProGallery_Tile extends Olo_Tile_Base {
 
         // ─── STYLE ───
         echo '<style>';
+
+        // Hover radius (applies to all layouts — items always have border-radius:$radius)
+        if ( $radius_hover_css !== '' ) {
+            echo ".{$uid} .olo-pg-item{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}";
+            echo ".{$uid} .olo-pg-item:hover{border-radius:{$radius_hover_css} !important}";
+        }
 
         // Base layout
         if ( $layout === 'justified' ) {

@@ -265,7 +265,9 @@ class Olo_LiveSearch_Tile extends Olo_Tile_Base {
         $font_size   = max( 12, min( 24, intval( $s['input_font_size'] ) ) );
         $modal_width = max( 400, min( 800, intval( $s['modal_width'] ?? 560 ) ) );
         $input_radius = Olo_Tile_Utils::border_radius( $s['input_border_radius'] ?? 8 );
+        $input_radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['input_border_radius_hover'] ?? null );
         $results_radius = Olo_Tile_Utils::border_radius( $s['results_border_radius'] ?? 10 );
+        $results_radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['results_border_radius_hover'] ?? null );
 
         // Animated placeholder
         $anim_ph = ! empty( $s['animated_placeholder'] );
@@ -338,6 +340,14 @@ class Olo_LiveSearch_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
+        <?php if ( $input_radius_hover_css !== '' || $results_radius_hover_css !== '' ) : ?>
+        <style>
+            #<?php echo esc_attr( $element_id ); ?> .olo-ls-input{transition:border-radius 400ms cubic-bezier(.4,0,.2,1),border-color 0.2s}
+            #<?php echo esc_attr( $element_id ); ?> .olo-ls-results{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}
+            <?php if ( $input_radius_hover_css !== '' ) : ?>#<?php echo esc_attr( $element_id ); ?> .olo-ls-input:hover{border-radius:<?php echo $input_radius_hover_css; ?> !important}<?php endif; ?>
+            <?php if ( $results_radius_hover_css !== '' ) : ?>#<?php echo esc_attr( $element_id ); ?> .olo-ls-results:hover{border-radius:<?php echo $results_radius_hover_css; ?> !important}<?php endif; ?>
+        </style>
+        <?php endif; ?>
         <div id="<?php echo esc_attr( $element_id ); ?>"
              class="olo-livesearch olo-livesearch--<?php echo esc_attr( $mode ); ?>"
              data-livesearch="<?php echo esc_attr( $config_b64 ); ?>"

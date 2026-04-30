@@ -1,6 +1,6 @@
 <template>
   <div class="olo-tile" :style="tileWrapStyle">
-    <component :is="tileComponent" :settings="tile.settings" :tile-id="tile.id" />
+    <component :is="tileComponent" :settings="tile.settings" :tile-id="tile.id" :tile="tile" />
   </div>
 </template>
 

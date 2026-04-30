@@ -35,6 +35,7 @@ export default {
     { key: 'enable_zoom', label: 'Abilita zoom', type: 'toggle' },
     { key: 'enable_lightbox', label: 'Abilita lightbox', type: 'toggle' },
     { key: 'border_radius', label: 'Raggio bordi (px)', type: 'border-radius' },
+    { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
 
     { type: 'separator', label: 'Miniature' },
     { key: 'show_thumbnails', label: 'Mostra miniature', type: 'toggle' },

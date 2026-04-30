@@ -1,3 +1,4 @@
+import { textEffectsFields, textEffectsDefaults } from './_shared';
 export default {
   type: 'form',
   name: 'Form Contatti',
@@ -131,6 +132,7 @@ export default {
     // Consenso privacy
     privacy_checkbox: false,
     privacy_text: 'Accetto il trattamento dei dati personali secondo la <a href="/privacy-policy">Privacy Policy</a>',
+    ...textEffectsDefaults,
   },
   fields: [
     // ── Campi ──
@@ -291,6 +293,7 @@ export default {
     { key: 'input_border_color', label: 'Colore bordo input', type: 'color' },
     { key: 'input_border_width', label: 'Spessore bordo (px)', type: 'range', min: 0, max: 3 },
     { key: 'input_radius', label: 'Raggio bordo input (px)', type: 'border-radius' },
+    { key: 'input_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'input_size', label: 'Dimensione input', type: 'select', options: [
       { value: 'small', label: 'Piccolo' },
       { value: 'default', label: 'Normale' },
@@ -307,6 +310,7 @@ export default {
     { key: 'submit_color', label: 'Colore testo pulsante', type: 'color' },
     { key: 'submit_hover_bg', label: 'Sfondo pulsante hover', type: 'color' },
     { key: 'submit_radius', label: 'Raggio bordo (px)', type: 'border-radius' },
+    { key: 'submit_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 48 },
     { key: 'submit_font_size', label: 'Dimensione testo (px)', type: 'range', min: 12, max: 22 },
     { key: 'submit_font_weight', label: 'Peso testo', type: 'select', options: [
@@ -412,5 +416,10 @@ export default {
     { key: 'privacy_checkbox', label: 'Checkbox consenso privacy', type: 'toggle' },
     { key: 'privacy_text', label: 'Testo consenso', type: 'text',
       condition: { field: 'privacy_checkbox', op: 'eq', value: true } },
+    ...textEffectsFields([
+      { value: 'label', label: 'Solo Etichetta' },
+      { value: 'name', label: 'Solo Nome' },
+      { value: 'all', label: 'Tutti gli elementi testuali' },
+    ]),
   ],
 };

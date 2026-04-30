@@ -1,3 +1,4 @@
+import { textEffectsFields, textEffectsDefaults } from './_shared';
 import { shadowField } from './_shared.js';
 
 export default {
@@ -37,6 +38,7 @@ export default {
     border_width: '0',
     border_style: 'solid',
     border_color: '',
+    ...textEffectsDefaults,
   },
   fields: [
     { key: 'icon_emoji', label: 'Icona / Emoji', type: 'icon' },
@@ -108,6 +110,7 @@ export default {
     { type: 'separator', label: 'Bordo e spaziatura' },
     { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 60 },
     { key: 'border_radius', label: 'Raggio bordi (px)', type: 'border-radius' },
+    { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'border_width', label: 'Spessore bordo (px)', type: 'range', min: 0, max: 10, step: 1 },
     { key: 'border_style', label: 'Stile bordo', type: 'select', options: [
       { value: 'solid', label: 'Continuo' },
@@ -118,5 +121,10 @@ export default {
     { key: 'border_color', label: 'Colore bordo', type: 'color',
       condition: { field: 'border_width', operator: '>', value: '0' } },
     ...shadowField,
+    ...textEffectsFields([
+      { value: 'title', label: 'Solo Titolo' },
+      { value: 'description', label: 'Solo Descrizione' },
+      { value: 'all', label: 'Tutti gli elementi testuali' },
+    ]),
   ],
 };

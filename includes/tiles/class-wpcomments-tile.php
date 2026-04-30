@@ -71,7 +71,7 @@ class Olo_Wpcomments_Tile extends Olo_Tile_Base {
         $show_title   = ! empty( $s['show_title'] );
         $show_avatar  = ! empty( $s['show_avatar'] );
         $avatar_size  = max( 24, min( 96, absint( $s['avatar_size'] ) ) );
-        $avatar_radius = max( 0, min( 50, absint( $s['avatar_border_radius'] ) ) );
+        $avatar_radius = max( 0, min( 50, Olo_Tile_Utils::radius_int( $s['avatar_border_radius'] ) ) );
         $show_date    = ! empty( $s['show_date'] );
         $show_reply   = ! empty( $s['show_reply_link'] );
         $show_form    = ! empty( $s['show_form'] );

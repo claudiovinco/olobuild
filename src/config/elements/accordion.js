@@ -1,3 +1,4 @@
+import { textEffectsFields, textEffectsDefaults } from './_shared';
 import { shadowField } from './_shared.js';
 
 export default {
@@ -31,6 +32,7 @@ export default {
     faq_schema: false,
     separator_style: 'border',
     shadow: 'none',
+    ...textEffectsDefaults,
   },
   fields: [
     { key: 'panels', label: 'Pannelli', type: 'content-items', supportsDynamic: true,
@@ -76,6 +78,7 @@ export default {
     ]},
     { key: 'media_width', label: 'Larghezza media (%)', type: 'range', min: 20, max: 50, step: 5 },
     { key: 'media_radius', label: 'Raggio bordo (px)', type: 'border-radius' },
+    { key: 'media_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'separator_style', label: 'Separatore', type: 'select', options: [
       { value: 'border', label: 'Bordo' },
       { value: 'shadow', label: 'Ombra' },
@@ -89,7 +92,13 @@ export default {
     { key: 'text_color', label: 'Colore testo', type: 'color' },
     { key: 'gap', label: 'Gap (px)', type: 'range', min: 0, max: 48, step: 4 },
     { key: 'border_radius', label: 'Border Radius', type: 'border-radius' },
+    { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'faq_schema', label: 'Schema FAQ', type: 'toggle' },
     ...shadowField,
+    ...textEffectsFields([
+      { value: 'title', label: 'Solo Titolo' },
+      { value: 'content', label: 'Solo Contenuto' },
+      { value: 'all', label: 'Tutti gli elementi testuali' },
+    ]),
   ],
 };

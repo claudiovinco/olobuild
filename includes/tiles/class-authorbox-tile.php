@@ -73,6 +73,7 @@ class Olo_Authorbox_Tile extends Olo_Tile_Base {
             $bg      = $this->safe_color_css( $s['background_color'] ) ?: 'var(--olo-color-muted, #F3F4F6)';
             $fg      = $this->safe_color_css( $s['name_color'] ) ?: '#F3F4F6';
             $rad     = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
+            $rad_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
             $pad     = absint( $s['padding'] );
             return '<div class="olo-authorbox" style="background:' . $bg . ';color:' . $fg . ';border-radius:' . $rad . ';padding:' . $pad . 'px;text-align:center;font-size:14px;">' . olo_t( 'Autore non disponibile in questo contesto' ) . '</div>';
         }
@@ -130,7 +131,8 @@ class Olo_Authorbox_Tile extends Olo_Tile_Base {
         $gap        = absint( $s['gap'] );
         $padding = Olo_Tile_Utils::spacing_css( $s['tile_padding'] ?? $s['padding'] ?? 20, 20 );
         $radius     = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
-        $av_radius  = max( 0, min( 50, absint( $s['avatar_border_radius'] ) ) );
+        $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
+        $av_radius  = max( 0, min( 50, Olo_Tile_Utils::radius_int( $s['avatar_border_radius'] ) ) );
         $text_align = in_array( $s['text_align'], [ 'left', 'center', 'right' ], true ) ? $s['text_align'] : 'left';
 
         ob_start();
@@ -148,6 +150,7 @@ class Olo_Authorbox_Tile extends Olo_Tile_Base {
                 border: <?php echo $bw; ?>px solid <?php echo $bc; ?>;
                 <?php endif; ?>
             }
+            <?php if ( $radius_hover_css !== '' ) : ?>.<?php echo $uid; ?>{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?>:hover{border-radius:<?php echo $radius_hover_css; ?> !important}<?php endif; ?>
             .<?php echo $uid; ?> .olo-ab-layout {
                 display: flex;
                 gap: <?php echo $gap; ?>px;

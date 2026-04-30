@@ -64,7 +64,8 @@ class Olo_Lightbox_Tile extends Olo_Tile_Base {
 
             // Caption
             if ( $caption && $cap ) {
-                $html .= '<div style="position:absolute;bottom:0;left:0;right:0;padding:6px 10px;background:rgba(0,0,0,0.6);color:#fff;font-size:12px">' . $cap . '</div>';
+                list( $lc_cls, $lc_data ) = $this->tfx_attrs( $settings, 'caption', $cap );
+                $html .= '<div class="olo-lb-cap' . $lc_cls . '" style="position:absolute;bottom:0;left:0;right:0;padding:6px 10px;background:rgba(0,0,0,0.6);color:#fff;font-size:12px"' . $lc_data . '>' . $cap . '</div>';
             }
 
             $html .= '</a>';
@@ -72,6 +73,10 @@ class Olo_Lightbox_Tile extends Olo_Tile_Base {
 
         $html .= '</div>';
         $html .= '<style>.olo-lb-item:hover .olo-lb-overlay{opacity:1!important}</style>';
+
+        $tfx_css = $this->tfx_css( $settings, '.olo-lightbox-grid' );
+        if ( $tfx_css ) $html .= '<style>' . $tfx_css . '</style>';
+        ob_start(); $this->tfx_print_script(); $html .= ob_get_clean();
 
         return $html;
     }

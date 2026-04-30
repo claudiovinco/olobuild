@@ -1163,8 +1163,6 @@ header.olo-site-header.olo-header-overlay + main > .wp-block-group:first-child {
 /* Card elements */
 .olo-postgrid-badge {
   position: absolute;
-  top: 10px;
-  left: 10px;
   padding: 3px 10px;
   font-size: 0.75em;
   font-weight: 600;
@@ -1175,6 +1173,12 @@ header.olo-site-header.olo-header-overlay + main > .wp-block-group:first-child {
   border-radius: 4px;
   z-index: 1;
 }
+/* Position modifier — default top-left for back-compat with templates pre v3.11.64 */
+.olo-postgrid-badge,
+.olo-postgrid-badge--top-left   { top: 10px; left: 10px; }
+.olo-postgrid-badge--top-right  { top: 10px; right: 10px; left: auto; }
+.olo-postgrid-badge--bottom-left  { bottom: 10px; left: 10px; top: auto; }
+.olo-postgrid-badge--bottom-right { bottom: 10px; right: 10px; left: auto; top: auto; }
 .olo-postgrid-meta {
   font-size: 0.82em;
   color: #888;

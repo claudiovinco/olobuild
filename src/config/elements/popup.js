@@ -1,3 +1,4 @@
+import { textEffectsFields, textEffectsDefaults } from './_shared';
 export default {
   type: 'popup',
   name: 'Popup',
@@ -49,6 +50,7 @@ export default {
     display_woo_cart: '',
     display_page_views: '0',
     display_click_count: '0',
+    ...textEffectsDefaults,
   },
   fields: [
     { type: 'separator', label: 'Pulsante' },
@@ -112,6 +114,7 @@ export default {
     { key: 'modal_shadow_inset', label: 'Ombra interna', type: 'toggle',
       condition: { field: 'modal_shadow', op: 'eq', value: 'custom' } },
     { key: 'modal_radius', label: 'Bordo arrotondato', type: 'border-radius' },
+    { key: 'modal_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'modal_border_width', label: 'Spessore bordo', type: 'range', min: 0, max: 10, step: 1 },
     { key: 'modal_border_color', label: 'Colore bordo', type: 'color' },
     { key: 'modal_overlay', label: 'Oscuramento sfondo', type: 'range', min: 0, max: 100, step: 5 },
@@ -171,5 +174,6 @@ export default {
       { value: 'empty', label: 'Solo se vuoto' },
     ]},
     { key: 'display_page_views', label: 'Dopo N pagine visitate (0=ignora)', type: 'range', min: 0, max: 20 },
+    ...textEffectsFields([ { value: 'content', label: 'Solo Contenuto' } ]),
   ],
 };

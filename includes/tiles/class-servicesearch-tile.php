@@ -80,6 +80,7 @@ class Olo_ServiceSearch_Tile extends Olo_Tile_Base {
             ];
 
         $border_radius = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
+        $border_radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
         $filter_bg     = $s['filter_bg'] ?: '#ffffff';
         $filter_border = $s['filter_border'] ?: '#e5e7eb';
         $is_overlap    = ! empty( $s['overlap'] );
@@ -114,8 +115,15 @@ class Olo_ServiceSearch_Tile extends Olo_Tile_Base {
             'resultsUrl' => esc_url( $results_url ),
         ];
 
+        if ( $border_radius_hover_css !== '' ) {
+            $wrap_style .= 'transition:border-radius 400ms cubic-bezier(.4,0,.2,1);';
+        }
+
         ob_start();
         ?>
+        <?php if ( $border_radius_hover_css !== '' ) : ?>
+        <style>#<?php echo esc_attr( $search_id ); ?>:hover{border-radius:<?php echo $border_radius_hover_css; ?> !important}</style>
+        <?php endif; ?>
         <div id="<?php echo esc_attr( $search_id ); ?>"
              class="olo-svsearch olo-svsearch--<?php echo esc_attr( $layout ); ?>"
              style="<?php echo $wrap_style; ?>"

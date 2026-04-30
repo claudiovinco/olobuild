@@ -1,3 +1,4 @@
+import { textEffectsFields, textEffectsDefaults } from './_shared';
 import { shadowField } from './_shared.js';
 
 export default {
@@ -18,10 +19,12 @@ export default {
     height: '300',
     shadow: 'none',
     border_radius: '0',
+    ...textEffectsDefaults,
   },
   fields: [
     { key: 'image_url', label: 'Immagine', type: 'image' },
     { key: 'border_radius', label: 'Border Radius', type: 'border-radius' },
+    { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'title', label: 'Titolo', type: 'text' },
     { key: 'description', label: 'Descrizione', type: 'textarea' },
     { key: 'link_url', label: 'URL link', type: 'text' },
@@ -39,5 +42,10 @@ export default {
     { key: 'overlay_opacity', label: 'Opacità overlay (%)', type: 'range', min: 0, max: 100, step: 5 },
     { key: 'height', label: 'Altezza (px)', type: 'range', min: 10, max: 600, step: 5 },
     ...shadowField,
+    ...textEffectsFields([
+      { value: 'title', label: 'Solo Titolo' },
+      { value: 'description', label: 'Solo Descrizione' },
+      { value: 'all', label: 'Tutti gli elementi testuali' },
+    ]),
   ],
 };

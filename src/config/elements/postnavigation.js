@@ -45,6 +45,7 @@ export default {
       condition: { field: 'show_thumbnail', value: true } },
     { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 40 },
     { key: 'border_radius', label: 'Arrotondamento card (px)', type: 'border-radius' },
+    { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
 
     // ── Colori ──
     { type: 'separator', label: 'Colori' },

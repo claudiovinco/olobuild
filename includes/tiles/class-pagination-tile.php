@@ -59,6 +59,7 @@ class Olo_Pagination_Tile extends Olo_Tile_Base {
         $gap         = max( 0, absint( $s['gap'] ) );
         $font_size   = max( 10, min( 24, absint( $s['font_size'] ) ) );
         $radius      = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
+        $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
         $bw          = max( 0, min( 4, absint( $s['border_width'] ) ) );
 
         // Sanitize padding
@@ -262,6 +263,7 @@ class Olo_Pagination_Tile extends Olo_Tile_Base {
                 transition: background 0.2s ease, color 0.2s ease;
                 box-sizing: border-box;
             }
+            <?php if ( $radius_hover_css !== '' ) : ?>.<?php echo $uid; ?> .olo-pagination-dots{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?> .olo-pagination-dots:hover{border-radius:<?php echo $radius_hover_css; ?> !important}<?php endif; ?>
             .<?php echo $uid; ?> .olo-pagination-link {
                 <?php if ( $text_color ) : ?>color: <?php echo $text_color; ?>;<?php endif; ?>
                 <?php if ( $bg_color ) : ?>background: <?php echo $bg_color; ?>;<?php else : ?>background: transparent;<?php endif; ?>

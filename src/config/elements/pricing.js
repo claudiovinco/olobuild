@@ -166,6 +166,7 @@ export default {
     ]},
     { key: 'cta_width', label: 'Larghezza (%)', type: 'range', min: 30, max: 100, step: 5 },
     { key: 'cta_radius', label: 'Arrotondamento (px)', type: 'border-radius' },
+    { key: 'cta_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'cta_bg_color', label: 'Sfondo', type: 'color' },
     { key: 'cta_text_color', label: 'Colore testo', type: 'color' },
     { key: 'cta_border_width', label: 'Bordo (px)', type: 'range', min: 0, max: 5, step: 1 },
@@ -199,6 +200,7 @@ export default {
       condition: { field: 'is_popular', value: true } },
     { key: 'badge_radius', label: 'Arrotondamento (px)', type: 'border-radius',
       condition: { field: 'is_popular', value: true } },
+    { key: 'badge_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'badge_bg_color', label: 'Sfondo', type: 'color',
       condition: { field: 'is_popular', value: true } },
     { key: 'badge_text_color', label: 'Colore testo', type: 'color',
@@ -278,6 +280,7 @@ export default {
     // ═══════════════════════════════════════
     { type: 'separator', label: 'Aspetto card' },
     { key: 'border_radius', label: 'Arrotondamento (px)', type: 'border-radius' },
+    { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'border_width', label: 'Bordo (px)', type: 'range', min: 0, max: 5, step: 1 },
     { key: 'border_color', label: 'Colore bordo', type: 'color',
       condition: { field: 'border_width', operator: '>', value: '0' } },

@@ -150,6 +150,7 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         $zoom   = absint( $s['zoom'] ) ?: 13;
         $height = absint( $s['height'] ) ?: 400;
         $radius = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 8 );
+        $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
 
         $src = "https://www.openstreetmap.org/export/embed.html?bbox="
              . ( $lng - 0.02 ) . ',' . ( $lat - 0.01 ) . ','
@@ -161,6 +162,9 @@ class Olo_Map_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
+        <?php if ( $radius_hover_css !== '' ) : ?>
+        <style>.<?php echo esc_attr( $uid ); ?>{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo esc_attr( $uid ); ?>:hover{border-radius:<?php echo $radius_hover_css; ?> !important}</style>
+        <?php endif; ?>
         <div class="olo-map olo-map-dynamic <?php echo esc_attr( $uid ); ?>" style="position:relative; border-radius: <?php echo $radius; ?>; overflow: hidden;">
             <iframe
                 src="<?php echo esc_url( $src ); ?>"
@@ -260,6 +264,7 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         $zoom         = absint( $s['zoom'] ) ?: 13;
         $height       = absint( $s['height'] ) ?: 400;
         $radius       = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
+        $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
         $show_marker  = filter_var( $s['marker'], FILTER_VALIDATE_BOOLEAN );
         $scroll_zoom  = filter_var( $s['scroll_wheel_zoom'] ?? false, FILTER_VALIDATE_BOOLEAN );
         $dragging     = filter_var( $s['dragging'] ?? true, FILTER_VALIDATE_BOOLEAN );
@@ -288,6 +293,9 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         ob_start();
         ?>
 
+        <?php if ( $radius_hover_css !== '' ) : ?>
+        <style>#<?php echo esc_attr( $map_id ); ?>{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}#<?php echo esc_attr( $map_id ); ?>:hover{border-radius:<?php echo $radius_hover_css; ?> !important}</style>
+        <?php endif; ?>
         <div class="olo-map-wrap <?php echo esc_attr( $uid ); ?>" style="position:relative;">
         <div id="<?php echo esc_attr( $map_id ); ?>" class="olo-map" style="height:<?php echo $height; ?>px; border-radius:<?php echo $radius; ?>; overflow:hidden;"></div>
         <?php if ( $fs_enabled ) : ?>
@@ -446,7 +454,7 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         $sort_default  = in_array( $s['sort_default'] ?? 'default', [ 'default', 'title_asc', 'title_desc', 'newest', 'distance' ], true ) ? $s['sort_default'] : 'default';
         $per_page      = max( 1, absint( $s['results_per_page'] ?? 10 ) );
         $card_mh       = max( 0, absint( $s['card_max_height'] ?? 0 ) );
-        $card_r        = max( 0, absint( $s['card_border_radius'] ?? 8 ) );
+        $card_r        = max( 0, Olo_Tile_Utils::radius_int( $s['card_border_radius'] ?? 8 ) );
         $show_search   = ! empty( $s['show_location_search'] );
         $show_radius   = ! empty( $s['show_radius'] );
         $radius_d      = max( 1, min( 50, absint( $s['radius_default'] ?? 5 ) ) );
@@ -854,7 +862,7 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         $sort_default  = in_array( $s['sort_default'] ?? 'default', [ 'default', 'title_asc', 'title_desc', 'newest', 'distance' ], true ) ? $s['sort_default'] : 'default';
         $per_page      = max( 1, absint( $s['results_per_page'] ?? 10 ) );
         $card_mh       = max( 0, absint( $s['card_max_height'] ?? 0 ) );
-        $card_r        = max( 0, absint( $s['card_border_radius'] ?? 8 ) );
+        $card_r        = max( 0, Olo_Tile_Utils::radius_int( $s['card_border_radius'] ?? 8 ) );
         $show_search   = ! empty( $s['show_location_search'] );
         $show_radius   = ! empty( $s['show_radius'] );
         $radius_d      = max( 1, min( 50, absint( $s['radius_default'] ?? 5 ) ) );
@@ -902,7 +910,7 @@ class Olo_Map_Tile extends Olo_Tile_Base {
             'popupBtnColor' => $this->safe_hex( $s['svc_popup_btn_color'] ?? '', '#3b82f6' ),
             'popupBg'       => $this->safe_hex( $s['svc_popup_bg'] ?? '', '#ffffff' ),
             'popupColor'    => $this->safe_hex( $s['svc_popup_color'] ?? '', '#333333' ),
-            'popupRadius'   => absint( $s['svc_popup_radius'] ?? 8 ),
+            'popupRadius'   => Olo_Tile_Utils::radius_int( $s['svc_popup_radius'] ?? 8 ),
             'popupLink'     => true,
             'showRadius'    => $show_radius,
             'radiusDefault' => $radius_d,

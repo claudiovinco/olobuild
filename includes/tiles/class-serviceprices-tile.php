@@ -55,13 +55,15 @@ class Olo_ServicePrices_Tile extends Olo_Tile_Base {
         $cols   = absint( $s['columns'] ) ?: 3;
         $gap    = absint( $s['gap'] );
         $radius = $this->build_border_radius_css( $s["card_radius"] );
+        $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['card_radius_hover'] ?? null );
         $uid    = 'olo-sprices-' . wp_rand( 10000, 99999 );
 
         ob_start();
         ?>
         <style>
             .<?php echo $uid; ?> { display:grid; grid-template-columns:repeat(<?php echo $cols; ?>,1fr); gap:<?php echo $gap; ?>px; }
-            .<?php echo $uid; ?> .olo-sp-card { border:2px solid <?php echo $this->safe_color_css( $s['card_border'] ); ?>; border-radius:<?php echo $radius; ?>; padding:<?php echo absint( $s['card_padding'] ); ?>px 16px; text-align:center; transition:border-color 0.2s; }
+            .<?php echo $uid; ?> .olo-sp-card { border:2px solid <?php echo $this->safe_color_css( $s['card_border'] ); ?>; border-radius:<?php echo $radius; ?>; padding:<?php echo absint( $s['card_padding'] ); ?>px 16px; text-align:center; transition:border-color 0.2s,border-radius 400ms cubic-bezier(.4,0,.2,1); }
+            <?php if ( $radius_hover_css !== '' ) : ?>.<?php echo $uid; ?> .olo-sp-card:hover{border-radius:<?php echo $radius_hover_css; ?> !important}<?php endif; ?>
             <?php if ( ! empty( $s['hover_border'] ) ) : ?>
             .<?php echo $uid; ?> .olo-sp-card:hover { border-color:<?php echo $this->safe_color_css( $accent ); ?>; }
             <?php endif; ?>

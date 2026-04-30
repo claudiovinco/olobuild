@@ -8,7 +8,7 @@
         type="number"
         :value="corners.tl"
         @input="onCornerInput('tl', $event.target.value)"
-        min="0" max="200" step="1"
+        min="0" step="1"
         @focus="focused = 'tl'"
         @blur="focused = null"
       />
@@ -17,7 +17,7 @@
         type="number"
         :value="corners.tr"
         @input="onCornerInput('tr', $event.target.value)"
-        min="0" max="200" step="1"
+        min="0" step="1"
         @focus="focused = 'tr'"
         @blur="focused = null"
       />
@@ -26,7 +26,7 @@
         type="number"
         :value="corners.bl"
         @input="onCornerInput('bl', $event.target.value)"
-        min="0" max="200" step="1"
+        min="0" step="1"
         @focus="focused = 'bl'"
         @blur="focused = null"
       />
@@ -35,7 +35,7 @@
         type="number"
         :value="corners.br"
         @input="onCornerInput('br', $event.target.value)"
-        min="0" max="200" step="1"
+        min="0" step="1"
         @focus="focused = 'br'"
         @blur="focused = null"
       />
@@ -97,8 +97,12 @@ watch(() => props.modelValue, (val) => {
   linked.value = !(val && typeof val === 'object');
 }, { immediate: false });
 
+function nonNeg(n) {
+  return Math.max(0, parseInt(n) || 0);
+}
+
 function onCornerInput(corner, val) {
-  const n = Math.max(0, parseInt(val) || 0);
+  const n = nonNeg(val);
   if (linked.value) {
     // All corners change together
     emit('update:modelValue', n);
@@ -112,12 +116,12 @@ function toggleLink() {
     // Unlink
     linked.value = false;
     const c = corners.value;
-    emit('update:modelValue', { tl: c.tl, tr: c.tr, br: c.br, bl: c.bl });
+    emit('update:modelValue', { tl: nonNeg(c.tl), tr: nonNeg(c.tr), br: nonNeg(c.br), bl: nonNeg(c.bl) });
   } else {
-    // Relink — use max
+    // Relink — use max corner
     linked.value = true;
     const c = corners.value;
-    const max = Math.max(c.tl, c.tr, c.br, c.bl);
+    const max = nonNeg(Math.max(c.tl, c.tr, c.br, c.bl));
     emit('update:modelValue', max);
   }
 }
@@ -126,11 +130,13 @@ function toggleLink() {
 <style scoped>
 .olo-br-wrap {
   padding: 4px 0;
+  max-width: 200px;
 }
 
 .olo-br-preview {
   position: relative;
   width: 100%;
+  max-width: 200px;
   aspect-ratio: 16 / 10;
   border: 2.5px solid #60a5fa;
   background: rgba(96, 165, 250, 0.06);

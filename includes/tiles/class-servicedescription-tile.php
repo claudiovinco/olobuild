@@ -47,6 +47,7 @@ class Olo_ServiceDescription_Tile extends Olo_Tile_Base {
         $text_size  = max( 12, min( 22, absint( $s['text_size'] ) ) );
         $title_size = max( 14, min( 32, absint( $s['title_size'] ) ) );
         $radius     = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
+        $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
         $padding    = absint( $s['padding'] );
         $line_h     = floatval( $s['line_height'] ) ?: 1.7;
         $align      = in_array( $s['text_align'], [ 'left', 'center', 'right', 'justify' ] ) ? $s['text_align'] : 'left';
@@ -68,11 +69,14 @@ class Olo_ServiceDescription_Tile extends Olo_Tile_Base {
 
         $uid = 'olo-sdesc-' . wp_rand( 10000, 99999 );
 
+        if ( $radius_hover_css !== '' ) $wrap[] = 'transition:border-radius 400ms cubic-bezier(.4,0,.2,1)';
+
         ob_start();
         ?>
         <style>
             .<?php echo $uid; ?> p { margin:0 0 1em; }
             .<?php echo $uid; ?> p:last-child { margin-bottom:0; }
+            <?php if ( $radius_hover_css !== '' ) : ?>.<?php echo $uid; ?>:hover{border-radius:<?php echo $radius_hover_css; ?> !important}<?php endif; ?>
         </style>
         <div class="<?php echo esc_attr( $uid ); ?>" style="<?php echo implode( ';', $wrap ); ?>">
             <?php if ( ! empty( $s['show_title'] ) && ! empty( $s['title_text'] ) ) : ?>

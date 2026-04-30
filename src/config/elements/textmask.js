@@ -1,3 +1,4 @@
+import { textEffectsFields, textEffectsDefaults } from './_shared';
 import { shadowField } from './_shared.js';
 
 export default {
@@ -54,6 +55,7 @@ export default {
     overlay_opacity: '0',
 
     shadow: 'none',
+    ...textEffectsDefaults,
   },
   fields: [
     // ── Testo ──
@@ -168,5 +170,6 @@ export default {
     { key: 'overlay_opacity', label: 'Opacità overlay (%)', type: 'range', min: 0, max: 100, step: 5 },
 
     ...shadowField,
+    ...textEffectsFields([ { value: 'text', label: 'Solo Testo' } ]),
   ],
 };

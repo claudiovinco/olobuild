@@ -1,3 +1,4 @@
+import { textEffectsFields, textEffectsDefaults } from './_shared';
 import { shadowField } from './_shared.js';
 
 export default {
@@ -21,6 +22,7 @@ export default {
     popup_hover_effect: 'none',
     popup_hover_color: '',
     shadow: 'none',
+    ...textEffectsDefaults,
   },
   fields: [
     { key: 'image', label: 'Immagine', type: 'image' },
@@ -44,6 +46,7 @@ export default {
     { key: 'popup_bg', label: 'Sfondo popup', type: 'color' },
     { key: 'popup_color', label: 'Colore testo popup', type: 'color' },
     { key: 'popup_radius', label: 'Arrotondamento popup (px)', type: 'border-radius' },
+    { key: 'popup_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
 
     { type: 'separator', label: 'Immagine popup' },
 
@@ -60,5 +63,10 @@ export default {
     { key: 'popup_hover_color', label: 'Colore overlay hover', type: 'color',
       condition: { field: 'popup_hover_effect', value: 'color-overlay' } },
     ...shadowField,
+    ...textEffectsFields([
+      { value: 'title', label: 'Solo Titolo' },
+      { value: 'content', label: 'Solo Contenuto' },
+      { value: 'all', label: 'Tutti gli elementi testuali' },
+    ]),
   ],
 };

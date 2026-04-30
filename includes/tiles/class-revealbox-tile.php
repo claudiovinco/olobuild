@@ -79,7 +79,7 @@ class Olo_Revealbox_Tile extends Olo_Tile_Base {
             'linear'                      => 'linear',
         ];
         $easing    = $easing_map[ $s['transition_easing'] ] ?? 'ease';
-        $radius    = intval( $s['border_radius'] );
+        $radius    = Olo_Tile_Utils::radius_int( $s['border_radius'] );
         $persp     = intval( $s['perspective'] ) ?: 800;
 
         $top_ov_op    = intval( $s['overlay_opacity'] );

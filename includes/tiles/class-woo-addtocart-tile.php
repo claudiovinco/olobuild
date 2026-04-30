@@ -58,6 +58,7 @@ class Olo_Woo_Addtocart_Tile extends Olo_Tile_Base {
         $hover_bg   = $this->safe_color_css( $s['hover_bg'] );
         $hover_text = $this->safe_color_css( $s['hover_text'] );
         $radius     = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
+        $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
 
         // Size
         $size_map = [
@@ -119,6 +120,7 @@ class Olo_Woo_Addtocart_Tile extends Olo_Tile_Base {
                 padding: <?php echo round( $sz['py'] / 2 ); ?>px 4px;
                 <?php endif; ?>
             }
+            <?php if ( $radius_hover_css !== '' ) : ?>.<?php echo $uid; ?> .olo-atc-btn{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?> .olo-atc-btn:hover{border-radius:<?php echo $radius_hover_css; ?> !important}<?php endif; ?>
             .<?php echo $uid; ?> .olo-atc-btn:hover {
                 <?php if ( $btn_style === 'filled' ) : ?>
                 background: <?php echo $hover_bg; ?>;

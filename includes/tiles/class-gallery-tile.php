@@ -71,6 +71,7 @@ class Olo_Gallery_Tile extends Olo_Tile_Base {
         $rows     = absint( $s['rows'] );
         $gap      = absint( $s['gap'] );
         $radius   = Olo_Tile_Utils::border_radius( $s['thumb_radius'] ?? 0 );
+        $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['thumb_radius_hover'] ?? null );
         $uid      = 'olo-gal-' . wp_rand( 10000, 99999 );
         $mob_cols = max( 1, min( 4, absint( $s['mobile_columns'] ) ) );
 
@@ -110,6 +111,7 @@ class Olo_Gallery_Tile extends Olo_Tile_Base {
                 break-inside: avoid;
                 margin-bottom: <?php echo $gap; ?>px;
             }
+            <?php if ( $radius_hover_css !== '' ) : ?>.<?php echo $uid; ?> .olo-gal-item{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?> .olo-gal-item:hover{border-radius:<?php echo $radius_hover_css; ?> !important}<?php endif; ?>
             .<?php echo $uid; ?> .olo-gal-item img {
                 width: 100%;
                 height: auto;

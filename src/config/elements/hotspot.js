@@ -1,3 +1,4 @@
+import { textEffectsFields, textEffectsDefaults } from './_shared';
 export default {
   type: 'hotspot',
   name: 'Hotspot',
@@ -17,10 +18,12 @@ export default {
     tooltip_bg: '',
     tooltip_color: '',
     tooltip_width: '220',
+    ...textEffectsDefaults,
   },
   fields: [
     { key: 'image', label: 'Immagine', type: 'image' },
     { key: 'border_radius', label: 'Border Radius immagine', type: 'border-radius' },
+    { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'image_height', label: 'Altezza immagine (px)', type: 'range', min: 200, max: 800, step: 10 },
     { key: 'markers', label: 'Marker', type: 'content-items',
       itemFields: [
@@ -47,5 +50,10 @@ export default {
     { key: 'tooltip_bg', label: 'Sfondo tooltip', type: 'color' },
     { key: 'tooltip_color', label: 'Colore testo tooltip', type: 'color' },
     { key: 'tooltip_width', label: 'Larghezza tooltip (px)', type: 'range', min: 150, max: 350, step: 10 },
+    ...textEffectsFields([
+      { value: 'title', label: 'Solo Titolo' },
+      { value: 'description', label: 'Solo Descrizione' },
+      { value: 'all', label: 'Tutti gli elementi testuali' },
+    ]),
   ],
 };

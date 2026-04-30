@@ -1,3 +1,4 @@
+import { textEffectsFields, textEffectsDefaults } from './_shared';
 import { shadowField } from './_shared.js';
 
 export default {
@@ -78,6 +79,7 @@ export default {
     // Avanzato
     full_bleed: false,
     shadow: 'none',
+    ...textEffectsDefaults,
   },
   fields: [
     // ── Contenuto ──
@@ -233,6 +235,7 @@ export default {
     { key: 'cta_bg_color', label: 'Colore sfondo CTA', type: 'color' },
     { key: 'cta_text_color', label: 'Colore testo CTA', type: 'color' },
     { key: 'cta_radius', label: 'Raggio bordo CTA (px)', type: 'border-radius' },
+    { key: 'cta_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
 
     // ── CTA Secondario ──
     { type: 'separator', label: 'CTA Secondario' },
@@ -254,5 +257,10 @@ export default {
     { type: 'separator', label: 'Avanzato' },
     { key: 'full_bleed', label: 'Full width (100vw)', type: 'toggle' },
     ...shadowField,
+    ...textEffectsFields([
+      { value: 'title', label: 'Solo Titolo' },
+      { value: 'subtitle', label: 'Solo Sottotitolo' },
+      { value: 'all', label: 'Tutti gli elementi testuali' },
+    ]),
   ],
 };

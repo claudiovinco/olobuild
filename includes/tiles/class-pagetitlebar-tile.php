@@ -97,7 +97,8 @@ class Olo_Pagetitlebar_Tile extends Olo_Tile_Base {
                 </<?php echo $tag; ?>>
 
                 <?php if ( ! empty( $s['subtitle'] ) ) : ?>
-                <p style="color:<?php echo $sub_c; ?>;font-size:<?php echo $sub_size; ?>px;margin:10px 0 0;opacity:.85">
+                <?php list( $pts_cls, $pts_data ) = $this->tfx_attrs( $s, 'subtitle', $s['subtitle'] ); ?>
+                <p class="olo-ptb-sub<?php echo $pts_cls; ?>" style="color:<?php echo $sub_c; ?>;font-size:<?php echo $sub_size; ?>px;margin:10px 0 0;opacity:.85"<?php echo $pts_data; ?>>
                     <?php echo esc_html( $s['subtitle'] ); ?>
                 </p>
                 <?php endif; ?>
@@ -110,6 +111,9 @@ class Olo_Pagetitlebar_Tile extends Olo_Tile_Base {
             </div>
         </div>
         <?php
+        $tfx_css = $this->tfx_css( $s, '.' . $uid );
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        $this->tfx_print_script();
         return ob_get_clean();
     }
 

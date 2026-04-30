@@ -177,6 +177,7 @@ class Olo_Popup_Tile extends Olo_Tile_Base {
 
         // Border radius
         $radius = Olo_Tile_Utils::border_radius( $s['modal_radius'] ?? 12 );
+        $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['modal_radius_hover'] ?? null );
 
         // Border
         $border_w = max( 0, intval( $s['modal_border_width'] ?? 0 ) );
@@ -211,6 +212,7 @@ class Olo_Popup_Tile extends Olo_Tile_Base {
                 <?php if ( $shadow !== 'none' ) : ?>box-shadow: <?php echo $shadow; ?>;<?php endif; ?>
                 <?php if ( $border_w > 0 ) : ?>border: <?php echo $border_w; ?>px solid <?php echo $border_c; ?>;<?php endif; ?>
             }
+            <?php if ( $radius_hover_css !== '' ) : ?>#<?php echo esc_attr( $uid ); ?> .uk-modal-dialog{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}#<?php echo esc_attr( $uid ); ?> .uk-modal-dialog:hover{border-radius:<?php echo $radius_hover_css; ?> !important}<?php endif; ?>
             /* Animation keyframes */
             <?php if ( $popup_animation === 'slide-up' ) : ?>
             #<?php echo esc_attr( $uid ); ?> .uk-modal-dialog { animation: oloPopSlideUp 0.3s ease-out; }
@@ -480,6 +482,9 @@ class Olo_Popup_Tile extends Olo_Tile_Base {
         })();
         </script>
         <?php
+        $tfx_css = $this->tfx_css( $s, '.olo-popup-' . $uid );
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        $this->tfx_print_script();
 
         return ob_get_clean();
     }
@@ -514,7 +519,8 @@ class Olo_Popup_Tile extends Olo_Tile_Base {
         // Content HTML
         $content_html = '';
         if ( ! empty( $content ) ) {
-            $content_html = '<div class="olo-popup-content">' . nl2br( esc_html( wp_strip_all_tags( $content ) ) ) . '</div>';
+            list( $pc_cls, $pc_data ) = $this->tfx_attrs( $s, 'content', wp_strip_all_tags( $content ) );
+            $content_html = '<div class="olo-popup-content' . $pc_cls . '"' . $pc_data . '>' . nl2br( esc_html( wp_strip_all_tags( $content ) ) ) . '</div>';
         }
 
         if ( ! $has_image ) {

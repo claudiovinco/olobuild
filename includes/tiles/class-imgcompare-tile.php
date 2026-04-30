@@ -48,6 +48,7 @@ class Olo_ImgCompare_Tile extends Olo_Tile_Base {
         $start       = max( 0, min( 100, intval( $s['start_position'] ) ) );
         $height      = intval( $s['height'] ) ?: 400;
         $radius      = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
+        $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
         $fit         = in_array( $s['object_fit'], [ 'cover', 'contain' ] ) ? $s['object_fit'] : 'cover';
         $handle_c    = $this->safe_color_css( $s['handle_color'] ) ?: '#FFFFFF';
         $handle_sz   = intval( $s['handle_size'] ) ?: 40;
@@ -88,6 +89,7 @@ class Olo_ImgCompare_Tile extends Olo_Tile_Base {
                 -webkit-user-select: none;
                 touch-action: none;
             }
+            <?php if ( $radius_hover_css !== '' ) : ?>.<?php echo $uid; ?>{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?>:hover{border-radius:<?php echo $radius_hover_css; ?> !important}<?php endif; ?>
 
             .<?php echo $uid; ?> img {
                 display: block;

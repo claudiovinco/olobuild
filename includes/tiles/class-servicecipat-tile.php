@@ -54,6 +54,7 @@ class Olo_ServiceCipat_Tile extends Olo_Tile_Base {
         $uid       = 'olo-scipat-' . wp_rand( 10000, 99999 );
         $font_size = max( 10, min( 24, absint( $s['font_size'] ) ) );
         $radius    = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
+        $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
         $padding   = absint( $s['padding'] );
         $is_block  = ( $s['layout'] === 'block' );
 
@@ -73,9 +74,13 @@ class Olo_ServiceCipat_Tile extends Olo_Tile_Base {
         if ( $s['border_color'] ) $wrap_styles[] = 'border:1px solid ' . $this->safe_color_css( $s['border_color'] );
         if ( $radius && $radius !== '0px' ) $wrap_styles[] = 'border-radius:' . $radius;
         if ( $padding )           $wrap_styles[] = 'padding:' . $padding . 'px';
+        if ( $radius_hover_css !== '' ) $wrap_styles[] = 'transition:border-radius 400ms cubic-bezier(.4,0,.2,1)';
 
         ob_start();
         ?>
+        <?php if ( $radius_hover_css !== '' ) : ?>
+        <style>.<?php echo esc_attr( $uid ); ?>:hover{border-radius:<?php echo $radius_hover_css; ?> !important}</style>
+        <?php endif; ?>
         <div class="<?php echo esc_attr( $uid ); ?>" style="display:flex;<?php echo $is_block ? 'flex-direction:column;align-items:' . $justify : 'align-items:center;justify-content:' . $justify; ?>;gap:<?php echo $is_block ? '4' : '8'; ?>px;<?php echo implode( ';', $wrap_styles ); ?>">
             <?php if ( ! empty( $s['show_icon'] ) ) : ?>
                 <span style="display:flex;align-items:center;flex-shrink:0"><?php echo $icon_svg; ?></span>

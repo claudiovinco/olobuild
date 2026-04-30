@@ -196,8 +196,9 @@ class Olo_Videoplaylist_Tile extends Olo_Tile_Base {
                             <span class="olo-vp-num"><?php echo $idx + 1; ?></span>
                         <?php endif; ?>
                     </div>
+                    <?php list( $vpt_cls, $vpt_data ) = $this->tfx_attrs( $s, 'title', $v_title ); ?>
                     <div class="olo-vp-info">
-                        <div class="olo-vp-title"><?php echo $v_title; ?></div>
+                        <div class="olo-vp-title<?php echo $vpt_cls; ?>"<?php echo $vpt_data; ?>><?php echo $v_title; ?></div>
                         <?php if ( $show_duration ) : ?>
                             <?php if ( $v_dur ) : ?>
                                 <div class="olo-vp-duration"><?php echo $v_dur; ?></div>
@@ -287,6 +288,9 @@ class Olo_Videoplaylist_Tile extends Olo_Tile_Base {
         })();
         </script>
         <?php
+        $tfx_css = $this->tfx_css( $s, '.' . $uid );
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        $this->tfx_print_script();
         return ob_get_clean();
     }
 

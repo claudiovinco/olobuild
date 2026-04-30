@@ -1,3 +1,4 @@
+import { textEffectsFields, textEffectsDefaults } from './_shared';
 import { shadowField } from './_shared.js';
 
 export default {
@@ -42,6 +43,7 @@ export default {
     shadow: 'none',
     border_radius: '0',
     card_radius: '0',
+    ...textEffectsDefaults,
   },
   fields: [
     { key: 'style', label: 'Stile', type: 'select', options: [
@@ -103,6 +105,7 @@ export default {
       condition: { field: 'media_type', op: 'neq', value: 'none' } },
     { key: 'border_radius', label: 'Border radius media', type: 'border-radius',
       condition: { field: 'media_type', op: 'neq', value: 'none' } },
+    { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
 
     { type: 'separator', label: 'Contenuto' },
     { key: 'title', label: 'Titolo', type: 'text' },
@@ -154,7 +157,13 @@ export default {
 
     { type: 'separator', label: 'Stile card' },
     { key: 'card_padding', label: 'Padding interno', type: 'spacing', max: 60 },
-    { key: 'card_radius', label: 'Border radius card (px)', type: 'range', min: 0, max: 32, step: 1 },
+    { key: 'card_radius', label: 'Border radius card (px)', type: 'border-radius'},
+    { key: 'card_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     ...shadowField,
+    ...textEffectsFields([
+      { value: 'title', label: 'Solo Titolo' },
+      { value: 'content', label: 'Solo Contenuto' },
+      { value: 'all', label: 'Tutti gli elementi testuali' },
+    ]),
   ],
 };

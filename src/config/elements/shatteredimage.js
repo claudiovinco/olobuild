@@ -150,6 +150,7 @@ export default {
     // --- Avanzato ---
     { type: 'separator', label: 'Avanzato' },
     { key: 'border_radius_outer', label: 'Border radius', type: 'border-radius' },
+    { key: 'border_radius_outer_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     ...shadowField,
   ],
 };

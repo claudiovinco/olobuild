@@ -318,8 +318,70 @@ export const customCssDefault = {
 // ─── Image Border Radius field (shared) ───
 export const imageRadiusField = [
   { key: 'border_radius', label: 'Border Radius', type: 'border-radius' },
+  { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
 ];
 export const imageRadiusDefault = { border_radius: '0' };
+
+// ─── Text effects shared fields ───
+// Returns the canonical "Effetti testo" inspector group, parametrized by available targets.
+// Each tile decides which semantic targets it has (heading/text/subtitle/…); pass them via
+// `targetOptions` (e.g. [{value:'heading',label:'Solo titolo'}, {value:'text',label:'Solo testo'}, {value:'both',label:'Titolo e testo'}]).
+export const textEffectsFields = (targetOptions = [
+  { value: 'heading', label: 'Solo titolo' },
+  { value: 'text', label: 'Solo testo' },
+  { value: 'both', label: 'Titolo e testo' },
+]) => [
+  { type: 'separator', label: 'Effetti testo' },
+  { key: 'text_effect', label: 'Effetto', type: 'select', options: [
+    { value: 'none', label: 'Nessuno' },
+    { value: 'typewriter', label: 'Macchina da scrivere' },
+    { value: 'typewriter-loop', label: 'Macchina da scrivere — loop frasi' },
+    { value: 'reveal-letter', label: 'Reveal lettera per lettera' },
+    { value: 'reveal-word', label: 'Reveal parola per parola' },
+    { value: 'gradient-anim', label: 'Gradient animato' },
+    { value: 'glitch', label: 'Glitch RGB' },
+    { value: 'wave', label: 'Wave (lettere ondulanti)' },
+    { value: 'underline-grow', label: 'Underline grow' },
+    { value: 'highlight-grow', label: 'Highlight grow' },
+    { value: 'scramble', label: 'Split scramble' },
+  ]},
+  { key: 'text_effect_target', label: 'Applica a', type: 'select', options: targetOptions,
+    condition: { field: 'text_effect', op: 'neq', value: 'none' } },
+  { key: 'text_effect_speed', label: 'Velocità (ms per char/parola)', type: 'range', min: 10, max: 300, step: 5,
+    condition: { field: 'text_effect', op: 'neq', value: 'none' } },
+  { key: 'text_effect_delay', label: 'Ritardo iniziale (ms)', type: 'range', min: 0, max: 3000, step: 100,
+    condition: { field: 'text_effect', op: 'neq', value: 'none' } },
+  { key: 'text_effect_cursor', label: 'Mostra cursore lampeggiante', type: 'toggle',
+    condition: { field: 'text_effect', op: 'eq', value: 'typewriter' } },
+  { key: 'text_effect_cursor_char', label: 'Carattere cursore', type: 'text',
+    condition: { field: 'text_effect_cursor', op: 'eq', value: true } },
+  { key: 'text_effect_phrases', label: 'Frasi (una per riga)', type: 'textarea',
+    description: 'Verranno mostrate in loop con effetto typewriter',
+    condition: { field: 'text_effect', op: 'eq', value: 'typewriter-loop' } },
+  { key: 'text_effect_pause', label: 'Pausa tra frasi (ms)', type: 'range', min: 500, max: 5000, step: 100,
+    condition: { field: 'text_effect', op: 'eq', value: 'typewriter-loop' } },
+  { key: 'text_effect_color', label: 'Colore primario', type: 'color',
+    description: 'Per gradient/highlight/underline',
+    condition: { field: 'text_effect', value: ['gradient-anim', 'highlight-grow', 'underline-grow'] } },
+  { key: 'text_effect_color_to', label: 'Colore secondario (gradient)', type: 'color',
+    condition: { field: 'text_effect', op: 'eq', value: 'gradient-anim' } },
+  { key: 'text_effect_loop', label: 'Riproduci in loop', type: 'toggle',
+    condition: { field: 'text_effect', value: ['typewriter', 'reveal-letter', 'reveal-word', 'wave', 'glitch', 'scramble'] } },
+];
+
+export const textEffectsDefaults = {
+  text_effect: 'none',
+  text_effect_target: 'heading',
+  text_effect_speed: '50',
+  text_effect_delay: '0',
+  text_effect_loop: false,
+  text_effect_cursor: true,
+  text_effect_cursor_char: '|',
+  text_effect_color: '',
+  text_effect_color_to: '',
+  text_effect_phrases: '',
+  text_effect_pause: '1500',
+};
 
 // ═══════════════════════════════════════════════════════════════════
 //  NEW SHARED PRESETS

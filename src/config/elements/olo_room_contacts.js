@@ -1,3 +1,4 @@
+import { textEffectsFields, textEffectsDefaults } from './_shared';
 export default {
   type: 'olo_room_contacts',
   name: 'Sala - Contatti',
@@ -6,6 +7,7 @@ export default {
   defaults: {
     style: 'card',
     title: 'Contatti',
+    ...textEffectsDefaults,
   },
   fields: [
     { type: 'separator', label: 'Contenuto' },
@@ -16,5 +18,6 @@ export default {
       { value: 'card', label: 'Card con sfondo' },
       { value: 'flat', label: 'Piatto (senza sfondo)' },
     ]},
+    ...textEffectsFields([ { value: 'title', label: 'Solo Titolo' } ]),
   ],
 };

@@ -146,10 +146,14 @@ class Olo_OverlayGrid_Tile extends Olo_Tile_Base {
                             <?php if ( ! empty( $item['ribbon'] ) ) : ?>
                                 <span class="mos-og-ribbon mos-og-ribbon--<?php echo $ribbon_position; ?>"><?php echo esc_html( $item['ribbon'] ); ?></span>
                             <?php endif; ?>
+                            <?php
+                            list( $ogt_cls, $ogt_data ) = $this->tfx_attrs( $s, 'title', $item['title'] ?? '' );
+                            list( $ogs_cls, $ogs_data ) = $this->tfx_attrs( $s, 'subtitle', $item['subtitle'] ?? '' );
+                            ?>
                             <div class="uk-<?php echo esc_attr( $style ); ?> uk-position-<?php echo $position; ?> uk-panel<?php echo $text_class . $pad_class . $overlay_class; ?>">
-                                <<?php echo $title_tag; ?> class="uk-margin-remove"><?php echo esc_html( $item['title'] ?? '' ); ?></<?php echo $title_tag; ?>>
+                                <<?php echo $title_tag; ?> class="uk-margin-remove<?php echo $ogt_cls; ?>"<?php echo $ogt_data; ?>><?php echo esc_html( $item['title'] ?? '' ); ?></<?php echo $title_tag; ?>>
                                 <?php if ( ! empty( $item['subtitle'] ) ) : ?>
-                                    <p class="uk-margin-small-top"><?php echo esc_html( $item['subtitle'] ); ?></p>
+                                    <p class="uk-margin-small-top<?php echo $ogs_cls; ?>"<?php echo $ogs_data; ?>><?php echo esc_html( $item['subtitle'] ); ?></p>
                                 <?php endif; ?>
                             </div>
                         </<?php echo $wrapper_tag; ?>>
@@ -158,6 +162,9 @@ class Olo_OverlayGrid_Tile extends Olo_Tile_Base {
             </div>
         </div>
         <?php
+        $tfx_css = $this->tfx_css( $s, '.' . $uid );
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        $this->tfx_print_script();
         return ob_get_clean();
     }
 }

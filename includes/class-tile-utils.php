@@ -125,6 +125,82 @@ class Olo_Tile_Utils {
     }
 
     /**
+     * Coerce a border-radius value (int OR { tl, tr, br, bl } array) to a single int.
+     * Used by legacy callers that expect a scalar radius. For 4-corner objects
+     * returns the max corner so symmetric usages keep their visual weight.
+     *
+     * @param mixed $value Raw radius input.
+     * @return int Numeric radius in px.
+     */
+    public static function radius_int( $value ) {
+        if ( is_array( $value ) ) {
+            return max(
+                absint( $value['tl'] ?? 0 ),
+                absint( $value['tr'] ?? 0 ),
+                absint( $value['br'] ?? 0 ),
+                absint( $value['bl'] ?? 0 )
+            );
+        }
+        return absint( $value );
+    }
+
+    /**
+     * Tell whether a hover-radius value is "set" — i.e. the user has touched it.
+     * 4-corner arrays count as set even if all corners are 0 (so the user can
+     * animate to "square" via hover).
+     *
+     * @param mixed $value Raw hover input.
+     * @return bool
+     */
+    public static function has_radius_hover( $value ) {
+        return is_array( $value ) || ( is_string( $value ) && $value !== '' ) || ( is_int( $value ) && $value > 0 );
+    }
+
+    /**
+     * Build a border-radius CSS value, NEVER short-circuiting on all-zeros.
+     * Required for hover animations where the target is `0 0 0 0` and we need the
+     * declaration to actually be emitted so the transition starts from the base.
+     *
+     * @param mixed $value Single px or array { tl, tr, br, bl }.
+     * @return string CSS value (e.g. "0px 0px 0px 0px") or empty string if input is null/''.
+     */
+    public static function radius_force_css( $value ) {
+        if ( ! self::has_radius_hover( $value ) ) return '';
+        if ( is_array( $value ) ) {
+            $tl = absint( $value['tl'] ?? 0 );
+            $tr = absint( $value['tr'] ?? 0 );
+            $br = absint( $value['br'] ?? 0 );
+            $bl = absint( $value['bl'] ?? 0 );
+            return "{$tl}px {$tr}px {$br}px {$bl}px";
+        }
+        return absint( $value ) . 'px';
+    }
+
+    /**
+     * Build the hover CSS block for a border-radius transition.
+     *
+     * Emits two declarations:
+     *   1. transition on the base selector (so going INTO hover animates)
+     *   2. :hover override of border-radius
+     *
+     * Caller is responsible for emitting the base `border-radius: …` rule on $selector.
+     * If $hover is empty / unset, returns ''.
+     *
+     * @param string $selector Full CSS selector (e.g. ".olo-uid .olo-btn").
+     * @param mixed  $hover    Raw hover value.
+     * @param int    $duration Transition duration in ms.
+     * @return string CSS string (possibly empty).
+     */
+    public static function radius_hover_css_block( $selector, $hover, $duration = 400 ) {
+        if ( ! self::has_radius_hover( $hover ) ) return '';
+        $hover_css = self::radius_force_css( $hover );
+        $duration  = max( 0, absint( $duration ) );
+        $sel       = trim( $selector );
+        return "{$sel}{transition:border-radius {$duration}ms cubic-bezier(.4,0,.2,1)}"
+             . "{$sel}:hover{border-radius:{$hover_css} !important}";
+    }
+
+    /**
      * Sanitize a hex color. Returns empty string if invalid.
      *
      * @param string $color Raw color input.

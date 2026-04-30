@@ -101,6 +101,7 @@ export default {
       { value: 'xl', label: 'Extra grande' },
     ]},
     { key: 'modal_radius', label: 'Bordo arrotondato', type: 'border-radius' },
+    { key: 'modal_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'modal_border_width', label: 'Spessore bordo', type: 'range', min: 0, max: 10, step: 1 },
     { key: 'modal_border_color', label: 'Colore bordo', type: 'color' },
     { key: 'modal_overlay', label: 'Oscuramento sfondo', type: 'range', min: 0, max: 100, step: 5 },
@@ -153,5 +154,6 @@ export default {
     { type: 'separator', label: 'Contenitore' },
     { key: 'tile_padding', type: 'spacing', label: 'Spaziatura interna' },
     { key: 'border_radius', type: 'border-radius', label: 'Raggio bordo' },
+    { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
   ],
 };

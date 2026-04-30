@@ -71,6 +71,7 @@ export default {
     { key: 'accent_color', label: 'Colore accento', type: 'color' },
     { key: 'card_bg', label: 'Sfondo card', type: 'color' },
     { key: 'card_radius', label: 'Border radius (px)', type: 'border-radius' },
+    { key: 'card_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
 
     // ── Modale ──
     { type: 'separator', label: 'Modale',

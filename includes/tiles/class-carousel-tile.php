@@ -52,6 +52,7 @@ class Olo_Carousel_Tile extends Olo_Tile_Base {
         $mob_show   = max( 1, min( 3, absint( $s['mobile_slides'] ) ) );
         $gap        = absint( $s['gap'] );
         $radius     = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
+        $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
         $autoplay   = filter_var( $s['autoplay'], FILTER_VALIDATE_BOOLEAN );
         $speed      = max( 1000, absint( $s['autoplay_speed'] ) );
         $loop       = filter_var( $s['loop'], FILTER_VALIDATE_BOOLEAN );
@@ -97,6 +98,7 @@ class Olo_Carousel_Tile extends Olo_Tile_Base {
                 border-radius: <?php echo $radius; ?>;
                 overflow: hidden;
             }
+            <?php if ( $radius_hover_css !== '' ) : ?>.<?php echo $uid; ?> .olo-car-slide{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?> .olo-car-slide:hover{border-radius:<?php echo $radius_hover_css; ?> !important}<?php endif; ?>
             .<?php echo $uid; ?> .olo-car-slide img {
                 width: 100%;
                 display: block;
@@ -192,7 +194,8 @@ class Olo_Carousel_Tile extends Olo_Tile_Base {
                     <img src="<?php echo esc_url( $url ); ?>" alt="<?php echo esc_attr( $alt ); ?>" loading="lazy" />
                     <?php endif; ?>
                     <?php if ( $captions && $caption ) : ?>
-                    <div class="olo-car-caption"><?php echo esc_html( $caption ); ?></div>
+                    <?php list( $cc_cls, $cc_data ) = $this->tfx_attrs( $s, 'caption', $caption ); ?>
+                    <div class="olo-car-caption<?php echo $cc_cls; ?>"<?php echo $cc_data; ?>><?php echo esc_html( $caption ); ?></div>
                     <?php endif; ?>
                 </div>
                 <?php endforeach; ?>
@@ -340,6 +343,9 @@ class Olo_Carousel_Tile extends Olo_Tile_Base {
         })();
         </script>
         <?php
+        $tfx_css = $this->tfx_css( $s, '.' . $uid );
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        $this->tfx_print_script();
         return ob_get_clean();
     }
 }

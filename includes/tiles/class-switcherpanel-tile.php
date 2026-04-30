@@ -104,9 +104,13 @@ class Olo_SwitcherPanel_Tile extends Olo_Tile_Base {
                 <li>
                     <div class="olo-sp-panel uk-grid-medium <?php echo $img_position === 'left' ? 'uk-flex-row-reverse' : ''; ?>" uk-grid>
                         <div class="uk-width-expand">
+                            <?php
+                            list( $spt_cls, $spt_data ) = $this->tfx_attrs( $s, 'title', wp_strip_all_tags( $item['title'] ) );
+                            list( $spx_cls, $spx_data ) = $this->tfx_attrs( $s, 'text', wp_strip_all_tags( $item['text'] ) );
+                            ?>
                             <div class="olo-sp-panel-body">
-                                <<?php echo $title_tag; ?> class="olo-sp-panel__title"><?php echo esc_html( wp_strip_all_tags( $item['title'] ) ); ?></<?php echo $title_tag; ?>>
-                                <div class="olo-sp-panel__text"><?php echo nl2br( esc_html( wp_strip_all_tags( $item['text'] ) ) ); ?></div>
+                                <<?php echo $title_tag; ?> class="olo-sp-panel__title<?php echo $spt_cls; ?>"<?php echo $spt_data; ?>><?php echo esc_html( wp_strip_all_tags( $item['title'] ) ); ?></<?php echo $title_tag; ?>>
+                                <div class="olo-sp-panel__text<?php echo $spx_cls; ?>"<?php echo $spx_data; ?>><?php echo nl2br( esc_html( wp_strip_all_tags( $item['text'] ) ) ); ?></div>
                                 <?php if ( ! empty( $item['button_text'] ) ) : ?>
                                     <a href="<?php echo esc_url( $item['button_url'] ); ?>" class="<?php echo esc_attr( $btn_class ); ?>">
                                         <?php echo esc_html( $item['button_text'] ); ?>
@@ -128,6 +132,9 @@ class Olo_SwitcherPanel_Tile extends Olo_Tile_Base {
             </ul>
         </div>
         <?php
+        $tfx_css = $this->tfx_css( $s, '.' . $uid );
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        $this->tfx_print_script();
         return ob_get_clean();
     }
 

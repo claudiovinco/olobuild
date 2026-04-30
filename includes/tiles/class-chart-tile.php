@@ -170,12 +170,12 @@ class Olo_Chart_Tile extends Olo_Tile_Base {
         $tt_text      = $this->safe_color_css( $s['tooltip_text_color'] ) ?: '#ffffff';
         $tt_bc        = $this->safe_color_css( $s['tooltip_border_color'] ) ?: 'transparent';
         $tt_bw        = max( 0, intval( $s['tooltip_border_width'] ) );
-        $tt_cr        = max( 0, intval( $s['tooltip_corner_radius'] ) );
+        $tt_cr        = max( 0, Olo_Tile_Utils::radius_int( $s['tooltip_corner_radius'] ) );
         $tt_fs        = max( 8, intval( $s['tooltip_font_size'] ) );
         $tt_pad       = max( 4, intval( $s['tooltip_padding'] ) );
 
         // Bar
-        $bar_radius   = max( 0, intval( $s['bar_radius'] ) );
+        $bar_radius   = max( 0, Olo_Tile_Utils::radius_int( $s['bar_radius'] ) );
         $bar_pct      = max( 0.1, min( 1, floatval( $s['bar_percentage'] ) ) );
         $cat_pct      = max( 0.1, min( 1, floatval( $s['category_percentage'] ) ) );
 

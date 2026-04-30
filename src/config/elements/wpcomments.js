@@ -41,6 +41,7 @@ export default {
       condition: { field: 'show_avatar', operator: '==', value: true } },
     { key: 'avatar_border_radius', label: 'Raggio avatar (%)', type: 'border-radius',
       condition: { field: 'show_avatar', operator: '==', value: true } },
+    { key: 'avatar_border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'show_date', label: 'Mostra data', type: 'toggle' },
     { key: 'show_reply_link', label: 'Mostra link rispondi', type: 'toggle' },
     { key: 'comments_per_page', label: 'Commenti per pagina', type: 'range', min: 5, max: 50, step: 5 },

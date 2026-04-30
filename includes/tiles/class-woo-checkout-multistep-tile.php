@@ -45,6 +45,7 @@ class Olo_Woo_Checkout_Multistep_Tile extends Olo_Tile_Base {
         $text_c  = $this->safe_color_css( $s['text_color'] ) ?: '#374151';
         $step_bg = $this->safe_color_css( $s['step_bg'] ) ?: '#F9FAFB';
         $radius  = Olo_Tile_Utils::border_radius( $s['card_radius'] ?? 0 );
+        $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['card_radius_hover'] ?? null );
         $labels  = array_map( 'trim', explode( ',', $s['step_labels'] ) );
 
         ob_start();
@@ -73,7 +74,8 @@ class Olo_Woo_Checkout_Multistep_Tile extends Olo_Tile_Base {
             #<?php echo $uid; ?> .woocommerce-billing-fields,
             #<?php echo $uid; ?> .woocommerce-shipping-fields,
             #<?php echo $uid; ?> #payment,
-            #<?php echo $uid; ?> .woocommerce-checkout-review-order{background:<?php echo $step_bg; ?>;padding:24px;border-radius:<?php echo $radius; ?>;margin-bottom:20px}
+            #<?php echo $uid; ?> .woocommerce-checkout-review-order{background:<?php echo $step_bg; ?>;padding:24px;border-radius:<?php echo $radius; ?>;margin-bottom:20px;transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}
+            <?php if ( $radius_hover_css !== '' ) : ?>#<?php echo $uid; ?> .woocommerce-billing-fields:hover,#<?php echo $uid; ?> .woocommerce-shipping-fields:hover,#<?php echo $uid; ?> #payment:hover,#<?php echo $uid; ?> .woocommerce-checkout-review-order:hover{border-radius:<?php echo $radius_hover_css; ?> !important}<?php endif; ?>
             #<?php echo $uid; ?> .olo-wms-step:hover{opacity:.85}
             #<?php echo $uid; ?> .olo-wms-step.olo-wms-done{background:<?php echo $accent; ?>;opacity:.6;color:#fff}
         </style>

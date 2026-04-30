@@ -1,3 +1,4 @@
+import { textEffectsFields, textEffectsDefaults } from './_shared';
 import { shadowField } from './_shared.js';
 
 export default {
@@ -19,6 +20,7 @@ export default {
     icon_gap: '10',
     tile_padding: { top: 16, right: 16, bottom: 16, left: 16 },
     shadow: 'none',
+    ...textEffectsDefaults,
   },
   fields: [
     { key: 'items', label: 'Elementi', type: 'content-items',
@@ -59,5 +61,6 @@ export default {
     { key: 'icon_gap', label: 'Spazio icona-testo (px)', type: 'range', min: 0, max: 32, step: 2 },
     { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 48 },
     ...shadowField,
+    ...textEffectsFields([ { value: 'text', label: 'Solo Testo' } ]),
   ],
 };

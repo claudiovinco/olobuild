@@ -57,14 +57,14 @@ class Olo_Switcher_Tile extends Olo_Tile_Base {
                 <div class="uk-width-auto">
                     <ul class="uk-tab-left" uk-tab="connect: .olo-switcher-content; <?php echo esc_attr( $switcher_attr ); ?>">
                         <?php foreach ( $items as $i => $item ) : ?>
-                        <li<?php echo $i === 0 ? ' class="uk-active"' : ''; ?>><a href="#"><?php echo esc_html( wp_strip_all_tags( $item['title'] ) ); ?></a></li>
+                        <li<?php echo $i === 0 ? ' class="uk-active"' : ''; ?>><?php list( $swt_cls, $swt_data ) = $this->tfx_attrs( $s, "title", wp_strip_all_tags( $item["title"] ) ); ?><a href="#" class="<?php echo trim( $swt_cls ); ?>"<?php echo $swt_data; ?>><?php echo esc_html( wp_strip_all_tags( $item["title"] ) ); ?></a></li>
                         <?php endforeach; ?>
                     </ul>
                 </div>
                 <div class="uk-width-expand">
                     <ul class="uk-switcher olo-switcher-content">
                         <?php foreach ( $items as $item ) : ?>
-                        <li><?php echo nl2br( esc_html( wp_strip_all_tags( $item['content'] ) ) ); ?></li>
+                        <?php list( $swc_cls, $swc_data ) = $this->tfx_attrs( $s, "content", wp_strip_all_tags( $item["content"] ) ); ?><li class="<?php echo trim( $swc_cls ); ?>"<?php echo $swc_data; ?>><?php echo nl2br( esc_html( wp_strip_all_tags( $item["content"] ) ) ); ?></li>
                         <?php endforeach; ?>
                     </ul>
                 </div>
@@ -79,12 +79,12 @@ class Olo_Switcher_Tile extends Olo_Tile_Base {
                 <div class="olo-switcher">
                     <ul class="<?php echo esc_attr( $nav_class ); ?>" uk-tab="connect: .olo-switcher-content; <?php echo esc_attr( $switcher_attr ); ?>">
                         <?php foreach ( $items as $i => $item ) : ?>
-                        <li<?php echo $i === 0 ? ' class="uk-active"' : ''; ?>><a href="#"><?php echo esc_html( wp_strip_all_tags( $item['title'] ) ); ?></a></li>
+                        <li<?php echo $i === 0 ? ' class="uk-active"' : ''; ?>><?php list( $swt_cls, $swt_data ) = $this->tfx_attrs( $s, "title", wp_strip_all_tags( $item["title"] ) ); ?><a href="#" class="<?php echo trim( $swt_cls ); ?>"<?php echo $swt_data; ?>><?php echo esc_html( wp_strip_all_tags( $item["title"] ) ); ?></a></li>
                         <?php endforeach; ?>
                     </ul>
                     <ul class="uk-switcher olo-switcher-content">
                         <?php foreach ( $items as $item ) : ?>
-                        <li><?php echo nl2br( esc_html( wp_strip_all_tags( $item['content'] ) ) ); ?></li>
+                        <?php list( $swc_cls, $swc_data ) = $this->tfx_attrs( $s, "content", wp_strip_all_tags( $item["content"] ) ); ?><li class="<?php echo trim( $swc_cls ); ?>"<?php echo $swc_data; ?>><?php echo nl2br( esc_html( wp_strip_all_tags( $item["content"] ) ) ); ?></li>
                         <?php endforeach; ?>
                     </ul>
                 </div>
@@ -95,12 +95,12 @@ class Olo_Switcher_Tile extends Olo_Tile_Base {
                 <div class="olo-switcher">
                     <ul class="<?php echo esc_attr( $nav_class ); ?>" uk-switcher="<?php echo esc_attr( $switcher_attr ); ?>">
                         <?php foreach ( $items as $i => $item ) : ?>
-                        <li<?php echo $i === 0 ? ' class="uk-active"' : ''; ?>><a href="#"><?php echo esc_html( wp_strip_all_tags( $item['title'] ) ); ?></a></li>
+                        <li<?php echo $i === 0 ? ' class="uk-active"' : ''; ?>><?php list( $swt_cls, $swt_data ) = $this->tfx_attrs( $s, "title", wp_strip_all_tags( $item["title"] ) ); ?><a href="#" class="<?php echo trim( $swt_cls ); ?>"<?php echo $swt_data; ?>><?php echo esc_html( wp_strip_all_tags( $item["title"] ) ); ?></a></li>
                         <?php endforeach; ?>
                     </ul>
                     <ul class="uk-switcher">
                         <?php foreach ( $items as $item ) : ?>
-                        <li><?php echo nl2br( esc_html( wp_strip_all_tags( $item['content'] ) ) ); ?></li>
+                        <?php list( $swc_cls, $swc_data ) = $this->tfx_attrs( $s, "content", wp_strip_all_tags( $item["content"] ) ); ?><li class="<?php echo trim( $swc_cls ); ?>"<?php echo $swc_data; ?>><?php echo nl2br( esc_html( wp_strip_all_tags( $item["content"] ) ) ); ?></li>
                         <?php endforeach; ?>
                     </ul>
                 </div>
@@ -108,6 +108,9 @@ class Olo_Switcher_Tile extends Olo_Tile_Base {
             endif;
         endif;
 
+        $tfx_css = $this->tfx_css( $s, '.olo-switcher' );
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        $this->tfx_print_script();
         return ob_get_clean();
     }
 

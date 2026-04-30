@@ -1,3 +1,4 @@
+import { textEffectsFields, textEffectsDefaults } from './_shared';
 import { shadowField } from './_shared.js';
 
 export default {
@@ -14,6 +15,7 @@ export default {
     animation: '',
     vertical: false,
     shadow: 'none',
+    ...textEffectsDefaults,
   },
   fields: [
     { key: 'items', label: 'Elementi', type: 'content-items', supportsDynamic: true,
@@ -40,5 +42,10 @@ export default {
     ]},
     { key: 'vertical', label: 'Verticale', type: 'toggle' },
     ...shadowField,
+    ...textEffectsFields([
+      { value: 'title', label: 'Solo Titolo' },
+      { value: 'content', label: 'Solo Contenuto' },
+      { value: 'all', label: 'Tutti gli elementi testuali' },
+    ]),
   ],
 };

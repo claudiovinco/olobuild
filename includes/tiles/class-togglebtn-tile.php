@@ -66,6 +66,7 @@ class Olo_ToggleBtn_Tile extends Olo_Tile_Base {
         $bw          = max( 0, intval( $s['btn_border_width'] ) );
         $bc          = $this->safe_color_css( $s['btn_border_color'] ) ?: 'var(--olo-color-primary, #6366F1)';
         $radius      = Olo_Tile_Utils::border_radius( $s['btn_border_radius'] ?? 0 );
+        $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['btn_border_radius_hover'] ?? null );
         $px          = intval( $s['btn_padding_x'] );
         $py          = intval( $s['btn_padding_y'] );
         $fsize       = max( 12, intval( $s['btn_font_size'] ) );
@@ -98,6 +99,7 @@ class Olo_ToggleBtn_Tile extends Olo_Tile_Base {
                 -webkit-user-select: none;
                 <?php if ( $full_width ) : ?>width: 100%; justify-content: center;<?php endif; ?>
             }
+            <?php if ( $radius_hover_css !== '' ) : ?>.<?php echo $uid; ?>{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?>:hover{border-radius:<?php echo $radius_hover_css; ?> !important}<?php endif; ?>
 
             .<?php echo $uid; ?>:hover {
                 background: <?php echo $hover_bg; ?>;

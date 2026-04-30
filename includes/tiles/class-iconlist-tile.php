@@ -84,13 +84,17 @@ class Olo_Iconlist_Tile extends Olo_Tile_Base {
                             <?php echo esc_html($item_icon); ?>
                         <?php endif; ?>
                     </span>
-                    <span style="color:<?php echo $text_clr; ?>;font-size:<?php echo $text_size; ?>px;line-height:1.4;">
+                    <?php list( $il_cls, $il_data ) = $this->tfx_attrs( $s, 'text', wp_strip_all_tags( $item_text ) ); ?>
+                    <span class="olo-il-text<?php echo $il_cls; ?>" style="color:<?php echo $text_clr; ?>;font-size:<?php echo $text_size; ?>px;line-height:1.4;"<?php echo $il_data; ?>>
                         <?php echo wp_kses_post($item_text); ?>
                     </span>
                 <?php echo $tag_close; ?>
             <?php endforeach; ?>
         </div>
         <?php
+        $tfx_css = $this->tfx_css( $s, '.olo-iconlist' );
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        $this->tfx_print_script();
         return ob_get_clean();
     }
 }

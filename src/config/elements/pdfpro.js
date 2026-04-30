@@ -1,3 +1,4 @@
+import { textEffectsFields, textEffectsDefaults } from './_shared';
 
 export default {
   type: 'pdfpro',
@@ -31,6 +32,7 @@ export default {
     hotspot_color: '',
     hotspot_size: '14',
     hotspot_pulse: true,
+    ...textEffectsDefaults,
   },
   fields: [
     { type: 'separator', label: 'Sorgente' },
@@ -127,6 +129,7 @@ export default {
         { key: 'btn_padding_h', label: 'Padding orizzontale (px)', type: 'spacing', max: 50 },
         // Bordo
         { key: 'btn_radius', label: 'Raggio angoli (px)', type: 'border-radius' },
+        { key: 'btn_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
         { key: 'btn_border_width', label: 'Spessore bordo (px)', type: 'range', min: 0, max: 5, step: 1 },
         { key: 'btn_border_color', label: 'Colore bordo', type: 'color' },
         { key: 'btn_border_style', label: 'Stile bordo', type: 'select', options: [
@@ -154,6 +157,10 @@ export default {
     { key: 'hotspot_color', label: 'Colore hotspot', type: 'color' },
     { key: 'hotspot_size', label: 'Dimensione hotspot (px)', type: 'range', min: 8, max: 30, step: 1 },
     { key: 'hotspot_pulse', label: 'Animazione pulse', type: 'toggle' },
-
+    ...textEffectsFields([
+      { value: 'title', label: 'Solo Titolo' },
+      { value: 'description', label: 'Solo Descrizione' },
+      { value: 'all', label: 'Tutti gli elementi testuali' },
+    ]),
   ],
 };

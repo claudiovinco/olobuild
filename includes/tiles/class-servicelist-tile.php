@@ -81,12 +81,13 @@ class Olo_ServiceList_Tile extends Olo_Tile_Base {
         $is_list = ( $s['style'] === 'list' );
         $shadow = Olo_Tile_Utils::shadow( $s['card_shadow'] ?? 'none' );
         $h_shadow = Olo_Tile_Utils::shadow( $s['card_hover_shadow'] ?? 'none' );
-        $radius = absint( $s['card_border_radius'] );
+        $radius = Olo_Tile_Utils::radius_int( $s['card_border_radius'] );
         $padding = absint( $s['card_padding'] );
         $bg     = $this->safe_color_css( $s['card_bg'] );
         $border = $this->safe_color_css( $s['card_border_color'] );
         $img_h  = absint( $s['image_height'] ) ?: 200;
         $img_r  = $this->build_border_radius_css( $s["image_radius"] );
+        $img_r_hover_css = Olo_Tile_Utils::radius_force_css( $s['image_radius_hover'] ?? null );
         $bar_h  = absint( $s['color_bar_height'] ) ?: 4;
 
         ob_start();
@@ -96,7 +97,8 @@ class Olo_ServiceList_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .olo-sl-card{background:<?php echo $bg ?: 'var(--olo-color-background, #FFFFFF)'; ?>;border-radius:<?php echo $radius; ?>px;border:1px solid <?php echo $border ?: 'var(--olo-color-border, #E5E7EB)'; ?>;box-shadow:<?php echo $shadow; ?>;overflow:hidden;transition:box-shadow 0.25s ease,transform 0.25s ease}
             .<?php echo $uid; ?> .olo-sl-card:hover{box-shadow:<?php echo $h_shadow; ?>;transform:translateY(-2px)}
             .<?php echo $uid; ?> .olo-sl-bar{height:<?php echo $bar_h; ?>px}
-            .<?php echo $uid; ?> .olo-sl-img{height:<?php echo $img_h; ?>px;position:relative;overflow:hidden;background:var(--olo-color-muted, #F3F4F6)}
+            .<?php echo $uid; ?> .olo-sl-img{height:<?php echo $img_h; ?>px;position:relative;overflow:hidden;background:var(--olo-color-muted, #F3F4F6);transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}
+            <?php if ( $img_r_hover_css !== '' ) : ?>.<?php echo $uid; ?> .olo-sl-card:hover .olo-sl-img{border-radius:<?php echo $img_r_hover_css; ?> !important}<?php endif; ?>
             .<?php echo $uid; ?> .olo-sl-img img{width:100%;height:100%;object-fit:cover}
             .<?php echo $uid; ?> .olo-sl-body{padding:<?php echo $padding; ?>px}
             .<?php echo $uid; ?> .olo-sl-title{font-size:<?php echo absint( $s['title_size'] ) ?: 18; ?>px;font-weight:<?php echo esc_attr( $s['title_weight'] ?: '600' ); ?>;color:<?php echo $this->safe_color_css( $s['title_color'] ) ?: 'var(--olo-color-text, #374151)'; ?>;margin:0 0 6px}
@@ -104,7 +106,7 @@ class Olo_ServiceList_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .olo-sl-duration{color:<?php echo $this->safe_color_css( $s['duration_color'] ) ?: 'var(--olo-color-text-muted, #9CA3AF)'; ?>}
             .<?php echo $uid; ?> .olo-sl-price{font-size:<?php echo absint( $s['price_size'] ) ?: 16; ?>px;font-weight:600;color:<?php echo $this->safe_color_css( $s['price_color'] ) ?: 'var(--olo-color-primary, #6366F1)'; ?>}
             .<?php echo $uid; ?> .olo-sl-excerpt{font-size:<?php echo absint( $s['excerpt_size'] ) ?: 14; ?>px;color:<?php echo $this->safe_color_css( $s['excerpt_color'] ) ?: 'var(--olo-color-text-muted, #9CA3AF)'; ?>;line-height:1.5;margin:0 0 14px}
-            .<?php echo $uid; ?> .olo-sl-btn{display:<?php echo ! empty( $s['btn_full_width'] ) ? 'block;width:100%' : 'inline-block'; ?>;padding:10px 20px;background:<?php echo $this->safe_color_css( $s['btn_bg'] ) ?: 'var(--olo-color-primary, #6366F1)'; ?>;color:<?php echo $this->safe_color_css( $s['btn_color'] ) ?: 'var(--olo-color-primary-contrast, #FFFFFF)'; ?>;border-radius:<?php echo absint( $s['btn_radius'] ); ?>px;text-align:center;font-weight:600;font-size:14px;text-decoration:none;transition:opacity 0.2s}
+            .<?php echo $uid; ?> .olo-sl-btn{display:<?php echo ! empty( $s['btn_full_width'] ) ? 'block;width:100%' : 'inline-block'; ?>;padding:10px 20px;background:<?php echo $this->safe_color_css( $s['btn_bg'] ) ?: 'var(--olo-color-primary, #6366F1)'; ?>;color:<?php echo $this->safe_color_css( $s['btn_color'] ) ?: 'var(--olo-color-primary-contrast, #FFFFFF)'; ?>;border-radius:<?php echo Olo_Tile_Utils::radius_int( $s['btn_radius'] ); ?>px;text-align:center;font-weight:600;font-size:14px;text-decoration:none;transition:opacity 0.2s}
             .<?php echo $uid; ?> .olo-sl-btn:hover{opacity:0.85}
             @media(max-width:767px){.<?php echo $uid; ?>{grid-template-columns:1fr}}
         </style>

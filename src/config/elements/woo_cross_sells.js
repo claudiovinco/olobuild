@@ -1,3 +1,4 @@
+import { textEffectsFields, textEffectsDefaults } from './_shared';
 import { shadowField } from './_shared.js';
 
 export default {
@@ -30,6 +31,7 @@ export default {
     columns_tablet: '2',
     columns_mobile: '1',
     shadow: 'none',
+    ...textEffectsDefaults,
   },
   fields: [
     { type: 'separator', label: 'Intestazione' },
@@ -82,5 +84,6 @@ export default {
     { key: 'badge_bg', label: 'Sfondo badge', type: 'color' },
 
     ...shadowField,
+    ...textEffectsFields([ { value: 'heading', label: 'Solo Titolo' } ]),
   ],
 };

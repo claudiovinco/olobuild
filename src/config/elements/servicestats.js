@@ -60,11 +60,13 @@ export default {
     { key: 'item_bg', label: 'Sfondo singolo item', type: 'color' },
     { key: 'item_border_color', label: 'Bordo item', type: 'color' },
     { key: 'item_border_radius', label: 'Raggio bordi item (px)', type: 'border-radius' },
+    { key: 'item_border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'item_padding', label: 'Padding item (px)', type: 'spacing', max: 24 },
 
     { type: 'separator', label: 'Contenitore' },
     { key: 'bg_color', label: 'Sfondo contenitore', type: 'color' },
     { key: 'border_radius', label: 'Raggio bordi (px)', type: 'border-radius' },
+    { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 32 },
   ],
 };

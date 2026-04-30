@@ -65,14 +65,19 @@ class Olo_Audio_Tile extends Olo_Tile_Base {
         $style = $s['player_style'] ?: 'default';
 
         if ( $style === 'minimal' ) {
-            return $this->render_minimal( $s, $src );
+            $html = $this->render_minimal( $s, $src );
+        } elseif ( $style === 'custom' ) {
+            $html = $this->render_custom( $s, $src );
+        } else {
+            $html = $this->render_default( $s, $src );
         }
 
-        if ( $style === 'custom' ) {
-            return $this->render_custom( $s, $src );
+        $tfx_css = $this->tfx_css( $s, '.olo-audio' );
+        if ( $tfx_css ) {
+            $html .= '<style>' . $tfx_css . '</style>';
+            ob_start(); $this->tfx_print_script(); $html .= ob_get_clean();
         }
-
-        return $this->render_default( $s, $src );
+        return $html;
     }
 
     // =========================================================================
@@ -82,6 +87,7 @@ class Olo_Audio_Tile extends Olo_Tile_Base {
     private function render_default( $s, $src ) {
         $bg_color     = $this->safe_color_css( $s['bg_color'] ) ?: 'var(--olo-color-muted, #F3F4F6)';
         $radius       = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
+        $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
         $accent       = $this->safe_color_css( $s['accent_color'] );
         $text_color   = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-text, #374151)';
 
@@ -89,11 +95,15 @@ class Olo_Audio_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
+        <?php if ( $radius_hover_css !== '' ) : ?>
+        <style>#<?php echo esc_attr( $uid ); ?>{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}#<?php echo esc_attr( $uid ); ?>:hover{border-radius:<?php echo $radius_hover_css; ?> !important}</style>
+        <?php endif; ?>
         <div id="<?php echo esc_attr( $uid ); ?>" class="olo-audio olo-audio-default" style="background:<?php echo $bg_color; ?>;border-radius:<?php echo $radius; ?>;padding:16px;">
             <?php if ( ! empty( $s['title'] ) || ! empty( $s['artist'] ) ) : ?>
             <div style="margin-bottom:8px;<?php echo 'color:' . $text_color . ';'; ?>">
                 <?php if ( ! empty( $s['title'] ) ) : ?>
-                    <div style="font-weight:600;font-size:14px;"><?php echo esc_html( $s['title'] ); ?></div>
+                    <?php list( $at_cls, $at_data ) = $this->tfx_attrs( $s, 'title', $s['title'] ); ?>
+                    <div class="olo-audio-title<?php echo $at_cls; ?>" style="font-weight:600;font-size:14px;"<?php echo $at_data; ?>><?php echo esc_html( $s['title'] ); ?></div>
                 <?php endif; ?>
                 <?php if ( ! empty( $s['artist'] ) ) : ?>
                     <div style="font-size:12px;opacity:0.7;"><?php echo esc_html( $s['artist'] ); ?></div>
@@ -139,11 +149,15 @@ class Olo_Audio_Tile extends Olo_Tile_Base {
         $text_color = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-text, #374151)';
         $accent     = $this->safe_color_css( $s['accent_color'] ) ?: 'var(--olo-color-primary, #6366F1)';
         $radius     = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
+        $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
 
         $uid = 'olo-audio-' . wp_unique_id();
 
         ob_start();
         ?>
+        <?php if ( $radius_hover_css !== '' ) : ?>
+        <style>#<?php echo esc_attr( $uid ); ?>{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}#<?php echo esc_attr( $uid ); ?>:hover{border-radius:<?php echo $radius_hover_css; ?> !important}</style>
+        <?php endif; ?>
         <div id="<?php echo esc_attr( $uid ); ?>" class="olo-audio olo-audio-minimal" style="background:<?php echo $bg_color; ?>;border-radius:<?php echo $radius; ?>;padding:12px 16px;display:flex;align-items:center;gap:12px;">
             <button type="button" class="olo-audio-playbtn" style="background:none;border:none;cursor:pointer;padding:0;flex-shrink:0;width:32px;height:32px;display:flex;align-items:center;justify-content:center;">
                 <svg class="olo-audio-icon-play" width="24" height="24" viewBox="0 0 24 24"><polygon points="6,4 6,20 20,12" fill="<?php echo esc_attr( $accent ); ?>"/></svg>
@@ -235,11 +249,15 @@ class Olo_Audio_Tile extends Olo_Tile_Base {
         $text_color = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-text, #374151)';
         $accent     = $this->safe_color_css( $s['accent_color'] ) ?: 'var(--olo-color-primary, #6366F1)';
         $radius     = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
+        $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
 
         $uid = 'olo-audio-' . wp_unique_id();
 
         ob_start();
         ?>
+        <?php if ( $radius_hover_css !== '' ) : ?>
+        <style>#<?php echo esc_attr( $uid ); ?>{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}#<?php echo esc_attr( $uid ); ?>:hover{border-radius:<?php echo $radius_hover_css; ?> !important}</style>
+        <?php endif; ?>
         <div id="<?php echo esc_attr( $uid ); ?>" class="olo-audio olo-audio-custom" style="background:<?php echo $bg_color; ?>;border-radius:<?php echo $radius; ?>;padding:16px;color:<?php echo $text_color; ?>;">
             <div style="display:flex;gap:16px;align-items:center;">
                 <!-- Cover image -->
@@ -252,7 +270,8 @@ class Olo_Audio_Tile extends Olo_Tile_Base {
                 <div style="flex:1;min-width:0;">
                     <!-- Title & Artist -->
                     <?php if ( ! empty( $s['title'] ) ) : ?>
-                    <div style="font-weight:600;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"><?php echo esc_html( $s['title'] ); ?></div>
+                    <?php list( $ac_cls, $ac_data ) = $this->tfx_attrs( $s, 'title', $s['title'] ); ?>
+                    <div class="olo-audio-title<?php echo $ac_cls; ?>" style="font-weight:600;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"<?php echo $ac_data; ?>><?php echo esc_html( $s['title'] ); ?></div>
                     <?php endif; ?>
                     <?php if ( ! empty( $s['artist'] ) ) : ?>
                     <div style="font-size:12px;opacity:0.7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:8px;"><?php echo esc_html( $s['artist'] ); ?></div>

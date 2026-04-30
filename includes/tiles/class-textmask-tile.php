@@ -168,8 +168,9 @@ class Olo_Textmask_Tile extends Olo_Tile_Base {
             <div class="olo-tm-overlay"></div>
             <?php endif; ?>
 
+            <?php list( $tm_cls, $tm_data ) = $this->tfx_attrs( $s, 'text', wp_strip_all_tags( $s['text'] ?? '' ) ); ?>
             <div class="olo-tm-mask">
-                <div class="olo-tm-text"><?php echo $text; ?></div>
+                <div class="olo-tm-text<?php echo $tm_cls; ?>"<?php echo $tm_data; ?>><?php echo $text; ?></div>
             </div>
         </div>
         <?php
@@ -244,6 +245,9 @@ class Olo_Textmask_Tile extends Olo_Tile_Base {
         <?php
         endif;
 
+        $tfx_css = $this->tfx_css( $s, '.' . $uid );
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        $this->tfx_print_script();
         return ob_get_clean();
     }
 }

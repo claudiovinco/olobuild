@@ -1,3 +1,4 @@
+import { textEffectsFields, textEffectsDefaults } from './_shared';
 import { shadowField } from './_shared.js';
 
 export default {
@@ -34,6 +35,7 @@ export default {
     content_size: '',
     content_color: '',
     shadow: 'none',
+    ...textEffectsDefaults,
   },
   fields: [
     { key: 'panels', label: 'Pannelli', type: 'content-items', supportsDynamic: true,
@@ -76,7 +78,8 @@ export default {
       { value: 'secondary', label: 'Secondary' },
       { value: 'hover', label: 'Hover' },
     ]},
-    { key: 'card_radius', label: 'Raggio bordi (px)', type: 'range', min: 0, max: 32, step: 1 },
+    { key: 'card_radius', label: 'Raggio bordi (px)', type: 'border-radius'},
+    { key: 'card_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'card_padding', label: 'Padding interno (px)', type: 'spacing', max: 48 },
     ...shadowField,
 
@@ -132,5 +135,10 @@ export default {
     { key: 'autoplay', label: 'Autoplay', type: 'toggle' },
     { key: 'autoplay_interval', label: 'Intervallo (ms)', type: 'range', min: 1000, max: 10000, step: 500,
       condition: { field: 'autoplay', op: 'eq', value: true } },
+    ...textEffectsFields([
+      { value: 'title', label: 'Solo Titolo' },
+      { value: 'content', label: 'Solo Contenuto' },
+      { value: 'all', label: 'Tutti gli elementi testuali' },
+    ]),
   ],
 };

@@ -114,12 +114,18 @@ class Olo_Panel_Tile extends Olo_Tile_Base {
                 </div>
             <?php endif; ?>
 
+            <?php
+            $title_plain = wp_strip_all_tags( $s['title'] ?? '' );
+            $content_plain = wp_strip_all_tags( $s['content'] ?? '' );
+            list( $t_tfx_cls, $t_tfx_data ) = $this->tfx_attrs( $s, 'title', $title_plain );
+            list( $c_tfx_cls, $c_tfx_data ) = $this->tfx_attrs( $s, 'content', $content_plain );
+            ?>
             <?php if ( ! empty( $s['title'] ) ) : ?>
-                <<?php echo $tag; ?> class="uk-card-title olo-panel-title"><?php
+                <<?php echo $tag; ?> class="uk-card-title olo-panel-title<?php echo $t_tfx_cls; ?>"<?php echo $t_tfx_data; ?>><?php
                     if ( ! empty( $s['link_url'] ) ) {
                         echo '<a href="' . esc_url( $s['link_url'] ) . '"' . $target . ' class="olo-panel-titlelink">';
                     }
-                    echo esc_html( wp_strip_all_tags( $s['title'] ) );
+                    echo esc_html( $title_plain );
                     if ( ! empty( $s['link_url'] ) ) {
                         echo '</a>';
                     }
@@ -131,7 +137,7 @@ class Olo_Panel_Tile extends Olo_Tile_Base {
             <?php endif; ?>
 
             <?php if ( ! empty( $s['content'] ) ) : ?>
-                <div class="olo-panel-content"><?php echo nl2br( esc_html( wp_strip_all_tags( $s['content'] ) ) ); ?></div>
+                <div class="olo-panel-content<?php echo $c_tfx_cls; ?>"<?php echo $c_tfx_data; ?>><?php echo nl2br( esc_html( $content_plain ) ); ?></div>
             <?php endif; ?>
 
             <?php if ( ! empty( $s['link_url'] ) && ! empty( $s['link_label'] ) ) : ?>
@@ -139,6 +145,9 @@ class Olo_Panel_Tile extends Olo_Tile_Base {
             <?php endif; ?>
         </div>
         <?php
+        $tfx_css = $this->tfx_css( $s, '.' . $uid );
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        $this->tfx_print_script();
         return ob_get_clean();
     }
 
@@ -152,7 +161,7 @@ class Olo_Panel_Tile extends Olo_Tile_Base {
         $css = '';
 
         // Outer card radius
-        $card_radius = absint( $s['card_radius'] ?? 0 );
+        $card_radius = Olo_Tile_Utils::radius_int( $s['card_radius'] ?? 0 );
         if ( $card_radius > 0 ) {
             $css .= $sel . '.olo-panel{border-radius:' . $card_radius . 'px;overflow:hidden;}';
         }
@@ -169,6 +178,7 @@ class Olo_Panel_Tile extends Olo_Tile_Base {
         $has_media_padding = false;
         if ( $media_type !== 'none' ) {
             $media_radius = $this->build_border_radius_css( $s['border_radius'] ?? '0' );
+            $media_radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
             $media_padding_arr = $s['media_padding'] ?? null;
             $has_media_padding = is_array( $media_padding_arr ) && (
                 intval( $media_padding_arr['top'] ?? 0 ) > 0 ||
@@ -212,6 +222,7 @@ class Olo_Panel_Tile extends Olo_Tile_Base {
             if ( $media_radius ) {
                 // Override UIkit's uk-card-media-top inheriting card radius
                 $css .= $sel . ' .olo-panel-media{border-radius:' . $media_radius . '!important;}';
+                if ( $media_radius_hover_css !== '' ) $css .= $sel . ' .olo-panel-media:hover{border-radius:' . $media_radius_hover_css . ' !important;}';
             }
 
             if ( $has_media_padding ) {

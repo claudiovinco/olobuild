@@ -60,8 +60,9 @@ class Olo_Testimonial_Tile extends Olo_Tile_Base {
         $is_bottom   = str_starts_with( $position, 'bottom' );
         $av_size     = intval( $s['avatar_size'] ) ?: 48;
         $is_square   = $s['avatar_shape'] === 'square';
-        $av_radius   = $is_square ? ( intval( $s['avatar_radius'] ) . 'px' ) : '50%';
+        $av_radius   = $is_square ? ( Olo_Tile_Utils::radius_int( $s['avatar_radius'] ) . 'px' ) : '50%';
         $tile_radius = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
+        $tile_radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
 
         $star_svg = '<svg width="18" height="18" viewBox="0 0 20 20" fill="#FBBF24" style="vertical-align:-2px;display:inline-block"><polygon points="10,1.5 12.5,7 18.5,7.6 14,11.5 15.3,17.5 10,14.5 4.7,17.5 6,11.5 1.5,7.6 7.5,7"/></svg>';
 
@@ -82,6 +83,9 @@ class Olo_Testimonial_Tile extends Olo_Tile_Base {
             $this->render_grid( $uid, $s, $star_svg, $is_bottom );
         }
 
+        $tfx_css = $this->tfx_css( $s, '.' . $uid );
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        $this->tfx_print_script();
         return ob_get_clean();
     }
 
@@ -101,6 +105,7 @@ class Olo_Testimonial_Tile extends Olo_Tile_Base {
                 border: <?php echo $bw; ?>px solid <?php echo $bc; ?>;
                 <?php endif; ?>
             }
+            <?php if ( $tile_radius_hover_css !== '' ) : ?>.<?php echo $uid; ?> .olo-test-card{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?> .olo-test-card:hover{border-radius:<?php echo $tile_radius_hover_css; ?> !important}<?php endif; ?>
             .<?php echo $uid; ?> .olo-test-stars {
                 margin-bottom: 12px;
                 display: flex;
@@ -310,11 +315,11 @@ class Olo_Testimonial_Tile extends Olo_Tile_Base {
                     <?php echo $this->render_author( $s, $author_name, $author_role ); ?>
                 </div>
                 <div class="olo-test-quote">
-                    <?php echo $this->render_quote( $rating, $star_svg, $quote ); ?>
+                    <?php echo $this->render_quote( $rating, $star_svg, $quote, $s ); ?>
                 </div>
             </div>
         <?php else : ?>
-            <?php echo $this->render_quote( $rating, $star_svg, $quote ); ?>
+            <?php echo $this->render_quote( $rating, $star_svg, $quote, $s ); ?>
             <div class="olo-test-author-wrap">
                 <div class="olo-test-author">
                     <?php echo $this->render_author( $s, $author_name, $author_role ); ?>
@@ -324,12 +329,13 @@ class Olo_Testimonial_Tile extends Olo_Tile_Base {
         return ob_get_clean();
     }
 
-    private function render_quote( $rating, $star_svg, $quote ) {
+    private function render_quote( $rating, $star_svg, $quote, $s = [] ) {
         $out = '';
         if ( $rating > 0 ) {
             $out .= '<div class="olo-test-stars">' . str_repeat( $star_svg, $rating ) . '</div>';
         }
-        $out .= '<blockquote>' . $quote . '</blockquote>';
+        list( $tq_cls, $tq_data ) = $this->tfx_attrs( $s, 'quote', wp_strip_all_tags( $quote ) );
+        $out .= '<blockquote class="' . trim( $tq_cls ) . '"' . $tq_data . '>' . $quote . '</blockquote>';
         return $out;
     }
 

@@ -187,7 +187,8 @@ class Olo_Newsticker_Tile extends Olo_Tile_Base {
                     <?php if ( ! empty( $item['badge'] ) ) : ?>
                         <span class="olo-nt-badge"><?php echo $item['badge']; ?></span>
                     <?php endif; ?>
-                    <span class="olo-nt-title"><?php echo $title_html; ?></span>
+                    <?php list( $nt_cls, $nt_data ) = $this->tfx_attrs( $s, 'title', wp_strip_all_tags( $item['title'] ) ); ?>
+                    <span class="olo-nt-title<?php echo $nt_cls; ?>"<?php echo $nt_data; ?>><?php echo $title_html; ?></span>
                 </div>
                 <?php endforeach; ?>
             </div>
@@ -238,6 +239,9 @@ class Olo_Newsticker_Tile extends Olo_Tile_Base {
         <?php endif; ?>
 
         <?php
+        $tfx_css = $this->tfx_css( $s, '#' . $uid );
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        $this->tfx_print_script();
         return ob_get_clean();
     }
 }

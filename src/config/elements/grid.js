@@ -1,3 +1,4 @@
+import { textEffectsFields, textEffectsDefaults } from './_shared';
 import { shadowField } from './_shared.js';
 
 export default {
@@ -37,6 +38,7 @@ export default {
     content_color: '',
     image_animation: 'none',
     image_animation_speed: '3',
+    ...textEffectsDefaults,
   },
   fields: [
     { key: 'items', label: 'Elementi', type: 'content-items', supportsDynamic: true,
@@ -90,7 +92,8 @@ export default {
       { value: 'border-glow', label: 'Bordo luminoso' },
       { value: 'tilt', label: 'Inclinazione 3D' },
     ]},
-    { key: 'card_radius', label: 'Raggio bordi (px)', type: 'range', min: 0, max: 32, step: 2 },
+    { key: 'card_radius', label: 'Raggio bordi (px)', type: 'border-radius'},
+    { key: 'card_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 48 },
     { key: 'card_bg_color', label: 'Colore sfondo card', type: 'color' },
     { key: 'card_border_color', label: 'Colore bordo card', type: 'color' },
@@ -162,5 +165,10 @@ export default {
 
     { type: 'separator', label: 'Avanzato' },
     { key: 'masonry', label: 'Masonry', type: 'toggle' },
+    ...textEffectsFields([
+      { value: 'title', label: 'Solo Titolo' },
+      { value: 'content', label: 'Solo Contenuto' },
+      { value: 'all', label: 'Tutti gli elementi testuali' },
+    ]),
   ],
 };

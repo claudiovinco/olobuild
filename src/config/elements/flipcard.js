@@ -1,3 +1,4 @@
+import { textEffectsFields, textEffectsDefaults } from './_shared';
 export default {
   type: 'flipcard',
   name: 'FlipCard',
@@ -62,6 +63,7 @@ export default {
     title_size: '22',
     title_weight: '600',
     desc_size: '14',
+    ...textEffectsDefaults,
   },
   fields: [
     // ── Fronte ──
@@ -80,7 +82,9 @@ export default {
     ], condition: { field: 'front_image', op: 'notEmpty' } },
     { key: 'front_image_padding', label: 'Padding immagine (px)', type: 'range', min: 0, max: 40, step: 1,
       condition: { field: 'front_image', op: 'notEmpty' } },
-    { key: 'front_image_radius', label: 'Raggio immagine (px)', type: 'range', min: 0, max: 50, step: 1,
+    { key: 'front_image_radius', label: 'Raggio immagine (px)', type: 'border-radius',
+      condition: { field: 'front_image', op: 'notEmpty' } },
+    { key: 'front_image_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius',
       condition: { field: 'front_image', op: 'notEmpty' } },
     { key: 'front_overlay', label: 'Overlay (su immagine)', type: 'color',
       condition: { field: 'front_image', op: 'notEmpty' } },
@@ -113,7 +117,9 @@ export default {
     ], condition: { field: 'back_image', op: 'notEmpty' } },
     { key: 'back_image_padding', label: 'Padding immagine (px)', type: 'range', min: 0, max: 40, step: 1,
       condition: { field: 'back_image', op: 'notEmpty' } },
-    { key: 'back_image_radius', label: 'Raggio immagine (px)', type: 'range', min: 0, max: 50, step: 1,
+    { key: 'back_image_radius', label: 'Raggio immagine (px)', type: 'border-radius',
+      condition: { field: 'back_image', op: 'notEmpty' } },
+    { key: 'back_image_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius',
       condition: { field: 'back_image', op: 'notEmpty' } },
     { key: 'back_overlay', label: 'Overlay (su immagine)', type: 'color',
       condition: { field: 'back_image', op: 'notEmpty' } },
@@ -134,6 +140,7 @@ export default {
     { key: 'back_cta_bg', label: 'Colore sfondo CTA', type: 'color' },
     { key: 'back_cta_color', label: 'Colore testo CTA', type: 'color' },
     { key: 'back_cta_radius', label: 'Raggio bordo CTA (px)', type: 'border-radius' },
+    { key: 'back_cta_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
 
     // ── Animazione ──
     { type: 'separator', label: 'Animazione' },
@@ -160,6 +167,7 @@ export default {
     { type: 'separator', label: 'Card' },
     { key: 'card_height', label: 'Altezza (px)', type: 'range', min: 200, max: 600, step: 10 },
     { key: 'card_border_radius', label: 'Raggio bordo (px)', type: 'border-radius' },
+    { key: 'card_border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'card_shadow', label: 'Ombra', type: 'select', options: [
       { value: 'none', label: 'Nessuna' },
       { value: 'sm', label: 'Leggera' },
@@ -194,5 +202,12 @@ export default {
       { value: '700', label: 'Bold' },
     ]},
     { key: 'desc_size', label: 'Dimensione descrizione (px)', type: 'range', min: 12, max: 20 },
+    ...textEffectsFields([
+      { value: 'front_title', label: 'Solo Titolo (fronte)' },
+      { value: 'front_description', label: 'Solo Descrizione (fronte)' },
+      { value: 'back_title', label: 'Solo Titolo (retro)' },
+      { value: 'back_description', label: 'Solo Descrizione (retro)' },
+      { value: 'all', label: 'Tutti gli elementi testuali' },
+    ]),
   ],
 };

@@ -18,6 +18,7 @@ export default {
 
     { type: 'separator', label: 'Stile' },
     { key: 'border_radius', label: 'Arrotondamento (px)', type: 'border-radius' },
+    { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'font_size', label: 'Dimensione testo (px)', type: 'range', min: 10, max: 24, step: 1 },
   ],
 };

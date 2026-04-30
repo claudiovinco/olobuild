@@ -1,3 +1,4 @@
+import { textEffectsFields, textEffectsDefaults } from './_shared';
 export default {
   type: 'team',
   name: 'Membro del team',
@@ -47,6 +48,7 @@ export default {
     border_radius: '16',
     border_width: '0',
     border_color: '',
+    ...textEffectsDefaults,
   },
   fields: [
     // ── Contenuto ──
@@ -70,6 +72,7 @@ export default {
     ]},
     { key: 'photo_radius', label: 'Raggio bordo foto (px)', type: 'border-radius',
       condition: { field: 'photo_shape', value: 'rounded' } },
+    { key: 'photo_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'photo_border_width', label: 'Bordo foto (px)', type: 'range', min: 0, max: 8, step: 1 },
     { key: 'photo_border_color', label: 'Colore bordo foto', type: 'color',
       condition: { field: 'photo_border_width', operator: '>', value: '0' } },
@@ -102,6 +105,7 @@ export default {
     { key: 'info_margin', label: 'Margine dal tile (px)', type: 'spacing', max: 40 },
     { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 48 },
     { key: 'info_radius', label: 'Arrotondamento (px)', type: 'border-radius' },
+    { key: 'info_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'info_border_width', label: 'Bordo contenitore (px)', type: 'range', min: 0, max: 5, step: 1 },
     { key: 'info_border_color', label: 'Colore bordo contenitore', type: 'color',
       condition: { field: 'info_border_width', operator: '>', value: '0' } },
@@ -129,8 +133,10 @@ export default {
     { key: 'bg_color', label: 'Colore sfondo tile', type: 'color' },
     { key: 'tile_padding', label: 'Padding tile (px)', type: 'spacing', max: 40 },
     { key: 'border_radius', label: 'Arrotondamento tile (px)', type: 'border-radius' },
+    { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'border_width', label: 'Bordo tile (px)', type: 'range', min: 0, max: 5, step: 1 },
     { key: 'border_color', label: 'Colore bordo tile', type: 'color',
       condition: { field: 'border_width', operator: '>', value: '0' } },
+    ...textEffectsFields([ { value: 'name', label: 'Solo Nome' } ]),
   ],
 };

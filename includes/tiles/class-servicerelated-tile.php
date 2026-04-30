@@ -89,7 +89,8 @@ class Olo_ServiceRelated_Tile extends Olo_Tile_Base {
             $h_size  = absint( $s['heading_size'] ) ?: 22;
             $h_color = $this->safe_color_css( $s['heading_color'] ) ?: 'var(--olo-color-text, #374151)';
             $h_align = in_array( $s['heading_align'], [ 'left', 'center', 'right' ] ) ? $s['heading_align'] : 'left';
-            echo '<h3 class="olo-sr-heading ' . esc_attr( $uid ) . '-h" style="font-size:' . $h_size . 'px;color:' . $h_color . ';text-align:' . $h_align . ';margin:0 0 16px">' . esc_html( $heading ) . '</h3>';
+            list( $srh_cls, $srh_data ) = $this->tfx_attrs( $s, 'heading', $heading );
+            echo '<h3 class="olo-sr-heading ' . esc_attr( $uid ) . '-h' . $srh_cls . '" style="font-size:' . $h_size . 'px;color:' . $h_color . ';text-align:' . $h_align . ';margin:0 0 16px"' . $srh_data . '>' . esc_html( $heading ) . '</h3>';
         }
 
         if ( $layout === 'marquee' ) {
@@ -102,6 +103,9 @@ class Olo_ServiceRelated_Tile extends Olo_Tile_Base {
 
         echo '</div>';
 
+        $tfx_css = $this->tfx_css( $s, '.' . $uid );
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        $this->tfx_print_script();
         return ob_get_clean();
     }
 
@@ -363,6 +367,7 @@ class Olo_ServiceRelated_Tile extends Olo_Tile_Base {
 
     private function render_styles( $uid, $s ) {
         $radius  = $this->build_border_radius_css( $s["card_radius"] );
+        $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['card_radius_hover'] ?? null );
         $bg      = $this->safe_color_css( $s['card_bg'] ) ?: 'var(--olo-color-background, #FFFFFF)';
         $shadow  = Olo_Tile_Utils::shadow( $s['card_shadow'] ?? 'none' );
         $hover   = $s['card_hover_effect'];
@@ -373,9 +378,11 @@ class Olo_ServiceRelated_Tile extends Olo_Tile_Base {
         $btn_bg  = $this->safe_color_css( $s['btn_bg'] ) ?: 'var(--olo-color-primary, #6366F1)';
         $btn_c   = $this->safe_color_css( $s['btn_color'] ) ?: 'var(--olo-color-primary-contrast, #FFFFFF)';
         $btn_r   = $this->build_border_radius_css( $s["btn_radius"] );
+        $btn_r_hover_css = Olo_Tile_Utils::radius_force_css( $s['btn_radius_hover'] ?? null );
         ?>
         <style>
-            .<?php echo $uid; ?>-card{display:block;text-decoration:none;color:inherit;background:<?php echo $bg; ?>;border-radius:<?php echo $radius; ?>;box-shadow:<?php echo $shadow; ?>;overflow:hidden;transition:transform .3s ease,box-shadow .3s ease}
+            .<?php echo $uid; ?>-card{display:block;text-decoration:none;color:inherit;background:<?php echo $bg; ?>;border-radius:<?php echo $radius; ?>;box-shadow:<?php echo $shadow; ?>;overflow:hidden;transition:transform .3s ease,box-shadow .3s ease,border-radius 400ms cubic-bezier(.4,0,.2,1)}
+            <?php if ( $radius_hover_css !== '' ) : ?>.<?php echo $uid; ?>-card:hover{border-radius:<?php echo $radius_hover_css; ?> !important}<?php endif; ?>
             <?php if ( $hover === 'lift' ) : ?>
             .<?php echo $uid; ?>-card:hover{transform:translateY(-6px);box-shadow:0 12px 28px rgba(0,0,0,.15)}
             <?php elseif ( $hover === 'scale' ) : ?>
@@ -393,7 +400,8 @@ class Olo_ServiceRelated_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?>-card .olo-sr-price{font-size:16px;font-weight:700;color:<?php echo $p_color; ?>;margin-bottom:8px}
             .<?php echo $uid; ?>-card .olo-sr-price small{font-weight:400;font-size:12px;opacity:.7}
             .<?php echo $uid; ?>-card .olo-sr-mush{font-size:14px;margin-bottom:6px}
-            .<?php echo $uid; ?>-card .olo-sr-btn{display:inline-block;padding:8px 18px;background:<?php echo $btn_bg; ?>;color:<?php echo $btn_c; ?>;border-radius:<?php echo $btn_r; ?>;font-size:13px;font-weight:600;transition:opacity .2s}
+            .<?php echo $uid; ?>-card .olo-sr-btn{display:inline-block;padding:8px 18px;background:<?php echo $btn_bg; ?>;color:<?php echo $btn_c; ?>;border-radius:<?php echo $btn_r; ?>;font-size:13px;font-weight:600;transition:opacity .2s,border-radius 400ms cubic-bezier(.4,0,.2,1)}
+            <?php if ( $btn_r_hover_css !== '' ) : ?>.<?php echo $uid; ?>-card:hover .olo-sr-btn{border-radius:<?php echo $btn_r_hover_css; ?> !important}<?php endif; ?>
             .<?php echo $uid; ?>-card:hover .olo-sr-btn{opacity:.85}
         </style>
         <?php

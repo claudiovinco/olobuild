@@ -66,12 +66,16 @@ class Olo_Slideshow_Tile extends Olo_Tile_Base {
                         <?php endif; ?>
                         <?php $sl_bg = $this->safe_color_css( $s['overlay_color'] ); $sl_fg = $this->safe_color_css( $s['text_color'] ); ?>
                         <div class="uk-position-cover" style="<?php if ( $sl_bg ) echo 'background:' . $sl_bg . ';'; ?>opacity:0.45;"></div>
+                        <?php
+                        list( $sst_cls, $sst_data ) = $this->tfx_attrs( $s, 'title', $slide['title'] ?? '' );
+                        list( $sss_cls, $sss_data ) = $this->tfx_attrs( $s, 'subtitle', $slide['subtitle'] ?? '' );
+                        ?>
                         <div class="uk-position-center uk-text-center" style="<?php if ( $sl_fg ) echo 'color:' . $sl_fg . ';'; ?>z-index:1;padding:24px;">
                             <?php if ( ! empty( $slide['title'] ) ) : ?>
-                                <div style="font-size:2em;font-weight:700;margin-bottom:8px;"><?php echo esc_html( $slide['title'] ); ?></div>
+                                <div class="olo-ss-title<?php echo $sst_cls; ?>" style="font-size:2em;font-weight:700;margin-bottom:8px;"<?php echo $sst_data; ?>><?php echo esc_html( $slide['title'] ); ?></div>
                             <?php endif; ?>
                             <?php if ( ! empty( $slide['subtitle'] ) ) : ?>
-                                <div style="font-size:1.1em;opacity:0.85;"><?php echo esc_html( $slide['subtitle'] ); ?></div>
+                                <div class="olo-ss-sub<?php echo $sss_cls; ?>" style="font-size:1.1em;opacity:0.85;"<?php echo $sss_data; ?>><?php echo esc_html( $slide['subtitle'] ); ?></div>
                             <?php endif; ?>
                         </div>
                     </div>
@@ -88,6 +92,9 @@ class Olo_Slideshow_Tile extends Olo_Tile_Base {
             <?php endif; ?>
         </div>
         <?php
+        $tfx_css = $this->tfx_css( $s, '#' . $id );
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        $this->tfx_print_script();
         return ob_get_clean();
     }
 }

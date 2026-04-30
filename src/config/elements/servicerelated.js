@@ -1,3 +1,4 @@
+import { textEffectsFields, textEffectsDefaults } from './_shared';
 export default {
   type: 'servicerelated',
   name: 'Strutture Correlate',
@@ -39,6 +40,7 @@ export default {
     marquee_speed: 25,
     marquee_direction: 'left',
     marquee_pause: true,
+    ...textEffectsDefaults,
   },
   fields: [
     // ── Contenuto ──
@@ -113,6 +115,7 @@ export default {
     // ── Card style ──
     { key: 'card_bg', label: 'Sfondo card', type: 'color' },
     { key: 'card_radius', label: 'Raggio angoli (px)', type: 'border-radius' },
+    { key: 'card_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     {
       key: 'card_shadow', label: 'Ombra', type: 'select', options: [
         { value: 'none', label: 'Nessuna' },
@@ -149,5 +152,7 @@ export default {
     { key: 'btn_bg', label: 'Sfondo pulsante', type: 'color' },
     { key: 'btn_color', label: 'Colore testo pulsante', type: 'color' },
     { key: 'btn_radius', label: 'Raggio pulsante (px)', type: 'border-radius' },
+    { key: 'btn_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
+    ...textEffectsFields([ { value: 'heading', label: 'Solo Titolo' } ]),
   ],
 };

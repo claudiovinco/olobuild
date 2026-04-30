@@ -104,7 +104,12 @@ class Olo_IconBox_Tile extends Olo_Tile_Base {
 
         // Border radius
         $br_val = $this->build_border_radius_css( $s['border_radius'] ?? null );
+        $br_val_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
         $tile_radius_css = $br_val ? 'border-radius:' . $br_val . ';' : '';
+        if ( $br_val_hover_css !== '' ) {
+            // ensure transition is on the wrapper so we can animate even when base radius is 0
+            $tile_radius_css .= 'transition:border-radius 400ms cubic-bezier(.4,0,.2,1);';
+        }
 
         // Shadow
         $shadow_val = Olo_Tile_Utils::shadow_value( $s, 'shadow' );
@@ -156,6 +161,7 @@ class Olo_IconBox_Tile extends Olo_Tile_Base {
                 border-radius: <?php echo $icon_shape === 'circle' ? '50%' : ( $icon_shape === 'rounded' ? '12px' : '4px' ); ?>;
             }
             <?php endif; ?>
+            <?php if ( $br_val_hover_css !== '' ) : ?>.<?php echo $uid; ?>:hover{border-radius:<?php echo $br_val_hover_css; ?> !important}<?php endif; ?>
         </style>
         <div class="olo-iconbox <?php echo $align_class; ?> <?php echo esc_attr( $uid ); ?>" style="<?php echo $tile_bg_css . $tile_padding_css . $tile_border_css . $tile_radius_css . $tile_shadow_css; ?>">
           <?php if ( $is_horiz ) : ?><div class="mib-flex"><?php endif; ?>
@@ -176,9 +182,15 @@ class Olo_IconBox_Tile extends Olo_Tile_Base {
                 </div>
             <?php endif; ?>
 
+            <?php
+            $title_plain = wp_strip_all_tags( $s['title'] );
+            $desc_plain  = wp_strip_all_tags( $s['description'] );
+            list( $t_tfx_cls, $t_tfx_data ) = $this->tfx_attrs( $s, 'title', $title_plain );
+            list( $d_tfx_cls, $d_tfx_data ) = $this->tfx_attrs( $s, 'description', $desc_plain );
+            ?>
             <?php if ( $is_horiz ) : ?><div class="mib-content-col"><?php endif; ?>
-                <h3 class="mib-title"><?php echo esc_html( wp_strip_all_tags( $s['title'] ) ); ?></h3>
-                <div style="margin: 0 0 <?php echo $desc_gap; ?>px; opacity: 0.8; line-height: 1.6;"><?php echo nl2br( esc_html( wp_strip_all_tags( $s['description'] ) ) ); ?></div>
+                <h3 class="mib-title<?php echo $t_tfx_cls; ?>"<?php echo $t_tfx_data; ?>><?php echo esc_html( $title_plain ); ?></h3>
+                <div class="mib-desc<?php echo $d_tfx_cls; ?>" style="margin: 0 0 <?php echo $desc_gap; ?>px; opacity: 0.8; line-height: 1.6;"<?php echo $d_tfx_data; ?>><?php echo nl2br( esc_html( $desc_plain ) ); ?></div>
                 <?php if ( ! empty( $s['link_url'] ) ) : ?>
                     <a href="<?php echo esc_url( $s['link_url'] ); ?>" class="mib-link" style="color:<?php echo $link_clr; ?>"><?php echo esc_html( wp_strip_all_tags( $s['link_text'] ) ); ?> &rarr;</a>
                 <?php endif; ?>
@@ -187,6 +199,9 @@ class Olo_IconBox_Tile extends Olo_Tile_Base {
           <?php if ( $is_horiz ) : ?></div><?php endif; ?>
         </div>
         <?php
+        $tfx_css = $this->tfx_css( $s, '.' . $uid );
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        $this->tfx_print_script();
         return ob_get_clean();
     }
 }

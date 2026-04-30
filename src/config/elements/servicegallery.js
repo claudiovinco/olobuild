@@ -49,6 +49,7 @@ export default {
     { key: 'gap', label: 'Gap (px)', type: 'range', min: 2, max: 24, step: 2 },
     { key: 'thumb_height', label: 'Altezza miniature (px)', type: 'range', min: 100, max: 350, step: 10 },
     { key: 'thumb_radius', label: 'Raggio bordi (px)', type: 'border-radius' },
+    { key: 'thumb_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'mobile_columns', label: 'Colonne mobile', type: 'range', min: 1, max: 4, step: 1 },
     { key: 'lightbox', label: 'Lightbox (click per ingrandire)', type: 'toggle' },
 

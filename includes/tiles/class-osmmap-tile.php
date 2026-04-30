@@ -34,6 +34,7 @@ class Olo_Osmmap_Tile extends Olo_Tile_Base {
         $zoom   = absint( $s['zoom'] ) ?: 13;
         $height = absint( $s['height'] ) ?: 400;
         $radius = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
+        $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
 
         $show_marker     = filter_var( $s['marker'], FILTER_VALIDATE_BOOLEAN );
         $scroll_zoom     = filter_var( $s['scroll_wheel_zoom'], FILTER_VALIDATE_BOOLEAN );
@@ -71,6 +72,9 @@ class Olo_Osmmap_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
+        <?php if ( $radius_hover_css !== '' ) : ?>
+        <style>#<?php echo esc_attr( $map_id ); ?>{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}#<?php echo esc_attr( $map_id ); ?>:hover{border-radius:<?php echo $radius_hover_css; ?> !important}</style>
+        <?php endif; ?>
 
         <div id="<?php echo esc_attr( $map_id ); ?>" class="olo-osmmap" style="height:<?php echo $height; ?>px; border-radius:<?php echo $radius; ?>; overflow:hidden;"></div>
 

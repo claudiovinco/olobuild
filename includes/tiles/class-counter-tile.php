@@ -51,6 +51,7 @@ class Olo_Counter_Tile extends Olo_Tile_Base {
         $icon_sz  = absint( $s['icon_size'] ) ?: 40;
         $pad = Olo_Tile_Utils::spacing_css( $s['tile_padding'] ?? $s['padding'] ?? 32, 32 );
         $tile_r   = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
+        $tile_r_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
         $tile_bw  = intval( $s['border_width'] );
         $tile_bc  = $this->safe_color_css( $s['border_color'] ) ?: 'var(--olo-color-text, #374151)';
 
@@ -74,6 +75,7 @@ class Olo_Counter_Tile extends Olo_Tile_Base {
                 border: <?php echo $tile_bw; ?>px solid <?php echo $tile_bc; ?>;
                 <?php endif; ?>
             }
+            <?php if ( $tile_r_hover_css !== '' ) : ?>.<?php echo $uid; ?>{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?>:hover{border-radius:<?php echo $tile_r_hover_css; ?> !important}<?php endif; ?>
             <?php if ( $bg_type === 'image' && ! empty( $s['bg_image'] ) ) : ?>
             .<?php echo $uid; ?> .olo-cnt-bg {
                 position: absolute; inset: 0;
@@ -138,11 +140,15 @@ class Olo_Counter_Tile extends Olo_Tile_Base {
                     <?php echo esc_html( $s['prefix'] ); ?><?php echo esc_html( $s['number'] ); ?><?php echo esc_html( $s['suffix'] ); ?>
                 </div>
                 <?php if ( ! empty( $s['label'] ) ) : ?>
-                    <div class="olo-cnt-label"><?php echo $label; ?></div>
+                    <?php list( $l_tfx_cls, $l_tfx_data ) = $this->tfx_attrs( $s, 'label', wp_strip_all_tags( $s['label'] ) ); ?>
+                    <div class="olo-cnt-label<?php echo $l_tfx_cls; ?>"<?php echo $l_tfx_data; ?>><?php echo $label; ?></div>
                 <?php endif; ?>
             </div>
         </div>
         <?php
+        $tfx_css = $this->tfx_css( $s, '.' . $uid );
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        $this->tfx_print_script();
         return ob_get_clean();
     }
 }

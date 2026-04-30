@@ -118,6 +118,7 @@ export default {
     { key: 'toolbar_padding_y', label: 'Padding verticale (px)', type: 'spacing', max: 24 },
     { key: 'toolbar_margin_bottom', label: 'Margine inferiore (px)', type: 'spacing', max: 32 },
     { key: 'toolbar_radius', label: 'Raggio bordo toolbar (px)', type: 'border-radius' },
+    { key: 'toolbar_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
 
     // ── Toolbar titolo ──
     { type: 'separator', label: 'Titolo toolbar' },
@@ -143,6 +144,7 @@ export default {
     { key: 'toolbar_btn_active_bg', label: 'Sfondo attivo', type: 'color' },
     { key: 'toolbar_btn_active_color', label: 'Colore testo attivo', type: 'color' },
     { key: 'toolbar_btn_radius', label: 'Raggio bordo (px)', type: 'border-radius' },
+    { key: 'toolbar_btn_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'toolbar_btn_padding_x', label: 'Padding orizzontale (px)', type: 'spacing', max: 24 },
     { key: 'toolbar_btn_padding_y', label: 'Padding verticale (px)', type: 'spacing', max: 14 },
     { key: 'toolbar_btn_font_size', label: 'Dimensione testo (px)', type: 'range', min: 11, max: 16 },
@@ -193,6 +195,7 @@ export default {
     // ── Stile eventi ──
     { type: 'separator', label: 'Stile eventi' },
     { key: 'event_radius', label: 'Raggio bordo eventi (px)', type: 'border-radius' },
+    { key: 'event_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'event_font_size', label: 'Dimensione testo eventi (px)', type: 'range', min: 10, max: 16 },
 
     // ── Modale ──

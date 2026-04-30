@@ -1,3 +1,4 @@
+import { textEffectsFields, textEffectsDefaults } from './_shared';
 export default {
   type: 'textpath',
   name: 'Testo su Tracciato',
@@ -12,6 +13,7 @@ export default {
     letter_spacing: '2',
     animation: 'none',
     animation_speed: '10',
+    ...textEffectsDefaults,
   },
   fields: [
     { key: 'text', label: 'Testo', type: 'text' },
@@ -40,5 +42,6 @@ export default {
     ]},
     { key: 'animation_speed', label: 'Velocita animazione (sec)', type: 'range', min: 1, max: 20,
       condition: { field: 'animation', value: ['scroll', 'continuous'] } },
+    ...textEffectsFields([ { value: 'text', label: 'Solo Testo' } ]),
   ],
 };

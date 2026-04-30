@@ -188,7 +188,8 @@ class Olo_Woo_Recently_Viewed_Tile extends Olo_Tile_Base {
         </style>
 
         <?php if ( $heading_text !== '' ) : ?>
-        <h3 class="<?php echo esc_attr( $uid ); ?>-heading"><?php echo esc_html( $heading_text ); ?></h3>
+        <?php list( $rv_cls, $rv_data ) = $this->tfx_attrs( $s, 'heading', $heading_text ); ?>
+        <h3 class="<?php echo esc_attr( $uid ); ?>-heading<?php echo $rv_cls; ?>"<?php echo $rv_data; ?>><?php echo esc_html( $heading_text ); ?></h3>
         <?php endif; ?>
 
         <div class="<?php echo esc_attr( $uid ); ?>">
@@ -259,6 +260,9 @@ class Olo_Woo_Recently_Viewed_Tile extends Olo_Tile_Base {
         <?php endforeach; ?>
         </div>
         <?php
+        $tfx_css = $this->tfx_css( $s, '.' . $uid );
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        $this->tfx_print_script();
         return ob_get_clean();
     }
 }

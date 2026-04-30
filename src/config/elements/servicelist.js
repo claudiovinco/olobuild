@@ -74,6 +74,7 @@ export default {
     // ── Card ──
     { key: 'card_bg', label: 'Sfondo card', type: 'color' },
     { key: 'card_border_radius', label: 'Radius card (px)', type: 'border-radius' },
+    { key: 'card_border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'card_border_color', label: 'Bordo colore', type: 'color' },
     { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 48 },
     { key: 'card_shadow', label: 'Ombra', type: 'select', options: [
@@ -118,6 +119,7 @@ export default {
       condition: { field: 'show_image', value: true } },
     { key: 'image_radius', label: 'Radius immagine (px)', type: 'border-radius',
       condition: { field: 'show_image', value: true } },
+    { key: 'image_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
 
     { type: 'separator', label: 'Tipografia' },
 
@@ -141,6 +143,7 @@ export default {
     { key: 'btn_bg', label: 'Sfondo pulsante', type: 'color' },
     { key: 'btn_color', label: 'Testo pulsante', type: 'color' },
     { key: 'btn_radius', label: 'Border radius (px)', type: 'border-radius' },
+    { key: 'btn_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'btn_full_width', label: 'Larghezza piena', type: 'toggle' },
   ],
 };

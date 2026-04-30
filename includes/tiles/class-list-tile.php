@@ -87,11 +87,15 @@ class Olo_List_Tile extends Olo_Tile_Base {
                     <?php else : ?>
                         <span style="flex-shrink:0;display:flex;align-items:center;line-height:1;"><?php echo $this->get_icon_svg( $icon, $s['icon_color'], $isize ); ?></span>
                     <?php endif; ?>
-                    <span style="line-height:1.5;"><?php echo esc_html( $item['text'] ); ?></span>
+                    <?php list( $li_cls, $li_data ) = $this->tfx_attrs( $s, 'text', $item['text'] ); ?>
+                    <span class="olo-list-text<?php echo $li_cls; ?>" style="line-height:1.5;"<?php echo $li_data; ?>><?php echo esc_html( $item['text'] ); ?></span>
                 <?php echo $li_close; ?>
             <?php endforeach; ?>
         </ul>
         <?php
+        $tfx_css = $this->tfx_css( $s, '.olo-list' );
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        $this->tfx_print_script();
         return ob_get_clean();
     }
 

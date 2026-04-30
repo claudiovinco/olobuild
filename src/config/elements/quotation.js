@@ -1,3 +1,4 @@
+import { textEffectsFields, textEffectsDefaults } from './_shared';
 import { shadowField } from './_shared.js';
 
 export default {
@@ -11,6 +12,7 @@ export default {
     style: 'default',
     alignment: 'left',
     shadow: 'none',
+    ...textEffectsDefaults,
   },
   fields: [
     { key: 'content', label: 'Citazione', type: 'textarea' },
@@ -25,5 +27,10 @@ export default {
       { value: 'right', label: 'Destra' },
     ]},
     ...shadowField,
+    ...textEffectsFields([
+      { value: 'content', label: 'Solo Contenuto' },
+      { value: 'author', label: 'Solo Autore' },
+      { value: 'all', label: 'Tutti gli elementi testuali' },
+    ]),
   ],
 };

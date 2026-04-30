@@ -40,6 +40,7 @@ class Olo_Popover_Tile extends Olo_Tile_Base {
         $popup_bg         = $this->safe_color_css( $s['popup_bg'] ?? '#ffffff' );
         $popup_color      = $this->safe_color_css( $s['popup_color'] ?? '#333333' );
         $popup_radius     = $this->build_border_radius_css( $s["popup_radius"] ?? 8 );
+        $popup_radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['popup_radius_hover'] ?? null );
         $popup_img_height = absint( $s['popup_img_height'] ?? 120 );
         $hover_effect     = $s['popup_hover_effect'] ?? 'none';
         $hover_color      = $this->safe_color_css( $s['popup_hover_color'] ?? '' ) ?: 'var(--olo-color-primary, #6366F1)';
@@ -67,6 +68,7 @@ class Olo_Popover_Tile extends Olo_Tile_Base {
                 min-width: 240px;
                 max-width: 320px;
             }
+            <?php if ( $popup_radius_hover_css !== '' ) : ?>.<?php echo $uid; ?> .olo-popover-drop{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?> .olo-popover-drop:hover{border-radius:<?php echo $popup_radius_hover_css; ?> !important}<?php endif; ?>
             .<?php echo $uid; ?> .olo-popover-drop h4 { color: <?php echo $popup_color; ?>; }
             .<?php echo $uid; ?> .olo-popover-drop__body { padding: 16px 20px; }
             .<?php echo $uid; ?> .olo-popover-drop__media {
@@ -128,12 +130,16 @@ class Olo_Popover_Tile extends Olo_Tile_Base {
                             <img src="<?php echo esc_url( $marker_img ); ?>" alt="<?php echo esc_attr( $marker['title'] ?? '' ); ?>" class="olo-popover-drop__img" loading="lazy">
                         </div>
                         <?php endif; ?>
+                        <?php
+                        list( $pvt_cls, $pvt_data ) = $this->tfx_attrs( $s, 'title', $marker['title'] ?? '' );
+                        list( $pvc_cls, $pvc_data ) = $this->tfx_attrs( $s, 'content', wp_strip_all_tags( $marker['content'] ?? '' ) );
+                        ?>
                         <div class="olo-popover-drop__body">
                             <?php if ( ! empty( $marker['title'] ) ) : ?>
-                                <h4 class="uk-margin-small-bottom"><?php echo esc_html( $marker['title'] ); ?></h4>
+                                <h4 class="uk-margin-small-bottom<?php echo $pvt_cls; ?>"<?php echo $pvt_data; ?>><?php echo esc_html( $marker['title'] ); ?></h4>
                             <?php endif; ?>
                             <?php if ( ! empty( $marker['content'] ) ) : ?>
-                                <p class="uk-margin-remove"><?php echo wp_kses_post( $marker['content'] ); ?></p>
+                                <p class="uk-margin-remove<?php echo $pvc_cls; ?>"<?php echo $pvc_data; ?>><?php echo wp_kses_post( $marker['content'] ); ?></p>
                             <?php endif; ?>
                         </div>
                     </div>
@@ -141,6 +147,9 @@ class Olo_Popover_Tile extends Olo_Tile_Base {
             <?php endforeach; ?>
         </div>
         <?php
+        $tfx_css = $this->tfx_css( $s, '.' . $uid );
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        $this->tfx_print_script();
         return ob_get_clean();
     }
 }

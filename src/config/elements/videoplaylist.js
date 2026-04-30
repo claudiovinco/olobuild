@@ -1,3 +1,4 @@
+import { textEffectsFields, textEffectsDefaults } from './_shared';
 export default {
   type: 'videoplaylist',
   name: 'Video Playlist',
@@ -17,6 +18,7 @@ export default {
     active_color: '',
     show_duration: true,
     autoplay_next: false,
+    ...textEffectsDefaults,
   },
   fields: [
     { key: 'videos', label: 'Video', type: 'content-items',
@@ -43,5 +45,6 @@ export default {
     { key: 'active_color', label: 'Colore attivo', type: 'color' },
     { key: 'show_duration', label: 'Mostra durata', type: 'toggle' },
     { key: 'autoplay_next', label: 'Autoplay successivo', type: 'toggle' },
+    ...textEffectsFields([ { value: 'title', label: 'Solo Titolo' } ]),
   ],
 };

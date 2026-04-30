@@ -35,9 +35,14 @@ class Olo_Starrating_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
-        <div class="olo-starrating" style="text-align:<?php echo $align; ?>;padding:16px;">
+        <?php $sr_uid = 'olo-sr-' . wp_unique_id(); ?>
+        <div class="olo-starrating <?php echo $sr_uid; ?>" style="text-align:<?php echo $align; ?>;padding:16px;">
+            <?php
+            list( $srt_cls, $srt_data ) = $this->tfx_attrs( $s, 'title', wp_strip_all_tags( $s['title'] ?? '' ) );
+            list( $srs_cls, $srs_data ) = $this->tfx_attrs( $s, 'subtitle', wp_strip_all_tags( $s['subtitle'] ?? '' ) );
+            ?>
             <?php if ( ! empty( $s['title'] ) ) : ?>
-                <div style="font-weight:600;margin-bottom:8px;color:<?php echo $this->safe_color_css($s['title_color']) ?: '#F3F4F6'; ?>;font-size:16px;">
+                <div class="olo-sr-title<?php echo $srt_cls; ?>" style="font-weight:600;margin-bottom:8px;color:<?php echo $this->safe_color_css($s['title_color']) ?: '#F3F4F6'; ?>;font-size:16px;"<?php echo $srt_data; ?>>
                     <?php echo esc_html( wp_strip_all_tags( $s['title'] ) ); ?>
                 </div>
             <?php endif; ?>
@@ -61,12 +66,15 @@ class Olo_Starrating_Tile extends Olo_Tile_Base {
                 <?php echo esc_html( $rating . ' / ' . $max ); ?>
             </div>
             <?php if ( ! empty( $s['subtitle'] ) ) : ?>
-                <div style="margin-top:4px;font-size:13px;color:<?php echo $this->safe_color_css($s['subtitle_color']) ?: '#9CA3AF'; ?>;">
+                <div class="olo-sr-subtitle<?php echo $srs_cls; ?>" style="margin-top:4px;font-size:13px;color:<?php echo $this->safe_color_css($s['subtitle_color']) ?: '#9CA3AF'; ?>;"<?php echo $srs_data; ?>>
                     <?php echo esc_html( wp_strip_all_tags( $s['subtitle'] ) ); ?>
                 </div>
             <?php endif; ?>
         </div>
         <?php
+        $tfx_css = $this->tfx_css( $s, '.' . $sr_uid );
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        $this->tfx_print_script();
         return ob_get_clean();
     }
 }

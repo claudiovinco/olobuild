@@ -1,3 +1,4 @@
+import { textEffectsFields, textEffectsDefaults } from './_shared';
 export default {
   type: 'carousel',
   name: 'Carosello immagini',
@@ -29,6 +30,7 @@ export default {
     caption_bg: '',
     object_fit: 'cover',
     mobile_slides: '1',
+    ...textEffectsDefaults,
   },
   fields: [
     { key: 'slides', label: 'Slide', type: 'content-items',
@@ -56,6 +58,7 @@ export default {
       { value: 'contain', label: 'Contieni' },
     ]},
     { key: 'border_radius', label: 'Raggio bordi (px)', type: 'border-radius' },
+    { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'mobile_slides', label: 'Slide mobile', type: 'range', min: 1, max: 3, step: 1 },
 
     { type: 'separator', label: 'Comportamento' },
@@ -80,5 +83,6 @@ export default {
       condition: { field: 'show_caption', value: true } },
     { key: 'caption_bg', label: 'Sfondo didascalia', type: 'color',
       condition: { field: 'show_caption', value: true } },
+    ...textEffectsFields([ { value: 'caption', label: 'Solo Didascalia' } ]),
   ],
 };

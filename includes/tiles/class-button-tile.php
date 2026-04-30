@@ -234,12 +234,15 @@ class Olo_Button_Tile extends Olo_Tile_Base {
             $text_html = esc_html( $s['text'] );
             $icon_spacing_px = absint( $s['icon_spacing'] ?? 8 );
 
+            list( $tfx_cls, $tfx_data ) = $this->tfx_attrs( $s, 'text', $s['text'] );
+            $text_span_cls = 'olo-btn-text' . $tfx_cls;
+
             if ( $icon_html && $s['icon_position'] === 'after' ) {
-                $inner = '<span class="olo-btn-text" style="display:inline-flex;align-items:center;gap:' . $icon_spacing_px . 'px;">' . $text_html . $icon_html . '</span>';
+                $inner = '<span class="' . $text_span_cls . '" style="display:inline-flex;align-items:center;gap:' . $icon_spacing_px . 'px;"' . $tfx_data . '>' . $text_html . $icon_html . '</span>';
             } elseif ( $icon_html ) {
-                $inner = '<span class="olo-btn-text" style="display:inline-flex;align-items:center;gap:' . $icon_spacing_px . 'px;">' . $icon_html . $text_html . '</span>';
+                $inner = '<span class="' . $text_span_cls . '" style="display:inline-flex;align-items:center;gap:' . $icon_spacing_px . 'px;"' . $tfx_data . '>' . $icon_html . $text_html . '</span>';
             } else {
-                $inner = '<span class="olo-btn-text">' . $text_html . '</span>';
+                $inner = '<span class="' . $text_span_cls . '"' . $tfx_data . '>' . $text_html . '</span>';
             }
 
             $btn_html = '<a href="' . esc_url( $s['url'] ) . '"' . $target_attr . ' class="olo-btn-link" role="button">' . $inner . '</a>';
@@ -252,6 +255,10 @@ class Olo_Button_Tile extends Olo_Tile_Base {
             ?>
         </div>
         <?php
+        // Text-effects scoped CSS + runtime script (idempotent)
+        $tfx_css = $this->tfx_css( $s, '.' . $uid );
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        $this->tfx_print_script();
         return ob_get_clean();
     }
 }

@@ -208,12 +208,16 @@ class Olo_Hotspot_Tile extends Olo_Tile_Base {
                     echo '<span style="font-size:' . $marker_size . 'px;">' . esc_html( $m_icon ) . '</span>';
                 }
                 ?>
+                <?php
+                list( $hst_cls, $hst_data ) = $this->tfx_attrs( $s, 'title', wp_strip_all_tags( $title ) );
+                list( $hsd_cls, $hsd_data ) = $this->tfx_attrs( $s, 'description', wp_strip_all_tags( $desc ) );
+                ?>
                 <div class="olo-hs-tooltip" data-pos="<?php echo esc_attr( $tt_pos ); ?>">
                     <?php if ( $title ) : ?>
-                        <div class="olo-hs-tooltip-title"><?php echo $title; ?></div>
+                        <div class="olo-hs-tooltip-title<?php echo $hst_cls; ?>"<?php echo $hst_data; ?>><?php echo $title; ?></div>
                     <?php endif; ?>
                     <?php if ( $desc ) : ?>
-                        <div class="olo-hs-tooltip-desc"><?php echo $desc; ?></div>
+                        <div class="olo-hs-tooltip-desc<?php echo $hsd_cls; ?>"<?php echo $hsd_data; ?>><?php echo $desc; ?></div>
                     <?php endif; ?>
                 </div>
             </div>
@@ -246,6 +250,9 @@ class Olo_Hotspot_Tile extends Olo_Tile_Base {
         })();
         </script>
         <?php
+        $tfx_css = $this->tfx_css( $s, '.' . $uid );
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        $this->tfx_print_script();
         return ob_get_clean();
     }
 }

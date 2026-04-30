@@ -1,3 +1,4 @@
+import { textEffectsFields, textEffectsDefaults } from './_shared';
 import { shadowField } from './_shared.js';
 
 export default {
@@ -29,6 +30,7 @@ export default {
     background_gradient: '',
     show_social_icons: false,
     shadow: 'none',
+    ...textEffectsDefaults,
   },
   fields: [
     { key: 'items', label: 'Link', type: 'content-items',
@@ -63,11 +65,13 @@ export default {
     { key: 'link_bg', label: 'Sfondo link', type: 'color' },
     { key: 'link_hover_bg', label: 'Sfondo hover', type: 'color' },
     { key: 'link_border_radius', label: 'Arrotondamento (px)', type: 'border-radius' },
+    { key: 'link_border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 24 },
     { type: 'separator', label: 'Sfondo' },
     { key: 'background_color', label: 'Colore sfondo', type: 'color' },
     { key: 'background_gradient', label: 'Gradiente CSS', type: 'text', placeholder: 'linear-gradient(135deg, #667eea, #764ba2)' },
     { key: 'show_social_icons', label: 'Mostra icone social', type: 'toggle' },
     ...shadowField,
+    ...textEffectsFields([ { value: 'title', label: 'Solo Titolo' } ]),
   ],
 };

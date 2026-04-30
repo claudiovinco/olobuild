@@ -60,7 +60,17 @@ class Olo_Video_Tile extends Olo_Tile_Base {
         }
 
         $_br_css = $this->build_border_radius_css( $s["border_radius"] );
+        $_br_css_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
         $this->_vbr = $_br_css ? "border-radius:" . $_br_css . ";overflow:hidden;" : "";
+        if ( $_br_css_hover_css !== '' ) {
+            $this->_vbr .= 'transition:border-radius 400ms cubic-bezier(.4,0,.2,1);';
+            // ensure overflow hidden so we can clip the video to a rounded shape during the transition
+            if ( ! $_br_css ) $this->_vbr .= 'overflow:hidden;';
+        }
+        // Stash hover css as instance prop so render_* funcs can emit a :hover rule
+        $this->_vbr_hover_css = $_br_css_hover_css;
+        // Per-instance uid so hover rules don't leak to other video tiles on the same page
+        $this->_v_uid = 'olo-v-' . wp_unique_id();
         // Shadow on the video wrapper
         $shadow_val = Olo_Tile_Utils::shadow_value( $s, 'shadow' );
         if ( $shadow_val && $shadow_val !== 'none' ) {
@@ -70,15 +80,32 @@ class Olo_Video_Tile extends Olo_Tile_Base {
         $is_file = $s["source_type"] === 'file' || $this->is_direct_video( $s['video_url'] );
         $is_cover = $s['display_mode'] === 'cover';
 
+        // Build hover CSS prefix scoped to this instance only
+        $hover_prefix = '';
+        if ( $_br_css_hover_css !== '' ) {
+            // Cover applies radius to the outer wrapper (which also has .olo-video-cover);
+            // embed/native apply to the inner <div> (first child of the wrapper).
+            $u = $this->_v_uid;
+            $hover_prefix = '<style>'
+                          . '.' . $u . '.olo-video-cover:hover{border-radius:' . $_br_css_hover_css . ' !important}'
+                          . '.' . $u . ':not(.olo-video-cover):hover>div{border-radius:' . $_br_css_hover_css . ' !important}'
+                          . '</style>';
+        }
+
         if ( $is_cover ) {
-            return $this->render_cover( $s, $is_file );
+            $body = $this->render_cover( $s, $is_file );
+        } elseif ( $is_file ) {
+            $body = $this->render_native( $s );
+        } else {
+            $body = $this->render_embed( $s );
         }
 
-        if ( $is_file ) {
-            return $this->render_native( $s );
-        }
+        // Text-effects scoped CSS + runtime script (per-instance via $this->_v_uid)
+        $tfx_css = $this->tfx_css( $s, '.' . $this->_v_uid );
+        $tfx_block = $tfx_css ? '<style>' . $tfx_css . '</style>' : '';
+        ob_start(); $this->tfx_print_script(); $tfx_block .= ob_get_clean();
 
-        return $this->render_embed( $s );
+        return $hover_prefix . $body . $tfx_block;
     }
 
     // =========================================================================
@@ -103,7 +130,7 @@ class Olo_Video_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
-        <div class="olo-video uk-responsive-width">
+        <div class="olo-video uk-responsive-width <?php echo esc_attr( $this->_v_uid ); ?>">
             <div style="position: relative; padding-bottom: <?php echo esc_attr( $padding ); ?>; overflow: hidden; <?php echo $this->_vbr; ?>">
                 <?php if ( $has_poster ) : ?>
                     <?php
@@ -155,7 +182,7 @@ class Olo_Video_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
-        <div class="olo-video uk-responsive-width">
+        <div class="olo-video uk-responsive-width <?php echo esc_attr( $this->_v_uid ); ?>">
             <div style="position: relative; padding-bottom: <?php echo esc_attr( $padding ); ?>; overflow: hidden; <?php echo $this->_vbr; ?> background: var(--olo-color-secondary, #1F2937);">
                 <?php if ( $src ) : ?>
                     <video
@@ -207,7 +234,7 @@ class Olo_Video_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
-        <div class="olo-video olo-video-cover uk-position-relative uk-overflow-hidden" style="height: <?php echo $height; ?>px; <?php echo $this->_vbr; ?>">
+        <div class="olo-video olo-video-cover uk-position-relative uk-overflow-hidden <?php echo esc_attr( $this->_v_uid ); ?>" style="height: <?php echo $height; ?>px; <?php echo $this->_vbr; ?>">
             <?php if ( $src ) : ?>
                 <video
                     class="uk-position-cover"
@@ -266,8 +293,9 @@ class Olo_Video_Tile extends Olo_Tile_Base {
                     esc_attr( $ov_align ), $ov_color, $ov_size, esc_attr( $ov_weight )
                 );
             ?>
+                <?php list( $ov_tfx_cls, $ov_tfx_data ) = $this->tfx_attrs( $s, 'overlay_text', wp_strip_all_tags( $s['overlay_text'] ) ); ?>
                 <div class="uk-position-cover uk-flex uk-flex-center uk-flex-middle" style="z-index: 2; pointer-events: none;">
-                    <div style="<?php echo $ov_text_style; ?>">
+                    <div class="olo-video-overlay-text<?php echo $ov_tfx_cls; ?>" style="<?php echo $ov_text_style; ?>"<?php echo $ov_tfx_data; ?>>
                         <?php echo nl2br( esc_html( wp_strip_all_tags( $s['overlay_text'] ) ) ); ?>
                     </div>
                 </div>
@@ -339,9 +367,14 @@ class Olo_Video_Tile extends Olo_Tile_Base {
 
     private function render_caption( $s ) {
         if ( ! empty( $s['caption'] ) ) {
-            echo '<p class="uk-text-center uk-text-small" style="padding: 8px 0; color: var(--olo-color-text-muted, #9CA3AF);">';
+            list( $tfx_caption_cls, $tfx_caption_data ) = $this->tfx_attrs( $s, 'caption', wp_strip_all_tags( $s['caption'] ) );
+            // Wrap in a div with the per-instance class so scoped tfx CSS (`.olo-v-XXX …`) catches it
+            // even when the caption sits OUTSIDE the cover wrapper.
+            echo '<div class="' . esc_attr( $this->_v_uid ) . '">';
+            echo '<p class="uk-text-center uk-text-small' . $tfx_caption_cls . '" style="padding: 8px 0; color: var(--olo-color-text-muted, #9CA3AF);"' . $tfx_caption_data . '>';
             echo esc_html( wp_strip_all_tags( $s['caption'] ) );
             echo '</p>';
+            echo '</div>';
         }
     }
 

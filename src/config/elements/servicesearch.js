@@ -151,6 +151,7 @@ export default {
       key: 'border_radius',
       label: 'Arrotondamento (px)',
       type: 'border-radius' },
+    { key: 'filter_border_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
 
     // ─── Larghezza campi ───
     { type: 'separator', label: 'Larghezza campi (%)' },

@@ -50,6 +50,7 @@ export default {
     ]},
     { key: 'max_width', label: 'Larghezza max (px, vuoto = 100%)', type: 'text' },
     { key: 'border_radius', label: 'Raggio bordi (px)', type: 'border-radius' },
+    { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
 
     { type: 'separator', label: 'Poster' },
     { key: 'poster_from_thumb', label: 'Usa immagine in evidenza come poster', type: 'toggle' },

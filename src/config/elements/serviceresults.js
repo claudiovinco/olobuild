@@ -44,14 +44,14 @@ export default {
     body_bg_opacity: '100',
     // Contenuto card
     card_content: 'excerpt,stats,price',
-    show_service_opening: false,
-    opening_bg_annual: '',
-    opening_bg_seasonal: '',
-    opening_size: '11',
+    opening_bg_annual: '#059669',
+    opening_bg_seasonal: '#d97706',
     ribbon_field: '',
+    ribbon_field_custom: '',
     ribbon_position: 'top-right',
     ribbon_bg: '',
     ribbon_color: '',
+    ribbon_size: 11,
     excerpt_length: '15',
     price_prefix: '\u20ac',
     price_suffix: '/notte',
@@ -190,11 +190,13 @@ export default {
       condition: { field: 'card_style', value: 'primary' } },
     { key: 'match_height', label: 'Stessa altezza card', type: 'toggle' },
     { key: 'card_radius', label: 'Arrotondamento angoli (px)', type: 'border-radius' },
+    { key: 'card_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
 
     // ─── Immagine ───
     { type: 'separator', label: 'Immagine' },
     { key: 'image_height', label: 'Altezza immagine (px)', type: 'range', min: 100, max: 350, step: 10 },
     { key: 'image_radius', label: 'Raggio bordo immagine (px)', type: 'border-radius' },
+    { key: 'image_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'hover_effect', label: 'Effetto hover', type: 'select', options: [
       { value: 'none', label: 'Nessuno' },
       { value: 'zoom', label: 'Zoom' },
@@ -260,22 +262,39 @@ export default {
       { value: 'card', label: 'Card intera cliccabile' },
     ]},
 
-    // ─── Badge e ribbon ───
-    { type: 'separator', label: 'Badge e ribbon' },
-    { key: 'show_service_opening', label: 'Mostra badge apertura', type: 'toggle' },
-    { key: 'opening_bg_annual', label: 'Sfondo apertura annuale', type: 'color',
-      condition: { field: 'show_service_opening', value: true } },
-    { key: 'opening_bg_seasonal', label: 'Sfondo apertura stagionale', type: 'color',
-      condition: { field: 'show_service_opening', value: true } },
-    { key: 'opening_size', label: 'Dimensione testo badge (px)', type: 'range', min: 8, max: 18, step: 1,
-      condition: { field: 'show_service_opening', value: true } },
-    { key: 'ribbon_field', label: 'Meta key ribbon', type: 'text' },
-    { key: 'ribbon_position', label: 'Posizione ribbon', type: 'select', options: [
-      { value: 'top-left', label: 'Alto sinistra' },
-      { value: 'top-right', label: 'Alto destra' },
+    // ─── Ribbon ─── (unificato: include il vecchio "badge apertura" come preset)
+    { type: 'separator', label: 'Ribbon' },
+    { key: 'ribbon_field', label: 'Contenuto', type: 'select', options: [
+      { value: '',                       label: '— Nessun ribbon —' },
+      { value: '_olo_service_opening',   label: 'Apertura struttura (annuale/stagionale)' },
+      { value: '_olo_service_price',     label: 'Prezzo' },
+      { value: '_olo_service_price_night', label: 'Prezzo a notte' },
+      { value: '_olo_acc_type',          label: 'Tipologia (baita/app/...)' },
+      { value: '_olo_service_capacity',  label: 'Capacità (ospiti)' },
+      { value: '_olo_service_valley',    label: 'Località / Valle' },
+      { value: '_olo_service_altitude',  label: 'Altitudine' },
+      { value: '_olo_service_bedrooms',  label: 'Camere' },
+      { value: '_olo_service_bathrooms', label: 'Bagni' },
+      { value: '_olo_service_sqm',       label: 'Mq' },
+      { value: '__custom__',             label: 'Personalizzato (meta key libera)' },
     ]},
-    { key: 'ribbon_bg', label: 'Sfondo ribbon', type: 'color' },
-    { key: 'ribbon_color', label: 'Testo ribbon', type: 'color' },
+    { key: 'ribbon_field_custom', label: '↳ Meta key personalizzata', type: 'text',
+      condition: { field: 'ribbon_field', value: '__custom__' } },
+    { key: 'ribbon_position', label: 'Posizione', type: 'select', options: [
+      { value: 'top-left',     label: 'Alto sinistra' },
+      { value: 'top-right',    label: 'Alto destra' },
+      { value: 'bottom-left',  label: 'Basso sinistra' },
+      { value: 'bottom-right', label: 'Basso destra' },
+    ]},
+    { key: 'ribbon_size', label: 'Dimensione testo (px)', type: 'range', min: 8, max: 24, step: 1 },
+    { key: 'ribbon_bg', label: 'Sfondo', type: 'color' },
+    { key: 'ribbon_color', label: 'Testo', type: 'color' },
+    // Override colori specifici quando il contenuto è "Apertura struttura": cambia
+    // automaticamente colore in base al valore (annuale = primo, stagionale = secondo).
+    { key: 'opening_bg_annual', label: '↳ Sfondo se annuale', type: 'color',
+      condition: { field: 'ribbon_field', value: '_olo_service_opening' } },
+    { key: 'opening_bg_seasonal', label: '↳ Sfondo se stagionale', type: 'color',
+      condition: { field: 'ribbon_field', value: '_olo_service_opening' } },
 
     // ─── Ordinamento ───
     { type: 'separator', label: 'Ordinamento' },

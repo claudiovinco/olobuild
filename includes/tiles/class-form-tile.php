@@ -108,6 +108,7 @@ class Olo_Form_Tile extends Olo_Tile_Base {
         $gap         = absint( $s['gap'] ) ?: 16;
         $bw          = absint( $s['input_border_width'] );
         $radius      = $this->build_border_radius_css( $s["input_radius"] );
+        $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['input_radius_hover'] ?? null );
         $label_color = $this->safe_color_css( $s['label_color'] ) ?: 'var(--olo-color-text, #374151)';
         $label_size  = absint( $s['label_size'] ) ?: 14;
         $label_weight= $s['label_weight'] ?: '500';
@@ -121,6 +122,7 @@ class Olo_Form_Tile extends Olo_Tile_Base {
         $btn_color   = $this->safe_color_css( $s['submit_color'] );
         $btn_hover   = $this->safe_color_css( $s['submit_hover_bg'] );
         $btn_radius  = $this->build_border_radius_css( $s["submit_radius"] );
+        $btn_radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['submit_radius_hover'] ?? null );
         $btn_px      = absint( $s['submit_padding_x'] ) ?: 32;
         $btn_py      = absint( $s['submit_padding_y'] ) ?: 14;
         $btn_fs      = absint( $s['submit_font_size'] ) ?: 16;
@@ -252,7 +254,8 @@ class Olo_Form_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .olo-f-required{color:var(--olo-color-danger, #EF4444);margin-left:2px}
             .<?php echo $uid; ?> .uk-input,
             .<?php echo $uid; ?> .uk-textarea,
-            .<?php echo $uid; ?> .uk-select{background-color:<?php echo $input_bg; ?>;color:<?php echo $input_color; ?>;border:<?php echo $bw; ?>px solid <?php echo $input_bc; ?>;border-radius:<?php echo $radius; ?>}
+            .<?php echo $uid; ?> .uk-select{background-color:<?php echo $input_bg; ?>;color:<?php echo $input_color; ?>;border:<?php echo $bw; ?>px solid <?php echo $input_bc; ?>;border-radius:<?php echo $radius; ?>;transition:border-radius 400ms cubic-bezier(.4,0,.2,1),border-color 0.15s ease}
+            <?php if ( $radius_hover_css !== '' ) : ?>.<?php echo $uid; ?> .uk-input:hover,.<?php echo $uid; ?> .uk-textarea:hover,.<?php echo $uid; ?> .uk-select:hover{border-radius:<?php echo $radius_hover_css; ?> !important}<?php endif; ?>
             .<?php echo $uid; ?> .uk-input:focus,
             .<?php echo $uid; ?> .uk-textarea:focus,
             .<?php echo $uid; ?> .uk-select:focus{border-color:<?php echo $focus_bc ?: 'var(--olo-color-primary, #6366F1)'; ?>;outline:none<?php if ( $focus_shadow ) : ?>;box-shadow:0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #6366F1) 15%, transparent)<?php endif; ?>}
@@ -264,7 +267,7 @@ class Olo_Form_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .uk-form-icon{color:<?php echo $input_color; ?>;opacity:0.5}
             .<?php echo $uid; ?> .uk-form-icon:hover{opacity:0.8}
             .<?php echo $uid; ?> .olo-f-btn{background:<?php echo $btn_bg ?: 'var(--olo-color-primary, #6366F1)'; ?>;color:<?php echo $btn_color; ?>;<?php if ( $btn_bw > 0 ) : ?>border:<?php echo $btn_bw; ?>px solid <?php echo $btn_bc ?: 'var(--olo-color-primary, #6366F1)'; ?><?php else : ?>border:none<?php endif; ?>;border-radius:<?php echo $btn_radius; ?>;padding:<?php echo $btn_py; ?>px <?php echo $btn_px; ?>px;font-size:<?php echo $btn_fs; ?>px;font-weight:<?php echo $btn_fw; ?>;cursor:pointer;transition:background 0.2s ease,border-color 0.2s ease,transform 0.15s ease;display:inline-flex;align-items:center;gap:8px<?php if ( $btn_ls > 0 ) : ?>;letter-spacing:<?php echo $btn_ls; ?>px<?php endif; ?><?php if ( $btn_tt !== 'none' ) : ?>;text-transform:<?php echo $btn_tt; ?><?php endif; ?><?php if ( $btn_full ) : ?>;width:100%;justify-content:center<?php endif; ?>}
-            .<?php echo $uid; ?> .olo-f-btn:hover{background:<?php echo $btn_hover ?: 'var(--olo-color-primary-dark, #4F46E5)'; ?><?php if ( $btn_bw > 0 && $btn_hbc ) : ?>;border-color:<?php echo $btn_hbc; ?><?php endif; ?>}
+            .<?php echo $uid; ?> .olo-f-btn:hover{background:<?php echo $btn_hover ?: 'var(--olo-color-primary-dark, #4F46E5)'; ?><?php if ( $btn_bw > 0 && $btn_hbc ) : ?>;border-color:<?php echo $btn_hbc; ?><?php endif; ?><?php if ( $btn_radius_hover_css !== '' ) : ?>;border-radius:<?php echo $btn_radius_hover_css; ?> !important<?php endif; ?>}
             .<?php echo $uid; ?> .olo-f-btn:active{transform:translateY(1px)}
             .<?php echo $uid; ?> .olo-f-btn:disabled{opacity:0.6;cursor:not-allowed}
             .<?php echo $uid; ?> .olo-f-msg{margin-top:12px;padding:12px 16px;border-radius:<?php echo $radius; ?>;font-size:14px;display:none}

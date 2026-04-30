@@ -115,7 +115,8 @@ class Olo_Woo_Order_Tracking_Tile extends Olo_Tile_Base {
         </style>
         <div class="<?php echo esc_attr( $uid ); ?>">
             <?php if ( $title !== '' ) : ?>
-            <<?php echo $title_tag; ?> class="olo-ot-title"><?php echo esc_html( $title ); ?></<?php echo $title_tag; ?>>
+            <?php list( $ot_cls, $ot_data ) = $this->tfx_attrs( $s, 'title', $title ); ?>
+            <<?php echo $title_tag; ?> class="olo-ot-title<?php echo $ot_cls; ?>"<?php echo $ot_data; ?>><?php echo esc_html( $title ); ?></<?php echo $title_tag; ?>>
             <?php endif; ?>
             <form class="olo-ot-form" method="post" action="<?php echo esc_url( wc_get_page_permalink( 'myaccount' ) ); ?>">
                 <div class="olo-ot-field">
@@ -134,6 +135,9 @@ class Olo_Woo_Order_Tracking_Tile extends Olo_Tile_Base {
             </form>
         </div>
         <?php
+        $tfx_css = $this->tfx_css( $s, '.' . $uid );
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        $this->tfx_print_script();
         return ob_get_clean();
     }
 }

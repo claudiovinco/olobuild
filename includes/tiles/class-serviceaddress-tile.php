@@ -58,6 +58,7 @@ class Olo_ServiceAddress_Tile extends Olo_Tile_Base {
 
         $font_size = max( 12, min( 22, absint( $s['font_size'] ) ) );
         $radius    = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
+        $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
         $padding   = absint( $s['padding'] );
 
         $wrap_styles = [];
@@ -79,9 +80,17 @@ class Olo_ServiceAddress_Tile extends Olo_Tile_Base {
             . '<circle cx="12" cy="9" r="2.5" stroke="' . $this->safe_color_css( $s['icon_color'] ) . '" stroke-width="1.8" fill="' . $this->safe_color_css( $s['icon_color'] ) . '" fill-opacity="0.3"/>'
             . '</svg>';
 
+        $sa_uid = 'olo-saddr-' . wp_unique_id();
+        if ( $radius_hover_css !== '' ) {
+            $wrap_styles[] = 'transition:border-radius 400ms cubic-bezier(.4,0,.2,1)';
+        }
+
         ob_start();
         ?>
-        <div style="display:flex;align-items:flex-start;gap:10px;<?php echo implode( ';', $wrap_styles ); ?>">
+        <?php if ( $radius_hover_css !== '' ) : ?>
+        <style>.<?php echo $sa_uid; ?>:hover{border-radius:<?php echo $radius_hover_css; ?> !important}</style>
+        <?php endif; ?>
+        <div class="<?php echo $sa_uid; ?>" style="display:flex;align-items:flex-start;gap:10px;<?php echo implode( ';', $wrap_styles ); ?>">
             <?php if ( ! empty( $s['show_icon'] ) ) : ?>
                 <span style="display:flex;flex-shrink:0;margin-top:2px"><?php echo $icon_svg; ?></span>
             <?php endif; ?>

@@ -1,3 +1,4 @@
+import { textEffectsFields, textEffectsDefaults } from './_shared';
 export default {
   type: 'icontabs',
   name: 'Tab a Icone',
@@ -20,6 +21,7 @@ export default {
     text_color: '#333333',
     link_color: '#2563EB',
     default_index: '0',
+    ...textEffectsDefaults,
   },
   fields: [
     { key: 'items', label: 'Schede', type: 'content-items',
@@ -42,12 +44,20 @@ export default {
     { key: 'inactive_color', label: 'Icone inattive', type: 'color' },
     { type: 'separator', label: 'Stile card' },
     { key: 'card_bg', label: 'Sfondo card', type: 'color' },
-    { key: 'card_radius', label: 'Raggio card', type: 'range', min: 0, max: 40 },
+    { key: 'card_radius', label: 'Raggio card', type: 'border-radius'},
+    { key: 'card_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'heading_color', label: 'Occhiello', type: 'color' },
     { key: 'title_color', label: 'Titolo', type: 'color' },
     { key: 'text_color', label: 'Testo', type: 'color' },
     { key: 'link_color', label: 'Link', type: 'color' },
     { type: 'separator', label: 'Comportamento' },
     { key: 'default_index', label: 'Scheda attiva iniziale (0-based)', type: 'text' },
+    ...textEffectsFields([
+      { value: 'label', label: 'Solo Etichetta' },
+      { value: 'heading', label: 'Solo Titolo' },
+      { value: 'title', label: 'Solo Titolo' },
+      { value: 'content', label: 'Solo Contenuto' },
+      { value: 'all', label: 'Tutti gli elementi testuali' },
+    ]),
   ],
 };

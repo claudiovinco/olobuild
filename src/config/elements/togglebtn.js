@@ -75,6 +75,7 @@ export default {
     { key: 'btn_border_width', label: 'Bordo (px)', type: 'range', min: 0, max: 4 },
     { key: 'btn_border_color', label: 'Colore bordo', type: 'color' },
     { key: 'btn_border_radius', label: 'Raggio bordo (px)', type: 'border-radius' },
+    { key: 'btn_border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 48 },
     { key: 'btn_font_size', label: 'Dimensione testo (px)', type: 'range', min: 12, max: 24 },
     { key: 'btn_font_weight', label: 'Peso testo', type: 'select', options: [

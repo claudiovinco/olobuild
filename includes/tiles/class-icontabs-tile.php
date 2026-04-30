@@ -58,7 +58,7 @@ class Olo_IconTabs_Tile extends Olo_Tile_Base {
         $active_color  = $this->safe_color_css( $s['active_color'] );
         $inactive_col  = $this->safe_color_css( $s['inactive_color'] );
         $card_bg       = $this->safe_color_css( $s['card_bg'] );
-        $radius        = max( 0, intval( $s['card_radius'] ) );
+        $radius        = max( 0, Olo_Tile_Utils::radius_int( $s['card_radius'] ) );
         $heading_color = $this->safe_color_css( $s['heading_color'] );
         $title_color   = $this->safe_color_css( $s['title_color'] );
         $text_color    = $this->safe_color_css( $s['text_color'] );
@@ -114,14 +114,20 @@ class Olo_IconTabs_Tile extends Olo_Tile_Base {
             ?>
             <div class="oit-panel<?php echo $active; ?>" data-panel="<?php echo $i; ?>" role="tabpanel">
                 <div class="oit-card">
+                    <?php
+                    list( $itl_cls, $itl_data ) = $this->tfx_attrs( $s, 'label', $item['label'] ?? '' );
+                    list( $ith_cls, $ith_data ) = $this->tfx_attrs( $s, 'heading', $item['heading'] ?? '' );
+                    list( $itt_cls, $itt_data ) = $this->tfx_attrs( $s, 'title', $item['title'] ?? '' );
+                    list( $itc_cls, $itc_data ) = $this->tfx_attrs( $s, 'content', wp_strip_all_tags( $item['content'] ?? '' ) );
+                    ?>
                     <?php if ( ! empty( $item['heading'] ) ) : ?>
-                        <div class="oit-heading"><?php echo esc_html( $item['heading'] ); ?></div>
+                        <div class="oit-heading<?php echo $ith_cls; ?>"<?php echo $ith_data; ?>><?php echo esc_html( $item['heading'] ); ?></div>
                     <?php endif; ?>
                     <?php if ( ! empty( $item['title'] ) ) : ?>
-                        <h3 class="oit-title"><?php echo esc_html( $item['title'] ); ?></h3>
+                        <h3 class="oit-title<?php echo $itt_cls; ?>"<?php echo $itt_data; ?>><?php echo esc_html( $item['title'] ); ?></h3>
                     <?php endif; ?>
                     <?php if ( ! empty( $item['content'] ) ) : ?>
-                        <p class="oit-content">
+                        <p class="oit-content<?php echo $itc_cls; ?>"<?php echo $itc_data; ?>>
                             <?php echo wp_kses_post( $item['content'] ); ?>
                             <?php if ( ! empty( $item['link_text'] ) ) : ?>
                                 <a class="oit-link" href="<?php echo esc_url( $item['link_url'] ?? '#' ); ?>"><?php echo esc_html( $item['link_text'] ); ?></a>
@@ -159,6 +165,9 @@ class Olo_IconTabs_Tile extends Olo_Tile_Base {
         })();
         </script>
         <?php
+        $tfx_css = $this->tfx_css( $s, '.' . $uid );
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        $this->tfx_print_script();
         return ob_get_clean();
     }
 }

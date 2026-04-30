@@ -48,6 +48,7 @@ export default {
     { type: 'separator', label: 'Layout' },
     { key: 'hero_height', label: 'Altezza (px)', type: 'range', min: 200, max: 600, step: 20 },
     { key: 'hero_radius', label: 'Raggio bordi (px)', type: 'border-radius' },
+    { key: 'hero_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
 
     { type: 'separator', label: 'Overlay' },
     { key: 'hero_overlay', label: 'Tipo overlay', type: 'select', options: [

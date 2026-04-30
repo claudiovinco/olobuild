@@ -69,6 +69,7 @@ export default {
     { key: 'hover_background', label: 'Sfondo hover', type: 'color' },
     { type: 'separator', label: 'Stile tag' },
     { key: 'border_radius', label: 'Arrotondamento (px)', type: 'border-radius' },
+    { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'padding', label: 'Padding (px)', type: 'text', placeholder: '6 14' },
   ],
 };

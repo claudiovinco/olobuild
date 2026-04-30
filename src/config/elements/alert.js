@@ -1,3 +1,4 @@
+import { textEffectsFields, textEffectsDefaults } from './_shared';
 import { shadowField } from './_shared.js';
 
 export default {
@@ -16,6 +17,7 @@ export default {
     custom_border_color: '',
     custom_text_color: '',
     shadow: 'none',
+    ...textEffectsDefaults,
   },
   fields: [
     { key: 'alert_type', label: 'Tipo', type: 'select', options: [
@@ -34,5 +36,10 @@ export default {
     { key: 'custom_border_color', label: 'Bordo personalizzato', type: 'color' },
     { key: 'custom_text_color', label: 'Testo personalizzato', type: 'color' },
     ...shadowField,
+    ...textEffectsFields([
+      { value: 'title', label: 'Solo Titolo' },
+      { value: 'message', label: 'Solo Messaggio' },
+      { value: 'all', label: 'Tutti gli elementi testuali' },
+    ]),
   ],
 };

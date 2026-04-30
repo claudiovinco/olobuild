@@ -54,6 +54,7 @@ export default {
     { key: 'bg_color', label: 'Sfondo', type: 'color' },
     { key: 'border_color', label: 'Bordo', type: 'color' },
     { key: 'border_radius', label: 'Raggio bordi (px)', type: 'border-radius' },
+    { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 24 },
   ],
 };

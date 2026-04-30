@@ -27,6 +27,7 @@ export default {
     { key: 'acc_max_width', label: 'Larghezza max (px)', type: 'range', min: 600, max: 1200, step: 50 },
     { key: 'acc_hero_height', label: 'Altezza hero (px)', type: 'range', min: 200, max: 600, step: 20 },
     { key: 'acc_card_radius', label: 'Raggio bordi (px)', type: 'border-radius' },
+    { key: 'acc_card_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'acc_card_shadow', label: 'Ombra', type: 'select', options: [
       { value: 'none', label: 'Nessuna' },
       { value: 'sm', label: 'Leggera' },

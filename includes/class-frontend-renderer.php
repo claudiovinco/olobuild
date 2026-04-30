@@ -2387,10 +2387,37 @@ class Olo_Frontend_Renderer {
         }
 
         $type = $node['type'] ?? '';
+        $settings = $node['settings'] ?? [];
+
+        // Legacy tile migration filter: permette ad altri plugin (es. olo-booking)
+        // di remappare type+settings di tile legacy ai nuovi equivalenti senza
+        // duplicare le classi PHP. Il filter riceve [type, settings] e può
+        // restituire la stessa coppia modificata.
+        // Esempio in olo-booking:
+        //   add_filter( 'olo_tile_legacy_migrate', function( $tile, $node ) {
+        //       if ( $tile['type'] === 'servicegallery' ) {
+        //           $tile['type']     = 'ac-gallery';
+        //           $tile['settings'] = $remapped;
+        //       }
+        //       return $tile;
+        //   }, 10, 2 );
+        $migrated = apply_filters(
+            'olo_tile_legacy_migrate',
+            [ 'type' => $type, 'settings' => $settings ],
+            $node
+        );
+        if ( is_array( $migrated ) ) {
+            if ( isset( $migrated['type'] ) && is_string( $migrated['type'] ) ) {
+                $type = $migrated['type'];
+            }
+            if ( isset( $migrated['settings'] ) && is_array( $migrated['settings'] ) ) {
+                $settings = $migrated['settings'];
+            }
+        }
+
         $tile_instance = $manager->get_tile( $type );
         if ( ! $tile_instance ) return '';
 
-        $settings = $node['settings'] ?? [];
         $style    = $node['style'] ?? [];
         $advanced = $node['advanced'] ?? [];
 

@@ -255,7 +255,7 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
         // Panel
         $p_bg        = $this->safe_color( $s['panel_bg'] ) ?: '#FFFFFF';
         $p_cols      = max( 2, min( 6, intval( $s['panel_columns'] ) ) );
-        $p_radius    = intval( $s['panel_radius'] );
+        $p_radius    = Olo_Tile_Utils::radius_int( $s['panel_radius'] );
         $p_pad       = intval( $s['panel_padding'] ) ?: 32;
         $p_bt        = intval( $s['panel_border_top'] );
         $p_bc        = $this->safe_color( $s['panel_border_color'] ) ?: 'var(--olo-color-primary, #6366F1)';
@@ -277,7 +277,7 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
         // Buttons
         $btn_bg      = $this->safe_color( $s['btn_bg'] ) ?: 'var(--olo-color-primary, #6366F1)';
         $btn_color   = $this->safe_color( $s['btn_color'] ) ?: '#FFFFFF';
-        $btn_radius  = intval( $s['btn_radius'] );
+        $btn_radius  = Olo_Tile_Utils::radius_int( $s['btn_radius'] );
         $btn_hbg     = $this->safe_color( $s['btn_hover_bg'] );
         $btn_pv      = intval( $s['btn_padding_v'] );
         $btn_ph      = intval( $s['btn_padding_h'] );

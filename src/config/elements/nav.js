@@ -1,3 +1,4 @@
+import { textEffectsFields, textEffectsDefaults } from './_shared';
 import { shadowField } from './_shared.js';
 
 export default {
@@ -38,6 +39,7 @@ export default {
     open_in_new_tab: false,
     nofollow: false,
     shadow: 'none',
+    ...textEffectsDefaults,
   },
   fields: [
     // --- CONTENUTO ---
@@ -84,6 +86,7 @@ export default {
       { value: 'dot', label: 'Punto' },
     ]},
     { key: 'border_radius', label: 'Raggio bordo (px)', type: 'border-radius' },
+    { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'hover_effect', label: 'Effetto hover', type: 'select', options: [
       { value: 'none', label: 'Nessuno' },
       { value: 'slide-bg', label: 'Sfondo slide' },
@@ -135,5 +138,10 @@ export default {
     { key: 'nofollow', label: 'rel="nofollow"', type: 'toggle' },
 
     ...shadowField,
+    ...textEffectsFields([
+      { value: 'title', label: 'Solo Titolo' },
+      { value: 'content', label: 'Solo Contenuto' },
+      { value: 'all', label: 'Tutti gli elementi testuali' },
+    ]),
   ],
 };

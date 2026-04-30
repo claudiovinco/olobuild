@@ -67,11 +67,12 @@ class Olo_Search_Tile extends Olo_Tile_Base {
         $btn_bg        = $this->safe_color_css( $s['button_bg'] ) ?: '#6366F1';
         $btn_color     = $this->safe_color_css( $s['button_color'] ) ?: '#FFFFFF';
         $btn_radius    = $this->build_border_radius_css( $s["button_radius"] );
+        $btn_radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['button_radius_hover'] ?? null );
         $input_shadow  = ! empty( $s['input_shadow'] );
         $focus_shadow  = ! empty( $s['focus_shadow'] );
 
         // Radius
-        $radius = absint( $s['border_radius'] ) . 'px';
+        $radius = Olo_Tile_Utils::radius_int( $s['border_radius'] ) . 'px';
         if ( $style === 'pill' ) $radius = '50px';
         if ( $style === 'hero' ) $radius = '16px';
 
@@ -137,6 +138,7 @@ class Olo_Search_Tile extends Olo_Tile_Base {
             <?php endif; ?>
         }
         <?php endif; ?>
+        <?php if ( $btn_radius_hover_css !== '' ) : ?>.<?php echo $uid; ?> button[type=submit]{transition:border-radius 400ms cubic-bezier(.4,0,.2,1) !important}.<?php echo $uid; ?> button[type=submit]:hover{border-radius:<?php echo $btn_radius_hover_css; ?> !important}<?php endif; ?>
         </style>
         <div class="olo-search <?php echo $uid; ?>"<?php if ( $wrapper_css ) echo ' style="' . esc_attr( $wrapper_css ) . '"'; ?>>
             <form class="olo-srch-form" style="<?php echo esc_attr( $form_css ); ?>" action="<?php echo esc_url( home_url( '/' ) ); ?>" method="get" role="search">

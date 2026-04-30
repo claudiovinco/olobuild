@@ -1,3 +1,4 @@
+import { textEffectsFields, textEffectsDefaults } from './_shared';
 export default {
   type: 'newsticker',
   name: 'News Ticker',
@@ -19,6 +20,7 @@ export default {
     separator: '|',
     auto_scroll: true,
     pause_on_hover: true,
+    ...textEffectsDefaults,
   },
   fields: [
     { key: 'items', label: 'Notizie', type: 'content-items',
@@ -46,5 +48,6 @@ export default {
     { key: 'speed', label: 'Intervallo (ms)', type: 'range', min: 2000, max: 8000, step: 500 },
     { key: 'auto_scroll', label: 'Scorrimento automatico', type: 'toggle' },
     { key: 'pause_on_hover', label: 'Pausa al passaggio mouse', type: 'toggle' },
+    ...textEffectsFields([ { value: 'title', label: 'Solo Titolo' } ]),
   ],
 };

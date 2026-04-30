@@ -23,6 +23,7 @@ export default {
     { key: 'label_color', label: 'Etichette', type: 'color' },
     { key: 'border_color', label: 'Bordo', type: 'color' },
     { key: 'border_radius', label: 'Raggio bordi (px)', type: 'border-radius' },
+    { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 32 },
     { key: 'font_size', label: 'Dimensione testo (px)', type: 'range', min: 12, max: 18, step: 1 },
   ],

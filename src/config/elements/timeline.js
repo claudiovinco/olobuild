@@ -1,3 +1,4 @@
+import { textEffectsFields, textEffectsDefaults } from './_shared';
 export default {
   type: 'timeline',
   name: 'Timeline',
@@ -79,6 +80,7 @@ export default {
     h_gap: '24',
     h_arrow_color: '',
     h_arrow_bg: '',
+    ...textEffectsDefaults,
   },
   fields: [
     // ── Items ──
@@ -162,6 +164,7 @@ export default {
     { key: 'card_text_color', label: 'Colore testo card', type: 'color' },
     { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 40 },
     { key: 'card_border_radius', label: 'Arrotondamento (px)', type: 'border-radius' },
+    { key: 'card_border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'card_shadow', label: 'Ombra', type: 'select', options: [
       { value: 'none', label: 'Nessuna' },
       { value: 'sm', label: 'Leggera' },
@@ -202,6 +205,7 @@ export default {
     ]},
     { key: 'card_media_margin', label: 'Margine media (px)', type: 'spacing', max: 20 },
     { key: 'card_media_radius', label: 'Arrotondamento media (px)', type: 'border-radius' },
+    { key: 'card_media_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
 
     // ── Data ──
     { type: 'separator', label: 'Etichetta data' },
@@ -259,5 +263,10 @@ export default {
       condition: { field: 'layout', value: 'horizontal' } },
     { key: 'h_arrow_bg', label: 'Sfondo frecce', type: 'color',
       condition: { field: 'layout', value: 'horizontal' } },
+    ...textEffectsFields([
+      { value: 'title', label: 'Solo Titolo' },
+      { value: 'description', label: 'Solo Descrizione' },
+      { value: 'all', label: 'Tutti gli elementi testuali' },
+    ]),
   ],
 };

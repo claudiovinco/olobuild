@@ -164,10 +164,14 @@ class Olo_OverlaySlider_Tile extends Olo_Tile_Base {
                                     <?php if ( ! empty( $slide['ribbon'] ) ) : ?>
                                         <span class="mos-os-ribbon mos-os-ribbon--<?php echo $ribbon_position; ?>"><?php echo esc_html( $slide['ribbon'] ); ?></span>
                                     <?php endif; ?>
+                                    <?php
+                                    list( $ost_cls, $ost_data ) = $this->tfx_attrs( $s, 'title', $slide['title'] ?? '' );
+                                    list( $oss_cls, $oss_data ) = $this->tfx_attrs( $s, 'subtitle', $slide['subtitle'] ?? '' );
+                                    ?>
                                     <div class="uk-<?php echo esc_attr( $style ); ?> uk-position-<?php echo $position; ?> uk-panel<?php echo $text_class . $pad_class . $overlay_class; ?>">
-                                        <<?php echo $title_tag; ?> class="uk-margin-remove"><?php echo esc_html( $slide['title'] ?? '' ); ?></<?php echo $title_tag; ?>>
+                                        <<?php echo $title_tag; ?> class="uk-margin-remove<?php echo $ost_cls; ?>"<?php echo $ost_data; ?>><?php echo esc_html( $slide['title'] ?? '' ); ?></<?php echo $title_tag; ?>>
                                         <?php if ( ! empty( $slide['subtitle'] ) ) : ?>
-                                            <p class="uk-margin-small-top"><?php echo esc_html( $slide['subtitle'] ); ?></p>
+                                            <p class="uk-margin-small-top<?php echo $oss_cls; ?>"<?php echo $oss_data; ?>><?php echo esc_html( $slide['subtitle'] ); ?></p>
                                         <?php endif; ?>
                                     </div>
                                 <?php echo $has_link ? '</a>' : '</div>'; ?>
@@ -187,6 +191,9 @@ class Olo_OverlaySlider_Tile extends Olo_Tile_Base {
             </div>
         </div>
         <?php
+        $tfx_css = $this->tfx_css( $s, '.' . $uid );
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        $this->tfx_print_script();
         return ob_get_clean();
     }
 }

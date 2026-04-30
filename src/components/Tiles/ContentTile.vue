@@ -46,6 +46,8 @@ const s = computed(() => ({
   heading: '',
   heading_tag: 'h2',
   heading_size: 'md',
+  heading_line_height: 1.2,
+  heading_align: '',
   heading_color: '',
   text: '',
   text_color: '',
@@ -71,6 +73,13 @@ const s = computed(() => ({
 // Resolve responsive values
 const effectivePosition = computed(() => rv(props.settings, 'image_position', s.value.image_position, builderStore.viewMode));
 const effectiveSize = computed(() => rv(props.settings, 'heading_size', s.value.heading_size, builderStore.viewMode));
+const effectiveLineHeight = computed(() => rv(props.settings, 'heading_line_height', s.value.heading_line_height, builderStore.viewMode));
+const effectiveAlign = computed(() => rv(props.settings, 'heading_align', s.value.heading_align, builderStore.viewMode));
+
+const hasText = computed(() => {
+  const raw = s.value.text || '';
+  return raw.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').trim().length > 0;
+});
 
 const textHtml = computed(() => s.value.text || '<span class="olo-editable-ph">Il contenuto va qui...</span>');
 
@@ -80,10 +89,15 @@ const isHorizontal = computed(() => effectivePosition.value === 'left' || effect
 const isReversed = computed(() => effectivePosition.value === 'bottom' || effectivePosition.value === 'right');
 
 const headingStyle = computed(() => {
+  // gap solo se c'è davvero del testo sotto
+  const gapPx = hasText.value ? (parseInt(s.value.heading_gap) || 0) : 0;
   const st = {
     fontSize: sizeMap[effectiveSize.value] || '1.25em',
-    margin: '0 0 ' + (parseInt(s.value.heading_gap) || 0) + 'px 0',
+    margin: '0 0 ' + gapPx + 'px 0',
   };
+  const lh = parseFloat(effectiveLineHeight.value);
+  if (lh && lh > 0) st.lineHeight = lh;
+  if (effectiveAlign.value) st.textAlign = effectiveAlign.value;
   if (s.value.heading_color) st.color = s.value.heading_color;
   return st;
 });

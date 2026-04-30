@@ -41,6 +41,7 @@ class Olo_Instagram_Tile extends Olo_Tile_Base {
         $show_caption = ! empty( $s['caption'] );
         $bg_color     = $this->safe_color_css( $s['background_color'] );
         $radius       = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
+        $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
         $alignment    = $s['alignment'] ?: 'center';
 
         $align_map = [ 'left' => 'left', 'center' => 'center', 'right' => 'right' ];
@@ -53,10 +54,21 @@ class Olo_Instagram_Tile extends Olo_Tile_Base {
         if ( $radius && $radius !== '0px' ) {
             $wrapper_style .= 'border-radius:' . $radius . ';overflow:hidden;';
         }
+        $ig_uid = 'olo-ig-' . wp_unique_id();
+        if ( $radius_hover_css !== '' ) {
+            $wrapper_style .= 'transition:border-radius 400ms cubic-bezier(.4,0,.2,1);';
+            if ( ! ( $radius && $radius !== '0px' ) ) {
+                // ensure overflow:hidden so transition clips correctly even when base is 0
+                $wrapper_style .= 'overflow:hidden;';
+            }
+        }
 
         ob_start();
         ?>
-        <div class="olo-instagram" style="<?php echo esc_attr( $wrapper_style ); ?>">
+        <?php if ( $radius_hover_css !== '' ) : ?>
+        <style>.<?php echo $ig_uid; ?>:hover{border-radius:<?php echo $radius_hover_css; ?> !important}</style>
+        <?php endif; ?>
+        <div class="olo-instagram <?php echo $ig_uid; ?>" style="<?php echo esc_attr( $wrapper_style ); ?>">
             <?php if ( empty( $url ) ) : ?>
                 <div style="padding:40px 20px;text-align:center;color:var(--olo-color-text-muted, #9CA3AF);background:var(--olo-color-muted, #F3F4F6);border-radius:<?php echo $radius; ?>;">
                     <?php echo esc_html( function_exists( 'olo_t' ) ? olo_t( 'Inserisci un URL Instagram' ) : 'Inserisci un URL Instagram' ); ?>

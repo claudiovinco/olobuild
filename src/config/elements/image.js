@@ -1,3 +1,4 @@
+import { textEffectsFields, textEffectsDefaults } from './_shared';
 import { shadowField } from './_shared.js';
 
 export default {
@@ -37,6 +38,7 @@ export default {
     border_radius: '0',
     hover_border_radius: '',
     hover_radius_duration: '400',
+    ...textEffectsDefaults,
   },
   fields: [
     { key: 'image_url', label: 'Immagine', type: 'image' },
@@ -86,5 +88,6 @@ export default {
     ]},
     { key: 'lightbox', label: 'Lightbox al click', type: 'toggle' },
     ...shadowField,
+    ...textEffectsFields([ { value: 'caption', label: 'Solo Didascalia' } ]),
   ],
 };

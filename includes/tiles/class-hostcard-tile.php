@@ -91,6 +91,7 @@ class Olo_HostCard_Tile extends Olo_Tile_Base {
         $photo_size  = max( 60, min( 200, absint( $s['photo_size'] ) ) );
         $rounded     = ! empty( $s['photo_rounded'] );
         $radius      = $this->build_border_radius_css( $s["card_radius"] );
+        $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['card_radius_hover'] ?? null );
         $accent      = $this->safe_color_css( $s['accent_color'] ?? '' ) ?: 'var(--olo-color-primary, #6366F1)';
         $card_bg     = $this->safe_color_css( $s['card_bg'] ?? '' ) ?: 'var(--olo-color-background, #FFFFFF)';
         $shadow      = Olo_Tile_Utils::shadow( $s['modal_shadow'] ?? 'lg' );
@@ -134,6 +135,7 @@ class Olo_HostCard_Tile extends Olo_Tile_Base {
                 <?php if ( $shadow !== 'none' ) : ?>box-shadow: <?php echo $shadow; ?>;<?php endif; ?>
                 max-width: 480px;
             }
+            <?php if ( $radius_hover_css !== '' ) : ?>#<?php echo esc_attr( $uid ); ?>-modal .uk-modal-dialog{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}#<?php echo esc_attr( $uid ); ?>-modal .uk-modal-dialog:hover{border-radius:<?php echo $radius_hover_css; ?> !important}<?php endif; ?>
         </style>
         <?php
 

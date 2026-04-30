@@ -61,6 +61,7 @@ class Olo_LangSwitcher_Tile extends Olo_Tile_Base {
         $size    = absint( $s['flag_size'] );
         $gap     = absint( $s['gap'] );
         $radius  = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
+        $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
         $compact = ! empty( $s['compact'] );
 
         $flags = [
@@ -92,6 +93,9 @@ class Olo_LangSwitcher_Tile extends Olo_Tile_Base {
             $wrapper_class .= ' ols-compact';
         }
 
+        $ols_uid = 'ols-uid-' . wp_unique_id();
+        $wrapper_class .= ' ' . $ols_uid;
+
         ob_start();
 
         // Emit base styles for new features (circle flags, compact)
@@ -107,6 +111,13 @@ class Olo_LangSwitcher_Tile extends Olo_Tile_Base {
                 echo '.ols-compact .ols-flag{font-size:16px !important;}';
             }
             echo '</style>';
+        }
+
+        if ( $radius_hover_css !== '' ) {
+            echo '<style>'
+                . '.' . $ols_uid . ' .ols-item,.' . $ols_uid . ' .ols-trigger{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}'
+                . '.' . $ols_uid . ' .ols-item:hover,.' . $ols_uid . ' .ols-trigger:hover{border-radius:' . $radius_hover_css . ' !important}'
+                . '</style>';
         }
 
         if ( $layout === 'tabs' ) {

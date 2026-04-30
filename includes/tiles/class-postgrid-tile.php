@@ -33,7 +33,8 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
         'image_radius'    => '0',
         'card_radius'     => '4',
         'show_image'      => true,
-        'show_category'   => true,
+        'show_category'             => true,
+        'category_badge_position'   => 'top-left',
         'show_excerpt'    => true,
         'excerpt_length'  => '20',
         'show_meta'       => true,
@@ -46,10 +47,13 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
         'hover_effect'      => 'none',
         'hover_image_field' => '',
         'hover_video_field' => '',
-        'ribbon_field'      => '',
-        'ribbon_position' => 'top-right',
-        'ribbon_bg'       => '#e11d48',
-        'ribbon_color'    => '#ffffff',
+        // Ribbon (v3.11.62: unificato con vecchio "badge apertura" come ribbon_field='_olo_service_opening')
+        'ribbon_field'        => '',
+        'ribbon_field_custom' => '',
+        'ribbon_position'     => 'top-right',
+        'ribbon_bg'           => '#e11d48',
+        'ribbon_color'        => '#ffffff',
+        'ribbon_size'         => 11,
         'meta_filter'     => '',
         // Stile testo
         'body_padding'     => '15',
@@ -90,6 +94,26 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
     public function render( $settings ) {
         $s = wp_parse_args( $settings, $this->defaults );
 
+        // Backward compat (pre-3.11.63): "Mostra badge apertura" era un toggle
+        // separato. Ora è unificato come ribbon_field='_olo_service_opening'.
+        // Migra al volo i template salvati con show_service_opening=true e
+        // ribbon non popolato → diventano ribbon su _olo_service_opening,
+        // posizionato in basso a sinistra come il vecchio badge.
+        if ( ! empty( $s['show_service_opening'] ) && empty( $s['ribbon_field'] ) ) {
+            $s['ribbon_field'] = '_olo_service_opening';
+            if ( ! isset( $settings['ribbon_position'] ) ) {
+                $s['ribbon_position'] = 'bottom-left';
+            }
+            if ( ! empty( $s['opening_size'] ) && empty( $settings['ribbon_size'] ) ) {
+                $s['ribbon_size'] = (int) $s['opening_size'];
+            }
+        }
+
+        // Risolvi __custom__ → ribbon_field_custom (meta_key inserita dall'utente)
+        if ( ( $s['ribbon_field'] ?? '' ) === '__custom__' ) {
+            $s['ribbon_field'] = (string) ( $s['ribbon_field_custom'] ?? '' );
+        }
+
         $post_type = sanitize_key( $s['post_type'] );
         if ( ! post_type_exists( $post_type ) ) {
             return '<p style="color:var(--olo-color-text-muted, #9CA3AF);text-align:center;">Tipo di contenuto "' . esc_html( $post_type ) . '" non trovato.</p>';
@@ -111,8 +135,19 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
             $query_args['meta_key'] = sanitize_key( $s['meta_key'] );
         }
 
-        // Meta filter: "key=value" pre-filters query
-        if ( ! empty( $s['meta_filter'] ) && str_contains( $s['meta_filter'], '=' ) ) {
+        // Meta filter — modalità nuova (select chiave + select valore)
+        if ( ! empty( $s['meta_filter_key'] ?? '' ) ) {
+            $mq = [ 'key' => sanitize_key( $s['meta_filter_key'] ) ];
+            $mv = $s['meta_filter_value'] ?? '';
+            if ( $mv !== '' ) {
+                $mq['value'] = sanitize_text_field( $mv );
+            } else {
+                $mq['compare'] = 'EXISTS';
+            }
+            $query_args['meta_query'] = [ $mq ];
+        }
+        // Meta filter — modalità legacy "key=value" testo libero (back-compat)
+        elseif ( ! empty( $s['meta_filter'] ) && str_contains( $s['meta_filter'], '=' ) ) {
             list( $mf_key, $mf_val ) = array_map( 'trim', explode( '=', $s['meta_filter'], 2 ) );
             if ( $mf_key && $mf_val ) {
                 $query_args['meta_query'] = [
@@ -203,9 +238,8 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
                     $item['service_club_group']    = get_post_meta( $post->ID, '_olo_service_club_group', true );
                     $item['service_club_category'] = get_post_meta( $post->ID, '_olo_service_club_category', true );
                 }
-                if ( ! empty( $s['show_service_opening'] ) ) {
-                    $item['service_opening'] = get_post_meta( $post->ID, '_olo_service_opening', true );
-                }
+                // Nota: service_opening è ora un caso del ribbon (ribbon_field='_olo_service_opening').
+                // Il retrofit in render() esegue la migrazione automatica per i template legacy.
             }
 
             // Taxonomy terms
@@ -256,7 +290,9 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
         $uid          = 'olo-postgrid-' . wp_rand( 10000, 99999 );
         $image_height = absint( $s['image_height'] ) ?: 200;
         $image_radius = $this->build_border_radius_css( $s["image_radius"] ?? 0 );
+        $image_radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['image_radius_hover'] ?? null );
         $card_radius  = $this->build_border_radius_css( $s["card_radius"] ?? 4 );
+        $card_radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['card_radius_hover'] ?? null );
 
         // Sort config for JS
         $sort_enabled      = ! empty( $s['show_sort'] );
@@ -311,11 +347,13 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
         ob_start();
         ?>
         <style>
-            .<?php echo $uid; ?> .olo-pg-img { transition: transform 0.5s ease, filter 0.5s ease; width: 100%; height: <?php echo $image_height; ?>px; object-fit: cover; display: block; border-radius: <?php echo $image_radius; ?>; }
-            .<?php echo $uid; ?> .olo-card-minimal__img { border-radius: <?php echo $image_radius; ?>; }
-            .<?php echo $uid; ?> .uk-card-media-top { border-radius: <?php echo $image_radius; ?>; overflow: hidden; }
-            .<?php echo $uid; ?> .uk-card { border-radius: <?php echo $card_radius; ?>; overflow: hidden; }
-            .<?php echo $uid; ?> .olo-card-minimal { border-radius: <?php echo $card_radius; ?>; overflow: hidden; }
+            .<?php echo $uid; ?> .olo-pg-img { transition: transform 0.5s ease, filter 0.5s ease, border-radius 400ms cubic-bezier(.4,0,.2,1); width: 100%; height: <?php echo $image_height; ?>px; object-fit: cover; display: block; border-radius: <?php echo $image_radius; ?>; }
+            .<?php echo $uid; ?> .olo-card-minimal__img { border-radius: <?php echo $image_radius; ?>; transition: border-radius 400ms cubic-bezier(.4,0,.2,1); }
+            .<?php echo $uid; ?> .uk-card-media-top { border-radius: <?php echo $image_radius; ?>; overflow: hidden; transition: border-radius 400ms cubic-bezier(.4,0,.2,1); }
+            .<?php echo $uid; ?> .uk-card { border-radius: <?php echo $card_radius; ?>; overflow: hidden; transition: border-radius 400ms cubic-bezier(.4,0,.2,1); }
+            .<?php echo $uid; ?> .olo-card-minimal { border-radius: <?php echo $card_radius; ?>; overflow: hidden; transition: border-radius 400ms cubic-bezier(.4,0,.2,1); }
+            <?php if ( $image_radius_hover_css !== '' ) : ?>.<?php echo $uid; ?> .uk-card:hover .olo-pg-img,.<?php echo $uid; ?> .olo-card-minimal:hover .olo-card-minimal__img,.<?php echo $uid; ?> .uk-card:hover .uk-card-media-top{border-radius:<?php echo $image_radius_hover_css; ?> !important}<?php endif; ?>
+            <?php if ( $card_radius_hover_css !== '' ) : ?>.<?php echo $uid; ?> .uk-card:hover,.<?php echo $uid; ?> .olo-card-minimal:hover{border-radius:<?php echo $card_radius_hover_css; ?> !important}<?php endif; ?>
             .<?php echo $uid; ?> .uk-card:hover .olo-pg-hover-zoom, .<?php echo $uid; ?> .olo-card-minimal:hover .olo-pg-hover-zoom { transform: scale(1.08); }
             .<?php echo $uid; ?> .uk-card:hover .olo-pg-hover-zoom-rotate, .<?php echo $uid; ?> .olo-card-minimal:hover .olo-pg-hover-zoom-rotate { transform: scale(1.08) rotate(2deg); }
             .<?php echo $uid; ?> .olo-pg-hover-brightness { filter: brightness(0.7); }
@@ -324,9 +362,11 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .uk-card:hover .olo-pg-hover-desaturate, .<?php echo $uid; ?> .olo-card-minimal:hover .olo-pg-hover-desaturate { filter: grayscale(0%); }
             .<?php echo $uid; ?> .olo-pg-hover-blur-in { filter: blur(3px); }
             .<?php echo $uid; ?> .uk-card:hover .olo-pg-hover-blur-in, .<?php echo $uid; ?> .olo-card-minimal:hover .olo-pg-hover-blur-in { filter: blur(0); }
-            .<?php echo $uid; ?> .olo-pg-ribbon { position: absolute; z-index: 2; font-size: 11px; font-weight: 700; padding: 4px 12px; text-transform: uppercase; letter-spacing: 0.5px; background: <?php echo $ribbon_bg; ?>; color: <?php echo $ribbon_color; ?>; }
-            .<?php echo $uid; ?> .olo-pg-ribbon--top-right { top: 0; right: 14px; border-radius: 0 0 4px 4px; }
-            .<?php echo $uid; ?> .olo-pg-ribbon--top-left { top: 0; left: 14px; border-radius: 0 0 4px 4px; }
+            .<?php echo $uid; ?> .olo-pg-ribbon { position: absolute; z-index: 2; font-size: <?php echo max( 8, min( 24, (int) ( $s['ribbon_size'] ?? 11 ) ) ); ?>px; font-weight: 700; padding: 4px 12px; text-transform: uppercase; letter-spacing: 0.5px; background: <?php echo $ribbon_bg; ?>; color: <?php echo $ribbon_color; ?>; }
+            .<?php echo $uid; ?> .olo-pg-ribbon--top-right    { top: 0; right: 14px; border-radius: 0 0 4px 4px; }
+            .<?php echo $uid; ?> .olo-pg-ribbon--top-left     { top: 0; left: 14px;  border-radius: 0 0 4px 4px; }
+            .<?php echo $uid; ?> .olo-pg-ribbon--bottom-right { bottom: 0; right: 14px; border-radius: 4px 4px 0 0; }
+            .<?php echo $uid; ?> .olo-pg-ribbon--bottom-left  { bottom: 0; left: 14px;  border-radius: 4px 4px 0 0; }
             /* Stile testo */
             .<?php echo $uid; ?> .uk-card-body { padding: <?php echo $body_padding; ?>; }
             .<?php echo $uid; ?> .olo-card-minimal__body { padding: <?php echo $body_padding; ?>; }
@@ -433,17 +473,20 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
                                 <?php echo $this->render_overlay_gradient( $overlay_color, $overlay_opacity, $overlay_direction, $overlay_height ); ?>
                             <?php endif; ?>
                             <?php if ( ! empty( $s['show_category'] ) && ! empty( $item['term_names'] ) ) : ?>
-                                <span class="olo-postgrid-badge"><?php echo esc_html( $item['term_names'][0] ); ?></span>
+                                <span class="olo-postgrid-badge olo-postgrid-badge--<?php echo esc_attr( $s['category_badge_position'] ?? 'top-left' ); ?>"><?php echo esc_html( $item['term_names'][0] ); ?></span>
                             <?php endif; ?>
-                            <?php if ( ! empty( $item['ribbon'] ) ) : ?>
-                                <span class="olo-pg-ribbon olo-pg-ribbon--<?php echo esc_attr( $ribbon_position ); ?>"><?php echo esc_html( $item['ribbon'] ); ?></span>
-                            <?php endif; ?>
-                            <?php if ( ! empty( $item['service_opening'] ) ) : ?>
-                                <?php
-                                    $op_bg = ( stripos( $item['service_opening'], 'stagionale' ) !== false )
-                                        ? $s['opening_bg_seasonal']
-                                        : $s['opening_bg_annual'];
-                                ?><span class="olo-pg-opening" style="background:<?php echo $this->safe_color_css( $op_bg ); ?>;font-size:<?php echo absint( $s['opening_size'] ); ?>px"><?php echo esc_html( $item['service_opening'] ); ?></span>
+                            <?php if ( ! empty( $item['ribbon'] ) ) :
+                                // Quando il ribbon punta a _olo_service_opening, applica colore
+                                // dinamico (annuale/stagionale) in base al contenuto.
+                                $rib_inline = '';
+                                if ( ( $s['ribbon_field'] ?? '' ) === '_olo_service_opening' ) {
+                                    $rib_dyn_bg = ( stripos( (string) $item['ribbon'], 'stagional' ) !== false )
+                                        ? ( $s['opening_bg_seasonal'] ?? '#d97706' )
+                                        : ( $s['opening_bg_annual']   ?? '#059669' );
+                                    $rib_inline = ' style="background:' . $this->safe_color_css( $rib_dyn_bg ) . '"';
+                                }
+                                ?>
+                                <span class="olo-pg-ribbon olo-pg-ribbon--<?php echo esc_attr( $ribbon_position ); ?>"<?php echo $rib_inline; ?>><?php echo esc_html( $item['ribbon'] ); ?></span>
                             <?php endif; ?>
                         </div>
                         <?php endif; ?>
@@ -501,17 +544,20 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
                                 <?php echo $this->render_overlay_gradient( $overlay_color, $overlay_opacity, $overlay_direction, $overlay_height ); ?>
                             <?php endif; ?>
                             <?php if ( ! empty( $s['show_category'] ) && ! empty( $item['term_names'] ) ) : ?>
-                                <span class="olo-postgrid-badge"><?php echo esc_html( $item['term_names'][0] ); ?></span>
+                                <span class="olo-postgrid-badge olo-postgrid-badge--<?php echo esc_attr( $s['category_badge_position'] ?? 'top-left' ); ?>"><?php echo esc_html( $item['term_names'][0] ); ?></span>
                             <?php endif; ?>
-                            <?php if ( ! empty( $item['ribbon'] ) ) : ?>
-                                <span class="olo-pg-ribbon olo-pg-ribbon--<?php echo esc_attr( $ribbon_position ); ?>"><?php echo esc_html( $item['ribbon'] ); ?></span>
-                            <?php endif; ?>
-                            <?php if ( ! empty( $item['service_opening'] ) ) : ?>
-                                <?php
-                                    $op_bg = ( stripos( $item['service_opening'], 'stagionale' ) !== false )
-                                        ? $s['opening_bg_seasonal']
-                                        : $s['opening_bg_annual'];
-                                ?><span class="olo-pg-opening" style="background:<?php echo $this->safe_color_css( $op_bg ); ?>;font-size:<?php echo absint( $s['opening_size'] ); ?>px"><?php echo esc_html( $item['service_opening'] ); ?></span>
+                            <?php if ( ! empty( $item['ribbon'] ) ) :
+                                // Quando il ribbon punta a _olo_service_opening, applica colore
+                                // dinamico (annuale/stagionale) in base al contenuto.
+                                $rib_inline = '';
+                                if ( ( $s['ribbon_field'] ?? '' ) === '_olo_service_opening' ) {
+                                    $rib_dyn_bg = ( stripos( (string) $item['ribbon'], 'stagional' ) !== false )
+                                        ? ( $s['opening_bg_seasonal'] ?? '#d97706' )
+                                        : ( $s['opening_bg_annual']   ?? '#059669' );
+                                    $rib_inline = ' style="background:' . $this->safe_color_css( $rib_dyn_bg ) . '"';
+                                }
+                                ?>
+                                <span class="olo-pg-ribbon olo-pg-ribbon--<?php echo esc_attr( $ribbon_position ); ?>"<?php echo $rib_inline; ?>><?php echo esc_html( $item['ribbon'] ); ?></span>
                             <?php endif; ?>
                         </div>
                         <?php endif; ?>

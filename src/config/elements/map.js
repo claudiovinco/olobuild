@@ -276,6 +276,7 @@ export default {
     { key: 'svc_popup_bg', label: 'Sfondo', type: 'color', condition: { field: 'mode', value: 'services' } },
     { key: 'svc_popup_color', label: 'Colore testo', type: 'color', condition: { field: 'mode', value: 'services' } },
     { key: 'svc_popup_radius', label: 'Border radius', type: 'border-radius', condition: { field: 'mode', value: 'services' } },
+    { key: 'svc_popup_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
 
     // ══════ LAYOUT SPLIT-VIEW (locations + services) ══════
     // Il layout split-view ha mappa su un lato e pannello risultati (filtri + lista) dall'altro.
@@ -321,7 +322,8 @@ export default {
     ], condition: { field: 'mode', value: 'locations' } },
     { key: 'results_per_page', label: 'Risultati per pagina (0 = tutti)', type: 'range', min: 0, max: 50, step: 1, condition: { field: 'mode', value: 'locations' } },
     { key: 'card_max_height', label: 'Altezza max card (px, 0 = auto)', type: 'range', min: 0, max: 400, step: 10, condition: { field: 'mode', value: 'locations' } },
-    { key: 'card_border_radius', label: 'Raggio angoli card', type: 'range', min: 0, max: 24, step: 2, condition: { field: 'mode', value: 'locations' } },
+    { key: 'card_border_radius', label: 'Raggio angoli card', type: 'border-radius', condition: { field: 'mode', value: 'locations' } },
+    { key: 'card_border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius', condition: { field: 'mode', value: 'locations' } },
 
     { type: 'separator', label: 'Pulsante ricerca', condition: { field: 'mode', value: 'locations' } },
     { key: 'btn_text',  label: 'Testo pulsante',  type: 'text',  condition: { field: 'mode', value: 'locations' } },
@@ -371,7 +373,8 @@ export default {
     ], condition: { field: 'mode', value: 'services' } },
     { key: 'results_per_page', label: 'Risultati per pagina (0 = tutti)', type: 'range', min: 0, max: 50, step: 1, condition: { field: 'mode', value: 'services' } },
     { key: 'card_max_height', label: 'Altezza max card (px, 0 = auto)', type: 'range', min: 0, max: 400, step: 10, condition: { field: 'mode', value: 'services' } },
-    { key: 'card_border_radius', label: 'Raggio angoli card', type: 'range', min: 0, max: 24, step: 2, condition: { field: 'mode', value: 'services' } },
+    { key: 'card_border_radius', label: 'Raggio angoli card', type: 'border-radius', condition: { field: 'mode', value: 'services' } },
+    { key: 'card_border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius', condition: { field: 'mode', value: 'services' } },
 
     { type: 'separator', label: 'Pulsante ricerca', condition: { field: 'mode', value: 'services' } },
     { key: 'btn_text',  label: 'Testo pulsante',  type: 'text',  condition: { field: 'mode', value: 'services' } },
@@ -384,6 +387,7 @@ export default {
     { type: 'separator', label: 'Dimensioni' },
     { key: 'height', label: 'Altezza (px)', type: 'range', min: 150, max: 800, step: 10 },
     { key: 'border_radius', label: 'Arrotondamento (px)', type: 'border-radius' },
+    { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     ...shadowField,
   ],
 };

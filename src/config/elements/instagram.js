@@ -22,6 +22,7 @@ export default {
     { key: 'caption', label: 'Mostra didascalia', type: 'toggle' },
     { key: 'background_color', label: 'Colore sfondo', type: 'color' },
     { key: 'border_radius', label: 'Arrotondamento (px)', type: 'border-radius' },
+    { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'alignment', label: 'Allineamento', type: 'select', options: [
       { value: 'left', label: 'Sinistra' },
       { value: 'center', label: 'Centro' },

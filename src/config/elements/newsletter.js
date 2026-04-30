@@ -1,3 +1,4 @@
+import { textEffectsFields, textEffectsDefaults } from './_shared';
 import { shadowField } from './_shared.js';
 
 export default {
@@ -80,6 +81,7 @@ export default {
     btn_font_weight: '600',
     // Shadow
     shadow: 'none',
+    ...textEffectsDefaults,
   },
   fields: [
     // ── CONTENUTO ──
@@ -175,7 +177,8 @@ export default {
       { value: 'right', label: 'Destra' },
     ]},
     { key: 'bg_color', label: 'Sfondo', type: 'color' },
-    { key: 'border_radius', label: 'Raggio bordi', type: 'range', min: 0, max: 30, step: 1 },
+    { key: 'border_radius', label: 'Raggio bordi', type: 'border-radius'},
+    { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 60 },
 
     // Testo
@@ -197,7 +200,8 @@ export default {
     { key: 'input_color', label: 'Colore testo input', type: 'color' },
     { key: 'input_border', label: 'Bordo input', type: 'color' },
     { key: 'input_focus_border', label: 'Bordo focus', type: 'color' },
-    { key: 'input_radius', label: 'Raggio input', type: 'range', min: 0, max: 24, step: 1 },
+    { key: 'input_radius', label: 'Raggio input', type: 'border-radius'},
+    { key: 'input_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'input_height', label: 'Altezza input (px)', type: 'range', min: 32, max: 56, step: 2 },
 
     // Button
@@ -205,7 +209,8 @@ export default {
     { key: 'btn_bg', label: 'Sfondo pulsante', type: 'color' },
     { key: 'btn_color', label: 'Colore testo pulsante', type: 'color' },
     { key: 'btn_hover_bg', label: 'Sfondo hover', type: 'color' },
-    { key: 'btn_radius', label: 'Raggio pulsante', type: 'range', min: 0, max: 24, step: 1 },
+    { key: 'btn_radius', label: 'Raggio pulsante', type: 'border-radius'},
+    { key: 'btn_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'btn_font_size', label: 'Dimensione testo (px)', type: 'range', min: 11, max: 20, step: 1 },
     { key: 'btn_font_weight', label: 'Peso testo', type: 'select', options: [
       { value: '400', label: 'Normale' },
@@ -213,5 +218,10 @@ export default {
       { value: '700', label: 'Bold' },
     ]},
     ...shadowField,
+    ...textEffectsFields([
+      { value: 'title', label: 'Solo Titolo' },
+      { value: 'subtitle', label: 'Solo Sottotitolo' },
+      { value: 'all', label: 'Tutti gli elementi testuali' },
+    ]),
   ],
 };

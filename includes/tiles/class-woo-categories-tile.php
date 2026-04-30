@@ -65,6 +65,7 @@ class Olo_Woo_Categories_Tile extends Olo_Tile_Base {
         $cols_mobile = max( 1, min( 2, absint( $s['columns_mobile'] ) ) );
         $gap         = absint( $s['gap'] );
         $radius      = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
+        $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
         $uid         = 'olo-woo-cats-' . wp_rand( 10000, 99999 );
         $tag         = in_array( $s['title_tag'], [ 'h2', 'h3', 'h4', 'h5' ], true ) ? $s['title_tag'] : 'h3';
         $txt_color   = $this->safe_color_css( $s['text_color'] );
@@ -77,7 +78,8 @@ class Olo_Woo_Categories_Tile extends Olo_Tile_Base {
         ?>
         <style>
             .<?php echo $uid; ?>{display:grid;grid-template-columns:repeat(<?php echo $cols; ?>,1fr);gap:<?php echo $gap; ?>px}
-            .<?php echo $uid; ?> .olo-wcat{position:relative;overflow:hidden;border-radius:<?php echo $radius; ?>}
+            .<?php echo $uid; ?> .olo-wcat{position:relative;overflow:hidden;border-radius:<?php echo $radius; ?>;transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}
+            <?php if ( $radius_hover_css !== '' ) : ?>.<?php echo $uid; ?> .olo-wcat:hover{border-radius:<?php echo $radius_hover_css; ?> !important}<?php endif; ?>
             .<?php echo $uid; ?> .olo-wcat-img{position:relative;padding-top:<?php echo $ratio_val; ?>;background:var(--olo-color-muted, #F3F4F6);overflow:hidden}
             .<?php echo $uid; ?> .olo-wcat-img img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;transition:transform .4s ease}
             <?php if ( $s['hover_effect'] === 'zoom' ) : ?>

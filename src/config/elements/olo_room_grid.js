@@ -271,6 +271,7 @@ export default {
     ]},
     { key: 'card_border_color', label: 'Colore bordo', type: 'color' },
     { key: 'card_border_radius', label: 'Raggio angoli (4 valori)', type: 'border-radius' },
+    { key: 'card_border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'card_border_hover', label: 'Colore bordo hover', type: 'color' },
     { key: 'card_hover_border_width', label: 'Spessore bordo hover (px)', type: 'range', min: 0, max: 5, step: 1 },
     { key: 'card_shadow', label: 'Ombra card', type: 'select', options: [
@@ -336,6 +337,7 @@ export default {
       { value: 'fill', label: 'Distorci (fill)' },
     ]},
     { key: 'image_radius', label: 'Raggio bordo immagine (px)', type: 'border-radius' },
+    { key: 'image_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'hover_effect', label: 'Effetto hover', type: 'select', options: [
       { value: 'none', label: 'Nessuno' },
       { value: 'zoom', label: 'Zoom' },

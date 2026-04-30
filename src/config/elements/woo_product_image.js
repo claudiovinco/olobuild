@@ -34,10 +34,12 @@ export default {
       { value: 'auto', label: 'Automatico' },
     ]},
     { key: 'border_radius', label: 'Bordo arrotondato (px)', type: 'border-radius' },
+    { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
 
     { type: 'separator', label: 'Miniature' },
     { key: 'thumb_size', label: 'Dimensione miniature (px)', type: 'range', min: 40, max: 120, step: 4 },
     { key: 'thumb_gap', label: 'Gap miniature (px)', type: 'range', min: 4, max: 16, step: 2 },
     { key: 'thumb_border_radius', label: 'Bordo miniature (px)', type: 'border-radius' },
+    { key: 'thumb_border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
   ],
 };

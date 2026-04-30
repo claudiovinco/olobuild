@@ -1,3 +1,4 @@
+import { textEffectsFields, textEffectsDefaults } from './_shared';
 import { shadowField } from './_shared.js';
 
 export default {
@@ -33,6 +34,7 @@ export default {
     tile_padding: { top: 8, right: 12, bottom: 8, left: 12 },
     highlight_current: true,
     shadow: 'none',
+    ...textEffectsDefaults,
   },
   fields: [
     // --- SORGENTE ---
@@ -81,6 +83,7 @@ export default {
     { key: 'gap', label: 'Gap (px)', type: 'range', min: 0, max: 32, step: 2 },
     { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 24 },
     { key: 'border_radius', label: 'Raggio bordo (px)', type: 'border-radius' },
+    { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
 
     // --- TIPOGRAFIA ---
     { key: '_section_typo', label: 'TIPOGRAFIA', type: 'separator' },
@@ -115,5 +118,10 @@ export default {
     { key: 'highlight_current', label: 'Evidenzia pagina corrente', type: 'toggle' },
 
     ...shadowField,
+    ...textEffectsFields([
+      { value: 'title', label: 'Solo Titolo' },
+      { value: 'content', label: 'Solo Contenuto' },
+      { value: 'all', label: 'Tutti gli elementi testuali' },
+    ]),
   ],
 };

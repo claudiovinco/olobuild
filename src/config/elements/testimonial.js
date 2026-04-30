@@ -1,3 +1,4 @@
+import { textEffectsFields, textEffectsDefaults } from './_shared';
 export default {
   type: 'testimonial',
   name: 'Testimonianza',
@@ -42,6 +43,7 @@ export default {
     border_radius: '12',
     border_width: '0',
     border_color: '',
+    ...textEffectsDefaults,
   },
   fields: [
     { key: 'quote', label: 'Citazione', type: 'textarea' },
@@ -119,6 +121,7 @@ export default {
     ]},
     { key: 'avatar_radius', label: 'Arrotondamento avatar (px)', type: 'border-radius',
       condition: { field: 'avatar_shape', value: 'square' } },
+    { key: 'avatar_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'avatar_shadow', label: 'Ombra avatar', type: 'select', options: [
       { value: 'none', label: 'Nessuna' },
       { value: 'sm', label: 'Piccola' },
@@ -151,8 +154,10 @@ export default {
 
     { type: 'separator', label: 'Aspetto' },
     { key: 'border_radius', label: 'Arrotondamento tile (px)', type: 'border-radius' },
+    { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'border_width', label: 'Spessore bordo (px)', type: 'range', min: 0, max: 5, step: 1 },
     { key: 'border_color', label: 'Colore bordo', type: 'color',
       condition: { field: 'border_width', operator: '>', value: '0' } },
+    ...textEffectsFields([ { value: 'quote', label: 'Solo Citazione' } ]),
   ],
 };

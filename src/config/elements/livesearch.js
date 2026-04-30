@@ -124,12 +124,14 @@ export default {
     { key: 'input_font_size', label: 'Dimensione font (px)', type: 'range', min: 12, max: 24, step: 1 },
     { key: 'input_height', label: 'Altezza input (px)', type: 'range', min: 32, max: 72, step: 2 },
     { key: 'input_border_radius', label: 'Arrotondamento input (px)', type: 'border-radius' },
+    { key: 'input_border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
 
     // ─── Stile Popup ───
     { type: 'separator', label: 'Stile Popup risultati' },
     { key: 'results_bg', label: 'Sfondo popup', type: 'color' },
     { key: 'results_border_color', label: 'Bordo popup', type: 'color' },
     { key: 'results_border_radius', label: 'Arrotondamento popup (px)', type: 'border-radius' },
+    { key: 'results_border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'item_hover_bg', label: 'Sfondo hover elemento', type: 'color' },
     { key: 'title_color', label: 'Colore titolo', type: 'color' },
     { key: 'excerpt_color', label: 'Colore estratto', type: 'color',
@@ -141,6 +143,7 @@ export default {
       show: s => s.show_thumbnail !== false },
     { key: 'thumb_radius', label: 'Arrotondamento miniatura (px)', type: 'border-radius',
       show: s => s.show_thumbnail !== false },
+    { key: 'thumb_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
 
     // ─── Bordo / Ombra ───
     ...shadowField,

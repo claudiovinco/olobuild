@@ -76,11 +76,13 @@ class Olo_Blendtext_Tile extends Olo_Tile_Base {
         $css .= "@media(max-width:960px){#{$uid} .olo-bt-text{font-size:{$fs_tablet}px !important}}";
         $css .= "@media(max-width:640px){#{$uid} .olo-bt-text{font-size:{$fs_mobile}px !important}}";
 
+        list( $bt_cls, $bt_data ) = $this->tfx_attrs( $s, 'text', wp_strip_all_tags( $s['text'] ) );
+
         ob_start();
         echo '<style>' . $css . '</style>';
         ?>
         <div id="<?php echo esc_attr( $uid ); ?>">
-            <<?php echo $tag; ?> class="olo-bt-text"><?php echo nl2br( $text ); ?></<?php echo $tag; ?>>
+            <<?php echo $tag; ?> class="olo-bt-text<?php echo $bt_cls; ?>"<?php echo $bt_data; ?>><?php echo nl2br( $text ); ?></<?php echo $tag; ?>>
         </div>
         <script>
         (function(){
@@ -121,6 +123,9 @@ class Olo_Blendtext_Tile extends Olo_Tile_Base {
         })();
         </script>
         <?php
+        $tfx_css = $this->tfx_css( $s, '#' . $uid );
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        $this->tfx_print_script();
         return ob_get_clean();
     }
 }

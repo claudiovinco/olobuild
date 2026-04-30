@@ -100,7 +100,8 @@ class Olo_Image_Tile extends Olo_Tile_Base {
         }
         $init_transform = $anim === 'zoom-out' ? 'transform:scale(1.05);' : '';
 
-        // Border radius (base + optional hover)
+        // Border radius (base + optional hover — image_tile uses legacy `hover_border_radius` key,
+        // not the canonical `*_hover` convention used elsewhere)
         $br_css        = $this->build_border_radius_css( $s['border_radius'] ?? '0' );
         $hover_br_raw  = $s['hover_border_radius'] ?? '';
         // hover is "set" whenever the user touched the field — i.e. it's an object
@@ -193,12 +194,16 @@ class Olo_Image_Tile extends Olo_Tile_Base {
             }
             ?>
             <?php if ( ! empty( $s['caption'] ) ) : ?>
-                <figcaption style="padding: 8px 0; font-size: 0.875em; color: var(--olo-color-text-muted, #9CA3AF); text-align: center;">
+                <?php list( $ic_cls, $ic_data ) = $this->tfx_attrs( $s, 'caption', wp_strip_all_tags( $s['caption'] ) ); ?>
+                <figcaption class="olo-img-caption<?php echo $ic_cls; ?>" style="padding: 8px 0; font-size: 0.875em; color: var(--olo-color-text-muted, #9CA3AF); text-align: center;"<?php echo $ic_data; ?>>
                     <?php echo esc_html( wp_strip_all_tags( $s['caption'] ) ); ?>
                 </figcaption>
             <?php endif; ?>
         </figure>
         <?php
+        $tfx_css = $this->tfx_css( $s, '.' . $uid );
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        $this->tfx_print_script();
         return ob_get_clean();
     }
 }

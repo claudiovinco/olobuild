@@ -101,12 +101,16 @@ class Olo_PanelSlider_Tile extends Olo_Tile_Base {
                                             ?>
                                         </div>
                                     <?php endif; ?>
+                                    <?php
+                                    list( $pst_cls, $pst_data ) = $this->tfx_attrs( $s, 'title', $panel['title'] ?? '' );
+                                    list( $psc_cls, $psc_data ) = $this->tfx_attrs( $s, 'content', wp_strip_all_tags( $panel['content'] ?? '' ) );
+                                    ?>
                                     <div class="olo-ps-body">
                                         <?php if ( ! empty( $panel['title'] ) ) : ?>
-                                        <h3 class="olo-ps-title uk-card-title"><?php echo esc_html( $panel['title'] ); ?></h3>
+                                        <h3 class="olo-ps-title uk-card-title<?php echo $pst_cls; ?>"<?php echo $pst_data; ?>><?php echo esc_html( $panel['title'] ); ?></h3>
                                         <?php endif; ?>
                                         <?php if ( ! empty( $panel['content'] ) ) : ?>
-                                        <div class="olo-ps-text"><?php echo wp_kses_post( $panel['content'] ); ?></div>
+                                        <div class="olo-ps-text<?php echo $psc_cls; ?>"<?php echo $psc_data; ?>><?php echo wp_kses_post( $panel['content'] ); ?></div>
                                         <?php endif; ?>
                                     </div>
                                 </div>
@@ -126,6 +130,9 @@ class Olo_PanelSlider_Tile extends Olo_Tile_Base {
             <?php endif; ?>
         </div>
         <?php
+        $tfx_css = $this->tfx_css( $s, '.' . $uid );
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        $this->tfx_print_script();
         return ob_get_clean();
     }
 
@@ -138,6 +145,7 @@ class Olo_PanelSlider_Tile extends Olo_Tile_Base {
 
         // Card radius + padding
         $radius  = $this->build_border_radius_css( $s['card_radius'] ?? 8 );
+        $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['card_radius_hover'] ?? null );
         $padding = Olo_Tile_Utils::spacing_css( $s['card_padding'] ?? 16, 16 );
         $radius_css = $radius ? 'border-radius:' . $radius . ';' : '';
 
@@ -151,7 +159,10 @@ class Olo_PanelSlider_Tile extends Olo_Tile_Base {
         }
 
         // Card base
-        $css .= $sel . ' .olo-ps-card{' . $radius_css . $shadow_css . 'overflow:hidden;background:#fff;display:flex;flex-direction:column;height:100%;transition:transform 0.35s cubic-bezier(.4,0,.2,1),box-shadow 0.35s ease;}';
+        $css .= $sel . ' .olo-ps-card{' . $radius_css . $shadow_css . 'overflow:hidden;background:#fff;display:flex;flex-direction:column;height:100%;transition:transform 0.35s cubic-bezier(.4,0,.2,1),box-shadow 0.35s ease,border-radius 400ms cubic-bezier(.4,0,.2,1);}';
+        if ( $radius_hover_css !== '' ) {
+            $css .= $sel . ' .olo-ps-card:hover{border-radius:' . $radius_hover_css . ' !important;}';
+        }
 
         // Equal-height: stretch li and inner content
         if ( ! empty( $s['equal_height'] ) ) {

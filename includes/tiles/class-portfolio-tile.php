@@ -50,6 +50,7 @@ class Olo_Portfolio_Tile extends Olo_Tile_Base {
         $cols     = max( 1, min( 6, absint( $s['columns'] ) ) );
         $gap      = absint( $s['gap'] );
         $radius   = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
+        $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
         $layout   = in_array( $s['layout'], [ 'grid', 'masonry' ], true ) ? $s['layout'] : 'grid';
         $fx       = in_array( $s['hover_effect'], [ 'none', 'zoom', 'fade', 'slide-up', 'overlay' ], true ) ? $s['hover_effect'] : 'fade';
         $anim     = in_array( $s['animation'], [ 'fade', 'scale', 'slide' ], true ) ? $s['animation'] : 'fade';
@@ -164,6 +165,7 @@ class Olo_Portfolio_Tile extends Olo_Tile_Base {
                 overflow: hidden;
                 transition: opacity 0.4s ease, transform 0.4s ease;
             }
+            <?php if ( $radius_hover_css !== '' ) : ?>.<?php echo $uid; ?>-grid .olo-pf-item{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?>-grid .olo-pf-item:hover{border-radius:<?php echo $radius_hover_css; ?> !important}<?php endif; ?>
             .<?php echo $uid; ?>-grid .olo-pf-item.olo-pf-hidden {
                 <?php if ( $anim === 'scale' ) : ?>
                 opacity: 0;
@@ -403,11 +405,11 @@ class Olo_Portfolio_Tile extends Olo_Tile_Base {
                             <?php endif; ?>
                         <?php endif; ?>
                         <?php if ( ! empty( $s['show_title'] ) ) : ?>
-                        <div class="olo-pf-title"><?php echo esc_html( $item['title'] ); ?></div>
+                        <?php list( $pft_cls, $pft_data ) = $this->tfx_attrs( $s, "title", $item["title"] ); ?><div class="olo-pf-title<?php echo $pft_cls; ?>"<?php echo $pft_data; ?>><?php echo esc_html( $item["title"] ); ?></div>
                         <?php endif; ?>
                         <?php if ( ! empty( $s['show_excerpt'] ) ) : ?>
                             <?php if ( ! empty( $item['description'] ) ) : ?>
-                            <div class="olo-pf-desc"><?php echo wp_kses_post( $item['description'] ); ?></div>
+                            <?php list( $pfd_cls, $pfd_data ) = $this->tfx_attrs( $s, "description", wp_strip_all_tags( $item["description"] ?? "" ) ); ?><div class="olo-pf-desc<?php echo $pfd_cls; ?>"<?php echo $pfd_data; ?>><?php echo wp_kses_post( $item["description"] ); ?></div>
                             <?php endif; ?>
                         <?php endif; ?>
                     </div>
@@ -456,6 +458,9 @@ class Olo_Portfolio_Tile extends Olo_Tile_Base {
         </script>
         <?php endif; ?>
         <?php
+        $tfx_css = $this->tfx_css( $s, '.' . $uid );
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        $this->tfx_print_script();
         return ob_get_clean();
     }
 }

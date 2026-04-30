@@ -216,6 +216,7 @@ export default {
       ],
     },
     { key: 'border_radius', label: 'Bordo arrotondato (px)', type: 'border-radius' },
+    { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'tile_padding', type: 'spacing', label: 'Spaziatura interna' },
   ],
 };

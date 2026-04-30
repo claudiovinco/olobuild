@@ -52,7 +52,8 @@ class Olo_Woo_Product_Filter_Tile extends Olo_Tile_Base {
         $bg_color      = $this->safe_color_css( $s['bg_color'] ) ?: '#FFFFFF';
         $border_color  = $this->safe_color_css( $s['border_color'] ) ?: '#E5E7EB';
         $radius        = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
-        $radius_raw    = absint( $s['border_radius'] ?? 0 );
+        $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
+        $radius_raw    = Olo_Tile_Utils::radius_int( $s['border_radius'] ?? 0 );
 
         // Auto-detect price range from DB
         $price_min  = floatval( $s['price_min'] );
@@ -115,6 +116,7 @@ class Olo_Woo_Product_Filter_Tile extends Olo_Tile_Base {
                 font-size: 14px;
                 color: <?php echo $text_color; ?>;
             }
+            <?php if ( $radius_hover_css !== '' ) : ?>.<?php echo $uid; ?>{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?>:hover{border-radius:<?php echo $radius_hover_css; ?> !important}<?php endif; ?>
             .<?php echo $uid; ?> .olo-pf-section {
                 border-bottom: 1px solid <?php echo $border_color; ?>;
                 padding-bottom: 16px;

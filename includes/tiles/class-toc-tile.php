@@ -55,7 +55,8 @@ class Olo_Toc_Tile extends Olo_Tile_Base {
         </style>
         <nav class="olo-toc <?php echo $uid; ?>" id="<?php echo $uid; ?>">
             <?php if (!empty($s['title'])) : ?>
-                <div class="olo-toc-title"><?php echo esc_html($s['title']); ?></div>
+                <?php list( $tt_cls, $tt_data ) = $this->tfx_attrs( $s, 'title', $s['title'] ); ?>
+                <div class="olo-toc-title<?php echo $tt_cls; ?>"<?php echo $tt_data; ?>><?php echo esc_html($s['title']); ?></div>
             <?php endif; ?>
             <div class="olo-toc-list" data-tags="<?php echo esc_attr($tag_selector); ?>" data-indent="<?php echo $indent; ?>" data-list-style="<?php echo esc_attr($list_style); ?>">
                 <p style="font-size:13px;color:var(--olo-color-text-muted, #9CA3AF);font-style:italic;"><?php echo esc_html( olo_t( 'Caricamento indice...' ) ); ?></p>
@@ -182,6 +183,9 @@ class Olo_Toc_Tile extends Olo_Tile_Base {
         })();
         </script>
         <?php
+        $tfx_css = $this->tfx_css( $s, '.' . $uid );
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        $this->tfx_print_script();
         return ob_get_clean();
     }
 }

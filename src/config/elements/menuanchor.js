@@ -1,3 +1,4 @@
+import { textEffectsFields, textEffectsDefaults } from './_shared';
 export default {
   type: 'menuanchor',
   name: 'Ancora Menu',
@@ -7,6 +8,7 @@ export default {
     anchor_id: '',
     offset: '0',
     label: '',
+    ...textEffectsDefaults,
   },
   fields: [
     { key: 'anchor_id', label: 'ID ancora (senza #)', type: 'text' },
@@ -14,5 +16,6 @@ export default {
 
     { type: 'separator', label: 'Builder' },
     { key: 'label', label: 'Etichetta (solo builder)', type: 'text' },
+    ...textEffectsFields([ { value: 'label', label: 'Solo Etichetta' } ]),
   ],
 };

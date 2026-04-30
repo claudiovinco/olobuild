@@ -389,7 +389,7 @@ class Olo_NavMenu_Tile extends Olo_Tile_Base {
         if ( ( $s['style'] ?? '' ) === 'vertical' ) {
             $v_spacing    = max( 0, intval( $s['v_item_spacing'] ) );
             $v_padding    = max( 4, intval( $s['v_item_padding'] ) );
-            $v_radius     = max( 0, intval( $s['v_border_radius'] ) );
+            $v_radius     = max( 0, Olo_Tile_Utils::radius_int( $s['v_border_radius'] ) );
             $v_hover_bg   = $this->safe_color_css( $s['v_hover_bg'] ?? '' );
             $v_active_bg  = $this->safe_color_css( $s['v_active_bg'] ?? '' );
             $v_icon_color = $this->safe_color_css( $s['v_icon_color'] ?? '' );

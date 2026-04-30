@@ -37,20 +37,28 @@ class Olo_Quotation_Tile extends Olo_Tile_Base {
         $s = wp_parse_args( $settings, $this->defaults );
 
         $align_class = 'uk-text-' . esc_attr( $s['alignment'] );
+        $quot_uid = 'olo-quot-' . wp_unique_id();
+        $content_plain = wp_strip_all_tags( $s['content'] ?? '' );
+        $author_plain  = $s['author'] ?? '';
+        list( $c_tfx_cls, $c_tfx_data ) = $this->tfx_attrs( $s, 'content', $content_plain );
+        list( $a_tfx_cls, $a_tfx_data ) = $this->tfx_attrs( $s, 'author', $author_plain );
 
         ob_start();
         ?>
-        <blockquote class="olo-quotation <?php echo $align_class; ?>">
-            <p><?php echo nl2br( esc_html( wp_strip_all_tags( $s['content'] ) ) ); ?></p>
+        <blockquote class="olo-quotation <?php echo $align_class; ?> <?php echo $quot_uid; ?>">
+            <p class="olo-quot-content<?php echo $c_tfx_cls; ?>"<?php echo $c_tfx_data; ?>><?php echo nl2br( esc_html( $content_plain ) ); ?></p>
             <?php if ( ! empty( $s['author'] ) ) : ?>
                 <?php if ( $s['style'] === 'footer' ) : ?>
-                    <footer><cite><?php echo esc_html( $s['author'] ); ?></cite></footer>
+                    <footer><cite class="olo-quot-author<?php echo $a_tfx_cls; ?>"<?php echo $a_tfx_data; ?>><?php echo esc_html( $author_plain ); ?></cite></footer>
                 <?php else : ?>
-                    <p class="uk-text-meta">&mdash; <?php echo esc_html( $s['author'] ); ?></p>
+                    <p class="uk-text-meta olo-quot-author<?php echo $a_tfx_cls; ?>"<?php echo $a_tfx_data; ?>>&mdash; <?php echo esc_html( $author_plain ); ?></p>
                 <?php endif; ?>
             <?php endif; ?>
         </blockquote>
         <?php
+        $tfx_css = $this->tfx_css( $s, '.' . $quot_uid );
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        $this->tfx_print_script();
         return ob_get_clean();
     }
 }

@@ -69,6 +69,7 @@ class Olo_Subnav_Tile extends Olo_Tile_Base {
         $px     = intval( $s['padding_x'] );
         $py     = intval( $s['padding_y'] );
         $radius = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
+        $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
         $fs     = intval( $s['font_size'] );
         $fw     = esc_attr( $s['font_weight'] );
         $tt     = esc_attr( $s['text_transform'] );
@@ -86,6 +87,7 @@ class Olo_Subnav_Tile extends Olo_Tile_Base {
             $css .= ";background:{$bg_c}";
         }
         $css .= '}';
+        if ( $radius_hover_css !== '' ) $css .= "#{$uid} a:hover{border-radius:{$radius_hover_css} !important}";
 
         // Hover
         $hover_rules = $hover_c ? "color:{$hover_c}" : '';

@@ -32,6 +32,10 @@ class Olo_Builder {
         // Enqueue scripts only on builder page
         add_action( 'admin_enqueue_scripts', [ $this, 'admin_enqueue_scripts' ] );
 
+        // Invalida cache mappa meta_keys quando si salva o elimina un post
+        add_action( 'save_post',    function () { delete_transient( 'olo_meta_keys_map_v1' ); } );
+        add_action( 'deleted_post', function () { delete_transient( 'olo_meta_keys_map_v1' ); } );
+
         // Submenu icons via CSS
         add_action( 'admin_head', [ $this, 'admin_submenu_icons' ] );
 
@@ -297,18 +301,26 @@ class Olo_Builder {
         // Load full WP media framework (needed for wp.media settings & templates)
         wp_enqueue_media();
 
+        // Cache-busting basato sul mtime reale dei file (oltre OLO_VERSION),
+        // così ogni rebuild forza il reload del bundle anche se la versione
+        // del plugin non è stata bumpata (utile in dev/staging).
+        $css_path = OLO_PATH . 'assets/css/builder.css';
+        $js_path  = OLO_PATH . 'assets/js/builder.js';
+        $css_ver  = OLO_VERSION . '.' . ( file_exists( $css_path ) ? filemtime( $css_path ) : 0 );
+        $js_ver   = OLO_VERSION . '.' . ( file_exists( $js_path )  ? filemtime( $js_path )  : 0 );
+
         wp_enqueue_style(
             'olobuilder-css',
             OLO_URL . 'assets/css/builder.css',
             [],
-            OLO_VERSION
+            $css_ver
         );
 
         wp_enqueue_script(
             'olobuilder-js',
             OLO_URL . 'assets/js/builder.js',
             [ 'media-views' ],
-            OLO_VERSION,
+            $js_ver,
             true
         );
 
@@ -358,6 +370,7 @@ class Olo_Builder {
             'postTypes'      => $this->get_public_post_types(),
             'taxonomies'     => $this->get_public_taxonomies(),
             'metaPrefixes'   => $this->get_meta_prefixes(),
+            'metaKeys'       => $this->get_meta_keys_map(),
             'serviceList'    => $this->get_service_list(),
             'wpPages'        => $this->get_wp_pages(),
             'singlePostItems' => $this->get_single_post_items(),
@@ -1002,6 +1015,7 @@ class Olo_Builder {
 
     private function register_core_tiles() {
         require_once OLO_PATH . 'includes/class-tile-utils.php';
+        require_once OLO_PATH . 'includes/class-text-effects.php';
         require_once OLO_PATH . 'includes/tiles/class-tile-base.php';
         require_once OLO_PATH . 'includes/tiles/class-section-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-column-tile.php';
@@ -1435,6 +1449,64 @@ class Olo_Builder {
      * Get meta prefix options for booking tiles.
      * Only includes CPTs that have an active single template.
      */
+    /**
+     * Mappa dei meta_key + valori distinti per ciascun public post_type, usata
+     * dall'inspector per offrire menu a discesa al posto del campo testo
+     * "chiave=valore". Cache transient 5 min.
+     *
+     * Output: [
+     *   'olo_service' => [ [ 'key' => '_olo_service_type', 'label' => '_olo_service_type', 'values' => [ 'accommodation', 'restaurant', ...] ], ... ],
+     *   'post'        => [ ... ],
+     * ]
+     */
+    private function get_meta_keys_map() {
+        $cache_key = 'olo_meta_keys_map_v1';
+        $cached    = get_transient( $cache_key );
+        if ( is_array( $cached ) ) return $cached;
+
+        global $wpdb;
+        $post_types = get_post_types( [ 'public' => true ], 'names' );
+        $map = [];
+        foreach ( $post_types as $type ) {
+            // Top 50 meta keys per post_type (esclude _edit_*, _wp_*, _oembed_* interne)
+            $keys = $wpdb->get_col( $wpdb->prepare(
+                "SELECT DISTINCT pm.meta_key
+                 FROM {$wpdb->postmeta} pm INNER JOIN {$wpdb->posts} p ON p.ID = pm.post_id
+                 WHERE p.post_type = %s AND p.post_status IN ('publish','draft','private','future')
+                   AND pm.meta_key != '' AND pm.meta_key NOT LIKE %s
+                   AND pm.meta_key NOT LIKE %s AND pm.meta_key NOT LIKE %s
+                 ORDER BY pm.meta_key ASC LIMIT 50",
+                $type, '_edit_%', '_wp_%', '_oembed_%'
+            ) );
+            if ( empty( $keys ) ) continue;
+            $entries = [];
+            foreach ( $keys as $k ) {
+                // Top 50 valori distinti scartando vuoti/JSON/serializzati lunghi
+                $values = $wpdb->get_col( $wpdb->prepare(
+                    "SELECT DISTINCT pm.meta_value FROM {$wpdb->postmeta} pm
+                     INNER JOIN {$wpdb->posts} p ON p.ID = pm.post_id
+                     WHERE p.post_type = %s AND pm.meta_key = %s
+                       AND pm.meta_value != ''
+                       AND CHAR_LENGTH(pm.meta_value) < 80
+                       AND pm.meta_value NOT LIKE %s AND pm.meta_value NOT LIKE %s
+                     ORDER BY pm.meta_value ASC LIMIT 50",
+                    $type, $k, 'a:%', 'O:%'
+                ) );
+                $values = array_values( array_filter( $values, function ( $v ) {
+                    return $v !== '' && ! is_serialized( $v );
+                } ) );
+                $entries[] = [
+                    'key'    => $k,
+                    'label'  => $k,
+                    'values' => $values,
+                ];
+            }
+            $map[ $type ] = $entries;
+        }
+        set_transient( $cache_key, $map, 5 * MINUTE_IN_SECONDS );
+        return $map;
+    }
+
     private function get_meta_prefixes() {
         $post_types = get_post_types( [ 'public' => true, '_builtin' => false ], 'objects' );
         $result     = [];

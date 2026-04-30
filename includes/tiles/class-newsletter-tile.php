@@ -124,7 +124,7 @@ class Olo_Newsletter_Tile extends Olo_Tile_Base {
         // Styles
         $primary     = 'var(--olo-color-primary, #3B82F6)';
         $bg          = $s['bg_color'] ?: 'transparent';
-        $radius      = absint( $s['border_radius'] );
+        $radius      = Olo_Tile_Utils::radius_int( $s['border_radius'] );
         $pad = Olo_Tile_Utils::spacing_css( $s['tile_padding'] ?? $s['padding'] ?? 32, 32 );
         $align_map   = [ 'left' => 'flex-start', 'center' => 'center', 'right' => 'flex-end' ];
         $align_css   = $align_map[ $s['alignment'] ] ?? 'center';
@@ -132,8 +132,8 @@ class Olo_Newsletter_Tile extends Olo_Tile_Base {
         $btn_hover   = $s['btn_hover_bg'] ?: $btn_bg;
         $focus_b     = $s['input_focus_border'] ?: $primary;
         $ih          = absint( $s['input_height'] ) ?: 44;
-        $ir          = absint( $s['input_radius'] );
-        $br          = absint( $s['btn_radius'] );
+        $ir          = Olo_Tile_Utils::radius_int( $s['input_radius'] );
+        $br          = Olo_Tile_Utils::radius_int( $s['btn_radius'] );
         $is_h        = $s['layout'] === 'horizontal';
         $is_minimal  = $s['layout'] === 'minimal';
 
@@ -177,11 +177,15 @@ class Olo_Newsletter_Tile extends Olo_Tile_Base {
               <div class="olo-nl-icon"><img src="<?php echo esc_url( $s['icon_image'] ); ?>" alt="" loading="lazy" /></div>
             <?php endif; ?>
 
+            <?php
+            list( $nt_cls, $nt_data ) = $this->tfx_attrs( $s, 'title', $s['title'] ?? '' );
+            list( $ns_cls, $ns_data ) = $this->tfx_attrs( $s, 'subtitle', $s['subtitle'] ?? '' );
+            ?>
             <?php if ( ! empty( $s['title'] ) ) : ?>
-              <h3 class="olo-nl-title"><?php echo esc_html( $s['title'] ); ?></h3>
+              <h3 class="olo-nl-title<?php echo $nt_cls; ?>"<?php echo $nt_data; ?>><?php echo esc_html( $s['title'] ); ?></h3>
             <?php endif; ?>
             <?php if ( ! empty( $s['subtitle'] ) ) : ?>
-              <p class="olo-nl-sub"><?php echo esc_html( $s['subtitle'] ); ?></p>
+              <p class="olo-nl-sub<?php echo $ns_cls; ?>"<?php echo $ns_data; ?>><?php echo esc_html( $s['subtitle'] ); ?></p>
             <?php endif; ?>
 
             <div class="olo-nl-msg olo-nl-ok" id="<?php echo $uid; ?>-ok"></div>
@@ -300,6 +304,9 @@ class Olo_Newsletter_Tile extends Olo_Tile_Base {
         </script>
         <?php
 
+        $tfx_css = $this->tfx_css( $s, '.' . $uid );
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        $this->tfx_print_script();
         $html = ob_get_clean();
 
         // Content Lock: wrap the NEXT sibling content

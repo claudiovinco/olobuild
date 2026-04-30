@@ -59,14 +59,20 @@ class Olo_ServiceResults_Tile extends Olo_Tile_Base {
         'body_bg'           => '',
         'body_bg_opacity'   => '100',
         // Badge / ribbon
+        // opening_bg_annual / opening_bg_seasonal sono ora override colore del ribbon
+        // quando ribbon_field = '_olo_service_opening' (annuale vs stagionale).
+        // show_service_opening + opening_size sono mantenuti come default per backward
+        // compat con template salvati prima dell'unificazione (v3.11.62).
         'show_service_opening' => false,
         'opening_bg_annual'    => '#059669',
         'opening_bg_seasonal'  => '#d97706',
         'opening_size'         => '11',
         'ribbon_field'         => '',
+        'ribbon_field_custom'  => '',
         'ribbon_position'      => 'top-right',
         'ribbon_bg'            => '#e11d48',
         'ribbon_color'         => '#ffffff',
+        'ribbon_size'          => 11,
         // Ordinamento
         'random_order'      => false,
         // Paginazione
@@ -82,6 +88,22 @@ class Olo_ServiceResults_Tile extends Olo_Tile_Base {
 
     public function render( $settings ) {
         $s = wp_parse_args( $settings, $this->defaults );
+
+        // Backward compat (pre-3.11.62): "Mostra badge apertura" era un toggle
+        // separato. Ora è unificato come ribbon_field='_olo_service_opening'.
+        // Migra al volo i template salvati con show_service_opening=true e ribbon
+        // non popolato → diventano ribbon su _olo_service_opening in basso a sx.
+        if ( ! empty( $s['show_service_opening'] ) && empty( $s['ribbon_field'] ) ) {
+            $s['ribbon_field']    = '_olo_service_opening';
+            $s['ribbon_position'] = $s['ribbon_position'] ?? 'bottom-left';
+            // Forza posizione bottom-left solo se non stata personalizzata altrove
+            if ( ! isset( $settings['ribbon_position'] ) ) {
+                $s['ribbon_position'] = 'bottom-left';
+            }
+            if ( ! empty( $s['opening_size'] ) && empty( $settings['ribbon_size'] ) ) {
+                $s['ribbon_size'] = (int) $s['opening_size'];
+            }
+        }
 
         $results_id = 'olo-svresults-' . wp_unique_id();
         $services   = $this->query_services( $s );
@@ -146,8 +168,8 @@ class Olo_ServiceResults_Tile extends Olo_Tile_Base {
             'gap'               => $s['gap'],
             'cardStyle'         => $s['card_style'],
             'imageHeight'       => intval( $s['image_height'] ),
-            'imageRadius'       => intval( $s['image_radius'] ),
-            'cardRadius'        => intval( $s['card_radius'] ),
+            'imageRadius'       => Olo_Tile_Utils::radius_int( $s['image_radius'] ),
+            'cardRadius'        => Olo_Tile_Utils::radius_int( $s['card_radius'] ),
             'showExcerpt'       => isset( $cc['excerpt'] ),
             'excerptLength'     => intval( $s['excerpt_length'] ),
             'showStats'         => isset( $cc['stats'] ),
@@ -179,14 +201,16 @@ class Olo_ServiceResults_Tile extends Olo_Tile_Base {
             // Card
             'matchHeight'       => ! empty( $s['match_height'] ),
             'cardPrimaryBg'     => $s['card_primary_bg'],
-            // Badge / ribbon
-            'showServiceOpening' => ! empty( $s['show_service_opening'] ),
-            'openingBgAnnual'   => $s['opening_bg_annual'],
-            'openingBgSeasonal' => $s['opening_bg_seasonal'],
-            'openingSize'       => intval( $s['opening_size'] ),
+            // Ribbon (unifica vecchio "badge apertura" come ribbon_field='_olo_service_opening')
+            'ribbonField'       => ( $s['ribbon_field'] === '__custom__' )
+                                    ? (string) ( $s['ribbon_field_custom'] ?? '' )
+                                    : (string) ( $s['ribbon_field'] ?? '' ),
             'ribbonPosition'    => $s['ribbon_position'],
             'ribbonBg'          => $s['ribbon_bg'],
             'ribbonColor'       => $s['ribbon_color'],
+            'ribbonSize'        => intval( $s['ribbon_size'] ?? 11 ),
+            'openingBgAnnual'   => $s['opening_bg_annual'] ?: '#059669',
+            'openingBgSeasonal' => $s['opening_bg_seasonal'] ?: '#d97706',
             // Label tradotte per il JS client-side
             'labels' => [
                 'ospiti'       => olo_t( 'ospiti' ),
@@ -207,8 +231,10 @@ class Olo_ServiceResults_Tile extends Olo_Tile_Base {
         $kenburns_speed = max( 10, min( 40, absint( $s['fx_kenburns_speed'] ?? 20 ) ) );
         $kenburns_scale = max( 1.05, min( 1.25, floatval( $s['fx_kenburns_scale'] ?? 1.12 ) ) );
         $image_radius   = $this->build_border_radius_css( $s["image_radius"] ?? 0 );
+        $image_radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['image_radius_hover'] ?? null );
         $image_height   = max( 100, absint( $s['image_height'] ?? 180 ) );
         $card_radius    = $this->build_border_radius_css( $s["card_radius"] ?? 8 );
+        $card_radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['card_radius_hover'] ?? null );
         $body_padding   = max( 0, min( 40, absint( $s['body_padding'] ?? 15 ) ) );
         $title_size     = max( 0.7, min( 2.5, floatval( $s['title_size'] ?? 1 ) ) );
         $excerpt_size   = max( 0.7, min( 1.5, floatval( $s['excerpt_size'] ?? 0.92 ) ) );
@@ -235,7 +261,10 @@ class Olo_ServiceResults_Tile extends Olo_Tile_Base {
             #<?php echo $uid; ?> .olo-svresults-card:hover .olo-svr-hover-slide-up { transform: translateY(-8px) scale(1.02); }
             #<?php echo $uid; ?> .olo-svr-hover-glow { filter: brightness(1); }
             #<?php echo $uid; ?> .olo-svresults-card:hover .olo-svr-hover-glow { filter: brightness(1.15) saturate(1.2); box-shadow: 0 0 20px rgba(255,255,255,0.3); }
-            #<?php echo $uid; ?> .olo-svresults-card { perspective: 800px; }
+            #<?php echo $uid; ?> .olo-svresults-card { perspective: 800px; transition: border-radius 400ms cubic-bezier(.4,0,.2,1); }
+            #<?php echo $uid; ?> .olo-svresults-card-img { transition: transform 0.5s ease, filter 0.5s ease, border-radius 400ms cubic-bezier(.4,0,.2,1); }
+            <?php if ( $card_radius_hover_css !== '' ) : ?>#<?php echo $uid; ?> .olo-svresults-card:hover{border-radius:<?php echo $card_radius_hover_css; ?> !important}<?php endif; ?>
+            <?php if ( $image_radius_hover_css !== '' ) : ?>#<?php echo $uid; ?> .olo-svresults-card:hover .olo-svresults-card-img{border-radius:<?php echo $image_radius_hover_css; ?> !important}<?php endif; ?>
             #<?php echo $uid; ?> .olo-svresults-card:hover .olo-svr-hover-tilt { transform: rotateY(4deg) rotateX(2deg) scale(1.03); }
             <?php if ( $kenburns_on ) : ?>
             @keyframes olo-kb-<?php echo $uid; ?> {
@@ -248,9 +277,11 @@ class Olo_ServiceResults_Tile extends Olo_Tile_Base {
             #<?php echo $uid; ?> .olo-svresults-card:nth-child(3n) .olo-svr-kenburns { animation-delay: -<?php echo round( $kenburns_speed * 2 / 3, 1 ); ?>s; }
             <?php endif; ?>
             /* Ribbon */
-            #<?php echo $uid; ?> .olo-svr-ribbon { position: absolute; z-index: 2; font-size: 11px; font-weight: 700; padding: 4px 12px; text-transform: uppercase; letter-spacing: 0.5px; }
-            #<?php echo $uid; ?> .olo-svr-ribbon--top-right { top: 0; right: 14px; border-radius: 0 0 4px 4px; }
-            #<?php echo $uid; ?> .olo-svr-ribbon--top-left { top: 0; left: 14px; border-radius: 0 0 4px 4px; }
+            #<?php echo $uid; ?> .olo-svr-ribbon { position: absolute; z-index: 2; font-size: <?php echo max( 8, min( 24, (int) ( $s['ribbon_size'] ?? 11 ) ) ); ?>px; font-weight: 700; padding: 4px 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+            #<?php echo $uid; ?> .olo-svr-ribbon--top-right    { top: 0; right: 14px; border-radius: 0 0 4px 4px; }
+            #<?php echo $uid; ?> .olo-svr-ribbon--top-left     { top: 0; left: 14px;  border-radius: 0 0 4px 4px; }
+            #<?php echo $uid; ?> .olo-svr-ribbon--bottom-right { bottom: 0; right: 14px; border-radius: 4px 4px 0 0; }
+            #<?php echo $uid; ?> .olo-svr-ribbon--bottom-left  { bottom: 0; left: 14px;  border-radius: 4px 4px 0 0; }
             /* Opening badge */
             #<?php echo $uid; ?> .olo-svr-opening { position: absolute; bottom: 8px; left: 8px; z-index: 2; color: var(--olo-color-primary-contrast, #FFFFFF); font-weight: 600; padding: 2px 10px; border-radius: 4px; line-height: 1.4; }
             <?php if ( ! empty( $s['match_height'] ) ) : ?>
@@ -496,21 +527,22 @@ class Olo_ServiceResults_Tile extends Olo_Tile_Base {
                 }
             }
 
-            // Ribbon (from configurable meta key)
-            if ( ! empty( $s['ribbon_field'] ) ) {
-                $ribbon_val = get_post_meta( $post->ID, sanitize_key( $s['ribbon_field'] ), true );
+            // Ribbon (from configurable meta key — preset list or custom)
+            $ribbon_meta = (string) ( $s['ribbon_field'] ?? '' );
+            if ( $ribbon_meta === '__custom__' ) {
+                $ribbon_meta = (string) ( $s['ribbon_field_custom'] ?? '' );
+            }
+            if ( $ribbon_meta !== '' ) {
+                $ribbon_val = get_post_meta( $post->ID, sanitize_key( $ribbon_meta ), true );
                 if ( ! empty( $ribbon_val ) ) {
                     $svc['ribbon'] = $ribbon_val;
                 }
             }
 
-            // Service opening
-            if ( ! empty( $s['show_service_opening'] ) ) {
-                $opening = get_post_meta( $post->ID, '_olo_service_opening', true );
-                if ( $opening ) {
-                    $svc['service_opening'] = $opening;
-                }
-            }
+            // Nota: il vecchio "service_opening" è ora un caso del ribbon
+            // (ribbon_field='_olo_service_opening'). Il retrofit in render()
+            // imposta ribbon_field se l'utente aveva show_service_opening=true,
+            // quindi qui non serve più popolare svc.service_opening.
 
             $services[] = $svc;
         }

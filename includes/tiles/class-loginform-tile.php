@@ -96,13 +96,16 @@ class Olo_Loginform_Tile extends Olo_Tile_Base {
         $input_focus      = $this->safe_color_css( $s['input_focus_color'] );
         $input_padding    = max( 4, intval( $s['input_padding'] ) ?: 11 );
         $input_radius     = Olo_Tile_Utils::border_radius( $s['input_radius'] ?? 0 );
+        $input_radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['input_radius_hover'] ?? null );
         $submit_bg        = $this->safe_color_css( $s['submit_bg'] );
         $submit_color     = $this->safe_color_css( $s['submit_color'] );
         $submit_radius    = Olo_Tile_Utils::border_radius( $s['submit_radius'] ?? 0 );
+        $submit_radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['submit_radius_hover'] ?? null );
         $submit_hover_bg  = $this->safe_color_css( $s['submit_hover_bg'] );
         $link_color_css   = $this->safe_color_css( $s['link_color'] );
         $icon_color_css   = $this->safe_color_css( $s['icon_color'] );
         $form_radius      = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
+        $form_radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
         $form_bw          = intval( $s['border_width'] );
         $form_bc          = $this->safe_color_css( $s['border_color'] );
         $form_pad = Olo_Tile_Utils::spacing_css( $s['tile_padding'] ?? $s['form_padding'] ?? 32, 32 );
@@ -194,6 +197,7 @@ class Olo_Loginform_Tile extends Olo_Tile_Base {
                 <?php if ( $form_bg ) : ?>background-color: <?php echo $form_bg; ?>;<?php endif; ?>
                 <?php if ( $form_bw > 0 ) : ?>border: <?php echo $form_bw; ?>px solid <?php echo $form_bc ?: $input_border_val; ?>;<?php endif; ?>
             }
+            <?php if ( $form_radius_hover_css !== '' ) : ?>.<?php echo $uid; ?>{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?>:hover{border-radius:<?php echo $form_radius_hover_css; ?> !important}<?php endif; ?>
             /* Header */
             .<?php echo $uid; ?> .olo-lf-header {
                 text-align: center; margin-bottom: 24px;
@@ -219,6 +223,7 @@ class Olo_Loginform_Tile extends Olo_Tile_Base {
                 border-radius: <?php echo $input_radius; ?>;
                 overflow: hidden; transition: border-color 0.2s;
             }
+            <?php if ( $input_radius_hover_css !== '' ) : ?>.<?php echo $uid; ?> .olo-lf-input-wrap{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?> .olo-lf-input-wrap:hover{border-radius:<?php echo $input_radius_hover_css; ?> !important}<?php endif; ?>
             .<?php echo $uid; ?> .olo-lf-input-wrap:focus-within {
                 border-color: <?php echo $input_focus_val; ?>;
             }
@@ -287,6 +292,7 @@ class Olo_Loginform_Tile extends Olo_Tile_Base {
                 cursor: pointer; text-align: center;
                 transition: background-color 0.2s, transform 0.15s; margin-top: 16px;
             }
+            <?php if ( $submit_radius_hover_css !== '' ) : ?>.<?php echo $uid; ?> .olo-lf-submit{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?> .olo-lf-submit:hover{border-radius:<?php echo $submit_radius_hover_css; ?> !important}<?php endif; ?>
             .<?php echo $uid; ?> .olo-lf-submit:hover {
                 <?php if ( $submit_hover_val ) : ?>background-color: <?php echo $submit_hover_val; ?>;
                 <?php else : ?>opacity: 0.9;<?php endif; ?>

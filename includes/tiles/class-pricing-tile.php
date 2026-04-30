@@ -83,6 +83,7 @@ class Olo_Pricing_Tile extends Olo_Tile_Base {
         $features  = array_filter( array_map( 'trim', explode( "\n", $feat_raw ) ) );
         $popular   = filter_var( $s['is_popular'], FILTER_VALIDATE_BOOLEAN );
         $tile_r    = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
+        $tile_r_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
         $tile_bw   = intval( $s['border_width'] );
         $tile_bc   = $this->safe_color_css( $s['border_color'] ) ?: 'var(--olo-color-text, #374151)';
 
@@ -101,6 +102,7 @@ class Olo_Pricing_Tile extends Olo_Tile_Base {
         $cta_bg  = $this->safe_color_css( $s['cta_bg_color'] ) ?: $accent;
         $cta_fg  = $this->safe_color_css( $s['cta_text_color'] ) ?: '#FFFFFF';
         $cta_r   = Olo_Tile_Utils::border_radius( $s['cta_radius'] ?? 0 );
+        $cta_r_hover_css = Olo_Tile_Utils::radius_force_css( $s['cta_radius_hover'] ?? null );
         $cta_bw  = intval( $s['cta_border_width'] );
         $cta_bc  = $this->safe_color_css( $s['cta_border_color'] ) ?: '#FFFFFF';
         $hover   = $s['cta_hover_effect'] ?: 'none';
@@ -124,6 +126,7 @@ class Olo_Pricing_Tile extends Olo_Tile_Base {
         $badge_bg  = $this->safe_color_css( $s['badge_bg_color'] ) ?: $accent;
         $badge_fg  = $this->safe_color_css( $s['badge_text_color'] ) ?: '#FFFFFF';
         $badge_r   = Olo_Tile_Utils::border_radius( $s['badge_radius'] ?? 0 );
+        $badge_r_hover_css = Olo_Tile_Utils::radius_force_css( $s['badge_radius_hover'] ?? null );
         $badge_st  = $s['badge_style'] ?: 'pill';
         $badge_top = intval( $s['badge_top'] );
 
@@ -174,6 +177,7 @@ class Olo_Pricing_Tile extends Olo_Tile_Base {
                 border: <?php echo $tile_bw; ?>px solid <?php echo $tile_bc; ?>;
                 <?php endif; ?>
             }
+            <?php if ( $tile_r_hover_css !== '' ) : ?>.<?php echo $uid; ?>{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?>:hover{border-radius:<?php echo $tile_r_hover_css; ?> !important}<?php endif; ?>
             <?php if ( $bg_type === 'image' && ! empty( $s['bg_image'] ) ) : ?>
             .<?php echo $uid; ?> .olo-price-bg {
                 position: absolute; inset: 0;
@@ -211,6 +215,7 @@ class Olo_Pricing_Tile extends Olo_Tile_Base {
                 background: <?php echo $badge_bg; ?>; padding: 4px 20px;
                 <?php endif; ?>
             }
+            <?php if ( $badge_r_hover_css !== '' ) : ?>.<?php echo $uid; ?> .olo-price-badge{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?> .olo-price-badge:hover{border-radius:<?php echo $badge_r_hover_css; ?> !important}<?php endif; ?>
             <?php endif; ?>
 
             /* Price shape */
@@ -278,6 +283,7 @@ class Olo_Pricing_Tile extends Olo_Tile_Base {
                 position: relative; overflow: hidden;
                 <?php endif; ?>
             }
+            <?php if ( $cta_r_hover_css !== '' ) : ?>.<?php echo $uid; ?> .olo-price-cta{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?> .olo-price-cta:hover{border-radius:<?php echo $cta_r_hover_css; ?> !important}<?php endif; ?>
             .<?php echo $uid; ?> .olo-price-cta:hover {
                 text-decoration: none !important;
                 <?php if ( $h_bg ) : ?>background: <?php echo $h_bg; ?>;<?php endif; ?>

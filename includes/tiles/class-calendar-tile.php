@@ -134,6 +134,7 @@ class Olo_Calendar_Tile extends Olo_Tile_Base {
         $tb_py     = absint( $s['toolbar_padding_y'] );
         $tb_mb     = absint( $s['toolbar_margin_bottom'] );
         $tb_radius = Olo_Tile_Utils::border_radius( $s['toolbar_radius'] ?? 0 );
+        $tb_radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['toolbar_radius_hover'] ?? null );
 
         $toolbar_rules = [];
         if ( $tb_bg )     $toolbar_rules[] = "background-color:{$tb_bg}";
@@ -141,7 +142,9 @@ class Olo_Calendar_Tile extends Olo_Tile_Base {
         $toolbar_rules[] = "padding:{$tb_py}px {$tb_px}px";
         if ( $tb_mb )     $toolbar_rules[] = "margin-bottom:{$tb_mb}px";
         if ( $tb_radius && $tb_radius !== '0px' ) $toolbar_rules[] = "border-radius:{$tb_radius}";
+        if ( $tb_radius_hover_css !== '' ) $toolbar_rules[] = "transition:border-radius 400ms cubic-bezier(.4,0,.2,1)";
         $css .= "{$u} .fc .fc-toolbar.fc-header-toolbar{" . implode( ';', $toolbar_rules ) . "}";
+        if ( $tb_radius_hover_css !== '' ) $css .= "{$u} .fc .fc-toolbar.fc-header-toolbar:hover{border-radius:{$tb_radius_hover_css} !important}";
 
         // ── Toolbar title ──
         $tt_size  = absint( $s['toolbar_title_size'] );
@@ -163,7 +166,8 @@ class Olo_Calendar_Tile extends Olo_Tile_Base {
         $btn_abg    = $this->safe_color_css( $s['toolbar_btn_active_bg'] );
         $btn_acolor = $this->safe_color_css( $s['toolbar_btn_active_color'] );
         $btn_radius = Olo_Tile_Utils::border_radius( $s['toolbar_btn_radius'] ?? 0 );
-        $btn_radius_raw = absint( $s['toolbar_btn_radius'] ?? 0 );
+        $btn_radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['toolbar_btn_radius_hover'] ?? null );
+        $btn_radius_raw = Olo_Tile_Utils::radius_int( $s['toolbar_btn_radius'] ?? 0 );
         $btn_px     = absint( $s['toolbar_btn_padding_x'] );
         $btn_py     = absint( $s['toolbar_btn_padding_y'] );
         $btn_fs     = absint( $s['toolbar_btn_font_size'] );
@@ -183,7 +187,9 @@ class Olo_Calendar_Tile extends Olo_Tile_Base {
         if ( $btn_tt ) $btn_rules[] = "text-transform:{$btn_tt}";
         if ( $btn_bw && $btn_bc ) { $btn_rules[] = "border:{$btn_bw}px solid {$btn_bc}"; }
         if ( $btn_shadow ) $btn_rules[] = "box-shadow:0 2px 6px rgba(0,0,0,0.12)";
+        if ( $btn_radius_hover_css !== '' ) $btn_rules[] = "transition:border-radius 400ms cubic-bezier(.4,0,.2,1)";
         $css .= "{$u} .fc .fc-button{" . implode( ';', $btn_rules ) . "}";
+        if ( $btn_radius_hover_css !== '' ) $css .= "{$u} .fc .fc-button:hover{border-radius:{$btn_radius_hover_css} !important}";
 
         // Button group radius
         if ( $btn_radius_raw ) {
@@ -228,8 +234,10 @@ class Olo_Calendar_Tile extends Olo_Tile_Base {
 
         // ── Events ──
         $ev_radius = Olo_Tile_Utils::border_radius( $s['event_radius'] ?? 0 );
+        $ev_radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['event_radius_hover'] ?? null );
         $ev_size   = absint( $s['event_font_size'] );
         if ( $ev_radius && $ev_radius !== '0px' ) $css .= "{$u} .fc .fc-daygrid-event{border-radius:{$ev_radius}}";
+        if ( $ev_radius_hover_css !== '' ) $css .= "{$u} .fc .fc-daygrid-event{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}{$u} .fc .fc-daygrid-event:hover{border-radius:{$ev_radius_hover_css} !important}";
         if ( $ev_size )   $css .= "{$u} .fc .fc-daygrid-event{font-size:{$ev_size}px}";
 
         return $css;

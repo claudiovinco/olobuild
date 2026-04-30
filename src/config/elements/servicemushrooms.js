@@ -55,6 +55,7 @@ export default {
     { type: 'separator', label: 'Sfondo' },
     { key: 'bg_color', label: 'Colore sfondo', type: 'color' },
     { key: 'border_radius', label: 'Raggio bordi (px)', type: 'border-radius' },
+    { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 32 },
   ],
 };

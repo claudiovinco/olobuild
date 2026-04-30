@@ -93,6 +93,9 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
             $this->render_vertical( $uid, $items, $s, $layout );
         }
 
+        $tfx_css = $this->tfx_css( $s, '.' . $uid );
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        $this->tfx_print_script();
         return ob_get_clean();
     }
 
@@ -177,6 +180,7 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
         $c_text    = $this->safe_color_css( $s['card_text_color'] ) ?: 'var(--olo-color-text, #374151)';
         $c_pad = Olo_Tile_Utils::spacing_css( $s['tile_padding'] ?? $s['card_padding'] ?? 20, 20 );
         $c_rad     = Olo_Tile_Utils::border_radius( $s['card_border_radius'] ?? 0 );
+        $c_rad_hover_css = Olo_Tile_Utils::radius_force_css( $s['card_border_radius_hover'] ?? null );
         $c_bw      = intval( $s['card_border_width'] );
         $c_bc      = $this->safe_color_css( $s['card_border_color'] ) ?: 'var(--olo-color-border, #E5E7EB)';
         $c_hover   = $s['card_hover'] ?: 'none';
@@ -221,6 +225,7 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
         $m_ratio  = $s['card_media_ratio'] ?: 'auto';
         $m_margin = intval( $s['card_media_margin'] ?? 0 );
         $m_radius = Olo_Tile_Utils::border_radius( $s['card_media_radius'] ?? 4 );
+        $m_radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['card_media_radius_hover'] ?? null );
 
         // Horizontal
         $h_gap    = intval( $s['h_gap'] ) ?: 24;
@@ -363,6 +368,7 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
                 max-width: <?php echo $c_maxw; ?>px;
                 <?php endif; ?>
             }
+            <?php if ( $c_rad_hover_css !== '' ) : ?>.<?php echo $uid; ?> .olo-tl-card{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?> .olo-tl-card:hover{border-radius:<?php echo $c_rad_hover_css; ?> !important}<?php endif; ?>
 
             <?php if ( $c_hover === 'lift' ) : ?>
             .<?php echo $uid; ?> .olo-tl-card:hover {
@@ -394,6 +400,7 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
                 margin: <?php echo $m_margin; ?>px <?php echo $m_margin; ?>px 8px <?php echo $m_margin; ?>px;
                 <?php endif; ?>
             }
+            <?php if ( $m_radius_hover_css !== '' ) : ?>.<?php echo $uid; ?> .olo-tl-media{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?> .olo-tl-media:hover{border-radius:<?php echo $m_radius_hover_css; ?> !important}<?php endif; ?>
             .<?php echo $uid; ?> .olo-tl-media img,
             .<?php echo $uid; ?> .olo-tl-media video,
             .<?php echo $uid; ?> .olo-tl-media iframe {
@@ -765,8 +772,8 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
                             <div class="olo-tl-date" style="margin-bottom:4px"><?php echo esc_html( $item['date'] ); ?></div>
                             <?php endif; ?>
 
-                            <h4 class="olo-tl-title"><?php echo esc_html( wp_strip_all_tags( $item['title'] ) ); ?></h4>
-                            <div class="olo-tl-desc"><?php echo nl2br( esc_html( wp_strip_all_tags( $item['description'] ) ) ); ?></div>
+                            <?php list( $tlt_cls, $tlt_data ) = $this->tfx_attrs( $s, "title", wp_strip_all_tags( $item["title"] ) ); ?><h4 class="olo-tl-title<?php echo $tlt_cls; ?>"<?php echo $tlt_data; ?>><?php echo esc_html( wp_strip_all_tags( $item["title"] ) ); ?></h4>
+                            <?php list( $tld_cls, $tld_data ) = $this->tfx_attrs( $s, "description", wp_strip_all_tags( $item["description"] ) ); ?><div class="olo-tl-desc<?php echo $tld_cls; ?>"<?php echo $tld_data; ?>><?php echo nl2br( esc_html( wp_strip_all_tags( $item["description"] ) ) ); ?></div>
                         </div>
 
                         <?php if ( $layout !== 'vertical-center' && $date_pos === 'outside' && ! empty( $item['date'] ) ) : ?>
@@ -867,8 +874,8 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
                                 <div class="olo-tl-date" style="margin-bottom:4px"><?php echo esc_html( $item['date'] ); ?></div>
                                 <?php endif; ?>
 
-                                <h4 class="olo-tl-title"><?php echo esc_html( wp_strip_all_tags( $item['title'] ) ); ?></h4>
-                                <div class="olo-tl-desc"><?php echo nl2br( esc_html( wp_strip_all_tags( $item['description'] ) ) ); ?></div>
+                                <?php list( $tlt_cls, $tlt_data ) = $this->tfx_attrs( $s, "title", wp_strip_all_tags( $item["title"] ) ); ?><h4 class="olo-tl-title<?php echo $tlt_cls; ?>"<?php echo $tlt_data; ?>><?php echo esc_html( wp_strip_all_tags( $item["title"] ) ); ?></h4>
+                                <?php list( $tld_cls, $tld_data ) = $this->tfx_attrs( $s, "description", wp_strip_all_tags( $item["description"] ) ); ?><div class="olo-tl-desc<?php echo $tld_cls; ?>"<?php echo $tld_data; ?>><?php echo nl2br( esc_html( wp_strip_all_tags( $item["description"] ) ) ); ?></div>
                             </div>
                             <?php if ( $date_pos === 'outside' && ! empty( $item['date'] ) ) : ?>
                             <div class="olo-tl-date"><?php echo esc_html( $item['date'] ); ?></div>
@@ -915,8 +922,8 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
                             <div class="olo-tl-date" style="margin-bottom:4px"><?php echo esc_html( $item['date'] ); ?></div>
                             <?php endif; ?>
 
-                            <h4 class="olo-tl-title"><?php echo esc_html( wp_strip_all_tags( $item['title'] ) ); ?></h4>
-                            <div class="olo-tl-desc"><?php echo nl2br( esc_html( wp_strip_all_tags( $item['description'] ) ) ); ?></div>
+                            <?php list( $tlt_cls, $tlt_data ) = $this->tfx_attrs( $s, "title", wp_strip_all_tags( $item["title"] ) ); ?><h4 class="olo-tl-title<?php echo $tlt_cls; ?>"<?php echo $tlt_data; ?>><?php echo esc_html( wp_strip_all_tags( $item["title"] ) ); ?></h4>
+                            <?php list( $tld_cls, $tld_data ) = $this->tfx_attrs( $s, "description", wp_strip_all_tags( $item["description"] ) ); ?><div class="olo-tl-desc<?php echo $tld_cls; ?>"<?php echo $tld_data; ?>><?php echo nl2br( esc_html( wp_strip_all_tags( $item["description"] ) ) ); ?></div>
                         </div>
                     </div>
                 </div>

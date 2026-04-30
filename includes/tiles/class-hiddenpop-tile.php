@@ -95,6 +95,7 @@ class Olo_Hiddenpop_Tile extends Olo_Tile_Base {
         $bg_color    = $this->safe_color_css( $s['modal_bg_color'] ?? '' ) ?: '#ffffff';
         $shadow      = Olo_Tile_Utils::shadow( $s['modal_shadow'] ?? 'lg' );
         $radius      = Olo_Tile_Utils::border_radius( $s['modal_radius'] ?? 16 );
+        $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['modal_radius_hover'] ?? null );
         $border_w    = max( 0, intval( $s['modal_border_width'] ?? 0 ) );
         $border_c    = $this->safe_color_css( $s['modal_border_color'] ?? '' ) ?: '#e5e7eb';
         $overlay_pct = max( 0, min( 100, intval( $s['modal_overlay'] ?? 60 ) ) );
@@ -133,6 +134,7 @@ class Olo_Hiddenpop_Tile extends Olo_Tile_Base {
                 <?php if ( $shadow !== 'none' ) : ?>box-shadow: <?php echo $shadow; ?>;<?php endif; ?>
                 <?php if ( $border_w > 0 ) : ?>border: <?php echo $border_w; ?>px solid <?php echo $border_c; ?>;<?php endif; ?>
             }
+            <?php if ( $radius_hover_css !== '' ) : ?>#<?php echo esc_attr( $uid ); ?>-modal .uk-modal-dialog{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}#<?php echo esc_attr( $uid ); ?>-modal .uk-modal-dialog:hover{border-radius:<?php echo $radius_hover_css; ?> !important}<?php endif; ?>
             <?php if ( $animation === 'slide-up' ) : ?>
             #<?php echo esc_attr( $uid ); ?>-modal .uk-modal-dialog { animation: oloHpSlideUp 0.35s ease-out; }
             @keyframes oloHpSlideUp { from { opacity:0; transform: translateY(40px); } to { opacity:1; transform: translateY(0); } }

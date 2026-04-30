@@ -36,6 +36,7 @@ export default {
     { key: 'widget_max_width', label: 'Larghezza max (px)', type: 'range', min: 320, max: 800, step: 10 },
     { key: 'widget_bg', label: 'Sfondo', type: 'color' },
     { key: 'widget_border_radius', label: 'Border radius (px)', type: 'border-radius' },
+    { key: 'widget_border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'widget_border_color', label: 'Bordo colore', type: 'color' },
     { key: 'widget_shadow', label: 'Ombra', type: 'select', options: [
       { value: 'none', label: 'Nessuna' },
@@ -67,7 +68,9 @@ export default {
     { key: 'btn_bg', label: 'Sfondo pulsante', type: 'color' },
     { key: 'btn_color', label: 'Testo pulsante', type: 'color' },
     { key: 'btn_radius', label: 'Border radius (px)', type: 'border-radius' },
+    { key: 'btn_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'slot_border_radius', label: 'Radius slot orari (px)', type: 'border-radius' },
+    { key: 'slot_border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
 
     { type: 'separator', label: 'Tipografia' },
     { key: 'title_size', label: 'Dimensione titolo (px)', type: 'range', min: 14, max: 28, step: 1 },

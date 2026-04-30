@@ -1,3 +1,4 @@
+import { textEffectsFields, textEffectsDefaults } from './_shared';
 import { shadowField } from './_shared.js';
 
 export default {
@@ -90,6 +91,7 @@ export default {
     number_format: false,
 
     shadow: 'none',
+    ...textEffectsDefaults,
   },
   fields: [
     { key: 'chart_type', label: 'Tipo grafico', type: 'select', options: [
@@ -192,6 +194,7 @@ export default {
       condition: { field: 'tooltip_enabled', value: true } },
     { key: 'tooltip_corner_radius', label: 'Raggio angoli tooltip', type: 'border-radius',
       condition: { field: 'tooltip_enabled', value: true } },
+    { key: 'tooltip_corner_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'tooltip_font_size', label: 'Dimensione font tooltip', type: 'range', min: 8, max: 18, step: 1,
       condition: { field: 'tooltip_enabled', value: true } },
     { key: 'tooltip_padding', label: 'Padding tooltip', type: 'spacing', max: 20,
@@ -204,6 +207,7 @@ export default {
     { key: 'border_color_override', label: 'Colore bordo globale', type: 'color' },
     { key: 'bar_radius', label: 'Raggio angoli barre', type: 'border-radius',
       condition: { field: 'chart_type', value: 'bar' } },
+    { key: 'bar_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'bar_percentage', label: 'Larghezza barre (%)', type: 'range', min: 0.1, max: 1, step: 0.05,
       condition: { field: 'chart_type', value: 'bar' } },
     { key: 'category_percentage', label: 'Larghezza categoria (%)', type: 'range', min: 0.1, max: 1, step: 0.05,
@@ -271,5 +275,6 @@ export default {
     { key: 'number_format', label: 'Separatore migliaia', type: 'toggle' },
 
     ...shadowField,
+    ...textEffectsFields([ { value: 'label', label: 'Solo Etichetta' } ]),
   ],
 };

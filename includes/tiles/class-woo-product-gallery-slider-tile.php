@@ -79,7 +79,8 @@ class Olo_Woo_Product_Gallery_Slider_Tile extends Olo_Tile_Base {
         $thumb_size  = max( 40, min( 120, absint( $s['thumbnail_size'] ) ) );
         $thumb_gap   = max( 2, min( 20, absint( $s['thumbnail_gap'] ) ) );
         $radius      = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
-        $radius_raw  = absint( $s['border_radius'] ?? 0 );
+        $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
+        $radius_raw  = Olo_Tile_Utils::radius_int( $s['border_radius'] ?? 0 );
         $max_width   = max( 200, min( 1200, absint( $s['max_width'] ) ) );
         $show_thumbs = ! empty( $s['show_thumbnails'] );
         $thumb_pos   = in_array( $s['thumbnail_position'], [ 'bottom', 'left' ], true ) ? $s['thumbnail_position'] : 'bottom';
@@ -146,6 +147,7 @@ class Olo_Woo_Product_Gallery_Slider_Tile extends Olo_Tile_Base {
                 order: 2;
                 <?php endif; ?>
             }
+            <?php if ( $radius_hover_css !== '' ) : ?>.<?php echo $uid; ?>-main{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?>-main:hover{border-radius:<?php echo $radius_hover_css; ?> !important}<?php endif; ?>
             .<?php echo $uid; ?>-track {
                 display: flex;
                 transition: transform 0.4s ease;

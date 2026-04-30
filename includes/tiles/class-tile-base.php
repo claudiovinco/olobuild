@@ -117,6 +117,61 @@ abstract class Olo_Tile_Base {
     }
 
     /**
+     * Text-effects helper: returns [$class_fragment, $data_attrs_string] for the given semantic target.
+     * If the target receives the active effect, returns class like " olo-tfx olo-tfx--gradient-anim"
+     * (with leading space) and data-attributes string ready to inline-echo on the element.
+     * Otherwise returns ['', ''].
+     *
+     * Pass `$plain_text` (the inner text of the element) so glitch/scramble can mirror it via data-fx-text.
+     *
+     * Usage:
+     *   list( $h_cls, $h_data ) = $this->tfx_attrs( $s, 'heading', $heading_text );
+     *   echo "<h2 class=\"olo-heading{$h_cls}\"{$h_data}>{$heading_text}</h2>";
+     *
+     * The tile must also:
+     *   - Emit CSS for CSS-driven effects via Olo_Text_Effects::css($s, $sel)  (or style_block)
+     *   - Print the runtime script via Olo_Text_Effects::print_script() once per render
+     *
+     * `'all'` is a shorthand target that matches anything except an explicit other target — used by
+     * tiles that expose multiple text fields and want one effect to apply to all of them at once.
+     *
+     * @param array  $s          Settings.
+     * @param string $target     The element's semantic target (e.g. 'heading', 'text', 'title', 'subtitle').
+     * @param string $plain_text Inner text content (for data-fx-text mirror).
+     * @return array [$class_fragment_with_lead_space, $data_attrs_with_lead_space]
+     */
+    protected function tfx_attrs( $s, $target, $plain_text = '' ) {
+        if ( ! class_exists( 'Olo_Text_Effects' ) ) return [ '', '' ];
+        if ( ! Olo_Text_Effects::active( $s ) ) return [ '', '' ];
+        $tgt = $s['text_effect_target'] ?? 'heading';
+        $hits = ( $tgt === 'all' ) || ( $tgt === 'both' && in_array( $target, [ 'heading', 'text' ], true ) ) || ( $tgt === $target );
+        if ( ! $hits ) return [ '', '' ];
+        // Fake a settings array where target matches so the helper greenlights it
+        $faux = $s;
+        $faux['text_effect_target'] = $target;
+        return [
+            Olo_Text_Effects::classes( $faux, $target ),
+            Olo_Text_Effects::data_attrs( $faux, $target, $plain_text ),
+        ];
+    }
+
+    /**
+     * Convenience: return the CSS block (without <style>) for the active text effect, scoped to $sel.
+     */
+    protected function tfx_css( $s, $sel ) {
+        if ( ! class_exists( 'Olo_Text_Effects' ) ) return '';
+        return Olo_Text_Effects::css( $s, $sel );
+    }
+
+    /**
+     * Convenience: print the runtime script once per request.
+     */
+    protected function tfx_print_script() {
+        if ( ! class_exists( 'Olo_Text_Effects' ) ) return;
+        Olo_Text_Effects::print_script();
+    }
+
+    /**
      * Render an icon — supports both UIkit icons and custom SVG icons.
      * Custom icons are stored with prefix "custom:" and saved in olo_custom_icons option.
      *

@@ -63,6 +63,7 @@ class Olo_LinkInBio_Tile extends Olo_Tile_Base {
         $max_width    = max( 300, min( 600, absint( $s['max_width'] ) ) );
         $gap          = max( 4, min( 24, absint( $s['gap'] ) ) );
         $radius       = Olo_Tile_Utils::border_radius( $s['link_border_radius'] ?? 0 );
+        $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['link_border_radius_hover'] ?? null );
         $padding = Olo_Tile_Utils::spacing_css( $s['tile_padding'] ?? $s['link_padding'] ?? 14, 14 );
         $text_align   = in_array( $s['text_align'], [ 'left', 'center', 'right' ], true ) ? $s['text_align'] : 'center';
 
@@ -101,6 +102,7 @@ class Olo_LinkInBio_Tile extends Olo_Tile_Base {
             #<?php echo $uid; ?> .olo-lib-btn--minimal { background: transparent; color: <?php echo $link_color; ?>; border: none; text-decoration: underline; border-radius: <?php echo $radius; ?>; }
             #<?php echo $uid; ?> .olo-lib-btn--minimal:hover { background: <?php echo $link_hover_bg; ?>; }
             #<?php echo $uid; ?> .olo-lib-btn:hover { transform: translateY(-1px); }
+            <?php if ( $radius_hover_css !== '' ) : ?>#<?php echo $uid; ?> .olo-lib-btn{transition:border-radius 400ms cubic-bezier(.4,0,.2,1),background-color 0.2s,color 0.2s,transform 0.2s}#<?php echo $uid; ?> .olo-lib-btn:hover{border-radius:<?php echo $radius_hover_css; ?> !important}<?php endif; ?>
         </style>
         <div id="<?php echo esc_attr( $uid ); ?>" class="olo-linkinbio">
             <div class="olo-lib-inner">
@@ -136,7 +138,8 @@ class Olo_LinkInBio_Tile extends Olo_Tile_Base {
                             continue;
                         }
                     ?>
-                        <a href="<?php echo $url; ?>" class="olo-lib-btn olo-lib-btn--<?php echo $style; ?>" target="_blank" rel="noopener noreferrer">
+                        <?php list( $lt_cls, $lt_data ) = $this->tfx_attrs( $s, 'title', $title ); ?>
+                        <a href="<?php echo $url; ?>" class="olo-lib-btn olo-lib-btn--<?php echo $style; ?><?php echo $lt_cls; ?>" target="_blank" rel="noopener noreferrer"<?php echo $lt_data; ?>>
                             <?php echo esc_html( $title ); ?>
                         </a>
                     <?php endforeach; ?>
@@ -144,6 +147,9 @@ class Olo_LinkInBio_Tile extends Olo_Tile_Base {
             </div>
         </div>
         <?php
+        $tfx_css = $this->tfx_css( $s, '#' . $uid );
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        $this->tfx_print_script();
         return ob_get_clean();
     }
 }

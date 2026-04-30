@@ -428,6 +428,7 @@ class Olo_ShatteredImage_Tile extends Olo_Tile_Base {
         $position   = esc_attr( $s['image_position'] ?: 'center center' );
         $gap_color  = $this->safe_color_css( $s['gap_color'] ) ?: 'transparent';
         $radius     = Olo_Tile_Utils::border_radius( $s['border_radius_outer'] ?? 0 );
+        $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_outer_hover'] ?? null );
         $bw         = max( 0, min( 10, intval( $s['border_width'] ) ) );
         $bc         = $this->safe_color_css( $s['border_color'] ) ?: 'var(--olo-color-border, #E5E7EB)';
         $kb_on      = ! empty( $s['kenburns'] );
@@ -497,6 +498,8 @@ class Olo_ShatteredImage_Tile extends Olo_Tile_Base {
         }
 
         // Container
+        $sh_uid = 'olo-shat-' . wp_unique_id();
+        $extra_style = $radius_hover_css !== '' ? 'transition:border-radius 400ms cubic-bezier(.4,0,.2,1);' : '';
         $container_style = $this->build_style( [
             'position'      => 'relative',
             'width'         => '100%',
@@ -506,9 +509,12 @@ class Olo_ShatteredImage_Tile extends Olo_Tile_Base {
             'background'    => $gap_color,
             'box-shadow'    => $shadow,
             'border'        => $bw > 0 ? "{$bw}px solid {$bc}" : '',
-        ] );
+        ] ) . $extra_style;
 
-        echo '<div class="olo-shattered" style="' . $container_style . '"' . $data_attrs . '>';
+        if ( $radius_hover_css !== '' ) {
+            echo '<style>.' . $sh_uid . ':hover{border-radius:' . $radius_hover_css . ' !important}</style>';
+        }
+        echo '<div class="olo-shattered ' . $sh_uid . '" style="' . $container_style . '"' . $data_attrs . '>';
 
         // Render each fragment: outer = static mask, inner = animated image
         $container_h = intval( $s['height'] ) ?: 400;

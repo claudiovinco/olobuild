@@ -59,6 +59,7 @@ class Olo_Pricelist_Tile extends Olo_Tile_Base {
         $desc_clr    = $this->safe_color_css( $s['description_color'] ) ?: 'var(--olo-color-text-muted, #888)';
         $img_size    = intval( $s['image_size'] ) ?: 60;
         $img_radius  = Olo_Tile_Utils::border_radius( $s['image_border_radius'] ?? 0 );
+        $img_radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['image_border_radius_hover'] ?? null );
         $show_image  = filter_var( $s['show_image'], FILTER_VALIDATE_BOOLEAN );
         $price_pos   = $s['price_position'] ?: 'right';
         $hl_bg       = $this->safe_color_css( $s['highlighted_bg'] ) ?: 'rgba(232, 98, 42, 0.06)';
@@ -67,11 +68,11 @@ class Olo_Pricelist_Tile extends Olo_Tile_Base {
         $badge_bw    = intval( $s['badge_border_width'] );
         $badge_bs    = in_array( $s['badge_border_style'], [ 'solid', 'dashed', 'dotted' ] ) ? $s['badge_border_style'] : 'solid';
         $badge_bc    = $this->safe_color_css( $s['badge_border_color'] ) ?: 'var(--olo-color-primary, #e8622a)';
-        $badge_br    = intval( $s['badge_border_radius'] ?? 6 );
+        $badge_br    = Olo_Tile_Utils::radius_int( $s['badge_border_radius'] ?? 6 );
         $gap         = intval( $s['gap'] ) ?: 12;
         $padding = Olo_Tile_Utils::spacing_css( $s['tile_padding'] ?? $s['padding'] ?? 14, 14 );
         $card_bg     = $this->safe_color_css( $s['card_bg'] ?? '' ) ?: 'rgba(255, 255, 255, 0.8)';
-        $card_radius = intval( $s['card_border_radius'] ?? 12 );
+        $card_radius = Olo_Tile_Utils::radius_int( $s['card_border_radius'] ?? 12 );
         $card_border = $this->safe_color_css( $s['card_border_color'] ?? '' ) ?: 'rgba(0, 0, 0, 0.06)';
         $hover_lift  = filter_var( $s['hover_lift'] ?? true, FILTER_VALIDATE_BOOLEAN );
         $hl_border   = $this->safe_color_css( $s['highlighted_bg'] ) ? $this->safe_color_css( $s['highlighted_bg'] ) : 'rgba(232, 98, 42, 0.2)';
@@ -121,6 +122,7 @@ class Olo_Pricelist_Tile extends Olo_Tile_Base {
                 flex-shrink: 0;
                 background: rgba(0, 0, 0, 0.03);
             }
+            <?php if ( $img_radius_hover_css !== '' ) : ?>.<?php echo $uid; ?> .olo-pl-img{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?> .olo-pl-img:hover{border-radius:<?php echo $img_radius_hover_css; ?> !important}<?php endif; ?>
             .<?php echo $uid; ?> .olo-pl-img img {
                 width: 100%;
                 height: 100%;
@@ -221,7 +223,7 @@ class Olo_Pricelist_Tile extends Olo_Tile_Base {
                 <div class="olo-pl-body">
                     <div class="olo-pl-top">
                         <div class="olo-pl-info">
-                            <span class="olo-pl-title"><?php echo esc_html( $item['title'] ); ?></span>
+                            <?php list( $plt_cls, $plt_data ) = $this->tfx_attrs( $s, "title", $item["title"] ); ?><span class="olo-pl-title<?php echo $plt_cls; ?>"<?php echo $plt_data; ?>><?php echo esc_html( $item["title"] ); ?></span>
                             <?php if ( ! empty( $item['badge'] ) ) : ?>
                                 <span class="olo-pl-badge"><?php echo esc_html( $item['badge'] ); ?></span>
                             <?php endif; ?>
@@ -231,7 +233,7 @@ class Olo_Pricelist_Tile extends Olo_Tile_Base {
                         <?php endif; ?>
                     </div>
                     <?php if ( ! empty( $item['description'] ) ) : ?>
-                    <div class="olo-pl-desc"><?php echo esc_html( $item['description'] ); ?></div>
+                    <?php list( $pld_cls, $pld_data ) = $this->tfx_attrs( $s, "description", $item["description"] ); ?><div class="olo-pl-desc<?php echo $pld_cls; ?>"<?php echo $pld_data; ?>><?php echo esc_html( $item["description"] ); ?></div>
                     <?php endif; ?>
                     <?php if ( $price_pos === 'below' ) : ?>
                     <div class="olo-pl-price olo-pl-price--below"><?php echo esc_html( $item['price'] ); ?></div>
@@ -245,6 +247,9 @@ class Olo_Pricelist_Tile extends Olo_Tile_Base {
             <?php endforeach; ?>
         </div>
         <?php
+        $tfx_css = $this->tfx_css( $s, '.' . $uid );
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        $this->tfx_print_script();
         return ob_get_clean();
     }
 

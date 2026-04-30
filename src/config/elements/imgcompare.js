@@ -56,6 +56,7 @@ export default {
     { type: 'separator', label: 'Aspetto' },
     { key: 'height', label: 'Altezza (px)', type: 'range', min: 200, max: 800, step: 10 },
     { key: 'border_radius', label: 'Raggio bordo (px)', type: 'border-radius' },
+    { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'object_fit', label: 'Adattamento immagini', type: 'select', options: [
       { value: 'cover', label: 'Riempi (cover)' },
       { value: 'contain', label: 'Contieni' },

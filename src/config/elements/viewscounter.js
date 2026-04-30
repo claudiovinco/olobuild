@@ -1,3 +1,4 @@
+import { textEffectsFields, textEffectsDefaults } from './_shared';
 export default {
   type: 'viewscounter',
   name: 'Contatore Visite',
@@ -15,6 +16,7 @@ export default {
     layout: 'inline',
     icon_size: '16',
     number_format: true,
+    ...textEffectsDefaults,
   },
   fields: [
     // ── Contenuto ──
@@ -51,5 +53,6 @@ export default {
     { key: 'text_color', label: 'Colore testo', type: 'color' },
     { key: 'icon_color', label: 'Colore icona', type: 'color',
       condition: { field: 'show_icon', value: true } },
+    ...textEffectsFields([ { value: 'label', label: 'Solo Etichetta' } ]),
   ],
 };

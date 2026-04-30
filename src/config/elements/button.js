@@ -1,3 +1,4 @@
+import { textEffectsFields, textEffectsDefaults } from './_shared';
 import { shadowField } from './_shared.js';
 
 export default {
@@ -37,6 +38,7 @@ export default {
     hover_effect: 'lift',
     hover_image: '',
     hover_video: '',
+    ...textEffectsDefaults,
   },
   fields: [
     { key: 'text', label: 'Testo pulsante', type: 'text' },
@@ -64,6 +66,7 @@ export default {
     { key: 'bg_color', label: 'Colore sfondo', type: 'color' },
     { key: 'text_color', label: 'Colore testo', type: 'color' },
     { key: 'border_radius', label: 'Border Radius', type: 'border-radius' },
+    { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 80 },
     { key: 'font_size', label: 'Dim. carattere (px)', type: 'range', min: 12, max: 32, step: 1, responsive: true },
     { key: 'font_weight', label: 'Peso font', type: 'select', options: [
@@ -120,5 +123,6 @@ export default {
       condition: { field: 'hover_shadow', op: 'eq', value: 'custom' } },
     { key: 'hover_image', label: 'Immagine hover', type: 'image' },
     { key: 'hover_video', label: 'Video hover (mp4)', type: 'media' },
+    ...textEffectsFields([ { value: 'text', label: 'Solo Testo' } ]),
   ],
 };

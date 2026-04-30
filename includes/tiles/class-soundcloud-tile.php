@@ -31,6 +31,7 @@ class Olo_Soundcloud_Tile extends Olo_Tile_Base {
 
         $url    = trim( $s['url'] );
         $radius = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
+        $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
         $height = absint( $s['height'] ) ?: 166;
 
         // Nessun URL — mostra placeholder
@@ -57,8 +58,12 @@ class Olo_Soundcloud_Tile extends Olo_Tile_Base {
 
         if ( $oembed_html ) {
             ob_start();
+            $sc_hash = $radius_hover_css !== '' ? substr( md5( $radius_hover_css ), 0, 6 ) : '';
             ?>
-            <div class="olo-soundcloud" style="border-radius: <?php echo $radius; ?>; overflow: hidden;">
+            <?php if ( $radius_hover_css !== '' ) : ?>
+            <style>.olo-sc-hr-<?php echo $sc_hash; ?>:hover{border-radius:<?php echo $radius_hover_css; ?> !important}</style>
+            <?php endif; ?>
+            <div class="olo-soundcloud<?php echo $radius_hover_css !== '' ? ' olo-sc-hr-' . $sc_hash : ''; ?>" style="border-radius: <?php echo $radius; ?>; overflow: hidden;<?php if ( $radius_hover_css !== '' ) echo 'transition:border-radius 400ms cubic-bezier(.4,0,.2,1);'; ?>">
                 <?php echo $oembed_html; ?>
             </div>
             <?php
@@ -79,8 +84,12 @@ class Olo_Soundcloud_Tile extends Olo_Tile_Base {
             . '&visual=' . $visual;
 
         ob_start();
+        $sc_hash = $radius_hover_css !== '' ? substr( md5( $radius_hover_css . $url ), 0, 6 ) : '';
         ?>
-        <div class="olo-soundcloud" style="border-radius: <?php echo $radius; ?>; overflow: hidden;">
+        <?php if ( $radius_hover_css !== '' ) : ?>
+        <style>.olo-sc-hr-<?php echo $sc_hash; ?>:hover{border-radius:<?php echo $radius_hover_css; ?> !important}</style>
+        <?php endif; ?>
+        <div class="olo-soundcloud<?php echo $radius_hover_css !== '' ? ' olo-sc-hr-' . $sc_hash : ''; ?>" style="border-radius: <?php echo $radius; ?>; overflow: hidden;<?php if ( $radius_hover_css !== '' ) echo 'transition:border-radius 400ms cubic-bezier(.4,0,.2,1);'; ?>">
             <iframe
                 src="<?php echo esc_url( $iframe_url ); ?>"
                 width="100%"

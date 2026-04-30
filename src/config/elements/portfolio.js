@@ -1,3 +1,4 @@
+import { textEffectsFields, textEffectsDefaults } from './_shared';
 import { shadowField } from './_shared.js';
 
 export default {
@@ -38,6 +39,7 @@ export default {
       { id: 'pf-6', title: 'Progetto Zeta', image_url: '', category: 'Foto', description: 'Reportage aziendale.', link_url: '' },
     ],
     shadow: 'none',
+    ...textEffectsDefaults,
   },
   fields: [
     { key: 'source', label: 'Origine dati', type: 'select', options: [
@@ -80,6 +82,7 @@ export default {
       { value: 'auto', label: 'Automatico' },
     ]},
     { key: 'border_radius', label: 'Raggio bordi (px)', type: 'border-radius' },
+    { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
 
     { type: 'separator', label: 'Barra filtri' },
     { key: 'filter_bar', label: 'Mostra barra filtri', type: 'toggle' },
@@ -122,5 +125,10 @@ export default {
     { key: 'overlay_opacity', label: 'Opacità overlay (%)', type: 'range', min: 0, max: 100, step: 5 },
 
     ...shadowField,
+    ...textEffectsFields([
+      { value: 'title', label: 'Solo Titolo' },
+      { value: 'description', label: 'Solo Descrizione' },
+      { value: 'all', label: 'Tutti gli elementi testuali' },
+    ]),
   ],
 };

@@ -123,6 +123,7 @@ export default {
     { key: 'border_color', label: 'Colore bordo', type: 'color' },
     { key: 'border_width', label: 'Spessore bordo (px)', type: 'range', min: 0, max: 10, step: 1 },
     { key: 'border_radius', label: 'Arrotondamento (px)', type: 'border-radius' },
+    { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 60 },
     { key: 'shadow', label: 'Ombra', type: 'toggle' },
     { key: 'shadow_color', label: 'Colore ombra', type: 'color',

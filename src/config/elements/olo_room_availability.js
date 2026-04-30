@@ -36,6 +36,7 @@ export default {
     { type: 'separator', label: 'Aspetto' },
     { key: 'card_style', label: 'Stile card con sfondo', type: 'toggle' },
     { key: 'day_radius', label: 'Raggio celle giorno (px)', type: 'border-radius' },
+    { key: 'day_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
 
     { type: 'separator', label: 'Colori stato' },
     { key: 'color_free', label: 'Libero', type: 'color' },

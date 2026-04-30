@@ -1,3 +1,4 @@
+import { textEffectsFields, textEffectsDefaults } from './_shared';
 import { shadowField } from './_shared.js';
 
 export default {
@@ -27,6 +28,7 @@ export default {
     gradient_angle: '90',
     blend_mode: 'normal',
     shadow: 'none',
+    ...textEffectsDefaults,
   },
   fields: [
     { key: 'heading', label: 'Titolo', type: 'textarea' },
@@ -109,5 +111,10 @@ export default {
     { type: 'separator', label: 'Sottotitolo' },
     { key: 'subtitle_color', label: 'Colore sottotitolo', type: 'color' },
     ...shadowField,
+    ...textEffectsFields([
+      { value: 'heading', label: 'Solo Titolo' },
+      { value: 'subtitle', label: 'Solo Sottotitolo' },
+      { value: 'all', label: 'Tutti gli elementi testuali' },
+    ]),
   ],
 };

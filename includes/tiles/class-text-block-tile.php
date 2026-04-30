@@ -98,12 +98,18 @@ class Olo_TextBlock_Tile extends Olo_Tile_Base {
             $content = nl2br( esc_html( $content_raw ) );
         }
 
+        list( $tb_cls, $tb_data ) = $this->tfx_attrs( $s, 'content', wp_strip_all_tags( $content_raw ) );
+        $tb_uid = 'olo-tb-' . wp_unique_id();
+
         ob_start();
         ?>
-        <div class="olo-text-block" style="<?php echo esc_attr( $style ); ?>">
+        <div class="olo-text-block <?php echo $tb_uid; ?><?php echo $tb_cls; ?>" style="<?php echo esc_attr( $style ); ?>"<?php echo $tb_data; ?>>
             <?php echo $content; ?>
         </div>
         <?php
+        $tfx_css = $this->tfx_css( $s, '.' . $tb_uid );
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        $this->tfx_print_script();
         return ob_get_clean();
     }
 }

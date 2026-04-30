@@ -1,3 +1,4 @@
+import { textEffectsFields, textEffectsDefaults } from './_shared';
 import { shadowField } from './_shared.js';
 
 export default {
@@ -78,6 +79,7 @@ export default {
     border_width: '0',
     border_color: '',
     shadow: 'none',
+    ...textEffectsDefaults,
   },
   fields: [
     // ═══════════════════════════════════════
@@ -245,11 +247,15 @@ export default {
     { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 64 },
     { key: 'input_padding', label: 'Padding input (px)', type: 'spacing', max: 24 },
     { key: 'input_radius', label: 'Raggio bordo input (px)', type: 'border-radius' },
+    { key: 'input_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'submit_radius', label: 'Raggio bordo pulsante (px)', type: 'border-radius' },
+    { key: 'submit_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'border_radius', label: 'Raggio bordo form (px)', type: 'border-radius' },
+    { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'border_width', label: 'Bordo form (px)', type: 'range', min: 0, max: 5, step: 1 },
     { key: 'border_color', label: 'Colore bordo form', type: 'color',
       condition: { field: 'border_width', operator: '>', value: '0' } },
     ...shadowField,
+    ...textEffectsFields([ { value: 'label', label: 'Solo Etichetta' } ]),
   ],
 };

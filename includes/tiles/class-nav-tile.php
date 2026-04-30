@@ -80,6 +80,7 @@ class Olo_Nav_Tile extends Olo_Tile_Base {
         $py     = intval( $s['padding_y'] );
         $gap    = intval( $s['gap'] );
         $radius = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
+        $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
         $fs     = intval( $s['font_size'] );
         $fw     = esc_attr( $s['font_weight'] );
         $tt     = esc_attr( $s['text_transform'] );
@@ -119,6 +120,9 @@ class Olo_Nav_Tile extends Olo_Tile_Base {
         }
         if ( $s['hover_effect'] === 'lift' ) {
             $hover_rules .= ';transform:translateY(-1px)';
+        }
+        if ( $radius_hover_css !== '' ) {
+            $hover_rules .= ";border-radius:{$radius_hover_css} !important";
         }
         if ( $s['hover_effect'] === 'underline' ) {
             $hover_rules .= ';text-decoration:underline;text-underline-offset:4px';
@@ -213,7 +217,8 @@ class Olo_Nav_Tile extends Olo_Tile_Base {
                     <?php if ( $icon && $s['icon_position'] !== 'right' ) : ?>
                     <span class="olo-nav-icon" uk-icon="icon: <?php echo esc_attr( $icon ); ?>; width: <?php echo $icon_s; ?>; height: <?php echo $icon_s; ?>"></span>
                     <?php endif; ?>
-                    <span><?php echo esc_html( $label ); ?></span>
+                    <?php list( $nv_cls, $nv_data ) = $this->tfx_attrs( $s, 'title', $label ); ?>
+                    <span class="olo-nav-text<?php echo $nv_cls; ?>"<?php echo $nv_data; ?>><?php echo esc_html( $label ); ?></span>
                     <?php if ( $icon && $s['icon_position'] === 'right' ) : ?>
                     <span class="olo-nav-icon" uk-icon="icon: <?php echo esc_attr( $icon ); ?>; width: <?php echo $icon_s; ?>; height: <?php echo $icon_s; ?>"></span>
                     <?php endif; ?>
@@ -226,6 +231,9 @@ class Olo_Nav_Tile extends Olo_Tile_Base {
         </<?php echo $tag; ?>>
         </nav>
         <?php
+        $tfx_css = $this->tfx_css( $s, '#' . $uid );
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        $this->tfx_print_script();
         return ob_get_clean();
     }
 

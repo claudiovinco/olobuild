@@ -60,6 +60,7 @@ export default {
     { type: 'separator', label: 'Aspetto' },
     { key: 'height', label: 'Altezza (px)', type: 'range', min: 150, max: 800, step: 10 },
     { key: 'border_radius', label: 'Arrotondamento (px)', type: 'border-radius' },
+    { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'tile_layer', label: 'Stile mappa', type: 'select', options: [
       { value: 'standard', label: 'Standard' },
       { value: 'hot', label: 'Humanitarian' },

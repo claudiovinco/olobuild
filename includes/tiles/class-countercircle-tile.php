@@ -132,7 +132,8 @@ class Olo_Countercircle_Tile extends Olo_Tile_Base {
             </svg>
 
             <?php if ( $title_pos === 'below' ) : ?>
-            <div style="font-size:<?php echo $title_font_size; ?>px;font-weight:600;color:<?php echo $title_color; ?>;"><?php echo $title; ?></div>
+            <?php list( $t_tfx_cls, $t_tfx_data ) = $this->tfx_attrs( $s, 'title', wp_strip_all_tags( $title ) ); ?>
+            <div class="olo-cc-title<?php echo $t_tfx_cls; ?>" style="font-size:<?php echo $title_font_size; ?>px;font-weight:600;color:<?php echo $title_color; ?>;"<?php echo $t_tfx_data; ?>><?php echo $title; ?></div>
             <?php endif; ?>
         </div>
 
@@ -193,6 +194,9 @@ class Olo_Countercircle_Tile extends Olo_Tile_Base {
         })();
         </script>
         <?php
+        $tfx_css = $this->tfx_css( $s, '#' . $uid );
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        $this->tfx_print_script();
         return ob_get_clean();
     }
 }

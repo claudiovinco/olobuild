@@ -1,3 +1,4 @@
+import { textEffectsFields, textEffectsDefaults } from './_shared';
 import { shadowField } from './_shared.js';
 
 export default {
@@ -29,6 +30,7 @@ export default {
     ribbon_bg: '',
     ribbon_color: '',
     shadow: 'none',
+    ...textEffectsDefaults,
   },
   fields: [
     { key: 'slides', label: 'Slide', type: 'content-items', supportsDynamic: true,
@@ -139,5 +141,10 @@ export default {
     { key: 'ribbon_bg', label: 'Sfondo ribbon', type: 'color' },
     { key: 'ribbon_color', label: 'Testo ribbon', type: 'color' },
     ...shadowField,
+    ...textEffectsFields([
+      { value: 'title', label: 'Solo Titolo' },
+      { value: 'subtitle', label: 'Solo Sottotitolo' },
+      { value: 'all', label: 'Tutti gli elementi testuali' },
+    ]),
   ],
 };

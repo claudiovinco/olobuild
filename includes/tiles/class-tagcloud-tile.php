@@ -79,6 +79,7 @@ class Olo_Tagcloud_Tile extends Olo_Tile_Base {
         $max_font    = absint( $s['max_font'] ) ?: 28;
         $gap         = absint( $s['gap'] );
         $radius      = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
+        $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
         $font_weight = in_array( $s['font_weight'], [ '400', '500', '600', '700' ], true ) ? $s['font_weight'] : '500';
         $show_count  = ! empty( $s['show_count'] );
         $underline   = ! empty( $s['link_underline'] );
@@ -125,6 +126,7 @@ class Olo_Tagcloud_Tile extends Olo_Tile_Base {
                 transition: all .2s ease;
                 line-height: 1.4;
             }
+            <?php if ( $radius_hover_css !== '' ) : ?>#<?php echo $uid; ?> .olo-tagcloud-tag{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}#<?php echo $uid; ?> .olo-tagcloud-tag:hover{border-radius:<?php echo $radius_hover_css; ?> !important}<?php endif; ?>
             #<?php echo $uid; ?> .olo-tagcloud-tag:hover {
                 color: <?php echo $hover_color; ?>;
                 background: <?php echo $hover_bg; ?>;

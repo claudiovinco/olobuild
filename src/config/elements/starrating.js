@@ -1,3 +1,4 @@
+import { textEffectsFields, textEffectsDefaults } from './_shared';
 import { shadowField } from './_shared.js';
 
 export default {
@@ -18,6 +19,7 @@ export default {
     subtitle_color: '',
     alignment: 'center',
     shadow: 'none',
+    ...textEffectsDefaults,
   },
   fields: [
     { key: 'rating', label: 'Valutazione', type: 'range', min: 0, max: 5, step: 0.5 },
@@ -40,5 +42,10 @@ export default {
       { value: 'right', label: 'Destra' },
     ]},
     ...shadowField,
+    ...textEffectsFields([
+      { value: 'title', label: 'Solo Titolo' },
+      { value: 'subtitle', label: 'Solo Sottotitolo' },
+      { value: 'all', label: 'Tutti gli elementi testuali' },
+    ]),
   ],
 };

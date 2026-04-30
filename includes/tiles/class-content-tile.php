@@ -14,6 +14,8 @@ class Olo_Content_Tile extends Olo_Tile_Base {
         'heading'            => 'Titolo sezione',
         'heading_tag'        => 'h2',
         'heading_size'       => 'md',
+        'heading_line_height' => 1.2,
+        'heading_align'      => '',
         'heading_color'      => '',
         'text'               => 'Aggiungi il tuo contenuto qui.',
         'text_color'         => '',
@@ -68,8 +70,6 @@ class Olo_Content_Tile extends Olo_Tile_Base {
         $font_size   = $size_px_map[ $base_size ] ?? '1.7rem';
 
         $hd_clr = $this->safe_color_css( $s['heading_color'] ?? '' );
-        $hstyle = 'margin:0 0 ' . absint( $s['heading_gap'] ?? 8 ) . 'px 0;font-weight:bold;font-size:' . $font_size . ';';
-        if ( $hd_clr ) { $hstyle .= 'color:' . $hd_clr . ';'; }
 
         // Text color
         $txt_clr = $this->safe_color_css( $s['text_color'] ?? '' );
@@ -86,11 +86,26 @@ class Olo_Content_Tile extends Olo_Tile_Base {
             $text_content = nl2br( esc_html( $text_raw ) );
         }
 
+        // Treat HTML-only-whitespace (e.g. <p><br></p>) as empty so we don't render an empty row
+        $text_stripped = trim( wp_strip_all_tags( str_replace( [ '&nbsp;', "\xc2\xa0" ], ' ', $text_raw ) ) );
+        $has_text      = ( $text_stripped !== '' );
+
+        // Heading gap only when there's actual text below
+        $hd_gap = $has_text ? absint( $s['heading_gap'] ?? 8 ) : 0;
+        $hstyle = 'margin:0 0 ' . $hd_gap . 'px 0;font-weight:bold;font-size:' . $font_size . ';';
+        $hd_lh  = isset( $s['heading_line_height'] ) ? floatval( $s['heading_line_height'] ) : 0;
+        if ( $hd_lh > 0 ) { $hstyle .= 'line-height:' . $hd_lh . ';'; }
+        $allowed_align = [ 'left', 'center', 'right', 'justify' ];
+        $hd_align = in_array( $s['heading_align'] ?? '', $allowed_align, true ) ? $s['heading_align'] : '';
+        if ( $hd_align ) { $hstyle .= 'text-align:' . $hd_align . ';'; }
+        if ( $hd_clr ) { $hstyle .= 'color:' . $hd_clr . ';'; }
+
         $position     = $this->validate_position( $s['image_position'] ?? 'top' );
         $image_width  = max( 20, min( 80, absint( $s['image_width'] ) ) );
         $image_height = $s['image_height'];
         $image_fit    = in_array( $s['image_fit'], [ 'cover', 'contain', 'fill' ], true ) ? $s['image_fit'] : 'cover';
         $image_radius = Olo_Tile_Utils::border_radius( $s['image_radius'] ?? 0 );
+        $image_radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['image_radius_hover'] ?? null );
         $border_width = absint( $s['image_border_width'] );
         $border_color = $this->safe_color_css( $s['image_border_color'] ) ?: 'var(--olo-color-border, #E5E7EB)';
         $image_gap    = absint( $s['image_gap'] );
@@ -142,6 +157,7 @@ class Olo_Content_Tile extends Olo_Tile_Base {
                 flex-shrink: 0;
                 <?php endif; ?>
             }
+            <?php if ( $image_radius_hover_css !== '' ) : ?>.<?php echo $uid; ?> .olo-ct-img-col{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?> .olo-ct-img-col:hover{border-radius:<?php echo $image_radius_hover_css; ?> !important}<?php endif; ?>
             .<?php echo $uid; ?> .olo-ct-text {
                 <?php if ( $is_hz ) : ?>flex: 1; min-width: 0;<?php endif; ?>
             }
@@ -184,6 +200,33 @@ class Olo_Content_Tile extends Olo_Tile_Base {
             }
             <?php
                     endif;
+                endif;
+            endforeach;
+
+            // Responsive heading_line_height overrides
+            foreach ( $bp_map as $bp => $max_w ) :
+                $lh_key = 'heading_line_height_' . $bp;
+                if ( isset( $s[ $lh_key ] ) && $s[ $lh_key ] !== '' ) :
+                    $bp_lh = floatval( $s[ $lh_key ] );
+                    if ( $bp_lh > 0 ) :
+            ?>
+            @media (max-width: <?php echo $max_w; ?>px) {
+                .<?php echo $uid; ?> .olo-ct-heading { line-height: <?php echo $bp_lh; ?>; }
+            }
+            <?php
+                    endif;
+                endif;
+            endforeach;
+
+            // Responsive heading_align overrides
+            foreach ( $bp_map as $bp => $max_w ) :
+                $al_key = 'heading_align_' . $bp;
+                if ( ! empty( $s[ $al_key ] ) && in_array( $s[ $al_key ], $allowed_align, true ) ) :
+            ?>
+            @media (max-width: <?php echo $max_w; ?>px) {
+                .<?php echo $uid; ?> .olo-ct-heading { text-align: <?php echo esc_attr( $s[ $al_key ] ); ?>; }
+            }
+            <?php
                 endif;
             endforeach;
 
@@ -274,8 +317,12 @@ class Olo_Content_Tile extends Olo_Tile_Base {
                 $extra_css .= $sel . ' .olo-tfx--underline-grow.olo-tfx-active{background-size:100% 3px;}';
             } elseif ( $effect === 'highlight-grow' ) {
                 $hc = $color1 ?: 'rgba(99,102,241,0.25)';
-                $extra_css .= $sel . ' .olo-tfx--highlight-grow{display:inline;background-image:linear-gradient(' . $hc . ',' . $hc . ');background-position:0 100%;background-size:0 100%;background-repeat:no-repeat;transition:background-size 1.2s cubic-bezier(.4,0,.2,1) ' . $delay . 'ms;padding:0 4px;}';
+                // inline-block keeps highlight working on both <h*> headings AND <div> text wrappers (which contain block-level <p>)
+                $extra_css .= $sel . ' .olo-tfx--highlight-grow{display:inline-block;background-image:linear-gradient(' . $hc . ',' . $hc . ');background-position:0 100%;background-size:0 100%;background-repeat:no-repeat;transition:background-size 1.2s cubic-bezier(.4,0,.2,1) ' . $delay . 'ms;padding:0 4px;}';
                 $extra_css .= $sel . ' .olo-tfx--highlight-grow.olo-tfx-active{background-size:100% 100%;}';
+                // Strip default top/bottom margins from paragraphs inside the highlighted text wrapper so the bg hugs the content
+                $extra_css .= $sel . ' .olo-ct-text-body.olo-tfx--highlight-grow > :first-child{margin-top:0;}';
+                $extra_css .= $sel . ' .olo-ct-text-body.olo-tfx--highlight-grow > :last-child{margin-bottom:0;}';
             } elseif ( $effect === 'wave' ) {
                 $extra_css .= '@keyframes olo-tfx-wave{0%,40%,100%{transform:translateY(0)}20%{transform:translateY(-30%)}}';
                 $extra_css .= $sel . ' .olo-tfx--wave .olo-tfx-char{display:inline-block;animation:olo-tfx-wave 2s ease-in-out infinite;animation-delay:calc(var(--i,0) * 80ms + ' . $delay . 'ms);}';
@@ -292,7 +339,9 @@ class Olo_Content_Tile extends Olo_Tile_Base {
                 <?php endif; ?>
                 <div class="olo-ct-text">
                     <<?php echo $htag; ?> class="olo-ct-heading<?php echo $h_fx_class; ?>" style="<?php echo $hstyle; ?>"<?php if ( $h_fx_data ) echo $h_fx_data . ' data-fx-text="' . esc_attr( $heading_text ) . '"'; ?>><?php echo $heading_text; ?></<?php echo $htag; ?>>
+                    <?php if ( $has_text ) : ?>
                     <div class="olo-ct-text-body<?php echo $t_fx_class; ?>"<?php if ( $txt_style ) echo ' style="' . $txt_style . '"'; ?><?php echo $t_fx_data; ?>><?php echo $text_content; ?></div>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
@@ -321,7 +370,7 @@ class Olo_Content_Tile extends Olo_Tile_Base {
 <script>
 (function(){
   if (window.__oloTextFxInit) return; window.__oloTextFxInit = true;
-  function splitIntoChars(el){ var t = el.textContent; el.innerHTML = ''; for (var i=0;i<t.length;i++){ var s=document.createElement('span'); s.className='olo-tfx-char'; s.style.setProperty('--i',i); s.textContent = t[i]; el.appendChild(s); } }
+  function splitIntoChars(el){ var t = el.textContent; el.innerHTML = ''; var idx = 0; for (var i=0;i<t.length;i++){ var ch = t[i]; if (ch === ' ' || ch === '\t' || ch === '\n') { el.appendChild(document.createTextNode(' ')); continue; } var s=document.createElement('span'); s.className='olo-tfx-char'; s.style.setProperty('--i', idx++); s.textContent = ch; el.appendChild(s); } }
   function splitIntoWords(el){ var t = el.textContent; el.innerHTML = ''; var w=t.split(/(\s+)/); for(var i=0;i<w.length;i++){ if(/^\s+$/.test(w[i])){ el.appendChild(document.createTextNode(w[i])); continue;} var s=document.createElement('span'); s.className='olo-tfx-word'; s.style.setProperty('--i',i); s.textContent=w[i]; el.appendChild(s); } }
   function typewriter(el, opts){
     var full = el.getAttribute('data-fx-original') || el.textContent.trim();

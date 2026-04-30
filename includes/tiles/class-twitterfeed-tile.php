@@ -51,6 +51,7 @@ class Olo_Twitterfeed_Tile extends Olo_Tile_Base {
         $language     = sanitize_text_field( $s['language'] ?: 'it' );
         $alignment    = $s['alignment'] ?: 'center';
         $radius       = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
+        $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
 
         $flex_map  = [ 'left' => 'flex-start', 'center' => 'center', 'right' => 'flex-end' ];
         $flex_just = $flex_map[ $alignment ] ?? 'center';
@@ -59,10 +60,17 @@ class Olo_Twitterfeed_Tile extends Olo_Tile_Base {
         if ( $radius && $radius !== '0px' ) {
             $wrapper_style .= 'border-radius:' . $radius . ';overflow:hidden;';
         }
+        if ( $radius_hover_css !== '' ) {
+            $wrapper_style .= 'transition:border-radius 400ms cubic-bezier(.4,0,.2,1);overflow:hidden;';
+        }
+        $tw_uid = 'olo-tw-' . wp_unique_id();
 
         ob_start();
         ?>
-        <div class="olo-twitterfeed" style="<?php echo esc_attr( $wrapper_style ); ?>">
+        <?php if ( $radius_hover_css !== '' ) : ?>
+        <style>.<?php echo $tw_uid; ?>:hover{border-radius:<?php echo $radius_hover_css; ?> !important}</style>
+        <?php endif; ?>
+        <div class="olo-twitterfeed <?php echo $tw_uid; ?>" style="<?php echo esc_attr( $wrapper_style ); ?>">
             <?php if ( empty( $url ) ) : ?>
                 <div style="padding:40px 20px;text-align:center;color:var(--olo-color-text-muted, #9CA3AF);background:<?php echo $theme === 'dark' ? '#15202b' : 'var(--olo-color-muted, #F3F4F6)'; ?>;border-radius:<?php echo $radius; ?>;width:100%;max-width:550px;">
                     <?php echo esc_html( function_exists( 'olo_t' ) ? olo_t( 'Inserisci URL profilo X/Twitter' ) : 'Inserisci URL profilo X/Twitter' ); ?>

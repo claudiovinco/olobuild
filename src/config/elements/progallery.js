@@ -166,6 +166,7 @@ export default {
       { value: 'contain', label: 'Contieni' },
     ]},
     { key: 'thumb_radius', label: 'Raggio bordi (px)', type: 'border-radius' },
+    { key: 'thumb_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'rows', label: 'Righe visibili (0 = tutte)', type: 'range', min: 0, max: 5, step: 1,
       show: s => !(s.layout && s.layout.startsWith('strip')) },
     { key: 'mobile_columns', label: 'Colonne mobile', type: 'range', min: 1, max: 4, step: 1,

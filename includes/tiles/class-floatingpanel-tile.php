@@ -123,7 +123,7 @@ class Olo_Floatingpanel_Tile extends Olo_Tile_Base {
         // --- Visual ---
         $bg = $this->safe_color_css( $s['bg_color'] ) ?: '#ffffff';
         $pos_css .= "background:{$bg};";
-        $pos_css .= 'border-radius:' . intval( $s['border_radius'] ) . 'px;';
+        $pos_css .= 'border-radius:' . Olo_Tile_Utils::radius_int( $s['border_radius'] ) . 'px;';
         $pos_css .= 'padding:' . Olo_Tile_Utils::spacing_css( $s['tile_padding'] ?? $s['padding'] ?? 20, 20 ) . ';';
         $pos_css .= 'box-sizing:border-box;';
 

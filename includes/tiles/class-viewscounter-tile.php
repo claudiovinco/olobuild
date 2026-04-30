@@ -126,7 +126,8 @@ class Olo_Viewscounter_Tile extends Olo_Tile_Base {
             <span class="olo-vc-text">
                 <strong><?php echo esc_html( $formatted ); ?></strong>
                 <?php if ( $show_label ) : ?>
-                    <span style="margin-left:4px;"><?php echo $label; ?></span>
+                    <?php list( $vcl_cls, $vcl_data ) = $this->tfx_attrs( $s, 'label', wp_strip_all_tags( $label ) ); ?>
+                    <span class="olo-vc-label<?php echo $vcl_cls; ?>" style="margin-left:4px;"<?php echo $vcl_data; ?>><?php echo $label; ?></span>
                 <?php endif; ?>
             </span>
 
@@ -137,6 +138,9 @@ class Olo_Viewscounter_Tile extends Olo_Tile_Base {
             <?php endif; ?>
         </div>
         <?php
+        $tfx_css = $this->tfx_css( $s, '.olo-vc-text' );
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        $this->tfx_print_script();
         return ob_get_clean();
     }
 }

@@ -1,3 +1,4 @@
+import { textEffectsFields, textEffectsDefaults } from './_shared';
 import { shadowField } from './_shared.js';
 
 export default {
@@ -25,6 +26,7 @@ export default {
     font_size: '14',
     gap: '0',
     shadow: 'none',
+    ...textEffectsDefaults,
   },
   fields: [
     // ── Items ──
@@ -72,5 +74,10 @@ export default {
     { key: 'text_color', label: 'Colore testo', type: 'color' },
 
     ...shadowField,
+    ...textEffectsFields([
+      { value: 'title', label: 'Solo Titolo' },
+      { value: 'description', label: 'Solo Descrizione' },
+      { value: 'all', label: 'Tutti gli elementi testuali' },
+    ]),
   ],
 };

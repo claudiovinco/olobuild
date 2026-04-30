@@ -403,6 +403,34 @@ const resolvedOptions = computed(() => {
       walk(tilesStore.canvasTiles || []);
       return results;
     }
+    if (props.field.optionsSource === 'metaKeys') {
+      // Lista meta_key disponibili per il post_type corrente, dipendente da optionsDependOn (default: 'post_type')
+      const depKey = props.field.optionsDependOn || 'post_type';
+      const tilesStore = useTilesStore();
+      const tile = props.tileId ? tilesStore.getTileById(props.tileId) : null;
+      const postType = tile?.settings?.[depKey] || 'post';
+      const map = (md.metaKeys || {})[postType] || [];
+      const opts = [{ value: '', label: t('— Nessun filtro —') }];
+      map.forEach(m => opts.push({ value: m.key, label: m.label }));
+      return opts;
+    }
+    if (props.field.optionsSource === 'metaValues') {
+      // Valori distinti per il meta_key selezionato. optionsDependOn può essere
+      // stringa (campo meta_key) o array [post_type_field, meta_key_field].
+      const dep = props.field.optionsDependOn || ['post_type', 'meta_filter_key'];
+      const [ptKey, mkKey] = Array.isArray(dep) ? dep : ['post_type', dep];
+      const tilesStore = useTilesStore();
+      const tile = props.tileId ? tilesStore.getTileById(props.tileId) : null;
+      const postType = tile?.settings?.[ptKey] || 'post';
+      const metaKey = tile?.settings?.[mkKey] || '';
+      if (!metaKey) return [{ value: '', label: t('— Seleziona prima la chiave —') }];
+      const map = (md.metaKeys || {})[postType] || [];
+      const entry = map.find(m => m.key === metaKey);
+      if (!entry || !entry.values?.length) return [{ value: '', label: t('— Nessun valore disponibile —') }];
+      const opts = [{ value: '', label: t('— Tutti i valori —') }];
+      entry.values.forEach(v => opts.push({ value: v, label: v }));
+      return opts;
+    }
     if (props.field.optionsSource === 'globalTypography') {
       const stylesStore = useStylesStore();
       const sets = stylesStore.globalTypography || [];

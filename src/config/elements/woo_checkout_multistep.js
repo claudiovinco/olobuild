@@ -28,5 +28,6 @@ export default {
     { key: 'text_color', label: 'Colore testo', type: 'color' },
     { key: 'step_bg', label: 'Sfondo step', type: 'color' },
     { key: 'card_radius', label: 'Arrotondamento (px)', type: 'border-radius' },
+    { key: 'card_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
   ],
 };

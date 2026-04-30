@@ -1,3 +1,4 @@
+import { textEffectsFields, textEffectsDefaults } from './_shared';
 import { shadowField } from './_shared.js';
 
 export default {
@@ -33,6 +34,7 @@ export default {
     overlay_text_align: 'center',
     caption: '',
     shadow: 'none',
+    ...textEffectsDefaults,
   },
   fields: [
     { key: 'source_type', label: 'Sorgente', type: 'select', options: [
@@ -50,6 +52,7 @@ export default {
     ]},
     { key: 'cover_height', label: 'Altezza (px)', type: 'range', min: 100, max: 1200, step: 10 },
     { key: 'border_radius', label: 'Raggio bordi (px)', type: 'border-radius' },
+    { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { type: 'separator', label: 'Riproduzione' },
     { key: 'autoplay', label: 'Riproduzione automatica', type: 'toggle' },
     { key: 'muted', label: 'Silenziato', type: 'toggle' },
@@ -89,5 +92,10 @@ export default {
     { type: 'separator', label: 'Didascalia' },
     { key: 'caption', label: 'Didascalia', type: 'text' },
     ...shadowField,
+    ...textEffectsFields([
+      { value: 'overlay_text', label: 'Solo Testo overlay' },
+      { value: 'caption', label: 'Solo Didascalia' },
+      { value: 'all', label: 'Entrambi' },
+    ]),
   ],
 };

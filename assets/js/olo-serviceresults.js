@@ -363,16 +363,16 @@
         html += '<div style="position:absolute;'+pos+dim+'pointer-events:none;z-index:1;background:linear-gradient('+cssDir+',rgba('+r+','+g+','+b+','+a+'),transparent);"></div>';
       }
 
-      // Ribbon
+      // Ribbon (unificato: include il vecchio badge apertura quando
+      // ribbonField === '_olo_service_opening' applicando colori annuale/stagionale)
       if (svc.ribbon) {
-        html += '<span class="olo-svr-ribbon olo-svr-ribbon--' + (config.ribbonPosition||'top-right') + '" style="background:' + (config.ribbonBg||'#e11d48') + ';color:' + (config.ribbonColor||'#fff') + ';">' + oloUtils.escHtml(svc.ribbon) + '</span>';
-      }
-
-      // Opening badge
-      if (config.showServiceOpening && svc.service_opening) {
-        var opBg = (svc.service_opening.toLowerCase().indexOf('stagional') >= 0)
-          ? (config.openingBgSeasonal || '#d97706') : (config.openingBgAnnual || '#059669');
-        html += '<span class="olo-svr-opening" style="background:' + opBg + ';font-size:' + (config.openingSize||11) + 'px;">' + oloUtils.escHtml(svc.service_opening) + '</span>';
+        var ribBg = config.ribbonBg || '#e11d48';
+        if (config.ribbonField === '_olo_service_opening') {
+          ribBg = (String(svc.ribbon).toLowerCase().indexOf('stagional') >= 0)
+            ? (config.openingBgSeasonal || '#d97706')
+            : (config.openingBgAnnual   || '#059669');
+        }
+        html += '<span class="olo-svr-ribbon olo-svr-ribbon--' + (config.ribbonPosition||'top-right') + '" style="background:' + ribBg + ';color:' + (config.ribbonColor||'#fff') + ';">' + oloUtils.escHtml(svc.ribbon) + '</span>';
       }
 
       html += '</div>';

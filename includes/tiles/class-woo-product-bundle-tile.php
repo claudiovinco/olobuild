@@ -108,6 +108,7 @@ class Olo_Woo_Product_Bundle_Tile extends Olo_Tile_Base {
         $bg_color       = $this->safe_color_css( $s['bg_color'] ) ?: '#FFFFFF';
         $border_color   = $this->safe_color_css( $s['border_color'] ) ?: '#E5E7EB';
         $radius         = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
+        $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
         $gap            = absint( $s['gap'] );
         $is_horizontal  = ( $s['layout'] === 'horizontal' );
 
@@ -137,6 +138,7 @@ class Olo_Woo_Product_Bundle_Tile extends Olo_Tile_Base {
                 border-radius: <?php echo $radius; ?>;
                 padding: 24px;
             }
+            <?php if ( $radius_hover_css !== '' ) : ?>.<?php echo $uid; ?>{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?>:hover{border-radius:<?php echo $radius_hover_css; ?> !important}<?php endif; ?>
             .<?php echo $uid; ?>-title {
                 font-size: 20px;
                 font-weight: 700;

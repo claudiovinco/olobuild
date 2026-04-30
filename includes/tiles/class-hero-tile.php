@@ -106,6 +106,8 @@ class Olo_Hero_Tile extends Olo_Tile_Base {
         // Sanitize rich text
         $title    = esc_html( wp_strip_all_tags( $s['title'] ) );
         $subtitle = esc_html( wp_strip_all_tags( $s['subtitle'] ) );
+        list( $h_tfx_cls, $h_tfx_data ) = $this->tfx_attrs( $s, 'title', $title );
+        list( $s_tfx_cls, $s_tfx_data ) = $this->tfx_attrs( $s, 'subtitle', $subtitle );
 
         // Layout values
         $min_height    = esc_attr( $s['min_height'] ?: '500px' );
@@ -122,6 +124,7 @@ class Olo_Hero_Tile extends Olo_Tile_Base {
             $pad_x = intval( $s['padding_x'] ?? 30 );
         }
         $border_radius = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
+        $border_radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
 
         // Background
         $bg_css = $this->build_background_css( $s );
@@ -138,6 +141,7 @@ class Olo_Hero_Tile extends Olo_Tile_Base {
         $cta_pad_x  = round( $cta_fs * 2.1 );
         $cta_size_css = "padding:{$cta_pad_y}px {$cta_pad_x}px;font-size:{$cta_fs}px;";
         $cta_radius   = Olo_Tile_Utils::border_radius( $s['cta_radius'] ?? 0 );
+        $cta_radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['cta_radius_hover'] ?? null );
 
         // CTA Primary colors — outline/ghost fallback to hero text color (visible)
         $cta_bg  = $this->safe_color_css( $s['cta_bg_color'] ) ?: '#FFFFFF';
@@ -175,6 +179,7 @@ class Olo_Hero_Tile extends Olo_Tile_Base {
                 margin-left: -50vw;
                 <?php endif; ?>
             }
+            <?php if ( $border_radius_hover_css !== '' ) : ?>.<?php echo $uid; ?>{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?>:hover{border-radius:<?php echo $border_radius_hover_css; ?> !important}<?php endif; ?>
 
             <?php if ( ! empty( $s['bg_type'] ) && $s['bg_type'] === 'video' && ! empty( $s['bg_video'] ) ) : ?>
             .<?php echo $uid; ?> .olo-hero-video {
@@ -247,6 +252,7 @@ class Olo_Hero_Tile extends Olo_Tile_Base {
                 transition: opacity .2s, transform .2s;
                 <?php echo $this->build_cta_css( $s['cta_style'], $cta_bg, $cta_fg ); ?>
             }
+            <?php if ( $cta_radius_hover_css !== '' ) : ?>.<?php echo $uid; ?> .olo-hero-cta1{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?> .olo-hero-cta1:hover{border-radius:<?php echo $cta_radius_hover_css; ?> !important}<?php endif; ?>
             .<?php echo $uid; ?> .olo-hero-cta1:hover {
                 opacity: .85;
                 transform: translateY(-1px);
@@ -319,7 +325,7 @@ class Olo_Hero_Tile extends Olo_Tile_Base {
                     $title_css .= 'margin:0 0 12px 0;';
                     $title_tag = in_array( $s['title_tag'], [ 'h1', 'h2', 'h3', 'p', 'span' ], true ) ? $s['title_tag'] : 'h1';
                     ?>
-                    <<?php echo $title_tag; ?> style="<?php echo $title_css; ?>"><?php echo $title; ?></<?php echo $title_tag; ?>>
+                    <<?php echo $title_tag; ?> class="olo-hero-title<?php echo $h_tfx_cls; ?>" style="<?php echo $title_css; ?>"<?php echo $h_tfx_data; ?>><?php echo $title; ?></<?php echo $title_tag; ?>>
                     <?php
                     // Subtitle inline style
                     $sub_css = 'opacity:0.9;margin:0 0 24px 0;';
@@ -339,7 +345,7 @@ class Olo_Hero_Tile extends Olo_Tile_Base {
                         $sub_css .= 'max-width:' . intval( $s['subtitle_max_width'] ) . 'px;';
                     }
                     ?>
-                    <div class="olo-hero-sub" style="<?php echo $sub_css; ?>"><?php echo $subtitle; ?></div>
+                    <div class="olo-hero-sub<?php echo $s_tfx_cls; ?>" style="<?php echo $sub_css; ?>"<?php echo $s_tfx_data; ?>><?php echo $subtitle; ?></div>
 
                     <?php if ( ! empty( $s['cta_text'] ) || ! empty( $s['cta2_text'] ) ) : ?>
                         <div class="olo-hero-cta-wrap">
@@ -363,6 +369,9 @@ class Olo_Hero_Tile extends Olo_Tile_Base {
             </div>
         </div>
         <?php
+        $tfx_css = $this->tfx_css( $s, '.' . $uid );
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        $this->tfx_print_script();
         return ob_get_clean();
     }
 

@@ -112,6 +112,7 @@ class Olo_Accordion_Tile extends Olo_Tile_Base {
         $media_margin = $media_align === 'right' ? '0 0 12px 16px' : '0 16px 12px 0';
         $media_width  = min( max( intval( $s['media_width'] ?? 35 ), 20 ), 50 );
         $media_radius = Olo_Tile_Utils::border_radius( $s['media_radius'] ?? 8 );
+        $media_radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['media_radius_hover'] ?? null );
 
         ob_start();
         ?>
@@ -185,6 +186,7 @@ class Olo_Accordion_Tile extends Olo_Tile_Base {
                 border-radius: <?php echo $media_radius; ?>;
                 overflow: hidden;
             }
+            <?php if ( $media_radius_hover_css !== '' ) : ?>.<?php echo esc_attr( $uid ); ?> .macc-panel-media{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo esc_attr( $uid ); ?> .macc-panel-media:hover{border-radius:<?php echo $media_radius_hover_css; ?> !important}<?php endif; ?>
             .<?php echo esc_attr( $uid ); ?> .macc-panel-media img,
             .<?php echo esc_attr( $uid ); ?> .macc-panel-media video,
             .<?php echo esc_attr( $uid ); ?> .macc-panel-media iframe {
@@ -259,7 +261,8 @@ class Olo_Accordion_Tile extends Olo_Tile_Base {
                             <?php endif; ?>
                         </span>
                     <?php endif; ?>
-                    <span class="macc-title-text"><?php echo wp_kses_post( $panel['title'] ); ?></span>
+                    <?php list( $at_tfx_cls, $at_tfx_data ) = $this->tfx_attrs( $s, 'title', wp_strip_all_tags( $panel['title'] ?? '' ) ); ?>
+                    <span class="macc-title-text<?php echo $at_tfx_cls; ?>"<?php echo $at_tfx_data; ?>><?php echo wp_kses_post( $panel['title'] ); ?></span>
                     <?php if ( $icon_pos !== 'none' ) : ?>
                         <span class="macc-icon"><?php echo $icon_svg; ?></span>
                     <?php endif; ?>
@@ -280,7 +283,11 @@ class Olo_Accordion_Tile extends Olo_Tile_Base {
                                 <?php endif; ?>
                             </div>
                         <?php endif; ?>
-                        <?php echo nl2br( esc_html( wp_strip_all_tags( $panel['content'] ) ) ); ?>
+                        <?php
+                        $acc_content_plain = wp_strip_all_tags( $panel['content'] );
+                        list( $ac_tfx_cls, $ac_tfx_data ) = $this->tfx_attrs( $s, 'content', $acc_content_plain );
+                        ?>
+                        <div class="macc-content-text<?php echo $ac_tfx_cls; ?>"<?php echo $ac_tfx_data; ?>><?php echo nl2br( esc_html( $acc_content_plain ) ); ?></div>
                         <?php if ( $has_media ) : ?>
                             <div style="clear:both"></div>
                         <?php endif; ?>
@@ -314,6 +321,9 @@ class Olo_Accordion_Tile extends Olo_Tile_Base {
         <?php endif; ?>
 
         <?php
+        $tfx_css = $this->tfx_css( $s, '.' . $uid );
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        $this->tfx_print_script();
         return ob_get_clean();
     }
 

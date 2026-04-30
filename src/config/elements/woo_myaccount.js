@@ -28,6 +28,7 @@ export default {
     ]},
     { key: 'avatar_size', label: 'Dimensione avatar (px)', type: 'range', min: 32, max: 128, step: 8 },
     { key: 'border_radius', label: 'Arrotondamento (px)', type: 'border-radius' },
+    { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { type: 'separator', label: 'Colori sidebar' },
     { key: 'sidebar_bg', label: 'Sfondo sidebar', type: 'color' },
     { key: 'sidebar_color', label: 'Colore testo', type: 'color' },

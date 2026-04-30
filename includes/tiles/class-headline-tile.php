@@ -138,6 +138,10 @@ class Olo_Headline_Tile extends Olo_Tile_Base {
             $subtitle_text = esc_html( wp_strip_all_tags( $s['subtitle'] ) );
         }
 
+        // Text effects
+        list( $h_tfx_cls, $h_tfx_data ) = $this->tfx_attrs( $s, 'heading', $raw );
+        list( $s_tfx_cls, $s_tfx_data ) = $this->tfx_attrs( $s, 'subtitle', $subtitle_text );
+
         ob_start();
 
         $needs_style = $has_gradient || $dec_clr;
@@ -159,12 +163,12 @@ class Olo_Headline_Tile extends Olo_Tile_Base {
         <?php endif; ?>
         <div class="olo-headline <?php echo $uid; ?> <?php echo $align_class; ?>" style="display:block;width:100%;">
             <?php if ( $s['decoration'] === 'line' ) : ?>
-                <<?php echo $tag; ?> class="<?php echo esc_attr( $heading_class ); ?> uk-heading-line<?php echo $heading_extra; ?>" style="<?php echo $heading_style; ?>">
+                <<?php echo $tag; ?> class="<?php echo esc_attr( $heading_class ); ?> uk-heading-line<?php echo $heading_extra; ?><?php echo $h_tfx_cls; ?>" style="<?php echo $heading_style; ?>"<?php echo $h_tfx_data; ?>>
                     <span><?php echo $heading_text; ?></span>
                 </<?php echo $tag; ?>>
 
             <?php elseif ( $s['decoration'] === 'divider' ) : ?>
-                <<?php echo $tag; ?> class="<?php echo esc_attr( $heading_class ); ?> uk-heading-divider<?php echo $heading_extra; ?>" style="<?php echo $heading_style; ?>">
+                <<?php echo $tag; ?> class="<?php echo esc_attr( $heading_class ); ?> uk-heading-divider<?php echo $heading_extra; ?><?php echo $h_tfx_cls; ?>" style="<?php echo $heading_style; ?>"<?php echo $h_tfx_data; ?>>
                     <?php echo $heading_text; ?>
                 </<?php echo $tag; ?>>
 
@@ -188,16 +192,20 @@ class Olo_Headline_Tile extends Olo_Tile_Base {
                     <?php endfor; ?>
                     </div>
                 <?php endif; ?>
-                <<?php echo $tag; ?> class="<?php echo esc_attr( $heading_class ); ?><?php echo $heading_extra; ?>" style="<?php echo $heading_style; ?>">
+                <<?php echo $tag; ?> class="<?php echo esc_attr( $heading_class ); ?><?php echo $heading_extra; ?><?php echo $h_tfx_cls; ?>" style="<?php echo $heading_style; ?>"<?php echo $h_tfx_data; ?>>
                     <?php echo $heading_text; ?>
                 </<?php echo $tag; ?>>
             <?php endif; ?>
 
             <?php if ( ! empty( $subtitle_text ) ) : ?>
-                <p style="margin:12px 0 0;font-size:1em;line-height:1.5;<?php if ( $sub_clr ) echo 'color:' . $sub_clr . ';'; ?>"><?php echo $subtitle_text; ?></p>
+                <p class="olo-hl-subtitle<?php echo $s_tfx_cls; ?>" style="margin:12px 0 0;font-size:1em;line-height:1.5;<?php if ( $sub_clr ) echo 'color:' . $sub_clr . ';'; ?>"<?php echo $s_tfx_data; ?>><?php echo $subtitle_text; ?></p>
             <?php endif; ?>
         </div>
         <?php
+        // Text-effects scoped CSS + runtime script
+        $tfx_css = $this->tfx_css( $s, '.' . $uid );
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        $this->tfx_print_script();
         return ob_get_clean();
     }
 }

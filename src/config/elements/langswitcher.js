@@ -108,5 +108,6 @@ export default {
     { key: 'color', label: 'Testo', type: 'color' },
     { key: 'border_color', label: 'Bordo', type: 'color' },
     { key: 'border_radius', label: 'Raggio bordo (px)', type: 'border-radius' },
+    { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
   ],
 };

@@ -56,8 +56,9 @@ class Olo_Woo_Myaccount_Tile extends Olo_Tile_Base {
         $btn_bg    = $this->safe_color_css( $s['button_bg'] ) ?: '#4f46e5';
         $btn_c     = $this->safe_color_css( $s['button_color'] ) ?: '#FFFFFF';
         $bdr_c     = $this->safe_color_css( $s['border_color'] ) ?: '#E5E7EB';
-        $radius_raw = max( 0, intval( $s['border_radius'] ) );
+        $radius_raw = max( 0, Olo_Tile_Utils::radius_int( $s['border_radius'] ) );
         $radius    = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
+        $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
         $avatar_sz = max( 32, intval( $s['avatar_size'] ) );
 
         ob_start();
@@ -85,6 +86,10 @@ class Olo_Woo_Myaccount_Tile extends Olo_Tile_Base {
         #<?php echo $uid; ?> .woocommerce-MyAccount-navigation{background:transparent;padding:0;border-bottom:2px solid <?php echo $bdr_c; ?>;margin-bottom:20px;border-radius:0}
         #<?php echo $uid; ?> .woocommerce-MyAccount-navigation ul{display:flex;gap:4px;flex-wrap:wrap}
         #<?php echo $uid; ?> .woocommerce-MyAccount-navigation li a{border-radius:<?php echo $radius; ?>;border-bottom-left-radius:0;border-bottom-right-radius:0;padding:10px 20px}
+        <?php endif; ?>
+        <?php if ( $radius_hover_css !== '' ) : ?>
+        #<?php echo $uid; ?> .woocommerce-MyAccount-navigation,#<?php echo $uid; ?> .woocommerce-MyAccount-content{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}
+        #<?php echo $uid; ?> .woocommerce-MyAccount-navigation:hover,#<?php echo $uid; ?> .woocommerce-MyAccount-content:hover{border-radius:<?php echo $radius_hover_css; ?> !important}
         <?php endif; ?>
         </style>
 

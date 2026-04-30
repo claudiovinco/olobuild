@@ -69,6 +69,7 @@ export default {
       condition: { field: 'overlay', value: true } },
     { key: 'text_color', label: 'Colore testo', type: 'color' },
     { key: 'border_radius', label: 'Arrotondamento (px)', type: 'border-radius' },
+    { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
 
   ],
 };

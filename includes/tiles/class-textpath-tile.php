@@ -95,11 +95,14 @@ class Olo_Textpath_Tile extends Olo_Tile_Base {
                     letter-spacing="<?php echo $spacing; ?>"
                     font-family="inherit"
                 >
+                    <?php list( $tp_cls, $tp_data ) = $this->tfx_attrs( $s, 'text', wp_strip_all_tags( $s['text'] ?? '' ) ); ?>
                     <textPath
                         href="#<?php echo esc_attr( $path_id ); ?>"
                         startOffset="0%"
                         dominant-baseline="middle"
                         id="<?php echo esc_attr( $uid ); ?>-tp"
+                        class="<?php echo trim( $tp_cls ); ?>"
+                        <?php echo $tp_data; ?>
                     ><?php echo $text; ?></textPath>
                 </text>
             </svg>
@@ -138,6 +141,9 @@ class Olo_Textpath_Tile extends Olo_Tile_Base {
         <?php endif; ?>
 
         <?php
+        $tfx_css = $this->tfx_css( $s, '#' . $uid );
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        $this->tfx_print_script();
         return ob_get_clean();
     }
 }

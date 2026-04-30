@@ -77,6 +77,7 @@ class Olo_Postnavigation_Tile extends Olo_Tile_Base {
         $thumb_size = intval( $s['thumbnail_size'] ) ?: 60;
         $padding = Olo_Tile_Utils::spacing_css( $s['tile_padding'] ?? $s['padding'] ?? 16, 16 );
         $radius     = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
+        $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
 
         $text_clr   = $this->safe_color_css( $s['text_color'] ) ?: '#F3F4F6';
         $link_clr   = $this->safe_color_css( $s['link_color'] ) ?: '#93C5FD';
@@ -103,6 +104,7 @@ class Olo_Postnavigation_Tile extends Olo_Tile_Base {
                 text-decoration: none !important;
                 transition: box-shadow 0.3s, transform 0.3s;
             }
+            <?php if ( $radius_hover_css !== '' ) : ?>.<?php echo $uid; ?> .olo-pnav-card{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?> .olo-pnav-card:hover{border-radius:<?php echo $radius_hover_css; ?> !important}<?php endif; ?>
             .<?php echo $uid; ?> .olo-pnav-card:hover {
                 box-shadow: 0 4px 16px rgba(0,0,0,.25);
                 transform: translateY(-2px);

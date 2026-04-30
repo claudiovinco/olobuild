@@ -1,3 +1,4 @@
+import { textEffectsFields, textEffectsDefaults } from './_shared';
 import { shadowField, conditionFields, conditionDefaults } from './_shared.js';
 
 export default {
@@ -18,6 +19,7 @@ export default {
     animation: 'fade',
     shadow: 'none',
     ...conditionDefaults,
+    ...textEffectsDefaults,
   },
   fields: [
     { key: 'items', label: 'Elementi', type: 'content-items',
@@ -44,6 +46,7 @@ export default {
       { value: 'auto', label: 'Auto' },
     ] },
     { key: 'thumb_radius', label: 'Raggio bordo (px)', type: 'border-radius' },
+    { key: 'thumb_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { type: 'separator', label: 'Lightbox' },
     { key: 'overlay_style', label: 'Stile overlay', type: 'select', options: [
       { value: 'dark', label: 'Scuro' },
@@ -58,5 +61,10 @@ export default {
     ] },
     ...shadowField,
     ...conditionFields,
+    ...textEffectsFields([
+      { value: 'title', label: 'Solo Titolo' },
+      { value: 'caption', label: 'Solo Didascalia' },
+      { value: 'all', label: 'Tutti gli elementi testuali' },
+    ]),
   ],
 };

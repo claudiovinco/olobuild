@@ -78,16 +78,23 @@ class Olo_Overlay_Tile extends Olo_Tile_Base {
             <?php $ov_bg = $this->safe_color_css( $s['overlay_color'] ); $ov_fg = $this->safe_color_css( $s['text_color'] ); ?>
             <div class="uk-overlay uk-overlay-primary uk-position-cover <?php echo esc_attr( $uk_effect ); ?>" style="<?php if ( $ov_bg ) echo 'background:' . $ov_bg . ';'; ?>opacity:<?php echo $opa; ?>;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;">
                 <div style="<?php if ( $ov_fg ) echo 'color:' . $ov_fg . ';'; ?>">
+                    <?php
+                    list( $ovt_cls, $ovt_data ) = $this->tfx_attrs( $s, 'title', wp_strip_all_tags( $s['title'] ?? '' ) );
+                    list( $ovd_cls, $ovd_data ) = $this->tfx_attrs( $s, 'description', wp_strip_all_tags( $s['description'] ?? '' ) );
+                    ?>
                     <?php if ( ! empty( $s['title'] ) ) : ?>
-                        <div style="font-size:1.5em;font-weight:700;margin-bottom:8px;"><?php echo esc_html( wp_strip_all_tags( $s['title'] ) ); ?></div>
+                        <div class="olo-overlay-title<?php echo $ovt_cls; ?>" style="font-size:1.5em;font-weight:700;margin-bottom:8px;"<?php echo $ovt_data; ?>><?php echo esc_html( wp_strip_all_tags( $s['title'] ) ); ?></div>
                     <?php endif; ?>
                     <?php if ( ! empty( $s['description'] ) ) : ?>
-                        <div style="font-size:0.9em;opacity:0.9;line-height:1.5;"><?php echo nl2br( esc_html( wp_strip_all_tags( $s['description'] ) ) ); ?></div>
+                        <div class="olo-overlay-desc<?php echo $ovd_cls; ?>" style="font-size:0.9em;opacity:0.9;line-height:1.5;"<?php echo $ovd_data; ?>><?php echo nl2br( esc_html( wp_strip_all_tags( $s['description'] ) ) ); ?></div>
                     <?php endif; ?>
                 </div>
             </div>
         </<?php echo $tag; ?>>
         <?php
+        $tfx_css = $this->tfx_css( $s, '#' . $id );
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        $this->tfx_print_script();
         return ob_get_clean();
     }
 }

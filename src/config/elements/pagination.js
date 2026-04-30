@@ -43,6 +43,7 @@ export default {
     { key: 'button_padding', label: 'Padding pulsanti (px)', type: 'text' },
     { key: 'font_size', label: 'Dimensione testo (px)', type: 'range', min: 10, max: 24, step: 1 },
     { key: 'border_radius', label: 'Raggio bordo (px)', type: 'border-radius' },
+    { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'border_width', label: 'Spessore bordo (px)', type: 'range', min: 0, max: 4, step: 1 },
 
     { type: 'separator', label: 'Colori' },
