@@ -1,3 +1,5 @@
+
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 /**
  * ProSlider — Slider professionale con editor visuale dei livelli.
  *
@@ -280,7 +282,11 @@ export default {
     tabPosition: 'bottom', // 'bottom' | 'top'
     // Scroll-fixed timeline (pin slider, animate on scroll)
     scrollTimeline: false,
-    scrollTimelineDistance: 2000, // px of scroll for full timeline
+    scrollTimelineDistance: 2000, // px of scroll for full timeline,
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
 
   fields: [
@@ -392,6 +398,7 @@ export default {
     { key: 'scrollTimeline', label: 'Scroll-fixed timeline', type: 'toggle' },
     { key: 'scrollTimelineDistance', label: 'Distanza scroll (px)', type: 'number', min: 500, max: 10000, step: 100,
       condition: { field: 'scrollTimeline', value: true } },
+    ...borderFields(),
   ],
 
   // Helper esportati per l'editor

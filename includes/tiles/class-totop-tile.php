@@ -14,6 +14,14 @@ class Olo_Totop_Tile extends Olo_Tile_Base {
         'alignment' => 'right',
         'style'     => 'default',
         'smooth'    => true,
+            'border'                  => [],
+        'border_hover'            => [],
+        'border_hover_duration'   => 300,
+        'border_effect'           => 'none',
+        'border_effect_intensity' => 'medium',
+        'border_effect_color2'    => '',
+        'border_effect_angle'     => 135,
+        'border_effect_speed'     => 4,
     ];
 
     public function get_controls() {
@@ -33,16 +41,26 @@ class Olo_Totop_Tile extends Olo_Tile_Base {
 
     public function render( $settings ) {
         $s = wp_parse_args( $settings, $this->defaults );
+        $uid = 'olo-tt-' . wp_rand( 10000, 99999 );
 
         $align_class = 'uk-text-' . esc_attr( $s['alignment'] );
         $scroll_attr = ! empty( $s['smooth'] ) ? ' uk-scroll' : '';
 
         ob_start();
         ?>
-        <div class="olo-totop <?php echo esc_attr( $align_class ); ?>">
+        <div class="olo-totop <?php echo esc_attr( $uid ); ?> <?php echo esc_attr( $align_class ); ?>">
             <a href="#" uk-totop<?php echo $scroll_attr; ?>></a>
         </div>
         <?php
+                // Border system
+        $border_css        = $this->build_border_css( $s['border'] ?? [] );
+        $border_hover_css  = $this->build_border_hover_css( ".{$uid}", $s['border'] ?? [], $s['border_hover'] ?? [], intval( $s['border_hover_duration'] ?? 300 ) );
+        $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
+        if ( $border_css || $border_hover_css || $border_effect_css ) {
+            echo '<style>';
+            if ( $border_css ) echo ".{$uid}{{$border_css}}";
+            echo $border_hover_css . $border_effect_css . '</style>';
+        }
         return ob_get_clean();
     }
 }

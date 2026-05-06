@@ -60,6 +60,7 @@ import ProSliderTile from './ProSliderTile.vue';
 import PopupTile from './PopupTile.vue';
 import MegaMenuTile from './MegaMenuTile.vue';
 import InnerColumnsTile from './InnerColumnsTile.vue';
+import IconTabsTile from './IconTabsTile.vue';
 import TimelineTile from './TimelineTile.vue';
 import FlipCardTile from './FlipCardTile.vue';
 import ImgCompareTile from './ImgCompareTile.vue';
@@ -264,6 +265,7 @@ const tileComponents = {
   alert: AlertTile,
   team: TeamTile,
   accordion: AccordionTile,
+  icontabs: IconTabsTile,
 
   social: SocialTile,
   map: MapTile,

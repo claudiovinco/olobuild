@@ -1,3 +1,5 @@
+
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 export default {
   type: 'mobilebar',
   name: 'Mobile Bar',
@@ -27,6 +29,10 @@ export default {
     search_enabled:      true,
     search_icon_color:   '#ffffff',
     search_placeholder:  'Cerca...',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
 
   fields: [
@@ -80,5 +86,6 @@ export default {
       condition: { field: 'search_enabled', value: true } },
     { key: 'search_placeholder', label: 'Placeholder ricerca', type: 'text',
       condition: { field: 'search_enabled', value: true } },
+    ...borderFields(),
   ],
 };

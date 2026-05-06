@@ -1,4 +1,4 @@
-import { shadowField } from './_shared.js';
+import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 
 export default {
   type: 'countdown',
@@ -37,6 +37,10 @@ export default {
     item_min_width: '70',
     tile_padding: { top: 32, right: 32, bottom: 32, left: 32 },
     shadow: 'none',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { key: 'countdown_style', label: 'Stile', type: 'select', options: [
@@ -107,5 +111,6 @@ export default {
     { key: 'text_color', label: 'Colore testo', type: 'color' },
     { key: 'accent_color', label: 'Colore accento', type: 'color' },
     ...shadowField,
+    ...borderFields(),
   ],
 };

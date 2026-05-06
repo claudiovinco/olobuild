@@ -12,6 +12,7 @@ class Olo_Lightbox_Tile extends Olo_Tile_Base {
 
     public function render( $settings ) {
         $items   = $settings['items'] ?? [];
+        $uid = 'olo-lb-' . wp_rand( 10000, 99999 );
         if ( empty( $items ) ) return '';
 
         $cols    = absint( $settings['columns'] ?? 3 );
@@ -25,7 +26,7 @@ class Olo_Lightbox_Tile extends Olo_Tile_Base {
         $ratio_map = [ '1:1' => '100%', '4:3' => '75%', '16:9' => '56.25%', 'auto' => '' ];
         $padding = $ratio_map[ $ratio ] ?? '100%';
 
-        $html = '<div class="olo-lightbox-grid" uk-lightbox="animation: ' . esc_attr( $anim ) . '"'
+        $html = '<div class="olo-lightbox-grid ' . esc_attr( $uid ) . '" uk-lightbox="animation: ' . esc_attr( $anim ) . '"'
               . ' style="display:grid;grid-template-columns:repeat(' . $cols . ',1fr);gap:' . $gap . 'px">';
 
         foreach ( $items as $item ) {
@@ -78,6 +79,14 @@ class Olo_Lightbox_Tile extends Olo_Tile_Base {
         if ( $tfx_css ) $html .= '<style>' . $tfx_css . '</style>';
         ob_start(); $this->tfx_print_script(); $html .= ob_get_clean();
 
+        $border_css        = $this->build_border_css( [] );
+        $border_hover_css  = $this->build_border_hover_css( '.$uid', [], [], 300 );
+        $border_effect_css = $this->build_border_effect_css( '.$uid', [], $settings );
+        if ( $border_css || $border_hover_css || $border_effect_css ) {
+            $html .= '<style>';
+            if ( $border_css ) $html .= '.' . $uid . '{' . $border_css . '}';
+            $html .= $border_hover_css . $border_effect_css . '</style>';
+        }
         return $html;
     }
 }

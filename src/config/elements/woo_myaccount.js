@@ -1,3 +1,5 @@
+
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 export default {
   type: 'woo_myaccount',
   name: 'WC My Account',
@@ -19,6 +21,10 @@ export default {
     border_color: '#E5E7EB',
     border_radius: '8',
     avatar_size: '64',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { key: 'layout', label: 'Layout', type: 'select', options: [
@@ -42,5 +48,6 @@ export default {
     { key: 'border_color', label: 'Colore bordi', type: 'color' },
     { key: 'button_bg', label: 'Sfondo pulsante', type: 'color' },
     { key: 'button_color', label: 'Colore testo pulsante', type: 'color' },
+    ...borderFields(),
   ],
 };

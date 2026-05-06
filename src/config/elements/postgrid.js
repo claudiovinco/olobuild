@@ -1,9 +1,12 @@
+import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared';
+
 export default {
   type: 'postgrid',
   name: 'Griglia articoli',
   icon: 'dashicons-grid-view',
   category: 'dynamic',
   defaults: {
+    ...textEffectsDefaults,
     post_type: 'post',
     posts_per_page: '12',
     orderby: 'date',
@@ -77,6 +80,10 @@ export default {
     overlay_opacity: '50',
     overlay_direction: 'bottom',
     overlay_height: '50',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     // ── Query ──
@@ -304,5 +311,11 @@ export default {
       condition: { field: 'ribbon_field', value: '_olo_service_opening' } },
     { key: 'opening_bg_seasonal', label: '↳ Sfondo se stagionale', type: 'color',
       condition: { field: 'ribbon_field', value: '_olo_service_opening' } },
+
+    ...textEffectsFields([
+      { value: 'title', label: 'Titolo articolo' },
+      { value: 'excerpt', label: 'Estratto' },
+    ]),
+    ...borderFields(),
   ],
 };

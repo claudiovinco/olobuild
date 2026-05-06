@@ -1,4 +1,4 @@
-import { shadowField } from './_shared.js';
+import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 
 export default {
   type: 'postnavigation',
@@ -24,6 +24,10 @@ export default {
     same_taxonomy: false,
     taxonomy: 'category',
     shadow: 'none',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     // ── Contenuto ──
@@ -61,5 +65,6 @@ export default {
       condition: { field: 'same_taxonomy', value: true } },
 
     ...shadowField,
+    ...borderFields(),
   ],
 };

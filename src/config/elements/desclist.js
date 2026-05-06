@@ -1,4 +1,4 @@
-import { shadowField } from './_shared.js';
+import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 
 export default {
   type: 'desclist',
@@ -26,6 +26,10 @@ export default {
     striped: false,
     striped_color: '',
     shadow: 'none',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { key: 'items', label: 'Elementi', type: 'content-items', supportsDynamic: true,
@@ -65,5 +69,6 @@ export default {
     { key: 'striped', label: 'Righe alternate', type: 'toggle' },
     { key: 'striped_color', label: 'Colore riga alternata', type: 'color' },
     ...shadowField,
+    ...borderFields(),
   ],
 };

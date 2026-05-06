@@ -1,4 +1,4 @@
-import { shadowField } from './_shared.js';
+import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 
 export default {
   type: 'gallery',
@@ -44,6 +44,10 @@ export default {
     // Mobile
     mobile_columns: '2',
     shadow: 'none',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { key: 'images', label: 'Immagini', type: 'gallery' },
@@ -118,5 +122,6 @@ export default {
     ]},
     { key: 'show_caption', label: 'Mostra didascalie', type: 'toggle' },
     ...shadowField,
+    ...borderFields(),
   ],
 };

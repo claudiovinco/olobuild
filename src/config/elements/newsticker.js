@@ -1,4 +1,4 @@
-import { textEffectsFields, textEffectsDefaults } from './_shared';
+import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared';
 export default {
   type: 'newsticker',
   name: 'News Ticker',
@@ -21,6 +21,10 @@ export default {
     auto_scroll: true,
     pause_on_hover: true,
     ...textEffectsDefaults,
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { key: 'items', label: 'Notizie', type: 'content-items',
@@ -49,5 +53,6 @@ export default {
     { key: 'auto_scroll', label: 'Scorrimento automatico', type: 'toggle' },
     { key: 'pause_on_hover', label: 'Pausa al passaggio mouse', type: 'toggle' },
     ...textEffectsFields([ { value: 'title', label: 'Solo Titolo' } ]),
+    ...borderFields(),
   ],
 };

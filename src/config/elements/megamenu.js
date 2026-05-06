@@ -1,3 +1,8 @@
+
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
+// Mega Menu — header navigation con menu WordPress.
+// D1 (text effects) N/A: il testo dei voci viene dal menu WP, non da fields del config.
+// D2 (filter sui logo) N/A: i logo del sito non vanno filtrati/sfocati.
 export default {
   type: 'megamenu',
   name: 'Mega Menu',
@@ -190,6 +195,10 @@ export default {
     topbar_right_cta_color: '#FFFFFF',
     topbar_border_bottom: true,
     topbar_border_color: '',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     // ── Menu ──
@@ -642,5 +651,6 @@ export default {
       condition: { field: 'topbar_enabled', value: true } },
     { key: 'topbar_right_cta_color', label: 'Pulsante CTA — colore testo', type: 'color',
       condition: { field: 'topbar_enabled', value: true } },
+    ...borderFields(),
   ],
 };

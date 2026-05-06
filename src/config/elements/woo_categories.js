@@ -1,4 +1,6 @@
 
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
+
 export default {
   type: 'woo_categories',
   name: 'Categorie Prodotti',
@@ -23,6 +25,10 @@ export default {
     hover_effect: 'zoom',
     columns_tablet: '2',
     columns_mobile: '1',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { type: 'separator', label: 'Query' },
@@ -70,6 +76,6 @@ export default {
     { key: 'text_color', label: 'Colore testo', type: 'color' },
     { key: 'border_radius', label: 'Arrotondamento (px)', type: 'border-radius' },
     { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
-
+    ...borderFields(),
   ],
 };

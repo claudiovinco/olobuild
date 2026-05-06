@@ -1,4 +1,4 @@
-import { textEffectsFields, textEffectsDefaults } from './_shared';
+import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared';
 export default {
   type: 'blendtext',
   name: 'Blend Text',
@@ -20,6 +20,10 @@ export default {
     blend_mode: 'difference',
     tile_padding: { top: 40, right: 20, bottom: 40, left: 20 },
     ...textEffectsDefaults,
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { key: 'text', label: 'Testo', type: 'text' },
@@ -80,5 +84,6 @@ export default {
     { type: 'separator', label: 'Spaziatura' },
     { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 200 },
     ...textEffectsFields([ { value: 'text', label: 'Solo Testo' } ]),
+    ...borderFields(),
   ],
 };

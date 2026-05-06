@@ -1,3 +1,5 @@
+
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 export default {
   type: 'woo_product_meta',
   name: 'Meta Prodotto',
@@ -15,6 +17,10 @@ export default {
     link_color: '',
     font_size: '14',
     label_weight: '600',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { key: 'show_sku', label: 'Mostra SKU', type: 'toggle' },
@@ -41,5 +47,6 @@ export default {
     { key: 'text_color', label: 'Colore testo', type: 'color' },
     { key: 'label_color', label: 'Colore etichette', type: 'color' },
     { key: 'link_color', label: 'Colore link', type: 'color' },
+    ...borderFields(),
   ],
 };

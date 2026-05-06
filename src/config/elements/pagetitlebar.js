@@ -1,4 +1,4 @@
-import { textEffectsFields, textEffectsDefaults } from './_shared';
+import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared';
 import { shadowField } from './_shared.js';
 
 export default {
@@ -32,6 +32,10 @@ export default {
     border_color: '#374151',
     shadow: 'none',
     ...textEffectsDefaults,
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { key: 'title_tag', label: 'Tag titolo', type: 'select', options: { h1: 'H1', h2: 'H2', h3: 'H3', h4: 'H4', div: 'DIV' } },
@@ -59,5 +63,6 @@ export default {
     { key: 'border_color', label: 'Colore bordo', type: 'color', show: s => s.border_bottom },
     ...shadowField,
     ...textEffectsFields([ { value: 'subtitle', label: 'Solo Sottotitolo' } ]),
+    ...borderFields(),
   ],
 };

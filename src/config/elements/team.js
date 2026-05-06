@@ -1,10 +1,11 @@
-import { textEffectsFields, textEffectsDefaults } from './_shared';
+import { textEffectsFields, textEffectsDefaults, filterFields, filterDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 export default {
   type: 'team',
   name: 'Membro del team',
   icon: 'dashicons-businessperson',
   category: 'marketing',
   defaults: {
+    ...filterDefaults,
     // Contenuto
     photo: '',
     hover_image: '',
@@ -46,8 +47,10 @@ export default {
     bg_color: '',
     tile_padding: '16',
     border_radius: '16',
-    border_width: '0',
-    border_color: '',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
     ...textEffectsDefaults,
   },
   fields: [
@@ -134,9 +137,8 @@ export default {
     { key: 'tile_padding', label: 'Padding tile (px)', type: 'spacing', max: 40 },
     { key: 'border_radius', label: 'Arrotondamento tile (px)', type: 'border-radius' },
     { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
-    { key: 'border_width', label: 'Bordo tile (px)', type: 'range', min: 0, max: 5, step: 1 },
-    { key: 'border_color', label: 'Colore bordo tile', type: 'color',
-      condition: { field: 'border_width', operator: '>', value: '0' } },
+    ...borderFields(),
+    ...filterFields,
     ...textEffectsFields([ { value: 'name', label: 'Solo Nome' } ]),
   ],
 };

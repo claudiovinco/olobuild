@@ -1,4 +1,4 @@
-import { shadowField } from './_shared.js';
+import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 
 export default {
   type: 'sitemap',
@@ -20,6 +20,10 @@ export default {
     indent: '20',
     exclude_ids: '',
     shadow: 'none',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { type: 'separator', label: 'Contenuto' },
@@ -54,5 +58,6 @@ export default {
     { key: 'link_color', label: 'Colore link', type: 'color' },
     { key: 'hover_color', label: 'Colore hover', type: 'color' },
     ...shadowField,
+    ...borderFields(),
   ],
 };

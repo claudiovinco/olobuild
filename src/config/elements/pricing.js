@@ -1,4 +1,4 @@
-import { shadowField } from './_shared.js';
+import { shadowField, textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 
 export default {
   type: 'pricing',
@@ -6,6 +6,7 @@ export default {
   icon: 'dashicons-money-alt',
   category: 'marketing',
   defaults: {
+    ...textEffectsDefaults,
     // Contenuto
     plan_name: 'Piano Pro',
     price: '29',
@@ -90,8 +91,10 @@ export default {
 
     // Aspetto tile
     border_radius: '12',
-    border_width: '0',
-    border_color: '',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
     shadow: 'none',
   },
   fields: [
@@ -281,9 +284,12 @@ export default {
     { type: 'separator', label: 'Aspetto card' },
     { key: 'border_radius', label: 'Arrotondamento (px)', type: 'border-radius' },
     { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
-    { key: 'border_width', label: 'Bordo (px)', type: 'range', min: 0, max: 5, step: 1 },
-    { key: 'border_color', label: 'Colore bordo', type: 'color',
-      condition: { field: 'border_width', operator: '>', value: '0' } },
     ...shadowField,
+    ...borderFields(),
+
+    ...textEffectsFields([
+      { value: 'plan_name', label: 'Nome piano' },
+      { value: 'price', label: 'Prezzo' },
+    ]),
   ],
 };

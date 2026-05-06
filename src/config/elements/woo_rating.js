@@ -1,3 +1,5 @@
+
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 export default {
   type: 'woo_rating',
   name: 'Valutazione Prodotto',
@@ -12,6 +14,10 @@ export default {
     text_color: '',
     star_size: '20',
     text_size: '14',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { key: 'show_count', label: 'Mostra numero recensioni', type: 'toggle' },
@@ -25,5 +31,6 @@ export default {
     { key: 'star_color', label: 'Colore stelle piene', type: 'color' },
     { key: 'empty_star_color', label: 'Colore stelle vuote', type: 'color' },
     { key: 'text_color', label: 'Colore testo', type: 'color' },
+    ...borderFields(),
   ],
 };

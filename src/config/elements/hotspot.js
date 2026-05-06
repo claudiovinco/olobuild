@@ -1,4 +1,4 @@
-import { textEffectsFields, textEffectsDefaults } from './_shared';
+import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared';
 export default {
   type: 'hotspot',
   name: 'Hotspot',
@@ -19,6 +19,10 @@ export default {
     tooltip_color: '',
     tooltip_width: '220',
     ...textEffectsDefaults,
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { key: 'image', label: 'Immagine', type: 'image' },
@@ -55,5 +59,6 @@ export default {
       { value: 'description', label: 'Solo Descrizione' },
       { value: 'all', label: 'Tutti gli elementi testuali' },
     ]),
+    ...borderFields(),
   ],
 };

@@ -1,4 +1,4 @@
-import { shadowField } from './_shared.js';
+import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 
 export default {
   type: 'woo_wishlist',
@@ -27,6 +27,10 @@ export default {
     columns_tablet: '2',
     columns_mobile: '1',
     shadow: 'none',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { type: 'separator', label: 'Pulsante wishlist' },
@@ -69,5 +73,6 @@ export default {
     { key: 'button_bg', label: 'Sfondo pulsante', type: 'color' },
 
     ...shadowField,
+    ...borderFields(),
   ],
 };

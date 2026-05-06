@@ -1,3 +1,5 @@
+
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 export default {
   type: 'olo_room_related',
   name: 'Sale simili',
@@ -44,6 +46,10 @@ export default {
     marquee_speed: 25,
     marquee_direction: 'left',
     marquee_pause: true,
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     // ── Contenuto ──
@@ -168,5 +174,6 @@ export default {
     { key: 'btn_color', label: 'Colore testo pulsante', type: 'color' },
     { key: 'btn_radius', label: 'Raggio pulsante (px)', type: 'border-radius' },
     { key: 'btn_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
+    ...borderFields(),
   ],
 };

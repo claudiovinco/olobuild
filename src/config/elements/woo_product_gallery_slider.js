@@ -1,4 +1,4 @@
-import { shadowField } from './_shared.js';
+import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 
 export default {
   type: 'woo_product_gallery_slider',
@@ -28,6 +28,10 @@ export default {
     dot_color: '',
     dot_active_color: '',
     shadow: 'none',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { type: 'separator', label: 'Immagine principale' },
@@ -67,5 +71,6 @@ export default {
     { key: 'dot_active_color', label: 'Colore dot attivo', type: 'color' },
 
     ...shadowField,
+    ...borderFields(),
   ],
 };

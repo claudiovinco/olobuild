@@ -26,7 +26,15 @@ class Olo_IconBox_Tile extends Olo_Tile_Base {
         'icon_color'        => '',
         'title_font_size'   => '20',
         'title_font_weight' => '600',
-        'link_color'        => '',
+        'link_color'              => '',
+        'border'                  => [],
+        'border_hover'            => [],
+        'border_hover_duration'   => 300,
+        'border_effect'           => 'none',
+        'border_effect_intensity' => 'medium',
+        'border_effect_color2'    => '',
+        'border_effect_angle'     => 135,
+        'border_effect_speed'     => 4,
     ];
 
     public function get_controls() {
@@ -115,6 +123,11 @@ class Olo_IconBox_Tile extends Olo_Tile_Base {
         $shadow_val = Olo_Tile_Utils::shadow_value( $s, 'shadow' );
         $tile_shadow_css = ( $shadow_val && $shadow_val !== 'none' ) ? 'box-shadow:' . $shadow_val . ';' : '';
 
+        // Border system
+        $border_css        = $this->build_border_css( $s['border'] ?? [] );
+        $border_hover_css  = $this->build_border_hover_css( ".{$uid}", $s['border'] ?? [], $s['border_hover'] ?? [], intval( $s['border_hover_duration'] ?? 300 ) );
+        $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
+
         // Icon/title/text spacing
         $icon_gap = intval( $s['icon_gap'] ?? 16 );
         $title_gap = intval( $s['title_gap'] ?? 8 );
@@ -163,6 +176,11 @@ class Olo_IconBox_Tile extends Olo_Tile_Base {
             <?php endif; ?>
             <?php if ( $br_val_hover_css !== '' ) : ?>.<?php echo $uid; ?>:hover{border-radius:<?php echo $br_val_hover_css; ?> !important}<?php endif; ?>
         </style>
+        <?php if ( $border_css || $border_hover_css || $border_effect_css ) : ?><style>
+        <?php if ( $border_css ) echo ".{$uid}{{$border_css}}"; ?>
+        <?php echo $border_hover_css; ?>
+        <?php echo $border_effect_css; ?>
+        </style><?php endif; ?>
         <div class="olo-iconbox <?php echo $align_class; ?> <?php echo esc_attr( $uid ); ?>" style="<?php echo $tile_bg_css . $tile_padding_css . $tile_border_css . $tile_radius_css . $tile_shadow_css; ?>">
           <?php if ( $is_horiz ) : ?><div class="mib-flex"><?php endif; ?>
 

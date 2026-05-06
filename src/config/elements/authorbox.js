@@ -1,9 +1,12 @@
+import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
+
 export default {
   type: 'authorbox',
   name: 'Author Box',
   icon: 'dashicons-admin-users',
   category: 'dynamic',
   defaults: {
+    ...textEffectsDefaults,
     layout: 'horizontal',
     avatar_size: '80',
     show_avatar: true,
@@ -28,8 +31,10 @@ export default {
     avatar_border_radius: '50',
     avatar_border_width: '0',
     avatar_border_color: '',
-    border_width: '0',
-    border_color: '',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
     gap: '16',
     text_align: 'left',
   },
@@ -94,8 +99,11 @@ export default {
     { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 48 },
     { key: 'border_radius', label: 'Raggio bordi (px)', type: 'border-radius' },
     { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
-    { key: 'border_width', label: 'Bordo (px)', type: 'range', min: 0, max: 5, step: 1 },
-    { key: 'border_color', label: 'Colore bordo', type: 'color',
-      condition: { field: 'border_width', operator: '>', value: '0' } },
+    ...borderFields(),
+
+    ...textEffectsFields([
+      { value: 'name', label: 'Nome autore' },
+      { value: 'bio', label: 'Bio' },
+    ]),
   ],
 };

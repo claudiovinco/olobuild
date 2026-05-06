@@ -1,4 +1,4 @@
-import { textEffectsFields, textEffectsDefaults } from './_shared';
+import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared';
 import { shadowField } from './_shared.js';
 
 export default {
@@ -21,6 +21,10 @@ export default {
     tile_padding: { top: 16, right: 16, bottom: 16, left: 16 },
     shadow: 'none',
     ...textEffectsDefaults,
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { key: 'items', label: 'Elementi', type: 'content-items',
@@ -62,5 +66,6 @@ export default {
     { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 48 },
     ...shadowField,
     ...textEffectsFields([ { value: 'text', label: 'Solo Testo' } ]),
+    ...borderFields(),
   ],
 };

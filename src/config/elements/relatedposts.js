@@ -1,3 +1,5 @@
+
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 export default {
   type: 'relatedposts',
   name: 'Articoli Correlati',
@@ -24,6 +26,10 @@ export default {
     hover_effect: 'shadow',
     fallback_text: 'Nessun articolo correlato',
     orderby: 'rand',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { type: 'separator', label: 'Query' },
@@ -84,5 +90,6 @@ export default {
 
     { type: 'separator', label: 'Fallback' },
     { key: 'fallback_text', label: 'Testo fallback', type: 'text' },
+    ...borderFields(),
   ],
 };

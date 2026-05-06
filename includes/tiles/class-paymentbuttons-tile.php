@@ -11,6 +11,7 @@ class Olo_Paymentbuttons_Tile extends Olo_Tile_Base {
 
     public function render( $settings, $id = '' ) {
         $provider    = $settings['provider'] ?? 'stripe';
+        $uid = 'olo-pb-' . wp_rand( 10000, 99999 );
         $amount      = esc_attr( $settings['amount'] ?? '29.99' );
         $currency    = esc_attr( $settings['currency'] ?? 'EUR' );
         $description = esc_attr( $settings['description'] ?? '' );
@@ -34,7 +35,7 @@ class Olo_Paymentbuttons_Tile extends Olo_Tile_Base {
         $btn_style = "background-color:{$bg_color};color:{$text_color};border-radius:{$radius};font-size:{$font_size}px;padding:12px 32px;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:8px;font-weight:600;";
         if ( $full_width ) $btn_style .= 'width:100%;justify-content:center;';
 
-        $html = '<div class="olo-paymentbuttons" style="text-align:' . $alignment . '">';
+        $html = '<div class="olo-paymentbuttons ' . esc_attr( $uid ) . '" style="text-align:' . $alignment . '">';
 
         if ( $provider === 'stripe' || $provider === 'both' ) {
             $html .= '<button class="olo-pay-btn olo-pay-btn--stripe" style="' . esc_attr( $btn_style ) . '"';
@@ -67,6 +68,14 @@ class Olo_Paymentbuttons_Tile extends Olo_Tile_Base {
         $html .= '<div class="olo-pay-amount" style="margin-top:8px;font-size:13px;opacity:0.7;">' . $sym . $amount . ' ' . $currency . '</div>';
         $html .= '</div>';
 
+                $border_css        = $this->build_border_css( $settings['border'] ?? [] );
+        $border_hover_css  = $this->build_border_hover_css( '.' . $uid, $settings['border'] ?? [], $settings['border_hover'] ?? [], intval( $settings['border_hover_duration'] ?? 300 ) );
+        $border_effect_css = $this->build_border_effect_css( '.' . $uid, $settings['border'] ?? [], $settings );
+        if ( $border_css || $border_hover_css || $border_effect_css ) {
+            $html .= '<style>';
+            if ( $border_css ) $html .= '.' . $uid . '{' . $border_css . '}';
+            $html .= $border_hover_css . $border_effect_css . '</style>';
+        }
         return $html;
     }
 }

@@ -1,4 +1,4 @@
-import { textEffectsFields, textEffectsDefaults } from './_shared';
+import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared';
 import { shadowField } from './_shared.js';
 
 export default {
@@ -36,6 +36,10 @@ export default {
     caption_position: 'bottom',
     shadow: 'none',
     ...textEffectsDefaults,
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     // ── SORGENTE ──
@@ -85,5 +89,6 @@ export default {
     { key: 'caption', label: 'Didascalia', type: 'text' },
     ...shadowField,
     ...textEffectsFields([ { value: 'caption', label: 'Solo Didascalia' } ]),
+    ...borderFields(),
   ],
 };

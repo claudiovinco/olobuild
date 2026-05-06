@@ -1,4 +1,4 @@
-import { textEffectsFields, textEffectsDefaults } from './_shared';
+import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared';
 export default {
   type: 'countercircle',
   name: 'Counter Circle',
@@ -19,6 +19,10 @@ export default {
     duration: '1500',
     title_position: 'below',
     ...textEffectsDefaults,
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { key: 'value', label: 'Valore', type: 'range', min: 0, max: 1000, step: 1 },
@@ -45,5 +49,6 @@ export default {
     { type: 'separator', label: 'Animazione' },
     { key: 'duration', label: 'Durata animazione (ms)', type: 'range', min: 0, max: 5000, step: 100 },
     ...textEffectsFields([ { value: 'title', label: 'Solo Titolo' } ]),
+    ...borderFields(),
   ],
 };

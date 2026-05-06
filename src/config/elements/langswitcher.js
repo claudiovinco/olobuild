@@ -1,3 +1,5 @@
+
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 export default {
   type: 'langswitcher',
   name: 'Selettore lingua',
@@ -29,6 +31,10 @@ export default {
     circle_size: 36,
     // Compact
     compact: false,
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { key: 'style', label: 'Stile', type: 'select', options: [
@@ -109,5 +115,6 @@ export default {
     { key: 'border_color', label: 'Bordo', type: 'color' },
     { key: 'border_radius', label: 'Raggio bordo (px)', type: 'border-radius' },
     { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
+    ...borderFields(),
   ],
 };

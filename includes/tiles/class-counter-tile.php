@@ -31,9 +31,17 @@ class Olo_Counter_Tile extends Olo_Tile_Base {
         'overlay_color'      => '#000000',
         'overlay_opacity'    => '50',
         'padding'            => '32',
-        'border_radius'      => '0',
-        'border_width'       => '0',
-        'border_color'       => '',
+        'border_radius'           => '0',
+        'border_width'            => '0',
+        'border_color'            => '',
+        'border'                  => [],
+        'border_hover'            => [],
+        'border_hover_duration'   => 300,
+        'border_effect'           => 'none',
+        'border_effect_intensity' => 'medium',
+        'border_effect_color2'    => '',
+        'border_effect_angle'     => 135,
+        'border_effect_speed'     => 4,
     ];
 
     public function get_controls() { return []; }
@@ -54,6 +62,11 @@ class Olo_Counter_Tile extends Olo_Tile_Base {
         $tile_r_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
         $tile_bw  = intval( $s['border_width'] );
         $tile_bc  = $this->safe_color_css( $s['border_color'] ) ?: 'var(--olo-color-text, #374151)';
+
+        // Border system
+        $border_css        = $this->build_border_css( $s['border'] ?? [] );
+        $border_hover_css  = $this->build_border_hover_css( ".{$uid}", $s['border'] ?? [], $s['border_hover'] ?? [], intval( $s['border_hover_duration'] ?? 300 ) );
+        $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
 
         $bg_type  = $s['bg_type'] ?: 'color';
         $bg_color = $this->safe_color_css( $s['bg_color'] ) ?: '';
@@ -115,6 +128,11 @@ class Olo_Counter_Tile extends Olo_Tile_Base {
                 <?php endif; ?>
             }
         </style>
+        <?php if ( $border_css || $border_hover_css || $border_effect_css ) : ?><style>
+        <?php if ( $border_css ) echo ".{$uid}{{$border_css}}"; ?>
+        <?php echo $border_hover_css; ?>
+        <?php echo $border_effect_css; ?>
+        </style><?php endif; ?>
         <div class="olo-counter <?php echo esc_attr( $uid ); ?>">
             <?php if ( $bg_type === 'image' && ! empty( $s['bg_image'] ) ) : ?>
                 <div class="olo-cnt-bg"></div>

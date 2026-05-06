@@ -37,8 +37,16 @@ class Olo_Button_Tile extends Olo_Tile_Base {
         'hover_border_color' => '',
         'hover_shadow'       => '',
         'hover_effect'       => 'lift',
-        'hover_image'        => '',
-        'hover_video'        => '',
+        'hover_image'             => '',
+        'hover_video'             => '',
+        'border'                  => [],
+        'border_hover'            => [],
+        'border_hover_duration'   => 300,
+        'border_effect'           => 'none',
+        'border_effect_intensity' => 'medium',
+        'border_effect_color2'    => '',
+        'border_effect_angle'     => 135,
+        'border_effect_speed'     => 4,
     ];
 
     public function get_controls() {
@@ -94,9 +102,14 @@ class Olo_Button_Tile extends Olo_Tile_Base {
         $letter_spacing = floatval( $s['letter_spacing'] );
         $text_transform = in_array( $s['text_transform'], [ 'none', 'uppercase', 'lowercase', 'capitalize' ], true ) ? $s['text_transform'] : 'none';
 
-        // Border
-        $border_width = absint( $s['border_width'] );
-        $border_color = $this->safe_color_css( $s['border_color'] ) ?: 'var(--olo-color-primary, #6366F1)';
+        // Border (legacy)
+        $border_width = absint( $s['border_width'] ?? 0 );
+        $border_color = $this->safe_color_css( $s['border_color'] ?? '' ) ?: 'var(--olo-color-primary, #6366F1)';
+
+        // Border system
+        $border_css        = $this->build_border_css( $s['border'] ?? [] );
+        $border_hover_css  = $this->build_border_hover_css( ".{$uid}", $s['border'] ?? [], $s['border_hover'] ?? [], intval( $s['border_hover_duration'] ?? 300 ) );
+        $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
 
         // Shadow
         $shadow = Olo_Tile_Utils::shadow( $s['shadow'] ?? 'none' );
@@ -219,6 +232,11 @@ class Olo_Button_Tile extends Olo_Tile_Base {
             }
             <?php endif; ?>
         </style>
+        <?php if ( $border_css || $border_hover_css || $border_effect_css ) : ?><style>
+        <?php if ( $border_css ) echo ".{$uid}{{$border_css}}"; ?>
+        <?php echo $border_hover_css; ?>
+        <?php echo $border_effect_css; ?>
+        </style><?php endif; ?>
 
         <div class="olo-button <?php echo esc_attr( $align_class ); ?> <?php echo esc_attr( $uid ); ?>" style="padding: 16px 0; overflow: visible;">
             <?php

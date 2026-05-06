@@ -1,3 +1,5 @@
+
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 export default {
   type: 'pagination',
   name: 'Paginazione',
@@ -21,6 +23,10 @@ export default {
     font_size: '14',
     border_color: '',
     border_width: '1',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { type: 'separator', label: 'Stile' },
@@ -54,5 +60,6 @@ export default {
     { key: 'active_color', label: 'Colore testo pagina attiva', type: 'color' },
     { key: 'active_text_color', label: 'Testo pagina attiva', type: 'color' },
     { key: 'active_background', label: 'Sfondo pagina attiva', type: 'color' },
+    ...borderFields(),
   ],
 };

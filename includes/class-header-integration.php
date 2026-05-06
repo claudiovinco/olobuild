@@ -38,12 +38,7 @@ class Olo_Header_Integration {
             return $html;
         }
 
-        // Per-page override, then global fallback
-        $override = 0;
-        if ( is_singular() ) {
-            $override = (int) get_post_meta( get_queried_object_id(), '_olo_header_id', true );
-        }
-        $header_id = $override ?: (int) get_option( 'olo_active_header', 0 );
+        $header_id = $this->resolve_active_header();
 
         if ( ! $header_id ) {
             return $html;
@@ -60,11 +55,7 @@ class Olo_Header_Integration {
             return $html;
         }
 
-        $override = 0;
-        if ( is_singular() ) {
-            $override = (int) get_post_meta( get_queried_object_id(), '_olo_header_id', true );
-        }
-        $header_id = $override ?: (int) get_option( 'olo_active_header', 0 );
+        $header_id = $this->resolve_active_header();
 
         if ( ! $header_id ) {
             return $html;
@@ -74,19 +65,30 @@ class Olo_Header_Integration {
     }
 
     /**
+     * Risolve il template Header attivo secondo la priorità:
+     *   1) override per-pagina (`_olo_header_id` post-meta)
+     *   2) regole di visualizzazione (Olo_Template_Conditions)
+     *   3) header globale (`olo_active_header` option)
+     *
+     * @return int  template_id o 0 se nessuno applicabile
+     */
+    private function resolve_active_header() {
+        if ( is_singular() ) {
+            $override = (int) get_post_meta( get_queried_object_id(), '_olo_header_id', true );
+            if ( $override ) return $override;
+        }
+        $by_rules = (int) apply_filters( 'olo_resolve_template_id', 0, 'header' );
+        if ( $by_rules ) return $by_rules;
+        return (int) get_option( 'olo_active_header', 0 );
+    }
+
+    /**
      * Add body class when Olobuild header is active (CSS fallback).
      */
     public function add_header_body_class( $classes ) {
-        $override = 0;
-        if ( is_singular() ) {
-            $override = (int) get_post_meta( get_queried_object_id(), '_olo_header_id', true );
-        }
-        $header_id = $override ?: (int) get_option( 'olo_active_header', 0 );
-
-        if ( $header_id ) {
+        if ( $this->resolve_active_header() ) {
             $classes[] = 'olo-has-header';
         }
-
         return $classes;
     }
 
@@ -170,11 +172,7 @@ class Olo_Header_Integration {
      * Enqueue UIkit + frontend CSS globally when a Olobuild header is active.
      */
     public function maybe_enqueue_global_assets() {
-        $override = 0;
-        if ( is_singular() ) {
-            $override = (int) get_post_meta( get_queried_object_id(), '_olo_header_id', true );
-        }
-        $header_id = $override ?: (int) get_option( 'olo_active_header', 0 );
+        $header_id = $this->resolve_active_header();
         if ( ! $header_id ) {
             return;
         }

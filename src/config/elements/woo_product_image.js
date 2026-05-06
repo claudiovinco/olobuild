@@ -1,3 +1,5 @@
+
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 export default {
   type: 'woo_product_image',
   name: 'Immagine Prodotto',
@@ -14,6 +16,10 @@ export default {
     thumb_size: '64',
     thumb_gap: '8',
     thumb_border_radius: '4',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { key: 'show_gallery', label: 'Mostra miniature galleria', type: 'toggle' },
@@ -41,5 +47,6 @@ export default {
     { key: 'thumb_gap', label: 'Gap miniature (px)', type: 'range', min: 4, max: 16, step: 2 },
     { key: 'thumb_border_radius', label: 'Bordo miniature (px)', type: 'border-radius' },
     { key: 'thumb_border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
+    ...borderFields(),
   ],
 };

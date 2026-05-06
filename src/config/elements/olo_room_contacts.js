@@ -1,4 +1,4 @@
-import { textEffectsFields, textEffectsDefaults } from './_shared';
+import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared';
 export default {
   type: 'olo_room_contacts',
   name: 'Sala - Contatti',
@@ -8,6 +8,10 @@ export default {
     style: 'card',
     title: 'Contatti',
     ...textEffectsDefaults,
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { type: 'separator', label: 'Contenuto' },
@@ -19,5 +23,6 @@ export default {
       { value: 'flat', label: 'Piatto (senza sfondo)' },
     ]},
     ...textEffectsFields([ { value: 'title', label: 'Solo Titolo' } ]),
+    ...borderFields(),
   ],
 };

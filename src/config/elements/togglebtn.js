@@ -1,3 +1,4 @@
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 export default {
   type: 'togglebtn',
   name: 'Pulsante Toggle',
@@ -29,6 +30,10 @@ export default {
     btn_font_weight: '600',
     btn_align: 'center',
     btn_full_width: false,
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     // ── Contenuto ──
@@ -90,5 +95,6 @@ export default {
       { value: 'right', label: 'Destra' },
     ]},
     { key: 'btn_full_width', label: 'Larghezza piena', type: 'toggle' },
+    ...borderFields(),
   ],
 };

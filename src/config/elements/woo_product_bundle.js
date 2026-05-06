@@ -1,4 +1,4 @@
-import { shadowField } from './_shared.js';
+import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 
 export default {
   type: 'woo_product_bundle',
@@ -28,6 +28,10 @@ export default {
     button_bg: '',
     divider_color: '',
     shadow: 'none',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { type: 'separator', label: 'Prodotti bundle' },
@@ -76,5 +80,6 @@ export default {
     { key: 'divider_color', label: 'Colore divisore', type: 'color' },
 
     ...shadowField,
+    ...borderFields(),
   ],
 };

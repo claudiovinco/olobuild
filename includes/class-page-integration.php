@@ -122,9 +122,17 @@ class Olo_Page_Integration {
 
     /**
      * Add meta box in page/post editor.
+     *
+     * Esposto su page, post e tutti i Custom Post Type pubblici (es. olo_service)
+     * così che ogni singolo dynamic post possa avere header/footer/template
+     * Olobuild personalizzati. Filtrabile via `olo_metabox_post_types` per togliere
+     * eventuali CPT che non vuoi tracciare.
      */
     public function add_meta_box() {
-        $post_types = [ 'page', 'post' ];
+        $public_cpts = get_post_types( [ 'public' => true, '_builtin' => false ], 'names' );
+        $post_types  = array_unique( array_merge( [ 'page', 'post' ], array_values( $public_cpts ) ) );
+        $post_types  = apply_filters( 'olo_metabox_post_types', $post_types );
+
         foreach ( $post_types as $post_type ) {
             add_meta_box(
                 'olo_builder_metabox',

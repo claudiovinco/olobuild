@@ -1,3 +1,5 @@
+
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 export default {
   type: 'postmeta',
   name: 'Post Meta',
@@ -20,6 +22,10 @@ export default {
     font_size: '14',
     author_link: true,
     category_link: true,
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { type: 'separator', label: 'Elementi da mostrare' },
@@ -61,5 +67,6 @@ export default {
     { key: 'icon_color', label: 'Colore icone', type: 'color',
       condition: { field: 'icon_style', value: 'before' } },
     { key: 'font_size', label: 'Dimensione font (px)', type: 'range', min: 10, max: 24, step: 1 },
+    ...borderFields(),
   ],
 };

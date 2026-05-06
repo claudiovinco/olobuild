@@ -1,3 +1,5 @@
+
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 export default {
   type: 'woo_price',
   name: 'Prezzo Prodotto',
@@ -16,6 +18,10 @@ export default {
     text_align: 'left',
     prefix: '',
     suffix: '',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { key: 'show_regular', label: 'Mostra prezzo originale', type: 'toggle' },
@@ -42,5 +48,6 @@ export default {
     { key: 'price_color', label: 'Colore prezzo', type: 'color' },
     { key: 'sale_color', label: 'Colore saldo', type: 'color' },
     { key: 'regular_color', label: 'Colore prezzo barrato', type: 'color' },
+    ...borderFields(),
   ],
 };

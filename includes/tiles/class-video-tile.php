@@ -39,8 +39,16 @@ class Olo_Video_Tile extends Olo_Tile_Base {
         'border_radius'       => 0,
         'shadow'              => 'none',
         // Legacy compat
-        'aspect_ratio'    => '16:9',
-        'cover_mode'      => false,
+        'aspect_ratio'            => '16:9',
+        'cover_mode'              => false,
+        'border'                  => [],
+        'border_hover'            => [],
+        'border_hover_duration'   => 300,
+        'border_effect'           => 'none',
+        'border_effect_intensity' => 'medium',
+        'border_effect_color2'    => '',
+        'border_effect_angle'     => 135,
+        'border_effect_speed'     => 4,
     ];
 
     public function get_controls() {
@@ -77,6 +85,18 @@ class Olo_Video_Tile extends Olo_Tile_Base {
             $this->_vbr .= 'box-shadow:' . $shadow_val . ';';
         }
 
+        // Border system
+        $v_uid = $this->_v_uid;
+        $border_css        = $this->build_border_css( $s['border'] ?? [] );
+        $border_hover_css  = $this->build_border_hover_css( ".{$v_uid}", $s['border'] ?? [], $s['border_hover'] ?? [], intval( $s['border_hover_duration'] ?? 300 ) );
+        $border_effect_css = $this->build_border_effect_css( ".{$v_uid}", $s['border'] ?? [], $s );
+        $border_block = '';
+        if ( $border_css || $border_hover_css || $border_effect_css ) {
+            $border_block = '<style>';
+            if ( $border_css ) $border_block .= ".{$v_uid}{{$border_css}}";
+            $border_block .= $border_hover_css . $border_effect_css . '</style>';
+        }
+
         $is_file = $s["source_type"] === 'file' || $this->is_direct_video( $s['video_url'] );
         $is_cover = $s['display_mode'] === 'cover';
 
@@ -105,7 +125,7 @@ class Olo_Video_Tile extends Olo_Tile_Base {
         $tfx_block = $tfx_css ? '<style>' . $tfx_css . '</style>' : '';
         ob_start(); $this->tfx_print_script(); $tfx_block .= ob_get_clean();
 
-        return $hover_prefix . $body . $tfx_block;
+        return $hover_prefix . $body . $tfx_block . $border_block;
     }
 
     // =========================================================================

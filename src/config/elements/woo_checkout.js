@@ -1,3 +1,5 @@
+
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 export default {
   type: 'woo_checkout',
   name: 'Checkout',
@@ -14,6 +16,10 @@ export default {
     border_color: '',
     button_color: '',
     button_bg: '',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { type: 'separator', label: 'Layout' },
@@ -36,5 +42,6 @@ export default {
     { key: 'border_color', label: 'Colore bordi', type: 'color' },
     { key: 'button_bg', label: 'Sfondo pulsante', type: 'color' },
     { key: 'button_color', label: 'Colore testo pulsante', type: 'color' },
+    ...borderFields(),
   ],
 };

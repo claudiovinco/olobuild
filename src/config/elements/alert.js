@@ -1,4 +1,4 @@
-import { textEffectsFields, textEffectsDefaults } from './_shared';
+import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared';
 import { shadowField } from './_shared.js';
 
 export default {
@@ -18,6 +18,10 @@ export default {
     custom_text_color: '',
     shadow: 'none',
     ...textEffectsDefaults,
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { key: 'alert_type', label: 'Tipo', type: 'select', options: [
@@ -41,5 +45,6 @@ export default {
       { value: 'message', label: 'Solo Messaggio' },
       { value: 'all', label: 'Tutti gli elementi testuali' },
     ]),
+    ...borderFields(),
   ],
 };

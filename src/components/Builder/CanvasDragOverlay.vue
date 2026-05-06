@@ -335,7 +335,8 @@ const dropTargetOpts = {
     };
   },
   getIsSticky: () => true,
-  onDragEnter: ({ self, location }) => {
+  onDragEnter: ({ self, location } = {}) => {
+    if (!self?.data) return;
     hit.value = self.data.hit;
     dnd.setDropTarget(
       hit.value
@@ -345,7 +346,8 @@ const dropTargetOpts = {
     );
     updateAutoScroll(location?.current?.input);
   },
-  onDrag: ({ self, location }) => {
+  onDrag: ({ self, location } = {}) => {
+    if (!self?.data) return;
     hit.value = self.data.hit;
     dnd.setDropTarget(
       hit.value
@@ -360,7 +362,8 @@ const dropTargetOpts = {
     dnd.clearDropTarget();
     stopAutoScroll();
   },
-  onDrop: ({ source, self }) => {
+  onDrop: ({ source, self } = {}) => {
+    if (!source?.data || !self?.data) return;
     const data = source.data;
     const target = self.data.hit;
     hit.value = null;

@@ -101,6 +101,12 @@
         @update:modelValue="onFieldUpdate($event)"
       />
 
+      <FieldBorder
+        v-else-if="field.type === 'border'"
+        :modelValue="effectiveValue"
+        @update:modelValue="onFieldUpdate($event)"
+      />
+
       <FieldEditor
         v-else-if="field.type === 'editor'"
         :modelValue="effectiveValue"
@@ -286,6 +292,7 @@ import FieldColor from './fields/FieldColor.vue';
 import FieldRange from './fields/FieldRange.vue';
 import FieldSpacing from './fields/FieldSpacing.vue';
 import FieldBorderRadius from './fields/FieldBorderRadius.vue';
+import FieldBorder from './fields/FieldBorder.vue';
 import FieldImage from './fields/FieldImage.vue';
 import FieldMedia from './fields/FieldMedia.vue';
 import FieldLottiePicker from './fields/FieldLottiePicker.vue';
@@ -471,6 +478,7 @@ const fieldComponent = computed(() => {
     case 'select': return FieldSelect;
     case 'range': return FieldRange;
     case 'border-radius': return FieldBorderRadius;
+    case 'border': return FieldBorder;
     case 'editor': return FieldEditor;
     case 'image': return FieldImage;
     case 'media': return FieldMedia;

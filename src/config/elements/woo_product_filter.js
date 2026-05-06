@@ -1,4 +1,4 @@
-import { shadowField } from './_shared.js';
+import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 
 export default {
   type: 'woo_product_filter',
@@ -24,6 +24,10 @@ export default {
     label_color: '',
     active_color: '',
     shadow: 'none',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { type: 'separator', label: 'Filtri visibili' },
@@ -57,5 +61,6 @@ export default {
     { key: 'button_bg', label: 'Sfondo pulsante', type: 'color' },
 
     ...shadowField,
+    ...borderFields(),
   ],
 };

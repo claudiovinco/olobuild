@@ -1,3 +1,5 @@
+
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 export default {
   type: 'olo_room_availability',
   name: 'Sala - Disponibilità',
@@ -14,6 +16,10 @@ export default {
     color_closed: '',
     card_style: true,
     day_radius: '4',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { type: 'separator', label: 'Contenuto' },
@@ -43,5 +49,6 @@ export default {
     { key: 'color_partial', label: 'Parzialmente occupato', type: 'color' },
     { key: 'color_full', label: 'Occupato', type: 'color' },
     { key: 'color_closed', label: 'Chiuso', type: 'color' },
+    ...borderFields(),
   ],
 };

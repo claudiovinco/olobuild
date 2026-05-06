@@ -1,3 +1,5 @@
+
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 export default {
   type: 'shapedivider',
   name: 'Shape Divider',
@@ -14,6 +16,10 @@ export default {
     z_index: '1',
     responsive_height_tablet: '',
     responsive_height_mobile: '',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { key: 'shape', label: 'Forma', type: 'select', options: [
@@ -42,5 +48,6 @@ export default {
     { type: 'separator', label: 'Responsive' },
     { key: 'responsive_height_tablet', label: 'Altezza tablet (px)', type: 'text' },
     { key: 'responsive_height_mobile', label: 'Altezza mobile (px)', type: 'text' },
+    ...borderFields(),
   ],
 };

@@ -1,4 +1,4 @@
-import { textEffectsFields, textEffectsDefaults } from './_shared';
+import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared';
 export default {
   type: 'timeline',
   name: 'Timeline',
@@ -81,6 +81,10 @@ export default {
     h_arrow_color: '',
     h_arrow_bg: '',
     ...textEffectsDefaults,
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     // ── Items ──
@@ -268,5 +272,6 @@ export default {
       { value: 'description', label: 'Solo Descrizione' },
       { value: 'all', label: 'Tutti gli elementi testuali' },
     ]),
+    ...borderFields(),
   ],
 };

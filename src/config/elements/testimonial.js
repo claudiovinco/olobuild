@@ -1,10 +1,11 @@
-import { textEffectsFields, textEffectsDefaults } from './_shared';
+import { textEffectsFields, textEffectsDefaults, filterFields, filterDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 export default {
   type: 'testimonial',
   name: 'Testimonianza',
   icon: 'dashicons-format-quote',
   category: 'marketing',
   defaults: {
+    ...filterDefaults,
     quote: 'Un prodotto fantastico!',
     author_name: 'Mario Rossi',
     author_role: 'CEO',
@@ -41,8 +42,10 @@ export default {
 
     // Tile
     border_radius: '12',
-    border_width: '0',
-    border_color: '',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
     ...textEffectsDefaults,
   },
   fields: [
@@ -155,9 +158,8 @@ export default {
     { type: 'separator', label: 'Aspetto' },
     { key: 'border_radius', label: 'Arrotondamento tile (px)', type: 'border-radius' },
     { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
-    { key: 'border_width', label: 'Spessore bordo (px)', type: 'range', min: 0, max: 5, step: 1 },
-    { key: 'border_color', label: 'Colore bordo', type: 'color',
-      condition: { field: 'border_width', operator: '>', value: '0' } },
+    ...borderFields(),
+    ...filterFields,
     ...textEffectsFields([ { value: 'quote', label: 'Solo Citazione' } ]),
   ],
 };

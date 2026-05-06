@@ -50,6 +50,14 @@ class Olo_LiveSearch_Tile extends Olo_Tile_Base {
         'backdrop_color'       => 'rgba(0,0,0,0.5)',
         'animated_placeholder' => false,
         'placeholder_words'    => '',
+            'border'                  => [],
+        'border_hover'            => [],
+        'border_hover_duration'   => 300,
+        'border_effect'           => 'none',
+        'border_effect_intensity' => 'medium',
+        'border_effect_color2'    => '',
+        'border_effect_angle'     => 135,
+        'border_effect_speed'     => 4,
     ];
 
     public function get_controls() {
@@ -420,6 +428,15 @@ class Olo_LiveSearch_Tile extends Olo_Tile_Base {
             <?php endif; ?>
         </div>
         <?php
+                // Border system
+        $border_css        = $this->build_border_css( $s['border'] ?? [] );
+        $border_hover_css  = $this->build_border_hover_css( ".{$element_id}", $s['border'] ?? [], $s['border_hover'] ?? [], intval( $s['border_hover_duration'] ?? 300 ) );
+        $border_effect_css = $this->build_border_effect_css( ".{$element_id}", $s['border'] ?? [], $s );
+        if ( $border_css || $border_hover_css || $border_effect_css ) {
+            echo '<style>';
+            if ( $border_css ) echo ".{$element_id}{{$border_css}}";
+            echo $border_hover_css . $border_effect_css . '</style>';
+        }
         return ob_get_clean();
     }
 }

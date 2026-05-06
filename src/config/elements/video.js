@@ -1,5 +1,4 @@
-import { textEffectsFields, textEffectsDefaults } from './_shared';
-import { shadowField } from './_shared.js';
+import { textEffectsFields, textEffectsDefaults, shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 
 export default {
   type: 'video',
@@ -13,6 +12,10 @@ export default {
     display_mode: '16:9',
     cover_height: '500',
     border_radius: 0,
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
     facade: true,
     autoplay: false,
     muted: false,
@@ -92,6 +95,7 @@ export default {
     { type: 'separator', label: 'Didascalia' },
     { key: 'caption', label: 'Didascalia', type: 'text' },
     ...shadowField,
+    ...borderFields(),
     ...textEffectsFields([
       { value: 'overlay_text', label: 'Solo Testo overlay' },
       { value: 'caption', label: 'Solo Didascalia' },

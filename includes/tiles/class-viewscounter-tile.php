@@ -22,6 +22,14 @@ class Olo_Viewscounter_Tile extends Olo_Tile_Base {
         'layout'        => 'inline',
         'icon_size'     => '16',
         'number_format' => true,
+            'border'                  => [],
+        'border_hover'            => [],
+        'border_hover_duration'   => 300,
+        'border_effect'           => 'none',
+        'border_effect_intensity' => 'medium',
+        'border_effect_color2'    => '',
+        'border_effect_angle'     => 135,
+        'border_effect_speed'     => 4,
     ];
 
     /** Common bot user-agent fragments. */
@@ -53,6 +61,7 @@ class Olo_Viewscounter_Tile extends Olo_Tile_Base {
 
     public function render( $settings ) {
         $s = wp_parse_args( $settings, $this->defaults );
+        $uid = 'olo-vc-' . wp_rand( 10000, 99999 );
 
         $post_id = get_the_ID();
 
@@ -116,7 +125,7 @@ class Olo_Viewscounter_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
-        <div class="olo-viewscounter" style="display:flex; flex-direction:<?php echo $direction; ?>; align-items:center; gap:6px; font-size:<?php echo $font_size; ?>px; font-weight:<?php echo $font_weight; ?>; color:<?php echo $text_color; ?>;">
+        <div class="olo-viewscounter <?php echo esc_attr( $uid ); ?>" style="display:flex; flex-direction:<?php echo $direction; ?>; align-items:center; gap:6px; font-size:<?php echo $font_size; ?>px; font-weight:<?php echo $font_weight; ?>; color:<?php echo $text_color; ?>;">
             <?php if ( $show_icon ) : ?>
                 <?php if ( $icon_pos === 'before' ) : ?>
                     <span class="olo-vc-icon" style="display:inline-flex; align-items:center; color:<?php echo $icon_color; ?>;"><?php echo $eye_svg; ?></span>
@@ -141,6 +150,15 @@ class Olo_Viewscounter_Tile extends Olo_Tile_Base {
         $tfx_css = $this->tfx_css( $s, '.olo-vc-text' );
         if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
         $this->tfx_print_script();
+                // Border system
+        $border_css        = $this->build_border_css( $s['border'] ?? [] );
+        $border_hover_css  = $this->build_border_hover_css( ".{$uid}", $s['border'] ?? [], $s['border_hover'] ?? [], intval( $s['border_hover_duration'] ?? 300 ) );
+        $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
+        if ( $border_css || $border_hover_css || $border_effect_css ) {
+            echo '<style>';
+            if ( $border_css ) echo ".{$uid}{{$border_css}}";
+            echo $border_hover_css . $border_effect_css . '</style>';
+        }
         return ob_get_clean();
     }
 }

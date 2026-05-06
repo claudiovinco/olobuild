@@ -1,3 +1,5 @@
+
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 export default {
   type: 'divider',
   name: 'Divisore',
@@ -14,6 +16,10 @@ export default {
     text_color: '',
     text_size: '14',
     icon_emoji: '',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { key: 'style', label: 'Stile linea', type: 'select', options: [
@@ -45,5 +51,6 @@ export default {
     { key: 'text_color', label: 'Colore testo', type: 'color' },
     { key: 'text_size', label: 'Dimensione testo (px)', type: 'range', min: 10, max: 32, step: 1 },
     { key: 'icon_emoji', label: 'Emoji / icona centrale', type: 'text' },
+    ...borderFields(),
   ],
 };

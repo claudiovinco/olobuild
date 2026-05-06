@@ -284,7 +284,11 @@ const { iframeReady, iframeHeight, postToIframe } = useIframeBridge(iframeRef);
 
 const iframeSrc = computed(() => {
   const base = window.oloData?.home_url || window.location.origin;
-  return base + '?olo_builder_iframe=1';
+  // Passa il template_id al PHP serve_builder_iframe: se trova un post che usa
+  // questo template, redirezionerà l'iframe al permalink reale (in modo che
+  // header/footer/regole vengano applicati come in produzione).
+  const tplId = builderStore.currentTemplate?.id || 0;
+  return base + '?olo_builder_iframe=1' + (tplId ? '&olo_tpl=' + tplId : '');
 });
 
 const iframeStyle = computed(() => {

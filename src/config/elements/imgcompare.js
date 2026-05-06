@@ -1,3 +1,5 @@
+
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 export default {
   type: 'imgcompare',
   name: 'Confronto Immagini',
@@ -31,6 +33,10 @@ export default {
     autoplay: false,
     autoplay_delay: '3',
     autoplay_speed: '2',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     // ── Immagini ──
@@ -91,5 +97,6 @@ export default {
       condition: { field: 'autoplay', value: true } },
     { key: 'autoplay_speed', label: 'Durata ciclo (sec)', type: 'range', min: 1, max: 8,
       condition: { field: 'autoplay', value: true } },
+    ...borderFields(),
   ],
 };

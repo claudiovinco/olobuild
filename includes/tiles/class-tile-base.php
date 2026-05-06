@@ -101,6 +101,158 @@ abstract class Olo_Tile_Base {
      * @param mixed $br  Border radius value — number, string, or array { tl, tr, br, bl }
      * @return string    CSS value like "8px" or "8px 0px 12px 4px", or empty string
      */
+    /**
+     * Normalizza un valore border (object JSON) in array PHP uniforme.
+     * Accetta array associativi o scalari (legacy 0).
+     * Restituisce array { top, right, bottom, left, style, color } oppure null se il bordo è vuoto.
+     */
+    protected function parse_border( $b ) {
+        if ( ! is_array( $b ) ) return null;
+        $color = trim( $b['color'] ?? '' );
+        if ( $color === '' ) return null;
+        $style = $b['style'] ?? 'solid';
+        $top    = max( 0, intval( $b['top']    ?? 0 ) );
+        $right  = max( 0, intval( $b['right']  ?? 0 ) );
+        $bottom = max( 0, intval( $b['bottom'] ?? 0 ) );
+        $left   = max( 0, intval( $b['left']   ?? 0 ) );
+        if ( ! $top && ! $right && ! $bottom && ! $left ) return null;
+        return compact( 'top', 'right', 'bottom', 'left', 'style', 'color' );
+    }
+
+    /**
+     * Genera le proprietà CSS di bordo inline (senza selettore).
+     * Restituisce stringa vuota se il bordo è inattivo.
+     */
+    protected function build_border_css( $b ) {
+        $d = $this->parse_border( $b );
+        if ( ! $d ) return '';
+        ['top'=>$t,'right'=>$r,'bottom'=>$bo,'left'=>$l,'style'=>$s,'color'=>$c] = $d;
+        if ( $t === $r && $r === $bo && $bo === $l ) {
+            return "border:{$t}px {$s} {$c};";
+        }
+        $css = '';
+        if ( $t  ) $css .= "border-top:{$t}px {$s} {$c};";
+        if ( $r  ) $css .= "border-right:{$r}px {$s} {$c};";
+        if ( $bo ) $css .= "border-bottom:{$bo}px {$s} {$c};";
+        if ( $l  ) $css .= "border-left:{$l}px {$s} {$c};";
+        return $css;
+    }
+
+    /**
+     * Genera il blocco CSS hover + transizione per il bordo.
+     * $uid   = selettore CSS univoco (es. ".olo-img-12345")
+     * $base  = valore border base (array o null)
+     * $hover = valore border hover (array)
+     * $dur   = durata transizione in ms
+     */
+    protected function build_border_hover_css( $uid, $base, $hover, $dur = 300 ) {
+        if ( ! is_array( $hover ) ) return '';
+
+        $base_d  = $this->parse_border( $base );
+        $h_color = trim( $hover['color'] ?? '' );
+        $h_style = trim( $hover['style'] ?? '' );
+        $h_top   = $hover['top']    !== '' ? max( 0, intval( $hover['top']    ?? 0 ) ) : null;
+        $h_right = $hover['right']  !== '' ? max( 0, intval( $hover['right']  ?? 0 ) ) : null;
+        $h_bot   = $hover['bottom'] !== '' ? max( 0, intval( $hover['bottom'] ?? 0 ) ) : null;
+        $h_left  = $hover['left']   !== '' ? max( 0, intval( $hover['left']   ?? 0 ) ) : null;
+
+        // Nulla da cambiare
+        if ( $h_color === '' && $h_style === '' && $h_top === null && $h_right === null && $h_bot === null && $h_left === null ) {
+            return '';
+        }
+
+        $dur_s  = max( 50, intval( $dur ) );
+        $eff_c  = $h_color !== '' ? $h_color : ( $base_d['color'] ?? '' );
+        $eff_s  = $h_style !== '' ? $h_style : ( $base_d['style'] ?? 'solid' );
+        $eff_t  = $h_top   !== null ? $h_top   : ( $base_d['top']    ?? 0 );
+        $eff_r  = $h_right !== null ? $h_right : ( $base_d['right']  ?? 0 );
+        $eff_bo = $h_bot   !== null ? $h_bot   : ( $base_d['bottom'] ?? 0 );
+        $eff_l  = $h_left  !== null ? $h_left  : ( $base_d['left']   ?? 0 );
+
+        if ( ! $eff_c ) return '';
+
+        $css = "{$uid}{transition:border {$dur_s}ms ease;}";
+        if ( $eff_t === $eff_r && $eff_r === $eff_bo && $eff_bo === $eff_l ) {
+            $css .= "{$uid}:hover{border:{$eff_t}px {$eff_s} {$eff_c};}";
+        } else {
+            $css .= "{$uid}:hover{";
+            if ( $eff_t  ) $css .= "border-top:{$eff_t}px {$eff_s} {$eff_c};";
+            if ( $eff_r  ) $css .= "border-right:{$eff_r}px {$eff_s} {$eff_c};";
+            if ( $eff_bo ) $css .= "border-bottom:{$eff_bo}px {$eff_s} {$eff_c};";
+            if ( $eff_l  ) $css .= "border-left:{$eff_l}px {$eff_s} {$eff_c};";
+            $css .= '}';
+        }
+        return $css;
+    }
+
+    /**
+     * Genera CSS per effetti bordo avanzati (neon, gradiente).
+     * Restituisce stringa CSS (senza tag <style>) o ''.
+     */
+    protected function build_border_effect_css( $uid, $border, $settings ) {
+        $effect = $settings['border_effect'] ?? 'none';
+        if ( $effect === 'none' || $effect === '' ) return '';
+
+        $d = $this->parse_border( $border );
+        if ( ! $d && ! in_array( $effect, [ 'gradient', 'gradient-spin' ], true ) ) return '';
+
+        $color1 = $d['color'] ?? '#6366f1';
+        $color2 = trim( $settings['border_effect_color2'] ?? '' ) ?: '#ec4899';
+
+        switch ( $effect ) {
+
+            case 'neon':
+                $levels = [
+                    'subtle'  => [ 4, 8 ],
+                    'medium'  => [ 6, 18 ],
+                    'intense' => [ 10, 30 ],
+                ];
+                $intensity = $settings['border_effect_intensity'] ?? 'medium';
+                [$a, $b] = $levels[ $intensity ] ?? $levels['medium'];
+                $alpha = $this->hex_to_rgba( $color1, 0.45 );
+                return "{$uid}{box-shadow:0 0 {$a}px {$color1},0 0 {$b}px {$color1},0 0 " . ($b*2) . "px {$alpha};}";
+
+            case 'neon-pulse':
+                $intensity = $settings['border_effect_intensity'] ?? 'medium';
+                $anim_id   = 'olo-np-' . substr( md5( $uid . $color1 ), 0, 6 );
+                $a1 = $this->hex_to_rgba( $color1, 0.5 );
+                $a2 = $this->hex_to_rgba( $color1, 0.8 );
+                switch ( $intensity ) {
+                    case 'subtle':  [$s1,$s2,$s3,$s4] = [3,6,5,12]; break;
+                    case 'intense': [$s1,$s2,$s3,$s4] = [8,20,14,40]; break;
+                    default:        [$s1,$s2,$s3,$s4] = [5,12,8,24]; break;
+                }
+                return "@keyframes {$anim_id}{0%,100%{box-shadow:0 0 {$s1}px {$color1},0 0 {$s2}px {$a1};}50%{box-shadow:0 0 {$s3}px {$color1},0 0 {$s4}px {$a2},0 0 " . ($s4*2) . "px {$a1};}}" .
+                       "{$uid}{animation:{$anim_id} 2s ease-in-out infinite;}";
+
+            case 'gradient':
+                $angle = intval( $settings['border_effect_angle'] ?? 135 );
+                // border-image: no border-radius — nota documentata nel tooltip
+                return "{$uid}{border-image:linear-gradient({$angle}deg,{$color1},{$color2}) 1;}";
+
+            case 'gradient-spin':
+                $speed  = max( 1, intval( $settings['border_effect_speed'] ?? 4 ) );
+                $prop   = '--olo-ba-' . substr( md5( $uid ), 0, 6 );
+                $anim_id = 'olo-bs-' . substr( md5( $uid ), 0, 6 );
+                return "@property {$prop}{syntax:'<angle>';initial-value:0deg;inherits:false;}" .
+                       "@keyframes {$anim_id}{to{{$prop}:360deg;}}" .
+                       "{$uid}{border-image:conic-gradient(from var({$prop}),{$color1},{$color2},{$color1}) 1;" .
+                       "animation:{$anim_id} {$speed}s linear infinite;}";
+        }
+        return '';
+    }
+
+    /** Converte un colore hex in rgba(r,g,b,alpha). */
+    private function hex_to_rgba( $hex, $alpha ) {
+        $hex = ltrim( $hex, '#' );
+        if ( strlen( $hex ) === 3 ) $hex = $hex[0].$hex[0].$hex[1].$hex[1].$hex[2].$hex[2];
+        if ( strlen( $hex ) !== 6 ) return "rgba(99,102,241,{$alpha})";
+        $r = hexdec( substr( $hex, 0, 2 ) );
+        $g = hexdec( substr( $hex, 2, 2 ) );
+        $b = hexdec( substr( $hex, 4, 2 ) );
+        return "rgba({$r},{$g},{$b},{$alpha})";
+    }
+
     protected function build_border_radius_css( $br ) {
         if ( is_array( $br ) ) {
             $tl  = intval( $br['tl'] ?? 0 );

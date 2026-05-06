@@ -1,3 +1,5 @@
+
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 export default {
   type: 'woo_product_title',
   name: 'Titolo Prodotto',
@@ -13,6 +15,10 @@ export default {
     line_height: '1.2',
     link_to_product: false,
     link_color_hover: '',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { key: 'tag', label: 'Tag HTML', type: 'select', options: [
@@ -54,5 +60,6 @@ export default {
     { type: 'separator', label: 'Colori' },
     { key: 'color', label: 'Colore testo', type: 'color' },
     { key: 'link_color_hover', label: 'Colore link hover', type: 'color' },
+    ...borderFields(),
   ],
 };

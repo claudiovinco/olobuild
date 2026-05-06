@@ -1,5 +1,4 @@
-import { textEffectsFields, textEffectsDefaults } from './_shared';
-import { shadowField } from './_shared.js';
+import { textEffectsFields, textEffectsDefaults, shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 
 export default {
   type: 'button',
@@ -26,14 +25,15 @@ export default {
     icon: '',
     icon_position: 'before',
     icon_spacing: '8',
-    border_width: '0',
-    border_color: '',
     shadow: 'none',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
 
     // Hover
     hover_bg_color: '',
     hover_text_color: '',
-    hover_border_color: '',
     hover_shadow: '',
     hover_effect: 'lift',
     hover_image: '',
@@ -83,9 +83,8 @@ export default {
       { value: 'lowercase', label: 'minuscolo' },
       { value: 'capitalize', label: 'Capitalizza' },
     ]},
-    { key: 'border_width', label: 'Spessore bordo (px)', type: 'range', min: 0, max: 5, step: 1 },
-    { key: 'border_color', label: 'Colore bordo', type: 'color' },
     ...shadowField,
+    ...borderFields(),
 
     { type: 'separator', label: 'Stato hover' },
 
@@ -99,7 +98,6 @@ export default {
     ]},
     { key: 'hover_bg_color', label: 'Sfondo hover', type: 'color' },
     { key: 'hover_text_color', label: 'Testo hover', type: 'color' },
-    { key: 'hover_border_color', label: 'Bordo hover', type: 'color' },
     { key: 'hover_shadow', label: 'Ombra hover', type: 'select', options: [
       { value: '', label: 'Invariata' },
       { value: 'none', label: 'Nessuna' },

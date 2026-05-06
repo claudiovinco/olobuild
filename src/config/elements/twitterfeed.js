@@ -1,3 +1,5 @@
+
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 export default {
   type: 'twitterfeed',
   name: 'X Timeline',
@@ -14,6 +16,10 @@ export default {
     language: 'it',
     alignment: 'center',
     border_radius: '8',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { key: 'url', label: 'URL profilo X / Tweet', type: 'text', placeholder: 'https://x.com/username' },
@@ -43,5 +49,6 @@ export default {
     ]},
     { key: 'border_radius', label: 'Arrotondamento (px)', type: 'border-radius' },
     { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
+    ...borderFields(),
   ],
 };

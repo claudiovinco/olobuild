@@ -1,4 +1,4 @@
-import { shadowField } from './_shared.js';
+import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 export default {
   type: 'readingtime',
   label: 'Tempo di Lettura',
@@ -17,8 +17,13 @@ export default {
     font_weight: '',
     text_align: 'left',
     box_shadow: '',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
+    { type: 'separator', label: 'Calcolo' },
     { key: 'words_per_minute', label: 'Parole al minuto', type: 'number', min: 50, max: 500 },
     { key: 'format', label: 'Formato', type: 'select', options: [
       { value: 'full', label: 'Completo (Tempo di lettura: 5 min)' },
@@ -27,10 +32,14 @@ export default {
     ]},
     { key: 'prefix', label: 'Prefisso', type: 'text', condition: { format: ['full'] }},
     { key: 'suffix', label: 'Suffisso', type: 'text' },
+
+    { type: 'separator', label: 'Icona' },
     { key: 'show_icon', label: 'Mostra icona', type: 'toggle' },
     { key: 'icon', label: 'Icona', type: 'icon', condition: { show_icon: [true] }},
-    { key: 'text_color', label: 'Colore testo', type: 'color' },
     { key: 'icon_color', label: 'Colore icona', type: 'color' },
+
+    { type: 'separator', label: 'Tipografia' },
+    { key: 'text_color', label: 'Colore testo', type: 'color' },
     { key: 'font_size', label: 'Dimensione font', type: 'text', placeholder: '16px' },
     { key: 'font_weight', label: 'Peso font', type: 'select', options: [
       { value: '', label: 'Default' },
@@ -40,6 +49,9 @@ export default {
     { key: 'text_align', label: 'Allineamento', type: 'select', options: [
       { value: 'left', label: 'Sinistra' }, { value: 'center', label: 'Centro' }, { value: 'right', label: 'Destra' }
     ]},
+
+    { type: 'separator', label: 'Aspetto' },
     ...shadowField,
+    ...borderFields(),
   ],
 };

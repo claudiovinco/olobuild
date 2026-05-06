@@ -1,4 +1,6 @@
 
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
+
 export default {
   type: 'content',
   name: 'Contenuto',
@@ -41,6 +43,10 @@ export default {
     text_effect_color_to: '',
     text_effect_phrases: '',
     text_effect_pause: '1500',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { key: 'heading', label: 'Titolo', type: 'text' },
@@ -174,5 +180,6 @@ export default {
       condition: { field: 'text_effect', op: 'eq', value: 'gradient-anim' } },
     { key: 'text_effect_loop', label: 'Riproduci in loop', type: 'toggle',
       condition: { field: 'text_effect', value: ['typewriter', 'reveal-letter', 'reveal-word', 'wave', 'glitch', 'scramble'] } },
+    ...borderFields(),
   ],
 };

@@ -1,3 +1,5 @@
+
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 export default {
   type: 'woo_product_tabs',
   name: 'Tab Prodotto',
@@ -12,6 +14,10 @@ export default {
     active_color: '',
     text_color: '',
     border_color: '',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { type: 'separator', label: 'Tab visibili' },
@@ -30,5 +36,6 @@ export default {
     { key: 'active_color', label: 'Colore tab attiva', type: 'color' },
     { key: 'text_color', label: 'Colore testo', type: 'color' },
     { key: 'border_color', label: 'Colore bordo', type: 'color' },
+    ...borderFields(),
   ],
 };

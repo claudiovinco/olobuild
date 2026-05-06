@@ -1,4 +1,6 @@
 
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
+
 export default {
   type: 'pdfviewer',
   name: 'PDF Viewer',
@@ -27,6 +29,10 @@ export default {
     nav_click: true,
     nav_swipe: true,
     nav_keyboard: true,
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { type: 'separator', label: 'Sorgente' },
@@ -82,6 +88,6 @@ export default {
     { key: 'nav_click', label: 'Click su pagina (volta pagina)', type: 'toggle' },
     { key: 'nav_swipe', label: 'Swipe touch (mobile)', type: 'toggle' },
     { key: 'nav_keyboard', label: 'Frecce tastiera', type: 'toggle' },
-
+    ...borderFields(),
   ],
 };

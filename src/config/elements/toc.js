@@ -1,4 +1,4 @@
-import { textEffectsFields, textEffectsDefaults } from './_shared';
+import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared';
 import { shadowField } from './_shared.js';
 
 export default {
@@ -20,6 +20,10 @@ export default {
     smooth_scroll: true,
     shadow: 'none',
     ...textEffectsDefaults,
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { key: 'title', label: 'Titolo', type: 'text' },
@@ -48,5 +52,6 @@ export default {
     { key: 'smooth_scroll', label: 'Scroll fluido', type: 'toggle' },
     ...shadowField,
     ...textEffectsFields([ { value: 'title', label: 'Solo Titolo' } ]),
+    ...borderFields(),
   ],
 };

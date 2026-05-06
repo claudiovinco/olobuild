@@ -1,4 +1,4 @@
-import { shadowField } from './_shared.js';
+import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 
 export default {
   type: 'offcanvas',
@@ -23,6 +23,10 @@ export default {
     trigger_icon: 'menu',
     show_trigger: true,
     shadow: 'none',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { type: 'separator', label: 'Trigger' },
@@ -63,5 +67,6 @@ export default {
       condition: { field: 'close_button', value: true } },
 
     shadowField,
+    ...borderFields(),
   ],
 };

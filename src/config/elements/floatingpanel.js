@@ -1,3 +1,4 @@
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 export default {
   type: 'floatingpanel',
   name: 'Pannello flottante',
@@ -17,8 +18,10 @@ export default {
     height: '',
     z_index: '9999',
     bg_color: '#ffffff',
-    border_color: '',
-    border_width: '0',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
     border_radius: '12',
     shadow: true,
     shadow_color: 'rgba(0,0,0,0.15)',
@@ -120,8 +123,6 @@ export default {
     // ─── Aspetto ───
     { type: 'separator', label: 'Aspetto' },
     { key: 'bg_color', label: 'Sfondo', type: 'color' },
-    { key: 'border_color', label: 'Colore bordo', type: 'color' },
-    { key: 'border_width', label: 'Spessore bordo (px)', type: 'range', min: 0, max: 10, step: 1 },
     { key: 'border_radius', label: 'Arrotondamento (px)', type: 'border-radius' },
     { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 60 },
@@ -132,6 +133,7 @@ export default {
       condition: { field: 'shadow', value: true } },
     { key: 'shadow_y', label: 'Offset Y ombra (px)', type: 'range', min: 0, max: 30, step: 1,
       condition: { field: 'shadow', value: true } },
+    ...borderFields(),
 
     // ─── Trigger ───
     { type: 'separator', label: 'Visibilità' },

@@ -1,4 +1,4 @@
-import { textEffectsFields, textEffectsDefaults } from './_shared';
+import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared';
 import { shadowField, conditionFields, conditionDefaults } from './_shared.js';
 
 export default {
@@ -20,6 +20,10 @@ export default {
     shadow: 'none',
     ...conditionDefaults,
     ...textEffectsDefaults,
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { key: 'items', label: 'Elementi', type: 'content-items',
@@ -66,5 +70,6 @@ export default {
       { value: 'caption', label: 'Solo Didascalia' },
       { value: 'all', label: 'Tutti gli elementi testuali' },
     ]),
+    ...borderFields(),
   ],
 };

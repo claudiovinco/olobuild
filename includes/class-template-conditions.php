@@ -27,6 +27,10 @@ class Olo_Template_Conditions {
 
         // Override single template selection with conditions
         add_filter( 'olo_resolve_template_id', [ $this, 'resolve_by_conditions' ], 10, 2 );
+
+        // Admin UI: pagina dedicata sotto Olobuild
+        add_action( 'admin_menu', [ $this, 'register_admin_page' ], 30 );
+        add_action( 'admin_post_olo_save_template_conditions', [ $this, 'handle_admin_save' ] );
     }
 
     /* ─────────────────────────────────────────────
@@ -293,5 +297,256 @@ class Olo_Template_Conditions {
             ];
         }
         return $clean;
+    }
+
+    /* ─────────────────────────────────────────────
+     * Admin UI
+     * ───────────────────────────────────────────── */
+
+    public function register_admin_page() {
+        add_submenu_page(
+            'admin.php?page=olobuilder',
+            __( 'Regole di visualizzazione', 'olobuilder' ),
+            __( 'Regole di visualizzazione', 'olobuilder' ),
+            'edit_others_posts',
+            'olobuilder-template-rules',
+            [ $this, 'render_admin_page' ]
+        );
+    }
+
+    public function render_admin_page() {
+        if ( ! current_user_can( 'edit_others_posts' ) ) {
+            wp_die( __( 'Accesso negato.', 'olobuilder' ) );
+        }
+
+        $assignments = get_option( 'olo_template_conditions', [] );
+        if ( ! is_array( $assignments ) ) $assignments = [];
+
+        // Carica template per dropdown
+        $db = new Olo_Database();
+        $all = $db->list_templates( [ 'per_page' => 200, 'orderby' => 'title', 'order' => 'ASC' ] )['items'] ?? [];
+        $headers = array_values( array_filter( $all, function ( $t ) { return ( $t['type'] ?? '' ) === 'header' && $t['status'] === 'published'; } ) );
+        $footers = array_values( array_filter( $all, function ( $t ) { return ( $t['type'] ?? '' ) === 'footer' && $t['status'] === 'published'; } ) );
+
+        $public_cpts = get_post_types( [ 'public' => true ], 'objects' );
+
+        $saved   = isset( $_GET['olo_saved'] );
+        ?>
+        <div class="wrap olo-tpl-rules">
+            <h1><?php esc_html_e( 'Regole di visualizzazione template', 'olobuilder' ); ?></h1>
+            <p class="description">
+                <?php esc_html_e( 'Definisci dove ogni template Header/Footer si applica. Le regole hanno priorità sull\'header/footer globale e cedono il passo a un\'eventuale assegnazione per-pagina dal metabox Olobuild.', 'olobuilder' ); ?>
+            </p>
+
+            <?php if ( $saved ) : ?>
+                <div class="notice notice-success is-dismissible"><p><?php esc_html_e( 'Regole salvate.', 'olobuilder' ); ?></p></div>
+            <?php endif; ?>
+
+            <?php if ( empty( $headers ) && empty( $footers ) ) : ?>
+                <p><em><?php esc_html_e( 'Nessun template Header/Footer pubblicato. Crea prima un template e impostalo come "Pubblicato".', 'olobuilder' ); ?></em></p>
+                <?php return; ?>
+            <?php endif; ?>
+
+            <form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" id="olo-tpl-rules-form">
+                <input type="hidden" name="action" value="olo_save_template_conditions" />
+                <?php wp_nonce_field( 'olo_save_template_conditions' ); ?>
+
+                <table class="widefat striped" id="olo-tpl-rules-table">
+                    <thead>
+                        <tr>
+                            <th style="width:36px;"></th>
+                            <th style="width:18%;"><?php esc_html_e( 'Nome', 'olobuilder' ); ?></th>
+                            <th style="width:22%;"><?php esc_html_e( 'Template', 'olobuilder' ); ?></th>
+                            <th style="width:15%;"><?php esc_html_e( 'Area', 'olobuilder' ); ?></th>
+                            <th style="width:10%;"><?php esc_html_e( 'Priorità', 'olobuilder' ); ?></th>
+                            <th><?php esc_html_e( 'Condizione', 'olobuilder' ); ?></th>
+                            <th style="width:48px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $rows = empty( $assignments ) ? [ [] ] : $assignments;
+                        foreach ( $rows as $i => $a ) :
+                            $name        = $a['name']        ?? '';
+                            $template_id = (int) ( $a['template_id'] ?? 0 );
+                            $context     = $a['context']     ?? 'header';
+                            $priority    = (int) ( $a['priority'] ?? 10 );
+                            $enabled     = isset( $a['enabled'] ) ? ! empty( $a['enabled'] ) : true;
+                            $cond_first  = $a['conditions'][0] ?? [ 'type' => '', 'value' => '', 'negate' => false ];
+                            $ct          = $cond_first['type']  ?? '';
+                            $cv          = $cond_first['value'] ?? '';
+                            ?>
+                            <tr class="olo-tpl-rule-row">
+                                <td>
+                                    <input type="checkbox" name="rules[<?php echo (int) $i; ?>][enabled]" value="1" <?php checked( $enabled ); ?> title="<?php esc_attr_e( 'Abilita', 'olobuilder' ); ?>" />
+                                </td>
+                                <td>
+                                    <input type="text" name="rules[<?php echo (int) $i; ?>][name]" value="<?php echo esc_attr( $name ); ?>" placeholder="<?php esc_attr_e( 'es. Header strutture', 'olobuilder' ); ?>" style="width:100%;" />
+                                </td>
+                                <td>
+                                    <select name="rules[<?php echo (int) $i; ?>][template_id]" class="olo-tpl-select" data-context="<?php echo esc_attr( $context ); ?>" style="width:100%;">
+                                        <option value="0">— <?php esc_html_e( 'Seleziona template', 'olobuilder' ); ?> —</option>
+                                        <optgroup label="<?php esc_attr_e( 'Header', 'olobuilder' ); ?>">
+                                            <?php foreach ( $headers as $t ) : ?>
+                                                <option value="<?php echo (int) $t['id']; ?>" data-type="header" <?php selected( $template_id, (int) $t['id'] ); ?>>#<?php echo (int) $t['id']; ?> — <?php echo esc_html( $t['title'] ); ?></option>
+                                            <?php endforeach; ?>
+                                        </optgroup>
+                                        <optgroup label="<?php esc_attr_e( 'Footer', 'olobuilder' ); ?>">
+                                            <?php foreach ( $footers as $t ) : ?>
+                                                <option value="<?php echo (int) $t['id']; ?>" data-type="footer" <?php selected( $template_id, (int) $t['id'] ); ?>>#<?php echo (int) $t['id']; ?> — <?php echo esc_html( $t['title'] ); ?></option>
+                                            <?php endforeach; ?>
+                                        </optgroup>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select name="rules[<?php echo (int) $i; ?>][context]" style="width:100%;">
+                                        <option value="header" <?php selected( $context, 'header' ); ?>><?php esc_html_e( 'Header', 'olobuilder' ); ?></option>
+                                        <option value="footer" <?php selected( $context, 'footer' ); ?>><?php esc_html_e( 'Footer', 'olobuilder' ); ?></option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type="number" name="rules[<?php echo (int) $i; ?>][priority]" value="<?php echo (int) $priority; ?>" min="1" max="999" style="width:80px;" title="<?php esc_attr_e( 'Più basso = più importante', 'olobuilder' ); ?>" />
+                                </td>
+                                <td class="olo-cond-cell">
+                                    <select name="rules[<?php echo (int) $i; ?>][conditions][0][type]" class="olo-cond-type" style="min-width:170px;">
+                                        <option value=""><?php esc_html_e( '— Seleziona —', 'olobuilder' ); ?></option>
+                                        <option value="entire_site" <?php selected( $ct, 'entire_site' ); ?>><?php esc_html_e( 'Tutto il sito', 'olobuilder' ); ?></option>
+                                        <option value="front_page" <?php selected( $ct, 'front_page' ); ?>><?php esc_html_e( 'Front page', 'olobuilder' ); ?></option>
+                                        <option value="post_type" <?php selected( $ct, 'post_type' ); ?>><?php esc_html_e( 'Singoli di un tipo (CPT)', 'olobuilder' ); ?></option>
+                                        <option value="archive" <?php selected( $ct, 'archive' ); ?>><?php esc_html_e( 'Archivio di un tipo (CPT)', 'olobuilder' ); ?></option>
+                                        <option value="page" <?php selected( $ct, 'page' ); ?>><?php esc_html_e( 'Una pagina specifica (ID)', 'olobuilder' ); ?></option>
+                                        <option value="post" <?php selected( $ct, 'post' ); ?>><?php esc_html_e( 'Un articolo specifico (ID)', 'olobuilder' ); ?></option>
+                                        <option value="search" <?php selected( $ct, 'search' ); ?>><?php esc_html_e( 'Risultati ricerca', 'olobuilder' ); ?></option>
+                                        <option value="404" <?php selected( $ct, '404' ); ?>><?php esc_html_e( 'Pagina 404', 'olobuilder' ); ?></option>
+                                        <option value="user_logged_in" <?php selected( $ct, 'user_logged_in' ); ?>><?php esc_html_e( 'Utenti loggati', 'olobuilder' ); ?></option>
+                                        <option value="user_logged_out" <?php selected( $ct, 'user_logged_out' ); ?>><?php esc_html_e( 'Utenti non loggati', 'olobuilder' ); ?></option>
+                                    </select>
+                                    <?php $show_cpt = in_array( $ct, [ 'post_type', 'archive' ], true ); ?>
+                                    <select name="rules[<?php echo (int) $i; ?>][conditions][0][value]" class="olo-cond-value-cpt" style="min-width:200px;<?php echo $show_cpt ? '' : 'display:none;'; ?>" <?php disabled( ! $show_cpt ); ?>>
+                                        <option value=""><?php esc_html_e( '— Tipo —', 'olobuilder' ); ?></option>
+                                        <?php foreach ( $public_cpts as $slug => $obj ) : ?>
+                                            <option value="<?php echo esc_attr( $slug ); ?>" <?php selected( $cv, $slug ); ?>><?php echo esc_html( $obj->labels->singular_name . ' (' . $slug . ')' ); ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                    <?php $show_id = in_array( $ct, [ 'page', 'post' ], true ); ?>
+                                    <input type="text" name="rules[<?php echo (int) $i; ?>][conditions][0][value]" class="olo-cond-value-id" value="<?php echo $show_id ? esc_attr( $cv ) : ''; ?>" placeholder="<?php esc_attr_e( 'ID', 'olobuilder' ); ?>" style="width:80px;<?php echo $show_id ? '' : 'display:none;'; ?>" <?php disabled( ! $show_id ); ?> />
+                                </td>
+                                <td>
+                                    <button type="button" class="button olo-rule-remove" title="<?php esc_attr_e( 'Rimuovi', 'olobuilder' ); ?>">×</button>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+
+                <p style="margin-top:14px;">
+                    <button type="button" class="button" id="olo-rule-add">+ <?php esc_html_e( 'Aggiungi regola', 'olobuilder' ); ?></button>
+                    <button type="submit" class="button button-primary" style="margin-left:8px;"><?php esc_html_e( 'Salva regole', 'olobuilder' ); ?></button>
+                </p>
+
+                <h2 style="margin-top:30px;"><?php esc_html_e( 'Come funziona', 'olobuilder' ); ?></h2>
+                <ul style="list-style:disc;margin-left:18px;">
+                    <li><strong><?php esc_html_e( 'Priorità più bassa = vince per prima', 'olobuilder' ); ?></strong>. <?php esc_html_e( 'A parità, l\'ordine in tabella decide.', 'olobuilder' ); ?></li>
+                    <li><?php esc_html_e( 'Se un singolo post ha un header/footer assegnato dal metabox Olobuild, quello vince comunque sulle regole qui.', 'olobuilder' ); ?></li>
+                    <li><?php esc_html_e( 'Se nessuna regola matcha, viene usato l\'header/footer globale (Gestione Template → Attiva).', 'olobuilder' ); ?></li>
+                </ul>
+            </form>
+        </div>
+        <script>
+        (function () {
+            function syncCondValue(row) {
+                var sel = row.querySelector('.olo-cond-type');
+                var type = sel ? sel.value : '';
+                var cpt  = row.querySelector('.olo-cond-value-cpt');
+                var idIn = row.querySelector('.olo-cond-value-id');
+                var showCpt = (type === 'post_type' || type === 'archive');
+                var showId  = (type === 'page' || type === 'post');
+                // I due input hanno lo stesso `name` per condividere il valore.
+                // Disabilitiamo quello non in uso così PHP riceve un solo
+                // valore corrispondente al tipo selezionato (HTML disabled
+                // exclude il campo dal form submission).
+                if (cpt)  { cpt.style.display  = showCpt ? '' : 'none'; cpt.disabled  = !showCpt; }
+                if (idIn) { idIn.style.display = showId  ? '' : 'none'; idIn.disabled = !showId; }
+            }
+            document.addEventListener('change', function (e) {
+                if (e.target.classList.contains('olo-cond-type')) {
+                    syncCondValue(e.target.closest('tr'));
+                }
+            });
+            document.addEventListener('click', function (e) {
+                if (e.target.id === 'olo-rule-add') {
+                    var tbody = document.querySelector('#olo-tpl-rules-table tbody');
+                    var row = tbody.querySelector('tr');
+                    if (!row) return;
+                    var clone = row.cloneNode(true);
+                    var newIdx = tbody.children.length;
+                    clone.querySelectorAll('input,select').forEach(function (el) {
+                        el.name = el.name.replace(/rules\[\d+\]/, 'rules[' + newIdx + ']');
+                        if (el.type === 'checkbox') el.checked = true;
+                        else if (el.tagName === 'SELECT') el.selectedIndex = 0;
+                        else el.value = '';
+                    });
+                    tbody.appendChild(clone);
+                    syncCondValue(clone);
+                }
+                if (e.target.classList.contains('olo-rule-remove')) {
+                    var tbody = e.target.closest('tbody');
+                    var tr = e.target.closest('tr');
+                    if (tbody && tbody.children.length > 1) {
+                        tr.remove();
+                    } else {
+                        tr.querySelectorAll('input,select').forEach(function (el) {
+                            if (el.type === 'checkbox') el.checked = false;
+                            else if (el.tagName === 'SELECT') el.selectedIndex = 0;
+                            else el.value = '';
+                        });
+                        syncCondValue(tr);
+                    }
+                }
+            });
+            // initial sync per ogni row
+            document.querySelectorAll('#olo-tpl-rules-table tr.olo-tpl-rule-row').forEach(syncCondValue);
+        })();
+        </script>
+        <?php
+    }
+
+    public function handle_admin_save() {
+        if ( ! current_user_can( 'edit_others_posts' ) ) {
+            wp_die( 'Forbidden' );
+        }
+        check_admin_referer( 'olo_save_template_conditions' );
+
+        $raw   = $_POST['rules'] ?? [];
+        if ( ! is_array( $raw ) ) $raw = [];
+
+        $clean = [];
+        $idx   = 0;
+        foreach ( $raw as $r ) {
+            if ( ! is_array( $r ) ) continue;
+            $tid = (int) ( $r['template_id'] ?? 0 );
+            if ( ! $tid ) continue; // skip incomplete
+
+            $cond_in = $r['conditions'][0] ?? [];
+            $ct = isset( $cond_in['type'] ) ? sanitize_text_field( $cond_in['type'] ) : '';
+            $cv = isset( $cond_in['value'] ) ? sanitize_text_field( $cond_in['value'] ) : '';
+            if ( $ct === '' ) continue; // condizione vuota → ignora
+
+            $clean[] = [
+                'enabled'          => ! empty( $r['enabled'] ),
+                'name'             => sanitize_text_field( $r['name'] ?? '' ),
+                'template_id'      => $tid,
+                'context'          => in_array( $r['context'] ?? '', [ 'header', 'footer' ], true ) ? $r['context'] : 'header',
+                'priority'         => max( 1, (int) ( $r['priority'] ?? 10 ) ),
+                'conditions'       => [ [ 'type' => $ct, 'value' => $cv, 'negate' => false ] ],
+                'conditions_logic' => 'AND',
+            ];
+            $idx++;
+        }
+
+        update_option( 'olo_template_conditions', $clean, false );
+
+        wp_safe_redirect( add_query_arg( 'olo_saved', '1', admin_url( 'admin.php?page=olobuilder-template-rules' ) ) );
+        exit;
     }
 }

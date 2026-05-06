@@ -107,14 +107,140 @@ class Olo_Builder {
 
     /**
      * Serve the builder iframe page for live preview.
+     *
+     * Comportamento context-aware:
+     *
+     *   1. Se siamo su un permalink reale (`is_singular()`), NON serviamo il
+     *      template standalone: lasciamo WP renderizzare la pagina con il suo
+     *      tema (header/footer/regole template Olobuild) e sostituiamo SOLO
+     *      il content del post con un placeholder che il bridge JS aggiorna
+     *      via postMessage. Così il preview mostra header/footer reali esattamente
+     *      come sono in prod (incluso `_olo_header_id` per-page o regole).
+     *
+     *   2. Se Vue ha passato `olo_tpl=<id>` e siamo sulla home (caso default
+     *      quando il template editato è una "page"), facciamo lookup automatico
+     *      di un post che usa quel template e ridirezioniamo all'iframe contestuale.
+     *
+     *   3. Altrimenti (home senza match, archive, ecc.) serviamo il template
+     *      standalone come fallback (status quo).
      */
     public function serve_builder_iframe() {
         if ( empty( $_GET['olo_builder_iframe'] ) ) return;
         if ( ! current_user_can( 'edit_pages' ) ) {
             wp_die( 'Unauthorized', 403 );
         }
+
+        $tpl_id = isset( $_GET['olo_tpl'] ) ? (int) $_GET['olo_tpl'] : 0;
+
+        // Modalità inline (1): siamo già su un permalink reale.
+        if ( is_singular() ) {
+            $this->setup_inline_preview_mode();
+            return;
+        }
+
+        // Modalità inline (2): redirect automatico al primo post associato al template.
+        if ( $tpl_id ) {
+            $associated = get_posts( [
+                'post_type'      => 'any',
+                'meta_key'       => '_olo_template_id',
+                'meta_value'     => $tpl_id,
+                'posts_per_page' => 1,
+                'fields'         => 'ids',
+                'post_status'    => [ 'publish', 'private', 'draft' ],
+            ] );
+            if ( ! empty( $associated ) ) {
+                $url = get_permalink( $associated[0] );
+                if ( $url ) {
+                    $url = add_query_arg( [
+                        'olo_builder_iframe' => 1,
+                        'olo_tpl'            => $tpl_id,
+                    ], $url );
+                    wp_safe_redirect( $url );
+                    exit;
+                }
+            }
+        }
+
+        // Fallback: standalone iframe template (home root, no associated post).
         include OLO_PATH . 'templates/builder-iframe.php';
         exit;
+    }
+
+    /**
+     * Inline mode: WP renderizza la pagina; sostituiamo content con il placeholder
+     * del bridge e iniettiamo gli stessi asset del builder-iframe.php.
+     */
+    private function setup_inline_preview_mode() {
+        // Sostituisce il content del post con il placeholder che bridge.js aggiornerà.
+        add_filter( 'the_content', [ $this, 'inline_preview_replace_content' ], 999 );
+
+        // Sostituisce eventuale block `core/post-content` (block theme).
+        add_filter( 'render_block', [ $this, 'inline_preview_replace_post_content_block' ], 100, 2 );
+
+        // CSS inline in head (mode-specific) + asset bridge in footer.
+        add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_inline_preview_assets' ], 100 );
+        add_action( 'wp_head', [ $this, 'print_inline_preview_styles' ], 99 );
+
+        // Disabilita admin bar e altri overlay
+        show_admin_bar( false );
+    }
+
+    /** @internal Filter callback: rimpiazza the_content con placeholder. */
+    public function inline_preview_replace_content( $content ) {
+        return '<div id="olo-iframe-root"><div class="olo-iframe-empty">Caricamento preview...</div></div>';
+    }
+
+    /** @internal Filter callback: rimpiazza core/post-content block (block themes). */
+    public function inline_preview_replace_post_content_block( $html, $block ) {
+        if ( ( $block['blockName'] ?? '' ) === 'core/post-content' ) {
+            return '<div id="olo-iframe-root"><div class="olo-iframe-empty">Caricamento preview...</div></div>';
+        }
+        return $html;
+    }
+
+    /** @internal Enqueue degli stessi asset di templates/builder-iframe.php. */
+    public function enqueue_inline_preview_assets() {
+        // Core CSS (mirror del builder-iframe.php)
+        wp_enqueue_style( 'olo-uikit-inline', OLO_URL . 'assets/vendor/uikit/css/uikit.min.css', [], OLO_VERSION );
+        wp_enqueue_style( 'olo-frontend-inline', OLO_URL . 'assets/css/frontend.css', [], OLO_VERSION );
+        wp_enqueue_style( 'olo-iframe-builder-inline', OLO_URL . 'assets/css/iframe-builder.css', [], OLO_VERSION );
+        // Core JS
+        wp_enqueue_script( 'olo-uikit-inline', OLO_URL . 'assets/vendor/uikit/js/uikit.min.js', [], OLO_VERSION, true );
+        wp_enqueue_script( 'olo-uikit-icons-inline', OLO_URL . 'assets/vendor/uikit/js/uikit-icons.min.js', [ 'olo-uikit-inline' ], OLO_VERSION, true );
+        // Tile runtimes (proslider, postgrid, map, ecc.)
+        if ( file_exists( OLO_PATH . 'assets/js/olo-proslider.js' ) ) {
+            wp_enqueue_script( 'olo-proslider-js', OLO_URL . 'assets/js/olo-proslider.js', [], OLO_VERSION, true );
+        }
+        if ( file_exists( OLO_PATH . 'assets/js/olo-postgrid.js' ) ) {
+            wp_enqueue_script( 'olo-postgrid-js', OLO_URL . 'assets/js/olo-postgrid.js', [], OLO_VERSION, true );
+        }
+        if ( file_exists( OLO_PATH . 'assets/js/olo-utils.js' ) ) {
+            wp_enqueue_script( 'olo-utils', OLO_URL . 'assets/js/olo-utils.js', [], OLO_VERSION, true );
+        }
+        // Bridge: deve essere DOPO ogni runtime (postMessage receiver)
+        wp_enqueue_script( 'olo-iframe-bridge', OLO_URL . 'assets/js/iframe-bridge.js', [], OLO_VERSION, true );
+        // Mode flag letto dal bridge.js → segnala al parent (Vue useIframeBridge) che
+        // questa è una pagina WP reale, header/footer NON vanno re-iniettati.
+        wp_add_inline_script( 'olo-iframe-bridge', "window.OLO_IFRAME_MODE='inline';", 'before' );
+    }
+
+    /** @internal Stile inline per la modalità preview (mirror del builder-iframe.php). */
+    public function print_inline_preview_styles() {
+        ?>
+        <style id="olo-inline-preview-styles">
+        #olo-iframe-root { min-height: 60vh; }
+        .olo-iframe-empty { display: flex; align-items: center; justify-content: center; min-height: 40vh; color: #9CA3AF; font-family: system-ui, sans-serif; font-size: 14px; }
+        .olo-site-header.olo-header-sticky,
+        .olo-site-header.olo-header-classic.olo-header-sticky,
+        .olo-sticky-cover, .olo-sticky-reveal {
+            position: relative !important; top: auto !important; z-index: auto !important;
+        }
+        .olo-template { width: 100% !important; position: static !important; left: auto !important; transform: none !important; }
+        .olo-floatingpanel, .olo-fp-wrapper { scroll-margin-top: 80px; }
+        /* Hide WP admin bar gap if any */
+        html { margin-top: 0 !important; }
+        </style>
+        <?php
     }
 
     public function admin_menu() {
@@ -309,12 +435,16 @@ class Olo_Builder {
         $css_ver  = OLO_VERSION . '.' . ( file_exists( $css_path ) ? filemtime( $css_path ) : 0 );
         $js_ver   = OLO_VERSION . '.' . ( file_exists( $js_path )  ? filemtime( $js_path )  : 0 );
 
-        wp_enqueue_style(
-            'olobuilder-css',
-            OLO_URL . 'assets/css/builder.css',
-            [],
-            $css_ver
-        );
+        // CSS is bundled inline in builder.js by Vite (iife mode injects <style> tags at runtime).
+        // Enqueue only if a separate builder.css exists (e.g. if build config switches to extracted CSS).
+        if ( file_exists( $css_path ) ) {
+            wp_enqueue_style(
+                'olobuilder-css',
+                OLO_URL . 'assets/css/builder.css',
+                [],
+                $css_ver
+            );
+        }
 
         wp_enqueue_script(
             'olobuilder-js',
@@ -1079,32 +1209,8 @@ class Olo_Builder {
         require_once OLO_PATH . 'includes/tiles/class-marquee-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-togglebtn-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-form-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-calendar-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-booking-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-servicelist-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-serviceinfo-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-servicehero-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-servicestats-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-serviceprices-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-servicegallery-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-serviceamenities-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-servicecheckin-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-servicemushrooms-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-servicevideo-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-servicecipat-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-serviceaddress-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-servicedirections-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-servicerules-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-bookingpicker-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-serviceexcerpt-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-servicedescription-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-serviceclub-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-servicerelated-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-killnextprev-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-langswitcher-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-servicesearch-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-serviceresults-tile.php';
-        require_once OLO_PATH . 'includes/tiles/class-hostcard-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-livesearch-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-shatteredimage-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-textmask-tile.php';
@@ -1256,32 +1362,8 @@ class Olo_Builder {
         $manager->register_tile( new Olo_Marquee_Tile() );
         $manager->register_tile( new Olo_ToggleBtn_Tile() );
         $manager->register_tile( new Olo_Form_Tile() );
-        $manager->register_tile( new Olo_Calendar_Tile() );
-        $manager->register_tile( new Olo_Booking_Tile() );
-        $manager->register_tile( new Olo_ServiceList_Tile() );
-        $manager->register_tile( new Olo_ServiceInfo_Tile() );
-        $manager->register_tile( new Olo_ServiceHero_Tile() );
-        $manager->register_tile( new Olo_ServiceStats_Tile() );
-        $manager->register_tile( new Olo_ServicePrices_Tile() );
-        $manager->register_tile( new Olo_ServiceGallery_Tile() );
-        $manager->register_tile( new Olo_ServiceAmenities_Tile() );
-        $manager->register_tile( new Olo_ServiceCheckin_Tile() );
-        $manager->register_tile( new Olo_ServiceMushrooms_Tile() );
-        $manager->register_tile( new Olo_ServiceVideo_Tile() );
-        $manager->register_tile( new Olo_ServiceCipat_Tile() );
-        $manager->register_tile( new Olo_ServiceAddress_Tile() );
-        $manager->register_tile( new Olo_ServiceDirections_Tile() );
-        $manager->register_tile( new Olo_ServiceRules_Tile() );
-        $manager->register_tile( new Olo_BookingPicker_Tile() );
-        $manager->register_tile( new Olo_ServiceExcerpt_Tile() );
-        $manager->register_tile( new Olo_ServiceDescription_Tile() );
-        $manager->register_tile( new Olo_ServiceClub_Tile() );
-        $manager->register_tile( new Olo_ServiceRelated_Tile() );
         $manager->register_tile( new Olo_KillNextPrev_Tile() );
         $manager->register_tile( new Olo_LangSwitcher_Tile() );
-        $manager->register_tile( new Olo_ServiceSearch_Tile() );
-        $manager->register_tile( new Olo_ServiceResults_Tile() );
-        $manager->register_tile( new Olo_HostCard_Tile() );
         $manager->register_tile( new Olo_LiveSearch_Tile() );
         $manager->register_tile( new Olo_ShatteredImage_Tile() );
         $manager->register_tile( new Olo_Textmask_Tile() );

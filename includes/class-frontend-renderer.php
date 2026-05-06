@@ -1018,10 +1018,10 @@ class Olo_Frontend_Renderer {
         if ( ! empty( $style['border_radius'] ) )  $inline_styles[] = $this->css->build_border_radius_css( $style['border_radius'] );
 
         // Border
-        if ( ! empty( $style['border_width'] ) && intval( $style['border_width'] ) > 0 ) {
+        if ( ! empty( $style['border_width'] ) && intval( $style['border_width'] ) > 0 && ( $style['border_style'] ?? 'solid' ) !== 'none' ) {
             $bw = intval( $style['border_width'] );
             $bs = $this->safe_border_style( $style['border_style'] ?? 'solid' );
-            $bc = $this->safe_border_color( $style['border_color'] ?? '#374151' );
+            $bc = $this->safe_border_color( $style['border_color'] ?? 'transparent' );
             $inline_styles[] = "border: {$bw}px {$bs} {$bc}";
         }
 
@@ -1328,10 +1328,10 @@ class Olo_Frontend_Renderer {
         if ( ! empty( $style['border_radius'] ) )  $row_spacing_styles[] = $this->css->build_border_radius_css( $style['border_radius'] );
 
         // Border
-        if ( ! empty( $style['border_width'] ) && intval( $style['border_width'] ) > 0 ) {
+        if ( ! empty( $style['border_width'] ) && intval( $style['border_width'] ) > 0 && ( $style['border_style'] ?? 'solid' ) !== 'none' ) {
             $bw = intval( $style['border_width'] );
             $bs = $this->safe_border_style( $style['border_style'] ?? 'solid' );
-            $bc = $this->safe_border_color( $style['border_color'] ?? '#374151' );
+            $bc = $this->safe_border_color( $style['border_color'] ?? 'transparent' );
             $row_spacing_styles[] = "border: {$bw}px {$bs} {$bc}";
         }
 
@@ -1368,7 +1368,7 @@ class Olo_Frontend_Renderer {
 
         // Wrapper for row background or spacing
         $has_border_radius = ! empty( $style['border_radius'] );
-        $has_border = ! empty( $style['border_width'] ) && intval( $style['border_width'] ) > 0;
+        $has_border = ! empty( $style['border_width'] ) && intval( $style['border_width'] ) > 0 && ( $style['border_style'] ?? 'solid' ) !== 'none';
         $has_opacity = ! empty( $style['opacity'] ) && intval( $style['opacity'] ) < 100;
         $has_shadow = ! empty( $style['shadow'] );
         $has_spacing = ! empty( $row_spacing_styles );
@@ -1917,10 +1917,10 @@ class Olo_Frontend_Renderer {
         if ( ! empty( $style['border_radius'] ) )  $inline_styles[] = $this->css->build_border_radius_css( $style['border_radius'] );
 
         // Border
-        if ( ! empty( $style['border_width'] ) && intval( $style['border_width'] ) > 0 ) {
+        if ( ! empty( $style['border_width'] ) && intval( $style['border_width'] ) > 0 && ( $style['border_style'] ?? 'solid' ) !== 'none' ) {
             $bw = intval( $style['border_width'] );
             $bs = $this->safe_border_style( $style['border_style'] ?? 'solid' );
-            $bc = $this->safe_border_color( $style['border_color'] ?? '#374151' );
+            $bc = $this->safe_border_color( $style['border_color'] ?? 'transparent' );
             $inline_styles[] = "border: {$bw}px {$bs} {$bc}";
         }
 
@@ -2139,10 +2139,10 @@ class Olo_Frontend_Renderer {
         if ( ! empty( $style['border_radius'] ) ) $inline_styles[] = $this->css->build_border_radius_css( $style['border_radius'] );
 
         // Border
-        if ( ! empty( $style['border_width'] ) && intval( $style['border_width'] ) > 0 ) {
+        if ( ! empty( $style['border_width'] ) && intval( $style['border_width'] ) > 0 && ( $style['border_style'] ?? 'solid' ) !== 'none' ) {
             $bw = intval( $style['border_width'] );
             $bs = $this->safe_border_style( $style['border_style'] ?? 'solid' );
-            $bc = $this->safe_border_color( $style['border_color'] ?? '#374151' );
+            $bc = $this->safe_border_color( $style['border_color'] ?? 'transparent' );
             $inline_styles[] = "border: {$bw}px {$bs} {$bc}";
         }
 
@@ -2215,10 +2215,10 @@ class Olo_Frontend_Renderer {
         if ( ! empty( $style['border_radius'] ) ) $inline_styles[] = $this->css->build_border_radius_css( $style['border_radius'] );
 
         // Border
-        if ( ! empty( $style['border_width'] ) && intval( $style['border_width'] ) > 0 ) {
+        if ( ! empty( $style['border_width'] ) && intval( $style['border_width'] ) > 0 && ( $style['border_style'] ?? 'solid' ) !== 'none' ) {
             $bw = intval( $style['border_width'] );
             $bs = $this->safe_border_style( $style['border_style'] ?? 'solid' );
-            $bc = $this->safe_border_color( $style['border_color'] ?? '#374151' );
+            $bc = $this->safe_border_color( $style['border_color'] ?? 'transparent' );
             $inline_styles[] = "border: {$bw}px {$bs} {$bc}";
         }
 
@@ -2502,10 +2502,10 @@ class Olo_Frontend_Renderer {
 
         if ( ! empty( $style['border_radius'] ) )  $inline_styles[] = $this->css->build_border_radius_css( $style['border_radius'] );
 
-        if ( ! empty( $style['border_width'] ) && intval( $style['border_width'] ) > 0 ) {
+        if ( ! empty( $style['border_width'] ) && intval( $style['border_width'] ) > 0 && ( $style['border_style'] ?? 'solid' ) !== 'none' ) {
             $bw = intval( $style['border_width'] );
             $bs = $this->safe_border_style( $style['border_style'] ?? 'solid' );
-            $bc = $this->safe_border_color( $style['border_color'] ?? '#374151' );
+            $bc = $this->safe_border_color( $style['border_color'] ?? 'transparent' );
             $inline_styles[] = "border: {$bw}px {$bs} {$bc}";
         }
 

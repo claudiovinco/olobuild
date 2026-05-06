@@ -1,3 +1,5 @@
+
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 export default {
   type: 'woo_addtocart',
   name: 'Aggiungi al Carrello',
@@ -18,6 +20,10 @@ export default {
     hover_text: '',
     border_radius: '6',
     quantity_style: 'input',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { key: 'button_text', label: 'Testo pulsante', type: 'text' },
@@ -51,5 +57,6 @@ export default {
     { key: 'text_color', label: 'Colore testo', type: 'color' },
     { key: 'hover_bg', label: 'Sfondo hover', type: 'color' },
     { key: 'hover_text', label: 'Colore testo hover', type: 'color' },
+    ...borderFields(),
   ],
 };

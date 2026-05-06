@@ -34,6 +34,14 @@ class Olo_Woo_Cross_Sells_Tile extends Olo_Tile_Base {
         'heading_size'    => 20,
         'heading_color'   => '',
         'limit'           => 8,
+            'border'                  => [],
+        'border_hover'            => [],
+        'border_hover_duration'   => 300,
+        'border_effect'           => 'none',
+        'border_effect_intensity' => 'medium',
+        'border_effect_color2'    => '',
+        'border_effect_angle'     => 135,
+        'border_effect_speed'     => 4,
     ];
 
     public function get_controls() {
@@ -290,6 +298,15 @@ class Olo_Woo_Cross_Sells_Tile extends Olo_Tile_Base {
         $tfx_css = $this->tfx_css( $s, '.' . $uid );
         if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
         $this->tfx_print_script();
+                // Border system
+        $border_css        = $this->build_border_css( $s['border'] ?? [] );
+        $border_hover_css  = $this->build_border_hover_css( ".{$uid}", $s['border'] ?? [], $s['border_hover'] ?? [], intval( $s['border_hover_duration'] ?? 300 ) );
+        $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
+        if ( $border_css || $border_hover_css || $border_effect_css ) {
+            echo '<style>';
+            if ( $border_css ) echo ".{$uid}{{$border_css}}";
+            echo $border_hover_css . $border_effect_css . '</style>';
+        }
         return ob_get_clean();
     }
 }

@@ -1,4 +1,4 @@
-import { shadowField } from './_shared.js';
+import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 
 export default {
   type: 'animatedheading',
@@ -21,6 +21,10 @@ export default {
     highlight_style: 'underline',
     highlight_color: '',
     shadow: 'none',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { key: 'before_text', label: 'Testo prima', type: 'text' },
@@ -69,5 +73,6 @@ export default {
     { key: 'highlight_color', label: 'Colore evidenziazione', type: 'color',
       condition: { field: 'animation', operator: '==', value: 'highlight' } },
     ...shadowField,
+    ...borderFields(),
   ],
 };

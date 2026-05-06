@@ -1,4 +1,4 @@
-import { textEffectsFields, textEffectsDefaults } from './_shared';
+import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared';
 
 export default {
   type: 'pdfpro',
@@ -33,6 +33,10 @@ export default {
     hotspot_size: '14',
     hotspot_pulse: true,
     ...textEffectsDefaults,
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { type: 'separator', label: 'Sorgente' },
@@ -162,5 +166,6 @@ export default {
       { value: 'description', label: 'Solo Descrizione' },
       { value: 'all', label: 'Tutti gli elementi testuali' },
     ]),
+    ...borderFields(),
   ],
 };

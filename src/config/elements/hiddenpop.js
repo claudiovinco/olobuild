@@ -1,3 +1,4 @@
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 export default {
   type: 'hiddenpop',
   name: 'Popup Nascosto',
@@ -46,6 +47,10 @@ export default {
     display_referrer: '',
     tile_padding: { top: 0, right: 0, bottom: 0, left: 0 },
     border_radius: { tl: 0, tr: 0, br: 0, bl: 0 },
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     // ── Contenuto ──
@@ -155,5 +160,6 @@ export default {
     { key: 'tile_padding', type: 'spacing', label: 'Spaziatura interna' },
     { key: 'border_radius', type: 'border-radius', label: 'Raggio bordo' },
     { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
+    ...borderFields(),
   ],
 };

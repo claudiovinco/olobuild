@@ -785,9 +785,9 @@ function nodeEdgeDrop(nodeKind, node, parentId, index, allowedEdges) {
       { element, input, allowedEdges: allowedEdges || ['top', 'bottom'] }
     ),
     getIsSticky: () => true,
-    onDragEnter: ({ self }) => { self.element.classList.add('st-dnd-over'); },
-    onDragLeave: ({ self }) => { self.element.classList.remove('st-dnd-over'); },
-    onDrop: ({ self }) => { self.element.classList.remove('st-dnd-over'); },
+    onDragEnter: ({ self } = {}) => { if (self?.element) self.element.classList.add('st-dnd-over'); },
+    onDragLeave: ({ self } = {}) => { if (self?.element) self.element.classList.remove('st-dnd-over'); },
+    onDrop: ({ self } = {}) => { if (self?.element) self.element.classList.remove('st-dnd-over'); },
   };
 }
 

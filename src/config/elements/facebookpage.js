@@ -1,3 +1,5 @@
+
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 export default {
   type: 'facebookpage',
   name: 'Facebook Page',
@@ -14,6 +16,10 @@ export default {
     adapt_container: true,
     language: 'it_IT',
     alignment: 'center',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { key: 'page_url', label: 'URL pagina Facebook', type: 'text', placeholder: 'https://www.facebook.com/...' },
@@ -36,5 +42,6 @@ export default {
       { value: 'center', label: 'Centro' },
       { value: 'right', label: 'Destra' },
     ]},
+    ...borderFields(),
   ],
 };

@@ -1,3 +1,5 @@
+
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 export default {
   type: 'navmenu',
   name: 'Menu Nav',
@@ -80,6 +82,10 @@ export default {
     hamburger_color: '',
     hamburger_size: 24,
     menu_badge_support: false,
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     // --- Menu ---
@@ -278,5 +284,6 @@ export default {
     { key: 'hamburger_bg', label: 'Sfondo trigger', type: 'color' },
     { key: 'hamburger_color', label: 'Colore trigger', type: 'color' },
     { key: 'menu_badge_support', label: 'Supporto badge voci', type: 'toggle' },
+    ...borderFields(),
   ],
 };

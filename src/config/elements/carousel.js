@@ -1,4 +1,4 @@
-import { textEffectsFields, textEffectsDefaults } from './_shared';
+import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 export default {
   type: 'carousel',
   name: 'Carosello immagini',
@@ -21,6 +21,10 @@ export default {
     slide_height: 'auto',
     fixed_height: '300',
     border_radius: '8',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
     arrow_color: '',
     arrow_bg: '',
     dot_color: '',
@@ -83,6 +87,7 @@ export default {
       condition: { field: 'show_caption', value: true } },
     { key: 'caption_bg', label: 'Sfondo didascalia', type: 'color',
       condition: { field: 'show_caption', value: true } },
+    ...borderFields(),
     ...textEffectsFields([ { value: 'caption', label: 'Solo Didascalia' } ]),
   ],
 };

@@ -1,3 +1,5 @@
+
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 export default {
   type: 'woo_product_stock',
   name: 'Stock Prodotto',
@@ -15,6 +17,10 @@ export default {
     font_weight: '500',
     text_align: 'left',
     icon_size: '10',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { key: 'show_quantity', label: 'Mostra quantita', type: 'toggle' },
@@ -40,5 +46,6 @@ export default {
     { key: 'in_stock_color', label: 'Colore disponibile', type: 'color' },
     { key: 'out_of_stock_color', label: 'Colore non disponibile', type: 'color' },
     { key: 'low_stock_color', label: 'Colore scorte basse', type: 'color' },
+    ...borderFields(),
   ],
 };

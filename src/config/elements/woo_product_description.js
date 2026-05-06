@@ -1,3 +1,5 @@
+
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 export default {
   type: 'woo_product_description',
   name: 'Descrizione Prodotto',
@@ -11,6 +13,10 @@ export default {
     line_height: '1.6',
     text_align: 'left',
     max_lines: '0',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { key: 'content_type', label: 'Tipo contenuto', type: 'select', options: [
@@ -38,5 +44,6 @@ export default {
 
     { type: 'separator', label: 'Colori' },
     { key: 'text_color', label: 'Colore testo', type: 'color' },
+    ...borderFields(),
   ],
 };

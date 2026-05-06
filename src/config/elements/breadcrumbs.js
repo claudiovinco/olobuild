@@ -1,4 +1,4 @@
-import { shadowField } from './_shared.js';
+import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 
 export default {
   type: 'breadcrumbs',
@@ -11,6 +11,10 @@ export default {
     show_home: true,
     show_current: true,
     shadow: 'none',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { key: 'separator', label: 'Separatore', type: 'text' },
@@ -18,5 +22,6 @@ export default {
     { key: 'show_home', label: 'Mostra Home', type: 'toggle' },
     { key: 'show_current', label: 'Mostra pagina corrente', type: 'toggle' },
     ...shadowField,
+    ...borderFields(),
   ],
 };

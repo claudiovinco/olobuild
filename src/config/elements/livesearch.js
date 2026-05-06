@@ -1,4 +1,4 @@
-import { shadowField } from './_shared.js';
+import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 
 export default {
   type: 'livesearch',
@@ -57,6 +57,10 @@ export default {
 
     // Bordo/Ombra
     shadow: 'none',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
 
   fields: [
@@ -147,5 +151,6 @@ export default {
 
     // ─── Bordo / Ombra ───
     ...shadowField,
+    ...borderFields(),
   ],
 };

@@ -16,17 +16,26 @@ class Olo_Footer_Integration {
      * Add body class when Olobuild footer is active (sticky footer CSS).
      */
     public function add_footer_body_class( $classes ) {
-        $override = 0;
-        if ( is_singular() ) {
-            $override = (int) get_post_meta( get_queried_object_id(), '_olo_footer_id', true );
-        }
-        $footer_id = $override ?: (int) get_option( 'olo_active_footer', 0 );
-
-        if ( $footer_id ) {
+        if ( $this->resolve_active_footer() ) {
             $classes[] = 'olo-has-footer';
         }
-
         return $classes;
+    }
+
+    /**
+     * Risolve il template Footer attivo secondo la priorità:
+     *   1) override per-pagina (`_olo_footer_id` post-meta)
+     *   2) regole di visualizzazione (Olo_Template_Conditions)
+     *   3) footer globale (`olo_active_footer` option)
+     */
+    private function resolve_active_footer() {
+        if ( is_singular() ) {
+            $override = (int) get_post_meta( get_queried_object_id(), '_olo_footer_id', true );
+            if ( $override ) return $override;
+        }
+        $by_rules = (int) apply_filters( 'olo_resolve_template_id', 0, 'footer' );
+        if ( $by_rules ) return $by_rules;
+        return (int) get_option( 'olo_active_footer', 0 );
     }
 
     /**
@@ -42,12 +51,7 @@ class Olo_Footer_Integration {
             return $html;
         }
 
-        // Per-page override, then global fallback
-        $override = 0;
-        if ( is_singular() ) {
-            $override = (int) get_post_meta( get_queried_object_id(), '_olo_footer_id', true );
-        }
-        $footer_id = $override ?: (int) get_option( 'olo_active_footer', 0 );
+        $footer_id = $this->resolve_active_footer();
 
         if ( ! $footer_id ) {
             return $html;
@@ -78,11 +82,7 @@ class Olo_Footer_Integration {
      * Uses wp_style_is/wp_script_is to avoid double enqueue if header is also active.
      */
     public function maybe_enqueue_global_assets() {
-        $override = 0;
-        if ( is_singular() ) {
-            $override = (int) get_post_meta( get_queried_object_id(), '_olo_footer_id', true );
-        }
-        $footer_id = $override ?: (int) get_option( 'olo_active_footer', 0 );
+        $footer_id = $this->resolve_active_footer();
         if ( ! $footer_id ) {
             return;
         }

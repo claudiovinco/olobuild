@@ -1,4 +1,4 @@
-import { shadowField } from './_shared.js';
+import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 
 export default {
   type: 'icon',
@@ -19,6 +19,10 @@ export default {
     link_url: '',
     link_target: '_self',
     shadow: 'none',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { key: 'icon', label: 'Nome icona', type: 'icon' },
@@ -52,5 +56,6 @@ export default {
       { value: '_blank', label: 'Nuova finestra' },
     ]},
     ...shadowField,
+    ...borderFields(),
   ],
 };

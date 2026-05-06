@@ -1,3 +1,5 @@
+
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 export default {
   type: 'soundcloud',
   name: 'SoundCloud',
@@ -13,6 +15,10 @@ export default {
     height: '166',
     alignment: 'center',
     border_radius: '8',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { key: 'url', label: 'URL SoundCloud', type: 'text', placeholder: 'https://soundcloud.com/...' },
@@ -31,5 +37,6 @@ export default {
     ]},
     { key: 'border_radius', label: 'Arrotondamento angoli (px)', type: 'border-radius' },
     { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
+    ...borderFields(),
   ],
 };

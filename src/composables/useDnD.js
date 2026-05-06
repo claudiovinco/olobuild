@@ -42,13 +42,24 @@ export const vOloDraggable = {
     applyDraggable(el, binding.value || {});
   },
   updated(el, binding) {
-    // CRUCIALE: NON fare teardown+reapply ad ogni re-render, altrimenti il drag
-    // attivo viene interrotto quando Vue re-renderizza. Aggiorniamo solo l'oggetto
-    // opts in place; le callback registrate in Pragmatic leggono __oloOpts via closure.
-    el.__oloOpts = binding.value || {};
+    const newOpts = binding.value || {};
+    el.__oloDraggableOpts = newOpts;
+    // Se il dragHandle è un selettore stringa, Pragmatic ha salvato un Element
+    // reference RISOLTO al mount-time. Se Vue re-renderizza la riga (es.
+    // StructureTree dopo selezione / expand) l'Element originale viene
+    // detached → Pragmatic rifiuta il drag (mostra il cursor "no-drop"
+    // ovunque). Quando il selettore non match più sull'handle salvato,
+    // ricreiamo la registrazione Pragmatic con il nuovo Element.
+    if (typeof newOpts.dragHandle === 'string') {
+      const currentHandle = el.querySelector(newOpts.dragHandle) || null;
+      if (el.__oloDragHandle !== currentHandle) {
+        teardownDraggable(el);
+        applyDraggable(el, newOpts);
+      }
+    }
   },
   unmounted(el) {
-    teardown(el);
+    teardownDraggable(el);
   },
 };
 
@@ -69,20 +80,24 @@ export const vOloDropTarget = {
     applyDropTarget(el, binding.value || {});
   },
   updated(el, binding) {
-    // Stabile come vOloDraggable: aggiorna solo __oloOpts, non re-registra Pragmatic.
-    el.__oloOpts = binding.value || {};
+    // Stabile: aggiorna solo le opts, non re-registra Pragmatic.
+    el.__oloDropTargetOpts = binding.value || {};
   },
   unmounted(el) {
-    teardown(el);
+    teardownDropTarget(el);
   },
 };
 
 function applyDraggable(el, opts) {
-  // Salviamo le opts in un slot mutevole; le callback leggono sempre el.__oloOpts corrente.
-  el.__oloOpts = opts;
+  // CRITICO: usiamo uno slot SEPARATO da __oloDropTargetOpts. Quando
+  // v-olo-draggable e v-olo-drop-target sono usati sullo stesso element
+  // (es. StructureTree st-item) condividere uno slot unico fa sì che la
+  // seconda directive sovrascriva la prima → getInitialData del draggable
+  // viene perso → source.data undefined → tutti i drop vengono rifiutati.
+  el.__oloDraggableOpts = opts;
 
   const resolveDragHandle = () => {
-    const o = el.__oloOpts || {};
+    const o = el.__oloDraggableOpts || {};
     if (!o.dragHandle) return undefined;
     if (typeof o.dragHandle === 'string') {
       return el.querySelector(o.dragHandle) || undefined;
@@ -90,38 +105,48 @@ function applyDraggable(el, opts) {
     return o.dragHandle;
   };
 
+  const handle = resolveDragHandle();
+  el.__oloDragHandle = handle || null;
   const cleanup = draggable({
     element: el,
-    dragHandle: resolveDragHandle(),
-    getInitialData: (arg) => el.__oloOpts?.getInitialData?.(arg),
-    canDrag: (arg) => (el.__oloOpts?.canDrag ? el.__oloOpts.canDrag(arg) : true),
-    onGenerateDragPreview: (arg) => el.__oloOpts?.onGenerateDragPreview?.(arg),
-    onDragStart: (arg) => el.__oloOpts?.onDragStart?.(arg),
-    onDrag: (arg) => el.__oloOpts?.onDrag?.(arg),
-    onDrop: (arg) => el.__oloOpts?.onDrop?.(arg),
+    dragHandle: handle,
+    getInitialData: (arg) => el.__oloDraggableOpts?.getInitialData?.(arg),
+    canDrag: (arg) => (el.__oloDraggableOpts?.canDrag ? el.__oloDraggableOpts.canDrag(arg) : true),
+    onGenerateDragPreview: (arg) => el.__oloDraggableOpts?.onGenerateDragPreview?.(arg),
+    onDragStart: (arg) => el.__oloDraggableOpts?.onDragStart?.(arg),
+    onDrag: (arg) => el.__oloDraggableOpts?.onDrag?.(arg),
+    onDrop: (arg) => el.__oloDraggableOpts?.onDrop?.(arg),
   });
-  el.__oloCleanup = cleanup;
+  el.__oloDraggableCleanup = cleanup;
 }
 
 function applyDropTarget(el, opts) {
-  el.__oloOpts = opts;
+  // Vedi commento in applyDraggable: slot separato per non sovrascrivere
+  // gli opts del draggable montato sullo stesso element.
+  el.__oloDropTargetOpts = opts;
 
   const cleanup = dropTargetForElements({
     element: el,
-    canDrop: (arg) => (el.__oloOpts?.canDrop ? el.__oloOpts.canDrop(arg) : true),
-    getData: (arg) => (el.__oloOpts?.getData ? el.__oloOpts.getData(arg) : {}),
-    getIsSticky: (arg) => (el.__oloOpts?.getIsSticky ? el.__oloOpts.getIsSticky(arg) : false),
-    onDragEnter: (arg) => el.__oloOpts?.onDragEnter?.(arg),
-    onDrag: (arg) => el.__oloOpts?.onDrag?.(arg),
-    onDragLeave: (arg) => el.__oloOpts?.onDragLeave?.(arg),
-    onDrop: (arg) => el.__oloOpts?.onDrop?.(arg),
+    canDrop: (arg) => (el.__oloDropTargetOpts?.canDrop ? el.__oloDropTargetOpts.canDrop(arg) : true),
+    getData: (arg) => (el.__oloDropTargetOpts?.getData ? el.__oloDropTargetOpts.getData(arg) : {}),
+    getIsSticky: (arg) => (el.__oloDropTargetOpts?.getIsSticky ? el.__oloDropTargetOpts.getIsSticky(arg) : false),
+    onDragEnter: (arg) => el.__oloDropTargetOpts?.onDragEnter?.(arg),
+    onDrag: (arg) => el.__oloDropTargetOpts?.onDrag?.(arg),
+    onDragLeave: (arg) => el.__oloDropTargetOpts?.onDragLeave?.(arg),
+    onDrop: (arg) => el.__oloDropTargetOpts?.onDrop?.(arg),
   });
-  el.__oloCleanup = cleanup;
+  el.__oloDropTargetCleanup = cleanup;
 }
 
-function teardown(el) {
-  if (typeof el.__oloCleanup === 'function') el.__oloCleanup();
-  el.__oloCleanup = null;
+function teardownDraggable(el) {
+  if (typeof el.__oloDraggableCleanup === 'function') el.__oloDraggableCleanup();
+  el.__oloDraggableCleanup = null;
+  el.__oloDragHandle = null;
+}
+
+function teardownDropTarget(el) {
+  if (typeof el.__oloDropTargetCleanup === 'function') el.__oloDropTargetCleanup();
+  el.__oloDropTargetCleanup = null;
 }
 
 // ───────────────────────────────────────────────────────────────────────────

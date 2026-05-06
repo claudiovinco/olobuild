@@ -27,6 +27,14 @@ class Olo_PostMeta_Tile extends Olo_Tile_Base {
         'font_size'           => '14',
         'author_link'         => true,
         'category_link'       => true,
+            'border'                  => [],
+        'border_hover'            => [],
+        'border_hover_duration'   => 300,
+        'border_effect'           => 'none',
+        'border_effect_intensity' => 'medium',
+        'border_effect_color2'    => '',
+        'border_effect_angle'     => 135,
+        'border_effect_speed'     => 4,
     ];
 
     public function get_controls() {
@@ -35,6 +43,7 @@ class Olo_PostMeta_Tile extends Olo_Tile_Base {
 
     public function render( $settings ) {
         $s = wp_parse_args( $settings, $this->defaults );
+        $uid = 'olo-pm-' . wp_rand( 10000, 99999 );
 
         $post_id = get_the_ID();
         $post    = get_post( $post_id );
@@ -205,7 +214,7 @@ class Olo_PostMeta_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
-        <div class="olo-postmeta" style="<?php echo esc_attr( $wrap_style ); ?>">
+        <div class="olo-postmeta <?php echo esc_attr( $uid ); ?>" style="<?php echo esc_attr( $wrap_style ); ?>">
             <?php
             $total = count( $items );
             foreach ( $items as $i => $item_html ) {
@@ -219,6 +228,15 @@ class Olo_PostMeta_Tile extends Olo_Tile_Base {
             ?>
         </div>
         <?php
+                // Border system
+        $border_css        = $this->build_border_css( $s['border'] ?? [] );
+        $border_hover_css  = $this->build_border_hover_css( ".{$uid}", $s['border'] ?? [], $s['border_hover'] ?? [], intval( $s['border_hover_duration'] ?? 300 ) );
+        $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
+        if ( $border_css || $border_hover_css || $border_effect_css ) {
+            echo '<style>';
+            if ( $border_css ) echo ".{$uid}{{$border_css}}";
+            echo $border_hover_css . $border_effect_css . '</style>';
+        }
         return ob_get_clean();
     }
 

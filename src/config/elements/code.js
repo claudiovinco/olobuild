@@ -1,4 +1,4 @@
-import { shadowField } from './_shared.js';
+import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 
 export default {
   type: 'code',
@@ -15,6 +15,10 @@ export default {
     max_height: '',
     wrap_lines: false,
     shadow: 'none',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { key: 'code', label: 'Codice', type: 'textarea' },
@@ -33,5 +37,6 @@ export default {
     { key: 'max_height', label: 'Altezza massima (px, vuoto = auto)', type: 'text' },
     { key: 'wrap_lines', label: 'Avvolgi righe lunghe', type: 'toggle' },
     ...shadowField,
+    ...borderFields(),
   ],
 };

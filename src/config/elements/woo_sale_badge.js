@@ -1,3 +1,5 @@
+
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 export default {
   type: 'woo_sale_badge',
   name: 'Badge Offerta',
@@ -13,6 +15,10 @@ export default {
     position: 'top-left',
     font_size: '14',
     font_weight: '700',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { key: 'badge_text', label: 'Testo badge', type: 'select', options: [
@@ -45,5 +51,6 @@ export default {
     { type: 'separator', label: 'Colori' },
     { key: 'badge_bg', label: 'Sfondo badge', type: 'color' },
     { key: 'badge_color', label: 'Colore testo badge', type: 'color' },
+    ...borderFields(),
   ],
 };

@@ -849,3 +849,66 @@ export const cssGridDefaults = {
   grid_align_items: 'stretch',
   grid_justify_items: 'stretch',
 };
+
+// ─── Border system ─────────────────────────────────────────────────────────
+
+export const borderDefault = {
+  top: 0, right: 0, bottom: 0, left: 0,
+  linked: true, style: 'solid', color: '',
+};
+
+export const borderHoverDefault = {
+  top: 0, right: 0, bottom: 0, left: 0,
+  linked: true, style: '', color: '',
+};
+
+export const borderEffectDefaults = {
+  border_effect:           'none',
+  border_effect_intensity: 'medium',
+  border_effect_color2:    '',
+  border_effect_angle:     135,
+  border_effect_speed:     4,
+};
+
+/**
+ * Restituisce l'array di fields per la sezione Bordo dell'inspector.
+ * @param {Object} opts  { key, hoverKey, durationKey } — override chiavi default
+ */
+export function borderFields(opts = {}) {
+  const key      = opts.key          ?? 'border';
+  const hoverKey = opts.hoverKey     ?? 'border_hover';
+  const durKey   = opts.durationKey  ?? 'border_hover_duration';
+
+  return [
+    { type: 'separator', label: 'Bordo' },
+    { key, label: 'Bordo', type: 'border' },
+    { key: hoverKey, label: 'Bordo hover', type: 'border',
+      description: 'Vuoto = invariato al hover' },
+    { key: durKey, label: 'Durata transizione (ms)', type: 'range',
+      min: 100, max: 1500, step: 50 },
+
+    { type: 'separator', label: 'Effetti bordo' },
+    { key: 'border_effect', label: 'Effetto', type: 'select', options: [
+      { value: 'none',          label: 'Nessuno' },
+      { value: 'neon',          label: 'Neon glow' },
+      { value: 'neon-pulse',    label: 'Neon pulsante' },
+      { value: 'gradient',      label: 'Gradiente statico' },
+      { value: 'gradient-spin', label: 'Gradiente rotante' },
+    ]},
+    { key: 'border_effect_intensity', label: 'Intensità glow', type: 'select',
+      options: [
+        { value: 'subtle',  label: 'Sottile' },
+        { value: 'medium',  label: 'Media' },
+        { value: 'intense', label: 'Intensa' },
+      ],
+      condition: { field: 'border_effect', op: 'in', value: ['neon', 'neon-pulse'] } },
+    { key: 'border_effect_color2', label: 'Colore 2', type: 'color',
+      condition: { field: 'border_effect', op: 'in', value: ['gradient', 'gradient-spin'] } },
+    { key: 'border_effect_angle', label: 'Angolo gradiente (°)', type: 'range',
+      min: 0, max: 360, step: 5,
+      condition: { field: 'border_effect', op: '=', value: 'gradient' } },
+    { key: 'border_effect_speed', label: 'Velocità rotazione (s)', type: 'range',
+      min: 1, max: 20, step: 1,
+      condition: { field: 'border_effect', op: '=', value: 'gradient-spin' } },
+  ];
+}

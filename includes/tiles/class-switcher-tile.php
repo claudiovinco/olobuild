@@ -18,6 +18,14 @@ class Olo_Switcher_Tile extends Olo_Tile_Base {
         'nav_style' => 'tab',
         'animation' => '',
         'vertical'  => false,
+            'border'                  => [],
+        'border_hover'            => [],
+        'border_hover_duration'   => 300,
+        'border_effect'           => 'none',
+        'border_effect_intensity' => 'medium',
+        'border_effect_color2'    => '',
+        'border_effect_angle'     => 135,
+        'border_effect_speed'     => 4,
     ];
 
     public function get_controls() {
@@ -48,12 +56,13 @@ class Olo_Switcher_Tile extends Olo_Tile_Base {
         $nav_style = $s['nav_style'] ?: 'tab';
         $vertical  = ! empty( $s['vertical'] );
 
-        ob_start();
+                $uid = 'olo-sw-' . wp_rand( 10000, 99999 );
+ob_start();
 
         if ( $vertical ) :
             // Vertical layout
             ?>
-            <div class="olo-switcher" uk-grid>
+            <div class="olo-switcher <?php echo esc_attr( $uid ); ?>" uk-grid>
                 <div class="uk-width-auto">
                     <ul class="uk-tab-left" uk-tab="connect: .olo-switcher-content; <?php echo esc_attr( $switcher_attr ); ?>">
                         <?php foreach ( $items as $i => $item ) : ?>
@@ -76,7 +85,7 @@ class Olo_Switcher_Tile extends Olo_Tile_Base {
             // For subnav styles, the connect attribute goes on the nav element
             if ( $nav_style === 'tab' || $nav_style === 'tab-underline' ) :
                 ?>
-                <div class="olo-switcher">
+                <div class="olo-switcher <?php echo esc_attr( $uid ); ?>">
                     <ul class="<?php echo esc_attr( $nav_class ); ?>" uk-tab="connect: .olo-switcher-content; <?php echo esc_attr( $switcher_attr ); ?>">
                         <?php foreach ( $items as $i => $item ) : ?>
                         <li<?php echo $i === 0 ? ' class="uk-active"' : ''; ?>><?php list( $swt_cls, $swt_data ) = $this->tfx_attrs( $s, "title", wp_strip_all_tags( $item["title"] ) ); ?><a href="#" class="<?php echo trim( $swt_cls ); ?>"<?php echo $swt_data; ?>><?php echo esc_html( wp_strip_all_tags( $item["title"] ) ); ?></a></li>
@@ -92,7 +101,7 @@ class Olo_Switcher_Tile extends Olo_Tile_Base {
             else :
                 // subnav / subnav-pill
                 ?>
-                <div class="olo-switcher">
+                <div class="olo-switcher <?php echo esc_attr( $uid ); ?>">
                     <ul class="<?php echo esc_attr( $nav_class ); ?>" uk-switcher="<?php echo esc_attr( $switcher_attr ); ?>">
                         <?php foreach ( $items as $i => $item ) : ?>
                         <li<?php echo $i === 0 ? ' class="uk-active"' : ''; ?>><?php list( $swt_cls, $swt_data ) = $this->tfx_attrs( $s, "title", wp_strip_all_tags( $item["title"] ) ); ?><a href="#" class="<?php echo trim( $swt_cls ); ?>"<?php echo $swt_data; ?>><?php echo esc_html( wp_strip_all_tags( $item["title"] ) ); ?></a></li>
@@ -111,6 +120,15 @@ class Olo_Switcher_Tile extends Olo_Tile_Base {
         $tfx_css = $this->tfx_css( $s, '.olo-switcher' );
         if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
         $this->tfx_print_script();
+                // Border system
+        $border_css        = $this->build_border_css( $s['border'] ?? [] );
+        $border_hover_css  = $this->build_border_hover_css( ".{$uid}", $s['border'] ?? [], $s['border_hover'] ?? [], intval( $s['border_hover_duration'] ?? 300 ) );
+        $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
+        if ( $border_css || $border_hover_css || $border_effect_css ) {
+            echo '<style>';
+            if ( $border_css ) echo ".{$uid}{{$border_css}}";
+            echo $border_hover_css . $border_effect_css . '</style>';
+        }
         return ob_get_clean();
     }
 

@@ -37,6 +37,14 @@ class Olo_Image_Tile extends Olo_Tile_Base {
         'border_radius'    => '0',
         'hover_border_radius' => '',
         'hover_radius_duration' => '400',
+        'border'              => [],
+        'border_hover'        => [],
+        'border_hover_duration' => 300,
+        'border_effect'           => 'none',
+        'border_effect_intensity' => 'medium',
+        'border_effect_color2'    => '',
+        'border_effect_angle'     => 135,
+        'border_effect_speed'     => 4,
     ];
 
     public function get_controls() {
@@ -122,6 +130,21 @@ class Olo_Image_Tile extends Olo_Tile_Base {
         }
         $br_duration   = max( 50, intval( $s['hover_radius_duration'] ?? 400 ) );
 
+        // Border system
+        $border_d       = $this->parse_border( $s['border'] ?? [] );
+        $border_css     = $this->build_border_css( $s['border'] ?? [] );
+        $border_hover_css = $this->build_border_hover_css(
+            ".{$uid}.olo-image",
+            $s['border'] ?? [],
+            $s['border_hover'] ?? [],
+            intval( $s['border_hover_duration'] ?? 300 )
+        );
+        $border_effect_css = $this->build_border_effect_css(
+            ".{$uid}.olo-image",
+            $s['border'] ?? [],
+            $s
+        );
+
         ob_start();
 
         if ( $filter_css || $hover_filter_css || $hover_transform || $anim === 'blur-in' || $has_hover_br ) {
@@ -140,11 +163,19 @@ class Olo_Image_Tile extends Olo_Tile_Base {
                 echo ".{$uid} img { filter:" . ($filter_css ? $filter_css . ' ' : '') . "blur(3px); }";
                 echo ".{$uid}:hover img { filter:" . ($filter_css ?: '') . "blur(0); }";
             }
-            // Hover border-radius — applied to the figure wrapper (which has overflow:hidden + base radius)
             if ( $has_hover_br ) {
                 echo ".{$uid}.olo-image{transition:border-radius {$br_duration}ms cubic-bezier(.4,0,.2,1);}";
                 echo ".{$uid}.olo-image:hover{border-radius:{$hover_br_css}!important;}";
             }
+            echo '</style>';
+        }
+
+        // CSS bordo, hover bordo, effetti bordo
+        if ( $border_css || $border_hover_css || $border_effect_css ) {
+            echo '<style>';
+            if ( $border_css ) echo ".{$uid}.olo-image{{$border_css}}";
+            if ( $border_hover_css ) echo $border_hover_css;
+            if ( $border_effect_css ) echo $border_effect_css;
             echo '</style>';
         }
         ?>
@@ -153,7 +184,6 @@ class Olo_Image_Tile extends Olo_Tile_Base {
         if ( $br_css ) {
             $figure_style .= ' border-radius: ' . esc_attr( $br_css ) . '; overflow: hidden;';
         } elseif ( $has_hover_br ) {
-            // Need overflow:hidden + explicit border-radius:0 for the hover transition to start from 0 and clip the image
             $figure_style .= ' border-radius: 0; overflow: hidden;';
         }
         ?>

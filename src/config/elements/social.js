@@ -1,4 +1,4 @@
-import { shadowField } from './_shared.js';
+import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 
 export default {
   type: 'social',
@@ -21,8 +21,13 @@ export default {
     icon_color: '',
     hover_effect: 'lift',
     use_brand_colors: true,
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
+    { type: 'separator', label: 'Piattaforme' },
     { key: 'links', label: 'Piattaforme', type: 'content-items',
       itemFields: [
         { key: 'platform', label: 'Piattaforma', type: 'select', options: [
@@ -46,13 +51,18 @@ export default {
         { key: 'url', label: 'URL', type: 'text' },
       ],
     },
+    { key: 'show_labels', label: 'Mostra nomi piattaforma', type: 'toggle' },
+
+    { type: 'separator', label: 'Layout' },
     { key: 'size', label: 'Dim. icona (px)', type: 'range', min: 20, max: 60, step: 4 },
+    { key: 'gap', label: 'Gap (px)', type: 'range', min: 0, max: 48, step: 4 },
     { key: 'alignment', label: 'Allineamento', type: 'select', options: [
       { value: 'left', label: 'Sinistra' },
       { value: 'center', label: 'Centro' },
       { value: 'right', label: 'Destra' },
     ]},
-    { key: 'gap', label: 'Gap (px)', type: 'range', min: 0, max: 48, step: 4 },
+
+    { type: 'separator', label: 'Stile' },
     { key: 'style', label: 'Stile', type: 'select', options: [
       { value: 'filled', label: 'Pieno (sfondo colorato)' },
       { value: 'outline', label: 'Contorno' },
@@ -61,13 +71,17 @@ export default {
     { key: 'use_brand_colors', label: 'Colori brand', type: 'toggle' },
     { key: 'icon_color', label: 'Colore personalizzato', type: 'color',
       condition: { field: 'use_brand_colors', operator: '!=', value: true } },
-    { key: 'show_labels', label: 'Mostra nomi piattaforma', type: 'toggle' },
+
+    { type: 'separator', label: 'Hover' },
     { key: 'hover_effect', label: 'Effetto hover', type: 'select', options: [
       { value: 'none', label: 'Nessuno' },
       { value: 'lift', label: 'Solleva' },
       { value: 'grow', label: 'Ingrandisci' },
       { value: 'glow', label: 'Bagliore' },
     ]},
+
+    { type: 'separator', label: 'Aspetto' },
     ...shadowField,
+    ...borderFields(),
   ],
 };

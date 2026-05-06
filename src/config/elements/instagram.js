@@ -1,3 +1,5 @@
+
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 export default {
   type: 'instagram',
   name: 'Instagram',
@@ -11,6 +13,10 @@ export default {
     background_color: '',
     border_radius: '8',
     alignment: 'center',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { key: 'url', label: 'URL Instagram', type: 'text', placeholder: 'https://www.instagram.com/p/...' },
@@ -28,5 +34,6 @@ export default {
       { value: 'center', label: 'Centro' },
       { value: 'right', label: 'Destra' },
     ]},
+    ...borderFields(),
   ],
 };

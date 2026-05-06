@@ -25,7 +25,15 @@ class Olo_Audio_Tile extends Olo_Tile_Base {
         'border_radius'  => '8',
         'title'          => '',
         'artist'         => '',
-        'cover_image'    => '',
+        'cover_image'             => '',
+        'border'                  => [],
+        'border_hover'            => [],
+        'border_hover_duration'   => 300,
+        'border_effect'           => 'none',
+        'border_effect_intensity' => 'medium',
+        'border_effect_color2'    => '',
+        'border_effect_angle'     => 135,
+        'border_effect_speed'     => 4,
     ];
 
     public function get_controls() {
@@ -54,6 +62,7 @@ class Olo_Audio_Tile extends Olo_Tile_Base {
 
     public function render( $settings ) {
         $s = wp_parse_args( $settings, $this->defaults );
+        $this->_audio_uid = 'olo-audio-' . wp_unique_id();
 
         $src = '';
         if ( $s['source_type'] === 'url' ) {
@@ -77,6 +86,16 @@ class Olo_Audio_Tile extends Olo_Tile_Base {
             $html .= '<style>' . $tfx_css . '</style>';
             ob_start(); $this->tfx_print_script(); $html .= ob_get_clean();
         }
+        // Border system
+        $a_uid = $this->_audio_uid;
+        $border_css        = $this->build_border_css( $s['border'] ?? [] );
+        $border_hover_css  = $this->build_border_hover_css( "#{$a_uid}", $s['border'] ?? [], $s['border_hover'] ?? [], intval( $s['border_hover_duration'] ?? 300 ) );
+        $border_effect_css = $this->build_border_effect_css( "#{$a_uid}", $s['border'] ?? [], $s );
+        if ( $border_css || $border_hover_css || $border_effect_css ) {
+            $html .= '<style>';
+            if ( $border_css ) $html .= "#{$a_uid}{{$border_css}}";
+            $html .= $border_hover_css . $border_effect_css . '</style>';
+        }
         return $html;
     }
 
@@ -91,7 +110,7 @@ class Olo_Audio_Tile extends Olo_Tile_Base {
         $accent       = $this->safe_color_css( $s['accent_color'] );
         $text_color   = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-text, #374151)';
 
-        $uid = 'olo-audio-' . wp_unique_id();
+        $uid = $this->_audio_uid ?? ( 'olo-audio-' . wp_unique_id() );
 
         ob_start();
         ?>
@@ -151,7 +170,7 @@ class Olo_Audio_Tile extends Olo_Tile_Base {
         $radius     = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
         $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
 
-        $uid = 'olo-audio-' . wp_unique_id();
+        $uid = $this->_audio_uid ?? ( 'olo-audio-' . wp_unique_id() );
 
         ob_start();
         ?>
@@ -251,7 +270,7 @@ class Olo_Audio_Tile extends Olo_Tile_Base {
         $radius     = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
         $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
 
-        $uid = 'olo-audio-' . wp_unique_id();
+        $uid = $this->_audio_uid ?? ( 'olo-audio-' . wp_unique_id() );
 
         ob_start();
         ?>

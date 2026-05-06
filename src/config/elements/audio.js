@@ -1,5 +1,4 @@
-import { textEffectsFields, textEffectsDefaults } from './_shared';
-import { shadowField } from './_shared.js';
+import { textEffectsFields, textEffectsDefaults, shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 
 export default {
   type: 'audio',
@@ -19,6 +18,10 @@ export default {
     bg_color: '',
     text_color: '',
     border_radius: '8',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
     title: '',
     artist: '',
     cover_image: '',
@@ -57,6 +60,7 @@ export default {
     { key: 'cover_image', label: 'Immagine copertina', type: 'image' },
 
     ...shadowField,
+    ...borderFields(),
     ...textEffectsFields([ { value: 'title', label: 'Solo Titolo' } ]),
   ],
 };

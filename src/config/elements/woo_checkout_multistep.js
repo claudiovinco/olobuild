@@ -1,3 +1,5 @@
+
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 export default {
   type: 'woo_checkout_multistep',
   name: 'Checkout Multi-step WC',
@@ -13,6 +15,10 @@ export default {
     text_color: '#374151',
     card_radius: 12,
     show_order_review: true,
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { key: 'step_labels', label: 'Etichette step (virgola)', type: 'text' },
@@ -29,5 +35,6 @@ export default {
     { key: 'step_bg', label: 'Sfondo step', type: 'color' },
     { key: 'card_radius', label: 'Arrotondamento (px)', type: 'border-radius' },
     { key: 'card_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
+    ...borderFields(),
   ],
 };

@@ -1,3 +1,5 @@
+
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 export default {
   type: 'woo_comparison',
   name: 'WC Confronto Prodotti',
@@ -16,6 +18,10 @@ export default {
     show_add_to_cart: true,
     header_bg: '#F9FAFB',
     header_color: '',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { key: 'max_products', label: 'Massimo prodotti', type: 'range', min: 2, max: 6 },
@@ -31,5 +37,6 @@ export default {
     { type: 'separator', label: 'Colori' },
     { key: 'header_bg', label: 'Sfondo intestazione', type: 'color' },
     { key: 'header_color', label: 'Colore intestazione', type: 'color' },
+    ...borderFields(),
   ],
 };

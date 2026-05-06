@@ -1,5 +1,4 @@
-import { textEffectsFields, textEffectsDefaults } from './_shared';
-import { shadowField } from './_shared.js';
+import { textEffectsFields, textEffectsDefaults, filterFields, filterDefaults, shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 
 export default {
   type: 'overlay',
@@ -19,7 +18,12 @@ export default {
     height: '300',
     shadow: 'none',
     border_radius: '0',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
     ...textEffectsDefaults,
+    ...filterDefaults,
   },
   fields: [
     { key: 'image_url', label: 'Immagine', type: 'image' },
@@ -42,6 +46,8 @@ export default {
     { key: 'overlay_opacity', label: 'Opacità overlay (%)', type: 'range', min: 0, max: 100, step: 5 },
     { key: 'height', label: 'Altezza (px)', type: 'range', min: 10, max: 600, step: 5 },
     ...shadowField,
+    ...filterFields,
+    ...borderFields(),
     ...textEffectsFields([
       { value: 'title', label: 'Solo Titolo' },
       { value: 'description', label: 'Solo Descrizione' },

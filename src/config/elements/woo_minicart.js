@@ -1,3 +1,5 @@
+
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 export default {
   type: 'woo_minicart',
   name: 'Mini Carrello',
@@ -16,6 +18,10 @@ export default {
     badge_bg: '',
     badge_color: '',
     dropdown_width: '320',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { key: 'style', label: 'Stile', type: 'select', options: [
@@ -40,5 +46,6 @@ export default {
     { key: 'icon_color', label: 'Colore icona', type: 'color' },
     { key: 'badge_bg', label: 'Sfondo badge', type: 'color' },
     { key: 'badge_color', label: 'Colore badge', type: 'color' },
+    ...borderFields(),
   ],
 };

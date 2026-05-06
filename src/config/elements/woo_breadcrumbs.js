@@ -1,3 +1,5 @@
+
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 export default {
   type: 'woo_breadcrumbs',
   name: 'Breadcrumbs WooCommerce',
@@ -10,6 +12,10 @@ export default {
     link_color: '',
     font_size: '14',
     alignment: 'left',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { key: 'separator', label: 'Separatore', type: 'select', options: [
@@ -28,5 +34,6 @@ export default {
     { key: 'font_size', label: 'Dimensione (px)', type: 'range', min: 10, max: 24, step: 1 },
     { key: 'text_color', label: 'Colore testo', type: 'color' },
     { key: 'link_color', label: 'Colore link', type: 'color' },
+    ...borderFields(),
   ],
 };

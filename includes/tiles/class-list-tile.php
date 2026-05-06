@@ -23,6 +23,14 @@ class Olo_List_Tile extends Olo_Tile_Base {
         'icon_size'    => '18',
         'icon_gap'     => '10',
         'padding'      => '16',
+            'border'                  => [],
+        'border_hover'            => [],
+        'border_hover_duration'   => 300,
+        'border_effect'           => 'none',
+        'border_effect_intensity' => 'medium',
+        'border_effect_color2'    => '',
+        'border_effect_angle'     => 135,
+        'border_effect_speed'     => 4,
     ];
 
     public function get_controls() {
@@ -67,10 +75,11 @@ class Olo_List_Tile extends Olo_Tile_Base {
             $shadow_css = 'box-shadow:' . $si . $sh . 'px ' . $sv . 'px ' . $sb . 'px ' . $ss . 'px ' . esc_attr( $sc ) . ';';
         }
 
-        ob_start();
+                $uid = 'olo-list-' . wp_rand( 10000, 99999 );
+ob_start();
         ?>
         <?php $list_text_clr = $this->safe_color_css( $s['text_color'] ); ?>
-        <ul class="olo-list uk-list" style="padding: <?php echo $pad; ?>;<?php echo $shadow_css; ?><?php if ( $list_text_clr ) echo 'color:' . $list_text_clr . ';'; ?>"><?php // kept on same line to avoid whitespace ?>
+        <ul class="olo-list <?php echo esc_attr( $uid ); ?> uk-list" style="padding: <?php echo $pad; ?>;<?php echo $shadow_css; ?><?php if ( $list_text_clr ) echo 'color:' . $list_text_clr . ';'; ?>"><?php // kept on same line to avoid whitespace ?>
             <?php foreach ( $items as $i => $item ) :
                 $icon = ! empty( $item['icon'] ) ? $item['icon'] : $default_icon;
             ?>
@@ -96,6 +105,15 @@ class Olo_List_Tile extends Olo_Tile_Base {
         $tfx_css = $this->tfx_css( $s, '.olo-list' );
         if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
         $this->tfx_print_script();
+                // Border system
+        $border_css        = $this->build_border_css( $s['border'] ?? [] );
+        $border_hover_css  = $this->build_border_hover_css( ".{$uid}", $s['border'] ?? [], $s['border_hover'] ?? [], intval( $s['border_hover_duration'] ?? 300 ) );
+        $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
+        if ( $border_css || $border_hover_css || $border_effect_css ) {
+            echo '<style>';
+            if ( $border_css ) echo ".{$uid}{{$border_css}}";
+            echo $border_hover_css . $border_effect_css . '</style>';
+        }
         return ob_get_clean();
     }
 

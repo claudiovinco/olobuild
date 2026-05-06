@@ -1,4 +1,4 @@
-import { textEffectsFields, textEffectsDefaults } from './_shared';
+import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared';
 export default {
   type: 'videoplaylist',
   name: 'Video Playlist',
@@ -19,6 +19,10 @@ export default {
     show_duration: true,
     autoplay_next: false,
     ...textEffectsDefaults,
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { key: 'videos', label: 'Video', type: 'content-items',
@@ -46,5 +50,6 @@ export default {
     { key: 'show_duration', label: 'Mostra durata', type: 'toggle' },
     { key: 'autoplay_next', label: 'Autoplay successivo', type: 'toggle' },
     ...textEffectsFields([ { value: 'title', label: 'Solo Titolo' } ]),
+    ...borderFields(),
   ],
 };

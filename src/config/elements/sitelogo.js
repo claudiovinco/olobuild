@@ -1,3 +1,8 @@
+
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
+// Site Logo — logo del sito.
+// D1 (text effects) N/A: nessun testo proprio (solo immagine + alt).
+// D2 (filter sull'immagine) N/A: i loghi del brand non vanno filtrati/sfocati.
 export default {
   type: 'sitelogo',
   name: 'Logo sito',
@@ -21,6 +26,10 @@ export default {
     retina_image: '',
     hover_opacity: '',
     transition_duration: '0.3',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     // ── LOGO ──
@@ -77,5 +86,6 @@ export default {
     { type: 'separator', label: 'Effetti' },
     { key: 'hover_opacity', label: 'Opacità hover (%)', type: 'range', min: 20, max: 100, step: 5 },
     { key: 'transition_duration', label: 'Durata transizione (s)', type: 'range', min: 0, max: 1, step: 0.05 },
+    ...borderFields(),
   ],
 };

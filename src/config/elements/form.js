@@ -1,4 +1,4 @@
-import { textEffectsFields, textEffectsDefaults } from './_shared';
+import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared';
 export default {
   type: 'form',
   name: 'Form Contatti',
@@ -10,7 +10,8 @@ export default {
       { id: 'f-2', field_type: 'email', label: 'Email', placeholder: 'La tua email', name: 'email', required: true, width: '1-2', options: '', icon: 'mail', condition_field: '', condition_operator: 'equals', condition_value: '' },
       { id: 'f-3', field_type: 'text', label: 'Oggetto', placeholder: 'Oggetto del messaggio', name: 'oggetto', required: false, width: '1-1', options: '', icon: '', condition_field: '', condition_operator: 'equals', condition_value: '' },
       { id: 'f-4', field_type: 'textarea', label: 'Messaggio', placeholder: 'Scrivi il tuo messaggio...', name: 'messaggio', required: true, width: '1-1', options: '', icon: '', condition_field: '', condition_operator: 'equals', condition_value: '' },
-    ],
+    ...borderFields(),
+  ],
 
     // Invio
     email_to: '',
@@ -133,6 +134,10 @@ export default {
     privacy_checkbox: false,
     privacy_text: 'Accetto il trattamento dei dati personali secondo la <a href="/privacy-policy">Privacy Policy</a>',
     ...textEffectsDefaults,
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     // ── Campi ──

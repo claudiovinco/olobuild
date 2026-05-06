@@ -1185,7 +1185,8 @@
     }
   });
 
-  // Signal ready to parent
-  post('olo:ready');
+  // Signal ready to parent. mode = 'inline' (WP renderizza header/footer reali,
+  // il bridge aggiorna SOLO il body) | 'standalone' (template HTML standalone).
+  post('olo:ready', { mode: (typeof window !== 'undefined' && window.OLO_IFRAME_MODE) ? window.OLO_IFRAME_MODE : 'standalone' });
 
 })();

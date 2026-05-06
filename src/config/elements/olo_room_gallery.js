@@ -1,3 +1,5 @@
+
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 export default {
   type: 'olo_room_gallery',
   name: 'Sala - Galleria',
@@ -14,6 +16,10 @@ export default {
     show_dots: true,
     thumb_height: 80,
     transition: 'kenburns',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { type: 'separator', label: 'Layout' },
@@ -35,5 +41,6 @@ export default {
     { key: 'show_arrows', label: 'Mostra frecce navigazione', type: 'toggle' },
     { key: 'show_dots', label: 'Mostra indicatori (dots)', type: 'toggle' },
     { key: 'show_counter', label: 'Mostra contatore immagini', type: 'toggle' },
+    ...borderFields(),
   ],
 };

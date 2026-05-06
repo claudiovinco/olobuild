@@ -20,6 +20,14 @@ class Olo_Soundcloud_Tile extends Olo_Tile_Base {
         'height'        => '166',
         'alignment'     => 'center',
         'border_radius' => '8',
+            'border'                  => [],
+        'border_hover'            => [],
+        'border_hover_duration'   => 300,
+        'border_effect'           => 'none',
+        'border_effect_intensity' => 'medium',
+        'border_effect_color2'    => '',
+        'border_effect_angle'     => 135,
+        'border_effect_speed'     => 4,
     ];
 
     public function get_controls() {
@@ -36,9 +44,10 @@ class Olo_Soundcloud_Tile extends Olo_Tile_Base {
 
         // Nessun URL — mostra placeholder
         if ( empty( $url ) ) {
-            ob_start();
+                    $uid = 'olo-sc-' . wp_rand( 10000, 99999 );
+ob_start();
             ?>
-            <div class="olo-soundcloud" style="text-align: center; padding: 40px 20px; background: linear-gradient(135deg, rgba(255,85,0,0.08) 0%, rgba(255,136,0,0.08) 100%); border: 2px dashed rgba(255,85,0,0.3); border-radius: <?php echo $radius; ?>;">
+            <div class="olo-soundcloud <?php echo esc_attr( $uid ); ?>" style="text-align: center; padding: 40px 20px; background: linear-gradient(135deg, rgba(255,85,0,0.08) 0%, rgba(255,136,0,0.08) 100%); border: 2px dashed rgba(255,85,0,0.3); border-radius: <?php echo $radius; ?>;">
                 <div style="color: #ff5500; opacity: .8; font-size: 14px;">
                     <?php echo esc_html( olo_t( 'Inserisci URL SoundCloud' ) ); ?>
                 </div>
@@ -63,7 +72,7 @@ class Olo_Soundcloud_Tile extends Olo_Tile_Base {
             <?php if ( $radius_hover_css !== '' ) : ?>
             <style>.olo-sc-hr-<?php echo $sc_hash; ?>:hover{border-radius:<?php echo $radius_hover_css; ?> !important}</style>
             <?php endif; ?>
-            <div class="olo-soundcloud<?php echo $radius_hover_css !== '' ? ' olo-sc-hr-' . $sc_hash : ''; ?>" style="border-radius: <?php echo $radius; ?>; overflow: hidden;<?php if ( $radius_hover_css !== '' ) echo 'transition:border-radius 400ms cubic-bezier(.4,0,.2,1);'; ?>">
+            <div class="olo-soundcloud <?php echo esc_attr( $uid ); ?><?php echo $radius_hover_css !== '' ? ' olo-sc-hr-' . $sc_hash : ''; ?>" style="border-radius: <?php echo $radius; ?>; overflow: hidden;<?php if ( $radius_hover_css !== '' ) echo 'transition:border-radius 400ms cubic-bezier(.4,0,.2,1);'; ?>">
                 <?php echo $oembed_html; ?>
             </div>
             <?php
@@ -89,7 +98,7 @@ class Olo_Soundcloud_Tile extends Olo_Tile_Base {
         <?php if ( $radius_hover_css !== '' ) : ?>
         <style>.olo-sc-hr-<?php echo $sc_hash; ?>:hover{border-radius:<?php echo $radius_hover_css; ?> !important}</style>
         <?php endif; ?>
-        <div class="olo-soundcloud<?php echo $radius_hover_css !== '' ? ' olo-sc-hr-' . $sc_hash : ''; ?>" style="border-radius: <?php echo $radius; ?>; overflow: hidden;<?php if ( $radius_hover_css !== '' ) echo 'transition:border-radius 400ms cubic-bezier(.4,0,.2,1);'; ?>">
+        <div class="olo-soundcloud <?php echo esc_attr( $uid ); ?><?php echo $radius_hover_css !== '' ? ' olo-sc-hr-' . $sc_hash : ''; ?>" style="border-radius: <?php echo $radius; ?>; overflow: hidden;<?php if ( $radius_hover_css !== '' ) echo 'transition:border-radius 400ms cubic-bezier(.4,0,.2,1);'; ?>">
             <iframe
                 src="<?php echo esc_url( $iframe_url ); ?>"
                 width="100%"
@@ -102,6 +111,15 @@ class Olo_Soundcloud_Tile extends Olo_Tile_Base {
             ></iframe>
         </div>
         <?php
+                // Border system
+        $border_css        = $this->build_border_css( $s['border'] ?? [] );
+        $border_hover_css  = $this->build_border_hover_css( ".{$uid}", $s['border'] ?? [], $s['border_hover'] ?? [], intval( $s['border_hover_duration'] ?? 300 ) );
+        $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
+        if ( $border_css || $border_hover_css || $border_effect_css ) {
+            echo '<style>';
+            if ( $border_css ) echo ".{$uid}{{$border_css}}";
+            echo $border_hover_css . $border_effect_css . '</style>';
+        }
         return ob_get_clean();
     }
 }

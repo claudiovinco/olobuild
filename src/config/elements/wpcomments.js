@@ -1,3 +1,5 @@
+
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 export default {
   type: 'wpcomments',
   name: 'Commenti',
@@ -22,6 +24,10 @@ export default {
     form_background: '',
     border_color: '',
     avatar_border_radius: '50',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { type: 'separator', label: 'Titolo' },
@@ -61,5 +67,6 @@ export default {
     { key: 'link_color', label: 'Colore link', type: 'color' },
     { key: 'form_background', label: 'Sfondo modulo', type: 'color' },
     { key: 'border_color', label: 'Colore bordo', type: 'color' },
+    ...borderFields(),
   ],
 };

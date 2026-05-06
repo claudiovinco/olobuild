@@ -1,3 +1,5 @@
+
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 export default {
   type: 'sharebuttons',
   name: 'Condivisione',
@@ -18,6 +20,10 @@ export default {
     icon_color: '',
     icon_hover_color: '',
     bg_color: '',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { key: 'buttons', label: 'Pulsanti', type: 'content-items',
@@ -50,5 +56,6 @@ export default {
     { key: 'icon_color', label: 'Colore icona', type: 'color' },
     { key: 'icon_hover_color', label: 'Colore icona hover', type: 'color' },
     { key: 'bg_color', label: 'Colore sfondo', type: 'color' },
+    ...borderFields(),
   ],
 };

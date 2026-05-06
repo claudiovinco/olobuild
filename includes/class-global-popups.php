@@ -413,12 +413,13 @@ class Olo_Global_Popups {
     public function render_admin_page() {
         $popups   = get_option( 'olo_global_popups', [] );
         $db       = new Olo_Database();
-        $tpls_raw = $db->get_all_templates();
+        $result   = $db->list_templates( [ 'per_page' => 500, 'orderby' => 'title', 'order' => 'ASC' ] );
+        $tpls_raw = $result['items'] ?? [];
         $templates = [];
         foreach ( $tpls_raw as $t ) {
             $templates[] = [
                 'id'   => $t['id'],
-                'name' => $t['name'],
+                'name' => $t['title'] ?? '',
                 'type' => $t['type'] ?? 'page',
             ];
         }

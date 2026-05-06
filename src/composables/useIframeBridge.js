@@ -19,6 +19,12 @@ export function useIframeBridge(iframeRef) {
   const { handleDropFromSidebar, handleDropIntoColumn } = useDragDrop();
   const iframeReady = ref(false);
   const iframeHeight = ref(800);
+  // 'standalone' (default): l'iframe carica il template builder-iframe.php standalone,
+  // il bridge inietta HTML completo (header + body + footer renderizzato dal REST).
+  // 'inline': l'iframe carica una pagina WP reale (permalink del post associato);
+  // header e footer sono già renderizzati dal tema/Olo_Header_Integration, quindi
+  // qui dobbiamo iniettare SOLO il body — pena doppio header/footer.
+  let iframeMode = 'standalone';
 
   function postToIframe(type, data) {
     const iframe = iframeRef.value;
@@ -43,9 +49,13 @@ export function useIframeBridge(iframeRef) {
     renderInFlight = true;
     try {
       const body = { tiles: deepClone(tiles), page_settings: pageSettings };
-      // Include header/footer if loaded
-      if (headerTiles && headerTiles.length) body.header_tiles = deepClone(headerTiles);
-      if (footerTiles && footerTiles.length) body.footer_tiles = deepClone(footerTiles);
+      // Include header/footer SOLO in modalità standalone. In modalità inline
+      // (iframe = pagina WP reale) header e footer sono già renderizzati dal
+      // tema; aggiungerli qui produrrebbe duplicati.
+      if (iframeMode !== 'inline') {
+        if (headerTiles && headerTiles.length) body.header_tiles = deepClone(headerTiles);
+        if (footerTiles && footerTiles.length) body.footer_tiles = deepClone(footerTiles);
+      }
 
       // For single templates, pass type and post_type so PHP can set up post context
       const tpl = builderStore.currentTemplate;
@@ -178,6 +188,7 @@ export function useIframeBridge(iframeRef) {
 
     switch (d.type) {
       case 'olo:ready':
+        iframeMode = (d.mode === 'inline') ? 'inline' : 'standalone';
         iframeReady.value = true;
         renderFull();
         break;

@@ -1,4 +1,4 @@
-import { shadowField } from './_shared.js';
+import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 
 export default {
   type: 'search',
@@ -33,6 +33,10 @@ export default {
     animated_placeholder: false,
     placeholder_words: '',
     shadow: 'none',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { type: 'separator', label: 'Contenuto' },
@@ -102,5 +106,6 @@ export default {
     { key: 'input_shadow', label: 'Ombra input', type: 'toggle' },
     { key: 'focus_shadow', label: 'Ombra su focus', type: 'toggle' },
     ...shadowField,
+    ...borderFields(),
   ],
 };

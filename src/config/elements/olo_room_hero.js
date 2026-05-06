@@ -1,3 +1,5 @@
+
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 export default {
   type: 'olo_room_hero',
   name: 'Sala - Hero',
@@ -10,6 +12,10 @@ export default {
     show_badge: true,
     show_address: true,
     cta_text: 'Prenota questa sala',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { type: 'separator', label: 'Layout' },
@@ -23,5 +29,6 @@ export default {
     { key: 'show_badge', label: 'Mostra badge tipologia', type: 'toggle' },
     { key: 'show_address', label: 'Mostra indirizzo', type: 'toggle' },
     { key: 'cta_text', label: 'Testo pulsante CTA', type: 'text' },
+    ...borderFields(),
   ],
 };

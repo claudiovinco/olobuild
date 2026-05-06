@@ -1,4 +1,4 @@
-import { shadowField } from './_shared.js';
+import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 
 export default {
   type: 'table',
@@ -26,6 +26,10 @@ export default {
     border_color: '',
     even_row_bg: '',
     shadow: 'none',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     {
@@ -33,6 +37,7 @@ export default {
       type: 'html',
       html: '<div style="font-size:11px;color:#9CA3AF;margin:-4px 0 8px;line-height:1.4">Clicca sulle celle nel canvas per modificarle. Usa i pulsanti + e − per aggiungere o rimuovere righe e colonne.</div>',
     },
+    { type: 'separator', label: 'Struttura' },
     { key: 'has_header', label: 'Riga intestazione', type: 'toggle' },
     { key: 'striped', label: 'Righe alternate', type: 'toggle' },
     { key: 'bordered', label: 'Con bordi', type: 'toggle' },
@@ -48,11 +53,16 @@ export default {
         { value: 'stack', label: 'Stack verticale' },
       ],
     },
+
+    { type: 'separator', label: 'Colori' },
     { key: 'header_bg', label: 'Sfondo intestazione', type: 'color' },
     { key: 'header_text_color', label: 'Colore testo intestazione', type: 'color' },
     { key: 'text_color', label: 'Colore testo', type: 'color' },
     { key: 'border_color', label: 'Colore bordi', type: 'color' },
     { key: 'even_row_bg', label: 'Sfondo righe pari', type: 'color' },
+
+    { type: 'separator', label: 'Aspetto' },
     ...shadowField,
+    ...borderFields(),
   ],
 };

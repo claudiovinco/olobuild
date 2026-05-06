@@ -1,4 +1,4 @@
-import { textEffectsFields, textEffectsDefaults } from './_shared';
+import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 export default {
   type: 'flipcard',
   name: 'FlipCard',
@@ -55,8 +55,10 @@ export default {
     card_height: '350',
     card_border_radius: '12',
     card_shadow: 'md',
-    card_border_width: '0',
-    card_border_color: '',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
     tile_padding: { top: 24, right: 24, bottom: 24, left: 24 },
 
     // Tipografia
@@ -188,9 +190,8 @@ export default {
       condition: { field: 'card_shadow', op: 'eq', value: 'custom' } },
     { key: 'card_shadow_inset', label: 'Ombra interna', type: 'toggle',
       condition: { field: 'card_shadow', op: 'eq', value: 'custom' } },
-    { key: 'card_border_width', label: 'Bordo (px)', type: 'range', min: 0, max: 4 },
-    { key: 'card_border_color', label: 'Colore bordo', type: 'color' },
     { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 40 },
+    ...borderFields(),
 
     // ── Tipografia ──
     { type: 'separator', label: 'Tipografia' },

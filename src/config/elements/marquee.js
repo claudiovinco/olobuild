@@ -1,4 +1,4 @@
-import { shadowField } from './_shared.js';
+import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 
 export default {
   type: 'marquee',
@@ -32,6 +32,10 @@ export default {
     border_bottom: '0',
     border_color: '',
     shadow: 'none',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     // ── Contenuto ──
@@ -85,5 +89,6 @@ export default {
     { key: 'border_bottom', label: 'Bordo inferiore (px)', type: 'range', min: 0, max: 4 },
     { key: 'border_color', label: 'Colore bordo', type: 'color' },
     ...shadowField,
+    ...borderFields(),
   ],
 };

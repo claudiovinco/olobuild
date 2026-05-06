@@ -1,3 +1,5 @@
+
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 export default {
   type: 'woo_product_navigation',
   name: 'Navigazione Prodotti',
@@ -12,6 +14,10 @@ export default {
     text_color: '',
     hover_color: '',
     separator_style: 'line',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { key: 'show_thumbnail', label: 'Mostra miniatura', type: 'toggle' },
@@ -27,5 +33,6 @@ export default {
     { type: 'separator', label: 'Colori' },
     { key: 'text_color', label: 'Colore testo', type: 'color' },
     { key: 'hover_color', label: 'Colore hover', type: 'color' },
+    ...borderFields(),
   ],
 };

@@ -1,4 +1,4 @@
-import { textEffectsFields, textEffectsDefaults } from './_shared';
+import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared';
 export default {
   type: 'viewscounter',
   name: 'Contatore Visite',
@@ -17,6 +17,10 @@ export default {
     icon_size: '16',
     number_format: true,
     ...textEffectsDefaults,
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     // ── Contenuto ──
@@ -54,5 +58,6 @@ export default {
     { key: 'icon_color', label: 'Colore icona', type: 'color',
       condition: { field: 'show_icon', value: true } },
     ...textEffectsFields([ { value: 'label', label: 'Solo Etichetta' } ]),
+    ...borderFields(),
   ],
 };

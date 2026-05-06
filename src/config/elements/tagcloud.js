@@ -1,9 +1,12 @@
+import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared';
+
 export default {
   type: 'tagcloud',
   name: 'Tag Cloud',
   icon: 'dashicons-tag',
   category: 'dynamic',
   defaults: {
+    ...textEffectsDefaults,
     taxonomy: 'post_tag',
     custom_taxonomy: '',
     min_font: '12',
@@ -20,10 +23,14 @@ export default {
     background_color: '',
     hover_background: '',
     border_radius: '16',
-    padding: '6 14',
+    padding: { top: 6, right: 14, bottom: 6, left: 14 },
     gap: '8',
     font_weight: '500',
     link_underline: false,
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { key: 'taxonomy', label: 'Tassonomia', type: 'select', options: [
@@ -70,6 +77,11 @@ export default {
     { type: 'separator', label: 'Stile tag' },
     { key: 'border_radius', label: 'Arrotondamento (px)', type: 'border-radius' },
     { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
-    { key: 'padding', label: 'Padding (px)', type: 'text', placeholder: '6 14' },
+    { key: 'padding', label: 'Padding (px)', type: 'spacing', max: 32 },
+
+    ...textEffectsFields([
+      { value: 'tag', label: 'Etichetta tag' },
+    ]),
+    ...borderFields(),
   ],
 };

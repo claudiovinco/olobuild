@@ -1,4 +1,4 @@
-import { textEffectsFields, textEffectsDefaults } from './_shared';
+import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared';
 export default {
   type: 'textpath',
   name: 'Testo su Tracciato',
@@ -14,6 +14,10 @@ export default {
     animation: 'none',
     animation_speed: '10',
     ...textEffectsDefaults,
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { key: 'text', label: 'Testo', type: 'text' },
@@ -43,5 +47,6 @@ export default {
     { key: 'animation_speed', label: 'Velocita animazione (sec)', type: 'range', min: 1, max: 20,
       condition: { field: 'animation', value: ['scroll', 'continuous'] } },
     ...textEffectsFields([ { value: 'text', label: 'Solo Testo' } ]),
+    ...borderFields(),
   ],
 };

@@ -1,5 +1,4 @@
-import { textEffectsFields, textEffectsDefaults } from './_shared';
-import { shadowField } from './_shared.js';
+import { textEffectsFields, textEffectsDefaults, shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 
 export default {
   type: 'panel',
@@ -43,6 +42,10 @@ export default {
     shadow: 'none',
     border_radius: '0',
     card_radius: '0',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
     ...textEffectsDefaults,
   },
   fields: [
@@ -160,6 +163,7 @@ export default {
     { key: 'card_radius', label: 'Border radius card (px)', type: 'border-radius'},
     { key: 'card_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     ...shadowField,
+    ...borderFields(),
     ...textEffectsFields([
       { value: 'title', label: 'Solo Titolo' },
       { value: 'content', label: 'Solo Contenuto' },

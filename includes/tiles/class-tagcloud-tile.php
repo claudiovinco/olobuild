@@ -27,10 +27,18 @@ class Olo_Tagcloud_Tile extends Olo_Tile_Base {
         'background_color' => '#f3f4f6',
         'hover_background' => '#6366f1',
         'border_radius'    => '16',
-        'padding'          => '6 14',
+        'padding'          => [ 'top' => 6, 'right' => 14, 'bottom' => 6, 'left' => 14 ],
         'gap'              => '8',
         'font_weight'      => '500',
         'link_underline'   => false,
+            'border'                  => [],
+        'border_hover'            => [],
+        'border_hover_duration'   => 300,
+        'border_effect'           => 'none',
+        'border_effect_intensity' => 'medium',
+        'border_effect_color2'    => '',
+        'border_effect_angle'     => 135,
+        'border_effect_speed'     => 4,
     ];
 
     public function get_controls() {
@@ -92,9 +100,19 @@ class Olo_Tagcloud_Tile extends Olo_Tile_Base {
         $bg_color         = $this->safe_color_css( $s['background_color'] ) ?: '#f3f4f6';
         $hover_bg         = $this->safe_color_css( $s['hover_background'] ) ?: '#6366f1';
 
-        // Padding
-        $padding_parts = preg_split( '/\s+/', trim( $s['padding'] ) );
-        $padding_css   = implode( 'px ', $padding_parts ) . 'px';
+        // Padding — supporta sia string legacy "6 14" che object spacing { top, right, bottom, left }
+        $padding_raw = $s['padding'];
+        if ( is_array( $padding_raw ) ) {
+            $padding_css = sprintf( '%dpx %dpx %dpx %dpx',
+                intval( $padding_raw['top'] ?? 0 ),
+                intval( $padding_raw['right'] ?? 0 ),
+                intval( $padding_raw['bottom'] ?? 0 ),
+                intval( $padding_raw['left'] ?? 0 )
+            );
+        } else {
+            $padding_parts = preg_split( '/\s+/', trim( (string) $padding_raw ) );
+            $padding_css   = implode( 'px ', $padding_parts ) . 'px';
+        }
 
         // Container style
         $container_style = '';
@@ -152,6 +170,15 @@ class Olo_Tagcloud_Tile extends Olo_Tile_Base {
             <?php endforeach; ?>
         </div>
         <?php
+                // Border system
+        $border_css        = $this->build_border_css( $s['border'] ?? [] );
+        $border_hover_css  = $this->build_border_hover_css( ".{$uid}", $s['border'] ?? [], $s['border_hover'] ?? [], intval( $s['border_hover_duration'] ?? 300 ) );
+        $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
+        if ( $border_css || $border_hover_css || $border_effect_css ) {
+            echo '<style>';
+            if ( $border_css ) echo ".{$uid}{{$border_css}}";
+            echo $border_hover_css . $border_effect_css . '</style>';
+        }
         return ob_get_clean();
     }
 }

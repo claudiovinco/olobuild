@@ -1,3 +1,5 @@
+
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 export default {
   type: 'woo_upsells',
   name: 'Prodotti Suggeriti',
@@ -17,6 +19,10 @@ export default {
     columns_mobile: '1',
     title_color: '',
     price_color: '',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { type: 'separator', label: 'Layout' },
@@ -40,5 +46,6 @@ export default {
     { type: 'separator', label: 'Colori' },
     { key: 'title_color', label: 'Colore titolo', type: 'color' },
     { key: 'price_color', label: 'Colore prezzo', type: 'color' },
+    ...borderFields(),
   ],
 };

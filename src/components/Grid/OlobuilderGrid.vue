@@ -451,9 +451,9 @@ function makeEdgeDrop(nodeKind, node, parentId, index, allowedEdges) {
       { element, input, allowedEdges: allowedEdges || ['top', 'bottom'] }
     ),
     getIsSticky: () => true,
-    onDragEnter: ({ self }) => { self.element.classList.add('olo-dnd-over'); },
-    onDragLeave: ({ self }) => { self.element.classList.remove('olo-dnd-over'); },
-    onDrop: ({ self }) => { self.element.classList.remove('olo-dnd-over'); },
+    onDragEnter: ({ self } = {}) => { if (self?.element) self.element.classList.add('olo-dnd-over'); },
+    onDragLeave: ({ self } = {}) => { if (self?.element) self.element.classList.remove('olo-dnd-over'); },
+    onDrop: ({ self } = {}) => { if (self?.element) self.element.classList.remove('olo-dnd-over'); },
   };
 }
 
@@ -484,9 +484,9 @@ const columnDrop = (col) => ({
   },
   getData: () => ({ _olo: true, kind: 'column-body', columnId: col.id }),
   getIsSticky: () => true,
-  onDragEnter: ({ self }) => { self.element.classList.add('olo-column-block--dragover'); },
-  onDragLeave: ({ self }) => { self.element.classList.remove('olo-column-block--dragover'); },
-  onDrop: ({ self }) => { self.element.classList.remove('olo-column-block--dragover'); },
+  onDragEnter: ({ self } = {}) => { if (self?.element) self.element.classList.add('olo-column-block--dragover'); },
+  onDragLeave: ({ self } = {}) => { if (self?.element) self.element.classList.remove('olo-column-block--dragover'); },
+  onDrop: ({ self } = {}) => { if (self?.element) self.element.classList.remove('olo-column-block--dragover'); },
 });
 
 /**

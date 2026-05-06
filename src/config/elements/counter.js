@@ -1,5 +1,4 @@
-import { textEffectsFields, textEffectsDefaults } from './_shared';
-import { shadowField } from './_shared.js';
+import { textEffectsFields, textEffectsDefaults, shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 
 export default {
   type: 'counter',
@@ -34,8 +33,10 @@ export default {
     // Tile
     tile_padding: { top: 32, right: 32, bottom: 32, left: 32 },
     border_radius: '0',
-    border_width: '0',
-    border_color: '',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
     shadow: 'none',
     ...textEffectsDefaults,
   },
@@ -97,10 +98,8 @@ export default {
     { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 80 },
     { key: 'border_radius', label: 'Arrotondamento (px)', type: 'border-radius' },
     { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
-    { key: 'border_width', label: 'Bordo tile (px)', type: 'range', min: 0, max: 5, step: 1 },
-    { key: 'border_color', label: 'Colore bordo tile', type: 'color',
-      condition: { field: 'border_width', operator: '>', value: '0' } },
     ...shadowField,
+    ...borderFields(),
     ...textEffectsFields([ { value: 'label', label: 'Solo Etichetta' } ]),
   ],
 };

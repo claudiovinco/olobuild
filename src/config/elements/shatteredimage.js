@@ -1,4 +1,4 @@
-import { shadowField } from './_shared.js';
+import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 
 export default {
   type: 'shatteredimage',
@@ -37,6 +37,10 @@ export default {
     // Avanzato
     border_radius_outer: 0,
     shadow: 'none',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
 
   fields: [
@@ -152,5 +156,6 @@ export default {
     { key: 'border_radius_outer', label: 'Border radius', type: 'border-radius' },
     { key: 'border_radius_outer_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     ...shadowField,
+    ...borderFields(),
   ],
 };

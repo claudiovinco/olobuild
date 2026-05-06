@@ -1,3 +1,5 @@
+
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 export default {
   type: 'olo_room_calendar',
   name: 'Sala - Calendario',
@@ -16,6 +18,10 @@ export default {
     color_closed: '',
     show_slot_count: true,
     header_style: 'full',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { type: 'separator', label: 'Contenuto' },
@@ -67,5 +73,6 @@ export default {
     { key: 'color_available', label: 'Disponibile', type: 'color' },
     { key: 'color_partial', label: 'Parzialmente occupato', type: 'color' },
     { key: 'color_closed', label: 'Chiuso', type: 'color' },
+    ...borderFields(),
   ],
 };

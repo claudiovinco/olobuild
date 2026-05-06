@@ -19,6 +19,14 @@ class Olo_Code_Tile extends Olo_Tile_Base {
         'font_size'         => '14',
         'max_height'        => '',
         'wrap_lines'        => false,
+            'border'                  => [],
+        'border_hover'            => [],
+        'border_hover_duration'   => 300,
+        'border_effect'           => 'none',
+        'border_effect_intensity' => 'medium',
+        'border_effect_color2'    => '',
+        'border_effect_angle'     => 135,
+        'border_effect_speed'     => 4,
     ];
 
     public function get_controls() {
@@ -94,6 +102,15 @@ class Olo_Code_Tile extends Olo_Tile_Base {
             <pre class="<?php echo esc_attr( $lang_class ); ?>" style="margin:0;padding:1em;overflow-x:auto;background:transparent;<?php echo $max_height_style; ?>"><code class="<?php echo esc_attr( $lang_class ); ?>" style="font-family:monospace;font-size:<?php echo $font_size; ?>px;color:<?php echo esc_attr( $t['text'] ); ?>;line-height:1.6;white-space:<?php echo $white_space; ?>;"><?php echo $code; ?></code></pre>
         </div>
         <?php
+                // Border system
+        $border_css        = $this->build_border_css( $s['border'] ?? [] );
+        $border_hover_css  = $this->build_border_hover_css( ".{$uid}", $s['border'] ?? [], $s['border_hover'] ?? [], intval( $s['border_hover_duration'] ?? 300 ) );
+        $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
+        if ( $border_css || $border_hover_css || $border_effect_css ) {
+            echo '<style>';
+            if ( $border_css ) echo ".{$uid}{{$border_css}}";
+            echo $border_hover_css . $border_effect_css . '</style>';
+        }
         return ob_get_clean();
     }
 }

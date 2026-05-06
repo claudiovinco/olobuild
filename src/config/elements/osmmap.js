@@ -1,3 +1,5 @@
+
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 export default {
   type: 'osmmap',
   name: 'Mappa',
@@ -19,6 +21,10 @@ export default {
     marker_image: '',
     marker_size: '36',
     address: '',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     // ── Posizione ──
@@ -73,5 +79,6 @@ export default {
       { value: 'gray', label: 'Grigio minimal' },
       { value: 'opentopomap', label: 'OpenTopoMap' },
     ]},
+    ...borderFields(),
   ],
 };

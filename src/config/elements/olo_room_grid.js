@@ -1,3 +1,5 @@
+
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 export default {
   type: 'olo_room_grid',
   name: 'Sale - Mappa e Lista',
@@ -83,6 +85,10 @@ export default {
     tag_color: '',
     body_bg: '',
     body_bg_opacity: '100',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     // ═══════════════════════════════════════════
@@ -411,5 +417,6 @@ export default {
     { key: 'body_bg', label: 'Sfondo area testo', type: 'color' },
     { key: 'body_bg_opacity', label: 'Opacita sfondo (%)', type: 'range', min: 0, max: 100, step: 5,
       condition: { field: 'body_bg', operator: '!=', value: '' } },
+    ...borderFields(),
   ],
 };

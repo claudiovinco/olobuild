@@ -1,3 +1,5 @@
+
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 export default {
   type: 'revealbox',
   name: 'Reveal Box',
@@ -43,6 +45,10 @@ export default {
     border_radius: { tl: 0, tr: 0, br: 0, bl: 0 },
     perspective: '800',
     tile_padding: { top: 0, right: 0, bottom: 0, left: 0 },
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { type: 'separator', label: 'Effetto reveal' },
@@ -218,5 +224,6 @@ export default {
     { key: 'border_radius', label: 'Bordo arrotondato (px)', type: 'border-radius' },
     { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     { key: 'tile_padding', type: 'spacing', label: 'Spaziatura interna' },
+    ...borderFields(),
   ],
 };

@@ -21,6 +21,14 @@ class Olo_Divider_Tile extends Olo_Tile_Base {
         'text_color' => '',
         'text_size'  => '14',
         'icon_emoji' => '',
+            'border'                  => [],
+        'border_hover'            => [],
+        'border_hover_duration'   => 300,
+        'border_effect'           => 'none',
+        'border_effect_intensity' => 'medium',
+        'border_effect_color2'    => '',
+        'border_effect_angle'     => 135,
+        'border_effect_speed'     => 4,
     ];
 
     public function get_controls() {
@@ -55,9 +63,10 @@ class Olo_Divider_Tile extends Olo_Tile_Base {
         $style_type = $s['style'];
         $wrap_style = "display:flex;justify-content:{$justify};padding:{$spacing}px 16px;";
 
-        ob_start();
+                $uid = 'olo-divider-' . wp_rand( 10000, 99999 );
+ob_start();
 
-        echo '<div class="olo-divider" style="' . esc_attr( $wrap_style ) . '">';
+        echo '<div class="olo-divider ' . esc_attr( $uid ) . '" style="' . esc_attr( $wrap_style ) . '">';
 
         if ( $has_center ) {
             $this->render_center( $s, $w, $thick, $style_type, $line_clr, $txt_clr, $txt_sz );
@@ -77,6 +86,15 @@ class Olo_Divider_Tile extends Olo_Tile_Base {
 
         echo '</div>';
 
+                // Border system
+        $border_css        = $this->build_border_css( $s['border'] ?? [] );
+        $border_hover_css  = $this->build_border_hover_css( ".{$uid}", $s['border'] ?? [], $s['border_hover'] ?? [], intval( $s['border_hover_duration'] ?? 300 ) );
+        $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
+        if ( $border_css || $border_hover_css || $border_effect_css ) {
+            echo '<style>';
+            if ( $border_css ) echo ".{$uid}{{$border_css}}";
+            echo $border_hover_css . $border_effect_css . '</style>';
+        }
         return ob_get_clean();
     }
 

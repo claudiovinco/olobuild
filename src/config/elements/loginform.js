@@ -1,4 +1,4 @@
-import { textEffectsFields, textEffectsDefaults } from './_shared';
+import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared';
 import { shadowField } from './_shared.js';
 
 export default {
@@ -80,6 +80,10 @@ export default {
     border_color: '',
     shadow: 'none',
     ...textEffectsDefaults,
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     // ═══════════════════════════════════════
@@ -257,5 +261,6 @@ export default {
       condition: { field: 'border_width', operator: '>', value: '0' } },
     ...shadowField,
     ...textEffectsFields([ { value: 'label', label: 'Solo Etichetta' } ]),
+    ...borderFields(),
   ],
 };

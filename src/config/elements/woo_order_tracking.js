@@ -1,4 +1,4 @@
-import { textEffectsFields, textEffectsDefaults } from './_shared';
+import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared';
 export default {
   type: 'woo_order_tracking',
   name: 'Tracciamento Ordine',
@@ -14,6 +14,10 @@ export default {
     button_bg: '',
     form_style: 'modern',
     ...textEffectsDefaults,
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { key: 'title', label: 'Titolo', type: 'text' },
@@ -34,5 +38,6 @@ export default {
     { key: 'button_bg', label: 'Sfondo pulsante', type: 'color' },
     { key: 'button_color', label: 'Colore pulsante', type: 'color' },
     ...textEffectsFields([ { value: 'title', label: 'Solo Titolo' } ]),
+    ...borderFields(),
   ],
 };

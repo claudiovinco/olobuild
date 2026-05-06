@@ -383,14 +383,15 @@
               <div class="mb-flex mb-gap-2">
                 <input
                   type="color"
-                  :value="tileStyle.border_color || '#374151'"
+                  :value="tileStyle.border_color || '#cccccc'"
                   @input="updateStyle('border_color', $event.target.value)"
                   class="mb-w-8 mb-h-8 mb-rounded mb-cursor-pointer mb-border-0"
                 />
                 <input
                   type="text"
-                  :value="tileStyle.border_color || '#374151'"
+                  :value="tileStyle.border_color || ''"
                   @change="updateStyle('border_color', $event.target.value)"
+                  placeholder="transparent (nessun bordo)"
                   class="mb-flex-1 mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1 mb-text-sm mb-text-gray-900"
                 />
               </div>
@@ -587,7 +588,7 @@
             <div class="mb-flex mb-gap-2">
               <input
                 type="color"
-                :value="tileHover.border_color || '#374151'"
+                :value="tileHover.border_color || '#cccccc'"
                 @input="updateHover('border_color', $event.target.value)"
                 class="mb-w-8 mb-h-8 mb-rounded mb-cursor-pointer mb-border-0"
               />

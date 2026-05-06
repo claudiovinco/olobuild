@@ -1,4 +1,4 @@
-import { shadowField } from './_shared.js';
+import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 
 export default {
   type: 'woo_quickview',
@@ -25,6 +25,10 @@ export default {
     button_bg: '',
     close_color: '',
     shadow: 'none',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { type: 'separator', label: 'Pulsante trigger' },
@@ -63,5 +67,6 @@ export default {
     { key: 'close_color', label: 'Colore icona chiudi', type: 'color' },
 
     ...shadowField,
+    ...borderFields(),
   ],
 };

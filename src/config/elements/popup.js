@@ -1,4 +1,4 @@
-import { textEffectsFields, textEffectsDefaults } from './_shared';
+import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared';
 export default {
   type: 'popup',
   name: 'Popup',
@@ -51,6 +51,10 @@ export default {
     display_page_views: '0',
     display_click_count: '0',
     ...textEffectsDefaults,
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     { type: 'separator', label: 'Pulsante' },
@@ -175,5 +179,6 @@ export default {
     ]},
     { key: 'display_page_views', label: 'Dopo N pagine visitate (0=ignora)', type: 'range', min: 0, max: 20 },
     ...textEffectsFields([ { value: 'content', label: 'Solo Contenuto' } ]),
+    ...borderFields(),
   ],
 };

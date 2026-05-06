@@ -61,9 +61,17 @@ class Olo_FlipCard_Tile extends Olo_Tile_Base {
         'card_height'        => '350',
         'card_border_radius' => '12',
         'card_shadow'        => 'md',
-        'card_border_width'  => '0',
-        'card_border_color'  => '',
-        'card_padding'       => '24',
+        'card_border_width'       => '0',
+        'card_border_color'       => '',
+        'card_padding'            => '24',
+        'border'                  => [],
+        'border_hover'            => [],
+        'border_hover_duration'   => 300,
+        'border_effect'           => 'none',
+        'border_effect_intensity' => 'medium',
+        'border_effect_color2'    => '',
+        'border_effect_angle'     => 135,
+        'border_effect_speed'     => 4,
 
         // Tipografia
         'title_size'   => '22',
@@ -303,6 +311,17 @@ class Olo_FlipCard_Tile extends Olo_Tile_Base {
         $tfx_css = $this->tfx_css( $s, '.' . $uid );
         if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
         $this->tfx_print_script();
+
+        // Border system
+        $border_css        = $this->build_border_css( $s['border'] ?? [] );
+        $border_hover_css  = $this->build_border_hover_css( ".{$uid}", $s['border'] ?? [], $s['border_hover'] ?? [], intval( $s['border_hover_duration'] ?? 300 ) );
+        $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
+        if ( $border_css || $border_hover_css || $border_effect_css ) {
+            echo '<style>';
+            if ( $border_css ) echo ".{$uid}{{$border_css}}";
+            echo $border_hover_css . $border_effect_css . '</style>';
+        }
+
         return ob_get_clean();
     }
 

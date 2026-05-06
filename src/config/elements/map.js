@@ -1,5 +1,8 @@
-import { shadowField } from './_shared.js';
+import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 
+// Map — mappa Google con marker.
+// D1 (text effects) N/A: i testi popup vengono dai post WP (CMS dynamic), non da fields del config.
+// D2 (filter sull'immagine) N/A: marker_image è una piccola icona (16-32px), filtri non hanno senso UX.
 export default {
   type: 'map',
   name: 'Mappa Pro',
@@ -94,6 +97,10 @@ export default {
     // Shared
     height: '400',
     shadow: 'none',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
   },
   fields: [
     {
@@ -389,5 +396,6 @@ export default {
     { key: 'border_radius', label: 'Arrotondamento (px)', type: 'border-radius' },
     { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
     ...shadowField,
+    ...borderFields(),
   ],
 };
