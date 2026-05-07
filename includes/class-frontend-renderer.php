@@ -2291,7 +2291,7 @@ class Olo_Frontend_Renderer {
             $pos_label = ucfirst( str_replace( '-', ' ', $orig_placement ) );
             $mode_label = ucfirst( $orig_position );
             $html .= '<div class="olo-fp-builder-banner" style="display:flex;align-items:center;gap:8px;padding:6px 10px;margin:-8px -8px 12px -8px;background:rgba(99,102,241,0.12);border-radius:6px;font-size:11px;font-weight:600;color:#4338CA;text-transform:uppercase;letter-spacing:0.5px;">'
-                   . '<span>📌 ' . esc_html__( 'Pannello flottante', 'olobuilder' ) . '</span>'
+                   . '<span>📌 ' . esc_html__( 'Pannello flottante', 'olobuild' ) . '</span>'
                    . '<span style="opacity:0.6;font-weight:400;text-transform:none;letter-spacing:0;">→ ' . esc_html( $mode_label ) . ' · ' . esc_html( $pos_label ) . '</span>'
                    . '</div>';
         }
@@ -2302,8 +2302,8 @@ class Olo_Frontend_Renderer {
             $fp_id = esc_attr( $node['id'] ?? '' );
             $html .= '<div class="olo-fp-builder-empty" data-olo-fp-empty="' . $fp_id . '" style="min-height:120px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;border:2px dashed rgba(99,102,241,0.6);border-radius:8px;padding:20px;background:rgba(99,102,241,0.06);color:#6366F1;font-size:13px;font-weight:500;text-align:center;cursor:pointer;">'
                    . '<span style="font-size:32px;font-weight:300;line-height:1;pointer-events:none;">+</span>'
-                   . '<span style="pointer-events:none;">' . esc_html__( 'Trascina qui contenuti del pannello', 'olobuilder' ) . '</span>'
-                   . '<span style="font-size:10px;opacity:0.7;text-transform:uppercase;letter-spacing:0.5px;pointer-events:none;">' . esc_html__( 'O clicca per aprire il finder', 'olobuilder' ) . '</span>'
+                   . '<span style="pointer-events:none;">' . esc_html__( 'Trascina qui contenuti del pannello', 'olobuild' ) . '</span>'
+                   . '<span style="font-size:10px;opacity:0.7;text-transform:uppercase;letter-spacing:0.5px;pointer-events:none;">' . esc_html__( 'O clicca per aprire il finder', 'olobuild' ) . '</span>'
                    . '</div>';
         }
 

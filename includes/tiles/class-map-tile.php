@@ -806,7 +806,7 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         <div class="olo-map-filters<?php echo $align_cls; ?>" data-map-target="<?php echo esc_attr( $map_id ); ?>">
             <?php if ( $style === 'dropdown' ) : ?>
                 <select class="olo-map-filter-select uk-select" data-filter-select>
-                    <option value=""><?php esc_html_e( 'Tutti', 'olobuilder' ); ?></option>
+                    <option value=""><?php esc_html_e( 'Tutti', 'olobuild' ); ?></option>
                     <?php foreach ( $terms as $term ) : ?>
                         <option value="<?php echo esc_attr( $term['slug'] ); ?>">
                             <?php echo esc_html( $term['name'] ); ?>
@@ -815,7 +815,7 @@ class Olo_Map_Tile extends Olo_Tile_Base {
                 </select>
             <?php elseif ( $style === 'minimal' ) : ?>
                 <button class="olo-map-filter-pill olo-map-filter-pill--minimal olo-map-filter-active" data-filter="">
-                    <?php esc_html_e( 'Tutti', 'olobuilder' ); ?>
+                    <?php esc_html_e( 'Tutti', 'olobuild' ); ?>
                 </button>
                 <?php foreach ( $terms as $term ) : ?>
                     <button class="olo-map-filter-pill olo-map-filter-pill--minimal" data-filter="<?php echo esc_attr( $term['slug'] ); ?>">
@@ -824,7 +824,7 @@ class Olo_Map_Tile extends Olo_Tile_Base {
                 <?php endforeach; ?>
             <?php else : ?>
                 <button class="olo-map-filter-pill olo-map-filter-active" data-filter="">
-                    <?php esc_html_e( 'Tutti', 'olobuilder' ); ?>
+                    <?php esc_html_e( 'Tutti', 'olobuild' ); ?>
                 </button>
                 <?php foreach ( $terms as $term ) : ?>
                     <button class="olo-map-filter-pill" data-filter="<?php echo esc_attr( $term['slug'] ); ?>">

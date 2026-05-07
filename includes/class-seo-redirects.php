@@ -304,9 +304,9 @@ class Olo_Seo_Redirects {
 
     public function add_menu() {
         add_submenu_page(
-            'olobuilder',
-            __( 'Redirect & 404', 'olobuilder' ),
-            __( 'Redirect & 404', 'olobuilder' ),
+            'olobuild',
+            __( 'Redirect & 404', 'olobuild' ),
+            __( 'Redirect & 404', 'olobuild' ),
             'manage_options',
             'olo-redirects',
             [ $this, 'render_page' ]

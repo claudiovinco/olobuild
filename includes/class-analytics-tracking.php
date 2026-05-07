@@ -72,9 +72,9 @@ class Olo_Analytics_Tracking {
 
     public static function add_menu() {
         add_submenu_page(
-            'olobuilder',
-            __( 'Analytics', 'olobuilder' ),
-            __( 'Analytics', 'olobuilder' ),
+            'olobuild',
+            __( 'Analytics', 'olobuild' ),
+            __( 'Analytics', 'olobuild' ),
             'manage_options',
             'olo-analytics',
             [ __CLASS__, 'render_page' ]
@@ -136,10 +136,10 @@ class Olo_Analytics_Tracking {
         $opts = self::get_options();
         $tab  = sanitize_key( $_GET['tab'] ?? 'providers' );
         $tabs = [
-            'providers' => __( 'Provider', 'olobuilder' ),
-            'events'    => __( 'Eventi', 'olobuilder' ),
-            'settings'  => __( 'Impostazioni', 'olobuilder' ),
-            'scripts'   => __( 'Script personalizzati', 'olobuilder' ),
+            'providers' => __( 'Provider', 'olobuild' ),
+            'events'    => __( 'Eventi', 'olobuild' ),
+            'settings'  => __( 'Impostazioni', 'olobuild' ),
+            'scripts'   => __( 'Script personalizzati', 'olobuild' ),
         ];
         $n = self::OPT;
         ?>
@@ -170,7 +170,7 @@ class Olo_Analytics_Tracking {
                 <div class="olo-actions" style="margin-top:20px">
                     <button type="submit" class="olo-btn-save">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-                        <?php esc_html_e( 'Salva impostazioni', 'olobuilder' ); ?>
+                        <?php esc_html_e( 'Salva impostazioni', 'olobuild' ); ?>
                     </button>
                 </div>
             </form>
@@ -215,7 +215,7 @@ class Olo_Analytics_Tracking {
                 'svg'   => '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>',
                 'color' => 'black',
                 'placeholder' => 'G-XXXXXXXXXX',
-                'desc'  => __( 'Measurement ID di GA4. Lo trovi in Amministrazione &rarr; Flussi di dati.', 'olobuilder' ),
+                'desc'  => __( 'Measurement ID di GA4. Lo trovi in Amministrazione &rarr; Flussi di dati.', 'olobuild' ),
             ],
             [
                 'key'   => 'gtm_id',
@@ -223,7 +223,7 @@ class Olo_Analytics_Tracking {
                 'svg'   => '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>',
                 'color' => 'orange',
                 'placeholder' => 'GTM-XXXXXXX',
-                'desc'  => __( 'Container ID di GTM. Se usi GTM per gestire GA4, non inserire anche il Measurement ID sopra.', 'olobuilder' ),
+                'desc'  => __( 'Container ID di GTM. Se usi GTM per gestire GA4, non inserire anche il Measurement ID sopra.', 'olobuild' ),
             ],
             [
                 'key'   => 'fb_pixel_id',
@@ -231,7 +231,7 @@ class Olo_Analytics_Tracking {
                 'svg'   => '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>',
                 'color' => 'warm',
                 'placeholder' => '123456789012345',
-                'desc'  => __( 'Pixel ID di Meta/Facebook. Lo trovi in Events Manager &rarr; Impostazioni.', 'olobuilder' ),
+                'desc'  => __( 'Pixel ID di Meta/Facebook. Lo trovi in Events Manager &rarr; Impostazioni.', 'olobuild' ),
             ],
             [
                 'key'   => 'clarity_id',
@@ -239,7 +239,7 @@ class Olo_Analytics_Tracking {
                 'svg'   => '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>',
                 'color' => 'light',
                 'placeholder' => 'xxxxxxxxxx',
-                'desc'  => __( 'Project ID di Clarity. Heatmap e session recording gratuiti.', 'olobuilder' ),
+                'desc'  => __( 'Project ID di Clarity. Heatmap e session recording gratuiti.', 'olobuild' ),
             ],
             [
                 'key'   => 'hotjar_id',
@@ -247,7 +247,7 @@ class Olo_Analytics_Tracking {
                 'svg'   => '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 0 1 0 20 10 10 0 0 1 0-20z"/><path d="M12 6v6l4 2"/></svg>',
                 'color' => 'black',
                 'placeholder' => '1234567',
-                'desc'  => __( 'Site ID di Hotjar. Lo trovi in Settings &rarr; Sites & Organizations.', 'olobuilder' ),
+                'desc'  => __( 'Site ID di Hotjar. Lo trovi in Settings &rarr; Sites & Organizations.', 'olobuild' ),
             ],
         ];
 
@@ -260,15 +260,15 @@ class Olo_Analytics_Tracking {
                     <p><?php echo $p['desc']; ?></p>
                 </div>
                 <?php if ( ! empty( $opts[ $p['key'] ] ) ) : ?>
-                    <span class="olo-badge green"><?php esc_html_e( 'Attivo', 'olobuilder' ); ?></span>
+                    <span class="olo-badge green"><?php esc_html_e( 'Attivo', 'olobuild' ); ?></span>
                 <?php else : ?>
-                    <span class="olo-badge gray"><?php esc_html_e( 'Non configurato', 'olobuilder' ); ?></span>
+                    <span class="olo-badge gray"><?php esc_html_e( 'Non configurato', 'olobuild' ); ?></span>
                 <?php endif; ?>
             </div>
             <div class="olo-card-body">
                 <div class="olo-field-row" style="border-bottom:none;padding:0">
                     <div class="olo-field-info">
-                        <label><?php esc_html_e( 'ID', 'olobuilder' ); ?></label>
+                        <label><?php esc_html_e( 'ID', 'olobuild' ); ?></label>
                         <span class="olo-field-hint"><?php echo esc_html( $p['placeholder'] ); ?></span>
                     </div>
                     <div class="olo-field-input-wrap">
@@ -288,13 +288,13 @@ class Olo_Analytics_Tracking {
     private static function render_tab_events( $opts ) {
         $n = self::OPT;
         $events = [
-            [ 'key' => 'track_buttons',   'label' => __( 'Click sui pulsanti', 'olobuilder' ),           'desc' => 'olo_button_click — elementi con data-olo-track="button"' ],
-            [ 'key' => 'track_forms',     'label' => __( 'Invio form', 'olobuilder' ),                   'desc' => 'olo_form_submit — form con data-olo-track="form"' ],
-            [ 'key' => 'track_video',     'label' => __( 'Riproduzione video', 'olobuilder' ),           'desc' => 'olo_video_play — evento "play" su tag <video>' ],
-            [ 'key' => 'track_scroll',    'label' => __( 'Profondità di scroll', 'olobuilder' ),         'desc' => 'olo_scroll_depth — milestone configurabili' ],
-            [ 'key' => 'track_pricing',   'label' => __( 'Click su pricing CTA', 'olobuilder' ),        'desc' => 'olo_pricing_click — elementi con data-olo-track="pricing"' ],
-            [ 'key' => 'track_downloads', 'label' => __( 'Download file', 'olobuilder' ),               'desc' => 'olo_file_download — click su link con estensioni configurate' ],
-            [ 'key' => 'track_outbound',  'label' => __( 'Link esterni', 'olobuilder' ),                'desc' => 'olo_outbound_click — click su link verso domini diversi' ],
+            [ 'key' => 'track_buttons',   'label' => __( 'Click sui pulsanti', 'olobuild' ),           'desc' => 'olo_button_click — elementi con data-olo-track="button"' ],
+            [ 'key' => 'track_forms',     'label' => __( 'Invio form', 'olobuild' ),                   'desc' => 'olo_form_submit — form con data-olo-track="form"' ],
+            [ 'key' => 'track_video',     'label' => __( 'Riproduzione video', 'olobuild' ),           'desc' => 'olo_video_play — evento "play" su tag <video>' ],
+            [ 'key' => 'track_scroll',    'label' => __( 'Profondità di scroll', 'olobuild' ),         'desc' => 'olo_scroll_depth — milestone configurabili' ],
+            [ 'key' => 'track_pricing',   'label' => __( 'Click su pricing CTA', 'olobuild' ),        'desc' => 'olo_pricing_click — elementi con data-olo-track="pricing"' ],
+            [ 'key' => 'track_downloads', 'label' => __( 'Download file', 'olobuild' ),               'desc' => 'olo_file_download — click su link con estensioni configurate' ],
+            [ 'key' => 'track_outbound',  'label' => __( 'Link esterni', 'olobuild' ),                'desc' => 'olo_outbound_click — click su link verso domini diversi' ],
         ];
         ?>
         <div class="olo-card">
@@ -303,8 +303,8 @@ class Olo_Analytics_Tracking {
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
                 </div>
                 <div>
-                    <h3><?php esc_html_e( 'Auto-tracking eventi', 'olobuilder' ); ?></h3>
-                    <p><?php esc_html_e( 'Scegli quali eventi tracciare automaticamente. Vengono inviati a tutti i provider configurati.', 'olobuilder' ); ?></p>
+                    <h3><?php esc_html_e( 'Auto-tracking eventi', 'olobuild' ); ?></h3>
+                    <p><?php esc_html_e( 'Scegli quali eventi tracciare automaticamente. Vengono inviati a tutti i provider configurati.', 'olobuild' ); ?></p>
                 </div>
             </div>
             <div class="olo-card-body">
@@ -331,15 +331,15 @@ class Olo_Analytics_Tracking {
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                 </div>
                 <div>
-                    <h3><?php esc_html_e( 'Parametri eventi', 'olobuilder' ); ?></h3>
-                    <p><?php esc_html_e( 'Configura i dettagli degli eventi di scroll e download.', 'olobuilder' ); ?></p>
+                    <h3><?php esc_html_e( 'Parametri eventi', 'olobuild' ); ?></h3>
+                    <p><?php esc_html_e( 'Configura i dettagli degli eventi di scroll e download.', 'olobuild' ); ?></p>
                 </div>
             </div>
             <div class="olo-card-body">
                 <div class="olo-field-row">
                     <div class="olo-field-info">
-                        <label><?php esc_html_e( 'Milestone scroll (%)', 'olobuilder' ); ?></label>
-                        <span class="olo-field-hint"><?php esc_html_e( 'Percentuali di scroll a cui inviare un evento (separate da virgola).', 'olobuilder' ); ?></span>
+                        <label><?php esc_html_e( 'Milestone scroll (%)', 'olobuild' ); ?></label>
+                        <span class="olo-field-hint"><?php esc_html_e( 'Percentuali di scroll a cui inviare un evento (separate da virgola).', 'olobuild' ); ?></span>
                     </div>
                     <div class="olo-field-input-wrap">
                         <input type="text" name="<?php echo $n; ?>[scroll_milestones]" value="<?php echo esc_attr( $opts['scroll_milestones'] ); ?>" class="olo-field-input" placeholder="25,50,75,100" />
@@ -347,8 +347,8 @@ class Olo_Analytics_Tracking {
                 </div>
                 <div class="olo-field-row">
                     <div class="olo-field-info">
-                        <label><?php esc_html_e( 'Estensioni download', 'olobuilder' ); ?></label>
-                        <span class="olo-field-hint"><?php esc_html_e( 'Estensioni file da tracciare come download (separate da virgola).', 'olobuilder' ); ?></span>
+                        <label><?php esc_html_e( 'Estensioni download', 'olobuild' ); ?></label>
+                        <span class="olo-field-hint"><?php esc_html_e( 'Estensioni file da tracciare come download (separate da virgola).', 'olobuild' ); ?></span>
                     </div>
                     <div class="olo-field-input-wrap">
                         <input type="text" name="<?php echo $n; ?>[download_extensions]" value="<?php echo esc_attr( $opts['download_extensions'] ); ?>" class="olo-field-input" placeholder="pdf,zip,doc" />
@@ -366,23 +366,23 @@ class Olo_Analytics_Tracking {
         $settings = [
             [
                 'key'   => 'consent_required',
-                'label' => __( 'Richiedi consenso cookie', 'olobuilder' ),
-                'desc'  => __( 'Blocca gli script di tracking finché l\'utente non accetta i cookie analitici/marketing dal banner Cookie Consent. Richiesto per GDPR.', 'olobuilder' ),
+                'label' => __( 'Richiedi consenso cookie', 'olobuild' ),
+                'desc'  => __( 'Blocca gli script di tracking finché l\'utente non accetta i cookie analitici/marketing dal banner Cookie Consent. Richiesto per GDPR.', 'olobuild' ),
             ],
             [
                 'key'   => 'anonymize_ip',
-                'label' => __( 'Anonimizza IP', 'olobuilder' ),
-                'desc'  => __( 'GA4 anonimizza l\'IP di default, ma questa opzione aggiunge il parametro esplicito per conformità.', 'olobuilder' ),
+                'label' => __( 'Anonimizza IP', 'olobuild' ),
+                'desc'  => __( 'GA4 anonimizza l\'IP di default, ma questa opzione aggiunge il parametro esplicito per conformità.', 'olobuild' ),
             ],
             [
                 'key'   => 'respect_dnt',
-                'label' => __( 'Rispetta Do Not Track', 'olobuilder' ),
-                'desc'  => __( 'Non caricare gli script se il browser invia l\'header Do Not Track.', 'olobuilder' ),
+                'label' => __( 'Rispetta Do Not Track', 'olobuild' ),
+                'desc'  => __( 'Non caricare gli script se il browser invia l\'header Do Not Track.', 'olobuild' ),
             ],
             [
                 'key'   => 'exclude_admins',
-                'label' => __( 'Escludi amministratori', 'olobuilder' ),
-                'desc'  => __( 'Non tracciare le visite degli utenti con ruolo Amministratore.', 'olobuilder' ),
+                'label' => __( 'Escludi amministratori', 'olobuild' ),
+                'desc'  => __( 'Non tracciare le visite degli utenti con ruolo Amministratore.', 'olobuild' ),
             ],
         ];
         ?>
@@ -392,8 +392,8 @@ class Olo_Analytics_Tracking {
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                 </div>
                 <div>
-                    <h3><?php esc_html_e( 'Privacy e conformità', 'olobuilder' ); ?></h3>
-                    <p><?php esc_html_e( 'Opzioni di privacy, GDPR e gestione del consenso.', 'olobuilder' ); ?></p>
+                    <h3><?php esc_html_e( 'Privacy e conformità', 'olobuild' ); ?></h3>
+                    <p><?php esc_html_e( 'Opzioni di privacy, GDPR e gestione del consenso.', 'olobuild' ); ?></p>
                 </div>
             </div>
             <div class="olo-card-body">
@@ -427,15 +427,15 @@ class Olo_Analytics_Tracking {
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
                 </div>
                 <div>
-                    <h3><?php esc_html_e( 'Script personalizzati', 'olobuilder' ); ?></h3>
-                    <p><?php esc_html_e( 'Inserisci script di tracking aggiuntivi. Verranno bloccati dal consenso cookie se abilitato.', 'olobuilder' ); ?></p>
+                    <h3><?php esc_html_e( 'Script personalizzati', 'olobuild' ); ?></h3>
+                    <p><?php esc_html_e( 'Inserisci script di tracking aggiuntivi. Verranno bloccati dal consenso cookie se abilitato.', 'olobuild' ); ?></p>
                 </div>
             </div>
             <div class="olo-card-body">
                 <div class="olo-field-row olo-field-row-stack">
                     <div class="olo-field-info">
-                        <label><?php esc_html_e( 'Script nel <head>', 'olobuilder' ); ?></label>
-                        <span class="olo-field-hint"><?php esc_html_e( 'Inseriti prima della chiusura di </head>. Utile per snippet di tracking non supportati nativamente.', 'olobuilder' ); ?></span>
+                        <label><?php esc_html_e( 'Script nel <head>', 'olobuild' ); ?></label>
+                        <span class="olo-field-hint"><?php esc_html_e( 'Inseriti prima della chiusura di </head>. Utile per snippet di tracking non supportati nativamente.', 'olobuild' ); ?></span>
                     </div>
                     <div class="olo-field-input-wrap" style="width:100%">
                         <textarea name="<?php echo $n; ?>[head_scripts]" rows="6" class="olo-field-input wide olo-field-code" placeholder="&lt;script&gt;...&lt;/script&gt;"><?php echo esc_textarea( $opts['head_scripts'] ); ?></textarea>
@@ -443,8 +443,8 @@ class Olo_Analytics_Tracking {
                 </div>
                 <div class="olo-field-row olo-field-row-stack">
                     <div class="olo-field-info">
-                        <label><?php esc_html_e( 'Script nel <body>', 'olobuilder' ); ?></label>
-                        <span class="olo-field-hint"><?php esc_html_e( 'Inseriti prima della chiusura di </body>.', 'olobuilder' ); ?></span>
+                        <label><?php esc_html_e( 'Script nel <body>', 'olobuild' ); ?></label>
+                        <span class="olo-field-hint"><?php esc_html_e( 'Inseriti prima della chiusura di </body>.', 'olobuild' ); ?></span>
                     </div>
                     <div class="olo-field-input-wrap" style="width:100%">
                         <textarea name="<?php echo $n; ?>[body_scripts]" rows="6" class="olo-field-input wide olo-field-code" placeholder="&lt;script&gt;...&lt;/script&gt;"><?php echo esc_textarea( $opts['body_scripts'] ); ?></textarea>

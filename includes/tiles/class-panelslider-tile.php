@@ -301,8 +301,8 @@ class Olo_PanelSlider_Tile extends Olo_Tile_Base {
      * Render arrow markup with correct SVG icons per style.
      */
     private function render_arrows( $style ) {
-        $prev_label = esc_attr__( 'Precedente', 'olobuilder' );
-        $next_label = esc_attr__( 'Successivo', 'olobuilder' );
+        $prev_label = esc_attr__( 'Precedente', 'olobuild' );
+        $next_label = esc_attr__( 'Successivo', 'olobuild' );
 
         if ( $style === 'uikit' ) {
             return '<a class="olo-ps-arrow olo-ps-prev" href uk-slidenav-previous uk-slider-item="previous" aria-label="' . $prev_label . '"></a>'

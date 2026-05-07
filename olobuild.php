@@ -3,10 +3,10 @@
  * Plugin Name: Olobuild
  * Plugin URI:  https://olotheme.com
  * Description: Page builder professionale olonico con sistema a griglia (tile drag & drop).
- * Version:     3.12.8
+ * Version:     3.12.9
  * Author:      Claudio Vinco
  * Author URI:  https://clod.eu
- * Text Domain: olobuilder
+ * Text Domain: olobuild
  * Requires PHP: 7.4
  * Requires at least: 5.8
  */
@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'OLO_VERSION', '3.12.8' );
+define( 'OLO_VERSION', '3.12.9' );
 define( 'OLO_PATH', plugin_dir_path( __FILE__ ) );
 define( 'OLO_URL', plugin_dir_url( __FILE__ ) );
 
@@ -42,7 +42,7 @@ add_action( 'init', function() {
         if ( ! file_exists( $mo ) ) {
             $mo = OLO_PATH . 'languages/olobuilder-en_US.mo';
         }
-        load_textdomain( 'olobuilder', $mo );
+        load_textdomain( 'olobuild', $mo );
     }
 } );
 

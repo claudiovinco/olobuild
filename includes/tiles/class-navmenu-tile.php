@@ -488,11 +488,11 @@ class Olo_NavMenu_Tile extends Olo_Tile_Base {
         $total = count( $tree );
         ?>
         <div class="olo-navmenu olo-navmenu--<?php echo esc_attr( $nav_id ); ?>">
-            <nav class="olo-nav-bar" role="navigation" aria-label="<?php echo esc_attr__( 'Main menu', 'olobuilder' ); ?>">
+            <nav class="olo-nav-bar" role="navigation" aria-label="<?php echo esc_attr__( 'Main menu', 'olobuild' ); ?>">
                 <?php if ( $mobile ) :
                     $h_sz = max( 16, intval( $s['hamburger_size'] ) );
                 ?>
-                    <a id="<?php echo esc_attr( $nav_id ); ?>-btn" class="uk-hidden@m olo-nav-toggle" href="#<?php echo esc_attr( $nav_id ); ?>" uk-toggle aria-label="<?php echo esc_attr__( 'Open menu', 'olobuilder' ); ?>" aria-expanded="false">
+                    <a id="<?php echo esc_attr( $nav_id ); ?>-btn" class="uk-hidden@m olo-nav-toggle" href="#<?php echo esc_attr( $nav_id ); ?>" uk-toggle aria-label="<?php echo esc_attr__( 'Open menu', 'olobuild' ); ?>" aria-expanded="false">
                         <svg width="<?php echo $h_sz; ?>" height="<?php echo $h_sz; ?>" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
                     </a>
                 <?php endif; ?>
@@ -557,8 +557,8 @@ class Olo_NavMenu_Tile extends Olo_Tile_Base {
                 $mobile_type = $s['mobile_type'] ?? 'dropdown';
                 // Fullscreen mobile menu
                 if ( $mobile_type === 'fullscreen' ) : ?>
-                    <div id="<?php echo esc_attr( $nav_id ); ?>" class="olo-nav-fullscreen" role="dialog" aria-label="<?php echo esc_attr__( 'Mobile menu', 'olobuilder' ); ?>">
-                        <button class="uk-close uk-close-large" type="button" uk-close aria-label="<?php echo esc_attr__( 'Close menu', 'olobuilder' ); ?>" onclick="this.parentElement.classList.remove('uk-open')"></button>
+                    <div id="<?php echo esc_attr( $nav_id ); ?>" class="olo-nav-fullscreen" role="dialog" aria-label="<?php echo esc_attr__( 'Mobile menu', 'olobuild' ); ?>">
+                        <button class="uk-close uk-close-large" type="button" uk-close aria-label="<?php echo esc_attr__( 'Close menu', 'olobuild' ); ?>" onclick="this.parentElement.classList.remove('uk-open')"></button>
                         <div>
                             <ul class="uk-nav uk-nav-default uk-nav-parent-icon" role="menu" uk-nav>
                                 <?php $this->render_mobile_items( $tree, $children, $grandchildren ); ?>
@@ -581,9 +581,9 @@ class Olo_NavMenu_Tile extends Olo_Tile_Base {
                     })();
                     </script>
                 <?php elseif ( $mob_style === 'offcanvas' ) : ?>
-                    <div id="<?php echo esc_attr( $nav_id ); ?>" uk-offcanvas="overlay: true" role="dialog" aria-label="<?php echo esc_attr__( 'Mobile menu', 'olobuilder' ); ?>">
+                    <div id="<?php echo esc_attr( $nav_id ); ?>" uk-offcanvas="overlay: true" role="dialog" aria-label="<?php echo esc_attr__( 'Mobile menu', 'olobuild' ); ?>">
                         <div class="uk-offcanvas-bar">
-                            <button class="uk-offcanvas-close" type="button" uk-close aria-label="<?php echo esc_attr__( 'Close menu', 'olobuilder' ); ?>"></button>
+                            <button class="uk-offcanvas-close" type="button" uk-close aria-label="<?php echo esc_attr__( 'Close menu', 'olobuild' ); ?>"></button>
                             <ul class="uk-nav uk-nav-default uk-nav-parent-icon" role="menu" uk-nav>
                                 <?php $this->render_mobile_items( $tree, $children, $grandchildren ); ?>
                                 <?php if ( $has_search_ref ) { $this->render_referenced_search( $s['search_tile_id'], $s, true ); } elseif ( $has_search_legacy ) { $this->render_mobile_search( $s ); } ?>
@@ -969,7 +969,7 @@ class Olo_NavMenu_Tile extends Olo_Tile_Base {
         $icon_size     = max( 14, intval( $s['v_icon_size'] ) );
         $alignment     = $s['alignment'] ?: 'left';
         ?>
-        <nav class="olo-navmenu olo-navmenu--<?php echo esc_attr( $nav_id ); ?> olo-vnav" role="navigation" aria-label="<?php echo esc_attr__( 'Vertical menu', 'olobuilder' ); ?>">
+        <nav class="olo-navmenu olo-navmenu--<?php echo esc_attr( $nav_id ); ?> olo-vnav" role="navigation" aria-label="<?php echo esc_attr__( 'Vertical menu', 'olobuild' ); ?>">
             <ul class="olo-vnav-list" style="text-align:<?php echo esc_attr( $alignment ); ?>">
                 <?php foreach ( $tree as $item ) :
                     $subs       = $children[ $item->ID ] ?? [];
@@ -1071,7 +1071,7 @@ class Olo_NavMenu_Tile extends Olo_Tile_Base {
         if ( $alignment === 'center' ) $align_class = ' uk-flex-center';
         if ( $alignment === 'right' )  $align_class = ' uk-flex-right';
         ?>
-        <nav class="olo-navmenu olo-navmenu--<?php echo esc_attr( $nav_id ); ?>" role="navigation" aria-label="<?php echo esc_attr__( 'Sub navigation', 'olobuilder' ); ?>">
+        <nav class="olo-navmenu olo-navmenu--<?php echo esc_attr( $nav_id ); ?>" role="navigation" aria-label="<?php echo esc_attr__( 'Sub navigation', 'olobuild' ); ?>">
             <ul class="uk-subnav<?php echo esc_attr( $align_class ); ?>">
                 <?php foreach ( $tree as $item ) : ?>
                     <li>

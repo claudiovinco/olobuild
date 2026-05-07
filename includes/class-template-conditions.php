@@ -306,8 +306,8 @@ class Olo_Template_Conditions {
     public function register_admin_page() {
         add_submenu_page(
             'admin.php?page=olobuilder',
-            __( 'Regole di visualizzazione', 'olobuilder' ),
-            __( 'Regole di visualizzazione', 'olobuilder' ),
+            __( 'Regole di visualizzazione', 'olobuild' ),
+            __( 'Regole di visualizzazione', 'olobuild' ),
             'edit_others_posts',
             'olobuilder-template-rules',
             [ $this, 'render_admin_page' ]
@@ -316,7 +316,7 @@ class Olo_Template_Conditions {
 
     public function render_admin_page() {
         if ( ! current_user_can( 'edit_others_posts' ) ) {
-            wp_die( __( 'Accesso negato.', 'olobuilder' ) );
+            wp_die( __( 'Accesso negato.', 'olobuild' ) );
         }
 
         $assignments = get_option( 'olo_template_conditions', [] );
@@ -333,17 +333,17 @@ class Olo_Template_Conditions {
         $saved   = isset( $_GET['olo_saved'] );
         ?>
         <div class="wrap olo-tpl-rules">
-            <h1><?php esc_html_e( 'Regole di visualizzazione template', 'olobuilder' ); ?></h1>
+            <h1><?php esc_html_e( 'Regole di visualizzazione template', 'olobuild' ); ?></h1>
             <p class="description">
-                <?php esc_html_e( 'Definisci dove ogni template Header/Footer si applica. Le regole hanno priorità sull\'header/footer globale e cedono il passo a un\'eventuale assegnazione per-pagina dal metabox Olobuild.', 'olobuilder' ); ?>
+                <?php esc_html_e( 'Definisci dove ogni template Header/Footer si applica. Le regole hanno priorità sull\'header/footer globale e cedono il passo a un\'eventuale assegnazione per-pagina dal metabox Olobuild.', 'olobuild' ); ?>
             </p>
 
             <?php if ( $saved ) : ?>
-                <div class="notice notice-success is-dismissible"><p><?php esc_html_e( 'Regole salvate.', 'olobuilder' ); ?></p></div>
+                <div class="notice notice-success is-dismissible"><p><?php esc_html_e( 'Regole salvate.', 'olobuild' ); ?></p></div>
             <?php endif; ?>
 
             <?php if ( empty( $headers ) && empty( $footers ) ) : ?>
-                <p><em><?php esc_html_e( 'Nessun template Header/Footer pubblicato. Crea prima un template e impostalo come "Pubblicato".', 'olobuilder' ); ?></em></p>
+                <p><em><?php esc_html_e( 'Nessun template Header/Footer pubblicato. Crea prima un template e impostalo come "Pubblicato".', 'olobuild' ); ?></em></p>
                 <?php return; ?>
             <?php endif; ?>
 
@@ -355,11 +355,11 @@ class Olo_Template_Conditions {
                     <thead>
                         <tr>
                             <th style="width:36px;"></th>
-                            <th style="width:18%;"><?php esc_html_e( 'Nome', 'olobuilder' ); ?></th>
-                            <th style="width:22%;"><?php esc_html_e( 'Template', 'olobuilder' ); ?></th>
-                            <th style="width:15%;"><?php esc_html_e( 'Area', 'olobuilder' ); ?></th>
-                            <th style="width:10%;"><?php esc_html_e( 'Priorità', 'olobuilder' ); ?></th>
-                            <th><?php esc_html_e( 'Condizione', 'olobuilder' ); ?></th>
+                            <th style="width:18%;"><?php esc_html_e( 'Nome', 'olobuild' ); ?></th>
+                            <th style="width:22%;"><?php esc_html_e( 'Template', 'olobuild' ); ?></th>
+                            <th style="width:15%;"><?php esc_html_e( 'Area', 'olobuild' ); ?></th>
+                            <th style="width:10%;"><?php esc_html_e( 'Priorità', 'olobuild' ); ?></th>
+                            <th><?php esc_html_e( 'Condizione', 'olobuild' ); ?></th>
                             <th style="width:48px;"></th>
                         </tr>
                     </thead>
@@ -378,20 +378,20 @@ class Olo_Template_Conditions {
                             ?>
                             <tr class="olo-tpl-rule-row">
                                 <td>
-                                    <input type="checkbox" name="rules[<?php echo (int) $i; ?>][enabled]" value="1" <?php checked( $enabled ); ?> title="<?php esc_attr_e( 'Abilita', 'olobuilder' ); ?>" />
+                                    <input type="checkbox" name="rules[<?php echo (int) $i; ?>][enabled]" value="1" <?php checked( $enabled ); ?> title="<?php esc_attr_e( 'Abilita', 'olobuild' ); ?>" />
                                 </td>
                                 <td>
-                                    <input type="text" name="rules[<?php echo (int) $i; ?>][name]" value="<?php echo esc_attr( $name ); ?>" placeholder="<?php esc_attr_e( 'es. Header strutture', 'olobuilder' ); ?>" style="width:100%;" />
+                                    <input type="text" name="rules[<?php echo (int) $i; ?>][name]" value="<?php echo esc_attr( $name ); ?>" placeholder="<?php esc_attr_e( 'es. Header strutture', 'olobuild' ); ?>" style="width:100%;" />
                                 </td>
                                 <td>
                                     <select name="rules[<?php echo (int) $i; ?>][template_id]" class="olo-tpl-select" data-context="<?php echo esc_attr( $context ); ?>" style="width:100%;">
-                                        <option value="0">— <?php esc_html_e( 'Seleziona template', 'olobuilder' ); ?> —</option>
-                                        <optgroup label="<?php esc_attr_e( 'Header', 'olobuilder' ); ?>">
+                                        <option value="0">— <?php esc_html_e( 'Seleziona template', 'olobuild' ); ?> —</option>
+                                        <optgroup label="<?php esc_attr_e( 'Header', 'olobuild' ); ?>">
                                             <?php foreach ( $headers as $t ) : ?>
                                                 <option value="<?php echo (int) $t['id']; ?>" data-type="header" <?php selected( $template_id, (int) $t['id'] ); ?>>#<?php echo (int) $t['id']; ?> — <?php echo esc_html( $t['title'] ); ?></option>
                                             <?php endforeach; ?>
                                         </optgroup>
-                                        <optgroup label="<?php esc_attr_e( 'Footer', 'olobuilder' ); ?>">
+                                        <optgroup label="<?php esc_attr_e( 'Footer', 'olobuild' ); ?>">
                                             <?php foreach ( $footers as $t ) : ?>
                                                 <option value="<?php echo (int) $t['id']; ?>" data-type="footer" <?php selected( $template_id, (int) $t['id'] ); ?>>#<?php echo (int) $t['id']; ?> — <?php echo esc_html( $t['title'] ); ?></option>
                                             <?php endforeach; ?>
@@ -400,39 +400,39 @@ class Olo_Template_Conditions {
                                 </td>
                                 <td>
                                     <select name="rules[<?php echo (int) $i; ?>][context]" style="width:100%;">
-                                        <option value="header" <?php selected( $context, 'header' ); ?>><?php esc_html_e( 'Header', 'olobuilder' ); ?></option>
-                                        <option value="footer" <?php selected( $context, 'footer' ); ?>><?php esc_html_e( 'Footer', 'olobuilder' ); ?></option>
+                                        <option value="header" <?php selected( $context, 'header' ); ?>><?php esc_html_e( 'Header', 'olobuild' ); ?></option>
+                                        <option value="footer" <?php selected( $context, 'footer' ); ?>><?php esc_html_e( 'Footer', 'olobuild' ); ?></option>
                                     </select>
                                 </td>
                                 <td>
-                                    <input type="number" name="rules[<?php echo (int) $i; ?>][priority]" value="<?php echo (int) $priority; ?>" min="1" max="999" style="width:80px;" title="<?php esc_attr_e( 'Più basso = più importante', 'olobuilder' ); ?>" />
+                                    <input type="number" name="rules[<?php echo (int) $i; ?>][priority]" value="<?php echo (int) $priority; ?>" min="1" max="999" style="width:80px;" title="<?php esc_attr_e( 'Più basso = più importante', 'olobuild' ); ?>" />
                                 </td>
                                 <td class="olo-cond-cell">
                                     <select name="rules[<?php echo (int) $i; ?>][conditions][0][type]" class="olo-cond-type" style="min-width:170px;">
-                                        <option value=""><?php esc_html_e( '— Seleziona —', 'olobuilder' ); ?></option>
-                                        <option value="entire_site" <?php selected( $ct, 'entire_site' ); ?>><?php esc_html_e( 'Tutto il sito', 'olobuilder' ); ?></option>
-                                        <option value="front_page" <?php selected( $ct, 'front_page' ); ?>><?php esc_html_e( 'Front page', 'olobuilder' ); ?></option>
-                                        <option value="post_type" <?php selected( $ct, 'post_type' ); ?>><?php esc_html_e( 'Singoli di un tipo (CPT)', 'olobuilder' ); ?></option>
-                                        <option value="archive" <?php selected( $ct, 'archive' ); ?>><?php esc_html_e( 'Archivio di un tipo (CPT)', 'olobuilder' ); ?></option>
-                                        <option value="page" <?php selected( $ct, 'page' ); ?>><?php esc_html_e( 'Una pagina specifica (ID)', 'olobuilder' ); ?></option>
-                                        <option value="post" <?php selected( $ct, 'post' ); ?>><?php esc_html_e( 'Un articolo specifico (ID)', 'olobuilder' ); ?></option>
-                                        <option value="search" <?php selected( $ct, 'search' ); ?>><?php esc_html_e( 'Risultati ricerca', 'olobuilder' ); ?></option>
-                                        <option value="404" <?php selected( $ct, '404' ); ?>><?php esc_html_e( 'Pagina 404', 'olobuilder' ); ?></option>
-                                        <option value="user_logged_in" <?php selected( $ct, 'user_logged_in' ); ?>><?php esc_html_e( 'Utenti loggati', 'olobuilder' ); ?></option>
-                                        <option value="user_logged_out" <?php selected( $ct, 'user_logged_out' ); ?>><?php esc_html_e( 'Utenti non loggati', 'olobuilder' ); ?></option>
+                                        <option value=""><?php esc_html_e( '— Seleziona —', 'olobuild' ); ?></option>
+                                        <option value="entire_site" <?php selected( $ct, 'entire_site' ); ?>><?php esc_html_e( 'Tutto il sito', 'olobuild' ); ?></option>
+                                        <option value="front_page" <?php selected( $ct, 'front_page' ); ?>><?php esc_html_e( 'Front page', 'olobuild' ); ?></option>
+                                        <option value="post_type" <?php selected( $ct, 'post_type' ); ?>><?php esc_html_e( 'Singoli di un tipo (CPT)', 'olobuild' ); ?></option>
+                                        <option value="archive" <?php selected( $ct, 'archive' ); ?>><?php esc_html_e( 'Archivio di un tipo (CPT)', 'olobuild' ); ?></option>
+                                        <option value="page" <?php selected( $ct, 'page' ); ?>><?php esc_html_e( 'Una pagina specifica (ID)', 'olobuild' ); ?></option>
+                                        <option value="post" <?php selected( $ct, 'post' ); ?>><?php esc_html_e( 'Un articolo specifico (ID)', 'olobuild' ); ?></option>
+                                        <option value="search" <?php selected( $ct, 'search' ); ?>><?php esc_html_e( 'Risultati ricerca', 'olobuild' ); ?></option>
+                                        <option value="404" <?php selected( $ct, '404' ); ?>><?php esc_html_e( 'Pagina 404', 'olobuild' ); ?></option>
+                                        <option value="user_logged_in" <?php selected( $ct, 'user_logged_in' ); ?>><?php esc_html_e( 'Utenti loggati', 'olobuild' ); ?></option>
+                                        <option value="user_logged_out" <?php selected( $ct, 'user_logged_out' ); ?>><?php esc_html_e( 'Utenti non loggati', 'olobuild' ); ?></option>
                                     </select>
                                     <?php $show_cpt = in_array( $ct, [ 'post_type', 'archive' ], true ); ?>
                                     <select name="rules[<?php echo (int) $i; ?>][conditions][0][value]" class="olo-cond-value-cpt" style="min-width:200px;<?php echo $show_cpt ? '' : 'display:none;'; ?>" <?php disabled( ! $show_cpt ); ?>>
-                                        <option value=""><?php esc_html_e( '— Tipo —', 'olobuilder' ); ?></option>
+                                        <option value=""><?php esc_html_e( '— Tipo —', 'olobuild' ); ?></option>
                                         <?php foreach ( $public_cpts as $slug => $obj ) : ?>
                                             <option value="<?php echo esc_attr( $slug ); ?>" <?php selected( $cv, $slug ); ?>><?php echo esc_html( $obj->labels->singular_name . ' (' . $slug . ')' ); ?></option>
                                         <?php endforeach; ?>
                                     </select>
                                     <?php $show_id = in_array( $ct, [ 'page', 'post' ], true ); ?>
-                                    <input type="text" name="rules[<?php echo (int) $i; ?>][conditions][0][value]" class="olo-cond-value-id" value="<?php echo $show_id ? esc_attr( $cv ) : ''; ?>" placeholder="<?php esc_attr_e( 'ID', 'olobuilder' ); ?>" style="width:80px;<?php echo $show_id ? '' : 'display:none;'; ?>" <?php disabled( ! $show_id ); ?> />
+                                    <input type="text" name="rules[<?php echo (int) $i; ?>][conditions][0][value]" class="olo-cond-value-id" value="<?php echo $show_id ? esc_attr( $cv ) : ''; ?>" placeholder="<?php esc_attr_e( 'ID', 'olobuild' ); ?>" style="width:80px;<?php echo $show_id ? '' : 'display:none;'; ?>" <?php disabled( ! $show_id ); ?> />
                                 </td>
                                 <td>
-                                    <button type="button" class="button olo-rule-remove" title="<?php esc_attr_e( 'Rimuovi', 'olobuilder' ); ?>">×</button>
+                                    <button type="button" class="button olo-rule-remove" title="<?php esc_attr_e( 'Rimuovi', 'olobuild' ); ?>">×</button>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -440,15 +440,15 @@ class Olo_Template_Conditions {
                 </table>
 
                 <p style="margin-top:14px;">
-                    <button type="button" class="button" id="olo-rule-add">+ <?php esc_html_e( 'Aggiungi regola', 'olobuilder' ); ?></button>
-                    <button type="submit" class="button button-primary" style="margin-left:8px;"><?php esc_html_e( 'Salva regole', 'olobuilder' ); ?></button>
+                    <button type="button" class="button" id="olo-rule-add">+ <?php esc_html_e( 'Aggiungi regola', 'olobuild' ); ?></button>
+                    <button type="submit" class="button button-primary" style="margin-left:8px;"><?php esc_html_e( 'Salva regole', 'olobuild' ); ?></button>
                 </p>
 
-                <h2 style="margin-top:30px;"><?php esc_html_e( 'Come funziona', 'olobuilder' ); ?></h2>
+                <h2 style="margin-top:30px;"><?php esc_html_e( 'Come funziona', 'olobuild' ); ?></h2>
                 <ul style="list-style:disc;margin-left:18px;">
-                    <li><strong><?php esc_html_e( 'Priorità più bassa = vince per prima', 'olobuilder' ); ?></strong>. <?php esc_html_e( 'A parità, l\'ordine in tabella decide.', 'olobuilder' ); ?></li>
-                    <li><?php esc_html_e( 'Se un singolo post ha un header/footer assegnato dal metabox Olobuild, quello vince comunque sulle regole qui.', 'olobuilder' ); ?></li>
-                    <li><?php esc_html_e( 'Se nessuna regola matcha, viene usato l\'header/footer globale (Gestione Template → Attiva).', 'olobuilder' ); ?></li>
+                    <li><strong><?php esc_html_e( 'Priorità più bassa = vince per prima', 'olobuild' ); ?></strong>. <?php esc_html_e( 'A parità, l\'ordine in tabella decide.', 'olobuild' ); ?></li>
+                    <li><?php esc_html_e( 'Se un singolo post ha un header/footer assegnato dal metabox Olobuild, quello vince comunque sulle regole qui.', 'olobuild' ); ?></li>
+                    <li><?php esc_html_e( 'Se nessuna regola matcha, viene usato l\'header/footer globale (Gestione Template → Attiva).', 'olobuild' ); ?></li>
                 </ul>
             </form>
         </div>

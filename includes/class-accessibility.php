@@ -41,7 +41,7 @@ class Olo_Accessibility {
      * ───────────────────────────────────────────── */
 
     public function output_skip_nav() {
-        echo '<a class="olo-skip-nav" href="#olo-main-content">' . esc_html__( 'Vai al contenuto principale', 'olobuilder' ) . '</a>' . "\n";
+        echo '<a class="olo-skip-nav" href="#olo-main-content">' . esc_html__( 'Vai al contenuto principale', 'olobuild' ) . '</a>' . "\n";
     }
 
     /* ─────────────────────────────────────────────

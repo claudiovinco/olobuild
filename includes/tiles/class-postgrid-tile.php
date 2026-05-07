@@ -755,7 +755,7 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
         <div class="olo-postgrid-filters<?php echo $fa_cls; ?>" data-postgrid-target="<?php echo esc_attr( $grid_id ); ?>">
             <?php if ( $style === 'dropdown' ) : ?>
                 <select class="olo-postgrid-filter-select uk-select" data-postgrid-filter-select>
-                    <option value=""><?php esc_html_e( 'Tutti', 'olobuilder' ); ?></option>
+                    <option value=""><?php esc_html_e( 'Tutti', 'olobuild' ); ?></option>
                     <?php foreach ( $terms as $term ) : ?>
                         <option value="<?php echo esc_attr( $term['slug'] ); ?>">
                             <?php echo esc_html( $term['name'] ); ?>
@@ -764,7 +764,7 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
                 </select>
             <?php elseif ( $style === 'minimal' ) : ?>
                 <button class="olo-postgrid-pill olo-postgrid-pill--minimal olo-postgrid-pill-active" data-filter="">
-                    <?php esc_html_e( 'Tutti', 'olobuilder' ); ?>
+                    <?php esc_html_e( 'Tutti', 'olobuild' ); ?>
                 </button>
                 <?php foreach ( $terms as $term ) : ?>
                     <button class="olo-postgrid-pill olo-postgrid-pill--minimal" data-filter="<?php echo esc_attr( $term['slug'] ); ?>">
@@ -773,7 +773,7 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
                 <?php endforeach; ?>
             <?php else : ?>
                 <button class="olo-postgrid-pill olo-postgrid-pill-active" data-filter="">
-                    <?php esc_html_e( 'Tutti', 'olobuilder' ); ?>
+                    <?php esc_html_e( 'Tutti', 'olobuild' ); ?>
                 </button>
                 <?php foreach ( $terms as $term ) : ?>
                     <button class="olo-postgrid-pill" data-filter="<?php echo esc_attr( $term['slug'] ); ?>">
@@ -815,7 +815,7 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
         ];
         ?>
         <select class="olo-postgrid-sort uk-select" data-postgrid-sort>
-            <option value="default"><?php esc_html_e( 'Ordina per…', 'olobuilder' ); ?></option>
+            <option value="default"><?php esc_html_e( 'Ordina per…', 'olobuild' ); ?></option>
             <?php foreach ( $available as $group ) :
                 if ( isset( $all_options[ $group ] ) ) :
                     foreach ( $all_options[ $group ] as $val => $label ) : ?>

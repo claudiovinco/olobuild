@@ -51,9 +51,9 @@ class Olo_Seo_Settings {
 
     public function add_menu() {
         add_submenu_page(
-            'olobuilder',
-            __( 'SEO', 'olobuilder' ),
-            __( 'SEO', 'olobuilder' ),
+            'olobuild',
+            __( 'SEO', 'olobuild' ),
+            __( 'SEO', 'olobuild' ),
             'manage_options',
             'olo-seo',
             [ $this, 'render_page' ]

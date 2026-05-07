@@ -247,10 +247,10 @@ class Olo_Builder {
         // Use 'manage_options' as primary capability — admins always have it.
         // 'edit_posts' can be missing on sites with custom role plugins (Tutor LMS, etc.)
         add_menu_page(
-            __( 'Olobuild', 'olobuilder' ),
-            __( 'Olobuild', 'olobuilder' ),
+            __( 'Olobuild', 'olobuild' ),
+            __( 'Olobuild', 'olobuild' ),
             'manage_options',
-            'olobuilder',
+            'olobuild',
             [ $this, 'render_dashboard_page' ],
             OLO_URL . 'assets/img/ob-menu-v2.png',
             30
@@ -258,45 +258,45 @@ class Olo_Builder {
 
         // Override the auto-generated first submenu item
         add_submenu_page(
-            'olobuilder',
-            __( 'Dashboard', 'olobuilder' ),
-            __( 'Dashboard', 'olobuilder' ),
+            'olobuild',
+            __( 'Dashboard', 'olobuild' ),
+            __( 'Dashboard', 'olobuild' ),
             'manage_options',
-            'olobuilder',
+            'olobuild',
             [ $this, 'render_dashboard_page' ]
         );
 
         add_submenu_page(
-            'olobuilder',
-            __( 'Gestione Template', 'olobuilder' ),
-            __( 'Gestione Template', 'olobuilder' ),
+            'olobuild',
+            __( 'Gestione Template', 'olobuild' ),
+            __( 'Gestione Template', 'olobuild' ),
             'manage_options',
             'olobuilder-templates',
             [ $this, 'render_builder_page' ]
         );
 
         add_submenu_page(
-            'olobuilder',
-            __( 'Configurazione', 'olobuilder' ),
-            __( 'Configurazione', 'olobuilder' ),
+            'olobuild',
+            __( 'Configurazione', 'olobuild' ),
+            __( 'Configurazione', 'olobuild' ),
             'manage_options',
             'olobuilder-settings',
             [ $this, 'render_configurazione_page' ]
         );
 
         add_submenu_page(
-            'olobuilder',
-            __( 'Ricerca Media', 'olobuilder' ),
-            __( 'Ricerca Media', 'olobuilder' ),
+            'olobuild',
+            __( 'Ricerca Media', 'olobuild' ),
+            __( 'Ricerca Media', 'olobuild' ),
             'upload_files',
             'olo-media-search',
             [ 'Olo_Media_Search', 'render_page' ]
         );
 
         add_submenu_page(
-            'olobuilder',
-            __( 'Invii Form', 'olobuilder' ),
-            __( 'Invii Form', 'olobuilder' ),
+            'olobuild',
+            __( 'Invii Form', 'olobuild' ),
+            __( 'Invii Form', 'olobuild' ),
             'manage_options',
             'olo-form-submissions',
             [ 'Olo_Form_Submissions', 'render_page' ]
@@ -317,7 +317,7 @@ class Olo_Builder {
         }
 
         $icons = [
-            'olobuilder'          => '\f226', // dashicons-dashboard
+            'olobuild'          => '\f226', // dashicons-dashboard
             'olobuilder-templates'=> '\f538', // dashicons-layout
             'olobuilder-settings' => '\f107', // dashicons-admin-generic
             'olo-media-search'    => '\f128', // dashicons-format-image
@@ -541,7 +541,7 @@ class Olo_Builder {
             include OLO_PATH . 'templates/builder-page.php';
         } else {
             // Template list mode — use the shared admin shell
-            self::page_shell_open( __( 'Gestione Template', 'olobuilder' ) );
+            self::page_shell_open( __( 'Gestione Template', 'olobuild' ) );
             echo '<div id="olobuilder-app"></div>';
             self::page_shell_close();
         }
@@ -613,7 +613,7 @@ class Olo_Builder {
         $base = admin_url( 'admin.php?page=' );
 
         $menu = [
-            [ 'slug' => 'olobuilder',           'label' => 'Avvio Rapido',  'icon' => 'rocket' ],
+            [ 'slug' => 'olobuild',           'label' => 'Avvio Rapido',  'icon' => 'rocket' ],
             [ 'slug' => 'olobuilder-settings',   'label' => 'Impostazioni',  'icon' => 'gear' ],
             [ 'slug' => 'olo-tools',             'label' => 'Strumenti',     'icon' => 'wrench' ],
             [ 'slug' => 'olo-role-manager',      'label' => 'Role Manager',  'icon' => 'users' ],
@@ -851,9 +851,9 @@ class Olo_Builder {
         // Sezione API Keys
         add_settings_section(
             'olo_api_keys_section',
-            __( 'API Keys — Stock Media', 'olobuilder' ),
+            __( 'API Keys — Stock Media', 'olobuild' ),
             function () {
-                echo '<p>' . esc_html__( 'Inserisci le chiavi API per i servizi di immagini/video stock. Se lasci un campo vuoto, verrà usata la chiave predefinita.', 'olobuilder' ) . '</p>';
+                echo '<p>' . esc_html__( 'Inserisci le chiavi API per i servizi di immagini/video stock. Se lasci un campo vuoto, verrà usata la chiave predefinita.', 'olobuild' ) . '</p>';
             },
             'olobuilder-settings'
         );
@@ -866,13 +866,13 @@ class Olo_Builder {
         ] );
         add_settings_field(
             'olo_pexels_api_key',
-            __( 'Pexels API Key', 'olobuilder' ),
+            __( 'Pexels API Key', 'olobuild' ),
             function () {
                 $val = get_option( 'olo_pexels_api_key', '***REMOVED-API-KEY***' );
                 echo '<input type="text" name="olo_pexels_api_key" value="' . esc_attr( $val ) . '" class="regular-text" />';
                 echo '<p class="description">' . sprintf(
                     /* translators: %s = URL */
-                    __( 'Ottieni una chiave su %s', 'olobuilder' ),
+                    __( 'Ottieni una chiave su %s', 'olobuild' ),
                     '<a href="https://www.pexels.com/api/" target="_blank" rel="noopener">pexels.com/api</a>'
                 ) . '</p>';
             },
@@ -888,12 +888,12 @@ class Olo_Builder {
         ] );
         add_settings_field(
             'olo_pixabay_api_key',
-            __( 'Pixabay API Key', 'olobuilder' ),
+            __( 'Pixabay API Key', 'olobuild' ),
             function () {
                 $val = get_option( 'olo_pixabay_api_key', '***REMOVED-API-KEY***' );
                 echo '<input type="text" name="olo_pixabay_api_key" value="' . esc_attr( $val ) . '" class="regular-text" />';
                 echo '<p class="description">' . sprintf(
-                    __( 'Ottieni una chiave su %s', 'olobuilder' ),
+                    __( 'Ottieni una chiave su %s', 'olobuild' ),
                     '<a href="https://pixabay.com/api/docs/" target="_blank" rel="noopener">pixabay.com/api/docs</a>'
                 ) . '</p>';
             },
@@ -909,12 +909,12 @@ class Olo_Builder {
         ] );
         add_settings_field(
             'olo_unsplash_api_key',
-            __( 'Unsplash Access Key', 'olobuilder' ),
+            __( 'Unsplash Access Key', 'olobuild' ),
             function () {
                 $val = get_option( 'olo_unsplash_api_key', 'mAtcGSa97BuefUN55vaORLV6YvFH4SHjdcCFbq_gJ84' );
                 echo '<input type="text" name="olo_unsplash_api_key" value="' . esc_attr( $val ) . '" class="regular-text" />';
                 echo '<p class="description">' . sprintf(
-                    __( 'Ottieni una chiave su %s', 'olobuilder' ),
+                    __( 'Ottieni una chiave su %s', 'olobuild' ),
                     '<a href="https://unsplash.com/developers" target="_blank" rel="noopener">unsplash.com/developers</a>'
                 ) . '</p>';
             },
@@ -930,12 +930,12 @@ class Olo_Builder {
         ] );
         add_settings_field(
             'olo_freesound_api_key',
-            __( 'Freesound API Key', 'olobuilder' ),
+            __( 'Freesound API Key', 'olobuild' ),
             function () {
                 $val = get_option( 'olo_freesound_api_key', '' );
                 echo '<input type="text" name="olo_freesound_api_key" value="' . esc_attr( $val ) . '" class="regular-text" placeholder="xbKm7Gp3..." />';
                 echo '<p class="description">' . sprintf(
-                    __( 'Ottieni una chiave su %s', 'olobuilder' ),
+                    __( 'Ottieni una chiave su %s', 'olobuild' ),
                     '<a href="https://freesound.org/apiv2/apply" target="_blank" rel="noopener">freesound.org/apiv2/apply</a>'
                 ) . '</p>';
             },
@@ -946,9 +946,9 @@ class Olo_Builder {
         // ── Sezione reCAPTCHA v3 ──
         add_settings_section(
             'olo_recaptcha_section',
-            __( 'reCAPTCHA v3', 'olobuilder' ),
+            __( 'reCAPTCHA v3', 'olobuild' ),
             function () {
-                echo '<p>' . esc_html__( 'Google reCAPTCHA v3 per la protezione dei form. Ottieni le chiavi su google.com/recaptcha', 'olobuilder' ) . '</p>';
+                echo '<p>' . esc_html__( 'Google reCAPTCHA v3 per la protezione dei form. Ottieni le chiavi su google.com/recaptcha', 'olobuild' ) . '</p>';
             },
             'olobuilder-settings'
         );
@@ -960,7 +960,7 @@ class Olo_Builder {
         ] );
         add_settings_field(
             'olo_recaptcha_site_key',
-            __( 'Site Key', 'olobuilder' ),
+            __( 'Site Key', 'olobuild' ),
             function () {
                 $val = get_option( 'olo_recaptcha_site_key', '' );
                 echo '<input type="text" name="olo_recaptcha_site_key" value="' . esc_attr( $val ) . '" class="regular-text" />';
@@ -976,7 +976,7 @@ class Olo_Builder {
         ] );
         add_settings_field(
             'olo_recaptcha_secret_key',
-            __( 'Secret Key', 'olobuilder' ),
+            __( 'Secret Key', 'olobuild' ),
             function () {
                 $val = get_option( 'olo_recaptcha_secret_key', '' );
                 echo '<input type="password" name="olo_recaptcha_secret_key" value="' . esc_attr( $val ) . '" class="regular-text" />';
@@ -988,9 +988,9 @@ class Olo_Builder {
         // ── Sezione Mailchimp ──
         add_settings_section(
             'olo_mailchimp_section',
-            __( 'Mailchimp', 'olobuilder' ),
+            __( 'Mailchimp', 'olobuild' ),
             function () {
-                echo '<p>' . esc_html__( 'API key Mailchimp per le integrazioni dei form contatti.', 'olobuilder' ) . '</p>';
+                echo '<p>' . esc_html__( 'API key Mailchimp per le integrazioni dei form contatti.', 'olobuild' ) . '</p>';
             },
             'olobuilder-settings'
         );
@@ -1002,12 +1002,12 @@ class Olo_Builder {
         ] );
         add_settings_field(
             'olo_mailchimp_api_key',
-            __( 'Mailchimp API Key', 'olobuilder' ),
+            __( 'Mailchimp API Key', 'olobuild' ),
             function () {
                 $val = get_option( 'olo_mailchimp_api_key', '' );
                 echo '<input type="text" name="olo_mailchimp_api_key" value="' . esc_attr( $val ) . '" class="regular-text" placeholder="xxxxxxxxxxxxxxxx-us1" />';
                 echo '<p class="description">' . sprintf(
-                    __( 'Ottieni una chiave su %s', 'olobuilder' ),
+                    __( 'Ottieni una chiave su %s', 'olobuild' ),
                     '<a href="https://mailchimp.com/help/about-api-keys/" target="_blank" rel="noopener">mailchimp.com</a>'
                 ) . '</p>';
             },

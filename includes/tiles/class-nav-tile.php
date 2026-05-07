@@ -194,7 +194,7 @@ class Olo_Nav_Tile extends Olo_Tile_Base {
         ob_start();
         echo '<style>' . $css . '</style>';
         ?>
-        <nav role="navigation" aria-label="<?php echo esc_attr__( 'Navigation', 'olobuilder' ); ?>">
+        <nav role="navigation" aria-label="<?php echo esc_attr__( 'Navigation', 'olobuild' ); ?>">
         <<?php echo $tag; ?> id="<?php echo esc_attr( $uid ); ?>">
             <?php foreach ( $items as $idx => $item ) :
                 $url   = ! empty( $item['url'] ) ? $item['url'] : '#';

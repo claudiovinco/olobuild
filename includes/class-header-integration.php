@@ -21,7 +21,7 @@ class Olo_Header_Integration {
      */
     public function register_nav_menus() {
         register_nav_menus( [
-            'olo_header' => __( 'Header Olobuild', 'olobuilder' ),
+            'olo_header' => __( 'Header Olobuild', 'olobuild' ),
         ] );
     }
 

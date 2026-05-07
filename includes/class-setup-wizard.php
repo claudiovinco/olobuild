@@ -40,9 +40,9 @@ class Olo_Setup_Wizard {
         ?>
         <div class="notice notice-info is-dismissible">
             <p>
-                <strong>Olobuild</strong> — <?php esc_html_e( 'Configurazione iniziale disponibile', 'olobuilder' ); ?>
+                <strong>Olobuild</strong> — <?php esc_html_e( 'Configurazione iniziale disponibile', 'olobuild' ); ?>
                 <a href="<?php echo esc_url( $wizard_url ); ?>" class="button button-primary" style="margin-left:12px;">
-                    <?php esc_html_e( 'Avvia configurazione', 'olobuilder' ); ?>
+                    <?php esc_html_e( 'Avvia configurazione', 'olobuild' ); ?>
                 </a>
             </p>
         </div>

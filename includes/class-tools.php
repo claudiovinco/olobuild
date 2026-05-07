@@ -38,7 +38,7 @@ class Olo_Tools {
 
     public function add_menu() {
         add_submenu_page(
-            'olobuilder',
+            'olobuild',
             'Strumenti',
             'Strumenti',
             'manage_options',

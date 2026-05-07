@@ -61,9 +61,9 @@ class Olo_Breadcrumbs_Tile extends Olo_Tile_Base {
         } elseif ( is_tag() ) {
             $items[] = '<li><span>' . esc_html( single_tag_title( '', false ) ) . '</span></li>';
         } elseif ( is_search() ) {
-            $items[] = '<li><span>' . esc_html__( 'Risultati ricerca', 'olobuilder' ) . '</span></li>';
+            $items[] = '<li><span>' . esc_html__( 'Risultati ricerca', 'olobuild' ) . '</span></li>';
         } elseif ( is_404() ) {
-            $items[] = '<li><span>' . esc_html__( 'Pagina non trovata', 'olobuilder' ) . '</span></li>';
+            $items[] = '<li><span>' . esc_html__( 'Pagina non trovata', 'olobuild' ) . '</span></li>';
         }
 
         if ( empty( $items ) ) {

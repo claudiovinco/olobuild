@@ -363,7 +363,7 @@ class Olo_LiveSearch_Tile extends Olo_Tile_Base {
 
             <?php if ( $mode === 'modal' ) : ?>
                 <!-- Trigger: solo icona -->
-                <button class="olo-ls-trigger" type="button" aria-label="<?php esc_attr_e( 'Apri ricerca', 'olobuilder' ); ?>">
+                <button class="olo-ls-trigger" type="button" aria-label="<?php esc_attr_e( 'Apri ricerca', 'olobuild' ); ?>">
                     <?php echo $icon_svg; ?>
                 </button>
 
@@ -377,13 +377,13 @@ class Olo_LiveSearch_Tile extends Olo_Tile_Base {
                                    class="olo-ls-input"
                                    placeholder="<?php echo esc_attr( $s['placeholder'] ?: 'Cerca...' ); ?>"
                                    autocomplete="off"
-                                   aria-label="<?php esc_attr_e( 'Cerca', 'olobuilder' ); ?>">
-                            <button class="olo-ls-clear" type="button" aria-label="<?php esc_attr_e( 'Cancella', 'olobuilder' ); ?>" hidden>
+                                   aria-label="<?php esc_attr_e( 'Cerca', 'olobuild' ); ?>">
+                            <button class="olo-ls-clear" type="button" aria-label="<?php esc_attr_e( 'Cancella', 'olobuild' ); ?>" hidden>
                                 <?php echo $clear_svg; ?>
                             </button>
                         </div>
 
-                        <div class="olo-ls-dropdown" role="listbox" aria-label="<?php esc_attr_e( 'Risultati ricerca', 'olobuilder' ); ?>" hidden>
+                        <div class="olo-ls-dropdown" role="listbox" aria-label="<?php esc_attr_e( 'Risultati ricerca', 'olobuild' ); ?>" hidden>
                             <div class="olo-ls-results"></div>
                             <div class="olo-ls-footer" hidden></div>
                             <div class="olo-ls-empty" hidden>
@@ -400,7 +400,7 @@ class Olo_LiveSearch_Tile extends Olo_Tile_Base {
             <?php else : ?>
                 <div class="olo-ls-input-wrap">
                     <?php if ( $mode === 'compact' ) : ?>
-                        <button class="olo-ls-trigger" type="button" aria-label="<?php esc_attr_e( 'Apri ricerca', 'olobuilder' ); ?>">
+                        <button class="olo-ls-trigger" type="button" aria-label="<?php esc_attr_e( 'Apri ricerca', 'olobuild' ); ?>">
                             <?php echo $icon_svg; ?>
                         </button>
                     <?php endif; ?>
@@ -411,14 +411,14 @@ class Olo_LiveSearch_Tile extends Olo_Tile_Base {
                                class="olo-ls-input"
                                placeholder="<?php echo esc_attr( $s['placeholder'] ?: 'Cerca...' ); ?>"
                                autocomplete="off"
-                               aria-label="<?php esc_attr_e( 'Cerca', 'olobuilder' ); ?>">
-                        <button class="olo-ls-clear" type="button" aria-label="<?php esc_attr_e( 'Cancella', 'olobuilder' ); ?>" hidden>
+                               aria-label="<?php esc_attr_e( 'Cerca', 'olobuild' ); ?>">
+                        <button class="olo-ls-clear" type="button" aria-label="<?php esc_attr_e( 'Cancella', 'olobuild' ); ?>" hidden>
                             <?php echo $clear_svg; ?>
                         </button>
                     </div>
                 </div>
 
-                <div class="olo-ls-dropdown" role="listbox" aria-label="<?php esc_attr_e( 'Risultati ricerca', 'olobuilder' ); ?>" hidden>
+                <div class="olo-ls-dropdown" role="listbox" aria-label="<?php esc_attr_e( 'Risultati ricerca', 'olobuild' ); ?>" hidden>
                     <div class="olo-ls-results"></div>
                     <div class="olo-ls-footer" hidden></div>
                     <div class="olo-ls-empty" hidden>

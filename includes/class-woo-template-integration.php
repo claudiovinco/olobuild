@@ -192,7 +192,7 @@ class Olo_Woo_Template_Integration {
      */
     public function add_admin_page() {
         add_submenu_page(
-            'olobuilder',
+            'olobuild',
             'WooCommerce Templates',
             'WooCommerce',
             'manage_options',

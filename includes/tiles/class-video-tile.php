@@ -173,7 +173,7 @@ class Olo_Video_Tile extends Olo_Tile_Base {
                 <?php elseif ( $embed_url ) : ?>
                     <iframe
                         src="<?php echo esc_url( $embed_url ); ?>"
-                        title="<?php echo esc_attr__( 'Embedded video', 'olobuilder' ); ?>"
+                        title="<?php echo esc_attr__( 'Embedded video', 'olobuild' ); ?>"
                         style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
                         frameborder="0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -182,7 +182,7 @@ class Olo_Video_Tile extends Olo_Tile_Base {
                     ></iframe>
                 <?php else : ?>
                     <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--olo-color-secondary, #1F2937); display: flex; align-items: center; justify-content: center; color: var(--olo-color-text-muted, #9CA3AF);">
-                        <?php echo esc_html__( 'Inserisci un URL video', 'olobuilder' ); ?>
+                        <?php echo esc_html__( 'Inserisci un URL video', 'olobuild' ); ?>
                     </div>
                 <?php endif; ?>
             </div>
@@ -218,7 +218,7 @@ class Olo_Video_Tile extends Olo_Tile_Base {
                     </video>
                 <?php else : ?>
                     <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: var(--olo-color-text-muted, #9CA3AF);">
-                        <?php echo esc_html__( 'Seleziona un file video', 'olobuilder' ); ?>
+                        <?php echo esc_html__( 'Seleziona un file video', 'olobuild' ); ?>
                     </div>
                 <?php endif; ?>
             </div>
@@ -285,7 +285,7 @@ class Olo_Video_Tile extends Olo_Tile_Base {
                 <?php else : ?>
                     <iframe
                         src="<?php echo esc_url( $embed ); ?>"
-                        title="<?php echo esc_attr__( 'Background video', 'olobuilder' ); ?>"
+                        title="<?php echo esc_attr__( 'Background video', 'olobuild' ); ?>"
                         style="position: absolute; top: 50%; left: 50%; width: 200%; height: 200%; transform: translate(-50%, -50%); pointer-events: none;"
                         frameborder="0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -295,7 +295,7 @@ class Olo_Video_Tile extends Olo_Tile_Base {
                 <?php endif; ?>
             <?php else : ?>
                 <div style="width: 100%; height: 100%; background: var(--olo-color-secondary, #1F2937); display: flex; align-items: center; justify-content: center; color: var(--olo-color-text-muted, #9CA3AF);">
-                    <?php echo esc_html__( 'Seleziona una sorgente video', 'olobuilder' ); ?>
+                    <?php echo esc_html__( 'Seleziona una sorgente video', 'olobuild' ); ?>
                 </div>
             <?php endif; ?>
 
