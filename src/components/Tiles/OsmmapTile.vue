@@ -2,8 +2,8 @@
   <div
     class="olo-osmmap-preview"
     :style="{
-      height: s.height + 'px',
-      borderRadius: s.border_radius + 'px',
+      height: (parseInt(s.height) || 400) + 'px',
+      borderRadius: (parseInt(s.border_radius) || 0) + 'px',
       overflow: 'hidden',
       position: 'relative',
       border: '1px solid #D1D5DB',
@@ -18,8 +18,7 @@
         border: 'none',
         pointerEvents: editMode ? 'auto' : 'none',
       }"
-      sandbox="allow-scripts"
-      loading="lazy"
+      sandbox="allow-scripts allow-same-origin"
     ></iframe>
 
     <!-- Edit mode toggle -->

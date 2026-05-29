@@ -122,6 +122,15 @@
             </label>
           </template>
 
+          <!-- Stato iniziale (tutti i tipi) -->
+          <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
+          <div>
+            <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
+              <input type="checkbox" :checked="layer.initiallyHidden === true" @change="up('initiallyHidden', $event.target.checked)" class="mb-rounded" />
+              <span class="mps-label mb-mb-0">Nascosto all'avvio (mostrabile via toggle)</span>
+            </label>
+          </div>
+
           <!-- Layer Action (tutti i tipi) -->
           <div class="mb-border-t mb-border-gray-700 mb-pt-2 mb-mt-2"></div>
           <p class="mb-text-[10px] mb-text-gray-400 mb-font-semibold mb-uppercase">Azione Click</p>
@@ -158,8 +167,20 @@
           </template>
           <template v-if="layer.action?.type === 'toggleLayer'">
             <div>
-              <label class="mps-label">ID layer target</label>
-              <input :value="layer.action.target || ''" @input="setAction('target', $event.target.value)" class="mps-input mb-w-full" placeholder="ID layer" />
+              <label class="mps-label">Layer target</label>
+              <select
+                v-if="targetableLayers.length"
+                :value="layer.action.target || ''"
+                @change="setAction('target', $event.target.value)"
+                class="mps-select"
+              >
+                <option value="">— Seleziona un layer —</option>
+                <option v-for="l in targetableLayers" :key="l.id" :value="l.id">
+                  {{ targetLayerLabel(l) }}
+                </option>
+              </select>
+              <p v-else class="mb-text-[10px] mb-text-gray-500 mb-italic">Nessun altro layer in questa slide</p>
+              <p v-if="layer.action.target" class="mb-text-[9px] mb-text-gray-500 mb-mt-1 mb-font-mono">id: {{ layer.action.target }}</p>
             </div>
           </template>
 
@@ -197,16 +218,16 @@
           <div>
             <label class="mps-label" :class="{ 'mb-text-yellow-400': isOverridden('x') }">X (%)</label>
             <div class="mb-flex mb-items-center mb-gap-2">
-              <input type="range" :value="rv('x')" @input="up('x', parseFloat($event.target.value))" min="0" max="100" step="0.5" class="mb-flex-1" />
-              <span class="mps-val">{{ rv('x') }}</span>
+              <input type="range" :value="rv('x')" @input="up('x', Math.round(parseFloat($event.target.value) * 10) / 10)" min="0" max="100" step="0.5" class="mb-flex-1" />
+              <span class="mps-val">{{ fmt(rv('x')) }}</span>
               <button v-if="isOverridden('x')" @click="clearOverride('x')" class="mb-text-yellow-500 mb-text-[10px]" title="Reset">&times;</button>
             </div>
           </div>
           <div>
             <label class="mps-label" :class="{ 'mb-text-yellow-400': isOverridden('y') }">Y (%)</label>
             <div class="mb-flex mb-items-center mb-gap-2">
-              <input type="range" :value="rv('y')" @input="up('y', parseFloat($event.target.value))" min="0" max="100" step="0.5" class="mb-flex-1" />
-              <span class="mps-val">{{ rv('y') }}</span>
+              <input type="range" :value="rv('y')" @input="up('y', Math.round(parseFloat($event.target.value) * 10) / 10)" min="0" max="100" step="0.5" class="mb-flex-1" />
+              <span class="mps-val">{{ fmt(rv('y')) }}</span>
               <button v-if="isOverridden('y')" @click="clearOverride('y')" class="mb-text-yellow-500 mb-text-[10px]" title="Reset">&times;</button>
             </div>
           </div>
@@ -217,8 +238,8 @@
                 <input type="checkbox" :checked="rv('width') === 'auto'" @change="up('width', $event.target.checked ? 'auto' : 50)" class="mb-rounded" /> Auto
               </label>
               <template v-if="rv('width') !== 'auto'">
-                <input type="range" :value="rv('width')" @input="up('width', parseFloat($event.target.value))" min="5" max="100" step="0.5" class="mb-flex-1" />
-                <span class="mps-val">{{ rv('width') }}</span>
+                <input type="range" :value="rv('width')" @input="up('width', Math.round(parseFloat($event.target.value) * 10) / 10)" min="5" max="100" step="0.5" class="mb-flex-1" />
+                <span class="mps-val">{{ fmt(rv('width')) }}</span>
               </template>
               <button v-if="isOverridden('width')" @click="clearOverride('width')" class="mb-text-yellow-500 mb-text-[10px]" title="Reset">&times;</button>
             </div>
@@ -230,8 +251,8 @@
                 <input type="checkbox" :checked="rv('height') === 'auto'" @change="up('height', $event.target.checked ? 'auto' : 30)" class="mb-rounded" /> Auto
               </label>
               <template v-if="rv('height') !== 'auto'">
-                <input type="range" :value="rv('height')" @input="up('height', parseFloat($event.target.value))" min="5" max="100" step="0.5" class="mb-flex-1" />
-                <span class="mps-val">{{ rv('height') }}</span>
+                <input type="range" :value="rv('height')" @input="up('height', Math.round(parseFloat($event.target.value) * 10) / 10)" min="5" max="100" step="0.5" class="mb-flex-1" />
+                <span class="mps-val">{{ fmt(rv('height')) }}</span>
               </template>
               <button v-if="isOverridden('height')" @click="clearOverride('height')" class="mb-text-yellow-500 mb-text-[10px]" title="Reset">&times;</button>
             </div>
@@ -1381,7 +1402,34 @@ const props = defineProps({
   layer: { type: Object, default: null },
   selectedKeyframeId: { type: String, default: null },
   activeBreakpoint: { type: String, default: 'desktop' },
+  slideLayers: { type: Array, default: () => [] },
 });
+
+const targetableLayers = computed(() => {
+  const cur = props.layer?.id;
+  return (props.slideLayers || []).filter(l => l && l.id && l.id !== cur);
+});
+
+function fmt(v) {
+  if (v === 'auto' || v === undefined || v === null) return v ?? '';
+  const n = Number(v);
+  if (!Number.isFinite(n)) return v;
+  return (Math.round(n * 10) / 10).toString();
+}
+
+function targetLayerLabel(l) {
+  const icons = { text: 'T', image: '🖼', video: '▶', button: '▢', icon: '★', shape: '◆', audio: '♫' };
+  const ico = icons[l.type] || '?';
+  let name = l.type;
+  if (l.type === 'text' || l.type === 'button') name = l.content || l.type;
+  else if (l.type === 'icon') name = l.iconName || 'icona';
+  else if (l.type === 'image') name = 'Immagine';
+  else if (l.type === 'video') name = 'Video';
+  else if (l.type === 'shape') name = 'Forma';
+  const trimmed = String(name).replace(/\s+/g, ' ').trim();
+  const short = trimmed.length > 40 ? trimmed.slice(0, 40) + '…' : trimmed;
+  return `${ico} ${short}`;
+}
 
 const emit = defineEmits(['update', 'update-keyframe', 'capture-from-canvas']);
 
@@ -1833,7 +1881,13 @@ function upParallax(key, val) {
 .mps-icon-preview :deep(svg) {
   width: 18px;
   height: 18px;
-  fill: #d1d5db;
-  stroke: #d1d5db;
+  color: #d1d5db;
+  stroke: currentColor;
+}
+.mps-icon-preview :deep(svg:not([fill="none"])) {
+  fill: currentColor;
+}
+.mps-icon-preview :deep(svg [fill="none"]) {
+  fill: none;
 }
 </style>

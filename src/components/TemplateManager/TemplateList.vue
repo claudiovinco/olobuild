@@ -1,598 +1,500 @@
 <template>
-  <div class="tpl-page">
-    <div class="tpl-container">
-      <!-- Actions bar -->
-      <div class="tpl-header-actions">
-        <button @click="triggerImport" class="tpl-btn tpl-btn-outline">{{ t('&#8593; Importa') }}</button>
-        <input
-          ref="importFileRef"
-          type="file"
-          accept=".json"
-          style="display:none"
-          @change="handleImportFile"
-        />
-        <!-- New template dropdown -->
-        <div class="tpl-dropdown" ref="dropdownRef">
-          <button @click="showNewMenu = !showNewMenu" class="tpl-btn tpl-btn-primary">
-            {{ t('+ Nuovo Template') }}
+  <div class="tpl-cockpit">
+    <!-- ═══ Page header ══════════════════════════════════════════════ -->
+    <div class="tpl-head">
+      <div class="titles">
+        <h1>{{ t('Gestione Template') }}</h1>
+        <div class="sub">
+          <b>{{ templates.length }}</b> {{ t('totali') }}
+          <template v-if="activeCount > 0"> · <b>{{ activeCount }}</b> {{ t('attivi') }}</template>
+          <template v-if="draftCount > 0"> · <b>{{ draftCount }}</b> {{ t('bozze') }}</template>
+        </div>
+      </div>
+      <div class="spc"></div>
+      <button class="btn-sec" @click="triggerImport" :title="t('Importa un template da JSON')">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v12M7 9l5-5 5 5M5 20h14"/></svg>
+        {{ t('Importa') }}
+      </button>
+      <input ref="importFileRef" type="file" accept=".json" style="display:none" @change="handleImportFile" />
+      <div class="split" ref="dropdownRef">
+        <button class="btn-pri main" @click.stop="showNewMenu = !showNewMenu">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+          {{ t('Nuovo Template') }}
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-left:6px;opacity:.85"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div v-if="showNewMenu" class="tpl-new-menu">
+          <div class="grp-head">{{ t('Standard') }}</div>
+          <div v-for="opt in standardNewOptions" :key="opt.id" class="item" @click="createNew(opt.type)">
+            <span class="ic-box" :style="{ background: opt.gradient }">
+              <component :is="opt.iconSvg"/>
+            </span>
+            {{ opt.label }}
+          </div>
+          <hr v-if="postTypes.length" />
+          <div v-if="postTypes.length" class="grp-head">{{ t('Template Single') }}</div>
+          <div v-for="pt in postTypes" :key="pt.value" class="item" @click="createNewSingle(pt.value)">
+            <span class="ic-box" :style="{ background: TONE_BG.purple }">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/></svg>
+            </span>
+            Single: {{ pt.label }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ Toolbar ══════════════════════════════════════════════════ -->
+    <div class="tpl-toolbar">
+      <div class="filters">
+        <button v-for="t_ in typeFilters" :key="t_.id"
+          :class="['chip', { on: activeType === t_.id }]"
+          @click="activeType = t_.id"
+        >
+          <span v-if="t_.dotColor" class="dot" :style="{ background: t_.dotColor }"></span>
+          {{ t_.label }}
+          <span class="num">{{ t_.count }}</span>
+        </button>
+      </div>
+      <div class="spc"></div>
+      <div class="search">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="color:var(--ot-text-muted, #64748b)"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input v-model="query" :placeholder="t('Cerca per nome o ID…')" />
+        <button v-if="query" class="clear" @click="query = ''" :title="t('Pulisci')">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+      <div class="sort-wrap" ref="sortRef">
+        <button class="sort" @click.stop="showSortMenu = !showSortMenu">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M6 12h12M10 18h4"/></svg>
+          {{ sortLabel }}
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div v-if="showSortMenu" class="tpl-sort-menu">
+          <button v-for="s in sortOptions" :key="s.id"
+            :class="['item', { on: sort === s.id }]"
+            @click="setSort(s.id)"
+          >{{ s.label }}</button>
+        </div>
+      </div>
+      <div class="view-tog">
+        <button :class="{ on: layout === 'grid' }" @click="setLayout('grid')" :title="t('Griglia')">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        </button>
+        <button :class="{ on: layout === 'list' }" @click="setLayout('list')" :title="t('Lista')">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- ═══ Body: grid / list / empty / loading ══════════════════════ -->
+    <div v-if="loading" class="tpl-loading">
+      <div class="loader-spinner"></div>
+      <div>{{ t('Caricamento template…') }}</div>
+    </div>
+
+    <div v-else-if="filteredSorted.length === 0" class="tpl-empty">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="opacity:.3"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
+      <h3>{{ query ? t('Nessun template trovato per la ricerca') : (activeType === 'all' ? t('Nessun template ancora') : t('Nessun template di questo tipo')) }}</h3>
+      <p>{{ query ? t('Prova a cambiare il termine di ricerca o pulisci il filtro.') : t('Crea il tuo primo template per iniziare.') }}</p>
+      <button v-if="!query" class="btn-pri" @click="createNew('page')">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+        {{ t('Crea Template') }}
+      </button>
+    </div>
+
+    <!-- Grid view -->
+    <div v-else-if="layout === 'grid'" class="tpl-grid">
+      <div v-for="tpl in filteredSorted" :key="tpl.id" class="tpl-card" @click="editTemplate(tpl.id)">
+        <div class="thumb">
+          <img v-if="tpl.thumbnail" :src="tpl.thumbnail" :alt="tpl.title || ''" loading="lazy" class="thumb-img" />
+          <TplPreviewShape v-else :kind="previewKindFor(tpl)" :type="tpl.type" />
+          <div class="badges">
+            <span :class="['badge', 't-' + (tpl.type || 'page')]">{{ typeLabelShort(tpl.type) }}<span v-if="getSinglePostType(tpl)">: {{ getSinglePostType(tpl) }}</span></span>
+          </div>
+          <div class="badge-r">
+            <span v-if="isActive(tpl)" class="badge attivo">{{ t('Attivo') }}</span>
+            <span v-if="tpl.status === 'draft'" class="badge draft">{{ t('Bozza') }}</span>
+          </div>
+          <span v-if="tpl.elements_count > 0 || (tpl.content && tpl.content.length)" class="pv-elements">
+            {{ countElements(tpl.content) }} {{ t('elementi') }}
+          </span>
+          <!-- Hover actions -->
+          <div class="actions" @click.stop>
+            <button @click="editTemplate(tpl.id)" :title="t('Modifica')">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l4-1 11-11-3-3L5 16l-1 4z"/></svg>
+            </button>
+            <button @click="duplicateTemplate(tpl.id)" :title="t('Duplica')">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 012-2h10"/></svg>
+            </button>
+            <button @click="exportTemplate(tpl.id)" :title="t('Esporta')">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v12M7 9l5-5 5 5M5 20h14"/></svg>
+            </button>
+            <button class="danger" @click="deleteTemplate(tpl.id, tpl.title)" :title="t('Elimina')">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2M6 6l1 14a2 2 0 002 2h6a2 2 0 002-2l1-14"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="body">
+          <div class="title-row">
+            <input v-if="renamingId === tpl.id" ref="renameInputRef" v-model="renameDraft"
+              @click.stop @keyup.enter="confirmRename(tpl)" @keyup.esc="cancelRename" @blur="confirmRename(tpl)"
+              class="title-edit"
+            />
+            <span v-else class="title" @dblclick.stop="startRename(tpl)" :title="tpl.title || t('Senza titolo')">
+              {{ tpl.title || t('Senza titolo') }}
+            </span>
+          </div>
+          <div class="meta">
+            <span :class="['dot-status', tpl.status === 'draft' ? 'draft' : '']"></span>
+            <span>{{ tpl.status === 'draft' ? t('Bozza') : t('Pubblicato') }}</span>
+            <span class="sep">·</span>
+            <span>{{ formatDate(tpl.updated_at) }}</span>
+            <span class="sep">·</span>
+            <span>ID {{ tpl.id }}</span>
+          </div>
+          <button class="shortcode" @click.stop="copyShortcode(tpl.id)" :title="t('Clicca per copiare')">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 012-2h10"/></svg>
+            [olo_template id=&quot;{{ tpl.id }}&quot;]
           </button>
-          <div v-if="showNewMenu" class="tpl-dropdown-menu">
-            <button @click="createNew('page')" class="tpl-dropdown-item">{{ t('Nuova Pagina') }}</button>
-            <button @click="createNew('header')" class="tpl-dropdown-item">{{ t('Nuovo Header') }}</button>
-            <button @click="createNew('footer')" class="tpl-dropdown-item">{{ t('Nuovo Footer') }}</button>
-            <button @click="createNew('megapanel')" class="tpl-dropdown-item">{{ t('Nuovo Mega Panel') }}</button>
-            <button @click="createNew('404')" class="tpl-dropdown-item">{{ t('Nuova 404') }}</button>
-            <div class="tpl-dropdown-sep"></div>
-            <div class="tpl-dropdown-label">{{ t('Template Single') }}</div>
-            <button
-              v-for="pt in postTypes"
-              :key="pt.value"
-              @click="createNewSingle(pt.value)"
-              class="tpl-dropdown-item"
-            >
-              Single: {{ pt.label }}
+        </div>
+      </div>
+    </div>
+
+    <!-- List view -->
+    <div v-else class="tpl-list">
+      <div class="row h">
+        <span></span>
+        <span>{{ t('Template') }}</span>
+        <span>{{ t('Tipo') }}</span>
+        <span>{{ t('Stato') }}</span>
+        <span>{{ t('Modificato') }}</span>
+        <span></span>
+      </div>
+      <div v-for="tpl in filteredSorted" :key="tpl.id" class="row" @click="editTemplate(tpl.id)">
+        <div class="mini-thumb" :style="miniThumbStyle(tpl)">
+          <img v-if="tpl.thumbnail" :src="tpl.thumbnail" alt="" loading="lazy" />
+        </div>
+        <div class="ttl-cell">
+          <div class="ttl">{{ tpl.title || t('Senza titolo') }}</div>
+          <div class="sub-line">[olo_template id=&quot;{{ tpl.id }}&quot;]</div>
+        </div>
+        <span :class="['badge', 't-' + (tpl.type || 'page')]">{{ typeLabelShort(tpl.type) }}</span>
+        <div class="status-cell">
+          <span :class="['dot-status', tpl.status === 'draft' ? 'draft' : '']"></span>
+          {{ tpl.status === 'draft' ? t('Bozza') : t('Pubblicato') }}
+          <span v-if="isActive(tpl)" class="active-pill">{{ t('Attivo') }}</span>
+        </div>
+        <div class="date-cell">{{ formatDate(tpl.updated_at) }} · {{ countElements(tpl.content) }} el.</div>
+        <div class="acts" @click.stop>
+          <button @click="editTemplate(tpl.id)" :title="t('Modifica')">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l4-1 11-11-3-3L5 16l-1 4z"/></svg>
+          </button>
+          <button @click="duplicateTemplate(tpl.id)" :title="t('Duplica')">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 012-2h10"/></svg>
+          </button>
+          <button class="danger" @click="deleteTemplate(tpl.id, tpl.title)" :title="t('Elimina')">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2M6 6l1 14a2 2 0 002 2h6a2 2 0 002-2l1-14"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast micro -->
+    <Teleport to="body">
+      <div v-if="toastMsg" class="tpl-toast">{{ toastMsg }}</div>
+    </Teleport>
+
+    <!-- Export dialog -->
+    <Teleport to="body">
+      <div v-if="exportDialogVisible" class="tpl-export-overlay" @click.self="exportDialogVisible = false">
+        <div class="tpl-export-dialog">
+          <h3>{{ t('Esporta template') }}</h3>
+          <label>
+            <input type="checkbox" v-model="exportIncludeMedia" />
+            <span>{{ t('Includi media (immagini, video, PDF)') }}</span>
+          </label>
+          <p>{{ t('Attiva questa opzione se devi trasferire il template su un altro sito WordPress.') }}</p>
+          <div class="actions-row">
+            <button @click="exportDialogVisible = false" class="btn-sec">{{ t('Annulla') }}</button>
+            <button @click="doExport" :disabled="exportLoading" class="btn-pri">
+              {{ exportLoading ? t('Esportazione…') : t('Esporta') }}
             </button>
           </div>
         </div>
       </div>
-
-      <!-- Tab filter + view toggle -->
-      <div class="tpl-tabs-row">
-        <div class="tpl-tabs">
-          <button
-            v-for="tab in tabs"
-            :key="tab.value"
-            @click="activeTab = tab.value"
-            :class="['tpl-tab', { active: activeTab === tab.value }]"
-          >
-            {{ tab.label }}
-          </button>
-        </div>
-        <div class="tpl-view-toggle">
-          <button @click="viewMode = 'grid'" :class="['tpl-view-btn', { active: viewMode === 'grid' }]" title="Griglia">
-            <svg width="14" height="14" viewBox="0 0 14 14"><rect x="0" y="0" width="6" height="6" rx="1" fill="currentColor"/><rect x="8" y="0" width="6" height="6" rx="1" fill="currentColor"/><rect x="0" y="8" width="6" height="6" rx="1" fill="currentColor"/><rect x="8" y="8" width="6" height="6" rx="1" fill="currentColor"/></svg>
-          </button>
-          <button @click="viewMode = 'table'" :class="['tpl-view-btn', { active: viewMode === 'table' }]" title="Tabella">
-            <svg width="14" height="14" viewBox="0 0 14 14"><rect x="0" y="1" width="14" height="2" rx="0.5" fill="currentColor"/><rect x="0" y="6" width="14" height="2" rx="0.5" fill="currentColor"/><rect x="0" y="11" width="14" height="2" rx="0.5" fill="currentColor"/></svg>
-          </button>
-        </div>
-      </div>
-
-      <!-- Loading state -->
-      <div v-if="loading" class="tpl-loading">
-        <p>{{ t('Caricamento template...') }}</p>
-      </div>
-
-      <!-- Empty state -->
-      <div v-else-if="filteredTemplates.length === 0" class="tpl-empty">
-        <div class="tpl-empty-icon">
-          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
-        </div>
-        <h2>
-          {{ activeTab === 'header' ? 'Nessun header' : activeTab === 'footer' ? 'Nessun footer' : activeTab === 'single' ? 'Nessun template single' : activeTab === '404' ? 'Nessuna pagina 404' : 'Nessun template' }}
-        </h2>
-        <p>
-          {{ activeTab === 'header' ? 'Crea il tuo primo template header.' : activeTab === 'footer' ? 'Crea il tuo primo template footer.' : activeTab === 'single' ? 'Crea un template single per un custom post type.' : activeTab === '404' ? 'Crea la tua pagina 404 personalizzata.' : 'Crea il tuo primo template per iniziare.' }}
-        </p>
-        <button
-          v-if="activeTab !== 'single'"
-          @click="createNew(activeTab === 'all' ? 'page' : activeTab)"
-          class="tpl-btn tpl-btn-primary"
-        >
-          {{ activeTab === 'header' ? 'Crea Header' : activeTab === 'footer' ? 'Crea Footer' : activeTab === '404' ? 'Crea 404' : 'Crea Template' }}
-        </button>
-      </div>
-
-      <!-- Template grid -->
-      <div v-else-if="viewMode === 'grid'" class="tpl-grid">
-        <div
-          v-for="tpl in filteredTemplates"
-          :key="tpl.id"
-          class="tpl-card"
-        >
-          <!-- Preview area -->
-          <div class="tpl-card-preview">
-            <div class="tpl-card-count">{{ countElements(tpl.content) }} elementi</div>
-            <!-- Type badge -->
-            <span v-if="tpl.type === 'header'" class="tpl-type-badge purple">{{ t('Header') }}</span>
-            <span v-if="tpl.type === 'footer'" class="tpl-type-badge teal">{{ t('Footer') }}</span>
-            <span v-if="tpl.type === 'single'" class="tpl-type-badge amber">Single: {{ getSinglePostType(tpl) }}</span>
-            <span v-if="tpl.type === 'megapanel'" class="tpl-type-badge indigo">{{ t('Mega Panel') }}</span>
-            <span v-if="tpl.type === '404'" class="tpl-type-badge red">404</span>
-            <!-- Active indicators -->
-            <span v-if="tpl.type === 'header' && tpl.id === activeHeaderId" class="tpl-active-badge">{{ t('Attivo') }}</span>
-            <span v-if="tpl.type === 'footer' && tpl.id === activeFooterId" class="tpl-active-badge">{{ t('Attivo') }}</span>
-            <span v-if="tpl.type === 'single' && isActiveSingle(tpl)" class="tpl-active-badge">{{ t('Attivo') }}</span>
-            <span v-if="tpl.type === '404' && tpl.id === active404Id" class="tpl-active-badge">{{ t('Attivo') }}</span>
-            <!-- Hover overlay -->
-            <div class="tpl-card-overlay">
-              <button @click="$emit('edit', tpl.id)" class="tpl-btn tpl-btn-primary tpl-btn-sm">{{ t('Modifica') }}</button>
-              <button @click="duplicateTemplate(tpl.id)" class="tpl-btn tpl-btn-outline-light tpl-btn-sm">{{ t('Duplica') }}</button>
-              <button @click="exportTemplate(tpl.id)" class="tpl-btn tpl-btn-outline-light tpl-btn-sm">{{ t('Esporta') }}</button>
-            </div>
-          </div>
-          <!-- Info -->
-          <div class="tpl-card-info">
-            <div class="tpl-card-info-top">
-              <div class="tpl-card-info-left">
-                <input
-                  v-if="renamingId === tpl.id"
-                  :ref="el => { if (el) renameInputRef = el }"
-                  v-model="renameDraft"
-                  @blur="confirmRename(tpl)"
-                  @keydown.enter="confirmRename(tpl)"
-                  @keydown.escape="cancelRename"
-                  class="tpl-rename-input"
-                />
-                <h3 v-else class="tpl-card-title">{{ tpl.title || 'Senza titolo' }}</h3>
-                <p class="tpl-card-meta">
-                  <span :class="statusClass(tpl.status)">{{ tpl.status }}</span>
-                  &middot; {{ formatDate(tpl.updated_at) }}
-                </p>
-              </div>
-              <div class="tpl-card-actions-mini">
-                <button @click="startRename(tpl)" class="tpl-icon-btn" title="Rinomina">&#9998;</button>
-                <button @click="deleteTemplate(tpl.id, tpl.title)" class="tpl-icon-btn tpl-icon-btn-danger" title="Elimina">{{ t('&times;') }}</button>
-              </div>
-            </div>
-            <div class="tpl-card-bottom">
-              <!-- Shortcode for pages -->
-              <code v-if="tpl.type !== 'header' && tpl.type !== 'footer' && tpl.type !== 'single' && tpl.type !== 'megapanel' && tpl.type !== '404'" class="tpl-shortcode">
-                [olo_template id="{{ tpl.id }}"]
-              </code>
-              <!-- Activate/Deactivate for headers -->
-              <template v-if="tpl.type === 'header'">
-                <button
-                  v-if="tpl.id === activeHeaderId"
-                  @click="deactivateHeader"
-                  class="tpl-activate-btn active"
-                >{{ t('Disattiva') }}</button>
-                <button
-                  v-else
-                  @click="activateHeader(tpl.id)"
-                  :disabled="tpl.status !== 'published'"
-                  :class="['tpl-activate-btn', { disabled: tpl.status !== 'published' }]"
-                  :title="tpl.status !== 'published' ? 'Pubblica prima di attivare' : 'Imposta come header attivo'"
-                >{{ t('Attiva') }}</button>
-              </template>
-              <!-- Activate/Deactivate for footers -->
-              <template v-if="tpl.type === 'footer'">
-                <button
-                  v-if="tpl.id === activeFooterId"
-                  @click="deactivateFooter"
-                  class="tpl-activate-btn active"
-                >Disattiva</button>
-                <button
-                  v-else
-                  @click="activateFooter(tpl.id)"
-                  :disabled="tpl.status !== 'published'"
-                  :class="['tpl-activate-btn', { disabled: tpl.status !== 'published' }]"
-                  :title="tpl.status !== 'published' ? 'Pubblica prima di attivare' : 'Imposta come footer attivo'"
-                >Attiva</button>
-              </template>
-              <!-- Activate/Deactivate for singles -->
-              <template v-if="tpl.type === 'single'">
-                <button
-                  v-if="isActiveSingle(tpl)"
-                  @click="deactivateSingle(getSinglePostType(tpl))"
-                  class="tpl-activate-btn active"
-                >Disattiva</button>
-                <button
-                  v-else
-                  @click="activateSingle(tpl.id, getSinglePostType(tpl))"
-                  :disabled="tpl.status !== 'published'"
-                  :class="['tpl-activate-btn', { disabled: tpl.status !== 'published' }]"
-                  :title="tpl.status !== 'published' ? 'Pubblica prima di attivare' : 'Imposta come template single attivo'"
-                >Attiva</button>
-              </template>
-              <!-- Activate/Deactivate for 404 -->
-              <template v-if="tpl.type === '404'">
-                <button
-                  v-if="tpl.id === active404Id"
-                  @click="deactivate404"
-                  class="tpl-activate-btn active"
-                >Disattiva</button>
-                <button
-                  v-else
-                  @click="activate404(tpl.id)"
-                  :disabled="tpl.status !== 'published'"
-                  :class="['tpl-activate-btn', { disabled: tpl.status !== 'published' }]"
-                  :title="tpl.status !== 'published' ? 'Pubblica prima di attivare' : 'Imposta come pagina 404 attiva'"
-                >Attiva</button>
-              </template>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Template table -->
-      <table v-else class="tpl-table">
-        <thead>
-          <tr>
-            <th>Titolo</th>
-            <th>Tipo</th>
-            <th>Istanze</th>
-            <th>Autore</th>
-            <th>Data</th>
-            <th>Shortcode</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="tpl in filteredTemplates" :key="tpl.id">
-            <td class="tpl-table-title">
-              <a @click.prevent="editTemplate(tpl.id)" href="#">{{ tpl.title || 'Senza titolo' }}</a>
-            </td>
-            <td><span class="tpl-badge" :class="'tpl-badge--' + tpl.type">{{ typeLabel(tpl.type) }}</span></td>
-            <td>{{ tpl.instances ?? '\u2014' }}</td>
-            <td>{{ tpl.author_name ?? '\u2014' }}</td>
-            <td>{{ formatDate(tpl.updated_at) }}</td>
-            <td>
-              <code v-if="tpl.type === 'page'" class="tpl-shortcode-sm">[olo_template id="{{ tpl.id }}"]</code>
-              <span v-else>\u2014</span>
-            </td>
-            <td class="tpl-table-actions">
-              <button @click="editTemplate(tpl.id)" class="tpl-table-action-btn" title="Modifica">
-                <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M11.5 1.5l3 3L5 14H2v-3z"/></svg>
-              </button>
-              <button @click="duplicateTemplate(tpl.id)" class="tpl-table-action-btn" title="Duplica">
-                <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="5" width="9" height="9" rx="1"/><path d="M3 11V2h9"/></svg>
-              </button>
-              <button @click="deleteTemplate(tpl.id, tpl.title)" class="tpl-table-action-btn tpl-table-action-btn--danger" title="Elimina">
-                <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 4h10M6 4V2h4v2M5 4v9h6V4"/></svg>
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-
-    </div>
+    </Teleport>
   </div>
-
-  <!-- Export dialog -->
-  <Teleport to="body">
-    <div v-if="exportDialogVisible" class="tpl-export-overlay" @click.self="exportDialogVisible = false">
-      <div class="tpl-export-dialog">
-        <h3 style="margin:0 0 16px;font-size:16px;font-weight:600">Esporta template</h3>
-        <label style="display:flex;align-items:center;gap:10px;cursor:pointer;margin-bottom:20px">
-          <input type="checkbox" v-model="exportIncludeMedia" style="width:18px;height:18px;accent-color:var(--olo-color-primary, #6366F1)" />
-          <span style="font-size:14px">Includi media (immagini, video, PDF)</span>
-        </label>
-        <p style="font-size:12px;color:#888;margin:0 0 20px">Attiva questa opzione se devi trasferire il template su un altro sito WordPress.</p>
-        <div style="display:flex;gap:10px;justify-content:flex-end">
-          <button @click="exportDialogVisible = false" class="tpl-btn tpl-btn-outline" style="padding:8px 20px;font-size:13px">Annulla</button>
-          <button @click="doExport" :disabled="exportLoading" class="tpl-btn tpl-btn-primary" style="padding:8px 20px;font-size:13px">
-            {{ exportLoading ? 'Esportazione...' : 'Esporta' }}
-          </button>
-        </div>
-      </div>
-    </div>
-  </Teleport>
 </template>
 
 <script setup>
 import { t } from '@/i18n';
-import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue';
+import { ref, computed, onMounted, onUnmounted, nextTick, h } from 'vue';
 
 const emit = defineEmits(['edit', 'create']);
 
 const oloData = window.oloData || {};
-const wpAdminUrl = (oloData.restUrl || '').replace('/wp-json/olo/v1', '/wp-admin/');
-const pluginUrl = oloData.pluginUrl || '';
+const postTypes = oloData.postTypes || [];
 
-const viewMode = ref('grid');
+/* ─── State ────────────────────────────────────────────────────────── */
 const loading = ref(true);
 const templates = ref([]);
-const showNewMenu = ref(false);
-const dropdownRef = ref(null);
+const byType = ref({});
 const activeHeaderId = ref(parseInt(oloData.activeHeaderId) || 0);
 const activeFooterId = ref(parseInt(oloData.activeFooterId) || 0);
 const active404Id = ref(parseInt(oloData.active404Id) || 0);
 const activeSingles = ref({ ...(oloData.activeSingles || {}) });
-const postTypes = oloData.postTypes || [];
+
+const activeType = ref('all');
+const query = ref('');
+const sort = ref('newest');
+const layout = ref(localStorage.getItem('olo_tpl_layout') || 'grid');
+const showSortMenu = ref(false);
+const showNewMenu = ref(false);
+const dropdownRef = ref(null);
+const sortRef = ref(null);
 const renamingId = ref(null);
 const renameDraft = ref('');
 const renameInputRef = ref(null);
 const importFileRef = ref(null);
+const toastMsg = ref('');
 
-const tabs = [
-  { value: 'all', label: 'Tutti' },
-  { value: 'page', label: 'Pagine' },
-  { value: 'header', label: 'Header' },
-  { value: 'footer', label: 'Footer' },
-  { value: 'single', label: 'Single' },
-  { value: 'megapanel', label: 'Mega Panel' },
-  { value: '404', label: '404' },
+/* ─── Sort options ─────────────────────────────────────────────────── */
+const sortOptions = [
+  { id: 'newest', label: t('Più recenti') },
+  { id: 'oldest', label: t('Più vecchi') },
+  { id: 'az',     label: 'A → Z' },
+  { id: 'za',     label: 'Z → A' },
+  { id: 'used',   label: t('Più usati') },
 ];
-const activeTab = ref('all');
+const sortLabel = computed(() => sortOptions.find(s => s.id === sort.value)?.label || '');
 
-const filteredTemplates = computed(() => {
-  if (activeTab.value === 'all') return templates.value;
-  return templates.value.filter(t => (t.type || 'page') === activeTab.value);
+function setSort(id) { sort.value = id; showSortMenu.value = false; }
+function setLayout(l) { layout.value = l; localStorage.setItem('olo_tpl_layout', l); }
+
+/* ─── Tone gradients (per icon-box dropdown "Nuovo") ────────────────── */
+const TONE_BG = {
+  primary: 'linear-gradient(135deg,#4a8c2a,#3fa23f)',
+  blue:    'linear-gradient(135deg,#3b82f6,#1d4ed8)',
+  slate:   'linear-gradient(135deg,#475569,#1e293b)',
+  purple:  'linear-gradient(135deg,#a855f7,#7e22ce)',
+  amber:   'linear-gradient(135deg,#f59e0b,#d97706)',
+  violet:  'linear-gradient(135deg,#8b5cf6,#5b21b6)',
+  red:     'linear-gradient(135deg,#ef4444,#b91c1c)',
+};
+
+/* ─── Type filters ─────────────────────────────────────────────────── */
+const TYPE_META = {
+  page:      { label: t('Pagina'),     short: 'PAGINA',     dot: '#4a8c2a' },
+  header:    { label: t('Header'),     short: 'HEADER',     dot: '#3b82f6' },
+  footer:    { label: t('Footer'),     short: 'FOOTER',     dot: '#64748b' },
+  single:    { label: t('Single'),     short: 'SINGLE',     dot: '#a855f7' },
+  megapanel: { label: t('Mega Panel'), short: 'MEGA',       dot: '#f59e0b' },
+  widget:    { label: t('Widget'),     short: 'WIDGET',     dot: '#8b5cf6' },
+  '404':     { label: '404',           short: '404',        dot: '#ef4444' },
+};
+
+const typeFilters = computed(() => {
+  const list = [
+    { id: 'all', label: t('Tutti'), count: byType.value.all || templates.value.length, dotColor: '' },
+  ];
+  for (const k of ['page', 'header', 'footer', 'single', 'megapanel', 'widget', '404']) {
+    const c = byType.value[k] || 0;
+    if (c === 0 && activeType.value !== k) continue;
+    list.push({
+      id: k,
+      label: TYPE_META[k].label,
+      count: c,
+      dotColor: TYPE_META[k].dot,
+    });
+  }
+  return list;
 });
 
-function handleClickOutside(e) {
-  if (dropdownRef.value && !dropdownRef.value.contains(e.target)) {
-    showNewMenu.value = false;
+/* ─── Filtering + sorting ──────────────────────────────────────────── */
+const filteredSorted = computed(() => {
+  let arr = templates.value.slice();
+  if (activeType.value !== 'all') arr = arr.filter(x => (x.type || 'page') === activeType.value);
+  const q = query.value.trim().toLowerCase();
+  if (q) {
+    arr = arr.filter(x =>
+      (x.title || '').toLowerCase().includes(q) ||
+      String(x.id).includes(q)
+    );
   }
+  switch (sort.value) {
+    case 'oldest': arr.sort((a,b) => +new Date(a.updated_at||0) - +new Date(b.updated_at||0)); break;
+    case 'az':     arr.sort((a,b) => (a.title||'').localeCompare(b.title||'')); break;
+    case 'za':     arr.sort((a,b) => (b.title||'').localeCompare(a.title||'')); break;
+    case 'used':   arr.sort((a,b) => (b.instances||0) - (a.instances||0)); break;
+    case 'newest':
+    default:       arr.sort((a,b) => +new Date(b.updated_at||0) - +new Date(a.updated_at||0));
+  }
+  return arr;
+});
+
+const activeCount = computed(() =>
+  templates.value.filter(t_ => isActive(t_)).length
+);
+const draftCount = computed(() =>
+  templates.value.filter(t_ => t_.status === 'draft').length
+);
+
+/* ─── Standard new options for dropdown ────────────────────────────── */
+const standardNewOptions = [
+  { id: 'new-page',   type: 'page',      label: t('Nuova Pagina'),     iconSvg: () => h('svg', svgAttr(13), [h('path', { d: 'M5 3v18h14V3z' }), h('path', { d: 'M9 8h6M9 12h6M9 16h4' })]),                                  gradient: TONE_BG.primary },
+  { id: 'new-header', type: 'header',    label: t('Nuovo Header'),     iconSvg: () => h('svg', svgAttr(13), [h('rect', { x: 3, y: 4, width: 18, height: 6, rx: 1 }), h('rect', { x: 3, y: 14, width: 8, height: 2 }), h('rect', { x: 13, y: 14, width: 8, height: 2 })]), gradient: TONE_BG.blue },
+  { id: 'new-footer', type: 'footer',    label: t('Nuovo Footer'),     iconSvg: () => h('svg', svgAttr(13), [h('rect', { x: 3, y: 14, width: 18, height: 6, rx: 1 }), h('rect', { x: 3, y: 4, width: 8, height: 2 }), h('rect', { x: 13, y: 4, width: 8, height: 2 })]), gradient: TONE_BG.slate },
+  { id: 'new-mega',   type: 'megapanel', label: t('Nuovo Mega Panel'), iconSvg: () => h('svg', svgAttr(13), [h('rect', { x: 3, y: 3, width: 8, height: 8, rx: 1 }), h('rect', { x: 13, y: 3, width: 8, height: 8, rx: 1 }), h('rect', { x: 3, y: 13, width: 8, height: 8, rx: 1 }), h('rect', { x: 13, y: 13, width: 8, height: 8, rx: 1 })]), gradient: TONE_BG.amber },
+  { id: 'new-widget', type: 'widget',    label: t('Nuovo Widget'),     iconSvg: () => h('svg', svgAttr(13), [h('rect', { x: 5, y: 5, width: 14, height: 14, rx: 2 }), h('circle', { cx: 12, cy: 12, r: 3 })]),                gradient: TONE_BG.violet },
+  { id: 'new-404',    type: '404',       label: t('Nuova 404'),        iconSvg: () => h('svg', svgAttr(13), [h('path', { d: 'M12 4l9 16H3z' }), h('path', { d: 'M12 11v4M12 18h.01' })]),                              gradient: TONE_BG.red },
+];
+
+function svgAttr(size) {
+  return { width: size, height: size, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', 'stroke-width': '1.7', 'stroke-linecap': 'round', 'stroke-linejoin': 'round' };
 }
 
+/* ─── Preview shape kind (when no thumbnail) ───────────────────────── */
+function previewKindFor(tpl) {
+  const type = tpl.type || 'page';
+  const cnt = countElements(tpl.content);
+  if (cnt === 0) return 'empty';
+  if (type === 'header') return 'header';
+  if (type === 'footer') return 'footer';
+  if (type === 'widget') return 'widget';
+  if (type === 'megapanel') return 'grid';
+  if (cnt > 12) return 'long';
+  if (cnt > 4)  return 'hero+grid';
+  return 'split';
+}
+
+/* ─── Click-outside ─────────────────────────────────────────────────── */
+function handleClickOutside(e) {
+  if (dropdownRef.value && !dropdownRef.value.contains(e.target)) showNewMenu.value = false;
+  if (sortRef.value && !sortRef.value.contains(e.target)) showSortMenu.value = false;
+}
+
+/* ─── Data fetch ────────────────────────────────────────────────────── */
 async function fetchTemplates() {
   loading.value = true;
   try {
     const res = await fetch(`${oloData.restUrl}/templates?per_page=200`, {
       headers: { 'X-WP-Nonce': oloData.nonce },
     });
-    if (!res.ok) throw new Error('Failed to fetch');
+    if (!res.ok) throw new Error('Failed');
     const data = await res.json();
     templates.value = data.items || [];
+    byType.value = data.byType || {};
   } catch (err) {
-    console.error('fetchTemplates error:', err);
+    console.error('fetchTemplates:', err);
     templates.value = [];
   } finally {
     loading.value = false;
   }
 }
 
+/* ─── Actions ───────────────────────────────────────────────────────── */
+function showToast(msg) {
+  toastMsg.value = msg;
+  setTimeout(() => { toastMsg.value = ''; }, 2200);
+}
+
 function createNew(type) {
   showNewMenu.value = false;
   emit('create', type);
 }
+function createNewSingle(postType) {
+  showNewMenu.value = false;
+  emit('create', { type: 'single', postType });
+}
+
+function editTemplate(id) { emit('edit', id); }
 
 async function duplicateTemplate(id) {
-  const tpl = templates.value.find((t) => t.id === id);
-  if (!tpl) return;
-
   try {
-    const res = await fetch(`${oloData.restUrl}/templates`, {
+    const res = await fetch(`${oloData.restUrl}/templates/${id}/duplicate`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-WP-Nonce': oloData.nonce,
-      },
-      body: JSON.stringify({
-        title: `${tpl.title || 'Senza titolo'} (Copia)`,
-        type: tpl.type || 'page',
-        content: tpl.content || [],
-        settings: tpl.settings || {},
-        status: 'draft',
-      }),
+      headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': oloData.nonce },
     });
-    if (res.ok) {
-      await fetchTemplates();
-    }
+    if (!res.ok) throw new Error('Duplicate failed');
+    showToast(t('Template duplicato'));
+    await fetchTemplates();
   } catch (err) {
-    console.error('duplicateTemplate error:', err);
+    console.error('duplicate:', err);
+    showToast(t('Errore duplicazione'));
   }
 }
 
 async function deleteTemplate(id, title) {
-  if (!confirm(`Eliminare "${title || 'Senza titolo'}"? Questa azione non può essere annullata.`)) return;
-
+  if (!confirm(t('Eliminare') + ' "' + (title || t('Senza titolo')) + '"? ' + t('Questa azione non può essere annullata.'))) return;
   try {
     const res = await fetch(`${oloData.restUrl}/templates/${id}`, {
       method: 'DELETE',
       headers: { 'X-WP-Nonce': oloData.nonce },
     });
     if (res.ok) {
-      templates.value = templates.value.filter((t) => t.id !== id);
-      if (id === activeHeaderId.value) {
-        activeHeaderId.value = 0;
-      }
-      if (id === activeFooterId.value) {
-        activeFooterId.value = 0;
-      }
-      if (id === active404Id.value) {
-        active404Id.value = 0;
-      }
-      for (const [pt, tplId] of Object.entries(activeSingles.value)) {
-        if (tplId === id) {
-          const updated = { ...activeSingles.value };
-          delete updated[pt];
-          activeSingles.value = updated;
-          break;
-        }
-      }
+      templates.value = templates.value.filter(x => x.id !== id);
+      showToast(t('Template eliminato'));
     }
-  } catch (err) {
-    console.error('deleteTemplate error:', err);
-  }
+  } catch (err) { console.error(err); }
 }
 
 function startRename(tpl) {
   renameDraft.value = tpl.title || '';
   renamingId.value = tpl.id;
   nextTick(() => {
-    renameInputRef.value?.focus();
-    renameInputRef.value?.select();
+    const el = renameInputRef.value;
+    const node = Array.isArray(el) ? el[0] : el;
+    node?.focus(); node?.select();
   });
 }
-
 async function confirmRename(tpl) {
   if (renamingId.value !== tpl.id) return;
   renamingId.value = null;
   const newTitle = renameDraft.value.trim();
   if (!newTitle || newTitle === tpl.title) return;
-
   try {
     const res = await fetch(`${oloData.restUrl}/templates/${tpl.id}`, {
       method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-WP-Nonce': oloData.nonce,
-      },
+      headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': oloData.nonce },
       body: JSON.stringify({ title: newTitle }),
     });
     if (res.ok) {
       tpl.title = newTitle;
+      showToast(t('Rinominato'));
     }
-  } catch (err) {
-    console.error('renameTemplate error:', err);
-  }
+  } catch (err) { console.error(err); }
 }
+function cancelRename() { renamingId.value = null; }
 
-function cancelRename() {
-  renamingId.value = null;
-}
-
-async function activateHeader(id) {
+async function copyShortcode(id) {
+  const code = `[olo_template id="${id}"]`;
   try {
-    const res = await fetch(`${oloData.restUrl}/header/activate`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-WP-Nonce': oloData.nonce,
-      },
-      body: JSON.stringify({ id }),
-    });
-    if (res.ok) {
-      activeHeaderId.value = id;
-      oloData.activeHeaderId = id;
-    }
+    await navigator.clipboard.writeText(code);
+    showToast(t('Shortcode copiato'));
   } catch (err) {
-    console.error('activateHeader error:', err);
+    // Fallback
+    const ta = document.createElement('textarea');
+    ta.value = code; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+    showToast(t('Shortcode copiato'));
   }
 }
 
-async function deactivateHeader() {
-  try {
-    const res = await fetch(`${oloData.restUrl}/header/activate`, {
-      method: 'DELETE',
-      headers: { 'X-WP-Nonce': oloData.nonce },
-    });
-    if (res.ok) {
-      activeHeaderId.value = 0;
-      oloData.activeHeaderId = 0;
-    }
-  } catch (err) {
-    console.error('deactivateHeader error:', err);
-  }
-}
-
-async function activateFooter(id) {
-  try {
-    const res = await fetch(`${oloData.restUrl}/footer/activate`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-WP-Nonce': oloData.nonce,
-      },
-      body: JSON.stringify({ id }),
-    });
-    if (res.ok) {
-      activeFooterId.value = id;
-      oloData.activeFooterId = id;
-    }
-  } catch (err) {
-    console.error('activateFooter error:', err);
-  }
-}
-
-async function deactivateFooter() {
-  try {
-    const res = await fetch(`${oloData.restUrl}/footer/activate`, {
-      method: 'DELETE',
-      headers: { 'X-WP-Nonce': oloData.nonce },
-    });
-    if (res.ok) {
-      activeFooterId.value = 0;
-      oloData.activeFooterId = 0;
-    }
-  } catch (err) {
-    console.error('deactivateFooter error:', err);
-  }
-}
-
-async function activate404(id) {
-  try {
-    const res = await fetch(`${oloData.restUrl}/404/activate`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-WP-Nonce': oloData.nonce,
-      },
-      body: JSON.stringify({ id }),
-    });
-    if (res.ok) {
-      active404Id.value = id;
-      oloData.active404Id = id;
-    }
-  } catch (err) {
-    console.error('activate404 error:', err);
-  }
-}
-
-async function deactivate404() {
-  try {
-    const res = await fetch(`${oloData.restUrl}/404/activate`, {
-      method: 'DELETE',
-      headers: { 'X-WP-Nonce': oloData.nonce },
-    });
-    if (res.ok) {
-      active404Id.value = 0;
-      oloData.active404Id = 0;
-    }
-  } catch (err) {
-    console.error('deactivate404 error:', err);
-  }
-}
-
+/* ─── Active flags (header/footer/single/404) ─────────────────────── */
 function getSinglePostType(tpl) {
   return tpl.settings?.single_post_type || '';
 }
-
-function isActiveSingle(tpl) {
-  const pt = getSinglePostType(tpl);
-  return pt && activeSingles.value[pt] === tpl.id;
-}
-
-async function activateSingle(id, postType) {
-  if (!postType) return;
-  try {
-    const res = await fetch(`${oloData.restUrl}/single/activate`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-WP-Nonce': oloData.nonce,
-      },
-      body: JSON.stringify({ id, post_type: postType }),
-    });
-    if (res.ok) {
-      activeSingles.value = { ...activeSingles.value, [postType]: id };
-      oloData.activeSingles = { ...activeSingles.value };
-    }
-  } catch (err) {
-    console.error('activateSingle error:', err);
+function isActive(tpl) {
+  if (tpl.type === 'header' && tpl.id === activeHeaderId.value) return true;
+  if (tpl.type === 'footer' && tpl.id === activeFooterId.value) return true;
+  if (tpl.type === '404'    && tpl.id === active404Id.value) return true;
+  if (tpl.type === 'single') {
+    const pt = getSinglePostType(tpl);
+    return pt && activeSingles.value[pt] === tpl.id;
   }
+  return false;
 }
 
-async function deactivateSingle(postType) {
-  if (!postType) return;
-  try {
-    const res = await fetch(`${oloData.restUrl}/single/activate`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-WP-Nonce': oloData.nonce,
-      },
-      body: JSON.stringify({ post_type: postType }),
-    });
-    if (res.ok) {
-      const updated = { ...activeSingles.value };
-      delete updated[postType];
-      activeSingles.value = updated;
-      oloData.activeSingles = { ...updated };
-    }
-  } catch (err) {
-    console.error('deactivateSingle error:', err);
-  }
-}
-
-function createNewSingle(postType) {
-  showNewMenu.value = false;
-  emit('create', { type: 'single', postType });
-}
-
+/* ─── Export ───────────────────────────────────────────────────────── */
 const exportDialogVisible = ref(false);
 const exportDialogId = ref(null);
 const exportIncludeMedia = ref(true);
@@ -603,18 +505,14 @@ function exportTemplate(id) {
   exportIncludeMedia.value = true;
   exportDialogVisible.value = true;
 }
-
 async function doExport() {
   const id = exportDialogId.value;
-  const includeMedia = exportIncludeMedia.value;
   exportLoading.value = true;
   try {
-    const endpoint = includeMedia
+    const endpoint = exportIncludeMedia.value
       ? `${oloData.restUrl}/export-template/${id}?include_media=1`
       : `${oloData.restUrl}/templates/${id}/export`;
-    const res = await fetch(endpoint, {
-      headers: { 'X-WP-Nonce': oloData.nonce },
-    });
+    const res = await fetch(endpoint, { headers: { 'X-WP-Nonce': oloData.nonce } });
     if (!res.ok) throw new Error('Export failed');
     const data = await res.json();
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
@@ -625,362 +523,632 @@ async function doExport() {
     a.click();
     URL.revokeObjectURL(url);
     exportDialogVisible.value = false;
+    showToast(t('Esportato'));
   } catch (err) {
-    console.error('exportTemplate error:', err);
-    alert('Errore durante l\'esportazione del template.');
+    console.error(err);
+    alert(t('Errore durante l\'esportazione del template.'));
   } finally {
     exportLoading.value = false;
   }
 }
 
-function triggerImport() {
-  importFileRef.value?.click();
-}
-
+/* ─── Import ───────────────────────────────────────────────────────── */
+function triggerImport() { importFileRef.value?.click(); }
 async function handleImportFile(e) {
   const file = e.target.files?.[0];
   if (!file) return;
   e.target.value = '';
-
   try {
     const text = await file.text();
     const json = JSON.parse(text);
-
-    // Support both old format (olo_export) and new format (format: olobuild-template)
-    const isOldFormat = json.olo_export === 'template';
-    const isNewFormat = json.format === 'olobuild-template';
-    if (!isOldFormat && !isNewFormat) {
-      alert('File non valido: non è un export Olobuild template.');
+    const isOld = json.olo_export === 'template';
+    const isNew = json.format === 'olobuild-template';
+    if (!isOld && !isNew) {
+      alert(t('File non valido: non è un export Olobuild template.'));
       return;
     }
-
-    // New format with media: use the import-template endpoint
-    const endpoint = isNewFormat
-      ? `${oloData.restUrl}/import-template`
-      : `${oloData.restUrl}/templates/import`;
-
+    const endpoint = isNew ? `${oloData.restUrl}/import-template` : `${oloData.restUrl}/templates/import`;
     const res = await fetch(endpoint, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-WP-Nonce': oloData.nonce,
-      },
+      headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': oloData.nonce },
       body: JSON.stringify(json),
     });
-
     if (!res.ok) {
       const err = await res.json();
       throw new Error(err.message || 'Import failed');
     }
-
     await fetchTemplates();
+    showToast(t('Importato'));
   } catch (err) {
-    console.error('importTemplate error:', err);
-    alert('Errore durante l\'importazione: ' + err.message);
+    console.error(err);
+    alert(t('Errore importazione') + ': ' + err.message);
   }
 }
 
-function statusClass(status) {
-  const map = {
-    published: 'status-published',
-    draft: 'status-draft',
-    archived: 'status-archived',
-  };
-  return map[status] || 'status-archived';
-}
-
+/* ─── Helpers ──────────────────────────────────────────────────────── */
 function countElements(content) {
   if (!Array.isArray(content)) return 0;
   let count = 0;
   for (const node of content) {
     count++;
-    if (Array.isArray(node.children)) {
-      count += countElements(node.children);
-    }
+    if (Array.isArray(node.children)) count += countElements(node.children);
   }
   return count;
 }
-
-function typeLabel(type) {
-  const labels = { page: 'Pagina', header: 'Header', footer: 'Footer', single: 'Single', megapanel: 'Mega Panel', '404': '404' };
-  return labels[type] || type;
+function typeLabelShort(type) {
+  return TYPE_META[type]?.short || (type || '').toUpperCase();
 }
-
-function editTemplate(id) {
-  emit('edit', id);
-}
-
 function formatDate(dateStr) {
   if (!dateStr) return '';
   const d = new Date(dateStr);
-  return d.toLocaleDateString('it-IT', {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric',
-  });
+  return d.toLocaleDateString('it-IT', { day: '2-digit', month: 'short', year: 'numeric' });
+}
+function miniThumbStyle(tpl) {
+  if (tpl.thumbnail) return {};
+  const meta = TYPE_META[tpl.type] || TYPE_META.page;
+  return { background: `linear-gradient(135deg, ${meta.dot}33, ${meta.dot}11)` };
 }
 
+/* ─── Lifecycle ────────────────────────────────────────────────────── */
 onMounted(() => {
   fetchTemplates();
   document.addEventListener('click', handleClickOutside);
 });
-
 onUnmounted(() => {
   document.removeEventListener('click', handleClickOutside);
 });
+
+/* ─── Preview shape sub-component ──────────────────────────────────── */
+import TplPreviewShape from './TplPreviewShape.vue';
 </script>
 
 <style scoped>
-/* ═══ Template Manager — warm, minimal design ═══ */
-/* NOTE: !important needed to override Tailwind preflight (border-width:0, background:transparent on button/*, etc.) */
-.tpl-page {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  color: #1a1a1a !important;
+/* ═══════════════════════════════════════════════════════════════════
+   Olobuild — Templates cockpit (v3.38)
+   ═══════════════════════════════════════════════════════════════════ */
+.tpl-cockpit {
+  --ot-primary:        #4a8c2a;
+  --ot-primary-bright: #3fa23f;
+  --ot-primary-dark:   #2d722d;
+  --ot-primary-50:     #f0f7ec;
+  --ot-primary-100:    #dcefd2;
+  --ot-text:           #1e293b;
+  --ot-text-muted:     #64748b;
+  --ot-text-light:     #94a3b8;
+  --ot-border:         #e2e8f0;
+  --ot-border-light:   #f1f5f9;
+  --ot-bg-muted:       #f1f5f9;
+  --ot-bg-soft:        #f9fafb;
+  --ot-shadow-xs:      0 1px 2px rgba(16,24,40,.05);
+  --ot-shadow-sm:      0 1px 2px rgba(0,0,0,.04);
+  font-family: 'Work Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: var(--ot-text);
+  display: flex; flex-direction: column; gap: 16px;
+  min-width: 0;
+  /* No padding — è il container .olo-cockpit-main a gestirlo */
 }
-.tpl-container { }
+.tpl-cockpit *,
+.tpl-cockpit *::before,
+.tpl-cockpit *::after { box-sizing: border-box; }
 
-/* ── Actions bar ── */
-.tpl-header-actions { display: flex; align-items: center; justify-content: flex-end; gap: 8px; margin-bottom: 20px; }
+/* ── Page header ─────────────────────────────────────────────────── */
+.tpl-head {
+  display: flex; align-items: flex-end; gap: 12px;
+  padding-bottom: 4px;
+}
+.tpl-head .titles { display: flex; flex-direction: column; gap: 4px; }
+.tpl-head h1 {
+  font-size: 22px !important; font-weight: 700; margin: 0; padding: 0;
+  color: var(--ot-text); letter-spacing: -0.01em; line-height: 1.2;
+}
+.tpl-head .sub { font-size: 13px; color: var(--ot-text-muted); }
+.tpl-head .sub b { color: var(--ot-text); font-weight: 600; }
+.tpl-head .spc { flex: 1; }
+.tpl-head .btn-sec, .tpl-head .btn-pri {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 14px; border-radius: 8px;
+  font: inherit; font-size: 13px; font-weight: 600;
+  cursor: pointer; border: 1px solid transparent;
+  transition: all .15s; line-height: 1;
+}
+.tpl-head .btn-sec {
+  background: #fff; border-color: var(--ot-border);
+  color: var(--ot-text);
+}
+.tpl-head .btn-sec:hover { border-color: var(--ot-text-muted); background: var(--ot-bg-muted); }
+.tpl-head .btn-pri {
+  background: var(--ot-primary); color: #fff;
+}
+.tpl-head .btn-pri:hover { background: var(--ot-primary-dark); }
+.tpl-head .split {
+  display: inline-flex; align-items: stretch;
+  border-radius: 8px;
+  position: relative;
+}
+.tpl-head .split .main { border-radius: 8px; padding-right: 16px; }
 
-/* ── Buttons ── */
-.tpl-btn {
-  display: inline-flex !important; align-items: center; gap: 6px;
-  padding: 9px 18px !important; border-radius: 10px !important; font-size: 13px !important; font-weight: 600;
-  cursor: pointer; transition: all .15s; font-family: inherit; border: none !important;
-  text-decoration: none !important; white-space: nowrap; line-height: 1.4 !important;
+/* ── New template menu ───────────────────────────────────────────── */
+.tpl-new-menu {
+  position: absolute; top: calc(100% + 6px); right: 0;
+  width: 240px; background: #fff;
+  border: 1px solid var(--ot-border-light);
+  border-radius: 10px;
+  box-shadow: 0 12px 40px rgba(15,17,21,.15), 0 2px 6px rgba(15,17,21,.06);
+  padding: 6px; z-index: 50;
+  animation: tplFade .12s ease-out;
 }
-.tpl-btn-primary { background: #1a1a1a !important; color: #fff !important; }
-.tpl-btn-primary:hover { background: #333 !important; box-shadow: 0 4px 12px rgba(0,0,0,.15); }
-.tpl-btn-outline {
-  background: #fff !important; color: #666 !important; border: 1.5px solid #eaeaea !important;
+@keyframes tplFade {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: none; }
 }
-.tpl-btn-outline:hover { background: #fafafa !important; color: #1a1a1a !important; border-color: #ccc !important; }
-.tpl-btn-outline-light {
-  background: rgba(255,255,255,.92) !important; color: #1a1a1a !important; border: 1.5px solid #eaeaea !important;
+.tpl-new-menu .grp-head {
+  font-size: 10px; font-weight: 700;
+  color: var(--ot-text-muted);
+  letter-spacing: .06em; text-transform: uppercase;
+  padding: 8px 10px 4px;
 }
-.tpl-btn-outline-light:hover { background: #fff !important; }
-.tpl-btn-sm { padding: 7px 14px !important; font-size: 12px !important; }
+.tpl-new-menu .item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 7px 10px; border-radius: 6px;
+  cursor: pointer; font-size: 13px;
+  color: var(--ot-text);
+  transition: background .12s;
+}
+.tpl-new-menu .item:hover { background: var(--ot-bg-muted); }
+.tpl-new-menu .item .ic-box {
+  width: 26px; height: 26px; border-radius: 6px;
+  display: grid; place-items: center;
+  color: #fff; flex-shrink: 0;
+}
+.tpl-new-menu hr {
+  border: 0; border-top: 1px solid var(--ot-border-light);
+  margin: 4px 6px;
+}
 
-/* ── Dropdown ── */
-.tpl-dropdown { position: relative; }
-.tpl-dropdown-menu {
-  position: absolute; right: 0; top: 100%; margin-top: 6px;
-  width: 200px; background: #fff !important; border: 1px solid #eaeaea !important;
-  border-radius: 12px !important; box-shadow: 0 12px 40px rgba(0,0,0,.12) !important;
-  z-index: 10; overflow: hidden;
+/* ── Toolbar ─────────────────────────────────────────────────────── */
+.tpl-toolbar {
+  display: flex; align-items: center; gap: 10px;
+  flex-wrap: wrap;
+  background: #fff;
+  border: 1px solid var(--ot-border-light);
+  border-radius: 10px;
+  padding: 8px 10px;
+  box-shadow: var(--ot-shadow-xs);
+  flex-shrink: 0;
 }
-.tpl-dropdown-item {
-  display: block; width: 100%; text-align: left; padding: 10px 16px;
-  font-size: 13px; color: #1a1a1a !important; background: none !important; border: none !important;
-  cursor: pointer; font-family: inherit; transition: background .1s;
+.tpl-toolbar .filters {
+  display: inline-flex; align-items: center; gap: 2px;
+  flex-wrap: wrap;
 }
-.tpl-dropdown-item:hover { background: #f5f0eb !important; }
-.tpl-dropdown-sep { border-top: 1px solid #eaeaea !important; }
-.tpl-dropdown-label {
-  padding: 8px 16px 4px; font-size: 10px; text-transform: uppercase;
-  font-weight: 700; color: #999; letter-spacing: .05em;
+.tpl-toolbar .chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 11px; border-radius: 7px;
+  font-size: 12px; font-weight: 500;
+  color: var(--ot-text-muted);
+  background: transparent; border: 0;
+  cursor: pointer;
+  transition: all .12s;
+  font-family: inherit;
+}
+.tpl-toolbar .chip:hover {
+  background: var(--ot-bg-muted);
+  color: var(--ot-text);
+}
+.tpl-toolbar .chip.on {
+  background: var(--ot-text); color: #fff;
+  font-weight: 600;
+}
+.tpl-toolbar .chip .num {
+  font-size: 10px; font-weight: 600;
+  padding: 1px 5px; border-radius: 99px;
+  background: rgba(0,0,0,.05);
+  color: inherit; opacity: .7;
+}
+.tpl-toolbar .chip.on .num {
+  background: rgba(255,255,255,.18);
+  color: #fff; opacity: 1;
+}
+.tpl-toolbar .chip .dot {
+  width: 6px; height: 6px; border-radius: 99px;
+}
+.tpl-toolbar .spc { flex: 1; }
+.tpl-toolbar .search {
+  display: flex; align-items: center; gap: 8px;
+  padding: 5px 10px; border-radius: 7px;
+  background: var(--ot-bg-muted);
+  border: 1px solid transparent;
+  width: 220px;
+  transition: all .15s;
+}
+.tpl-toolbar .search:focus-within {
+  background: #fff; border-color: var(--ot-primary);
+}
+.tpl-toolbar .search input {
+  flex: 1; border: 0; outline: 0; background: transparent;
+  font: inherit; font-size: 12px;
+  padding: 0; box-shadow: none !important;
+}
+.tpl-toolbar .search input:focus { outline: 0; box-shadow: none !important; }
+.tpl-toolbar .search .clear {
+  background: none; border: 0; cursor: pointer;
+  color: var(--ot-text-muted);
+  padding: 2px;
+  display: inline-flex;
+}
+.tpl-toolbar .search .clear:hover { color: var(--ot-text); }
+.tpl-toolbar .sort-wrap { position: relative; }
+.tpl-toolbar .sort {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 10px; border-radius: 7px;
+  background: transparent; border: 0;
+  font: inherit; font-size: 12px;
+  color: var(--ot-text-muted); cursor: pointer;
+}
+.tpl-toolbar .sort:hover { background: var(--ot-bg-muted); color: var(--ot-text); }
+.tpl-sort-menu {
+  position: absolute; right: 0; top: calc(100% + 4px);
+  background: #fff; border: 1px solid var(--ot-border-light);
+  border-radius: 8px; padding: 4px; z-index: 40;
+  box-shadow: 0 8px 24px rgba(0,0,0,.10);
+  min-width: 160px;
+  display: flex; flex-direction: column;
+}
+.tpl-sort-menu .item {
+  text-align: left; padding: 7px 10px; border-radius: 5px;
+  background: transparent; border: 0; cursor: pointer;
+  font: inherit; font-size: 12px; color: var(--ot-text);
+}
+.tpl-sort-menu .item:hover { background: var(--ot-bg-muted); }
+.tpl-sort-menu .item.on { background: var(--ot-primary-50); color: var(--ot-primary-dark); font-weight: 600; }
+.tpl-toolbar .view-tog {
+  display: inline-flex; align-items: stretch;
+  background: var(--ot-bg-muted);
+  border-radius: 7px; padding: 2px;
+}
+.tpl-toolbar .view-tog button {
+  width: 26px; height: 26px;
+  display: grid; place-items: center;
+  background: transparent; border: 0; cursor: pointer;
+  color: var(--ot-text-muted);
+  border-radius: 5px;
+  transition: all .12s;
+  padding: 0;
+}
+.tpl-toolbar .view-tog button.on {
+  background: #fff; color: var(--ot-text);
+  box-shadow: 0 1px 2px rgba(0,0,0,.06);
 }
 
-/* ── Tabs ── */
-.tpl-tabs {
-  display: flex !important; gap: 4px;
-  background: #fff !important; border-radius: 12px !important; padding: 4px !important;
-  width: fit-content; border: 1px solid #eaeaea !important;
+/* ── Loading / empty ─────────────────────────────────────────────── */
+.tpl-loading, .tpl-empty {
+  padding: 60px 20px; text-align: center;
+  color: var(--ot-text-muted);
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
 }
-.tpl-tab {
-  padding: 7px 16px !important; border-radius: 8px !important; font-size: 13px !important; font-weight: 600;
-  color: #999 !important; background: transparent !important; border: none !important; cursor: pointer;
-  font-family: inherit; transition: all .15s;
+.tpl-empty h3 { font-size: 15px; font-weight: 600; color: var(--ot-text); margin: 8px 0 0; }
+.tpl-empty p  { font-size: 13px; margin: 0 0 14px; }
+.tpl-empty .btn-pri {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 14px; border-radius: 8px;
+  background: var(--ot-primary); color: #fff;
+  border: 0; font: inherit; font-size: 13px; font-weight: 600;
+  cursor: pointer;
 }
-.tpl-tab:hover { color: #1a1a1a !important; }
-.tpl-tab.active { background: #1a1a1a !important; color: #fff !important; }
+.loader-spinner {
+  width: 28px; height: 28px;
+  border: 3px solid var(--ot-border-light);
+  border-top-color: var(--ot-primary);
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
 
-/* ── Loading ── */
-.tpl-loading { text-align: center; padding: 64px 0; color: #999; font-size: 15px; }
-
-/* ── Empty state ── */
-.tpl-empty {
-  text-align: center; padding: 64px 24px;
-  background: #fff !important; border-radius: 14px !important; border: 1px solid #eaeaea !important;
-  box-shadow: 0 2px 8px rgba(0,0,0,.04) !important;
-}
-.tpl-empty-icon {
-  width: 64px; height: 64px; margin: 0 auto 16px;
-  background: #f5f0eb !important; border-radius: 16px;
-  display: flex; align-items: center; justify-content: center; color: #999;
-}
-.tpl-empty h2 { font-size: 16px; font-weight: 600; color: #1a1a1a !important; margin: 0 0 6px; }
-.tpl-empty p { font-size: 13px; color: #999; margin: 0 0 20px; }
-
-/* ── Grid ── */
+/* ── Grid ────────────────────────────────────────────────────────── */
 .tpl-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 14px;
 }
 
-/* ── Card ── */
+/* ── Card ────────────────────────────────────────────────────────── */
 .tpl-card {
-  background: #fff !important; border-radius: 14px !important; border: 1px solid #eaeaea !important;
-  overflow: hidden; transition: border-color .15s, box-shadow .15s;
-  box-shadow: 0 2px 8px rgba(0,0,0,.04) !important;
+  background: #fff;
+  border: 1px solid var(--ot-border-light);
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex; flex-direction: column;
+  transition: all .15s;
+  cursor: pointer;
+  position: relative;
 }
-.tpl-card:hover { border-color: #ccc !important; box-shadow: 0 8px 24px rgba(0,0,0,.08) !important; }
-
-.tpl-card-preview {
-  height: 160px; background: #f5f0eb !important;
-  display: flex; align-items: center; justify-content: center;
-  border-bottom: 1px solid #eaeaea !important; position: relative;
+.tpl-card:hover {
+  border-color: var(--ot-primary);
+  box-shadow: 0 6px 20px rgba(74,140,42,.10), 0 1px 3px rgba(0,0,0,.04);
+  transform: translateY(-2px);
 }
-.tpl-card-count { color: #bbb; font-size: 13px; }
-
-/* ── Type badges ── */
-.tpl-type-badge {
-  position: absolute; top: 10px; left: 10px;
-  padding: 3px 10px !important; font-size: 10px; font-weight: 700;
-  text-transform: uppercase; border-radius: 20px !important; letter-spacing: .02em;
-  border: none !important;
+.tpl-card .thumb {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-bottom: 1px solid var(--ot-border-light);
+  background: var(--ot-bg-soft);
 }
-.tpl-type-badge.purple { background: #f0e6ff !important; color: #7c3aed !important; }
-.tpl-type-badge.teal { background: #e0faf4 !important; color: #0d9488 !important; }
-.tpl-type-badge.amber { background: #fff3e0 !important; color: #d97706 !important; }
-.tpl-type-badge.indigo { background: #e8eaf6 !important; color: #4f46e5 !important; }
-.tpl-type-badge.red { background: #fde8e8 !important; color: #dc2626 !important; }
-
-.tpl-active-badge {
-  position: absolute; top: 10px; right: 10px;
-  padding: 3px 10px !important; font-size: 10px; font-weight: 700;
-  text-transform: uppercase; border-radius: 20px !important;
-  background: #e6f9ee !important; color: #059669 !important;
-  border: none !important;
-}
-
-/* ── Overlay ── */
-.tpl-card-overlay {
+.tpl-card .thumb-img {
   position: absolute; inset: 0;
-  background: rgba(26, 26, 26, .6) !important; backdrop-filter: blur(2px);
-  display: flex; align-items: center; justify-content: center; gap: 8px;
-  opacity: 0; transition: opacity .2s;
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: top center;
+  display: block;
 }
-.tpl-card:hover .tpl-card-overlay { opacity: 1; }
+.tpl-card .badges {
+  position: absolute; top: 10px; left: 10px;
+  display: flex; gap: 6px; z-index: 2;
+}
+.tpl-card .badge-r {
+  position: absolute; top: 10px; right: 10px;
+  display: flex; gap: 6px; z-index: 2;
+}
+.tpl-card .badge {
+  font-size: 9.5px; font-weight: 700;
+  letter-spacing: .05em; text-transform: uppercase;
+  padding: 3px 8px; border-radius: 99px;
+  background: #fff; border: 1px solid var(--ot-border-light);
+  color: var(--ot-text-muted);
+  display: inline-flex; align-items: center; gap: 4px;
+  white-space: nowrap;
+}
+.tpl-card .badge.t-page    { background: #f0f7ec; color: #2d722d; border-color: #dcefd2; }
+.tpl-card .badge.t-header  { background: #dbeafe; color: #1e40af; border-color: #bfdbfe; }
+.tpl-card .badge.t-footer  { background: #e2e8f0; color: #1e293b; border-color: #cbd5e1; }
+.tpl-card .badge.t-single  { background: #f3e8ff; color: #6b21a8; border-color: #e9d5ff; }
+.tpl-card .badge.t-megapanel { background: #fef3c7; color: #92400e; border-color: #fde68a; }
+.tpl-card .badge.t-widget  { background: #ede9fe; color: #5b21b6; border-color: #ddd6fe; }
+.tpl-card .badge.t-404     { background: #fee2e2; color: #991b1b; border-color: #fecaca; }
+.tpl-card .badge.attivo {
+  background: var(--ot-primary); color: #fff; border-color: transparent;
+}
+.tpl-card .badge.draft {
+  background: #fef3c7; color: #92400e; border-color: #fde68a;
+}
+.tpl-card .pv-elements {
+  position: absolute; bottom: 8px; right: 10px;
+  font-size: 10px; font-weight: 500;
+  color: var(--ot-text);
+  background: rgba(255,255,255,.92);
+  padding: 2px 7px; border-radius: 99px;
+  backdrop-filter: blur(4px);
+  z-index: 2;
+}
+.tpl-card .actions {
+  position: absolute; bottom: 8px; left: 10px;
+  display: flex; gap: 4px;
+  opacity: 0; transform: translateY(2px);
+  transition: all .15s;
+  z-index: 3;
+}
+.tpl-card:hover .actions { opacity: 1; transform: none; }
+.tpl-card .actions button {
+  width: 26px; height: 26px;
+  display: grid; place-items: center;
+  background: #fff;
+  border: 1px solid var(--ot-border-light);
+  border-radius: 6px;
+  color: var(--ot-text-muted);
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,.10);
+  transition: all .12s;
+  padding: 0;
+}
+.tpl-card .actions button:hover {
+  border-color: var(--ot-text);
+  color: var(--ot-text);
+}
+.tpl-card .actions button.danger:hover {
+  border-color: #ef4444; color: #ef4444;
+}
 
-/* ── Card info ── */
-.tpl-card-info { padding: 14px 16px; }
-.tpl-card-info-top { display: flex; align-items: flex-start; justify-content: space-between; }
-.tpl-card-info-left { flex: 1; min-width: 0; }
-.tpl-card-title {
-  font-size: 13px; font-weight: 600; color: #1a1a1a !important; margin: 0;
+/* Card body */
+.tpl-card .body {
+  padding: 12px 14px;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.tpl-card .title-row {
+  display: flex; align-items: center; gap: 8px;
+}
+.tpl-card .title {
+  font-size: 13.5px; font-weight: 600;
+  color: var(--ot-text);
+  flex: 1; min-width: 0;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
-.tpl-card-meta { font-size: 11px; color: #999; margin: 4px 0 0; }
-.status-published { color: #059669 !important; }
-.status-draft { color: #d97706 !important; }
-.status-archived { color: #999 !important; }
-
-.tpl-card-actions-mini { display: flex; align-items: center; gap: 2px; flex-shrink: 0; }
-.tpl-icon-btn {
-  background: none !important; border: none !important; cursor: pointer; font-size: 13px;
-  color: #ccc !important; padding: 2px 4px; transition: color .15s;
+.tpl-card .title-edit {
+  flex: 1; font: inherit; font-size: 13.5px; font-weight: 600;
+  border: 1px solid var(--ot-primary);
+  border-radius: 5px;
+  padding: 3px 6px;
+  outline: 0;
+  width: 100%;
+  background: #fff;
+  color: var(--ot-text);
+  box-shadow: 0 0 0 3px rgba(74,140,42,.15);
 }
-.tpl-icon-btn:hover { color: #e8622a !important; }
-.tpl-icon-btn-danger:hover { color: #dc2626 !important; }
-
-.tpl-rename-input {
-  width: 100% !important; padding: 4px 8px !important; font-size: 13px; font-weight: 600;
-  border: 1.5px solid #e8622a !important; border-radius: 8px !important; background: #fff !important;
-  color: #1a1a1a !important; outline: none; font-family: inherit;
+.tpl-card .meta {
+  font-size: 11.5px; color: var(--ot-text-muted);
+  display: flex; align-items: center; gap: 6px;
+  flex-wrap: wrap;
 }
-
-/* ── Bottom area ── */
-.tpl-card-bottom { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
-.tpl-shortcode {
-  font-size: 10px; color: #999 !important; background: #f5f5f5 !important;
-  padding: 3px 8px !important; border-radius: 6px !important; font-family: 'SF Mono', Monaco, monospace;
-  border: none !important;
+.tpl-card .meta .dot-status {
+  width: 6px; height: 6px; border-radius: 99px; background: #22c55e;
+  flex-shrink: 0;
 }
-
-/* ── Activate buttons ── */
-.tpl-activate-btn {
-  font-size: 11px !important; padding: 4px 12px !important; border-radius: 6px !important; font-weight: 600;
-  border: 1.5px solid #eaeaea !important; background: #fff !important; color: #666 !important;
-  cursor: pointer; transition: all .15s; font-family: inherit;
+.tpl-card .meta .dot-status.draft { background: #f59e0b; }
+.tpl-card .meta .sep { opacity: .5; }
+.tpl-card .shortcode {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 10.5px;
+  background: var(--ot-bg-muted);
+  border: 1px solid var(--ot-border-light);
+  border-radius: 6px;
+  padding: 4px 8px;
+  color: var(--ot-text-muted);
+  cursor: pointer;
+  transition: all .12s;
+  align-self: flex-start;
+  max-width: 100%;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  font-weight: 500;
 }
-.tpl-activate-btn:hover { border-color: #1a1a1a !important; color: #1a1a1a !important; }
-.tpl-activate-btn.active {
-  background: #e6f9ee !important; color: #059669 !important; border-color: #b2e5cc !important;
-}
-.tpl-activate-btn.active:hover {
-  background: #fde8e8 !important; color: #dc2626 !important; border-color: #f5b7b7 !important;
-}
-.tpl-activate-btn.disabled {
-  opacity: .4; cursor: not-allowed;
-}
-.tpl-activate-btn.disabled:hover { border-color: #eaeaea !important; color: #666 !important; }
-
-/* ── Tabs row (tabs + view toggle) ── */
-.tpl-tabs-row { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
-.tpl-tabs-row .tpl-tabs { margin-bottom: 0; }
-
-/* ── View toggle ── */
-.tpl-view-toggle { display: inline-flex; gap: 2px; }
-.tpl-view-btn {
-  width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;
-  border: 1px solid #eaeaea !important; border-radius: 6px !important; background: #fff !important;
-  cursor: pointer; color: #bbb !important; transition: all .15s;
-}
-.tpl-view-btn:hover { color: #666 !important; border-color: #ccc !important; }
-.tpl-view-btn.active { background: #f5f0eb !important; color: #1a1a1a !important; border-color: #d5d0cb !important; }
-
-/* ── Table view ── */
-.tpl-table { width: 100%; border-collapse: collapse; font-size: 13px; background: #fff !important; border-radius: 12px !important; overflow: hidden; border: 1px solid #eaeaea !important; }
-.tpl-table th { text-align: left; padding: 10px 14px; color: #999 !important; font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid #eaeaea !important; background: #fafafa !important; }
-.tpl-table td { padding: 10px 14px; border-bottom: 1px solid #f5f5f5 !important; vertical-align: middle; color: #1a1a1a !important; }
-.tpl-table tr:hover td { background: #faf8f6 !important; }
-.tpl-table-title a { color: #1a1a1a !important; font-weight: 600; text-decoration: none !important; }
-.tpl-table-title a:hover { color: var(--olo-color-primary, #e8622a) !important; }
-.tpl-table-actions { display: flex; gap: 4px; }
-.tpl-table-action-btn {
-  background: none !important; border: 1px solid #eaeaea !important; border-radius: 5px !important;
-  padding: 4px 6px !important; cursor: pointer; color: #999 !important; transition: all .15s;
-  display: inline-flex; align-items: center; justify-content: center;
-}
-.tpl-table-action-btn:hover { background: #f5f0eb !important; color: #1a1a1a !important; border-color: #ccc !important; }
-.tpl-table-action-btn--danger:hover { color: #dc2626 !important; border-color: #f5b7b7 !important; background: #fde8e8 !important; }
-.tpl-shortcode-sm { font-size: 10px; background: #f5f5f5 !important; padding: 2px 6px !important; border-radius: 4px !important; font-family: 'SF Mono', Monaco, monospace; user-select: all; color: #999 !important; border: none !important; }
-.tpl-badge { display: inline-block; padding: 2px 8px !important; border-radius: 10px !important; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .02em; border: none !important; }
-.tpl-badge--page { background: #dbeafe !important; color: #1d4ed8 !important; }
-.tpl-badge--header { background: #f0e6ff !important; color: #7c3aed !important; }
-.tpl-badge--footer { background: #e0faf4 !important; color: #0d9488 !important; }
-.tpl-badge--single { background: #fff3e0 !important; color: #d97706 !important; }
-.tpl-badge--megapanel { background: #e8eaf6 !important; color: #4f46e5 !important; }
-.tpl-badge--404 { background: #fde8e8 !important; color: #dc2626 !important; }
-
-/* ── Responsive ── */
-@media (max-width: 900px) {
-  .tpl-grid { grid-template-columns: repeat(2, 1fr); }
-}
-@media (max-width: 768px) {
-  .tpl-header-actions { flex-wrap: wrap; }
-  .tpl-grid { grid-template-columns: 1fr; }
-  .tpl-tabs { overflow-x: auto; width: 100%; }
+.tpl-card .shortcode:hover {
+  border-color: var(--ot-primary);
+  background: var(--ot-primary-50);
+  color: var(--ot-primary-dark);
 }
 
-/* Export dialog */
+/* ── List view ───────────────────────────────────────────────────── */
+.tpl-list {
+  display: flex; flex-direction: column;
+  background: #fff;
+  border: 1px solid var(--ot-border-light);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.tpl-list .row {
+  display: grid;
+  grid-template-columns: 56px 1fr 110px 160px 140px 90px;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--ot-border-light);
+  cursor: pointer;
+  transition: background .12s;
+  font-size: 13px;
+  color: var(--ot-text);
+}
+.tpl-list .row:last-child { border-bottom: 0; }
+.tpl-list .row:hover { background: var(--ot-bg-muted); }
+.tpl-list .row.h {
+  background: var(--ot-bg-muted);
+  font-size: 11px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: .05em;
+  color: var(--ot-text-muted);
+  cursor: default;
+  padding: 8px 14px;
+}
+.tpl-list .row.h:hover { background: var(--ot-bg-muted); }
+.tpl-list .mini-thumb {
+  width: 56px; height: 36px; border-radius: 4px;
+  border: 1px solid var(--ot-border-light);
+  overflow: hidden;
+  background: var(--ot-bg-muted);
+  flex-shrink: 0;
+  position: relative;
+}
+.tpl-list .mini-thumb img {
+  width: 100%; height: 100%; object-fit: cover;
+}
+.tpl-list .ttl-cell { min-width: 0; }
+.tpl-list .ttl {
+  font-weight: 600; color: var(--ot-text);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.tpl-list .sub-line {
+  font-size: 11px; color: var(--ot-text-muted);
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  margin-top: 2px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.tpl-list .status-cell {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 12px; color: var(--ot-text-muted);
+  white-space: nowrap;
+}
+.tpl-list .status-cell .dot-status {
+  width: 6px; height: 6px; border-radius: 99px; background: #22c55e;
+}
+.tpl-list .status-cell .dot-status.draft { background: #f59e0b; }
+.tpl-list .status-cell .active-pill {
+  font-size: 9.5px; font-weight: 700; padding: 2px 6px;
+  background: var(--ot-primary); color: #fff;
+  border-radius: 99px; letter-spacing: .04em;
+  text-transform: uppercase;
+}
+.tpl-list .date-cell {
+  color: var(--ot-text-muted); font-size: 12px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.tpl-list .row .acts {
+  display: flex; gap: 4px; justify-content: flex-end;
+  opacity: 0; transition: opacity .12s;
+}
+.tpl-list .row:hover .acts { opacity: 1; }
+.tpl-list .row .acts button {
+  width: 24px; height: 24px;
+  display: grid; place-items: center;
+  background: #fff; border: 1px solid var(--ot-border-light);
+  border-radius: 5px; cursor: pointer;
+  color: var(--ot-text-muted);
+  padding: 0;
+}
+.tpl-list .row .acts button:hover { color: var(--ot-text); border-color: var(--ot-text-muted); }
+.tpl-list .row .acts button.danger:hover { color: #ef4444; border-color: #ef4444; }
+
+/* ── Toast ───────────────────────────────────────────────────────── */
+.tpl-toast {
+  position: fixed; bottom: 32px; left: 50%;
+  transform: translateX(-50%);
+  background: #1e293b; color: #fff;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 13px; font-weight: 500;
+  font-family: 'Work Sans', -apple-system, sans-serif;
+  box-shadow: 0 12px 32px rgba(0,0,0,.25);
+  z-index: 100001;
+  animation: tplToast .25s ease-out;
+}
+@keyframes tplToast {
+  from { opacity: 0; transform: translateX(-50%) translateY(10px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+/* ── Export dialog ───────────────────────────────────────────────── */
 .tpl-export-overlay {
-  position: fixed !important;
-  inset: 0 !important;
-  background: rgba(0,0,0,0.5) !important;
-  z-index: 999999 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
+  position: fixed; inset: 0;
+  background: rgba(15,23,42,.45);
+  z-index: 100000;
+  display: flex; align-items: center; justify-content: center;
+  backdrop-filter: blur(4px);
 }
 .tpl-export-dialog {
-  background: #fff !important;
-  border-radius: 12px !important;
-  padding: 28px 32px !important;
-  max-width: 420px !important;
-  width: 90% !important;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.3) !important;
+  background: #fff;
+  padding: 24px;
+  border-radius: 12px;
+  width: 380px; max-width: 90vw;
+  box-shadow: 0 24px 64px rgba(0,0,0,.25);
+  font-family: 'Work Sans', -apple-system, sans-serif;
 }
+.tpl-export-dialog h3 {
+  margin: 0 0 16px; font-size: 16px; font-weight: 600;
+  color: #1e293b;
+}
+.tpl-export-dialog label {
+  display: flex; align-items: center; gap: 10px;
+  cursor: pointer; margin-bottom: 12px;
+  font-size: 14px;
+}
+.tpl-export-dialog label input { width: 18px; height: 18px; accent-color: #4a8c2a; }
+.tpl-export-dialog p {
+  font-size: 12px; color: #64748b; margin: 0 0 20px;
+}
+.tpl-export-dialog .actions-row {
+  display: flex; gap: 10px; justify-content: flex-end;
+}
+.tpl-export-dialog .btn-pri,
+.tpl-export-dialog .btn-sec {
+  padding: 8px 16px; font-size: 13px; font-weight: 600;
+  border-radius: 8px; cursor: pointer; border: 1px solid transparent;
+  font-family: inherit;
+}
+.tpl-export-dialog .btn-pri { background: #4a8c2a; color: #fff; }
+.tpl-export-dialog .btn-pri:disabled { opacity: .6; cursor: not-allowed; }
+.tpl-export-dialog .btn-sec { background: #fff; color: #1e293b; border-color: #e2e8f0; }
 </style>

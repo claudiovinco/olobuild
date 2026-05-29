@@ -127,7 +127,22 @@ class Olo_Builder {
     public function serve_builder_iframe() {
         if ( empty( $_GET['olo_builder_iframe'] ) ) return;
         if ( ! current_user_can( 'edit_pages' ) ) {
-            wp_die( 'Unauthorized', 403 );
+            // Diagnostica: distingue tra "non loggato" e "loggato ma senza permessi"
+            $uid = get_current_user_id();
+            if ( ! $uid ) {
+                $msg = '<h2>Sessione scaduta</h2><p>Il browser non ha inviato il cookie di autenticazione all\'iframe del builder.</p>'
+                     . '<p><strong>Cosa fare:</strong></p><ul>'
+                     . '<li>Ricarica la pagina del builder con <kbd>Ctrl+Shift+R</kbd></li>'
+                     . '<li>Se persiste, esegui logout/login da WordPress</li>'
+                     . '<li>Verifica che i cookie di terze parti non siano bloccati nel browser</li>'
+                     . '</ul>';
+            } else {
+                $user = wp_get_current_user();
+                $roles = implode( ', ', (array) $user->roles );
+                $msg = '<h2>Permessi insufficienti</h2><p>L\'utente <strong>' . esc_html( $user->user_login ) . '</strong> (ruoli: ' . esc_html( $roles ) . ') non ha la capability <code>edit_pages</code>.</p>'
+                     . '<p>Aggiungi il ruolo Editor o Administrator all\'utente, oppure usa un plugin di gestione capability.</p>';
+            }
+            wp_die( $msg, 'Olobuild Builder', [ 'response' => 403 ] );
         }
 
         $tpl_id = isset( $_GET['olo_tpl'] ) ? (int) $_GET['olo_tpl'] : 0;
@@ -181,19 +196,80 @@ class Olo_Builder {
         add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_inline_preview_assets' ], 100 );
         add_action( 'wp_head', [ $this, 'print_inline_preview_styles' ], 99 );
 
+        // Quando l'utente sta editando un template di tipo header o footer
+        // nel builder iframe, evitiamo il DOPPIO render (header/footer dal tema
+        // + template in editing renderizzato come body): definiamo una costante
+        // che Olo_Header_Integration/Olo_Footer_Integration leggono per
+        // skippare il rendering dell'header/footer attivo.
+        $tpl_id = isset( $_GET['olo_tpl'] ) ? (int) $_GET['olo_tpl'] : 0;
+        if ( $tpl_id && class_exists( 'Olo_Database' ) ) {
+            $db = new Olo_Database();
+            $tpl = $db->get_template( $tpl_id );
+            $editing_type = is_array( $tpl ) ? ( $tpl['type'] ?? '' ) : '';
+            if ( $editing_type === 'header' && ! defined( 'OLO_BUILDER_EDITING_HEADER' ) ) {
+                define( 'OLO_BUILDER_EDITING_HEADER', true );
+            }
+            if ( $editing_type === 'footer' && ! defined( 'OLO_BUILDER_EDITING_FOOTER' ) ) {
+                define( 'OLO_BUILDER_EDITING_FOOTER', true );
+            }
+        }
+
         // Disabilita admin bar e altri overlay
         show_admin_bar( false );
     }
 
+    /**
+     * Empty-state HTML mostrato nell'iframe del builder durante il boot iniziale,
+     * quando il template è interamente vuoto, oppure quando solo il body è vuoto
+     * ma header/footer sono presenti. Markup unico = UX coerente nei 3 casi.
+     *
+     * Uso: server-side (templates/builder-iframe.php, filtri inline_preview_*,
+     * REST builder_render); il bridge JS replica lo stesso markup via oloData.
+     */
+    public static function get_iframe_empty_html() {
+        $title       = esc_html__( 'Pagina vuota', 'olobuild' );
+        $text        = esc_html__( 'Aggiungi un modulo o scegli un layout per iniziare', 'olobuild' );
+        $add_module  = esc_html__( 'Aggiungi modulo', 'olobuild' );
+        $add_row     = esc_html__( 'Scegli layout', 'olobuild' );
+        return '<div class="olo-iframe-empty">'
+             . '<div class="olo-iframe-empty-card">'
+             . '<h3 class="olo-iframe-empty-title">' . $title . '</h3>'
+             . '<p class="olo-iframe-empty-text">' . $text . '</p>'
+             . '<div class="olo-iframe-empty-actions">'
+             . '<button type="button" class="olo-iframe-empty-btn" data-olo-empty-action="add-module" aria-label="' . $add_module . '">'
+             . '<span class="olo-iframe-empty-btn-icon">'
+             . '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+             . '<rect x="3" y="3" width="18" height="18" rx="2" stroke-dasharray="3 3"/>'
+             . '<path d="M12 8v8M8 12h8"/>'
+             . '</svg>'
+             . '</span>'
+             . '<span class="olo-iframe-empty-btn-label">' . $add_module . '</span>'
+             . '</button>'
+             . '<button type="button" class="olo-iframe-empty-btn" data-olo-empty-action="add-row" aria-label="' . $add_row . '">'
+             . '<span class="olo-iframe-empty-btn-icon">'
+             . '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+             . '<rect x="3" y="3" width="7" height="7" rx="1"/>'
+             . '<rect x="14" y="3" width="7" height="7" rx="1"/>'
+             . '<rect x="3" y="14" width="7" height="7" rx="1"/>'
+             . '<rect x="14" y="14" width="7" height="7" rx="1"/>'
+             . '</svg>'
+             . '</span>'
+             . '<span class="olo-iframe-empty-btn-label">' . $add_row . '</span>'
+             . '</button>'
+             . '</div>'
+             . '</div>'
+             . '</div>';
+    }
+
     /** @internal Filter callback: rimpiazza the_content con placeholder. */
     public function inline_preview_replace_content( $content ) {
-        return '<div id="olo-iframe-root"><div class="olo-iframe-empty">Caricamento preview...</div></div>';
+        return '<div id="olo-iframe-root">' . self::get_iframe_empty_html() . '</div>';
     }
 
     /** @internal Filter callback: rimpiazza core/post-content block (block themes). */
     public function inline_preview_replace_post_content_block( $html, $block ) {
         if ( ( $block['blockName'] ?? '' ) === 'core/post-content' ) {
-            return '<div id="olo-iframe-root"><div class="olo-iframe-empty">Caricamento preview...</div></div>';
+            return '<div id="olo-iframe-root">' . self::get_iframe_empty_html() . '</div>';
         }
         return $html;
     }
@@ -204,6 +280,8 @@ class Olo_Builder {
         wp_enqueue_style( 'olo-uikit-inline', OLO_URL . 'assets/vendor/uikit/css/uikit.min.css', [], OLO_VERSION );
         wp_enqueue_style( 'olo-frontend-inline', OLO_URL . 'assets/css/frontend.css', [], OLO_VERSION );
         wp_enqueue_style( 'olo-iframe-builder-inline', OLO_URL . 'assets/css/iframe-builder.css', [], OLO_VERSION );
+        // Tile-specific CSS (mirror del builder-iframe.php)
+        wp_enqueue_style( 'olo-proslider-css', OLO_URL . 'assets/css/olo-proslider.css', [], OLO_VERSION );
         // Core JS
         wp_enqueue_script( 'olo-uikit-inline', OLO_URL . 'assets/vendor/uikit/js/uikit.min.js', [], OLO_VERSION, true );
         wp_enqueue_script( 'olo-uikit-icons-inline', OLO_URL . 'assets/vendor/uikit/js/uikit-icons.min.js', [ 'olo-uikit-inline' ], OLO_VERSION, true );
@@ -393,6 +471,114 @@ class Olo_Builder {
             );
         }
 
+        // Cockpit CSS condiviso per tutte le pagine top-level che usano cockpit_shell_open()
+        if ( in_array( $hook, self::cockpit_screen_ids(), true ) ) {
+            wp_enqueue_style(
+                'olo-cockpit-css',
+                OLO_URL . 'assets/css/dashboard.css',
+                [],
+                OLO_VERSION
+            );
+        }
+
+        // Submissions cockpit (Fase 3)
+        if ( $hook === 'olobuild_page_olo-form-submissions' ) {
+            wp_enqueue_script(
+                'olo-submissions-js',
+                OLO_URL . 'assets/js/olo-submissions.js',
+                [],
+                OLO_VERSION,
+                true
+            );
+            wp_localize_script( 'olo-submissions-js', 'oloSubmissionsConfig', [
+                'restUrl' => esc_url_raw( rest_url( 'olo/v1/' ) ),
+                'nonce'   => wp_create_nonce( 'wp_rest' ),
+                'i18n'    => [
+                    'noResults'    => __( 'Nessun invio trovato.', 'olobuild' ),
+                    'noResultsHint'=> __( 'Prova a cambiare filtro o aspetta nuovi messaggi.', 'olobuild' ),
+                    'markRead'     => __( 'Segna come letto', 'olobuild' ),
+                    'markUnread'   => __( 'Segna come non letto', 'olobuild' ),
+                    'confirmDelete'=> __( "Eliminare definitivamente questo invio? L'azione non si può annullare.", 'olobuild' ),
+                    'deleted'      => __( 'Invio eliminato', 'olobuild' ),
+                    'deleteFailed' => __( 'Errore eliminazione', 'olobuild' ),
+                    'loadFailed'   => __( 'Errore caricamento. Riprova.', 'olobuild' ),
+                    'fields'       => __( 'Campi compilati', 'olobuild' ),
+                    'metadata'     => __( 'Metadati', 'olobuild' ),
+                    'ip'           => 'IP',
+                    'userAgent'    => 'User Agent',
+                    'submittedAt'  => __( 'Inviato il', 'olobuild' ),
+                ],
+            ] );
+        }
+
+        // Dashboard cockpit (toplevel_page_olobuild)
+        if ( 'toplevel_page_olobuild' === $hook ) {
+            wp_enqueue_style(
+                'olo-dashboard-css',
+                OLO_URL . 'assets/css/dashboard.css',
+                [],
+                OLO_VERSION
+            );
+            wp_enqueue_script(
+                'olo-dashboard-js',
+                OLO_URL . 'assets/js/dashboard.js',
+                [],
+                OLO_VERSION,
+                true
+            );
+
+            // Boot data per evitare flash di skeleton
+            $rest = new Olo_Rest_Api();
+            $req_recent = new WP_REST_Request( 'GET' );
+            $req_recent->set_query_params( [ 'limit' => 6 ] );
+            $req_changelog = new WP_REST_Request( 'GET' );
+            $req_changelog->set_query_params( [ 'limit' => 3 ] );
+
+            $boot_kpis      = $rest->dashboard_kpis( null );
+            $boot_recent    = $rest->dashboard_recent( $req_recent );
+            $boot_changelog = $rest->dashboard_changelog( $req_changelog );
+
+            $user_id = get_current_user_id();
+            $user_prefs = get_user_meta( $user_id, 'olo_dashboard_prefs', true );
+            if ( ! is_array( $user_prefs ) ) $user_prefs = [];
+            $user_prefs = wp_parse_args( $user_prefs, [
+                'pinned'      => [ 'tpl', 'cfg', 'media' ],
+                'rail'        => 'expanded',
+                'app_mode'    => true,
+                'banners_off' => [],
+            ] );
+
+            wp_localize_script( 'olo-dashboard-js', 'oloDashboardData', [
+                'restUrl'     => esc_url_raw( rest_url( 'olo/v1/' ) ),
+                'adminUrl'    => admin_url(),
+                'nonce'       => wp_create_nonce( 'wp_rest' ),
+                'pluginUrl'   => OLO_URL,
+                'version'     => OLO_VERSION,
+                'prefs'       => $user_prefs,
+                'searchIndex' => self::dashboard_search_index(),
+                'boot' => [
+                    'kpis'      => is_wp_error( $boot_kpis )      ? [] : $boot_kpis->get_data(),
+                    'recent'    => is_wp_error( $boot_recent )    ? [] : $boot_recent->get_data(),
+                    'changelog' => is_wp_error( $boot_changelog ) ? [] : $boot_changelog->get_data(),
+                ],
+                'i18n' => [
+                    'live'         => __( 'live', 'olobuild' ),
+                    'draft'        => __( 'bozza', 'olobuild' ),
+                    'pin'          => __( 'Aggiungi ai preferiti', 'olobuild' ),
+                    'unpin'        => __( 'Rimuovi dai preferiti', 'olobuild' ),
+                    'expand'       => __( 'Espandi pannello', 'olobuild' ),
+                    'collapse'     => __( 'Comprimi pannello', 'olobuild' ),
+                    'searchPh'     => __( 'Cerca pagine, template, impostazioni…', 'olobuild' ),
+                    'noResults'    => __( 'Nessun risultato', 'olobuild' ),
+                    'emptyRecent'  => __( 'Nessuna attività recente. Crea o modifica una pagina per iniziare.', 'olobuild' ),
+                    'creating'     => __( 'Creazione…', 'olobuild' ),
+                    'untitled'     => __( 'Senza titolo', 'olobuild' ),
+                    'newPageError' => __( 'Errore nella creazione della pagina. Riprova.', 'olobuild' ),
+                ],
+            ] );
+            return;
+        }
+
         // Configurazione page — admin Vue app
         if ( 'olobuild_page_olobuilder-settings' === $hook ) {
             // CSS is injected inline by Vite IIFE build + render_configurazione_page inline styles
@@ -405,17 +591,35 @@ class Olo_Builder {
             );
 
             $style_system = Olo_Style_System::instance();
+            // Timestamp ultimo save (mostrato nella savebar). Ogni tab al suo POST aggiorna
+            // l'option `olo_settings_last_saved`; questo è solo il bootstrap iniziale.
+            $last_saved_ts = (int) get_option( 'olo_settings_last_saved', 0 );
+            $last_saved_str = '';
+            if ( $last_saved_ts > 0 ) {
+                $diff = max( 0, time() - $last_saved_ts );
+                if ( $diff < 60 ) {
+                    $last_saved_str = __( 'pochi secondi fa', 'olobuild' );
+                } elseif ( $diff < 3600 ) {
+                    $last_saved_str = sprintf( __( '%d minuti fa', 'olobuild' ), intval( $diff / 60 ) );
+                } else {
+                    $last_saved_str = wp_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $last_saved_ts );
+                }
+            }
             wp_localize_script( 'olo-admin-settings-js', 'oloData', [
-                'restUrl'          => esc_url_raw( rest_url( 'olo/v1' ) ),
-                'nonce'            => wp_create_nonce( 'wp_rest' ),
-                'pluginUrl'        => OLO_URL,
-                'version'          => OLO_VERSION,
-                'locale'           => olo_current_locale(),
-                'translations'     => olo_get_translations_map(),
-                'styles'           => $style_system->get_styles(),
-                'presets'          => $style_system->get_presets(),
-                'globalColors'     => $style_system->get_global_colors(),
-                'globalTypography' => $style_system->get_global_typography(),
+                'restUrl'           => esc_url_raw( rest_url( 'olo/v1' ) . '/' ),
+                'nonce'             => wp_create_nonce( 'wp_rest' ),
+                'ajaxUrl'           => admin_url( 'admin-ajax.php' ),
+                'adminUrl'          => admin_url(),
+                'siteUrl'           => home_url( '/' ),
+                'pluginUrl'         => OLO_URL,
+                'version'           => OLO_VERSION,
+                'locale'            => olo_current_locale(),
+                'translations'      => olo_get_translations_map(),
+                'styles'            => $style_system->get_styles(),
+                'presets'           => $style_system->get_presets(),
+                'globalColors'      => $style_system->get_global_colors(),
+                'globalTypography'  => $style_system->get_global_typography(),
+                'settingsLastSaved' => $last_saved_str,
             ] );
             return;
         }
@@ -427,13 +631,31 @@ class Olo_Builder {
         // Load full WP media framework (needed for wp.media settings & templates)
         wp_enqueue_media();
 
+        // Carica frontend.css anche nel builder admin: il canvas Vue usa .olo-template
+        // e ha bisogno delle stesse regole, including @keyframes entrance animations.
+        wp_enqueue_style(
+            'olo-builder-frontend-styles',
+            OLO_URL . 'assets/css/frontend.css',
+            [],
+            OLO_VERSION
+        );
+
         // Cache-busting basato sul mtime reale dei file (oltre OLO_VERSION),
         // così ogni rebuild forza il reload del bundle anche se la versione
         // del plugin non è stata bumpata (utile in dev/staging).
         $css_path = OLO_PATH . 'assets/css/builder.css';
         $js_path  = OLO_PATH . 'assets/js/builder.js';
+        $mtime    = file_exists( $js_path ) ? filemtime( $js_path ) : 0;
         $css_ver  = OLO_VERSION . '.' . ( file_exists( $css_path ) ? filemtime( $css_path ) : 0 );
-        $js_ver   = OLO_VERSION . '.' . ( file_exists( $js_path )  ? filemtime( $js_path )  : 0 );
+        // OLO_VERSION + mtime sono sufficienti: ogni build aggiorna mtime,
+        // ogni release aggiorna OLO_VERSION → il browser riscarica solo quando
+        // serve. Aggiungere time() come prima rompeva la cache del browser
+        // ad ogni F5 in admin (4 MB di builder.js riscaricati senza motivo).
+        // Per forzare il reload in dev: aggiungere `?olo_no_cache=1`.
+        $js_ver   = OLO_VERSION . '.' . $mtime;
+        if ( isset( $_GET['olo_no_cache'] ) ) {
+            $js_ver .= '.' . time();
+        }
 
         // CSS is bundled inline in builder.js by Vite (iife mode injects <style> tags at runtime).
         // Enqueue only if a separate builder.css exists (e.g. if build config switches to extracted CSS).
@@ -454,6 +676,20 @@ class Olo_Builder {
             true
         );
 
+        // Auto-thumbnail capture: listener su `olobuild:saved` → html2canvas → upload
+        wp_enqueue_script(
+            'olo-thumb-capture',
+            OLO_URL . 'assets/js/olo-thumb-capture.js',
+            [],
+            OLO_VERSION,
+            true
+        );
+        wp_localize_script( 'olo-thumb-capture', 'oloThumbConfig', [
+            'restUrl'   => esc_url_raw( rest_url( 'olo/v1/' ) ),
+            'nonce'     => wp_create_nonce( 'wp_rest' ),
+            'vendorUrl' => OLO_URL . 'assets/vendor/html2canvas.min.js',
+            'debug'     => defined( 'WP_DEBUG' ) && WP_DEBUG,
+        ] );
 
         $style_system = Olo_Style_System::instance();
 
@@ -474,6 +710,25 @@ class Olo_Builder {
             $post_id = 0;
         }
 
+        // v3.55.42 — quando l'utente apre il builder per un template (senza un post
+        // specifico in URL), risolvi via PHP il permalink REALE del post collegato
+        // nei settings del template. Senza questo, il pulsante "Reale" costruiva un
+        // URL `?p=ID` lato JS che funziona solo per post_type='post' e dava 404
+        // sulle pages (che usano `?page_id=ID`) o sui CPT.
+        $linked_post_permalink = '';
+        $linked_post_id = 0;
+        $template_id_for_link = absint( $_GET['template_id'] ?? 0 );
+        if ( $template_id_for_link && class_exists( 'Olo_Database' ) ) {
+            $db_for_link = new Olo_Database();
+            $tpl_for_link = $db_for_link->get_template( $template_id_for_link );
+            if ( $tpl_for_link && ! empty( $tpl_for_link['settings']['post_id'] ) ) {
+                $linked_post_id = absint( $tpl_for_link['settings']['post_id'] );
+                if ( $linked_post_id ) {
+                    $linked_post_permalink = (string) get_permalink( $linked_post_id );
+                }
+            }
+        }
+
         wp_localize_script( 'olobuilder-js', 'oloData', [
             'restUrl'        => esc_url_raw( rest_url( 'olo/v1' ) ),
             'nonce'          => wp_create_nonce( 'wp_rest' ),
@@ -484,6 +739,10 @@ class Olo_Builder {
             'templateId'     => absint( $_GET['template_id'] ?? 0 ),
             'postId'         => $post_id,
             'postPermalink'  => $post_id ? get_permalink( $post_id ) : '',
+            // Permalink REALE del post collegato al template (vedi commento sopra).
+            // Usato dal pulsante "Anteprima reale" come priorità 2 se postPermalink è vuoto.
+            'linkedPostId'        => $linked_post_id,
+            'linkedPostPermalink' => $linked_post_permalink,
             'themeColors'    => $this->detect_theme_colors(),
             'styles'         => $style_system->get_styles(),
             'stylesCss'      => $style_system->generate_css(),
@@ -495,8 +754,13 @@ class Olo_Builder {
             'activeFooterId' => (int) get_option( 'olo_active_footer', 0 ),
             'active404Id'    => (int) get_option( 'olo_active_404', 0 ),
             'activeSingles'  => $this->get_active_singles_map(),
+            'stockmedia'     => wp_parse_args(
+                get_option( 'olo_stockmedia_behavior', [] ) ?: [],
+                [ 'preferred' => 'unsplash', 'download_local' => true, 'optimize_on_download' => false ]
+            ),
             'templateList'       => $this->get_template_list(),
             'megapanelTemplates' => $this->get_megapanel_templates(),
+            'widgetTemplates'    => $this->get_widget_templates(),
             'postTypes'      => $this->get_public_post_types(),
             'taxonomies'     => $this->get_public_taxonomies(),
             'metaPrefixes'   => $this->get_meta_prefixes(),
@@ -504,6 +768,7 @@ class Olo_Builder {
             'serviceList'    => $this->get_service_list(),
             'wpPages'        => $this->get_wp_pages(),
             'singlePostItems' => $this->get_single_post_items(),
+            'iframeEmptyHtml' => self::get_iframe_empty_html(),
             '_debug_tpl_id'   => absint( $_GET['template_id'] ?? 0 ),
             'hasAiKey'       => ! empty( get_option( 'olo_ai_anthropic_key', '' ) ),
             'breakpointsEnabled' => wp_parse_args( get_option( 'olo_breakpoints_enabled', [] ), [
@@ -536,30 +801,100 @@ class Olo_Builder {
     public function render_builder_page() {
         $template_id = absint( $_GET['template_id'] ?? 0 );
 
+        // Forza il browser a NON usare la cache locale per la pagina builder.
+        // Senza questi header alcuni browser (Chrome con bfcache) riservano
+        // l'HTML completo della pagina builder — inclusi i tag <script src="builder.js?ver=X">
+        // — e ricaricarla con F5 normale serve la versione vecchia.
+        if ( ! headers_sent() ) {
+            header( 'Cache-Control: no-store, no-cache, must-revalidate, max-age=0' );
+            header( 'Pragma: no-cache' );
+            header( 'Expires: 0' );
+        }
+
         if ( $template_id > 0 ) {
             // Fullscreen editor mode — keep existing behaviour
             include OLO_PATH . 'templates/builder-page.php';
         } else {
-            // Template list mode — use the shared admin shell
-            self::page_shell_open( __( 'Gestione Template', 'olobuild' ) );
-            echo '<div id="olobuilder-app"></div>';
-            self::page_shell_close();
+            // Template list mode — usa il cockpit shell della dashboard
+            // (topbar OLObuild + appback strip + WP sidebar collassata in app mode)
+            self::cockpit_shell_open( '<a href="' . esc_url( admin_url( 'admin.php?page=olobuilder-templates' ) ) . '" style="color:inherit;text-decoration:none">' . esc_html__( 'Template', 'olobuild' ) . '</a> · <b>' . esc_html__( 'Salvati', 'olobuild' ) . '</b>' );
+            echo '<main class="olo-cockpit-main"><div id="olobuilder-app"></div></main>';
+            self::cockpit_shell_close();
         }
     }
 
     /**
      * Add body class on Olobuild admin pages for shell layout.
      */
+    /**
+     * Lista degli screen IDs che usano lo shell cockpit (topbar OLObuild + appback +
+     * sidebar WP collassata in app mode + body full-width).
+     *
+     * Single source of truth: usata da admin_body_class() e admin_enqueue_scripts()
+     * per applicare CSS + body class in modo consistente.
+     */
+    public static function cockpit_screen_ids() {
+        return [
+            'toplevel_page_olobuild',
+            'olobuild_page_olobuilder-templates',
+            'olobuild_page_olobuilder-settings',     // Configurazione (Vue app)
+            'olobuild_page_olo-media-search',
+            'olobuild_page_olo-form-submissions',
+            'olobuild_page_olo-analytics',
+            'olobuild_page_olo-cookie-consent',
+            'olobuild_page_olo-role-manager',
+            'olobuild_page_olo-seo',
+            'olobuild_page_olo-redirects',
+            'olobuild_page_olo-performance',
+            'olobuild_page_olo-tools',
+            'olobuild_page_olo-global-popups',
+            'olobuild_page_olo-white-label',
+            'olobuild_page_olo-import-export',
+            'olobuild_page_olo-woo-templates',
+        ];
+    }
+
     public function admin_body_class( $classes ) {
         $screen = get_current_screen();
-        if ( $screen && ( str_contains( $screen->id, 'olobuild' ) || str_contains( $screen->id, 'olo-' ) ) ) {
+        $is_olo_page = $screen && ( str_contains( $screen->id, 'olobuild' ) || str_contains( $screen->id, 'olo-' ) );
+
+        if ( $is_olo_page ) {
             $classes .= ' olo-admin-shell';
         }
+
+        // Pagine top-level che usano lo shell cockpit (full-width, no padding WP)
+        $is_cockpit = $screen && in_array( $screen->id, self::cockpit_screen_ids(), true );
+
+        if ( $is_cockpit ) {
+            $classes .= ' olobuild-cockpit';
+            // Mantieni la vecchia classe per la dashboard per compatibilità
+            if ( $screen->id === 'toplevel_page_olobuild' ) {
+                $classes .= ' olobuild-dashboard';
+            }
+        }
+
+        // App mode: applicato a TUTTE le pagine Olobuild (sidebar 52px,
+        // sotto-menu Olobuild nascosto perché ridondante con cockpit + page-shell).
+        if ( $is_olo_page ) {
+            $user_id = get_current_user_id();
+            $prefs = get_user_meta( $user_id, 'olo_dashboard_prefs', true );
+            $app_mode = is_array( $prefs ) && array_key_exists( 'app_mode', $prefs )
+                ? (bool) $prefs['app_mode']
+                : true; // default ON
+            if ( $app_mode ) {
+                $classes .= ' olobuild-app-mode';
+            }
+        }
+
         return $classes;
     }
 
     /**
      * Open the shared admin page shell: top bar + sidebar + content area.
+     */
+    /**
+     * @deprecated 3.39.0 Usare cockpit_shell_open() — questo è mantenuto per
+     * backward compat con eventuali plugin/tema che lo chiamano.
      */
     public static function page_shell_open( $page_title = '', $extra_class = '' ) {
         $logo_url  = OLO_URL . 'assets/img/olobuild-logo-200-v2.png';
@@ -571,7 +906,7 @@ class Olo_Builder {
             <!-- Top bar -->
             <div class="olo-shell-topbar">
                 <div class="olo-shell-topbar-brand">
-                    <a href="<?php echo esc_url( admin_url( 'admin.php?page=olobuilder' ) ); ?>">
+                    <a href="<?php echo esc_url( admin_url( 'admin.php?page=olobuild' ) ); ?>">
                         <img src="<?php echo esc_url( $white_url ); ?>" alt="Olobuild" />
                     </a>
                     <span class="olo-shell-topbar-label">website builder</span>
@@ -613,44 +948,44 @@ class Olo_Builder {
         $base = admin_url( 'admin.php?page=' );
 
         $menu = [
-            [ 'slug' => 'olobuild',           'label' => 'Avvio Rapido',  'icon' => 'rocket' ],
-            [ 'slug' => 'olobuilder-settings',   'label' => 'Impostazioni',  'icon' => 'gear' ],
-            [ 'slug' => 'olo-tools',             'label' => 'Strumenti',     'icon' => 'wrench' ],
-            [ 'slug' => 'olo-role-manager',      'label' => 'Role Manager',  'icon' => 'users' ],
-            [ 'slug' => 'olo-form-submissions',  'label' => 'Submissions',   'icon' => 'email' ],
+            [ 'slug' => 'olobuild',           'label' => __( 'Avvio Rapido', 'olobuild' ),  'icon' => 'rocket' ],
+            [ 'slug' => 'olobuilder-settings',   'label' => __( 'Impostazioni', 'olobuild' ),  'icon' => 'gear' ],
+            [ 'slug' => 'olo-tools',             'label' => __( 'Strumenti', 'olobuild' ),     'icon' => 'wrench' ],
+            [ 'slug' => 'olobuilder-settings', 'label' => __( 'Permessi & Ruoli', 'olobuild' ), 'icon' => 'users', 'tab' => 'permessi' ],
+            [ 'slug' => 'olo-form-submissions',  'label' => __( 'Submissions', 'olobuild' ),   'icon' => 'email' ],
             [
-                'group' => 'Template',
+                'group' => __( 'Template', 'olobuild' ),
                 'icon'  => 'layout',
                 'items' => [
-                    [ 'slug' => 'olobuilder-templates', 'label' => 'Template Salvati' ],
-                    [ 'slug' => 'olo-import-export',    'label' => 'Template Website' ],
-                    [ 'slug' => 'olo-global-popups',    'label' => 'Popups' ],
+                    [ 'slug' => 'olobuilder-templates', 'label' => __( 'Template Salvati', 'olobuild' ) ],
+                    [ 'slug' => 'olo-import-export',    'label' => __( 'Template Website', 'olobuild' ) ],
+                    [ 'slug' => 'olobuilder-settings',  'label' => __( 'Popup globali', 'olobuild' ), 'tab' => 'popups' ],
                 ],
             ],
             [
-                'group' => 'Marketing',
+                'group' => __( 'Marketing', 'olobuild' ),
                 'icon'  => 'chart',
                 'items' => [
-                    [ 'slug' => 'olo-analytics',       'label' => 'Analytics' ],
-                    [ 'slug' => 'olo-cookie-consent',   'label' => 'Cookie Consent' ],
-                    [ 'slug' => 'olo-seo',              'label' => 'SEO' ],
-                    [ 'slug' => 'olo-redirects',         'label' => 'Redirect & 404' ],
+                    [ 'slug' => 'olobuilder-settings',   'label' => __( 'Analytics & Tracking', 'olobuild' ), 'tab' => 'analytics' ],
+                    [ 'slug' => 'olobuilder-settings',   'label' => __( 'Cookie Consent', 'olobuild' ),       'tab' => 'cookie' ],
+                    [ 'slug' => 'olobuilder-settings',   'label' => __( 'SEO', 'olobuild' ),                  'tab' => 'seo' ],
+                    [ 'slug' => 'olobuilder-settings',   'label' => __( 'Redirect & 404', 'olobuild' ),       'tab' => 'redirects' ],
                 ],
             ],
             [
-                'group' => 'Personalizzazione',
+                'group' => __( 'Personalizzazione', 'olobuild' ),
                 'icon'  => 'palette',
                 'items' => [
-                    [ 'slug' => 'olo-media-search',    'label' => 'Ricerca Media' ],
-                    [ 'slug' => 'olo-performance',     'label' => 'Performance' ],
-                    [ 'slug' => 'olo-woo-templates',   'label' => 'WooCommerce' ],
+                    [ 'slug' => 'olo-media-search',      'label' => __( 'Ricerca Media', 'olobuild' ) ],
+                    [ 'slug' => 'olobuilder-settings',   'label' => __( 'Performance', 'olobuild' ), 'tab' => 'performance' ],
+                    [ 'slug' => 'olobuilder-settings',   'label' => __( 'WooCommerce', 'olobuild' ), 'tab' => 'wootemplates' ],
                 ],
             ],
             [
-                'group' => 'Sistema',
+                'group' => __( 'Sistema', 'olobuild' ),
                 'icon'  => 'settings',
                 'items' => [
-                    [ 'slug' => 'olo-white-label',     'label' => 'White Label' ],
+                    [ 'slug' => 'olobuilder-settings', 'label' => __( 'White Label', 'olobuild' ), 'tab' => 'whitelabel' ],
                 ],
             ],
         ];
@@ -696,9 +1031,12 @@ class Olo_Builder {
                                 <svg class="olo-shell-nav-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
                             </button>
                             <ul class="olo-shell-nav-sub">
-                                <?php foreach ( $item['items'] as $sub ) : ?>
+                                <?php foreach ( $item['items'] as $sub ) :
+                                    $sub_href = $base . $sub['slug'];
+                                    if ( ! empty( $sub['tab'] ) ) { $sub_href .= '&tab=' . rawurlencode( $sub['tab'] ); }
+                                ?>
                                     <li>
-                                        <a href="<?php echo esc_url( $base . $sub['slug'] ); ?>"
+                                        <a href="<?php echo esc_url( $sub_href ); ?>"
                                            class="<?php echo $current_page === $sub['slug'] ? 'active' : ''; ?>">
                                             <?php echo esc_html( $sub['label'] ); ?>
                                         </a>
@@ -706,9 +1044,12 @@ class Olo_Builder {
                                 <?php endforeach; ?>
                             </ul>
                         </li>
-                    <?php else : ?>
+                    <?php else :
+                        $item_href = $base . $item['slug'];
+                        if ( ! empty( $item['tab'] ) ) { $item_href .= '&tab=' . rawurlencode( $item['tab'] ); }
+                    ?>
                         <li>
-                            <a href="<?php echo esc_url( $base . $item['slug'] ); ?>"
+                            <a href="<?php echo esc_url( $item_href ); ?>"
                                class="olo-shell-nav-item <?php echo $current_page === $item['slug'] ? 'active' : ''; ?>">
                                 <span class="olo-shell-nav-icon"><?php echo $icons[ $item['icon'] ] ?? ''; ?></span>
                                 <span><?php echo esc_html( $item['label'] ); ?></span>
@@ -721,128 +1062,896 @@ class Olo_Builder {
         <?php
     }
 
-    public function render_dashboard_page() {
-        // Collect all submenu items for the dashboard
-        $items = [
+    /**
+     * Tile "Gestione" della dashboard cockpit.
+     * Lo stesso array è riutilizzato per costruire l'indice di ricerca.
+     */
+    public static function dashboard_manage_tiles() {
+        return [
             [
-                'title' => 'Gestione Template',
-                'desc'  => 'Crea e modifica i tuoi template',
-                'icon'  => '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>',
-                'url'   => admin_url( 'admin.php?page=olobuilder-templates' ),
-                'color' => '#e8622a',
-            ],
-            [
-                'title' => 'Configurazione',
-                'desc'  => 'Stili, colori, tipografia e API',
-                'icon'  => '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>',
-                'url'   => admin_url( 'admin.php?page=olobuilder-settings' ),
-                'color' => '#1a1a1a',
-            ],
-            [
-                'title' => 'Ricerca Media',
-                'desc'  => 'Cerca foto, video e audio stock',
-                'icon'  => '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>',
-                'url'   => admin_url( 'admin.php?page=olo-media-search' ),
-                'color' => '#8b5cf6',
-            ],
-            [
-                'title' => 'Invii Form',
-                'desc'  => 'Visualizza i messaggi ricevuti',
-                'icon'  => '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>',
-                'url'   => admin_url( 'admin.php?page=olo-form-submissions' ),
-                'color' => '#10b981',
-            ],
-            [
-                'title' => 'Analytics',
-                'desc'  => 'Tracking e statistiche',
-                'icon'  => '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>',
-                'url'   => admin_url( 'admin.php?page=olo-analytics' ),
-                'color' => '#3b82f6',
-            ],
-            [
-                'title' => 'Cookie Consent',
-                'desc'  => 'Banner GDPR e consenso cookie',
-                'icon'  => '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><circle cx="8" cy="9" r="1" fill="currentColor"/><circle cx="15" cy="13" r="1" fill="currentColor"/><circle cx="10" cy="15" r="1" fill="currentColor"/></svg>',
-                'url'   => admin_url( 'admin.php?page=olo-cookie-consent' ),
-                'color' => '#f59e0b',
-            ],
-            [
-                'title' => 'SEO',
-                'desc'  => 'Meta tag, Open Graph e sitemap',
-                'icon'  => '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>',
-                'url'   => admin_url( 'admin.php?page=olo-seo' ),
-                'color' => '#06b6d4',
-            ],
-            [
-                'title' => 'Redirect & 404',
-                'desc'  => 'Gestisci redirect e pagine 404',
-                'icon'  => '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 18l6-6-6-6"/></svg>',
-                'url'   => admin_url( 'admin.php?page=olo-redirects' ),
-                'color' => '#ef4444',
-            ],
-            [
-                'title' => 'Performance',
-                'desc'  => 'Cache, lazy load e ottimizzazione',
-                'icon'  => '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>',
-                'url'   => admin_url( 'admin.php?page=olo-performance' ),
+                'id'    => 'tpl',
+                'label' => __( 'Gestione Template', 'olobuild' ),
+                'hint'  => __( 'Crea e modifica i tuoi template', 'olobuild' ),
+                'icon'  => 'template',
                 'color' => '#f97316',
+                'href'  => admin_url( 'admin.php?page=olobuilder-templates' ),
             ],
             [
-                'title' => 'Strumenti',
-                'desc'  => 'Cache, manutenzione, URL, versioni',
-                'icon'  => '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>',
-                'url'   => admin_url( 'admin.php?page=olo-tools' ),
+                'id'    => 'cfg',
+                'label' => __( 'Configurazione', 'olobuild' ),
+                'hint'  => __( 'Stili, colori, tipografia e API', 'olobuild' ),
+                'icon'  => 'sliders',
+                'color' => '#1f2937',
+                'href'  => admin_url( 'admin.php?page=olobuilder-settings' ),
+            ],
+            [
+                'id'    => 'media',
+                'label' => __( 'Ricerca Media', 'olobuild' ),
+                'hint'  => __( 'Foto, video e audio stock', 'olobuild' ),
+                'icon'  => 'image',
+                'color' => '#a855f7',
+                'href'  => admin_url( 'admin.php?page=olo-media-search' ),
+            ],
+            [
+                'id'    => 'form',
+                'label' => __( 'Invii Form', 'olobuild' ),
+                'hint'  => __( 'Visualizza i messaggi ricevuti', 'olobuild' ),
+                'icon'  => 'form',
+                'color' => '#10b981',
+                'href'  => admin_url( 'admin.php?page=olo-form-submissions' ),
+            ],
+            [
+                'id'    => 'an',
+                'label' => __( 'Analytics', 'olobuild' ),
+                'hint'  => __( 'Tracking e statistiche', 'olobuild' ),
+                'icon'  => 'chart',
+                'color' => '#3b82f6',
+                'href'  => admin_url( 'admin.php?page=olobuilder-settings&tab=analytics' ),
+            ],
+            [
+                'id'    => 'cc',
+                'label' => __( 'Cookie Consent', 'olobuild' ),
+                'hint'  => __( 'Banner GDPR e consenso', 'olobuild' ),
+                'icon'  => 'cookie',
+                'color' => '#f59e0b',
+                'href'  => admin_url( 'admin.php?page=olobuilder-settings&tab=cookie' ),
+            ],
+            [
+                'id'    => 'seo',
+                'label' => __( 'SEO', 'olobuild' ),
+                'hint'  => __( 'Meta tag, Open Graph e sitemap', 'olobuild' ),
+                'icon'  => 'search',
+                'color' => '#06b6d4',
+                'href'  => admin_url( 'admin.php?page=olobuilder-settings&tab=seo' ),
+            ],
+            [
+                'id'    => '404',
+                'label' => __( 'Redirect & 404', 'olobuild' ),
+                'hint'  => __( 'Gestisci redirect e pagine 404', 'olobuild' ),
+                'icon'  => 'redirect',
+                'color' => '#ef4444',
+                'href'  => admin_url( 'admin.php?page=olobuilder-settings&tab=redirects' ),
+            ],
+            [
+                'id'    => 'perf',
+                'label' => __( 'Performance', 'olobuild' ),
+                'hint'  => __( 'Cache, lazy load, ottimizzazione', 'olobuild' ),
+                'icon'  => 'zap',
+                'color' => '#eab308',
+                'href'  => admin_url( 'admin.php?page=olobuilder-settings&tab=performance' ),
+            ],
+            [
+                'id'    => 'tools',
+                'label' => __( 'Strumenti', 'olobuild' ),
+                'hint'  => __( 'Cache, manutenzione, URL, versioni', 'olobuild' ),
+                'icon'  => 'wrench',
                 'color' => '#64748b',
+                'href'  => admin_url( 'admin.php?page=olo-tools' ),
             ],
             [
-                'title' => 'WooCommerce',
-                'desc'  => 'Template per prodotti e shop',
-                'icon'  => '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>',
-                'url'   => admin_url( 'admin.php?page=olo-woo-templates' ),
-                'color' => '#7c3aed',
+                'id'    => 'woo',
+                'label' => __( 'WooCommerce', 'olobuild' ),
+                'hint'  => __( 'Template per prodotti e shop', 'olobuild' ),
+                'icon'  => 'cart',
+                'color' => '#7e22ce',
+                'href'  => admin_url( 'admin.php?page=olobuilder-settings&tab=wootemplates' ),
+            ],
+            [
+                'id'    => 'pop',
+                'label' => __( 'Popup Globali', 'olobuild' ),
+                'hint'  => __( 'Banner e modali riusabili', 'olobuild' ),
+                'icon'  => 'modal',
+                'color' => '#0ea5e9',
+                'href'  => admin_url( 'admin.php?page=olobuilder-settings&tab=popups' ),
             ],
         ];
+    }
+
+    /**
+     * Voci "Sistema" — chip rounded raramente usate.
+     */
+    public static function dashboard_system_chips() {
+        return [
+            [ 'id' => 'wl',   'label' => __( 'White Label', 'olobuild' ),       'icon' => 'tag',     'href' => admin_url( 'admin.php?page=olobuilder-settings&tab=whitelabel' ) ],
+            [ 'id' => 'imp',  'label' => __( 'Import/Export', 'olobuild' ),     'icon' => 'upload',  'href' => admin_url( 'admin.php?page=olo-import-export' ) ],
+            [ 'id' => 'perm', 'label' => __( 'Permessi & Ruoli', 'olobuild' ),  'icon' => 'users',   'href' => admin_url( 'admin.php?page=olobuilder-settings&tab=permessi' ) ],
+            [ 'id' => 'subs', 'label' => __( 'Submissions', 'olobuild' ),       'icon' => 'inbox',   'href' => admin_url( 'admin.php?page=olo-form-submissions' ) ],
+            [ 'id' => 'log',  'label' => __( 'Diagnostica', 'olobuild' ),       'icon' => 'history', 'href' => admin_url( 'tools.php?page=olo-diagnostics' ) ],
+            [ 'id' => 'lic',  'label' => __( 'Licenza', 'olobuild' ),           'icon' => 'key',     'href' => admin_url( 'admin.php?page=olobuilder-settings' ) ],
+        ];
+    }
+
+    /**
+     * Indice di ricerca per la palette ⌘K.
+     * Voci di menu + pagine + template (top N più recenti).
+     */
+    public static function dashboard_search_index() {
+        $idx = [];
+
+        foreach ( self::dashboard_manage_tiles() as $t ) {
+            $idx[] = [ 'label' => $t['label'], 'hint' => $t['hint'], 'href' => $t['href'], 'icon' => $t['icon'] ];
+        }
+        foreach ( self::dashboard_system_chips() as $t ) {
+            $idx[] = [ 'label' => $t['label'], 'hint' => '', 'href' => $t['href'], 'icon' => $t['icon'] ];
+        }
+
+        // Top pagine recenti
+        $pages = get_posts( [
+            'post_type'      => [ 'page', 'post' ],
+            'post_status'    => [ 'publish', 'draft' ],
+            'posts_per_page' => 30,
+            'orderby'        => 'modified',
+            'order'          => 'DESC',
+        ] );
+        foreach ( $pages as $p ) {
+            $idx[] = [
+                'label' => $p->post_title ?: __( '(senza titolo)', 'olobuild' ),
+                'hint'  => $p->post_type === 'post' ? __( 'Articolo', 'olobuild' ) : __( 'Pagina', 'olobuild' ),
+                'href'  => admin_url( 'post.php?post=' . $p->ID . '&action=edit' ),
+                'icon'  => 'fileText',
+            ];
+        }
+
+        // Top template
+        global $wpdb;
+        $tpl_table = $wpdb->prefix . 'olo_templates';
+        if ( $wpdb->get_var( "SHOW TABLES LIKE '$tpl_table'" ) === $tpl_table ) {
+            $tpls = $wpdb->get_results(
+                "SELECT id, title, type FROM $tpl_table ORDER BY updated_at DESC LIMIT 30",
+                ARRAY_A
+            );
+            foreach ( $tpls as $t ) {
+                $idx[] = [
+                    'label' => $t['title'] ?: __( '(senza titolo)', 'olobuild' ),
+                    'hint'  => __( 'Template', 'olobuild' ) . ' · ' . ucfirst( $t['type'] ?: 'template' ),
+                    'href'  => admin_url( 'admin.php?page=olobuilder-templates&template_id=' . $t['id'] ),
+                    'icon'  => 'template',
+                ];
+            }
+        }
+
+        return $idx;
+    }
+
+    /**
+     * Dato per l'hero contestuale: prima la pagina più recentemente modificata,
+     * altrimenti il template più recente. Include URL builder Olobuild + thumbnail.
+     */
+    private static function dashboard_hero_data() {
+        global $wpdb;
+        $tpl_table = $wpdb->prefix . 'olo_templates';
+        $tpl_table_exists = ( $wpdb->get_var( "SHOW TABLES LIKE '$tpl_table'" ) === $tpl_table );
+
+        $pages = get_posts( [
+            'post_type'      => [ 'page', 'post' ],
+            'post_status'    => [ 'publish', 'draft' ],
+            'posts_per_page' => 1,
+            'orderby'        => 'modified',
+            'order'          => 'DESC',
+        ] );
+        if ( ! empty( $pages ) ) {
+            $p = $pages[0];
+            $thumbnail = '';
+            $tpl_id = (int) get_post_meta( $p->ID, '_olo_template_id', true );
+            if ( $tpl_id && $tpl_table_exists ) {
+                $thumbnail = (string) $wpdb->get_var( $wpdb->prepare(
+                    "SELECT thumbnail FROM $tpl_table WHERE id = %d", $tpl_id
+                ) );
+            }
+            // Fallback: featured image
+            if ( ! $thumbnail ) {
+                $thumb_id = get_post_thumbnail_id( $p->ID );
+                if ( $thumb_id ) $thumbnail = wp_get_attachment_image_url( $thumb_id, 'large' );
+            }
+
+            $edit_url = class_exists( 'Olo_Page_Integration' )
+                ? Olo_Page_Integration::get_builder_url( $p->ID )
+                : admin_url( 'admin.php?page=olobuilder-templates' );
+
+            return [
+                'title'     => $p->post_title ?: __( '(senza titolo)', 'olobuild' ),
+                'sub'       => sprintf(
+                    /* translators: 1: human time diff, 2: status word */
+                    __( 'Hai modificato questa pagina %1$s. La pagina è %2$s.', 'olobuild' ),
+                    '<b>' . human_time_diff( strtotime( $p->post_modified_gmt ), time() ) . ' ' . __( 'fa', 'olobuild' ) . '</b>',
+                    $p->post_status === 'publish' ? __( 'pubblicata', 'olobuild' ) : __( 'in bozza', 'olobuild' )
+                ),
+                'edit'      => $edit_url,
+                'view'      => get_permalink( $p->ID ),
+                'is_page'   => true,
+                'thumbnail' => $thumbnail,
+                'status'    => $p->post_status,
+            ];
+        }
+        return [
+            'title'     => __( 'Inizia a costruire il tuo sito', 'olobuild' ),
+            'sub'       => __( 'Crea la prima pagina o sfoglia i template per partire al volo.', 'olobuild' ),
+            'edit'      => admin_url( 'admin.php?page=olobuilder-templates' ),
+            'view'      => home_url( '/' ),
+            'is_page'   => false,
+            'thumbnail' => '',
+            'status'    => '',
+        ];
+    }
+
+    /**
+     * Apre lo "shell cockpit" condiviso (appback strip + topbar) — usato sia
+     * dalla dashboard che dalle altre pagine top-level Olobuild.
+     *
+     * Dopo questa chiamata, l'output è dentro `.olo-cockpit-wrap`. Chiudere
+     * con `cockpit_shell_close()`. Il blocco intermedio è libero (la pagina
+     * gestisce il suo layout: dashboard usa `.olo-cockpit-grid` con rail,
+     * la lista template usa direttamente `.olo-cockpit-main`).
+     *
+     * @param string $crumb_html  HTML del breadcrumb dopo "Olobuild · ".
+     */
+    public static function cockpit_shell_open( $crumb_html = '' ) {
+        $user = wp_get_current_user();
+        $initials = strtoupper( substr( $user->first_name ?: $user->display_name ?: 'U', 0, 2 ) );
+        $site_host = wp_parse_url( home_url(), PHP_URL_HOST );
+
+        $user_prefs = get_user_meta( $user->ID, 'olo_dashboard_prefs', true );
+        if ( ! is_array( $user_prefs ) ) $user_prefs = [];
+        $app_mode = array_key_exists( 'app_mode', $user_prefs ) ? (bool) $user_prefs['app_mode'] : true;
         ?>
-        <?php self::page_shell_open(); ?>
-                <p class="olo-dash-tagline">Più di un page builder.</p>
-                <div class="olo-dash-grid">
-                    <?php foreach ( $items as $item ) : ?>
-                    <a href="<?php echo esc_url( $item['url'] ); ?>" class="olo-dash-card">
-                        <div class="olo-dash-card-icon" style="background: <?php echo esc_attr( $item['color'] ); ?>">
-                            <?php echo $item['icon']; ?>
-                        </div>
-                        <div class="olo-dash-card-body">
-                            <h3><?php echo esc_html( $item['title'] ); ?></h3>
-                            <p><?php echo esc_html( $item['desc'] ); ?></p>
-                        </div>
-                        <svg class="olo-dash-card-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
-                    </a>
-                    <?php endforeach; ?>
+        <div class="olo-cockpit-wrap">
+            <?php if ( $app_mode ) : ?>
+            <div class="olo-cockpit-appback">
+                <a href="<?php echo esc_url( admin_url( 'index.php' ) ); ?>">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                    <?php esc_html_e( 'Torna a WordPress', 'olobuild' ); ?>
+                </a>
+                <span style="opacity:.4">|</span>
+                <span><?php echo esc_html( $site_host ); ?></span>
+                <span class="spc"></span>
+                <span class="pill-app"><?php esc_html_e( 'App mode', 'olobuild' ); ?></span>
+            </div>
+            <?php endif; ?>
+
+            <div class="olo-cockpit-topbar">
+                <a href="<?php echo esc_url( admin_url( 'admin.php?page=olobuild' ) ); ?>" style="display:inline-flex;align-items:center;text-decoration:none;">
+                    <img class="logo" src="<?php echo esc_url( OLO_URL . 'assets/img/olobuild-horizontal.png' ); ?>" alt="Olobuild" />
+                </a>
+                <button type="button" class="ver" data-olo-app-mode-toggle title="<?php esc_attr_e( 'Cambia modalità', 'olobuild' ); ?>">v<?php echo esc_html( OLO_VERSION ); ?></button>
+                <span class="sep"></span>
+                <span class="crumb"><a href="<?php echo esc_url( admin_url( 'admin.php?page=olobuild' ) ); ?>" style="color:inherit;text-decoration:none">Olobuild</a> · <?php echo $crumb_html ?: '<b>' . esc_html__( 'Dashboard', 'olobuild' ) . '</b>'; ?></span>
+                <span class="spc"></span>
+                <div class="search-mini" data-olo-palette-trigger>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="color:var(--olo-text-muted)"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                    <input type="text" placeholder="<?php esc_attr_e( 'Cerca pagine, template, impostazioni…', 'olobuild' ); ?>" readonly/>
+                    <kbd>Ctrl K</kbd>
                 </div>
-        <?php self::page_shell_close(); ?>
-        <style>
-            .olo-dash-tagline { font-size: 15px; color: #999; margin: 0 0 28px; font-weight: 400; text-align: center; }
-            .olo-dash-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-            .olo-dash-card {
-                display: flex; align-items: center; gap: 16px; padding: 20px 24px;
-                background: #fff; border: 1.5px solid #f0f0f0; border-radius: 14px;
-                text-decoration: none; color: inherit; transition: all 0.2s;
-            }
-            .olo-dash-card:hover { border-color: #ddd; box-shadow: 0 4px 20px rgba(0,0,0,0.06); transform: translateY(-1px); }
-            .olo-dash-card:focus { outline: none; border-color: #e8622a; }
-            .olo-dash-card-icon {
-                width: 48px; height: 48px; border-radius: 12px; flex-shrink: 0;
-                display: flex; align-items: center; justify-content: center; color: #fff;
-            }
-            .olo-dash-card-body { flex: 1; min-width: 0; }
-            .olo-dash-card-body h3 { margin: 0 0 2px; font-size: 14px; font-weight: 600; color: #1a1a1a; }
-            .olo-dash-card-body p { margin: 0; font-size: 12px; color: #999; }
-            .olo-dash-card-arrow { color: #ccc; flex-shrink: 0; transition: color 0.15s, transform 0.15s; }
-            .olo-dash-card:hover .olo-dash-card-arrow { color: #e8622a; transform: translateX(2px); }
-            @media (max-width: 680px) { .olo-dash-grid { grid-template-columns: 1fr; } }
-        </style>
+                <a class="ico-btn" href="<?php echo esc_url( admin_url( 'admin.php?page=olo-form-submissions' ) ); ?>" title="<?php esc_attr_e( 'Notifiche', 'olobuild' ); ?>">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 16V11a6 6 0 0112 0v5l2 2H4l2-2zM10 20a2 2 0 004 0"/></svg>
+                </a>
+                <a class="ico-btn" href="https://olotheme.com/docs" target="_blank" rel="noopener" title="<?php esc_attr_e( 'Documentazione', 'olobuild' ); ?>">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 015 0c0 1.5-2.5 2-2.5 4M12 17h.01"/></svg>
+                </a>
+                <a class="ico-btn" href="<?php echo esc_url( get_edit_user_link() ); ?>" title="<?php esc_attr_e( 'Profilo', 'olobuild' ); ?>">
+                    <span class="av"><?php echo esc_html( $initials ); ?></span>
+                </a>
+            </div>
         <?php
     }
+
+    /**
+     * Chiude lo shell cockpit (chiusura `.olo-cockpit-wrap`).
+     */
+    public static function cockpit_shell_close() {
+        ?>
+        </div><!-- .olo-cockpit-wrap -->
+        <?php
+    }
+
+    /* ════════════════════════════════════════════════════════════════
+       TOOLKIT — componenti shared per pagine cockpit (Fase 2)
+       Helper PHP che emettono il markup standard dei pattern comuni.
+       Vanno usati DENTRO `<main class="olo-cockpit-main">`.
+       Vedono CSS classes in dashboard.css sezione TOOLKIT.
+       ════════════════════════════════════════════════════════════════ */
+
+    /**
+     * Page head: titolo H1 + sottotitolo meta + bottoni a destra.
+     *
+     * @param array $args {
+     *   @type string $title    Titolo H1 (richiesto).
+     *   @type string $sub      HTML del sottotitolo (b/a/spans permessi).
+     *   @type string $actions  HTML dei bottoni a destra (usa cockpit_button()).
+     * }
+     *
+     * @example
+     *   echo Olo_Builder::cockpit_page_head([
+     *     'title'   => __('Strumenti', 'olobuild'),
+     *     'sub'     => sprintf(__('Cache: %s · DB: %s'), '<b>2.4 MB</b>', '<b>OK</b>'),
+     *     'actions' => Olo_Builder::cockpit_button(['label' => 'Nuovo', 'variant' => 'pri']),
+     *   ]);
+     */
+    public static function cockpit_page_head( $args = [] ) {
+        $args = wp_parse_args( $args, [ 'title' => '', 'sub' => '', 'actions' => '' ] );
+        ob_start();
+        ?>
+        <header class="olo-page-head">
+            <div class="titles">
+                <h1><?php echo esc_html( $args['title'] ); ?></h1>
+                <?php if ( $args['sub'] ) : ?>
+                    <div class="sub"><?php echo wp_kses_post( $args['sub'] ); ?></div>
+                <?php endif; ?>
+            </div>
+            <?php if ( $args['actions'] ) : ?>
+                <div class="actions"><?php echo $args['actions']; // markup pre-validato ?></div>
+            <?php endif; ?>
+        </header>
+        <?php
+        return ob_get_clean();
+    }
+
+    /**
+     * Sub-nav tabs (orizzontali) sotto il page head.
+     *
+     * @param array  $items   Array di tabs: [{slug, label, count?, href}].
+     * @param string $active  Slug del tab attivo.
+     *
+     * @example
+     *   echo Olo_Builder::cockpit_subnav([
+     *     ['slug' => 'general', 'label' => 'Generale', 'href' => admin_url('admin.php?page=olo-seo')],
+     *     ['slug' => 'meta',    'label' => 'Meta tag', 'href' => admin_url('admin.php?page=olo-seo&tab=meta'), 'count' => 12],
+     *   ], 'general');
+     */
+    public static function cockpit_subnav( $items, $active = '' ) {
+        if ( empty( $items ) || ! is_array( $items ) ) return '';
+        ob_start();
+        ?>
+        <nav class="olo-subnav">
+            <?php foreach ( $items as $it ) :
+                $slug = $it['slug'] ?? '';
+                $href = $it['href'] ?? '#';
+                $label = $it['label'] ?? '';
+                $count = $it['count'] ?? null;
+                $is_active = ( $slug === $active );
+            ?>
+                <a href="<?php echo esc_url( $href ); ?>" class="<?php echo $is_active ? 'active' : ''; ?>">
+                    <?php echo esc_html( $label ); ?>
+                    <?php if ( $count !== null ) : ?>
+                        <span class="num"><?php echo (int) $count; ?></span>
+                    <?php endif; ?>
+                </a>
+            <?php endforeach; ?>
+        </nav>
+        <?php
+        return ob_get_clean();
+    }
+
+    /**
+     * Toolbar sticky: chip filtri + search + sort + view toggle + content libero.
+     *
+     * @param array $args {
+     *   @type array  $chips        Lista chip: [{id, label, count?, dot_color?, href?}]
+     *   @type string $active_chip  ID del chip attivo.
+     *   @type bool   $search       Mostra input search (default false).
+     *   @type string $search_id    ID dell'input search (per binding JS).
+     *   @type string $search_placeholder
+     *   @type string $extra        HTML aggiuntivo dopo gli spacer (es. sort, view toggle).
+     * }
+     *
+     * @example
+     *   echo Olo_Builder::cockpit_toolbar([
+     *     'chips' => [
+     *       ['id'=>'all', 'label'=>'Tutti', 'count'=>128],
+     *       ['id'=>'unread', 'label'=>'Non letti', 'count'=>12, 'dot_color'=>'#ef4444'],
+     *     ],
+     *     'active_chip' => 'all',
+     *     'search'      => true,
+     *     'search_placeholder' => 'Cerca…',
+     *   ]);
+     */
+    public static function cockpit_toolbar( $args = [] ) {
+        $args = wp_parse_args( $args, [
+            'chips'              => [],
+            'active_chip'        => '',
+            'search'             => false,
+            'search_id'          => '',
+            'search_placeholder' => __( 'Cerca…', 'olobuild' ),
+            'extra'              => '',
+        ] );
+        ob_start();
+        ?>
+        <div class="olo-toolbar">
+            <?php if ( ! empty( $args['chips'] ) ) : ?>
+                <div class="chips">
+                    <?php foreach ( $args['chips'] as $c ) :
+                        $id    = $c['id']    ?? '';
+                        $label = $c['label'] ?? '';
+                        $count = $c['count'] ?? null;
+                        $dot   = $c['dot_color'] ?? '';
+                        $href  = $c['href']  ?? '';
+                        $on    = ( $id === $args['active_chip'] );
+                        $tag   = $href ? 'a' : 'button';
+                        $extra_attr = $href ? ' href="' . esc_url( $href ) . '"' : ' type="button"';
+                    ?>
+                        <<?php echo $tag; ?> class="olo-chip <?php echo $on ? 'on' : ''; ?>"
+                            data-chip-id="<?php echo esc_attr( $id ); ?>"<?php echo $extra_attr; ?>>
+                            <?php if ( $dot ) : ?>
+                                <span class="dot" style="background: <?php echo esc_attr( $dot ); ?>"></span>
+                            <?php endif; ?>
+                            <?php echo esc_html( $label ); ?>
+                            <?php if ( $count !== null ) : ?>
+                                <span class="num"><?php echo (int) $count; ?></span>
+                            <?php endif; ?>
+                        </<?php echo $tag; ?>>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
+            <span class="spc"></span>
+            <?php if ( $args['search'] ) : ?>
+                <div class="olo-search">
+                    <span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></span>
+                    <input type="search" id="<?php echo esc_attr( $args['search_id'] ); ?>"
+                        placeholder="<?php echo esc_attr( $args['search_placeholder'] ); ?>" autocomplete="off" />
+                </div>
+            <?php endif; ?>
+            <?php if ( $args['extra'] ) : ?>
+                <?php echo $args['extra']; // markup pre-validato ?>
+            <?php endif; ?>
+        </div>
+        <?php
+        return ob_get_clean();
+    }
+
+    /**
+     * Bottone cockpit standard (atomico).
+     *
+     * @param array $args {
+     *   @type string $label    Testo del bottone (richiesto).
+     *   @type string $variant  'pri' | 'sec' | 'danger' | 'ghost'. Default 'sec'.
+     *   @type string $size     '' | 'sm'. Default ''.
+     *   @type string $icon     SVG path inline (24×24 viewBox, stroke-width 1.7).
+     *   @type string $href     Se presente, emette <a> invece di <button>.
+     *   @type string $type     button|submit. Default 'button'.
+     *   @type string $title    Tooltip.
+     *   @type bool   $disabled Default false.
+     *   @type array  $attrs    Attributi extra (data-*, onclick, ecc.) come [k=>v].
+     * }
+     *
+     * @example
+     *   echo Olo_Builder::cockpit_button([
+     *     'label' => 'Salva', 'variant' => 'pri', 'type' => 'submit',
+     *     'icon' => '<path d="M19 21H5..." />',
+     *   ]);
+     */
+    public static function cockpit_button( $args = [] ) {
+        $args = wp_parse_args( $args, [
+            'label'    => '',
+            'variant'  => 'sec',
+            'size'     => '',
+            'icon'     => '',
+            'href'     => '',
+            'type'     => 'button',
+            'title'    => '',
+            'disabled' => false,
+            'attrs'    => [],
+        ] );
+        $cls = 'olo-btn olo-btn-' . sanitize_html_class( $args['variant'] );
+        if ( $args['size'] ) $cls .= ' olo-btn-' . sanitize_html_class( $args['size'] );
+        if ( ! $args['label'] && $args['icon'] ) $cls .= ' olo-btn-icon';
+
+        $attrs_str = '';
+        foreach ( $args['attrs'] as $k => $v ) {
+            $attrs_str .= ' ' . esc_attr( $k ) . '="' . esc_attr( $v ) . '"';
+        }
+        if ( $args['title'] ) $attrs_str .= ' title="' . esc_attr( $args['title'] ) . '"';
+
+        $svg = $args['icon']
+            ? '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">' . $args['icon'] . '</svg>'
+            : '';
+
+        if ( $args['href'] ) {
+            return sprintf(
+                '<a class="%s" href="%s"%s>%s%s</a>',
+                esc_attr( $cls ), esc_url( $args['href'] ), $attrs_str,
+                $svg, esc_html( $args['label'] )
+            );
+        }
+        return sprintf(
+            '<button class="%s" type="%s"%s%s>%s%s</button>',
+            esc_attr( $cls ),
+            esc_attr( $args['type'] ),
+            $args['disabled'] ? ' disabled' : '',
+            $attrs_str,
+            $svg, esc_html( $args['label'] )
+        );
+    }
+
+    /**
+     * Card grid o list per liste di entità (Submissions, Popups, Media, ecc).
+     *
+     * @param array $args {
+     *   @type array  $items    Array di items, ognuno con shape libera; passato al renderer.
+     *   @type string $layout   'grid' | 'list'. Default 'grid'.
+     *   @type callable $render Callback `function($item) => string` che ritorna l'HTML
+     *                          della card. Riceve l'intero $item.
+     *   @type string $empty_title    Titolo dell'empty state.
+     *   @type string $empty_message  Messaggio dell'empty state.
+     *   @type string $empty_actions  HTML dei bottoni dell'empty state.
+     * }
+     *
+     * @example
+     *   echo Olo_Builder::cockpit_card_grid([
+     *     'items'  => $submissions,
+     *     'layout' => 'grid',
+     *     'render' => function($s) {
+     *         return '<a class="olo-card" href="#' . $s['id'] . '">' .
+     *             '<div class="head"><div class="lab"><div class="t">' . esc_html($s['from']) . '</div></div></div>' .
+     *             '<div class="body">' . esc_html($s['preview']) . '</div>' .
+     *         '</a>';
+     *     },
+     *     'empty_title'   => 'Nessun invio ancora',
+     *     'empty_message' => 'I messaggi dai form compariranno qui.',
+     *   ]);
+     */
+    public static function cockpit_card_grid( $args = [] ) {
+        $args = wp_parse_args( $args, [
+            'items'         => [],
+            'layout'        => 'grid',
+            'render'        => null,
+            'empty_title'   => __( 'Nessun elemento', 'olobuild' ),
+            'empty_message' => '',
+            'empty_actions' => '',
+        ] );
+
+        if ( empty( $args['items'] ) ) {
+            ob_start();
+            ?>
+            <div class="olo-empty-state">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="opacity:.3"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
+                <h3><?php echo esc_html( $args['empty_title'] ); ?></h3>
+                <?php if ( $args['empty_message'] ) : ?>
+                    <p><?php echo esc_html( $args['empty_message'] ); ?></p>
+                <?php endif; ?>
+                <?php if ( $args['empty_actions'] ) : ?>
+                    <div><?php echo $args['empty_actions']; // markup pre-validato ?></div>
+                <?php endif; ?>
+            </div>
+            <?php
+            return ob_get_clean();
+        }
+
+        $cls = $args['layout'] === 'list' ? 'olo-data-list' : 'olo-data-grid';
+        ob_start();
+        ?>
+        <div class="<?php echo esc_attr( $cls ); ?>">
+            <?php
+            if ( is_callable( $args['render'] ) ) {
+                foreach ( $args['items'] as $item ) {
+                    echo call_user_func( $args['render'], $item ); // markup dal renderer
+                }
+            }
+            ?>
+        </div>
+        <?php
+        return ob_get_clean();
+    }
+
+    public function render_dashboard_page() {
+        $manage = self::dashboard_manage_tiles();
+        $system = self::dashboard_system_chips();
+        $hero   = self::dashboard_hero_data();
+
+        $user = wp_get_current_user();
+        $first_name = $user->first_name ?: $user->display_name ?: __( 'Utente', 'olobuild' );
+        $site_host = wp_parse_url( home_url(), PHP_URL_HOST );
+
+        // Stato "aggiornamento disponibile" (placeholder — TODO collegare a UpdateChecker)
+        $update_available = false;
+        $update_info = [];
+
+        $user_prefs = get_user_meta( $user->ID, 'olo_dashboard_prefs', true );
+        if ( ! is_array( $user_prefs ) ) $user_prefs = [];
+        $rail_collapsed = isset( $user_prefs['rail'] ) && $user_prefs['rail'] === 'collapsed';
+
+        self::cockpit_shell_open( '<b>' . esc_html__( 'Dashboard', 'olobuild' ) . '</b>' );
+        ?>
+            <div class="olo-cockpit-grid<?php echo $rail_collapsed ? ' collapsed' : ''; ?>">
+                <main class="olo-cockpit-main">
+
+                    <?php if ( $update_available ) : ?>
+                    <div class="olo-banner" data-banner="update-<?php echo esc_attr( $update_info['version'] ?? '0' ); ?>">
+                        <span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4l9 16H3z"/><path d="M12 11v4M12 18h.01"/></svg></span>
+                        <span><b><?php printf( esc_html__( 'Aggiornamento disponibile · v%s', 'olobuild' ), esc_html( $update_info['version'] ?? '' ) ); ?></b> — <?php echo esc_html( $update_info['note'] ?? '' ); ?></span>
+                        <span class="spc"></span>
+                        <a class="act" href="<?php echo esc_url( admin_url( 'plugins.php' ) ); ?>"><?php esc_html_e( 'Aggiorna ora', 'olobuild' ); ?></a>
+                        <button type="button" class="x" title="<?php esc_attr_e( 'Chiudi', 'olobuild' ); ?>"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+                    </div>
+                    <?php endif; ?>
+
+                    <!-- Hero contestuale -->
+                    <section class="olo-hero">
+                        <div class="olo-hero-l">
+                            <div class="greet"><?php
+                                /* translators: %s = first name */
+                                printf( esc_html__( 'Ciao %s, buon lavoro', 'olobuild' ), esc_html( $first_name ) );
+                            ?></div>
+                            <h1><?php
+                                if ( $hero['is_page'] ) {
+                                    /* translators: %s = page title */
+                                    printf( esc_html__( 'Continua su %s', 'olobuild' ), '<b>' . esc_html( $hero['title'] ) . '</b>' );
+                                } else {
+                                    echo '<b>' . esc_html( $hero['title'] ) . '</b>';
+                                }
+                            ?></h1>
+                            <p class="sub"><?php echo wp_kses( $hero['sub'], [ 'b' => [], 'strong' => [] ] ); ?></p>
+                            <div class="meta-row">
+                                <span class="item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 010 18M12 3a14 14 0 000 18"/></svg> <?php echo esc_html( $site_host ); ?></span>
+                                <span class="item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/></svg> <b><?php echo esc_html( wp_count_posts( 'page' )->publish ); ?></b> <?php esc_html_e( 'pagine', 'olobuild' ); ?></span>
+                                <span class="item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19l3-3a4 4 0 015.7 0l.3.3 4-9-9 4 .3.3a4 4 0 010 5.7L5 19zM4 14a3 3 0 00-1 6 3 3 0 006-1"/></svg> v<?php echo esc_html( OLO_VERSION ); ?></span>
+                            </div>
+                            <div class="ctas">
+                                <a class="pri" href="<?php echo esc_url( $hero['edit'] ); ?>">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l4-1 11-11-3-3L5 16l-1 4z"/></svg>
+                                    <?php echo $hero['is_page'] ? esc_html__( 'Apri editor', 'olobuild' ) : esc_html__( 'Vai ai template', 'olobuild' ); ?>
+                                </a>
+                                <a class="sec" href="<?php echo esc_url( $hero['view'] ); ?>" target="_blank" rel="noopener">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M20 4l-8 8M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4"/></svg>
+                                    <?php esc_html_e( 'Vedi sito live', 'olobuild' ); ?>
+                                </a>
+                                <button type="button" class="sec" data-olo-new-page title="<?php esc_attr_e( 'Crea un nuovo template e la pagina WP collegata', 'olobuild' ); ?>">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+                                    <?php esc_html_e( 'Nuova pagina', 'olobuild' ); ?>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="olo-hero-r">
+                            <?php if ( $hero['status'] === 'publish' ) : ?>
+                                <span class="live-pill">live</span>
+                            <?php endif; ?>
+                            <?php
+                            // URL nella browser bar: full URL della pagina (host + path),
+                            // troncato a metà se troppo lungo per stare nella barra.
+                            $hero_url_display = $site_host;
+                            if ( ! empty( $hero['view'] ) ) {
+                                $parts = wp_parse_url( $hero['view'] );
+                                $hero_url_display = ( $parts['host'] ?? $site_host ) . ( $parts['path'] ?? '' );
+                                $hero_url_display = rtrim( $hero_url_display, '/' );
+                            }
+                            ?>
+                            <div class="browser">
+                                <div class="br-bar">
+                                    <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+                                    <span class="url" title="<?php echo esc_attr( $hero['view'] ?? '' ); ?>"><?php echo esc_html( $hero_url_display ); ?></span>
+                                </div>
+                                <?php if ( ! empty( $hero['thumbnail'] ) ) : ?>
+                                    <a class="br-screenshot" href="<?php echo esc_url( $hero['view'] ); ?>" target="_blank" rel="noopener" title="<?php esc_attr_e( 'Apri pagina live', 'olobuild' ); ?>">
+                                        <img src="<?php echo esc_url( $hero['thumbnail'] ); ?>" alt="<?php echo esc_attr( $hero['title'] ); ?>" loading="lazy" />
+                                    </a>
+                                <?php else : ?>
+                                    <div class="br-body">
+                                        <div class="nav">
+                                            <span class="lo"><?php echo esc_html( strtoupper( substr( get_bloginfo( 'name' ), 0, 7 ) ) ); ?></span>
+                                            <span><?php esc_html_e( 'Home', 'olobuild' ); ?></span>
+                                            <span><?php esc_html_e( 'Servizi', 'olobuild' ); ?></span>
+                                            <span><?php esc_html_e( 'Contatti', 'olobuild' ); ?></span>
+                                        </div>
+                                        <h2><?php echo esc_html( get_bloginfo( 'name' ) ); ?></h2>
+                                        <p><?php echo esc_html( wp_trim_words( get_bloginfo( 'description' ) ?: __( 'Il tuo sito WordPress costruito con Olobuild.', 'olobuild' ), 12 ) ); ?></p>
+                                        <span class="btn"><?php esc_html_e( 'Scopri di più', 'olobuild' ); ?> →</span>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- KPI strip (popolato da JS / boot data) -->
+                    <section class="olo-kpi-strip" aria-label="<?php esc_attr_e( 'Indicatori chiave', 'olobuild' ); ?>"></section>
+
+                    <!-- Recent strip -->
+                    <section>
+                        <div class="olo-sec-h">
+                            <h2><?php esc_html_e( 'Continua dove avevi lasciato', 'olobuild' ); ?></h2>
+                            <span class="hint"><?php esc_html_e( 'Le tue ultime modifiche', 'olobuild' ); ?></span>
+                            <span class="spc"></span>
+                            <a class="more" href="<?php echo esc_url( admin_url( 'edit.php?post_type=page&orderby=modified' ) ); ?>">
+                                <?php esc_html_e( 'Vedi tutto', 'olobuild' ); ?>
+                                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                            </a>
+                        </div>
+                        <div class="olo-recent-strip"></div>
+                    </section>
+
+                    <!-- Quick actions -->
+                    <section>
+                        <div class="olo-sec-h">
+                            <h2><?php esc_html_e( 'Azioni rapide', 'olobuild' ); ?></h2>
+                            <span class="hint"><?php esc_html_e( 'Ciò che fai più spesso', 'olobuild' ); ?></span>
+                        </div>
+                        <div class="olo-quick-row">
+                            <button type="button" class="olo-quick-card tone-primary" data-olo-new-page>
+                                <div class="ic-box"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg></div>
+                                <div class="lab"><span class="t"><?php esc_html_e( 'Crea pagina', 'olobuild' ); ?></span><span class="h"><?php esc_html_e( 'Nuovo template + pagina WP', 'olobuild' ); ?></span></div>
+                                <span class="arr"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+                            </button>
+                            <a class="olo-quick-card tone-info" href="<?php echo esc_url( $hero['edit'] ); ?>">
+                                <div class="ic-box"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l4-1 11-11-3-3L5 16l-1 4z"/></svg></div>
+                                <div class="lab"><span class="t"><?php esc_html_e( 'Apri editor', 'olobuild' ); ?></span><span class="h"><?php echo esc_html( wp_trim_words( $hero['title'], 4 ) ); ?></span></div>
+                                <span class="arr"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+                            </a>
+                            <a class="olo-quick-card tone-purple" href="<?php echo esc_url( admin_url( 'admin.php?page=olobuilder-templates' ) ); ?>">
+                                <div class="ic-box"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+                                <div class="lab"><span class="t"><?php esc_html_e( 'Sfoglia template', 'olobuild' ); ?></span><span class="h"><?php esc_html_e( 'Pronti all\'uso', 'olobuild' ); ?></span></div>
+                                <span class="arr"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+                            </a>
+                            <a class="olo-quick-card tone-neutral" href="<?php echo esc_url( admin_url( 'admin.php?page=olo-import-export' ) ); ?>">
+                                <div class="ic-box"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v12M7 9l5-5 5 5M5 20h14"/></svg></div>
+                                <div class="lab"><span class="t"><?php esc_html_e( 'Importa', 'olobuild' ); ?></span><span class="h"><?php esc_html_e( 'Pagina, sito, JSON', 'olobuild' ); ?></span></div>
+                                <span class="arr"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+                            </a>
+                        </div>
+                    </section>
+
+                    <!-- Manage tile grid -->
+                    <section>
+                        <div class="olo-sec-h">
+                            <h2><?php esc_html_e( 'Gestione', 'olobuild' ); ?></h2>
+                            <span class="hint"><?php esc_html_e( 'Configurazione e contenuti del sito', 'olobuild' ); ?></span>
+                        </div>
+                        <div class="olo-manage-grid">
+                            <?php foreach ( $manage as $i => $t ) : ?>
+                            <a class="olo-manage-tile" href="<?php echo esc_url( $t['href'] ); ?>" data-id="<?php echo esc_attr( $t['id'] ); ?>" data-order="<?php echo esc_attr( $i ); ?>">
+                                <div class="ic-sq" style="background: <?php echo esc_attr( $t['color'] ); ?>"><?php echo self::dashboard_svg( $t['icon'], 18 ); ?></div>
+                                <div class="lab">
+                                    <span class="t"><?php echo esc_html( $t['label'] ); ?></span>
+                                    <span class="h"><?php echo esc_html( $t['hint'] ); ?></span>
+                                </div>
+                                <button type="button" class="pin" title="<?php esc_attr_e( 'Aggiungi ai preferiti', 'olobuild' ); ?>">
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3l7 7-3 3 1 5-5-1-7 7v-4l-3-3 7-7-1-5z"/></svg>
+                                </button>
+                            </a>
+                            <?php endforeach; ?>
+                        </div>
+                    </section>
+
+                    <!-- System chips -->
+                    <section>
+                        <div class="olo-sec-h">
+                            <h2><?php esc_html_e( 'Sistema', 'olobuild' ); ?></h2>
+                            <span class="hint"><?php esc_html_e( 'Configurazione tecnica · raramente', 'olobuild' ); ?></span>
+                        </div>
+                        <div class="olo-system-row">
+                            <?php foreach ( $system as $s ) : ?>
+                            <a class="olo-system-chip" href="<?php echo esc_url( $s['href'] ); ?>">
+                                <span class="ic"><?php echo self::dashboard_svg( $s['icon'], 13 ); ?></span>
+                                <?php echo esc_html( $s['label'] ); ?>
+                            </a>
+                            <?php endforeach; ?>
+                        </div>
+                    </section>
+
+                </main>
+
+                <!-- Right rail -->
+                <aside class="olo-rail">
+                    <div class="rail-head">
+                        <h2><?php esc_html_e( 'Centro risorse', 'olobuild' ); ?></h2>
+                        <button type="button" class="toggle" title="<?php esc_attr_e( 'Comprimi pannello', 'olobuild' ); ?>">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l-6 6 6 6M15 6l6 6-6 6"/></svg>
+                        </button>
+                    </div>
+                    <div class="rail-mini">
+                        <button type="button" title="<?php esc_attr_e( 'Cosa c\'è di nuovo', 'olobuild' ); ?>">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19l3-3a4 4 0 015.7 0l.3.3 4-9-9 4 .3.3a4 4 0 010 5.7L5 19zM4 14a3 3 0 00-1 6 3 3 0 006-1"/></svg>
+                            <span class="dot-new"></span>
+                        </button>
+                        <button type="button" title="<?php esc_attr_e( 'Tutorial', 'olobuild' ); ?>">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 5l12 7-12 7z"/></svg>
+                        </button>
+                        <button type="button" title="<?php esc_attr_e( 'Documentazione', 'olobuild' ); ?>">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 015 0c0 1.5-2.5 2-2.5 4M12 17h.01"/></svg>
+                        </button>
+                        <button type="button" title="<?php esc_attr_e( 'Notifiche', 'olobuild' ); ?>">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 16V11a6 6 0 0112 0v5l2 2H4l2-2zM10 20a2 2 0 004 0"/></svg>
+                        </button>
+                    </div>
+                    <div class="rail-body">
+                        <div class="olo-rail-section">
+                            <h3>
+                                <?php esc_html_e( 'Cosa c\'è di nuovo', 'olobuild' ); ?>
+                                <span class="pill">v<?php echo esc_html( OLO_VERSION ); ?></span>
+                            </h3>
+                            <div data-olo-changelog></div>
+                        </div>
+                        <div class="olo-rail-section">
+                            <h3><?php esc_html_e( 'Impara Olobuild', 'olobuild' ); ?></h3>
+                            <a class="olo-learn-card" href="https://olotheme.com/docs/onboarding" target="_blank" rel="noopener">
+                                <div class="th" style="background: linear-gradient(135deg,#4a8c2a,#3fa23f);">🚀</div>
+                                <div class="info"><span class="t"><?php esc_html_e( 'Onboarding 60 secondi', 'olobuild' ); ?></span><span class="d"><svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><path d="M7 5l12 7-12 7z"/></svg> 1:02</span></div>
+                            </a>
+                            <a class="olo-learn-card" href="https://olotheme.com/docs/templates" target="_blank" rel="noopener">
+                                <div class="th" style="background: linear-gradient(135deg,#f97316,#ef4444);">🎨</div>
+                                <div class="info"><span class="t"><?php esc_html_e( 'Template come pro', 'olobuild' ); ?></span><span class="d"><svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><path d="M7 5l12 7-12 7z"/></svg> 4:18</span></div>
+                            </a>
+                            <a class="olo-learn-card" href="https://olotheme.com/docs/seo" target="_blank" rel="noopener">
+                                <div class="th" style="background: linear-gradient(135deg,#3b82f6,#1d4ed8);">🔍</div>
+                                <div class="info"><span class="t"><?php esc_html_e( 'SEO e Open Graph', 'olobuild' ); ?></span><span class="d"><svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><path d="M7 5l12 7-12 7z"/></svg> 3:45</span></div>
+                            </a>
+                            <a class="olo-learn-card" href="https://olotheme.com/docs/performance" target="_blank" rel="noopener">
+                                <div class="th" style="background: linear-gradient(135deg,#eab308,#ca8a04);">⚡</div>
+                                <div class="info"><span class="t"><?php esc_html_e( 'Performance: punteggio 100', 'olobuild' ); ?></span><span class="d"><svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><path d="M7 5l12 7-12 7z"/></svg> 5:30</span></div>
+                            </a>
+                        </div>
+                        <div class="olo-rail-section">
+                            <h3><?php esc_html_e( 'Aiuto & supporto', 'olobuild' ); ?></h3>
+                            <div class="olo-help-row">
+                                <a href="https://olotheme.com/docs" target="_blank" rel="noopener">
+                                    <span class="ic"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 015 0c0 1.5-2.5 2-2.5 4M12 17h.01"/></svg></span>
+                                    <?php esc_html_e( 'Documentazione', 'olobuild' ); ?>
+                                </a>
+                                <a href="https://olotheme.com/support" target="_blank" rel="noopener">
+                                    <span class="ic"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></span>
+                                    <?php esc_html_e( 'Apri ticket', 'olobuild' ); ?>
+                                </a>
+                                <a href="https://olotheme.com/community" target="_blank" rel="noopener">
+                                    <span class="ic"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3 20a6 6 0 0112 0"/><circle cx="17" cy="9" r="2.5"/><path d="M14 20a5 5 0 017-4.5"/></svg></span>
+                                    <?php esc_html_e( 'Community', 'olobuild' ); ?>
+                                </a>
+                                <a href="https://olotheme.com/roadmap" target="_blank" rel="noopener">
+                                    <span class="ic"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M20 4l-8 8M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4"/></svg></span>
+                                    <?php esc_html_e( 'Roadmap', 'olobuild' ); ?>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        <?php
+        self::cockpit_shell_close();
+    }
+
+    /**
+     * Mappa nome icona → SVG inline (subset usato dalla dashboard cockpit).
+     */
+    public static function dashboard_svg( $name, $size = 18 ) {
+        $paths = [
+            'template' => '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/>',
+            'sliders'  => '<line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/>',
+            'image'    => '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>',
+            'form'     => '<path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>',
+            'chart'    => '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
+            'cookie'   => '<circle cx="12" cy="12" r="9"/><circle cx="9" cy="9" r="1"/><circle cx="15" cy="11" r="1"/><circle cx="11" cy="15" r="1"/>',
+            'search'   => '<circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>',
+            'redirect' => '<path d="M3 9l4-4 4 4M7 5v9a4 4 0 004 4h7M21 15l-4 4-4-4"/>',
+            'zap'      => '<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>',
+            'wrench'   => '<path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/>',
+            'cart'     => '<circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/>',
+            'modal'    => '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/>',
+            'tag'      => '<path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="7.5" r="1"/>',
+            'upload'   => '<path d="M12 4v12M7 9l5-5 5 5M5 20h14"/>',
+            'users'    => '<circle cx="9" cy="8" r="3"/><path d="M3 20a6 6 0 0112 0"/><circle cx="17" cy="9" r="2.5"/><path d="M14 20a5 5 0 017-4.5"/>',
+            'inbox'    => '<path d="M3 12l3-7h12l3 7v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6zM3 12h5l1 2h6l1-2h5"/>',
+            'history'  => '<path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 106 5.3L3 8"/><path d="M12 7v5l4 2"/>',
+            'key'      => '<circle cx="8" cy="15" r="4"/><path d="M11 12l9-9 2 2-2 2 2 2-2 2-3-3"/>',
+        ];
+        $path = $paths[ $name ] ?? '';
+        return '<svg width="' . (int) $size . '" height="' . (int) $size . '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">' . $path . '</svg>';
+    }
+
 
     /**
      * Registra le impostazioni API keys nella WP Settings API.
@@ -1023,10 +2132,14 @@ class Olo_Builder {
         if ( ! current_user_can( 'manage_options' ) ) {
             return;
         }
+        // v1.0.30 — redesign: la pagina ora occupa l'intera area #wpbody con shell propria
+        // (topbar + sidebar console navy + savebar). Niente più cockpit chrome — Vue gestisce tutto.
+        // .olo-cfg-wrap toglie il margin/padding di default di .wrap WP.
         ?>
-        <?php self::page_shell_open( 'Configurazione' ); ?>
-                <div id="olo-admin-settings"></div>
-        <?php self::page_shell_close(); ?>
+        <div class="wrap olo-cfg-wrap">
+            <h1 class="screen-reader-text"><?php esc_html_e( 'Configurazione Olobuild', 'olobuild' ); ?></h1>
+            <div id="olo-admin-settings"></div>
+        </div>
         <?php
     }
 
@@ -1063,6 +2176,715 @@ class Olo_Builder {
                 'permission_callback' => function () { return current_user_can( 'manage_options' ); },
             ],
         ] );
+
+        // Palette colori (ColorsTab in Configurazione): brand palette + scala neutri + dark
+        register_rest_route( $ns, '/settings/global-colors', [
+            [
+                'methods'             => 'GET',
+                'callback'            => function () {
+                    return rest_ensure_response( [
+                        'palette'      => get_option( 'olo_palette', [] ),
+                        'neutrals'     => get_option( 'olo_neutrals', [] ),
+                        'neutral_mode' => get_option( 'olo_neutral_mode', 'auto' ),
+                        'neutral_tint' => get_option( 'olo_neutral_tint', 'zinc' ),
+                        'dark'         => get_option( 'olo_dark_settings', [ 'enabled' => true, 'strategy' => 'auto' ] ),
+                    ] );
+                },
+                'permission_callback' => function () { return current_user_can( 'manage_options' ); },
+            ],
+            [
+                'methods'             => 'PUT',
+                'callback'            => function ( $req ) {
+                    $b = $req->get_json_params();
+                    if ( ! is_array( $b ) ) $b = [];
+
+                    if ( isset( $b['palette'] ) && is_array( $b['palette'] ) ) {
+                        $clean = [];
+                        foreach ( $b['palette'] as $p ) {
+                            if ( ! is_array( $p ) ) continue;
+                            $hex = sanitize_hex_color( $p['hex'] ?? '' );
+                            $clean[] = [
+                                'id'   => sanitize_key( $p['id'] ?? '' ),
+                                'name' => sanitize_text_field( $p['name'] ?? '' ),
+                                'role' => sanitize_text_field( $p['role'] ?? '' ),
+                                'hex'  => $hex ?: '#000000',
+                            ];
+                        }
+                        update_option( 'olo_palette', $clean );
+                    }
+
+                    if ( isset( $b['neutrals'] ) && is_array( $b['neutrals'] ) ) {
+                        $clean = array_values( array_filter( array_map( 'sanitize_hex_color', $b['neutrals'] ) ) );
+                        update_option( 'olo_neutrals', $clean );
+                    }
+
+                    if ( isset( $b['neutral_mode'] ) ) {
+                        $m = $b['neutral_mode'] === 'manual' ? 'manual' : 'auto';
+                        update_option( 'olo_neutral_mode', $m );
+                    }
+
+                    if ( isset( $b['neutral_tint'] ) ) {
+                        $allowed = [ 'slate', 'gray', 'zinc', 'neutral', 'stone' ];
+                        $tint = in_array( $b['neutral_tint'], $allowed, true ) ? $b['neutral_tint'] : 'zinc';
+                        update_option( 'olo_neutral_tint', $tint );
+                    }
+
+                    if ( isset( $b['dark'] ) && is_array( $b['dark'] ) ) {
+                        $strategy = in_array( $b['dark']['strategy'] ?? '', [ 'auto', 'manual', 'luminance' ], true ) ? $b['dark']['strategy'] : 'auto';
+                        update_option( 'olo_dark_settings', [
+                            'enabled'  => ! empty( $b['dark']['enabled'] ),
+                            'strategy' => $strategy,
+                        ] );
+                    }
+
+                    update_option( 'olo_settings_last_saved', time() );
+                    return rest_ensure_response( [ 'ok' => true ] );
+                },
+                'permission_callback' => function () { return current_user_can( 'manage_options' ); },
+            ],
+        ] );
+
+        // ─── Endpoint generici per i 5 tab migrati in Configurazione (v1.0.30) ───
+        // Cookie Consent — option array unica `olo_cookie_settings`
+        register_rest_route( $ns, '/cookie-consent', [
+            [
+                'methods'             => 'GET',
+                'callback'            => function () {
+                    return rest_ensure_response( get_option( 'olo_cookie_settings', [] ) );
+                },
+                'permission_callback' => function () { return current_user_can( 'manage_options' ); },
+            ],
+            [
+                'methods'             => 'POST',
+                'callback'            => function ( $req ) {
+                    $existing = get_option( 'olo_cookie_settings', [] );
+                    $payload  = $req->get_json_params();
+                    if ( ! is_array( $payload ) ) $payload = [];
+                    update_option( 'olo_cookie_settings', array_merge( $existing, $payload ) );
+                    update_option( 'olo_settings_last_saved', time() );
+                    return rest_ensure_response( [ 'ok' => true ] );
+                },
+                'permission_callback' => function () { return current_user_can( 'manage_options' ); },
+            ],
+        ] );
+
+        // Performance — option array unica `olo_performance`
+        register_rest_route( $ns, '/performance', [
+            [
+                'methods'             => 'GET',
+                'callback'            => function () {
+                    return rest_ensure_response( get_option( 'olo_performance', [] ) );
+                },
+                'permission_callback' => function () { return current_user_can( 'manage_options' ); },
+            ],
+            [
+                'methods'             => 'POST',
+                'callback'            => function ( $req ) {
+                    $existing = get_option( 'olo_performance', [] );
+                    $payload  = $req->get_json_params();
+                    if ( ! is_array( $payload ) ) $payload = [];
+                    update_option( 'olo_performance', array_merge( $existing, $payload ) );
+                    update_option( 'olo_settings_last_saved', time() );
+                    return rest_ensure_response( [ 'ok' => true ] );
+                },
+                'permission_callback' => function () { return current_user_can( 'manage_options' ); },
+            ],
+        ] );
+
+        // Performance stats — read-only, dati reali da Critical CSS + CSS cache
+        register_rest_route( $ns, '/performance/stats', [
+            [
+                'methods'             => 'GET',
+                'callback'            => function () {
+                    $opt = get_option( 'olo_performance', [] );
+                    if ( ! is_array( $opt ) ) $opt = [];
+
+                    // Critical CSS pages cached
+                    $ccss_count = 0;
+                    $ccss_last  = '';
+                    if ( class_exists( 'Olo_Critical_CSS' ) && method_exists( 'Olo_Critical_CSS', 'get_status' ) ) {
+                        $st = Olo_Critical_CSS::get_status();
+                        if ( is_array( $st ) ) {
+                            $ccss_count = (int) ( $st['cached_count'] ?? 0 );
+                            $ccss_last  = (string) ( $st['last_generated'] ?? '' );
+                        }
+                    }
+
+                    // CSS cache files dir
+                    $upload_dir = wp_upload_dir();
+                    $cache_dir  = trailingslashit( $upload_dir['basedir'] ) . 'olobuild-cache/';
+                    $cache_count = 0;
+                    $cache_size  = 0;
+                    if ( is_dir( $cache_dir ) ) {
+                        $files = glob( $cache_dir . 'olo-*.css' ) ?: [];
+                        $cache_count = count( $files );
+                        foreach ( $files as $f ) $cache_size += filesize( $f ) ?: 0;
+                    }
+
+                    // Templates totali (proxy per "pages_total")
+                    global $wpdb;
+                    $pages_total = (int) $wpdb->get_var( $wpdb->prepare(
+                        "SELECT COUNT(*) FROM {$wpdb->prefix}olo_templates WHERE status = %s",
+                        'published'
+                    ) );
+
+                    // Score derivato dai flag performance attivi
+                    $flag_keys = [
+                        'critical_css_enabled', 'defer_js', 'minify_css', 'css_cache_files',
+                        'resource_hints', 'font_preload', 'video_facade', 'fetchpriority',
+                        'lazy_images', 'remove_jquery_migrate', 'remove_emoji_scripts',
+                    ];
+                    $on = 0;
+                    foreach ( $flag_keys as $k ) if ( ! empty( $opt[ $k ] ) ) $on++;
+                    $score = (int) round( 60 + ( $on / count( $flag_keys ) ) * 40 ); // 60-100
+
+                    return rest_ensure_response( [
+                        'score'           => $score,
+                        'pages_cached'    => $ccss_count + $cache_count,
+                        'pages_total'     => max( $pages_total, $ccss_count + $cache_count ),
+                        'hit_rate'        => '—', // no log layer yet
+                        'size'            => size_format( $cache_size, 1 ),
+                        'size_max'        => '500 MB',
+                        'bandwidth_saved' => '—',
+                        'last_purge'      => $ccss_last ?: '—',
+                    ] );
+                },
+                'permission_callback' => function () { return current_user_can( 'manage_options' ); },
+            ],
+        ] );
+
+        // Stockmedia behavior — preferenze importazione stock provider
+        register_rest_route( $ns, '/settings/stockmedia-behavior', [
+            [
+                'methods'             => 'GET',
+                'callback'            => function () {
+                    $defaults = [ 'preferred' => 'unsplash', 'download_local' => true, 'optimize_on_download' => false ];
+                    $saved = get_option( 'olo_stockmedia_behavior', [] );
+                    if ( ! is_array( $saved ) ) $saved = [];
+                    return rest_ensure_response( wp_parse_args( $saved, $defaults ) );
+                },
+                'permission_callback' => function () { return current_user_can( 'manage_options' ); },
+            ],
+            [
+                'methods'             => 'POST',
+                'callback'            => function ( $req ) {
+                    $b = $req->get_json_params();
+                    if ( ! is_array( $b ) ) $b = [];
+                    $allowed_providers = [ 'unsplash', 'pexels', 'pixabay', 'freesound', 'openverse' ];
+                    $clean = [
+                        'preferred'            => in_array( $b['preferred'] ?? '', $allowed_providers, true ) ? $b['preferred'] : 'unsplash',
+                        'download_local'       => ! empty( $b['download_local'] ),
+                        'optimize_on_download' => ! empty( $b['optimize_on_download'] ),
+                    ];
+                    update_option( 'olo_stockmedia_behavior', $clean );
+                    update_option( 'olo_settings_last_saved', time() );
+                    return rest_ensure_response( [ 'ok' => true ] );
+                },
+                'permission_callback' => function () { return current_user_can( 'manage_options' ); },
+            ],
+        ] );
+
+        // AI usage — rolling stats degli ultimi 30 giorni
+        register_rest_route( $ns, '/ai/usage', [
+            [
+                'methods'             => 'GET',
+                'callback'            => function () {
+                    $log = get_option( 'olo_ai_usage', [] );
+                    if ( ! is_array( $log ) ) $log = [];
+
+                    // Filter ultimi 30 giorni
+                    $cutoff = time() - 30 * DAY_IN_SECONDS;
+                    $recent = array_filter( $log, function ( $e ) use ( $cutoff ) {
+                        return is_array( $e ) && ( $e['ts'] ?? 0 ) >= $cutoff;
+                    } );
+
+                    if ( empty( $recent ) ) {
+                        return rest_ensure_response( [
+                            'calls'         => 0,
+                            'tokens'        => '0',
+                            'cost_estimate' => '0.00',
+                            'latency_avg'   => '0',
+                        ] );
+                    }
+
+                    $calls = count( $recent );
+                    $tokens = 0; $cost = 0.0; $latency_sum = 0;
+                    foreach ( $recent as $e ) {
+                        $tokens      += (int) ( $e['tokens']  ?? 0 );
+                        $cost        += (float) ( $e['cost']  ?? 0 );
+                        $latency_sum += (int) ( $e['ms']      ?? 0 );
+                    }
+                    $latency_avg = $calls > 0 ? round( ( $latency_sum / $calls ) / 1000, 1 ) : 0;
+
+                    return rest_ensure_response( [
+                        'calls'         => $calls,
+                        'tokens'        => $tokens >= 1000 ? round( $tokens / 1000, 1 ) . 'k' : (string) $tokens,
+                        'cost_estimate' => number_format_i18n( $cost, 2 ),
+                        'latency_avg'   => (string) $latency_avg,
+                    ] );
+                },
+                'permission_callback' => function () { return current_user_can( 'manage_options' ); },
+            ],
+        ] );
+
+        // SEO — 6 sub-endpoint, ognuno mappa a una option WP separata
+        $seo_subkeys = [
+            'titles'         => 'olo_seo_titles',
+            'social'         => 'olo_seo_social',
+            'local_business' => 'olo_seo_local_business',
+            'webmaster'      => 'olo_seo_webmaster',
+            'sitemap'        => 'olo_seo_sitemap',
+            'advanced'       => 'olo_seo_advanced',
+        ];
+        foreach ( $seo_subkeys as $route => $option_key ) {
+            register_rest_route( $ns, '/seo/' . $route, [
+                [
+                    'methods'             => 'GET',
+                    'callback'            => function () use ( $option_key ) {
+                        return rest_ensure_response( get_option( $option_key, [] ) );
+                    },
+                    'permission_callback' => function () { return current_user_can( 'manage_options' ); },
+                ],
+                [
+                    'methods'             => 'POST',
+                    'callback'            => function ( $req ) use ( $option_key ) {
+                        $existing = get_option( $option_key, [] );
+                        $payload  = $req->get_json_params();
+                        if ( ! is_array( $payload ) ) $payload = [];
+                        update_option( $option_key, array_merge( $existing, $payload ) );
+                        update_option( 'olo_settings_last_saved', time() );
+                        return rest_ensure_response( [ 'ok' => true ] );
+                    },
+                    'permission_callback' => function () { return current_user_can( 'manage_options' ); },
+                ],
+            ] );
+        }
+
+        // ─── Endpoint generici v1.0.31 (sprint configurazione fase 2) ───
+        // Analytics / Tracking — option array `olo_analytics`
+        register_rest_route( $ns, '/analytics', [
+            [
+                'methods'             => 'GET',
+                'callback'            => function () {
+                    return rest_ensure_response( get_option( 'olo_analytics', [] ) );
+                },
+                'permission_callback' => function () { return current_user_can( 'manage_options' ); },
+            ],
+            [
+                'methods'             => 'POST',
+                'callback'            => function ( $req ) {
+                    $existing = get_option( 'olo_analytics', [] );
+                    $payload  = $req->get_json_params();
+                    if ( ! is_array( $payload ) ) $payload = [];
+                    update_option( 'olo_analytics', array_merge( $existing, $payload ) );
+                    // Mantieni anche le 3 option singole legacy per compat con codice frontend più vecchio.
+                    foreach ( [ 'ga_id', 'fb_pixel_id', 'gtm_id' ] as $legacy_k ) {
+                        if ( isset( $payload[ $legacy_k ] ) ) {
+                            update_option( 'olo_' . ( $legacy_k === 'ga_id' ? 'ga_measurement_id' : $legacy_k ), sanitize_text_field( $payload[ $legacy_k ] ) );
+                        }
+                    }
+                    update_option( 'olo_settings_last_saved', time() );
+                    return rest_ensure_response( [ 'ok' => true ] );
+                },
+                'permission_callback' => function () { return current_user_can( 'manage_options' ); },
+            ],
+        ] );
+
+        // Maintenance & Coming Soon — 5 option singole
+        register_rest_route( $ns, '/maintenance', [
+            [
+                'methods'             => 'GET',
+                'callback'            => function () {
+                    return rest_ensure_response( [
+                        'mode'                    => get_option( 'olo_maintenance_mode', 'off' ),
+                        'template_id'             => (int) get_option( 'olo_maintenance_template_id', 0 ),
+                        'coming_soon_template_id' => (int) get_option( 'olo_coming_soon_template_id', 0 ),
+                        'bypass_roles'            => (array) get_option( 'olo_maintenance_bypass_roles', [ 'administrator' ] ),
+                        'bypass_secret'           => get_option( 'olo_maintenance_bypass_secret', '' ),
+                    ] );
+                },
+                'permission_callback' => function () { return current_user_can( 'manage_options' ); },
+            ],
+            [
+                'methods'             => 'POST',
+                'callback'            => function ( $req ) {
+                    $p = $req->get_json_params();
+                    if ( isset( $p['mode'] ) ) {
+                        $mode = in_array( $p['mode'], [ 'off', 'coming_soon', 'maintenance' ], true ) ? $p['mode'] : 'off';
+                        update_option( 'olo_maintenance_mode', $mode );
+                    }
+                    if ( isset( $p['template_id'] ) )             update_option( 'olo_maintenance_template_id', (int) $p['template_id'] );
+                    if ( isset( $p['coming_soon_template_id'] ) ) update_option( 'olo_coming_soon_template_id', (int) $p['coming_soon_template_id'] );
+                    if ( isset( $p['bypass_roles'] ) && is_array( $p['bypass_roles'] ) ) {
+                        update_option( 'olo_maintenance_bypass_roles', array_map( 'sanitize_key', $p['bypass_roles'] ) );
+                    }
+                    if ( isset( $p['bypass_secret'] ) )            update_option( 'olo_maintenance_bypass_secret', sanitize_text_field( $p['bypass_secret'] ) );
+                    update_option( 'olo_settings_last_saved', time() );
+                    return rest_ensure_response( [ 'ok' => true ] );
+                },
+                'permission_callback' => function () { return current_user_can( 'manage_options' ); },
+            ],
+        ] );
+
+        // Maintenance — genera un template "Coming Soon" precaricato e lo seleziona automaticamente
+        register_rest_route( $ns, '/maintenance/generate-template', [
+            'methods'             => 'POST',
+            'callback'            => function ( $req ) {
+                $params = $req->get_json_params();
+                $kind   = ( $params['kind'] ?? 'coming_soon' ) === 'maintenance' ? 'maintenance' : 'coming_soon';
+                if ( ! class_exists( 'Olo_Database' ) ) {
+                    return new WP_Error( 'no_db', 'Olo_Database non disponibile', [ 'status' => 500 ] );
+                }
+                $launch_at = strtotime( '+30 days' );
+                $launch_iso = wp_date( 'Y-m-d\TH:i:s', $launch_at );
+                $title_text = $kind === 'coming_soon' ? __( 'Stiamo per arrivare', 'olobuild' ) : __( 'Sito in manutenzione', 'olobuild' );
+                $sub_text   = $kind === 'coming_soon'
+                    ? __( 'Un\'esperienza unica sta per cominciare. Lascia la tua email per essere tra i primi a scoprirla.', 'olobuild' )
+                    : __( 'Stiamo aggiornando il sito per offrirti una nuova esperienza. Torniamo presto.', 'olobuild' );
+                $bg_color   = $kind === 'coming_soon' ? '#0f172a' : '#1c1917';
+                $accent     = '#e1474f';
+
+                $headline_id  = wp_generate_uuid4();
+                $sub_id       = wp_generate_uuid4();
+                $countdown_id = wp_generate_uuid4();
+                $spacer_id    = wp_generate_uuid4();
+                $btn_id       = wp_generate_uuid4();
+                $col_id       = wp_generate_uuid4();
+                $row_id       = wp_generate_uuid4();
+                $section_id   = wp_generate_uuid4();
+
+                // Template content: 1 section centered → 1 row → 1 column → headline + text + countdown + button.
+                // I tile usano default config; settings essenziali sotto.
+                $content = [
+                    [
+                        'id'   => $section_id,
+                        'type' => 'section',
+                        'settings' => [
+                            'width'         => 'default',
+                            'bg_scope'      => 'container',
+                            'padding'       => 'large',
+                            'sticky_effect' => 'none',
+                            'flex_direction'=> 'column',
+                            'flex_justify'  => 'center',
+                            'flex_align'    => 'center',
+                        ],
+                        'style' => [
+                            'bg' => [
+                                'type'  => 'solid',
+                                'color' => $bg_color,
+                                'gradient_angle' => 135, 'gradient_from' => $bg_color, 'gradient_to' => '#1e1b4b',
+                                'image_url' => '', 'image_size' => 'cover', 'image_position' => 'center center',
+                                'video_url' => '', 'video_poster' => '', 'video_fit' => 'cover',
+                                'overlay_color' => '#000000', 'overlay_opacity' => 0, 'color_opacity' => 100,
+                            ],
+                            'tile_min_height' => '100vh',
+                            'padding_top' => 80, 'padding_right' => 24, 'padding_bottom' => 80, 'padding_left' => 24,
+                        ],
+                        'advanced' => [],
+                        'children' => [
+                            [
+                                'id'   => $row_id,
+                                'type' => 'row',
+                                'settings' => [ 'layout' => '100', 'gap' => '24', 'vertical_align' => 'stretch' ],
+                                'style'    => [],
+                                'advanced' => [],
+                                'children' => [
+                                    [
+                                        'id'   => $col_id,
+                                        'type' => 'column',
+                                        'settings' => [],
+                                        'style'    => [ 'tile_max_width' => '720px' ],
+                                        'advanced' => [],
+                                        'children' => [
+                                            [
+                                                'id'   => $headline_id,
+                                                'type' => 'headline',
+                                                'settings' => [
+                                                    'preset'             => 'custom',
+                                                    'heading'            => $title_text,
+                                                    'subtitle'           => '',
+                                                    'tag'                => 'h1',
+                                                    'alignment'          => 'center',
+                                                    'heading_size'       => 'xl',
+                                                    'heading_font_size'  => '64',
+                                                    'heading_color'      => '#ffffff',
+                                                    'heading_italic'     => false,
+                                                    'heading_uppercase'  => false,
+                                                    'decoration'         => 'none',
+                                                ],
+                                                'style' => [ 'margin_bottom' => 16 ],
+                                                'advanced' => [],
+                                                'children' => [],
+                                            ],
+                                            [
+                                                'id'   => $sub_id,
+                                                'type' => 'text-block',
+                                                'settings' => [
+                                                    'content' => '<p style="font-size:18px;line-height:1.6;color:rgba(255,255,255,.75);text-align:center;max-width:560px;margin:0 auto;">' . esc_html( $sub_text ) . '</p>',
+                                                ],
+                                                'style' => [ 'margin_bottom' => 40 ],
+                                                'advanced' => [],
+                                                'children' => [],
+                                            ],
+                                            $kind === 'coming_soon' ? [
+                                                'id'   => $countdown_id,
+                                                'type' => 'countdown',
+                                                'settings' => [
+                                                    'date'             => $launch_iso,
+                                                    'show_days'        => true,
+                                                    'show_hours'       => true,
+                                                    'show_minutes'     => true,
+                                                    'show_seconds'     => true,
+                                                    'expired_message'  => __( 'È arrivato il momento!', 'olobuild' ),
+                                                    'digit_color'      => '#ffffff',
+                                                    'label_color'      => 'rgba(255,255,255,0.6)',
+                                                    'alignment'        => 'center',
+                                                    'digit_font_size'  => '56',
+                                                    'label_font_size'  => '13',
+                                                    'days_label'       => __( 'Giorni', 'olobuild' ),
+                                                    'hours_label'      => __( 'Ore', 'olobuild' ),
+                                                    'minutes_label'    => __( 'Minuti', 'olobuild' ),
+                                                    'seconds_label'    => __( 'Secondi', 'olobuild' ),
+                                                ],
+                                                'style' => [ 'margin_bottom' => 32 ],
+                                                'advanced' => [],
+                                                'children' => [],
+                                            ] : [
+                                                'id'   => $spacer_id,
+                                                'type' => 'spacer',
+                                                'settings' => [ 'height' => '40' ],
+                                                'style'    => [],
+                                                'advanced' => [],
+                                                'children' => [],
+                                            ],
+                                            [
+                                                'id'   => $btn_id,
+                                                'type' => 'button',
+                                                'settings' => [
+                                                    'preset'           => 'modern-clean',
+                                                    'text'             => $kind === 'coming_soon' ? __( 'Avvisami al lancio', 'olobuild' ) : __( 'Contattaci', 'olobuild' ),
+                                                    'url'              => 'mailto:' . get_bloginfo( 'admin_email' ),
+                                                    'target'           => '_self',
+                                                    'alignment'        => 'center',
+                                                    'full_width'       => false,
+                                                    'bg'               => [ 'type' => 'none' ],
+                                                    'bg_color'         => $accent,
+                                                    'text_color'       => '#ffffff',
+                                                    'border_radius'    => '999',
+                                                    'font_size'        => '16',
+                                                    'font_weight'      => '600',
+                                                    'letter_spacing'   => '0',
+                                                    'text_transform'   => 'none',
+                                                    'tile_padding'     => [ 'top' => 16, 'right' => 36, 'bottom' => 16, 'left' => 36 ],
+                                                    'icon_position'    => 'before',
+                                                    'icon_spacing'     => '8',
+                                                    'shadow'           => 'sm',
+                                                    'hover_bg_color'   => '#c8323a',
+                                                    'hover_text_color' => '#ffffff',
+                                                    'hover_effect'     => 'lift',
+                                                ],
+                                                // Forza il wrapper a NON ereditare bg_color dai settings.
+                                                // Senza questo, il renderer element copia settings.bg_color
+                                                // (rosso del button) anche allo style del wrapper esterno,
+                                                // creando il doppio sfondo "scatola rossa" attorno al button.
+                                                'style' => [ 'bg_color' => 'transparent', 'bg' => [ 'type' => 'none' ] ],
+                                                'advanced' => [],
+                                                'children' => [],
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ];
+
+                $db = new Olo_Database();
+                $title = $kind === 'coming_soon' ? __( 'Coming Soon — Default', 'olobuild' ) : __( 'Manutenzione — Default', 'olobuild' );
+                $new_id = $db->create_template( [
+                    'title'   => $title,
+                    'type'    => 'page',
+                    'content' => $content,
+                    'status'  => 'published',
+                    'settings'=> new stdClass(),
+                ] );
+
+                if ( ! $new_id ) {
+                    return new WP_Error( 'create_failed', 'Errore creazione template', [ 'status' => 500 ] );
+                }
+
+                $option_key = $kind === 'coming_soon' ? 'olo_coming_soon_template_id' : 'olo_maintenance_template_id';
+                update_option( $option_key, (int) $new_id );
+                update_option( 'olo_settings_last_saved', time() );
+
+                return rest_ensure_response( [
+                    'ok'          => true,
+                    'template_id' => (int) $new_id,
+                    'title'       => $title,
+                    'edit_url'    => admin_url( 'admin.php?page=olobuilder-templates&template_id=' . (int) $new_id ),
+                ] );
+            },
+            'permission_callback' => function () { return current_user_can( 'manage_options' ); },
+        ] );
+
+        // WooCommerce templates — 5 option singole
+        register_rest_route( $ns, '/woo-templates', [
+            [
+                'methods'             => 'GET',
+                'callback'            => function () {
+                    return rest_ensure_response( [
+                        'olo_woo_tpl_product_single'  => (int) get_option( 'olo_woo_tpl_product_single', 0 ),
+                        'olo_woo_tpl_product_archive' => (int) get_option( 'olo_woo_tpl_product_archive', 0 ),
+                        'olo_woo_tpl_cart'            => (int) get_option( 'olo_woo_tpl_cart', 0 ),
+                        'olo_woo_tpl_checkout'        => (int) get_option( 'olo_woo_tpl_checkout', 0 ),
+                        'olo_woo_tpl_myaccount'       => (int) get_option( 'olo_woo_tpl_myaccount', 0 ),
+                        'woo_active'                  => class_exists( 'WooCommerce' ),
+                    ] );
+                },
+                'permission_callback' => function () { return current_user_can( 'manage_options' ); },
+            ],
+            [
+                'methods'             => 'POST',
+                'callback'            => function ( $req ) {
+                    $p = $req->get_json_params();
+                    $allowed = [ 'olo_woo_tpl_product_single', 'olo_woo_tpl_product_archive', 'olo_woo_tpl_cart', 'olo_woo_tpl_checkout', 'olo_woo_tpl_myaccount' ];
+                    foreach ( $allowed as $k ) {
+                        if ( isset( $p[ $k ] ) ) update_option( $k, (int) $p[ $k ] );
+                    }
+                    update_option( 'olo_settings_last_saved', time() );
+                    return rest_ensure_response( [ 'ok' => true ] );
+                },
+                'permission_callback' => function () { return current_user_can( 'manage_options' ); },
+            ],
+        ] );
+
+        // Design Presets — behavior (overwrite_manual, snapshot_before, preview_mode)
+        // + snapshots stub (per ora list/restore/delete: noop, gli stili reali sono in olo_styles).
+        register_rest_route( $ns, '/design-presets/behavior', [
+            [
+                'methods'             => 'GET',
+                'callback'            => function () {
+                    return rest_ensure_response( get_option( 'olo_design_preset_behavior', [
+                        'overwrite_manual' => true,
+                        'snapshot_before'  => true,
+                        'preview_mode'     => 'side_by_side',
+                    ] ) );
+                },
+                'permission_callback' => function () { return current_user_can( 'manage_options' ); },
+            ],
+            [
+                'methods'             => 'POST',
+                'callback'            => function ( $req ) {
+                    $payload = $req->get_json_params();
+                    if ( ! is_array( $payload ) ) $payload = [];
+                    update_option( 'olo_design_preset_behavior', $payload );
+                    update_option( 'olo_settings_last_saved', time() );
+                    return rest_ensure_response( [ 'ok' => true ] );
+                },
+                'permission_callback' => function () { return current_user_can( 'manage_options' ); },
+            ],
+        ] );
+
+        // Design Presets — apply (stub graceful, l'apply reale richiede integrazione stylesStore).
+        register_rest_route( $ns, '/design-presets/apply', [
+            'methods'             => 'POST',
+            'callback'            => function ( $req ) {
+                $p = $req->get_json_params();
+                $preset_id = sanitize_key( $p['preset_id'] ?? '' );
+                update_option( 'olo_active_preset_id', $preset_id );
+                update_option( 'olo_settings_last_saved', time() );
+                // TODO: applicare effettivamente i colori/font/tokens del preset a `olo_styles`,
+                // `olo_global_colors`, `olo_global_typography`. Per ora salva solo il flag attivo.
+                return rest_ensure_response( [ 'ok' => true, 'preset_id' => $preset_id ] );
+            },
+            'permission_callback' => function () { return current_user_can( 'manage_options' ); },
+        ] );
+
+        // Design Presets — snapshots (stub: list ritorna [], action: noop)
+        register_rest_route( $ns, '/design-presets/snapshots', [
+            [
+                'methods'             => 'GET',
+                'callback'            => function () {
+                    return rest_ensure_response( get_option( 'olo_design_preset_snapshots', [] ) );
+                },
+                'permission_callback' => function () { return current_user_can( 'manage_options' ); },
+            ],
+            [
+                'methods'             => 'POST',
+                'callback'            => function () {
+                    // Stub — TODO: implementare restore/delete reale che ripristina olo_styles ecc.
+                    return rest_ensure_response( [ 'ok' => true ] );
+                },
+                'permission_callback' => function () { return current_user_can( 'manage_options' ); },
+            ],
+        ] );
+
+        // Redirects — CRUD su tabella custom + log 404
+        register_rest_route( $ns, '/redirects', [
+            [
+                'methods'             => 'GET',
+                'callback'            => function () {
+                    global $wpdb;
+                    $redirects = [];
+                    $log404    = [];
+                    $rt = $wpdb->prefix . 'olo_redirects';
+                    $lt = $wpdb->prefix . 'olo_404_log';
+                    if ( $wpdb->get_var( "SHOW TABLES LIKE '$rt'" ) === $rt ) {
+                        $redirects = $wpdb->get_results( "SELECT id, from_url, to_url, type, hits FROM $rt ORDER BY id DESC LIMIT 500", ARRAY_A );
+                    }
+                    if ( $wpdb->get_var( "SHOW TABLES LIKE '$lt'" ) === $lt ) {
+                        $log404 = $wpdb->get_results( "SELECT id, url, hits, last_hit FROM $lt ORDER BY hits DESC LIMIT 200", ARRAY_A );
+                    }
+                    $advanced = (array) get_option( 'olo_seo_advanced', [] );
+                    return rest_ensure_response( [
+                        'redirects'    => $redirects ?: [],
+                        'log404'       => $log404 ?: [],
+                        'indexnow_key' => $advanced['indexnow_key'] ?? '',
+                    ] );
+                },
+                'permission_callback' => function () { return current_user_can( 'manage_options' ); },
+            ],
+            [
+                'methods'             => 'POST',
+                'callback'            => function ( $req ) {
+                    global $wpdb;
+                    $p = $req->get_json_params();
+                    $action = $p['action'] ?? '';
+                    $rt = $wpdb->prefix . 'olo_redirects';
+                    $lt = $wpdb->prefix . 'olo_404_log';
+                    if ( $action === 'add' ) {
+                        if ( empty( $p['from_url'] ) || empty( $p['to_url'] ) ) {
+                            return new WP_Error( 'missing', 'from_url e to_url obbligatori', [ 'status' => 400 ] );
+                        }
+                        $wpdb->insert( $rt, [
+                            'from_url'   => sanitize_text_field( $p['from_url'] ),
+                            'to_url'     => esc_url_raw( $p['to_url'] ),
+                            'type'       => (int) ( $p['type'] ?? 301 ),
+                            'hits'       => 0,
+                            'created_at' => current_time( 'mysql' ),
+                        ] );
+                        return rest_ensure_response( [ 'ok' => true, 'id' => $wpdb->insert_id ] );
+                    }
+                    if ( $action === 'delete' && ! empty( $p['id'] ) ) {
+                        $wpdb->delete( $rt, [ 'id' => (int) $p['id'] ], [ '%d' ] );
+                        return rest_ensure_response( [ 'ok' => true ] );
+                    }
+                    if ( $action === 'clear_404' ) {
+                        $wpdb->query( "TRUNCATE TABLE $lt" );
+                        return rest_ensure_response( [ 'ok' => true ] );
+                    }
+                    if ( $action === 'save_indexnow' ) {
+                        $adv = (array) get_option( 'olo_seo_advanced', [] );
+                        $adv['indexnow_key'] = sanitize_text_field( $p['indexnow_key'] ?? '' );
+                        update_option( 'olo_seo_advanced', $adv );
+                        update_option( 'olo_settings_last_saved', time() );
+                        return rest_ensure_response( [ 'ok' => true ] );
+                    }
+                    return new WP_Error( 'invalid_action', 'Azione non riconosciuta', [ 'status' => 400 ] );
+                },
+                'permission_callback' => function () { return current_user_can( 'manage_options' ); },
+            ],
+        ] );
     }
 
     public function rest_get_api_keys() {
@@ -1094,52 +2916,53 @@ class Olo_Builder {
     }
 
     public function rest_get_breakpoints() {
-        $bp = get_option( 'olo_default_breakpoints', [] );
-        $enabled = get_option( 'olo_breakpoints_enabled', [] );
-        $defaults = [
-            'widescreen'       => 1400,
-            'tablet_landscape' => 1200,
-            'tablet'           => 960,
-            'mobile_landscape' => 640,
-            'mobile'           => 480,
+        $defaults_bps = [
+            [ 'id' => 'desktop_xl', 'name' => 'Desktop XL', 'min' => '1440', 'max' => '∞',    'icon' => '🖥️', 'is_default' => false ],
+            [ 'id' => 'desktop',    'name' => 'Desktop',    'min' => '1200', 'max' => '1439', 'icon' => '🖥️', 'is_default' => true  ],
+            [ 'id' => 'laptop',     'name' => 'Laptop',     'min' => '992',  'max' => '1199', 'icon' => '💻', 'is_default' => false ],
+            [ 'id' => 'tablet',     'name' => 'Tablet',     'min' => '768',  'max' => '991',  'icon' => '📱', 'is_default' => false ],
+            [ 'id' => 'mobile_l',   'name' => 'Mobile L',   'min' => '576',  'max' => '767',  'icon' => '📱', 'is_default' => false ],
+            [ 'id' => 'mobile',     'name' => 'Mobile',     'min' => '0',    'max' => '575',  'icon' => '📱', 'is_default' => false ],
         ];
-        $enabled_defaults = [
-            'widescreen'       => true,
-            'tablet_landscape' => false,
-            'tablet'           => true,
-            'mobile_landscape' => false,
-            'mobile'           => true,
-        ];
+        $defaults_adv = [ 'strategy' => 'mobile' ];
+
+        $bps = get_option( 'olo_breakpoints_v2', $defaults_bps );
+        $adv = get_option( 'olo_breakpoints_advanced', $defaults_adv );
+
+        if ( ! is_array( $bps ) || empty( $bps ) ) $bps = $defaults_bps;
+        if ( ! is_array( $adv ) ) $adv = $defaults_adv;
+
         return rest_ensure_response( [
-            'values'  => wp_parse_args( $bp, $defaults ),
-            'enabled' => wp_parse_args( $enabled, $enabled_defaults ),
+            'breakpoints' => array_values( $bps ),
+            'advanced'    => wp_parse_args( $adv, $defaults_adv ),
         ] );
     }
 
     public function rest_put_breakpoints( $request ) {
-        $body    = $request->get_json_params();
-        $allowed = [ 'widescreen', 'tablet_landscape', 'tablet', 'mobile_landscape', 'mobile' ];
+        $body = $request->get_json_params();
 
-        // Save pixel values
-        if ( isset( $body['values'] ) && is_array( $body['values'] ) ) {
-            $bp = [];
-            foreach ( $allowed as $k ) {
-                if ( isset( $body['values'][ $k ] ) ) {
-                    $bp[ $k ] = absint( $body['values'][ $k ] );
-                }
+        if ( isset( $body['breakpoints'] ) && is_array( $body['breakpoints'] ) ) {
+            $clean = [];
+            foreach ( $body['breakpoints'] as $b ) {
+                if ( ! is_array( $b ) ) continue;
+                $clean[] = [
+                    'id'         => sanitize_key( $b['id']   ?? 'bp_' . wp_generate_password( 6, false ) ),
+                    'name'       => sanitize_text_field( $b['name'] ?? '' ),
+                    'min'        => sanitize_text_field( (string) ( $b['min'] ?? '0' ) ),
+                    'max'        => sanitize_text_field( (string) ( $b['max'] ?? '∞' ) ),
+                    'icon'       => sanitize_text_field( $b['icon'] ?? '📱' ),
+                    'is_default' => ! empty( $b['is_default'] ),
+                ];
             }
-            update_option( 'olo_default_breakpoints', $bp );
+            update_option( 'olo_breakpoints_v2', $clean );
         }
 
-        // Save enabled states
-        if ( isset( $body['enabled'] ) && is_array( $body['enabled'] ) ) {
-            $en = [];
-            foreach ( $allowed as $k ) {
-                $en[ $k ] = ! empty( $body['enabled'][ $k ] );
-            }
-            update_option( 'olo_breakpoints_enabled', $en );
+        if ( isset( $body['advanced'] ) && is_array( $body['advanced'] ) ) {
+            $strategy = in_array( $body['advanced']['strategy'] ?? '', [ 'mobile', 'desktop' ], true ) ? $body['advanced']['strategy'] : 'mobile';
+            update_option( 'olo_breakpoints_advanced', [ 'strategy' => $strategy ] );
         }
 
+        update_option( 'olo_settings_last_saved', time() );
         return rest_ensure_response( [ 'success' => true ] );
     }
 
@@ -1150,6 +2973,13 @@ class Olo_Builder {
         require_once OLO_PATH . 'includes/tiles/class-section-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-column-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-hero-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-hero-split-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-section-header-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-info-cards-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-product-cards-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-step-timeline-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-cta-banner-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-trust-strip-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-content-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-image-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-video-tile.php';
@@ -1303,6 +3133,13 @@ class Olo_Builder {
         $manager->register_tile( new Olo_Section_Tile() );
         $manager->register_tile( new Olo_Column_Tile() );
         $manager->register_tile( new Olo_Hero_Tile() );
+        $manager->register_tile( new Olo_HeroSplit_Tile() );
+        $manager->register_tile( new Olo_SectionHeader_Tile() );
+        $manager->register_tile( new Olo_InfoCards_Tile() );
+        $manager->register_tile( new Olo_ProductCards_Tile() );
+        $manager->register_tile( new Olo_StepTimeline_Tile() );
+        $manager->register_tile( new Olo_CtaBanner_Tile() );
+        $manager->register_tile( new Olo_TrustStrip_Tile() );
         $manager->register_tile( new Olo_Content_Tile() );
         $manager->register_tile( new Olo_Image_Tile() );
         $manager->register_tile( new Olo_Video_Tile() );
@@ -1521,6 +3358,20 @@ class Olo_Builder {
         $db     = new Olo_Database();
         $result = $db->list_templates( [ 'status' => 'published', 'type' => 'megapanel', 'per_page' => 100 ] );
         $list   = [ [ 'value' => 0, 'label' => 'Auto (colonne)' ] ];
+        foreach ( $result['items'] as $t ) {
+            $list[] = [ 'value' => (int) $t['id'], 'label' => $t['title'] ];
+        }
+        return $list;
+    }
+
+    /**
+     * Get published templates of type "widget" — riusabili come contenuto
+     * delle schede/items dei tile container (accordion, tab, slider, ecc.).
+     */
+    private function get_widget_templates() {
+        $db     = new Olo_Database();
+        $result = $db->list_templates( [ 'status' => 'published', 'type' => 'widget', 'per_page' => 100 ] );
+        $list   = [ [ 'value' => 0, 'label' => '— Nessun widget —' ] ];
         foreach ( $result['items'] as $t ) {
             $list[] = [ 'value' => (int) $t['id'], 'label' => $t['title'] ];
         }

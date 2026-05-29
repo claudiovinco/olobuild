@@ -11,7 +11,12 @@ class Olo_DescList_Tile extends Olo_Tile_Base {
     protected $icon     = 'dashicons-editor-justify';
     protected $category = 'text';
     protected $defaults = [
-        'items'                => [],
+        'preset' => 'custom',
+        'items'                => [
+            [ 'term' => 'Anno di fondazione', 'definition' => '2024', 'icon' => 'calendar' ],
+            [ 'term' => 'Sede principale', 'definition' => 'Milano, Italia', 'icon' => 'location' ],
+            [ 'term' => 'Clienti serviti', 'definition' => 'Oltre 500 aziende', 'icon' => 'users' ],
+        ],
         'layout'               => 'stacked',
         'show_icon'            => true,
         'icon_color'           => '',
@@ -26,6 +31,18 @@ class Olo_DescList_Tile extends Olo_Tile_Base {
         'spacing'              => '16',
         'striped'              => false,
         'striped_color'        => 'rgba(255,255,255,0.03)',
+        // Text effects
+        'text_effect'             => 'none',
+        'text_effect_target'      => 'definition',
+        'text_effect_speed'       => '50',
+        'text_effect_delay'       => '0',
+        'text_effect_loop'        => false,
+        'text_effect_cursor'      => true,
+        'text_effect_cursor_char' => '|',
+        'text_effect_color'       => '',
+        'text_effect_color_to'    => '',
+        'text_effect_phrases'     => '',
+        'text_effect_pause'       => '1500',
             'border'                  => [],
         'border_hover'            => [],
         'border_hover_duration'   => 300,
@@ -158,13 +175,23 @@ class Olo_DescList_Tile extends Olo_Tile_Base {
             }
         </style>
 
-        <div class="olo-desclist <?php echo esc_attr( $uid ); ?><?php echo $show_icon ? ' mdl-has-icon' : ''; ?>">
+        <?php
+        $dl_ta = $s['text_align'] ?? '';
+        $dl_ta_css = in_array( $dl_ta, [ 'left', 'center', 'right', 'justify' ], true ) ? 'text-align:' . $dl_ta . ';' : '';
+        ?>
+        <div class="olo-desclist <?php echo esc_attr( $uid ); ?><?php echo $show_icon ? ' mdl-has-icon' : ''; ?> olo-dl-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" style="<?php echo $dl_ta_css; ?>">
             <?php foreach ( $items as $item ) :
                 $icon = $item['icon'] ?? '';
                 $has_icon = $show_icon && ! empty( $icon );
                 $has_link = ! empty( $item['link'] );
                 $item_tag  = $has_link ? '<a href="' . esc_url( $item['link'] ) . '" class="mdl-item" style="text-decoration:none;color:inherit;display:block;">' : '<div class="mdl-item">';
                 $item_close = $has_link ? '</a>' : '</div>';
+            ?>
+            <?php
+                $term_plain = wp_strip_all_tags( $item['term'] );
+                $def_plain  = wp_strip_all_tags( $item['definition'] );
+                list( $term_cls, $term_data ) = $this->tfx_attrs( $s, 'term', $term_plain );
+                list( $def_cls,  $def_data  ) = $this->tfx_attrs( $s, 'definition', $def_plain );
             ?>
             <?php echo $item_tag; ?>
                 <?php if ( $layout === 'stacked' ) : ?>
@@ -175,8 +202,8 @@ class Olo_DescList_Tile extends Olo_Tile_Base {
                             </span>
                         <?php endif; ?>
                         <div class="mdl-text">
-                            <dt class="mdl-term"><?php echo esc_html( wp_strip_all_tags( $item['term'] ) ); ?></dt>
-                            <dd class="mdl-def"><?php echo nl2br( esc_html( wp_strip_all_tags( $item['definition'] ) ) ); ?></dd>
+                            <dt class="mdl-term<?php echo $term_cls; ?>"<?php echo $term_data; ?>><?php echo esc_html( $term_plain ); ?></dt>
+                            <dd class="mdl-def<?php echo $def_cls; ?>"<?php echo $def_data; ?>><?php echo nl2br( esc_html( $def_plain ) ); ?></dd>
                         </div>
                     </div>
                 <?php elseif ( $layout === 'inline' ) : ?>
@@ -186,8 +213,8 @@ class Olo_DescList_Tile extends Olo_Tile_Base {
                                 <?php echo $this->render_icon( $icon, $icon_size ); ?>
                             </span>
                         <?php endif; ?>
-                        <dt class="mdl-term"><?php echo esc_html( wp_strip_all_tags( $item['term'] ) ); ?></dt>
-                        <dd class="mdl-def"><?php echo nl2br( esc_html( wp_strip_all_tags( $item['definition'] ) ) ); ?></dd>
+                        <dt class="mdl-term<?php echo $term_cls; ?>"<?php echo $term_data; ?>><?php echo esc_html( $term_plain ); ?></dt>
+                        <dd class="mdl-def<?php echo $def_cls; ?>"<?php echo $def_data; ?>><?php echo nl2br( esc_html( $def_plain ) ); ?></dd>
                     </div>
                 <?php elseif ( $layout === 'grid' ) : ?>
                     <div class="mdl-row">
@@ -196,14 +223,18 @@ class Olo_DescList_Tile extends Olo_Tile_Base {
                                 <?php echo $this->render_icon( $icon, $icon_size ); ?>
                             </span>
                         <?php endif; ?>
-                        <dt class="mdl-term"><?php echo esc_html( wp_strip_all_tags( $item['term'] ) ); ?></dt>
-                        <dd class="mdl-def"><?php echo nl2br( esc_html( wp_strip_all_tags( $item['definition'] ) ) ); ?></dd>
+                        <dt class="mdl-term<?php echo $term_cls; ?>"<?php echo $term_data; ?>><?php echo esc_html( $term_plain ); ?></dt>
+                        <dd class="mdl-def<?php echo $def_cls; ?>"<?php echo $def_data; ?>><?php echo nl2br( esc_html( $def_plain ) ); ?></dd>
                     </div>
                 <?php endif; ?>
             <?php echo $item_close; ?>
             <?php endforeach; ?>
         </div>
         <?php
+        // Text effects: CSS scoped + runtime script (una sola volta per request)
+        $tfx_css = $this->tfx_css( $s, '.olo-desclist' );
+        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
+        $this->tfx_print_script();
                 // Border system
         $border_css        = $this->build_border_css( $s['border'] ?? [] );
         $border_hover_css  = $this->build_border_hover_css( ".{$uid}", $s['border'] ?? [], $s['border_hover'] ?? [], intval( $s['border_hover_duration'] ?? 300 ) );

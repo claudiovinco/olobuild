@@ -4,8 +4,8 @@
     <template v-if="settings.mode === 'single' || (!settings.mode)">
       <div
         :style="{
-          height: (settings.height || 400) + 'px',
-          borderRadius: (settings.border_radius || 0) + 'px',
+          height: (parseInt(settings.height) || 400) + 'px',
+          borderRadius: (parseInt(settings.border_radius) || 0) + 'px',
           overflow: 'hidden',
           position: 'relative',
           border: '1px solid #D1D5DB',
@@ -20,8 +20,7 @@
             border: 'none',
             pointerEvents: editMode ? 'auto' : 'none',
           }"
-          sandbox="allow-scripts"
-          loading="lazy"
+          sandbox="allow-scripts allow-same-origin"
         ></iframe>
 
         <!-- Edit mode toggle -->
@@ -107,7 +106,7 @@
         </div>
         <div>Cluster: <span class="mb-text-gray-300">{{ settings.svc_cluster !== false ? 'S&igrave;' : 'No' }}</span> &middot; Stile: <span class="mb-text-gray-300">{{ settings.svc_tile_layer || 'positron' }}</span></div>
       </div>
-      <span class="mb-text-[10px] mb-text-gray-600 mb-mt-1">Mappa interattiva con marker servizi e filtri combinati</span>
+      <span class="mb-text-[10px] mb-text-gray-600 mb-mt-1">{{ t('Mappa interattiva con marker servizi e filtri combinati') }}</span>
     </div>
 
     <!-- Locations mode: informative placeholder -->
@@ -127,7 +126,7 @@
           &middot; Filtri: <span class="mb-text-gray-300">{{ settings.loc_show_filters ? 'S\u00EC' : 'No' }}</span>
         </div>
       </div>
-      <span class="mb-text-[10px] mb-text-gray-600 mb-mt-1">Mappa interattiva renderizzata nel frontend</span>
+      <span class="mb-text-[10px] mb-text-gray-600 mb-mt-1">{{ t('Mappa interattiva renderizzata nel frontend') }}</span>
     </div>
   </div>
 </template>
@@ -135,6 +134,7 @@
 <script setup>
 import { computed, ref, onMounted, onUnmounted } from 'vue';
 import { useTilesStore } from '@/stores/tiles';
+import { t } from '@/i18n';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },

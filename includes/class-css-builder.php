@@ -34,7 +34,19 @@ class Olo_CSS_Builder {
      */
     public function get_effective_bg( $style ) {
         if ( ! empty( $style['bg'] ) && ! empty( $style['bg']['type'] ) && $style['bg']['type'] !== 'none' ) {
-            return $style['bg'];
+            $bg = $style['bg'];
+            // Normalizza: se il type richiede un asset ma l'asset manca, fallback al
+            // color (se presente) come 'solid', altrimenti 'none'. Caso classico:
+            // l'utente seleziona galleria/immagine/video, poi cambia idea e mette un
+            // colore — il type resta sul vecchio valore ma l'asset è vuoto → bg invisibile.
+            if ( $bg['type'] === 'image'   && empty( $bg['image_url'] ) ) {
+                $bg['type'] = ! empty( $bg['color'] ) ? 'solid' : 'none';
+            } elseif ( $bg['type'] === 'video'   && empty( $bg['video_url'] ) ) {
+                $bg['type'] = ! empty( $bg['color'] ) ? 'solid' : 'none';
+            } elseif ( $bg['type'] === 'gallery' && empty( $bg['gallery_images'] ) ) {
+                $bg['type'] = ! empty( $bg['color'] ) ? 'solid' : 'none';
+            }
+            return $bg;
         }
         if ( ! empty( $style['bg_color'] ) ) {
             return [ 'type' => 'solid', 'color' => $style['bg_color'] ];
@@ -67,6 +79,72 @@ class Olo_CSS_Builder {
         if ( $bg['type'] === 'pattern' && ! empty( $bg['pattern_type'] ) ) {
             return $this->build_pattern_css( $bg );
         }
+        if ( $bg['type'] === 'image' && ! empty( $bg['image_url'] ) ) {
+            $url      = esc_url_raw( $bg['image_url'] );
+            $position = sanitize_text_field( $bg['image_position'] ?? 'center center' );
+            $size     = sanitize_text_field( $bg['image_size']     ?? 'cover' );
+            $repeat   = sanitize_text_field( $bg['image_repeat']   ?? 'no-repeat' );
+            $attach   = ! empty( $bg['image_parallax'] ) ? 'fixed' : 'scroll';
+            return "background-image:url('{$url}');background-position:" . esc_attr( $position )
+                . ';background-size:' . esc_attr( $size )
+                . ';background-repeat:' . esc_attr( $repeat )
+                . ';background-attachment:' . esc_attr( $attach );
+        }
+        return '';
+    }
+
+    /**
+     * Genera markup HTML per bg di tipo video o gallery.
+     * I tile chiamano questo metodo per inserire un <video> o <div slideshow>
+     * dentro il loro wrapper. Lo styling (position:absolute, inset:0) è applicato
+     * via classe "olo-bg-media" che ogni tile deve definire come overflow:hidden,
+     * position:relative sul wrapper.
+     *
+     * @param array  $bg     Background config.
+     * @param string $scope  Classe CSS univoca del tile (per scoping). Opzionale.
+     * @return string HTML markup da iniettare dentro il wrapper del tile.
+     */
+    public function get_bg_html_markup( $bg, $scope = '' ) {
+        if ( empty( $bg['type'] ) ) return '';
+        $type = sanitize_key( $bg['type'] );
+
+        if ( $type === 'video' && ! empty( $bg['video_url'] ) ) {
+            $url       = esc_url( $bg['video_url'] );
+            $poster    = ! empty( $bg['video_poster'] ) ? ' poster="' . esc_url( $bg['video_poster'] ) . '"' : '';
+            $loop      = empty( $bg['video_no_loop'] )     ? ' loop' : '';
+            $muted     = ! empty( $bg['video_audio'] )     ? '' : ' muted';
+            $autoplay  = empty( $bg['video_no_autoplay'] ) ? ' autoplay' : '';
+            $controls  = ! empty( $bg['video_controls'] )  ? ' controls' : '';
+            $position  = sanitize_text_field( $bg['video_position'] ?? 'center center' );
+            $size      = sanitize_text_field( $bg['video_size']     ?? 'cover' );
+            $object_fit = ( $size === 'contain' ) ? 'contain' : ( $size === 'fill' ? 'fill' : 'cover' );
+            $style = 'position:absolute;inset:0;width:100%;height:100%;object-fit:' . $object_fit
+                   . ';object-position:' . esc_attr( $position )
+                   . ';z-index:0;pointer-events:none';
+            return '<video class="olo-bg-video" src="' . $url . '"'
+                . $poster . $autoplay . $muted . $loop . $controls
+                . ' playsinline preload="metadata" style="' . esc_attr( $style ) . '"></video>';
+        }
+
+        if ( $type === 'gallery' && ! empty( $bg['gallery_images'] ) && is_array( $bg['gallery_images'] ) ) {
+            $duration  = max( 1000, intval( $bg['gallery_duration'] ?? 4000 ) );
+            $transition = sanitize_key( $bg['gallery_transition'] ?? 'fade' );
+            $uid = $scope ? sanitize_html_class( $scope ) . '-bggal' : 'olo-bggal-' . wp_unique_id();
+            $imgs = '';
+            foreach ( $bg['gallery_images'] as $i => $img ) {
+                $url = esc_url( is_array( $img ) ? ( $img['url'] ?? '' ) : $img );
+                if ( ! $url ) continue;
+                $imgs .= '<img src="' . $url . '" alt="" class="olo-bg-gallery-img' . ( $i === 0 ? ' is-active' : '' ) . '" />';
+            }
+            $css = '<style>'
+                 . '.' . $uid . '{position:absolute;inset:0;z-index:0;overflow:hidden}'
+                 . '.' . $uid . ' .olo-bg-gallery-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1s ease}'
+                 . '.' . $uid . ' .olo-bg-gallery-img.is-active{opacity:1}'
+                 . '</style>';
+            $js = '<script>(function(){var c=document.querySelector(".' . $uid . '");if(!c)return;var imgs=c.querySelectorAll(".olo-bg-gallery-img");if(imgs.length<2)return;var i=0;setInterval(function(){imgs[i].classList.remove("is-active");i=(i+1)%imgs.length;imgs[i].classList.add("is-active")},' . $duration . ');})();</script>';
+            return $css . '<div class="' . esc_attr( $uid ) . '">' . $imgs . '</div>' . $js;
+        }
+
         return '';
     }
 
@@ -123,18 +201,20 @@ class Olo_CSS_Builder {
      */
     public function build_pattern_css( $bg ) {
         $type    = sanitize_text_field( $bg['pattern_type'] ?? 'dots' );
-        $color   = esc_attr( $bg['pattern_color'] ?? '#000000' );
+        $color   = (string) ( $bg['pattern_color'] ?? '#000000' );
         $bg_clr  = esc_attr( $bg['pattern_bg_color'] ?? '#ffffff' );
         $size    = max( 8, intval( $bg['pattern_size'] ?? 20 ) );
         $opacity = max( 0.05, min( 1, ( intval( $bg['pattern_opacity'] ?? 50 ) ) / 100 ) );
 
-        // Convert hex color to rgba
-        $h = ltrim( $color, '#' );
-        $r = hexdec( substr( $h, 0, 2 ) ); $g = hexdec( substr( $h, 2, 2 ) ); $b = hexdec( substr( $h, 4, 2 ) );
-        if ( $r === false ) { $r = 0; }
-        if ( $g === false ) { $g = 0; }
-        if ( $b === false ) { $b = 0; }
-        $c = "rgba({$r},{$g},{$b},{$opacity})";
+        // Parse pattern_color: supporta hex (#rrggbb, #rgb) E rgba(r,g,b,a).
+        // BUG storico: usare hexdec() su una stringa rgba(...) produceva colori
+        // assurdi (es. "rgba(229,16,16,0.1)" → ltrim '#' lascia invariato →
+        // hexdec("rg")=0, hexdec("ba")=186, hexdec("(2")=2 → rgba(0,186,2,...)
+        // = verde brillante, da qui il bug del "pattern verde" segnalato).
+        $rgba = self::normalize_pattern_color( $color, $opacity );
+        $r = $rgba['r']; $g = $rgba['g']; $b = $rgba['b'];
+        $final_opacity = $rgba['a'];
+        $c = "rgba({$r},{$g},{$b},{$final_opacity})";
 
         $bg_image = '';
         $bg_size  = "{$size}px {$size}px";
@@ -194,7 +274,7 @@ class Olo_CSS_Builder {
                 $bg_image = "repeating-linear-gradient(0deg,{$c} 0px,{$c} 1px,transparent 1px,transparent {$size}px)";
                 break;
             case 'blueprint':
-                $thin_opacity = round( $opacity * 0.5, 2 );
+                $thin_opacity = round( $final_opacity * 0.5, 2 );
                 $c_thin = "rgba({$r},{$g},{$b},{$thin_opacity})";
                 $sub = max( 1, round( $size / 5 ) );
                 $bg_image = "linear-gradient({$c} 1px,transparent 1px),linear-gradient(90deg,{$c} 1px,transparent 1px),linear-gradient({$c_thin} 1px,transparent 1px),linear-gradient(90deg,{$c_thin} 1px,transparent 1px)";
@@ -219,11 +299,52 @@ class Olo_CSS_Builder {
     }
 
     /**
+     * Normalize a color string (hex #rrggbb / #rgb OR rgba()) to RGB+alpha.
+     * Restituisce alpha finale = pattern_opacity * color_alpha.
+     * Fallback nero per stringhe non riconosciute (es. var(--olo-color-*)).
+     */
+    public static function normalize_pattern_color( $color, $opacity ) {
+        $color = trim( (string) $color );
+        $opacity = max( 0, min( 1, (float) $opacity ) );
+
+        // rgba()/rgb() — combina pattern opacity con alpha del colore
+        if ( preg_match( '/^rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)(?:\s*,\s*([\d.]+))?\s*\)/i', $color, $m ) ) {
+            $color_alpha = isset( $m[4] ) && $m[4] !== '' ? (float) $m[4] : 1.0;
+            return [
+                'r' => min( 255, max( 0, (int) $m[1] ) ),
+                'g' => min( 255, max( 0, (int) $m[2] ) ),
+                'b' => min( 255, max( 0, (int) $m[3] ) ),
+                'a' => round( $opacity * $color_alpha, 4 ),
+            ];
+        }
+
+        // Hex #rgb o #rrggbb
+        $h = ltrim( $color, '#' );
+        if ( strlen( $h ) === 3 && preg_match( '/^[0-9a-fA-F]{3}$/', $h ) ) {
+            $h = $h[0] . $h[0] . $h[1] . $h[1] . $h[2] . $h[2];
+        }
+        if ( preg_match( '/^[0-9a-fA-F]{6}$/', $h ) ) {
+            return [
+                'r' => hexdec( substr( $h, 0, 2 ) ),
+                'g' => hexdec( substr( $h, 2, 2 ) ),
+                'b' => hexdec( substr( $h, 4, 2 ) ),
+                'a' => $opacity,
+            ];
+        }
+
+        // Fallback (var CSS, color name non gestiti, stringa invalida): nero
+        return [ 'r' => 0, 'g' => 0, 'b' => 0, 'a' => $opacity ];
+    }
+
+    /**
      * Generate SVG markup for complex patterns (triangles, hexagons, waves, etc.).
      */
     private function build_pattern_svg( $type, $color, $opacity, $size ) {
-        $c = esc_attr( $color );
-        $o = floatval( $opacity );
+        // SVG fill/stroke ammette hex e (in SVG2) rgba, ma per massima compatibilità
+        // convertiamo SEMPRE a hex e gestiamo l'alpha via fill-opacity/stroke-opacity.
+        $rgba = self::normalize_pattern_color( $color, $opacity );
+        $c = sprintf( '#%02x%02x%02x', $rgba['r'], $rgba['g'], $rgba['b'] );
+        $o = $rgba['a']; // include già pattern_opacity * color_alpha
         $sz = intval( $size );
 
         switch ( $type ) {

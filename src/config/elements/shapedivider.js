@@ -1,8 +1,16 @@
 
 import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
+import { t } from '@/i18n';
+
+/**
+ * Tile ShapeDivider — split CONTENUTO/STILE (regola universale Olobuild).
+ *   fields[]      → forma, posizione (top/bottom), flip orizzontale/verticale
+ *   styleFields[] → colore, altezza, larghezza, z-index, altezze responsive, bordo
+ *   AVANZATE      → meta tecnico (id/class/condizioni)
+ */
 export default {
   type: 'shapedivider',
-  name: 'Shape Divider',
+  name: t('Shape Divider'),
   icon: 'dashicons-editor-contract',
   category: 'layout',
   defaults: {
@@ -21,33 +29,39 @@ export default {
     border_hover_duration: 300,
     ...borderEffectDefaults,
   },
-  fields: [
-    { key: 'shape', label: 'Forma', type: 'select', options: [
-      { value: 'wave', label: 'Onda' },
-      { value: 'wave2', label: 'Onda doppia' },
-      { value: 'triangle', label: 'Triangolo' },
-      { value: 'tilt', label: 'Inclinato' },
-      { value: 'arrow', label: 'Freccia' },
-      { value: 'zigzag', label: 'Zigzag' },
-      { value: 'mountains', label: 'Montagne' },
-      { value: 'clouds', label: 'Nuvole' },
-      { value: 'drops', label: 'Gocce' },
-      { value: 'curve', label: 'Curva' },
-    ]},
-    { key: 'position', label: 'Posizione', type: 'select', options: [
-      { value: 'top', label: 'Alto' },
-      { value: 'bottom', label: 'Basso' },
-    ]},
-    { key: 'color', label: 'Colore', type: 'color' },
-    { key: 'height', label: 'Altezza (px)', type: 'range', min: 10, max: 500, step: 5 },
-    { key: 'width', label: 'Larghezza (%)', type: 'range', min: 100, max: 300, step: 5 },
-    { key: 'flip_horizontal', label: 'Specchia orizzontale', type: 'toggle' },
-    { key: 'flip_vertical', label: 'Specchia verticale', type: 'toggle' },
-    { key: 'z_index', label: 'Z-Index', type: 'range', min: 0, max: 99, step: 1 },
 
-    { type: 'separator', label: 'Responsive' },
-    { key: 'responsive_height_tablet', label: 'Altezza tablet (px)', type: 'text' },
-    { key: 'responsive_height_mobile', label: 'Altezza mobile (px)', type: 'text' },
+  // ─── CONTENUTO ─────────────────────────────────────────────
+  fields: [
+    { key: 'shape', label: t('Forma'), type: 'select', options: [
+      { value: 'wave', label: t('Onda') },
+      { value: 'wave2', label: t('Onda doppia') },
+      { value: 'triangle', label: t('Triangolo') },
+      { value: 'tilt', label: t('Inclinato') },
+      { value: 'arrow', label: t('Freccia') },
+      { value: 'zigzag', label: t('Zigzag') },
+      { value: 'mountains', label: t('Montagne') },
+      { value: 'clouds', label: t('Nuvole') },
+      { value: 'drops', label: t('Gocce') },
+      { value: 'curve', label: t('Curva') },
+    ]},
+    { key: 'position', label: t('Posizione'), type: 'select', options: [
+      { value: 'top', label: t('Alto') },
+      { value: 'bottom', label: t('Basso') },
+    ]},
+    { key: 'flip_horizontal', label: t('Specchia orizzontale'), type: 'toggle' },
+    { key: 'flip_vertical', label: t('Specchia verticale'), type: 'toggle' },
+  ],
+
+  // ─── STILE ─────────────────────────────────────────────────
+  styleFields: [
+    { key: 'color', label: t('Colore'), type: 'color' },
+    { key: 'height', label: t('Altezza (px)'), type: 'range', min: 10, max: 500, step: 5 },
+    { key: 'width', label: t('Larghezza (%)'), type: 'range', min: 100, max: 300, step: 5 },
+    { key: 'z_index', label: t('Z-Index'), type: 'range', min: 0, max: 99, step: 1 },
+
+    { type: 'separator', label: t('Responsive') },
+    { key: 'responsive_height_tablet', label: t('Altezza tablet (px)'), type: 'text' },
+    { key: 'responsive_height_mobile', label: t('Altezza mobile (px)'), type: 'text' },
     ...borderFields(),
   ],
 };

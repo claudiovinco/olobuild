@@ -216,7 +216,7 @@
         <button type="button" :style="submitStyle" style="margin-top:16px;">{{ s.register_button_text || 'Registrati' }}</button>
         <!-- Switch link -->
         <div v-if="s.mode === 'both'" style="text-align:center;margin-top:16px;font-size:13px;" :style="{ color: s.text_color || 'var(--olo-color-text-muted, #9CA3AF)' }">
-          Hai già un account? <a href="#" @click.prevent="activeTab = 'login'" style="text-decoration:none;font-weight:600;" :style="{ color: linkColor }">Accedi</a>
+          {{ t('Hai già un account?') }} <a href="#" @click.prevent="activeTab = 'login'" style="text-decoration:none;font-weight:600;" :style="{ color: linkColor }">{{ t('Accedi') }}</a>
         </div>
       </form>
     </template>

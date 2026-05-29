@@ -22,3 +22,11 @@ if ( ! defined( 'ABSPATH' ) ) {
     }
 </style>
 <div id="olobuilder-app"></div>
+<script>
+// bfcache busting: se il browser serve questa pagina dalla back-forward cache,
+// forziamo un hard reload. Altrimenti dopo un deploy l'utente che torna alla pagina
+// builder vedrebbe la versione cached con vecchio builder.js?ver=X.
+window.addEventListener('pageshow', function(e) {
+    if (e.persisted) window.location.reload();
+});
+</script>

@@ -1,11 +1,24 @@
 
-import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared.js';
+import { t } from '@/i18n';
+
+/**
+ * Tile Lang Switcher — split CONTENUTO/STILE (regola universale Olobuild).
+ *   fields[]      → stile contenutistico (bandiere/codici/nomi), layout (inline/dropdown/tabs/floating), posizione fluttuante,
+ *                   bordo tabs, formato etichetta, toggle visibilità (show_label, show_dropdown_arrow), compatto
+ *   styleFields[] → preset, bg, typography_preset, dimensioni (flag_size, circle_size, tabs_offset, tabs_size, gap),
+ *                   forma bandiere, colori, border-radius, bordo
+ *   AVANZATE      → meta tecnico (id/class/condizioni)
+ */
 export default {
   type: 'langswitcher',
-  name: 'Selettore lingua',
+  name: t('Selettore lingua'),
   icon: 'dashicons-translation',
   category: 'navigation',
   defaults: {
+    preset: 'custom',
+    bg: { type: 'none' },
+    typography_preset: '',
     style: 'flags',
     flag_shape: 'circle',
     flag_size: 24,
@@ -36,85 +49,110 @@ export default {
     border_hover_duration: 300,
     ...borderEffectDefaults,
   },
+
+  // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
-    { key: 'style', label: 'Stile', type: 'select', options: [
-      { value: 'flags', label: 'Bandiere' },
-      { value: 'flags_circle', label: 'Bandiere in cerchietto' },
-      { value: 'codes', label: 'Codici (IT/EN/DE)' },
-      { value: 'names', label: 'Nomi (Italiano/English)' },
-      { value: 'flags_text', label: 'Bandiere + codice' },
+    { type: 'separator', label: t('Stile contenuto') },
+    { key: 'style', label: t('Stile'), type: 'select', options: [
+      { value: 'flags', label: t('Bandiere') },
+      { value: 'flags_circle', label: t('Bandiere in cerchietto') },
+      { value: 'codes', label: t('Codici (IT/EN/DE)') },
+      { value: 'names', label: t('Nomi (Italiano/English)') },
+      { value: 'flags_text', label: t('Bandiere + codice') },
     ]},
-    { key: 'layout', label: 'Layout', type: 'select', options: [
-      { value: 'inline', label: 'Inline (dentro header/footer)' },
-      { value: 'dropdown', label: 'Dropdown' },
-      { value: 'tabs', label: 'Linguette fisse (bordo pagina)' },
-      { value: 'floating', label: 'Fluttuante (fisso su schermo)' },
+    { key: 'layout', label: t('Layout'), type: 'select', options: [
+      { value: 'inline', label: t('Inline (dentro header/footer)') },
+      { value: 'dropdown', label: t('Dropdown') },
+      { value: 'tabs', label: t('Linguette fisse (bordo pagina)') },
+      { value: 'floating', label: t('Fluttuante (fisso su schermo)') },
     ]},
-    { key: 'compact', label: 'Compatto (extra piccolo)', type: 'toggle' },
+    { key: 'compact', label: t('Compatto (extra piccolo)'), type: 'toggle' },
 
-    // Tabs options
-    { key: 'tabs_edge', label: 'Bordo', type: 'select',
+    { type: 'separator', label: t('Linguette / Fluttuante'), show: s => s.layout === 'tabs' || s.layout === 'floating' },
+    { key: 'tabs_edge', label: t('Bordo'), type: 'select',
       show: s => s.layout === 'tabs',
       options: [
-        { value: 'top', label: 'Alto (linguette che scendono)' },
-        { value: 'right', label: 'Destra (linguette laterali)' },
-        { value: 'left', label: 'Sinistra (linguette laterali)' },
+        { value: 'top', label: t('Alto (linguette che scendono)') },
+        { value: 'right', label: t('Destra (linguette laterali)') },
+        { value: 'left', label: t('Sinistra (linguette laterali)') },
       ]},
-    { key: 'tabs_offset', label: 'Distanza dal bordo (px)', type: 'range', min: 0, max: 200, step: 5,
-      show: s => s.layout === 'tabs' },
-    { key: 'tabs_size', label: 'Dimensione linguette', type: 'select',
-      show: s => s.layout === 'tabs',
-      options: [
-        { value: 'tiny', label: 'Minima' },
-        { value: 'small', label: 'Piccola' },
-        { value: 'normal', label: 'Normale' },
-      ]},
-
-    // Floating position
-    { key: 'floating_pos', label: 'Posizione fluttuante', type: 'select', options: [
-      { value: 'bottom-right', label: 'Basso destra' },
-      { value: 'bottom-left', label: 'Basso sinistra' },
-      { value: 'top-right', label: 'Alto destra' },
-      { value: 'top-left', label: 'Alto sinistra' },
-      { value: 'middle-right', label: 'Centro destra' },
-      { value: 'middle-left', label: 'Centro sinistra' },
+    { key: 'floating_pos', label: t('Posizione fluttuante'), type: 'select', options: [
+      { value: 'bottom-right', label: t('Basso destra') },
+      { value: 'bottom-left', label: t('Basso sinistra') },
+      { value: 'top-right', label: t('Alto destra') },
+      { value: 'top-left', label: t('Alto sinistra') },
+      { value: 'middle-right', label: t('Centro destra') },
+      { value: 'middle-left', label: t('Centro sinistra') },
     ], show: s => s.layout === 'floating' },
 
-    // Flag options
-    { key: 'flag_shape', label: 'Forma bandiere', type: 'select', options: [
-      { value: 'circle', label: 'Cerchio' },
-      { value: 'rounded', label: 'Rettangolo arrotondato' },
+    { type: 'separator', label: t('Etichetta') },
+    { key: 'show_label', label: t('Mostra etichetta sotto'), type: 'toggle',
+      show: s => s.style === 'flags' || s.style === 'flags_circle' },
+    { key: 'label_format', label: t('Formato etichetta'), type: 'select', options: [
+      { value: 'name', label: t('Nome completo') },
+      { value: 'code', label: t('Codice (IT/EN)') },
+    ], show: s => s.show_label },
+    { key: 'show_dropdown_arrow', label: t('Freccia dropdown'), type: 'toggle',
+      show: s => s.layout === 'dropdown' },
+  ],
+
+  // ─── STILE ─────────────────────────────────────────────────
+  styleFields: [
+    { type: 'separator', label: t('Preset stilistico') },
+    { key: 'preset', label: t('Stile'), type: 'select', options: [
+      { value: 'modern-clean',    label: t('Modern Clean') },
+      { value: 'minimal-mono',    label: t('Minimal Mono') },
+      { value: 'magazine-bold',   label: t('Magazine Bold') },
+      { value: 'editorial-serif', label: t('Editorial Serif') },
+      { value: 'compact-inline',  label: t('Compact Inline') },
+      { value: 'glass-frosted',   label: t('Glass Frosted') },
+      { value: 'neon-glow',       label: t('Neon Glow') },
+      { value: 'brutalist-stamp', label: t('Brutalist Stamp') },
+      { value: 'gradient-aurora', label: t('Gradient Aurora') },
+      { value: 'sticker-fun',     label: t('Sticker Fun') },
+      { value: 'retro-terminal',  label: t('Retro Terminal') },
+      { value: 'tilt-3d',         label: t('3D Tilt') },
+      { value: 'custom',          label: t('Personalizzato') },
+    ] },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
+
+    { type: 'separator', label: t('Dimensioni linguette'), show: s => s.layout === 'tabs' },
+    { key: 'tabs_offset', label: t('Distanza dal bordo (px)'), type: 'range', min: 0, max: 200, step: 5,
+      show: s => s.layout === 'tabs' },
+    { key: 'tabs_size', label: t('Dimensione linguette'), type: 'select',
+      show: s => s.layout === 'tabs',
+      options: [
+        { value: 'tiny', label: t('Minima') },
+        { value: 'small', label: t('Piccola') },
+        { value: 'normal', label: t('Normale') },
+      ]},
+
+    { type: 'separator', label: t('Bandiere'),
+      show: s => s.style === 'flags' || s.style === 'flags_text' || s.style === 'flags_circle' },
+    { key: 'flag_shape', label: t('Forma bandiere'), type: 'select', options: [
+      { value: 'circle', label: t('Cerchio') },
+      { value: 'rounded', label: t('Rettangolo arrotondato') },
     ], show: s => s.style === 'flags' || s.style === 'flags_text' },
-    { key: 'flag_size', label: 'Dimensione bandiere (px)', type: 'range', min: 14, max: 48,
+    { key: 'flag_size', label: t('Dimensione bandiere (px)'), type: 'range', min: 14, max: 48,
       show: s => s.style === 'flags' || s.style === 'flags_text' || s.style === 'flags_circle' },
 
-    // Circle badge options
-    { key: 'circle_size', label: 'Diametro cerchietto (px)', type: 'range', min: 24, max: 56, step: 2,
+    { key: 'circle_size', label: t('Diametro cerchietto (px)'), type: 'range', min: 24, max: 56, step: 2,
       show: s => s.style === 'flags_circle' },
-    { key: 'circle_bg', label: 'Sfondo cerchietto', type: 'color',
+    { key: 'circle_bg', label: t('Sfondo cerchietto'), type: 'color',
       show: s => s.style === 'flags_circle' },
-    { key: 'circle_border', label: 'Bordo cerchietto', type: 'color',
+    { key: 'circle_border', label: t('Bordo cerchietto'), type: 'color',
       show: s => s.style === 'flags_circle' },
 
-    { key: 'show_label', label: 'Mostra etichetta sotto', type: 'toggle',
-      show: s => s.style === 'flags' || s.style === 'flags_circle' },
-    { key: 'label_format', label: 'Formato etichetta', type: 'select', options: [
-      { value: 'name', label: 'Nome completo' },
-      { value: 'code', label: 'Codice (IT/EN)' },
-    ], show: s => s.show_label },
-    { key: 'gap', label: 'Spazio tra elementi (px)', type: 'range', min: 0, max: 24 },
-    { key: 'show_dropdown_arrow', label: 'Freccia dropdown', type: 'toggle',
-      show: s => s.layout === 'dropdown' },
+    { type: 'separator', label: t('Spaziatura') },
+    { key: 'gap', label: t('Spazio tra elementi (px)'), type: 'range', min: 0, max: 24 },
 
-    // Colori
-    { key: '_sep_colors', label: 'Colori', type: 'separator' },
-    { key: 'active_bg', label: 'Sfondo lingua attiva', type: 'color' },
-    { key: 'active_color', label: 'Testo lingua attiva', type: 'color' },
-    { key: 'bg', label: 'Sfondo', type: 'color' },
-    { key: 'color', label: 'Testo', type: 'color' },
-    { key: 'border_color', label: 'Bordo', type: 'color' },
-    { key: 'border_radius', label: 'Raggio bordo (px)', type: 'border-radius' },
-    { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
+    { type: 'separator', label: t('Colori') },
+    { key: 'active_bg', label: t('Sfondo lingua attiva'), type: 'color' },
+    { key: 'active_color', label: t('Testo lingua attiva'), type: 'color' },
+    { key: 'bg', label: t('Sfondo'), type: 'color' },
+    { key: 'color', label: t('Testo'), type: 'color' },
+    { key: 'border_color', label: t('Bordo'), type: 'color' },
+    withHover({ key: 'border_radius', label: t('Raggio bordo (px)'), type: 'border-radius' }),
     ...borderFields(),
   ],
 };

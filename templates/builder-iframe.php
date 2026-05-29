@@ -49,8 +49,10 @@ if ( class_exists( 'Olo_Style_System' ) ) {
 }
 ?>
 <style>
-html, body { margin: 0; padding: 0; background: #fff; }
-body { min-height: 100vh; }
+/* Il bg pagina è gestito dinamicamente da olo:set-page-bg / olo:render — qui solo reset */
+html, body { margin: 0; padding: 0; }
+body { min-height: 100vh; background: #fff; }
+body[data-olo-pagebg], html[data-olo-pagebg], body[data-olo-pagebg] #olo-iframe-root { background: transparent !important; }
 #olo-iframe-root { min-height: 100vh; }
 .olo-iframe-empty { display: flex; align-items: center; justify-content: center; min-height: 60vh; color: #9CA3AF; font-family: system-ui, sans-serif; font-size: 14px; }
 
@@ -79,7 +81,7 @@ body { min-height: 100vh; }
 </head>
 <body>
 <div id="olo-iframe-root">
-    <div class="olo-iframe-empty">Caricamento preview...</div>
+    <?php echo Olo_Builder::get_iframe_empty_html(); ?>
 </div>
 <!-- Core JS -->
 <script src="<?php echo esc_url( OLO_URL . 'assets/vendor/uikit/js/uikit.min.js' ); ?>"></script>

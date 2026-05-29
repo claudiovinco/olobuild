@@ -3,7 +3,7 @@
  * Plugin Name: Olobuild
  * Plugin URI:  https://olotheme.com
  * Description: Page builder professionale olonico con sistema a griglia (tile drag & drop).
- * Version:     3.12.9
+ * Version:     1.2.4
  * Author:      Claudio Vinco
  * Author URI:  https://clod.eu
  * Text Domain: olobuild
@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'OLO_VERSION', '3.12.9' );
+define( 'OLO_VERSION', '1.2.4' );
 define( 'OLO_PATH', plugin_dir_path( __FILE__ ) );
 define( 'OLO_URL', plugin_dir_url( __FILE__ ) );
 
@@ -32,17 +32,78 @@ if ( ! function_exists( 'str_starts_with' ) ) {
 }
 
 /**
+ * Helper globale per leggere preferenze stockmedia (Configurazione → Stock media → comportamento).
+ * Usato dai 4 provider Olo_Unsplash/Pexels/Pixabay/Openverse per decidere download_local + optimize_on_download.
+ */
+function olo_stockmedia_behavior() {
+    static $cached = null;
+    if ( $cached !== null ) return $cached;
+    $cached = wp_parse_args(
+        get_option( 'olo_stockmedia_behavior', [] ) ?: [],
+        [ 'preferred' => 'unsplash', 'download_local' => true, 'optimize_on_download' => false ]
+    );
+    return $cached;
+}
+
+/**
+ * Converte un file immagine in WebP usando GD o Imagick (se disponibili).
+ * Restituisce il path del WebP, o false se la conversione fallisce.
+ *
+ * @param string $source_path Path al file sorgente.
+ * @param int    $quality     Qualità 0-100.
+ * @return string|false Path del WebP creato (rimpiazza source) oppure false.
+ */
+function olo_convert_to_webp( $source_path, $quality = 82 ) {
+    if ( ! file_exists( $source_path ) ) return false;
+    $info = @getimagesize( $source_path );
+    if ( ! $info || ! in_array( $info[2], [ IMAGETYPE_JPEG, IMAGETYPE_PNG ], true ) ) return false;
+
+    $webp_path = preg_replace( '/\.(jpe?g|png)$/i', '.webp', $source_path );
+    if ( $webp_path === $source_path ) $webp_path .= '.webp';
+
+    // Imagick (preferito, qualità migliore)
+    if ( extension_loaded( 'imagick' ) ) {
+        try {
+            $im = new Imagick( $source_path );
+            $im->setImageFormat( 'webp' );
+            $im->setImageCompressionQuality( $quality );
+            $im->writeImage( $webp_path );
+            $im->clear();
+            return file_exists( $webp_path ) ? $webp_path : false;
+        } catch ( Exception $e ) { /* fallback to GD */ }
+    }
+
+    // GD fallback
+    if ( function_exists( 'imagewebp' ) ) {
+        $img = ( $info[2] === IMAGETYPE_PNG ) ? @imagecreatefrompng( $source_path ) : @imagecreatefromjpeg( $source_path );
+        if ( ! $img ) return false;
+        if ( $info[2] === IMAGETYPE_PNG ) {
+            imagepalettetotruecolor( $img );
+            imagealphablending( $img, true );
+            imagesavealpha( $img, true );
+        }
+        $ok = imagewebp( $img, $webp_path, $quality );
+        imagedestroy( $img );
+        return $ok && file_exists( $webp_path ) ? $webp_path : false;
+    }
+
+    return false;
+}
+
+/**
  * Load plugin text domain for translations.
  * Force-load MO for all non-Italian locales (plugin source strings are in Italian).
  */
 add_action( 'init', function() {
     $locale = determine_locale();
     if ( ! str_starts_with( $locale, 'it' ) ) {
-        $mo = OLO_PATH . 'languages/olobuilder-' . $locale . '.mo';
+        $mo = OLO_PATH . 'languages/olobuild-' . $locale . '.mo';
         if ( ! file_exists( $mo ) ) {
-            $mo = OLO_PATH . 'languages/olobuilder-en_US.mo';
+            $mo = OLO_PATH . 'languages/olobuild-en_US.mo';
         }
-        load_textdomain( 'olobuild', $mo );
+        if ( file_exists( $mo ) ) {
+            load_textdomain( 'olobuild', $mo );
+        }
     }
 } );
 
@@ -467,6 +528,19 @@ if ( ! wp_next_scheduled( 'olo_weekly_cleanup' ) ) {
 // Setup Wizard (first-run experience)
 require_once OLO_PATH . 'includes/class-setup-wizard.php';
 ( new Olo_Setup_Wizard() )->init();
+
+// Anti-cache header per admin loggati: il browser non deve servire la home/pagine
+// dalla memory cache mentre stai costruendo il sito, altrimenti i cambi a
+// header/footer/template non si vedono finché non fai hard reload.
+// Aggiunge anche `Vary: Cookie` perché la response varia in base al login state
+// (es. admin bar visibile solo se loggato).
+add_action( 'send_headers', function() {
+    if ( is_admin() || wp_doing_ajax() || wp_doing_cron() || defined( 'REST_REQUEST' ) ) return;
+    if ( ! is_user_logged_in() ) return;
+    if ( ! current_user_can( 'edit_posts' ) ) return;
+    nocache_headers();
+    header( 'Vary: Cookie', false );
+}, 1 );
 
 // Preconnect hints for Google Fonts — only on pages using Olobuild or custom fonts
 add_action( 'wp_head', function() {

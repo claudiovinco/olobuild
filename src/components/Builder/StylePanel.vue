@@ -116,14 +116,14 @@
       <div class="mb-space-y-2.5">
         <div>
           <label class="mb-block mb-text-[10px] mb-font-medium mb-text-gray-400 mb-mb-0.5">{{ t('Raggio bordi') }}</label>
-          <FieldBorderRadius
+          <FieldBox mode="corners"
             :modelValue="parseBorderRadius(stylesStore.layout.border_radius)"
             @update:modelValue="stylesStore.updateLayout('border_radius', $event)"
           />
         </div>
         <div>
           <label class="mb-block mb-text-[10px] mb-font-medium mb-text-gray-400 mb-mb-0.5">{{ t('Raggio bordi grande') }}</label>
-          <FieldBorderRadius
+          <FieldBox mode="corners"
             :modelValue="parseBorderRadius(stylesStore.layout.border_radius_large)"
             @update:modelValue="stylesStore.updateLayout('border_radius_large', $event)"
           />
@@ -254,7 +254,7 @@ import CollapseSection from './CollapseSection.vue';
 import FieldColor from './fields/FieldColor.vue';
 import FieldText from './fields/FieldText.vue';
 import FieldSelect from './fields/FieldSelect.vue';
-import FieldBorderRadius from './fields/FieldBorderRadius.vue';
+import FieldBox from './fields/FieldBox.vue';
 import FieldFontFamily from './fields/FieldFontFamily.vue';
 
 const builderStore = useBuilderStore();

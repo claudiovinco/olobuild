@@ -16,12 +16,32 @@ class Olo_IconTabs_Tile extends Olo_Tile_Base {
             [ 'icon' => 'tablet',   'label' => 'Mobile', 'heading' => 'HeyConad Mobile',  'title' => 'Tariffe mobile esclusive',            'content' => 'Naviga e chiama senza pensieri a prezzi vantaggiosi.', 'link_text' => 'Scopri le tariffe',       'link_url' => '#' ],
             [ 'icon' => 'lock',     'label' => 'Tutela', 'heading' => 'HeyConad Tutela',  'title' => 'Assicurazioni pensate per te',        'content' => 'Protezione per la casa, la persona e i tuoi animali.', 'link_text' => 'Scopri i prodotti',       'link_url' => '#' ],
         ],
+        'preset'         => 'pill-default',
         'pill_bg'        => '#F5F2EB',
         'active_bg'      => '#E8622A',
         'active_color'   => '#FFFFFF',
         'inactive_color' => '#1A1A1A',
         'card_bg'        => '#F9D7D7',
         'card_radius'    => '16',
+        'effect_color'   => '',
+        'effect_intensity' => 'medium',
+        'effect_speed'   => 0,
+        'wow_disable'           => false,
+        'wow_backdrop_blur'     => 0,
+        'wow_backdrop_saturate' => 100,
+        'wow_border_style'      => 'solid',
+        'wow_font_family'       => 'inherit',
+        'wow_rotation'          => 0,
+        'wow_perspective'       => 0,
+        'wow_tilt_x'            => 0,
+        'wow_glow_pulse'        => false,
+        'wow_title_glow'        => false,
+        'wow_scanlines'         => false,
+
+        'wow_terminal_prompt' => false,
+        'card_border'              => [],
+        'card_border_hover'        => [],
+        'card_border_hover_duration' => 300,
         'heading_color'  => '#E8622A',
         'title_color'    => '#1A1A1A',
         'text_color'     => '#333333',
@@ -36,6 +56,17 @@ class Olo_IconTabs_Tile extends Olo_Tile_Base {
         'border_effect_angle'     => 135,
         'border_effect_speed'     => 4,
     ];
+
+    /**
+     * V3.28.0 — Extra CSS for "audacious" presets, parametric on
+     * effect_color / effect_intensity / effect_speed.
+     */
+    private function get_preset_extra_css( $preset_id, $uid, $s = [] ) {
+        // @deprecated v1.0.73 — refactor profondo: i preset audaci ora settano direttamente
+        // i field standard tramite TILE_PRESETS in BuilderInspector.vue, e i field wow_* via
+        // build_wow_effects_css(). Nessun !important, ogni proprieta personalizzabile.
+        return '';
+    }
 
     public function get_controls() {
         return [
@@ -72,6 +103,8 @@ class Olo_IconTabs_Tile extends Olo_Tile_Base {
         $text_color    = $this->safe_color_css( $s['text_color'] );
         $link_color    = $this->safe_color_css( $s['link_color'] );
 
+        $preset_id     = $s['preset'] ?? 'pill-default';
+
         ob_start();
         ?>
         <style>
@@ -95,9 +128,15 @@ class Olo_IconTabs_Tile extends Olo_Tile_Base {
                 .<?php echo esc_attr( $uid ); ?> .oit-card { padding:22px; }
                 .<?php echo esc_attr( $uid ); ?> .oit-card .oit-title { font-size:22px; }
             }
+
+            <?php
+            // V3.28.0 — preset extras (audacious presets)
+            echo $this->get_preset_extra_css( $preset_id, esc_attr( $uid ), $s );
+            echo $this->build_wow_effects_css( $s, '.' . esc_attr( $uid ), '.uk-tab > * > a' );
+            ?>
         </style>
 
-        <div class="olo-icontabs <?php echo esc_attr( $uid ); ?>" data-olo-icontabs>
+        <div class="olo-icontabs olo-it--preset-<?php echo esc_attr( $preset_id ); ?> <?php echo esc_attr( $uid ); ?>" data-olo-icontabs>
             <div class="oit-pill" role="tablist">
                 <?php foreach ( $items as $i => $item ) :
                     $icon_raw = $item['icon'] ?? '';
@@ -122,6 +161,10 @@ class Olo_IconTabs_Tile extends Olo_Tile_Base {
             ?>
             <div class="oit-panel<?php echo $active; ?>" data-panel="<?php echo $i; ?>" role="tabpanel">
                 <div class="oit-card">
+                    <?php $widget_html = $this->render_widget_template( $item['widget_template_id'] ?? 0 ); ?>
+                    <?php if ( $widget_html ) : ?>
+                        <div class="olo-item-widget"><?php echo $widget_html; ?></div>
+                    <?php endif; ?>
                     <?php
                     list( $itl_cls, $itl_data ) = $this->tfx_attrs( $s, 'label', $item['label'] ?? '' );
                     list( $ith_cls, $ith_data ) = $this->tfx_attrs( $s, 'heading', $item['heading'] ?? '' );
@@ -136,7 +179,7 @@ class Olo_IconTabs_Tile extends Olo_Tile_Base {
                     <?php endif; ?>
                     <?php if ( ! empty( $item['content'] ) ) : ?>
                         <p class="oit-content<?php echo $itc_cls; ?>"<?php echo $itc_data; ?>>
-                            <?php echo wp_kses_post( $item['content'] ); ?>
+                            <?php echo $this->safe_richtext_content( $item['content'] ); ?>
                             <?php if ( ! empty( $item['link_text'] ) ) : ?>
                                 <a class="oit-link" href="<?php echo esc_url( $item['link_url'] ?? '#' ); ?>"><?php echo esc_html( $item['link_text'] ); ?></a>
                             <?php endif; ?>
@@ -176,14 +219,22 @@ class Olo_IconTabs_Tile extends Olo_Tile_Base {
         $tfx_css = $this->tfx_css( $s, '.' . $uid );
         if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
         $this->tfx_print_script();
-                // Border system
+                // Border system — wrapper tile
         $border_css        = $this->build_border_css( $s['border'] ?? [] );
         $border_hover_css  = $this->build_border_hover_css( ".{$uid}", $s['border'] ?? [], $s['border_hover'] ?? [], intval( $s['border_hover_duration'] ?? 300 ) );
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
-        if ( $border_css || $border_hover_css || $border_effect_css ) {
+
+        // Border system — card interna (.oit-card)
+        $card_border_sel        = ".{$uid} .oit-card";
+        $card_border_css        = $this->build_border_css( $s['card_border'] ?? [] );
+        $card_border_hover_css  = $this->build_border_hover_css( $card_border_sel, $s['card_border'] ?? [], $s['card_border_hover'] ?? [], intval( $s['card_border_hover_duration'] ?? 300 ) );
+
+        if ( $border_css || $border_hover_css || $border_effect_css || $card_border_css || $card_border_hover_css ) {
             echo '<style>';
             if ( $border_css ) echo ".{$uid}{{$border_css}}";
-            echo $border_hover_css . $border_effect_css . '</style>';
+            echo $border_hover_css . $border_effect_css;
+            if ( $card_border_css ) echo "{$card_border_sel}{{$card_border_css}}";
+            echo $card_border_hover_css . '</style>';
         }
         return ob_get_clean();
     }

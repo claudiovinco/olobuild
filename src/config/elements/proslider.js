@@ -1,10 +1,19 @@
 
 import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
+import { t } from '@/i18n';
 /**
- * ProSlider — Slider professionale con editor visuale dei livelli.
+ * Tile Pro Slider — split CONTENUTO/STILE (regola universale Olobuild).
  *
- * Tutto il contenuto è gestito tramite un editor modale a schermo intero dedicato,
- * quindi l'array `fields` è intenzionalmente vuoto.
+ * NOTA: il contenuto principale (slide/livelli) è gestito da un editor modale dedicato
+ * (`customEditor: 'proslider'`); qui sotto split delle sole opzioni globali.
+ *
+ *   fields[]      → modalità sizing, riproduzione (autoplay/loop/swipe/keyboard/mouseWheel),
+ *                   tipo transizione, visibilità navigazione (frecce/dots/thumbs/tabs/progress),
+ *                   parallax/carousel toggles, scroll timeline (toggle + distanza)
+ *   styleFields[] → preset, sfondo, tipografia, durata transizione/animazioni, stile frecce/dots/thumbs,
+ *                   colore/altezza barra progresso, intensità parallax, geometria carosello,
+ *                   bordi
+ *   AVANZATE      → meta tecnico (id/class/condizioni)
  */
 
 function makeId() {
@@ -140,6 +149,8 @@ function defaultLayer(type = 'text') {
     timeline: null,
     // Layer actions (null = nessuna azione)
     action: null, // { type: 'none'|'goToSlide'|'nextSlide'|'prevSlide'|'scrollBelow'|'openUrl'|'toggleLayer', target, url, urlTarget }
+    // Stato iniziale: true = il layer parte nascosto (display:none) e può essere mostrato via action toggleLayer
+    initiallyHidden: false,
     // Parallax depth (0 = nessun parallax, 1-10 profondita)
     parallaxDepth: 0,
     // Static layer: visibile su tutte le slide (solo se aggiunto alla sezione global)
@@ -218,12 +229,15 @@ export function resolveHeightPx(h, canvasWidth) {
 
 export default {
   type: 'proslider',
-  name: 'Pro Slider',
+  name: t('Pro Slider'),
   icon: 'dashicons-slides',
   category: 'media',
   customEditor: 'proslider',
 
   defaults: {
+    typography_preset: '',
+    bg: { type: 'none' },
+    preset: 'custom',
     slides: [defaultSlide()],
     globalBackground: {
       type: 'color',
@@ -289,115 +303,148 @@ export default {
     ...borderEffectDefaults,
   },
 
+  // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
-    { key: 'sizingMode', label: 'Modalita', type: 'select', options: [
-      { value: 'auto', label: 'Auto' },
-      { value: 'fullwidth', label: 'Full Width' },
-      { value: 'fullscreen', label: 'Full Screen' },
+    { key: 'sizingMode', label: t('Modalita'), type: 'select', options: [
+      { value: 'auto', label: t('Auto') },
+      { value: 'fullwidth', label: t('Full Width') },
+      { value: 'fullscreen', label: t('Full Screen') },
     ]},
 
-    { type: 'separator', label: 'Riproduzione' },
-    { key: 'autoplay', label: 'Riproduzione automatica', type: 'toggle' },
-    { key: 'autoplaySpeed', label: 'Velocita (ms)', type: 'number', min: 1000, max: 20000, step: 500,
+    { type: 'separator', label: t('Riproduzione') },
+    { key: 'autoplay', label: t('Riproduzione automatica'), type: 'toggle' },
+    { key: 'autoplaySpeed', label: t('Velocita (ms)'), type: 'number', min: 1000, max: 20000, step: 500,
       condition: { field: 'autoplay', value: true } },
-    { key: 'pauseOnHover', label: 'Pausa al passaggio mouse', type: 'toggle',
+    { key: 'pauseOnHover', label: t('Pausa al passaggio mouse'), type: 'toggle',
       condition: { field: 'autoplay', value: true } },
-    { key: 'loop', label: 'Ripeti', type: 'toggle' },
+    { key: 'loop', label: t('Ripeti'), type: 'toggle' },
 
-    { type: 'separator', label: 'Transizione' },
-    { key: 'transition', label: 'Tipo transizione', type: 'select', options: [
-      { value: 'fade', label: 'Dissolvenza' },
-      { value: 'slide', label: 'Scorrimento' },
-      { value: 'zoom', label: 'Zoom' },
-      { value: 'crossFade', label: 'Cross Fade' },
-      { value: 'slideOver', label: 'Slide Over' },
-      { value: 'fadeThroughDark', label: 'Fade Nero' },
-      { value: 'blur', label: 'Blur' },
-      { value: 'flipH', label: 'Flip Orizzontale' },
-      { value: 'flipV', label: 'Flip Verticale' },
-      { value: 'cubeH', label: 'Cubo Orizzontale' },
-      { value: 'cubeV', label: 'Cubo Verticale' },
-      { value: 'push', label: 'Push' },
-      { value: 'pushDown', label: 'Push Giu' },
-      { value: 'stack', label: 'Stack' },
-      { value: 'paperCut', label: 'Paper Cut' },
-      { value: 'zoomFade', label: 'Zoom Fade' },
-      { value: 'rotateSlide', label: 'Rotate Slide' },
-      { value: 'curtain3D', label: 'Curtain 3D' },
-      { value: 'slideUp', label: 'Slide Up' },
-      { value: 'slideDown', label: 'Slide Down' },
+    { type: 'separator', label: t('Transizione') },
+    { key: 'transition', label: t('Tipo transizione'), type: 'select', options: [
+      { value: 'fade', label: t('Dissolvenza') },
+      { value: 'slide', label: t('Scorrimento') },
+      { value: 'zoom', label: t('Zoom') },
+      { value: 'crossFade', label: t('Cross Fade') },
+      { value: 'slideOver', label: t('Slide Over') },
+      { value: 'fadeThroughDark', label: t('Fade Nero') },
+      { value: 'blur', label: t('Blur') },
+      { value: 'flipH', label: t('Flip Orizzontale') },
+      { value: 'flipV', label: t('Flip Verticale') },
+      { value: 'cubeH', label: t('Cubo Orizzontale') },
+      { value: 'cubeV', label: t('Cubo Verticale') },
+      { value: 'push', label: t('Push') },
+      { value: 'pushDown', label: t('Push Giu') },
+      { value: 'stack', label: t('Stack') },
+      { value: 'paperCut', label: t('Paper Cut') },
+      { value: 'zoomFade', label: t('Zoom Fade') },
+      { value: 'rotateSlide', label: t('Rotate Slide') },
+      { value: 'curtain3D', label: t('Curtain 3D') },
+      { value: 'slideUp', label: t('Slide Up') },
+      { value: 'slideDown', label: t('Slide Down') },
     ]},
-    { key: 'transitionDuration', label: 'Durata (ms)', type: 'number', min: 200, max: 3000, step: 100 },
 
-    { type: 'separator', label: 'Navigazione' },
-    { key: 'showArrows', label: 'Frecce', type: 'toggle' },
-    { key: 'arrowStyle', label: 'Stile frecce', type: 'select', options: [
-      { value: 'minimal', label: 'Minimal' },
-      { value: 'rounded', label: 'Arrotondato' },
-      { value: 'boxed', label: 'Box' },
-      { value: 'outline', label: 'Outline' },
+    { type: 'separator', label: t('Navigazione') },
+    { key: 'showArrows', label: t('Frecce'), type: 'toggle' },
+    { key: 'showDots', label: t('Punti'), type: 'toggle' },
+    { key: 'showProgressBar', label: t('Barra progresso'), type: 'toggle' },
+    { key: 'keyboard', label: t('Navigazione tastiera'), type: 'toggle' },
+    { key: 'swipe', label: t('Swipe touch'), type: 'toggle' },
+    { key: 'mouseWheel', label: t('Rotella mouse'), type: 'toggle' },
+
+    { type: 'separator', label: t('Miniature e Tab') },
+    { key: 'showThumbs', label: t('Miniature'), type: 'toggle' },
+    { key: 'showTabs', label: t('Tab'), type: 'toggle' },
+
+    { type: 'separator', label: t('Parallax') },
+    { key: 'parallax', label: t('Parallax'), type: 'toggle' },
+    { key: 'parallaxType', label: t('Tipo parallax'), type: 'select', options: [
+      { value: 'mouse', label: t('Mouse') },
+      { value: 'scroll', label: t('Scroll') },
+      { value: 'both', label: t('Entrambi') },
+    ], condition: { field: 'parallax', value: true } },
+
+    { type: 'separator', label: t('Carosello') },
+    { key: 'carousel', label: t('Modalita carosello'), type: 'toggle' },
+    { key: 'carousel3D', label: t('Rotazione 3D'), type: 'toggle',
+      condition: { field: 'carousel', value: true } },
+
+    { type: 'separator', label: t('Scroll Timeline') },
+    { key: 'scrollTimeline', label: t('Scroll-fixed timeline'), type: 'toggle' },
+    { key: 'scrollTimelineDistance', label: t('Distanza scroll (px)'), type: 'number', min: 500, max: 10000, step: 100,
+      condition: { field: 'scrollTimeline', value: true } },
+  ],
+
+  // ─── STILE ─────────────────────────────────────────────────
+  styleFields: [
+    { type: 'separator', label: t('Preset stilistico') },
+    { key: 'preset', label: t('Stile'), type: 'select', options: [
+      { value: 'cinema-hero',     label: t('Cinema Hero') },
+      { value: 'magazine-cover',  label: t('Magazine Cover') },
+      { value: 'editorial-split', label: t('Editorial Split') },
+      { value: 'minimal-clean',   label: t('Minimal Clean') },
+      { value: 'product-showcase', label: t('Product Showcase') },
+      { value: 'glass-overlay',   label: t('Glass Overlay') },
+      { value: 'neon-tron',       label: t('Neon Tron') },
+      { value: 'brutalist-mega',  label: t('Brutalist Mega') },
+      { value: 'gradient-aurora', label: t('Gradient Aurora') },
+      { value: 'sticker-fun',     label: t('Sticker Fun') },
+      { value: 'retro-vhs',       label: t('Retro VHS') },
+      { value: 'tilt-parallax',   label: t('Tilt Parallax') },
+      { value: 'custom',          label: t('Personalizzato') },
+    ]},
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
+
+    { type: 'separator', label: t('Transizione — aspetto') },
+    { key: 'transitionDuration', label: t('Durata (ms)'), type: 'number', min: 200, max: 3000, step: 100 },
+
+    { type: 'separator', label: t('Navigazione — stile') },
+    { key: 'arrowStyle', label: t('Stile frecce'), type: 'select', options: [
+      { value: 'minimal', label: t('Minimal') },
+      { value: 'rounded', label: t('Arrotondato') },
+      { value: 'boxed', label: t('Box') },
+      { value: 'outline', label: t('Outline') },
     ], condition: { field: 'showArrows', value: true } },
-    { key: 'showDots', label: 'Punti', type: 'toggle' },
-    { key: 'dotStyle', label: 'Stile punti', type: 'select', options: [
-      { value: 'circles', label: 'Cerchi' },
-      { value: 'bars', label: 'Barre' },
-      { value: 'numbers', label: 'Numeri' },
-      { value: 'dash', label: 'Trattini' },
+    { key: 'dotStyle', label: t('Stile punti'), type: 'select', options: [
+      { value: 'circles', label: t('Cerchi') },
+      { value: 'bars', label: t('Barre') },
+      { value: 'numbers', label: t('Numeri') },
+      { value: 'dash', label: t('Trattini') },
     ], condition: { field: 'showDots', value: true } },
-    { key: 'showProgressBar', label: 'Barra progresso', type: 'toggle' },
-    { key: 'progressBarColor', label: 'Colore barra', type: 'color',
+    { key: 'progressBarColor', label: t('Colore barra'), type: 'color',
       condition: { field: 'showProgressBar', value: true } },
-    { key: 'progressBarHeight', label: 'Altezza barra', type: 'number', min: 1, max: 10,
+    { key: 'progressBarHeight', label: t('Altezza barra'), type: 'number', min: 1, max: 10,
       condition: { field: 'showProgressBar', value: true } },
-    { key: 'keyboard', label: 'Navigazione tastiera', type: 'toggle' },
-    { key: 'swipe', label: 'Swipe touch', type: 'toggle' },
-    { key: 'mouseWheel', label: 'Rotella mouse', type: 'toggle' },
 
-    { type: 'separator', label: 'Miniature e Tab' },
-    { key: 'showThumbs', label: 'Miniature', type: 'toggle' },
-    { key: 'thumbPosition', label: 'Posizione miniature', type: 'select', options: [
-      { value: 'bottom', label: 'Sotto' },
-      { value: 'top', label: 'Sopra' },
-      { value: 'left', label: 'Sinistra' },
-      { value: 'right', label: 'Destra' },
+    { type: 'separator', label: t('Miniature e Tab — posizione') },
+    { key: 'thumbPosition', label: t('Posizione miniature'), type: 'select', options: [
+      { value: 'bottom', label: t('Sotto') },
+      { value: 'top', label: t('Sopra') },
+      { value: 'left', label: t('Sinistra') },
+      { value: 'right', label: t('Destra') },
     ], condition: { field: 'showThumbs', value: true } },
-    { key: 'showTabs', label: 'Tab', type: 'toggle' },
-    { key: 'tabPosition', label: 'Posizione tab', type: 'select', options: [
-      { value: 'bottom', label: 'Sotto' },
-      { value: 'top', label: 'Sopra' },
+    { key: 'tabPosition', label: t('Posizione tab'), type: 'select', options: [
+      { value: 'bottom', label: t('Sotto') },
+      { value: 'top', label: t('Sopra') },
     ], condition: { field: 'showTabs', value: true } },
 
-    { type: 'separator', label: 'Effetti' },
-    { key: 'scrollEffect', label: 'Effetto scroll', type: 'select', options: [
-      { value: 'none', label: 'Nessuno' },
-      { value: 'fade', label: 'Fade' },
-      { value: 'blur', label: 'Blur' },
-      { value: 'fadeBlur', label: 'Fade + Blur' },
+    { type: 'separator', label: t('Effetti') },
+    { key: 'scrollEffect', label: t('Effetto scroll'), type: 'select', options: [
+      { value: 'none', label: t('Nessuno') },
+      { value: 'fade', label: t('Fade') },
+      { value: 'blur', label: t('Blur') },
+      { value: 'fadeBlur', label: t('Fade + Blur') },
     ]},
-    { key: 'parallax', label: 'Parallax', type: 'toggle' },
-    { key: 'parallaxType', label: 'Tipo parallax', type: 'select', options: [
-      { value: 'mouse', label: 'Mouse' },
-      { value: 'scroll', label: 'Scroll' },
-      { value: 'both', label: 'Entrambi' },
-    ], condition: { field: 'parallax', value: true } },
-    { key: 'parallaxIntensity', label: 'Intensita parallax', type: 'number', min: 1, max: 20,
+    { key: 'parallaxIntensity', label: t('Intensita parallax'), type: 'number', min: 1, max: 20,
       condition: { field: 'parallax', value: true } },
 
-    { type: 'separator', label: 'Carosello' },
-    { key: 'carousel', label: 'Modalita carosello', type: 'toggle' },
-    { key: 'carouselWidth', label: 'Larghezza slide %', type: 'number', min: 40, max: 95,
+    { type: 'separator', label: t('Carosello — dimensioni') },
+    { key: 'carouselWidth', label: t('Larghezza slide %'), type: 'number', min: 40, max: 95,
       condition: { field: 'carousel', value: true } },
-    { key: 'carouselGap', label: 'Gap (px)', type: 'number', min: 0, max: 60,
+    { key: 'carouselGap', label: t('Gap (px)'), type: 'number', min: 0, max: 60,
       condition: { field: 'carousel', value: true } },
-    { key: 'carouselSideScale', label: 'Scala laterali', type: 'number', min: 0.5, max: 1, step: 0.05,
-      condition: { field: 'carousel', value: true } },
-    { key: 'carousel3D', label: 'Rotazione 3D', type: 'toggle',
+    { key: 'carouselSideScale', label: t('Scala laterali'), type: 'number', min: 0.5, max: 1, step: 0.05,
       condition: { field: 'carousel', value: true } },
 
-    { type: 'separator', label: 'Scroll Timeline' },
-    { key: 'scrollTimeline', label: 'Scroll-fixed timeline', type: 'toggle' },
-    { key: 'scrollTimelineDistance', label: 'Distanza scroll (px)', type: 'number', min: 500, max: 10000, step: 100,
-      condition: { field: 'scrollTimeline', value: true } },
     ...borderFields(),
   ],
 

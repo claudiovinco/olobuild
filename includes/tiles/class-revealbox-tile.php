@@ -135,8 +135,8 @@ class Olo_Revealbox_Tile extends Olo_Tile_Base {
         $top_face_css = "{$face_base};{$face_dim};align-items:" . esc_attr( $s['top_justify'] ) . ";justify-content:" . esc_attr( $s['top_align'] );
         $bot_face_css = "{$face_base};{$face_dim};align-items:" . esc_attr( $s['bottom_justify'] ) . ";justify-content:" . esc_attr( $s['bottom_align'] );
 
-        $top_content = wp_kses_post( $s['top_content'] );
-        $bot_content = wp_kses_post( $s['bottom_content'] );
+        $top_content = $this->safe_richtext_content( $s['top_content'] );
+        $bot_content = $this->safe_richtext_content( $s['bottom_content'] );
 
         $top_content_css = 'position:relative;z-index:2;padding:' . $top_pad . 'px;color:' . $safe_top_text_clr;
         if ( $top_font_size > 0 ) { $top_content_css .= ';font-size:' . $top_font_size . 'px'; }

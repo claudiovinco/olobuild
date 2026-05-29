@@ -12,8 +12,8 @@ class Olo_Overlay_Tile extends Olo_Tile_Base {
     protected $category = 'media';
     protected $defaults = [
         'image_url'       => '',
-        'title'           => 'Project Title',
-        'description'     => 'A brief description of this project.',
+        'title'           => 'Titolo del progetto',
+        'description'     => 'Una breve descrizione del progetto.',
         'link_url'        => '',
         'link_target'     => '_self',
         'overlay_color'   => '#000000',
@@ -69,19 +69,22 @@ class Olo_Overlay_Tile extends Olo_Tile_Base {
         ];
         $uk_effect = $effect_map[ $effect ] ?? 'uk-transition-fade';
 
-        $tag      = ! empty( $s['link_url'] ) ? 'a' : 'div';
-        $link_attr = '';
-        if ( ! empty( $s['link_url'] ) ) {
-            $link_attr = ' href="' . esc_url( $s['link_url'] ) . '" target="' . esc_attr( $s['link_target'] ) . '" rel="noopener noreferrer" style="text-decoration:none;color:inherit;"';
+        $has_link = ! empty( $s['link_url'] );
+        $link_open = '';
+        $link_close = '';
+        if ( $has_link ) {
+            $link_open  = '<a href="' . esc_url( $s['link_url'] ) . '" target="' . esc_attr( $s['link_target'] ) . '" rel="noopener noreferrer" style="display:block;width:100%;text-decoration:none;color:inherit;">';
+            $link_close = '</a>';
         }
 
         ob_start();
+        echo $link_open;
         ?>
-        <<?php echo $tag; ?> id="<?php echo esc_attr( $id ); ?>"<?php echo $link_attr; ?> class="olo-overlay uk-inline uk-transition-toggle" style="display:block;border-radius:<?php echo $radius_css; ?>;height:<?php echo $h; ?>px;overflow:hidden;cursor:pointer;">
+        <div id="<?php echo esc_attr( $id ); ?>" class="olo-overlay uk-inline uk-transition-toggle" style="display:block;width:100%;box-sizing:border-box;border-radius:<?php echo $radius_css; ?>;height:<?php echo $h; ?>px;overflow:hidden;cursor:pointer;">
             <?php if ( ! empty( $s['image_url'] ) ) : ?>
                 <?php echo Olo_Tile_Utils::img_srcset( absint( $s['image_url_id'] ?? 0 ), $s['image_url'], $s['title'] ?? '', '', 'full', 'uk-cover' ); ?>
             <?php else : ?>
-                <div style="background:var(--olo-color-secondary, #1F2937);" uk-cover></div>
+                <div style="background:#1F2937;" uk-cover></div>
             <?php endif; ?>
             <?php $ov_bg = $this->safe_color_css( $s['overlay_color'] ); $ov_fg = $this->safe_color_css( $s['text_color'] ); ?>
             <div class="uk-overlay uk-overlay-primary uk-position-cover <?php echo esc_attr( $uk_effect ); ?>" style="<?php if ( $ov_bg ) echo 'background:' . $ov_bg . ';'; ?>opacity:<?php echo $opa; ?>;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;">
@@ -98,7 +101,10 @@ class Olo_Overlay_Tile extends Olo_Tile_Base {
                     <?php endif; ?>
                 </div>
             </div>
-        </<?php echo $tag; ?>>
+        </div>
+        <?php
+        echo $link_close;
+        ?>
         <?php
         $tfx_css = $this->tfx_css( $s, '#' . $id );
         if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';

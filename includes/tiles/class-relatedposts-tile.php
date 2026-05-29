@@ -11,6 +11,7 @@ class Olo_RelatedPosts_Tile extends Olo_Tile_Base {
     protected $icon     = 'dashicons-screenoptions';
     protected $category = 'dynamic';
     protected $defaults = [
+        'preset' => 'custom',
         'source'             => 'categories',
         'count'              => '3',
         'columns'            => '3',
@@ -149,11 +150,11 @@ class Olo_RelatedPosts_Tile extends Olo_Tile_Base {
             <?php endif; ?>
             .<?php echo $uid; ?> .olo-rp-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
         </style>
-        <div class="olo-relatedposts <?php echo $uid; ?>">
+        <div class="olo-relatedposts <?php echo $uid; ?> olo-rp-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>">
             <?php while ( $query->have_posts() ) : $query->the_post(); ?>
             <a href="<?php the_permalink(); ?>" class="olo-rp-card">
                 <?php if ( ! empty( $s['show_image'] ) ) : ?>
-                <div style="<?php echo $image_ratio !== 'auto' ? 'aspect-ratio:' . esc_attr( $image_ratio ) . ';' : 'height:160px;'; ?>overflow:hidden;background:var(--olo-color-secondary, #1F2937);">
+                <div style="<?php echo $image_ratio !== 'auto' ? 'aspect-ratio:' . esc_attr( $image_ratio ) . ';' : 'height:160px;'; ?>overflow:hidden;background:#1F2937;">
                     <?php if ( has_post_thumbnail() ) : ?>
                         <?php the_post_thumbnail( 'medium_large', [ 'style' => 'width:100%;height:100%;object-fit:cover;display:block;' ] ); ?>
                     <?php endif; ?>

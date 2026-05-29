@@ -30,8 +30,10 @@ class Olo_Page_Integration {
     /**
      * Get the builder URL for a post.
      * If a template is already linked, edit it. Otherwise, create one.
+     *
+     * Public static: usato anche dalla dashboard cockpit per i CTA.
      */
-    private function get_builder_url( $post_id ) {
+    public static function get_builder_url( $post_id ) {
         $template_id = get_post_meta( $post_id, '_olo_template_id', true );
 
         if ( $template_id ) {
@@ -62,7 +64,7 @@ class Olo_Page_Integration {
             return $actions;
         }
 
-        $url = $this->get_builder_url( $post->ID );
+        $url = self::get_builder_url( $post->ID );
         $template_id = get_post_meta( $post->ID, '_olo_template_id', true );
         $label = $template_id ? 'Olobuild' : 'Crea con Olobuild';
 
@@ -77,44 +79,90 @@ class Olo_Page_Integration {
 
     /**
      * Add "Edit with Olobuild" button in the admin bar.
+     *
+     * Strategie di contesto:
+     *  - frontend singular  → edit/crea template della pagina/post
+     *  - frontend home/front → edit page_on_front (se static) altrimenti dashboard
+     *  - frontend archive   → dashboard (TODO: link diretto al template archive del post_type)
+     *  - frontend 404/search → edit template 404 / search results se attivi
+     *  - admin post.php     → edit template della pagina/post in editing
      */
     public function add_admin_bar_button( $wp_admin_bar ) {
         if ( ! current_user_can( 'edit_posts' ) ) {
             return;
         }
 
-        // On single post/page view (frontend)
-        if ( is_singular() && ! is_admin() ) {
-            $post_id = get_queried_object_id();
-            $url = $this->get_builder_url( $post_id );
-            $template_id = get_post_meta( $post_id, '_olo_template_id', true );
+        $node = null;
 
-            // Also check CPT single template
-            if ( ! $template_id ) {
-                $pt = get_post_type( $post_id );
-                if ( $pt && $pt !== 'page' && $pt !== 'post' ) {
-                    $template_id = (int) get_option( "olo_active_single_{$pt}", 0 );
+        if ( ! is_admin() ) {
+            // ── Frontend ──
+            if ( is_singular() ) {
+                $post_id = get_queried_object_id();
+                $template_id = get_post_meta( $post_id, '_olo_template_id', true );
+                if ( ! $template_id ) {
+                    $pt = get_post_type( $post_id );
+                    if ( $pt && $pt !== 'page' && $pt !== 'post' ) {
+                        $template_id = (int) get_option( "olo_active_single_{$pt}", 0 );
+                    }
                 }
+                $node = [
+                    'href'  => self::get_builder_url( $post_id ),
+                    'label' => $template_id ? 'Modifica con Olobuild' : 'Crea con Olobuild',
+                ];
+            } elseif ( is_front_page() || is_home() ) {
+                // Home: se è static page edita quella, altrimenti dashboard
+                $front_id = (int) get_option( 'page_on_front', 0 );
+                if ( $front_id && get_option( 'show_on_front' ) === 'page' ) {
+                    $tpl = get_post_meta( $front_id, '_olo_template_id', true );
+                    $node = [
+                        'href'  => self::get_builder_url( $front_id ),
+                        'label' => $tpl ? 'Modifica home con Olobuild' : 'Crea home con Olobuild',
+                    ];
+                } else {
+                    $node = [
+                        'href'  => admin_url( 'admin.php?page=olobuild' ),
+                        'label' => 'Apri Olobuild',
+                    ];
+                }
+            } elseif ( is_404() ) {
+                $tpl_404 = (int) get_option( 'olo_active_404', 0 );
+                $node = [
+                    'href'  => $tpl_404
+                        ? admin_url( 'admin.php?page=olobuilder-templates&template_id=' . $tpl_404 )
+                        : admin_url( 'admin.php?page=olobuild' ),
+                    'label' => $tpl_404 ? 'Modifica 404 con Olobuild' : 'Apri Olobuild',
+                ];
+            } elseif ( is_search() ) {
+                $tpl_search = (int) get_option( 'olo_active_search', 0 );
+                $node = [
+                    'href'  => $tpl_search
+                        ? admin_url( 'admin.php?page=olobuilder-templates&template_id=' . $tpl_search )
+                        : admin_url( 'admin.php?page=olobuild' ),
+                    'label' => $tpl_search ? 'Modifica ricerca con Olobuild' : 'Apri Olobuild',
+                ];
+            } elseif ( is_archive() ) {
+                $node = [
+                    'href'  => admin_url( 'admin.php?page=olobuild' ),
+                    'label' => 'Apri Olobuild',
+                ];
             }
-
-            $wp_admin_bar->add_node( [
-                'id'    => 'olobuilder-edit',
-                'title' => '<span style="color: #a5b4fc;">&#9638;</span> ' . ( $template_id ? 'Modifica con Olobuild' : 'Crea con Olobuild' ),
-                'href'  => $url,
-                'meta'  => [ 'title' => 'Apri in Olobuild' ],
-            ] );
+        } else {
+            // ── Admin: editor post.php ──
+            global $pagenow, $post;
+            if ( $pagenow === 'post.php' && $post ) {
+                $template_id = get_post_meta( $post->ID, '_olo_template_id', true );
+                $node = [
+                    'href'  => self::get_builder_url( $post->ID ),
+                    'label' => $template_id ? 'Modifica con Olobuild' : 'Crea con Olobuild',
+                ];
+            }
         }
 
-        // On post edit screen (admin)
-        global $pagenow, $post;
-        if ( is_admin() && $pagenow === 'post.php' && $post ) {
-            $url = $this->get_builder_url( $post->ID );
-            $template_id = get_post_meta( $post->ID, '_olo_template_id', true );
-
+        if ( $node ) {
             $wp_admin_bar->add_node( [
                 'id'    => 'olobuilder-edit',
-                'title' => '<span style="color: #a5b4fc;">&#9638;</span> ' . ( $template_id ? 'Modifica con Olobuild' : 'Crea con Olobuild' ),
-                'href'  => $url,
+                'title' => '<span style="color: #a5b4fc;">&#9638;</span> ' . esc_html( $node['label'] ),
+                'href'  => $node['href'],
                 'meta'  => [ 'title' => 'Apri in Olobuild' ],
             ] );
         }
@@ -149,7 +197,7 @@ class Olo_Page_Integration {
         $template_id = (int) get_post_meta( $post->ID, '_olo_template_id', true );
         $header_id   = (int) get_post_meta( $post->ID, '_olo_header_id', true );
         $footer_id   = (int) get_post_meta( $post->ID, '_olo_footer_id', true );
-        $url = $this->get_builder_url( $post->ID );
+        $url = self::get_builder_url( $post->ID );
 
         // Fetch all templates for the select
         $db = new Olo_Database();
@@ -289,7 +337,7 @@ class Olo_Page_Integration {
         // Check if already linked
         $existing = get_post_meta( $post_id, '_olo_template_id', true );
         if ( $existing ) {
-            wp_safe_redirect( admin_url( 'admin.php?page=olobuilder&template_id=' . $existing . '&post_id=' . $post_id ) );
+            wp_safe_redirect( admin_url( 'admin.php?page=olobuilder-templates&template_id=' . $existing . '&post_id=' . $post_id ) );
             exit;
         }
 
@@ -308,7 +356,7 @@ class Olo_Page_Integration {
             update_post_meta( $post_id, '_olo_template_id', $template_id );
         }
 
-        wp_safe_redirect( admin_url( 'admin.php?page=olobuilder&template_id=' . $template_id . '&post_id=' . $post_id ) );
+        wp_safe_redirect( admin_url( 'admin.php?page=olobuilder-templates&template_id=' . $template_id . '&post_id=' . $post_id ) );
         exit;
     }
 

@@ -11,6 +11,7 @@ class Olo_Countercircle_Tile extends Olo_Tile_Base {
     protected $icon     = 'dashicons-marker';
     protected $category = 'content';
     protected $defaults = [
+        'preset' => 'custom',
         'value'          => '75',
         'max_value'      => '100',
         'suffix'         => '%',
@@ -84,7 +85,7 @@ class Olo_Countercircle_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
-        <div id="<?php echo esc_attr( $uid ); ?>" class="olo-countercircle" style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 16px;gap:8px;">
+        <div id="<?php echo esc_attr( $uid ); ?>" class="olo-countercircle olo-cc-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 16px;gap:8px;">
             <?php if ( $title_pos === 'above' ) : ?>
             <div style="font-size:<?php echo $title_font_size; ?>px;font-weight:600;color:<?php echo $title_color; ?>;"><?php echo $title; ?></div>
             <?php endif; ?>

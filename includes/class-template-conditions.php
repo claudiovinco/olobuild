@@ -305,7 +305,7 @@ class Olo_Template_Conditions {
 
     public function register_admin_page() {
         add_submenu_page(
-            'admin.php?page=olobuilder',
+            'admin.php?page=olobuild',
             __( 'Regole di visualizzazione', 'olobuild' ),
             __( 'Regole di visualizzazione', 'olobuild' ),
             'edit_others_posts',

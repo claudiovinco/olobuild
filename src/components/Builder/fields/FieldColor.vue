@@ -1,7 +1,7 @@
 <template>
   <div class="mb-space-y-1">
-    <!-- Global Colors swatches -->
-    <div class="fc-global">
+    <!-- Global Colors swatches (espansi al bisogno via icona globe) -->
+    <div v-if="showGlobals" class="fc-global">
       <div class="fc-global-swatches">
         <span
           v-for="gc in globalColors"
@@ -47,6 +47,20 @@
         @change="onTextChange($event.target.value)"
         class="fc-hex-input"
       />
+      <button
+        type="button"
+        class="fc-globe-btn"
+        :class="{ 'fc-globe-btn--active': showGlobals || isGlobalActive }"
+        :title="t('Colori globali')"
+        :aria-pressed="showGlobals"
+        @click="showGlobals = !showGlobals"
+      >
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M2 12h20"/>
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+        </svg>
+      </button>
     </div>
     <div class="mb-flex mb-items-center mb-gap-2">
       <span class="mb-text-[10px] mb-text-gray-400 mb-shrink-0">{{ t('Alfa') }}</span>
@@ -70,7 +84,7 @@
 
 <script setup>
 import { t } from '@/i18n';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { useStylesStore } from '@/stores/styles';
 
 const props = defineProps({
@@ -80,6 +94,15 @@ const emit = defineEmits(['update:modelValue']);
 
 const stylesStore = useStylesStore();
 const globalColors = computed(() => stylesStore.globalColors || []);
+
+const showGlobals = ref(false);
+
+const isGlobalActive = computed(() => {
+  const cur = (props.modelValue || '').toLowerCase();
+  if (!cur) return false;
+  if (cur.startsWith('var(--olo-color-')) return true;
+  return (stylesStore.globalColors || []).some(gc => gc.value?.toLowerCase() === cur);
+});
 
 /**
  * Check if a global color is currently selected.
@@ -351,5 +374,33 @@ async function removeQuickColor(colorId) {
   color: #374151;
   outline: none;
   font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+}
+
+.fc-globe-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 32px;
+  margin-right: 2px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #9ca3af;
+  cursor: pointer;
+  transition: color 0.15s, background-color 0.15s;
+  flex-shrink: 0;
+  border-radius: 4px;
+}
+.fc-globe-btn:hover {
+  color: #374151;
+  background: #f3f4f6;
+}
+.fc-globe-btn--active {
+  color: var(--olo-color-primary, #6366f1);
+}
+.fc-globe-btn--active:hover {
+  color: var(--olo-color-primary, #6366f1);
+  background: rgba(99, 102, 241, 0.08);
 }
 </style>

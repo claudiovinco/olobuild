@@ -1,0 +1,2160 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: mosaic (__plugin:olobuild)\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-21 09:39+0000\n"
+"PO-Revision-Date: 2026-05-21 09:39+0000\n"
+"Last-Translator: \n"
+"Language-Team: ru_RU\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ru_RU\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Olo Lang 3.15.3\n"
+
+msgid "Permessi Utente"
+msgstr "Права пользователя"
+
+msgid "Permessi & Ruoli"
+msgstr "Права и роли"
+
+msgid "%1$s ruoli con accesso completo · %2$s ruoli design-only"
+msgstr "%1$s ролей с полным доступом · %2$s только дизайн"
+
+msgid "Livelli di Accesso"
+msgstr "Уровни доступа"
+
+msgid "Assegna un livello di accesso per ciascun ruolo WordPress"
+msgstr "Назначьте уровень доступа каждой WP-роли"
+
+msgid "Ruolo"
+msgstr "Ruolo"
+
+msgid "Accesso completo"
+msgstr "Полный доступ"
+
+msgid "Solo design"
+msgstr "Только дизайн"
+
+msgid "Solo contenuti"
+msgstr "Только контент"
+
+msgid "Nessun accesso"
+msgstr "Нет доступа"
+
+msgid "Completo:"
+msgstr "Полный:"
+
+msgid "struttura + design + contenuti"
+msgstr "структура + дизайн + контент"
+
+msgid "Design:"
+msgstr "Дизайн:"
+
+msgid "stili e layout"
+msgstr "стили и макет"
+
+msgid "Contenuti:"
+msgstr "Контент:"
+
+msgid "solo testo e immagini"
+msgstr "только текст и изображения"
+
+msgid "Salva Permessi"
+msgstr "Сохранить права"
+
+msgid "Dati non validi"
+msgstr "Недопустимые данные"
+
+msgid "Popup Globali"
+msgstr "Глобальные попапы"
+
+msgid "%1$s popup configurati · %2$s attivi · trigger automatici per condizioni di visualizzazione"
+msgstr "%1$s настроено · %2$s активно"
+
+msgid "Nessun popup configurato"
+msgstr "Нет настроенных попапов"
+
+msgid "Attivo"
+msgstr "Attivo"
+
+msgid "Disattivato"
+msgstr "Деактивирован"
+
+msgid "Popup"
+msgstr "Попап"
+
+msgid "Rimuovi"
+msgstr "Rimuovi"
+
+msgid "Nome popup"
+msgstr "Название попапа"
+
+msgid "Template"
+msgstr "Шаблон"
+
+msgid "Seleziona"
+msgstr "Выбрать"
+
+msgid "Trigger"
+msgstr "Триггер"
+
+msgid "Frequenza"
+msgstr "Частота"
+
+msgid "Condizioni"
+msgstr "Условия"
+
+msgid "OR (almeno una)"
+msgstr "ИЛИ (хотя бы одно)"
+
+msgid "AND (tutte)"
+msgstr "И (все)"
+
+msgid "Condizione"
+msgstr "Условие"
+
+msgid "NON"
+msgstr "НЕ"
+
+msgid "Valore (ID, slug)"
+msgstr "Значение (ID, slug)"
+
+msgid "Aggiungi Popup"
+msgstr "Добавить попап"
+
+msgid "Salva Tutto"
+msgstr "Сохранить всё"
+
+msgid "Popup salvati con successo!"
+msgstr "Попапы сохранены!"
+
+msgid "Errore"
+msgstr "Errore"
+
+msgid "Caricamento pagina"
+msgstr "Загрузка страницы"
+
+msgid "Scroll %"
+msgstr "Прокрутка %"
+
+msgid "Exit Intent"
+msgstr "Exit Intent"
+
+msgid "Timer"
+msgstr "Таймер"
+
+msgid "Inattività"
+msgstr "Бездействие"
+
+msgid "Sempre"
+msgstr "Sempre"
+
+msgid "1 volta per sessione"
+msgstr "1 раз за сессию"
+
+msgid "1 volta al giorno"
+msgstr "1 раз в день"
+
+msgid "1 volta a settimana"
+msgstr "1 раз в неделю"
+
+msgid "Solo 1 volta"
+msgstr "Только 1 раз"
+
+msgid "Tutto il sito"
+msgstr "Весь сайт"
+
+msgid "Homepage"
+msgstr "Главная страница"
+
+msgid "Pagina specifica"
+msgstr "Конкретная страница"
+
+msgid "Articolo specifico"
+msgstr "Конкретная статья"
+
+msgid "Tipo contenuto"
+msgstr "Тип контента"
+
+msgid "Archivio"
+msgstr "Архив"
+
+msgid "Categoria"
+msgstr "Categoria"
+
+msgid "Utente loggato"
+msgstr "Авторизованный"
+
+msgid "Utente non loggato"
+msgstr "Неавторизованный"
+
+msgid "Desktop"
+msgstr "Десктоп"
+
+msgid "Mobile"
+msgstr "Мобильный"
+
+msgid "Pagina 404"
+msgstr "Страница 404"
+
+msgid "Ricerca"
+msgstr "Поиск"
+
+msgid "JavaScript richiesto."
+msgstr "Требуется JavaScript."
+
+msgid "Performance"
+msgstr "Производительность"
+
+msgid "Critical CSS"
+msgstr "Critical CSS"
+
+msgid "Asset Optimizer"
+msgstr "Asset Optimizer"
+
+msgid "Performance Hints"
+msgstr "Performance Hints"
+
+msgid "Head Cleanup"
+msgstr "Очистка Head"
+
+msgid "Critical CSS: %1$s pagine generate · Cache CSS: %2$s"
+msgstr "Critical CSS: %1$s стр. · Кэш CSS: %2$s"
+
+msgid "Salva impostazioni"
+msgstr "Сохранить настройки"
+
+msgid "Off"
+msgstr "Выкл."
+
+msgid "Rigenerazione in corso..."
+msgstr "Регенерация..."
+
+msgid "Svuotare tutta la cache Critical CSS?"
+msgstr "Очистить весь Critical CSS кэш?"
+
+msgid "Svuotare la cache CSS? I file verranno rigenerati automaticamente."
+msgstr "Очистить CSS-кэш? Файлы регенерируются."
+
+msgid "Rigenerato %d su %d pagine (%d errori)"
+msgstr "Регенерировано %d из %d (%d ошибок)"
+
+msgid "Svuotati %d transient Critical CSS"
+msgstr "Очищено %d transient"
+
+msgid "Cache CSS svuotata. I file verranno rigenerati al prossimo caricamento."
+msgstr "CSS-кэш очищен."
+
+msgid "Genera automaticamente il CSS above-the-fold e lo inietta inline nel <head>. Il foglio di stile principale viene caricato in modo asincrono."
+msgstr "Авто-генерация above-the-fold CSS."
+
+msgid "Abilita Critical CSS"
+msgstr "Включить Critical CSS"
+
+msgid "Migliora FCP e LCP inlinando il CSS critico e deferendo il resto."
+msgstr "Улучшает FCP и LCP."
+
+msgid "Durata cache"
+msgstr "Длительность кэша"
+
+msgid "Il CSS critico viene rigenerato automaticamente alla scadenza. Invalidato quando salvi un template."
+msgstr "Critical CSS регенерируется при истечении."
+
+msgid "giorni"
+msgstr "giorni"
+
+msgid "Sezioni above-the-fold"
+msgstr "Above-the-fold секции"
+
+msgid "Quante sezioni del template analizzare per il CSS critico. 2 è il valore consigliato."
+msgstr "Сколько секций анализировать. 2 рекоменд."
+
+msgid "Stato cache"
+msgstr "Состояние кэша"
+
+msgid "Stato"
+msgstr "Stato"
+
+msgid "Pagine in cache"
+msgstr "Страниц в кэше"
+
+msgid "Mai"
+msgstr "Mai"
+
+msgid "Ultima generazione"
+msgstr "Последняя генерация"
+
+msgid "Rigenera tutto"
+msgstr "Регенерировать всё"
+
+msgid "Svuota cache"
+msgstr "Очистить кэш"
+
+msgid "Ottimizzazione Asset"
+msgstr "Оптимизация ассетов"
+
+msgid "Controlla come vengono caricati JavaScript e CSS nel frontend."
+msgstr "Контроль загрузки JS и CSS."
+
+msgid "Defer JavaScript"
+msgstr "Defer JavaScript"
+
+msgid "Aggiunge l'attributo defer agli script frontend di Olobuild. Non blocca il rendering della pagina."
+msgstr "Добавляет defer к скриптам."
+
+msgid "Cache CSS su file"
+msgstr "CSS-кэш в файл"
+
+msgid "Salva il CSS generato dai template come file statici invece di iniettarlo inline. Migliora il caching del browser."
+msgstr "Сохраняет CSS как статич. файлы."
+
+msgid "Minifica CSS"
+msgstr "Минифицировать CSS"
+
+msgid "Rimuove commenti, spazi e newline dal CSS generato."
+msgstr "Удаляет комментарии, пробелы, переводы строк."
+
+msgid "Cache CSS"
+msgstr "Кэш CSS"
+
+msgid "File in cache"
+msgstr "Файлов в кэше"
+
+msgid "Dimensione totale"
+msgstr "Общий размер"
+
+msgid "Svuota cache CSS"
+msgstr "Очистить CSS-кэш"
+
+msgid "Resource Hints"
+msgstr "Resource Hints"
+
+msgid "Suggerimenti al browser per precaricare risorse e velocizzare il caricamento."
+msgstr "Подсказки браузеру для preload."
+
+msgid "DNS Prefetch & Preconnect"
+msgstr "DNS Prefetch & Preconnect"
+
+msgid "Aggiunge dns-prefetch e preconnect per Google Fonts, YouTube, Vimeo e altri domini esterni."
+msgstr "Добавляет dns-prefetch и preconnect."
+
+msgid "Preload font"
+msgstr "Preload шрифтов"
+
+msgid "Precarica i font custom usati come body/heading per evitare FOUT (Flash of Unstyled Text)."
+msgstr "Preload кастомных шрифтов."
+
+msgid "Video facade"
+msgstr "Видео facade"
+
+msgid "Mostra un'anteprima statica dei video YouTube/Vimeo. L'iframe si carica solo al click. Risparmia ~500KB per video."
+msgstr "Статич. превью YouTube/Vimeo."
+
+msgid "fetchpriority hero image"
+msgstr "fetchpriority hero image"
+
+msgid "Aggiunge fetchpriority=\"high\" alla prima immagine della pagina e rimuove lazy loading dagli elementi above-fold."
+msgstr "Добавляет fetchpriority=\"high\" к hero."
+
+msgid "Lazy loading immagini"
+msgstr "Lazy-загрузка изображений"
+
+msgid "Aggiunge loading=\"lazy\" alle immagini below-the-fold. Riduce il peso iniziale della pagina."
+msgstr "Добавляет loading=\"lazy\" к изображениям."
+
+msgid "Domini personalizzati"
+msgstr "Свои домены"
+
+msgid "Aggiungi domini per dns-prefetch e preconnect personalizzati (uno per riga, con https://)."
+msgstr "Добавьте домены для dns-prefetch."
+
+msgid "DNS Prefetch"
+msgstr "DNS Prefetch"
+
+msgid "Risolve il DNS in anticipo. Utile per CDN e servizi esterni."
+msgstr "Заранее разрешает DNS."
+
+msgid "Preconnect"
+msgstr "Preconnect"
+
+msgid "Apre connessione completa (DNS + TCP + TLS). Più aggressivo del dns-prefetch, usare solo per risorse critiche."
+msgstr "Открывает полное соединение."
+
+msgid "Pulizia head"
+msgstr "Очистка head"
+
+msgid "Rimuovi risorse non necessarie dal <head> per ridurre richieste e peso della pagina."
+msgstr "Удаляет ненужное из head."
+
+msgid "Rimuovi jQuery Migrate"
+msgstr "Удалить jQuery Migrate"
+
+msgid "Rimuove jquery-migrate.js (~10KB). Necessario solo per compatibilità con plugin molto vecchi."
+msgstr "Удаляет jquery-migrate.js (~10КБ)."
+
+msgid "Rimuovi emoji scripts"
+msgstr "Удалить emoji-скрипты"
+
+msgid "Rimuove wp-emoji-release.min.js e relativi stili inline. I browser moderni supportano emoji nativamente."
+msgstr "Удаляет wp-emoji-release.min.js."
+
+msgid "Rimuovi Block CSS"
+msgstr "Удалить Block CSS"
+
+msgid "Rimuove wp-block-library-css (~30KB). Attiva solo se non usi blocchi Gutenberg nel frontend."
+msgstr "Удаляет wp-block-library-css."
+
+msgid "Rimuovi Classic Theme CSS"
+msgstr "Удалить Classic Theme CSS"
+
+msgid "Rimuove classic-theme-styles-css. Inutile se non usi un tema classico."
+msgstr "Удаляет classic-theme-styles-css."
+
+msgid "Analytics"
+msgstr "Аналитика"
+
+msgid "Provider"
+msgstr "Провайдер"
+
+msgid "Eventi"
+msgstr "События"
+
+msgid "Impostazioni"
+msgstr "Настройки"
+
+msgid "Script personalizzati"
+msgstr "Свои скрипты"
+
+msgid "%1$s provider attivi · %2$s eventi tracciati · %3$s blocchi script custom"
+msgstr "%1$s провайдеров · %2$s событий · %3$s скриптов"
+
+msgid "Analytics & Tracking"
+msgstr "Аналитика и трекинг"
+
+msgid "Measurement ID di GA4. Lo trovi in Amministrazione &rarr; Flussi di dati."
+msgstr "GA4 Measurement ID. Адм. → Потоки данных."
+
+msgid "Container ID di GTM. Se usi GTM per gestire GA4, non inserire anche il Measurement ID sopra."
+msgstr "GTM Container ID. Не указывайте также Measurement ID."
+
+msgid "Pixel ID di Meta/Facebook. Lo trovi in Events Manager &rarr; Impostazioni."
+msgstr "Meta/FB Pixel ID. В Events Manager."
+
+msgid "Project ID di Clarity. Heatmap e session recording gratuiti."
+msgstr "Clarity Project ID. Бесплатные heatmap и записи."
+
+msgid "Site ID di Hotjar. Lo trovi in Settings &rarr; Sites & Organizations."
+msgstr "Hotjar Site ID."
+
+msgid "Click sui pulsanti"
+msgstr "Клики по кнопкам"
+
+msgid "Invio form"
+msgstr "Отправка формы"
+
+msgid "Riproduzione video"
+msgstr "Воспроизведение видео"
+
+msgid "Profondità di scroll"
+msgstr "Глубина прокрутки"
+
+msgid "Click su pricing CTA"
+msgstr "Клик по pricing CTA"
+
+msgid "Download file"
+msgstr "Скачивание файла"
+
+msgid "Link esterni"
+msgstr "Внешние ссылки"
+
+msgid "Richiedi consenso cookie"
+msgstr "Запросить согласие cookie"
+
+msgid "Blocca gli script di tracking finché l'utente non accetta i cookie analitici/marketing dal banner Cookie Consent. Richiesto per GDPR."
+msgstr "Блокирует tracking-скрипты до согласия."
+
+msgid "Anonimizza IP"
+msgstr "Анонимизация IP"
+
+msgid "GA4 anonimizza l'IP di default, ma questa opzione aggiunge il parametro esplicito per conformità."
+msgstr "GA4 анонимизирует по умолчанию."
+
+msgid "Rispetta Do Not Track"
+msgstr "Уважать Do Not Track"
+
+msgid "Non caricare gli script se il browser invia l'header Do Not Track."
+msgstr "Не загружать скрипты при DNT."
+
+msgid "Escludi amministratori"
+msgstr "Исключить администраторов"
+
+msgid "Non tracciare le visite degli utenti con ruolo Amministratore."
+msgstr "Не отслеживать админов."
+
+msgid "Non configurato"
+msgstr "Не настроено"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Auto-tracking eventi"
+msgstr "Авто-трекинг событий"
+
+msgid "Scegli quali eventi tracciare automaticamente. Vengono inviati a tutti i provider configurati."
+msgstr "Выберите авто-отслеживаемые события."
+
+msgid "Parametri eventi"
+msgstr "Параметры событий"
+
+msgid "Configura i dettagli degli eventi di scroll e download."
+msgstr "Настройте параметры scroll/download."
+
+msgid "Milestone scroll (%)"
+msgstr "Этапы прокрутки (%)"
+
+msgid "Percentuali di scroll a cui inviare un evento (separate da virgola)."
+msgstr "Проценты прокрутки (через зап.)."
+
+msgid "Estensioni download"
+msgstr "Расширения загрузок"
+
+msgid "Estensioni file da tracciare come download (separate da virgola)."
+msgstr "Расширения файлов (через зап.)."
+
+msgid "Privacy e conformità"
+msgstr "Приватность и соответствие"
+
+msgid "Opzioni di privacy, GDPR e gestione del consenso."
+msgstr "Параметры приватности, GDPR."
+
+msgid "Inserisci script di tracking aggiuntivi. Verranno bloccati dal consenso cookie se abilitato."
+msgstr "Добавьте tracking-скрипты."
+
+msgid "Script nel <head>"
+msgstr "Скрипты в <head>"
+
+msgid "Inseriti prima della chiusura di </head>. Utile per snippet di tracking non supportati nativamente."
+msgstr "Перед </head>."
+
+msgid "Script nel <body>"
+msgstr "Скрипты в <body>"
+
+msgid "Inseriti prima della chiusura di </body>."
+msgstr "Перед </body>."
+
+msgid "Vai al contenuto principale"
+msgstr "К основному содержимому"
+
+msgid "Riproduci video"
+msgstr "Воспроизвести видео"
+
+msgid "Redirect & 404"
+msgstr "Редиректы и 404"
+
+msgid "Redirect"
+msgstr "Редирект"
+
+msgid "Monitor 404"
+msgstr "Монитор 404"
+
+msgid "%1$s redirect attivi · %2$s pagine 404 da gestire"
+msgstr "%1$s редиректов · %2$s страниц 404"
+
+msgid "%s redirect attivi · nessun 404 da gestire"
+msgstr "%s редиректов · нет 404"
+
+msgid "Prefisso <code>~</code> per regex. Es: <code>~/vecchio/(.*)</code> &rarr; <code>/nuovo/$1</code>"
+msgstr "Префикс ~ для regex."
+
+msgid "Aggiungi Redirect"
+msgstr "Добавить редирект"
+
+msgid "Da URL"
+msgstr "С URL"
+
+msgid "Percorso relativo o regex con prefisso ~"
+msgstr "Отн. путь или regex"
+
+msgid "A URL"
+msgstr "На URL"
+
+msgid "Percorso relativo o URL assoluto"
+msgstr "Относ. путь или абсолют. URL"
+
+msgid "Tipo"
+msgstr "Тип"
+
+msgid "301 — Permanente (consigliato)"
+msgstr "301 — Постоянный (реком.)"
+
+msgid "302 — Temporaneo"
+msgstr "302 — Временный"
+
+msgid "307 — Temporaneo (strict)"
+msgstr "307 — Временный (strict)"
+
+msgid "410 — Risorsa rimossa (Gone)"
+msgstr "410 — Удалено"
+
+msgid "Cookie Consent"
+msgstr "Cookie Consent"
+
+msgid "Generale"
+msgstr "Общие"
+
+msgid "Testi"
+msgstr "Тексты"
+
+msgid "Aspetto"
+msgstr "Внешний вид"
+
+msgid "Categorie"
+msgstr "Категории"
+
+msgid "Blocco Script"
+msgstr "Блокировка скриптов"
+
+msgid "Dichiarazione Cookie"
+msgstr "Декларация Cookie"
+
+msgid "Log Consensi"
+msgstr "Журнал согласий"
+
+msgid "Banner attivo · GDPR-compliant · log consensi tracciato."
+msgstr "Баннер активен · GDPR · журнал."
+
+msgid "Banner disattivato. Configura testi, aspetto e categorie cookie per attivarlo."
+msgstr "Баннер выкл."
+
+msgid "%d consensi registrati. Il GDPR richiede di poter dimostrare il consenso raccolto."
+msgstr "%d зарегистр. согласий."
+
+msgid "Svuotare tutti i log dei consensi?"
+msgstr "Очистить все журналы согласий?"
+
+msgid "Questo contenuto richiede il consenso ai cookie"
+msgstr "Этот контент требует согласия cookie"
+
+msgid "Accetta e carica"
+msgstr "Принять и загрузить"
+
+msgid "Gestisci cookie"
+msgstr "Управление cookie"
+
+msgid "Impostazioni generali"
+msgstr "Общие настройки"
+
+msgid "Configura il comportamento del cookie banner"
+msgstr "Настройка cookie-баннера"
+
+msgid "Abilita Cookie Banner"
+msgstr "Включить cookie-баннер"
+
+msgid "Layout"
+msgstr "Макет"
+
+msgid "Barra"
+msgstr "Полоса"
+
+msgid "Box laterale"
+msgstr "Боковой бокс"
+
+msgid "Full-width"
+msgstr "Full-width"
+
+msgid "Posizione"
+msgstr "Позиция"
+
+msgid "In basso"
+msgstr "Внизу"
+
+msgid "In alto"
+msgstr "Вверху"
+
+msgid "Mostra \"Rifiuta tutti\""
+msgstr "Показать «Отклонить все»"
+
+msgid "Richiesto dalle linee guida CNIL/Garante Privacy italiano."
+msgstr "Требуется CNIL/итал. Garante."
+
+msgid "Mostra \"Personalizza\""
+msgstr "Показать «Настроить»"
+
+msgid "Pulsante per aprire il pannello preferenze con le categorie."
+msgstr "Кнопка для панели настроек."
+
+msgid "Durata consenso"
+msgstr "Срок согласия"
+
+msgid "GDPR raccomanda max 6 mesi (180 giorni). Molti usano 365."
+msgstr "GDPR рек. макс. 6 мес."
+
+msgid "Richiedere nuovamente dopo"
+msgstr "Запросить снова после"
+
+msgid "Se la cookie policy cambia, puoi forzare la ripresentazione del banner."
+msgstr "При смене policy баннер показ. снова."
+
+msgid "giorni (0 = mai)"
+msgstr "дней (0 = никогда)"
+
+msgid "Google Consent Mode v2"
+msgstr "Google Consent Mode v2"
+
+msgid "Invia segnali gtag(\"consent\") a Google. Richiesto da Google Ads dal marzo 2024 per EEA/UK."
+msgstr "Отправляет gtag(\"consent\") в Google."
+
+msgid "Blocco iframe"
+msgstr "Блокировка iframe"
+
+msgid "Blocca iframe di YouTube, Vimeo, Google Maps fino al consenso. Mostra un placeholder con pulsante \"Carica contenuto\"."
+msgstr "Блокирует iframe до согласия."
+
+msgid "Versione banner"
+msgstr "Версия баннера"
+
+msgid "Incrementa quando cambi la cookie policy. I visitatori con consenso a una versione precedente vedranno di nuovo il banner."
+msgstr "Увеличивайте при смене политики."
+
+msgid "Testi del banner"
+msgstr "Тексты баннера"
+
+msgid "Personalizza i testi mostrati nel cookie banner"
+msgstr "Настройте тексты баннера"
+
+msgid "Titolo"
+msgstr "Название"
+
+msgid "Messaggio"
+msgstr "Сообщение"
+
+msgid "Pulsante \"Accetta tutti\""
+msgstr "Кнопка «Принять все»"
+
+msgid "Pulsante \"Rifiuta tutti\""
+msgstr "Кнопка «Отклонить все»"
+
+msgid "Pulsante \"Personalizza\""
+msgstr "Кнопка «Настроить»"
+
+msgid "Pulsante \"Salva preferenze\""
+msgstr "Кнопка «Сохр. настройки»"
+
+msgid "Link policy"
+msgstr "Ссылки policy"
+
+msgid "URL e testi dei link alle pagine di policy"
+msgstr "URL и тексты ссылок на policy"
+
+msgid "URL Privacy Policy"
+msgstr "URL Privacy Policy"
+
+msgid "Testo link Privacy"
+msgstr "Текст ссылки Privacy"
+
+msgid "URL Cookie Policy"
+msgstr "URL Cookie Policy"
+
+msgid "Testo link Cookie Policy"
+msgstr "Текст ссылки Cookie Policy"
+
+msgid "Colori banner"
+msgstr "Цвета баннера"
+
+msgid "Sfondo e testo del cookie banner"
+msgstr "Фон и текст баннера"
+
+msgid "Sfondo banner"
+msgstr "Фон баннера"
+
+msgid "Colore testo"
+msgstr "Цвет текста"
+
+msgid "Colori pulsanti"
+msgstr "Цвета кнопок"
+
+msgid "Personalizza i colori dei pulsanti \"Accetta\" e \"Rifiuta\""
+msgstr "Настройте цвета кнопок"
+
+msgid "Pulsante primario — sfondo"
+msgstr "Осн. кнопка — фон"
+
+msgid "Pulsante primario — testo"
+msgstr "Осн. кнопка — текст"
+
+msgid "Pulsante secondario — sfondo"
+msgstr "Втор. кнопка — фон"
+
+msgid "Pulsante secondario — testo"
+msgstr "Втор. кнопка — текст"
+
+msgid "Stile"
+msgstr "Стиль"
+
+msgid "Overlay e border radius del banner"
+msgstr "Overlay и border radius"
+
+msgid "Overlay scuro"
+msgstr "Тёмный оверлей"
+
+msgid "Oscura la pagina dietro il banner per attirare l'attenzione."
+msgstr "Затемняет страницу для внимания."
+
+msgid "Border radius"
+msgstr "Border radius"
+
+msgid "Categorie cookie"
+msgstr "Категории cookie"
+
+msgid "Personalizza nome e descrizione di ogni categoria mostrata nel pannello preferenze."
+msgstr "Настройте имя и описание категорий."
+
+msgid "Sempre attivo"
+msgstr "Всегда активно"
+
+msgid "Etichetta"
+msgstr "Etichetta"
+
+msgid "Descrizione"
+msgstr "Descrizione"
+
+msgid "Blocco automatico script"
+msgstr "Авто-блокировка скриптов"
+
+msgid "Blocca automaticamente script di terze parti finché l'utente non accetta la categoria corrispondente."
+msgstr "Авто-блокировка 3rd-party скриптов."
+
+msgid "Abilita auto-blocco"
+msgstr "Включить авто-блок"
+
+msgid "Converte gli script corrispondenti in type=\"text/plain\" finché il consenso non è dato."
+msgstr "Конвертирует скрипты в type=\"text/plain\"."
+
+msgid "Pattern da bloccare"
+msgstr "Шаблоны для блок."
+
+msgid "Un dominio/pattern per riga. Gli script il cui src contiene uno di questi pattern vengono bloccati."
+msgstr "Один домен/шаблон в строку."
+
+msgid "Blocco manuale"
+msgstr "Ручная блокировка"
+
+msgid "Puoi anche bloccare script manualmente nel tuo HTML aggiungendo:"
+msgstr "Можно блокировать вручную в HTML:"
+
+msgid "Dichiarazione cookie"
+msgstr "Декларация Cookie"
+
+msgid "Elenca i cookie utilizzati dal sito. Questi vengono mostrati nel pannello preferenze."
+msgstr "Список используемых cookie."
+
+msgid "Nome cookie"
+msgstr "Имя cookie"
+
+msgid "Scopo"
+msgstr "Цель"
+
+msgid "Scadenza"
+msgstr "Срок"
+
+msgid "Aggiungi cookie"
+msgstr "Добавить cookie"
+
+msgid "Log dei consensi"
+msgstr "Журнал согласий"
+
+msgid "Esporta CSV"
+msgstr "Esporta CSV"
+
+msgid "Svuota log"
+msgstr "Очистить журнал"
+
+msgid "ID Consenso"
+msgstr "ID согласия"
+
+msgid "Data"
+msgstr "Data"
+
+msgid "Azione"
+msgstr "Действие"
+
+msgid "Ver."
+msgstr "Вер."
+
+msgid "IP (hash)"
+msgstr "IP (хэш)"
+
+msgid "Categorie accettate"
+msgstr "Принятые категории"
+
+msgid "User Agent"
+msgstr "User Agent"
+
+msgid "Nessun consenso registrato."
+msgstr "Нет зарегистр. согласий."
+
+msgid "Preferenze cookie"
+msgstr "Настройки cookie"
+
+msgid "Chiudi"
+msgstr "Chiudi"
+
+msgid "Scegli quali categorie di cookie accettare. Puoi modificare le tue preferenze in qualsiasi momento."
+msgstr "Выберите принимаемые категории."
+
+msgid "Dettaglio cookie utilizzati"
+msgstr "Детали используемых cookie"
+
+msgid "Cookie"
+msgstr "Cookie"
+
+msgid "WooCommerce"
+msgstr "WooCommerce"
+
+msgid "Template WooCommerce"
+msgstr "Шаблоны WooCommerce"
+
+msgid "Override Olobuild attivi su %1$s/%2$s pagine WooCommerce (prodotto, archivio, carrello, checkout, mio account)."
+msgstr "Olobuild override на %1$s/%2$s WC-стр."
+
+msgid "Senza titolo"
+msgstr "Без названия"
+
+msgid "(Copia)"
+msgstr "(Копия)"
+
+msgid "Pagine pubblicate"
+msgstr "Опубликованные стр."
+
+msgid "nessuna nuova"
+msgstr "ничего нового"
+
+msgid "Template attivi"
+msgstr "Активные шаблоны"
+
+msgid "tutti pubblicati"
+msgstr "все опубликованы"
+
+msgid "Invii form (7gg)"
+msgstr "Отправки форм (7 дн.)"
+
+msgid "periodo iniziale"
+msgstr "начальный период"
+
+msgid "Avvisi da risolvere"
+msgstr "Уведомления к решению"
+
+msgid "tutto a posto"
+msgstr "всё в порядке"
+
+msgid "(senza titolo)"
+msgstr "(без названия)"
+
+msgid "Articolo"
+msgstr "Статья"
+
+msgid "Pagina"
+msgstr "Страница"
+
+msgid "fa"
+msgstr "fa"
+
+msgid "Vedi changelog completo nel repository."
+msgstr "Полный changelog в репо."
+
+msgid "Invio non trovato"
+msgstr "Отправка не найдена"
+
+msgid "Nessun ID selezionato"
+msgstr "ID не выбран"
+
+msgid "Azione non valida"
+msgstr "Недопустимое действие"
+
+msgid "+%d questa settimana"
+msgstr "+%d на этой неделе"
+
+msgid "%d in bozza"
+msgstr "%d в черновике"
+
+msgid "Regole di visualizzazione"
+msgstr "Правила отображения"
+
+msgid "Accesso negato."
+msgstr "Доступ запрещён."
+
+msgid "Regole di visualizzazione template"
+msgstr "Правила отображения шаблонов"
+
+msgid "Definisci dove ogni template Header/Footer si applica. Le regole hanno priorità sull'header/footer globale e cedono il passo a un'eventuale assegnazione per-pagina dal metabox Olobuild."
+msgstr "Где применяется каждый header/footer."
+
+msgid "Regole salvate."
+msgstr "Правила сохранены."
+
+msgid "Nessun template Header/Footer pubblicato. Crea prima un template e impostalo come \"Pubblicato\"."
+msgstr "Нет опубликованных Header/Footer."
+
+msgid "Nome"
+msgstr "Nome"
+
+msgid "Area"
+msgstr "Область"
+
+msgid "Priorità"
+msgstr "Priorità"
+
+msgid "Abilita"
+msgstr "Включить"
+
+msgid "es. Header strutture"
+msgstr "напр. Header объектов"
+
+msgid "Seleziona template"
+msgstr "Выбрать шаблон"
+
+msgid "Header"
+msgstr "Header"
+
+msgid "Footer"
+msgstr "Footer"
+
+msgid "Più basso = più importante"
+msgstr "Меньше = важнее"
+
+msgid "— Seleziona —"
+msgstr "— Seleziona —"
+
+msgid "Front page"
+msgstr "Front page"
+
+msgid "Singoli di un tipo (CPT)"
+msgstr "Одиночные типа (CPT)"
+
+msgid "Archivio di un tipo (CPT)"
+msgstr "Архив типа (CPT)"
+
+msgid "Una pagina specifica (ID)"
+msgstr "Конкретная страница (ID)"
+
+msgid "Un articolo specifico (ID)"
+msgstr "Конкретная статья (ID)"
+
+msgid "Risultati ricerca"
+msgstr "Результаты поиска"
+
+msgid "Utenti loggati"
+msgstr "Авторизованные"
+
+msgid "Utenti non loggati"
+msgstr "Неавторизованные"
+
+msgid "— Tipo —"
+msgstr "— Тип —"
+
+msgid "Aggiungi regola"
+msgstr "Добавить правило"
+
+msgid "Salva regole"
+msgstr "Сохранить правила"
+
+msgid "Come funziona"
+msgstr "Как работает"
+
+msgid "Priorità più bassa = vince per prima"
+msgstr "Меньший приоритет = первый"
+
+msgid "A parità, l'ordine in tabella decide."
+msgstr "При равенстве — порядок в таблице."
+
+msgid "Se un singolo post ha un header/footer assegnato dal metabox Olobuild, quello vince comunque sulle regole qui."
+msgstr "Header/footer из метабокса побеждает."
+
+msgid "Se nessuna regola matcha, viene usato l'header/footer globale (Gestione Template → Attiva)."
+msgstr "Если ни одно правило не подходит — глобальный."
+
+msgid "Header Olobuild"
+msgstr "Header Olobuild"
+
+msgid "Sostituzione URL"
+msgstr "Замена URL"
+
+msgid "Controllo Versione"
+msgstr "Контроль версии"
+
+msgid "Modalità di Manutenzione"
+msgstr "Режим обслуживания"
+
+msgid "Template Website"
+msgstr "Шаблон веб-сайта"
+
+msgid "Strumenti"
+msgstr "Инструменты"
+
+msgid "Cache, manutenzione, sostituzione URL e rollback. Utilizzare con cura."
+msgstr "Кэш, обслуж., замена URL, rollback."
+
+msgid "Olobuild Diagnostics"
+msgstr "Диагностика Olobuild"
+
+msgid "Sì"
+msgstr "Sì"
+
+msgid "No"
+msgstr "No"
+
+msgid "NON DEFINITO"
+msgstr "НЕ ОПРЕДЕЛЕНО"
+
+msgid "Questa pagina serve solo per debug. Se stai vedendo questo contenuto, l'accesso funziona. Riporta queste informazioni per risolvere problemi di permessi."
+msgstr "Страница для отладки. Сообщите инфо."
+
+msgid "Utente corrente"
+msgstr "Текущий пользователь"
+
+msgid "User ID"
+msgstr "User ID"
+
+msgid "Username"
+msgstr "Username"
+
+msgid "Email"
+msgstr "Email"
+
+msgid "Ruoli"
+msgstr "Роли"
+
+msgid "Super admin?"
+msgstr "Супер админ?"
+
+msgid "Multisite?"
+msgstr "Multisite?"
+
+msgid "Verifica capability"
+msgstr "Проверить capability"
+
+msgid "Capability"
+msgstr "Capability"
+
+msgid "Stato Olobuild"
+msgstr "Состояние Olobuild"
+
+msgid "Plugin attivi"
+msgstr "Активные плагины"
+
+msgid "Info WordPress"
+msgstr "Инфо WordPress"
+
+msgid "Versione WP"
+msgstr "Версия WP"
+
+msgid "Versione PHP"
+msgstr "Версия PHP"
+
+msgid "Tema"
+msgstr "Тема"
+
+msgid "URL sito"
+msgstr "URL сайта"
+
+msgid "URL admin"
+msgstr "URL админки"
+
+msgid "Test accesso pagine"
+msgstr "Тест доступа стр."
+
+msgid "Clicca questi link per capire dove fallisce:"
+msgstr "Кликните для диагностики."
+
+msgid "Dashboard"
+msgstr "Dashboard"
+
+msgid "Gestione Template"
+msgstr "Управление шаблонами"
+
+msgid "Configurazione"
+msgstr "Конфигурация"
+
+msgid "Setup Wizard"
+msgstr "Мастер настройки"
+
+msgid "SEO"
+msgstr "SEO"
+
+msgid "Title, meta description, Open Graph, schema.org, sitemap XML e webmaster tools."
+msgstr "Title, meta, OG, schema, sitemap."
+
+msgid "Tutti"
+msgstr "Все"
+
+msgid "Non letti"
+msgstr "Непрочитанные"
+
+msgid "Letti"
+msgstr "Прочитанные"
+
+msgid "%1$s invii totali · %2$s da leggere · %3$s ultimi 7gg"
+msgstr "%1$s всего · %2$s к чтению · %3$s 7 дн."
+
+msgid "Invii Form"
+msgstr "Отправки форм"
+
+msgid "Cerca per nome, email, contenuto…"
+msgstr "Поиск по имени, e-mail, контенту…"
+
+msgid "Caricamento invii…"
+msgstr "Загрузка отправок…"
+
+msgid "Segna come non letto"
+msgstr "Отметить как непрочит."
+
+msgid "Elimina"
+msgstr "Elimina"
+
+msgid "Carica altri"
+msgstr "Загрузить ещё"
+
+msgid "Pannello flottante"
+msgstr "Плавающая панель"
+
+msgid "Trascina qui contenuti del pannello"
+msgstr "Перетащите сюда контент"
+
+msgid "O clicca per aprire il finder"
+msgstr "Или нажмите для finder"
+
+msgid "Ordina:"
+msgstr "Сортировка:"
+
+msgid "Più recenti"
+msgstr "Più recenti"
+
+msgid "Più vecchi"
+msgstr "Più vecchi"
+
+msgid "Titolo (A-Z)"
+msgstr "Название (A-Z)"
+
+msgid "Titolo (Z-A)"
+msgstr "Название (Z-A)"
+
+msgid "Casuale"
+msgstr "Случайный"
+
+msgid "Notizia %d"
+msgstr "Новость %d"
+
+msgid "Precedente"
+msgstr "Precedente"
+
+msgid "Successivo"
+msgstr "Successivo"
+
+msgid "Pagina non trovata"
+msgstr "Страница не найдена"
+
+msgid "Apri ricerca"
+msgstr "Открыть поиск"
+
+msgid "Cerca"
+msgstr "Cerca"
+
+msgid "Cancella"
+msgstr "Cancella"
+
+msgid "Main menu"
+msgstr "Главное меню"
+
+msgid "Open menu"
+msgstr "Открыть меню"
+
+msgid "Mobile menu"
+msgstr "Мобильное меню"
+
+msgid "Close menu"
+msgstr "Закрыть меню"
+
+msgid "Vertical menu"
+msgstr "Вертикальное меню"
+
+msgid "Sub navigation"
+msgstr "Подменю"
+
+msgid "Embedded video"
+msgstr "Встроенное видео"
+
+msgid "Inserisci un URL video"
+msgstr "Введите URL видео"
+
+msgid "Seleziona un file video"
+msgstr "Выберите видеофайл"
+
+msgid "Background video"
+msgstr "Фоновое видео"
+
+msgid "Seleziona una sorgente video"
+msgstr "Выберите источник видео"
+
+msgid "Ordina per…"
+msgstr "Сортировать по…"
+
+msgid "Navigation"
+msgstr "Навигация"
+
+msgid "Import / Export"
+msgstr "Импорт / Экспорт"
+
+msgid "Esporta singoli template, intero sito o backup completo. %d template disponibili."
+msgstr "Экспорт шаблонов, сайта или backup."
+
+msgid "Esporta"
+msgstr "Экспорт"
+
+msgid "Scarica template e media in formato JSON"
+msgstr "Скачайте шаблоны и медиа в JSON"
+
+msgid "Singolo template"
+msgstr "Один шаблон"
+
+msgid "Includi media (immagini, video, PDF)"
+msgstr "С медиа (изобр., видео, PDF)"
+
+msgid "Esporta Template"
+msgstr "Экспорт шаблона"
+
+msgid "Esporta tutto il sito"
+msgstr "Экспорт всего сайта"
+
+msgid "Include tutti i template, header, footer e stili globali"
+msgstr "Все шаблоны, header, footer, стили"
+
+msgid "Esporta Sito Completo"
+msgstr "Экспорт всего сайта"
+
+msgid "Importa"
+msgstr "Импорт"
+
+msgid "Carica un file .json esportato da Olobuild"
+msgstr "Загрузите .json из Olobuild"
+
+msgid "Importa media (scarica e ricarica immagini)"
+msgstr "Импорт медиа"
+
+msgid "Ricerca Media"
+msgstr "Поиск медиа"
+
+msgid "Cerca foto, video, audio e panorami da provider stock. %1$s/%2$s provider configurati."
+msgstr "Поиск фото/видео/аудио. %1$s/%2$s."
+
+msgid "Cerca foto, video, audio..."
+msgstr "Поиск фото, видео, аудио..."
+
+msgid "https://www.google.com/maps/@45.4642,9.1900,3a... oppure 45.4642,9.1900"
+msgstr "URL Google Maps или координаты"
+
+msgid "min sec"
+msgstr "мин сек"
+
+msgid "max sec"
+msgstr "макс сек"
+
+msgid "Foto"
+msgstr "Фото"
+
+msgid "Video"
+msgstr "Video"
+
+msgid "Foto 360"
+msgstr "Фото 360"
+
+msgid "Video 360"
+msgstr "Видео 360"
+
+msgid "Audio"
+msgstr "Аудио"
+
+msgid "Incolla un URL Google Maps, coordinate (lat,lng) o un pano_id per scaricare un panorama Street View."
+msgstr "Вставьте URL Maps, координаты или pano_id."
+
+msgid "Zoom 2 (bassa)"
+msgstr "Zoom 2 (низкий)"
+
+msgid "Zoom 3 (media)"
+msgstr "Zoom 3 (средний)"
+
+msgid "Zoom 4 (alta)"
+msgstr "Zoom 4 (высокий)"
+
+msgid "Cerca panorama"
+msgstr "Поиск панорамы"
+
+msgid "Orientamento:"
+msgstr "Ориентация:"
+
+msgid "Qualsiasi"
+msgstr "Qualsiasi"
+
+msgid "Orizzontale"
+msgstr "Горизонтальный"
+
+msgid "Verticale"
+msgstr "Вертикальный"
+
+msgid "Quadrato"
+msgstr "Квадрат"
+
+msgid "Dimensione:"
+msgstr "Размер:"
+
+msgid "Piccola"
+msgstr "Маленький"
+
+msgid "Media"
+msgstr "Средний"
+
+msgid "Grande"
+msgstr "Большой"
+
+msgid "Min larghezza:"
+msgstr "Мин ширина:"
+
+msgid "Min altezza:"
+msgstr "Мин высота:"
+
+msgid "Durata:"
+msgstr "Длительность:"
+
+msgid "Brevissimo (< 5s)"
+msgstr "Очень короткое (< 5с)"
+
+msgid "Breve (< 15s)"
+msgstr "Короткое (< 15с)"
+
+msgid "5 — 30 secondi"
+msgstr "5 — 30 секунд"
+
+msgid "10s — 1 minuto"
+msgstr "10с — 1 минута"
+
+msgid "30s — 2 minuti"
+msgstr "30с — 2 минуты"
+
+msgid "1 — 5 minuti"
+msgstr "1 — 5 минут"
+
+msgid "Lungo (> 5 min)"
+msgstr "Длинное (> 5 мин)"
+
+msgid "oppure"
+msgstr "или"
+
+msgid "secondi"
+msgstr "секунд"
+
+msgid "White Label"
+msgstr "White Label"
+
+msgid "Branding personalizzato attivo. Nasconde il marchio Olobuild dai tuoi clienti."
+msgstr "Свой брендинг активен."
+
+msgid "Personalizza nome plugin, logo, autore e link per nascondere il brand Olobuild."
+msgstr "Настройте имя, лого, автора."
+
+msgid "Page builder professionale"
+msgstr "Профессиональный page builder"
+
+msgid "Salvataggio..."
+msgstr "Сохранение..."
+
+msgid "Impostazioni salvate con successo"
+msgstr "Настройки сохранены"
+
+msgid "Errore nel salvataggio"
+msgstr "Ошибка сохранения"
+
+msgid "Impostazioni White Label"
+msgstr "Настройки White Label"
+
+msgid "Rinomina plugin, nascondi credits e impostazioni per i non-admin"
+msgstr "Переименуйте плагин, скройте credits."
+
+msgid "Attiva White Label"
+msgstr "Включить White Label"
+
+msgid "Abilita la personalizzazione del brand"
+msgstr "Включить кастомизацию бренда"
+
+msgid "Nome plugin"
+msgstr "Имя плагина"
+
+msgid "Nome autore"
+msgstr "Имя автора"
+
+msgid "URL autore"
+msgstr "URL автора"
+
+msgid "Nascondi per non-admin"
+msgstr "Скрыть для не-админов"
+
+msgid "Nasconde le impostazioni White Label per utenti non amministratori"
+msgstr "Скрывает White Label для не-админов."
+
+msgid "Nascondi credits"
+msgstr "Скрыть credits"
+
+msgid "Rimuove la scritta \"Powered by Olobuild\""
+msgstr "Удаляет надпись «Powered by Olobuild»."
+
+msgid "Pagina vuota"
+msgstr "Пустая страница"
+
+msgid "Aggiungi un modulo o scegli un layout per iniziare"
+msgstr "Добавьте модуль или выберите макет"
+
+msgid "Aggiungi modulo"
+msgstr "Добавить модуль"
+
+msgid "Scegli layout"
+msgstr "Выбрать макет"
+
+msgid "Olobuild"
+msgstr "Olobuild"
+
+msgid "Nessun invio trovato."
+msgstr "Отправок не найдено."
+
+msgid "Prova a cambiare filtro o aspetta nuovi messaggi."
+msgstr "Измените фильтр или подождите."
+
+msgid "Segna come letto"
+msgstr "Отметить как прочит."
+
+msgid "Eliminare definitivamente questo invio? L'azione non si può annullare."
+msgstr "Удалить навсегда? Не отменить."
+
+msgid "Invio eliminato"
+msgstr "Отправка удалена"
+
+msgid "Errore eliminazione"
+msgstr "Ошибка удаления"
+
+msgid "Errore caricamento. Riprova."
+msgstr "Ошибка загрузки. Попробуйте."
+
+msgid "Campi compilati"
+msgstr "Заполненные поля"
+
+msgid "Metadati"
+msgstr "Метаданные"
+
+msgid "Inviato il"
+msgstr "Отправлено"
+
+msgid "live"
+msgstr "live"
+
+msgid "bozza"
+msgstr "черновик"
+
+msgid "Aggiungi ai preferiti"
+msgstr "Aggiungi ai preferiti"
+
+msgid "Rimuovi dai preferiti"
+msgstr "Удалить из избранного"
+
+msgid "Espandi pannello"
+msgstr "Развернуть панель"
+
+msgid "Comprimi pannello"
+msgstr "Свернуть панель"
+
+msgid "Cerca pagine, template, impostazioni…"
+msgstr "Поиск страниц, шаблонов…"
+
+msgid "Nessun risultato"
+msgstr "Нет результатов"
+
+msgid "Nessuna attività recente. Crea o modifica una pagina per iniziare."
+msgstr "Нет недавней активности."
+
+msgid "Creazione…"
+msgstr "Создание…"
+
+msgid "Errore nella creazione della pagina. Riprova."
+msgstr "Ошибка создания страницы."
+
+msgid "Salvati"
+msgstr "Сохранённые"
+
+msgid "Avvio Rapido"
+msgstr "Быстрый старт"
+
+msgid "Role Manager"
+msgstr "Role Manager"
+
+msgid "Submissions"
+msgstr "Отправки"
+
+msgid "Template Salvati"
+msgstr "Сохр. шаблоны"
+
+msgid "Popups"
+msgstr "Попапы"
+
+msgid "Marketing"
+msgstr "Маркетинг"
+
+msgid "Personalizzazione"
+msgstr "Кастомизация"
+
+msgid "Sistema"
+msgstr "Система"
+
+msgid "Crea e modifica i tuoi template"
+msgstr "Создание и редактирование шаблонов"
+
+msgid "Stili, colori, tipografia e API"
+msgstr "Стили, цвета, типографика, API"
+
+msgid "Foto, video e audio stock"
+msgstr "Стоковые фото, видео, аудио"
+
+msgid "Visualizza i messaggi ricevuti"
+msgstr "Просмотр сообщений"
+
+msgid "Tracking e statistiche"
+msgstr "Трекинг и статистика"
+
+msgid "Banner GDPR e consenso"
+msgstr "GDPR-баннер и согласие"
+
+msgid "Meta tag, Open Graph e sitemap"
+msgstr "Мета-теги, OG, sitemap"
+
+msgid "Gestisci redirect e pagine 404"
+msgstr "Управление редиректами и 404"
+
+msgid "Cache, lazy load, ottimizzazione"
+msgstr "Кэш, lazy load, оптимизация"
+
+msgid "Cache, manutenzione, URL, versioni"
+msgstr "Кэш, обслуж., URL, версии"
+
+msgid "Template per prodotti e shop"
+msgstr "Шаблоны для товаров и магазина"
+
+msgid "Banner e modali riusabili"
+msgstr "Баннеры и модальные"
+
+msgid "Import/Export"
+msgstr "Импорт/Экспорт"
+
+msgid "Diagnostica"
+msgstr "Диагностика"
+
+msgid "Licenza"
+msgstr "Licenza"
+
+msgid "Hai modificato questa pagina %1$s. La pagina è %2$s."
+msgstr "Изменена %1$s. Состояние: %2$s."
+
+msgid "pubblicata"
+msgstr "опубликована"
+
+msgid "in bozza"
+msgstr "в черновике"
+
+msgid "Inizia a costruire il tuo sito"
+msgstr "Начните создавать сайт"
+
+msgid "Crea la prima pagina o sfoglia i template per partire al volo."
+msgstr "Создайте первую страницу или выберите шаблон."
+
+msgid ""
+"Cache: %s · DB: %s'), '<b>2.4 MB</b>', '<b>OK</b>'),\n"
+"     *     'actions' => Olo_Builder::cockpit_button(['label' => 'Nuovo', 'variant' => 'pri']),\n"
+"     *   ]);\n"
+"     */\n"
+"    public static function cockpit_page_head( $args = [] ) {\n"
+"        $args = wp_parse_args( $args, [ 'title' => '', 'sub' => '', 'actions' => '' ] );\n"
+"        ob_start();\n"
+"        ?>\n"
+"        <header class=\"olo-page-head\">\n"
+"            <div class=\"titles\">\n"
+"                <h1><?php echo esc_html( $args['title'] ); ?></h1>\n"
+"                <?php if ( $args['sub'] ) : ?>\n"
+"                    <div class=\"sub\"><?php echo wp_kses_post( $args['sub'] ); ?></div>\n"
+"                <?php endif; ?>\n"
+"            </div>\n"
+"            <?php if ( $args['actions'] ) : ?>\n"
+"                <div class=\"actions\"><?php echo $args['actions']; // markup pre-validato ?></div>\n"
+"            <?php endif; ?>\n"
+"        </header>\n"
+"        <?php\n"
+"        return ob_get_clean();\n"
+"    }\n"
+"\n"
+"    /**\n"
+"     * Sub-nav tabs (orizzontali) sotto il page head.\n"
+"     *\n"
+"     * @param array  $items   Array di tabs: [{slug, label, count?, href}].\n"
+"     * @param string $active  Slug del tab attivo.\n"
+"     *\n"
+"     * @example\n"
+"     *   echo Olo_Builder::cockpit_subnav([\n"
+"     *     ['slug' => 'general', 'label' => 'Generale', 'href' => admin_url('admin.php?page=olo-seo')],\n"
+"     *     ['slug' => 'meta',    'label' => 'Meta tag', 'href' => admin_url('admin.php?page=olo-seo&tab=meta'), 'count' => 12],\n"
+"     *   ], 'general');\n"
+"     */\n"
+"    public static function cockpit_subnav( $items, $active = '' ) {\n"
+"        if ( empty( $items ) || ! is_array( $items ) ) return '';\n"
+"        ob_start();\n"
+"        ?>\n"
+"        <nav class=\"olo-subnav\">\n"
+"            <?php foreach ( $items as $it ) :\n"
+"                $slug = $it['slug'] ?? '';\n"
+"                $href = $it['href'] ?? '#';\n"
+"                $label = $it['label'] ?? '';\n"
+"                $count = $it['count'] ?? null;\n"
+"                $is_active = ( $slug === $active );\n"
+"            ?>\n"
+"                <a href=\"<?php echo esc_url( $href ); ?>\" class=\"<?php echo $is_active ? 'active' : ''; ?>\">\n"
+"                    <?php echo esc_html( $label ); ?>\n"
+"                    <?php if ( $count !== null ) : ?>\n"
+"                        <span class=\"num\"><?php echo (int) $count; ?></span>\n"
+"                    <?php endif; ?>\n"
+"                </a>\n"
+"            <?php endforeach; ?>\n"
+"        </nav>\n"
+"        <?php\n"
+"        return ob_get_clean();\n"
+"    }\n"
+"\n"
+"    /**\n"
+"     * Toolbar sticky: chip filtri + search + sort + view toggle + content libero.\n"
+"     *\n"
+"     * @param array $args {\n"
+"     *   @type array  $chips        Lista chip: [{id, label, count?, dot_color?, href?}]\n"
+"     *   @type string $active_chip  ID del chip attivo.\n"
+"     *   @type bool   $search       Mostra input search (default false).\n"
+"     *   @type string $search_id    ID dell'input search (per binding JS).\n"
+"     *   @type string $search_placeholder\n"
+"     *   @type string $extra        HTML aggiuntivo dopo gli spacer (es. sort, view toggle).\n"
+"     * }\n"
+"     *\n"
+"     * @example\n"
+"     *   echo Olo_Builder::cockpit_toolbar([\n"
+"     *     'chips' => [\n"
+"     *       ['id'=>'all', 'label'=>'Tutti', 'count'=>128],\n"
+"     *       ['id'=>'unread', 'label'=>'Non letti', 'count'=>12, 'dot_color'=>'#ef4444'],\n"
+"     *     ],\n"
+"     *     'active_chip' => 'all',\n"
+"     *     'search'      => true,\n"
+"     *     'search_placeholder' => 'Cerca…',\n"
+"     *   ]);\n"
+"     */\n"
+"    public static function cockpit_toolbar( $args = [] ) {\n"
+"        $args = wp_parse_args( $args, [\n"
+"            'chips'              => [],\n"
+"            'active_chip'        => '',\n"
+"            'search'             => false,\n"
+"            'search_id'          => '',\n"
+"            'search_placeholder' => __( 'Cerca…"
+msgstr ""
+"Cache: %s · DB: %s'), '<b>2.4 MB</b>', '<b>OK</b>'),\n"
+"     *     'actions' => Olo_Builder::cockpit_button(['label' => 'Nuovo', 'variant' => 'pri']),\n"
+"     *   ]);\n"
+"     */\n"
+"    public static function cockpit_page_head( $args = [] ) {\n"
+"        $args = wp_parse_args( $args, [ 'title' => '', 'sub' => '', 'actions' => '' ] );\n"
+"        ob_start();\n"
+"        ?>\n"
+"        <header class=\"olo-page-head\">\n"
+"            <div class=\"titles\">\n"
+"                <h1><?php echo esc_html( $args['title'] ); ?></h1>\n"
+"                <?php if ( $args['sub'] ) : ?>\n"
+"                    <div class=\"sub\"><?php echo wp_kses_post( $args['sub'] ); ?></div>\n"
+"                <?php endif; ?>\n"
+"            </div>\n"
+"            <?php if ( $args['actions'] ) : ?>\n"
+"                <div class=\"actions\"><?php echo $args['actions']; // markup pre-validato ?></div>\n"
+"            <?php endif; ?>\n"
+"        </header>\n"
+"        <?php\n"
+"        return ob_get_clean();\n"
+"    }\n"
+"\n"
+"    /**\n"
+"     * Sub-nav tabs (orizzontali) sotto il page head.\n"
+"     *\n"
+"     * @param array  $items   Array di tabs: [{slug, label, count?, href}].\n"
+"     * @param string $active  Slug del tab attivo.\n"
+"     *\n"
+"     * @example\n"
+"     *   echo Olo_Builder::cockpit_subnav([\n"
+"     *     ['slug' => 'general', 'label' => 'Generale', 'href' => admin_url('admin.php?page=olo-seo')],\n"
+"     *     ['slug' => 'meta',    'label' => 'Meta tag', 'href' => admin_url('admin.php?page=olo-seo&tab=meta'), 'count' => 12],\n"
+"     *   ], 'general');\n"
+"     */\n"
+"    public static function cockpit_subnav( $items, $active = '' ) {\n"
+"        if ( empty( $items ) || ! is_array( $items ) ) return '';\n"
+"        ob_start();\n"
+"        ?>\n"
+"        <nav class=\"olo-subnav\">\n"
+"            <?php foreach ( $items as $it ) :\n"
+"                $slug = $it['slug'] ?? '';\n"
+"                $href = $it['href'] ?? '#';\n"
+"                $label = $it['label'] ?? '';\n"
+"                $count = $it['count'] ?? null;\n"
+"                $is_active = ( $slug === $active );\n"
+"            ?>\n"
+"                <a href=\"<?php echo esc_url( $href ); ?>\" class=\"<?php echo $is_active ? 'active' : ''; ?>\">\n"
+"                    <?php echo esc_html( $label ); ?>\n"
+"                    <?php if ( $count !== null ) : ?>\n"
+"                        <span class=\"num\"><?php echo (int) $count; ?></span>\n"
+"                    <?php endif; ?>\n"
+"                </a>\n"
+"            <?php endforeach; ?>\n"
+"        </nav>\n"
+"        <?php\n"
+"        return ob_get_clean();\n"
+"    }\n"
+"\n"
+"    /**\n"
+"     * Toolbar sticky: chip filtri + search + sort + view toggle + content libero.\n"
+"     *\n"
+"     * @param array $args {\n"
+"     *   @type array  $chips        Lista chip: [{id, label, count?, dot_color?, href?}]\n"
+"     *   @type string $active_chip  ID del chip attivo.\n"
+"     *   @type bool   $search       Mostra input search (default false).\n"
+"     *   @type string $search_id    ID dell'input search (per binding JS).\n"
+"     *   @type string $search_placeholder\n"
+"     *   @type string $extra        HTML aggiuntivo dopo gli spacer (es. sort, view toggle).\n"
+"     * }\n"
+"     *\n"
+"     * @example\n"
+"     *   echo Olo_Builder::cockpit_toolbar([\n"
+"     *     'chips' => [\n"
+"     *       ['id'=>'all', 'label'=>'Tutti', 'count'=>128],\n"
+"     *       ['id'=>'unread', 'label'=>'Non letti', 'count'=>12, 'dot_color'=>'#ef4444'],\n"
+"     *     ],\n"
+"     *     'active_chip' => 'all',\n"
+"     *     'search'      => true,\n"
+"     *     'search_placeholder' => 'Cerca…',\n"
+"     *   ]);\n"
+"     */\n"
+"    public static function cockpit_toolbar( $args = [] ) {\n"
+"        $args = wp_parse_args( $args, [\n"
+"            'chips'              => [],\n"
+"            'active_chip'        => '',\n"
+"            'search'             => false,\n"
+"            'search_id'          => '',\n"
+"            'search_placeholder' => __( 'Cerca…"
+
+msgid "Nessun elemento"
+msgstr "Нет элементов"
+
+msgid "Utente"
+msgstr "Пользователь"
+
+msgid "Aggiornamento disponibile · v%s"
+msgstr "Доступно обновление · v%s"
+
+msgid "Ciao %s, buon lavoro"
+msgstr "Привет %s, удачи"
+
+msgid "Continua su %s"
+msgstr "Продолжить на %s"
+
+msgid "Apri editor"
+msgstr "Открыть редактор"
+
+msgid "Vai ai template"
+msgstr "К шаблонам"
+
+msgid "Il tuo sito WordPress costruito con Olobuild."
+msgstr "Ваш WP-сайт на Olobuild."
+
+msgid "API Keys — Stock Media"
+msgstr "API-ключи — Stock Media"
+
+msgid "Inserisci le chiavi API per i servizi di immagini/video stock. Se lasci un campo vuoto, verrà usata la chiave predefinita."
+msgstr "Введите API-ключи. Пусто = по умолч."
+
+msgid "Pexels API Key"
+msgstr "Pexels API Key"
+
+msgid "Ottieni una chiave su %s"
+msgstr "Получите ключ на %s"
+
+msgid "Pixabay API Key"
+msgstr "Pixabay API Key"
+
+msgid "Unsplash Access Key"
+msgstr "Unsplash Access Key"
+
+msgid "Freesound API Key"
+msgstr "Freesound API Key"
+
+msgid "reCAPTCHA v3"
+msgstr "reCAPTCHA v3"
+
+msgid "Google reCAPTCHA v3 per la protezione dei form. Ottieni le chiavi su google.com/recaptcha"
+msgstr "Google reCAPTCHA v3 для защиты форм."
+
+msgid "Site Key"
+msgstr "Site Key"
+
+msgid "Secret Key"
+msgstr "Secret Key"
+
+msgid "Mailchimp"
+msgstr "Mailchimp"
+
+msgid "API key Mailchimp per le integrazioni dei form contatti."
+msgstr "Mailchimp API-ключ для интеграции."
+
+msgid "Mailchimp API Key"
+msgstr "Mailchimp API Key"
+
+msgid "Stili globali, palette colori, tipografia, breakpoint responsive, AI assistant e chiavi API stock media."
+msgstr "Глобальные стили, цвета, типографика."
+
+msgid "Torna a WordPress"
+msgstr "Назад к WordPress"
+
+msgid "App mode"
+msgstr "App mode"
+
+msgid "Cambia modalità"
+msgstr "Сменить режим"
+
+msgid "Notifiche"
+msgstr "Notifiche"
+
+msgid "Documentazione"
+msgstr "Документация"
+
+msgid "Profilo"
+msgstr "Profilo"
+
+msgid "Aggiorna ora"
+msgstr "Обновить сейчас"
+
+msgid "pagine"
+msgstr "страницы"
+
+msgid "Vedi sito live"
+msgstr "Посмотреть live"
+
+msgid "Crea un nuovo template e la pagina WP collegata"
+msgstr "Создать новый шаблон и WP-стр."
+
+msgid "Nuova pagina"
+msgstr "Новая страница"
+
+msgid "Apri pagina live"
+msgstr "Открыть live"
+
+msgid "Home"
+msgstr "Главная"
+
+msgid "Servizi"
+msgstr "Услуги"
+
+msgid "Contatti"
+msgstr "Контакты"
+
+msgid "Scopri di più"
+msgstr "Scopri di più"
+
+msgid "Indicatori chiave"
+msgstr "Ключевые показатели"
+
+msgid "Continua dove avevi lasciato"
+msgstr "Продолжите с места остановки"
+
+msgid "Le tue ultime modifiche"
+msgstr "Последние изменения"
+
+msgid "Vedi tutto"
+msgstr "Показать всё"
+
+msgid "Azioni rapide"
+msgstr "Azioni rapide"
+
+msgid "Ciò che fai più spesso"
+msgstr "То, что вы делаете чаще"
+
+msgid "Crea pagina"
+msgstr "Создать страницу"
+
+msgid "Nuovo template + pagina WP"
+msgstr "Новый шаблон + WP-стр."
+
+msgid "Sfoglia template"
+msgstr "Просмотреть шаблоны"
+
+msgid "Pronti all'uso"
+msgstr "Готово к использованию"
+
+msgid "Pagina, sito, JSON"
+msgstr "Стр., сайт, JSON"
+
+msgid "Gestione"
+msgstr "Gestione"
+
+msgid "Configurazione e contenuti del sito"
+msgstr "Конфиг. и контент сайта"
+
+msgid "Configurazione tecnica · raramente"
+msgstr "Тех. конфигурация · редко"
+
+msgid "Centro risorse"
+msgstr "Центр ресурсов"
+
+msgid "Cosa c'è di nuovo"
+msgstr "Что нового"
+
+msgid "Tutorial"
+msgstr "Туториал"
+
+msgid "Impara Olobuild"
+msgstr "Изучите Olobuild"
+
+msgid "Onboarding 60 secondi"
+msgstr "60-секундный онбординг"
+
+msgid "Template come pro"
+msgstr "Шаблоны как профи"
+
+msgid "SEO e Open Graph"
+msgstr "SEO и Open Graph"
+
+msgid "Performance: punteggio 100"
+msgstr "Performance: 100 баллов"
+
+msgid "Aiuto & supporto"
+msgstr "Помощь и поддержка"
+
+msgid "Apri ticket"
+msgstr "Открыть тикет"
+
+msgid "Community"
+msgstr "Сообщество"
+
+msgid "Roadmap"
+msgstr "Roadmap"
+
+msgid "Olobuild Setup"
+msgstr "Настройка Olobuild"
+
+msgid "Olobuild — Configurazione iniziale"
+msgstr "Olobuild — Начальная настройка"
+
+msgid "Configuriamo il tuo sito in pochi secondi.<br>Potrai personalizzare tutto in seguito."
+msgstr "Настроим сайт за секунды."
+
+msgid "Installiamo <strong>Hello Olobuild</strong> — un tema WordPress leggero e minimale, progettato per non interferire col builder. Solo ~3KB di CSS."
+msgstr "Установим Hello Olobuild — мин. тема. ~3КБ CSS."
+
+msgid "Installazione..."
+msgstr "Установка..."
+
+msgid "Installazione in corso..."
+msgstr "Установка..."
+
+msgid "Errore di connessione"
+msgstr "Ошибка подключения"
+
+msgid "Riprova"
+msgstr "Повторить"
+
+msgid "Importazione..."
+msgstr "Импорт..."
+
+msgid "Nessun tema importato — parti da zero!"
+msgstr "Без темы — с нуля!"
+
+msgid "Creazione template, menu, pagine..."
+msgstr "Создание шаблонов, меню, страниц..."
+
+msgid "%d template creati, homepage impostata!"
+msgstr "%d шаблонов создано, homepage установлена!"
+
+msgid "Permessi insufficienti."
+msgstr "Недостаточно прав."
+
+msgid "Bundle tema non trovato nel plugin."
+msgstr "Bundle темы не найден."
+
+msgid "Hello Olobuild installato e attivato!"
+msgstr "Hello Olobuild установлен и активирован!"
+
+msgid "Nessun tema selezionato."
+msgstr "Тема не выбрана."
+
+msgid "Configurazione iniziale disponibile"
+msgstr "Доступна начальная настройка"
+
+msgid "Avvia configurazione"
+msgstr "Запустить настройку"
+
+msgid "Benvenuto in Olobuild"
+msgstr "Добро пожаловать в Olobuild"
+
+msgid "1. Tema WordPress"
+msgstr "1. Тема WordPress"
+
+msgid "Hello Olobuild è già attivo. Perfetto!"
+msgstr "Hello Olobuild уже активен. Отлично!"
+
+msgid "Continua →"
+msgstr "Продолжить →"
+
+msgid "Hello Olobuild è installato ma non attivo. È un tema leggero senza CSS invasivo — perfetto per Olobuild."
+msgstr "Hello Olobuild установлен, но не активен."
+
+msgid "Attiva Hello Olobuild"
+msgstr "Активировать Hello Olobuild"
+
+msgid "Mantieni tema attuale →"
+msgstr "Оставить тему →"
+
+msgid "Installa e attiva"
+msgstr "Установить и активировать"
+
+msgid "Usa tema attuale →"
+msgstr "Использовать тему →"
+
+msgid "2. Scegli un design"
+msgstr "2. Выберите дизайн"
+
+msgid "Seleziona un tema completo per iniziare. Include header, footer, homepage e menu — tutto personalizzabile."
+msgstr "Выберите тему. Header, footer, homepage, меню."
+
+msgid "Vuoto"
+msgstr "Пусто"
+
+msgid "Parti da zero"
+msgstr "Начать с нуля"
+
+msgid "Importa tema selezionato"
+msgstr "Импорт темы"
+
+msgid "✨ Tutto pronto!"
+msgstr "✨ Всё готово!"
+
+msgid "Il tuo sito è configurato. Puoi iniziare a personalizzare tutto dal builder visuale."
+msgstr "Сайт настроен. Кастомизируйте из билдера."
+
+msgid "Apri Olobuild →"
+msgstr "Открыть Olobuild →"
+
+msgid "Vedi il sito →"
+msgstr "Открыть сайт →"
+
+msgid "Salta configurazione"
+msgstr "Пропустить настройку"

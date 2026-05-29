@@ -1,8 +1,14 @@
 import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
+import { t } from '@/i18n';
 
+/**
+ * Tile Code — split CONTENUTO/STILE.
+ *   fields[]      → codice, linguaggio, show_line_numbers, show_copy_button, wrap_lines
+ *   styleFields[] → tema, font size, max height, shadow, border
+ */
 export default {
   type: 'code',
-  name: 'Codice',
+  name: t('Codice'),
   icon: 'dashicons-editor-code',
   category: 'text',
   defaults: {
@@ -20,22 +26,38 @@ export default {
     border_hover_duration: 300,
     ...borderEffectDefaults,
   },
+
   fields: [
-    { key: 'code', label: 'Codice', type: 'textarea' },
-    { key: 'language', label: 'Linguaggio', type: 'text' },
-    { key: 'show_line_numbers', label: 'Mostra numeri di riga', type: 'toggle' },
-    { key: 'theme', label: 'Tema', type: 'select', options: [
-      { value: 'github-dark', label: 'GitHub Dark' },
-      { value: 'monokai', label: 'Monokai' },
-      { value: 'dracula', label: 'Dracula' },
-      { value: 'one-dark', label: 'One Dark' },
-      { value: 'solarized-dark', label: 'Solarized Dark' },
-      { value: 'light', label: 'Chiaro' },
+    { key: 'code', label: t('Codice'), type: 'textarea' },
+    { key: 'language', label: t('Linguaggio'), type: 'text' },
+    { key: 'show_line_numbers', label: t('Mostra numeri di riga'), type: 'toggle' },
+    { key: 'show_copy_button', label: t('Pulsante copia'), type: 'toggle' },
+    { key: 'wrap_lines', label: t('Avvolgi righe lunghe'), type: 'toggle' },
+  ],
+
+  styleFields: [
+    { type: 'separator', label: t('Tema') },
+    { key: 'theme', label: t('Tema'), type: 'select', options: [
+      { value: 'github-dark', label: t('GitHub Dark') },
+      { value: 'monokai', label: t('Monokai') },
+      { value: 'dracula', label: t('Dracula') },
+      { value: 'one-dark', label: t('One Dark') },
+      { value: 'solarized-dark', label: t('Solarized Dark') },
+      { value: 'light', label: t('Chiaro') },
     ]},
-    { key: 'show_copy_button', label: 'Pulsante copia', type: 'toggle' },
-    { key: 'font_size', label: 'Dimensione font (px)', type: 'range', min: 10, max: 24, step: 1 },
-    { key: 'max_height', label: 'Altezza massima (px, vuoto = auto)', type: 'text' },
-    { key: 'wrap_lines', label: 'Avvolgi righe lunghe', type: 'toggle' },
+
+    { type: 'separator', label: t('Tipografia') },
+    { type: 'typography', label: t('Codice'),
+      responsiveKeys: ['size'],
+      keys: {
+        size: 'font_size',
+      },
+      sizeMin: 10, sizeMax: 24,
+    },
+
+    { type: 'separator', label: t('Dimensioni') },
+    { key: 'max_height', label: t('Altezza massima (px, vuoto = auto)'), type: 'text' },
+
     ...shadowField,
     ...borderFields(),
   ],

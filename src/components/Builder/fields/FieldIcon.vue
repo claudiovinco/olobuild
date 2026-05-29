@@ -37,7 +37,7 @@
 <script setup>
 import { t } from '@/i18n';
 import { ref, computed, watch } from 'vue';
-import iconsSvg from '../../ProSlider/uikitIconsSvg.js';
+import iconsSvg from '../../ProSlider/iconsLibrary.js';
 import IconPicker from '../../ProSlider/IconPicker.vue';
 
 const props = defineProps({
@@ -96,8 +96,14 @@ function onSelect(name) {
 .field-icon-preview :deep(svg) {
   width: 20px;
   height: 20px;
-  fill: #374151;
-  stroke: #374151;
+  color: #374151;
+  stroke: currentColor;
+}
+.field-icon-preview :deep(svg:not([fill="none"])) {
+  fill: currentColor;
+}
+.field-icon-preview :deep(svg [fill="none"]) {
+  fill: none;
 }
 .field-icon-empty {
   color: #9CA3AF;

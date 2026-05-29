@@ -72,14 +72,9 @@ class Olo_Performance_Settings {
      * ═══════════════════════════════════════════════════ */
 
     public function add_menu() {
-        add_submenu_page(
-            'olobuild',
-            __( 'Performance', 'olobuild' ),
-            __( 'Performance', 'olobuild' ),
-            'manage_options',
-            'olo-performance',
-            [ $this, 'render_page' ]
-        );
+        // v1.0.30 — pagina migrata in ?page=olobuilder-settings&tab=performance
+        // Submenu rimosso: i campi vivono ora in Configurazione → Performance & Cache.
+        // La classe resta attiva per critical CSS, asset optimizer, head cleanup nel frontend.
     }
 
     public function register_settings() {
@@ -146,19 +141,29 @@ class Olo_Performance_Settings {
         // CSS cache info
         $css_cache_info = $this->get_css_cache_info();
 
+        $subnav = [];
+        foreach ( $tabs as $slug => $label ) {
+            $subnav[] = [ 'slug' => $slug, 'label' => $label, 'href' => admin_url( 'admin.php?page=olo-performance&tab=' . $slug ) ];
+        }
+        $ccss_pages = is_array( $ccss_status ) ? (int) ( $ccss_status['generated'] ?? 0 ) : 0;
+        $cache_size = $css_cache_info['size_human'] ?? '—';
         ?>
-        <?php Olo_Builder::page_shell_open( 'Performance', 'olo-perf-page' ); ?>
+        <?php Olo_Builder::cockpit_shell_open( '<b>' . esc_html__( 'Performance', 'olobuild' ) . '</b>' ); ?>
+        <main class="olo-cockpit-main olo-cockpit-legacy olo-perf-page">
+            <?php
+            echo Olo_Builder::cockpit_page_head( [
+                'title' => __( 'Performance', 'olobuild' ),
+                'sub'   => sprintf(
+                    /* translators: 1: pages with critical css, 2: cache size */
+                    __( 'Critical CSS: %1$s pagine generate · Cache CSS: %2$s', 'olobuild' ),
+                    '<b>' . $ccss_pages . '</b>',
+                    '<b>' . esc_html( $cache_size ) . '</b>'
+                ),
+            ] );
+            echo Olo_Builder::cockpit_subnav( $subnav, $tab );
+            ?>
 
-            <div class="olo-admin-tabs">
-                <?php foreach ( $tabs as $slug => $label ) : ?>
-                    <a href="<?php echo esc_url( admin_url( 'admin.php?page=olo-performance&tab=' . $slug ) ); ?>"
-                       class="olo-admin-tab <?php echo $tab === $slug ? 'active' : ''; ?>">
-                        <?php echo esc_html( $label ); ?>
-                    </a>
-                <?php endforeach; ?>
-            </div>
-
-            <form method="post" action="options.php" class="olo-perf-form">
+            <form method="post" action="options.php" class="olo-perf-form" style="margin-top:16px">
                 <?php settings_fields( 'olo_performance_group' ); ?>
 
                 <?php
@@ -178,14 +183,17 @@ class Olo_Performance_Settings {
                 }
                 ?>
 
-                <div class="olo-actions" style="margin-top: 20px;">
-                    <button type="submit" class="olo-btn-save">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-                        <?php esc_html_e( 'Salva impostazioni', 'olobuild' ); ?>
-                    </button>
+                <div class="olo-actions" style="margin-top: 24px;">
+                    <?php echo Olo_Builder::cockpit_button( [
+                        'label'   => __( 'Salva impostazioni', 'olobuild' ),
+                        'variant' => 'pri',
+                        'type'    => 'submit',
+                        'icon'    => '<path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/>',
+                    ] ); ?>
                 </div>
             </form>
-        <?php Olo_Builder::page_shell_close(); ?>
+        </main>
+        <?php Olo_Builder::cockpit_shell_close(); ?>
         <?php
     }
 

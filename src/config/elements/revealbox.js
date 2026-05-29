@@ -1,8 +1,18 @@
 
-import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared.js';
+import { t } from '@/i18n';
+
+/**
+ * Tile RevealBox — split CONTENUTO/STILE.
+ *   fields[]      → effetto reveal (type+perspective), sfondo globale (image_url+size+position),
+ *                   zona visibile (image/video URL+top_content+top_icon), zona rivelata (image/video+bottom_content+bottom_icon+cta),
+ *                   reveal_amount per slide
+ *   styleFields[] → visible_height, top_image_size/position, icon size/color, content tipografia, overlay colori,
+ *                   bottom analogo, transition speed/easing, border radius, padding, border
+ */
 export default {
   type: 'revealbox',
-  name: 'Reveal Box',
+  name: t('Reveal Box'),
   icon: 'dashicons-arrow-up-alt',
   category: 'interactive',
   defaults: {
@@ -50,180 +60,160 @@ export default {
     border_hover_duration: 300,
     ...borderEffectDefaults,
   },
+
   fields: [
-    { type: 'separator', label: 'Effetto reveal' },
-    {
-      key: 'reveal_effect', label: 'Tipo effetto', type: 'select',
-      options: [
-        { value: 'slide-up', label: 'Scorrimento ↑' },
-        { value: 'slide-down', label: 'Scorrimento ↓' },
-        { value: 'slide-left', label: 'Scorrimento ←' },
-        { value: 'slide-right', label: 'Scorrimento →' },
-        { value: 'fade', label: 'Dissolvenza' },
-        { value: 'zoom-in', label: 'Zoom in' },
-        { value: 'zoom-out', label: 'Zoom out' },
-        { value: 'flip-x', label: 'Giro 3D orizzontale' },
-        { value: 'flip-y', label: 'Giro 3D verticale' },
-        { value: 'rotate-in', label: 'Rotazione' },
-      ],
-    },
-    {
-      key: 'perspective', label: 'Prospettiva 3D (px)', type: 'range', min: 200, max: 2000, step: 50,
-      condition: { field: 'reveal_effect', operator: 'in', value: ['flip-x', 'flip-y'] },
-    },
+    { type: 'separator', label: t('Effetto reveal') },
+    { key: 'reveal_effect', label: t('Tipo effetto'), type: 'select', options: [
+      { value: 'slide-up', label: t('Scorrimento ↑') },
+      { value: 'slide-down', label: t('Scorrimento ↓') },
+      { value: 'slide-left', label: t('Scorrimento ←') },
+      { value: 'slide-right', label: t('Scorrimento →') },
+      { value: 'fade', label: t('Dissolvenza') },
+      { value: 'zoom-in', label: t('Zoom in') },
+      { value: 'zoom-out', label: t('Zoom out') },
+      { value: 'flip-x', label: t('Giro 3D orizzontale') },
+      { value: 'flip-y', label: t('Giro 3D verticale') },
+      { value: 'rotate-in', label: t('Rotazione') },
+    ]},
+    { key: 'reveal_amount', label: t('Scorrimento (px, vuoto = auto)'), type: 'text', placeholder: t('auto'),
+      condition: { field: 'reveal_effect', operator: 'in', value: ['slide-up', 'slide-down', 'slide-left', 'slide-right'] } },
 
-    { type: 'separator', label: 'Sfondo globale' },
-    { key: 'image_url', label: 'Immagine di sfondo (entrambe le zone)', type: 'media' },
-    {
-      key: 'image_size', label: 'Dimensione', type: 'select',
-      options: [
-        { value: 'cover', label: 'Copri' },
-        { value: 'contain', label: 'Contieni' },
-        { value: 'auto', label: 'Originale' },
-      ],
-      condition: { field: 'image_url', operator: '!=', value: '' },
-    },
-    {
-      key: 'image_position', label: 'Posizione', type: 'select',
-      options: [
-        { value: 'center center', label: 'Centro' },
-        { value: 'center top', label: 'Centro alto' },
-        { value: 'center bottom', label: 'Centro basso' },
-        { value: 'left center', label: 'Sinistra' },
-        { value: 'right center', label: 'Destra' },
-      ],
-      condition: { field: 'image_url', operator: '!=', value: '' },
-    },
+    { type: 'separator', label: t('Sfondo globale') },
+    { key: 'image_url', label: t('Immagine di sfondo (entrambe le zone)'), type: 'media' },
 
-    { type: 'separator', label: 'Zona visibile (fronte)' },
-    { key: 'top_image_url', label: 'Immagine di sfondo', type: 'media' },
-    {
-      key: 'top_image_size', label: 'Dimensione immagine', type: 'select',
-      options: [
-        { value: 'cover', label: 'Copri' },
-        { value: 'contain', label: 'Contieni' },
-        { value: 'auto', label: 'Originale' },
-      ],
-      condition: { field: 'top_image_url', operator: '!=', value: '' },
-    },
-    {
-      key: 'top_image_position', label: 'Posizione immagine', type: 'select',
-      options: [
-        { value: 'center center', label: 'Centro' },
-        { value: 'center top', label: 'Centro alto' },
-        { value: 'center bottom', label: 'Centro basso' },
-        { value: 'left center', label: 'Sinistra' },
-        { value: 'right center', label: 'Destra' },
-      ],
-      condition: { field: 'top_image_url', operator: '!=', value: '' },
-    },
-    { key: 'top_video_url', label: 'Video di sfondo', type: 'media', mediaType: 'video' },
-    { key: 'visible_height', label: 'Altezza visibile (px)', type: 'range', min: 100, max: 800, step: 10 },
-    { key: 'top_icon', label: 'Icona', type: 'icon' },
-    {
-      key: 'top_icon_size', label: 'Dimensione icona', type: 'range', min: 0.5, max: 6, step: 0.1,
-      condition: { field: 'top_icon', operator: '!=', value: '' },
-    },
-    {
-      key: 'top_icon_color', label: 'Colore icona', type: 'color',
-      condition: { field: 'top_icon', operator: '!=', value: '' },
-    },
-    { key: 'top_content', label: 'Contenuto visibile', type: 'richtext' },
-    { key: 'top_text_color', label: 'Colore testo', type: 'color' },
-    { key: 'top_font_size', label: 'Grandezza testo (px)', type: 'range', min: 10, max: 72, step: 1 },
-    {
-      key: 'top_align', label: 'Allineamento verticale', type: 'select',
-      options: [
-        { value: 'flex-start', label: 'Alto' },
-        { value: 'center', label: 'Centro' },
-        { value: 'flex-end', label: 'Basso' },
-      ],
-    },
-    {
-      key: 'top_justify', label: 'Allineamento orizzontale', type: 'select',
-      options: [
-        { value: 'flex-start', label: 'Sinistra' },
-        { value: 'center', label: 'Centro' },
-        { value: 'flex-end', label: 'Destra' },
-      ],
-    },
-    { key: 'top_padding', label: 'Padding interno (px)', type: 'range', min: 0, max: 80, step: 4 },
-    { key: 'overlay_color', label: 'Colore overlay', type: 'color' },
-    { key: 'overlay_opacity', label: 'Opacità overlay (%)', type: 'range', min: 0, max: 100 },
+    { type: 'separator', label: t('Zona visibile — Sfondo') },
+    { key: 'top_image_url', label: t('Immagine di sfondo'), type: 'media' },
+    { key: 'top_video_url', label: t('Video di sfondo'), type: 'media', mediaType: 'video' },
 
-    { type: 'separator', label: 'Zona rivelata (hover)' },
-    { key: 'bottom_image_url', label: 'Immagine di sfondo', type: 'media' },
-    {
-      key: 'bottom_image_size', label: 'Dimensione immagine', type: 'select',
-      options: [
-        { value: 'cover', label: 'Copri' },
-        { value: 'contain', label: 'Contieni' },
-        { value: 'auto', label: 'Originale' },
-      ],
-      condition: { field: 'bottom_image_url', operator: '!=', value: '' },
-    },
-    {
-      key: 'bottom_image_position', label: 'Posizione immagine', type: 'select',
-      options: [
-        { value: 'center center', label: 'Centro' },
-        { value: 'center top', label: 'Centro alto' },
-        { value: 'center bottom', label: 'Centro basso' },
-        { value: 'left center', label: 'Sinistra' },
-        { value: 'right center', label: 'Destra' },
-      ],
-      condition: { field: 'bottom_image_url', operator: '!=', value: '' },
-    },
-    { key: 'bottom_video_url', label: 'Video di sfondo', type: 'media', mediaType: 'video' },
-    { key: 'bottom_icon', label: 'Icona', type: 'icon' },
-    {
-      key: 'bottom_icon_size', label: 'Dimensione icona', type: 'range', min: 0.5, max: 6, step: 0.1,
-      condition: { field: 'bottom_icon', operator: '!=', value: '' },
-    },
-    {
-      key: 'bottom_icon_color', label: 'Colore icona', type: 'color',
-      condition: { field: 'bottom_icon', operator: '!=', value: '' },
-    },
-    { key: 'bottom_content', label: 'Contenuto rivelato', type: 'richtext' },
-    { key: 'bottom_text_color', label: 'Colore testo', type: 'color' },
-    { key: 'bottom_font_size', label: 'Grandezza testo (px)', type: 'range', min: 10, max: 72, step: 1 },
-    { key: 'reveal_amount', label: 'Scorrimento (px, vuoto = auto)', type: 'text', placeholder: 'auto',
-      condition: { field: 'reveal_effect', operator: 'in', value: ['slide-up', 'slide-down', 'slide-left', 'slide-right'] },
-    },
-    {
-      key: 'bottom_align', label: 'Allineamento verticale', type: 'select',
-      options: [
-        { value: 'flex-start', label: 'Alto' },
-        { value: 'center', label: 'Centro' },
-        { value: 'flex-end', label: 'Basso' },
-      ],
-    },
-    {
-      key: 'bottom_justify', label: 'Allineamento orizzontale', type: 'select',
-      options: [
-        { value: 'flex-start', label: 'Sinistra' },
-        { value: 'center', label: 'Centro' },
-        { value: 'flex-end', label: 'Destra' },
-      ],
-    },
-    { key: 'bottom_padding', label: 'Padding interno (px)', type: 'range', min: 0, max: 80, step: 4 },
-    { key: 'reveal_overlay_color', label: 'Colore overlay rivelato', type: 'color' },
-    { key: 'reveal_overlay_opacity', label: 'Opacità overlay rivelato (%)', type: 'range', min: 0, max: 100 },
+    { type: 'separator', label: t('Zona visibile — Contenuto') },
+    { key: 'top_icon', label: t('Icona'), type: 'icon' },
+    { key: 'top_content', label: t('Contenuto visibile'), type: 'richtext' },
 
-    { type: 'separator', label: 'Stile' },
-    { key: 'transition_speed', label: 'Velocità transizione (s)', type: 'range', min: 0.1, max: 2, step: 0.1 },
-    {
-      key: 'transition_easing', label: 'Curva transizione', type: 'select',
-      options: [
-        { value: 'ease', label: 'Ease' },
-        { value: 'ease-in-out', label: 'Ease In/Out' },
-        { value: 'ease-out', label: 'Ease Out' },
-        { value: 'cubic-bezier(0.4,0,0.2,1)', label: 'Smooth' },
-        { value: 'linear', label: 'Lineare' },
-      ],
+    { type: 'separator', label: t('Zona rivelata — Sfondo') },
+    { key: 'bottom_image_url', label: t('Immagine di sfondo'), type: 'media' },
+    { key: 'bottom_video_url', label: t('Video di sfondo'), type: 'media', mediaType: 'video' },
+
+    { type: 'separator', label: t('Zona rivelata — Contenuto') },
+    { key: 'bottom_icon', label: t('Icona'), type: 'icon' },
+    { key: 'bottom_content', label: t('Contenuto rivelato'), type: 'richtext' },
+  ],
+
+  styleFields: [
+    { type: 'separator', label: t('Effetto reveal — Aspetto') },
+    { key: 'perspective', label: t('Prospettiva 3D (px)'), type: 'range', min: 200, max: 2000, step: 50,
+      condition: { field: 'reveal_effect', operator: 'in', value: ['flip-x', 'flip-y'] } },
+
+    { type: 'separator', label: t('Sfondo globale — Aspetto') },
+    { key: 'image_size', label: t('Dimensione'), type: 'select', options: [
+      { value: 'cover', label: t('Copri') },
+      { value: 'contain', label: t('Contieni') },
+      { value: 'auto', label: t('Originale') },
+    ], condition: { field: 'image_url', operator: '!=', value: '' } },
+    { key: 'image_position', label: t('Posizione'), type: 'select', options: [
+      { value: 'center center', label: t('Centro') },
+      { value: 'center top', label: t('Centro alto') },
+      { value: 'center bottom', label: t('Centro basso') },
+      { value: 'left center', label: t('Sinistra') },
+      { value: 'right center', label: t('Destra') },
+    ], condition: { field: 'image_url', operator: '!=', value: '' } },
+
+    { type: 'separator', label: t('Zona visibile — Aspetto') },
+    { key: 'visible_height', label: t('Altezza visibile (px)'), type: 'range', min: 100, max: 800, step: 10 },
+    { key: 'top_image_size', label: t('Dimensione immagine'), type: 'select', options: [
+      { value: 'cover', label: t('Copri') },
+      { value: 'contain', label: t('Contieni') },
+      { value: 'auto', label: t('Originale') },
+    ], condition: { field: 'top_image_url', operator: '!=', value: '' } },
+    { key: 'top_image_position', label: t('Posizione immagine'), type: 'select', options: [
+      { value: 'center center', label: t('Centro') },
+      { value: 'center top', label: t('Centro alto') },
+      { value: 'center bottom', label: t('Centro basso') },
+      { value: 'left center', label: t('Sinistra') },
+      { value: 'right center', label: t('Destra') },
+    ], condition: { field: 'top_image_url', operator: '!=', value: '' } },
+    { key: 'top_icon_size', label: t('Dimensione icona'), type: 'range', min: 0.5, max: 6, step: 0.1,
+      condition: { field: 'top_icon', operator: '!=', value: '' } },
+    { key: 'top_icon_color', label: t('Colore icona'), type: 'color',
+      condition: { field: 'top_icon', operator: '!=', value: '' } },
+    { type: 'separator', label: t('Tipografia') },
+    { type: 'typography', label: t('Zona Visibile'),
+      responsiveKeys: ['size'],
+      keys: {
+        size:  'top_font_size',
+        color: 'top_text_color',
+      },
+      sizeMin: 10, sizeMax: 72,
     },
-    { key: 'border_radius', label: 'Bordo arrotondato (px)', type: 'border-radius' },
-    { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
-    { key: 'tile_padding', type: 'spacing', label: 'Spaziatura interna' },
+    { key: 'top_align', label: t('Allineamento verticale'), type: 'select', options: [
+      { value: 'flex-start', label: t('Alto') },
+      { value: 'center', label: t('Centro') },
+      { value: 'flex-end', label: t('Basso') },
+    ]},
+    { key: 'top_justify', label: t('Allineamento orizzontale'), type: 'select', options: [
+      { value: 'flex-start', label: t('Sinistra') },
+      { value: 'center', label: t('Centro') },
+      { value: 'flex-end', label: t('Destra') },
+    ]},
+    { key: 'top_padding', label: t('Padding interno (px)'), type: 'range', min: 0, max: 80, step: 4 },
+
+    { type: 'separator', label: t('Zona visibile — Overlay') },
+    { key: 'overlay_color', label: t('Colore overlay'), type: 'color' },
+    { key: 'overlay_opacity', label: t('Opacità overlay (%)'), type: 'range', min: 0, max: 100 },
+
+    { type: 'separator', label: t('Zona rivelata — Aspetto') },
+    { key: 'bottom_image_size', label: t('Dimensione immagine'), type: 'select', options: [
+      { value: 'cover', label: t('Copri') },
+      { value: 'contain', label: t('Contieni') },
+      { value: 'auto', label: t('Originale') },
+    ], condition: { field: 'bottom_image_url', operator: '!=', value: '' } },
+    { key: 'bottom_image_position', label: t('Posizione immagine'), type: 'select', options: [
+      { value: 'center center', label: t('Centro') },
+      { value: 'center top', label: t('Centro alto') },
+      { value: 'center bottom', label: t('Centro basso') },
+      { value: 'left center', label: t('Sinistra') },
+      { value: 'right center', label: t('Destra') },
+    ], condition: { field: 'bottom_image_url', operator: '!=', value: '' } },
+    { key: 'bottom_icon_size', label: t('Dimensione icona'), type: 'range', min: 0.5, max: 6, step: 0.1,
+      condition: { field: 'bottom_icon', operator: '!=', value: '' } },
+    { key: 'bottom_icon_color', label: t('Colore icona'), type: 'color',
+      condition: { field: 'bottom_icon', operator: '!=', value: '' } },
+    { type: 'separator', label: t('Tipografia') },
+    { type: 'typography', label: t('Zona Rivelata'),
+      responsiveKeys: ['size'],
+      keys: {
+        size:  'bottom_font_size',
+        color: 'bottom_text_color',
+      },
+      sizeMin: 10, sizeMax: 72,
+    },
+    { key: 'bottom_align', label: t('Allineamento verticale'), type: 'select', options: [
+      { value: 'flex-start', label: t('Alto') },
+      { value: 'center', label: t('Centro') },
+      { value: 'flex-end', label: t('Basso') },
+    ]},
+    { key: 'bottom_justify', label: t('Allineamento orizzontale'), type: 'select', options: [
+      { value: 'flex-start', label: t('Sinistra') },
+      { value: 'center', label: t('Centro') },
+      { value: 'flex-end', label: t('Destra') },
+    ]},
+    { key: 'bottom_padding', label: t('Padding interno (px)'), type: 'range', min: 0, max: 80, step: 4 },
+
+    { type: 'separator', label: t('Zona rivelata — Overlay') },
+    { key: 'reveal_overlay_color', label: t('Colore overlay rivelato'), type: 'color' },
+    { key: 'reveal_overlay_opacity', label: t('Opacità overlay rivelato (%)'), type: 'range', min: 0, max: 100 },
+
+    { type: 'separator', label: t('Transizione') },
+    { key: 'transition_speed', label: t('Velocità transizione (s)'), type: 'range', min: 0.1, max: 2, step: 0.1 },
+    { key: 'transition_easing', label: t('Curva transizione'), type: 'select', options: [
+      { value: 'ease', label: t('Ease') },
+      { value: 'ease-in-out', label: t('Ease In/Out') },
+      { value: 'ease-out', label: t('Ease Out') },
+      { value: 'cubic-bezier(0.4,0,0.2,1)', label: t('Smooth') },
+      { value: 'linear', label: t('Lineare') },
+    ]},
+    withHover({ key: 'border_radius', label: t('Bordo arrotondato (px)'), type: 'border-radius' }),
+    { key: 'tile_padding', type: 'spacing', label: t('Spaziatura interna') },
+
     ...borderFields(),
   ],
 };

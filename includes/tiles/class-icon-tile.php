@@ -54,8 +54,6 @@ class Olo_Icon_Tile extends Olo_Tile_Base {
         $color     = ! empty( $s['color'] ) ? $this->safe_color_css( $s['color'] ) : '';
         $target    = $s['link_target'] === '_blank' ? ' target="_blank" rel="noopener"' : '';
 
-        $icon_style = $color ? ' style="color:' . $color . ';"' : '';
-
         /* --- wrapper styling --- */
         $view   = $s['view'] ?? 'default';
         $bg_clr = $this->safe_color_css( $s['bg_color'] ) ?: 'var(--olo-color-primary, #6366F1)';
@@ -65,7 +63,12 @@ class Olo_Icon_Tile extends Olo_Tile_Base {
         $anim   = $s['hover_animation'] ?? 'none';
 
         $radius = $shape === 'circle' ? '50%' : ( $shape === 'rounded' ? '12px' : '0' );
+        // Color sul wrapper: propaga via currentColor sia agli SVG Lucide
+        // (stroke="currentColor") sia ai <span uk-icon> UIkit.
         $wrapper_style = 'display:inline-flex;align-items:center;justify-content:center;';
+        if ( $color ) {
+            $wrapper_style .= "color:{$color};";
+        }
         if ( $rot !== 0 ) {
             $wrapper_style .= "transform:rotate({$rot}deg);";
         }
@@ -112,10 +115,10 @@ class Olo_Icon_Tile extends Olo_Tile_Base {
             <span class="olo-icon-wrap" style="<?php echo $wrapper_style; ?>">
             <?php if ( ! empty( $s['link_url'] ) ) : ?>
                 <a href="<?php echo esc_url( $s['link_url'] ); ?>"<?php echo $target; ?>>
-                    <span<?php echo $icon_style; ?> uk-icon="icon: <?php echo $icon_name; ?>; ratio: <?php echo $ratio; ?>"></span>
+                    <?php echo $this->render_icon_html( $icon_name, floatval( $ratio ) ); ?>
                 </a>
             <?php else : ?>
-                <span<?php echo $icon_style; ?> uk-icon="icon: <?php echo $icon_name; ?>; ratio: <?php echo $ratio; ?>"></span>
+                <?php echo $this->render_icon_html( $icon_name, floatval( $ratio ) ); ?>
             <?php endif; ?>
             </span>
         </div>

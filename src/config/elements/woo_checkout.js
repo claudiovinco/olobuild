@@ -1,12 +1,23 @@
 
 import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
+import { t } from '@/i18n';
+
+/**
+ * Tile WooCommerce Checkout — split CONTENUTO/STILE (regola universale Olobuild).
+ *   fields[]      → layout, stile form, toggle visibilita note ordine
+ *   styleFields[] → preset, sfondo, tipografia, colori, bordo
+ *   AVANZATE      → meta tecnico (id/class/condizioni)
+ */
 export default {
   type: 'woo_checkout',
-  name: 'Checkout',
+  name: t('Checkout'),
   icon: 'dashicons-clipboard',
   category: 'woocommerce',
-  placeholder: 'Pagina checkout WooCommerce',
+  placeholder: t('Pagina checkout WooCommerce'),
   defaults: {
+    preset: 'custom',
+    bg: { type: 'none' },
+    typography_preset: '',
     layout: 'two_columns',
     show_order_notes: true,
     accent_color: '',
@@ -21,27 +32,72 @@ export default {
     border_hover_duration: 300,
     ...borderEffectDefaults,
   },
+
+  // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
-    { type: 'separator', label: 'Layout' },
-    { key: 'layout', label: 'Layout', type: 'select', options: [
-      { value: 'one_column', label: 'Una colonna' },
-      { value: 'two_columns', label: 'Due colonne' },
+    { type: 'separator', label: t('Layout') },
+    { key: 'layout', label: t('Layout'), type: 'select', options: [
+      { value: 'one_column', label: t('Una colonna') },
+      { value: 'two_columns', label: t('Due colonne') },
     ]},
-    { key: 'form_style', label: 'Stile form', type: 'select', options: [
-      { value: 'modern', label: 'Moderno' },
-      { value: 'classic', label: 'Classico' },
+    { key: 'form_style', label: t('Stile form'), type: 'select', options: [
+      { value: 'modern', label: t('Moderno') },
+      { value: 'classic', label: t('Classico') },
     ]},
 
-    { type: 'separator', label: 'Opzioni' },
-    { key: 'show_order_notes', label: 'Mostra note ordine', type: 'toggle' },
+    { type: 'separator', label: t('Opzioni') },
+    { key: 'show_order_notes', label: t('Mostra note ordine'), type: 'toggle' },
+  ],
 
-    { type: 'separator', label: 'Colori' },
-    { key: 'accent_color', label: 'Colore accento', type: 'color' },
-    { key: 'heading_color', label: 'Colore intestazioni', type: 'color' },
-    { key: 'text_color', label: 'Colore testo', type: 'color' },
-    { key: 'border_color', label: 'Colore bordi', type: 'color' },
-    { key: 'button_bg', label: 'Sfondo pulsante', type: 'color' },
-    { key: 'button_color', label: 'Colore testo pulsante', type: 'color' },
+  // ─── STILE ─────────────────────────────────────────────────
+  styleFields: [
+    { type: 'separator', label: t('Preset stilistico') },
+    { key: 'preset', label: t('Stile'), type: 'select', options: [
+      { value: 'modern-clean',    label: t('Modern Clean') },
+      { value: 'minimal-mono',    label: t('Minimal Mono') },
+      { value: 'magazine-bold',   label: t('Magazine Bold') },
+      { value: 'editorial-serif', label: t('Editorial Serif') },
+      { value: 'compact-inline',  label: t('Compact Inline') },
+      { value: 'glass-frosted',   label: t('Glass Frosted') },
+      { value: 'neon-glow',       label: t('Neon Glow') },
+      { value: 'brutalist-stamp', label: t('Brutalist Stamp') },
+      { value: 'gradient-aurora', label: t('Gradient Aurora') },
+      { value: 'sticker-fun',     label: t('Sticker Fun') },
+      { value: 'retro-terminal',  label: t('Retro Terminal') },
+      { value: 'tilt-3d',         label: t('3D Tilt') },
+      { value: 'custom',          label: t('Personalizzato') },
+    ] },
+    { type: 'separator', label: t('Tipografia') },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
+    { type: 'typography', label: t('Headings'),
+      presetKey: 'typography_preset',
+      responsiveKeys: ['size'],
+      keys: {
+        color: 'heading_color',
+      },
+      sizeMin: 12, sizeMax: 60,
+    },
+    { type: 'typography', label: t('Testo'),
+      presetKey: 'typography_preset',
+      responsiveKeys: ['size'],
+      keys: {
+        color: 'text_color',
+      },
+      sizeMin: 12, sizeMax: 60,
+    },
+    { type: 'typography', label: t('Pulsante'),
+      presetKey: 'typography_preset',
+      responsiveKeys: ['size'],
+      keys: {
+        color: 'button_color',
+      },
+      sizeMin: 12, sizeMax: 60,
+    },
+
+    { type: 'separator', label: t('Colori') },
+    { key: 'accent_color', label: t('Colore accento'), type: 'color' },
+    { key: 'border_color', label: t('Colore bordi'), type: 'color' },
+    { key: 'button_bg', label: t('Sfondo pulsante'), type: 'color' },
     ...borderFields(),
   ],
 };

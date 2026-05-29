@@ -1,12 +1,26 @@
-import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
 
+import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
+import { t } from '@/i18n';
+
+/**
+ * Tile WooCommerce Prodotti — split CONTENUTO/STILE (regola universale Olobuild).
+ *   fields[]      → query (posts_per_page, orderby/order, category/tag, on_sale, featured),
+ *                   toggle visibilita (image/title/price/rating/cart/badge/compare/pagination),
+ *                   layout grid/carousel + behaviour carousel (autoplay/loop/arrows/dots)
+ *   styleFields[] → preset, sfondo, tipografia, columns/gap/image_ratio/card/hover,
+ *                   carousel_speed (animation duration ms), colori, shadow, bordo
+ *   AVANZATE      → meta tecnico (id/class/condizioni)
+ */
 export default {
   type: 'woo_products',
-  name: 'Prodotti WC',
+  name: t('Prodotti WC'),
   icon: 'dashicons-products',
   category: 'woocommerce',
-  placeholder: 'Griglia prodotti WooCommerce',
+  placeholder: t('Griglia prodotti WooCommerce'),
   defaults: {
+    preset: 'custom',
+    bg: { type: 'none' },
+    typography_preset: '',
     posts_per_page: '12',
     columns: '4',
     orderby: 'date',
@@ -47,79 +61,126 @@ export default {
     border_hover_duration: 300,
     ...borderEffectDefaults,
   },
+
+  // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
-    { type: 'separator', label: 'Query prodotti' },
-    { key: 'posts_per_page', label: 'Prodotti per pagina', type: 'range', min: 1, max: 48, step: 1 },
-    { key: 'columns', label: 'Colonne', type: 'range', min: 1, max: 6, step: 1 },
-    { key: 'orderby', label: 'Ordina per', type: 'select', options: [
-      { value: 'date', label: 'Data' },
-      { value: 'price', label: 'Prezzo' },
-      { value: 'popularity', label: 'Popolarita' },
-      { value: 'rating', label: 'Valutazione' },
-      { value: 'title', label: 'Titolo' },
+    { type: 'separator', label: t('Query prodotti') },
+    { key: 'posts_per_page', label: t('Prodotti per pagina'), type: 'range', min: 1, max: 48, step: 1 },
+    { key: 'orderby', label: t('Ordina per'), type: 'select', options: [
+      { value: 'date', label: t('Data') },
+      { value: 'price', label: t('Prezzo') },
+      { value: 'popularity', label: t('Popolarita') },
+      { value: 'rating', label: t('Valutazione') },
+      { value: 'title', label: t('Titolo') },
     ]},
-    { key: 'order', label: 'Direzione', type: 'select', options: [
-      { value: 'DESC', label: 'Decrescente' },
-      { value: 'ASC', label: 'Crescente' },
+    { key: 'order', label: t('Direzione'), type: 'select', options: [
+      { value: 'DESC', label: t('Decrescente') },
+      { value: 'ASC', label: t('Crescente') },
     ]},
-    { key: 'category', label: 'Categoria (slug)', type: 'text', placeholder: 'es. magliette' },
-    { key: 'tag', label: 'Tag (slug)', type: 'text', placeholder: 'es. novita' },
-    { key: 'on_sale', label: 'Solo in saldo', type: 'toggle' },
-    { key: 'featured', label: 'Solo in evidenza', type: 'toggle' },
+    { key: 'category', label: t('Categoria (slug)'), type: 'text', placeholder: t('es. magliette') },
+    { key: 'tag', label: t('Tag (slug)'), type: 'text', placeholder: t('es. novita') },
+    { key: 'on_sale', label: t('Solo in saldo'), type: 'toggle' },
+    { key: 'featured', label: t('Solo in evidenza'), type: 'toggle' },
 
-    { type: 'separator', label: 'Elementi visibili' },
-    { key: 'show_image', label: 'Mostra immagine', type: 'toggle' },
-    { key: 'show_title', label: 'Mostra titolo', type: 'toggle' },
-    { key: 'show_price', label: 'Mostra prezzo', type: 'toggle' },
-    { key: 'show_rating', label: 'Mostra valutazione', type: 'toggle' },
-    { key: 'show_add_to_cart', label: 'Mostra pulsante carrello', type: 'toggle' },
-    { key: 'show_badge', label: 'Mostra badge (saldo/nuovo)', type: 'toggle' },
-    { key: 'show_compare', label: 'Mostra pulsante Confronta', type: 'toggle' },
-    { key: 'pagination', label: 'Paginazione', type: 'toggle' },
+    { type: 'separator', label: t('Elementi visibili') },
+    { key: 'show_image', label: t('Mostra immagine'), type: 'toggle' },
+    { key: 'show_title', label: t('Mostra titolo'), type: 'toggle' },
+    { key: 'show_price', label: t('Mostra prezzo'), type: 'toggle' },
+    { key: 'show_rating', label: t('Mostra valutazione'), type: 'toggle' },
+    { key: 'show_add_to_cart', label: t('Mostra pulsante carrello'), type: 'toggle' },
+    { key: 'show_badge', label: t('Mostra badge (saldo/nuovo)'), type: 'toggle' },
+    { key: 'show_compare', label: t('Mostra pulsante Confronta'), type: 'toggle' },
+    { key: 'pagination', label: t('Paginazione'), type: 'toggle' },
 
-    { type: 'separator', label: 'Layout' },
-    { key: 'layout', label: 'Modalità', type: 'select', options: [
-      { value: 'grid', label: 'Griglia' },
-      { value: 'carousel', label: 'Carosello' },
+    { type: 'separator', label: t('Modalita') },
+    { key: 'layout', label: t('Modalità'), type: 'select', options: [
+      { value: 'grid', label: t('Griglia') },
+      { value: 'carousel', label: t('Carosello') },
     ]},
-    { key: 'carousel_autoplay', label: 'Autoplay', type: 'toggle',
+    { key: 'carousel_autoplay', label: t('Autoplay'), type: 'toggle',
       condition: { field: 'layout', value: 'carousel' } },
-    { key: 'carousel_speed', label: 'Velocità (ms)', type: 'range', min: 1000, max: 10000, step: 500,
+    { key: 'carousel_loop', label: t('Loop infinito'), type: 'toggle',
       condition: { field: 'layout', value: 'carousel' } },
-    { key: 'carousel_loop', label: 'Loop infinito', type: 'toggle',
+    { key: 'carousel_arrows', label: t('Mostra frecce'), type: 'toggle',
       condition: { field: 'layout', value: 'carousel' } },
-    { key: 'carousel_arrows', label: 'Mostra frecce', type: 'toggle',
+    { key: 'carousel_dots', label: t('Mostra pallini'), type: 'toggle',
       condition: { field: 'layout', value: 'carousel' } },
-    { key: 'carousel_dots', label: 'Mostra pallini', type: 'toggle',
-      condition: { field: 'layout', value: 'carousel' } },
-    { key: 'image_ratio', label: 'Proporzione immagine', type: 'select', options: [
-      { value: '1-1', label: '1:1 Quadrato' },
+  ],
+
+  // ─── STILE ─────────────────────────────────────────────────
+  styleFields: [
+    { type: 'separator', label: t('Preset stilistico') },
+    { key: 'preset', label: t('Stile'), type: 'select', options: [
+      { value: 'modern-clean',    label: t('Modern Clean') },
+      { value: 'minimal-mono',    label: t('Minimal Mono') },
+      { value: 'magazine-bold',   label: t('Magazine Bold') },
+      { value: 'editorial-serif', label: t('Editorial Serif') },
+      { value: 'compact-inline',  label: t('Compact Inline') },
+      { value: 'glass-frosted',   label: t('Glass Frosted') },
+      { value: 'neon-glow',       label: t('Neon Glow') },
+      { value: 'brutalist-stamp', label: t('Brutalist Stamp') },
+      { value: 'gradient-aurora', label: t('Gradient Aurora') },
+      { value: 'sticker-fun',     label: t('Sticker Fun') },
+      { value: 'retro-terminal',  label: t('Retro Terminal') },
+      { value: 'tilt-3d',         label: t('3D Tilt') },
+      { value: 'custom',          label: t('Personalizzato') },
+    ] },
+    { type: 'separator', label: t('Tipografia') },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
+    { type: 'typography', label: t('Titolo'),
+      presetKey: 'typography_preset',
+      responsiveKeys: ['size'],
+      keys: {
+        color: 'title_color',
+      },
+      sizeMin: 12, sizeMax: 60,
+    },
+    { type: 'typography', label: t('Prezzo'),
+      presetKey: 'typography_preset',
+      responsiveKeys: ['size'],
+      keys: {
+        color: 'price_color',
+      },
+      sizeMin: 12, sizeMax: 60,
+    },
+    { type: 'typography', label: t('Pulsante'),
+      presetKey: 'typography_preset',
+      responsiveKeys: ['size'],
+      keys: {
+        color: 'button_color',
+      },
+      sizeMin: 12, sizeMax: 60,
+    },
+
+    { type: 'separator', label: t('Layout') },
+    { key: 'columns', label: t('Colonne'), type: 'range', min: 1, max: 6, step: 1 },
+    { key: 'columns_tablet', label: t('Colonne tablet'), type: 'range', min: 1, max: 4, step: 1 },
+    { key: 'columns_mobile', label: t('Colonne mobile'), type: 'range', min: 1, max: 2, step: 1 },
+    { key: 'gap', label: t('Gap (px)'), type: 'range', min: 0, max: 48, step: 4 },
+    { key: 'image_ratio', label: t('Proporzione immagine'), type: 'select', options: [
+      { value: '1-1', label: t('1:1 Quadrato') },
       { value: '4-3', label: '4:3' },
-      { value: '3-4', label: '3:4 Verticale' },
+      { value: '3-4', label: t('3:4 Verticale') },
       { value: '16-9', label: '16:9' },
-      { value: 'auto', label: 'Automatico' },
+      { value: 'auto', label: t('Automatico') },
     ]},
-    { key: 'gap', label: 'Gap (px)', type: 'range', min: 0, max: 48, step: 4 },
-    { key: 'card_style', label: 'Stile card', type: 'select', options: [
-      { value: 'none', label: 'Nessuno' },
-      { value: 'shadow', label: 'Ombra' },
-      { value: 'border', label: 'Bordo' },
+    { key: 'card_style', label: t('Stile card'), type: 'select', options: [
+      { value: 'none', label: t('Nessuno') },
+      { value: 'shadow', label: t('Ombra') },
+      { value: 'border', label: t('Bordo') },
     ]},
-    { key: 'hover_effect', label: 'Effetto hover', type: 'select', options: [
-      { value: 'none', label: 'Nessuno' },
-      { value: 'zoom', label: 'Zoom' },
-      { value: 'shadow', label: 'Ombra' },
+    { key: 'hover_effect', label: t('Effetto hover'), type: 'select', options: [
+      { value: 'none', label: t('Nessuno') },
+      { value: 'zoom', label: t('Zoom') },
+      { value: 'shadow', label: t('Ombra') },
     ]},
-    { key: 'columns_tablet', label: 'Colonne tablet', type: 'range', min: 1, max: 4, step: 1 },
-    { key: 'columns_mobile', label: 'Colonne mobile', type: 'range', min: 1, max: 2, step: 1 },
+    { key: 'carousel_speed', label: t('Velocità (ms)'), type: 'range', min: 1000, max: 10000, step: 500,
+      condition: { field: 'layout', value: 'carousel' } },
 
-    { type: 'separator', label: 'Colori' },
-    { key: 'title_color', label: 'Colore titolo', type: 'color' },
-    { key: 'price_color', label: 'Colore prezzo', type: 'color' },
-    { key: 'sale_color', label: 'Colore saldo', type: 'color' },
-    { key: 'button_color', label: 'Colore testo pulsante', type: 'color' },
-    { key: 'button_bg', label: 'Sfondo pulsante', type: 'color' },
-    { key: 'badge_bg', label: 'Sfondo badge', type: 'color' },
+    { type: 'separator', label: t('Colori') },
+    { key: 'sale_color', label: t('Colore saldo'), type: 'color' },
+    { key: 'button_bg', label: t('Sfondo pulsante'), type: 'color' },
+    { key: 'badge_bg', label: t('Sfondo badge'), type: 'color' },
 
     ...shadowField,
     ...borderFields(),

@@ -11,6 +11,7 @@ class Olo_Search_Tile extends Olo_Tile_Base {
     protected $icon     = 'dashicons-search';
     protected $category = 'navigation';
     protected $defaults = [
+        'preset' => 'custom',
         'placeholder'        => 'Cerca...',
         'style'              => 'default',
         'size'               => 'medium',
@@ -148,7 +149,7 @@ class Olo_Search_Tile extends Olo_Tile_Base {
         <?php endif; ?>
         <?php if ( $btn_radius_hover_css !== '' ) : ?>.<?php echo $uid; ?> button[type=submit]{transition:border-radius 400ms cubic-bezier(.4,0,.2,1) !important}.<?php echo $uid; ?> button[type=submit]:hover{border-radius:<?php echo $btn_radius_hover_css; ?> !important}<?php endif; ?>
         </style>
-        <div class="olo-search <?php echo $uid; ?>"<?php if ( $wrapper_css ) echo ' style="' . esc_attr( $wrapper_css ) . '"'; ?>>
+        <div class="olo-search <?php echo $uid; ?> olo-srch-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>"<?php if ( $wrapper_css ) echo ' style="' . esc_attr( $wrapper_css ) . '"'; ?>>
             <form class="olo-srch-form" style="<?php echo esc_attr( $form_css ); ?>" action="<?php echo esc_url( home_url( '/' ) ); ?>" method="get" role="search">
                 <?php if ( $show_icon && $icon_pos === 'left' ) : ?>
                 <span style="display:flex;align-items:center;flex-shrink:0;padding-left:<?php echo $style === 'hero' ? '20px' : '14px'; ?>"><?php echo $icon_svg; ?></span>

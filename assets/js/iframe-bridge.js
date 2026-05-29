@@ -5,6 +5,13 @@
 (function() {
   'use strict';
 
+  // v3.55.29 — blocca HTML5 drag SUBITO al caricamento dell'iframe-bridge
+  // (NON dentro init()). Le tile contengono <img>/<a> che sono draggable di
+  // default → senza questo blocco, il browser fa partire HTML5 drag in parallelo
+  // al drag custom (Edge-hotzone) e mostra cursor "no-drop" (cerchio barrato).
+  document.addEventListener('dragstart', function(e) { e.preventDefault(); }, true);
+  document.addEventListener('drag',      function(e) { e.preventDefault(); }, true);
+
   var root = document.getElementById('olo-iframe-root');
   var selectedId = null;
   var hoveredEl = null;
@@ -37,6 +44,57 @@
 
   function findTileEl(tileId) {
     return root.querySelector('[data-olo-tile-id="' + tileId + '"]');
+  }
+
+  // ── Force-hover preview ──
+  // L'utente attiva il toggle "modifica hover" nell'inspector e si aspetta di
+  // vedere la tile come fosse :hover. CSS :hover non è forzabile da JS, quindi
+  // cloniamo runtime tutte le regole CSS che contengono :hover sostituendolo
+  // con [data-olo-force-hover] e applichiamo l'attributo alla tile + descendant.
+  var forceHoverState = { enabled: false, tileId: null };
+  function applyForceHover(enabled, tileId) {
+    forceHoverState.enabled = !!enabled;
+    forceHoverState.tileId = enabled ? tileId : null;
+    // Cleanup: rimuovi attributo da tutti gli elementi e rimuovi style precedente
+    var prev = document.querySelectorAll('[data-olo-force-hover]');
+    for (var i = 0; i < prev.length; i++) prev[i].removeAttribute('data-olo-force-hover');
+    var oldStyle = document.getElementById('olo-force-hover-css');
+    if (oldStyle) oldStyle.remove();
+
+    if (!enabled || !tileId) return;
+    var tileEl = findTileEl(tileId);
+    if (!tileEl) return;
+
+    // Applica data-attr a wrapper + tutti i discendenti (così le rules nested
+    // tipo `.tile .child:hover` si attivano se il :hover era sul figlio).
+    tileEl.setAttribute('data-olo-force-hover', '1');
+    var descendants = tileEl.querySelectorAll('*');
+    for (var j = 0; j < descendants.length; j++) {
+      descendants[j].setAttribute('data-olo-force-hover', '1');
+    }
+
+    // Clona regole CSS contenenti :hover sostituendolo con [data-olo-force-hover]
+    var clones = [];
+    for (var s = 0; s < document.styleSheets.length; s++) {
+      try {
+        var sheet = document.styleSheets[s];
+        if (!sheet.cssRules) continue;
+        for (var r = 0; r < sheet.cssRules.length; r++) {
+          var rule = sheet.cssRules[r];
+          if (!rule.cssText || rule.cssText.indexOf(':hover') === -1) continue;
+          // Replace solo l'occorrenza del pseudo-class :hover, non sottostringhe accidentali.
+          // Il pattern "(?<!\w):hover\b" non funziona ovunque, usiamo una regex più semplice:
+          // sostituisce :hover quando NON è preceduto da '\\' (per evitare CSS escaped — raro).
+          clones.push(rule.cssText.replace(/:hover\b/g, '[data-olo-force-hover]'));
+        }
+      } catch (e) { /* CORS / SecurityError su stylesheets cross-origin: skip */ }
+    }
+    if (clones.length) {
+      var st = document.createElement('style');
+      st.id = 'olo-force-hover-css';
+      st.textContent = clones.join('\n');
+      document.head.appendChild(st);
+    }
   }
 
   // ── Selection ──
@@ -108,8 +166,27 @@
       e.stopPropagation();
       return;
     }
-    e.preventDefault();
-    e.stopPropagation();
+
+    // V3.22.5 — Detect clicks on interactive widgets (accordion / tabs /
+    // switcher / etc.). For these we *don't* call preventDefault, AND we
+    // explicitly invoke the UIkit component method since the bridge is in
+    // capture phase and the native handler doesn't always fire reliably.
+    // Add `data-olo-interactive` to any custom element to opt-in.
+    var INTERACTIVE_SEL = '.uk-accordion-title, .uk-tab a, .uk-tab > * > a, .uk-switcher-nav a, .uk-subnav a, .uk-slidenav, .uk-dotnav a, [data-uk-toggle], [uk-toggle], [data-olo-interactive], .oit-tab, [role="tab"], [data-idx][role="button"], .olo-carousel-arrow, .olo-carousel-dot, .olo-car-arrow, .olo-car-dot';
+    var isInteractive = e.target.closest && e.target.closest(INTERACTIVE_SEL);
+
+    if (!isInteractive) {
+      e.preventDefault();
+      e.stopPropagation();
+    } else {
+      // For .uk-accordion-title (and similar <a href="#">) we only block the
+      // browser default navigation (jump-to-top). We leave propagation alone
+      // so the native UIkit handler in the bubble phase performs the toggle.
+      // Calling toggle() manually here would cause a double-toggle (bridge +
+      // UIkit), netting zero state change.
+      var anchor = e.target.closest('a[href="#"]');
+      if (anchor) e.preventDefault();
+    }
     // Floating panel empty placeholder: open finder to insert into the panel
     var emptyEl = e.target.closest && e.target.closest('[data-olo-fp-empty]');
     if (emptyEl) {
@@ -119,11 +196,20 @@
         return;
       }
     }
+    // Empty canvas placeholder buttons: open InsertPanel on the right tab
+    var emptyActionEl = e.target.closest && e.target.closest('[data-olo-empty-action]');
+    if (emptyActionEl) {
+      e.preventDefault();
+      e.stopPropagation();
+      var action = emptyActionEl.getAttribute('data-olo-empty-action');
+      post('olo:empty-action', { action: action });
+      return;
+    }
     var tileId = findTileId(e.target);
     if (tileId) {
       selectTile(tileId);
       post('olo:tile-click', { tileId: tileId });
-    } else {
+    } else if (!isInteractive) {
       selectTile(null);
       post('olo:canvas-click');
     }
@@ -160,7 +246,9 @@
     if (!tileId) return;
     var el = findTileEl(tileId);
     if (!el) return;
-    if (!nearBorderOf(el, e.clientX, e.clientY)) return;
+    // Il drag parte da qualunque punto del tile. DRAG_THRESHOLD (movimento > 5px)
+    // distingue click (selezione) da drag — il check nearBorderOf era una restrizione
+    // di troppo che impediva di afferrare tile larghi (es. headline centrato) dal centro.
     edgeDownState = { tileId: tileId, el: el, startX: e.clientX, startY: e.clientY };
   }
 
@@ -215,11 +303,17 @@
         var tileEl = textEl.closest('[data-olo-tile-id]');
         if (tileEl) {
           editEl = textEl;
-          // Auto-assign editable attribute based on tag
+          // Auto-assign editable attribute based on tag.
+          // Marca anche come "auto" così endInlineEdit() può ripulirlo al termine —
+          // altrimenti l'attributo resta appiccicato sul DOM e il check di
+          // onEdgeMouseDown (skip editable text regions) blocca il drag per sempre
+          // su quel tile. Bug visibile soprattutto su tile headline che vengono
+          // doppio-cliccati per editare e poi non si trascinano più.
           var tag = textEl.tagName.toLowerCase();
           if (tag.match(/^h[1-6]$/)) editEl.setAttribute('data-olo-editable', 'heading');
           else if (textEl.classList.contains('olo-btn-text') || textEl.closest('.olo-btn')) editEl.setAttribute('data-olo-editable', 'text');
           else editEl.setAttribute('data-olo-editable', 'content');
+          editEl.dataset.oloEditableAuto = '1';
         }
       }
     }
@@ -297,6 +391,13 @@
     var newValue = field === 'content' ? el.innerHTML : el.textContent.trim();
 
     el.removeAttribute('contenteditable');
+    // Se l'attributo data-olo-editable era stato auto-assegnato dal doppio-click
+    // (non viene dal PHP renderer), lo rimuoviamo — altrimenti resta sul DOM e
+    // impedisce per sempre il drag del tile (vedi check in onEdgeMouseDown).
+    if (el.dataset.oloEditableAuto === '1') {
+      el.removeAttribute('data-olo-editable');
+      delete el.dataset.oloEditableAuto;
+    }
     el.style.outline = '';
     el.style.outlineOffset = '';
     el.style.cursor = '';
@@ -750,6 +851,13 @@
         el.style.transition = 'opacity 0.2s';
 
         if (hoverToolbar) hoverToolbar.style.display = 'none';
+
+        // v3.55.30 — attiva la classe globale olo-dragging così il CSS forza il
+        // cursore "mano chiusa" (var(--olo-cursor-grabbing)) ovunque durante il
+        // drag interno tile→tile. Senza questa, il cursor durante movimento
+        // restava la "manina puntata" del SO Windows perché nessuna classe
+        // attivava l'override CSS.
+        document.body.classList.add('olo-dragging');
       };
 
       var grip = hoverToolbar.querySelector('.olo-iframe-tb-grip');
@@ -816,6 +924,9 @@
         if (gripGhost) { gripGhost.remove(); gripGhost = null; }
         if (gripIndicator) gripIndicator.style.display = 'none';
 
+        // v3.55.30 — rimuovi la classe globale olo-dragging (vedi startTileDrag).
+        document.body.classList.remove('olo-dragging');
+
         // Execute reorder
         if (gripDropTarget && gripDragId && gripDropTarget !== gripDragId) {
           post('olo:reorder', {
@@ -837,45 +948,12 @@
   }
 
   // ── Section drag reorder in iframe ──
-
-  var dragSrcId = null;
-  var dragIndicatorEl = null;
-
-  function initSectionDrag() {
-    // Make all tile elements accept drag reorder
-    root.querySelectorAll('[data-olo-tile-id]').forEach(function(el) {
-      el.addEventListener('dragover', function(e) {
-        if (!dragSrcId || dragSrcId === el.dataset.oloTileId) return;
-        e.preventDefault();
-        e.dataTransfer.dropEffect = 'move';
-        var rect = el.getBoundingClientRect();
-        var indicator = getDropIndicator();
-        indicator.style.display = 'block';
-        indicator.style.top = (e.clientY < rect.top + rect.height / 2 ? rect.top : rect.bottom) + 'px';
-      });
-      el.addEventListener('drop', function(e) {
-        if (!dragSrcId || dragSrcId === el.dataset.oloTileId) return;
-        e.preventDefault();
-        e.stopPropagation();
-        var rect = el.getBoundingClientRect();
-        var before = e.clientY < rect.top + rect.height / 2;
-        post('olo:reorder', { sourceId: dragSrcId, targetId: el.dataset.oloTileId, before: before });
-        dragSrcId = null;
-        hideDropIndicator();
-      });
-      el.addEventListener('dragstart', function(e) {
-        if (previewMode) return;
-        dragSrcId = el.dataset.oloTileId;
-        e.dataTransfer.effectAllowed = 'move';
-        el.style.opacity = '0.4';
-      });
-      el.addEventListener('dragend', function() {
-        el.style.opacity = '';
-        dragSrcId = null;
-        hideDropIndicator();
-      });
-    });
-  }
+  // v3.55.24 — RIMOSSO `initSectionDrag()` HTML5 (dragstart/dragover/drop).
+  // Era dead code: nessuna tile ha `draggable="true"` quindi gli eventi non si
+  // firavano mai. Il drag reorder dentro l'iframe è già implementato in modo
+  // custom via pointer events (Edge-hotzone drag + grip mousedown sopra → vedi
+  // riga ~795 startTileDrag). Il vantaggio del custom: cursor: var(--olo-cursor-*)
+  // funziona, niente "manina pixelata" di Windows del drag HTML5 nativo.
 
   function showHoverToolbar(el, tileId) {
     if (previewMode) return;
@@ -996,10 +1074,15 @@
           reinitUIkit();
           reinitTileScripts();
           injectAddButtons();
-          initSectionDrag();
+          // initSectionDrag() rimosso v3.55.24 — drag custom basato su pointer events
+          // (vedi onEdgeMouseDown / startTileDrag) gestisce già il reorder.
           if (selectedId) {
             var el = findTileEl(selectedId);
             if (el) el.classList.add('olo-builder-selected');
+          }
+          // Riapplica force-hover se era attivo prima del re-render
+          if (forceHoverState.enabled && forceHoverState.tileId) {
+            applyForceHover(true, forceHoverState.tileId);
           }
         }, 50);
         // Report height + layout snapshot for drag-and-drop hit-testing
@@ -1023,6 +1106,19 @@
               reinitTileScripts();
               if (d.tileId === selectedId) {
                 newEl.classList.add('olo-builder-selected');
+              }
+
+              // Scoped CSS (hover + responsive) — rimpiazza eventuale <style data-tile-id="X">
+              // precedente per evitare accumulo di rules stale dopo molte patch sullo stesso tile.
+              var STYLE_ID = 'olo-tile-style-' + d.tileId.replace(/[^A-Za-z0-9_-]/g, '');
+              var oldStyle = document.getElementById(STYLE_ID);
+              if (oldStyle) oldStyle.remove();
+              if (d.scoped_css) {
+                var styleEl = document.createElement('style');
+                styleEl.id = STYLE_ID;
+                styleEl.setAttribute('data-tile-id', d.tileId);
+                styleEl.textContent = d.scoped_css;
+                document.head.appendChild(styleEl);
               }
             } else {
               // HTML didn't produce an element — request full render
@@ -1049,6 +1145,42 @@
           var scrollEl = findTileEl(d.tileId);
           if (scrollEl) scrollEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
+        break;
+
+      case 'olo:set-page-bg':
+        // Applica il bg pagina IMMEDIATAMENTE via inline style su html+body, senza
+        // aspettare il render REST completo. Update live mentre l'utente cambia colori.
+        // Il render REST farà il merge definitivo del style; questo è solo per UX immediata.
+        try {
+          var bg = d.page_bg || {};
+          var hasBg = bg.type && bg.type !== 'none';
+          // Marker sul body: dice ai reset CSS del template di togliersi di mezzo.
+          if (hasBg) {
+            document.body.setAttribute('data-olo-pagebg', '1');
+          } else {
+            document.body.removeAttribute('data-olo-pagebg');
+          }
+          var styleEl = document.getElementById('olo-builder-live-page-bg');
+          if (!styleEl) {
+            styleEl = document.createElement('style');
+            styleEl.id = 'olo-builder-live-page-bg';
+            document.head.appendChild(styleEl);
+          }
+          var css = '';
+          // !important per battere reset CSS del template, style-system o tema.
+          if (bg.type === 'solid' && bg.color) {
+            css = 'background-color: ' + bg.color + ' !important; background-image: none !important;';
+          } else if (bg.type === 'gradient') {
+            var ga = parseInt(bg.gradient_angle) || 180;
+            css = 'background: linear-gradient(' + ga + 'deg, ' + (bg.gradient_from || '#fff') + ', ' + (bg.gradient_to || '#000') + ') !important;';
+          } else if (bg.type === 'image' && bg.image_url) {
+            css = 'background-image: url(' + bg.image_url + ') !important;background-size:' + (bg.image_size || 'cover') + ' !important;background-position:' + (bg.image_position || 'center center') + ' !important;background-repeat:no-repeat !important;';
+          }
+          // Applichiamo a TUTTI i container possibili: html, body, root wrapper.
+          // Sufficienti per coprire i casi in cui un parent ha bg suo che maschera body.
+          styleEl.textContent = css ? ('html, body, body > #olo-iframe-root { ' + css + ' }') : '';
+          console.log('[bridge] olo:set-page-bg applied:', bg.type, bg.color || bg.gradient_from || bg.image_url || '');
+        } catch (e) { console.warn('[bridge] olo:set-page-bg error', e); }
         break;
 
       case 'olo:viewport':
@@ -1083,6 +1215,10 @@
         } else if (existing) {
           existing.remove();
         }
+        break;
+
+      case 'olo:force-hover':
+        applyForceHover(!!d.enabled, d.tileId || null);
         break;
 
       case 'olo:drag-over':
@@ -1169,6 +1305,7 @@
   document.addEventListener('mousemove', onEdgeMouseMove);
   document.addEventListener('mouseup', onEdgeMouseUp, true);
   document.addEventListener('click', blockLinks, true);
+  // (HTML5 drag già bloccato al top del modulo, vedi commento v3.55.29.)
   window.addEventListener('message', onMessage, false);
 
   observeHeight();

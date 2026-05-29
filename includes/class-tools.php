@@ -58,26 +58,36 @@ class Olo_Tools {
 
         $tab  = sanitize_key( $_GET['tab'] ?? 'generale' );
         $tabs = [
-            'generale'         => 'Generale',
-            'url-replace'      => 'Sostituzione URL',
-            'versioni'         => 'Controllo Versione',
-            'manutenzione'     => 'Modalit&agrave; di Manutenzione',
-            'template-website' => 'Template Website',
+            'generale'         => __( 'Generale', 'olobuild' ),
+            'url-replace'      => __( 'Sostituzione URL', 'olobuild' ),
+            'versioni'         => __( 'Controllo Versione', 'olobuild' ),
+            'manutenzione'     => __( 'Modalità di Manutenzione', 'olobuild' ),
+            'template-website' => __( 'Template Website', 'olobuild' ),
         ];
 
+        // Subnav items per cockpit_subnav()
+        $subnav_items = [];
+        foreach ( $tabs as $slug => $label ) {
+            $subnav_items[] = [
+                'slug'  => $slug,
+                'label' => $label,
+                'href'  => admin_url( 'admin.php?page=olo-tools&tab=' . $slug ),
+            ];
+        }
+
         ?>
-        <?php Olo_Builder::page_shell_open( 'Strumenti', 'olo-tools-page' ); ?>
+        <?php Olo_Builder::cockpit_shell_open( '<b>' . esc_html__( 'Strumenti', 'olobuild' ) . '</b>' ); ?>
+        <main class="olo-cockpit-main olo-cockpit-legacy olo-tools-page">
 
-            <div class="olo-admin-tabs">
-                <?php foreach ( $tabs as $slug => $label ) : ?>
-                    <a href="<?php echo esc_url( admin_url( 'admin.php?page=olo-tools&tab=' . $slug ) ); ?>"
-                       class="olo-admin-tab <?php echo $tab === $slug ? 'active' : ''; ?>">
-                        <?php echo $label; ?>
-                    </a>
-                <?php endforeach; ?>
-            </div>
+            <?php
+            echo Olo_Builder::cockpit_page_head( [
+                'title' => __( 'Strumenti', 'olobuild' ),
+                'sub'   => __( 'Cache, manutenzione, sostituzione URL e rollback. Utilizzare con cura.', 'olobuild' ),
+            ] );
+            echo Olo_Builder::cockpit_subnav( $subnav_items, $tab );
+            ?>
 
-            <div id="olo-tools-msg"></div>
+            <div id="olo-tools-msg" style="margin-top:16px"></div>
 
             <?php
             switch ( $tab ) {
@@ -99,7 +109,8 @@ class Olo_Tools {
             }
             ?>
 
-        <?php Olo_Builder::page_shell_close(); ?>
+        </main>
+        <?php Olo_Builder::cockpit_shell_close(); ?>
 
         <script>
         var oloToolsNonce = '<?php echo wp_create_nonce( 'olo_tools_nonce' ); ?>';
@@ -122,8 +133,8 @@ class Olo_Tools {
             .olo-tools-page .olo-field-hint { font-size: 12px; color: #888; }
             .olo-tools-page .olo-field-input { min-width: 160px; padding: 6px 10px; border: 1px solid #d0d5dd; border-radius: 6px; font-size: 13px; }
             .olo-tools-page .olo-field-input-full { width: 100%; padding: 8px 12px; border: 1px solid #d0d5dd; border-radius: 6px; font-size: 13px; box-sizing: border-box; }
-            .olo-tools-page .olo-btn-action { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border: none; border-radius: 6px; font-size: 13px; cursor: pointer; color: #fff; background: #333; }
-            .olo-tools-page .olo-btn-action:hover { background: #555; }
+            .olo-tools-page .olo-btn-action { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border: none; border-radius: 6px; font-size: 13px; cursor: pointer; color: #fff; background: #1a1a1a; }
+            .olo-tools-page .olo-btn-action:hover { background: #333; }
             .olo-tools-page .olo-btn-action:disabled { opacity: 0.5; cursor: not-allowed; }
             .olo-tools-page .olo-btn-action.red { background: #dc2626; }
             .olo-tools-page .olo-btn-action.red:hover { background: #b91c1c; }

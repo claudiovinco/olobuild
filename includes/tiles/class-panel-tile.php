@@ -11,10 +11,27 @@ class Olo_Panel_Tile extends Olo_Tile_Base {
     protected $icon     = 'dashicons-id-alt';
     protected $category = 'interactive';
     protected $defaults = [
+        'preset'         => 'card-classic',
+        'effect_color'   => '',
+        'effect_intensity' => 'medium',
+        'effect_speed'   => 0,
+        'wow_disable'           => false,
+        'wow_backdrop_blur'     => 0,
+        'wow_backdrop_saturate' => 100,
+        'wow_border_style'      => 'solid',
+        'wow_font_family'       => 'inherit',
+        'wow_rotation'          => 0,
+        'wow_perspective'       => 0,
+        'wow_tilt_x'            => 0,
+        'wow_glow_pulse'        => false,
+        'wow_title_glow'        => false,
+        'wow_scanlines'         => false,
+
+        'wow_terminal_prompt' => false,
         'style'          => 'default',
-        'title'          => 'Panel Title',
-        'meta'           => 'Written by Author',
-        'content'        => 'Panel content goes here. Add your text, images, or any other content.',
+        'title'          => 'Titolo del pannello',
+        'meta'           => 'Scritto dall\'autore',
+        'content'        => 'Contenuto del pannello. Aggiungi testo, immagini o altri elementi.',
         'media_type'     => 'image',
         'image'          => '',
         'image_ratio'    => 'auto',
@@ -57,6 +74,16 @@ class Olo_Panel_Tile extends Olo_Tile_Base {
         'border_effect_speed'     => 4,
     ];
 
+    /**
+     * V3.28.0 — Extra CSS for "audacious" panel presets.
+     */
+    private function get_preset_extra_css( $preset_id, $sel, $s = [] ) {
+        // @deprecated v1.0.73 — refactor profondo: i preset audaci ora settano direttamente
+        // i field standard tramite TILE_PRESETS in BuilderInspector.vue, e i field wow_* via
+        // build_wow_effects_css(). Nessun !important, ogni proprietà personalizzabile.
+        return '';
+    }
+
     public function get_controls() {
         return [
             [ 'key' => 'style', 'type' => 'select', 'label' => 'Style', 'options' => [
@@ -92,13 +119,17 @@ class Olo_Panel_Tile extends Olo_Tile_Base {
         $tag        = in_array( $s['title_element'], [ 'h2', 'h3', 'h4', 'div' ], true ) ? $s['title_element'] : 'h3';
         $target     = $s['link_target'] === '_blank' ? ' target="_blank" rel="noopener"' : '';
         $media_type = in_array( $s['media_type'] ?? 'image', [ 'none', 'image', 'video' ], true ) ? $s['media_type'] : 'image';
+        $preset_id  = $s['preset'] ?? 'card-classic';
 
-        $css = $this->build_scoped_css( $uid, $s, $media_type );
+        $css  = $this->build_scoped_css( $uid, $s, $media_type );
+        // v1.0.73 — refactor profondo: get_preset_extra_css svuotato, ora i preset audaci
+        // settano i field standard tramite TILE_PRESETS.panel + helper wow_*.
+        $css .= $this->build_wow_effects_css( $s, '.' . $uid, '.uk-card-title' );
 
         ob_start();
         ?>
         <style><?php echo $css; ?></style>
-        <div class="olo-panel <?php echo esc_attr( $uid ); ?> <?php echo esc_attr( $card_class ); ?>">
+        <div class="olo-panel olo-pn--preset-<?php echo esc_attr( $preset_id ); ?> <?php echo esc_attr( $uid ); ?> <?php echo esc_attr( $card_class ); ?>">
             <?php if ( $media_type === 'image' && ! empty( $s['image'] ) ) : ?>
                 <div class="olo-panel-media uk-card-media-top">
                     <?php

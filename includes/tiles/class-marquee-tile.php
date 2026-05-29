@@ -56,7 +56,18 @@ class Olo_Marquee_Tile extends Olo_Tile_Base {
         $direction   = $s['direction'] === 'right' ? 'right' : 'left';
         $pause       = ! empty( $s['pause_hover'] );
         $gap         = max( 0, intval( $s['gap'] ) );
-        $bg          = $this->safe_color_css( $s['bg_color'] ) ?: '#1F2937';
+        // Bg: preferisce l'oggetto "bg" (Sfondo creativo) — supporta solid/gradient/pattern via CSS Builder.
+        // Fallback su bg_color setting (colore semplice).
+        $bg_obj  = $s['bg'] ?? null;
+        $bg_decl = '';
+        if ( is_array( $bg_obj ) && ! empty( $bg_obj['type'] ) && $bg_obj['type'] !== 'none' && class_exists( 'Olo_CSS_Builder' ) ) {
+            $bg_decl = ( new Olo_CSS_Builder() )->get_bg_inline_css( $bg_obj );
+        }
+        if ( ! $bg_decl ) {
+            $color   = $this->safe_color_css( $s['bg_color'] ) ?: '#1F2937';
+            $bg_decl = 'background: ' . $color;
+        }
+        $bg = $bg_decl;
         $height      = max( 20, intval( $s['height'] ) );
         $full_width  = ! empty( $s['full_width'] );
         $bt          = max( 0, intval( $s['border_top'] ) );
@@ -115,7 +126,7 @@ class Olo_Marquee_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> {
                 display: flex;
                 align-items: center;
-                background: <?php echo $bg; ?>;
+                <?php echo $bg; ?>;
                 height: <?php echo $height; ?>px;
                 overflow: hidden;
                 width: 100%;

@@ -1,0 +1,2022 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Olobuild legacy (pre-3.28.0)\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-09 07:47+0000\n"
+"PO-Revision-Date: 2026-03-28\n"
+"Last-Translator: Claudio\n"
+"Language-Team: French\n"
+"Language: fr_FR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Olo Lang i18n rebuild — legacy/orphan strings\n"
+
+#: includes/class-seo-settings.php:1620
+#, php-format
+msgid "%1$d/%2$d campi SEO compilati"
+msgstr "%1$d/%2$d champs SEO remplis"
+
+#: includes/class-form-submissions.php:597
+#, php-format
+msgid "%d campi"
+msgstr "%d champs"
+
+#: includes/class-form-submissions.php:452
+#, php-format
+msgid "%d invii eliminati."
+msgstr "%d soumissions supprimées."
+
+#: includes/class-form-submissions.php:456
+#, php-format
+msgid "%d invii segnati come letti."
+msgstr "%d soumissions marquées comme lues."
+
+#: includes/class-form-submissions.php:460
+#, php-format
+msgid "%d invii segnati come non letti."
+msgstr "%d soumissions marquées comme non lues."
+
+#: includes/class-form-submissions.php:354
+#: includes/class-form-submissions.php:575
+msgid "(senza nome)"
+msgstr "(sans nom)"
+
+#: includes/class-global-popups.php:469
+msgid "1 volta a settimana"
+msgstr "1 fois par semaine"
+
+#: includes/class-global-popups.php:468
+msgid "1 volta al giorno"
+msgstr "1 fois par jour"
+
+#: includes/class-global-popups.php:467
+msgid "1 volta per sessione"
+msgstr "1 fois par session"
+
+#: includes/class-seo-settings.php:244
+msgid "404 — Titolo"
+msgstr "404 — Titre"
+
+#: includes/class-seo-redirects.php:440
+msgid "A"
+msgstr "Vers"
+
+#: includes/class-seo-redirects.php:387
+msgid "A URL"
+msgstr "URL destination"
+
+#: includes/class-global-popups.php:562
+msgid "AND (tutte)"
+msgstr "ET (toutes)"
+
+#: includes/class-performance-settings.php:656
+msgid "Abilita View Transitions"
+msgstr "Activer les View Transitions"
+
+#: includes/class-white-label.php:206
+msgid "Abilita la personalizzazione del brand"
+msgstr "Activer la personnalisation de la marque"
+
+#: includes/class-role-manager.php:290
+msgid "Accesso completo"
+msgstr "Accès complet"
+
+#: includes/class-seo-settings.php:456
+msgid "Agenzia assicurazioni"
+msgstr "Agence d'assurances"
+
+#: includes/class-seo-settings.php:453
+msgid "Agenzia immobiliare"
+msgstr "Agence immobilière"
+
+#: includes/class-seo-settings.php:454
+msgid "Agenzia viaggi"
+msgstr "Agence de voyages"
+
+#: includes/class-performance-settings.php:657
+msgid ""
+"Aggiunge un effetto fade+scale alla navigazione tra pagine. Funziona solo su "
+"browser compatibili, gli altri navigano normalmente."
+msgstr ""
+"Ajoute un effet fade+scale à la navigation entre les pages. Fonctionne "
+"uniquement sur les navigateurs compatibles, les autres naviguent normalement."
+
+#: includes/class-seo-settings.php:875
+msgid "Aggiungi <code>rel=\"nofollow\"</code> ai link esterni nel contenuto."
+msgstr "Ajoute <code>rel=\"nofollow\"</code> aux liens externes dans le contenu."
+
+#: includes/class-seo-settings.php:885
+msgid "Aggiungi <code>target=\"_blank\"</code> ai link esterni."
+msgstr "Ajoute <code>target=\"_blank\"</code> aux liens externes."
+
+#: includes/class-seo-settings.php:1222
+msgid "Aggiungi FAQ"
+msgstr "Ajouter une FAQ"
+
+#: includes/class-global-popups.php:591
+msgid "Aggiungi Popup"
+msgstr "Ajouter un popup"
+
+#: includes/class-seo-redirects.php:371 includes/class-seo-redirects.php:410
+msgid "Aggiungi Redirect"
+msgstr "Ajouter une redirection"
+
+#: includes/class-seo-settings.php:1202
+msgid ""
+"Aggiungi coppie domanda/risposta per generare markup FAQPage. Ottiene rich "
+"results su Google."
+msgstr ""
+"Ajoutez des paires question/réponse pour générer le balisage FAQPage. Obtient "
+"des résultats enrichis sur Google."
+
+#: includes/class-seo-settings.php:963
+msgid ""
+"Aggiungi righe personalizzate al file <code>robots.txt</code> virtuale di "
+"WordPress. Una regola per riga."
+msgstr ""
+"Ajoutez des lignes personnalisées au fichier <code>robots.txt</code> virtuel "
+"de WordPress. Une règle par ligne."
+
+#: includes/class-seo-settings.php:719
+msgid "Aggiungi tag <code>&lt;image:image&gt;</code> nella sitemap."
+msgstr "Ajoute la balise <code>&lt;image:image&gt;</code> dans le sitemap."
+
+#: includes/class-seo-settings.php:444
+msgid "Alimentari / Supermercato"
+msgstr "Alimentation / Supermarché"
+
+#: includes/class-analytics-tracking.php:146
+msgid "Analytics & Tracking"
+msgstr "Analytics & Tracking"
+
+#: includes/class-seo-redirects.php:592
+msgid "Annulla"
+msgstr "Annuler"
+
+#: includes/class-seo-settings.php:884
+msgid "Apri in nuova tab"
+msgstr "Ouvrir dans un nouvel onglet"
+
+#: includes/class-seo-settings.php:821
+msgid "Archivi autore"
+msgstr "Archives auteur"
+
+#: includes/class-seo-settings.php:830
+msgid "Archivi per data"
+msgstr "Archives par date"
+
+#: includes/class-global-popups.php:479
+msgid "Archivio"
+msgstr "Archive"
+
+#: includes/class-woo-template-integration.php:41
+msgid "Archivio Prodotti"
+msgstr "Archive des produits"
+
+#: includes/class-seo-settings.php:236
+msgid "Articoli — Descrizione"
+msgstr "Articles — Description"
+
+#: includes/class-seo-settings.php:235
+msgid "Articoli — Titolo"
+msgstr "Articles — Titre"
+
+#: includes/class-global-popups.php:477
+msgid "Articolo specifico"
+msgstr "Article spécifique"
+
+#: includes/class-role-manager.php:282
+msgid "Assegna un livello di accesso per ciascun ruolo WordPress"
+msgstr "Assignez un niveau d'accès pour chaque rôle WordPress"
+
+#: includes/class-woo-template-integration.php:242
+msgid "Assegnazione Template"
+msgstr "Assignation des modèles"
+
+#: includes/class-woo-template-integration.php:297
+msgid "Assegnazioni salvate"
+msgstr "Assignations enregistrées"
+
+#: includes/class-white-label.php:205
+msgid "Attiva White Label"
+msgstr "Activer White Label"
+
+#: includes/class-seo-settings.php:437
+msgid "Attività locale (generico)"
+msgstr "Commerce local (générique)"
+
+#: includes/class-media-search.php:37
+msgid "Audio"
+msgstr "Audio"
+
+#: includes/class-seo-settings.php:1184
+msgid "Automatico (predefinito)"
+msgstr "Automatique (par défaut)"
+
+#: includes/class-seo-settings.php:242
+msgid "Autore — Titolo"
+msgstr "Auteur — Titre"
+
+#: includes/class-media-search.php:301
+msgid "Autore:"
+msgstr "Auteur :"
+
+#: includes/class-seo-settings.php:152 includes/class-seo-settings.php:1068
+msgid "Avanzate"
+msgstr "Avancé"
+
+#: includes/class-seo-redirects.php:547
+msgid "Azioni"
+msgstr "Actions"
+
+#: includes/class-olo-builder.php:488
+msgid "Banner GDPR e consenso cookie"
+msgstr "Bannière RGPD et consentement aux cookies"
+
+#: includes/class-seo-settings.php:440
+msgid "Bar / Pub"
+msgstr "Bar / Pub"
+
+#: includes/class-seo-settings.php:460
+msgid "Bed & Breakfast"
+msgstr "Chambre d'hôtes"
+
+#: includes/class-role-manager.php:169
+msgid "Blocca aggiunta elementi"
+msgstr "Bloquer l'ajout d'éléments"
+
+#: includes/class-role-manager.php:172
+msgid "Blocca impostazioni section/row"
+msgstr "Bloquer les paramètres section/row"
+
+#: includes/class-role-manager.php:170
+msgid "Blocca rimozione elementi"
+msgstr "Bloquer la suppression d'éléments"
+
+#: includes/class-role-manager.php:171
+msgid "Blocca riordinamento"
+msgstr "Bloquer le réordonnancement"
+
+#: includes/class-media-search.php:104
+msgid "Breve"
+msgstr "Court"
+
+#: includes/class-media-search.php:103
+msgid "Brevissimo"
+msgstr "Très court"
+
+#: includes/class-seo-settings.php:1262
+msgid "Buono"
+msgstr "Bon"
+
+#: includes/class-seo-settings.php:516
+msgid "CAP"
+msgstr "Code postal"
+
+#: includes/class-olo-builder.php:509
+msgid "Cache, lazy load e ottimizzazione"
+msgstr "Cache, lazy load et optimisation"
+
+#: includes/class-seo-settings.php:441
+msgid "Caffè / Coffee Shop"
+msgstr "Café / Coffee Shop"
+
+#: includes/class-seo-settings.php:459
+msgid "Campeggio"
+msgstr "Camping"
+
+#: includes/class-form-submissions.php:383
+msgid "Campi compilati"
+msgstr "Champs remplis"
+
+#: includes/class-form-submissions.php:391
+msgid "Campo"
+msgstr "Champ"
+
+#: includes/class-site-import-export.php:543
+msgid "Carica un file .json esportato da Olobuild"
+msgstr "Chargez un fichier .json exporté depuis Olobuild"
+
+#: includes/class-global-popups.php:458
+msgid "Caricamento pagina"
+msgstr "Chargement de la page"
+
+#: includes/class-woo-template-integration.php:42
+msgid "Carrello"
+msgstr "Panier"
+
+#: includes/class-seo-settings.php:240
+msgid "Categorie — Descrizione"
+msgstr "Catégories — Description"
+
+#: includes/class-seo-settings.php:239
+msgid "Categorie — Titolo"
+msgstr "Catégories — Titre"
+
+#: includes/class-olo-builder.php:467
+msgid "Cerca foto, video e audio stock"
+msgstr "Rechercher photos, vidéo et audio stock"
+
+#: includes/class-media-search.php:44
+msgid "Cerca foto, video, audio..."
+msgstr "Rechercher photos, vidéo, audio..."
+
+#: includes/class-media-search.php:61
+msgid "Cerca panorama"
+msgstr "Rechercher un panorama"
+
+#: includes/class-woo-template-integration.php:43
+msgid "Checkout"
+msgstr "Paiement"
+
+#: includes/class-olo-builder.php:696
+msgid "Chiave segreta"
+msgstr "Clé secrète"
+
+#: includes/class-olo-builder.php:680
+msgid "Chiave sito"
+msgstr "Clé du site"
+
+#: includes/class-seo-redirects.php:698
+msgid "Chiave suggerita:"
+msgstr "Clé suggérée :"
+
+#: includes/class-seo-settings.php:500
+msgid "Città"
+msgstr "Ville"
+
+#: includes/class-seo-settings.php:449
+msgid "Clinica medica"
+msgstr "Clinique médicale"
+
+#: includes/class-seo-settings.php:452
+msgid "Commercialista"
+msgstr "Expert-comptable"
+
+#: includes/class-site-import-export.php:719
+msgid "Completato!"
+msgstr "Terminé !"
+
+#: includes/class-role-manager.php:327
+msgid "Completo"
+msgstr "Complet"
+
+#: includes/class-global-popups.php:557
+msgid "Condizioni"
+msgstr "Conditions"
+
+#: includes/class-global-popups.php:435
+msgid ""
+"Configura popup che appaiono automaticamente in base a condizioni di "
+"visualizzazione."
+msgstr ""
+"Configurez des popups qui apparaissent automatiquement en fonction des "
+"conditions d'affichage."
+
+#: includes/class-seo-settings.php:371
+msgid "Configurazione per la condivisione su Facebook, Twitter e altri social network."
+msgstr ""
+"Configuration pour le partage sur Facebook, Twitter et d'autres réseaux "
+"sociaux."
+
+#: includes/class-role-manager.php:329
+msgid "Contenuti"
+msgstr "Contenu"
+
+#: includes/class-seo-settings.php:1250
+msgid "Contenuto breve:"
+msgstr "Contenu court :"
+
+#: includes/class-seo-settings.php:797
+msgid ""
+"Controlla le direttive robots globali. Queste possono essere sovrascritte per "
+"singolo post/pagina."
+msgstr ""
+"Contrôlez les directives robots globales. Celles-ci peuvent être remplacées "
+"pour chaque article/page."
+
+#: includes/class-seo-settings.php:548
+msgid "Coordinate GPS"
+msgstr "Coordonnées GPS"
+
+#: includes/class-media-search.php:320
+msgid "Coordinate:"
+msgstr "Coordonnées :"
+
+#: includes/class-media-search.php:321
+msgid "Copyright:"
+msgstr "Copyright :"
+
+#: includes/class-seo-settings.php:565
+msgid "Costoso"
+msgstr "Cher"
+
+#: includes/class-seo-redirects.php:593
+msgid "Crea Redirect 301"
+msgstr "Créer une redirection 301"
+
+#: includes/class-seo-redirects.php:699
+msgid "Crea anche un file <code>"
+msgstr "Crée également un fichier <code>"
+
+#: includes/class-olo-builder.php:453
+msgid "Crea e modifica i tuoi template"
+msgstr "Créez et modifiez vos modèles"
+
+#: includes/class-seo-redirects.php:582
+msgid "Crea redirect da 404"
+msgstr "Créer une redirection depuis 404"
+
+#: includes/class-performance-settings.php:680
+#: includes/class-performance-settings.php:701
+msgid "Critical CSS non disponibile"
+msgstr "CSS critique non disponible"
+
+#: includes/class-seo-redirects.php:439
+msgid "Da"
+msgstr "De"
+
+#: includes/class-seo-redirects.php:378
+msgid "Da URL"
+msgstr "URL source"
+
+#: includes/class-seo-settings.php:1264
+msgid "Da migliorare"
+msgstr "À améliorer"
+
+#: includes/class-seo-redirects.php:583
+msgid "Da:"
+msgstr "De :"
+
+#: includes/class-form-submissions.php:357
+#: includes/class-form-submissions.php:495
+msgid "Data invio"
+msgstr "Date d'envoi"
+
+#: includes/class-media-search.php:322
+msgid "Data:"
+msgstr "Date :"
+
+#: includes/class-form-submissions.php:494
+msgid "Dati"
+msgstr "Données"
+
+#: includes/class-form-submissions.php:384
+msgid "Dati inseriti dall'utente nel form"
+msgstr "Données saisies par l'utilisateur dans le formulaire"
+
+#: includes/class-seo-redirects.php:818
+msgid "Dati mancanti."
+msgstr "Données manquantes."
+
+#: includes/class-global-popups.php:352 includes/class-role-manager.php:476
+#: includes/class-role-manager.php:518 includes/class-white-label.php:149
+msgid "Dati non validi"
+msgstr "Données non valides"
+
+#: includes/class-site-import-export.php:103
+msgid "Dati template non validi"
+msgstr "Données du modèle non valides"
+
+#: includes/class-seo-settings.php:211
+msgid ""
+"Definisci il formato predefinito dei titoli per ogni tipo di contenuto. "
+"Variabili: <code>%title%</code>, <code>%sitename%</code>, <code>%sep%</code>, "
+"<code>%tagline%</code>, <code>%category%</code>, <code>%tag%</code>, "
+"<code>%search_query%</code>, <code>%page%</code>, <code>%date%</code>, "
+"<code>%author%</code>"
+msgstr ""
+"Définissez le format par défaut des titres pour chaque type de contenu. "
+"Variables : <code>%title%</code>, <code>%sitename%</code>, <code>%sep%</code>, "
+"<code>%tagline%</code>, <code>%category%</code>, <code>%tag%</code>, "
+"<code>%search_query%</code>, <code>%page%</code>, <code>%date%</code>, "
+"<code>%author%</code>"
+
+#: includes/class-seo-settings.php:448
+msgid "Dentista"
+msgstr "Dentiste"
+
+#: includes/class-seo-settings.php:1117
+msgid "Descrivi questa pagina in 120-160 caratteri..."
+msgstr "Décrivez cette page en 120-160 caractères..."
+
+#: includes/class-media-search.php:303
+msgid "Descrizione:"
+msgstr "Description :"
+
+#: includes/class-role-manager.php:328
+msgid "Design"
+msgstr "Design"
+
+#: includes/class-seo-redirects.php:586
+msgid "Destinazione"
+msgstr "Destination"
+
+#: includes/class-form-submissions.php:325
+msgid "Dettaglio del messaggio ricevuto"
+msgstr "Détail du message reçu"
+
+#: includes/class-media-search.php:78
+msgid "Dimensione:"
+msgstr "Taille :"
+
+#: includes/class-media-search.php:302
+msgid "Dimensioni:"
+msgstr "Dimensions :"
+
+#: includes/class-global-popups.php:500
+msgid "Disattivato"
+msgstr "Désactivé"
+
+#: includes/class-seo-settings.php:1212 includes/class-seo-settings.php:1265
+msgid "Domanda"
+msgstr "Question"
+
+#: includes/class-seo-settings.php:602
+msgid "Domenica"
+msgstr "Dimanche"
+
+#: includes/class-media-search.php:311
+msgid "Download tile in corso..."
+msgstr "Téléchargement de la tuile en cours..."
+
+#: includes/class-media-search.php:310
+msgid "Download..."
+msgstr "Téléchargement..."
+
+#: includes/class-media-search.php:100
+msgid "Durata:"
+msgstr "Durée :"
+
+#: includes/class-seo-settings.php:563
+msgid "Economico"
+msgstr "Économique"
+
+#: includes/class-form-submissions.php:274
+msgid "Elenco invii"
+msgstr "Liste des soumissions"
+
+#: includes/class-form-submissions.php:520
+#: includes/class-form-submissions.php:560 includes/class-seo-redirects.php:460
+msgid "Elimina"
+msgstr "Supprimer"
+
+#: includes/class-form-submissions.php:560
+msgid "Eliminare questo invio?"
+msgstr "Supprimer cette soumission ?"
+
+#: includes/class-seo-redirects.php:493
+msgid "Eliminare questo redirect?"
+msgstr "Supprimer cette redirection ?"
+
+#: includes/class-seo-settings.php:464
+msgid "Ente educativo"
+msgstr "Établissement éducatif"
+
+#: includes/class-global-popups.php:622 includes/class-global-popups.php:623
+#: includes/class-media-search.php:312
+#: includes/class-performance-settings.php:333
+#: includes/class-site-import-export.php:606
+#: includes/class-site-import-export.php:612
+#: includes/class-site-import-export.php:634
+#: includes/class-site-import-export.php:640
+#: includes/class-site-import-export.php:722
+#: includes/class-site-import-export.php:729
+msgid "Errore"
+msgstr "Erreur"
+
+#: includes/class-site-import-export.php:723
+#: includes/class-site-import-export.php:730
+msgid "Errore importazione"
+msgstr "Erreur d'importation"
+
+#: includes/class-role-manager.php:418 includes/class-role-manager.php:441
+#: includes/class-white-label.php:302
+msgid "Errore nel salvataggio"
+msgstr "Erreur lors de l'enregistrement"
+
+#: includes/class-site-import-export.php:218
+msgid "Errore salvataggio template"
+msgstr "Erreur d'enregistrement du modèle"
+
+#: includes/class-site-import-export.php:494
+msgid "Esporta"
+msgstr "Exporter"
+
+#: includes/class-site-import-export.php:530
+#: includes/class-site-import-export.php:637
+#: includes/class-site-import-export.php:642
+msgid "Esporta Sito Completo"
+msgstr "Exporter le site complet"
+
+#: includes/class-site-import-export.php:518
+#: includes/class-site-import-export.php:609
+#: includes/class-site-import-export.php:614
+msgid "Esporta Template"
+msgstr "Exporter le modèle"
+
+#: includes/class-site-import-export.php:525
+msgid "Esporta tutto il sito"
+msgstr "Exporter tout le site"
+
+#: includes/class-site-import-export.php:593
+#: includes/class-site-import-export.php:622
+msgid "Esportazione..."
+msgstr "Exportation..."
+
+#: includes/class-seo-settings.php:1201
+msgid "FAQ Schema (domande e risposte)"
+msgstr "FAQ Schema (questions et réponses)"
+
+#: includes/class-seo-settings.php:450
+msgid "Farmacia"
+msgstr "Pharmacie"
+
+#: includes/class-seo-settings.php:558
+msgid "Fascia di prezzo"
+msgstr "Gamme de prix"
+
+#: includes/class-seo-settings.php:945
+msgid "Feed RSS extra (commenti, categorie)"
+msgstr "Flux RSS supplémentaires (commentaires, catégories)"
+
+#: includes/class-site-import-export.php:668
+msgid "File JSON non valido"
+msgstr "Fichier JSON non valide"
+
+#: includes/class-form-submissions.php:673
+msgid "Filtra"
+msgstr "Filtrer"
+
+#: includes/class-seo-settings.php:1257
+msgid "Focus keyword assente dal primo paragrafo"
+msgstr "Mot-clé principal absent du premier paragraphe"
+
+#: includes/class-seo-settings.php:1255
+msgid "Focus keyword non trovata nel contenuto"
+msgstr "Mot-clé principal non trouvé dans le contenu"
+
+#: includes/class-seo-settings.php:1237
+msgid "Focus keyword non trovata nel titolo SEO"
+msgstr "Mot-clé principal non trouvé dans le titre SEO"
+
+#: includes/class-seo-settings.php:1241
+msgid "Focus keyword non trovata nell'URL"
+msgstr "Mot-clé principal non trouvé dans l'URL"
+
+#: includes/class-seo-settings.php:1239
+msgid "Focus keyword non trovata nella meta description"
+msgstr "Mot-clé principal non trouvé dans la meta description"
+
+#: includes/class-seo-settings.php:1256
+msgid "Focus keyword presente nel primo paragrafo"
+msgstr "Mot-clé principal présent dans le premier paragraphe"
+
+#: includes/class-seo-settings.php:1236
+msgid "Focus keyword presente nel titolo SEO"
+msgstr "Mot-clé principal présent dans le titre SEO"
+
+#: includes/class-seo-settings.php:1240
+msgid "Focus keyword presente nell'URL"
+msgstr "Mot-clé principal présent dans l'URL"
+
+#: includes/class-seo-settings.php:1238
+msgid "Focus keyword presente nella meta description"
+msgstr "Mot-clé principal présent dans la meta description"
+
+#: includes/class-form-submissions.php:353
+msgid "Form"
+msgstr "Formulaire"
+
+#: includes/class-seo-settings.php:210
+msgid "Formato Titoli"
+msgstr "Format des titres"
+
+#: includes/class-site-import-export.php:675
+msgid "Formato non riconosciuto"
+msgstr "Format non reconnu"
+
+#: includes/class-site-import-export.php:236
+msgid "Formato non valido. Richiesto olobuild-site."
+msgstr "Format non valide. olobuild-site requis."
+
+#: includes/class-site-import-export.php:184
+msgid "Formato non valido. Richiesto olobuild-template."
+msgstr "Format non valide. olobuild-template requis."
+
+#: includes/class-media-search.php:33
+msgid "Foto"
+msgstr "Photos"
+
+#: includes/class-media-search.php:35
+msgid "Foto 360"
+msgstr "Photos 360"
+
+#: includes/class-seo-settings.php:1259
+msgid "Frasi lunghe: media"
+msgstr "Phrases longues : moyenne"
+
+#: includes/class-global-popups.php:547
+msgid "Frequenza"
+msgstr "Fréquence"
+
+#: includes/class-seo-settings.php:701
+msgid "Genera la sitemap XML per i motori di ricerca."
+msgstr "Génère le sitemap XML pour les moteurs de recherche."
+
+#: includes/class-seo-redirects.php:690
+msgid "Genera una chiave casuale e inseriscila qui"
+msgstr "Générez une clé aléatoire et insérez-la ici"
+
+#: includes/class-seo-settings.php:868
+msgid "Gestione attributi per i link esterni nel contenuto."
+msgstr "Gestion des attributs pour les liens externes dans le contenu."
+
+#: includes/class-olo-builder.php:502
+msgid "Gestisci redirect e pagine 404"
+msgstr "Gérer les redirections et pages 404"
+
+#: includes/class-seo-settings.php:599
+msgid "Giovedì"
+msgstr "Jeudi"
+
+#: includes/class-media-search.php:83
+msgid "Grande"
+msgstr "Grande"
+
+#: includes/class-seo-redirects.php:442 includes/class-seo-redirects.php:544
+msgid "Hit"
+msgstr "Hit"
+
+#: includes/class-global-popups.php:475
+msgid "Homepage"
+msgstr "Page d'accueil"
+
+#: includes/class-seo-settings.php:234
+msgid "Homepage — Descrizione"
+msgstr "Page d'accueil — Description"
+
+#: includes/class-seo-settings.php:233
+msgid "Homepage — Titolo"
+msgstr "Page d'accueil — Titre"
+
+#: includes/class-seo-settings.php:439
+msgid "Hotel"
+msgstr "Hôtel"
+
+#: includes/class-seo-redirects.php:770
+msgid "ID obbligatorio."
+msgstr "ID obligatoire."
+
+#: includes/class-seo-settings.php:218
+msgid "Il carattere usato per separare titolo e nome sito."
+msgstr "Le caractère utilisé pour séparer le titre et le nom du site."
+
+#: includes/class-seo-settings.php:377
+msgid "Immagine OG predefinita"
+msgstr "Image OG par défaut"
+
+#: includes/class-seo-settings.php:572
+msgid "Immagine attività (URL)"
+msgstr "Image de l'activité (URL)"
+
+#: includes/class-site-import-export.php:481
+msgid "Import / Export"
+msgstr "Import / Export"
+
+#: includes/class-site-import-export.php:469
+#: includes/class-site-import-export.php:470
+msgid "Import/Export"
+msgstr "Import/Export"
+
+#: includes/class-media-search.php:308
+#: includes/class-site-import-export.php:542
+#: includes/class-site-import-export.php:557
+#: includes/class-site-import-export.php:670
+#: includes/class-site-import-export.php:677
+#: includes/class-site-import-export.php:726
+#: includes/class-site-import-export.php:732
+msgid "Importa"
+msgstr "Importer"
+
+#: includes/class-media-search.php:306
+msgid "Importa JPG nella Media Library"
+msgstr "Importer JPG dans la bibliothèque de médias"
+
+#: includes/class-site-import-export.php:552
+msgid "Importa media (scarica e ricarica immagini)"
+msgstr "Importer les médias (télécharger et recharger les images)"
+
+#: includes/class-media-search.php:305
+msgid "Importa nella Media Library"
+msgstr "Importer dans la bibliothèque de médias"
+
+#: includes/class-media-search.php:309
+msgid "Importato!"
+msgstr "Importé !"
+
+#: includes/class-site-import-export.php:720
+msgid "Importazione completata!"
+msgstr "Importation terminée !"
+
+#: includes/class-site-import-export.php:658
+msgid "Importazione..."
+msgstr "Importation..."
+
+#: includes/class-white-label.php:198
+msgid "Impostazioni White Label"
+msgstr "Paramètres White Label"
+
+#: includes/class-white-label.php:299
+msgid "Impostazioni salvate con successo"
+msgstr "Paramètres enregistrés avec succès"
+
+#: includes/class-global-popups.php:462
+msgid "Inattivita'"
+msgstr "Inactivité"
+
+#: includes/class-site-import-export.php:526
+msgid "Include tutti i template, header, footer e stili globali"
+msgstr "Inclut tous les modèles, en-tête, pied de page et styles globaux"
+
+#: includes/class-seo-settings.php:718
+msgid "Includi immagini"
+msgstr "Inclure les images"
+
+#: includes/class-site-import-export.php:513
+msgid "Includi media (immagini, video, PDF)"
+msgstr "Inclure les médias (images, vidéo, PDF)"
+
+#: includes/class-media-search.php:52
+msgid ""
+"Incolla un URL Google Maps, coordinate (lat,lng) o un pano_id per scaricare un "
+"panorama Street View."
+msgstr ""
+"Collez une URL Google Maps, des coordonnées (lat,lng) ou un pano_id pour "
+"télécharger un panorama Street View."
+
+#: includes/class-form-submissions.php:341
+msgid "Informazioni invio"
+msgstr "Informations de soumission"
+
+#: includes/class-seo-redirects.php:475 includes/class-seo-redirects.php:612
+msgid "Inserisci URL di destinazione."
+msgstr "Saisissez l'URL de destination."
+
+#: includes/class-seo-redirects.php:474
+msgid "Inserisci URL di origine."
+msgstr "Saisissez l'URL source."
+
+#: includes/class-seo-settings.php:590
+msgid ""
+"Inserisci gli orari nel formato <code>HH:MM</code>. Lascia vuoto per i giorni "
+"di chiusura."
+msgstr ""
+"Saisissez les horaires au format <code>HH:MM</code>. Laissez vide pour les "
+"jours de fermeture."
+
+#: includes/class-seo-settings.php:638
+msgid ""
+"Inserisci il codice di verifica (solo il valore del <code>content</code>, non "
+"l'intero meta tag)."
+msgstr ""
+"Saisissez le code de vérification (uniquement la valeur du "
+"<code>content</code>, pas l'intégralité du meta tag)."
+
+#: includes/class-form-submissions.php:210
+msgid "Invii per pagina"
+msgstr "Soumissions par page"
+
+#: includes/class-form-submissions.php:324
+#, php-format
+msgid "Invio #%s"
+msgstr "Soumission #%s"
+
+#: includes/class-site-import-export.php:687
+msgid "Invio dati al server..."
+msgstr "Envoi des données au serveur..."
+
+#: includes/class-form-submissions.php:430
+msgid "Invio eliminato."
+msgstr "Soumission supprimée."
+
+#: includes/class-form-submissions.php:301
+msgid "Invio non trovato"
+msgstr "Soumission non trouvée"
+
+#: includes/class-global-popups.php:440
+msgid "JavaScript richiesto."
+msgstr "JavaScript requis."
+
+#: includes/class-seo-settings.php:1253
+msgid "Keyword density:"
+msgstr "Densité du mot-clé :"
+
+#: includes/class-seo-settings.php:274
+msgid "Knowledge Graph"
+msgstr "Knowledge Graph"
+
+#: includes/class-seo-settings.php:1166
+msgid "Lascia vuoto per usare l'URL predefinito."
+msgstr "Laissez vide pour utiliser l'URL par défaut."
+
+#: includes/class-seo-settings.php:1258
+msgid "Leggibilità buona (media"
+msgstr "Bonne lisibilité (moyenne"
+
+#: includes/class-form-submissions.php:196
+#: includes/class-form-submissions.php:370
+#: includes/class-form-submissions.php:634
+msgid "Letto"
+msgstr "Lu"
+
+#: includes/class-site-import-export.php:660
+msgid "Lettura file..."
+msgstr "Lecture du fichier..."
+
+#: includes/class-media-search.php:304 includes/class-media-search.php:316
+msgid "Licenza:"
+msgstr "Licence :"
+
+#: includes/class-seo-settings.php:867
+msgid "Link"
+msgstr "Liens"
+
+#: includes/class-role-manager.php:281
+msgid "Livelli di Accesso"
+msgstr "Niveaux d'accès"
+
+#: includes/class-seo-settings.php:424
+msgid "Local Business / Organizzazione"
+msgstr "Commerce local / Organisation"
+
+#: includes/class-seo-settings.php:300
+msgid "Logo / Foto (URL)"
+msgstr "Logo / Photo (URL)"
+
+#: includes/class-seo-settings.php:596
+msgid "Lunedì"
+msgstr "Lundi"
+
+#: includes/class-seo-settings.php:1249
+msgid "Lunghezza contenuto buona"
+msgstr "Bonne longueur de contenu"
+
+#: includes/class-seo-settings.php:1246
+msgid "Lunghezza description ottimale"
+msgstr "Longueur de description optimale"
+
+#: includes/class-seo-settings.php:1247
+msgid "Lunghezza description:"
+msgstr "Longueur de la description :"
+
+#: includes/class-seo-settings.php:1242
+msgid "Lunghezza titolo ottimale"
+msgstr "Longueur de titre optimale"
+
+#: includes/class-seo-settings.php:1243
+msgid "Lunghezza titolo:"
+msgstr "Longueur du titre :"
+
+#: includes/class-media-search.php:109
+msgid "Lungo"
+msgstr "Long"
+
+#: includes/class-media-search.php:319
+msgid "Luogo:"
+msgstr "Lieu :"
+
+#: includes/class-seo-settings.php:566
+msgid "Lusso"
+msgstr "Luxe"
+
+#: includes/class-seo-settings.php:597
+msgid "Martedì"
+msgstr "Mardi"
+
+#: includes/class-media-search.php:82
+msgid "Media"
+msgstr "Moyenne"
+
+#: includes/class-seo-settings.php:598
+msgid "Mercoledì"
+msgstr "Mercredi"
+
+#: includes/class-seo-settings.php:1248
+msgid "Meta description mancante"
+msgstr "Meta description manquante"
+
+#: includes/class-olo-builder.php:495
+msgid "Meta tag, Open Graph e sitemap"
+msgstr "Meta tags, Open Graph et sitemap"
+
+#: includes/class-form-submissions.php:342
+msgid "Metadati del messaggio"
+msgstr "Métadonnées du message"
+
+#: includes/class-seo-settings.php:1263
+msgid "Migliorabile"
+msgstr "Améliorable"
+
+#: includes/class-media-search.php:91
+msgid "Min altezza:"
+msgstr "Hauteur min :"
+
+#: includes/class-media-search.php:87
+msgid "Min larghezza:"
+msgstr "Largeur min :"
+
+#: includes/class-seo-settings.php:564
+msgid "Moderato"
+msgstr "Modéré"
+
+#: includes/class-cookie-consent.php:966
+msgid "Modifica"
+msgstr "Modification"
+
+#: includes/class-seo-redirects.php:525
+msgid ""
+"Monitora gli URL visitati che non esistono. Puoi convertirli in redirect con "
+"un click."
+msgstr ""
+"Surveille les URL visitées qui n'existent pas. Vous pouvez les convertir en "
+"redirections en un clic."
+
+#: includes/class-woo-template-integration.php:44
+msgid "My Account"
+msgstr "Mon compte"
+
+#: includes/class-white-label.php:248
+msgid "Nasconde le impostazioni White Label per utenti non amministratori"
+msgstr "Masque les paramètres White Label pour les utilisateurs non administrateurs"
+
+#: includes/class-white-label.php:257
+msgid "Nascondi credits"
+msgstr "Masquer les crédits"
+
+#: includes/class-role-manager.php:173
+msgid "Nascondi impostazioni pagina"
+msgstr "Masquer les paramètres de page"
+
+#: includes/class-role-manager.php:175
+msgid "Nascondi libreria template"
+msgstr "Masquer la bibliothèque de modèles"
+
+#: includes/class-role-manager.php:168
+msgid "Nascondi pannello Animazioni"
+msgstr "Masquer le panneau Animations"
+
+#: includes/class-role-manager.php:167
+msgid "Nascondi pannello Avanzate"
+msgstr "Masquer le panneau Avancé"
+
+#: includes/class-role-manager.php:166
+msgid "Nascondi pannello Stile"
+msgstr "Masquer le panneau Style"
+
+#: includes/class-white-label.php:247
+msgid "Nascondi per non-admin"
+msgstr "Masquer pour les non-admins"
+
+#: includes/class-role-manager.php:174
+msgid "Nascondi stili globali"
+msgstr "Masquer les styles globaux"
+
+#: includes/class-seo-settings.php:442
+msgid "Negozio (generico)"
+msgstr "Magasin (générique)"
+
+#: includes/class-seo-settings.php:443
+msgid "Negozio abbigliamento"
+msgstr "Magasin de vêtements"
+
+#: includes/class-seo-settings.php:445
+msgid "Negozio articoli sportivi"
+msgstr "Magasin d'articles de sport"
+
+#: includes/class-role-manager.php:293
+msgid "Nessun accesso"
+msgstr "Aucun accès"
+
+#: includes/class-form-submissions.php:409
+msgid "Nessun campo."
+msgstr "Aucun champ."
+
+#: includes/class-seo-settings.php:1616
+msgid "Nessun dato SEO configurato"
+msgstr "Aucune donnée SEO configurée"
+
+#: includes/class-seo-redirects.php:537
+msgid "Nessun errore 404 registrato. Le visite a URL inesistenti appariranno qui."
+msgstr ""
+"Aucune erreur 404 enregistrée. Les visites à des URL inexistantes apparaîtront "
+"ici."
+
+#: includes/class-form-submissions.php:143
+#: includes/class-form-submissions.php:758
+msgid "Nessun invio trovato."
+msgstr "Aucune soumission trouvée."
+
+#: includes/class-global-popups.php:495
+msgid "Nessun popup configurato"
+msgstr "Aucun popup configuré"
+
+#: includes/class-seo-redirects.php:433
+msgid "Nessun redirect configurato."
+msgstr "Aucune redirection configurée."
+
+#: includes/class-media-search.php:314 includes/class-seo-settings.php:1127
+#: includes/class-seo-settings.php:1268
+msgid "Nessuna immagine"
+msgstr "Aucune image"
+
+#: includes/class-seo-settings.php:1195
+msgid "Nessuno schema"
+msgstr "Aucun schéma"
+
+#: includes/class-seo-settings.php:874
+msgid "Nofollow link esterni"
+msgstr "Nofollow liens externes"
+
+#: includes/class-seo-settings.php:476
+msgid "Nome attività"
+msgstr "Nom de l'activité"
+
+#: includes/class-white-label.php:231
+msgid "Nome autore"
+msgstr "Nom de l'auteur"
+
+#: includes/class-white-label.php:215
+msgid "Nome plugin"
+msgstr "Nom du plugin"
+
+#: includes/class-global-popups.php:520 includes/class-global-popups.php:521
+msgid "Nome popup"
+msgstr "Nom du popup"
+
+#: includes/class-media-search.php:315
+msgid "Nome:"
+msgstr "Nom :"
+
+#: includes/class-form-submissions.php:124
+#: includes/class-form-submissions.php:232
+msgid "Non autorizzato."
+msgstr "Non autorisé."
+
+#: includes/class-form-submissions.php:196
+#: includes/class-form-submissions.php:370
+#: includes/class-form-submissions.php:636
+msgid "Non letto"
+msgstr "Non lu"
+
+#: includes/class-seo-settings.php:562
+msgid "Non specificato"
+msgstr "Non spécifié"
+
+#: includes/class-seo-redirects.php:676
+msgid ""
+"Notifica istantaneamente i motori di ricerca (Bing, Yandex, Naver, Seznam) "
+"quando pubblichi o aggiorni un contenuto"
+msgstr ""
+"Notifie instantanément les moteurs de recherche (Bing, Yandex, Naver, Seznam) "
+"lorsque vous publiez ou mettez à jour un contenu"
+
+#: includes/class-seo-settings.php:710
+msgid "Numero max URL per sitemap"
+msgstr "Nombre max d'URL par sitemap"
+
+#: includes/class-form-submissions.php:636
+msgid "Nuovo"
+msgstr "Nouveau"
+
+#: includes/class-global-popups.php:561
+msgid "OR (almeno una)"
+msgstr "OU (au moins une)"
+
+#: includes/class-seo-settings.php:446
+msgid "Officina auto"
+msgstr "Garage automobile"
+
+#: includes/class-seo-redirects.php:705
+msgid "Ogni pubblicazione/aggiornamento invia un ping IndexNow."
+msgstr "Chaque publication/mise à jour envoie un ping IndexNow."
+
+#: includes/class-seo-settings.php:370
+msgid "Open Graph — Impostazioni Predefinite"
+msgstr "Open Graph — Paramètres par défaut"
+
+#: includes/class-seo-settings.php:589
+msgid "Orari di apertura"
+msgstr "Horaires d'ouverture"
+
+#: includes/class-seo-settings.php:285
+msgid "Organizzazione"
+msgstr "Organisation"
+
+#: includes/class-media-search.php:69
+msgid "Orientamento:"
+msgstr "Orientation :"
+
+#: includes/class-media-search.php:72
+msgid "Orizzontale"
+msgstr "Paysage"
+
+#: includes/class-seo-settings.php:461
+msgid "Ostello"
+msgstr "Auberge de jeunesse"
+
+#: includes/class-performance-settings.php:138
+msgid "Ottimizzatore Asset"
+msgstr "Optimiseur d'assets"
+
+#: includes/class-seo-settings.php:524
+msgid "Paese"
+msgstr "Pays"
+
+#: includes/class-white-label.php:226
+msgid "Page builder professionale"
+msgstr "Page builder professionnel"
+
+#: includes/class-media-search.php:297
+msgid "Pagina"
+msgstr "Page"
+
+#: includes/class-global-popups.php:476
+msgid "Pagina specifica"
+msgstr "Page spécifique"
+
+#: includes/class-seo-settings.php:839
+msgid "Pagine di ricerca"
+msgstr "Pages de recherche"
+
+#: includes/class-seo-settings.php:238
+msgid "Pagine — Descrizione"
+msgstr "Pages — Description"
+
+#: includes/class-seo-settings.php:237
+msgid "Pagine — Titolo"
+msgstr "Pages — Titre"
+
+#: includes/class-seo-settings.php:457
+msgid "Palestra / Centro fitness"
+msgstr "Salle de sport / Centre de fitness"
+
+#: includes/class-media-search.php:318
+msgid "Pano ID:"
+msgstr "Pano ID :"
+
+#: includes/class-seo-redirects.php:388
+msgid "Percorso relativo o URL assoluto"
+msgstr "Chemin relatif ou URL absolu"
+
+#: includes/class-seo-redirects.php:379
+msgid "Percorso relativo o regex con prefisso ~"
+msgstr "Chemin relatif ou regex avec préfixe ~"
+
+#: includes/class-seo-redirects.php:400
+msgid "Permanente (consigliato)"
+msgstr "Permanent (recommandé)"
+
+#: includes/class-role-manager.php:258
+msgid "Permessi"
+msgstr "Permissions"
+
+#: includes/class-role-manager.php:257 includes/class-role-manager.php:271
+msgid "Permessi Utente"
+msgstr "Permissions utilisateur"
+
+#: includes/class-role-manager.php:418
+msgid "Permessi salvati"
+msgstr "Permissions enregistrées"
+
+#: includes/class-performance-settings.php:676
+#: includes/class-performance-settings.php:697
+#: includes/class-performance-settings.php:713
+msgid "Permesso negato"
+msgstr "Permission refusée"
+
+#: includes/class-seo-redirects.php:729 includes/class-seo-redirects.php:765
+#: includes/class-seo-redirects.php:782 includes/class-seo-redirects.php:799
+#: includes/class-seo-redirects.php:811
+msgid "Permesso negato."
+msgstr "Permission refusée."
+
+#: includes/class-seo-settings.php:286
+msgid "Persona"
+msgstr "Personne"
+
+#: includes/class-media-search.php:81
+msgid "Piccola"
+msgstr "Petite"
+
+#: includes/class-olo-builder.php:524
+msgid "Più di un page builder."
+msgstr "Plus qu'un simple page builder."
+
+#: includes/class-global-popups.php:405 includes/class-global-popups.php:406
+#: includes/class-global-popups.php:426 includes/class-global-popups.php:434
+msgid "Popup Globali"
+msgstr "Popups Globaux"
+
+#: includes/class-global-popups.php:622
+msgid "Popup salvati con successo!"
+msgstr "Popups enregistrés avec succès !"
+
+#: includes/class-seo-settings.php:736
+msgid "Post Type nella Sitemap"
+msgstr "Types de contenu dans le sitemap"
+
+#: includes/class-media-search.php:299
+msgid "Prec"
+msgstr "Préc"
+
+#: includes/class-woo-template-integration.php:258
+msgid "Predefinito WooCommerce"
+msgstr "WooCommerce par défaut"
+
+#: includes/class-seo-redirects.php:372
+msgid ""
+"Prefisso <code>~</code> per regex. Es: <code>~/vecchio/(.*)</code> &rarr; "
+"<code>/nuovo/$1</code>"
+msgstr ""
+"Préfixe <code>~</code> pour regex. Ex : <code>~/ancien/(.*)</code> &rarr; "
+"<code>/nouveau/$1</code>"
+
+#: includes/class-cookie-consent.php:966
+msgid "Primo consenso"
+msgstr "Premier consentement"
+
+#: includes/class-seo-settings.php:334
+msgid "Profili Social"
+msgstr "Profils sociaux"
+
+#: includes/class-seo-settings.php:508
+msgid "Provincia / Stato"
+msgstr "Province / État"
+
+#: includes/class-seo-settings.php:902
+msgid "Pulizia &lt;head&gt;"
+msgstr "Nettoyage &lt;head&gt;"
+
+#: includes/class-performance-settings.php:140
+msgid "Pulizia Head"
+msgstr "Nettoyage du Head"
+
+#: includes/class-media-search.php:74
+msgid "Quadrato"
+msgstr "Carré"
+
+#: includes/class-media-search.php:71 includes/class-media-search.php:80
+#: includes/class-media-search.php:102
+msgid "Qualsiasi"
+msgstr "Tout"
+
+#: includes/class-seo-redirects.php:181
+msgid "Questa risorsa non è più disponibile."
+msgstr "Cette ressource n'est plus disponible."
+
+#: includes/class-seo-settings.php:275
+msgid ""
+"Queste informazioni vengono usate per il markup JSON-LD del Knowledge Graph di "
+"Google."
+msgstr ""
+"Ces informations sont utilisées pour le balisage JSON-LD du Knowledge Graph de "
+"Google."
+
+#: includes/class-seo-redirects.php:423
+#, php-format
+msgid "Redirect attivi (%d)"
+msgstr "Redirections actives (%d)"
+
+#: includes/class-seo-redirects.php:748
+msgid "Redirect per questo URL esiste già."
+msgstr "Une redirection pour cette URL existe déjà."
+
+#: includes/class-seo-redirects.php:546
+msgid "Referrer"
+msgstr "Référent"
+
+#: includes/class-role-manager.php:360
+msgid "Restrizione"
+msgstr "Restriction"
+
+#: includes/class-role-manager.php:352
+msgid "Restrizioni Granulari per Pannello"
+msgstr "Restrictions granulaires par panneau"
+
+#: includes/class-role-manager.php:441
+msgid "Restrizioni salvate"
+msgstr "Restrictions enregistrées"
+
+#: includes/class-cookie-consent.php:966
+msgid "Revoca"
+msgstr "Révocation"
+
+#: includes/class-global-popups.php:486
+msgid "Ricerca"
+msgstr "Recherche"
+
+#: includes/class-media-search.php:294
+msgid "Ricerca in corso..."
+msgstr "Recherche en cours..."
+
+#: includes/class-media-search.php:295
+msgid "Ricerca panorama Street View..."
+msgstr "Recherche de panorama Street View..."
+
+#: includes/class-seo-settings.php:243
+msgid "Ricerca — Titolo"
+msgstr "Recherche — Titre"
+
+#: includes/class-white-label.php:258
+msgid "Rimuove la scritta \"Powered by Olobuild\""
+msgstr "Supprime la mention \"Powered by Olobuild\""
+
+#: includes/class-seo-settings.php:903
+msgid "Rimuovi tag non necessari dall'header HTML per un codice più pulito."
+msgstr "Supprimez les balises inutiles de l'en-tête HTML pour un code plus propre."
+
+#: includes/class-white-label.php:199
+msgid "Rinomina plugin, nascondi credits e impostazioni per i non-admin"
+msgstr "Renommez le plugin, masquez les crédits et les paramètres pour les non-admins"
+
+#: includes/class-seo-redirects.php:403
+msgid "Risorsa rimossa (Gone)"
+msgstr "Ressource supprimée (Gone)"
+
+#: includes/class-seo-settings.php:1216 includes/class-seo-settings.php:1266
+msgid "Risposta"
+msgstr "Réponse"
+
+#: includes/class-seo-settings.php:438
+msgid "Ristorante"
+msgstr "Restaurant"
+
+#: includes/class-seo-settings.php:796
+msgid "Robots Meta"
+msgstr "Robots Meta"
+
+#: includes/class-seo-settings.php:962
+msgid "Robots.txt personalizzato"
+msgstr "Robots.txt personnalisé"
+
+#: includes/class-role-manager.php:289
+msgid "Ruolo"
+msgstr "Rôle"
+
+#: includes/class-seo-settings.php:601
+msgid "Sabato"
+msgstr "Samedi"
+
+#: includes/class-seo-settings.php:447
+msgid "Salone di bellezza"
+msgstr "Salon de beauté"
+
+#: includes/class-seo-redirects.php:713
+msgid "Salva"
+msgstr "Enregistrer"
+
+#: includes/class-seo-settings.php:176
+msgid "Salva Impostazioni"
+msgstr "Enregistrer les paramètres"
+
+#: includes/class-role-manager.php:336
+msgid "Salva Permessi"
+msgstr "Enregistrer les permissions"
+
+#: includes/class-role-manager.php:389
+msgid "Salva Restrizioni"
+msgstr "Enregistrer les restrictions"
+
+#: includes/class-global-popups.php:592
+msgid "Salva Tutto"
+msgstr "Tout enregistrer"
+
+#: includes/class-woo-template-integration.php:274
+#: includes/class-woo-template-integration.php:301
+msgid "Salva assegnazioni"
+msgstr "Enregistrer les assignations"
+
+#: includes/class-white-label.php:279
+#: includes/class-woo-template-integration.php:285
+msgid "Salvataggio..."
+msgstr "Enregistrement..."
+
+#: includes/class-media-search.php:307
+msgid "Scarica e importa nella Media Library"
+msgstr "Télécharger et importer dans la bibliothèque de médias"
+
+#: includes/class-site-import-export.php:495
+msgid "Scarica template e media in formato JSON"
+msgstr "Téléchargez les modèles et médias au format JSON"
+
+#: includes/class-site-import-export.php:690
+msgid "Scaricamento"
+msgstr "Téléchargement"
+
+#: includes/class-seo-settings.php:149
+msgid "Schema / Local SEO"
+msgstr "Schema / SEO Local"
+
+#: includes/class-seo-settings.php:425
+msgid ""
+"Schema markup LocalBusiness per Google. Se il nome è vuoto, questo schema non "
+"viene generato."
+msgstr ""
+"Balisage schema LocalBusiness pour Google. Si le nom est vide, ce schéma n'est "
+"pas généré."
+
+#: includes/class-media-search.php:313
+msgid "Sconosciuto"
+msgstr "Inconnu"
+
+#: includes/class-form-submissions.php:518
+msgid "Segna come letto"
+msgstr "Marquer comme lu"
+
+#: includes/class-form-submissions.php:519
+msgid "Segna come non letto"
+msgstr "Marquer comme non lu"
+
+#: includes/class-form-submissions.php:564
+msgid "Segna letto"
+msgstr "Marquer lu"
+
+#: includes/class-form-submissions.php:437
+msgid "Segnato come letto."
+msgstr "Marqué comme lu."
+
+#: includes/class-global-popups.php:528 includes/class-seo-settings.php:304
+#: includes/class-seo-settings.php:382 includes/class-seo-settings.php:576
+msgid "Seleziona"
+msgstr "Sélectionner"
+
+#: includes/class-seo-settings.php:1146 includes/class-seo-settings.php:1267
+msgid "Seleziona immagine"
+msgstr "Sélectionner une image"
+
+#: includes/class-role-manager.php:353
+msgid "Seleziona quali pannelli e funzioni nascondere per ogni ruolo"
+msgstr "Sélectionnez les panneaux et fonctions à masquer pour chaque rôle"
+
+#: includes/class-seo-settings.php:763
+msgid "Seleziona quali tassonomie includere nella sitemap."
+msgstr "Sélectionnez les taxonomies à inclure dans le sitemap."
+
+#: includes/class-seo-settings.php:737
+msgid "Seleziona quali tipi di contenuto includere nella sitemap."
+msgstr "Sélectionnez les types de contenu à inclure dans le sitemap."
+
+#: includes/class-woo-template-integration.php:243
+msgid ""
+"Seleziona un template Olobuild per ciascuna pagina WooCommerce. Lascia "
+"\"Predefinito\" per usare il template nativo."
+msgstr ""
+"Sélectionnez un modèle Olobuild pour chaque page WooCommerce. Laissez \"Par "
+"défaut\" pour utiliser le modèle natif."
+
+#: includes/class-global-popups.php:466
+msgid "Sempre"
+msgstr "Toujours"
+
+#: includes/class-seo-settings.php:217
+msgid "Separatore"
+msgstr "Séparateur"
+
+#: includes/class-seo-settings.php:455
+msgid "Servizi finanziari"
+msgstr "Services financiers"
+
+#: includes/class-seo-settings.php:463
+msgid "Servizio professionale"
+msgstr "Service professionnel"
+
+#: includes/class-woo-template-integration.php:40
+msgid "Singolo Prodotto"
+msgstr "Produit individuel"
+
+#: includes/class-site-import-export.php:501
+msgid "Singolo template"
+msgstr "Modèle unique"
+
+#: includes/class-seo-settings.php:151
+msgid "Sitemap"
+msgstr "Sitemap"
+
+#: includes/class-seo-settings.php:700
+msgid "Sitemap attiva"
+msgstr "Sitemap activé"
+
+#: includes/class-site-import-export.php:632
+msgid "Sito esportato!"
+msgstr "Site exporté !"
+
+#: includes/class-seo-settings.php:148
+msgid "Social"
+msgstr "Social"
+
+#: includes/class-global-popups.php:470
+msgid "Solo 1 volta"
+msgstr "1 seule fois"
+
+#: includes/class-role-manager.php:292
+msgid "Solo contenuti"
+msgstr "Contenu uniquement"
+
+#: includes/class-role-manager.php:291
+msgid "Solo design"
+msgstr "Design uniquement"
+
+#: includes/class-seo-settings.php:458
+msgid "Spa / Centro benessere"
+msgstr "Spa / Centre de bien-être"
+
+#: includes/class-olo-builder.php:460
+msgid "Stili, colori, tipografia e API"
+msgstr "Styles, couleurs, typographie et API"
+
+#: includes/class-seo-settings.php:462
+msgid "Struttura ricettiva (generico)"
+msgstr "Hébergement (générique)"
+
+#: includes/class-seo-settings.php:451
+msgid "Studio legale"
+msgstr "Cabinet d'avocats"
+
+#: includes/class-media-search.php:300
+msgid "Succ"
+msgstr "Suiv"
+
+#: includes/class-performance-settings.php:139
+msgid "Suggerimenti Prestazioni"
+msgstr "Conseils de performance"
+
+#: includes/class-seo-settings.php:402
+msgid "Summary con immagine grande"
+msgstr "Summary avec grande image"
+
+#: includes/class-seo-redirects.php:648
+msgid "Svuotare tutto il log 404?"
+msgstr "Vider tout le journal 404 ?"
+
+#: includes/class-seo-settings.php:812
+msgid "Tag"
+msgstr "Tags"
+
+#: includes/class-seo-settings.php:241
+msgid "Tag — Titolo"
+msgstr "Tags — Titre"
+
+#: includes/class-media-search.php:317
+msgid "Tags:"
+msgstr "Tags :"
+
+#: includes/class-seo-settings.php:762
+msgid "Tassonomie nella Sitemap"
+msgstr "Taxonomies dans le sitemap"
+
+#: includes/class-seo-settings.php:532
+msgid "Telefono"
+msgstr "Téléphone"
+
+#: includes/class-site-import-export.php:604
+msgid "Template esportato!"
+msgstr "Modèle exporté !"
+
+#: includes/class-site-import-export.php:205
+#: includes/class-site-import-export.php:265
+msgid "Template importato"
+msgstr "Modèle importé"
+
+#: includes/class-site-import-export.php:97
+msgid "Template non trovato"
+msgstr "Modèle non trouvé"
+
+#: includes/class-olo-builder.php:516
+msgid "Template per prodotti e shop"
+msgstr "Modèles pour produits et boutique"
+
+#: includes/class-site-import-export.php:189
+msgid "Template vuoto"
+msgstr "Modèle vide"
+
+#: includes/class-seo-redirects.php:401
+msgid "Temporaneo"
+msgstr "Temporaire"
+
+#: includes/class-seo-redirects.php:402
+msgid "Temporaneo (strict)"
+msgstr "Temporaire (strict)"
+
+#: includes/class-media-search.php:324
+msgid "Timeline:"
+msgstr "Chronologie :"
+
+#: includes/class-seo-redirects.php:396 includes/class-seo-redirects.php:441
+msgid "Tipo"
+msgstr "Type"
+
+#: includes/class-seo-settings.php:431
+msgid "Tipo attività"
+msgstr "Type d'activité"
+
+#: includes/class-global-popups.php:478
+msgid "Tipo contenuto"
+msgstr "Type de contenu"
+
+#: includes/class-seo-settings.php:281
+msgid "Tipo entità"
+msgstr "Type d'entité"
+
+#: includes/class-seo-settings.php:147
+msgid "Titoli &amp; Meta"
+msgstr "Titres &amp; Meta"
+
+#: includes/class-seo-settings.php:1008
+msgid "Titolo pagina"
+msgstr "Titre de la page"
+
+#: includes/class-form-submissions.php:301
+#: includes/class-form-submissions.php:330
+msgid "Torna alla lista"
+msgstr "Retour à la liste"
+
+#: includes/class-olo-builder.php:481
+msgid "Tracking e statistiche"
+msgstr "Suivi et statistiques"
+
+#: includes/class-performance-settings.php:141
+msgid "Transizioni Vista"
+msgstr "Transitions de vue"
+
+#: includes/class-performance-settings.php:650
+msgid ""
+"Transizioni fluide tra le pagine del sito con la View Transitions API nativa "
+"del browser. Supportata da Chrome 111+, Edge 111+ e Opera 97+."
+msgstr ""
+"Transitions fluides entre les pages du site avec l'API native View Transitions "
+"du navigateur. Supportée par Chrome 111+, Edge 111+ et Opera 97+."
+
+#: includes/class-global-popups.php:537
+msgid "Trigger"
+msgstr "Déclencheur"
+
+#: includes/class-form-submissions.php:666
+msgid "Tutti i form"
+msgstr "Tous les formulaires"
+
+#: includes/class-form-submissions.php:275
+msgid "Tutti i messaggi ricevuti dai form del sito"
+msgstr "Tous les messages reçus des formulaires du site"
+
+#: includes/class-seo-redirects.php:424
+msgid "Tutti i redirect configurati, ordinati per data di creazione"
+msgstr "Toutes les redirections configurées, classées par date de création"
+
+#: includes/class-seo-redirects.php:543
+msgid "URL"
+msgstr "URL"
+
+#: includes/class-white-label.php:239
+msgid "URL autore"
+msgstr "URL de l'auteur"
+
+#: includes/class-seo-redirects.php:524
+msgid "URL che generano errore 404"
+msgstr "URL générant des erreurs 404"
+
+#: includes/class-seo-redirects.php:737
+msgid "URL di origine obbligatorio."
+msgstr "URL source obligatoire."
+
+#: includes/class-seo-settings.php:465
+msgid "Ufficio pubblico"
+msgstr "Bureau public"
+
+#: includes/class-seo-redirects.php:545
+msgid "Ultimo accesso"
+msgstr "Dernier accès"
+
+#: includes/class-seo-settings.php:1228
+msgid ""
+"Usa <code>[olo_breadcrumb]</code> per inserire breadcrumb SEO-friendly con "
+"markup JSON-LD. Parametri opzionali: <code>separator=\"&raquo;\"</code>, "
+"<code>class=\"my-breadcrumb\"</code>"
+msgstr ""
+"Utilisez <code>[olo_breadcrumb]</code> pour insérer un fil d'Ariane "
+"SEO-friendly avec balisage JSON-LD. Paramètres optionnels : "
+"<code>separator=\"&raquo;\"</code>, <code>class=\"my-breadcrumb\"</code>"
+
+#: includes/class-seo-settings.php:1157
+msgid "Usa OG Description se vuoto"
+msgstr "Utiliser la description OG si vide"
+
+#: includes/class-seo-settings.php:1153
+msgid "Usa OG Title se vuoto"
+msgstr "Utiliser le titre OG si vide"
+
+#: includes/class-seo-settings.php:1137
+msgid "Usa il titolo SEO se vuoto"
+msgstr "Utiliser le titre SEO si vide"
+
+#: includes/class-seo-settings.php:1141
+msgid "Usa la meta description se vuoto"
+msgstr "Utiliser la meta description si vide"
+
+#: includes/class-seo-settings.php:378
+msgid ""
+"Usata quando un post/pagina non ha immagine in evidenza. Dimensione "
+"consigliata: 1200x630px."
+msgstr ""
+"Utilisée quand un article/page n'a pas d'image mise en avant. Taille "
+"recommandée : 1200x630px."
+
+#: includes/class-seo-settings.php:335
+msgid ""
+"Usati nel markup JSON-LD <code>sameAs</code> per collegare il sito ai profili "
+"social."
+msgstr ""
+"Utilisés dans le balisage JSON-LD <code>sameAs</code> pour relier le site aux "
+"profils sociaux."
+
+#: includes/class-global-popups.php:481
+msgid "Utente loggato"
+msgstr "Utilisateur connecté"
+
+#: includes/class-global-popups.php:482
+msgid "Utente non loggato"
+msgstr "Utilisateur non connecté"
+
+#: includes/class-form-submissions.php:392
+msgid "Valore"
+msgstr "Valeur"
+
+#: includes/class-global-popups.php:577
+msgid "Valore (ID, slug)"
+msgstr "Valeur (ID, slug)"
+
+#: includes/class-seo-settings.php:600
+msgid "Venerdì"
+msgstr "Vendredi"
+
+#: includes/class-seo-settings.php:637
+msgid "Verifica Motori di Ricerca"
+msgstr "Vérification des moteurs de recherche"
+
+#: includes/class-media-search.php:73
+msgid "Verticale"
+msgstr "Portrait"
+
+#: includes/class-seo-settings.php:492
+msgid "Via / Indirizzo"
+msgstr "Rue / Adresse"
+
+#: includes/class-media-search.php:34
+msgid "Video"
+msgstr "Vidéo"
+
+#: includes/class-media-search.php:36
+msgid "Video 360"
+msgstr "Vidéo 360"
+
+#: includes/class-performance-settings.php:649
+msgid "View Transitions API"
+msgstr "API View Transitions"
+
+#: includes/class-form-submissions.php:559
+msgid "Visualizza"
+msgstr "Afficher"
+
+#: includes/class-olo-builder.php:474
+msgid "Visualizza i messaggi ricevuti"
+msgstr "Afficher les messages reçus"
+
+#: includes/class-seo-redirects.php:828
+msgid "Voce non trovata."
+msgstr "Entrée non trouvée."
+
+#: includes/class-seo-settings.php:150
+msgid "Webmaster Tools"
+msgstr "Outils pour webmasters"
+
+#: includes/class-white-label.php:177 includes/class-white-label.php:178
+#: includes/class-white-label.php:188
+msgid "White Label"
+msgstr "White Label"
+
+#: includes/class-olo-builder.php:515
+#: includes/class-woo-template-integration.php:232
+msgid "WooCommerce"
+msgstr "WooCommerce"
+
+#: includes/class-media-search.php:57
+msgid "Zoom 2 (bassa)"
+msgstr "Zoom 2 (basse)"
+
+#: includes/class-media-search.php:58
+msgid "Zoom 3 (media)"
+msgstr "Zoom 3 (moyenne)"
+
+#: includes/class-media-search.php:59
+msgid "Zoom 4 (alta)"
+msgstr "Zoom 4 (haute)"
+
+#: includes/class-media-search.php:323
+msgid "Zoom max:"
+msgstr "Zoom max :"
+
+#: includes/class-seo-settings.php:1244
+msgid "caratteri"
+msgstr "caractères"
+
+#: includes/class-seo-settings.php:1252
+msgid "consigliato:"
+msgstr "recommandé :"
+
+#: includes/class-media-search.php:298
+msgid "di"
+msgstr "de"
+
+#: includes/class-site-import-export.php:690
+msgid "file media..."
+msgstr "fichiers médias..."
+
+#: includes/class-seo-settings.php:1245
+msgid "ideale:"
+msgstr "idéal :"
+
+#: includes/class-site-import-export.php:714
+msgid "importato"
+msgstr "importé"
+
+#: includes/class-site-import-export.php:717
+msgid "media importati"
+msgstr "médias importés"
+
+#: includes/class-media-search.php:107 includes/class-media-search.php:108
+msgid "minuti"
+msgstr "minutes"
+
+#: includes/class-media-search.php:106
+msgid "minuto"
+msgstr "minute"
+
+#: includes/class-seo-settings.php:1173
+msgid "non indicizzare questa pagina"
+msgstr "ne pas indexer cette page"
+
+#: includes/class-seo-settings.php:1177
+msgid "non seguire i link"
+msgstr "ne pas suivre les liens"
+
+#: includes/class-seo-settings.php:1254
+msgid "occorrenze"
+msgstr "occurrences"
+
+#: includes/class-media-search.php:111
+msgid "oppure"
+msgstr "ou"
+
+#: includes/class-seo-settings.php:1251
+msgid "parole"
+msgstr "mots"
+
+#: includes/class-seo-settings.php:1261
+msgid "parole/frase (ideale: max 20)"
+msgstr "mots/phrase (idéal : max 20)"
+
+#: includes/class-seo-settings.php:1260
+msgid "parole/frase)"
+msgstr "mots/phrase)"
+
+#: includes/class-media-search.php:296
+msgid "risultati trovati"
+msgstr "résultats trouvés"
+
+#: includes/class-site-import-export.php:606
+#: includes/class-site-import-export.php:634
+#: includes/class-site-import-export.php:722
+msgid "sconosciuto"
+msgstr "inconnu"
+
+#: includes/class-media-search.php:105 includes/class-media-search.php:115
+msgid "secondi"
+msgstr "secondes"
+
+#: includes/class-role-manager.php:329
+msgid "solo testo e immagini"
+msgstr "texte et images uniquement"
+
+#: includes/class-role-manager.php:328
+msgid "stili e layout"
+msgstr "styles et mise en page"
+
+#: includes/class-role-manager.php:327
+msgid "struttura + design + contenuti"
+msgstr "structure + design + contenu"
+
+#: includes/class-site-import-export.php:712
+msgid "template importati"
+msgstr "modèles importés"

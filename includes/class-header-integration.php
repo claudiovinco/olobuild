@@ -38,6 +38,14 @@ class Olo_Header_Integration {
             return $html;
         }
 
+        // Se il builder iframe sta editando un template di tipo header, non
+        // renderizziamo l'header del tema: il preview iframe deve mostrare
+        // SOLO il template in editing (come body). Altrimenti l'utente vede
+        // DOPPIO render (header del tema + template editato).
+        if ( defined( 'OLO_BUILDER_EDITING_HEADER' ) && OLO_BUILDER_EDITING_HEADER ) {
+            return '';
+        }
+
         $header_id = $this->resolve_active_header();
 
         if ( ! $header_id ) {

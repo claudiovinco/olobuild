@@ -1,6 +1,14 @@
+import { t } from '@/i18n';
+
+/**
+ * Tile Dark Mode Toggle — split CONTENUTO/STILE (regola universale Olobuild).
+ *   fields[]      → stile UI (toggle/icon/button), icone scelte, testi pulsante, comportamento (salva preferenza, rispetta sistema)
+ *   styleFields[] → dimensione icona, colori toggle, durata transizione
+ *   AVANZATE      → meta tecnico (id/class/condizioni)
+ */
 export default {
   type: 'darkmode',
-  name: 'Dark Mode Toggle',
+  name: t('Dark Mode Toggle'),
   icon: 'dashicons-admin-appearance',
   category: 'interactive',
   defaults: {
@@ -16,32 +24,41 @@ export default {
     respect_system: true,
     transition_duration: 300,
   },
+
+  // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
-    { type: 'separator', label: 'Stile' },
-    { key: 'style', label: 'Stile', type: 'select', options: [
-      { value: 'toggle', label: 'Toggle switch' },
-      { value: 'icon', label: 'Icona singola' },
-      { value: 'button', label: 'Pulsante con testo' },
+    { type: 'separator', label: t('Stile') },
+    { key: 'style', label: t('Stile'), type: 'select', options: [
+      { value: 'toggle', label: t('Toggle switch') },
+      { value: 'icon', label: t('Icona singola') },
+      { value: 'button', label: t('Pulsante con testo') },
     ]},
 
-    { type: 'separator', label: 'Icone' },
-    { key: 'light_icon', label: 'Icona luce', type: 'icon' },
-    { key: 'dark_icon', label: 'Icona scuro', type: 'icon' },
-    { key: 'icon_size', label: 'Dimensione icona (px)', type: 'range', min: 16, max: 48, step: 2 },
+    { type: 'separator', label: t('Icone') },
+    { key: 'light_icon', label: t('Icona luce'), type: 'icon' },
+    { key: 'dark_icon', label: t('Icona scuro'), type: 'icon' },
 
-    { type: 'separator', label: 'Testo (solo button)' },
-    { key: 'button_text_light', label: 'Testo (modalità chiara)', type: 'text',
+    { type: 'separator', label: t('Testo (solo button)') },
+    { key: 'button_text_light', label: t('Testo (modalità chiara)'), type: 'text',
       condition: { field: 'style', operator: '==', value: 'button' } },
-    { key: 'button_text_dark', label: 'Testo (modalità scura)', type: 'text',
+    { key: 'button_text_dark', label: t('Testo (modalità scura)'), type: 'text',
       condition: { field: 'style', operator: '==', value: 'button' } },
 
-    { type: 'separator', label: 'Colori' },
-    { key: 'toggle_color', label: 'Colore toggle', type: 'color' },
-    { key: 'toggle_active_color', label: 'Colore toggle attivo', type: 'color' },
+    { type: 'separator', label: t('Comportamento') },
+    { key: 'save_preference', label: t('Salva preferenza'), type: 'toggle' },
+    { key: 'respect_system', label: t('Rispetta tema di sistema'), type: 'toggle' },
+  ],
 
-    { type: 'separator', label: 'Comportamento' },
-    { key: 'save_preference', label: 'Salva preferenza', type: 'toggle' },
-    { key: 'respect_system', label: 'Rispetta tema di sistema', type: 'toggle' },
-    { key: 'transition_duration', label: 'Durata transizione (ms)', type: 'range', min: 0, max: 1000, step: 50 },
+  // ─── STILE ─────────────────────────────────────────────────
+  styleFields: [
+    { type: 'separator', label: t('Dimensioni') },
+    { key: 'icon_size', label: t('Dimensione icona (px)'), type: 'range', min: 16, max: 48, step: 2 },
+
+    { type: 'separator', label: t('Colori') },
+    { key: 'toggle_color', label: t('Colore toggle'), type: 'color' },
+    { key: 'toggle_active_color', label: t('Colore toggle attivo'), type: 'color' },
+
+    { type: 'separator', label: t('Transizione') },
+    { key: 'transition_duration', label: t('Durata transizione (ms)'), type: 'range', min: 0, max: 1000, step: 50 },
   ],
 };

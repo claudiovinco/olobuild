@@ -10,6 +10,33 @@ class Olo_Rest_Api {
 
     public function init() {
         add_action( 'rest_api_init', [ $this, 'register_routes' ] );
+        // During REST requests, WP's determine_locale() returns the SITE locale,
+        // not the user_locale. This breaks __() output for endpoints that return
+        // translated strings to the JS dashboard. Switch to the logged-in user's
+        // locale before dispatching any /olo/v1/ route.
+        add_filter( 'rest_pre_dispatch', [ $this, 'apply_user_locale' ], 10, 3 );
+    }
+
+    /**
+     * Switch to the logged-in user's locale for /olo/v1/ routes so that __()
+     * returns strings in the right language (matches admin context behavior).
+     */
+    public function apply_user_locale( $result, $server, $request ) {
+        if ( $result !== null ) {
+            return $result;
+        }
+        if ( ! is_user_logged_in() ) {
+            return $result;
+        }
+        $route = $request->get_route();
+        if ( strpos( $route, '/' . $this->namespace . '/' ) !== 0 ) {
+            return $result;
+        }
+        $user_locale = get_user_locale( get_current_user_id() );
+        if ( $user_locale && $user_locale !== get_locale() ) {
+            switch_to_locale( $user_locale );
+        }
+        return $result;
     }
 
     public function register_routes() {
@@ -33,22 +60,22 @@ class Olo_Rest_Api {
             ],
         ] );
 
-        // Single template
+        // Single template — usa check_template_permission per ownership-aware ACL.
         register_rest_route( $this->namespace, '/templates/(?P<id>\d+)', [
             [
                 'methods'             => 'GET',
                 'callback'            => [ $this, 'get_template' ],
-                'permission_callback' => [ $this, 'check_permission' ],
+                'permission_callback' => [ $this, 'check_template_permission' ],
             ],
             [
                 'methods'             => 'PUT',
                 'callback'            => [ $this, 'update_template' ],
-                'permission_callback' => [ $this, 'check_permission' ],
+                'permission_callback' => [ $this, 'check_template_permission' ],
             ],
             [
                 'methods'             => 'DELETE',
                 'callback'            => [ $this, 'delete_template' ],
-                'permission_callback' => [ $this, 'check_permission' ],
+                'permission_callback' => [ $this, 'check_template_permission' ],
             ],
         ] );
 
@@ -56,7 +83,21 @@ class Olo_Rest_Api {
         register_rest_route( $this->namespace, '/templates/(?P<id>\d+)/export', [
             'methods'             => 'GET',
             'callback'            => [ $this, 'export_template' ],
-            'permission_callback' => [ $this, 'check_permission' ],
+            'permission_callback' => [ $this, 'check_template_permission' ],
+        ] );
+
+        // Template thumbnail upload (auto-cattura dal builder)
+        register_rest_route( $this->namespace, '/templates/(?P<id>\d+)/thumbnail', [
+            'methods'             => 'POST',
+            'callback'            => [ $this, 'upload_template_thumbnail' ],
+            'permission_callback' => [ $this, 'check_template_permission' ],
+        ] );
+
+        // Template duplicate
+        register_rest_route( $this->namespace, '/templates/(?P<id>\d+)/duplicate', [
+            'methods'             => 'POST',
+            'callback'            => [ $this, 'duplicate_template' ],
+            'permission_callback' => [ $this, 'check_template_permission' ],
         ] );
 
         // Template import
@@ -70,7 +111,7 @@ class Olo_Rest_Api {
         register_rest_route( $this->namespace, '/templates/(?P<id>\d+)/revisions', [
             'methods'             => 'GET',
             'callback'            => [ $this, 'get_revisions' ],
-            'permission_callback' => [ $this, 'check_permission' ],
+            'permission_callback' => [ $this, 'check_template_permission' ],
         ] );
 
         // Single revision (full content)
@@ -503,7 +544,7 @@ class Olo_Rest_Api {
         register_rest_route( $this->namespace, '/templates/(?P<id>\d+)/render', [
             'methods'             => 'GET',
             'callback'            => [ $this, 'render_template_preview' ],
-            'permission_callback' => [ $this, 'check_permission' ],
+            'permission_callback' => [ $this, 'check_template_permission' ],
         ] );
 
         // Builder live render (accepts tiles in POST body, returns HTML with data-olo-tile-id)
@@ -526,6 +567,253 @@ class Olo_Rest_Api {
             'callback'            => [ $this, 'get_postgrid_preview' ],
             'permission_callback' => [ $this, 'check_permission' ],
         ] );
+
+        // Row Loop: load more (paginazione AJAX, nessun nonce richiesto perché
+        // i dati sono pubblici — gli stessi che si vedono in pagina).
+        register_rest_route( $this->namespace, '/row-loop/page', [
+            'methods'             => 'POST',
+            'callback'            => [ $this, 'row_loop_page' ],
+            'permission_callback' => '__return_true',
+        ] );
+
+        // ───────────────────────────────────────────────────────────
+        // Dashboard cockpit endpoints
+        // ───────────────────────────────────────────────────────────
+        register_rest_route( $this->namespace, '/dashboard/kpis', [
+            'methods'             => 'GET',
+            'callback'            => [ $this, 'dashboard_kpis' ],
+            'permission_callback' => [ $this, 'check_dashboard_permission' ],
+        ] );
+        register_rest_route( $this->namespace, '/dashboard/recent', [
+            'methods'             => 'GET',
+            'callback'            => [ $this, 'dashboard_recent' ],
+            'permission_callback' => [ $this, 'check_dashboard_permission' ],
+            'args'                => [
+                'limit' => [ 'default' => 6, 'sanitize_callback' => 'absint' ],
+            ],
+        ] );
+        register_rest_route( $this->namespace, '/dashboard/changelog', [
+            'methods'             => 'GET',
+            'callback'            => [ $this, 'dashboard_changelog' ],
+            'permission_callback' => [ $this, 'check_dashboard_permission' ],
+            'args'                => [
+                'limit' => [ 'default' => 3, 'sanitize_callback' => 'absint' ],
+            ],
+        ] );
+        register_rest_route( $this->namespace, '/dashboard/prefs', [
+            [
+                'methods'             => 'GET',
+                'callback'            => [ $this, 'dashboard_get_prefs' ],
+                'permission_callback' => [ $this, 'check_dashboard_permission' ],
+            ],
+            [
+                'methods'             => 'POST',
+                'callback'            => [ $this, 'dashboard_set_prefs' ],
+                'permission_callback' => [ $this, 'check_dashboard_permission' ],
+            ],
+        ] );
+
+        // ───────────────────────────────────────────────────────────
+        // Form submissions
+        // ───────────────────────────────────────────────────────────
+        register_rest_route( $this->namespace, '/submissions', [
+            'methods'             => 'GET',
+            'callback'            => [ $this, 'submissions_list' ],
+            'permission_callback' => [ $this, 'check_dashboard_permission' ],
+            'args'                => [
+                'status'    => [ 'default' => 'all', 'sanitize_callback' => 'sanitize_key' ],
+                'form_name' => [ 'default' => '',    'sanitize_callback' => 'sanitize_text_field' ],
+                'q'         => [ 'default' => '',    'sanitize_callback' => 'sanitize_text_field' ],
+                'page'      => [ 'default' => 1,     'sanitize_callback' => 'absint' ],
+                'per_page'  => [ 'default' => 30,    'sanitize_callback' => 'absint' ],
+            ],
+        ] );
+        register_rest_route( $this->namespace, '/submissions/stats', [
+            'methods'             => 'GET',
+            'callback'            => [ $this, 'submissions_stats' ],
+            'permission_callback' => [ $this, 'check_dashboard_permission' ],
+        ] );
+        register_rest_route( $this->namespace, '/submissions/(?P<id>\d+)', [
+            [
+                'methods'             => 'GET',
+                'callback'            => [ $this, 'submissions_get' ],
+                'permission_callback' => [ $this, 'check_dashboard_permission' ],
+            ],
+            [
+                'methods'             => 'DELETE',
+                'callback'            => [ $this, 'submissions_delete' ],
+                'permission_callback' => [ $this, 'check_dashboard_permission' ],
+            ],
+        ] );
+        register_rest_route( $this->namespace, '/submissions/(?P<id>\d+)/read', [
+            'methods'             => 'POST',
+            'callback'            => [ $this, 'submissions_toggle_read' ],
+            'permission_callback' => [ $this, 'check_dashboard_permission' ],
+        ] );
+        register_rest_route( $this->namespace, '/submissions/bulk', [
+            'methods'             => 'POST',
+            'callback'            => [ $this, 'submissions_bulk' ],
+            'permission_callback' => [ $this, 'check_dashboard_permission' ],
+        ] );
+
+        // ── Page SEO (per-post meta box, esposto al builder Vue) ───────────
+        register_rest_route( $this->namespace, '/page-seo/(?P<id>\d+)', [
+            [
+                'methods'             => 'GET',
+                'callback'            => [ $this, 'page_seo_get' ],
+                'permission_callback' => [ $this, 'check_permission' ],
+            ],
+            [
+                'methods'             => 'POST',
+                'callback'            => [ $this, 'page_seo_save' ],
+                'permission_callback' => [ $this, 'check_permission' ],
+            ],
+        ] );
+
+        // ── Link Picker: cerca pagine, post, CPT pubblici e tassonomie ─────
+        // Usato da FieldLink.vue per popolare l'autocomplete con risultati ricchi
+        // (thumbnail, excerpt, type label). Restituisce array di { id, title, url,
+        // type, type_label, sublabel, thumbnail, excerpt }.
+        register_rest_route( $this->namespace, '/link-search', [
+            'methods'             => 'GET',
+            'callback'            => [ $this, 'link_search' ],
+            'permission_callback' => [ $this, 'check_permission' ],
+            'args'                => [
+                'q'        => [ 'default' => '',  'sanitize_callback' => 'sanitize_text_field' ],
+                'per_page' => [ 'default' => 15, 'sanitize_callback' => 'absint' ],
+                'types'    => [ 'default' => '',  'sanitize_callback' => 'sanitize_text_field' ],
+            ],
+        ] );
+    }
+
+    /**
+     * Lista campi SEO esposti al builder. Chiave Vue = chiave meta WP (senza prefisso `_olo_seo_`).
+     * - schema_type accetta valori predefiniti (Article, BlogPosting, …) o 'none'.
+     * - extra_jsonld è textarea libera, validata server-side prima dell'output.
+     * - faq è array [{q, a}, ...]
+     */
+    private function page_seo_meta_map() {
+        return [
+            'title'           => [ 'meta' => '_olo_seo_title',          'type' => 'text' ],
+            'description'     => [ 'meta' => '_olo_seo_description',    'type' => 'textarea' ],
+            'focus_keyword'   => [ 'meta' => '_olo_seo_focus_keyword',  'type' => 'text' ],
+            'canonical'       => [ 'meta' => '_olo_seo_canonical',      'type' => 'text' ],
+            'noindex'         => [ 'meta' => '_olo_seo_noindex',        'type' => 'bool' ],
+            'nofollow'        => [ 'meta' => '_olo_seo_nofollow',       'type' => 'bool' ],
+            'og_title'        => [ 'meta' => '_olo_seo_og_title',       'type' => 'text' ],
+            'og_description'  => [ 'meta' => '_olo_seo_og_description', 'type' => 'textarea' ],
+            'og_image'        => [ 'meta' => '_olo_seo_og_image',       'type' => 'text' ],
+            'tw_title'        => [ 'meta' => '_olo_seo_tw_title',       'type' => 'text' ],
+            'tw_description'  => [ 'meta' => '_olo_seo_tw_description', 'type' => 'textarea' ],
+            'schema_type'     => [ 'meta' => '_olo_seo_schema_type',    'type' => 'text' ],
+            'extra_jsonld'    => [ 'meta' => '_olo_seo_extra_jsonld',   'type' => 'jsonld' ],
+            'faq'             => [ 'meta' => '_olo_seo_faq',            'type' => 'faq' ],
+        ];
+    }
+
+    public function page_seo_get( $request ) {
+        $post_id = absint( $request['id'] );
+        $post = get_post( $post_id );
+        if ( ! $post || ! current_user_can( 'edit_post', $post_id ) ) {
+            return new WP_Error( 'rest_forbidden', 'Not allowed', [ 'status' => 403 ] );
+        }
+        $out = [];
+        foreach ( $this->page_seo_meta_map() as $key => $def ) {
+            $val = get_post_meta( $post_id, $def['meta'], true );
+            switch ( $def['type'] ) {
+                case 'bool': $out[ $key ] = (bool) $val; break;
+                case 'faq':  $out[ $key ] = is_array( $val ) ? array_values( $val ) : []; break;
+                default:     $out[ $key ] = is_string( $val ) ? $val : ''; break;
+            }
+        }
+        // Anteprime: titolo/url di default, dominio sito (per OG/Twitter preview lato Vue).
+        $out['_defaults'] = [
+            'site_name'   => get_bloginfo( 'name' ),
+            'post_title'  => $post->post_title,
+            'post_url'    => get_permalink( $post_id ),
+            'site_host'   => wp_parse_url( home_url(), PHP_URL_HOST ),
+        ];
+        return rest_ensure_response( $out );
+    }
+
+    public function page_seo_save( $request ) {
+        $post_id = absint( $request['id'] );
+        if ( ! get_post( $post_id ) || ! current_user_can( 'edit_post', $post_id ) ) {
+            return new WP_Error( 'rest_forbidden', 'Not allowed', [ 'status' => 403 ] );
+        }
+        $body = $request->get_json_params();
+        if ( ! is_array( $body ) ) $body = [];
+
+        $errors = [];
+        foreach ( $this->page_seo_meta_map() as $key => $def ) {
+            if ( ! array_key_exists( $key, $body ) ) continue;
+            $raw = $body[ $key ];
+            switch ( $def['type'] ) {
+                case 'bool':
+                    if ( $raw ) update_post_meta( $post_id, $def['meta'], '1' );
+                    else        delete_post_meta( $post_id, $def['meta'] );
+                    break;
+                case 'text':
+                    $v = sanitize_text_field( (string) $raw );
+                    if ( $v !== '' ) update_post_meta( $post_id, $def['meta'], $v );
+                    else             delete_post_meta( $post_id, $def['meta'] );
+                    break;
+                case 'textarea':
+                    $v = sanitize_textarea_field( (string) $raw );
+                    if ( $v !== '' ) update_post_meta( $post_id, $def['meta'], $v );
+                    else             delete_post_meta( $post_id, $def['meta'] );
+                    break;
+                case 'faq':
+                    $clean = [];
+                    if ( is_array( $raw ) ) {
+                        foreach ( $raw as $item ) {
+                            $q = isset( $item['q'] ) ? sanitize_text_field( $item['q'] ) : '';
+                            $a = isset( $item['a'] ) ? sanitize_textarea_field( $item['a'] ) : '';
+                            if ( $q && $a ) $clean[] = [ 'q' => $q, 'a' => $a ];
+                        }
+                    }
+                    if ( $clean ) update_post_meta( $post_id, $def['meta'], $clean );
+                    else          delete_post_meta( $post_id, $def['meta'] );
+                    break;
+                case 'jsonld':
+                    $s = is_string( $raw ) ? trim( $raw ) : '';
+                    // Rimuove eventuali <script> di wrapping prima della validazione.
+                    $s_clean = preg_replace( '#</?script[^>]*>#i', '', $s );
+                    if ( $s_clean === '' ) {
+                        delete_post_meta( $post_id, $def['meta'] );
+                    } else {
+                        $decoded = json_decode( $s_clean, true );
+                        if ( $decoded === null && json_last_error() !== JSON_ERROR_NONE ) {
+                            $errors[ $key ] = 'JSON non valido: ' . json_last_error_msg();
+                        } else {
+                            update_post_meta( $post_id, $def['meta'], wp_kses_post( $s_clean ) );
+                        }
+                    }
+                    break;
+            }
+        }
+
+        $resp = [ 'saved' => true ];
+        if ( $errors ) $resp['errors'] = $errors;
+        return rest_ensure_response( $resp );
+    }
+
+    /**
+     * Permission callback più permissivo per la dashboard:
+     * usa `manage_options` come fallback per ambienti dove `edit_pages` è
+     * stato rimosso a livello di ruolo (es. Tutor LMS Pro).
+     */
+    public function check_dashboard_permission( $request = null ) {
+        if ( ! current_user_can( 'manage_options' ) && ! current_user_can( 'edit_pages' ) ) {
+            return false;
+        }
+        if ( $request && in_array( $request->get_method(), [ 'POST', 'PUT', 'DELETE' ], true ) ) {
+            $nonce = $request->get_header( 'x-wp-nonce' );
+            if ( ! $nonce || ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
+                return new WP_Error( 'rest_forbidden', 'Nonce non valido.', [ 'status' => 403 ] );
+            }
+        }
+        return true;
     }
 
     public function check_permission( $request = null ) {
@@ -556,6 +844,51 @@ class Olo_Rest_Api {
     }
 
     /**
+     * Permission callback per le route che operano su un singolo template
+     * (`/templates/{id}`, `/templates/{id}/export`, `/templates/{id}/thumbnail`,
+     * `/templates/{id}/duplicate`, `/templates/{id}/revisions`, `/templates/{id}/render`).
+     *
+     * Estende `check_permission` aggiungendo un check di ownership:
+     * un utente con `edit_pages` (Author) può accedere SOLO ai propri template,
+     * a meno che non abbia anche `edit_others_pages` (Editor/Admin).
+     *
+     * Questo impedisce IDOR cross-author: prima della modifica un Author che
+     * conosceva (o indovinava) un ID di template altrui poteva leggerlo/modificarlo.
+     */
+    public function check_template_permission( $request ) {
+        $base = $this->check_permission( $request );
+        if ( $base !== true ) {
+            return $base; // false o WP_Error → forward
+        }
+
+        // Editor+ può vedere tutti i template (cap standard WP).
+        if ( current_user_can( 'edit_others_pages' ) ) {
+            return true;
+        }
+
+        // Author: solo i propri template
+        $id = isset( $request['id'] ) ? (int) $request['id'] : 0;
+        if ( ! $id ) {
+            return true; // nessun id nella route → check non applicabile
+        }
+
+        $db       = new Olo_Database();
+        $template = $db->get_template( $id );
+        if ( ! $template ) {
+            // Lasciamo che sia il callback a rispondere 404 dopo il check di ownership;
+            // ritornare 404 qui esporrebbe l'esistenza dell'ID a un attaccante.
+            return true;
+        }
+
+        $owner = (int) ( $template['author_id'] ?? 0 );
+        if ( $owner && $owner !== get_current_user_id() ) {
+            return new WP_Error( 'rest_forbidden', 'Non sei autorizzato ad accedere a questo template.', array( 'status' => 403 ) );
+        }
+
+        return true;
+    }
+
+    /**
      * Ensure settings is always a JSON object (not array) in REST responses.
      * PHP json_decode('{}', true) returns [], which json_encode turns back to [].
      * JS treats [] as Array, losing non-indexed properties on stringify.
@@ -564,10 +897,47 @@ class Olo_Rest_Api {
         if ( isset( $template['id'] ) ) {
             $template['id'] = (int) $template['id'];
         }
+        // linked_post_id: post canonico associato a questo template, calcolato in modo robusto.
+        // Per il pannello SEO serve il post PUBBLICATO che usa questo template, non un eventuale
+        // draft "Handoff …" creato come preview. La risoluzione segue questa priorità:
+        //   1. Primo post publish con meta `_olo_template_id` = template id
+        //   2. Fallback: primo post di qualunque status con quel meta
+        //   3. Fallback: settings.post_id del template (legacy / preview)
+        if ( isset( $template['id'] ) ) {
+            $linked = $this->resolve_template_linked_post( (int) $template['id'], $template );
+            if ( $linked ) {
+                $template['linked_post_id'] = $linked;
+            }
+        }
         if ( isset( $template['settings'] ) && is_array( $template['settings'] ) && empty( $template['settings'] ) ) {
             $template['settings'] = new stdClass;
         }
         return $template;
+    }
+
+    /**
+     * Trova il post canonico per un template, privilegiando i pubblicati.
+     */
+    private function resolve_template_linked_post( $template_id, $template ) {
+        global $wpdb;
+        $published = $wpdb->get_var( $wpdb->prepare(
+            "SELECT p.ID FROM {$wpdb->posts} p
+             INNER JOIN {$wpdb->postmeta} m ON m.post_id = p.ID AND m.meta_key = '_olo_template_id'
+             WHERE m.meta_value = %s AND p.post_status = 'publish'
+             ORDER BY p.post_date ASC LIMIT 1",
+            (string) $template_id
+        ) );
+        if ( $published ) return (int) $published;
+        $any = $wpdb->get_var( $wpdb->prepare(
+            "SELECT p.ID FROM {$wpdb->posts} p
+             INNER JOIN {$wpdb->postmeta} m ON m.post_id = p.ID AND m.meta_key = '_olo_template_id'
+             WHERE m.meta_value = %s AND p.post_status != 'trash'
+             ORDER BY FIELD(p.post_status,'publish','private','future','pending','draft','auto-draft','inherit'), p.post_date ASC LIMIT 1",
+            (string) $template_id
+        ) );
+        if ( $any ) return (int) $any;
+        $settings_post_id = isset( $template['settings']['post_id'] ) ? (int) $template['settings']['post_id'] : 0;
+        return $settings_post_id ?: 0;
     }
 
     public function get_templates( $request ) {
@@ -601,8 +971,50 @@ class Olo_Rest_Api {
             unset( $item );
 
             $result['items'] = array_map( [ $this, 'prepare_template' ], $result['items'] );
+
+            // Aggregato byType per i counter chip della UI templates.
+            // Calcolato sull'intero set (non solo la pagina corrente).
+            $tpl_table = $wpdb->prefix . 'olo_templates';
+            $by_type = [];
+            $total = 0;
+            $rows2 = $wpdb->get_results( "SELECT type, COUNT(*) AS cnt FROM $tpl_table GROUP BY type" );
+            foreach ( $rows2 as $r ) {
+                $t = $r->type ?: 'page';
+                $by_type[ $t ] = (int) $r->cnt;
+                $total += (int) $r->cnt;
+            }
+            $by_type['all'] = $total;
+            $result['byType'] = $by_type;
         }
         return rest_ensure_response( $result );
+    }
+
+    /**
+     * Duplica un template esistente: copia title + " (Copia)", content,
+     * settings, type e status='draft'. Stesso author del corrente utente.
+     */
+    public function duplicate_template( $request ) {
+        $id = (int) $request['id'];
+        $db = new Olo_Database();
+        $src = $db->get_template( $id );
+        if ( ! $src ) {
+            return new WP_Error( 'not_found', 'Template non trovato.', [ 'status' => 404 ] );
+        }
+
+        $new_id = $db->create_template( [
+            'title'    => ( $src['title'] ?: __( 'Senza titolo', 'olobuild' ) ) . ' ' . __( '(Copia)', 'olobuild' ),
+            'type'     => $src['type'] ?: 'page',
+            'content'  => is_array( $src['content'] ) ? $src['content'] : [],
+            'settings' => is_array( $src['settings'] ) ? $src['settings'] : [],
+            'status'   => 'draft',
+        ] );
+
+        if ( ! $new_id ) {
+            return new WP_Error( 'duplicate_failed', 'Duplicazione fallita.', [ 'status' => 500 ] );
+        }
+
+        $copy = $db->get_template( $new_id );
+        return rest_ensure_response( $this->prepare_template( $copy ) );
     }
 
     public function create_template( $request ) {
@@ -636,8 +1048,56 @@ class Olo_Rest_Api {
             return new WP_Error( 'create_failed', 'Impossibile creare il template.', [ 'status' => 500 ] );
         }
 
+        // Auto-binding pagina WP per template di tipo 'page' senza post associato.
+        $this->maybe_auto_create_linked_page( $id, $db );
+
         $template = $db->get_template( $id );
         return rest_ensure_response( $this->prepare_template( $template ) );
+    }
+
+    /**
+     * Crea automaticamente una pagina WordPress collegata al template
+     * quando il template è di tipo 'page' e non ha ancora un post associato.
+     * La pagina viene creata come bozza con stesso titolo del template;
+     * `auto_render_template` (filtro the_content) si occupa del rendering frontend.
+     *
+     * Idempotente: se settings.post_id esiste già, non fa nulla.
+     */
+    private function maybe_auto_create_linked_page( $template_id, $db = null ) {
+        if ( ! $db ) {
+            $db = new Olo_Database();
+        }
+        $template = $db->get_template( $template_id );
+        if ( ! $template ) return;
+
+        // Solo template di tipo 'page' (non header/footer/single/CPT).
+        if ( ( $template['type'] ?? '' ) !== 'page' ) return;
+
+        $settings = (array) ( $template['settings'] ?? [] );
+        if ( ! empty( $settings['post_id'] ) ) {
+            // Verifica che la pagina esista ancora (potrebbe essere stata cestinata).
+            $linked = get_post( (int) $settings['post_id'] );
+            if ( $linked && $linked->post_status !== 'trash' ) return;
+            // Pagina cestinata o eliminata → ne creiamo una nuova
+        }
+
+        $title = $template['title'] ?: 'Senza titolo';
+
+        $page_id = wp_insert_post( [
+            'post_title'   => $title,
+            'post_type'    => 'page',
+            'post_status'  => 'draft',
+            'post_content' => '',
+            'post_author'  => get_current_user_id(),
+        ], true );
+
+        if ( ! $page_id || is_wp_error( $page_id ) ) return;
+
+        update_post_meta( $page_id, '_olo_template_id', $template_id );
+
+        // Aggiorna settings del template col post_id appena creato
+        $settings['post_id'] = $page_id;
+        $db->update_template( $template_id, [ 'settings' => $settings ] );
     }
 
     public function get_template( $request ) {
@@ -688,9 +1148,38 @@ class Olo_Rest_Api {
         }
 
         $db->update_template( $id, $update_data );
-        $template = $db->get_template( $id );
 
-        return rest_ensure_response( $this->prepare_template( $template ) );
+        // Auto-binding: se il template è di tipo 'page' e non ha ancora una pagina
+        // collegata (es. creato in versioni precedenti del plugin), la creiamo ora.
+        $this->maybe_auto_create_linked_page( $id, $db );
+
+        // Sincronizza titolo / status della pagina collegata col template.
+        // Il template usa 'published'|'draft', WordPress usa 'publish'|'draft'.
+        $template_after = $db->get_template( $id );
+        $linked_post_id = (int) ( $template_after['settings']['post_id'] ?? 0 );
+        if ( $linked_post_id && get_post( $linked_post_id ) ) {
+            $sync = [ 'ID' => $linked_post_id ];
+
+            // Sync titolo
+            if ( isset( $update_data['title'] ) && $update_data['title'] !== ( $existing['title'] ?? '' ) ) {
+                $sync['post_title'] = $update_data['title'];
+            }
+
+            // Sync status: template 'published' → page 'publish', template 'draft' → page 'draft'.
+            // Si attiva solo quando il client manda esplicitamente uno status nuovo.
+            if ( isset( $update_data['status'] ) && $update_data['status'] !== ( $existing['status'] ?? '' ) ) {
+                $map = [ 'published' => 'publish', 'draft' => 'draft' ];
+                if ( isset( $map[ $update_data['status'] ] ) ) {
+                    $sync['post_status'] = $map[ $update_data['status'] ];
+                }
+            }
+
+            if ( count( $sync ) > 1 ) {
+                wp_update_post( $sync );
+            }
+        }
+
+        return rest_ensure_response( $this->prepare_template( $template_after ) );
     }
 
     public function delete_template( $request ) {
@@ -1902,7 +2391,11 @@ class Olo_Rest_Api {
         $preview_post_id = $body['preview_post_id'] ?? 0;
 
         if ( empty( $tiles ) && empty( $header_tiles ) && empty( $footer_tiles ) ) {
-            return rest_ensure_response( [ 'html' => '', 'css' => [], 'inline_css' => '' ] );
+            return rest_ensure_response( [
+                'html'       => Olo_Builder::get_iframe_empty_html(),
+                'css'        => [],
+                'inline_css' => '',
+            ] );
         }
 
         // For single templates, set up a post context so dynamic tiles work
@@ -1988,9 +2481,11 @@ class Olo_Rest_Api {
         $header_bg = $body['header_page_bg'] ?? null;
         $body_bg   = $page_settings['page_bg'] ?? null;
         $footer_bg = $body['footer_page_bg'] ?? null;
-        $bg_inline = function( $bg ) use ( $renderer ) {
+        $css_builder = class_exists( 'Olo_CSS_Builder' ) ? new Olo_CSS_Builder() : null;
+        $bg_inline = function( $bg ) use ( $css_builder ) {
+            if ( ! $css_builder ) return '';
             if ( ! is_array( $bg ) || empty( $bg['type'] ) || $bg['type'] === 'none' ) return '';
-            $css = $renderer->css->get_bg_inline_css( $bg );
+            $css = $css_builder->get_bg_inline_css( $bg );
             return $css ? ' style="' . esc_attr( $css ) . '"' : '';
         };
 
@@ -2010,6 +2505,10 @@ class Olo_Rest_Api {
             $renderer->render_tiles_array( $tiles, $page_settings );
             echo '</div></main>';
             $parts[] = ob_get_clean();
+        } elseif ( ! empty( $header_tiles ) || ! empty( $footer_tiles ) ) {
+            // Body vuoto ma header/footer presenti: inietta empty state centrato
+            // così il canvas non resta uno spazio bianco silenzioso tra le due zone.
+            $parts[] = '<main data-olo-zone="body">' . Olo_Builder::get_iframe_empty_html() . '</main>';
         }
 
         // Footer
@@ -2032,6 +2531,25 @@ class Olo_Rest_Api {
         $inline_css = '';
         if ( class_exists( 'Olo_Style_System' ) ) {
             $inline_css = Olo_Style_System::instance()->generate_css();
+        }
+
+        // Estendi inline_css con il page background della body zone, applicato a html+body
+        // dell'iframe builder. Senza questo, il bg vive solo dentro `.olo-template` (che ha
+        // max-width limitata) e i bordi laterali dell'iframe restano del colore di default
+        // del tema. UX-wise l'utente si aspetta che il bg pagina riempia l'intera area canvas.
+        // !important perché altri inline_css generati da Olo_Style_System potrebbero settare
+        // `body { background: ... }` con specificità simile, e l'ordine di append non basta
+        // a garantire il vincitore.
+        if ( $css_builder && is_array( $body_bg ) && ! empty( $body_bg['type'] ) && $body_bg['type'] !== 'none' ) {
+            $body_bg_css = $css_builder->get_bg_inline_css( $body_bg );
+            if ( $body_bg_css ) {
+                // Aggiungi !important a ciascuna prop CSS generata.
+                $body_bg_important = preg_replace( '/;(?=\s*[a-z-]+\s*:)|;\s*$|(?<=[^;])\s*$/i', ' !important;', rtrim( $body_bg_css, '; ' ) . ';' );
+                // Targetiamo html, body E il root wrapper interno: il template iframe
+                // imposta `body { background: #fff }` di base, e #olo-iframe-root copre
+                // body se eredita o ha bg implicito.
+                $inline_css .= "\nhtml, body, body > #olo-iframe-root { " . $body_bg_important . " }\n";
+            }
         }
 
         $renderer->builder_mode = false;
@@ -2059,11 +2577,93 @@ class Olo_Rest_Api {
     /**
      * Builder render single tile: accepts a tile node, returns rendered HTML.
      */
+    /**
+     * REST: ritorna l'HTML dei children della Row con loop, paginati alla pagina N.
+     * Usato dal bottone "Carica altri" frontend.
+     *
+     * Body atteso: { template_id: int, row_id: string (md5 short), page: int }
+     */
+    public function row_loop_page( $request ) {
+        $body         = $request->get_json_params();
+        $template_id  = absint( $body['template_id'] ?? 0 );
+        $row_id_short = sanitize_text_field( $body['row_id'] ?? '' );
+        $page         = max( 1, intval( $body['page'] ?? 1 ) );
+
+        if ( ! $template_id || ! $row_id_short ) {
+            return new WP_Error( 'invalid_params', 'Parametri mancanti.', [ 'status' => 400 ] );
+        }
+
+        $db = new Olo_Database();
+        $template = $db->get_template( $template_id );
+        if ( ! $template ) {
+            return new WP_Error( 'not_found', 'Template non trovato.', [ 'status' => 404 ] );
+        }
+
+        // Trova la Row col matching id (md5 short)
+        $row_node = $this->find_row_by_short_id( $template['content'] ?? [], $row_id_short );
+        if ( ! $row_node ) {
+            return new WP_Error( 'row_not_found', 'Row con loop non trovata.', [ 'status' => 404 ] );
+        }
+
+        $s = $row_node['settings'] ?? [];
+        if ( empty( $s['loop_enabled'] ) ) {
+            return new WP_Error( 'loop_disabled', 'Loop non attivo su questa row.', [ 'status' => 400 ] );
+        }
+
+        $renderer = new Olo_Frontend_Renderer();
+        $loop_query = $renderer->run_row_loop_query( $s, $page, true );
+        $hover_css_rules = [];
+        $tile_counter = 0;
+        $manager = class_exists( 'Olo_Tile_Manager' ) ? new Olo_Tile_Manager() : null;
+
+        $html = $renderer->render_row_loop_children(
+            $row_node['children'] ?? [],
+            $loop_query->posts,
+            $manager,
+            $template_id,
+            $hover_css_rules,
+            $tile_counter,
+            ( $s['layout_mode'] ?? '' ) === 'grid'
+        );
+
+        return rest_ensure_response( [
+            'html'         => $html,
+            'page'         => $page,
+            'max_pages'    => intval( $loop_query->max_num_pages ),
+            'has_more'     => $page < intval( $loop_query->max_num_pages ),
+        ] );
+    }
+
+    /**
+     * Cerca ricorsivamente nel content del template una Row con id che, dopo md5 short,
+     * coincide con $short_id. Ritorna il nodo trovato o null.
+     */
+    private function find_row_by_short_id( $nodes, $short_id ) {
+        foreach ( $nodes as $node ) {
+            if ( ( $node['type'] ?? '' ) === 'row' ) {
+                $node_id = $node['id'] ?? '';
+                if ( $node_id && substr( md5( $node_id ), 0, 8 ) === $short_id ) {
+                    return $node;
+                }
+            }
+            if ( ! empty( $node['children'] ) && is_array( $node['children'] ) ) {
+                $found = $this->find_row_by_short_id( $node['children'], $short_id );
+                if ( $found ) return $found;
+            }
+        }
+        return null;
+    }
+
     public function builder_render_tile( $request ) {
         $body = $request->get_json_params();
         $tile = $body['tile'] ?? null;
         $page_settings = $body['page_settings'] ?? [];
         $template_type = $body['template_type'] ?? 'page';
+        // template_id + counter_hint servono al patch incrementale per generare
+        // lo STESSO css_id (`ms-X-Y`) del full render — altrimenti hover CSS e
+        // responsive rules non matchano con il nuovo nodo.
+        $template_id   = intval( $body['template_id'] ?? 0 );
+        $counter_hint  = intval( $body['tile_counter_hint'] ?? 0 );
 
         if ( empty( $tile ) || empty( $tile['type'] ) ) {
             return rest_ensure_response( [ 'html' => '' ] );
@@ -2123,11 +2723,25 @@ class Olo_Rest_Api {
 
         $manager = Olo_Tile_Manager::instance();
         $hover_css = [];
-        $counter = 0;
+        // counter_hint - 1: prima dell'increment in render_*_node, così che ++$counter
+        // produca esattamente l'hint passato dal client (= ID del nodo già nel DOM).
+        $counter = max( 0, $counter_hint - 1 );
 
         ob_start();
-        echo $renderer->render_node_public( $tile, $manager, 0, $hover_css, $counter );
+        echo $renderer->render_node_public( $tile, $manager, $template_id, $hover_css, $counter );
         $html = ob_get_clean();
+
+        // Hover CSS + responsive CSS raccolti durante il render del nodo:
+        // il client li userà per aggiornare un `<style data-tile-id="X">` dedicato
+        // nell'iframe (impedisce accumulo di rules stale dopo molte patch).
+        $hover_css_str = is_array( $hover_css ) ? implode( "\n", $hover_css ) : '';
+        $responsive_css_str = '';
+        if ( ! empty( $renderer->responsive_css_rules ) ) {
+            foreach ( $renderer->responsive_css_rules as $max_w => $rules ) {
+                $responsive_css_str .= '@media(max-width:' . esc_attr( $max_w ) . '){' . implode( ' ', $rules ) . '}';
+            }
+        }
+        $scoped_css = trim( $hover_css_str . "\n" . $responsive_css_str );
 
         // Restore post context
         if ( $template_type === 'single' && $original_post !== null ) {
@@ -2140,7 +2754,10 @@ class Olo_Rest_Api {
             }
         }
 
-        return rest_ensure_response( [ 'html' => $html ] );
+        return rest_ensure_response( [
+            'html'       => $html,
+            'scoped_css' => $scoped_css,
+        ] );
     }
 
     public function render_template_preview( $request ) {
@@ -2289,5 +2906,747 @@ class Olo_Rest_Api {
 
         wp_reset_postdata();
         return rest_ensure_response( $results );
+    }
+
+    /* ════════════════════════════════════════════════════════════════
+       TEMPLATE THUMBNAIL — auto-capture dal builder
+       ════════════════════════════════════════════════════════════════ */
+
+    /**
+     * Riceve un file JPEG (binary) dal builder e lo salva come thumbnail
+     * del template. Risponde con { thumbnail_url, thumbnail_path }.
+     */
+    public function upload_template_thumbnail( $request ) {
+        $template_id = (int) $request->get_param( 'id' );
+        if ( ! $template_id ) {
+            return new WP_Error( 'olo_no_id', 'Template ID mancante', [ 'status' => 400 ] );
+        }
+
+        $files = $request->get_file_params();
+        if ( empty( $files['file'] ) || empty( $files['file']['tmp_name'] ) ) {
+            return new WP_Error( 'olo_no_file', 'Nessun file ricevuto', [ 'status' => 400 ] );
+        }
+        $f = $files['file'];
+
+        // Valida MIME (solo immagini)
+        $allowed = [ 'image/jpeg', 'image/png', 'image/webp' ];
+        $info = function_exists( 'getimagesize' ) ? @getimagesize( $f['tmp_name'] ) : false;
+        if ( ! $info || ! in_array( $info['mime'], $allowed, true ) ) {
+            return new WP_Error( 'olo_bad_mime', 'Formato non supportato', [ 'status' => 415 ] );
+        }
+        if ( $f['size'] > 2 * 1024 * 1024 ) {
+            return new WP_Error( 'olo_too_big', 'Thumbnail troppo grande (max 2MB)', [ 'status' => 413 ] );
+        }
+
+        // Salva in uploads/olobuild-thumbs/
+        $uploads = wp_upload_dir();
+        $dir = trailingslashit( $uploads['basedir'] ) . 'olobuild-thumbs';
+        if ( ! file_exists( $dir ) ) {
+            wp_mkdir_p( $dir );
+            // Index per evitare directory listing
+            @file_put_contents( $dir . '/index.html', '' );
+        }
+        if ( ! is_writable( $dir ) ) {
+            return new WP_Error( 'olo_not_writable', 'Cartella uploads non scrivibile', [ 'status' => 500 ] );
+        }
+
+        $ext = $info['mime'] === 'image/png' ? 'png' : ( $info['mime'] === 'image/webp' ? 'webp' : 'jpg' );
+        $filename = 'template-' . $template_id . '-' . substr( md5( time() . wp_rand() ), 0, 6 ) . '.' . $ext;
+        $dest = $dir . '/' . $filename;
+
+        if ( ! @move_uploaded_file( $f['tmp_name'], $dest ) ) {
+            // Fallback per ambienti dove move_uploaded_file fallisce (CLI/test)
+            if ( ! @copy( $f['tmp_name'], $dest ) ) {
+                return new WP_Error( 'olo_move_failed', 'Salvataggio file fallito', [ 'status' => 500 ] );
+            }
+        }
+        @chmod( $dest, 0644 );
+
+        $url = trailingslashit( $uploads['baseurl'] ) . 'olobuild-thumbs/' . $filename;
+
+        // Aggiorna campo `thumbnail` del template + cleanup vecchia thumb
+        $db = new Olo_Database();
+        $template = $db->get_template( $template_id );
+        if ( ! $template ) {
+            @unlink( $dest );
+            return new WP_Error( 'olo_no_template', 'Template non trovato', [ 'status' => 404 ] );
+        }
+
+        $old_url = $template['thumbnail'] ?? '';
+        $db->update_template( $template_id, [ 'thumbnail' => $url ] );
+
+        // Cleanup: rimuovi vecchia thumb solo se è nel nostro dir (no media library)
+        if ( $old_url && strpos( $old_url, '/olobuild-thumbs/' ) !== false ) {
+            $old_path = str_replace( $uploads['baseurl'], $uploads['basedir'], $old_url );
+            if ( file_exists( $old_path ) ) @unlink( $old_path );
+        }
+
+        // Invalida cache KPI/recent (così la dashboard mostra subito il nuovo thumb)
+        delete_transient( 'olo_dashboard_kpis' );
+
+        return rest_ensure_response( [
+            'thumbnail_url' => $url,
+            'template_id'   => $template_id,
+        ] );
+    }
+
+    /* ════════════════════════════════════════════════════════════════
+       DASHBOARD COCKPIT — KPI / Recent / Changelog / Preferenze utente
+       ════════════════════════════════════════════════════════════════ */
+
+    /**
+     * KPI strip: 4 metriche aggregate, cached 5 minuti via transient.
+     */
+    public function dashboard_kpis( $request ) {
+        // Include locale in cache key — labels are translated via __() and the
+        // result is cached, so each locale needs its own cached payload.
+        $cache_key = 'olo_dashboard_kpis_' . determine_locale();
+        $cached = get_transient( $cache_key );
+        if ( $cached !== false ) {
+            return rest_ensure_response( $cached );
+        }
+
+        global $wpdb;
+
+        // Pagine pubblicate
+        $pages_published = (int) $wpdb->get_var(
+            "SELECT COUNT(*) FROM {$wpdb->posts}
+             WHERE post_type = 'page' AND post_status = 'publish'"
+        );
+        $pages_recent = (int) $wpdb->get_var( $wpdb->prepare(
+            "SELECT COUNT(*) FROM {$wpdb->posts}
+             WHERE post_type = 'page' AND post_status = 'publish'
+             AND post_date_gmt >= %s",
+            gmdate( 'Y-m-d H:i:s', strtotime( '-7 days' ) )
+        ) );
+
+        // Template Olobuild
+        $tpl_table = $wpdb->prefix . 'olo_templates';
+        $tpl_total = 0;
+        $tpl_draft = 0;
+        if ( $wpdb->get_var( "SHOW TABLES LIKE '$tpl_table'" ) === $tpl_table ) {
+            $tpl_total = (int) $wpdb->get_var( "SELECT COUNT(*) FROM $tpl_table WHERE status = 'published'" );
+            $tpl_draft = (int) $wpdb->get_var( "SELECT COUNT(*) FROM $tpl_table WHERE status = 'draft'" );
+        }
+
+        // Invii form ultimi 7gg (se la tabella esiste)
+        $sub_table = $wpdb->prefix . 'olo_form_submissions';
+        $form_7d = 0;
+        $form_prev = 0;
+        if ( $wpdb->get_var( "SHOW TABLES LIKE '$sub_table'" ) === $sub_table ) {
+            $form_7d = (int) $wpdb->get_var( $wpdb->prepare(
+                "SELECT COUNT(*) FROM $sub_table WHERE created_at >= %s",
+                gmdate( 'Y-m-d H:i:s', strtotime( '-7 days' ) )
+            ) );
+            $form_prev = (int) $wpdb->get_var( $wpdb->prepare(
+                "SELECT COUNT(*) FROM $sub_table WHERE created_at >= %s AND created_at < %s",
+                gmdate( 'Y-m-d H:i:s', strtotime( '-14 days' ) ),
+                gmdate( 'Y-m-d H:i:s', strtotime( '-7 days' ) )
+            ) );
+        }
+        $form_delta_pct = $form_prev > 0 ? round( ( ( $form_7d - $form_prev ) / $form_prev ) * 100 ) : 0;
+
+        // Avvisi: redirect 404 + revisioni in bozza + ecc.
+        $alerts_404   = 0;
+        $alerts_break = 0;
+        $tools_404 = $wpdb->prefix . 'olo_404_log';
+        if ( $wpdb->get_var( "SHOW TABLES LIKE '$tools_404'" ) === $tools_404 ) {
+            $alerts_404 = (int) $wpdb->get_var(
+                "SELECT COUNT(*) FROM $tools_404 WHERE handled = 0"
+            );
+        }
+        $alerts_total = $alerts_404 + $tpl_draft;
+
+        $kpis = [
+            [
+                'label' => __( 'Pagine pubblicate', 'olobuild' ),
+                'value' => $pages_published,
+                'delta' => $pages_recent > 0
+                    ? sprintf( _n( '+%d questa settimana', '+%d questa settimana', $pages_recent, 'olobuild' ), $pages_recent )
+                    : __( 'nessuna nuova', 'olobuild' ),
+                'trend' => $pages_recent > 0 ? 'up' : 'flat',
+                'icon'  => 'fileText',
+                'href'  => admin_url( 'edit.php?post_type=page' ),
+            ],
+            [
+                'label' => __( 'Template attivi', 'olobuild' ),
+                'value' => $tpl_total,
+                'delta' => $tpl_draft > 0
+                    ? sprintf( _n( '%d in bozza', '%d in bozza', $tpl_draft, 'olobuild' ), $tpl_draft )
+                    : __( 'tutti pubblicati', 'olobuild' ),
+                'trend' => 'flat',
+                'icon'  => 'template',
+                'href'  => admin_url( 'admin.php?page=olobuilder-templates' ),
+            ],
+            [
+                'label' => __( 'Invii form (7gg)', 'olobuild' ),
+                'value' => $form_7d,
+                'delta' => $form_prev > 0
+                    ? sprintf( '%s%d%% vs scorsa', $form_delta_pct >= 0 ? '+' : '', $form_delta_pct )
+                    : __( 'periodo iniziale', 'olobuild' ),
+                'trend' => $form_delta_pct > 0 ? 'up' : ( $form_delta_pct < 0 ? 'warn' : 'flat' ),
+                'icon'  => 'form',
+                'href'  => admin_url( 'admin.php?page=olo-form-submissions' ),
+            ],
+            [
+                'label' => __( 'Avvisi da risolvere', 'olobuild' ),
+                'value' => $alerts_total,
+                'delta' => $alerts_total > 0
+                    ? sprintf( '%d 404 · %d bozze', $alerts_404, $tpl_draft )
+                    : __( 'tutto a posto', 'olobuild' ),
+                'trend' => $alerts_total > 0 ? 'warn' : 'up',
+                'icon'  => 'alert',
+                'href'  => $alerts_404 > 0 ? admin_url( 'admin.php?page=olo-redirects' ) : admin_url( 'admin.php?page=olobuilder-templates' ),
+            ],
+        ];
+
+        set_transient( $cache_key, $kpis, 5 * MINUTE_IN_SECONDS );
+        return rest_ensure_response( $kpis );
+    }
+
+    /**
+     * Recent: ultime N modifiche tra pagine + template Olobuild.
+     */
+    public function dashboard_recent( $request ) {
+        $limit = max( 1, min( 20, (int) $request->get_param( 'limit' ) ) );
+        global $wpdb;
+        $items = [];
+
+        // Ultime pagine modificate. Thumbnail in ordine: template Olobuild associato →
+        // featured image della pagina → gradient fallback.
+        $page_query = new WP_Query( [
+            'post_type'      => [ 'page', 'post' ],
+            'post_status'    => [ 'publish', 'draft' ],
+            'posts_per_page' => $limit,
+            'orderby'        => 'modified',
+            'order'          => 'DESC',
+            'no_found_rows'  => true,
+        ] );
+        $tpl_table = $wpdb->prefix . 'olo_templates';
+        $tpl_table_exists = ( $wpdb->get_var( "SHOW TABLES LIKE '$tpl_table'" ) === $tpl_table );
+        foreach ( $page_query->posts as $p ) {
+            $thumb_url = '';
+            // 1. Template Olobuild associato
+            $tpl_id = (int) get_post_meta( $p->ID, '_olo_template_id', true );
+            if ( $tpl_id && $tpl_table_exists ) {
+                $thumb_url = (string) $wpdb->get_var( $wpdb->prepare(
+                    "SELECT thumbnail FROM $tpl_table WHERE id = %d", $tpl_id
+                ) );
+            }
+            // 2. Featured image
+            if ( ! $thumb_url ) {
+                $thumb_id = get_post_thumbnail_id( $p->ID );
+                $thumb_url = $thumb_id ? wp_get_attachment_image_url( $thumb_id, 'medium' ) : '';
+            }
+            $items[] = [
+                'id'         => 'p' . $p->ID,
+                'title'      => $p->post_title ?: __( '(senza titolo)', 'olobuild' ),
+                'type'       => $p->post_type === 'post' ? __( 'Articolo', 'olobuild' ) : __( 'Pagina', 'olobuild' ),
+                'time'       => human_time_diff( strtotime( $p->post_modified_gmt ), time() ) . ' ' . __( 'fa', 'olobuild' ),
+                'time_iso'   => $p->post_modified_gmt,
+                'thumb'      => $thumb_url,
+                'thumb_grad' => self::get_color_gradient_for( $p->ID ),
+                'status'     => $p->post_status === 'publish' ? 'live' : 'draft',
+                'href'       => admin_url( 'post.php?post=' . $p->ID . '&action=edit' ),
+            ];
+        }
+
+        // Ultimi template Olobuild
+        if ( $tpl_table_exists ) {
+            $tpls = $wpdb->get_results( $wpdb->prepare(
+                "SELECT id, title, type, status, updated_at, thumbnail
+                 FROM $tpl_table
+                 ORDER BY updated_at DESC
+                 LIMIT %d",
+                $limit
+            ), ARRAY_A );
+            foreach ( $tpls as $t ) {
+                $type_label = ucfirst( $t['type'] ?: 'template' );
+                $items[] = [
+                    'id'         => 't' . $t['id'],
+                    'title'      => $t['title'] ?: __( '(senza titolo)', 'olobuild' ),
+                    'type'       => __( 'Template', 'olobuild' ) . ' · ' . $type_label,
+                    'time'       => human_time_diff( strtotime( $t['updated_at'] ), time() ) . ' ' . __( 'fa', 'olobuild' ),
+                    'time_iso'   => $t['updated_at'],
+                    'thumb'      => $t['thumbnail'] ?: '',
+                    'thumb_grad' => self::get_color_gradient_for( (int) $t['id'] + 1000 ),
+                    'status'     => $t['status'] === 'published' ? 'live' : 'draft',
+                    'href'       => admin_url( 'admin.php?page=olobuilder-templates&template_id=' . $t['id'] ),
+                ];
+            }
+        }
+
+        // Sort by time desc + cap to limit
+        usort( $items, function( $a, $b ) {
+            return strcmp( $b['time_iso'], $a['time_iso'] );
+        } );
+        $items = array_slice( $items, 0, $limit );
+
+        return rest_ensure_response( $items );
+    }
+
+    /**
+     * Genera un gradiente CSS deterministico in base all'ID per fallback thumb.
+     */
+    private static function get_color_gradient_for( $seed ) {
+        $palettes = [
+            [ '#a7d7f9', '#79b8e8' ],
+            [ '#fde68a', '#f59e0b' ],
+            [ '#bbf7d0', '#4a8c2a' ],
+            [ '#fecaca', '#ef4444' ],
+            [ '#e9d5ff', '#a855f7' ],
+            [ '#cffafe', '#06b6d4' ],
+            [ '#fed7aa', '#f97316' ],
+            [ '#bfdbfe', '#3b82f6' ],
+        ];
+        $p = $palettes[ abs( crc32( (string) $seed ) ) % count( $palettes ) ];
+        return 'linear-gradient(135deg,' . $p[0] . ',' . $p[1] . ')';
+    }
+
+    /**
+     * Changelog: ultime N versioni del plugin (recent commit / readme).
+     * Per ora lettura statica da array hardcoded — TODO: leggere da CHANGELOG.md.
+     */
+    public function dashboard_changelog( $request ) {
+        $limit = max( 1, min( 10, (int) $request->get_param( 'limit' ) ) );
+
+        // Lettura del CHANGELOG.md se esiste
+        $changelog_file = OLO_PATH . 'CHANGELOG.md';
+        $entries = [];
+        if ( file_exists( $changelog_file ) ) {
+            $entries = self::parse_changelog_md( $changelog_file, $limit );
+        }
+
+        // Fallback: ultima versione dall'header del plugin
+        if ( empty( $entries ) ) {
+            $entries = [ [
+                'v'     => 'v' . OLO_VERSION,
+                'date'  => date_i18n( 'j M', time() ),
+                'tag'   => 'novità',
+                'items' => [ __( 'Vedi changelog completo nel repository.', 'olobuild' ) ],
+            ] ];
+        }
+
+        return rest_ensure_response( $entries );
+    }
+
+    private static function parse_changelog_md( $file, $limit ) {
+        $content = @file_get_contents( $file );
+        if ( ! $content ) return [];
+        $lines = explode( "\n", $content );
+        $entries = [];
+        $current = null;
+        foreach ( $lines as $line ) {
+            // ## v3.34.6 — 2026-05-09 (novità)
+            if ( preg_match( '/^##\s+(v[\d.]+)(?:\s*[—\-]\s*([\d-]+))?(?:\s*\(([^)]+)\))?/', $line, $m ) ) {
+                if ( $current ) $entries[] = $current;
+                if ( count( $entries ) >= $limit ) break;
+                $current = [
+                    'v'     => $m[1],
+                    'date'  => ! empty( $m[2] ) ? date_i18n( 'j M', strtotime( $m[2] ) ) : '',
+                    'tag'   => ! empty( $m[3] ) ? strtolower( trim( $m[3] ) ) : 'novità',
+                    'items' => [],
+                ];
+            } elseif ( $current && preg_match( '/^[\-\*]\s+(.+)/', $line, $m ) ) {
+                $current['items'][] = trim( $m[1] );
+            }
+        }
+        if ( $current && count( $entries ) < $limit ) $entries[] = $current;
+        return $entries;
+    }
+
+    /**
+     * Preferenze utente per la dashboard (pin tile, rail collapsed, app mode).
+     * Persiste in user-meta.
+     */
+    public function dashboard_get_prefs( $request ) {
+        $user_id = get_current_user_id();
+        $prefs = get_user_meta( $user_id, 'olo_dashboard_prefs', true );
+        if ( ! is_array( $prefs ) ) $prefs = [];
+        return rest_ensure_response( wp_parse_args( $prefs, [
+            'pinned'      => [ 'tpl', 'cfg', 'media' ],
+            'rail'        => 'expanded',
+            'app_mode'    => true,
+            'banners_off' => [],
+        ] ) );
+    }
+
+    public function dashboard_set_prefs( $request ) {
+        $user_id = get_current_user_id();
+        $body = $request->get_json_params();
+        if ( ! is_array( $body ) ) $body = [];
+
+        $existing = get_user_meta( $user_id, 'olo_dashboard_prefs', true );
+        if ( ! is_array( $existing ) ) $existing = [];
+
+        // Merge solo dei campi noti
+        $allowed = [ 'pinned', 'rail', 'app_mode', 'banners_off' ];
+        foreach ( $allowed as $k ) {
+            if ( array_key_exists( $k, $body ) ) {
+                $existing[ $k ] = $body[ $k ];
+            }
+        }
+        update_user_meta( $user_id, 'olo_dashboard_prefs', $existing );
+        return rest_ensure_response( $existing );
+    }
+
+    /* ════════════════════════════════════════════════════════════════
+       FORM SUBMISSIONS — list / detail / read / delete / bulk / stats
+       ════════════════════════════════════════════════════════════════ */
+
+    private function submissions_table() {
+        global $wpdb;
+        return $wpdb->prefix . 'olo_form_submissions';
+    }
+
+    /**
+     * Lista submissions con filtri (status, form_name, q) + paginazione.
+     */
+    public function submissions_list( $request ) {
+        global $wpdb;
+        $tab = $this->submissions_table();
+        if ( $wpdb->get_var( "SHOW TABLES LIKE '$tab'" ) !== $tab ) {
+            return rest_ensure_response( [ 'items' => [], 'total' => 0, 'page' => 1, 'per_page' => 30 ] );
+        }
+
+        $status    = $request->get_param( 'status' );
+        $form_name = $request->get_param( 'form_name' );
+        $q         = $request->get_param( 'q' );
+        $page      = max( 1, (int) $request->get_param( 'page' ) );
+        $per_page  = max( 1, min( 100, (int) $request->get_param( 'per_page' ) ) );
+        $offset    = ( $page - 1 ) * $per_page;
+
+        $where = [ '1=1' ];
+        $params = [];
+        if ( $status === 'unread' ) $where[] = 'read_status = 0';
+        elseif ( $status === 'read' ) $where[] = 'read_status = 1';
+        if ( $form_name ) {
+            $where[] = 'form_name = %s';
+            $params[] = $form_name;
+        }
+        if ( $q ) {
+            $where[] = '(fields_data LIKE %s OR ip_address LIKE %s OR form_name LIKE %s)';
+            $like = '%' . $wpdb->esc_like( $q ) . '%';
+            $params[] = $like; $params[] = $like; $params[] = $like;
+        }
+        $where_sql = implode( ' AND ', $where );
+
+        $count_sql = "SELECT COUNT(*) FROM $tab WHERE $where_sql";
+        $list_sql  = "SELECT id, form_name, fields_data, submitted_at, ip_address, read_status
+                      FROM $tab WHERE $where_sql
+                      ORDER BY submitted_at DESC LIMIT %d OFFSET %d";
+
+        $total = (int) $wpdb->get_var( $params ? $wpdb->prepare( $count_sql, $params ) : $count_sql );
+        $list_params = array_merge( $params, [ $per_page, $offset ] );
+        $rows = $wpdb->get_results( $wpdb->prepare( $list_sql, $list_params ), ARRAY_A );
+
+        $items = array_map( [ $this, 'prepare_submission_summary' ], $rows ?: [] );
+
+        return rest_ensure_response( [
+            'items'    => $items,
+            'total'    => $total,
+            'page'     => $page,
+            'per_page' => $per_page,
+        ] );
+    }
+
+    /**
+     * Stats aggregate per KPI strip + chip filters dinamici.
+     */
+    public function submissions_stats( $request ) {
+        global $wpdb;
+        $tab = $this->submissions_table();
+        if ( $wpdb->get_var( "SHOW TABLES LIKE '$tab'" ) !== $tab ) {
+            return rest_ensure_response( [
+                'total' => 0, 'unread' => 0, 'read' => 0, 'last_7d' => 0,
+                'forms' => [],
+            ] );
+        }
+
+        $total   = (int) $wpdb->get_var( "SELECT COUNT(*) FROM $tab" );
+        $unread  = (int) $wpdb->get_var( "SELECT COUNT(*) FROM $tab WHERE read_status = 0" );
+        $last_7d = (int) $wpdb->get_var( $wpdb->prepare(
+            "SELECT COUNT(*) FROM $tab WHERE submitted_at >= %s",
+            gmdate( 'Y-m-d H:i:s', strtotime( '-7 days' ) )
+        ) );
+        $prev_7d = (int) $wpdb->get_var( $wpdb->prepare(
+            "SELECT COUNT(*) FROM $tab WHERE submitted_at >= %s AND submitted_at < %s",
+            gmdate( 'Y-m-d H:i:s', strtotime( '-14 days' ) ),
+            gmdate( 'Y-m-d H:i:s', strtotime( '-7 days' ) )
+        ) );
+
+        // Counter per form_name (top 10)
+        $forms = $wpdb->get_results(
+            "SELECT form_name, COUNT(*) AS n FROM $tab
+             GROUP BY form_name ORDER BY n DESC LIMIT 10",
+            ARRAY_A
+        );
+        $forms = array_map( function( $r ) {
+            return [
+                'name'  => $r['form_name'] ?: '(senza nome)',
+                'count' => (int) $r['n'],
+            ];
+        }, $forms ?: [] );
+
+        return rest_ensure_response( [
+            'total'   => $total,
+            'unread'  => $unread,
+            'read'    => $total - $unread,
+            'last_7d' => $last_7d,
+            'prev_7d' => $prev_7d,
+            'forms'   => $forms,
+        ] );
+    }
+
+    /**
+     * Dettaglio singola submission. Auto-mark as read alla GET.
+     */
+    public function submissions_get( $request ) {
+        global $wpdb;
+        $tab = $this->submissions_table();
+        $id = (int) $request['id'];
+        $row = $wpdb->get_row( $wpdb->prepare(
+            "SELECT * FROM $tab WHERE id = %d", $id
+        ), ARRAY_A );
+        if ( ! $row ) {
+            return new WP_Error( 'not_found', __( 'Invio non trovato', 'olobuild' ), [ 'status' => 404 ] );
+        }
+        // Auto-mark read
+        if ( ! $row['read_status'] ) {
+            $wpdb->update( $tab, [ 'read_status' => 1 ], [ 'id' => $id ], [ '%d' ], [ '%d' ] );
+            $row['read_status'] = 1;
+        }
+        $fields = json_decode( $row['fields_data'], true );
+        if ( ! is_array( $fields ) ) $fields = [];
+        return rest_ensure_response( [
+            'id'           => (int) $row['id'],
+            'form_name'    => $row['form_name'],
+            'fields'       => $fields,
+            'submitted_at' => $row['submitted_at'],
+            'ip_address'   => $row['ip_address'],
+            'user_agent'   => $row['user_agent'],
+            'read_status'  => (int) $row['read_status'],
+        ] );
+    }
+
+    /**
+     * Toggle read status (POST con body {read: 0|1}, default toggle).
+     */
+    public function submissions_toggle_read( $request ) {
+        global $wpdb;
+        $tab = $this->submissions_table();
+        $id = (int) $request['id'];
+        $body = $request->get_json_params();
+        $row = $wpdb->get_row( $wpdb->prepare(
+            "SELECT read_status FROM $tab WHERE id = %d", $id
+        ), ARRAY_A );
+        if ( ! $row ) {
+            return new WP_Error( 'not_found', __( 'Invio non trovato', 'olobuild' ), [ 'status' => 404 ] );
+        }
+        $new = isset( $body['read'] ) ? (int) (bool) $body['read'] : ( $row['read_status'] ? 0 : 1 );
+        $wpdb->update( $tab, [ 'read_status' => $new ], [ 'id' => $id ], [ '%d' ], [ '%d' ] );
+        return rest_ensure_response( [ 'id' => $id, 'read_status' => $new ] );
+    }
+
+    public function submissions_delete( $request ) {
+        global $wpdb;
+        $tab = $this->submissions_table();
+        $id = (int) $request['id'];
+        $wpdb->delete( $tab, [ 'id' => $id ], [ '%d' ] );
+        return rest_ensure_response( [ 'id' => $id, 'deleted' => true ] );
+    }
+
+    /**
+     * Bulk action su molti id contemporaneamente.
+     * Body: { action: 'delete'|'mark_read'|'mark_unread', ids: [1,2,3] }
+     */
+    public function submissions_bulk( $request ) {
+        global $wpdb;
+        $tab = $this->submissions_table();
+        $body = $request->get_json_params();
+        $action = $body['action'] ?? '';
+        $ids = isset( $body['ids'] ) && is_array( $body['ids'] ) ? array_map( 'absint', $body['ids'] ) : [];
+        $ids = array_filter( $ids );
+        if ( empty( $ids ) ) {
+            return new WP_Error( 'no_ids', __( 'Nessun ID selezionato', 'olobuild' ), [ 'status' => 400 ] );
+        }
+        $placeholders = implode( ',', array_fill( 0, count( $ids ), '%d' ) );
+        if ( $action === 'delete' ) {
+            $wpdb->query( $wpdb->prepare( "DELETE FROM $tab WHERE id IN ($placeholders)", $ids ) );
+        } elseif ( $action === 'mark_read' ) {
+            $wpdb->query( $wpdb->prepare( "UPDATE $tab SET read_status = 1 WHERE id IN ($placeholders)", $ids ) );
+        } elseif ( $action === 'mark_unread' ) {
+            $wpdb->query( $wpdb->prepare( "UPDATE $tab SET read_status = 0 WHERE id IN ($placeholders)", $ids ) );
+        } else {
+            return new WP_Error( 'bad_action', __( 'Azione non valida', 'olobuild' ), [ 'status' => 400 ] );
+        }
+        return rest_ensure_response( [ 'action' => $action, 'count' => count( $ids ) ] );
+    }
+
+    /**
+     * Prepara il summary di una submission per la lista (preview campi top).
+     */
+    private function prepare_submission_summary( $row ) {
+        $fields = json_decode( $row['fields_data'] ?? '{}', true );
+        if ( ! is_array( $fields ) ) $fields = [];
+
+        // Estrae i campi più rappresentativi: name, email, message → preview
+        $name    = '';
+        $email   = '';
+        $preview = '';
+        foreach ( $fields as $k => $v ) {
+            $kl = strtolower( $k );
+            if ( ! $name && in_array( $kl, [ 'name', 'nome', 'fullname', 'full_name' ], true ) ) {
+                $name = is_array( $v ) ? implode( ' ', $v ) : $v;
+            } elseif ( ! $email && ( $kl === 'email' || strpos( $kl, 'mail' ) !== false ) ) {
+                $email = is_array( $v ) ? reset( $v ) : $v;
+            } elseif ( ! $preview && in_array( $kl, [ 'message', 'messaggio', 'note', 'comment', 'comments', 'body', 'testo', 'description' ], true ) ) {
+                $preview = is_array( $v ) ? implode( ' ', $v ) : $v;
+            }
+        }
+
+        // Fallback: se non c'è preview, prendi il primo campo testuale lungo > 20
+        if ( ! $preview ) {
+            foreach ( $fields as $v ) {
+                if ( is_string( $v ) && strlen( $v ) > 20 ) { $preview = $v; break; }
+            }
+        }
+
+        return [
+            'id'           => (int) $row['id'],
+            'form_name'    => $row['form_name'] ?: '(senza nome)',
+            'name'         => mb_strimwidth( (string) $name, 0, 60, '…' ),
+            'email'        => $email,
+            'preview'      => mb_strimwidth( wp_strip_all_tags( (string) $preview ), 0, 140, '…' ),
+            'fields_count' => count( $fields ),
+            'submitted_at' => $row['submitted_at'],
+            'time_diff'    => human_time_diff( strtotime( $row['submitted_at'] ), time() ) . ' ' . __( 'fa', 'olobuild' ),
+            'ip_address'   => $row['ip_address'],
+            'read_status'  => (int) $row['read_status'],
+        ];
+    }
+
+    /**
+     * Cerca contenuti linkabili del sito (pagine, post, CPT pubblici, tassonomie)
+     * per popolare l'autocomplete del FieldLink nel builder.
+     *
+     * Senza query: restituisce le ultime N pagine pubblicate (lista iniziale utile).
+     * Con query: cerca per titolo/slug su tutti i post type pubblici + termini tassonomie.
+     */
+    public function link_search( $request ) {
+        $q        = trim( (string) $request->get_param( 'q' ) );
+        $per_page = max( 1, min( 30, absint( $request->get_param( 'per_page' ) ) ?: 15 ) );
+        $types    = trim( (string) $request->get_param( 'types' ) );
+
+        // Post types ammessi: tutti i pubblici esclusi attachment + tipi interni Olobuild.
+        $public_types = get_post_types( [ 'public' => true ], 'objects' );
+        unset( $public_types['attachment'] );
+        if ( isset( $public_types['olo_template'] ) ) unset( $public_types['olo_template'] );
+        if ( isset( $public_types['olo_global_widget'] ) ) unset( $public_types['olo_global_widget'] );
+
+        // Filtro opzionale per types=page,post,product
+        if ( $types ) {
+            $allowed = array_filter( array_map( 'sanitize_key', explode( ',', $types ) ) );
+            $public_types = array_intersect_key( $public_types, array_flip( $allowed ) );
+        }
+
+        $post_type_keys = array_keys( $public_types );
+        $results = [];
+
+        // 1. Query post/page/CPT
+        if ( ! empty( $post_type_keys ) ) {
+            $args = [
+                'post_type'        => $post_type_keys,
+                'post_status'      => 'publish',
+                'posts_per_page'   => $per_page,
+                'no_found_rows'    => true,
+                'suppress_filters' => true,
+                'orderby'          => $q ? 'relevance' : 'modified',
+                'order'            => 'DESC',
+            ];
+            if ( $q !== '' ) {
+                $args['s'] = $q;
+            }
+            $query = new WP_Query( $args );
+            foreach ( $query->posts as $p ) {
+                $pt_obj    = $public_types[ $p->post_type ] ?? null;
+                $type_lbl  = $pt_obj ? ( $pt_obj->labels->singular_name ?: $pt_obj->label ) : $p->post_type;
+                $thumb_id  = get_post_thumbnail_id( $p->ID );
+                $thumb_url = $thumb_id ? wp_get_attachment_image_url( $thumb_id, 'thumbnail' ) : '';
+                $excerpt   = $p->post_excerpt ?: wp_strip_all_tags( $p->post_content );
+                $excerpt   = mb_strimwidth( trim( preg_replace( '/\s+/', ' ', $excerpt ) ), 0, 110, '…' );
+
+                $permalink = get_permalink( $p );
+                $results[] = [
+                    'id'           => (int) $p->ID,
+                    'title'        => $p->post_title ?: __( '(senza titolo)', 'olobuild' ),
+                    'url'          => $permalink,
+                    'url_relative' => wp_make_link_relative( $permalink ),
+                    'type'         => 'post',
+                    'subtype'      => $p->post_type,
+                    'type_label'   => $type_lbl,
+                    'sublabel'     => $type_lbl,
+                    'thumbnail'    => $thumb_url ?: '',
+                    'excerpt'      => $excerpt,
+                ];
+            }
+        }
+
+        // 2. Tassonomie pubbliche (categorie, tag, custom): solo se c'è una query.
+        if ( $q !== '' && count( $results ) < $per_page ) {
+            $public_taxonomies = get_taxonomies( [ 'public' => true ], 'objects' );
+            $tax_keys = array_keys( $public_taxonomies );
+            if ( ! empty( $tax_keys ) ) {
+                $terms = get_terms( [
+                    'taxonomy'   => $tax_keys,
+                    'search'     => $q,
+                    'number'     => $per_page - count( $results ),
+                    'hide_empty' => false,
+                ] );
+                if ( ! is_wp_error( $terms ) ) {
+                    foreach ( $terms as $term ) {
+                        $tx_obj   = $public_taxonomies[ $term->taxonomy ] ?? null;
+                        $type_lbl = $tx_obj ? ( $tx_obj->labels->singular_name ?: $tx_obj->label ) : $term->taxonomy;
+                        $link     = get_term_link( $term );
+                        if ( is_wp_error( $link ) ) continue;
+
+                        $results[] = [
+                            'id'           => (int) $term->term_id,
+                            'title'        => $term->name,
+                            'url'          => $link,
+                            'url_relative' => wp_make_link_relative( $link ),
+                            'type'         => 'term',
+                            'subtype'      => $term->taxonomy,
+                            'type_label'   => $type_lbl,
+                            'sublabel'     => $type_lbl . ' · ' . ( $term->count ) . ' ' . __( 'voci', 'olobuild' ),
+                            'thumbnail'    => '',
+                            'excerpt'      => mb_strimwidth( wp_strip_all_tags( (string) $term->description ), 0, 110, '…' ),
+                        ];
+                    }
+                }
+            }
+        }
+
+        // 3. Sempre disponibili: scorciatoie semantiche (homepage, ecc.)
+        if ( $q === '' || stripos( __( 'Homepage', 'olobuild' ), $q ) !== false || stripos( 'home', $q ) !== false ) {
+            array_unshift( $results, [
+                'id'           => 0,
+                'title'        => __( 'Homepage', 'olobuild' ),
+                'url'          => home_url( '/' ),
+                'url_relative' => '/',
+                'type'         => 'shortcut',
+                'subtype'      => 'home',
+                'type_label'   => __( 'Homepage', 'olobuild' ),
+                'sublabel'     => home_url( '/' ),
+                'thumbnail'    => '',
+                'excerpt'      => '',
+            ] );
+        }
+
+        return rest_ensure_response( [
+            'query'   => $q,
+            'count'   => count( $results ),
+            'results' => $results,
+        ] );
     }
 }

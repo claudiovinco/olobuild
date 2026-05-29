@@ -11,6 +11,7 @@ class Olo_Gallery_Tile extends Olo_Tile_Base {
     protected $icon     = 'dashicons-format-gallery';
     protected $category = 'media';
     protected $defaults = [
+        'preset' => 'custom',
         'images'              => [],
         'layout'              => 'grid',
         'filter_bar'          => false,
@@ -351,7 +352,7 @@ class Olo_Gallery_Tile extends Olo_Tile_Base {
             <?php endforeach; ?>
         </div>
         <?php endif; ?>
-        <div class="<?php echo esc_attr( $uid ); ?>" id="<?php echo esc_attr( $uid ); ?>" uk-lightbox="animation: <?php echo $lb_anim; ?>">
+        <div class="<?php echo esc_attr( $uid ); ?> olo-gallery-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" id="<?php echo esc_attr( $uid ); ?>" uk-lightbox="animation: <?php echo $lb_anim; ?>">
             <?php
             $i = 0;
             foreach ( $images as $img ) :

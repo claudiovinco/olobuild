@@ -1,5 +1,5 @@
 <template>
-  <div class="mb-w-60 mb-bg-gray-800 mb-border-r mb-border-gray-700 mb-overflow-y-auto mb-shrink-0">
+  <div class="olo-sb-root mb-bg-white mb-border-r mb-border-gray-200 mb-shrink-0">
     <!-- Tab switcher -->
     <div class="sidebar-tabs">
       <button
@@ -33,161 +33,200 @@
       <button class="tp-insert-cancel" @click="builderStore.insertAfterTileId = null">✕</button>
     </div>
 
-    <!-- Tiles tab -->
-    <div v-if="activeTab === 'tiles'" class="tp-root">
-      <!-- Search -->
-      <div class="tp-search">
-        <svg class="tp-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-        <input v-model="tileSearch" class="tp-search-input" type="text" :placeholder="t('Cerca elemento...')" />
-        <button v-if="tileSearch" class="tp-search-clear" @click="tileSearch = ''">{{ t('&times;') }}</button>
-      </div>
-
-      <!-- Search results -->
-      <div v-if="tileSearch.trim()" class="tp-group">
-        <div class="tp-grid">
-          <div
-            v-for="tile in searchResults"
-            :key="'search-' + tile.type"
-            class="tp-btn"
-            role="button"
-            tabindex="0"
-            :style="{ '--cat-color': '#3B82F6' }"
-            v-olo-draggable="draggableTileOpts(tile.type)"
-            @click="addTile(tile.type)"
-            @keydown.enter.prevent="addTile(tile.type)"
-            @keydown.space.prevent="addTile(tile.type)"
-            :title="t(tile.name)"
-          ><span class="tp-btn-icon" v-html="tileIcon(tile.type)"></span><span class="tp-btn-label">{{ t(tile.name) }}</span></div>
-        </div>
-        <div v-if="!searchResults.length" class="tp-search-empty">{{ t('Nessun elemento trovato') }}</div>
-      </div>
-
-      <template v-if="!tileSearch.trim()">
-      <!-- RECENTI -->
-      <div v-if="recentTilesList.length > 0" class="tp-group">
-        <button class="tp-cat-head" @click="toggleCategory('_recent')">
-          <span class="tp-cat-dot" style="background: #8B5CF6"></span>
-          <span class="tp-cat-label">{{ t('Recenti') }}</span>
-          <span class="tp-cat-count">{{ recentTilesList.length }}</span>
-          <svg class="tp-chevron" :class="{ 'tp-chevron--open': isCategoryOpen('_recent') }" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+    <!-- Tiles tab — V2 layout: 56px rail + 1fr panel -->
+    <div v-if="activeTab === 'tiles'" class="olo-sb-body">
+      <!-- Rail: vertical category buttons -->
+      <div class="olo-sb-rail" role="tablist" aria-label="Categorie elementi">
+        <button
+          v-for="cat in railCategories"
+          :key="cat.id"
+          class="olo-sb-rail-btn"
+          :class="{ 'on': activeCategory === cat.id && !tileSearch.trim() }"
+          role="tab"
+          :aria-selected="activeCategory === cat.id"
+          :title="cat.label"
+          @click="onSelectCategory(cat.id)"
+        >
+          <span class="bar" :style="cat.id === activeCategory ? { background: catColor(cat.id) } : {}"></span>
+          <span class="ic" v-html="catIcon(cat.id)"></span>
+          <span class="lbl">{{ cat.label }}</span>
+          <span class="cnt">{{ cat.count }}</span>
         </button>
-        <div class="tp-drawer" :class="{ 'tp-drawer--open': isCategoryOpen('_recent') }">
-          <div class="tp-grid">
-            <div
-              v-for="tile in recentTilesList"
-              :key="'recent-' + tile.type"
-              class="tp-btn"
-              role="button"
-              tabindex="0"
-              :style="{ '--cat-color': '#8B5CF6' }"
-              v-olo-draggable="draggableTileOpts(tile.type)"
-              @click="addTile(tile.type)"
-              @keydown.enter.prevent="addTile(tile.type)"
-              @keydown.space.prevent="addTile(tile.type)"
-              :title="tile.name"
-            ><span class="tp-btn-icon" v-html="tileIcon(tile.type)"></span><span class="tp-btn-label">{{ tile.name }}</span><span class="tp-fav-star" :class="{ 'tp-fav-star--active': isFavorite(tile.type) }" @click.stop="toggleFavorite(tile.type)">&#9733;</span></div>
-          </div>
+      </div>
+
+      <!-- Panel: header + search + grid -->
+      <div class="olo-sb-panel">
+        <div class="olo-sb-panel-head">
+          <span class="dot" :style="{ background: tileSearch.trim() ? '#94a3b8' : catColor(activeCategory) }"></span>
+          <h3>{{ tileSearch.trim() ? t('Risultati') : activeCategoryLabel }}</h3>
+          <span class="cnt">{{ panelCount }}</span>
         </div>
-      </div>
 
-      <!-- PREFERITI -->
-      <div v-if="favoriteTilesList.length > 0" class="tp-group">
-        <button class="tp-cat-head" @click="toggleCategory('_favorites')">
-          <span class="tp-cat-dot" style="background: #EAB308"></span>
-          <span class="tp-cat-label">{{ t('Preferiti') }}</span>
-          <span class="tp-cat-count">{{ favoriteTilesList.length }}</span>
-          <svg class="tp-chevron" :class="{ 'tp-chevron--open': isCategoryOpen('_favorites') }" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
-        </button>
-        <div class="tp-drawer" :class="{ 'tp-drawer--open': isCategoryOpen('_favorites') }">
-          <div class="tp-grid">
-            <div
-              v-for="tile in favoriteTilesList"
-              :key="'fav-' + tile.type"
-              class="tp-btn"
-              role="button"
-              tabindex="0"
-              :style="{ '--cat-color': '#EAB308' }"
-              v-olo-draggable="draggableTileOpts(tile.type)"
-              @click="addTile(tile.type)"
-              @keydown.enter.prevent="addTile(tile.type)"
-              @keydown.space.prevent="addTile(tile.type)"
-              :title="tile.name"
-            ><span class="tp-btn-icon" v-html="tileIcon(tile.type)"></span><span class="tp-btn-label">{{ tile.name }}</span><span class="tp-fav-star tp-fav-star--active" @click.stop="toggleFavorite(tile.type)">&#9733;</span></div>
-          </div>
+        <div class="olo-sb-search">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          <input v-model="tileSearch" type="text" :placeholder="tileSearch ? '' : t('Cerca in') + ' ' + activeCategoryLabel + '…'" />
+          <button v-if="tileSearch" class="ic-x" :title="t('Pulisci')" @click="tileSearch = ''">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+          </button>
         </div>
-      </div>
 
-      <div v-for="(tiles, category) in tilesByCategory" :key="category" class="tp-group">
-        <button class="tp-cat-head" @click="toggleCategory(category)">
-          <span class="tp-cat-dot" :style="{ background: catColor(category) }"></span>
-          <span class="tp-cat-label">{{ categoryLabel(category) }}</span>
-          <span class="tp-cat-count">{{ tiles.length }}</span>
-          <svg class="tp-chevron" :class="{ 'tp-chevron--open': isCategoryOpen(category) }" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
-        </button>
-        <div class="tp-drawer" :class="{ 'tp-drawer--open': isCategoryOpen(category) }">
-          <div class="tp-grid">
-            <div
-              v-for="tile in tiles"
-              :key="tile.type"
-              class="tp-btn"
-              role="button"
-              tabindex="0"
-              :style="{ '--cat-color': catColor(category) }"
-              v-olo-draggable="draggableTileOpts(tile.type)"
-              @click="addTile(tile.type)"
-              @keydown.enter.prevent="addTile(tile.type)"
-              @keydown.space.prevent="addTile(tile.type)"
-              :title="tile.name"
-            ><span class="tp-btn-icon" v-html="tileIcon(tile.type)"></span><span class="tp-btn-label">{{ tile.name }}</span><span class="tp-fav-star" :class="{ 'tp-fav-star--active': isFavorite(tile.type) }" @click.stop="toggleFavorite(tile.type)">&#9733;</span></div>
-          </div>
-        </div>
-      </div>
-
-      <div v-if="Object.keys(tilesByCategory).length === 0" class="tp-empty">
-        {{ t('Caricamento tile...') }}
-      </div>
-
-      </template>
-      <!-- Global Widgets section -->
-      <div v-if="tilesStore.globalWidgets.length > 0 && !tileSearch.trim()" class="tp-group">
-        <button class="tp-cat-head" @click="toggleCategory('_global')">
-          <span class="tp-cat-dot" style="background: #D97706"></span>
-          <span class="tp-cat-label">{{ t('Widget Globali') }}</span>
-          <span class="tp-cat-count">{{ tilesStore.globalWidgets.length }}</span>
-          <svg class="tp-chevron" :class="{ 'tp-chevron--open': isCategoryOpen('_global') }" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
-        </button>
-        <div class="tp-drawer" :class="{ 'tp-drawer--open': isCategoryOpen('_global') }">
-          <div class="tp-grid">
+        <div class="olo-sb-grid">
+          <!-- Global widgets cards (only when category is _global) -->
+          <template v-if="activeCategory === '_global' && !tileSearch.trim()">
             <div
               v-for="gw in tilesStore.globalWidgets"
               :key="'gw-' + gw.id"
-              class="tp-gw-wrap"
+              class="olo-sb-card olo-sb-card--global"
+              role="button"
+              tabindex="0"
+              v-olo-draggable="draggableGlobalWidgetOpts(gw.id)"
+              @click="addGlobalWidget(gw.id)"
+              @keydown.enter.prevent="addGlobalWidget(gw.id)"
+              @keydown.space.prevent="addGlobalWidget(gw.id)"
+              :title="gw.name"
             >
-              <div
-                class="tp-btn tp-btn--global"
-                role="button"
-                tabindex="0"
-                v-olo-draggable="draggableGlobalWidgetOpts(gw.id)"
-                @click="addGlobalWidget(gw.id)"
-                @keydown.enter.prevent="addGlobalWidget(gw.id)"
-                @keydown.space.prevent="addGlobalWidget(gw.id)"
-                :title="gw.name"
-              ><span class="tp-btn-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span><span class="tp-btn-label">{{ gw.name }}</span></div>
-              <button
-                class="tp-gw-del"
-                :title="t('Elimina widget globale')"
-                @click.stop="deleteGlobal(gw.id, gw.name)"
-              >&times;</button>
+              <div class="ic" v-html="globeIcon"></div>
+              <div class="lbl">{{ gw.name }}</div>
+              <button class="del" :title="t('Elimina widget globale')" @click.stop="deleteGlobal(gw.id, gw.name)">×</button>
             </div>
+            <div v-if="!tilesStore.globalWidgets.length" class="olo-sb-empty">
+              {{ t('Nessun widget globale') }}
+            </div>
+          </template>
+
+          <!-- Standard tile cards -->
+          <template v-else>
+            <div
+              v-for="tile in displayedTiles"
+              :key="(tile.cat || activeCategory) + '-' + tile.type"
+              class="olo-sb-card"
+              role="button"
+              tabindex="0"
+              v-olo-draggable="draggableTileOpts(tile.type)"
+              @click="addTile(tile.type)"
+              @keydown.enter.prevent="addTile(tile.type)"
+              @keydown.space.prevent="addTile(tile.type)"
+              :title="t(tile.name)"
+            >
+              <div class="ic" v-html="tileIcon(tile.type)"></div>
+              <div class="lbl">{{ t(tile.name) }}</div>
+              <div
+                v-if="tileSearch.trim() && tile.cat"
+                class="bdg"
+                :style="{ background: catColor(tile.cat) + '22', color: catColor(tile.cat) }"
+              >{{ categoryLabel(tile.cat) }}</div>
+              <span
+                v-if="!tileSearch.trim() && activeCategory !== '_recent' && activeCategory !== '_favorites'"
+                class="fav"
+                :class="{ 'on': isFavorite(tile.type) }"
+                :title="isFavorite(tile.type) ? t('Rimuovi dai preferiti') : t('Aggiungi ai preferiti')"
+                @click.stop="toggleFavorite(tile.type)"
+              >★</span>
+              <span class="grip" aria-hidden="true">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.5"/><circle cx="15" cy="6" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="9" cy="18" r="1.5"/><circle cx="15" cy="18" r="1.5"/></svg>
+              </span>
+            </div>
+            <div v-if="!displayedTiles.length" class="olo-sb-empty">
+              <template v-if="tileSearch.trim()">{{ t('Nessun elemento per') }} "<b>{{ tileSearch }}</b>"</template>
+              <template v-else>{{ t('Nessun elemento in questa categoria') }}</template>
+            </div>
+          </template>
+        </div>
+      </div>
+    </div>
+
+    <!-- Structure tab — V2 layout: 56px rail + 1fr panel -->
+    <div v-else class="olo-sb-body olo-sb-body--struct">
+      <!-- Rail: zone filters -->
+      <div class="olo-sb-rail" role="tablist" aria-label="Filtri vista struttura">
+        <button
+          v-for="f in structFilters"
+          :key="f.id"
+          class="olo-sb-rail-btn"
+          :class="['tone-' + f.tone, { 'on': structFilter === f.id }]"
+          role="tab"
+          :aria-selected="structFilter === f.id"
+          :title="f.label"
+          @click="structFilter = f.id"
+        >
+          <span class="bar"></span>
+          <span class="ic" v-html="f.icon"></span>
+          <span class="lbl">{{ f.label }}</span>
+          <span v-if="f.count !== null" class="cnt">{{ f.count }}</span>
+        </button>
+      </div>
+
+      <!-- Panel: header + search + toolbar + tree + breadcrumb -->
+      <div class="olo-sb-panel olo-sb-panel--struct">
+        <div class="olo-sb-panel-head">
+          <span class="dot" style="background: var(--olo-color-primary, #e8622a)"></span>
+          <h3>{{ t('Struttura pagina') }}</h3>
+          <span class="cnt">{{ structureCount }}</span>
+        </div>
+
+        <div class="olo-sb-search">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          <input v-model="structSearch" type="text" :placeholder="t('Cerca un blocco…')" />
+          <button v-if="structSearch" class="ic-x" :title="t('Pulisci')" @click="structSearch = ''">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+          </button>
+        </div>
+
+        <div class="olo-sb-tools">
+          <button type="button" :title="t('Comprimi tutto')" @click="structureRef?.collapseAll()">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="transform:rotate(-90deg)"><polyline points="6 9 12 15 18 9"/></svg>
+            {{ t('Comprimi tutto') }}
+          </button>
+          <button type="button" :title="t('Espandi tutto')" @click="structureRef?.expandAll()">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            {{ t('Espandi tutto') }}
+          </button>
+          <span class="spc"></span>
+          <button
+            type="button"
+            class="iso"
+            :class="{ 'on': onlySelected }"
+            :title="t('Mostra solo selezione')"
+            @click="onlySelected = !onlySelected"
+          >
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+
+        <StructureTree
+          ref="structureRef"
+          :filter="structFilter"
+          :search-query="structSearch"
+          :only-selected="onlySelected"
+          @save-as-template="section => $emit('save-as-template', section)"
+        />
+
+        <div v-if="selectedBreadcrumb.length" class="olo-sb-breadcrumb">
+          <span class="lbl">{{ t('Selezionato') }}</span>
+          <div class="path">
+            <template v-for="(item, i) in selectedBreadcrumb" :key="i">
+              <span v-if="i < selectedBreadcrumb.length - 1" class="seg" :title="item.label">{{ item.label }}</span>
+              <span v-else class="cur">
+                <span v-if="item.icon" class="ic" v-html="item.icon"></span>
+                {{ item.label }}
+              </span>
+              <svg
+                v-if="i < selectedBreadcrumb.length - 1"
+                class="chev"
+                width="9"
+                height="9"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ><polyline points="9 6 15 12 9 18"/></svg>
+            </template>
           </div>
         </div>
       </div>
-
-      <p class="tp-hint">{{ t('Clicca o trascina per aggiungere') }}</p>
     </div>
-
-    <!-- Structure tab -->
-    <StructureTree v-else @save-as-template="section => $emit('save-as-template', section)" />
   </div>
 </template>
 
@@ -197,8 +236,7 @@ import { useTilesStore } from '@/stores/tiles';
 import { useBuilderStore } from '@/stores/builder';
 import { useDnDStore } from '@/stores/dnd';
 import { useDragDrop } from '@/composables/useDragDrop';
-import { vOloDraggable, makeSidebarPayload, makeGlobalWidgetPayload } from '@/composables/useDnD';
-import { setCustomNativeDragPreview } from '@atlaskit/pragmatic-drag-and-drop/element/set-custom-native-drag-preview';
+import { vOloDraggable, makeSidebarPayload, makeGlobalWidgetPayload, setCustomNativeDragPreview } from '@/composables/useDnD';
 import { createSection, createRow, createColumn, generateId } from '@/stores/tiles';
 import StructureTree from './StructureTree.vue';
 import { t } from '@/i18n';
@@ -213,7 +251,9 @@ const searchResults = computed(() => {
   const q = tileSearch.value.trim().toLowerCase();
   if (!q) return [];
   const all = tilesStore.registeredTiles || [];
-  return all.filter(t => (t.name || '').toLowerCase().includes(q) || (t.type || '').toLowerCase().includes(q));
+  return all
+    .filter(t => (t.name || '').toLowerCase().includes(q) || (t.type || '').toLowerCase().includes(q))
+    .map(t => ({ ...t, cat: t.category }));
 });
 
 import { onUnmounted } from 'vue';
@@ -329,14 +369,171 @@ const categoryLabels = {
 };
 
 function categoryLabel(category) {
+  if (category === '_recent') return t('Recenti');
+  if (category === '_favorites') return t('Preferiti');
+  if (category === '_global') return t('Globali');
   return t(categoryLabels[category] || category);
 }
 
 function catColor(category) {
+  if (category === '_recent') return '#8B5CF6';
+  if (category === '_favorites') return '#EAB308';
+  if (category === '_global') return '#D97706';
   return categoryColors[category] || '#6B7280';
 }
 
+// ── V2 Rail icons (per category) ──
+const catIcons = {
+  '_recent':    '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>',
+  '_favorites': '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
+  '_global':    '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>',
+  'essential':  '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>',
+  'layout':     '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>',
+  'text':       '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></svg>',
+  'media':      '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>',
+  'marketing':  '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l18-8v18L3 13z"/><path d="M11.6 16.8a3 3 0 11-5.8-1.6"/></svg>',
+  'interactive':'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.8H20l-4.9 3.6 1.9 5.8L12 14.6 7 18.2l1.9-5.8L4 8.8h6.1z"/></svg>',
+  'navigation': '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h18M3 6h18M3 18h18"/></svg>',
+  'dynamic':    '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg>',
+  'booking':    '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M8 14l3 3 5-5"/></svg>',
+  'olo-space':  '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><path d="M9 22V12h6v10"/></svg>',
+};
+
+function catIcon(category) {
+  return catIcons[category] || catIcons['essential'];
+}
+
+const globeIcon = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>';
+
+// ── V2 active category state ──
+const ACTIVE_CAT_KEY = 'olo_sb_active_cat';
+const activeCategory = ref(localStorage.getItem(ACTIVE_CAT_KEY) || 'essential');
+
+function onSelectCategory(catId) {
+  activeCategory.value = catId;
+  tileSearch.value = '';
+  try { localStorage.setItem(ACTIVE_CAT_KEY, catId); } catch {}
+}
+
+// Rail categories: built dynamically from current tile inventory
+const railCategories = computed(() => {
+  const out = [];
+  if (recentTilesList.value.length) {
+    out.push({ id: '_recent', label: t('Recenti'), count: recentTilesList.value.length });
+  }
+  if (favoriteTilesList.value.length) {
+    out.push({ id: '_favorites', label: t('Preferiti'), count: favoriteTilesList.value.length });
+  }
+  for (const cid of categoryOrder) {
+    const tiles = (tilesByCategory.value || {})[cid] || [];
+    if (!tiles.length) continue;
+    out.push({ id: cid, label: t(categoryLabels[cid] || cid), count: tiles.length });
+  }
+  if ((tilesStore.globalWidgets || []).length) {
+    out.push({ id: '_global', label: t('Globali'), count: tilesStore.globalWidgets.length });
+  }
+  return out;
+});
+
+// Tiles to display in panel grid (category-scoped or search-scoped)
+const displayedTiles = computed(() => {
+  if (tileSearch.value.trim()) return searchResults.value;
+  if (activeCategory.value === '_recent') return recentTilesList.value;
+  if (activeCategory.value === '_favorites') return favoriteTilesList.value;
+  if (activeCategory.value === '_global') return [];
+  return (tilesByCategory.value || {})[activeCategory.value] || [];
+});
+
+const activeCategoryLabel = computed(() => categoryLabel(activeCategory.value));
+
+const panelCount = computed(() => {
+  if (tileSearch.value.trim()) return searchResults.value.length;
+  if (activeCategory.value === '_global') return (tilesStore.globalWidgets || []).length;
+  return displayedTiles.value.length;
+});
+
+// ── Structure tab: zone filters ──
+const STRUCT_FILTER_KEY = 'olo_sb_struct_filter';
+const structFilter = ref(localStorage.getItem(STRUCT_FILTER_KEY) || 'all');
+import { watch } from 'vue';
+watch(structFilter, v => { try { localStorage.setItem(STRUCT_FILTER_KEY, v); } catch {} });
+
+// V2: live search across nodes + isolation toggle ("show only selected path")
+const structSearch = ref('');
+const onlySelected = ref(false);
+const structureRef = ref(null);
+
+// Breadcrumb path of the currently selected tile
+function _findNodePath(nodes, targetId, chain = []) {
+  for (const node of (nodes || [])) {
+    const newChain = [...chain, node];
+    if (node.id === targetId) return newChain;
+    if (node.children?.length) {
+      const r = _findNodePath(node.children, targetId, newChain);
+      if (r) return r;
+    }
+  }
+  return null;
+}
+
+const _typeLabels = {
+  section: 'Sezione', row: 'Row', column: 'Column', 'inner-columns': 'Colonne', 'inner-column': 'Colonna',
+};
+
+const selectedBreadcrumb = computed(() => {
+  const id = builderStore.selectedTileId;
+  if (!id) return [];
+  let path = _findNodePath(tilesStore.headerTiles || [], id);
+  let zone = t('Header');
+  if (!path) { path = _findNodePath(tilesStore.canvasTiles || [], id); zone = t('Body'); }
+  if (!path) { path = _findNodePath(tilesStore.footerTiles || [], id); zone = t('Footer'); }
+  if (!path) return [];
+  const out = [{ label: zone, icon: '' }];
+  for (const node of path) {
+    const lbl = node.settings?._label || _typeLabels[node.type] || node.type;
+    const ic = (node === path[path.length - 1]) ? (tileIcons[node.type] || '') : '';
+    out.push({ label: lbl, icon: ic });
+  }
+  return out;
+});
+
+// Recursive count of leaf elements in a tree
+function _countTreeLeaves(nodes) {
+  if (!Array.isArray(nodes)) return 0;
+  let n = 0;
+  for (const node of nodes) {
+    const kids = node.children || [];
+    if (kids.length === 0) { n += 1; }
+    else { n += _countTreeLeaves(kids); }
+  }
+  return n;
+}
+
+const headerCount = computed(() => _countTreeLeaves(tilesStore.headerTiles || []));
+const bodyCount   = computed(() => _countTreeLeaves(tilesStore.canvasTiles  || []));
+const footerCount = computed(() => _countTreeLeaves(tilesStore.footerTiles  || []));
+
+const structureCount = computed(() => {
+  const total = headerCount.value + bodyCount.value + footerCount.value;
+  return total === 1 ? `1 ${t('elemento')}` : `${total} ${t('elementi')}`;
+});
+
+const structFilters = computed(() => [
+  { id: 'all',    icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l9 4.5v11L12 22l-9-4.5v-11z"/><path d="M3 6.5L12 11l9-4.5M12 11v11"/></svg>',
+    label: t('Tutto'), tone: 'neutral', count: headerCount.value + bodyCount.value + footerCount.value },
+  { id: 'header', icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="6" rx="2"/><line x1="3" y1="13" x2="21" y2="13" opacity=".4"/><line x1="3" y1="17" x2="21" y2="17" opacity=".4"/></svg>',
+    label: t('Header'), tone: 'info', count: headerCount.value },
+  { id: 'body',   icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/></svg>',
+    label: t('Body'), tone: 'brand', count: bodyCount.value },
+  { id: 'footer', icon: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="7" x2="21" y2="7" opacity=".4"/><line x1="3" y1="11" x2="21" y2="11" opacity=".4"/><rect x="3" y="15" width="18" height="6" rx="2"/></svg>',
+    label: t('Footer'), tone: 'success', count: footerCount.value },
+]);
+
 // ── SVG icon map per tile type ──
+// ── Registry icone tile (2 di 3) ──────────────────────────────────────────
+// Set 24×24 in formato shorthand (w=/h=/vb=/f=/s=/sw=) espanso da tileIcon().
+// Gli altri due set (InsertPanel.moduleIcon 24×24 espanso, StructureTree.nodeIcon
+// 14×14) divergono per formato/dimensione: NON unificare. Allinea le CHIAVI.
 const tileIcons = {
   // Essential
   'headline':     '<svg w="14" h="14" vb="0 0 24 24" f="none" s="cC" sw="1.5"><path d="M4 4v16M20 4v16M4 12h16"/></svg>',
@@ -750,46 +947,58 @@ async function deleteGlobal(globalId, name) {
 </script>
 
 <style scoped>
+/* ── Root container ──────────────────────────────────────── */
+.olo-sb-root {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  container-type: inline-size;
+}
+
+/* ── Top tabs (Elementi / Struttura) ─────────────────────── */
 .sidebar-tabs {
   display: flex;
+  height: 38px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  background: #fff;
+  flex-shrink: 0;
 }
 .sidebar-tab {
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 5px;
-  padding: 9px 0;
-  font-size: 11px;
+  gap: 6px;
+  padding: 0;
+  font-size: 12px;
   font-weight: 500;
-  letter-spacing: 0.3px;
-  color: #888;
+  color: #64748b;
   background: none;
   border: none;
   border-bottom: 2px solid transparent;
   cursor: pointer;
   transition: color 0.15s, border-color 0.15s;
+  font-family: inherit;
 }
-.sidebar-tab:hover {
-  color: #555;
-}
+.sidebar-tab:hover { color: #1e293b; }
 .sidebar-tab--active {
-  color: #1a1a1a;
+  color: #1e293b;
   border-bottom-color: var(--olo-color-primary, #e8622a);
 }
 
-/* Insert-after banner */
+/* ── Insert-after banner ─────────────────────────────────── */
 .tp-insert-banner {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 8px 12px;
   margin: 6px 6px 0;
-  background: rgba(34, 197, 94, 0.15);
-  border: 1px solid rgba(34, 197, 94, 0.4);
+  background: rgba(232, 98, 42, 0.10);
+  border: 1px solid rgba(232, 98, 42, 0.35);
   border-radius: 6px;
-  color: #22c55e;
+  color: #b04217;
   font-size: 12px;
   font-weight: 600;
   animation: tp-insert-pulse 1.5s ease-in-out infinite;
@@ -801,217 +1010,317 @@ async function deleteGlobal(globalId, name) {
 .tp-insert-cancel {
   background: none;
   border: none;
-  color: #22c55e;
+  color: #b04217;
   cursor: pointer;
   font-size: 14px;
   padding: 0 4px;
   opacity: 0.6;
 }
-.tp-insert-cancel:hover {
-  opacity: 1;
-}
+.tp-insert-cancel:hover { opacity: 1; }
 
-/* Tile palette — light glass */
-.tp-root {
-  padding: 8px 6px;
-  container-type: inline-size;
-}
-/* Search */
-.tp-search {
-  position: relative;
-  margin-bottom: 8px;
-  display: flex;
-  align-items: center;
-}
-.tp-search-icon {
-  position: absolute;
-  left: 10px;
-  color: #6B7280;
-  pointer-events: none;
-}
-.tp-search-input {
-  width: 100%;
-  padding: 8px 30px 8px 32px;
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 8px;
-  background: rgba(255,255,255,0.06);
-  color: #E5E7EB;
-  font-size: 12px;
-  font-family: inherit;
-  outline: none;
-  transition: border-color 0.2s, background 0.2s;
-}
-.tp-search-input::placeholder { color: #6B7280; }
-.tp-search-input:focus {
-  border-color: var(--olo-color-primary, #6366F1);
-  background: rgba(255,255,255,0.1);
-}
-.tp-search-clear {
-  position: absolute;
-  right: 6px;
-  background: none;
-  border: none;
-  color: #6B7280;
-  font-size: 16px;
-  cursor: pointer;
-  padding: 2px 6px;
-  line-height: 1;
-}
-.tp-search-clear:hover { color: #D1D5DB; }
-.tp-search-empty {
-  padding: 16px;
-  text-align: center;
-  color: #6B7280;
-  font-size: 12px;
-}
-.tp-group {
-  margin-bottom: 2px;
-}
-.tp-cat-head {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 8px;
-  width: 100%;
-  background: none;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.15s;
-  font-family: inherit;
-}
-.tp-cat-head:hover {
-  background: rgba(0, 0, 0, 0.04);
-}
-.tp-cat-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-.tp-cat-label {
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  color: #888;
-}
-.tp-cat-count {
-  font-size: 9px;
-  color: #555;
-  background: rgba(0, 0, 0, 0.06);
-  padding: 0 5px;
-  border-radius: 8px;
-  line-height: 15px;
-}
-.tp-chevron {
-  margin-left: auto;
-  color: #aaa;
-  transform: rotate(-90deg);
-  transition: transform 0.2s ease;
-  flex-shrink: 0;
-}
-.tp-chevron--open {
-  transform: rotate(0deg);
-}
-
-/* Collapsible drawer */
-.tp-drawer {
+/* ── V2 body: rail (56px) + panel (1fr) ──────────────────── */
+.olo-sb-body {
+  flex: 1;
   display: grid;
-  grid-template-rows: 0fr;
-  transition: grid-template-rows 0.25s ease;
-}
-.tp-drawer--open {
-  grid-template-rows: 1fr;
-}
-.tp-drawer > .tp-grid {
+  grid-template-columns: 56px 1fr;
+  min-height: 0;
   overflow: hidden;
+  background: #fff;
 }
 
-.tp-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4px;
-  padding: 2px 4px 6px;
-}
-@container (max-width: 200px) {
-  .tp-grid {
-    grid-template-columns: 1fr;
-  }
-}
-.tp-btn {
+/* Rail — vertical category buttons */
+.olo-sb-rail {
+  background: #f9fafb;
+  border-right: 1px solid #f1f5f9;
   display: flex;
+  flex-direction: column;
+  padding: 4px 0;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+.olo-sb-rail::-webkit-scrollbar { display: none; }
+
+.olo-sb-rail-btn {
+  position: relative;
+  width: 100%;
+  height: 56px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 6px;
-  height: 38px;
-  padding: 0 8px;
-  border-radius: 10px;
-  cursor: grab;
-  border: 1px solid rgba(0, 0, 0, 0.07);
-  background: rgba(255, 255, 255, 0.7);
-  font-size: 10px;
-  color: #666;
-  font-weight: 500;
+  justify-content: center;
+  gap: 3px;
+  padding: 0 4px;
   font-family: inherit;
-  line-height: 1;
-  user-select: none;
-  -webkit-user-select: none;
-  /* Abilita esplicitamente HTML5 drag su WebKit/Blink (Safari/Chrome).
-     Il button HTML nativo con draggable=true spesso non inizia il drag
-     a causa di conflitti con :active state. Il div non ha questo problema. */
-  -webkit-user-drag: element;
-  transition: background-color 0.12s, border-color 0.12s, color 0.12s, box-shadow 0.12s, transform 0.12s;
-}
-.tp-btn:active {
-  cursor: grabbing;
-}
-.tp-btn:hover {
-  background: #fff;
-  border-color: var(--cat-color, #e8622a);
-  color: #1a1a1a;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  transform: translateY(-1px);
-}
-.tp-btn:active {
-  transform: translateY(0);
-  box-shadow: none;
-  opacity: 0.7;
-}
-.tp-btn-icon {
+  color: #64748b;
   flex-shrink: 0;
-  width: 14px;
-  height: 14px;
+  transition: background-color 0.15s, color 0.15s;
+}
+.olo-sb-rail-btn .bar {
+  position: absolute;
+  left: 0;
+  top: 8px;
+  bottom: 8px;
+  width: 2px;
+  background: transparent;
+  border-radius: 0 2px 2px 0;
+  transition: background-color 0.15s;
+}
+.olo-sb-rail-btn .ic {
   display: flex;
   align-items: center;
   justify-content: center;
-  opacity: 0.5;
+  width: 18px;
+  height: 18px;
 }
-.tp-btn:hover .tp-btn-icon {
-  opacity: 0.85;
-  color: var(--cat-color, #e8622a);
+.olo-sb-rail-btn .ic :deep(svg) { width: 18px; height: 18px; }
+.olo-sb-rail-btn .lbl {
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 1.1;
+  text-align: center;
+  letter-spacing: 0.1px;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
-.tp-btn-label {
+.olo-sb-rail-btn .cnt {
+  position: absolute;
+  top: 5px;
+  right: 6px;
+  font-size: 9px;
+  font-weight: 600;
+  background: #f1f5f9;
+  color: #64748b;
+  padding: 1px 5px;
+  border-radius: 99px;
+  min-width: 14px;
+  text-align: center;
+  line-height: 1.4;
+  font-variant-numeric: tabular-nums;
+}
+.olo-sb-rail-btn:not(.on):hover {
+  color: #1e293b;
+  background: rgba(0, 0, 0, 0.02);
+}
+.olo-sb-rail-btn.on {
+  color: #1e293b;
+  background: #fff;
+}
+.olo-sb-rail-btn.on .cnt {
+  background: rgba(232, 98, 42, 0.12);
+  color: #b04217;
+}
+
+/* Panel — header + search + grid */
+.olo-sb-panel {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+  background: #fff;
+}
+.olo-sb-panel-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 12px 8px;
+  flex-shrink: 0;
+}
+.olo-sb-panel-head .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 99px;
+  flex-shrink: 0;
+}
+.olo-sb-panel-head h3 {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: #1e293b;
+  flex: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.olo-sb-panel-head .cnt {
+  background: #f1f5f9;
+  color: #64748b;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 1px 7px;
+  border-radius: 99px;
+  font-variant-numeric: tabular-nums;
+  margin-left: auto;
+}
+
+.olo-sb-search {
+  margin: 0 12px 10px;
+  padding: 6px 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f9fafb;
+  border: 1px solid #f1f5f9;
+  border-radius: 8px;
+  flex-shrink: 0;
+  transition: border-color 0.15s, background 0.15s;
+}
+.olo-sb-search:focus-within {
+  border-color: var(--olo-color-primary, #e8622a);
+  background: #fff;
+}
+.olo-sb-search > svg {
+  color: #94a3b8;
+  flex-shrink: 0;
+}
+.olo-sb-search input {
+  flex: 1;
+  border: 0;
+  background: transparent;
+  outline: 0;
+  font: inherit;
+  font-size: 12px;
+  color: #1e293b;
+  padding: 2px 0;
   min-width: 0;
 }
-.tp-empty {
-  text-align: center;
-  color: #aaa;
-  font-size: 11px;
-  padding: 32px 0;
+.olo-sb-search input::placeholder { color: #94a3b8; }
+.olo-sb-search .ic-x {
+  background: #f1f5f9;
+  border: 0;
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  color: #64748b;
+  flex-shrink: 0;
+  padding: 0;
 }
-.tp-gw-wrap {
+.olo-sb-search .ic-x:hover { background: #e2e8f0; color: #1e293b; }
+
+/* Grid of cards */
+.olo-sb-grid {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 12px 14px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  align-content: start;
+}
+
+.olo-sb-card {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 8px 8px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #fff;
+  cursor: grab;
+  text-align: left;
+  font: inherit;
+  color: #1e293b;
+  font-family: inherit;
+  min-width: 0;
+  transition: background-color 0.15s, border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+  -webkit-user-drag: element;
+  user-select: none;
+  -webkit-user-select: none;
 }
-.tp-gw-wrap:hover .tp-gw-del {
-  opacity: 1;
+.olo-sb-card:active { cursor: grabbing; }
+.olo-sb-card:hover {
+  border-color: var(--olo-color-primary, #e8622a);
+  background: rgba(232, 98, 42, 0.04);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  transform: translateY(-1px);
 }
-.tp-gw-del {
+.olo-sb-card .ic {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background: #f1f5f9;
+  color: #475569;
+  display: grid;
+  place-items: center;
+  transition: background-color 0.15s, color 0.15s, box-shadow 0.15s;
+}
+.olo-sb-card .ic :deep(svg) { width: 16px; height: 16px; }
+.olo-sb-card:hover .ic {
+  background: #fff;
+  color: var(--olo-color-primary, #e8622a);
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
+}
+.olo-sb-card .lbl {
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.25;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #1e293b;
+}
+.olo-sb-card .bdg {
+  font-size: 9px;
+  font-weight: 600;
+  padding: 1px 6px;
+  border-radius: 99px;
+  align-self: flex-start;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  line-height: 1.4;
+}
+.olo-sb-card .fav {
   position: absolute;
-  top: -4px;
-  right: -4px;
+  top: 6px;
+  right: 6px;
+  font-size: 12px;
+  line-height: 1;
+  color: transparent;
+  cursor: pointer;
+  transition: color 0.15s, opacity 0.15s;
+}
+.olo-sb-card:hover .fav { color: #cbd5e1; }
+.olo-sb-card .fav.on { color: #f59e0b; }
+.olo-sb-card .fav:hover { color: #f59e0b; }
+
+.olo-sb-card .grip {
+  position: absolute;
+  right: 6px;
+  bottom: 6px;
+  color: #cbd5e1;
+  opacity: 0;
+  transition: opacity 0.15s;
+  pointer-events: none;
+  display: flex;
+}
+.olo-sb-card:hover .grip { opacity: 1; }
+
+/* Global widget card variant */
+.olo-sb-card--global {
+  border-color: rgba(217, 119, 6, 0.3);
+  background: rgba(217, 119, 6, 0.05);
+}
+.olo-sb-card--global:hover {
+  border-color: #D97706;
+  background: rgba(217, 119, 6, 0.10);
+}
+.olo-sb-card--global .ic {
+  background: rgba(217, 119, 6, 0.10);
+  color: #b45309;
+}
+.olo-sb-card--global:hover .ic { background: #fff; color: #d97706; }
+.olo-sb-card--global .del {
+  position: absolute;
+  top: -5px;
+  right: -5px;
   width: 16px;
   height: 16px;
   border-radius: 50%;
@@ -1026,41 +1335,150 @@ async function deleteGlobal(globalId, name) {
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 0;
   z-index: 2;
 }
-.tp-gw-del:hover {
-  background: #b91c1c;
-  color: #fff;
-}
-.tp-btn--global {
-  border-color: rgba(217, 119, 6, 0.3);
-  color: #d97706;
-  background: rgba(217, 119, 6, 0.06);
-}
-.tp-btn--global:hover {
-  background: rgba(217, 119, 6, 0.12) !important;
-  border-color: #D97706 !important;
-  color: #b45309 !important;
-}
-.tp-hint {
-  font-size: 10px;
-  color: #aaa;
+.olo-sb-card--global:hover .del { opacity: 1; }
+.olo-sb-card--global .del:hover { background: #b91c1c; }
+
+.olo-sb-empty {
+  grid-column: 1 / -1;
+  padding: 28px 16px;
   text-align: center;
-  margin-top: 8px;
-}
-.tp-fav-star {
-  position: absolute;
-  top: 2px;
-  right: 2px;
+  color: #94a3b8;
   font-size: 12px;
-  color: transparent;
-  cursor: pointer;
-  transition: color 0.15s, opacity 0.15s;
-  opacity: 0;
-  line-height: 1;
+  line-height: 1.5;
 }
-.tp-btn { position: relative; }
-.tp-btn:hover .tp-fav-star { opacity: 1; color: #d1d5db; }
-.tp-fav-star--active { opacity: 1 !important; color: #EAB308 !important; }
-.tp-fav-star:hover { color: #EAB308 !important; }
+.olo-sb-empty b { color: #1e293b; font-weight: 600; }
+
+/* Narrow sidebar fallback (< 280px) — single column */
+@container (max-width: 280px) {
+  .olo-sb-grid { grid-template-columns: 1fr; }
+}
+
+/* ── V2 Structure tab ────────────────────────────────────── */
+.olo-sb-rail-btn.tone-info.on    { background: #eff6ff; color: #1d4ed8; }
+.olo-sb-rail-btn.tone-info.on .bar    { background: #3b82f6; }
+.olo-sb-rail-btn.tone-info.on .cnt    { background: #dbeafe; color: #1d4ed8; }
+
+.olo-sb-rail-btn.tone-brand.on   { background: #faf5ff; color: #7e22ce; }
+.olo-sb-rail-btn.tone-brand.on .bar   { background: #a855f7; }
+.olo-sb-rail-btn.tone-brand.on .cnt   { background: #f3e8ff; color: #7e22ce; }
+
+.olo-sb-rail-btn.tone-success.on { background: #f0fdf4; color: #15803d; }
+.olo-sb-rail-btn.tone-success.on .bar { background: #22c55e; }
+.olo-sb-rail-btn.tone-success.on .cnt { background: #dcfce7; color: #15803d; }
+
+.olo-sb-rail-btn.tone-neutral.on { background: #fff; color: #1e293b; }
+.olo-sb-rail-btn.tone-neutral.on .bar { background: var(--olo-color-primary, #e8622a); }
+
+.olo-sb-panel--struct {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.olo-sb-panel--struct :deep(.st-root) {
+  flex: 1;
+  overflow-y: auto;
+  padding: 4px 8px 8px;
+  min-height: 0;
+}
+
+/* Toolbar (Comprimi/Espandi/Solo selezione) */
+.olo-sb-tools {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 12px 8px;
+  border-bottom: 1px solid #f1f5f9;
+  margin-bottom: 4px;
+  flex-shrink: 0;
+}
+.olo-sb-tools button {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  font-family: inherit;
+  font-size: 11px;
+  color: #64748b;
+  padding: 4px 6px;
+  border-radius: 4px;
+  transition: background-color 0.12s, color 0.12s;
+}
+.olo-sb-tools button:hover {
+  background: #f1f5f9;
+  color: #1e293b;
+}
+.olo-sb-tools .spc { flex: 1; }
+.olo-sb-tools button.iso {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+}
+.olo-sb-tools button.iso.on {
+  background: rgba(232, 98, 42, 0.12);
+  color: var(--olo-color-primary, #e8622a);
+}
+
+/* Breadcrumb sticky bottom */
+.olo-sb-breadcrumb {
+  border-top: 1px solid #f1f5f9;
+  background: #f9fafb;
+  padding: 6px 12px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex-shrink: 0;
+}
+.olo-sb-breadcrumb .lbl {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #94a3b8;
+  font-weight: 600;
+}
+.olo-sb-breadcrumb .path {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 11px;
+  color: #64748b;
+  flex-wrap: wrap;
+}
+.olo-sb-breadcrumb .path .seg {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 80px;
+}
+.olo-sb-breadcrumb .path .chev {
+  color: #cbd5e1;
+  flex-shrink: 0;
+}
+.olo-sb-breadcrumb .path .cur {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(232, 98, 42, 0.12);
+  color: var(--olo-color-primary, #e8622a);
+  font-weight: 600;
+  padding: 1px 7px;
+  border-radius: 99px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 140px;
+}
+.olo-sb-breadcrumb .path .cur .ic {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+.olo-sb-breadcrumb .path .cur .ic :deep(svg) { width: 11px; height: 11px; }
 </style>

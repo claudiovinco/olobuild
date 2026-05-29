@@ -1,13 +1,21 @@
-import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared.js';
+import { t } from '@/i18n';
+
+/**
+ * Tile HiddenPop — split CONTENUTO/STILE (regola universale Olobuild).
+ *   fields[]      → modalità, testi, immagine, CTA, trigger, frequenza, display rules
+ *   styleFields[] → aspetto modale (sfondo, colori, ombra, radius, overlay, animazione, padding, bordo)
+ *   AVANZATE      → meta tecnico (id/class/condizioni)
+ */
 export default {
   type: 'hiddenpop',
-  name: 'Popup Nascosto',
+  name: t('Popup Nascosto'),
   icon: 'dashicons-flag',
   category: 'interactive',
   defaults: {
     // Contenuto
     mode: 'simple',
-    title: 'Titolo popup',
+    title: t('Titolo popup'),
     subtitle: '',
     image: '',
     image_position: 'top',
@@ -52,114 +60,131 @@ export default {
     border_hover_duration: 300,
     ...borderEffectDefaults,
   },
+
+  // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
-    // ── Contenuto ──
-    { key: 'mode', label: 'Modalità contenuto', type: 'select', options: [
-      { value: 'simple', label: 'Semplice' },
-      { value: 'template', label: 'Template Olobuild' },
+    { key: 'mode', label: t('Modalità contenuto'), type: 'select', options: [
+      { value: 'simple', label: t('Semplice') },
+      { value: 'template', label: t('Template Olobuild') },
     ]},
-    { key: 'title', label: 'Titolo', type: 'text',
+    { key: 'title', label: t('Titolo'), type: 'text',
       condition: { field: 'mode', op: 'eq', value: 'simple' } },
-    { key: 'subtitle', label: 'Testo / Descrizione', type: 'textarea',
+    { key: 'subtitle', label: t('Testo / Descrizione'), type: 'textarea',
       condition: { field: 'mode', op: 'eq', value: 'simple' } },
-    { key: 'image', label: 'Immagine', type: 'image',
+    { key: 'image', label: t('Immagine'), type: 'image',
       condition: { field: 'mode', op: 'eq', value: 'simple' } },
-    { key: 'image_position', label: 'Posizione immagine', type: 'select', options: [
-      { value: 'top', label: 'Sopra' },
-      { value: 'bottom', label: 'Sotto' },
-      { value: 'left', label: 'Sinistra' },
-      { value: 'right', label: 'Destra' },
+    { key: 'image_position', label: t('Posizione immagine'), type: 'select', options: [
+      { value: 'top', label: t('Sopra') },
+      { value: 'bottom', label: t('Sotto') },
+      { value: 'left', label: t('Sinistra') },
+      { value: 'right', label: t('Destra') },
     ], condition: { field: 'mode', op: 'eq', value: 'simple' } },
-    { key: 'template_id', label: 'Template', type: 'select', optionsSource: 'templates',
+    { key: 'template_id', label: t('Template'), type: 'select', optionsSource: 'templates',
       condition: { field: 'mode', op: 'eq', value: 'template' } },
 
-    { type: 'separator', label: 'Pulsante CTA' },
-    { key: 'cta_text', label: 'Testo pulsante', type: 'text', placeholder: 'Lascia vuoto per nascondere',
+    { type: 'separator', label: t('Pulsante CTA') },
+    { key: 'cta_text', label: t('Testo pulsante'), type: 'text', placeholder: t('Lascia vuoto per nascondere'),
       condition: { field: 'mode', op: 'eq', value: 'simple' } },
-    { key: 'cta_url', label: 'URL pulsante', type: 'text',
+    { key: 'cta_url', label: t('URL pulsante'), type: 'link',
       condition: { field: 'mode', op: 'eq', value: 'simple' } },
-    { key: 'cta_style', label: 'Stile pulsante', type: 'select', options: [
-      { value: 'primary', label: 'Primario' },
-      { value: 'secondary', label: 'Secondario' },
-      { value: 'danger', label: 'Pericolo' },
-      { value: 'text', label: 'Testo' },
-    ], condition: { field: 'mode', op: 'eq', value: 'simple' } },
-    { key: 'cta_target', label: 'Apri in', type: 'select', options: [
-      { value: '_self', label: 'Stessa finestra' },
-      { value: '_blank', label: 'Nuova finestra' },
+    { key: 'cta_target', label: t('Apri in'), type: 'select', options: [
+      { value: '_self', label: t('Stessa finestra') },
+      { value: '_blank', label: t('Nuova finestra') },
     ], condition: { field: 'mode', op: 'eq', value: 'simple' } },
 
-    { type: 'separator', label: 'Aspetto modale' },
-    { key: 'modal_max_width', label: 'Larghezza max (px)', type: 'range', min: 300, max: 900, step: 10 },
-    { key: 'modal_bg_color', label: 'Sfondo card', type: 'color' },
-    { key: 'title_color', label: 'Colore titolo', type: 'color',
-      condition: { field: 'mode', op: 'eq', value: 'simple' } },
-    { key: 'title_size', label: 'Dimensione titolo (px)', type: 'range', min: 14, max: 48, step: 1,
-      condition: { field: 'mode', op: 'eq', value: 'simple' } },
-    { key: 'text_color', label: 'Colore testo', type: 'color',
-      condition: { field: 'mode', op: 'eq', value: 'simple' } },
-    { key: 'modal_shadow', label: 'Ombra', type: 'select', options: [
-      { value: 'none', label: 'Nessuna' },
-      { value: 'sm', label: 'Leggera' },
-      { value: 'md', label: 'Media' },
-      { value: 'lg', label: 'Grande' },
-      { value: 'xl', label: 'Extra grande' },
-    ]},
-    { key: 'modal_radius', label: 'Bordo arrotondato', type: 'border-radius' },
-    { key: 'modal_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
-    { key: 'modal_border_width', label: 'Spessore bordo', type: 'range', min: 0, max: 10, step: 1 },
-    { key: 'modal_border_color', label: 'Colore bordo', type: 'color' },
-    { key: 'modal_overlay', label: 'Oscuramento sfondo', type: 'range', min: 0, max: 100, step: 5 },
-    { key: 'modal_close_button', label: 'Pulsante chiudi (X)', type: 'toggle' },
-    { key: 'popup_close_overlay', label: 'Chiudi su click overlay', type: 'toggle' },
-    { key: 'popup_overlay_blur', label: 'Sfocatura overlay (px)', type: 'range', min: 0, max: 20, step: 1 },
-    { key: 'popup_animation', label: 'Animazione apertura', type: 'select', options: [
-      { value: 'fade', label: 'Fade' },
-      { value: 'slide-up', label: 'Scorrimento su' },
-      { value: 'slide-down', label: 'Scorrimento giù' },
-      { value: 'zoom', label: 'Zoom' },
-      { value: 'flip', label: 'Flip' },
-    ]},
-
-    { type: 'separator', label: 'Trigger' },
-    { key: 'exit_intent', label: 'Exit Intent (mouse verso top)', type: 'toggle' },
-    { key: 'trigger_threshold', label: 'Punto di attivazione (% viewport)', type: 'range', min: 10, max: 90, step: 5,
+    { type: 'separator', label: t('Trigger') },
+    { key: 'exit_intent', label: t('Exit Intent (mouse verso top)'), type: 'toggle' },
+    { key: 'trigger_threshold', label: t('Punto di attivazione (% viewport)'), type: 'range', min: 10, max: 90, step: 5,
       condition: { field: 'exit_intent', op: 'eq', value: false } },
-    { key: 'trigger_direction', label: 'Direzione scroll', type: 'select', options: [
-      { value: 'down', label: 'Solo verso il basso' },
-      { value: 'up', label: 'Solo verso l\'alto' },
-      { value: 'both', label: 'Entrambe le direzioni' },
+    { key: 'trigger_direction', label: t('Direzione scroll'), type: 'select', options: [
+      { value: 'down', label: t('Solo verso il basso') },
+      { value: 'up', label: t('Solo verso l\'alto') },
+      { value: 'both', label: t('Entrambe le direzioni') },
     ], condition: { field: 'exit_intent', op: 'eq', value: false } },
-    { key: 'retrigger', label: 'Ri-attiva a ogni passaggio', type: 'toggle',
+    { key: 'retrigger', label: t('Ri-attiva a ogni passaggio'), type: 'toggle',
       condition: { field: 'exit_intent', op: 'eq', value: false } },
-    { key: 'popup_frequency', label: 'Frequenza', type: 'select', options: [
-      { value: 'always', label: 'Sempre' },
-      { value: 'once_session', label: 'Una volta per sessione' },
-      { value: 'once_day', label: 'Una volta al giorno' },
-      { value: 'once_week', label: 'Una volta a settimana' },
-      { value: 'once_ever', label: 'Solo una volta' },
+    { key: 'popup_frequency', label: t('Frequenza'), type: 'select', options: [
+      { value: 'always', label: t('Sempre') },
+      { value: 'once_session', label: t('Una volta per sessione') },
+      { value: 'once_day', label: t('Una volta al giorno') },
+      { value: 'once_week', label: t('Una volta a settimana') },
+      { value: 'once_ever', label: t('Solo una volta') },
     ]},
-    { key: 'show_max_times', label: 'Max visualizzazioni (0=illimitato)', type: 'range', min: 0, max: 50 },
+    { key: 'show_max_times', label: t('Max visualizzazioni (0=illimitato)'), type: 'range', min: 0, max: 50 },
 
-    { type: 'separator', label: 'Regole visualizzazione' },
-    { key: 'display_device', label: 'Dispositivo', type: 'select', options: [
-      { value: '', label: 'Tutti' },
-      { value: 'desktop', label: 'Solo desktop' },
-      { value: 'mobile', label: 'Solo mobile' },
+    { type: 'separator', label: t('Regole visualizzazione') },
+    { key: 'display_device', label: t('Dispositivo'), type: 'select', options: [
+      { value: '', label: t('Tutti') },
+      { value: 'desktop', label: t('Solo desktop') },
+      { value: 'mobile', label: t('Solo mobile') },
     ]},
-    { key: 'display_logged', label: 'Stato utente', type: 'select', options: [
-      { value: '', label: 'Tutti' },
-      { value: 'logged_in', label: 'Solo loggati' },
-      { value: 'logged_out', label: 'Solo visitatori' },
+    { key: 'display_logged', label: t('Stato utente'), type: 'select', options: [
+      { value: '', label: t('Tutti') },
+      { value: 'logged_in', label: t('Solo loggati') },
+      { value: 'logged_out', label: t('Solo visitatori') },
     ]},
-    { key: 'display_date_from', label: 'Mostra dal', type: 'date' },
-    { key: 'display_date_to', label: 'Mostra fino al', type: 'date' },
-    { key: 'display_referrer', label: 'Solo da referrer (contiene)', type: 'text', placeholder: 'google.com' },
+    { key: 'display_date_from', label: t('Mostra dal'), type: 'date' },
+    { key: 'display_date_to', label: t('Mostra fino al'), type: 'date' },
+    { key: 'display_referrer', label: t('Solo da referrer (contiene)'), type: 'text', placeholder: t('google.com') },
+  ],
 
-    { type: 'separator', label: 'Contenitore' },
-    { key: 'tile_padding', type: 'spacing', label: 'Spaziatura interna' },
-    { key: 'border_radius', type: 'border-radius', label: 'Raggio bordo' },
-    { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
+  // ─── STILE ─────────────────────────────────────────────────
+  styleFields: [
+    { type: 'separator', label: t('Stile pulsante CTA') },
+    { key: 'cta_style', label: t('Stile pulsante'), type: 'select', options: [
+      { value: 'primary', label: t('Primario') },
+      { value: 'secondary', label: t('Secondario') },
+      { value: 'danger', label: t('Pericolo') },
+      { value: 'text', label: t('Testo') },
+    ], condition: { field: 'mode', op: 'eq', value: 'simple' } },
+
+    { type: 'separator', label: t('Tipografia') },
+    { type: 'typography', label: t('Titolo'),
+      responsiveKeys: ['size'],
+      keys: {
+        size:  'title_size',
+        color: 'title_color',
+      },
+      sizeMin: 14, sizeMax: 48,
+      condition: { field: 'mode', op: 'eq', value: 'simple' },
+    },
+    { type: 'typography', label: t('Testo'),
+      responsiveKeys: ['size'],
+      keys: {
+        color: 'text_color',
+      },
+      sizeMin: 12, sizeMax: 60,
+      condition: { field: 'mode', op: 'eq', value: 'simple' },
+    },
+
+    { type: 'separator', label: t('Aspetto modale') },
+    { key: 'modal_max_width', label: t('Larghezza max (px)'), type: 'range', min: 300, max: 900, step: 10 },
+    { key: 'modal_bg_color', label: t('Sfondo card'), type: 'color' },
+    { key: 'modal_shadow', label: t('Ombra'), type: 'select', options: [
+      { value: 'none', label: t('Nessuna') },
+      { value: 'sm', label: t('Leggera') },
+      { value: 'md', label: t('Media') },
+      { value: 'lg', label: t('Grande') },
+      { value: 'xl', label: t('Extra grande') },
+    ]},
+    withHover({ key: 'modal_radius', label: t('Bordo arrotondato'), type: 'border-radius' }),
+    { key: 'modal_border_width', label: t('Spessore bordo'), type: 'range', min: 0, max: 10, step: 1 },
+    { key: 'modal_border_color', label: t('Colore bordo'), type: 'color' },
+    { key: 'modal_overlay', label: t('Oscuramento sfondo'), type: 'range', min: 0, max: 100, step: 5 },
+    { key: 'modal_close_button', label: t('Pulsante chiudi (X)'), type: 'toggle' },
+    { key: 'popup_close_overlay', label: t('Chiudi su click overlay'), type: 'toggle' },
+    { key: 'popup_overlay_blur', label: t('Sfocatura overlay (px)'), type: 'range', min: 0, max: 20, step: 1 },
+    { key: 'popup_animation', label: t('Animazione apertura'), type: 'select', options: [
+      { value: 'fade', label: t('Fade') },
+      { value: 'slide-up', label: t('Scorrimento su') },
+      { value: 'slide-down', label: t('Scorrimento giù') },
+      { value: 'zoom', label: t('Zoom') },
+      { value: 'flip', label: t('Flip') },
+    ]},
+
+    { type: 'separator', label: t('Contenitore') },
+    { key: 'tile_padding', type: 'spacing', label: t('Spaziatura interna') },
+    withHover({ key: 'border_radius', type: 'border-radius', label: t('Raggio bordo') }),
     ...borderFields(),
   ],
 };

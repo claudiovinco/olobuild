@@ -1,12 +1,22 @@
-import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
+import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared.js';
+import { t } from '@/i18n';
 
+/**
+ * Tile AuthorBox — split CONTENUTO/STILE.
+ *   fields[]      → visibilità (avatar/nome/bio/ruolo/post_count/website), tag nome, layout, alignment, gap
+ *   styleFields[] → preset, bg, typo, text-effects, avatar (size/radius/border), tipografia, colori, padding, radius, border
+ */
 export default {
   type: 'authorbox',
-  name: 'Author Box',
+  name: t('Author Box'),
   icon: 'dashicons-admin-users',
   category: 'dynamic',
   defaults: {
+    preset: 'custom',
+    bg: { type: 'none' },
+    typography_preset: '',
     ...textEffectsDefaults,
+    text_effect_target: 'name',
     layout: 'horizontal',
     avatar_size: '80',
     show_avatar: true,
@@ -38,72 +48,113 @@ export default {
     gap: '16',
     text_align: 'left',
   },
+
   fields: [
-    { type: 'separator', label: 'Contenuto' },
-    { key: 'show_avatar', label: 'Mostra avatar', type: 'toggle' },
-    { key: 'show_name', label: 'Mostra nome', type: 'toggle' },
-    { key: 'show_bio', label: 'Mostra biografia', type: 'toggle' },
-    { key: 'show_role', label: 'Mostra ruolo', type: 'toggle' },
-    { key: 'show_post_count', label: 'Mostra conteggio articoli', type: 'toggle' },
-    { key: 'show_website', label: 'Mostra sito web', type: 'toggle' },
+    { type: 'separator', label: t('Contenuto') },
+    { key: 'show_avatar', label: t('Mostra avatar'), type: 'toggle' },
+    { key: 'show_name', label: t('Mostra nome'), type: 'toggle' },
+    { key: 'show_bio', label: t('Mostra biografia'), type: 'toggle' },
+    { key: 'show_role', label: t('Mostra ruolo'), type: 'toggle' },
+    { key: 'show_post_count', label: t('Mostra conteggio articoli'), type: 'toggle' },
+    { key: 'show_website', label: t('Mostra sito web'), type: 'toggle' },
 
-    { type: 'separator', label: 'Layout' },
-    { key: 'layout', label: 'Layout', type: 'select', options: [
-      { value: 'horizontal', label: 'Orizzontale' },
-      { value: 'vertical', label: 'Verticale' },
+    { type: 'separator', label: t('Layout') },
+    { key: 'layout', label: t('Layout'), type: 'select', options: [
+      { value: 'horizontal', label: t('Orizzontale') },
+      { value: 'vertical', label: t('Verticale') },
     ]},
-    { key: 'name_tag', label: 'Tag nome', type: 'select', options: [
-      { value: 'h3', label: 'H3' },
-      { value: 'h4', label: 'H4' },
-      { value: 'h5', label: 'H5' },
-      { value: 'div', label: 'Div' },
+    { key: 'text_align', label: t('Allineamento testo'), type: 'select', options: [
+      { value: 'left', label: t('Sinistra') },
+      { value: 'center', label: t('Centro') },
+      { value: 'right', label: t('Destra') },
     ]},
-    { key: 'text_align', label: 'Allineamento testo', type: 'select', options: [
-      { value: 'left', label: 'Sinistra' },
-      { value: 'center', label: 'Centro' },
-      { value: 'right', label: 'Destra' },
-    ]},
-    { key: 'gap', label: 'Gap (px)', type: 'range', min: 8, max: 40, step: 4 },
+    { key: 'gap', label: t('Gap (px)'), type: 'range', min: 8, max: 40, step: 4 },
+  ],
 
-    { type: 'separator', label: 'Avatar' },
-    { key: 'avatar_size', label: 'Dimensione avatar (px)', type: 'range', min: 40, max: 160, step: 8,
-      condition: { field: 'show_avatar', value: true } },
-    { key: 'avatar_border_radius', label: 'Raggio bordo avatar (%)', type: 'border-radius',
-      condition: { field: 'show_avatar', value: true } },
-    { key: 'avatar_border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
-    { key: 'avatar_border_width', label: 'Bordo avatar (px)', type: 'range', min: 0, max: 6, step: 1,
-      condition: { field: 'show_avatar', value: true } },
-    { key: 'avatar_border_color', label: 'Colore bordo avatar', type: 'color',
-      condition: { field: 'avatar_border_width', operator: '>', value: '0' } },
-
-    { type: 'separator', label: 'Tipografia' },
-    { key: 'name_size', label: 'Dim. nome (px)', type: 'range', min: 14, max: 32, step: 1 },
-    { key: 'name_weight', label: 'Peso nome', type: 'select', options: [
-      { value: '400', label: 'Normale' },
-      { value: '500', label: 'Medio' },
-      { value: '600', label: 'Semi-grassetto' },
-      { value: '700', label: 'Grassetto' },
-    ]},
-    { key: 'bio_size', label: 'Dim. biografia (px)', type: 'range', min: 11, max: 18, step: 1 },
-    { key: 'role_size', label: 'Dim. ruolo (px)', type: 'range', min: 10, max: 18, step: 1 },
-
-    { type: 'separator', label: 'Colori' },
-    { key: 'name_color', label: 'Colore nome', type: 'color' },
-    { key: 'bio_color', label: 'Colore biografia', type: 'color' },
-    { key: 'role_color', label: 'Colore ruolo', type: 'color' },
-    { key: 'link_color', label: 'Colore link', type: 'color' },
-    { key: 'count_color', label: 'Colore conteggio', type: 'color' },
-    { key: 'background_color', label: 'Sfondo', type: 'color' },
-
-    { type: 'separator', label: 'Aspetto' },
-    { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 48 },
-    { key: 'border_radius', label: 'Raggio bordi (px)', type: 'border-radius' },
-    { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
-    ...borderFields(),
+  styleFields: [
+    { type: 'separator', label: t('Preset stilistico') },
+    { key: 'preset', label: t('Stile'), type: 'select', options: [
+      { value: 'modern-clean',    label: t('Modern Clean') },
+      { value: 'minimal-mono',    label: t('Minimal Mono') },
+      { value: 'magazine-bold',   label: t('Magazine Bold') },
+      { value: 'editorial-serif', label: t('Editorial Serif') },
+      { value: 'compact-inline',  label: t('Compact Inline') },
+      { value: 'glass-frosted',   label: t('Glass Frosted') },
+      { value: 'neon-glow',       label: t('Neon Glow') },
+      { value: 'brutalist-stamp', label: t('Brutalist Stamp') },
+      { value: 'gradient-aurora', label: t('Gradient Aurora') },
+      { value: 'sticker-fun',     label: t('Sticker Fun') },
+      { value: 'retro-terminal',  label: t('Retro Terminal') },
+      { value: 'tilt-3d',         label: t('3D Tilt') },
+      { value: 'custom',          label: t('Personalizzato') },
+    ] },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
 
     ...textEffectsFields([
-      { value: 'name', label: 'Nome autore' },
-      { value: 'bio', label: 'Bio' },
+      { value: 'name', label: t('Nome autore') },
+      { value: 'bio', label: t('Bio') },
     ]),
+
+    { type: 'separator', label: t('Avatar') },
+    { key: 'avatar_size', label: t('Dimensione avatar (px)'), type: 'range', min: 40, max: 160, step: 8,
+      condition: { field: 'show_avatar', value: true } },
+    withHover({ key: 'avatar_border_radius', label: t('Raggio bordo avatar (%)'), type: 'border-radius',
+      condition: { field: 'show_avatar', value: true } }),
+    { key: 'avatar_border_width', label: t('Bordo avatar (px)'), type: 'range', min: 0, max: 6, step: 1,
+      condition: { field: 'show_avatar', value: true } },
+    { key: 'avatar_border_color', label: t('Colore bordo avatar'), type: 'color',
+      condition: { field: 'avatar_border_width', operator: '>', value: '0' } },
+
+    { type: 'separator', label: t('Tipografia') },
+    { type: 'typography', label: t('Nome'),
+      presetKey: 'typography_preset',
+      responsiveKeys: ['size'],
+      keys: {
+        tag:    'name_tag',
+        size:   'name_size',
+        weight: 'name_weight',
+        color:  'name_color',
+      },
+      sizeMin: 14, sizeMax: 32, sizeStep: 1,
+    },
+    { type: 'typography', label: t('Biografia'),
+      presetKey: 'typography_preset',
+      responsiveKeys: ['size'],
+      keys: {
+        size:  'bio_size',
+        color: 'bio_color',
+      },
+      sizeMin: 11, sizeMax: 18, sizeStep: 1,
+    },
+    { type: 'typography', label: t('Ruolo'),
+      presetKey: 'typography_preset',
+      responsiveKeys: ['size'],
+      keys: {
+        size:  'role_size',
+        color: 'role_color',
+      },
+      sizeMin: 10, sizeMax: 18, sizeStep: 1,
+    },
+    { type: 'typography', label: t('Link'),
+      presetKey: 'typography_preset',
+      keys: {
+        color: 'link_color',
+      },
+    },
+    { type: 'typography', label: t('Conteggio'),
+      presetKey: 'typography_preset',
+      keys: {
+        color: 'count_color',
+      },
+    },
+
+    { type: 'separator', label: t('Colori') },
+    { key: 'background_color', label: t('Sfondo'), type: 'color' },
+
+    { type: 'separator', label: t('Aspetto') },
+    { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 48 },
+    withHover({ key: 'border_radius', label: t('Raggio bordi (px)'), type: 'border-radius' }),
+
+    ...borderFields(),
   ],
 };

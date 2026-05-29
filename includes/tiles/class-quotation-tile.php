@@ -11,7 +11,8 @@ class Olo_Quotation_Tile extends Olo_Tile_Base {
     protected $icon     = 'dashicons-format-quote';
     protected $category = 'text';
     protected $defaults = [
-        'content'   => 'Life is what happens when you\'re busy making other plans.',
+        'preset' => 'custom',
+        'content'   => 'La vita è ciò che ti succede mentre sei occupato a fare altri progetti.',
         'author'    => 'John Lennon',
         'style'     => 'default',
         'alignment' => 'left',
@@ -53,7 +54,7 @@ class Olo_Quotation_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
-        <blockquote class="olo-quotation <?php echo $align_class; ?> <?php echo $quot_uid; ?>">
+        <blockquote class="olo-quotation <?php echo $align_class; ?> <?php echo $quot_uid; ?> olo-quot-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>">
             <p class="olo-quot-content<?php echo $c_tfx_cls; ?>"<?php echo $c_tfx_data; ?>><?php echo nl2br( esc_html( $content_plain ) ); ?></p>
             <?php if ( ! empty( $s['author'] ) ) : ?>
                 <?php if ( $s['style'] === 'footer' ) : ?>

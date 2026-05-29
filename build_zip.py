@@ -29,7 +29,9 @@ OUTPUT_ZIP = OUTPUT_DIR / f"{PLUGIN}-{version}.zip"
 EXCLUDE_DIRS = {
     "node_modules", ".git", ".claude", "tmp_deploy", "dist",
     "docs", ".vscode", ".idea", "__pycache__",
+    "tmp_handoff", "scripts",
 }
+EXCLUDE_DIR_PREFIXES = ("design_handoff_", "languages._backup_")
 EXCLUDE_FILES = {
     "CLAUDE.md", ".gitignore", ".gitattributes", ".editorconfig",
     "package.json", "package-lock.json", "yarn.lock",
@@ -38,9 +40,11 @@ EXCLUDE_FILES = {
     "composer.json", "composer.lock",
     "_build.cjs", "check_config.py", "build_zip.py",
     ".DS_Store", "Thumbs.db",
+    "ROADMAP.md", "OLOBUILD-SCHEDA.md",
+    "add_borders.py", "add_borders_special.py",
 }
-EXCLUDE_EXT = {".log", ".po~", ".bak", ".tmp", ".swp"}
-EXCLUDE_PATTERN_PREFIXES = ("test-",)  # test-*.php files
+EXCLUDE_EXT = {".log", ".po~", ".bak", ".tmp", ".swp", ".tsv"}
+EXCLUDE_PATTERN_PREFIXES = ("test-", "BRIEF_", "AUDIT-", "AUDIT_")  # test-*.php, BRIEF_*.md, AUDIT-*.md
 # Exclude files with .bak somewhere in the name
 def is_backup_file(name: str) -> bool:
     return ".bak" in name
@@ -66,14 +70,19 @@ total_size = 0
 for root, dirs, files in os.walk(PROJECT_ROOT):
     root_path = Path(root)
     # Prune excluded dirs in-place
-    dirs[:] = [d for d in dirs if d not in EXCLUDE_DIRS and not d.startswith(".")]
+    dirs[:] = [
+        d for d in dirs
+        if d not in EXCLUDE_DIRS
+        and not d.startswith(".")
+        and not any(d.startswith(p) for p in EXCLUDE_DIR_PREFIXES)
+    ]
     if not INCLUDE_SRC and root_path == PROJECT_ROOT:
         dirs[:] = [d for d in dirs if d != "src"]
 
     for filename in files:
         if filename in EXCLUDE_FILES:
             continue
-        if any(filename.startswith(p) for p in EXCLUDE_PATTERN_PREFIXES) and filename.endswith(".php"):
+        if any(filename.startswith(p) for p in EXCLUDE_PATTERN_PREFIXES):
             continue
         if Path(filename).suffix in EXCLUDE_EXT:
             continue

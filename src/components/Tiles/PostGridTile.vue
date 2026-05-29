@@ -67,12 +67,12 @@
         <span class="mpg-pag-btn">›</span>
       </template>
       <template v-else-if="paginationStyle === 'loadmore'">
-        <span class="mpg-pag-loadmore">Carica altri</span>
+        <span class="mpg-pag-loadmore">{{ t('Carica altri') }}</span>
       </template>
     </div>
     <!-- Info bar -->
     <div class="mpg-info">
-      {{ settings.post_type || 'post' }} · {{ settings.posts_per_page || 12 }} articoli · {{ cols }} colonne<template v-if="settings.pagination"> · {{ settings.items_per_page || 6 }}/pagina</template><template v-if="hasRealData"> · <span class="mpg-live-badge">anteprima reale</span></template>
+      {{ settings.post_type || 'post' }} · {{ settings.posts_per_page || 12 }} {{ t('articoli') }} · {{ cols }} {{ t('colonne') }}<template v-if="settings.pagination"> · {{ settings.items_per_page || 6 }}/{{ t('pagina') }}</template><template v-if="hasRealData"> · <span class="mpg-live-badge">{{ t('anteprima reale') }}</span></template>
     </div>
   </div>
 </template>

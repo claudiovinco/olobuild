@@ -16,8 +16,9 @@
         :value="uniformValue"
         @input="onUniformInput($event.target.value)"
         @dblclick="onReset"
+        @wheel="handleNumberWheel"
         :min="min" :max="max" :step="step"
-        class="mb-w-12 mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-1 mb-py-0.5 mb-text-xs mb-text-gray-900 mb-text-center"
+        class="olo-num-input mb-w-16 mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-1.5 mb-py-0.5 mb-text-xs mb-text-gray-900 mb-text-center"
         :title="t('Doppio click per reimpostare al valore predefinito')"
       />
       <button
@@ -41,8 +42,9 @@
             type="number"
             :value="sides.top"
             @input="onSideInput('top', $event.target.value)"
+            @wheel="handleNumberWheel"
             :min="min" :max="max" :step="step"
-            class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1 mb-text-sm mb-text-gray-900"
+            class="olo-num-input mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1 mb-text-sm mb-text-gray-900 mb-text-center"
           />
         </div>
         <div>
@@ -51,8 +53,9 @@
             type="number"
             :value="sides.right"
             @input="onSideInput('right', $event.target.value)"
+            @wheel="handleNumberWheel"
             :min="min" :max="max" :step="step"
-            class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1 mb-text-sm mb-text-gray-900"
+            class="olo-num-input mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1 mb-text-sm mb-text-gray-900 mb-text-center"
           />
         </div>
         <button
@@ -70,8 +73,9 @@
             type="number"
             :value="sides.bottom"
             @input="onSideInput('bottom', $event.target.value)"
+            @wheel="handleNumberWheel"
             :min="min" :max="max" :step="step"
-            class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1 mb-text-sm mb-text-gray-900"
+            class="olo-num-input mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1 mb-text-sm mb-text-gray-900 mb-text-center"
           />
         </div>
         <div>
@@ -80,8 +84,9 @@
             type="number"
             :value="sides.left"
             @input="onSideInput('left', $event.target.value)"
+            @wheel="handleNumberWheel"
             :min="min" :max="max" :step="step"
-            class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1 mb-text-sm mb-text-gray-900"
+            class="olo-num-input mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1 mb-text-sm mb-text-gray-900 mb-text-center"
           />
         </div>
       </div>
@@ -92,6 +97,7 @@
 <script setup>
 import { t } from '@/i18n';
 import { ref, computed, watch } from 'vue';
+import { handleNumberWheel } from '@/utils/numberInputWheel';
 
 const props = defineProps({
   modelValue: { default: () => ({ top: 0, right: 0, bottom: 0, left: 0 }) },
@@ -179,3 +185,15 @@ function onReset() {
   emit('update:modelValue', { top: n, right: n, bottom: n, left: n });
 }
 </script>
+
+<style scoped>
+/* Hide native number spin-buttons: liberano ~12px utili a mostrare 3 cifre. */
+.olo-num-input::-webkit-outer-spin-button,
+.olo-num-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.olo-num-input {
+  -moz-appearance: textfield;
+}
+</style>

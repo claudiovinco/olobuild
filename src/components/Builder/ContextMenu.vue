@@ -77,8 +77,12 @@
           </button>
         </div>
         <template v-for="(cat, catIdx) in gridCategories" :key="catIdx">
-          <div class="olo-ctx-label">{{ cat.label }}</div>
-          <div class="olo-ctx-layouts">
+          <button class="olo-ctx-cat-toggle" :class="{ 'olo-ctx-cat-toggle--open': openCategory === catIdx }"
+            @click="toggleCategory(catIdx)" type="button">
+            <span class="olo-ctx-cat-label">{{ cat.label }}</span>
+            <svg class="olo-ctx-cat-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div v-show="openCategory === catIdx" class="olo-ctx-layouts">
             <button v-for="g in cat.items" :key="g.id" class="olo-ctx-layout"
               :class="{ 'olo-ctx-layout--active': isParentGrid && currentGridTemplate === g.id }"
               :title="g.name" @click="doChangeGrid(g.id)">
@@ -158,6 +162,8 @@ const rowLayouts = [
   { key: '50-50', label: '1/2 + 1/2', cols: [1, 1] },
   { key: '33-33-33', label: '1/3 x 3', cols: [1, 1, 1] },
   { key: '25-25-25-25', label: '1/4 x 4', cols: [1, 1, 1, 1] },
+  { key: '20-20-20-20-20', label: '1/5 x 5', cols: [1, 1, 1, 1, 1] },
+  { key: '16-16-16-16-16-16', label: '1/6 x 6', cols: [1, 1, 1, 1, 1, 1] },
   { key: '66-33', label: '2/3 + 1/3', cols: [2, 1] },
   { key: '33-66', label: '1/3 + 2/3', cols: [1, 2] },
   { key: '25-50-25', label: '1/4 + 1/2 + 1/4', cols: [1, 2, 1] },
@@ -171,6 +177,13 @@ const gridCategories = [
   { label: 'Masonry', items: gridMasonry },
   { label: 'Sidebar', items: gridSidebar },
 ];
+
+// Accordion: solo una categoria aperta alla volta. -1 = tutte chiuse.
+// Default: nessuna aperta — il menu resta compatto, l'utente sceglie.
+const openCategory = ref(-1);
+function toggleCategory(idx) {
+  openCategory.value = openCategory.value === idx ? -1 : idx;
+}
 
 const isParentGrid = computed(() => {
   return parentRow.value?.settings?.layout_mode === 'grid';
@@ -317,20 +330,31 @@ function doChangeLayout(layoutKey) {
   const row = parentRow.value;
   if (!row) { close(); return; }
 
-  // Switch back to flex mode if coming from grid
-  tilesStore.updateTile(tileId.value, 'settings.layout', layoutKey);
-  tilesStore.updateTile(tileId.value, 'settings.layout_mode', 'flex');
-  tilesStore.updateTile(tileId.value, 'settings.grid_template', '');
-  tilesStore.updateTile(tileId.value, 'settings.grid_columns', '');
-  tilesStore.updateTile(tileId.value, 'settings.grid_rows', '');
+  // Update DEVE finire sulla ROW, non sul tile cliccato col destro (che può
+  // essere una colonna figlia). updateTile aspetta un oggetto da mergiare
+  // in tile.settings, non un path-string come 'settings.layout' (quello faceva
+  // silently fail e il layout/layout_mode non venivano mai aggiornati).
+  tilesStore.updateTile(row.id, {
+    layout: layoutKey,
+    layout_mode: 'flex',
+    grid_template: '',
+    grid_columns: '',
+    grid_rows: '',
+  });
 
   // Ensure correct number of columns
-  const colCounts = { '100': 1, '50-50': 2, '33-33-33': 3, '25-25-25-25': 4, '66-33': 2, '33-66': 2, '25-50-25': 3, '20-60-20': 3, '20-20-20-20-20': 5, '16-16-16-16-16-16': 6 };
+  const colCounts = {
+    '100': 1, '50-50': 2, '33-33-33': 3, '25-25-25-25': 4,
+    '20-20-20-20-20': 5, '16-16-16-16-16-16': 6,
+    '66-33': 2, '33-66': 2, '25-50-25': 3, '20-60-20': 3,
+  };
   const widthMaps = {
     '100': ['1-1'], '50-50': ['1-2', '1-2'], '33-33-33': ['1-3', '1-3', '1-3'],
-    '25-25-25-25': ['1-4', '1-4', '1-4', '1-4'], '66-33': ['2-3', '1-3'],
-    '33-66': ['1-3', '2-3'], '25-50-25': ['1-4', '1-2', '1-4'],
-    '20-60-20': ['1-5', '3-5', '1-5'],
+    '25-25-25-25': ['1-4', '1-4', '1-4', '1-4'],
+    '20-20-20-20-20': ['1-5', '1-5', '1-5', '1-5', '1-5'],
+    '16-16-16-16-16-16': ['1-6', '1-6', '1-6', '1-6', '1-6', '1-6'],
+    '66-33': ['2-3', '1-3'], '33-66': ['1-3', '2-3'],
+    '25-50-25': ['1-4', '1-2', '1-4'], '20-60-20': ['1-5', '3-5', '1-5'],
   };
   const needed = colCounts[layoutKey] || 1;
   const widths = widthMaps[layoutKey] || ['1-1'];
@@ -522,6 +546,38 @@ defineExpose({ open, close });
   text-transform: uppercase;
   letter-spacing: 0.05em;
   font-weight: 600;
+}
+.olo-ctx-cat-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 6px 10px;
+  background: transparent;
+  border: 0;
+  color: #9ca3af;
+  cursor: pointer;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+  font-family: inherit;
+  transition: background 0.12s;
+}
+.olo-ctx-cat-toggle:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: #d1d5db;
+}
+.olo-ctx-cat-toggle--open {
+  color: #f3f4f6;
+}
+.olo-ctx-cat-chevron {
+  transition: transform 0.15s ease;
+  opacity: 0.6;
+}
+.olo-ctx-cat-toggle--open .olo-ctx-cat-chevron {
+  transform: rotate(180deg);
+  opacity: 1;
 }
 .olo-ctx-layouts {
   display: grid;

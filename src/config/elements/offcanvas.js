@@ -1,8 +1,14 @@
 import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
+import { t } from '@/i18n';
 
+/**
+ * Tile OffCanvas — split CONTENUTO/STILE.
+ *   fields[]      → trigger (visibility/testo/icona/selector esterno), posizione, transition, overlay toggle, close button toggle
+ *   styleFields[] → dimensioni pannello, colori pannello/overlay/close, ombra, bordo
+ */
 export default {
   type: 'offcanvas',
-  name: 'Off-Canvas',
+  name: t('Off-Canvas'),
   icon: 'dashicons-slides',
   category: 'interactive',
   hasChildren: true,
@@ -28,45 +34,51 @@ export default {
     border_hover_duration: 300,
     ...borderEffectDefaults,
   },
+
   fields: [
-    { type: 'separator', label: 'Trigger' },
-    { key: 'show_trigger', label: 'Mostra pulsante trigger', type: 'toggle' },
-    { key: 'trigger_text', label: 'Testo trigger', type: 'text',
+    { key: 'show_trigger', label: t('Mostra pulsante trigger'), type: 'toggle' },
+    { key: 'trigger_text', label: t('Testo trigger'), type: 'text',
       condition: { field: 'show_trigger', value: true } },
-    { key: 'trigger_icon', label: 'Icona trigger', type: 'icon',
+    { key: 'trigger_icon', label: t('Icona trigger'), type: 'icon',
       condition: { field: 'show_trigger', value: true } },
-    { key: 'trigger_selector', label: 'Selettore CSS trigger esterno', type: 'text' },
+    { key: 'trigger_selector', label: t('Selettore CSS trigger esterno'), type: 'text' },
 
-    { type: 'separator', label: 'Pannello' },
-    { key: 'position', label: 'Posizione', type: 'select', options: [
-      { value: 'left', label: 'Sinistra' },
-      { value: 'right', label: 'Destra' },
-      { value: 'top', label: 'Alto' },
-      { value: 'bottom', label: 'Basso' },
+    { type: 'separator', label: t('Pannello — Comportamento') },
+    { key: 'position', label: t('Posizione'), type: 'select', options: [
+      { value: 'left', label: t('Sinistra') },
+      { value: 'right', label: t('Destra') },
+      { value: 'top', label: t('Alto') },
+      { value: 'bottom', label: t('Basso') },
     ]},
-    { key: 'transition', label: 'Transizione', type: 'select', options: [
-      { value: 'slide', label: 'Slide' },
-      { value: 'push', label: 'Push' },
-      { value: 'reveal', label: 'Reveal' },
+    { key: 'transition', label: t('Transizione'), type: 'select', options: [
+      { value: 'slide', label: t('Slide') },
+      { value: 'push', label: t('Push') },
+      { value: 'reveal', label: t('Reveal') },
     ]},
-    { key: 'width', label: 'Larghezza (px)', type: 'range', min: 200, max: 600, step: 10 },
-    { key: 'height', label: 'Altezza (px)', type: 'range', min: 200, max: 600, step: 10 },
-    { key: 'bg_color', label: 'Sfondo pannello', type: 'color' },
-    { key: 'text_color', label: 'Colore testo', type: 'color' },
 
-    { type: 'separator', label: 'Overlay' },
-    { key: 'overlay', label: 'Mostra overlay', type: 'toggle' },
-    { key: 'overlay_color', label: 'Colore overlay', type: 'color',
+    { type: 'separator', label: t('Overlay & chiusura') },
+    { key: 'overlay', label: t('Mostra overlay'), type: 'toggle' },
+    { key: 'close_button', label: t('Pulsante chiudi'), type: 'toggle' },
+  ],
+
+  styleFields: [
+    { type: 'separator', label: t('Pannello — Dimensione & colori') },
+    { key: 'width', label: t('Larghezza (px)'), type: 'range', min: 200, max: 600, step: 10 },
+    { key: 'height', label: t('Altezza (px)'), type: 'range', min: 200, max: 600, step: 10 },
+    { key: 'bg_color', label: t('Sfondo pannello'), type: 'color' },
+    { key: 'text_color', label: t('Colore testo'), type: 'color' },
+
+    { type: 'separator', label: t('Overlay — Aspetto') },
+    { key: 'overlay_color', label: t('Colore overlay'), type: 'color',
       condition: { field: 'overlay', value: true } },
-    { key: 'overlay_opacity', label: 'Opacita overlay (%)', type: 'range', min: 0, max: 100, step: 5,
+    { key: 'overlay_opacity', label: t('Opacità overlay (%)'), type: 'range', min: 0, max: 100, step: 5,
       condition: { field: 'overlay', value: true } },
 
-    { type: 'separator', label: 'Chiusura' },
-    { key: 'close_button', label: 'Pulsante chiudi', type: 'toggle' },
-    { key: 'close_color', label: 'Colore pulsante chiudi', type: 'color',
+    { type: 'separator', label: t('Chiusura — Aspetto') },
+    { key: 'close_color', label: t('Colore pulsante chiudi'), type: 'color',
       condition: { field: 'close_button', value: true } },
 
-    shadowField,
+    ...shadowField,
     ...borderFields(),
   ],
 };

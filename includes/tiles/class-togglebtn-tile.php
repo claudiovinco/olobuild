@@ -238,13 +238,15 @@ class Olo_ToggleBtn_Tile extends Olo_Tile_Base {
         });
         </script>
         <?php
-        // Border system
+        // Border system — applicato al <button class="{uid}"> (pulsante visibile),
+        // NON al wrapper esterno {uid}-wrap.
+        $btn_sel           = ".{$uid}";
         $border_css        = $this->build_border_css( $s['border'] ?? [] );
-        $border_hover_css  = $this->build_border_hover_css( ".{$uid}-wrap", $s['border'] ?? [], $s['border_hover'] ?? [], intval( $s['border_hover_duration'] ?? 300 ) );
-        $border_effect_css = $this->build_border_effect_css( ".{$uid}-wrap", $s['border'] ?? [], $s );
+        $border_hover_css  = $this->build_border_hover_css( $btn_sel, $s['border'] ?? [], $s['border_hover'] ?? [], intval( $s['border_hover_duration'] ?? 300 ) );
+        $border_effect_css = $this->build_border_effect_css( $btn_sel, $s['border'] ?? [], $s );
         if ( $border_css || $border_hover_css || $border_effect_css ) {
             echo '<style>';
-            if ( $border_css ) echo ".{$uid}-wrap{{$border_css}}";
+            if ( $border_css ) echo "{$btn_sel}{{$border_css}}";
             echo $border_hover_css . $border_effect_css . '</style>';
         }
         return ob_get_clean();

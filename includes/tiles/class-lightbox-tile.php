@@ -13,7 +13,13 @@ class Olo_Lightbox_Tile extends Olo_Tile_Base {
     public function render( $settings ) {
         $items   = $settings['items'] ?? [];
         $uid = 'olo-lb-' . wp_rand( 10000, 99999 );
-        if ( empty( $items ) ) return '';
+        $builder_mode = ! empty( $settings['_builder_mode'] );
+        // In builder mode mostriamo sempre un'anteprima (placeholder vuoti inclusi)
+        // così l'utente vede dove cliccare per aggiungere immagini.
+        if ( empty( $items ) ) {
+            if ( ! $builder_mode ) return '';
+            $items = [ [ 'id' => 'placeholder', 'type' => 'image', 'url' => '', 'thumb' => '', 'title' => '', 'caption' => '' ] ];
+        }
 
         $cols    = absint( $settings['columns'] ?? 3 );
         $gap     = absint( $settings['gap'] ?? 15 );
@@ -26,7 +32,8 @@ class Olo_Lightbox_Tile extends Olo_Tile_Base {
         $ratio_map = [ '1:1' => '100%', '4:3' => '75%', '16:9' => '56.25%', 'auto' => '' ];
         $padding = $ratio_map[ $ratio ] ?? '100%';
 
-        $html = '<div class="olo-lightbox-grid ' . esc_attr( $uid ) . '" uk-lightbox="animation: ' . esc_attr( $anim ) . '"'
+        $preset_id = isset( $settings['preset'] ) ? sanitize_key( $settings['preset'] ) : 'custom';
+        $html = '<div class="olo-lightbox-grid ' . esc_attr( $uid ) . ' olo-lb-preset-' . esc_attr( $preset_id ) . '" uk-lightbox="animation: ' . esc_attr( $anim ) . '"'
               . ' style="display:grid;grid-template-columns:repeat(' . $cols . ',1fr);gap:' . $gap . 'px">';
 
         foreach ( $items as $item ) {
@@ -36,22 +43,41 @@ class Olo_Lightbox_Tile extends Olo_Tile_Base {
             $title = esc_attr( $item['title'] ?? '' );
             $cap   = esc_html( $item['caption'] ?? '' );
 
-            if ( empty( $url ) ) continue;
+            // Frontend: skippa items vuoti. Builder: render placeholder visivo.
+            if ( empty( $url ) && ! $builder_mode ) continue;
 
             $src = $thumb ?: $url;
             $data_cap = $caption && $cap ? ' data-caption="' . $cap . '"' : '';
 
-            $html .= '<a href="' . $url . '" data-type="' . esc_attr( $type ) . '"' . $data_cap . ' class="olo-lb-item"'
-                   . ' style="display:block;position:relative;overflow:hidden;border-radius:' . $radius . 'px">';
+            if ( $url ) {
+                $html .= '<a href="' . $url . '" data-type="' . esc_attr( $type ) . '"' . $data_cap . ' class="olo-lb-item"'
+                       . ' style="display:block;position:relative;overflow:hidden;border-radius:' . $radius . 'px">';
+            } else {
+                $html .= '<div class="olo-lb-item olo-lb-item--empty"'
+                       . ' style="display:block;position:relative;overflow:hidden;border-radius:' . $radius . 'px;background:#F3F4F6">';
+            }
 
             if ( $padding ) {
                 $html .= '<div style="padding-bottom:' . $padding . ';position:relative">';
-                $html .= '<img src="' . $src . '" alt="' . $title . '" loading="lazy" decoding="async"'
-                       . ' style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover" />';
+                if ( $url || $src ) {
+                    $html .= '<img src="' . $src . '" alt="' . $title . '" loading="lazy" decoding="async"'
+                           . ' style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover" />';
+                } else {
+                    // Placeholder SVG inline (icona immagine grigia su sfondo neutro)
+                    $html .= '<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#9CA3AF">'
+                           . '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>'
+                           . '</div>';
+                }
                 $html .= '</div>';
             } else {
-                $html .= '<img src="' . $src . '" alt="' . $title . '" loading="lazy" decoding="async"'
-                       . ' style="width:100%;display:block" />';
+                if ( $url || $src ) {
+                    $html .= '<img src="' . $src . '" alt="' . $title . '" loading="lazy" decoding="async"'
+                           . ' style="width:100%;display:block" />';
+                } else {
+                    $html .= '<div style="aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;color:#9CA3AF">'
+                           . '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>'
+                           . '</div>';
+                }
             }
 
             // Hover overlay
@@ -69,7 +95,7 @@ class Olo_Lightbox_Tile extends Olo_Tile_Base {
                 $html .= '<div class="olo-lb-cap' . $lc_cls . '" style="position:absolute;bottom:0;left:0;right:0;padding:6px 10px;background:rgba(0,0,0,0.6);color:#fff;font-size:12px"' . $lc_data . '>' . $cap . '</div>';
             }
 
-            $html .= '</a>';
+            $html .= $url ? '</a>' : '</div>';
         }
 
         $html .= '</div>';

@@ -132,6 +132,18 @@ class Olo_Unsplash {
             ] );
         }
 
+        // Hotlink mode: se download_local=false, ritorna URL diretto Unsplash senza sideload.
+        $behavior = olo_stockmedia_behavior();
+        if ( empty( $behavior['download_local'] ) ) {
+            return rest_ensure_response( [
+                'id'       => 0,
+                'url'      => $regular_url,
+                'alt'      => $alt,
+                'caption'  => $photographer ? 'Photo by ' . $photographer . ' on Unsplash' : '',
+                'hotlink'  => true,
+            ] );
+        }
+
         // 2. Scarica il file temporaneo
         require_once ABSPATH . 'wp-admin/includes/file.php';
         require_once ABSPATH . 'wp-admin/includes/media.php';
@@ -140,6 +152,15 @@ class Olo_Unsplash {
         $tmp_file = download_url( $regular_url, 30 );
         if ( is_wp_error( $tmp_file ) ) {
             return new WP_Error( 'download_failed', $tmp_file->get_error_message(), [ 'status' => 502 ] );
+        }
+
+        // Optimize: converti in WebP se richiesto
+        if ( ! empty( $behavior['optimize_on_download'] ) ) {
+            $webp = olo_convert_to_webp( $tmp_file, 82 );
+            if ( $webp && $webp !== $tmp_file ) {
+                @unlink( $tmp_file );
+                $tmp_file = $webp;
+            }
         }
 
         // Validate MIME type
@@ -154,10 +175,11 @@ class Olo_Unsplash {
         }
 
         // 3. Crea attachment nel WP Media Library
-        $filename  = 'unsplash-' . $photo_id . '.jpg';
+        $is_webp   = str_ends_with( $tmp_file, '.webp' );
+        $filename  = 'unsplash-' . $photo_id . ( $is_webp ? '.webp' : '.jpg' );
         $file_data = [
             'name'     => $filename,
-            'type'     => 'image/jpeg',
+            'type'     => $is_webp ? 'image/webp' : 'image/jpeg',
             'tmp_name' => $tmp_file,
             'error'    => 0,
             'size'     => filesize( $tmp_file ),

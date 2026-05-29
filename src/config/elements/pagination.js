@@ -1,16 +1,26 @@
 
-import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared.js';
+import { t } from '@/i18n';
+
+/**
+ * Tile Pagination — split CONTENUTO/STILE.
+ *   fields[]      → modalità (numerata/prev-next/both), show_first_last, prev/next text
+ *   styleFields[] → preset, bg, typo, alignment, gap/padding/font/radius/border, colori (testo/sfondo/bordo/attivo), border
+ */
 export default {
   type: 'pagination',
-  name: 'Paginazione',
+  name: t('Paginazione'),
   icon: 'dashicons-ellipsis',
   category: 'navigation',
   defaults: {
+    bg: { type: 'none' },
+    typography_preset: '',
+    preset: 'custom',
     style: 'both',
     alignment: 'center',
     show_first_last: false,
-    prev_text: '\u00ab Precedente',
-    next_text: 'Successivo \u00bb',
+    prev_text: '« Precedente',
+    next_text: 'Successivo »',
     gap: '8',
     button_padding: '8 16',
     text_color: '',
@@ -28,38 +38,67 @@ export default {
     border_hover_duration: 300,
     ...borderEffectDefaults,
   },
+
   fields: [
-    { type: 'separator', label: 'Stile' },
-    { key: 'style', label: 'Modalit\u00e0', type: 'select', options: [
-      { value: 'numbered', label: 'Solo numeri' },
-      { value: 'prev-next', label: 'Solo Prec/Succ' },
-      { value: 'both', label: 'Numeri + Prec/Succ' },
+    { key: 'style', label: t('Modalità'), type: 'select', options: [
+      { value: 'numbered', label: t('Solo numeri') },
+      { value: 'prev-next', label: t('Solo Prec/Succ') },
+      { value: 'both', label: t('Numeri + Prec/Succ') },
     ]},
-    { key: 'alignment', label: 'Allineamento', type: 'select', options: [
-      { value: 'left', label: 'Sinistra' },
-      { value: 'center', label: 'Centro' },
-      { value: 'right', label: 'Destra' },
+    { key: 'show_first_last', label: t('Mostra Primo/Ultimo'), type: 'toggle' },
+    { key: 'prev_text', label: t('Testo Precedente'), type: 'text' },
+    { key: 'next_text', label: t('Testo Successivo'), type: 'text' },
+  ],
+
+  styleFields: [
+    { type: 'separator', label: t('Preset stilistico') },
+    { key: 'preset', label: t('Stile'), type: 'select', options: [
+      { value: 'modern-pills',    label: t('Modern Pills') },
+      { value: 'minimal-thin',    label: t('Minimal Thin') },
+      { value: 'magazine-bold',   label: t('Magazine Bold') },
+      { value: 'circle-numbers',  label: t('Circle Numbers') },
+      { value: 'compact-text',    label: t('Compact Text') },
+      { value: 'glass-pills',     label: t('Glass Pills') },
+      { value: 'neon-numbers',    label: t('Neon Numbers') },
+      { value: 'brutalist-block', label: t('Brutalist Block') },
+      { value: 'gradient-pills',  label: t('Gradient Pills') },
+      { value: 'sticker-pages',   label: t('Sticker Pages') },
+      { value: 'retro-terminal',  label: t('Retro Terminal') },
+      { value: 'tilt-3d',         label: t('3D Tilt') },
+      { value: 'custom',          label: t('Personalizzato') },
     ]},
-    { key: 'show_first_last', label: 'Mostra Primo/Ultimo', type: 'toggle' },
-    { key: 'prev_text', label: 'Testo Precedente', type: 'text' },
-    { key: 'next_text', label: 'Testo Successivo', type: 'text' },
+    { type: 'separator', label: t('Tipografia') },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
+    { type: 'typography', label: t('Numero'),
+      presetKey: 'typography_preset',
+      responsiveKeys: ['size'],
+      keys: {
+        size:  'font_size',
+        color: 'text_color',
+      },
+      sizeMin: 10, sizeMax: 24,
+    },
 
-    { type: 'separator', label: 'Dimensioni' },
-    { key: 'gap', label: 'Distanza tra pulsanti (px)', type: 'range', min: 0, max: 24, step: 2 },
-    { key: 'button_padding', label: 'Padding pulsanti (px)', type: 'text' },
-    { key: 'font_size', label: 'Dimensione testo (px)', type: 'range', min: 10, max: 24, step: 1 },
-    { key: 'border_radius', label: 'Raggio bordo (px)', type: 'border-radius' },
-    { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
-    { key: 'border_width', label: 'Spessore bordo (px)', type: 'range', min: 0, max: 4, step: 1 },
+    { type: 'separator', label: t('Allineamento') },
+    { key: 'alignment', label: t('Allineamento'), type: 'select', options: [
+      { value: 'left', label: t('Sinistra') },
+      { value: 'center', label: t('Centro') },
+      { value: 'right', label: t('Destra') },
+    ]},
 
-    { type: 'separator', label: 'Colori' },
-    { key: 'text_color', label: 'Colore testo', type: 'color' },
-    { key: 'background_color', label: 'Sfondo pulsanti', type: 'color' },
-    { key: 'border_color', label: 'Colore bordo', type: 'color' },
-    { key: 'hover_background', label: 'Sfondo hover', type: 'color' },
-    { key: 'active_color', label: 'Colore testo pagina attiva', type: 'color' },
-    { key: 'active_text_color', label: 'Testo pagina attiva', type: 'color' },
-    { key: 'active_background', label: 'Sfondo pagina attiva', type: 'color' },
+    { type: 'separator', label: t('Dimensioni') },
+    { key: 'gap', label: t('Distanza tra pulsanti (px)'), type: 'range', min: 0, max: 24, step: 2 },
+    { key: 'button_padding', label: t('Padding pulsanti (px)'), type: 'text' },
+    withHover({ key: 'border_radius', label: t('Raggio bordo (px)'), type: 'border-radius' }),
+    { key: 'border_width', label: t('Spessore bordo (px)'), type: 'range', min: 0, max: 4, step: 1 },
+
+    { type: 'separator', label: t('Colori') },
+    withHover({ key: 'background_color', label: t('Sfondo pulsanti'), type: 'color' }, { hoverKey: 'hover_background' }),
+    { key: 'border_color', label: t('Colore bordo'), type: 'color' },
+    { key: 'active_color', label: t('Colore testo pagina attiva'), type: 'color' },
+    { key: 'active_text_color', label: t('Testo pagina attiva'), type: 'color' },
+    { key: 'active_background', label: t('Sfondo pagina attiva'), type: 'color' },
+
     ...borderFields(),
   ],
 };

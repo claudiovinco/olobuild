@@ -1,0 +1,26 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://olotheme.com/#org",
+      "name": "OLOtheme",
+      "url": "https://olotheme.com/",
+      "logo": "https://olotheme.com/wp-content/uploads/2026/03/olotheme-1000-orizz.png",
+      "description": "Suite WordPress modulare: page builder gratis, prenotazioni multi-verticale, multilingua nativo, virtual tour, e-learning.",
+      "slogan": "Un telaio, cinque prodotti, nessuna catena.",
+      "sameAs": ["https://github.com/olotheme"]
+    },
+    {
+      "@type": "SoftwareApplication",
+      "name": "OLObuild",
+      "applicationCategory": "DesignApplication",
+      "operatingSystem": "WordPress 5.8+",
+      "description": "Page builder olonico con 187 tile, GPL v3.",
+      "offers": [
+        {"@type": "Offer", "name": "OLObuild Free", "price": "0", "priceCurrency": "EUR", "availability": "https://schema.org/InStock"},
+        {"@type": "Offer", "name": "OLObuild Pro · Lancio", "price": "29", "priceCurrency": "EUR", "availability": "https://schema.org/InStock", "priceValidUntil": "2026-12-31"}
+      ]
+    }
+  ]
+}

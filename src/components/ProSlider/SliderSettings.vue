@@ -16,9 +16,9 @@
             <option value="gradient">Gradiente</option>
           </select>
         </div>
-        <div v-if="globalBg.type === 'color'">
+        <div v-if="globalBg.type === 'color'" class="mb-w-48">
           <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">Colore</label>
-          <input type="color" :value="globalBg.color" @input="updateGlobalBg('color', $event.target.value)" class="mb-w-8 mb-h-8 mb-rounded mb-border-0 mb-cursor-pointer" />
+          <FieldColor :modelValue="globalBg.color" @update:modelValue="updateGlobalBg('color', $event)" />
         </div>
         <div v-if="globalBg.type === 'image'" class="mb-flex mb-gap-2 mb-items-end">
           <div>
@@ -37,13 +37,13 @@
           </div>
         </div>
         <template v-if="globalBg.type === 'gradient'">
-          <div>
+          <div class="mb-w-48">
             <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">Da</label>
-            <input type="color" :value="globalBg.gradientFrom" @input="updateGlobalBg('gradientFrom', $event.target.value)" class="mb-w-8 mb-h-8 mb-rounded mb-border-0 mb-cursor-pointer" />
+            <FieldColor :modelValue="globalBg.gradientFrom" @update:modelValue="updateGlobalBg('gradientFrom', $event)" />
           </div>
-          <div>
+          <div class="mb-w-48">
             <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">A</label>
-            <input type="color" :value="globalBg.gradientTo" @input="updateGlobalBg('gradientTo', $event.target.value)" class="mb-w-8 mb-h-8 mb-rounded mb-border-0 mb-cursor-pointer" />
+            <FieldColor :modelValue="globalBg.gradientTo" @update:modelValue="updateGlobalBg('gradientTo', $event)" />
           </div>
           <div>
             <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-0.5">Angolo</label>
@@ -62,6 +62,7 @@
 
 <script setup>
 import { ref, computed } from 'vue';
+import FieldColor from '../Builder/fields/FieldColor.vue';
 
 const props = defineProps({
   settings: { type: Object, required: true },

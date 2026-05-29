@@ -7,6 +7,7 @@ class Olo_Toc_Tile extends Olo_Tile_Base {
     protected $icon     = 'dashicons-list-view';
     protected $category = 'navigation';
     protected $defaults = [
+        'preset' => 'custom',
         'title'            => 'Sommario',
         'max_depth'        => '3',
         'list_style'       => 'numbered',
@@ -61,7 +62,7 @@ class Olo_Toc_Tile extends Olo_Tile_Base {
         .<?php echo $uid; ?> .olo-toc-item a.olo-toc-active { font-weight: 700; }
         <?php endif; ?>
         </style>
-        <nav class="olo-toc <?php echo $uid; ?>" id="<?php echo $uid; ?>">
+        <nav class="olo-toc <?php echo $uid; ?> olo-toc-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" id="<?php echo $uid; ?>">
             <?php if (!empty($s['title'])) : ?>
                 <?php list( $tt_cls, $tt_data ) = $this->tfx_attrs( $s, 'title', $s['title'] ); ?>
                 <div class="olo-toc-title<?php echo $tt_cls; ?>"<?php echo $tt_data; ?>><?php echo esc_html($s['title']); ?></div>

@@ -11,6 +11,7 @@ class Olo_Postnavigation_Tile extends Olo_Tile_Base {
     protected $icon     = 'dashicons-arrow-left-alt';
     protected $category = 'navigation';
     protected $defaults = [
+        'preset' => 'custom',
         'show_thumbnail'  => true,
         'show_label'      => true,
         'prev_label'      => 'Precedente',
@@ -141,7 +142,7 @@ class Olo_Postnavigation_Tile extends Olo_Tile_Base {
                 border-radius: <?php echo $radius; ?>;
                 overflow: hidden;
                 flex-shrink: 0;
-                background: var(--olo-color-secondary, #1F2937);
+                background: #1F2937;
             }
             .<?php echo $uid; ?> .olo-pnav-thumb img {
                 width: 100%;
@@ -162,7 +163,7 @@ class Olo_Postnavigation_Tile extends Olo_Tile_Base {
                 }
             }
         </style>
-        <nav class="olo-postnavigation <?php echo esc_attr( $uid ); ?>" aria-label="<?php echo esc_attr( olo_t( 'Navigazione articoli' ) ); ?>">
+        <nav class="olo-postnavigation <?php echo esc_attr( $uid ); ?> olo-pnav-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" aria-label="<?php echo esc_attr( olo_t( 'Navigazione articoli' ) ); ?>">
             <?php if ( $prev_post ) :
                 $prev_url   = get_permalink( $prev_post );
                 $prev_title = mb_strimwidth( get_the_title( $prev_post ), 0, $title_len, '...' );

@@ -197,6 +197,14 @@ const rowLayouts = [
 ];
 
 // Module icons (same SVGs from StructureTree + extras)
+// ── Registry icone tile (1 di 3) ──────────────────────────────────────────
+// Esistono TRE set di icone tile, specializzati per contesto e NON unificabili
+// in un solo dizionario (gli SVG differiscono per dimensione/formato):
+//   1. QUI moduleIcon()              → 24×24 espanso, card del pannello Inserisci
+//   2. BuilderSidebar.tileIcons      → 24×24 shorthand (w=/h=/vb=…), card sidebar
+//   3. StructureTree.nodeIcon()      → 14×14 path semplificati, albero struttura
+// Invariante da mantenere: le CHIAVI (i tipi tile) devono restare allineate nei
+// tre punti. Quando aggiungi un tile, registra la sua icona in tutti e tre.
 var _iconCache = {};
 function moduleIcon(type) {
   if (_iconCache[type]) return _iconCache[type];
@@ -427,9 +435,9 @@ function moduleIcon(type) {
   return svg;
 }
 
-function open(sectionIndex) {
+function open(sectionIndex, initialTab) {
   insertAtIndex.value = sectionIndex != null ? sectionIndex : tilesStore.canvasTiles.length;
-  activeTab.value = 'module';
+  activeTab.value = (initialTab === 'row' || initialTab === 'library') ? initialTab : 'module';
   searchQuery.value = '';
   visible.value = true;
   nextTick(() => {

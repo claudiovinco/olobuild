@@ -21,26 +21,18 @@
     </div>
 
     <!-- Solid color -->
+    <!-- v1.0.74 — rimosso lo slider "Opacità sfondo": era ridondante con l'Alfa
+         dentro FieldColor (entrambi producono background-color rgba). Il
+         default color_opacity:100 resta nei dati e il backend lo applica come
+         no-op; i template legacy con color_opacity != 100 continuano a
+         funzionare ma non sono più modificabili dall'inspector — l'utente
+         migra usando l'Alfa del color picker. -->
     <div v-if="bg.type === 'solid'" class="mb-space-y-2">
       <label class="mb-block mb-text-[10px] mb-text-gray-400">{{ t('Colore') }}</label>
       <FieldColor
         :modelValue="bg.color || '#ffffff'"
         @update:modelValue="updateField('color', $event)"
       />
-      <div>
-        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Opacità sfondo') }}</label>
-        <div class="mb-flex mb-items-center mb-gap-2">
-          <input
-            type="range"
-            :value="bg.color_opacity ?? 100"
-            @input="updateField('color_opacity', parseInt($event.target.value))"
-            min="0" max="100" step="5"
-            class="mb-flex-1"
-          />
-          <span class="mb-text-xs mb-text-gray-400 mb-w-10 mb-text-right">{{ bg.color_opacity ?? 100 }}%</span>
-        </div>
-        <p class="mb-text-[9px] mb-text-gray-500 mb-mt-0.5">{{ t('Solo lo sfondo diventa trasparente, non il contenuto') }}</p>
-      </div>
       <!-- Preview swatch -->
       <div
         class="mb-h-6 mb-rounded-md mb-border mb-border-gray-600"
@@ -50,15 +42,12 @@
 
     <!-- Gradient (multi-stop) -->
     <div v-if="bg.type === 'gradient'" class="mb-space-y-3">
+      <!-- FieldGradient include già una preview interna; nessun bisogno di
+           duplicarla qui (creava le due barre "morte" non cliccabili). -->
       <FieldGradient
         :modelValue="gradientModel"
         @update:modelValue="onGradientUpdate"
       />
-      <!-- Gradient preview -->
-      <div
-        class="mb-h-6 mb-rounded-md mb-border mb-border-gray-600"
-        :style="{ background: gradientPreview }"
-      ></div>
     </div>
 
     <!-- Image -->
@@ -522,19 +511,9 @@ const patternPreviewStyle = computed(() => {
 
 const bg = computed(() => ({ ...defaultBg, ...props.modelValue }));
 
-const solidPreview = computed(() => {
-  const hex = bg.value.color || '#ffffff';
-  const opacity = (bg.value.color_opacity ?? 100) / 100;
-  return hexToRgba(hex, opacity);
-});
-
-function hexToRgba(hex, alpha) {
-  const h = hex.replace('#', '');
-  const rp = parseInt(h.substring(0, 2), 16); const r = isNaN(rp) ? 0 : rp;
-  const gp = parseInt(h.substring(2, 4), 16); const g = isNaN(gp) ? 0 : gp;
-  const bp = parseInt(h.substring(4, 6), 16); const b = isNaN(bp) ? 0 : bp;
-  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-}
+// v1.0.77 — preview usa direttamente bg.color (può essere #hex, rgba(...) o var(--olo-color-*)),
+// l'Alfa è già parte del valore emesso da FieldColor. color_opacity è legacy no-op.
+const solidPreview = computed(() => bg.value.color || '#ffffff');
 
 // Gradient multi-stop model (backward-compat with old gradient_from/gradient_to)
 const gradientModel = computed(() => {

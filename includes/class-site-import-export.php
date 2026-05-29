@@ -211,7 +211,7 @@ class Olo_Site_Import_Export {
             'type'     => $type,
             'content'  => $data,
             'settings' => $styles,
-            'status'   => 'publish',
+            'status'   => 'published',
         ] );
 
         if ( ! $new_id ) {
@@ -271,7 +271,7 @@ class Olo_Site_Import_Export {
                 'type'     => $type,
                 'content'  => $tpl_data,
                 'settings' => $styles,
-                'status'   => 'publish',
+                'status'   => 'published',
             ] );
 
             if ( $new_id ) {
@@ -285,11 +285,19 @@ class Olo_Site_Import_Export {
             }
         }
 
-        // Import global styles
-        if ( ! empty( $json['global_styles'] ) ) {
+        // Import global styles — SEMPRE attraverso sanitize_styles per evitare
+        // stored XSS via bundle malevolo. `olo_styles` viene poi interpolato in
+        // <style> da Olo_Style_System::generate_css() (es. var(--olo-color-X)),
+        // quindi un valore tipo "</style><script>..." persisterebbe su ogni pagina.
+        if ( ! empty( $json['global_styles'] ) && is_array( $json['global_styles'] ) ) {
             $existing = get_option( 'olo_styles', [] );
             if ( empty( $existing ) ) {
-                update_option( 'olo_styles', $json['global_styles'] );
+                $sanitized_styles = class_exists( 'Olo_Style_System' )
+                    ? ( new Olo_Style_System() )->sanitize_styles( $json['global_styles'] )
+                    : [];
+                if ( ! empty( $sanitized_styles ) ) {
+                    update_option( 'olo_styles', $sanitized_styles );
+                }
             }
         }
 
@@ -505,10 +513,22 @@ class Olo_Site_Import_Export {
     public function render_admin_page() {
         $db        = new Olo_Database();
         $templates = $db->list_templates();
+        $tpl_count = isset( $templates['total'] ) ? (int) $templates['total'] : count( $templates['items'] ?? [] );
         ?>
-        <?php Olo_Builder::page_shell_open( 'Import / Export' ); ?>
+        <?php Olo_Builder::cockpit_shell_open( '<b>' . esc_html__( 'Import / Export', 'olobuild' ) . '</b>' ); ?>
+        <main class="olo-cockpit-main olo-cockpit-legacy">
+            <?php
+            echo Olo_Builder::cockpit_page_head( [
+                'title' => __( 'Import / Export', 'olobuild' ),
+                'sub'   => sprintf(
+                    /* translators: %d: total templates */
+                    __( 'Esporta singoli template, intero sito o backup completo. %d template disponibili.', 'olobuild' ),
+                    (int) $tpl_count
+                ),
+            ] );
+            ?>
 
-            <div id="olo-ie-msg"></div>
+            <div id="olo-ie-msg" style="margin-top:16px"></div>
 
             <div class="olo-grid-2">
 
@@ -519,14 +539,14 @@ class Olo_Site_Import_Export {
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
                         </div>
                         <div>
-                            <h3>Esporta</h3>
-                            <p>Scarica template e media in formato JSON</p>
+                            <h3><?php esc_html_e( 'Esporta', 'olobuild' ); ?></h3>
+                            <p><?php esc_html_e( 'Scarica template e media in formato JSON', 'olobuild' ); ?></p>
                         </div>
                     </div>
                     <div class="olo-card-body">
                         <div class="olo-field-row">
                             <div class="olo-field-info">
-                                <label>Singolo template</label>
+                                <label><?php esc_html_e( 'Singolo template', 'olobuild' ); ?></label>
                             </div>
                             <div class="olo-field-input-wrap">
                                 <select id="olo-export-tpl" class="olo-field-input">
@@ -538,24 +558,24 @@ class Olo_Site_Import_Export {
                         </div>
                         <div class="olo-check-row">
                             <input type="checkbox" id="olo-export-media" checked />
-                            <label for="olo-export-media">Includi media (immagini, video, PDF)</label>
+                            <label for="olo-export-media"><?php esc_html_e( 'Includi media (immagini, video, PDF)', 'olobuild' ); ?></label>
                         </div>
                         <div class="olo-actions" style="margin-top:12px">
                             <button class="olo-btn-save" id="olo-export-btn">
                                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                                Esporta Template
+                                <?php esc_html_e( 'Esporta Template', 'olobuild' ); ?>
                             </button>
                         </div>
 
                         <div style="border-top:1px solid #f0f0f0;margin:20px 0"></div>
 
                         <div class="olo-field-info" style="margin-bottom:12px">
-                            <label>Esporta tutto il sito</label>
-                            <div class="olo-field-hint">Include tutti i template, header, footer e stili globali</div>
+                            <label><?php esc_html_e( 'Esporta tutto il sito', 'olobuild' ); ?></label>
+                            <div class="olo-field-hint"><?php esc_html_e( 'Include tutti i template, header, footer e stili globali', 'olobuild' ); ?></div>
                         </div>
                         <button class="olo-btn-reset" id="olo-export-site-btn">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-                            Esporta Sito Completo
+                            <?php esc_html_e( 'Esporta Sito Completo', 'olobuild' ); ?>
                         </button>
                     </div>
                 </div>
@@ -567,8 +587,8 @@ class Olo_Site_Import_Export {
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                         </div>
                         <div>
-                            <h3>Importa</h3>
-                            <p>Carica un file .json esportato da Olobuild</p>
+                            <h3><?php esc_html_e( 'Importa', 'olobuild' ); ?></h3>
+                            <p><?php esc_html_e( 'Carica un file .json esportato da Olobuild', 'olobuild' ); ?></p>
                         </div>
                     </div>
                     <div class="olo-card-body">
@@ -577,12 +597,12 @@ class Olo_Site_Import_Export {
                         </div>
                         <div class="olo-check-row">
                             <input type="checkbox" id="olo-import-media" checked />
-                            <label for="olo-import-media">Importa media (scarica e ricarica immagini)</label>
+                            <label for="olo-import-media"><?php esc_html_e( 'Importa media (scarica e ricarica immagini)', 'olobuild' ); ?></label>
                         </div>
                         <div class="olo-actions" style="margin-top:12px">
                             <button class="olo-btn-orange" id="olo-import-btn" disabled>
                                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                                Importa
+                                <?php esc_html_e( 'Importa', 'olobuild' ); ?>
                             </button>
                         </div>
 
@@ -764,7 +784,8 @@ class Olo_Site_Import_Export {
                 });
             })();
             </script>
-        <?php Olo_Builder::page_shell_close(); ?>
+        </main>
+        <?php Olo_Builder::cockpit_shell_close(); ?>
         <?php
     }
 }

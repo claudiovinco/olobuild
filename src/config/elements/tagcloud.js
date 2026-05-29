@@ -1,12 +1,26 @@
-import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared';
+import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared';
+import { t } from '@/i18n';
 
+/**
+ * Tile Tag Cloud — split CONTENUTO/STILE (regola universale Olobuild).
+ *   fields[]      → taxonomy, custom_taxonomy, max_tags, orderby, order, show_count,
+ *                   layout, columns (griglia), link_underline
+ *   styleFields[] → bg, typography_preset, preset, textEffectsFields, gap (spaziatura layout),
+ *                   tipografia (min_font, max_font, font_weight), colori (text_color +
+ *                   hover_color, background_color + hover_background), border_radius,
+ *                   padding, borderFields
+ */
 export default {
   type: 'tagcloud',
-  name: 'Tag Cloud',
+  name: t('Tag Cloud'),
   icon: 'dashicons-tag',
   category: 'dynamic',
   defaults: {
+    bg: { type: 'none' },
+    typography_preset: '',
+    preset: 'custom',
     ...textEffectsDefaults,
+    text_effect_target: 'all',
     taxonomy: 'post_tag',
     custom_taxonomy: '',
     min_font: '12',
@@ -32,56 +46,84 @@ export default {
     border_hover_duration: 300,
     ...borderEffectDefaults,
   },
+
+  // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
-    { key: 'taxonomy', label: 'Tassonomia', type: 'select', options: [
-      { value: 'post_tag', label: 'Tag' },
-      { value: 'category', label: 'Categorie' },
-      { value: 'custom', label: 'Tassonomia personalizzata' },
+    { key: 'taxonomy', label: t('Tassonomia'), type: 'select', options: [
+      { value: 'post_tag', label: t('Tag') },
+      { value: 'category', label: t('Categorie') },
+      { value: 'custom', label: t('Tassonomia personalizzata') },
     ]},
-    { key: 'custom_taxonomy', label: 'Slug tassonomia', type: 'text', placeholder: 'es. product_tag',
+    { key: 'custom_taxonomy', label: t('Slug tassonomia'), type: 'text', placeholder: t('es. product_tag'),
       condition: { field: 'taxonomy', operator: '==', value: 'custom' } },
-    { key: 'max_tags', label: 'Numero massimo tag', type: 'range', min: 5, max: 100, step: 5 },
-    { key: 'orderby', label: 'Ordina per', type: 'select', options: [
-      { value: 'name', label: 'Nome' },
-      { value: 'count', label: 'Conteggio' },
+    { key: 'max_tags', label: t('Numero massimo tag'), type: 'range', min: 5, max: 100, step: 5 },
+    { key: 'orderby', label: t('Ordina per'), type: 'select', options: [
+      { value: 'name', label: t('Nome') },
+      { value: 'count', label: t('Conteggio') },
     ]},
-    { key: 'order', label: 'Ordine', type: 'select', options: [
-      { value: 'ASC', label: 'Crescente' },
-      { value: 'DESC', label: 'Decrescente' },
+    { key: 'order', label: t('Ordine'), type: 'select', options: [
+      { value: 'ASC', label: t('Crescente') },
+      { value: 'DESC', label: t('Decrescente') },
     ]},
-    { key: 'show_count', label: 'Mostra conteggio', type: 'toggle' },
-    { type: 'separator', label: 'Layout' },
-    { key: 'layout', label: 'Layout', type: 'select', options: [
-      { value: 'cloud', label: 'Cloud (flex)' },
-      { value: 'list', label: 'Lista verticale' },
-      { value: 'grid', label: 'Griglia' },
+    { key: 'show_count', label: t('Mostra conteggio'), type: 'toggle' },
+
+    { type: 'separator', label: t('Layout') },
+    { key: 'layout', label: t('Layout'), type: 'select', options: [
+      { value: 'cloud', label: t('Cloud (flex)') },
+      { value: 'list', label: t('Lista verticale') },
+      { value: 'grid', label: t('Griglia') },
     ]},
-    { key: 'columns', label: 'Colonne (griglia)', type: 'range', min: 2, max: 6, step: 1,
+    { key: 'columns', label: t('Colonne (griglia)'), type: 'range', min: 2, max: 6, step: 1,
       condition: { field: 'layout', operator: '==', value: 'grid' } },
-    { key: 'gap', label: 'Gap (px)', type: 'range', min: 0, max: 24, step: 2 },
-    { type: 'separator', label: 'Tipografia' },
-    { key: 'min_font', label: 'Dimensione min (px)', type: 'range', min: 8, max: 24, step: 1 },
-    { key: 'max_font', label: 'Dimensione max (px)', type: 'range', min: 16, max: 60, step: 1 },
-    { key: 'font_weight', label: 'Peso font', type: 'select', options: [
-      { value: '400', label: 'Normale (400)' },
-      { value: '500', label: 'Medium (500)' },
-      { value: '600', label: 'Semibold (600)' },
-      { value: '700', label: 'Bold (700)' },
+    { key: 'link_underline', label: t('Sottolineatura link'), type: 'toggle' },
+  ],
+
+  // ─── STILE ─────────────────────────────────────────────────
+  styleFields: [
+    { type: 'separator', label: t('Preset stilistico') },
+    { key: 'preset', label: t('Stile'), type: 'select', options: [
+      { value: 'cloud-weighted',  label: t('Cloud Weighted') },
+      { value: 'pills-uniform',   label: t('Pills Uniform') },
+      { value: 'minimal-line',    label: t('Minimal Line') },
+      { value: 'magazine-tags',   label: t('Magazine Tags') },
+      { value: 'compact-chips',   label: t('Compact Chips') },
+      { value: 'glass-pills',     label: t('Glass Pills') },
+      { value: 'neon-tags',       label: t('Neon Tags') },
+      { value: 'brutalist-stamp', label: t('Brutalist Stamp') },
+      { value: 'gradient-tags',   label: t('Gradient Tags') },
+      { value: 'sticky-notes',    label: t('Sticky Notes') },
+      { value: 'retro-terminal',  label: t('Retro Terminal') },
+      { value: 'tilt-3d',         label: t('3D Tilt') },
+      { value: 'custom',          label: t('Personalizzato') },
     ]},
-    { key: 'link_underline', label: 'Sottolineatura link', type: 'toggle' },
-    { type: 'separator', label: 'Colori' },
-    { key: 'text_color', label: 'Colore testo', type: 'color' },
-    { key: 'hover_color', label: 'Colore testo hover', type: 'color' },
-    { key: 'background_color', label: 'Sfondo tag', type: 'color' },
-    { key: 'hover_background', label: 'Sfondo hover', type: 'color' },
-    { type: 'separator', label: 'Stile tag' },
-    { key: 'border_radius', label: 'Arrotondamento (px)', type: 'border-radius' },
-    { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
-    { key: 'padding', label: 'Padding (px)', type: 'spacing', max: 32 },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
 
     ...textEffectsFields([
-      { value: 'tag', label: 'Etichetta tag' },
+      { value: 'all', label: t('Tutti i tag') },
     ]),
+
+    { type: 'separator', label: t('Spaziatura layout') },
+    { key: 'gap', label: t('Gap (px)'), type: 'range', min: 0, max: 24, step: 2 },
+
+    { type: 'separator', label: t('Tipografia') },
+    { type: 'typography', label: t('Tag'),
+      presetKey: 'typography_preset',
+      keys: {
+        weight:    'font_weight',
+        color:     'text_color',
+        colorHover: 'hover_color',
+      },
+    },
+    { key: 'min_font', label: t('Dimensione min (px)'), type: 'range', min: 8, max: 24, step: 1 },
+    { key: 'max_font', label: t('Dimensione max (px)'), type: 'range', min: 16, max: 60, step: 1 },
+
+    { type: 'separator', label: t('Colori') },
+    withHover({ key: 'background_color', label: t('Sfondo tag'),   type: 'color' }, { hoverKey: 'hover_background' }),
+
+    { type: 'separator', label: t('Stile tag') },
+    withHover({ key: 'border_radius', label: t('Arrotondamento (px)'), type: 'border-radius' }),
+    { key: 'padding', label: t('Padding (px)'), type: 'spacing', max: 32 },
+
     ...borderFields(),
   ],
 };

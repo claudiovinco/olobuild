@@ -11,6 +11,7 @@ class Olo_Slideshow_Tile extends Olo_Tile_Base {
     protected $icon     = 'dashicons-slides';
     protected $category = 'media';
     protected $defaults = [
+        'preset' => 'custom',
         'slides' => [
             [ 'id' => 's-1', 'image' => '', 'title' => 'Prima slide', 'subtitle' => 'Prima slide', 'link' => '' ],
         ],
@@ -34,6 +35,22 @@ class Olo_Slideshow_Tile extends Olo_Tile_Base {
         'border_effect_color2'    => '',
         'border_effect_angle'     => 135,
         'border_effect_speed'     => 4,
+        'effect_color'            => '',
+        'effect_intensity'        => 'medium',
+        'effect_speed'            => 0,
+        'wow_disable'             => false,
+        'wow_backdrop_blur'       => 0,
+        'wow_backdrop_saturate'   => 100,
+        'wow_border_style'        => 'solid',
+        'wow_font_family'         => 'inherit',
+        'wow_rotation'            => 0,
+        'wow_perspective'         => 0,
+        'wow_tilt_x'              => 0,
+        'wow_glow_pulse'          => false,
+        'wow_title_glow'          => false,
+        'wow_scanlines'           => false,
+
+        'wow_terminal_prompt' => false,
     ];
 
     public function get_controls() {
@@ -47,6 +64,13 @@ class Olo_Slideshow_Tile extends Olo_Tile_Base {
             [ 'key' => 'text_color',     'type' => 'color',  'label' => 'Text Color' ],
             [ 'key' => 'transition',     'type' => 'select', 'label' => 'Transition' ],
         ];
+    }
+
+    private function get_preset_extra_css( $preset_id, $id, $s = [] ) {
+        // @deprecated v1.0.73 — refactor profondo: i preset audaci ora settano direttamente
+        // i field standard tramite TILE_PRESETS in BuilderInspector.vue, e i field wow_* via
+        // build_wow_effects_css(). Nessun !important, ogni proprietà personalizzabile.
+        return '';
     }
 
     public function render( $settings ) {
@@ -63,14 +87,14 @@ class Olo_Slideshow_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
-        <div id="<?php echo esc_attr( $id ); ?>" class="olo-slideshow" uk-slideshow="autoplay: <?php echo $s['autoplay'] ? 'true' : 'false'; ?>; autoplay-interval: <?php echo $speed; ?>; animation: <?php echo esc_attr( $transition ); ?>" style="height:<?php echo $h; ?>px;">
+        <div id="<?php echo esc_attr( $id ); ?>" class="olo-slideshow olo-ss-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" uk-slideshow="autoplay: <?php echo $s['autoplay'] ? 'true' : 'false'; ?>; autoplay-interval: <?php echo $speed; ?>; animation: <?php echo esc_attr( $transition ); ?>" style="height:<?php echo $h; ?>px;">
             <div class="uk-slideshow-items" style="height:<?php echo $h; ?>px;">
                 <?php foreach ( $slides as $slide ) : ?>
                     <div>
                         <?php if ( ! empty( $slide['image'] ) ) : ?>
                             <?php echo Olo_Tile_Utils::img_srcset( absint( $slide['image_id'] ?? 0 ), $slide['image'], $slide['title'] ?? '', '', 'full', 'uk-cover' ); ?>
                         <?php else : ?>
-                            <div style="position:absolute;inset:0;background:var(--olo-color-secondary, #1F2937);" uk-cover></div>
+                            <div style="position:absolute;inset:0;background:#1F2937;" uk-cover></div>
                         <?php endif; ?>
                         <?php $sl_bg = $this->safe_color_css( $s['overlay_color'] ); $sl_fg = $this->safe_color_css( $s['text_color'] ); ?>
                         <div class="uk-position-cover" style="<?php if ( $sl_bg ) echo 'background:' . $sl_bg . ';'; ?>opacity:0.45;"></div>
@@ -79,6 +103,10 @@ class Olo_Slideshow_Tile extends Olo_Tile_Base {
                         list( $sss_cls, $sss_data ) = $this->tfx_attrs( $s, 'subtitle', $slide['subtitle'] ?? '' );
                         ?>
                         <div class="uk-position-center uk-text-center" style="<?php if ( $sl_fg ) echo 'color:' . $sl_fg . ';'; ?>z-index:1;padding:24px;">
+                            <?php $widget_html = $this->render_widget_template( $slide['widget_template_id'] ?? 0 ); ?>
+                            <?php if ( $widget_html ) : ?>
+                                <div class="olo-item-widget"><?php echo $widget_html; ?></div>
+                            <?php endif; ?>
                             <?php if ( ! empty( $slide['title'] ) ) : ?>
                                 <div class="olo-ss-title<?php echo $sst_cls; ?>" style="font-size:2em;font-weight:700;margin-bottom:8px;"<?php echo $sst_data; ?>><?php echo esc_html( $slide['title'] ); ?></div>
                             <?php endif; ?>
@@ -103,6 +131,11 @@ class Olo_Slideshow_Tile extends Olo_Tile_Base {
         $tfx_css = $this->tfx_css( $s, '#' . $id );
         if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
         $this->tfx_print_script();
+
+        // v1.0.73 — refactor profondo: get_preset_extra_css svuotato, ora i preset audaci
+        // settano i field standard tramite TILE_PRESETS.slideshow + helper wow_*.
+        $preset_css = $this->build_wow_effects_css( $s, '#' . $id, '.olo-slide-title' );
+        if ( $preset_css ) echo '<style>' . $preset_css . '</style>';
                 // Border system
         $border_css        = $this->build_border_css( $s['border'] ?? [] );
         $border_hover_css  = $this->build_border_hover_css( ".{$id}", $s['border'] ?? [], $s['border_hover'] ?? [], intval( $s['border_hover_duration'] ?? 300 ) );

@@ -13,6 +13,14 @@
 import { computed } from 'vue';
 import { getPatternCSS } from '@/utils/patternCSS';
 
+// v1.0.55 — Tile ATOMICHE: il loro wrapper esterno (sezione/colonna container)
+// NON deve MAI ricevere bg_color/border-radius/shadow dal preset/settings/style della
+// tile stessa. Sono elementi inline/atomici (button, icon, divider, spacer, togglebtn):
+// il bg deve essere VISIVAMENTE solo sull'elemento, non sull'area circostante.
+// Regola HARD validata con utente — è la differenza tra "wrapper colorato enorme attorno
+// al pulsante piccolo" (rotto) e "pulsante visibile sul background della pagina" (corretto).
+export const ATOMIC_TILE_TYPES = new Set(['button', 'icon', 'divider', 'spacer', 'togglebtn']);
+
 // ────────────────────────────────────────────
 // Funzioni imperative (usate anche internamente dai computed)
 // ────────────────────────────────────────────
@@ -20,11 +28,26 @@ import { getPatternCSS } from '@/utils/patternCSS';
 /**
  * Risolve l'oggetto bg effettivo di un nodo (tile o section/row).
  * Gestisce il fallback da bg_color legacy.
+ *
+ * Fallback su node.settings.bg: i tile element che dichiarano il field `bg` in
+ * fields[]/styleFields[] del config (es. panel, accordion, button) lo salvano in
+ * tile.settings.bg (StyleFieldsRenderer emette type:'setting'). Il PHP renderer
+ * fa già lo stesso fallback (class-frontend-renderer.php:2674). Senza, la preview
+ * builder mostra il bg vuoto mentre il frontend lo applica al wrapper.
+ *
+ * v1.0.55 — Tile atomiche (button/icon/divider/spacer/togglebtn): wrapper SEMPRE
+ * trasparente, ignora qualsiasi bg/bg_color in style/settings.
  */
 export function resolveNodeBg(nodeOrStyle) {
-  const s = nodeOrStyle?.style ?? nodeOrStyle ?? {};
-  if (s.bg && s.bg.type && s.bg.type !== 'none') return s.bg;
-  if (s.bg_color) return { type: 'solid', color: s.bg_color };
+  const node = nodeOrStyle ?? {};
+  // Hard guard: tile atomiche → wrapper trasparente sempre
+  if (node.type && ATOMIC_TILE_TYPES.has(node.type)) return { type: 'none' };
+  const style    = node.style    ?? node ?? {};
+  const settings = node.settings ?? {};
+  if (style.bg && style.bg.type && style.bg.type !== 'none') return style.bg;
+  if (settings.bg && settings.bg.type && settings.bg.type !== 'none') return settings.bg;
+  if (style.bg_color) return { type: 'solid', color: style.bg_color };
+  if (settings.bg_color) return { type: 'solid', color: settings.bg_color };
   return { type: 'none' };
 }
 

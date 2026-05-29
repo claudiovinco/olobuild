@@ -11,6 +11,7 @@ class Olo_Hotspot_Tile extends Olo_Tile_Base {
     protected $icon     = 'dashicons-location-alt';
     protected $category = 'interactive';
     protected $defaults = [
+        'preset' => 'custom',
         'image'           => '',
         'image_height'    => '400',
         'markers'         => [
@@ -190,7 +191,7 @@ class Olo_Hotspot_Tile extends Olo_Tile_Base {
             }
         </style>
 
-        <div class="<?php echo esc_attr( $uid ); ?>" id="<?php echo esc_attr( $uid ); ?>">
+        <div class="<?php echo esc_attr( $uid ); ?> olo-hs-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" id="<?php echo esc_attr( $uid ); ?>">
             <?php if ( $image ) : ?>
                 <img src="<?php echo $image; ?>" alt="" loading="lazy" />
             <?php else : ?>

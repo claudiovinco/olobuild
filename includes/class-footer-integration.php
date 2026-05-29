@@ -51,6 +51,12 @@ class Olo_Footer_Integration {
             return $html;
         }
 
+        // Skip rendering quando il builder sta editando il template footer
+        // (evita doppio render del footer nel preview iframe).
+        if ( defined( 'OLO_BUILDER_EDITING_FOOTER' ) && OLO_BUILDER_EDITING_FOOTER ) {
+            return '';
+        }
+
         $footer_id = $this->resolve_active_footer();
 
         if ( ! $footer_id ) {

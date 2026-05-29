@@ -134,14 +134,9 @@ class Olo_Cookie_Consent {
      * ═══════════════════════════════════════════════════ */
 
     public function add_menu() {
-        add_submenu_page(
-            'olobuild',
-            __( 'Cookie Consent', 'olobuild' ),
-            __( 'Cookie Consent', 'olobuild' ),
-            'manage_options',
-            'olo-cookie-consent',
-            [ $this, 'render_admin_page' ]
-        );
+        // v1.0.30 — pagina migrata in ?page=olobuilder-settings&tab=cookie
+        // Submenu rimosso: i campi vivono ora in Configurazione → Cookie Consent & GDPR.
+        // La classe resta attiva per il banner frontend e il blocco script pre-consenso.
     }
 
     public function register_settings() {
@@ -241,20 +236,26 @@ class Olo_Cookie_Consent {
             'declaration' => __( 'Dichiarazione Cookie', 'olobuild' ),
             'consent_log' => __( 'Log Consensi', 'olobuild' ),
         ];
+        $subnav = [];
+        foreach ( $tabs as $slug => $label ) {
+            $subnav[] = [ 'slug' => $slug, 'label' => $label, 'href' => admin_url( 'admin.php?page=olo-cookie-consent&tab=' . $slug ) ];
+        }
+        $banner_active = ! empty( $opts['enabled'] );
         ?>
-        <?php Olo_Builder::page_shell_open( 'Cookie Consent', 'olo-ck-page' ); ?>
-
-            <div class="olo-admin-tabs">
-                <?php foreach ( $tabs as $slug => $label ) : ?>
-                    <a href="<?php echo esc_url( admin_url( 'admin.php?page=olo-cookie-consent&tab=' . $slug ) ); ?>"
-                       class="olo-admin-tab <?php echo $tab === $slug ? 'active' : ''; ?>">
-                        <?php echo esc_html( $label ); ?>
-                    </a>
-                <?php endforeach; ?>
-            </div>
+        <?php Olo_Builder::cockpit_shell_open( '<b>' . esc_html__( 'Cookie Consent', 'olobuild' ) . '</b>' ); ?>
+        <main class="olo-cockpit-main olo-cockpit-legacy olo-ck-page">
+            <?php
+            echo Olo_Builder::cockpit_page_head( [
+                'title' => __( 'Cookie Consent', 'olobuild' ),
+                'sub'   => $banner_active
+                    ? __( 'Banner attivo · GDPR-compliant · log consensi tracciato.', 'olobuild' )
+                    : __( 'Banner disattivato. Configura testi, aspetto e categorie cookie per attivarlo.', 'olobuild' ),
+            ] );
+            echo Olo_Builder::cockpit_subnav( $subnav, $tab );
+            ?>
 
             <?php if ( $tab !== 'consent_log' ) : ?>
-            <form method="post" action="options.php" class="olo-ck-form">
+            <form method="post" action="options.php" class="olo-ck-form" style="margin-top:16px">
                 <?php settings_fields( 'olo_cookie_group' ); ?>
                 <?php $this->render_hidden_fields( $opts, $tab ); ?>
 
@@ -269,17 +270,20 @@ class Olo_Cookie_Consent {
                 }
                 ?>
 
-                <div class="olo-actions">
-                    <button type="submit" class="olo-btn-save">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-                        <?php esc_html_e( 'Salva impostazioni', 'olobuild' ); ?>
-                    </button>
+                <div class="olo-actions" style="margin-top:24px">
+                    <?php echo Olo_Builder::cockpit_button( [
+                        'label'   => __( 'Salva impostazioni', 'olobuild' ),
+                        'variant' => 'pri',
+                        'type'    => 'submit',
+                        'icon'    => '<path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/>',
+                    ] ); ?>
                 </div>
             </form>
             <?php else : ?>
-                <?php $this->render_tab_consent_log(); ?>
+                <div style="margin-top:16px"><?php $this->render_tab_consent_log(); ?></div>
             <?php endif; ?>
-        <?php Olo_Builder::page_shell_close(); ?>
+        </main>
+        <?php Olo_Builder::cockpit_shell_close(); ?>
         <?php
     }
 

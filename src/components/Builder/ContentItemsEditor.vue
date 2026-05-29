@@ -128,21 +128,11 @@
               />
 
               <!-- color -->
-              <div v-else-if="field.type === 'color'" class="cie-color-wrap">
-                <input
-                  type="color"
-                  :value="element[field.key] || '#000000'"
-                  @input="updateField(index, field.key, $event.target.value)"
-                  class="cie-color-swatch"
-                />
-                <input
-                  type="text"
-                  :value="element[field.key] || ''"
-                  @change="updateField(index, field.key, $event.target.value)"
-                  class="cie-input"
-                  placeholder="#000000"
-                />
-              </div>
+              <FieldColor
+                v-else-if="field.type === 'color'"
+                :modelValue="element[field.key] || '#000000'"
+                @update:modelValue="updateField(index, field.key, $event)"
+              />
 
               <!-- select -->
               <select
@@ -151,7 +141,7 @@
                 @change="updateField(index, field.key, $event.target.value)"
                 class="cie-input"
               >
-                <option v-for="opt in (field.options || [])" :key="opt.value" :value="opt.value">
+                <option v-for="opt in resolveSelectOptions(field)" :key="opt.value" :value="opt.value">
                   {{ opt.label }}
                 </option>
               </select>
@@ -186,18 +176,29 @@
                 @click="openPlacer(index)"
               >{{ t('&#9678; Posiziona su PDF') }}</button>
 
-              <!-- toggle (checkbox) -->
-              <label
+              <!-- toggle (switch standard FieldToggle, allineato all'InspectorField) -->
+              <FieldToggle
                 v-else-if="field.type === 'toggle'"
-                class="cie-toggle"
-              >
-                <input
-                  type="checkbox"
-                  :checked="!!element[field.key]"
-                  @change="updateField(index, field.key, $event.target.checked)"
-                />
-                <span class="cie-toggle-label">{{ element[field.key] ? 'Sì' : 'No' }}</span>
-              </label>
+                :modelValue="!!element[field.key]"
+                @update:modelValue="updateField(index, field.key, $event)"
+              />
+
+              <!-- link (autocomplete pagine/post/CPT) -->
+              <FieldLink
+                v-else-if="field.type === 'link'"
+                :modelValue="element[field.key] || ''"
+                :placeholder="field.placeholder || ''"
+                :types="field.linkTypes || ''"
+                @update:modelValue="updateField(index, field.key, $event)"
+              />
+
+              <!-- background creativo unificato (solid/gradient/pattern/image/video/gallery) -->
+              <BackgroundControls
+                v-else-if="field.type === 'background'"
+                :modelValue="element[field.key] || { type: 'none' }"
+                :showParallax="field.showParallax !== false"
+                @update:modelValue="updateField(index, field.key, $event)"
+              />
 
               <!-- text (default) -->
               <input
@@ -277,6 +278,10 @@ import { t } from '@/i18n';
 import { ref, computed, watch } from 'vue';
 import draggable from 'vuedraggable';
 import RichTextEditor from './RichTextEditor.vue';
+import FieldColor from './fields/FieldColor.vue';
+import FieldLink from './fields/FieldLink.vue';
+import FieldToggle from './fields/FieldToggle.vue';
+import BackgroundControls from './BackgroundControls.vue';
 import DynamicQueryPanel from './DynamicQueryPanel.vue';
 import IconPicker from '../ProSlider/IconPicker.vue';
 import { useToast } from '@/composables/useToast';
@@ -302,7 +307,37 @@ const isDynamicQueryActive = computed(() => !!tileQuery.value?.enabled);
 const { openSingleImage } = useMediaPicker();
 
 const ensureArray = (v) => Array.isArray(v) ? v : [];
-const localItems = ref(JSON.parse(JSON.stringify(ensureArray(props.modelValue))));
+
+// Risolve le options di un sub-field di tipo 'select' supportando sia
+// `field.options` (statiche) sia `field.optionsSource` (dinamiche da oloData).
+// Mirror della logica in InspectorField.vue per i sub-field nei content-items.
+function resolveSelectOptions(field) {
+  if (Array.isArray(field.options) && field.options.length) return field.options;
+  if (!field.optionsSource) return [];
+  const md = window.oloData || {};
+  switch (field.optionsSource) {
+    case 'wpMenus':         return (md.wpMenus || []).map(m => ({ value: m.id, label: m.name }));
+    case 'postTypes':       return md.postTypes || [];
+    case 'taxonomies':      return md.taxonomies || [];
+    case 'templates':       return md.templateList || [];
+    case 'widgetTemplates': return md.widgetTemplates || [{ value: 0, label: '— Nessun widget —' }];
+    case 'wpPages':         return md.wpPages || [];
+    case 'serviceList':     return [{ value: '', label: '— Tutti i servizi —' }, ...(md.serviceList || [])];
+    case 'globalTypography':return md.globalTypography || [];
+    default:                return [];
+  }
+}
+
+// Ensure every item has a unique id. Without an id, expandedId === undefined
+// would match every id-less item at once and all of them would expand together.
+function _ensureIds(items) {
+  return items.map((item, idx) => {
+    if (item && item.id) return item;
+    return { ...item, id: 'ci-' + Date.now() + '-' + idx + '-' + Math.random().toString(36).substr(2, 5) };
+  });
+}
+
+const localItems = ref(_ensureIds(JSON.parse(JSON.stringify(ensureArray(props.modelValue)))));
 const expandedId = ref(null);
 const iconPickerTarget = ref(null);
 
@@ -322,7 +357,7 @@ watch(() => props.modelValue, (newVal) => {
   const safe = ensureArray(newVal);
   const incoming = JSON.stringify(safe);
   if (incoming !== JSON.stringify(localItems.value)) {
-    localItems.value = JSON.parse(incoming);
+    localItems.value = _ensureIds(JSON.parse(incoming));
   }
 }, { deep: true });
 
@@ -912,8 +947,14 @@ function removeItem(index) {
 .cie-icon-preview :deep(svg) {
   width: 18px;
   height: 18px;
-  fill: #555;
-  stroke: #555;
+  color: #555;
+  stroke: currentColor;
+}
+.cie-icon-preview :deep(svg:not([fill="none"])) {
+  fill: currentColor;
+}
+.cie-icon-preview :deep(svg [fill="none"]) {
+  fill: none;
 }
 .cie-icon-empty {
   color: #999;

@@ -130,8 +130,19 @@ function open() {
   document.body.appendChild(modalEl);
   modalEl.querySelector('[data-overlay]').onclick = close;
   modalEl.querySelector('[data-close]').onclick = close;
-  modalEl._onKey = e => { if (e.key === 'Escape') close(); };
+  const _focusSel = 'a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
+  modalEl._onKey = e => {
+    if (e.key === 'Escape') { close(); return; }
+    if (e.key !== 'Tab') return;
+    const f = modalEl.querySelectorAll(_focusSel);
+    if (!f.length) return;
+    const first = f[0], last = f[f.length - 1];
+    if (e.shiftKey) { if (document.activeElement === first) { e.preventDefault(); last.focus(); } }
+    else if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+  };
   document.addEventListener('keydown', modalEl._onKey);
+  const _first = modalEl.querySelector(_focusSel);
+  if (_first) _first.focus();
 
   fetchThemes();
 }

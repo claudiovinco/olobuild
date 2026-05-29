@@ -88,7 +88,7 @@ class Olo_Content_Tile extends Olo_Tile_Base {
         $heading_text = esc_html( wp_strip_all_tags( $s['heading'] ) );
         // Text content: supporta sia plain text (legacy) che HTML (da RichTextEditor)
         $text_raw = $s['text'] ?? '';
-        if ( preg_match( '/^\s*</', $text_raw ) ) {
+        if ( preg_match( '/<[a-z!\/][^>]*>/i', $text_raw ) ) {
             $text_content = wp_kses_post( $text_raw );
         } else {
             $text_content = nl2br( esc_html( $text_raw ) );

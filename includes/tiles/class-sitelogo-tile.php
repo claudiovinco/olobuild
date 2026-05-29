@@ -11,7 +11,7 @@ class Olo_SiteLogo_Tile extends Olo_Tile_Base {
     protected $icon     = 'dashicons-admin-home';
     protected $category = 'navigation';
     protected $defaults = [
-        'source'              => 'auto',
+        'source'              => 'custom_image',
         'custom_image'        => '',
         'dark_image'          => '',
         'dark_mode'           => 'none',

@@ -8,8 +8,8 @@
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
         </div>
         <div>
-          <h3>Presets</h3>
-          <p>Applica un set predefinito di stili con un click</p>
+          <h3>{{ t('Presets') }}</h3>
+          <p>{{ t('Applica un set predefinito di stili con un click') }}</p>
         </div>
       </div>
       <div class="olo-card-body">
@@ -27,7 +27,7 @@
 
         <!-- Custom presets -->
         <div v-if="stylesStore.customPresets.length > 0" class="olo-custom-presets">
-          <div class="olo-custom-presets-label">I tuoi preset</div>
+          <div class="olo-custom-presets-label">{{ t('I tuoi preset') }}</div>
           <div class="olo-presets-grid">
             <div
               v-for="cp in stylesStore.customPresets"
@@ -37,7 +37,7 @@
             >
               <span class="olo-preset-dot" :style="{ backgroundColor: (cp.style?.colors?.primary || '#888') }"></span>
               <span class="olo-preset-btn-name">{{ cp.name }}</span>
-              <button class="olo-preset-delete" @click.stop="deletePreset(cp.id)" title="Elimina preset">
+              <button class="olo-preset-delete" @click.stop="deletePreset(cp.id)" :title="t('Elimina preset')">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
               </button>
             </div>
@@ -49,13 +49,13 @@
           <input
             v-model="newPresetName"
             type="text"
-            placeholder="Nome del preset..."
+            :placeholder="t('Nome del preset...')"
             class="olo-field-input olo-preset-name-input"
             @keyup.enter="savePreset"
           />
           <button @click="savePreset" class="olo-btn-add" :disabled="!newPresetName.trim()">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
-            Salva preset
+            {{ t('Salva preset') }}
           </button>
         </div>
       </div>
@@ -69,8 +69,8 @@
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/></svg>
           </div>
           <div>
-            <h3>Colori</h3>
-            <p>Palette colori principale del sito</p>
+            <h3>{{ t('Colori') }}</h3>
+            <p>{{ t('Palette colori principale del sito') }}</p>
           </div>
         </div>
         <svg :class="['olo-chevron', sections.colors && 'open']" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
@@ -96,8 +96,8 @@
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
           </div>
           <div>
-            <h3>Colori Dark Mode</h3>
-            <p>Sovrascrivono i colori base quando il dark mode &egrave; attivo</p>
+            <h3>{{ t('Colori Dark Mode') }}</h3>
+            <p>{{ t('Sovrascrivono i colori base quando il dark mode è attivo') }}</p>
           </div>
         </div>
         <svg :class="['olo-chevron', sections.darkColors && 'open']" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
@@ -123,8 +123,8 @@
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
           </div>
           <div>
-            <h3>Tipografia</h3>
-            <p>Font, dimensioni e pesi del testo</p>
+            <h3>{{ t('Tipografia') }}</h3>
+            <p>{{ t('Font, dimensioni e pesi del testo') }}</p>
           </div>
         </div>
         <svg :class="['olo-chevron', sections.typo && 'open']" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
@@ -132,42 +132,42 @@
       <div v-show="sections.typo" class="olo-card-body">
         <div class="olo-fields-grid">
           <div class="olo-field-block">
-            <label>Font corpo</label>
+            <label>{{ t('Font corpo') }}</label>
             <FieldFontFamily
               :modelValue="stylesStore.typography.font_family"
               @update:modelValue="stylesStore.updateTypography('font_family', $event)"
             />
           </div>
           <div class="olo-field-block">
-            <label>Font titoli</label>
+            <label>{{ t('Font titoli') }}</label>
             <FieldFontFamily
               :modelValue="stylesStore.typography.font_family_heading"
               @update:modelValue="stylesStore.updateTypography('font_family_heading', $event)"
             />
           </div>
           <div class="olo-field-block">
-            <label>Dimensione base</label>
+            <label>{{ t('Dimensione font base') }}</label>
             <FieldText
               :modelValue="stylesStore.typography.font_size_base"
               @update:modelValue="stylesStore.updateTypography('font_size_base', $event)"
             />
           </div>
           <div v-for="i in 6" :key="'h' + i" class="olo-field-block">
-            <label>Dimensione H{{ i }}</label>
+            <label>{{ t('Dimensione') }} H{{ i }}</label>
             <FieldText
               :modelValue="stylesStore.typography['font_size_h' + i]"
               @update:modelValue="stylesStore.updateTypography('font_size_h' + i, $event)"
             />
           </div>
           <div class="olo-field-block">
-            <label>Interlinea</label>
+            <label>{{ t('Interlinea') }}</label>
             <FieldText
               :modelValue="stylesStore.typography.line_height"
               @update:modelValue="stylesStore.updateTypography('line_height', $event)"
             />
           </div>
           <div class="olo-field-block">
-            <label>Peso titoli</label>
+            <label>{{ t('Peso titoli') }}</label>
             <FieldSelect
               :modelValue="stylesStore.typography.font_weight_heading"
               :options="weightOptions"
@@ -186,8 +186,8 @@
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
           </div>
           <div>
-            <h3>Layout</h3>
-            <p>Bordi, contenitore e dimensioni generali</p>
+            <h3>{{ t('Layout') }}</h3>
+            <p>{{ t('Bordi, contenitore e dimensioni generali') }}</p>
           </div>
         </div>
         <svg :class="['olo-chevron', sections.layout && 'open']" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
@@ -195,53 +195,23 @@
       <div v-show="sections.layout" class="olo-card-body">
         <div class="olo-fields-grid">
           <div class="olo-field-block">
-            <label>Raggio bordi</label>
-            <FieldBorderRadius
+            <label>{{ t('Raggio bordi') }}</label>
+            <FieldBox mode="corners"
               :modelValue="parseBorderRadius(stylesStore.layout.border_radius)"
               @update:modelValue="stylesStore.updateLayout('border_radius', $event)"
             />
           </div>
           <div class="olo-field-block">
-            <label>Raggio bordi grande</label>
-            <FieldBorderRadius
+            <label>{{ t('Raggio bordi grande') }}</label>
+            <FieldBox mode="corners"
               :modelValue="parseBorderRadius(stylesStore.layout.border_radius_large)"
               @update:modelValue="stylesStore.updateLayout('border_radius_large', $event)"
             />
           </div>
-          <div class="olo-field-block">
-            <label>Larghezza max contenitore</label>
-            <FieldText
-              :modelValue="stylesStore.layout.container_max_width"
-              @update:modelValue="stylesStore.updateLayout('container_max_width', $event)"
-            />
-          </div>
         </div>
-      </div>
-    </div>
-
-    <!-- Scala Spaziatura -->
-    <div class="olo-card">
-      <button class="olo-card-head olo-card-toggle" @click="toggle('spacing')">
-        <div style="display:flex;align-items:flex-start;gap:14px">
-          <div class="olo-card-icon" style="background:#fdf0e8;color:#e8622a">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 3H3M21 21H3M12 7v10M8 7l4-4 4 4M8 17l4 4 4-4"/></svg>
-          </div>
-          <div>
-            <h3>Scala Spaziatura</h3>
-            <p>8 livelli di spacing globali (--olo-space-*)</p>
-          </div>
-        </div>
-        <svg :class="['olo-chevron', sections.spacing && 'open']" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
-      </button>
-      <div v-show="sections.spacing" class="olo-card-body">
-        <div class="olo-fields-grid">
-          <div v-for="(lbl, key) in spacingLabels" :key="key" class="olo-field-block">
-            <label>{{ lbl }}</label>
-            <FieldText
-              :modelValue="(stylesStore.styles.spacing || {})[key] || spacingDefaults[key]"
-              @update:modelValue="stylesStore.updateSpacing(key, $event)"
-            />
-          </div>
+        <div class="olo-moved-hint">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          <span>{{ t('Larghezza container e scala spacing sono ora in') }} <a href="#" @click.prevent="goToSpaziature">{{ t('Spaziature & layout') }}</a></span>
         </div>
       </div>
     </div>
@@ -254,8 +224,8 @@
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="6"/></svg>
           </div>
           <div>
-            <h3>Scala Border Radius</h3>
-            <p>Valori predefiniti dei bordi arrotondati</p>
+            <h3>{{ t('Scala Border Radius') }}</h3>
+            <p>{{ t('Valori predefiniti dei bordi arrotondati') }}</p>
           </div>
         </div>
         <svg :class="['olo-chevron', sections.radius && 'open']" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
@@ -281,8 +251,8 @@
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><rect x="6" y="6" width="18" height="18" rx="2" opacity=".3"/></svg>
           </div>
           <div>
-            <h3>Ombre Globali</h3>
-            <p>Box-shadow per i vari livelli di elevazione</p>
+            <h3>{{ t('Ombre Globali') }}</h3>
+            <p>{{ t('Box-shadow per i vari livelli di elevazione') }}</p>
           </div>
         </div>
         <svg :class="['olo-chevron', sections.shadows && 'open']" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
@@ -307,19 +277,19 @@
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
         </div>
         <div>
-          <h3>Design Tokens</h3>
-          <p>Esporta/importa tutti gli stili come JSON</p>
+          <h3>{{ t('Design Tokens') }}</h3>
+          <p>{{ t('Esporta/importa tutti gli stili come JSON') }}</p>
         </div>
       </div>
       <div class="olo-card-body">
         <div class="olo-token-actions">
           <button @click="stylesStore.exportDesignTokens()" class="olo-btn-token export">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            Esporta JSON
+            {{ t('Esporta JSON') }}
           </button>
           <button @click="importTokens" class="olo-btn-token import">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-            Importa JSON
+            {{ t('Importa JSON') }}
           </button>
         </div>
       </div>
@@ -333,8 +303,8 @@
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></svg>
           </div>
           <div>
-            <h3>Google Fonts</h3>
-            <p>Font caricati da Google Fonts CDN</p>
+            <h3>{{ t('Google Fonts') }}</h3>
+            <p>{{ t('Font caricati da Google Fonts CDN') }}</p>
           </div>
         </div>
         <svg :class="['olo-chevron', sections.fonts && 'open']" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
@@ -343,23 +313,23 @@
         <div class="olo-fonts-list">
           <div v-for="font in stylesStore.googleFonts" :key="font" class="olo-font-item">
             <span class="olo-font-name">{{ font }}</span>
-            <button @click="stylesStore.removeGoogleFont(font)" class="olo-font-remove" title="Rimuovi">
+            <button @click="stylesStore.removeGoogleFont(font)" class="olo-font-remove" :title="t('Rimuovi')">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             </button>
           </div>
-          <div v-if="!stylesStore.googleFonts?.length" class="olo-fonts-empty">Nessun font aggiunto</div>
+          <div v-if="!stylesStore.googleFonts?.length" class="olo-fonts-empty">{{ t('Nessun font aggiunto') }}</div>
         </div>
         <div class="olo-font-add">
           <input
             v-model="newFontName"
             type="text"
-            placeholder="Nome font (es. Inter, Poppins...)"
+            :placeholder="t('Nome font (es. Inter, Poppins...)')"
             class="olo-field-input"
             @keyup.enter="addFont"
           />
           <button @click="addFont" class="olo-btn-add" :disabled="!newFontName.trim()">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            Aggiungi
+            {{ t('Aggiungi') }}
           </button>
         </div>
       </div>
@@ -375,7 +345,7 @@
       >
         <svg v-if="!stylesStore.isSaving" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
         <span v-if="stylesStore.isSaving" class="olo-spinner"></span>
-        {{ stylesStore.isSaving ? 'Salvataggio...' : 'Salva stili' }}
+        {{ stylesStore.isSaving ? t('Salvataggio...') : t('Salva stili') }}
       </button>
       <button
         @click="stylesStore.resetStyles()"
@@ -383,7 +353,7 @@
         class="olo-btn-reset"
       >
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 105.42-8.37L1 10"/></svg>
-        Ripristina
+        {{ t('Ripristina') }}
       </button>
     </div>
   </div>
@@ -391,11 +361,12 @@
 
 <script setup>
 import { ref, reactive, inject } from 'vue';
+import { t } from '@/i18n';
 import { useStylesStore } from '@/stores/styles';
 import FieldColor from '../Builder/fields/FieldColor.vue';
 import FieldText from '../Builder/fields/FieldText.vue';
 import FieldSelect from '../Builder/fields/FieldSelect.vue';
-import FieldBorderRadius from '../Builder/fields/FieldBorderRadius.vue';
+import FieldBox from '../Builder/fields/FieldBox.vue';
 import FieldFontFamily from '../Builder/fields/FieldFontFamily.vue';
 
 const stylesStore = useStylesStore();
@@ -412,18 +383,18 @@ async function savePreset() {
   try {
     await stylesStore.saveCurrentAsPreset(name);
     newPresetName.value = '';
-    showToast('Preset salvato');
+    showToast(t('Preset salvato'));
   } catch {
-    showToast('Errore nel salvataggio del preset', 'error');
+    showToast(t('Errore nel salvataggio del preset'), 'error');
   }
 }
 
 async function deletePreset(id) {
   try {
     await stylesStore.deleteCustomPreset(id);
-    showToast('Preset eliminato');
+    showToast(t('Preset eliminato'));
   } catch {
-    showToast('Errore nell\'eliminazione del preset', 'error');
+    showToast(t('Errore nell\'eliminazione del preset'), 'error');
   }
 }
 
@@ -432,7 +403,6 @@ const sections = reactive({
   darkColors: false,
   typo: false,
   layout: false,
-  spacing: false,
   radius: false,
   shadows: false,
   fonts: false,
@@ -462,8 +432,6 @@ function parseBorderRadius(val) {
   return parseInt(s) || 0;
 }
 
-const spacingLabels = { xs: 'XS (4px)', sm: 'SM (8px)', md: 'MD (16px)', lg: 'LG (24px)', xl: 'XL (32px)', '2xl': '2XL (48px)', '3xl': '3XL (64px)', '4xl': '4XL (96px)' };
-const spacingDefaults = { xs: '4px', sm: '8px', md: '16px', lg: '24px', xl: '32px', '2xl': '48px', '3xl': '64px', '4xl': '96px' };
 const radiusLabels = { sm: 'Piccolo (4px)', md: 'Medio (8px)', lg: 'Grande (16px)', full: 'Pieno (9999px)' };
 const radiusDefaults = { sm: '4px', md: '8px', lg: '16px', full: '9999px' };
 const shadowLabels = { sm: 'Leggera', md: 'Media', lg: 'Forte', xl: 'Molto forte' };
@@ -480,10 +448,10 @@ function importTokens() {
       const text = await file.text();
       const tokens = JSON.parse(text);
       stylesStore.importDesignTokens(tokens);
-      showToast('Design tokens importati');
+      showToast(t('Design tokens importati'));
     } catch (err) {
       console.error('Import tokens error:', err);
-      showToast('Errore importazione', 'error');
+      showToast(t('Errore importazione'), 'error');
     }
   };
   input.click();
@@ -499,7 +467,13 @@ function addFont() {
 
 async function saveStyles() {
   await stylesStore.saveStyles();
-  showToast('Stili salvati con successo');
+  showToast(t('Stili salvati con successo'));
+}
+
+function goToSpaziature() {
+  const url = new URL(window.location.href);
+  url.searchParams.set('tab', 'spaziature');
+  window.location.href = url.toString();
 }
 </script>
 
@@ -756,6 +730,23 @@ async function saveStyles() {
   background: #fafafa;
   color: #1a1a1a;
 }
+
+/* ── Moved hint ── */
+.olo-moved-hint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+  padding: 10px 14px;
+  background: #fef8f0;
+  border: 1px dashed #fcd9b6;
+  border-radius: 8px;
+  font-size: 12.5px;
+  color: #92541a;
+}
+.olo-moved-hint svg { flex-shrink: 0; color: #e8622a; }
+.olo-moved-hint a { color: #c54a18; font-weight: 600; text-decoration: underline; cursor: pointer; }
+.olo-moved-hint a:hover { color: #8a3410; }
 
 /* ── Save disabled state ── */
 .olo-btn-save.disabled {

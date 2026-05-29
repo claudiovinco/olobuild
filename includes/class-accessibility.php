@@ -520,6 +520,37 @@ var first=m.querySelector('a[href],button:not([disabled]),input,select,textarea,
 if(first){first.focus()}
 }
 });
+/* Keep ARIA state in sync with UIkit interactive widgets.
+   UIkit toggles .uk-open / .uk-active classes but never updates ARIA,
+   so we mirror those into aria-expanded (accordion) and aria-selected (tabs). */
+function oloSyncAria(){
+var accs=document.querySelectorAll('.uk-accordion > li');
+accs.forEach(function(li){
+var t=li.querySelector(':scope > .uk-accordion-title');
+if(!t||t.__oloAria){return}
+t.__oloAria=1;
+var upd=function(){t.setAttribute('aria-expanded',li.classList.contains('uk-open')?'true':'false')};
+upd();
+new MutationObserver(upd).observe(li,{attributes:true,attributeFilter:['class']});
+});
+document.querySelectorAll('.uk-tab').forEach(function(tl){
+tl.setAttribute('role','tablist');
+tl.querySelectorAll(':scope > li').forEach(function(li){
+var a=li.querySelector('a');
+if(!a||a.__oloAria){return}
+a.__oloAria=1;
+a.setAttribute('role','tab');
+var upd=function(){a.setAttribute('aria-selected',li.classList.contains('uk-active')?'true':'false')};
+upd();
+new MutationObserver(upd).observe(li,{attributes:true,attributeFilter:['class']});
+});
+});
+document.querySelectorAll('.uk-switcher > li').forEach(function(li){
+if(!li.__oloAria){li.__oloAria=1;li.setAttribute('role','tabpanel')}
+});
+}
+oloSyncAria();
+document.addEventListener('DOMContentLoaded',oloSyncAria);
 })();
 </script>
         <?php

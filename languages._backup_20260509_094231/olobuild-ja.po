@@ -1,0 +1,3211 @@
+# Japanese translation for Olobuild
+# Copyright (C) 2026 Claudio
+# This file is distributed under the same license as the Olobuild plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: Olobuild 2.51.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-03-29 10:09+0000\n"
+"PO-Revision-Date: 2026-03-28\n"
+"Last-Translator: Claudio\n"
+"Language-Team: Japanese\n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: includes/class-accessibility.php:44
+msgid "Vai al contenuto principale"
+msgstr "メインコンテンツへスキップ"
+
+#: includes/class-analytics-tracking.php:76
+#: includes/class-analytics-tracking.php:77 includes/class-olo-builder.php:480
+msgid "Analytics"
+msgstr "アナリティクス"
+
+#: includes/class-analytics-tracking.php:139
+#: includes/class-cookie-consent.php:823 includes/class-cookie-consent.php:1355
+msgid "Provider"
+msgstr "プロバイダー"
+
+#: includes/class-analytics-tracking.php:140
+msgid "Eventi"
+msgstr "イベント"
+
+#: includes/class-analytics-tracking.php:141
+msgid "Impostazioni"
+msgstr "設定"
+
+#: includes/class-analytics-tracking.php:142
+#: includes/class-analytics-tracking.php:430
+msgid "Script personalizzati"
+msgstr "カスタムスクリプト"
+
+#: includes/class-analytics-tracking.php:146
+msgid "Analytics & Tracking"
+msgstr "アナリティクス & トラッキング"
+
+#: includes/class-analytics-tracking.php:173
+#: includes/class-cookie-consent.php:275
+#: includes/class-performance-settings.php:191
+#: includes/class-white-label.php:271 includes/class-white-label.php:308
+msgid "Salva impostazioni"
+msgstr "設定を保存"
+
+#: includes/class-analytics-tracking.php:218
+msgid ""
+"Measurement ID di GA4. Lo trovi in Amministrazione &rarr; Flussi di dati."
+msgstr "GA4のMeasurement ID。管理画面 &rarr; データストリームで確認できます。"
+
+#: includes/class-analytics-tracking.php:226
+msgid ""
+"Container ID di GTM. Se usi GTM per gestire GA4, non inserire anche il "
+"Measurement ID sopra."
+msgstr ""
+"GTMのContainer ID。GTMでGA4を管理している場合、上記のMeasurement IDは入力しな"
+"いでください。"
+
+#: includes/class-analytics-tracking.php:234
+msgid ""
+"Pixel ID di Meta/Facebook. Lo trovi in Events Manager &rarr; Impostazioni."
+msgstr ""
+"Meta/FacebookのPixel ID。イベントマネージャー &rarr; 設定で確認できます。"
+
+#: includes/class-analytics-tracking.php:242
+msgid "Project ID di Clarity. Heatmap e session recording gratuiti."
+msgstr "ClarityのProject ID。無料のヒートマップとセッション録画。"
+
+#: includes/class-analytics-tracking.php:250
+msgid "Site ID di Hotjar. Lo trovi in Settings &rarr; Sites & Organizations."
+msgstr "HotjarのSite ID。Settings &rarr; Sites & Organizationsで確認できます。"
+
+#: includes/class-analytics-tracking.php:263
+#: includes/class-global-popups.php:500
+#: includes/class-performance-settings.php:272
+#: includes/class-seo-redirects.php:679
+msgid "Attivo"
+msgstr "有効"
+
+#: includes/class-analytics-tracking.php:265
+#: includes/class-seo-redirects.php:681
+msgid "Non configurato"
+msgstr "未設定"
+
+#: includes/class-analytics-tracking.php:271
+msgid "ID"
+msgstr "ID"
+
+#: includes/class-analytics-tracking.php:291
+msgid "Click sui pulsanti"
+msgstr "ボタンクリック"
+
+#: includes/class-analytics-tracking.php:292
+msgid "Invio form"
+msgstr "フォーム送信"
+
+#: includes/class-analytics-tracking.php:293
+msgid "Riproduzione video"
+msgstr "動画再生"
+
+#: includes/class-analytics-tracking.php:294
+msgid "Profondità di scroll"
+msgstr "スクロール深度"
+
+#: includes/class-analytics-tracking.php:295
+msgid "Click su pricing CTA"
+msgstr "料金CTAクリック"
+
+#: includes/class-analytics-tracking.php:296
+msgid "Download file"
+msgstr "ファイルダウンロード"
+
+#: includes/class-analytics-tracking.php:297
+msgid "Link esterni"
+msgstr "外部リンク"
+
+#: includes/class-analytics-tracking.php:306
+msgid "Auto-tracking eventi"
+msgstr "イベント自動追跡"
+
+#: includes/class-analytics-tracking.php:307
+msgid ""
+"Scegli quali eventi tracciare automaticamente. Vengono inviati a tutti i "
+"provider configurati."
+msgstr ""
+"自動追跡するイベントを選択してください。設定済みの全プロバイダーに送信されま"
+"す。"
+
+#: includes/class-analytics-tracking.php:334
+msgid "Parametri eventi"
+msgstr "イベントパラメーター"
+
+#: includes/class-analytics-tracking.php:335
+msgid "Configura i dettagli degli eventi di scroll e download."
+msgstr "スクロールとダウンロードイベントの詳細を設定します。"
+
+#: includes/class-analytics-tracking.php:341
+msgid "Milestone scroll (%)"
+msgstr "スクロールマイルストーン (%)"
+
+#: includes/class-analytics-tracking.php:342
+msgid "Percentuali di scroll a cui inviare un evento (separate da virgola)."
+msgstr "イベントを送信するスクロール率（カンマ区切り）。"
+
+#: includes/class-analytics-tracking.php:350
+msgid "Estensioni download"
+msgstr "ダウンロード拡張子"
+
+#: includes/class-analytics-tracking.php:351
+msgid "Estensioni file da tracciare come download (separate da virgola)."
+msgstr "ダウンロードとして追跡するファイル拡張子（カンマ区切り）。"
+
+#: includes/class-analytics-tracking.php:369
+msgid "Richiedi consenso cookie"
+msgstr "Cookieの同意を要求"
+
+#: includes/class-analytics-tracking.php:370
+msgid ""
+"Blocca gli script di tracking finché l'utente non accetta i cookie analitici/"
+"marketing dal banner Cookie Consent. Richiesto per GDPR."
+msgstr ""
+"Cookie同意バナーで分析/マーケティングCookieが承認されるまで、トラッキングスク"
+"リプトをブロックします。GDPRに必要です。"
+
+#: includes/class-analytics-tracking.php:374
+msgid "Anonimizza IP"
+msgstr "IPを匿名化"
+
+#: includes/class-analytics-tracking.php:375
+msgid ""
+"GA4 anonimizza l'IP di default, ma questa opzione aggiunge il parametro "
+"esplicito per conformità."
+msgstr ""
+"GA4はデフォルトでIPを匿名化しますが、このオプションはコンプライアンスのために"
+"明示的なパラメーターを追加します。"
+
+#: includes/class-analytics-tracking.php:379
+msgid "Rispetta Do Not Track"
+msgstr "Do Not Trackを尊重"
+
+#: includes/class-analytics-tracking.php:380
+msgid "Non caricare gli script se il browser invia l'header Do Not Track."
+msgstr "ブラウザがDo Not Trackヘッダーを送信した場合、スクリプトを読み込みません。"
+
+#: includes/class-analytics-tracking.php:384
+msgid "Escludi amministratori"
+msgstr "管理者を除外"
+
+#: includes/class-analytics-tracking.php:385
+msgid "Non tracciare le visite degli utenti con ruolo Amministratore."
+msgstr "管理者ロールのユーザーの訪問を追跡しません。"
+
+#: includes/class-analytics-tracking.php:395
+msgid "Privacy e conformità"
+msgstr "プライバシーとコンプライアンス"
+
+#: includes/class-analytics-tracking.php:396
+msgid "Opzioni di privacy, GDPR e gestione del consenso."
+msgstr "プライバシー、GDPRおよび同意管理オプション。"
+
+#: includes/class-analytics-tracking.php:431
+msgid ""
+"Inserisci script di tracking aggiuntivi. Verranno bloccati dal consenso "
+"cookie se abilitato."
+msgstr ""
+"追加のトラッキングスクリプトを入力してください。Cookie同意が有効な場合ブロッ"
+"クされます。"
+
+#: includes/class-analytics-tracking.php:437
+msgid "Script nel <head>"
+msgstr "<head>内のスクリプト"
+
+#: includes/class-analytics-tracking.php:438
+msgid ""
+"Inseriti prima della chiusura di </head>. Utile per snippet di tracking non "
+"supportati nativamente."
+msgstr ""
+"</head>の直前に挿入されます。ネイティブ非対応のトラッキングスニペットに便利で"
+"す。"
+
+#: includes/class-analytics-tracking.php:446
+msgid "Script nel <body>"
+msgstr "<body>内のスクリプト"
+
+#: includes/class-analytics-tracking.php:447
+msgid "Inseriti prima della chiusura di </body>."
+msgstr "</body>の直前に挿入されます。"
+
+#: includes/class-cookie-consent.php:139 includes/class-cookie-consent.php:140
+#: includes/class-cookie-consent.php:245 includes/class-olo-builder.php:487
+msgid "Cookie Consent"
+msgstr "Cookie同意"
+
+#: includes/class-cookie-consent.php:236
+msgid "Generale"
+msgstr "一般"
+
+#: includes/class-cookie-consent.php:237
+msgid "Testi"
+msgstr "テキスト"
+
+#: includes/class-cookie-consent.php:238
+msgid "Aspetto"
+msgstr "外観"
+
+#: includes/class-cookie-consent.php:239 includes/class-seo-settings.php:803
+msgid "Categorie"
+msgstr "カテゴリー"
+
+#: includes/class-cookie-consent.php:240
+msgid "Blocco Script"
+msgstr "スクリプトブロック"
+
+#: includes/class-cookie-consent.php:241
+msgid "Dichiarazione Cookie"
+msgstr "Cookie宣言"
+
+#: includes/class-cookie-consent.php:242
+msgid "Log Consensi"
+msgstr "同意ログ"
+
+#: includes/class-cookie-consent.php:342
+msgid "Impostazioni generali"
+msgstr "一般設定"
+
+#: includes/class-cookie-consent.php:343
+msgid "Configura il comportamento del cookie banner"
+msgstr "Cookieバナーの動作を設定"
+
+#: includes/class-cookie-consent.php:349
+msgid "Abilita Cookie Banner"
+msgstr "Cookieバナーを有効にする"
+
+#: includes/class-cookie-consent.php:358
+msgid "Layout"
+msgstr "レイアウト"
+
+#: includes/class-cookie-consent.php:362
+msgid "Barra"
+msgstr "バー"
+
+#: includes/class-cookie-consent.php:363
+msgid "Box laterale"
+msgstr "サイドボックス"
+
+#: includes/class-cookie-consent.php:364
+msgid "Full-width"
+msgstr "全幅"
+
+#: includes/class-cookie-consent.php:370
+msgid "Posizione"
+msgstr "位置"
+
+#: includes/class-cookie-consent.php:374
+msgid "In basso"
+msgstr "下部"
+
+#: includes/class-cookie-consent.php:375
+msgid "In alto"
+msgstr "上部"
+
+#: includes/class-cookie-consent.php:381
+msgid "Mostra \"Rifiuta tutti\""
+msgstr "「すべて拒否」を表示"
+
+#: includes/class-cookie-consent.php:382
+msgid "Richiesto dalle linee guida CNIL/Garante Privacy italiano."
+msgstr "CNIL/イタリアプライバシー当局のガイドラインで必要とされています。"
+
+#: includes/class-cookie-consent.php:391
+msgid "Mostra \"Personalizza\""
+msgstr "「カスタマイズ」を表示"
+
+#: includes/class-cookie-consent.php:392
+msgid "Pulsante per aprire il pannello preferenze con le categorie."
+msgstr "カテゴリー付きの設定パネルを開くボタン。"
+
+#: includes/class-cookie-consent.php:401
+msgid "Durata consenso"
+msgstr "同意の有効期間"
+
+#: includes/class-cookie-consent.php:402
+msgid "GDPR raccomanda max 6 mesi (180 giorni). Molti usano 365."
+msgstr "GDPRでは最大6ヶ月（180日）を推奨。多くは365日を使用。"
+
+#: includes/class-cookie-consent.php:406
+#: includes/class-performance-settings.php:236
+msgid "giorni"
+msgstr "日"
+
+#: includes/class-cookie-consent.php:411
+msgid "Richiedere nuovamente dopo"
+msgstr "再確認までの期間"
+
+#: includes/class-cookie-consent.php:412
+msgid "Se la cookie policy cambia, puoi forzare la ripresentazione del banner."
+msgstr "Cookieポリシーが変更された場合、バナーの再表示を強制できます。"
+
+#: includes/class-cookie-consent.php:416
+msgid "giorni (0 = mai)"
+msgstr "日（0 = なし）"
+
+#: includes/class-cookie-consent.php:421
+msgid "Google Consent Mode v2"
+msgstr "Google Consent Mode v2"
+
+#: includes/class-cookie-consent.php:422
+msgid ""
+"Invia segnali gtag(\"consent\") a Google. Richiesto da Google Ads dal marzo "
+"2024 per EEA/UK."
+msgstr ""
+"Googleにgtag(\"consent\")シグナルを送信します。2024年3月よりEEA/UKでGoogle "
+"Adsに必須。"
+
+#: includes/class-cookie-consent.php:431
+msgid "Blocco iframe"
+msgstr "iframeブロック"
+
+#: includes/class-cookie-consent.php:432
+msgid ""
+"Blocca iframe di YouTube, Vimeo, Google Maps fino al consenso. Mostra un "
+"placeholder con pulsante \"Carica contenuto\"."
+msgstr ""
+"同意までYouTube、Vimeo、Google Mapsのiframeをブロックします。「コンテンツを読"
+"み込む」ボタン付きのプレースホルダーを表示。"
+
+#: includes/class-cookie-consent.php:441
+msgid "Versione banner"
+msgstr "バナーバージョン"
+
+#: includes/class-cookie-consent.php:442
+msgid ""
+"Incrementa quando cambi la cookie policy. I visitatori con consenso a una "
+"versione precedente vedranno di nuovo il banner."
+msgstr ""
+"Cookieポリシーを変更した際に増加させてください。以前のバージョンに同意した訪"
+"問者にはバナーが再表示されます。"
+
+#: includes/class-cookie-consent.php:464
+msgid "Testi del banner"
+msgstr "バナーテキスト"
+
+#: includes/class-cookie-consent.php:465
+msgid "Personalizza i testi mostrati nel cookie banner"
+msgstr "Cookieバナーに表示されるテキストをカスタマイズ"
+
+#: includes/class-cookie-consent.php:471
+msgid "Titolo"
+msgstr "タイトル"
+
+#: includes/class-cookie-consent.php:479
+msgid "Messaggio"
+msgstr "メッセージ"
+
+#: includes/class-cookie-consent.php:487
+msgid "Pulsante \"Accetta tutti\""
+msgstr "「すべて受け入れる」ボタン"
+
+#: includes/class-cookie-consent.php:495
+msgid "Pulsante \"Rifiuta tutti\""
+msgstr "「すべて拒否」ボタン"
+
+#: includes/class-cookie-consent.php:503
+msgid "Pulsante \"Personalizza\""
+msgstr "「カスタマイズ」ボタン"
+
+#: includes/class-cookie-consent.php:511
+msgid "Pulsante \"Salva preferenze\""
+msgstr "「設定を保存」ボタン"
+
+#: includes/class-cookie-consent.php:526
+msgid "Link policy"
+msgstr "ポリシーリンク"
+
+#: includes/class-cookie-consent.php:527
+msgid "URL e testi dei link alle pagine di policy"
+msgstr "ポリシーページリンクのURLとテキスト"
+
+#: includes/class-cookie-consent.php:533
+msgid "URL Privacy Policy"
+msgstr "プライバシーポリシーURL"
+
+#: includes/class-cookie-consent.php:541
+msgid "Testo link Privacy"
+msgstr "プライバシーリンクテキスト"
+
+#: includes/class-cookie-consent.php:549
+msgid "URL Cookie Policy"
+msgstr "CookieポリシーURL"
+
+#: includes/class-cookie-consent.php:557
+msgid "Testo link Cookie Policy"
+msgstr "Cookieポリシーリンクテキスト"
+
+#: includes/class-cookie-consent.php:579
+msgid "Colori banner"
+msgstr "バナーカラー"
+
+#: includes/class-cookie-consent.php:580
+msgid "Sfondo e testo del cookie banner"
+msgstr "Cookieバナーの背景とテキスト"
+
+#: includes/class-cookie-consent.php:586
+msgid "Sfondo banner"
+msgstr "バナー背景"
+
+#: includes/class-cookie-consent.php:594
+msgid "Colore testo"
+msgstr "テキストカラー"
+
+#: includes/class-cookie-consent.php:609
+msgid "Colori pulsanti"
+msgstr "ボタンカラー"
+
+#: includes/class-cookie-consent.php:610
+msgid "Personalizza i colori dei pulsanti \"Accetta\" e \"Rifiuta\""
+msgstr "「受け入れる」と「拒否」ボタンの色をカスタマイズ"
+
+#: includes/class-cookie-consent.php:616
+msgid "Pulsante primario — sfondo"
+msgstr "プライマリボタン — 背景"
+
+#: includes/class-cookie-consent.php:624
+msgid "Pulsante primario — testo"
+msgstr "プライマリボタン — テキスト"
+
+#: includes/class-cookie-consent.php:632
+msgid "Pulsante secondario — sfondo"
+msgstr "セカンダリボタン — 背景"
+
+#: includes/class-cookie-consent.php:640
+msgid "Pulsante secondario — testo"
+msgstr "セカンダリボタン — テキスト"
+
+#: includes/class-cookie-consent.php:655
+msgid "Stile"
+msgstr "スタイル"
+
+#: includes/class-cookie-consent.php:656
+msgid "Overlay e border radius del banner"
+msgstr "バナーのオーバーレイと角丸"
+
+#: includes/class-cookie-consent.php:662
+msgid "Overlay scuro"
+msgstr "ダークオーバーレイ"
+
+#: includes/class-cookie-consent.php:663
+msgid "Oscura la pagina dietro il banner per attirare l'attenzione."
+msgstr "注目を集めるためにバナーの背後のページを暗くします。"
+
+#: includes/class-cookie-consent.php:672
+msgid "Border radius"
+msgstr "角丸"
+
+#: includes/class-cookie-consent.php:701
+msgid "Categorie cookie"
+msgstr "Cookieカテゴリー"
+
+#: includes/class-cookie-consent.php:702
+msgid ""
+"Personalizza nome e descrizione di ogni categoria mostrata nel pannello "
+"preferenze."
+msgstr "設定パネルに表示される各カテゴリーの名前と説明をカスタマイズ。"
+
+#: includes/class-cookie-consent.php:715 includes/class-cookie-consent.php:1336
+msgid "Sempre attivo"
+msgstr "常に有効"
+
+#: includes/class-cookie-consent.php:722
+msgid "Etichetta"
+msgstr "ラベル"
+
+#: includes/class-cookie-consent.php:730 includes/class-seo-settings.php:484
+#: includes/class-white-label.php:223
+msgid "Descrizione"
+msgstr "説明"
+
+#: includes/class-cookie-consent.php:755
+msgid "Blocco automatico script"
+msgstr "スクリプト自動ブロック"
+
+#: includes/class-cookie-consent.php:756
+msgid ""
+"Blocca automaticamente script di terze parti finché l'utente non accetta la "
+"categoria corrispondente."
+msgstr ""
+"ユーザーが対応するカテゴリーを承認するまで、サードパーティスクリプトを自動的に"
+"ブロックします。"
+
+#: includes/class-cookie-consent.php:762
+msgid "Abilita auto-blocco"
+msgstr "自動ブロックを有効にする"
+
+#: includes/class-cookie-consent.php:763
+msgid ""
+"Converte gli script corrispondenti in type=\"text/plain\" finché il consenso "
+"non è dato."
+msgstr ""
+"同意が得られるまで、該当するスクリプトをtype=\"text/plain\"に変換します。"
+
+#: includes/class-cookie-consent.php:772
+msgid "Pattern da bloccare"
+msgstr "ブロックするパターン"
+
+#: includes/class-cookie-consent.php:773
+msgid ""
+"Un dominio/pattern per riga. Gli script il cui src contiene uno di questi "
+"pattern vengono bloccati."
+msgstr ""
+"1行に1つのドメイン/パターン。srcにこれらのパターンを含むスクリプトがブロック"
+"されます。"
+
+#: includes/class-cookie-consent.php:788
+msgid "Blocco manuale"
+msgstr "手動ブロック"
+
+#: includes/class-cookie-consent.php:789
+msgid "Puoi anche bloccare script manualmente nel tuo HTML aggiungendo:"
+msgstr "HTMLに以下を追加して手動でスクリプトをブロックすることもできます："
+
+#: includes/class-cookie-consent.php:814
+msgid "Dichiarazione cookie"
+msgstr "Cookie宣言"
+
+#: includes/class-cookie-consent.php:815
+msgid ""
+"Elenca i cookie utilizzati dal sito. Questi vengono mostrati nel pannello "
+"preferenze."
+msgstr "サイトで使用されるCookieを一覧表示します。設定パネルに表示されます。"
+
+#: includes/class-cookie-consent.php:822
+msgid "Nome cookie"
+msgstr "Cookie名"
+
+#: includes/class-cookie-consent.php:824 includes/class-cookie-consent.php:1356
+msgid "Scopo"
+msgstr "目的"
+
+#: includes/class-cookie-consent.php:825 includes/class-cookie-consent.php:1357
+msgid "Scadenza"
+msgstr "有効期限"
+
+#: includes/class-cookie-consent.php:826 includes/class-global-popups.php:480
+msgid "Categoria"
+msgstr "カテゴリー"
+
+#: includes/class-cookie-consent.php:845 includes/class-global-popups.php:512
+msgid "Rimuovi"
+msgstr "削除"
+
+#: includes/class-cookie-consent.php:854
+msgid "Aggiungi cookie"
+msgstr "Cookieを追加"
+
+#: includes/class-cookie-consent.php:920
+msgid "Log dei consensi"
+msgstr "同意ログ"
+
+#: includes/class-cookie-consent.php:924
+#, php-format
+msgid ""
+"%d consensi registrati. Il GDPR richiede di poter dimostrare il consenso "
+"raccolto."
+msgstr ""
+"%d件の同意が記録されています。GDPRでは収集した同意を証明できることが求められ"
+"ます。"
+
+#: includes/class-cookie-consent.php:935
+msgid "Esporta CSV"
+msgstr "CSVエクスポート"
+
+#: includes/class-cookie-consent.php:939 includes/class-seo-redirects.php:528
+msgid "Svuota log"
+msgstr "ログを消去"
+
+#: includes/class-cookie-consent.php:949
+msgid "ID Consenso"
+msgstr "同意ID"
+
+#: includes/class-cookie-consent.php:950
+#: includes/class-form-submissions.php:181 includes/class-seo-redirects.php:443
+msgid "Data"
+msgstr "日付"
+
+#: includes/class-cookie-consent.php:951
+msgid "Azione"
+msgstr "アクション"
+
+#: includes/class-cookie-consent.php:952
+msgid "Ver."
+msgstr "Ver."
+
+#: includes/class-cookie-consent.php:953
+msgid "IP (hash)"
+msgstr "IP (ハッシュ)"
+
+#: includes/class-cookie-consent.php:954
+msgid "Categorie accettate"
+msgstr "承認済みカテゴリー"
+
+#: includes/class-cookie-consent.php:955
+msgid "User Agent"
+msgstr "User Agent"
+
+#: includes/class-cookie-consent.php:966
+msgid "Primo consenso"
+msgstr "初回同意"
+
+#: includes/class-cookie-consent.php:966
+msgid "Modifica"
+msgstr "変更"
+
+#: includes/class-cookie-consent.php:966
+msgid "Revoca"
+msgstr "取り消し"
+
+#: includes/class-cookie-consent.php:1007
+msgid "Nessun consenso registrato."
+msgstr "同意の記録がありません。"
+
+#: includes/class-cookie-consent.php:1018
+msgid "Svuotare tutti i log dei consensi?"
+msgstr "すべての同意ログを消去しますか？"
+
+#: includes/class-cookie-consent.php:1326
+msgid "Preferenze cookie"
+msgstr "Cookie設定"
+
+#: includes/class-cookie-consent.php:1327
+msgid "Chiudi"
+msgstr "閉じる"
+
+#: includes/class-cookie-consent.php:1329
+msgid ""
+"Scegli quali categorie di cookie accettare. Puoi modificare le tue "
+"preferenze in qualsiasi momento."
+msgstr ""
+"受け入れるCookieカテゴリーを選択してください。設定はいつでも変更できます。"
+
+#: includes/class-cookie-consent.php:1350
+msgid "Dettaglio cookie utilizzati"
+msgstr "使用Cookieの詳細"
+
+#: includes/class-cookie-consent.php:1354
+msgid "Cookie"
+msgstr "Cookie"
+
+#: includes/class-cookie-consent.php:1509
+msgid "Questo contenuto richiede il consenso ai cookie"
+msgstr "このコンテンツにはCookieの同意が必要です"
+
+#: includes/class-cookie-consent.php:1510
+msgid "Accetta e carica"
+msgstr "同意して読み込む"
+
+#: includes/class-cookie-consent.php:1783
+msgid "Gestisci cookie"
+msgstr "Cookieを管理"
+
+#: includes/class-form-submissions.php:124
+#: includes/class-form-submissions.php:232
+msgid "Non autorizzato."
+msgstr "権限がありません。"
+
+#: includes/class-form-submissions.php:143
+#: includes/class-form-submissions.php:758
+msgid "Nessun invio trovato."
+msgstr "送信が見つかりません。"
+
+#: includes/class-form-submissions.php:181
+#: includes/class-form-submissions.php:369
+#: includes/class-form-submissions.php:497
+#: includes/class-performance-settings.php:273
+msgid "Stato"
+msgstr "ステータス"
+
+#: includes/class-form-submissions.php:196
+#: includes/class-form-submissions.php:370
+#: includes/class-form-submissions.php:634
+msgid "Letto"
+msgstr "既読"
+
+#: includes/class-form-submissions.php:196
+#: includes/class-form-submissions.php:370
+#: includes/class-form-submissions.php:636
+msgid "Non letto"
+msgstr "未読"
+
+#: includes/class-form-submissions.php:210
+msgid "Invii per pagina"
+msgstr "ページあたりの送信数"
+
+#: includes/class-form-submissions.php:266 includes/class-olo-builder.php:163
+#: includes/class-olo-builder.php:164 includes/class-olo-builder.php:473
+msgid "Invii Form"
+msgstr "フォーム送信"
+
+#: includes/class-form-submissions.php:274
+msgid "Elenco invii"
+msgstr "送信一覧"
+
+#: includes/class-form-submissions.php:275
+msgid "Tutti i messaggi ricevuti dai form del sito"
+msgstr "サイトのフォームから受信したすべてのメッセージ"
+
+#: includes/class-form-submissions.php:282 includes/class-media-search.php:45
+msgid "Cerca"
+msgstr "検索"
+
+#: includes/class-form-submissions.php:301
+msgid "Invio non trovato"
+msgstr "送信が見つかりません"
+
+#: includes/class-form-submissions.php:301
+#: includes/class-form-submissions.php:330
+msgid "Torna alla lista"
+msgstr "一覧に戻る"
+
+#: includes/class-form-submissions.php:324
+#, php-format
+msgid "Invio #%s"
+msgstr "送信 #%s"
+
+#: includes/class-form-submissions.php:325
+msgid "Dettaglio del messaggio ricevuto"
+msgstr "受信メッセージの詳細"
+
+#: includes/class-form-submissions.php:341
+msgid "Informazioni invio"
+msgstr "送信情報"
+
+#: includes/class-form-submissions.php:342
+msgid "Metadati del messaggio"
+msgstr "メッセージのメタデータ"
+
+#: includes/class-form-submissions.php:353
+msgid "Form"
+msgstr "フォーム"
+
+#: includes/class-form-submissions.php:354
+#: includes/class-form-submissions.php:575
+msgid "(senza nome)"
+msgstr "（名前なし）"
+
+#: includes/class-form-submissions.php:357
+#: includes/class-form-submissions.php:495
+msgid "Data invio"
+msgstr "送信日"
+
+#: includes/class-form-submissions.php:383
+msgid "Campi compilati"
+msgstr "入力済みフィールド"
+
+#: includes/class-form-submissions.php:384
+msgid "Dati inseriti dall'utente nel form"
+msgstr "ユーザーがフォームに入力したデータ"
+
+#: includes/class-form-submissions.php:391
+msgid "Campo"
+msgstr "フィールド"
+
+#: includes/class-form-submissions.php:392
+msgid "Valore"
+msgstr "値"
+
+#: includes/class-form-submissions.php:409
+msgid "Nessun campo."
+msgstr "フィールドがありません。"
+
+#: includes/class-form-submissions.php:430
+msgid "Invio eliminato."
+msgstr "送信を削除しました。"
+
+#: includes/class-form-submissions.php:437
+msgid "Segnato come letto."
+msgstr "既読にしました。"
+
+#: includes/class-form-submissions.php:452
+#, php-format
+msgid "%d invii eliminati."
+msgstr "%d件の送信を削除しました。"
+
+#: includes/class-form-submissions.php:456
+#, php-format
+msgid "%d invii segnati come letti."
+msgstr "%d件の送信を既読にしました。"
+
+#: includes/class-form-submissions.php:460
+#, php-format
+msgid "%d invii segnati come non letti."
+msgstr "%d件の送信を未読にしました。"
+
+#: includes/class-form-submissions.php:494
+msgid "Dati"
+msgstr "データ"
+
+#: includes/class-form-submissions.php:518
+msgid "Segna come letto"
+msgstr "既読にする"
+
+#: includes/class-form-submissions.php:519
+msgid "Segna come non letto"
+msgstr "未読にする"
+
+#: includes/class-form-submissions.php:520
+#: includes/class-form-submissions.php:560 includes/class-seo-redirects.php:460
+msgid "Elimina"
+msgstr "削除"
+
+#: includes/class-form-submissions.php:559
+msgid "Visualizza"
+msgstr "表示"
+
+#: includes/class-form-submissions.php:560
+msgid "Eliminare questo invio?"
+msgstr "この送信を削除しますか？"
+
+#: includes/class-form-submissions.php:564
+msgid "Segna letto"
+msgstr "既読にする"
+
+#: includes/class-form-submissions.php:597
+#, php-format
+msgid "%d campi"
+msgstr "%d件のフィールド"
+
+#: includes/class-form-submissions.php:636
+msgid "Nuovo"
+msgstr "新規"
+
+#: includes/class-form-submissions.php:666
+msgid "Tutti i form"
+msgstr "すべてのフォーム"
+
+#: includes/class-form-submissions.php:673
+msgid "Filtra"
+msgstr "フィルター"
+
+#: includes/class-global-popups.php:352 includes/class-role-manager.php:476
+#: includes/class-role-manager.php:518 includes/class-white-label.php:149
+msgid "Dati non validi"
+msgstr "無効なデータ"
+
+#: includes/class-global-popups.php:405 includes/class-global-popups.php:406
+#: includes/class-global-popups.php:426 includes/class-global-popups.php:434
+msgid "Popup Globali"
+msgstr "グローバルポップアップ"
+
+#: includes/class-global-popups.php:435
+msgid ""
+"Configura popup che appaiono automaticamente in base a condizioni di "
+"visualizzazione."
+msgstr "表示条件に基づいて自動的に表示されるポップアップを設定します。"
+
+#: includes/class-global-popups.php:440
+msgid "JavaScript richiesto."
+msgstr "JavaScriptが必要です。"
+
+#: includes/class-global-popups.php:458
+msgid "Caricamento pagina"
+msgstr "ページ読み込み"
+
+#: includes/class-global-popups.php:462
+msgid "Inattivita'"
+msgstr "非アクティブ"
+
+#: includes/class-global-popups.php:466
+msgid "Sempre"
+msgstr "常時"
+
+#: includes/class-global-popups.php:467
+msgid "1 volta per sessione"
+msgstr "セッションにつき1回"
+
+#: includes/class-global-popups.php:468
+msgid "1 volta al giorno"
+msgstr "1日1回"
+
+#: includes/class-global-popups.php:469
+msgid "1 volta a settimana"
+msgstr "週1回"
+
+#: includes/class-global-popups.php:470
+msgid "Solo 1 volta"
+msgstr "1回のみ"
+
+#: includes/class-global-popups.php:474
+msgid "Tutto il sito"
+msgstr "サイト全体"
+
+#: includes/class-global-popups.php:475
+msgid "Homepage"
+msgstr "ホームページ"
+
+#: includes/class-global-popups.php:476
+msgid "Pagina specifica"
+msgstr "特定のページ"
+
+#: includes/class-global-popups.php:477
+msgid "Articolo specifico"
+msgstr "特定の記事"
+
+#: includes/class-global-popups.php:478
+msgid "Tipo contenuto"
+msgstr "コンテンツタイプ"
+
+#: includes/class-global-popups.php:479
+msgid "Archivio"
+msgstr "アーカイブ"
+
+#: includes/class-global-popups.php:481
+msgid "Utente loggato"
+msgstr "ログイン済みユーザー"
+
+#: includes/class-global-popups.php:482
+msgid "Utente non loggato"
+msgstr "未ログインユーザー"
+
+#: includes/class-global-popups.php:485
+msgid "Pagina 404"
+msgstr "404ページ"
+
+#: includes/class-global-popups.php:486
+msgid "Ricerca"
+msgstr "検索"
+
+#: includes/class-global-popups.php:495
+msgid "Nessun popup configurato"
+msgstr "ポップアップが設定されていません"
+
+#: includes/class-global-popups.php:500
+msgid "Disattivato"
+msgstr "無効"
+
+#: includes/class-global-popups.php:520 includes/class-global-popups.php:521
+msgid "Nome popup"
+msgstr "ポップアップ名"
+
+#: includes/class-global-popups.php:528 includes/class-seo-settings.php:304
+#: includes/class-seo-settings.php:382 includes/class-seo-settings.php:576
+msgid "Seleziona"
+msgstr "選択"
+
+#: includes/class-global-popups.php:537
+msgid "Trigger"
+msgstr "トリガー"
+
+#: includes/class-global-popups.php:547
+msgid "Frequenza"
+msgstr "頻度"
+
+#: includes/class-global-popups.php:557
+msgid "Condizioni"
+msgstr "条件"
+
+#: includes/class-global-popups.php:561
+msgid "OR (almeno una)"
+msgstr "OR（少なくとも1つ）"
+
+#: includes/class-global-popups.php:562
+msgid "AND (tutte)"
+msgstr "AND（すべて）"
+
+#: includes/class-global-popups.php:564
+msgid "Condizione"
+msgstr "条件"
+
+#: includes/class-global-popups.php:577
+msgid "Valore (ID, slug)"
+msgstr "値（ID、スラッグ）"
+
+#: includes/class-global-popups.php:591
+msgid "Aggiungi Popup"
+msgstr "ポップアップを追加"
+
+#: includes/class-global-popups.php:592
+msgid "Salva Tutto"
+msgstr "すべて保存"
+
+#: includes/class-global-popups.php:622
+msgid "Popup salvati con successo!"
+msgstr "ポップアップを保存しました！"
+
+#: includes/class-global-popups.php:622 includes/class-global-popups.php:623
+#: includes/class-media-search.php:312
+#: includes/class-performance-settings.php:333
+#: includes/class-site-import-export.php:606
+#: includes/class-site-import-export.php:612
+#: includes/class-site-import-export.php:634
+#: includes/class-site-import-export.php:640
+#: includes/class-site-import-export.php:722
+#: includes/class-site-import-export.php:729
+msgid "Errore"
+msgstr "エラー"
+
+#: includes/class-header-integration.php:24
+msgid "Header Olobuild"
+msgstr "Olobuildヘッダー"
+
+#: includes/class-media-search.php:29 includes/class-olo-builder.php:154
+#: includes/class-olo-builder.php:155 includes/class-olo-builder.php:466
+msgid "Ricerca Media"
+msgstr "メディア検索"
+
+#: includes/class-media-search.php:33
+msgid "Foto"
+msgstr "写真"
+
+#: includes/class-media-search.php:34
+msgid "Video"
+msgstr "動画"
+
+#: includes/class-media-search.php:35
+msgid "Foto 360"
+msgstr "360度写真"
+
+#: includes/class-media-search.php:36
+msgid "Video 360"
+msgstr "360度動画"
+
+#: includes/class-media-search.php:37
+msgid "Audio"
+msgstr "オーディオ"
+
+#: includes/class-media-search.php:44
+msgid "Cerca foto, video, audio..."
+msgstr "写真、動画、オーディオを検索..."
+
+#: includes/class-media-search.php:52
+msgid ""
+"Incolla un URL Google Maps, coordinate (lat,lng) o un pano_id per scaricare "
+"un panorama Street View."
+msgstr ""
+"Google MapsのURL、座標（lat,lng）またはpano_idを貼り付けてストリートビューパノ"
+"ラマをダウンロードします。"
+
+#: includes/class-media-search.php:57
+msgid "Zoom 2 (bassa)"
+msgstr "ズーム 2（低）"
+
+#: includes/class-media-search.php:58
+msgid "Zoom 3 (media)"
+msgstr "ズーム 3（中）"
+
+#: includes/class-media-search.php:59
+msgid "Zoom 4 (alta)"
+msgstr "ズーム 4（高）"
+
+#: includes/class-media-search.php:61
+msgid "Cerca panorama"
+msgstr "パノラマを検索"
+
+#: includes/class-media-search.php:69
+msgid "Orientamento:"
+msgstr "向き："
+
+#: includes/class-media-search.php:71 includes/class-media-search.php:80
+#: includes/class-media-search.php:102
+msgid "Qualsiasi"
+msgstr "すべて"
+
+#: includes/class-media-search.php:72
+msgid "Orizzontale"
+msgstr "横向き"
+
+#: includes/class-media-search.php:73
+msgid "Verticale"
+msgstr "縦向き"
+
+#: includes/class-media-search.php:74
+msgid "Quadrato"
+msgstr "正方形"
+
+#: includes/class-media-search.php:78
+msgid "Dimensione:"
+msgstr "サイズ："
+
+#: includes/class-media-search.php:81
+msgid "Piccola"
+msgstr "小"
+
+#: includes/class-media-search.php:82
+msgid "Media"
+msgstr "中"
+
+#: includes/class-media-search.php:83
+msgid "Grande"
+msgstr "大"
+
+#: includes/class-media-search.php:87
+msgid "Min larghezza:"
+msgstr "最小幅："
+
+#: includes/class-media-search.php:91
+msgid "Min altezza:"
+msgstr "最小高さ："
+
+#: includes/class-media-search.php:100
+msgid "Durata:"
+msgstr "長さ："
+
+#: includes/class-media-search.php:103
+msgid "Brevissimo"
+msgstr "とても短い"
+
+#: includes/class-media-search.php:104
+msgid "Breve"
+msgstr "短い"
+
+#: includes/class-media-search.php:105 includes/class-media-search.php:115
+msgid "secondi"
+msgstr "秒"
+
+#: includes/class-media-search.php:106
+msgid "minuto"
+msgstr "分"
+
+#: includes/class-media-search.php:107 includes/class-media-search.php:108
+msgid "minuti"
+msgstr "分"
+
+#: includes/class-media-search.php:109
+msgid "Lungo"
+msgstr "長い"
+
+#: includes/class-media-search.php:111
+msgid "oppure"
+msgstr "または"
+
+#: includes/class-media-search.php:294
+msgid "Ricerca in corso..."
+msgstr "検索中..."
+
+#: includes/class-media-search.php:295
+msgid "Ricerca panorama Street View..."
+msgstr "ストリートビューパノラマを検索中..."
+
+#: includes/class-media-search.php:296
+msgid "risultati trovati"
+msgstr "件の結果"
+
+#: includes/class-media-search.php:297
+msgid "Pagina"
+msgstr "ページ"
+
+#: includes/class-media-search.php:298
+msgid "di"
+msgstr "/"
+
+#: includes/class-media-search.php:299
+msgid "Prec"
+msgstr "前へ"
+
+#: includes/class-media-search.php:300
+msgid "Succ"
+msgstr "次へ"
+
+#: includes/class-media-search.php:301
+msgid "Autore:"
+msgstr "作者："
+
+#: includes/class-media-search.php:302
+msgid "Dimensioni:"
+msgstr "サイズ："
+
+#: includes/class-media-search.php:303
+msgid "Descrizione:"
+msgstr "説明："
+
+#: includes/class-media-search.php:304 includes/class-media-search.php:316
+msgid "Licenza:"
+msgstr "ライセンス："
+
+#: includes/class-media-search.php:305
+msgid "Importa nella Media Library"
+msgstr "メディアライブラリにインポート"
+
+#: includes/class-media-search.php:306
+msgid "Importa JPG nella Media Library"
+msgstr "JPGをメディアライブラリにインポート"
+
+#: includes/class-media-search.php:307
+msgid "Scarica e importa nella Media Library"
+msgstr "ダウンロードしてメディアライブラリにインポート"
+
+#: includes/class-media-search.php:308
+#: includes/class-site-import-export.php:542
+#: includes/class-site-import-export.php:557
+#: includes/class-site-import-export.php:670
+#: includes/class-site-import-export.php:677
+#: includes/class-site-import-export.php:726
+#: includes/class-site-import-export.php:732
+msgid "Importa"
+msgstr "インポート"
+
+#: includes/class-media-search.php:309
+msgid "Importato!"
+msgstr "インポート完了！"
+
+#: includes/class-media-search.php:310
+msgid "Download..."
+msgstr "ダウンロード中..."
+
+#: includes/class-media-search.php:311
+msgid "Download tile in corso..."
+msgstr "タイルをダウンロード中..."
+
+#: includes/class-media-search.php:313
+msgid "Sconosciuto"
+msgstr "不明"
+
+#: includes/class-media-search.php:314 includes/class-seo-settings.php:1127
+#: includes/class-seo-settings.php:1268
+msgid "Nessuna immagine"
+msgstr "画像なし"
+
+#: includes/class-media-search.php:315
+msgid "Nome:"
+msgstr "名前："
+
+#: includes/class-media-search.php:317
+msgid "Tags:"
+msgstr "タグ："
+
+#: includes/class-media-search.php:318
+msgid "Pano ID:"
+msgstr "パノID："
+
+#: includes/class-media-search.php:319
+msgid "Luogo:"
+msgstr "場所："
+
+#: includes/class-media-search.php:320
+msgid "Coordinate:"
+msgstr "座標："
+
+#: includes/class-media-search.php:321
+msgid "Copyright:"
+msgstr "著作権："
+
+#: includes/class-media-search.php:322
+msgid "Data:"
+msgstr "日付："
+
+#: includes/class-media-search.php:323
+msgid "Zoom max:"
+msgstr "最大ズーム："
+
+#: includes/class-media-search.php:324
+msgid "Timeline:"
+msgstr "タイムライン："
+
+#: includes/class-olo-builder.php:115 includes/class-olo-builder.php:116
+msgid "Olobuild"
+msgstr "Olobuild"
+
+#: includes/class-olo-builder.php:127 includes/class-olo-builder.php:128
+msgid "Dashboard"
+msgstr "ダッシュボード"
+
+#: includes/class-olo-builder.php:136 includes/class-olo-builder.php:137
+#: includes/class-olo-builder.php:393 includes/class-olo-builder.php:452
+msgid "Gestione Template"
+msgstr "テンプレート管理"
+
+#: includes/class-olo-builder.php:145 includes/class-olo-builder.php:146
+#: includes/class-olo-builder.php:459 includes/class-olo-builder.php:744
+msgid "Configurazione"
+msgstr "設定"
+
+#: includes/class-olo-builder.php:453
+msgid "Crea e modifica i tuoi template"
+msgstr "テンプレートの作成と編集"
+
+#: includes/class-olo-builder.php:460
+msgid "Stili, colori, tipografia e API"
+msgstr "スタイル、カラー、タイポグラフィ、API"
+
+#: includes/class-olo-builder.php:467
+msgid "Cerca foto, video e audio stock"
+msgstr "ストック写真、動画、オーディオを検索"
+
+#: includes/class-olo-builder.php:474
+msgid "Visualizza i messaggi ricevuti"
+msgstr "受信メッセージを表示"
+
+#: includes/class-olo-builder.php:481
+msgid "Tracking e statistiche"
+msgstr "トラッキングと統計"
+
+#: includes/class-olo-builder.php:488
+msgid "Banner GDPR e consenso cookie"
+msgstr "GDPRバナーとCookie同意"
+
+#: includes/class-olo-builder.php:494 includes/class-seo-settings.php:55
+#: includes/class-seo-settings.php:56 includes/class-seo-settings.php:156
+msgid "SEO"
+msgstr "SEO"
+
+#: includes/class-olo-builder.php:495
+msgid "Meta tag, Open Graph e sitemap"
+msgstr "メタタグ、Open Graph、サイトマップ"
+
+#: includes/class-olo-builder.php:501 includes/class-seo-redirects.php:300
+#: includes/class-seo-redirects.php:301 includes/class-seo-redirects.php:328
+msgid "Redirect & 404"
+msgstr "リダイレクト & 404"
+
+#: includes/class-olo-builder.php:502
+msgid "Gestisci redirect e pagine 404"
+msgstr "リダイレクトと404ページを管理"
+
+#: includes/class-olo-builder.php:508
+#: includes/class-performance-settings.php:79
+#: includes/class-performance-settings.php:80
+#: includes/class-performance-settings.php:154
+msgid "Performance"
+msgstr "パフォーマンス"
+
+#: includes/class-olo-builder.php:509
+msgid "Cache, lazy load e ottimizzazione"
+msgstr "キャッシュ、遅延読み込み、最適化"
+
+#: includes/class-olo-builder.php:515
+#: includes/class-woo-template-integration.php:232
+msgid "WooCommerce"
+msgstr "WooCommerce"
+
+#: includes/class-olo-builder.php:516
+msgid "Template per prodotti e shop"
+msgstr "商品とショップのテンプレート"
+
+#: includes/class-olo-builder.php:524
+msgid "Più di un page builder."
+msgstr "ただのページビルダー以上のもの。"
+
+#: includes/class-olo-builder.php:571
+msgid "API Keys — Stock Media"
+msgstr "APIキー — ストックメディア"
+
+#: includes/class-olo-builder.php:573
+msgid ""
+"Inserisci le chiavi API per i servizi di immagini/video stock. Se lasci un "
+"campo vuoto, verrà usata la chiave predefinita."
+msgstr ""
+"ストック画像/動画サービスのAPIキーを入力してください。空欄の場合、デフォルト"
+"キーが使用されます。"
+
+#: includes/class-olo-builder.php:586
+msgid "Pexels API Key"
+msgstr "Pexels APIキー"
+
+#: includes/class-olo-builder.php:592 includes/class-olo-builder.php:613
+#: includes/class-olo-builder.php:634 includes/class-olo-builder.php:655
+#: includes/class-olo-builder.php:727
+#, php-format
+msgid "Ottieni una chiave su %s"
+msgstr "%s でキーを取得してください"
+
+#: includes/class-olo-builder.php:608
+msgid "Pixabay API Key"
+msgstr "Pixabay APIキー"
+
+#: includes/class-olo-builder.php:629
+msgid "Unsplash Access Key"
+msgstr "Unsplashアクセスキー"
+
+#: includes/class-olo-builder.php:650
+msgid "Freesound API Key"
+msgstr "Freesound APIキー"
+
+#: includes/class-olo-builder.php:666
+msgid "reCAPTCHA v3"
+msgstr "reCAPTCHA v3"
+
+#: includes/class-olo-builder.php:668
+msgid ""
+"Google reCAPTCHA v3 per la protezione dei form. Ottieni le chiavi su google."
+"com/recaptcha"
+msgstr ""
+"フォーム保護のためのGoogle reCAPTCHA v3。google.com/recaptchaでキーを取得して"
+"ください"
+
+#: includes/class-olo-builder.php:680
+msgid "Chiave sito"
+msgstr "サイトキー"
+
+#: includes/class-olo-builder.php:696
+msgid "Chiave segreta"
+msgstr "シークレットキー"
+
+#: includes/class-olo-builder.php:708
+msgid "Mailchimp"
+msgstr "Mailchimp"
+
+#: includes/class-olo-builder.php:710
+msgid "API key Mailchimp per le integrazioni dei form contatti."
+msgstr "お問い合わせフォーム連携用のMailchimp APIキー。"
+
+#: includes/class-olo-builder.php:722
+msgid "Mailchimp API Key"
+msgstr "Mailchimp APIキー"
+
+#: includes/class-performance-hints.php:183
+msgid "Riproduci video"
+msgstr "動画を再生"
+
+#: includes/class-performance-settings.php:137
+#: includes/class-performance-settings.php:213
+msgid "Critical CSS"
+msgstr "Critical CSS"
+
+#: includes/class-performance-settings.php:138
+msgid "Ottimizzatore Asset"
+msgstr "アセット最適化"
+
+#: includes/class-performance-settings.php:139
+msgid "Suggerimenti Prestazioni"
+msgstr "パフォーマンスヒント"
+
+#: includes/class-performance-settings.php:140
+msgid "Pulizia Head"
+msgstr "Headクリーンアップ"
+
+#: includes/class-performance-settings.php:141
+msgid "Transizioni Vista"
+msgstr "ビュートランジション"
+
+#: includes/class-performance-settings.php:214
+msgid ""
+"Genera automaticamente il CSS above-the-fold e lo inietta inline nel <head>. "
+"Il foglio di stile principale viene caricato in modo asincrono."
+msgstr ""
+"above-the-fold CSSを自動生成し、<head>にインラインで挿入します。メインスタイ"
+"ルシートは非同期で読み込まれます。"
+
+#: includes/class-performance-settings.php:220
+msgid "Abilita Critical CSS"
+msgstr "Critical CSSを有効にする"
+
+#: includes/class-performance-settings.php:221
+msgid "Migliora FCP e LCP inlinando il CSS critico e deferendo il resto."
+msgstr ""
+"クリティカルCSSをインライン化し残りを遅延させることで、FCPとLCPを改善します。"
+
+#: includes/class-performance-settings.php:230
+msgid "Durata cache"
+msgstr "キャッシュ期間"
+
+#: includes/class-performance-settings.php:231
+msgid ""
+"Il CSS critico viene rigenerato automaticamente alla scadenza. Invalidato "
+"quando salvi un template."
+msgstr ""
+"クリティカルCSSは期限切れ時に自動再生成されます。テンプレート保存時に無効化さ"
+"れます。"
+
+#: includes/class-performance-settings.php:241
+msgid "Sezioni above-the-fold"
+msgstr "Above-the-foldセクション数"
+
+#: includes/class-performance-settings.php:242
+msgid ""
+"Quante sezioni del template analizzare per il CSS critico. 2 è il valore "
+"consigliato."
+msgstr "クリティカルCSS用に分析するテンプレートセクション数。推奨値は2です。"
+
+#: includes/class-performance-settings.php:257
+msgid "Stato cache"
+msgstr "キャッシュ状態"
+
+#: includes/class-performance-settings.php:272
+msgid "Off"
+msgstr "オフ"
+
+#: includes/class-performance-settings.php:281
+msgid "Pagine in cache"
+msgstr "キャッシュ済みページ"
+
+#: includes/class-performance-settings.php:293
+msgid "Mai"
+msgstr "なし"
+
+#: includes/class-performance-settings.php:297
+msgid "Ultima generazione"
+msgstr "最終生成"
+
+#: includes/class-performance-settings.php:304
+msgid "Rigenera tutto"
+msgstr "すべて再生成"
+
+#: includes/class-performance-settings.php:308
+msgid "Svuota cache"
+msgstr "キャッシュをクリア"
+
+#: includes/class-performance-settings.php:322
+msgid "Rigenerazione in corso..."
+msgstr "再生成中..."
+
+#: includes/class-performance-settings.php:341
+msgid "Svuotare tutta la cache Critical CSS?"
+msgstr "Critical CSSキャッシュをすべてクリアしますか？"
+
+#: includes/class-performance-settings.php:374
+msgid "Ottimizzazione Asset"
+msgstr "アセット最適化"
+
+#: includes/class-performance-settings.php:375
+msgid "Controlla come vengono caricati JavaScript e CSS nel frontend."
+msgstr "フロントエンドでのJavaScriptとCSSの読み込み方法を制御します。"
+
+#: includes/class-performance-settings.php:381
+msgid "Defer JavaScript"
+msgstr "JavaScriptを遅延読み込み"
+
+#: includes/class-performance-settings.php:382
+msgid ""
+"Aggiunge l'attributo defer agli script frontend di Olobuild. Non blocca il "
+"rendering della pagina."
+msgstr ""
+"OlobuildフロントエンドスクリプトにDefer属性を追加します。ページのレンダリング"
+"をブロックしません。"
+
+#: includes/class-performance-settings.php:391
+msgid "Cache CSS su file"
+msgstr "CSSをファイルにキャッシュ"
+
+#: includes/class-performance-settings.php:392
+msgid ""
+"Salva il CSS generato dai template come file statici invece di iniettarlo "
+"inline. Migliora il caching del browser."
+msgstr ""
+"テンプレート生成CSSをインラインではなく静的ファイルとして保存します。ブラウザ"
+"キャッシュを改善します。"
+
+#: includes/class-performance-settings.php:401
+msgid "Minifica CSS"
+msgstr "CSSを圧縮"
+
+#: includes/class-performance-settings.php:402
+msgid "Rimuove commenti, spazi e newline dal CSS generato."
+msgstr "生成CSSからコメント、スペース、改行を削除します。"
+
+#: includes/class-performance-settings.php:419
+msgid "Cache CSS"
+msgstr "CSSキャッシュ"
+
+#: includes/class-performance-settings.php:429
+msgid "File in cache"
+msgstr "キャッシュファイル"
+
+#: includes/class-performance-settings.php:436
+msgid "Dimensione totale"
+msgstr "合計サイズ"
+
+#: includes/class-performance-settings.php:443
+msgid "Svuota cache CSS"
+msgstr "CSSキャッシュをクリア"
+
+#: includes/class-performance-settings.php:454
+msgid "Svuotare la cache CSS? I file verranno rigenerati automaticamente."
+msgstr "CSSキャッシュをクリアしますか？ファイルは自動的に再生成されます。"
+
+#: includes/class-performance-settings.php:486
+msgid "Resource Hints"
+msgstr "リソースヒント"
+
+#: includes/class-performance-settings.php:487
+msgid ""
+"Suggerimenti al browser per precaricare risorse e velocizzare il caricamento."
+msgstr "リソースのプリロードと読み込み高速化のためのブラウザヒント。"
+
+#: includes/class-performance-settings.php:493
+msgid "DNS Prefetch & Preconnect"
+msgstr "DNSプリフェッチ & プリコネクト"
+
+#: includes/class-performance-settings.php:494
+msgid ""
+"Aggiunge dns-prefetch e preconnect per Google Fonts, YouTube, Vimeo e altri "
+"domini esterni."
+msgstr ""
+"Google Fonts、YouTube、Vimeo、その他の外部ドメインのdns-prefetchとpreconnect"
+"を追加します。"
+
+#: includes/class-performance-settings.php:503
+msgid "Preload font"
+msgstr "フォントのプリロード"
+
+#: includes/class-performance-settings.php:504
+msgid ""
+"Precarica i font custom usati come body/heading per evitare FOUT (Flash of "
+"Unstyled Text)."
+msgstr ""
+"FOUT（Flash of Unstyled Text）を防ぐため、body/headingで使用されるカスタム"
+"フォントをプリロードします。"
+
+#: includes/class-performance-settings.php:513
+msgid "Video facade"
+msgstr "ビデオファサード"
+
+#: includes/class-performance-settings.php:514
+msgid ""
+"Mostra un'anteprima statica dei video YouTube/Vimeo. L'iframe si carica solo "
+"al click. Risparmia ~500KB per video."
+msgstr ""
+"YouTube/Vimeo動画の静的プレビューを表示します。iframeはクリック時のみ読み込ま"
+"れます。動画1つあたり約500KB節約。"
+
+#: includes/class-performance-settings.php:523
+msgid "fetchpriority hero image"
+msgstr "fetchpriority ヒーロー画像"
+
+#: includes/class-performance-settings.php:524
+msgid ""
+"Aggiunge fetchpriority=\"high\" alla prima immagine della pagina e rimuove "
+"lazy loading dagli elementi above-fold."
+msgstr ""
+"ページの最初の画像にfetchpriority=\"high\"を追加し、above-fold要素からlazy "
+"loadingを削除します。"
+
+#: includes/class-performance-settings.php:533
+msgid "Lazy loading immagini"
+msgstr "画像の遅延読み込み"
+
+#: includes/class-performance-settings.php:534
+msgid ""
+"Aggiunge loading=\"lazy\" alle immagini below-the-fold. Riduce il peso "
+"iniziale della pagina."
+msgstr ""
+"below-the-fold画像にloading=\"lazy\"を追加します。初期ページ重量を軽減しま"
+"す。"
+
+#: includes/class-performance-settings.php:551
+msgid "Domini personalizzati"
+msgstr "カスタムドメイン"
+
+#: includes/class-performance-settings.php:552
+msgid ""
+"Aggiungi domini per dns-prefetch e preconnect personalizzati (uno per riga, "
+"con https://)."
+msgstr ""
+"カスタムdns-prefetchとpreconnect用のドメインを追加（1行に1つ、https://付"
+"き）。"
+
+#: includes/class-performance-settings.php:557
+msgid "DNS Prefetch"
+msgstr "DNSプリフェッチ"
+
+#: includes/class-performance-settings.php:560
+msgid "Risolve il DNS in anticipo. Utile per CDN e servizi esterni."
+msgstr "DNSを事前に解決します。CDNや外部サービスに便利です。"
+
+#: includes/class-performance-settings.php:563
+msgid "Preconnect"
+msgstr "プリコネクト"
+
+#: includes/class-performance-settings.php:566
+msgid ""
+"Apre connessione completa (DNS + TCP + TLS). Più aggressivo del dns-"
+"prefetch, usare solo per risorse critiche."
+msgstr ""
+"完全な接続（DNS + TCP + TLS）を開きます。dns-prefetchよりも積極的で、重要なリ"
+"ソースのみに使用してください。"
+
+#: includes/class-performance-settings.php:586
+msgid "Pulizia head"
+msgstr "Headクリーンアップ"
+
+#: includes/class-performance-settings.php:587
+msgid ""
+"Rimuovi risorse non necessarie dal <head> per ridurre richieste e peso della "
+"pagina."
+msgstr ""
+"<head>から不要なリソースを削除してリクエスト数とページ重量を軽減します。"
+
+#: includes/class-performance-settings.php:593
+msgid "Rimuovi jQuery Migrate"
+msgstr "jQuery Migrateを削除"
+
+#: includes/class-performance-settings.php:594
+msgid ""
+"Rimuove jquery-migrate.js (~10KB). Necessario solo per compatibilità con "
+"plugin molto vecchi."
+msgstr ""
+"jquery-migrate.js（約10KB）を削除します。非常に古いプラグインとの互換性のため"
+"にのみ必要です。"
+
+#: includes/class-performance-settings.php:603
+msgid "Rimuovi emoji scripts"
+msgstr "絵文字スクリプトを削除"
+
+#: includes/class-performance-settings.php:604
+msgid ""
+"Rimuove wp-emoji-release.min.js e relativi stili inline. I browser moderni "
+"supportano emoji nativamente."
+msgstr ""
+"wp-emoji-release.min.jsと関連インラインスタイルを削除します。モダンブラウザは"
+"ネイティブに絵文字をサポートしています。"
+
+#: includes/class-performance-settings.php:613
+msgid "Rimuovi Block CSS"
+msgstr "ブロックCSSを削除"
+
+#: includes/class-performance-settings.php:614
+msgid ""
+"Rimuove wp-block-library-css (~30KB). Attiva solo se non usi blocchi "
+"Gutenberg nel frontend."
+msgstr ""
+"wp-block-library-css（約30KB）を削除します。フロントエンドでGutenbergブロック"
+"を使用しない場合のみ有効にしてください。"
+
+#: includes/class-performance-settings.php:623
+msgid "Rimuovi Classic Theme CSS"
+msgstr "クラシックテーマCSSを削除"
+
+#: includes/class-performance-settings.php:624
+msgid "Rimuove classic-theme-styles-css. Inutile se non usi un tema classico."
+msgstr ""
+"classic-theme-styles-cssを削除します。クラシックテーマを使用していない場合は"
+"不要です。"
+
+#: includes/class-performance-settings.php:649
+msgid "View Transitions API"
+msgstr "View Transitions API"
+
+#: includes/class-performance-settings.php:650
+msgid ""
+"Transizioni fluide tra le pagine del sito con la View Transitions API nativa "
+"del browser. Supportata da Chrome 111+, Edge 111+ e Opera 97+."
+msgstr ""
+"ブラウザのネイティブView Transitions APIを使用したサイトページ間のスムーズな"
+"トランジション。Chrome 111+、Edge 111+、Opera 97+でサポート。"
+
+#: includes/class-performance-settings.php:656
+msgid "Abilita View Transitions"
+msgstr "View Transitionsを有効にする"
+
+#: includes/class-performance-settings.php:657
+msgid ""
+"Aggiunge un effetto fade+scale alla navigazione tra pagine. Funziona solo su "
+"browser compatibili, gli altri navigano normalmente."
+msgstr ""
+"ページナビゲーションにフェード+スケール効果を追加します。対応ブラウザでのみ動"
+"作し、それ以外は通常のナビゲーションとなります。"
+
+#: includes/class-performance-settings.php:676
+#: includes/class-performance-settings.php:697
+#: includes/class-performance-settings.php:713
+msgid "Permesso negato"
+msgstr "アクセスが拒否されました"
+
+#: includes/class-performance-settings.php:680
+#: includes/class-performance-settings.php:701
+msgid "Critical CSS non disponibile"
+msgstr "Critical CSSは利用できません"
+
+#: includes/class-performance-settings.php:686
+#, php-format
+msgid "Rigenerato %d su %d pagine (%d errori)"
+msgstr "%d / %d ページを再生成しました（%d エラー）"
+
+#: includes/class-performance-settings.php:706
+#, php-format
+msgid "Svuotati %d transient Critical CSS"
+msgstr "%d 件のCritical CSSトランジェントをクリアしました"
+
+#: includes/class-performance-settings.php:721
+msgid "Cache CSS svuotata. I file verranno rigenerati al prossimo caricamento."
+msgstr ""
+"CSSキャッシュをクリアしました。次回読み込み時にファイルが再生成されます。"
+
+#: includes/class-role-manager.php:166
+msgid "Nascondi pannello Stile"
+msgstr "スタイルパネルを非表示"
+
+#: includes/class-role-manager.php:167
+msgid "Nascondi pannello Avanzate"
+msgstr "詳細パネルを非表示"
+
+#: includes/class-role-manager.php:168
+msgid "Nascondi pannello Animazioni"
+msgstr "アニメーションパネルを非表示"
+
+#: includes/class-role-manager.php:169
+msgid "Blocca aggiunta elementi"
+msgstr "要素の追加をブロック"
+
+#: includes/class-role-manager.php:170
+msgid "Blocca rimozione elementi"
+msgstr "要素の削除をブロック"
+
+#: includes/class-role-manager.php:171
+msgid "Blocca riordinamento"
+msgstr "並べ替えをブロック"
+
+#: includes/class-role-manager.php:172
+msgid "Blocca impostazioni section/row"
+msgstr "セクション/行の設定をブロック"
+
+#: includes/class-role-manager.php:173
+msgid "Nascondi impostazioni pagina"
+msgstr "ページ設定を非表示"
+
+#: includes/class-role-manager.php:174
+msgid "Nascondi stili globali"
+msgstr "グローバルスタイルを非表示"
+
+#: includes/class-role-manager.php:175
+msgid "Nascondi libreria template"
+msgstr "テンプレートライブラリを非表示"
+
+#: includes/class-role-manager.php:257 includes/class-role-manager.php:271
+msgid "Permessi Utente"
+msgstr "ユーザー権限"
+
+#: includes/class-role-manager.php:258
+msgid "Permessi"
+msgstr "権限"
+
+#: includes/class-role-manager.php:281
+msgid "Livelli di Accesso"
+msgstr "アクセスレベル"
+
+#: includes/class-role-manager.php:282
+msgid "Assegna un livello di accesso per ciascun ruolo WordPress"
+msgstr "各WordPressロールにアクセスレベルを割り当て"
+
+#: includes/class-role-manager.php:289
+msgid "Ruolo"
+msgstr "ロール"
+
+#: includes/class-role-manager.php:290
+msgid "Accesso completo"
+msgstr "フルアクセス"
+
+#: includes/class-role-manager.php:291
+msgid "Solo design"
+msgstr "デザインのみ"
+
+#: includes/class-role-manager.php:292
+msgid "Solo contenuti"
+msgstr "コンテンツのみ"
+
+#: includes/class-role-manager.php:293
+msgid "Nessun accesso"
+msgstr "アクセスなし"
+
+#: includes/class-role-manager.php:327
+msgid "Completo"
+msgstr "フル"
+
+#: includes/class-role-manager.php:327
+msgid "struttura + design + contenuti"
+msgstr "構造 + デザイン + コンテンツ"
+
+#: includes/class-role-manager.php:328
+msgid "Design"
+msgstr "デザイン"
+
+#: includes/class-role-manager.php:328
+msgid "stili e layout"
+msgstr "スタイルとレイアウト"
+
+#: includes/class-role-manager.php:329
+msgid "Contenuti"
+msgstr "コンテンツ"
+
+#: includes/class-role-manager.php:329
+msgid "solo testo e immagini"
+msgstr "テキストと画像のみ"
+
+#: includes/class-role-manager.php:336
+msgid "Salva Permessi"
+msgstr "権限を保存"
+
+#: includes/class-role-manager.php:352
+msgid "Restrizioni Granulari per Pannello"
+msgstr "パネル単位の詳細な制限"
+
+#: includes/class-role-manager.php:353
+msgid "Seleziona quali pannelli e funzioni nascondere per ogni ruolo"
+msgstr "各ロールで非表示にするパネルと機能を選択"
+
+#: includes/class-role-manager.php:360
+msgid "Restrizione"
+msgstr "制限"
+
+#: includes/class-role-manager.php:389
+msgid "Salva Restrizioni"
+msgstr "制限を保存"
+
+#: includes/class-role-manager.php:418
+msgid "Permessi salvati"
+msgstr "権限を保存しました"
+
+#: includes/class-role-manager.php:418 includes/class-role-manager.php:441
+#: includes/class-white-label.php:302
+msgid "Errore nel salvataggio"
+msgstr "保存エラー"
+
+#: includes/class-role-manager.php:441
+msgid "Restrizioni salvate"
+msgstr "制限を保存しました"
+
+#: includes/class-seo-redirects.php:181
+msgid "Questa risorsa non è più disponibile."
+msgstr "このリソースは利用できなくなりました。"
+
+#: includes/class-seo-redirects.php:371 includes/class-seo-redirects.php:410
+msgid "Aggiungi Redirect"
+msgstr "リダイレクトを追加"
+
+#: includes/class-seo-redirects.php:372
+msgid ""
+"Prefisso <code>~</code> per regex. Es: <code>~/vecchio/(.*)</code> &rarr; "
+"<code>/nuovo/$1</code>"
+msgstr ""
+"正規表現には<code>~</code>プレフィックスを使用。例：<code>~/vecchio/(.*)"
+"</code> &rarr; <code>/nuovo/$1</code>"
+
+#: includes/class-seo-redirects.php:378
+msgid "Da URL"
+msgstr "元URL"
+
+#: includes/class-seo-redirects.php:379
+msgid "Percorso relativo o regex con prefisso ~"
+msgstr "相対パスまたは~プレフィックス付き正規表現"
+
+#: includes/class-seo-redirects.php:387
+msgid "A URL"
+msgstr "先URL"
+
+#: includes/class-seo-redirects.php:388
+msgid "Percorso relativo o URL assoluto"
+msgstr "相対パスまたは絶対URL"
+
+#: includes/class-seo-redirects.php:396 includes/class-seo-redirects.php:441
+msgid "Tipo"
+msgstr "タイプ"
+
+#: includes/class-seo-redirects.php:400
+msgid "Permanente (consigliato)"
+msgstr "永続（推奨）"
+
+#: includes/class-seo-redirects.php:401
+msgid "Temporaneo"
+msgstr "一時的"
+
+#: includes/class-seo-redirects.php:402
+msgid "Temporaneo (strict)"
+msgstr "一時的（strict）"
+
+#: includes/class-seo-redirects.php:403
+msgid "Risorsa rimossa (Gone)"
+msgstr "リソース削除済み（Gone）"
+
+#: includes/class-seo-redirects.php:423
+#, php-format
+msgid "Redirect attivi (%d)"
+msgstr "有効なリダイレクト (%d)"
+
+#: includes/class-seo-redirects.php:424
+msgid "Tutti i redirect configurati, ordinati per data di creazione"
+msgstr "設定済みのすべてのリダイレクト（作成日順）"
+
+#: includes/class-seo-redirects.php:433
+msgid "Nessun redirect configurato."
+msgstr "リダイレクトが設定されていません。"
+
+#: includes/class-seo-redirects.php:439
+msgid "Da"
+msgstr "元"
+
+#: includes/class-seo-redirects.php:440
+msgid "A"
+msgstr "先"
+
+#: includes/class-seo-redirects.php:442 includes/class-seo-redirects.php:544
+msgid "Hit"
+msgstr "ヒット"
+
+#: includes/class-seo-redirects.php:474
+msgid "Inserisci URL di origine."
+msgstr "元URLを入力してください。"
+
+#: includes/class-seo-redirects.php:475 includes/class-seo-redirects.php:612
+msgid "Inserisci URL di destinazione."
+msgstr "宛先URLを入力してください。"
+
+#: includes/class-seo-redirects.php:493
+msgid "Eliminare questo redirect?"
+msgstr "このリダイレクトを削除しますか？"
+
+#: includes/class-seo-redirects.php:524
+msgid "URL che generano errore 404"
+msgstr "404エラーを生成するURL"
+
+#: includes/class-seo-redirects.php:525
+msgid ""
+"Monitora gli URL visitati che non esistono. Puoi convertirli in redirect con "
+"un click."
+msgstr ""
+"存在しないアクセス済みURLを監視します。ワンクリックでリダイレクトに変換できま"
+"す。"
+
+#: includes/class-seo-redirects.php:537
+msgid ""
+"Nessun errore 404 registrato. Le visite a URL inesistenti appariranno qui."
+msgstr ""
+"404エラーは記録されていません。存在しないURLへのアクセスがここに表示されます。"
+
+#: includes/class-seo-redirects.php:543
+msgid "URL"
+msgstr "URL"
+
+#: includes/class-seo-redirects.php:545
+msgid "Ultimo accesso"
+msgstr "最終アクセス"
+
+#: includes/class-seo-redirects.php:546
+msgid "Referrer"
+msgstr "リファラー"
+
+#: includes/class-seo-redirects.php:547
+msgid "Azioni"
+msgstr "アクション"
+
+#: includes/class-seo-redirects.php:582
+msgid "Crea redirect da 404"
+msgstr "404からリダイレクトを作成"
+
+#: includes/class-seo-redirects.php:583
+msgid "Da:"
+msgstr "元："
+
+#: includes/class-seo-redirects.php:586
+msgid "Destinazione"
+msgstr "宛先"
+
+#: includes/class-seo-redirects.php:592
+msgid "Annulla"
+msgstr "キャンセル"
+
+#: includes/class-seo-redirects.php:593
+msgid "Crea Redirect 301"
+msgstr "301リダイレクトを作成"
+
+#: includes/class-seo-redirects.php:648
+msgid "Svuotare tutto il log 404?"
+msgstr "404ログをすべて消去しますか？"
+
+#: includes/class-seo-redirects.php:676
+msgid ""
+"Notifica istantaneamente i motori di ricerca (Bing, Yandex, Naver, Seznam) "
+"quando pubblichi o aggiorni un contenuto"
+msgstr ""
+"コンテンツの公開や更新時に検索エンジン（Bing、Yandex、Naver、Seznam）に即座に"
+"通知します"
+
+#: includes/class-seo-redirects.php:690
+msgid "Genera una chiave casuale e inseriscila qui"
+msgstr "ランダムキーを生成してここに入力してください"
+
+#: includes/class-seo-redirects.php:698
+msgid "Chiave suggerita:"
+msgstr "推奨キー："
+
+#: includes/class-seo-redirects.php:699
+msgid "Crea anche un file <code>"
+msgstr "次のファイルも作成 <code>"
+
+#: includes/class-seo-redirects.php:705
+msgid "Ogni pubblicazione/aggiornamento invia un ping IndexNow."
+msgstr "公開/更新のたびにIndexNow pingを送信します。"
+
+#: includes/class-seo-redirects.php:713
+msgid "Salva"
+msgstr "保存"
+
+#: includes/class-seo-redirects.php:729 includes/class-seo-redirects.php:765
+#: includes/class-seo-redirects.php:782 includes/class-seo-redirects.php:799
+#: includes/class-seo-redirects.php:811
+msgid "Permesso negato."
+msgstr "アクセスが拒否されました。"
+
+#: includes/class-seo-redirects.php:737
+msgid "URL di origine obbligatorio."
+msgstr "元URLは必須です。"
+
+#: includes/class-seo-redirects.php:748
+msgid "Redirect per questo URL esiste già."
+msgstr "このURLのリダイレクトは既に存在します。"
+
+#: includes/class-seo-redirects.php:770
+msgid "ID obbligatorio."
+msgstr "IDは必須です。"
+
+#: includes/class-seo-redirects.php:818
+msgid "Dati mancanti."
+msgstr "データが不足しています。"
+
+#: includes/class-seo-redirects.php:828
+msgid "Voce non trovata."
+msgstr "項目が見つかりません。"
+
+#: includes/class-seo-settings.php:147
+msgid "Titoli &amp; Meta"
+msgstr "タイトル &amp; メタ"
+
+#: includes/class-seo-settings.php:148
+msgid "Social"
+msgstr "ソーシャル"
+
+#: includes/class-seo-settings.php:149
+msgid "Schema / Local SEO"
+msgstr "スキーマ / ローカルSEO"
+
+#: includes/class-seo-settings.php:150
+msgid "Webmaster Tools"
+msgstr "ウェブマスターツール"
+
+#: includes/class-seo-settings.php:151
+msgid "Sitemap"
+msgstr "サイトマップ"
+
+#: includes/class-seo-settings.php:152 includes/class-seo-settings.php:1068
+msgid "Avanzate"
+msgstr "詳細"
+
+#: includes/class-seo-settings.php:176
+msgid "Salva Impostazioni"
+msgstr "設定を保存"
+
+#: includes/class-seo-settings.php:210
+msgid "Formato Titoli"
+msgstr "タイトル形式"
+
+#: includes/class-seo-settings.php:211
+msgid ""
+"Definisci il formato predefinito dei titoli per ogni tipo di contenuto. "
+"Variabili: <code>%title%</code>, <code>%sitename%</code>, <code>%sep%</"
+"code>, <code>%tagline%</code>, <code>%category%</code>, <code>%tag%</code>, "
+"<code>%search_query%</code>, <code>%page%</code>, <code>%date%</code>, "
+"<code>%author%</code>"
+msgstr ""
+"各コンテンツタイプのデフォルトタイトル形式を定義します。変数："
+"<code>%title%</code>、<code>%sitename%</code>、<code>%sep%</code>、"
+"<code>%tagline%</code>、<code>%category%</code>、<code>%tag%</code>、"
+"<code>%search_query%</code>、<code>%page%</code>、<code>%date%</code>、"
+"<code>%author%</code>"
+
+#: includes/class-seo-settings.php:217
+msgid "Separatore"
+msgstr "区切り文字"
+
+#: includes/class-seo-settings.php:218
+msgid "Il carattere usato per separare titolo e nome sito."
+msgstr "タイトルとサイト名を区切る文字。"
+
+#: includes/class-seo-settings.php:233
+msgid "Homepage — Titolo"
+msgstr "ホームページ — タイトル"
+
+#: includes/class-seo-settings.php:234
+msgid "Homepage — Descrizione"
+msgstr "ホームページ — 説明"
+
+#: includes/class-seo-settings.php:235
+msgid "Articoli — Titolo"
+msgstr "投稿 — タイトル"
+
+#: includes/class-seo-settings.php:236
+msgid "Articoli — Descrizione"
+msgstr "投稿 — 説明"
+
+#: includes/class-seo-settings.php:237
+msgid "Pagine — Titolo"
+msgstr "固定ページ — タイトル"
+
+#: includes/class-seo-settings.php:238
+msgid "Pagine — Descrizione"
+msgstr "固定ページ — 説明"
+
+#: includes/class-seo-settings.php:239
+msgid "Categorie — Titolo"
+msgstr "カテゴリー — タイトル"
+
+#: includes/class-seo-settings.php:240
+msgid "Categorie — Descrizione"
+msgstr "カテゴリー — 説明"
+
+#: includes/class-seo-settings.php:241
+msgid "Tag — Titolo"
+msgstr "タグ — タイトル"
+
+#: includes/class-seo-settings.php:242
+msgid "Autore — Titolo"
+msgstr "投稿者 — タイトル"
+
+#: includes/class-seo-settings.php:243
+msgid "Ricerca — Titolo"
+msgstr "検索 — タイトル"
+
+#: includes/class-seo-settings.php:244
+msgid "404 — Titolo"
+msgstr "404 — タイトル"
+
+#: includes/class-seo-settings.php:274
+msgid "Knowledge Graph"
+msgstr "ナレッジグラフ"
+
+#: includes/class-seo-settings.php:275
+msgid ""
+"Queste informazioni vengono usate per il markup JSON-LD del Knowledge Graph "
+"di Google."
+msgstr ""
+"これらの情報はGoogleナレッジグラフのJSON-LDマークアップに使用されます。"
+
+#: includes/class-seo-settings.php:281
+msgid "Tipo entità"
+msgstr "エンティティタイプ"
+
+#: includes/class-seo-settings.php:285
+msgid "Organizzazione"
+msgstr "組織"
+
+#: includes/class-seo-settings.php:286
+msgid "Persona"
+msgstr "個人"
+
+#: includes/class-seo-settings.php:292
+msgid "Nome"
+msgstr "名前"
+
+#: includes/class-seo-settings.php:300
+msgid "Logo / Foto (URL)"
+msgstr "ロゴ / 写真（URL）"
+
+#: includes/class-seo-settings.php:334
+msgid "Profili Social"
+msgstr "ソーシャルプロフィール"
+
+#: includes/class-seo-settings.php:335
+msgid ""
+"Usati nel markup JSON-LD <code>sameAs</code> per collegare il sito ai "
+"profili social."
+msgstr ""
+"JSON-LD <code>sameAs</code>マークアップでサイトとソーシャルプロフィールを関連"
+"付けます。"
+
+#: includes/class-seo-settings.php:370
+msgid "Open Graph — Impostazioni Predefinite"
+msgstr "Open Graph — デフォルト設定"
+
+#: includes/class-seo-settings.php:371
+msgid ""
+"Configurazione per la condivisione su Facebook, Twitter e altri social "
+"network."
+msgstr "Facebook、Twitter、その他のソーシャルネットワークでの共有設定。"
+
+#: includes/class-seo-settings.php:377
+msgid "Immagine OG predefinita"
+msgstr "デフォルトOG画像"
+
+#: includes/class-seo-settings.php:378
+msgid ""
+"Usata quando un post/pagina non ha immagine in evidenza. Dimensione "
+"consigliata: 1200x630px."
+msgstr ""
+"投稿/ページにアイキャッチ画像がない場合に使用。推奨サイズ：1200x630px。"
+
+#: includes/class-seo-settings.php:402
+msgid "Summary con immagine grande"
+msgstr "大きな画像付きサマリー"
+
+#: includes/class-seo-settings.php:424
+msgid "Local Business / Organizzazione"
+msgstr "ローカルビジネス / 組織"
+
+#: includes/class-seo-settings.php:425
+msgid ""
+"Schema markup LocalBusiness per Google. Se il nome è vuoto, questo schema "
+"non viene generato."
+msgstr ""
+"Google向けLocalBusinessスキーママークアップ。名前が空の場合、このスキーマは生"
+"成されません。"
+
+#: includes/class-seo-settings.php:431
+msgid "Tipo attività"
+msgstr "事業タイプ"
+
+#: includes/class-seo-settings.php:437
+msgid "Attività locale (generico)"
+msgstr "ローカルビジネス（一般）"
+
+#: includes/class-seo-settings.php:438
+msgid "Ristorante"
+msgstr "レストラン"
+
+#: includes/class-seo-settings.php:439
+msgid "Hotel"
+msgstr "ホテル"
+
+#: includes/class-seo-settings.php:440
+msgid "Bar / Pub"
+msgstr "バー / パブ"
+
+#: includes/class-seo-settings.php:441
+msgid "Caffè / Coffee Shop"
+msgstr "カフェ / コーヒーショップ"
+
+#: includes/class-seo-settings.php:442
+msgid "Negozio (generico)"
+msgstr "店舗（一般）"
+
+#: includes/class-seo-settings.php:443
+msgid "Negozio abbigliamento"
+msgstr "衣料品店"
+
+#: includes/class-seo-settings.php:444
+msgid "Alimentari / Supermercato"
+msgstr "食料品店 / スーパーマーケット"
+
+#: includes/class-seo-settings.php:445
+msgid "Negozio articoli sportivi"
+msgstr "スポーツ用品店"
+
+#: includes/class-seo-settings.php:446
+msgid "Officina auto"
+msgstr "自動車整備工場"
+
+#: includes/class-seo-settings.php:447
+msgid "Salone di bellezza"
+msgstr "美容院"
+
+#: includes/class-seo-settings.php:448
+msgid "Dentista"
+msgstr "歯科医院"
+
+#: includes/class-seo-settings.php:449
+msgid "Clinica medica"
+msgstr "クリニック"
+
+#: includes/class-seo-settings.php:450
+msgid "Farmacia"
+msgstr "薬局"
+
+#: includes/class-seo-settings.php:451
+msgid "Studio legale"
+msgstr "法律事務所"
+
+#: includes/class-seo-settings.php:452
+msgid "Commercialista"
+msgstr "会計事務所"
+
+#: includes/class-seo-settings.php:453
+msgid "Agenzia immobiliare"
+msgstr "不動産会社"
+
+#: includes/class-seo-settings.php:454
+msgid "Agenzia viaggi"
+msgstr "旅行代理店"
+
+#: includes/class-seo-settings.php:455
+msgid "Servizi finanziari"
+msgstr "金融サービス"
+
+#: includes/class-seo-settings.php:456
+msgid "Agenzia assicurazioni"
+msgstr "保険代理店"
+
+#: includes/class-seo-settings.php:457
+msgid "Palestra / Centro fitness"
+msgstr "ジム / フィットネスセンター"
+
+#: includes/class-seo-settings.php:458
+msgid "Spa / Centro benessere"
+msgstr "スパ / ウェルネスセンター"
+
+#: includes/class-seo-settings.php:459
+msgid "Campeggio"
+msgstr "キャンプ場"
+
+#: includes/class-seo-settings.php:460
+msgid "Bed & Breakfast"
+msgstr "ベッド＆ブレックファスト"
+
+#: includes/class-seo-settings.php:461
+msgid "Ostello"
+msgstr "ホステル"
+
+#: includes/class-seo-settings.php:462
+msgid "Struttura ricettiva (generico)"
+msgstr "宿泊施設（一般）"
+
+#: includes/class-seo-settings.php:463
+msgid "Servizio professionale"
+msgstr "専門サービス"
+
+#: includes/class-seo-settings.php:464
+msgid "Ente educativo"
+msgstr "教育機関"
+
+#: includes/class-seo-settings.php:465
+msgid "Ufficio pubblico"
+msgstr "公共機関"
+
+#: includes/class-seo-settings.php:476
+msgid "Nome attività"
+msgstr "事業名"
+
+#: includes/class-seo-settings.php:492
+msgid "Via / Indirizzo"
+msgstr "住所"
+
+#: includes/class-seo-settings.php:500
+msgid "Città"
+msgstr "市区町村"
+
+#: includes/class-seo-settings.php:508
+msgid "Provincia / Stato"
+msgstr "都道府県"
+
+#: includes/class-seo-settings.php:516
+msgid "CAP"
+msgstr "郵便番号"
+
+#: includes/class-seo-settings.php:524
+msgid "Paese"
+msgstr "国"
+
+#: includes/class-seo-settings.php:532
+msgid "Telefono"
+msgstr "電話番号"
+
+#: includes/class-seo-settings.php:548
+msgid "Coordinate GPS"
+msgstr "GPS座標"
+
+#: includes/class-seo-settings.php:558
+msgid "Fascia di prezzo"
+msgstr "価格帯"
+
+#: includes/class-seo-settings.php:562
+msgid "Non specificato"
+msgstr "未指定"
+
+#: includes/class-seo-settings.php:563
+msgid "Economico"
+msgstr "リーズナブル"
+
+#: includes/class-seo-settings.php:564
+msgid "Moderato"
+msgstr "普通"
+
+#: includes/class-seo-settings.php:565
+msgid "Costoso"
+msgstr "高め"
+
+#: includes/class-seo-settings.php:566
+msgid "Lusso"
+msgstr "高級"
+
+#: includes/class-seo-settings.php:572
+msgid "Immagine attività (URL)"
+msgstr "事業画像（URL）"
+
+#: includes/class-seo-settings.php:589
+msgid "Orari di apertura"
+msgstr "営業時間"
+
+#: includes/class-seo-settings.php:590
+msgid ""
+"Inserisci gli orari nel formato <code>HH:MM</code>. Lascia vuoto per i "
+"giorni di chiusura."
+msgstr ""
+"時間を<code>HH:MM</code>形式で入力してください。定休日は空欄にしてください。"
+
+#: includes/class-seo-settings.php:596
+msgid "Lunedì"
+msgstr "月曜日"
+
+#: includes/class-seo-settings.php:597
+msgid "Martedì"
+msgstr "火曜日"
+
+#: includes/class-seo-settings.php:598
+msgid "Mercoledì"
+msgstr "水曜日"
+
+#: includes/class-seo-settings.php:599
+msgid "Giovedì"
+msgstr "木曜日"
+
+#: includes/class-seo-settings.php:600
+msgid "Venerdì"
+msgstr "金曜日"
+
+#: includes/class-seo-settings.php:601
+msgid "Sabato"
+msgstr "土曜日"
+
+#: includes/class-seo-settings.php:602
+msgid "Domenica"
+msgstr "日曜日"
+
+#: includes/class-seo-settings.php:637
+msgid "Verifica Motori di Ricerca"
+msgstr "検索エンジン認証"
+
+#: includes/class-seo-settings.php:638
+msgid ""
+"Inserisci il codice di verifica (solo il valore del <code>content</code>, "
+"non l'intero meta tag)."
+msgstr ""
+"認証コードを入力してください（<code>content</code>の値のみ、メタタグ全体では"
+"ありません）。"
+
+#: includes/class-seo-settings.php:700
+msgid "Sitemap attiva"
+msgstr "サイトマップを有効化"
+
+#: includes/class-seo-settings.php:701
+msgid "Genera la sitemap XML per i motori di ricerca."
+msgstr "検索エンジン向けのXMLサイトマップを生成します。"
+
+#: includes/class-seo-settings.php:710
+msgid "Numero max URL per sitemap"
+msgstr "サイトマップあたりの最大URL数"
+
+#: includes/class-seo-settings.php:718
+msgid "Includi immagini"
+msgstr "画像を含める"
+
+#: includes/class-seo-settings.php:719
+msgid "Aggiungi tag <code>&lt;image:image&gt;</code> nella sitemap."
+msgstr "サイトマップに<code>&lt;image:image&gt;</code>タグを追加します。"
+
+#: includes/class-seo-settings.php:736
+msgid "Post Type nella Sitemap"
+msgstr "サイトマップの投稿タイプ"
+
+#: includes/class-seo-settings.php:737
+msgid "Seleziona quali tipi di contenuto includere nella sitemap."
+msgstr "サイトマップに含めるコンテンツタイプを選択してください。"
+
+#: includes/class-seo-settings.php:762
+msgid "Tassonomie nella Sitemap"
+msgstr "サイトマップのタクソノミー"
+
+#: includes/class-seo-settings.php:763
+msgid "Seleziona quali tassonomie includere nella sitemap."
+msgstr "サイトマップに含めるタクソノミーを選択してください。"
+
+#: includes/class-seo-settings.php:796
+msgid "Robots Meta"
+msgstr "Robots Meta"
+
+#: includes/class-seo-settings.php:797
+msgid ""
+"Controlla le direttive robots globali. Queste possono essere sovrascritte "
+"per singolo post/pagina."
+msgstr ""
+"グローバルrobotディレクティブを制御します。個々の投稿/ページで上書きできます。"
+
+#: includes/class-seo-settings.php:812
+msgid "Tag"
+msgstr "タグ"
+
+#: includes/class-seo-settings.php:821
+msgid "Archivi autore"
+msgstr "投稿者アーカイブ"
+
+#: includes/class-seo-settings.php:830
+msgid "Archivi per data"
+msgstr "日付アーカイブ"
+
+#: includes/class-seo-settings.php:839
+msgid "Pagine di ricerca"
+msgstr "検索ページ"
+
+#: includes/class-seo-settings.php:867
+msgid "Link"
+msgstr "リンク"
+
+#: includes/class-seo-settings.php:868
+msgid "Gestione attributi per i link esterni nel contenuto."
+msgstr "コンテンツ内の外部リンクの属性管理。"
+
+#: includes/class-seo-settings.php:874
+msgid "Nofollow link esterni"
+msgstr "外部リンクをNofollow"
+
+#: includes/class-seo-settings.php:875
+msgid "Aggiungi <code>rel=\"nofollow\"</code> ai link esterni nel contenuto."
+msgstr "コンテンツ内の外部リンクに<code>rel=\"nofollow\"</code>を追加します。"
+
+#: includes/class-seo-settings.php:884
+msgid "Apri in nuova tab"
+msgstr "新しいタブで開く"
+
+#: includes/class-seo-settings.php:885
+msgid "Aggiungi <code>target=\"_blank\"</code> ai link esterni."
+msgstr "外部リンクに<code>target=\"_blank\"</code>を追加します。"
+
+#: includes/class-seo-settings.php:902
+msgid "Pulizia &lt;head&gt;"
+msgstr "&lt;head&gt;のクリーンアップ"
+
+#: includes/class-seo-settings.php:903
+msgid "Rimuovi tag non necessari dall'header HTML per un codice più pulito."
+msgstr "HTMLヘッダーから不要なタグを削除してコードをクリーンにします。"
+
+#: includes/class-seo-settings.php:945
+msgid "Feed RSS extra (commenti, categorie)"
+msgstr "追加RSSフィード（コメント、カテゴリー）"
+
+#: includes/class-seo-settings.php:962
+msgid "Robots.txt personalizzato"
+msgstr "カスタムrobots.txt"
+
+#: includes/class-seo-settings.php:963
+msgid ""
+"Aggiungi righe personalizzate al file <code>robots.txt</code> virtuale di "
+"WordPress. Una regola per riga."
+msgstr ""
+"WordPressの仮想<code>robots.txt</code>ファイルにカスタム行を追加します。1行に"
+"1ルール。"
+
+#: includes/class-seo-settings.php:1008
+msgid "Titolo pagina"
+msgstr "ページタイトル"
+
+#: includes/class-seo-settings.php:1117
+msgid "Descrivi questa pagina in 120-160 caratteri..."
+msgstr "このページを120〜160文字で説明してください..."
+
+#: includes/class-seo-settings.php:1137
+msgid "Usa il titolo SEO se vuoto"
+msgstr "空の場合はSEOタイトルを使用"
+
+#: includes/class-seo-settings.php:1141
+msgid "Usa la meta description se vuoto"
+msgstr "空の場合はメタディスクリプションを使用"
+
+#: includes/class-seo-settings.php:1146 includes/class-seo-settings.php:1267
+msgid "Seleziona immagine"
+msgstr "画像を選択"
+
+#: includes/class-seo-settings.php:1153
+msgid "Usa OG Title se vuoto"
+msgstr "空の場合はOGタイトルを使用"
+
+#: includes/class-seo-settings.php:1157
+msgid "Usa OG Description se vuoto"
+msgstr "空の場合はOGディスクリプションを使用"
+
+#: includes/class-seo-settings.php:1166
+msgid "Lascia vuoto per usare l'URL predefinito."
+msgstr "デフォルトURLを使用する場合は空欄にしてください。"
+
+#: includes/class-seo-settings.php:1173
+msgid "non indicizzare questa pagina"
+msgstr "このページをインデックスしない"
+
+#: includes/class-seo-settings.php:1177
+msgid "non seguire i link"
+msgstr "リンクをフォローしない"
+
+#: includes/class-seo-settings.php:1184
+msgid "Automatico (predefinito)"
+msgstr "自動（デフォルト）"
+
+#: includes/class-seo-settings.php:1195
+msgid "Nessuno schema"
+msgstr "スキーマなし"
+
+#: includes/class-seo-settings.php:1201
+msgid "FAQ Schema (domande e risposte)"
+msgstr "FAQスキーマ（質問と回答）"
+
+#: includes/class-seo-settings.php:1202
+msgid ""
+"Aggiungi coppie domanda/risposta per generare markup FAQPage. Ottiene rich "
+"results su Google."
+msgstr ""
+"FAQPageマークアップを生成するための質問/回答ペアを追加します。Googleでリッチリ"
+"ザルトを取得できます。"
+
+#: includes/class-seo-settings.php:1212 includes/class-seo-settings.php:1265
+msgid "Domanda"
+msgstr "質問"
+
+#: includes/class-seo-settings.php:1216 includes/class-seo-settings.php:1266
+msgid "Risposta"
+msgstr "回答"
+
+#: includes/class-seo-settings.php:1222
+msgid "Aggiungi FAQ"
+msgstr "FAQを追加"
+
+#: includes/class-seo-settings.php:1228
+msgid ""
+"Usa <code>[olo_breadcrumb]</code> per inserire breadcrumb SEO-friendly con "
+"markup JSON-LD. Parametri opzionali: <code>separator=\"&raquo;\"</code>, "
+"<code>class=\"my-breadcrumb\"</code>"
+msgstr ""
+"<code>[olo_breadcrumb]</code>を使用してJSON-LDマークアップ付きのSEOフレンドリ"
+"ーなパンくずリストを挿入します。オプションパラメーター："
+"<code>separator=\"&raquo;\"</code>、"
+"<code>class=\"my-breadcrumb\"</code>"
+
+#: includes/class-seo-settings.php:1236
+msgid "Focus keyword presente nel titolo SEO"
+msgstr "フォーカスキーワードがSEOタイトルに含まれています"
+
+#: includes/class-seo-settings.php:1237
+msgid "Focus keyword non trovata nel titolo SEO"
+msgstr "フォーカスキーワードがSEOタイトルに見つかりません"
+
+#: includes/class-seo-settings.php:1238
+msgid "Focus keyword presente nella meta description"
+msgstr "フォーカスキーワードがメタディスクリプションに含まれています"
+
+#: includes/class-seo-settings.php:1239
+msgid "Focus keyword non trovata nella meta description"
+msgstr "フォーカスキーワードがメタディスクリプションに見つかりません"
+
+#: includes/class-seo-settings.php:1240
+msgid "Focus keyword presente nell'URL"
+msgstr "フォーカスキーワードがURLに含まれています"
+
+#: includes/class-seo-settings.php:1241
+msgid "Focus keyword non trovata nell'URL"
+msgstr "フォーカスキーワードがURLに見つかりません"
+
+#: includes/class-seo-settings.php:1242
+msgid "Lunghezza titolo ottimale"
+msgstr "タイトルの長さが最適です"
+
+#: includes/class-seo-settings.php:1243
+msgid "Lunghezza titolo:"
+msgstr "タイトルの長さ："
+
+#: includes/class-seo-settings.php:1244
+msgid "caratteri"
+msgstr "文字"
+
+#: includes/class-seo-settings.php:1245
+msgid "ideale:"
+msgstr "理想："
+
+#: includes/class-seo-settings.php:1246
+msgid "Lunghezza description ottimale"
+msgstr "ディスクリプションの長さが最適です"
+
+#: includes/class-seo-settings.php:1247
+msgid "Lunghezza description:"
+msgstr "ディスクリプションの長さ："
+
+#: includes/class-seo-settings.php:1248
+msgid "Meta description mancante"
+msgstr "メタディスクリプションがありません"
+
+#: includes/class-seo-settings.php:1249
+msgid "Lunghezza contenuto buona"
+msgstr "コンテンツの長さが適切です"
+
+#: includes/class-seo-settings.php:1250
+msgid "Contenuto breve:"
+msgstr "コンテンツが短い："
+
+#: includes/class-seo-settings.php:1251
+msgid "parole"
+msgstr "語"
+
+#: includes/class-seo-settings.php:1252
+msgid "consigliato:"
+msgstr "推奨："
+
+#: includes/class-seo-settings.php:1253
+msgid "Keyword density:"
+msgstr "キーワード密度："
+
+#: includes/class-seo-settings.php:1254
+msgid "occorrenze"
+msgstr "回出現"
+
+#: includes/class-seo-settings.php:1255
+msgid "Focus keyword non trovata nel contenuto"
+msgstr "フォーカスキーワードがコンテンツに見つかりません"
+
+#: includes/class-seo-settings.php:1256
+msgid "Focus keyword presente nel primo paragrafo"
+msgstr "フォーカスキーワードが最初の段落に含まれています"
+
+#: includes/class-seo-settings.php:1257
+msgid "Focus keyword assente dal primo paragrafo"
+msgstr "フォーカスキーワードが最初の段落にありません"
+
+#: includes/class-seo-settings.php:1258
+msgid "Leggibilità buona (media"
+msgstr "読みやすさ良好（平均"
+
+#: includes/class-seo-settings.php:1259
+msgid "Frasi lunghe: media"
+msgstr "長い文：平均"
+
+#: includes/class-seo-settings.php:1260
+msgid "parole/frase)"
+msgstr "語/文）"
+
+#: includes/class-seo-settings.php:1261
+msgid "parole/frase (ideale: max 20)"
+msgstr "語/文（理想：最大20）"
+
+#: includes/class-seo-settings.php:1262
+msgid "Buono"
+msgstr "良好"
+
+#: includes/class-seo-settings.php:1263
+msgid "Migliorabile"
+msgstr "改善可能"
+
+#: includes/class-seo-settings.php:1264
+msgid "Da migliorare"
+msgstr "要改善"
+
+#: includes/class-seo-settings.php:1616
+msgid "Nessun dato SEO configurato"
+msgstr "SEOデータが設定されていません"
+
+#: includes/class-seo-settings.php:1620
+#, php-format
+msgid "%1$d/%2$d campi SEO compilati"
+msgstr "%1$d/%2$d件のSEOフィールド入力済み"
+
+#: includes/class-site-import-export.php:97
+msgid "Template non trovato"
+msgstr "テンプレートが見つかりません"
+
+#: includes/class-site-import-export.php:103
+msgid "Dati template non validi"
+msgstr "無効なテンプレートデータ"
+
+#: includes/class-site-import-export.php:184
+msgid "Formato non valido. Richiesto olobuild-template."
+msgstr "無効な形式。olobuild-templateが必要です。"
+
+#: includes/class-site-import-export.php:189
+msgid "Template vuoto"
+msgstr "空のテンプレート"
+
+#: includes/class-site-import-export.php:205
+#: includes/class-site-import-export.php:265
+msgid "Template importato"
+msgstr "テンプレートをインポートしました"
+
+#: includes/class-site-import-export.php:218
+msgid "Errore salvataggio template"
+msgstr "テンプレートの保存エラー"
+
+#: includes/class-site-import-export.php:236
+msgid "Formato non valido. Richiesto olobuild-site."
+msgstr "無効な形式。olobuild-siteが必要です。"
+
+#: includes/class-site-import-export.php:469
+#: includes/class-site-import-export.php:470
+msgid "Import/Export"
+msgstr "インポート/エクスポート"
+
+#: includes/class-site-import-export.php:481
+msgid "Import / Export"
+msgstr "インポート / エクスポート"
+
+#: includes/class-site-import-export.php:494
+msgid "Esporta"
+msgstr "エクスポート"
+
+#: includes/class-site-import-export.php:495
+msgid "Scarica template e media in formato JSON"
+msgstr "テンプレートとメディアをJSON形式でダウンロード"
+
+#: includes/class-site-import-export.php:501
+msgid "Singolo template"
+msgstr "単一テンプレート"
+
+#: includes/class-site-import-export.php:513
+msgid "Includi media (immagini, video, PDF)"
+msgstr "メディアを含める（画像、動画、PDF）"
+
+#: includes/class-site-import-export.php:518
+#: includes/class-site-import-export.php:609
+#: includes/class-site-import-export.php:614
+msgid "Esporta Template"
+msgstr "テンプレートをエクスポート"
+
+#: includes/class-site-import-export.php:525
+msgid "Esporta tutto il sito"
+msgstr "サイト全体をエクスポート"
+
+#: includes/class-site-import-export.php:526
+msgid "Include tutti i template, header, footer e stili globali"
+msgstr "すべてのテンプレート、ヘッダー、フッター、グローバルスタイルを含む"
+
+#: includes/class-site-import-export.php:530
+#: includes/class-site-import-export.php:637
+#: includes/class-site-import-export.php:642
+msgid "Esporta Sito Completo"
+msgstr "サイト全体をエクスポート"
+
+#: includes/class-site-import-export.php:543
+msgid "Carica un file .json esportato da Olobuild"
+msgstr "Olobuildからエクスポートした.jsonファイルをアップロード"
+
+#: includes/class-site-import-export.php:552
+msgid "Importa media (scarica e ricarica immagini)"
+msgstr "メディアをインポート（画像をダウンロードして再アップロード）"
+
+#: includes/class-site-import-export.php:593
+#: includes/class-site-import-export.php:622
+msgid "Esportazione..."
+msgstr "エクスポート中..."
+
+#: includes/class-site-import-export.php:604
+msgid "Template esportato!"
+msgstr "テンプレートをエクスポートしました！"
+
+#: includes/class-site-import-export.php:606
+#: includes/class-site-import-export.php:634
+#: includes/class-site-import-export.php:722
+msgid "sconosciuto"
+msgstr "不明"
+
+#: includes/class-site-import-export.php:632
+msgid "Sito esportato!"
+msgstr "サイトをエクスポートしました！"
+
+#: includes/class-site-import-export.php:658
+msgid "Importazione..."
+msgstr "インポート中..."
+
+#: includes/class-site-import-export.php:660
+msgid "Lettura file..."
+msgstr "ファイル読み込み中..."
+
+#: includes/class-site-import-export.php:668
+msgid "File JSON non valido"
+msgstr "無効なJSONファイル"
+
+#: includes/class-site-import-export.php:675
+msgid "Formato non riconosciuto"
+msgstr "認識できない形式"
+
+#: includes/class-site-import-export.php:687
+msgid "Invio dati al server..."
+msgstr "サーバーにデータを送信中..."
+
+#: includes/class-site-import-export.php:690
+msgid "Scaricamento"
+msgstr "ダウンロード中"
+
+#: includes/class-site-import-export.php:690
+msgid "file media..."
+msgstr "メディアファイル..."
+
+#: includes/class-site-import-export.php:712
+msgid "template importati"
+msgstr "テンプレートをインポートしました"
+
+#: includes/class-site-import-export.php:714
+msgid "importato"
+msgstr "インポート済み"
+
+#: includes/class-site-import-export.php:717
+msgid "media importati"
+msgstr "メディアをインポートしました"
+
+#: includes/class-site-import-export.php:719
+msgid "Completato!"
+msgstr "完了！"
+
+#: includes/class-site-import-export.php:720
+msgid "Importazione completata!"
+msgstr "インポート完了！"
+
+#: includes/class-site-import-export.php:723
+#: includes/class-site-import-export.php:730
+msgid "Errore importazione"
+msgstr "インポートエラー"
+
+#: includes/class-white-label.php:177 includes/class-white-label.php:178
+#: includes/class-white-label.php:188
+msgid "White Label"
+msgstr "ホワイトラベル"
+
+#: includes/class-white-label.php:198
+msgid "Impostazioni White Label"
+msgstr "ホワイトラベル設定"
+
+#: includes/class-white-label.php:199
+msgid "Rinomina plugin, nascondi credits e impostazioni per i non-admin"
+msgstr "プラグインの名前変更、非管理者向けのクレジットと設定の非表示"
+
+#: includes/class-white-label.php:205
+msgid "Attiva White Label"
+msgstr "ホワイトラベルを有効にする"
+
+#: includes/class-white-label.php:206
+msgid "Abilita la personalizzazione del brand"
+msgstr "ブランドのカスタマイズを有効にする"
+
+#: includes/class-white-label.php:215
+msgid "Nome plugin"
+msgstr "プラグイン名"
+
+#: includes/class-white-label.php:226
+msgid "Page builder professionale"
+msgstr "プロフェッショナルなページビルダー"
+
+#: includes/class-white-label.php:231
+msgid "Nome autore"
+msgstr "作者名"
+
+#: includes/class-white-label.php:239
+msgid "URL autore"
+msgstr "作者URL"
+
+#: includes/class-white-label.php:247
+msgid "Nascondi per non-admin"
+msgstr "非管理者に非表示"
+
+#: includes/class-white-label.php:248
+msgid "Nasconde le impostazioni White Label per utenti non amministratori"
+msgstr "非管理者ユーザーにホワイトラベル設定を非表示にします"
+
+#: includes/class-white-label.php:257
+msgid "Nascondi credits"
+msgstr "クレジットを非表示"
+
+#: includes/class-white-label.php:258
+msgid "Rimuove la scritta \"Powered by Olobuild\""
+msgstr "「Powered by Olobuild」の表記を削除"
+
+#: includes/class-white-label.php:279
+#: includes/class-woo-template-integration.php:285
+msgid "Salvataggio..."
+msgstr "保存中..."
+
+#: includes/class-white-label.php:299
+msgid "Impostazioni salvate con successo"
+msgstr "設定を保存しました"
+
+#: includes/class-woo-template-integration.php:40
+msgid "Singolo Prodotto"
+msgstr "商品詳細"
+
+#: includes/class-woo-template-integration.php:41
+msgid "Archivio Prodotti"
+msgstr "商品アーカイブ"
+
+#: includes/class-woo-template-integration.php:42
+msgid "Carrello"
+msgstr "カート"
+
+#: includes/class-woo-template-integration.php:43
+msgid "Checkout"
+msgstr "チェックアウト"
+
+#: includes/class-woo-template-integration.php:44
+msgid "My Account"
+msgstr "マイアカウント"
+
+#: includes/class-woo-template-integration.php:242
+msgid "Assegnazione Template"
+msgstr "テンプレート割り当て"
+
+#: includes/class-woo-template-integration.php:243
+msgid ""
+"Seleziona un template Olobuild per ciascuna pagina WooCommerce. Lascia "
+"\"Predefinito\" per usare il template nativo."
+msgstr ""
+"各WooCommerceページにOlobuildテンプレートを選択してください。ネイティブテンプ"
+"レートを使用する場合は「デフォルト」のままにしてください。"
+
+#: includes/class-woo-template-integration.php:258
+msgid "Predefinito WooCommerce"
+msgstr "WooCommerceデフォルト"
+
+#: includes/class-woo-template-integration.php:274
+#: includes/class-woo-template-integration.php:301
+msgid "Salva assegnazioni"
+msgstr "割り当てを保存"
+
+#: includes/class-woo-template-integration.php:297
+msgid "Assegnazioni salvate"
+msgstr "割り当てを保存しました"
+
+#~ msgid ""
+#~ "Page builder professionale olonico con sistema a griglia (tile drag & "
+#~ "drop)."
+#~ msgstr ""
+#~ "グリッドシステム（タイルのドラッグ＆ドロップ）を備えたプロフェッショナルな"
+#~ "ホロニックページビルダー。"
+
+#~ msgid "Claudio"
+#~ msgstr "Claudio"
+
+#~ msgid "Risultati ricerca"
+#~ msgstr "検索結果"
+
+#~ msgid "Pagina non trovata"
+#~ msgstr "ページが見つかりません"
+
+#~ msgid "Navigation"
+#~ msgstr "ナビゲーション"
+
+#~ msgid "Main menu"
+#~ msgstr "メインメニュー"
+
+#~ msgid "Open menu"
+#~ msgstr "メニューを開く"
+
+#~ msgid "Mobile menu"
+#~ msgstr "モバイルメニュー"
+
+#~ msgid "Close menu"
+#~ msgstr "メニューを閉じる"
+
+#~ msgid "Vertical menu"
+#~ msgstr "縦型メニュー"
+
+#~ msgid "Sub navigation"
+#~ msgstr "サブナビゲーション"
+
+#~ msgid "Embedded video"
+#~ msgstr "埋め込み動画"
+
+#~ msgid "Inserisci un URL video"
+#~ msgstr "動画URLを入力してください"
+
+#~ msgid "Seleziona un file video"
+#~ msgstr "動画ファイルを選択"
+
+#~ msgid "Background video"
+#~ msgstr "背景動画"
+
+#~ msgid "Seleziona una sorgente video"
+#~ msgstr "動画ソースを選択"
+
+#~ msgid "Apri ricerca"
+#~ msgstr "検索を開く"
+
+#~ msgid "Cancella"
+#~ msgstr "クリア"
+
+#~ msgid "Tutti"
+#~ msgstr "すべて"
+
+#~ msgid "Ordina per…"
+#~ msgstr "並び替え..."

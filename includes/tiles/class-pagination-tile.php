@@ -11,6 +11,7 @@ class Olo_Pagination_Tile extends Olo_Tile_Base {
     protected $icon     = 'dashicons-ellipsis';
     protected $category = 'navigation';
     protected $defaults = [
+        'preset' => 'custom',
         'style'              => 'both',
         'alignment'          => 'center',
         'show_first_last'    => false,
@@ -109,7 +110,7 @@ class Olo_Pagination_Tile extends Olo_Tile_Base {
             $this->render_styles( $uid, $justify, $gap, $font_size, $radius, $bw, $padding_css,
                 $text_color, $bg_color, $border_color, $active_text, $active_bg, $hover_bg );
             ?>
-            <nav class="olo-pagination <?php echo $uid; ?>" role="navigation" aria-label="<?php echo esc_attr( olo_t( 'Paginazione' ) ); ?>">
+            <nav class="olo-pagination <?php echo $uid; ?> olo-pg-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" role="navigation" aria-label="<?php echo esc_attr( olo_t( 'Paginazione' ) ); ?>">
             <?php
             $show_numbers = ( $style_mode === 'numbered' || $style_mode === 'both' );
             $show_pn      = ( $style_mode === 'prev-next' || $style_mode === 'both' );

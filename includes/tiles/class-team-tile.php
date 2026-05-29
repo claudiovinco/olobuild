@@ -11,6 +11,7 @@ class Olo_Team_Tile extends Olo_Tile_Base {
     protected $icon     = 'dashicons-businessperson';
     protected $category = 'marketing';
     protected $defaults = [
+        'preset' => 'custom',
         'photo'              => '',
         'hover_image'        => '',
         'hover_video'        => '',
@@ -234,7 +235,7 @@ class Olo_Team_Tile extends Olo_Tile_Base {
                 opacity: 1; text-decoration: none;
             }
         </style>
-        <div class="olo-team <?php echo esc_attr( $uid ); ?>">
+        <div class="olo-team <?php echo esc_attr( $uid ); ?> olo-team-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>">
             <div class="olo-team-photo-wrap">
                 <div class="olo-team-photo-outer">
                     <div class="olo-team-photo-inner">
@@ -246,7 +247,7 @@ class Olo_Team_Tile extends Olo_Tile_Base {
                             echo $this->render_hover_wrap( $img, $s['hover_image'] ?? '', $s['hover_video'] ?? '' );
                             ?>
                         <?php else : ?>
-                            <div style="width:100%;height:100%;background:var(--olo-color-secondary, #1F2937);display:flex;align-items:center;justify-content:center;font-size:<?php echo round( $ph_size * 0.4 ); ?>px">&#x1F464;</div>
+                            <div style="width:100%;height:100%;background:#1F2937;display:flex;align-items:center;justify-content:center;font-size:<?php echo round( $ph_size * 0.4 ); ?>px">&#x1F464;</div>
                         <?php endif; ?>
                     </div>
                 </div>

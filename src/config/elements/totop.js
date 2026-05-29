@@ -1,8 +1,15 @@
 import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
+import { t } from '@/i18n';
 
+/**
+ * Tile ToTop — split CONTENUTO/STILE (regola universale Olobuild).
+ *   fields[]      → allineamento (posizione), comportamento scroll fluido
+ *   styleFields[] → stile pulsante (default/primary), ombra, bordo
+ *   AVANZATE      → meta tecnico (id/class/condizioni)
+ */
 export default {
   type: 'totop',
-  name: 'Torna su',
+  name: t('Torna su'),
   icon: 'dashicons-arrow-up-alt',
   category: 'navigation',
   defaults: {
@@ -15,17 +22,23 @@ export default {
     border_hover_duration: 300,
     ...borderEffectDefaults,
   },
+
+  // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
-    { key: 'alignment', label: 'Allineamento', type: 'select', options: [
-      { value: 'left', label: 'Sinistra' },
-      { value: 'center', label: 'Centro' },
-      { value: 'right', label: 'Destra' },
+    { key: 'alignment', label: t('Allineamento'), type: 'select', options: [
+      { value: 'left', label: t('Sinistra') },
+      { value: 'center', label: t('Centro') },
+      { value: 'right', label: t('Destra') },
     ]},
-    { key: 'style', label: 'Stile', type: 'select', options: [
-      { value: 'default', label: 'Predefinito' },
-      { value: 'primary', label: 'Primary' },
+    { key: 'smooth', label: t('Scorrimento fluido'), type: 'toggle' },
+  ],
+
+  // ─── STILE ─────────────────────────────────────────────────
+  styleFields: [
+    { key: 'style', label: t('Stile'), type: 'select', options: [
+      { value: 'default', label: t('Predefinito') },
+      { value: 'primary', label: t('Primary') },
     ]},
-    { key: 'smooth', label: 'Scorrimento fluido', type: 'toggle' },
     ...shadowField,
     ...borderFields(),
   ],

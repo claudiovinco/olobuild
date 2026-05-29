@@ -15,9 +15,13 @@
       type="number"
       :value="modelValue"
       @change="onInput($event)"
+      @input="onInput($event)"
       @dblclick="onReset"
+      @wheel="handleNumberWheel"
       :step="step"
-      class="mb-w-14 mb-bg-white mb-border mb-border-gray-300 mb-rounded mb-px-1.5 mb-py-0.5 mb-text-xs mb-text-gray-900 mb-text-center"
+      :min="min"
+      :max="max"
+      class="field-range-num mb-w-16 mb-bg-white mb-border mb-border-gray-300 mb-rounded mb-px-1.5 mb-py-0.5 mb-text-xs mb-text-gray-900 mb-text-center"
       :title="resetHint"
     />
   </div>
@@ -26,6 +30,7 @@
 <script setup>
 import { computed } from 'vue';
 import { t } from '@/i18n';
+import { handleNumberWheel } from '@/utils/numberInputWheel';
 
 const props = defineProps({
   modelValue: { type: [String, Number], default: 0 },
@@ -87,5 +92,15 @@ function onReset() {
   height: 4px;
   background: #374151;
   border-radius: 2px;
+}
+
+/* Hide native number spin-buttons (liberano spazio per 3 cifre). */
+.field-range-num::-webkit-outer-spin-button,
+.field-range-num::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.field-range-num {
+  -moz-appearance: textfield;
 }
 </style>

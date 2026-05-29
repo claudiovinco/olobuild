@@ -11,6 +11,7 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
     protected $icon     = 'dashicons-grid-view';
     protected $category = 'dynamic';
     protected $defaults = [
+        'preset' => 'custom',
         'post_type'       => 'post',
         'posts_per_page'  => '12',
         'orderby'         => 'date',
@@ -441,7 +442,7 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .uk-card-primary .uk-button-primary { background: rgba(255,255,255,0.2); border-color: #fff; }
             <?php endif; ?>
         </style>
-        <div class="olo-postgrid <?php echo $uid; ?>" id="<?php echo esc_attr( $uid ); ?>"
+        <div class="olo-postgrid <?php echo $uid; ?> olo-pg-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" id="<?php echo esc_attr( $uid ); ?>"
              data-postgrid-config="<?php echo esc_attr( wp_json_encode( $config ) ); ?>">
 
             <?php if ( ! empty( $terms ) || $sort_enabled ) : ?>

@@ -118,6 +118,12 @@ class Olo_Headline_Tile extends Olo_Tile_Base {
         if ( ! empty( $s['heading_uppercase'] ) ) {
             $heading_style .= 'text-transform:uppercase;letter-spacing:0.05em;';
         }
+        // Font size custom: override del preset uk-heading-* quando > 0
+        $hd_fs = absint( $s['heading_font_size'] ?? 0 );
+        if ( $hd_fs > 0 ) {
+            // !important per battere uk-heading-* che ha font-size molto specifica
+            $heading_style .= 'font-size:' . $hd_fs . 'px !important;line-height:1.2;';
+        }
         // Gradient wins over heading_color
         if ( ! $has_gradient && $hd_clr ) {
             $heading_style .= 'color:' . $hd_clr . ';';
@@ -206,7 +212,8 @@ class Olo_Headline_Tile extends Olo_Tile_Base {
             <?php endif; ?>
 
             <?php if ( ! empty( $subtitle_text ) ) : ?>
-                <p class="olo-hl-subtitle<?php echo $s_tfx_cls; ?>" style="margin:12px 0 0;font-size:1em;line-height:1.5;<?php if ( $sub_clr ) echo 'color:' . $sub_clr . ';'; ?>"<?php echo $s_tfx_data; ?>><?php echo $subtitle_text; ?></p>
+                <?php $sub_fs = absint( $s['subtitle_font_size'] ?? 0 ); ?>
+                <p class="olo-hl-subtitle<?php echo $s_tfx_cls; ?>" style="margin:12px 0 0;font-size:<?php echo $sub_fs > 0 ? $sub_fs . 'px' : '1em'; ?>;line-height:1.5;<?php if ( $sub_clr ) echo 'color:' . $sub_clr . ';'; ?>"<?php echo $s_tfx_data; ?>><?php echo $subtitle_text; ?></p>
             <?php endif; ?>
         </div>
         <?php

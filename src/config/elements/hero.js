@@ -1,16 +1,34 @@
-import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared';
-import { shadowField } from './_shared.js';
+import { textEffectsFields, textEffectsDefaults, withHover } from './_shared';
+import { t } from '@/i18n';
 
+/**
+ * Tile Hero — applica la regola universale Olobuild:
+ *
+ *   tab CONTENUTO  → fields[]       solo dati testuali (titolo, testi CTA, URL, tag HTML)
+ *   tab STILE      → styleFields[]  tutto l'aspetto (colori, tipografia, layout, effetti, CTA stile)
+ *                  + styleFieldsBase (sfondo, padding/margin esterno, bordo, ombra, opacità del wrapper)
+ *   tab AVANZATE   → meta tecnico (HTML id, CSS class, condizioni, dynamic data)
+ *
+ * Tutti i campi (sia fields che styleFields) salvano in tile.settings.* — il PHP renderer
+ * resta invariato. Solo l'inspector è riorganizzato in due tab logici.
+ */
 export default {
   type: 'hero',
-  name: 'Hero',
+  name: t('Hero'),
   icon: 'dashicons-cover-image',
   category: 'layout',
   defaults: {
+    typography_preset: '',
+    preset: 'custom',
+
     // Contenuto
-    title: 'Benvenuto nel nostro sito',
-    subtitle: 'Scopri qualcosa di straordinario',
+    title: t('Titolo Provvisorio'),
+    subtitle: t('Sottotitolo provvisorio'),
+
+    // Colori
     text_color: '',
+    title_color: '',
+    subtitle_color: '',
 
     // Titolo tipografia
     title_tag: 'h1',
@@ -20,14 +38,12 @@ export default {
     title_letter_spacing: '0',
     title_line_height: '1.2',
     title_text_transform: 'none',
-    title_color: '',
     title_text_shadow: '',
 
     // Sottotitolo tipografia
     subtitle_font_size: '',
     subtitle_font_weight: '400',
     subtitle_letter_spacing: '0',
-    subtitle_color: '',
     subtitle_max_width: '',
 
     // Layout
@@ -38,33 +54,13 @@ export default {
     text_align: 'center',
     tile_padding: { top: 60, right: 20, bottom: 60, left: 20 },
 
-    // Sfondo
-    bg_type: 'color',
-    bg_color: '',
-    bg_gradient_from: '',
-    bg_gradient_to: '',
-    bg_gradient_angle: '135',
-    bg_image: '',
-    bg_video: '',
-    bg_position: 'center',
-    bg_size: 'cover',
-    bg_fixed: false,
-
-    // Overlay
-    overlay: false,
-    overlay_color: '#000000',
-    overlay_opacity: '50',
-    overlay_gradient: false,
-    overlay_gradient_to: 'transparent',
-    overlay_gradient_angle: '180',
-
     // CTA Primario
-    cta_text: 'Inizia ora',
+    cta_text: t('Inizia ora'),
     cta_url: '#',
     cta_target: '_self',
     cta_bg_color: '',
     cta_text_color: '',
-    cta_radius: '6',
+    cta_radius: { tl: 6, tr: 6, br: 6, bl: 6 },
     cta_size: '15',
     cta_style: 'filled',
 
@@ -76,196 +72,137 @@ export default {
     cta2_text_color: '',
     cta2_style: 'outline',
 
-    // Avanzato
-    full_bleed: false,
-    shadow: 'none',
+    // Effetti testo
     ...textEffectsDefaults,
-    border: { ...borderDefault },
-    border_hover: { ...borderHoverDefault },
-    border_hover_duration: 300,
-    ...borderEffectDefaults,
+    text_effect_target: 'all',
   },
+
+  // ─────────────────────────────────────────────────────────────────
+  // TAB CONTENUTO — dati testuali, semantica HTML, link
+  // ─────────────────────────────────────────────────────────────────
   fields: [
-    // ── Contenuto ──
-    { key: 'title', label: 'Titolo', type: 'text' },
-    { key: 'subtitle', label: 'Sottotitolo', type: 'text' },
-    { key: 'text_color', label: 'Colore testo generale', type: 'color' },
+    { key: 'title', label: t('Titolo'), type: 'text' },
+    { key: 'subtitle', label: t('Sottotitolo'), type: 'text' },
 
-    // ── Tipografia titolo ──
-    { type: 'separator', label: 'Tipografia titolo' },
-    { key: 'title_tag', label: 'Tag HTML', type: 'select', options: [
-      { value: 'h1', label: 'H1' },
-      { value: 'h2', label: 'H2' },
-      { value: 'h3', label: 'H3' },
-      { value: 'p', label: 'Paragrafo' },
-      { value: 'span', label: 'Span' },
+    { type: 'separator', label: t('CTA Primario') },
+    { key: 'cta_text',   label: t('Testo pulsante'), type: 'text' },
+    { key: 'cta_url',    label: t('URL pulsante'),   type: 'link' },
+    { key: 'cta_target', label: t('Apri in'), type: 'select', options: [
+      { value: '_self',  label: t('Stessa finestra') },
+      { value: '_blank', label: t('Nuova scheda') },
     ]},
-    { key: 'title_font_family', label: 'Font family', type: 'font-family' },
-    { key: 'title_font_size', label: 'Dimensione (px)', type: 'range', responsive: true, min: 14, max: 120, step: 1 },
-    { key: 'title_font_weight', label: 'Peso', type: 'select', options: [
-      { value: '300', label: 'Light' },
-      { value: '400', label: 'Regular' },
-      { value: '500', label: 'Medium' },
-      { value: '600', label: 'Semibold' },
-      { value: '700', label: 'Bold' },
-      { value: '800', label: 'Extra Bold' },
-      { value: '900', label: 'Black' },
-    ]},
-    { key: 'title_letter_spacing', label: 'Spaziatura lettere (px)', type: 'range', min: -5, max: 20, step: 0.5 },
-    { key: 'title_line_height', label: 'Interlinea', type: 'range', min: 0.8, max: 2, step: 0.05 },
-    { key: 'title_text_transform', label: 'Trasformazione', type: 'select', options: [
-      { value: 'none', label: 'Nessuna' },
-      { value: 'uppercase', label: 'MAIUSCOLO' },
-      { value: 'lowercase', label: 'minuscolo' },
-      { value: 'capitalize', label: 'Capitalizza' },
-    ]},
-    { key: 'title_color', label: 'Colore titolo', type: 'color' },
-    { key: 'title_text_shadow', label: 'Ombra testo', type: 'select', options: [
-      { value: '', label: 'Nessuna' },
-      { value: '2px 2px 4px rgba(0,0,0,0.3)', label: 'Leggera' },
-      { value: '3px 3px 8px rgba(0,0,0,0.5)', label: 'Media' },
-      { value: '4px 4px 12px rgba(0,0,0,0.6)', label: 'Forte' },
-      { value: '0 0 20px rgba(0,0,0,0.8)', label: 'Alone scuro' },
-      { value: '0 0 30px rgba(255,255,255,0.6)', label: 'Alone chiaro' },
-      { value: 'custom', label: 'Personalizzata' },
-    ]},
-    { key: 'title_text_shadow_h', label: 'Offset H (px)', type: 'range', min: -20, max: 20, step: 1,
-      condition: { field: 'title_text_shadow', op: 'eq', value: 'custom' } },
-    { key: 'title_text_shadow_v', label: 'Offset V (px)', type: 'range', min: -20, max: 20, step: 1,
-      condition: { field: 'title_text_shadow', op: 'eq', value: 'custom' } },
-    { key: 'title_text_shadow_blur', label: 'Sfocatura (px)', type: 'range', min: 0, max: 40, step: 1,
-      condition: { field: 'title_text_shadow', op: 'eq', value: 'custom' } },
-    { key: 'title_text_shadow_color', label: 'Colore ombra', type: 'color',
-      condition: { field: 'title_text_shadow', op: 'eq', value: 'custom' } },
 
-    // ── Tipografia sottotitolo ──
-    { type: 'separator', label: 'Tipografia sottotitolo' },
-    { key: 'subtitle_font_size', label: 'Dimensione (px)', type: 'range', responsive: true, min: 12, max: 48, step: 1 },
-    { key: 'subtitle_font_weight', label: 'Peso', type: 'select', options: [
-      { value: '300', label: 'Light' },
-      { value: '400', label: 'Regular' },
-      { value: '500', label: 'Medium' },
-      { value: '600', label: 'Semibold' },
-      { value: '700', label: 'Bold' },
+    { type: 'separator', label: t('CTA Secondario') },
+    { key: 'cta2_text',   label: t('Testo (vuoto = nascosto)'), type: 'text' },
+    { key: 'cta2_url',    label: t('URL'), type: 'link' },
+    { key: 'cta2_target', label: t('Apri in'), type: 'select', options: [
+      { value: '_self',  label: t('Stessa finestra') },
+      { value: '_blank', label: t('Nuova scheda') },
     ]},
-    { key: 'subtitle_letter_spacing', label: 'Spaziatura lettere (px)', type: 'range', min: -2, max: 10, step: 0.5 },
-    { key: 'subtitle_color', label: 'Colore sottotitolo', type: 'color' },
-    { key: 'subtitle_max_width', label: 'Larghezza max (px)', type: 'range', min: 200, max: 1000, step: 10 },
+  ],
 
-    // ── Layout ──
-    { type: 'separator', label: 'Layout' },
-    { key: 'min_height', label: 'Altezza minima (es. 500px, 80vh)', type: 'text' },
-    { key: 'content_max_width', label: 'Larghezza max contenuto (px)', type: 'range', min: 200, max: 1200, step: 50 },
-    { key: 'vertical_align', label: 'Allineamento verticale', type: 'select', options: [
-      { value: 'top', label: 'Alto' },
-      { value: 'center', label: 'Centro' },
-      { value: 'bottom', label: 'Basso' },
+  // ─────────────────────────────────────────────────────────────────
+  // TAB STILE — aspetto visivo specifico della hero. Mostrato dal
+  // StyleFieldsRenderer PRIMA dei campi style universali del wrapper.
+  // ─────────────────────────────────────────────────────────────────
+  styleFields: [
+    { type: 'separator', label: t('Preset stilistico') },
+    { key: 'preset', label: t('Stile'), type: 'select', options: [
+      { value: 'modern-centered',   label: t('Modern Centered') },
+      { value: 'split-image',       label: t('Split Image') },
+      { value: 'minimal-editorial', label: t('Minimal Editorial') },
+      { value: 'bold-statement',    label: t('Bold Statement') },
+      { value: 'video-cinema',      label: t('Video Cinema') },
+      { value: 'glass-overlay',     label: t('Glass Overlay') },
+      { value: 'neon-cyberpunk',    label: t('Neon Cyberpunk') },
+      { value: 'brutalist-mega',    label: t('Brutalist Mega') },
+      { value: 'gradient-aurora',   label: t('Gradient Aurora') },
+      { value: 'sticker-collage',   label: t('Sticker Collage') },
+      { value: 'retro-poster',      label: t('Retro Poster') },
+      { value: 'tilt-parallax',     label: t('Tilt Parallax') },
+      { value: 'custom',            label: t('Personalizzato') },
     ]},
-    { key: 'horizontal_align', label: 'Allineamento orizzontale', type: 'select', options: [
-      { value: 'left', label: 'Sinistra' },
-      { value: 'center', label: 'Centro' },
-      { value: 'right', label: 'Destra' },
-    ]},
-    { key: 'text_align', label: 'Allineamento testo', type: 'select', options: [
-      { value: 'left', label: 'Sinistra' },
-      { value: 'center', label: 'Centro' },
-      { value: 'right', label: 'Destra' },
-    ]},
-    { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 200 },
+    // ── Tipografia (unica sezione: titolo, sottotitolo, default + effetti) ──
+    { type: 'separator', label: t('Tipografia') },
+    { key: 'text_color', label: t('Colore testo (default)'), type: 'color',
+      description: t('Default per titolo + sottotitolo, sovrascritto dai colori specifici nei popover qui sotto.') },
+    { type: 'typography', label: t('Titolo'),
+      presetKey: 'typography_preset',
+      responsiveKeys: ['size', 'lineHeight', 'letterSpacing'],
+      keys: {
+        tag:           'title_tag',
+        family:        'title_font_family',
+        size:          'title_font_size',
+        weight:        'title_font_weight',
+        transform:     'title_text_transform',
+        lineHeight:    'title_line_height',
+        letterSpacing: 'title_letter_spacing',
+        color:         'title_color',
+        shadow:        'title_text_shadow',
+      },
+      sizeMin: 14, sizeMax: 120, sizeStep: 1,
+    },
+    { type: 'typography', label: t('Sottotitolo'),
+      presetKey: 'typography_preset',
+      responsiveKeys: ['size', 'letterSpacing'],
+      keys: {
+        size:          'subtitle_font_size',
+        weight:        'subtitle_font_weight',
+        letterSpacing: 'subtitle_letter_spacing',
+        color:         'subtitle_color',
+      },
+      sizeMin: 12, sizeMax: 48, sizeStep: 1,
+    },
+    { key: 'subtitle_max_width', label: t('Larghezza max sottotitolo (px)'), type: 'range', min: 200, max: 1000, step: 10 },
 
-    // ── Sfondo ──
-    { type: 'separator', label: 'Sfondo' },
-    { key: 'bg_type', label: 'Tipo sfondo', type: 'select', options: [
-      { value: 'color', label: 'Colore' },
-      { value: 'gradient', label: 'Gradiente' },
-      { value: 'image', label: 'Immagine' },
-      { value: 'video', label: 'Video' },
-    ]},
-    { key: 'bg_color', label: 'Colore sfondo', type: 'color',
-      condition: { field: 'bg_type', value: 'color' } },
-    { key: 'bg_gradient_from', label: 'Gradiente da', type: 'color',
-      condition: { field: 'bg_type', value: 'gradient' } },
-    { key: 'bg_gradient_to', label: 'Gradiente a', type: 'color',
-      condition: { field: 'bg_type', value: 'gradient' } },
-    { key: 'bg_gradient_angle', label: 'Angolo gradiente (°)', type: 'range', min: 0, max: 360, step: 15,
-      condition: { field: 'bg_type', value: 'gradient' } },
-    { key: 'bg_image', label: 'Immagine sfondo', type: 'image',
-      condition: { field: 'bg_type', value: 'image' } },
-    { key: 'bg_video', label: 'Video sfondo (mp4)', type: 'media',
-      condition: { field: 'bg_type', value: 'video' } },
-    { key: 'bg_position', label: 'Posizione sfondo', type: 'select', options: [
-      { value: 'center', label: 'Centro' },
-      { value: 'top', label: 'Alto' },
-      { value: 'bottom', label: 'Basso' },
-      { value: 'left', label: 'Sinistra' },
-      { value: 'right', label: 'Destra' },
-    ], condition: { field: 'bg_type', value: 'image' } },
-    { key: 'bg_size', label: 'Dimensione sfondo', type: 'select', options: [
-      { value: 'cover', label: 'Cover' },
-      { value: 'contain', label: 'Contain' },
-      { value: 'auto', label: 'Auto' },
-    ], condition: { field: 'bg_type', value: ['image', 'video'] } },
-    { key: 'bg_fixed', label: 'Sfondo fisso (parallax)', type: 'toggle',
-      condition: { field: 'bg_type', value: 'image' } },
-
-    // ── Overlay ──
-    { type: 'separator', label: 'Overlay' },
-    { key: 'overlay', label: 'Attiva overlay', type: 'toggle' },
-    { key: 'overlay_color', label: 'Colore overlay', type: 'color',
-      condition: { field: 'overlay', value: true } },
-    { key: 'overlay_opacity', label: 'Opacità overlay (%)', type: 'range', min: 10, max: 100, step: 5,
-      condition: { field: 'overlay', value: true } },
-    { key: 'overlay_gradient', label: 'Overlay sfumato', type: 'toggle',
-      condition: { field: 'overlay', value: true } },
-    { key: 'overlay_gradient_to', label: 'Sfumatura verso', type: 'color',
-      condition: { field: 'overlay_gradient', value: true } },
-    { key: 'overlay_gradient_angle', label: 'Angolo sfumatura (°)', type: 'range', min: 0, max: 360, step: 15,
-      condition: { field: 'overlay_gradient', value: true } },
-
-    // ── CTA Primario ──
-    { type: 'separator', label: 'CTA Primario' },
-    { key: 'cta_text', label: 'Testo pulsante', type: 'text' },
-    { key: 'cta_url', label: 'URL pulsante', type: 'text' },
-    { key: 'cta_target', label: 'Apri in', type: 'select', options: [
-      { value: '_self', label: 'Stessa finestra' },
-      { value: '_blank', label: 'Nuova scheda' },
-    ]},
-    { key: 'cta_style', label: 'Stile pulsante', type: 'select', options: [
-      { value: 'filled', label: 'Pieno' },
-      { value: 'outline', label: 'Contorno' },
-      { value: 'ghost', label: 'Trasparente' },
-    ]},
-    { key: 'cta_size', label: 'Dimensione (px)', type: 'range', min: 12, max: 24, step: 1 },
-    { key: 'cta_bg_color', label: 'Colore sfondo CTA', type: 'color' },
-    { key: 'cta_text_color', label: 'Colore testo CTA', type: 'color' },
-    { key: 'cta_radius', label: 'Raggio bordo CTA (px)', type: 'border-radius' },
-    { key: 'cta_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
-
-    // ── CTA Secondario ──
-    { type: 'separator', label: 'CTA Secondario' },
-    { key: 'cta2_text', label: 'Testo (vuoto = nascosto)', type: 'text' },
-    { key: 'cta2_url', label: 'URL', type: 'text' },
-    { key: 'cta2_target', label: 'Apri in', type: 'select', options: [
-      { value: '_self', label: 'Stessa finestra' },
-      { value: '_blank', label: 'Nuova scheda' },
-    ]},
-    { key: 'cta2_style', label: 'Stile', type: 'select', options: [
-      { value: 'filled', label: 'Pieno' },
-      { value: 'outline', label: 'Contorno' },
-      { value: 'ghost', label: 'Trasparente' },
-    ]},
-    { key: 'cta2_bg_color', label: 'Colore sfondo', type: 'color' },
-    { key: 'cta2_text_color', label: 'Colore testo', type: 'color' },
-
-    // ── Avanzato ──
-    { type: 'separator', label: 'Avanzato' },
-    { key: 'full_bleed', label: 'Full width (100vw)', type: 'toggle' },
-    ...shadowField,
+    // ── Effetti testo (gradient/neon/typewriter/...) ──
     ...textEffectsFields([
-      { value: 'title', label: 'Solo Titolo' },
-      { value: 'subtitle', label: 'Solo Sottotitolo' },
-      { value: 'all', label: 'Tutti gli elementi testuali' },
+      { value: 'title',    label: t('Solo Titolo') },
+      { value: 'subtitle', label: t('Solo Sottotitolo') },
+      { value: 'all',      label: t('Tutti gli elementi testuali') },
     ]),
-    ...borderFields(),
+
+    // ── Layout interno ──
+    { type: 'separator', label: t('Layout interno') },
+    { key: 'min_height',         label: t('Altezza minima (es. 500px, 80vh)'), type: 'text' },
+    { key: 'content_max_width',  label: t('Larghezza max contenuto (px)'), type: 'range', min: 200, max: 1200, step: 50 },
+    { key: 'vertical_align',     label: t('Posizione verticale del blocco'), type: 'select', options: [
+      { value: 'top',    label: t('In alto') },
+      { value: 'center', label: t('Al centro') },
+      { value: 'bottom', label: t('In basso') },
+    ]},
+    { key: 'horizontal_align',   label: t('Posizione orizzontale del blocco'), type: 'select', options: [
+      { value: 'left',   label: t('A sinistra') },
+      { value: 'center', label: t('Al centro') },
+      { value: 'right',  label: t('A destra') },
+    ]},
+    { key: 'text_align',         label: t('Allineamento del testo'), type: 'select', options: [
+      { value: 'left',   label: t('A sinistra') },
+      { value: 'center', label: t('Al centro') },
+      { value: 'right',  label: t('A destra') },
+    ]},
+    { key: 'tile_padding', label: t('Padding del contenuto interno (px)'), type: 'spacing', max: 200 },
+
+    // ── Stile pulsante CTA Primario ──
+    { type: 'separator', label: t('Stile CTA Primario') },
+    { key: 'cta_style', label: t('Tipo'), type: 'select', options: [
+      { value: 'filled',  label: t('Pieno') },
+      { value: 'outline', label: t('Contorno') },
+      { value: 'ghost',   label: t('Trasparente') },
+    ]},
+    { key: 'cta_size',       label: t('Dimensione testo (px)'), type: 'range', min: 12, max: 24, step: 1 },
+    { key: 'cta_bg_color',   label: t('Colore sfondo'), type: 'color' },
+    { key: 'cta_text_color', label: t('Colore testo'),  type: 'color' },
+    withHover({ key: 'cta_radius', label: t('Raggio bordo (px)'), type: 'border-radius' }),
+
+    // ── Stile pulsante CTA Secondario ──
+    { type: 'separator', label: t('Stile CTA Secondario') },
+    { key: 'cta2_style', label: t('Tipo'), type: 'select', options: [
+      { value: 'filled',  label: t('Pieno') },
+      { value: 'outline', label: t('Contorno') },
+      { value: 'ghost',   label: t('Trasparente') },
+    ]},
+    { key: 'cta2_bg_color',   label: t('Colore sfondo'), type: 'color' },
+    { key: 'cta2_text_color', label: t('Colore testo'),  type: 'color' },
   ],
 };

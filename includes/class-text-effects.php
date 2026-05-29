@@ -133,7 +133,9 @@ class Olo_Text_Effects {
             $g1 = $color1 ?: 'var(--olo-color-primary, #6366F1)';
             $g2 = $color2 ?: '#ec4899';
             $out .= '@keyframes olo-tfx-grad{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}';
-            $out .= $sel . ' .olo-tfx--gradient-anim{background:linear-gradient(90deg,' . $g1 . ',' . $g2 . ',' . $g1 . ');background-size:200% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:olo-tfx-grad 4s ease-in-out infinite;animation-delay:' . $delay . 'ms;}';
+            // display:inline-block + !important su text-fill-color per garantire che background-clip:text
+            // funzioni anche su tile (es. button) il cui parent forza `color: ... !important`.
+            $out .= $sel . ' .olo-tfx--gradient-anim{display:inline-block;background:linear-gradient(90deg,' . $g1 . ',' . $g2 . ',' . $g1 . ');background-size:200% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent !important;color:transparent !important;animation:olo-tfx-grad 4s ease-in-out infinite;animation-delay:' . $delay . 'ms;}';
         } elseif ( $effect === 'glitch' ) {
             $out .= '@keyframes olo-tfx-glitch-1{0%,100%{clip-path:inset(0 0 0 0);transform:translate(0)}20%{clip-path:inset(20% 0 50% 0);transform:translate(-2px,1px)}40%{clip-path:inset(60% 0 10% 0);transform:translate(2px,-1px)}60%{clip-path:inset(30% 0 30% 0);transform:translate(-1px,2px)}80%{clip-path:inset(80% 0 5% 0);transform:translate(1px,-2px)}}';
             $out .= '@keyframes olo-tfx-glitch-2{0%,100%{clip-path:inset(0 0 0 0);transform:translate(0)}25%{clip-path:inset(40% 0 30% 0);transform:translate(2px,-1px)}50%{clip-path:inset(10% 0 60% 0);transform:translate(-2px,1px)}75%{clip-path:inset(50% 0 20% 0);transform:translate(1px,2px)}}';
@@ -182,22 +184,43 @@ class Olo_Text_Effects {
 <script>
 (function(){
   if (window.__oloTextFxInit) return; window.__oloTextFxInit = true;
-  function splitIntoChars(el){ var t = el.textContent; el.innerHTML = ''; var idx = 0; for (var i=0;i<t.length;i++){ var ch = t[i]; if (ch === ' ' || ch === '\t' || ch === '\n') { el.appendChild(document.createTextNode(' ')); continue; } var s=document.createElement('span'); s.className='olo-tfx-char'; s.style.setProperty('--i', idx++); s.textContent = ch; el.appendChild(s); } }
-  function splitIntoWords(el){ var t = el.textContent; el.innerHTML = ''; var w=t.split(/(\s+)/); for(var i=0;i<w.length;i++){ if(/^\s+$/.test(w[i])){ el.appendChild(document.createTextNode(w[i])); continue;} var s=document.createElement('span'); s.className='olo-tfx-word'; s.style.setProperty('--i',i); s.textContent=w[i]; el.appendChild(s); } }
+  // Estrae il testo preservando i ritorni a capo: <br>, </p>, </div>, </h1-6>, </li>, </blockquote>
+  // diventano '\n' così gli effetti JS possono riprodurli con <br> durante l'animazione.
+  function getTextWithBreaks(el){
+    var html = el.getAttribute('data-fx-original-html') || el.innerHTML;
+    el.setAttribute('data-fx-original-html', html);
+    var normalized = html
+      .replace(/<br\s*\/?>(\s*)/gi, '\n')
+      .replace(/<\/(p|div|h[1-6]|li|tr|blockquote)>/gi, '\n');
+    var tmp = document.createElement('div');
+    tmp.innerHTML = normalized;
+    return tmp.textContent.replace(/\n{2,}/g, '\n').replace(/^\n+|\n+$/g, '');
+  }
+  // Escape HTML + converte '\n' in '<br>' per il rendering durante typewriter/scramble
+  function htmlEscapeWithBreaks(s){
+    return s.replace(/[&<>]/g, function(m){return ({'&':'&amp;','<':'&lt;','>':'&gt;'}[m]);}).replace(/\n/g,'<br>');
+  }
+  function splitIntoChars(el){ var t = getTextWithBreaks(el); el.innerHTML = ''; var idx = 0; for (var i=0;i<t.length;i++){ var ch = t[i]; if (ch === '\n'){ el.appendChild(document.createElement('br')); continue; } if (ch === ' ' || ch === '\t') { el.appendChild(document.createTextNode(' ')); continue; } var s=document.createElement('span'); s.className='olo-tfx-char'; s.style.setProperty('--i', idx++); s.textContent = ch; el.appendChild(s); } }
+  function splitIntoWords(el){ var t = getTextWithBreaks(el); el.innerHTML = ''; var lines = t.split('\n'); for (var li=0; li<lines.length; li++){ var w = lines[li].split(/(\s+)/); for(var i=0;i<w.length;i++){ if(/^\s+$/.test(w[i])){ el.appendChild(document.createTextNode(w[i])); continue;} var s=document.createElement('span'); s.className='olo-tfx-word'; s.style.setProperty('--i', li*1000 + i); s.textContent=w[i]; el.appendChild(s); } if (li < lines.length - 1) el.appendChild(document.createElement('br')); } }
   function typewriter(el, opts){
-    var full = el.getAttribute('data-fx-original') || el.textContent.trim();
+    var full = el.getAttribute('data-fx-original') || getTextWithBreaks(el);
     el.setAttribute('data-fx-original', full);
-    el.textContent = '';
+    el.innerHTML = '';
     var cursor = opts.cursor ? document.createElement('span') : null;
     if (cursor){ cursor.className='olo-tfx-cursor'; cursor.textContent = opts.cursorCh || '|'; cursor.style.cssText='display:inline-block;animation:olo-tfx-blink 1s step-end infinite;'; el.parentElement.insertAdjacentElement('beforeend', cursor); }
     var i=0;
-    function step(){ if (i<=full.length){ el.textContent = full.slice(0,i); i++; setTimeout(step, opts.speed); } else if (opts.loop){ setTimeout(function(){ i=0; el.textContent=''; setTimeout(step, opts.speed); }, opts.pause||1500); } }
+    function step(){ if (i<=full.length){ el.innerHTML = htmlEscapeWithBreaks(full.slice(0,i)); i++; setTimeout(step, opts.speed); } else if (opts.loop){ setTimeout(function(){ i=0; el.innerHTML=''; setTimeout(step, opts.speed); }, opts.pause||1500); } }
     setTimeout(step, opts.delay);
   }
   function typewriterLoop(el, opts){
     var phrases = (opts.phrases||'').split(/\n+/).map(function(s){return s.trim();}).filter(Boolean);
+    // Fallback: se la textarea è vuota, usa le righe del contenuto come frasi
+    // (così il tile testo multi-riga funziona out-of-the-box senza compilare il campo)
+    if (!phrases.length){
+      phrases = getTextWithBreaks(el).split('\n').map(function(s){return s.trim();}).filter(Boolean);
+    }
     if (!phrases.length) phrases = [el.textContent.trim()];
-    el.textContent = '';
+    el.innerHTML = '';
     var cursor = opts.cursor ? document.createElement('span') : null;
     if (cursor){ cursor.className='olo-tfx-cursor'; cursor.textContent = opts.cursorCh || '|'; cursor.style.cssText='display:inline-block;animation:olo-tfx-blink 1s step-end infinite;'; el.parentElement.appendChild(cursor); }
     var pi=0, ci=0, mode='type';
@@ -222,7 +245,7 @@ class Olo_Text_Effects {
     ws.forEach(function(w,i){ w.style.opacity='0'; w.style.filter='blur(6px)'; w.style.transition='opacity .5s, filter .5s, transform .5s'; w.style.display='inline-block'; w.style.transform='translateY(10px)'; setTimeout(function(){ w.style.opacity='1'; w.style.filter='blur(0)'; w.style.transform='translateY(0)'; }, opts.delay + i*opts.speed); });
   }
   function scramble(el, opts){
-    var full = el.getAttribute('data-fx-original') || el.textContent.trim();
+    var full = el.getAttribute('data-fx-original') || getTextWithBreaks(el);
     el.setAttribute('data-fx-original', full);
     var chars = '!@#$%^&*()_+-=[]{}|;:,.<>?ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     var len = full.length, frame = 0, totalFrames = Math.ceil(len*opts.speed/30);
@@ -230,10 +253,12 @@ class Olo_Text_Effects {
       var output = '';
       for (var i=0;i<len;i++){
         var revealAt = (i/len)*totalFrames;
+        if (full[i] === '\n') { output += '\n'; continue; }
+        if (full[i] === ' ')  { output += ' '; continue; }
         if (frame >= revealAt){ output += full[i]; }
         else { output += chars[Math.floor(Math.random()*chars.length)]; }
       }
-      el.textContent = output;
+      el.innerHTML = htmlEscapeWithBreaks(output);
       frame++;
       if (frame <= totalFrames + 5) requestAnimationFrame(step);
       else if (opts.loop){ setTimeout(function(){ frame=0; step(); }, 2500); }

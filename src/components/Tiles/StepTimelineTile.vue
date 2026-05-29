@@ -1,0 +1,266 @@
+<template>
+  <div class="olo-stl">
+    <div v-if="s.show_timeline" class="olo-stl__timeline" :style="timelineStyle">
+      <div :style="lineStyle"></div>
+      <span
+        v-for="d in dotsCount"
+        :key="d"
+        :style="dotStyle(d - 1)"
+      ></span>
+    </div>
+
+    <div class="olo-stl__grid" :style="gridStyle">
+      <div
+        v-for="(it, idx) in items"
+        :key="idx"
+        class="olo-stl__item"
+        style="display:flex;flex-direction:column;gap:18px;position:relative"
+      >
+        <div style="display:flex;align-items:flex-end;gap:18px;flex-wrap:wrap">
+          <span v-if="it.counter" :style="counterStyle">{{ it.counter }}</span>
+          <div v-if="it.tag_text" style="display:inline-flex;align-items:center;gap:8px;padding-bottom:14px">
+            <span :style="{ width: '8px', height: '8px', borderRadius: '50%', background: it.tag_dot_color || '#b3261e' }"></span>
+            <span :style="tagStyle">{{ it.tag_text }}</span>
+          </div>
+        </div>
+
+        <div class="olo-stl__mockup" :style="mockupStyle(it)">
+          <div v-if="s.show_media_label && it.media_label" :style="mockupHeaderStyle(it)">
+            <span style="display:inline-flex;gap:4px">
+              <span style="width:8px;height:8px;border-radius:50%;background:#ef4444;opacity:.7"></span>
+              <span style="width:8px;height:8px;border-radius:50%;background:#f59e0b;opacity:.7"></span>
+              <span style="width:8px;height:8px;border-radius:50%;background:#10b981;opacity:.7"></span>
+            </span>
+            <span style="margin-left:8px">{{ it.media_label }}</span>
+          </div>
+          <div style="flex:1;padding:14px;display:flex;align-items:center;justify-content:center;overflow:hidden">
+            <img v-if="it.media_type === 'image' && it.media_image" :src="it.media_image" :style="{ width: '100%', height: '100%', objectFit: 'cover' }" />
+            <pre v-else-if="it.media_type === 'terminal' && it.media_content" :style="terminalStyle(it)">{{ it.media_content }}</pre>
+            <div v-else style="width:100%;display:flex;flex-direction:column;gap:8px;opacity:.7">
+              <span :style="{ height: '8px', background: (it.media_color || '#b3261e') + '33', borderRadius: '4px' }"></span>
+              <span :style="{ height: '8px', width: '80%', background: (it.media_color || '#b3261e') + '22', borderRadius: '4px' }"></span>
+              <span :style="{ height: '8px', width: '60%', background: (it.media_color || '#b3261e') + '22', borderRadius: '4px' }"></span>
+            </div>
+          </div>
+        </div>
+
+        <div v-if="it.pre_title" :style="preTitleStyle">{{ it.pre_title }}</div>
+
+        <h3 v-if="it.title || it.title_accent || it.title_after" :style="titleStyle">
+          <span v-if="it.title">{{ it.title }}</span><template v-if="it.title_accent"> <span :style="{ color: s.title_accent_color || '#b3261e', fontStyle: it.title_accent_italic ? 'italic' : 'normal' }">{{ it.title_accent }}</span></template><template v-if="it.title_after"> <span :style="{ fontStyle: it.title_after_italic ? 'italic' : 'normal' }">{{ it.title_after }}</span></template>
+        </h3>
+
+        <div v-if="it.description" :style="descStyle" v-html="it.description"></div>
+
+        <div v-if="it.footer_value || it.footer_label" :style="footerStyle">
+          <span v-if="s.footer_icon" :style="{ color: s.footer_value_color || '#0f172a' }" v-html="resolveIcon(s.footer_icon)"></span>
+          <span v-if="it.footer_value" :style="footerValueStyle">{{ it.footer_value }}</span>
+          <span v-if="it.footer_label" :style="footerLabelStyle">{{ it.footer_label }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { computed } from 'vue';
+import iconsSvg from '../ProSlider/iconsLibrary.js';
+
+const props = defineProps({ settings: { type: Object, default: () => ({}) } });
+
+const R = (n) => ({ tl: n, tr: n, br: n, bl: n, linked: true });
+
+const defaults = {
+  items: [],
+  show_timeline: true,
+  timeline_line_color: '#fde8e8',
+  timeline_dot_color: '#b3261e',
+  timeline_dot_size: 14,
+  timeline_height: 3,
+  timeline_margin_bottom: 50,
+  counter_font_family: 'serif',
+  counter_size: 96, counter_color: '#b3261e', counter_italic: true, counter_weight: '500',
+  tag_size: 12, tag_color: '#374151',
+  media_aspect_ratio: '5/4',
+  media_radius: R(14),
+  media_shadow: 'sm',
+  show_media_label: true,
+  pre_title_size: 12, pre_title_color: '#9ca3af',
+  title_font_family: 'serif', title_size: 30, title_weight: '500',
+  title_color: '#0f172a', title_accent_color: '#b3261e',
+  description_size: 14, description_color: '#6b7280',
+  footer_icon: 'clock', footer_value_size: 18, footer_label_size: 11,
+  footer_value_color: '#0f172a', footer_label_color: '#9ca3af',
+  separator_color: '#b3261e', show_separator: true,
+  columns: 3, gap: 32, items_align: 'start',
+};
+
+const s = computed(() => ({ ...defaults, ...props.settings }));
+const items = computed(() => Array.isArray(s.value.items) ? s.value.items : []);
+const dotsCount = computed(() => items.value.length + 1);
+
+const SERIF = "'Playfair Display','Cormorant Garamond',Georgia,'Times New Roman',serif";
+const SANS  = "'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif";
+const MONO  = "ui-monospace,'SF Mono',Menlo,Consolas,monospace";
+const fmap  = { serif: SERIF, 'sans-serif': SANS, mono: MONO };
+
+const SHADOW = {
+  none: 'none',
+  sm: '0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04)',
+  md: '0 4px 12px rgba(0,0,0,0.10), 0 2px 4px rgba(0,0,0,0.06)',
+  lg: '0 10px 30px rgba(0,0,0,0.12), 0 4px 8px rgba(0,0,0,0.08)',
+};
+
+function radiusToCss(r) {
+  if (!r) return '0';
+  if (typeof r === 'number') return r + 'px';
+  return `${r.tl ?? 0}px ${r.tr ?? 0}px ${r.br ?? 0}px ${r.bl ?? 0}px`;
+}
+
+const timelineStyle = computed(() => ({
+  position: 'relative',
+  height: (s.value.timeline_dot_size || 14) + 'px',
+  marginBottom: (s.value.timeline_margin_bottom || 50) + 'px',
+}));
+
+const lineStyle = computed(() => ({
+  position: 'absolute',
+  left: 0, right: 0, top: '50%', transform: 'translateY(-50%)',
+  height: (s.value.timeline_height || 3) + 'px',
+  background: s.value.timeline_line_color || '#fde8e8',
+  borderRadius: (s.value.timeline_height || 3) + 'px',
+}));
+
+function dotStyle(i) {
+  const n = dotsCount.value;
+  const pct = n > 1 ? (i / (n - 1)) * 100 : 50;
+  let color = s.value.timeline_dot_color || '#b3261e';
+  if (i === n - 1 && items.value[items.value.length - 1]?.tag_dot_color) {
+    color = items.value[items.value.length - 1].tag_dot_color;
+  }
+  return {
+    position: 'absolute', left: pct + '%', top: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: (s.value.timeline_dot_size || 14) + 'px',
+    height: (s.value.timeline_dot_size || 14) + 'px',
+    borderRadius: '50%',
+    background: color,
+    boxShadow: `0 0 0 4px #fff, 0 0 0 5px ${color}33`,
+  };
+}
+
+const gridStyle = computed(() => ({
+  display: 'grid',
+  gridTemplateColumns: `repeat(${s.value.columns || 3}, 1fr)`,
+  gap: (s.value.gap || 32) + 'px',
+  alignItems: s.value.items_align === 'center' ? 'center' : 'flex-start',
+  position: 'relative',
+}));
+
+const counterStyle = computed(() => ({
+  fontFamily: fmap[s.value.counter_font_family] || SERIF,
+  fontSize: (s.value.counter_size || 96) + 'px',
+  lineHeight: 0.9,
+  color: s.value.counter_color || '#b3261e',
+  fontStyle: s.value.counter_italic ? 'italic' : 'normal',
+  fontWeight: s.value.counter_weight || '500',
+  letterSpacing: '-0.02em',
+}));
+
+const tagStyle = computed(() => ({
+  fontFamily: MONO,
+  fontSize: (s.value.tag_size || 12) + 'px',
+  letterSpacing: '0.08em',
+  textTransform: 'uppercase',
+  color: s.value.tag_color || '#374151',
+}));
+
+function mockupStyle(it) {
+  return {
+    background: it.media_bg || '#f5efe7',
+    borderRadius: radiusToCss(s.value.media_radius),
+    aspectRatio: s.value.media_aspect_ratio || '5/4',
+    overflow: 'hidden',
+    boxShadow: SHADOW[s.value.media_shadow || 'sm'] || SHADOW.sm,
+    display: 'flex',
+    flexDirection: 'column',
+    transition: 'transform .3s ease',
+  };
+}
+
+function mockupHeaderStyle(it) {
+  return {
+    padding: '10px 14px',
+    background: 'rgba(0,0,0,0.06)',
+    fontFamily: MONO,
+    fontSize: '10px',
+    letterSpacing: '0.1em',
+    textTransform: 'uppercase',
+    color: (it.media_bg === '#0f172a') ? '#9ca3af' : '#6b7280',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '6px',
+  };
+}
+
+function terminalStyle(it) {
+  return {
+    margin: 0, width: '100%', fontFamily: MONO, fontSize: '11px',
+    lineHeight: 1.6, color: it.media_color || '#10b981', whiteSpace: 'pre-wrap',
+  };
+}
+
+const preTitleStyle = computed(() => ({
+  fontFamily: MONO,
+  fontSize: (s.value.pre_title_size || 12) + 'px',
+  letterSpacing: '0.12em',
+  textTransform: 'uppercase',
+  color: s.value.pre_title_color || '#9ca3af',
+}));
+
+const titleStyle = computed(() => ({
+  fontFamily: fmap[s.value.title_font_family] || SERIF,
+  fontSize: (s.value.title_size || 30) + 'px',
+  fontWeight: s.value.title_weight || '500',
+  lineHeight: 1.15,
+  letterSpacing: '-0.01em',
+  color: s.value.title_color || '#0f172a',
+  margin: 0,
+}));
+
+const descStyle = computed(() => ({
+  fontFamily: SANS,
+  fontSize: (s.value.description_size || 14) + 'px',
+  lineHeight: 1.55,
+  color: s.value.description_color || '#6b7280',
+}));
+
+const footerStyle = computed(() => ({
+  display: 'inline-flex', alignItems: 'center', gap: '10px',
+  marginTop: '12px', paddingTop: '14px',
+  borderTop: '1px solid rgba(15,23,42,0.08)',
+}));
+
+const footerValueStyle = computed(() => ({
+  fontFamily: fmap[s.value.title_font_family] || SERIF,
+  fontSize: (s.value.footer_value_size || 18) + 'px',
+  fontWeight: 600,
+  color: s.value.footer_value_color || '#0f172a',
+}));
+
+const footerLabelStyle = computed(() => ({
+  fontFamily: MONO,
+  fontSize: (s.value.footer_label_size || 11) + 'px',
+  letterSpacing: '0.08em',
+  textTransform: 'uppercase',
+  color: s.value.footer_label_color || '#9ca3af',
+}));
+
+function resolveIcon(name) {
+  return iconsSvg[name] || '';
+}
+</script>
+
+<style scoped>
+.olo-stl__mockup :deep(svg) { width: 0.9em; height: 0.9em; }
+</style>

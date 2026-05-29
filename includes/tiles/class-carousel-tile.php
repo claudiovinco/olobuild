@@ -191,15 +191,23 @@ class Olo_Carousel_Tile extends Olo_Tile_Base {
                     $alt = is_array( $slide ) ? ( $slide['image_alt'] ?? '' ) : '';
                     $link = is_array( $slide ) ? ( $slide['link_url'] ?? '' ) : '';
                     $caption = is_array( $slide ) ? ( $slide['caption'] ?? '' ) : '';
-                    if ( ! $url ) continue;
+                    $widget_id = is_array( $slide ) ? absint( $slide['widget_template_id'] ?? 0 ) : 0;
+                    // Skip slide solo se NÉ image NÉ widget sono presenti
+                    if ( ! $url && ! $widget_id ) continue;
+                    $widget_html = $this->render_widget_template( $widget_id );
                 ?>
                 <div class="olo-car-slide">
-                    <?php if ( $link ) : ?>
-                    <a href="<?php echo esc_url( $link ); ?>">
+                    <?php if ( $widget_html ) : ?>
+                    <div class="olo-item-widget"><?php echo $widget_html; ?></div>
+                    <?php endif; ?>
+                    <?php if ( $url ) : ?>
+                        <?php if ( $link ) : ?>
+                        <a href="<?php echo esc_url( $link ); ?>">
+                            <img src="<?php echo esc_url( $url ); ?>" alt="<?php echo esc_attr( $alt ); ?>" loading="lazy" />
+                        </a>
+                        <?php else : ?>
                         <img src="<?php echo esc_url( $url ); ?>" alt="<?php echo esc_attr( $alt ); ?>" loading="lazy" />
-                    </a>
-                    <?php else : ?>
-                    <img src="<?php echo esc_url( $url ); ?>" alt="<?php echo esc_attr( $alt ); ?>" loading="lazy" />
+                        <?php endif; ?>
                     <?php endif; ?>
                     <?php if ( $captions && $caption ) : ?>
                     <?php list( $cc_cls, $cc_data ) = $this->tfx_attrs( $s, 'caption', $caption ); ?>

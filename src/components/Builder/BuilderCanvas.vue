@@ -283,18 +283,34 @@ useDragMonitor({
 const { iframeReady, iframeHeight, postToIframe } = useIframeBridge(iframeRef);
 
 const iframeSrc = computed(() => {
-  const base = window.oloData?.home_url || window.location.origin;
+  const base = window.oloData?.siteInfo?.home_url || window.oloData?.home_url || window.location.origin;
   // Passa il template_id al PHP serve_builder_iframe: se trova un post che usa
   // questo template, redirezionerà l'iframe al permalink reale (in modo che
   // header/footer/regole vengano applicati come in produzione).
   const tplId = builderStore.currentTemplate?.id || 0;
-  return base + '?olo_builder_iframe=1' + (tplId ? '&olo_tpl=' + tplId : '');
+  // Cache-buster basato su updated_at del template (cambia solo quando il template muta).
+  // Evita che il browser serva una response cached vecchia (es. 403 dopo cambio capability).
+  const updatedAt = builderStore.currentTemplate?.updated_at || '';
+  const buster = updatedAt ? '&v=' + encodeURIComponent(updatedAt) : '';
+  return base + '?olo_builder_iframe=1' + (tplId ? '&olo_tpl=' + tplId : '') + buster;
 });
 
 const iframeStyle = computed(() => {
   const mode = builderStore.viewMode;
-  const widths = { desktop: '100%', tablet: '768px', 'tablet-landscape': '1024px', mobile: '375px', 'mobile-landscape': '667px' };
-  const w = widths[mode] || '100%';
+  // Le larghezze provengono dai breakpoints del design system (page settings),
+  // così l'iframe replica esattamente i breakpoint a cui rispondono le media query.
+  // Desktop = full-width (no breakpoint, è la default base).
+  const bp = (builderStore.pageSettings && builderStore.pageSettings.breakpoints) || {};
+  let w;
+  if (mode === 'desktop') {
+    w = '100%';
+  } else if (bp[mode] != null) {
+    // Sottraiamo 1px per garantire che le media query "max-width: Npx" siano attive
+    // a una larghezza esattamente = breakpoint (es. tablet 960px → iframe 959px).
+    w = (parseInt(bp[mode], 10)) + 'px';
+  } else {
+    w = '100%';
+  }
   const zoom = builderStore.canvasZoom / 100;
   const style = {
     width: w,
@@ -417,6 +433,8 @@ const canvasStyle = computed(() => {
   const bp = builderStore.pageSettings.breakpoints || {};
   if (mode === 'desktop' && maxW < 9999) {
     style.maxWidth = `${maxW}px`;
+  } else if (mode === 'widescreen') {
+    style.maxWidth = `${bp.widescreen || 1400}px`;
   } else if (mode === 'tablet_landscape') {
     style.maxWidth = `${bp.tablet_landscape || 1200}px`;
   } else if (mode === 'tablet') {

@@ -11,11 +11,12 @@ class Olo_Button_Tile extends Olo_Tile_Base {
     protected $icon     = 'dashicons-button';
     protected $category = 'essential';
     protected $defaults = [
-        'text'               => 'Click Here',
+        'text'               => 'Clicca qui',
         'url'                => '#',
         'target'             => '_self',
         'alignment'          => 'center',
         'full_width'         => false,
+        'bg'                 => [ 'type' => 'none' ],
         'bg_color'           => '',
         'text_color'         => '',
         'border_radius'      => '6',
@@ -64,13 +65,58 @@ class Olo_Button_Tile extends Olo_Tile_Base {
         $bg = $this->safe_color_css( $s['bg_color'] ) ?: 'var(--olo-color-primary, #6366F1)';
         $fg = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-primary-contrast, #FFFFFF)';
 
-        // Border radius
+        // Sfondo creativo (bg unificato) — se settato (type !== 'none') sovrascrive il
+        // bg_color tinta unita usando lo stesso CSS Builder di section/row/iconbox.
+        // Per type 'video' e 'gallery' aggiungiamo anche markup HTML dentro il button.
+        $bg_creative_css  = '';
+        $bg_creative_html = '';
+        $bg_obj = $s['bg'] ?? [ 'type' => 'none' ];
+        if ( is_array( $bg_obj ) && ( $bg_obj['type'] ?? 'none' ) !== 'none' && class_exists( 'Olo_CSS_Builder' ) ) {
+            $cssb = new Olo_CSS_Builder();
+            $bg_creative_css = $cssb->get_bg_inline_css( $bg_obj );
+            if ( $bg_creative_css && ! str_ends_with( $bg_creative_css, ';' ) ) {
+                $bg_creative_css .= ';';
+            }
+            if ( method_exists( $cssb, 'get_bg_html_markup' ) ) {
+                $bg_creative_html = $cssb->get_bg_html_markup( $bg_obj );
+            }
+        }
+
+        // Border radius — l'utente si aspetta che il valore impostato corrisponda alla
+        // curvatura INTERNA del bordo (= dove inizia il content). In CSS standard,
+        // `border-radius: X` produce curvatura esterna X e interna max(0, X - border_width).
+        // Per ottenere interno = X applichiamo (X + border_width) all'elemento col bordo.
+        $border_data_for_bw = $this->parse_border( $s['border'] ?? [] );
+        $bw_uniform = 0;
+        if ( $border_data_for_bw
+            && $border_data_for_bw['top'] === $border_data_for_bw['right']
+            && $border_data_for_bw['right'] === $border_data_for_bw['bottom']
+            && $border_data_for_bw['bottom'] === $border_data_for_bw['left'] ) {
+            $bw_uniform = max( 0, intval( $border_data_for_bw['top'] ) );
+        }
+        // Include anche il border legacy ($border_width definito più sotto) nel calcolo
+        $bw_legacy  = absint( $s['border_width'] ?? 0 );
+        $bw_compensate = max( $bw_uniform, $bw_legacy );
+
         $rad_raw = $s['border_radius'];
         if ( is_array( $rad_raw ) ) {
-            $rad_css = sprintf( '%dpx %dpx %dpx %dpx', absint( $rad_raw['tl'] ?? 0 ), absint( $rad_raw['tr'] ?? 0 ), absint( $rad_raw['br'] ?? 0 ), absint( $rad_raw['bl'] ?? 0 ) );
+            $rad_css = sprintf( '%dpx %dpx %dpx %dpx',
+                absint( $rad_raw['tl'] ?? 0 ) + $bw_compensate,
+                absint( $rad_raw['tr'] ?? 0 ) + $bw_compensate,
+                absint( $rad_raw['br'] ?? 0 ) + $bw_compensate,
+                absint( $rad_raw['bl'] ?? 0 ) + $bw_compensate
+            );
         } else {
-            $rad_css = absint( $rad_raw ) . 'px';
+            $rad_css = ( absint( $rad_raw ) + $bw_compensate ) . 'px';
         }
+
+        // Hover CSS dichiarativo — duale dell'helper JS withHover() in _shared.js.
+        // Vedi class-tile-base.php::build_hover_css() per il design.
+        $hover = $this->build_hover_css( $s, [
+            'bg_color'      => [ 'css' => 'background-color', 'hover_key' => 'hover_bg_color',   'important' => true ],
+            'text_color'    => [ 'css' => 'color',            'hover_key' => 'hover_text_color', 'important' => true ],
+            'border_radius' => 'border-radius',
+        ] );
 
         // Typography preset (global style)
         $tp = sanitize_text_field( $s['typography_preset'] ?? '' );
@@ -106,26 +152,29 @@ class Olo_Button_Tile extends Olo_Tile_Base {
         $border_width = absint( $s['border_width'] ?? 0 );
         $border_color = $this->safe_color_css( $s['border_color'] ?? '' ) ?: 'var(--olo-color-primary, #6366F1)';
 
-        // Border system
-        $border_css        = $this->build_border_css( $s['border'] ?? [] );
-        $border_hover_css  = $this->build_border_hover_css( ".{$uid}", $s['border'] ?? [], $s['border_hover'] ?? [], intval( $s['border_hover_duration'] ?? 300 ) );
-        $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
+        // Border system — applicato a .olo-btn-link (il pulsante visibile),
+        // NON al wrapper .uid (che è solo container con allineamento/padding).
+        // Nota: usiamo build_border_hover_props (decoupled) invece di build_border_hover_css
+        // per evitare che la transition border generi una regola CSS separata che
+        // sovrascriverebbe le transition di border-radius/bg/color (CSS shorthand reset).
+        $btn_sel              = ".{$uid} .olo-btn-link";
+        $border_css           = $this->build_border_css( $s['border'] ?? [] );
+        $border_hover_props   = $this->build_border_hover_props( $s['border'] ?? [], $s['border_hover'] ?? [], intval( $s['border_hover_duration'] ?? 300 ) );
+        $border_effect_css    = $this->build_border_effect_css( $btn_sel, $s['border'] ?? [], $s );
 
-        // Shadow
-        $shadow = Olo_Tile_Utils::shadow( $s['shadow'] ?? 'none' );
+        // Shadow — variant 'button' usa ombre più visibili (alpha 18-35%)
+        // invece dei valori "standard" troppo deboli (8-15%) per bottoni colorati.
+        $shadow = Olo_Tile_Utils::shadow( $s['shadow'] ?? 'none', 'button' );
 
         // Hover colors
         $hover_bg     = $this->safe_color_css( $s['hover_bg_color'] );
         $hover_fg     = $this->safe_color_css( $s['hover_text_color'] );
         $hover_bc     = $this->safe_color_css( $s['hover_border_color'] );
-        $hover_shadow = ( $s['hover_shadow'] !== '' ) ? Olo_Tile_Utils::shadow( $s['hover_shadow'] ) : '';
+        $hover_shadow = ( $s['hover_shadow'] !== '' ) ? Olo_Tile_Utils::shadow( $s['hover_shadow'], 'button' ) : '';
         $hover_effect = $s['hover_effect'] ?? 'lift';
 
         // Hover image/video
         $has_hover_media = ! empty( $s['hover_image'] ) || ! empty( $s['hover_video'] );
-
-        // Transition properties
-        $transitions = [ 'background-color 0.25s ease', 'color 0.25s ease', 'border-color 0.25s ease', 'box-shadow 0.25s ease', 'transform 0.25s ease' ];
 
         // Determine the hover-transform target:
         // with hover media → .olo-hover-wrap  (so button + media move together)
@@ -133,6 +182,22 @@ class Olo_Button_Tile extends Olo_Tile_Base {
         $transform_sel = $has_hover_media
             ? '.olo-hover-wrap'
             : '.olo-btn-link';
+
+        // Transition properties — quelle hoverable (bg/color/border-radius) sono già
+        // generate dall'helper con la durata custom, qui solo il resto del legacy.
+        // `transform` va incluso nella stessa regola SOLO se il target è .olo-btn-link;
+        // altrimenti il blocco "Transform effects" più sotto applica una transition
+        // separata sul wrap (selettore diverso, niente conflitto di overrideing).
+        $base_transitions = [ 'border-color 0.25s ease', 'box-shadow 0.25s ease' ];
+        if ( $transform_sel === '.olo-btn-link' ) {
+            $base_transitions[] = 'transform 0.25s ease';
+        }
+        $transitions = array_merge( $base_transitions, $hover['transitions'] );
+        // Aggiungi la transition border (con la sua durata custom) al transition shorthand
+        // principale, così non collide con border-radius/bg/color.
+        if ( $border_hover_props['transition'] !== '' ) {
+            $transitions[] = $border_hover_props['transition'];
+        }
 
         ob_start();
         ?>
@@ -142,7 +207,16 @@ class Olo_Button_Tile extends Olo_Tile_Base {
                 display: inline-block;
                 <?php echo $fw_width; ?>
                 padding: <?php echo $pt; ?>px <?php echo $pr; ?>px <?php echo $pb; ?>px <?php echo $pl; ?>px;
+                position: relative;
+                overflow: hidden;
+                <?php if ( $bg_creative_css ) : ?>
+                <?php echo $bg_creative_css; ?>
+                <?php else : ?>
                 background-color: <?php echo $bg; ?> !important;
+                <?php endif; ?>
+                <?php if ( $bg_creative_html ) : ?>
+                /* video/gallery bg: testo sopra il video */
+                <?php endif; ?>
                 color: <?php echo $fg; ?> !important;
                 border-radius: <?php echo $rad_css; ?>;
                 font-size: <?php echo $fs; ?>px;
@@ -158,17 +232,28 @@ class Olo_Button_Tile extends Olo_Tile_Base {
                 <?php if ( $shadow !== 'none' ) : ?>box-shadow: <?php echo $shadow; ?>;<?php endif; ?>
                 transition: <?php echo implode( ', ', $transitions ); ?>;
             }
+            .<?php echo $uid; ?> .olo-btn-link > .olo-btn-text,
+            .<?php echo $uid; ?> .olo-btn-link > span {
+                position: relative;
+                z-index: 2;
+            }
+            .<?php echo $uid; ?> .olo-btn-link > .olo-bg-video,
+            .<?php echo $uid; ?> .olo-btn-link > [class*="-bggal"] {
+                z-index: 0;
+            }
             .<?php echo $uid; ?> .olo-btn-link:hover {
                 text-decoration: none !important;
-                <?php if ( $hover_bg ) : ?>background-color: <?php echo $hover_bg; ?> !important;<?php endif; ?>
-                <?php if ( $hover_fg ) : ?>color: <?php echo $hover_fg; ?> !important;<?php endif; ?>
+                <?php echo $hover['hover_decls']; ?>
+                <?php echo $border_hover_props['decls']; ?>
                 <?php if ( $hover_bc ) : ?>border-color: <?php echo $hover_bc; ?>;<?php endif; ?>
                 <?php if ( $hover_shadow !== '' ) : ?>box-shadow: <?php echo $hover_shadow; ?>;<?php endif; ?>
             }
-            /* Transform effects — applied to <?php echo $transform_sel; ?> so media follows */
+            <?php if ( $transform_sel !== '.olo-btn-link' ) : ?>
+            /* Transform effects — applied to <?php echo $transform_sel; ?> (hover-wrap) so media follows */
             .<?php echo $uid; ?> <?php echo $transform_sel; ?> {
                 transition: transform 0.25s ease;
             }
+            <?php endif; ?>
             <?php
             $transform_hover_css = '';
             switch ( $hover_effect ) {
@@ -232,9 +317,8 @@ class Olo_Button_Tile extends Olo_Tile_Base {
             }
             <?php endif; ?>
         </style>
-        <?php if ( $border_css || $border_hover_css || $border_effect_css ) : ?><style>
-        <?php if ( $border_css ) echo ".{$uid}{{$border_css}}"; ?>
-        <?php echo $border_hover_css; ?>
+        <?php if ( $border_css || $border_effect_css ) : ?><style>
+        <?php if ( $border_css ) echo "{$btn_sel}{{$border_css}}"; ?>
         <?php echo $border_effect_css; ?>
         </style><?php endif; ?>
 
@@ -263,7 +347,10 @@ class Olo_Button_Tile extends Olo_Tile_Base {
                 $inner = '<span class="' . $text_span_cls . '"' . $tfx_data . '>' . $text_html . '</span>';
             }
 
-            $btn_html = '<a href="' . esc_url( $s['url'] ) . '"' . $target_attr . ' class="olo-btn-link" role="button">' . $inner . '</a>';
+            // Per video/gallery bg, inseriamo il markup DENTRO l'anchor con position:absolute.
+            // Il testo del button è già in z-index:2 sopra al video.
+            $btn_inner_full = $bg_creative_html . $inner;
+            $btn_html = '<a href="' . esc_url( $s['url'] ) . '"' . $target_attr . ' class="olo-btn-link" role="button" style="position:relative;overflow:hidden;">' . $btn_inner_full . '</a>';
 
             if ( $has_hover_media ) {
                 echo $this->render_hover_wrap( $btn_html, $s['hover_image'] ?? '', $s['hover_video'] ?? '' );

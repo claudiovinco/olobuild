@@ -28,6 +28,38 @@ class Olo_Popup_Tile extends Olo_Tile_Base {
         'content'               => '<p>Contenuto del popup...</p>',
         'image'                 => '',
         'image_position'        => 'top',
+
+        // Preset & granular controls (V3.26.1)
+        'preset'                    => 'modal-classic',
+        'modal_bg'                  => '#ffffff',
+        'modal_text_color'          => '#1e293b',
+        'modal_title_color'         => '#0f172a',
+        'modal_title_size'          => 24,
+        'modal_title_weight'        => '700',
+        'modal_title_uppercase'     => false,
+        'modal_title_letter_spacing'=> 0,
+        'button_radius'             => 6,
+        'button_uppercase'          => false,
+        'button_letter_spacing'     => 0.02,
+        'button_weight'             => '600',
+        'effect_color'              => '',
+        'effect_intensity'          => 'medium',
+        'effect_speed'              => 0,
+
+        // Effetti avanzati modale (v1.0.60+) — esposti come field per personalizzazione
+        // dei preset audaci (era CSS hardcoded in get_preset_extra_css con !important).
+        'modal_backdrop_blur'       => 0,
+        'modal_backdrop_saturate'   => 100,
+        'modal_border_style'        => 'solid',
+        'modal_font_family'         => 'inherit',
+        'modal_rotation'            => 0,
+        'modal_perspective'         => 0,
+        'modal_tilt_x'              => 0,
+        'modal_glow_pulse'          => false,
+        'modal_title_glow'          => false,
+        'modal_scanlines'           => false,
+        'modal_terminal_prompt'     => false,
+
         'template_id'           => 0,
         'popup_trigger'         => 'click',
         'popup_delay'           => 5,
@@ -190,6 +222,45 @@ class Olo_Popup_Tile extends Olo_Tile_Base {
         // Border
         $border_w = max( 0, intval( $s['modal_border_width'] ?? 0 ) );
         $border_c = $this->safe_color_css( $s['modal_border_color'] ?? '' ) ?: 'var(--olo-color-border, #E5E7EB)';
+        $border_style_allowed = [ 'solid', 'dashed', 'dotted', 'double' ];
+        $border_style = in_array( $s['modal_border_style'] ?? 'solid', $border_style_allowed, true ) ? $s['modal_border_style'] : 'solid';
+
+        // Effetti avanzati modale (v1.0.60+)
+        $backdrop_blur     = max( 0, min( 40, intval( $s['modal_backdrop_blur'] ?? 0 ) ) );
+        $backdrop_saturate = max( 100, min( 200, intval( $s['modal_backdrop_saturate'] ?? 100 ) ) );
+        $font_family_map   = [
+            'inherit'   => 'inherit',
+            'monospace' => 'ui-monospace, SFMono-Regular, Menlo, monospace',
+            'serif'     => 'Georgia, "Times New Roman", serif',
+            'sans'      => '"Helvetica Neue", Helvetica, Arial, sans-serif',
+        ];
+        $font_family_key   = $s['modal_font_family'] ?? 'inherit';
+        $font_family_css   = $font_family_map[ $font_family_key ] ?? 'inherit';
+        $modal_rotation    = max( -10, min( 10, floatval( $s['modal_rotation'] ?? 0 ) ) );
+        $modal_perspective = max( 0, min( 2000, intval( $s['modal_perspective'] ?? 0 ) ) );
+        $modal_tilt_x      = max( -10, min( 10, floatval( $s['modal_tilt_x'] ?? 0 ) ) );
+        $glow_pulse        = ! empty( $s['modal_glow_pulse'] );
+        $title_glow        = ! empty( $s['modal_title_glow'] );
+        $scanlines         = ! empty( $s['modal_scanlines'] );
+        $terminal_prompt   = ! empty( $s['modal_terminal_prompt'] );
+
+        // Preset (V3.26.1)
+        $preset_id = $s['preset'] ?? 'modal-classic';
+
+        // Modal/title color tweaks
+        $modal_bg     = $this->safe_color_css( $s['modal_bg'] ?? '#ffffff' );
+        $modal_text   = $this->safe_color_css( $s['modal_text_color'] ?? '#1e293b' );
+        $modal_t_clr  = $this->safe_color_css( $s['modal_title_color'] ?? '#0f172a' );
+        $modal_t_size = max( 10, intval( $s['modal_title_size'] ?? 24 ) );
+        $modal_t_w    = preg_match( '/^[1-9]00$/', (string) ($s['modal_title_weight'] ?? '700') ) ? $s['modal_title_weight'] : '700';
+        $modal_t_up   = ! empty( $s['modal_title_uppercase'] );
+        $modal_t_ls   = floatval( $s['modal_title_letter_spacing'] ?? 0 );
+
+        // Button typography
+        $btn_radius  = max( 0, intval( $s['button_radius'] ?? 6 ) );
+        $btn_upper   = ! empty( $s['button_uppercase'] );
+        $btn_ls      = floatval( $s['button_letter_spacing'] ?? 0.02 );
+        $btn_weight  = preg_match( '/^[1-9]00$/', (string) ($s['button_weight'] ?? '600') ) ? $s['button_weight'] : '600';
 
         // Data attributes for JS popup trigger handling
         $data_attrs  = ' data-olo-popup-trigger="' . esc_attr( $trigger ) . '"';
@@ -218,7 +289,7 @@ class Olo_Popup_Tile extends Olo_Tile_Base {
             #<?php echo esc_attr( $uid ); ?> .uk-modal-dialog {
                 <?php if ( $radius && $radius !== '0px' ) : ?>border-radius: <?php echo $radius; ?>; overflow: hidden;<?php endif; ?>
                 <?php if ( $shadow !== 'none' ) : ?>box-shadow: <?php echo $shadow; ?>;<?php endif; ?>
-                <?php if ( $border_w > 0 ) : ?>border: <?php echo $border_w; ?>px solid <?php echo $border_c; ?>;<?php endif; ?>
+                <?php if ( $border_w > 0 ) : ?>border: <?php echo $border_w; ?>px <?php echo $border_style; ?> <?php echo $border_c; ?>;<?php endif; ?>
             }
             <?php if ( $radius_hover_css !== '' ) : ?>#<?php echo esc_attr( $uid ); ?> .uk-modal-dialog{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}#<?php echo esc_attr( $uid ); ?> .uk-modal-dialog:hover{border-radius:<?php echo $radius_hover_css; ?> !important}<?php endif; ?>
             /* Animation keyframes */
@@ -250,7 +321,7 @@ class Olo_Popup_Tile extends Olo_Tile_Base {
                 display: flex;
                 flex-direction: column;
                 <?php if ( $shadow !== 'none' ) : ?>box-shadow: <?php echo $shadow; ?>;<?php endif; ?>
-                <?php if ( $border_w > 0 ) : ?>border: <?php echo $border_w; ?>px solid <?php echo $border_c; ?>;<?php endif; ?>
+                <?php if ( $border_w > 0 ) : ?>border: <?php echo $border_w; ?>px <?php echo $border_style; ?> <?php echo $border_c; ?>;<?php endif; ?>
             }
             #<?php echo esc_attr( $uid ); ?> .olo-popup-fullbody {
                 flex: 1;
@@ -270,20 +341,96 @@ class Olo_Popup_Tile extends Olo_Tile_Base {
             #<?php echo esc_attr( $uid ); ?> .olo-frontend-grid { --olo-container-max-width: none; }
             #<?php echo esc_attr( $uid ); ?> .wp-block-post-title,
             #<?php echo esc_attr( $uid ); ?> .entry-title { display: none; }
+
+            /* V3.26.1 — Modal style tweaks (universal, all presets) */
+            #<?php echo esc_attr( $uid ); ?> .uk-modal-dialog {
+                background: <?php echo $modal_bg; ?>;
+                color: <?php echo $modal_text; ?>;
+                <?php if ( $font_family_css !== 'inherit' ) : ?>font-family: <?php echo $font_family_css; ?>;<?php endif; ?>
+                <?php if ( $backdrop_blur > 0 || $backdrop_saturate > 100 ) : ?>backdrop-filter: blur(<?php echo $backdrop_blur; ?>px) saturate(<?php echo $backdrop_saturate; ?>%); -webkit-backdrop-filter: blur(<?php echo $backdrop_blur; ?>px) saturate(<?php echo $backdrop_saturate; ?>%);<?php endif; ?>
+                <?php if ( abs( $modal_rotation ) > 0.01 || $modal_perspective > 0 || abs( $modal_tilt_x ) > 0.01 ) : ?>
+                    transform:
+                        <?php if ( $modal_perspective > 0 ) : ?>perspective(<?php echo $modal_perspective; ?>px) <?php endif; ?>
+                        <?php if ( abs( $modal_tilt_x ) > 0.01 ) : ?>rotateX(<?php echo $modal_tilt_x; ?>deg) <?php endif; ?>
+                        <?php if ( abs( $modal_rotation ) > 0.01 ) : ?>rotate(<?php echo $modal_rotation; ?>deg)<?php endif; ?>
+                    ;
+                <?php endif; ?>
+            }
+            #<?php echo esc_attr( $uid ); ?> .uk-modal-title {
+                color: <?php echo $modal_t_clr; ?>;
+                font-size: <?php echo $modal_t_size; ?>px;
+                font-weight: <?php echo $modal_t_w; ?>;
+                <?php if ( $modal_t_up ) : ?>text-transform: uppercase;<?php endif; ?>
+                letter-spacing: <?php echo $modal_t_ls; ?>em;
+                <?php if ( $font_family_css !== 'inherit' ) : ?>font-family: inherit;<?php endif; ?>
+                <?php if ( $title_glow ) : $glow_c = $this->safe_color_css( $s['effect_color'] ?? '' ) ?: $modal_t_clr; $glow_rgb = $this->color_to_rgb( $glow_c ); ?>
+                text-shadow: 0 0 8px rgba(<?php echo $glow_rgb; ?>,0.6);
+                <?php endif; ?>
+            }
+            .olo-popup-<?php echo esc_attr( $uid ); ?> > button {
+                border-radius: <?php echo $btn_radius; ?>px;
+                font-weight: <?php echo $btn_weight; ?>;
+                <?php if ( $btn_upper ) : ?>text-transform: uppercase;<?php endif; ?>
+                letter-spacing: <?php echo $btn_ls; ?>em;
+                transition: all 0.25s ease;
+            }
+
+            <?php
+            // Effetti avanzati che richiedono CSS dinamico (animation keyframes, ::before/::after,
+            // scanlines via background-image): generati solo se il rispettivo toggle è attivo.
+            $effect_speed = absint( $s['effect_speed'] ?? 0 );
+            if ( $glow_pulse ) :
+                $c = $this->safe_color_css( $s['effect_color'] ?? '' ) ?: '#ff6a2a';
+                $rgb = $this->color_to_rgb( $c );
+                $pulse_ms = $effect_speed > 0 ? $effect_speed : 2200;
+            ?>
+            @keyframes olo-pop-glow-<?php echo esc_attr( $uid ); ?> {
+                0%, 100% { box-shadow: 0 0 12px rgba(<?php echo $rgb; ?>,0.5), inset 0 0 12px rgba(<?php echo $rgb; ?>,0.15); }
+                50%      { box-shadow: 0 0 24px rgba(<?php echo $rgb; ?>,0.85), inset 0 0 24px rgba(<?php echo $rgb; ?>,0.30); }
+            }
+            #<?php echo esc_attr( $uid ); ?> .uk-modal-dialog {
+                animation: olo-pop-glow-<?php echo esc_attr( $uid ); ?> <?php echo $pulse_ms; ?>ms ease-in-out infinite;
+            }
+            <?php endif; ?>
+
+            <?php if ( $scanlines ) :
+                $sc_c = $this->safe_color_css( $s['effect_color'] ?? '' ) ?: '#00ff8c';
+                $sc_rgb = $this->color_to_rgb( $sc_c );
+            ?>
+            #<?php echo esc_attr( $uid ); ?> .uk-modal-dialog {
+                background-image: repeating-linear-gradient(0deg, transparent 0, transparent 2px, rgba(<?php echo $sc_rgb; ?>,0.06) 2px, rgba(<?php echo $sc_rgb; ?>,0.06) 3px);
+            }
+            <?php endif; ?>
+
+            <?php if ( $terminal_prompt ) :
+                $tp_c = $this->safe_color_css( $s['effect_color'] ?? '' ) ?: $modal_t_clr;
+                $tp_rgb = $this->color_to_rgb( $tp_c );
+                $blink_ms = $effect_speed > 0 ? $effect_speed : 1000;
+            ?>
+            @keyframes olo-pop-cursor-<?php echo esc_attr( $uid ); ?> {
+                0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; }
+            }
+            #<?php echo esc_attr( $uid ); ?> .uk-modal-title::before { content: '> '; opacity: 0.7; }
+            #<?php echo esc_attr( $uid ); ?> .uk-modal-title::after  {
+                content: ' \2588';
+                margin-left: 2px;
+                animation: olo-pop-cursor-<?php echo esc_attr( $uid ); ?> <?php echo $blink_ms; ?>ms steps(1) infinite;
+            }
+            <?php endif; ?>
         </style>
         <?php
 
         // Full-screen modal uses special structure
         if ( $s['modal_size'] === 'full' ) :
         ?>
-        <div class="olo-popup olo-popup-<?php echo esc_attr( $uid ); ?>"<?php echo $data_attrs; ?>>
+        <div class="olo-popup olo-pop--preset-<?php echo esc_attr( $preset_id ); ?> olo-popup-<?php echo esc_attr( $uid ); ?>"<?php echo $data_attrs; ?>>
             <?php if ( ! $is_auto_trigger ) : ?>
             <button class="<?php echo esc_attr( $btn_class ); ?>" type="button" uk-toggle="target: #<?php echo esc_attr( $uid ); ?>">
                 <?php echo $icon_html; ?><?php echo $btn_text; ?>
             </button>
             <?php endif; ?>
 
-            <div id="<?php echo esc_attr( $uid ); ?>" class="uk-modal-full" <?php echo $modal_attr; ?>>
+            <div id="<?php echo esc_attr( $uid ); ?>" class="uk-modal-full olo-pop--preset-<?php echo esc_attr( $preset_id ); ?>" <?php echo $modal_attr; ?>>
                 <div class="uk-modal-dialog">
                     <?php if ( ! empty( $s['modal_close_button'] ) ) : ?>
                         <button class="uk-modal-close-full uk-close-large" type="button" uk-close style="z-index:10;"></button>
@@ -295,14 +442,14 @@ class Olo_Popup_Tile extends Olo_Tile_Base {
             </div>
         </div>
         <?php else : ?>
-        <div class="olo-popup olo-popup-<?php echo esc_attr( $uid ); ?>"<?php echo $data_attrs; ?>>
+        <div class="olo-popup olo-pop--preset-<?php echo esc_attr( $preset_id ); ?> olo-popup-<?php echo esc_attr( $uid ); ?>"<?php echo $data_attrs; ?>>
             <?php if ( ! $is_auto_trigger ) : ?>
             <button class="<?php echo esc_attr( $btn_class ); ?>" type="button" uk-toggle="target: #<?php echo esc_attr( $uid ); ?>">
                 <?php echo $icon_html; ?><?php echo $btn_text; ?>
             </button>
             <?php endif; ?>
 
-            <div id="<?php echo esc_attr( $uid ); ?>" <?php echo $modal_attr; ?>>
+            <div id="<?php echo esc_attr( $uid ); ?>" class="olo-pop--preset-<?php echo esc_attr( $preset_id ); ?>" <?php echo $modal_attr; ?>>
                 <div class="<?php echo esc_attr( $dialog_class ); ?>">
                     <?php if ( ! empty( $s['modal_close_button'] ) ) : ?>
                         <button class="uk-modal-close-default" type="button" uk-close></button>
@@ -504,6 +651,23 @@ class Olo_Popup_Tile extends Olo_Tile_Base {
             echo $border_hover_css . $border_effect_css . '</style>';
         }
         return ob_get_clean();
+    }
+
+    private function color_to_rgba( $color, $alpha ) {
+        $rgb = $this->color_to_rgb( $color );
+        return "rgba({$rgb},{$alpha})";
+    }
+
+    /**
+     * @deprecated v1.0.60 — Gli effetti dei preset audaci ora arrivano dai field
+     * regolari ({@see modal_backdrop_blur, modal_border_style, modal_font_family,
+     * modal_rotation, modal_perspective, modal_tilt_x, modal_glow_pulse,
+     * modal_title_glow, modal_scanlines, modal_terminal_prompt}) e sono interamente
+     * modificabili dall'inspector. Mantenuto come noop per back-compat se richiamato
+     * da overrides esterni.
+     */
+    private function get_preset_extra_css( $preset_id, $modal_id, $btn_sel, $s = [] ) {
+        return '';
     }
 
     /**

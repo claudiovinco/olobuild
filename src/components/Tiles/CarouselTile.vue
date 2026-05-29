@@ -8,24 +8,36 @@
         class="olo-carousel-slide"
         :style="slideStyle"
       >
-        <img
-          v-if="slide.image_url"
-          :src="slide.image_url"
-          :alt="slide.image_alt || ''"
-          :style="imgStyle"
-        />
-        <div v-else :style="{ ...placeholderStyle, color: 'var(--olo-color-text-muted, #9CA3AF)' }">
+        <component
+          :is="slide.link_url ? 'a' : 'div'"
+          v-if="slide.image_url || slide.widget_template_id"
+          :href="slide.link_url || undefined"
+          :style="slideInnerStyle"
+          @click.prevent
+        >
+          <img
+            v-if="slide.image_url"
+            :src="slide.image_url"
+            :alt="slide.image_alt || ''"
+            :style="imgStyle"
+          />
+          <div v-else :style="widgetBadgeStyle">
+            <span>{{ t('Widget') }}</span>
+          </div>
+        </component>
+        <div v-else :style="placeholderStyle">
           <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
             <rect x="3" y="3" width="18" height="18" rx="2" />
             <circle cx="8.5" cy="8.5" r="1.5" />
             <path d="m21 15-5-5L5 21" />
           </svg>
+          <small :style="{ marginTop: '6px', fontSize: '11px', opacity: 0.7 }">{{ t('Slide') }} {{ (currentOffset + i + 1) }}</small>
         </div>
         <!-- Caption -->
         <div
           v-if="s.show_caption && slide.caption"
           :style="captionStyle"
-          :data-olo-editable="`slides.${i}.caption`"
+          :data-olo-editable="`slides.${currentOffset + i}.caption`"
         >
           {{ slide.caption }}
         </div>
@@ -48,12 +60,15 @@
 
     <!-- Dots -->
     <div v-if="s.show_dots && slides.length > slidesToShow" class="olo-carousel-dots" :style="dotsWrapStyle">
-      <span
+      <button
         v-for="(_, i) in dotCount"
         :key="i"
+        type="button"
         class="olo-carousel-dot"
         :style="dotStyle(i)"
-      ></span>
+        :aria-label="t('Vai a gruppo') + ' ' + (i + 1)"
+        @click="goToDot(i)"
+      ></button>
     </div>
   </div>
 </template>
@@ -61,6 +76,7 @@
 <script setup>
 import { t } from '@/i18n';
 import { computed, ref } from 'vue';
+import { radiusToCss } from '@/composables/useRadius';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
@@ -78,7 +94,7 @@ const defaults = {
   pause_on_hover: true,
   slide_height: 'auto',
   fixed_height: '300',
-  border_radius: '8',
+  border_radius: 8,
   arrow_color: '#FFFFFF',
   arrow_bg: 'rgba(0,0,0,0.5)',
   dot_color: 'var(--olo-color-primary, #6366F1)',
@@ -104,7 +120,20 @@ const slides = computed(() => {
 
 const slidesToShow = computed(() => Math.max(1, Math.min(6, parseInt(s.value.slides_to_show) || 3)));
 const gap = computed(() => parseInt(s.value.gap) || 16);
-const radius = computed(() => (v => isNaN(v) ? 8 : v)(parseInt(s.value.border_radius)));
+
+const radiusCss = computed(() => radiusToCss(s.value.border_radius, { fallback: '8px' }));
+// Solo per il bottom-radius della caption (top resta 0 perché la caption sta sotto)
+const captionRadiusCss = computed(() => {
+  const v = s.value.border_radius;
+  if (v && typeof v === 'object') {
+    const br = parseInt(v.br) || 0;
+    const bl = parseInt(v.bl) || 0;
+    return `0 0 ${br}px ${bl}px`;
+  }
+  const n = parseInt(v);
+  const r = isNaN(n) ? 8 : n;
+  return `0 0 ${r}px ${r}px`;
+});
 
 const currentOffset = ref(0);
 const visibleSlides = computed(() => {
@@ -120,6 +149,11 @@ function nextSlide() {
 function prevSlide() {
   if (currentOffset.value > 0) currentOffset.value--;
   else if (s.value.loop) currentOffset.value = Math.max(0, slides.value.length - slidesToShow.value);
+}
+function goToDot(i) {
+  const target = i * slidesToShow.value;
+  const max = Math.max(0, slides.value.length - slidesToShow.value);
+  currentOffset.value = Math.min(target, max);
 }
 
 const dotCount = computed(() => Math.max(1, Math.ceil(slides.value.length / slidesToShow.value)));
@@ -137,17 +171,25 @@ const slideStyle = computed(() => {
     flex: `0 0 calc((100% - ${g * (n - 1)}px) / ${n})`,
     minWidth: '0',
     position: 'relative',
-    borderRadius: radius.value + 'px',
+    borderRadius: radiusCss.value,
     overflow: 'hidden',
   };
 });
+
+const slideInnerStyle = computed(() => ({
+  display: 'block',
+  width: '100%',
+  height: '100%',
+  textDecoration: 'none',
+  color: 'inherit',
+}));
 
 const imgStyle = computed(() => {
   const st = {
     width: '100%',
     display: 'block',
     objectFit: s.value.object_fit || 'cover',
-    borderRadius: radius.value + 'px',
+    borderRadius: radiusCss.value,
   };
   if (s.value.slide_height === 'fixed') {
     st.height = (parseInt(s.value.fixed_height) || 300) + 'px';
@@ -162,10 +204,34 @@ const placeholderStyle = computed(() => {
   const st = {
     width: '100%',
     display: 'flex',
+    flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
     background: 'var(--olo-color-muted, #F3F4F6)',
-    borderRadius: radius.value + 'px',
+    color: 'var(--olo-color-text-muted, #9CA3AF)',
+    borderRadius: radiusCss.value,
+  };
+  if (s.value.slide_height === 'fixed') {
+    st.height = (parseInt(s.value.fixed_height) || 300) + 'px';
+  } else {
+    st.aspectRatio = '16/10';
+  }
+  return st;
+});
+
+const widgetBadgeStyle = computed(() => {
+  const st = {
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    background: 'linear-gradient(135deg, var(--olo-color-primary, #6366F1), var(--olo-color-primary, #8B5CF6))',
+    color: '#FFFFFF',
+    fontWeight: '600',
+    fontSize: '13px',
+    letterSpacing: '0.5px',
+    textTransform: 'uppercase',
+    borderRadius: radiusCss.value,
   };
   if (s.value.slide_height === 'fixed') {
     st.height = (parseInt(s.value.fixed_height) || 300) + 'px';
@@ -188,11 +254,15 @@ const dotsWrapStyle = computed(() => ({
 }));
 
 function dotStyle(index) {
+  const activeIdx = Math.floor(currentOffset.value / slidesToShow.value);
   return {
     width: '10px',
     height: '10px',
     borderRadius: '50%',
-    background: index === currentOffset.value ? (s.value.dot_color || 'var(--olo-color-primary, #6366F1)') : (s.value.dot_inactive_color || 'var(--olo-color-border, #E5E7EB)'),
+    border: 'none',
+    padding: '0',
+    cursor: 'pointer',
+    background: index === activeIdx ? (s.value.dot_color || 'var(--olo-color-primary, #6366F1)') : (s.value.dot_inactive_color || 'var(--olo-color-border, #E5E7EB)'),
     transition: 'background 0.2s',
   };
 }
@@ -206,7 +276,7 @@ const captionStyle = computed(() => ({
   fontSize: '12px',
   color: s.value.caption_color || '#FFFFFF',
   background: s.value.caption_bg || 'rgba(0,0,0,0.6)',
-  borderRadius: `0 0 ${radius.value}px ${radius.value}px`,
+  borderRadius: captionRadiusCss.value,
 }));
 </script>
 

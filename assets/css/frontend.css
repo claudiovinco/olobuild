@@ -241,8 +241,14 @@ video.olo-tile-bg {
   margin-top: 0 !important;
   padding-top: 0 !important;
 }
-/* Remove gap between classic header and first page section */
-.olo-site-header.olo-header-classic ~ main .olo-template > .olo-frontend-grid > section:first-child {
+/* Remove gap between classic header and first page section.
+ * Excludes section with an explicit inline padding-top (so the user can
+ * override via inspector → Style → Padding), sections with explicit
+ * UIkit padding presets (uk-section-large/xlarge/small/remove-vertical),
+ * and sections that have any background (color/image/video/gallery): per
+ * queste l'utente vuole vedere il riquadro colorato intero, quindi il
+ * padding-top deve essere preservato per non tagliare la parte alta. */
+.olo-site-header.olo-header-classic ~ main .olo-template > .olo-frontend-grid > section:first-child:not([style*="padding-top"]):not(.uk-section-large):not(.uk-section-xlarge):not(.uk-section-small):not(.uk-padding-remove-vertical):not(.olo-section-has-bg) {
   padding-top: 0 !important;
 }
 
@@ -1036,6 +1042,10 @@ header.olo-site-header.olo-header-overlay + main > .wp-block-group:first-child {
   border-color: var(--olo-color-primary, #6366F1);
   box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
 }
+.olo-map-compact-select:focus-visible {
+  outline: 2px solid var(--olo-color-primary, #6366F1);
+  outline-offset: 2px;
+}
 .olo-map-filters-bar--compact .olo-map-svc-filter-counter {
   border-top: none;
   font-size: 0.78em;
@@ -1754,6 +1764,11 @@ header.olo-site-header.olo-header-overlay + main > .wp-block-group:first-child {
 .olo-svsearch-input:focus {
   border-color: var(--olo-color-primary, #6366F1);
 }
+.olo-svsearch-select:focus-visible,
+.olo-svsearch-input:focus-visible {
+  outline: 2px solid var(--olo-color-primary, #6366F1);
+  outline-offset: 2px;
+}
 .olo-svsearch-amenities {
   display: flex;
   flex-wrap: wrap;
@@ -1831,6 +1846,10 @@ header.olo-site-header.olo-header-overlay + main > .wp-block-group:first-child {
 }
 .olo-svresults-select:focus {
   border-color: var(--olo-color-primary, #6366F1);
+}
+.olo-svresults-select:focus-visible {
+  outline: 2px solid var(--olo-color-primary, #6366F1);
+  outline-offset: 2px;
 }
 .olo-svresults-amenities {
   display: flex;
@@ -2266,6 +2285,12 @@ header.olo-site-header.olo-header-overlay + main > .wp-block-group:first-child {
   .olo-template .olo-proslider-kenburns {
     animation: none !important;
   }
+  /* Background Gallery: stop Ken Burns zoom + slide movement; il cambio
+     immagine resta (gestito da JS) ma senza animazione/transizione. */
+  .olo-template .olo-bg-gallery-slide {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+  }
   .olo-template .olo-hover-wrap .olo-hover-media {
     transition: none !important;
   }
@@ -2370,3 +2395,521 @@ header.olo-site-header.olo-header-overlay + main > .wp-block-group:first-child {
 @keyframes olo-kb-out { from { transform: scale(1.15); } to { transform: scale(1); } }
 .olo-bg-gallery--kb-alternate .olo-bg-gallery-slide.olo-bg-gallery--active { animation: olo-kb-in var(--olo-kb-dur, 6000ms) ease forwards; }
 .olo-bg-gallery--kb-alternate .olo-bg-gallery-slide.olo-bg-gallery--active.olo-bg-gallery--even { animation: olo-kb-out var(--olo-kb-dur, 6000ms) ease forwards; }
+
+
+/* ================================================================
+ * Entrance animations (olo-entrance-*)
+ * Customizzazioni via CSS variables impostate inline sul wrapper:
+ *   --olo-e-dur    durata animazione (default per effetto)
+ *   --olo-e-delay  ritardo iniziale (default 0)
+ *   --olo-e-ease   curva (default per effetto)
+ *   --olo-e-int    intensità: moltiplicatore su distanze/scala/rotazione (default 1)
+ *
+ * Le keyframes sono single-line per facilitare la rigenerazione via script.
+ * ================================================================ */
+.olo-entrance-fade.olo-visible            { animation: olo-fx-fade var(--olo-e-dur, .6s) var(--olo-e-ease, ease) var(--olo-e-delay, 0s) forwards; }
+.olo-entrance-slide-up.olo-visible        { animation: olo-fx-slide-up var(--olo-e-dur, .6s) var(--olo-e-ease, cubic-bezier(.4,0,.2,1)) var(--olo-e-delay, 0s) forwards; }
+.olo-entrance-slide-down.olo-visible      { animation: olo-fx-slide-down var(--olo-e-dur, .6s) var(--olo-e-ease, cubic-bezier(.4,0,.2,1)) var(--olo-e-delay, 0s) forwards; }
+.olo-entrance-slide-left.olo-visible      { animation: olo-fx-slide-left var(--olo-e-dur, .6s) var(--olo-e-ease, cubic-bezier(.4,0,.2,1)) var(--olo-e-delay, 0s) forwards; }
+.olo-entrance-slide-right.olo-visible     { animation: olo-fx-slide-right var(--olo-e-dur, .6s) var(--olo-e-ease, cubic-bezier(.4,0,.2,1)) var(--olo-e-delay, 0s) forwards; }
+.olo-entrance-zoom-in.olo-visible         { animation: olo-fx-zoom-in var(--olo-e-dur, .6s) var(--olo-e-ease, cubic-bezier(.34,1.56,.64,1)) var(--olo-e-delay, 0s) forwards; }
+.olo-entrance-zoom-out.olo-visible        { animation: olo-fx-zoom-out var(--olo-e-dur, .6s) var(--olo-e-ease, ease) var(--olo-e-delay, 0s) forwards; }
+.olo-entrance-flip.olo-visible            { animation: olo-fx-flip var(--olo-e-dur, .8s) var(--olo-e-ease, ease) var(--olo-e-delay, 0s) forwards; }
+.olo-entrance-flip-x.olo-visible          { animation: olo-fx-flip-x var(--olo-e-dur, .8s) var(--olo-e-ease, ease) var(--olo-e-delay, 0s) forwards; }
+.olo-entrance-flip-y.olo-visible          { animation: olo-fx-flip-y var(--olo-e-dur, .8s) var(--olo-e-ease, ease) var(--olo-e-delay, 0s) forwards; }
+.olo-entrance-rotate-in.olo-visible       { animation: olo-fx-rotate-in var(--olo-e-dur, .8s) var(--olo-e-ease, ease) var(--olo-e-delay, 0s) forwards; }
+.olo-entrance-rotate-ccw.olo-visible      { animation: olo-fx-rotate-ccw var(--olo-e-dur, .8s) var(--olo-e-ease, ease) var(--olo-e-delay, 0s) forwards; }
+.olo-entrance-bounce.olo-visible          { animation: olo-fx-bounce var(--olo-e-dur, .9s) var(--olo-e-ease, cubic-bezier(.68,-.55,.27,1.55)) var(--olo-e-delay, 0s) forwards; }
+.olo-entrance-bounce-left.olo-visible     { animation: olo-fx-bounce-left var(--olo-e-dur, .9s) var(--olo-e-ease, cubic-bezier(.68,-.55,.27,1.55)) var(--olo-e-delay, 0s) forwards; }
+.olo-entrance-bounce-right.olo-visible    { animation: olo-fx-bounce-right var(--olo-e-dur, .9s) var(--olo-e-ease, cubic-bezier(.68,-.55,.27,1.55)) var(--olo-e-delay, 0s) forwards; }
+.olo-entrance-elastic.olo-visible         { animation: olo-fx-elastic var(--olo-e-dur, 1s) var(--olo-e-ease, cubic-bezier(.5,1.5,.5,.8)) var(--olo-e-delay, 0s) forwards; }
+.olo-entrance-blur-in.olo-visible         { animation: olo-fx-blur-in var(--olo-e-dur, .7s) var(--olo-e-ease, ease) var(--olo-e-delay, 0s) forwards; }
+.olo-entrance-blur-zoom.olo-visible       { animation: olo-fx-blur-zoom var(--olo-e-dur, .8s) var(--olo-e-ease, cubic-bezier(.34,1.56,.64,1)) var(--olo-e-delay, 0s) forwards; }
+.olo-entrance-swing.olo-visible           { animation: olo-fx-swing var(--olo-e-dur, 1s) var(--olo-e-ease, ease) var(--olo-e-delay, 0s) forwards; transform-origin: top center; }
+.olo-entrance-rubber.olo-visible          { animation: olo-fx-rubber var(--olo-e-dur, 1s) var(--olo-e-ease, ease) var(--olo-e-delay, 0s) forwards; }
+.olo-entrance-jello.olo-visible           { animation: olo-fx-jello var(--olo-e-dur, 1s) var(--olo-e-ease, ease) var(--olo-e-delay, 0s) forwards; }
+.olo-entrance-back-in-left.olo-visible    { animation: olo-fx-back-in-left var(--olo-e-dur, .8s) var(--olo-e-ease, cubic-bezier(.34,1.56,.64,1)) var(--olo-e-delay, 0s) forwards; }
+.olo-entrance-back-in-right.olo-visible   { animation: olo-fx-back-in-right var(--olo-e-dur, .8s) var(--olo-e-ease, cubic-bezier(.34,1.56,.64,1)) var(--olo-e-delay, 0s) forwards; }
+.olo-entrance-typewriter.olo-visible      { animation: olo-fx-fade var(--olo-e-dur, .6s) var(--olo-e-ease, ease) var(--olo-e-delay, 0s) forwards; }
+.olo-entrance-fade-up-big.olo-visible     { animation: olo-fx-fade-up-big var(--olo-e-dur, .8s) var(--olo-e-ease, ease) var(--olo-e-delay, 0s) forwards; }
+.olo-entrance-fade-down-big.olo-visible   { animation: olo-fx-fade-down-big var(--olo-e-dur, .8s) var(--olo-e-ease, ease) var(--olo-e-delay, 0s) forwards; }
+.olo-entrance-lightspeed-left.olo-visible { animation: olo-fx-lightspeed-left var(--olo-e-dur, .7s) var(--olo-e-ease, ease) var(--olo-e-delay, 0s) forwards; }
+.olo-entrance-lightspeed-right.olo-visible{ animation: olo-fx-lightspeed-right var(--olo-e-dur, .7s) var(--olo-e-ease, ease) var(--olo-e-delay, 0s) forwards; }
+.olo-entrance-roll-in.olo-visible         { animation: olo-fx-roll-in var(--olo-e-dur, .8s) var(--olo-e-ease, ease) var(--olo-e-delay, 0s) forwards; }
+.olo-entrance-jack-in-box.olo-visible     { animation: olo-fx-jack-in-box var(--olo-e-dur, .9s) var(--olo-e-ease, ease) var(--olo-e-delay, 0s) forwards; transform-origin: center bottom; }
+.olo-entrance-hinge.olo-visible           { animation: olo-fx-hinge var(--olo-e-dur, 2s) var(--olo-e-ease, ease-in) var(--olo-e-delay, 0s) forwards; transform-origin: top left; }
+.olo-entrance-zoom-in-down.olo-visible    { animation: olo-fx-zoom-in-down var(--olo-e-dur, .8s) var(--olo-e-ease, cubic-bezier(.175,.885,.32,1.275)) var(--olo-e-delay, 0s) forwards; }
+.olo-entrance-zoom-in-up.olo-visible      { animation: olo-fx-zoom-in-up var(--olo-e-dur, .8s) var(--olo-e-ease, cubic-bezier(.175,.885,.32,1.275)) var(--olo-e-delay, 0s) forwards; }
+.olo-entrance-skew-in.olo-visible         { animation: olo-fx-skew-in var(--olo-e-dur, .7s) var(--olo-e-ease, ease) var(--olo-e-delay, 0s) forwards; }
+.olo-entrance-curtain-reveal.olo-visible  { animation: olo-fx-curtain-reveal var(--olo-e-dur, .8s) var(--olo-e-ease, ease) var(--olo-e-delay, 0s) forwards; transform-origin: top; }
+
+@keyframes olo-fx-fade            { from { opacity: 0; } to { opacity: 1; } }
+@keyframes olo-fx-slide-up        { from { opacity: 0; transform: translateY(calc(40px * var(--olo-e-int, 1))); } to { opacity: 1; transform: none; } }
+@keyframes olo-fx-slide-down      { from { opacity: 0; transform: translateY(calc(-40px * var(--olo-e-int, 1))); } to { opacity: 1; transform: none; } }
+@keyframes olo-fx-slide-left      { from { opacity: 0; transform: translateX(calc(-60px * var(--olo-e-int, 1))); } to { opacity: 1; transform: none; } }
+@keyframes olo-fx-slide-right     { from { opacity: 0; transform: translateX(calc(60px * var(--olo-e-int, 1))); } to { opacity: 1; transform: none; } }
+@keyframes olo-fx-zoom-in         { from { opacity: 0; transform: scale(calc(1 - 0.3 * var(--olo-e-int, 1))); } to { opacity: 1; transform: scale(1); } }
+@keyframes olo-fx-zoom-out        { from { opacity: 0; transform: scale(calc(1 + 0.3 * var(--olo-e-int, 1))); } to { opacity: 1; transform: scale(1); } }
+@keyframes olo-fx-flip            { from { opacity: 0; transform: perspective(400px) rotateY(calc(90deg * var(--olo-e-int, 1))); } to { opacity: 1; transform: perspective(400px) rotateY(0); } }
+@keyframes olo-fx-flip-x          { from { opacity: 0; transform: perspective(400px) rotateX(calc(90deg * var(--olo-e-int, 1))); } to { opacity: 1; transform: perspective(400px) rotateX(0); } }
+@keyframes olo-fx-flip-y          { from { opacity: 0; transform: perspective(400px) rotateY(calc(90deg * var(--olo-e-int, 1))); } to { opacity: 1; transform: perspective(400px) rotateY(0); } }
+@keyframes olo-fx-rotate-in       { from { opacity: 0; transform: rotate(calc(-180deg * var(--olo-e-int, 1))); } to { opacity: 1; transform: none; } }
+@keyframes olo-fx-rotate-ccw      { from { opacity: 0; transform: rotate(calc(180deg * var(--olo-e-int, 1))); } to { opacity: 1; transform: none; } }
+@keyframes olo-fx-bounce          { 0% { opacity: 0; transform: scale(calc(1 - 0.7 * var(--olo-e-int, 1))); } 50% { opacity: 1; transform: scale(calc(1 + 0.05 * var(--olo-e-int, 1))); } 100% { transform: scale(1); } }
+@keyframes olo-fx-bounce-left     { 0% { opacity: 0; transform: translateX(calc(-100px * var(--olo-e-int, 1))); } 60% { opacity: 1; transform: translateX(calc(20px * var(--olo-e-int, 1))); } 100% { transform: none; } }
+@keyframes olo-fx-bounce-right    { 0% { opacity: 0; transform: translateX(calc(100px * var(--olo-e-int, 1))); } 60% { opacity: 1; transform: translateX(calc(-20px * var(--olo-e-int, 1))); } 100% { transform: none; } }
+@keyframes olo-fx-elastic         { 0% { opacity: 0; transform: scale(calc(1 - 0.7 * var(--olo-e-int, 1))); } 50% { opacity: 1; transform: scale(calc(1 + 0.15 * var(--olo-e-int, 1))); } 70% { transform: scale(calc(1 - 0.05 * var(--olo-e-int, 1))); } 100% { transform: scale(1); } }
+@keyframes olo-fx-blur-in         { from { opacity: 0; filter: blur(calc(12px * var(--olo-e-int, 1))); } to { opacity: 1; filter: blur(0); } }
+@keyframes olo-fx-blur-zoom       { from { opacity: 0; filter: blur(calc(12px * var(--olo-e-int, 1))); transform: scale(calc(1 - 0.15 * var(--olo-e-int, 1))); } to { opacity: 1; filter: blur(0); transform: scale(1); } }
+@keyframes olo-fx-swing           { 20% { transform: rotate(calc(15deg * var(--olo-e-int, 1))); } 40% { transform: rotate(calc(-10deg * var(--olo-e-int, 1))); } 60% { transform: rotate(calc(5deg * var(--olo-e-int, 1))); } 80% { transform: rotate(calc(-5deg * var(--olo-e-int, 1))); } 100% { opacity: 1; transform: rotate(0); } }
+@keyframes olo-fx-rubber          { 0% { opacity: 0; transform: scale(1); } 30% { opacity: 1; transform: scaleX(calc(1 + 0.25 * var(--olo-e-int, 1))) scaleY(calc(1 - 0.25 * var(--olo-e-int, 1))); } 40% { transform: scaleX(calc(1 - 0.25 * var(--olo-e-int, 1))) scaleY(calc(1 + 0.25 * var(--olo-e-int, 1))); } 50% { transform: scaleX(calc(1 + 0.15 * var(--olo-e-int, 1))) scaleY(calc(1 - 0.15 * var(--olo-e-int, 1))); } 65% { transform: scaleX(calc(1 - 0.05 * var(--olo-e-int, 1))) scaleY(calc(1 + 0.05 * var(--olo-e-int, 1))); } 75% { transform: scaleX(calc(1 + 0.05 * var(--olo-e-int, 1))) scaleY(calc(1 - 0.05 * var(--olo-e-int, 1))); } 100% { transform: none; } }
+@keyframes olo-fx-jello           { 0% { opacity: 0; } 11% { opacity: 1; transform: skewX(calc(-12.5deg * var(--olo-e-int, 1))) skewY(calc(-12.5deg * var(--olo-e-int, 1))); } 22% { transform: skewX(calc(6.25deg * var(--olo-e-int, 1))) skewY(calc(6.25deg * var(--olo-e-int, 1))); } 33% { transform: skewX(calc(-3.125deg * var(--olo-e-int, 1))) skewY(calc(-3.125deg * var(--olo-e-int, 1))); } 44% { transform: skewX(calc(1.5625deg * var(--olo-e-int, 1))) skewY(calc(1.5625deg * var(--olo-e-int, 1))); } 100% { transform: none; } }
+@keyframes olo-fx-back-in-left    { 0% { opacity: 0; transform: translateX(calc(-200px * var(--olo-e-int, 1))) scale(calc(1 - 0.3 * var(--olo-e-int, 1))); } 80% { opacity: 1; transform: translateX(0) scale(calc(1 - 0.3 * var(--olo-e-int, 1))); } 100% { transform: scale(1); } }
+@keyframes olo-fx-back-in-right   { 0% { opacity: 0; transform: translateX(calc(200px * var(--olo-e-int, 1))) scale(calc(1 - 0.3 * var(--olo-e-int, 1))); } 80% { opacity: 1; transform: translateX(0) scale(calc(1 - 0.3 * var(--olo-e-int, 1))); } 100% { transform: scale(1); } }
+@keyframes olo-fx-fade-up-big     { from { opacity: 0; transform: translateY(calc(180px * var(--olo-e-int, 1))); } to { opacity: 1; transform: none; } }
+@keyframes olo-fx-fade-down-big   { from { opacity: 0; transform: translateY(calc(-180px * var(--olo-e-int, 1))); } to { opacity: 1; transform: none; } }
+@keyframes olo-fx-lightspeed-left { 0% { opacity: 0; transform: translateX(-100%) skewX(calc(30deg * var(--olo-e-int, 1))); } 60% { opacity: 1; transform: skewX(calc(-15deg * var(--olo-e-int, 1))); } 80% { transform: skewX(calc(5deg * var(--olo-e-int, 1))); } 100% { transform: none; } }
+@keyframes olo-fx-lightspeed-right{ 0% { opacity: 0; transform: translateX(100%) skewX(calc(-30deg * var(--olo-e-int, 1))); } 60% { opacity: 1; transform: skewX(calc(15deg * var(--olo-e-int, 1))); } 80% { transform: skewX(calc(-5deg * var(--olo-e-int, 1))); } 100% { transform: none; } }
+@keyframes olo-fx-roll-in         { from { opacity: 0; transform: translateX(-100%) rotate(calc(-120deg * var(--olo-e-int, 1))); } to { opacity: 1; transform: none; } }
+@keyframes olo-fx-jack-in-box     { 0% { opacity: 0; transform: scale(calc(1 - 0.9 * var(--olo-e-int, 1))) rotate(calc(30deg * var(--olo-e-int, 1))); } 50% { transform: rotate(calc(-10deg * var(--olo-e-int, 1))); } 70% { transform: rotate(calc(3deg * var(--olo-e-int, 1))); } 100% { opacity: 1; transform: scale(1) rotate(0); } }
+@keyframes olo-fx-hinge           { 0% { opacity: 1; } 20% { transform: rotate(calc(80deg * var(--olo-e-int, 1))); } 40%, 80% { opacity: 1; transform: rotate(calc(60deg * var(--olo-e-int, 1))); } 100% { opacity: 0; transform: translateY(calc(700px * var(--olo-e-int, 1))); } }
+@keyframes olo-fx-zoom-in-down    { from { opacity: 0; transform: scale(calc(1 - 0.9 * var(--olo-e-int, 1))) translateY(calc(-1000px * var(--olo-e-int, 1))); } 60% { opacity: 1; transform: scale(calc(1 - 0.525 * var(--olo-e-int, 1))) translateY(calc(60px * var(--olo-e-int, 1))); } to { opacity: 1; transform: scale(1) translateY(0); } }
+@keyframes olo-fx-zoom-in-up      { from { opacity: 0; transform: scale(calc(1 - 0.9 * var(--olo-e-int, 1))) translateY(calc(1000px * var(--olo-e-int, 1))); } 60% { opacity: 1; transform: scale(calc(1 - 0.525 * var(--olo-e-int, 1))) translateY(calc(-60px * var(--olo-e-int, 1))); } to { opacity: 1; transform: scale(1) translateY(0); } }
+@keyframes olo-fx-skew-in         { from { opacity: 0; transform: skewX(calc(-30deg * var(--olo-e-int, 1))) translateX(calc(-50px * var(--olo-e-int, 1))); } to { opacity: 1; transform: none; } }
+@keyframes olo-fx-curtain-reveal  { from { opacity: 0; transform: scaleY(0); } to { opacity: 1; transform: scaleY(1); } }
+
+@media (prefers-reduced-motion: reduce) {
+  [class*="olo-entrance-"] { opacity: 1 !important; animation: none !important; transform: none !important; filter: none !important; }
+}
+
+/* ── Olobuild switcher: fallback display per pre-UIkit-init ────────── */
+/* Senza questo, prima che UIkit JS inizializzi `[uk-tab]`, TUTTI i <li>
+   del content-area sono visibili (CSS UIkit base non setta display:none).
+   Risultato: flash di tutti i tab simultanei. Il PHP renderer aggiunge
+   uk-active al primo <li> server-side, e questo CSS nasconde gli altri. */
+.olo-switcher ul.uk-switcher > li:not(.uk-active) {
+  display: none;
+}
+
+/* v3.55.47 — Sticky desktop-only.
+   Quando l'utente disattiva "Attivo anche su mobile" nello sticky,
+   forziamo position:static sotto i 640px cosi l'elemento scorre normalmente
+   su mobile invece di restare fisso. */
+@media (max-width: 640px) {
+  .olo-sticky-desktop-only {
+    position: static !important;
+    top: auto !important;
+    bottom: auto !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+ * Preset visivi per tile Hero (v3.57.24)
+ *
+ * REGOLA PRESET UNIVERSALE OLOBUILD — ogni preset DEVE modificare
+ * 5 dimensioni affinché il cambio sia percepito a colpo d'occhio:
+ *   1. Tipografia       (font family/weight/transform/letter-spacing)
+ *   2. Layout           (padding, allineamenti, min-height, max-width)
+ *   3. Colori           (text, title, subtitle, bg, CTA bg/text)
+ *   4. Effetti CSS      (questa sezione: glow, blur, shadow, scanlines, parallax)
+ *   5. Animazione       (entrance_animation impostata in TILE_PRESETS)
+ *
+ * Le dimensioni 1-3 + 5 sono gestite da TILE_PRESETS.hero in
+ * BuilderInspector.vue. Questa sezione fornisce la "firma visiva"
+ * di ciascun preset tramite la classe wrapper .olo-hero-preset-{id}.
+ * ═══════════════════════════════════════════════════════════════ */
+
+/* ── Modern Centered — underline decorativo sotto il titolo ── */
+.olo-hero-preset-modern-centered .olo-hero-title {
+  position: relative;
+  padding-bottom: 18px;
+}
+.olo-hero-preset-modern-centered .olo-hero-title::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  width: 64px;
+  height: 3px;
+  background: currentColor;
+  opacity: .55;
+  border-radius: 2px;
+}
+
+/* ── Split Image — content allineato a sinistra, larghezza dimezzata ── */
+.olo-hero-preset-split-image .olo-hero-content {
+  max-width: 56%;
+  margin-left: 6%;
+  margin-right: auto;
+}
+@media (max-width: 768px) {
+  .olo-hero-preset-split-image .olo-hero-content {
+    max-width: 100%;
+    margin: 0 auto;
+  }
+}
+
+/* ── Minimal Editorial — line separator + CTA underlined ── */
+.olo-hero-preset-minimal-editorial .olo-hero-inner::before {
+  content: '';
+  display: block;
+  width: 52px;
+  height: 1px;
+  background: currentColor;
+  margin: 0 0 28px 0;
+  opacity: .45;
+}
+.olo-hero-preset-minimal-editorial .olo-hero-cta1,
+.olo-hero-preset-minimal-editorial .olo-hero-cta2 {
+  text-decoration: underline !important;
+  text-underline-offset: 8px;
+  text-decoration-thickness: 1px;
+}
+
+/* ── Bold Statement — titolo con outline (text-stroke) ── */
+.olo-hero-preset-bold-statement .olo-hero-title {
+  -webkit-text-stroke: 1px currentColor;
+          text-stroke: 1px currentColor;
+}
+
+/* ── Video Cinema — vignette radiale + scaling lento del bg ── */
+.olo-hero-preset-video-cinema {
+  position: relative;
+  overflow: hidden;
+}
+.olo-hero-preset-video-cinema::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 45%, rgba(0,0,0,.55) 100%);
+  z-index: 1;
+}
+.olo-hero-preset-video-cinema .olo-hero-content {
+  position: relative;
+  z-index: 2;
+}
+
+/* ── Glass Overlay — backdrop-filter blur sul content-inner ── */
+.olo-hero-preset-glass-overlay .olo-hero-inner {
+  background: rgba(255,255,255,.22);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255,255,255,.35);
+  border-radius: 24px;
+  padding: 48px 40px;
+  box-shadow: 0 8px 32px rgba(0,0,0,.12);
+}
+
+/* ── Neon Cyberpunk — text-shadow glow pulsante + CTA neon border ── */
+.olo-hero-preset-neon-cyberpunk .olo-hero-title {
+  text-shadow:
+    0 0 8px currentColor,
+    0 0 20px currentColor,
+    0 0 40px currentColor;
+  animation: olo-hero-neon-pulse 2.4s ease-in-out infinite;
+}
+.olo-hero-preset-neon-cyberpunk .olo-hero-cta1,
+.olo-hero-preset-neon-cyberpunk .olo-hero-cta2 {
+  border: 2px solid currentColor !important;
+  box-shadow: 0 0 14px currentColor, inset 0 0 14px rgba(255,255,255,.08);
+}
+@keyframes olo-hero-neon-pulse {
+  0%, 100% { filter: brightness(1); }
+  50%      { filter: brightness(1.35); }
+}
+
+/* ── Brutalist Mega — titolo shadow hard offset + CTA stamp ── */
+.olo-hero-preset-brutalist-mega .olo-hero-title {
+  text-shadow: 6px 6px 0 #000;
+}
+.olo-hero-preset-brutalist-mega .olo-hero-cta1 {
+  border: 3px solid #000 !important;
+  box-shadow: 6px 6px 0 #000;
+  transition: transform .15s, box-shadow .15s;
+}
+.olo-hero-preset-brutalist-mega .olo-hero-cta1:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 8px 8px 0 #000;
+}
+
+/* ── Gradient Aurora — gradient bg animato + titolo gradient text ── */
+.olo-hero-preset-gradient-aurora {
+  background-size: 200% 200% !important;
+  animation: olo-hero-aurora-shift 9s ease-in-out infinite;
+}
+.olo-hero-preset-gradient-aurora .olo-hero-title {
+  background: linear-gradient(135deg, #ffffff 30%, #fce7f3 50%, #ffffff 70%);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+          background-clip: text;
+  -webkit-text-fill-color: transparent;
+          color: transparent;
+  animation: olo-hero-aurora-shift 6s ease-in-out infinite;
+}
+@keyframes olo-hero-aurora-shift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ── Sticker Collage — content ruotato + shadow sticker offset ── */
+.olo-hero-preset-sticker-collage .olo-hero-inner {
+  transform: rotate(-1.2deg);
+  background: #ffffff;
+  padding: 36px 30px;
+  border-radius: 8px;
+  box-shadow: 8px 8px 0 rgba(0,0,0,.18), 0 16px 32px rgba(0,0,0,.12);
+}
+.olo-hero-preset-sticker-collage .olo-hero-cta1 {
+  transform: rotate(1deg);
+  box-shadow: 4px 4px 0 rgba(0,0,0,.18);
+}
+
+/* ── Retro Poster — scanlines overlay + flicker leggero ── */
+.olo-hero-preset-retro-poster {
+  position: relative;
+  overflow: hidden;
+}
+.olo-hero-preset-retro-poster::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0,0,0,.18) 0px,
+    rgba(0,0,0,.18) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  z-index: 2;
+  animation: olo-hero-scanline-drift 9s linear infinite;
+}
+.olo-hero-preset-retro-poster .olo-hero-content {
+  position: relative;
+  z-index: 3;
+  animation: olo-hero-retro-flicker 5s steps(2) infinite;
+}
+@keyframes olo-hero-scanline-drift {
+  0%   { transform: translateY(0); }
+  100% { transform: translateY(4px); }
+}
+@keyframes olo-hero-retro-flicker {
+  0%, 95%, 100% { opacity: 1; }
+  97%           { opacity: .9; }
+}
+
+/* ── Tilt Parallax — perspective 3D + scaling al hover ── */
+.olo-hero-preset-tilt-parallax {
+  perspective: 1200px;
+}
+.olo-hero-preset-tilt-parallax .olo-hero-content {
+  transition: transform .6s cubic-bezier(.4,0,.2,1);
+  transform-style: preserve-3d;
+}
+.olo-hero-preset-tilt-parallax:hover .olo-hero-content {
+  transform: rotateX(2deg) rotateY(-2deg) scale(1.02);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+ * Preset visivi per tile Gallery (v3.57.25)
+ *
+ * Le 12 voci di TILE_PRESETS.gallery già modulano effetti reali
+ * (layout, columns, gap, hover_zoom, kenburns, vignette, grain, tint).
+ * Questa sezione aggiunge la "firma visiva" CSS specifica per ogni
+ * preset, completando le 5 dimensioni della Regola Preset.
+ *
+ * Struttura HTML target (class-gallery-tile.php):
+ *   .olo-gallery-preset-{id}  → wrapper container
+ *     .olo-gal-item           → singolo thumb (anchor)
+ *       img                   → immagine
+ *       .olo-gal-tint         → overlay tint opzionale
+ *       .olo-gal-grain        → overlay grain opzionale
+ *       .olo-gal-more         → "+N" last-visible
+ * ═══════════════════════════════════════════════════════════════ */
+
+/* ── Cinema Strip — bordo nero in alto/basso (effetto pellicola) ── */
+.olo-gallery-preset-cinema-strip {
+  border-top:    8px solid #0a0a0a;
+  border-bottom: 8px solid #0a0a0a;
+  background: #0a0a0a;
+  padding: 4px;
+}
+.olo-gallery-preset-cinema-strip .olo-gal-item {
+  position: relative;
+}
+.olo-gallery-preset-cinema-strip .olo-gal-item::before,
+.olo-gallery-preset-cinema-strip .olo-gal-item::after {
+  content: '';
+  position: absolute;
+  left: 4px;
+  right: 4px;
+  height: 6px;
+  background: repeating-linear-gradient(
+    90deg,
+    #0a0a0a 0px, #0a0a0a 8px,
+    transparent 8px, transparent 14px
+  );
+  z-index: 2;
+  pointer-events: none;
+}
+.olo-gallery-preset-cinema-strip .olo-gal-item::before { top: 0; }
+.olo-gallery-preset-cinema-strip .olo-gal-item::after  { bottom: 0; }
+
+/* ── Polaroid Album — bordo bianco bottom-padded + shadow + rotazione random ── */
+.olo-gallery-preset-polaroid-album .olo-gal-item {
+  background: #ffffff;
+  padding: 10px 10px 36px 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,.18);
+  transition: transform .3s ease;
+}
+.olo-gallery-preset-polaroid-album .olo-gal-item:nth-child(3n)   { transform: rotate(-1.5deg); }
+.olo-gallery-preset-polaroid-album .olo-gal-item:nth-child(3n+1) { transform: rotate(1.2deg); }
+.olo-gallery-preset-polaroid-album .olo-gal-item:nth-child(3n+2) { transform: rotate(-.6deg); }
+.olo-gallery-preset-polaroid-album .olo-gal-item:hover           { transform: rotate(0) translateY(-4px); z-index: 1; }
+
+/* ── Glass Tiles — backdrop blur sull'overlay del thumb ── */
+.olo-gallery-preset-glass-tiles .olo-gal-item {
+  position: relative;
+  border: 1px solid rgba(255,255,255,.4);
+  box-shadow: 0 4px 16px rgba(0,0,0,.08);
+}
+.olo-gallery-preset-glass-tiles .olo-gal-item::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 65%, rgba(255,255,255,.25) 100%);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  opacity: 0;
+  transition: opacity .3s ease;
+  pointer-events: none;
+}
+.olo-gallery-preset-glass-tiles .olo-gal-item:hover::after { opacity: 1; }
+
+/* ── Neon Frame — bordo glow neon sui thumb ── */
+.olo-gallery-preset-neon-frame .olo-gal-item {
+  border: 2px solid #ff6a2a;
+  box-shadow:
+    0 0 12px rgba(255,106,42,.5),
+    inset 0 0 8px rgba(255,106,42,.2);
+  transition: box-shadow .3s ease;
+}
+.olo-gallery-preset-neon-frame .olo-gal-item:hover {
+  box-shadow:
+    0 0 24px rgba(255,106,42,.9),
+    inset 0 0 16px rgba(255,106,42,.35);
+}
+
+/* ── Brutalist Grid — bordo nero spesso + offset hover ── */
+.olo-gallery-preset-brutalist-grid .olo-gal-item {
+  border: 4px solid #000;
+  box-shadow: 6px 6px 0 #000;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.olo-gallery-preset-brutalist-grid .olo-gal-item:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 9px 9px 0 #000;
+}
+
+/* ── Sticker Fun — thumb ruotati pattern + shadow sticker ── */
+.olo-gallery-preset-sticker-fun .olo-gal-item {
+  background: #fff;
+  padding: 6px;
+  box-shadow: 4px 4px 0 rgba(0,0,0,.18), 0 8px 20px rgba(0,0,0,.1);
+  transition: transform .25s ease;
+}
+.olo-gallery-preset-sticker-fun .olo-gal-item:nth-child(5n)   { transform: rotate(-2deg); }
+.olo-gallery-preset-sticker-fun .olo-gal-item:nth-child(5n+1) { transform: rotate(1deg); }
+.olo-gallery-preset-sticker-fun .olo-gal-item:nth-child(5n+2) { transform: rotate(-1deg); }
+.olo-gallery-preset-sticker-fun .olo-gal-item:nth-child(5n+3) { transform: rotate(2deg); }
+.olo-gallery-preset-sticker-fun .olo-gal-item:nth-child(5n+4) { transform: rotate(0); }
+.olo-gallery-preset-sticker-fun .olo-gal-item:hover           { transform: rotate(0) scale(1.05); z-index: 1; }
+
+/* ── VHS Retro — scanlines overlay + chroma shift al hover ── */
+.olo-gallery-preset-vhs-retro .olo-gal-item {
+  position: relative;
+}
+.olo-gallery-preset-vhs-retro .olo-gal-item::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0,255,140,.15) 0px,
+    rgba(0,255,140,.15) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  z-index: 2;
+  mix-blend-mode: overlay;
+}
+.olo-gallery-preset-vhs-retro .olo-gal-item:hover img {
+  filter: hue-rotate(-10deg) saturate(1.4);
+}
+
+/* ── Tilt 3D — perspective container + hover tilt avanzato ── */
+.olo-gallery-preset-tilt-3d {
+  perspective: 1400px;
+}
+.olo-gallery-preset-tilt-3d .olo-gal-item {
+  transform-style: preserve-3d;
+  transition: transform .5s cubic-bezier(.4,0,.2,1), box-shadow .3s ease;
+}
+.olo-gallery-preset-tilt-3d .olo-gal-item:hover {
+  transform: rotateY(-6deg) rotateX(4deg) scale(1.04);
+  box-shadow: -20px 20px 40px rgba(0,0,0,.2);
+}
+
+/* ── Text-block: baseline tipografica ──────────────────────────
+ * Default font-size 13px (coerente con UI del builder e leggibile
+ * a corpo di pagina). L'inspector lo sovrascrive via style inline. */
+.olo-text-block {
+  font-size: 13px;
+}
+
+/* ── Text-block: liste ricche (bullets / numerazione) ────────────
+ * Molti temi WP (TT4/TT5) e Tailwind preflight applicano
+ * list-style: none — qui ripristiniamo i marker dentro la tile testo
+ * con specificità sufficiente a vincere senza !important. */
+.olo-text-block ul {
+  list-style: disc outside;
+  padding-left: 1.5em;
+  margin: 0 0 0.8em;
+}
+.olo-text-block ol {
+  list-style: decimal outside;
+  padding-left: 1.5em;
+  margin: 0 0 0.8em;
+}
+.olo-text-block ul ul { list-style: circle outside; }
+.olo-text-block ul ul ul { list-style: square outside; }
+.olo-text-block ol ol { list-style: lower-alpha outside; }
+.olo-text-block ol ol ol { list-style: lower-roman outside; }
+.olo-text-block li { margin: 0.2em 0; }
+
+/* Forza eredità tipografica: i temi WP (TT4/TT5) e block editor css
+ * spesso applicano font-family/size/line-height diversi su ul/li,
+ * facendo apparire le liste con font diverso dai paragrafi della
+ * stessa tile testo. Ereditare dal wrapper neutralizza il problema. */
+.olo-text-block ul,
+.olo-text-block ol,
+.olo-text-block li {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
+  letter-spacing: inherit;
+}
+
+/* Tiptap StarterKit serializza i list-item come <li><p>...</p></li>;
+ * azzeriamo i margini di quei <p> per evitare spacing doppio. */
+.olo-text-block li > p {
+  margin: 0;
+}
+.olo-text-block li > p + p {
+  margin-top: 0.4em;
+}

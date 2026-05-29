@@ -16,13 +16,15 @@ import { t } from '@/i18n';
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 const defaults = { style: 'card' };
 const s = computed(() => ({ ...defaults, ...props.settings }));
+// Dati di esempio per la preview builder: i valori reali sono dinamici (meta del
+// CPT "room" di OLObooking), qui mostriamo un mock localizzato.
 const items = [
-  { label: 'Capienza', value: '50 persone' },
-  { label: 'Superficie', value: '85 mq' },
-  { label: 'Piano', value: 'Piano terra' },
-  { label: 'Tipo', value: 'Sala conferenze' },
-  { label: 'Zona', value: 'Centro storico' },
-  { label: 'Tariffa', value: '\u20AC 25/h' },
+  { label: t('Capienza'), value: t('50 persone') },
+  { label: t('Superficie'), value: '85 mq' },
+  { label: t('Piano'), value: t('Piano terra') },
+  { label: t('Tipo'), value: t('Sala conferenze') },
+  { label: t('Zona'), value: t('Centro storico') },
+  { label: t('Tariffa'), value: '\u20AC 25/h' },
 ];
 const wrapStyle = computed(() => s.value.style === 'card' ? { background: '#f9fafb', border: '1px solid #e5e7eb', borderRadius: '10px', padding: '16px' } : {});
 const gridStyle = computed(() => ({ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '12px 20px' }));

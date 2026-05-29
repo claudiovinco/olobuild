@@ -1,10 +1,20 @@
 import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared';
+import { t } from '@/i18n';
+
+/**
+ * Tile TextPath — split CONTENUTO/STILE.
+ *   fields[]      → text, path_preset, custom_path, animation, animation_speed
+ *   styleFields[] → preset, bg, typo, text-effects, tipografia (size/color/spacing), border
+ */
 export default {
   type: 'textpath',
-  name: 'Testo su Tracciato',
+  name: t('Testo su Tracciato'),
   icon: 'dashicons-editor-textcolor',
   category: 'text',
   defaults: {
+    preset: 'custom',
+    bg: { type: 'none' },
+    typography_preset: '',
     text: 'Testo che segue un tracciato curvo',
     path_preset: 'arc',
     custom_path: '',
@@ -14,39 +24,70 @@ export default {
     animation: 'none',
     animation_speed: '10',
     ...textEffectsDefaults,
+    text_effect_target: 'text',
     border: { ...borderDefault },
     border_hover: { ...borderHoverDefault },
     border_hover_duration: 300,
     ...borderEffectDefaults,
   },
-  fields: [
-    { key: 'text', label: 'Testo', type: 'text' },
 
-    { type: 'separator', label: 'Tracciato' },
-    { key: 'path_preset', label: 'Forma tracciato', type: 'select', options: [
-      { value: 'arc', label: 'Arco' },
-      { value: 'wave', label: 'Onda' },
-      { value: 'circle', label: 'Cerchio' },
-      { value: 'spiral', label: 'Spirale' },
-      { value: 'custom', label: 'Personalizzato' },
+  fields: [
+    { key: 'text', label: t('Testo'), type: 'text' },
+
+    { type: 'separator', label: t('Tracciato') },
+    { key: 'path_preset', label: t('Forma tracciato'), type: 'select', options: [
+      { value: 'arc', label: t('Arco') },
+      { value: 'wave', label: t('Onda') },
+      { value: 'circle', label: t('Cerchio') },
+      { value: 'spiral', label: t('Spirale') },
+      { value: 'custom', label: t('Personalizzato') },
     ]},
-    { key: 'custom_path', label: 'Percorso SVG (d)', type: 'text', placeholder: 'M 0 50 Q 150 0 300 50',
+    { key: 'custom_path', label: t('Percorso SVG (d)'), type: 'text', placeholder: t('M 0 50 Q 150 0 300 50'),
       condition: { field: 'path_preset', value: 'custom' } },
 
-    { type: 'separator', label: 'Tipografia' },
-    { key: 'font_size', label: 'Dimensione testo (px)', type: 'range', min: 12, max: 72 },
-    { key: 'text_color', label: 'Colore testo', type: 'color' },
-    { key: 'letter_spacing', label: 'Spaziatura lettere (px)', type: 'range', min: 0, max: 20 },
-
-    { type: 'separator', label: 'Animazione' },
-    { key: 'animation', label: 'Animazione', type: 'select', options: [
-      { value: 'none', label: 'Nessuna' },
-      { value: 'scroll', label: 'Scorrimento una volta' },
-      { value: 'continuous', label: 'Scorrimento continuo' },
+    { type: 'separator', label: t('Animazione') },
+    { key: 'animation', label: t('Animazione'), type: 'select', options: [
+      { value: 'none', label: t('Nessuna') },
+      { value: 'scroll', label: t('Scorrimento una volta') },
+      { value: 'continuous', label: t('Scorrimento continuo') },
     ]},
-    { key: 'animation_speed', label: 'Velocita animazione (sec)', type: 'range', min: 1, max: 20,
+    { key: 'animation_speed', label: t('Velocità animazione (sec)'), type: 'range', min: 1, max: 20,
       condition: { field: 'animation', value: ['scroll', 'continuous'] } },
-    ...textEffectsFields([ { value: 'text', label: 'Solo Testo' } ]),
+  ],
+
+  styleFields: [
+    { type: 'separator', label: t('Preset stilistico') },
+    { key: 'preset', label: t('Stile'), type: 'select', options: [
+      { value: 'modern-clean',    label: t('Modern Clean') },
+      { value: 'minimal-mono',    label: t('Minimal Mono') },
+      { value: 'magazine-bold',   label: t('Magazine Bold') },
+      { value: 'editorial-serif', label: t('Editorial Serif') },
+      { value: 'compact-inline',  label: t('Compact Inline') },
+      { value: 'glass-frosted',   label: t('Glass Frosted') },
+      { value: 'neon-glow',       label: t('Neon Glow') },
+      { value: 'brutalist-stamp', label: t('Brutalist Stamp') },
+      { value: 'gradient-aurora', label: t('Gradient Aurora') },
+      { value: 'sticker-fun',     label: t('Sticker Fun') },
+      { value: 'retro-terminal',  label: t('Retro Terminal') },
+      { value: 'tilt-3d',         label: t('3D Tilt') },
+      { value: 'custom',          label: t('Personalizzato') },
+    ] },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
+
+    ...textEffectsFields([ { value: 'text', label: t('Solo Testo') } ]),
+
+    { type: 'separator', label: t('Tipografia') },
+    { type: 'typography', label: t('Testo'),
+      presetKey: 'typography_preset',
+      responsiveKeys: ['size', 'letterSpacing'],
+      keys: {
+        size:          'font_size',
+        letterSpacing: 'letter_spacing',
+        color:         'text_color',
+      },
+      sizeMin: 12, sizeMax: 72,
+    },
+
     ...borderFields(),
   ],
 };

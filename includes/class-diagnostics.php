@@ -17,8 +17,8 @@ class Olo_Diagnostics {
         // Registered with the lowest capability 'read' so it's always accessible to logged-in users.
         add_submenu_page(
             'tools.php',
-            'Olobuild Diagnostics',
-            'Olobuild Diagnostics',
+            __( 'Olobuild Diagnostics', 'olobuild' ),
+            __( 'Olobuild Diagnostics', 'olobuild' ),
             'read',
             'olo-diagnostics',
             [ __CLASS__, 'render_page' ]
@@ -41,66 +41,68 @@ class Olo_Diagnostics {
         $setup_complete = get_option( 'olo_setup_complete' );
         $activating     = get_transient( 'olo_activating' );
 
+        $yes = __( 'Sì', 'olobuild' );
+        $no  = __( 'No', 'olobuild' );
         ?>
         <div class="wrap">
-            <h1>Olobuild Diagnostics</h1>
-            <p style="color:#666">Questa pagina serve solo per debug. Se stai vedendo questo contenuto, l'accesso funziona. Riporta queste informazioni per risolvere problemi di permessi.</p>
+            <h1><?php esc_html_e( 'Olobuild Diagnostics', 'olobuild' ); ?></h1>
+            <p style="color:#666"><?php esc_html_e( "Questa pagina serve solo per debug. Se stai vedendo questo contenuto, l'accesso funziona. Riporta queste informazioni per risolvere problemi di permessi.", 'olobuild' ); ?></p>
 
-            <h2>Utente corrente</h2>
+            <h2><?php esc_html_e( 'Utente corrente', 'olobuild' ); ?></h2>
             <table class="widefat striped" style="max-width:800px">
-                <tr><td><strong>User ID</strong></td><td><?php echo (int) $user->ID; ?></td></tr>
-                <tr><td><strong>Username</strong></td><td><?php echo esc_html( $user->user_login ); ?></td></tr>
-                <tr><td><strong>Email</strong></td><td><?php echo esc_html( $user->user_email ); ?></td></tr>
-                <tr><td><strong>Roles</strong></td><td><?php echo esc_html( implode( ', ', $roles ) ); ?></td></tr>
-                <tr><td><strong>Is super admin?</strong></td><td><?php echo is_super_admin() ? 'Yes' : 'No'; ?></td></tr>
-                <tr><td><strong>Is multisite?</strong></td><td><?php echo is_multisite() ? 'Yes' : 'No'; ?></td></tr>
+                <tr><td><strong><?php esc_html_e( 'User ID', 'olobuild' ); ?></strong></td><td><?php echo (int) $user->ID; ?></td></tr>
+                <tr><td><strong><?php esc_html_e( 'Username', 'olobuild' ); ?></strong></td><td><?php echo esc_html( $user->user_login ); ?></td></tr>
+                <tr><td><strong><?php esc_html_e( 'Email', 'olobuild' ); ?></strong></td><td><?php echo esc_html( $user->user_email ); ?></td></tr>
+                <tr><td><strong><?php esc_html_e( 'Ruoli', 'olobuild' ); ?></strong></td><td><?php echo esc_html( implode( ', ', $roles ) ); ?></td></tr>
+                <tr><td><strong><?php esc_html_e( 'Super admin?', 'olobuild' ); ?></strong></td><td><?php echo is_super_admin() ? esc_html( $yes ) : esc_html( $no ); ?></td></tr>
+                <tr><td><strong><?php esc_html_e( 'Multisite?', 'olobuild' ); ?></strong></td><td><?php echo is_multisite() ? esc_html( $yes ) : esc_html( $no ); ?></td></tr>
             </table>
 
-            <h2>Capability check</h2>
+            <h2><?php esc_html_e( 'Verifica capability', 'olobuild' ); ?></h2>
             <table class="widefat striped" style="max-width:800px">
-                <thead><tr><th>Capability</th><th>current_user_can()</th></tr></thead>
+                <thead><tr><th><?php esc_html_e( 'Capability', 'olobuild' ); ?></th><th>current_user_can()</th></tr></thead>
                 <tbody>
                 <?php foreach ( $caps_to_check as $cap ): ?>
                     <tr>
                         <td><code><?php echo esc_html( $cap ); ?></code></td>
-                        <td><?php echo current_user_can( $cap ) ? '<span style="color:#46b450">✓ Yes</span>' : '<span style="color:#dc3232">✗ No</span>'; ?></td>
+                        <td><?php echo current_user_can( $cap ) ? '<span style="color:#46b450">✓ ' . esc_html( $yes ) . '</span>' : '<span style="color:#dc3232">✗ ' . esc_html( $no ) . '</span>'; ?></td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>
             </table>
 
-            <h2>Olobuild state</h2>
+            <h2><?php esc_html_e( 'Stato Olobuild', 'olobuild' ); ?></h2>
             <table class="widefat striped" style="max-width:800px">
-                <tr><td><strong>OLO_VERSION</strong></td><td><?php echo esc_html( defined( 'OLO_VERSION' ) ? OLO_VERSION : 'NOT DEFINED' ); ?></td></tr>
-                <tr><td><strong>OLO_PATH</strong></td><td><?php echo esc_html( defined( 'OLO_PATH' ) ? OLO_PATH : 'NOT DEFINED' ); ?></td></tr>
-                <tr><td><strong>olo_setup_complete</strong></td><td><?php echo $setup_complete ? 'Yes (' . esc_html( $setup_complete ) . ')' : 'No'; ?></td></tr>
-                <tr><td><strong>olo_activating transient</strong></td><td><?php echo $activating ? 'Yes' : 'No'; ?></td></tr>
+                <tr><td><strong>OLO_VERSION</strong></td><td><?php echo esc_html( defined( 'OLO_VERSION' ) ? OLO_VERSION : __( 'NON DEFINITO', 'olobuild' ) ); ?></td></tr>
+                <tr><td><strong>OLO_PATH</strong></td><td><?php echo esc_html( defined( 'OLO_PATH' ) ? OLO_PATH : __( 'NON DEFINITO', 'olobuild' ) ); ?></td></tr>
+                <tr><td><strong>olo_setup_complete</strong></td><td><?php echo $setup_complete ? esc_html( $yes ) . ' (' . esc_html( $setup_complete ) . ')' : esc_html( $no ); ?></td></tr>
+                <tr><td><strong>olo_activating transient</strong></td><td><?php echo $activating ? esc_html( $yes ) : esc_html( $no ); ?></td></tr>
                 <tr><td><strong>olo_builder_roles</strong></td><td><code><?php echo esc_html( wp_json_encode( get_option( 'olo_builder_roles' ) ) ); ?></code></td></tr>
             </table>
 
-            <h2>Active plugins</h2>
+            <h2><?php esc_html_e( 'Plugin attivi', 'olobuild' ); ?></h2>
             <table class="widefat striped" style="max-width:800px">
                 <?php foreach ( $active_plugins as $p ): ?>
                     <tr><td><code><?php echo esc_html( $p ); ?></code></td></tr>
                 <?php endforeach; ?>
             </table>
 
-            <h2>WordPress info</h2>
+            <h2><?php esc_html_e( 'Info WordPress', 'olobuild' ); ?></h2>
             <table class="widefat striped" style="max-width:800px">
-                <tr><td><strong>WP version</strong></td><td><?php echo esc_html( get_bloginfo( 'version' ) ); ?></td></tr>
-                <tr><td><strong>PHP version</strong></td><td><?php echo esc_html( PHP_VERSION ); ?></td></tr>
-                <tr><td><strong>Theme</strong></td><td><?php echo esc_html( get_stylesheet() ); ?></td></tr>
-                <tr><td><strong>Site URL</strong></td><td><?php echo esc_html( site_url() ); ?></td></tr>
-                <tr><td><strong>Admin URL</strong></td><td><?php echo esc_html( admin_url() ); ?></td></tr>
+                <tr><td><strong><?php esc_html_e( 'Versione WP', 'olobuild' ); ?></strong></td><td><?php echo esc_html( get_bloginfo( 'version' ) ); ?></td></tr>
+                <tr><td><strong><?php esc_html_e( 'Versione PHP', 'olobuild' ); ?></strong></td><td><?php echo esc_html( PHP_VERSION ); ?></td></tr>
+                <tr><td><strong><?php esc_html_e( 'Tema', 'olobuild' ); ?></strong></td><td><?php echo esc_html( get_stylesheet() ); ?></td></tr>
+                <tr><td><strong><?php esc_html_e( 'URL sito', 'olobuild' ); ?></strong></td><td><?php echo esc_html( site_url() ); ?></td></tr>
+                <tr><td><strong><?php esc_html_e( 'URL admin', 'olobuild' ); ?></strong></td><td><?php echo esc_html( admin_url() ); ?></td></tr>
             </table>
 
-            <h2>Test page access</h2>
-            <p>Clicca questi link per capire dove fallisce:</p>
+            <h2><?php esc_html_e( 'Test accesso pagine', 'olobuild' ); ?></h2>
+            <p><?php esc_html_e( 'Clicca questi link per capire dove fallisce:', 'olobuild' ); ?></p>
             <ul>
-                <li><a href="<?php echo esc_url( admin_url( 'admin.php?page=olobuilder' ) ); ?>">admin.php?page=olobuilder (Avvio rapido)</a></li>
-                <li><a href="<?php echo esc_url( admin_url( 'admin.php?page=olobuilder-templates' ) ); ?>">admin.php?page=olobuilder-templates (Gestione Template)</a></li>
-                <li><a href="<?php echo esc_url( admin_url( 'admin.php?page=olobuilder-settings' ) ); ?>">admin.php?page=olobuilder-settings (Configurazione)</a></li>
-                <li><a href="<?php echo esc_url( admin_url( 'admin.php?page=olo-setup' ) ); ?>">admin.php?page=olo-setup (Setup Wizard)</a></li>
+                <li><a href="<?php echo esc_url( admin_url( 'admin.php?page=olobuild' ) ); ?>">admin.php?page=olobuild (<?php esc_html_e( 'Dashboard', 'olobuild' ); ?>)</a></li>
+                <li><a href="<?php echo esc_url( admin_url( 'admin.php?page=olobuilder-templates' ) ); ?>">admin.php?page=olobuilder-templates (<?php esc_html_e( 'Gestione Template', 'olobuild' ); ?>)</a></li>
+                <li><a href="<?php echo esc_url( admin_url( 'admin.php?page=olobuilder-settings' ) ); ?>">admin.php?page=olobuilder-settings (<?php esc_html_e( 'Configurazione', 'olobuild' ); ?>)</a></li>
+                <li><a href="<?php echo esc_url( admin_url( 'admin.php?page=olo-setup' ) ); ?>">admin.php?page=olo-setup (<?php esc_html_e( 'Setup Wizard', 'olobuild' ); ?>)</a></li>
             </ul>
         </div>
         <?php

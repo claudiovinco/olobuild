@@ -16,23 +16,40 @@
       <!-- Separator — now handled by CollapseSection in BuilderInspector -->
       <template v-if="field.type === 'separator'" />
 
+      <!-- Description: testo informativo, no input -->
+      <p v-else-if="field.type === 'description'" class="mb-text-[10px] mb-text-gray-400 mb-italic mb-leading-snug mb-py-0.5">
+        {{ t(field.description || field.label || '') }}
+      </p>
+
       <template v-else>
-      <!-- Responsive wrapper for fields with responsive: true -->
-      <template v-if="field.responsive">
+      <!-- Label + state toggles (responsive / hover) -->
+      <template v-if="field.responsive || field.hoverable">
         <div class="mb-flex mb-items-center mb-justify-between mb-mb-1">
           <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400">
             {{ t(field.label) }}
           </label>
-          <button
-            @click="respOpen = !respOpen"
-            class="mb-p-0.5 mb-rounded mb-transition-colors"
-            :class="respBp !== 'desktop' || respOpen ? 'mb-text-primary-400' : 'mb-text-gray-500 hover:mb-text-gray-300'"
-            :title="t('Responsive')"
-          >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg>
-          </button>
+          <div class="mb-flex mb-items-center mb-gap-1">
+            <button
+              v-if="field.hoverable"
+              @click="hoverOpen = !hoverOpen"
+              class="mb-p-0.5 mb-rounded mb-transition-colors"
+              :class="hoverOpen || hasHoverValue ? 'mb-text-orange-400' : 'mb-text-gray-500 hover:mb-text-gray-300'"
+              :title="t('Stato hover')"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+            <button
+              v-if="field.responsive"
+              @click="respOpen = !respOpen"
+              class="mb-p-0.5 mb-rounded mb-transition-colors"
+              :class="respBp !== 'desktop' || respOpen ? 'mb-text-primary-400' : 'mb-text-gray-500 hover:mb-text-gray-300'"
+              :title="t('Responsive')"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg>
+            </button>
+          </div>
         </div>
-        <div v-if="respOpen" class="mb-flex mb-gap-0.5 mb-mb-1.5 mb-bg-gray-700 mb-rounded-lg mb-p-0.5">
+        <div v-if="field.responsive && respOpen" class="mb-flex mb-gap-0.5 mb-mb-1.5 mb-bg-gray-700 mb-rounded-lg mb-p-0.5">
           <button
             v-for="bp in respBreakpoints"
             :key="bp.key"
@@ -46,13 +63,13 @@
             :title="t(bp.label)"
           >{{ bp.short }}</button>
         </div>
-        <div v-if="!respOpen && respBp !== 'desktop'" class="mb-mb-1">
+        <div v-if="field.responsive && !respOpen && respBp !== 'desktop'" class="mb-mb-1">
           <span class="mb-text-[9px] mb-bg-primary-700 mb-text-primary-200 mb-px-1.5 mb-py-0.5 mb-rounded mb-font-medium">
             {{ t(respBreakpoints.find(b => b.key === respBp)?.label) }}
           </span>
         </div>
       </template>
-      <label v-else class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">
+      <label v-else-if="field.type !== 'typography' && field.type !== 'content-popup'" class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">
         {{ t(field.label) }}
       </label>
 
@@ -95,9 +112,10 @@
         @update:modelValue="onFieldUpdate($event)"
       />
 
-      <FieldBorderRadius
+      <FieldBox
         v-else-if="field.type === 'border-radius'"
         :modelValue="effectiveValue"
+        mode="corners"
         @update:modelValue="onFieldUpdate($event)"
       />
 
@@ -119,6 +137,14 @@
         :modelValue="effectiveValue"
         @update:modelValue="onFieldUpdate($event)"
         @update:attachmentId="$emit('update:attachmentId', $event)"
+      />
+
+      <FieldLink
+        v-else-if="field.type === 'link'"
+        :modelValue="effectiveValue"
+        :placeholder="field.placeholder || ''"
+        :types="field.linkTypes || ''"
+        @update:modelValue="onFieldUpdate($event)"
       />
 
       <FieldMedia
@@ -222,6 +248,51 @@
         @update:modelValue="onFieldUpdate($event)"
       />
 
+      <FieldTextShadow
+        v-else-if="field.type === 'text-shadow'"
+        :modelValue="effectiveValue"
+        @update:modelValue="onFieldUpdate($event)"
+      />
+
+      <FieldBackdropFilter
+        v-else-if="field.type === 'backdrop-filter'"
+        :modelValue="effectiveValue"
+        @update:modelValue="onFieldUpdate($event)"
+      />
+
+      <FieldBorderLegacy
+        v-else-if="field.type === 'border-legacy'"
+        :modelValue="effectiveValue"
+        @update:modelValue="onFieldUpdate($event)"
+      />
+
+      <FieldContentPopup
+        v-else-if="field.type === 'content-popup'"
+        :field="field"
+        :settings="tileSettings || {}"
+        :tileId="tileId"
+        @update:settingKey="$emit('update:settingKey', $event)"
+      />
+
+      <BackgroundControls
+        v-else-if="field.type === 'background'"
+        :modelValue="effectiveValue || { type: 'none' }"
+        :showParallax="field.showParallax !== false"
+        @update:modelValue="onFieldUpdate($event)"
+      />
+
+      <!-- Typography popover (multi-key consolidated control) -->
+      <FieldTypography
+        v-else-if="field.type === 'typography'"
+        :keys="field.keys || {}"
+        :values="tileSettings || {}"
+        :label="field.label || 'Tipografia'"
+        :sizeMin="field.sizeMin"
+        :sizeMax="field.sizeMax"
+        :sizeStep="field.sizeStep"
+        @update="$emit('update:settingKey', $event)"
+      />
+
       <!-- Custom field types rendered by parent (content-items) -->
       <slot v-else-if="field.type === 'content-items'" name="content-items" />
 
@@ -276,6 +347,42 @@
         @update:modelValue="onFieldUpdate($event)"
         @confirm="$emit('confirm', $event)"
       />
+
+      <!-- Hover sub-control (inline secondary value bound to ${key}_hover) -->
+      <div
+        v-if="field.hoverable && hoverOpen"
+        class="mb-mt-1.5 mb-pl-2 mb-pr-1 mb-py-1.5 mb-border-l-2 mb-border-orange-400/60 mb-bg-orange-400/5 mb-rounded-r"
+      >
+        <div class="mb-flex mb-items-center mb-justify-between mb-mb-1">
+          <span class="mb-text-[10px] mb-font-semibold mb-text-orange-400 mb-uppercase mb-tracking-wide">
+            {{ t('Hover') }}
+          </span>
+          <button
+            v-if="hasHoverValue"
+            @click="resetHoverValue"
+            class="mb-text-[10px] mb-text-gray-500 hover:mb-text-red-400 mb-px-1"
+            :title="t('Reset valore hover')"
+          >×</button>
+        </div>
+        <component
+          :is="fieldComponent"
+          v-bind="fieldPropsHover"
+          @update:modelValue="onHoverUpdate"
+        />
+        <div class="mb-flex mb-items-center mb-gap-1.5 mb-mt-1">
+          <span class="mb-text-[9px] mb-text-gray-500">{{ t('Durata') }}</span>
+          <input
+            type="number"
+            min="0"
+            max="3000"
+            step="50"
+            :value="hoverDurationValue"
+            @input="onHoverDurationUpdate(Number($event.target.value))"
+            class="mb-w-16 mb-bg-white mb-border mb-border-gray-300 mb-rounded mb-px-1 mb-py-0.5 mb-text-[10px] mb-text-gray-900"
+          />
+          <span class="mb-text-[9px] mb-text-gray-500">ms</span>
+        </div>
+      </div>
       </template>
     </template>
   </div>
@@ -291,10 +398,11 @@ import FieldToggle from './fields/FieldToggle.vue';
 import FieldColor from './fields/FieldColor.vue';
 import FieldRange from './fields/FieldRange.vue';
 import FieldSpacing from './fields/FieldSpacing.vue';
-import FieldBorderRadius from './fields/FieldBorderRadius.vue';
+import FieldBox from './fields/FieldBox.vue';
 import FieldBorder from './fields/FieldBorder.vue';
 import FieldImage from './fields/FieldImage.vue';
 import FieldMedia from './fields/FieldMedia.vue';
+import FieldLink from './fields/FieldLink.vue';
 import FieldLottiePicker from './fields/FieldLottiePicker.vue';
 import FieldGallery from './fields/FieldGallery.vue';
 import FieldIcon from './fields/FieldIcon.vue';
@@ -304,6 +412,7 @@ import FieldBoxShadow from './fields/FieldBoxShadow.vue';
 import FieldGradient from './fields/FieldGradient.vue';
 import FieldTransform from './fields/FieldTransform.vue';
 import FieldFontFamily from './fields/FieldFontFamily.vue';
+import FieldTypography from './fields/FieldTypography.vue';
 import FieldDatetime from './fields/FieldDatetime.vue';
 import FieldDate from './fields/FieldDate.vue';
 import FieldTime from './fields/FieldTime.vue';
@@ -314,6 +423,11 @@ import { useStylesStore } from '@/stores/styles';
 import { t } from '@/i18n';
 
 import FieldEditor from './fields/FieldEditor.vue';
+import FieldTextShadow from './fields/FieldTextShadow.vue';
+import FieldBackdropFilter from './fields/FieldBackdropFilter.vue';
+import FieldBorderLegacy from './fields/FieldBorderLegacy.vue';
+import FieldContentPopup from './fields/FieldContentPopup.vue';
+import BackgroundControls from './BackgroundControls.vue';
 
 const DYNAMIC_TYPES = ['text', 'textarea', 'editor', 'image', 'media'];
 
@@ -323,9 +437,13 @@ const props = defineProps({
   tileId: { type: String, default: '' },
   dynamic: { type: Object, default: () => ({}) },
   tileSettings: { type: Object, default: null },
+  // hover storage layout:
+  //   false (default) → flat in tileSettings: settings[`${key}_hover`]
+  //   true            → nested under .hover: tileSettings.hover[key]   (per scope=style legacy)
+  hoverNested: { type: Boolean, default: false },
 });
 
-const emit = defineEmits(['update:modelValue', 'update:dynamic', 'update:attachmentId', 'confirm', 'update:responsiveValue']);
+const emit = defineEmits(['update:modelValue', 'update:dynamic', 'update:attachmentId', 'confirm', 'update:responsiveValue', 'update:hoverValue', 'update:settingKey']);
 
 // ── Responsive per-field breakpoint ──
 const respBreakpoints = [
@@ -370,6 +488,82 @@ function onFieldUpdate(value) {
   }
 }
 
+// ── Hover state (inline per-field) ──
+// Local override (user clicked the eye icon on this specific field).
+const _localHoverOpen = ref(false);
+// Global toggle (Inspector V2 amber "Hover" pill): when ON, every hoverable
+// field opens its hover variant by default. The local toggle still wins when
+// the user clicks the eye on a specific field — _localHoverOpen tracks that.
+const hoverOpen = computed({
+  get() {
+    if (!props.field.hoverable) return false;
+    return _localHoverOpen.value || builderStore.editingHover;
+  },
+  set(v) { _localHoverOpen.value = v; },
+});
+
+const hoverKey = computed(() => {
+  if (!props.field.hoverable) return '';
+  // For nested layout (style.hover.X) the "hoverKey" è il NAME usato dentro tileSettings.hover[],
+  // di default uguale a field.key (NO suffisso _hover, perché siamo già nel namespace .hover).
+  if (props.hoverNested) return props.field.hoverKey || props.field.key;
+  return props.field.hoverKey || `${props.field.key}_hover`;
+});
+
+const hoverDurationKey = computed(() => {
+  if (!props.field.hoverable) return '';
+  if (props.hoverNested) return props.field.hoverDurationKey || `${props.field.key}_hover_duration`;
+  return props.field.hoverDurationKey || `${props.field.key}_hover_duration`;
+});
+
+const hoverValue = computed(() => {
+  if (!hoverKey.value || !props.tileSettings) return '';
+  if (props.hoverNested) {
+    const nested = props.tileSettings.hover || {};
+    return hoverKey.value in nested ? nested[hoverKey.value] : '';
+  }
+  return hoverKey.value in props.tileSettings ? props.tileSettings[hoverKey.value] : '';
+});
+
+const hasHoverValue = computed(() => {
+  const v = hoverValue.value;
+  if (v == null || v === '') return false;
+  // For object-typed fields (border, border-radius, spacing) treat as set when any non-zero/non-empty member exists
+  if (typeof v === 'object') {
+    try {
+      return Object.values(v).some(x => x !== 0 && x !== '' && x !== false && x != null);
+    } catch (_) { return false; }
+  }
+  return true;
+});
+
+const hoverDurationValue = computed(() => {
+  if (!hoverDurationKey.value || !props.tileSettings) return props.field.hoverDefaultDuration ?? 300;
+  const v = props.tileSettings[hoverDurationKey.value];
+  return (v == null || v === '') ? (props.field.hoverDefaultDuration ?? 300) : v;
+});
+
+function onHoverUpdate(value) {
+  if (!hoverKey.value) return;
+  emit('update:hoverValue', { key: hoverKey.value, value });
+}
+
+function onHoverDurationUpdate(value) {
+  if (!hoverDurationKey.value) return;
+  emit('update:hoverValue', { key: hoverDurationKey.value, value });
+}
+
+function resetHoverValue() {
+  if (!hoverKey.value) return;
+  // Reset to empty/null per field type
+  const f = props.field;
+  let empty = '';
+  if (f.type === 'spacing' || f.type === 'border-radius') empty = { top: 0, right: 0, bottom: 0, left: 0, linked: true };
+  else if (f.type === 'border') empty = { top: 0, right: 0, bottom: 0, left: 0, linked: true, style: '', color: '' };
+  else if (f.type === 'toggle') empty = false;
+  emit('update:hoverValue', { key: hoverKey.value, value: empty });
+}
+
 const resolvedOptions = computed(() => {
   if (props.field.optionsSource) {
     const md = window.oloData || {};
@@ -384,6 +578,9 @@ const resolvedOptions = computed(() => {
     }
     if (props.field.optionsSource === 'templates') {
       return (md.templateList || []);
+    }
+    if (props.field.optionsSource === 'widgetTemplates') {
+      return (md.widgetTemplates || [{ value: 0, label: t('— Nessun widget —') }]);
     }
     if (props.field.optionsSource === 'metaPrefixes') {
       return md.metaPrefixes || [];
@@ -477,10 +674,11 @@ const fieldComponent = computed(() => {
     case 'color': return FieldColor;
     case 'select': return FieldSelect;
     case 'range': return FieldRange;
-    case 'border-radius': return FieldBorderRadius;
+    case 'border-radius': return FieldBox;
     case 'border': return FieldBorder;
     case 'editor': return FieldEditor;
     case 'image': return FieldImage;
+    case 'link': return FieldLink;
     case 'media': return FieldMedia;
     case 'gallery': return FieldGallery;
     case 'icon': return FieldIcon;
@@ -495,6 +693,10 @@ const fieldComponent = computed(() => {
     case 'date': return FieldDate;
     case 'time': return FieldTime;
     case 'code': return FieldTextarea;
+    case 'text-shadow': return FieldTextShadow;
+    case 'backdrop-filter': return FieldBackdropFilter;
+    case 'border-legacy': return FieldBorderLegacy;
+    case 'background': return BackgroundControls;
     default: return FieldText;
   }
 });
@@ -542,6 +744,8 @@ const fieldProps = computed(() => {
     default: return base;
   }
 });
+
+const fieldPropsHover = computed(() => ({ ...fieldProps.value, modelValue: hoverValue.value }));
 
 // ── AI Alt Text Generation ──
 const tilesStore = useTilesStore();

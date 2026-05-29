@@ -59,6 +59,7 @@ const contentStyle = computed(() => {
 
 <style scoped>
 .olo-textblock-preview {
+  font-size: 13px;
   line-height: 1.6;
 }
 .olo-textblock-preview :deep(h1),
@@ -76,11 +77,32 @@ const contentStyle = computed(() => {
 .olo-textblock-preview :deep(p) {
   margin: 0 0 0.8em;
 }
-.olo-textblock-preview :deep(ul),
-.olo-textblock-preview :deep(ol) {
+.olo-textblock-preview :deep(ul) {
+  list-style: disc outside;
   margin: 0 0 0.8em;
   padding-left: 1.5em;
 }
+.olo-textblock-preview :deep(ol) {
+  list-style: decimal outside;
+  margin: 0 0 0.8em;
+  padding-left: 1.5em;
+}
+.olo-textblock-preview :deep(ul ul) { list-style: circle outside; }
+.olo-textblock-preview :deep(ul ul ul) { list-style: square outside; }
+.olo-textblock-preview :deep(ol ol) { list-style: lower-alpha outside; }
+.olo-textblock-preview :deep(ol ol ol) { list-style: lower-roman outside; }
+.olo-textblock-preview :deep(li) { margin: 0.2em 0; }
+.olo-textblock-preview :deep(ul),
+.olo-textblock-preview :deep(ol),
+.olo-textblock-preview :deep(li) {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
+  letter-spacing: inherit;
+}
+.olo-textblock-preview :deep(li > p) { margin: 0; }
+.olo-textblock-preview :deep(li > p + p) { margin-top: 0.4em; }
 .olo-textblock-preview :deep(blockquote) {
   margin: 0.8em 0;
   padding-left: 1em;

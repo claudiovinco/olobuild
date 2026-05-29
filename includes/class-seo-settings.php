@@ -50,14 +50,9 @@ class Olo_Seo_Settings {
      * ═══════════════════════════════════════════════════ */
 
     public function add_menu() {
-        add_submenu_page(
-            'olobuild',
-            __( 'SEO', 'olobuild' ),
-            __( 'SEO', 'olobuild' ),
-            'manage_options',
-            'olo-seo',
-            [ $this, 'render_page' ]
-        );
+        // v1.0.30 — pagina migrata in ?page=olobuilder-settings&tab=seo
+        // Submenu rimosso: i campi vivono ora in Configurazione → SEO globale.
+        // La classe resta attiva per i filter del frontend (title, meta, sitemap, schema.org).
     }
 
     public function enqueue_admin_assets( $hook ) {
@@ -155,31 +150,38 @@ class Olo_Seo_Settings {
             $active_tab = 'titles';
         }
 
+        $subnav = [];
+        foreach ( $tabs as $slug => $label ) {
+            $subnav[] = [ 'slug' => $slug, 'label' => wp_kses_post( $label ), 'href' => admin_url( 'admin.php?page=olo-seo&tab=' . $slug ) ];
+        }
+
         ?>
-        <?php Olo_Builder::page_shell_open( 'SEO', 'olo-seo-wrap' ); ?>
+        <?php Olo_Builder::cockpit_shell_open( '<b>' . esc_html__( 'SEO', 'olobuild' ) . '</b>' ); ?>
+        <main class="olo-cockpit-main olo-cockpit-legacy olo-seo-wrap">
+            <?php
+            echo Olo_Builder::cockpit_page_head( [
+                'title' => __( 'SEO', 'olobuild' ),
+                'sub'   => __( 'Title, meta description, Open Graph, schema.org, sitemap XML e webmaster tools.', 'olobuild' ),
+            ] );
+            echo Olo_Builder::cockpit_subnav( $subnav, $active_tab );
+            ?>
 
-            <div class="olo-admin-tabs olo-seo-tabs">
-                <?php foreach ( $tabs as $slug => $label ) : ?>
-                    <a
-                        href="<?php echo esc_url( admin_url( 'admin.php?page=olo-seo&tab=' . $slug ) ); ?>"
-                        class="olo-admin-tab <?php echo $active_tab === $slug ? 'active' : ''; ?>"
-                    >
-                        <?php echo $this->tab_icon( $slug ); ?>
-                        <?php echo $label; ?>
-                    </a>
-                <?php endforeach; ?>
-            </div>
-
-            <form method="post" action="options.php" class="olo-seo-form">
+            <form method="post" action="options.php" class="olo-seo-form" style="margin-top:16px">
                 <?php
                 settings_fields( 'olo_seo_group' );
                 $this->{'render_tab_' . $active_tab}();
                 ?>
                 <div style="margin-top:24px;">
-                    <button type="submit" class="olo-btn-save">Salva Impostazioni</button>
+                    <?php echo Olo_Builder::cockpit_button( [
+                        'label'   => __( 'Salva impostazioni', 'olobuild' ),
+                        'variant' => 'pri',
+                        'type'    => 'submit',
+                        'icon'    => '<path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/>',
+                    ] ); ?>
                 </div>
             </form>
-        <?php Olo_Builder::page_shell_close(); ?>
+        </main>
+        <?php Olo_Builder::cockpit_shell_close(); ?>
         <?php
     }
 
@@ -1532,6 +1534,14 @@ class Olo_Seo_Settings {
             } else {
                 delete_post_meta( $post_id, $meta_key );
             }
+        }
+
+        // JSON-LD custom — textarea, sanitizzato preservando struttura JSON.
+        $extra = isset( $_POST['olo_seo_extra_jsonld'] ) ? wp_unslash( $_POST['olo_seo_extra_jsonld'] ) : '';
+        if ( is_string( $extra ) && trim( $extra ) !== '' ) {
+            update_post_meta( $post_id, '_olo_seo_extra_jsonld', wp_kses_post( $extra ) );
+        } else {
+            delete_post_meta( $post_id, '_olo_seo_extra_jsonld' );
         }
 
         // FAQ Schema data

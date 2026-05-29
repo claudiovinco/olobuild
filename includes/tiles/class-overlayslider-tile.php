@@ -12,12 +12,12 @@ class Olo_OverlaySlider_Tile extends Olo_Tile_Base {
     protected $category = 'interactive';
     protected $defaults = [
         'slides' => [
-            [ 'id' => 'os-1', 'image' => '', 'title' => 'Slide 1', 'subtitle' => '', 'link' => '' ],
-            [ 'id' => 'os-2', 'image' => '', 'title' => 'Slide 2', 'subtitle' => '', 'link' => '' ],
+            [ 'id' => 'os-1', 'image' => '', 'title' => 'Prima slide', 'subtitle' => '', 'link' => '' ],
+            [ 'id' => 'os-2', 'image' => '', 'title' => 'Seconda slide', 'subtitle' => '', 'link' => '' ],
         ],
         'columns'             => '1',
         'gap'                 => 'default',
-        'image_ratio'         => 'auto',
+        'image_ratio'         => '21/9',
         'image_height'        => '400',
         'image_fit'           => 'cover',
         'height'              => '400',
@@ -25,15 +25,49 @@ class Olo_OverlaySlider_Tile extends Olo_Tile_Base {
         'overlay_horizontal'  => 'left',
         'overlay_style'       => 'overlay-primary',
         'overlay_padding'     => 'medium',
-        'title_size'          => 'h3',
-        'hover_effect'        => 'none',
+        'title_size'          => 'h2',
+        'hover_effect'        => 'zoom',
         'hover_overlay'       => 'always',
         'show_arrows'         => true,
         'show_dots'           => true,
         'ribbon_position'     => 'top-right',
         'ribbon_bg'           => '#e11d48',
         'ribbon_color'        => '#ffffff',
-            'border'                  => [],
+        'shadow'              => 'lg',
+
+        'preset'              => 'cinematic-overlay',
+        'slide_radius'        => 0,
+        'overlay_color'       => 'rgba(0,0,0,0.45)',
+        'overlay_gradient'    => true,
+        'title_color'         => '#ffffff',
+        'title_weight'        => '700',
+        'title_letter_spacing'=> 0,
+        'title_uppercase'     => false,
+        'subtitle_color'      => 'rgba(255,255,255,0.85)',
+        'subtitle_size'       => 16,
+        'show_cta'            => false,
+        'cta_text'            => 'Scopri di più',
+        'cta_style'           => 'underline',
+
+        'effect_color'        => '',
+        'effect_intensity'    => 'medium',
+        'effect_speed'        => 0,
+        'wow_disable'           => false,
+        'wow_backdrop_blur'     => 0,
+        'wow_backdrop_saturate' => 100,
+        'wow_border_style'      => 'solid',
+        'wow_font_family'       => 'inherit',
+        'wow_rotation'          => 0,
+        'wow_perspective'       => 0,
+        'wow_tilt_x'            => 0,
+        'wow_glow_pulse'        => false,
+        'wow_title_glow'        => false,
+        'wow_scanlines'         => false,
+
+
+        'wow_terminal_prompt' => false,
+
+        'border'                  => [],
         'border_hover'            => [],
         'border_hover_duration'   => 300,
         'border_effect'           => 'none',
@@ -44,15 +78,25 @@ class Olo_OverlaySlider_Tile extends Olo_Tile_Base {
     ];
 
     public function get_controls() {
-        return [
-            [ 'key' => 'slides',           'type' => 'slides', 'label' => 'Slides' ],
-            [ 'key' => 'columns',          'type' => 'select', 'label' => 'Columns' ],
-            [ 'key' => 'height',           'type' => 'range',  'label' => 'Height (px)' ],
-            [ 'key' => 'overlay_position', 'type' => 'select', 'label' => 'Overlay Position' ],
-            [ 'key' => 'overlay_style',    'type' => 'select', 'label' => 'Overlay Style' ],
-            [ 'key' => 'show_arrows',      'type' => 'toggle', 'label' => 'Show Arrows' ],
-            [ 'key' => 'show_dots',        'type' => 'toggle', 'label' => 'Show Dots' ],
-        ];
+        return [];
+    }
+
+    /**
+     * V3.26.0 — Extra CSS for "audacious" presets.
+     */
+    private function get_preset_extra_css( $preset_id, $sel, $s = [] ) {
+        // @deprecated v1.0.73 — refactor profondo: i preset audaci ora settano direttamente
+        // i field standard tramite TILE_PRESETS in BuilderInspector.vue, e i field wow_* via
+        // build_wow_effects_css(). Nessun !important, ogni proprieta personalizzabile.
+        return '';
+    }
+
+    /**
+     * Helper: convert hex/rgb to "rgba(r,g,b,alpha)" string.
+     */
+    private function color_to_rgba( $color, $alpha ) {
+        $rgb = $this->color_to_rgb( $color );
+        return "rgba({$rgb},{$alpha})";
     }
 
     public function render( $settings ) {
@@ -67,11 +111,28 @@ class Olo_OverlaySlider_Tile extends Olo_Tile_Base {
         $gap      = in_array( $s['gap'] ?? 'default', [ 'collapse', 'small', 'default', 'medium', 'large' ], true ) ? $s['gap'] : 'default';
         $img_ratio  = $s['image_ratio'] ?? 'auto';
         $img_fit    = in_array( $s['image_fit'] ?? 'cover', [ 'cover', 'contain', 'fill' ], true ) ? $s['image_fit'] : 'cover';
-        // Backward compat: image_height new field, fallback to legacy 'height'
         $height   = absint( $s['image_height'] ?? $s['height'] ?? 400 ) ?: 400;
         $position = esc_attr( $s['overlay_position'] ?: 'bottom' );
         $style    = in_array( $s['overlay_style'], [ 'overlay-primary', 'overlay-default' ], true ) ? $s['overlay_style'] : 'overlay-primary';
         $count    = count( $slides );
+
+        $preset_id = $s['preset'] ?? 'cinematic-overlay';
+
+        // Slide radius + custom overlay color/gradient
+        $slide_radius = max( 0, intval( $s['slide_radius'] ?? 0 ) );
+        $overlay_clr  = $this->safe_color_css( $s['overlay_color'] ?? 'rgba(0,0,0,0.45)' );
+        $overlay_grad = ! empty( $s['overlay_gradient'] );
+
+        $title_clr    = $this->safe_color_css( $s['title_color'] ?? '#ffffff' ) ?: '#ffffff';
+        $title_w      = preg_match( '/^[1-9]00$/', (string) ($s['title_weight'] ?? '700') ) ? $s['title_weight'] : '700';
+        $title_ls     = floatval( $s['title_letter_spacing'] ?? 0 );
+        $title_upper  = ! empty( $s['title_uppercase'] );
+        $subtitle_clr = $this->safe_color_css( $s['subtitle_color'] ?? 'rgba(255,255,255,0.85)' ) ?: 'rgba(255,255,255,0.85)';
+        $subtitle_sz  = max( 10, intval( $s['subtitle_size'] ?? 16 ) );
+
+        $show_cta  = ! empty( $s['show_cta'] );
+        $cta_text  = $s['cta_text'] ?? '';
+        $cta_style = $s['cta_style'] ?? 'underline';
 
         // Text alignment
         $text_align = $s['overlay_horizontal'] ?? 'left';
@@ -109,9 +170,18 @@ class Olo_OverlaySlider_Tile extends Olo_Tile_Base {
 
         $uid = 'mos-os-' . wp_rand( 10000, 99999 );
 
-        ob_start();
-        ?>
-        <?php
+        $wrap_class = 'olo-overlayslider olo-os--preset-' . esc_attr( $preset_id ) . ' ' . $uid;
+
+        // Shadow
+        $shadow_v = $s['shadow'] ?? 'none';
+        $shadow_map = [
+            'sm' => '0 4px 12px rgba(0,0,0,.08)',
+            'md' => '0 8px 24px rgba(0,0,0,.12)',
+            'lg' => '0 16px 48px rgba(0,0,0,.18)',
+            'xl' => '0 28px 64px rgba(0,0,0,.22)',
+        ];
+        $shadow_css = isset( $shadow_map[ $shadow_v ] ) ? 'box-shadow:' . $shadow_map[ $shadow_v ] . ';' : '';
+
         // Build slide-frame sizing CSS based on ratio/height/fit
         $frame_css = '';
         if ( $img_ratio && $img_ratio !== 'auto' ) {
@@ -120,12 +190,31 @@ class Olo_OverlaySlider_Tile extends Olo_Tile_Base {
             $frame_css = 'height:' . $height . 'px;';
         }
         $img_size_css = 'width:100%;height:100%;object-fit:' . esc_attr( $img_fit ) . ';display:block;';
+
+        // CTA classes per style
+        $cta_class_map = [
+            'underline' => 'olo-os-cta olo-os-cta--underline',
+            'arrow'     => 'olo-os-cta olo-os-cta--arrow',
+            'pill'      => 'olo-os-cta olo-os-cta--pill',
+            'text'      => 'olo-os-cta olo-os-cta--text',
+        ];
+        $cta_class = $cta_class_map[ $cta_style ] ?? $cta_class_map['underline'];
+
+        ob_start();
         ?>
         <style>
-            .<?php echo $uid; ?> .mos-os-frame { position:relative; width:100%; <?php echo $frame_css; ?> overflow:hidden; }
+            .<?php echo $uid; ?> .mos-os-frame {
+                position: relative;
+                width: 100%;
+                <?php echo $frame_css; ?>
+                overflow: hidden;
+                <?php if ( $slide_radius ) : ?>border-radius: <?php echo $slide_radius; ?>px;<?php endif; ?>
+                <?php echo $shadow_css; ?>
+            }
             .<?php echo $uid; ?> .mos-os-img { transition: transform 0.5s ease, filter 0.5s ease; <?php echo $img_size_css; ?> }
-            .<?php echo $uid; ?> .olo-hover-wrap { width:100%; height:100%; }
-            .<?php echo $uid; ?> .olo-hover-wrap img, .<?php echo $uid; ?> .olo-hover-wrap video { <?php echo $img_size_css; ?> }
+            .<?php echo $uid; ?> .olo-hover-wrap { width: 100%; height: 100%; }
+            .<?php echo $uid; ?> .olo-hover-wrap img,
+            .<?php echo $uid; ?> .olo-hover-wrap video { <?php echo $img_size_css; ?> }
             .<?php echo $uid; ?> .mos-os-hover-zoom:hover,
             .<?php echo $uid; ?> .uk-transition-toggle:hover .mos-os-hover-zoom { transform: scale(1.08); }
             .<?php echo $uid; ?> .mos-os-hover-zoom-rotate:hover,
@@ -139,11 +228,62 @@ class Olo_OverlaySlider_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .mos-os-hover-blur-in { filter: blur(3px); }
             .<?php echo $uid; ?> .mos-os-hover-blur-in:hover,
             .<?php echo $uid; ?> .uk-transition-toggle:hover .mos-os-hover-blur-in { filter: blur(0); }
+
+            /* Custom overlay color (works for all preset overlays) */
+            .<?php echo $uid; ?> .uk-overlay-primary,
+            .<?php echo $uid; ?> .uk-overlay-default {
+                <?php if ( $overlay_grad ) : ?>
+                background: linear-gradient(180deg, rgba(0,0,0,0) 0%, <?php echo $overlay_clr; ?> 100%);
+                <?php else : ?>
+                background: <?php echo $overlay_clr; ?>;
+                <?php endif; ?>
+                color: <?php echo $title_clr; ?>;
+            }
+            .<?php echo $uid; ?> .uk-overlay h1,
+            .<?php echo $uid; ?> .uk-overlay h2,
+            .<?php echo $uid; ?> .uk-overlay h3,
+            .<?php echo $uid; ?> .uk-overlay h4 {
+                color: <?php echo $title_clr; ?>;
+                font-weight: <?php echo $title_w; ?>;
+                letter-spacing: <?php echo $title_ls; ?>em;
+                <?php if ( $title_upper ) : ?>text-transform: uppercase;<?php endif; ?>
+                margin: 0;
+            }
+            .<?php echo $uid; ?> .uk-overlay p {
+                color: <?php echo $subtitle_clr; ?>;
+                font-size: <?php echo $subtitle_sz; ?>px;
+                margin: 6px 0 0;
+            }
+
+            /* CTA */
+            .<?php echo $uid; ?> .olo-os-cta {
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                font-size: 13px;
+                font-weight: 600;
+                margin-top: 12px;
+                color: <?php echo $title_clr; ?>;
+                width: fit-content;
+                transition: all 0.25s ease;
+            }
+            .<?php echo $uid; ?> .olo-os-cta--underline { border-bottom: 1.5px solid currentColor; padding-bottom: 2px; }
+            .<?php echo $uid; ?> .olo-os-cta--arrow .olo-os-cta__arrow { transition: transform 0.25s ease; }
+            .<?php echo $uid; ?> li:hover .olo-os-cta--arrow .olo-os-cta__arrow { transform: translateX(4px); }
+            .<?php echo $uid; ?> .olo-os-cta--pill { background: var(--olo-color-primary, #e8622a); color: #fff; border-radius: 999px; padding: 8px 18px; }
+
+            /* Ribbon */
             .<?php echo $uid; ?> .mos-os-ribbon { position: absolute; z-index: 2; font-size: 11px; font-weight: 700; padding: 4px 12px; text-transform: uppercase; letter-spacing: 0.5px; background: <?php echo $ribbon_bg; ?>; color: <?php echo $ribbon_color; ?>; }
             .<?php echo $uid; ?> .mos-os-ribbon--top-right { top: 0; right: 14px; border-radius: 0 0 4px 4px; }
             .<?php echo $uid; ?> .mos-os-ribbon--top-left { top: 0; left: 14px; border-radius: 0 0 4px 4px; }
+
+            <?php
+            // V3.26.0 — preset-specific extras (audacious presets)
+            echo $this->get_preset_extra_css( $preset_id, '.' . $uid, $s );
+            echo $this->build_wow_effects_css( $s, '.' . $uid, '.olo-overlay-title' );
+            ?>
         </style>
-        <div class="olo-overlayslider <?php echo $uid; ?>" uk-slider>
+        <div class="<?php echo $wrap_class; ?>" uk-slider>
             <div class="uk-position-relative">
                 <div class="uk-slider-container">
                     <?php $gap_class = $gap === 'collapse' ? 'uk-grid-collapse' : 'uk-grid-' . $gap; ?>
@@ -166,7 +306,7 @@ class Olo_OverlaySlider_Tile extends Olo_Tile_Base {
                                         echo $this->render_hover_wrap( $os_img, $slide['hover_image'] ?? '', $slide['hover_video'] ?? '' );
                                         ?>
                                     <?php else : ?>
-                                        <div style="width:100%;height:100%;background:var(--olo-color-secondary, #1F2937);"></div>
+                                        <div style="width:100%;height:100%;background:#1F2937;"></div>
                                     <?php endif; ?>
                                     </div>
                                     <?php if ( ! empty( $slide['ribbon'] ) ) : ?>
@@ -177,9 +317,16 @@ class Olo_OverlaySlider_Tile extends Olo_Tile_Base {
                                     list( $oss_cls, $oss_data ) = $this->tfx_attrs( $s, 'subtitle', $slide['subtitle'] ?? '' );
                                     ?>
                                     <div class="uk-<?php echo esc_attr( $style ); ?> uk-position-<?php echo $position; ?> uk-panel<?php echo $text_class . $pad_class . $overlay_class; ?>">
+                                        <?php $widget_html = $this->render_widget_template( $slide['widget_template_id'] ?? 0 ); ?>
+                                        <?php if ( $widget_html ) : ?>
+                                            <div class="olo-item-widget"><?php echo $widget_html; ?></div>
+                                        <?php endif; ?>
                                         <<?php echo $title_tag; ?> class="uk-margin-remove<?php echo $ost_cls; ?>"<?php echo $ost_data; ?>><?php echo esc_html( $slide['title'] ?? '' ); ?></<?php echo $title_tag; ?>>
                                         <?php if ( ! empty( $slide['subtitle'] ) ) : ?>
                                             <p class="uk-margin-small-top<?php echo $oss_cls; ?>"<?php echo $oss_data; ?>><?php echo esc_html( $slide['subtitle'] ); ?></p>
+                                        <?php endif; ?>
+                                        <?php if ( $show_cta && ! empty( $cta_text ) ) : ?>
+                                            <span class="<?php echo esc_attr( $cta_class ); ?>"><?php echo esc_html( $cta_text ); ?><?php if ( $cta_style === 'arrow' ) : ?> <span class="olo-os-cta__arrow" aria-hidden="true">&rarr;</span><?php endif; ?></span>
                                         <?php endif; ?>
                                     </div>
                                 <?php echo $has_link ? '</a>' : '</div>'; ?>
@@ -202,7 +349,7 @@ class Olo_OverlaySlider_Tile extends Olo_Tile_Base {
         $tfx_css = $this->tfx_css( $s, '.' . $uid );
         if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
         $this->tfx_print_script();
-                // Border system
+
         $border_css        = $this->build_border_css( $s['border'] ?? [] );
         $border_hover_css  = $this->build_border_hover_css( ".{$uid}", $s['border'] ?? [], $s['border_hover'] ?? [], intval( $s['border_hover_duration'] ?? 300 ) );
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );

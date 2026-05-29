@@ -11,6 +11,7 @@ class Olo_Progresstracker_Tile extends Olo_Tile_Base {
     protected $icon     = 'dashicons-editor-ol';
     protected $category = 'content';
     protected $defaults = [
+        'preset' => 'custom',
         'items' => [
             [ 'title' => 'Ordine ricevuto', 'description' => 'Il tuo ordine è stato confermato.', 'icon' => 'check', 'status' => 'completed' ],
             [ 'title' => 'In preparazione', 'description' => 'Stiamo preparando il tuo ordine.', 'icon' => 'settings', 'status' => 'active' ],
@@ -216,7 +217,7 @@ class Olo_Progresstracker_Tile extends Olo_Tile_Base {
             }
             <?php endif; ?>
         </style>
-        <div class="olo-progresstracker <?php echo esc_attr( $uid ); ?>">
+        <div class="olo-progresstracker <?php echo esc_attr( $uid ); ?> olo-pt-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>">
         <?php if ( $layout === 'horizontal' ) : ?>
             <div class="olo-pt-h-wrap">
                 <?php foreach ( $items as $i => $item ) :

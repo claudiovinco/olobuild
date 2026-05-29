@@ -251,6 +251,7 @@ class Olo_AI_Assistant {
             $body['style'] = $style;
         }
 
+        $started = microtime( true );
         $response = wp_remote_post( 'https://api.openai.com/v1/images/generations', [
             'timeout' => 120,
             'headers' => [
@@ -259,6 +260,7 @@ class Olo_AI_Assistant {
             ],
             'body' => wp_json_encode( $body ),
         ] );
+        $elapsed_ms = (int) ( ( microtime( true ) - $started ) * 1000 );
 
         if ( is_wp_error( $response ) ) {
             return new WP_Error( 'api_error', 'Errore nella chiamata API: ' . $response->get_error_message(), [ 'status' => 500 ] );
@@ -277,6 +279,10 @@ class Olo_AI_Assistant {
         if ( empty( $resp_body['data'][0]['url'] ) ) {
             return new WP_Error( 'no_image', 'Nessuna immagine generata.', [ 'status' => 500 ] );
         }
+
+        // Log usage: DALL-E 3 standard 1024 → ~€0.037, HD ~€0.075 (stima fissa per chiamata)
+        $img_cost = ( $size === '1024x1024' ) ? 0.037 : 0.075;
+        self::log_usage( 0, $img_cost, $elapsed_ms );
 
         $image_url = $resp_body['data'][0]['url'];
 
@@ -469,6 +475,7 @@ class Olo_AI_Assistant {
                        . "Scrivi in {$lang}. L'alt text deve essere conciso (max 125 caratteri), descrittivo e ottimizzato per i motori di ricerca. "
                        . "Rispondi SOLO con l'alt text, senza virgolette.";
 
+        $started = microtime( true );
         $response = wp_remote_post( 'https://api.anthropic.com/v1/messages', [
             'timeout' => 60,
             'headers' => [
@@ -501,6 +508,7 @@ class Olo_AI_Assistant {
                 ],
             ] ),
         ] );
+        $elapsed_ms = (int) ( ( microtime( true ) - $started ) * 1000 );
 
         if ( is_wp_error( $response ) ) {
             return new WP_Error( 'api_error', 'Errore nella chiamata API: ' . $response->get_error_message(), [ 'status' => 500 ] );
@@ -519,6 +527,13 @@ class Olo_AI_Assistant {
         if ( empty( $resp_body['content'][0]['text'] ) ) {
             return new WP_Error( 'empty_response', 'L\'API non ha restituito alcun contenuto.', [ 'status' => 500 ] );
         }
+
+        // Log usage (vision call includes image tokens — più costosa)
+        $in_tok  = (int) ( $resp_body['usage']['input_tokens']  ?? 0 );
+        $out_tok = (int) ( $resp_body['usage']['output_tokens'] ?? 0 );
+        $tokens  = $in_tok + $out_tok;
+        $cost    = ( $in_tok * 0.0000028 ) + ( $out_tok * 0.0000139 );
+        self::log_usage( $tokens, $cost, $elapsed_ms );
 
         $alt_text = trim( $resp_body['content'][0]['text'] );
         $alt_text = trim( $alt_text, "\"'" );
@@ -689,6 +704,7 @@ class Olo_AI_Assistant {
 
         $model = get_option( 'olo_ai_model', 'claude-sonnet-4-6' );
 
+        $started = microtime( true );
         $response = wp_remote_post( 'https://api.anthropic.com/v1/messages', [
             'timeout' => 60,
             'headers' => [
@@ -705,6 +721,7 @@ class Olo_AI_Assistant {
                 ],
             ] ),
         ] );
+        $elapsed_ms = (int) ( ( microtime( true ) - $started ) * 1000 );
 
         if ( is_wp_error( $response ) ) {
             return new WP_Error( 'api_error', 'Errore nella chiamata API: ' . $response->get_error_message(), [ 'status' => 500 ] );
@@ -724,7 +741,44 @@ class Olo_AI_Assistant {
             return new WP_Error( 'empty_response', 'L\'API non ha restituito alcun contenuto.', [ 'status' => 500 ] );
         }
 
+        // Log usage: Sonnet ~$3/MTok input + $15/MTok output → media €4/MTok ≈ €0.000004/token
+        $in_tok  = (int) ( $resp_body['usage']['input_tokens']  ?? 0 );
+        $out_tok = (int) ( $resp_body['usage']['output_tokens'] ?? 0 );
+        $tokens  = $in_tok + $out_tok;
+        $cost    = ( $in_tok * 0.0000028 ) + ( $out_tok * 0.0000139 ); // EUR
+        self::log_usage( $tokens, $cost, $elapsed_ms );
+
         return trim( $resp_body['content'][0]['text'] );
+    }
+
+    /**
+     * Log a singola chiamata AI per stats in admin (endpoint /ai/usage).
+     *
+     * @param int   $tokens  Token consumati (input+output).
+     * @param float $cost    Costo stimato in EUR.
+     * @param int   $ms      Latenza in millisecondi.
+     */
+    public static function log_usage( $tokens = 0, $cost = 0.0, $ms = 0 ) {
+        $log = get_option( 'olo_ai_usage', [] );
+        if ( ! is_array( $log ) ) $log = [];
+
+        $log[] = [
+            'ts'     => time(),
+            'tokens' => (int) $tokens,
+            'cost'   => (float) $cost,
+            'ms'     => (int) $ms,
+        ];
+
+        // Prune entries older than 60 days e cap a 1000 entries per evitare bloat option
+        $cutoff = time() - 60 * DAY_IN_SECONDS;
+        $log = array_values( array_filter( $log, function ( $e ) use ( $cutoff ) {
+            return is_array( $e ) && ( $e['ts'] ?? 0 ) >= $cutoff;
+        } ) );
+        if ( count( $log ) > 1000 ) {
+            $log = array_slice( $log, -1000 );
+        }
+
+        update_option( 'olo_ai_usage', $log, false );
     }
 }
 

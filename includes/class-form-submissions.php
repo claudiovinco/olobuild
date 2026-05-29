@@ -225,7 +225,7 @@ class Olo_Form_Submissions {
     // =========================================================================
 
     /**
-     * Render the admin page.
+     * Render the admin page (cockpit redesign v3.40+).
      */
     public static function render_page() {
         if ( ! current_user_can( 'manage_options' ) ) {
@@ -238,18 +238,10 @@ class Olo_Form_Submissions {
             return;
         }
 
-        // Process bulk/single actions
-        self::process_actions();
-
-        // Render detail view if requested
-        if ( ! empty( $_GET['view_id'] ) ) {
-            self::render_detail_view( absint( $_GET['view_id'] ) );
-            return;
-        }
-
-        // Create and prepare the list table
-        $list_table = new Olo_Form_Submissions_List_Table();
-        $list_table->prepare_items();
+        // Boot data (preload prima riga di KPI + items per evitare skeleton flash)
+        $rest = new Olo_Rest_Api();
+        $boot_stats = $rest->submissions_stats( null );
+        $stats = is_wp_error( $boot_stats ) ? [] : $boot_stats->get_data();
 
         $export_url = add_query_arg( [
             'page'           => 'olo-form-submissions',
@@ -257,35 +249,93 @@ class Olo_Form_Submissions {
             '_wpnonce'       => wp_create_nonce( 'olo_export_submissions' ),
         ], admin_url( 'admin.php' ) );
 
-        $form_name_filter = sanitize_text_field( $_REQUEST['form_name'] ?? '' );
-        if ( $form_name_filter ) {
-            $export_url = add_query_arg( 'form_name', $form_name_filter, $export_url );
+        // Chip filter di stato
+        $chips = [
+            [ 'id' => 'all',    'label' => __( 'Tutti', 'olobuild' ),     'count' => $stats['total']  ?? 0 ],
+            [ 'id' => 'unread', 'label' => __( 'Non letti', 'olobuild' ), 'count' => $stats['unread'] ?? 0, 'dot_color' => '#ef4444' ],
+            [ 'id' => 'read',   'label' => __( 'Letti', 'olobuild' ),    'count' => $stats['read']   ?? 0, 'dot_color' => '#22c55e' ],
+        ];
+        // Aggiungi chip per i form più frequenti
+        foreach ( ( $stats['forms'] ?? [] ) as $f ) {
+            $chips[] = [
+                'id'    => 'form:' . $f['name'],
+                'label' => $f['name'],
+                'count' => $f['count'],
+            ];
         }
 
-        ?>
-        <?php Olo_Builder::page_shell_open( 'Invii Form' ); ?>
+        // Sub: contatore inline
+        $sub = sprintf(
+            /* translators: 1: total, 2: unread, 3: last 7 days */
+            __( '%1$s invii totali · %2$s da leggere · %3$s ultimi 7gg', 'olobuild' ),
+            '<b>' . number_format_i18n( $stats['total']   ?? 0 ) . '</b>',
+            '<b>' . number_format_i18n( $stats['unread']  ?? 0 ) . '</b>',
+            '<b>' . number_format_i18n( $stats['last_7d'] ?? 0 ) . '</b>'
+        );
 
-            <div class="olo-card">
-                <div class="olo-card-head">
-                    <div class="olo-card-icon black">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-                    </div>
-                    <div>
-                        <h3>Elenco invii</h3>
-                        <p>Tutti i messaggi ricevuti dai form del sito</p>
-                    </div>
-                </div>
-                <div class="olo-card-body" style="padding:0">
-                    <form method="get">
-                        <input type="hidden" name="page" value="olo-form-submissions" />
-                        <?php
-                        $list_table->search_box( 'Cerca', 'olo-submissions-search' );
-                        $list_table->display();
-                        ?>
-                    </form>
+        // Actions: bottone Esporta CSV
+        $actions = Olo_Builder::cockpit_button( [
+            'label'   => __( 'Esporta CSV', 'olobuild' ),
+            'variant' => 'sec',
+            'href'    => $export_url,
+            'icon'    => '<path d="M12 4v12M7 9l5-5 5 5M5 20h14"/>',
+        ] );
+
+        ?>
+        <?php Olo_Builder::cockpit_shell_open( '<b>' . esc_html__( 'Invii Form', 'olobuild' ) . '</b>' ); ?>
+        <main class="olo-cockpit-main olo-submissions-page">
+            <?php
+            echo Olo_Builder::cockpit_page_head( [
+                'title'   => __( 'Invii Form', 'olobuild' ),
+                'sub'     => $sub,
+                'actions' => $actions,
+            ] );
+            echo Olo_Builder::cockpit_toolbar( [
+                'chips'              => $chips,
+                'active_chip'        => 'all',
+                'search'             => true,
+                'search_id'          => 'olo-sub-search',
+                'search_placeholder' => __( 'Cerca per nome, email, contenuto…', 'olobuild' ),
+            ] );
+            ?>
+
+            <div class="olo-sub-list" data-olo-submissions>
+                <div class="olo-empty-state" data-olo-loading>
+                    <div class="loader-spinner"></div>
+                    <div><?php esc_html_e( 'Caricamento invii…', 'olobuild' ); ?></div>
                 </div>
             </div>
-        <?php Olo_Builder::page_shell_close(); ?>
+        </main>
+
+        <!-- Drawer dettaglio (overlay laterale destra) -->
+        <div class="olo-sub-drawer-back" data-olo-drawer hidden>
+            <aside class="olo-sub-drawer">
+                <header class="olo-sub-drawer-head">
+                    <div>
+                        <div class="olo-sub-drawer-title" data-olo-drawer-title>—</div>
+                        <div class="olo-sub-drawer-meta" data-olo-drawer-meta></div>
+                    </div>
+                    <button type="button" class="olo-btn olo-btn-ghost olo-btn-icon" data-olo-drawer-close title="<?php esc_attr_e( 'Chiudi', 'olobuild' ); ?>">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+                    </button>
+                </header>
+                <div class="olo-sub-drawer-body" data-olo-drawer-body>
+                    <!-- popolato via JS -->
+                </div>
+                <footer class="olo-sub-drawer-foot">
+                    <button type="button" class="olo-btn olo-btn-sec" data-olo-drawer-toggle-read>
+                        <?php esc_html_e( 'Segna come non letto', 'olobuild' ); ?>
+                    </button>
+                    <span style="flex:1"></span>
+                    <button type="button" class="olo-btn olo-btn-danger" data-olo-drawer-delete>
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2M6 6l1 14a2 2 0 002 2h6a2 2 0 002-2l1-14"/></svg>
+                        <?php esc_html_e( 'Elimina', 'olobuild' ); ?>
+                    </button>
+                </footer>
+            </aside>
+        </div>
+
+        <?php Olo_Builder::cockpit_shell_close(); ?>
         <?php
     }
 

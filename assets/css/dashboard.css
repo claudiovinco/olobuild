@@ -1,0 +1,1476 @@
+/* ═══════════════════════════════════════════════════════════════════
+   Olobuild Dashboard — Cockpit redesign (v3.36)
+   Reset locale + design tokens + layout ispirato a Olo Tutor design system
+   Tutti i selettori sotto .olo-cockpit per non disturbare WP admin
+   ═══════════════════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700&display=swap');
+
+/* ── Reset/scope: la dashboard occupa l'intera area #wpbody-content ── */
+.olo-cockpit-wrap {
+    /* Brand */
+    --olo-primary:        #4a8c2a;
+    --olo-primary-bright: #3fa23f;
+    --olo-primary-hover:  #348634;
+    --olo-primary-dark:   #2d722d;
+    --olo-primary-50:     #f0f7ec;
+    --olo-primary-100:    #dcefd2;
+    --olo-primary-200:    #b9dfaa;
+    --olo-primary-700:    #325e1d;
+
+    /* Neutrals */
+    --olo-bg:        #f6f7f7;
+    --olo-bg-soft:   #f9fafb;
+    --olo-bg-muted:  #f1f5f9;
+    --olo-card:      #ffffff;
+    --olo-text:        #1e293b;
+    --olo-text-strong: #111827;
+    --olo-text-soft:   #374151;
+    --olo-text-muted:  #64748b;
+    --olo-text-light:  #94a3b8;
+    --olo-border:        #e2e8f0;
+    --olo-border-light:  #f1f5f9;
+
+    /* Semantic */
+    --olo-success:      #22c55e;
+    --olo-success-dark: #15803d;
+    --olo-success-soft: #dcfce7;
+    --olo-warning:      #f59e0b;
+    --olo-warning-dark: #b45309;
+    --olo-warning-soft: #fef3c7;
+    --olo-danger:       #ef4444;
+    --olo-info:         #3b82f6;
+
+    /* WP admin */
+    --olo-wp-bg:     #1d2327;
+    --olo-wp-border: #2c3338;
+    --olo-wp-link:   #72aee6;
+    --olo-wp-mute:   #c3c4c7;
+
+    /* Type */
+    --olo-font-sans: 'Work Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --olo-font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+
+    /* Shadows */
+    --olo-shadow-xs: 0 1px 2px rgba(16,24,40,.05);
+    --olo-shadow-sm: 0 1px 2px rgba(0,0,0,.04);
+    --olo-shadow:    0 2px 8px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+    --olo-shadow-md: 0 4px 12px rgba(16,24,40,.08), 0 2px 4px rgba(16,24,40,.06);
+
+    /* Layout */
+    --olo-rail-w: 360px;
+    --olo-topbar-h: 52px;
+
+    font-family: var(--olo-font-sans);
+    color: var(--olo-text);
+    background: var(--olo-bg);
+    box-sizing: border-box;
+    min-height: calc(100vh - 32px); /* WP admin bar */
+    display: flex;
+    flex-direction: column;
+}
+.olo-cockpit-wrap *,
+.olo-cockpit-wrap *::before,
+.olo-cockpit-wrap *::after { box-sizing: border-box; }
+
+/* ── Body class hooks: layout WP admin ottimizzato per il cockpit ────
+   `olobuild-cockpit` = qualunque pagina top-level che usa cockpit_shell_open()
+   (dashboard + lista template + altre pagine future).
+   NB: regole "app-mode" globali (sidebar 52px, submenu Olobuild hidden)
+   sono in olo-admin.css perché valgono su TUTTE le pagine Olobuild,
+   non solo su quelle cockpit. ──────────────────────────────────────── */
+body.olobuild-cockpit #wpcontent { padding-left: 0 !important; }
+body.olobuild-cockpit #wpbody-content { padding-bottom: 0 !important; margin: 0 !important; }
+body.olobuild-cockpit .update-nag,
+body.olobuild-cockpit .notice:not(.olo-show-notice) { display: none !important; }
+body.olobuild-cockpit #wpfooter { display: none !important; }
+
+/* La pagina templates monta l'app Vue dentro `<main class="olo-cockpit-main">`,
+   ma `#olobuilder-app` ha bisogno di altezza piena per scrollare. */
+body.olobuild-cockpit .olo-cockpit-main {
+    flex: 1;
+    overflow-y: auto;
+    padding: 18px 24px 32px;
+    min-width: 0;
+}
+body.olobuild-cockpit #olobuilder-app {
+    min-width: 0;
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   LEGACY PAGES — adapter per pagine non ancora restilizzate (Fase 1)
+   Mantengono il loro markup interno (.olo-admin-tabs, .olo-card, etc)
+   ma vivono dentro il cockpit shell. Centriamo a max-width per evitare
+   layout stirati su monitor larghi. Da rimuovere quando le pagine
+   verranno restilizzate completamente nelle Fasi 3-4.
+   ───────────────────────────────────────────────────────────────────── */
+.olo-cockpit-main.olo-cockpit-legacy {
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* Pagina Configurazione: la Vue app ha già la sua sidebar 2-colonne
+   ben strutturata, quindi vogliamo full-width senza max-width. */
+.olo-cockpit-main.olo-cockpit-config {
+    width: 100%;
+    min-width: 0;
+}
+.olo-cockpit-config #olo-admin-settings {
+    margin-top: 16px;
+}
+/* Override il max-width interno della Vue app per usare tutto lo spazio */
+.olo-cockpit-config .olo-cfg {
+    max-width: none !important;
+}
+/* Reset font-family eredita da topbar (Work Sans) — niente da fare,
+   le legacy pages usano già system-font. */
+.olo-cockpit-legacy * { box-sizing: border-box; }
+
+/* Notice WP messaggi inline visibili ANCHE in cockpit (sono importanti):
+   sovrascrive il "display:none" del body class generico. */
+body.olobuild-cockpit .olo-cockpit-legacy .notice,
+body.olobuild-cockpit .olo-cockpit-legacy .updated,
+body.olobuild-cockpit .olo-cockpit-legacy .error {
+    display: block !important;
+    margin: 0 0 16px;
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   "Torna a WordPress" strip — visibile solo in app-mode
+   ───────────────────────────────────────────────────────────────────── */
+.olo-cockpit-appback {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 16px;
+    background: var(--olo-wp-bg); color: var(--olo-wp-mute);
+    font-size: 12px;
+    border-bottom: 1px solid var(--olo-wp-border);
+    flex-shrink: 0;
+    line-height: 1.3;
+}
+.olo-cockpit-appback a {
+    color: var(--olo-wp-link); text-decoration: none;
+    display: inline-flex; align-items: center; gap: 6px;
+    cursor: pointer;
+}
+.olo-cockpit-appback a:hover { color: #fff; }
+.olo-cockpit-appback .spc { flex: 1; }
+.olo-cockpit-appback .pill-app {
+    background: rgba(74,140,42,.2); color: #b9dfaa;
+    padding: 2px 8px; border-radius: 99px;
+    font-size: 10px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .04em;
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   Top bar Olobuild — logo + version + breadcrumb + search + icone
+   ───────────────────────────────────────────────────────────────────── */
+.olo-cockpit-topbar {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 24px;
+    background: #fff;
+    border-bottom: 1px solid #e5e7eb;
+    flex-shrink: 0;
+    height: var(--olo-topbar-h);
+}
+.olo-cockpit-topbar .logo {
+    height: 22px; width: auto; display: block;
+}
+.olo-cockpit-topbar .ver {
+    font-size: 10px; font-weight: 600; padding: 2px 7px;
+    border-radius: 99px; background: var(--olo-primary-50);
+    color: var(--olo-primary-dark); cursor: pointer;
+    border: 0; font-family: inherit; line-height: 1;
+}
+.olo-cockpit-topbar .ver:hover { background: var(--olo-primary-100); }
+.olo-cockpit-topbar .sep {
+    width: 1px; height: 18px; background: var(--olo-border);
+    margin: 0 4px;
+}
+.olo-cockpit-topbar .crumb {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 13px; color: var(--olo-text-muted);
+}
+.olo-cockpit-topbar .crumb b { color: var(--olo-text); font-weight: 600; }
+.olo-cockpit-topbar .spc { flex: 1; }
+.olo-cockpit-topbar .ico-btn {
+    width: 32px; height: 32px;
+    border: 1px solid var(--olo-border); border-radius: 6px;
+    background: #fff; color: var(--olo-text-muted); cursor: pointer;
+    display: grid; place-items: center; position: relative;
+}
+.olo-cockpit-topbar .ico-btn:hover { background: var(--olo-bg-muted); color: var(--olo-text); }
+.olo-cockpit-topbar .ico-btn .badge-dot {
+    position: absolute; top: 6px; right: 6px;
+    width: 7px; height: 7px; border-radius: 99px;
+    background: var(--olo-danger); border: 2px solid #fff;
+}
+.olo-cockpit-topbar .ico-btn .av {
+    width: 22px; height: 22px; border-radius: 99px;
+    background: linear-gradient(135deg, var(--olo-primary), var(--olo-primary-bright));
+    color: #fff; display: grid; place-items: center;
+    font-size: 10px; font-weight: 700;
+}
+.olo-cockpit-topbar .search-mini {
+    display: flex; align-items: center; gap: 8px;
+    width: 280px;
+    background: var(--olo-bg-muted); border: 1px solid var(--olo-border-light);
+    border-radius: 7px; padding: 6px 10px;
+}
+.olo-cockpit-topbar .search-mini input {
+    flex: 1; border: 0; outline: 0; background: transparent;
+    font: inherit; font-size: 13px; color: var(--olo-text);
+    padding: 0; box-shadow: none;
+}
+.olo-cockpit-topbar .search-mini input:focus { outline: 0; box-shadow: none; }
+.olo-cockpit-topbar .search-mini kbd {
+    font: inherit; font-size: 10px;
+    padding: 1px 5px; border-radius: 4px;
+    background: #fff; border: 1px solid var(--olo-border);
+    color: var(--olo-text-muted);
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   Main area — split main / rail
+   ───────────────────────────────────────────────────────────────────── */
+.olo-cockpit-grid {
+    display: grid;
+    grid-template-columns: 1fr var(--rail-w, var(--olo-rail-w));
+    flex: 1;
+    min-height: 0; min-width: 0;
+    transition: grid-template-columns .25s cubic-bezier(.4,0,.2,1);
+}
+.olo-cockpit-grid.collapsed { --rail-w: 56px; }
+
+.olo-cockpit-main {
+    overflow-y: auto;
+    padding: 20px 24px 32px;
+    display: flex; flex-direction: column; gap: 18px;
+    min-width: 0;
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   Notification banner
+   ───────────────────────────────────────────────────────────────────── */
+.olo-banner {
+    display: flex; align-items: center; gap: 10px;
+    background: linear-gradient(90deg, #fffbeb, #fef3c7);
+    border: 1px solid #fde68a; border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 13px; color: #92400e;
+    flex-shrink: 0;
+}
+.olo-banner .ic { color: #d97706; flex-shrink: 0; display: inline-flex; }
+.olo-banner b { color: #78350f; }
+.olo-banner .spc { flex: 1; }
+.olo-banner .act {
+    background: #d97706; color: #fff; border: 0;
+    padding: 5px 12px; border-radius: 6px;
+    font: inherit; font-size: 12px; font-weight: 600; cursor: pointer;
+    text-decoration: none;
+}
+.olo-banner .act:hover { background: #b45309; color: #fff; }
+.olo-banner .x {
+    background: transparent; border: 0; cursor: pointer;
+    color: #92400e; padding: 4px; border-radius: 4px;
+    display: grid; place-items: center;
+}
+.olo-banner .x:hover { background: rgba(217,119,6,.15); }
+
+/* ─────────────────────────────────────────────────────────────────────
+   Hero contestuale
+   ───────────────────────────────────────────────────────────────────── */
+.olo-hero {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    background: #fff;
+    border: 1px solid var(--olo-border-light);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: var(--olo-shadow-xs);
+    flex-shrink: 0;
+    min-height: 280px;
+}
+.olo-hero-l {
+    padding: 22px 24px;
+    display: flex; flex-direction: column; gap: 14px;
+    background: linear-gradient(135deg, var(--olo-primary-50) 0%, #fff 60%);
+    position: relative;
+}
+.olo-hero-l::before {
+    content: ""; position: absolute; right: -40px; top: -40px;
+    width: 220px; height: 220px;
+    background: radial-gradient(circle, rgba(74,140,42,.12) 0%, transparent 70%);
+    pointer-events: none;
+}
+.olo-hero-l .greet {
+    font-size: 11px; text-transform: uppercase; letter-spacing: .08em;
+    color: var(--olo-primary-dark); font-weight: 700;
+}
+.olo-hero-l h1 {
+    margin: 0; font-size: 26px; font-weight: 700; line-height: 1.15;
+    color: var(--olo-text); text-wrap: balance; padding: 0;
+}
+.olo-hero-l h1 b { color: var(--olo-primary); }
+.olo-hero-l .sub {
+    font-size: 14px; color: var(--olo-text-muted); line-height: 1.5;
+    max-width: 44ch; margin: 0;
+}
+.olo-hero-l .sub b { color: var(--olo-text); font-weight: 600; }
+.olo-hero-l .meta-row {
+    display: flex; align-items: center; gap: 16px;
+    font-size: 12px; color: var(--olo-text-muted);
+    margin-top: 4px; flex-wrap: wrap;
+}
+.olo-hero-l .meta-row .item {
+    display: flex; align-items: center; gap: 6px;
+}
+.olo-hero-l .meta-row .item b { color: var(--olo-text); font-weight: 600; }
+.olo-hero-l .ctas { display: flex; gap: 8px; margin-top: 6px; flex-wrap: wrap; }
+.olo-hero-l .ctas a, .olo-hero-l .ctas button {
+    height: 38px;
+    padding: 0 16px;
+    border-radius: 8px; border: 1px solid transparent;
+    font: inherit; font-size: 13px; font-weight: 600;
+    cursor: pointer;
+    display: inline-flex; align-items: center; gap: 8px;
+    text-decoration: none;
+    line-height: 1;
+}
+.olo-hero-l .ctas .pri {
+    background: var(--olo-primary); color: #fff;
+    box-shadow: 0 2px 8px rgba(74,140,42,.25);
+}
+.olo-hero-l .ctas .pri:hover { background: var(--olo-primary-dark); color: #fff; }
+.olo-hero-l .ctas .sec {
+    background: #fff; border-color: var(--olo-border);
+    color: var(--olo-text);
+}
+.olo-hero-l .ctas .sec:hover { background: var(--olo-bg-muted); color: var(--olo-text); }
+
+.olo-hero-r {
+    position: relative;
+    background: var(--olo-wp-bg);
+    display: flex; align-items: stretch; justify-content: stretch;
+    min-height: 220px;
+}
+.olo-hero-r .browser {
+    margin: 14px;
+    border-radius: 10px; overflow: hidden;
+    background: #fff;
+    display: flex; flex-direction: column;
+    box-shadow: 0 8px 32px rgba(0,0,0,.25);
+    flex: 1;
+}
+.olo-hero-r .br-bar {
+    display: flex; align-items: center; gap: 6px;
+    padding: 6px 10px;
+    background: #f1f5f9; border-bottom: 1px solid #e2e8f0;
+}
+.olo-hero-r .br-bar .dot { width: 8px; height: 8px; border-radius: 99px; background: #cbd5e1; }
+.olo-hero-r .br-bar .dot.r { background: #ef4444; }
+.olo-hero-r .br-bar .dot.y { background: #f59e0b; }
+.olo-hero-r .br-bar .dot.g { background: #22c55e; }
+.olo-hero-r .br-bar .url {
+    flex: 1; margin-left: 10px;
+    background: #fff; border: 1px solid #e2e8f0; border-radius: 4px;
+    padding: 2px 8px; font-size: 10px; color: #64748b;
+    font-family: var(--olo-font-mono);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.olo-hero-r .br-body {
+    flex: 1;
+    background: linear-gradient(135deg, var(--olo-primary) 0%, var(--olo-primary-dark) 100%);
+    position: relative;
+    display: flex; flex-direction: column;
+    padding: 16px;
+    color: #fff;
+    overflow: hidden;
+}
+
+/* Screenshot reale della pagina (sostituisce il mockup quando disponibile) */
+.olo-hero-r .br-screenshot {
+    flex: 1;
+    display: block;
+    background: #fff;
+    overflow: hidden;
+    position: relative;
+    text-decoration: none;
+    cursor: pointer;
+}
+.olo-hero-r .br-screenshot img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+    transition: transform .35s ease;
+}
+.olo-hero-r .br-screenshot:hover img {
+    transform: scale(1.02);
+}
+.olo-hero-r .br-screenshot::after {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,.04), transparent 30%);
+    pointer-events: none;
+}
+.olo-hero-r .br-body::after {
+    content: ""; position: absolute; inset: 0;
+    background:
+        radial-gradient(circle at 80% 20%, rgba(255,255,255,.15) 0%, transparent 40%),
+        radial-gradient(circle at 20% 80%, rgba(0,0,0,.2) 0%, transparent 40%);
+}
+.olo-hero-r .br-body .nav {
+    display: flex; gap: 10px; font-size: 8px;
+    margin-bottom: 14px; opacity: .9;
+}
+.olo-hero-r .br-body .nav span { padding: 2px 0; }
+.olo-hero-r .br-body .nav .lo { font-weight: 700; margin-right: auto; font-size: 10px; }
+.olo-hero-r .br-body h2 {
+    margin: 0 0 6px; font-size: 14px; font-weight: 700; line-height: 1.1; color: #fff;
+}
+.olo-hero-r .br-body p {
+    margin: 0 0 12px; font-size: 9px; opacity: .85; line-height: 1.4; max-width: 70%;
+}
+.olo-hero-r .br-body .btn {
+    font-size: 9px; padding: 4px 10px;
+    background: #fff; color: var(--olo-primary-dark); border-radius: 4px;
+    font-weight: 700; align-self: flex-start;
+    position: relative; z-index: 1;
+}
+.olo-hero-r .live-pill {
+    position: absolute; top: 22px; right: 22px;
+    background: rgba(34,197,94,.95); color: #fff;
+    font-size: 9px; font-weight: 700; padding: 3px 8px;
+    border-radius: 99px; text-transform: uppercase; letter-spacing: .04em;
+    display: inline-flex; align-items: center; gap: 4px;
+    z-index: 2;
+}
+.olo-hero-r .live-pill::before {
+    content: ""; width: 5px; height: 5px; border-radius: 99px;
+    background: #fff;
+    animation: olo-pulse 1.6s ease-in-out infinite;
+}
+@keyframes olo-pulse { 50% { opacity: .3; } }
+
+/* ─────────────────────────────────────────────────────────────────────
+   KPI strip
+   ───────────────────────────────────────────────────────────────────── */
+.olo-kpi-strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    flex-shrink: 0;
+}
+.olo-kpi {
+    background: #fff;
+    border: 1px solid var(--olo-border-light);
+    border-radius: 12px;
+    padding: 14px 16px;
+    display: flex; flex-direction: column; gap: 4px;
+    position: relative; overflow: hidden;
+    cursor: pointer;
+    transition: all .15s;
+    color: inherit; text-decoration: none;
+}
+.olo-kpi:hover {
+    border-color: var(--olo-border);
+    transform: translateY(-1px);
+    box-shadow: var(--olo-shadow-xs);
+    color: inherit;
+}
+.olo-kpi .kpi-h {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 11px; color: var(--olo-text-muted);
+    font-weight: 500;
+}
+.olo-kpi .kpi-ic {
+    width: 22px; height: 22px; border-radius: 6px;
+    background: var(--olo-bg-muted);
+    display: grid; place-items: center;
+    color: var(--olo-text-muted);
+}
+.olo-kpi .kpi-val {
+    font-size: 26px; font-weight: 700; color: var(--olo-text);
+    line-height: 1; margin: 2px 0;
+    font-variant-numeric: tabular-nums;
+}
+.olo-kpi .kpi-d {
+    font-size: 11px; color: var(--olo-text-muted);
+    display: inline-flex; align-items: center; gap: 4px;
+}
+.olo-kpi.up   .kpi-d  { color: var(--olo-success-dark); }
+.olo-kpi.warn .kpi-d  { color: var(--olo-warning-dark); }
+.olo-kpi.warn .kpi-ic { background: var(--olo-warning-soft); color: var(--olo-warning-dark); }
+.olo-kpi.up   .kpi-ic { background: var(--olo-success-soft); color: var(--olo-success-dark); }
+
+/* Loading skeleton */
+.olo-kpi.loading .kpi-val { color: transparent; background: var(--olo-bg-muted); border-radius: 4px; min-height: 26px; min-width: 60px; }
+.olo-kpi.loading .kpi-d { color: transparent; background: var(--olo-bg-muted); border-radius: 4px; min-height: 11px; min-width: 100px; }
+
+/* ─────────────────────────────────────────────────────────────────────
+   Section header
+   ───────────────────────────────────────────────────────────────────── */
+.olo-sec-h {
+    display: flex; align-items: baseline; gap: 10px;
+    margin: 4px 2px 0;
+}
+.olo-sec-h h2 {
+    margin: 0; font-size: 13px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .06em;
+    color: var(--olo-text);
+    padding: 0; line-height: 1.3;
+}
+.olo-sec-h .hint { font-size: 12px; color: var(--olo-text-muted); }
+.olo-sec-h .spc { flex: 1; }
+.olo-sec-h .more {
+    background: transparent; border: 0; cursor: pointer;
+    font: inherit; font-size: 12px; color: var(--olo-primary-dark);
+    font-weight: 600;
+    display: inline-flex; align-items: center; gap: 4px;
+    text-decoration: none;
+    padding: 0;
+}
+.olo-sec-h .more:hover { color: var(--olo-primary); }
+
+/* ─────────────────────────────────────────────────────────────────────
+   Recent strip
+   ───────────────────────────────────────────────────────────────────── */
+.olo-recent-strip {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 10px;
+    flex-shrink: 0;
+    margin-top: 8px;
+}
+.olo-recent-card {
+    background: #fff;
+    border: 1px solid var(--olo-border-light);
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all .15s;
+    display: flex; flex-direction: column;
+    text-decoration: none; color: inherit;
+}
+.olo-recent-card:hover {
+    border-color: var(--olo-primary-200);
+    transform: translateY(-2px); box-shadow: var(--olo-shadow-sm);
+    color: inherit;
+}
+.olo-recent-card .thumb {
+    height: 84px; position: relative;
+    background-size: cover; background-position: center;
+    background-color: var(--olo-bg-muted);
+}
+.olo-recent-card .pill {
+    position: absolute; top: 8px; left: 8px;
+    font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em;
+    padding: 2px 7px; border-radius: 99px;
+    background: rgba(255,255,255,.95); color: var(--olo-text);
+}
+.olo-recent-card .pill.live  { background: var(--olo-success); color: #fff; }
+.olo-recent-card .pill.draft { background: var(--olo-warning); color: #fff; }
+.olo-recent-card .body { padding: 10px 12px; display: flex; flex-direction: column; gap: 2px; }
+.olo-recent-card .title {
+    font-size: 12px; font-weight: 600; color: var(--olo-text);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.olo-recent-card .meta {
+    font-size: 10px; color: var(--olo-text-muted);
+    display: flex; align-items: center; gap: 4px;
+}
+.olo-recent-card .meta .type { color: var(--olo-text); font-weight: 500; }
+
+/* Empty / loading state */
+.olo-recent-empty {
+    grid-column: 1/-1;
+    padding: 24px;
+    text-align: center;
+    color: var(--olo-text-muted);
+    font-size: 13px;
+    background: #fff;
+    border: 1px dashed var(--olo-border);
+    border-radius: 10px;
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   Quick actions
+   ───────────────────────────────────────────────────────────────────── */
+.olo-quick-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    flex-shrink: 0;
+    margin-top: 8px;
+}
+.olo-quick-card {
+    position: relative;
+    background: #fff;
+    border: 1px solid var(--olo-border-light);
+    border-radius: 12px;
+    padding: 16px;
+    display: flex; align-items: center; gap: 12px;
+    cursor: pointer;
+    transition: all .15s;
+    text-decoration: none; color: inherit;
+    font: inherit; font-size: 13px;
+    text-align: left;
+    width: 100%;
+}
+.olo-quick-card:disabled { opacity: .55; cursor: wait; }
+.olo-quick-card:hover {
+    border-color: var(--olo-border);
+    transform: translateY(-1px);
+    box-shadow: var(--olo-shadow-sm);
+    color: inherit;
+}
+.olo-quick-card .ic-box {
+    width: 38px; height: 38px; border-radius: 9px;
+    display: grid; place-items: center; flex-shrink: 0;
+    color: #fff;
+}
+.olo-quick-card.tone-primary .ic-box { background: linear-gradient(135deg, var(--olo-primary), var(--olo-primary-bright)); }
+.olo-quick-card.tone-info    .ic-box { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+.olo-quick-card.tone-purple  .ic-box { background: linear-gradient(135deg, #a855f7, #7e22ce); }
+.olo-quick-card.tone-neutral .ic-box { background: linear-gradient(135deg, #475569, #1e293b); }
+.olo-quick-card .lab { display: flex; flex-direction: column; gap: 1px; min-width: 0; flex: 1; }
+.olo-quick-card .lab .t { font-size: 13px; font-weight: 700; color: var(--olo-text); }
+.olo-quick-card .lab .h { font-size: 11px; color: var(--olo-text-muted); }
+.olo-quick-card .arr {
+    margin-left: auto; color: var(--olo-text-light);
+    opacity: 0; transition: opacity .15s, transform .15s;
+}
+.olo-quick-card:hover .arr { opacity: 1; transform: translateX(2px); }
+
+/* ─────────────────────────────────────────────────────────────────────
+   Manage tile grid
+   ───────────────────────────────────────────────────────────────────── */
+.olo-manage-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 10px;
+    flex-shrink: 0;
+    margin-top: 8px;
+}
+.olo-manage-tile {
+    background: #fff;
+    border: 1px solid var(--olo-border-light);
+    border-radius: 10px;
+    padding: 12px 14px;
+    display: flex; align-items: center; gap: 12px;
+    cursor: pointer; position: relative;
+    transition: all .15s;
+    text-decoration: none; color: inherit;
+}
+.olo-manage-tile:hover {
+    border-color: var(--olo-primary-200);
+    background: #fafefa;
+    color: inherit;
+}
+.olo-manage-tile .ic-sq {
+    width: 36px; height: 36px; border-radius: 8px;
+    display: grid; place-items: center; flex-shrink: 0;
+    color: #fff;
+}
+.olo-manage-tile .lab { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.olo-manage-tile .lab .t {
+    font-size: 13px; font-weight: 600; color: var(--olo-text);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.olo-manage-tile .lab .h {
+    font-size: 11px; color: var(--olo-text-muted);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.olo-manage-tile .pin {
+    width: 22px; height: 22px; border: 0;
+    background: transparent; cursor: pointer;
+    border-radius: 4px; color: var(--olo-text-light);
+    display: grid; place-items: center;
+    opacity: 0; transition: opacity .15s;
+    flex-shrink: 0; padding: 0;
+}
+.olo-manage-tile:hover .pin { opacity: 1; }
+.olo-manage-tile .pin:hover { background: var(--olo-bg-muted); color: var(--olo-text); }
+.olo-manage-tile .pin.on { opacity: 1; color: var(--olo-primary); }
+.olo-manage-tile .badge-num {
+    position: absolute; top: -4px; right: -4px;
+    font-size: 9px; font-weight: 700;
+    background: var(--olo-danger); color: #fff;
+    padding: 2px 5px; border-radius: 99px;
+    border: 2px solid var(--olo-bg);
+    min-width: 18px; text-align: center;
+    line-height: 1.3;
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   System chip row
+   ───────────────────────────────────────────────────────────────────── */
+.olo-system-row {
+    display: flex; flex-wrap: wrap; gap: 6px;
+    flex-shrink: 0;
+    margin-top: 8px;
+}
+.olo-system-chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 10px;
+    background: #fff;
+    border: 1px solid var(--olo-border-light);
+    border-radius: 99px;
+    font-size: 12px; color: var(--olo-text);
+    cursor: pointer;
+    transition: all .15s;
+    text-decoration: none;
+}
+.olo-system-chip:hover {
+    border-color: var(--olo-border);
+    background: var(--olo-bg-muted);
+    color: var(--olo-text);
+}
+.olo-system-chip .ic { color: var(--olo-text-muted); display: inline-flex; }
+
+/* ─────────────────────────────────────────────────────────────────────
+   Right rail (collapsible)
+   ───────────────────────────────────────────────────────────────────── */
+.olo-rail {
+    background: #fff;
+    border-left: 1px solid var(--olo-border-light);
+    display: flex; flex-direction: column;
+    min-width: 0; overflow: hidden;
+}
+.olo-rail .rail-head {
+    display: flex; align-items: center; gap: 8px;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--olo-border-light);
+    background: var(--olo-bg-soft);
+    flex-shrink: 0;
+}
+.olo-rail .rail-head h2 {
+    margin: 0; font-size: 13px; font-weight: 700;
+    color: var(--olo-text); flex: 1;
+    padding: 0; line-height: 1.3;
+}
+.olo-rail .rail-head .toggle {
+    width: 26px; height: 26px;
+    border: 1px solid var(--olo-border); border-radius: 6px;
+    background: #fff; cursor: pointer;
+    color: var(--olo-text-muted);
+    display: grid; place-items: center;
+    padding: 0;
+}
+.olo-rail .rail-head .toggle:hover { background: var(--olo-bg-muted); color: var(--olo-text); }
+
+.olo-rail .rail-body {
+    flex: 1; overflow-y: auto;
+    padding: 14px;
+    display: flex; flex-direction: column; gap: 16px;
+}
+
+.olo-rail-section h3 {
+    margin: 0 0 8px; font-size: 11px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .06em;
+    color: var(--olo-text-muted);
+    display: flex; align-items: center; gap: 8px;
+    padding: 0; line-height: 1.3;
+}
+.olo-rail-section h3 .pill {
+    font-size: 9px; font-weight: 700;
+    padding: 1px 6px; border-radius: 99px;
+    background: var(--olo-primary-100); color: var(--olo-primary-dark);
+    text-transform: uppercase; letter-spacing: .04em;
+}
+
+/* Changelog item */
+.olo-cl-item {
+    border-left: 2px solid var(--olo-border);
+    padding: 0 0 12px 12px;
+    position: relative;
+}
+.olo-cl-item::before {
+    content: ""; position: absolute; left: -5px; top: 4px;
+    width: 8px; height: 8px; border-radius: 99px;
+    background: var(--olo-primary); border: 2px solid #fff;
+}
+.olo-cl-item.old::before { background: var(--olo-text-light); }
+.olo-cl-item .v {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 12px; font-weight: 700; color: var(--olo-text);
+}
+.olo-cl-item .v .date {
+    font-size: 10px; color: var(--olo-text-muted); font-weight: 500;
+}
+.olo-cl-item .v .tag {
+    font-size: 9px; font-weight: 700; padding: 1px 6px;
+    border-radius: 99px; text-transform: uppercase; letter-spacing: .04em;
+}
+.olo-cl-item .v .tag.novità,
+.olo-cl-item .v .tag.novita { background: var(--olo-primary-100); color: var(--olo-primary-dark); }
+.olo-cl-item .v .tag.fix    { background: #dbeafe; color: #1d4ed8; }
+.olo-cl-item ul {
+    margin: 4px 0 0; padding: 0; list-style: none;
+    font-size: 11px; color: var(--olo-text-muted); line-height: 1.5;
+}
+.olo-cl-item ul li::before {
+    content: "•"; margin-right: 6px; color: var(--olo-text-light);
+}
+
+/* Learn cards */
+.olo-learn-card {
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    gap: 10px;
+    background: var(--olo-bg-soft);
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    margin-bottom: 6px;
+    text-decoration: none; color: inherit;
+}
+.olo-learn-card:hover { background: var(--olo-bg-muted); color: inherit; }
+.olo-learn-card .th {
+    height: 100%; min-height: 48px;
+    display: grid; place-items: center;
+    font-size: 22px;
+}
+.olo-learn-card .info { padding: 8px 10px 8px 0; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.olo-learn-card .info .t { font-size: 12px; font-weight: 600; color: var(--olo-text); line-height: 1.3; }
+.olo-learn-card .info .d { font-size: 10px; color: var(--olo-text-muted); display: inline-flex; align-items: center; gap: 4px; }
+
+/* Help row */
+.olo-help-row {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
+}
+.olo-help-row a {
+    background: var(--olo-bg-soft); border-radius: 7px;
+    padding: 10px; font-size: 11px; color: var(--olo-text);
+    text-decoration: none;
+    display: flex; align-items: center; gap: 6px;
+    cursor: pointer;
+}
+.olo-help-row a:hover { background: var(--olo-bg-muted); color: var(--olo-text); }
+.olo-help-row a .ic { color: var(--olo-primary); display: inline-flex; }
+
+/* Collapsed rail state */
+.olo-cockpit-grid.collapsed .olo-rail .rail-head {
+    flex-direction: column; padding: 10px 8px;
+    background: transparent; border: 0;
+}
+.olo-cockpit-grid.collapsed .olo-rail .rail-head h2,
+.olo-cockpit-grid.collapsed .olo-rail .rail-body { display: none; }
+.olo-cockpit-grid.collapsed .olo-rail-mini {
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    padding: 8px 0;
+}
+.olo-rail-mini { display: none; }
+.olo-rail-mini button {
+    width: 38px; height: 38px;
+    border: 0; background: transparent; cursor: pointer;
+    border-radius: 7px; color: var(--olo-text-muted);
+    display: grid; place-items: center;
+    position: relative; padding: 0;
+}
+.olo-rail-mini button:hover { background: var(--olo-bg-muted); color: var(--olo-text); }
+.olo-rail-mini .dot-new {
+    position: absolute; top: 6px; right: 6px;
+    width: 7px; height: 7px; border-radius: 99px;
+    background: var(--olo-primary); border: 2px solid #fff;
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   Search palette (⌘K) — overlay modale
+   ───────────────────────────────────────────────────────────────────── */
+.olo-palette-back {
+    position: fixed; inset: 0;
+    background: rgba(15,23,42,.45);
+    z-index: 100000;
+    display: none;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 12vh;
+    backdrop-filter: blur(4px);
+}
+.olo-palette-back.open { display: flex; }
+.olo-palette {
+    width: 560px; max-width: 90vw;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 24px 64px rgba(0,0,0,.25);
+    overflow: hidden;
+    display: flex; flex-direction: column;
+}
+.olo-palette-input {
+    display: flex; align-items: center; gap: 10px;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--olo-border-light);
+}
+.olo-palette-input input {
+    flex: 1; border: 0; outline: 0; background: transparent;
+    font-family: inherit; font-size: 15px; color: var(--olo-text);
+    padding: 0; box-shadow: none !important;
+}
+.olo-palette-input kbd {
+    font: inherit; font-size: 10px;
+    padding: 2px 6px; border-radius: 4px;
+    background: var(--olo-bg-muted); border: 1px solid var(--olo-border);
+    color: var(--olo-text-muted);
+}
+.olo-palette-results {
+    max-height: 50vh; overflow-y: auto;
+    padding: 6px;
+}
+.olo-palette-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    cursor: pointer; color: var(--olo-text);
+    text-decoration: none;
+    font-size: 13px;
+}
+.olo-palette-item:hover,
+.olo-palette-item.focus { background: var(--olo-bg-muted); color: var(--olo-text); }
+.olo-palette-item .ic { color: var(--olo-text-muted); display: inline-flex; }
+.olo-palette-item .lab { flex: 1; min-width: 0; }
+.olo-palette-item .lab .t { font-weight: 600; display: block; }
+.olo-palette-item .lab .h { font-size: 11px; color: var(--olo-text-muted); }
+.olo-palette-empty { padding: 24px; text-align: center; color: var(--olo-text-muted); font-size: 13px; }
+
+/* ═══════════════════════════════════════════════════════════════════
+   TOOLKIT — componenti shared per pagine cockpit (Fase 2)
+   Pattern riutilizzabili: page head, sub-nav, toolbar, card-grid, button
+   Emessi dai metodi statici Olo_Builder::cockpit_*()
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Page head ──────────────────────────────────────────────────────
+   Header di pagina con titolo H1 + sottotitolo meta + bottoni a destra.
+   Usato da Olo_Builder::cockpit_page_head().
+   ─────────────────────────────────────────────────────────────────── */
+.olo-page-head {
+    display: flex; align-items: flex-end; gap: 12px;
+    padding-bottom: 4px;
+    flex-shrink: 0;
+}
+.olo-page-head .titles {
+    display: flex; flex-direction: column; gap: 4px;
+    min-width: 0; flex: 1;
+}
+.olo-page-head h1 {
+    font-size: 22px !important; font-weight: 700; margin: 0; padding: 0;
+    color: var(--olo-text); letter-spacing: -0.01em; line-height: 1.2;
+    font-family: var(--olo-font-sans);
+}
+.olo-page-head .sub {
+    font-size: 13px; color: var(--olo-text-muted);
+    font-weight: 400; line-height: 1.4;
+}
+.olo-page-head .sub b { color: var(--olo-text); font-weight: 600; }
+.olo-page-head .sub a { color: var(--olo-primary-dark); text-decoration: none; }
+.olo-page-head .actions {
+    display: flex; align-items: center; gap: 8px;
+    flex-shrink: 0;
+}
+
+/* ── Sub-nav ────────────────────────────────────────────────────────
+   Tabs orizzontali sotto il page-head (Configurazione, Analytics, ecc.)
+   con underline brand sull'attivo.
+   ─────────────────────────────────────────────────────────────────── */
+.olo-subnav {
+    display: flex; align-items: center; gap: 0;
+    border-bottom: 1px solid var(--olo-border-light);
+    margin: 0 -24px;
+    padding: 0 24px;
+    flex-shrink: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+.olo-subnav::-webkit-scrollbar { display: none; }
+.olo-subnav a {
+    padding: 10px 14px;
+    font-size: 13px; font-weight: 500;
+    color: var(--olo-text-muted);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    display: inline-flex; align-items: center; gap: 6px;
+    transition: color .15s, border-color .15s;
+    text-decoration: none;
+    white-space: nowrap;
+}
+.olo-subnav a:hover { color: var(--olo-text); }
+.olo-subnav a.active {
+    color: var(--olo-primary-dark);
+    border-bottom-color: var(--olo-primary);
+    font-weight: 600;
+}
+.olo-subnav a .num {
+    font-size: 10px; font-weight: 600;
+    background: var(--olo-bg-muted);
+    color: var(--olo-text-muted);
+    padding: 1px 6px; border-radius: 99px;
+}
+.olo-subnav a.active .num {
+    background: var(--olo-primary-50);
+    color: var(--olo-primary-dark);
+}
+
+/* ── Toolbar ────────────────────────────────────────────────────────
+   Riga sticky con chip filtri + search + sort + view toggle.
+   Usato da Olo_Builder::cockpit_toolbar().
+   ─────────────────────────────────────────────────────────────────── */
+.olo-toolbar {
+    display: flex; align-items: center; gap: 10px;
+    flex-wrap: wrap;
+    background: #fff;
+    border: 1px solid var(--olo-border-light);
+    border-radius: 10px;
+    padding: 8px 10px;
+    box-shadow: var(--olo-shadow-xs);
+    flex-shrink: 0;
+}
+.olo-toolbar .chips {
+    display: inline-flex; align-items: center; gap: 2px;
+    flex-wrap: wrap;
+}
+.olo-toolbar .spc { flex: 1; }
+.olo-toolbar .div {
+    width: 1px; height: 22px; background: var(--olo-border-light);
+}
+
+/* Chip filter (atomico) */
+.olo-chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 5px 11px; border-radius: 7px;
+    font-size: 12px; font-weight: 500;
+    color: var(--olo-text-muted);
+    background: transparent; border: 0;
+    cursor: pointer;
+    transition: all .12s;
+    font-family: inherit;
+    text-decoration: none;
+    line-height: 1.2;
+}
+.olo-chip:hover { background: var(--olo-bg-muted); color: var(--olo-text); }
+.olo-chip.on, .olo-chip.is-active {
+    background: var(--olo-text); color: #fff;
+    font-weight: 600;
+}
+.olo-chip .num {
+    font-size: 10px; font-weight: 600;
+    padding: 1px 5px; border-radius: 99px;
+    background: rgba(0,0,0,.05);
+    color: inherit; opacity: .7;
+}
+.olo-chip.on .num, .olo-chip.is-active .num {
+    background: rgba(255,255,255,.18);
+    color: #fff; opacity: 1;
+}
+.olo-chip .dot {
+    width: 6px; height: 6px; border-radius: 99px;
+    flex-shrink: 0;
+}
+
+/* Search input (atomico) */
+.olo-search {
+    display: flex; align-items: center; gap: 8px;
+    padding: 5px 10px; border-radius: 7px;
+    background: var(--olo-bg-muted);
+    border: 1px solid transparent;
+    width: 220px;
+    transition: all .15s;
+}
+.olo-search:focus-within {
+    background: #fff; border-color: var(--olo-primary);
+}
+.olo-search input {
+    flex: 1; border: 0; outline: 0; background: transparent;
+    font: inherit; font-size: 12px; color: var(--olo-text);
+    padding: 0; box-shadow: none !important; min-width: 0;
+}
+.olo-search input:focus { outline: 0; box-shadow: none !important; }
+.olo-search .ic {
+    color: var(--olo-text-muted);
+    display: inline-flex;
+    flex-shrink: 0;
+}
+.olo-search .clear {
+    background: none; border: 0; cursor: pointer;
+    color: var(--olo-text-muted);
+    padding: 2px;
+    display: inline-flex;
+}
+.olo-search .clear:hover { color: var(--olo-text); }
+
+/* View toggle segmented (grid/list) */
+.olo-view-toggle {
+    display: inline-flex; align-items: stretch;
+    background: var(--olo-bg-muted);
+    border-radius: 7px; padding: 2px;
+}
+.olo-view-toggle button {
+    width: 26px; height: 26px;
+    display: grid; place-items: center;
+    background: transparent; border: 0; cursor: pointer;
+    color: var(--olo-text-muted);
+    border-radius: 5px;
+    transition: all .12s;
+    padding: 0;
+}
+.olo-view-toggle button.on,
+.olo-view-toggle button.is-active {
+    background: #fff; color: var(--olo-text);
+    box-shadow: 0 1px 2px rgba(0,0,0,.06);
+}
+
+/* ── Button atomico ─────────────────────────────────────────────────
+   Bottoni cockpit standard: primary verde brand, secondary outline,
+   danger rosso. Usato da Olo_Builder::cockpit_button().
+   ─────────────────────────────────────────────────────────────────── */
+.olo-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 14px; border-radius: 8px;
+    font: inherit; font-size: 13px; font-weight: 600;
+    cursor: pointer; border: 1px solid transparent;
+    transition: all .15s; line-height: 1;
+    text-decoration: none;
+    font-family: var(--olo-font-sans);
+    white-space: nowrap;
+}
+.olo-btn:disabled, .olo-btn.is-disabled {
+    opacity: .55; cursor: not-allowed;
+}
+.olo-btn-pri {
+    background: var(--olo-primary); color: #fff;
+}
+.olo-btn-pri:hover:not(:disabled) {
+    background: var(--olo-primary-dark); color: #fff;
+}
+.olo-btn-sec {
+    background: #fff; border-color: var(--olo-border);
+    color: var(--olo-text);
+}
+.olo-btn-sec:hover:not(:disabled) {
+    border-color: var(--olo-text-muted);
+    background: var(--olo-bg-muted);
+    color: var(--olo-text);
+}
+.olo-btn-danger {
+    background: #fff; border-color: var(--olo-border);
+    color: var(--olo-danger);
+}
+.olo-btn-danger:hover:not(:disabled) {
+    background: #fef2f2; border-color: var(--olo-danger);
+}
+.olo-btn-ghost {
+    background: transparent; color: var(--olo-text-muted);
+}
+.olo-btn-ghost:hover:not(:disabled) {
+    background: var(--olo-bg-muted); color: var(--olo-text);
+}
+.olo-btn-sm { padding: 5px 10px; font-size: 12px; }
+.olo-btn-icon {
+    width: 32px; height: 32px; padding: 0;
+    display: grid; place-items: center;
+}
+
+/* ── Data grid / list (cards neutre) ────────────────────────────────
+   Layout standard per liste di entità (submissions, popups, media…)
+   Usato da Olo_Builder::cockpit_card_grid().
+   ─────────────────────────────────────────────────────────────────── */
+.olo-data-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 12px;
+    flex-shrink: 0;
+}
+.olo-data-list {
+    display: flex; flex-direction: column;
+    background: #fff;
+    border: 1px solid var(--olo-border-light);
+    border-radius: 10px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+/* Card neutra (per data-grid) */
+.olo-card {
+    background: #fff;
+    border: 1px solid var(--olo-border-light);
+    border-radius: 10px;
+    padding: 14px;
+    display: flex; flex-direction: column; gap: 8px;
+    transition: all .15s;
+    text-decoration: none; color: inherit;
+    position: relative;
+}
+.olo-card:hover {
+    border-color: var(--olo-primary-200);
+    box-shadow: var(--olo-shadow-sm);
+    transform: translateY(-1px);
+    color: inherit;
+}
+.olo-card .head {
+    display: flex; align-items: center; gap: 10px;
+    min-width: 0;
+}
+.olo-card .head .ic {
+    width: 32px; height: 32px; border-radius: 7px;
+    background: var(--olo-bg-muted);
+    display: grid; place-items: center;
+    color: var(--olo-text-muted);
+    flex-shrink: 0;
+}
+.olo-card .head .lab {
+    flex: 1; min-width: 0;
+}
+.olo-card .head .t {
+    font-size: 13px; font-weight: 600; color: var(--olo-text);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.olo-card .head .h {
+    font-size: 11px; color: var(--olo-text-muted);
+}
+.olo-card .body {
+    font-size: 12px; color: var(--olo-text-muted);
+    line-height: 1.5;
+}
+.olo-card .foot {
+    display: flex; align-items: center; gap: 8px;
+    margin-top: auto; padding-top: 6px;
+    border-top: 1px solid var(--olo-border-light);
+    font-size: 11px; color: var(--olo-text-muted);
+}
+.olo-card .foot .spc { flex: 1; }
+
+/* Empty state per data-grid/list */
+.olo-empty-state {
+    padding: 60px 20px; text-align: center;
+    color: var(--olo-text-muted);
+    background: #fff;
+    border: 1px dashed var(--olo-border);
+    border-radius: 10px;
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+}
+.olo-empty-state h3 {
+    font-size: 15px; font-weight: 600;
+    color: var(--olo-text); margin: 8px 0 0;
+}
+.olo-empty-state p {
+    font-size: 13px; margin: 0 0 14px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   SUBMISSIONS — pagina Invii Form (Fase 3)
+   ═══════════════════════════════════════════════════════════════════ */
+.olo-submissions-page .olo-sub-list {
+    display: flex; flex-direction: column;
+    gap: 8px;
+}
+.olo-sub-card {
+    background: #fff;
+    border: 1px solid var(--olo-border-light);
+    border-left: 3px solid transparent;
+    border-radius: 10px;
+    padding: 14px 16px 14px 14px;
+    display: flex; align-items: flex-start; gap: 12px;
+    cursor: pointer;
+    transition: all .12s;
+    width: 100%;
+    text-align: left;
+    font-family: inherit;
+    color: var(--olo-text);
+}
+.olo-sub-card:hover {
+    border-color: var(--olo-primary-200);
+    border-left-color: var(--olo-primary-200);
+    box-shadow: var(--olo-shadow-xs);
+    transform: translateY(-1px);
+}
+.olo-sub-card.is-unread {
+    border-left-color: var(--olo-danger);
+    background: #fffefe;
+}
+.olo-sub-card.is-unread .olo-sub-name {
+    color: var(--olo-text-strong);
+    font-weight: 700;
+}
+
+.olo-sub-dot {
+    width: 10px; height: 10px;
+    border-radius: 99px;
+    flex-shrink: 0;
+    margin-top: 4px;
+    cursor: pointer;
+    transition: transform .12s;
+    box-shadow: 0 0 0 2px transparent;
+}
+.olo-sub-dot:hover { transform: scale(1.25); box-shadow: 0 0 0 3px rgba(0,0,0,.05); }
+.olo-sub-dot.unread { background: var(--olo-danger); }
+.olo-sub-dot.read   { background: var(--olo-success); }
+
+.olo-sub-card-body {
+    flex: 1; min-width: 0;
+}
+.olo-sub-card-head {
+    display: flex; align-items: baseline; gap: 8px;
+    margin-bottom: 4px;
+    flex-wrap: wrap;
+}
+.olo-sub-name {
+    font-size: 13px; font-weight: 600;
+    color: var(--olo-text);
+    flex: 0 1 auto;
+    max-width: 60%;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.olo-sub-form {
+    font-size: 11px; font-weight: 500;
+    color: var(--olo-text-muted);
+    background: var(--olo-bg-muted);
+    padding: 1px 7px;
+    border-radius: 99px;
+}
+.olo-sub-time {
+    margin-left: auto;
+    font-size: 11px;
+    color: var(--olo-text-muted);
+}
+.olo-sub-email {
+    font-size: 12px;
+    color: var(--olo-text-muted);
+    margin-bottom: 4px;
+    font-family: var(--olo-font-mono);
+}
+.olo-sub-preview {
+    font-size: 13px;
+    color: var(--olo-text-soft);
+    line-height: 1.4;
+    margin-bottom: 6px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.olo-sub-meta-row {
+    font-size: 11px;
+    color: var(--olo-text-light);
+    display: flex; gap: 6px;
+}
+
+/* ── Drawer dettaglio (overlay laterale destra) ─────────────────── */
+.olo-sub-drawer-back {
+    position: fixed; inset: 0;
+    background: rgba(15,23,42,.4);
+    z-index: 100000;
+    display: flex; justify-content: flex-end;
+    backdrop-filter: blur(2px);
+    animation: oloFadeIn .12s ease-out;
+}
+.olo-sub-drawer-back[hidden] { display: none; }
+.olo-sub-drawer {
+    width: 560px; max-width: 92vw;
+    background: #fff;
+    display: flex; flex-direction: column;
+    box-shadow: -16px 0 48px rgba(0,0,0,.20);
+    animation: oloSlideIn .22s cubic-bezier(.4,0,.2,1);
+}
+@keyframes oloFadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes oloSlideIn { from { transform: translateX(100%); } to { transform: none; } }
+.olo-sub-drawer-head {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--olo-border-light);
+    display: flex; align-items: flex-start; gap: 10px;
+    flex-shrink: 0;
+}
+.olo-sub-drawer-title {
+    font-size: 16px; font-weight: 700;
+    color: var(--olo-text-strong);
+    line-height: 1.3;
+}
+.olo-sub-drawer-meta {
+    font-size: 11px; color: var(--olo-text-muted);
+    margin-top: 4px;
+    word-break: break-word;
+}
+.olo-sub-drawer-body {
+    flex: 1; overflow-y: auto;
+    padding: 18px 20px;
+    font-family: var(--olo-font-sans);
+}
+.olo-sub-drawer-foot {
+    padding: 12px 16px;
+    border-top: 1px solid var(--olo-border-light);
+    display: flex; align-items: center; gap: 8px;
+    flex-shrink: 0;
+    background: var(--olo-bg-soft);
+}
+.olo-sub-section-title {
+    font-size: 11px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .06em;
+    color: var(--olo-text-muted);
+    margin: 0 0 10px;
+}
+.olo-sub-fields {
+    margin: 0; padding: 0;
+    display: grid;
+    grid-template-columns: 130px 1fr;
+    gap: 4px 14px;
+    font-size: 13px;
+}
+.olo-sub-fields dt {
+    font-weight: 600;
+    color: var(--olo-text-muted);
+    padding: 8px 0;
+    border-top: 1px solid var(--olo-border-light);
+}
+.olo-sub-fields dd {
+    margin: 0;
+    color: var(--olo-text);
+    padding: 8px 0;
+    border-top: 1px solid var(--olo-border-light);
+    line-height: 1.5;
+    word-wrap: break-word;
+}
+.olo-sub-fields dt:first-of-type,
+.olo-sub-fields dd:first-of-type {
+    border-top: 0;
+    padding-top: 0;
+}
+
+/* Body lock quando drawer aperto */
+body.olo-drawer-open { overflow: hidden; }
+
+/* ─────────────────────────────────────────────────────────────────────
+   Responsive
+   ───────────────────────────────────────────────────────────────────── */
+@media (max-width: 1366px) {
+    .olo-cockpit-grid { --rail-w: 56px; }
+    /* Quando l'utente espande la rail sotto 1366px, diventa un overlay
+       floating fisso sopra il contenuto: serve perché 56px non basta per
+       le card "Impara/Aiuto" che altrimenti vengono schiacciate (bug
+       storico delle strisce verticali colorate). */
+    .olo-cockpit-grid:not(.collapsed) .olo-rail {
+        position: fixed;
+        top: 32px;
+        right: 0;
+        bottom: 0;
+        width: 340px;
+        max-width: 90vw;
+        background: var(--olo-bg, #fff);
+        box-shadow: -8px 0 24px rgba(0, 0, 0, 0.15);
+        z-index: 9999;
+        overflow-y: auto;
+    }
+    @media (max-width: 782px) {
+        .olo-cockpit-grid:not(.collapsed) .olo-rail { top: 46px; }
+    }
+}
+@media (max-width: 1024px) {
+    .olo-hero { grid-template-columns: 1fr; }
+    .olo-hero-r { min-height: 180px; }
+    .olo-kpi-strip { grid-template-columns: repeat(2, 1fr); }
+    .olo-quick-row { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 782px) {
+    .olo-cockpit-grid { grid-template-columns: 1fr; }
+    .olo-rail { display: none; }
+    .olo-cockpit-topbar .search-mini { display: none; }
+    .olo-cockpit-main { padding: 14px 14px 24px; }
+}

@@ -179,8 +179,8 @@
 
     <!-- Info label (hidden in clean mode) -->
     <div v-if="!isClean" class="olo-mm-info">
-      <span v-if="selectedMenu">{{ selectedMenu.name }} · {{ menuItemCount }} voci</span>
-      <span v-else>Nessun menu selezionato</span>
+      <span v-if="selectedMenu">{{ selectedMenu.name }} · {{ menuItemCount }} {{ t('voci') }}</span>
+      <span v-else>{{ t('Nessun menu selezionato') }}</span>
       <span class="olo-mm-info-tags">
         <span class="olo-mm-info-tag">{{ s.hamburger_style }}</span>
         <span class="olo-mm-info-tag">hover: {{ s.hover_effect || 'none' }}</span>

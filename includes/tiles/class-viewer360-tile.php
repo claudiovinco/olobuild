@@ -11,6 +11,7 @@ class Olo_Viewer360_Tile extends Olo_Tile_Base {
     protected $icon     = 'dashicons-admin-site-alt3';
     protected $category = 'media';
     protected $defaults = [
+        'preset' => 'custom',
         'source_type'       => 'image',
         'image_url'         => '',
         'video_url'         => '',
@@ -90,7 +91,7 @@ class Olo_Viewer360_Tile extends Olo_Tile_Base {
         <?php if ( $radius_css_hover_css !== '' ) : ?>
         <style>#<?php echo esc_attr( $uid ); ?>{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}#<?php echo esc_attr( $uid ); ?>:hover{border-radius:<?php echo $radius_css_hover_css; ?> !important}</style>
         <?php endif; ?>
-        <div class="olo-v360" id="<?php echo esc_attr( $uid ); ?>"
+        <div class="olo-v360 olo-v3-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" id="<?php echo esc_attr( $uid ); ?>"
              style="height:<?php echo $height; ?>px;<?php if ( $radius_css ) echo 'border-radius:' . $radius_css . ';'; ?>overflow:hidden;position:relative;background:#111"
              data-olo-v360='<?php echo esc_attr( wp_json_encode( $config ) ); ?>'>
             <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px">

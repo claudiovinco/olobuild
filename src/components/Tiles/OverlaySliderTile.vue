@@ -1,5 +1,5 @@
 <template>
-  <div class="olo-overlayslider" style="position:relative;overflow:hidden;">
+  <div class="olo-overlayslider" :class="'olo-os--preset-' + (s.preset || 'cinematic-overlay')" style="position:relative;overflow:hidden;">
     <!-- Track -->
     <div
       class="olo-os-track"
@@ -289,5 +289,92 @@ function prev() { goTo(current.value - 1); }
 
 .olo-os-dot--active {
   background: #fff;
+}
+
+/* ───── Preset visual hints in builder ───── */
+
+/* Liquid Glass */
+.olo-os--preset-liquid-glass .olo-os-overlay {
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  background: rgba(255,255,255,0.20) !important;
+  border: 1px solid rgba(255,255,255,0.4);
+  border-radius: 12px;
+  margin: 12px;
+}
+
+/* Neon Cyber */
+.olo-os--preset-neon-cyber .olo-os-slide {
+  border: 2px solid #ff6a2a;
+  box-shadow: 0 0 14px rgba(255,106,42,0.35);
+}
+.olo-os--preset-neon-cyber .olo-os-overlay {
+  background: linear-gradient(180deg, transparent 0%, rgba(10,15,28,0.85) 100%) !important;
+}
+.olo-os--preset-neon-cyber .olo-os-overlay :deep(*) {
+  color: #ff6a2a !important;
+  text-shadow: 0 0 6px rgba(255,106,42,0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* Brutalist */
+.olo-os--preset-brutalist-block .olo-os-slide {
+  border: 3px solid #000;
+  box-shadow: 6px 6px 0 0 #000;
+}
+.olo-os--preset-brutalist-block .olo-os-overlay {
+  background: #fff !important;
+  color: #000 !important;
+  border-top: 3px solid #000;
+}
+.olo-os--preset-brutalist-block .olo-os-overlay :deep(*) {
+  color: #000 !important;
+  font-weight: 900 !important;
+  text-transform: uppercase;
+}
+
+/* Magnetic */
+.olo-os--preset-magnetic-liquid .olo-os-slide {
+  border-radius: 22px;
+  box-shadow: 0 14px 32px rgba(232,98,42,0.18);
+}
+.olo-os--preset-magnetic-liquid .olo-os-overlay {
+  background: linear-gradient(135deg, rgba(0,0,0,0.30) 0%, rgba(232,98,42,0.55) 100%) !important;
+  border-radius: 22px;
+  margin: 12px;
+}
+
+/* Sticker */
+.olo-os--preset-sticker .olo-os-slide {
+  border: 3px dashed rgba(232,98,42,0.55);
+  background: #fff;
+  padding: 6px;
+  border-radius: 6px;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.18);
+  transform: rotate(-1deg);
+}
+
+/* Retro Terminal */
+.olo-os--preset-retro-terminal .olo-os-slide {
+  border: 1px solid rgba(0,255,140,0.45);
+  background-image: repeating-linear-gradient(0deg, transparent 0, transparent 2px, rgba(0,255,140,0.06) 2px, rgba(0,255,140,0.06) 3px);
+}
+.olo-os--preset-retro-terminal .olo-os-overlay {
+  background: rgba(12,12,12,0.85) !important;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace !important;
+}
+.olo-os--preset-retro-terminal .olo-os-overlay :deep(*) {
+  color: #00ff8c !important;
+  text-shadow: 0 0 6px rgba(0,255,140,0.5);
+  font-family: inherit !important;
+  text-transform: uppercase;
+}
+
+/* 3D Tilt */
+.olo-os--preset-3d-tilt .olo-os-slide {
+  box-shadow: 0 20px 40px rgba(0,0,0,0.20);
+  transform: perspective(900px) rotateX(2deg);
+  transform-origin: center top;
 }
 </style>

@@ -1,14 +1,23 @@
-import { textEffectsFields, textEffectsDefaults, shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
+import { textEffectsFields, textEffectsDefaults, shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared.js';
+import { t } from '@/i18n';
 
+/**
+ * Tile IconBox — split CONTENUTO/STILE.
+ *   fields[]      → icona, title, description, link (URL+testo)
+ *   styleFields[] → preset, bg, typo, text-effects, icona aspetto, tipografia titolo, spaziature, colori, sfondo interno box, padding, radius, shadow, border
+ */
 export default {
   type: 'iconbox',
-  name: 'Icon Box',
+  name: t('Icon Box'),
   icon: 'dashicons-star-filled',
   category: 'content',
   defaults: {
+    bg: { type: 'none' },
+    typography_preset: '',
+    preset: 'custom',
     icon_emoji: 'star',
-    title: 'Titolo funzionalità',
-    description: 'Una breve descrizione.',
+    title: t('Titolo Provvisorio'),
+    description: t('Una breve descrizione.'),
     link_url: '',
     link_text: 'Scopri di più',
     alignment: 'center',
@@ -39,84 +48,126 @@ export default {
     border_hover_duration: 300,
     ...borderEffectDefaults,
     ...textEffectsDefaults,
+    text_effect_target: 'all',
   },
+
   fields: [
-    { key: 'icon_emoji', label: 'Icona / Emoji', type: 'icon' },
-    { key: 'title', label: 'Titolo', type: 'text' },
-    { key: 'description', label: 'Descrizione', type: 'textarea' },
-    { key: 'link_url', label: 'URL link', type: 'text' },
-    { key: 'link_text', label: 'Testo link', type: 'text' },
-    { key: 'alignment', label: 'Allineamento', type: 'select', options: [
-      { value: 'left', label: 'Sinistra' },
-      { value: 'center', label: 'Centro' },
-      { value: 'right', label: 'Destra' },
+    { key: 'icon_emoji', label: t('Icona / Emoji'), type: 'icon' },
+    { key: 'title', label: t('Titolo'), type: 'text' },
+    { key: 'description', label: t('Descrizione'), type: 'textarea' },
+    { key: 'link_url', label: t('URL link'), type: 'link' },
+    { key: 'link_text', label: t('Testo link'), type: 'text' },
+  ],
+
+  styleFields: [
+    { type: 'separator', label: t('Preset stilistico') },
+    { key: 'preset', label: t('Stile'), type: 'select', options: [
+      { value: 'modern-card',     label: t('Modern Card') },
+      { value: 'minimal-line',    label: t('Minimal Line') },
+      { value: 'magazine-bold',   label: t('Magazine Bold') },
+      { value: 'centered-pill',   label: t('Centered Pill') },
+      { value: 'horizontal-row',  label: t('Horizontal Row') },
+      { value: 'glass-tile',      label: t('Glass Tile') },
+      { value: 'neon-icon',       label: t('Neon Icon') },
+      { value: 'brutalist-block', label: t('Brutalist Block') },
+      { value: 'gradient-circle', label: t('Gradient Circle') },
+      { value: 'sticker-fun',     label: t('Sticker Fun') },
+      { value: 'retro-badge',     label: t('Retro Badge') },
+      { value: 'tilt-3d',         label: t('3D Tilt') },
+      { value: 'custom',          label: t('Personalizzato') },
     ]},
-    { type: 'separator', label: 'Icona' },
-    { key: 'icon_size', label: 'Dimensione icona (em)', type: 'range', min: 1, max: 8, step: 0.5 },
-    { key: 'icon_position', label: 'Posizione icona', type: 'select', options: [
-      { value: 'top', label: 'Sopra' },
-      { value: 'left', label: 'Sinistra' },
-      { value: 'right', label: 'Destra' },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
+
+    { type: 'separator', label: t('Allineamento') },
+    { key: 'alignment', label: t('Allineamento'), type: 'select', options: [
+      { value: 'left', label: t('Sinistra') },
+      { value: 'center', label: t('Centro') },
+      { value: 'right', label: t('Destra') },
+      { value: 'justify', label: t('Giustificato') },
     ]},
-    { key: 'icon_color', label: 'Colore icona', type: 'color' },
-    { key: 'icon_bg_color', label: 'Sfondo icona', type: 'color' },
-    { key: 'icon_bg_shape', label: 'Forma sfondo icona', type: 'select', options: [
-      { value: 'circle', label: 'Cerchio' },
-      { value: 'square', label: 'Quadrato' },
-      { value: 'rounded', label: 'Arrotondato' },
-    ],
-      condition: { field: 'icon_bg_color', operator: '!=', value: '' } },
-    { type: 'separator', label: 'Tipografia' },
-    { key: 'title_font_size', label: 'Dimensione titolo (px)', type: 'range', min: 14, max: 48, step: 1 },
-    { key: 'title_font_weight', label: 'Peso titolo', type: 'select', options: [
-      { value: '400', label: 'Normale' },
-      { value: '500', label: 'Medio' },
-      { value: '600', label: 'Semi-grassetto' },
-      { value: '700', label: 'Grassetto' },
+
+    ...textEffectsFields([
+      { value: 'title', label: t('Solo Titolo') },
+      { value: 'description', label: t('Solo Descrizione') },
+      { value: 'all', label: t('Tutti gli elementi testuali') },
+    ]),
+
+    { type: 'separator', label: t('Icona') },
+    { key: 'icon_size', label: t('Dimensione icona (em)'), type: 'range', min: 1, max: 8, step: 0.5 },
+    { key: 'icon_position', label: t('Posizione icona'), type: 'select', options: [
+      { value: 'top', label: t('Sopra') },
+      { value: 'left', label: t('Sinistra') },
+      { value: 'right', label: t('Destra') },
     ]},
-    { type: 'separator', label: 'Spaziatura elementi' },
-    { key: 'icon_gap', label: 'Distanza icona-titolo (px)', type: 'range', min: 0, max: 48, step: 2 },
-    { key: 'title_gap', label: 'Distanza titolo-testo (px)', type: 'range', min: 0, max: 32, step: 2 },
-    { key: 'desc_gap', label: 'Distanza testo-link (px)', type: 'range', min: 0, max: 48, step: 2 },
-    { type: 'separator', label: 'Colori' },
-    { key: 'title_color', label: 'Colore titolo', type: 'color' },
-    { key: 'text_color', label: 'Colore descrizione', type: 'color' },
-    { key: 'link_color', label: 'Colore link', type: 'color' },
-    { type: 'separator', label: 'Sfondo tile' },
-    { key: 'bg_type', label: 'Tipo sfondo', type: 'select', options: [
-      { value: 'none', label: 'Nessuno' },
-      { value: 'color', label: 'Colore' },
-      { value: 'gradient', label: 'Gradiente' },
-      { value: 'image', label: 'Immagine' },
+    { key: 'icon_color', label: t('Colore icona'), type: 'color' },
+    { key: 'icon_bg_color', label: t('Sfondo icona'), type: 'color' },
+    { key: 'icon_bg_shape', label: t('Forma sfondo icona'), type: 'select', options: [
+      { value: 'circle', label: t('Cerchio') },
+      { value: 'square', label: t('Quadrato') },
+      { value: 'rounded', label: t('Arrotondato') },
+    ], condition: { field: 'icon_bg_color', operator: '!=', value: '' } },
+
+    { type: 'separator', label: t('Tipografia') },
+    { type: 'typography', label: t('Titolo'),
+      presetKey: 'typography_preset',
+      responsiveKeys: ['size'],
+      keys: {
+        size:   'title_font_size',
+        weight: 'title_font_weight',
+        color:  'title_color',
+      },
+      sizeMin: 14, sizeMax: 48, sizeStep: 1,
+    },
+    { type: 'typography', label: t('Descrizione'),
+      presetKey: 'typography_preset',
+      keys: {
+        color: 'text_color',
+      },
+    },
+    { type: 'typography', label: t('Link'),
+      presetKey: 'typography_preset',
+      keys: {
+        color: 'link_color',
+      },
+    },
+
+    { type: 'separator', label: t('Spaziatura elementi') },
+    { key: 'icon_gap', label: t('Distanza icona-titolo (px)'), type: 'range', min: 0, max: 48, step: 2 },
+    { key: 'title_gap', label: t('Distanza titolo-testo (px)'), type: 'range', min: 0, max: 32, step: 2 },
+    { key: 'desc_gap', label: t('Distanza testo-link (px)'), type: 'range', min: 0, max: 48, step: 2 },
+
+    { type: 'separator', label: t('Sfondo box icona') },
+    { key: '_bg_hint', type: 'description', label: '', description: t('Sfondo specifico del box icona (interno). Per lo sfondo del wrapper esterno usa il tab Stile → Sfondo.') },
+    { key: 'bg_type', label: t('Tipo sfondo'), type: 'select', options: [
+      { value: 'none', label: t('Nessuno') },
+      { value: 'color', label: t('Colore') },
+      { value: 'gradient', label: t('Gradiente') },
+      { value: 'image', label: t('Immagine') },
     ]},
-    { key: 'bg_color', label: 'Colore sfondo', type: 'color',
+    { key: 'bg_color', label: t('Colore sfondo'), type: 'color',
       condition: { field: 'bg_type', value: 'color' } },
-    { key: 'bg_gradient', label: 'Gradiente', type: 'gradient',
+    { key: 'bg_gradient', label: t('Gradiente'), type: 'gradient',
       condition: { field: 'bg_type', value: 'gradient' } },
-    { key: 'bg_image', label: 'Immagine sfondo', type: 'image',
+    { key: 'bg_image', label: t('Immagine sfondo'), type: 'image',
       condition: { field: 'bg_type', value: 'image' } },
-    { key: 'bg_image_size', label: 'Dimensione sfondo', type: 'select', options: [
-      { value: 'cover', label: 'Cover' },
-      { value: 'contain', label: 'Contain' },
-      { value: 'auto', label: 'Auto' },
+    { key: 'bg_image_size', label: t('Dimensione sfondo'), type: 'select', options: [
+      { value: 'cover', label: t('Cover') },
+      { value: 'contain', label: t('Contain') },
+      { value: 'auto', label: t('Auto') },
     ], condition: { field: 'bg_type', value: 'image' } },
-    { key: 'bg_image_position', label: 'Posizione sfondo', type: 'select', options: [
-      { value: 'center center', label: 'Centro' },
-      { value: 'top center', label: 'Alto' },
-      { value: 'bottom center', label: 'Basso' },
-      { value: 'left center', label: 'Sinistra' },
-      { value: 'right center', label: 'Destra' },
+    { key: 'bg_image_position', label: t('Posizione sfondo'), type: 'select', options: [
+      { value: 'center center', label: t('Centro') },
+      { value: 'top center', label: t('Alto') },
+      { value: 'bottom center', label: t('Basso') },
+      { value: 'left center', label: t('Sinistra') },
+      { value: 'right center', label: t('Destra') },
     ], condition: { field: 'bg_type', value: 'image' } },
-    { type: 'separator', label: 'Bordo e spaziatura' },
-    { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 60 },
-    { key: 'border_radius', label: 'Raggio bordi (px)', type: 'border-radius' },
-    { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
+
+    { type: 'separator', label: t('Bordo e spaziatura') },
+    { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 60 },
+    withHover({ key: 'border_radius', label: t('Raggio bordi (px)'), type: 'border-radius' }),
+
     ...shadowField,
     ...borderFields(),
-    ...textEffectsFields([
-      { value: 'title', label: 'Solo Titolo' },
-      { value: 'description', label: 'Solo Descrizione' },
-      { value: 'all', label: 'Tutti gli elementi testuali' },
-    ]),
   ],
 };

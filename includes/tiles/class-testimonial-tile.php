@@ -11,6 +11,7 @@ class Olo_Testimonial_Tile extends Olo_Tile_Base {
     protected $icon     = 'dashicons-format-quote';
     protected $category = 'marketing';
     protected $defaults = [
+        'preset' => 'custom',
         'quote'           => 'Un prodotto fantastico!',
         'author_name'     => 'Mario Rossi',
         'author_role'     => 'CEO',
@@ -42,6 +43,9 @@ class Olo_Testimonial_Tile extends Olo_Tile_Base {
         'border'                  => [],
         'border_hover'            => [],
         'border_hover_duration'   => 300,
+        'card_border'                 => [],
+        'card_border_hover'           => [],
+        'card_border_hover_duration'  => 300,
         'border_effect'           => 'none',
         'border_effect_intensity' => 'medium',
         'border_effect_color2'    => '',
@@ -99,10 +103,12 @@ class Olo_Testimonial_Tile extends Olo_Tile_Base {
         $border_css        = $this->build_border_css( $s['border'] ?? [] );
         $border_hover_css  = $this->build_border_hover_css( ".{$uid}", $s['border'] ?? [], $s['border_hover'] ?? [], intval( $s['border_hover_duration'] ?? 300 ) );
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
-        if ( $border_css || $border_hover_css || $border_effect_css ) {
+        // V3.21: hover transitions for the card border (the base CSS is emitted inline above).
+        $card_border_hover_css = $this->build_border_hover_css( ".{$uid} .olo-test-card", $s['card_border'] ?? [], $s['card_border_hover'] ?? [], intval( $s['card_border_hover_duration'] ?? 300 ) );
+        if ( $border_css || $border_hover_css || $border_effect_css || $card_border_hover_css ) {
             echo '<style>';
             if ( $border_css ) echo ".{$uid}{{$border_css}}";
-            echo $border_hover_css . $border_effect_css . '</style>';
+            echo $border_hover_css . $border_effect_css . $card_border_hover_css . '</style>';
         }
 
         return ob_get_clean();
@@ -117,12 +123,18 @@ class Olo_Testimonial_Tile extends Olo_Tile_Base {
                 border-radius: <?php echo $tile_radius; ?>;
                 padding: 24px;
                 <?php
-                $bw = intval( $s['border_width'] );
-                if ( $bw > 0 ) :
-                    $bc = $this->safe_color_css( $s['border_color'] ) ?: 'var(--olo-color-text, #374151)';
+                // V3.21: nuovo card_border (4 lati hoverable) ha priorità sul legacy border_width/color.
+                $_card_border_css = $this->build_border_css( $s['card_border'] ?? [] );
+                if ( $_card_border_css ) {
+                    echo $_card_border_css;
+                } else {
+                    $bw = intval( $s['border_width'] );
+                    if ( $bw > 0 ) {
+                        $bc = $this->safe_color_css( $s['border_color'] ) ?: 'var(--olo-color-text, #374151)';
+                        echo "border:{$bw}px solid {$bc};";
+                    }
+                }
                 ?>
-                border: <?php echo $bw; ?>px solid <?php echo $bc; ?>;
-                <?php endif; ?>
             }
             <?php if ( $tile_radius_hover_css !== '' ) : ?>.<?php echo $uid; ?> .olo-test-card{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?> .olo-test-card:hover{border-radius:<?php echo $tile_radius_hover_css; ?> !important}<?php endif; ?>
             .<?php echo $uid; ?> .olo-test-stars {
@@ -219,7 +231,7 @@ class Olo_Testimonial_Tile extends Olo_Tile_Base {
         $author_name = esc_html( wp_strip_all_tags( $s['author_name'] ) );
         $author_role = esc_html( wp_strip_all_tags( $s['author_role'] ) );
         ?>
-        <div class="olo-testimonial <?php echo esc_attr( $uid ); ?>">
+        <div class="olo-testimonial <?php echo esc_attr( $uid ); ?> olo-test-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>">
             <div class="olo-test-card">
                 <?php echo $this->render_card_inner( $s, $rating, $star_svg, $quote, $author_name, $author_role, $is_bottom, $position ); ?>
             </div>
@@ -250,7 +262,7 @@ class Olo_Testimonial_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .uk-dotnav > * > * { background: var(--olo-color-border, #E5E7EB); }
             .<?php echo $uid; ?> .uk-dotnav > .uk-active > * { background: var(--olo-color-primary, #6366F1); }
         </style>
-        <div class="olo-testimonial <?php echo esc_attr( $uid ); ?>"
+        <div class="olo-testimonial <?php echo esc_attr( $uid ); ?> olo-test-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>"
              uk-slider="autoplay: <?php echo $autoplay_attr; ?>; autoplay-interval: <?php echo $interval; ?>">
             <ul class="uk-slider-items uk-child-width-1-<?php echo $slides; ?>@m uk-child-width-1-1">
                 <?php foreach ( $items as $item ) : ?>
@@ -307,7 +319,7 @@ class Olo_Testimonial_Tile extends Olo_Tile_Base {
                 }
             }
         </style>
-        <div class="olo-testimonial <?php echo esc_attr( $uid ); ?>">
+        <div class="olo-testimonial <?php echo esc_attr( $uid ); ?> olo-test-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>">
             <div class="olo-test-grid">
                 <?php foreach ( $items as $item ) : ?>
                 <div class="olo-test-card">

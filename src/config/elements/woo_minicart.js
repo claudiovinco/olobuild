@@ -1,12 +1,23 @@
 
 import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
+import { t } from '@/i18n';
+
+/**
+ * Tile WooCommerce Mini Carrello — split CONTENUTO/STILE (regola universale Olobuild).
+ *   fields[]      → comportamento + toggle visibilita (style/icona, count/total/dropdown)
+ *   styleFields[] → preset, sfondo, tipografia, dimensioni, colori, bordo
+ *   AVANZATE      → meta tecnico (id/class/condizioni)
+ */
 export default {
   type: 'woo_minicart',
-  name: 'Mini Carrello',
+  name: t('Mini Carrello'),
   icon: 'dashicons-cart',
   category: 'woocommerce',
-  placeholder: 'Mini carrello WooCommerce',
+  placeholder: t('Mini carrello WooCommerce'),
   defaults: {
+    preset: 'custom',
+    bg: { type: 'none' },
+    typography_preset: '',
     style: 'icon-text',
     icon: 'cart',
     show_count: true,
@@ -23,29 +34,62 @@ export default {
     border_hover_duration: 300,
     ...borderEffectDefaults,
   },
+
+  // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
-    { key: 'style', label: 'Stile', type: 'select', options: [
-      { value: 'icon', label: 'Solo icona' },
-      { value: 'icon-text', label: 'Icona + testo' },
-      { value: 'text', label: 'Solo testo' },
+    { key: 'style', label: t('Stile'), type: 'select', options: [
+      { value: 'icon', label: t('Solo icona') },
+      { value: 'icon-text', label: t('Icona + testo') },
+      { value: 'text', label: t('Solo testo') },
     ]},
-    { key: 'icon', label: 'Icona', type: 'select', options: [
-      { value: 'cart', label: 'Carrello' },
-      { value: 'bag', label: 'Borsa' },
-      { value: 'basket', label: 'Cestino' },
+    { key: 'icon', label: t('Icona'), type: 'select', options: [
+      { value: 'cart', label: t('Carrello') },
+      { value: 'bag', label: t('Borsa') },
+      { value: 'basket', label: t('Cestino') },
     ]},
-    { key: 'show_count', label: 'Mostra conteggio', type: 'toggle' },
-    { key: 'show_total', label: 'Mostra totale', type: 'toggle' },
-    { key: 'dropdown', label: 'Dropdown al hover', type: 'toggle' },
-    { key: 'icon_size', label: 'Dimensione icona (px)', type: 'range', min: 16, max: 48, step: 2 },
-    { key: 'dropdown_width', label: 'Larghezza dropdown (px)', type: 'range', min: 240, max: 480, step: 20,
+    { key: 'show_count', label: t('Mostra conteggio'), type: 'toggle' },
+    { key: 'show_total', label: t('Mostra totale'), type: 'toggle' },
+    { key: 'dropdown', label: t('Dropdown al hover'), type: 'toggle' },
+  ],
+
+  // ─── STILE ─────────────────────────────────────────────────
+  styleFields: [
+    { type: 'separator', label: t('Preset stilistico') },
+    { key: 'preset', label: t('Stile'), type: 'select', options: [
+      { value: 'modern-clean',    label: t('Modern Clean') },
+      { value: 'minimal-mono',    label: t('Minimal Mono') },
+      { value: 'magazine-bold',   label: t('Magazine Bold') },
+      { value: 'editorial-serif', label: t('Editorial Serif') },
+      { value: 'compact-inline',  label: t('Compact Inline') },
+      { value: 'glass-frosted',   label: t('Glass Frosted') },
+      { value: 'neon-glow',       label: t('Neon Glow') },
+      { value: 'brutalist-stamp', label: t('Brutalist Stamp') },
+      { value: 'gradient-aurora', label: t('Gradient Aurora') },
+      { value: 'sticker-fun',     label: t('Sticker Fun') },
+      { value: 'retro-terminal',  label: t('Retro Terminal') },
+      { value: 'tilt-3d',         label: t('3D Tilt') },
+      { value: 'custom',          label: t('Personalizzato') },
+    ] },
+    { type: 'separator', label: t('Tipografia') },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
+    { type: 'typography', label: t('Testo'),
+      presetKey: 'typography_preset',
+      responsiveKeys: ['size'],
+      keys: {
+        color: 'text_color',
+      },
+      sizeMin: 12, sizeMax: 60,
+    },
+
+    { type: 'separator', label: t('Dimensioni') },
+    { key: 'icon_size', label: t('Dimensione icona (px)'), type: 'range', min: 16, max: 48, step: 2 },
+    { key: 'dropdown_width', label: t('Larghezza dropdown (px)'), type: 'range', min: 240, max: 480, step: 20,
       condition: { field: 'dropdown', value: true } },
 
-    { type: 'separator', label: 'Colori' },
-    { key: 'text_color', label: 'Colore testo', type: 'color' },
-    { key: 'icon_color', label: 'Colore icona', type: 'color' },
-    { key: 'badge_bg', label: 'Sfondo badge', type: 'color' },
-    { key: 'badge_color', label: 'Colore badge', type: 'color' },
+    { type: 'separator', label: t('Colori') },
+    { key: 'icon_color', label: t('Colore icona'), type: 'color' },
+    { key: 'badge_bg', label: t('Sfondo badge'), type: 'color' },
+    { key: 'badge_color', label: t('Colore badge'), type: 'color' },
     ...borderFields(),
   ],
 };

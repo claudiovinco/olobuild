@@ -1,12 +1,23 @@
-import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared';
+import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared';
+import { t } from '@/i18n';
 
+/**
+ * Tile PostGrid — split CONTENUTO/STILE.
+ *   fields[]      → query (post_type/posts_per_page/orderby/order/meta_key/meta filter),
+ *                   filtri (taxonomy, show_filters, show_sort, sort_options), contenuto card (show_image/category/excerpt/meta/price), link, paginazione, ribbon, dati servizio
+ *   styleFields[] → preset, bg, typo, text-effects, layout (columns/gap/match_height/masonry/card_style), aspetto card (immagine altezza/radius, category position, padding, sizes/colori), hover effect, ken burns, overlay, ribbon aspect
+ */
 export default {
   type: 'postgrid',
-  name: 'Griglia articoli',
+  name: t('Griglia articoli'),
   icon: 'dashicons-grid-view',
   category: 'dynamic',
   defaults: {
+    bg: { type: 'none' },
+    typography_preset: '',
+    preset: 'custom',
     ...textEffectsDefaults,
+    text_effect_target: 'title',
     post_type: 'post',
     posts_per_page: '12',
     orderby: 'date',
@@ -52,7 +63,6 @@ export default {
     meta_filter: '',
     meta_filter_key: '',
     meta_filter_value: '',
-    // Stile testo
     tile_padding: { top: 15, right: 15, bottom: 15, left: 15 },
     title_size: '1',
     excerpt_size: '0.92',
@@ -61,20 +71,16 @@ export default {
     meta_color: '',
     body_bg: '',
     body_bg_opacity: '100',
-    // Paginazione
     pagination: false,
     items_per_page: '6',
     pagination_style: 'dots',
-    // Ken Burns
     fx_kenburns: false,
     fx_kenburns_speed: '20',
     fx_kenburns_scale: '1.12',
-    // Dati servizio
     show_service_stats: false,
     show_service_club: false,
     opening_bg_annual: '#059669',
     opening_bg_seasonal: '#d97706',
-    // Overlay gradient
     overlay_gradient: false,
     overlay_color: '#000000',
     overlay_opacity: '50',
@@ -85,237 +91,267 @@ export default {
     border_hover_duration: 300,
     ...borderEffectDefaults,
   },
+
   fields: [
-    // ── Query ──
-    { key: 'post_type', label: 'Tipo di contenuto', type: 'select', optionsSource: 'postTypes', options: [] },
-    { key: 'posts_per_page', label: 'Max articoli', type: 'range', min: 1, max: 50, step: 1 },
-    { key: 'orderby', label: 'Ordina per', type: 'select', options: [
-      { value: 'date', label: 'Data' },
-      { value: 'title', label: 'Titolo' },
-      { value: 'modified', label: 'Data modifica' },
-      { value: 'rand', label: 'Casuale' },
-      { value: 'meta_value_num', label: 'Meta value (numerico)' },
+    { type: 'separator', label: t('Query') },
+    { key: 'post_type', label: t('Tipo di contenuto'), type: 'select', optionsSource: 'postTypes', options: [] },
+    { key: 'posts_per_page', label: t('Max articoli'), type: 'range', min: 1, max: 50, step: 1 },
+    { key: 'orderby', label: t('Ordina per'), type: 'select', options: [
+      { value: 'date', label: t('Data') },
+      { value: 'title', label: t('Titolo') },
+      { value: 'modified', label: t('Data modifica') },
+      { value: 'rand', label: t('Casuale') },
+      { value: 'meta_value_num', label: t('Meta value (numerico)') },
     ]},
-    { key: 'order', label: 'Ordine', type: 'select', options: [
-      { value: 'DESC', label: 'Decrescente' },
-      { value: 'ASC', label: 'Crescente' },
+    { key: 'order', label: t('Ordine'), type: 'select', options: [
+      { value: 'DESC', label: t('Decrescente') },
+      { value: 'ASC', label: t('Crescente') },
     ]},
-    { key: 'meta_key', label: 'Meta key (per ordinamento meta)', type: 'text',
+    { key: 'meta_key', label: t('Meta key (per ordinamento meta)'), type: 'text',
       condition: { field: 'orderby', value: 'meta_value_num' } },
-    { key: 'meta_filter_key',   label: 'Filtro meta — chiave',  type: 'select', optionsSource: 'metaKeys',   optionsDependOn: 'post_type', options: [] },
-    { key: 'meta_filter_value', label: 'Filtro meta — valore',  type: 'select', optionsSource: 'metaValues', optionsDependOn: ['post_type', 'meta_filter_key'], options: [], condition: { field: 'meta_filter_key', not_in: [''] } },
+    { key: 'meta_filter_key', label: t('Filtro meta — chiave'), type: 'select', optionsSource: 'metaKeys', optionsDependOn: 'post_type', options: [] },
+    { key: 'meta_filter_value', label: t('Filtro meta — valore'), type: 'select', optionsSource: 'metaValues', optionsDependOn: ['post_type', 'meta_filter_key'], options: [], condition: { field: 'meta_filter_key', not_in: [''] } },
 
-    { type: 'separator' },
-
-    // ── Filtri ──
-    { key: 'taxonomy', label: 'Tassonomia', type: 'select', optionsSource: 'taxonomies' },
-    { key: 'show_filters', label: 'Mostra filtri tassonomia', type: 'toggle' },
-    { key: 'filter_style', label: 'Stile filtri', type: 'select', options: [
-      { value: 'pills', label: 'Pills' },
-      { value: 'minimal', label: 'Minimale' },
-      { value: 'dropdown', label: 'Dropdown' },
-    ], condition: { field: 'show_filters', value: true } },
-    { key: 'filter_align', label: 'Allineamento filtri', type: 'select', options: [
-      { value: 'left', label: 'Sinistra' },
-      { value: 'center', label: 'Centro' },
-      { value: 'right', label: 'Destra' },
-    ], condition: { field: 'show_filters', value: true } },
-    { key: 'show_sort', label: 'Mostra dropdown ordinamento', type: 'toggle' },
-    { key: 'sort_options', label: 'Opzioni ordinamento (separate da pipe)', type: 'text',
+    { type: 'separator', label: t('Filtri tassonomia') },
+    { key: 'taxonomy', label: t('Tassonomia'), type: 'select', optionsSource: 'taxonomies' },
+    { key: 'show_filters', label: t('Mostra filtri tassonomia'), type: 'toggle' },
+    { key: 'show_sort', label: t('Mostra dropdown ordinamento'), type: 'toggle' },
+    { key: 'sort_options', label: t('Opzioni ordinamento (separate da pipe)'), type: 'text',
       condition: { field: 'show_sort', value: true } },
 
-    { type: 'separator', label: 'Layout' },
+    { type: 'separator', label: t('Contenuto card') },
+    { key: 'show_image', label: t('Mostra immagine'), type: 'toggle' },
+    { key: 'show_category', label: t('Mostra badge categoria'), type: 'toggle' },
+    { key: 'show_excerpt', label: t('Mostra estratto'), type: 'toggle' },
+    { key: 'excerpt_length', label: t('Parole estratto'), type: 'range', min: 5, max: 50, step: 1,
+      condition: { field: 'show_excerpt', value: true } },
+    { key: 'show_meta', label: t('Mostra data e autore'), type: 'toggle' },
+    { key: 'show_service_stats', label: t('Mostra stats servizio'), type: 'toggle',
+      condition: { field: 'post_type', value: 'olo_service' } },
+    { key: 'show_service_club', label: t('Mostra club'), type: 'toggle',
+      condition: { field: 'post_type', value: 'olo_service' } },
 
-    // ── Layout ──
-    { key: 'columns', label: 'Colonne (desktop)', type: 'select', options: [
+    { type: 'separator', label: t('Prezzo') },
+    { key: 'show_price', label: t('Mostra prezzo'), type: 'toggle' },
+    { key: 'price_field', label: t('Meta key prezzo'), type: 'text',
+      condition: { field: 'show_price', value: true } },
+    { key: 'price_prefix', label: t('Prefisso prezzo'), type: 'text',
+      condition: { field: 'show_price', value: true } },
+    { key: 'price_suffix', label: t('Suffisso prezzo'), type: 'text',
+      condition: { field: 'show_price', value: true } },
+
+    { type: 'separator', label: t('Link') },
+    { key: 'link_text', label: t('Testo link'), type: 'text' },
+    { key: 'link_style', label: t('Stile link'), type: 'select', options: [
+      { value: 'button', label: t('Pulsante') },
+      { value: 'text', label: t('Link testuale') },
+      { value: 'card', label: t('Card cliccabile') },
+    ]},
+
+    { type: 'separator', label: t('Paginazione') },
+    { key: 'pagination', label: t('Abilita paginazione'), type: 'toggle' },
+    { key: 'items_per_page', label: t('Articoli per pagina'), type: 'range', min: 2, max: 24, step: 1,
+      condition: { field: 'pagination', value: true } },
+    { key: 'pagination_style', label: t('Stile paginazione'), type: 'select', options: [
+      { value: 'dots', label: t('Punti') },
+      { value: 'numbers', label: t('Numeri') },
+      { value: 'arrows', label: t('Frecce') },
+      { value: 'loadmore', label: t('Carica altri') },
+      { value: 'infinite', label: t('Scroll infinito') },
+    ], condition: { field: 'pagination', value: true } },
+
+    { type: 'separator', label: t('Ribbon') },
+    { key: 'ribbon_field', label: t('Contenuto'), type: 'select', options: [
+      { value: '',                       label: t('— Nessun ribbon —') },
+      { value: '_olo_service_opening',   label: t('Apertura struttura (annuale/stagionale)') },
+      { value: '_olo_service_price',     label: t('Prezzo') },
+      { value: '_olo_service_price_night', label: t('Prezzo a notte') },
+      { value: '_olo_acc_type',          label: t('Tipologia (baita/app/...)') },
+      { value: '_olo_service_capacity',  label: t('Capacità (ospiti)') },
+      { value: '_olo_service_valley',    label: t('Località / Valle') },
+      { value: '_olo_service_altitude',  label: t('Altitudine') },
+      { value: '_olo_service_bedrooms',  label: t('Camere') },
+      { value: '_olo_service_bathrooms', label: t('Bagni') },
+      { value: '_olo_service_sqm',       label: t('Mq') },
+      { value: '__custom__',             label: t('Personalizzato (meta key libera)') },
+    ]},
+    { key: 'ribbon_field_custom', label: t('↳ Meta key personalizzata'), type: 'text',
+      condition: { field: 'ribbon_field', value: '__custom__' } },
+
+    { type: 'separator', label: t('Sostituzione immagine al hover') },
+    { key: 'hover_image_field', label: t('Meta key immagine hover'), type: 'text',
+      condition: { field: 'show_image', value: true } },
+    { key: 'hover_video_field', label: t('Meta key video hover (mp4)'), type: 'text',
+      condition: { field: 'show_image', value: true } },
+  ],
+
+  styleFields: [
+    { type: 'separator', label: t('Preset stilistico') },
+    { key: 'preset', label: t('Stile'), type: 'select', options: [
+      { value: 'modern-cards',     label: t('Modern Cards') },
+      { value: 'magazine-trio',    label: t('Magazine Trio') },
+      { value: 'editorial-list',   label: t('Editorial List') },
+      { value: 'compact-index',    label: t('Compact Index') },
+      { value: 'newspaper-cols',   label: t('Newspaper Columns') },
+      { value: 'glass-cards',      label: t('Glass Cards') },
+      { value: 'neon-grid',        label: t('Neon Grid') },
+      { value: 'brutalist-blocks', label: t('Brutalist Blocks') },
+      { value: 'gradient-soft',    label: t('Gradient Soft') },
+      { value: 'sticker-cards',    label: t('Sticker Cards') },
+      { value: 'retro-zine',       label: t('Retro Zine') },
+      { value: 'tilt-3d',          label: t('3D Tilt Cards') },
+      { value: 'custom',           label: t('Personalizzato') },
+    ]},
+    { type: 'separator', label: t('Tipografia') },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
+    { type: 'typography', label: t('Titolo'),
+      presetKey: 'typography_preset',
+      responsiveKeys: ['size'],
+      keys: {
+        size:  'title_size',
+        color: 'title_color',
+      },
+      sizeMin: 0.7, sizeMax: 2.5, sizeStep: 0.05,
+    },
+    { type: 'typography', label: t('Estratto'),
+      presetKey: 'typography_preset',
+      responsiveKeys: ['size'],
+      keys: {
+        size:  'excerpt_size',
+        color: 'excerpt_color',
+      },
+      sizeMin: 0.7, sizeMax: 1.5, sizeStep: 0.05,
+    },
+    { type: 'typography', label: t('Meta (data/autore)'),
+      presetKey: 'typography_preset',
+      keys: {
+        color: 'meta_color',
+      },
+    },
+    { type: 'typography', label: t('Ribbon'),
+      presetKey: 'typography_preset',
+      responsiveKeys: ['size'],
+      keys: {
+        size:  'ribbon_size',
+        color: 'ribbon_color',
+      },
+      sizeMin: 8, sizeMax: 24, sizeStep: 1,
+    },
+
+    ...textEffectsFields([
+      { value: 'title', label: t('Titolo articolo') },
+      { value: 'excerpt', label: t('Estratto') },
+    ]),
+
+    { type: 'separator', label: t('Filtri — Aspetto') },
+    { key: 'filter_style', label: t('Stile filtri'), type: 'select', options: [
+      { value: 'pills', label: t('Pills') },
+      { value: 'minimal', label: t('Minimale') },
+      { value: 'dropdown', label: t('Dropdown') },
+    ], condition: { field: 'show_filters', value: true } },
+    { key: 'filter_align', label: t('Allineamento filtri'), type: 'select', options: [
+      { value: 'left', label: t('Sinistra') },
+      { value: 'center', label: t('Centro') },
+      { value: 'right', label: t('Destra') },
+    ], condition: { field: 'show_filters', value: true } },
+
+    { type: 'separator', label: t('Layout') },
+    { key: 'columns', label: t('Colonne (desktop)'), type: 'select', options: [
       { value: '2', label: '2' },
       { value: '3', label: '3' },
       { value: '4', label: '4' },
       { value: '5', label: '5' },
     ]},
-    { key: 'columns_mobile', label: 'Colonne (mobile)', type: 'select', options: [
+    { key: 'columns_mobile', label: t('Colonne (mobile)'), type: 'select', options: [
       { value: '1', label: '1' },
       { value: '2', label: '2' },
     ]},
-    { key: 'gap', label: 'Spaziatura', type: 'select', options: [
-      { value: 'collapse', label: 'Nessuna' },
-      { value: 'small', label: 'Piccola' },
-      { value: 'default', label: 'Predefinita' },
-      { value: 'medium', label: 'Media' },
-      { value: 'large', label: 'Grande' },
+    { key: 'gap', label: t('Spaziatura'), type: 'select', options: [
+      { value: 'collapse', label: t('Nessuna') },
+      { value: 'small', label: t('Piccola') },
+      { value: 'default', label: t('Predefinita') },
+      { value: 'medium', label: t('Media') },
+      { value: 'large', label: t('Grande') },
     ]},
-    { key: 'match_height', label: 'Stessa altezza', type: 'toggle' },
-    { key: 'masonry', label: 'Masonry', type: 'toggle' },
-    { key: 'card_style', label: 'Stile card', type: 'select', options: [
-      { value: 'default', label: 'Predefinito' },
-      { value: 'hover', label: 'Effetto hover' },
-      { value: 'primary', label: 'Primary' },
-      { value: 'minimal', label: 'Minimale' },
+    { key: 'match_height', label: t('Stessa altezza'), type: 'toggle' },
+    { key: 'masonry', label: t('Masonry'), type: 'toggle' },
+    { key: 'card_style', label: t('Stile card'), type: 'select', options: [
+      { value: 'default', label: t('Predefinito') },
+      { value: 'hover', label: t('Effetto hover') },
+      { value: 'primary', label: t('Primary') },
+      { value: 'minimal', label: t('Minimale') },
     ]},
-    { key: 'card_primary_bg', label: 'Colore sfondo card', type: 'color',
+    { key: 'card_primary_bg', label: t('Colore sfondo card'), type: 'color',
       condition: { field: 'card_style', value: 'primary' } },
 
-    { type: 'separator', label: 'Contenuto card' },
-
-    // ── Contenuto card ──
-    { key: 'show_image', label: 'Mostra immagine', type: 'toggle' },
-    { key: 'image_height', label: 'Altezza immagine (px)', type: 'range', min: 100, max: 500, step: 10,
+    { type: 'separator', label: t('Aspetto card') },
+    { key: 'image_height', label: t('Altezza immagine (px)'), type: 'range', min: 100, max: 500, step: 10,
       condition: { field: 'show_image', value: true } },
-    { key: 'image_radius', label: 'Raggio bordo immagine (px)', type: 'border-radius',
-      condition: { field: 'show_image', value: true } },
-    { key: 'image_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
-    { key: 'card_radius', label: 'Raggio bordo card (px)', type: 'border-radius' },
-    { key: 'card_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
-    { key: 'show_category', label: 'Mostra badge categoria', type: 'toggle' },
-    { key: 'category_badge_position', label: '↳ Posizione', type: 'select',
+    withHover({ key: 'image_radius', label: t('Raggio bordo immagine (px)'), type: 'border-radius',
+      condition: { field: 'show_image', value: true } }),
+    withHover({ key: 'card_radius', label: t('Raggio bordo card (px)'), type: 'border-radius' }),
+    { key: 'category_badge_position', label: t('Posizione badge categoria'), type: 'select',
       condition: { field: 'show_category', value: true },
       options: [
-        { value: 'top-left',     label: 'Alto sinistra' },
-        { value: 'top-right',    label: 'Alto destra' },
-        { value: 'bottom-left',  label: 'Basso sinistra' },
-        { value: 'bottom-right', label: 'Basso destra' },
+        { value: 'top-left',     label: t('Alto sinistra') },
+        { value: 'top-right',    label: t('Alto destra') },
+        { value: 'bottom-left',  label: t('Basso sinistra') },
+        { value: 'bottom-right', label: t('Basso destra') },
       ]
     },
-    { key: 'show_excerpt', label: 'Mostra estratto', type: 'toggle' },
-    { key: 'excerpt_length', label: 'Parole estratto', type: 'range', min: 5, max: 50, step: 1,
-      condition: { field: 'show_excerpt', value: true } },
-    { key: 'show_meta', label: 'Mostra data e autore', type: 'toggle' },
-
-    { type: 'separator', label: 'Dati servizio' },
-
-    // ── Dati servizio ──
-    { key: 'show_service_stats', label: 'Mostra stats servizio', type: 'toggle',
-      condition: { field: 'post_type', value: 'olo_service' } },
-    { key: 'show_service_club', label: 'Mostra club', type: 'toggle',
-      condition: { field: 'post_type', value: 'olo_service' } },
-    { type: 'separator', label: 'Prezzo' },
-
-    // ── Prezzo ──
-    { key: 'show_price', label: 'Mostra prezzo', type: 'toggle' },
-    { key: 'price_field', label: 'Meta key prezzo', type: 'text',
-      condition: { field: 'show_price', value: true } },
-    { key: 'price_prefix', label: 'Prefisso prezzo', type: 'text',
-      condition: { field: 'show_price', value: true } },
-    { key: 'price_suffix', label: 'Suffisso prezzo', type: 'text',
-      condition: { field: 'show_price', value: true } },
-
-    { type: 'separator', label: 'Link' },
-
-    // ── Link ──
-    { key: 'link_text', label: 'Testo link', type: 'text' },
-    { key: 'link_style', label: 'Stile link', type: 'select', options: [
-      { value: 'button', label: 'Pulsante' },
-      { value: 'text', label: 'Link testuale' },
-      { value: 'card', label: 'Card cliccabile' },
-    ]},
-
-    { type: 'separator', label: 'Stile testo' },
-
-    // ── Stile testo ──
-    { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 40 },
-    { key: 'title_size', label: 'Dimensione titolo (em)', type: 'range', min: 0.7, max: 2.5, step: 0.05 },
-    { key: 'title_color', label: 'Colore titolo', type: 'color' },
-    { key: 'excerpt_size', label: 'Dimensione estratto (em)', type: 'range', min: 0.7, max: 1.5, step: 0.05 },
-    { key: 'excerpt_color', label: 'Colore estratto', type: 'color' },
-    { key: 'meta_color', label: 'Colore meta (data/autore)', type: 'color' },
-    { key: 'body_bg', label: 'Sfondo area testo', type: 'color' },
-    { key: 'body_bg_opacity', label: 'Opacità sfondo testo (%)', type: 'range', min: 0, max: 100, step: 5,
+    { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 40 },
+    { key: 'body_bg', label: t('Sfondo area testo'), type: 'color' },
+    { key: 'body_bg_opacity', label: t('Opacità sfondo testo (%)'), type: 'range', min: 0, max: 100, step: 5,
       condition: { field: 'body_bg', value: '', operator: '!=' } },
 
-    { type: 'separator', label: 'Paginazione' },
-
-    // ── Paginazione ──
-    { key: 'pagination', label: 'Abilita paginazione', type: 'toggle' },
-    { key: 'items_per_page', label: 'Articoli per pagina', type: 'range', min: 2, max: 24, step: 1,
-      condition: { field: 'pagination', value: true } },
-    { key: 'pagination_style', label: 'Stile paginazione', type: 'select', options: [
-      { value: 'dots', label: 'Punti' },
-      { value: 'numbers', label: 'Numeri' },
-      { value: 'arrows', label: 'Frecce' },
-      { value: 'loadmore', label: 'Carica altri' },
-      { value: 'infinite', label: 'Scroll infinito' },
-    ], condition: { field: 'pagination', value: true } },
-
-    { type: 'separator', label: 'Effetti hover' },
-
-    // ── Hover ──
-    { key: 'hover_effect', label: 'Effetto immagine', type: 'select', options: [
-      { value: 'none', label: 'Nessuno' },
-      { value: 'zoom', label: 'Zoom' },
-      { value: 'zoom-rotate', label: 'Zoom + rotazione' },
-      { value: 'brightness', label: 'Luminosità' },
-      { value: 'desaturate', label: 'Desatura → colore' },
-      { value: 'blur-in', label: 'Sfocatura → nitido' },
-      { value: 'slide-up', label: 'Scorrimento in alto' },
-      { value: 'glow', label: 'Bagliore' },
-      { value: 'tilt', label: 'Tilt 3D' },
+    { type: 'separator', label: t('Effetti hover') },
+    { key: 'hover_effect', label: t('Effetto immagine'), type: 'select', options: [
+      { value: 'none', label: t('Nessuno') },
+      { value: 'zoom', label: t('Zoom') },
+      { value: 'zoom-rotate', label: t('Zoom + rotazione') },
+      { value: 'brightness', label: t('Luminosità') },
+      { value: 'desaturate', label: t('Desatura → colore') },
+      { value: 'blur-in', label: t('Sfocatura → nitido') },
+      { value: 'slide-up', label: t('Scorrimento in alto') },
+      { value: 'glow', label: t('Bagliore') },
+      { value: 'tilt', label: t('Tilt 3D') },
     ]},
-    { key: 'hover_image_field', label: 'Meta key immagine hover', type: 'text',
-      condition: { field: 'show_image', value: true } },
-    { key: 'hover_video_field', label: 'Meta key video hover (mp4)', type: 'text',
-      condition: { field: 'show_image', value: true } },
 
-    { type: 'separator', label: 'Effetti immagine' },
-
-    // ── Effetti immagine ──
-    { key: 'fx_kenburns', label: 'Ken Burns (zoom cinematico)', type: 'toggle',
+    { type: 'separator', label: t('Effetti immagine') },
+    { key: 'fx_kenburns', label: t('Ken Burns (zoom cinematico)'), type: 'toggle',
       condition: { field: 'show_image', value: true } },
-    { key: 'fx_kenburns_speed', label: 'Velocità Ken Burns (s)', type: 'range', min: 10, max: 40, step: 1,
+    { key: 'fx_kenburns_speed', label: t('Velocità Ken Burns (s)'), type: 'range', min: 10, max: 40, step: 1,
       condition: { field: 'fx_kenburns', value: true } },
-    { key: 'fx_kenburns_scale', label: 'Intensità zoom', type: 'range', min: 1.05, max: 1.25, step: 0.01,
+    { key: 'fx_kenburns_scale', label: t('Intensità zoom'), type: 'range', min: 1.05, max: 1.25, step: 0.01,
       condition: { field: 'fx_kenburns', value: true } },
-    { key: 'overlay_gradient', label: 'Overlay sfumato', type: 'toggle',
+    { key: 'overlay_gradient', label: t('Overlay sfumato'), type: 'toggle',
       condition: { field: 'show_image', value: true } },
-    { key: 'overlay_color', label: 'Colore overlay', type: 'color',
+    { key: 'overlay_color', label: t('Colore overlay'), type: 'color',
       condition: { field: 'overlay_gradient', value: true } },
-    { key: 'overlay_opacity', label: 'Opacità overlay (%)', type: 'range', min: 10, max: 90, step: 5,
+    { key: 'overlay_opacity', label: t('Opacità overlay (%)'), type: 'range', min: 10, max: 90, step: 5,
       condition: { field: 'overlay_gradient', value: true } },
-    { key: 'overlay_direction', label: 'Direzione sfumatura', type: 'select', options: [
-      { value: 'bottom', label: 'Dal basso' },
+    { key: 'overlay_direction', label: t('Direzione sfumatura'), type: 'select', options: [
+      { value: 'bottom', label: t('Dal basso') },
       { value: 'top', label: "Dall'alto" },
-      { value: 'left', label: 'Da sinistra' },
-      { value: 'right', label: 'Da destra' },
+      { value: 'left', label: t('Da sinistra') },
+      { value: 'right', label: t('Da destra') },
     ], condition: { field: 'overlay_gradient', value: true } },
-    { key: 'overlay_height', label: 'Altezza gradiente (%)', type: 'range', min: 20, max: 100, step: 5,
+    { key: 'overlay_height', label: t('Altezza gradiente (%)'), type: 'range', min: 20, max: 100, step: 5,
       condition: { field: 'overlay_gradient', value: true } },
 
-    // ── Ribbon (unifica vecchio "badge apertura" come preset _olo_service_opening) ──
-    { type: 'separator', label: 'Ribbon' },
-    { key: 'ribbon_field', label: 'Contenuto', type: 'select', options: [
-      { value: '',                       label: '— Nessun ribbon —' },
-      { value: '_olo_service_opening',   label: 'Apertura struttura (annuale/stagionale)' },
-      { value: '_olo_service_price',     label: 'Prezzo' },
-      { value: '_olo_service_price_night', label: 'Prezzo a notte' },
-      { value: '_olo_acc_type',          label: 'Tipologia (baita/app/...)' },
-      { value: '_olo_service_capacity',  label: 'Capacità (ospiti)' },
-      { value: '_olo_service_valley',    label: 'Località / Valle' },
-      { value: '_olo_service_altitude',  label: 'Altitudine' },
-      { value: '_olo_service_bedrooms',  label: 'Camere' },
-      { value: '_olo_service_bathrooms', label: 'Bagni' },
-      { value: '_olo_service_sqm',       label: 'Mq' },
-      { value: '__custom__',             label: 'Personalizzato (meta key libera)' },
+    { type: 'separator', label: t('Ribbon — Aspetto') },
+    { key: 'ribbon_position', label: t('Posizione'), type: 'select', options: [
+      { value: 'top-left',     label: t('Alto sinistra') },
+      { value: 'top-right',    label: t('Alto destra') },
+      { value: 'bottom-left',  label: t('Basso sinistra') },
+      { value: 'bottom-right', label: t('Basso destra') },
     ]},
-    { key: 'ribbon_field_custom', label: '↳ Meta key personalizzata', type: 'text',
-      condition: { field: 'ribbon_field', value: '__custom__' } },
-    { key: 'ribbon_position', label: 'Posizione', type: 'select', options: [
-      { value: 'top-left',     label: 'Alto sinistra' },
-      { value: 'top-right',    label: 'Alto destra' },
-      { value: 'bottom-left',  label: 'Basso sinistra' },
-      { value: 'bottom-right', label: 'Basso destra' },
-    ]},
-    { key: 'ribbon_size', label: 'Dimensione testo (px)', type: 'range', min: 8, max: 24, step: 1 },
-    { key: 'ribbon_bg', label: 'Sfondo', type: 'color' },
-    { key: 'ribbon_color', label: 'Testo', type: 'color' },
-    // Override colori (annuale/stagionale) quando il contenuto è "Apertura struttura"
-    { key: 'opening_bg_annual', label: '↳ Sfondo se annuale', type: 'color',
+    { key: 'ribbon_bg', label: t('Sfondo'), type: 'color' },
+    { key: 'opening_bg_annual', label: t('↳ Sfondo se annuale'), type: 'color',
       condition: { field: 'ribbon_field', value: '_olo_service_opening' } },
-    { key: 'opening_bg_seasonal', label: '↳ Sfondo se stagionale', type: 'color',
+    { key: 'opening_bg_seasonal', label: t('↳ Sfondo se stagionale'), type: 'color',
       condition: { field: 'ribbon_field', value: '_olo_service_opening' } },
 
-    ...textEffectsFields([
-      { value: 'title', label: 'Titolo articolo' },
-      { value: 'excerpt', label: 'Estratto' },
-    ]),
     ...borderFields(),
   ],
 };

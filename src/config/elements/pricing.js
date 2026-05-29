@@ -1,40 +1,44 @@
-import { shadowField, textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
+import { shadowField, textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared.js';
+import { t } from '@/i18n';
 
+/**
+ * Tile Pricing — split CONTENUTO/STILE.
+ *   fields[]      → plan info (name, price, currency_position, period), toggle prezzo, sale_price + badge,
+ *                   features, cta (text+url+target+info), badge popolare, countdown, sfondo (image/video)
+ *   styleFields[] → preset, bg, typo, text-effects, currency size, sale badge color, check style/size, dividers,
+ *                   cta aspect (radius/colors+hover/border/effect/width), badge aspect (radius/colors/position),
+ *                   forma prezzo (color/border/glow), countdown colors, colori card, overlay, radius, shadow, border
+ */
 export default {
   type: 'pricing',
-  name: 'Listino prezzi',
+  name: t('Listino prezzi'),
   icon: 'dashicons-money-alt',
   category: 'marketing',
   defaults: {
+    bg: { type: 'none' },
+    typography_preset: '',
+    preset: 'custom',
     ...textEffectsDefaults,
-    // Contenuto
-    plan_name: 'Piano Pro',
+    text_effect_target: 'plan_name',
+    plan_name: t('Piano Pro'),
     price: '29',
     currency: '€',
     currency_size: '14',
     currency_position: 'before',
-    period: '/mese',
-
-    // Toggle mensile/annuale
+    period: t('/mese'),
     enable_toggle: false,
-    toggle_label_1: 'Mensile',
-    toggle_label_2: 'Annuale',
+    toggle_label_1: t('Mensile'),
+    toggle_label_2: t('Annuale'),
     toggle_color: '',
     price_yearly: '',
-
-    // Prezzo scontato
     sale_price: '',
-    sale_badge_text: 'OFFERTA',
+    sale_badge_text: t('OFFERTA'),
     sale_badge_color: '',
-
-    // Funzionalità
-    features: 'Progetti illimitati\n10 GB di spazio\nSupporto prioritario\nDominio personalizzato',
+    features: t('Progetti illimitati\n10 GB di spazio\nSupporto prioritario\nDominio personalizzato'),
     check_style: 'checkmark',
     check_size: '14',
     feature_dividers: true,
-
-    // Pulsante
-    cta_text: 'Inizia ora',
+    cta_text: t('Inizia ora'),
     cta_url: '#',
     cta_target: '_self',
     cta_bg_color: '',
@@ -47,17 +51,13 @@ export default {
     cta_hover_bg_color: '',
     cta_hover_text_color: '',
     additional_info: '',
-
-    // Badge
     is_popular: false,
-    badge_text: 'Popolare',
+    badge_text: t('Popolare'),
     badge_style: 'pill',
     badge_radius: '20',
     badge_top: '-12',
     badge_bg_color: '',
     badge_text_color: '',
-
-    // Forma prezzo
     price_shape: 'none',
     price_shape_color: '',
     price_shape_glow: false,
@@ -65,31 +65,23 @@ export default {
     price_shape_glow_intensity: '15',
     price_shape_border_width: '0',
     price_shape_border_color: '',
-
-    // Countdown
     countdown_enabled: false,
     countdown_date: '',
-    countdown_label: 'Offerta scade tra:',
-    countdown_expired_text: 'Offerta scaduta',
+    countdown_label: t('Offerta scade tra:'),
+    countdown_expired_text: t('Offerta scaduta'),
     countdown_hide_on_expire: false,
     countdown_bg_color: '',
     countdown_text_color: '',
-
-    // Colori
     price_color: '',
     bg_color: '',
     accent_color: '',
     text_color: '',
-
-    // Sfondo
     bg_type: 'color',
     bg_image: '',
     bg_video: '',
     overlay: false,
     overlay_color: '#000000',
     overlay_opacity: '50',
-
-    // Aspetto tile
     border_radius: '12',
     border: { ...borderDefault },
     border_hover: { ...borderHoverDefault },
@@ -97,199 +89,237 @@ export default {
     ...borderEffectDefaults,
     shadow: 'none',
   },
+
   fields: [
-    // ═══════════════════════════════════════
-    //  CONTENUTO
-    // ═══════════════════════════════════════
-    { key: 'plan_name', label: 'Nome piano', type: 'text' },
-    { key: 'price', label: 'Prezzo', type: 'text' },
-    { key: 'currency', label: 'Valuta', type: 'select', options: [
-      { value: '€', label: '€ Euro' },
-      { value: '$', label: '$ Dollaro' },
-      { value: '£', label: '£ Sterlina' },
-      { value: '', label: 'Nessuna' },
+    { key: 'plan_name', label: t('Nome piano'), type: 'text' },
+    { key: 'price', label: t('Prezzo'), type: 'text' },
+    { key: 'currency', label: t('Valuta'), type: 'select', options: [
+      { value: '€', label: t('€ Euro') },
+      { value: '$', label: t('$ Dollaro') },
+      { value: '£', label: t('£ Sterlina') },
+      { value: '', label: t('Nessuna') },
     ]},
-    { key: 'currency_position', label: 'Posizione valuta', type: 'select', options: [
-      { value: 'before', label: 'Prima (€99)' },
-      { value: 'after', label: 'Dopo (99€)' },
+    { key: 'currency_position', label: t('Posizione valuta'), type: 'select', options: [
+      { value: 'before', label: t('Prima (€99)') },
+      { value: 'after', label: t('Dopo (99€)') },
     ]},
-    { key: 'currency_size', label: 'Dimensione valuta (px)', type: 'range', min: 10, max: 40, step: 1 },
-    { key: 'period', label: 'Periodo', type: 'text' },
+    { key: 'period', label: t('Periodo'), type: 'text' },
 
-    // ═══════════════════════════════════════
-    //  TOGGLE MENSILE / ANNUALE
-    // ═══════════════════════════════════════
-    { type: 'separator', label: 'Toggle prezzo' },
-    { key: 'enable_toggle', label: 'Abilita toggle prezzo', type: 'toggle' },
-    { key: 'price_yearly', label: 'Prezzo alternativo', type: 'text',
+    { type: 'separator', label: t('Toggle prezzo') },
+    { key: 'enable_toggle', label: t('Abilita toggle prezzo'), type: 'toggle' },
+    { key: 'price_yearly', label: t('Prezzo alternativo'), type: 'text',
       condition: { field: 'enable_toggle', value: true } },
-    { key: 'toggle_label_1', label: 'Etichetta 1', type: 'text',
+    { key: 'toggle_label_1', label: t('Etichetta 1'), type: 'text',
       condition: { field: 'enable_toggle', value: true } },
-    { key: 'toggle_label_2', label: 'Etichetta 2', type: 'text',
-      condition: { field: 'enable_toggle', value: true } },
-    { key: 'toggle_color', label: 'Colore toggle', type: 'color',
+    { key: 'toggle_label_2', label: t('Etichetta 2'), type: 'text',
       condition: { field: 'enable_toggle', value: true } },
 
-    // ═══════════════════════════════════════
-    //  PREZZO SCONTATO
-    // ═══════════════════════════════════════
-    { type: 'separator', label: 'Prezzo scontato' },
-    { key: 'sale_price', label: 'Prezzo scontato', type: 'text' },
-    { key: 'sale_badge_text', label: 'Testo badge sconto', type: 'text',
-      condition: { field: 'sale_price', operator: '!=', value: '' } },
-    { key: 'sale_badge_color', label: 'Colore badge sconto', type: 'color',
+    { type: 'separator', label: t('Prezzo scontato') },
+    { key: 'sale_price', label: t('Prezzo scontato'), type: 'text' },
+    { key: 'sale_badge_text', label: t('Testo badge sconto'), type: 'text',
       condition: { field: 'sale_price', operator: '!=', value: '' } },
 
-    // ═══════════════════════════════════════
-    //  FUNZIONALITÀ
-    // ═══════════════════════════════════════
-    { type: 'separator', label: 'Funzionalità' },
-    { key: 'features', label: 'Lista (una per riga)', type: 'textarea' },
-    { key: 'check_style', label: 'Icona spunta', type: 'select', options: [
-      { value: 'checkmark', label: '✓ Spunta' },
-      { value: 'circle-check', label: '● Cerchio pieno' },
-      { value: 'dot', label: '• Punto' },
-      { value: 'star', label: '★ Stella' },
-      { value: 'arrow', label: '→ Freccia' },
-      { value: 'none', label: 'Nessuna' },
-    ]},
-    { key: 'check_size', label: 'Dimensione icona (px)', type: 'range', min: 10, max: 28, step: 1,
-      condition: { field: 'check_style', operator: '!=', value: 'none' } },
-    { key: 'feature_dividers', label: 'Separatori tra voci', type: 'toggle' },
+    { type: 'separator', label: t('Funzionalità') },
+    { key: 'features', label: t('Lista (una per riga)'), type: 'textarea' },
+    { key: 'feature_dividers', label: t('Separatori tra voci'), type: 'toggle' },
 
-    // ═══════════════════════════════════════
-    //  PULSANTE
-    // ═══════════════════════════════════════
-    { type: 'separator', label: 'Pulsante' },
-    { key: 'cta_text', label: 'Testo', type: 'text' },
-    { key: 'cta_url', label: 'URL', type: 'text' },
-    { key: 'cta_target', label: 'Apri in', type: 'select', options: [
-      { value: '_self', label: 'Stessa finestra' },
-      { value: '_blank', label: 'Nuova scheda' },
+    { type: 'separator', label: t('Pulsante CTA') },
+    { key: 'cta_text', label: t('Testo'), type: 'text' },
+    { key: 'cta_url', label: t('URL'), type: 'link' },
+    { key: 'cta_target', label: t('Apri in'), type: 'select', options: [
+      { value: '_self', label: t('Stessa finestra') },
+      { value: '_blank', label: t('Nuova scheda') },
     ]},
-    { key: 'cta_width', label: 'Larghezza (%)', type: 'range', min: 30, max: 100, step: 5 },
-    { key: 'cta_radius', label: 'Arrotondamento (px)', type: 'border-radius' },
-    { key: 'cta_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
-    { key: 'cta_bg_color', label: 'Sfondo', type: 'color' },
-    { key: 'cta_text_color', label: 'Colore testo', type: 'color' },
-    { key: 'cta_border_width', label: 'Bordo (px)', type: 'range', min: 0, max: 5, step: 1 },
-    { key: 'cta_border_color', label: 'Colore bordo', type: 'color',
-      condition: { field: 'cta_border_width', operator: '>', value: '0' } },
-    { key: 'cta_hover_effect', label: 'Animazione hover', type: 'select', options: [
-      { value: 'none', label: 'Nessuna' },
-      { value: 'lift', label: 'Solleva' },
-      { value: 'grow', label: 'Ingrandisci' },
-      { value: 'glow', label: 'Bagliore' },
-      { value: 'pulse', label: 'Pulsazione' },
-      { value: 'shine', label: 'Luccichio' },
-    ]},
-    { key: 'cta_hover_bg_color', label: 'Sfondo hover', type: 'color' },
-    { key: 'cta_hover_text_color', label: 'Testo hover', type: 'color' },
-    { key: 'additional_info', label: 'Info aggiuntive (sotto pulsante)', type: 'text' },
+    { key: 'additional_info', label: t('Info aggiuntive (sotto pulsante)'), type: 'text' },
 
-    // ═══════════════════════════════════════
-    //  BADGE
-    // ═══════════════════════════════════════
-    { type: 'separator', label: 'Badge' },
-    { key: 'is_popular', label: 'Mostra badge', type: 'toggle' },
-    { key: 'badge_text', label: 'Testo', type: 'text',
-      condition: { field: 'is_popular', value: true } },
-    { key: 'badge_style', label: 'Stile', type: 'select', options: [
-      { value: 'pill', label: 'Pillola' },
-      { value: 'classic', label: 'Classico' },
-      { value: 'minimal', label: 'Minimale' },
-    ], condition: { field: 'is_popular', value: true } },
-    { key: 'badge_top', label: 'Posizione verticale (px)', type: 'range', min: -20, max: 40, step: 1,
-      condition: { field: 'is_popular', value: true } },
-    { key: 'badge_radius', label: 'Arrotondamento (px)', type: 'border-radius',
-      condition: { field: 'is_popular', value: true } },
-    { key: 'badge_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
-    { key: 'badge_bg_color', label: 'Sfondo', type: 'color',
-      condition: { field: 'is_popular', value: true } },
-    { key: 'badge_text_color', label: 'Colore testo', type: 'color',
+    { type: 'separator', label: t('Badge popolare') },
+    { key: 'is_popular', label: t('Mostra badge'), type: 'toggle' },
+    { key: 'badge_text', label: t('Testo badge'), type: 'text',
       condition: { field: 'is_popular', value: true } },
 
-    // ═══════════════════════════════════════
-    //  FORMA PREZZO
-    // ═══════════════════════════════════════
-    { type: 'separator', label: 'Forma prezzo' },
-    { key: 'price_shape', label: 'Forma', type: 'select', options: [
-      { value: 'none', label: 'Nessuna' },
-      { value: 'circle', label: 'Cerchio' },
-      { value: 'rounded', label: 'Quadrato arrotondato' },
+    { type: 'separator', label: t('Countdown offerta') },
+    { key: 'countdown_enabled', label: t('Mostra countdown'), type: 'toggle' },
+    { key: 'countdown_date', label: t('Data scadenza'), type: 'datetime',
+      condition: { field: 'countdown_enabled', value: true } },
+    { key: 'countdown_label', label: t('Etichetta'), type: 'text',
+      condition: { field: 'countdown_enabled', value: true } },
+    { key: 'countdown_expired_text', label: t('Testo scaduto'), type: 'text',
+      condition: { field: 'countdown_enabled', value: true } },
+    { key: 'countdown_hide_on_expire', label: t('Nascondi card se scaduto'), type: 'toggle',
+      condition: { field: 'countdown_enabled', value: true } },
+
+    { type: 'separator', label: t('Sfondo avanzato') },
+    { key: 'bg_type', label: t('Tipo sfondo'), type: 'select', options: [
+      { value: 'color', label: t('Colore') },
+      { value: 'image', label: t('Immagine') },
+      { value: 'video', label: t('Video') },
     ]},
-    { key: 'price_shape_color', label: 'Colore forma', type: 'color',
-      condition: { field: 'price_shape', operator: '!=', value: 'none' } },
-    { key: 'price_shape_border_width', label: 'Bordo (px)', type: 'range', min: 0, max: 5, step: 1,
-      condition: { field: 'price_shape', operator: '!=', value: 'none' } },
-    { key: 'price_shape_border_color', label: 'Colore bordo', type: 'color',
-      condition: { field: 'price_shape_border_width', operator: '>', value: '0' } },
-    { key: 'price_shape_glow', label: 'Luce interna', type: 'toggle',
-      condition: { field: 'price_shape', operator: '!=', value: 'none' } },
-    { key: 'price_shape_glow_color', label: 'Colore luce', type: 'color',
-      condition: { field: 'price_shape_glow', value: true } },
-    { key: 'price_shape_glow_intensity', label: 'Intensità luce (px)', type: 'range', min: 5, max: 40, step: 5,
-      condition: { field: 'price_shape_glow', value: true } },
-
-    // ═══════════════════════════════════════
-    //  COUNTDOWN OFFERTA
-    // ═══════════════════════════════════════
-    { type: 'separator', label: 'Countdown offerta' },
-    { key: 'countdown_enabled', label: 'Mostra countdown', type: 'toggle' },
-    { key: 'countdown_date', label: 'Data scadenza', type: 'datetime',
-      condition: { field: 'countdown_enabled', value: true } },
-    { key: 'countdown_label', label: 'Etichetta', type: 'text',
-      condition: { field: 'countdown_enabled', value: true } },
-    { key: 'countdown_expired_text', label: 'Testo scaduto', type: 'text',
-      condition: { field: 'countdown_enabled', value: true } },
-    { key: 'countdown_hide_on_expire', label: 'Nascondi card se scaduto', type: 'toggle',
-      condition: { field: 'countdown_enabled', value: true } },
-    { key: 'countdown_bg_color', label: 'Sfondo', type: 'color',
-      condition: { field: 'countdown_enabled', value: true } },
-    { key: 'countdown_text_color', label: 'Colore testo', type: 'color',
-      condition: { field: 'countdown_enabled', value: true } },
-
-    // ═══════════════════════════════════════
-    //  COLORI
-    // ═══════════════════════════════════════
-    { type: 'separator', label: 'Colori' },
-    { key: 'price_color', label: 'Colore prezzo', type: 'color' },
-    { key: 'bg_color', label: 'Sfondo card', type: 'color' },
-    { key: 'accent_color', label: 'Colore accento', type: 'color' },
-    { key: 'text_color', label: 'Colore testo', type: 'color' },
-
-    // ═══════════════════════════════════════
-    //  SFONDO AVANZATO
-    // ═══════════════════════════════════════
-    { type: 'separator', label: 'Sfondo avanzato' },
-    { key: 'bg_type', label: 'Tipo sfondo', type: 'select', options: [
-      { value: 'color', label: 'Colore' },
-      { value: 'image', label: 'Immagine' },
-      { value: 'video', label: 'Video' },
-    ]},
-    { key: 'bg_image', label: 'Immagine', type: 'image',
+    { key: 'bg_image', label: t('Immagine'), type: 'image',
       condition: { field: 'bg_type', value: 'image' } },
-    { key: 'bg_video', label: 'Video (mp4)', type: 'media',
+    { key: 'bg_video', label: t('Video (mp4)'), type: 'media',
       condition: { field: 'bg_type', value: 'video' } },
-    { key: 'overlay', label: 'Overlay', type: 'toggle',
+    { key: 'overlay', label: t('Overlay'), type: 'toggle',
       condition: { field: 'bg_type', operator: '!=', value: 'color' } },
-    { key: 'overlay_color', label: 'Colore overlay', type: 'color',
-      condition: { field: 'overlay', value: true } },
-    { key: 'overlay_opacity', label: 'Opacità overlay (%)', type: 'range', min: 10, max: 100, step: 5,
-      condition: { field: 'overlay', value: true } },
+  ],
 
-    // ═══════════════════════════════════════
-    //  ASPETTO CARD
-    // ═══════════════════════════════════════
-    { type: 'separator', label: 'Aspetto card' },
-    { key: 'border_radius', label: 'Arrotondamento (px)', type: 'border-radius' },
-    { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
-    ...shadowField,
-    ...borderFields(),
+  styleFields: [
+    { type: 'separator', label: t('Preset stilistico') },
+    { key: 'preset', label: t('Stile'), type: 'select', options: [
+      { value: 'modern-clean',     label: t('Modern Clean') },
+      { value: 'magazine-card',    label: t('Magazine Card') },
+      { value: 'minimal-mono',     label: t('Minimal Mono') },
+      { value: 'highlighted-pro',  label: t('Highlighted Pro') },
+      { value: 'dark-luxury',      label: t('Dark Luxury') },
+      { value: 'glass-tier',       label: t('Glass Tier') },
+      { value: 'neon-cyber',       label: t('Neon Cyber') },
+      { value: 'brutalist-stamp',  label: t('Brutalist Stamp') },
+      { value: 'gradient-aurora',  label: t('Gradient Aurora') },
+      { value: 'sticker-fun',      label: t('Sticker Fun') },
+      { value: 'retro-receipt',    label: t('Retro Receipt') },
+      { value: 'tilt-floating',    label: t('Tilt Floating') },
+      { value: 'custom',           label: t('Personalizzato') },
+    ]},
+    { type: 'separator', label: t('Tipografia') },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
+    { type: 'typography', label: t('Prezzo'),
+      presetKey: 'typography_preset',
+      keys: {
+        color: 'price_color',
+      },
+    },
+    { type: 'typography', label: t('Badge sconto'),
+      presetKey: 'typography_preset',
+      keys: {
+        color: 'sale_badge_color',
+      },
+      condition: { field: 'sale_price', operator: '!=', value: '' },
+    },
+    { type: 'typography', label: t('CTA'),
+      presetKey: 'typography_preset',
+      keys: {
+        color: 'cta_text_color',
+      },
+    },
+    { type: 'typography', label: t('Badge popolare'),
+      presetKey: 'typography_preset',
+      keys: {
+        color: 'badge_text_color',
+      },
+      condition: { field: 'is_popular', value: true },
+    },
+    { type: 'typography', label: t('Countdown'),
+      presetKey: 'typography_preset',
+      keys: {
+        color: 'countdown_text_color',
+      },
+      condition: { field: 'countdown_enabled', value: true },
+    },
+    { type: 'typography', label: t('Toggle prezzo'),
+      presetKey: 'typography_preset',
+      keys: {
+        color: 'toggle_color',
+      },
+      condition: { field: 'enable_toggle', value: true },
+    },
+    { type: 'typography', label: t('Testo card'),
+      presetKey: 'typography_preset',
+      keys: {
+        color: 'text_color',
+      },
+    },
+    { type: 'typography', label: t('Accento'),
+      presetKey: 'typography_preset',
+      keys: {
+        color: 'accent_color',
+      },
+    },
 
     ...textEffectsFields([
-      { value: 'plan_name', label: 'Nome piano' },
-      { value: 'price', label: 'Prezzo' },
+      { value: 'plan_name', label: t('Nome piano') },
+      { value: 'price', label: t('Prezzo') },
     ]),
+
+    { type: 'separator', label: t('Prezzo — Aspetto') },
+    { key: 'currency_size', label: t('Dimensione valuta (px)'), type: 'range', min: 10, max: 40, step: 1 },
+
+    { type: 'separator', label: t('Funzionalità — Aspetto') },
+    { key: 'check_style', label: t('Icona spunta'), type: 'select', options: [
+      { value: 'checkmark', label: t('✓ Spunta') },
+      { value: 'circle-check', label: t('● Cerchio pieno') },
+      { value: 'dot', label: t('• Punto') },
+      { value: 'star', label: t('★ Stella') },
+      { value: 'arrow', label: t('→ Freccia') },
+      { value: 'none', label: t('Nessuna') },
+    ]},
+    { key: 'check_size', label: t('Dimensione icona (px)'), type: 'range', min: 10, max: 28, step: 1,
+      condition: { field: 'check_style', operator: '!=', value: 'none' } },
+
+    { type: 'separator', label: t('CTA — Aspetto') },
+    { key: 'cta_width', label: t('Larghezza (%)'), type: 'range', min: 30, max: 100, step: 5 },
+    withHover({ key: 'cta_radius', label: t('Arrotondamento (px)'), type: 'border-radius' }),
+    withHover({ key: 'cta_bg_color',   label: t('Sfondo'),       type: 'color' }, { hoverKey: 'cta_hover_bg_color' }),
+    { key: 'cta_hover_text_color', label: t('Colore testo hover'), type: 'color' },
+    { key: 'cta_border_width', label: t('Bordo (px)'), type: 'range', min: 0, max: 5, step: 1 },
+    { key: 'cta_border_color', label: t('Colore bordo'), type: 'color',
+      condition: { field: 'cta_border_width', operator: '>', value: '0' } },
+    { key: 'cta_hover_effect', label: t('Animazione hover'), type: 'select', options: [
+      { value: 'none', label: t('Nessuna') },
+      { value: 'lift', label: t('Solleva') },
+      { value: 'grow', label: t('Ingrandisci') },
+      { value: 'glow', label: t('Bagliore') },
+      { value: 'pulse', label: t('Pulsazione') },
+      { value: 'shine', label: t('Luccichio') },
+    ]},
+
+    { type: 'separator', label: t('Badge — Aspetto') },
+    { key: 'badge_style', label: t('Stile'), type: 'select', options: [
+      { value: 'pill', label: t('Pillola') },
+      { value: 'classic', label: t('Classico') },
+      { value: 'minimal', label: t('Minimale') },
+    ], condition: { field: 'is_popular', value: true } },
+    { key: 'badge_top', label: t('Posizione verticale (px)'), type: 'range', min: -20, max: 40, step: 1,
+      condition: { field: 'is_popular', value: true } },
+    withHover({ key: 'badge_radius', label: t('Arrotondamento (px)'), type: 'border-radius',
+      condition: { field: 'is_popular', value: true } }),
+    { key: 'badge_bg_color', label: t('Sfondo'), type: 'color',
+      condition: { field: 'is_popular', value: true } },
+
+    { type: 'separator', label: t('Forma prezzo') },
+    { key: 'price_shape', label: t('Forma'), type: 'select', options: [
+      { value: 'none', label: t('Nessuna') },
+      { value: 'circle', label: t('Cerchio') },
+      { value: 'rounded', label: t('Quadrato arrotondato') },
+    ]},
+    { key: 'price_shape_color', label: t('Colore forma'), type: 'color',
+      condition: { field: 'price_shape', operator: '!=', value: 'none' } },
+    { key: 'price_shape_border_width', label: t('Bordo (px)'), type: 'range', min: 0, max: 5, step: 1,
+      condition: { field: 'price_shape', operator: '!=', value: 'none' } },
+    { key: 'price_shape_border_color', label: t('Colore bordo'), type: 'color',
+      condition: { field: 'price_shape_border_width', operator: '>', value: '0' } },
+    { key: 'price_shape_glow', label: t('Luce interna'), type: 'toggle',
+      condition: { field: 'price_shape', operator: '!=', value: 'none' } },
+    { key: 'price_shape_glow_color', label: t('Colore luce'), type: 'color',
+      condition: { field: 'price_shape_glow', value: true } },
+    { key: 'price_shape_glow_intensity', label: t('Intensità luce (px)'), type: 'range', min: 5, max: 40, step: 5,
+      condition: { field: 'price_shape_glow', value: true } },
+
+    { type: 'separator', label: t('Countdown — Aspetto') },
+    { key: 'countdown_bg_color', label: t('Sfondo'), type: 'color',
+      condition: { field: 'countdown_enabled', value: true } },
+
+    { type: 'separator', label: t('Colori card') },
+    { key: 'bg_color', label: t('Sfondo card'), type: 'color' },
+
+    { type: 'separator', label: t('Overlay sfondo avanzato') },
+    { key: 'overlay_color', label: t('Colore overlay'), type: 'color',
+      condition: { field: 'overlay', value: true } },
+    { key: 'overlay_opacity', label: t('Opacità overlay (%)'), type: 'range', min: 10, max: 100, step: 5,
+      condition: { field: 'overlay', value: true } },
+
+    { type: 'separator', label: t('Aspetto card') },
+    withHover({ key: 'border_radius', label: t('Arrotondamento (px)'), type: 'border-radius' }),
+
+    ...shadowField,
+    ...borderFields(),
   ],
 };

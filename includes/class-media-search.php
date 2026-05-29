@@ -25,40 +25,54 @@ class Olo_Media_Search {
             'polyhaven' => $vtour_active,
             'googlesv'  => $vtour_active,
         ];
+        $providers_active = count( array_filter( $keys ) );
+        $providers_total  = count( $keys );
         ?>
-        <?php Olo_Builder::page_shell_open( 'Ricerca Media', 'olo-ms-wrap' ); ?>
+        <?php Olo_Builder::cockpit_shell_open( '<b>' . esc_html__( 'Ricerca Media', 'olobuild' ) . '</b>' ); ?>
+        <main class="olo-cockpit-main olo-cockpit-legacy olo-ms-wrap">
+            <?php
+            echo Olo_Builder::cockpit_page_head( [
+                'title' => __( 'Ricerca Media', 'olobuild' ),
+                'sub'   => sprintf(
+                    /* translators: 1: active providers, 2: total providers */
+                    __( 'Cerca foto, video, audio e panorami da provider stock. %1$s/%2$s provider configurati.', 'olobuild' ),
+                    '<b>' . (int) $providers_active . '</b>',
+                    (int) $providers_total
+                ),
+            ] );
+            ?>
 
             <!-- Tabs -->
             <div class="olo-admin-tabs">
-                <button class="olo-admin-tab olo-ms-tab active" data-tab="photo">Foto</button>
-                <button class="olo-admin-tab olo-ms-tab" data-tab="video">Video</button>
-                <button class="olo-admin-tab olo-ms-tab" data-tab="photo360">Foto 360</button>
-                <button class="olo-admin-tab olo-ms-tab" data-tab="video360">Video 360</button>
-                <button class="olo-admin-tab olo-ms-tab" data-tab="audio">Audio</button>
+                <button class="olo-admin-tab olo-ms-tab active" data-tab="photo"><?php esc_html_e( 'Foto', 'olobuild' ); ?></button>
+                <button class="olo-admin-tab olo-ms-tab" data-tab="video"><?php esc_html_e( 'Video', 'olobuild' ); ?></button>
+                <button class="olo-admin-tab olo-ms-tab" data-tab="photo360"><?php esc_html_e( 'Foto 360', 'olobuild' ); ?></button>
+                <button class="olo-admin-tab olo-ms-tab" data-tab="video360"><?php esc_html_e( 'Video 360', 'olobuild' ); ?></button>
+                <button class="olo-admin-tab olo-ms-tab" data-tab="audio"><?php esc_html_e( 'Audio', 'olobuild' ); ?></button>
             </div>
 
             <!-- Search bar -->
             <div class="olo-ms-search-bar">
                 <div class="olo-ms-providers" id="olo-ms-providers"></div>
                 <div class="olo-ms-input-wrap">
-                    <input type="text" id="olo-ms-query" class="olo-field-input olo-ms-query" placeholder="Cerca foto, video, audio..." autocomplete="off" />
-                    <button id="olo-ms-search-btn" class="olo-btn-save olo-btn-sm">Cerca</button>
+                    <input type="text" id="olo-ms-query" class="olo-field-input olo-ms-query" placeholder="<?php echo esc_attr__( 'Cerca foto, video, audio...', 'olobuild' ); ?>" autocomplete="off" />
+                    <button id="olo-ms-search-btn" class="olo-btn-save olo-btn-sm"><?php esc_html_e( 'Cerca', 'olobuild' ); ?></button>
                 </div>
             </div>
 
             <!-- Google SV panel (hidden by default) -->
             <div id="olo-ms-gsv-panel" class="olo-ms-gsv-panel">
                 <div class="olo-msg info">
-                    Incolla un URL Google Maps, coordinate (lat,lng) o un pano_id per scaricare un panorama Street View.
+                    <?php esc_html_e( 'Incolla un URL Google Maps, coordinate (lat,lng) o un pano_id per scaricare un panorama Street View.', 'olobuild' ); ?>
                 </div>
                 <div class="olo-ms-input-wrap olo-ms-gsv-inputs">
-                    <input type="text" id="olo-ms-gsv-input" class="olo-field-input olo-ms-gsv-field" placeholder="https://www.google.com/maps/@45.4642,9.1900,3a... oppure 45.4642,9.1900" autocomplete="off" />
+                    <input type="text" id="olo-ms-gsv-input" class="olo-field-input olo-ms-gsv-field" placeholder="<?php echo esc_attr__( 'https://www.google.com/maps/@45.4642,9.1900,3a... oppure 45.4642,9.1900', 'olobuild' ); ?>" autocomplete="off" />
                     <select id="olo-ms-gsv-zoom" class="olo-field-input olo-ms-gsv-select">
-                        <option value="2">Zoom 2 (bassa)</option>
-                        <option value="3" selected>Zoom 3 (media)</option>
-                        <option value="4">Zoom 4 (alta)</option>
+                        <option value="2"><?php esc_html_e( 'Zoom 2 (bassa)', 'olobuild' ); ?></option>
+                        <option value="3" selected><?php esc_html_e( 'Zoom 3 (media)', 'olobuild' ); ?></option>
+                        <option value="4"><?php esc_html_e( 'Zoom 4 (alta)', 'olobuild' ); ?></option>
                     </select>
-                    <button id="olo-ms-gsv-btn" class="olo-btn-save olo-btn-sm">Cerca panorama</button>
+                    <button id="olo-ms-gsv-btn" class="olo-btn-save olo-btn-sm"><?php esc_html_e( 'Cerca panorama', 'olobuild' ); ?></button>
                 </div>
             </div>
 
@@ -66,29 +80,29 @@ class Olo_Media_Search {
             <div id="olo-ms-photo-filters" class="olo-ms-filters">
                 <div class="olo-ms-filters-row">
                     <span class="olo-ms-pf olo-ms-filter-group" data-pf="orientation">
-                        <label class="olo-ms-filter-label">Orientamento:</label>
+                        <label class="olo-ms-filter-label"><?php esc_html_e( 'Orientamento:', 'olobuild' ); ?></label>
                         <select id="olo-ms-orientation" class="olo-field-input olo-ms-filter-select">
-                            <option value="">Qualsiasi</option>
-                            <option value="landscape">Orizzontale</option>
-                            <option value="portrait">Verticale</option>
-                            <option value="square">Quadrato</option>
+                            <option value=""><?php esc_html_e( 'Qualsiasi', 'olobuild' ); ?></option>
+                            <option value="landscape"><?php esc_html_e( 'Orizzontale', 'olobuild' ); ?></option>
+                            <option value="portrait"><?php esc_html_e( 'Verticale', 'olobuild' ); ?></option>
+                            <option value="square"><?php esc_html_e( 'Quadrato', 'olobuild' ); ?></option>
                         </select>
                     </span>
                     <span class="olo-ms-pf olo-ms-filter-group" data-pf="size">
-                        <label class="olo-ms-filter-label">Dimensione:</label>
+                        <label class="olo-ms-filter-label"><?php esc_html_e( 'Dimensione:', 'olobuild' ); ?></label>
                         <select id="olo-ms-size" class="olo-field-input olo-ms-filter-select">
-                            <option value="">Qualsiasi</option>
-                            <option value="small">Piccola</option>
-                            <option value="medium">Media</option>
-                            <option value="large">Grande</option>
+                            <option value=""><?php esc_html_e( 'Qualsiasi', 'olobuild' ); ?></option>
+                            <option value="small"><?php esc_html_e( 'Piccola', 'olobuild' ); ?></option>
+                            <option value="medium"><?php esc_html_e( 'Media', 'olobuild' ); ?></option>
+                            <option value="large"><?php esc_html_e( 'Grande', 'olobuild' ); ?></option>
                         </select>
                     </span>
                     <span class="olo-ms-pf olo-ms-filter-group" data-pf="min_width">
-                        <label class="olo-ms-filter-label">Min larghezza:</label>
+                        <label class="olo-ms-filter-label"><?php esc_html_e( 'Min larghezza:', 'olobuild' ); ?></label>
                         <input type="number" id="olo-ms-min-width" class="olo-field-input olo-ms-filter-num" placeholder="px" min="0" step="100" />
                     </span>
                     <span class="olo-ms-pf olo-ms-filter-group" data-pf="min_height">
-                        <label class="olo-ms-filter-label">Min altezza:</label>
+                        <label class="olo-ms-filter-label"><?php esc_html_e( 'Min altezza:', 'olobuild' ); ?></label>
                         <input type="number" id="olo-ms-min-height" class="olo-field-input olo-ms-filter-num" placeholder="px" min="0" step="100" />
                     </span>
                 </div>
@@ -97,22 +111,22 @@ class Olo_Media_Search {
             <!-- Duration filters (audio + video) -->
             <div id="olo-ms-duration-filters" class="olo-ms-filters">
                 <div class="olo-ms-filters-row">
-                    <label class="olo-ms-filter-label">Durata:</label>
+                    <label class="olo-ms-filter-label"><?php esc_html_e( 'Durata:', 'olobuild' ); ?></label>
                     <select id="olo-ms-dur-preset" class="olo-field-input olo-ms-filter-select">
-                        <option value="">Qualsiasi</option>
-                        <option value="0,5">Brevissimo (&lt; 5s)</option>
-                        <option value="0,15">Breve (&lt; 15s)</option>
-                        <option value="5,30">5 — 30 secondi</option>
-                        <option value="10,60">10s — 1 minuto</option>
-                        <option value="30,120">30s — 2 minuti</option>
-                        <option value="60,300">1 — 5 minuti</option>
-                        <option value="300,">Lungo (&gt; 5 min)</option>
+                        <option value=""><?php esc_html_e( 'Qualsiasi', 'olobuild' ); ?></option>
+                        <option value="0,5"><?php esc_html_e( 'Brevissimo (< 5s)', 'olobuild' ); ?></option>
+                        <option value="0,15"><?php esc_html_e( 'Breve (< 15s)', 'olobuild' ); ?></option>
+                        <option value="5,30"><?php esc_html_e( '5 — 30 secondi', 'olobuild' ); ?></option>
+                        <option value="10,60"><?php esc_html_e( '10s — 1 minuto', 'olobuild' ); ?></option>
+                        <option value="30,120"><?php esc_html_e( '30s — 2 minuti', 'olobuild' ); ?></option>
+                        <option value="60,300"><?php esc_html_e( '1 — 5 minuti', 'olobuild' ); ?></option>
+                        <option value="300,"><?php esc_html_e( 'Lungo (> 5 min)', 'olobuild' ); ?></option>
                     </select>
-                    <span class="olo-ms-filter-sep">oppure</span>
-                    <input type="number" id="olo-ms-dur-min" class="olo-field-input olo-ms-filter-num" placeholder="min sec" min="0" />
+                    <span class="olo-ms-filter-sep"><?php esc_html_e( 'oppure', 'olobuild' ); ?></span>
+                    <input type="number" id="olo-ms-dur-min" class="olo-field-input olo-ms-filter-num" placeholder="<?php echo esc_attr__( 'min sec', 'olobuild' ); ?>" min="0" />
                     <span class="olo-ms-filter-dash">&mdash;</span>
-                    <input type="number" id="olo-ms-dur-max" class="olo-field-input olo-ms-filter-num" placeholder="max sec" min="0" />
-                    <span class="olo-ms-filter-sep">secondi</span>
+                    <input type="number" id="olo-ms-dur-max" class="olo-field-input olo-ms-filter-num" placeholder="<?php echo esc_attr__( 'max sec', 'olobuild' ); ?>" min="0" />
+                    <span class="olo-ms-filter-sep"><?php esc_html_e( 'secondi', 'olobuild' ); ?></span>
                 </div>
             </div>
 
@@ -133,7 +147,8 @@ class Olo_Media_Search {
                     <div id="olo-ms-modal-body"></div>
                 </div>
             </div>
-        <?php Olo_Builder::page_shell_close(); ?>
+        </main>
+        <?php Olo_Builder::cockpit_shell_close(); ?>
 
         <style>
             /* ── Media Search — page-specific overrides ── */

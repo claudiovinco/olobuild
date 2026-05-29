@@ -869,3 +869,62 @@ body.olo-admin-shell .olo-admin-topbar { display: none; }
     }
     .olo-shell-topbar { top: 0; } /* no WP admin bar on mobile */
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+   APP MODE — applicato a TUTTE le pagine Olobuild quando attivo.
+   La WP admin sidebar si riduce a 52px icon-only e il sotto-menu
+   Olobuild è nascosto perché ridondante con la dashboard cockpit
+   e con la sidebar interna del page-shell sulle altre pagine.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* Sidebar collapsed a 52px */
+body.olobuild-app-mode #adminmenuwrap,
+body.olobuild-app-mode #adminmenuback { width: 52px !important; }
+body.olobuild-app-mode #adminmenu { width: 52px !important; overflow: visible; }
+body.olobuild-app-mode #adminmenu a.menu-top {
+    padding: 8px 0 !important;
+    text-align: center !important;
+    min-height: 36px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+body.olobuild-app-mode #adminmenu .wp-menu-name { display: none !important; }
+body.olobuild-app-mode #adminmenu .wp-menu-image {
+    float: none !important; padding: 0 !important; width: 36px !important;
+}
+body.olobuild-app-mode #adminmenu .wp-menu-image::before {
+    font-size: 18px !important; padding: 0 !important;
+}
+
+/* Sotto-menu di prodotti diversi da Olobuild restano accessibili al hover */
+body.olobuild-app-mode #adminmenu .wp-submenu {
+    left: 52px !important;
+    min-width: 200px;
+    box-shadow: 0 2px 12px rgba(0,0,0,.25);
+}
+body.olobuild-app-mode #adminmenu .wp-submenu-head { display: block !important; }
+body.olobuild-app-mode #adminmenu li.menu-top:hover .wp-submenu,
+body.olobuild-app-mode #adminmenu li.opensub .wp-submenu { display: block !important; }
+
+/* Sotto-menu Olobuild: NASCOSTO sempre in app mode (ridondante con
+   la dashboard cockpit e la sidebar interna del page-shell). */
+body.olobuild-app-mode #adminmenu li#toplevel_page_olobuild .wp-submenu,
+body.olobuild-app-mode #adminmenu li#toplevel_page_olobuild:hover .wp-submenu,
+body.olobuild-app-mode #adminmenu li#toplevel_page_olobuild.opensub .wp-submenu,
+body.olobuild-app-mode #adminmenu li#toplevel_page_olobuild .wp-submenu-wrap {
+    display: none !important;
+}
+
+body.olobuild-app-mode #wpcontent,
+body.olobuild-app-mode #wpfooter { margin-left: 52px !important; }
+
+/* Reset folded state mai usato in app-mode */
+body.folded.olobuild-app-mode #adminmenu .wp-submenu-wrap { display: none; }
+
+/* Mobile: nasconde sidebar */
+@media (max-width: 782px) {
+    body.olobuild-app-mode #adminmenuwrap,
+    body.olobuild-app-mode #adminmenu { width: 0 !important; display: none !important; }
+    body.olobuild-app-mode #wpcontent { margin-left: 0 !important; }
+}

@@ -18,8 +18,16 @@ class Olo_Image_Tile extends Olo_Tile_Base {
         'caption'     => '',
         'link_url'    => '',
         'link_target' => '_self',
-        'object_fit'  => 'cover',
-        'height'      => '300px',
+        // ── Dimensioni / fit ──
+        'image_width'         => '100%',
+        'height'              => '300px',
+        'max_width'           => '',
+        'aspect_ratio'        => 'auto',
+        'aspect_ratio_custom' => '16/9',
+        'object_fit'          => 'cover',
+        'object_position'     => 'center center',
+        'image_alignment'     => 'center',
+        'align_in_column'     => '',
         'filter_blur'       => '0',
         'filter_brightness' => '100',
         'filter_contrast'   => '100',
@@ -180,20 +188,102 @@ class Olo_Image_Tile extends Olo_Tile_Base {
         }
         ?>
         <?php
+        // ── Dimensioni & fit (controlli professionali) ──
         $figure_style = 'margin: 0;';
+        $img_width   = trim( (string) ( $s['image_width'] ?? '100%' ) );
+        $img_height  = trim( (string) ( $s['height'] ?? '300px' ) );
+        $img_maxw    = trim( (string) ( $s['max_width'] ?? '' ) );
+        $aspect      = $s['aspect_ratio'] ?? 'auto';
+        $aspect_css  = '';
+        if ( $aspect && $aspect !== 'auto' ) {
+            $aspect_css = $aspect === 'custom'
+                ? trim( (string) ( $s['aspect_ratio_custom'] ?? '' ) )
+                : $aspect;
+        }
+        $valid_fit = [ 'cover', 'contain', 'fill', 'none', 'scale-down' ];
+        $obj_fit   = in_array( $s['object_fit'] ?? 'cover', $valid_fit, true ) ? $s['object_fit'] : 'cover';
+        $obj_pos   = trim( (string) ( $s['object_position'] ?? 'center center' ) );
+        $align     = $s['image_alignment'] ?? 'center';
+        $valid_align = [ 'left', 'center', 'right' ];
+        if ( ! in_array( $align, $valid_align, true ) ) $align = 'center';
+
+        // Applica width/max-width al figure (così il container può essere ristretto e centrato)
+        if ( $img_width !== '' && $img_width !== '100%' ) {
+            $figure_style .= ' width: ' . esc_attr( $img_width ) . ';';
+        }
+        if ( $img_maxw !== '' && $img_maxw !== 'none' ) {
+            $figure_style .= ' max-width: ' . esc_attr( $img_maxw ) . ';';
+        }
+        // Aspect ratio sul figure (se settato, l'altezza segue il rapporto)
+        if ( $aspect_css !== '' ) {
+            $figure_style .= ' aspect-ratio: ' . esc_attr( $aspect_css ) . ';';
+        }
+        // Allineamento: margin auto per left/center/right
+        if ( $align === 'center' ) {
+            $figure_style .= ' margin-left: auto; margin-right: auto;';
+        } elseif ( $align === 'right' ) {
+            $figure_style .= ' margin-left: auto; margin-right: 0;';
+        } else {
+            $figure_style .= ' margin-left: 0; margin-right: auto;';
+        }
+
         if ( $br_css ) {
             $figure_style .= ' border-radius: ' . esc_attr( $br_css ) . '; overflow: hidden;';
         } elseif ( $has_hover_br ) {
             $figure_style .= ' border-radius: 0; overflow: hidden;';
         }
+
+        // Shadow: applicata al figure. Quando c'è border-radius + overflow:hidden,
+        // box-shadow funziona comunque (CSS standard: shadow vive fuori dal box).
+        // Per shadow custom (preset 'custom'), si possono usare i sub-field shadow_h/v/blur/spread/color/inset.
+        $shadow_value = '';
+        $shadow_pref  = $s['shadow'] ?? 'none';
+        if ( $shadow_pref === 'custom' ) {
+            $sh_h = intval( $s['shadow_h']      ?? 0 );
+            $sh_v = intval( $s['shadow_v']      ?? 4 );
+            $sh_b = max( 0, intval( $s['shadow_blur']   ?? 10 ) );
+            $sh_s = intval( $s['shadow_spread']    ?? 0 );
+            $sh_c = $this->safe_color_css( $s['shadow_color'] ?? 'rgba(0,0,0,0.15)' ) ?: 'rgba(0,0,0,0.15)';
+            $sh_inset = ! empty( $s['shadow_inset'] ) ? 'inset ' : '';
+            $shadow_value = $sh_inset . "{$sh_h}px {$sh_v}px {$sh_b}px {$sh_s}px {$sh_c}";
+        } elseif ( $shadow_pref && $shadow_pref !== 'none' ) {
+            $shadow_value = Olo_Tile_Utils::shadow( $shadow_pref );
+            if ( $shadow_value === 'none' ) $shadow_value = '';
+        }
+        if ( $shadow_value ) {
+            $figure_style .= ' box-shadow: ' . esc_attr( $shadow_value ) . ';';
+        }
+
+        // Posizione verticale nella colonna: usa :has() per rendere flex la column
+        // parent e applica margin-auto al .olo-frontend-tile wrapper (parent diretto
+        // del figure) per ancorarla in alto/centro/basso.
+        // Struttura HTML:  .uk-width-X-Y (column) > .olo-frontend-tile (tile wrapper) > figure.olo-image
+        // Quindi il flex va sulla column, il margin auto sul tile wrapper.
+        $align_in_col = $s['align_in_column'] ?? '';
+        $align_data_attr = '';
+        $align_css_block = '';
+        if ( in_array( $align_in_col, [ 'top', 'center', 'bottom' ], true ) ) {
+            $align_data_attr = ' data-olo-align-col="' . esc_attr( $align_in_col ) . '"';
+            $tile_margin = '';
+            if ( $align_in_col === 'top' )    $tile_margin = 'margin-bottom:auto;';
+            if ( $align_in_col === 'center' ) $tile_margin = 'margin-top:auto;margin-bottom:auto;';
+            if ( $align_in_col === 'bottom' ) $tile_margin = 'margin-top:auto;';
+            // Cerca la column UIkit (class che contiene "uk-width-") che ha il figure come descendant
+            $align_css_block = '<style>'
+                . '[class*="uk-width-"]:has(figure.olo-image.' . $uid . '[data-olo-align-col]){display:flex;flex-direction:column;}'
+                . '.olo-frontend-tile:has(> figure.olo-image.' . $uid . '[data-olo-align-col]){' . $tile_margin . '}'
+                . '</style>';
+        }
+        echo $align_css_block;
         ?>
-        <figure class="olo-image <?php echo esc_attr( $uid ); ?>"<?php if ( ! empty( $s['lightbox'] ) && empty( $s['link_url'] ) ) echo ' data-uk-lightbox'; ?> style="<?php echo esc_attr( $figure_style ); ?>">
+        <figure class="olo-image <?php echo esc_attr( $uid ); ?>"<?php echo $align_data_attr; ?><?php if ( ! empty( $s['lightbox'] ) && empty( $s['link_url'] ) ) echo ' data-uk-lightbox'; ?> style="<?php echo esc_attr( $figure_style ); ?>">
             <?php
             $att_id = absint( $s['image_url_id'] ?? 0 );
             // No border-radius on the <img>: figure has overflow:hidden + radius which clips correctly.
-            // Applying radius on both could conflict when the figure changes radius on :hover (the
-            // intersection of two different rounded shapes can leave residual sharp corners).
-            $img_style = 'width: 100%; height: ' . esc_attr( $s['height'] ) . '; object-fit: ' . esc_attr( $s['object_fit'] ) . '; display: block;';
+            // Applying radius on both could conflict when the figure changes radius on :hover.
+            // Quando aspect-ratio è settato sul figure, l'img usa height:100% per riempirlo.
+            $img_h = $aspect_css !== '' ? '100%' : $img_height;
+            $img_style = 'width: 100%; height: ' . esc_attr( $img_h ) . '; object-fit: ' . esc_attr( $obj_fit ) . '; object-position: ' . esc_attr( $obj_pos ) . '; display: block;';
             $extra  = 'uk-img style="' . $img_style . '"';
             $img_opts = [];
             if ( ! empty( $s['_img_loading'] ) ) $img_opts['loading'] = $s['_img_loading'];

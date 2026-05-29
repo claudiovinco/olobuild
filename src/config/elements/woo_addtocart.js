@@ -1,12 +1,23 @@
 
-import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared.js';
+import { t } from '@/i18n';
+
+/**
+ * Tile WooCommerce Aggiungi al Carrello — split CONTENUTO/STILE (regola universale Olobuild).
+ *   fields[]      → testo pulsante, toggle visibilita (icona/quantita), stile quantita, icona
+ *   styleFields[] → preset, sfondo, tipografia, stile/dimensione, border-radius, colori, bordo
+ *   AVANZATE      → meta tecnico (id/class/condizioni)
+ */
 export default {
   type: 'woo_addtocart',
-  name: 'Aggiungi al Carrello',
+  name: t('Aggiungi al Carrello'),
   icon: 'dashicons-cart',
   category: 'woocommerce',
-  placeholder: 'Pulsante aggiungi al carrello WooCommerce',
+  placeholder: t('Pulsante aggiungi al carrello WooCommerce'),
   defaults: {
+    preset: 'custom',
+    bg: { type: 'none' },
+    typography_preset: '',
     button_text: 'Aggiungi al carrello',
     show_quantity: true,
     show_icon: true,
@@ -25,38 +36,60 @@ export default {
     border_hover_duration: 300,
     ...borderEffectDefaults,
   },
-  fields: [
-    { key: 'button_text', label: 'Testo pulsante', type: 'text' },
-    { key: 'show_quantity', label: 'Mostra quantita', type: 'toggle' },
-    { key: 'show_icon', label: 'Mostra icona', type: 'toggle' },
-    { key: 'icon', label: 'Icona', type: 'select', options: [
-      { value: 'cart', label: 'Carrello' },
-      { value: 'bag', label: 'Borsa' },
-      { value: 'plus', label: 'Piu' },
-    ], condition: { field: 'show_icon', value: true } },
-    { key: 'style', label: 'Stile', type: 'select', options: [
-      { value: 'filled', label: 'Pieno' },
-      { value: 'outline', label: 'Contorno' },
-      { value: 'text', label: 'Solo testo' },
-    ]},
-    { key: 'size', label: 'Dimensione', type: 'select', options: [
-      { value: 'small', label: 'Piccolo' },
-      { value: 'medium', label: 'Medio' },
-      { value: 'large', label: 'Grande' },
-    ]},
-    { key: 'full_width', label: 'Larghezza piena', type: 'toggle' },
-    { key: 'quantity_style', label: 'Stile quantita', type: 'select', options: [
-      { value: 'input', label: 'Campo numerico' },
-      { value: 'stepper', label: 'Stepper +/-' },
-    ], condition: { field: 'show_quantity', value: true } },
-    { key: 'border_radius', label: 'Arrotondamento (px)', type: 'border-radius' },
-    { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
 
-    { type: 'separator', label: 'Colori' },
-    { key: 'bg_color', label: 'Sfondo', type: 'color' },
-    { key: 'text_color', label: 'Colore testo', type: 'color' },
-    { key: 'hover_bg', label: 'Sfondo hover', type: 'color' },
-    { key: 'hover_text', label: 'Colore testo hover', type: 'color' },
+  // ─── CONTENUTO ─────────────────────────────────────────────
+  fields: [
+    { key: 'button_text', label: t('Testo pulsante'), type: 'text' },
+    { key: 'show_quantity', label: t('Mostra quantita'), type: 'toggle' },
+    { key: 'show_icon', label: t('Mostra icona'), type: 'toggle' },
+    { key: 'icon', label: t('Icona'), type: 'select', options: [
+      { value: 'cart', label: t('Carrello') },
+      { value: 'bag', label: t('Borsa') },
+      { value: 'plus', label: t('Piu') },
+    ], condition: { field: 'show_icon', value: true } },
+    { key: 'quantity_style', label: t('Stile quantita'), type: 'select', options: [
+      { value: 'input', label: t('Campo numerico') },
+      { value: 'stepper', label: t('Stepper +/-') },
+    ], condition: { field: 'show_quantity', value: true } },
+  ],
+
+  // ─── STILE ─────────────────────────────────────────────────
+  styleFields: [
+    { type: 'separator', label: t('Preset stilistico') },
+    { key: 'preset', label: t('Stile'), type: 'select', options: [
+      { value: 'modern-clean',    label: t('Modern Clean') },
+      { value: 'minimal-mono',    label: t('Minimal Mono') },
+      { value: 'magazine-bold',   label: t('Magazine Bold') },
+      { value: 'editorial-serif', label: t('Editorial Serif') },
+      { value: 'compact-inline',  label: t('Compact Inline') },
+      { value: 'glass-frosted',   label: t('Glass Frosted') },
+      { value: 'neon-glow',       label: t('Neon Glow') },
+      { value: 'brutalist-stamp', label: t('Brutalist Stamp') },
+      { value: 'gradient-aurora', label: t('Gradient Aurora') },
+      { value: 'sticker-fun',     label: t('Sticker Fun') },
+      { value: 'retro-terminal',  label: t('Retro Terminal') },
+      { value: 'tilt-3d',         label: t('3D Tilt') },
+      { value: 'custom',          label: t('Personalizzato') },
+    ] },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
+    { key: 'style', label: t('Stile'), type: 'select', options: [
+      { value: 'filled', label: t('Pieno') },
+      { value: 'outline', label: t('Contorno') },
+      { value: 'text', label: t('Solo testo') },
+    ]},
+    { key: 'size', label: t('Dimensione'), type: 'select', options: [
+      { value: 'small', label: t('Piccolo') },
+      { value: 'medium', label: t('Medio') },
+      { value: 'large', label: t('Grande') },
+    ]},
+    { key: 'full_width', label: t('Larghezza piena'), type: 'toggle' },
+    withHover({ key: 'border_radius', label: t('Arrotondamento (px)'), type: 'border-radius' }),
+
+    { type: 'separator', label: t('Colori') },
+    { key: 'bg_color', label: t('Sfondo'), type: 'color' },
+    { key: 'text_color', label: t('Colore testo'), type: 'color' },
+    { key: 'hover_bg', label: t('Sfondo hover'), type: 'color' },
+    { key: 'hover_text', label: t('Colore testo hover'), type: 'color' },
     ...borderFields(),
   ],
 };

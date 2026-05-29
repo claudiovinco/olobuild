@@ -1,279 +1,242 @@
 <template>
-  <div class="olo-typo-tab">
-    <div class="olo-card">
-      <div class="olo-card-head">
-        <div class="olo-card-icon" style="background:#1a1a1a;color:#fff">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
-        </div>
-        <div>
-          <h3>Tipografia Globale</h3>
-          <p>Definisci set tipografici riutilizzabili tramite variabili CSS</p>
-        </div>
+  <div class="cfg-page-head">
+    <div>
+      <h1>{{ t('Tipografia') }} <em>{{ t('globale') }}</em></h1>
+      <p>{{ t('Coppia di font, scala modulare, pesi e interlinea. Si applica a tutti i blocchi di testo del sito — sovrascrivibile a livello di pagina.') }}</p>
+    </div>
+    <div class="head-actions">
+      <button class="cfg-btn cfg-btn-secondary" @click="uploadCustomFont">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+        {{ t('Carica font custom') }}
+      </button>
+    </div>
+  </div>
+
+  <div class="cfg-card">
+    <div class="cfg-card-head">
+      <div class="head-ic">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V5h16v2"/><path d="M9 20h6"/><path d="M12 5v15"/></svg>
       </div>
-      <div class="olo-card-body">
-        <div class="olo-typosets-list">
-          <div v-for="(set, index) in localSets" :key="index" class="olo-typoset">
-            <!-- Header set -->
-            <div class="olo-typoset-header">
-              <input
-                type="text"
-                :value="set.label"
-                @input="updateField(index, 'label', $event.target.value)"
-                placeholder="Nome set"
-                class="olo-field-input olo-typoset-name"
-              />
-              <button class="olo-typoset-remove" @click="removeSet(index)" title="Rimuovi set">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-              </button>
-            </div>
-
-            <!-- Fields grid -->
-            <div class="olo-typoset-fields">
-              <div class="olo-typoset-field">
-                <label>Font family</label>
-                <FieldFontFamily
-                  :modelValue="set.family"
-                  @update:modelValue="updateField(index, 'family', $event)"
-                />
-              </div>
-              <div class="olo-typoset-field">
-                <label>Peso</label>
-                <select :value="set.weight" @change="updateField(index, 'weight', $event.target.value)" class="olo-field-input olo-select">
-                  <option value="100">100 - Thin</option>
-                  <option value="200">200 - Extra Light</option>
-                  <option value="300">300 - Light</option>
-                  <option value="400">400 - Regular</option>
-                  <option value="500">500 - Medium</option>
-                  <option value="600">600 - Semi Bold</option>
-                  <option value="700">700 - Bold</option>
-                  <option value="800">800 - Extra Bold</option>
-                  <option value="900">900 - Black</option>
-                </select>
-              </div>
-              <div class="olo-typoset-field">
-                <label>Trasformazione</label>
-                <select :value="set.transform" @change="updateField(index, 'transform', $event.target.value)" class="olo-field-input olo-select">
-                  <option value="none">Nessuna</option>
-                  <option value="uppercase">MAIUSCOLO</option>
-                  <option value="lowercase">minuscolo</option>
-                  <option value="capitalize">Capitalizza</option>
-                </select>
-              </div>
-              <div class="olo-typoset-field">
-                <label>Line height</label>
-                <input type="text" :value="set.line_height" @change="updateField(index, 'line_height', $event.target.value)" class="olo-field-input olo-input-sm" />
-              </div>
-              <div class="olo-typoset-field">
-                <label>Letter spacing (px)</label>
-                <input type="text" :value="set.letter_spacing" @change="updateField(index, 'letter_spacing', $event.target.value)" class="olo-field-input olo-input-sm" />
-              </div>
-            </div>
-
-            <!-- CSS vars -->
-            <div class="olo-typoset-vars">
-              <span v-if="set.family" class="olo-var-tag">var(--olo-font-{{ set.id }}-family)</span>
-              <span class="olo-var-tag">var(--olo-font-{{ set.id }}-weight)</span>
-            </div>
-
-            <!-- Preview -->
-            <div
-              class="olo-typoset-preview"
-              :style="{
-                fontFamily: set.family ? (set.family + ', sans-serif') : 'inherit',
-                fontWeight: set.weight,
-                textTransform: set.transform === 'none' ? 'initial' : set.transform,
-                lineHeight: set.line_height,
-                letterSpacing: set.letter_spacing + 'px',
-              }"
-            >
-              Anteprima del testo - Abc 123
-            </div>
-          </div>
-        </div>
-
-        <button class="olo-typoset-add" @click="addSet">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-          Aggiungi set tipografico
-        </button>
+      <div>
+        <h3>{{ t('Coppia di font') }}</h3>
+        <p>{{ t('Display per titoli, body per testo corrente. Tieni 2 famiglie max per buona leggibilità.') }}</p>
       </div>
     </div>
+    <div class="cfg-card-body">
+      <div class="font-pair-grid">
+        <div class="font-card">
+          <div class="font-card-label">{{ t('Display · titoli') }}</div>
+          <div class="font-card-preview" :style="{ fontFamily: displayFontFamily }">Abc · Æg</div>
+          <div class="cfg-select">
+            <select :value="display.family" @change="setDisplay('family', $event.target.value)">
+              <option v-for="f in DISPLAY_FONTS" :key="f.value" :value="f.value">{{ f.label }}</option>
+            </select>
+            <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></span>
+          </div>
+          <div class="font-pills">
+            <span class="cfg-pill off">italic</span>
+            <span class="cfg-pill off">400</span>
+            <span class="cfg-pill ok">+ Google Fonts</span>
+          </div>
+        </div>
+        <div class="font-card">
+          <div class="font-card-label">{{ t('Body · testo corrente') }}</div>
+          <div class="font-card-preview body" :style="{ fontFamily: bodyFontFamily }">Abc · 123</div>
+          <div class="cfg-select">
+            <select :value="body.family" @change="setBody('family', $event.target.value)">
+              <option v-for="f in BODY_FONTS" :key="f.value" :value="f.value">{{ f.label }}</option>
+            </select>
+            <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></span>
+          </div>
+          <div class="font-pills">
+            <span class="cfg-pill off">400</span>
+            <span class="cfg-pill off">500</span>
+            <span class="cfg-pill off">600</span>
+            <span class="cfg-pill off">700</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-    <div class="olo-actions">
-      <button @click="save" :disabled="!isDirty || isSaving" class="olo-btn-save" :class="{ disabled: !isDirty }">
-        <svg v-if="!isSaving" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-        <span v-if="isSaving" class="olo-spinner"></span>
-        {{ isSaving ? 'Salvataggio...' : 'Salva tipografia' }}
-      </button>
+  <div class="cfg-card">
+    <div class="cfg-card-head">
+      <div class="head-ic">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2 9 5-9 5-9-5 9-5z"/><path d="m3 17 9 5 9-5"/><path d="m3 12 9 5 9-5"/></svg>
+      </div>
+      <div>
+        <h3>{{ t('Scala tipografica') }}</h3>
+        <p>{{ t('Ratio matematico tra le grandezze. Anteprima live a destra.') }}</p>
+      </div>
+    </div>
+    <div class="cfg-card-body tight">
+      <div class="cfg-row">
+        <div class="label-col">
+          <label>{{ t('Dimensione base') }}</label>
+          <div class="hint">{{ t('Punto di partenza, di solito 16px per il corpo del testo.') }}</div>
+        </div>
+        <div class="control-col">
+          <div class="cfg-input mono">
+            <input type="number" min="10" max="32" :value="scale.base" @input="setScale('base', parseInt($event.target.value) || 16)" />
+            <span class="suffix">px</span>
+          </div>
+        </div>
+      </div>
+      <div class="cfg-row">
+        <div class="label-col">
+          <label>{{ t('Ratio scala') }}</label>
+          <div class="hint">{{ t('Più alto = differenza più marcata fra body e h1.') }}</div>
+        </div>
+        <div class="control-col">
+          <div class="cfg-select">
+            <select :value="scale.ratio" @change="setScale('ratio', parseFloat($event.target.value))">
+              <option value="1.125">1.125 · Major Second</option>
+              <option value="1.2">1.2 · Minor Third</option>
+              <option value="1.25">1.25 · Major Third</option>
+              <option value="1.333">1.333 · Perfect Fourth</option>
+              <option value="1.414">1.414 · Augmented Fourth</option>
+              <option value="1.5">1.5 · Perfect Fifth</option>
+            </select>
+            <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></span>
+          </div>
+        </div>
+      </div>
+      <div class="cfg-row">
+        <div class="label-col">
+          <label>{{ t('Interlinea body') }}</label>
+          <div class="hint">{{ t('Altezza riga del testo corrente.') }}</div>
+        </div>
+        <div class="control-col">
+          <div class="cfg-slider">
+            <input type="range" min="1.1" max="2" step="0.05" :value="scale.lineHeight" @input="setScale('lineHeight', parseFloat($event.target.value))" />
+            <span class="val">{{ scale.lineHeight.toFixed(2) }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="cfg-row no-divider">
+        <div class="label-col">
+          <label>{{ t('Anteprima scala') }}</label>
+        </div>
+        <div class="control-col">
+          <div class="scale-preview">
+            <div :style="{ fontFamily: displayFontFamily, fontSize: sizes.h1 + 'px', color: 'var(--c-navy)', lineHeight: 1 }">H1 — {{ sizes.h1 }} / 1.0</div>
+            <div :style="{ fontFamily: displayFontFamily, fontSize: sizes.h2 + 'px', color: 'var(--c-navy)', lineHeight: 1.05 }">H2 — {{ sizes.h2 }} / 1.05</div>
+            <div :style="{ fontFamily: bodyFontFamily, fontWeight: 600, fontSize: sizes.h3 + 'px', color: 'var(--c-navy)' }">H3 — {{ sizes.h3 }} / 1.2</div>
+            <div :style="{ fontFamily: bodyFontFamily, fontSize: scale.base + 'px', lineHeight: scale.lineHeight, color: 'var(--c-text)' }">Body — {{ scale.base }} / {{ scale.lineHeight.toFixed(2) }} — Lorem ipsum dolor sit amet consectetur adipiscing elit.</div>
+            <div :style="{ fontFamily: bodyFontFamily, fontSize: sizes.small + 'px', color: 'var(--c-text-mute)' }">Small — {{ sizes.small }} / 1.5 — Caption, meta, didascalie.</div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, watch, computed, inject } from 'vue';
-import { useStylesStore } from '@/stores/styles';
-import FieldFontFamily from '../Builder/fields/FieldFontFamily.vue';
+import { ref, computed, inject, onMounted, onBeforeUnmount } from 'vue';
+import { t } from '@/i18n';
 
-const stylesStore = useStylesStore();
 const showToast = inject('showToast', () => {});
+const setDirty  = inject('setDirty',  () => {});
 
-const localSets = ref(JSON.parse(JSON.stringify(stylesStore.globalTypography || [])));
+const DISPLAY_FONTS = [
+  { value: 'Instrument Serif',  label: 'Instrument Serif' },
+  { value: 'Playfair Display',  label: 'Playfair Display' },
+  { value: 'Fraunces',          label: 'Fraunces' },
+  { value: 'DM Serif Display',  label: 'DM Serif Display' },
+  { value: 'Cormorant Garamond', label: 'Cormorant Garamond' },
+  { value: 'Lora',              label: 'Lora' },
+];
+const BODY_FONTS = [
+  { value: 'Work Sans',         label: 'Work Sans' },
+  { value: 'Inter',             label: 'Inter' },
+  { value: 'Manrope',           label: 'Manrope' },
+  { value: 'Plus Jakarta Sans', label: 'Plus Jakarta Sans' },
+  { value: 'system-ui',         label: 'System UI stack' },
+];
 
-if (localSets.value.length === 0) {
-  localSets.value = [
-    { id: 'heading', label: 'Titoli', family: 'Montserrat', weight: '700', transform: 'none', line_height: '1.3', letter_spacing: '0' },
-    { id: 'subheading', label: 'Sottotitoli', family: 'Montserrat', weight: '500', transform: 'none', line_height: '1.4', letter_spacing: '0.5' },
-    { id: 'body', label: 'Corpo testo', family: 'Open Sans', weight: '400', transform: 'none', line_height: '1.6', letter_spacing: '0' },
-    { id: 'small', label: 'Testo piccolo', family: 'Open Sans', weight: '400', transform: 'none', line_height: '1.5', letter_spacing: '0' },
-  ];
+const display = ref({ family: 'Instrument Serif', weight: 400 });
+const body    = ref({ family: 'Work Sans', weight: 500 });
+const scale   = ref({ base: 16, ratio: 1.25, lineHeight: 1.55 });
+
+const displayFontFamily = computed(() => `'${display.value.family}', serif`);
+const bodyFontFamily    = computed(() => `'${body.value.family}', sans-serif`);
+
+const sizes = computed(() => {
+  const b = scale.value.base;
+  const r = scale.value.ratio;
+  return {
+    small: Math.round(b / r),
+    h3:    Math.round(b * Math.pow(r, 2)),
+    h2:    Math.round(b * Math.pow(r, 4)),
+    h1:    Math.round(b * Math.pow(r, 6)),
+  };
+});
+
+function setDisplay(k, v) { display.value[k] = v; setDirty(true); ensureFontLoaded(v); }
+function setBody(k, v)    { body.value[k]    = v; setDirty(true); ensureFontLoaded(v); }
+function setScale(k, v)   { scale.value[k]   = v; setDirty(true); }
+
+const loadedFonts = new Set();
+function ensureFontLoaded(name) {
+  if (!name || name === 'system-ui' || loadedFonts.has(name)) return;
+  loadedFonts.add(name);
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(name).replace(/%20/g, '+')}:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap`;
+  document.head.appendChild(link);
 }
 
-const isDirty = ref(false);
-const isSaving = computed(() => stylesStore.isSaving);
-
-function generateId(label) {
-  return label.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'set-' + Date.now();
+function uploadCustomFont() {
+  showToast(t('Caricamento font custom in arrivo nella prossima release'), 'success');
 }
 
-function updateField(index, field, value) {
-  localSets.value[index][field] = value;
-  if (field === 'label') {
-    localSets.value[index].id = generateId(value);
-  }
-  isDirty.value = true;
+async function loadSettings() {
+  try {
+    const res = await fetch(`${window.oloData.restUrl}settings/global-typography`, { headers: { 'X-WP-Nonce': window.oloData.nonce } });
+    if (res.ok) {
+      const data = await res.json();
+      if (data?.display) Object.assign(display.value, data.display);
+      if (data?.body)    Object.assign(body.value, data.body);
+      if (data?.scale)   Object.assign(scale.value, data.scale);
+      ensureFontLoaded(display.value.family);
+      ensureFontLoaded(body.value.family);
+    }
+  } catch (e) { /* defaults */ }
 }
 
-function addSet() {
-  const n = localSets.value.length + 1;
-  localSets.value.push({
-    id: 'set-' + n, label: 'Set ' + n, family: '', weight: '400',
-    transform: 'none', line_height: '1.5', letter_spacing: '0',
-  });
-  isDirty.value = true;
+async function saveSettings() {
+  try {
+    await fetch(`${window.oloData.restUrl}settings/global-typography`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData.nonce },
+      body: JSON.stringify({ display: display.value, body: body.value, scale: scale.value }),
+    });
+  } catch (e) { showToast(t('Errore di salvataggio tipografia'), 'error'); }
 }
 
-function removeSet(index) {
-  localSets.value.splice(index, 1);
-  isDirty.value = true;
-}
+const onSave = () => saveSettings();
+const onDiscard = () => loadSettings();
 
-async function save() {
-  stylesStore.setGlobalTypography(JSON.parse(JSON.stringify(localSets.value)));
-  await stylesStore.saveGlobalTypography();
-  isDirty.value = false;
-  showToast('Tipografia globale salvata');
-}
-
-watch(() => stylesStore.globalTypography, (newVal) => {
-  if (!isDirty.value) {
-    localSets.value = JSON.parse(JSON.stringify(newVal || []));
-  }
-}, { deep: true });
+onMounted(() => {
+  ensureFontLoaded('Instrument Serif');
+  ensureFontLoaded('Work Sans');
+  loadSettings();
+  window.addEventListener('olo-cfg-save', onSave);
+  window.addEventListener('olo-cfg-discard', onDiscard);
+});
+onBeforeUnmount(() => {
+  window.removeEventListener('olo-cfg-save', onSave);
+  window.removeEventListener('olo-cfg-discard', onDiscard);
+});
 </script>
 
 <style scoped>
-.olo-typosets-list {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  margin-bottom: 16px;
-}
-.olo-typoset {
-  background: #f9fafb;
-  border: 1px solid #f3f4f6;
-  border-radius: 10px;
-  padding: 16px;
-  transition: border-color 0.15s;
-}
-.olo-typoset:hover {
-  border-color: #e5e7eb;
-}
-.olo-typoset-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 14px;
-}
-.olo-typoset-name {
-  flex: 1;
-  font-weight: 600 !important;
-  font-size: 14px !important;
-}
-.olo-typoset-remove {
-  background: none;
-  border: none;
-  color: #d1d5db;
-  cursor: pointer;
-  padding: 6px;
-  border-radius: 6px;
-  display: flex;
-  transition: all 0.15s;
-}
-.olo-typoset-remove:hover {
-  color: #ef4444;
-  background: #fef2f2;
-}
-.olo-typoset-fields {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-}
-.olo-typoset-field label {
-  display: block;
-  font-size: 11px;
-  font-weight: 500;
-  color: #9ca3af;
-  margin-bottom: 4px;
-}
-.olo-select {
-  cursor: pointer;
-  appearance: auto;
-}
-.olo-input-sm {
-  width: 80px !important;
-}
-.olo-typoset-vars {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-top: 12px;
-}
-.olo-var-tag {
-  font-size: 11px;
-  color: #9ca3af;
-  font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
-  background: #f3f4f6;
-  padding: 2px 8px;
-  border-radius: 4px;
-}
-.olo-typoset-preview {
-  margin-top: 10px;
-  padding: 10px 14px;
-  background: #fff;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  color: #374151;
-  font-size: 16px;
-}
-.olo-typoset-add {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  width: 100%;
-  padding: 12px 0;
-  background: none;
-  border: 2px dashed #e5e7eb;
-  border-radius: 10px;
-  color: #9ca3af;
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  font-family: inherit;
-  transition: all 0.15s;
-}
-.olo-typoset-add:hover {
-  border-color: #6366f1;
-  color: #6366f1;
-  background: #fafafe;
-}
+.font-pair-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 900px) { .font-pair-grid { grid-template-columns: 1fr; } }
+.font-card { background: #fff; border: 1px solid var(--c-line-soft); border-radius: 12px; padding: 18px; }
+.font-card-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--c-text-faint); margin-bottom: 8px; }
+.font-card-preview { font-size: 46px; line-height: 1; letter-spacing: -.02em; margin: 6px 0 16px; color: var(--c-navy); }
+.font-card-preview.body { font-weight: 500; font-size: 32px; line-height: 1.1; }
+.font-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.scale-preview { background: var(--c-bg); border-radius: 10px; padding: 18px; display: grid; gap: 10px; }
 </style>

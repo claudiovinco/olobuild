@@ -37,22 +37,22 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
         'item_gap'           => '15',
         // Bar Spacing
         'bar_width'          => 'full',
-        'bar_padding'        => '16',
+        'bar_padding'        => [ 'top' => 16, 'right' => 16, 'bottom' => 16, 'left' => 16 ],
         'bar_gap'            => '20',
-        'logo_margin_right'  => '0',
+        'logo_margin_right'  => [ 'top' => 0, 'right' => 0, 'bottom' => 0, 'left' => 0 ],
         // Hover Effects
         'hover_effect'       => 'none',
         'hover_effect_color' => '',
         'hover_effect_height'=> '2',
-        'hover_effect_padding'=> '8',
+        'hover_effect_padding'=> [ 'top' => 8, 'right' => 8, 'bottom' => 8, 'left' => 8 ],
         // Mega Panel
         'mega_mode'          => 'auto',
         'panel_width'        => 'container',
         'panel_columns'      => '4',
         'panel_bg'           => '#FFFFFF',
         'panel_shadow'       => 'md',
-        'panel_radius'       => '8',
-        'panel_padding'      => '32',
+        'panel_radius'       => [ 'tl' => 8, 'tr' => 8, 'br' => 8, 'bl' => 8 ],
+        'panel_padding'      => [ 'top' => 32, 'right' => 32, 'bottom' => 32, 'left' => 32 ],
         'panel_border_top'   => '3',
         'panel_border_color' => '',
         'panel_animation'    => 'fade',
@@ -77,12 +77,12 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
         'button_mode'        => 'none',
         'btn_bg'             => '',
         'btn_color'          => '#FFFFFF',
-        'btn_radius'         => '6',
+        'btn_radius'         => [ 'tl' => 6, 'tr' => 6, 'br' => 6, 'bl' => 6 ],
         'btn_hover_bg'       => '',
-        'btn_padding_v'      => '8',
-        'btn_padding_h'      => '20',
-        'btn_margin_left'    => '0',
-        'btn_margin_right'   => '0',
+        'btn_padding_v'      => [ 'top' => 8, 'right' => 0, 'bottom' => 8, 'left' => 0 ],
+        'btn_padding_h'      => [ 'top' => 0, 'right' => 20, 'bottom' => 0, 'left' => 20 ],
+        'btn_margin_left'    => [ 'top' => 0, 'right' => 0, 'bottom' => 0, 'left' => 0 ],
+        'btn_margin_right'   => [ 'top' => 0, 'right' => 0, 'bottom' => 0, 'left' => 0 ],
         'btn_border_width'   => '0',
         'btn_border_color'   => '',
         // Search
@@ -112,7 +112,7 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
         'mob_toggle_size'    => '20',
         'mob_toggle_color'   => '',
         'mobile_font_size'   => '17',
-        'mobile_item_padding'=> '16',
+        'mobile_item_padding'=> [ 'top' => 16, 'right' => 16, 'bottom' => 16, 'left' => 16 ],
         'mobile_logo'        => '',
         'mobile_logo_height' => '36',
         'mobile_bar_logo'    => true,
@@ -256,6 +256,36 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
 
     /* ─── CSS ─── */
 
+    /**
+     * Normalizza un valore "spacing" in array {top,right,bottom,left}.
+     * Accetta:
+     *   - array { top, right, bottom, left }
+     *   - scalar (es. '16') → uniform su tutti i lati
+     *   - vuoto → default uniforme su tutti i lati
+     */
+    private function pad_obj( $value, $default = 0 ) {
+        if ( is_array( $value ) ) {
+            return [
+                'top'    => intval( $value['top']    ?? $default ),
+                'right'  => intval( $value['right']  ?? $default ),
+                'bottom' => intval( $value['bottom'] ?? $default ),
+                'left'   => intval( $value['left']   ?? $default ),
+            ];
+        }
+        $v = ( $value === '' || $value === null ) ? $default : intval( $value );
+        return [ 'top' => $v, 'right' => $v, 'bottom' => $v, 'left' => $v ];
+    }
+
+    /**
+     * Restituisce un singolo intero da un setting "spacing" o scalare.
+     * Strategia per shorthand legacy: prende il valore "top" (= scalar legacy se
+     * uniformemente impostato).
+     */
+    private function pad_int( $value, $default = 0 ) {
+        $obj = $this->pad_obj( $value, $default );
+        return $obj['top'];
+    }
+
     private function render_css( $s, $uid ) {
         $bp          = intval( $s['mobile_breakpoint'] ) ?: 1024;
         $nav_bg      = $this->safe_color( $s['nav_bg'] );
@@ -273,7 +303,7 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
         $p_bg        = $this->safe_color( $s['panel_bg'] ) ?: '#FFFFFF';
         $p_cols      = max( 2, min( 6, intval( $s['panel_columns'] ) ) );
         $p_radius    = Olo_Tile_Utils::radius_int( $s['panel_radius'] );
-        $p_pad       = intval( $s['panel_padding'] ) ?: 32;
+        $p_pad       = $this->pad_int( $s['panel_padding'] ?? null, 32 ) ?: 32;
         $p_bt        = intval( $s['panel_border_top'] );
         $p_bc        = $this->safe_color( $s['panel_border_color'] ) ?: 'var(--olo-color-primary, #6366F1)';
         $p_anim      = $s['panel_animation'] === 'slide-down' ? 'slide' : 'fade';
@@ -296,10 +326,10 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
         $btn_color   = $this->safe_color( $s['btn_color'] ) ?: '#FFFFFF';
         $btn_radius  = Olo_Tile_Utils::radius_int( $s['btn_radius'] );
         $btn_hbg     = $this->safe_color( $s['btn_hover_bg'] );
-        $btn_pv      = intval( $s['btn_padding_v'] );
-        $btn_ph      = intval( $s['btn_padding_h'] );
-        $btn_ml      = intval( $s['btn_margin_left'] );
-        $btn_mr      = intval( $s['btn_margin_right'] );
+        $btn_pv      = $this->pad_int( $s['btn_padding_v'] ?? null, 8 );
+        $btn_ph      = $this->pad_int( $s['btn_padding_h'] ?? null, 20 );
+        $btn_ml      = $this->pad_int( $s['btn_margin_left'] ?? null, 0 );
+        $btn_mr      = $this->pad_int( $s['btn_margin_right'] ?? null, 0 );
         $btn_bw      = intval( $s['btn_border_width'] ?? 0 );
         $btn_bc      = $this->safe_color( $s['btn_border_color'] ?? '' );
 
@@ -320,9 +350,9 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
         $sep_style   = $s['mob_separator_style'] ?? 'line';
 
         // Bar spacing
-        $bar_pad     = intval( $s['bar_padding'] ?? 16 );
+        $bar_pad     = $this->pad_int( $s['bar_padding'] ?? null, 16 );
         $bar_gap_val = intval( $s['bar_gap'] ?? 20 );
-        $logo_mr     = intval( $s['logo_margin_right'] ?? 0 );
+        $logo_mr     = $this->pad_int( $s['logo_margin_right'] ?? null, 0 );
 
         // Panel extras
         $p_max_w     = intval( $s['panel_max_width'] ?? 900 );
@@ -1243,7 +1273,7 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
         /* === Mobile Dropdown Panel === */
         <?php
         $mob_fs  = intval( $s['mobile_font_size'] ?? 17 ) ?: 17;
-        $mob_ip  = intval( $s['mobile_item_padding'] ?? 16 ) ?: 16;
+        $mob_ip  = $this->pad_int( $s['mobile_item_padding'] ?? null, 16 ) ?: 16;
         $mob_sep = ! empty( $s['mobile_separator'] ?? true );
         $mob_drop_bg = $this->safe_color_css( $s['panel_bg'] ?? '' ) ?: '#ffffff';
         $mob_drop_tc = $this->safe_color_css( $s['mobile_text_color'] ?? '' ) ?: '#222';
@@ -1418,7 +1448,7 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
             padding: <?php echo max(4, $btn_pv - 2); ?>px <?php echo max(8, $btn_ph - 4); ?>px;
         }
         .<?php echo $uid; ?> .olo-mm-mob-search-panel {
-            display: none; padding: 10px <?php echo intval($s['bar_padding'] ?? 12); ?>px;
+            display: none; padding: 10px <?php echo $this->pad_int($s['bar_padding'] ?? null, 12); ?>px;
             background: <?php echo $mob_drop_bg; ?>;
         }
         .<?php echo $uid; ?>.olo-mm-search-active .olo-mm-mob-search-panel { display: flex; }
@@ -1464,7 +1494,7 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
         $he = $s['hover_effect'] ?? 'none';
         $he_color = $this->safe_color( $s['hover_effect_color'] ) ?: 'var(--olo-color-primary, #6366F1)';
         $he_h = intval( $s['hover_effect_height'] ?? 2 );
-        $he_pad = intval( $s['hover_effect_padding'] ?? 8 );
+        $he_pad = $this->pad_int( $s['hover_effect_padding'] ?? null, 8 );
         ?>
         <?php if ( $he === 'highlight' ) : ?>
         .<?php echo $uid; ?> .olo-mm-nav > li > a::after {
@@ -1735,7 +1765,7 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
         <?php if ( ! empty( $s['topbar_enabled'] ) ) : ?>
         .<?php echo $uid; ?> .olo-mm-topbar {
             display: flex; align-items: center; justify-content: space-between;
-            padding: 0 <?php echo absint($s['bar_padding']); ?>px;
+            padding: 0 <?php echo absint($this->pad_int($s['bar_padding'] ?? null, 16)); ?>px;
             height: <?php echo absint($s['topbar_height']); ?>px;
             background: <?php echo esc_attr($s['topbar_bg']); ?>;
             color: <?php echo esc_attr($s['topbar_text_color']); ?>;
@@ -1743,8 +1773,8 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
             line-height: 1; position: relative; z-index: 100000;
             width: 100vw;
             margin-left: calc(-50vw + 50%);
-            padding-left: max(<?php echo absint($s['bar_padding']); ?>px, calc(50vw - 600px));
-            padding-right: max(<?php echo absint($s['bar_padding']); ?>px, calc(50vw - 600px));
+            padding-left: max(<?php echo absint($this->pad_int($s['bar_padding'] ?? null, 16)); ?>px, calc(50vw - 600px));
+            padding-right: max(<?php echo absint($this->pad_int($s['bar_padding'] ?? null, 16)); ?>px, calc(50vw - 600px));
             box-sizing: border-box;
         }
         <?php if ( ! empty( $s['topbar_border_bottom'] ) ) : ?>

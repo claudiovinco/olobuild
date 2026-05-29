@@ -7,6 +7,7 @@
         @click.self="close"
       >
         <div
+          ref="dialogRef"
           class="mb-bg-gray-800 mb-border mb-border-gray-600 mb-rounded-xl mb-shadow-2xl mb-w-[640px] mb-max-h-[85vh] mb-flex mb-flex-col mb-overflow-hidden"
           @click.stop
         >
@@ -578,7 +579,8 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, onBeforeUnmount, watch } from 'vue';
+import { ref, reactive, onMounted, onBeforeUnmount, watch, nextTick } from 'vue';
+import { useFocusTrap } from '@/composables/useFocusTrap';
 import { useBuilderStore } from '@/stores/builder';
 import { useTilesStore } from '@/stores/tiles';
 import { useToast } from '@/composables/useToast.js';
@@ -1100,6 +1102,10 @@ function open() {
 function close() {
   visible.value = false;
 }
+
+const dialogRef = ref(null);
+const aiTrap = useFocusTrap(dialogRef, { onEscape: close });
+watch(visible, (v) => { if (v) { nextTick(() => aiTrap.activate()); } else { aiTrap.deactivate(); } });
 
 // Keyboard shortcut: Ctrl+Shift+A (solo se chiave API configurata)
 const hasAiKey = !!(window.oloData && window.oloData.hasAiKey);

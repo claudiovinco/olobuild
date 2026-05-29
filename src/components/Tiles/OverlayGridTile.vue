@@ -1,5 +1,5 @@
 <template>
-  <div class="olo-overlaygrid">
+  <div class="olo-overlaygrid" :class="'olo-og--preset-' + (s.preset || 'editorial-grid')">
     <div class="mog-grid" :style="{ '--mog-cols': cols, '--mog-gap': gap }">
       <div
         v-for="(item, i) in items"
@@ -209,4 +209,103 @@ const hoverOverlayClass = computed(() => {
 .mog-cell:hover .mog-ov-slide-left { transform: translateX(0); }
 .mog-ov-slide-right { transform: translateX(100%); transition: transform 0.3s ease; }
 .mog-cell:hover .mog-ov-slide-right { transform: translateX(0); }
+
+/* ───── Preset visual hints in builder ───── */
+
+/* Liquid Glass */
+.olo-og--preset-liquid-glass .mog-cell { border-radius: 14px; overflow: hidden; }
+.olo-og--preset-liquid-glass .mog-overlay {
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  background: rgba(255,255,255,0.20) !important;
+  border: 1px solid rgba(255,255,255,0.4);
+  border-radius: 10px;
+  margin: 8px;
+}
+
+/* Neon Cyber */
+.olo-og--preset-neon-cyber .mog-cell {
+  border: 2px solid #ff6a2a;
+  box-shadow: 0 0 14px rgba(255,106,42,0.35);
+}
+.olo-og--preset-neon-cyber .mog-overlay {
+  background: linear-gradient(180deg, transparent 0%, rgba(10,15,28,0.85) 100%) !important;
+}
+.olo-og--preset-neon-cyber .mog-overlay :deep(*) {
+  color: #ff6a2a !important;
+  text-shadow: 0 0 6px rgba(255,106,42,0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* Brutalist */
+.olo-og--preset-brutalist-block .mog-cell {
+  border: 3px solid #000;
+  box-shadow: 5px 5px 0 0 #000;
+}
+.olo-og--preset-brutalist-block .mog-overlay {
+  background: #fff !important;
+  border-top: 3px solid #000;
+}
+.olo-og--preset-brutalist-block .mog-overlay :deep(*) {
+  color: #000 !important;
+  font-weight: 900 !important;
+  text-transform: uppercase;
+}
+
+/* Magnetic */
+.olo-og--preset-magnetic-liquid .mog-cell {
+  border-radius: 18px;
+  box-shadow: 0 12px 26px rgba(232,98,42,0.18);
+}
+.olo-og--preset-magnetic-liquid .mog-overlay {
+  background: linear-gradient(135deg, rgba(0,0,0,0.30) 0%, rgba(232,98,42,0.55) 100%) !important;
+}
+
+/* Sticker */
+.olo-og--preset-sticker .mog-cell {
+  border: 3px dashed rgba(232,98,42,0.55);
+  background: #fff;
+  padding: 4px;
+  border-radius: 6px;
+  box-shadow: 0 10px 22px rgba(0,0,0,0.16);
+}
+.olo-og--preset-sticker .mog-grid > .mog-cell:nth-child(3n+1) { transform: rotate(-1.4deg); }
+.olo-og--preset-sticker .mog-grid > .mog-cell:nth-child(3n+2) { transform: rotate(0.9deg); }
+.olo-og--preset-sticker .mog-grid > .mog-cell:nth-child(3n+3) { transform: rotate(-0.5deg); }
+
+/* Retro Terminal */
+.olo-og--preset-retro-terminal .mog-cell {
+  border: 1px solid rgba(0,255,140,0.45);
+  background-image: repeating-linear-gradient(0deg, transparent 0, transparent 2px, rgba(0,255,140,0.06) 2px, rgba(0,255,140,0.06) 3px);
+}
+.olo-og--preset-retro-terminal .mog-bg {
+  filter: hue-rotate(70deg) saturate(2) brightness(0.7);
+}
+.olo-og--preset-retro-terminal .mog-overlay {
+  background: rgba(12,12,12,0.85) !important;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace !important;
+}
+.olo-og--preset-retro-terminal .mog-overlay :deep(*) {
+  color: #00ff8c !important;
+  text-shadow: 0 0 6px rgba(0,255,140,0.5);
+  font-family: inherit !important;
+  text-transform: uppercase;
+}
+
+/* 3D Tilt */
+.olo-og--preset-3d-tilt .mog-cell {
+  box-shadow: 0 18px 36px rgba(0,0,0,0.18);
+  transform: perspective(800px) rotateX(2deg);
+  transform-origin: center top;
+}
+
+/* Duotone Portfolio */
+.olo-og--preset-duotone-portfolio .mog-bg {
+  filter: grayscale(100%);
+  transition: filter 0.45s ease;
+}
+.olo-og--preset-duotone-portfolio .mog-cell:hover .mog-bg {
+  filter: grayscale(0%);
+}
 </style>

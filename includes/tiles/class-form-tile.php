@@ -11,6 +11,7 @@ class Olo_Form_Tile extends Olo_Tile_Base {
     protected $icon     = 'dashicons-email-alt';
     protected $category = 'marketing';
     protected $defaults = [
+        'preset' => 'custom',
         'fields' => [
             [ 'field_type' => 'text', 'label' => 'Nome', 'placeholder' => 'Il tuo nome', 'name' => 'nome', 'required' => true, 'width' => '1-2', 'options' => '', 'icon' => 'user' ],
             [ 'field_type' => 'email', 'label' => 'Email', 'placeholder' => 'La tua email', 'name' => 'email', 'required' => true, 'width' => '1-2', 'options' => '', 'icon' => 'mail' ],
@@ -259,7 +260,7 @@ class Olo_Form_Tile extends Olo_Tile_Base {
         ?>
         <style>
             .<?php echo $uid; ?> .olo-f-label{color:<?php echo $label_color; ?>;font-size:<?php echo $label_size; ?>px;font-weight:<?php echo $label_weight; ?>;margin-bottom:6px;display:block}
-            .<?php echo $uid; ?> .olo-f-required{color:var(--olo-color-danger, #EF4444);margin-left:2px}
+            .<?php echo $uid; ?> .olo-f-required{color:currentColor;opacity:.65;margin-left:2px;font-weight:700}
             .<?php echo $uid; ?> .uk-input,
             .<?php echo $uid; ?> .uk-textarea,
             .<?php echo $uid; ?> .uk-select{background-color:<?php echo $input_bg; ?>;color:<?php echo $input_color; ?>;border:<?php echo $bw; ?>px solid <?php echo $input_bc; ?>;border-radius:<?php echo $radius; ?>;transition:border-radius 400ms cubic-bezier(.4,0,.2,1),border-color 0.15s ease}
@@ -334,10 +335,16 @@ class Olo_Form_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .olo-f-file-remove:hover{opacity:0.7}
         </style>
 
-        <div class="olo-form <?php echo esc_attr( $uid ); ?>"<?php if ( $container_style ) : ?> style="<?php echo esc_attr( $container_style ); ?>"<?php endif; ?>>
+        <div class="olo-form <?php echo esc_attr( $uid ); ?> olo-fm-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>"<?php if ( $container_style ) : ?> style="<?php echo esc_attr( $container_style ); ?>"<?php endif; ?>>
+            <?php
+            // Token bound to the config: any tampering on email_to / email_subject /
+            // auto_reply_message will fail HMAC verification server-side.
+            $config_b64 = base64_encode( $form_config );
+            $form_token = Olo_Form_Handler::generate_token( $config_b64 );
+            ?>
             <form class="uk-form-stacked" data-olo-form="<?php echo esc_attr( $uid ); ?>" enctype="multipart/form-data">
-                <input type="hidden" name="_olo_form_config" value="<?php echo esc_attr( base64_encode( $form_config ) ); ?>" />
-                <input type="hidden" name="_olo_form_token" value="<?php echo esc_attr( Olo_Form_Handler::generate_token() ); ?>" />
+                <input type="hidden" name="_olo_form_config" value="<?php echo esc_attr( $config_b64 ); ?>" />
+                <input type="hidden" name="_olo_form_token" value="<?php echo esc_attr( $form_token ); ?>" />
                 <input type="hidden" name="_olo_form_id" value="<?php echo esc_attr( $uid ); ?>" />
 
                 <?php if ( ! empty( $s['honeypot'] ) ) : ?>

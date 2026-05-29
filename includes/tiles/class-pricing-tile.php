@@ -8,6 +8,7 @@ class Olo_Pricing_Tile extends Olo_Tile_Base {
     protected $icon     = 'dashicons-money-alt';
     protected $category = 'marketing';
     protected $defaults = [
+        'preset' => 'custom',
         'plan_name'    => 'Piano Pro',
         'price'        => '29',
         'currency'     => '€',
@@ -179,7 +180,7 @@ class Olo_Pricing_Tile extends Olo_Tile_Base {
                 <?php if ( $bg_type === 'color' ) : ?>
                 background: <?php echo $bg; ?>;
                 <?php else : ?>
-                background: var(--olo-color-secondary, #1F2937);
+                background: #1F2937;
                 <?php endif; ?>
                 <?php if ( $tile_bw > 0 ) : ?>
                 border: <?php echo $tile_bw; ?>px solid <?php echo $tile_bc; ?>;
@@ -356,7 +357,7 @@ class Olo_Pricing_Tile extends Olo_Tile_Base {
             }
             <?php endif; ?>
         </style>
-        <div class="olo-pricing <?php echo esc_attr( $uid ); ?>">
+        <div class="olo-pricing <?php echo esc_attr( $uid ); ?> olo-pricing-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>">
             <?php if ( $bg_type === 'image' && ! empty( $s['bg_image'] ) ) : ?>
                 <div class="olo-price-bg"></div>
             <?php endif; ?>

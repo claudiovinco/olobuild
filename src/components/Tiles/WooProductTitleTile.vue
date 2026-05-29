@@ -8,7 +8,7 @@
       v-else
       :is="s.tag"
       :style="titleStyle"
-    >Titolo del prodotto</component>
+    >{{ t('Titolo del prodotto') }}</component>
   </div>
 </template>
 

@@ -1,12 +1,25 @@
 import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared';
 import { shadowField } from './_shared.js';
+import { t } from '@/i18n';
 
+/**
+ * Tile Page Title Bar — split CONTENUTO/STILE (regola universale Olobuild).
+ *   fields[]      → title_tag (HTML), subtitle (testo), toggle show_breadcrumbs, breadcrumb_separator,
+ *                   asset sfondo (bg_image), toggle bg_parallax, toggle border_bottom
+ *   styleFields[] → preset, bg, typography_preset, colori e dimensioni titolo/sottotitolo/breadcrumbs,
+ *                   sfondo (bg_color, overlay, size, position), min_height, tile_padding, content_width,
+ *                   border_color, textEffectsFields, shadow, borderFields
+ *   AVANZATE      → meta tecnico (id/class/condizioni)
+ */
 export default {
   type: 'pagetitlebar',
-  name: 'Page Title Bar',
+  name: t('Page Title Bar'),
   icon: 'dashicons-format-aside',
   category: 'structure',
   defaults: {
+    preset: 'custom',
+    bg: { type: 'none' },
+    typography_preset: '',
     title_tag: 'h1',
     title_color: '#FFFFFF',
     title_size: '36',
@@ -32,37 +45,96 @@ export default {
     border_color: '#374151',
     shadow: 'none',
     ...textEffectsDefaults,
+    text_effect_target: 'subtitle',
     border: { ...borderDefault },
     border_hover: { ...borderHoverDefault },
     border_hover_duration: 300,
     ...borderEffectDefaults,
   },
+
+  // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
-    { key: 'title_tag', label: 'Tag titolo', type: 'select', options: { h1: 'H1', h2: 'H2', h3: 'H3', h4: 'H4', div: 'DIV' } },
-    { key: 'title_color', label: 'Colore titolo', type: 'color' },
-    { key: 'title_size', label: 'Dimensione titolo (px)', type: 'range', min: 14, max: 80 },
-    { key: 'title_weight', label: 'Peso titolo', type: 'select', options: { '300': 'Light', '400': 'Normal', '600': 'Semi-bold', '700': 'Bold', '800': 'Extra-bold' } },
-    { key: 'title_align', label: 'Allineamento', type: 'select', options: { left: 'Sinistra', center: 'Centro', right: 'Destra' } },
-    { key: 'subtitle', label: 'Sottotitolo', type: 'text' },
-    { key: 'subtitle_color', label: 'Colore sottotitolo', type: 'color' },
-    { key: 'subtitle_size', label: 'Dimensione sottotitolo (px)', type: 'range', min: 12, max: 40 },
-    { key: 'show_breadcrumbs', label: 'Mostra breadcrumbs', type: 'toggle' },
-    { key: 'breadcrumb_color', label: 'Colore breadcrumbs', type: 'color', show: s => s.show_breadcrumbs },
-    { key: 'breadcrumb_separator', label: 'Separatore', type: 'text', show: s => s.show_breadcrumbs },
-    { key: 'bg_color', label: 'Colore sfondo', type: 'color' },
-    { key: 'bg_image', label: 'Immagine sfondo', type: 'media' },
-    { key: 'bg_overlay', label: 'Opacita overlay (%)', type: 'range', min: 0, max: 100, show: s => !!s.bg_image },
-    { key: 'bg_overlay_color', label: 'Colore overlay', type: 'color', show: s => !!s.bg_image },
-    { key: 'bg_size', label: 'Dimensione sfondo', type: 'select', options: { cover: 'Cover', contain: 'Contain', auto: 'Auto' }, show: s => !!s.bg_image },
-    { key: 'bg_position', label: 'Posizione sfondo', type: 'select', options: { 'center center': 'Centro', 'top center': 'Alto', 'bottom center': 'Basso', 'left center': 'Sinistra', 'right center': 'Destra' }, show: s => !!s.bg_image },
-    { key: 'bg_parallax', label: 'Parallax', type: 'toggle', show: s => !!s.bg_image },
-    { key: 'min_height', label: 'Altezza minima (px)', type: 'range', min: 0, max: 600, step: 10 },
-    { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 200 },
-    { key: 'content_width', label: 'Larghezza contenuto (px)', type: 'range', min: 600, max: 1600, step: 50 },
-    { key: 'border_bottom', label: 'Bordo inferiore', type: 'toggle' },
-    { key: 'border_color', label: 'Colore bordo', type: 'color', show: s => s.border_bottom },
+    { type: 'separator', label: t('Sottotitolo') },
+    { key: 'subtitle', label: t('Sottotitolo'), type: 'text' },
+
+    { type: 'separator', label: t('Breadcrumbs') },
+    { key: 'show_breadcrumbs', label: t('Mostra breadcrumbs'), type: 'toggle' },
+    { key: 'breadcrumb_separator', label: t('Separatore'), type: 'text', show: s => s.show_breadcrumbs },
+
+    { type: 'separator', label: t('Sfondo (asset)') },
+    { key: 'bg_image', label: t('Immagine sfondo'), type: 'media' },
+    { key: 'bg_parallax', label: t('Parallax'), type: 'toggle', show: s => !!s.bg_image },
+
+    { type: 'separator', label: t('Bordo inferiore') },
+    { key: 'border_bottom', label: t('Bordo inferiore'), type: 'toggle' },
+  ],
+
+  // ─── STILE ─────────────────────────────────────────────────
+  styleFields: [
+    { type: 'separator', label: t('Preset stilistico') },
+    { key: 'preset', label: t('Stile'), type: 'select', options: [
+      { value: 'modern-clean',    label: t('Modern Clean') },
+      { value: 'minimal-mono',    label: t('Minimal Mono') },
+      { value: 'magazine-bold',   label: t('Magazine Bold') },
+      { value: 'editorial-serif', label: t('Editorial Serif') },
+      { value: 'compact-inline',  label: t('Compact Inline') },
+      { value: 'glass-frosted',   label: t('Glass Frosted') },
+      { value: 'neon-glow',       label: t('Neon Glow') },
+      { value: 'brutalist-stamp', label: t('Brutalist Stamp') },
+      { value: 'gradient-aurora', label: t('Gradient Aurora') },
+      { value: 'sticker-fun',     label: t('Sticker Fun') },
+      { value: 'retro-terminal',  label: t('Retro Terminal') },
+      { value: 'tilt-3d',         label: t('3D Tilt') },
+      { value: 'custom',          label: t('Personalizzato') },
+    ] },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
+
+    { type: 'separator', label: t('Tipografia') },
+    { type: 'typography', label: t('Titolo'),
+      presetKey: 'typography_preset',
+      responsiveKeys: ['size'],
+      keys: {
+        tag:    'title_tag',
+        size:   'title_size',
+        weight: 'title_weight',
+        color:  'title_color',
+      },
+      sizeMin: 14, sizeMax: 80, sizeStep: 1,
+    },
+    { type: 'typography', label: t('Sottotitolo'),
+      presetKey: 'typography_preset',
+      responsiveKeys: ['size'],
+      keys: {
+        size:  'subtitle_size',
+        color: 'subtitle_color',
+      },
+      sizeMin: 12, sizeMax: 40, sizeStep: 1,
+    },
+    { type: 'typography', label: t('Breadcrumbs'),
+      presetKey: 'typography_preset',
+      keys: {
+        color: 'breadcrumb_color',
+      },
+    },
+    { key: 'title_align', label: t('Allineamento'), type: 'select', options: { left: 'Sinistra', center: 'Centro', right: 'Destra' } },
+
+    { type: 'separator', label: t('Sfondo') },
+    { key: 'bg_color', label: t('Colore sfondo'), type: 'color' },
+    { key: 'bg_overlay', label: t('Opacita overlay (%)'), type: 'range', min: 0, max: 100, show: s => !!s.bg_image },
+    { key: 'bg_overlay_color', label: t('Colore overlay'), type: 'color', show: s => !!s.bg_image },
+    { key: 'bg_size', label: t('Dimensione sfondo'), type: 'select', options: { cover: 'Cover', contain: 'Contain', auto: 'Auto' }, show: s => !!s.bg_image },
+    { key: 'bg_position', label: t('Posizione sfondo'), type: 'select', options: { 'center center': 'Centro', 'top center': 'Alto', 'bottom center': 'Basso', 'left center': 'Sinistra', 'right center': 'Destra' }, show: s => !!s.bg_image },
+
+    { type: 'separator', label: t('Layout') },
+    { key: 'min_height', label: t('Altezza minima (px)'), type: 'range', min: 0, max: 600, step: 10 },
+    { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 200 },
+    { key: 'content_width', label: t('Larghezza contenuto (px)'), type: 'range', min: 600, max: 1600, step: 50 },
+
+    { type: 'separator', label: t('Bordo inferiore') },
+    { key: 'border_color', label: t('Colore bordo'), type: 'color', show: s => s.border_bottom },
+
+    ...textEffectsFields([ { value: 'subtitle', label: t('Solo Sottotitolo') } ]),
     ...shadowField,
-    ...textEffectsFields([ { value: 'subtitle', label: 'Solo Sottotitolo' } ]),
     ...borderFields(),
   ],
 };

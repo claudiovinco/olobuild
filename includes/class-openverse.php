@@ -143,6 +143,20 @@ class Olo_Openverse {
             return new WP_Error( 'missing_url', 'URL immagine mancante', [ 'status' => 400 ] );
         }
 
+        // Hotlink mode: skip sideload
+        $behavior = olo_stockmedia_behavior();
+        if ( empty( $behavior['download_local'] ) ) {
+            $caption_hotlink = $attribution ? wp_strip_all_tags( $attribution )
+                : ( $photographer ? $photographer . ' / Openverse' : '' );
+            return rest_ensure_response( [
+                'id'      => 0,
+                'url'     => $regular_url,
+                'alt'     => $alt,
+                'caption' => $caption_hotlink,
+                'hotlink' => true,
+            ] );
+        }
+
         require_once ABSPATH . 'wp-admin/includes/file.php';
         require_once ABSPATH . 'wp-admin/includes/media.php';
         require_once ABSPATH . 'wp-admin/includes/image.php';
@@ -152,11 +166,23 @@ class Olo_Openverse {
             return new WP_Error( 'download_failed', $tmp_file->get_error_message(), [ 'status' => 502 ] );
         }
 
+        // Optimize: WebP conversion se richiesto (solo jpg/png)
+        if ( ! empty( $behavior['optimize_on_download'] ) ) {
+            $webp = olo_convert_to_webp( $tmp_file, 82 );
+            if ( $webp && $webp !== $tmp_file ) {
+                @unlink( $tmp_file );
+                $tmp_file = $webp;
+            }
+        }
+
         // Detect extension from URL or default to jpg
         $ext = pathinfo( wp_parse_url( $regular_url, PHP_URL_PATH ), PATHINFO_EXTENSION );
         $ext = preg_replace( '/[^a-z0-9]/i', '', $ext );
         if ( ! in_array( strtolower( $ext ), [ 'jpg', 'jpeg', 'png', 'gif', 'webp', 'svg' ], true ) ) {
             $ext = 'jpg';
+        }
+        if ( str_ends_with( $tmp_file, '.webp' ) ) {
+            $ext = 'webp';
         }
 
         $filename  = 'openverse-' . sanitize_file_name( substr( $photo_id, 0, 36 ) ) . '.' . $ext;

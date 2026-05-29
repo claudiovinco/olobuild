@@ -46,6 +46,7 @@
       <div class="olo-border-cross-top">
         <input
           type="number"
+          @wheel="handleNumberWheel"
           class="olo-border-num"
           :class="{ 'olo-border-num--active': val.top > 0 }"
           :value="val.top"
@@ -63,6 +64,7 @@
         <div class="olo-border-cross-side olo-border-cross-side--l">
           <input
             type="number"
+            @wheel="handleNumberWheel"
             class="olo-border-num"
             :class="{ 'olo-border-num--active': val.left > 0 }"
             :value="val.left"
@@ -99,6 +101,7 @@
           <div class="olo-border-seg olo-border-seg--v" :class="{ 'olo-border-seg--on': val.right > 0 }"></div>
           <input
             type="number"
+            @wheel="handleNumberWheel"
             class="olo-border-num"
             :class="{ 'olo-border-num--active': val.right > 0 }"
             :value="val.right"
@@ -115,6 +118,7 @@
         <div class="olo-border-seg olo-border-seg--h" :class="{ 'olo-border-seg--on': val.bottom > 0 }"></div>
         <input
           type="number"
+          @wheel="handleNumberWheel"
           class="olo-border-num"
           :class="{ 'olo-border-num--active': val.bottom > 0 }"
           :value="val.bottom"
@@ -131,6 +135,7 @@
 <script setup>
 import { ref, computed } from 'vue';
 import { t } from '@/i18n';
+import { handleNumberWheel } from '@/utils/numberInputWheel';
 
 const props = defineProps({
   modelValue: { default: null },
@@ -265,6 +270,7 @@ function onColorPick(hex) {
 
 .olo-border-color-group { flex: 1 1 auto; min-width: 0; }
 .olo-border-color-row {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 4px;
@@ -278,6 +284,7 @@ function onColorPick(hex) {
 .olo-border-color-row:focus-within { border-color: #60a5fa; }
 
 .olo-border-color-swatch {
+  position: relative;
   width: 28px;
   height: 100%;
   flex-shrink: 0;
@@ -291,11 +298,20 @@ function onColorPick(hex) {
 .olo-border-color-swatch:hover { filter: brightness(0.93); }
 .olo-border-color-empty { font-size: 13px; color: #9ca3af; }
 
+/* Native color input: full overlay on the swatch so the OS picker opens
+   on direct user click, without needing a programmatic .click() dispatch
+   (Chromium recent versions ignore programmatic clicks on size-0 inputs). */
 .olo-border-color-native {
   position: absolute;
+  inset: 0;
+  width: 28px;
+  height: 100%;
   opacity: 0;
-  pointer-events: none;
-  width: 0; height: 0;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  padding: 0;
+  z-index: 2;
 }
 .olo-border-color-text {
   flex: 1;
@@ -349,7 +365,7 @@ function onColorPick(hex) {
 
 /* Input numerico lato */
 .olo-border-num {
-  width: 44px;
+  width: 56px;
   height: 26px;
   background: #f0f4f8;
   border: 1.5px solid #d1d9e6;
@@ -360,7 +376,7 @@ function onColorPick(hex) {
   text-align: center;
   outline: none;
   -moz-appearance: textfield;
-  padding: 0 2px;
+  padding: 0 4px;
   transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
 }
 .olo-border-num::-webkit-inner-spin-button,

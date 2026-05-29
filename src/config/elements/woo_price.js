@@ -1,12 +1,23 @@
 
 import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
+import { t } from '@/i18n';
+
+/**
+ * Tile WC Prezzo Prodotto — split CONTENUTO/STILE (regola universale Olobuild).
+ *   fields[]      → toggle regular/sale/suffisso, testi prefisso/suffisso
+ *   styleFields[] → preset, sfondo, tipografia, dimensione, peso, allineamento, colori, bordo
+ *   AVANZATE      → meta tecnico (id/class/condizioni)
+ */
 export default {
   type: 'woo_price',
-  name: 'Prezzo Prodotto',
+  name: t('Prezzo Prodotto'),
   icon: 'dashicons-tag',
   category: 'woocommerce',
-  placeholder: 'Prezzo prodotto WooCommerce',
+  placeholder: t('Prezzo prodotto WooCommerce'),
   defaults: {
+    preset: 'custom',
+    bg: { type: 'none' },
+    typography_preset: '',
     show_regular: true,
     show_sale: true,
     show_suffix: false,
@@ -23,31 +34,58 @@ export default {
     border_hover_duration: 300,
     ...borderEffectDefaults,
   },
+
+  // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
-    { key: 'show_regular', label: 'Mostra prezzo originale', type: 'toggle' },
-    { key: 'show_sale', label: 'Mostra prezzo scontato', type: 'toggle' },
-    { key: 'show_suffix', label: 'Mostra suffisso prezzo', type: 'toggle' },
-    { key: 'prefix', label: 'Prefisso', type: 'text', placeholder: 'es. A partire da' },
-    { key: 'suffix', label: 'Suffisso', type: 'text', placeholder: 'es. + IVA' },
+    { key: 'show_regular', label: t('Mostra prezzo originale'), type: 'toggle' },
+    { key: 'show_sale', label: t('Mostra prezzo scontato'), type: 'toggle' },
+    { key: 'show_suffix', label: t('Mostra suffisso prezzo'), type: 'toggle' },
+    { key: 'prefix', label: t('Prefisso'), type: 'text', placeholder: t('es. A partire da') },
+    { key: 'suffix', label: t('Suffisso'), type: 'text', placeholder: t('es. + IVA') },
+  ],
 
-    { type: 'separator', label: 'Stile' },
-    { key: 'font_size', label: 'Dimensione (px)', type: 'range', min: 12, max: 72, step: 2 },
-    { key: 'font_weight', label: 'Peso font', type: 'select', options: [
-      { value: '400', label: 'Normale' },
-      { value: '600', label: 'Semi-bold' },
-      { value: '700', label: 'Bold' },
-      { value: '800', label: 'Extra-bold' },
-    ]},
-    { key: 'text_align', label: 'Allineamento', type: 'select', options: [
-      { value: 'left', label: 'Sinistra' },
-      { value: 'center', label: 'Centro' },
-      { value: 'right', label: 'Destra' },
+  // ─── STILE ─────────────────────────────────────────────────
+  styleFields: [
+    { type: 'separator', label: t('Preset stilistico') },
+    { key: 'preset', label: t('Stile'), type: 'select', options: [
+      { value: 'modern-clean',    label: t('Modern Clean') },
+      { value: 'minimal-mono',    label: t('Minimal Mono') },
+      { value: 'magazine-bold',   label: t('Magazine Bold') },
+      { value: 'editorial-serif', label: t('Editorial Serif') },
+      { value: 'compact-inline',  label: t('Compact Inline') },
+      { value: 'glass-frosted',   label: t('Glass Frosted') },
+      { value: 'neon-glow',       label: t('Neon Glow') },
+      { value: 'brutalist-stamp', label: t('Brutalist Stamp') },
+      { value: 'gradient-aurora', label: t('Gradient Aurora') },
+      { value: 'sticker-fun',     label: t('Sticker Fun') },
+      { value: 'retro-terminal',  label: t('Retro Terminal') },
+      { value: 'tilt-3d',         label: t('3D Tilt') },
+      { value: 'custom',          label: t('Personalizzato') },
+    ] },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
+
+    { type: 'separator', label: t('Tipografia') },
+    { type: 'typography', label: t('Prezzo'),
+      presetKey: 'typography_preset',
+      responsiveKeys: ['size'],
+      keys: {
+        size:   'font_size',
+        weight: 'font_weight',
+        color:  'price_color',
+      },
+      sizeMin: 12, sizeMax: 72,
+    },
+
+    { type: 'separator', label: t('Stile') },
+    { key: 'text_align', label: t('Allineamento'), type: 'select', options: [
+      { value: 'left', label: t('Sinistra') },
+      { value: 'center', label: t('Centro') },
+      { value: 'right', label: t('Destra') },
     ]},
 
-    { type: 'separator', label: 'Colori' },
-    { key: 'price_color', label: 'Colore prezzo', type: 'color' },
-    { key: 'sale_color', label: 'Colore saldo', type: 'color' },
-    { key: 'regular_color', label: 'Colore prezzo barrato', type: 'color' },
+    { type: 'separator', label: t('Colori') },
+    { key: 'sale_color', label: t('Colore saldo'), type: 'color' },
+    { key: 'regular_color', label: t('Colore prezzo barrato'), type: 'color' },
     ...borderFields(),
   ],
 };

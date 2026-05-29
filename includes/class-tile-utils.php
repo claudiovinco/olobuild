@@ -12,6 +12,47 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Olo_Tile_Utils {
 
     /**
+     * Sostituisce i dynamic tag (es. {{site_name}}, {{current_year}}) nei testi
+     * dei tile con i valori reali al momento del rendering.
+     *
+     * Inserito dall'editor rich text via il dropdown "campo dinamico".
+     * Applicato globalmente in Olo_Frontend_Renderer dopo il render di ogni tile.
+     *
+     * @param string $text HTML/testo del tile.
+     * @return string Testo con tag sostituiti.
+     */
+    public static function process_dynamic_tags( $text ) {
+        if ( ! is_string( $text ) || strpos( $text, '{{' ) === false ) {
+            return $text;
+        }
+
+        $replacements = [
+            '{{site_name}}'    => get_bloginfo( 'name' ),
+            '{{site_tagline}}' => get_bloginfo( 'description' ),
+            '{{site_url}}'     => home_url( '/' ),
+            '{{current_year}}' => date( 'Y' ),
+            '{{current_date}}' => date_i18n( get_option( 'date_format' ) ),
+            '{{current_time}}' => date_i18n( get_option( 'time_format' ) ),
+        ];
+
+        // Tag context-aware (post corrente) — solo se esiste un post in queried object
+        $post = get_post();
+        if ( $post ) {
+            $replacements['{{post_title}}']   = get_the_title( $post );
+            $replacements['{{post_excerpt}}'] = wp_strip_all_tags( get_the_excerpt( $post ) );
+            $replacements['{{author_name}}']  = get_the_author_meta( 'display_name', $post->post_author );
+            $replacements['{{page_url}}']     = get_permalink( $post );
+        } else {
+            $replacements['{{post_title}}']   = '';
+            $replacements['{{post_excerpt}}'] = '';
+            $replacements['{{author_name}}']  = '';
+            $replacements['{{page_url}}']     = '';
+        }
+
+        return strtr( $text, $replacements );
+    }
+
+    /**
      * Standard shadow presets (card / element level).
      */
     const SHADOW_MAP = [
@@ -43,6 +84,19 @@ class Olo_Tile_Utils {
     ];
 
     /**
+     * Button shadow presets — più visibili degli standard, pensate per essere
+     * visibili sotto un bottone con sfondo colorato pieno (dove sm/md della
+     * mappa standard a 8-15% di alpha quasi spariscono).
+     */
+    const SHADOW_BUTTON = [
+        'none' => 'none',
+        'sm'   => '0 2px 4px rgba(0,0,0,.18)',
+        'md'   => '0 4px 12px rgba(0,0,0,.25)',
+        'lg'   => '0 8px 24px rgba(0,0,0,.30)',
+        'xl'   => '0 16px 32px rgba(0,0,0,.35)',
+    ];
+
+    /**
      * Get a box-shadow CSS value from a preset key.
      *
      * @param string $key     Shadow key (none|sm|md|lg|xl).
@@ -55,6 +109,8 @@ class Olo_Tile_Utils {
                 return self::SHADOW_PHOTO[ $key ] ?? 'none';
             case 'panel':
                 return self::SHADOW_PANEL[ $key ] ?? 'none';
+            case 'button':
+                return self::SHADOW_BUTTON[ $key ] ?? 'none';
             default:
                 return self::SHADOW_MAP[ $key ] ?? 'none';
         }
@@ -177,29 +233,6 @@ class Olo_Tile_Utils {
     }
 
     /**
-     * Build the hover CSS block for a border-radius transition.
-     *
-     * Emits two declarations:
-     *   1. transition on the base selector (so going INTO hover animates)
-     *   2. :hover override of border-radius
-     *
-     * Caller is responsible for emitting the base `border-radius: …` rule on $selector.
-     * If $hover is empty / unset, returns ''.
-     *
-     * @param string $selector Full CSS selector (e.g. ".olo-uid .olo-btn").
-     * @param mixed  $hover    Raw hover value.
-     * @param int    $duration Transition duration in ms.
-     * @return string CSS string (possibly empty).
-     */
-    public static function radius_hover_css_block( $selector, $hover, $duration = 400 ) {
-        if ( ! self::has_radius_hover( $hover ) ) return '';
-        $hover_css = self::radius_force_css( $hover );
-        $duration  = max( 0, absint( $duration ) );
-        $sel       = trim( $selector );
-        return "{$sel}{transition:border-radius {$duration}ms cubic-bezier(.4,0,.2,1)}"
-             . "{$sel}:hover{border-radius:{$hover_css} !important}";
-    }
-
     /**
      * Sanitize a hex color. Returns empty string if invalid.
      *

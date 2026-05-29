@@ -11,6 +11,7 @@ class Olo_Breadcrumbs_Tile extends Olo_Tile_Base {
     protected $icon     = 'dashicons-arrow-right-alt2';
     protected $category = 'navigation';
     protected $defaults = [
+        'preset' => 'custom',
         'separator'    => '/',
         'home_label'   => 'Home',
         'show_home'    => true,
@@ -72,7 +73,7 @@ class Olo_Breadcrumbs_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
-        <nav class="olo-breadcrumbs" aria-label="<?php echo esc_attr( olo_t( 'Breadcrumb' ) ); ?>">
+        <nav class="olo-breadcrumbs olo-bc-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" aria-label="<?php echo esc_attr( olo_t( 'Breadcrumb' ) ); ?>">
             <ul class="uk-breadcrumb">
                 <?php echo implode( "\n", $items ); ?>
             </ul>

@@ -1,317 +1,310 @@
 <template>
-  <div class="olo-ai-tab">
-    <!-- Anthropic -->
-    <div class="olo-card">
-      <div class="olo-card-head">
-        <div class="olo-card-icon" style="background:#1a1a1a;color:#fff">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2a3 3 0 0 1 3 3v1a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3z"/><path d="M19 10h-1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1h1a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-2a2 2 0 0 1 2-2h1a1 1 0 0 0 1-1v-1a1 1 0 0 0-1-1H5"/><circle cx="9" cy="18" r="1" fill="currentColor"/><circle cx="15" cy="18" r="1" fill="currentColor"/></svg>
+  <div class="cfg-page-head">
+    <div>
+      <h1>AI <em>{{ t('Assistant') }}</em></h1>
+      <p>{{ t('Generazione testi, alt-text immagini, traduzioni e suggerimenti UX all\'interno del builder. Le chiamate vengono fatturate dal provider AI che scegli.') }}</p>
+    </div>
+    <div class="head-actions">
+      <span class="cfg-pill" :class="anyKey ? 'ok' : 'off'"><span class="dot"></span> {{ anyKey ? t('Provider connesso') : t('Non configurato') }}</span>
+    </div>
+  </div>
+
+  <!-- ─── Provider ─── -->
+  <div class="cfg-card">
+    <div class="cfg-card-head">
+      <div class="head-ic">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5L12 3z"/><path d="M19 14l.7 2.3L22 17l-2.3.7L19 20l-.7-2.3L16 17l2.3-.7L19 14z"/></svg>
+      </div>
+      <div>
+        <h3>{{ t('Provider') }}</h3>
+        <p>{{ t('Scegli il modello che muove le funzioni AI dentro l\'editor.') }}</p>
+      </div>
+    </div>
+    <div class="cfg-card-body tight">
+      <div class="cfg-row">
+        <div class="label-col">
+          <label>{{ t('Provider AI') }}</label>
+          <div class="hint">{{ t('Puoi cambiarlo in qualsiasi momento — la chiave API è salvata per provider.') }}</div>
         </div>
-        <div>
-          <h3>Anthropic (Claude)</h3>
-          <p>Chiave per testo, traduzioni, layout, stile, alt text e CSS &mdash; <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">console.anthropic.com</a></p>
-        </div>
-        <div v-if="hasKey" class="olo-ai-status ok">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
-          Configurata
+        <div class="control-col">
+          <div class="cfg-segment">
+            <button :class="{ 'is-on': form.provider === 'anthropic' }" @click="setField('provider', 'anthropic')">Anthropic</button>
+            <button :class="{ 'is-on': form.provider === 'openai' }"    @click="setField('provider', 'openai')">OpenAI</button>
+            <button :class="{ 'is-on': form.provider === 'mistral' }"   @click="setField('provider', 'mistral')">Mistral</button>
+            <button :class="{ 'is-on': form.provider === 'selfhost' }"  @click="setField('provider', 'selfhost')">Self-hosted</button>
+          </div>
         </div>
       </div>
-      <div class="olo-card-body">
-        <div class="olo-ai-fields">
-          <div class="olo-field-row">
-            <div class="olo-field-info">
-              <label>API Key</label>
-            </div>
-            <div class="olo-field-input-wrap olo-ai-key-wrap">
-              <input
-                :type="showKey ? 'text' : 'password'"
-                v-model="settings.anthropic_key"
-                placeholder="sk-ant-..."
-                class="olo-field-input"
-              />
-              <button @click="showKey = !showKey" class="olo-ai-eye" type="button" :title="showKey ? 'Nascondi' : 'Mostra'">
-                <svg v-if="showKey" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
-                <svg v-else width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-              </button>
-            </div>
+      <div class="cfg-row">
+        <div class="label-col">
+          <label>{{ t('API key') }} <span class="req">*</span></label>
+          <div class="hint">{{ t('La chiave è criptata nel database. Inseriscila una sola volta.') }}</div>
+        </div>
+        <div class="control-col">
+          <div class="cfg-input mono">
+            <input
+              :type="revealKey ? 'text' : 'password'"
+              :value="currentKey"
+              @input="updateKey($event.target.value)"
+              :placeholder="placeholderKey"
+              autocomplete="off"
+              spellcheck="false"
+              name="olo-ai-apikey"
+              data-1p-ignore
+              data-lpignore="true"
+            />
+            <button type="button" class="reveal" @click="revealKey = !revealKey" :title="revealKey ? t('Nascondi') : t('Mostra')">
+              <svg v-if="!revealKey" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
+              <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3l18 18M10.6 6.1A10.5 10.5 0 0 1 12 6c6.5 0 10 6 10 6a17.3 17.3 0 0 1-4 4.5M6.6 6.6A17.3 17.3 0 0 0 2 12s3.5 6 10 6c1.3 0 2.5-.3 3.6-.7"/></svg>
+            </button>
           </div>
-          <div class="olo-field-row">
-            <div class="olo-field-info">
-              <label>Modello Claude</label>
-            </div>
-            <div class="olo-field-input-wrap">
-              <select v-model="settings.model" class="olo-field-input olo-select">
-                <option value="claude-sonnet-4-6">Claude Sonnet 4.6 (bilanciato)</option>
-                <option value="claude-haiku-4-5-20251001">Claude Haiku 4.5 (veloce)</option>
-                <option value="claude-opus-4-6">Claude Opus 4.6 (massima qualit&agrave;)</option>
-              </select>
-            </div>
+        </div>
+      </div>
+      <div class="cfg-row">
+        <div class="label-col">
+          <label>{{ t('Modello') }}</label>
+          <div class="hint">{{ t('Modelli più potenti = risposte migliori ma costo maggiore per chiamata.') }}</div>
+        </div>
+        <div class="control-col">
+          <div class="cfg-select">
+            <select :value="form.model" @change="setField('model', $event.target.value)">
+              <option v-for="m in availableModels" :key="m.value" :value="m.value">{{ m.label }}</option>
+            </select>
+            <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></span>
+          </div>
+        </div>
+      </div>
+      <div class="cfg-row no-divider">
+        <div class="label-col">
+          <label>{{ t('Budget mensile') }}</label>
+          <div class="hint">{{ t('Soglia di spesa oltre la quale le funzioni AI vengono disattivate.') }}</div>
+        </div>
+        <div class="control-col">
+          <div class="cfg-input mono">
+            <span class="prefix">€</span>
+            <input type="number" min="0" step="5" :value="form.budget" @input="setField('budget', parseFloat($event.target.value) || 0)" />
+            <span class="suffix">/ {{ t('mese') }}</span>
           </div>
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- OpenAI (opzionale) -->
-    <div class="olo-card">
-      <div class="olo-card-head">
-        <div class="olo-card-icon" style="background:#e8622a;color:#fff">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+  <!-- ─── Comportamento ─── -->
+  <div class="cfg-card">
+    <div class="cfg-card-head">
+      <div class="head-ic">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L2 19l3 3 7.3-7.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.4-.6-.6-2.4 2.6-2.6z"/></svg>
+      </div>
+      <div>
+        <h3>{{ t('Comportamento') }}</h3>
+        <p>{{ t('Tono, lingua e creatività del modello.') }}</p>
+      </div>
+    </div>
+    <div class="cfg-card-body tight">
+      <div class="cfg-row">
+        <div class="label-col">
+          <label>{{ t('Lingua di default') }}</label>
+          <div class="hint">{{ t('Il modello risponderà in questa lingua se non specifichi altrimenti.') }}</div>
         </div>
-        <div>
-          <h3>OpenAI (opzionale)</h3>
-          <p>Chiave per generazione immagini con DALL-E</p>
+        <div class="control-col">
+          <div class="cfg-select">
+            <select :value="form.language" @change="setField('language', $event.target.value)">
+              <option value="it">{{ t('Italiano') }}</option>
+              <option value="en">{{ t('Inglese') }}</option>
+              <option value="auto">{{ t('Auto (lingua del sito)') }}</option>
+            </select>
+            <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></span>
+          </div>
         </div>
       </div>
-      <div class="olo-card-body">
-        <div class="olo-ai-fields">
-          <div class="olo-field-row">
-            <div class="olo-field-info">
-              <label>API Key</label>
-            </div>
-            <div class="olo-field-input-wrap olo-ai-key-wrap">
-              <input
-                :type="showOpenaiKey ? 'text' : 'password'"
-                v-model="settings.openai_key"
-                placeholder="sk-..."
-                class="olo-field-input"
-              />
-              <button @click="showOpenaiKey = !showOpenaiKey" class="olo-ai-eye" type="button">
-                <svg v-if="showOpenaiKey" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
-                <svg v-else width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-              </button>
-            </div>
+      <div class="cfg-row">
+        <div class="label-col">
+          <label>{{ t('Temperatura') }}</label>
+          <div class="hint">{{ t('0 = preciso e ripetibile · 1 = creativo e variabile.') }}</div>
+        </div>
+        <div class="control-col">
+          <div class="cfg-slider">
+            <input type="range" min="0" max="1" step="0.05" :value="form.temperature" @input="setField('temperature', parseFloat($event.target.value))" />
+            <span class="val">{{ form.temperature.toFixed(2) }}</span>
           </div>
-          <div class="olo-field-row">
-            <div class="olo-field-info">
-              <label>Modello immagine</label>
-            </div>
-            <div class="olo-field-input-wrap">
-              <select v-model="settings.image_model" class="olo-field-input olo-select">
-                <option value="dall-e-3">DALL-E 3 (alta qualit&agrave;)</option>
-                <option value="dall-e-2">DALL-E 2 (pi&ugrave; economico)</option>
-              </select>
-            </div>
+        </div>
+      </div>
+      <div class="cfg-row">
+        <div class="label-col">
+          <label>{{ t('Tono di voce') }}</label>
+          <div class="hint">{{ t('Personalità di base che il modello adotta in tutti i task.') }}</div>
+        </div>
+        <div class="control-col">
+          <div class="cfg-segment">
+            <button :class="{ 'is-on': form.tone === 'neutral' }"   @click="setField('tone', 'neutral')">{{ t('Neutrale') }}</button>
+            <button :class="{ 'is-on': form.tone === 'warm' }"      @click="setField('tone', 'warm')">{{ t('Caldo') }}</button>
+            <button :class="{ 'is-on': form.tone === 'technical' }" @click="setField('tone', 'technical')">{{ t('Tecnico') }}</button>
+            <button :class="{ 'is-on': form.tone === 'editorial' }" @click="setField('tone', 'editorial')">{{ t('Editoriale') }}</button>
           </div>
+        </div>
+      </div>
+      <div class="cfg-row no-divider">
+        <div class="label-col">
+          <label>{{ t('Istruzioni di sistema') }}</label>
+          <div class="hint">{{ t('Contesto del brand che viene incluso in ogni chiamata. Max 500 caratteri.') }}</div>
+        </div>
+        <div class="control-col">
+          <div class="cfg-textarea">
+            <textarea rows="4" :value="form.system_prompt" @input="setField('system_prompt', $event.target.value.slice(0, 500))" :placeholder="systemPromptPlaceholder"></textarea>
+          </div>
+          <div class="text-xs mt-2" style="color:var(--c-text-faint);">{{ (form.system_prompt || '').length }} / 500 {{ t('caratteri') }}</div>
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- Status message -->
-    <Transition name="olo-fade">
-      <div v-if="statusMessage" class="olo-ai-msg" :class="statusType">
-        <svg v-if="statusType === 'success'" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
-        <svg v-else width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>
-        {{ statusMessage }}
+  <!-- ─── Utilizzo ─── -->
+  <div class="cfg-card">
+    <div class="cfg-card-head">
+      <div class="head-ic">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M7 17V8M12 17V4M17 17v-6"/></svg>
       </div>
-    </Transition>
-
-    <!-- Actions -->
-    <div class="olo-actions">
-      <button @click="saveSettings" :disabled="saving" class="olo-btn-save">
-        <svg v-if="!saving" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-        <span v-if="saving" class="olo-spinner"></span>
-        {{ saving ? 'Salvataggio...' : 'Salva impostazioni' }}
-      </button>
-      <button @click="testConnection" :disabled="testing" class="olo-btn-reset">
-        <svg v-if="!testing" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-        <span v-if="testing" class="olo-spinner" style="border-color:rgba(0,0,0,.15);border-top-color:#374151"></span>
-        {{ testing ? 'Test...' : 'Testa connessione' }}
-      </button>
+      <div>
+        <h3>{{ t('Utilizzo questo mese') }}</h3>
+        <p>{{ t('Statistiche delle chiamate API negli ultimi 30 giorni.') }}</p>
+      </div>
+    </div>
+    <div class="cfg-card-body">
+      <div class="usage-grid">
+        <div v-for="s in usageStats" :key="s.l" class="usage-card">
+          <div class="usage-label">{{ t(s.l) }}</div>
+          <div class="usage-value">{{ s.v }}</div>
+          <div class="usage-trend">{{ s.t }}</div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, reactive, inject, onMounted } from 'vue';
+import { ref, computed, inject, onMounted, onBeforeUnmount } from 'vue';
+import { t } from '@/i18n';
 
 const showToast = inject('showToast', () => {});
+const setDirty  = inject('setDirty',  () => {});
 
-const showKey = ref(false);
-const showOpenaiKey = ref(false);
-const saving = ref(false);
-const testing = ref(false);
-const statusMessage = ref('');
-const statusType = ref('success');
-const hasKey = ref(false);
-
-const settings = reactive({
+const form = ref({
+  provider: 'anthropic',
   anthropic_key: '',
   openai_key: '',
-  model: 'claude-sonnet-4-6',
-  image_model: 'dall-e-3',
+  mistral_key: '',
+  selfhost_key: '',
+  model: 'claude-sonnet-4-5',
+  budget: 50,
+  language: 'it',
+  temperature: 0.35,
+  tone: 'warm',
+  system_prompt: '',
 });
 
-function getOloData() {
-  return window.oloData || {};
+const MODELS = {
+  anthropic: [
+    { value: 'claude-sonnet-4-5',  label: 'Claude Sonnet 4.5 · ' + 'equilibrato' },
+    { value: 'claude-haiku-4-5',   label: 'Claude Haiku 4.5 · veloce' },
+    { value: 'claude-opus-4-1',    label: 'Claude Opus 4.1 · qualità massima' },
+  ],
+  openai: [
+    { value: 'gpt-4o',       label: 'gpt-4o · qualità/prezzo equilibrato' },
+    { value: 'gpt-4o-mini',  label: 'gpt-4o-mini · economico, veloce' },
+    { value: 'o1',           label: 'o1 · ragionamento avanzato' },
+  ],
+  mistral: [
+    { value: 'mistral-large', label: 'mistral-large' },
+    { value: 'mistral-small', label: 'mistral-small' },
+  ],
+  selfhost: [
+    { value: 'custom', label: 'Custom endpoint' },
+  ],
+};
+
+const revealKey = ref(false);
+const availableModels = computed(() => MODELS[form.value.provider] || []);
+const currentKey = computed(() => form.value[form.value.provider + '_key'] || '');
+const placeholderKey = computed(() => {
+  switch (form.value.provider) {
+    case 'anthropic': return 'sk-ant-...';
+    case 'openai':    return 'sk-proj-...';
+    case 'mistral':   return 'mst-...';
+    default:          return 'https://your-endpoint';
+  }
+});
+const anyKey = computed(() => !!(form.value.anthropic_key || form.value.openai_key || form.value.mistral_key || form.value.selfhost_key));
+const systemPromptPlaceholder = t('Es. Sei l’assistente di scrittura per un hotel boutique sul lago di Como. Tono caldo, professionale.');
+
+const usageStats = ref([
+  { l: 'Chiamate',       v: '—', t: 'Connetti AI per vedere statistiche' },
+  { l: 'Token usati',    v: '—', t: '—' },
+  { l: 'Spesa stimata',  v: '€ —', t: '—' },
+  { l: 'Latenza media',  v: '—', t: '—' },
+]);
+
+function setField(k, v) {
+  form.value[k] = v;
+  if (k === 'provider') {
+    const list = MODELS[v] || [];
+    if (list.length && !list.find(m => m.value === form.value.model)) {
+      form.value.model = list[0].value;
+    }
+  }
+  setDirty(true);
+}
+function updateKey(val) {
+  form.value[form.value.provider + '_key'] = val;
+  setDirty(true);
 }
 
 async function loadSettings() {
-  const olo = getOloData();
   try {
-    const res = await fetch(olo.restUrl + '/ai/settings', {
-      headers: { 'X-WP-Nonce': olo.nonce },
-    });
-    if (res.ok) {
-      const data = await res.json();
-      settings.anthropic_key = data.anthropic_key || '';
-      settings.openai_key = data.openai_key || '';
-      settings.model = data.model || 'claude-sonnet-4-6';
-      settings.image_model = data.image_model || 'dall-e-3';
-      hasKey.value = data.has_key || false;
+    const res = await fetch(`${window.oloData.restUrl}ai/settings`, { headers: { 'X-WP-Nonce': window.oloData.nonce } });
+    if (res.ok) Object.assign(form.value, await res.json());
+  } catch (e) { /* defaults */ }
+  try {
+    const res2 = await fetch(`${window.oloData.restUrl}ai/usage`, { headers: { 'X-WP-Nonce': window.oloData.nonce } });
+    if (res2.ok) {
+      const data = await res2.json();
+      if (data?.calls != null)   usageStats.value[0].v = String(data.calls);
+      if (data?.tokens)          usageStats.value[1].v = data.tokens;
+      if (data?.cost_estimate)   usageStats.value[2].v = '€ ' + data.cost_estimate;
+      if (data?.latency_avg)     usageStats.value[3].v = data.latency_avg + ' s';
     }
-  } catch (e) {
-    console.error('Errore caricamento impostazioni AI:', e);
-  }
+  } catch (e) { /* keep dashes */ }
 }
 
 async function saveSettings() {
-  saving.value = true;
-  statusMessage.value = '';
-  const olo = getOloData();
   try {
-    const res = await fetch(olo.restUrl + '/ai/settings', {
+    await fetch(`${window.oloData.restUrl}ai/settings`, {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': olo.nonce },
-      body: JSON.stringify({
-        anthropic_key: settings.anthropic_key,
-        openai_key: settings.openai_key,
-        model: settings.model,
-        image_model: settings.image_model,
-      }),
+      headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData.nonce },
+      body: JSON.stringify(form.value),
     });
-    if (res.ok) {
-      hasKey.value = true;
-      showToast('Impostazioni AI salvate');
-    } else {
-      const data = await res.json();
-      throw new Error(data.message || 'Errore nel salvataggio');
-    }
-  } catch (e) {
-    statusMessage.value = e.message;
-    statusType.value = 'error';
-    showToast('Errore nel salvataggio', 'error');
-  } finally {
-    saving.value = false;
-  }
+  } catch (e) { showToast(t('Errore di salvataggio AI'), 'error'); }
 }
 
-async function testConnection() {
-  testing.value = true;
-  statusMessage.value = '';
-  const olo = getOloData();
+const onSave = () => saveSettings();
+const onDiscard = () => loadSettings();
 
-  try {
-    await fetch(olo.restUrl + '/ai/settings', {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': olo.nonce },
-      body: JSON.stringify({
-        anthropic_key: settings.anthropic_key,
-        openai_key: settings.openai_key,
-        model: settings.model,
-        image_model: settings.image_model,
-      }),
-    });
-  } catch (e) { /* ignore */ }
-
-  try {
-    const res = await fetch(olo.restUrl + '/ai/generate-text', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': olo.nonce },
-      body: JSON.stringify({
-        prompt: 'Scrivi "Connessione riuscita" e nient\'altro.',
-        type: 'headline', tone: 'professionale', language: 'it', max_length: 10,
-      }),
-    });
-    if (res.ok) {
-      statusMessage.value = 'Connessione riuscita! Claude funziona correttamente.';
-      statusType.value = 'success';
-      hasKey.value = true;
-    } else {
-      const data = await res.json();
-      throw new Error(data.message || 'Test fallito');
-    }
-  } catch (e) {
-    statusMessage.value = 'Test fallito: ' + e.message;
-    statusType.value = 'error';
-  } finally {
-    testing.value = false;
-  }
-}
-
-onMounted(() => { loadSettings(); });
+onMounted(() => {
+  loadSettings();
+  window.addEventListener('olo-cfg-save', onSave);
+  window.addEventListener('olo-cfg-discard', onDiscard);
+});
+onBeforeUnmount(() => {
+  window.removeEventListener('olo-cfg-save', onSave);
+  window.removeEventListener('olo-cfg-discard', onDiscard);
+});
 </script>
 
 <style scoped>
-.olo-ai-fields {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
-.olo-ai-key-wrap {
-  position: relative;
-}
-.olo-ai-key-wrap .olo-field-input {
-  padding-right: 38px;
-}
-.olo-ai-eye {
-  position: absolute;
-  right: 8px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  color: #9ca3af;
-  cursor: pointer;
-  padding: 4px;
-  border-radius: 4px;
-  display: flex;
-  transition: color 0.15s;
-}
-.olo-ai-eye:hover {
-  color: #6b7280;
-}
-.olo-select {
-  cursor: pointer;
-  appearance: auto;
-}
-.olo-ai-status {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 12px;
-  font-weight: 500;
-  margin-left: auto;
-  flex-shrink: 0;
-  padding: 4px 10px;
-  border-radius: 20px;
-}
-.olo-ai-status.ok {
-  color: #059669;
-  background: #ecfdf5;
-}
-.olo-ai-msg {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 16px;
-  border-radius: 10px;
-  font-size: 13px;
-  font-weight: 500;
-  border: 1px solid;
-}
-.olo-ai-msg.success {
-  background: #f0fdf4;
-  border-color: #bbf7d0;
-  color: #15803d;
-}
-.olo-ai-msg.error {
-  background: #fef2f2;
-  border-color: #fecaca;
-  color: #dc2626;
-}
-.olo-fade-enter-active { animation: olo-fadein .3s ease; }
-.olo-fade-leave-active { animation: olo-fadein .2s ease reverse; }
-@keyframes olo-fadein {
-  from { opacity: 0; transform: translateY(-4px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+.usage-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+@media (max-width: 900px) { .usage-grid { grid-template-columns: 1fr 1fr; } }
+.usage-card { background: var(--c-bg); border-radius: 10px; padding: 14px; }
+.usage-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--c-text-mute); }
+.usage-value { font-family: var(--c-display); font-size: 32px; line-height: 1; margin-top: 6px; color: var(--c-navy); }
+.usage-trend { font-size: 11px; color: var(--c-text-faint); margin-top: 4px; }
 </style>

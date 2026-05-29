@@ -15,6 +15,7 @@ class Olo_Form_Handler {
      * rendendo inutile il binding per-session. Il token è protetto da:
      * - HMAC con salt unico per sito (wp_salt)
      * - Scadenza temporale (12h)
+     * - Binding al config del form (impedisce mass-assignment del payload server-side)
      * - Rate limiting per IP (configurabile)
      */
     private static function get_token_secret() {
@@ -22,40 +23,86 @@ class Olo_Form_Handler {
     }
 
     /**
-     * Generate a time-limited token for a form.
-     * Token = timestamp:hmac(timestamp, secret)
+     * Generate a time-limited token bound to a specific form config payload.
+     * Token format: v2:{timestamp}:{hmac(timestamp + sha256(config_b64), secret)}
+     * Il binding al config impedisce a un attaccante di prendere un token valido
+     * (es. da una pagina contact pubblica) e riusarlo modificando email_to/subject/
+     * auto_reply_message per trasformare il sito in relay phishing.
+     *
      * Valid for 12 hours.
+     *
+     * @param string $config_b64 Il payload base64-encoded del form config (lo stesso
+     *                            che finisce in `_olo_form_config`). Stringa vuota per
+     *                            casi senza config (sconsigliato).
      */
-    public static function generate_token() {
-        $timestamp = time();
-        $hmac      = hash_hmac( 'sha256', (string) $timestamp, self::get_token_secret() );
-        return $timestamp . ':' . $hmac;
+    public static function generate_token( $config_b64 = '' ) {
+        $timestamp     = time();
+        $config_digest = hash( 'sha256', (string) $config_b64 );
+        $hmac          = hash_hmac( 'sha256', $timestamp . ':' . $config_digest, self::get_token_secret() );
+        return 'v2:' . $timestamp . ':' . $hmac;
     }
 
     /**
-     * Validate a form token. Returns true if valid and not expired (12h).
+     * Validate a form token. Returns true if valid, not expired, and bound to the
+     * supplied config payload.
+     *
+     * I token v1 legacy (senza binding al config) vengono rifiutati: dopo l'aggiornamento
+     * gli utenti con form aperti vedranno "Ricarica la pagina" — accettabile per il fix
+     * di sicurezza (relay email arbitrarie). TTL form: 12h → la finestra di disagio
+     * è limitata.
      */
-    private function validate_token( $token ) {
+    private function validate_token( $token, $config_b64 = '' ) {
         if ( empty( $token ) || ! is_string( $token ) ) {
             return false;
         }
 
-        $parts = explode( ':', $token, 2 );
-        if ( count( $parts ) !== 2 ) {
+        $parts = explode( ':', $token, 3 );
+        if ( count( $parts ) !== 3 || $parts[0] !== 'v2' ) {
             return false;
         }
 
-        list( $timestamp, $hmac ) = $parts;
-        $timestamp = (int) $timestamp;
+        $timestamp = (int) $parts[1];
+        $hmac      = $parts[2];
 
         // Check expiration (12 hours)
         if ( abs( time() - $timestamp ) > 12 * HOUR_IN_SECONDS ) {
             return false;
         }
 
-        // Verify HMAC
-        $expected = hash_hmac( 'sha256', (string) $timestamp, self::get_token_secret() );
+        // Verify HMAC binds to this specific config (impedisce manomissione email_to)
+        $config_digest = hash( 'sha256', (string) $config_b64 );
+        $expected      = hash_hmac( 'sha256', $timestamp . ':' . $config_digest, self::get_token_secret() );
         return hash_equals( $expected, $hmac );
+    }
+
+    /**
+     * Whitelist server-side per i destinatari email dei form.
+     *
+     * Anche con token v2 (config bound), trattiamo l'`email_to`/`email_cc` come dati
+     * untrusted: validiamo contro un set sicuro.
+     *
+     *  - Sempre permesso: admin_email del sito
+     *  - Sempre permesso: qualsiasi email con dominio uguale all'admin_email
+     *    (l'utente sta inviando a sé stesso/al team dello stesso dominio)
+     *  - Permesse anche le email in `olo_allowed_form_recipients` (CSV in option)
+     *    — utile per chi vuole un destinatario su dominio diverso.
+     *
+     * Tutto il resto → fallback su admin_email (vedi chiamante).
+     */
+    private function is_recipient_allowed( $email, $admin_email ) {
+        if ( ! is_email( $email ) ) return false;
+        if ( strcasecmp( $email, $admin_email ) === 0 ) return true;
+
+        $email_domain = strtolower( substr( strrchr( $email, '@' ), 1 ) );
+        $admin_domain = strtolower( substr( strrchr( $admin_email, '@' ), 1 ) );
+        if ( $email_domain && $email_domain === $admin_domain ) return true;
+
+        $extra = (string) get_option( 'olo_allowed_form_recipients', '' );
+        if ( $extra !== '' ) {
+            $list = array_filter( array_map( 'trim', explode( ',', strtolower( $extra ) ) ) );
+            if ( in_array( strtolower( $email ), $list, true ) ) return true;
+        }
+        return false;
     }
 
     /**
@@ -110,17 +157,10 @@ class Olo_Form_Handler {
      * Handle form submission.
      */
     public function handle_submit( $request ) {
-        // 1. Validate token (anti-CSRF / anti-replay)
-        $token = $request->get_param( '_olo_form_token' );
-        if ( ! $this->validate_token( $token ) ) {
-            return new WP_REST_Response( [
-                'success' => false,
-                'data'    => [ 'message' => 'Token non valido o scaduto. Ricarica la pagina e riprova.' ],
-            ], 403 );
-        }
-
-        // 2. Decode form config — validate base64 before json_decode
-        $config_raw    = $request->get_param( '_olo_form_config' );
+        // 1. Decode form config — validate base64 before json_decode.
+        //    Lo facciamo PRIMA del token check perché il token v2 è legato al config:
+        //    se il config arriva corrotto/mancante, il token non potrà mai validare.
+        $config_raw    = (string) $request->get_param( '_olo_form_config' );
         $config_decoded = base64_decode( $config_raw, true ); // strict mode
         if ( $config_decoded === false ) {
             return new WP_REST_Response( [
@@ -134,6 +174,17 @@ class Olo_Form_Handler {
                 'success' => false,
                 'data'    => [ 'message' => 'Configurazione form non valida.' ],
             ], 400 );
+        }
+
+        // 2. Validate token (anti-CSRF / anti-replay / anti-tampering).
+        //    Il token è legato all'EXACT config payload: se l'attaccante modifica
+        //    email_to (o qualsiasi altra chiave) il digest cambia e l'HMAC non torna.
+        $token = $request->get_param( '_olo_form_token' );
+        if ( ! $this->validate_token( $token, $config_raw ) ) {
+            return new WP_REST_Response( [
+                'success' => false,
+                'data'    => [ 'message' => 'Token non valido o scaduto. Ricarica la pagina e riprova.' ],
+            ], 403 );
         }
 
         // 3. Honeypot checks
@@ -357,9 +408,14 @@ class Olo_Form_Handler {
         }
 
         // 8. Build email
-        $to = sanitize_email( $config['email_to'] ?? '' );
-        if ( empty( $to ) ) {
-            $to = get_option( 'admin_email' );
+        // Defense-in-depth: anche se il token v2 lega il config (impedendo il tamper
+        // del destinatario), validiamo email_to contro una whitelist server-side.
+        // Se non passa, fallback su admin_email — il form non spegne la submission,
+        // ma la spedizione va sempre verso un destinatario di fiducia.
+        $admin_email = get_option( 'admin_email' );
+        $to          = sanitize_email( $config['email_to'] ?? '' );
+        if ( empty( $to ) || ! $this->is_recipient_allowed( $to, $admin_email ) ) {
+            $to = $admin_email;
         }
 
         $subject   = sanitize_text_field( $config['email_subject'] ?? 'Nuovo messaggio dal sito' );
@@ -414,9 +470,9 @@ class Olo_Form_Handler {
             $headers[] = 'Reply-To: ' . ( $reply_name ? "{$reply_name} <{$reply_email}>" : $reply_email );
         }
 
-        // CC
+        // CC — stessa whitelist del destinatario principale per evitare relay
         $cc = sanitize_email( $config['email_cc'] ?? '' );
-        if ( $cc ) {
+        if ( $cc && $this->is_recipient_allowed( $cc, $admin_email ) ) {
             $headers[] = 'Cc: ' . $cc;
         }
 

@@ -3,7 +3,7 @@
     <div class="mps-iconpicker-backdrop" @click.self="$emit('close')">
       <div class="mps-iconpicker">
         <div class="mps-iconpicker-header">
-          <span class="mps-iconpicker-title">Seleziona icona ({{ filtered.length }})</span>
+          <span class="mps-iconpicker-title">Seleziona icona ({{ filtered.length }}<span v-if="!search.trim() && totalCount() > filtered.length" class="mps-iconpicker-total"> / {{ totalCount() }}</span>)</span>
           <button @click="$emit('close')" class="mps-iconpicker-close">&times;</button>
         </div>
         <!-- Tabs -->
@@ -28,7 +28,7 @@
           </label>
           <span v-if="uploading" class="mps-upload-status">Caricamento...</span>
         </div>
-        <div class="mps-iconpicker-grid">
+        <div class="mps-iconpicker-grid" ref="gridEl" @scroll.passive="onScroll">
           <button
             v-for="name in filtered"
             :key="name"
@@ -39,10 +39,11 @@
             <span class="mps-iconpicker-svg" v-html="getSvg(name)"></span>
             <span class="mps-iconpicker-name">{{ name }}</span>
           </button>
-          <!-- Delete button for custom icons -->
           <div v-if="!filtered.length" class="mps-iconpicker-empty">
             {{ tab === 'custom' ? 'Nessuna icona custom. Carica file SVG.' : 'Nessuna icona trovata' }}
           </div>
+          <!-- Caricamento progressivo allo scroll (sentinel informativo) -->
+          <div v-if="hasMore" class="mps-iconpicker-loading">+{{ totalCount() - filtered.length }}</div>
         </div>
       </div>
     </div>
@@ -51,7 +52,7 @@
 
 <script setup>
 import { ref, computed, onMounted, nextTick } from 'vue';
-import iconsSvg from './uikitIconsSvg.js';
+import iconsSvg from './iconsLibrary.js';
 
 defineEmits(['select', 'close']);
 
@@ -74,12 +75,42 @@ function getSvg(name) {
   return iconsSvg[name] || '';
 }
 
+// Senza ricerca, paginazione "virtuale" semplice (mostra batch, espandibile)
+// per evitare ~1800 SVG simultanei nel DOM al primo apri (renderizzazione lenta).
+const VISIBLE_BATCH = 200;
+const visibleCount = ref(VISIBLE_BATCH);
+
 const filtered = computed(() => {
   const q = search.value.toLowerCase().trim();
   const source = tab.value === 'custom' ? customNames.value : iconNames;
-  if (!q) return source;
+  if (!q) return source.slice(0, visibleCount.value);
   return source.filter(i => i.includes(q));
 });
+
+const hasMore = computed(() => {
+  if (search.value.trim()) return false;
+  const source = tab.value === 'custom' ? customNames.value : iconNames;
+  return visibleCount.value < source.length;
+});
+
+function loadMore() {
+  visibleCount.value += VISIBLE_BATCH;
+}
+
+// Scroll infinito: carica il batch successivo avvicinandosi al fondo della griglia,
+// senza pulsante manuale. Mantiene la performance (no ~1800 SVG insieme al primo apri).
+const gridEl = ref(null);
+function onScroll() {
+  const el = gridEl.value;
+  if (!el) return;
+  if (el.scrollTop + el.clientHeight >= el.scrollHeight - 240 && hasMore.value) {
+    loadMore();
+  }
+}
+
+function totalCount() {
+  return (tab.value === 'custom' ? customNames.value : iconNames).length;
+}
 
 async function loadCustomIcons() {
   if (customLoaded.value) return;
@@ -134,8 +165,9 @@ async function uploadIcons(event) {
   background: #fff;
   border: 1px solid #e5e7eb;
   border-radius: 12px;
-  width: 520px;
-  max-height: 560px;
+  width: 640px;
+  max-width: 92vw;
+  max-height: 600px;
   display: flex;
   flex-direction: column;
   box-shadow: 0 20px 60px rgba(0,0,0,0.15), 0 4px 12px rgba(0,0,0,0.08);
@@ -185,11 +217,12 @@ async function uploadIcons(event) {
 
 .mps-iconpicker-grid {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 2px;
+  grid-template-columns: repeat(auto-fill, minmax(76px, 1fr));
+  gap: 4px;
   padding: 10px;
   overflow-y: auto;
   flex: 1;
+  align-content: start;
 }
 .mps-iconpicker-item {
   display: flex;
@@ -213,15 +246,29 @@ async function uploadIcons(event) {
   width: 28px;
   height: 28px;
 }
+/* Icon colorization — `currentColor` strategy:
+ *   1. Set `color` on <svg> → both fill and stroke pick it up via currentColor.
+ *   2. UIkit icons (no fill/stroke on root) need an explicit `fill: currentColor`
+ *      override; their default would be implicit `black`.
+ *   3. Lucide icons (`<svg fill="none" stroke="currentColor">`) must keep
+ *      `fill: none` — the attribute selector preserves it without leaking the
+ *      fill onto the path geometry (which would solid-fill line icons).
+ *   4. Inner elements with explicit `fill="none"` (UIkit composite icons)
+ *      must also be respected. */
 .mps-iconpicker-svg :deep(svg) {
   width: 24px;
   height: 24px;
-  fill: #4b5563;
-  stroke: #4b5563;
+  color: #4b5563;
+  stroke: currentColor;
+}
+.mps-iconpicker-svg :deep(svg:not([fill="none"])) {
+  fill: currentColor;
+}
+.mps-iconpicker-svg :deep(svg [fill="none"]) {
+  fill: none;
 }
 .mps-iconpicker-item:hover .mps-iconpicker-svg :deep(svg) {
-  fill: #1f2937;
-  stroke: #1f2937;
+  color: #1f2937;
 }
 .mps-iconpicker-name {
   font-size: 9px;
@@ -237,6 +284,18 @@ async function uploadIcons(event) {
   font-size: 13px;
   color: #9ca3af;
   padding: 24px;
+}
+.mps-iconpicker-total {
+  color: #9ca3af;
+  font-weight: 400;
+}
+.mps-iconpicker-loading {
+  grid-column: 1 / -1;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 600;
+  color: #9ca3af;
+  padding: 14px;
 }
 
 /* Tabs */

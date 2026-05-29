@@ -287,10 +287,16 @@ watch(
 // --- Styles ---
 const containerStyle = computed(() => {
   const bw = parseInt(s.value.border_width) || 0;
-  const br = s.value.border_radius || {};
+  const brRaw = s.value.border_radius;
+  let borderRadius = '0px';
+  if (brRaw && typeof brRaw === 'object') {
+    borderRadius = `${brRaw.tl || 0}px ${brRaw.tr || 0}px ${brRaw.br || 0}px ${brRaw.bl || 0}px`;
+  } else if (brRaw) {
+    borderRadius = (parseInt(brRaw) || 0) + 'px';
+  }
   const style = {
     height: (parseInt(s.value.viewer_height) || 600) + 'px',
-    borderRadius: `${br.tl || 0}px ${br.tr || 0}px ${br.br || 0}px ${br.bl || 0}px`,
+    borderRadius,
     overflow: 'hidden',
     display: 'flex',
     flexDirection: 'column',

@@ -1,25 +1,29 @@
 import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
+import { t } from '@/i18n';
 
+/**
+ * Tile Marquee — split CONTENUTO/STILE.
+ *   fields[]      → content_type (text/images), text_items, separator, images, image_height, movimento (speed/direction/pause_hover/gap)
+ *   styleFields[] → preset, bg, typo, colori (bg/text), tipografia (size/weight/spacing/transform), altezza, full_width, bordi top/bottom + color, shadow, border
+ */
 export default {
   type: 'marquee',
-  name: 'Nastro Scorrevole',
+  name: t('Nastro Scorrevole'),
   icon: 'dashicons-slides',
   category: 'media',
   defaults: {
-    // Contenuto
+    preset: 'custom',
+    bg: { type: 'none' },
+    typography_preset: '',
     content_type: 'text',
     text_items: 'Testo scorrevole di esempio',
     separator: ' — ',
     images: [],
     image_height: '40',
-
-    // Movimento
     speed: '30',
     direction: 'left',
     pause_hover: true,
     gap: '60',
-
-    // Aspetto
     bg_color: '#1F2937',
     text_color: '',
     font_size: '16',
@@ -37,57 +41,76 @@ export default {
     border_hover_duration: 300,
     ...borderEffectDefaults,
   },
+
   fields: [
-    // ── Contenuto ──
-    { key: 'content_type', label: 'Tipo contenuto', type: 'select', options: [
-      { value: 'text', label: 'Testo' },
-      { value: 'images', label: 'Immagini' },
+    { key: 'content_type', label: t('Tipo contenuto'), type: 'select', options: [
+      { value: 'text', label: t('Testo') },
+      { value: 'images', label: t('Immagini') },
     ]},
-    { key: 'text_items', label: 'Testo', type: 'text',
+    { key: 'text_items', label: t('Testo'), type: 'text',
       condition: { field: 'content_type', value: 'text' } },
-    { key: 'separator', label: 'Separatore', type: 'text',
+    { key: 'separator', label: t('Separatore'), type: 'text',
       condition: { field: 'content_type', value: 'text' } },
-    { key: 'images', label: 'Immagini', type: 'gallery',
-      condition: { field: 'content_type', value: 'images' } },
-    { key: 'image_height', label: 'Altezza immagini (px)', type: 'range', min: 20, max: 120,
+    { key: 'images', label: t('Immagini'), type: 'gallery',
       condition: { field: 'content_type', value: 'images' } },
 
-    // ── Movimento ──
-    { type: 'separator', label: 'Movimento' },
-    { key: 'speed', label: 'Durata ciclo (sec)', type: 'range', min: 5, max: 80, step: 5 },
-    { key: 'direction', label: 'Direzione', type: 'select', options: [
-      { value: 'left', label: 'Verso sinistra' },
-      { value: 'right', label: 'Verso destra' },
+    { type: 'separator', label: t('Movimento') },
+    { key: 'speed', label: t('Durata ciclo (sec)'), type: 'range', min: 5, max: 80, step: 5 },
+    { key: 'direction', label: t('Direzione'), type: 'select', options: [
+      { value: 'left', label: t('Verso sinistra') },
+      { value: 'right', label: t('Verso destra') },
     ]},
-    { key: 'pause_hover', label: 'Pausa al passaggio mouse', type: 'toggle' },
-    { key: 'gap', label: 'Spazio tra elementi (px)', type: 'range', min: 20, max: 120, step: 10 },
+    { key: 'pause_hover', label: t('Pausa al passaggio mouse'), type: 'toggle' },
+    { key: 'gap', label: t('Spazio tra elementi (px)'), type: 'range', min: 20, max: 120, step: 10 },
+  ],
 
-    // ── Aspetto ──
-    { type: 'separator', label: 'Aspetto' },
-    { key: 'bg_color', label: 'Colore sfondo', type: 'color' },
-    { key: 'text_color', label: 'Colore testo', type: 'color',
+  styleFields: [
+    { type: 'separator', label: t('Preset stilistico') },
+    { key: 'preset', label: t('Stile'), type: 'select', options: [
+      { value: 'modern-clean',    label: t('Modern Clean') },
+      { value: 'minimal-mono',    label: t('Minimal Mono') },
+      { value: 'magazine-bold',   label: t('Magazine Bold') },
+      { value: 'editorial-serif', label: t('Editorial Serif') },
+      { value: 'compact-inline',  label: t('Compact Inline') },
+      { value: 'glass-frosted',   label: t('Glass Frosted') },
+      { value: 'neon-glow',       label: t('Neon Glow') },
+      { value: 'brutalist-stamp', label: t('Brutalist Stamp') },
+      { value: 'gradient-aurora', label: t('Gradient Aurora') },
+      { value: 'sticker-fun',     label: t('Sticker Fun') },
+      { value: 'retro-terminal',  label: t('Retro Terminal') },
+      { value: 'tilt-3d',         label: t('3D Tilt') },
+      { value: 'custom',          label: t('Personalizzato') },
+    ] },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
+
+    { type: 'separator', label: t('Aspetto immagini') },
+    { key: 'image_height', label: t('Altezza immagini (px)'), type: 'range', min: 20, max: 120,
+      condition: { field: 'content_type', value: 'images' } },
+
+    { type: 'separator', label: t('Tipografia'),
       condition: { field: 'content_type', value: 'text' } },
-    { key: 'font_size', label: 'Dimensione testo (px)', type: 'range', min: 12, max: 48,
-      condition: { field: 'content_type', value: 'text' } },
-    { key: 'font_weight', label: 'Peso testo', type: 'select', options: [
-      { value: '400', label: 'Normal' },
-      { value: '500', label: 'Medium' },
-      { value: '600', label: 'Semibold' },
-      { value: '700', label: 'Bold' },
-      { value: '900', label: 'Black' },
-    ], condition: { field: 'content_type', value: 'text' } },
-    { key: 'letter_spacing', label: 'Spaziatura lettere (px)', type: 'range', min: 0, max: 8,
-      condition: { field: 'content_type', value: 'text' } },
-    { key: 'text_transform', label: 'Trasformazione', type: 'select', options: [
-      { value: 'none', label: 'Nessuna' },
-      { value: 'uppercase', label: 'MAIUSCOLO' },
-      { value: 'lowercase', label: 'minuscolo' },
-    ], condition: { field: 'content_type', value: 'text' } },
-    { key: 'height', label: 'Altezza nastro (px)', type: 'range', min: 30, max: 120 },
-    { key: 'full_width', label: 'Larghezza piena (100vw)', type: 'toggle' },
-    { key: 'border_top', label: 'Bordo superiore (px)', type: 'range', min: 0, max: 4 },
-    { key: 'border_bottom', label: 'Bordo inferiore (px)', type: 'range', min: 0, max: 4 },
-    { key: 'border_color', label: 'Colore bordo', type: 'color' },
+    { type: 'typography', label: t('Testo'),
+      condition: { field: 'content_type', value: 'text' },
+      presetKey: 'typography_preset',
+      responsiveKeys: ['size'],
+      keys: {
+        size:          'font_size',
+        weight:        'font_weight',
+        letterSpacing: 'letter_spacing',
+        transform:     'text_transform',
+        color:         'text_color',
+      },
+      sizeMin: 12, sizeMax: 48, sizeStep: 1,
+    },
+
+    { type: 'separator', label: t('Aspetto') },
+    { key: 'bg_color', label: t('Colore sfondo'), type: 'color' },
+    { key: 'height', label: t('Altezza nastro (px)'), type: 'range', min: 30, max: 120 },
+    { key: 'full_width', label: t('Larghezza piena (100vw)'), type: 'toggle' },
+    { key: 'border_top', label: t('Bordo superiore (px)'), type: 'range', min: 0, max: 4 },
+    { key: 'border_bottom', label: t('Bordo inferiore (px)'), type: 'range', min: 0, max: 4 },
+    { key: 'border_color', label: t('Colore bordo'), type: 'color' },
+
     ...shadowField,
     ...borderFields(),
   ],

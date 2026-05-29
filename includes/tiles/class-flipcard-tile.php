@@ -11,6 +11,7 @@ class Olo_FlipCard_Tile extends Olo_Tile_Base {
     protected $icon     = 'dashicons-image-flip-horizontal';
     protected $category = 'marketing';
     protected $defaults = [
+        'preset' => 'custom',
         // Fronte
         'front_image'      => '',
         'front_video'      => '',
@@ -64,6 +65,9 @@ class Olo_FlipCard_Tile extends Olo_Tile_Base {
         'card_border_width'       => '0',
         'card_border_color'       => '',
         'card_padding'            => '24',
+        'card_border'                => [],
+        'card_border_hover'          => [],
+        'card_border_hover_duration' => 300,
         'border'                  => [],
         'border_hover'            => [],
         'border_hover_duration'   => 300,
@@ -183,7 +187,15 @@ class Olo_FlipCard_Tile extends Olo_Tile_Base {
                 flex-direction: column;
                 <?php if ( $radius && $radius !== '0px' ) : ?>border-radius: <?php echo $radius; ?>;<?php endif; ?>
                 <?php if ( $shadow && $shadow !== 'none' ) : ?>box-shadow: <?php echo $shadow; ?>;<?php endif; ?>
-                <?php if ( $bw > 0 ) : ?>border: <?php echo $bw; ?>px solid <?php echo $bc; ?>;<?php endif; ?>
+                <?php
+                // V3.21: nuovo card_border (4 lati hoverable) ha priorità sul legacy bw/bc.
+                $_card_border_css = $this->build_border_css( $s['card_border'] ?? [] );
+                if ( $_card_border_css ) {
+                    echo $_card_border_css;
+                } elseif ( $bw > 0 ) {
+                    echo "border:{$bw}px solid {$bc};";
+                }
+                ?>
             }
 
             .<?php echo $uid; ?> .olo-fc-front {
@@ -279,7 +291,7 @@ class Olo_FlipCard_Tile extends Olo_Tile_Base {
                 }
             }
         </style>
-        <div class="olo-fc <?php echo esc_attr( $uid ); ?>" data-trigger="<?php echo esc_attr( $trigger ); ?>">
+        <div class="olo-fc <?php echo esc_attr( $uid ); ?> olo-fc-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" data-trigger="<?php echo esc_attr( $trigger ); ?>">
             <div class="olo-fc-inner">
                 <div class="olo-fc-front">
                     <?php echo $this->render_face( $s, 'front' ); ?>
@@ -312,14 +324,20 @@ class Olo_FlipCard_Tile extends Olo_Tile_Base {
         if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
         $this->tfx_print_script();
 
-        // Border system
+        // Border system — wrapper tile
         $border_css        = $this->build_border_css( $s['border'] ?? [] );
         $border_hover_css  = $this->build_border_hover_css( ".{$uid}", $s['border'] ?? [], $s['border_hover'] ?? [], intval( $s['border_hover_duration'] ?? 300 ) );
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
-        if ( $border_css || $border_hover_css || $border_effect_css ) {
+
+        // Border system — card (front + back)
+        $card_border_sel       = ".{$uid} .olo-fc-front, .{$uid} .olo-fc-back";
+        $card_border_hover_css = $this->build_border_hover_css( $card_border_sel, $s['card_border'] ?? [], $s['card_border_hover'] ?? [], intval( $s['card_border_hover_duration'] ?? 300 ) );
+
+        if ( $border_css || $border_hover_css || $border_effect_css || $card_border_hover_css ) {
             echo '<style>';
             if ( $border_css ) echo ".{$uid}{{$border_css}}";
-            echo $border_hover_css . $border_effect_css . '</style>';
+            echo $border_hover_css . $border_effect_css;
+            echo $card_border_hover_css . '</style>';
         }
 
         return ob_get_clean();

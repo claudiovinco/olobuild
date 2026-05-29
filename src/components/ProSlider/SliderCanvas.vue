@@ -48,15 +48,18 @@
       <!-- Layers -->
       <div
         v-for="layer in layers"
+        v-show="!hiddenIds.has(layer.id)"
         :key="layer.id"
         :class="[
           'mb-absolute mb-cursor-move mb-select-none',
-          layer.id === selectedLayerId ? 'mb-ring-2 mb-ring-primary-400 mb-ring-offset-1 mb-ring-offset-transparent' : ''
+          layer.id === selectedLayerId ? 'mb-ring-2 mb-ring-primary-400 mb-ring-offset-1 mb-ring-offset-transparent' : '',
+          layer.initiallyHidden ? 'mps-canvas-initially-hidden' : ''
         ]"
         :style="layerStyle(layer)"
         @pointerdown.stop="startDrag($event, layer)"
         @dblclick.stop="onDblClick(layer)"
       >
+        <span v-if="layer.initiallyHidden" class="mps-canvas-hidden-badge" title="Questo layer parte nascosto. Sarà mostrato solo se un altro layer con azione 'Toggle visibilità' lo prende come target.">nascosto all'avvio</span>
         <!-- Text -->
         <component
           v-if="layer.type === 'text'"
@@ -156,6 +159,7 @@ const props = defineProps({
   activeBreakpoint: { type: String, default: 'desktop' },
   canvasMaxWidth: { type: Number, default: null },
   zoom: { type: Number, default: 1 },
+  hiddenIds: { type: Set, default: () => new Set() },
 });
 
 const emit = defineEmits(['deselect', 'select-layer', 'update-layer', 'update-keyframe', 'start-edit', 'stop-edit']);
@@ -578,11 +582,12 @@ function onPointerMove(e) {
   const dx = (e.clientX - dragState.startX) / effectiveScale.value;
   const dy = (e.clientY - dragState.startY) / effectiveScale.value;
 
+  const round1 = (v) => Math.round(v * 10) / 10;
   if (dragState.mode === 'drag') {
     const pctX = (dx / CANVAS_W.value) * 100;
     const pctY = (dy / canvasH.value) * 100;
-    const newX = Math.max(0, Math.min(100, dragState.origX + pctX));
-    const newY = Math.max(0, Math.min(100, dragState.origY + pctY));
+    const newX = round1(Math.max(0, Math.min(100, dragState.origX + pctX)));
+    const newY = round1(Math.max(0, Math.min(100, dragState.origY + pctY)));
     if (dragState.timelineKfId) {
       emit('update-keyframe', dragState.timelineKfId, { props: { x: newX, y: newY } });
     } else {
@@ -594,15 +599,15 @@ function onPointerMove(e) {
     const h = dragState.handle;
     const updates = {};
 
-    if (h.includes('e')) updates.width = Math.max(5, dragState.origW + pctX);
+    if (h.includes('e')) updates.width = round1(Math.max(5, dragState.origW + pctX));
     if (h.includes('w')) {
-      updates.width = Math.max(5, dragState.origW - pctX);
-      updates.x = dragState.origX + pctX;
+      updates.width = round1(Math.max(5, dragState.origW - pctX));
+      updates.x = round1(dragState.origX + pctX);
     }
-    if (h.includes('s')) updates.height = Math.max(5, dragState.origH + pctY);
+    if (h.includes('s')) updates.height = round1(Math.max(5, dragState.origH + pctY));
     if (h.includes('n')) {
-      updates.height = Math.max(5, dragState.origH - pctY);
-      updates.y = dragState.origY + pctY;
+      updates.height = round1(Math.max(5, dragState.origH - pctY));
+      updates.y = round1(dragState.origY + pctY);
     }
     emit('update-layer', dragState.layerId, updates);
   }
@@ -653,6 +658,27 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
+.mps-canvas-initially-hidden {
+  opacity: 0.4;
+  outline: 1px dashed rgba(239, 68, 68, 0.6);
+  outline-offset: 2px;
+}
+.mps-canvas-hidden-badge {
+  position: absolute;
+  top: -18px;
+  left: 0;
+  background: rgba(239, 68, 68, 0.9);
+  color: #fff;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 2px 6px;
+  border-radius: 3px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 50;
+}
 .mps-handle {
   position: absolute;
   width: 10px;

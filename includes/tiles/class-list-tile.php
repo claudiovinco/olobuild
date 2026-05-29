@@ -11,10 +11,11 @@ class Olo_List_Tile extends Olo_Tile_Base {
     protected $icon     = 'dashicons-editor-ul';
     protected $category = 'text';
     protected $defaults = [
+        'preset' => 'custom',
         'items'        => [
-            [ 'text' => 'Feature one included', 'icon' => 'check' ],
-            [ 'text' => 'Feature two included', 'icon' => 'check' ],
-            [ 'text' => 'Feature three included', 'icon' => 'check' ],
+            [ 'text' => 'Prima voce della lista', 'icon' => 'check' ],
+            [ 'text' => 'Seconda voce della lista', 'icon' => 'check' ],
+            [ 'text' => 'Terza voce della lista', 'icon' => 'check' ],
         ],
         'icon_default' => 'check',
         'icon_color'   => '#22C55E',
@@ -78,8 +79,12 @@ class Olo_List_Tile extends Olo_Tile_Base {
                 $uid = 'olo-list-' . wp_rand( 10000, 99999 );
 ob_start();
         ?>
-        <?php $list_text_clr = $this->safe_color_css( $s['text_color'] ); ?>
-        <ul class="olo-list <?php echo esc_attr( $uid ); ?> uk-list" style="padding: <?php echo $pad; ?>;<?php echo $shadow_css; ?><?php if ( $list_text_clr ) echo 'color:' . $list_text_clr . ';'; ?>"><?php // kept on same line to avoid whitespace ?>
+        <?php
+        $list_text_clr = $this->safe_color_css( $s['text_color'] );
+        $list_ta_val  = $s['text_align'] ?? '';
+        $list_ta_css  = in_array( $list_ta_val, [ 'left', 'center', 'right', 'justify' ], true ) ? 'text-align:' . $list_ta_val . ';flex:1;' : '';
+        ?>
+        <ul class="olo-list <?php echo esc_attr( $uid ); ?> uk-list olo-ls-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" style="padding: <?php echo $pad; ?>;<?php echo $shadow_css; ?><?php if ( $list_text_clr ) echo 'color:' . $list_text_clr . ';'; ?>"><?php // kept on same line to avoid whitespace ?>
             <?php foreach ( $items as $i => $item ) :
                 $icon = ! empty( $item['icon'] ) ? $item['icon'] : $default_icon;
             ?>
@@ -97,7 +102,7 @@ ob_start();
                         <span style="flex-shrink:0;display:flex;align-items:center;line-height:1;"><?php echo $this->get_icon_svg( $icon, $s['icon_color'], $isize ); ?></span>
                     <?php endif; ?>
                     <?php list( $li_cls, $li_data ) = $this->tfx_attrs( $s, 'text', $item['text'] ); ?>
-                    <span class="olo-list-text<?php echo $li_cls; ?>" style="line-height:1.5;"<?php echo $li_data; ?>><?php echo esc_html( $item['text'] ); ?></span>
+                    <span class="olo-list-text<?php echo $li_cls; ?>" style="line-height:1.5;<?php echo $list_ta_css; ?>"<?php echo $li_data; ?>><?php echo esc_html( $item['text'] ); ?></span>
                 <?php echo $li_close; ?>
             <?php endforeach; ?>
         </ul>

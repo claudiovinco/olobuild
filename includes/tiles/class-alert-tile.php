@@ -11,9 +11,10 @@ class Olo_Alert_Tile extends Olo_Tile_Base {
     protected $icon     = 'dashicons-warning';
     protected $category = 'text';
     protected $defaults = [
+        'preset' => 'custom',
         'alert_type'          => 'info',
-        'title'               => 'Heads up!',
-        'message'             => 'This is an informational alert message.',
+        'title'               => 'Attenzione!',
+        'message'             => 'Questo è un avviso informativo.',
         'show_icon'           => true,
         'custom_icon'         => '',
         'dismissible'         => false,
@@ -75,6 +76,10 @@ class Olo_Alert_Tile extends Olo_Tile_Base {
         if ( ! empty( $s['custom_text_color'] ) ) {
             $inline_styles[] = 'color:' . esc_attr( $s['custom_text_color'] );
         }
+        $alert_ta = $s['text_align'] ?? '';
+        if ( in_array( $alert_ta, [ 'left', 'center', 'right', 'justify' ], true ) ) {
+            $inline_styles[] = 'text-align:' . $alert_ta;
+        }
         $style_attr = ! empty( $inline_styles ) ? ' style="' . implode( ';', $inline_styles ) . '"' : '';
 
         $alert_uid = 'olo-alert-' . wp_unique_id();
@@ -85,7 +90,7 @@ class Olo_Alert_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
-        <div class="olo-alert uk-alert uk-alert-<?php echo esc_attr( $uk_type ); ?> <?php echo $alert_uid; ?>"<?php echo $style_attr; ?> uk-alert>
+        <div class="olo-alert uk-alert uk-alert-<?php echo esc_attr( $uk_type ); ?> <?php echo $alert_uid; ?> olo-alert-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>"<?php echo $style_attr; ?> uk-alert>
             <?php if ( ! empty( $s['dismissible'] ) ) : ?>
                 <a class="uk-alert-close" uk-close></a>
             <?php endif; ?>

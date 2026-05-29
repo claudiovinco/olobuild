@@ -11,6 +11,7 @@ class Olo_Counter_Tile extends Olo_Tile_Base {
     protected $icon     = 'dashicons-performance';
     protected $category = 'marketing';
     protected $defaults = [
+        'preset' => 'custom',
         'number'             => '1250',
         'label'              => 'Clienti soddisfatti',
         'prefix'             => '',
@@ -133,7 +134,7 @@ class Olo_Counter_Tile extends Olo_Tile_Base {
         <?php echo $border_hover_css; ?>
         <?php echo $border_effect_css; ?>
         </style><?php endif; ?>
-        <div class="olo-counter <?php echo esc_attr( $uid ); ?>">
+        <div class="olo-counter <?php echo esc_attr( $uid ); ?> olo-cnt-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>">
             <?php if ( $bg_type === 'image' && ! empty( $s['bg_image'] ) ) : ?>
                 <div class="olo-cnt-bg"></div>
             <?php endif; ?>

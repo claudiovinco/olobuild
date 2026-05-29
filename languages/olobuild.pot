@@ -1,1055 +1,1391 @@
-# Copyright (C) 2026 Claudio
-# This file is distributed under the same license as the Olobuild plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Olobuild 2.51.0\n"
+"Project-Id-Version: Olobuild 3.28.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-28\n"
+"POT-Creation-Date: 2026-05-09 08:42+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Olo Lang i18n rebuild (gettext-parser)\n"
 
-#. Plugin Name of the plugin
-#: olobuild.php
-msgid "Olobuild"
+#: includes/class-cookie-consent.php:925
+msgid ""
+"%d consensi registrati. Il GDPR richiede di poter dimostrare il consenso "
+"raccolto."
 msgstr ""
 
-#. Description of the plugin
-#: olobuild.php
-msgid "Page builder professionale olonico con sistema a griglia (tile drag & drop)."
+#: includes/class-template-conditions.php:449
+msgid "A parità, l'ordine in tabella decide."
 msgstr ""
 
-#. Author of the plugin
-#: olobuild.php
-msgid "Claudio"
-msgstr ""
-
-#: includes/class-olo-builder.php
-msgid "Dashboard"
-msgstr ""
-
-#: includes/class-olo-builder.php
-msgid "Gestione Template"
-msgstr ""
-
-#: includes/class-olo-builder.php
-msgid "Configurazione"
-msgstr ""
-
-#: includes/class-olo-builder.php
-msgid "Ricerca Media"
-msgstr ""
-
-#: includes/class-olo-builder.php
-msgid "Invii Form"
-msgstr ""
-
-#: includes/class-olo-builder.php
+#: includes/class-olo-builder.php:863
 msgid "API Keys — Stock Media"
 msgstr ""
 
-#: includes/class-olo-builder.php
-msgid "Inserisci le chiavi API per i servizi di immagini/video stock. Se lasci un campo vuoto, verrà usata la chiave predefinita."
-msgstr ""
-
-#: includes/class-olo-builder.php
-msgid "Pexels API Key"
-msgstr ""
-
-#: includes/class-olo-builder.php
-msgid "Pixabay API Key"
-msgstr ""
-
-#: includes/class-olo-builder.php
-msgid "Unsplash Access Key"
-msgstr ""
-
-#: includes/class-olo-builder.php
-msgid "Freesound API Key"
-msgstr ""
-
-#: includes/class-olo-builder.php
-msgid "Ottieni una chiave su %s"
-msgstr ""
-
-#: includes/class-olo-builder.php
-msgid "reCAPTCHA v3"
-msgstr ""
-
-#: includes/class-olo-builder.php
-msgid "Google reCAPTCHA v3 per la protezione dei form. Ottieni le chiavi su google.com/recaptcha"
-msgstr ""
-
-#: includes/class-olo-builder.php
-msgid "Chiave sito"
-msgstr ""
-
-#: includes/class-olo-builder.php
-msgid "Chiave segreta"
-msgstr ""
-
-#: includes/class-olo-builder.php
-msgid "Mailchimp"
-msgstr ""
-
-#: includes/class-olo-builder.php
+#: includes/class-olo-builder.php:1002
 msgid "API key Mailchimp per le integrazioni dei form contatti."
 msgstr ""
 
-#: includes/class-olo-builder.php
-msgid "Mailchimp API Key"
+#: includes/class-template-conditions.php:381
+msgid "Abilita"
 msgstr ""
 
-#: includes/class-accessibility.php
-msgid "Vai al contenuto principale"
-msgstr ""
-
-#: includes/class-analytics-tracking.php
-msgid "Analytics"
-msgstr ""
-
-#: includes/class-analytics-tracking.php
-msgid "Provider"
-msgstr ""
-
-#: includes/class-analytics-tracking.php
-msgid "Eventi"
-msgstr ""
-
-#: includes/class-analytics-tracking.php
-msgid "Impostazioni"
-msgstr ""
-
-#: includes/class-analytics-tracking.php
-msgid "Script personalizzati"
-msgstr ""
-
-#: includes/class-analytics-tracking.php
-msgid "Measurement ID di GA4. Lo trovi in Amministrazione &rarr; Flussi di dati."
-msgstr ""
-
-#: includes/class-analytics-tracking.php
-msgid "Container ID di GTM. Se usi GTM per gestire GA4, non inserire anche il Measurement ID sopra."
-msgstr ""
-
-#: includes/class-analytics-tracking.php
-msgid "Pixel ID di Meta/Facebook. Lo trovi in Events Manager &rarr; Impostazioni."
-msgstr ""
-
-#: includes/class-analytics-tracking.php
-msgid "Project ID di Clarity. Heatmap e session recording gratuiti."
-msgstr ""
-
-#: includes/class-analytics-tracking.php
-msgid "Site ID di Hotjar. Lo trovi in Settings &rarr; Sites & Organizations."
-msgstr ""
-
-#: includes/class-analytics-tracking.php
-msgid "Click sui pulsanti"
-msgstr ""
-
-#: includes/class-analytics-tracking.php
-msgid "Invio form"
-msgstr ""
-
-#: includes/class-analytics-tracking.php
-msgid "Riproduzione video"
-msgstr ""
-
-#: includes/class-analytics-tracking.php
-msgid "Profondità di scroll"
-msgstr ""
-
-#: includes/class-analytics-tracking.php
-msgid "Click su pricing CTA"
-msgstr ""
-
-#: includes/class-analytics-tracking.php
-msgid "Download file"
-msgstr ""
-
-#: includes/class-analytics-tracking.php
-msgid "Link esterni"
-msgstr ""
-
-#: includes/class-analytics-tracking.php
-msgid "Richiedi consenso cookie"
-msgstr ""
-
-#: includes/class-analytics-tracking.php
-msgid "Anonimizza IP"
-msgstr ""
-
-#: includes/class-analytics-tracking.php
-msgid "Rispetta Do Not Track"
-msgstr ""
-
-#: includes/class-analytics-tracking.php
-msgid "Escludi amministratori"
-msgstr ""
-
-#: includes/class-analytics-tracking.php
-msgid "Non tracciare le visite degli utenti con ruolo Amministratore."
-msgstr ""
-
-#: includes/class-analytics-tracking.php
-msgid "Salva impostazioni"
-msgstr ""
-
-#: includes/class-analytics-tracking.php
-msgid "Attivo"
-msgstr ""
-
-#: includes/class-analytics-tracking.php
-msgid "Non configurato"
-msgstr ""
-
-#: includes/class-analytics-tracking.php
-msgid "ID"
-msgstr ""
-
-#: includes/class-analytics-tracking.php
-msgid "Auto-tracking eventi"
-msgstr ""
-
-#: includes/class-analytics-tracking.php
-msgid "Scegli quali eventi tracciare automaticamente. Vengono inviati a tutti i provider configurati."
-msgstr ""
-
-#: includes/class-analytics-tracking.php
-msgid "Parametri eventi"
-msgstr ""
-
-#: includes/class-analytics-tracking.php
-msgid "Configura i dettagli degli eventi di scroll e download."
-msgstr ""
-
-#: includes/class-analytics-tracking.php
-msgid "Milestone scroll (%)"
-msgstr ""
-
-#: includes/class-analytics-tracking.php
-msgid "Percentuali di scroll a cui inviare un evento (separate da virgola)."
-msgstr ""
-
-#: includes/class-analytics-tracking.php
-msgid "Estensioni download"
-msgstr ""
-
-#: includes/class-analytics-tracking.php
-msgid "Estensioni file da tracciare come download (separate da virgola)."
-msgstr ""
-
-#: includes/class-analytics-tracking.php
-msgid "Privacy e conformità"
-msgstr ""
-
-#: includes/class-analytics-tracking.php
-msgid "Opzioni di privacy, GDPR e gestione del consenso."
-msgstr ""
-
-#: includes/class-analytics-tracking.php
-msgid "Inserisci script di tracking aggiuntivi. Verranno bloccati dal consenso cookie se abilitato."
-msgstr ""
-
-#: includes/class-analytics-tracking.php
-msgid "Script nel <head>"
-msgstr ""
-
-#: includes/class-analytics-tracking.php
-msgid "Inseriti prima della chiusura di </head>. Utile per snippet di tracking non supportati nativamente."
-msgstr ""
-
-#: includes/class-analytics-tracking.php
-msgid "Script nel <body>"
-msgstr ""
-
-#: includes/class-analytics-tracking.php
-msgid "Inseriti prima della chiusura di </body>."
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Cookie Consent"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Generale"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Testi"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Aspetto"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Categorie"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Blocco Script"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Dichiarazione Cookie"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Log Consensi"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "%d consensi registrati. Il GDPR richiede di poter dimostrare il consenso raccolto."
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Svuotare tutti i log dei consensi?"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Questo contenuto richiede il consenso ai cookie"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Accetta e carica"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Gestisci cookie"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Impostazioni generali"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Configura il comportamento del cookie banner"
-msgstr ""
-
-#: includes/class-cookie-consent.php
+#: includes/class-cookie-consent.php:349
 msgid "Abilita Cookie Banner"
 msgstr ""
 
-#: includes/class-cookie-consent.php
-msgid "Layout"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Barra"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Box laterale"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Full-width"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Posizione"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "In basso"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "In alto"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Mostra \"Rifiuta tutti\""
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Richiesto dalle linee guida CNIL/Garante Privacy italiano."
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Mostra \"Personalizza\""
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Pulsante per aprire il pannello preferenze con le categorie."
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Durata consenso"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "GDPR raccomanda max 6 mesi (180 giorni). Molti usano 365."
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "giorni"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Richiedere nuovamente dopo"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Se la cookie policy cambia, puoi forzare la ripresentazione del banner."
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "giorni (0 = mai)"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Google Consent Mode v2"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Invia segnali gtag(\"consent\") a Google. Richiesto da Google Ads dal marzo 2024 per EEA/UK."
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Blocco iframe"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Blocca iframe di YouTube, Vimeo, Google Maps fino al consenso. Mostra un placeholder con pulsante \"Carica contenuto\"."
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Versione banner"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Incrementa quando cambi la cookie policy. I visitatori con consenso a una versione precedente vedranno di nuovo il banner."
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Testi del banner"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Personalizza i testi mostrati nel cookie banner"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Titolo"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Messaggio"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Pulsante \"Accetta tutti\""
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Pulsante \"Rifiuta tutti\""
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Pulsante \"Personalizza\""
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Pulsante \"Salva preferenze\""
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Link policy"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "URL e testi dei link alle pagine di policy"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "URL Privacy Policy"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Testo link Privacy"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "URL Cookie Policy"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Testo link Cookie Policy"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Colori banner"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Sfondo e testo del cookie banner"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Sfondo banner"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Colore testo"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Colori pulsanti"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Personalizza i colori dei pulsanti \"Accetta\" e \"Rifiuta\""
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Pulsante primario — sfondo"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Pulsante primario — testo"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Pulsante secondario — sfondo"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Pulsante secondario — testo"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Stile"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Overlay e border radius del banner"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Overlay scuro"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Border radius"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Categorie cookie"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Personalizza nome e descrizione di ogni categoria mostrata nel pannello preferenze."
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Sempre attivo"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Etichetta"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Descrizione"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Blocco automatico script"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Abilita auto-blocco"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Converte gli script corrispondenti in type=\"text/plain\" finché il consenso non è dato."
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Pattern da bloccare"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Un dominio/pattern per riga. Gli script il cui src contiene uno di questi pattern vengono bloccati."
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Blocco manuale"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Puoi anche bloccare script manualmente nel tuo HTML aggiungendo:"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Dichiarazione cookie"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Elenca i cookie utilizzati dal sito. Questi vengono mostrati nel pannello preferenze."
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Nome cookie"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Scopo"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Scadenza"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Categoria"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Rimuovi"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Aggiungi cookie"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Log dei consensi"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Esporta CSV"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Svuota log"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "ID Consenso"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Data"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Azione"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Ver."
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "IP (hash)"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Categorie accettate"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "User Agent"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Nessun consenso registrato."
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Preferenze cookie"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Chiudi"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Scegli quali categorie di cookie accettare. Puoi modificare le tue preferenze in qualsiasi momento."
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Dettaglio cookie utilizzati"
-msgstr ""
-
-#: includes/class-cookie-consent.php
-msgid "Cookie"
-msgstr ""
-
-#: includes/class-performance-settings.php
-msgid "Performance"
-msgstr ""
-
-#: includes/class-performance-settings.php
-msgid "Critical CSS"
-msgstr ""
-
-#: includes/class-performance-settings.php
-msgid "Ottimizzatore Asset"
-msgstr ""
-
-#: includes/class-performance-settings.php
-msgid "Suggerimenti Prestazioni"
-msgstr ""
-
-#: includes/class-performance-settings.php
-msgid "Pulizia Head"
-msgstr ""
-
-#: includes/class-performance-settings.php
-msgid "Transizioni Vista"
-msgstr ""
-
-#: includes/class-performance-settings.php
-msgid "Off"
-msgstr ""
-
-#: includes/class-performance-settings.php
-msgid "Rigenerazione in corso..."
-msgstr ""
-
-#: includes/class-performance-settings.php
-msgid "Svuotare tutta la cache Critical CSS?"
-msgstr ""
-
-#: includes/class-performance-settings.php
-msgid "Svuotare la cache CSS? I file verranno rigenerati automaticamente."
-msgstr ""
-
-#: includes/class-performance-settings.php
-msgid "Rigenerato %d su %d pagine (%d errori)"
-msgstr ""
-
-#: includes/class-performance-settings.php
-msgid "Svuotati %d transient Critical CSS"
-msgstr ""
-
-#: includes/class-performance-settings.php
-msgid "Cache CSS svuotata. I file verranno rigenerati al prossimo caricamento."
-msgstr ""
-
-#: includes/class-performance-settings.php
-msgid "Genera automaticamente il CSS above-the-fold e lo inietta inline nel <head>. Il foglio di stile principale viene caricato in modo asincrono."
-msgstr ""
-
-#: includes/class-performance-settings.php
+#: includes/class-performance-settings.php:213
 msgid "Abilita Critical CSS"
 msgstr ""
 
-#: includes/class-performance-settings.php
-msgid "Migliora FCP e LCP inlinando il CSS critico e deferendo il resto."
+#: includes/class-cookie-consent.php:762
+msgid "Abilita auto-blocco"
 msgstr ""
 
-#: includes/class-performance-settings.php
-msgid "Durata cache"
+#: includes/class-template-conditions.php:319
+msgid "Accesso negato."
 msgstr ""
 
-#: includes/class-performance-settings.php
-msgid "Il CSS critico viene rigenerato automaticamente alla scadenza. Invalidato quando salvi un template."
+#: includes/class-cookie-consent.php:1525
+msgid "Accetta e carica"
 msgstr ""
 
-#: includes/class-performance-settings.php
-msgid "Sezioni above-the-fold"
+#: includes/class-performance-settings.php:487
+msgid ""
+"Aggiunge dns-prefetch e preconnect per Google Fonts, YouTube, Vimeo e altri "
+"domini esterni."
 msgstr ""
 
-#: includes/class-performance-settings.php
-msgid "Quante sezioni del template analizzare per il CSS critico. 2 è il valore consigliato."
+#: includes/class-performance-settings.php:517
+msgid ""
+"Aggiunge fetchpriority=\"high\" alla prima immagine della pagina e rimuove "
+"lazy loading dagli elementi above-fold."
 msgstr ""
 
-#: includes/class-performance-settings.php
-msgid "Stato cache"
+#: includes/class-performance-settings.php:375
+msgid ""
+"Aggiunge l'attributo defer agli script frontend di Olobuild. Non blocca il "
+"rendering della pagina."
 msgstr ""
 
-#: includes/class-performance-settings.php
-msgid "Stato"
+#: includes/class-performance-settings.php:527
+msgid ""
+"Aggiunge loading=\"lazy\" alle immagini below-the-fold. Riduce il peso "
+"iniziale della pagina."
 msgstr ""
 
-#: includes/class-performance-settings.php
-msgid "Pagine in cache"
+#: includes/class-cookie-consent.php:854
+msgid "Aggiungi cookie"
 msgstr ""
 
-#: includes/class-performance-settings.php
-msgid "Mai"
+#: includes/class-performance-settings.php:545
+msgid ""
+"Aggiungi domini per dns-prefetch e preconnect personalizzati (uno per riga, "
+"con https://)."
 msgstr ""
 
-#: includes/class-performance-settings.php
-msgid "Ultima generazione"
+#: includes/class-template-conditions.php:443
+msgid "Aggiungi regola"
 msgstr ""
 
-#: includes/class-performance-settings.php
-msgid "Rigenera tutto"
+#: includes/class-analytics-tracking.php:76 includes/class-analytics-tracking.php:77 includes/class-olo-builder.php:643 includes/class-olo-builder.php:765
+msgid "Analytics"
 msgstr ""
 
-#: includes/class-performance-settings.php
-msgid "Svuota cache"
+#: includes/class-analytics-tracking.php:374
+msgid "Anonimizza IP"
 msgstr ""
 
-#: includes/class-performance-settings.php
-msgid "Ottimizzazione Asset"
+#: includes/class-performance-settings.php:559
+msgid ""
+"Apre connessione completa (DNS + TCP + TLS). Più aggressivo del dns-prefetch, "
+"usare solo per risorse critiche."
 msgstr ""
 
-#: includes/class-performance-settings.php
-msgid "Controlla come vengono caricati JavaScript e CSS nel frontend."
-msgstr ""
-
-#: includes/class-performance-settings.php
-msgid "Defer JavaScript"
-msgstr ""
-
-#: includes/class-performance-settings.php
-msgid "Cache CSS su file"
-msgstr ""
-
-#: includes/class-performance-settings.php
-msgid "Salva il CSS generato dai template come file statici invece di iniettarlo inline. Migliora il caching del browser."
-msgstr ""
-
-#: includes/class-performance-settings.php
-msgid "Minifica CSS"
-msgstr ""
-
-#: includes/class-performance-settings.php
-msgid "Rimuove commenti, spazi e newline dal CSS generato."
-msgstr ""
-
-#: includes/class-performance-settings.php
-msgid "Cache CSS"
-msgstr ""
-
-#: includes/class-performance-settings.php
-msgid "File in cache"
-msgstr ""
-
-#: includes/class-performance-settings.php
-msgid "Dimensione totale"
-msgstr ""
-
-#: includes/class-performance-settings.php
-msgid "Svuota cache CSS"
-msgstr ""
-
-#: includes/class-performance-settings.php
-msgid "Resource Hints"
-msgstr ""
-
-#: includes/class-performance-settings.php
-msgid "Suggerimenti al browser per precaricare risorse e velocizzare il caricamento."
-msgstr ""
-
-#: includes/class-performance-settings.php
-msgid "DNS Prefetch & Preconnect"
-msgstr ""
-
-#: includes/class-performance-settings.php
-msgid "Aggiunge dns-prefetch e preconnect per Google Fonts, YouTube, Vimeo e altri domini esterni."
-msgstr ""
-
-#: includes/class-performance-settings.php
-msgid "Preload font"
-msgstr ""
-
-#: includes/class-performance-settings.php
-msgid "Precarica i font custom usati come body/heading per evitare FOUT (Flash of Unstyled Text)."
-msgstr ""
-
-#: includes/class-performance-settings.php
-msgid "Video facade"
-msgstr ""
-
-#: includes/class-performance-settings.php
-msgid "fetchpriority hero image"
-msgstr ""
-
-#: includes/class-performance-settings.php
-msgid "Aggiunge fetchpriority=\"high\" alla prima immagine della pagina e rimuove lazy loading dagli elementi above-fold."
-msgstr ""
-
-#: includes/class-performance-settings.php
-msgid "Lazy loading immagini"
-msgstr ""
-
-#: includes/class-performance-settings.php
-msgid "Aggiunge loading=\"lazy\" alle immagini below-the-fold. Riduce il peso iniziale della pagina."
-msgstr ""
-
-#: includes/class-performance-settings.php
-msgid "Domini personalizzati"
-msgstr ""
-
-#: includes/class-performance-settings.php
-msgid "Aggiungi domini per dns-prefetch e preconnect personalizzati (uno per riga, con https://)."
-msgstr ""
-
-#: includes/class-performance-settings.php
-msgid "DNS Prefetch"
-msgstr ""
-
-#: includes/class-performance-settings.php
-msgid "Risolve il DNS in anticipo. Utile per CDN e servizi esterni."
-msgstr ""
-
-#: includes/class-performance-settings.php
-msgid "Preconnect"
-msgstr ""
-
-#: includes/class-performance-settings.php
-msgid "Apre connessione completa (DNS + TCP + TLS). Più aggressivo del dns-prefetch, usare solo per risorse critiche."
-msgstr ""
-
-#: includes/class-performance-settings.php
-msgid "Pulizia head"
-msgstr ""
-
-#: includes/class-performance-settings.php
-msgid "Rimuovi risorse non necessarie dal <head> per ridurre richieste e peso della pagina."
-msgstr ""
-
-#: includes/class-performance-settings.php
-msgid "Rimuovi jQuery Migrate"
-msgstr ""
-
-#: includes/class-performance-settings.php
-msgid "Rimuove jquery-migrate.js (~10KB). Necessario solo per compatibilità con plugin molto vecchi."
-msgstr ""
-
-#: includes/class-performance-settings.php
-msgid "Rimuovi emoji scripts"
-msgstr ""
-
-#: includes/class-performance-settings.php
-msgid "Rimuove wp-emoji-release.min.js e relativi stili inline. I browser moderni supportano emoji nativamente."
-msgstr ""
-
-#: includes/class-performance-settings.php
-msgid "Rimuovi Block CSS"
-msgstr ""
-
-#: includes/class-performance-settings.php
-msgid "Rimuove wp-block-library-css (~30KB). Attiva solo se non usi blocchi Gutenberg nel frontend."
-msgstr ""
-
-#: includes/class-performance-settings.php
-msgid "Rimuovi Classic Theme CSS"
-msgstr ""
-
-#: includes/class-performance-settings.php
-msgid "Rimuove classic-theme-styles-css. Inutile se non usi un tema classico."
-msgstr ""
-
-#: includes/class-performance-settings.php
-msgid "View Transitions API"
-msgstr ""
-
-#: includes/class-performance-settings.php
-msgid "Transizioni fluide tra le pagine del sito con la View Transitions API nativa del browser. Supportata da Chrome 111+, Edge 111+ e Opera 97+."
-msgstr ""
-
-#: includes/class-performance-settings.php
-msgid "Abilita View Transitions"
-msgstr ""
-
-#: includes/class-performance-settings.php
-msgid "Aggiunge un effetto fade+scale alla navigazione tra pagine. Funziona solo su browser compatibili, gli altri navigano normalmente."
-msgstr ""
-
-#: includes/class-header-integration.php
-msgid "Header Olobuild"
-msgstr ""
-
-#: includes/class-seo-settings.php
-msgid "SEO"
-msgstr ""
-
-#: includes/class-seo-redirects.php
-msgid "Redirect & 404"
-msgstr ""
-
-#: includes/class-performance-hints.php
-msgid "Riproduci video"
-msgstr ""
-
-#: includes/tiles/class-breadcrumbs-tile.php
-msgid "Risultati ricerca"
-msgstr ""
-
-#: includes/tiles/class-breadcrumbs-tile.php
-msgid "Pagina non trovata"
-msgstr ""
-
-#: includes/tiles/class-nav-tile.php
-msgid "Navigation"
-msgstr ""
-
-#: includes/tiles/class-navmenu-tile.php
-msgid "Main menu"
-msgstr ""
-
-#: includes/tiles/class-navmenu-tile.php
-msgid "Open menu"
-msgstr ""
-
-#: includes/tiles/class-navmenu-tile.php
-msgid "Mobile menu"
-msgstr ""
-
-#: includes/tiles/class-navmenu-tile.php
-msgid "Close menu"
-msgstr ""
-
-#: includes/tiles/class-navmenu-tile.php
-msgid "Vertical menu"
-msgstr ""
-
-#: includes/tiles/class-navmenu-tile.php
-msgid "Sub navigation"
-msgstr ""
-
-#: includes/tiles/class-video-tile.php
-msgid "Embedded video"
-msgstr ""
-
-#: includes/tiles/class-video-tile.php
-msgid "Inserisci un URL video"
-msgstr ""
-
-#: includes/tiles/class-video-tile.php
-msgid "Seleziona un file video"
-msgstr ""
-
-#: includes/tiles/class-video-tile.php
-msgid "Background video"
-msgstr ""
-
-#: includes/tiles/class-video-tile.php
-msgid "Seleziona una sorgente video"
-msgstr ""
-
-#: includes/tiles/class-livesearch-tile.php
+#: includes/tiles/class-livesearch-tile.php:366 includes/tiles/class-livesearch-tile.php:403
 msgid "Apri ricerca"
 msgstr ""
 
-#: includes/tiles/class-livesearch-tile.php
-msgid "Cerca"
+#: includes/class-template-conditions.php:416
+msgid "Archivio di un tipo (CPT)"
 msgstr ""
 
-#: includes/tiles/class-livesearch-tile.php
+#: includes/class-template-conditions.php:360
+msgid "Area"
+msgstr ""
+
+#: includes/class-cookie-consent.php:238
+msgid "Aspetto"
+msgstr ""
+
+#: includes/class-performance-settings.php:135
+msgid "Asset Optimizer"
+msgstr ""
+
+#: includes/class-analytics-tracking.php:263 includes/class-performance-settings.php:265
+msgid "Attivo"
+msgstr ""
+
+#: includes/class-analytics-tracking.php:306
+msgid "Auto-tracking eventi"
+msgstr ""
+
+#: includes/class-setup-wizard.php:45
+msgid "Avvia configurazione"
+msgstr ""
+
+#: includes/class-olo-builder.php:625
+msgid "Avvio Rapido"
+msgstr ""
+
+#: includes/class-cookie-consent.php:952
+msgid "Azione"
+msgstr ""
+
+#: includes/tiles/class-video-tile.php:288
+msgid "Background video"
+msgstr ""
+
+#: includes/class-olo-builder.php:773
+msgid "Banner GDPR e consenso cookie"
+msgstr ""
+
+#: includes/class-cookie-consent.php:362
+msgid "Barra"
+msgstr ""
+
+#: includes/class-cookie-consent.php:756
+msgid ""
+"Blocca automaticamente script di terze parti finché l'utente non accetta la "
+"categoria corrispondente."
+msgstr ""
+
+#: includes/class-analytics-tracking.php:370
+msgid ""
+"Blocca gli script di tracking finché l'utente non accetta i cookie "
+"analitici/marketing dal banner Cookie Consent. Richiesto per GDPR."
+msgstr ""
+
+#: includes/class-cookie-consent.php:432
+msgid ""
+"Blocca iframe di YouTube, Vimeo, Google Maps fino al consenso. Mostra un "
+"placeholder con pulsante \"Carica contenuto\"."
+msgstr ""
+
+#: includes/class-cookie-consent.php:240
+msgid "Blocco Script"
+msgstr ""
+
+#: includes/class-cookie-consent.php:755
+msgid "Blocco automatico script"
+msgstr ""
+
+#: includes/class-cookie-consent.php:431
+msgid "Blocco iframe"
+msgstr ""
+
+#: includes/class-cookie-consent.php:788
+msgid "Blocco manuale"
+msgstr ""
+
+#: includes/class-cookie-consent.php:672
+msgid "Border radius"
+msgstr ""
+
+#: includes/class-cookie-consent.php:363
+msgid "Box laterale"
+msgstr ""
+
+#: includes/class-performance-settings.php:412
+msgid "Cache CSS"
+msgstr ""
+
+#: includes/class-performance-settings.php:384
+msgid "Cache CSS su file"
+msgstr ""
+
+#: includes/class-performance-settings.php:681
+msgid "Cache CSS svuotata. I file verranno rigenerati al prossimo caricamento."
+msgstr ""
+
+#: includes/class-olo-builder.php:794
+msgid "Cache, lazy load e ottimizzazione"
+msgstr ""
+
+#: includes/class-olo-builder.php:801
+msgid "Cache, manutenzione, URL, versioni"
+msgstr ""
+
+#: includes/tiles/class-livesearch-tile.php:381 includes/tiles/class-livesearch-tile.php:415
 msgid "Cancella"
 msgstr ""
 
-#: includes/tiles/class-map-tile.php
-#: includes/tiles/class-postgrid-tile.php
+#: includes/class-cookie-consent.php:826
+msgid "Categoria"
+msgstr ""
+
+#: includes/class-cookie-consent.php:239
+msgid "Categorie"
+msgstr ""
+
+#: includes/class-cookie-consent.php:955
+msgid "Categorie accettate"
+msgstr ""
+
+#: includes/class-cookie-consent.php:701
+msgid "Categorie cookie"
+msgstr ""
+
+#: includes/tiles/class-livesearch-tile.php:380 includes/tiles/class-livesearch-tile.php:414
+msgid "Cerca"
+msgstr ""
+
+#: includes/class-olo-builder.php:752
+msgid "Cerca foto, video e audio stock"
+msgstr ""
+
+#: includes/class-cookie-consent.php:1342
+msgid "Chiudi"
+msgstr ""
+
+#: includes/class-analytics-tracking.php:295
+msgid "Click su pricing CTA"
+msgstr ""
+
+#: includes/class-analytics-tracking.php:291
+msgid "Click sui pulsanti"
+msgstr ""
+
+#: includes/tiles/class-navmenu-tile.php:561 includes/tiles/class-navmenu-tile.php:586
+msgid "Close menu"
+msgstr ""
+
+#: includes/class-cookie-consent.php:594
+msgid "Colore testo"
+msgstr ""
+
+#: includes/class-cookie-consent.php:579
+msgid "Colori banner"
+msgstr ""
+
+#: includes/class-cookie-consent.php:609
+msgid "Colori pulsanti"
+msgstr ""
+
+#: includes/class-template-conditions.php:447
+msgid "Come funziona"
+msgstr ""
+
+#: includes/class-template-conditions.php:362
+msgid "Condizione"
+msgstr ""
+
+#: includes/class-analytics-tracking.php:335
+msgid "Configura i dettagli degli eventi di scroll e download."
+msgstr ""
+
+#: includes/class-cookie-consent.php:343
+msgid "Configura il comportamento del cookie banner"
+msgstr ""
+
+#: includes/class-olo-builder.php:280 includes/class-olo-builder.php:281 includes/class-olo-builder.php:744
+msgid "Configurazione"
+msgstr ""
+
+#: includes/class-setup-wizard.php:43
+msgid "Configurazione iniziale disponibile"
+msgstr ""
+
+#: includes/class-analytics-tracking.php:226
+msgid ""
+"Container ID di GTM. Se usi GTM per gestire GA4, non inserire anche il "
+"Measurement ID sopra."
+msgstr ""
+
+#: includes/class-performance-settings.php:368
+msgid "Controlla come vengono caricati JavaScript e CSS nel frontend."
+msgstr ""
+
+#: includes/class-cookie-consent.php:763
+msgid ""
+"Converte gli script corrispondenti in type=\"text/plain\" finché il consenso "
+"non è dato."
+msgstr ""
+
+#: includes/class-cookie-consent.php:1369
+msgid "Cookie"
+msgstr ""
+
+#: includes/class-cookie-consent.php:139 includes/class-cookie-consent.php:140 includes/class-olo-builder.php:644 includes/class-olo-builder.php:772
+msgid "Cookie Consent"
+msgstr ""
+
+#: includes/class-olo-builder.php:738
+msgid "Crea e modifica i tuoi template"
+msgstr ""
+
+#: includes/class-performance-settings.php:134 includes/class-performance-settings.php:206
+msgid "Critical CSS"
+msgstr ""
+
+#: includes/class-performance-settings.php:550
+msgid "DNS Prefetch"
+msgstr ""
+
+#: includes/class-performance-settings.php:486
+msgid "DNS Prefetch & Preconnect"
+msgstr ""
+
+#: includes/class-olo-builder.php:262 includes/class-olo-builder.php:263
+msgid "Dashboard"
+msgstr ""
+
+#: includes/class-cookie-consent.php:951
+msgid "Data"
+msgstr ""
+
+#: includes/class-performance-settings.php:374
+msgid "Defer JavaScript"
+msgstr ""
+
+#: includes/class-template-conditions.php:338
+msgid ""
+"Definisci dove ogni template Header/Footer si applica. Le regole hanno "
+"priorità sull'header/footer globale e cedono il passo a un'eventuale "
+"assegnazione per-pagina dal metabox Olobuild."
+msgstr ""
+
+#: includes/class-cookie-consent.php:730
+msgid "Descrizione"
+msgstr ""
+
+#: includes/class-cookie-consent.php:1365
+msgid "Dettaglio cookie utilizzati"
+msgstr ""
+
+#: includes/class-cookie-consent.php:241
+msgid "Dichiarazione Cookie"
+msgstr ""
+
+#: includes/class-cookie-consent.php:814
+msgid "Dichiarazione cookie"
+msgstr ""
+
+#: includes/class-performance-settings.php:429
+msgid "Dimensione totale"
+msgstr ""
+
+#: includes/class-performance-settings.php:544
+msgid "Domini personalizzati"
+msgstr ""
+
+#: includes/class-analytics-tracking.php:296
+msgid "Download file"
+msgstr ""
+
+#: includes/class-performance-settings.php:223
+msgid "Durata cache"
+msgstr ""
+
+#: includes/class-cookie-consent.php:401
+msgid "Durata consenso"
+msgstr ""
+
+#: includes/class-cookie-consent.php:815
+msgid ""
+"Elenca i cookie utilizzati dal sito. Questi vengono mostrati nel pannello "
+"preferenze."
+msgstr ""
+
+#: includes/tiles/class-video-tile.php:176
+msgid "Embedded video"
+msgstr ""
+
+#: includes/class-analytics-tracking.php:384
+msgid "Escludi amministratori"
+msgstr ""
+
+#: includes/class-cookie-consent.php:936
+msgid "Esporta CSV"
+msgstr ""
+
+#: includes/class-analytics-tracking.php:350
+msgid "Estensioni download"
+msgstr ""
+
+#: includes/class-analytics-tracking.php:351
+msgid "Estensioni file da tracciare come download (separate da virgola)."
+msgstr ""
+
+#: includes/class-cookie-consent.php:722
+msgid "Etichetta"
+msgstr ""
+
+#: includes/class-analytics-tracking.php:140
+msgid "Eventi"
+msgstr ""
+
+#: includes/class-performance-settings.php:422
+msgid "File in cache"
+msgstr ""
+
+#: includes/class-template-conditions.php:394 includes/class-template-conditions.php:404
+msgid "Footer"
+msgstr ""
+
+#: includes/class-olo-builder.php:942
+msgid "Freesound API Key"
+msgstr ""
+
+#: includes/class-template-conditions.php:414
+msgid "Front page"
+msgstr ""
+
+#: includes/class-cookie-consent.php:364
+msgid "Full-width"
+msgstr ""
+
+#: includes/class-analytics-tracking.php:375
+msgid ""
+"GA4 anonimizza l'IP di default, ma questa opzione aggiunge il parametro "
+"esplicito per conformità."
+msgstr ""
+
+#: includes/class-cookie-consent.php:402
+msgid "GDPR raccomanda max 6 mesi (180 giorni). Molti usano 365."
+msgstr ""
+
+#: includes/class-performance-settings.php:207
+msgid ""
+"Genera automaticamente il CSS above-the-fold e lo inietta inline nel <head>. "
+"Il foglio di stile principale viene caricato in modo asincrono."
+msgstr ""
+
+#: includes/class-cookie-consent.php:236
+msgid "Generale"
+msgstr ""
+
+#: includes/class-olo-builder.php:271 includes/class-olo-builder.php:272 includes/class-olo-builder.php:553 includes/class-olo-builder.php:737
+msgid "Gestione Template"
+msgstr ""
+
+#: includes/class-cookie-consent.php:1800
+msgid "Gestisci cookie"
+msgstr ""
+
+#: includes/class-olo-builder.php:787
+msgid "Gestisci redirect e pagine 404"
+msgstr ""
+
+#: includes/class-cookie-consent.php:421
+msgid "Google Consent Mode v2"
+msgstr ""
+
+#: includes/class-olo-builder.php:960
+msgid ""
+"Google reCAPTCHA v3 per la protezione dei form. Ottieni le chiavi su "
+"google.com/recaptcha"
+msgstr ""
+
+#: includes/class-performance-settings.php:137
+msgid "Head Cleanup"
+msgstr ""
+
+#: includes/class-template-conditions.php:389 includes/class-template-conditions.php:403
+msgid "Header"
+msgstr ""
+
+#: includes/class-header-integration.php:24
+msgid "Header Olobuild"
+msgstr ""
+
+#: includes/class-analytics-tracking.php:271 includes/class-template-conditions.php:432
+msgid "ID"
+msgstr ""
+
+#: includes/class-cookie-consent.php:950
+msgid "ID Consenso"
+msgstr ""
+
+#: includes/class-cookie-consent.php:954
+msgid "IP (hash)"
+msgstr ""
+
+#: includes/class-performance-settings.php:224
+msgid ""
+"Il CSS critico viene rigenerato automaticamente alla scadenza. Invalidato "
+"quando salvi un template."
+msgstr ""
+
+#: includes/class-analytics-tracking.php:141 includes/class-olo-builder.php:626
+msgid "Impostazioni"
+msgstr ""
+
+#: includes/class-cookie-consent.php:342
+msgid "Impostazioni generali"
+msgstr ""
+
+#: includes/class-cookie-consent.php:375
+msgid "In alto"
+msgstr ""
+
+#: includes/class-cookie-consent.php:374
+msgid "In basso"
+msgstr ""
+
+#: includes/class-cookie-consent.php:442
+msgid ""
+"Incrementa quando cambi la cookie policy. I visitatori con consenso a una "
+"versione precedente vedranno di nuovo il banner."
+msgstr ""
+
+#: includes/class-olo-builder.php:865
+msgid ""
+"Inserisci le chiavi API per i servizi di immagini/video stock. Se lasci un "
+"campo vuoto, verrà usata la chiave predefinita."
+msgstr ""
+
+#: includes/class-analytics-tracking.php:431
+msgid ""
+"Inserisci script di tracking aggiuntivi. Verranno bloccati dal consenso cookie "
+"se abilitato."
+msgstr ""
+
+#: includes/tiles/class-video-tile.php:185
+msgid "Inserisci un URL video"
+msgstr ""
+
+#: includes/class-analytics-tracking.php:447
+msgid "Inseriti prima della chiusura di </body>."
+msgstr ""
+
+#: includes/class-analytics-tracking.php:438
+msgid ""
+"Inseriti prima della chiusura di </head>. Utile per snippet di tracking non "
+"supportati nativamente."
+msgstr ""
+
+#: includes/class-cookie-consent.php:422
+msgid ""
+"Invia segnali gtag(\"consent\") a Google. Richiesto da Google Ads dal marzo "
+"2024 per EEA/UK."
+msgstr ""
+
+#: includes/class-olo-builder.php:298 includes/class-olo-builder.php:299 includes/class-olo-builder.php:758
+msgid "Invii Form"
+msgstr ""
+
+#: includes/class-analytics-tracking.php:292
+msgid "Invio form"
+msgstr ""
+
+#: includes/class-cookie-consent.php:358
+msgid "Layout"
+msgstr ""
+
+#: includes/class-performance-settings.php:526
+msgid "Lazy loading immagini"
+msgstr ""
+
+#: includes/class-analytics-tracking.php:297
+msgid "Link esterni"
+msgstr ""
+
+#: includes/class-cookie-consent.php:526
+msgid "Link policy"
+msgstr ""
+
+#: includes/class-cookie-consent.php:242
+msgid "Log Consensi"
+msgstr ""
+
+#: includes/class-cookie-consent.php:921
+msgid "Log dei consensi"
+msgstr ""
+
+#: includes/class-performance-settings.php:286
+msgid "Mai"
+msgstr ""
+
+#: includes/class-olo-builder.php:1000
+msgid "Mailchimp"
+msgstr ""
+
+#: includes/class-olo-builder.php:1014
+msgid "Mailchimp API Key"
+msgstr ""
+
+#: includes/tiles/class-navmenu-tile.php:491
+msgid "Main menu"
+msgstr ""
+
+#: includes/class-olo-builder.php:640
+msgid "Marketing"
+msgstr ""
+
+#: includes/class-analytics-tracking.php:218
+msgid "Measurement ID di GA4. Lo trovi in Amministrazione &rarr; Flussi di dati."
+msgstr ""
+
+#: includes/class-cookie-consent.php:479
+msgid "Messaggio"
+msgstr ""
+
+#: includes/class-olo-builder.php:780
+msgid "Meta tag, Open Graph e sitemap"
+msgstr ""
+
+#: includes/class-performance-settings.php:214
+msgid "Migliora FCP e LCP inlinando il CSS critico e deferendo il resto."
+msgstr ""
+
+#: includes/class-analytics-tracking.php:341
+msgid "Milestone scroll (%)"
+msgstr ""
+
+#: includes/class-performance-settings.php:394
+msgid "Minifica CSS"
+msgstr ""
+
+#: includes/tiles/class-navmenu-tile.php:560 includes/tiles/class-navmenu-tile.php:584
+msgid "Mobile menu"
+msgstr ""
+
+#: includes/class-cookie-consent.php:391
+msgid "Mostra \"Personalizza\""
+msgstr ""
+
+#: includes/class-cookie-consent.php:381
+msgid "Mostra \"Rifiuta tutti\""
+msgstr ""
+
+#: includes/class-performance-settings.php:507
+msgid ""
+"Mostra un'anteprima statica dei video YouTube/Vimeo. L'iframe si carica solo "
+"al click. Risparmia ~500KB per video."
+msgstr ""
+
+#: includes/tiles/class-nav-tile.php:197
+msgid "Navigation"
+msgstr ""
+
+#: includes/class-cookie-consent.php:1008
+msgid "Nessun consenso registrato."
+msgstr ""
+
+#: includes/class-template-conditions.php:346
+msgid ""
+"Nessun template Header/Footer pubblicato. Crea prima un template e impostalo "
+"come \"Pubblicato\"."
+msgstr ""
+
+#: includes/class-template-conditions.php:358
+msgid "Nome"
+msgstr ""
+
+#: includes/class-cookie-consent.php:822
+msgid "Nome cookie"
+msgstr ""
+
+#: includes/class-analytics-tracking.php:380
+msgid "Non caricare gli script se il browser invia l'header Do Not Track."
+msgstr ""
+
+#: includes/class-analytics-tracking.php:265
+msgid "Non configurato"
+msgstr ""
+
+#: includes/class-analytics-tracking.php:385
+msgid "Non tracciare le visite degli utenti con ruolo Amministratore."
+msgstr ""
+
+#: includes/class-frontend-renderer.php:2326
+msgid "O clicca per aprire il finder"
+msgstr ""
+
+#: includes/class-performance-settings.php:265
+msgid "Off"
+msgstr ""
+
+#: includes/class-olo-builder.php:250 includes/class-olo-builder.php:251
+msgid "Olobuild"
+msgstr ""
+
+#: includes/tiles/class-navmenu-tile.php:495
+msgid "Open menu"
+msgstr ""
+
+#: includes/class-analytics-tracking.php:396
+msgid "Opzioni di privacy, GDPR e gestione del consenso."
+msgstr ""
+
+#: includes/tiles/class-postgrid-tile.php:818
+msgid "Ordina per…"
+msgstr ""
+
+#: includes/class-cookie-consent.php:663
+msgid "Oscura la pagina dietro il banner per attirare l'attenzione."
+msgstr ""
+
+#: includes/class-olo-builder.php:1019 includes/class-olo-builder.php:884 includes/class-olo-builder.php:905 includes/class-olo-builder.php:926 includes/class-olo-builder.php:947
+msgid "Ottieni una chiave su %s"
+msgstr ""
+
+#: includes/class-performance-settings.php:367
+msgid "Ottimizzazione Asset"
+msgstr ""
+
+#: includes/class-cookie-consent.php:656
+msgid "Overlay e border radius del banner"
+msgstr ""
+
+#: includes/class-cookie-consent.php:662
+msgid "Overlay scuro"
+msgstr ""
+
+#: includes/class-template-conditions.php:420
+msgid "Pagina 404"
+msgstr ""
+
+#: includes/tiles/class-breadcrumbs-tile.php:66
+msgid "Pagina non trovata"
+msgstr ""
+
+#: includes/class-performance-settings.php:274
+msgid "Pagine in cache"
+msgstr ""
+
+#: includes/class-frontend-renderer.php:2314
+msgid "Pannello flottante"
+msgstr ""
+
+#: includes/class-analytics-tracking.php:334
+msgid "Parametri eventi"
+msgstr ""
+
+#: includes/class-cookie-consent.php:772
+msgid "Pattern da bloccare"
+msgstr ""
+
+#: includes/class-analytics-tracking.php:342
+msgid "Percentuali di scroll a cui inviare un evento (separate da virgola)."
+msgstr ""
+
+#: includes/class-olo-builder.php:654 includes/class-olo-builder.php:793 includes/class-performance-settings.php:77 includes/class-performance-settings.php:78
+msgid "Performance"
+msgstr ""
+
+#: includes/class-performance-settings.php:136
+msgid "Performance Hints"
+msgstr ""
+
+#: includes/class-cookie-consent.php:610
+msgid "Personalizza i colori dei pulsanti \"Accetta\" e \"Rifiuta\""
+msgstr ""
+
+#: includes/class-cookie-consent.php:465
+msgid "Personalizza i testi mostrati nel cookie banner"
+msgstr ""
+
+#: includes/class-cookie-consent.php:702
+msgid ""
+"Personalizza nome e descrizione di ogni categoria mostrata nel pannello "
+"preferenze."
+msgstr ""
+
+#: includes/class-olo-builder.php:650
+msgid "Personalizzazione"
+msgstr ""
+
+#: includes/class-olo-builder.php:878
+msgid "Pexels API Key"
+msgstr ""
+
+#: includes/class-olo-builder.php:900
+msgid "Pixabay API Key"
+msgstr ""
+
+#: includes/class-analytics-tracking.php:234
+msgid "Pixel ID di Meta/Facebook. Lo trovi in Events Manager &rarr; Impostazioni."
+msgstr ""
+
+#: includes/class-template-conditions.php:408
+msgid "Più basso = più importante"
+msgstr ""
+
+#: includes/class-olo-builder.php:816
+msgid "Più di un page builder."
+msgstr ""
+
+#: includes/class-olo-builder.php:636
+msgid "Popups"
+msgstr ""
+
+#: includes/class-cookie-consent.php:370
+msgid "Posizione"
+msgstr ""
+
+#: includes/class-performance-settings.php:497
+msgid ""
+"Precarica i font custom usati come body/heading per evitare FOUT (Flash of "
+"Unstyled Text)."
+msgstr ""
+
+#: includes/tiles/class-panelslider-tile.php:690
+msgid "Precedente"
+msgstr ""
+
+#: includes/class-performance-settings.php:556
+msgid "Preconnect"
+msgstr ""
+
+#: includes/class-cookie-consent.php:1341
+msgid "Preferenze cookie"
+msgstr ""
+
+#: includes/class-performance-settings.php:496
+msgid "Preload font"
+msgstr ""
+
+#: includes/class-template-conditions.php:361
+msgid "Priorità"
+msgstr ""
+
+#: includes/class-template-conditions.php:449
+msgid "Priorità più bassa = vince per prima"
+msgstr ""
+
+#: includes/class-analytics-tracking.php:395
+msgid "Privacy e conformità"
+msgstr ""
+
+#: includes/class-analytics-tracking.php:294
+msgid "Profondità di scroll"
+msgstr ""
+
+#: includes/class-analytics-tracking.php:242
+msgid "Project ID di Clarity. Heatmap e session recording gratuiti."
+msgstr ""
+
+#: includes/class-analytics-tracking.php:139 includes/class-cookie-consent.php:1370 includes/class-cookie-consent.php:823
+msgid "Provider"
+msgstr ""
+
+#: includes/class-performance-settings.php:579
+msgid "Pulizia head"
+msgstr ""
+
+#: includes/class-cookie-consent.php:487
+msgid "Pulsante \"Accetta tutti\""
+msgstr ""
+
+#: includes/class-cookie-consent.php:503
+msgid "Pulsante \"Personalizza\""
+msgstr ""
+
+#: includes/class-cookie-consent.php:495
+msgid "Pulsante \"Rifiuta tutti\""
+msgstr ""
+
+#: includes/class-cookie-consent.php:511
+msgid "Pulsante \"Salva preferenze\""
+msgstr ""
+
+#: includes/class-cookie-consent.php:392
+msgid "Pulsante per aprire il pannello preferenze con le categorie."
+msgstr ""
+
+#: includes/class-cookie-consent.php:616
+msgid "Pulsante primario — sfondo"
+msgstr ""
+
+#: includes/class-cookie-consent.php:624
+msgid "Pulsante primario — testo"
+msgstr ""
+
+#: includes/class-cookie-consent.php:632
+msgid "Pulsante secondario — sfondo"
+msgstr ""
+
+#: includes/class-cookie-consent.php:640
+msgid "Pulsante secondario — testo"
+msgstr ""
+
+#: includes/class-cookie-consent.php:789
+msgid "Puoi anche bloccare script manualmente nel tuo HTML aggiungendo:"
+msgstr ""
+
+#: includes/class-performance-settings.php:235
+msgid ""
+"Quante sezioni del template analizzare per il CSS critico. 2 è il valore "
+"consigliato."
+msgstr ""
+
+#: includes/class-cookie-consent.php:1524
+msgid "Questo contenuto richiede il consenso ai cookie"
+msgstr ""
+
+#: includes/class-olo-builder.php:646 includes/class-olo-builder.php:786 includes/class-seo-redirects.php:308 includes/class-seo-redirects.php:309
+msgid "Redirect & 404"
+msgstr ""
+
+#: includes/class-template-conditions.php:309 includes/class-template-conditions.php:310
+msgid "Regole di visualizzazione"
+msgstr ""
+
+#: includes/class-template-conditions.php:336
+msgid "Regole di visualizzazione template"
+msgstr ""
+
+#: includes/class-template-conditions.php:342
+msgid "Regole salvate."
+msgstr ""
+
+#: includes/class-performance-settings.php:479
+msgid "Resource Hints"
+msgstr ""
+
+#: includes/class-olo-builder.php:289 includes/class-olo-builder.php:290 includes/class-olo-builder.php:653 includes/class-olo-builder.php:751
+msgid "Ricerca Media"
+msgstr ""
+
+#: includes/class-cookie-consent.php:411
+msgid "Richiedere nuovamente dopo"
+msgstr ""
+
+#: includes/class-analytics-tracking.php:369
+msgid "Richiedi consenso cookie"
+msgstr ""
+
+#: includes/class-cookie-consent.php:382
+msgid "Richiesto dalle linee guida CNIL/Garante Privacy italiano."
+msgstr ""
+
+#: includes/class-performance-settings.php:297
+msgid "Rigenera tutto"
+msgstr ""
+
+#: includes/class-performance-settings.php:646
+msgid "Rigenerato %d su %d pagine (%d errori)"
+msgstr ""
+
+#: includes/class-performance-settings.php:315
+msgid "Rigenerazione in corso..."
+msgstr ""
+
+#: includes/class-performance-settings.php:617
+msgid "Rimuove classic-theme-styles-css. Inutile se non usi un tema classico."
+msgstr ""
+
+#: includes/class-performance-settings.php:395
+msgid "Rimuove commenti, spazi e newline dal CSS generato."
+msgstr ""
+
+#: includes/class-performance-settings.php:587
+msgid ""
+"Rimuove jquery-migrate.js (~10KB). Necessario solo per compatibilità con "
+"plugin molto vecchi."
+msgstr ""
+
+#: includes/class-performance-settings.php:607
+msgid ""
+"Rimuove wp-block-library-css (~30KB). Attiva solo se non usi blocchi Gutenberg "
+"nel frontend."
+msgstr ""
+
+#: includes/class-performance-settings.php:597
+msgid ""
+"Rimuove wp-emoji-release.min.js e relativi stili inline. I browser moderni "
+"supportano emoji nativamente."
+msgstr ""
+
+#: includes/class-cookie-consent.php:845 includes/class-template-conditions.php:435
+msgid "Rimuovi"
+msgstr ""
+
+#: includes/class-performance-settings.php:606
+msgid "Rimuovi Block CSS"
+msgstr ""
+
+#: includes/class-performance-settings.php:616
+msgid "Rimuovi Classic Theme CSS"
+msgstr ""
+
+#: includes/class-performance-settings.php:596
+msgid "Rimuovi emoji scripts"
+msgstr ""
+
+#: includes/class-performance-settings.php:586
+msgid "Rimuovi jQuery Migrate"
+msgstr ""
+
+#: includes/class-performance-settings.php:580
+msgid ""
+"Rimuovi risorse non necessarie dal <head> per ridurre richieste e peso della "
+"pagina."
+msgstr ""
+
+#: includes/class-performance-hints.php:183
+msgid "Riproduci video"
+msgstr ""
+
+#: includes/class-analytics-tracking.php:293
+msgid "Riproduzione video"
+msgstr ""
+
+#: includes/class-performance-settings.php:553
+msgid "Risolve il DNS in anticipo. Utile per CDN e servizi esterni."
+msgstr ""
+
+#: includes/class-analytics-tracking.php:379
+msgid "Rispetta Do Not Track"
+msgstr ""
+
+#: includes/class-template-conditions.php:419 includes/tiles/class-breadcrumbs-tile.php:64 includes/tiles/class-livesearch-tile.php:386 includes/tiles/class-livesearch-tile.php:421
+msgid "Risultati ricerca"
+msgstr ""
+
+#: includes/class-olo-builder.php:628
+msgid "Role Manager"
+msgstr ""
+
+#: includes/class-olo-builder.php:645 includes/class-olo-builder.php:779 includes/class-seo-settings.php:55 includes/class-seo-settings.php:56
+msgid "SEO"
+msgstr ""
+
+#: includes/class-performance-settings.php:385
+msgid ""
+"Salva il CSS generato dai template come file statici invece di iniettarlo "
+"inline. Migliora il caching del browser."
+msgstr ""
+
+#: includes/class-analytics-tracking.php:173 includes/class-cookie-consent.php:275 includes/class-performance-settings.php:184
+msgid "Salva impostazioni"
+msgstr ""
+
+#: includes/class-template-conditions.php:444
+msgid "Salva regole"
+msgstr ""
+
+#: includes/class-cookie-consent.php:1372 includes/class-cookie-consent.php:825
+msgid "Scadenza"
+msgstr ""
+
+#: includes/class-cookie-consent.php:1344
+msgid ""
+"Scegli quali categorie di cookie accettare. Puoi modificare le tue preferenze "
+"in qualsiasi momento."
+msgstr ""
+
+#: includes/class-analytics-tracking.php:307
+msgid ""
+"Scegli quali eventi tracciare automaticamente. Vengono inviati a tutti i "
+"provider configurati."
+msgstr ""
+
+#: includes/class-cookie-consent.php:1371 includes/class-cookie-consent.php:824
+msgid "Scopo"
+msgstr ""
+
+#: includes/class-analytics-tracking.php:446
+msgid "Script nel <body>"
+msgstr ""
+
+#: includes/class-analytics-tracking.php:437
+msgid "Script nel <head>"
+msgstr ""
+
+#: includes/class-analytics-tracking.php:142 includes/class-analytics-tracking.php:430
+msgid "Script personalizzati"
+msgstr ""
+
+#: includes/class-cookie-consent.php:412
+msgid "Se la cookie policy cambia, puoi forzare la ripresentazione del banner."
+msgstr ""
+
+#: includes/class-template-conditions.php:451
+msgid ""
+"Se nessuna regola matcha, viene usato l'header/footer globale (Gestione "
+"Template → Attiva)."
+msgstr ""
+
+#: includes/class-template-conditions.php:450
+msgid ""
+"Se un singolo post ha un header/footer assegnato dal metabox Olobuild, quello "
+"vince comunque sulle regole qui."
+msgstr ""
+
+#: includes/class-olo-builder.php:988
+msgid "Secret Key"
+msgstr ""
+
+#: includes/class-template-conditions.php:388
+msgid "Seleziona template"
+msgstr ""
+
+#: includes/tiles/class-video-tile.php:221
+msgid "Seleziona un file video"
+msgstr ""
+
+#: includes/tiles/class-video-tile.php:298
+msgid "Seleziona una sorgente video"
+msgstr ""
+
+#: includes/class-cookie-consent.php:1351 includes/class-cookie-consent.php:715
+msgid "Sempre attivo"
+msgstr ""
+
+#: includes/class-performance-settings.php:234
+msgid "Sezioni above-the-fold"
+msgstr ""
+
+#: includes/class-cookie-consent.php:586
+msgid "Sfondo banner"
+msgstr ""
+
+#: includes/class-cookie-consent.php:580
+msgid "Sfondo e testo del cookie banner"
+msgstr ""
+
+#: includes/class-template-conditions.php:415
+msgid "Singoli di un tipo (CPT)"
+msgstr ""
+
+#: includes/class-olo-builder.php:659
+msgid "Sistema"
+msgstr ""
+
+#: includes/class-analytics-tracking.php:250
+msgid "Site ID di Hotjar. Lo trovi in Settings &rarr; Sites & Organizations."
+msgstr ""
+
+#: includes/class-olo-builder.php:972
+msgid "Site Key"
+msgstr ""
+
+#: includes/class-performance-settings.php:266
+msgid "Stato"
+msgstr ""
+
+#: includes/class-performance-settings.php:250
+msgid "Stato cache"
+msgstr ""
+
+#: includes/class-cookie-consent.php:655
+msgid "Stile"
+msgstr ""
+
+#: includes/class-olo-builder.php:745
+msgid "Stili, colori, tipografia e API"
+msgstr ""
+
+#: includes/class-olo-builder.php:627 includes/class-olo-builder.php:800
+msgid "Strumenti"
+msgstr ""
+
+#: includes/tiles/class-navmenu-tile.php:1074
+msgid "Sub navigation"
+msgstr ""
+
+#: includes/class-olo-builder.php:629
+msgid "Submissions"
+msgstr ""
+
+#: includes/tiles/class-panelslider-tile.php:691
+msgid "Successivo"
+msgstr ""
+
+#: includes/class-performance-settings.php:480
+msgid "Suggerimenti al browser per precaricare risorse e velocizzare il caricamento."
+msgstr ""
+
+#: includes/class-performance-settings.php:301
+msgid "Svuota cache"
+msgstr ""
+
+#: includes/class-performance-settings.php:436
+msgid "Svuota cache CSS"
+msgstr ""
+
+#: includes/class-cookie-consent.php:940
+msgid "Svuota log"
+msgstr ""
+
+#: includes/class-performance-settings.php:447
+msgid "Svuotare la cache CSS? I file verranno rigenerati automaticamente."
+msgstr ""
+
+#: includes/class-performance-settings.php:334
+msgid "Svuotare tutta la cache Critical CSS?"
+msgstr ""
+
+#: includes/class-cookie-consent.php:1019
+msgid "Svuotare tutti i log dei consensi?"
+msgstr ""
+
+#: includes/class-performance-settings.php:666
+msgid "Svuotati %d transient Critical CSS"
+msgstr ""
+
+#: includes/class-olo-builder.php:631 includes/class-template-conditions.php:359
+msgid "Template"
+msgstr ""
+
+#: includes/class-olo-builder.php:634
+msgid "Template Salvati"
+msgstr ""
+
+#: includes/class-olo-builder.php:635
+msgid "Template Website"
+msgstr ""
+
+#: includes/class-olo-builder.php:808
+msgid "Template per prodotti e shop"
+msgstr ""
+
+#: includes/class-cookie-consent.php:237
+msgid "Testi"
+msgstr ""
+
+#: includes/class-cookie-consent.php:464
+msgid "Testi del banner"
+msgstr ""
+
+#: includes/class-cookie-consent.php:557
+msgid "Testo link Cookie Policy"
+msgstr ""
+
+#: includes/class-cookie-consent.php:541
+msgid "Testo link Privacy"
+msgstr ""
+
+#: includes/class-cookie-consent.php:471
+msgid "Titolo"
+msgstr ""
+
+#: includes/class-olo-builder.php:766
+msgid "Tracking e statistiche"
+msgstr ""
+
+#: includes/class-frontend-renderer.php:2325
+msgid "Trascina qui contenuti del pannello"
+msgstr ""
+
+#: includes/tiles/class-map-tile.php:809 includes/tiles/class-map-tile.php:818 includes/tiles/class-map-tile.php:827 includes/tiles/class-postgrid-tile.php:758 includes/tiles/class-postgrid-tile.php:767 includes/tiles/class-postgrid-tile.php:776
 msgid "Tutti"
 msgstr ""
 
-#: includes/tiles/class-postgrid-tile.php
-msgid "Ordina per…"
+#: includes/class-template-conditions.php:413
+msgid "Tutto il sito"
+msgstr ""
+
+#: includes/class-cookie-consent.php:549
+msgid "URL Cookie Policy"
+msgstr ""
+
+#: includes/class-cookie-consent.php:533
+msgid "URL Privacy Policy"
+msgstr ""
+
+#: includes/class-cookie-consent.php:527
+msgid "URL e testi dei link alle pagine di policy"
+msgstr ""
+
+#: includes/class-performance-settings.php:290
+msgid "Ultima generazione"
+msgstr ""
+
+#: includes/class-template-conditions.php:418
+msgid "Un articolo specifico (ID)"
+msgstr ""
+
+#: includes/class-cookie-consent.php:773
+msgid ""
+"Un dominio/pattern per riga. Gli script il cui src contiene uno di questi "
+"pattern vengono bloccati."
+msgstr ""
+
+#: includes/class-template-conditions.php:417
+msgid "Una pagina specifica (ID)"
+msgstr ""
+
+#: includes/class-olo-builder.php:921
+msgid "Unsplash Access Key"
+msgstr ""
+
+#: includes/class-cookie-consent.php:956
+msgid "User Agent"
+msgstr ""
+
+#: includes/class-template-conditions.php:421
+msgid "Utenti loggati"
+msgstr ""
+
+#: includes/class-template-conditions.php:422
+msgid "Utenti non loggati"
+msgstr ""
+
+#: includes/class-accessibility.php:44
+msgid "Vai al contenuto principale"
+msgstr ""
+
+#: includes/class-cookie-consent.php:953
+msgid "Ver."
+msgstr ""
+
+#: includes/class-cookie-consent.php:441
+msgid "Versione banner"
+msgstr ""
+
+#: includes/tiles/class-navmenu-tile.php:972
+msgid "Vertical menu"
+msgstr ""
+
+#: includes/class-performance-settings.php:506
+msgid "Video facade"
+msgstr ""
+
+#: includes/class-olo-builder.php:759
+msgid "Visualizza i messaggi ricevuti"
+msgstr ""
+
+#: includes/class-olo-builder.php:662
+msgid "White Label"
+msgstr ""
+
+#: includes/class-olo-builder.php:655 includes/class-olo-builder.php:807
+msgid "WooCommerce"
+msgstr ""
+
+#: includes/class-template-conditions.php:384
+msgid "es. Header strutture"
+msgstr ""
+
+#: includes/class-performance-settings.php:516
+msgid "fetchpriority hero image"
+msgstr ""
+
+#: includes/class-cookie-consent.php:406 includes/class-performance-settings.php:229
+msgid "giorni"
+msgstr ""
+
+#: includes/class-cookie-consent.php:416
+msgid "giorni (0 = mai)"
+msgstr ""
+
+#: includes/class-olo-builder.php:958
+msgid "reCAPTCHA v3"
+msgstr ""
+
+#: includes/class-template-conditions.php:412
+msgid "— Seleziona —"
+msgstr ""
+
+#: includes/class-template-conditions.php:426
+msgid "— Tipo —"
 msgstr ""

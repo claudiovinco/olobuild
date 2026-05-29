@@ -7,8 +7,8 @@
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
         </div>
         <div>
-          <h3>Stock Media</h3>
-          <p>Chiavi API per immagini, video e audio stock</p>
+          <h3>{{ t('Stock Media') }}</h3>
+          <p>{{ t('Chiavi API per immagini, video e audio stock') }}</p>
         </div>
       </div>
       <div class="olo-card-body">
@@ -22,10 +22,10 @@
               :id="field.key"
               type="text"
               v-model="values[field.key]"
-              :placeholder="field.placeholder || 'Inserisci la chiave...'"
+              :placeholder="field.placeholder || t('Inserisci la chiave...')"
               class="olo-field-input"
             />
-            <span v-if="values[field.key]" class="olo-field-status ok" title="Configurata">
+            <span v-if="values[field.key]" class="olo-field-status ok" :title="t('Configurata')">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
             </span>
           </div>
@@ -41,13 +41,13 @@
         </div>
         <div>
           <h3>reCAPTCHA v3</h3>
-          <p>Protezione anti-spam per i form &mdash; <a href="https://www.google.com/recaptcha" target="_blank" rel="noopener">Ottieni le chiavi</a></p>
+          <p>{{ t('Protezione anti-spam per i form') }} &mdash; <a href="https://www.google.com/recaptcha" target="_blank" rel="noopener">{{ t('Ottieni le chiavi') }}</a></p>
         </div>
       </div>
       <div class="olo-card-body">
         <div class="olo-field-row">
           <div class="olo-field-info">
-            <label for="recaptcha_site">Site Key</label>
+            <label for="recaptcha_site">{{ t('Site Key') }}</label>
           </div>
           <div class="olo-field-input-wrap">
             <input id="recaptcha_site" type="text" v-model="values.olo_recaptcha_site_key" placeholder="6L..." class="olo-field-input" />
@@ -55,7 +55,7 @@
         </div>
         <div class="olo-field-row">
           <div class="olo-field-info">
-            <label for="recaptcha_secret">Secret Key</label>
+            <label for="recaptcha_secret">{{ t('Secret Key') }}</label>
           </div>
           <div class="olo-field-input-wrap">
             <input id="recaptcha_secret" type="password" v-model="values.olo_recaptcha_secret_key" placeholder="6L..." class="olo-field-input" />
@@ -72,13 +72,13 @@
         </div>
         <div>
           <h3>Mailchimp</h3>
-          <p>API key per integrazioni form contatti</p>
+          <p>{{ t('API key Mailchimp per le integrazioni dei form contatti.') }}</p>
         </div>
       </div>
       <div class="olo-card-body">
         <div class="olo-field-row">
           <div class="olo-field-info">
-            <label for="mailchimp">API Key</label>
+            <label for="mailchimp">{{ t('API Key') }}</label>
           </div>
           <div class="olo-field-input-wrap">
             <input id="mailchimp" type="text" v-model="values.olo_mailchimp_api_key" placeholder="xxxxxxxx-us1" class="olo-field-input" />
@@ -92,7 +92,7 @@
       <button @click="save" :disabled="saving" class="olo-btn-save">
         <svg v-if="!saving" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
         <span v-if="saving" class="olo-spinner"></span>
-        {{ saving ? 'Salvataggio...' : 'Salva modifiche' }}
+        {{ saving ? t('Salvataggio...') : t('Salva modifiche') }}
       </button>
     </div>
   </div>
@@ -100,6 +100,7 @@
 
 <script setup>
 import { ref, inject, onMounted } from 'vue';
+import { t } from '@/i18n';
 
 const oloData = window.oloData || {};
 const showToast = inject('showToast', () => {});
@@ -145,13 +146,13 @@ async function save() {
       body: JSON.stringify(values.value),
     });
     if (res.ok) {
-      showToast('API keys salvate con successo');
+      showToast(t('API keys salvate con successo'));
     } else {
-      showToast('Errore nel salvataggio', 'error');
+      showToast(t('Errore nel salvataggio'), 'error');
     }
   } catch (e) {
     console.error('Save API keys failed:', e);
-    showToast('Errore nel salvataggio', 'error');
+    showToast(t('Errore nel salvataggio'), 'error');
   } finally {
     saving.value = false;
   }

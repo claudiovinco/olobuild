@@ -1,12 +1,22 @@
 
-import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared.js';
+import { t } from '@/i18n';
+
+/**
+ * Tile Woo Checkout Multi-step — split CONTENUTO/STILE (regola universale Olobuild).
+ *   fields[]      → etichette step, stile step, toggle riepilogo ordine
+ *   styleFields[] → preset, sfondo, tipografia, colori, raggio card, bordo
+ */
 export default {
   type: 'woo_checkout_multistep',
-  name: 'Checkout Multi-step WC',
+  name: t('Checkout Multi-step WC'),
   icon: 'dashicons-cart',
   category: 'woocommerce',
-  placeholder: 'Checkout multi-step WooCommerce',
+  placeholder: t('Checkout multi-step WooCommerce'),
   defaults: {
+    preset: 'custom',
+    bg: { type: 'none' },
+    typography_preset: '',
     step_labels: 'Dati,Spedizione,Pagamento,Conferma',
     step_style: 'progress',
     accent_color: '',
@@ -20,21 +30,52 @@ export default {
     border_hover_duration: 300,
     ...borderEffectDefaults,
   },
+
+  // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
-    { key: 'step_labels', label: 'Etichette step (virgola)', type: 'text' },
-    { key: 'step_style', label: 'Stile step', type: 'select', options: [
-      { value: 'progress', label: 'Barra progresso' },
-      { value: 'tabs', label: 'Tab' },
-      { value: 'numbered', label: 'Numeri' },
+    { key: 'step_labels', label: t('Etichette step (virgola)'), type: 'text' },
+    { key: 'step_style', label: t('Stile step'), type: 'select', options: [
+      { value: 'progress', label: t('Barra progresso') },
+      { value: 'tabs', label: t('Tab') },
+      { value: 'numbered', label: t('Numeri') },
     ]},
-    { key: 'show_order_review', label: 'Mostra riepilogo ordine', type: 'toggle' },
-    { type: 'separator', label: 'Colori' },
-    { key: 'accent_color', label: 'Colore accento', type: 'color' },
-    { key: 'active_color', label: 'Colore step attivo', type: 'color' },
-    { key: 'text_color', label: 'Colore testo', type: 'color' },
-    { key: 'step_bg', label: 'Sfondo step', type: 'color' },
-    { key: 'card_radius', label: 'Arrotondamento (px)', type: 'border-radius' },
-    { key: 'card_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
+    { key: 'show_order_review', label: t('Mostra riepilogo ordine'), type: 'toggle' },
+  ],
+
+  // ─── STILE ─────────────────────────────────────────────────
+  styleFields: [
+    { type: 'separator', label: t('Preset stilistico') },
+    { key: 'preset', label: t('Stile'), type: 'select', options: [
+      { value: 'modern-clean',    label: t('Modern Clean') },
+      { value: 'minimal-mono',    label: t('Minimal Mono') },
+      { value: 'magazine-bold',   label: t('Magazine Bold') },
+      { value: 'editorial-serif', label: t('Editorial Serif') },
+      { value: 'compact-inline',  label: t('Compact Inline') },
+      { value: 'glass-frosted',   label: t('Glass Frosted') },
+      { value: 'neon-glow',       label: t('Neon Glow') },
+      { value: 'brutalist-stamp', label: t('Brutalist Stamp') },
+      { value: 'gradient-aurora', label: t('Gradient Aurora') },
+      { value: 'sticker-fun',     label: t('Sticker Fun') },
+      { value: 'retro-terminal',  label: t('Retro Terminal') },
+      { value: 'tilt-3d',         label: t('3D Tilt') },
+      { value: 'custom',          label: t('Personalizzato') },
+    ] },
+    { type: 'separator', label: t('Tipografia') },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
+    { type: 'typography', label: t('Steps'),
+      presetKey: 'typography_preset',
+      responsiveKeys: ['size'],
+      keys: {
+        color: 'text_color',
+      },
+      sizeMin: 12, sizeMax: 60,
+    },
+
+    { type: 'separator', label: t('Colori') },
+    { key: 'accent_color', label: t('Colore accento'), type: 'color' },
+    { key: 'active_color', label: t('Colore step attivo'), type: 'color' },
+    { key: 'step_bg', label: t('Sfondo step'), type: 'color' },
+    withHover({ key: 'card_radius', label: t('Arrotondamento (px)'), type: 'border-radius' }),
     ...borderFields(),
   ],
 };

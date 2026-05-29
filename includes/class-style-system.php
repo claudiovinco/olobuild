@@ -63,9 +63,39 @@ class Olo_Style_System {
                 'heading_text_transform'   => 'none',
             ],
             'layout' => [
-                'border_radius'       => '4px',
-                'border_radius_large' => '8px',
-                'container_max_width' => '1200px',
+                'border_radius'        => '4px',
+                'border_radius_large'  => '8px',
+                'container_max_width'  => '1200px',
+                'container_narrow'     => '720px',
+                'container_wide'       => '1440px',
+            ],
+            'spacing' => [
+                'xs'  => '4px',
+                'sm'  => '8px',
+                'md'  => '16px',
+                'lg'  => '24px',
+                'xl'  => '32px',
+                '2xl' => '48px',
+                '3xl' => '64px',
+                '4xl' => '96px',
+            ],
+            'section_padding' => [
+                'compact'  => 'lg',
+                'default'  => 'xl',
+                'spacious' => '2xl',
+                'between'  => 'md',
+            ],
+            'gutter' => [
+                'desktop'      => 32,
+                'tablet'       => 24,
+                'mobile'       => 16,
+                'side_desktop' => 32,
+                'side_mobile'  => 16,
+            ],
+            'fluid_scaling' => [
+                'enabled' => false,
+                'tablet'  => 0.85,
+                'mobile'  => 0.65,
             ],
             'buttons' => [
                 'font_size'        => '14px',
@@ -124,24 +154,34 @@ class Olo_Style_System {
         $defaults = $this->get_defaults();
 
         return [
-            'colors'       => wp_parse_args( $saved['colors'] ?? [], $defaults['colors'] ),
-            'typography'   => wp_parse_args( $saved['typography'] ?? [], $defaults['typography'] ),
-            'layout'       => wp_parse_args( $saved['layout'] ?? [], $defaults['layout'] ),
-            'buttons'      => wp_parse_args( $saved['buttons'] ?? [], $defaults['buttons'] ),
-            'forms'        => wp_parse_args( $saved['forms'] ?? [], $defaults['forms'] ),
-            'links'        => wp_parse_args( $saved['links'] ?? [], $defaults['links'] ),
-            'dark_colors'  => wp_parse_args( $saved['dark_colors'] ?? [], $defaults['dark_colors'] ),
-            'google_fonts' => $saved['google_fonts'] ?? $defaults['google_fonts'],
+            'colors'          => wp_parse_args( $saved['colors'] ?? [], $defaults['colors'] ),
+            'typography'      => wp_parse_args( $saved['typography'] ?? [], $defaults['typography'] ),
+            'layout'          => wp_parse_args( $saved['layout'] ?? [], $defaults['layout'] ),
+            'buttons'         => wp_parse_args( $saved['buttons'] ?? [], $defaults['buttons'] ),
+            'forms'           => wp_parse_args( $saved['forms'] ?? [], $defaults['forms'] ),
+            'links'           => wp_parse_args( $saved['links'] ?? [], $defaults['links'] ),
+            'dark_colors'     => wp_parse_args( $saved['dark_colors'] ?? [], $defaults['dark_colors'] ),
+            'google_fonts'    => $saved['google_fonts'] ?? $defaults['google_fonts'],
+            'spacing'         => wp_parse_args( $saved['spacing'] ?? [], $defaults['spacing'] ),
+            'section_padding' => wp_parse_args( $saved['section_padding'] ?? [], $defaults['section_padding'] ),
+            'gutter'          => wp_parse_args( $saved['gutter'] ?? [], $defaults['gutter'] ),
+            'fluid_scaling'   => wp_parse_args( $saved['fluid_scaling'] ?? [], $defaults['fluid_scaling'] ),
         ];
     }
 
     /**
      * Save styles to wp_options.
+     *
+     * Merge con i valori già salvati per blocco: un PUT parziale (es. solo fluid_scaling)
+     * non deve cancellare gli altri blocchi (colors, typography, spacing, ecc.).
      */
     public function save_styles( $styles ) {
         $sanitized = $this->sanitize_styles( $styles );
-        update_option( 'olo_styles', $sanitized, false );
-        return $sanitized;
+        $existing  = get_option( 'olo_styles', [] );
+        if ( ! is_array( $existing ) ) $existing = [];
+        $merged    = array_replace( $existing, $sanitized );
+        update_option( 'olo_styles', $merged, false );
+        return $merged;
     }
 
     /**
@@ -251,6 +291,65 @@ class Olo_Style_System {
         if ( isset( $styles['google_fonts'] ) && is_array( $styles['google_fonts'] ) ) {
             $sanitized['google_fonts'] = array_map( 'sanitize_text_field', $styles['google_fonts'] );
             $sanitized['google_fonts'] = array_values( array_unique( $sanitized['google_fonts'] ) );
+        }
+
+        // Spacing scale (xs..4xl) — pass-through with sanitize_text_field
+        if ( isset( $styles['spacing'] ) && is_array( $styles['spacing'] ) ) {
+            $sanitized['spacing'] = [];
+            foreach ( $styles['spacing'] as $key => $value ) {
+                $skey = preg_replace( '/[^a-z0-9_]/', '', strtolower( (string) $key ) );
+                if ( $skey !== '' ) {
+                    $sanitized['spacing'][ $skey ] = sanitize_text_field( $value );
+                }
+            }
+        }
+
+        // Border radius scale
+        if ( isset( $styles['border_radius_scale'] ) && is_array( $styles['border_radius_scale'] ) ) {
+            $sanitized['border_radius_scale'] = [];
+            foreach ( $styles['border_radius_scale'] as $key => $value ) {
+                $sanitized['border_radius_scale'][ sanitize_key( $key ) ] = sanitize_text_field( $value );
+            }
+        }
+
+        // Shadows
+        if ( isset( $styles['shadows'] ) && is_array( $styles['shadows'] ) ) {
+            $sanitized['shadows'] = [];
+            foreach ( $styles['shadows'] as $key => $value ) {
+                $sanitized['shadows'][ sanitize_key( $key ) ] = sanitize_text_field( $value );
+            }
+        }
+
+        // Section padding (chiavi mappano a spacing scale: xs..4xl)
+        if ( isset( $styles['section_padding'] ) && is_array( $styles['section_padding'] ) ) {
+            $allowed_tokens = [ 'xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl' ];
+            $sanitized['section_padding'] = [];
+            foreach ( $styles['section_padding'] as $key => $value ) {
+                $skey = sanitize_key( $key );
+                $sval = sanitize_text_field( $value );
+                if ( in_array( $sval, $allowed_tokens, true ) ) {
+                    $sanitized['section_padding'][ $skey ] = $sval;
+                }
+            }
+        }
+
+        // Gutter responsive (numeric px)
+        if ( isset( $styles['gutter'] ) && is_array( $styles['gutter'] ) ) {
+            $sanitized['gutter'] = [];
+            foreach ( $styles['gutter'] as $key => $value ) {
+                $skey = sanitize_key( $key );
+                $sanitized['gutter'][ $skey ] = max( 0, min( 120, absint( $value ) ) );
+            }
+        }
+
+        // Fluid scaling
+        if ( isset( $styles['fluid_scaling'] ) && is_array( $styles['fluid_scaling'] ) ) {
+            $fs = $styles['fluid_scaling'];
+            $sanitized['fluid_scaling'] = [
+                'enabled' => ! empty( $fs['enabled'] ),
+                'tablet'  => max( 0.3, min( 1.0, (float) ( $fs['tablet'] ?? 0.85 ) ) ),
+                'mobile'  => max( 0.3, min( 1.0, (float) ( $fs['mobile'] ?? 0.65 ) ) ),
+            ];
         }
 
         return $sanitized;
@@ -368,6 +467,29 @@ class Olo_Style_System {
         $css .= "  --olo-border-radius: " . $this->css_border_radius( $l['border_radius'], '4px' ) . ";\n";
         $css .= "  --olo-border-radius-large: " . $this->css_border_radius( $l['border_radius_large'], '8px' ) . ";\n";
         $css .= "  --olo-container-max-width: {$l['container_max_width']};\n";
+        $css .= "  --olo-container-narrow: " . ( $l['container_narrow'] ?? '720px' ) . ";\n";
+        $css .= "  --olo-container-wide: " . ( $l['container_wide'] ?? '1440px' ) . ";\n";
+
+        // Spacing scale (xs..4xl)
+        $sp = $s['spacing'] ?? [];
+        $sp_defaults = [ 'xs' => '4px', 'sm' => '8px', 'md' => '16px', 'lg' => '24px', 'xl' => '32px', '2xl' => '48px', '3xl' => '64px', '4xl' => '96px' ];
+        foreach ( $sp_defaults as $sk => $sv ) {
+            $val = ! empty( $sp[ $sk ] ) ? $sp[ $sk ] : $sv;
+            $css .= "  --olo-space-{$sk}: {$val};\n";
+        }
+
+        // Section padding (alias verso i token spacing)
+        $secp = $s['section_padding'] ?? [];
+        $secp_defaults = [ 'compact' => 'lg', 'default' => 'xl', 'spacious' => '2xl', 'between' => 'md' ];
+        foreach ( $secp_defaults as $sk => $sv ) {
+            $token = ! empty( $secp[ $sk ] ) ? $secp[ $sk ] : $sv;
+            $css .= "  --olo-section-pad-y-{$sk}: var(--olo-space-{$token});\n";
+        }
+
+        // Gutter (gap colonne + padding orizzontale container)
+        $g = $s['gutter'] ?? [];
+        $css .= "  --olo-gutter: " . absint( $g['desktop'] ?? 32 ) . "px;\n";
+        $css .= "  --olo-gutter-side: " . absint( $g['side_desktop'] ?? 32 ) . "px;\n";
         // Shadows
         $css .= "  --olo-shadow-small: 0 1px 2px 0 rgba(0,0,0,0.05);\n";
         $css .= "  --olo-shadow-medium: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1);\n";
@@ -447,6 +569,10 @@ class Olo_Style_System {
         // background-color WITHOUT !important so inline styles (custom bg) can override
         // color WITH !important to ensure text contrast with section style
         $css .= "/* UIkit Section overrides */\n";
+        // Section default: TRASPARENTE (eredita bg da .olo-template / page_bg).
+        // UIkit base imposta uk-section-default { background: #fff } che copre il page_bg.
+        // Senza questa regola, ogni section default sovrascrive il bg pagina con bianco.
+        $css .= ".olo-template .uk-section-default { background-color: transparent; }\n";
         $css .= ".olo-template .uk-section-primary { background-color: var(--olo-color-primary); color: var(--olo-color-primary-contrast) !important; }\n";
         $css .= ".olo-template .uk-section-primary :where(a) { color: var(--olo-color-primary-contrast) !important; }\n";
         $css .= ".olo-template .uk-section-secondary { background-color: var(--olo-color-secondary); color: var(--olo-color-secondary-contrast) !important; }\n";
@@ -563,7 +689,60 @@ class Olo_Style_System {
 
         // Container max-width
         $css .= "\n/* Container overrides */\n";
-        $css .= ".olo-template .uk-container:not(.uk-container-expand) { max-width: var(--olo-container-max-width); }\n";
+        $css .= ".olo-template .uk-container:not(.uk-container-expand) { max-width: var(--olo-container-max-width); padding-left: var(--olo-gutter-side); padding-right: var(--olo-gutter-side); }\n";
+        $css .= ".olo-template .olo-container-narrow { max-width: var(--olo-container-narrow); margin-left: auto; margin-right: auto; }\n";
+        $css .= ".olo-template .olo-container-wide { max-width: var(--olo-container-wide); margin-left: auto; margin-right: auto; }\n";
+        $css .= ".olo-template .olo-container-full { max-width: 100%; }\n";
+
+        // Section rhythm helpers
+        $css .= ".olo-template .olo-section-pad-compact  { padding-top: var(--olo-section-pad-y-compact);  padding-bottom: var(--olo-section-pad-y-compact); }\n";
+        $css .= ".olo-template .olo-section-pad-default  { padding-top: var(--olo-section-pad-y-default);  padding-bottom: var(--olo-section-pad-y-default); }\n";
+        $css .= ".olo-template .olo-section-pad-spacious { padding-top: var(--olo-section-pad-y-spacious); padding-bottom: var(--olo-section-pad-y-spacious); }\n";
+        $css .= ".olo-template .olo-section + .olo-section { margin-top: var(--olo-section-pad-y-between, 0); }\n";
+
+        // Gutter responsive (tablet/mobile media queries)
+        $g_desk      = absint( $g['desktop']      ?? 32 );
+        $g_tab       = absint( $g['tablet']       ?? 24 );
+        $g_mob       = absint( $g['mobile']       ?? 16 );
+        $g_side_desk = absint( $g['side_desktop'] ?? 32 );
+        $g_side_mob  = absint( $g['side_mobile']  ?? 16 );
+        if ( $g_tab !== $g_desk || $g_side_desk !== $g_side_mob ) {
+            $css .= "\n/* Gutter responsive — tablet */\n";
+            $css .= "@media (max-width: 960px) {\n";
+            $css .= "  .olo-template { --olo-gutter: {$g_tab}px; }\n";
+            $css .= "}\n";
+        }
+        if ( $g_mob !== $g_desk || $g_side_mob !== $g_side_desk ) {
+            $css .= "\n/* Gutter responsive — mobile */\n";
+            $css .= "@media (max-width: 640px) {\n";
+            $css .= "  .olo-template { --olo-gutter: {$g_mob}px; --olo-gutter-side: {$g_side_mob}px; }\n";
+            $css .= "}\n";
+        }
+
+        // Fluid scaling — riscala tutti i token spacing su tablet/mobile
+        $fs = $s['fluid_scaling'] ?? [];
+        if ( ! empty( $fs['enabled'] ) ) {
+            $tab_factor = max( 0.3, min( 1.0, (float) ( $fs['tablet'] ?? 0.85 ) ) );
+            $mob_factor = max( 0.3, min( 1.0, (float) ( $fs['mobile'] ?? 0.65 ) ) );
+            $css .= "\n/* Fluid scaling — tablet */\n";
+            $css .= "@media (max-width: 960px) {\n  .olo-template {\n";
+            foreach ( $sp_defaults as $sk => $sv ) {
+                $val_raw = ! empty( $sp[ $sk ] ) ? $sp[ $sk ] : $sv;
+                $num     = (float) preg_replace( '/[^0-9.]/', '', $val_raw );
+                $scaled  = round( $num * $tab_factor, 2 );
+                $css    .= "    --olo-space-{$sk}: {$scaled}px;\n";
+            }
+            $css .= "  }\n}\n";
+            $css .= "\n/* Fluid scaling — mobile */\n";
+            $css .= "@media (max-width: 640px) {\n  .olo-template {\n";
+            foreach ( $sp_defaults as $sk => $sv ) {
+                $val_raw = ! empty( $sp[ $sk ] ) ? $sp[ $sk ] : $sv;
+                $num     = (float) preg_replace( '/[^0-9.]/', '', $val_raw );
+                $scaled  = round( $num * $mob_factor, 2 );
+                $css    .= "    --olo-space-{$sk}: {$scaled}px;\n";
+            }
+            $css .= "  }\n}\n";
+        }
 
         // Dark Mode — override color variables when html.olo-dark-mode is active
         $dc = $s['dark_colors'] ?? [];

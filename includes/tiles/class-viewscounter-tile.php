@@ -11,6 +11,7 @@ class Olo_Viewscounter_Tile extends Olo_Tile_Base {
     protected $icon     = 'dashicons-visibility';
     protected $category = 'dynamic';
     protected $defaults = [
+        'preset' => 'custom',
         'show_icon'     => true,
         'icon_position' => 'before',
         'label'         => 'visualizzazioni',
@@ -125,7 +126,7 @@ class Olo_Viewscounter_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
-        <div class="olo-viewscounter <?php echo esc_attr( $uid ); ?>" style="display:flex; flex-direction:<?php echo $direction; ?>; align-items:center; gap:6px; font-size:<?php echo $font_size; ?>px; font-weight:<?php echo $font_weight; ?>; color:<?php echo $text_color; ?>;">
+        <div class="olo-viewscounter <?php echo esc_attr( $uid ); ?> olo-vc-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" style="display:flex; flex-direction:<?php echo $direction; ?>; align-items:center; gap:6px; font-size:<?php echo $font_size; ?>px; font-weight:<?php echo $font_weight; ?>; color:<?php echo $text_color; ?>;">
             <?php if ( $show_icon ) : ?>
                 <?php if ( $icon_pos === 'before' ) : ?>
                     <span class="olo-vc-icon" style="display:inline-flex; align-items:center; color:<?php echo $icon_color; ?>;"><?php echo $eye_svg; ?></span>

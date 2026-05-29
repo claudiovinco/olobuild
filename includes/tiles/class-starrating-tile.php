@@ -7,6 +7,7 @@ class Olo_Starrating_Tile extends Olo_Tile_Base {
     protected $icon     = 'dashicons-star-filled';
     protected $category = 'marketing';
     protected $defaults = [
+        'preset' => 'custom',
         'rating'         => '4',
         'max_stars'      => '5',
         'star_size'      => '32',
@@ -44,7 +45,7 @@ class Olo_Starrating_Tile extends Olo_Tile_Base {
         ob_start();
         ?>
         <?php $sr_uid = 'olo-sr-' . wp_unique_id(); ?>
-        <div class="olo-starrating <?php echo $sr_uid; ?>" style="text-align:<?php echo $align; ?>;padding:16px;">
+        <div class="olo-starrating <?php echo $sr_uid; ?> olo-sr-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" style="text-align:<?php echo $align; ?>;padding:16px;">
             <?php
             list( $srt_cls, $srt_data ) = $this->tfx_attrs( $s, 'title', wp_strip_all_tags( $s['title'] ?? '' ) );
             list( $srs_cls, $srs_data ) = $this->tfx_attrs( $s, 'subtitle', wp_strip_all_tags( $s['subtitle'] ?? '' ) );

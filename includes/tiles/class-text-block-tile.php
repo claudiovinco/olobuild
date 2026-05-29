@@ -16,10 +16,27 @@ class Olo_TextBlock_Tile extends Olo_Tile_Base {
         'font_size'   => '',
         'line_height' => '',
         'max_width'   => '',
+        'columns'     => 1,
+        'column_gap'  => '30',
         'padding'      => '16',
         'tile_padding' => [ 'top' => 16, 'right' => 16, 'bottom' => 16, 'left' => 16 ],
         'tile_margin'  => [ 'top' => 0, 'right' => 0, 'bottom' => 0, 'left' => 0 ],
-            'border'                  => [],
+        'border_radius'           => [ 'tl' => 0, 'tr' => 0, 'br' => 0, 'bl' => 0 ],
+        'hover_border_radius'     => [ 'tl' => 0, 'tr' => 0, 'br' => 0, 'bl' => 0 ],
+        'hover_radius_duration'   => 400,
+        // Text effects
+        'text_effect'             => 'none',
+        'text_effect_target'      => 'content',
+        'text_effect_speed'       => '50',
+        'text_effect_delay'       => '0',
+        'text_effect_loop'        => false,
+        'text_effect_cursor'      => true,
+        'text_effect_cursor_char' => '|',
+        'text_effect_color'       => '',
+        'text_effect_color_to'    => '',
+        'text_effect_phrases'     => '',
+        'text_effect_pause'       => '1500',
+        'border'                  => [],
         'border_hover'            => [],
         'border_hover_duration'   => 300,
         'border_effect'           => 'none',
@@ -88,9 +105,11 @@ class Olo_TextBlock_Tile extends Olo_Tile_Base {
         }
 
         $lh = $s['line_height'] ?? '';
-        $allowed_lh = [ '1.2', '1.4', '1.6', '1.8', '2.0' ];
-        if ( in_array( $lh, $allowed_lh, true ) ) {
-            $style .= 'line-height:' . $lh . ';';
+        if ( is_numeric( $lh ) ) {
+            $lh_val = (float) $lh;
+            if ( $lh_val >= 0.5 && $lh_val <= 5 ) {
+                $style .= 'line-height:' . rtrim( rtrim( sprintf( '%.2f', $lh_val ), '0' ), '.' ) . ';';
+            }
         }
 
         $mw = absint( $s['max_width'] ?? 0 );
@@ -98,10 +117,47 @@ class Olo_TextBlock_Tile extends Olo_Tile_Base {
             $style .= 'max-width:' . $mw . 'px;';
         }
 
-        // Content: supports both HTML (from RichTextEditor) and plain text (legacy)
+        // Allineamento testo
+        $ta = $s['text_align'] ?? '';
+        if ( in_array( $ta, [ 'left', 'center', 'right', 'justify' ], true ) ) {
+            $style .= 'text-align:' . $ta . ';';
+        }
+
+        // Multi-colonne (CSS columns): 1=single, 2-4=multi colonne con gap
+        $cols = max( 1, min( 4, absint( $s['columns'] ?? 1 ) ) );
+        if ( $cols > 1 ) {
+            $col_gap = max( 0, min( 80, absint( $s['column_gap'] ?? 30 ) ) );
+            $style .= 'column-count:' . $cols . ';';
+            $style .= 'column-gap:' . $col_gap . 'px;';
+        }
+
+        // Border radius (4 angoli indipendenti via FieldBorderRadius)
+        $br_css = $this->build_border_radius_css( $s['border_radius'] ?? [] );
+        if ( $br_css ) {
+            $style .= 'border-radius:' . $br_css . ';';
+        }
+
+        // Hover border-radius: se settato (anche con valori 0) genera transition + rule :hover
+        $hover_br_raw = $s['hover_border_radius'] ?? '';
+        $has_hover_br = is_array( $hover_br_raw ) && (
+            ( isset( $hover_br_raw['tl'] ) && intval( $hover_br_raw['tl'] ) !== intval( $s['border_radius']['tl'] ?? 0 ) ) ||
+            ( isset( $hover_br_raw['tr'] ) && intval( $hover_br_raw['tr'] ) !== intval( $s['border_radius']['tr'] ?? 0 ) ) ||
+            ( isset( $hover_br_raw['br'] ) && intval( $hover_br_raw['br'] ) !== intval( $s['border_radius']['br'] ?? 0 ) ) ||
+            ( isset( $hover_br_raw['bl'] ) && intval( $hover_br_raw['bl'] ) !== intval( $s['border_radius']['bl'] ?? 0 ) )
+        );
+        $hover_br_css = $has_hover_br ? $this->build_border_radius_css( $hover_br_raw ) : '';
+        $br_duration  = max( 50, intval( $s['hover_radius_duration'] ?? 400 ) );
+        if ( $hover_br_css ) {
+            $style .= 'transition:border-radius ' . $br_duration . 'ms ease;';
+        }
+
+        // Content: supports both HTML (from RichTextEditor) and plain text (legacy).
+        // Rileva HTML in QUALSIASI posizione (non solo all'inizio). Prima la regex
+        // matchava solo '^\s*<' → un paragrafo "Testo <strong>...</strong>" veniva
+        // trattato come plain text e i tag finivano escapati come testo letterale.
         $content_raw = $s['content'] ?? '';
-        if ( preg_match( '/^\s*</', $content_raw ) ) {
-            $content = wp_kses_post( $content_raw );
+        if ( preg_match( '/<[a-z!\/][^>]*>/i', $content_raw ) ) {
+            $content = $this->safe_richtext_content( $content_raw );
         } else {
             $content = nl2br( esc_html( $content_raw ) );
         }
@@ -122,10 +178,11 @@ class Olo_TextBlock_Tile extends Olo_Tile_Base {
         $border_css        = $this->build_border_css( $s['border'] ?? [] );
         $border_hover_css  = $this->build_border_hover_css( ".{$tb_uid}", $s['border'] ?? [], $s['border_hover'] ?? [], intval( $s['border_hover_duration'] ?? 300 ) );
         $border_effect_css = $this->build_border_effect_css( ".{$tb_uid}", $s['border'] ?? [], $s );
-        if ( $border_css || $border_hover_css || $border_effect_css ) {
+        $hover_br_rule_css = $hover_br_css ? ".{$tb_uid}:hover{border-radius:{$hover_br_css};}" : '';
+        if ( $border_css || $border_hover_css || $border_effect_css || $hover_br_rule_css ) {
             echo '<style>';
             if ( $border_css ) echo ".{$tb_uid}{{$border_css}}";
-            echo $border_hover_css . $border_effect_css . '</style>';
+            echo $border_hover_css . $border_effect_css . $hover_br_rule_css . '</style>';
         }
         return ob_get_clean();
     }

@@ -71,14 +71,8 @@ class Olo_Analytics_Tracking {
      * ═══════════════════════════════════════════════════ */
 
     public static function add_menu() {
-        add_submenu_page(
-            'olobuild',
-            __( 'Analytics', 'olobuild' ),
-            __( 'Analytics', 'olobuild' ),
-            'manage_options',
-            'olo-analytics',
-            [ __CLASS__, 'render_page' ]
-        );
+        // v1.0.31 — pagina migrata in ?page=olobuilder-settings&tab=analytics
+        // La classe resta attiva per l'injection dei tracker GA4/FB Pixel/GTM/Clarity/Hotjar nel frontend.
     }
 
     public static function register_settings() {
@@ -142,19 +136,50 @@ class Olo_Analytics_Tracking {
             'scripts'   => __( 'Script personalizzati', 'olobuild' ),
         ];
         $n = self::OPT;
+
+        // Counter providers attivi
+        $provider_keys = [ 'ga_id', 'fb_pixel_id', 'gtm_id', 'clarity_id', 'hotjar_id' ];
+        $providers_active = 0;
+        foreach ( $provider_keys as $k ) if ( ! empty( $opts[ $k ] ) ) $providers_active++;
+
+        // Counter eventi attivi
+        $event_keys = [ 'track_buttons', 'track_forms', 'track_video', 'track_scroll', 'track_pricing', 'track_downloads', 'track_outbound' ];
+        $events_active = 0;
+        foreach ( $event_keys as $k ) if ( ! empty( $opts[ $k ] ) ) $events_active++;
+
+        // Scripts custom
+        $scripts_count = 0;
+        if ( ! empty( $opts['head_scripts'] ) ) $scripts_count++;
+        if ( ! empty( $opts['body_scripts'] ) ) $scripts_count++;
+
+        // Subnav items con counter contestuali
+        $subnav = [
+            [ 'slug' => 'providers', 'label' => $tabs['providers'], 'href' => admin_url( 'admin.php?page=olo-analytics&tab=providers' ), 'count' => $providers_active ],
+            [ 'slug' => 'events',    'label' => $tabs['events'],    'href' => admin_url( 'admin.php?page=olo-analytics&tab=events' ),    'count' => $events_active ],
+            [ 'slug' => 'settings',  'label' => $tabs['settings'],  'href' => admin_url( 'admin.php?page=olo-analytics&tab=settings' ) ],
+            [ 'slug' => 'scripts',   'label' => $tabs['scripts'],   'href' => admin_url( 'admin.php?page=olo-analytics&tab=scripts' ),   'count' => $scripts_count ],
+        ];
+
+        $sub = sprintf(
+            /* translators: 1: provider count, 2: events count, 3: scripts count */
+            __( '%1$s provider attivi · %2$s eventi tracciati · %3$s blocchi script custom', 'olobuild' ),
+            '<b>' . (int) $providers_active . '</b>',
+            '<b>' . (int) $events_active . '</b>',
+            '<b>' . (int) $scripts_count . '</b>'
+        );
+
         ?>
-        <?php Olo_Builder::page_shell_open( 'Analytics & Tracking', 'olo-analytics-page' ); ?>
+        <?php Olo_Builder::cockpit_shell_open( '<b>' . esc_html__( 'Analytics & Tracking', 'olobuild' ) . '</b>' ); ?>
+        <main class="olo-cockpit-main olo-cockpit-legacy olo-analytics-page">
+            <?php
+            echo Olo_Builder::cockpit_page_head( [
+                'title' => __( 'Analytics & Tracking', 'olobuild' ),
+                'sub'   => $sub,
+            ] );
+            echo Olo_Builder::cockpit_subnav( $subnav, $tab );
+            ?>
 
-            <div class="olo-admin-tabs">
-                <?php foreach ( $tabs as $slug => $label ) : ?>
-                    <a href="<?php echo esc_url( admin_url( 'admin.php?page=olo-analytics&tab=' . $slug ) ); ?>"
-                       class="olo-admin-tab <?php echo $tab === $slug ? 'active' : ''; ?>">
-                        <?php echo esc_html( $label ); ?>
-                    </a>
-                <?php endforeach; ?>
-            </div>
-
-            <form method="post" action="options.php" class="olo-analytics-form">
+            <form method="post" action="options.php" class="olo-analytics-form" style="margin-top:16px">
                 <?php settings_fields( 'olo_analytics_group' ); ?>
                 <?php self::render_hidden_fields( $opts, $tab ); ?>
 
@@ -167,14 +192,19 @@ class Olo_Analytics_Tracking {
                 }
                 ?>
 
-                <div class="olo-actions" style="margin-top:20px">
-                    <button type="submit" class="olo-btn-save">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-                        <?php esc_html_e( 'Salva impostazioni', 'olobuild' ); ?>
-                    </button>
+                <div class="olo-actions" style="margin-top:24px">
+                    <?php
+                    echo Olo_Builder::cockpit_button( [
+                        'label'   => __( 'Salva impostazioni', 'olobuild' ),
+                        'variant' => 'pri',
+                        'type'    => 'submit',
+                        'icon'    => '<path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/>',
+                    ] );
+                    ?>
                 </div>
             </form>
-        <?php Olo_Builder::page_shell_close(); ?>
+        </main>
+        <?php Olo_Builder::cockpit_shell_close(); ?>
         <?php
     }
 

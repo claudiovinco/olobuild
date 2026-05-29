@@ -12,13 +12,11 @@
     </div>
 
     <template v-else>
-      <!-- Toolbar: Close All / Expand All -->
-      <div style="padding:2px 6px 8px;display:flex;align-items:center;gap:8px">
-        <button style="background:none;border:none;color:#9CA3AF;font-size:11px;cursor:pointer;padding:0;font-family:inherit" @click="allExpanded ? collapseAll() : expandAll()">{{ allExpanded ? 'Close All' : 'Expand All' }}</button>
-      </div>
+      <!-- Toolbar moved to BuilderSidebar V2 panel header (Comprimi/Espandi/Solo selezione). -->
+
 
       <!-- ═══ Unified: Header root node ═══ -->
-      <div v-if="builderStore.unifiedMode && builderStore.headerTemplate" class="st-zone-root">
+      <div v-if="builderStore.unifiedMode && builderStore.headerTemplate" v-show="showHeader" class="st-zone-root st-zone-root--header">
         <div
           class="st-row st-row--zone"
           :class="{ 'st-row--zone-active': builderStore.activeZone === 'header' }"
@@ -34,7 +32,7 @@
         <div v-if="isExpanded('__zone_header')" class="st-sub" style="margin-left:10px;padding-left:5px">
           <div class="st-list" v-olo-drop-target="listEndDrop('sections', null)">
             <template v-for="(section, sIdx) in tilesStore.headerTiles" :key="section.id">
-              <div class="st-item" v-olo-draggable="sectionDraggable(section, sIdx)" v-olo-drop-target="sectionDrop(section, sIdx)">
+              <div v-show="isVisible(section.id)" class="st-item" v-olo-draggable="sectionDraggable(section, sIdx)" v-olo-drop-target="sectionDrop(section, sIdx)">
                 <div class="st-row st-row--section" :class="{ 'st-row--active': builderStore.selectedTileId === section.id }" @click="selectTile(section.id, 'header')">
                   <span class="st-grip" :title="t('Trascina')"><svg width="6" height="10" viewBox="0 0 6 10" fill="currentColor"><circle cx="1" cy="1" r="1"/><circle cx="5" cy="1" r="1"/><circle cx="1" cy="5" r="1"/><circle cx="5" cy="5" r="1"/><circle cx="1" cy="9" r="1"/><circle cx="5" cy="9" r="1"/></svg></span>
                   <button class="st-toggle" :class="{ 'st-toggle--open': isExpanded(section.id) }" @click.stop="toggle(section.id)"><svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor"><path d="M2 1l4 3-4 3z"/></svg></button>
@@ -44,7 +42,7 @@
                 <div v-if="isExpanded(section.id)" class="st-sub" style="margin-left:10px;padding-left:5px">
                   <div class="st-list" v-olo-drop-target="listEndDrop('rows', section.id)">
                     <template v-for="(row, rIdx) in (section.children || [])" :key="row.id">
-                      <div class="st-item" v-olo-draggable="rowDraggable(row, section.id, rIdx)" v-olo-drop-target="rowDrop(row, section.id, rIdx)">
+                      <div v-show="isVisible(row.id)" class="st-item" v-olo-draggable="rowDraggable(row, section.id, rIdx)" v-olo-drop-target="rowDrop(row, section.id, rIdx)">
                         <div class="st-row st-row--row" :class="{ 'st-row--active': builderStore.selectedTileId === row.id }" @click.stop="selectTile(row.id, 'header')">
                           <span class="st-grip" :title="t('Trascina')"><svg width="6" height="10" viewBox="0 0 6 10" fill="currentColor"><circle cx="1" cy="1" r="1"/><circle cx="5" cy="1" r="1"/><circle cx="1" cy="5" r="1"/><circle cx="5" cy="5" r="1"/><circle cx="1" cy="9" r="1"/><circle cx="5" cy="9" r="1"/></svg></span>
                           <button class="st-toggle" :class="{ 'st-toggle--open': isExpanded(row.id) }" @click.stop="toggle(row.id)"><svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor"><path d="M2 1l4 3-4 3z"/></svg></button>
@@ -52,7 +50,7 @@
                           <span class="st-name">{{ row.settings?._label || 'Row' }}</span>
                         </div>
                         <div v-if="isExpanded(row.id)" class="st-sub" style="margin-left:10px;padding-left:5px">
-                          <div v-for="col in (row.children || [])" :key="col.id" class="st-item">
+                          <div v-for="col in (row.children || [])" v-show="isVisible(col.id)" :key="col.id" class="st-item">
                             <div class="st-row st-row--column" :class="{ 'st-row--active': builderStore.selectedTileId === col.id }" @click.stop="selectTile(col.id, 'header')">
                               <span class="st-grip-ph"></span>
                               <button v-if="col.children?.length" class="st-toggle" :class="{ 'st-toggle--open': isExpanded(col.id) }" @click.stop="toggle(col.id)"><svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor"><path d="M2 1l4 3-4 3z"/></svg></button>
@@ -63,7 +61,7 @@
                             <div v-if="isExpanded(col.id) && col.children?.length" class="st-sub" style="margin-left:10px;padding-left:5px">
                               <div class="st-list" v-olo-drop-target="listEndDrop('elements', col.id)">
                                 <template v-for="(tile, eIdx) in (col.children || [])" :key="tile.id">
-                                  <div class="st-item" v-olo-draggable="elementDraggable(tile, col.id, eIdx)" v-olo-drop-target="elementDrop(tile, col.id, eIdx)">
+                                  <div v-show="isVisible(tile.id)" class="st-item" v-olo-draggable="elementDraggable(tile, col.id, eIdx)" v-olo-drop-target="elementDrop(tile, col.id, eIdx)">
                                     <div class="st-row st-row--element" :class="{ 'st-row--active': builderStore.selectedTileId === tile.id }" @click.stop="selectTile(tile.id, 'header')">
                                       <span class="st-grip" :title="t('Trascina')"><svg width="6" height="10" viewBox="0 0 6 10" fill="currentColor"><circle cx="1" cy="1" r="1"/><circle cx="5" cy="1" r="1"/><circle cx="1" cy="5" r="1"/><circle cx="5" cy="5" r="1"/><circle cx="1" cy="9" r="1"/><circle cx="5" cy="9" r="1"/></svg></span>
                                       <span class="st-toggle-ph"></span>
@@ -87,8 +85,10 @@
       </div>
 
       <!-- ═══ Body root node (unified mode wrapper) ═══ -->
-      <div v-if="builderStore.unifiedMode" class="st-zone-root">
+      <!-- In unifiedMode: wrapper colorato + header collassabile. Senza unifiedMode: wrapper trasparente, sezioni dirette. -->
+      <div :class="builderStore.unifiedMode ? 'st-zone-root st-zone-root--body' : ''" v-show="!builderStore.unifiedMode || showBody">
         <div
+          v-if="builderStore.unifiedMode"
           class="st-row st-row--zone"
           :class="{ 'st-row--zone-active': builderStore.activeZone === 'body' }"
           @click="onZoneClick('body')"
@@ -100,13 +100,12 @@
           <span class="st-name" style="font-weight:600;color:#A78BFA">Body</span>
           <span v-if="builderStore.isDirty" style="width:6px;height:6px;border-radius:50%;background:#FBBF24;flex-shrink:0" title="Modifiche non salvate"></span>
         </div>
-        <div v-if="isExpanded('__zone_body')" class="st-sub" style="margin-left:10px;padding-left:5px">
-      </div></div>
+        <div :class="{ 'st-sub': builderStore.unifiedMode }" :style="builderStore.unifiedMode ? 'margin-left:10px;padding-left:5px' : ''" v-show="!builderStore.unifiedMode || isExpanded('__zone_body')">
 
       <!-- Sections -->
       <div class="st-list" v-olo-drop-target="listEndDrop('sections', null)">
         <template v-for="(section, sIdx) in tilesStore.canvasTiles" :key="section.id">
-          <div class="st-item" v-olo-draggable="sectionDraggable(section, sIdx)" v-olo-drop-target="sectionDrop(section, sIdx)">
+          <div v-show="isVisible(section.id)" class="st-item" v-olo-draggable="sectionDraggable(section, sIdx)" v-olo-drop-target="sectionDrop(section, sIdx)">
             <!-- Section node -->
             <div
               class="st-row st-row--section"
@@ -150,7 +149,7 @@
             <div v-if="isExpanded(section.id)" class="st-sub" style="margin-left:10px;padding-left:5px">
               <div class="st-list" v-olo-drop-target="listEndDrop('rows', section.id)">
                 <template v-for="(row, rIdx) in (section.children || [])" :key="row.id">
-                  <div class="st-item" v-olo-draggable="rowDraggable(row, section.id, rIdx)" v-olo-drop-target="rowDrop(row, section.id, rIdx)">
+                  <div v-show="isVisible(row.id)" class="st-item" v-olo-draggable="rowDraggable(row, section.id, rIdx)" v-olo-drop-target="rowDrop(row, section.id, rIdx)">
                     <!-- Row node -->
                     <div
                       class="st-row st-row--row"
@@ -187,7 +186,7 @@
 
                     <!-- Row children: Columns -->
                     <div v-if="isExpanded(row.id)" class="st-sub" style="margin-left:10px;padding-left:5px">
-                      <div v-for="(col, ci) in (row.children || [])" :key="col.id" class="st-item">
+                      <div v-for="(col, ci) in (row.children || [])" v-show="isVisible(col.id)" :key="col.id" class="st-item">
                         <!-- Column node -->
                         <div
                           class="st-row st-row--column"
@@ -212,7 +211,7 @@
                         <div v-if="isExpanded(col.id) || !(col.children && col.children.length)" class="st-sub" style="margin-left:10px;padding-left:5px">
                           <div class="st-list st-dropzone" v-olo-drop-target="listEndDrop('elements', col.id)">
                             <template v-for="(tile, eIdx) in (col.children || (col.children = []))" :key="tile.id">
-                              <div class="st-item" v-olo-draggable="elementDraggable(tile, col.id, eIdx)" v-olo-drop-target="elementDrop(tile, col.id, eIdx)">
+                              <div v-show="isVisible(tile.id)" class="st-item" v-olo-draggable="elementDraggable(tile, col.id, eIdx)" v-olo-drop-target="elementDrop(tile, col.id, eIdx)">
                                 <div
                                   class="st-row st-row--element"
                                   :class="{ 'st-row--active': builderStore.selectedTileId === tile.id }"
@@ -255,7 +254,7 @@
 
                                 <!-- Inner columns children -->
                                 <div v-if="tile.type === 'inner-columns' && isExpanded(tile.id) && tile.children?.length" class="st-sub" style="margin-left:10px;padding-left:5px">
-                                  <div v-for="(icol, ici) in tile.children" :key="icol.id" class="st-item">
+                                  <div v-for="(icol, ici) in tile.children" v-show="isVisible(icol.id)" :key="icol.id" class="st-item">
                                     <div
                                       class="st-row st-row--column"
                                       :class="{ 'st-row--active': builderStore.selectedTileId === icol.id }"
@@ -332,12 +331,11 @@
         </template>
       </div>
 
-      <!-- Close body wrapper in unified mode -->
-      <template v-if="builderStore.unifiedMode">
-        </template>
+        </div><!-- /st-sub or pass-through -->
+      </div><!-- /st-zone-root--body or pass-through -->
 
       <!-- ═══ Unified: Footer root node ═══ -->
-      <div v-if="builderStore.unifiedMode && builderStore.footerTemplate" class="st-zone-root">
+      <div v-if="builderStore.unifiedMode && builderStore.footerTemplate" v-show="showFooter" class="st-zone-root st-zone-root--footer">
         <div
           class="st-row st-row--zone"
           :class="{ 'st-row--zone-active': builderStore.activeZone === 'footer' }"
@@ -353,7 +351,7 @@
         <div v-if="isExpanded('__zone_footer')" class="st-sub" style="margin-left:10px;padding-left:5px">
           <div class="st-list" v-olo-drop-target="listEndDrop('sections', null)">
             <template v-for="(section, sIdx) in tilesStore.footerTiles" :key="section.id">
-              <div class="st-item" v-olo-draggable="sectionDraggable(section, sIdx)" v-olo-drop-target="sectionDrop(section, sIdx)">
+              <div v-show="isVisible(section.id)" class="st-item" v-olo-draggable="sectionDraggable(section, sIdx)" v-olo-drop-target="sectionDrop(section, sIdx)">
                 <div class="st-row st-row--section" :class="{ 'st-row--active': builderStore.selectedTileId === section.id }" @click="selectTile(section.id, 'footer')">
                   <span class="st-grip" title="Trascina"><svg width="6" height="10" viewBox="0 0 6 10" fill="currentColor"><circle cx="1" cy="1" r="1"/><circle cx="5" cy="1" r="1"/><circle cx="1" cy="5" r="1"/><circle cx="5" cy="5" r="1"/><circle cx="1" cy="9" r="1"/><circle cx="5" cy="9" r="1"/></svg></span>
                   <button class="st-toggle" :class="{ 'st-toggle--open': isExpanded(section.id) }" @click.stop="toggle(section.id)"><svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor"><path d="M2 1l4 3-4 3z"/></svg></button>
@@ -363,7 +361,7 @@
                 <div v-if="isExpanded(section.id)" class="st-sub" style="margin-left:10px;padding-left:5px">
                   <div class="st-list" v-olo-drop-target="listEndDrop('rows', section.id)">
                     <template v-for="(row, rIdx) in (section.children || [])" :key="row.id">
-                      <div class="st-item" v-olo-draggable="rowDraggable(row, section.id, rIdx)" v-olo-drop-target="rowDrop(row, section.id, rIdx)">
+                      <div v-show="isVisible(row.id)" class="st-item" v-olo-draggable="rowDraggable(row, section.id, rIdx)" v-olo-drop-target="rowDrop(row, section.id, rIdx)">
                         <div class="st-row st-row--row" :class="{ 'st-row--active': builderStore.selectedTileId === row.id }" @click.stop="selectTile(row.id, 'footer')">
                           <span class="st-grip" title="Trascina"><svg width="6" height="10" viewBox="0 0 6 10" fill="currentColor"><circle cx="1" cy="1" r="1"/><circle cx="5" cy="1" r="1"/><circle cx="1" cy="5" r="1"/><circle cx="5" cy="5" r="1"/><circle cx="1" cy="9" r="1"/><circle cx="5" cy="9" r="1"/></svg></span>
                           <button class="st-toggle" :class="{ 'st-toggle--open': isExpanded(row.id) }" @click.stop="toggle(row.id)"><svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor"><path d="M2 1l4 3-4 3z"/></svg></button>
@@ -371,7 +369,7 @@
                           <span class="st-name">{{ row.settings?._label || 'Row' }}</span>
                         </div>
                         <div v-if="isExpanded(row.id)" class="st-sub" style="margin-left:10px;padding-left:5px">
-                          <div v-for="col in (row.children || [])" :key="col.id" class="st-item">
+                          <div v-for="col in (row.children || [])" v-show="isVisible(col.id)" :key="col.id" class="st-item">
                             <div class="st-row st-row--column" :class="{ 'st-row--active': builderStore.selectedTileId === col.id }" @click.stop="selectTile(col.id, 'footer')">
                               <span class="st-grip-ph"></span>
                               <button v-if="col.children?.length" class="st-toggle" :class="{ 'st-toggle--open': isExpanded(col.id) }" @click.stop="toggle(col.id)"><svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor"><path d="M2 1l4 3-4 3z"/></svg></button>
@@ -382,7 +380,7 @@
                             <div v-if="isExpanded(col.id) && col.children?.length" class="st-sub" style="margin-left:10px;padding-left:5px">
                               <div class="st-list" v-olo-drop-target="listEndDrop('elements', col.id)">
                                 <template v-for="(tile, eIdx) in (col.children || [])" :key="tile.id">
-                                  <div class="st-item" v-olo-draggable="elementDraggable(tile, col.id, eIdx)" v-olo-drop-target="elementDrop(tile, col.id, eIdx)">
+                                  <div v-show="isVisible(tile.id)" class="st-item" v-olo-draggable="elementDraggable(tile, col.id, eIdx)" v-olo-drop-target="elementDrop(tile, col.id, eIdx)">
                                     <div class="st-row st-row--element" :class="{ 'st-row--active': builderStore.selectedTileId === tile.id }" @click.stop="selectTile(tile.id, 'footer')">
                                       <span class="st-grip" title="Trascina"><svg width="6" height="10" viewBox="0 0 6 10" fill="currentColor"><circle cx="1" cy="1" r="1"/><circle cx="5" cy="1" r="1"/><circle cx="1" cy="5" r="1"/><circle cx="5" cy="5" r="1"/><circle cx="1" cy="9" r="1"/><circle cx="5" cy="9" r="1"/></svg></span>
                                       <span class="st-toggle-ph"></span>
@@ -415,15 +413,95 @@ import { ref, reactive, computed, nextTick, watch } from 'vue';
 import { useTilesStore } from '@/stores/tiles';
 import { useBuilderStore } from '@/stores/builder';
 import { loadScrollFlashPrefs } from '@/utils/scrollFlashPrefs';
+import { requestScrollToTile } from '@/utils/scrollToTileChannel';
 import {
   vOloDraggable,
   vOloDropTarget,
   attachClosestEdge,
+  extractClosestEdge,
   makeNodePayload,
   isOloData,
 } from '@/composables/useDnD';
 
 const emit = defineEmits(['save-as-template']);
+
+const props = defineProps({
+  // V2: filter zone visibility from outside (rail filters in BuilderSidebar)
+  filter: { type: String, default: 'all' }, // 'all' | 'header' | 'body' | 'footer'
+  // V2: live search over node labels — empty string = no filter
+  searchQuery: { type: String, default: '' },
+  // V2: when true, show only the path of the currently selected node
+  onlySelected: { type: Boolean, default: false },
+});
+
+const showHeader = computed(() => props.filter === 'all' || props.filter === 'header');
+const showBody   = computed(() => props.filter === 'all' || props.filter === 'body');
+const showFooter = computed(() => props.filter === 'all' || props.filter === 'footer');
+
+// Compute visible node IDs based on searchQuery and onlySelected.
+// Returns null when no filter is active (= show everything).
+function _nodeLabelText(node) {
+  return ((node.settings?._label || node.type || '') + '').toLowerCase();
+}
+function _collectMatching(nodes, q, parentChain, out) {
+  for (const node of (nodes || [])) {
+    const childChain = [...parentChain, node.id];
+    let matchedHere = _nodeLabelText(node).includes(q);
+    if (matchedHere) {
+      out.add(node.id);
+      for (const a of parentChain) out.add(a);
+    }
+    if (node.children?.length) {
+      const before = out.size;
+      _collectMatching(node.children, q, childChain, out);
+      if (out.size > before && !out.has(node.id)) {
+        out.add(node.id);
+      }
+    }
+  }
+}
+function _findPath(nodes, targetId, chain = []) {
+  for (const node of (nodes || [])) {
+    const newChain = [...chain, node.id];
+    if (node.id === targetId) return newChain;
+    if (node.children?.length) {
+      const r = _findPath(node.children, targetId, newChain);
+      if (r) return r;
+    }
+  }
+  return null;
+}
+const visibleNodeIds = computed(() => {
+  const q = (props.searchQuery || '').trim().toLowerCase();
+  const isolate = !!props.onlySelected;
+  if (!q && !isolate) return null;
+  const out = new Set();
+  if (q) {
+    _collectMatching(tilesStore.headerTiles || [], q, [], out);
+    _collectMatching(tilesStore.canvasTiles || [], q, [], out);
+    _collectMatching(tilesStore.footerTiles || [], q, [], out);
+  }
+  if (isolate) {
+    const sid = builderStore.selectedTileId;
+    if (sid) {
+      const path = _findPath(tilesStore.headerTiles || [], sid)
+                || _findPath(tilesStore.canvasTiles || [], sid)
+                || _findPath(tilesStore.footerTiles || [], sid);
+      if (path) {
+        for (const id of path) out.add(id);
+      }
+    }
+    if (q && out.size === 0) {
+      // search active but no match in selected path — keep search-only set
+    }
+  }
+  return out;
+});
+
+function isVisible(id) {
+  if (!visibleNodeIds.value) return true;
+  return visibleNodeIds.value.has(id);
+}
 
 const tilesStore = useTilesStore();
 const builderStore = useBuilderStore();
@@ -519,7 +597,14 @@ function expandAll() {
   for (var i = 0; i < ids.length; i++) collapsed[ids[i]] = false;
 }
 
+// Expose expand/collapse so the parent BuilderSidebar V2 toolbar can call them.
+defineExpose({ expandAll, collapseAll });
+
 // Node type icons (SVG)
+// ── Registry icone tile (3 di 3) ──────────────────────────────────────────
+// Set 14×14 con path semplificati per l'albero struttura. Gli altri due set
+// (InsertPanel.moduleIcon 24×24 espanso, BuilderSidebar.tileIcons 24×24 shorthand)
+// hanno SVG diversi per contesto: NON unificare. Mantieni allineate le CHIAVI.
 var _iconCache = {};
 function nodeIcon(type) {
   if (_iconCache[type]) return _iconCache[type];
@@ -678,63 +763,9 @@ function tileLabel(tile) {
 function selectTile(id, zone) {
   builderStore.selectTile(id);
   if (zone) builderStore.setActiveZone(zone);
-  nextTick(function() {
-    try {
-      var el = document.querySelector('[data-tile-id="' + id + '"]');
-      if (!el) return;
-      var p = loadScrollFlashPrefs();
-
-      // Scroll
-      var parent = el.closest('.mb-overflow-y-auto');
-      if (parent) {
-        var er = el.getBoundingClientRect();
-        var pr = parent.getBoundingClientRect();
-        var offset = er.top - pr.top - pr.height / 2 + er.height / 2;
-        if (p.scroll_ms <= 0) {
-          parent.scrollTop += offset;
-        } else {
-          var start = parent.scrollTop;
-          var target = start + offset;
-          var t0 = performance.now();
-          (function step(now) {
-            var prog = Math.min((now - t0) / p.scroll_ms, 1);
-            parent.scrollTop = start + (target - start) * (1 - Math.pow(1 - prog, 3));
-            if (prog < 1) requestAnimationFrame(step);
-          })(t0);
-        }
-
-        // Color
-        var hex = p.color || '#6366F1';
-        var rp = parseInt(hex.slice(1, 3), 16); var r = isNaN(rp) ? 99 : rp;
-        var gp = parseInt(hex.slice(3, 5), 16); var g = isNaN(gp) ? 102 : gp;
-        var bp = parseInt(hex.slice(5, 7), 16); var b = isNaN(bp) ? 241 : bp;
-        el.style.setProperty('--sf-color', 'rgb(' + r + ',' + g + ',' + b + ')');
-        el.style.setProperty('--sf-color-soft', 'rgba(' + r + ',' + g + ',' + b + ',0.7)');
-        el.style.setProperty('--sf-size', p.size + 'px');
-
-        // Effect
-        el.classList.remove('olo-tile-flash', 'olo-tile-pulse');
-        void el.offsetWidth;
-        if (p.effect === 'pulse') {
-          el.style.setProperty('--sf-cycle', Math.round(p.duration / (p.pulse_count || 2)) + 'ms');
-          el.style.setProperty('--sf-count', String(p.pulse_count || 2));
-          el.classList.add('olo-tile-pulse');
-        } else {
-          el.style.setProperty('--sf-dur', p.duration + 'ms');
-          el.classList.add('olo-tile-flash');
-        }
-        el.addEventListener('animationend', function() {
-          el.classList.remove('olo-tile-flash', 'olo-tile-pulse');
-          el.style.removeProperty('--sf-color');
-          el.style.removeProperty('--sf-color-soft');
-          el.style.removeProperty('--sf-size');
-          el.style.removeProperty('--sf-dur');
-          el.style.removeProperty('--sf-cycle');
-          el.style.removeProperty('--sf-count');
-        }, { once: true });
-      }
-    } catch (e) { /* non bloccare la selezione */ }
-  });
+  // Canvas vive in un iframe: scroll va richiesto via canale dedicato → useIframeBridge → postMessage 'olo:scroll-to'.
+  // Il vecchio document.querySelector('[data-tile-id]') falliva perché cercava nel DOM esterno.
+  requestScrollToTile(id);
 }
 
 function duplicate(id) {
@@ -785,9 +816,29 @@ function nodeEdgeDrop(nodeKind, node, parentId, index, allowedEdges) {
       { element, input, allowedEdges: allowedEdges || ['top', 'bottom'] }
     ),
     getIsSticky: () => true,
-    onDragEnter: ({ self } = {}) => { if (self?.element) self.element.classList.add('st-dnd-over'); },
-    onDragLeave: ({ self } = {}) => { if (self?.element) self.element.classList.remove('st-dnd-over'); },
-    onDrop: ({ self } = {}) => { if (self?.element) self.element.classList.remove('st-dnd-over'); },
+    onDragEnter: ({ self } = {}) => {
+      if (!self?.element) return;
+      self.element.classList.add('st-dnd-over');
+      const edge = extractClosestEdge(self.data);
+      self.element.classList.toggle('st-dnd-over-top', edge === 'top');
+      self.element.classList.toggle('st-dnd-over-bottom', edge === 'bottom');
+    },
+    onDrag: ({ self } = {}) => {
+      // v1.0.62 — aggiorna classe edge-specific live durante drag così la linea
+      // di drop indicator segue il pointer (top vs bottom).
+      if (!self?.element) return;
+      const edge = extractClosestEdge(self.data);
+      self.element.classList.toggle('st-dnd-over-top', edge === 'top');
+      self.element.classList.toggle('st-dnd-over-bottom', edge === 'bottom');
+    },
+    onDragLeave: ({ self } = {}) => {
+      if (!self?.element) return;
+      self.element.classList.remove('st-dnd-over', 'st-dnd-over-top', 'st-dnd-over-bottom');
+    },
+    onDrop: ({ self } = {}) => {
+      if (!self?.element) return;
+      self.element.classList.remove('st-dnd-over', 'st-dnd-over-top', 'st-dnd-over-bottom');
+    },
   };
 }
 
@@ -824,25 +875,36 @@ const rowDrop = (row, sectionId, idx) => nodeEdgeDrop('row', row, sectionId, idx
 const elementDraggable = (el, parentId, idx) => draggableOpts('element', el, parentId, idx);
 const elementDrop = (el, parentId, idx) => nodeEdgeDrop('element', el, parentId, idx, ['top', 'bottom']);
 
-// Expand ancestors of a tile so it's visible in the tree
+// Expand ancestors of a tile so it's visible in the tree.
+// Cerca in body, header E footer — l'utente può cliccare tile in qualunque zona.
 function expandAncestors(tileId) {
-  for (var s of tilesStore.canvasTiles) {
-    if (s.id === tileId) return;
+  const zones = [
+    tilesStore.canvasTiles || [],
+    tilesStore.headerTiles || [],
+    tilesStore.footerTiles || [],
+  ];
+  for (const tiles of zones) {
+    if (expandAncestorsIn(tiles, tileId)) return;
+  }
+}
+function expandAncestorsIn(tiles, tileId) {
+  for (var s of tiles) {
+    if (s.id === tileId) return true;
     if (!s.children) continue;
     for (var r of s.children) {
-      if (r.id === tileId) { collapsed[s.id] = false; return; }
+      if (r.id === tileId) { collapsed[s.id] = false; return true; }
       if (!r.children) continue;
       for (var c of r.children) {
-        if (c.id === tileId) { collapsed[s.id] = false; collapsed[r.id] = false; return; }
+        if (c.id === tileId) { collapsed[s.id] = false; collapsed[r.id] = false; return true; }
         if (!c.children) continue;
         for (var e of c.children) {
-          if (e.id === tileId) { collapsed[s.id] = false; collapsed[r.id] = false; collapsed[c.id] = false; return; }
+          if (e.id === tileId) { collapsed[s.id] = false; collapsed[r.id] = false; collapsed[c.id] = false; return true; }
           if (e.type === 'inner-columns' && e.children) {
             for (var ic of e.children) {
-              if (ic.id === tileId) { collapsed[s.id] = false; collapsed[r.id] = false; collapsed[c.id] = false; collapsed[e.id] = false; return; }
+              if (ic.id === tileId) { collapsed[s.id] = false; collapsed[r.id] = false; collapsed[c.id] = false; collapsed[e.id] = false; return true; }
               if (ic.children) {
                 for (var ie of ic.children) {
-                  if (ie.id === tileId) { collapsed[s.id] = false; collapsed[r.id] = false; collapsed[c.id] = false; collapsed[e.id] = false; collapsed[ic.id] = false; return; }
+                  if (ie.id === tileId) { collapsed[s.id] = false; collapsed[r.id] = false; collapsed[c.id] = false; collapsed[e.id] = false; collapsed[ic.id] = false; return true; }
                 }
               }
             }
@@ -851,15 +913,42 @@ function expandAncestors(tileId) {
       }
     }
   }
+  return false;
 }
 
-// When a tile is selected (from canvas or anywhere), scroll tree to it
+// When a tile is selected (from canvas or anywhere), evidenzia + scrolla la riga
+// nella tree. block:'center' è più visibile di nearest (riposiziona attivamente
+// anche per tile parzialmente visibili). Flash CSS class temporaneo aiuta a notare
+// dove è andata la selezione.
 watch(function() { return builderStore.selectedTileId; }, function(newId) {
   if (!newId) return;
   expandAncestors(newId);
   nextTick(function() {
-    var el = stRoot.value && stRoot.value.querySelector('.st-row--active');
-    if (el) el.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    if (!stRoot.value) return;
+    var el = stRoot.value.querySelector('.st-row--active');
+    if (!el) return;
+    // Scroll: il container scrollabile è di solito il parent della sidebar.
+    // Calcoliamo manualmente per controllare meglio il container target.
+    var scrollContainer = el.closest('.mb-overflow-y-auto, [data-olo-scroll]') || stRoot.value.parentElement;
+    if (scrollContainer && scrollContainer.scrollHeight > scrollContainer.clientHeight) {
+      var er = el.getBoundingClientRect();
+      var cr = scrollContainer.getBoundingClientRect();
+      var offset = er.top - cr.top - (cr.height / 2) + (er.height / 2);
+      scrollContainer.scrollBy({ top: offset, behavior: 'smooth' });
+    } else {
+      el.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    }
+    // Flash effetto via inline style temporaneo (memoria: evitare <style scoped>
+    // di StructureTree per non scatenare bug di cache già osservati).
+    var prevBoxShadow = el.style.boxShadow;
+    var prevTransition = el.style.transition;
+    el.style.transition = 'box-shadow 0.18s ease-out';
+    el.style.boxShadow = '0 0 0 2px var(--olo-color-primary, #6366F1)';
+    setTimeout(function() {
+      el.style.transition = 'box-shadow 0.45s ease-in';
+      el.style.boxShadow = prevBoxShadow || '';
+      setTimeout(function() { el.style.transition = prevTransition || ''; }, 500);
+    }, 400);
   });
 });
 </script>
@@ -985,15 +1074,24 @@ watch(function() { return builderStore.selectedTileId; }, function(newId) {
   font-weight: 600;
 }
 
-/* Hover actions */
+/* Hover actions
+ * v1.0.58 — fix: opacity 0 + transition causava race condition col click fisico.
+ * Quando il mouse passava dal label al button X, in alcuni casi perdeva l'hover
+ * sul .st-row e .st-actions tornava opacity 0 mid-click. Il click finiva sul
+ * nome "Sezione" sotto invece che sul button Elimina, e la sezione veniva
+ * solo selezionata (apertura Inspector) senza essere rimossa.
+ * Soluzione: opacity bassa di default per indicare cliccabilità + pointer-events
+ * sempre auto. Su hover full opacity. Niente più race. */
 .st-actions {
   display: flex;
   gap: 1px;
-  opacity: 0;
-  transition: opacity 0.1s;
+  opacity: 0.35;
+  transition: opacity 0.12s;
   flex-shrink: 0;
+  pointer-events: auto;
 }
-.st-row:hover .st-actions {
+.st-row:hover .st-actions,
+.st-actions:hover {
   opacity: 1;
 }
 .st-actions button {
@@ -1015,10 +1113,57 @@ watch(function() { return builderStore.selectedTileId; }, function(newId) {
   background: rgba(0, 0, 0, 0.06);
 }
 
-/* Subtree (children) */
+/* v1.0.62 — Drop indicator durante drag&drop nella Struttura tree.
+ * Mostra una linea orizzontale brand orange in alto o in basso dell'item
+ * a seconda di dove il drop avverrà (top/bottom edge), + leggero highlight
+ * sull'intera riga per evidenziare quale item sta ricevendo il drop. */
+.st-item.st-dnd-over {
+  position: relative;
+}
+.st-item.st-dnd-over > .st-row {
+  background: rgba(232, 98, 42, 0.08);
+}
+.st-item.st-dnd-over::after {
+  content: "";
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  height: 2px;
+  background: #e8622a;
+  border-radius: 2px;
+  pointer-events: none;
+  z-index: 10;
+  box-shadow: 0 0 0 2px rgba(232, 98, 42, 0.25);
+}
+.st-item.st-dnd-over-top::after {
+  top: -1px;
+}
+.st-item.st-dnd-over-bottom::after {
+  bottom: -1px;
+}
+/* Fallback se per qualche motivo nessuna delle 2 edge classi è settata: linea in alto */
+.st-item.st-dnd-over:not(.st-dnd-over-top):not(.st-dnd-over-bottom)::after {
+  top: 0;
+}
+
+/* Subtree (children) — V2 indent guide tratteggiata */
 .st-sub {
   margin-left: 18px;
   padding-left: 8px;
+  position: relative;
+}
+.st-sub::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 2px;
+  bottom: 6px;
+  border-left: 1px dashed #d1d5db;
+  pointer-events: none;
+}
+/* Hide the guide on the top-level sub of each zone (the zone bar already marks the column) */
+.st-zone-root > .st-sub::before {
+  display: none;
 }
 
 /* Dropzone for elements */
@@ -1049,26 +1194,61 @@ watch(function() { return builderStore.selectedTileId; }, function(newId) {
   opacity: 0.3;
 }
 
-/* Zone root nodes (unified editing) */
+/* Zone root nodes (unified editing) — V2 color-coded macro areas */
 .st-zone-root {
-  margin-bottom: 2px;
+  margin-bottom: 6px;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
 }
+.st-zone-root::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 4px;
+  bottom: 4px;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: var(--ot-text-muted, #64748b);
+  z-index: 1;
+}
+.st-zone-root--header { background: #eff6ff; }
+.st-zone-root--header::before { background: #3b82f6; }
+.st-zone-root--body   { background: #faf5ff; }
+.st-zone-root--body::before { background: #a855f7; }
+.st-zone-root--footer { background: #f0fdf4; }
+.st-zone-root--footer::before { background: #22c55e; }
+
 .st-row--zone {
-  height: 28px;
-  padding: 0 4px;
-  border-radius: 3px;
+  height: 30px;
+  padding: 0 8px 0 12px;
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 5px;
-  border-left: 2px solid transparent;
-  transition: background-color 0.1s;
+  gap: 6px;
+  transition: background-color 0.12s;
 }
 .st-row--zone:hover {
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(0, 0, 0, 0.03);
 }
 .st-row--zone-active {
-  background: rgba(99, 102, 241, 0.08);
-  border-left-color: var(--olo-color-primary, #6366F1);
+  background: rgba(0, 0, 0, 0.04);
+}
+
+/* Header zone tone overrides for the row label/icon */
+.st-zone-root--header .st-row--zone .st-name { color: #1d4ed8; }
+.st-zone-root--body   .st-row--zone .st-name { color: #7e22ce; }
+.st-zone-root--footer .st-row--zone .st-name { color: #15803d; }
+
+/* Override hardcoded indigo on selected — use brand orange */
+.st-row--active {
+  background: rgba(232, 98, 42, 0.08);
+  border-left-color: var(--olo-color-primary, #e8622a);
+}
+.st-row--active:hover {
+  background: rgba(232, 98, 42, 0.12);
+}
+.st-row--active .st-icon {
+  color: var(--olo-color-primary, #e8622a);
 }
 </style>

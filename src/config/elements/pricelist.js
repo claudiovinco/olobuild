@@ -1,16 +1,29 @@
-import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared';
+import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared';
 import { shadowField } from './_shared.js';
+import { t } from '@/i18n';
 
+/**
+ * Tile PriceList — split CONTENUTO/STILE (regola universale Olobuild).
+ *   fields[]      → items (content-items), toggle mostra immagine, posizione prezzo (layout)
+ *   styleFields[] → preset, sfondo creativo, typography preset, effetti testo,
+ *                   card (sfondo/bordo/radius/hover), separatore, dimensione immagine, radius immagine,
+ *                   gap, padding, colori (titolo/prezzo/descrizione/highlighted), badge (sfondo/colore/bordo/radius),
+ *                   ombra, bordo
+ *   AVANZATE      → meta tecnico (id/class/condizioni)
+ */
 export default {
   type: 'pricelist',
-  name: 'Lista prezzi',
+  name: t('Lista prezzi'),
   icon: 'dashicons-list-view',
   category: 'content',
   defaults: {
+    preset: 'custom',
+    bg: { type: 'none' },
+    typography_preset: '',
     items: [
-      { id: 'pl-1', title: 'Bruschetta', description: 'Pomodoro fresco, basilico e olio EVO', price: '€8', image_url: '', highlighted: false, badge: '' },
-      { id: 'pl-2', title: 'Risotto ai funghi porcini', description: 'Riso Carnaroli mantecato con porcini freschi', price: '€14', image_url: '', highlighted: false, badge: '' },
-      { id: 'pl-3', title: 'Tiramisù', description: 'Mascarpone, savoiardi e caffè espresso', price: '€7', image_url: '', highlighted: false, badge: 'Consigliato' },
+      { id: 'pl-1', title: t('Bruschetta'), description: t('Pomodoro fresco, basilico e olio EVO'), price: '€8', image_url: '', highlighted: false, badge: '' },
+      { id: 'pl-2', title: t('Risotto ai funghi porcini'), description: t('Riso Carnaroli mantecato con porcini freschi'), price: '€14', image_url: '', highlighted: false, badge: '' },
+      { id: 'pl-3', title: t('Tiramisù'), description: t('Mascarpone, savoiardi e caffè espresso'), price: '€7', image_url: '', highlighted: false, badge: 'Consigliato' },
     ],
     separator_style: 'dotted',
     separator_color: '',
@@ -36,89 +49,147 @@ export default {
     hover_lift: true,
     shadow: 'none',
     ...textEffectsDefaults,
+    text_effect_target: 'title',
     border: { ...borderDefault },
     border_hover: { ...borderHoverDefault },
     border_hover_duration: 300,
     ...borderEffectDefaults,
   },
+
+  // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
     // ── Items ──
-    { key: 'items', label: 'Elementi', type: 'content-items',
+    { key: 'items', label: t('Elementi'), type: 'content-items',
       itemFields: [
-        { key: 'title', label: 'Nome', type: 'text' },
-        { key: 'description', label: 'Descrizione', type: 'text' },
-        { key: 'price', label: 'Prezzo', type: 'text' },
-        { key: 'image_url', label: 'Immagine', type: 'image' },
-        { key: 'highlighted', label: 'In evidenza', type: 'toggle' },
-        { key: 'badge', label: 'Badge', type: 'text' },
+        { key: 'title', label: t('Nome'), type: 'text' },
+        { key: 'description', label: t('Descrizione'), type: 'text' },
+        { key: 'price', label: t('Prezzo'), type: 'text' },
+        { key: 'image_url', label: t('Immagine'), type: 'image' },
+        { key: 'highlighted', label: t('In evidenza'), type: 'toggle' },
+        { key: 'badge', label: t('Badge'), type: 'text' },
       ],
-      newItemDefaults: { title: 'Nuovo piatto', description: 'Descrizione del piatto', price: '€0', image_url: '', highlighted: false, badge: '' },
+      newItemDefaults: { title: t('Nuovo piatto'), description: t('Descrizione del piatto'), price: '€0', image_url: '', highlighted: false, badge: '' },
       itemLabel: 'Piatto',
     },
 
+    // ── Immagine ──
+    { type: 'separator', label: t('Immagine') },
+    { key: 'show_image', label: t('Mostra immagine'), type: 'toggle' },
+
+    // ── Layout ──
+    { type: 'separator', label: t('Layout') },
+    { key: 'price_position', label: t('Posizione prezzo'), type: 'select', options: [
+      { value: 'right', label: t('A destra') },
+      { value: 'below', label: t('Sotto il titolo') },
+    ]},
+  ],
+
+  // ─── STILE ─────────────────────────────────────────────────
+  styleFields: [
+    { type: 'separator', label: t('Preset stilistico') },
+    { key: 'preset', label: t('Stile'), type: 'select', options: [
+      { value: 'modern-clean',    label: t('Modern Clean') },
+      { value: 'minimal-mono',    label: t('Minimal Mono') },
+      { value: 'magazine-bold',   label: t('Magazine Bold') },
+      { value: 'editorial-serif', label: t('Editorial Serif') },
+      { value: 'compact-inline',  label: t('Compact Inline') },
+      { value: 'glass-frosted',   label: t('Glass Frosted') },
+      { value: 'neon-glow',       label: t('Neon Glow') },
+      { value: 'brutalist-stamp', label: t('Brutalist Stamp') },
+      { value: 'gradient-aurora', label: t('Gradient Aurora') },
+      { value: 'sticker-fun',     label: t('Sticker Fun') },
+      { value: 'retro-terminal',  label: t('Retro Terminal') },
+      { value: 'tilt-3d',         label: t('3D Tilt') },
+      { value: 'custom',          label: t('Personalizzato') },
+    ] },
+    ...textEffectsFields([
+      { value: 'title', label: t('Solo Titolo') },
+      { value: 'description', label: t('Solo Descrizione') },
+      { value: 'all', label: t('Tutti gli elementi testuali') },
+    ]),
+
+    { type: 'separator', label: t('Tipografia') },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
+    { type: 'typography', label: t('Titolo'),
+      presetKey: 'typography_preset',
+      responsiveKeys: ['size'],
+      keys: {
+        color: 'title_color',
+      },
+      sizeMin: 12, sizeMax: 60,
+    },
+    { type: 'typography', label: t('Descrizione'),
+      presetKey: 'typography_preset',
+      responsiveKeys: ['size'],
+      keys: {
+        color: 'description_color',
+      },
+      sizeMin: 12, sizeMax: 60,
+    },
+    { type: 'typography', label: t('Prezzo'),
+      presetKey: 'typography_preset',
+      responsiveKeys: ['size'],
+      keys: {
+        color: 'price_color',
+      },
+      sizeMin: 12, sizeMax: 60,
+    },
+    { type: 'typography', label: t('Badge'),
+      presetKey: 'typography_preset',
+      responsiveKeys: ['size'],
+      keys: {
+        color: 'badge_color',
+      },
+      sizeMin: 12, sizeMax: 60,
+    },
+
     // ── Card ──
-    { type: 'separator', label: 'Card' },
-    { key: 'card_bg', label: 'Sfondo card', type: 'color' },
-    { key: 'card_border_color', label: 'Bordo card', type: 'color' },
-    { key: 'card_border_radius', label: 'Arrotondamento card (px)', type: 'border-radius'},
-    { key: 'card_border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
-    { key: 'hover_lift', label: 'Effetto hover', type: 'toggle' },
+    { type: 'separator', label: t('Card') },
+    { key: 'card_bg', label: t('Sfondo card'), type: 'color' },
+    { key: 'card_border_color', label: t('Bordo card'), type: 'color' },
+    withHover({ key: 'card_border_radius', label: t('Arrotondamento card (px)'), type: 'border-radius'}),
+    { key: 'hover_lift', label: t('Effetto hover'), type: 'toggle' },
 
     // ── Separatore ──
-    { type: 'separator', label: 'Separatore' },
-    { key: 'separator_style', label: 'Stile separatore', type: 'select', options: [
-      { value: 'dotted', label: 'Puntinato' },
-      { value: 'dashed', label: 'Tratteggiato' },
-      { value: 'solid', label: 'Continuo' },
-      { value: 'none', label: 'Nessuno' },
+    { type: 'separator', label: t('Separatore') },
+    { key: 'separator_style', label: t('Stile separatore'), type: 'select', options: [
+      { value: 'dotted', label: t('Puntinato') },
+      { value: 'dashed', label: t('Tratteggiato') },
+      { value: 'solid', label: t('Continuo') },
+      { value: 'none', label: t('Nessuno') },
     ]},
-    { key: 'separator_color', label: 'Colore separatore', type: 'color',
+    { key: 'separator_color', label: t('Colore separatore'), type: 'color',
       condition: { field: 'separator_style', operator: '!=', value: 'none' } },
 
     // ── Immagine ──
-    { type: 'separator', label: 'Immagine' },
-    { key: 'show_image', label: 'Mostra immagine', type: 'toggle' },
-    { key: 'image_size', label: 'Dimensione immagine (px)', type: 'range', min: 30, max: 120, step: 5,
+    { type: 'separator', label: t('Immagine') },
+    { key: 'image_size', label: t('Dimensione immagine (px)'), type: 'range', min: 30, max: 120, step: 5,
       condition: { field: 'show_image', value: true } },
-    { key: 'image_border_radius', label: 'Arrotondamento immagine (px)', type: 'border-radius',
-      condition: { field: 'show_image', value: true } },
-    { key: 'image_border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
+    withHover({ key: 'image_border_radius', label: t('Arrotondamento immagine (px)'), type: 'border-radius',
+      condition: { field: 'show_image', value: true } }),
 
-    // ── Layout ──
-    { type: 'separator', label: 'Layout' },
-    { key: 'price_position', label: 'Posizione prezzo', type: 'select', options: [
-      { value: 'right', label: 'A destra' },
-      { value: 'below', label: 'Sotto il titolo' },
-    ]},
-    { key: 'gap', label: 'Gap tra elementi (px)', type: 'range', min: 0, max: 32, step: 2 },
-    { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 32 },
+    // ── Spaziatura ──
+    { type: 'separator', label: t('Spaziatura') },
+    { key: 'gap', label: t('Gap tra elementi (px)'), type: 'range', min: 0, max: 32, step: 2 },
+    { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 32 },
 
-    // ── Colori ──
-    { type: 'separator', label: 'Colori' },
-    { key: 'title_color', label: 'Colore titolo', type: 'color' },
-    { key: 'price_color', label: 'Colore prezzo', type: 'color' },
-    { key: 'description_color', label: 'Colore descrizione', type: 'color' },
-    { key: 'highlighted_bg', label: 'Sfondo evidenziato', type: 'color' },
+    // ── Colori extra (non gestiti dai popover Tipografia) ──
+    { type: 'separator', label: t('Colori extra') },
+    { key: 'highlighted_bg', label: t('Sfondo evidenziato'), type: 'color' },
+
     // ── Badge ──
-    { type: 'separator', label: 'Badge' },
-    { key: 'badge_bg', label: 'Sfondo', type: 'color' },
-    { key: 'badge_color', label: 'Colore testo', type: 'color' },
-    { key: 'badge_border_color', label: 'Colore bordo', type: 'color' },
-    { key: 'badge_border_width', label: 'Spessore bordo (px)', type: 'range', min: 0, max: 5, step: 1 },
-    { key: 'badge_border_style', label: 'Stile bordo', type: 'select', options: [
-      { value: 'solid', label: 'Continuo' },
-      { value: 'dashed', label: 'Tratteggiato' },
-      { value: 'dotted', label: 'Puntinato' },
+    { type: 'separator', label: t('Badge') },
+    { key: 'badge_bg', label: t('Sfondo'), type: 'color' },
+    { key: 'badge_border_color', label: t('Colore bordo'), type: 'color' },
+    { key: 'badge_border_width', label: t('Spessore bordo (px)'), type: 'range', min: 0, max: 5, step: 1 },
+    { key: 'badge_border_style', label: t('Stile bordo'), type: 'select', options: [
+      { value: 'solid', label: t('Continuo') },
+      { value: 'dashed', label: t('Tratteggiato') },
+      { value: 'dotted', label: t('Puntinato') },
     ], condition: { field: 'badge_border_width', operator: '!=', value: '0' } },
-    { key: 'badge_border_radius', label: 'Arrotondamento (px)', type: 'border-radius'},
-    { key: 'badge_border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
+    withHover({ key: 'badge_border_radius', label: t('Arrotondamento (px)'), type: 'border-radius'}),
 
     ...shadowField,
-    ...textEffectsFields([
-      { value: 'title', label: 'Solo Titolo' },
-      { value: 'description', label: 'Solo Descrizione' },
-      { value: 'all', label: 'Tutti gli elementi testuali' },
-    ]),
     ...borderFields(),
   ],
 };

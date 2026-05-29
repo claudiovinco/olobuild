@@ -1,12 +1,21 @@
 import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
+import { t } from '@/i18n';
+
+/**
+ * Tile ReadingTime — split CONTENUTO/STILE.
+ *   fields[]      → calcolo (words_per_minute/format/prefix/suffix), icona (show + icon)
+ *   styleFields[] → bg, typo preset, tipografia (color/size/weight/align), icona color, shadow, border
+ */
 export default {
   type: 'readingtime',
-  label: 'Tempo di Lettura',
+  label: t('Tempo di Lettura'),
   icon: 'dashicons-clock',
   category: 'dynamic',
   defaults: {
+    bg: { type: 'none' },
+    typography_preset: '',
     words_per_minute: 200,
-    format: 'full', // full | short | minutes_only
+    format: 'full',
     prefix: 'Tempo di lettura:',
     suffix: 'min',
     icon: 'clock',
@@ -22,35 +31,43 @@ export default {
     border_hover_duration: 300,
     ...borderEffectDefaults,
   },
+
   fields: [
-    { type: 'separator', label: 'Calcolo' },
-    { key: 'words_per_minute', label: 'Parole al minuto', type: 'number', min: 50, max: 500 },
-    { key: 'format', label: 'Formato', type: 'select', options: [
-      { value: 'full', label: 'Completo (Tempo di lettura: 5 min)' },
-      { value: 'short', label: 'Breve (5 min di lettura)' },
-      { value: 'minutes_only', label: 'Solo minuti (5)' },
+    { type: 'separator', label: t('Calcolo') },
+    { key: 'words_per_minute', label: t('Parole al minuto'), type: 'number', min: 50, max: 500 },
+    { key: 'format', label: t('Formato'), type: 'select', options: [
+      { value: 'full', label: t('Completo (Tempo di lettura: 5 min)') },
+      { value: 'short', label: t('Breve (5 min di lettura)') },
+      { value: 'minutes_only', label: t('Solo minuti (5)') },
     ]},
-    { key: 'prefix', label: 'Prefisso', type: 'text', condition: { format: ['full'] }},
-    { key: 'suffix', label: 'Suffisso', type: 'text' },
+    { key: 'prefix', label: t('Prefisso'), type: 'text', condition: { format: ['full'] }},
+    { key: 'suffix', label: t('Suffisso'), type: 'text' },
 
-    { type: 'separator', label: 'Icona' },
-    { key: 'show_icon', label: 'Mostra icona', type: 'toggle' },
-    { key: 'icon', label: 'Icona', type: 'icon', condition: { show_icon: [true] }},
-    { key: 'icon_color', label: 'Colore icona', type: 'color' },
+    { type: 'separator', label: t('Icona') },
+    { key: 'show_icon', label: t('Mostra icona'), type: 'toggle' },
+    { key: 'icon', label: t('Icona'), type: 'icon', condition: { show_icon: [true] }},
+  ],
 
-    { type: 'separator', label: 'Tipografia' },
-    { key: 'text_color', label: 'Colore testo', type: 'color' },
-    { key: 'font_size', label: 'Dimensione font', type: 'text', placeholder: '16px' },
-    { key: 'font_weight', label: 'Peso font', type: 'select', options: [
-      { value: '', label: 'Default' },
-      { value: '300', label: 'Light' }, { value: '400', label: 'Regular' },
-      { value: '600', label: 'Semi Bold' }, { value: '700', label: 'Bold' },
+  styleFields: [
+    { type: 'separator', label: t('Sfondo & tipografia') },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
+
+    { type: 'separator', label: t('Tipografia') },
+    { type: 'typography', label: t('Testo'),
+      presetKey: 'typography_preset',
+      responsiveKeys: ['size'],
+      keys: {
+        size:   'font_size',
+        weight: 'font_weight',
+        color:  'text_color',
+      },
+      sizeMin: 12, sizeMax: 60,
+    },
+    { key: 'text_align', label: t('Allineamento'), type: 'select', options: [
+      { value: 'left', label: t('Sinistra') }, { value: 'center', label: t('Centro') }, { value: 'right', label: t('Destra') }
     ]},
-    { key: 'text_align', label: 'Allineamento', type: 'select', options: [
-      { value: 'left', label: 'Sinistra' }, { value: 'center', label: 'Centro' }, { value: 'right', label: 'Destra' }
-    ]},
+    { key: 'icon_color', label: t('Colore icona'), type: 'color' },
 
-    { type: 'separator', label: 'Aspetto' },
     ...shadowField,
     ...borderFields(),
   ],

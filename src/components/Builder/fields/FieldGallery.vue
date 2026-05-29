@@ -108,7 +108,7 @@
       <input
         v-model="embedUrl"
         type="text"
-        placeholder="URL YouTube o Vimeo..."
+        :placeholder="t('URL YouTube o Vimeo...')"
         class="mb-flex-1 mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-md mb-px-2 mb-py-1.5 mb-text-xs mb-text-gray-200 mb-placeholder-gray-500"
         @keydown.enter="addEmbedVideo"
       />
@@ -337,7 +337,8 @@ const services = [
   { key: 'openverse', label: 'Openverse', searchPath: '/openverse/search', downloadPath: '/openverse/download', hasTracking: false },
 ];
 
-const activePanel = ref(null);
+const preferredProvider = window.oloData?.stockmedia?.preferred || 'unsplash';
+const activePanel = ref(services.find(s => s.key === preferredProvider) ? preferredProvider : null);
 const activeSvc = computed(() => services.find(s => s.key === activePanel.value) || services[0]);
 
 // Per-service state

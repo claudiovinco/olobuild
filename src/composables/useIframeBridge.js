@@ -5,13 +5,24 @@ import { ref, watch, onMounted, onUnmounted } from 'vue';
 import { useTilesStore, createRow, createColumn } from '@/stores/tiles';
 import { useBuilderStore } from '@/stores/builder';
 import { useDragDrop } from '@/composables/useDragDrop';
+import { onScrollToTileRequest } from '@/utils/scrollToTileChannel';
 
 let debounceTimer = null;
 let patchTimer = null;
 let lastTileSnapshot = null;
 let renderInFlight = false;
 
-function deepClone(obj) { return JSON.parse(JSON.stringify(obj)); }
+// JSON.parse(JSON.stringify) — robusto su tutti i payload Pinia/Vue.
+//
+// Avevamo provato `structuredClone` per performance ma fallisce con DataCloneError
+// su payload provenienti da Pinia reactive (proxy/function/symbol non-clonabili,
+// es. funzioni getter sui derived state). Il fallback try/catch sarebbe stato un
+// flag di errore globale — meglio restare su JSON, che è "schema-safe": cloni
+// solo i dati serializzabili, e quelli sono esattamente quelli che la REST
+// builder/render accetta come body.
+function deepClone(obj) {
+  return JSON.parse(JSON.stringify(obj));
+}
 
 export function useIframeBridge(iframeRef) {
   const tilesStore = useTilesStore();
@@ -41,7 +52,9 @@ export function useIframeBridge(iframeRef) {
     const pageSettings = builderStore.pageSettings || {};
 
     if ((!tiles || !tiles.length) && (!headerTiles || !headerTiles.length) && (!footerTiles || !footerTiles.length)) {
-      postToIframe('olo:render', { html: '<div class="olo-iframe-empty">Nessun contenuto — trascina una tile dalla sidebar</div>' });
+      const emptyHtml = (window.oloData && window.oloData.iframeEmptyHtml)
+        || '<div class="olo-iframe-empty"><div class="olo-iframe-empty-card"><h3 class="olo-iframe-empty-title">Pagina vuota</h3><p class="olo-iframe-empty-text">Aggiungi un modulo o scegli un layout per iniziare</p><div class="olo-iframe-empty-actions"><button type="button" class="olo-iframe-empty-btn" data-olo-empty-action="add-module"><span class="olo-iframe-empty-btn-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" stroke-dasharray="3 3"/><path d="M12 8v8M8 12h8"/></svg></span><span class="olo-iframe-empty-btn-label">Aggiungi modulo</span></button><button type="button" class="olo-iframe-empty-btn" data-olo-empty-action="add-row"><span class="olo-iframe-empty-btn-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span><span class="olo-iframe-empty-btn-label">Scegli layout</span></button></div></div></div>';
+      postToIframe('olo:render', { html: emptyHtml });
       lastTileSnapshot = null;
       return;
     }
@@ -67,13 +80,14 @@ export function useIframeBridge(iframeRef) {
         }
       }
 
+      console.log('[IframeBridge] POST /builder/render body.page_settings.page_bg:', body?.page_settings?.page_bg);
       const res = await fetch(window.oloData.restUrl + '/builder/render', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': window.oloData.nonce },
         body: JSON.stringify(body),
       });
       const data = await res.json();
-      console.log('[IframeBridge] render response:', { htmlLen: (data.html||'').length, hasError: !!data.code, status: res.status });
+      console.log('[IframeBridge] render response:', { htmlLen: (data.html||'').length, inline_css_has_body_bg: (data.inline_css||'').includes('html, body'), hasError: !!data.code, status: res.status });
       if (data.code) {
         console.error('[IframeBridge] REST error:', data.code, data.message);
       }
@@ -87,12 +101,86 @@ export function useIframeBridge(iframeRef) {
     renderInFlight = false;
   }
 
-  // ── Patch single tile — always full render for reliability ──
-  // Single-tile patching caused issues with complex tiles (galleries, carousels, sliders)
-  // whose JS wouldn't re-initialize after DOM replacement.
+  // ── Patch single tile — incremental render via /builder/render-tile ──
+  // Per modifiche settings/style di un singolo tile foglia, evitiamo il full
+  // render dell'intero template (60-80% riduzione traffico REST in editing).
+  // Su qualsiasi errore o tile non-patchable → fallback a scheduleFullRender().
 
-  function patchTile(/* tileId */) {
-    scheduleFullRender();
+  // Tile-type/condition NON patchabili: il single-tile render rompe la struttura
+  // o richiede re-init JS che il bridge non gestisce in modo affidabile.
+  const NON_PATCHABLE_TYPES = new Set([
+    'section', 'row', 'inner-columns', 'inner-column', 'floatingpanel',
+    'map', 'osmmap', // Leaflet: resetScriptGuards non è scoped al subtree, rischio race con altri map
+  ]);
+
+  function isPatchable(node) {
+    if (!node) return false;
+    if (NON_PATCHABLE_TYPES.has(node.type)) return false;
+    const s = node.settings || {};
+    if (s.widget_template_id || s.tile_template_id) return false; // espande template esterno
+    if (s.loop_enabled)                              return false; // ripete tile N volte
+    if (node.advanced?.html_id)                      return false; // ID custom: full render aggiorna tutti i selettori CSS
+    return true;
+  }
+
+  let patchInFlight = false;
+
+  async function patchTile(tileId) {
+    if (renderInFlight || patchInFlight) return;
+    const node = findNodeById(tilesStore.canvasTiles, tileId);
+    if (!node) { scheduleFullRender(); return; }
+    if (!isPatchable(node)) { scheduleFullRender(); return; }
+
+    // Leggi il css_id del nodo già renderizzato (es. "ms-118-3") per estrarre il
+    // counter — così il nuovo render genera lo STESSO ID e gli hover/responsive
+    // rules continuano a matchare.
+    const iframe = iframeRef.value;
+    const existingEl = iframe?.contentDocument?.querySelector('[data-olo-tile-id="' + tileId + '"]');
+    const existingId = existingEl?.id || '';
+    // Pattern: ms- (section), mr- (row), mc- (column), mt- (tile/element), ma- (advanced?)
+    const counterMatch = existingId.match(/^m[srcatu]-\d+-(\d+)$/);
+    const counterHint = counterMatch ? parseInt(counterMatch[1]) : 0;
+    if (!counterHint) { scheduleFullRender(); return; } // ID non riconosciuto → safe fallback
+
+    const olo = window.oloData || {};
+    const tpl = builderStore.currentTemplate;
+    const body = {
+      tile:               deepClone(node),
+      page_settings:      builderStore.pageSettings || {},
+      // template_id: 0 — coerente con render_tiles_array() che hardcoda 0 per il
+      // builder rendering. Il CSS ID risultante (mt-0-N) deve matchare quello già
+      // nel DOM dell'iframe, sennò hover/responsive non si applicano al nuovo nodo.
+      template_id:        0,
+      tile_counter_hint:  counterHint,
+      template_type:      tpl?.type || 'page',
+      post_type:          tpl?.settings?.single_post_type || tpl?.post_type || 'post',
+      preview_post_id:    tpl?.settings?.preview_post_id || 0,
+    };
+
+    patchInFlight = true;
+    try {
+      const res = await fetch(olo.restUrl + '/builder/render-tile', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': olo.nonce },
+        body: JSON.stringify(body),
+      });
+      const data = await res.json();
+      if (!res.ok || !data || !data.html) {
+        console.warn('[IframeBridge] patch returned empty/error → full render', data?.code);
+        scheduleFullRender();
+        return;
+      }
+      postToIframe('olo:patch', {
+        tileId,
+        html:       data.html,
+        scoped_css: data.scoped_css || '',
+      });
+    } catch (err) {
+      console.error('[IframeBridge] patch error → full render:', err);
+      scheduleFullRender();
+    } finally {
+      patchInFlight = false;
+    }
   }
 
   function findNodeById(nodes, id) {
@@ -161,7 +249,10 @@ export function useIframeBridge(iframeRef) {
 
   function schedulePatch(tileId) {
     clearTimeout(patchTimer);
-    patchTimer = setTimeout(() => patchTile(tileId), 250);
+    // 80ms vs 300ms del full: la patch è 5-10× più leggera, possiamo essere reattivi.
+    // Componenti inspector hanno già debounce/throttle propri (color picker, range, ecc.)
+    // quindi NON moltiplichiamo richieste.
+    patchTimer = setTimeout(() => patchTile(tileId), 80);
   }
 
   function onTilesChange() {
@@ -222,7 +313,26 @@ export function useIframeBridge(iframeRef) {
 
       case 'olo:inline-edit':
         if (d.tileId && d.field && d.value !== undefined) {
-          tilesStore.updateTile(d.tileId, { [d.field]: d.value });
+          // Gestisci campi array dotted (es. "headline_lines.0.text"): senza
+          // questo split, updateTile salverebbe la chiave letterale con i punti,
+          // lasciando intatto l'array originale e perdendo la modifica inline.
+          if (d.field.indexOf('.') !== -1) {
+            const parts = d.field.split('.');
+            if (parts.length >= 3) {
+              const arrayKey = parts[0];
+              const index    = parseInt(parts[1], 10);
+              const itemKey  = parts.slice(2).join('.');
+              const tile     = tilesStore.getTileById(d.tileId);
+              if (tile && tile.settings && Array.isArray(tile.settings[arrayKey])) {
+                const newArr = tile.settings[arrayKey].map((item, i) =>
+                  i === index ? { ...item, [itemKey]: d.value } : item
+                );
+                tilesStore.updateTile(d.tileId, { [arrayKey]: newArr });
+              }
+            }
+          } else {
+            tilesStore.updateTile(d.tileId, { [d.field]: d.value });
+          }
           builderStore.markDirtyForTile(d.tileId || builderStore.selectedTileId);
         }
         break;
@@ -249,6 +359,15 @@ export function useIframeBridge(iframeRef) {
           }
         }
         break;
+
+      case 'olo:empty-action': {
+        const openInsertPanel = window.__oloOpenInsertPanel;
+        if (openInsertPanel) {
+          const tab = d.action === 'add-row' ? 'row' : 'module';
+          openInsertPanel(0, tab);
+        }
+        break;
+      }
 
       case 'olo:reorder':
         if (d.sourceId && d.targetId) {
@@ -364,14 +483,59 @@ export function useIframeBridge(iframeRef) {
     postToIframe('olo:wireframe-mode', { enabled: val });
   });
 
+  // Force-hover: quando l'utente attiva l'editing hover dall'inspector,
+  // mostra la tile selezionata "come fosse in hover" nel canvas (clone delle
+  // regole CSS :hover applicato via [data-olo-force-hover]).
+  function syncForceHover() {
+    if (!iframeReady.value) return;
+    postToIframe('olo:force-hover', {
+      enabled: !!builderStore.editingHover,
+      tileId: builderStore.selectedTileId || null,
+    });
+  }
+  watch(() => builderStore.editingHover, syncForceHover);
+  // Anche quando la tile selezionata cambia mentre editingHover è attivo,
+  // dobbiamo spostare il force-hover sulla nuova tile.
+  watch(() => builderStore.selectedTileId, () => {
+    if (builderStore.editingHover) syncForceHover();
+  });
+
   // ── Lifecycle ──
+
+  // Canale scrollToTile: StructureTree → utility → questo listener → iframe.
+  // Non passa dallo store (memoria: scroll-flash deve restare fuori da builder.js).
+  let unsubScroll = null;
+
+  // Backup: alcuni componenti (PageSettingsPanel onBgUpdate) richiedono full re-render
+  // esplicitamente via CustomEvent, perché il watcher su pageSettings non sempre scatta
+  // per nested mutations sui getter Pinia.
+  function onForceRerender() {
+    if (iframeReady.value) scheduleFullRender();
+  }
 
   onMounted(() => {
     window.addEventListener('message', onMessage, false);
+    window.addEventListener('olo:builder-force-rerender', onForceRerender);
+    // Espone scheduleFullRender come fallback diretto. Quando il watcher su pageSettings
+    // non scatta (es. nested mutation Pinia su getter ricomputato), PageSettingsPanel
+    // può chiamare questa direttamente — è più affidabile del CustomEvent.
+    window.__oloBridgeForceRerender = scheduleFullRender;
+    window.__oloBridgePostToIframe = postToIframe;
+    unsubScroll = onScrollToTileRequest((tileId) => {
+      if (tileId) postToIframe('olo:scroll-to', { tileId });
+    });
   });
 
   onUnmounted(() => {
     window.removeEventListener('message', onMessage, false);
+    window.removeEventListener('olo:builder-force-rerender', onForceRerender);
+    if (window.__oloBridgeForceRerender === scheduleFullRender) {
+      delete window.__oloBridgeForceRerender;
+    }
+    if (window.__oloBridgePostToIframe === postToIframe) {
+      delete window.__oloBridgePostToIframe;
+    }
+    if (unsubScroll) unsubScroll();
     clearTimeout(debounceTimer);
     clearTimeout(patchTimer);
   });

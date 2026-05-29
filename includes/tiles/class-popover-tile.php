@@ -122,7 +122,7 @@ class Olo_Popover_Tile extends Olo_Tile_Base {
             <?php if ( ! empty( $s['image'] ) ) : ?>
                 <?php echo Olo_Tile_Utils::img_srcset( absint( $s['image_id'] ?? 0 ), $s['image'], $s['image_alt'] ?? '', '', 'full', 'style="' . esc_attr( $img_style ) . '"' ); ?>
             <?php else : ?>
-                <div style="width:100%;<?php echo $image_height > 0 ? 'height:' . $image_height . 'px;' : 'padding-bottom:56.25%;'; ?>background:var(--olo-color-secondary, #1F2937);"></div>
+                <div style="width:100%;<?php echo $image_height > 0 ? 'height:' . $image_height . 'px;' : 'padding-bottom:56.25%;'; ?>background:#1F2937;"></div>
             <?php endif; ?>
 
             <?php foreach ( $markers as $i => $marker ) :
@@ -147,7 +147,7 @@ class Olo_Popover_Tile extends Olo_Tile_Base {
                                 <h4 class="uk-margin-small-bottom<?php echo $pvt_cls; ?>"<?php echo $pvt_data; ?>><?php echo esc_html( $marker['title'] ); ?></h4>
                             <?php endif; ?>
                             <?php if ( ! empty( $marker['content'] ) ) : ?>
-                                <p class="uk-margin-remove<?php echo $pvc_cls; ?>"<?php echo $pvc_data; ?>><?php echo wp_kses_post( $marker['content'] ); ?></p>
+                                <p class="uk-margin-remove<?php echo $pvc_cls; ?>"<?php echo $pvc_data; ?>><?php echo $this->safe_richtext_content( $marker['content'] ); ?></p>
                             <?php endif; ?>
                         </div>
                     </div>

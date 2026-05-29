@@ -11,6 +11,7 @@ class Olo_Countdown_Tile extends Olo_Tile_Base {
     protected $icon     = 'dashicons-clock';
     protected $category = 'marketing';
     protected $defaults = [
+        'preset' => 'custom',
         'countdown_style'     => 'custom',
         'countdown_type'      => 'date',
         'evergreen_hours'     => '0',
@@ -34,13 +35,18 @@ class Olo_Countdown_Tile extends Olo_Tile_Base {
         'bg_color'            => '',
         'text_color'          => '',
         'accent_color'        => '',
+        'separator_color'     => '',
         'number_font_size'    => '48',
         'number_font_weight'  => '700',
         'label_font_size'     => '12',
         'label_font_weight'   => '500',
         'separator_font_size' => '32',
         'item_min_width'      => '70',
-        'padding'             => '32',
+        'item_bg_color'       => '',
+        'item_radius'         => '0',
+        'item_padding'        => '0',
+        'tile_padding'        => [ 'top' => 32, 'right' => 32, 'bottom' => 32, 'left' => 32 ],
+        'padding'             => '32', // legacy, kept for backward compat
         'shadow'              => 'none',
         'border_width'        => '0',
         'border_color'        => '',
@@ -92,10 +98,18 @@ class Olo_Countdown_Tile extends Olo_Tile_Base {
         $sep_fs  = absint( $s['separator_font_size'] );
         $min_w   = absint( $s['item_min_width'] );
         $pad = Olo_Tile_Utils::spacing_css( $s['tile_padding'] ?? $s['padding'] ?? 32, 32 );
-        $bg      = $this->safe_color_css( $s['bg_color'] );
+        // bg_color è un controllo legacy ridondante con `bg` (sfondo creativo universale).
+        // Lo applichiamo solo se settato esplicitamente, NON come default vuoto — altrimenti
+        // produrremmo `background: ;` (invalido) e nasconderemmo il bg universale applicato
+        // dal wrapper esterno .olo-frontend-tile dal frontend renderer.
+        $bg      = $this->safe_color_css( $s['bg_color'] ?? '' );
         $fg      = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-text, #374151)';
         $accent  = $this->safe_color_css( $s['accent_color'] ) ?: 'var(--olo-color-primary, #6366F1)';
         $is_inline = ( $s['display_mode'] === 'inline' );
+        // Card per singola unità (giorni/ore/min/sec) — opzionali, default 0 = no card.
+        $item_bg     = $this->safe_color_css( $s['item_bg_color'] ?? '' );
+        $item_radius = absint( $s['item_radius'] ?? 0 );
+        $item_pad    = absint( $s['item_padding'] ?? 0 );
 
         ob_start();
         ?>
@@ -107,11 +121,14 @@ class Olo_Countdown_Tile extends Olo_Tile_Base {
                 flex-wrap: <?php echo $is_inline ? 'nowrap' : 'wrap'; ?>;
                 gap: <?php echo $is_inline ? '4px' : '8px'; ?>;
                 padding: <?php echo $is_inline ? max(8, round($pad / 2)) : $pad; ?>px;
-                background: <?php echo $bg; ?>;
+                <?php if ( $bg ) : ?>background: <?php echo $bg; ?>;<?php endif; ?>
                 color: <?php echo $fg; ?>;
             }
             .<?php echo $uid; ?> .mcd-item {
                 text-align: center;
+                <?php if ( $item_bg ) : ?>background: <?php echo $item_bg; ?>;<?php endif; ?>
+                <?php if ( $item_radius > 0 ) : ?>border-radius: <?php echo $item_radius; ?>px;<?php endif; ?>
+                <?php if ( $item_pad > 0 ) : ?>padding: <?php echo $item_pad; ?>px;<?php endif; ?>
                 <?php if ( ! $is_inline ) : ?>
                 min-width: <?php echo $min_w; ?>px;
                 <?php else : ?>
@@ -155,7 +172,7 @@ class Olo_Countdown_Tile extends Olo_Tile_Base {
             }
         </style>
         <div id="<?php echo esc_attr( $uid ); ?>"
-            class="olo-countdown <?php echo esc_attr( $uid ); ?>"
+            class="olo-countdown <?php echo esc_attr( $uid ); ?> olo-cd-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>"
             data-target="<?php echo esc_attr( $s['target_date'] ); ?>"
             data-expired="<?php echo esc_attr( $s['expired_message'] ); ?>"
             data-olo-countdown-type="<?php echo esc_attr( $s['countdown_type'] ); ?>"
@@ -281,10 +298,15 @@ class Olo_Countdown_Tile extends Olo_Tile_Base {
         $lbl_fs  = absint( $s['label_font_size'] );
         $lbl_fw  = absint( $s['label_font_weight'] );
         $sep_fs  = absint( $s['separator_font_size'] );
-        $pad     = absint( $s['padding'] );
-        $bg      = $this->safe_color_css( $s['bg_color'] );
+        // Bug pre-3.57.18: usava $s['padding'] che era stato sostituito da $s['tile_padding']
+        // (oggetto spacing). Risultato: padding sempre 0 in uikit-mode. Allineiamo a render_custom.
+        $pad = Olo_Tile_Utils::spacing_css( $s['tile_padding'] ?? $s['padding'] ?? 32, 32 );
+        $bg      = $this->safe_color_css( $s['bg_color'] ?? '' );
         $fg      = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-text, #374151)';
         $accent  = $this->safe_color_css( $s['accent_color'] ) ?: 'var(--olo-color-primary, #6366F1)';
+        $item_bg     = $this->safe_color_css( $s['item_bg_color'] ?? '' );
+        $item_radius = absint( $s['item_radius'] ?? 0 );
+        $item_pad    = absint( $s['item_padding'] ?? 0 );
 
         $units = [];
         if ( $s['show_days'] )    $units[] = [ 'cls' => 'uk-countdown-days',    'label' => $s['label_days'] ];
@@ -296,9 +318,14 @@ class Olo_Countdown_Tile extends Olo_Tile_Base {
         ?>
         <style>
             .<?php echo $uid; ?> {
-                padding: <?php echo $pad; ?>;
-                background: <?php echo $bg; ?>;
+                padding: <?php echo $pad; ?>px;
+                <?php if ( $bg ) : ?>background: <?php echo $bg; ?>;<?php endif; ?>
                 color: <?php echo $fg; ?>;
+            }
+            .<?php echo $uid; ?> .uk-countdown > div > div:not(.uk-countdown-separator) {
+                <?php if ( $item_bg ) : ?>background: <?php echo $item_bg; ?>;<?php endif; ?>
+                <?php if ( $item_radius > 0 ) : ?>border-radius: <?php echo $item_radius; ?>px;<?php endif; ?>
+                <?php if ( $item_pad > 0 ) : ?>padding: <?php echo $item_pad; ?>px;<?php endif; ?>
             }
             .<?php echo $uid; ?> .uk-countdown-number {
                 font-size: <?php echo $num_fs; ?>px;
@@ -319,9 +346,12 @@ class Olo_Countdown_Tile extends Olo_Tile_Base {
                 font-size: <?php echo $sep_fs; ?>px;
                 font-weight: 700;
                 opacity: 0.45;
+                <?php $sep_c = $this->safe_color_css( $s['separator_color'] ?? '' ); if ( $sep_c ) : ?>
+                color: <?php echo $sep_c; ?>;
+                <?php endif; ?>
             }
         </style>
-        <div class="olo-countdown <?php echo esc_attr( $uid ); ?>" uk-countdown="date: <?php echo esc_attr( $date ); ?>">
+        <div class="olo-countdown <?php echo esc_attr( $uid ); ?> olo-cd-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" uk-countdown="date: <?php echo esc_attr( $date ); ?>">
             <div class="uk-grid-small uk-child-width-auto uk-flex-center" uk-grid>
                 <?php foreach ( $units as $i => $unit ) :
                     if ( $i > 0 && ! empty( $s['separator'] ) ) : ?>

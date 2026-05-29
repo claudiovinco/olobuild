@@ -44,6 +44,18 @@ abstract class Olo_Tile_Base {
     /**
      * Renders the frontend HTML for this tile.
      */
+    /**
+     * Render del tile.
+     *
+     * @param array $settings Settings del tile (tile.settings).
+     *
+     * Nota: dal v3.18+, il frontend renderer passa anche `$style` (tile.style)
+     * come secondo argomento. I tile che vogliono usare `style.bg` come fallback
+     * al loro `settings.bg_*` (es. iconbox, hero) devono dichiarare l'override:
+     *   public function render( $settings, $style = [] ) { ... }
+     * I tile che ignorano il secondo argomento (la maggioranza) funzionano
+     * identici — PHP scarta silenziosamente i parametri extra.
+     */
     abstract public function render( $settings );
 
     /**
@@ -75,6 +87,37 @@ abstract class Olo_Tile_Base {
     }
 
     /**
+     * Sanitize rich-text HTML for safe output preserving inline color styles.
+     * WordPress `safecss_filter_attr` (used inside `wp_kses_post`) rejects
+     * `color: rgb(r,g,b)` because its regex disallows commas in values —
+     * Tiptap's parseHTML fallback can emit `style="color: rgb(...)"` when
+     * the browser normalizes the inline color, so we convert any rgb/rgba
+     * in CSS color properties to #hex (with alpha as 8-digit hex if needed)
+     * BEFORE handing the string to wp_kses_post.
+     */
+    protected function safe_richtext_content( $html ) {
+        if ( empty( $html ) || ! is_string( $html ) ) return '';
+        $html = preg_replace_callback(
+            '/(color|background-color|border-color|outline-color|text-decoration-color|caret-color|column-rule-color)\s*:\s*rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)(?:\s*,\s*([\d.]+))?\s*\)/i',
+            function( $m ) {
+                $r = max( 0, min( 255, intval( $m[2] ) ) );
+                $g = max( 0, min( 255, intval( $m[3] ) ) );
+                $b = max( 0, min( 255, intval( $m[4] ) ) );
+                if ( isset( $m[5] ) && $m[5] !== '' ) {
+                    $a = max( 0.0, min( 1.0, floatval( $m[5] ) ) );
+                    if ( $a < 1.0 ) {
+                        $a_int = (int) round( $a * 255 );
+                        return $m[1] . ': ' . sprintf( '#%02x%02x%02x%02x', $r, $g, $b, $a_int );
+                    }
+                }
+                return $m[1] . ': ' . sprintf( '#%02x%02x%02x', $r, $g, $b );
+            },
+            $html
+        );
+        return wp_kses_post( $html );
+    }
+
+    /**
      * Validate and return a CSS-safe color value, or empty string.
      * Use inside style="" attributes and <style> blocks.
      * Prevents CSS injection by allowing only valid color formats.
@@ -87,6 +130,166 @@ abstract class Olo_Tile_Base {
             return $v;
         }
         return '';
+    }
+
+    /**
+     * Convert a color (hex, rgb, rgba) to "r,g,b" triplet for use inside rgba().
+     * V3.26.0 — shared helper used by audacious preset extra CSS.
+     *
+     * @param string $color
+     * @return string e.g. "255,106,42"
+     */
+    protected function color_to_rgb( $color ) {
+        $color = trim( (string) $color );
+        if ( preg_match( '/^#([0-9a-f]{3})$/i', $color, $m ) ) {
+            $h = $m[1];
+            $r = hexdec( $h[0] . $h[0] );
+            $g = hexdec( $h[1] . $h[1] );
+            $b = hexdec( $h[2] . $h[2] );
+            return "{$r},{$g},{$b}";
+        }
+        if ( preg_match( '/^#([0-9a-f]{6})$/i', $color, $m ) ) {
+            $h = $m[1];
+            $r = hexdec( substr( $h, 0, 2 ) );
+            $g = hexdec( substr( $h, 2, 2 ) );
+            $b = hexdec( substr( $h, 4, 2 ) );
+            return "{$r},{$g},{$b}";
+        }
+        if ( preg_match( '/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/i', $color, $m ) ) {
+            return "{$m[1]},{$m[2]},{$m[3]}";
+        }
+        return '128,128,128';
+    }
+
+    /**
+     * Mix a color with white (lighten) or black (darken). Amount: 0..1.
+     */
+    protected function color_mix( $color, $amount, $with_white ) {
+        $rgb_str = $this->color_to_rgb( $color );
+        list( $r, $g, $b ) = array_map( 'intval', explode( ',', $rgb_str ) );
+        if ( $with_white ) {
+            $r = round( $r + ( 255 - $r ) * $amount );
+            $g = round( $g + ( 255 - $g ) * $amount );
+            $b = round( $b + ( 255 - $b ) * $amount );
+        } else {
+            $r = round( $r * ( 1 - $amount ) );
+            $g = round( $g * ( 1 - $amount ) );
+            $b = round( $b * ( 1 - $amount ) );
+        }
+        return sprintf( '#%02x%02x%02x', max( 0, min( 255, $r ) ), max( 0, min( 255, $g ) ), max( 0, min( 255, $b ) ) );
+    }
+
+    protected function color_lighten( $c, $a ) { return $this->color_mix( $c, $a, true ); }
+    protected function color_darken( $c, $a )  { return $this->color_mix( $c, $a, false ); }
+
+    /**
+     * Sanitize a CSS selector to make a valid CSS identifier suffix
+     * (used for keyframes and animation names tied to a preset).
+     */
+    protected function preset_uid( $sel ) {
+        return preg_replace( '/[^a-z0-9-]/i', '', (string) $sel );
+    }
+
+    /**
+     * Build CSS for the 11 "wow effects" controls shared via wowEffectsFields()
+     * helper (defined in src/config/elements/_shared.js). Each tile that uses the
+     * audacious presets includes this helper in its style fields and calls this
+     * method during render to emit the corresponding CSS — backdrop-filter,
+     * border-style, font-family, transform rotate/perspective/tilt, glow-pulse
+     * keyframe animation, title text-shadow glow, scanlines via background-image.
+     *
+     * Replaces hardcoded `!important` CSS that previously lived in each tile's
+     * get_preset_extra_css() block — so every effect is now driven by an
+     * inspector control and can be tweaked or disabled after picking a preset.
+     *
+     * The `wow_disable` toggle short-circuits the entire output: the user can
+     * keep a wow preset's colors/typography but strip the special effects.
+     *
+     * @param array  $s        Tile settings.
+     * @param string $sel      Base CSS selector for the wrapper (e.g. "#tile-123").
+     * @param string $title    CSS selector (within $sel) for the title element. Pass '' to skip title glow.
+     * @return string CSS (no <style> wrapper) — empty when wow_disable is on.
+     */
+    protected function build_wow_effects_css( $s, $sel, $title = '' ) {
+        if ( ! empty( $s['wow_disable'] ) ) return '';
+
+        $blur     = max( 0, min( 40, intval( $s['wow_backdrop_blur'] ?? 0 ) ) );
+        $sat      = max( 100, min( 200, intval( $s['wow_backdrop_saturate'] ?? 100 ) ) );
+        $bstyle_a = [ 'solid', 'dashed', 'dotted', 'double' ];
+        $bstyle   = in_array( $s['wow_border_style'] ?? 'solid', $bstyle_a, true ) ? $s['wow_border_style'] : 'solid';
+        $font_map = [
+            'inherit'   => 'inherit',
+            'monospace' => 'ui-monospace, SFMono-Regular, Menlo, monospace',
+            'serif'     => 'Georgia, "Times New Roman", serif',
+            'sans'      => '"Helvetica Neue", Helvetica, Arial, sans-serif',
+        ];
+        $font_key = $s['wow_font_family'] ?? 'inherit';
+        $font     = $font_map[ $font_key ] ?? 'inherit';
+        $rot      = max( -10, min( 10, floatval( $s['wow_rotation'] ?? 0 ) ) );
+        $persp    = max( 0, min( 2000, intval( $s['wow_perspective'] ?? 0 ) ) );
+        $tilt_x   = max( -10, min( 10, floatval( $s['wow_tilt_x'] ?? 0 ) ) );
+        $glow     = ! empty( $s['wow_glow_pulse'] );
+        $t_glow   = ! empty( $s['wow_title_glow'] );
+        $scan     = ! empty( $s['wow_scanlines'] );
+        $speed    = absint( $s['effect_speed'] ?? 0 );
+        $color_in = $s['effect_color'] ?? '';
+        $color    = $color_in ? $this->safe_color_css( $color_in ) : '';
+        $uid      = $this->preset_uid( $sel );
+
+        $css = '';
+
+        $main_props = [];
+        if ( $blur > 0 || $sat > 100 ) {
+            $main_props[] = "backdrop-filter: blur({$blur}px) saturate({$sat}%)";
+            $main_props[] = "-webkit-backdrop-filter: blur({$blur}px) saturate({$sat}%)";
+        }
+        if ( $bstyle !== 'solid' ) {
+            $main_props[] = "border-style: {$bstyle}";
+        }
+        if ( $font !== 'inherit' ) {
+            $main_props[] = "font-family: {$font}";
+        }
+        $tf = [];
+        if ( $persp > 0 )            $tf[] = "perspective({$persp}px)";
+        if ( abs( $tilt_x ) > 0.01 ) $tf[] = "rotateX({$tilt_x}deg)";
+        if ( abs( $rot ) > 0.01 )    $tf[] = "rotate({$rot}deg)";
+        if ( $tf ) $main_props[] = 'transform: ' . implode( ' ', $tf );
+
+        if ( $main_props ) {
+            $css .= $sel . '{' . implode( ';', $main_props ) . ';}';
+        }
+
+        if ( $scan ) {
+            $sc_c   = $color ?: '#00ff8c';
+            $sc_rgb = $this->color_to_rgb( $sc_c );
+            $css   .= $sel . "{background-image:repeating-linear-gradient(0deg,transparent 0,transparent 2px,rgba({$sc_rgb},0.06) 2px,rgba({$sc_rgb},0.06) 3px);}";
+        }
+
+        if ( $glow ) {
+            $g_c   = $color ?: '#ff6a2a';
+            $g_rgb = $this->color_to_rgb( $g_c );
+            $pulse = $speed > 0 ? $speed : 2200;
+            $kf    = "olo-wow-glow-{$uid}";
+            $css  .= "@keyframes {$kf}{0%,100%{box-shadow:0 0 12px rgba({$g_rgb},0.5),inset 0 0 12px rgba({$g_rgb},0.15)}50%{box-shadow:0 0 24px rgba({$g_rgb},0.85),inset 0 0 24px rgba({$g_rgb},0.30)}}";
+            $css  .= $sel . "{animation:{$kf} {$pulse}ms ease-in-out infinite;}";
+        }
+
+        if ( $t_glow && $title !== '' ) {
+            $tg_c   = $color ?: '';
+            $tg_c   = $tg_c ?: '#ff6a2a';
+            $tg_rgb = $this->color_to_rgb( $tg_c );
+            $css   .= $sel . ' ' . $title . "{text-shadow:0 0 8px rgba({$tg_rgb},0.6);}";
+        }
+
+        if ( ! empty( $s['wow_terminal_prompt'] ) && $title !== '' ) {
+            $blink_ms = $speed > 0 ? $speed : 1000;
+            $kf2      = "olo-wow-cursor-{$uid}";
+            $css     .= "@keyframes {$kf2}{0%,49%{opacity:1}50%,100%{opacity:0}}";
+            $css     .= $sel . ' ' . $title . "::before{content:'> ';opacity:0.7;}";
+            $css     .= $sel . ' ' . $title . "::after{content:' \\2588';margin-left:2px;animation:{$kf2} {$blink_ms}ms steps(1) infinite;}";
+        }
+
+        return $css;
     }
 
     /**
@@ -151,15 +354,23 @@ abstract class Olo_Tile_Base {
         $base_d  = $this->parse_border( $base );
         $h_color = trim( $hover['color'] ?? '' );
         $h_style = trim( $hover['style'] ?? '' );
-        $h_top   = $hover['top']    !== '' ? max( 0, intval( $hover['top']    ?? 0 ) ) : null;
-        $h_right = $hover['right']  !== '' ? max( 0, intval( $hover['right']  ?? 0 ) ) : null;
-        $h_bot   = $hover['bottom'] !== '' ? max( 0, intval( $hover['bottom'] ?? 0 ) ) : null;
-        $h_left  = $hover['left']   !== '' ? max( 0, intval( $hover['left']   ?? 0 ) ) : null;
 
-        // Nulla da cambiare
-        if ( $h_color === '' && $h_style === '' && $h_top === null && $h_right === null && $h_bot === null && $h_left === null ) {
+        // Early-out: hover NON configurato (icona occhio mai aperta) →
+        // tutti i lati 0 (o assenti) + style e color vuoti. Comportamento atteso:
+        // al hover il bordo resta IDENTICO al base (niente decl :hover).
+        $size_top    = intval( $hover['top']    ?? 0 );
+        $size_right  = intval( $hover['right']  ?? 0 );
+        $size_bottom = intval( $hover['bottom'] ?? 0 );
+        $size_left   = intval( $hover['left']   ?? 0 );
+        if ( $h_color === '' && $h_style === '' && $size_top === 0 && $size_right === 0 && $size_bottom === 0 && $size_left === 0 ) {
             return '';
         }
+
+        // Per la logica downstream: distingue "non impostato" (assente o '') da "esplicito 0"
+        $h_top   = ( ! array_key_exists( 'top',    $hover ) || $hover['top']    === '' ) ? null : max( 0, $size_top );
+        $h_right = ( ! array_key_exists( 'right',  $hover ) || $hover['right']  === '' ) ? null : max( 0, $size_right );
+        $h_bot   = ( ! array_key_exists( 'bottom', $hover ) || $hover['bottom'] === '' ) ? null : max( 0, $size_bottom );
+        $h_left  = ( ! array_key_exists( 'left',   $hover ) || $hover['left']   === '' ) ? null : max( 0, $size_left );
 
         $dur_s  = max( 50, intval( $dur ) );
         $eff_c  = $h_color !== '' ? $h_color : ( $base_d['color'] ?? '' );
@@ -183,6 +394,64 @@ abstract class Olo_Tile_Base {
             $css .= '}';
         }
         return $css;
+    }
+
+    /**
+     * Versione "decoupled" di build_border_hover_css: restituisce decl e transition
+     * separate, così il caller può integrare la transition nella sua lista invece
+     * di creare una regola CSS separata che sovrascriverebbe la transition base.
+     *
+     * Da preferire in tutti i NUOVI tile / refactor. Il vecchio metodo
+     * `build_border_hover_css()` rimane per backward compat sui ~30 tile esistenti.
+     *
+     * @param mixed $base   Valore border base (array o null)
+     * @param mixed $hover  Valore border hover (array)
+     * @param int   $dur    Durata transizione in ms
+     * @return array{ decls: string, transition: string }
+     */
+    protected function build_border_hover_props( $base, $hover, $dur = 300 ) {
+        $empty = [ 'decls' => '', 'transition' => '' ];
+        if ( ! is_array( $hover ) ) return $empty;
+
+        $h_color = trim( $hover['color'] ?? '' );
+        $h_style = trim( $hover['style'] ?? '' );
+        $size_top    = intval( $hover['top']    ?? 0 );
+        $size_right  = intval( $hover['right']  ?? 0 );
+        $size_bottom = intval( $hover['bottom'] ?? 0 );
+        $size_left   = intval( $hover['left']   ?? 0 );
+
+        // Hover non configurato → niente decls, niente transition
+        if ( $h_color === '' && $h_style === '' && $size_top === 0 && $size_right === 0 && $size_bottom === 0 && $size_left === 0 ) {
+            return $empty;
+        }
+
+        $base_d = $this->parse_border( $base );
+        $h_top   = ( ! array_key_exists( 'top',    $hover ) || $hover['top']    === '' ) ? null : max( 0, $size_top );
+        $h_right = ( ! array_key_exists( 'right',  $hover ) || $hover['right']  === '' ) ? null : max( 0, $size_right );
+        $h_bot   = ( ! array_key_exists( 'bottom', $hover ) || $hover['bottom'] === '' ) ? null : max( 0, $size_bottom );
+        $h_left  = ( ! array_key_exists( 'left',   $hover ) || $hover['left']   === '' ) ? null : max( 0, $size_left );
+
+        $eff_c  = $h_color !== '' ? $h_color : ( $base_d['color'] ?? '' );
+        $eff_s  = $h_style !== '' ? $h_style : ( $base_d['style'] ?? 'solid' );
+        $eff_t  = $h_top   !== null ? $h_top   : ( $base_d['top']    ?? 0 );
+        $eff_r  = $h_right !== null ? $h_right : ( $base_d['right']  ?? 0 );
+        $eff_bo = $h_bot   !== null ? $h_bot   : ( $base_d['bottom'] ?? 0 );
+        $eff_l  = $h_left  !== null ? $h_left  : ( $base_d['left']   ?? 0 );
+
+        if ( ! $eff_c ) return $empty;
+
+        $decls = '';
+        if ( $eff_t === $eff_r && $eff_r === $eff_bo && $eff_bo === $eff_l ) {
+            $decls = "border:{$eff_t}px {$eff_s} {$eff_c};";
+        } else {
+            if ( $eff_t  ) $decls .= "border-top:{$eff_t}px {$eff_s} {$eff_c};";
+            if ( $eff_r  ) $decls .= "border-right:{$eff_r}px {$eff_s} {$eff_c};";
+            if ( $eff_bo ) $decls .= "border-bottom:{$eff_bo}px {$eff_s} {$eff_c};";
+            if ( $eff_l  ) $decls .= "border-left:{$eff_l}px {$eff_s} {$eff_c};";
+        }
+
+        $dur_s = max( 50, intval( $dur ) );
+        return [ 'decls' => $decls, 'transition' => "border {$dur_s}ms ease" ];
     }
 
     /**
@@ -269,6 +538,134 @@ abstract class Olo_Tile_Base {
     }
 
     /**
+     * Genera dichiarazioni CSS inline da un oggetto style.bg (formato unificato
+     * di BackgroundControls.vue) per i tile che vogliono usare style.bg come
+     * fallback al loro settings.bg_* legacy (es. iconbox, hero).
+     *
+     * Gestisce solid/gradient/pattern (resi inline). I tipi image/video/gallery
+     * sono ignorati perché vengono già renderizzati a livello wrapper .olo-tile
+     * dal frontend renderer (uk-position-cover etc.) — replicare qui creerebbe
+     * duplicazioni visibili.
+     *
+     * @param array $bg Oggetto style.bg con almeno 'type'.
+     * @return string CSS inline (es. "background-color: #fff;") o '' se nessun bg.
+     */
+    protected function build_bg_css_from_style_bg( $bg ) {
+        if ( ! is_array( $bg ) || empty( $bg['type'] ) || $bg['type'] === 'none' ) {
+            return '';
+        }
+        if ( ! class_exists( 'Olo_Css_Builder' ) ) {
+            return '';
+        }
+        // Solo solid/gradient/pattern qui: image/video/gallery vanno al wrapper.
+        $type = $bg['type'];
+        if ( $type !== 'solid' && $type !== 'gradient' && $type !== 'pattern' ) {
+            return '';
+        }
+        static $css_builder = null;
+        if ( $css_builder === null ) {
+            $css_builder = new Olo_Css_Builder();
+        }
+        $decl = $css_builder->get_bg_inline_css( $bg );
+        return $decl ? rtrim( $decl, ';' ) . ';' : '';
+    }
+
+    /**
+     * Genera CSS :hover + transitions da una mappa dichiarativa di chiavi
+     * settings → CSS property. Duale del helper JS `withHover()` in _shared.js.
+     *
+     * Per ogni voce della mappa legge `{key}_hover` (o opts.hover_key custom)
+     * e `{key}_hover_duration` dai settings, e produce:
+     *   - 'hover_decls'  → stringa con le dichiarazioni CSS per il blocco :hover
+     *   - 'transitions'  → array di "css-prop {dur}ms ease" da concatenare
+     *
+     * Form della mappa:
+     *   [ 'bg_color' => 'background-color' ]                                  (forma corta)
+     *   [ 'bg_color' => [
+     *         'css'        => 'background-color',
+     *         'hover_key'  => 'hover_bg_color',     // override chiave
+     *         'dur_key'    => 'hover_bg_duration',  // override chiave durata
+     *         'important'  => true,                  // aggiunge !important
+     *         'unit'       => 'px',                  // unit per valori numerici
+     *     ]
+     *   ]
+     *
+     * Tipi di valore auto-detected:
+     *   - oggetto {tl,tr,br,bl} → "Xpx Ypx Zpx Wpx"  (border-radius)
+     *   - oggetto {top,right,bottom,left} → "Xpx Ypx Zpx Wpx"  (spacing)
+     *   - stringa con prop "*color*"/"background"/"fill"/"stroke" → safe_color_css
+     *   - numero → "<n><unit>"
+     *   - stringa generica → as-is
+     *
+     * @param array $s   Settings del tile.
+     * @param array $map Mappa property hoverable → CSS.
+     * @return array{ hover_decls: string, transitions: array }
+     */
+    protected function build_hover_css( $s, $map ) {
+        $decls       = [];
+        $transitions = [];
+
+        foreach ( $map as $key => $cfg ) {
+            $opts = is_array( $cfg ) ? $cfg : [ 'css' => $cfg ];
+            $css_prop  = $opts['css'] ?? '';
+            $hover_key = $opts['hover_key'] ?? ( $key . '_hover' );
+            $dur_key   = $opts['dur_key']   ?? ( $key . '_hover_duration' );
+            $important = ! empty( $opts['important'] );
+
+            if ( $css_prop === '' ) continue;
+            if ( ! array_key_exists( $hover_key, $s ) ) continue;
+
+            $css_value = $this->normalize_hover_value( $css_prop, $s[ $hover_key ], $opts );
+            if ( $css_value === '' ) continue;
+
+            $imp = $important ? ' !important' : '';
+            $decls[] = "{$css_prop}: {$css_value}{$imp};";
+
+            $dur = absint( $s[ $dur_key ] ?? 300 );
+            if ( $dur < 1 ) $dur = 300;
+            $transitions[] = "{$css_prop} {$dur}ms ease";
+        }
+
+        return [
+            'hover_decls' => implode( "\n                ", $decls ),
+            'transitions' => $transitions,
+        ];
+    }
+
+    /**
+     * Converte un valore hover in stringa CSS valida per la property data.
+     * Vedi build_hover_css() per i tipi supportati.
+     */
+    protected function normalize_hover_value( $css_prop, $value, $opts = [] ) {
+        if ( $value === null || $value === '' ) return '';
+
+        // Oggetto con 4 angoli (border-radius)
+        if ( is_array( $value ) && isset( $value['tl'] ) ) {
+            return $this->build_border_radius_css( $value );
+        }
+        // Oggetto con 4 lati (spacing/padding/margin)
+        if ( is_array( $value ) && isset( $value['top'] ) ) {
+            $t = absint( $value['top']    ?? 0 );
+            $r = absint( $value['right']  ?? 0 );
+            $b = absint( $value['bottom'] ?? 0 );
+            $l = absint( $value['left']   ?? 0 );
+            if ( $t === 0 && $r === 0 && $b === 0 && $l === 0 ) return '';
+            return "{$t}px {$r}px {$b}px {$l}px";
+        }
+        // Color (euristica sul nome della CSS property)
+        if ( is_string( $value ) && preg_match( '/(color|background|fill|stroke)/i', $css_prop ) ) {
+            return $this->safe_color_css( $value );
+        }
+        // Numero con unit auto (default px)
+        if ( is_numeric( $value ) ) {
+            $unit = $opts['unit'] ?? 'px';
+            return $value . $unit;
+        }
+        // Stringa generica (select, ecc.)
+        return is_string( $value ) ? $value : '';
+    }
+
+    /**
      * Text-effects helper: returns [$class_fragment, $data_attrs_string] for the given semantic target.
      * If the target receives the active effect, returns class like " olo-tfx olo-tfx--gradient-anim"
      * (with leading space) and data-attributes string ready to inline-echo on the element.
@@ -345,6 +742,41 @@ abstract class Olo_Tile_Base {
             }
             return '';
         }
+        // UIkit precede in caso di nome duplicato (preserva look storico): se la
+        // 131-set UIkit conosce il nome, deleghiamo a uk-icon JS (più leggero).
+        // Lucide (~1700 icone, ISC) coprono il resto via SVG inline server-side.
+        static $uikit_lib = null;
+        if ( $uikit_lib === null ) {
+            $uikit_path = OLO_PATH . 'assets/data/uikit-icons.json';
+            if ( file_exists( $uikit_path ) ) {
+                $raw = file_get_contents( $uikit_path );
+                $uikit_lib = json_decode( $raw, true ) ?: [];
+            } else {
+                $uikit_lib = [];
+            }
+        }
+        if ( isset( $uikit_lib[ $icon_name ] ) ) {
+            return '<span ' . $extra_attr . ' uk-icon="icon: ' . esc_attr( $icon_name ) . '; ratio: ' . esc_attr( $ratio ) . '"></span>';
+        }
+        static $lucide_lib = null;
+        if ( $lucide_lib === null ) {
+            $lucide_path = OLO_PATH . 'assets/data/lucide-icons.json';
+            if ( file_exists( $lucide_path ) ) {
+                $raw = file_get_contents( $lucide_path );
+                $lucide_lib = json_decode( $raw, true ) ?: [];
+            } else {
+                $lucide_lib = [];
+            }
+        }
+        if ( isset( $lucide_lib[ $icon_name ] ) ) {
+            $size = round( 20 * $ratio );
+            $svg = $lucide_lib[ $icon_name ];
+            $svg = preg_replace( '/width="\d+"/', 'width="' . $size . '"', $svg, 1 );
+            $svg = preg_replace( '/height="\d+"/', 'height="' . $size . '"', $svg, 1 );
+            return '<span class="olo-lucide-icon" style="display:inline-flex" ' . $extra_attr . '>' . $svg . '</span>';
+        }
+        // Fallback: il nome non è in nessuno dei due dict — lascia che UIkit JS provi
+        // (potrebbe essere un'icona nuova di una versione UIkit più recente).
         return '<span ' . $extra_attr . ' uk-icon="icon: ' . esc_attr( $icon_name ) . '; ratio: ' . esc_attr( $ratio ) . '"></span>';
     }
 
@@ -439,5 +871,62 @@ abstract class Olo_Tile_Base {
         })();
         </script>
         <?php
+    }
+
+    /**
+     * Render a "Widget" template (type=widget) inside a tile container's item.
+     *
+     * Used by tile container types (accordion, icontabs, panelslider, switcher,
+     * slideshow, carousel, overlayslider, ecc.) per consentire all'utente di
+     * inserire un template come contenuto della singola scheda/slide/pannello.
+     *
+     * Sicurezza:
+     *  - Anti-loop: stack di ID già in render. Se l'ID è già presente, abort.
+     *  - Max depth: 5 livelli di nesting widget→widget→widget...
+     *  - Type check: il template deve essere effettivamente type='widget'
+     *    (no `page` o altri type per evitare embedding casuali di pagine intere).
+     *
+     * @param int $widget_id  ID del template widget.
+     * @return string  HTML del widget renderizzato, o '' se non valido.
+     */
+    protected function render_widget_template( $widget_id ) {
+        $widget_id = absint( $widget_id );
+        if ( ! $widget_id ) return '';
+
+        static $stack = [];
+        if ( in_array( $widget_id, $stack, true ) ) {
+            return '<!-- olo: widget loop detected (id ' . esc_html( $widget_id ) . ') -->';
+        }
+        if ( count( $stack ) >= 5 ) {
+            return '<!-- olo: widget max nesting depth reached -->';
+        }
+
+        $db  = new Olo_Database();
+        $tpl = $db->get_template( $widget_id );
+        if ( ! $tpl ) return '';
+        if ( ( $tpl['type'] ?? '' ) !== 'widget' ) {
+            return '<!-- olo: template ' . esc_html( $widget_id ) . ' is not a widget -->';
+        }
+
+        $stack[] = $widget_id;
+        // Chiamiamo direttamente render_shortcode invece di do_shortcode per evitare
+        // che WordPress applichi filtri the_content/wpautop/wptexturize all'HTML
+        // del widget — quei filtri possono spostare elementi block-level (section,
+        // div) fuori dal contesto annidato (es. fuori dai <li> di uno switcher).
+        if ( class_exists( 'Olo_Frontend_Renderer' ) ) {
+            $renderer = new Olo_Frontend_Renderer();
+            $output = $renderer->render_shortcode( [ 'id' => $widget_id ] );
+        } else {
+            $output = do_shortcode( '[olo_template id="' . $widget_id . '"]' );
+        }
+        array_pop( $stack );
+
+        // wpautop interferisce con HTML annidato dentro <li>/<td>/etc. trasformando
+        // sequenze di newlines in <p>...</p> che possono rompere la chiusura di
+        // elementi e far "estrarre" il content fuori dal contenitore. Rimuoviamo
+        // i double-newlines (e collassiamo gli whitespace tra tag) per evitarlo.
+        $output = preg_replace( '/\n\s*\n/', "\n", $output );
+        $output = preg_replace( '/>\s+</', '><', $output );
+        return $output;
     }
 }

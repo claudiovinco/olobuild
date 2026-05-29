@@ -39,13 +39,14 @@
         <span style="text-decoration:line-through;color:#9CA3AF;font-size:13px;">€ 120,00</span>
         <span style="font-weight:700;font-size:16px;color:#059669;">€ 102,00</span>
       </div>
-      <button :style="btnStyle">Aggiungi bundle</button>
+      <button :style="btnStyle">{{ t('Aggiungi bundle') }}</button>
     </div>
   </div>
 </template>
 
 <script setup>
 import { computed } from 'vue';
+import { t } from '@/i18n';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },

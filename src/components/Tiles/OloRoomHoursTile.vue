@@ -11,6 +11,7 @@
 </template>
 
 <script setup>
+import { computed } from 'vue';
 import { t } from '@/i18n';
 defineProps({ settings: { type: Object, default: () => ({}) } });
 const days = [

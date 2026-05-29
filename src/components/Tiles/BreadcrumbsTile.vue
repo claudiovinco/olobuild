@@ -5,10 +5,10 @@
         <a href="#" class="mb-text-blue-400 mb-no-underline hover:mb-underline" data-olo-editable="home_label">{{ s.home_label }}</a>
         <span class="mb-text-gray-600" data-olo-editable="separator">{{ s.separator }}</span>
       </template>
-      <a href="#" class="mb-text-blue-400 mb-no-underline hover:mb-underline">Category</a>
+      <a href="#" class="mb-text-blue-400 mb-no-underline hover:mb-underline">{{ t('Categoria') }}</a>
       <span class="mb-text-gray-600">{{ s.separator }}</span>
       <template v-if="s.show_current !== false">
-        <span class="mb-text-gray-300">Current Page</span>
+        <span class="mb-text-gray-300">{{ t('Pagina corrente') }}</span>
       </template>
     </nav>
   </div>
@@ -16,6 +16,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { t } from '@/i18n';
 
 const defaults = {
   separator: '/',

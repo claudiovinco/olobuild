@@ -1,11 +1,21 @@
 
-import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared.js';
+import { t } from '@/i18n';
+
+/**
+ * Tile RelatedPosts — split CONTENUTO/STILE.
+ *   fields[]      → query (source/count/orderby), contenuto card (show_image/date/excerpt/category/title_tag), fallback text
+ *   styleFields[] → preset, bg, typo, layout (columns/gap/image_ratio), colori, padding, radius, hover effect, border
+ */
 export default {
   type: 'relatedposts',
-  name: 'Articoli Correlati',
+  name: t('Articoli Correlati'),
   icon: 'dashicons-screenoptions',
   category: 'dynamic',
   defaults: {
+    bg: { type: 'none' },
+    typography_preset: '',
+    preset: 'custom',
     source: 'categories',
     count: '3',
     columns: '3',
@@ -31,65 +41,102 @@ export default {
     border_hover_duration: 300,
     ...borderEffectDefaults,
   },
+
   fields: [
-    { type: 'separator', label: 'Query' },
-    { key: 'source', label: 'Correlazione per', type: 'select', options: [
-      { value: 'categories', label: 'Categorie' },
-      { value: 'tags', label: 'Tag' },
-      { value: 'both', label: 'Categorie + Tag' },
+    { type: 'separator', label: t('Query') },
+    { key: 'source', label: t('Correlazione per'), type: 'select', options: [
+      { value: 'categories', label: t('Categorie') },
+      { value: 'tags', label: t('Tag') },
+      { value: 'both', label: t('Categorie + Tag') },
     ]},
-    { key: 'count', label: 'Numero articoli', type: 'range', min: 1, max: 12, step: 1 },
-    { key: 'orderby', label: 'Ordina per', type: 'select', options: [
-      { value: 'rand', label: 'Casuale' },
-      { value: 'date', label: 'Data' },
-      { value: 'title', label: 'Titolo' },
+    { key: 'count', label: t('Numero articoli'), type: 'range', min: 1, max: 12, step: 1 },
+    { key: 'orderby', label: t('Ordina per'), type: 'select', options: [
+      { value: 'rand', label: t('Casuale') },
+      { value: 'date', label: t('Data') },
+      { value: 'title', label: t('Titolo') },
     ]},
 
-    { type: 'separator', label: 'Layout' },
-    { key: 'columns', label: 'Colonne', type: 'select', options: [
+    { type: 'separator', label: t('Contenuto card') },
+    { key: 'show_image', label: t('Mostra immagine'), type: 'toggle' },
+    { key: 'show_date', label: t('Mostra data'), type: 'toggle' },
+    { key: 'show_excerpt', label: t('Mostra estratto'), type: 'toggle' },
+    { key: 'excerpt_length', label: t('Parole estratto'), type: 'range', min: 5, max: 50, step: 1,
+      condition: { field: 'show_excerpt', value: true } },
+    { key: 'show_category', label: t('Mostra categoria'), type: 'toggle' },
+
+    { key: 'fallback_text', label: t('Testo fallback (nessun risultato)'), type: 'text' },
+  ],
+
+  styleFields: [
+    { type: 'separator', label: t('Preset stilistico') },
+    { key: 'preset', label: t('Stile'), type: 'select', options: [
+      { value: 'modern-cards',     label: t('Modern Cards') },
+      { value: 'editorial-list',   label: t('Editorial List') },
+      { value: 'compact-row',      label: t('Compact Row') },
+      { value: 'magazine-trio',    label: t('Magazine Trio') },
+      { value: 'minimal-line',     label: t('Minimal Line') },
+      { value: 'glass-cards',      label: t('Glass Cards') },
+      { value: 'neon-tiles',       label: t('Neon Tiles') },
+      { value: 'brutalist-stamp',  label: t('Brutalist Stamp') },
+      { value: 'gradient-soft',    label: t('Gradient Soft') },
+      { value: 'sticker-cards',    label: t('Sticker Cards') },
+      { value: 'retro-zine',       label: t('Retro Zine') },
+      { value: 'tilt-3d',          label: t('3D Tilt Cards') },
+      { value: 'custom',           label: t('Personalizzato') },
+    ]},
+    { type: 'separator', label: t('Tipografia') },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
+    { type: 'typography', label: t('Titolo'),
+      presetKey: 'typography_preset',
+      responsiveKeys: ['size'],
+      keys: {
+        tag:   'title_tag',
+        color: 'title_color',
+      },
+      sizeMin: 12, sizeMax: 60,
+    },
+    { type: 'typography', label: t('Testo'),
+      presetKey: 'typography_preset',
+      responsiveKeys: ['size'],
+      keys: {
+        color: 'text_color',
+      },
+      sizeMin: 12, sizeMax: 60,
+    },
+    { type: 'typography', label: t('Data'),
+      presetKey: 'typography_preset',
+      responsiveKeys: ['size'],
+      keys: {
+        color: 'date_color',
+      },
+      sizeMin: 12, sizeMax: 60,
+    },
+
+    { type: 'separator', label: t('Layout') },
+    { key: 'columns', label: t('Colonne'), type: 'select', options: [
       { value: '1', label: '1' },
       { value: '2', label: '2' },
       { value: '3', label: '3' },
       { value: '4', label: '4' },
     ]},
-    { key: 'gap', label: 'Spaziatura (px)', type: 'range', min: 0, max: 40, step: 2 },
-
-    { type: 'separator', label: 'Contenuto card' },
-    { key: 'show_image', label: 'Mostra immagine', type: 'toggle' },
-    { key: 'image_ratio', label: 'Rapporto immagine', type: 'select', options: [
+    { key: 'gap', label: t('Spaziatura (px)'), type: 'range', min: 0, max: 40, step: 2 },
+    { key: 'image_ratio', label: t('Rapporto immagine'), type: 'select', options: [
       { value: '16/9', label: '16:9' },
       { value: '4/3', label: '4:3' },
       { value: '1/1', label: '1:1' },
-      { value: 'auto', label: 'Automatico' },
+      { value: 'auto', label: t('Automatico') },
     ], condition: { field: 'show_image', value: true } },
-    { key: 'show_date', label: 'Mostra data', type: 'toggle' },
-    { key: 'show_excerpt', label: 'Mostra estratto', type: 'toggle' },
-    { key: 'excerpt_length', label: 'Parole estratto', type: 'range', min: 5, max: 50, step: 1,
-      condition: { field: 'show_excerpt', value: true } },
-    { key: 'show_category', label: 'Mostra categoria', type: 'toggle' },
-    { key: 'title_tag', label: 'Tag titolo', type: 'select', options: [
-      { value: 'h3', label: 'H3' },
-      { value: 'h4', label: 'H4' },
-      { value: 'h5', label: 'H5' },
-      { value: 'p', label: 'Paragrafo' },
+
+    { type: 'separator', label: t('Stile') },
+    { key: 'card_background', label: t('Sfondo card'), type: 'color' },
+    { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 32 },
+    withHover({ key: 'card_border_radius', label: t('Raggio bordo (px)'), type: 'border-radius' }),
+    { key: 'hover_effect', label: t('Effetto hover'), type: 'select', options: [
+      { value: 'none', label: t('Nessuno') },
+      { value: 'shadow', label: t('Ombra') },
+      { value: 'scale', label: t('Ingrandisci') },
     ]},
 
-    { type: 'separator', label: 'Stile' },
-    { key: 'title_color', label: 'Colore titolo', type: 'color' },
-    { key: 'text_color', label: 'Colore testo', type: 'color' },
-    { key: 'date_color', label: 'Colore data', type: 'color' },
-    { key: 'card_background', label: 'Sfondo card', type: 'color' },
-    { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 32 },
-    { key: 'card_border_radius', label: 'Raggio bordo (px)', type: 'border-radius' },
-    { key: 'card_border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
-    { key: 'hover_effect', label: 'Effetto hover', type: 'select', options: [
-      { value: 'none', label: 'Nessuno' },
-      { value: 'shadow', label: 'Ombra' },
-      { value: 'scale', label: 'Ingrandisci' },
-    ]},
-
-    { type: 'separator', label: 'Fallback' },
-    { key: 'fallback_text', label: 'Testo fallback', type: 'text' },
     ...borderFields(),
   ],
 };

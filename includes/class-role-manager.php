@@ -252,14 +252,9 @@ class Olobuild_Role_Manager {
      * ───────────────────────────────────────────── */
 
     public function add_admin_page() {
-        add_submenu_page(
-            'olobuild',
-            'Permessi Utente',
-            'Permessi',
-            'manage_options',
-            'olo-role-manager',
-            [ $this, 'render_admin_page' ]
-        );
+        // v1.0.30 — pagina migrata in ?page=olobuilder-settings&tab=permessi
+        // Submenu rimosso: i campi vivono ora in Configurazione → Permessi & Ruoli.
+        // La classe resta attiva per il filter user_has_cap e per applicare le restrizioni nell'inspector.
     }
 
     public function render_admin_page() {
@@ -267,10 +262,24 @@ class Olobuild_Role_Manager {
         $allowed         = $this->get_allowed_roles();
         $content_only    = $this->get_content_only_roles();
         $design_only     = get_option( 'olo_design_only_roles', [] );
+        $allowed_count = is_array( $allowed_roles ) ? count( $allowed_roles ) : 0;
+        $design_only_count = is_array( $design_only ) ? count( $design_only ) : 0;
         ?>
-        <?php Olo_Builder::page_shell_open( 'Permessi Utente' ); ?>
+        <?php Olo_Builder::cockpit_shell_open( '<b>' . esc_html__( 'Permessi Utente', 'olobuild' ) . '</b>' ); ?>
+        <main class="olo-cockpit-main olo-cockpit-legacy">
+            <?php
+            echo Olo_Builder::cockpit_page_head( [
+                'title' => __( 'Permessi & Ruoli', 'olobuild' ),
+                'sub'   => sprintf(
+                    /* translators: 1: roles with edit access, 2: roles with design-only access */
+                    __( '%1$s ruoli con accesso completo · %2$s ruoli design-only', 'olobuild' ),
+                    '<b>' . (int) $allowed_count . '</b>',
+                    '<b>' . (int) $design_only_count . '</b>'
+                ),
+            ] );
+            ?>
 
-            <div id="olo-roles-msg-box"></div>
+            <div id="olo-roles-msg-box" style="margin-top:16px"></div>
 
             <div class="olo-card">
                 <div class="olo-card-head">
@@ -278,19 +287,19 @@ class Olobuild_Role_Manager {
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
                     </div>
                     <div>
-                        <h3>Livelli di Accesso</h3>
-                        <p>Assegna un livello di accesso per ciascun ruolo WordPress</p>
+                        <h3><?php esc_html_e( 'Livelli di Accesso', 'olobuild' ); ?></h3>
+                        <p><?php esc_html_e( 'Assegna un livello di accesso per ciascun ruolo WordPress', 'olobuild' ); ?></p>
                     </div>
                 </div>
                 <div class="olo-card-body" style="padding:0">
                     <table class="olo-table">
                         <thead>
                             <tr>
-                                <th>Ruolo</th>
-                                <th style="text-align:center">Accesso completo</th>
-                                <th style="text-align:center">Solo design</th>
-                                <th style="text-align:center">Solo contenuti</th>
-                                <th style="text-align:center">Nessun accesso</th>
+                                <th><?php esc_html_e( 'Ruolo', 'olobuild' ); ?></th>
+                                <th style="text-align:center"><?php esc_html_e( 'Accesso completo', 'olobuild' ); ?></th>
+                                <th style="text-align:center"><?php esc_html_e( 'Solo design', 'olobuild' ); ?></th>
+                                <th style="text-align:center"><?php esc_html_e( 'Solo contenuti', 'olobuild' ); ?></th>
+                                <th style="text-align:center"><?php esc_html_e( 'Nessun accesso', 'olobuild' ); ?></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -324,16 +333,16 @@ class Olobuild_Role_Manager {
             <div class="olo-msg info" style="margin-bottom:20px">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
                 <div>
-                    <strong>Completo:</strong> struttura + design + contenuti &nbsp;&bull;&nbsp;
-                    <strong>Design:</strong> stili e layout &nbsp;&bull;&nbsp;
-                    <strong>Contenuti:</strong> solo testo e immagini
+                    <strong><?php esc_html_e( 'Completo:', 'olobuild' ); ?></strong> <?php esc_html_e( 'struttura + design + contenuti', 'olobuild' ); ?> &nbsp;&bull;&nbsp;
+                    <strong><?php esc_html_e( 'Design:', 'olobuild' ); ?></strong> <?php esc_html_e( 'stili e layout', 'olobuild' ); ?> &nbsp;&bull;&nbsp;
+                    <strong><?php esc_html_e( 'Contenuti:', 'olobuild' ); ?></strong> <?php esc_html_e( 'solo testo e immagini', 'olobuild' ); ?>
                 </div>
             </div>
 
             <div class="olo-actions" style="margin-bottom:30px">
                 <button class="olo-btn-save" id="olo-save-roles">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-                    Salva Permessi
+                    <?php esc_html_e( 'Salva Permessi', 'olobuild' ); ?>
                 </button>
             </div>
 
@@ -444,7 +453,8 @@ class Olobuild_Role_Manager {
                 });
             })();
             </script>
-        <?php Olo_Builder::page_shell_close(); ?>
+        </main>
+        <?php Olo_Builder::cockpit_shell_close(); ?>
         <?php
     }
 

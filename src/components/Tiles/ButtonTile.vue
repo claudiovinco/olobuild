@@ -7,7 +7,19 @@
       :style="btnStyle"
       class="mb-relative"
     >
-      <span style="display:inline-flex;align-items:center;" :style="{ flexDirection: s.icon_position === 'after' ? 'row-reverse' : 'row', gap: (parseInt(s.icon_spacing) || 8) + 'px' }">
+      <!-- bg video creativo: anteprima fedele -->
+      <video
+        v-if="bgVideoUrl"
+        :src="bgVideoUrl"
+        autoplay muted loop playsinline
+        style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;pointer-events:none;border-radius:inherit"
+      ></video>
+      <!-- bg image creativo: anteprima fedele -->
+      <div
+        v-else-if="bgImageUrl"
+        :style="{ position:'absolute', inset:0, backgroundImage:`url('${bgImageUrl}')`, backgroundSize:'cover', backgroundPosition:'center', zIndex:0 }"
+      ></div>
+      <span style="display:inline-flex;align-items:center;position:relative;z-index:2;" :style="{ flexDirection: s.icon_position === 'after' ? 'row-reverse' : 'row', gap: (parseInt(s.icon_spacing) || 8) + 'px' }">
         <span v-if="iconSvg" class="olo-btn-icon" :style="{ width: '1em', height: '1em', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }" v-html="iconSvg"></span>
         <span data-olo-editable="text">{{ s.text || 'Clicca qui' }}</span>
       </span>
@@ -60,6 +72,18 @@ const s = computed(() => ({
 
 const iconSvg = computed(() => iconsSvg[s.value.icon] || '');
 
+// Bg creativo (unified bg field) — supporta video/image come sfondo del button
+const bgVideoUrl = computed(() => {
+  const b = s.value.bg;
+  if (b && typeof b === 'object' && b.type === 'video') return b.video_url || '';
+  return '';
+});
+const bgImageUrl = computed(() => {
+  const b = s.value.bg;
+  if (b && typeof b === 'object' && b.type === 'image') return b.image_url || '';
+  return '';
+});
+
 const alignMap = {
   left: 'flex-start',
   center: 'center',
@@ -94,18 +118,24 @@ const btnStyle = computed(() => {
     padRight = padLeft = parseInt(s.value.padding_x) || 32;
   }
 
+  // Se c'è bg creativo (video/image/gradient/pattern), il bg_color viene sovrascritto
+  const bgObj = s.value.bg;
+  const hasCreative = bgObj && typeof bgObj === 'object' && bgObj.type && bgObj.type !== 'none';
+
   const style = {
     display: 'inline-block',
     width: s.value.full_width ? '100%' : 'auto',
     textAlign: 'center',
     padding: `${padTop}px ${padRight}px ${padBottom}px ${padLeft}px`,
-    backgroundColor: s.value.bg_color || '#6366F1',
+    backgroundColor: hasCreative ? 'transparent' : (s.value.bg_color || '#6366F1'),
     color: s.value.text_color || '#FFFFFF',
     borderRadius,
     fontSize: `${fontSize || 16}px`,
     fontWeight: s.value.font_weight || '600',
     cursor: 'pointer',
     textTransform: s.value.text_transform !== 'none' ? s.value.text_transform : undefined,
+    position: 'relative',
+    overflow: 'hidden',
   };
 
   if (ls > 0) style.letterSpacing = ls + 'px';

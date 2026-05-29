@@ -1,11 +1,14 @@
 import { shadowField } from './_shared.js';
+import { t } from '@/i18n';
 
-// Shortcode tile è un wrapper per shortcode WordPress di terze parti.
-// D1 (text effects) N/A: il contenuto è codice WP arbitrario, non testo Olobuild.
-// D2 (image presets) N/A: nessuna immagine propria.
+/**
+ * Tile Shortcode — split CONTENUTO/STILE.
+ *   fields[]      → shortcode_text, parse_shortcodes
+ *   styleFields[] → shadow
+ */
 export default {
   type: 'shortcode',
-  name: 'Shortcode',
+  name: t('Shortcode'),
   icon: 'dashicons-shortcode',
   category: 'dynamic',
   defaults: {
@@ -13,13 +16,14 @@ export default {
     parse_shortcodes: true,
     shadow: 'none',
   },
-  fields: [
-    { type: 'separator', label: 'Shortcode' },
-    { key: 'shortcode_text', label: 'Shortcode', type: 'textarea',
-      description: 'Esempio: [gallery ids="1,2,3"] o [contact-form-7 id="42"]' },
-    { key: 'parse_shortcodes', label: 'Esegui shortcode', type: 'toggle' },
 
-    { type: 'separator', label: 'Aspetto' },
+  fields: [
+    { key: 'shortcode_text', label: t('Shortcode'), type: 'textarea',
+      description: 'Esempio: [gallery ids="1,2,3"] o [contact-form-7 id="42"]' },
+    { key: 'parse_shortcodes', label: t('Esegui shortcode'), type: 'toggle' },
+  ],
+
+  styleFields: [
     ...shadowField,
   ],
 };

@@ -1,13 +1,21 @@
 import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared';
 import { shadowField } from './_shared.js';
+import { t } from '@/i18n';
 
+/**
+ * Tile TextMask — split CONTENUTO/STILE.
+ *   fields[]      → testo (text+multiline), video URL+poster+opacity, maschera (mask_mode/blend_mode), animazione scroll (toggles + valori)
+ *   styleFields[] → preset, bg, typo, text-effects, tipografia (size/weight/family/transform/spacing/line-h/align), layout (min_height/padding/valign/bg_color), text_fill blend, overlay color/opacity, shadow, border
+ */
 export default {
   type: 'textmask',
-  name: 'Text Mask Video',
+  name: t('Text Mask Video'),
   icon: 'dashicons-editor-textcolor',
   category: 'creative',
   defaults: {
-    // Testo
+    preset: 'custom',
+    bg: { type: 'none' },
+    typography_preset: '',
     text: 'WELCOME\nTO THE WORLD',
     multiline: true,
     font_size: '120',
@@ -19,24 +27,16 @@ export default {
     letter_spacing: '5',
     line_height: '1',
     text_align: 'center',
-
-    // Video
     video_url: '',
     video_poster: '',
     video_opacity: '100',
-
-    // Layout
     min_height: '100vh',
     tile_padding: { top: 40, right: 20, bottom: 40, left: 20 },
     vertical_align: 'center',
     bg_color: '',
-
-    // Maschera
     mask_mode: 'text_reveals_video',
     blend_mode: 'normal',
     text_fill: '',
-
-    // Animazione scroll
     scroll_animate: true,
     scroll_start: '0',
     scroll_end: '100',
@@ -49,42 +49,109 @@ export default {
     scroll_blur: false,
     scroll_blur_from: '0',
     scroll_blur_to: '10',
-
-    // Overlay
     overlay_color: '',
     overlay_opacity: '0',
-
     shadow: 'none',
     ...textEffectsDefaults,
+    text_effect_target: 'text',
     border: { ...borderDefault },
     border_hover: { ...borderHoverDefault },
     border_hover_duration: 300,
     ...borderEffectDefaults,
   },
+
   fields: [
-    // ── Testo ──
-    { key: 'text', label: 'Testo', type: 'textarea', rows: 3, placeholder: 'WELCOME\nTO THE WORLD' },
-    { key: 'multiline', label: 'Testo su più righe', type: 'toggle' },
-    { key: 'font_size', label: 'Dimensione testo (px)', type: 'range', min: 30, max: 300, step: 5 },
-    { key: 'font_size_tablet', label: 'Dimensione tablet (px)', type: 'range', min: 20, max: 200, step: 5 },
-    { key: 'font_size_mobile', label: 'Dimensione mobile (px)', type: 'range', min: 16, max: 150, step: 5 },
-    { key: 'font_weight', label: 'Peso font', type: 'select', options: [
-      { value: '400', label: 'Regular' },
-      { value: '500', label: 'Medium' },
-      { value: '600', label: 'Semi Bold' },
-      { value: '700', label: 'Bold' },
-      { value: '800', label: 'Extra Bold' },
-      { value: '900', label: 'Black' },
+    { key: 'text', label: t('Testo'), type: 'textarea', rows: 3, placeholder: t('WELCOME\nTO THE WORLD') },
+    { key: 'multiline', label: t('Testo su più righe'), type: 'toggle' },
+
+    { type: 'separator', label: t('Video') },
+    { key: 'video_url', label: t('Video (MP4/WebM)'), type: 'media' },
+    { key: 'video_poster', label: t('Immagine poster'), type: 'image' },
+    { key: 'video_opacity', label: t('Opacità video (%)'), type: 'range', min: 10, max: 100, step: 5 },
+
+    { type: 'separator', label: t('Maschera') },
+    { key: 'mask_mode', label: t('Modalità maschera'), type: 'select', options: [
+      { value: 'text_reveals_video', label: t('Testo rivela il video') },
+      { value: 'video_behind_text', label: t('Video dietro al testo (clip)') },
+      { value: 'blend', label: t('Blend mode') },
     ]},
-    { key: 'font_family', label: 'Font family', type: 'font-family' },
-    { key: 'text_transform', label: 'Trasformazione', type: 'select', options: [
-      { value: 'none', label: 'Nessuna' },
-      { value: 'uppercase', label: 'Maiuscolo' },
-      { value: 'capitalize', label: 'Capitalizzato' },
-      { value: 'lowercase', label: 'Minuscolo' },
-    ]},
-    { key: 'letter_spacing', label: 'Spaziatura lettere (px)', type: 'range', min: 0, max: 30, step: 1 },
-    { key: 'line_height', label: 'Altezza riga', type: 'select', options: [
+    { key: 'blend_mode', label: t('Blend mode'), type: 'select', options: [
+      { value: 'normal', label: t('Normal') },
+      { value: 'multiply', label: t('Multiply') },
+      { value: 'screen', label: t('Screen') },
+      { value: 'overlay', label: t('Overlay') },
+      { value: 'darken', label: t('Darken') },
+      { value: 'lighten', label: t('Lighten') },
+      { value: 'color-dodge', label: t('Color Dodge') },
+      { value: 'color-burn', label: t('Color Burn') },
+      { value: 'hard-light', label: t('Hard Light') },
+      { value: 'soft-light', label: t('Soft Light') },
+      { value: 'difference', label: t('Difference') },
+      { value: 'exclusion', label: t('Exclusion') },
+    ], show: s => s.mask_mode === 'blend' },
+
+    { type: 'separator', label: t('Animazione Scroll') },
+    { key: 'scroll_animate', label: t('Animazione su scroll'), type: 'toggle' },
+    { key: 'scroll_start', label: t('Inizio animazione (% viewport)'), type: 'range', min: 0, max: 100, step: 5,
+      show: s => s.scroll_animate },
+    { key: 'scroll_end', label: t('Fine animazione (% viewport)'), type: 'range', min: 0, max: 100, step: 5,
+      show: s => s.scroll_animate },
+    { key: 'scroll_scale', label: t('Scala'), type: 'toggle',
+      show: s => s.scroll_animate },
+    { key: 'scroll_scale_from', label: t('Scala iniziale (%)'), type: 'range', min: 10, max: 200, step: 5,
+      show: s => s.scroll_animate && s.scroll_scale },
+    { key: 'scroll_scale_to', label: t('Scala finale (%)'), type: 'range', min: 50, max: 1000, step: 25,
+      show: s => s.scroll_animate && s.scroll_scale },
+    { key: 'scroll_opacity', label: t('Opacità'), type: 'toggle',
+      show: s => s.scroll_animate },
+    { key: 'scroll_opacity_from', label: t('Opacità iniziale (%)'), type: 'range', min: 0, max: 100, step: 5,
+      show: s => s.scroll_animate && s.scroll_opacity },
+    { key: 'scroll_opacity_to', label: t('Opacità finale (%)'), type: 'range', min: 0, max: 100, step: 5,
+      show: s => s.scroll_animate && s.scroll_opacity },
+    { key: 'scroll_blur', label: t('Sfocatura'), type: 'toggle',
+      show: s => s.scroll_animate },
+    { key: 'scroll_blur_from', label: t('Sfocatura iniziale (px)'), type: 'range', min: 0, max: 30, step: 1,
+      show: s => s.scroll_animate && s.scroll_blur },
+    { key: 'scroll_blur_to', label: t('Sfocatura finale (px)'), type: 'range', min: 0, max: 30, step: 1,
+      show: s => s.scroll_animate && s.scroll_blur },
+  ],
+
+  styleFields: [
+    { type: 'separator', label: t('Preset stilistico') },
+    { key: 'preset', label: t('Stile'), type: 'select', options: [
+      { value: 'modern-clean',    label: t('Modern Clean') },
+      { value: 'minimal-mono',    label: t('Minimal Mono') },
+      { value: 'magazine-bold',   label: t('Magazine Bold') },
+      { value: 'editorial-serif', label: t('Editorial Serif') },
+      { value: 'compact-inline',  label: t('Compact Inline') },
+      { value: 'glass-frosted',   label: t('Glass Frosted') },
+      { value: 'neon-glow',       label: t('Neon Glow') },
+      { value: 'brutalist-stamp', label: t('Brutalist Stamp') },
+      { value: 'gradient-aurora', label: t('Gradient Aurora') },
+      { value: 'sticker-fun',     label: t('Sticker Fun') },
+      { value: 'retro-terminal',  label: t('Retro Terminal') },
+      { value: 'tilt-3d',         label: t('3D Tilt') },
+      { value: 'custom',          label: t('Personalizzato') },
+    ] },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
+
+    ...textEffectsFields([ { value: 'text', label: t('Solo Testo') } ]),
+
+    { type: 'separator', label: t('Tipografia') },
+    { type: 'typography', label: t('Testo'),
+      presetKey: 'typography_preset',
+      responsiveKeys: ['size', 'letterSpacing'],
+      keys: {
+        family:        'font_family',
+        size:          'font_size',
+        weight:        'font_weight',
+        transform:     'text_transform',
+        letterSpacing: 'letter_spacing',
+        color:         'text_fill',
+      },
+      sizeMin: 16, sizeMax: 300, sizeStep: 5,
+    },
+    { key: 'line_height', label: t('Altezza riga'), type: 'select', options: [
       { value: '0.8', label: '0.8' },
       { value: '0.9', label: '0.9' },
       { value: '1', label: '1' },
@@ -92,89 +159,27 @@ export default {
       { value: '1.2', label: '1.2' },
       { value: '1.4', label: '1.4' },
     ]},
-    { key: 'text_align', label: 'Allineamento testo', type: 'select', options: [
-      { value: 'left', label: 'Sinistra' },
-      { value: 'center', label: 'Centro' },
-      { value: 'right', label: 'Destra' },
+    { key: 'text_align', label: t('Allineamento testo'), type: 'select', options: [
+      { value: 'left', label: t('Sinistra') },
+      { value: 'center', label: t('Centro') },
+      { value: 'right', label: t('Destra') },
     ]},
 
-    // ── Video ──
-    { type: 'separator', label: 'Video' },
-    { key: 'video_url', label: 'Video (MP4/WebM)', type: 'media' },
-    { key: 'video_poster', label: 'Immagine poster', type: 'image' },
-    { key: 'video_opacity', label: 'Opacità video (%)', type: 'range', min: 10, max: 100, step: 5 },
-
-    // ── Layout ──
-    { type: 'separator', label: 'Layout' },
-    { key: 'min_height', label: 'Altezza minima (es. 100vh, 600px)', type: 'text' },
-    { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 200 },
-    { key: 'vertical_align', label: 'Allineamento verticale', type: 'select', options: [
-      { value: 'top', label: 'Alto' },
-      { value: 'center', label: 'Centro' },
-      { value: 'bottom', label: 'Basso' },
+    { type: 'separator', label: t('Layout') },
+    { key: 'min_height', label: t('Altezza minima (es. 100vh, 600px)'), type: 'text' },
+    { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 200 },
+    { key: 'vertical_align', label: t('Allineamento verticale'), type: 'select', options: [
+      { value: 'top', label: t('Alto') },
+      { value: 'center', label: t('Centro') },
+      { value: 'bottom', label: t('Basso') },
     ]},
-    { key: 'bg_color', label: 'Colore sfondo', type: 'color' },
+    { key: 'bg_color', label: t('Colore sfondo'), type: 'color' },
 
-    // ── Maschera ──
-    { type: 'separator', label: 'Maschera' },
-    { key: 'mask_mode', label: 'Modalità maschera', type: 'select', options: [
-      { value: 'text_reveals_video', label: 'Testo rivela il video' },
-      { value: 'video_behind_text', label: 'Video dietro al testo (clip)' },
-      { value: 'blend', label: 'Blend mode' },
-    ]},
-    { key: 'blend_mode', label: 'Blend mode', type: 'select', options: [
-      { value: 'normal', label: 'Normal' },
-      { value: 'multiply', label: 'Multiply' },
-      { value: 'screen', label: 'Screen' },
-      { value: 'overlay', label: 'Overlay' },
-      { value: 'darken', label: 'Darken' },
-      { value: 'lighten', label: 'Lighten' },
-      { value: 'color-dodge', label: 'Color Dodge' },
-      { value: 'color-burn', label: 'Color Burn' },
-      { value: 'hard-light', label: 'Hard Light' },
-      { value: 'soft-light', label: 'Soft Light' },
-      { value: 'difference', label: 'Difference' },
-      { value: 'exclusion', label: 'Exclusion' },
-    ], show: s => s.mask_mode === 'blend' },
-    { key: 'text_fill', label: 'Colore testo (blend)', type: 'color',
-      show: s => s.mask_mode === 'blend' },
-
-    // ── Animazione scroll ──
-    { type: 'separator', label: 'Animazione Scroll' },
-    { key: 'scroll_animate', label: 'Animazione su scroll', type: 'toggle' },
-    { key: 'scroll_start', label: 'Inizio animazione (% viewport)', type: 'range', min: 0, max: 100, step: 5,
-      show: s => s.scroll_animate },
-    { key: 'scroll_end', label: 'Fine animazione (% viewport)', type: 'range', min: 0, max: 100, step: 5,
-      show: s => s.scroll_animate },
-
-    { key: 'scroll_scale', label: 'Scala', type: 'toggle',
-      show: s => s.scroll_animate },
-    { key: 'scroll_scale_from', label: 'Scala iniziale (%)', type: 'range', min: 10, max: 200, step: 5,
-      show: s => s.scroll_animate && s.scroll_scale },
-    { key: 'scroll_scale_to', label: 'Scala finale (%)', type: 'range', min: 50, max: 1000, step: 25,
-      show: s => s.scroll_animate && s.scroll_scale },
-
-    { key: 'scroll_opacity', label: 'Opacità', type: 'toggle',
-      show: s => s.scroll_animate },
-    { key: 'scroll_opacity_from', label: 'Opacità iniziale (%)', type: 'range', min: 0, max: 100, step: 5,
-      show: s => s.scroll_animate && s.scroll_opacity },
-    { key: 'scroll_opacity_to', label: 'Opacità finale (%)', type: 'range', min: 0, max: 100, step: 5,
-      show: s => s.scroll_animate && s.scroll_opacity },
-
-    { key: 'scroll_blur', label: 'Sfocatura', type: 'toggle',
-      show: s => s.scroll_animate },
-    { key: 'scroll_blur_from', label: 'Sfocatura iniziale (px)', type: 'range', min: 0, max: 30, step: 1,
-      show: s => s.scroll_animate && s.scroll_blur },
-    { key: 'scroll_blur_to', label: 'Sfocatura finale (px)', type: 'range', min: 0, max: 30, step: 1,
-      show: s => s.scroll_animate && s.scroll_blur },
-
-    // ── Overlay ──
-    { type: 'separator', label: 'Overlay' },
-    { key: 'overlay_color', label: 'Colore overlay', type: 'color' },
-    { key: 'overlay_opacity', label: 'Opacità overlay (%)', type: 'range', min: 0, max: 100, step: 5 },
+    { type: 'separator', label: t('Overlay') },
+    { key: 'overlay_color', label: t('Colore overlay'), type: 'color' },
+    { key: 'overlay_opacity', label: t('Opacità overlay (%)'), type: 'range', min: 0, max: 100, step: 5 },
 
     ...shadowField,
-    ...textEffectsFields([ { value: 'text', label: 'Solo Testo' } ]),
     ...borderFields(),
   ],
 };

@@ -50,7 +50,7 @@
         <span class="olo-svresults-preview-arrow">&rarr;</span>
       </template>
       <template v-else-if="settings.pagination_style === 'loadmore'">
-        <span class="olo-svresults-preview-loadmore">Carica altro</span>
+        <span class="olo-svresults-preview-loadmore">{{ t('Carica altro') }}</span>
       </template>
       <template v-else>
         <span class="olo-svresults-preview-num active">1</span>

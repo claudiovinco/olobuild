@@ -303,14 +303,8 @@ class Olo_Seo_Redirects {
      * ═══════════════════════════════════════════════════ */
 
     public function add_menu() {
-        add_submenu_page(
-            'olobuild',
-            __( 'Redirect & 404', 'olobuild' ),
-            __( 'Redirect & 404', 'olobuild' ),
-            'manage_options',
-            'olo-redirects',
-            [ $this, 'render_page' ]
-        );
+        // v1.0.31 — pagina migrata in ?page=olobuilder-settings&tab=redirects
+        // La classe resta attiva per il middleware redirect 301/302/410 e il log 404.
     }
 
     public function enqueue_admin_assets( $hook ) {
@@ -332,24 +326,28 @@ class Olo_Seo_Redirects {
         $redirect_count = intval( $wpdb->get_var( "SELECT COUNT(*) FROM {$this->table_redirects()}" ) );
         $monitor_count  = intval( $wpdb->get_var( "SELECT COUNT(*) FROM {$this->table_404_log()}" ) );
 
+        $subnav = [
+            [ 'slug' => 'redirects', 'label' => __( 'Redirect', 'olobuild' ),    'count' => (int) $redirect_count, 'href' => admin_url( 'admin.php?page=olo-redirects&tab=redirects' ) ],
+            [ 'slug' => 'monitor',   'label' => __( 'Monitor 404', 'olobuild' ), 'count' => (int) $monitor_count,  'href' => admin_url( 'admin.php?page=olo-redirects&tab=monitor' ) ],
+            [ 'slug' => 'indexnow',  'label' => 'IndexNow',                      'href' => admin_url( 'admin.php?page=olo-redirects&tab=indexnow' ) ],
+        ];
+        $sub_text = $monitor_count > 0
+            ? sprintf( /* translators: 1: redirects count, 2: 404 count */ __( '%1$s redirect attivi · %2$s pagine 404 da gestire', 'olobuild' ),
+                '<b>' . (int) $redirect_count . '</b>', '<b>' . (int) $monitor_count . '</b>' )
+            : sprintf( /* translators: %s: redirects count */ __( '%s redirect attivi · nessun 404 da gestire', 'olobuild' ),
+                '<b>' . (int) $redirect_count . '</b>' );
         ?>
-        <?php Olo_Builder::page_shell_open( 'Redirect & 404' ); ?>
+        <?php Olo_Builder::cockpit_shell_open( '<b>' . esc_html__( 'Redirect & 404', 'olobuild' ) . '</b>' ); ?>
+        <main class="olo-cockpit-main olo-cockpit-legacy">
+            <?php
+            echo Olo_Builder::cockpit_page_head( [
+                'title' => __( 'Redirect & 404', 'olobuild' ),
+                'sub'   => $sub_text,
+            ] );
+            echo Olo_Builder::cockpit_subnav( $subnav, $active_tab );
+            ?>
 
-            <div class="olo-admin-tabs">
-                <a href="<?php echo esc_url( admin_url( 'admin.php?page=olo-redirects&tab=redirects' ) ); ?>" class="olo-admin-tab <?php echo $active_tab === 'redirects' ? 'active' : ''; ?>">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/><polyline points="9 21 3 21 3 15"/></svg>
-                    Redirect (<?php echo $redirect_count; ?>)
-                </a>
-                <a href="<?php echo esc_url( admin_url( 'admin.php?page=olo-redirects&tab=monitor' ) ); ?>" class="olo-admin-tab <?php echo $active_tab === 'monitor' ? 'active' : ''; ?>">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                    Monitor 404 (<?php echo $monitor_count; ?>)
-                </a>
-                <a href="<?php echo esc_url( admin_url( 'admin.php?page=olo-redirects&tab=indexnow' ) ); ?>" class="olo-admin-tab <?php echo $active_tab === 'indexnow' ? 'active' : ''; ?>">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-                    IndexNow
-                </a>
-            </div>
-
+            <div style="margin-top:16px">
             <?php
             if ( $active_tab === 'redirects' ) {
                 $this->render_tab_redirects();
@@ -359,7 +357,9 @@ class Olo_Seo_Redirects {
                 $this->render_tab_indexnow();
             }
             ?>
-        <?php Olo_Builder::page_shell_close(); ?>
+            </div>
+        </main>
+        <?php Olo_Builder::cockpit_shell_close(); ?>
         <?php
     }
 
@@ -376,15 +376,15 @@ class Olo_Seo_Redirects {
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                 </div>
                 <div>
-                    <h3>Aggiungi Redirect</h3>
-                    <p>Prefisso <code>~</code> per regex. Es: <code>~/vecchio/(.*)</code> &rarr; <code>/nuovo/$1</code></p>
+                    <h3><?php esc_html_e( 'Aggiungi Redirect', 'olobuild' ); ?></h3>
+                    <p><?php echo wp_kses( __( 'Prefisso <code>~</code> per regex. Es: <code>~/vecchio/(.*)</code> &rarr; <code>/nuovo/$1</code>', 'olobuild' ), [ 'code' => [] ] ); ?></p>
                 </div>
             </div>
             <div class="olo-card-body" id="olo-new-redirect-form">
                 <div class="olo-field-row">
                     <div class="olo-field-info">
-                        <label>Da URL</label>
-                        <span class="olo-field-hint">Percorso relativo o regex con prefisso ~</span>
+                        <label><?php esc_html_e( 'Da URL', 'olobuild' ); ?></label>
+                        <span class="olo-field-hint"><?php esc_html_e( 'Percorso relativo o regex con prefisso ~', 'olobuild' ); ?></span>
                     </div>
                     <div class="olo-field-input-wrap">
                         <input type="text" id="olo-redir-from" class="olo-field-input" placeholder="/vecchio-percorso/">
@@ -392,8 +392,8 @@ class Olo_Seo_Redirects {
                 </div>
                 <div class="olo-field-row">
                     <div class="olo-field-info">
-                        <label>A URL</label>
-                        <span class="olo-field-hint">Percorso relativo o URL assoluto</span>
+                        <label><?php esc_html_e( 'A URL', 'olobuild' ); ?></label>
+                        <span class="olo-field-hint"><?php esc_html_e( 'Percorso relativo o URL assoluto', 'olobuild' ); ?></span>
                     </div>
                     <div class="olo-field-input-wrap">
                         <input type="text" id="olo-redir-to" class="olo-field-input" placeholder="/nuovo-percorso/">
@@ -401,21 +401,21 @@ class Olo_Seo_Redirects {
                 </div>
                 <div class="olo-field-row">
                     <div class="olo-field-info">
-                        <label>Tipo</label>
+                        <label><?php esc_html_e( 'Tipo', 'olobuild' ); ?></label>
                     </div>
                     <div class="olo-field-input-wrap">
                         <select id="olo-redir-type" class="olo-field-input">
-                            <option value="301">301 &mdash; Permanente (consigliato)</option>
-                            <option value="302">302 &mdash; Temporaneo</option>
-                            <option value="307">307 &mdash; Temporaneo (strict)</option>
-                            <option value="410">410 &mdash; Risorsa rimossa (Gone)</option>
+                            <option value="301"><?php esc_html_e( '301 — Permanente (consigliato)', 'olobuild' ); ?></option>
+                            <option value="302"><?php esc_html_e( '302 — Temporaneo', 'olobuild' ); ?></option>
+                            <option value="307"><?php esc_html_e( '307 — Temporaneo (strict)', 'olobuild' ); ?></option>
+                            <option value="410"><?php esc_html_e( '410 — Risorsa rimossa (Gone)', 'olobuild' ); ?></option>
                         </select>
                     </div>
                 </div>
                 <div class="olo-actions" style="margin-top:16px;">
                     <button type="button" class="olo-btn-save" onclick="oloSaveRedirect()">
                         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                        Aggiungi Redirect
+                        <?php esc_html_e( 'Aggiungi Redirect', 'olobuild' ); ?>
                     </button>
                 </div>
             </div>

@@ -1,11 +1,21 @@
 
-import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared.js';
+import { t } from '@/i18n';
+
+/**
+ * Tile ShareButtons — split CONTENUTO/STILE.
+ *   fields[]      → buttons (platform + custom_label)
+ *   styleFields[] → preset, bg, typo, stile (icon-only/text/etc.), size, gap, alignment, colore icona+hover, sfondo, border
+ */
 export default {
   type: 'sharebuttons',
-  name: 'Condivisione',
+  name: t('Condivisione'),
   icon: 'dashicons-share-alt',
   category: 'marketing',
   defaults: {
+    bg: { type: 'none' },
+    typography_preset: '',
+    preset: 'custom',
     buttons: [
       { id: 'sh-1', platform: 'facebook',  custom_label: '' },
       { id: 'sh-2', platform: 'twitter',   custom_label: '' },
@@ -25,37 +35,62 @@ export default {
     border_hover_duration: 300,
     ...borderEffectDefaults,
   },
+
   fields: [
-    { key: 'buttons', label: 'Pulsanti', type: 'content-items',
+    { key: 'buttons', label: t('Pulsanti'), type: 'content-items',
       itemFields: [
-        { key: 'platform', label: 'Piattaforma', type: 'select', options: [
-          { value: 'facebook',  label: 'Facebook' },
-          { value: 'twitter',   label: 'X / Twitter' },
-          { value: 'whatsapp',  label: 'WhatsApp' },
-          { value: 'linkedin',  label: 'LinkedIn' },
-          { value: 'email',     label: 'Email' },
-          { value: 'copylink',  label: 'Copia link' },
-          { value: 'telegram',  label: 'Telegram' },
-          { value: 'pinterest', label: 'Pinterest' },
+        { key: 'platform', label: t('Piattaforma'), type: 'select', options: [
+          { value: 'facebook',  label: t('Facebook') },
+          { value: 'twitter',   label: t('X / Twitter') },
+          { value: 'whatsapp',  label: t('WhatsApp') },
+          { value: 'linkedin',  label: t('LinkedIn') },
+          { value: 'email',     label: t('Email') },
+          { value: 'copylink',  label: t('Copia link') },
+          { value: 'telegram',  label: t('Telegram') },
+          { value: 'pinterest', label: t('Pinterest') },
         ]},
-        { key: 'custom_label', label: 'Etichetta personalizzata', type: 'text' },
+        { key: 'custom_label', label: t('Etichetta personalizzata'), type: 'text' },
       ],
     },
-    { key: 'style', label: 'Stile', type: 'select', options: [
-      { value: 'icon-only',  label: 'Solo icona' },
-      { value: 'icon-text',  label: 'Icona + testo' },
-      { value: 'text-only',  label: 'Solo testo' },
+  ],
+
+  styleFields: [
+    { type: 'separator', label: t('Preset stilistico') },
+    { key: 'preset', label: t('Stile'), type: 'select', options: [
+      { value: 'modern-pills',    label: t('Modern Pills') },
+      { value: 'icon-only',       label: t('Icon Only') },
+      { value: 'minimal-line',    label: t('Minimal Line') },
+      { value: 'circle-icons',    label: t('Circle Icons') },
+      { value: 'magazine-row',    label: t('Magazine Row') },
+      { value: 'glass-pills',     label: t('Glass Pills') },
+      { value: 'neon-glow',       label: t('Neon Glow') },
+      { value: 'brutalist-block', label: t('Brutalist Block') },
+      { value: 'gradient-pills',  label: t('Gradient Pills') },
+      { value: 'sticker-fun',     label: t('Sticker Fun') },
+      { value: 'retro-vhs',       label: t('Retro VHS') },
+      { value: 'tilt-3d',         label: t('3D Tilt') },
+      { value: 'custom',          label: t('Personalizzato') },
     ]},
-    { key: 'size', label: 'Dimensione (px)', type: 'range', min: 24, max: 64, step: 2 },
-    { key: 'gap', label: 'Gap (px)', type: 'range', min: 4, max: 24, step: 2 },
-    { key: 'alignment', label: 'Allineamento', type: 'select', options: [
-      { value: 'left',   label: 'Sinistra' },
-      { value: 'center', label: 'Centro' },
-      { value: 'right',  label: 'Destra' },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
+
+    { type: 'separator', label: t('Aspetto pulsanti') },
+    { key: 'style', label: t('Stile'), type: 'select', options: [
+      { value: 'icon-only',  label: t('Solo icona') },
+      { value: 'icon-text',  label: t('Icona + testo') },
+      { value: 'text-only',  label: t('Solo testo') },
     ]},
-    { key: 'icon_color', label: 'Colore icona', type: 'color' },
-    { key: 'icon_hover_color', label: 'Colore icona hover', type: 'color' },
-    { key: 'bg_color', label: 'Colore sfondo', type: 'color' },
+    { key: 'size', label: t('Dimensione (px)'), type: 'range', min: 24, max: 64, step: 2 },
+    { key: 'gap', label: t('Gap (px)'), type: 'range', min: 4, max: 24, step: 2 },
+    { key: 'alignment', label: t('Allineamento'), type: 'select', options: [
+      { value: 'left',   label: t('Sinistra') },
+      { value: 'center', label: t('Centro') },
+      { value: 'right',  label: t('Destra') },
+    ]},
+
+    { type: 'separator', label: t('Colori') },
+    withHover({ key: 'icon_color', label: t('Colore icona'), type: 'color' }, { hoverKey: 'icon_hover_color' }),
+    { key: 'bg_color', label: t('Colore sfondo'), type: 'color' },
+
     ...borderFields(),
   ],
 };

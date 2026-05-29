@@ -7,6 +7,7 @@
 </template>
 
 <script setup>
+import { computed } from 'vue';
 import { t } from '@/i18n';
 defineProps({ settings: { type: Object, default: () => ({}) } });
 const wrapStyle = { background: 'linear-gradient(135deg,#1e3a5f 0%,#1e87f0 100%)', borderRadius: '12px', padding: '30px', textAlign: 'center' };

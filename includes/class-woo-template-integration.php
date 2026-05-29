@@ -191,14 +191,8 @@ class Olo_Woo_Template_Integration {
      * Admin page for assigning WooCommerce templates.
      */
     public function add_admin_page() {
-        add_submenu_page(
-            'olobuild',
-            'WooCommerce Templates',
-            'WooCommerce',
-            'manage_options',
-            'olo-woo-templates',
-            [ $this, 'render_admin_page' ]
-        );
+        // v1.0.31 — pagina migrata in ?page=olobuilder-settings&tab=wootemplates
+        // La classe resta attiva per il hook woocommerce_locate_template che sostituisce i template Woo.
     }
 
     public function render_admin_page() {
@@ -221,10 +215,27 @@ class Olo_Woo_Template_Integration {
             'myaccount'       => '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
         ];
 
+        // Conta override attivi (template Olobuild assegnati alle pagine WC)
+        $woo_overrides = 0;
+        foreach ( $this->page_types as $key => $info ) {
+            if ( (int) get_option( "olo_woo_tpl_{$key}", 0 ) > 0 ) $woo_overrides++;
+        }
         ?>
-        <?php Olo_Builder::page_shell_open( 'WooCommerce' ); ?>
+        <?php Olo_Builder::cockpit_shell_open( '<b>' . esc_html__( 'WooCommerce', 'olobuild' ) . '</b>' ); ?>
+        <main class="olo-cockpit-main olo-cockpit-legacy">
+            <?php
+            echo Olo_Builder::cockpit_page_head( [
+                'title' => __( 'Template WooCommerce', 'olobuild' ),
+                'sub'   => sprintf(
+                    /* translators: 1: overrides count, 2: total page types */
+                    __( 'Override Olobuild attivi su %1$s/%2$s pagine WooCommerce (prodotto, archivio, carrello, checkout, mio account).', 'olobuild' ),
+                    '<b>' . (int) $woo_overrides . '</b>',
+                    (int) count( $this->page_types )
+                ),
+            ] );
+            ?>
 
-            <div id="woo-msg-box"></div>
+            <div id="woo-msg-box" style="margin-top:16px"></div>
 
             <div class="olo-card">
                 <div class="olo-card-head">
@@ -267,7 +278,8 @@ class Olo_Woo_Template_Integration {
                     Salva assegnazioni
                 </button>
             </div>
-        <?php Olo_Builder::page_shell_close(); ?>
+        </main>
+        <?php Olo_Builder::cockpit_shell_close(); ?>
 
         <script>
         (function(){

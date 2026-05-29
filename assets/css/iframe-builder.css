@@ -2,6 +2,22 @@
  * Olobuild iframe builder — overlay styles for live preview canvas.
  */
 
+/* No user text selection inside the builder iframe: editing happens via
+   double-click → inline editor, never via native selection. Prevents
+   confusing text highlight when dragging tiles over content. */
+body {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+body.olo-preview-mode,
+[contenteditable="true"],
+[contenteditable="true"] * {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  user-select: text;
+}
+
 /* Tile hover outline */
 [data-olo-tile-id] {
   cursor: pointer;
@@ -198,6 +214,21 @@ footer.olo-site-footer {
   height: 28px;
   pointer-events: auto;
 }
+/* Cursor SVG vettoriali in stile Lucide — linee curve pulite tipo cursor pointer
+   del SO Windows (manina che indica) ma con stato esplicito open/closed per drag.
+   32×32, hotspot al centro del palmo (16, 16). Fill bianco + stroke nero per
+   visibilità su qualunque sfondo. */
+:root {
+  --olo-cursor-grab: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDgxIDEwNi42NSI+PHBhdGggZmlsbD0iI2ZmZiIgc3Ryb2tlPSIjMWQxZDFiIiBzdHJva2UtbWl0ZXJsaW1pdD0iMTAiIHN0cm9rZS13aWR0aD0iMyIgZD0iTTc1LjIyLDkwLjM3YzIuODUtMTIuOS0uMy01NS42NSwwLTY0LjA1cy0xMS4yNS0xMS41NS0xMS4yNSwxLjJ2MjMuMVYxNS44MmMwLTguODUtMTEuNTUtOC41NS0xMS41NSwwdjMwLjNWMTIuODJjMC05Ljk4LTEyLjQ1LTEwLjM1LTEyLjQ1LDB2MzYuM3MtLjYtMjEuNi0uNi0zMC4xNS0xMC44LTYtMTAuOCwxLjA1djM3Ljk1YzAsNC4yLTMuNiw3LjgtNy4wNSwyLjQtMy40NS01LjQtMi4yNS0zLjMtNC45NS02LjE1cy0xNC4yNSwxLjUtOS4zLDguNTVjNC45NSw3LjA1LDE5Ljk1LDI2LjI1LDIyLjUsMjkuN3M2LjAzLDguODUsMTQuNzIsOS4zLDI3LjU4LDIuODUsMzAuNzMtMTEuNFoiLz48L3N2Zz4K") 12 16;
+  --olo-cursor-grabbing: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDgxIDEwNi42NSI+PHBhdGggZmlsbD0iI2ZmZiIgc3Ryb2tlPSIjMWQxZDFiIiBzdHJva2UtbWl0ZXJsaW1pdD0iMTAiIHN0cm9rZS13aWR0aD0iMyIgZD0iTTc1LjIyLDkwLjM3YzIuODUtMTIuOS0uMy00MS4yNSwwLTQ5LjY1cy0xMS4yNS0xMS41NS0xMS4yNSwxLjIsMCw4LjcsMCw4Ljd2LTIwLjRjMC04Ljg1LTExLjU1LTguNTUtMTEuNTUsMHYxNS45LTE4LjljMC05Ljk4LTEyLjQ1LTEwLjM1LTEyLjQ1LDB2MjEuOXMtLjYtNy4yLS42LTE1Ljc1LTEwLjgtNi0xMC44LDEuMDUtLjM5LDE5LjM3LDAsMjMuNTVjMi4zNiwyNS41LTMuMzYsNS43NC0xLjgsMS40MiwyLjE4LTYuMDItMS4yNC04LjY2LTMuNDktOC43OC0zLjkyLS4yLTcuNjUsNC44NC03Ljc2LDE2Ljk5LS4wOCw4LjYxLDEwLjczLDE4LjI2LDEzLjI3LDIxLjcxczcuMDEsMTIsMTUuNjksMTIuNDUsMjcuNTgsMi44NSwzMC43My0xMS40WiIvPjwvc3ZnPgo=") 12 16;
+}
+
+/* Override globale dentro l'iframe builder: qualunque elemento con cursor: grab/grabbing
+   ottiene l'SVG vettoriale. Il selettore [style*=...] copre anche stili inline applicati
+   da JS (gripDragging, edge-hotzone). */
+[style*="cursor: grab"], [style*="cursor:grab"] { cursor: var(--olo-cursor-grab), grab !important; }
+[style*="cursor: grabbing"], [style*="cursor:grabbing"] { cursor: var(--olo-cursor-grabbing), grabbing !important; }
+
 /* Grip handle — 6-dot drag icon, standard UI */
 .olo-iframe-tb-grip {
   display: flex;
@@ -205,7 +236,7 @@ footer.olo-site-footer {
   justify-content: center;
   width: 22px;
   height: 26px;
-  cursor: grab;
+  cursor: var(--olo-cursor-grab), grab;
   opacity: 0.6;
   transition: opacity 0.15s, color 0.15s, background 0.15s;
   color: #64748b;
@@ -220,8 +251,15 @@ footer.olo-site-footer {
   background: rgba(99, 102, 241, 0.08);
 }
 .olo-iframe-tb-grip:active {
-  cursor: grabbing;
+  cursor: var(--olo-cursor-grabbing), grabbing;
   background: rgba(99, 102, 241, 0.15);
+}
+
+/* Cursor di drag globale dell'iframe builder durante un trascinamento attivo
+   (impostato via classe sul body o sul wrapper). */
+body.olo-dragging,
+body.olo-dragging * {
+  cursor: var(--olo-cursor-grabbing), grabbing !important;
 }
 
 /* Drag ghost */
@@ -342,7 +380,122 @@ body.olo-preview-mode .olo-iframe-toolbar {
   align-items: center;
   justify-content: center;
   min-height: 60vh;
-  color: #9CA3AF;
+  padding: 48px 24px;
   font-family: system-ui, -apple-system, sans-serif;
-  font-size: 14px;
+}
+.olo-iframe-empty-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  max-width: 480px;
+  text-align: center;
+  padding: 40px 32px;
+  border: 1px dashed #D1D5DB;
+  border-radius: 14px;
+  background: #FAFAFA;
+}
+.olo-iframe-empty-icon {
+  color: #9CA3AF;
+  margin-bottom: 4px;
+}
+.olo-iframe-empty-title {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 600;
+  color: #374151;
+  line-height: 1.3;
+}
+.olo-iframe-empty-text {
+  margin: 0;
+  font-size: 13px;
+  color: #6B7280;
+  line-height: 1.5;
+}
+.olo-iframe-empty-actions {
+  display: flex;
+  gap: 14px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.olo-iframe-empty-btn {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 140px;
+  padding: 18px 20px;
+  background: #fff;
+  border: 1px solid #E5E7EB;
+  border-radius: 12px;
+  color: #374151;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease, color 0.15s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+.olo-iframe-empty-btn:hover {
+  border-color: var(--olo-color-primary, #6366F1);
+  color: var(--olo-color-primary, #6366F1);
+  background: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.12);
+}
+.olo-iframe-empty-btn:active {
+  transform: translateY(0);
+}
+.olo-iframe-empty-btn:focus-visible {
+  outline: 2px solid var(--olo-color-primary, #6366F1);
+  outline-offset: 2px;
+}
+.olo-iframe-empty-btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  background: #F3F4F6;
+  color: #6B7280;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+.olo-iframe-empty-btn:hover .olo-iframe-empty-btn-icon {
+  background: rgba(99, 102, 241, 0.1);
+  color: var(--olo-color-primary, #6366F1);
+}
+.olo-iframe-empty-btn-label {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+/* ─────────────────────────────────────────────────────────
+   Empty container highlight in builder canvas.
+   Server-side il renderer aggiunge data-olo-empty="1" sui contenitori
+   strutturali (section/row/column/inner-*) che non contengono alcun
+   tile-leaf nel sottoalbero. Senza questo CSS collasserebbero a 0 e
+   l'utente non vedrebbe nulla nel canvas anche con tante righe vuote.
+   ───────────────────────────────────────────────────────── */
+[data-olo-empty="1"][data-olo-tile-type="column"],
+[data-olo-empty="1"][data-olo-tile-type="inner-column"] {
+  min-height: 30px !important;
+  outline: 1px dashed rgba(99, 102, 241, 0.5);
+  outline-offset: -1px;
+}
+[data-olo-empty="1"][data-olo-tile-type="row"],
+[data-olo-empty="1"][data-olo-tile-type="inner-columns"] {
+  min-height: 30px !important;
+}
+[data-olo-empty="1"][data-olo-tile-type="section"] {
+  min-height: 30px !important;
+}
+/* Preview mode: niente outline né min-height forzato */
+body.olo-preview-mode [data-olo-empty="1"] {
+  min-height: 0 !important;
+  outline: none !important;
+  background-color: transparent !important;
 }

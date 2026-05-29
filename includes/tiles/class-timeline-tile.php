@@ -16,6 +16,23 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
             [ 'title' => 'Secondo evento', 'description' => 'Descrizione del secondo evento.', 'date' => '2025', 'image' => '', 'icon' => 'check', 'icon_color' => '' ],
             [ 'title' => 'Terzo evento', 'description' => 'Descrizione del terzo evento.', 'date' => '2026', 'image' => '', 'icon' => 'heart', 'icon_color' => '' ],
         ],
+        'preset'              => 'classic-center',
+        'effect_color'        => '',
+        'effect_intensity'    => 'medium',
+        'effect_speed'        => 0,
+        'wow_disable'           => false,
+        'wow_backdrop_blur'     => 0,
+        'wow_backdrop_saturate' => 100,
+        'wow_border_style'      => 'solid',
+        'wow_font_family'       => 'inherit',
+        'wow_rotation'          => 0,
+        'wow_perspective'       => 0,
+        'wow_tilt_x'            => 0,
+        'wow_glow_pulse'        => false,
+        'wow_title_glow'        => false,
+        'wow_scanlines'         => false,
+
+        'wow_terminal_prompt' => false,
         'layout'              => 'vertical-center',
         'mobile_layout'       => 'vertical-left',
         'line_color'          => '',
@@ -79,6 +96,16 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
 
     public function get_controls() { return []; }
 
+    /**
+     * V3.26.0 — Extra CSS for "audacious" timeline presets.
+     */
+    private function get_preset_extra_css( $preset_id, $sel, $s = [] ) {
+        // @deprecated v1.0.73 — refactor profondo: i preset audaci ora settano direttamente
+        // i field standard tramite TILE_PRESETS in BuilderInspector.vue, e i field wow_* via
+        // build_wow_effects_css(). Nessun !important, ogni proprieta personalizzabile.
+        return '';
+    }
+
     public function render( $settings ) {
         $s     = wp_parse_args( $settings, $this->defaults );
         $items = $this->parse_items( $s['items'] );
@@ -90,10 +117,18 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
 
         $uid    = 'olo-tl-' . wp_rand( 10000, 99999 );
         $layout = $s['layout'] ?: 'vertical-center';
+        $preset_id = $s['preset'] ?? 'classic-center';
 
         ob_start();
 
         $this->render_styles( $uid, $s, $layout, $count );
+
+        // Append preset extra CSS if it's an audacious preset
+        $preset_css = $this->get_preset_extra_css( $preset_id, '.' . $uid, $s );
+        $preset_css .= $this->build_wow_effects_css( $s, '.' . $uid, '.olo-timeline-title' );
+        if ( $preset_css ) {
+            echo '<style>' . $preset_css . '</style>';
+        }
 
         if ( $layout === 'horizontal' ) {
             $this->render_horizontal( $uid, $items, $s );
@@ -730,8 +765,9 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
         if ( $anim !== 'none' ) {
             $scrollspy = ' uk-scrollspy="cls: olo-tl-visible; target: .olo-tl-item; delay: ' . $stagger . '; repeat: false"';
         }
+        $preset_class = 'olo-tl--preset-' . esc_attr( $s['preset'] ?? 'classic-center' );
         ?>
-        <div class="olo-timeline <?php echo esc_attr( $uid ); ?>"<?php echo $scrollspy; ?>>
+        <div class="olo-timeline <?php echo $preset_class; ?> <?php echo esc_attr( $uid ); ?>"<?php echo $scrollspy; ?>>
             <div class="olo-tl-line"></div>
             <?php if ( $progress ) : ?>
             <div class="olo-tl-progress" data-olo-progress></div>
@@ -866,8 +902,9 @@ class Olo_Timeline_Tile extends Olo_Tile_Base {
         if ( $anim !== 'none' ) {
             $scrollspy = ' uk-scrollspy="cls: olo-tl-visible; target: .olo-tl-item; delay: ' . $stagger . '; repeat: false"';
         }
+        $preset_class = 'olo-tl--preset-' . esc_attr( $s['preset'] ?? 'classic-center' );
         ?>
-        <div class="olo-timeline <?php echo esc_attr( $uid ); ?>"<?php echo $scrollspy; ?>>
+        <div class="olo-timeline <?php echo $preset_class; ?> <?php echo esc_attr( $uid ); ?>"<?php echo $scrollspy; ?>>
             <!-- Desktop horizontal -->
             <div class="olo-tl-h-desktop olo-tl-h-wrap">
                 <button class="olo-tl-h-arrow olo-tl-h-arrow--prev" data-olo-prev><?php echo esc_html( olo_t( '&lsaquo;' ) ); ?></button>

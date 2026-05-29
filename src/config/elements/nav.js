@@ -1,17 +1,27 @@
-import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared';
+import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared';
 import { shadowField } from './_shared.js';
+import { t } from '@/i18n';
 
+/**
+ * Tile Nav — split CONTENUTO/STILE (regola universale Olobuild).
+ *   fields[]      → items (label+url+icona), visibilità icone, target link, nofollow
+ *   styleFields[] → preset, bg, typo, direzione, allineamento, stile, indicatore attivo, hover, colori, separatori, padding, gap
+ *   AVANZATE      → meta tecnico
+ */
 export default {
   type: 'nav',
-  name: 'Nav',
+  name: t('Nav'),
   icon: 'dashicons-menu',
   category: 'navigation',
   defaults: {
+    preset: 'custom',
+    bg: { type: 'none' },
+    typography_preset: '',
     items: [
-      { id: 'n-1', title: 'Home', content: '#', tag: 'home' },
-      { id: 'n-2', title: 'Chi siamo', content: '#', tag: 'users' },
-      { id: 'n-3', title: 'Servizi', content: '#', tag: 'settings' },
-      { id: 'n-4', title: 'Contatti', content: '#', tag: 'mail' },
+      { id: 'n-1', title: t('Home'), content: '#', tag: 'home' },
+      { id: 'n-2', title: t('Chi siamo'), content: '#', tag: 'users' },
+      { id: 'n-3', title: t('Servizi'), content: '#', tag: 'settings' },
+      { id: 'n-4', title: t('Contatti'), content: '#', tag: 'mail' },
     ],
     style: 'default',
     direction: 'vertical',
@@ -40,113 +50,126 @@ export default {
     nofollow: false,
     shadow: 'none',
     ...textEffectsDefaults,
+    text_effect_target: 'title',
     border: { ...borderDefault },
     border_hover: { ...borderHoverDefault },
     border_hover_duration: 300,
     ...borderEffectDefaults,
   },
+
+  // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
-    // --- CONTENUTO ---
-    { key: 'items', label: 'Elementi', type: 'content-items', supportsDynamic: true,
+    { key: 'items', label: t('Elementi'), type: 'content-items', supportsDynamic: true,
       itemFields: [
-        { key: 'title', label: 'Etichetta', type: 'text' },
-        { key: 'content', label: 'URL', type: 'text', placeholder: 'https://...' },
-        { key: 'tag', label: 'Icona', type: 'icon' },
+        { key: 'title', label: t('Etichetta'), type: 'text' },
+        { key: 'content', label: t('URL'), type: 'link', placeholder: t('https://...') },
+        { key: 'tag', label: t('Icona'), type: 'icon' },
       ],
-      newItemDefaults: { title: 'Nuovo link', content: '#', tag: '' },
+      newItemDefaults: { title: t('Nuovo link'), content: '#', tag: '' },
       itemLabel: 'Link',
     },
 
-    // --- LAYOUT ---
-    { key: '_section_layout', label: 'LAYOUT', type: 'separator' },
-    { key: 'direction', label: 'Direzione', type: 'select', options: [
-      { value: 'vertical', label: 'Verticale' },
-      { value: 'horizontal', label: 'Orizzontale' },
-    ]},
-    { key: 'alignment', label: 'Allineamento', type: 'select', options: [
-      { value: 'left', label: 'Sinistra' },
-      { value: 'center', label: 'Centro' },
-      { value: 'right', label: 'Destra' },
-      { value: 'stretch', label: 'Espandi' },
-    ]},
-    { key: 'gap', label: 'Gap tra elementi (px)', type: 'range', min: 0, max: 24, step: 2 },
-    { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 32 },
+    { type: 'separator', label: t('Icone') },
+    { key: 'show_icons', label: t('Mostra icone'), type: 'toggle' },
 
-    // --- STILE ---
-    { key: '_section_style', label: 'STILE', type: 'separator' },
-    { key: 'style', label: 'Stile predefinito', type: 'select', options: [
-      { value: 'default', label: 'Predefinito' },
-      { value: 'pill', label: 'Pill' },
-      { value: 'underline', label: 'Sottolineato' },
-      { value: 'boxed', label: 'Riquadro' },
-      { value: 'minimal', label: 'Minimale' },
-    ]},
-    { key: 'active_style', label: 'Indicatore attivo', type: 'select', options: [
-      { value: 'none', label: 'Nessuno' },
-      { value: 'left-border', label: 'Bordo sinistro' },
-      { value: 'bottom-border', label: 'Bordo inferiore' },
-      { value: 'background', label: 'Sfondo' },
-      { value: 'bold', label: 'Grassetto' },
-      { value: 'dot', label: 'Punto' },
-    ]},
-    { key: 'border_radius', label: 'Raggio bordo (px)', type: 'border-radius' },
-    { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
-    { key: 'hover_effect', label: 'Effetto hover', type: 'select', options: [
-      { value: 'none', label: 'Nessuno' },
-      { value: 'slide-bg', label: 'Sfondo slide' },
-      { value: 'underline', label: 'Sottolineatura' },
-      { value: 'lift', label: 'Solleva' },
-    ]},
-
-    // --- TIPOGRAFIA ---
-    { key: '_section_typo', label: 'TIPOGRAFIA', type: 'separator' },
-    { key: 'font_size', label: 'Dimensione testo (px)', type: 'range', min: 11, max: 24, step: 1 },
-    { key: 'font_weight', label: 'Peso font', type: 'select', options: [
-      { value: '300', label: 'Light' },
-      { value: '400', label: 'Regular' },
-      { value: '500', label: 'Medium' },
-      { value: '600', label: 'Semi Bold' },
-      { value: '700', label: 'Bold' },
-    ]},
-    { key: 'text_transform', label: 'Trasformazione', type: 'select', options: [
-      { value: 'none', label: 'Nessuna' },
-      { value: 'uppercase', label: 'Maiuscolo' },
-      { value: 'lowercase', label: 'Minuscolo' },
-      { value: 'capitalize', label: 'Capitalizzato' },
-    ]},
-    { key: 'letter_spacing', label: 'Letter spacing (px)', type: 'range', min: 0, max: 5, step: 0.5 },
-
-    // --- ICONE ---
-    { key: '_section_icons', label: 'ICONE', type: 'separator' },
-    { key: 'show_icons', label: 'Mostra icone', type: 'toggle' },
-    { key: 'icon_position', label: 'Posizione icona', type: 'select', options: [
-      { value: 'left', label: 'Sinistra' },
-      { value: 'right', label: 'Destra' },
-    ], show: s => s.show_icons },
-    { key: 'icon_size', label: 'Dim. icona (px)', type: 'range', min: 12, max: 28, step: 2, show: s => s.show_icons },
-    { key: 'icon_color', label: 'Colore icona', type: 'color', show: s => s.show_icons },
-
-    // --- COLORI ---
-    { key: '_section_colors', label: 'COLORI', type: 'separator' },
-    { key: 'link_color', label: 'Colore link', type: 'color' },
-    { key: 'link_hover_color', label: 'Colore hover', type: 'color' },
-    { key: 'active_color', label: 'Colore attivo', type: 'color' },
-    { key: 'active_bg', label: 'Sfondo attivo', type: 'color' },
-    { key: 'hover_bg', label: 'Sfondo hover', type: 'color' },
-    { key: 'separator', label: 'Mostra separatori', type: 'toggle' },
-    { key: 'separator_color', label: 'Colore separatore', type: 'color', show: s => s.separator },
-
-    // --- LINK ---
-    { key: '_section_link', label: 'LINK', type: 'separator' },
-    { key: 'open_in_new_tab', label: 'Apri in nuova scheda', type: 'toggle' },
+    { type: 'separator', label: t('Comportamento link') },
+    { key: 'open_in_new_tab', label: t('Apri in nuova scheda'), type: 'toggle' },
     { key: 'nofollow', label: 'rel="nofollow"', type: 'toggle' },
+  ],
 
-    ...shadowField,
+  // ─── STILE ─────────────────────────────────────────────────
+  styleFields: [
+    { type: 'separator', label: t('Preset stilistico') },
+    { key: 'preset', label: t('Stile'), type: 'select', options: [
+      { value: 'modern-clean',    label: t('Modern Clean') },
+      { value: 'minimal-mono',    label: t('Minimal Mono') },
+      { value: 'magazine-bold',   label: t('Magazine Bold') },
+      { value: 'editorial-serif', label: t('Editorial Serif') },
+      { value: 'compact-inline',  label: t('Compact Inline') },
+      { value: 'glass-frosted',   label: t('Glass Frosted') },
+      { value: 'neon-glow',       label: t('Neon Glow') },
+      { value: 'brutalist-stamp', label: t('Brutalist Stamp') },
+      { value: 'gradient-aurora', label: t('Gradient Aurora') },
+      { value: 'sticker-fun',     label: t('Sticker Fun') },
+      { value: 'retro-terminal',  label: t('Retro Terminal') },
+      { value: 'tilt-3d',         label: t('3D Tilt') },
+      { value: 'custom',          label: t('Personalizzato') },
+    ] },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
+
+    { type: 'separator', label: t('Layout') },
+    { key: 'direction', label: t('Direzione'), type: 'select', options: [
+      { value: 'vertical', label: t('Verticale') },
+      { value: 'horizontal', label: t('Orizzontale') },
+    ]},
+    { key: 'alignment', label: t('Allineamento'), type: 'select', options: [
+      { value: 'left', label: t('Sinistra') },
+      { value: 'center', label: t('Centro') },
+      { value: 'right', label: t('Destra') },
+      { value: 'stretch', label: t('Espandi') },
+    ]},
+    { key: 'gap', label: t('Gap tra elementi (px)'), type: 'range', min: 0, max: 24, step: 2 },
+    { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 32 },
+
+    { type: 'separator', label: t('Stile voci') },
+    { key: 'style', label: t('Stile predefinito'), type: 'select', options: [
+      { value: 'default', label: t('Predefinito') },
+      { value: 'pill', label: t('Pill') },
+      { value: 'underline', label: t('Sottolineato') },
+      { value: 'boxed', label: t('Riquadro') },
+      { value: 'minimal', label: t('Minimale') },
+    ]},
+    { key: 'active_style', label: t('Indicatore attivo'), type: 'select', options: [
+      { value: 'none', label: t('Nessuno') },
+      { value: 'left-border', label: t('Bordo sinistro') },
+      { value: 'bottom-border', label: t('Bordo inferiore') },
+      { value: 'background', label: t('Sfondo') },
+      { value: 'bold', label: t('Grassetto') },
+      { value: 'dot', label: t('Punto') },
+    ]},
+    withHover({ key: 'border_radius', label: t('Raggio bordo (px)'), type: 'border-radius' }),
+    { key: 'hover_effect', label: t('Effetto hover'), type: 'select', options: [
+      { value: 'none', label: t('Nessuno') },
+      { value: 'slide-bg', label: t('Sfondo slide') },
+      { value: 'underline', label: t('Sottolineatura') },
+      { value: 'lift', label: t('Solleva') },
+    ]},
+
+    { type: 'separator', label: t('Tipografia') },
+    { type: 'typography', label: t('Voci'),
+      presetKey: 'typography_preset',
+      responsiveKeys: ['size'],
+      keys: {
+        size:          'font_size',
+        weight:        'font_weight',
+        transform:     'text_transform',
+        letterSpacing: 'letter_spacing',
+        color:         'link_color',
+        colorHover:    'link_hover_color',
+      },
+      sizeMin: 11, sizeMax: 24, sizeStep: 1,
+    },
+
+    { type: 'separator', label: t('Stile icone') },
+    { key: 'icon_position', label: t('Posizione icona'), type: 'select', options: [
+      { value: 'left', label: t('Sinistra') },
+      { value: 'right', label: t('Destra') },
+    ], show: s => s.show_icons },
+    { key: 'icon_size', label: t('Dim. icona (px)'), type: 'range', min: 12, max: 28, step: 2, show: s => s.show_icons },
+    { key: 'icon_color', label: t('Colore icona'), type: 'color', show: s => s.show_icons },
+
+    { type: 'separator', label: t('Colori') },
+    { key: 'active_color', label: t('Colore attivo'), type: 'color' },
+    withHover({ key: 'active_bg',  label: t('Sfondo attivo'), type: 'color' }, { hoverKey: 'hover_bg' }),
+    { key: 'separator', label: t('Mostra separatori'), type: 'toggle' },
+    { key: 'separator_color', label: t('Colore separatore'), type: 'color', show: s => s.separator },
+
     ...textEffectsFields([
-      { value: 'title', label: 'Solo Titolo' },
-      { value: 'content', label: 'Solo Contenuto' },
-      { value: 'all', label: 'Tutti gli elementi testuali' },
+      { value: 'title', label: t('Solo Titolo') },
+      { value: 'content', label: t('Solo Contenuto') },
+      { value: 'all', label: t('Tutti gli elementi testuali') },
     ]),
+    ...shadowField,
     ...borderFields(),
   ],
 };

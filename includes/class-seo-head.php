@@ -398,6 +398,20 @@ class Olo_Seo_Head {
                 echo '<script type="application/ld+json">' . wp_json_encode( $schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT ) . '</script>' . "\n";
             }
         }
+
+        // 5. JSON-LD custom per-page (textarea utente, validato come JSON parsabile).
+        if ( is_singular() && $post ) {
+            $extra = get_post_meta( $post->ID, '_olo_seo_extra_jsonld', true );
+            if ( is_string( $extra ) && trim( $extra ) !== '' ) {
+                $clean = trim( $extra );
+                // L'utente può aver incluso il wrapping <script> per copia/incolla — lo rimuoviamo.
+                $clean = preg_replace( '#</?script[^>]*>#i', '', $clean );
+                $decoded = json_decode( $clean, true );
+                if ( is_array( $decoded ) ) {
+                    echo '<script type="application/ld+json">' . wp_json_encode( $decoded, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT ) . '</script>' . "\n";
+                }
+            }
+        }
     }
 
     /* ─── Schema generators ─── */

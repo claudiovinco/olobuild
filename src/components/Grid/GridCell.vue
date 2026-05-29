@@ -100,14 +100,41 @@ const cellClasses = computed(() => {
   if (isHiddenInViewport.value) classes.push('olo-grid-cell--hidden-vp');
   const pm = (props.tile.advanced || {}).position_mode;
   if (pm && pm !== 'static' && pm !== 'relative' && !builderStore.cleanMode) classes.push('olo-grid-cell--positioned');
+  // Entrance animation preview nel builder canvas:
+  //   olo-entrance-X applica le keyframe (definite in frontend.css)
+  //   olo-visible le attiva (frontend lo fa via IntersectionObserver, qui sempre)
+  //   Storage: tile.settings.entrance_animation (NON tile.advanced — coerente con PHP renderer)
+  const entrance = props.tile.settings?.entrance_animation;
+  if (entrance && entrance !== 'none') {
+    classes.push('olo-entrance-' + entrance);
+    classes.push('olo-visible');
+  }
   return classes;
 });
 
 const cellStyle = computed(() => {
   const s = props.tile.style || {};
   const adv = props.tile.advanced || {};
+  const set = props.tile.settings || {};
   const mode = builderStore.viewMode;
   const style = {};
+
+  // Entrance animation custom controls (CSS vars consumed by frontend.css rules)
+  const eAnim = set.entrance_animation;
+  if (eAnim && eAnim !== 'none') {
+    const eDur = parseInt(set.entrance_duration);
+    if (eDur > 0) style['--olo-e-dur'] = Math.max(50, Math.min(5000, eDur)) + 'ms';
+    const eDelay = parseInt(set.entrance_delay);
+    if (eDelay > 0) style['--olo-e-delay'] = Math.min(5000, eDelay) + 'ms';
+    const eEase = set.entrance_easing;
+    if (eEase && eEase !== 'auto' && /^(linear|ease|ease-in|ease-out|ease-in-out|cubic-bezier\([0-9.,\s\-]+\))$/.test(eEase)) {
+      style['--olo-e-ease'] = eEase;
+    }
+    const eInt = parseFloat(set.entrance_intensity);
+    if (eInt > 0 && Math.abs(eInt - 1) > 0.01) {
+      style['--olo-e-int'] = Math.max(0.1, Math.min(5, eInt));
+    }
+  }
 
   // Popup tiles (non-fullwidth): inline-block so they sit side by side
   if (props.tile.type === 'popup' && !props.tile.settings?.button_fullwidth) {
@@ -140,6 +167,9 @@ const cellStyle = computed(() => {
 
   // Background (solid & gradient via composable; image handled via bgImageStyle layer)
   Object.assign(style, bgInlineStyle.value);
+
+  // Text color (usato dai preset stilistici: i discendenti ereditano)
+  if (s.text_color) style.color = s.text_color;
 
   // Border radius (responsive) — il check !== undefined gestisce anche il valore 0
   const brVal = rv(s, 'border_radius', undefined, mode);

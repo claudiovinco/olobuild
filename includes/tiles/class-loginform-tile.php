@@ -11,6 +11,7 @@ class Olo_Loginform_Tile extends Olo_Tile_Base {
     protected $icon     = 'dashicons-lock';
     protected $category = 'marketing';
     protected $defaults = [
+        'preset' => 'custom',
         'mode'                 => 'login',
         'redirect_url'         => '',
         'show_remember_me'     => true,
@@ -444,7 +445,7 @@ class Olo_Loginform_Tile extends Olo_Tile_Base {
             }
         </style>
 
-        <div class="olo-loginform <?php echo esc_attr( $uid ); ?>" data-pw-str="0">
+        <div class="olo-loginform <?php echo esc_attr( $uid ); ?> olo-lf-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" data-pw-str="0">
         <?php
         if ( is_user_logged_in() ) :
             $current_user = wp_get_current_user();

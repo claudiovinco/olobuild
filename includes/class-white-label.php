@@ -168,22 +168,27 @@ class Olo_White_Label {
      * ───────────────────────────────────────────── */
 
     public function add_admin_page() {
-        add_submenu_page(
-            'olobuild',
-            'White Label',
-            'White Label',
-            'manage_options',
-            'olo-white-label',
-            [ $this, 'render_admin_page' ]
-        );
+        // v1.0.30 — pagina migrata in ?page=olobuilder-settings&tab=whitelabel
+        // Submenu rimosso: i campi vivono ora in Configurazione → White Label.
+        // La classe resta attiva per i filter su plugin name/author/description nel listing WP.
     }
 
     public function render_admin_page() {
         $s = $this->get_settings();
+        $custom_brand = ! empty( $s['plugin_name'] ) || ! empty( $s['plugin_logo_url'] );
         ?>
-        <?php Olo_Builder::page_shell_open( 'White Label' ); ?>
+        <?php Olo_Builder::cockpit_shell_open( '<b>' . esc_html__( 'White Label', 'olobuild' ) . '</b>' ); ?>
+        <main class="olo-cockpit-main olo-cockpit-legacy">
+            <?php
+            echo Olo_Builder::cockpit_page_head( [
+                'title' => __( 'White Label', 'olobuild' ),
+                'sub'   => $custom_brand
+                    ? __( 'Branding personalizzato attivo. Nasconde il marchio Olobuild dai tuoi clienti.', 'olobuild' )
+                    : __( 'Personalizza nome plugin, logo, autore e link per nascondere il brand Olobuild.', 'olobuild' ),
+            ] );
+            ?>
 
-            <div id="wl-msg-box"></div>
+            <div id="wl-msg-box" style="margin-top:16px"></div>
 
             <div class="olo-card">
                 <div class="olo-card-head">
@@ -191,15 +196,15 @@ class Olo_White_Label {
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
                     </div>
                     <div>
-                        <h3>Impostazioni White Label</h3>
-                        <p>Rinomina plugin, nascondi credits e impostazioni per i non-admin</p>
+                        <h3><?php esc_html_e( 'Impostazioni White Label', 'olobuild' ); ?></h3>
+                        <p><?php esc_html_e( 'Rinomina plugin, nascondi credits e impostazioni per i non-admin', 'olobuild' ); ?></p>
                     </div>
                 </div>
                 <div class="olo-card-body">
                     <div class="olo-field-row">
                         <div class="olo-field-info">
-                            <label>Attiva White Label</label>
-                            <div class="olo-field-hint">Abilita la personalizzazione del brand</div>
+                            <label><?php esc_html_e( 'Attiva White Label', 'olobuild' ); ?></label>
+                            <div class="olo-field-hint"><?php esc_html_e( 'Abilita la personalizzazione del brand', 'olobuild' ); ?></div>
                         </div>
                         <label class="olo-toggle">
                             <input type="checkbox" id="wl_enabled" <?php checked( $s['enabled'] ); ?> />
@@ -208,7 +213,7 @@ class Olo_White_Label {
                     </div>
                     <div class="olo-field-row">
                         <div class="olo-field-info">
-                            <label>Nome plugin</label>
+                            <label><?php esc_html_e( 'Nome plugin', 'olobuild' ); ?></label>
                         </div>
                         <div class="olo-field-input-wrap">
                             <input type="text" id="wl_name" value="<?php echo esc_attr( $s['plugin_name'] ); ?>" class="olo-field-input" placeholder="Olobuild" />
@@ -216,15 +221,15 @@ class Olo_White_Label {
                     </div>
                     <div class="olo-field-row">
                         <div class="olo-field-info">
-                            <label>Descrizione</label>
+                            <label><?php esc_html_e( 'Descrizione', 'olobuild' ); ?></label>
                         </div>
                         <div class="olo-field-input-wrap">
-                            <input type="text" id="wl_desc" value="<?php echo esc_attr( $s['plugin_description'] ); ?>" class="olo-field-input" placeholder="Page builder professionale" />
+                            <input type="text" id="wl_desc" value="<?php echo esc_attr( $s['plugin_description'] ); ?>" class="olo-field-input" placeholder="<?php echo esc_attr__( 'Page builder professionale', 'olobuild' ); ?>" />
                         </div>
                     </div>
                     <div class="olo-field-row">
                         <div class="olo-field-info">
-                            <label>Nome autore</label>
+                            <label><?php esc_html_e( 'Nome autore', 'olobuild' ); ?></label>
                         </div>
                         <div class="olo-field-input-wrap">
                             <input type="text" id="wl_author" value="<?php echo esc_attr( $s['author_name'] ); ?>" class="olo-field-input" />
@@ -232,7 +237,7 @@ class Olo_White_Label {
                     </div>
                     <div class="olo-field-row">
                         <div class="olo-field-info">
-                            <label>URL autore</label>
+                            <label><?php esc_html_e( 'URL autore', 'olobuild' ); ?></label>
                         </div>
                         <div class="olo-field-input-wrap">
                             <input type="url" id="wl_url" value="<?php echo esc_attr( $s['author_url'] ); ?>" class="olo-field-input" />
@@ -240,8 +245,8 @@ class Olo_White_Label {
                     </div>
                     <div class="olo-field-row">
                         <div class="olo-field-info">
-                            <label>Nascondi per non-admin</label>
-                            <div class="olo-field-hint">Nasconde le impostazioni White Label per utenti non amministratori</div>
+                            <label><?php esc_html_e( 'Nascondi per non-admin', 'olobuild' ); ?></label>
+                            <div class="olo-field-hint"><?php esc_html_e( 'Nasconde le impostazioni White Label per utenti non amministratori', 'olobuild' ); ?></div>
                         </div>
                         <label class="olo-toggle">
                             <input type="checkbox" id="wl_hide" <?php checked( $s['hide_for_non_admins'] ); ?> />
@@ -250,8 +255,8 @@ class Olo_White_Label {
                     </div>
                     <div class="olo-field-row">
                         <div class="olo-field-info">
-                            <label>Nascondi credits</label>
-                            <div class="olo-field-hint">Rimuove la scritta "Powered by Olobuild"</div>
+                            <label><?php esc_html_e( 'Nascondi credits', 'olobuild' ); ?></label>
+                            <div class="olo-field-hint"><?php esc_html_e( 'Rimuove la scritta "Powered by Olobuild"', 'olobuild' ); ?></div>
                         </div>
                         <label class="olo-toggle">
                             <input type="checkbox" id="wl_credits" <?php checked( $s['hide_credits'] ); ?> />
@@ -264,15 +269,21 @@ class Olo_White_Label {
             <div class="olo-actions">
                 <button class="olo-btn-save" id="wl-save">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-                    Salva impostazioni
+                    <?php esc_html_e( 'Salva impostazioni', 'olobuild' ); ?>
                 </button>
             </div>
 
             <script>
+            var wlI18n = {
+                saving:       <?php echo wp_json_encode( __( 'Salvataggio...', 'olobuild' ) ); ?>,
+                saved:        <?php echo wp_json_encode( __( 'Impostazioni salvate con successo', 'olobuild' ) ); ?>,
+                saveError:    <?php echo wp_json_encode( __( 'Errore nel salvataggio', 'olobuild' ) ); ?>,
+                saveSettings: <?php echo wp_json_encode( __( 'Salva impostazioni', 'olobuild' ) ); ?>
+            };
             document.getElementById('wl-save').addEventListener('click', function() {
                 var btn = this;
                 btn.disabled = true;
-                btn.innerHTML = '<span class="olo-spinner"></span> Salvataggio...';
+                btn.innerHTML = '<span class="olo-spinner"></span> ' + wlI18n.saving;
                 var data = {
                     enabled: document.getElementById('wl_enabled').checked,
                     plugin_name: document.getElementById('wl_name').value,
@@ -292,20 +303,21 @@ class Olo_White_Label {
                     var box = document.getElementById('wl-msg-box');
                     if (d.success) {
                         box.className = 'olo-msg success';
-                        box.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Impostazioni salvate con successo';
+                        box.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> ' + wlI18n.saved;
                     } else {
                         box.className = 'olo-msg error';
-                        box.textContent = 'Errore nel salvataggio';
+                        box.textContent = wlI18n.saveError;
                     }
                     setTimeout(function() { box.className = ''; box.innerHTML = ''; }, 3000);
                 })
                 .finally(function() {
                     btn.disabled = false;
-                    btn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Salva impostazioni';
+                    btn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> ' + wlI18n.saveSettings;
                 });
             });
             </script>
-        <?php Olo_Builder::page_shell_close(); ?>
+        </main>
+        <?php Olo_Builder::cockpit_shell_close(); ?>
         <?php
     }
 }

@@ -11,6 +11,7 @@ class Olo_PostMeta_Tile extends Olo_Tile_Base {
     protected $icon     = 'dashicons-media-text';
     protected $category = 'dynamic';
     protected $defaults = [
+        'preset'              => 'editorial-classic',
         'show_date'           => true,
         'show_author'         => true,
         'show_categories'     => true,
@@ -24,10 +25,39 @@ class Olo_PostMeta_Tile extends Olo_Tile_Base {
         'text_color'          => '#9CA3AF',
         'link_color'          => '#6366F1',
         'icon_color'          => '#6B7280',
+        'bg_color'            => '',
         'font_size'           => '14',
+        'font_family'         => 'inherit',
+        'font_weight'         => '400',
+        'text_transform'      => 'none',
+        'letter_spacing'      => 0,
+        'item_gap'            => 0,
+        'chip_style'          => 'none',
+        'chip_bg'             => '',
+        'chip_padding_x'      => 0,
+        'chip_padding_y'      => 0,
+        'chip_radius'         => 0,
+        'container_padding'   => [ 'top' => 0, 'right' => 0, 'bottom' => 0, 'left' => 0 ],
+        'container_radius'    => [],
+        'effect_color'        => '',
+        'effect_intensity'    => 'medium',
+        'effect_speed'        => 0,
+        'wow_disable'           => false,
+        'wow_backdrop_blur'     => 0,
+        'wow_backdrop_saturate' => 100,
+        'wow_border_style'      => 'solid',
+        'wow_font_family'       => 'inherit',
+        'wow_rotation'          => 0,
+        'wow_perspective'       => 0,
+        'wow_tilt_x'            => 0,
+        'wow_glow_pulse'        => false,
+        'wow_title_glow'        => false,
+        'wow_scanlines'         => false,
+
+        'wow_terminal_prompt' => false,
         'author_link'         => true,
         'category_link'       => true,
-            'border'                  => [],
+        'border'                  => [],
         'border_hover'            => [],
         'border_hover_duration'   => 300,
         'border_effect'           => 'none',
@@ -41,6 +71,25 @@ class Olo_PostMeta_Tile extends Olo_Tile_Base {
         return [];
     }
 
+    private function font_family_css( $val ) {
+        switch ( $val ) {
+            case 'sans':  return 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif';
+            case 'serif': return 'Georgia, "Times New Roman", Times, serif';
+            case 'mono':  return 'ui-monospace, "SF Mono", Menlo, Consolas, monospace';
+            default:      return 'inherit';
+        }
+    }
+
+    /**
+     * Extra CSS per preset audaci (effetti che non si mappano a singoli field).
+     */
+    private function get_preset_extra_css( $preset_id, $uid, $s ) {
+        // @deprecated v1.0.73 — refactor profondo: i preset audaci ora settano direttamente
+        // i field standard tramite TILE_PRESETS in BuilderInspector.vue, e i field wow_* via
+        // build_wow_effects_css(). Nessun !important, ogni proprieta personalizzabile.
+        return '';
+    }
+
     public function render( $settings ) {
         $s = wp_parse_args( $settings, $this->defaults );
         $uid = 'olo-pm-' . wp_rand( 10000, 99999 );
@@ -48,13 +97,35 @@ class Olo_PostMeta_Tile extends Olo_Tile_Base {
         $post_id = get_the_ID();
         $post    = get_post( $post_id );
 
+        $preset_id  = sanitize_key( $s['preset'] ?? 'custom' );
         $text_color = $this->safe_color_css( $s['text_color'] );
         $link_color = $this->safe_color_css( $s['link_color'] );
         $icon_color = $this->safe_color_css( $s['icon_color'] );
+        $bg_color   = $this->safe_color_css( $s['bg_color'] );
         $font_size  = max( 10, min( 24, absint( $s['font_size'] ) ) );
         $separator  = esc_html( $s['separator'] );
         $layout     = $s['layout'] === 'stacked' ? 'stacked' : 'inline';
         $show_icons = $s['icon_style'] === 'before';
+        $item_gap   = max( 0, min( 40, absint( $s['item_gap'] ) ) );
+
+        $font_family = $this->font_family_css( $s['font_family'] ?? 'inherit' );
+        $font_weight = in_array( $s['font_weight'], [ '300','400','500','600','700' ], true ) ? $s['font_weight'] : '400';
+        $tt          = in_array( $s['text_transform'], [ 'none','uppercase','lowercase','capitalize' ], true ) ? $s['text_transform'] : 'none';
+        $ls          = floatval( $s['letter_spacing'] ?? 0 );
+
+        $chip_style  = in_array( $s['chip_style'], [ 'none','pill','tag','sticker','chip-3d' ], true ) ? $s['chip_style'] : 'none';
+        $chip_bg     = $this->safe_color_css( $s['chip_bg'] ?? '' );
+        $chip_px     = max( 0, min( 24, absint( $s['chip_padding_x'] ) ) );
+        $chip_py     = max( 0, min( 16, absint( $s['chip_padding_y'] ) ) );
+        $chip_radius = max( 0, min( 999, absint( $s['chip_radius'] ) ) );
+
+        // Container padding/radius
+        $cp = $s['container_padding'] ?? [];
+        $cpt = is_array( $cp ) ? absint( $cp['top']    ?? 0 ) : 0;
+        $cpr = is_array( $cp ) ? absint( $cp['right']  ?? 0 ) : 0;
+        $cpb = is_array( $cp ) ? absint( $cp['bottom'] ?? 0 ) : 0;
+        $cpl = is_array( $cp ) ? absint( $cp['left']   ?? 0 ) : 0;
+        $container_radius_css = $this->build_border_radius_css( $s['container_radius'] ?? [] );
 
         // SVG icons (14x14)
         $icon_svg = [
@@ -69,7 +140,6 @@ class Olo_PostMeta_Tile extends Olo_Tile_Base {
         // Collect meta items
         $items = [];
 
-        // Date
         if ( ! empty( $s['show_date'] ) ) {
             $date_text = '';
             if ( $post ) {
@@ -78,16 +148,9 @@ class Olo_PostMeta_Tile extends Olo_Tile_Base {
             if ( ! $date_text ) {
                 $date_text = wp_date( $s['date_format'] );
             }
-            $items[] = $this->build_meta_item(
-                $date_text,
-                '',
-                $show_icons ? $icon_svg['date'] : '',
-                $text_color,
-                $icon_color
-            );
+            $items[] = $this->build_meta_item( $date_text, '', $show_icons ? $icon_svg['date'] : '', $text_color, $icon_color );
         }
 
-        // Author
         if ( ! empty( $s['show_author'] ) ) {
             $author_name = '';
             $author_url  = '';
@@ -100,16 +163,9 @@ class Olo_PostMeta_Tile extends Olo_Tile_Base {
             if ( ! $author_name ) {
                 $author_name = 'Autore';
             }
-            $items[] = $this->build_meta_item(
-                $author_name,
-                $author_url,
-                $show_icons ? $icon_svg['author'] : '',
-                $author_url ? $link_color : $text_color,
-                $icon_color
-            );
+            $items[] = $this->build_meta_item( $author_name, $author_url, $show_icons ? $icon_svg['author'] : '', $author_url ? $link_color : $text_color, $icon_color );
         }
 
-        // Categories
         if ( ! empty( $s['show_categories'] ) ) {
             $cats = [];
             if ( $post ) {
@@ -127,17 +183,9 @@ class Olo_PostMeta_Tile extends Olo_Tile_Base {
             if ( empty( $cats ) ) {
                 $cats[] = 'Senza categoria';
             }
-            $items[] = $this->build_meta_item(
-                implode( ', ', $cats ),
-                '',
-                $show_icons ? $icon_svg['category'] : '',
-                $text_color,
-                $icon_color,
-                true
-            );
+            $items[] = $this->build_meta_item( implode( ', ', $cats ), '', $show_icons ? $icon_svg['category'] : '', $text_color, $icon_color, true );
         }
 
-        // Tags
         if ( ! empty( $s['show_tags'] ) ) {
             $tag_list = [];
             if ( $post ) {
@@ -149,34 +197,19 @@ class Olo_PostMeta_Tile extends Olo_Tile_Base {
                 }
             }
             if ( ! empty( $tag_list ) ) {
-                $items[] = $this->build_meta_item(
-                    implode( ', ', $tag_list ),
-                    '',
-                    $show_icons ? $icon_svg['tag'] : '',
-                    $text_color,
-                    $icon_color,
-                    true
-                );
+                $items[] = $this->build_meta_item( implode( ', ', $tag_list ), '', $show_icons ? $icon_svg['tag'] : '', $text_color, $icon_color, true );
             }
         }
 
-        // Comments count
         if ( ! empty( $s['show_comments_count'] ) ) {
             $count = 0;
             if ( $post ) {
                 $count = (int) get_comments_number( $post->ID );
             }
             $label = $count . ' ' . olo_t( $count === 1 ? 'commento' : 'commenti' );
-            $items[] = $this->build_meta_item(
-                $label,
-                '',
-                $show_icons ? $icon_svg['comment'] : '',
-                $text_color,
-                $icon_color
-            );
+            $items[] = $this->build_meta_item( $label, '', $show_icons ? $icon_svg['comment'] : '', $text_color, $icon_color );
         }
 
-        // Reading time
         if ( ! empty( $s['show_reading_time'] ) ) {
             $minutes = 1;
             if ( $post ) {
@@ -185,50 +218,61 @@ class Olo_PostMeta_Tile extends Olo_Tile_Base {
                 $minutes    = max( 1, (int) ceil( $word_count / 200 ) );
             }
             $label = $minutes . ' ' . olo_t( 'min di lettura' );
-            $items[] = $this->build_meta_item(
-                $label,
-                '',
-                $show_icons ? $icon_svg['clock'] : '',
-                $text_color,
-                $icon_color
-            );
+            $items[] = $this->build_meta_item( $label, '', $show_icons ? $icon_svg['clock'] : '', $text_color, $icon_color );
         }
 
         if ( empty( $items ) ) {
             return '';
         }
 
-        // Build separator
-        $sep_html = '';
-        if ( $layout === 'inline' ) {
-            $sep_html = '<span class="olo-postmeta-sep" style="color:' . $text_color . ';">' . $separator . '</span>';
-        }
+        // Decide se mostrare separatori (chip style nasconde i separatori)
+        $show_sep = ( $layout === 'inline' && $separator !== '' && $chip_style === 'none' );
+        $sep_html = $show_sep ? '<span class="olo-postmeta-sep" style="color:' . $text_color . ';">' . $separator . '</span>' : '';
 
-        // Layout styles
-        $wrap_style = 'font-size:' . $font_size . 'px;line-height:1.6;';
+        // Container styles
+        $wrap_style  = 'font-size:' . $font_size . 'px;line-height:1.6;';
+        $wrap_style .= 'font-family:' . $font_family . ';';
+        $wrap_style .= 'font-weight:' . $font_weight . ';';
+        $wrap_style .= 'text-transform:' . $tt . ';';
+        if ( $ls > 0 ) $wrap_style .= 'letter-spacing:' . $ls . 'px;';
+        if ( $bg_color ) $wrap_style .= 'background:' . $bg_color . ';';
+        if ( $cpt || $cpr || $cpb || $cpl ) $wrap_style .= "padding:{$cpt}px {$cpr}px {$cpb}px {$cpl}px;";
+        if ( $container_radius_css ) $wrap_style .= "border-radius:{$container_radius_css};";
+
         if ( $layout === 'stacked' ) {
-            $wrap_style .= 'display:flex;flex-direction:column;gap:4px;';
+            $wrap_style .= 'display:flex;flex-direction:column;gap:' . max( 4, $item_gap ) . 'px;';
         } else {
-            $wrap_style .= 'display:flex;flex-wrap:wrap;align-items:center;gap:0;';
+            $gap_css = $item_gap > 0 ? "gap:{$item_gap}px;" : 'gap:0;';
+            $wrap_style .= 'display:flex;flex-wrap:wrap;align-items:center;' . $gap_css;
         }
 
         ob_start();
         ?>
-        <div class="olo-postmeta <?php echo esc_attr( $uid ); ?>" style="<?php echo esc_attr( $wrap_style ); ?>">
+        <div class="olo-postmeta <?php echo esc_attr( $uid ); ?> olo-pm-preset-<?php echo esc_attr( $preset_id ); ?>" style="<?php echo esc_attr( $wrap_style ); ?>">
             <?php
-            $total = count( $items );
             foreach ( $items as $i => $item_html ) {
-                if ( $i > 0 ) {
-                    if ( $layout === 'inline' ) {
-                        echo $sep_html;
-                    }
+                if ( $i > 0 && $sep_html ) {
+                    echo $sep_html;
                 }
-                echo $item_html;
+                echo $this->wrap_meta_item( $item_html, $chip_style, $chip_bg, $chip_px, $chip_py, $chip_radius );
             }
             ?>
         </div>
         <?php
-                // Border system
+
+        // Hover link sotto preset (text-shadow su a)
+        if ( $link_color && $preset_id !== 'neon-cyber' && $preset_id !== 'gradient-glow' ) {
+            // hover non standardizzato qui, lascio i preset gestire
+        }
+
+        // Preset extra CSS
+        $extra = $this->get_preset_extra_css( $preset_id, $uid, $s );
+        $extra .= $this->build_wow_effects_css( $s, '.' . $uid, '' );
+        if ( $extra ) {
+            echo '<style>' . $extra . '</style>';
+        }
+
+        // Border system standard
         $border_css        = $this->build_border_css( $s['border'] ?? [] );
         $border_hover_css  = $this->build_border_hover_css( ".{$uid}", $s['border'] ?? [], $s['border_hover'] ?? [], intval( $s['border_hover_duration'] ?? 300 ) );
         $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
@@ -241,21 +285,35 @@ class Olo_PostMeta_Tile extends Olo_Tile_Base {
     }
 
     /**
+     * Wrap meta item with chip styling (if applicable).
+     */
+    private function wrap_meta_item( $item_html, $chip_style, $chip_bg, $chip_px, $chip_py, $chip_radius ) {
+        if ( $chip_style === 'none' ) {
+            return $item_html;
+        }
+        // Strip outer span e ricostruisci con stili chip
+        $extra_style = '';
+        if ( $chip_bg ) $extra_style .= 'background:' . $chip_bg . ';';
+        if ( $chip_px || $chip_py ) $extra_style .= "padding:{$chip_py}px {$chip_px}px;";
+        if ( $chip_radius > 0 ) $extra_style .= "border-radius:{$chip_radius}px;";
+
+        // Inietta stili nello span esistente
+        return preg_replace(
+            '/^<span class="olo-postmeta-item" style="([^"]*)"/',
+            '<span class="olo-postmeta-item olo-pm-chip-' . esc_attr( $chip_style ) . '" style="$1' . $extra_style . '"',
+            $item_html,
+            1
+        );
+    }
+
+    /**
      * Build a single meta item HTML.
-     *
-     * @param string $text       The text or HTML content.
-     * @param string $url        Optional link URL.
-     * @param string $icon_svg   Optional SVG icon HTML.
-     * @param string $color      Text/link color.
-     * @param string $icon_color Icon color.
-     * @param bool   $raw_html   If true, $text is already HTML (contains links).
-     * @return string
      */
     private function build_meta_item( $text, $url = '', $icon_svg = '', $color = '', $icon_color = '', $raw_html = false ) {
         $html = '<span class="olo-postmeta-item" style="display:inline-flex;align-items:center;gap:5px;color:' . $color . ';">';
 
         if ( $icon_svg ) {
-            $html .= '<span style="color:' . $icon_color . ';display:inline-flex;flex-shrink:0;">' . $icon_svg . '</span>';
+            $html .= '<span class="olo-postmeta-icon" style="color:' . $icon_color . ';display:inline-flex;flex-shrink:0;">' . $icon_svg . '</span>';
         }
 
         if ( $url ) {

@@ -88,6 +88,14 @@ class Olo_Asset_Optimizer {
     public static function cache_css( $css, $template_id ) {
         if ( empty( $css ) ) return false;
 
+        // Check user preference: se css_cache_files è off, fallback a inline.
+        $opt = class_exists( 'Olo_Performance_Settings' )
+            ? Olo_Performance_Settings::get_option()
+            : [ 'css_cache_files' => true, 'minify_css' => true ];
+        if ( empty( $opt['css_cache_files'] ) ) {
+            return false;
+        }
+
         $upload_dir = wp_upload_dir();
         $cache_dir  = $upload_dir['basedir'] . '/olobuild-cache/';
         $cache_url  = $upload_dir['baseurl'] . '/olobuild-cache/';
@@ -101,8 +109,8 @@ class Olo_Asset_Optimizer {
         $filepath = $cache_dir . $filename;
 
         if ( ! file_exists( $filepath ) ) {
-            $minified = self::minify_css( $css );
-            file_put_contents( $filepath, $minified );
+            $payload = ! empty( $opt['minify_css'] ) ? self::minify_css( $css ) : $css;
+            file_put_contents( $filepath, $payload );
         }
 
         return $cache_url . $filename;
@@ -189,11 +197,18 @@ class Olo_Asset_Optimizer {
 
     /**
      * Initialize optimizer hooks.
+     * I flag defer_js / css_cache_files / minify_css sono gestiti da Olo_Performance_Settings.
      */
     public static function init() {
-        // Defer frontend scripts
-        add_filter( 'script_loader_tag', [ __CLASS__, 'defer_scripts' ], 10, 2 );
-        // ES module scripts (priority 11 = after defer)
+        $opt = class_exists( 'Olo_Performance_Settings' )
+            ? Olo_Performance_Settings::get_option()
+            : [ 'defer_js' => true ];
+
+        // Defer frontend scripts solo se l'utente ha il flag attivo
+        if ( ! empty( $opt['defer_js'] ) ) {
+            add_filter( 'script_loader_tag', [ __CLASS__, 'defer_scripts' ], 10, 2 );
+        }
+        // ES module scripts: sempre attivo (modules sono deferred by spec, non c'è scelta)
         add_filter( 'script_loader_tag', [ __CLASS__, 'module_scripts' ], 11, 2 );
 
         // Clean cache on template save

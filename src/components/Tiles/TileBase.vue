@@ -9,6 +9,13 @@ import { computed } from 'vue';
 import SectionTile from './SectionTile.vue';
 import ColumnTile from './ColumnTile.vue';
 import HeroTile from './HeroTile.vue';
+import HeroSplitTile from './HeroSplitTile.vue';
+import SectionHeaderTile from './SectionHeaderTile.vue';
+import InfoCardsTile from './InfoCardsTile.vue';
+import ProductCardsTile from './ProductCardsTile.vue';
+import StepTimelineTile from './StepTimelineTile.vue';
+import CtaBannerTile from './CtaBannerTile.vue';
+import TrustStripTile from './TrustStripTile.vue';
 import ContentTile from './ContentTile.vue';
 import ImageTile from './ImageTile.vue';
 import VideoTile from './VideoTile.vue';
@@ -251,6 +258,13 @@ const tileComponents = {
   section: SectionTile,
   column: ColumnTile,
   hero: HeroTile,
+  'hero-split': HeroSplitTile,
+  'section-header': SectionHeaderTile,
+  'info-cards': InfoCardsTile,
+  'product-cards': ProductCardsTile,
+  'step-timeline': StepTimelineTile,
+  'cta-banner': CtaBannerTile,
+  'trust-strip': TrustStripTile,
   content: ContentTile,
   image: ImageTile,
   video: VideoTile,

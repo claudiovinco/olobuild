@@ -1,19 +1,27 @@
-import { textEffectsFields, textEffectsDefaults, shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
+import { textEffectsFields, textEffectsDefaults, shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared.js';
+import { t } from '@/i18n';
 
+/**
+ * Tile Button — split CONTENUTO/STILE (regola universale Olobuild).
+ *   fields[]      → testo, icona, URL, target, allineamento (semantica)
+ *   styleFields[] → preset, colori, tipografia, padding, bordo, ombra, hover
+ *   AVANZATE      → meta tecnico
+ */
 export default {
   type: 'button',
-  name: 'Pulsante',
+  name: t('Pulsante'),
   icon: 'dashicons-button',
   category: 'essential',
   defaults: {
-    text: 'Clicca qui',
+    preset: 'custom',
+    text: t('Clicca qui'),
     url: '#',
     target: '_self',
     alignment: 'center',
     full_width: false,
 
-    // Style
     typography_preset: '',
+    bg: { type: 'none' },
     bg_color: '',
     text_color: '',
     border_radius: '6',
@@ -31,7 +39,6 @@ export default {
     border_hover_duration: 300,
     ...borderEffectDefaults,
 
-    // Hover
     hover_bg_color: '',
     hover_text_color: '',
     hover_shadow: '',
@@ -39,88 +46,111 @@ export default {
     hover_image: '',
     hover_video: '',
     ...textEffectsDefaults,
+    text_effect_target: 'text',
   },
+
+  // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
-    { key: 'text', label: 'Testo pulsante', type: 'text' },
-    { key: 'icon', label: 'Icona', type: 'icon' },
-    { key: 'icon_position', label: 'Posizione icona', type: 'select', options: [
-      { value: 'before', label: 'Prima del testo' },
-      { value: 'after', label: 'Dopo il testo' },
+    { key: 'text', label: t('Testo pulsante'), type: 'text' },
+    { key: 'icon', label: t('Icona'), type: 'icon' },
+    { key: 'icon_position', label: t('Posizione icona'), type: 'select', options: [
+      { value: 'before', label: t('Prima del testo') },
+      { value: 'after', label: t('Dopo il testo') },
     ]},
-    { key: 'icon_spacing', label: 'Spazio icona (px)', type: 'range', min: 0, max: 24, step: 2 },
-    { key: 'url', label: 'URL', type: 'text' },
-    { key: 'target', label: 'Apri in', type: 'select', options: [
-      { value: '_self', label: 'Stessa finestra' },
-      { value: '_blank', label: 'Nuova scheda' },
+    { key: 'url', label: t('URL'), type: 'link' },
+    { key: 'target', label: t('Apri in'), type: 'select', options: [
+      { value: '_self', label: t('Stessa finestra') },
+      { value: '_blank', label: t('Nuova scheda') },
     ]},
-    { key: 'alignment', label: 'Allineamento', type: 'select', responsive: true, options: [
-      { value: 'left', label: 'Sinistra' },
-      { value: 'center', label: 'Centro' },
-      { value: 'right', label: 'Destra' },
-    ]},
-    { key: 'full_width', label: 'Larghezza piena', type: 'toggle' },
+    { key: 'full_width', label: t('Larghezza piena'), type: 'toggle' },
+  ],
 
-    { type: 'separator', label: 'Stile' },
+  // ─── STILE ─────────────────────────────────────────────────
+  styleFields: [
+    { type: 'separator', label: t('Preset stilistico') },
+    { key: 'preset', label: t('Stile'), type: 'select', options: [
+      { value: 'modern-clean',    label: t('Modern Clean') },
+      { value: 'minimal-mono',    label: t('Minimal Mono') },
+      { value: 'magazine-bold',   label: t('Magazine Bold') },
+      { value: 'editorial-serif', label: t('Editorial Serif') },
+      { value: 'compact-inline',  label: t('Compact Inline') },
+      { value: 'glass-pill',      label: t('Glass Pill') },
+      { value: 'neon-glow',       label: t('Neon Glow') },
+      { value: 'brutalist-stamp', label: t('Brutalist Stamp') },
+      { value: 'gradient-aurora', label: t('Gradient Aurora') },
+      { value: 'sticker-fun',     label: t('Sticker Fun') },
+      { value: 'retro-terminal',  label: t('Retro Terminal') },
+      { value: 'tilt-3d',         label: t('3D Tilt') },
+      { value: 'custom',          label: t('Personalizzato') },
+    ]},
 
-    { key: 'typography_preset', label: 'Stile tipografico', type: 'select', optionsSource: 'globalTypography' },
-    { key: 'bg_color', label: 'Colore sfondo', type: 'color' },
-    { key: 'text_color', label: 'Colore testo', type: 'color' },
-    { key: 'border_radius', label: 'Border Radius', type: 'border-radius' },
-    { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
-    { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 80 },
-    { key: 'font_size', label: 'Dim. carattere (px)', type: 'range', min: 12, max: 32, step: 1, responsive: true },
-    { key: 'font_weight', label: 'Peso font', type: 'select', options: [
-      { value: '400', label: 'Normale' },
-      { value: '500', label: 'Medio' },
-      { value: '600', label: 'Semibold' },
-      { value: '700', label: 'Bold' },
-      { value: '800', label: 'Extra Bold' },
+    { type: 'separator', label: t('Layout') },
+    { key: 'alignment', label: t('Allineamento'), type: 'select', responsive: true, options: [
+      { value: 'left', label: t('Sinistra') },
+      { value: 'center', label: t('Centro') },
+      { value: 'right', label: t('Destra') },
     ]},
-    { key: 'letter_spacing', label: 'Spaziatura lettere (px)', type: 'range', min: 0, max: 5, step: 0.5 },
-    { key: 'text_transform', label: 'Trasformazione testo', type: 'select', options: [
-      { value: 'none', label: 'Nessuna' },
-      { value: 'uppercase', label: 'MAIUSCOLO' },
-      { value: 'lowercase', label: 'minuscolo' },
-      { value: 'capitalize', label: 'Capitalizza' },
-    ]},
+    { key: 'icon_spacing', label: t('Spazio icona (px)'), type: 'range', min: 0, max: 24, step: 2 },
+
+    ...textEffectsFields([ { value: 'text', label: t('Solo Testo') } ]),
+
+    { type: 'separator', label: t('Tipografia') },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
+    { type: 'typography', label: t('Testo'),
+      presetKey: 'typography_preset',
+      responsiveKeys: ['size'],
+      keys: {
+        size:          'font_size',
+        weight:        'font_weight',
+        transform:     'text_transform',
+        letterSpacing: 'letter_spacing',
+        color:         'text_color',
+      },
+      sizeMin: 12, sizeMax: 32,
+      letterSpacingUnit: 'px',
+    },
+
+    { type: 'separator', label: t('Sfondo & colori') },
+    withHover({ key: 'bg_color', label: t('Colore sfondo (semplice)'), type: 'color' }, { hoverKey: 'hover_bg_color' }),
+
+    { type: 'separator', label: t('Forma') },
+    withHover({ key: 'border_radius', label: t('Border Radius'), type: 'border-radius' }),
+    { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 80 },
     ...shadowField,
     ...borderFields(),
 
-    { type: 'separator', label: 'Stato hover' },
-
-    { key: 'hover_effect', label: 'Effetto hover', type: 'select', options: [
-      { value: 'none', label: 'Nessuno' },
-      { value: 'lift', label: 'Solleva (↑)' },
-      { value: 'grow', label: 'Ingrandisci' },
-      { value: 'shrink', label: 'Rimpicciolisci' },
-      { value: 'glow', label: 'Bagliore' },
-      { value: 'pulse', label: 'Pulsazione' },
+    { type: 'separator', label: t('Stato hover') },
+    { key: 'hover_text_color', label: t('Colore testo hover'), type: 'color' },
+    { key: 'hover_effect', label: t('Effetto hover'), type: 'select', options: [
+      { value: 'none', label: t('Nessuno') },
+      { value: 'lift', label: t('Solleva (↑)') },
+      { value: 'grow', label: t('Ingrandisci') },
+      { value: 'shrink', label: t('Rimpicciolisci') },
+      { value: 'glow', label: t('Bagliore') },
+      { value: 'pulse', label: t('Pulsazione') },
     ]},
-    { key: 'hover_bg_color', label: 'Sfondo hover', type: 'color' },
-    { key: 'hover_text_color', label: 'Testo hover', type: 'color' },
-    { key: 'hover_shadow', label: 'Ombra hover', type: 'select', options: [
-      { value: '', label: 'Invariata' },
-      { value: 'none', label: 'Nessuna' },
-      { value: 'sm', label: 'Piccola' },
-      { value: 'md', label: 'Media' },
-      { value: 'lg', label: 'Grande' },
-      { value: 'xl', label: 'Extra grande' },
-      { value: 'custom', label: 'Personalizzata' },
+    { key: 'hover_shadow', label: t('Ombra hover'), type: 'select', options: [
+      { value: '', label: t('Invariata') },
+      { value: 'none', label: t('Nessuna') },
+      { value: 'sm', label: t('Piccola') },
+      { value: 'md', label: t('Media') },
+      { value: 'lg', label: t('Grande') },
+      { value: 'xl', label: t('Extra grande') },
+      { value: 'custom', label: t('Personalizzata') },
     ]},
-    { key: 'hover_shadow_h', label: 'Offset H hover (px)', type: 'range', min: -50, max: 50, step: 1,
+    { key: 'hover_shadow_h', label: t('Offset H hover (px)'), type: 'range', min: -50, max: 50, step: 1,
       condition: { field: 'hover_shadow', op: 'eq', value: 'custom' } },
-    { key: 'hover_shadow_v', label: 'Offset V hover (px)', type: 'range', min: -50, max: 50, step: 1,
+    { key: 'hover_shadow_v', label: t('Offset V hover (px)'), type: 'range', min: -50, max: 50, step: 1,
       condition: { field: 'hover_shadow', op: 'eq', value: 'custom' } },
-    { key: 'hover_shadow_blur', label: 'Sfocatura hover (px)', type: 'range', min: 0, max: 100, step: 1,
+    { key: 'hover_shadow_blur', label: t('Sfocatura hover (px)'), type: 'range', min: 0, max: 100, step: 1,
       condition: { field: 'hover_shadow', op: 'eq', value: 'custom' } },
-    { key: 'hover_shadow_spread', label: 'Espansione hover (px)', type: 'range', min: -50, max: 50, step: 1,
+    { key: 'hover_shadow_spread', label: t('Espansione hover (px)'), type: 'range', min: -50, max: 50, step: 1,
       condition: { field: 'hover_shadow', op: 'eq', value: 'custom' } },
-    { key: 'hover_shadow_color', label: 'Colore ombra hover', type: 'color',
+    { key: 'hover_shadow_color', label: t('Colore ombra hover'), type: 'color',
       condition: { field: 'hover_shadow', op: 'eq', value: 'custom' } },
-    { key: 'hover_shadow_inset', label: 'Ombra interna hover', type: 'toggle',
+    { key: 'hover_shadow_inset', label: t('Ombra interna hover'), type: 'toggle',
       condition: { field: 'hover_shadow', op: 'eq', value: 'custom' } },
-    { key: 'hover_image', label: 'Immagine hover', type: 'image' },
-    { key: 'hover_video', label: 'Video hover (mp4)', type: 'media' },
-    ...textEffectsFields([ { value: 'text', label: 'Solo Testo' } ]),
+    { key: 'hover_image', label: t('Immagine hover'), type: 'image' },
+    { key: 'hover_video', label: t('Video hover (mp4)'), type: 'media' },
   ],
 };

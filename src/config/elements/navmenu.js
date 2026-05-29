@@ -1,17 +1,27 @@
 
-import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared.js';
+import { t } from '@/i18n';
+
+/**
+ * Tile NavMenu — split CONTENUTO/STILE (regola universale Olobuild).
+ *   fields[]      → menu WP, stile struttura (navbar/vertical/subnav), search tile, mega menu sorgente, button voci, mobile toggle/breakpoint
+ *   styleFields[] → preset, bg, typo preset, allineamento, stile verticale, indicatore, tipografia, dropdown, header/sticky, hamburger aspetto
+ *   AVANZATE      → meta tecnico
+ */
 export default {
   type: 'navmenu',
-  name: 'Menu Nav',
+  name: t('Menu Nav'),
   icon: 'dashicons-menu',
   category: 'navigation',
   defaults: {
+    preset: 'custom',
+    bg: { type: 'none' },
+    typography_preset: '',
     menu_id: 0,
     style: 'navbar',
     alignment: 'left',
     mobile_toggle: true,
     mobile_style: 'offcanvas',
-    // Stile
     text_color: '',
     hover_color: '',
     active_color: '',
@@ -20,31 +30,23 @@ export default {
     text_transform: 'none',
     letter_spacing: 0,
     gap: 'medium',
-    // Indicatore menu
     menu_pointer: 'none',
     menu_pointer_animation: 'fade',
     menu_pointer_color: '',
-    // Dropdown
     dropdown_bg: '',
     dropdown_color: '',
-    // Header
     header_mode: 'overlay',
-    // Sticky Header
     sticky: false,
     sticky_show_on_up: false,
     sticky_bg: '',
     sticky_shadow: true,
-    // Mega Menu
     mega_menu: 'none',
     mega_columns: 3,
-    // Voci pulsante
     button_items: 'none',
     button_style: 'primary',
     button_size: 'small',
-    // Ricerca integrata (tile reference)
     search_tile_id: '',
     search_position: 'after',
-    // Vertical mode
     v_show_icons: false,
     v_icon_style: 'line',
     v_icon_size: 20,
@@ -58,7 +60,6 @@ export default {
     v_hover_bg: '',
     v_border_radius: 6,
     v_expand_subs: true,
-    // Legacy (backward compat)
     append_search: false,
     search_mode: 'modal',
     search_placeholder: 'Cerca...',
@@ -71,7 +72,6 @@ export default {
     search_input_height: 36,
     search_results_bg: '',
     search_hover_bg: '',
-    // Mobile avanzato
     mobile_type: 'dropdown',
     mobile_breakpoint: 960,
     hamburger_style: 'default',
@@ -87,203 +87,243 @@ export default {
     border_hover_duration: 300,
     ...borderEffectDefaults,
   },
+
+  // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
-    // --- Menu ---
-    { key: 'menu_id', label: 'Menu', type: 'select',
-      optionsSource: 'wpMenus' },
-    { key: 'style', label: 'Stile', type: 'select', options: [
-      { value: 'navbar', label: 'Navbar orizzontale' },
-      { value: 'vertical', label: 'Verticale' },
-      { value: 'subnav', label: 'Link Subnav' },
+    { key: 'menu_id', label: t('Menu WordPress'), type: 'select', optionsSource: 'wpMenus' },
+    { key: 'style', label: t('Tipo struttura'), type: 'select', options: [
+      { value: 'navbar', label: t('Navbar orizzontale') },
+      { value: 'vertical', label: t('Verticale') },
+      { value: 'subnav', label: t('Link Subnav') },
     ]},
-    { key: 'alignment', label: 'Allineamento', type: 'select', options: [
-      { value: 'left', label: 'Sinistra' },
-      { value: 'center', label: 'Centro' },
-      { value: 'right', label: 'Destra' },
-    ]},
-    // --- Verticale ---
-    { key: '_separator_vertical', label: 'Stile verticale', type: 'separator',
+
+    { type: 'separator', label: t('Sotto-voci verticale') },
+    { key: 'v_show_icons', label: t('Mostra icone'), type: 'toggle',
       show: s => s.style === 'vertical' },
-    { key: 'v_show_icons', label: 'Mostra icone', type: 'toggle',
+    { key: 'v_expand_subs', label: t('Sottovoci espandibili'), type: 'toggle',
       show: s => s.style === 'vertical' },
-    { key: 'v_icon_style', label: 'Stile icona', type: 'select',
-      show: s => s.style === 'vertical' && s.v_show_icons,
-      options: [
-        { value: 'line', label: 'Linea (outline)' },
-        { value: 'filled', label: 'Pieno' },
-        { value: 'circle', label: 'Cerchio sfondo' },
-      ]},
-    { key: 'v_icon_size', label: 'Dim. icona (px)', type: 'range', min: 14, max: 32, step: 2,
-      show: s => s.style === 'vertical' && s.v_show_icons },
-    { key: 'v_icon_color', label: 'Colore icona', type: 'color',
-      show: s => s.style === 'vertical' && s.v_show_icons },
-    { key: 'v_item_spacing', label: 'Spaziatura voci (px)', type: 'range', min: 0, max: 24, step: 2,
+    { key: 'v_separator', label: t('Separatore tra voci'), type: 'toggle',
       show: s => s.style === 'vertical' },
-    { key: 'v_item_padding', label: 'Padding voce (px)', type: 'spacing', max: 20 },
-    { key: 'v_separator', label: 'Separatore tra voci', type: 'toggle',
-      show: s => s.style === 'vertical' },
-    { key: 'v_separator_color', label: 'Colore separatore', type: 'color',
-      show: s => s.style === 'vertical' && s.v_separator },
-    { key: 'v_active_indicator', label: 'Indicatore attivo', type: 'select',
-      show: s => s.style === 'vertical',
-      options: [
-        { value: 'none', label: 'Nessuno' },
-        { value: 'left-border', label: 'Bordo sinistro' },
-        { value: 'background', label: 'Sfondo' },
-        { value: 'bold', label: 'Grassetto' },
-      ]},
-    { key: 'v_active_bg', label: 'Sfondo attivo', type: 'color',
-      show: s => s.style === 'vertical' && (s.v_active_indicator === 'background' || s.v_active_indicator === 'left-border') },
-    { key: 'v_hover_bg', label: 'Sfondo hover', type: 'color',
-      show: s => s.style === 'vertical' },
-    { key: 'v_border_radius', label: 'Raggio bordo voci (px)', type: 'border-radius',
-      show: s => s.style === 'vertical' },
-    { key: 'v_border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius',
-      show: s => s.style === 'vertical' },
-    { key: 'v_expand_subs', label: 'Sottovoci espandibili', type: 'toggle',
-      show: s => s.style === 'vertical' },
-    // --- Indicatore menu ---
-    { key: '_separator_pointer', label: 'Indicatore menu', type: 'separator' },
-    { key: 'menu_pointer', label: 'Indicatore menu', type: 'select', options: [
-      { value: 'none', label: 'Nessuno' },
-      { value: 'underline', label: 'Sottolineatura' },
-      { value: 'overline', label: 'Linea sopra' },
-      { value: 'framed', label: 'Cornice' },
-      { value: 'background', label: 'Sfondo' },
-      { value: 'double-line', label: 'Doppia linea' },
+
+    { type: 'separator', label: t('Mega Menu — Sorgente') },
+    { key: 'mega_menu', label: t('Mega Menu'), type: 'select', options: [
+      { value: 'none', label: t('Disabilitato') },
+      { value: 'auto', label: t('Auto (tutti i parent)') },
+      { value: 'class', label: t('Classe CSS (mega-menu)') },
     ]},
-    { key: 'menu_pointer_animation', label: 'Animazione indicatore', type: 'select',
-      show: s => s.menu_pointer && s.menu_pointer !== 'none',
-      options: [
-        { value: 'fade', label: 'Fade' },
-        { value: 'slide', label: 'Slide' },
-        { value: 'grow', label: 'Grow' },
-        { value: 'drop', label: 'Drop' },
-      ]},
-    { key: 'menu_pointer_color', label: 'Colore indicatore', type: 'color',
-      show: s => s.menu_pointer && s.menu_pointer !== 'none' },
-    // --- Tipografia ---
-    { key: '_separator_typo', label: 'Tipografia', type: 'separator' },
-    { key: 'text_color', label: 'Colore link', type: 'color' },
-    { key: 'hover_color', label: 'Colore hover', type: 'color' },
-    { key: 'active_color', label: 'Colore attivo/corrente', type: 'color' },
-    { key: 'font_size', label: 'Dimensione font (px)', type: 'range', min: 11, max: 24, step: 1 },
-    { key: 'font_weight', label: 'Peso font', type: 'select', options: [
-      { value: 'normal', label: 'Normale' },
-      { value: '500', label: 'Medio' },
-      { value: '600', label: 'Semi-grassetto' },
-      { value: 'bold', label: 'Grassetto' },
+
+    { type: 'separator', label: t('Voci pulsante') },
+    { key: 'button_items', label: t('Voci da rendere pulsante'), type: 'select', options: [
+      { value: 'none', label: t('Nessuna') },
+      { value: 'last', label: t('Ultima voce') },
+      { value: 'last-2', label: t('Ultime 2 voci') },
+      { value: 'css-class', label: t('Classe CSS (olo-btn)') },
     ]},
-    { key: 'text_transform', label: 'Trasformazione testo', type: 'select', options: [
-      { value: 'none', label: 'Nessuna' },
-      { value: 'uppercase', label: 'Maiuscolo' },
-      { value: 'capitalize', label: 'Iniziale maiuscola' },
-    ]},
-    { key: 'letter_spacing', label: 'Spaziatura lettere (px)', type: 'range', min: 0, max: 5, step: 0.5 },
-    { key: 'gap', label: 'Gap elementi', type: 'select', options: [
-      { value: 'small', label: 'Piccolo' },
-      { value: 'medium', label: 'Medio' },
-      { value: 'large', label: 'Grande' },
-    ]},
-    // --- Dropdown ---
-    { key: '_separator_dropdown', label: 'Dropdown', type: 'separator' },
-    { key: 'dropdown_bg', label: 'Sfondo dropdown', type: 'color' },
-    { key: 'dropdown_color', label: 'Colore testo dropdown', type: 'color' },
-    // --- Header ---
-    { key: '_separator_header', label: 'Header', type: 'separator' },
-    { key: 'header_mode', label: 'Modalità header', type: 'select', options: [
-      { value: 'overlay', label: 'Sovrapposto (sopra il contenuto)' },
-      { value: 'classic', label: 'Classico (spinge il contenuto)' },
-    ]},
-    { key: 'sticky', label: 'Abilita sticky', type: 'toggle' },
-    { key: 'sticky_show_on_up', label: 'Mostra allo scroll in su', type: 'toggle',
-      show: s => !!s.sticky },
-    { key: 'sticky_bg', label: 'Sfondo sticky', type: 'color',
-      show: s => !!s.sticky },
-    { key: 'sticky_shadow', label: 'Ombra sticky', type: 'toggle',
-      show: s => !!s.sticky },
-    // --- Mega Menu ---
-    { key: '_separator_mega', label: 'Mega Menu', type: 'separator' },
-    { key: 'mega_menu', label: 'Mega Menu', type: 'select', options: [
-      { value: 'none', label: 'Disabilitato' },
-      { value: 'auto', label: 'Auto (tutti i parent)' },
-      { value: 'class', label: 'Classe CSS (mega-menu)' },
-    ]},
-    { key: 'mega_columns', label: 'Colonne', type: 'select',
-      show: s => s.mega_menu && s.mega_menu !== 'none',
-      options: [
-        { value: 2, label: '2 colonne' },
-        { value: 3, label: '3 colonne' },
-        { value: 4, label: '4 colonne' },
-      ]},
-    // --- Voci pulsante ---
-    { key: '_separator_buttons', label: 'Voci pulsante', type: 'separator' },
-    { key: 'button_items', label: 'Voci pulsante', type: 'select', options: [
-      { value: 'none', label: 'Nessuna' },
-      { value: 'last', label: 'Ultima voce' },
-      { value: 'last-2', label: 'Ultime 2 voci' },
-      { value: 'css-class', label: 'Classe CSS (olo-btn)' },
-    ]},
-    { key: 'button_style', label: 'Stile pulsante', type: 'select',
-      show: s => s.button_items && s.button_items !== 'none',
-      options: [
-        { value: 'default', label: 'Predefinito' },
-        { value: 'primary', label: 'Primary' },
-        { value: 'secondary', label: 'Secondary' },
-      ]},
-    { key: 'button_size', label: 'Dimensione pulsante', type: 'select',
-      show: s => s.button_items && s.button_items !== 'none',
-      options: [
-        { value: 'small', label: 'Piccolo' },
-        { value: 'default', label: 'Predefinito' },
-      ]},
-    // --- Ricerca nel menu ---
-    { key: '_separator_search', label: 'Ricerca nel menu', type: 'separator' },
-    { key: 'search_tile_id', label: 'Tile ricerca', type: 'select',
-      optionsSource: 'searchTiles' },
-    { key: 'search_position', label: 'Posizione', type: 'select',
+
+    { type: 'separator', label: t('Ricerca integrata') },
+    { key: 'search_tile_id', label: t('Tile ricerca'), type: 'select', optionsSource: 'searchTiles' },
+    { key: 'search_position', label: t('Posizione'), type: 'select',
       show: s => !!s.search_tile_id,
       options: [
-        { value: 'before', label: 'Prima del menu (sinistra)' },
-        { value: 'after', label: 'Dopo il menu (destra)' },
+        { value: 'before', label: t('Prima del menu (sinistra)') },
+        { value: 'after', label: t('Dopo il menu (destra)') },
       ]},
-    // --- Mobile ---
-    { key: '_separator_mobile', label: 'Mobile', type: 'separator' },
-    { key: 'mobile_toggle', label: 'Hamburger mobile', type: 'toggle' },
-    { key: 'mobile_style', label: 'Stile mobile', type: 'select', options: [
-      { value: 'offcanvas', label: 'Pannello offcanvas' },
-      { value: 'dropdown', label: 'Dropdown' },
+
+    { type: 'separator', label: t('Mobile') },
+    { key: 'mobile_toggle', label: t('Hamburger mobile'), type: 'toggle' },
+    { key: 'mobile_breakpoint', label: t('Breakpoint mobile (px)'), type: 'range', min: 640, max: 1200, step: 10 },
+    { key: 'menu_badge_support', label: t('Supporto badge voci'), type: 'toggle' },
+  ],
+
+  // ─── STILE ─────────────────────────────────────────────────
+  styleFields: [
+    { type: 'separator', label: t('Preset stilistico') },
+    { key: 'preset', label: t('Stile'), type: 'select', options: [
+      { value: 'modern-clean',    label: t('Modern Clean') },
+      { value: 'minimal-mono',    label: t('Minimal Mono') },
+      { value: 'magazine-bold',   label: t('Magazine Bold') },
+      { value: 'editorial-serif', label: t('Editorial Serif') },
+      { value: 'compact-inline',  label: t('Compact Inline') },
+      { value: 'glass-frosted',   label: t('Glass Frosted') },
+      { value: 'neon-glow',       label: t('Neon Glow') },
+      { value: 'brutalist-stamp', label: t('Brutalist Stamp') },
+      { value: 'gradient-aurora', label: t('Gradient Aurora') },
+      { value: 'sticker-fun',     label: t('Sticker Fun') },
+      { value: 'retro-terminal',  label: t('Retro Terminal') },
+      { value: 'tilt-3d',         label: t('3D Tilt') },
+      { value: 'custom',          label: t('Personalizzato') },
+    ] },
+    { key: 'alignment', label: t('Allineamento'), type: 'select', options: [
+      { value: 'left', label: t('Sinistra') },
+      { value: 'center', label: t('Centro') },
+      { value: 'right', label: t('Destra') },
     ]},
-    { key: 'mobile_type', label: 'Menu mobile tipo', type: 'select', options: [
-      { value: 'dropdown', label: 'Dropdown' },
-      { value: 'offcanvas', label: 'Offcanvas' },
-      { value: 'fullscreen', label: 'Fullscreen' },
+
+    { type: 'separator', label: t('Aspetto verticale'),
+      show: s => s.style === 'vertical' },
+    { key: 'v_icon_style', label: t('Stile icona'), type: 'select',
+      show: s => s.style === 'vertical' && s.v_show_icons,
+      options: [
+        { value: 'line', label: t('Linea (outline)') },
+        { value: 'filled', label: t('Pieno') },
+        { value: 'circle', label: t('Cerchio sfondo') },
+      ]},
+    { key: 'v_icon_size', label: t('Dim. icona (px)'), type: 'range', min: 14, max: 32, step: 2,
+      show: s => s.style === 'vertical' && s.v_show_icons },
+    { key: 'v_item_spacing', label: t('Spaziatura voci (px)'), type: 'range', min: 0, max: 24, step: 2,
+      show: s => s.style === 'vertical' },
+    { key: 'v_item_padding', label: t('Padding voce (px)'), type: 'spacing', max: 20 },
+    { key: 'v_separator_color', label: t('Colore separatore'), type: 'color',
+      show: s => s.style === 'vertical' && s.v_separator },
+    { key: 'v_active_indicator', label: t('Indicatore attivo'), type: 'select',
+      show: s => s.style === 'vertical',
+      options: [
+        { value: 'none', label: t('Nessuno') },
+        { value: 'left-border', label: t('Bordo sinistro') },
+        { value: 'background', label: t('Sfondo') },
+        { value: 'bold', label: t('Grassetto') },
+      ]},
+    { key: 'v_active_bg', label: t('Sfondo attivo'), type: 'color',
+      show: s => s.style === 'vertical' && (s.v_active_indicator === 'background' || s.v_active_indicator === 'left-border') },
+    { key: 'v_hover_bg', label: t('Sfondo hover'), type: 'color',
+      show: s => s.style === 'vertical' },
+    withHover({ key: 'v_border_radius', label: t('Raggio bordo voci (px)'), type: 'border-radius',
+      show: s => s.style === 'vertical' }),
+
+    { type: 'separator', label: t('Indicatore menu') },
+    { key: 'menu_pointer', label: t('Tipo indicatore'), type: 'select', options: [
+      { value: 'none', label: t('Nessuno') },
+      { value: 'underline', label: t('Sottolineatura') },
+      { value: 'overline', label: t('Linea sopra') },
+      { value: 'framed', label: t('Cornice') },
+      { value: 'background', label: t('Sfondo') },
+      { value: 'double-line', label: t('Doppia linea') },
     ]},
-    { key: 'mobile_breakpoint', label: 'Breakpoint mobile (px)', type: 'range',
-      min: 640, max: 1200, step: 10 },
-    { key: 'hamburger_style', label: 'Stile hamburger', type: 'select', options: [
-      { value: 'default', label: 'Default' },
-      { value: 'squeeze', label: 'Squeeze' },
-      { value: 'elastic', label: 'Elastic' },
+    { key: 'menu_pointer_animation', label: t('Animazione indicatore'), type: 'select',
+      show: s => s.menu_pointer && s.menu_pointer !== 'none',
+      options: [
+        { value: 'fade', label: t('Fade') },
+        { value: 'slide', label: t('Slide') },
+        { value: 'grow', label: t('Grow') },
+        { value: 'drop', label: t('Drop') },
+      ]},
+    { key: 'menu_pointer_color', label: t('Colore indicatore'), type: 'color',
+      show: s => s.menu_pointer && s.menu_pointer !== 'none' },
+
+    { type: 'separator', label: t('Tipografia') },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
+    { type: 'typography', label: t('Link nav'),
+      presetKey: 'typography_preset',
+      responsiveKeys: ['size', 'letterSpacing'],
+      keys: {
+        size:          'font_size',
+        weight:        'font_weight',
+        transform:     'text_transform',
+        letterSpacing: 'letter_spacing',
+        color:         'text_color',
+        colorHover:    'hover_color',
+      },
+      sizeMin: 11, sizeMax: 24, sizeStep: 1,
+    },
+    { type: 'typography', label: t('Voce attiva'),
+      presetKey: 'typography_preset',
+      keys: {
+        color: 'active_color',
+      },
+    },
+    { type: 'typography', label: t('Dropdown'),
+      presetKey: 'typography_preset',
+      keys: {
+        color: 'dropdown_color',
+      },
+    },
+    { type: 'typography', label: t('Icona verticale'),
+      presetKey: 'typography_preset',
+      keys: {
+        color: 'v_icon_color',
+      },
+      show: s => s.style === 'vertical' && s.v_show_icons,
+    },
+    { key: 'gap', label: t('Gap elementi'), type: 'select', options: [
+      { value: 'small', label: t('Piccolo') },
+      { value: 'medium', label: t('Medio') },
+      { value: 'large', label: t('Grande') },
     ]},
-    { key: 'hamburger_position', label: 'Posizione trigger', type: 'select', options: [
-      { value: 'inline', label: 'Inline (nel flusso)' },
-      { value: 'top-left', label: 'Fisso alto-sinistra' },
-      { value: 'top-right', label: 'Fisso alto-destra' },
-      { value: 'bottom-left', label: 'Fisso basso-sinistra' },
-      { value: 'bottom-right', label: 'Fisso basso-destra' },
+
+    { type: 'separator', label: t('Dropdown') },
+    { key: 'dropdown_bg', label: t('Sfondo dropdown'), type: 'color' },
+
+    { type: 'separator', label: t('Header') },
+    { key: 'header_mode', label: t('Modalità header'), type: 'select', options: [
+      { value: 'overlay', label: t('Sovrapposto (sopra il contenuto)') },
+      { value: 'classic', label: t('Classico (spinge il contenuto)') },
     ]},
-    { key: 'hamburger_offset_x', label: 'Offset orizzontale (px)', type: 'range',
+    { key: 'sticky', label: t('Abilita sticky'), type: 'toggle' },
+    { key: 'sticky_show_on_up', label: t('Mostra allo scroll in su'), type: 'toggle',
+      show: s => !!s.sticky },
+    { key: 'sticky_bg', label: t('Sfondo sticky'), type: 'color',
+      show: s => !!s.sticky },
+    { key: 'sticky_shadow', label: t('Ombra sticky'), type: 'toggle',
+      show: s => !!s.sticky },
+
+    { type: 'separator', label: t('Mega Menu — Aspetto') },
+    { key: 'mega_columns', label: t('Colonne'), type: 'select',
+      show: s => s.mega_menu && s.mega_menu !== 'none',
+      options: [
+        { value: 2, label: t('2 colonne') },
+        { value: 3, label: t('3 colonne') },
+        { value: 4, label: t('4 colonne') },
+      ]},
+
+    { type: 'separator', label: t('Voci pulsante — Aspetto') },
+    { key: 'button_style', label: t('Stile pulsante'), type: 'select',
+      show: s => s.button_items && s.button_items !== 'none',
+      options: [
+        { value: 'default', label: t('Predefinito') },
+        { value: 'primary', label: t('Primary') },
+        { value: 'secondary', label: t('Secondary') },
+      ]},
+    { key: 'button_size', label: t('Dimensione pulsante'), type: 'select',
+      show: s => s.button_items && s.button_items !== 'none',
+      options: [
+        { value: 'small', label: t('Piccolo') },
+        { value: 'default', label: t('Predefinito') },
+      ]},
+
+    { type: 'separator', label: t('Mobile — Aspetto') },
+    { key: 'mobile_style', label: t('Stile mobile'), type: 'select', options: [
+      { value: 'offcanvas', label: t('Pannello offcanvas') },
+      { value: 'dropdown', label: t('Dropdown') },
+    ]},
+    { key: 'mobile_type', label: t('Menu mobile tipo'), type: 'select', options: [
+      { value: 'dropdown', label: t('Dropdown') },
+      { value: 'offcanvas', label: t('Offcanvas') },
+      { value: 'fullscreen', label: t('Fullscreen') },
+    ]},
+
+    { type: 'separator', label: t('Hamburger') },
+    { key: 'hamburger_style', label: t('Stile hamburger'), type: 'select', options: [
+      { value: 'default', label: t('Default') },
+      { value: 'squeeze', label: t('Squeeze') },
+      { value: 'elastic', label: t('Elastic') },
+    ]},
+    { key: 'hamburger_position', label: t('Posizione trigger'), type: 'select', options: [
+      { value: 'inline', label: t('Inline (nel flusso)') },
+      { value: 'top-left', label: t('Fisso alto-sinistra') },
+      { value: 'top-right', label: t('Fisso alto-destra') },
+      { value: 'bottom-left', label: t('Fisso basso-sinistra') },
+      { value: 'bottom-right', label: t('Fisso basso-destra') },
+    ]},
+    { key: 'hamburger_offset_x', label: t('Offset orizzontale (px)'), type: 'range',
       min: 0, max: 60, step: 2,
       show: s => s.hamburger_position && s.hamburger_position !== 'inline' },
-    { key: 'hamburger_offset_y', label: 'Offset verticale (px)', type: 'range',
+    { key: 'hamburger_offset_y', label: t('Offset verticale (px)'), type: 'range',
       min: 0, max: 60, step: 2,
       show: s => s.hamburger_position && s.hamburger_position !== 'inline' },
-    { key: 'hamburger_size', label: 'Dimensione icona (px)', type: 'range',
-      min: 16, max: 48, step: 2 },
-    { key: 'hamburger_bg', label: 'Sfondo trigger', type: 'color' },
-    { key: 'hamburger_color', label: 'Colore trigger', type: 'color' },
-    { key: 'menu_badge_support', label: 'Supporto badge voci', type: 'toggle' },
+    { key: 'hamburger_size', label: t('Dimensione icona (px)'), type: 'range', min: 16, max: 48, step: 2 },
+    { key: 'hamburger_bg', label: t('Sfondo trigger'), type: 'color' },
+    { key: 'hamburger_color', label: t('Colore trigger'), type: 'color' },
+
     ...borderFields(),
   ],
 };

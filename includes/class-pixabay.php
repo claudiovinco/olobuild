@@ -154,6 +154,18 @@ class Olo_Pixabay {
             return new WP_Error( 'missing_url', 'URL immagine mancante', [ 'status' => 400 ] );
         }
 
+        // Hotlink mode: skip sideload
+        $behavior = olo_stockmedia_behavior();
+        if ( empty( $behavior['download_local'] ) ) {
+            return rest_ensure_response( [
+                'id'      => 0,
+                'url'     => $regular_url,
+                'alt'     => $alt,
+                'caption' => $photographer ? 'Photo by ' . $photographer . ' on Pixabay' : '',
+                'hotlink' => true,
+            ] );
+        }
+
         require_once ABSPATH . 'wp-admin/includes/file.php';
         require_once ABSPATH . 'wp-admin/includes/media.php';
         require_once ABSPATH . 'wp-admin/includes/image.php';
@@ -174,10 +186,20 @@ class Olo_Pixabay {
             }
         }
 
-        $filename  = 'pixabay-' . $photo_id . '.jpg';
+        // Optimize: WebP conversion se richiesto
+        if ( ! empty( $behavior['optimize_on_download'] ) ) {
+            $webp = olo_convert_to_webp( $tmp_file, 82 );
+            if ( $webp && $webp !== $tmp_file ) {
+                @unlink( $tmp_file );
+                $tmp_file = $webp;
+            }
+        }
+
+        $is_webp   = str_ends_with( $tmp_file, '.webp' );
+        $filename  = 'pixabay-' . $photo_id . ( $is_webp ? '.webp' : '.jpg' );
         $file_data = [
             'name'     => $filename,
-            'type'     => 'image/jpeg',
+            'type'     => $is_webp ? 'image/webp' : 'image/jpeg',
             'tmp_name' => $tmp_file,
             'error'    => 0,
             'size'     => filesize( $tmp_file ),

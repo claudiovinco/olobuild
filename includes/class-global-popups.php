@@ -349,7 +349,7 @@ class Olo_Global_Popups {
     public function save_popups( $request ) {
         $popups = $request->get_json_params();
         if ( ! is_array( $popups ) ) {
-            return new WP_Error( 'invalid', 'Dati non validi', [ 'status' => 400 ] );
+            return new WP_Error( 'invalid', __( 'Dati non validi', 'olobuild' ), [ 'status' => 400 ] );
         }
 
         // Sanitize each popup
@@ -400,14 +400,8 @@ class Olo_Global_Popups {
      * ───────────────────────────────────────────── */
 
     public function add_admin_page() {
-        add_submenu_page(
-            'olobuild',
-            'Popup Globali',
-            'Popup Globali',
-            'manage_options',
-            'olo-global-popups',
-            [ $this, 'render_admin_page' ]
-        );
+        // v1.0.31 — pagina migrata in ?page=olobuilder-settings&tab=popups
+        // La classe resta attiva per il rendering dei popup nel frontend in base alle condizioni.
     }
 
     public function render_admin_page() {
@@ -423,22 +417,30 @@ class Olo_Global_Popups {
                 'type' => $t['type'] ?? 'page',
             ];
         }
+        $popup_count = is_array( $popups ) ? count( $popups ) : 0;
+        $active_count = 0;
+        if ( is_array( $popups ) ) {
+            foreach ( $popups as $p ) if ( ! empty( $p['enabled'] ) ) $active_count++;
+        }
         ?>
-        <?php Olo_Builder::page_shell_open( 'Popup Globali' ); ?>
+        <?php Olo_Builder::cockpit_shell_open( '<b>' . esc_html__( 'Popup Globali', 'olobuild' ) . '</b>' ); ?>
+        <main class="olo-cockpit-main olo-cockpit-legacy">
+            <?php
+            echo Olo_Builder::cockpit_page_head( [
+                'title' => __( 'Popup Globali', 'olobuild' ),
+                'sub'   => sprintf(
+                    /* translators: 1: total popups, 2: active popups */
+                    __( '%1$s popup configurati · %2$s attivi · trigger automatici per condizioni di visualizzazione', 'olobuild' ),
+                    '<b>' . (int) $popup_count . '</b>',
+                    '<b>' . (int) $active_count . '</b>'
+                ),
+            ] );
+            ?>
 
-            <div class="olo-card" style="margin-bottom:24px">
-                <div class="olo-card-head">
-                    <div class="olo-card-icon orange">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
-                    </div>
-                    <div>
-                        <strong>Popup Globali</strong>
-                        <p style="margin:2px 0 0;color:#888;font-size:13px">Configura popup che appaiono automaticamente in base a condizioni di visualizzazione.</p>
-                    </div>
-                </div>
-                <div class="olo-card-body">
+            <div class="olo-card" style="margin-top:16px;margin-bottom:24px">
+                <div class="olo-card-body" style="padding-top:0">
                     <div id="olo-global-popups-app">
-                        <noscript>JavaScript richiesto.</noscript>
+                        <noscript><?php esc_html_e( 'JavaScript richiesto.', 'olobuild' ); ?></noscript>
                     </div>
                 </div>
             </div>
@@ -455,36 +457,59 @@ class Olo_Global_Popups {
                 var app = document.getElementById('olo-global-popups-app');
                 if (!app) return;
 
+                var gpopI18n = {
+                    noPopupsConfigured: <?php echo wp_json_encode( __( 'Nessun popup configurato', 'olobuild' ) ); ?>,
+                    active:             <?php echo wp_json_encode( __( 'Attivo', 'olobuild' ) ); ?>,
+                    disabled:           <?php echo wp_json_encode( __( 'Disattivato', 'olobuild' ) ); ?>,
+                    popup:              <?php echo wp_json_encode( __( 'Popup', 'olobuild' ) ); ?>,
+                    remove:             <?php echo wp_json_encode( __( 'Rimuovi', 'olobuild' ) ); ?>,
+                    popupName:          <?php echo wp_json_encode( __( 'Nome popup', 'olobuild' ) ); ?>,
+                    template:           <?php echo wp_json_encode( __( 'Template', 'olobuild' ) ); ?>,
+                    selectPlaceholder:  <?php echo wp_json_encode( __( 'Seleziona', 'olobuild' ) ); ?>,
+                    trigger:            <?php echo wp_json_encode( __( 'Trigger', 'olobuild' ) ); ?>,
+                    frequency:          <?php echo wp_json_encode( __( 'Frequenza', 'olobuild' ) ); ?>,
+                    conditions:         <?php echo wp_json_encode( __( 'Condizioni', 'olobuild' ) ); ?>,
+                    orAtLeastOne:       <?php echo wp_json_encode( __( 'OR (almeno una)', 'olobuild' ) ); ?>,
+                    andAll:             <?php echo wp_json_encode( __( 'AND (tutte)', 'olobuild' ) ); ?>,
+                    condition:          <?php echo wp_json_encode( __( 'Condizione', 'olobuild' ) ); ?>,
+                    not:                <?php echo wp_json_encode( __( 'NON', 'olobuild' ) ); ?>,
+                    valueIdSlug:        <?php echo wp_json_encode( __( 'Valore (ID, slug)', 'olobuild' ) ); ?>,
+                    addPopup:           <?php echo wp_json_encode( __( 'Aggiungi Popup', 'olobuild' ) ); ?>,
+                    saveAll:            <?php echo wp_json_encode( __( 'Salva Tutto', 'olobuild' ) ); ?>,
+                    saved:              <?php echo wp_json_encode( __( 'Popup salvati con successo!', 'olobuild' ) ); ?>,
+                    error:              <?php echo wp_json_encode( __( 'Errore', 'olobuild' ) ); ?>
+                };
+
                 var triggerOptions = [
-                    {v:'page_load',l:'Caricamento pagina'},
-                    {v:'scroll_percent',l:'Scroll %'},
-                    {v:'exit_intent',l:'Exit Intent'},
-                    {v:'timer',l:'Timer'},
-                    {v:'inactivity',l:'Inattivita\''}
+                    {v:'page_load',l:<?php echo wp_json_encode( __( 'Caricamento pagina', 'olobuild' ) ); ?>},
+                    {v:'scroll_percent',l:<?php echo wp_json_encode( __( 'Scroll %', 'olobuild' ) ); ?>},
+                    {v:'exit_intent',l:<?php echo wp_json_encode( __( 'Exit Intent', 'olobuild' ) ); ?>},
+                    {v:'timer',l:<?php echo wp_json_encode( __( 'Timer', 'olobuild' ) ); ?>},
+                    {v:'inactivity',l:<?php echo wp_json_encode( __( "Inattività", 'olobuild' ) ); ?>}
                 ];
 
                 var freqOptions = [
-                    {v:'always',l:'Sempre'},
-                    {v:'once_session',l:'1 volta per sessione'},
-                    {v:'once_day',l:'1 volta al giorno'},
-                    {v:'once_week',l:'1 volta a settimana'},
-                    {v:'once_ever',l:'Solo 1 volta'}
+                    {v:'always',l:<?php echo wp_json_encode( __( 'Sempre', 'olobuild' ) ); ?>},
+                    {v:'once_session',l:<?php echo wp_json_encode( __( '1 volta per sessione', 'olobuild' ) ); ?>},
+                    {v:'once_day',l:<?php echo wp_json_encode( __( '1 volta al giorno', 'olobuild' ) ); ?>},
+                    {v:'once_week',l:<?php echo wp_json_encode( __( '1 volta a settimana', 'olobuild' ) ); ?>},
+                    {v:'once_ever',l:<?php echo wp_json_encode( __( 'Solo 1 volta', 'olobuild' ) ); ?>}
                 ];
 
                 var conditionTypes = [
-                    {v:'entire_site',l:'Tutto il sito'},
-                    {v:'front_page',l:'Homepage'},
-                    {v:'page',l:'Pagina specifica'},
-                    {v:'post',l:'Articolo specifico'},
-                    {v:'post_type',l:'Tipo contenuto'},
-                    {v:'archive',l:'Archivio'},
-                    {v:'category',l:'Categoria'},
-                    {v:'user_logged_in',l:'Utente loggato'},
-                    {v:'user_logged_out',l:'Utente non loggato'},
-                    {v:'device_desktop',l:'Desktop'},
-                    {v:'device_mobile',l:'Mobile'},
-                    {v:'404',l:'Pagina 404'},
-                    {v:'search',l:'Ricerca'}
+                    {v:'entire_site',l:<?php echo wp_json_encode( __( 'Tutto il sito', 'olobuild' ) ); ?>},
+                    {v:'front_page',l:<?php echo wp_json_encode( __( 'Homepage', 'olobuild' ) ); ?>},
+                    {v:'page',l:<?php echo wp_json_encode( __( 'Pagina specifica', 'olobuild' ) ); ?>},
+                    {v:'post',l:<?php echo wp_json_encode( __( 'Articolo specifico', 'olobuild' ) ); ?>},
+                    {v:'post_type',l:<?php echo wp_json_encode( __( 'Tipo contenuto', 'olobuild' ) ); ?>},
+                    {v:'archive',l:<?php echo wp_json_encode( __( 'Archivio', 'olobuild' ) ); ?>},
+                    {v:'category',l:<?php echo wp_json_encode( __( 'Categoria', 'olobuild' ) ); ?>},
+                    {v:'user_logged_in',l:<?php echo wp_json_encode( __( 'Utente loggato', 'olobuild' ) ); ?>},
+                    {v:'user_logged_out',l:<?php echo wp_json_encode( __( 'Utente non loggato', 'olobuild' ) ); ?>},
+                    {v:'device_desktop',l:<?php echo wp_json_encode( __( 'Desktop', 'olobuild' ) ); ?>},
+                    {v:'device_mobile',l:<?php echo wp_json_encode( __( 'Mobile', 'olobuild' ) ); ?>},
+                    {v:'404',l:<?php echo wp_json_encode( __( 'Pagina 404', 'olobuild' ) ); ?>},
+                    {v:'search',l:<?php echo wp_json_encode( __( 'Ricerca', 'olobuild' ) ); ?>}
                 ];
 
                 function render(){
@@ -493,24 +518,24 @@ class Olo_Global_Popups {
                     if(popups.length === 0){
                         html += '<div class="olo-empty">';
                         html += '<div class="olo-empty-icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>';
-                        html += '<p>Nessun popup configurato</p>';
+                        html += '<p>' + escHtml(gpopI18n.noPopupsConfigured) + '</p>';
                         html += '</div>';
                     }
 
                     popups.forEach(function(p,i){
-                        var statusBadge = p.enabled ? '<span class="olo-badge green">Attivo</span>' : '<span class="olo-badge gray">Disattivato</span>';
+                        var statusBadge = p.enabled ? '<span class="olo-badge green">' + escHtml(gpopI18n.active) + '</span>' : '<span class="olo-badge gray">' + escHtml(gpopI18n.disabled) + '</span>';
 
                         html += '<div class="olo-card" style="margin-bottom:16px">';
                         html += '<div class="olo-card-head">';
                         html += '<div class="olo-card-icon black"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>';
                         html += '<div style="flex:1;min-width:0">';
                         html += '<div style="display:flex;align-items:center;gap:8px">';
-                        html += '<strong>' + escHtml(p.name || 'Popup #'+(i+1)) + '</strong> ' + statusBadge;
+                        html += '<strong>' + escHtml(p.name || gpopI18n.popup + ' #'+(i+1)) + '</strong> ' + statusBadge;
                         html += '</div>';
                         html += '</div>';
                         html += '<div style="display:flex;align-items:center;gap:10px">';
                         html += '<label class="olo-toggle"><input type="checkbox" '+(p.enabled?'checked':'')+' onchange="oloGPToggle('+i+',this.checked)"><span class="olo-toggle-slider"></span></label>';
-                        html += '<button class="olo-btn-danger" onclick="oloGPRemove('+i+')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg> Rimuovi</button>';
+                        html += '<button class="olo-btn-danger" onclick="oloGPRemove('+i+')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg> ' + escHtml(gpopI18n.remove) + '</button>';
                         html += '</div>';
                         html += '</div>';
 
@@ -518,15 +543,15 @@ class Olo_Global_Popups {
 
                         // Nome popup
                         html += '<div class="olo-field-row">';
-                        html += '<div class="olo-field-info"><label>Nome popup</label></div>';
-                        html += '<div class="olo-field-input-wrap"><input type="text" class="olo-field-input" value="'+escHtml(p.name||'')+'" placeholder="Nome popup" onchange="oloGPField('+i+',\'name\',this.value)"></div>';
+                        html += '<div class="olo-field-info"><label>' + escHtml(gpopI18n.popupName) + '</label></div>';
+                        html += '<div class="olo-field-input-wrap"><input type="text" class="olo-field-input" value="'+escHtml(p.name||'')+'" placeholder="'+escHtml(gpopI18n.popupName)+'" onchange="oloGPField('+i+',\'name\',this.value)"></div>';
                         html += '</div>';
 
                         // Template
                         html += '<div class="olo-field-row">';
-                        html += '<div class="olo-field-info"><label>Template</label></div>';
+                        html += '<div class="olo-field-info"><label>' + escHtml(gpopI18n.template) + '</label></div>';
                         html += '<div class="olo-field-input-wrap"><select class="olo-field-input" onchange="oloGPField('+i+',\'template_id\',this.value)">';
-                        html += '<option value="0">\u2014 Seleziona \u2014</option>';
+                        html += '<option value="0">\u2014 ' + escHtml(gpopI18n.selectPlaceholder) + ' \u2014</option>';
                         templates.forEach(function(t){
                             html += '<option value="'+t.id+'"'+(p.template_id==t.id?' selected':'')+'>'+escHtml(t.name)+' ('+t.type+')</option>';
                         });
@@ -535,7 +560,7 @@ class Olo_Global_Popups {
 
                         // Trigger
                         html += '<div class="olo-field-row">';
-                        html += '<div class="olo-field-info"><label>Trigger</label></div>';
+                        html += '<div class="olo-field-info"><label>' + escHtml(gpopI18n.trigger) + '</label></div>';
                         html += '<div class="olo-field-input-wrap"><select class="olo-field-input" onchange="oloGPField('+i+',\'trigger\',this.value)">';
                         triggerOptions.forEach(function(o){
                             html += '<option value="'+o.v+'"'+(p.trigger===o.v?' selected':'')+'>'+o.l+'</option>';
@@ -545,7 +570,7 @@ class Olo_Global_Popups {
 
                         // Frequenza
                         html += '<div class="olo-field-row">';
-                        html += '<div class="olo-field-info"><label>Frequenza</label></div>';
+                        html += '<div class="olo-field-info"><label>' + escHtml(gpopI18n.frequency) + '</label></div>';
                         html += '<div class="olo-field-input-wrap"><select class="olo-field-input" onchange="oloGPField('+i+',\'frequency\',this.value)">';
                         freqOptions.forEach(function(o){
                             html += '<option value="'+o.v+'"'+(p.frequency===o.v?' selected':'')+'>'+o.l+'</option>';
@@ -555,27 +580,27 @@ class Olo_Global_Popups {
 
                         // Condizioni
                         html += '<div class="olo-field-row" style="align-items:flex-start">';
-                        html += '<div class="olo-field-info"><label>Condizioni</label></div>';
+                        html += '<div class="olo-field-info"><label>' + escHtml(gpopI18n.conditions) + '</label></div>';
                         html += '<div class="olo-field-input-wrap">';
                         html += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">';
                         html += '<select class="olo-field-input" style="width:auto" onchange="oloGPField('+i+',\'conditions_logic\',this.value)">';
-                        html += '<option value="OR"'+(p.conditions_logic!=='AND'?' selected':'')+'>OR (almeno una)</option>';
-                        html += '<option value="AND"'+(p.conditions_logic==='AND'?' selected':'')+'>AND (tutte)</option>';
+                        html += '<option value="OR"'+(p.conditions_logic!=='AND'?' selected':'')+'>'+escHtml(gpopI18n.orAtLeastOne)+'</option>';
+                        html += '<option value="AND"'+(p.conditions_logic==='AND'?' selected':'')+'>'+escHtml(gpopI18n.andAll)+'</option>';
                         html += '</select>';
-                        html += '<button class="olo-btn-orange" onclick="oloGPAddCond('+i+')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg> Condizione</button>';
+                        html += '<button class="olo-btn-orange" onclick="oloGPAddCond('+i+')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg> ' + escHtml(gpopI18n.condition) + '</button>';
                         html += '</div>';
 
                         if(p.conditions){if(p.conditions.length>0){
                             p.conditions.forEach(function(c,ci){
                                 html += '<div style="display:flex;gap:6px;margin:6px 0;align-items:center">';
                                 html += '<label class="olo-toggle" style="min-width:auto"><input type="checkbox" '+(c.negate?'checked':'')+' onchange="oloGPCondField('+i+','+ci+',\'negate\',this.checked)"><span class="olo-toggle-slider"></span></label>';
-                                html += '<span style="font-size:12px;color:#888;min-width:30px">NON</span>';
+                                html += '<span style="font-size:12px;color:#888;min-width:30px">' + escHtml(gpopI18n.not) + '</span>';
                                 html += '<select class="olo-field-input" onchange="oloGPCondField('+i+','+ci+',\'type\',this.value)">';
                                 conditionTypes.forEach(function(ct){
                                     html += '<option value="'+ct.v+'"'+(c.type===ct.v?' selected':'')+'>'+ct.l+'</option>';
                                 });
                                 html += '</select>';
-                                html += '<input type="text" class="olo-field-input" value="'+escHtml(c.value||'')+'" placeholder="Valore (ID, slug)" style="width:130px" onchange="oloGPCondField('+i+','+ci+',\'value\',this.value)">';
+                                html += '<input type="text" class="olo-field-input" value="'+escHtml(c.value||'')+'" placeholder="'+escHtml(gpopI18n.valueIdSlug)+'" style="width:130px" onchange="oloGPCondField('+i+','+ci+',\'value\',this.value)">';
                                 html += '<button class="olo-btn-danger" style="padding:4px 8px;font-size:12px" onclick="oloGPRemoveCond('+i+','+ci+')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>';
                                 html += '</div>';
                             });
@@ -589,8 +614,8 @@ class Olo_Global_Popups {
                     });
 
                     html += '<div style="display:flex;gap:10px;margin-top:20px">';
-                    html += '<button class="olo-btn-orange" onclick="oloGPAdd()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg> Aggiungi Popup</button>';
-                    html += '<button class="olo-btn-save" onclick="oloGPSave()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Salva Tutto</button>';
+                    html += '<button class="olo-btn-orange" onclick="oloGPAdd()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg> ' + escHtml(gpopI18n.addPopup) + '</button>';
+                    html += '<button class="olo-btn-save" onclick="oloGPSave()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> ' + escHtml(gpopI18n.saveAll) + '</button>';
                     html += '</div>';
 
                     app.innerHTML = html;
@@ -620,14 +645,15 @@ class Olo_Global_Popups {
                 window.oloGPSave = function(){
                     fetch(restUrl,{method:'POST',headers:{'Content-Type':'application/json','X-WP-Nonce':nonce},body:JSON.stringify(popups)})
                     .then(function(r){return r.json()})
-                    .then(function(d){if(d.success){showMsg('success','Popup salvati con successo!')}else{showMsg('error','Errore: '+JSON.stringify(d))}})
-                    .catch(function(e){showMsg('error','Errore: '+e.message)});
+                    .then(function(d){if(d.success){showMsg('success',gpopI18n.saved)}else{showMsg('error',gpopI18n.error+': '+JSON.stringify(d))}})
+                    .catch(function(e){showMsg('error',gpopI18n.error+': '+e.message)});
                 };
 
                 render();
             })();
             </script>
-        <?php Olo_Builder::page_shell_close(); ?>
+        </main>
+        <?php Olo_Builder::cockpit_shell_close(); ?>
         <?php
     }
 }

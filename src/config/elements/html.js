@@ -1,8 +1,15 @@
 import { shadowField } from './_shared.js';
+import { t } from '@/i18n';
 
+/**
+ * Tile HTML — split CONTENUTO/STILE (regola universale Olobuild).
+ *   fields[]      → codice HTML, opzione sandbox
+ *   styleFields[] → ombra
+ *   AVANZATE      → meta tecnico
+ */
 export default {
   type: 'html',
-  name: 'HTML / Codice',
+  name: t('HTML / Codice'),
   icon: 'dashicons-editor-code',
   category: 'text',
   defaults: {
@@ -10,9 +17,16 @@ export default {
     sandbox: false,
     shadow: 'none',
   },
+
+  // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
-    { key: 'html_content', label: 'Contenuto HTML', type: 'textarea' },
-    { key: 'sandbox', label: 'Sandbox (iframe)', type: 'toggle' },
+    { key: 'html_content', label: t('Contenuto HTML'), type: 'textarea' },
+    { key: 'sandbox', label: t('Sandbox (iframe)'), type: 'toggle',
+      description: t('Esegue l\'HTML in un iframe isolato (più sicuro per codice esterno).') },
+  ],
+
+  // ─── STILE ─────────────────────────────────────────────────
+  styleFields: [
     ...shadowField,
   ],
 };

@@ -7,6 +7,7 @@ class Olo_Iconlist_Tile extends Olo_Tile_Base {
     protected $icon     = 'dashicons-list-view';
     protected $category = 'text';
     protected $defaults = [
+        'preset' => 'custom',
         'items'          => [],
         'icon_color'     => '#22C55E',
         'icon_size'      => '20',
@@ -18,6 +19,18 @@ class Olo_Iconlist_Tile extends Olo_Tile_Base {
         'divider'        => false,
         'divider_color'  => '#374151',
         'layout'         => 'vertical',
+        // Text effects defaults (l'unica opzione di target è 'text')
+        'text_effect'           => 'none',
+        'text_effect_target'    => 'text',
+        'text_effect_speed'     => '50',
+        'text_effect_delay'     => '0',
+        'text_effect_loop'      => false,
+        'text_effect_cursor'    => true,
+        'text_effect_cursor_char' => '|',
+        'text_effect_color'     => '',
+        'text_effect_color_to'  => '',
+        'text_effect_phrases'   => '',
+        'text_effect_pause'     => '1500',
             'border'                  => [],
         'border_hover'            => [],
         'border_hover_duration'   => 300,
@@ -63,7 +76,7 @@ class Olo_Iconlist_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
-        <div class="olo-iconlist <?php echo esc_attr( $uid ); ?>" style="padding:16px;<?php echo $list_style; ?>">
+        <div class="olo-iconlist <?php echo esc_attr( $uid ); ?> olo-il-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" style="padding:16px;<?php echo $list_style; ?>">
             <?php foreach ($items as $item) :
                 $item_icon = $item['icon'] ?? 'check';
                 $item_text = $item['text'] ?? '';
@@ -93,8 +106,12 @@ class Olo_Iconlist_Tile extends Olo_Tile_Base {
                             <?php echo esc_html($item_icon); ?>
                         <?php endif; ?>
                     </span>
-                    <?php list( $il_cls, $il_data ) = $this->tfx_attrs( $s, 'text', wp_strip_all_tags( $item_text ) ); ?>
-                    <span class="olo-il-text<?php echo $il_cls; ?>" style="color:<?php echo $text_clr; ?>;font-size:<?php echo $text_size; ?>px;line-height:1.4;"<?php echo $il_data; ?>>
+                    <?php
+                    list( $il_cls, $il_data ) = $this->tfx_attrs( $s, 'text', wp_strip_all_tags( $item_text ) );
+                    $il_ta = $s['text_align'] ?? '';
+                    $il_ta_css = in_array( $il_ta, [ 'left', 'center', 'right', 'justify' ], true ) ? 'text-align:' . $il_ta . ';flex:1;' : '';
+                    ?>
+                    <span class="olo-il-text<?php echo $il_cls; ?>" style="color:<?php echo $text_clr; ?>;font-size:<?php echo $text_size; ?>px;line-height:1.4;<?php echo $il_ta_css; ?>"<?php echo $il_data; ?>>
                         <?php echo wp_kses_post($item_text); ?>
                     </span>
                 <?php echo $tag_close; ?>

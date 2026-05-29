@@ -70,6 +70,8 @@ export const useStylesStore = defineStore('styles', {
       css += `  --olo-border-radius: ${cssRadius(l.border_radius, '4px')};\n`;
       css += `  --olo-border-radius-large: ${cssRadius(l.border_radius_large, '8px')};\n`;
       css += `  --olo-container-max-width: ${l.container_max_width || '1200px'};\n`;
+      css += `  --olo-container-narrow: ${l.container_narrow || '720px'};\n`;
+      css += `  --olo-container-wide: ${l.container_wide || '1440px'};\n`;
       // Spacing scale
       const sp = s.spacing || {};
       css += `  --olo-space-xs: ${sp.xs || '4px'};\n`;
@@ -98,6 +100,18 @@ export const useStylesStore = defineStore('styles', {
       css += '  --olo-shadow-small: var(--olo-shadow-sm);\n';
       css += '  --olo-shadow-medium: var(--olo-shadow-md);\n';
       css += '  --olo-shadow-large: var(--olo-shadow-lg);\n';
+
+      // Section padding (token alias)
+      const secp = s.section_padding || {};
+      css += `  --olo-section-pad-y-compact:  var(--olo-space-${secp.compact  || 'lg'});\n`;
+      css += `  --olo-section-pad-y-default:  var(--olo-space-${secp.default  || 'xl'});\n`;
+      css += `  --olo-section-pad-y-spacious: var(--olo-space-${secp.spacious || '2xl'});\n`;
+      css += `  --olo-section-pad-y-between:  var(--olo-space-${secp.between  || 'md'});\n`;
+
+      // Gutter
+      const g = s.gutter || {};
+      css += `  --olo-gutter: ${parseInt(g.desktop ?? 32, 10)}px;\n`;
+      css += `  --olo-gutter-side: ${parseInt(g.side_desktop ?? 32, 10)}px;\n`;
 
       // Global Colors
       if (state.globalColors && state.globalColors.length > 0) {
@@ -154,7 +168,45 @@ export const useStylesStore = defineStore('styles', {
       css += '.olo-template .uk-box-shadow-small { box-shadow: var(--olo-shadow-small) !important; }\n';
       css += '.olo-template .uk-box-shadow-medium { box-shadow: var(--olo-shadow-medium) !important; }\n';
       css += '.olo-template .uk-box-shadow-large { box-shadow: var(--olo-shadow-large) !important; }\n';
-      css += '.olo-template .uk-container { max-width: var(--olo-container-max-width); }\n';
+      css += '.olo-template .uk-container:not(.uk-container-expand) { max-width: var(--olo-container-max-width); padding-left: var(--olo-gutter-side); padding-right: var(--olo-gutter-side); }\n';
+      css += '.olo-template .olo-container-narrow { max-width: var(--olo-container-narrow); margin-left: auto; margin-right: auto; }\n';
+      css += '.olo-template .olo-container-wide   { max-width: var(--olo-container-wide); margin-left: auto; margin-right: auto; }\n';
+      css += '.olo-template .olo-container-full   { max-width: 100%; }\n';
+      css += '.olo-template .olo-section-pad-compact  { padding-top: var(--olo-section-pad-y-compact);  padding-bottom: var(--olo-section-pad-y-compact); }\n';
+      css += '.olo-template .olo-section-pad-default  { padding-top: var(--olo-section-pad-y-default);  padding-bottom: var(--olo-section-pad-y-default); }\n';
+      css += '.olo-template .olo-section-pad-spacious { padding-top: var(--olo-section-pad-y-spacious); padding-bottom: var(--olo-section-pad-y-spacious); }\n';
+
+      // Gutter responsive
+      const gDesk = parseInt(g.desktop ?? 32, 10);
+      const gTab  = parseInt(g.tablet  ?? 24, 10);
+      const gMob  = parseInt(g.mobile  ?? 16, 10);
+      const gSideDesk = parseInt(g.side_desktop ?? 32, 10);
+      const gSideMob  = parseInt(g.side_mobile  ?? 16, 10);
+      if (gTab !== gDesk) {
+        css += `@media (max-width: 960px) { .olo-template { --olo-gutter: ${gTab}px; } }\n`;
+      }
+      if (gMob !== gDesk || gSideMob !== gSideDesk) {
+        css += `@media (max-width: 640px) { .olo-template { --olo-gutter: ${gMob}px; --olo-gutter-side: ${gSideMob}px; } }\n`;
+      }
+
+      // Fluid scaling
+      const fs = s.fluid_scaling || {};
+      if (fs.enabled) {
+        const tabF = Math.max(0.3, Math.min(1.0, parseFloat(fs.tablet ?? 0.85)));
+        const mobF = Math.max(0.3, Math.min(1.0, parseFloat(fs.mobile ?? 0.65)));
+        const spDefaults = { xs: 4, sm: 8, md: 16, lg: 24, xl: 32, '2xl': 48, '3xl': 64, '4xl': 96 };
+        const writeScaled = (factor) => {
+          let out = '';
+          for (const [k, def] of Object.entries(spDefaults)) {
+            const raw = (sp[k] || `${def}px`).toString();
+            const n = parseFloat(raw) || def;
+            out += `    --olo-space-${k}: ${Math.round(n * factor * 100) / 100}px;\n`;
+          }
+          return out;
+        };
+        css += `\n@media (max-width: 960px) {\n  .olo-template {\n${writeScaled(tabF)}  }\n}\n`;
+        css += `@media (max-width: 640px) {\n  .olo-template {\n${writeScaled(mobF)}  }\n}\n`;
+      }
 
       // Dark Mode overrides
       const dc = s.dark_colors || {};
@@ -213,6 +265,24 @@ export const useStylesStore = defineStore('styles', {
     updateShadow(key, value) {
       if (!this.styles.shadows) this.styles.shadows = {};
       this.styles.shadows[key] = value;
+      this.isDirty = true;
+    },
+
+    updateSectionPadding(key, value) {
+      if (!this.styles.section_padding) this.styles.section_padding = {};
+      this.styles.section_padding[key] = value;
+      this.isDirty = true;
+    },
+
+    updateGutter(key, value) {
+      if (!this.styles.gutter) this.styles.gutter = {};
+      this.styles.gutter[key] = value;
+      this.isDirty = true;
+    },
+
+    updateFluidScaling(key, value) {
+      if (!this.styles.fluid_scaling) this.styles.fluid_scaling = {};
+      this.styles.fluid_scaling[key] = value;
       this.isDirty = true;
     },
 
@@ -285,7 +355,7 @@ export const useStylesStore = defineStore('styles', {
       if (this.isSaving) return;
       this.isSaving = true;
       try {
-        const res = await fetch(`${oloData.restUrl}/styles`, {
+        const res = await fetch(`${oloData.restUrl}styles`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -308,7 +378,7 @@ export const useStylesStore = defineStore('styles', {
       if (this.isSaving) return;
       this.isSaving = true;
       try {
-        const res = await fetch(`${oloData.restUrl}/styles/reset`, {
+        const res = await fetch(`${oloData.restUrl}styles/reset`, {
           method: 'POST',
           headers: {
             'X-WP-Nonce': oloData.nonce,
@@ -337,7 +407,7 @@ export const useStylesStore = defineStore('styles', {
       if (this.isSaving) return;
       this.isSaving = true;
       try {
-        const res = await fetch(`${oloData.restUrl}/global-colors`, {
+        const res = await fetch(`${oloData.restUrl}global-colors`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -358,7 +428,7 @@ export const useStylesStore = defineStore('styles', {
 
     async loadGlobalColors() {
       try {
-        const res = await fetch(`${oloData.restUrl}/global-colors`, {
+        const res = await fetch(`${oloData.restUrl}global-colors`, {
           headers: { 'X-WP-Nonce': oloData.nonce },
         });
         if (res.ok) {
@@ -380,7 +450,7 @@ export const useStylesStore = defineStore('styles', {
       if (this.isSaving) return;
       this.isSaving = true;
       try {
-        const res = await fetch(`${oloData.restUrl}/global-typography`, {
+        const res = await fetch(`${oloData.restUrl}global-typography`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -403,7 +473,7 @@ export const useStylesStore = defineStore('styles', {
 
     async loadCustomPresets() {
       try {
-        const res = await fetch(`${oloData.restUrl}/design-presets`, {
+        const res = await fetch(`${oloData.restUrl}design-presets`, {
           headers: { 'X-WP-Nonce': oloData.nonce },
         });
         if (res.ok) {
@@ -424,7 +494,7 @@ export const useStylesStore = defineStore('styles', {
           border_radius_scale: { ...(this.styles.border_radius_scale || {}) },
           shadows: { ...(this.styles.shadows || {}) },
         };
-        const res = await fetch(`${oloData.restUrl}/design-presets`, {
+        const res = await fetch(`${oloData.restUrl}design-presets`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -444,7 +514,7 @@ export const useStylesStore = defineStore('styles', {
 
     async deleteCustomPreset(id) {
       try {
-        const res = await fetch(`${oloData.restUrl}/design-presets/${id}`, {
+        const res = await fetch(`${oloData.restUrl}design-presets/${id}`, {
           method: 'DELETE',
           headers: { 'X-WP-Nonce': oloData.nonce },
         });
@@ -469,7 +539,7 @@ export const useStylesStore = defineStore('styles', {
 
     async loadGlobalTypography() {
       try {
-        const res = await fetch(`${oloData.restUrl}/global-typography`, {
+        const res = await fetch(`${oloData.restUrl}global-typography`, {
           headers: { 'X-WP-Nonce': oloData.nonce },
         });
         if (res.ok) {

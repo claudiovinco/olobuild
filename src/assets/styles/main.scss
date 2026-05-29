@@ -200,13 +200,76 @@
   box-shadow: 0 3px 0 0 var(--olo-color-primary, #6366f1);
 }
 
+// Cursor SVG personalizzati Olotheme — due manine vettoriali con stati distinti:
+//   - manoaperta    → grab     (hover su elemento trascinabile, dita estese in alto)
+//   - manotrascina  → grabbing (drag attivo, dita raccolte che afferrano)
+// viewBox 81×106.65, scalato a 24×32 (aspect mantenuto). Hotspot (12, 16) =
+// centro geometrico, compromesso che funziona per entrambi gli stati.
+// v3.57.27 — sostituite manine identiche con i 2 stati reali brand Olotheme.
+:root {
+  --olo-cursor-grab: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDgxIDEwNi42NSI+PHBhdGggZmlsbD0iI2ZmZiIgc3Ryb2tlPSIjMWQxZDFiIiBzdHJva2UtbWl0ZXJsaW1pdD0iMTAiIHN0cm9rZS13aWR0aD0iMyIgZD0iTTc1LjIyLDkwLjM3YzIuODUtMTIuOS0uMy01NS42NSwwLTY0LjA1cy0xMS4yNS0xMS41NS0xMS4yNSwxLjJ2MjMuMVYxNS44MmMwLTguODUtMTEuNTUtOC41NS0xMS41NSwwdjMwLjNWMTIuODJjMC05Ljk4LTEyLjQ1LTEwLjM1LTEyLjQ1LDB2MzYuM3MtLjYtMjEuNi0uNi0zMC4xNS0xMC44LTYtMTAuOCwxLjA1djM3Ljk1YzAsNC4yLTMuNiw3LjgtNy4wNSwyLjQtMy40NS01LjQtMi4yNS0zLjMtNC45NS02LjE1cy0xNC4yNSwxLjUtOS4zLDguNTVjNC45NSw3LjA1LDE5Ljk1LDI2LjI1LDIyLjUsMjkuN3M2LjAzLDguODUsMTQuNzIsOS4zLDI3LjU4LDIuODUsMzAuNzMtMTEuNFoiLz48L3N2Zz4K") 12 16, grab;
+  --olo-cursor-grabbing: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDgxIDEwNi42NSI+PHBhdGggZmlsbD0iI2ZmZiIgc3Ryb2tlPSIjMWQxZDFiIiBzdHJva2UtbWl0ZXJsaW1pdD0iMTAiIHN0cm9rZS13aWR0aD0iMyIgZD0iTTc1LjIyLDkwLjM3YzIuODUtMTIuOS0uMy00MS4yNSwwLTQ5LjY1cy0xMS4yNS0xMS41NS0xMS4yNSwxLjIsMCw4LjcsMCw4Ljd2LTIwLjRjMC04Ljg1LTExLjU1LTguNTUtMTEuNTUsMHYxNS45LTE4LjljMC05Ljk4LTEyLjQ1LTEwLjM1LTEyLjQ1LDB2MjEuOXMtLjYtNy4yLS42LTE1Ljc1LTEwLjgtNi0xMC44LDEuMDUtLjM5LDE5LjM3LDAsMjMuNTVjMi4zNiwyNS41LTMuMzYsNS43NC0xLjgsMS40MiwyLjE4LTYuMDItMS4yNC04LjY2LTMuNDktOC43OC0zLjkyLS4yLTcuNjUsNC44NC03Ljc2LDE2Ljk5LS4wOCw4LjYxLDEwLjczLDE4LjI2LDEzLjI3LDIxLjcxczcuMDEsMTIsMTUuNjksMTIuNDUsMjcuNTgsMi44NSwzMC43My0xMS40WiIvPjwvc3ZnPgo=") 12 16, grabbing;
+}
+
+// Override per stili inline applicati da JS (es. gripDragging che setta el.style.cursor)
+[style*="cursor: grab"], [style*="cursor:grab"] { cursor: var(--olo-cursor-grab), grab !important; }
+[style*="cursor: grabbing"], [style*="cursor:grabbing"] { cursor: var(--olo-cursor-grabbing), grabbing !important; }
+
+// v3.55.25 — drag custom basato su pointer events (useDnD.js).
+// Quando il drag è attivo aggiungiamo body.olo-dragging che forza il cursore SVG
+// vettoriale OVUNQUE, sostituendo finalmente la "manina pixelata" di Windows
+// (che era un retaggio del drag HTML5 nativo).
+body.olo-dragging,
+body.olo-dragging * {
+  cursor: var(--olo-cursor-grabbing), grabbing !important;
+}
+
+// Ghost element del drag custom (popolato da setCustomNativeDragPreview).
+.olo-drag-ghost {
+  pointer-events: none;
+  user-select: none;
+}
+
 // Legacy sortable fallback (ancora usato da draggable residui fino a completion rewrite)
 .sortable-ghost {
   opacity: 0.4;
   border: 2px dashed var(--olo-color-primary, #6366f1) !important;
 }
 .sortable-chosen {
-  cursor: grabbing;
+  cursor: var(--olo-cursor-grabbing), grabbing;
+}
+
+// Override delle classi/selettori che dichiarano cursor: grab/grabbing nei .vue
+// del builder principale (sidebar card, grid cell, content items, gallery field,
+// structure tree, bezier path editor). Centralizzato qui per non duplicare in ogni file.
+//
+// !important serve perché i .vue usano <style scoped> che aggiunge l'attributo
+// [data-v-xxx] al selettore (specificity 0,2,0) e vince sul mio override globale
+// senza il flag.
+.olo-grid-cell,
+.olo-sb-card,
+.fg-grip,
+.bp-svg-pan,
+.bp-point,
+.bp-handle,
+.st-item,
+.st-handle,
+.olo-iframe-tb-grip {
+  cursor: var(--olo-cursor-grab), grab !important;
+}
+.olo-grid-cell:active,
+.olo-sb-card:active,
+.fg-grip:active,
+.bp-svg-pan:active,
+.bp-point:active,
+.bp-handle:active,
+.st-item:active,
+.st-handle:active,
+.olo-iframe-tb-grip:active,
+.sortable-chosen,
+body.olo-dragging,
+body.olo-dragging * {
+  cursor: var(--olo-cursor-grabbing), grabbing !important;
 }
 
 // Row/Columns drop zones

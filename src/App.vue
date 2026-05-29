@@ -106,8 +106,8 @@ function onOpenFinderAfter() {
 provide('openFinder', openFinder);
 window.__oloOpenFinder = openFinder;
 
-function openInsertPanel(sectionIndex) {
-  insertPanelRef.value?.open(sectionIndex);
+function openInsertPanel(sectionIndex, initialTab) {
+  insertPanelRef.value?.open(sectionIndex, initialTab);
 }
 provide('openInsertPanel', openInsertPanel);
 window.__oloOpenInsertPanel = openInsertPanel;
@@ -130,7 +130,12 @@ const currentView = ref('list'); // 'list' | 'builder'
 // Sidebar resize + collapse
 const SIDEBAR_W_KEY = 'olo_sidebar_w';
 const SIDEBAR_C_KEY = 'olo_sidebar_c';
-const sidebarWidth = ref(parseInt(localStorage.getItem(SIDEBAR_W_KEY)) || 240);
+// V2 sidebar (rail 56 + panel ≥220) needs at least 280px to render comfortably.
+const SIDEBAR_MIN_W = 280;
+const _savedSidebarW = parseInt(localStorage.getItem(SIDEBAR_W_KEY));
+const sidebarWidth = ref(
+  Number.isFinite(_savedSidebarW) && _savedSidebarW >= SIDEBAR_MIN_W ? _savedSidebarW : 336
+);
 const sidebarCollapsed = ref(localStorage.getItem(SIDEBAR_C_KEY) === '1');
 
 function toggleSidebar() {
@@ -159,7 +164,7 @@ function startResize(event) {
     } else {
       sidebarCollapsed.value = false;
       localStorage.setItem(SIDEBAR_C_KEY, '');
-      sidebarWidth.value = Math.min(600, w);
+      sidebarWidth.value = Math.min(600, Math.max(SIDEBAR_MIN_W, w));
     }
   }
   function onUp() {
@@ -177,7 +182,12 @@ function startResize(event) {
 // Inspector resize + collapse
 const INSPECTOR_W_KEY = 'olo_inspector_w';
 const INSPECTOR_C_KEY = 'olo_inspector_c';
-const inspectorWidth = ref(parseInt(localStorage.getItem(INSPECTOR_W_KEY)) || 288);
+// V2 inspector (1fr content + 64px rail) needs at least 320px to render comfortably.
+const INSPECTOR_MIN_W = 320;
+const _savedInspectorW = parseInt(localStorage.getItem(INSPECTOR_W_KEY));
+const inspectorWidth = ref(
+  Number.isFinite(_savedInspectorW) && _savedInspectorW >= INSPECTOR_MIN_W ? _savedInspectorW : 384
+);
 const inspectorCollapsed = ref(localStorage.getItem(INSPECTOR_C_KEY) === '1');
 
 function toggleInspector() {
@@ -199,7 +209,7 @@ function startInspectorResize(event) {
     } else {
       inspectorCollapsed.value = false;
       localStorage.setItem(INSPECTOR_C_KEY, '');
-      inspectorWidth.value = Math.min(600, w);
+      inspectorWidth.value = Math.min(600, Math.max(INSPECTOR_MIN_W, w));
     }
   }
   function onUp() {

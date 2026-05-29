@@ -1,24 +1,29 @@
-import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared.js';
+import { t } from '@/i18n';
+
+/**
+ * Tile ToggleBtn — split CONTENUTO/STILE.
+ *   fields[]      → testi show/hide, icone, target_id, initial_state, animation, duration
+ *   styleFields[] → preset, bg, typo, icona posizione, stile pulsante (colori/bordo/padding/font/align), border
+ */
 export default {
   type: 'togglebtn',
-  name: 'Pulsante Toggle',
+  name: t('Pulsante Toggle'),
   icon: 'dashicons-hidden',
   category: 'interactive',
   defaults: {
-    // Contenuto
+    preset: 'custom',
+    bg: { type: 'none' },
+    typography_preset: '',
     text_show: 'Mostra di più',
     text_hide: 'Mostra di meno',
     icon_show: 'chevron-down',
     icon_hide: 'chevron-up',
     icon_position: 'right',
-
-    // Target
     target_id: '',
     initial_state: 'hidden',
     animation: 'collapse',
     duration: '400',
-
-    // Stile pulsante
     btn_bg: '',
     btn_color: '',
     btn_hover_bg: '',
@@ -35,66 +40,89 @@ export default {
     border_hover_duration: 300,
     ...borderEffectDefaults,
   },
+
   fields: [
-    // ── Contenuto ──
-    { key: 'text_show', label: 'Testo (quando nascosto)', type: 'text' },
-    { key: 'text_hide', label: 'Testo (quando visibile)', type: 'text' },
-    { key: 'icon_show', label: 'Icona mostra', type: 'select', options: [
-      { value: '', label: 'Nessuna' },
-      { value: 'chevron-down', label: '▼ Chevron giù' },
-      { value: 'plus', label: '＋ Più' },
-      { value: 'arrow-down', label: '↓ Freccia giù' },
-      { value: 'eye', label: '👁 Occhio' },
+    { key: 'text_show', label: t('Testo (quando nascosto)'), type: 'text' },
+    { key: 'text_hide', label: t('Testo (quando visibile)'), type: 'text' },
+    { key: 'icon_show', label: t('Icona mostra'), type: 'select', options: [
+      { value: '', label: t('Nessuna') },
+      { value: 'chevron-down', label: t('▼ Chevron giù') },
+      { value: 'plus', label: t('＋ Più') },
+      { value: 'arrow-down', label: t('↓ Freccia giù') },
+      { value: 'eye', label: t('👁 Occhio') },
     ]},
-    { key: 'icon_hide', label: 'Icona nascondi', type: 'select', options: [
-      { value: '', label: 'Nessuna' },
-      { value: 'chevron-up', label: '▲ Chevron su' },
-      { value: 'minus', label: '— Meno' },
-      { value: 'arrow-up', label: '↑ Freccia su' },
-      { value: 'eye-off', label: '🚫 Occhio chiuso' },
-    ]},
-    { key: 'icon_position', label: 'Posizione icona', type: 'select', options: [
-      { value: 'left', label: 'Sinistra' },
-      { value: 'right', label: 'Destra' },
+    { key: 'icon_hide', label: t('Icona nascondi'), type: 'select', options: [
+      { value: '', label: t('Nessuna') },
+      { value: 'chevron-up', label: t('▲ Chevron su') },
+      { value: 'minus', label: t('— Meno') },
+      { value: 'arrow-up', label: t('↑ Freccia su') },
+      { value: 'eye-off', label: t('🚫 Occhio chiuso') },
     ]},
 
-    // ── Target ──
-    { type: 'separator', label: 'Sezione target' },
-    { key: 'target_id', label: 'ID sezione (html_id in Avanzate)', type: 'text' },
-    { key: 'initial_state', label: 'Stato iniziale sezione', type: 'select', options: [
-      { value: 'hidden', label: 'Nascosta' },
-      { value: 'visible', label: 'Visibile' },
+    { type: 'separator', label: t('Sezione target') },
+    { key: 'target_id', label: t('ID sezione (html_id in Avanzate)'), type: 'text' },
+    { key: 'initial_state', label: t('Stato iniziale sezione'), type: 'select', options: [
+      { value: 'hidden', label: t('Nascosta') },
+      { value: 'visible', label: t('Visibile') },
     ]},
-    { key: 'animation', label: 'Animazione', type: 'select', options: [
-      { value: 'collapse', label: 'Collassa (altezza)' },
-      { value: 'fade', label: 'Dissolvenza' },
-      { value: 'slide', label: 'Scorrimento + dissolvenza' },
+    { key: 'animation', label: t('Animazione'), type: 'select', options: [
+      { value: 'collapse', label: t('Collassa (altezza)') },
+      { value: 'fade', label: t('Dissolvenza') },
+      { value: 'slide', label: t('Scorrimento + dissolvenza') },
     ]},
-    { key: 'duration', label: 'Durata (ms)', type: 'range', min: 100, max: 800, step: 50 },
+    { key: 'duration', label: t('Durata (ms)'), type: 'range', min: 100, max: 800, step: 50 },
+  ],
 
-    // ── Stile pulsante ──
-    { type: 'separator', label: 'Stile pulsante' },
-    { key: 'btn_bg', label: 'Sfondo', type: 'color' },
-    { key: 'btn_color', label: 'Colore testo', type: 'color' },
-    { key: 'btn_hover_bg', label: 'Sfondo hover', type: 'color' },
-    { key: 'btn_border_width', label: 'Bordo (px)', type: 'range', min: 0, max: 4 },
-    { key: 'btn_border_color', label: 'Colore bordo', type: 'color' },
-    { key: 'btn_border_radius', label: 'Raggio bordo (px)', type: 'border-radius' },
-    { key: 'btn_border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
-    { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 48 },
-    { key: 'btn_font_size', label: 'Dimensione testo (px)', type: 'range', min: 12, max: 24 },
-    { key: 'btn_font_weight', label: 'Peso testo', type: 'select', options: [
-      { value: '400', label: 'Normal' },
-      { value: '500', label: 'Medium' },
-      { value: '600', label: 'Semibold' },
-      { value: '700', label: 'Bold' },
+  styleFields: [
+    { type: 'separator', label: t('Preset stilistico') },
+    { key: 'preset', label: t('Stile'), type: 'select', options: [
+      { value: 'modern-clean',    label: t('Modern Clean') },
+      { value: 'minimal-mono',    label: t('Minimal Mono') },
+      { value: 'magazine-bold',   label: t('Magazine Bold') },
+      { value: 'editorial-serif', label: t('Editorial Serif') },
+      { value: 'compact-inline',  label: t('Compact Inline') },
+      { value: 'glass-frosted',   label: t('Glass Frosted') },
+      { value: 'neon-glow',       label: t('Neon Glow') },
+      { value: 'brutalist-stamp', label: t('Brutalist Stamp') },
+      { value: 'gradient-aurora', label: t('Gradient Aurora') },
+      { value: 'sticker-fun',     label: t('Sticker Fun') },
+      { value: 'retro-terminal',  label: t('Retro Terminal') },
+      { value: 'tilt-3d',         label: t('3D Tilt') },
+      { value: 'custom',          label: t('Personalizzato') },
+    ] },
+    { type: 'separator', label: t('Tipografia') },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
+    { type: 'typography', label: t('Pulsante'),
+      presetKey: 'typography_preset',
+      responsiveKeys: ['size'],
+      keys: {
+        size:   'btn_font_size',
+        weight: 'btn_font_weight',
+        color:  'btn_color',
+      },
+      sizeMin: 12, sizeMax: 24,
+    },
+
+    { type: 'separator', label: t('Icona') },
+    { key: 'icon_position', label: t('Posizione icona'), type: 'select', options: [
+      { value: 'left', label: t('Sinistra') },
+      { value: 'right', label: t('Destra') },
     ]},
-    { key: 'btn_align', label: 'Allineamento', type: 'select', options: [
-      { value: 'left', label: 'Sinistra' },
-      { value: 'center', label: 'Centro' },
-      { value: 'right', label: 'Destra' },
+
+    { type: 'separator', label: t('Stile pulsante') },
+    { key: 'btn_bg', label: t('Sfondo'), type: 'color' },
+    { key: 'btn_hover_bg', label: t('Sfondo hover'), type: 'color' },
+    { key: 'btn_border_width', label: t('Bordo (px)'), type: 'range', min: 0, max: 4 },
+    { key: 'btn_border_color', label: t('Colore bordo'), type: 'color' },
+    withHover({ key: 'btn_border_radius', label: t('Raggio bordo (px)'), type: 'border-radius' }),
+    { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 48 },
+    { key: 'btn_align', label: t('Allineamento'), type: 'select', options: [
+      { value: 'left', label: t('Sinistra') },
+      { value: 'center', label: t('Centro') },
+      { value: 'right', label: t('Destra') },
     ]},
-    { key: 'btn_full_width', label: 'Larghezza piena', type: 'toggle' },
+    { key: 'btn_full_width', label: t('Larghezza piena'), type: 'toggle' },
+
     ...borderFields(),
   ],
 };

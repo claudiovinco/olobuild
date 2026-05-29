@@ -12,9 +12,9 @@ class Olo_Grid_Tile extends Olo_Tile_Base {
     protected $category = 'layout';
     protected $defaults = [
         'items'              => [
-            [ 'title' => 'Item 1', 'content' => 'Description for item one.', 'image' => '', 'tag' => 'all' ],
-            [ 'title' => 'Item 2', 'content' => 'Description for item two.', 'image' => '', 'tag' => 'all' ],
-            [ 'title' => 'Item 3', 'content' => 'Description for item three.', 'image' => '', 'tag' => 'all' ],
+            [ 'title' => 'Elemento 1', 'content' => 'Descrizione del primo elemento.', 'image' => '', 'tag' => 'all' ],
+            [ 'title' => 'Elemento 2', 'content' => 'Descrizione del secondo elemento.', 'image' => '', 'tag' => 'all' ],
+            [ 'title' => 'Elemento 3', 'content' => 'Descrizione del terzo elemento.', 'image' => '', 'tag' => 'all' ],
         ],
         'columns'            => '3',
         'gap'                => 'default',

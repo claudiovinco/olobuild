@@ -1,5 +1,5 @@
 <template>
-  <div :style="wrapStyle">
+  <div :class="'olo-pop--preset-' + (s.preset || 'modal-classic')" :style="wrapStyle">
     <!-- Click mode: mostra il pulsante -->
     <template v-if="s.popup_trigger === 'click' || !s.popup_trigger">
       <button type="button" :style="btnStyle">
@@ -208,5 +208,82 @@ const triggerDetailStyle = computed(() => ({
   height: 100%;
   fill: currentColor;
   stroke: currentColor;
+}
+
+/* ───── Preset visual hints in builder (button only — modal is invisible here) ───── */
+
+/* Liquid Glass */
+.olo-pop--preset-liquid-glass :deep(button) {
+  background: rgba(255,255,255,0.55) !important;
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  border: 1px solid rgba(255,255,255,0.55) !important;
+  color: #0f172a !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+  text-transform: none;
+}
+
+/* Neon Cyber */
+.olo-pop--preset-neon-cyber :deep(button) {
+  background: transparent !important;
+  border: 2px solid #ff6a2a !important;
+  color: #ff6a2a !important;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  box-shadow: 0 0 12px rgba(255,106,42,0.3);
+  text-shadow: 0 0 6px rgba(255,106,42,0.4);
+  border-radius: 4px;
+}
+
+/* Brutalist */
+.olo-pop--preset-brutalist-block :deep(button) {
+  background: #fff !important;
+  border: 3px solid #000 !important;
+  color: #000 !important;
+  box-shadow: 4px 4px 0 0 #000;
+  border-radius: 0 !important;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* Magnetic */
+.olo-pop--preset-magnetic-liquid :deep(button) {
+  background: linear-gradient(135deg, #e8622a 0%, #ff8a5b 100%) !important;
+  color: #fff !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  padding: 12px 28px !important;
+  box-shadow: 0 8px 20px rgba(232,98,42,0.35);
+  text-transform: none;
+}
+
+/* Sticker */
+.olo-pop--preset-sticker :deep(button) {
+  background: rgba(232,98,42,0.15) !important;
+  border: 2px dashed #e8622a !important;
+  color: #b04217 !important;
+  border-radius: 8px !important;
+  transform: rotate(-1.2deg);
+  text-transform: none;
+}
+
+/* Retro Terminal */
+.olo-pop--preset-retro-terminal :deep(button) {
+  background: transparent !important;
+  border: 1px solid #00ff8c !important;
+  color: #00ff8c !important;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace !important;
+  border-radius: 0 !important;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  box-shadow: 0 0 8px rgba(0,255,140,0.3);
+}
+
+/* 3D Tilt */
+.olo-pop--preset-3d-tilt :deep(button) {
+  transform: perspective(800px) rotateX(-6deg);
+  transform-origin: center bottom;
+  box-shadow: 0 12px 24px rgba(0,0,0,0.18);
 }
 </style>

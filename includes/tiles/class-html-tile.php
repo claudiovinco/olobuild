@@ -39,17 +39,15 @@ class Olo_Html_Tile extends Olo_Tile_Base {
             </div>
             <?php
         } else {
+            // Il tile "HTML / Codice" esiste apposta per inserire HTML grezzo
+            // (script, style, form, iframe inclusi). Il contenuto viene scritto
+            // SOLO da chi ha capability di editare i template Olobuild → trust.
+            // Per casi che vogliono ri-sanitizzare opt-in c'è il filter
+            // `olo_html_tile_output`.
+            $html = apply_filters( 'olo_html_tile_output', $s['html_content'], $s );
             ?>
             <div class="olo-html uk-panel">
-                <?php
-                // Full HTML for users with unfiltered_html capability (admins);
-                // sanitized fallback for everyone else.
-                if ( current_user_can( 'unfiltered_html' ) ) {
-                    echo $s['html_content'];
-                } else {
-                    echo wp_kses_post( $s['html_content'] );
-                }
-                ?>
+                <?php echo $html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped — by design ?>
             </div>
             <?php
         }

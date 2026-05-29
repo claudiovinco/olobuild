@@ -12,6 +12,7 @@ class Olo_ProGallery_Tile extends Olo_Tile_Base {
     protected $category = 'media';
 
     protected $defaults = [
+        'preset' => 'custom',
         'images'              => [],
         'video_preview'       => 'poster',
         'layout'              => 'grid',
@@ -877,7 +878,7 @@ class Olo_ProGallery_Tile extends Olo_Tile_Base {
         echo ".{$uid} .olo-pg-item video{width:100%;height:100%;object-fit:{$object_fit};display:block}";
         echo ".{$uid} .olo-pg-play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:2}";
         echo ".{$uid} .olo-pg-play::before{content:'';width:44px;height:44px;border-radius:50%;background:rgba(0,0,0,.5) url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpolygon points='9,5 20,12 9,19'/%3E%3C/svg%3E\") center/20px 20px no-repeat}";
-        echo ".{$uid} .olo-pg-no-poster{width:100%;height:100%;background:var(--olo-color-secondary, #1F2937);display:flex;align-items:center;justify-content:center}";
+        echo ".{$uid} .olo-pg-no-poster{width:100%;height:100%;background:#1F2937;display:flex;align-items:center;justify-content:center}";
 
         echo '</style>';
 
@@ -894,7 +895,7 @@ class Olo_ProGallery_Tile extends Olo_Tile_Base {
         self::maybe_output_script( $needs_tilt3d, $needs_magnetic, $needs_entrance, $needs_filmstrip, $needs_expand, $needs_strip, $needs_parallax, $needs_drift, $needs_cascade );
 
         // ─── Container attrs ───
-        $container_class = esc_attr( $uid );
+        $container_class = esc_attr( $uid ) . ' olo-pgal-preset-' . esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) );
         $data_attrs = '';
         if ( $needs_entrance ) {
             $data_attrs .= ' data-pg-reveal="1"';

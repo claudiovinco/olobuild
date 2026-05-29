@@ -11,6 +11,7 @@ class Olo_ImgCompare_Tile extends Olo_Tile_Base {
     protected $icon     = 'dashicons-image-flip-horizontal';
     protected $category = 'media';
     protected $defaults = [
+        'preset' => 'custom',
         'before_image'   => '',
         'after_image'    => '',
         'before_label'   => 'Prima',
@@ -187,7 +188,7 @@ class Olo_ImgCompare_Tile extends Olo_Tile_Base {
                 z-index: 1;
                 padding: 4px 12px;
                 border-radius: 4px;
-                background: rgba(0,0,0,0.55);
+                background: rgba(0,0,0,0.75);
                 color: #fff;
                 font-size: 12px;
                 font-weight: 600;
@@ -239,7 +240,7 @@ class Olo_ImgCompare_Tile extends Olo_Tile_Base {
                 <?php endif; ?>
             }
         </style>
-        <div class="olo-ic <?php echo esc_attr( $uid ); ?>" data-orientation="<?php echo esc_attr( $orientation ); ?>">
+        <div class="olo-ic <?php echo esc_attr( $uid ); ?> olo-ic-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" data-orientation="<?php echo esc_attr( $orientation ); ?>">
             <div class="olo-ic-after">
                 <?php if ( $after_url ) : ?>
                     <img src="<?php echo $after_url; ?>" alt="<?php echo esc_attr( $after_lbl ); ?>" draggable="false" loading="lazy" />
@@ -251,7 +252,7 @@ class Olo_ImgCompare_Tile extends Olo_Tile_Base {
                 <?php if ( $before_url ) : ?>
                     <img src="<?php echo $before_url; ?>" alt="<?php echo esc_attr( $before_lbl ); ?>" draggable="false" loading="lazy" />
                 <?php else : ?>
-                    <div style="width:100%;height:100%;background:var(--olo-color-secondary, #1F2937);display:flex;align-items:center;justify-content:center;color:var(--olo-color-text-muted, #9CA3AF);font-size:14px;">Prima</div>
+                    <div style="width:100%;height:100%;background:#1F2937;display:flex;align-items:center;justify-content:center;color:var(--olo-color-text-muted, #9CA3AF);font-size:14px;">Prima</div>
                 <?php endif; ?>
             </div>
             <div class="olo-ic-line"></div>

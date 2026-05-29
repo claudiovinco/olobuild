@@ -1,5 +1,5 @@
 <template>
-  <div class="olo-timeline-preview" :style="wrapStyle">
+  <div class="olo-timeline-preview" :class="'olo-tl--preset-' + (s.preset || 'classic-center')" :style="wrapStyle">
     <!-- Horizontal layout -->
     <template v-if="isHorizontal">
       <div class="olo-tl-h-wrap" style="position:relative">
@@ -589,5 +589,130 @@ const arrowStyle = computed(() => ({
 
 .olo-tl-marker {
   transition: transform 0.3s;
+}
+
+/* ───── Preset visual hints in builder ───── */
+
+/* Liquid Glass */
+.olo-tl--preset-liquid-glass :deep(.olo-tl-card) {
+  background: rgba(255,255,255,0.55) !important;
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  border: 1px solid rgba(255,255,255,0.5) !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.10) !important;
+}
+.olo-tl--preset-liquid-glass :deep(.olo-tl-marker) {
+  background: rgba(255,255,255,0.7) !important;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* Neon Cyber */
+.olo-tl--preset-neon-cyber :deep(.olo-tl-card) {
+  background: #0a0f1c !important;
+  border: 1px solid rgba(255,106,42,0.45) !important;
+  color: rgba(255,255,255,0.85) !important;
+  box-shadow: 0 0 14px rgba(255,106,42,0.20) !important;
+}
+.olo-tl--preset-neon-cyber :deep(.olo-tl-title) {
+  color: #ff6a2a !important;
+  text-shadow: 0 0 6px rgba(255,106,42,0.5);
+  text-transform: uppercase;
+}
+.olo-tl--preset-neon-cyber :deep(.olo-tl-desc) { color: rgba(255,255,255,0.78) !important; }
+.olo-tl--preset-neon-cyber :deep(.olo-tl-date) { color: #ff6a2a !important; }
+.olo-tl--preset-neon-cyber :deep(.olo-tl-line) { background: #ff6a2a !important; box-shadow: 0 0 6px rgba(255,106,42,0.6); }
+.olo-tl--preset-neon-cyber :deep(.olo-tl-marker) {
+  background: #0a0f1c !important;
+  border: 2px solid #ff6a2a !important;
+  color: #ff6a2a !important;
+}
+
+/* Brutalist */
+.olo-tl--preset-brutalist-block :deep(.olo-tl-card) {
+  background: #fff !important;
+  border: 3px solid #000 !important;
+  box-shadow: 5px 5px 0 0 #000 !important;
+  border-radius: 0 !important;
+  color: #000 !important;
+}
+.olo-tl--preset-brutalist-block :deep(.olo-tl-title) {
+  color: #000 !important;
+  font-weight: 900 !important;
+  text-transform: uppercase;
+}
+.olo-tl--preset-brutalist-block :deep(.olo-tl-desc) { color: #000 !important; font-weight: 500; }
+.olo-tl--preset-brutalist-block :deep(.olo-tl-date) { color: #000 !important; font-weight: 800; text-transform: uppercase; }
+.olo-tl--preset-brutalist-block :deep(.olo-tl-line) { background: #000 !important; }
+.olo-tl--preset-brutalist-block :deep(.olo-tl-marker) {
+  background: #000 !important;
+  color: #fff !important;
+  border: 3px solid #000 !important;
+  border-radius: 0 !important;
+}
+
+/* Magnetic */
+.olo-tl--preset-magnetic-liquid :deep(.olo-tl-card) {
+  border-radius: 18px !important;
+  box-shadow: 0 8px 22px rgba(232,98,42,0.16) !important;
+}
+.olo-tl--preset-magnetic-liquid :deep(.olo-tl-line) {
+  background: linear-gradient(180deg, #e8622a 0%, #ff8a5b 100%) !important;
+}
+.olo-tl--preset-magnetic-liquid :deep(.olo-tl-marker) {
+  background: #e8622a !important;
+  color: #fff !important;
+  box-shadow: 0 6px 14px rgba(232,98,42,0.4) !important;
+}
+.olo-tl--preset-magnetic-liquid :deep(.olo-tl-date) { color: #e8622a !important; font-weight: 700; }
+
+/* Sticker */
+.olo-tl--preset-sticker :deep(.olo-tl-card) {
+  background: #fff !important;
+  border: 2px dashed rgba(232,98,42,0.55) !important;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.10) !important;
+}
+.olo-tl--preset-sticker :deep(.olo-tl-marker) {
+  background: #e8622a !important;
+  color: #fff !important;
+  border: 3px dashed #f3aa86 !important;
+}
+.olo-tl--preset-sticker :deep(.olo-tl-line) {
+  background: rgba(232,98,42,0.4) !important;
+}
+
+/* Retro Terminal */
+.olo-tl--preset-retro-terminal :deep(.olo-tl-card) {
+  background: #0c0c0c !important;
+  border: 1px solid rgba(0,255,140,0.4) !important;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace !important;
+  background-image: repeating-linear-gradient(0deg, transparent 0, transparent 2px, rgba(0,255,140,0.06) 2px, rgba(0,255,140,0.06) 3px);
+  border-radius: 0 !important;
+}
+.olo-tl--preset-retro-terminal :deep(.olo-tl-title) {
+  color: #00ff8c !important;
+  text-shadow: 0 0 6px rgba(0,255,140,0.5);
+  font-family: inherit !important;
+  text-transform: uppercase;
+}
+.olo-tl--preset-retro-terminal :deep(.olo-tl-title)::before {
+  content: '> ';
+  opacity: 0.7;
+}
+.olo-tl--preset-retro-terminal :deep(.olo-tl-desc) { color: rgba(0,255,140,0.85) !important; font-family: inherit !important; }
+.olo-tl--preset-retro-terminal :deep(.olo-tl-date) { color: #00ff8c !important; font-family: inherit !important; }
+.olo-tl--preset-retro-terminal :deep(.olo-tl-line) { background: #00ff8c !important; }
+.olo-tl--preset-retro-terminal :deep(.olo-tl-marker) {
+  background: #0c0c0c !important;
+  border: 2px solid #00ff8c !important;
+  color: #00ff8c !important;
+  border-radius: 0 !important;
+}
+
+/* 3D Tilt */
+.olo-tl--preset-3d-tilt :deep(.olo-tl-card) {
+  box-shadow: 0 18px 36px rgba(0,0,0,0.14) !important;
+  transform: perspective(900px) rotateX(2deg);
+  transform-origin: center top;
 }
 </style>

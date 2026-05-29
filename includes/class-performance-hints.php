@@ -26,20 +26,76 @@ class Olo_Performance_Hints {
     }
 
     public function init() {
-        // Resource hints in <head>
-        add_action( 'wp_head', [ $this, 'output_resource_hints' ], 2 );
+        $opt = class_exists( 'Olo_Performance_Settings' )
+            ? Olo_Performance_Settings::get_option()
+            : [
+                'resource_hints' => true, 'font_preload' => true, 'fetchpriority' => true,
+                'video_facade' => true, 'lazy_images' => true,
+            ];
 
-        // Font preload
-        add_action( 'wp_head', [ $this, 'output_font_preload' ], 3 );
+        if ( ! empty( $opt['resource_hints'] ) ) {
+            add_action( 'wp_head', [ $this, 'output_resource_hints' ], 2 );
+        }
 
-        // fetchpriority on above-fold images
-        add_filter( 'olo_image_attributes', [ $this, 'add_fetchpriority' ], 10, 2 );
+        if ( ! empty( $opt['font_preload'] ) ) {
+            add_action( 'wp_head', [ $this, 'output_font_preload' ], 3 );
+        }
 
-        // Video facade filter
-        add_filter( 'olo_video_embed', [ $this, 'video_facade' ], 10, 2 );
+        if ( ! empty( $opt['fetchpriority'] ) ) {
+            add_filter( 'olo_image_attributes', [ $this, 'add_fetchpriority' ], 10, 2 );
+        }
 
-        // CSS static file instead of inline for templates
+        if ( ! empty( $opt['video_facade'] ) ) {
+            add_filter( 'olo_video_embed', [ $this, 'video_facade' ], 10, 2 );
+        }
+
+        // Lazy loading: filter to add/remove loading="lazy" on below-fold images.
+        if ( ! empty( $opt['lazy_images'] ) ) {
+            add_filter( 'olo_image_attributes', [ $this, 'add_lazy_loading' ], 9, 2 );
+        }
+
+        // CSS static file output filter — sempre attivo, gating interno via css_cache_files in cache_css()
         add_filter( 'olo_template_css_output', [ $this, 'css_to_file' ], 10, 2 );
+
+        // Head cleanup
+        if ( ! empty( $opt['remove_jquery_migrate'] ) ) {
+            add_action( 'wp_default_scripts', function ( $scripts ) {
+                if ( ! is_admin() && isset( $scripts->registered['jquery'] ) ) {
+                    $deps = $scripts->registered['jquery']->deps;
+                    $scripts->registered['jquery']->deps = array_diff( $deps, [ 'jquery-migrate' ] );
+                }
+            } );
+        }
+        if ( ! empty( $opt['remove_emoji_scripts'] ) ) {
+            remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
+            remove_action( 'wp_print_styles', 'print_emoji_styles' );
+            remove_action( 'admin_print_scripts', 'print_emoji_detection_script' );
+            remove_action( 'admin_print_styles', 'print_emoji_styles' );
+            remove_filter( 'the_content_feed', 'wp_staticize_emoji' );
+            remove_filter( 'comment_text_rss', 'wp_staticize_emoji' );
+        }
+        if ( ! empty( $opt['remove_block_css'] ) ) {
+            add_action( 'wp_enqueue_scripts', function () {
+                wp_dequeue_style( 'wp-block-library' );
+                wp_dequeue_style( 'wp-block-library-theme' );
+                wp_dequeue_style( 'global-styles' );
+            }, 100 );
+        }
+        if ( ! empty( $opt['remove_classic_theme'] ) ) {
+            add_action( 'wp_enqueue_scripts', function () {
+                wp_dequeue_style( 'classic-theme-styles' );
+            }, 100 );
+        }
+    }
+
+    /**
+     * Add loading="lazy" to below-fold images (preserves fetchpriority hero override).
+     */
+    public function add_lazy_loading( $attrs, $context = [] ) {
+        if ( $this->hero_marked && empty( $attrs['loading'] ) ) {
+            $attrs['loading'] = 'lazy';
+        }
+        return $attrs;
     }
 
     /* ─────────────────────────────────────────────
@@ -61,6 +117,19 @@ class Olo_Performance_Hints {
             $hints[] = '<link rel="dns-prefetch" href="//www.youtube.com" />';
             $hints[] = '<link rel="dns-prefetch" href="//player.vimeo.com" />';
             $hints[] = '<link rel="dns-prefetch" href="//i.ytimg.com" />';
+        }
+
+        // Domini custom configurati dall'utente
+        $opt = class_exists( 'Olo_Performance_Settings' ) ? Olo_Performance_Settings::get_option() : [];
+        $dns = preg_split( '/\r\n|\r|\n/', (string) ( $opt['dns_prefetch_domains'] ?? '' ) );
+        foreach ( $dns as $d ) {
+            $d = trim( $d );
+            if ( $d ) $hints[] = '<link rel="dns-prefetch" href="' . esc_attr( $d ) . '" />';
+        }
+        $pre = preg_split( '/\r\n|\r|\n/', (string) ( $opt['preconnect_domains'] ?? '' ) );
+        foreach ( $pre as $d ) {
+            $d = trim( $d );
+            if ( $d ) $hints[] = '<link rel="preconnect" href="' . esc_url( $d ) . '" crossorigin />';
         }
 
         echo implode( "\n", $hints ) . "\n";

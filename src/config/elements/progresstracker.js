@@ -1,17 +1,26 @@
 import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared';
 import { shadowField } from './_shared.js';
+import { t } from '@/i18n';
 
+/**
+ * Tile ProgressTracker — split CONTENUTO/STILE.
+ *   fields[]      → items (title+description+icon+status), layout, show_numbers, show_description
+ *   styleFields[] → preset, bg, typo, text-effects, circle size, font size, gap, connector stile/colore, colori (completato/attivo/pending/testo), shadow, border
+ */
 export default {
   type: 'progresstracker',
-  name: 'Progress tracker',
+  name: t('Progress tracker'),
   icon: 'dashicons-editor-ol',
   category: 'content',
   defaults: {
+    bg: { type: 'none' },
+    typography_preset: '',
+    preset: 'custom',
     items: [
-      { id: 'pt-1', title: 'Ordine ricevuto', description: 'Il tuo ordine è stato confermato.', icon: 'check', status: 'completed' },
-      { id: 'pt-2', title: 'In preparazione', description: 'Stiamo preparando il tuo ordine.', icon: 'settings', status: 'active' },
-      { id: 'pt-3', title: 'Spedito', description: 'Il pacco è in viaggio.', icon: 'cart', status: 'pending' },
-      { id: 'pt-4', title: 'Consegnato', description: 'Consegna completata.', icon: 'home', status: 'pending' },
+      { id: 'pt-1', title: t('Ordine ricevuto'), description: t('Il tuo ordine è stato confermato.'), icon: 'check', status: 'completed' },
+      { id: 'pt-2', title: t('In preparazione'), description: t('Stiamo preparando il tuo ordine.'), icon: 'settings', status: 'active' },
+      { id: 'pt-3', title: t('Spedito'), description: t('Il pacco è in viaggio.'), icon: 'cart', status: 'pending' },
+      { id: 'pt-4', title: t('Consegnato'), description: t('Consegna completata.'), icon: 'home', status: 'pending' },
     ],
     layout: 'horizontal',
     connector_style: 'line',
@@ -27,62 +36,91 @@ export default {
     gap: '0',
     shadow: 'none',
     ...textEffectsDefaults,
+    text_effect_target: 'title',
     border: { ...borderDefault },
     border_hover: { ...borderHoverDefault },
     border_hover_duration: 300,
     ...borderEffectDefaults,
   },
+
   fields: [
-    // ── Items ──
-    { key: 'items', label: 'Passaggi', type: 'content-items',
+    { key: 'items', label: t('Passaggi'), type: 'content-items',
       itemFields: [
-        { key: 'title', label: 'Titolo', type: 'text' },
-        { key: 'description', label: 'Descrizione', type: 'text' },
-        { key: 'icon', label: 'Icona (UIkit)', type: 'icon' },
-        { key: 'status', label: 'Stato', type: 'select', options: [
-          { value: 'completed', label: 'Completato' },
-          { value: 'active', label: 'Attivo' },
-          { value: 'pending', label: 'In attesa' },
+        { key: 'title', label: t('Titolo'), type: 'text' },
+        { key: 'description', label: t('Descrizione'), type: 'text' },
+        { key: 'icon', label: t('Icona (UIkit)'), type: 'icon' },
+        { key: 'status', label: t('Stato'), type: 'select', options: [
+          { value: 'completed', label: t('Completato') },
+          { value: 'active', label: t('Attivo') },
+          { value: 'pending', label: t('In attesa') },
         ]},
       ],
-      newItemDefaults: { title: 'Nuovo passaggio', description: 'Descrizione del passaggio.', icon: 'check', status: 'pending' },
+      newItemDefaults: { title: t('Nuovo passaggio'), description: t('Descrizione del passaggio.'), icon: 'check', status: 'pending' },
       itemLabel: 'Passaggio',
     },
 
-    // ── Layout ──
-    { type: 'separator', label: 'Layout' },
-    { key: 'layout', label: 'Layout', type: 'select', options: [
-      { value: 'horizontal', label: 'Orizzontale' },
-      { value: 'vertical', label: 'Verticale' },
+    { type: 'separator', label: t('Layout') },
+    { key: 'layout', label: t('Layout'), type: 'select', options: [
+      { value: 'horizontal', label: t('Orizzontale') },
+      { value: 'vertical', label: t('Verticale') },
     ]},
-    { key: 'show_numbers', label: 'Mostra numeri', type: 'toggle' },
-    { key: 'show_description', label: 'Mostra descrizione', type: 'toggle' },
-    { key: 'circle_size', label: 'Dimensione cerchio (px)', type: 'range', min: 24, max: 60, step: 2 },
-    { key: 'font_size', label: 'Dimensione testo (px)', type: 'range', min: 10, max: 20, step: 1 },
-    { key: 'gap', label: 'Gap aggiuntivo (px)', type: 'range', min: 0, max: 40, step: 4 },
+    { key: 'show_numbers', label: t('Mostra numeri'), type: 'toggle' },
+    { key: 'show_description', label: t('Mostra descrizione'), type: 'toggle' },
+  ],
 
-    // ── Connettore ──
-    { type: 'separator', label: 'Connettore' },
-    { key: 'connector_style', label: 'Stile connettore', type: 'select', options: [
-      { value: 'line', label: 'Linea continua' },
-      { value: 'dashed', label: 'Tratteggiato' },
-      { value: 'dotted', label: 'Puntinato' },
+  styleFields: [
+    { type: 'separator', label: t('Preset stilistico') },
+    { key: 'preset', label: t('Stile'), type: 'select', options: [
+      { value: 'modern-clean',     label: t('Modern Clean') },
+      { value: 'minimal-line',     label: t('Minimal Line') },
+      { value: 'magazine-stepped', label: t('Magazine Stepped') },
+      { value: 'circle-numbered',  label: t('Circle Numbered') },
+      { value: 'card-rows',        label: t('Card Rows') },
+      { value: 'glass-tier',       label: t('Glass Tier') },
+      { value: 'neon-trail',       label: t('Neon Trail') },
+      { value: 'brutalist-block',  label: t('Brutalist Block') },
+      { value: 'gradient-flow',    label: t('Gradient Flow') },
+      { value: 'sticker-steps',    label: t('Sticker Steps') },
+      { value: 'retro-checklist',  label: t('Retro Checklist') },
+      { value: 'tilt-cards',       label: t('Tilt Cards') },
+      { value: 'custom',           label: t('Personalizzato') },
     ]},
-    { key: 'connector_color', label: 'Colore connettore', type: 'color' },
+    ...textEffectsFields([
+      { value: 'title', label: t('Solo Titolo') },
+      { value: 'description', label: t('Solo Descrizione') },
+      { value: 'all', label: t('Tutti gli elementi testuali') },
+    ]),
 
-    // ── Colori ──
-    { type: 'separator', label: 'Colori' },
-    { key: 'completed_color', label: 'Colore completato', type: 'color' },
-    { key: 'active_color', label: 'Colore attivo', type: 'color' },
-    { key: 'pending_color', label: 'Colore in attesa', type: 'color' },
-    { key: 'text_color', label: 'Colore testo', type: 'color' },
+    { type: 'separator', label: t('Tipografia') },
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
+    { type: 'typography', label: t('Items'),
+      presetKey: 'typography_preset',
+      responsiveKeys: ['size'],
+      keys: {
+        size:  'font_size',
+        color: 'text_color',
+      },
+      sizeMin: 10, sizeMax: 20,
+    },
+
+    { type: 'separator', label: t('Dimensioni') },
+    { key: 'circle_size', label: t('Dimensione cerchio (px)'), type: 'range', min: 24, max: 60, step: 2 },
+    { key: 'gap', label: t('Gap aggiuntivo (px)'), type: 'range', min: 0, max: 40, step: 4 },
+
+    { type: 'separator', label: t('Connettore') },
+    { key: 'connector_style', label: t('Stile connettore'), type: 'select', options: [
+      { value: 'line', label: t('Linea continua') },
+      { value: 'dashed', label: t('Tratteggiato') },
+      { value: 'dotted', label: t('Puntinato') },
+    ]},
+    { key: 'connector_color', label: t('Colore connettore'), type: 'color' },
+
+    { type: 'separator', label: t('Colori') },
+    { key: 'completed_color', label: t('Colore completato'), type: 'color' },
+    { key: 'active_color', label: t('Colore attivo'), type: 'color' },
+    { key: 'pending_color', label: t('Colore in attesa'), type: 'color' },
 
     ...shadowField,
-    ...textEffectsFields([
-      { value: 'title', label: 'Solo Titolo' },
-      { value: 'description', label: 'Solo Descrizione' },
-      { value: 'all', label: 'Tutti gli elementi testuali' },
-    ]),
     ...borderFields(),
   ],
 };

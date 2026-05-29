@@ -11,6 +11,7 @@ class Olo_Sharebuttons_Tile extends Olo_Tile_Base {
     protected $icon     = 'dashicons-share-alt';
     protected $category = 'marketing';
     protected $defaults = [
+        'preset' => 'custom',
         'buttons'          => [],
         'style'            => 'icon-only',
         'size'             => '36',
@@ -104,7 +105,7 @@ class Olo_Sharebuttons_Tile extends Olo_Tile_Base {
             #<?php echo $uid; ?> .olo-share-btn:hover { opacity: 0.85; }
             #<?php echo $uid; ?> .olo-share-btn:hover svg { color: <?php echo esc_attr( $hover_clr ); ?>; }
         </style>
-        <div id="<?php echo esc_attr( $uid ); ?>" class="olo-sharebuttons" style="display:flex;flex-wrap:wrap;justify-content:<?php echo $justify; ?>;gap:<?php echo $gap; ?>px;padding:16px;">
+        <div id="<?php echo esc_attr( $uid ); ?>" class="olo-sharebuttons olo-sb-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" style="display:flex;flex-wrap:wrap;justify-content:<?php echo $justify; ?>;gap:<?php echo $gap; ?>px;padding:16px;">
             <?php foreach ( $buttons as $btn ) :
                 $platform = sanitize_key( $btn['platform'] );
                 $icon_svg = self::icon_svg( $platform );

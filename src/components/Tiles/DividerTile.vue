@@ -3,8 +3,9 @@
     <!-- With center text/emoji -->
     <div v-if="hasCenter" class="olo-divider-center" :style="{ width: s.width + '%' }">
       <span class="olo-divider-line olo-divider-line--left" :style="lineStyle"></span>
-      <span class="olo-divider-label" :style="labelStyle" data-olo-editable="text">
-        <template v-if="s.icon_emoji">{{ s.icon_emoji }} </template>{{ s.text }}
+      <span class="olo-divider-label" :style="labelStyle">
+        <span v-if="iconSvg" class="olo-divider-icon" v-html="iconSvg" style="display:inline-flex;align-items:center;vertical-align:middle"></span>
+        <span data-olo-editable="text"><template v-if="!iconSvg && s.icon_emoji">{{ s.icon_emoji }} </template>{{ s.text }}</span>
       </span>
       <span class="olo-divider-line olo-divider-line--right" :style="lineStyle"></span>
     </div>
@@ -50,6 +51,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import iconsSvg from '../ProSlider/iconsLibrary.js';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
@@ -69,6 +71,10 @@ const defaults = {
 };
 
 const s = computed(() => ({ ...defaults, ...props.settings }));
+
+// icon_emoji può essere un nome icona (libreria) o un'emoji libera: se è un nome
+// noto renderizza l'SVG, altrimenti ricade sul testo/emoji nello span editabile.
+const iconSvg = computed(() => iconsSvg[s.value.icon_emoji] || '');
 
 const hasCenter = computed(() => !!(s.value.text || s.value.icon_emoji));
 const isDecorative = computed(() => ['wave', 'zigzag', 'dots', 'diamonds'].includes(s.value.style));

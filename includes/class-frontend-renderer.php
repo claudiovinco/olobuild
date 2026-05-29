@@ -32,6 +32,12 @@ class Olo_Frontend_Renderer {
     /** @var Olo_Animation_Builder */
     private $anim;
 
+    /** @var array Breakpoint definitions (popolato da render_for_builder). */
+    public $breakpoints = [];
+
+    /** @var array Responsive CSS rules collected during render. */
+    public $responsive_css_rules = [];
+
     /**
      * Whitelist of allowed CSS border-style values.
      */
@@ -40,6 +46,9 @@ class Olo_Frontend_Renderer {
     public function __construct() {
         $this->css  = new Olo_CSS_Builder();
         $this->anim = new Olo_Animation_Builder();
+        if ( ! has_action( 'wp_footer', [ __CLASS__, 'print_sticky_offset_script' ] ) ) {
+            add_action( 'wp_footer', [ __CLASS__, 'print_sticky_offset_script' ], 99 );
+        }
     }
 
     /**
@@ -78,6 +87,175 @@ class Olo_Frontend_Renderer {
         $css = preg_replace( '/behavior\s*:/i', '', $css );
         $css = preg_replace( '/-moz-binding\s*:/i', '', $css );
         return $css;
+    }
+
+    /**
+     * Sanitize a CSS dimension value (width/height/max-width/min-height/etc.).
+     * Accetta numeri puri (→ px) e qualunque unità CSS standard: px/%/em/rem/vw/vh/vmin/vmax/ch/ex/fr/cm/mm/in/pt/pc.
+     * Supporta anche keyword (auto/none/inherit/initial/unset/fit-content) e funzioni CSS sicure (calc/min/max/clamp/var/env).
+     * Tutto il resto viene scartato per evitare CSS injection.
+     *
+     * @param mixed $value Valore raw (numero o stringa).
+     * @return string Valore CSS sanitizzato (es. "49%", "200px", "calc(100% - 10px)") o '' se invalido.
+     */
+    private function safe_dim_value( $value ) {
+        if ( $value === null || $value === '' ) return '';
+        $v = trim( (string) $value );
+        if ( $v === '' ) return '';
+        // Numero puro → px
+        if ( is_numeric( $v ) ) return $v . 'px';
+        // Keyword consentite
+        $keywords = [ 'auto', 'none', 'inherit', 'initial', 'unset', 'revert', 'fit-content', 'max-content', 'min-content' ];
+        if ( in_array( strtolower( $v ), $keywords, true ) ) return strtolower( $v );
+        // Numero + unità (es. 49%, 200px, 1.5rem, 50vh, calc()/min()/max()/clamp()/var()/env() supportate)
+        // Pattern: [numero][unità] oppure funzione CSS con caratteri sicuri.
+        if ( preg_match( '/^-?\d*\.?\d+(px|%|em|rem|vw|vh|vmin|vmax|ch|ex|fr|cm|mm|in|pt|pc)$/i', $v ) ) {
+            return $v;
+        }
+        // Funzioni CSS: calc(), min(), max(), clamp(), var(), env() — solo caratteri sicuri.
+        if ( preg_match( '/^(calc|min|max|clamp|var|env)\([\w\s\d\.\,\+\-\*\/%\(\)\-]+\)$/i', $v ) ) {
+            // Aggiuntiva: blocca espressioni pericolose
+            if ( strpos( $v, 'expression' ) !== false ) return '';
+            if ( stripos( $v, 'url(' ) !== false )      return '';
+            return $v;
+        }
+        return '';
+    }
+
+    /**
+     * Applica al `$inline_styles` (by-ref) tutti gli "box styles" che sono
+     * identici tra section / row / column / element renderer:
+     * margin, padding, border-radius, border, opacity, flex container, transform,
+     * box-shadow inline, text-shadow, backdrop-filter, overflow esplicito,
+     * dimensions (tile_width/max_width/min_height), mask, custom CSS (advanced),
+     * positioning (advanced.position_mode + top/left/right/bottom/width/zindex).
+     *
+     * Sostituisce ~180 LOC di codice duplicato. L'ordine delle declarations è
+     * "canonical" — è sicuro perché ognuna è una proprietà CSS diversa (no
+     * cascading conflicts tra di loro).
+     *
+     * Cose ESCLUSE perché divergenti tra i nodi (i renderer le gestiscono in proprio):
+     *  - background (image/video/gallery layers, scope container vs section)
+     *  - shadow class `uk-box-shadow-*` (decide il renderer in base a has_bg_any)
+     *  - drop-shadow filter (solo element trasparente)
+     *  - sticky/scroll_snap (section), grid placement (column), entrance animation
+     *  - scrollspy/parallax attrs, hover_css_rules, responsive_css
+     *  - text_color (solo element, aggiunto di recente)
+     *
+     * @param array &$inline_styles Array CSS declarations (by-ref, esteso in-place).
+     * @param array  $style         `$node['style']`
+     * @param array  $settings      `$node['settings']` (serve per flex container)
+     * @param array  $advanced      `$node['advanced']` (custom_css + positioning)
+     * @param array  $opts          Flag opzionali (vedi sotto):
+     *                              - `apply_box_shadow` (bool, default true): include `build_box_shadow_css`.
+     *                                Element trasparente lo skippa e usa drop-shadow filter.
+     *                              - `apply_flex` (bool, default true): include `build_flex_container_css`.
+     *                                Row lo skippa perché il flex va al `<div uk-grid>` interno,
+     *                                non al wrapper esterno.
+     */
+    private function apply_common_box_styles( array &$inline_styles, array $style, array $settings, array $advanced = [], array $opts = [] ) {
+        $apply_box_shadow = $opts['apply_box_shadow'] ?? true;
+        $apply_flex       = $opts['apply_flex'] ?? true;
+        // Margin & Padding — intval() per prevenire CSS injection via tile settings.
+        if ( ! empty( $style['margin_top'] ) )     $inline_styles[] = 'margin-top: ' . intval( $style['margin_top'] ) . 'px';
+        if ( ! empty( $style['margin_right'] ) )   $inline_styles[] = 'margin-right: ' . intval( $style['margin_right'] ) . 'px';
+        if ( ! empty( $style['margin_bottom'] ) )  $inline_styles[] = 'margin-bottom: ' . intval( $style['margin_bottom'] ) . 'px';
+        if ( ! empty( $style['margin_left'] ) )    $inline_styles[] = 'margin-left: ' . intval( $style['margin_left'] ) . 'px';
+        if ( ! empty( $style['padding_top'] ) )    $inline_styles[] = 'padding-top: ' . intval( $style['padding_top'] ) . 'px';
+        if ( ! empty( $style['padding_right'] ) )  $inline_styles[] = 'padding-right: ' . intval( $style['padding_right'] ) . 'px';
+        if ( ! empty( $style['padding_bottom'] ) ) $inline_styles[] = 'padding-bottom: ' . intval( $style['padding_bottom'] ) . 'px';
+        if ( ! empty( $style['padding_left'] ) )   $inline_styles[] = 'padding-left: ' . intval( $style['padding_left'] ) . 'px';
+
+        // Border radius
+        if ( ! empty( $style['border_radius'] ) )  $inline_styles[] = $this->css->build_border_radius_css( $style['border_radius'] );
+
+        // Border (sistema unificato: oggetto 4-side + fallback legacy 3-key)
+        $border_css = $this->build_wrapper_border_css( $style );
+        if ( $border_css ) $inline_styles[] = $border_css;
+
+        // Opacity
+        if ( ! empty( $style['opacity'] ) && intval( $style['opacity'] ) < 100 ) {
+            $opacity = intval( $style['opacity'] ) / 100;
+            $inline_styles[] = "opacity: {$opacity}";
+        }
+
+        // Flex container settings (tab "Layout Flex" inspector).
+        // Row skippa (`apply_flex=false`) perché applica flex al `<div uk-grid>` interno.
+        if ( $apply_flex ) {
+            $flex_css = $this->css->build_flex_container_css( $settings );
+            foreach ( $flex_css as $decl ) $inline_styles[] = $decl;
+        }
+
+        // CSS Transform (normal state)
+        $transform_css = $this->css->build_transform_css( $style );
+        if ( $transform_css ) {
+            foreach ( $transform_css as $decl ) $inline_styles[] = $decl;
+        }
+
+        // Box shadow inline (separato dalla classe uk-box-shadow-*, decisa dal renderer).
+        // Element con bg=trasparente skippa: usa drop-shadow filter, lo gestisce nel renderer.
+        if ( $apply_box_shadow ) {
+            $box_shadow = $this->css->build_box_shadow_css( $style );
+            if ( $box_shadow ) $inline_styles[] = $box_shadow;
+        }
+
+        // Text shadow
+        $text_shadow = $this->css->build_text_shadow_css( $style );
+        if ( $text_shadow ) $inline_styles[] = $text_shadow;
+
+        // Backdrop filter
+        $backdrop = $this->css->build_backdrop_filter_css( $style );
+        if ( $backdrop ) {
+            foreach ( $backdrop as $decl ) $inline_styles[] = $decl;
+        }
+
+        // Overflow esplicito
+        if ( ! empty( $style['overflow'] ) && $style['overflow'] !== 'visible' ) {
+            $inline_styles[] = 'overflow: ' . esc_attr( $style['overflow'] );
+        }
+
+        // Dimensions (tile_width / tile_max_width / tile_min_height) — unità libere via safe_dim_value
+        $dim_map = [
+            'tile_width'      => 'width',
+            'tile_max_width'  => 'max-width',
+            'tile_min_height' => 'min-height',
+        ];
+        foreach ( $dim_map as $key => $css_prop ) {
+            if ( ! isset( $style[ $key ] ) || $style[ $key ] === '' || $style[ $key ] === null ) continue;
+            $v = $this->safe_dim_value( $style[ $key ] );
+            if ( $v !== '' ) $inline_styles[] = $css_prop . ': ' . $v;
+        }
+
+        // Mask
+        $mask_css = $this->css->build_mask_css( $style );
+        if ( $mask_css ) {
+            foreach ( $mask_css as $decl ) $inline_styles[] = $decl;
+        }
+
+        // Custom CSS da advanced
+        if ( ! empty( $advanced['custom_css'] ) ) {
+            $inline_styles[] = $this->safe_inline_css( $advanced['custom_css'] );
+        }
+
+        // Positioning (absolute/fixed/relative)
+        $pos_mode = $advanced['position_mode'] ?? 'static';
+        if ( $pos_mode && $pos_mode !== 'static' ) {
+            $inline_styles[] = 'position: ' . esc_attr( $pos_mode );
+            foreach ( [ 'top', 'left', 'bottom', 'right' ] as $dir ) {
+                $val = $advanced[ 'position_' . $dir ] ?? '';
+                if ( $val !== '' ) {
+                    $inline_styles[] = $dir . ': ' . ( is_numeric( $val ) ? $val . 'px' : esc_attr( $val ) );
+                }
+            }
+            $w = $advanced['position_width'] ?? '';
+            if ( $w !== '' ) {
+                $inline_styles[] = 'width: ' . ( is_numeric( $w ) ? $w . 'px' : esc_attr( $w ) );
+            }
+            $z = $advanced['position_zindex'] ?? '';
+            if ( $z !== '' ) {
+                $inline_styles[] = 'z-index: ' . intval( $z );
+            }
+        }
     }
 
     /**
@@ -364,6 +542,62 @@ class Olo_Frontend_Renderer {
     }
 
     private static $gallery_script_enqueued = false;
+    public static $needs_sticky_offset_script = false;
+
+    /**
+     * Print sticky-offset script in footer.
+     *
+     * Lo sticky di colonna usa `top: calc(var(--olo-sticky-top-offset, 0px) + Npx)`.
+     * Questo script aggiorna la var con l'altezza dell'header sticky:
+     * - se l'header non è sticky (es. nel builder) → var = 0 → colonna parte da Npx
+     * - se l'header è sticky → var = offsetHeight → colonna si attacca sotto l'header
+     *
+     * IMPORTANTE — versione precedente usava MutationObserver su class/style
+     * dell'header: durante lo scroll lo script dell'header (megamenu/navmenu)
+     * muta classe/style continuamente, ogni mutation triggava measure(), che
+     * chiamava getBoundingClientRect() forzando un reflow sincrono → freeze
+     * del browser. Qui usiamo solo:
+     *  - scroll listener throttled via requestAnimationFrame (1 measure/frame)
+     *  - getComputedStyle().position (cached, no reflow forzato)
+     *  - offsetHeight (1 reflow netto per frame)
+     * Niente MutationObserver. Niente cascata.
+     */
+    public static function print_sticky_offset_script() {
+        if ( ! self::$needs_sticky_offset_script ) return;
+        ?>
+        <script>
+        (function(){
+          var root = document.documentElement;
+          var header = document.querySelector('header.olo-site-header');
+          if (!header) return;
+          var lastValue = -1;
+          var ticking = false;
+          function measure(){
+            ticking = false;
+            // getComputedStyle è cached: legge il valore già calcolato senza forzare reflow.
+            var pos = getComputedStyle(header).position;
+            var isSticky = (pos === 'sticky' || pos === 'fixed');
+            var v = isSticky ? header.offsetHeight : 0;
+            if (v === lastValue) return; // no-op se invariato
+            lastValue = v;
+            root.style.setProperty('--olo-sticky-top-offset', v + 'px');
+          }
+          function onScroll(){
+            if (ticking) return;
+            ticking = true;
+            requestAnimationFrame(measure);
+          }
+          window.addEventListener('scroll', onScroll, { passive: true });
+          window.addEventListener('resize', onScroll, { passive: true });
+          // Initial measures: il primo subito, gli altri dopo che gli script
+          // header (megamenu/navmenu) hanno applicato position:sticky.
+          measure();
+          setTimeout(measure, 100);
+          setTimeout(measure, 500);
+        })();
+        </script>
+        <?php
+    }
 
     /**
      * Print gallery background slideshow script in footer (once).
@@ -813,6 +1047,21 @@ class Olo_Frontend_Renderer {
     }
 
     /**
+     * True se il sottoalbero contiene almeno un tile-leaf (non strutturale).
+     * Usato in builder mode per marcare i wrapper vuoti con data-olo-empty="1".
+     */
+    private function has_leaf_descendant( $node ) {
+        static $structural = [ 'section', 'row', 'column', 'inner-columns', 'inner-column' ];
+        if ( empty( $node['children'] ) || ! is_array( $node['children'] ) ) return false;
+        foreach ( $node['children'] as $child ) {
+            $ctype = $child['type'] ?? '';
+            if ( $ctype && ! in_array( $ctype, $structural, true ) ) return true;
+            if ( $this->has_leaf_descendant( $child ) ) return true;
+        }
+        return false;
+    }
+
+    /**
      * Render a node (recursive dispatcher).
      */
     private function render_node( $node, $manager, $template_id, &$hover_css_rules, &$tile_counter, $parent_is_grid = false ) {
@@ -848,6 +1097,13 @@ class Olo_Frontend_Renderer {
         // In builder mode, inject data-olo-tile-id on the first HTML tag
         if ( $this->builder_mode && ! empty( $node['id'] ) && $html ) {
             $tile_id_attr = ' data-olo-tile-id="' . esc_attr( $node['id'] ) . '" data-olo-tile-type="' . esc_attr( $type ) . '"';
+            // Mark structural containers without leaf descendants so the iframe CSS
+            // can give them a visible min-height (otherwise they collapse to 0 and
+            // are invisible in the canvas).
+            $structural_types = [ 'section', 'row', 'column', 'inner-columns', 'inner-column' ];
+            if ( in_array( $type, $structural_types, true ) && ! $this->has_leaf_descendant( $node ) ) {
+                $tile_id_attr .= ' data-olo-empty="1"';
+            }
             $html = preg_replace( '/^(\s*<\w+)/', '$1' . $tile_id_attr, $html, 1 );
 
             // Add data-olo-editable to text elements for inline editing
@@ -984,7 +1240,14 @@ class Olo_Frontend_Renderer {
         }
 
         // Background handling
+        // Il field `bg` (type=background) di section è dichiarato in `fields[]` (settings),
+        // quindi BuilderInspector lo salva via updateSetting → finisce in $s['bg'], NON in
+        // $style['bg']. Il render storicamente leggeva solo da $style: l'utente impostava
+        // un colore alla section ma non lo vedeva mai applicato. Fallback su settings.
         $tile_bg = $this->css->get_effective_bg( $style );
+        if ( ( $tile_bg['type'] ?? 'none' ) === 'none' && ! empty( $s['bg']['type'] ) && $s['bg']['type'] !== 'none' ) {
+            $tile_bg = $this->css->get_effective_bg( [ 'bg' => $s['bg'] ] );
+        }
         $has_bg_image   = ( $tile_bg['type'] === 'image' && ! empty( $tile_bg['image_url'] ) );
         $has_bg_video   = ( $tile_bg['type'] === 'video' && ! empty( $tile_bg['video_url'] ) );
         $has_bg_gallery = ( $tile_bg['type'] === 'gallery' && ! empty( $tile_bg['gallery_images'] ) && is_array( $tile_bg['gallery_images'] ) );
@@ -999,33 +1262,19 @@ class Olo_Frontend_Renderer {
             if ( $bg_css ) $inline_styles[] = $bg_css;
         }
 
+        // Marker class: preserva il padding-top della prima section quando ha un
+        // background, altrimenti la regola "classic header gap collapse" in frontend.css
+        // azzera lo spazio sopra il contenuto e taglia il riquadro colorato.
+        if ( $has_bg_any ) {
+            $classes[] = 'olo-section-has-bg';
+        }
+
         // Video cover height
         if ( $has_bg_video && ! empty( $tile_bg['cover_height'] ) && intval( $tile_bg['cover_height'] ) > 0 ) {
             $inline_styles[] = 'min-height: ' . intval( $tile_bg['cover_height'] ) . 'px';
         }
 
-        // Margin & Padding
-        if ( ! empty( $style['margin_top'] ) )    $inline_styles[] = "margin-top: {$style['margin_top']}px";
-        if ( ! empty( $style['margin_right'] ) )  $inline_styles[] = "margin-right: {$style['margin_right']}px";
-        if ( ! empty( $style['margin_bottom'] ) ) $inline_styles[] = "margin-bottom: {$style['margin_bottom']}px";
-        if ( ! empty( $style['margin_left'] ) )   $inline_styles[] = "margin-left: {$style['margin_left']}px";
-        if ( ! empty( $style['padding_top'] ) )    $inline_styles[] = "padding-top: {$style['padding_top']}px";
-        if ( ! empty( $style['padding_right'] ) )  $inline_styles[] = "padding-right: {$style['padding_right']}px";
-        if ( ! empty( $style['padding_bottom'] ) ) $inline_styles[] = "padding-bottom: {$style['padding_bottom']}px";
-        if ( ! empty( $style['padding_left'] ) )   $inline_styles[] = "padding-left: {$style['padding_left']}px";
-
-        // Border radius
-        if ( ! empty( $style['border_radius'] ) )  $inline_styles[] = $this->css->build_border_radius_css( $style['border_radius'] );
-
-        // Border
-        if ( ! empty( $style['border_width'] ) && intval( $style['border_width'] ) > 0 && ( $style['border_style'] ?? 'solid' ) !== 'none' ) {
-            $bw = intval( $style['border_width'] );
-            $bs = $this->safe_border_style( $style['border_style'] ?? 'solid' );
-            $bc = $this->safe_border_color( $style['border_color'] ?? 'transparent' );
-            $inline_styles[] = "border: {$bw}px {$bs} {$bc}";
-        }
-
-        // Shadow
+        // Shadow CLASS — section applica sempre (no branch has_bg_any come element).
         if ( ! empty( $style['shadow'] ) ) {
             $uk_shadow_map = [
                 'sm' => 'uk-box-shadow-small',
@@ -1038,92 +1287,20 @@ class Olo_Frontend_Renderer {
             }
         }
 
-        // Opacity
-        if ( ! empty( $style['opacity'] ) && intval( $style['opacity'] ) < 100 ) {
-            $opacity = intval( $style['opacity'] ) / 100;
-            $inline_styles[] = "opacity: {$opacity}";
-        }
+        // Helper unificato: margin/padding/border-radius/border/opacity/flex/transform/
+        // box-shadow inline/text-shadow/backdrop/overflow/dimensions/mask/custom_css/position.
+        $this->apply_common_box_styles( $inline_styles, $style, $s, $advanced );
 
-        // Flex container settings
-        $flex_css = $this->css->build_flex_container_css( $s );
-        foreach ( $flex_css as $decl ) {
-            $inline_styles[] = $decl;
-        }
-
-        // CSS Grid layout (overrides flex if layout_mode=grid)
+        // CSS Grid layout (overrides flex se layout_mode=grid) — section-specific.
         $grid_css = $this->css->build_css_grid_css( $s );
         foreach ( $grid_css as $decl ) {
             $inline_styles[] = $decl;
         }
 
-        // Overflow clip needed for border-radius clipping (clip instead of hidden to preserve sticky)
+        // overflow:clip per border-radius clipping — section/row hanno questa forzatura
+        // perché altrimenti il bg overflow esce dal rounded corner. (clip preserva sticky)
         if ( ! empty( $style['border_radius'] ) ) {
             $inline_styles[] = 'overflow: clip';
-        }
-
-        // CSS Transform (normal state)
-        $transform_css = $this->css->build_transform_css( $style );
-        if ( $transform_css ) {
-            foreach ( $transform_css as $decl ) {
-                $inline_styles[] = $decl;
-            }
-        }
-
-        // Box shadow (segue border-radius del div)
-        $box_shadow = $this->css->build_box_shadow_css( $style );
-        if ( $box_shadow ) {
-            $inline_styles[] = $box_shadow;
-        }
-
-        // Text shadow
-        $text_shadow = $this->css->build_text_shadow_css( $style );
-        if ( $text_shadow ) {
-            $inline_styles[] = $text_shadow;
-        }
-
-        // Backdrop filter
-        $backdrop = $this->css->build_backdrop_filter_css( $style );
-        if ( $backdrop ) {
-            foreach ( $backdrop as $decl ) {
-                $inline_styles[] = $decl;
-            }
-        }
-
-        // Overflow
-        if ( ! empty( $style['overflow'] ) && $style['overflow'] !== 'visible' ) {
-            $inline_styles[] = 'overflow: ' . esc_attr( $style['overflow'] );
-        }
-
-        // Mask
-        $mask_css = $this->css->build_mask_css( $style );
-        if ( $mask_css ) {
-            foreach ( $mask_css as $decl ) {
-                $inline_styles[] = $decl;
-            }
-        }
-
-        if ( ! empty( $advanced['custom_css'] ) ) {
-            $inline_styles[] = $this->safe_inline_css( $advanced['custom_css'] );
-        }
-
-        // Positioning (absolute/fixed/relative) for sections
-        $pos_mode = $advanced['position_mode'] ?? 'static';
-        if ( $pos_mode && $pos_mode !== 'static' ) {
-            $inline_styles[] = 'position: ' . esc_attr( $pos_mode );
-            foreach ( [ 'top', 'left', 'bottom', 'right' ] as $dir ) {
-                $val = $advanced[ 'position_' . $dir ] ?? '';
-                if ( $val !== '' ) {
-                    $inline_styles[] = $dir . ': ' . ( is_numeric( $val ) ? $val . 'px' : esc_attr( $val ) );
-                }
-            }
-            $w = $advanced['position_width'] ?? '';
-            if ( $w !== '' ) {
-                $inline_styles[] = 'width: ' . ( is_numeric( $w ) ? $w . 'px' : esc_attr( $w ) );
-            }
-            $z = $advanced['position_zindex'] ?? '';
-            if ( $z !== '' ) {
-                $inline_styles[] = 'z-index: ' . intval( $z );
-            }
         }
 
         // HTML ID (always generate for hover CSS support)
@@ -1155,6 +1332,24 @@ class Olo_Frontend_Renderer {
         $entrance = $s['entrance_animation'] ?? 'none';
         if ( $entrance && $entrance !== 'none' ) {
             $classes[] = 'olo-entrance-' . sanitize_html_class( $entrance );
+            $classes[] = 'olo-visible'; // applicata subito: l'animation parte al page-load (no IntersectionObserver dependency)
+            // Override CSS variables per durata/delay/easing custom (via field inspector)
+            $e_dur = intval( $s['entrance_duration'] ?? 0 );
+            if ( $e_dur > 0 ) $inline_styles[] = '--olo-e-dur: ' . max( 50, min( 5000, $e_dur ) ) . 'ms';
+            $e_delay = intval( $s['entrance_delay'] ?? 0 );
+            if ( $e_delay > 0 ) $inline_styles[] = '--olo-e-delay: ' . min( 5000, $e_delay ) . 'ms';
+            $e_ease = $s['entrance_easing'] ?? 'auto';
+            if ( $e_ease && $e_ease !== 'auto' ) {
+                // Whitelist: keyword o cubic-bezier
+                if ( preg_match( '/^(linear|ease|ease-in|ease-out|ease-in-out|cubic-bezier\([0-9.,\s\-]+\))$/', $e_ease ) ) {
+                    $inline_styles[] = '--olo-e-ease: ' . $e_ease;
+                }
+            }
+            $e_int = floatval( $s['entrance_intensity'] ?? 1 );
+            if ( $e_int > 0 && abs( $e_int - 1 ) > 0.01 ) {
+                $e_int = max( 0.1, min( 5, $e_int ) );
+                $inline_styles[] = '--olo-e-int: ' . $e_int;
+            }
             if ( ! empty( $s['entrance_stagger'] ) ) {
                 $stagger_delay = intval( $s['entrance_stagger_delay'] ?? 100 );
                 $stagger_delay = max( 25, min( 500, $stagger_delay ) );
@@ -1188,17 +1383,39 @@ class Olo_Frontend_Renderer {
             $snap_data_attr .= ' data-snap-dot-pos="' . esc_attr( $dot_position ) . '"';
         }
 
+        // Decide where to place bg/overlay layers: full section (default) or inside container.
+        // bg_scope='container' keeps the bg/overlay limited to the container max-width
+        // (useful when 'width' = default/small/etc. and the user doesn't want edge-to-edge bg).
+        // v1.0.78 — default 'container' (Centrata): la sezione rispetta la larghezza contenuto
+        // scelta dall'utente. Dati legacy senza bg_scope vengono trattati come Centrata.
+        $bg_scope = ( $s['bg_scope'] ?? 'container' ) === 'section' ? 'section' : 'container';
+        $has_any_bg = ( $has_bg_image || $has_bg_video || $has_bg_gallery || $has_overlay );
+
+        // ─── Section outer max-width ─────────────────────────────────────
+        // Quando bg_scope='container' E width != fullbleed/expand, anche la `<section>`
+        // esterna viene limitata in larghezza con `max-width` + `margin: 0 auto`.
+        // Senza questo, il colore/gradiente di sfondo era sempre bordo-a-bordo perché
+        // applicato come inline style sull'outer `<section>`, mentre solo il container
+        // interno seguiva il width semantico. Risultato per l'utente: scegliendo
+        // "Piccolo" o "Grande" la section sembrava sempre uguale (full viewport).
+        $width_for_outer = $s['width'] ?? $s['section_width'] ?? 'default';
+        $outer_max_width_map = [
+            'small'   => 900,
+            'default' => 1200,
+            'large'   => 1400,
+            'xlarge'  => 1600,
+        ];
+        if ( $bg_scope === 'container' && isset( $outer_max_width_map[ $width_for_outer ] ) ) {
+            $inline_styles[] = 'max-width: ' . $outer_max_width_map[ $width_for_outer ] . 'px';
+            $inline_styles[] = 'margin-left: auto';
+            $inline_styles[] = 'margin-right: auto';
+        }
+
         $html = '<section role="region" class="' . esc_attr( implode( ' ', $classes ) ) . '"' . $id_attr;
         if ( $inline_styles ) {
             $html .= ' style="' . esc_attr( implode( '; ', $inline_styles ) ) . '"';
         }
         $html .= $scrollspy_attr . $el_parallax_attr . $snap_data_attr . $mouse_attrs . '>';
-
-        // Decide where to place bg/overlay layers: full section (default) or inside container.
-        // bg_scope='container' keeps the bg/overlay limited to the container max-width
-        // (useful when 'width' = default/small/etc. and the user doesn't want edge-to-edge bg).
-        $bg_scope = ( $s['bg_scope'] ?? 'section' ) === 'container' ? 'container' : 'section';
-        $has_any_bg = ( $has_bg_image || $has_bg_video || $has_bg_gallery || $has_overlay );
 
         $bg_layers_html = '';
         if ( $has_bg_image ) {
@@ -1305,70 +1522,32 @@ class Olo_Frontend_Renderer {
         $stack        = ! empty( $s['stack_mobile'] );
         $stack_tablet = ! empty( $s['stack_tablet'] );
 
-        // Background handling
+        // Background handling — vedi commento in render_section_node: fallback su $s['bg'].
         $tile_bg      = $this->css->get_effective_bg( $style );
+        if ( ( $tile_bg['type'] ?? 'none' ) === 'none' && ! empty( $s['bg']['type'] ) && $s['bg']['type'] !== 'none' ) {
+            $tile_bg = $this->css->get_effective_bg( [ 'bg' => $s['bg'] ] );
+        }
         $has_bg_image   = ( $tile_bg['type'] === 'image' && ! empty( $tile_bg['image_url'] ) );
         $has_bg_video   = ( $tile_bg['type'] === 'video' && ! empty( $tile_bg['video_url'] ) );
         $has_bg_gallery = ( $tile_bg['type'] === 'gallery' && ! empty( $tile_bg['gallery_images'] ) && is_array( $tile_bg['gallery_images'] ) );
         $has_bg_any     = ( $tile_bg['type'] !== 'none' );
         $has_overlay    = ( $has_bg_any && ! empty( $tile_bg['overlay_opacity'] ) && intval( $tile_bg['overlay_opacity'] ) > 0 );
 
-        // Row margin/padding
+        // Row spacing/decorations — apply_flex=false: il flex va sul <div uk-grid>
+        // interno (vedi $row_flex_styles più sotto), non sul wrapper esterno.
+        // Pre-calc $pos_mode: ci serve per $has_positioning (riga successiva).
+        $pos_mode = $advanced['position_mode'] ?? 'static';
         $row_spacing_styles = [];
-        if ( ! empty( $style['margin_top'] ) )    $row_spacing_styles[] = "margin-top: {$style['margin_top']}px";
-        if ( ! empty( $style['margin_right'] ) )  $row_spacing_styles[] = "margin-right: {$style['margin_right']}px";
-        if ( ! empty( $style['margin_bottom'] ) ) $row_spacing_styles[] = "margin-bottom: {$style['margin_bottom']}px";
-        if ( ! empty( $style['margin_left'] ) )   $row_spacing_styles[] = "margin-left: {$style['margin_left']}px";
-        if ( ! empty( $style['padding_top'] ) )    $row_spacing_styles[] = "padding-top: {$style['padding_top']}px";
-        if ( ! empty( $style['padding_right'] ) )  $row_spacing_styles[] = "padding-right: {$style['padding_right']}px";
-        if ( ! empty( $style['padding_bottom'] ) ) $row_spacing_styles[] = "padding-bottom: {$style['padding_bottom']}px";
-        if ( ! empty( $style['padding_left'] ) )   $row_spacing_styles[] = "padding-left: {$style['padding_left']}px";
+        $this->apply_common_box_styles( $row_spacing_styles, $style, $s, $advanced, [ 'apply_flex' => false ] );
 
-        // Border radius
-        if ( ! empty( $style['border_radius'] ) )  $row_spacing_styles[] = $this->css->build_border_radius_css( $style['border_radius'] );
-
-        // Border
-        if ( ! empty( $style['border_width'] ) && intval( $style['border_width'] ) > 0 && ( $style['border_style'] ?? 'solid' ) !== 'none' ) {
-            $bw = intval( $style['border_width'] );
-            $bs = $this->safe_border_style( $style['border_style'] ?? 'solid' );
-            $bc = $this->safe_border_color( $style['border_color'] ?? 'transparent' );
-            $row_spacing_styles[] = "border: {$bw}px {$bs} {$bc}";
-        }
-
-        // Opacity
-        if ( ! empty( $style['opacity'] ) && intval( $style['opacity'] ) < 100 ) {
-            $opacity = intval( $style['opacity'] ) / 100;
-            $row_spacing_styles[] = "opacity: {$opacity}";
-        }
-
-        // Video cover height
+        // Video cover height — row/section-specific (l'helper non gestisce bg layers).
         if ( $has_bg_video && ! empty( $tile_bg['cover_height'] ) && intval( $tile_bg['cover_height'] ) > 0 ) {
             $row_spacing_styles[] = 'min-height: ' . intval( $tile_bg['cover_height'] ) . 'px';
         }
 
-        // Positioning (absolute/fixed/relative) for rows
-        $pos_mode = $advanced['position_mode'] ?? 'static';
-        if ( $pos_mode && $pos_mode !== 'static' ) {
-            $row_spacing_styles[] = 'position: ' . esc_attr( $pos_mode );
-            foreach ( [ 'top', 'left', 'bottom', 'right' ] as $dir ) {
-                $val = $advanced[ 'position_' . $dir ] ?? '';
-                if ( $val !== '' ) {
-                    $row_spacing_styles[] = $dir . ': ' . ( is_numeric( $val ) ? $val . 'px' : esc_attr( $val ) );
-                }
-            }
-            $w = $advanced['position_width'] ?? '';
-            if ( $w !== '' ) {
-                $row_spacing_styles[] = 'width: ' . ( is_numeric( $w ) ? $w . 'px' : esc_attr( $w ) );
-            }
-            $z = $advanced['position_zindex'] ?? '';
-            if ( $z !== '' ) {
-                $row_spacing_styles[] = 'z-index: ' . intval( $z );
-            }
-        }
-
         // Wrapper for row background or spacing
         $has_border_radius = ! empty( $style['border_radius'] );
-        $has_border = ! empty( $style['border_width'] ) && intval( $style['border_width'] ) > 0 && ( $style['border_style'] ?? 'solid' ) !== 'none';
+        $has_border = $this->wrapper_has_border( $style );
         $has_opacity = ! empty( $style['opacity'] ) && intval( $style['opacity'] ) < 100;
         $has_shadow = ! empty( $style['shadow'] );
         $has_spacing = ! empty( $row_spacing_styles );
@@ -1538,6 +1717,7 @@ class Olo_Frontend_Renderer {
         $entrance = $s['entrance_animation'] ?? 'none';
         if ( $entrance && $entrance !== 'none' ) {
             $wrapper_classes[] = 'olo-entrance-' . sanitize_html_class( $entrance );
+            $wrapper_classes[] = 'olo-visible'; // applicata subito (no IntersectionObserver dependency)
             if ( ! empty( $s['entrance_stagger'] ) ) {
                 $stagger_delay = intval( $s['entrance_stagger_delay'] ?? 100 );
                 $stagger_delay = max( 25, min( 500, $stagger_delay ) );
@@ -1600,25 +1780,11 @@ class Olo_Frontend_Renderer {
             }
         }
 
-        // Flex container overrides for the row grid (direction, justify, align, wrap, gap)
-        $row_flex_styles = [];
-        $rfd = $s['flex_direction'] ?? '';
-        if ( $rfd && $rfd !== 'row' )         $row_flex_styles[] = 'flex-direction: ' . esc_attr( $rfd );
-        $rfj = $s['flex_justify'] ?? '';
-        if ( $rfj && $rfj !== 'flex-start' )  $row_flex_styles[] = 'justify-content: ' . esc_attr( $rfj );
-        $rfa = $s['flex_align'] ?? '';
-        if ( $rfa && $rfa !== 'stretch' )     $row_flex_styles[] = 'align-items: ' . esc_attr( $rfa );
-        $rfw = $s['flex_wrap'] ?? '';
-        if ( $rfw && $rfw !== 'nowrap' )      $row_flex_styles[] = 'flex-wrap: ' . esc_attr( $rfw );
-        $rfcg = $s['flex_column_gap'] ?? '';
-        $rfrg = $s['flex_row_gap'] ?? '';
-        $rfg  = $s['flex_gap'] ?? ''; // legacy
-        if ( ( $rfcg && intval( $rfcg ) > 0 ) || ( $rfrg && intval( $rfrg ) > 0 ) ) {
-            if ( $rfcg && intval( $rfcg ) > 0 ) $row_flex_styles[] = 'column-gap: ' . intval( $rfcg ) . 'px';
-            if ( $rfrg && intval( $rfrg ) > 0 ) $row_flex_styles[] = 'row-gap: ' . intval( $rfrg ) . 'px';
-        } elseif ( $rfg && intval( $rfg ) > 0 ) {
-            $row_flex_styles[] = 'gap: ' . intval( $rfg ) . 'px';
-        }
+        // Flex container overrides for the row grid (direction, justify, align, wrap, gap).
+        // Helper unificato — un eventuale `display: flex` aggiuntivo è no-op perché
+        // .uk-grid ce l'ha già; gli altri decls (flex-direction/justify-content/...)
+        // sono i veri override.
+        $row_flex_styles = $this->css->build_flex_container_css( $s );
 
         // Grid — if no wrapper, put scrollspy/parallax on the grid div itself
         $grid_extra_attrs = $needs_wrapper ? '' : ( $row_scrollspy_attr . $row_el_parallax_attr );
@@ -1688,20 +1854,21 @@ class Olo_Frontend_Renderer {
 
             // Loop mode: repeat children for each post from WP_Query
             $loop_enabled = ! empty( $s['loop_enabled'] );
+            $loop_pagination_html = '';
             if ( $loop_enabled ) {
-                $loop_posts = $this->run_row_loop_query( $s );
-                if ( ! empty( $loop_posts ) ) {
-                    global $post;
-                    $old_post = $post;
-                    foreach ( $loop_posts as $loop_post ) {
-                        $post = $loop_post;
-                        setup_postdata( $post );
-                        foreach ( $node['children'] ?? [] as $child ) {
-                            $html .= $this->render_node( $child, $manager, $template_id, $hover_css_rules, $tile_counter, true );
-                        }
-                    }
-                    $post = $old_post;
-                    if ( $old_post ) { setup_postdata( $old_post ); } else { wp_reset_postdata(); }
+                $row_id_short = substr( md5( $node['id'] ?? wp_rand() ), 0, 8 );
+                $current_page = isset( $_GET[ 'olo_p_' . $row_id_short ] ) ? max( 1, intval( $_GET[ 'olo_p_' . $row_id_short ] ) ) : 1;
+                $loop_query = $this->run_row_loop_query( $s, $current_page, true );
+                $html .= $this->render_row_loop_children( $node['children'] ?? [], $loop_query->posts, $manager, $template_id, $hover_css_rules, $tile_counter, true );
+                $loop_pagination_html = $this->render_row_loop_pagination( $s, $current_page, intval( $loop_query->max_num_pages ), $row_id_short );
+                // Marca il container della row con data-olo-loop-row così il JS Load More
+                // sa dove appendere i nuovi children (li appende al wrapper interno).
+                if ( ( $s['loop_pagination'] ?? 'none' ) === 'load_more' ) {
+                    $html = preg_replace(
+                        '/<div(' . preg_quote( $grid_class_attr, '/' ) . ')/',
+                        '<div data-olo-loop-row-container="' . esc_attr( $row_id_short ) . '" data-olo-loop-template-id="' . intval( $template_id ) . '"$1',
+                        $html, 1
+                    );
                 }
             } else {
                 foreach ( $node['children'] ?? [] as $child ) {
@@ -1710,6 +1877,7 @@ class Olo_Frontend_Renderer {
             }
 
             $html .= '</div>';
+            $html .= $loop_pagination_html;
 
             // Stack on mobile: override grid to 1 column
             if ( $stack ) {
@@ -1726,20 +1894,20 @@ class Olo_Frontend_Renderer {
 
             // Loop mode: repeat children for each post from WP_Query
             $loop_enabled_flex = ! empty( $s['loop_enabled'] );
+            $loop_pagination_html_flex = '';
             if ( $loop_enabled_flex ) {
-                $loop_posts_flex = $this->run_row_loop_query( $s );
-                if ( ! empty( $loop_posts_flex ) ) {
-                    global $post;
-                    $old_post_flex = $post;
-                    foreach ( $loop_posts_flex as $loop_post ) {
-                        $post = $loop_post;
-                        setup_postdata( $post );
-                        foreach ( $node['children'] ?? [] as $child ) {
-                            $html .= $this->render_node( $child, $manager, $template_id, $hover_css_rules, $tile_counter );
-                        }
-                    }
-                    $post = $old_post_flex;
-                    if ( $old_post_flex ) { setup_postdata( $old_post_flex ); } else { wp_reset_postdata(); }
+                $row_id_short_flex = substr( md5( $node['id'] ?? wp_rand() ), 0, 8 );
+                $current_page_flex = isset( $_GET[ 'olo_p_' . $row_id_short_flex ] ) ? max( 1, intval( $_GET[ 'olo_p_' . $row_id_short_flex ] ) ) : 1;
+                $loop_query_flex   = $this->run_row_loop_query( $s, $current_page_flex, true );
+                $html .= $this->render_row_loop_children( $node['children'] ?? [], $loop_query_flex->posts, $manager, $template_id, $hover_css_rules, $tile_counter, false );
+                $loop_pagination_html_flex = $this->render_row_loop_pagination( $s, $current_page_flex, intval( $loop_query_flex->max_num_pages ), $row_id_short_flex );
+                // Marca il container per il Load More JS
+                if ( ( $s['loop_pagination'] ?? 'none' ) === 'load_more' ) {
+                    $html = preg_replace(
+                        '/<div(' . preg_quote( $class_attr, '/' ) . ' ' . preg_quote( $uk_grid, '/' ) . ')/',
+                        '<div data-olo-loop-row-container="' . esc_attr( $row_id_short_flex ) . '" data-olo-loop-template-id="' . intval( $template_id ) . '"$1',
+                        $html, 1
+                    );
                 }
             } else {
                 foreach ( $node['children'] ?? [] as $child ) {
@@ -1748,6 +1916,7 @@ class Olo_Frontend_Renderer {
             }
 
             $html .= '</div>';
+            $html .= $loop_pagination_html_flex;
         }
 
         // Close row wrapper
@@ -1761,10 +1930,15 @@ class Olo_Frontend_Renderer {
     /**
      * Build and run a WP_Query for row loop mode.
      *
-     * @param array $s  Row settings containing loop_* keys.
-     * @return WP_Post[]  Array of post objects, or empty array.
+     * Reso PUBBLICO per consentire al REST endpoint Load More di riusare
+     * la stessa logica di costruzione args.
+     *
+     * @param array $s            Row settings containing loop_* keys.
+     * @param int   $current_page Pagina corrente (1-based) per la paginazione.
+     * @param bool  $return_query Se true ritorna l'oggetto WP_Query invece dei soli posts.
+     * @return WP_Post[]|WP_Query  Array di post objects (default) oppure l'intero WP_Query.
      */
-    private function run_row_loop_query( $s ) {
+    public function run_row_loop_query( $s, $current_page = 1, $return_query = false ) {
         $post_type = sanitize_key( $s['loop_post_type'] ?? 'post' );
         if ( ! post_type_exists( $post_type ) ) {
             $post_type = 'post';
@@ -1776,6 +1950,7 @@ class Olo_Frontend_Renderer {
             'orderby'        => sanitize_key( $s['loop_orderby'] ?? 'date' ),
             'order'          => strtoupper( $s['loop_order'] ?? 'DESC' ) === 'ASC' ? 'ASC' : 'DESC',
             'post_status'    => 'publish',
+            'paged'          => max( 1, intval( $current_page ) ),
         ];
 
         // Offset
@@ -1850,7 +2025,99 @@ class Olo_Frontend_Renderer {
         }
 
         $query = new WP_Query( $args );
-        return $query->posts;
+        return $return_query ? $query : $query->posts;
+    }
+
+    /**
+     * Renderizza la paginazione del Row Loop (numerica o bottone Load More).
+     * Riusa la classe `.olo-btn-link` del tile button per coerenza visiva del bottone.
+     *
+     * @param array  $s            Settings della Row.
+     * @param int    $current_page Pagina corrente.
+     * @param int    $max_pages    Numero totale di pagine.
+     * @param string $row_id       Identificatore univoco della Row (per query var + data attr).
+     * @return string  HTML della paginazione (vuoto se non applicabile).
+     */
+    private function render_row_loop_pagination( $s, $current_page, $max_pages, $row_id ) {
+        $mode = $s['loop_pagination'] ?? 'none';
+        if ( $mode === 'none' || $max_pages <= 1 ) return '';
+
+        $align = in_array( $s['loop_pagination_align'] ?? 'center', [ 'left', 'center', 'right' ], true )
+            ? $s['loop_pagination_align'] : 'center';
+        $align_css = $align === 'left' ? 'flex-start' : ( $align === 'right' ? 'flex-end' : 'center' );
+
+        $wrapper_style = 'display:flex;justify-content:' . $align_css . ';margin-top:24px;';
+
+        if ( $mode === 'numbers' ) {
+            $qvar = 'olo_p_' . $row_id;
+            $links = paginate_links( [
+                'base'      => add_query_arg( $qvar, '%#%' ),
+                'format'    => '',
+                'current'   => $current_page,
+                'total'     => $max_pages,
+                'prev_text' => '&laquo;',
+                'next_text' => '&raquo;',
+                'type'      => 'array',
+            ] );
+            if ( empty( $links ) ) return '';
+            $items = '';
+            foreach ( $links as $lnk ) {
+                $items .= '<span class="olo-loop-page-item">' . $lnk . '</span>';
+            }
+            return '<nav class="olo-loop-pagination olo-loop-pagination--numbers" style="' . esc_attr( $wrapper_style ) . '">'
+                . $items . '</nav>';
+        }
+
+        if ( $mode === 'load_more' ) {
+            // Mostra il bottone solo se ci sono altre pagine da caricare
+            if ( $current_page >= $max_pages ) return '';
+            $label = sanitize_text_field( $s['loop_load_more_label'] ?? '' ) ?: __( 'Carica altri', 'olobuild' );
+            // Riusa la classe `.olo-btn-link` del tile button per coerenza visiva.
+            // Wrapper `.olo-button` applica gli stili di centratura/padding del button.
+            $btn = '<a href="#" role="button"'
+                . ' class="olo-btn-link olo-loop-load-more"'
+                . ' data-olo-loop-row="' . esc_attr( $row_id ) . '"'
+                . ' data-olo-loop-page="' . intval( $current_page ) . '"'
+                . ' data-olo-loop-max="' . intval( $max_pages ) . '"'
+                . ' style="display:inline-block;padding:14px 32px;background-color:var(--olo-color-primary,#6366F1);color:var(--olo-color-primary-contrast,#FFFFFF);border-radius:6px;text-decoration:none;font-weight:600;cursor:pointer;transition:opacity .2s ease;">'
+                . '<span class="olo-loop-load-more-label">' . esc_html( $label ) . '</span>'
+                . '</a>';
+            return '<div class="olo-loop-pagination olo-loop-pagination--load-more" style="' . esc_attr( $wrapper_style ) . '">'
+                . $btn . '</div>';
+        }
+
+        return '';
+    }
+
+    /**
+     * Renderizza il template del Loop una volta per ogni post.
+     *
+     * IMPORTANTE: il "template" del Loop è la PRIMA colonna della Row.
+     * Le altre colonne eventualmente presenti vengono ignorate quando il loop è
+     * attivo. Questo modello (Elementor-style):
+     *   - Coerente con come l'utente pensa al loop ("una card si ripete N volte")
+     *   - Layout della disposizione gestito dalla Row (es. 33-33-33 + 6 post = 2 righe da 3)
+     *   - Coerente col modello mentale "Loop Item = la prima colonna"
+     *
+     * Usato sia dal render normale che dal REST Load More.
+     *
+     * @return string  HTML concatenato del template renderizzato per ogni post.
+     */
+    public function render_row_loop_children( $children, $loop_posts, $manager, $template_id, &$hover_css_rules, &$tile_counter, $parent_is_grid = false ) {
+        if ( empty( $loop_posts ) || empty( $children ) ) return '';
+        // Solo il primo child viene usato come template del singolo card del loop.
+        $template_child = $children[0];
+        global $post;
+        $old_post = $post;
+        $html = '';
+        foreach ( $loop_posts as $loop_post ) {
+            $post = $loop_post;
+            setup_postdata( $post );
+            $html .= $this->render_node( $template_child, $manager, $template_id, $hover_css_rules, $tile_counter, $parent_is_grid );
+        }
+        $post = $old_post;
+        if ( $old_post ) { setup_postdata( $old_post ); } else { wp_reset_postdata(); }
+        return $html;
     }
 
     /**
@@ -1903,28 +2170,7 @@ class Olo_Frontend_Renderer {
             }
         }
 
-        // Column margin/padding
-        if ( ! empty( $style['margin_top'] ) )    $inline_styles[] = "margin-top: {$style['margin_top']}px";
-        if ( ! empty( $style['margin_right'] ) )  $inline_styles[] = "margin-right: {$style['margin_right']}px";
-        if ( ! empty( $style['margin_bottom'] ) ) $inline_styles[] = "margin-bottom: {$style['margin_bottom']}px";
-        if ( ! empty( $style['margin_left'] ) )   $inline_styles[] = "margin-left: {$style['margin_left']}px";
-        if ( ! empty( $style['padding_top'] ) )    $inline_styles[] = "padding-top: {$style['padding_top']}px";
-        if ( ! empty( $style['padding_right'] ) )  $inline_styles[] = "padding-right: {$style['padding_right']}px";
-        if ( ! empty( $style['padding_bottom'] ) ) $inline_styles[] = "padding-bottom: {$style['padding_bottom']}px";
-        if ( ! empty( $style['padding_left'] ) )   $inline_styles[] = "padding-left: {$style['padding_left']}px";
-
-        // Border radius
-        if ( ! empty( $style['border_radius'] ) )  $inline_styles[] = $this->css->build_border_radius_css( $style['border_radius'] );
-
-        // Border
-        if ( ! empty( $style['border_width'] ) && intval( $style['border_width'] ) > 0 && ( $style['border_style'] ?? 'solid' ) !== 'none' ) {
-            $bw = intval( $style['border_width'] );
-            $bs = $this->safe_border_style( $style['border_style'] ?? 'solid' );
-            $bc = $this->safe_border_color( $style['border_color'] ?? 'transparent' );
-            $inline_styles[] = "border: {$bw}px {$bs} {$bc}";
-        }
-
-        // Shadow
+        // Shadow CLASS — column applica sempre (no branch has_bg_any come element).
         if ( ! empty( $style['shadow'] ) ) {
             $uk_shadow_map = [
                 'sm' => 'uk-box-shadow-small',
@@ -1937,55 +2183,16 @@ class Olo_Frontend_Renderer {
             }
         }
 
-        // Opacity
-        if ( ! empty( $style['opacity'] ) && intval( $style['opacity'] ) < 100 ) {
-            $opacity = intval( $style['opacity'] ) / 100;
-            $inline_styles[] = "opacity: {$opacity}";
-        }
+        // Helper unificato: margin/padding/border-radius/border/opacity/flex/transform/
+        // box-shadow inline/text-shadow/backdrop/overflow/dimensions/mask/custom_css/position.
+        $this->apply_common_box_styles( $inline_styles, $style, $s, $advanced );
 
-        // CSS Transform (normal state)
-        $transform_css = $this->css->build_transform_css( $style );
-        if ( $transform_css ) {
-            foreach ( $transform_css as $decl ) {
-                $inline_styles[] = $decl;
-            }
-        }
-
-        // Box shadow (segue border-radius del div)
-        $box_shadow = $this->css->build_box_shadow_css( $style );
-        if ( $box_shadow ) {
-            $inline_styles[] = $box_shadow;
-        }
-
-        // Text shadow
-        $text_shadow = $this->css->build_text_shadow_css( $style );
-        if ( $text_shadow ) {
-            $inline_styles[] = $text_shadow;
-        }
-
-        // Backdrop filter
-        $backdrop = $this->css->build_backdrop_filter_css( $style );
-        if ( $backdrop ) {
-            foreach ( $backdrop as $decl ) {
-                $inline_styles[] = $decl;
-            }
-        }
-
-        // Overflow
-        if ( ! empty( $style['overflow'] ) && $style['overflow'] !== 'visible' ) {
-            $inline_styles[] = 'overflow: ' . esc_attr( $style['overflow'] );
-        }
-
-        // Mask
-        $mask_css = $this->css->build_mask_css( $style );
-        if ( $mask_css ) {
-            foreach ( $mask_css as $decl ) {
-                $inline_styles[] = $decl;
-            }
-        }
-
-        // Background handling for column
+        // Background handling for column (post-helper: gestione layer image/video/overlay).
+        // Vedi commento in render_section_node: fallback su $s['bg'].
         $col_bg      = $this->css->get_effective_bg( $style );
+        if ( ( $col_bg['type'] ?? 'none' ) === 'none' && ! empty( $s['bg']['type'] ) && $s['bg']['type'] !== 'none' ) {
+            $col_bg = $this->css->get_effective_bg( [ 'bg' => $s['bg'] ] );
+        }
         $has_col_bg_image = ( $col_bg['type'] === 'image' && ! empty( $col_bg['image_url'] ) );
         $has_col_bg_video = ( $col_bg['type'] === 'video' && ! empty( $col_bg['video_url'] ) );
         $has_col_bg_any   = ( $col_bg['type'] !== 'none' );
@@ -2000,24 +2207,23 @@ class Olo_Frontend_Renderer {
             $inline_styles[] = 'overflow: clip';
         }
 
-        // Positioning (absolute/fixed/relative) for columns
-        $pos_mode = $advanced['position_mode'] ?? 'static';
-        if ( $pos_mode && $pos_mode !== 'static' ) {
-            $inline_styles[] = 'position: ' . esc_attr( $pos_mode );
-            foreach ( [ 'top', 'left', 'bottom', 'right' ] as $dir ) {
-                $val = $advanced[ 'position_' . $dir ] ?? '';
-                if ( $val !== '' ) {
-                    $inline_styles[] = $dir . ': ' . ( is_numeric( $val ) ? $val . 'px' : esc_attr( $val ) );
-                }
-            }
-            $w = $advanced['position_width'] ?? '';
-            if ( $w !== '' ) {
-                $inline_styles[] = 'width: ' . ( is_numeric( $w ) ? $w . 'px' : esc_attr( $w ) );
-            }
-            $z = $advanced['position_zindex'] ?? '';
-            if ( $z !== '' ) {
-                $inline_styles[] = 'z-index: ' . intval( $z );
-            }
+        // v3.55.48 — sticky column ri-attivata. Necessaria perché lo sticky della
+        // tile element (Avanzate → Sticky) raramente funziona per layout immagine
+        // + testo: il parent immediato della tile è la column wrapper, che spesso
+        // ha overflow:clip (per bg image) o altezza non stretched. La column invece
+        // è child diretto della row (uk-grid) che è sempre flex container con
+        // height = max child height. position:sticky sulla column funziona quindi
+        // come atteso: si blocca all'offset, si sblocca quando la row termina.
+        if ( ! empty( $s['sticky'] ) ) {
+            $sticky_offset = max( 0, intval( $s['sticky_offset'] ?? 50 ) );
+            $inline_styles[] = 'position: sticky';
+            // Top dinamico: --olo-sticky-top-offset viene aggiornata da
+            // print_sticky_offset_script() in base all'altezza dell'header sticky.
+            // Nel builder la var resta 0 (header forzato a position:relative).
+            $inline_styles[] = 'top: calc(var(--olo-sticky-top-offset, 0px) + ' . $sticky_offset . 'px)';
+            $inline_styles[] = 'align-self: start';
+            $inline_styles[] = 'z-index: 5';
+            self::$needs_sticky_offset_script = true;
         }
 
         // ID for hover CSS support
@@ -2035,6 +2241,7 @@ class Olo_Frontend_Renderer {
         $entrance = $s['entrance_animation'] ?? 'none';
         if ( $entrance && $entrance !== 'none' ) {
             $classes[] = 'olo-entrance-' . sanitize_html_class( $entrance );
+            $classes[] = 'olo-visible'; // applicata subito: l'animation parte al page-load (no IntersectionObserver dependency)
             if ( ! empty( $s['entrance_stagger'] ) ) {
                 $stagger_delay = intval( $s['entrance_stagger_delay'] ?? 100 );
                 $stagger_delay = max( 25, min( 500, $stagger_delay ) );
@@ -2119,14 +2326,17 @@ class Olo_Frontend_Renderer {
         }
 
         // Margin & Padding from style tab
-        if ( ! empty( $style['margin_top'] ) )    $inline_styles[] = "margin-top: {$style['margin_top']}px";
-        if ( ! empty( $style['margin_right'] ) )  $inline_styles[] = "margin-right: {$style['margin_right']}px";
-        if ( ! empty( $style['margin_bottom'] ) ) $inline_styles[] = "margin-bottom: {$style['margin_bottom']}px";
-        if ( ! empty( $style['margin_left'] ) )   $inline_styles[] = "margin-left: {$style['margin_left']}px";
-        if ( ! empty( $style['padding_top'] ) )    $inline_styles[] = "padding-top: {$style['padding_top']}px";
-        if ( ! empty( $style['padding_right'] ) )  $inline_styles[] = "padding-right: {$style['padding_right']}px";
-        if ( ! empty( $style['padding_bottom'] ) ) $inline_styles[] = "padding-bottom: {$style['padding_bottom']}px";
-        if ( ! empty( $style['padding_left'] ) )   $inline_styles[] = "padding-left: {$style['padding_left']}px";
+        // intval() previene CSS injection via tile settings (es. "10;background:url(...)").
+        // I valori margin/padding sono SEMPRE numeri interi (px) — qualsiasi cosa diversa
+        // viene troncata a 0.
+        if ( ! empty( $style['margin_top'] ) )     $inline_styles[] = 'margin-top: ' . intval( $style['margin_top'] ) . 'px';
+        if ( ! empty( $style['margin_right'] ) )   $inline_styles[] = 'margin-right: ' . intval( $style['margin_right'] ) . 'px';
+        if ( ! empty( $style['margin_bottom'] ) )  $inline_styles[] = 'margin-bottom: ' . intval( $style['margin_bottom'] ) . 'px';
+        if ( ! empty( $style['margin_left'] ) )    $inline_styles[] = 'margin-left: ' . intval( $style['margin_left'] ) . 'px';
+        if ( ! empty( $style['padding_top'] ) )    $inline_styles[] = 'padding-top: ' . intval( $style['padding_top'] ) . 'px';
+        if ( ! empty( $style['padding_right'] ) )  $inline_styles[] = 'padding-right: ' . intval( $style['padding_right'] ) . 'px';
+        if ( ! empty( $style['padding_bottom'] ) ) $inline_styles[] = 'padding-bottom: ' . intval( $style['padding_bottom'] ) . 'px';
+        if ( ! empty( $style['padding_left'] ) )   $inline_styles[] = 'padding-left: ' . intval( $style['padding_left'] ) . 'px';
 
         // Background
         $tile_bg = $this->css->get_effective_bg( $style );
@@ -2138,13 +2348,9 @@ class Olo_Frontend_Renderer {
         // Border radius
         if ( ! empty( $style['border_radius'] ) ) $inline_styles[] = $this->css->build_border_radius_css( $style['border_radius'] );
 
-        // Border
-        if ( ! empty( $style['border_width'] ) && intval( $style['border_width'] ) > 0 && ( $style['border_style'] ?? 'solid' ) !== 'none' ) {
-            $bw = intval( $style['border_width'] );
-            $bs = $this->safe_border_style( $style['border_style'] ?? 'solid' );
-            $bc = $this->safe_border_color( $style['border_color'] ?? 'transparent' );
-            $inline_styles[] = "border: {$bw}px {$bs} {$bc}";
-        }
+        // Border (sistema unificato: oggetto 4-side + fallback legacy 3-key)
+        $border_css = $this->build_wrapper_border_css( $style );
+        if ( $border_css ) $inline_styles[] = $border_css;
 
         $classes = [ 'olo-inner-columns' ];
         if ( ! empty( $advanced['css_classes'] ) ) {
@@ -2195,14 +2401,17 @@ class Olo_Frontend_Renderer {
         ];
 
         // Margin & Padding
-        if ( ! empty( $style['margin_top'] ) )    $inline_styles[] = "margin-top: {$style['margin_top']}px";
-        if ( ! empty( $style['margin_right'] ) )  $inline_styles[] = "margin-right: {$style['margin_right']}px";
-        if ( ! empty( $style['margin_bottom'] ) ) $inline_styles[] = "margin-bottom: {$style['margin_bottom']}px";
-        if ( ! empty( $style['margin_left'] ) )   $inline_styles[] = "margin-left: {$style['margin_left']}px";
-        if ( ! empty( $style['padding_top'] ) )    $inline_styles[] = "padding-top: {$style['padding_top']}px";
-        if ( ! empty( $style['padding_right'] ) )  $inline_styles[] = "padding-right: {$style['padding_right']}px";
-        if ( ! empty( $style['padding_bottom'] ) ) $inline_styles[] = "padding-bottom: {$style['padding_bottom']}px";
-        if ( ! empty( $style['padding_left'] ) )   $inline_styles[] = "padding-left: {$style['padding_left']}px";
+        // intval() previene CSS injection via tile settings (es. "10;background:url(...)").
+        // I valori margin/padding sono SEMPRE numeri interi (px) — qualsiasi cosa diversa
+        // viene troncata a 0.
+        if ( ! empty( $style['margin_top'] ) )     $inline_styles[] = 'margin-top: ' . intval( $style['margin_top'] ) . 'px';
+        if ( ! empty( $style['margin_right'] ) )   $inline_styles[] = 'margin-right: ' . intval( $style['margin_right'] ) . 'px';
+        if ( ! empty( $style['margin_bottom'] ) )  $inline_styles[] = 'margin-bottom: ' . intval( $style['margin_bottom'] ) . 'px';
+        if ( ! empty( $style['margin_left'] ) )    $inline_styles[] = 'margin-left: ' . intval( $style['margin_left'] ) . 'px';
+        if ( ! empty( $style['padding_top'] ) )    $inline_styles[] = 'padding-top: ' . intval( $style['padding_top'] ) . 'px';
+        if ( ! empty( $style['padding_right'] ) )  $inline_styles[] = 'padding-right: ' . intval( $style['padding_right'] ) . 'px';
+        if ( ! empty( $style['padding_bottom'] ) ) $inline_styles[] = 'padding-bottom: ' . intval( $style['padding_bottom'] ) . 'px';
+        if ( ! empty( $style['padding_left'] ) )   $inline_styles[] = 'padding-left: ' . intval( $style['padding_left'] ) . 'px';
 
         // Background
         $tile_bg = $this->css->get_effective_bg( $style );
@@ -2214,20 +2423,17 @@ class Olo_Frontend_Renderer {
         // Border radius
         if ( ! empty( $style['border_radius'] ) ) $inline_styles[] = $this->css->build_border_radius_css( $style['border_radius'] );
 
-        // Border
-        if ( ! empty( $style['border_width'] ) && intval( $style['border_width'] ) > 0 && ( $style['border_style'] ?? 'solid' ) !== 'none' ) {
-            $bw = intval( $style['border_width'] );
-            $bs = $this->safe_border_style( $style['border_style'] ?? 'solid' );
-            $bc = $this->safe_border_color( $style['border_color'] ?? 'transparent' );
-            $inline_styles[] = "border: {$bw}px {$bs} {$bc}";
-        }
+        // Border (sistema unificato: oggetto 4-side + fallback legacy 3-key)
+        $border_css = $this->build_wrapper_border_css( $style );
+        if ( $border_css ) $inline_styles[] = $border_css;
 
         // Sticky column support
         if ( ! empty( $s['sticky'] ) ) {
             $sticky_offset = intval( $s['sticky_offset'] ?? 20 );
             $inline_styles[] = 'position: sticky';
-            $inline_styles[] = 'top: ' . $sticky_offset . 'px';
+            $inline_styles[] = 'top: calc(var(--olo-sticky-top-offset, 0px) + ' . $sticky_offset . 'px)';
             $inline_styles[] = 'align-self: flex-start';
+            self::$needs_sticky_offset_script = true;
         }
 
         // ID for hover CSS support
@@ -2279,7 +2485,7 @@ class Olo_Frontend_Renderer {
         }
 
         // Render opening wrapper (panel div with styles, trigger button, close button)
-        $html = $tile_instance->render( $settings );
+        $html = Olo_Tile_Utils::process_dynamic_tags( $tile_instance->render( $settings, $node['style'] ?? [] ) );
 
         $children = $node['children'] ?? [];
 
@@ -2421,6 +2627,13 @@ class Olo_Frontend_Renderer {
         $style    = $node['style'] ?? [];
         $advanced = $node['advanced'] ?? [];
 
+        // Builder mode flag: i tile possono leggere $settings['_builder_mode'] per
+        // disabilitare comportamenti pesanti durante l'editing (es. video autoplay,
+        // form submit, mapJS init, ecc.).
+        if ( $this->builder_mode ) {
+            $settings['_builder_mode'] = true;
+        }
+
         // Conditional visibility check — skip rendering entirely if condition not met
         if ( ! $this->check_conditions( $settings ) ) {
             return '';
@@ -2475,42 +2688,58 @@ class Olo_Frontend_Renderer {
             }
         }
 
-        $tile_bg      = $this->css->get_effective_bg( $style );
+        // Migrazione legacy hero: prima della v3.55.13 la tile hero aveva il proprio
+        // sistema di sfondo nei settings (bg_type/bg_color/bg_image/bg_video/overlay_*).
+        // Ora usa style.bg come tutti gli altri tile. Convertiamo on-the-fly i template
+        // salvati prima della migrazione, così wrapper e overlay vengono renderizzati.
+        if ( $type === 'hero' && empty( $style['bg'] ) && empty( $settings['bg'] ) && ! empty( $settings['bg_type'] ) ) {
+            $settings['bg'] = $this->migrate_legacy_hero_bg( $settings );
+        }
+
+        // Per element tile il field "bg" (Sfondo creativo) è dichiarato in fields[] del config,
+        // quindi viene salvato in node.settings — non in node.style come per le sezioni.
+        // Merge: se settings.bg/bg_color è settato e style non lo è, usa quello dei settings.
+        $bg_source = $style;
+        if ( empty( $bg_source['bg'] ) && ! empty( $settings['bg'] ) )            $bg_source['bg']       = $settings['bg'];
+        if ( empty( $bg_source['bg_color'] ) && ! empty( $settings['bg_color'] ) ) $bg_source['bg_color'] = $settings['bg_color'];
+
+        // v1.0.55 — Tile ATOMICHE (button/icon/divider/spacer/togglebtn): wrapper SEMPRE
+        // trasparente, ignora qualsiasi bg in style/settings (il bg appartiene all'elemento
+        // interno, non al wrapper). Specchio della guardia ATOMIC_TILE_TYPES nel JS
+        // useBackgroundStyle.js — regola HARD: nessun pulsante colora lo spazio circostante.
+        $ATOMIC_TILES = [ 'button', 'icon', 'divider', 'spacer', 'togglebtn' ];
+        if ( in_array( $type, $ATOMIC_TILES, true ) ) {
+            $bg_source = [ 'bg' => [ 'type' => 'none' ] ];
+        }
+
+        $tile_bg      = $this->css->get_effective_bg( $bg_source );
         $is_fullwidth = ! empty( $style['full_width'] );
-        $has_bg_image = ( $tile_bg['type'] === 'image' && ! empty( $tile_bg['image_url'] ) );
-        $has_bg_video = ( $tile_bg['type'] === 'video' && ! empty( $tile_bg['video_url'] ) );
-        $has_bg_any   = ( $tile_bg['type'] !== 'none' );
-        $has_overlay  = ( $has_bg_any && ! empty( $tile_bg['overlay_opacity'] ) && intval( $tile_bg['overlay_opacity'] ) > 0 );
+        $has_bg_image   = ( $tile_bg['type'] === 'image' && ! empty( $tile_bg['image_url'] ) );
+        $has_bg_video   = ( $tile_bg['type'] === 'video' && ! empty( $tile_bg['video_url'] ) );
+        $has_bg_gallery = ( $tile_bg['type'] === 'gallery' && ! empty( $tile_bg['gallery_images'] ) && is_array( $tile_bg['gallery_images'] ) );
+        $has_bg_any     = ( $tile_bg['type'] !== 'none' );
+        $has_overlay    = ( $has_bg_any && ! empty( $tile_bg['overlay_opacity'] ) && intval( $tile_bg['overlay_opacity'] ) > 0 );
 
         // Build inline styles (custom values that UIkit can't handle)
         $inline_styles = [];
 
-        if ( ! empty( $style['margin_top'] ) )    $inline_styles[] = "margin-top: {$style['margin_top']}px";
-        if ( ! empty( $style['margin_right'] ) )  $inline_styles[] = "margin-right: {$style['margin_right']}px";
-        if ( ! empty( $style['margin_bottom'] ) ) $inline_styles[] = "margin-bottom: {$style['margin_bottom']}px";
-        if ( ! empty( $style['margin_left'] ) )   $inline_styles[] = "margin-left: {$style['margin_left']}px";
-
-        if ( ! empty( $style['padding_top'] ) )    $inline_styles[] = "padding-top: {$style['padding_top']}px";
-        if ( ! empty( $style['padding_right'] ) )  $inline_styles[] = "padding-right: {$style['padding_right']}px";
-        if ( ! empty( $style['padding_bottom'] ) ) $inline_styles[] = "padding-bottom: {$style['padding_bottom']}px";
-        if ( ! empty( $style['padding_left'] ) )   $inline_styles[] = "padding-left: {$style['padding_left']}px";
-
+        // Background base (solo se non c'è image/video — quelli sono layer separati)
         if ( ! $has_bg_image && ! $has_bg_video ) {
             $bg_css = $this->css->get_bg_inline_css( $tile_bg );
             if ( $bg_css ) $inline_styles[] = $bg_css;
         }
 
-        if ( ! empty( $style['border_radius'] ) )  $inline_styles[] = $this->css->build_border_radius_css( $style['border_radius'] );
+        // v1.0.55 — Per tile atomiche il wrapper NON eredita text_color/border_radius/shadow:
+        // quei valori vanno SOLO sull'elemento interno, non sull'area circostante.
+        $is_atomic_tile = in_array( $type, $ATOMIC_TILES, true );
 
-        if ( ! empty( $style['border_width'] ) && intval( $style['border_width'] ) > 0 && ( $style['border_style'] ?? 'solid' ) !== 'none' ) {
-            $bw = intval( $style['border_width'] );
-            $bs = $this->safe_border_style( $style['border_style'] ?? 'solid' );
-            $bc = $this->safe_border_color( $style['border_color'] ?? 'transparent' );
-            $inline_styles[] = "border: {$bw}px {$bs} {$bc}";
+        // Text color (preset stilistici applicano color al wrapper → i discendenti ereditano).
+        if ( ! $is_atomic_tile && ! empty( $style['text_color'] ) ) {
+            $inline_styles[] = 'color: ' . esc_attr( $style['text_color'] );
         }
 
-        // UIkit shadow classes — solo per elementi con sfondo (box-shadow segue border-radius)
-        // Per elementi trasparenti il drop-shadow viene applicato via inline filter
+        // UIkit shadow class — solo per elementi con sfondo (box-shadow segue border-radius).
+        // Per elementi trasparenti, drop-shadow filter viene applicato dopo l'helper.
         $shadow_class = '';
         if ( ! empty( $style['shadow'] ) && $has_bg_any ) {
             $uk_shadow_map = [
@@ -2524,87 +2753,32 @@ class Olo_Frontend_Renderer {
             }
         }
 
-        if ( ! empty( $style['opacity'] ) && intval( $style['opacity'] ) < 100 ) {
-            $opacity = intval( $style['opacity'] ) / 100;
-            $inline_styles[] = "opacity: {$opacity}";
-        }
+        // $pos_mode è usato anche più sotto (scrollspy_attr, sticky_attr, fixed-position
+        // body-mount) — lo calcoliamo qui per averlo disponibile fuori dall'helper.
+        $pos_mode = $advanced['position_mode'] ?? 'static';
 
-        // Flex container settings (for elements that use flexContainerFields)
-        $flex_css = $this->css->build_flex_container_css( $settings );
-        foreach ( $flex_css as $decl ) {
-            $inline_styles[] = $decl;
+        // Helper unificato: margin/padding/border-radius/border/opacity/flex/transform/
+        // box-shadow inline/text-shadow/backdrop/overflow/dimensions/mask/custom_css/position.
+        // `apply_box_shadow=false` per element trasparenti — usano drop-shadow filter sotto.
+        // v1.0.55 — Per atomic: passiamo style filtrato (no border_radius/border/shadow), così
+        // l'helper applica solo margin/padding/dimensions/flex/transform/etc. al wrapper.
+        $box_style = $style;
+        if ( $is_atomic_tile ) {
+            unset( $box_style['border_radius'], $box_style['border'], $box_style['shadow'],
+                   $box_style['box_shadow_h'], $box_style['box_shadow_v'], $box_style['box_shadow_blur'],
+                   $box_style['box_shadow_spread'], $box_style['box_shadow_color'], $box_style['box_shadow_inset'] );
         }
+        $this->apply_common_box_styles(
+            $inline_styles, $box_style, $settings, $advanced,
+            [ 'apply_box_shadow' => (bool) $has_bg_any && ! $is_atomic_tile ]
+        );
 
-        // CSS Transform (normal state)
-        $transform_css = $this->css->build_transform_css( $style );
-        if ( $transform_css ) {
-            foreach ( $transform_css as $decl ) {
-                $inline_styles[] = $decl;
-            }
-        }
-
-        // Shadow — box-shadow per elementi con sfondo (segue border-radius),
-        // filter: drop-shadow per elementi trasparenti (segue forma del contenuto: SVG, icone)
-        if ( $has_bg_any ) {
-            $box_shadow = $this->css->build_box_shadow_css( $style );
-            if ( $box_shadow ) {
-                $inline_styles[] = $box_shadow;
-            }
-        } else {
+        // Drop-shadow filter per element trasparenti (segue forma SVG/icone via clip-path).
+        // Non per atomic: il drop-shadow apparirebbe attorno all'area del wrapper.
+        if ( ! $has_bg_any && ! $is_atomic_tile ) {
             $drop_shadow = $this->css->build_drop_shadow_css( $style );
             if ( $drop_shadow ) {
                 $inline_styles[] = 'filter: ' . $drop_shadow;
-            }
-        }
-
-        // Text shadow
-        $text_shadow = $this->css->build_text_shadow_css( $style );
-        if ( $text_shadow ) {
-            $inline_styles[] = $text_shadow;
-        }
-
-        // Backdrop filter
-        $backdrop = $this->css->build_backdrop_filter_css( $style );
-        if ( $backdrop ) {
-            foreach ( $backdrop as $decl ) {
-                $inline_styles[] = $decl;
-            }
-        }
-
-        // Overflow
-        if ( ! empty( $style['overflow'] ) && $style['overflow'] !== 'visible' ) {
-            $inline_styles[] = 'overflow: ' . esc_attr( $style['overflow'] );
-        }
-
-        // Mask
-        $mask_css = $this->css->build_mask_css( $style );
-        if ( $mask_css ) {
-            foreach ( $mask_css as $decl ) {
-                $inline_styles[] = $decl;
-            }
-        }
-
-        if ( ! empty( $advanced['custom_css'] ) ) {
-            $inline_styles[] = $this->safe_inline_css( $advanced['custom_css'] );
-        }
-
-        // Positioning (absolute/fixed/relative)
-        $pos_mode = $advanced['position_mode'] ?? 'static';
-        if ( $pos_mode && $pos_mode !== 'static' ) {
-            $inline_styles[] = 'position: ' . esc_attr( $pos_mode );
-            foreach ( [ 'top', 'left', 'bottom', 'right' ] as $dir ) {
-                $val = $advanced[ 'position_' . $dir ] ?? '';
-                if ( $val !== '' ) {
-                    $inline_styles[] = $dir . ': ' . ( is_numeric( $val ) ? $val . 'px' : esc_attr( $val ) );
-                }
-            }
-            $w = $advanced['position_width'] ?? '';
-            if ( $w !== '' ) {
-                $inline_styles[] = 'width: ' . ( is_numeric( $w ) ? $w . 'px' : esc_attr( $w ) );
-            }
-            $z = $advanced['position_zindex'] ?? '';
-            if ( $z !== '' ) {
-                $inline_styles[] = 'z-index: ' . intval( $z );
             }
         }
 
@@ -2624,6 +2798,7 @@ class Olo_Frontend_Renderer {
         $entrance = $settings['entrance_animation'] ?? 'none';
         if ( $entrance && $entrance !== 'none' ) {
             $classes[] = 'olo-entrance-' . sanitize_html_class( $entrance );
+            $classes[] = 'olo-visible'; // applicata subito: l'animation parte al page-load (no IntersectionObserver dependency)
             // Stagger: animate children sequentially
             if ( ! empty( $settings['entrance_stagger'] ) ) {
                 $stagger_delay = intval( $settings['entrance_stagger_delay'] ?? 100 );
@@ -2666,16 +2841,39 @@ class Olo_Frontend_Renderer {
         $elem_scrollspy_attr = ( $pos_mode === 'fixed' ) ? '' : $this->anim->build_scrollspy_attr( $advanced );
         $elem_el_parallax_attr = $this->anim->build_element_parallax_attr( $advanced );
 
-        // Sticky attribute (UIkit uk-sticky) — skip if tile is already fixed-positioned
-        // Also skip for megamenu tiles — they handle header stickiness via their own JS
-        $elem_sticky_attr = '';
-        if ( ! empty( $settings['sticky'] ) && $pos_mode !== 'fixed' && $type !== 'megamenu' ) {
-            $sticky_pos    = esc_attr( $settings['sticky_position'] ?? 'top' );
-            $sticky_offset = intval( $settings['sticky_offset'] ?? 0 );
-            $sticky_mobile = $settings['sticky_on_mobile'] ?? true;
-            $sticky_media  = $sticky_mobile ? '' : '; media: @s';
-            $elem_sticky_attr = ' uk-sticky="position: ' . $sticky_pos . '; offset: ' . $sticky_offset . $sticky_media . '"';
+        // Sticky — skip if tile is already fixed-positioned or is a megamenu
+        //
+        // v3.55.47 — switch da `uk-sticky` JS (sticky GLOBALE, non si sblocca mai)
+        // a CSS nativo `position: sticky` che è LIMITATO al parent: quando il
+        // container genitore termina, l'elemento si sblocca e torna a scorrere
+        // naturalmente. È il comportamento atteso per layout immagine+testo.
+        //
+        // Requisiti `position: sticky` CSS:
+        //  1. align-self: start (no stretch) — sticky non funziona su elementi stretched
+        //  2. il parent non deve avere overflow: hidden (clip è ok)
+        //  3. il parent deve essere più alto dell'elemento (altrimenti niente range scroll)
+        //  4. !important sull'align-self perché UIkit applica `align-self: stretch`
+        //     di default a `.uk-grid > *` con specificity più alta dell'inline.
+        $elem_sticky_inline_css = '';
+        $sticky_on              = ! empty( $advanced['sticky'] ) || ! empty( $settings['sticky'] );
+        if ( $sticky_on && $pos_mode !== 'fixed' && $type !== 'megamenu' ) {
+            $sticky_pos    = $advanced['sticky_position'] ?? $settings['sticky_position'] ?? 'top';
+            $sticky_offset = intval( $advanced['sticky_offset'] ?? $settings['sticky_offset'] ?? 0 );
+            $sticky_mobile = $advanced['sticky_on_mobile'] ?? $settings['sticky_on_mobile'] ?? true;
+            $pos_prop      = $sticky_pos === 'bottom' ? 'bottom' : 'top';
+            $elem_sticky_inline_css = 'position: sticky; ' . $pos_prop . ': ' . $sticky_offset
+                . 'px; align-self: start; z-index: 10';
+            if ( ! $sticky_mobile ) {
+                // CSS in frontend.css → @media (max-width:640px) { .olo-sticky-desktop-only{position:static!important} }
+                $classes[] = 'olo-sticky-desktop-only';
+            }
         }
+        // Append sticky CSS a $style_attr (già assemblato a riga ~2629).
+        if ( $elem_sticky_inline_css !== '' ) {
+            $style_attr = $style_attr ? $style_attr . '; ' . $elem_sticky_inline_css : $elem_sticky_inline_css;
+        }
+        // Variabile mantenuta per compatibilità riga 2811, ora sempre vuota.
+        $elem_sticky_attr = '';
 
         // Mouse effects data attributes
         $elem_mouse_attrs = '';
@@ -2809,12 +3007,13 @@ class Olo_Frontend_Renderer {
                 <div class="uk-position-cover" style="background-color: <?php echo $ov_color; ?>; opacity: <?php echo $ov_opacity; ?>; pointer-events: none" aria-hidden="true"></div>
             <?php endif; ?>
 
+            <?php if ( $this->builder_mode ) $settings['_builder_mode'] = true; ?>
             <?php if ( $has_bg_image || $has_bg_video || $has_bg_gallery || $has_overlay ) : ?>
                 <div class="uk-position-relative" style="z-index: 1">
-                    <?php echo $tile_instance->render( $settings ); ?>
+                    <?php echo Olo_Tile_Utils::process_dynamic_tags( $tile_instance->render( $settings, $node['style'] ?? [] ) ); ?>
                 </div>
             <?php else : ?>
-                <?php echo $tile_instance->render( $settings ); ?>
+                <?php echo Olo_Tile_Utils::process_dynamic_tags( $tile_instance->render( $settings, $node['style'] ?? [] ) ); ?>
             <?php endif; ?>
         </div>
         <?php
@@ -2907,6 +3106,63 @@ class Olo_Frontend_Renderer {
     }
 
     /**
+     * Migra i campi legacy bg_type/bg_color/bg_image/bg_video/overlay_* della tile hero
+     * (formato pre-v3.55.13) all'oggetto bg unificato di BackgroundControls.
+     * Chiamata on-the-fly al render — non modifica il template salvato.
+     *
+     * @param array $s Settings flat legacy.
+     * @return array Bg object: { type, color|gradient_*|image_*|video_*, overlay_* }
+     */
+    private function migrate_legacy_hero_bg( $s ) {
+        $type = $s['bg_type'] ?? 'solid';
+        $bg   = [ 'type' => 'none' ];
+
+        switch ( $type ) {
+            case 'color':
+                $bg = [ 'type' => 'solid', 'color' => $s['bg_color'] ?: '#1F2937' ];
+                break;
+            case 'gradient':
+                $bg = [
+                    'type'           => 'gradient',
+                    'gradient_from'  => $s['bg_gradient_from'] ?: '#6366F1',
+                    'gradient_to'    => $s['bg_gradient_to']   ?: '#8B5CF6',
+                    'gradient_angle' => intval( $s['bg_gradient_angle'] ?: 135 ),
+                ];
+                break;
+            case 'image':
+                $pos_map = [
+                    'center' => 'center center', 'top' => 'top center', 'bottom' => 'bottom center',
+                    'left'   => 'center left',   'right' => 'center right',
+                ];
+                $pos = $s['bg_position'] ?? 'center';
+                $bg = [
+                    'type'           => 'image',
+                    'image_url'      => $s['bg_image'] ?: '',
+                    'image_size'     => $s['bg_size']  ?: 'cover',
+                    'image_position' => $pos_map[ $pos ] ?? 'center center',
+                    'image_parallax' => ! empty( $s['bg_fixed'] ),
+                ];
+                break;
+            case 'video':
+                $bg = [
+                    'type'       => 'video',
+                    'video_url'  => $s['bg_video'] ?: '',
+                    'video_size' => $s['bg_size']  ?: 'cover',
+                ];
+                break;
+            default:
+                $bg = [ 'type' => 'solid', 'color' => '#1F2937' ];
+        }
+
+        if ( ! empty( $s['overlay'] ) ) {
+            $bg['overlay_color']   = $s['overlay_color'] ?: '#000000';
+            $bg['overlay_opacity'] = intval( $s['overlay_opacity'] ?: 50 );
+        }
+
+        return $bg;
+    }
+
+    /**
      * Collect hover CSS rules for an element.
      */
     private function collect_hover_css( $style, $css_id, $is_fullwidth, &$hover_css_rules, $advanced = [] ) {
@@ -2926,6 +3182,60 @@ class Olo_Frontend_Renderer {
         if ( ! empty( $hover['border_color'] ) ) {
             $hover_decls[] = 'border-color: ' . esc_attr( $hover['border_color'] );
             $has_hover = true;
+        }
+        // v3.55.17 — hover anche su border_width e border_style (prima solo border_color era hoverable).
+        if ( isset( $hover['border_width'] ) && $hover['border_width'] !== '' && $hover['border_width'] !== null ) {
+            $hover_decls[] = 'border-width: ' . intval( $hover['border_width'] ) . 'px';
+            $has_hover = true;
+        }
+        if ( ! empty( $hover['border_style'] ) ) {
+            $hover_decls[] = 'border-style: ' . esc_attr( $hover['border_style'] );
+            $has_hover = true;
+        }
+        // v3.55.20 — hover per il sistema NUOVO style.border_hover (oggetto 4-side + style + color).
+        // Convive con il legacy: il nuovo vince se ha valori (color non vuoto + qualche lato > 0).
+        $bh = $style['border_hover'] ?? null;
+        if ( is_array( $bh ) ) {
+            $bh_color = trim( $bh['color'] ?? '' );
+            $bh_style = trim( $bh['style'] ?? '' );
+            $bh_t  = intval( $bh['top']    ?? 0 );
+            $bh_r  = intval( $bh['right']  ?? 0 );
+            $bh_b  = intval( $bh['bottom'] ?? 0 );
+            $bh_l  = intval( $bh['left']   ?? 0 );
+            $bh_any = $bh_t || $bh_r || $bh_b || $bh_l;
+            if ( $bh_color !== '' || $bh_style !== '' || $bh_any ) {
+                // Base value (per ereditare i lati non override).
+                $base = $style['border'] ?? null;
+                $base_d = is_array( $base ) ? [
+                    'top'    => max( 0, intval( $base['top']    ?? 0 ) ),
+                    'right'  => max( 0, intval( $base['right']  ?? 0 ) ),
+                    'bottom' => max( 0, intval( $base['bottom'] ?? 0 ) ),
+                    'left'   => max( 0, intval( $base['left']   ?? 0 ) ),
+                    'style'  => $base['style'] ?? 'solid',
+                    'color'  => $base['color'] ?? '',
+                ] : [ 'top' => 0, 'right' => 0, 'bottom' => 0, 'left' => 0, 'style' => 'solid', 'color' => '' ];
+
+                $eff_c = $bh_color !== '' ? $bh_color : $base_d['color'];
+                $eff_s = $bh_style !== '' ? $bh_style : $base_d['style'];
+                $eff_t = $bh_t ?: $base_d['top'];
+                $eff_r = $bh_r ?: $base_d['right'];
+                $eff_b = $bh_b ?: $base_d['bottom'];
+                $eff_l = $bh_l ?: $base_d['left'];
+
+                if ( $eff_c !== '' ) {
+                    $bs = $this->safe_border_style( $eff_s ?: 'solid' );
+                    $bc = $this->safe_border_color( $eff_c );
+                    if ( $eff_t === $eff_r && $eff_r === $eff_b && $eff_b === $eff_l ) {
+                        $hover_decls[] = "border: {$eff_t}px {$bs} {$bc}";
+                    } else {
+                        if ( $eff_t ) $hover_decls[] = "border-top: {$eff_t}px {$bs} {$bc}";
+                        if ( $eff_r ) $hover_decls[] = "border-right: {$eff_r}px {$bs} {$bc}";
+                        if ( $eff_b ) $hover_decls[] = "border-bottom: {$eff_b}px {$bs} {$bc}";
+                        if ( $eff_l ) $hover_decls[] = "border-left: {$eff_l}px {$bs} {$bc}";
+                    }
+                    $has_hover = true;
+                }
+            }
         }
         if ( isset( $hover['border_radius'] ) && $hover['border_radius'] !== '' && $hover['border_radius'] !== null ) {
             $br = $hover['border_radius'];
@@ -3186,6 +3496,18 @@ class Olo_Frontend_Renderer {
                 $decls[] = 'height: ' . ( is_numeric( $h_val ) ? intval( $h_val ) . 'px' : esc_attr( $h_val ) );
             }
 
+            // tile_* responsive (style fields del tab "Stile" del builder).
+            $resp_dim_map = [
+                "tile_width_{$bp}"      => 'width',
+                "tile_max_width_{$bp}"  => 'max-width',
+                "tile_min_height_{$bp}" => 'min-height',
+            ];
+            foreach ( $resp_dim_map as $rkey => $rprop ) {
+                if ( ! isset( $style[ $rkey ] ) || $style[ $rkey ] === '' || $style[ $rkey ] === null ) continue;
+                $rv_dim = $this->safe_dim_value( $style[ $rkey ] );
+                if ( $rv_dim !== '' ) $decls[] = $rprop . ': ' . $rv_dim;
+            }
+
             // Display override (responsive visibility)
             $disp_key = "display_{$bp}";
             if ( isset( $style[ $disp_key ] ) && $style[ $disp_key ] !== '' && $style[ $disp_key ] !== null ) {
@@ -3246,109 +3568,73 @@ class Olo_Frontend_Renderer {
     }
 
     /**
-     * Check for postgrid element usage recursively.
+     * Single-pass node tree scan: ritorna tutti i "signature" usati per decidere
+     * gli script da enqueue. Sostituisce 7 funzioni `check_*_recursive` che
+     * facevano 12+ visite separate dell'albero (ognuna O(N)).
+     *
+     * Output:
+     *   [
+     *     'types'          => ['postgrid' => true, 'pdfviewer' => true, ...],
+     *     'has_leaflet_map'        => bool (map con mode=locations|services)
+     *     'has_row_loop_load_more' => bool
+     *     'has_bezier'             => bool (advanced.bezier_path settato su qualsiasi tile)
+     *     'has_progallery_lightbox'=> bool (progallery con lightbox_thumbs ∈ bottom/right/left)
+     *   ]
+     *
+     * Costo: 1 visita O(N) invece di 12. Per template con 200 tile: ~200 confronti
+     * vs ~2400 con i metodi singoli.
      */
-    private function check_postgrid_recursive( $nodes ) {
-        foreach ( $nodes as $node ) {
-            if ( ( $node['type'] ?? '' ) === 'postgrid' ) {
-                return true;
-            }
-            if ( ! empty( $node['children'] ) && is_array( $node['children'] ) ) {
-                if ( $this->check_postgrid_recursive( $node['children'] ) ) {
-                    return true;
-                }
-            }
-        }
-        return false;
+    private function collect_node_signatures( $tiles ) {
+        $sig = [
+            'types'                   => [],
+            'has_leaflet_map'         => false,
+            'has_row_loop_load_more'  => false,
+            'has_bezier'              => false,
+            'has_progallery_lightbox' => false,
+        ];
+        $this->walk_signatures( $tiles, $sig );
+        return $sig;
     }
 
-    /**
-     * Check for Leaflet map (mode: locations) usage recursively.
-     */
-    private function check_leaflet_map_recursive( $nodes ) {
+    private function walk_signatures( $nodes, &$sig ) {
+        if ( ! is_array( $nodes ) ) return;
         foreach ( $nodes as $node ) {
-            $map_mode = $node['settings']['mode'] ?? 'single';
-            if ( ( $node['type'] ?? '' ) === 'map' && in_array( $map_mode, [ 'locations', 'services' ], true ) ) {
-                return true;
-            }
-            if ( ! empty( $node['children'] ) && is_array( $node['children'] ) ) {
-                if ( $this->check_leaflet_map_recursive( $node['children'] ) ) {
-                    return true;
+            $type = $node['type'] ?? '';
+            if ( $type ) $sig['types'][ $type ] = true;
+
+            // map: distingue mode (locations/services richiede leaflet)
+            if ( $type === 'map' ) {
+                $mode = $node['settings']['mode'] ?? 'single';
+                if ( $mode === 'locations' || $mode === 'services' ) {
+                    $sig['has_leaflet_map'] = true;
                 }
             }
-        }
-        return false;
-    }
 
-    /**
-     * Check for proslider element usage recursively.
-     */
-    private function check_proslider_recursive( $nodes ) {
-        foreach ( $nodes as $node ) {
-            if ( ( $node['type'] ?? '' ) === 'proslider' ) {
-                return true;
-            }
-            if ( ! empty( $node['children'] ) && is_array( $node['children'] ) ) {
-                if ( $this->check_proslider_recursive( $node['children'] ) ) {
-                    return true;
+            // row con loop "load more"
+            if ( $type === 'row' ) {
+                $s = $node['settings'] ?? [];
+                if ( ! empty( $s['loop_enabled'] ) && ( $s['loop_pagination'] ?? 'none' ) === 'load_more' ) {
+                    $sig['has_row_loop_load_more'] = true;
                 }
             }
-        }
-        return false;
-    }
 
-    /**
-     * Generic recursive check for a specific tile type.
-     */
-    private function check_tile_recursive( $nodes, $tile_type ) {
-        foreach ( $nodes as $node ) {
-            if ( ( $node['type'] ?? '' ) === $tile_type ) {
-                return true;
-            }
-            if ( ! empty( $node['children'] ) && is_array( $node['children'] ) ) {
-                if ( $this->check_tile_recursive( $node['children'], $tile_type ) ) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Check if any tile has a bezier_path in advanced settings.
-     */
-    private function check_bezier_recursive( $nodes ) {
-        foreach ( $nodes as $node ) {
+            // bezier_path è in advanced (qualsiasi tile)
             if ( ! empty( $node['advanced']['bezier_path'] ) ) {
-                return true;
+                $sig['has_bezier'] = true;
             }
-            if ( ! empty( $node['children'] ) && is_array( $node['children'] ) ) {
-                if ( $this->check_bezier_recursive( $node['children'] ) ) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
 
-    /**
-     * Check for progallery with custom lightbox (thumbs) recursively.
-     */
-    private function check_progallery_lightbox_recursive( $nodes ) {
-        foreach ( $nodes as $node ) {
-            if ( ( $node['type'] ?? '' ) === 'progallery' ) {
+            // progallery con thumbs custom
+            if ( $type === 'progallery' ) {
                 $thumbs = $node['settings']['lightbox_thumbs'] ?? 'none';
-                if ( in_array( $thumbs, [ 'bottom', 'right', 'left' ], true ) ) {
-                    return true;
+                if ( $thumbs === 'bottom' || $thumbs === 'right' || $thumbs === 'left' ) {
+                    $sig['has_progallery_lightbox'] = true;
                 }
             }
-            if ( ! empty( $node['children'] ) && is_array( $node['children'] ) ) {
-                if ( $this->check_progallery_lightbox_recursive( $node['children'] ) ) {
-                    return true;
-                }
+
+            if ( ! empty( $node['children'] ) ) {
+                $this->walk_signatures( $node['children'], $sig );
             }
         }
-        return false;
     }
 
     /**
@@ -3432,8 +3718,12 @@ class Olo_Frontend_Renderer {
             true
         );
 
+        // Una sola visita dell'albero per raccogliere le signature di tutti i tile
+        // (vs 12+ visite separate prima). $sig['types'][$type] è O(1) lookup.
+        $sig = $this->collect_node_signatures( $tiles );
+
         // Post Grid detection (recursive)
-        if ( $this->check_postgrid_recursive( $tiles ) ) {
+        if ( ! empty( $sig['types']['postgrid'] ) ) {
             wp_enqueue_script(
                 'olo-postgrid-js',
                 OLO_URL . 'assets/js/olo-postgrid.js',
@@ -3443,8 +3733,24 @@ class Olo_Frontend_Renderer {
             );
         }
 
+        // Row Loop "Load More" pagination (delegated click handler on body).
+        if ( $sig['has_row_loop_load_more'] ) {
+            wp_enqueue_script(
+                'olo-row-loop-js',
+                OLO_URL . 'assets/js/olo-row-loop.js',
+                [],
+                OLO_VERSION,
+                true
+            );
+            wp_add_inline_script(
+                'olo-row-loop-js',
+                'window.oloFrontendData = window.oloFrontendData || {}; window.oloFrontendData.restUrl = "' . esc_js( esc_url_raw( rest_url( 'olo/v1' ) ) ) . '";',
+                'before'
+            );
+        }
+
         // Leaflet map detection (recursive)
-        if ( $this->check_leaflet_map_recursive( $tiles ) ) {
+        if ( $sig['has_leaflet_map'] ) {
             $vendor_url = OLO_URL . 'assets/vendor/leaflet/';
 
             wp_enqueue_style( 'leaflet-css', $vendor_url . 'leaflet.css', [], '1.9.4' );
@@ -3464,7 +3770,7 @@ class Olo_Frontend_Renderer {
         }
 
         // ProSlider detection (recursive)
-        if ( $this->check_proslider_recursive( $tiles ) ) {
+        if ( ! empty( $sig['types']['proslider'] ) ) {
             wp_enqueue_style(
                 'olo-proslider-css',
                 OLO_URL . 'assets/css/olo-proslider.css',
@@ -3481,7 +3787,7 @@ class Olo_Frontend_Renderer {
         }
 
         // LiveSearch detection (recursive)
-        if ( $this->check_tile_recursive( $tiles, 'livesearch' ) ) {
+        if ( ! empty( $sig['types']['livesearch'] ) ) {
             wp_enqueue_style(
                 'olo-livesearch-css',
                 OLO_URL . 'assets/css/olo-livesearch.css',
@@ -3498,7 +3804,7 @@ class Olo_Frontend_Renderer {
         }
 
         // ServiceSearch detection (recursive)
-        if ( $this->check_tile_recursive( $tiles, 'servicesearch' ) ) {
+        if ( ! empty( $sig['types']['servicesearch'] ) ) {
             wp_enqueue_script(
                 'olo-servicesearch-js',
                 OLO_URL . 'assets/js/olo-servicesearch.js',
@@ -3509,7 +3815,7 @@ class Olo_Frontend_Renderer {
         }
 
         // ServiceResults detection (recursive)
-        if ( $this->check_tile_recursive( $tiles, 'serviceresults' ) ) {
+        if ( ! empty( $sig['types']['serviceresults'] ) ) {
             $vendor_url = OLO_URL . 'assets/vendor/leaflet/';
 
             wp_enqueue_style( 'leaflet-css', $vendor_url . 'leaflet.css', [], '1.9.4' );
@@ -3528,7 +3834,7 @@ class Olo_Frontend_Renderer {
         }
 
         // ProGallery custom lightbox detection (recursive)
-        if ( $this->check_progallery_lightbox_recursive( $tiles ) ) {
+        if ( $sig['has_progallery_lightbox'] ) {
             wp_enqueue_script(
                 'olo-progallery-lightbox-js',
                 OLO_URL . 'assets/js/olo-progallery-lightbox.js',
@@ -3539,7 +3845,7 @@ class Olo_Frontend_Renderer {
         }
 
         // PdfViewer detection (recursive)
-        if ( $this->check_tile_recursive( $tiles, 'pdfviewer' ) ) {
+        if ( ! empty( $sig['types']['pdfviewer'] ) ) {
             wp_enqueue_script(
                 'pdfjs',
                 OLO_URL . 'assets/vendor/pdfjs/pdf.min.js',
@@ -3573,7 +3879,7 @@ class Olo_Frontend_Renderer {
         }
 
         // PdfPro detection (recursive) — shares pdfjs/pageflip vendors with PdfViewer
-        if ( $this->check_tile_recursive( $tiles, 'pdfpro' ) ) {
+        if ( ! empty( $sig['types']['pdfpro'] ) ) {
             wp_enqueue_script(
                 'pdfjs',
                 OLO_URL . 'assets/vendor/pdfjs/pdf.min.js',
@@ -3601,18 +3907,18 @@ class Olo_Frontend_Renderer {
         }
 
         // SVG Animator
-        if ( $this->check_tile_recursive( $tiles, 'svganimator' ) ) {
+        if ( ! empty( $sig['types']['svganimator'] ) ) {
             wp_enqueue_style( 'olo-svganimator-css', OLO_URL . 'assets/css/olo-svganimator.css', [], OLO_VERSION );
             wp_enqueue_script( 'olo-svganimator-js', OLO_URL . 'assets/js/olo-svganimator.js', [], OLO_VERSION, true );
         }
 
         // Viewer 360
-        if ( $this->check_tile_recursive( $tiles, 'viewer360' ) ) {
+        if ( ! empty( $sig['types']['viewer360'] ) ) {
             wp_enqueue_script( 'olo-viewer360-js', OLO_URL . 'assets/js/olo-viewer360.js', [], OLO_VERSION, true );
         }
 
         // Bezier path scroll animation
-        if ( $this->check_bezier_recursive( $tiles ) ) {
+        if ( $sig['has_bezier'] ) {
             wp_enqueue_script( 'olo-bezier-parallax-js', OLO_URL . 'assets/js/olo-bezier-parallax.js', [], OLO_VERSION, true );
         }
         } // end if ( ! $safe_mode ) — skip tile JS enqueue
@@ -3624,9 +3930,17 @@ class Olo_Frontend_Renderer {
         $this->responsive_css_rules = [];
         $tile_counter = 0;
 
+        // Quando il template è di tipo 'widget' è renderizzato dentro un altro
+        // template (via render_widget_template). Evitiamo l'`id="olo-main-content"`
+        // (deve essere unico per pagina) e `role="main"` (semantica per il main
+        // wrapper della pagina, non per un sub-template embedded).
+        $is_widget = ( $template['type'] ?? '' ) === 'widget';
+        $wrapper_id_attr   = $is_widget ? '' : ' id="olo-main-content"';
+        $wrapper_role_attr = $is_widget ? '' : ' role="main"';
+
         ob_start();
         ?>
-        <div id="olo-main-content" role="main" class="olo-template olo-template-<?php echo esc_attr( $id ); ?>"<?php
+        <div<?php echo $wrapper_id_attr; ?><?php echo $wrapper_role_attr; ?> class="olo-template olo-template-<?php echo esc_attr( $id ); ?>"<?php
             if ( ( $page_bg['type'] === 'image' && ! empty( $page_bg['image_url'] ) ) || ( $page_bg['type'] === 'video' && ! empty( $page_bg['video_url'] ) ) ) {
                 echo ' style="position: relative; overflow: clip"';
             } elseif ( $page_bg_css ) {
@@ -3871,7 +4185,11 @@ class Olo_Frontend_Renderer {
               var obs = new IntersectionObserver(function(entries){
                 entries.forEach(function(e){
                   if(e.isIntersecting){
-                    var tpl = e.target.querySelector('template');
+                    // ":scope > template" matcha SOLO il template figlio DIRETTO.
+                    // Senza :scope, il querySelector pescherebbe template di
+                    // data-olo-lazy ANNIDATI (es. widget dentro switcher), inserendo
+                    // il loro content nel data-olo-lazy padre sbagliato.
+                    var tpl = e.target.querySelector(':scope > template');
                     if(tpl){
                       var ph = e.target.querySelector('.olo-lazy-ph');
                       if(ph) ph.remove();
@@ -3882,6 +4200,29 @@ class Olo_Frontend_Renderer {
                       pending.forEach(function(s){ s.parentNode.removeChild(s); });
                       e.target.appendChild(frag);
                       tpl.remove();
+                      // Riosserva i data-olo-lazy ANNIDATI appena introdotti.
+                      // L'observer iniziale non li conosceva (erano dentro <template>),
+                      // quindi senza questo step restano svuoti per sempre.
+                      e.target.querySelectorAll('[data-olo-lazy]').forEach(function(nested){
+                        if (!nested.dataset.oloLazyObserved) {
+                          nested.dataset.oloLazyObserved = '1';
+                          obs.observe(nested);
+                        }
+                      });
+                      // Re-init UIkit components sui nuovi elementi (es. switcher, tab, slider...)
+                      // — UIkit usa MutationObserver ma a volte salta gli inserimenti via importNode/template.
+                      // Stesso pattern del builder iframe-bridge.js::reinitUIkit().
+                      if (window.UIkit && typeof window.UIkit.update === 'function') {
+                        try {
+                          var ukNames = ['slider','slideshow','lightbox','grid','scrollspy','accordion','tab','switcher','countdown','filter','parallax','sticky','navbar','drop','dropdown'];
+                          ukNames.forEach(function(name){
+                            e.target.querySelectorAll('[uk-' + name + '],[data-uk-' + name + ']').forEach(function(el){
+                              try { if (UIkit[name]) UIkit[name](el); } catch(_){}
+                            });
+                          });
+                          UIkit.update(e.target);
+                        } catch(_){}
+                      }
                       (function runScripts(list, parent){
                         if(!list.length) return;
                         var old = list.shift();
@@ -4240,5 +4581,77 @@ class Olo_Frontend_Renderer {
             }
             echo '<style class="olo-hover-styles">' . $all_css . '</style>';
         }
+    }
+
+    /**
+     * Genera il CSS border per il wrapper di un tile, supportando entrambi i sistemi:
+     *
+     *   1. style.border (NUOVO, FieldBorder oggetto 4-side):
+     *      { top, right, bottom, left, style, color, linked }
+     *      → border:Npx style color  oppure  border-top/right/bottom/left:Npx style color
+     *
+     *   2. style.border_width + style.border_style + style.border_color (LEGACY uniforme).
+     *      Usato SOLO se la chiave style.border non esiste affatto (template pre-v3.55.20).
+     *
+     * IMPORTANTE: la sola PRESENZA di array_key_exists('border', $style) significa che
+     * l'utente ha toccato il nuovo controllo e quindi il sistema legacy va IGNORATO,
+     * anche se il nuovo bordo è "spento" (tutti i lati a 0). Senza questo check, mettere
+     * a 0 il nuovo bordo lascia visibile il vecchio salvato in border_width legacy.
+     *
+     * @param array $style  tile.style flat
+     * @return string       CSS declarations (vuoto se nessun border)
+     */
+    private function build_wrapper_border_css( $style ) {
+        // Sistema NUOVO: oggetto 4-side. Se la chiave esiste, vince sempre sul legacy.
+        if ( array_key_exists( 'border', $style ) && is_array( $style['border'] ) ) {
+            $b = $style['border'];
+            $color = trim( $b['color'] ?? '' );
+            $stylename = $b['style'] ?? 'solid';
+            $top    = max( 0, intval( $b['top']    ?? 0 ) );
+            $right  = max( 0, intval( $b['right']  ?? 0 ) );
+            $bottom = max( 0, intval( $b['bottom'] ?? 0 ) );
+            $left   = max( 0, intval( $b['left']   ?? 0 ) );
+            $any    = $top || $right || $bottom || $left;
+            if ( $color !== '' && $any && $stylename !== 'none' ) {
+                $bs = $this->safe_border_style( $stylename );
+                $bc = $this->safe_border_color( $color );
+                if ( $top === $right && $right === $bottom && $bottom === $left ) {
+                    return "border: {$top}px {$bs} {$bc}";
+                }
+                $parts = [];
+                if ( $top    ) $parts[] = "border-top: {$top}px {$bs} {$bc}";
+                if ( $right  ) $parts[] = "border-right: {$right}px {$bs} {$bc}";
+                if ( $bottom ) $parts[] = "border-bottom: {$bottom}px {$bs} {$bc}";
+                if ( $left   ) $parts[] = "border-left: {$left}px {$bs} {$bc}";
+                return implode( '; ', $parts );
+            }
+            // Nuovo sistema esiste ma utente l'ha messo a 0/vuoto → bordo OFF (no fallback).
+            // Forza border:none così il legacy non riemerge via cascade CSS del tema.
+            return 'border: none';
+        }
+
+        // Sistema LEGACY: 3 chiavi piatte. Solo se la chiave 'border' nuova non esiste.
+        if ( ! empty( $style['border_width'] ) && intval( $style['border_width'] ) > 0 && ( $style['border_style'] ?? 'solid' ) !== 'none' ) {
+            $bw = intval( $style['border_width'] );
+            $bs = $this->safe_border_style( $style['border_style'] ?? 'solid' );
+            $bc = $this->safe_border_color( $style['border_color'] ?? 'transparent' );
+            return "border: {$bw}px {$bs} {$bc}";
+        }
+
+        return '';
+    }
+
+    /**
+     * True se il wrapper ha un border attivo. Identica policy di build_wrapper_border_css:
+     * la presenza di style.border (oggetto) disattiva sempre il fallback legacy.
+     */
+    private function wrapper_has_border( $style ) {
+        if ( array_key_exists( 'border', $style ) && is_array( $style['border'] ) ) {
+            $b = $style['border'];
+            $color = trim( $b['color'] ?? '' );
+            $any   = intval( $b['top'] ?? 0 ) || intval( $b['right'] ?? 0 ) || intval( $b['bottom'] ?? 0 ) || intval( $b['left'] ?? 0 );
+            return ( $color !== '' && $any && ( $b['style'] ?? 'solid' ) !== 'none' );
+        }
+        return ! empty( $style['border_width'] ) && intval( $style['border_width'] ) > 0 && ( $style['border_style'] ?? 'solid' ) !== 'none';
     }
 }

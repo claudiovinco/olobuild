@@ -1,12 +1,22 @@
-import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared';
+import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared';
 import { shadowField } from './_shared.js';
+import { t } from '@/i18n';
 
+/**
+ * Tile LoginForm — split CONTENUTO/STILE.
+ *   fields[]      → mode, redirect, remember/lost/avatar toggles, titoli/testi pulsanti, funzionalità visive (icone/toggle password/strength/regole),
+ *                   tab_style, termini, social login (URLs+toggles), campi registrazione
+ *   styleFields[] → preset, bg, typo, text-effects, colori (form/text/label/input/focus/icon/link/submit), padding, radius (input/submit/form), border, shadow
+ */
 export default {
   type: 'loginform',
-  name: 'Login / Registrazione',
+  name: t('Login / Registrazione'),
   icon: 'dashicons-lock',
   category: 'marketing',
   defaults: {
+    bg: { type: 'none' },
+    typography_preset: '',
+    preset: 'custom',
     mode: 'login',
     redirect_url: '',
     show_remember_me: true,
@@ -14,18 +24,12 @@ export default {
     show_avatar: true,
     logged_in_message: 'Bentornato!',
     logged_out_redirect: '',
-
-    // Titoli
     login_title: 'Bentornato',
     login_subtitle: 'Accedi al tuo account',
     register_title: 'Crea un account',
     register_subtitle: 'Registrati in pochi secondi',
-
-    // Testi pulsanti
     login_button_text: 'Accedi',
     register_button_text: 'Registrati',
-
-    // Visual
     show_input_icons: true,
     show_password_toggle: true,
     show_password_strength: true,
@@ -36,13 +40,9 @@ export default {
     password_min_strength: 0,
     tab_style: 'underline',
     tile_padding: { top: 32, right: 32, bottom: 32, left: 32 },
-
-    // Termini e condizioni
     show_terms: false,
     terms_text: 'Accetto i Termini e le Condizioni',
     terms_url: '',
-
-    // Divider social (visuale)
     show_social_divider: false,
     social_divider_text: 'oppure',
     social_google: false,
@@ -51,15 +51,11 @@ export default {
     social_google_url: '#',
     social_facebook_url: '#',
     social_apple_url: '#',
-
-    // Campi registrazione (built-in + personalizzati, riordinabili)
     register_fields: [
-      { id: 'rf-username', label: 'Nome utente', field_type: 'username', placeholder: 'Scegli un nome utente', required: true, width: '100', meta_key: '', options: '' },
-      { id: 'rf-email', label: 'Email', field_type: 'user_email', placeholder: 'nome@esempio.it', required: true, width: '100', meta_key: '', options: '' },
-      { id: 'rf-password', label: 'Password', field_type: 'user_password', placeholder: 'Min. 8 caratteri', required: true, width: '100', meta_key: '', options: '' },
+      { id: 'rf-username', label: t('Nome utente'), field_type: 'username', placeholder: t('Scegli un nome utente'), required: true, width: '100', meta_key: '', options: '' },
+      { id: 'rf-email', label: t('Email'), field_type: 'user_email', placeholder: t('nome@esempio.it'), required: true, width: '100', meta_key: '', options: '' },
+      { id: 'rf-password', label: t('Password'), field_type: 'user_password', placeholder: t('Min. 8 caratteri'), required: true, width: '100', meta_key: '', options: '' },
     ],
-
-    // Stile
     form_bg: '',
     text_color: '',
     label_color: '',
@@ -80,187 +76,182 @@ export default {
     border_color: '',
     shadow: 'none',
     ...textEffectsDefaults,
+    text_effect_target: 'label',
     border: { ...borderDefault },
     border_hover: { ...borderHoverDefault },
     border_hover_duration: 300,
     ...borderEffectDefaults,
   },
+
   fields: [
-    // ═══════════════════════════════════════
-    //  MODALITÀ
-    // ═══════════════════════════════════════
-    { key: 'mode', label: 'Modalità', type: 'select', options: [
-      { value: 'login', label: 'Solo Login' },
-      { value: 'register', label: 'Solo Registrazione' },
-      { value: 'both', label: 'Login + Registrazione (tab)' },
+    { key: 'mode', label: t('Modalità'), type: 'select', options: [
+      { value: 'login', label: t('Solo Login') },
+      { value: 'register', label: t('Solo Registrazione') },
+      { value: 'both', label: t('Login + Registrazione (tab)') },
     ]},
-    { key: 'redirect_url', label: 'Redirect dopo login', type: 'text', placeholder: 'URL (vuoto = pagina corrente)' },
+    { key: 'redirect_url', label: t('Redirect dopo login'), type: 'link', placeholder: t('URL (vuoto = pagina corrente)') },
     { key: 'show_remember_me', label: 'Mostra "Ricordami"', type: 'toggle' },
     { key: 'show_lost_password', label: 'Mostra "Password dimenticata"', type: 'toggle' },
-    { key: 'show_avatar', label: 'Mostra avatar se loggato', type: 'toggle' },
-    { key: 'logged_in_message', label: 'Messaggio utente loggato', type: 'text' },
-    { key: 'logged_out_redirect', label: 'Redirect dopo logout', type: 'text', placeholder: 'URL (vuoto = pagina corrente)' },
+    { key: 'show_avatar', label: t('Mostra avatar se loggato'), type: 'toggle' },
+    { key: 'logged_in_message', label: t('Messaggio utente loggato'), type: 'text' },
+    { key: 'logged_out_redirect', label: t('Redirect dopo logout'), type: 'link', placeholder: t('URL (vuoto = pagina corrente)') },
 
-    // ═══════════════════════════════════════
-    //  TITOLI E TESTI
-    // ═══════════════════════════════════════
-    { type: 'separator', label: 'Titoli e testi' },
-    { key: 'login_title', label: 'Titolo login', type: 'text' },
-    { key: 'login_subtitle', label: 'Sottotitolo login', type: 'text' },
-    { key: 'register_title', label: 'Titolo registrazione', type: 'text',
+    { type: 'separator', label: t('Titoli e testi') },
+    { key: 'login_title', label: t('Titolo login'), type: 'text' },
+    { key: 'login_subtitle', label: t('Sottotitolo login'), type: 'text' },
+    { key: 'register_title', label: t('Titolo registrazione'), type: 'text',
       condition: { field: 'mode', operator: '!=', value: 'login' } },
-    { key: 'register_subtitle', label: 'Sottotitolo registrazione', type: 'text',
+    { key: 'register_subtitle', label: t('Sottotitolo registrazione'), type: 'text',
       condition: { field: 'mode', operator: '!=', value: 'login' } },
-    { key: 'login_button_text', label: 'Testo pulsante login', type: 'text' },
-    { key: 'register_button_text', label: 'Testo pulsante registrazione', type: 'text',
+    { key: 'login_button_text', label: t('Testo pulsante login'), type: 'text' },
+    { key: 'register_button_text', label: t('Testo pulsante registrazione'), type: 'text',
       condition: { field: 'mode', operator: '!=', value: 'login' } },
 
-    // ═══════════════════════════════════════
-    //  FUNZIONALITÀ VISIVE
-    // ═══════════════════════════════════════
-    { type: 'separator', label: 'Funzionalità visive' },
-    { key: 'show_input_icons', label: 'Icone negli input', type: 'toggle' },
-    { key: 'show_password_toggle', label: 'Mostra/nascondi password', type: 'toggle' },
-    { key: 'show_password_strength', label: 'Indicatore forza password', type: 'toggle',
+    { type: 'separator', label: t('Funzionalità visive') },
+    { key: 'show_input_icons', label: t('Icone negli input'), type: 'toggle' },
+    { key: 'show_password_toggle', label: t('Mostra/nascondi password'), type: 'toggle' },
+    { key: 'show_password_strength', label: t('Indicatore forza password'), type: 'toggle',
       condition: { field: 'mode', operator: '!=', value: 'login' } },
-    { key: 'password_min_length', label: 'Lunghezza minima password', type: 'range', min: 4, max: 24, step: 1,
+    { key: 'password_min_length', label: t('Lunghezza minima password'), type: 'range', min: 4, max: 24, step: 1,
       condition: { field: 'mode', operator: '!=', value: 'login' } },
-    { key: 'password_require_uppercase', label: 'Richiedi maiuscola', type: 'toggle',
+    { key: 'password_require_uppercase', label: t('Richiedi maiuscola'), type: 'toggle',
       condition: { field: 'mode', operator: '!=', value: 'login' } },
-    { key: 'password_require_number', label: 'Richiedi numero', type: 'toggle',
+    { key: 'password_require_number', label: t('Richiedi numero'), type: 'toggle',
       condition: { field: 'mode', operator: '!=', value: 'login' } },
-    { key: 'password_require_special', label: 'Richiedi carattere speciale', type: 'toggle',
+    { key: 'password_require_special', label: t('Richiedi carattere speciale'), type: 'toggle',
       condition: { field: 'mode', operator: '!=', value: 'login' } },
-    { key: 'password_min_strength', label: 'Forza minima per registrarsi', type: 'select',
+    { key: 'password_min_strength', label: t('Forza minima per registrarsi'), type: 'select',
       condition: { field: 'mode', operator: '!=', value: 'login' },
       options: [
-        { value: 0, label: 'Nessun requisito' },
-        { value: 1, label: 'Debole (1/4)' },
-        { value: 2, label: 'Media (2/4)' },
-        { value: 3, label: 'Buona (3/4)' },
-        { value: 4, label: 'Forte (4/4)' },
+        { value: 0, label: t('Nessun requisito') },
+        { value: 1, label: t('Debole (1/4)') },
+        { value: 2, label: t('Media (2/4)') },
+        { value: 3, label: t('Buona (3/4)') },
+        { value: 4, label: t('Forte (4/4)') },
       ]},
-    { key: 'tab_style', label: 'Stile tab', type: 'select', options: [
-      { value: 'underline', label: 'Sottolineato' },
-      { value: 'pill', label: 'Pillola' },
-      { value: 'classic', label: 'Classico' },
-    ], condition: { field: 'mode', value: 'both' } },
 
-    // ═══════════════════════════════════════
-    //  TERMINI E CONDIZIONI
-    // ═══════════════════════════════════════
-    { type: 'separator', label: 'Termini e condizioni' },
-    { key: 'show_terms', label: 'Mostra checkbox termini', type: 'toggle' },
-    { key: 'terms_text', label: 'Testo', type: 'text',
+    { type: 'separator', label: t('Termini e condizioni') },
+    { key: 'show_terms', label: t('Mostra checkbox termini'), type: 'toggle' },
+    { key: 'terms_text', label: t('Testo'), type: 'text',
       condition: { field: 'show_terms', value: true } },
-    { key: 'terms_url', label: 'URL pagina termini', type: 'text',
+    { key: 'terms_url', label: t('URL pagina termini'), type: 'link',
       condition: { field: 'show_terms', value: true } },
 
-    // ═══════════════════════════════════════
-    //  SOCIAL LOGIN
-    // ═══════════════════════════════════════
-    { type: 'separator', label: 'Social login' },
-    { key: 'show_social_divider', label: 'Mostra sezione social', type: 'toggle' },
-    { key: 'social_divider_text', label: 'Testo divisore', type: 'text',
+    { type: 'separator', label: t('Social login') },
+    { key: 'show_social_divider', label: t('Mostra sezione social'), type: 'toggle' },
+    { key: 'social_google', label: t('Google'), type: 'toggle',
       condition: { field: 'show_social_divider', value: true } },
-    { key: 'social_google', label: 'Google', type: 'toggle',
-      condition: { field: 'show_social_divider', value: true } },
-    { key: 'social_google_url', label: 'URL Google', type: 'text',
+    { key: 'social_google_url', label: t('URL Google'), type: 'text',
       condition: { field: 'social_google', value: true } },
-    { key: 'social_facebook', label: 'Facebook', type: 'toggle',
+    { key: 'social_facebook', label: t('Facebook'), type: 'toggle',
       condition: { field: 'show_social_divider', value: true } },
-    { key: 'social_facebook_url', label: 'URL Facebook', type: 'text',
+    { key: 'social_facebook_url', label: t('URL Facebook'), type: 'text',
       condition: { field: 'social_facebook', value: true } },
-    { key: 'social_apple', label: 'Apple', type: 'toggle',
+    { key: 'social_apple', label: t('Apple'), type: 'toggle',
       condition: { field: 'show_social_divider', value: true } },
-    { key: 'social_apple_url', label: 'URL Apple', type: 'text',
+    { key: 'social_apple_url', label: t('URL Apple'), type: 'text',
       condition: { field: 'social_apple', value: true } },
 
-    // ═══════════════════════════════════════
-    //  CAMPI REGISTRAZIONE
-    // ═══════════════════════════════════════
-    { type: 'separator', label: 'Campi registrazione' },
+    { type: 'separator', label: t('Campi registrazione') },
     {
       key: 'register_fields',
-      label: 'Campi del form',
+      label: t('Campi del form'),
       type: 'content-items',
       condition: { field: 'mode', operator: '!=', value: 'login' },
       itemFields: [
-        { key: 'label', label: 'Etichetta', type: 'text' },
-        { key: 'field_type', label: 'Tipo', type: 'select', options: [
-          { value: 'username', label: 'Nome utente (built-in)' },
-          { value: 'user_email', label: 'Email (built-in)' },
-          { value: 'user_password', label: 'Password (built-in)' },
-          { value: 'confirm_password', label: 'Conferma password (built-in)' },
-          { value: 'text', label: 'Testo' },
-          { value: 'email', label: 'Email personalizzata' },
-          { value: 'tel', label: 'Telefono' },
-          { value: 'number', label: 'Numero' },
-          { value: 'date', label: 'Data' },
-          { value: 'url', label: 'URL' },
-          { value: 'textarea', label: 'Area testo' },
-          { value: 'select', label: 'Dropdown' },
-          { value: 'checkbox', label: 'Checkbox' },
-          { value: 'radio', label: 'Radio' },
+        { key: 'label', label: t('Etichetta'), type: 'text' },
+        { key: 'field_type', label: t('Tipo'), type: 'select', options: [
+          { value: 'username', label: t('Nome utente (built-in)') },
+          { value: 'user_email', label: t('Email (built-in)') },
+          { value: 'user_password', label: t('Password (built-in)') },
+          { value: 'confirm_password', label: t('Conferma password (built-in)') },
+          { value: 'text', label: t('Testo') },
+          { value: 'email', label: t('Email personalizzata') },
+          { value: 'tel', label: t('Telefono') },
+          { value: 'number', label: t('Numero') },
+          { value: 'date', label: t('Data') },
+          { value: 'url', label: t('URL') },
+          { value: 'textarea', label: t('Area testo') },
+          { value: 'select', label: t('Dropdown') },
+          { value: 'checkbox', label: t('Checkbox') },
+          { value: 'radio', label: t('Radio') },
         ]},
-        { key: 'placeholder', label: 'Placeholder', type: 'text' },
-        { key: 'meta_key', label: 'Chiave user_meta', type: 'text' },
-        { key: 'required', label: 'Obbligatorio', type: 'toggle' },
-        { key: 'width', label: 'Larghezza', type: 'select', options: [
+        { key: 'placeholder', label: t('Placeholder'), type: 'text' },
+        { key: 'meta_key', label: t('Chiave user_meta'), type: 'text' },
+        { key: 'required', label: t('Obbligatorio'), type: 'toggle' },
+        { key: 'width', label: t('Larghezza'), type: 'select', options: [
           { value: '100', label: '100%' },
           { value: '50', label: '50%' },
           { value: '33', label: '33%' },
         ]},
-        { key: 'options', label: 'Opzioni (una per riga)', type: 'textarea',
+        { key: 'options', label: t('Opzioni (una per riga)'), type: 'textarea',
           condition: { field: 'field_type', operator: 'in', value: ['select', 'radio'] } },
       ],
       newItemDefaults: {
-        label: 'Nuovo campo',
-        field_type: 'text',
-        placeholder: '',
-        meta_key: '',
-        required: false,
-        width: '100',
-        options: '',
+        label: t('Nuovo campo'), field_type: 'text', placeholder: '', meta_key: '', required: false, width: '100', options: '',
       },
       itemLabel: 'Campo',
     },
+  ],
 
-    // ═══════════════════════════════════════
-    //  COLORI
-    // ═══════════════════════════════════════
-    { type: 'separator', label: 'Colori' },
-    { key: 'form_bg', label: 'Sfondo form', type: 'color' },
-    { key: 'text_color', label: 'Colore testo', type: 'color' },
-    { key: 'label_color', label: 'Colore label', type: 'color' },
-    { key: 'input_bg', label: 'Sfondo input', type: 'color' },
-    { key: 'input_color', label: 'Colore testo input', type: 'color' },
-    { key: 'input_border_color', label: 'Colore bordo input', type: 'color' },
-    { key: 'input_focus_color', label: 'Colore bordo focus', type: 'color' },
-    { key: 'icon_color', label: 'Colore icone input', type: 'color',
+  styleFields: [
+    { type: 'separator', label: t('Preset stilistico') },
+    { key: 'preset', label: t('Stile'), type: 'select', options: [
+      { value: 'modern-clean',    label: t('Modern Clean') },
+      { value: 'minimal-line',    label: t('Minimal Line') },
+      { value: 'card-floating',   label: t('Card Floating') },
+      { value: 'split-image',     label: t('Split with Image') },
+      { value: 'centered-modal',  label: t('Centered Modal') },
+      { value: 'glass-frosted',   label: t('Glass Frosted') },
+      { value: 'neon-cyber',      label: t('Neon Cyber') },
+      { value: 'brutalist-stamp', label: t('Brutalist Stamp') },
+      { value: 'gradient-aurora', label: t('Gradient Aurora') },
+      { value: 'sticky-note',     label: t('Sticky Note') },
+      { value: 'retro-terminal',  label: t('Retro Terminal') },
+      { value: 'tilt-card',       label: t('Tilt Card') },
+      { value: 'custom',          label: t('Personalizzato') },
+    ]},
+    { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
+
+    ...textEffectsFields([ { value: 'label', label: t('Solo Etichetta') } ]),
+
+    { type: 'separator', label: t('Stile tab (se Login+Registrazione)') },
+    { key: 'tab_style', label: t('Stile tab'), type: 'select', options: [
+      { value: 'underline', label: t('Sottolineato') },
+      { value: 'pill', label: t('Pillola') },
+      { value: 'classic', label: t('Classico') },
+    ], condition: { field: 'mode', value: 'both' } },
+
+    { type: 'separator', label: t('Divisore social') },
+    { key: 'social_divider_text', label: t('Testo divisore'), type: 'text',
+      condition: { field: 'show_social_divider', value: true } },
+
+    { type: 'separator', label: t('Colori') },
+    { key: 'form_bg', label: t('Sfondo form'), type: 'color' },
+    { key: 'text_color', label: t('Colore testo'), type: 'color' },
+    { key: 'label_color', label: t('Colore label'), type: 'color' },
+    { key: 'input_bg', label: t('Sfondo input'), type: 'color' },
+    { key: 'input_color', label: t('Colore testo input'), type: 'color' },
+    { key: 'input_border_color', label: t('Colore bordo input'), type: 'color' },
+    { key: 'input_focus_color', label: t('Colore bordo focus'), type: 'color' },
+    { key: 'icon_color', label: t('Colore icone input'), type: 'color',
       condition: { field: 'show_input_icons', value: true } },
-    { key: 'link_color', label: 'Colore link', type: 'color' },
-    { key: 'submit_bg', label: 'Sfondo pulsante', type: 'color' },
-    { key: 'submit_color', label: 'Colore testo pulsante', type: 'color' },
-    { key: 'submit_hover_bg', label: 'Sfondo pulsante hover', type: 'color' },
+    { key: 'link_color', label: t('Colore link'), type: 'color' },
+    { key: 'submit_bg', label: t('Sfondo pulsante'), type: 'color' },
+    { key: 'submit_color', label: t('Colore testo pulsante'), type: 'color' },
+    { key: 'submit_hover_bg', label: t('Sfondo pulsante hover'), type: 'color' },
 
-    // ═══════════════════════════════════════
-    //  ASPETTO FORM
-    // ═══════════════════════════════════════
-    { type: 'separator', label: 'Aspetto form' },
-    { key: 'tile_padding', label: 'Padding (px)', type: 'spacing', max: 64 },
-    { key: 'input_padding', label: 'Padding input (px)', type: 'spacing', max: 24 },
-    { key: 'input_radius', label: 'Raggio bordo input (px)', type: 'border-radius' },
-    { key: 'input_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
-    { key: 'submit_radius', label: 'Raggio bordo pulsante (px)', type: 'border-radius' },
-    { key: 'submit_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
-    { key: 'border_radius', label: 'Raggio bordo form (px)', type: 'border-radius' },
-    { key: 'border_radius_hover', label: 'Raggio bordo (hover)', type: 'border-radius' },
-    { key: 'border_width', label: 'Bordo form (px)', type: 'range', min: 0, max: 5, step: 1 },
-    { key: 'border_color', label: 'Colore bordo form', type: 'color',
+    { type: 'separator', label: t('Aspetto form') },
+    { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 64 },
+    { key: 'input_padding', label: t('Padding input (px)'), type: 'spacing', max: 24 },
+    withHover({ key: 'input_radius', label: t('Raggio bordo input (px)'), type: 'border-radius' }),
+    withHover({ key: 'submit_radius', label: t('Raggio bordo pulsante (px)'), type: 'border-radius' }),
+    withHover({ key: 'border_radius', label: t('Raggio bordo form (px)'), type: 'border-radius' }),
+    { key: 'border_width', label: t('Bordo form (px)'), type: 'range', min: 0, max: 5, step: 1 },
+    { key: 'border_color', label: t('Colore bordo form'), type: 'color',
       condition: { field: 'border_width', operator: '>', value: '0' } },
+
     ...shadowField,
-    ...textEffectsFields([ { value: 'label', label: 'Solo Etichetta' } ]),
     ...borderFields(),
   ],
 };

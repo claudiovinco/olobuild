@@ -156,18 +156,19 @@ function tryAttachIframeScroll() {
 }
 
 onMounted(() => {
-  document.addEventListener('dragstart', onNativeDragStart, true);
-  document.addEventListener('dragend', onNativeDragEnd, true);
-  document.addEventListener('drop', onNativeDragEnd, true);
+  // v3.55.26 — useDnD.js (drag custom pointer-events) emette olo:drag-start /
+  // olo:drag-end. Prima ascoltavamo dragstart/dragend HTML5 nativo, ma ora
+  // il drag non passa più dall'API HTML5 → eventi mai firati → overlay morto.
+  window.addEventListener('olo:drag-start', onNativeDragStart);
+  window.addEventListener('olo:drag-end',   onNativeDragEnd);
   // Prova subito + retry su un paio di tick (l'iframe carica async)
   tryAttachIframeScroll();
   setTimeout(tryAttachIframeScroll, 500);
   setTimeout(tryAttachIframeScroll, 2000);
 });
 onBeforeUnmount(() => {
-  document.removeEventListener('dragstart', onNativeDragStart, true);
-  document.removeEventListener('dragend', onNativeDragEnd, true);
-  document.removeEventListener('drop', onNativeDragEnd, true);
+  window.removeEventListener('olo:drag-start', onNativeDragStart);
+  window.removeEventListener('olo:drag-end',   onNativeDragEnd);
   const iframe = getIframeEl();
   try {
     iframe?.contentWindow?.removeEventListener('scroll', onIframeScroll);

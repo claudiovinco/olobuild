@@ -24,19 +24,19 @@
       <!-- Inline layout -->
       <template v-else>
         <span v-if="s.show_sku">
-          <span :style="labelStyle">SKU:</span>
+          <span :style="labelStyle">{{ t('SKU:') }}</span>
           <span>WC-001</span>
         </span>
         <span v-if="s.show_sku && (s.show_categories || s.show_tags)" :style="sepStyle">{{ s.separator }}</span>
         <span v-if="s.show_categories">
-          <span :style="labelStyle">Categoria:</span>
-          <span :style="linkStyle">Magliette</span>
+          <span :style="labelStyle">{{ t('Categoria:') }}</span>
+          <span :style="linkStyle">{{ t('Magliette') }}</span>
         </span>
         <span v-if="s.show_categories && s.show_tags" :style="sepStyle">{{ s.separator }}</span>
         <span v-if="s.show_tags">
-          <span :style="labelStyle">Tag:</span>
-          <span :style="linkStyle">Nuovo</span>,
-          <span :style="linkStyle">Cotone</span>
+          <span :style="labelStyle">{{ t('Tag:') }}</span>
+          <span :style="linkStyle">{{ t('Nuovo') }}</span>,
+          <span :style="linkStyle">{{ t('Cotone') }}</span>
         </span>
       </template>
     </div>

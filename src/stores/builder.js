@@ -26,6 +26,9 @@ export const useBuilderStore = defineStore('builder', {
     stylePanelOpen: false,
     inlineEditingTileId: null,
     inlineEditingField: null,
+    // Inspector V2: when true, every hoverable field opens its hover variant
+    // by default. Visual indicator: amber bar at the top of the inspector panel.
+    editingHover: false,
     // ── Unified Editing ──
     activeZone: 'body',          // 'header' | 'body' | 'footer'
     headerTemplate: null,        // Full template object for the active header
@@ -165,6 +168,13 @@ export const useBuilderStore = defineStore('builder', {
         this.currentTemplate = saved;
         this.isDirty = false;
         useToast().success('Template salvato');
+
+        // Trigger auto-thumbnail capture (handler standalone in olo-thumb-capture.js)
+        if (saved.id && typeof window !== 'undefined') {
+          window.dispatchEvent(new CustomEvent('olobuild:saved', {
+            detail: { templateId: saved.id, type: saved.type },
+          }));
+        }
       } catch (err) {
         console.error('saveTemplate error:', err);
         useToast().error('Errore nel salvataggio');
@@ -322,11 +332,14 @@ export const useBuilderStore = defineStore('builder', {
       }
 
       const tilesStore = useTilesStoreRef();
-      const headerId = olo.activeHeaderId;
-      const footerId = olo.activeFooterId;
+      // Coerce stringhe '0' a falsy e ignora id non positivi.
+      // Senza questa coercion, `'0'` (stringa) supera `if (id)` (truthy) e fa fetch a /templates/0
+      // che restituisce 404 — innocuo ma sporca la console.
+      const headerId = parseInt(olo.activeHeaderId, 10) || 0;
+      const footerId = parseInt(olo.activeFooterId, 10) || 0;
 
       // Load header template
-      if (headerId) {
+      if (headerId > 0) {
         try {
           const res = await fetch(`${olo.restUrl}/templates/${headerId}`, {
             headers: { 'X-WP-Nonce': olo.nonce },
@@ -343,7 +356,7 @@ export const useBuilderStore = defineStore('builder', {
       }
 
       // Load footer template
-      if (footerId) {
+      if (footerId > 0) {
         try {
           const res = await fetch(`${olo.restUrl}/templates/${footerId}`, {
             headers: { 'X-WP-Nonce': olo.nonce },
@@ -457,6 +470,13 @@ export const useBuilderStore = defineStore('builder', {
         }
 
         useToast().success('Tutto salvato');
+
+        // Trigger auto-thumbnail capture per il template body (l'unico che si vede)
+        if (this.currentTemplate?.id && typeof window !== 'undefined') {
+          window.dispatchEvent(new CustomEvent('olobuild:saved', {
+            detail: { templateId: this.currentTemplate.id, type: this.currentTemplate.type },
+          }));
+        }
       } catch (err) {
         console.error('saveAllZones error:', err);
         useToast().error('Errore nel salvataggio');

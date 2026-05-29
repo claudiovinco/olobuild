@@ -11,6 +11,7 @@ class Olo_Newsletter_Tile extends Olo_Tile_Base {
     protected $icon     = 'dashicons-email-alt';
     protected $category = 'marketing';
     protected $defaults = [
+        'preset' => 'custom',
         'layout'            => 'horizontal',
         'title'             => 'Iscriviti alla newsletter',
         'subtitle'          => 'Ricevi aggiornamenti e contenuti esclusivi direttamente nella tua casella email.',
@@ -125,9 +126,11 @@ class Olo_Newsletter_Tile extends Olo_Tile_Base {
         }
 
         $config_b64 = base64_encode( wp_json_encode( $form_config ) );
-        $token_time = time();
-        $token_hash = hash_hmac( 'sha256', 'olo_form_' . $token_time, wp_salt( 'nonce' ) );
-        $token      = $token_time . ':' . $token_hash;
+        // Token v2: legato al config — impedisce manomissione di email_to / api_keys
+        // / webhook_url che permetterebbe l'uso del sito come relay.
+        $token      = class_exists( 'Olo_Form_Handler' )
+            ? Olo_Form_Handler::generate_token( $config_b64 )
+            : ''; // fallback no-op: senza handler il form non è funzionante
 
         // Styles
         $primary     = 'var(--olo-color-primary, #3B82F6)';
@@ -177,7 +180,7 @@ class Olo_Newsletter_Tile extends Olo_Tile_Base {
         @media(max-width:640px){.<?php echo $uid; ?> .olo-nl-form{flex-direction:column}.<?php echo $uid; ?> .olo-nl-btn{width:100%}}
         </style>
 
-        <div class="<?php echo esc_attr( $uid ); ?>">
+        <div class="<?php echo esc_attr( $uid ); ?> olo-nl-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>">
           <div class="olo-nl-box">
             <?php if ( $s['icon_type'] === 'emoji' ) : ?>
               <div class="olo-nl-icon"><?php echo esc_html( $s['icon_name'] ); ?></div>

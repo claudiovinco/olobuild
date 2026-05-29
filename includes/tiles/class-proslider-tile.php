@@ -14,6 +14,7 @@ class Olo_ProSlider_Tile extends Olo_Tile_Base {
     protected $icon     = 'dashicons-slides';
     protected $category = 'media';
     protected $defaults = [
+        'preset' => 'custom',
         'slides'             => [
             [
                 'id'         => 'ps-default-1',
@@ -37,7 +38,7 @@ class Olo_ProSlider_Tile extends Olo_Tile_Base {
                     [
                         'id'             => 'ps-layer-1',
                         'type'           => 'text',
-                        'content'        => 'Heading Text',
+                        'content'        => 'Titolo Slider',
                         'tag'            => 'h2',
                         'imageSrc'       => '',
                         'iconName'       => 'star',
@@ -217,7 +218,7 @@ class Olo_ProSlider_Tile extends Olo_Tile_Base {
         }
         ?>
         <?php
-        $container_classes = 'olo-proslider';
+        $container_classes = 'olo-proslider olo-ps-preset-' . esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) );
         if ( $sizing === 'fullwidth' )   { $container_classes .= ' mps-fullwidth'; }
         if ( $sizing === 'fullscreen' )  { $container_classes .= ' mps-fullscreen'; }
         $is_carousel = ! empty( $s['carousel'] );
@@ -764,6 +765,11 @@ class Olo_ProSlider_Tile extends Olo_Tile_Base {
             $style .= 'cursor:' . esc_attr( $cursor ) . ';';
         }
 
+        // Initially hidden: layer parte nascosto, mostrabile via action toggleLayer
+        if ( ! empty( $layer['initiallyHidden'] ) ) {
+            $style .= 'display:none;';
+        }
+
         // SFX block reveal
         $sfx_class = '';
         $sfx_style = '';
@@ -861,7 +867,7 @@ class Olo_ProSlider_Tile extends Olo_Tile_Base {
         switch ( $type ) {
             case 'text':
                 $tag     = in_array( $layer['tag'] ?? 'h2', [ 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'span', 'div' ], true ) ? $layer['tag'] : 'h2';
-                $content = wp_kses_post( $layer['content'] ?? '' );
+                $content = $this->safe_richtext_content( $layer['content'] ?? '' );
 
                 // Character animation: split text into spans
                 if ( ! empty( $layer['charAnim'] ) && is_array( $layer['charAnim'] ) ) {

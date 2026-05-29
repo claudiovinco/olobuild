@@ -2,19 +2,20 @@
   <div>
     <h3 style="font-size:16px;font-weight:700;color:var(--olo-color-text, #374151);margin:0 0 12px">{{ t('Disponibilità — Febbraio 2026') }}</h3>
     <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center">
-      <span v-for="d in ['Lun','Mar','Mer','Gio','Ven','Sab','Dom']" :key="d" style="font-size:11px;font-weight:600;color:#9ca3af;padding:4px 0">{{ d }}</span>
+      <span v-for="d in [t('Lun'),t('Mar'),t('Mer'),t('Gio'),t('Ven'),t('Sab'),t('Dom')]" :key="d" style="font-size:11px;font-weight:600;color:#9ca3af;padding:4px 0">{{ d }}</span>
       <span v-for="i in 5" :key="'e'+i" style="padding:6px"></span>
       <span v-for="day in calDays" :key="day.n" :style="dayStyle(day)">{{ day.n }}</span>
     </div>
     <div style="display:flex;gap:16px;margin-top:10px;font-size:11px;color:#6b7280">
-      <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#22c55e;margin-right:4px"></span>Libero</span>
-      <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#f59e0b;margin-right:4px"></span>Parziale</span>
-      <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#ef4444;margin-right:4px"></span>Occupato</span>
+      <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#22c55e;margin-right:4px"></span>{{ t('Libero') }}</span>
+      <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#f59e0b;margin-right:4px"></span>{{ t('Parziale') }}</span>
+      <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#ef4444;margin-right:4px"></span>{{ t('Occupato') }}</span>
     </div>
   </div>
 </template>
 
 <script setup>
+import { computed } from 'vue';
 import { t } from '@/i18n';
 defineProps({ settings: { type: Object, default: () => ({}) } });
 const calDays = [];

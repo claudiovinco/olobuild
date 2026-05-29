@@ -11,7 +11,8 @@ class Olo_Table_Tile extends Olo_Tile_Base {
     protected $icon     = 'dashicons-editor-table';
     protected $category = 'text';
     protected $defaults = [
-        'table_data'        => "Feature|Basic|Pro|Enterprise\nStorage|5 GB|50 GB|Unlimited\nUsers|1|10|Unlimited\nSupport|Email|Priority|Dedicated",
+        'preset' => 'custom',
+        'table_data'        => "Funzionalità|Base|Pro|Enterprise\nSpazio|5 GB|50 GB|Illimitato\nUtenti|1|10|Illimitato\nSupporto|Email|Prioritario|Dedicato",
         'has_header'        => true,
         'striped'           => true,
         'bordered'          => true,
@@ -100,7 +101,7 @@ class Olo_Table_Tile extends Olo_Tile_Base {
         ob_start();
         echo $css;
         ?>
-        <div class="olo-table" style="<?php echo $responsive === 'scroll' ? 'overflow-x:auto' : ''; ?>">
+        <div class="olo-table olo-tb-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" style="<?php echo $responsive === 'scroll' ? 'overflow-x:auto' : ''; ?>">
             <table class="<?php echo esc_attr( $uid ); ?>">
                 <?php if ( $header ) : ?>
                 <thead>

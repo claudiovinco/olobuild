@@ -48,7 +48,9 @@ class Olo_Instagram_Tile extends Olo_Tile_Base {
         $width        = $s['width'] ?: '100%';
         $show_caption = ! empty( $s['caption'] );
         $bg_color     = $this->safe_color_css( $s['background_color'] );
-        $radius       = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
+        // border_radius ora è un oggetto {tl,tr,br,bl} (type:'border-radius' + withHover);
+        // build_border_radius_css gestisce sia l'oggetto sia il vecchio scalare ('8').
+        $radius       = $this->build_border_radius_css( $s['border_radius'] ?? 0 );
         $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
         $alignment    = $s['alignment'] ?: 'center';
 
@@ -64,7 +66,8 @@ class Olo_Instagram_Tile extends Olo_Tile_Base {
         }
         $ig_uid = 'olo-ig-' . wp_unique_id();
         if ( $radius_hover_css !== '' ) {
-            $wrapper_style .= 'transition:border-radius 400ms cubic-bezier(.4,0,.2,1);';
+            $radius_dur = absint( $s['border_radius_hover_duration'] ?? 300 ) ?: 300;
+            $wrapper_style .= 'transition:border-radius ' . $radius_dur . 'ms cubic-bezier(.4,0,.2,1);';
             if ( ! ( $radius && $radius !== '0px' ) ) {
                 // ensure overflow:hidden so transition clips correctly even when base is 0
                 $wrapper_style .= 'overflow:hidden;';

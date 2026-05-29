@@ -1,0 +1,2160 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: mosaic (__plugin:olobuild)\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-21 09:39+0000\n"
+"PO-Revision-Date: 2026-05-21 09:39+0000\n"
+"Last-Translator: \n"
+"Language-Team: cs_CZ\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: cs_CZ\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Generator: Olo Lang 3.15.3\n"
+
+msgid "Permessi Utente"
+msgstr "Uživatelská oprávnění"
+
+msgid "Permessi & Ruoli"
+msgstr "Oprávnění & Role"
+
+msgid "%1$s ruoli con accesso completo · %2$s ruoli design-only"
+msgstr "%1$s rolí s plným přístupem · %2$s pouze design"
+
+msgid "Livelli di Accesso"
+msgstr "Úrovně přístupu"
+
+msgid "Assegna un livello di accesso per ciascun ruolo WordPress"
+msgstr "Přiřaďte úroveň přístupu každé WP roli"
+
+msgid "Ruolo"
+msgstr "Ruolo"
+
+msgid "Accesso completo"
+msgstr "Plný přístup"
+
+msgid "Solo design"
+msgstr "Pouze design"
+
+msgid "Solo contenuti"
+msgstr "Pouze obsah"
+
+msgid "Nessun accesso"
+msgstr "Bez přístupu"
+
+msgid "Completo:"
+msgstr "Plný:"
+
+msgid "struttura + design + contenuti"
+msgstr "struktura + design + obsah"
+
+msgid "Design:"
+msgstr "Design:"
+
+msgid "stili e layout"
+msgstr "styly a layout"
+
+msgid "Contenuti:"
+msgstr "Obsah:"
+
+msgid "solo testo e immagini"
+msgstr "pouze text a obrázky"
+
+msgid "Salva Permessi"
+msgstr "Uložit oprávnění"
+
+msgid "Dati non validi"
+msgstr "Neplatná data"
+
+msgid "Popup Globali"
+msgstr "Globální popupy"
+
+msgid "%1$s popup configurati · %2$s attivi · trigger automatici per condizioni di visualizzazione"
+msgstr "%1$s popupů nakonfigurováno · %2$s aktivních"
+
+msgid "Nessun popup configurato"
+msgstr "Žádné popupy"
+
+msgid "Attivo"
+msgstr "Attivo"
+
+msgid "Disattivato"
+msgstr "Deaktivováno"
+
+msgid "Popup"
+msgstr "Popup"
+
+msgid "Rimuovi"
+msgstr "Rimuovi"
+
+msgid "Nome popup"
+msgstr "Název popupu"
+
+msgid "Template"
+msgstr "Šablona"
+
+msgid "Seleziona"
+msgstr "Vyberte"
+
+msgid "Trigger"
+msgstr "Trigger"
+
+msgid "Frequenza"
+msgstr "Frekvence"
+
+msgid "Condizioni"
+msgstr "Podmínky"
+
+msgid "OR (almeno una)"
+msgstr "OR (alespoň jedna)"
+
+msgid "AND (tutte)"
+msgstr "AND (všechny)"
+
+msgid "Condizione"
+msgstr "Podmínka"
+
+msgid "NON"
+msgstr "NE"
+
+msgid "Valore (ID, slug)"
+msgstr "Hodnota (ID, slug)"
+
+msgid "Aggiungi Popup"
+msgstr "Přidat popup"
+
+msgid "Salva Tutto"
+msgstr "Uložit vše"
+
+msgid "Popup salvati con successo!"
+msgstr "Popupy úspěšně uloženy!"
+
+msgid "Errore"
+msgstr "Errore"
+
+msgid "Caricamento pagina"
+msgstr "Načtení stránky"
+
+msgid "Scroll %"
+msgstr "Scroll %"
+
+msgid "Exit Intent"
+msgstr "Exit Intent"
+
+msgid "Timer"
+msgstr "Časovač"
+
+msgid "Inattività"
+msgstr "Nečinnost"
+
+msgid "Sempre"
+msgstr "Sempre"
+
+msgid "1 volta per sessione"
+msgstr "1× za relaci"
+
+msgid "1 volta al giorno"
+msgstr "1× denně"
+
+msgid "1 volta a settimana"
+msgstr "1× týdně"
+
+msgid "Solo 1 volta"
+msgstr "Pouze 1×"
+
+msgid "Tutto il sito"
+msgstr "Celý web"
+
+msgid "Homepage"
+msgstr "Domovská stránka"
+
+msgid "Pagina specifica"
+msgstr "Konkrétní stránka"
+
+msgid "Articolo specifico"
+msgstr "Konkrétní článek"
+
+msgid "Tipo contenuto"
+msgstr "Typ obsahu"
+
+msgid "Archivio"
+msgstr "Archiv"
+
+msgid "Categoria"
+msgstr "Categoria"
+
+msgid "Utente loggato"
+msgstr "Přihlášený uživatel"
+
+msgid "Utente non loggato"
+msgstr "Nepřihlášený uživatel"
+
+msgid "Desktop"
+msgstr "Desktop"
+
+msgid "Mobile"
+msgstr "Mobil"
+
+msgid "Pagina 404"
+msgstr "Stránka 404"
+
+msgid "Ricerca"
+msgstr "Hledání"
+
+msgid "JavaScript richiesto."
+msgstr "Vyžadován JavaScript."
+
+msgid "Performance"
+msgstr "Výkon"
+
+msgid "Critical CSS"
+msgstr "Critical CSS"
+
+msgid "Asset Optimizer"
+msgstr "Asset Optimizer"
+
+msgid "Performance Hints"
+msgstr "Performance Hints"
+
+msgid "Head Cleanup"
+msgstr "Head Cleanup"
+
+msgid "Critical CSS: %1$s pagine generate · Cache CSS: %2$s"
+msgstr "Critical CSS: %1$s stránek · Cache CSS: %2$s"
+
+msgid "Salva impostazioni"
+msgstr "Uložit nastavení"
+
+msgid "Off"
+msgstr "Vypnuto"
+
+msgid "Rigenerazione in corso..."
+msgstr "Regenerace probíhá..."
+
+msgid "Svuotare tutta la cache Critical CSS?"
+msgstr "Vyprázdnit celý cache Critical CSS?"
+
+msgid "Svuotare la cache CSS? I file verranno rigenerati automaticamente."
+msgstr "Vyprázdnit cache CSS? Soubory se regenerují."
+
+msgid "Rigenerato %d su %d pagine (%d errori)"
+msgstr "Regenerováno %d z %d (%d chyb)"
+
+msgid "Svuotati %d transient Critical CSS"
+msgstr "Vyprázdněno %d transientů"
+
+msgid "Cache CSS svuotata. I file verranno rigenerati al prossimo caricamento."
+msgstr "Cache CSS vyprázdněn."
+
+msgid "Genera automaticamente il CSS above-the-fold e lo inietta inline nel <head>. Il foglio di stile principale viene caricato in modo asincrono."
+msgstr "Automaticky generuje above-the-fold CSS a injektuje inline."
+
+msgid "Abilita Critical CSS"
+msgstr "Povolit Critical CSS"
+
+msgid "Migliora FCP e LCP inlinando il CSS critico e deferendo il resto."
+msgstr "Vylepšuje FCP a LCP."
+
+msgid "Durata cache"
+msgstr "Doba cache"
+
+msgid "Il CSS critico viene rigenerato automaticamente alla scadenza. Invalidato quando salvi un template."
+msgstr "Critical CSS se regeneruje při vypršení."
+
+msgid "giorni"
+msgstr "giorni"
+
+msgid "Sezioni above-the-fold"
+msgstr "Sekce above-the-fold"
+
+msgid "Quante sezioni del template analizzare per il CSS critico. 2 è il valore consigliato."
+msgstr "Kolik sekcí analyzovat. 2 je doporučeno."
+
+msgid "Stato cache"
+msgstr "Stav cache"
+
+msgid "Stato"
+msgstr "Stato"
+
+msgid "Pagine in cache"
+msgstr "Stránky v cache"
+
+msgid "Mai"
+msgstr "Mai"
+
+msgid "Ultima generazione"
+msgstr "Poslední generování"
+
+msgid "Rigenera tutto"
+msgstr "Regenerovat vše"
+
+msgid "Svuota cache"
+msgstr "Vyprázdnit cache"
+
+msgid "Ottimizzazione Asset"
+msgstr "Optimalizace assetů"
+
+msgid "Controlla come vengono caricati JavaScript e CSS nel frontend."
+msgstr "Kontroluje načítání JS a CSS na frontendu."
+
+msgid "Defer JavaScript"
+msgstr "Defer JavaScript"
+
+msgid "Aggiunge l'attributo defer agli script frontend di Olobuild. Non blocca il rendering della pagina."
+msgstr "Přidává defer ke skriptům. Neblokuje rendering."
+
+msgid "Cache CSS su file"
+msgstr "Cache CSS do souboru"
+
+msgid "Salva il CSS generato dai template come file statici invece di iniettarlo inline. Migliora il caching del browser."
+msgstr "Ukládá CSS jako statické soubory. Vylepšuje cache prohlížeče."
+
+msgid "Minifica CSS"
+msgstr "Minifikovat CSS"
+
+msgid "Rimuove commenti, spazi e newline dal CSS generato."
+msgstr "Odstraňuje komentáře, mezery a nové řádky."
+
+msgid "Cache CSS"
+msgstr "Cache CSS"
+
+msgid "File in cache"
+msgstr "Soubory v cache"
+
+msgid "Dimensione totale"
+msgstr "Celková velikost"
+
+msgid "Svuota cache CSS"
+msgstr "Vyprázdnit cache CSS"
+
+msgid "Resource Hints"
+msgstr "Resource Hints"
+
+msgid "Suggerimenti al browser per precaricare risorse e velocizzare il caricamento."
+msgstr "Návrhy prohlížeči pro preload."
+
+msgid "DNS Prefetch & Preconnect"
+msgstr "DNS Prefetch & Preconnect"
+
+msgid "Aggiunge dns-prefetch e preconnect per Google Fonts, YouTube, Vimeo e altri domini esterni."
+msgstr "Přidává dns-prefetch a preconnect."
+
+msgid "Preload font"
+msgstr "Preload fontů"
+
+msgid "Precarica i font custom usati come body/heading per evitare FOUT (Flash of Unstyled Text)."
+msgstr "Preload vlastních fontů."
+
+msgid "Video facade"
+msgstr "Video facade"
+
+msgid "Mostra un'anteprima statica dei video YouTube/Vimeo. L'iframe si carica solo al click. Risparmia ~500KB per video."
+msgstr "Statický náhled YouTube/Vimeo."
+
+msgid "fetchpriority hero image"
+msgstr "fetchpriority hero image"
+
+msgid "Aggiunge fetchpriority=\"high\" alla prima immagine della pagina e rimuove lazy loading dagli elementi above-fold."
+msgstr "Přidává fetchpriority=\"high\" k hero obrázku."
+
+msgid "Lazy loading immagini"
+msgstr "Lazy loading obrázků"
+
+msgid "Aggiunge loading=\"lazy\" alle immagini below-the-fold. Riduce il peso iniziale della pagina."
+msgstr "Přidává loading=\"lazy\" k obrázkům."
+
+msgid "Domini personalizzati"
+msgstr "Vlastní domény"
+
+msgid "Aggiungi domini per dns-prefetch e preconnect personalizzati (uno per riga, con https://)."
+msgstr "Přidejte domény pro dns-prefetch."
+
+msgid "DNS Prefetch"
+msgstr "DNS Prefetch"
+
+msgid "Risolve il DNS in anticipo. Utile per CDN e servizi esterni."
+msgstr "Předem řeší DNS."
+
+msgid "Preconnect"
+msgstr "Preconnect"
+
+msgid "Apre connessione completa (DNS + TCP + TLS). Più aggressivo del dns-prefetch, usare solo per risorse critiche."
+msgstr "Otevírá plné spojení (DNS + TCP + TLS)."
+
+msgid "Pulizia head"
+msgstr "Pulizia head"
+
+msgid "Rimuovi risorse non necessarie dal <head> per ridurre richieste e peso della pagina."
+msgstr "Odstranění zbytečných zdrojů z head."
+
+msgid "Rimuovi jQuery Migrate"
+msgstr "Odstranit jQuery Migrate"
+
+msgid "Rimuove jquery-migrate.js (~10KB). Necessario solo per compatibilità con plugin molto vecchi."
+msgstr "Odstraňuje jquery-migrate.js (~10KB)."
+
+msgid "Rimuovi emoji scripts"
+msgstr "Odstranit emoji skripty"
+
+msgid "Rimuove wp-emoji-release.min.js e relativi stili inline. I browser moderni supportano emoji nativamente."
+msgstr "Odstraňuje wp-emoji-release.min.js."
+
+msgid "Rimuovi Block CSS"
+msgstr "Odstranit Block CSS"
+
+msgid "Rimuove wp-block-library-css (~30KB). Attiva solo se non usi blocchi Gutenberg nel frontend."
+msgstr "Odstraňuje wp-block-library-css."
+
+msgid "Rimuovi Classic Theme CSS"
+msgstr "Odstranit Classic Theme CSS"
+
+msgid "Rimuove classic-theme-styles-css. Inutile se non usi un tema classico."
+msgstr "Odstraňuje classic-theme-styles-css."
+
+msgid "Analytics"
+msgstr "Analytika"
+
+msgid "Provider"
+msgstr "Poskytovatel"
+
+msgid "Eventi"
+msgstr "Události"
+
+msgid "Impostazioni"
+msgstr "Nastavení"
+
+msgid "Script personalizzati"
+msgstr "Vlastní skripty"
+
+msgid "%1$s provider attivi · %2$s eventi tracciati · %3$s blocchi script custom"
+msgstr "%1$s aktivních poskytovatelů · %2$s událostí · %3$s skriptů"
+
+msgid "Analytics & Tracking"
+msgstr "Analytika & Tracking"
+
+msgid "Measurement ID di GA4. Lo trovi in Amministrazione &rarr; Flussi di dati."
+msgstr "Measurement ID GA4. V Administraci → Datové toky."
+
+msgid "Container ID di GTM. Se usi GTM per gestire GA4, non inserire anche il Measurement ID sopra."
+msgstr "Container ID GTM. Nepoužívejte současně Measurement ID."
+
+msgid "Pixel ID di Meta/Facebook. Lo trovi in Events Manager &rarr; Impostazioni."
+msgstr "Pixel ID Meta/Facebook. V Events Manager."
+
+msgid "Project ID di Clarity. Heatmap e session recording gratuiti."
+msgstr "Project ID Clarity. Heatmapy a recordings zdarma."
+
+msgid "Site ID di Hotjar. Lo trovi in Settings &rarr; Sites & Organizations."
+msgstr "Site ID Hotjar."
+
+msgid "Click sui pulsanti"
+msgstr "Kliky na tlačítka"
+
+msgid "Invio form"
+msgstr "Odeslání formuláře"
+
+msgid "Riproduzione video"
+msgstr "Přehrávání videa"
+
+msgid "Profondità di scroll"
+msgstr "Hloubka scrollování"
+
+msgid "Click su pricing CTA"
+msgstr "Klik na pricing CTA"
+
+msgid "Download file"
+msgstr "Stažení souboru"
+
+msgid "Link esterni"
+msgstr "Externí odkazy"
+
+msgid "Richiedi consenso cookie"
+msgstr "Vyžadovat souhlas cookies"
+
+msgid "Blocca gli script di tracking finché l'utente non accetta i cookie analitici/marketing dal banner Cookie Consent. Richiesto per GDPR."
+msgstr "Blokuje tracking skripty do souhlasu."
+
+msgid "Anonimizza IP"
+msgstr "Anonymizovat IP"
+
+msgid "GA4 anonimizza l'IP di default, ma questa opzione aggiunge il parametro esplicito per conformità."
+msgstr "GA4 anonymizuje IP standardně."
+
+msgid "Rispetta Do Not Track"
+msgstr "Respektovat Do Not Track"
+
+msgid "Non caricare gli script se il browser invia l'header Do Not Track."
+msgstr "Nenahrávat skripty pokud prohlížeč posílá DNT."
+
+msgid "Escludi amministratori"
+msgstr "Vyloučit administrátory"
+
+msgid "Non tracciare le visite degli utenti con ruolo Amministratore."
+msgstr "Nesledovat návštěvy administrátorů."
+
+msgid "Non configurato"
+msgstr "Nenakonfigurováno"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Auto-tracking eventi"
+msgstr "Auto-tracking událostí"
+
+msgid "Scegli quali eventi tracciare automaticamente. Vengono inviati a tutti i provider configurati."
+msgstr "Vyberte události k auto-trackování."
+
+msgid "Parametri eventi"
+msgstr "Parametry událostí"
+
+msgid "Configura i dettagli degli eventi di scroll e download."
+msgstr "Konfigurujte detaily scroll/download."
+
+msgid "Milestone scroll (%)"
+msgstr "Milníky scroll (%)"
+
+msgid "Percentuali di scroll a cui inviare un evento (separate da virgola)."
+msgstr "Procenta scrollu (oddělené čárkou)."
+
+msgid "Estensioni download"
+msgstr "Přípony stahování"
+
+msgid "Estensioni file da tracciare come download (separate da virgola)."
+msgstr "Přípony souborů (oddělené čárkou)."
+
+msgid "Privacy e conformità"
+msgstr "Soukromí a soulad"
+
+msgid "Opzioni di privacy, GDPR e gestione del consenso."
+msgstr "Možnosti soukromí, GDPR a souhlas."
+
+msgid "Inserisci script di tracking aggiuntivi. Verranno bloccati dal consenso cookie se abilitato."
+msgstr "Vložte další tracking skripty."
+
+msgid "Script nel <head>"
+msgstr "Skripty v <head>"
+
+msgid "Inseriti prima della chiusura di </head>. Utile per snippet di tracking non supportati nativamente."
+msgstr "Vložené před </head>."
+
+msgid "Script nel <body>"
+msgstr "Skripty v <body>"
+
+msgid "Inseriti prima della chiusura di </body>."
+msgstr "Vložené před </body>."
+
+msgid "Vai al contenuto principale"
+msgstr "Přejít na hlavní obsah"
+
+msgid "Riproduci video"
+msgstr "Přehrát video"
+
+msgid "Redirect & 404"
+msgstr "Redirect & 404"
+
+msgid "Redirect"
+msgstr "Přesměrování"
+
+msgid "Monitor 404"
+msgstr "Monitor 404"
+
+msgid "%1$s redirect attivi · %2$s pagine 404 da gestire"
+msgstr "%1$s aktivních přesměrování · %2$s 404 stránek"
+
+msgid "%s redirect attivi · nessun 404 da gestire"
+msgstr "%s aktivních přesměrování · žádné 404"
+
+msgid "Prefisso <code>~</code> per regex. Es: <code>~/vecchio/(.*)</code> &rarr; <code>/nuovo/$1</code>"
+msgstr "Prefix ~ pro regex."
+
+msgid "Aggiungi Redirect"
+msgstr "Přidat redirect"
+
+msgid "Da URL"
+msgstr "Z URL"
+
+msgid "Percorso relativo o regex con prefisso ~"
+msgstr "Relativní cesta nebo regex s ~"
+
+msgid "A URL"
+msgstr "Na URL"
+
+msgid "Percorso relativo o URL assoluto"
+msgstr "Relativní cesta nebo absolutní URL"
+
+msgid "Tipo"
+msgstr "Typ"
+
+msgid "301 — Permanente (consigliato)"
+msgstr "301 — Trvalé (doporučeno)"
+
+msgid "302 — Temporaneo"
+msgstr "302 — Dočasné"
+
+msgid "307 — Temporaneo (strict)"
+msgstr "307 — Dočasné (strict)"
+
+msgid "410 — Risorsa rimossa (Gone)"
+msgstr "410 — Odstraněno"
+
+msgid "Cookie Consent"
+msgstr "Cookie Consent"
+
+msgid "Generale"
+msgstr "Obecné"
+
+msgid "Testi"
+msgstr "Texty"
+
+msgid "Aspetto"
+msgstr "Vzhled"
+
+msgid "Categorie"
+msgstr "Kategorie"
+
+msgid "Blocco Script"
+msgstr "Blokování skriptů"
+
+msgid "Dichiarazione Cookie"
+msgstr "Prohlášení o cookies"
+
+msgid "Log Consensi"
+msgstr "Log souhlasů"
+
+msgid "Banner attivo · GDPR-compliant · log consensi tracciato."
+msgstr "Banner aktivní · GDPR · log souhlasů."
+
+msgid "Banner disattivato. Configura testi, aspetto e categorie cookie per attivarlo."
+msgstr "Banner vypnut."
+
+msgid "%d consensi registrati. Il GDPR richiede di poter dimostrare il consenso raccolto."
+msgstr "%d zaznamenaných souhlasů."
+
+msgid "Svuotare tutti i log dei consensi?"
+msgstr "Vyprázdnit všechny logy souhlasů?"
+
+msgid "Questo contenuto richiede il consenso ai cookie"
+msgstr "Tento obsah vyžaduje souhlas cookies"
+
+msgid "Accetta e carica"
+msgstr "Přijmout a načíst"
+
+msgid "Gestisci cookie"
+msgstr "Spravovat cookies"
+
+msgid "Impostazioni generali"
+msgstr "Obecná nastavení"
+
+msgid "Configura il comportamento del cookie banner"
+msgstr "Konfigurujte chování cookie banneru"
+
+msgid "Abilita Cookie Banner"
+msgstr "Povolit cookie banner"
+
+msgid "Layout"
+msgstr "Layout"
+
+msgid "Barra"
+msgstr "Lišta"
+
+msgid "Box laterale"
+msgstr "Boční box"
+
+msgid "Full-width"
+msgstr "Full-width"
+
+msgid "Posizione"
+msgstr "Pozice"
+
+msgid "In basso"
+msgstr "Dole"
+
+msgid "In alto"
+msgstr "Nahoře"
+
+msgid "Mostra \"Rifiuta tutti\""
+msgstr "Zobrazit \"Odmítnout vše\""
+
+msgid "Richiesto dalle linee guida CNIL/Garante Privacy italiano."
+msgstr "Vyžadováno CNIL/italským úřadem."
+
+msgid "Mostra \"Personalizza\""
+msgstr "Zobrazit \"Přizpůsobit\""
+
+msgid "Pulsante per aprire il pannello preferenze con le categorie."
+msgstr "Tlačítko pro panel preferencí."
+
+msgid "Durata consenso"
+msgstr "Doba souhlasu"
+
+msgid "GDPR raccomanda max 6 mesi (180 giorni). Molti usano 365."
+msgstr "GDPR doporučuje max 6 měsíců."
+
+msgid "Richiedere nuovamente dopo"
+msgstr "Vyžádat znovu po"
+
+msgid "Se la cookie policy cambia, puoi forzare la ripresentazione del banner."
+msgstr "Při změně policy lze vynutit znovuzobrazení."
+
+msgid "giorni (0 = mai)"
+msgstr "dní (0 = nikdy)"
+
+msgid "Google Consent Mode v2"
+msgstr "Google Consent Mode v2"
+
+msgid "Invia segnali gtag(\"consent\") a Google. Richiesto da Google Ads dal marzo 2024 per EEA/UK."
+msgstr "Posílá signály gtag(\"consent\") Googlu."
+
+msgid "Blocco iframe"
+msgstr "Blokování iframe"
+
+msgid "Blocca iframe di YouTube, Vimeo, Google Maps fino al consenso. Mostra un placeholder con pulsante \"Carica contenuto\"."
+msgstr "Blokuje iframe YouTube/Vimeo/Maps do souhlasu."
+
+msgid "Versione banner"
+msgstr "Verze banneru"
+
+msgid "Incrementa quando cambi la cookie policy. I visitatori con consenso a una versione precedente vedranno di nuovo il banner."
+msgstr "Inkrementujte při změně cookie policy."
+
+msgid "Testi del banner"
+msgstr "Texty banneru"
+
+msgid "Personalizza i testi mostrati nel cookie banner"
+msgstr "Přizpůsobte texty banneru"
+
+msgid "Titolo"
+msgstr "Název"
+
+msgid "Messaggio"
+msgstr "Zpráva"
+
+msgid "Pulsante \"Accetta tutti\""
+msgstr "Tlačítko \"Přijmout vše\""
+
+msgid "Pulsante \"Rifiuta tutti\""
+msgstr "Tlačítko \"Odmítnout vše\""
+
+msgid "Pulsante \"Personalizza\""
+msgstr "Tlačítko \"Přizpůsobit\""
+
+msgid "Pulsante \"Salva preferenze\""
+msgstr "Tlačítko \"Uložit preference\""
+
+msgid "Link policy"
+msgstr "Odkazy policy"
+
+msgid "URL e testi dei link alle pagine di policy"
+msgstr "URL a texty odkazů na policy"
+
+msgid "URL Privacy Policy"
+msgstr "URL ochrany osobních údajů"
+
+msgid "Testo link Privacy"
+msgstr "Text odkazu Privacy"
+
+msgid "URL Cookie Policy"
+msgstr "URL cookie policy"
+
+msgid "Testo link Cookie Policy"
+msgstr "Text odkazu cookie policy"
+
+msgid "Colori banner"
+msgstr "Barvy banneru"
+
+msgid "Sfondo e testo del cookie banner"
+msgstr "Pozadí a text cookie banneru"
+
+msgid "Sfondo banner"
+msgstr "Pozadí banneru"
+
+msgid "Colore testo"
+msgstr "Barva textu"
+
+msgid "Colori pulsanti"
+msgstr "Barvy tlačítek"
+
+msgid "Personalizza i colori dei pulsanti \"Accetta\" e \"Rifiuta\""
+msgstr "Přizpůsobte barvy tlačítek"
+
+msgid "Pulsante primario — sfondo"
+msgstr "Primární tlačítko — pozadí"
+
+msgid "Pulsante primario — testo"
+msgstr "Primární tlačítko — text"
+
+msgid "Pulsante secondario — sfondo"
+msgstr "Sekundární tlačítko — pozadí"
+
+msgid "Pulsante secondario — testo"
+msgstr "Sekundární tlačítko — text"
+
+msgid "Stile"
+msgstr "Styl"
+
+msgid "Overlay e border radius del banner"
+msgstr "Overlay a border radius"
+
+msgid "Overlay scuro"
+msgstr "Tmavý overlay"
+
+msgid "Oscura la pagina dietro il banner per attirare l'attenzione."
+msgstr "Ztmavuje stránku pro pozornost."
+
+msgid "Border radius"
+msgstr "Border radius"
+
+msgid "Categorie cookie"
+msgstr "Kategorie cookies"
+
+msgid "Personalizza nome e descrizione di ogni categoria mostrata nel pannello preferenze."
+msgstr "Přizpůsobte název a popis každé kategorie."
+
+msgid "Sempre attivo"
+msgstr "Vždy aktivní"
+
+msgid "Etichetta"
+msgstr "Etichetta"
+
+msgid "Descrizione"
+msgstr "Descrizione"
+
+msgid "Blocco automatico script"
+msgstr "Automatické blokování skriptů"
+
+msgid "Blocca automaticamente script di terze parti finché l'utente non accetta la categoria corrispondente."
+msgstr "Automaticky blokuje skripty 3. stran."
+
+msgid "Abilita auto-blocco"
+msgstr "Povolit auto-blokování"
+
+msgid "Converte gli script corrispondenti in type=\"text/plain\" finché il consenso non è dato."
+msgstr "Konvertuje skripty na type=\"text/plain\"."
+
+msgid "Pattern da bloccare"
+msgstr "Vzory k blokování"
+
+msgid "Un dominio/pattern per riga. Gli script il cui src contiene uno di questi pattern vengono bloccati."
+msgstr "Doména/vzor na řádek."
+
+msgid "Blocco manuale"
+msgstr "Manuální blokování"
+
+msgid "Puoi anche bloccare script manualmente nel tuo HTML aggiungendo:"
+msgstr "Můžete blokovat ručně v HTML přidáním:"
+
+msgid "Dichiarazione cookie"
+msgstr "Prohlášení o cookies"
+
+msgid "Elenca i cookie utilizzati dal sito. Questi vengono mostrati nel pannello preferenze."
+msgstr "Seznam použitých cookies."
+
+msgid "Nome cookie"
+msgstr "Název cookie"
+
+msgid "Scopo"
+msgstr "Účel"
+
+msgid "Scadenza"
+msgstr "Platnost"
+
+msgid "Aggiungi cookie"
+msgstr "Přidat cookie"
+
+msgid "Log dei consensi"
+msgstr "Log souhlasů"
+
+msgid "Esporta CSV"
+msgstr "Esporta CSV"
+
+msgid "Svuota log"
+msgstr "Vyprázdnit log"
+
+msgid "ID Consenso"
+msgstr "ID souhlasu"
+
+msgid "Data"
+msgstr "Data"
+
+msgid "Azione"
+msgstr "Akce"
+
+msgid "Ver."
+msgstr "Verze"
+
+msgid "IP (hash)"
+msgstr "IP (hash)"
+
+msgid "Categorie accettate"
+msgstr "Přijaté kategorie"
+
+msgid "User Agent"
+msgstr "User Agent"
+
+msgid "Nessun consenso registrato."
+msgstr "Žádné zaznamenané souhlasy."
+
+msgid "Preferenze cookie"
+msgstr "Preference cookies"
+
+msgid "Chiudi"
+msgstr "Chiudi"
+
+msgid "Scegli quali categorie di cookie accettare. Puoi modificare le tue preferenze in qualsiasi momento."
+msgstr "Vyberte kategorie cookies k přijetí."
+
+msgid "Dettaglio cookie utilizzati"
+msgstr "Detail použitých cookies"
+
+msgid "Cookie"
+msgstr "Cookie"
+
+msgid "WooCommerce"
+msgstr "WooCommerce"
+
+msgid "Template WooCommerce"
+msgstr "Šablony WooCommerce"
+
+msgid "Override Olobuild attivi su %1$s/%2$s pagine WooCommerce (prodotto, archivio, carrello, checkout, mio account)."
+msgstr "Override Olobuild na %1$s/%2$s WC stránkách."
+
+msgid "Senza titolo"
+msgstr "Bez názvu"
+
+msgid "(Copia)"
+msgstr "(Kopie)"
+
+msgid "Pagine pubblicate"
+msgstr "Publikované stránky"
+
+msgid "nessuna nuova"
+msgstr "žádná nová"
+
+msgid "Template attivi"
+msgstr "Aktivní šablony"
+
+msgid "tutti pubblicati"
+msgstr "vše publikováno"
+
+msgid "Invii form (7gg)"
+msgstr "Odeslání formulářů (7 dnů)"
+
+msgid "periodo iniziale"
+msgstr "počáteční období"
+
+msgid "Avvisi da risolvere"
+msgstr "Upozornění k vyřešení"
+
+msgid "tutto a posto"
+msgstr "vše v pořádku"
+
+msgid "(senza titolo)"
+msgstr "(bez názvu)"
+
+msgid "Articolo"
+msgstr "Článek"
+
+msgid "Pagina"
+msgstr "Stránka"
+
+msgid "fa"
+msgstr "fa"
+
+msgid "Vedi changelog completo nel repository."
+msgstr "Plný changelog v repositáři."
+
+msgid "Invio non trovato"
+msgstr "Odeslání nenalezeno"
+
+msgid "Nessun ID selezionato"
+msgstr "Není vybráno ID"
+
+msgid "Azione non valida"
+msgstr "Neplatná akce"
+
+msgid "+%d questa settimana"
+msgstr "+%d tento týden"
+
+msgid "%d in bozza"
+msgstr "%d v konceptu"
+
+msgid "Regole di visualizzazione"
+msgstr "Pravidla zobrazení"
+
+msgid "Accesso negato."
+msgstr "Přístup odepřen."
+
+msgid "Regole di visualizzazione template"
+msgstr "Pravidla zobrazení šablon"
+
+msgid "Definisci dove ogni template Header/Footer si applica. Le regole hanno priorità sull'header/footer globale e cedono il passo a un'eventuale assegnazione per-pagina dal metabox Olobuild."
+msgstr "Definujte kde se každý header/footer aplikuje."
+
+msgid "Regole salvate."
+msgstr "Pravidla uložena."
+
+msgid "Nessun template Header/Footer pubblicato. Crea prima un template e impostalo come \"Pubblicato\"."
+msgstr "Žádné publikované Header/Footer šablony."
+
+msgid "Nome"
+msgstr "Nome"
+
+msgid "Area"
+msgstr "Oblast"
+
+msgid "Priorità"
+msgstr "Priorità"
+
+msgid "Abilita"
+msgstr "Povolit"
+
+msgid "es. Header strutture"
+msgstr "např. Header ubytování"
+
+msgid "Seleziona template"
+msgstr "Vybrat šablonu"
+
+msgid "Header"
+msgstr "Header"
+
+msgid "Footer"
+msgstr "Footer"
+
+msgid "Più basso = più importante"
+msgstr "Nižší = důležitější"
+
+msgid "— Seleziona —"
+msgstr "— Seleziona —"
+
+msgid "Front page"
+msgstr "Front page"
+
+msgid "Singoli di un tipo (CPT)"
+msgstr "Jednotlivé z typu (CPT)"
+
+msgid "Archivio di un tipo (CPT)"
+msgstr "Archiv typu (CPT)"
+
+msgid "Una pagina specifica (ID)"
+msgstr "Konkrétní stránka (ID)"
+
+msgid "Un articolo specifico (ID)"
+msgstr "Konkrétní článek (ID)"
+
+msgid "Risultati ricerca"
+msgstr "Výsledky hledání"
+
+msgid "Utenti loggati"
+msgstr "Přihlášení uživatelé"
+
+msgid "Utenti non loggati"
+msgstr "Nepřihlášení uživatelé"
+
+msgid "— Tipo —"
+msgstr "— Typ —"
+
+msgid "Aggiungi regola"
+msgstr "Přidat pravidlo"
+
+msgid "Salva regole"
+msgstr "Uložit pravidla"
+
+msgid "Come funziona"
+msgstr "Jak to funguje"
+
+msgid "Priorità più bassa = vince per prima"
+msgstr "Nižší priorita = vyhrává první"
+
+msgid "A parità, l'ordine in tabella decide."
+msgstr "Při rovnosti rozhoduje pořadí."
+
+msgid "Se un singolo post ha un header/footer assegnato dal metabox Olobuild, quello vince comunque sulle regole qui."
+msgstr "Header/footer z metaboxu vyhrává nad pravidly."
+
+msgid "Se nessuna regola matcha, viene usato l'header/footer globale (Gestione Template → Attiva)."
+msgstr "Pokud žádné pravidlo neodpovídá, použije se globální."
+
+msgid "Header Olobuild"
+msgstr "Header Olobuild"
+
+msgid "Sostituzione URL"
+msgstr "Náhrada URL"
+
+msgid "Controllo Versione"
+msgstr "Kontrola verze"
+
+msgid "Modalità di Manutenzione"
+msgstr "Režim údržby"
+
+msgid "Template Website"
+msgstr "Šablona webu"
+
+msgid "Strumenti"
+msgstr "Nástroje"
+
+msgid "Cache, manutenzione, sostituzione URL e rollback. Utilizzare con cura."
+msgstr "Cache, údržba, URL náhrada, rollback."
+
+msgid "Olobuild Diagnostics"
+msgstr "Olobuild diagnostika"
+
+msgid "Sì"
+msgstr "Sì"
+
+msgid "No"
+msgstr "No"
+
+msgid "NON DEFINITO"
+msgstr "NEDEFINOVÁNO"
+
+msgid "Questa pagina serve solo per debug. Se stai vedendo questo contenuto, l'accesso funziona. Riporta queste informazioni per risolvere problemi di permessi."
+msgstr "Stránka pro debug. Pošlete informace pro řešení."
+
+msgid "Utente corrente"
+msgstr "Aktuální uživatel"
+
+msgid "User ID"
+msgstr "User ID"
+
+msgid "Username"
+msgstr "Username"
+
+msgid "Email"
+msgstr "Email"
+
+msgid "Ruoli"
+msgstr "Role"
+
+msgid "Super admin?"
+msgstr "Super admin?"
+
+msgid "Multisite?"
+msgstr "Multisite?"
+
+msgid "Verifica capability"
+msgstr "Ověřit oprávnění"
+
+msgid "Capability"
+msgstr "Capability"
+
+msgid "Stato Olobuild"
+msgstr "Stav Olobuild"
+
+msgid "Plugin attivi"
+msgstr "Aktivní pluginy"
+
+msgid "Info WordPress"
+msgstr "Info WordPress"
+
+msgid "Versione WP"
+msgstr "Verze WP"
+
+msgid "Versione PHP"
+msgstr "Verze PHP"
+
+msgid "Tema"
+msgstr "Téma"
+
+msgid "URL sito"
+msgstr "URL webu"
+
+msgid "URL admin"
+msgstr "URL administrace"
+
+msgid "Test accesso pagine"
+msgstr "Test přístupu stránek"
+
+msgid "Clicca questi link per capire dove fallisce:"
+msgstr "Klikněte na odkazy pro diagnostiku."
+
+msgid "Dashboard"
+msgstr "Dashboard"
+
+msgid "Gestione Template"
+msgstr "Správa šablon"
+
+msgid "Configurazione"
+msgstr "Konfigurace"
+
+msgid "Setup Wizard"
+msgstr "Setup Wizard"
+
+msgid "SEO"
+msgstr "SEO"
+
+msgid "Title, meta description, Open Graph, schema.org, sitemap XML e webmaster tools."
+msgstr "Title, meta, OG, schema, sitemap."
+
+msgid "Tutti"
+msgstr "Vše"
+
+msgid "Non letti"
+msgstr "Nepřečtené"
+
+msgid "Letti"
+msgstr "Přečtené"
+
+msgid "%1$s invii totali · %2$s da leggere · %3$s ultimi 7gg"
+msgstr "%1$s celkem · %2$s ke čtení · %3$s 7 dnů"
+
+msgid "Invii Form"
+msgstr "Odeslání formulářů"
+
+msgid "Cerca per nome, email, contenuto…"
+msgstr "Hledat podle jména, e-mailu, obsahu…"
+
+msgid "Caricamento invii…"
+msgstr "Načítání odeslání…"
+
+msgid "Segna come non letto"
+msgstr "Označit jako nepřečtené"
+
+msgid "Elimina"
+msgstr "Elimina"
+
+msgid "Carica altri"
+msgstr "Načíst další"
+
+msgid "Pannello flottante"
+msgstr "Plovoucí panel"
+
+msgid "Trascina qui contenuti del pannello"
+msgstr "Sem přetáhněte obsah panelu"
+
+msgid "O clicca per aprire il finder"
+msgstr "Nebo klikněte pro finder"
+
+msgid "Ordina:"
+msgstr "Seřadit:"
+
+msgid "Più recenti"
+msgstr "Più recenti"
+
+msgid "Più vecchi"
+msgstr "Più vecchi"
+
+msgid "Titolo (A-Z)"
+msgstr "Název (A-Z)"
+
+msgid "Titolo (Z-A)"
+msgstr "Název (Z-A)"
+
+msgid "Casuale"
+msgstr "Náhodný"
+
+msgid "Notizia %d"
+msgstr "Novinka %d"
+
+msgid "Precedente"
+msgstr "Precedente"
+
+msgid "Successivo"
+msgstr "Successivo"
+
+msgid "Pagina non trovata"
+msgstr "Stránka nenalezena"
+
+msgid "Apri ricerca"
+msgstr "Otevřít hledání"
+
+msgid "Cerca"
+msgstr "Cerca"
+
+msgid "Cancella"
+msgstr "Cancella"
+
+msgid "Main menu"
+msgstr "Hlavní menu"
+
+msgid "Open menu"
+msgstr "Otevřít menu"
+
+msgid "Mobile menu"
+msgstr "Mobilní menu"
+
+msgid "Close menu"
+msgstr "Zavřít menu"
+
+msgid "Vertical menu"
+msgstr "Vertikální menu"
+
+msgid "Sub navigation"
+msgstr "Podnavigace"
+
+msgid "Embedded video"
+msgstr "Vložené video"
+
+msgid "Inserisci un URL video"
+msgstr "Vložte URL videa"
+
+msgid "Seleziona un file video"
+msgstr "Vyberte video soubor"
+
+msgid "Background video"
+msgstr "Video na pozadí"
+
+msgid "Seleziona una sorgente video"
+msgstr "Vyberte zdroj videa"
+
+msgid "Ordina per…"
+msgstr "Seřadit podle…"
+
+msgid "Navigation"
+msgstr "Navigace"
+
+msgid "Import / Export"
+msgstr "Import / Export"
+
+msgid "Esporta singoli template, intero sito o backup completo. %d template disponibili."
+msgstr "Exportujte šablony, web nebo backup."
+
+msgid "Esporta"
+msgstr "Exportovat"
+
+msgid "Scarica template e media in formato JSON"
+msgstr "Stáhněte šablony a média v JSON"
+
+msgid "Singolo template"
+msgstr "Jednotlivá šablona"
+
+msgid "Includi media (immagini, video, PDF)"
+msgstr "Včetně médií (obrázky, videa, PDF)"
+
+msgid "Esporta Template"
+msgstr "Exportovat šablonu"
+
+msgid "Esporta tutto il sito"
+msgstr "Exportovat celý web"
+
+msgid "Include tutti i template, header, footer e stili globali"
+msgstr "Včetně šablon, header, footer, stylů"
+
+msgid "Esporta Sito Completo"
+msgstr "Exportovat celý web"
+
+msgid "Importa"
+msgstr "Importovat"
+
+msgid "Carica un file .json esportato da Olobuild"
+msgstr "Nahrajte .json z Olobuild"
+
+msgid "Importa media (scarica e ricarica immagini)"
+msgstr "Importovat média"
+
+msgid "Ricerca Media"
+msgstr "Hledání médií"
+
+msgid "Cerca foto, video, audio e panorami da provider stock. %1$s/%2$s provider configurati."
+msgstr "Hledejte foto/video/audio. %1$s/%2$s."
+
+msgid "Cerca foto, video, audio..."
+msgstr "Hledat foto, video, audio..."
+
+msgid "https://www.google.com/maps/@45.4642,9.1900,3a... oppure 45.4642,9.1900"
+msgstr "URL Google Maps nebo souřadnice"
+
+msgid "min sec"
+msgstr "min sek"
+
+msgid "max sec"
+msgstr "max sek"
+
+msgid "Foto"
+msgstr "Foto"
+
+msgid "Video"
+msgstr "Video"
+
+msgid "Foto 360"
+msgstr "Foto 360"
+
+msgid "Video 360"
+msgstr "Video 360"
+
+msgid "Audio"
+msgstr "Audio"
+
+msgid "Incolla un URL Google Maps, coordinate (lat,lng) o un pano_id per scaricare un panorama Street View."
+msgstr "Vložte URL Maps, souřadnice nebo pano_id."
+
+msgid "Zoom 2 (bassa)"
+msgstr "Zoom 2 (nízký)"
+
+msgid "Zoom 3 (media)"
+msgstr "Zoom 3 (střední)"
+
+msgid "Zoom 4 (alta)"
+msgstr "Zoom 4 (vysoký)"
+
+msgid "Cerca panorama"
+msgstr "Hledat panorama"
+
+msgid "Orientamento:"
+msgstr "Orientace:"
+
+msgid "Qualsiasi"
+msgstr "Qualsiasi"
+
+msgid "Orizzontale"
+msgstr "Horizontální"
+
+msgid "Verticale"
+msgstr "Vertikální"
+
+msgid "Quadrato"
+msgstr "Čtverec"
+
+msgid "Dimensione:"
+msgstr "Velikost:"
+
+msgid "Piccola"
+msgstr "Malá"
+
+msgid "Media"
+msgstr "Střední"
+
+msgid "Grande"
+msgstr "Velká"
+
+msgid "Min larghezza:"
+msgstr "Min šířka:"
+
+msgid "Min altezza:"
+msgstr "Min výška:"
+
+msgid "Durata:"
+msgstr "Délka:"
+
+msgid "Brevissimo (< 5s)"
+msgstr "Velmi krátké (< 5s)"
+
+msgid "Breve (< 15s)"
+msgstr "Krátké (< 15s)"
+
+msgid "5 — 30 secondi"
+msgstr "5 — 30 sekund"
+
+msgid "10s — 1 minuto"
+msgstr "10s — 1 minuta"
+
+msgid "30s — 2 minuti"
+msgstr "30s — 2 minuty"
+
+msgid "1 — 5 minuti"
+msgstr "1 — 5 minut"
+
+msgid "Lungo (> 5 min)"
+msgstr "Dlouhé (> 5 min)"
+
+msgid "oppure"
+msgstr "nebo"
+
+msgid "secondi"
+msgstr "sekundy"
+
+msgid "White Label"
+msgstr "White Label"
+
+msgid "Branding personalizzato attivo. Nasconde il marchio Olobuild dai tuoi clienti."
+msgstr "Vlastní branding aktivní."
+
+msgid "Personalizza nome plugin, logo, autore e link per nascondere il brand Olobuild."
+msgstr "Přizpůsobte název, logo, autora."
+
+msgid "Page builder professionale"
+msgstr "Profesionální page builder"
+
+msgid "Salvataggio..."
+msgstr "Ukládání..."
+
+msgid "Impostazioni salvate con successo"
+msgstr "Nastavení uložena"
+
+msgid "Errore nel salvataggio"
+msgstr "Chyba ukládání"
+
+msgid "Impostazioni White Label"
+msgstr "Nastavení White Label"
+
+msgid "Rinomina plugin, nascondi credits e impostazioni per i non-admin"
+msgstr "Přejmenujte plugin, skryjte credits."
+
+msgid "Attiva White Label"
+msgstr "Aktivovat White Label"
+
+msgid "Abilita la personalizzazione del brand"
+msgstr "Povolit přizpůsobení brandu"
+
+msgid "Nome plugin"
+msgstr "Název pluginu"
+
+msgid "Nome autore"
+msgstr "Jméno autora"
+
+msgid "URL autore"
+msgstr "URL autora"
+
+msgid "Nascondi per non-admin"
+msgstr "Skrýt pro ne-administrátory"
+
+msgid "Nasconde le impostazioni White Label per utenti non amministratori"
+msgstr "Skrývá White Label pro neadminy."
+
+msgid "Nascondi credits"
+msgstr "Skrýt credits"
+
+msgid "Rimuove la scritta \"Powered by Olobuild\""
+msgstr "Odstraní \"Powered by Olobuild\"."
+
+msgid "Pagina vuota"
+msgstr "Prázdná stránka"
+
+msgid "Aggiungi un modulo o scegli un layout per iniziare"
+msgstr "Přidejte modul nebo vyberte layout"
+
+msgid "Aggiungi modulo"
+msgstr "Přidat modul"
+
+msgid "Scegli layout"
+msgstr "Vybrat layout"
+
+msgid "Olobuild"
+msgstr "Olobuild"
+
+msgid "Nessun invio trovato."
+msgstr "Žádná odeslání."
+
+msgid "Prova a cambiare filtro o aspetta nuovi messaggi."
+msgstr "Změňte filtr nebo počkejte."
+
+msgid "Segna come letto"
+msgstr "Označit jako přečtené"
+
+msgid "Eliminare definitivamente questo invio? L'azione non si può annullare."
+msgstr "Smazat odeslání? Akci nelze vrátit."
+
+msgid "Invio eliminato"
+msgstr "Odeslání smazáno"
+
+msgid "Errore eliminazione"
+msgstr "Chyba mazání"
+
+msgid "Errore caricamento. Riprova."
+msgstr "Chyba načítání. Zkuste znovu."
+
+msgid "Campi compilati"
+msgstr "Vyplněná pole"
+
+msgid "Metadati"
+msgstr "Metadata"
+
+msgid "Inviato il"
+msgstr "Odesláno"
+
+msgid "live"
+msgstr "live"
+
+msgid "bozza"
+msgstr "koncept"
+
+msgid "Aggiungi ai preferiti"
+msgstr "Aggiungi ai preferiti"
+
+msgid "Rimuovi dai preferiti"
+msgstr "Odebrat z oblíbených"
+
+msgid "Espandi pannello"
+msgstr "Rozbalit panel"
+
+msgid "Comprimi pannello"
+msgstr "Sbalit panel"
+
+msgid "Cerca pagine, template, impostazioni…"
+msgstr "Hledat stránky, šablony, nastavení…"
+
+msgid "Nessun risultato"
+msgstr "Žádné výsledky"
+
+msgid "Nessuna attività recente. Crea o modifica una pagina per iniziare."
+msgstr "Žádná nedávná aktivita."
+
+msgid "Creazione…"
+msgstr "Vytváření…"
+
+msgid "Errore nella creazione della pagina. Riprova."
+msgstr "Chyba při vytváření stránky."
+
+msgid "Salvati"
+msgstr "Uložené"
+
+msgid "Avvio Rapido"
+msgstr "Rychlý start"
+
+msgid "Role Manager"
+msgstr "Role Manager"
+
+msgid "Submissions"
+msgstr "Odeslání"
+
+msgid "Template Salvati"
+msgstr "Uložené šablony"
+
+msgid "Popups"
+msgstr "Popupy"
+
+msgid "Marketing"
+msgstr "Marketing"
+
+msgid "Personalizzazione"
+msgstr "Přizpůsobení"
+
+msgid "Sistema"
+msgstr "Systém"
+
+msgid "Crea e modifica i tuoi template"
+msgstr "Vytvořte a upravte šablony"
+
+msgid "Stili, colori, tipografia e API"
+msgstr "Styly, barvy, typografie a API"
+
+msgid "Foto, video e audio stock"
+msgstr "Stock foto, video, audio"
+
+msgid "Visualizza i messaggi ricevuti"
+msgstr "Zobrazit přijaté zprávy"
+
+msgid "Tracking e statistiche"
+msgstr "Tracking a statistiky"
+
+msgid "Banner GDPR e consenso"
+msgstr "Banner GDPR a souhlas"
+
+msgid "Meta tag, Open Graph e sitemap"
+msgstr "Meta tagy, OG, sitemap"
+
+msgid "Gestisci redirect e pagine 404"
+msgstr "Spravujte přesměrování a 404"
+
+msgid "Cache, lazy load, ottimizzazione"
+msgstr "Cache, lazy load, optimalizace"
+
+msgid "Cache, manutenzione, URL, versioni"
+msgstr "Cache, údržba, URL, verze"
+
+msgid "Template per prodotti e shop"
+msgstr "Šablony pro produkty a shop"
+
+msgid "Banner e modali riusabili"
+msgstr "Bannery a modaly k opakovanému použití"
+
+msgid "Import/Export"
+msgstr "Import/Export"
+
+msgid "Diagnostica"
+msgstr "Diagnostika"
+
+msgid "Licenza"
+msgstr "Licenza"
+
+msgid "Hai modificato questa pagina %1$s. La pagina è %2$s."
+msgstr "Upravili jste stránku %1$s. Stav: %2$s."
+
+msgid "pubblicata"
+msgstr "publikováno"
+
+msgid "in bozza"
+msgstr "v konceptu"
+
+msgid "Inizia a costruire il tuo sito"
+msgstr "Začněte budovat web"
+
+msgid "Crea la prima pagina o sfoglia i template per partire al volo."
+msgstr "Vytvořte první stránku nebo procházejte šablony."
+
+msgid ""
+"Cache: %s · DB: %s'), '<b>2.4 MB</b>', '<b>OK</b>'),\n"
+"     *     'actions' => Olo_Builder::cockpit_button(['label' => 'Nuovo', 'variant' => 'pri']),\n"
+"     *   ]);\n"
+"     */\n"
+"    public static function cockpit_page_head( $args = [] ) {\n"
+"        $args = wp_parse_args( $args, [ 'title' => '', 'sub' => '', 'actions' => '' ] );\n"
+"        ob_start();\n"
+"        ?>\n"
+"        <header class=\"olo-page-head\">\n"
+"            <div class=\"titles\">\n"
+"                <h1><?php echo esc_html( $args['title'] ); ?></h1>\n"
+"                <?php if ( $args['sub'] ) : ?>\n"
+"                    <div class=\"sub\"><?php echo wp_kses_post( $args['sub'] ); ?></div>\n"
+"                <?php endif; ?>\n"
+"            </div>\n"
+"            <?php if ( $args['actions'] ) : ?>\n"
+"                <div class=\"actions\"><?php echo $args['actions']; // markup pre-validato ?></div>\n"
+"            <?php endif; ?>\n"
+"        </header>\n"
+"        <?php\n"
+"        return ob_get_clean();\n"
+"    }\n"
+"\n"
+"    /**\n"
+"     * Sub-nav tabs (orizzontali) sotto il page head.\n"
+"     *\n"
+"     * @param array  $items   Array di tabs: [{slug, label, count?, href}].\n"
+"     * @param string $active  Slug del tab attivo.\n"
+"     *\n"
+"     * @example\n"
+"     *   echo Olo_Builder::cockpit_subnav([\n"
+"     *     ['slug' => 'general', 'label' => 'Generale', 'href' => admin_url('admin.php?page=olo-seo')],\n"
+"     *     ['slug' => 'meta',    'label' => 'Meta tag', 'href' => admin_url('admin.php?page=olo-seo&tab=meta'), 'count' => 12],\n"
+"     *   ], 'general');\n"
+"     */\n"
+"    public static function cockpit_subnav( $items, $active = '' ) {\n"
+"        if ( empty( $items ) || ! is_array( $items ) ) return '';\n"
+"        ob_start();\n"
+"        ?>\n"
+"        <nav class=\"olo-subnav\">\n"
+"            <?php foreach ( $items as $it ) :\n"
+"                $slug = $it['slug'] ?? '';\n"
+"                $href = $it['href'] ?? '#';\n"
+"                $label = $it['label'] ?? '';\n"
+"                $count = $it['count'] ?? null;\n"
+"                $is_active = ( $slug === $active );\n"
+"            ?>\n"
+"                <a href=\"<?php echo esc_url( $href ); ?>\" class=\"<?php echo $is_active ? 'active' : ''; ?>\">\n"
+"                    <?php echo esc_html( $label ); ?>\n"
+"                    <?php if ( $count !== null ) : ?>\n"
+"                        <span class=\"num\"><?php echo (int) $count; ?></span>\n"
+"                    <?php endif; ?>\n"
+"                </a>\n"
+"            <?php endforeach; ?>\n"
+"        </nav>\n"
+"        <?php\n"
+"        return ob_get_clean();\n"
+"    }\n"
+"\n"
+"    /**\n"
+"     * Toolbar sticky: chip filtri + search + sort + view toggle + content libero.\n"
+"     *\n"
+"     * @param array $args {\n"
+"     *   @type array  $chips        Lista chip: [{id, label, count?, dot_color?, href?}]\n"
+"     *   @type string $active_chip  ID del chip attivo.\n"
+"     *   @type bool   $search       Mostra input search (default false).\n"
+"     *   @type string $search_id    ID dell'input search (per binding JS).\n"
+"     *   @type string $search_placeholder\n"
+"     *   @type string $extra        HTML aggiuntivo dopo gli spacer (es. sort, view toggle).\n"
+"     * }\n"
+"     *\n"
+"     * @example\n"
+"     *   echo Olo_Builder::cockpit_toolbar([\n"
+"     *     'chips' => [\n"
+"     *       ['id'=>'all', 'label'=>'Tutti', 'count'=>128],\n"
+"     *       ['id'=>'unread', 'label'=>'Non letti', 'count'=>12, 'dot_color'=>'#ef4444'],\n"
+"     *     ],\n"
+"     *     'active_chip' => 'all',\n"
+"     *     'search'      => true,\n"
+"     *     'search_placeholder' => 'Cerca…',\n"
+"     *   ]);\n"
+"     */\n"
+"    public static function cockpit_toolbar( $args = [] ) {\n"
+"        $args = wp_parse_args( $args, [\n"
+"            'chips'              => [],\n"
+"            'active_chip'        => '',\n"
+"            'search'             => false,\n"
+"            'search_id'          => '',\n"
+"            'search_placeholder' => __( 'Cerca…"
+msgstr ""
+"Cache: %s · DB: %s'), '<b>2.4 MB</b>', '<b>OK</b>'),\n"
+"     *     'actions' => Olo_Builder::cockpit_button(['label' => 'Nuovo', 'variant' => 'pri']),\n"
+"     *   ]);\n"
+"     */\n"
+"    public static function cockpit_page_head( $args = [] ) {\n"
+"        $args = wp_parse_args( $args, [ 'title' => '', 'sub' => '', 'actions' => '' ] );\n"
+"        ob_start();\n"
+"        ?>\n"
+"        <header class=\"olo-page-head\">\n"
+"            <div class=\"titles\">\n"
+"                <h1><?php echo esc_html( $args['title'] ); ?></h1>\n"
+"                <?php if ( $args['sub'] ) : ?>\n"
+"                    <div class=\"sub\"><?php echo wp_kses_post( $args['sub'] ); ?></div>\n"
+"                <?php endif; ?>\n"
+"            </div>\n"
+"            <?php if ( $args['actions'] ) : ?>\n"
+"                <div class=\"actions\"><?php echo $args['actions']; // markup pre-validato ?></div>\n"
+"            <?php endif; ?>\n"
+"        </header>\n"
+"        <?php\n"
+"        return ob_get_clean();\n"
+"    }\n"
+"\n"
+"    /**\n"
+"     * Sub-nav tabs (orizzontali) sotto il page head.\n"
+"     *\n"
+"     * @param array  $items   Array di tabs: [{slug, label, count?, href}].\n"
+"     * @param string $active  Slug del tab attivo.\n"
+"     *\n"
+"     * @example\n"
+"     *   echo Olo_Builder::cockpit_subnav([\n"
+"     *     ['slug' => 'general', 'label' => 'Generale', 'href' => admin_url('admin.php?page=olo-seo')],\n"
+"     *     ['slug' => 'meta',    'label' => 'Meta tag', 'href' => admin_url('admin.php?page=olo-seo&tab=meta'), 'count' => 12],\n"
+"     *   ], 'general');\n"
+"     */\n"
+"    public static function cockpit_subnav( $items, $active = '' ) {\n"
+"        if ( empty( $items ) || ! is_array( $items ) ) return '';\n"
+"        ob_start();\n"
+"        ?>\n"
+"        <nav class=\"olo-subnav\">\n"
+"            <?php foreach ( $items as $it ) :\n"
+"                $slug = $it['slug'] ?? '';\n"
+"                $href = $it['href'] ?? '#';\n"
+"                $label = $it['label'] ?? '';\n"
+"                $count = $it['count'] ?? null;\n"
+"                $is_active = ( $slug === $active );\n"
+"            ?>\n"
+"                <a href=\"<?php echo esc_url( $href ); ?>\" class=\"<?php echo $is_active ? 'active' : ''; ?>\">\n"
+"                    <?php echo esc_html( $label ); ?>\n"
+"                    <?php if ( $count !== null ) : ?>\n"
+"                        <span class=\"num\"><?php echo (int) $count; ?></span>\n"
+"                    <?php endif; ?>\n"
+"                </a>\n"
+"            <?php endforeach; ?>\n"
+"        </nav>\n"
+"        <?php\n"
+"        return ob_get_clean();\n"
+"    }\n"
+"\n"
+"    /**\n"
+"     * Toolbar sticky: chip filtri + search + sort + view toggle + content libero.\n"
+"     *\n"
+"     * @param array $args {\n"
+"     *   @type array  $chips        Lista chip: [{id, label, count?, dot_color?, href?}]\n"
+"     *   @type string $active_chip  ID del chip attivo.\n"
+"     *   @type bool   $search       Mostra input search (default false).\n"
+"     *   @type string $search_id    ID dell'input search (per binding JS).\n"
+"     *   @type string $search_placeholder\n"
+"     *   @type string $extra        HTML aggiuntivo dopo gli spacer (es. sort, view toggle).\n"
+"     * }\n"
+"     *\n"
+"     * @example\n"
+"     *   echo Olo_Builder::cockpit_toolbar([\n"
+"     *     'chips' => [\n"
+"     *       ['id'=>'all', 'label'=>'Tutti', 'count'=>128],\n"
+"     *       ['id'=>'unread', 'label'=>'Non letti', 'count'=>12, 'dot_color'=>'#ef4444'],\n"
+"     *     ],\n"
+"     *     'active_chip' => 'all',\n"
+"     *     'search'      => true,\n"
+"     *     'search_placeholder' => 'Cerca…',\n"
+"     *   ]);\n"
+"     */\n"
+"    public static function cockpit_toolbar( $args = [] ) {\n"
+"        $args = wp_parse_args( $args, [\n"
+"            'chips'              => [],\n"
+"            'active_chip'        => '',\n"
+"            'search'             => false,\n"
+"            'search_id'          => '',\n"
+"            'search_placeholder' => __( 'Cerca…"
+
+msgid "Nessun elemento"
+msgstr "Žádné prvky"
+
+msgid "Utente"
+msgstr "Uživatel"
+
+msgid "Aggiornamento disponibile · v%s"
+msgstr "Aktualizace k dispozici · v%s"
+
+msgid "Ciao %s, buon lavoro"
+msgstr "Ahoj %s, hodně štěstí"
+
+msgid "Continua su %s"
+msgstr "Pokračovat na %s"
+
+msgid "Apri editor"
+msgstr "Otevřít editor"
+
+msgid "Vai ai template"
+msgstr "Přejít na šablony"
+
+msgid "Il tuo sito WordPress costruito con Olobuild."
+msgstr "Váš WordPress web s Olobuild."
+
+msgid "API Keys — Stock Media"
+msgstr "API klíče — Stock Media"
+
+msgid "Inserisci le chiavi API per i servizi di immagini/video stock. Se lasci un campo vuoto, verrà usata la chiave predefinita."
+msgstr "Vložte API klíče. Prázdné pole = výchozí klíč."
+
+msgid "Pexels API Key"
+msgstr "Pexels API Key"
+
+msgid "Ottieni una chiave su %s"
+msgstr "Získejte klíč na %s"
+
+msgid "Pixabay API Key"
+msgstr "Pixabay API Key"
+
+msgid "Unsplash Access Key"
+msgstr "Unsplash Access Key"
+
+msgid "Freesound API Key"
+msgstr "Freesound API Key"
+
+msgid "reCAPTCHA v3"
+msgstr "reCAPTCHA v3"
+
+msgid "Google reCAPTCHA v3 per la protezione dei form. Ottieni le chiavi su google.com/recaptcha"
+msgstr "Google reCAPTCHA v3 pro ochranu formulářů."
+
+msgid "Site Key"
+msgstr "Site Key"
+
+msgid "Secret Key"
+msgstr "Secret Key"
+
+msgid "Mailchimp"
+msgstr "Mailchimp"
+
+msgid "API key Mailchimp per le integrazioni dei form contatti."
+msgstr "API klíč Mailchimp pro integraci."
+
+msgid "Mailchimp API Key"
+msgstr "Mailchimp API Key"
+
+msgid "Stili globali, palette colori, tipografia, breakpoint responsive, AI assistant e chiavi API stock media."
+msgstr "Globální styly, barvy, typografie, breakpoint."
+
+msgid "Torna a WordPress"
+msgstr "Zpět na WordPress"
+
+msgid "App mode"
+msgstr "App mode"
+
+msgid "Cambia modalità"
+msgstr "Změnit režim"
+
+msgid "Notifiche"
+msgstr "Notifiche"
+
+msgid "Documentazione"
+msgstr "Dokumentace"
+
+msgid "Profilo"
+msgstr "Profilo"
+
+msgid "Aggiorna ora"
+msgstr "Aktualizovat nyní"
+
+msgid "pagine"
+msgstr "stránky"
+
+msgid "Vedi sito live"
+msgstr "Zobrazit živý web"
+
+msgid "Crea un nuovo template e la pagina WP collegata"
+msgstr "Vytvořit novou šablonu a WP stránku"
+
+msgid "Nuova pagina"
+msgstr "Nová stránka"
+
+msgid "Apri pagina live"
+msgstr "Otevřít živou stránku"
+
+msgid "Home"
+msgstr "Domů"
+
+msgid "Servizi"
+msgstr "Služby"
+
+msgid "Contatti"
+msgstr "Kontakt"
+
+msgid "Scopri di più"
+msgstr "Scopri di più"
+
+msgid "Indicatori chiave"
+msgstr "Klíčové ukazatele"
+
+msgid "Continua dove avevi lasciato"
+msgstr "Pokračovat odkud jste skončili"
+
+msgid "Le tue ultime modifiche"
+msgstr "Vaše poslední úpravy"
+
+msgid "Vedi tutto"
+msgstr "Zobrazit vše"
+
+msgid "Azioni rapide"
+msgstr "Azioni rapide"
+
+msgid "Ciò che fai più spesso"
+msgstr "Co děláte nejčastěji"
+
+msgid "Crea pagina"
+msgstr "Vytvořit stránku"
+
+msgid "Nuovo template + pagina WP"
+msgstr "Nová šablona + WP stránka"
+
+msgid "Sfoglia template"
+msgstr "Procházet šablony"
+
+msgid "Pronti all'uso"
+msgstr "Připraveno k použití"
+
+msgid "Pagina, sito, JSON"
+msgstr "Stránka, web, JSON"
+
+msgid "Gestione"
+msgstr "Gestione"
+
+msgid "Configurazione e contenuti del sito"
+msgstr "Konfigurace a obsah webu"
+
+msgid "Configurazione tecnica · raramente"
+msgstr "Technická konfigurace · zřídka"
+
+msgid "Centro risorse"
+msgstr "Centrum zdrojů"
+
+msgid "Cosa c'è di nuovo"
+msgstr "Co je nového"
+
+msgid "Tutorial"
+msgstr "Tutoriál"
+
+msgid "Impara Olobuild"
+msgstr "Naučte se Olobuild"
+
+msgid "Onboarding 60 secondi"
+msgstr "Onboarding 60 sekund"
+
+msgid "Template come pro"
+msgstr "Šablony jako profík"
+
+msgid "SEO e Open Graph"
+msgstr "SEO a Open Graph"
+
+msgid "Performance: punteggio 100"
+msgstr "Performance: skóre 100"
+
+msgid "Aiuto & supporto"
+msgstr "Pomoc & podpora"
+
+msgid "Apri ticket"
+msgstr "Otevřít ticket"
+
+msgid "Community"
+msgstr "Komunita"
+
+msgid "Roadmap"
+msgstr "Roadmap"
+
+msgid "Olobuild Setup"
+msgstr "Nastavení Olobuild"
+
+msgid "Olobuild — Configurazione iniziale"
+msgstr "Olobuild — Počáteční konfigurace"
+
+msgid "Configuriamo il tuo sito in pochi secondi.<br>Potrai personalizzare tutto in seguito."
+msgstr "Nakonfigurujeme web za pár sekund."
+
+msgid "Installiamo <strong>Hello Olobuild</strong> — un tema WordPress leggero e minimale, progettato per non interferire col builder. Solo ~3KB di CSS."
+msgstr "Instalujeme Hello Olobuild — minimální téma. ~3KB CSS."
+
+msgid "Installazione..."
+msgstr "Instalace..."
+
+msgid "Installazione in corso..."
+msgstr "Instalace probíhá..."
+
+msgid "Errore di connessione"
+msgstr "Chyba připojení"
+
+msgid "Riprova"
+msgstr "Zkusit znovu"
+
+msgid "Importazione..."
+msgstr "Importování..."
+
+msgid "Nessun tema importato — parti da zero!"
+msgstr "Žádné téma importováno — začněte od nuly!"
+
+msgid "Creazione template, menu, pagine..."
+msgstr "Vytváření šablon, menu, stránek..."
+
+msgid "%d template creati, homepage impostata!"
+msgstr "%d šablon vytvořeno, homepage nastavena!"
+
+msgid "Permessi insufficienti."
+msgstr "Nedostatečná oprávnění."
+
+msgid "Bundle tema non trovato nel plugin."
+msgstr "Bundle téma nenalezen."
+
+msgid "Hello Olobuild installato e attivato!"
+msgstr "Hello Olobuild nainstalováno a aktivováno!"
+
+msgid "Nessun tema selezionato."
+msgstr "Žádné téma vybráno."
+
+msgid "Configurazione iniziale disponibile"
+msgstr "Počáteční konfigurace k dispozici"
+
+msgid "Avvia configurazione"
+msgstr "Spustit konfiguraci"
+
+msgid "Benvenuto in Olobuild"
+msgstr "Vítejte v Olobuild"
+
+msgid "1. Tema WordPress"
+msgstr "1. Téma WordPress"
+
+msgid "Hello Olobuild è già attivo. Perfetto!"
+msgstr "Hello Olobuild je již aktivní. Perfektní!"
+
+msgid "Continua →"
+msgstr "Pokračovat →"
+
+msgid "Hello Olobuild è installato ma non attivo. È un tema leggero senza CSS invasivo — perfetto per Olobuild."
+msgstr "Hello Olobuild je nainstalováno, ale ne aktivní."
+
+msgid "Attiva Hello Olobuild"
+msgstr "Aktivovat Hello Olobuild"
+
+msgid "Mantieni tema attuale →"
+msgstr "Zachovat současné téma →"
+
+msgid "Installa e attiva"
+msgstr "Nainstalovat a aktivovat"
+
+msgid "Usa tema attuale →"
+msgstr "Použít současné téma →"
+
+msgid "2. Scegli un design"
+msgstr "2. Vyberte design"
+
+msgid "Seleziona un tema completo per iniziare. Include header, footer, homepage e menu — tutto personalizzabile."
+msgstr "Vyberte kompletní téma. Header, footer, homepage, menu."
+
+msgid "Vuoto"
+msgstr "Prázdný"
+
+msgid "Parti da zero"
+msgstr "Začít od nuly"
+
+msgid "Importa tema selezionato"
+msgstr "Importovat vybrané téma"
+
+msgid "✨ Tutto pronto!"
+msgstr "✨ Vše připraveno!"
+
+msgid "Il tuo sito è configurato. Puoi iniziare a personalizzare tutto dal builder visuale."
+msgstr "Web je nakonfigurován. Můžete přizpůsobit z builderu."
+
+msgid "Apri Olobuild →"
+msgstr "Otevřít Olobuild →"
+
+msgid "Vedi il sito →"
+msgstr "Zobrazit web →"
+
+msgid "Salta configurazione"
+msgstr "Přeskočit konfiguraci"

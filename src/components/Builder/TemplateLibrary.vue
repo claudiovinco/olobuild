@@ -7,6 +7,7 @@
         @click.self="close"
       >
         <div
+          ref="dialogRef"
           class="mb-bg-gray-800 mb-border mb-border-gray-600 mb-rounded-xl mb-shadow-2xl mb-w-[900px] mb-max-h-[85vh] mb-flex mb-flex-col mb-overflow-hidden"
           @click.stop
         >
@@ -272,7 +273,8 @@
 
 <script setup>
 import { t } from '@/i18n';
-import { ref, computed, nextTick } from 'vue';
+import { ref, computed, nextTick, watch } from 'vue';
+import { useFocusTrap } from '@/composables/useFocusTrap';
 import { useTilesStore } from '@/stores/tiles';
 import { useBuilderStore } from '@/stores/builder';
 import { useToast } from '@/composables/useToast.js';
@@ -806,6 +808,14 @@ function open() {
 function close() {
   visible.value = false;
 }
+
+const dialogRef = ref(null);
+const tplTrap = useFocusTrap(dialogRef, { onEscape: close });
+// Trap attivo solo quando il modale principale è aperto e nessun sotto-dialog
+// (salva/elimina/inserimento pagina) è in primo piano, così il focus può
+// raggiungere i dialog annidati.
+const _mainTrapActive = computed(() => visible.value && !saveDialogVisible.value && !deleteDialogVisible.value && pageInsertMode.value !== 'ask');
+watch(_mainTrapActive, (v) => { if (v) { nextTick(() => tplTrap.activate()); } else { tplTrap.deactivate(); } });
 
 defineExpose({ open, close, visible, openSaveDialog });
 </script>

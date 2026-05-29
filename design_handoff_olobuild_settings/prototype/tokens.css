@@ -1,0 +1,225 @@
+/**
+ * Olobuild — Design System
+ * Base tokens (colors + type) — primary brand color is the Olobuild orange
+ * (#e8622a) defined in src/assets/styles/main.scss for #olobuilder-app.
+ * Import this file first — all other stylesheets depend on these vars.
+ */
+
+/* ── Google Fonts (substitutes for missing brand fonts; see README) ─── */
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700;800&display=swap');
+
+:root {
+	/* ═══════════════════════════════════════════════════════════
+	   BRAND — Olobuild orange (warm orange), navy night shell
+	   ─────────────────────────────────────────────────────────── */
+	--ot-primary:           #e8622a;   /* core Olobuild brand orange (main.scss override) */
+	--ot-primary-bright:    #f97316;   /* CTA / accent (Tailwind orange-500) */
+	--ot-primary-hover:     #d2521e;
+	--ot-primary-dark:      #b04217;
+	--ot-primary-darker:    #6a2810;
+	--ot-primary-light:     #f29871;
+
+	/* Primary tints (derived from brand orange #e8622a) */
+	--ot-primary-50:  #fdf2ec;
+	--ot-primary-100: #fbe1d3;
+	--ot-primary-200: #f7c1a3;
+	--ot-primary-300: #f29871;
+	--ot-primary-400: #ee7e4f;
+	--ot-primary-500: #e8622a;
+	--ot-primary-600: #d4521f;
+	--ot-primary-700: #b04217;
+	--ot-primary-800: #8a3413;
+	--ot-primary-900: #6a2810;
+	--ot-primary-950: #3d1607;
+
+	/* Navy — the sidebar / chrome / login background */
+	--ot-navy:       #0f172a;   /* slate-900 */
+	--ot-navy-hover: #1e293b;   /* slate-800 */
+	--ot-navy-dark:  #020617;   /* slate-950 */
+	--ot-navy-light: #334155;   /* slate-700 */
+	--ot-slate-200:  #e2e8f0;
+	--ot-slate-300:  #cbd5e1;
+
+	/* ═══════════════════════════════════════════════════════════
+	   NEUTRALS — Slate-based grays
+	   ─────────────────────────────────────────────────────────── */
+	--ot-bg:         #f8fafc;   /* app background (slate-50) */
+	--ot-bg-soft:    #f9fafb;
+	--ot-bg-softer:  #f3f4f6;
+	--ot-bg-muted:   #f1f5f9;
+	--ot-card:       #ffffff;
+	--ot-surface:    #ffffff;
+	--ot-surface-alt:#f3f4f6;
+
+	--ot-text:        #1e293b;  /* slate-800 */
+	--ot-text-strong: #111827;
+	--ot-text-soft:   #374151;
+	--ot-text-muted:  #64748b;  /* slate-500 */
+	--ot-text-subtle: #6b7280;
+	--ot-text-light:  #94a3b8;
+	--ot-text-faint:  #9ca3af;
+	--ot-text-on-primary: #ffffff;
+
+	--ot-border:        #e2e8f0;
+	--ot-border-light:  #f1f5f9;
+	--ot-border-strong: #d1d5db;
+	--ot-border-focus:  #e8622a;
+
+	/* ═══════════════════════════════════════════════════════════
+	   SEMANTIC — Status colors
+	   ─────────────────────────────────────────────────────────── */
+	--ot-success:      #22c55e;
+	--ot-success-dark: #15803d;
+	--ot-success-soft: #dcfce7;
+	--ot-success-50:   #f0fdf4;
+
+	--ot-warning:      #f59e0b;
+	--ot-warning-dark: #b45309;
+	--ot-warning-soft: #fef3c7;
+	--ot-warning-50:   #fffbeb;
+
+	--ot-danger:       #ef4444;
+	--ot-danger-dark:  #b91c1c;
+	--ot-danger-soft:  #fee2e2;
+	--ot-danger-50:    #fef2f2;
+
+	--ot-info:         #3b82f6;
+	--ot-info-dark:    #1d4ed8;
+	--ot-info-soft:    #dbeafe;
+	--ot-info-50:      #eff6ff;
+
+	/* ═══════════════════════════════════════════════════════════
+	   TYPOGRAPHY
+	   ─────────────────────────────────────────────────────────── */
+	--ot-font-sans:    'Work Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+	--ot-font-display: 'Playfair Display', Georgia, serif;
+	--ot-font-mono:    ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+
+	--ot-font-xs:   11px;
+	--ot-font-sm:   13px;
+	--ot-font-base: 14px;
+	--ot-font-md:   15px;
+	--ot-font-lg:   16px;
+	--ot-font-xl:   18px;
+	--ot-font-2xl:  22px;
+	--ot-font-3xl:  28px;
+	--ot-font-4xl:  36px;
+
+	--ot-line-tight:   1.2;
+	--ot-line-snug:    1.35;
+	--ot-line-normal:  1.5;
+	--ot-line-relaxed: 1.7;
+
+	/* ═══════════════════════════════════════════════════════════
+	   SPACING (8pt grid, with 4px half-steps)
+	   ─────────────────────────────────────────────────────────── */
+	--ot-space-xs:  4px;
+	--ot-space-sm:  8px;
+	--ot-space-md:  12px;
+	--ot-space-lg:  16px;
+	--ot-space-xl:  20px;
+	--ot-space-2xl: 24px;
+	--ot-space-3xl: 32px;
+	--ot-space-4xl: 48px;
+	--ot-space-5xl: 64px;
+
+	/* ── Radii ── */
+	--ot-radius-xs:   4px;
+	--ot-radius-sm:   6px;
+	--ot-radius:      8px;
+	--ot-radius-lg:   12px;
+	--ot-radius-xl:   16px;
+	--ot-radius-2xl:  24px;
+	--ot-radius-full: 9999px;
+
+	/* ── Shadows ── */
+	--ot-shadow-xs:  0 1px 2px rgba(16,24,40,.05);
+	--ot-shadow-sm:  0 1px 2px rgba(0,0,0,.04);
+	--ot-shadow:     0 2px 8px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+	--ot-shadow-md:  0 4px 12px rgba(16,24,40,.08), 0 2px 4px rgba(16,24,40,.06);
+	--ot-shadow-lg:  0 8px 32px rgba(0,0,0,.10);
+	--ot-shadow-xl:  0 24px 64px rgba(0,0,0,.15);
+	--ot-shadow-focus: 0 0 0 3px rgba(232,98,42,.30);
+
+	/* ── Layout ── */
+	--ot-sidebar-w:  280px;
+	--ot-topbar-h:   56px;
+
+	/* ── Motion ── */
+	--ot-ease-out:    cubic-bezier(0.25, 0.46, 0.45, 0.94);
+	--ot-ease-in-out: cubic-bezier(0.42, 0, 0.58, 1);
+	--ot-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+	--ot-ease-std:    cubic-bezier(.4, 0, .2, 1);
+	--ot-dur-fast:    0.15s;
+	--ot-dur-base:    0.25s;
+	--ot-dur-slow:    0.4s;
+	--ot-transition:  all .2s cubic-bezier(.4, 0, .2, 1);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   SEMANTIC TYPOGRAPHY — drop-in classes / element defaults
+   ═══════════════════════════════════════════════════════════════════ */
+.ot-display,
+h1.ot-display {
+	font-family: var(--ot-font-display);
+	font-weight: 700;
+	font-size: var(--ot-font-4xl);
+	line-height: var(--ot-line-tight);
+	letter-spacing: 0.5px;
+	color: var(--ot-text-strong);
+	margin: 0;
+}
+.ot-h1, .ot-page-title {
+	font-family: var(--ot-font-sans);
+	font-weight: 700;
+	font-size: var(--ot-font-3xl);
+	line-height: var(--ot-line-tight);
+	color: var(--ot-text);
+	margin: 0 0 var(--ot-space-sm);
+}
+.ot-h2 {
+	font-family: var(--ot-font-sans);
+	font-weight: 700;
+	font-size: var(--ot-font-2xl);
+	line-height: var(--ot-line-snug);
+	color: var(--ot-text);
+}
+.ot-h3 {
+	font-family: var(--ot-font-sans);
+	font-weight: 600;
+	font-size: var(--ot-font-xl);
+	line-height: var(--ot-line-snug);
+	color: var(--ot-text);
+}
+.ot-h4 {
+	font-family: var(--ot-font-sans);
+	font-weight: 600;
+	font-size: var(--ot-font-lg);
+	color: var(--ot-text);
+}
+.ot-body, p.ot-body {
+	font-family: var(--ot-font-sans);
+	font-weight: 400;
+	font-size: var(--ot-font-base);
+	line-height: var(--ot-line-normal);
+	color: var(--ot-text);
+}
+.ot-small, .ot-page-desc {
+	font-size: var(--ot-font-sm);
+	color: var(--ot-text-muted);
+	line-height: var(--ot-line-normal);
+}
+.ot-eyebrow, .ot-table-th {
+	font-size: var(--ot-font-xs);
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: .05em;
+	color: var(--ot-text-muted);
+}
+.ot-mono, code {
+	font-family: var(--ot-font-mono);
+	font-size: .92em;
+	background: var(--ot-bg-muted);
+	padding: 2px 6px;
+	border-radius: var(--ot-radius-sm);
+}

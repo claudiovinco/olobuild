@@ -12,6 +12,7 @@ class Olo_LiveSearch_Tile extends Olo_Tile_Base {
     protected $category = 'navigation';
 
     protected $defaults = [
+        'preset' => 'custom',
         'placeholder'          => 'Cerca...',
         'mode'                 => 'expanded',
         'min_chars'            => '2',
@@ -357,7 +358,7 @@ class Olo_LiveSearch_Tile extends Olo_Tile_Base {
         </style>
         <?php endif; ?>
         <div id="<?php echo esc_attr( $element_id ); ?>"
-             class="olo-livesearch olo-livesearch--<?php echo esc_attr( $mode ); ?>"
+             class="olo-livesearch olo-livesearch--<?php echo esc_attr( $mode ); ?> olo-ls-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>"
              data-livesearch="<?php echo esc_attr( $config_b64 ); ?>"
              style="<?php echo $css_vars; ?>">
 

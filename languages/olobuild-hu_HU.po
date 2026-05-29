@@ -1,0 +1,2160 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: mosaic (__plugin:olobuild)\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-21 09:39+0000\n"
+"PO-Revision-Date: 2026-05-21 09:39+0000\n"
+"Last-Translator: \n"
+"Language-Team: hu_HU\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: hu_HU\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Olo Lang 3.15.3\n"
+
+msgid "Permessi Utente"
+msgstr "Felhasználói jogosultságok"
+
+msgid "Permessi & Ruoli"
+msgstr "Jogosultságok & Szerepek"
+
+msgid "%1$s ruoli con accesso completo · %2$s ruoli design-only"
+msgstr "%1$s teljes hozzáférésű szerep · %2$s csak design"
+
+msgid "Livelli di Accesso"
+msgstr "Hozzáférési szintek"
+
+msgid "Assegna un livello di accesso per ciascun ruolo WordPress"
+msgstr "Rendeljen hozzáférési szintet minden WP szerephez"
+
+msgid "Ruolo"
+msgstr "Ruolo"
+
+msgid "Accesso completo"
+msgstr "Teljes hozzáférés"
+
+msgid "Solo design"
+msgstr "Csak design"
+
+msgid "Solo contenuti"
+msgstr "Csak tartalom"
+
+msgid "Nessun accesso"
+msgstr "Nincs hozzáférés"
+
+msgid "Completo:"
+msgstr "Teljes:"
+
+msgid "struttura + design + contenuti"
+msgstr "struktúra + design + tartalom"
+
+msgid "Design:"
+msgstr "Design:"
+
+msgid "stili e layout"
+msgstr "stílusok és elrendezés"
+
+msgid "Contenuti:"
+msgstr "Tartalom:"
+
+msgid "solo testo e immagini"
+msgstr "csak szöveg és képek"
+
+msgid "Salva Permessi"
+msgstr "Jogosultságok mentése"
+
+msgid "Dati non validi"
+msgstr "Érvénytelen adatok"
+
+msgid "Popup Globali"
+msgstr "Globális popup-ok"
+
+msgid "%1$s popup configurati · %2$s attivi · trigger automatici per condizioni di visualizzazione"
+msgstr "%1$s konfigurált popup · %2$s aktív"
+
+msgid "Nessun popup configurato"
+msgstr "Nincs konfigurált popup"
+
+msgid "Attivo"
+msgstr "Attivo"
+
+msgid "Disattivato"
+msgstr "Deaktiválva"
+
+msgid "Popup"
+msgstr "Popup"
+
+msgid "Rimuovi"
+msgstr "Rimuovi"
+
+msgid "Nome popup"
+msgstr "Popup neve"
+
+msgid "Template"
+msgstr "Sablon"
+
+msgid "Seleziona"
+msgstr "Választ"
+
+msgid "Trigger"
+msgstr "Trigger"
+
+msgid "Frequenza"
+msgstr "Gyakoriság"
+
+msgid "Condizioni"
+msgstr "Feltételek"
+
+msgid "OR (almeno una)"
+msgstr "OR (legalább egy)"
+
+msgid "AND (tutte)"
+msgstr "AND (mind)"
+
+msgid "Condizione"
+msgstr "Feltétel"
+
+msgid "NON"
+msgstr "NEM"
+
+msgid "Valore (ID, slug)"
+msgstr "Érték (ID, slug)"
+
+msgid "Aggiungi Popup"
+msgstr "Popup hozzáadása"
+
+msgid "Salva Tutto"
+msgstr "Mind mentése"
+
+msgid "Popup salvati con successo!"
+msgstr "Popup-ok mentve!"
+
+msgid "Errore"
+msgstr "Errore"
+
+msgid "Caricamento pagina"
+msgstr "Oldal betöltése"
+
+msgid "Scroll %"
+msgstr "Görgetés %"
+
+msgid "Exit Intent"
+msgstr "Exit Intent"
+
+msgid "Timer"
+msgstr "Időzítő"
+
+msgid "Inattività"
+msgstr "Inaktivitás"
+
+msgid "Sempre"
+msgstr "Sempre"
+
+msgid "1 volta per sessione"
+msgstr "1x munkamenetenként"
+
+msgid "1 volta al giorno"
+msgstr "1x naponta"
+
+msgid "1 volta a settimana"
+msgstr "1x hetente"
+
+msgid "Solo 1 volta"
+msgstr "Csak 1x"
+
+msgid "Tutto il sito"
+msgstr "Egész webhely"
+
+msgid "Homepage"
+msgstr "Főoldal"
+
+msgid "Pagina specifica"
+msgstr "Adott oldal"
+
+msgid "Articolo specifico"
+msgstr "Adott bejegyzés"
+
+msgid "Tipo contenuto"
+msgstr "Tartalom típus"
+
+msgid "Archivio"
+msgstr "Archívum"
+
+msgid "Categoria"
+msgstr "Categoria"
+
+msgid "Utente loggato"
+msgstr "Bejelentkezett"
+
+msgid "Utente non loggato"
+msgstr "Nem bejelentkezett"
+
+msgid "Desktop"
+msgstr "Asztali"
+
+msgid "Mobile"
+msgstr "Mobil"
+
+msgid "Pagina 404"
+msgstr "404 oldal"
+
+msgid "Ricerca"
+msgstr "Keresés"
+
+msgid "JavaScript richiesto."
+msgstr "JavaScript szükséges."
+
+msgid "Performance"
+msgstr "Teljesítmény"
+
+msgid "Critical CSS"
+msgstr "Critical CSS"
+
+msgid "Asset Optimizer"
+msgstr "Asset Optimizer"
+
+msgid "Performance Hints"
+msgstr "Teljesítmény tippek"
+
+msgid "Head Cleanup"
+msgstr "Head tisztítás"
+
+msgid "Critical CSS: %1$s pagine generate · Cache CSS: %2$s"
+msgstr "Critical CSS: %1$s oldal · CSS cache: %2$s"
+
+msgid "Salva impostazioni"
+msgstr "Beállítások mentése"
+
+msgid "Off"
+msgstr "Ki"
+
+msgid "Rigenerazione in corso..."
+msgstr "Regenerálás folyamatban..."
+
+msgid "Svuotare tutta la cache Critical CSS?"
+msgstr "Törli a teljes Critical CSS cache-t?"
+
+msgid "Svuotare la cache CSS? I file verranno rigenerati automaticamente."
+msgstr "Törli a CSS cache-t? Automatikusan újragenerálódik."
+
+msgid "Rigenerato %d su %d pagine (%d errori)"
+msgstr "Újragenerálva %d/%d (%d hiba)"
+
+msgid "Svuotati %d transient Critical CSS"
+msgstr "%d transient törölve"
+
+msgid "Cache CSS svuotata. I file verranno rigenerati al prossimo caricamento."
+msgstr "CSS cache törölve."
+
+msgid "Genera automaticamente il CSS above-the-fold e lo inietta inline nel <head>. Il foglio di stile principale viene caricato in modo asincrono."
+msgstr "Automatikusan generálja az above-the-fold CSS-t."
+
+msgid "Abilita Critical CSS"
+msgstr "Critical CSS engedélyezése"
+
+msgid "Migliora FCP e LCP inlinando il CSS critico e deferendo il resto."
+msgstr "Javítja az FCP és LCP-t."
+
+msgid "Durata cache"
+msgstr "Cache időtartam"
+
+msgid "Il CSS critico viene rigenerato automaticamente alla scadenza. Invalidato quando salvi un template."
+msgstr "Critical CSS lejáratkor újragenerálódik."
+
+msgid "giorni"
+msgstr "giorni"
+
+msgid "Sezioni above-the-fold"
+msgstr "Above-the-fold szakaszok"
+
+msgid "Quante sezioni del template analizzare per il CSS critico. 2 è il valore consigliato."
+msgstr "Hány szakaszt elemezni. 2 ajánlott."
+
+msgid "Stato cache"
+msgstr "Cache állapot"
+
+msgid "Stato"
+msgstr "Stato"
+
+msgid "Pagine in cache"
+msgstr "Cache-elt oldalak"
+
+msgid "Mai"
+msgstr "Mai"
+
+msgid "Ultima generazione"
+msgstr "Utolsó generálás"
+
+msgid "Rigenera tutto"
+msgstr "Mind újragenerálása"
+
+msgid "Svuota cache"
+msgstr "Cache törlése"
+
+msgid "Ottimizzazione Asset"
+msgstr "Asset optimalizálás"
+
+msgid "Controlla come vengono caricati JavaScript e CSS nel frontend."
+msgstr "Vezérli a frontend JS és CSS betöltését."
+
+msgid "Defer JavaScript"
+msgstr "JS késleltetés"
+
+msgid "Aggiunge l'attributo defer agli script frontend di Olobuild. Non blocca il rendering della pagina."
+msgstr "Defer attribútumot ad a szkriptekhez."
+
+msgid "Cache CSS su file"
+msgstr "CSS cache fájlba"
+
+msgid "Salva il CSS generato dai template come file statici invece di iniettarlo inline. Migliora il caching del browser."
+msgstr "CSS-t statikus fájlokként menti. Javítja a böngésző cache-ét."
+
+msgid "Minifica CSS"
+msgstr "CSS minifikálás"
+
+msgid "Rimuove commenti, spazi e newline dal CSS generato."
+msgstr "Eltávolítja a kommenteket, szóközöket."
+
+msgid "Cache CSS"
+msgstr "CSS cache"
+
+msgid "File in cache"
+msgstr "Cache-elt fájlok"
+
+msgid "Dimensione totale"
+msgstr "Teljes méret"
+
+msgid "Svuota cache CSS"
+msgstr "CSS cache törlése"
+
+msgid "Resource Hints"
+msgstr "Resource Hints"
+
+msgid "Suggerimenti al browser per precaricare risorse e velocizzare il caricamento."
+msgstr "Tippek a böngészőnek a preload-hoz."
+
+msgid "DNS Prefetch & Preconnect"
+msgstr "DNS Prefetch & Preconnect"
+
+msgid "Aggiunge dns-prefetch e preconnect per Google Fonts, YouTube, Vimeo e altri domini esterni."
+msgstr "Hozzáadja a dns-prefetch és preconnect-et."
+
+msgid "Preload font"
+msgstr "Betűtípus preload"
+
+msgid "Precarica i font custom usati come body/heading per evitare FOUT (Flash of Unstyled Text)."
+msgstr "Egyedi betűtípusok preload-ja."
+
+msgid "Video facade"
+msgstr "Videó facade"
+
+msgid "Mostra un'anteprima statica dei video YouTube/Vimeo. L'iframe si carica solo al click. Risparmia ~500KB per video."
+msgstr "YouTube/Vimeo statikus előnézet."
+
+msgid "fetchpriority hero image"
+msgstr "fetchpriority hero kép"
+
+msgid "Aggiunge fetchpriority=\"high\" alla prima immagine della pagina e rimuove lazy loading dagli elementi above-fold."
+msgstr "fetchpriority=\"high\" hozzáadása hero képhez."
+
+msgid "Lazy loading immagini"
+msgstr "Lazy képbetöltés"
+
+msgid "Aggiunge loading=\"lazy\" alle immagini below-the-fold. Riduce il peso iniziale della pagina."
+msgstr "loading=\"lazy\" hozzáadása képekhez."
+
+msgid "Domini personalizzati"
+msgstr "Egyedi domének"
+
+msgid "Aggiungi domini per dns-prefetch e preconnect personalizzati (uno per riga, con https://)."
+msgstr "Adjon hozzá domén-eket dns-prefetch-hez."
+
+msgid "DNS Prefetch"
+msgstr "DNS Prefetch"
+
+msgid "Risolve il DNS in anticipo. Utile per CDN e servizi esterni."
+msgstr "Előre feloldja a DNS-t."
+
+msgid "Preconnect"
+msgstr "Preconnect"
+
+msgid "Apre connessione completa (DNS + TCP + TLS). Più aggressivo del dns-prefetch, usare solo per risorse critiche."
+msgstr "Teljes kapcsolat megnyitása."
+
+msgid "Pulizia head"
+msgstr "Head tisztítás"
+
+msgid "Rimuovi risorse non necessarie dal <head> per ridurre richieste e peso della pagina."
+msgstr "Felesleges erőforrások eltávolítása."
+
+msgid "Rimuovi jQuery Migrate"
+msgstr "jQuery Migrate eltávolítása"
+
+msgid "Rimuove jquery-migrate.js (~10KB). Necessario solo per compatibilità con plugin molto vecchi."
+msgstr "Eltávolítja a jquery-migrate.js-t."
+
+msgid "Rimuovi emoji scripts"
+msgstr "Emoji szkriptek eltávolítása"
+
+msgid "Rimuove wp-emoji-release.min.js e relativi stili inline. I browser moderni supportano emoji nativamente."
+msgstr "Eltávolítja a wp-emoji-release.min.js-t."
+
+msgid "Rimuovi Block CSS"
+msgstr "Block CSS eltávolítása"
+
+msgid "Rimuove wp-block-library-css (~30KB). Attiva solo se non usi blocchi Gutenberg nel frontend."
+msgstr "Eltávolítja a wp-block-library-css-t."
+
+msgid "Rimuovi Classic Theme CSS"
+msgstr "Classic Theme CSS eltávolítása"
+
+msgid "Rimuove classic-theme-styles-css. Inutile se non usi un tema classico."
+msgstr "Eltávolítja a classic-theme-styles-css-t."
+
+msgid "Analytics"
+msgstr "Analitika"
+
+msgid "Provider"
+msgstr "Szolgáltató"
+
+msgid "Eventi"
+msgstr "Események"
+
+msgid "Impostazioni"
+msgstr "Beállítások"
+
+msgid "Script personalizzati"
+msgstr "Egyedi szkriptek"
+
+msgid "%1$s provider attivi · %2$s eventi tracciati · %3$s blocchi script custom"
+msgstr "%1$s aktív szolgáltató · %2$s esemény · %3$s szkript"
+
+msgid "Analytics & Tracking"
+msgstr "Analitika & Követés"
+
+msgid "Measurement ID di GA4. Lo trovi in Amministrazione &rarr; Flussi di dati."
+msgstr "GA4 Measurement ID. Adminisztráció → Adatfolyamok."
+
+msgid "Container ID di GTM. Se usi GTM per gestire GA4, non inserire anche il Measurement ID sopra."
+msgstr "GTM Container ID. Ne adja meg a Measurement ID-t is."
+
+msgid "Pixel ID di Meta/Facebook. Lo trovi in Events Manager &rarr; Impostazioni."
+msgstr "Meta/FB Pixel ID. Events Manager-ben."
+
+msgid "Project ID di Clarity. Heatmap e session recording gratuiti."
+msgstr "Clarity Project ID. Ingyenes heatmap és felvételek."
+
+msgid "Site ID di Hotjar. Lo trovi in Settings &rarr; Sites & Organizations."
+msgstr "Hotjar Site ID."
+
+msgid "Click sui pulsanti"
+msgstr "Kattintások a gombokra"
+
+msgid "Invio form"
+msgstr "Űrlap küldés"
+
+msgid "Riproduzione video"
+msgstr "Videó lejátszás"
+
+msgid "Profondità di scroll"
+msgstr "Görgetési mélység"
+
+msgid "Click su pricing CTA"
+msgstr "Pricing CTA kattintás"
+
+msgid "Download file"
+msgstr "Fájl letöltés"
+
+msgid "Link esterni"
+msgstr "Külső linkek"
+
+msgid "Richiedi consenso cookie"
+msgstr "Cookie hozzájárulás"
+
+msgid "Blocca gli script di tracking finché l'utente non accetta i cookie analitici/marketing dal banner Cookie Consent. Richiesto per GDPR."
+msgstr "Blokkolja a tracking szkripteket a hozzájárulásig."
+
+msgid "Anonimizza IP"
+msgstr "IP anonimizálása"
+
+msgid "GA4 anonimizza l'IP di default, ma questa opzione aggiunge il parametro esplicito per conformità."
+msgstr "GA4 alapból anonimizál."
+
+msgid "Rispetta Do Not Track"
+msgstr "DNT tiszteletben tartása"
+
+msgid "Non caricare gli script se il browser invia l'header Do Not Track."
+msgstr "Ne tölts szkriptet, ha DNT van."
+
+msgid "Escludi amministratori"
+msgstr "Adminok kizárása"
+
+msgid "Non tracciare le visite degli utenti con ruolo Amministratore."
+msgstr "Ne kövesse az admin látogatásokat."
+
+msgid "Non configurato"
+msgstr "Nincs konfigurálva"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Auto-tracking eventi"
+msgstr "Esemény auto-tracking"
+
+msgid "Scegli quali eventi tracciare automaticamente. Vengono inviati a tutti i provider configurati."
+msgstr "Válassza ki az auto-követett eseményeket."
+
+msgid "Parametri eventi"
+msgstr "Esemény paraméterek"
+
+msgid "Configura i dettagli degli eventi di scroll e download."
+msgstr "Konfigurálja a scroll/download részleteket."
+
+msgid "Milestone scroll (%)"
+msgstr "Görgetési mérföldkövek (%)"
+
+msgid "Percentuali di scroll a cui inviare un evento (separate da virgola)."
+msgstr "Görgetési %-ok (vesszővel)."
+
+msgid "Estensioni download"
+msgstr "Letöltés kiterjesztések"
+
+msgid "Estensioni file da tracciare come download (separate da virgola)."
+msgstr "Fájl kiterjesztések (vesszővel)."
+
+msgid "Privacy e conformità"
+msgstr "Adatvédelem és megfelelőség"
+
+msgid "Opzioni di privacy, GDPR e gestione del consenso."
+msgstr "Adatvédelem, GDPR és hozzájárulás."
+
+msgid "Inserisci script di tracking aggiuntivi. Verranno bloccati dal consenso cookie se abilitato."
+msgstr "Adjon hozzá tracking szkripteket."
+
+msgid "Script nel <head>"
+msgstr "Szkriptek a <head>-ben"
+
+msgid "Inseriti prima della chiusura di </head>. Utile per snippet di tracking non supportati nativamente."
+msgstr "A </head> előtt beillesztve."
+
+msgid "Script nel <body>"
+msgstr "Szkriptek a <body>-ban"
+
+msgid "Inseriti prima della chiusura di </body>."
+msgstr "A </body> előtt beillesztve."
+
+msgid "Vai al contenuto principale"
+msgstr "Ugrás a fő tartalomhoz"
+
+msgid "Riproduci video"
+msgstr "Videó lejátszása"
+
+msgid "Redirect & 404"
+msgstr "Átirányítás & 404"
+
+msgid "Redirect"
+msgstr "Átirányítás"
+
+msgid "Monitor 404"
+msgstr "404 figyelő"
+
+msgid "%1$s redirect attivi · %2$s pagine 404 da gestire"
+msgstr "%1$s aktív átirányítás · %2$s 404 oldal"
+
+msgid "%s redirect attivi · nessun 404 da gestire"
+msgstr "%s aktív átirányítás · nincs 404"
+
+msgid "Prefisso <code>~</code> per regex. Es: <code>~/vecchio/(.*)</code> &rarr; <code>/nuovo/$1</code>"
+msgstr "~ előtag regexhez."
+
+msgid "Aggiungi Redirect"
+msgstr "Átirányítás hozzáadása"
+
+msgid "Da URL"
+msgstr "URL-től"
+
+msgid "Percorso relativo o regex con prefisso ~"
+msgstr "Relatív útvonal vagy regex"
+
+msgid "A URL"
+msgstr "URL-re"
+
+msgid "Percorso relativo o URL assoluto"
+msgstr "Relatív útvonal vagy abszolút URL"
+
+msgid "Tipo"
+msgstr "Típus"
+
+msgid "301 — Permanente (consigliato)"
+msgstr "301 — Állandó (ajánlott)"
+
+msgid "302 — Temporaneo"
+msgstr "302 — Ideiglenes"
+
+msgid "307 — Temporaneo (strict)"
+msgstr "307 — Ideiglenes (strict)"
+
+msgid "410 — Risorsa rimossa (Gone)"
+msgstr "410 — Eltávolítva"
+
+msgid "Cookie Consent"
+msgstr "Cookie Consent"
+
+msgid "Generale"
+msgstr "Általános"
+
+msgid "Testi"
+msgstr "Szövegek"
+
+msgid "Aspetto"
+msgstr "Megjelenés"
+
+msgid "Categorie"
+msgstr "Kategóriák"
+
+msgid "Blocco Script"
+msgstr "Szkriptek blokkolása"
+
+msgid "Dichiarazione Cookie"
+msgstr "Cookie nyilatkozat"
+
+msgid "Log Consensi"
+msgstr "Hozzájárulási napló"
+
+msgid "Banner attivo · GDPR-compliant · log consensi tracciato."
+msgstr "Banner aktív · GDPR · napló."
+
+msgid "Banner disattivato. Configura testi, aspetto e categorie cookie per attivarlo."
+msgstr "Banner kikapcsolva."
+
+msgid "%d consensi registrati. Il GDPR richiede di poter dimostrare il consenso raccolto."
+msgstr "%d rögzített hozzájárulás."
+
+msgid "Svuotare tutti i log dei consensi?"
+msgstr "Törli az összes hozzájárulási naplót?"
+
+msgid "Questo contenuto richiede il consenso ai cookie"
+msgstr "Ehhez a tartalomhoz cookie hozzájárulás kell"
+
+msgid "Accetta e carica"
+msgstr "Elfogad és betölt"
+
+msgid "Gestisci cookie"
+msgstr "Cookie-k kezelése"
+
+msgid "Impostazioni generali"
+msgstr "Általános beállítások"
+
+msgid "Configura il comportamento del cookie banner"
+msgstr "Cookie banner viselkedése"
+
+msgid "Abilita Cookie Banner"
+msgstr "Cookie banner engedélyezése"
+
+msgid "Layout"
+msgstr "Elrendezés"
+
+msgid "Barra"
+msgstr "Sáv"
+
+msgid "Box laterale"
+msgstr "Oldalsó doboz"
+
+msgid "Full-width"
+msgstr "Teljes szélességű"
+
+msgid "Posizione"
+msgstr "Pozíció"
+
+msgid "In basso"
+msgstr "Lent"
+
+msgid "In alto"
+msgstr "Fent"
+
+msgid "Mostra \"Rifiuta tutti\""
+msgstr "Mutasd \"Mind elutasít\""
+
+msgid "Richiesto dalle linee guida CNIL/Garante Privacy italiano."
+msgstr "Az olasz adatvédelmi szabályozás megköveteli."
+
+msgid "Mostra \"Personalizza\""
+msgstr "Mutasd \"Testreszabás\""
+
+msgid "Pulsante per aprire il pannello preferenze con le categorie."
+msgstr "Gomb a beállítási panelhez."
+
+msgid "Durata consenso"
+msgstr "Hozzájárulás időtartama"
+
+msgid "GDPR raccomanda max 6 mesi (180 giorni). Molti usano 365."
+msgstr "GDPR max 6 hónapot javasol."
+
+msgid "Richiedere nuovamente dopo"
+msgstr "Újrakérdezés"
+
+msgid "Se la cookie policy cambia, puoi forzare la ripresentazione del banner."
+msgstr "Policy változáskor újra megjelenik."
+
+msgid "giorni (0 = mai)"
+msgstr "nap (0 = soha)"
+
+msgid "Google Consent Mode v2"
+msgstr "Google Consent Mode v2"
+
+msgid "Invia segnali gtag(\"consent\") a Google. Richiesto da Google Ads dal marzo 2024 per EEA/UK."
+msgstr "gtag(\"consent\") jeleket küld a Google-nek."
+
+msgid "Blocco iframe"
+msgstr "iframe blokkolás"
+
+msgid "Blocca iframe di YouTube, Vimeo, Google Maps fino al consenso. Mostra un placeholder con pulsante \"Carica contenuto\"."
+msgstr "Blokkolja az iframe-eket hozzájárulásig."
+
+msgid "Versione banner"
+msgstr "Banner verzió"
+
+msgid "Incrementa quando cambi la cookie policy. I visitatori con consenso a una versione precedente vedranno di nuovo il banner."
+msgstr "Növelje a cookie policy változásakor."
+
+msgid "Testi del banner"
+msgstr "Banner szövegek"
+
+msgid "Personalizza i testi mostrati nel cookie banner"
+msgstr "Testreszabhatja a banner szövegeit"
+
+msgid "Titolo"
+msgstr "Cím"
+
+msgid "Messaggio"
+msgstr "Üzenet"
+
+msgid "Pulsante \"Accetta tutti\""
+msgstr "\"Mind elfogadom\" gomb"
+
+msgid "Pulsante \"Rifiuta tutti\""
+msgstr "\"Mind elutasít\" gomb"
+
+msgid "Pulsante \"Personalizza\""
+msgstr "\"Testreszabás\" gomb"
+
+msgid "Pulsante \"Salva preferenze\""
+msgstr "\"Beállítások mentése\" gomb"
+
+msgid "Link policy"
+msgstr "Policy linkek"
+
+msgid "URL e testi dei link alle pagine di policy"
+msgstr "URL és linkszövegek a policy oldalakhoz"
+
+msgid "URL Privacy Policy"
+msgstr "Adatvédelmi szabályzat URL"
+
+msgid "Testo link Privacy"
+msgstr "Adatvédelem link szöveg"
+
+msgid "URL Cookie Policy"
+msgstr "Cookie szabályzat URL"
+
+msgid "Testo link Cookie Policy"
+msgstr "Cookie szabályzat link szöveg"
+
+msgid "Colori banner"
+msgstr "Banner színek"
+
+msgid "Sfondo e testo del cookie banner"
+msgstr "Banner háttér és szöveg"
+
+msgid "Sfondo banner"
+msgstr "Banner háttér"
+
+msgid "Colore testo"
+msgstr "Szövegszín"
+
+msgid "Colori pulsanti"
+msgstr "Gombszínek"
+
+msgid "Personalizza i colori dei pulsanti \"Accetta\" e \"Rifiuta\""
+msgstr "Gombok színeinek testreszabása"
+
+msgid "Pulsante primario — sfondo"
+msgstr "Elsődleges gomb — háttér"
+
+msgid "Pulsante primario — testo"
+msgstr "Elsődleges gomb — szöveg"
+
+msgid "Pulsante secondario — sfondo"
+msgstr "Másodlagos gomb — háttér"
+
+msgid "Pulsante secondario — testo"
+msgstr "Másodlagos gomb — szöveg"
+
+msgid "Stile"
+msgstr "Stílus"
+
+msgid "Overlay e border radius del banner"
+msgstr "Overlay és border radius"
+
+msgid "Overlay scuro"
+msgstr "Sötét overlay"
+
+msgid "Oscura la pagina dietro il banner per attirare l'attenzione."
+msgstr "Sötétíti az oldalt a figyelemfelhívásért."
+
+msgid "Border radius"
+msgstr "Border radius"
+
+msgid "Categorie cookie"
+msgstr "Cookie kategóriák"
+
+msgid "Personalizza nome e descrizione di ogni categoria mostrata nel pannello preferenze."
+msgstr "Testreszabhatja a kategóriák nevét és leírását."
+
+msgid "Sempre attivo"
+msgstr "Mindig aktív"
+
+msgid "Etichetta"
+msgstr "Etichetta"
+
+msgid "Descrizione"
+msgstr "Descrizione"
+
+msgid "Blocco automatico script"
+msgstr "Szkriptek automatikus blokkolása"
+
+msgid "Blocca automaticamente script di terze parti finché l'utente non accetta la categoria corrispondente."
+msgstr "Automatikusan blokkolja a 3rd party szkripteket."
+
+msgid "Abilita auto-blocco"
+msgstr "Auto-blokkolás engedélyezése"
+
+msgid "Converte gli script corrispondenti in type=\"text/plain\" finché il consenso non è dato."
+msgstr "type=\"text/plain\"-re alakítja a szkripteket."
+
+msgid "Pattern da bloccare"
+msgstr "Blokkolandó minták"
+
+msgid "Un dominio/pattern per riga. Gli script il cui src contiene uno di questi pattern vengono bloccati."
+msgstr "Egy domén/minta soronként."
+
+msgid "Blocco manuale"
+msgstr "Kézi blokkolás"
+
+msgid "Puoi anche bloccare script manualmente nel tuo HTML aggiungendo:"
+msgstr "Kézzel is blokkolhat HTML-ben:"
+
+msgid "Dichiarazione cookie"
+msgstr "Cookie nyilatkozat"
+
+msgid "Elenca i cookie utilizzati dal sito. Questi vengono mostrati nel pannello preferenze."
+msgstr "A használt cookie-k listája."
+
+msgid "Nome cookie"
+msgstr "Cookie név"
+
+msgid "Scopo"
+msgstr "Cél"
+
+msgid "Scadenza"
+msgstr "Lejárat"
+
+msgid "Aggiungi cookie"
+msgstr "Cookie hozzáadása"
+
+msgid "Log dei consensi"
+msgstr "Hozzájárulási napló"
+
+msgid "Esporta CSV"
+msgstr "Esporta CSV"
+
+msgid "Svuota log"
+msgstr "Napló törlése"
+
+msgid "ID Consenso"
+msgstr "Hozzájárulás ID"
+
+msgid "Data"
+msgstr "Data"
+
+msgid "Azione"
+msgstr "Művelet"
+
+msgid "Ver."
+msgstr "Ver."
+
+msgid "IP (hash)"
+msgstr "IP (hash)"
+
+msgid "Categorie accettate"
+msgstr "Elfogadott kategóriák"
+
+msgid "User Agent"
+msgstr "User Agent"
+
+msgid "Nessun consenso registrato."
+msgstr "Nincs rögzített hozzájárulás."
+
+msgid "Preferenze cookie"
+msgstr "Cookie beállítások"
+
+msgid "Chiudi"
+msgstr "Chiudi"
+
+msgid "Scegli quali categorie di cookie accettare. Puoi modificare le tue preferenze in qualsiasi momento."
+msgstr "Válassza ki az elfogadott cookie kategóriákat."
+
+msgid "Dettaglio cookie utilizzati"
+msgstr "Használt cookie-k részletei"
+
+msgid "Cookie"
+msgstr "Cookie"
+
+msgid "WooCommerce"
+msgstr "WooCommerce"
+
+msgid "Template WooCommerce"
+msgstr "WooCommerce sablonok"
+
+msgid "Override Olobuild attivi su %1$s/%2$s pagine WooCommerce (prodotto, archivio, carrello, checkout, mio account)."
+msgstr "Olobuild felülírás %1$s/%2$s WC oldalon."
+
+msgid "Senza titolo"
+msgstr "Cím nélkül"
+
+msgid "(Copia)"
+msgstr "(Másolat)"
+
+msgid "Pagine pubblicate"
+msgstr "Közzétett oldalak"
+
+msgid "nessuna nuova"
+msgstr "semmi új"
+
+msgid "Template attivi"
+msgstr "Aktív sablonok"
+
+msgid "tutti pubblicati"
+msgstr "mind közzétéve"
+
+msgid "Invii form (7gg)"
+msgstr "Űrlap küldések (7 nap)"
+
+msgid "periodo iniziale"
+msgstr "kezdeti időszak"
+
+msgid "Avvisi da risolvere"
+msgstr "Megoldandó figyelmeztetések"
+
+msgid "tutto a posto"
+msgstr "minden rendben"
+
+msgid "(senza titolo)"
+msgstr "(cím nélkül)"
+
+msgid "Articolo"
+msgstr "Bejegyzés"
+
+msgid "Pagina"
+msgstr "Oldal"
+
+msgid "fa"
+msgstr "fa"
+
+msgid "Vedi changelog completo nel repository."
+msgstr "Teljes changelog a repo-ban."
+
+msgid "Invio non trovato"
+msgstr "Beküldés nem található"
+
+msgid "Nessun ID selezionato"
+msgstr "Nincs ID kiválasztva"
+
+msgid "Azione non valida"
+msgstr "Érvénytelen művelet"
+
+msgid "+%d questa settimana"
+msgstr "+%d ezen a héten"
+
+msgid "%d in bozza"
+msgstr "%d vázlatban"
+
+msgid "Regole di visualizzazione"
+msgstr "Megjelenítési szabályok"
+
+msgid "Accesso negato."
+msgstr "Hozzáférés megtagadva."
+
+msgid "Regole di visualizzazione template"
+msgstr "Sablon megjelenítési szabályok"
+
+msgid "Definisci dove ogni template Header/Footer si applica. Le regole hanno priorità sull'header/footer globale e cedono il passo a un'eventuale assegnazione per-pagina dal metabox Olobuild."
+msgstr "Adja meg, hol jelenjenek meg a header/footer sablonok."
+
+msgid "Regole salvate."
+msgstr "Szabályok mentve."
+
+msgid "Nessun template Header/Footer pubblicato. Crea prima un template e impostalo come \"Pubblicato\"."
+msgstr "Nincs közzétett Header/Footer sablon."
+
+msgid "Nome"
+msgstr "Nome"
+
+msgid "Area"
+msgstr "Terület"
+
+msgid "Priorità"
+msgstr "Priorità"
+
+msgid "Abilita"
+msgstr "Engedélyez"
+
+msgid "es. Header strutture"
+msgstr "pl. Szállás header"
+
+msgid "Seleziona template"
+msgstr "Sablon kiválasztása"
+
+msgid "Header"
+msgstr "Header"
+
+msgid "Footer"
+msgstr "Footer"
+
+msgid "Più basso = più importante"
+msgstr "Alacsonyabb = fontosabb"
+
+msgid "— Seleziona —"
+msgstr "— Seleziona —"
+
+msgid "Front page"
+msgstr "Kezdőlap"
+
+msgid "Singoli di un tipo (CPT)"
+msgstr "Egyedi típusból (CPT)"
+
+msgid "Archivio di un tipo (CPT)"
+msgstr "Típus archívum (CPT)"
+
+msgid "Una pagina specifica (ID)"
+msgstr "Adott oldal (ID)"
+
+msgid "Un articolo specifico (ID)"
+msgstr "Adott bejegyzés (ID)"
+
+msgid "Risultati ricerca"
+msgstr "Keresési eredmények"
+
+msgid "Utenti loggati"
+msgstr "Bejelentkezett"
+
+msgid "Utenti non loggati"
+msgstr "Nem bejelentkezett"
+
+msgid "— Tipo —"
+msgstr "— Típus —"
+
+msgid "Aggiungi regola"
+msgstr "Szabály hozzáadása"
+
+msgid "Salva regole"
+msgstr "Szabályok mentése"
+
+msgid "Come funziona"
+msgstr "Hogyan működik"
+
+msgid "Priorità più bassa = vince per prima"
+msgstr "Alacsonyabb prioritás = elsőként győz"
+
+msgid "A parità, l'ordine in tabella decide."
+msgstr "Egyenlőség esetén a sorrend dönt."
+
+msgid "Se un singolo post ha un header/footer assegnato dal metabox Olobuild, quello vince comunque sulle regole qui."
+msgstr "A metabox-ban beállított header/footer felülírja."
+
+msgid "Se nessuna regola matcha, viene usato l'header/footer globale (Gestione Template → Attiva)."
+msgstr "Ha egyik szabály sem illik, a globális használt."
+
+msgid "Header Olobuild"
+msgstr "Olobuild Header"
+
+msgid "Sostituzione URL"
+msgstr "URL csere"
+
+msgid "Controllo Versione"
+msgstr "Verzió ellenőrzés"
+
+msgid "Modalità di Manutenzione"
+msgstr "Karbantartás mód"
+
+msgid "Template Website"
+msgstr "Webhely sablon"
+
+msgid "Strumenti"
+msgstr "Eszközök"
+
+msgid "Cache, manutenzione, sostituzione URL e rollback. Utilizzare con cura."
+msgstr "Cache, karbantartás, URL csere, rollback."
+
+msgid "Olobuild Diagnostics"
+msgstr "Olobuild diagnosztika"
+
+msgid "Sì"
+msgstr "Sì"
+
+msgid "No"
+msgstr "No"
+
+msgid "NON DEFINITO"
+msgstr "NEM DEFINIÁLT"
+
+msgid "Questa pagina serve solo per debug. Se stai vedendo questo contenuto, l'accesso funziona. Riporta queste informazioni per risolvere problemi di permessi."
+msgstr "Hibakereső oldal. Küldje el az infókat."
+
+msgid "Utente corrente"
+msgstr "Aktuális felhasználó"
+
+msgid "User ID"
+msgstr "User ID"
+
+msgid "Username"
+msgstr "Username"
+
+msgid "Email"
+msgstr "Email"
+
+msgid "Ruoli"
+msgstr "Szerepek"
+
+msgid "Super admin?"
+msgstr "Super admin?"
+
+msgid "Multisite?"
+msgstr "Multisite?"
+
+msgid "Verifica capability"
+msgstr "Jogosultság ellenőrzése"
+
+msgid "Capability"
+msgstr "Capability"
+
+msgid "Stato Olobuild"
+msgstr "Olobuild állapot"
+
+msgid "Plugin attivi"
+msgstr "Aktív bővítmények"
+
+msgid "Info WordPress"
+msgstr "WordPress info"
+
+msgid "Versione WP"
+msgstr "WP verzió"
+
+msgid "Versione PHP"
+msgstr "PHP verzió"
+
+msgid "Tema"
+msgstr "Téma"
+
+msgid "URL sito"
+msgstr "Webhely URL"
+
+msgid "URL admin"
+msgstr "Admin URL"
+
+msgid "Test accesso pagine"
+msgstr "Oldal hozzáférés teszt"
+
+msgid "Clicca questi link per capire dove fallisce:"
+msgstr "Kattintson a linkekre diagnózishoz."
+
+msgid "Dashboard"
+msgstr "Dashboard"
+
+msgid "Gestione Template"
+msgstr "Sablonkezelés"
+
+msgid "Configurazione"
+msgstr "Konfiguráció"
+
+msgid "Setup Wizard"
+msgstr "Beállítás varázsló"
+
+msgid "SEO"
+msgstr "SEO"
+
+msgid "Title, meta description, Open Graph, schema.org, sitemap XML e webmaster tools."
+msgstr "Title, meta, OG, schema, sitemap."
+
+msgid "Tutti"
+msgstr "Mind"
+
+msgid "Non letti"
+msgstr "Olvasatlanok"
+
+msgid "Letti"
+msgstr "Olvasottak"
+
+msgid "%1$s invii totali · %2$s da leggere · %3$s ultimi 7gg"
+msgstr "%1$s összes · %2$s olvasandó · %3$s 7 nap"
+
+msgid "Invii Form"
+msgstr "Űrlap beküldések"
+
+msgid "Cerca per nome, email, contenuto…"
+msgstr "Név, e-mail, tartalom keresése…"
+
+msgid "Caricamento invii…"
+msgstr "Beküldések betöltése…"
+
+msgid "Segna come non letto"
+msgstr "Olvasatlannak jelölés"
+
+msgid "Elimina"
+msgstr "Elimina"
+
+msgid "Carica altri"
+msgstr "Továbbiak betöltése"
+
+msgid "Pannello flottante"
+msgstr "Lebegő panel"
+
+msgid "Trascina qui contenuti del pannello"
+msgstr "Húzza ide a panel tartalmat"
+
+msgid "O clicca per aprire il finder"
+msgstr "Vagy kattintson a kereshez"
+
+msgid "Ordina:"
+msgstr "Rendezés:"
+
+msgid "Più recenti"
+msgstr "Più recenti"
+
+msgid "Più vecchi"
+msgstr "Più vecchi"
+
+msgid "Titolo (A-Z)"
+msgstr "Cím (A-Z)"
+
+msgid "Titolo (Z-A)"
+msgstr "Cím (Z-A)"
+
+msgid "Casuale"
+msgstr "Véletlenszerű"
+
+msgid "Notizia %d"
+msgstr "Hír %d"
+
+msgid "Precedente"
+msgstr "Precedente"
+
+msgid "Successivo"
+msgstr "Successivo"
+
+msgid "Pagina non trovata"
+msgstr "Oldal nem található"
+
+msgid "Apri ricerca"
+msgstr "Keresés megnyitása"
+
+msgid "Cerca"
+msgstr "Cerca"
+
+msgid "Cancella"
+msgstr "Cancella"
+
+msgid "Main menu"
+msgstr "Fő menü"
+
+msgid "Open menu"
+msgstr "Menü megnyitása"
+
+msgid "Mobile menu"
+msgstr "Mobil menü"
+
+msgid "Close menu"
+msgstr "Menü bezárása"
+
+msgid "Vertical menu"
+msgstr "Függőleges menü"
+
+msgid "Sub navigation"
+msgstr "Alnavigáció"
+
+msgid "Embedded video"
+msgstr "Beágyazott videó"
+
+msgid "Inserisci un URL video"
+msgstr "Adjon meg videó URL-t"
+
+msgid "Seleziona un file video"
+msgstr "Válasszon videó fájlt"
+
+msgid "Background video"
+msgstr "Háttér videó"
+
+msgid "Seleziona una sorgente video"
+msgstr "Válasszon videó forrást"
+
+msgid "Ordina per…"
+msgstr "Rendezés…"
+
+msgid "Navigation"
+msgstr "Navigáció"
+
+msgid "Import / Export"
+msgstr "Import / Export"
+
+msgid "Esporta singoli template, intero sito o backup completo. %d template disponibili."
+msgstr "Exportáljon sablonokat, webhelyet vagy backupot."
+
+msgid "Esporta"
+msgstr "Exportálás"
+
+msgid "Scarica template e media in formato JSON"
+msgstr "Sablonok és médiák JSON-ben"
+
+msgid "Singolo template"
+msgstr "Egyedi sablon"
+
+msgid "Includi media (immagini, video, PDF)"
+msgstr "Médiákkal együtt"
+
+msgid "Esporta Template"
+msgstr "Sablon exportálása"
+
+msgid "Esporta tutto il sito"
+msgstr "Teljes webhely export"
+
+msgid "Include tutti i template, header, footer e stili globali"
+msgstr "Sablonok, header, footer, stílusok"
+
+msgid "Esporta Sito Completo"
+msgstr "Teljes webhely exportálása"
+
+msgid "Importa"
+msgstr "Importálás"
+
+msgid "Carica un file .json esportato da Olobuild"
+msgstr "Töltsön fel Olobuild .json fájlt"
+
+msgid "Importa media (scarica e ricarica immagini)"
+msgstr "Médiák importja"
+
+msgid "Ricerca Media"
+msgstr "Médiakeresés"
+
+msgid "Cerca foto, video, audio e panorami da provider stock. %1$s/%2$s provider configurati."
+msgstr "Foto/videó/audió keresése. %1$s/%2$s."
+
+msgid "Cerca foto, video, audio..."
+msgstr "Foto, videó, audió keresése..."
+
+msgid "https://www.google.com/maps/@45.4642,9.1900,3a... oppure 45.4642,9.1900"
+msgstr "Google Maps URL vagy koordináta"
+
+msgid "min sec"
+msgstr "min mp"
+
+msgid "max sec"
+msgstr "max mp"
+
+msgid "Foto"
+msgstr "Fotó"
+
+msgid "Video"
+msgstr "Video"
+
+msgid "Foto 360"
+msgstr "360 fotó"
+
+msgid "Video 360"
+msgstr "360 videó"
+
+msgid "Audio"
+msgstr "Audió"
+
+msgid "Incolla un URL Google Maps, coordinate (lat,lng) o un pano_id per scaricare un panorama Street View."
+msgstr "Adjon meg Maps URL-t, koordinátát vagy pano_id-t."
+
+msgid "Zoom 2 (bassa)"
+msgstr "Zoom 2 (alacsony)"
+
+msgid "Zoom 3 (media)"
+msgstr "Zoom 3 (közepes)"
+
+msgid "Zoom 4 (alta)"
+msgstr "Zoom 4 (magas)"
+
+msgid "Cerca panorama"
+msgstr "Panoráma keresése"
+
+msgid "Orientamento:"
+msgstr "Tájolás:"
+
+msgid "Qualsiasi"
+msgstr "Qualsiasi"
+
+msgid "Orizzontale"
+msgstr "Vízszintes"
+
+msgid "Verticale"
+msgstr "Függőleges"
+
+msgid "Quadrato"
+msgstr "Négyzet"
+
+msgid "Dimensione:"
+msgstr "Méret:"
+
+msgid "Piccola"
+msgstr "Kicsi"
+
+msgid "Media"
+msgstr "Közepes"
+
+msgid "Grande"
+msgstr "Nagy"
+
+msgid "Min larghezza:"
+msgstr "Min szélesség:"
+
+msgid "Min altezza:"
+msgstr "Min magasság:"
+
+msgid "Durata:"
+msgstr "Időtartam:"
+
+msgid "Brevissimo (< 5s)"
+msgstr "Nagyon rövid (< 5s)"
+
+msgid "Breve (< 15s)"
+msgstr "Rövid (< 15s)"
+
+msgid "5 — 30 secondi"
+msgstr "5 — 30 mp"
+
+msgid "10s — 1 minuto"
+msgstr "10mp — 1 perc"
+
+msgid "30s — 2 minuti"
+msgstr "30mp — 2 perc"
+
+msgid "1 — 5 minuti"
+msgstr "1 — 5 perc"
+
+msgid "Lungo (> 5 min)"
+msgstr "Hosszú (> 5 perc)"
+
+msgid "oppure"
+msgstr "vagy"
+
+msgid "secondi"
+msgstr "másodperc"
+
+msgid "White Label"
+msgstr "White Label"
+
+msgid "Branding personalizzato attivo. Nasconde il marchio Olobuild dai tuoi clienti."
+msgstr "Egyedi branding aktív."
+
+msgid "Personalizza nome plugin, logo, autore e link per nascondere il brand Olobuild."
+msgstr "Plugin név, logó, szerző testreszabása."
+
+msgid "Page builder professionale"
+msgstr "Professzionális page builder"
+
+msgid "Salvataggio..."
+msgstr "Mentés..."
+
+msgid "Impostazioni salvate con successo"
+msgstr "Beállítások mentve"
+
+msgid "Errore nel salvataggio"
+msgstr "Mentési hiba"
+
+msgid "Impostazioni White Label"
+msgstr "White Label beállítások"
+
+msgid "Rinomina plugin, nascondi credits e impostazioni per i non-admin"
+msgstr "Nevezze át, rejtse el a credits-et."
+
+msgid "Attiva White Label"
+msgstr "White Label aktiválása"
+
+msgid "Abilita la personalizzazione del brand"
+msgstr "Brand testreszabás engedélyezése"
+
+msgid "Nome plugin"
+msgstr "Plugin neve"
+
+msgid "Nome autore"
+msgstr "Szerző neve"
+
+msgid "URL autore"
+msgstr "Szerző URL"
+
+msgid "Nascondi per non-admin"
+msgstr "Rejtés nem-adminoknak"
+
+msgid "Nasconde le impostazioni White Label per utenti non amministratori"
+msgstr "Nem-admin felhasználóknak rejtve."
+
+msgid "Nascondi credits"
+msgstr "Credits rejtése"
+
+msgid "Rimuove la scritta \"Powered by Olobuild\""
+msgstr "Eltávolítja a \"Powered by Olobuild\" feliratot."
+
+msgid "Pagina vuota"
+msgstr "Üres oldal"
+
+msgid "Aggiungi un modulo o scegli un layout per iniziare"
+msgstr "Adjon hozzá modult vagy elrendezést"
+
+msgid "Aggiungi modulo"
+msgstr "Modul hozzáadása"
+
+msgid "Scegli layout"
+msgstr "Elrendezés választás"
+
+msgid "Olobuild"
+msgstr "Olobuild"
+
+msgid "Nessun invio trovato."
+msgstr "Nincs beküldés."
+
+msgid "Prova a cambiare filtro o aspetta nuovi messaggi."
+msgstr "Változtasson szűrőt vagy várjon."
+
+msgid "Segna come letto"
+msgstr "Olvasottnak jelölés"
+
+msgid "Eliminare definitivamente questo invio? L'azione non si può annullare."
+msgstr "Véglegesen törli? Nem visszavonható."
+
+msgid "Invio eliminato"
+msgstr "Beküldés törölve"
+
+msgid "Errore eliminazione"
+msgstr "Törlési hiba"
+
+msgid "Errore caricamento. Riprova."
+msgstr "Betöltési hiba. Próbálja újra."
+
+msgid "Campi compilati"
+msgstr "Kitöltött mezők"
+
+msgid "Metadati"
+msgstr "Metaadatok"
+
+msgid "Inviato il"
+msgstr "Beküldve"
+
+msgid "live"
+msgstr "élő"
+
+msgid "bozza"
+msgstr "vázlat"
+
+msgid "Aggiungi ai preferiti"
+msgstr "Aggiungi ai preferiti"
+
+msgid "Rimuovi dai preferiti"
+msgstr "Eltávolítás kedvencekből"
+
+msgid "Espandi pannello"
+msgstr "Panel kibontása"
+
+msgid "Comprimi pannello"
+msgstr "Panel összecsukása"
+
+msgid "Cerca pagine, template, impostazioni…"
+msgstr "Oldalak, sablonok, beállítások keresése…"
+
+msgid "Nessun risultato"
+msgstr "Nincs eredmény"
+
+msgid "Nessuna attività recente. Crea o modifica una pagina per iniziare."
+msgstr "Nincs friss tevékenység."
+
+msgid "Creazione…"
+msgstr "Létrehozás…"
+
+msgid "Errore nella creazione della pagina. Riprova."
+msgstr "Hiba az oldal létrehozásánál."
+
+msgid "Salvati"
+msgstr "Mentett"
+
+msgid "Avvio Rapido"
+msgstr "Gyors indítás"
+
+msgid "Role Manager"
+msgstr "Szerepkezelő"
+
+msgid "Submissions"
+msgstr "Beküldések"
+
+msgid "Template Salvati"
+msgstr "Mentett sablonok"
+
+msgid "Popups"
+msgstr "Popup-ok"
+
+msgid "Marketing"
+msgstr "Marketing"
+
+msgid "Personalizzazione"
+msgstr "Testreszabás"
+
+msgid "Sistema"
+msgstr "Rendszer"
+
+msgid "Crea e modifica i tuoi template"
+msgstr "Sablonok létrehozása és szerkesztése"
+
+msgid "Stili, colori, tipografia e API"
+msgstr "Stílusok, színek, tipográfia, API"
+
+msgid "Foto, video e audio stock"
+msgstr "Stock fotó, videó, audió"
+
+msgid "Visualizza i messaggi ricevuti"
+msgstr "Beérkezett üzenetek"
+
+msgid "Tracking e statistiche"
+msgstr "Tracking és statisztikák"
+
+msgid "Banner GDPR e consenso"
+msgstr "GDPR banner és hozzájárulás"
+
+msgid "Meta tag, Open Graph e sitemap"
+msgstr "Meta tagek, OG, sitemap"
+
+msgid "Gestisci redirect e pagine 404"
+msgstr "Átirányítások és 404 kezelése"
+
+msgid "Cache, lazy load, ottimizzazione"
+msgstr "Cache, lazy load, optimalizálás"
+
+msgid "Cache, manutenzione, URL, versioni"
+msgstr "Cache, karbantartás, URL, verziók"
+
+msgid "Template per prodotti e shop"
+msgstr "Termék és shop sablonok"
+
+msgid "Banner e modali riusabili"
+msgstr "Újrahasznosítható bannerek"
+
+msgid "Import/Export"
+msgstr "Import/Export"
+
+msgid "Diagnostica"
+msgstr "Diagnosztika"
+
+msgid "Licenza"
+msgstr "Licenza"
+
+msgid "Hai modificato questa pagina %1$s. La pagina è %2$s."
+msgstr "Módosította: %1$s. Állapot: %2$s."
+
+msgid "pubblicata"
+msgstr "közzétéve"
+
+msgid "in bozza"
+msgstr "vázlatban"
+
+msgid "Inizia a costruire il tuo sito"
+msgstr "Kezdje el építeni a weboldalt"
+
+msgid "Crea la prima pagina o sfoglia i template per partire al volo."
+msgstr "Hozza létre az első oldalt vagy nézze meg a sablonokat."
+
+msgid ""
+"Cache: %s · DB: %s'), '<b>2.4 MB</b>', '<b>OK</b>'),\n"
+"     *     'actions' => Olo_Builder::cockpit_button(['label' => 'Nuovo', 'variant' => 'pri']),\n"
+"     *   ]);\n"
+"     */\n"
+"    public static function cockpit_page_head( $args = [] ) {\n"
+"        $args = wp_parse_args( $args, [ 'title' => '', 'sub' => '', 'actions' => '' ] );\n"
+"        ob_start();\n"
+"        ?>\n"
+"        <header class=\"olo-page-head\">\n"
+"            <div class=\"titles\">\n"
+"                <h1><?php echo esc_html( $args['title'] ); ?></h1>\n"
+"                <?php if ( $args['sub'] ) : ?>\n"
+"                    <div class=\"sub\"><?php echo wp_kses_post( $args['sub'] ); ?></div>\n"
+"                <?php endif; ?>\n"
+"            </div>\n"
+"            <?php if ( $args['actions'] ) : ?>\n"
+"                <div class=\"actions\"><?php echo $args['actions']; // markup pre-validato ?></div>\n"
+"            <?php endif; ?>\n"
+"        </header>\n"
+"        <?php\n"
+"        return ob_get_clean();\n"
+"    }\n"
+"\n"
+"    /**\n"
+"     * Sub-nav tabs (orizzontali) sotto il page head.\n"
+"     *\n"
+"     * @param array  $items   Array di tabs: [{slug, label, count?, href}].\n"
+"     * @param string $active  Slug del tab attivo.\n"
+"     *\n"
+"     * @example\n"
+"     *   echo Olo_Builder::cockpit_subnav([\n"
+"     *     ['slug' => 'general', 'label' => 'Generale', 'href' => admin_url('admin.php?page=olo-seo')],\n"
+"     *     ['slug' => 'meta',    'label' => 'Meta tag', 'href' => admin_url('admin.php?page=olo-seo&tab=meta'), 'count' => 12],\n"
+"     *   ], 'general');\n"
+"     */\n"
+"    public static function cockpit_subnav( $items, $active = '' ) {\n"
+"        if ( empty( $items ) || ! is_array( $items ) ) return '';\n"
+"        ob_start();\n"
+"        ?>\n"
+"        <nav class=\"olo-subnav\">\n"
+"            <?php foreach ( $items as $it ) :\n"
+"                $slug = $it['slug'] ?? '';\n"
+"                $href = $it['href'] ?? '#';\n"
+"                $label = $it['label'] ?? '';\n"
+"                $count = $it['count'] ?? null;\n"
+"                $is_active = ( $slug === $active );\n"
+"            ?>\n"
+"                <a href=\"<?php echo esc_url( $href ); ?>\" class=\"<?php echo $is_active ? 'active' : ''; ?>\">\n"
+"                    <?php echo esc_html( $label ); ?>\n"
+"                    <?php if ( $count !== null ) : ?>\n"
+"                        <span class=\"num\"><?php echo (int) $count; ?></span>\n"
+"                    <?php endif; ?>\n"
+"                </a>\n"
+"            <?php endforeach; ?>\n"
+"        </nav>\n"
+"        <?php\n"
+"        return ob_get_clean();\n"
+"    }\n"
+"\n"
+"    /**\n"
+"     * Toolbar sticky: chip filtri + search + sort + view toggle + content libero.\n"
+"     *\n"
+"     * @param array $args {\n"
+"     *   @type array  $chips        Lista chip: [{id, label, count?, dot_color?, href?}]\n"
+"     *   @type string $active_chip  ID del chip attivo.\n"
+"     *   @type bool   $search       Mostra input search (default false).\n"
+"     *   @type string $search_id    ID dell'input search (per binding JS).\n"
+"     *   @type string $search_placeholder\n"
+"     *   @type string $extra        HTML aggiuntivo dopo gli spacer (es. sort, view toggle).\n"
+"     * }\n"
+"     *\n"
+"     * @example\n"
+"     *   echo Olo_Builder::cockpit_toolbar([\n"
+"     *     'chips' => [\n"
+"     *       ['id'=>'all', 'label'=>'Tutti', 'count'=>128],\n"
+"     *       ['id'=>'unread', 'label'=>'Non letti', 'count'=>12, 'dot_color'=>'#ef4444'],\n"
+"     *     ],\n"
+"     *     'active_chip' => 'all',\n"
+"     *     'search'      => true,\n"
+"     *     'search_placeholder' => 'Cerca…',\n"
+"     *   ]);\n"
+"     */\n"
+"    public static function cockpit_toolbar( $args = [] ) {\n"
+"        $args = wp_parse_args( $args, [\n"
+"            'chips'              => [],\n"
+"            'active_chip'        => '',\n"
+"            'search'             => false,\n"
+"            'search_id'          => '',\n"
+"            'search_placeholder' => __( 'Cerca…"
+msgstr ""
+"Cache: %s · DB: %s'), '<b>2.4 MB</b>', '<b>OK</b>'),\n"
+"     *     'actions' => Olo_Builder::cockpit_button(['label' => 'Nuovo', 'variant' => 'pri']),\n"
+"     *   ]);\n"
+"     */\n"
+"    public static function cockpit_page_head( $args = [] ) {\n"
+"        $args = wp_parse_args( $args, [ 'title' => '', 'sub' => '', 'actions' => '' ] );\n"
+"        ob_start();\n"
+"        ?>\n"
+"        <header class=\"olo-page-head\">\n"
+"            <div class=\"titles\">\n"
+"                <h1><?php echo esc_html( $args['title'] ); ?></h1>\n"
+"                <?php if ( $args['sub'] ) : ?>\n"
+"                    <div class=\"sub\"><?php echo wp_kses_post( $args['sub'] ); ?></div>\n"
+"                <?php endif; ?>\n"
+"            </div>\n"
+"            <?php if ( $args['actions'] ) : ?>\n"
+"                <div class=\"actions\"><?php echo $args['actions']; // markup pre-validato ?></div>\n"
+"            <?php endif; ?>\n"
+"        </header>\n"
+"        <?php\n"
+"        return ob_get_clean();\n"
+"    }\n"
+"\n"
+"    /**\n"
+"     * Sub-nav tabs (orizzontali) sotto il page head.\n"
+"     *\n"
+"     * @param array  $items   Array di tabs: [{slug, label, count?, href}].\n"
+"     * @param string $active  Slug del tab attivo.\n"
+"     *\n"
+"     * @example\n"
+"     *   echo Olo_Builder::cockpit_subnav([\n"
+"     *     ['slug' => 'general', 'label' => 'Generale', 'href' => admin_url('admin.php?page=olo-seo')],\n"
+"     *     ['slug' => 'meta',    'label' => 'Meta tag', 'href' => admin_url('admin.php?page=olo-seo&tab=meta'), 'count' => 12],\n"
+"     *   ], 'general');\n"
+"     */\n"
+"    public static function cockpit_subnav( $items, $active = '' ) {\n"
+"        if ( empty( $items ) || ! is_array( $items ) ) return '';\n"
+"        ob_start();\n"
+"        ?>\n"
+"        <nav class=\"olo-subnav\">\n"
+"            <?php foreach ( $items as $it ) :\n"
+"                $slug = $it['slug'] ?? '';\n"
+"                $href = $it['href'] ?? '#';\n"
+"                $label = $it['label'] ?? '';\n"
+"                $count = $it['count'] ?? null;\n"
+"                $is_active = ( $slug === $active );\n"
+"            ?>\n"
+"                <a href=\"<?php echo esc_url( $href ); ?>\" class=\"<?php echo $is_active ? 'active' : ''; ?>\">\n"
+"                    <?php echo esc_html( $label ); ?>\n"
+"                    <?php if ( $count !== null ) : ?>\n"
+"                        <span class=\"num\"><?php echo (int) $count; ?></span>\n"
+"                    <?php endif; ?>\n"
+"                </a>\n"
+"            <?php endforeach; ?>\n"
+"        </nav>\n"
+"        <?php\n"
+"        return ob_get_clean();\n"
+"    }\n"
+"\n"
+"    /**\n"
+"     * Toolbar sticky: chip filtri + search + sort + view toggle + content libero.\n"
+"     *\n"
+"     * @param array $args {\n"
+"     *   @type array  $chips        Lista chip: [{id, label, count?, dot_color?, href?}]\n"
+"     *   @type string $active_chip  ID del chip attivo.\n"
+"     *   @type bool   $search       Mostra input search (default false).\n"
+"     *   @type string $search_id    ID dell'input search (per binding JS).\n"
+"     *   @type string $search_placeholder\n"
+"     *   @type string $extra        HTML aggiuntivo dopo gli spacer (es. sort, view toggle).\n"
+"     * }\n"
+"     *\n"
+"     * @example\n"
+"     *   echo Olo_Builder::cockpit_toolbar([\n"
+"     *     'chips' => [\n"
+"     *       ['id'=>'all', 'label'=>'Tutti', 'count'=>128],\n"
+"     *       ['id'=>'unread', 'label'=>'Non letti', 'count'=>12, 'dot_color'=>'#ef4444'],\n"
+"     *     ],\n"
+"     *     'active_chip' => 'all',\n"
+"     *     'search'      => true,\n"
+"     *     'search_placeholder' => 'Cerca…',\n"
+"     *   ]);\n"
+"     */\n"
+"    public static function cockpit_toolbar( $args = [] ) {\n"
+"        $args = wp_parse_args( $args, [\n"
+"            'chips'              => [],\n"
+"            'active_chip'        => '',\n"
+"            'search'             => false,\n"
+"            'search_id'          => '',\n"
+"            'search_placeholder' => __( 'Cerca…"
+
+msgid "Nessun elemento"
+msgstr "Nincs elem"
+
+msgid "Utente"
+msgstr "Felhasználó"
+
+msgid "Aggiornamento disponibile · v%s"
+msgstr "Frissítés elérhető · v%s"
+
+msgid "Ciao %s, buon lavoro"
+msgstr "Szia %s, jó munkát"
+
+msgid "Continua su %s"
+msgstr "Folytatás itt: %s"
+
+msgid "Apri editor"
+msgstr "Szerkesztő megnyitása"
+
+msgid "Vai ai template"
+msgstr "Sablonokhoz"
+
+msgid "Il tuo sito WordPress costruito con Olobuild."
+msgstr "WordPress webhelye Olobuild-del."
+
+msgid "API Keys — Stock Media"
+msgstr "API kulcsok — Stock Media"
+
+msgid "Inserisci le chiavi API per i servizi di immagini/video stock. Se lasci un campo vuoto, verrà usata la chiave predefinita."
+msgstr "API kulcsok megadása. Üres = alapértelmezett."
+
+msgid "Pexels API Key"
+msgstr "Pexels API Key"
+
+msgid "Ottieni una chiave su %s"
+msgstr "Kérjen kulcsot itt: %s"
+
+msgid "Pixabay API Key"
+msgstr "Pixabay API Key"
+
+msgid "Unsplash Access Key"
+msgstr "Unsplash Access Key"
+
+msgid "Freesound API Key"
+msgstr "Freesound API Key"
+
+msgid "reCAPTCHA v3"
+msgstr "reCAPTCHA v3"
+
+msgid "Google reCAPTCHA v3 per la protezione dei form. Ottieni le chiavi su google.com/recaptcha"
+msgstr "Google reCAPTCHA v3 űrlap védelemhez."
+
+msgid "Site Key"
+msgstr "Site Key"
+
+msgid "Secret Key"
+msgstr "Secret Key"
+
+msgid "Mailchimp"
+msgstr "Mailchimp"
+
+msgid "API key Mailchimp per le integrazioni dei form contatti."
+msgstr "Mailchimp API kulcs integrációkhoz."
+
+msgid "Mailchimp API Key"
+msgstr "Mailchimp API Key"
+
+msgid "Stili globali, palette colori, tipografia, breakpoint responsive, AI assistant e chiavi API stock media."
+msgstr "Globális stílusok, színek, tipográfia."
+
+msgid "Torna a WordPress"
+msgstr "Vissza a WordPress-hez"
+
+msgid "App mode"
+msgstr "App mode"
+
+msgid "Cambia modalità"
+msgstr "Mód váltása"
+
+msgid "Notifiche"
+msgstr "Notifiche"
+
+msgid "Documentazione"
+msgstr "Dokumentáció"
+
+msgid "Profilo"
+msgstr "Profilo"
+
+msgid "Aggiorna ora"
+msgstr "Frissítés most"
+
+msgid "pagine"
+msgstr "oldal"
+
+msgid "Vedi sito live"
+msgstr "Élő webhely megtekintése"
+
+msgid "Crea un nuovo template e la pagina WP collegata"
+msgstr "Új sablon és kapcsolt WP oldal"
+
+msgid "Nuova pagina"
+msgstr "Új oldal"
+
+msgid "Apri pagina live"
+msgstr "Élő oldal megnyitása"
+
+msgid "Home"
+msgstr "Kezdőlap"
+
+msgid "Servizi"
+msgstr "Szolgáltatások"
+
+msgid "Contatti"
+msgstr "Kapcsolat"
+
+msgid "Scopri di più"
+msgstr "Scopri di più"
+
+msgid "Indicatori chiave"
+msgstr "Kulcs indikátorok"
+
+msgid "Continua dove avevi lasciato"
+msgstr "Folytatás onnan, ahol abbahagyta"
+
+msgid "Le tue ultime modifiche"
+msgstr "Legutóbbi módosítások"
+
+msgid "Vedi tutto"
+msgstr "Mind megtekintése"
+
+msgid "Azioni rapide"
+msgstr "Azioni rapide"
+
+msgid "Ciò che fai più spesso"
+msgstr "Amit a leggyakrabban tesz"
+
+msgid "Crea pagina"
+msgstr "Oldal létrehozása"
+
+msgid "Nuovo template + pagina WP"
+msgstr "Új sablon + WP oldal"
+
+msgid "Sfoglia template"
+msgstr "Sablonok böngészése"
+
+msgid "Pronti all'uso"
+msgstr "Készen áll a használatra"
+
+msgid "Pagina, sito, JSON"
+msgstr "Oldal, webhely, JSON"
+
+msgid "Gestione"
+msgstr "Gestione"
+
+msgid "Configurazione e contenuti del sito"
+msgstr "Webhely konfiguráció és tartalom"
+
+msgid "Configurazione tecnica · raramente"
+msgstr "Műszaki konfiguráció · ritkán"
+
+msgid "Centro risorse"
+msgstr "Erőforrás központ"
+
+msgid "Cosa c'è di nuovo"
+msgstr "Mi az újdonság"
+
+msgid "Tutorial"
+msgstr "Tutorial"
+
+msgid "Impara Olobuild"
+msgstr "Tanulja meg az Olobuild-et"
+
+msgid "Onboarding 60 secondi"
+msgstr "60 másodperces onboarding"
+
+msgid "Template come pro"
+msgstr "Sablonok mint a profi"
+
+msgid "SEO e Open Graph"
+msgstr "SEO és Open Graph"
+
+msgid "Performance: punteggio 100"
+msgstr "Teljesítmény: 100 pont"
+
+msgid "Aiuto & supporto"
+msgstr "Súgó & támogatás"
+
+msgid "Apri ticket"
+msgstr "Ticket nyitása"
+
+msgid "Community"
+msgstr "Közösség"
+
+msgid "Roadmap"
+msgstr "Roadmap"
+
+msgid "Olobuild Setup"
+msgstr "Olobuild beállítás"
+
+msgid "Olobuild — Configurazione iniziale"
+msgstr "Olobuild — Kezdeti beállítás"
+
+msgid "Configuriamo il tuo sito in pochi secondi.<br>Potrai personalizzare tutto in seguito."
+msgstr "Másodpercek alatt beállítjuk a webhelyét."
+
+msgid "Installiamo <strong>Hello Olobuild</strong> — un tema WordPress leggero e minimale, progettato per non interferire col builder. Solo ~3KB di CSS."
+msgstr "Hello Olobuild — minimális téma. ~3KB CSS."
+
+msgid "Installazione..."
+msgstr "Telepítés..."
+
+msgid "Installazione in corso..."
+msgstr "Telepítés folyamatban..."
+
+msgid "Errore di connessione"
+msgstr "Csatlakozási hiba"
+
+msgid "Riprova"
+msgstr "Újra"
+
+msgid "Importazione..."
+msgstr "Importálás..."
+
+msgid "Nessun tema importato — parti da zero!"
+msgstr "Nincs importált téma — kezdje el nulláról!"
+
+msgid "Creazione template, menu, pagine..."
+msgstr "Sablonok, menük, oldalak létrehozása..."
+
+msgid "%d template creati, homepage impostata!"
+msgstr "%d sablon létrehozva, kezdőlap beállítva!"
+
+msgid "Permessi insufficienti."
+msgstr "Nem elegendő jogosultság."
+
+msgid "Bundle tema non trovato nel plugin."
+msgstr "Téma bundle nem található."
+
+msgid "Hello Olobuild installato e attivato!"
+msgstr "Hello Olobuild telepítve és aktiválva!"
+
+msgid "Nessun tema selezionato."
+msgstr "Nincs téma kiválasztva."
+
+msgid "Configurazione iniziale disponibile"
+msgstr "Kezdeti beállítás elérhető"
+
+msgid "Avvia configurazione"
+msgstr "Beállítás indítása"
+
+msgid "Benvenuto in Olobuild"
+msgstr "Üdvözöljük az Olobuild-ben"
+
+msgid "1. Tema WordPress"
+msgstr "1. WordPress téma"
+
+msgid "Hello Olobuild è già attivo. Perfetto!"
+msgstr "Hello Olobuild már aktív. Tökéletes!"
+
+msgid "Continua →"
+msgstr "Tovább →"
+
+msgid "Hello Olobuild è installato ma non attivo. È un tema leggero senza CSS invasivo — perfetto per Olobuild."
+msgstr "Hello Olobuild telepítve, de nem aktív."
+
+msgid "Attiva Hello Olobuild"
+msgstr "Hello Olobuild aktiválása"
+
+msgid "Mantieni tema attuale →"
+msgstr "Jelenlegi téma megtartása →"
+
+msgid "Installa e attiva"
+msgstr "Telepítés és aktiválás"
+
+msgid "Usa tema attuale →"
+msgstr "Jelenlegi téma használata →"
+
+msgid "2. Scegli un design"
+msgstr "2. Válasszon dizájnt"
+
+msgid "Seleziona un tema completo per iniziare. Include header, footer, homepage e menu — tutto personalizzabile."
+msgstr "Válasszon teljes témát. Header, footer, kezdőlap, menü."
+
+msgid "Vuoto"
+msgstr "Üres"
+
+msgid "Parti da zero"
+msgstr "Kezdje nulláról"
+
+msgid "Importa tema selezionato"
+msgstr "Kiválasztott téma importja"
+
+msgid "✨ Tutto pronto!"
+msgstr "✨ Minden kész!"
+
+msgid "Il tuo sito è configurato. Puoi iniziare a personalizzare tutto dal builder visuale."
+msgstr "Webhely beállítva. Testreszabhatja a builder-ből."
+
+msgid "Apri Olobuild →"
+msgstr "Olobuild megnyitása →"
+
+msgid "Vedi il sito →"
+msgstr "Webhely megtekintése →"
+
+msgid "Salta configurazione"
+msgstr "Beállítás kihagyása"

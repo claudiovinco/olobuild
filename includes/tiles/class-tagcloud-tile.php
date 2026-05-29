@@ -11,6 +11,7 @@ class Olo_Tagcloud_Tile extends Olo_Tile_Base {
     protected $icon     = 'dashicons-tag';
     protected $category = 'dynamic';
     protected $defaults = [
+        'preset' => 'custom',
         'taxonomy'         => 'post_tag',
         'custom_taxonomy'  => '',
         'min_font'         => '12',
@@ -150,7 +151,7 @@ class Olo_Tagcloud_Tile extends Olo_Tile_Base {
                 background: <?php echo $hover_bg; ?>;
             }
         </style>
-        <div id="<?php echo esc_attr( $uid ); ?>" class="olo-tagcloud" style="<?php echo esc_attr( $container_style ); ?>">
+        <div id="<?php echo esc_attr( $uid ); ?>" class="olo-tagcloud olo-tc-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" style="<?php echo esc_attr( $container_style ); ?>">
             <?php foreach ( $terms as $term ) :
                 $count     = (int) $term->count;
                 $range     = max( 1, $max_count - $min_count );

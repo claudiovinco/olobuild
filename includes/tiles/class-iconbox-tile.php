@@ -11,11 +11,12 @@ class Olo_IconBox_Tile extends Olo_Tile_Base {
     protected $icon     = 'dashicons-star-filled';
     protected $category = 'marketing';
     protected $defaults = [
+        'preset' => 'custom',
         'icon_emoji'        => 'star',
-        'title'             => 'Feature Title',
-        'description'       => 'A short description of this feature and why it matters.',
+        'title'             => 'Titolo funzionalità',
+        'description'       => 'Una breve descrizione di questa funzionalità e del suo valore.',
         'link_url'          => '',
-        'link_text'         => 'Learn more',
+        'link_text'         => 'Scopri di più',
         'alignment'         => 'center',
         'text_color'        => '',
         'title_color'       => '',
@@ -49,7 +50,7 @@ class Olo_IconBox_Tile extends Olo_Tile_Base {
         ];
     }
 
-    public function render( $settings ) {
+    public function render( $settings, $style = [] ) {
         $s   = wp_parse_args( $settings, $this->defaults );
         $uid = 'mib-' . wp_rand( 10000, 99999 );
 
@@ -66,10 +67,13 @@ class Olo_IconBox_Tile extends Olo_Tile_Base {
         $icon_clr   = $this->safe_color_css( $s['icon_color'] );
         $icon_shape = in_array( $s['icon_bg_shape'], [ 'circle', 'square', 'rounded' ], true ) ? $s['icon_bg_shape'] : 'circle';
 
-        // Tile background (mutually exclusive via bg_type)
+        // Tile background (mutually exclusive via bg_type) — fallback su style.bg
+        // se settings.bg_type non è settato (utente preferisce tab Stile).
         $tile_bg_css = '';
         $bg_type = $s['bg_type'] ?? 'none';
-        if ( $bg_type === 'color' ) {
+        if ( $bg_type === 'none' && is_array( $style ) && isset( $style['bg'] ) && is_array( $style['bg'] ) ) {
+            $tile_bg_css = $this->build_bg_css_from_style_bg( $style['bg'] );
+        } elseif ( $bg_type === 'color' ) {
             $c = $this->safe_color_css( $s['bg_color'] ?? '' );
             if ( $c ) $tile_bg_css = 'background-color:' . $c . ';';
         } elseif ( $bg_type === 'gradient' ) {
@@ -181,7 +185,7 @@ class Olo_IconBox_Tile extends Olo_Tile_Base {
         <?php echo $border_hover_css; ?>
         <?php echo $border_effect_css; ?>
         </style><?php endif; ?>
-        <div class="olo-iconbox <?php echo $align_class; ?> <?php echo esc_attr( $uid ); ?>" style="<?php echo $tile_bg_css . $tile_padding_css . $tile_border_css . $tile_radius_css . $tile_shadow_css; ?>">
+        <div class="olo-iconbox <?php echo $align_class; ?> <?php echo esc_attr( $uid ); ?> olo-ib-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" style="<?php echo $tile_bg_css . $tile_padding_css . $tile_border_css . $tile_radius_css . $tile_shadow_css; ?>">
           <?php if ( $is_horiz ) : ?><div class="mib-flex"><?php endif; ?>
 
             <?php if ( ! empty( $s['icon_emoji'] ) ) : ?>
@@ -192,7 +196,7 @@ class Olo_IconBox_Tile extends Olo_Tile_Base {
                     ?>
                     <div style="<?php echo $icon_inline; ?>" <?php echo $icon_bg ? 'class="mib-icon-bg"' : ''; ?>>
                         <?php if ( preg_match( '/^[a-z][a-z0-9-]*$/', $s['icon_emoji'] ) ) : ?>
-                            <span style="color:inherit;" uk-icon="icon: <?php echo esc_attr( $s['icon_emoji'] ); ?>; ratio: <?php echo esc_attr( $icon_size ); ?>"></span>
+                            <?php echo $this->render_icon_html( $s['icon_emoji'], floatval( $icon_size ) ); ?>
                         <?php else : ?>
                             <?php echo esc_html( $s['icon_emoji'] ); ?>
                         <?php endif; ?>

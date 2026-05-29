@@ -67,13 +67,25 @@ class Olo_Video_Tile extends Olo_Tile_Base {
             }
         }
 
-        $_br_css = $this->build_border_radius_css( $s["border_radius"] );
-        $_br_css_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
-        $this->_vbr = $_br_css ? "border-radius:" . $_br_css . ";overflow:hidden;" : "";
+        // Border-radius: priorità al `style.border_radius` (tab Stile globale, gestita
+        // da frontend-renderer sul tile wrapper esterno) per garantire coerenza visiva
+        // tra wrapper e tile interno. Fallback al `border_radius` flat (tab Contenuto)
+        // per backward-compat con template esistenti.
+        $br_value = $s['style']['border_radius'] ?? null;
+        if ( $br_value === null || $br_value === '' || $br_value === 0 || ( is_array( $br_value ) && ! array_filter( array_map( 'intval', $br_value ) ) ) ) {
+            $br_value = $s['border_radius'] ?? 0;
+        }
+        $_br_css = $this->build_border_radius_css( $br_value );
+        $_br_css_hover_css = Olo_Tile_Utils::radius_force_css( $s['style']['hover']['border_radius'] ?? $s['border_radius_hover'] ?? null );
+        // `transform:translateZ(0)` crea un nuovo stacking context: in Chromium senza
+        // questo, <iframe> e a volte <img> con position:absolute dentro un parent con
+        // border-radius+overflow:hidden NON vengono clippati — il video resta squadrato
+        // anche se il wrapper è arrotondato. Workaround standard cross-browser.
+        $this->_vbr = $_br_css ? "border-radius:" . $_br_css . ";overflow:hidden;transform:translateZ(0);" : "";
         if ( $_br_css_hover_css !== '' ) {
             $this->_vbr .= 'transition:border-radius 400ms cubic-bezier(.4,0,.2,1);';
-            // ensure overflow hidden so we can clip the video to a rounded shape during the transition
-            if ( ! $_br_css ) $this->_vbr .= 'overflow:hidden;';
+            // ensure overflow hidden + new stacking context so we can clip the video during the transition
+            if ( ! $_br_css ) $this->_vbr .= 'overflow:hidden;transform:translateZ(0);';
         }
         // Stash hover css as instance prop so render_* funcs can emit a :hover rule
         $this->_vbr_hover_css = $_br_css_hover_css;
@@ -90,10 +102,43 @@ class Olo_Video_Tile extends Olo_Tile_Base {
         $border_css        = $this->build_border_css( $s['border'] ?? [] );
         $border_hover_css  = $this->build_border_hover_css( ".{$v_uid}", $s['border'] ?? [], $s['border_hover'] ?? [], intval( $s['border_hover_duration'] ?? 300 ) );
         $border_effect_css = $this->build_border_effect_css( ".{$v_uid}", $s['border'] ?? [], $s );
+
+        // L'utente si aspetta che il valore del raggio coincida con la curvatura del VIDEO
+        // (= curvatura interna del bordo). In CSS standard `border-radius: X` produce
+        // curvatura esterna X e interna max(0, X - border_width). Per ottenere curvatura
+        // interna = X dobbiamo applicare al wrapper esterno X + border_width.
+        $border_data = $this->parse_border( $s['border'] ?? [] );
+        $bw_uniform  = 0;
+        if ( $border_data
+            && $border_data['top'] === $border_data['right']
+            && $border_data['right'] === $border_data['bottom']
+            && $border_data['bottom'] === $border_data['left'] ) {
+            $bw_uniform = max( 0, intval( $border_data['top'] ) );
+        }
+
+        // Outer radius = inner radius + border-width (così la curvatura interna coincide).
+        $outer_br_value = $br_value;
+        if ( $bw_uniform > 0 ) {
+            if ( is_array( $br_value ) ) {
+                $outer_br_value = [
+                    'tl' => intval( $br_value['tl'] ?? 0 ) + $bw_uniform,
+                    'tr' => intval( $br_value['tr'] ?? 0 ) + $bw_uniform,
+                    'br' => intval( $br_value['br'] ?? 0 ) + $bw_uniform,
+                    'bl' => intval( $br_value['bl'] ?? 0 ) + $bw_uniform,
+                ];
+            } elseif ( is_numeric( $br_value ) && intval( $br_value ) > 0 ) {
+                $outer_br_value = intval( $br_value ) + $bw_uniform;
+            }
+        }
+        $outer_radius_css = $this->build_border_radius_css( $outer_br_value );
         $border_block = '';
-        if ( $border_css || $border_hover_css || $border_effect_css ) {
+        if ( $border_css || $border_hover_css || $border_effect_css || $outer_radius_css ) {
             $border_block = '<style>';
-            if ( $border_css ) $border_block .= ".{$v_uid}{{$border_css}}";
+            $outer_rules = $border_css;
+            if ( $outer_radius_css ) {
+                $outer_rules .= 'border-radius:' . $outer_radius_css . ';';
+            }
+            if ( $outer_rules ) $border_block .= ".{$v_uid}{{$outer_rules}}";
             $border_block .= $border_hover_css . $border_effect_css . '</style>';
         }
 
@@ -181,10 +226,11 @@ class Olo_Video_Tile extends Olo_Tile_Base {
                         loading="lazy"
                     ></iframe>
                 <?php else : ?>
-                    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--olo-color-secondary, #1F2937); display: flex; align-items: center; justify-content: center; color: var(--olo-color-text-muted, #9CA3AF);">
+                    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #1F2937; display: flex; align-items: center; justify-content: center; color: var(--olo-color-text-muted, #9CA3AF);">
                         <?php echo esc_html__( 'Inserisci un URL video', 'olobuild' ); ?>
                     </div>
                 <?php endif; ?>
+                <?php echo $this->render_overlay_layers( $s ); ?>
             </div>
             <?php $this->render_caption( $s ); ?>
         </div>
@@ -199,18 +245,26 @@ class Olo_Video_Tile extends Olo_Tile_Base {
     private function render_native( $s ) {
         $src     = $this->get_file_src( $s );
         $padding = $this->get_aspect_padding( $s['display_mode'] );
+        // Builder mode: niente autoplay (evita re-download a ogni patch del tile,
+        // che con video grandi freezza visibilmente l'editing) e preload=metadata
+        // (Chrome scarica solo i pochi KB iniziali, non l'intero file).
+        $is_builder = ! empty( $s['_builder_mode'] );
+        $autoplay = ! $is_builder && ! empty( $s['autoplay'] );
+        $muted    = ! empty( $s['muted'] ) || $autoplay;
+        $preload  = $is_builder ? 'metadata' : 'auto';
 
         ob_start();
         ?>
         <div class="olo-video uk-responsive-width <?php echo esc_attr( $this->_v_uid ); ?>">
-            <div style="position: relative; padding-bottom: <?php echo esc_attr( $padding ); ?>; overflow: hidden; <?php echo $this->_vbr; ?> background: var(--olo-color-secondary, #1F2937);">
+            <div style="position: relative; padding-bottom: <?php echo esc_attr( $padding ); ?>; overflow: hidden; <?php echo $this->_vbr; ?> background: #1F2937;">
                 <?php if ( $src ) : ?>
                     <video
                         style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;"
-                        <?php echo ! empty( $s['autoplay'] ) ? 'autoplay' : ''; ?>
-                        <?php echo ! empty( $s['muted'] ) || ! empty( $s['autoplay'] ) ? 'muted' : ''; ?>
+                        preload="<?php echo esc_attr( $preload ); ?>"
+                        <?php echo $autoplay ? 'autoplay' : ''; ?>
+                        <?php echo $muted ? 'muted' : ''; ?>
                         <?php echo ! empty( $s['loop'] ) ? 'loop' : ''; ?>
-                        <?php echo ! empty( $s['controls'] ) ? 'controls' : ''; ?>
+                        <?php echo ( $is_builder || ! empty( $s['controls'] ) ) ? 'controls' : ''; ?>
                         <?php echo ! empty( $s['poster_image'] ) ? 'poster="' . esc_url( $s['poster_image'] ) . '"' : ''; ?>
                         playsinline
                     >
@@ -221,6 +275,7 @@ class Olo_Video_Tile extends Olo_Tile_Base {
                         <?php echo esc_html__( 'Seleziona un file video', 'olobuild' ); ?>
                     </div>
                 <?php endif; ?>
+                <?php echo $this->render_overlay_layers( $s ); ?>
             </div>
             <?php $this->render_caption( $s ); ?>
         </div>
@@ -252,6 +307,11 @@ class Olo_Video_Tile extends Olo_Tile_Base {
         $icon_color  = $this->safe_color_css( $s['play_icon_color'] ) ?: '#fff';
         $show_icon   = $s['show_play_icon'] !== false;
 
+        $is_builder = ! empty( $s['_builder_mode'] );
+        $autoplay   = ! $is_builder && ! empty( $s['autoplay'] );
+        $muted      = ! empty( $s['muted'] ) || $autoplay;
+        $preload    = $is_builder ? 'metadata' : 'auto';
+
         ob_start();
         ?>
         <div class="olo-video olo-video-cover uk-position-relative uk-overflow-hidden <?php echo esc_attr( $this->_v_uid ); ?>" style="height: <?php echo $height; ?>px; <?php echo $this->_vbr; ?>">
@@ -259,10 +319,11 @@ class Olo_Video_Tile extends Olo_Tile_Base {
                 <video
                     class="uk-position-cover"
                     style="object-fit: cover; width: 100%; height: 100%;"
-                    <?php echo ! empty( $s['autoplay'] ) ? 'autoplay' : ''; ?>
-                    <?php echo ! empty( $s['muted'] ) || ! empty( $s['autoplay'] ) ? 'muted' : ''; ?>
+                    preload="<?php echo esc_attr( $preload ); ?>"
+                    <?php echo $autoplay ? 'autoplay' : ''; ?>
+                    <?php echo $muted ? 'muted' : ''; ?>
                     <?php echo ! empty( $s['loop'] ) ? 'loop' : ''; ?>
-                    <?php echo ! empty( $s['controls'] ) ? 'controls' : ''; ?>
+                    <?php echo ( $is_builder || ! empty( $s['controls'] ) ) ? 'controls' : ''; ?>
                     <?php echo $has_poster ? 'poster="' . esc_url( $poster_url ) . '"' : ''; ?>
                     playsinline
                 >
@@ -294,35 +355,45 @@ class Olo_Video_Tile extends Olo_Tile_Base {
                     ></iframe>
                 <?php endif; ?>
             <?php else : ?>
-                <div style="width: 100%; height: 100%; background: var(--olo-color-secondary, #1F2937); display: flex; align-items: center; justify-content: center; color: var(--olo-color-text-muted, #9CA3AF);">
+                <div style="width: 100%; height: 100%; background: #1F2937; display: flex; align-items: center; justify-content: center; color: var(--olo-color-text-muted, #9CA3AF);">
                     <?php echo esc_html__( 'Seleziona una sorgente video', 'olobuild' ); ?>
                 </div>
             <?php endif; ?>
 
-            <?php if ( $has_overlay ) : ?>
-                <div class="uk-position-cover" style="background-color: <?php echo $ov_color; ?>; opacity: <?php echo $ov_opacity / 100; ?>; pointer-events: none;"></div>
-            <?php endif; ?>
-
-            <?php if ( ! empty( $s['overlay_text'] ) ) :
-                $ov_size   = max( 8, absint( $s['overlay_text_size'] ?? 32 ) );
-                $ov_color  = $this->safe_color_css( $s['overlay_text_color'] ?? '#ffffff' ) ?: '#ffffff';
-                $ov_weight = in_array( (string) ( $s['overlay_text_weight'] ?? '700' ), [ '300','400','500','600','700','800','900' ], true ) ? $s['overlay_text_weight'] : '700';
-                $ov_align  = in_array( $s['overlay_text_align'] ?? 'center', [ 'left', 'center', 'right' ], true ) ? $s['overlay_text_align'] : 'center';
-                $ov_text_style = sprintf(
-                    'text-align:%s;color:%s;padding:24px;max-width:800px;pointer-events:auto;font-size:%dpx;font-weight:%s;line-height:1.25;',
-                    esc_attr( $ov_align ), $ov_color, $ov_size, esc_attr( $ov_weight )
-                );
-            ?>
-                <?php list( $ov_tfx_cls, $ov_tfx_data ) = $this->tfx_attrs( $s, 'overlay_text', wp_strip_all_tags( $s['overlay_text'] ) ); ?>
-                <div class="uk-position-cover uk-flex uk-flex-center uk-flex-middle" style="z-index: 2; pointer-events: none;">
-                    <div class="olo-video-overlay-text<?php echo $ov_tfx_cls; ?>" style="<?php echo $ov_text_style; ?>"<?php echo $ov_tfx_data; ?>>
-                        <?php echo nl2br( esc_html( wp_strip_all_tags( $s['overlay_text'] ) ) ); ?>
-                    </div>
-                </div>
-            <?php endif; ?>
+            <?php echo $this->render_overlay_layers( $s ); ?>
         </div>
         <?php $this->render_caption( $s ); ?>
         <?php
+        return ob_get_clean();
+    }
+
+    // =========================================================================
+    // Overlay layers (color + text) — funziona in TUTTI display_mode (embed/native/cover).
+    // Estratto in v1.0.58 (fix UX: overlay_text era esposto in inspector ma renderizzato solo in cover).
+    // =========================================================================
+    private function render_overlay_layers( $s ) {
+        $ov_opacity  = absint( $s['overlay_opacity'] ?? 0 );
+        $ov_color    = $this->safe_color_css( $s['overlay_color'] ?? '' );
+        $has_overlay = $ov_opacity > 0 && $ov_color;
+        $has_text    = ! empty( $s['overlay_text'] );
+        if ( ! $has_overlay && ! $has_text ) return '';
+
+        ob_start();
+        if ( $has_overlay ) {
+            ?><div style="position:absolute;inset:0;background-color:<?php echo esc_attr( $ov_color ); ?>;opacity:<?php echo $ov_opacity / 100; ?>;pointer-events:none;z-index:1;"></div><?php
+        }
+        if ( $has_text ) {
+            $ov_size    = max( 8, absint( $s['overlay_text_size'] ?? 32 ) );
+            $ov_t_color = $this->safe_color_css( $s['overlay_text_color'] ?? '#ffffff' ) ?: '#ffffff';
+            $ov_weight  = in_array( (string) ( $s['overlay_text_weight'] ?? '700' ), [ '300','400','500','600','700','800','900' ], true ) ? $s['overlay_text_weight'] : '700';
+            $ov_align   = in_array( $s['overlay_text_align'] ?? 'center', [ 'left', 'center', 'right' ], true ) ? $s['overlay_text_align'] : 'center';
+            $ov_text_style = sprintf(
+                'text-align:%s;color:%s;padding:24px;max-width:800px;pointer-events:auto;font-size:%dpx;font-weight:%s;line-height:1.25;',
+                esc_attr( $ov_align ), $ov_t_color, $ov_size, esc_attr( $ov_weight )
+            );
+            list( $ov_tfx_cls, $ov_tfx_data ) = $this->tfx_attrs( $s, 'overlay_text', wp_strip_all_tags( $s['overlay_text'] ) );
+            ?><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:2;pointer-events:none;"><div class="olo-video-overlay-text<?php echo $ov_tfx_cls; ?>" style="<?php echo $ov_text_style; ?>"<?php echo $ov_tfx_data; ?>><?php echo nl2br( esc_html( wp_strip_all_tags( $s['overlay_text'] ) ) ); ?></div></div><?php
+        }
         return ob_get_clean();
     }
 

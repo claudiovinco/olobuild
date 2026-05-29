@@ -11,6 +11,7 @@ class Olo_Progress_Tile extends Olo_Tile_Base {
     protected $icon     = 'dashicons-chart-bar';
     protected $category = 'marketing';
     protected $defaults = [
+        'preset' => 'custom',
         'bars'               => "HTML / CSS|90\nJavaScript|80\nVue.js|75\nPHP / WordPress|85",
         'bar_color'          => '',
         'bar_bg'             => '',
@@ -153,7 +154,7 @@ class Olo_Progress_Tile extends Olo_Tile_Base {
         $inner_text    = isset( $s['inner_text'] ) ? trim( $s['inner_text'] ) : '';
         $animate       = ! empty( $s['animate_counter'] );
         ?>
-        <div id="<?php echo esc_attr( $uid ); ?>" class="olo-progress olo-progress-circle" style="display:flex;flex-wrap:wrap;gap:16px;justify-content:center;padding:16px;">
+        <div id="<?php echo esc_attr( $uid ); ?>" class="olo-progress olo-pr-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?> olo-progress-circle" style="display:flex;flex-wrap:wrap;gap:16px;justify-content:center;padding:16px;">
             <?php foreach ( $bars as $bar ) :
                 $val    = min( max( intval( $bar['value'] ), 0 ), 100 );
                 $offset = $circumference - ( $circumference * $val / 100 );
@@ -188,7 +189,7 @@ class Olo_Progress_Tile extends Olo_Tile_Base {
         $inner_text = isset( $s['inner_text'] ) ? trim( $s['inner_text'] ) : '';
         $animate    = ! empty( $s['animate_counter'] );
         ?>
-        <div id="<?php echo esc_attr( $uid ); ?>" class="olo-progress" style="padding:16px;display:flex;flex-direction:column;gap:16px;">
+        <div id="<?php echo esc_attr( $uid ); ?>" class="olo-progress olo-pr-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" style="padding:16px;display:flex;flex-direction:column;gap:16px;">
             <?php foreach ( $bars as $bar ) :
                 $val = min( max( intval( $bar['value'] ), 0 ), 100 );
             ?>

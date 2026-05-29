@@ -136,7 +136,7 @@
         @click.self="showShortcuts = false"
         style="background:rgba(0,0,0,0.6)"
       >
-        <div class="mb-bg-gray-800 mb-border mb-border-gray-600 mb-rounded-xl mb-p-6 mb-shadow-2xl mb-w-[380px]" @click.stop>
+        <div ref="shortcutsModalRef" class="mb-bg-gray-800 mb-border mb-border-gray-600 mb-rounded-xl mb-p-6 mb-shadow-2xl mb-w-[380px]" @click.stop>
           <div class="mb-flex mb-items-center mb-justify-between mb-mb-4">
             <h3 class="mb-text-white mb-text-base mb-font-semibold mb-m-0">{{ t('Scorciatoie tastiera') }}</h3>
             <button
@@ -371,6 +371,28 @@
         Reale
       </button>
       <button
+        v-if="builderStore.currentTemplate?.id"
+        @click="regenerateThumbnail"
+        class="mb-px-2 mb-py-1.5 mb-text-xs mb-rounded-md mb-border mb-border-gray-600 mb-text-gray-300 hover:mb-bg-gray-700 mb-transition-colors"
+        :title="t('Rigenera anteprima 16:9 della pagina')"
+      >
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="14" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+      </button>
+      <!-- Indicatore stato salvataggio -->
+      <div class="mb-flex mb-items-center mb-gap-1 mb-text-[11px] mb-mr-0.5 mb-select-none" :title="saveStatusTitle">
+        <template v-if="builderStore.isSaving">
+          <svg class="mb-animate-spin mb-text-gray-400" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
+        </template>
+        <template v-else-if="builderStore.isAnyDirty">
+          <span class="mb-w-1.5 mb-h-1.5 mb-rounded-full mb-bg-amber-400"></span>
+          <span class="mb-text-amber-400/90">{{ t('Non salvato') }}</span>
+        </template>
+        <template v-else>
+          <svg class="mb-text-emerald-400" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+          <span class="mb-text-gray-500">{{ t('Salvato') }}</span>
+        </template>
+      </div>
+      <button
         @click="builderStore.saveTemplate()"
         :disabled="builderStore.isSaving || !builderStore.isAnyDirty"
         :class="[
@@ -380,7 +402,7 @@
             : 'mb-bg-gray-700 mb-text-gray-500 mb-cursor-not-allowed'
         ]"
       >
-        {{ builderStore.isSaving ? 'Salvataggio...' : 'Salva' }}
+        {{ builderStore.isSaving ? t('Salvataggio…') : t('Salva') }}
       </button>
       <button
         @click="builderStore.togglePublish()"
@@ -438,11 +460,12 @@
 </template>
 
 <script setup>
-import { computed, ref, nextTick, onMounted, onBeforeUnmount } from 'vue';
+import { computed, ref, nextTick, onMounted, onBeforeUnmount, watch } from 'vue';
 import { useBuilderStore } from '@/stores/builder';
 import { useTilesStore } from '@/stores/tiles';
 import { useHistory } from '@/composables/useHistory';
 import { useToast } from '@/composables/useToast';
+import { useFocusTrap } from '@/composables/useFocusTrap';
 import { t } from '@/i18n';
 
 const emit = defineEmits(['back', 'open-revisions', 'open-finder', 'open-ai', 'open-library', 'open-themes']);
@@ -455,6 +478,18 @@ const builderStore = useBuilderStore();
 const tilesStore = useTilesStore();
 const history = useHistory();
 const toast = useToast();
+
+// ─── Indicatore stato salvataggio ───
+const lastSavedAt = ref(null);
+watch(() => builderStore.isSaving, (now, prev) => {
+  if (prev && !now && !builderStore.isAnyDirty) lastSavedAt.value = new Date();
+});
+const saveStatusTitle = computed(() => {
+  if (builderStore.isSaving) return t('Salvataggio in corso…');
+  if (builderStore.isAnyDirty) return t('Ci sono modifiche non salvate');
+  if (lastSavedAt.value) return t('Salvato alle') + ' ' + lastSavedAt.value.toLocaleTimeString();
+  return t('Tutte le modifiche sono salvate');
+});
 
 // AI availability
 const hasAiKey = !!(window.oloData && window.oloData.hasAiKey);
@@ -483,6 +518,12 @@ const visibleViewports = computed(() => {
 
 // Shortcuts panel
 const showShortcuts = ref(false);
+const shortcutsModalRef = ref(null);
+const shortcutsTrap = useFocusTrap(shortcutsModalRef, { onEscape: () => { showShortcuts.value = false; } });
+watch(showShortcuts, (v) => {
+  if (v) { nextTick(() => shortcutsTrap.activate()); }
+  else { shortcutsTrap.deactivate(); }
+});
 const showZoomMenu = ref(false);
 const zoomMenuStyle = computed(() => {
   return { top: '48px', left: '50%', transform: 'translateX(-50%)' };
@@ -772,12 +813,16 @@ async function toggleActivateSingle() {
 
 // ─── Real Preview ───
 const realPreviewUrl = computed(() => {
-  // Priority 1: permalink passato da PHP (aperto da una pagina specifica)
+  // Priority 1: permalink passato da PHP (aperto da una pagina specifica via ?post_id=)
   if (oloData.postPermalink) return oloData.postPermalink;
-  // Priority 2: post_id nei settings del template (collegamento salvato)
+  // Priority 2: permalink REALE del post collegato al template, risolto lato PHP
+  // tramite get_permalink() che gestisce post/page/CPT correttamente.
+  if (oloData.linkedPostPermalink) return oloData.linkedPostPermalink;
+  // Priority 3: fallback `?p=ID` (funziona solo per post_type='post' — page/CPT 404).
+  // Manteniamo per back-compat con template salvati prima della v3.55.42.
   const settingsPostId = builderStore.currentTemplate?.settings?.post_id;
   if (settingsPostId && parseInt(settingsPostId) > 0) {
-    const home = oloData.siteInfo?.home_url || '';
+    const home = (oloData.siteInfo?.home_url || '').replace(/\/+$/, '');
     if (home) return `${home}/?p=${settingsPostId}`;
   }
   return '';
@@ -788,6 +833,31 @@ async function openRealPreview() {
   if (builderStore.isDirty) {
     await builderStore.saveTemplate();
   }
-  window.open(realPreviewUrl.value, '_blank');
+  const url = realPreviewUrl.value;
+  if (!url) {
+    toast.warning(t('Nessun post collegato al template. Imposta "Post collegato" nelle impostazioni.'));
+    return;
+  }
+  // Hint per mu-plugin/sandbox: bypassa eventuali landing/CTA intermedie e
+  // renderizza direttamente il template. Su server senza sandbox il parametro
+  // è innocuo (ignorato da WordPress core).
+  const sep = url.includes('?') ? '&' : '?';
+  window.open(url + sep + 'olo_preview=1', '_blank');
+}
+
+async function regenerateThumbnail() {
+  const id = builderStore.currentTemplate?.id;
+  if (!id) return;
+  if (typeof window.oloCaptureThumbnail !== 'function') {
+    toast.error('Modulo thumbnail non caricato');
+    return;
+  }
+  toast.info('Rigenero anteprima…');
+  try {
+    await window.oloCaptureThumbnail(id);
+    toast.success('Anteprima aggiornata');
+  } catch (e) {
+    toast.error('Errore: ' + (e?.message || e));
+  }
 }
 </script>
