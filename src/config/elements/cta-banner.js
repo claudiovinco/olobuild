@@ -26,12 +26,12 @@ export default {
     // Stile globale
     bg:              { type: 'solid', color: '#0f172a' },
     text_color:      '#ffffff',
-    accent_color:    '#b3261e',
+    accent_color:    'var(--olo-color-primary, #e1474f)',
     subtitle_color:  '#9ca3af',
 
     // CTA pill
-    cta_bg:                  '#b3261e',
-    cta_bg_hover:            '#dc2626',
+    cta_bg:                  'var(--olo-color-primary, #e1474f)',
+    cta_bg_hover:            '',
     cta_color:               '#ffffff',
     cta_color_hover:         '#ffffff',
     cta_radius:              { ...R(999) },

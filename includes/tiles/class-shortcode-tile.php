@@ -28,7 +28,7 @@ class Olo_Shortcode_Tile extends Olo_Tile_Base {
         $shortcode_text = trim( $s['shortcode_text'] );
 
         if ( empty( $shortcode_text ) ) {
-            return '<div class="olo-shortcode" style="text-align:center;padding:20px;color:#999;">'
+            return '<div class="olo-shortcode" style="text-align:center;padding:20px;color:var(--olo-color-text-muted, #9ca3af);">'
                  . olo_t( 'Inserisci uno shortcode nell\'inspector.' )
                  . '</div>';
         }
@@ -42,7 +42,7 @@ class Olo_Shortcode_Tile extends Olo_Tile_Base {
                 echo do_shortcode( $shortcode_text );
             } else {
                 // Display as code without execution
-                echo '<pre style="background:#f3f4f6;padding:12px;border-radius:6px;overflow-x:auto;"><code>'
+                echo '<pre style="background:var(--olo-color-muted, #f3f4f6);padding:12px;border-radius:6px;overflow-x:auto;"><code>'
                    . esc_html( $shortcode_text )
                    . '</code></pre>';
             }

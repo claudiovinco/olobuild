@@ -185,6 +185,12 @@ class Olo_Darkmode_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .olo-dm-button:hover {
                 transform: scale(1.03);
             }
+            .<?php echo $uid; ?> .olo-dm-track:focus-visible,
+            .<?php echo $uid; ?> .olo-dm-icon-btn:focus-visible,
+            .<?php echo $uid; ?> .olo-dm-button:focus-visible {
+                outline: none;
+                box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
+            }
             .<?php echo $uid; ?> .olo-dm-button .olo-dm-icon-sun,
             .<?php echo $uid; ?> .olo-dm-button .olo-dm-icon-moon {
                 transition: opacity <?php echo $duration; ?>ms ease, transform <?php echo $duration; ?>ms ease;

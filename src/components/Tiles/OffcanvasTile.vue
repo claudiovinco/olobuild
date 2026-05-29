@@ -9,7 +9,7 @@
         class="mb-px-3 mb-py-1.5 mb-rounded mb-text-sm mb-font-medium mb-flex mb-items-center mb-gap-1.5"
         :style="{ background: 'var(--olo-color-muted, #F3F4F6)', color: s.text_color || 'var(--olo-color-text, #374151)' }"
       >
-        <span v-if="s.trigger_icon" class="mb-text-xs">&#9776;</span>
+        <span v-if="s.trigger_icon" class="olo-oc-trigger-ico" v-html="menuSvg"></span>
         <span>{{ s.trigger_text || 'Apri pannello' }}</span>
       </div>
     </div>
@@ -41,6 +41,9 @@ import { t } from '@/i18n';
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
 });
+
+// Icona menu (hamburger) SVG — sostituisce il glyph ☰ (&#9776;)
+const menuSvg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>';
 
 const defaults = {
   trigger_selector: '',
@@ -76,3 +79,8 @@ const positionStyle = computed(() => {
   return { ...base, top: '0', right: '0', width: '30%', height: '100%' };
 });
 </script>
+
+<style scoped>
+.olo-oc-trigger-ico { display: inline-flex; align-items: center; }
+.olo-oc-trigger-ico :deep(svg) { display: block; }
+</style>

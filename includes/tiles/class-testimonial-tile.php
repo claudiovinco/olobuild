@@ -35,7 +35,7 @@ class Olo_Testimonial_Tile extends Olo_Tile_Base {
         'avatar_radius'      => '6',
         'avatar_shadow'      => 'none',
         'avatar_border_width' => '0',
-        'avatar_border_color' => '#FFFFFF',
+        'avatar_border_color' => '',
         'avatar_filter'      => 'none',
         'border_radius'      => '12',
         'border_width'            => '0',
@@ -63,9 +63,9 @@ class Olo_Testimonial_Tile extends Olo_Tile_Base {
         $layout = in_array( $s['layout'], [ 'single', 'carousel', 'grid' ], true ) ? $s['layout'] : 'single';
 
         // Preparazione stili comuni
-        $bg          = $this->safe_color_css( $s['bg_color'] ) ?: 'var(--olo-color-muted, #F3F4F6)';
+        $bg          = $this->safe_color_css( $s['bg_color'] ) ?: 'var(--olo-color-surface-alt, #F3F4F6)';
         $fg          = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-text, #374151)';
-        $line_col    = $this->safe_color_css( $s['line_color'] ) ?: 'var(--olo-color-primary, #6366F1)';
+        $line_col    = $this->safe_color_css( $s['line_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $show_line   = filter_var( $s['show_line'], FILTER_VALIDATE_BOOLEAN );
         $valid_pos   = [ 'bottom-left', 'bottom-center', 'bottom-right', 'left', 'right' ];
         $position    = in_array( $s['author_position'], $valid_pos ) ? $s['author_position'] : 'bottom-left';
@@ -170,7 +170,7 @@ class Olo_Testimonial_Tile extends Olo_Tile_Base {
                 <?php
                 $abw = intval( $s['avatar_border_width'] );
                 if ( $abw > 0 ) :
-                    $abc = $this->safe_color_css( $s['avatar_border_color'] ) ?: '#FFFFFF';
+                    $abc = $this->safe_color_css( $s['avatar_border_color'] ) ?: 'var(--olo-color-on-primary, #FFFFFF)';
                 ?>
                 border: <?php echo $abw; ?>px solid <?php echo $abc; ?>;
                 <?php endif; ?>
@@ -260,7 +260,7 @@ class Olo_Testimonial_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .olo-test-slider-nav { display: flex; justify-content: center; align-items: center; gap: 16px; margin-top: 16px; }
             .<?php echo $uid; ?> .olo-test-slider-nav a { color: inherit; }
             .<?php echo $uid; ?> .uk-dotnav > * > * { background: var(--olo-color-border, #E5E7EB); }
-            .<?php echo $uid; ?> .uk-dotnav > .uk-active > * { background: var(--olo-color-primary, #6366F1); }
+            .<?php echo $uid; ?> .uk-dotnav > .uk-active > * { background: var(--olo-color-primary, #e1474f); }
         </style>
         <div class="olo-testimonial <?php echo esc_attr( $uid ); ?> olo-test-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>"
              uk-slider="autoplay: <?php echo $autoplay_attr; ?>; autoplay-interval: <?php echo $interval; ?>">

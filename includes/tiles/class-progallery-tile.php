@@ -243,7 +243,7 @@ class Olo_ProGallery_Tile extends Olo_Tile_Base {
         $hz_scale    = max( 1.05, min( 1.30, floatval( $s['hover_zoom_scale'] ) ) );
         $tilt_angle  = max( 5, min( 20, absint( $s['hover_tilt_angle'] ) ) );
         $mag_str     = max( 8, min( 60, absint( $s['hover_magnetic_strength'] ) ) );
-        $glow_color  = $this->safe_color_css( $s['hover_glow_color'] ) ?: '#6366f1';
+        $glow_color  = $this->safe_color_css( $s['hover_glow_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $glow_spread = max( 8, min( 50, absint( $s['hover_glow_spread'] ) ) );
         $hcaption    = $s['hover_caption'] ?: 'none';
         $hcap_bg     = $this->safe_color_css( $s['hover_caption_bg'] ) ?: 'rgba(0,0,0,0.6)';

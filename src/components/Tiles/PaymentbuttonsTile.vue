@@ -31,7 +31,7 @@ const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 const s = computed(() => props.settings || {});
 const currencySymbol = computed(() => ({ EUR: '€', USD: '$', GBP: '£' }[s.value.currency] || ''));
 const btnStyle = computed(() => ({
-  backgroundColor: s.value.bg_color || 'var(--olo-color-primary, #6366F1)',
+  backgroundColor: s.value.bg_color || 'var(--olo-color-primary, #e1474f)',
   color: s.value.text_color || '#ffffff',
   borderRadius: (s.value.border_radius || 8) + 'px',
   fontSize: (s.value.font_size || 16) + 'px',
@@ -50,3 +50,10 @@ const paypalStyle = computed(() => ({
   marginLeft: s.value.provider === 'both' ? '12px' : '0',
 }));
 </script>
+
+<style scoped>
+.olo-pay-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
+}
+</style>

@@ -20,23 +20,23 @@ class Olo_Authorbox_Tile extends Olo_Tile_Base {
         'show_post_count'      => false,
         'show_website'         => false,
         'name_tag'             => 'h3',
-        'name_color'           => '#F3F4F6',
+        'name_color'           => '',
         'name_size'            => '20',
         'name_weight'          => '700',
-        'bio_color'            => '#9CA3AF',
+        'bio_color'            => '',
         'bio_size'             => '14',
-        'role_color'           => '#818CF8',
+        'role_color'           => '',
         'role_size'            => '13',
-        'link_color'           => '#6366F1',
-        'count_color'          => '#9CA3AF',
+        'link_color'           => '',
+        'count_color'          => '',
         'background_color'     => '',
         'border_radius'        => '8',
         'padding'              => '20',
         'avatar_border_radius' => '50',
         'avatar_border_width'  => '0',
-        'avatar_border_color'  => '#6366F1',
+        'avatar_border_color'  => '',
         'border_width'            => '0',
-        'border_color'            => '#374151',
+        'border_color'            => '',
         'gap'                     => '16',
         'text_align'              => 'left',
         'border'                  => [],
@@ -78,8 +78,8 @@ class Olo_Authorbox_Tile extends Olo_Tile_Base {
 
         // No author found — placeholder
         if ( ! $author_id ) {
-            $bg      = $this->safe_color_css( $s['background_color'] ) ?: 'var(--olo-color-muted, #F3F4F6)';
-            $fg      = $this->safe_color_css( $s['name_color'] ) ?: '#F3F4F6';
+            $bg      = $this->safe_color_css( $s['background_color'] ) ?: 'var(--olo-color-surface-alt, #F3F4F6)';
+            $fg      = $this->safe_color_css( $s['name_color'] ) ?: 'var(--olo-color-text, #374151)';
             $rad     = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
             $rad_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
             $pad     = absint( $s['padding'] );
@@ -123,13 +123,13 @@ class Olo_Authorbox_Tile extends Olo_Tile_Base {
         $show_web    = filter_var( $s['show_website'], FILTER_VALIDATE_BOOLEAN );
         $name_tag    = in_array( $s['name_tag'], [ 'h3', 'h4', 'h5', 'div' ], true ) ? $s['name_tag'] : 'h3';
 
-        // Colors
-        $bg_col     = $this->safe_color_css( $s['background_color'] ) ?: 'var(--olo-color-muted, #F3F4F6)';
-        $name_col   = $this->safe_color_css( $s['name_color'] ) ?: '#F3F4F6';
-        $bio_col    = $this->safe_color_css( $s['bio_color'] ) ?: '#9CA3AF';
-        $role_col   = $this->safe_color_css( $s['role_color'] ) ?: '#818CF8';
-        $link_col   = $this->safe_color_css( $s['link_color'] ) ?: '#6366F1';
-        $count_col  = $this->safe_color_css( $s['count_color'] ) ?: '#9CA3AF';
+        // Colors — token-first (no più indaco/grigi nudi off-brand)
+        $bg_col     = $this->safe_color_css( $s['background_color'] ) ?: 'var(--olo-color-surface-alt, #F3F4F6)';
+        $name_col   = $this->safe_color_css( $s['name_color'] ) ?: 'var(--olo-color-text, #374151)';
+        $bio_col    = $this->safe_color_css( $s['bio_color'] ) ?: 'var(--olo-color-text-soft, #6b7280)';
+        $role_col   = $this->safe_color_css( $s['role_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
+        $link_col   = $this->safe_color_css( $s['link_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
+        $count_col  = $this->safe_color_css( $s['count_color'] ) ?: 'var(--olo-color-text-soft, #6b7280)';
 
         // Sizes
         $name_size  = max( 14, min( 32, absint( $s['name_size'] ) ) );
@@ -153,7 +153,7 @@ class Olo_Authorbox_Tile extends Olo_Tile_Base {
                 <?php
                 $bw = absint( $s['border_width'] );
                 if ( $bw > 0 ) :
-                    $bc = $this->safe_color_css( $s['border_color'] ) ?: '#374151';
+                    $bc = $this->safe_color_css( $s['border_color'] ) ?: 'var(--olo-color-border, #E5E7EB)';
                 ?>
                 border: <?php echo $bw; ?>px solid <?php echo $bc; ?>;
                 <?php endif; ?>
@@ -183,7 +183,7 @@ class Olo_Authorbox_Tile extends Olo_Tile_Base {
                 <?php
                 $abw = absint( $s['avatar_border_width'] );
                 if ( $abw > 0 ) :
-                    $abc = $this->safe_color_css( $s['avatar_border_color'] ) ?: '#6366F1';
+                    $abc = $this->safe_color_css( $s['avatar_border_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
                 ?>
                 border: <?php echo $abw; ?>px solid <?php echo $abc; ?>;
                 <?php endif; ?>
@@ -225,6 +225,11 @@ class Olo_Authorbox_Tile extends Olo_Tile_Base {
             }
             .<?php echo $uid; ?> .olo-ab-website a:hover {
                 opacity: 0.8;
+            }
+            .<?php echo $uid; ?> .olo-ab-website a:focus-visible {
+                outline: none;
+                border-radius: 3px;
+                box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
             }
         </style>
         <div class="olo-authorbox <?php echo esc_attr( $uid ); ?>">

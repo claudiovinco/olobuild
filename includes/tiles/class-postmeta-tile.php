@@ -22,9 +22,9 @@ class Olo_PostMeta_Tile extends Olo_Tile_Base {
         'layout'              => 'inline',
         'separator'           => ' · ',
         'icon_style'          => 'none',
-        'text_color'          => '#9CA3AF',
-        'link_color'          => '#6366F1',
-        'icon_color'          => '#6B7280',
+        'text_color'          => '',
+        'link_color'          => '',
+        'icon_color'          => '',
         'bg_color'            => '',
         'font_size'           => '14',
         'font_family'         => 'inherit',
@@ -97,10 +97,11 @@ class Olo_PostMeta_Tile extends Olo_Tile_Base {
         $post_id = get_the_ID();
         $post    = get_post( $post_id );
 
+        // TOKEN-FIRST: neutri → token tema; link = primario brand (era #e1474f indaco off-brand)
         $preset_id  = sanitize_key( $s['preset'] ?? 'custom' );
-        $text_color = $this->safe_color_css( $s['text_color'] );
-        $link_color = $this->safe_color_css( $s['link_color'] );
-        $icon_color = $this->safe_color_css( $s['icon_color'] );
+        $text_color = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-text-faint, #9CA3AF)';
+        $link_color = $this->safe_color_css( $s['link_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
+        $icon_color = $this->safe_color_css( $s['icon_color'] ) ?: 'var(--olo-color-text-soft, #6B7280)';
         $bg_color   = $this->safe_color_css( $s['bg_color'] );
         $font_size  = max( 10, min( 24, absint( $s['font_size'] ) ) );
         $separator  = esc_html( $s['separator'] );
@@ -264,6 +265,9 @@ class Olo_PostMeta_Tile extends Olo_Tile_Base {
         if ( $link_color && $preset_id !== 'neon-cyber' && $preset_id !== 'gradient-glow' ) {
             // hover non standardizzato qui, lascio i preset gestire
         }
+
+        // a11y tastiera: anello di focus visibile sui link meta (autore/categorie/tag)
+        echo '<style>.' . esc_attr( $uid ) . ' a:focus-visible{outline:none;box-shadow:0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);border-radius:3px;}</style>';
 
         // Preset extra CSS
         $extra = $this->get_preset_extra_css( $preset_id, $uid, $s );

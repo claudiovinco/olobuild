@@ -27,7 +27,7 @@ class Olo_Wpcomments_Tile extends Olo_Tile_Base {
         'date_color'          => '',
         'link_color'          => '',
         'form_background'     => '',
-        'border_color'        => '#e5e7eb',
+        'border_color'        => '',
         'avatar_border_radius' => '50',
             'border'                  => [],
         'border_hover'            => [],
@@ -93,7 +93,7 @@ class Olo_Wpcomments_Tile extends Olo_Tile_Base {
         $date_color   = $this->safe_color_css( $s['date_color'] );
         $link_color   = $this->safe_color_css( $s['link_color'] );
         $form_bg      = $this->safe_color_css( $s['form_background'] );
-        $border_color = $this->safe_color_css( $s['border_color'] ?: '#e5e7eb' );
+        $border_color = $this->safe_color_css( $s['border_color'] ) ?: 'var(--olo-color-border, #e5e7eb)';
 
         // Get comments
         $comments = get_comments( [
@@ -207,9 +207,14 @@ class Olo_Wpcomments_Tile extends Olo_Tile_Base {
                 cursor: pointer;
                 font-size: 0.9em;
                 font-weight: 500;
-                <?php if ( $link_color ) : ?>background: <?php echo $link_color; ?>; color: #fff;<?php else : ?>background: #1e87f0; color: #fff;<?php endif; ?>
+                <?php if ( $link_color ) : ?>background: <?php echo $link_color; ?>; color: #fff;<?php else : ?>background: var(--olo-color-primary, #e1474f); color: #fff;<?php endif; ?>
             }
             <?php endif; ?>
+            .<?php echo $uid; ?> .olo-comment-reply a:focus-visible,
+            .<?php echo $uid; ?> .olo-comment-form-wrap .comment-form .form-submit input:focus-visible {
+                outline: none;
+                box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
+            }
         </style>
 
         <div class="olo-wpcomments <?php echo $uid; ?>">

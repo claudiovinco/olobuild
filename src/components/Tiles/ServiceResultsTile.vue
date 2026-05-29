@@ -113,7 +113,7 @@ const gridStyle = computed(() => ({
 }
 .olo-svresults-preview-filters {
   padding: 10px 0;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--olo-color-border, #e5e7eb);
   margin-bottom: 12px;
 }
 .olo-svresults-preview-selects {
@@ -124,11 +124,11 @@ const gridStyle = computed(() => ({
 }
 .olo-svresults-preview-sel {
   padding: 4px 10px;
-  background: #f9fafb;
-  border: 1px solid #e5e7eb;
+  background: var(--olo-color-surface-alt, #f6f7f9);
+  border: 1px solid var(--olo-color-border, #e5e7eb);
   border-radius: 4px;
   font-size: 0.82em;
-  color: #666;
+  color: var(--olo-color-text-soft, #6b7280);
 }
 .olo-svresults-preview-amenities {
   display: flex;
@@ -138,15 +138,15 @@ const gridStyle = computed(() => ({
 }
 .olo-svresults-preview-pill {
   padding: 2px 8px;
-  background: #f3f4f6;
-  border: 1px solid #e5e7eb;
+  background: var(--olo-color-surface-alt, #f6f7f9);
+  border: 1px solid var(--olo-color-border, #e5e7eb);
   border-radius: 999px;
   font-size: 0.72em;
-  color: #666;
+  color: var(--olo-color-text-soft, #6b7280);
 }
 .olo-svresults-preview-counter {
   font-size: 0.78em;
-  color: #999;
+  color: var(--olo-color-text-faint, #94a3b8);
 }
 .olo-svresults-preview-body {
   display: flex;
@@ -172,13 +172,13 @@ const gridStyle = computed(() => ({
 .olo-svresults-preview-map-placeholder {
   width: 100%;
   height: 100%;
-  background: #e5e7eb;
+  background: var(--olo-color-surface-alt, #f6f7f9);
   border-radius: 8px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  color: #999;
+  color: var(--olo-color-text-faint, #94a3b8);
   font-size: 0.85em;
 }
 .olo-svresults-preview-grid {
@@ -186,12 +186,13 @@ const gridStyle = computed(() => ({
   min-width: 0;
 }
 .olo-svresults-preview-card {
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--olo-color-border, #e5e7eb);
   overflow: hidden;
-  background: #fff;
+  background: var(--olo-color-surface, #fff);
 }
 .olo-svresults-preview-card-img {
-  background: linear-gradient(135deg, #e0e7ff, #f0f0f0);
+  /* placeholder media elegante: tinta soft brand su superficie (no più indaco #e0e7ff) */
+  background: linear-gradient(135deg, color-mix(in srgb, var(--olo-color-primary, #e1474f) 12%, #fff), var(--olo-color-surface-alt, #f6f7f9));
 }
 .olo-svresults-preview-card-body {
   padding: 10px;
@@ -203,12 +204,12 @@ const gridStyle = computed(() => ({
 }
 .olo-svresults-preview-card-stats {
   font-size: 0.75em;
-  color: #888;
+  color: var(--olo-color-text-soft, #6b7280);
   margin-bottom: 4px;
 }
 .olo-svresults-preview-card-excerpt {
   font-size: 0.78em;
-  color: #888;
+  color: var(--olo-color-text-soft, #6b7280);
   margin-bottom: 6px;
 }
 .olo-svresults-preview-card-footer {
@@ -219,11 +220,11 @@ const gridStyle = computed(() => ({
 .olo-svresults-preview-card-price {
   font-weight: 700;
   font-size: 0.9em;
-  color: var(--olo-color-primary, #6366F1);
+  color: var(--olo-color-primary, #e1474f);
 }
 .olo-svresults-preview-card-link {
   font-size: 0.78em;
-  color: var(--olo-color-primary, #6366F1);
+  color: var(--olo-color-primary, #e1474f);
 }
 .olo-svresults-preview-pagination {
   display: flex;
@@ -235,11 +236,11 @@ const gridStyle = computed(() => ({
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  border: 2px solid #ccc;
+  border: 2px solid var(--olo-color-border, #e5e7eb);
 }
 .olo-svresults-preview-dot.active {
-  background: var(--olo-color-primary, #6366F1);
-  border-color: var(--olo-color-primary, #6366F1);
+  background: var(--olo-color-primary, #e1474f);
+  border-color: var(--olo-color-primary, #e1474f);
 }
 .olo-svresults-preview-num {
   min-width: 24px;
@@ -249,23 +250,23 @@ const gridStyle = computed(() => ({
   justify-content: center;
   border-radius: 4px;
   font-size: 0.8em;
-  border: 1px solid #ddd;
-  color: #666;
+  border: 1px solid var(--olo-color-border, #e5e7eb);
+  color: var(--olo-color-text-soft, #6b7280);
 }
 .olo-svresults-preview-num.active {
-  background: var(--olo-color-primary, #6366F1);
-  color: #fff;
-  border-color: var(--olo-color-primary, #6366F1);
+  background: var(--olo-color-primary, #e1474f);
+  color: var(--olo-color-on-primary, #fff);
+  border-color: var(--olo-color-primary, #e1474f);
 }
 .olo-svresults-preview-arrow {
   font-size: 0.9em;
-  color: #888;
+  color: var(--olo-color-text-soft, #6b7280);
 }
 .olo-svresults-preview-loadmore {
   padding: 4px 16px;
-  border: 1px solid var(--olo-color-primary, #6366F1);
+  border: 1px solid var(--olo-color-primary, #e1474f);
   border-radius: 999px;
   font-size: 0.78em;
-  color: var(--olo-color-primary, #6366F1);
+  color: var(--olo-color-primary, #e1474f);
 }
 </style>

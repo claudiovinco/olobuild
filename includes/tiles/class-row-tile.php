@@ -84,7 +84,7 @@ class Olo_Row_Tile extends Olo_Tile_Base {
                 }
 
                 if ( empty( $col_tiles ) ) {
-                    echo '<div style="padding: 20px; text-align: center; color: #6b7280; font-size: 0.875em;">Column ' . ( $i + 1 ) . '</div>';
+                    echo '<div style="padding: 20px; text-align: center; color: var(--olo-color-text-soft, #6b7280); font-size: 0.875em;">Column ' . ( $i + 1 ) . '</div>';
                 }
                 ?>
             </div>

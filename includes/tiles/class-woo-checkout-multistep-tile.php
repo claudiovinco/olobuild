@@ -17,9 +17,9 @@ class Olo_Woo_Checkout_Multistep_Tile extends Olo_Tile_Base {
         'step_labels'      => 'Dati,Spedizione,Pagamento,Conferma',
         'step_style'       => 'progress',
         'accent_color'     => '',
-        'step_bg'          => '#F9FAFB',
+        'step_bg'          => '',
         'active_color'     => '',
-        'text_color'       => '#374151',
+        'text_color'       => '',
         'card_radius'      => 12,
         'show_order_review' => true,
             'border'                  => [],
@@ -48,10 +48,10 @@ class Olo_Woo_Checkout_Multistep_Tile extends Olo_Tile_Base {
         $s   = wp_parse_args( $settings, $this->defaults );
         $uid = 'olo-woo-ms-' . wp_rand( 10000, 99999 );
 
-        $accent  = $this->safe_color_css( $s['accent_color'] ) ?: 'var(--olo-color-primary, #6366F1)';
+        $accent  = $this->safe_color_css( $s['accent_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $active  = $this->safe_color_css( $s['active_color'] ) ?: $accent;
-        $text_c  = $this->safe_color_css( $s['text_color'] ) ?: '#374151';
-        $step_bg = $this->safe_color_css( $s['step_bg'] ) ?: '#F9FAFB';
+        $text_c  = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-text, #1f2937)';
+        $step_bg = $this->safe_color_css( $s['step_bg'] ) ?: 'var(--olo-color-surface-alt, #f6f7f9)';
         $radius  = Olo_Tile_Utils::border_radius( $s['card_radius'] ?? 0 );
         $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['card_radius_hover'] ?? null );
         $labels  = array_map( 'trim', explode( ',', $s['step_labels'] ) );

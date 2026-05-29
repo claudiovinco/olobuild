@@ -308,8 +308,8 @@ class Olo_Content_Tile extends Olo_Tile_Base {
             // CSS-only effects (rest are JS-driven via olo-text-fx data-attribute below)
             $sel = '.' . $uid;
             if ( $effect === 'gradient-anim' ) {
-                $g1 = $color1 ?: 'var(--olo-color-primary, #6366F1)';
-                $g2 = $color2 ?: '#ec4899';
+                $g1 = $color1 ?: 'var(--olo-color-primary, #e1474f)';
+                $g2 = $color2 ?: 'var(--olo-color-accent, #f4a23b)';
                 $extra_css .= '@keyframes olo-tfx-grad{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}';
                 $extra_css .= $sel . ' .olo-tfx--gradient-anim{background:linear-gradient(90deg,' . $g1 . ',' . $g2 . ',' . $g1 . ');background-size:200% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:olo-tfx-grad 4s ease-in-out infinite;animation-delay:' . $delay . 'ms;}';
             } elseif ( $effect === 'glitch' ) {
@@ -324,7 +324,7 @@ class Olo_Content_Tile extends Olo_Tile_Base {
                 $extra_css .= $sel . ' .olo-tfx--underline-grow{display:inline-block;background-image:linear-gradient(' . $uc . ',' . $uc . ');background-position:0 100%;background-size:0 3px;background-repeat:no-repeat;transition:background-size 1s cubic-bezier(.4,0,.2,1) ' . $delay . 'ms;padding-bottom:4px;}';
                 $extra_css .= $sel . ' .olo-tfx--underline-grow.olo-tfx-active{background-size:100% 3px;}';
             } elseif ( $effect === 'highlight-grow' ) {
-                $hc = $color1 ?: 'rgba(99,102,241,0.25)';
+                $hc = $color1 ?: 'color-mix(in srgb, var(--olo-color-primary, #e1474f) 25%, transparent)';
                 // inline-block keeps highlight working on both <h*> headings AND <div> text wrappers (which contain block-level <p>)
                 $extra_css .= $sel . ' .olo-tfx--highlight-grow{display:inline-block;background-image:linear-gradient(' . $hc . ',' . $hc . ');background-position:0 100%;background-size:0 100%;background-repeat:no-repeat;transition:background-size 1.2s cubic-bezier(.4,0,.2,1) ' . $delay . 'ms;padding:0 4px;}';
                 $extra_css .= $sel . ' .olo-tfx--highlight-grow.olo-tfx-active{background-size:100% 100%;}';

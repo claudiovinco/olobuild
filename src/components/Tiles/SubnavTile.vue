@@ -12,10 +12,10 @@
       <template v-for="(item, i) in displayItems" :key="item.id || i">
         <span
           v-if="i > 0 && s.divider"
-          class="mb-text-gray-600"
-          :style="{ alignSelf: 'stretch', width: '1px', background: '#4b5563' }"
+          :style="{ alignSelf: 'stretch', width: '1px', background: 'var(--olo-color-border, #4b5563)' }"
         ></span>
         <span
+          class="olo-subnav-item"
           :style="itemStyle(i)"
           @mouseenter="hoverIdx = i"
           @mouseleave="hoverIdx = -1"
@@ -82,9 +82,12 @@ const displayItems = computed(() => {
   return [{ title: 'Elemento 1' }, { title: 'Elemento 2' }, { title: 'Elemento 3' }];
 });
 
-const linkColor = computed(() => s.value.link_color || '#9ca3af');
-const hoverColor = computed(() => s.value.hover_color || '#e5e7eb');
-const activeColor = computed(() => s.value.active_color || '#6366f1');
+// TOKEN-FIRST: neutri → token testo; voce attiva = primario brand (era #e1474f indaco)
+const linkColor = computed(() => s.value.link_color || 'var(--olo-color-text-soft, #6b7280)');
+const hoverColor = computed(() => s.value.hover_color || 'var(--olo-color-text, #374151)');
+const activeColor = computed(() => s.value.active_color || 'var(--olo-color-primary, #e1474f)');
+// Tinta soft dal colore attivo (compatibile con token CSS var: niente più concat hex-alpha)
+const activeTint = (pct) => `color-mix(in srgb, ${activeColor.value} ${pct}%, transparent)`;
 
 const containerClasses = computed(() => ['mb-flex', 'mb-flex-wrap', 'mb-items-center']);
 
@@ -122,7 +125,7 @@ function itemStyle(i) {
   // Active
   if (isActive) {
     if (s.value.active_style === 'underline') st.borderBottom = `2px solid ${activeColor.value}`;
-    if (s.value.active_style === 'background') st.background = s.value.active_bg || `${activeColor.value}15`;
+    if (s.value.active_style === 'background') st.background = s.value.active_bg || activeTint(8);
     if (s.value.active_style === 'bold') st.fontWeight = '700';
     if (s.value.active_bg && s.value.active_style !== 'background') st.background = s.value.active_bg;
   }
@@ -135,15 +138,23 @@ function itemStyle(i) {
   // Style presets
   if (style_type === 'pill') {
     st.borderRadius = '999px';
-    if (isActive) st.background = s.value.active_bg || `${activeColor.value}20`;
+    if (isActive) st.background = s.value.active_bg || activeTint(12);
   } else if (style_type === 'underline') {
     st.borderRadius = '0';
     st.borderBottom = isActive ? `2px solid ${activeColor.value}` : '2px solid transparent';
   } else if (style_type === 'boxed') {
     st.border = `1px solid ${isActive ? activeColor.value : 'rgba(255,255,255,0.15)'}`;
-    if (isActive) st.background = s.value.active_bg || `${activeColor.value}10`;
+    if (isActive) st.background = s.value.active_bg || activeTint(6);
   }
 
   return st;
 }
 </script>
+
+<style scoped>
+/* a11y tastiera: anello di focus visibile sulle voci di sotto-navigazione */
+.olo-subnav-item:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
+}
+</style>

@@ -32,7 +32,7 @@ class Olo_ProductCards_Tile extends Olo_Tile_Base {
         ],
 
         'card_bg'                    => [ 'type' => 'solid', 'color' => '#ffffff' ],
-        'card_color'                 => '#374151',
+        'card_color'                 => '',
         'card_radius'                => [ 'tl' => 24, 'tr' => 24, 'br' => 24, 'bl' => 24, 'linked' => true ],
         'card_radius_hover'          => [ 'tl' => 24, 'tr' => 24, 'br' => 24, 'bl' => 24, 'linked' => true ],
         'card_radius_hover_duration' => 400,
@@ -46,7 +46,7 @@ class Olo_ProductCards_Tile extends Olo_Tile_Base {
         'letter_italic'         => true,
         'letter_align'          => 'center',
         'show_screenshot_label' => true,
-        'screenshot_label_color' => '#9ca3af',
+        'screenshot_label_color' => '',
 
         'brand_size'           => 13,
         'brand_letter_spacing' => 0.08,
@@ -110,7 +110,7 @@ class Olo_ProductCards_Tile extends Olo_Tile_Base {
         $card_bg_css = $this->_bg_inline_css( $s['card_bg'] ?? [ 'type' => 'solid', 'color' => '#ffffff' ] );
         if ( ! $card_bg_css ) $card_bg_css = 'background:#ffffff';
 
-        $card_color    = $this->safe_color_css( $s['card_color'] ) ?: '#374151';
+        $card_color    = $this->safe_color_css( $s['card_color'] ) ?: 'var(--olo-color-text, #374151)';
         $card_padding  = max( 12, min( 60, absint( $s['card_padding'] ) ) );
 
         $top_aspect    = in_array( $s['top_aspect_ratio'] ?? '3/4', [ '1/1', '4/5', '3/4', '2/3', '3/2' ], true ) ? $s['top_aspect_ratio'] : '3/4';
@@ -119,7 +119,7 @@ class Olo_ProductCards_Tile extends Olo_Tile_Base {
         $letter_italic = ! empty( $s['letter_italic'] ) ? 'italic' : 'normal';
         $letter_align  = in_array( $s['letter_align'] ?? 'center', [ 'left', 'center', 'right' ], true ) ? $s['letter_align'] : 'center';
 
-        $sl_color = $this->safe_color_css( $s['screenshot_label_color'] ) ?: '#9ca3af';
+        $sl_color = $this->safe_color_css( $s['screenshot_label_color'] ) ?: 'var(--olo-color-text-faint, #9ca3af)';
 
         $brand_size = max( 10, min( 22, absint( $s['brand_size'] ) ) );
         $brand_ls   = max( 0, min( 0.3, floatval( $s['brand_letter_spacing'] ) ) );
@@ -149,7 +149,7 @@ class Olo_ProductCards_Tile extends Olo_Tile_Base {
                 $show_badge  = ! empty( $it['show_badge'] );
                 $badge_txt   = $it['badge_text'] ?? '';
                 $badge_bg    = $this->safe_color_css( $it['badge_bg'] ?? '' ) ?: '#0f172a';
-                $badge_clr   = $this->safe_color_css( $it['badge_color'] ?? '' ) ?: '#ffffff';
+                $badge_clr   = $this->safe_color_css( $it['badge_color'] ?? '' ) ?: 'var(--olo-color-on-primary, #ffffff)';
 
                 $title       = $it['title'] ?? '';
                 $title_acc   = $it['title_accent'] ?? '';
@@ -170,7 +170,7 @@ class Olo_ProductCards_Tile extends Olo_Tile_Base {
                         <?php endif; ?>
 
                         <?php if ( ! empty( $s['show_screenshot_label'] ) && $screen_lbl ) : ?>
-                            <div class="olo-pcards__screen-label" style="position:absolute;left:<?php echo $top_padding; ?>px;right:<?php echo $top_padding; ?>px;bottom:<?php echo $top_padding; ?>px;border:1px dashed <?php echo esc_attr( $sl_color ); ?>66;border-radius:6px;padding:8px 12px;text-align:center;font-family:<?php echo esc_attr( $mono ); ?>;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:<?php echo esc_attr( $sl_color ); ?>" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.screenshot_label'; ?>"><?php echo esc_html( $screen_lbl ); ?></div>
+                            <div class="olo-pcards__screen-label" style="position:absolute;left:<?php echo $top_padding; ?>px;right:<?php echo $top_padding; ?>px;bottom:<?php echo $top_padding; ?>px;border:1px dashed color-mix(in srgb, <?php echo esc_attr( $sl_color ); ?> 40%, transparent);border-radius:6px;padding:8px 12px;text-align:center;font-family:<?php echo esc_attr( $mono ); ?>;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:<?php echo esc_attr( $sl_color ); ?>" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.screenshot_label'; ?>"><?php echo esc_html( $screen_lbl ); ?></div>
                         <?php endif; ?>
                     </div>
 
@@ -198,7 +198,7 @@ class Olo_ProductCards_Tile extends Olo_Tile_Base {
                         <?php endif; ?>
 
                         <?php if ( $cta_text !== '' ) : ?>
-                            <a href="<?php echo esc_url( $cta_url ?: '#' ); ?>" style="font-family:<?php echo esc_attr( $mono ); ?>;font-size:<?php echo $cta_size; ?>px;letter-spacing:0.08em;text-transform:uppercase;color:<?php echo esc_attr( $brand_clr ); ?>;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:6px;margin-top:auto" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.cta_text'; ?>"><?php echo esc_html( $cta_text ); ?><?php if ( ! empty( $s['cta_arrow'] ) ) echo ' →'; ?></a>
+                            <a class="olo-pcards__cta" href="<?php echo esc_url( $cta_url ?: '#' ); ?>" style="font-family:<?php echo esc_attr( $mono ); ?>;font-size:<?php echo $cta_size; ?>px;letter-spacing:0.08em;text-transform:uppercase;color:<?php echo esc_attr( $brand_clr ); ?>;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:6px;margin-top:auto" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.cta_text'; ?>"><?php echo esc_html( $cta_text ); ?><?php if ( ! empty( $s['cta_arrow'] ) ) echo ' →'; ?></a>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -221,6 +221,7 @@ class Olo_ProductCards_Tile extends Olo_Tile_Base {
             <?php if ( $card_radius_h ) : ?>
             .<?php echo $uid; ?> .olo-pcards__card:hover { border-radius: <?php echo $card_radius_h; ?> !important; }
             <?php endif; ?>
+            .<?php echo $uid; ?> .olo-pcards__cta:focus-visible { outline: none; border-radius: 3px; box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent); }
             @media (max-width: 1100px) { .<?php echo $uid; ?> { grid-template-columns: repeat(<?php echo min( $cols, 3 ); ?>, 1fr) !important; } }
             @media (max-width: 700px)  { .<?php echo $uid; ?> { grid-template-columns: 1fr !important; } }
         </style>

@@ -23,10 +23,10 @@ class Olo_Tagcloud_Tile extends Olo_Tile_Base {
         'separator'        => ' ',
         'layout'           => 'cloud',
         'columns'          => '3',
-        'text_color'       => '#374151',
-        'hover_color'      => '#ffffff',
-        'background_color' => '#f3f4f6',
-        'hover_background' => '#6366f1',
+        'text_color'       => '',
+        'hover_color'      => '',
+        'background_color' => '',
+        'hover_background' => '',
         'border_radius'    => '16',
         'padding'          => [ 'top' => 6, 'right' => 14, 'bottom' => 6, 'left' => 14 ],
         'gap'              => '8',
@@ -73,7 +73,7 @@ class Olo_Tagcloud_Tile extends Olo_Tile_Base {
         ] );
 
         if ( is_wp_error( $terms ) || empty( $terms ) ) {
-            return '<div class="olo-tagcloud" style="text-align:center;padding:20px;color:var(--olo-color-text-muted, #9CA3AF);">'
+            return '<div class="olo-tagcloud" style="text-align:center;padding:20px;color:var(--olo-color-text-faint, #9CA3AF);">'
                 . esc_html( olo_t( 'Nessun tag trovato' ) )
                 . '</div>';
         }
@@ -95,11 +95,11 @@ class Olo_Tagcloud_Tile extends Olo_Tile_Base {
         $layout      = $s['layout'];
         $columns     = absint( $s['columns'] ) ?: 3;
 
-        // Colori
-        $text_color       = $this->safe_color_css( $s['text_color'] ) ?: '#374151';
-        $hover_color      = $this->safe_color_css( $s['hover_color'] ) ?: '#ffffff';
-        $bg_color         = $this->safe_color_css( $s['background_color'] ) ?: '#f3f4f6';
-        $hover_bg         = $this->safe_color_css( $s['hover_background'] ) ?: '#6366f1';
+        // Colori — token-first (rosso brand su hover invece dell'indaco off-brand)
+        $text_color       = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-text, #374151)';
+        $hover_color      = $this->safe_color_css( $s['hover_color'] ) ?: 'var(--olo-color-on-primary, #ffffff)';
+        $bg_color         = $this->safe_color_css( $s['background_color'] ) ?: 'var(--olo-color-surface-alt, #f3f4f6)';
+        $hover_bg         = $this->safe_color_css( $s['hover_background'] ) ?: 'var(--olo-color-primary, #e1474f)';
 
         // Padding — supporta sia string legacy "6 14" che object spacing { top, right, bottom, left }
         $padding_raw = $s['padding'];
@@ -149,6 +149,10 @@ class Olo_Tagcloud_Tile extends Olo_Tile_Base {
             #<?php echo $uid; ?> .olo-tagcloud-tag:hover {
                 color: <?php echo $hover_color; ?>;
                 background: <?php echo $hover_bg; ?>;
+            }
+            #<?php echo $uid; ?> .olo-tagcloud-tag:focus-visible {
+                outline: none;
+                box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
             }
         </style>
         <div id="<?php echo esc_attr( $uid ); ?>" class="olo-tagcloud olo-tc-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" style="<?php echo esc_attr( $container_style ); ?>">

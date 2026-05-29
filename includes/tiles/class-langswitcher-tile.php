@@ -19,11 +19,11 @@ class Olo_LangSwitcher_Tile extends Olo_Tile_Base {
         'layout'         => 'inline',
         'floating_pos'   => 'bottom-right',
         'gap'            => 8,
-        'active_bg'      => '#6366F1',
-        'active_color'   => '#ffffff',
-        'bg'             => '#ffffff',
-        'color'          => '#374151',
-        'border_color'   => '#e5e7eb',
+        'active_bg'      => '',
+        'active_color'   => '',
+        'bg'             => '',
+        'color'          => '',
+        'border_color'   => '',
         'border_radius'  => 8,
         'show_dropdown_arrow' => true,
         // Tabs
@@ -82,12 +82,15 @@ class Olo_LangSwitcher_Tile extends Olo_Tile_Base {
             'sl' => '🇸🇮', 'bg' => '🇧🇬', 'uk' => '🇺🇦',
         ];
 
+        // TOKEN-FIRST: vuoto → token tema (lingua attiva = primario brand, era #e1474f indaco)
         $css_vars = sprintf(
             '--ols-size:%dpx;--ols-gap:%dpx;--ols-radius:%s;--ols-bg:%s;--ols-color:%s;--ols-active-bg:%s;--ols-active-color:%s;--ols-border:%s;',
             $size, $gap, $radius,
-            $this->safe_color_css( $s['bg'] ), $this->safe_color_css( $s['color'] ),
-            $this->safe_color_css( $s['active_bg'] ), $this->safe_color_css( $s['active_color'] ),
-            $this->safe_color_css( $s['border_color'] )
+            $this->safe_color_css( $s['bg'] ) ?: 'var(--olo-color-surface, #ffffff)',
+            $this->safe_color_css( $s['color'] ) ?: 'var(--olo-color-text, #374151)',
+            $this->safe_color_css( $s['active_bg'] ) ?: 'var(--olo-color-primary, #e1474f)',
+            $this->safe_color_css( $s['active_color'] ) ?: 'var(--olo-color-primary-contrast, #ffffff)',
+            $this->safe_color_css( $s['border_color'] ) ?: 'var(--olo-color-border, #e5e7eb)'
         );
 
         $wrapper_class = 'ols-switcher ols-style--' . $style . ' ols-layout--' . $layout;
@@ -105,6 +108,9 @@ class Olo_LangSwitcher_Tile extends Olo_Tile_Base {
         $wrapper_class .= ' ' . $ols_uid;
 
         ob_start();
+
+        // a11y tastiera: anello di focus visibile su voci/linguette/trigger lingua
+        echo '<style>.ols-switcher .ols-item:focus-visible,.ols-switcher .ols-trigger:focus-visible,.ols-switcher .ols-option:focus-visible,.ols-tab:focus-visible{outline:none;box-shadow:0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);}</style>';
 
         // Emit base styles for new features (circle flags, compact)
         if ( $style === 'flags_circle' || $compact ) {
@@ -211,10 +217,11 @@ class Olo_LangSwitcher_Tile extends Olo_Tile_Base {
         $font     = $font_map[ $t_size ] ?? $font_map['normal'];
         $fsz      = $flag_sz[ $t_size ] ?? $flag_sz['normal'];
 
-        $bg_color     = $this->safe_color_css( $s['bg'] ) ?: '#ffffff';
-        $text_color   = $this->safe_color_css( $s['color'] ) ?: '#374151';
-        $active_bg    = $this->safe_color_css( $s['active_bg'] ) ?: '#6366F1';
-        $active_color = $this->safe_color_css( $s['active_color'] ) ?: '#ffffff';
+        // TOKEN-FIRST: linguetta attiva = primario brand (era #e1474f indaco off-brand)
+        $bg_color     = $this->safe_color_css( $s['bg'] ) ?: 'var(--olo-color-surface, #ffffff)';
+        $text_color   = $this->safe_color_css( $s['color'] ) ?: 'var(--olo-color-text, #374151)';
+        $active_bg    = $this->safe_color_css( $s['active_bg'] ) ?: 'var(--olo-color-primary, #e1474f)';
+        $active_color = $this->safe_color_css( $s['active_color'] ) ?: 'var(--olo-color-primary-contrast, #ffffff)';
         $border_color = $this->safe_color_css( $s['border_color'] ) ?: 'transparent';
 
         echo '<style>';

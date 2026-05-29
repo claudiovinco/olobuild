@@ -52,25 +52,14 @@
 <script setup>
 import { computed } from 'vue';
 import iconsSvg from '../ProSlider/iconsLibrary.js';
+import { resolveColor, TOKENS, buildDefaults } from '@/composables/oloTileDefaults';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
 });
 
-const defaults = {
-  style: 'solid',
-  width: '100',
-  thickness: '1',
-  color: '#d1d5db',
-  alignment: 'center',
-  text: '',
-  text_color: '#6b7280',
-  text_size: '14',
-  icon_emoji: '',
-  spacing: '16',
-};
-
-const s = computed(() => ({ ...defaults, ...props.settings }));
+// Fonte UNICA dei default (allineata a divider.js); colori token-first ('' ⇒ token)
+const s = computed(() => ({ ...buildDefaults('divider'), ...props.settings }));
 
 // icon_emoji può essere un nome icona (libreria) o un'emoji libera: se è un nome
 // noto renderizza l'SVG, altrimenti ricade sul testo/emoji nello span editabile.
@@ -79,7 +68,8 @@ const iconSvg = computed(() => iconsSvg[s.value.icon_emoji] || '');
 const hasCenter = computed(() => !!(s.value.text || s.value.icon_emoji));
 const isDecorative = computed(() => ['wave', 'zigzag', 'dots', 'diamonds'].includes(s.value.style));
 
-const lineColor = computed(() => s.value.color || '#d1d5db');
+// La linea del divisore è un elemento "border": token-first sul colore bordo
+const lineColor = computed(() => resolveColor(s.value.color, TOKENS.border));
 const svgThick = computed(() => Math.max(parseInt(s.value.thickness) || 1, 1));
 
 const wrapStyle = computed(() => ({
@@ -134,7 +124,7 @@ const svgStyle = computed(() => ({
 }));
 
 const labelStyle = computed(() => ({
-  color: s.value.text_color || '#6b7280',
+  color: resolveColor(s.value.text_color, TOKENS.textSoft),
   fontSize: (parseInt(s.value.text_size) || 14) + 'px',
   whiteSpace: 'nowrap',
   lineHeight: '1.2',

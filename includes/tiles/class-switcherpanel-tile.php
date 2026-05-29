@@ -342,6 +342,10 @@ class Olo_SwitcherPanel_Tile extends Olo_Tile_Base {
                 color: <?php echo $nav_active_clr; ?>;
             }
             <?php endif; ?>
+            .<?php echo $uid; ?> .olo-sp-nav__btn:focus-visible {
+                outline: none;
+                box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 35%, transparent);
+            }
             .<?php echo $uid; ?> .olo-sp-nav > li.uk-active > .olo-sp-nav__btn {
                 color: <?php echo $nav_active_clr; ?>;
                 <?php if ( $nav_active_bg && $nav_active_bg !== 'transparent' ) : ?>background: <?php echo $nav_active_bg; ?>;<?php endif; ?>
@@ -427,15 +431,15 @@ class Olo_SwitcherPanel_Tile extends Olo_Tile_Base {
             }
             .<?php echo $uid; ?> .olo-sp-panel__btn--default { background: #fff; border-color: #e5e7eb; color: #1e293b; }
             .<?php echo $uid; ?> .olo-sp-panel__btn--default:hover { background: #f8fafc; }
-            .<?php echo $uid; ?> .olo-sp-panel__btn--primary { background: var(--olo-color-primary, #e8622a); border-color: var(--olo-color-primary, #e8622a); color: #fff; }
-            .<?php echo $uid; ?> .olo-sp-panel__btn--primary:hover { background: transparent; color: var(--olo-color-primary, #e8622a); }
+            .<?php echo $uid; ?> .olo-sp-panel__btn--primary { background: var(--olo-color-primary, #e1474f); border-color: var(--olo-color-primary, #e1474f); color: #fff; }
+            .<?php echo $uid; ?> .olo-sp-panel__btn--primary:hover { background: transparent; color: var(--olo-color-primary, #e1474f); }
             .<?php echo $uid; ?> .olo-sp-panel__btn--secondary { background: #1e293b; border-color: #1e293b; color: #fff; }
             .<?php echo $uid; ?> .olo-sp-panel__btn--secondary:hover { background: transparent; color: #1e293b; }
-            .<?php echo $uid; ?> .olo-sp-panel__btn--text { background: transparent; border: 0; color: var(--olo-color-primary, #e8622a); padding: 0; text-transform: none; letter-spacing: 0; font-weight: 600; }
+            .<?php echo $uid; ?> .olo-sp-panel__btn--text { background: transparent; border: 0; color: var(--olo-color-primary, #e1474f); padding: 0; text-transform: none; letter-spacing: 0; font-weight: 600; }
             .<?php echo $uid; ?> .olo-sp-panel__btn--text:hover { text-decoration: underline; }
             .<?php echo $uid; ?> .olo-sp-panel__btn--underline { background: transparent; border: 0; border-bottom: 2px solid currentColor; padding: 4px 0; color: <?php echo $panel_title_clr; ?>; border-radius: 0; }
             .<?php echo $uid; ?> .olo-sp-panel__btn--underline:hover { transform: translateX(4px); }
-            .<?php echo $uid; ?> .olo-sp-panel__btn--pill { border-radius: 999px; background: var(--olo-color-primary, #e8622a); border-color: var(--olo-color-primary, #e8622a); color: #fff; }
+            .<?php echo $uid; ?> .olo-sp-panel__btn--pill { border-radius: 999px; background: var(--olo-color-primary, #e1474f); border-color: var(--olo-color-primary, #e1474f); color: #fff; }
             .<?php echo $uid; ?> .olo-sp-panel__btn--pill:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(232,98,42,0.3); }
 
             <?php

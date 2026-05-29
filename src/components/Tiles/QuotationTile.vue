@@ -5,7 +5,7 @@
   >
     <blockquote
       class="mb-m-0 mb-p-0"
-      :style="{ borderLeft: effectiveAlignment === 'left' ? '4px solid #6366F1' : 'none', paddingLeft: effectiveAlignment === 'left' ? '16px' : '0' }"
+      :style="{ borderLeft: effectiveAlignment === 'left' ? '4px solid var(--olo-color-primary, #e1474f)' : 'none', paddingLeft: effectiveAlignment === 'left' ? '16px' : '0' }"
     >
       <div
         class="mb-text-gray-200 mb-italic mb-leading-relaxed mb-text-lg"

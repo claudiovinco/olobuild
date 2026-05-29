@@ -37,7 +37,7 @@ class Olo_Toc_Tile extends Olo_Tile_Base {
 
         $max_depth  = absint($s['max_depth']) ?: 3;
         $list_style = $s['list_style'];
-        $link_clr   = $this->safe_color_css($s['link_color']) ?: 'var(--olo-color-primary, #6366F1)';
+        $link_clr   = $this->safe_color_css($s['link_color']) ?: 'var(--olo-color-primary, #e1474f)';
         $title_clr  = $this->safe_color_css($s['title_color']) ?: 'var(--olo-color-text, #374151)';
         $text_clr   = $this->safe_color_css($s['text_color']) ?: 'var(--olo-color-text, #374151)';
         $font_size  = absint($s['font_size']) ?: 15;
@@ -58,6 +58,7 @@ class Olo_Toc_Tile extends Olo_Tile_Base {
         .<?php echo $uid; ?> .olo-toc-item { margin-bottom: 6px; }
         .<?php echo $uid; ?> .olo-toc-item a { color: <?php echo $link_clr; ?>; text-decoration: none; font-size: <?php echo $font_size; ?>px; transition: color 0.2s; }
         .<?php echo $uid; ?> .olo-toc-item a:hover { text-decoration: underline; }
+        .<?php echo $uid; ?> .olo-toc-item a:focus-visible { outline: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent); border-radius: 3px; }
         <?php if ($highlight) : ?>
         .<?php echo $uid; ?> .olo-toc-item a.olo-toc-active { font-weight: 700; }
         <?php endif; ?>

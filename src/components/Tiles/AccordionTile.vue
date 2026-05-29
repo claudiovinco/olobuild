@@ -60,7 +60,7 @@
           <!-- Panel media -->
           <div v-if="panel.image || panel.video" class="olo-accordion-media" :style="mediaStyle">
             <img v-if="panel.image" :src="panel.image" alt="" class="olo-accordion-media-img" :style="{ borderRadius: (parseInt(s.media_radius) || 0) + 'px' }" />
-            <div v-else-if="panel.video" class="olo-accordion-media-video">{{ t('&#x1F3AC; Video') }}</div>
+            <div v-else-if="panel.video" class="olo-accordion-media-video">{{ t('Video') }}</div>
           </div>
           <div
             class="olo-accordion-content"
@@ -102,13 +102,13 @@ const PRESETS = {
     gap: 0, border_radius: 0, icon_style: 'plus', separator_style: 'border', shadow: 'none',
   },
   'pill-brand': {
-    header_bg: '#ffffff', header_bg_active: '#e8622a', header_text_color: '#1e293b',
+    header_bg: '#ffffff', header_bg_active: '#e1474f', header_text_color: '#1e293b',
     content_bg: '#ffffff', text_color: '#475569', border_color: '',
     gap: 8, border_radius: 999, icon_style: 'chevron', separator_style: 'shadow', shadow: 'sm',
   },
   'outline-sharp': {
     header_bg: '#ffffff', header_bg_active: '#fdf2ec', header_text_color: '#0f172a',
-    content_bg: '#ffffff', text_color: '#475569', border_color: '#e8622a',
+    content_bg: '#ffffff', text_color: '#475569', border_color: '#e1474f',
     gap: 0, border_radius: 6, icon_style: 'plus', separator_style: 'border', shadow: 'none',
   },
   'glass-soft': {
@@ -390,6 +390,13 @@ const contentStyle = computed(() => {
 .olo-accordion-header:hover {
   filter: brightness(1.1);
 }
+/* a11y: anello di focus visibile da tastiera sull'header */
+.olo-accordion-header:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
+  position: relative;
+  z-index: 1;
+}
 
 .olo-accordion-title {
   flex: 1;
@@ -480,7 +487,7 @@ const contentStyle = computed(() => {
   font-size: 15px !important;
 }
 .olo-accordion--preset-minimal-underline .olo-accordion-icon {
-  color: #e8622a;
+  color: #e1474f;
 }
 
 /* Pill Brand (Linear-style) */
@@ -511,7 +518,7 @@ const contentStyle = computed(() => {
 
 /* Outline Sharp (brutalist) */
 .olo-accordion--preset-outline-sharp .olo-accordion-panel {
-  border: 2px solid #e8622a !important;
+  border: 2px solid #e1474f !important;
   border-radius: 6px !important;
   box-shadow: none !important;
 }
@@ -531,7 +538,7 @@ const contentStyle = computed(() => {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: #e8622a;
+  color: #e1474f;
 }
 
 /* Glass Soft (glassmorphism) */
@@ -554,7 +561,7 @@ const contentStyle = computed(() => {
   -webkit-backdrop-filter: blur(8px) saturate(140%);
 }
 .olo-accordion--preset-glass-soft .olo-accordion-icon {
-  color: #e8622a;
+  color: #e1474f;
 }
 
 /* Card Soft active accent (default preset, also enhanced) */
@@ -564,10 +571,10 @@ const contentStyle = computed(() => {
 }
 .olo-accordion--preset-card-soft .olo-accordion-header[aria-expanded="true"] + .olo-accordion-panel-body,
 .olo-accordion--preset-card-soft .olo-accordion-panel:has([aria-expanded="true"]) {
-  border-color: #e8622a !important;
+  border-color: #e1474f !important;
   box-shadow: 0 1px 2px rgba(232,98,42,0.05), 0 4px 12px rgba(232,98,42,0.08) !important;
 }
 .olo-accordion--preset-card-soft .olo-accordion-icon {
-  color: #e8622a;
+  color: #e1474f;
 }
 </style>

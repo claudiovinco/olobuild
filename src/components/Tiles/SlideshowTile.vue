@@ -164,6 +164,12 @@ watch(() => s.value.autoplay_speed, () => { clearInterval(autoTimer); startAuto(
   background: rgba(0,0,0,0.75);
 }
 
+.olo-ss-arrow:focus-visible,
+.olo-ss-dot:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
+}
+
 .olo-ss-prev { left: 12px; }
 .olo-ss-next { right: 12px; }
 

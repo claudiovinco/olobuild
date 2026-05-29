@@ -20,7 +20,7 @@ class Olo_Woo_Categories_Tile extends Olo_Tile_Base {
         'parent_only'      => false,
         'overlay'          => true,
         'overlay_color'    => 'rgba(0,0,0,0.4)',
-        'text_color'       => '#FFFFFF',
+        'text_color'       => '',
         'title_tag'        => 'h3',
         'gap'              => 24,
         'image_ratio'      => '1-1',
@@ -44,7 +44,7 @@ class Olo_Woo_Categories_Tile extends Olo_Tile_Base {
 
     public function render( $settings ) {
         if ( ! class_exists( 'WooCommerce' ) ) {
-            return '<div style="padding:40px;text-align:center;color:#92400E;background:#FEF3C7;border:1px solid #F59E0B;border-radius:8px;">'
+            return '<div style="padding:40px;text-align:center;color:var(--olo-color-warning, #b45309);background:color-mix(in srgb, var(--olo-color-warning, #b45309) 12%, #fff);border:1px solid var(--olo-color-warning, #b45309);border-radius:8px;">'
                  . esc_html( olo_t( 'WooCommerce non attivo.' ) )
                  . '</div>';
         }

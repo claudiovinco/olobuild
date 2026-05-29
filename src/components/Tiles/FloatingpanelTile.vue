@@ -95,8 +95,8 @@ const previewStyle = computed(() => {
 }
 .ofp-trigger {
   font-size: 10px;
-  color: #7c3aed;
-  background: #ede9fe;
+  color: var(--olo-color-primary, #e1474f);
+  background: color-mix(in srgb, var(--olo-color-primary, #e1474f) 12%, #fff);
   padding: 2px 8px;
   border-radius: 10px;
   font-weight: 600;

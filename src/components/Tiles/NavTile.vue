@@ -6,12 +6,12 @@
         <span
           v-if="i > 0 && s.separator && isHorizontal"
           class="mb-self-stretch"
-          :style="{ width: '1px', background: s.separator_color || '#374151' }"
+          :style="{ width: '1px', background: s.separator_color || 'var(--olo-color-border, #374151)' }"
         ></span>
         <hr
           v-if="i > 0 && s.separator && !isHorizontal"
           class="mb-border-0 mb-my-0"
-          :style="{ height: '1px', background: s.separator_color || '#374151' }"
+          :style="{ height: '1px', background: s.separator_color || 'var(--olo-color-border, #374151)' }"
         />
 
         <!-- Nav item -->
@@ -76,7 +76,7 @@ const defaults = {
   active_color: '',
   icon_color: '',
   separator: false,
-  separator_color: '#374151',
+  separator_color: '',
   gap: '4',
   padding_x: '12',
   padding_y: '8',
@@ -92,9 +92,12 @@ const hoverIndex = ref(-1);
 const isHorizontal = computed(() => s.value.direction === 'horizontal');
 const iconSizePx = computed(() => parseInt(s.value.icon_size) || 16);
 
-const linkColorVal = computed(() => s.value.link_color || '#9ca3af');
-const hoverColorVal = computed(() => s.value.link_hover_color || '#e5e7eb');
-const activeColorVal = computed(() => s.value.active_color || '#6366f1');
+// TOKEN-FIRST: neutri nudi → token testo; voce attiva = primario brand (era #e1474f indaco)
+const linkColorVal = computed(() => s.value.link_color || 'var(--olo-color-text-soft, #6b7280)');
+const hoverColorVal = computed(() => s.value.link_hover_color || 'var(--olo-color-text, #374151)');
+const activeColorVal = computed(() => s.value.active_color || 'var(--olo-color-primary, #e1474f)');
+// Tinta soft dal colore attivo (compatibile con i token CSS var: niente più concat hex-alpha)
+const activeTint = (pct) => `color-mix(in srgb, ${activeColorVal.value} ${pct}%, transparent)`;
 const hoverBgVal = computed(() => s.value.hover_bg || '');
 const activeBgVal = computed(() => s.value.active_bg || '');
 
@@ -167,7 +170,7 @@ function itemStyle(i) {
     } else if (active_style === 'bottom-border') {
       st.borderBottom = `2px solid ${activeColorVal.value}`;
     } else if (active_style === 'background') {
-      st.background = activeBgVal.value || `${activeColorVal.value}15`;
+      st.background = activeBgVal.value || activeTint(8);
     } else if (active_style === 'bold') {
       st.fontWeight = '700';
     }
@@ -192,10 +195,10 @@ function itemStyle(i) {
   // Style presets
   if (style_type === 'pill') {
     st.borderRadius = '999px';
-    if (isActive) st.background = activeBgVal.value || `${activeColorVal.value}20`;
+    if (isActive) st.background = activeBgVal.value || activeTint(12);
   } else if (style_type === 'boxed') {
     st.border = `1px solid ${isActive ? activeColorVal.value : 'rgba(255,255,255,0.1)'}`;
-    if (isActive) st.background = activeBgVal.value || `${activeColorVal.value}10`;
+    if (isActive) st.background = activeBgVal.value || activeTint(6);
   } else if (style_type === 'underline') {
     st.borderRadius = '0';
     st.borderBottom = isActive ? `2px solid ${activeColorVal.value}` : '2px solid transparent';
@@ -231,5 +234,10 @@ const items = computed(() => {
 <style scoped>
 :deep(svg) {
   fill: currentColor;
+}
+/* a11y tastiera: anello di focus visibile sulle voci di menu */
+.mb-cursor-pointer:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
 }
 </style>

@@ -1,10 +1,10 @@
 <template>
   <div :style="wrapStyle">
-    <h3 style="font-size:16px;font-weight:700;color:var(--olo-color-text, #374151);margin:0 0 10px">{{ t('Informazioni sala') }}</h3>
+    <h3 :style="{ fontSize:'16px', fontWeight:'700', color: TOKENS.text, margin:'0 0 10px' }">{{ t('Informazioni sala') }}</h3>
     <div :style="gridStyle">
       <div v-for="item in items" :key="item.label" style="display:flex;flex-direction:column;gap:2px">
-        <span style="font-size:11px;color:#9ca3af;font-weight:600;text-transform:uppercase">{{ item.label }}</span>
-        <span style="font-size:14px;color:var(--olo-color-text, #374151);font-weight:500">{{ item.value }}</span>
+        <span :style="{ fontSize:'11px', color: TOKENS.textFaint, fontWeight:'600', textTransform:'uppercase' }">{{ item.label }}</span>
+        <span :style="{ fontSize:'14px', color: TOKENS.text, fontWeight:'500' }">{{ item.value }}</span>
       </div>
     </div>
   </div>
@@ -13,6 +13,7 @@
 <script setup>
 import { computed } from 'vue';
 import { t } from '@/i18n';
+import { TOKENS } from '@/composables/oloTileDefaults';
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 const defaults = { style: 'card' };
 const s = computed(() => ({ ...defaults, ...props.settings }));
@@ -24,8 +25,8 @@ const items = [
   { label: t('Piano'), value: t('Piano terra') },
   { label: t('Tipo'), value: t('Sala conferenze') },
   { label: t('Zona'), value: t('Centro storico') },
-  { label: t('Tariffa'), value: '\u20AC 25/h' },
+  { label: t('Tariffa'), value: '€ 25/h' },
 ];
-const wrapStyle = computed(() => s.value.style === 'card' ? { background: '#f9fafb', border: '1px solid #e5e7eb', borderRadius: '10px', padding: '16px' } : {});
+const wrapStyle = computed(() => s.value.style === 'card' ? { background: TOKENS.surfaceAlt, border: '1px solid ' + TOKENS.border, borderRadius: '10px', padding: '16px' } : {});
 const gridStyle = computed(() => ({ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '12px 20px' }));
 </script>

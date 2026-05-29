@@ -11,7 +11,7 @@ class Olo_Html_Tile extends Olo_Tile_Base {
     protected $icon     = 'dashicons-editor-code';
     protected $category = 'text';
     protected $defaults = [
-        'html_content' => '<div style="padding:20px;text-align:center;color:#9CA3AF;">Custom HTML block</div>',
+        'html_content' => '<div style="padding:20px;text-align:center;color:var(--olo-color-text-faint, #9ca3af);">Custom HTML block</div>',
         'sandbox'      => false,
     ];
 

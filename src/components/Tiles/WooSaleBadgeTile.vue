@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="!wooActive" class="olo-woo-notice">
-      <span class="olo-woo-notice-icon">{{ t('&#x1F6D2;') }}</span>
+      <span class="olo-woo-notice-icon" v-html="cartIcon"></span>
       <span>{{ t('WooCommerce richiesto') }}</span>
     </div>
     <div v-else :style="wrapStyle">
@@ -13,6 +13,8 @@
 <script setup>
 import { computed } from 'vue';
 import { t } from '@/i18n';
+import iconsSvg from '../ProSlider/uikitIconsSvg.js';
+import { resolveColor, TOKENS } from '@/composables/oloTileDefaults';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
@@ -21,8 +23,8 @@ const props = defineProps({
 const defaults = {
   badge_text: 'auto',
   custom_text: 'Offerta!',
-  badge_bg: '#EF4444',
-  badge_color: '#FFFFFF',
+  badge_bg: '',             // '' ⇒ TOKENS.primary (badge = brand)
+  badge_color: '',          // '' ⇒ TOKENS.onPrimary
   badge_shape: 'pill',
   position: 'top-left',
   font_size: '14',
@@ -30,6 +32,7 @@ const defaults = {
 };
 const s = computed(() => ({ ...defaults, ...props.settings }));
 const wooActive = computed(() => true);
+const cartIcon = computed(() => iconsSvg['cart'] || '');
 
 const badgeLabel = computed(() => {
   if (s.value.badge_text === 'custom') {
@@ -53,8 +56,8 @@ const wrapStyle = computed(() => ({
 
 const badgeStyle = computed(() => {
   const base = {
-    background: s.value.badge_bg || '#EF4444',
-    color: s.value.badge_color || '#FFFFFF',
+    background: resolveColor(s.value.badge_bg, TOKENS.primary),
+    color: resolveColor(s.value.badge_color, TOKENS.onPrimary),
     fontSize: fontSize.value + 'px',
     fontWeight: s.value.font_weight || '700',
     borderRadius: shapeRadius.value,
@@ -79,6 +82,6 @@ const badgeStyle = computed(() => {
 </script>
 
 <style scoped>
-.olo-woo-notice { display:flex;align-items:center;gap:8px;padding:16px 20px;background:#FEF3C7;border:1px solid #F59E0B;border-radius:8px;color:#92400E;font-size:14px;font-weight:500 }
-.olo-woo-notice-icon { font-size:20px }
+.olo-woo-notice { display:flex;align-items:center;gap:8px;padding:16px 20px;background:color-mix(in srgb, var(--olo-color-warning, #b45309) 12%, #fff);border:1px solid var(--olo-color-warning, #b45309);border-radius:8px;color:var(--olo-color-warning, #b45309);font-size:14px;font-weight:500 }
+.olo-woo-notice-icon { width:20px;height:20px;display:inline-flex;flex-shrink:0 } .olo-woo-notice-icon :deep(svg) { width:100%;height:100% }
 </style>

@@ -44,7 +44,7 @@ class Olo_Animatedheading_Tile extends Olo_Tile_Base {
         $tag   = in_array($s['tag'], ['h1','h2','h3','h4','h5','h6','p'], true) ? $s['tag'] : 'h2';
         $align = in_array($s['alignment'], ['left','center','right'], true) ? $s['alignment'] : 'center';
         $clr   = $this->safe_color_css($s['text_color']) ?: 'var(--olo-color-text, #374151)';
-        $aclr  = $this->safe_color_css($s['animated_color']) ?: 'var(--olo-color-primary, #6366F1)';
+        $aclr  = $this->safe_color_css($s['animated_color']) ?: 'var(--olo-color-primary, #e1474f)';
         $fs    = absint($s['font_size']) ?: 36;
         $fw    = absint($s['font_weight']) ?: 700;
         $anim  = $s['animation'];
@@ -66,7 +66,7 @@ class Olo_Animatedheading_Tile extends Olo_Tile_Base {
         .<?php echo $uid; ?> .olo-ah-word { transition: opacity 0.5s ease; }
         <?php elseif ($anim === 'highlight') : ?>
         <?php
-            $hclr = $this->safe_color_css($s['highlight_color']) ?: 'var(--olo-color-primary, #6366F1)';
+            $hclr = $this->safe_color_css($s['highlight_color']) ?: 'var(--olo-color-primary, #e1474f)';
             $hstyle = $s['highlight_style'];
             if ($hstyle === 'underline') {
                 echo ".{$uid} .olo-ah-word { border-bottom: 3px solid {$hclr}; }";

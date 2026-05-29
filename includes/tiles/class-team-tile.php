@@ -24,11 +24,11 @@ class Olo_Team_Tile extends Olo_Tile_Base {
         'photo_shape'        => 'circle',
         'photo_radius'       => '12',
         'photo_border_width' => '3',
-        'photo_border_color' => '#FFFFFF',
+        'photo_border_color' => '',
         'photo_shadow'       => 'md',
         'photo_gap'          => '12',
         'info_bg_color'      => '',
-        'info_text_color'    => '#FFFFFF',
+        'info_text_color'    => '',
         'info_padding'       => '24',
         'info_width'         => '100',
         'info_margin'        => '0',
@@ -63,18 +63,18 @@ class Olo_Team_Tile extends Olo_Tile_Base {
         $uid = 'olo-team-' . wp_rand( 10000, 99999 );
 
         $bg       = $this->safe_color_css( $s['bg_color'] ) ?: 'transparent';
-        $fg       = $this->safe_color_css( $s['info_text_color'] ) ?: '#FFFFFF';
+        $fg       = $this->safe_color_css( $s['info_text_color'] ) ?: 'var(--olo-color-on-primary, #FFFFFF)';
         $tile_r   = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
         $tile_r_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
         $tile_bw  = intval( $s['border_width'] );
-        $tile_bc  = $this->safe_color_css( $s['border_color'] ) ?: 'var(--olo-color-text, #374151)';
+        $tile_bc  = $this->safe_color_css( $s['border_color'] ) ?: 'var(--olo-color-border, #E5E7EB)';
         $tile_pad = intval( $s['tile_padding'] );
 
         // Photo
         $ph_size   = intval( $s['photo_size'] ) ?: 120;
         $ph_shape  = $s['photo_shape'] ?: 'circle';
         $ph_bw     = intval( $s['photo_border_width'] );
-        $ph_bc     = $this->safe_color_css( $s['photo_border_color'] ) ?: '#FFFFFF';
+        $ph_bc     = $this->safe_color_css( $s['photo_border_color'] ) ?: 'var(--olo-color-on-primary, #FFFFFF)';
         $ph_gap    = max( intval( $s['photo_gap'] ), 0 );
         $outer_sz  = $ph_size + $ph_bw * 2;
         $ph_shadow  = Olo_Tile_Utils::shadow( $s['photo_shadow'] ?? 'none', 'photo' );
@@ -95,14 +95,14 @@ class Olo_Team_Tile extends Olo_Tile_Base {
         }
 
         // Info
-        $info_bg  = $this->safe_color_css( $s['info_bg_color'] ) ?: 'var(--olo-color-primary, #6366F1)';
+        $info_bg  = $this->safe_color_css( $s['info_bg_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $info_pad = Olo_Tile_Utils::spacing_css( $s['tile_padding'] ?? $s['info_padding'] ?? 24, 24 );
         $info_w   = intval( $s['info_width'] ) ?: 100;
         $info_m   = intval( $s['info_margin'] );
         $info_r   = Olo_Tile_Utils::border_radius( $s['info_radius'] ?? 0 );
         $info_r_hover_css = Olo_Tile_Utils::radius_force_css( $s['info_radius_hover'] ?? null );
         $info_bw  = intval( $s['info_border_width'] );
-        $info_bc  = $this->safe_color_css( $s['info_border_color'] ) ?: 'var(--olo-color-text, #374151)';
+        $info_bc  = $this->safe_color_css( $s['info_border_color'] ) ?: 'var(--olo-color-border, #E5E7EB)';
         $align    = in_array( $s['info_align'], [ 'left', 'center', 'right' ] ) ? $s['info_align'] : 'center';
 
         // Alignment
@@ -234,6 +234,11 @@ class Olo_Team_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .olo-team-link:hover {
                 opacity: 1; text-decoration: none;
             }
+            .<?php echo $uid; ?> .olo-team-link:focus-visible {
+                outline: none; opacity: 1; border-radius: 3px;
+                box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
+            }
+            .<?php echo $uid; ?> .olo-team-photo-ph svg { width: 100%; height: 100%; fill: currentColor; stroke: currentColor; }
         </style>
         <div class="olo-team <?php echo esc_attr( $uid ); ?> olo-team-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>">
             <div class="olo-team-photo-wrap">
@@ -247,7 +252,7 @@ class Olo_Team_Tile extends Olo_Tile_Base {
                             echo $this->render_hover_wrap( $img, $s['hover_image'] ?? '', $s['hover_video'] ?? '' );
                             ?>
                         <?php else : ?>
-                            <div style="width:100%;height:100%;background:#1F2937;display:flex;align-items:center;justify-content:center;font-size:<?php echo round( $ph_size * 0.4 ); ?>px">&#x1F464;</div>
+                            <div class="olo-team-photo-ph" style="width:100%;height:100%;background:var(--olo-color-surface-alt, #F3F4F6);color:var(--olo-color-text-faint, #9CA3AF);display:flex;align-items:center;justify-content:center"><span style="width:<?php echo round( $ph_size * 0.4 ); ?>px;height:<?php echo round( $ph_size * 0.4 ); ?>px;display:inline-flex"><?php echo $this->render_icon_html( 'user', $ph_size * 0.4 / 20 ); ?></span></div>
                         <?php endif; ?>
                     </div>
                 </div>

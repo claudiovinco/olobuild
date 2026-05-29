@@ -1,7 +1,7 @@
 <template>
   <div class="olo-ctab" :style="bannerStyle">
     <h2 v-if="s.headline || s.headline_accent" :style="headlineStyle">
-      <span v-if="s.headline">{{ s.headline }}</span><template v-if="s.headline_accent"> <span :style="{ color: s.accent_color || '#b3261e', fontStyle: s.headline_accent_italic ? 'italic' : 'normal' }">{{ s.headline_accent }}</span></template>
+      <span v-if="s.headline">{{ s.headline }}</span><template v-if="s.headline_accent"> <span :style="{ color: s.accent_color || 'var(--olo-color-primary, #e1474f)', fontStyle: s.headline_accent_italic ? 'italic' : 'normal' }">{{ s.headline_accent }}</span></template>
     </h2>
     <div v-if="s.layout !== 'split-2' && s.subtitle" :style="subtitleStyle" v-html="s.subtitle"></div>
     <div v-else-if="s.layout === 'split-2' && s.subtitle" :style="{ ...subtitleStyle, gridColumn: 1, marginTop: '8px' }" v-html="s.subtitle"></div>
@@ -23,8 +23,8 @@ const defaults = {
   subtitle: 'Trial gratuita, niente carta. Tre passi, una sigaretta a testa di pausa.',
   cta_text: 'Inizia ora →', cta_url: '#',
   bg: { type: 'solid', color: '#0f172a' },
-  text_color: '#ffffff', accent_color: '#b3261e', subtitle_color: '#9ca3af',
-  cta_bg: '#b3261e', cta_color: '#ffffff',
+  text_color: '#ffffff', accent_color: 'var(--olo-color-primary, #e1474f)', subtitle_color: '#9ca3af',
+  cta_bg: 'var(--olo-color-primary, #e1474f)', cta_color: '#ffffff',
   cta_radius: R(999), cta_size: 15, cta_padding_y: 18, cta_padding_x: 32,
   headline_font_family: 'serif', headline_size: 36, headline_weight: '400',
   subtitle_size: 14,
@@ -99,7 +99,7 @@ const ctaStyle = computed(() => ({
   alignItems: 'center',
   justifyContent: 'center',
   padding: `${s.value.cta_padding_y || 18}px ${s.value.cta_padding_x || 32}px`,
-  background: s.value.cta_bg || '#b3261e',
+  background: s.value.cta_bg || 'var(--olo-color-primary, #e1474f)',
   color: s.value.cta_color || '#ffffff',
   borderRadius: radiusToCss(s.value.cta_radius),
   fontFamily: SANS,
@@ -113,4 +113,8 @@ const ctaStyle = computed(() => ({
 
 <style scoped>
 .olo-ctab__cta:hover { transform: translateY(-1px); }
+.olo-ctab__cta:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
+}
 </style>

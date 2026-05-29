@@ -9,7 +9,7 @@
         <path :id="pathId" :d="pathD" fill="none" />
       </defs>
       <text
-        :fill="s.text_color || '#f3f4f6'"
+        :fill="s.text_color || 'var(--olo-color-text, #374151)'"
         :font-size="parseInt(s.font_size) || 24"
         :letter-spacing="parseInt(s.letter_spacing) || 0"
         font-family="inherit"
@@ -34,7 +34,7 @@ const defaults = {
   path_preset: 'arc',
   custom_path: '',
   font_size: '24',
-  text_color: '#f3f4f6',
+  text_color: '',
   letter_spacing: '2',
   animation: 'none',
   animation_speed: '10',

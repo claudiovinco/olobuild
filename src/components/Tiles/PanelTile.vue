@@ -120,14 +120,14 @@ const hasMedia = computed(() => {
 
 // Card background by style key — match UIkit card style intent
 const styleBgs = {
-  default:   '#ffffff',
-  primary:   'var(--olo-color-primary, #6366F1)',
-  secondary: '#f3f4f6',
-  hover:     '#ffffff',
+  default:   'var(--olo-color-surface, #ffffff)',
+  primary:   'var(--olo-color-primary, #e1474f)',
+  secondary: 'var(--olo-color-surface-alt, #f3f4f6)',
+  hover:     'var(--olo-color-surface, #ffffff)',
 };
 const styleColors = {
   default:   'inherit',
-  primary:   '#ffffff',
+  primary:   'var(--olo-color-on-primary, #ffffff)',
   secondary: 'inherit',
   hover:     'inherit',
 };
@@ -307,7 +307,7 @@ const linkStyle = computed(() => ({
   marginTop: '8px',
   fontSize: '0.85em',
   fontWeight: '600',
-  color: s.value.link_color || (s.value.style === 'primary' ? '#fff' : 'var(--olo-color-primary, #6366F1)'),
+  color: s.value.link_color || (s.value.style === 'primary' ? '#fff' : 'var(--olo-color-primary, #e1474f)'),
 }));
 </script>
 

@@ -7,7 +7,7 @@
       :style="{ marginTop: i > 0 ? spacing + 'px' : '0', gap: iconGap + 'px' }"
     >
       <!-- Number icon -->
-      <span v-if="resolveIcon(item) === 'number'" class="olo-list-icon-num" :style="{ color: s.icon_color, fontSize: iconSize + 'px', minWidth: iconSize + 'px' }">{{ i + 1 }}.</span>
+      <span v-if="resolveIcon(item) === 'number'" class="olo-list-icon-num" :style="{ color: s.icon_color || 'var(--olo-color-success, #15803d)', fontSize: iconSize + 'px', minWidth: iconSize + 'px' }">{{ i + 1 }}.</span>
       <!-- SVG icon -->
       <span v-else class="olo-list-icon-svg" v-html="getIcon(resolveIcon(item))"></span>
       <span class="olo-list-text" :data-olo-editable="'items.' + i + '.text'">{{ item.text }}</span>
@@ -31,7 +31,7 @@ const defaults = {
     { text: 'Funzionalit\u00e0 tre', icon: 'check' },
   ],
   icon_default: 'check',
-  icon_color: '#22C55E',
+  icon_color: '',
   text_color: 'var(--olo-color-text, #e5e7eb)',
   spacing: '12',
   icon_size: '18',
@@ -90,7 +90,7 @@ function resolveIcon(item) {
 }
 
 function getIcon(icon) {
-  const c = s.value.icon_color || '#22C55E';
+  const c = s.value.icon_color || 'var(--olo-color-success, #15803d)';
   const sz = iconSize.value;
   const icons = {
     check:   `<svg width="${sz}" height="${sz}" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="${c}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,

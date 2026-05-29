@@ -47,6 +47,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { resolveColor, TOKENS } from '@/composables/oloTileDefaults';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
@@ -60,10 +61,10 @@ const defaults = {
   style: 'filled',
   size: 'medium',
   full_width: false,
-  bg_color: 'var(--olo-color-primary, #6366F1)',
-  text_color: '#FFFFFF',
-  hover_bg: '#4F46E5',
-  hover_text: '#FFFFFF',
+  bg_color: '',            // '' ⇒ TOKENS.primary (CTA carrello = brand)
+  text_color: '',          // '' ⇒ TOKENS.onPrimary
+  hover_bg: '',            // '' ⇒ TOKENS.primary
+  hover_text: '',          // '' ⇒ TOKENS.onPrimary
   border_radius: '6',
   quantity_style: 'input',
 };
@@ -99,16 +100,17 @@ const btnStyle = computed(() => {
     width: s.value.full_width ? '100%' : 'auto',
     justifyContent: 'center',
   };
+  const accent = resolveColor(s.value.bg_color, TOKENS.primary);
   if (s.value.style === 'filled') {
-    base.background = s.value.bg_color || 'var(--olo-color-primary, #6366F1)';
-    base.color = s.value.text_color || '#fff';
+    base.background = accent;
+    base.color = resolveColor(s.value.text_color, TOKENS.onPrimary);
   } else if (s.value.style === 'outline') {
     base.background = 'transparent';
-    base.color = s.value.bg_color || 'var(--olo-color-primary, #6366F1)';
-    base.border = `2px solid ${s.value.bg_color || 'var(--olo-color-primary, #6366F1)'}`;
+    base.color = accent;
+    base.border = `2px solid ${accent}`;
   } else {
     base.background = 'transparent';
-    base.color = s.value.bg_color || 'var(--olo-color-primary, #6366F1)';
+    base.color = accent;
     base.padding = `${sz.value.py / 2}px 4px`;
   }
   return base;
@@ -124,7 +126,7 @@ const qtyInputStyle = computed(() => ({
   width: '50px',
   height: (sz.value.py * 2 + sz.value.fs) + 'px',
   textAlign: 'center',
-  border: '1px solid #D1D5DB',
+  border: '1px solid ' + TOKENS.border,
   borderRadius: ((v => isNaN(v) ? 6 : v)(parseInt(s.value.border_radius))) + 'px',
   fontSize: sz.value.fs + 'px',
   padding: '0 4px',
@@ -136,8 +138,8 @@ const stepperBtnStyle = computed(() => ({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  border: '1px solid #D1D5DB',
-  background: '#F9FAFB',
+  border: '1px solid ' + TOKENS.border,
+  background: TOKENS.surfaceAlt,
   fontSize: sz.value.fs + 'px',
   cursor: 'pointer',
 }));
@@ -146,8 +148,8 @@ const stepperValueStyle = computed(() => ({
   width: '36px',
   textAlign: 'center',
   fontSize: sz.value.fs + 'px',
-  borderTop: '1px solid #D1D5DB',
-  borderBottom: '1px solid #D1D5DB',
+  borderTop: '1px solid ' + TOKENS.border,
+  borderBottom: '1px solid ' + TOKENS.border,
   height: (sz.value.py * 2 + sz.value.fs) + 'px',
   lineHeight: (sz.value.py * 2 + sz.value.fs) + 'px',
 }));

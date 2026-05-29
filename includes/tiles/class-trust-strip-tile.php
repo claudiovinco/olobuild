@@ -17,15 +17,15 @@ class Olo_TrustStrip_Tile extends Olo_Tile_Base {
     protected $category = 'layout';
     protected $defaults = [
         'items' => [
-            [ 'icon' => 'check', 'icon_color' => '#10b981', 'text' => 'Licenza <b>GPL-v3</b>' ],
-            [ 'icon' => 'check', 'icon_color' => '#10b981', 'text' => '<b>WCAG 2.2 AA</b>' ],
-            [ 'icon' => 'check', 'icon_color' => '#10b981', 'text' => 'Hosting <b>a scelta tua</b>' ],
-            [ 'icon' => 'check', 'icon_color' => '#10b981', 'text' => 'Export <b>HTML/JSON</b> totale' ],
-            [ 'icon' => 'check', 'icon_color' => '#10b981', 'text' => 'Trento, <b>Italia 🇮🇹</b>' ],
+            [ 'icon' => 'check', 'icon_color' => '', 'text' => 'Licenza <b>GPL-v3</b>' ],
+            [ 'icon' => 'check', 'icon_color' => '', 'text' => '<b>WCAG 2.2 AA</b>' ],
+            [ 'icon' => 'check', 'icon_color' => '', 'text' => 'Hosting <b>a scelta tua</b>' ],
+            [ 'icon' => 'check', 'icon_color' => '', 'text' => 'Export <b>HTML/JSON</b> totale' ],
+            [ 'icon' => 'check', 'icon_color' => '', 'text' => 'Trento, <b>Italia 🇮🇹</b>' ],
         ],
         'separator_char'  => '·',
-        'separator_color' => '#9ca3af',
-        'text_color'      => '#374151',
+        'separator_color' => '',
+        'text_color'      => '',
         'text_size'       => 14,
         'font_family'     => 'sans-serif',
         'align'           => 'center',
@@ -44,8 +44,8 @@ class Olo_TrustStrip_Tile extends Olo_Tile_Base {
         $fmap  = [ 'serif' => $serif, 'sans-serif' => $sans, 'mono' => $mono ];
         $fam   = $fmap[ $s['font_family'] ] ?? $sans;
 
-        $text_color = $this->safe_color_css( $s['text_color'] ) ?: '#374151';
-        $sep_color  = $this->safe_color_css( $s['separator_color'] ) ?: '#9ca3af';
+        $text_color = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-text, #374151)';
+        $sep_color  = $this->safe_color_css( $s['separator_color'] ) ?: 'var(--olo-color-text-faint, #9ca3af)';
         $text_size  = max( 10, min( 24, absint( $s['text_size'] ) ) );
         $gap        = max( 4, min( 80, absint( $s['gap'] ) ) );
         $align      = in_array( $s['align'], [ 'left', 'center', 'right', 'space-between' ], true ) ? $s['align'] : 'center';
@@ -76,7 +76,7 @@ class Olo_TrustStrip_Tile extends Olo_Tile_Base {
         <div class="olo-tstrip" style="<?php echo esc_attr( $row_style ); ?>">
             <?php $last = count( $items ) - 1; foreach ( $items as $idx => $it ) :
                 $icon       = $it['icon'] ?? '';
-                $icon_color = $this->safe_color_css( $it['icon_color'] ?? '' ) ?: '#10b981';
+                $icon_color = $this->safe_color_css( $it['icon_color'] ?? '' ) ?: 'var(--olo-color-success, #10b981)';
                 $text       = $it['text'] ?? '';
                 if ( $text === '' && $icon === '' ) continue;
             ?>

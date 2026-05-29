@@ -79,7 +79,7 @@ const defaults = {
 
 const s = computed(() => ({ ...defaults, ...props.settings }));
 
-const accent = computed(() => s.value.accent_color || 'var(--olo-color-primary, #6366F1)');
+const accent = computed(() => s.value.accent_color || 'var(--olo-color-primary, #e1474f)');
 
 const wrapStyle = computed(() => ({
   maxWidth: '400px',
@@ -87,10 +87,10 @@ const wrapStyle = computed(() => ({
 
 const btnColorMap = {
   default: { bg: '#e5e7eb', color: '#374151' },
-  primary: { bg: '#1e87f0', color: '#fff' },
+  primary: { bg: '#e1474f', color: '#fff' },
   secondary: { bg: '#222', color: '#fff' },
   text: { bg: 'transparent', color: '#374151' },
-  link: { bg: 'transparent', color: '#1e87f0' },
+  link: { bg: 'transparent', color: '#e1474f' },
 };
 
 const buttonStyle = computed(() => {

@@ -1,7 +1,7 @@
 <template>
   <div class="mb-flex mb-flex-col mb-items-center mb-justify-center mb-py-6 mb-gap-2">
     <!-- Title above -->
-    <div v-if="s.title_position === 'above'" class="mb-text-sm mb-font-semibold" :style="{ color: s.title_color || '#666' }" data-olo-editable="title">
+    <div v-if="s.title_position === 'above'" class="mb-text-sm mb-font-semibold" :style="{ color: titleColor }" data-olo-editable="title">
       {{ s.title }}
     </div>
 
@@ -11,14 +11,14 @@
       <circle
         :cx="center" :cy="center" :r="radius"
         fill="none"
-        :stroke="s.track_color || '#e5e5e5'"
+        :stroke="trackColor"
         :stroke-width="strokeW"
       />
       <!-- Progress circle -->
       <circle
         :cx="center" :cy="center" :r="radius"
         fill="none"
-        :stroke="s.stroke_color || '#1e87f0'"
+        :stroke="strokeColor"
         :stroke-width="strokeW"
         :stroke-dasharray="circumference"
         :stroke-dashoffset="dashOffset"
@@ -32,7 +32,7 @@
         :y="s.title_position === 'inside' ? center - fontSize * 0.35 : center"
         text-anchor="middle"
         dominant-baseline="central"
-        :fill="s.text_color || '#333'"
+        :fill="textColor"
         :font-size="fontSize + 'px'"
         font-weight="700"
       >{{ s.prefix }}{{ displayValue }}{{ s.suffix }}</text>
@@ -43,14 +43,14 @@
         :y="center + fontSize * 0.65"
         text-anchor="middle"
         dominant-baseline="central"
-        :fill="s.title_color || '#666'"
+        :fill="titleColor"
         :font-size="titleFontSize + 'px'"
         font-weight="500"
       >{{ s.title }}</text>
     </svg>
 
     <!-- Title below -->
-    <div v-if="s.title_position === 'below'" class="mb-text-sm mb-font-semibold" :style="{ color: s.title_color || '#666' }" data-olo-editable="title">
+    <div v-if="s.title_position === 'below'" class="mb-text-sm mb-font-semibold" :style="{ color: titleColor }" data-olo-editable="title">
       {{ s.title }}
     </div>
   </div>
@@ -58,6 +58,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { resolveColor, TOKENS } from '@/composables/oloTileDefaults';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
@@ -71,15 +72,22 @@ const defaults = {
   title: 'Progresso',
   size: '160',
   stroke_width: '10',
-  stroke_color: '#1e87f0',
-  track_color: '#e5e5e5',
-  text_color: '#333333',
-  title_color: '#666666',
+  stroke_color: '',
+  track_color: '',
+  text_color: '',
+  title_color: '',
   duration: '1500',
   title_position: 'below',
 };
 
 const s = computed(() => ({ ...defaults, ...props.settings }));
+
+// Colori token-first: progresso = primario brand (era #e1474f blu UIkit),
+// traccia = border neutro, valore = text, titolo = text-soft.
+const strokeColor = computed(() => resolveColor(s.value.stroke_color, TOKENS.primary));
+const trackColor = computed(() => resolveColor(s.value.track_color, TOKENS.border));
+const textColor = computed(() => resolveColor(s.value.text_color, TOKENS.text));
+const titleColor = computed(() => resolveColor(s.value.title_color, TOKENS.textSoft));
 
 const size = computed(() => parseInt(s.value.size) || 160);
 const strokeW = computed(() => parseInt(s.value.stroke_width) || 10);

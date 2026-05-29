@@ -168,7 +168,7 @@ const defaults = {
   showDots: true,
   dotStyle: 'circles',
   showProgressBar: false,
-  progressBarColor: '#3b82f6',
+  progressBarColor: '',
   progressBarHeight: 3,
   showThumbs: false,
   thumbPosition: 'bottom',
@@ -335,7 +335,7 @@ const dotClass = computed(() => 'mps-dots--' + dotStyleVal.value);
 
 // Progress bar
 const progressFillStyle = computed(() => ({
-  background: s.value.progressBarColor || '#3b82f6',
+  background: s.value.progressBarColor || 'var(--olo-color-primary, #e1474f)',
   width: slideCount.value > 0 ? ((currentIdx.value + 1) / slideCount.value * 100) + '%' : '0%',
   transition: 'width 0.5s ease',
 }));
@@ -377,9 +377,9 @@ function fullLayerStyle(l) {
   }
   if (l.type === 'shape') {
     if (l.shapeGradient) {
-      st.background = `linear-gradient(${l.shapeGradient.angle || 180}deg, ${l.shapeGradient.from || '#3b82f6'}, ${l.shapeGradient.to || '#8b5cf6'})`;
+      st.background = `linear-gradient(${l.shapeGradient.angle || 180}deg, ${l.shapeGradient.from || 'var(--olo-color-primary, #e1474f)'}, ${l.shapeGradient.to || 'var(--olo-color-accent, #f4a23b)'})`;
     } else {
-      st.backgroundColor = l.bgColor || '#3b82f6';
+      st.backgroundColor = l.bgColor || 'var(--olo-color-primary, #e1474f)';
     }
   } else if (l.type === 'button') {
     st.backgroundColor = l.bgColor || '#2563eb';
@@ -637,6 +637,12 @@ function getIconSvg(name) {
   padding: 0;
 }
 .mps-arrow:hover { background: rgba(0,0,0,0.7); opacity: 1; }
+.mps-arrow:focus-visible,
+.mps-dot:focus-visible,
+.mps-thumb:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
+}
 .mps-arrow--rounded { background: rgba(255,255,255,0.2); backdrop-filter: blur(8px); }
 .mps-arrow--rounded:hover { background: rgba(255,255,255,0.35); }
 .mps-arrow--boxed { border-radius: 4px; background: rgba(0,0,0,0.6); }

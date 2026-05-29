@@ -16,8 +16,8 @@
     <!-- Badges -->
     <div v-if="s.show_badges || s.show_opening" style="position:absolute;top:10px;right:10px;display:flex;gap:5px;z-index:3;flex-wrap:wrap;justify-content:flex-end">
       <span v-if="s.show_opening" :style="openingBadgeStyle">{{ t('Apertura annuale') }}</span>
-      <span v-if="s.show_badges" :style="badgeStyle">{{ t('&#9737; Località') }}</span>
-      <span v-if="s.show_badges" :style="badgeStyle">{{ t('&#9968; 1900 m') }}</span>
+      <span v-if="s.show_badges" :style="badgeStyle" style="display:inline-flex;align-items:center;gap:3px"><span class="olo-svhero-badge-ico" v-html="pinSvg"></span>{{ t('Località') }}</span>
+      <span v-if="s.show_badges" :style="badgeStyle">{{ t('1900 m') }}</span>
     </div>
 
     <!-- Title -->
@@ -25,7 +25,7 @@
 
     <!-- Effect indicators -->
     <div v-if="activeEffects.length" style="position:absolute;bottom:6px;right:8px;z-index:4;display:flex;gap:3px">
-      <span v-for="fx in activeEffects" :key="fx" style="background:rgba(0,0,0,0.5);color:#a5f3fc;padding:1px 5px;border-radius:8px;font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:0.3px">{{ fx }}</span>
+      <span v-for="fx in activeEffects" :key="fx" style="background:rgba(0,0,0,0.5);color:var(--olo-color-on-primary, #ffffff);padding:1px 5px;border-radius:8px;font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:0.3px">{{ fx }}</span>
     </div>
   </div>
 </template>
@@ -33,17 +33,22 @@
 <script setup>
 import { t } from '@/i18n';
 import { computed } from 'vue';
+import iconsSvg from '../ProSlider/uikitIconsSvg.js';
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
+
+const pinSvg = iconsSvg['map-pin'] || iconsSvg['location'] || '';
 
 const defaults = {
   hero_height: '400', hero_radius: '16', hero_overlay: 'gradient',
   overlay_color: '#000000', overlay_opacity: '45',
-  show_badges: true, badge_bg: 'rgba(30,41,59,0.75)', badge_color: '#FFFFFF',
+  show_badges: true, badge_bg: 'rgba(22,38,61,0.78)', badge_color: '#FFFFFF',
   show_title: true, title_size: '30', title_color: '#FFFFFF', title_position: 'bottom',
-  show_opening: true, opening_bg: '#059669', opening_color: '#FFFFFF',
+  // badge apertura → semantico success (era #059669 hardcoded)
+  show_opening: true, opening_bg: 'var(--olo-color-success, #15803d)', opening_color: '#FFFFFF',
   fx_kenburns: false, fx_shimmer: false, fx_hover_zoom: true, fx_hover_tilt: false,
   fx_vignette: false, fx_vignette_strength: '50', fx_grain: false,
-  fx_tint: false, fx_tint_color: '#1E3A5F', fx_tint_opacity: '15', fx_tint_blend: 'multiply',
+  // tint creativo default → navy brand (era #1E3A5F hardcoded)
+  fx_tint: false, fx_tint_color: 'var(--olo-color-secondary, #16263d)', fx_tint_opacity: '15', fx_tint_blend: 'multiply',
 };
 const s = computed(() => ({ ...defaults, ...props.settings }));
 
@@ -56,7 +61,8 @@ const wrapStyle = computed(() => ({
 
 const imgStyle = computed(() => ({
   position: 'absolute', inset: '0',
-  background: 'linear-gradient(135deg, #0891B2 0%, #164E63 100%)',
+  // placeholder hero elegante: brand → navy secondario (no più teal off-brand)
+  background: 'linear-gradient(135deg, var(--olo-color-primary, #e1474f) 0%, var(--olo-color-secondary, #16263d) 100%)',
   animation: s.value.fx_kenburns ? 'olo-kb-preview 8s ease-in-out infinite' : 'none',
 }));
 
@@ -130,6 +136,8 @@ const activeEffects = computed(() => {
 </script>
 
 <style scoped>
+.olo-svhero-badge-ico { display: inline-flex; }
+.olo-svhero-badge-ico :deep(svg) { width: 11px; height: 11px; stroke: currentColor; fill: none; }
 @keyframes olo-kb-preview {
   0%   { transform: scale(1); }
   50%  { transform: scale(1.08) translate(-1%, -0.5%); }

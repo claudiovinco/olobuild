@@ -36,12 +36,13 @@
       :style="{ color: s.text_color || 'var(--olo-color-text, #374151)', fontSize: '14px', fontWeight: 600 }"
     >99,00</span>
     <!-- Dropdown indicator -->
-    <div v-if="s.dropdown" style="font-size:10px;color:#9CA3AF;">&#9660;</div>
+    <div v-if="s.dropdown" :style="{ fontSize: '10px', color: TOKENS.textFaint }">&#9660;</div>
   </div>
 </template>
 
 <script setup>
 import { computed } from 'vue';
+import { resolveColor, TOKENS } from '@/composables/oloTileDefaults';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
@@ -56,8 +57,8 @@ const defaults = {
   icon_size: '24',
   text_color: 'var(--olo-color-text, #374151)',
   icon_color: 'var(--olo-color-text, #374151)',
-  badge_bg: '#EF4444',
-  badge_color: '#FFFFFF',
+  badge_bg: '',             // '' ⇒ TOKENS.primary (badge carrello = brand)
+  badge_color: '',          // '' ⇒ TOKENS.onPrimary
 };
 const s = computed(() => ({ ...defaults, ...props.settings }));
 
@@ -72,8 +73,8 @@ const countBadgeStyle = computed(() => ({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  background: s.value.badge_bg || '#EF4444',
-  color: s.value.badge_color || '#fff',
+  background: resolveColor(s.value.badge_bg, TOKENS.primary),
+  color: resolveColor(s.value.badge_color, TOKENS.onPrimary),
   fontSize: '10px',
   fontWeight: 700,
   borderRadius: '9px',

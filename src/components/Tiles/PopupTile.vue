@@ -2,7 +2,7 @@
   <div :class="'olo-pop--preset-' + (s.preset || 'modal-classic')" :style="wrapStyle">
     <!-- Click mode: mostra il pulsante -->
     <template v-if="s.popup_trigger === 'click' || !s.popup_trigger">
-      <button type="button" :style="btnStyle">
+      <button type="button" class="olo-popup-trigger" :style="btnStyle">
         <span v-if="s.button_icon && iconSvg" class="olo-popup-icon" :style="iconStyle" v-html="iconSvg"></span>
         <span data-olo-editable="button_text">{{ s.button_text || 'Apri' }}</span>
       </button>
@@ -56,12 +56,12 @@ const s = computed(() => ({
 const iconSvg = computed(() => iconsSvg[s.value.button_icon] || '');
 
 const styleMap = {
-  default:   { bg: '#222', color: '#fff', border: 'none' },
-  primary:   { bg: 'var(--olo-color-primary, #6366F1)', color: '#fff', border: 'none' },
-  secondary: { bg: '#e5e7eb', color: '#222', border: 'none' },
-  danger:    { bg: '#dc2626', color: '#fff', border: 'none' },
-  text:      { bg: 'transparent', color: '#999', border: 'none', textDecoration: 'none' },
-  link:      { bg: 'transparent', color: 'var(--olo-color-primary, #6366F1)', border: 'none', textDecoration: 'none' },
+  default:   { bg: 'var(--olo-color-dark, #16263d)', color: '#fff', border: 'none' },
+  primary:   { bg: 'var(--olo-color-primary, #e1474f)', color: 'var(--olo-color-primary-contrast, #fff)', border: 'none' },
+  secondary: { bg: 'var(--olo-color-surface-alt, #e5e7eb)', color: 'var(--olo-color-text, #16263d)', border: 'none' },
+  danger:    { bg: 'var(--olo-color-danger, #dc2626)', color: '#fff', border: 'none' },
+  text:      { bg: 'transparent', color: 'var(--olo-color-text-soft, #6b7280)', border: 'none', textDecoration: 'none' },
+  link:      { bg: 'transparent', color: 'var(--olo-color-primary, #e1474f)', border: 'none', textDecoration: 'none' },
 };
 
 const sizeMap = {
@@ -169,7 +169,7 @@ const triggerBadgeStyle = computed(() => ({
   gap: '4px',
   background: '#1e1b4b',
   color: '#c7d2fe',
-  border: '1px dashed #6366f1',
+  border: '1px dashed #e1474f',
   borderRadius: '8px',
   padding: '12px 18px',
   fontSize: '12px',
@@ -208,6 +208,11 @@ const triggerDetailStyle = computed(() => ({
   height: 100%;
   fill: currentColor;
   stroke: currentColor;
+}
+/* a11y: anello di focus visibile da tastiera sul pulsante trigger */
+.olo-popup-trigger:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
 }
 
 /* ───── Preset visual hints in builder (button only — modal is invisible here) ───── */
@@ -249,7 +254,7 @@ const triggerDetailStyle = computed(() => ({
 
 /* Magnetic */
 .olo-pop--preset-magnetic-liquid :deep(button) {
-  background: linear-gradient(135deg, #e8622a 0%, #ff8a5b 100%) !important;
+  background: linear-gradient(135deg, #e1474f 0%, #f07a80 100%) !important;
   color: #fff !important;
   border: 0 !important;
   border-radius: 999px !important;
@@ -261,7 +266,7 @@ const triggerDetailStyle = computed(() => ({
 /* Sticker */
 .olo-pop--preset-sticker :deep(button) {
   background: rgba(232,98,42,0.15) !important;
-  border: 2px dashed #e8622a !important;
+  border: 2px dashed #e1474f !important;
   color: #b04217 !important;
   border-radius: 8px !important;
   transform: rotate(-1.2deg);

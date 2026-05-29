@@ -115,9 +115,9 @@ function cardStyle(item) {
     padding: pad.value,
     borderRadius: cardRadius.value,
     background: hl
-      ? (s.value.highlighted_bg || 'rgba(232, 98, 42, 0.06)')
+      ? (s.value.highlighted_bg || 'color-mix(in srgb, var(--olo-color-primary, #e1474f) 6%, transparent)')
       : (s.value.card_bg || 'rgba(255, 255, 255, 0.8)'),
-    border: '1px solid ' + (s.value.card_border_color || (hl ? 'rgba(232, 98, 42, 0.2)' : 'rgba(0, 0, 0, 0.06)')),
+    border: '1px solid ' + (s.value.card_border_color || (hl ? 'color-mix(in srgb, var(--olo-color-primary, #e1474f) 20%, transparent)' : 'rgba(0, 0, 0, 0.06)')),
     transition: 'transform 0.2s, box-shadow 0.2s, border-color 0.2s',
     position: 'relative',
     overflow: 'hidden',
@@ -156,7 +156,7 @@ const descStyleObj = computed(() => ({
 }));
 
 const priceStyleObj = computed(() => ({
-  color: s.value.price_color || 'var(--olo-color-primary, #e8622a)',
+  color: s.value.price_color || 'var(--olo-color-primary, #e1474f)',
   fontWeight: '700',
   fontSize: '17px',
   whiteSpace: 'nowrap',
@@ -178,8 +178,8 @@ const badgeStyleObj = computed(() => {
   const st = {
     display: 'inline-flex',
     alignItems: 'center',
-    background: s.value.badge_bg || 'var(--olo-color-primary, #e8622a)',
-    color: s.value.badge_color || '#fff',
+    background: s.value.badge_bg || 'var(--olo-color-primary, #e1474f)',
+    color: s.value.badge_color || 'var(--olo-color-on-primary, #ffffff)',
     fontSize: '9px',
     fontWeight: '700',
     padding: '3px 7px',
@@ -192,7 +192,7 @@ const badgeStyleObj = computed(() => {
     letterSpacing: '0.04em',
   };
   if (bw > 0) {
-    st.border = bw + 'px ' + (s.value.badge_border_style || 'solid') + ' ' + (s.value.badge_border_color || 'var(--olo-color-primary, #e8622a)');
+    st.border = bw + 'px ' + (s.value.badge_border_style || 'solid') + ' ' + (s.value.badge_border_color || 'var(--olo-color-primary, #e1474f)');
   }
   return st;
 });
@@ -211,7 +211,7 @@ const badgeStyleObj = computed(() => {
   border-color: rgba(0, 0, 0, 0.12) !important;
 }
 .olo-pl-card--hl:hover {
-  border-color: rgba(232, 98, 42, 0.35) !important;
+  border-color: color-mix(in srgb, var(--olo-color-primary, #e1474f) 35%, transparent) !important;
 }
 .olo-pl-img-ph {
   width: 100%;

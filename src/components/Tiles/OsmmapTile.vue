@@ -6,7 +6,7 @@
       borderRadius: (parseInt(s.border_radius) || 0) + 'px',
       overflow: 'hidden',
       position: 'relative',
-      border: '1px solid #D1D5DB',
+      border: '1px solid var(--olo-color-border, #d1d5db)',
     }"
   >
     <iframe
@@ -23,6 +23,7 @@
 
     <!-- Edit mode toggle -->
     <button
+      class="olo-osm-edit-btn"
       :style="{
         position: 'absolute',
         top: '8px',
@@ -206,3 +207,10 @@ map.on('click',function(e){
 </html>`;
 });
 </script>
+
+<style scoped>
+.olo-osm-edit-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
+}
+</style>

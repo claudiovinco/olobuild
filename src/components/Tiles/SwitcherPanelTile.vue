@@ -306,6 +306,11 @@ const imgStyle = computed(() => {
   cursor: pointer;
   white-space: nowrap;
 }
+/* a11y: anello di focus visibile da tastiera sul tab */
+.sp-nav__btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 35%, transparent);
+}
 
 /* Panel */
 .sp-panel {
@@ -344,8 +349,8 @@ const imgStyle = computed(() => {
 }
 .sp-btn--default { background: #fff; }
 .sp-btn--primary {
-  background: var(--olo-color-primary, #e8622a);
-  border-color: var(--olo-color-primary, #e8622a);
+  background: var(--olo-color-primary, #e1474f);
+  border-color: var(--olo-color-primary, #e1474f);
   color: #fff;
 }
 .sp-btn--secondary {
@@ -356,7 +361,7 @@ const imgStyle = computed(() => {
 .sp-btn--text {
   border: none;
   padding: 0;
-  color: var(--olo-color-primary, #e8622a);
+  color: var(--olo-color-primary, #e1474f);
   text-transform: none;
   letter-spacing: 0;
   font-weight: 600;
@@ -369,8 +374,8 @@ const imgStyle = computed(() => {
 }
 .sp-btn--pill {
   border-radius: 999px;
-  background: var(--olo-color-primary, #e8622a);
-  border-color: var(--olo-color-primary, #e8622a);
+  background: var(--olo-color-primary, #e1474f);
+  border-color: var(--olo-color-primary, #e1474f);
   color: #fff;
 }
 
@@ -446,7 +451,7 @@ const imgStyle = computed(() => {
 }
 .olo-sp--preset-brutalist-block .sp-nav > li:last-child .sp-nav__btn { border-right: 0; }
 .olo-sp--preset-brutalist-block .sp-nav__btn.is-active {
-  background: #e8622a !important;
+  background: #e1474f !important;
   color: #000 !important;
 }
 .olo-sp--preset-brutalist-block .sp-panel {
@@ -474,7 +479,7 @@ const imgStyle = computed(() => {
   box-shadow: 0 4px 12px rgba(232,98,42,0.45) !important;
 }
 .olo-sp--preset-magnetic-liquid .sp-panel__btn {
-  background: linear-gradient(135deg, #e8622a 0%, #ff8a5b 100%) !important;
+  background: linear-gradient(135deg, #e1474f 0%, #f07a80 100%) !important;
   color: #fff !important;
   border: 0 !important;
 }
@@ -493,7 +498,7 @@ const imgStyle = computed(() => {
 .olo-sp--preset-sticker .sp-nav__btn.is-active {
   transform: rotate(0deg) scale(1.06) !important;
   border-style: solid !important;
-  border-color: #e8622a !important;
+  border-color: #e1474f !important;
   background: #fdf2ec !important;
 }
 .olo-sp--preset-sticker .sp-panel {

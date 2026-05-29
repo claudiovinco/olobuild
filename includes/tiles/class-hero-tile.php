@@ -76,7 +76,7 @@ class Olo_Hero_Tile extends Olo_Tile_Base {
         $s   = wp_parse_args( $settings, $this->defaults );
         $uid = 'olo-hero-' . wp_rand( 10000, 99999 );
 
-        $fg = $this->safe_color_css( $s['text_color'] ) ?: '#FFFFFF';
+        $fg = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-on-primary, #FFFFFF)';
 
         // Sanitize rich text — permetti inline tag sicuri (in particolare <br> per a-capo).
         // L'utente può scrivere "Riga 1<br>Riga 2" nel titolo/sottotitolo dell'inspector.
@@ -128,19 +128,19 @@ class Olo_Hero_Tile extends Olo_Tile_Base {
         $cta_radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['cta_radius_hover'] ?? null );
 
         // CTA Primary colors — outline/ghost fallback to hero text color (visible)
-        $cta_bg          = $this->safe_color_css( $s['cta_bg_color'] ) ?: '#FFFFFF';
+        $cta_bg          = $this->safe_color_css( $s['cta_bg_color'] ) ?: 'var(--olo-color-on-primary, #FFFFFF)';
         $cta_fg_explicit = $this->safe_color_css( $s['cta_text_color'] );
         if ( $cta_fg_explicit ) {
             $cta_fg = $cta_fg_explicit;
         } elseif ( $s['cta_style'] === 'filled' ) {
-            $cta_fg = 'var(--olo-color-primary, #6366F1)';
+            $cta_fg = 'var(--olo-color-primary, #e1474f)';
         } else {
             $cta_fg = $fg;
         }
 
         // CTA Secondary colors
         $cta2_bg = $this->safe_color_css( $s['cta2_bg_color'] ) ?: 'transparent';
-        $cta2_fg = $this->safe_color_css( $s['cta2_text_color'] ) ?: '#FFFFFF';
+        $cta2_fg = $this->safe_color_css( $s['cta2_text_color'] ) ?: 'var(--olo-color-on-primary, #FFFFFF)';
 
         ob_start();
         ?>

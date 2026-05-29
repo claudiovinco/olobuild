@@ -78,16 +78,21 @@
       ></iframe>
       <div
         v-else
-        class="mb-absolute mb-inset-0 mb-flex mb-flex-col mb-items-center mb-justify-center mb-text-gray-500"
+        class="mb-absolute mb-inset-0 mb-flex mb-flex-col mb-items-center mb-justify-center"
+        :style="{ background: 'var(--olo-color-surface-alt, #f6f7f9)', color: 'var(--olo-color-text-faint, #94a3b8)' }"
       >
-        <span class="mb-text-4xl mb-mb-2">{{ t('&#x1F3AC;') }}</span>
+        <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="mb-mb-2">
+          <rect x="2" y="5" width="14" height="14" rx="2" />
+          <path d="m16 9 6-3v12l-6-3" />
+        </svg>
         <span class="mb-text-sm">{{ t('Inserisci un URL YouTube/Vimeo o un file video') }}</span>
       </div>
     </div>
 
     <div
       v-if="s.caption"
-      class="mb-text-sm mb-text-gray-400 mb-text-center mb-mt-2"
+      class="mb-text-sm mb-text-center mb-mt-2"
+      :style="{ color: 'var(--olo-color-text-soft, #6b7280)' }"
     data-olo-editable="caption">{{ s.caption }}</div>
   </div>
 </template>

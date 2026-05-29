@@ -23,7 +23,7 @@ class Olo_Readingtime_Tile extends Olo_Tile_Base {
         'font_weight'      => '',
         'text_align'       => 'left',
         'border_width'     => '0',
-        'border_color'     => '#e5e7eb',
+        'border_color'     => '',
         'border_radius'    => '0',
         'box_shadow'       => '',
             'border'                  => [],
@@ -88,7 +88,7 @@ class Olo_Readingtime_Tile extends Olo_Tile_Base {
 
         // Stili
         $bw = intval( $s['border_width'] );
-        $bc = $this->safe_color_css( $s['border_color'] ) ?: '#e5e7eb';
+        $bc = $this->safe_color_css( $s['border_color'] ) ?: 'var(--olo-color-border, #e5e7eb)';
         $br = esc_attr( $s['border_radius'] );
 
         ob_start();

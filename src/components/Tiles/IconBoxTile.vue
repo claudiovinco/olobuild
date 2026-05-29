@@ -39,7 +39,7 @@ const props = defineProps({
 const builderStore = useBuilderStore();
 
 const defaults = {
-  icon_emoji: '\uD83D\uDE80',
+  icon_emoji: 'star',
   title: 'Titolo funzionalit\u00e0',
   description: 'Una breve descrizione.',
   link_url: '',
@@ -53,7 +53,7 @@ const defaults = {
   icon_color: '',
   title_font_size: '20',
   title_font_weight: '600',
-  link_color: 'var(--olo-color-primary, #6366F1)',
+  link_color: 'var(--olo-color-primary, #e1474f)',
 };
 const s = computed(() => ({ ...defaults, ...props.settings }));
 
@@ -94,7 +94,7 @@ const containerStyle = computed(() => {
   // Border
   const bw = parseInt(s.value.border_width) || 0;
   if (bw > 0) {
-    st.border = bw + 'px ' + (s.value.border_style || 'solid') + ' ' + (s.value.border_color || '#e5e7eb');
+    st.border = bw + 'px ' + (s.value.border_style || 'solid') + ' ' + (s.value.border_color || 'var(--olo-color-border, #e5e7eb)');
   }
   // Border radius
   const br = s.value.border_radius;

@@ -54,7 +54,7 @@ export default {
     // Eyebrow
     eyebrow_text: 'STACK WORDPRESS · PER AGENZIE E PMI',
     eyebrow_dot_color: '#10b981',
-    eyebrow_color: '#1f2937',
+    eyebrow_color: 'var(--olo-color-text, #1f2937)',
 
     // Headline
     headline_lines: [
@@ -70,7 +70,7 @@ export default {
 
     // Subhead
     subhead: 'Un telaio, cinque prodotti, nessuna catena. Page builder gratis + prenotazioni + multilingua + virtual tour + e-learning, tutto in WordPress.',
-    subhead_color:     '#374151',
+    subhead_color:     'var(--olo-color-text, #374151)',
     subhead_size:      18,
     subhead_italic:    true,
     subhead_max_width: 520,

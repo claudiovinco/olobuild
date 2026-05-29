@@ -129,3 +129,11 @@ const buttonStyle = computed(() => ({
   transition: `all ${s.value.transition_duration}ms ease`,
 }));
 </script>
+
+<style scoped>
+.olo-dm-icon-preview:focus-visible,
+.olo-dm-btn-preview:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
+}
+</style>

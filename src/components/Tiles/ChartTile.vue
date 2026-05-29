@@ -32,10 +32,10 @@ const props = defineProps({
 const defaults = {
   chart_type: 'bar',
   items: [
-    { id: 'c-1', label: 'Gen', value: '65', color: '#6366F1' },
-    { id: 'c-2', label: 'Feb', value: '45', color: '#8B5CF6' },
-    { id: 'c-3', label: 'Mar', value: '80', color: '#A78BFA' },
-    { id: 'c-4', label: 'Apr', value: '55', color: '#C4B5FD' },
+    { id: 'c-1', label: 'Gen', value: '65', color: '#e1474f' },
+    { id: 'c-2', label: 'Feb', value: '45', color: '#16263d' },
+    { id: 'c-3', label: 'Mar', value: '80', color: '#f4a23b' },
+    { id: 'c-4', label: 'Apr', value: '55', color: '#15803d' },
   ],
   chart_height: '300',
   show_legend: true,
@@ -112,9 +112,9 @@ function buildConfig() {
   const items = Array.isArray(s.value.items) ? s.value.items : defaults.items;
   const labels = items.map(i => i.label || '');
   const values = items.map(i => parseFloat(i.value) || 0);
-  const bgColors = items.map(i => i.color || '#6366F1');
+  const bgColors = items.map(i => i.color || '#e1474f');
   const borderOverride = s.value.border_color_override || '';
-  const borderColors = items.map(i => borderOverride || i.border_color || i.color || '#6366F1');
+  const borderColors = items.map(i => borderOverride || i.border_color || i.color || '#e1474f');
   const chartType = s.value.chart_type || 'bar';
   const hasGrid = ['bar', 'line'].includes(chartType);
   const textColor = s.value.text_color || '#9CA3AF';

@@ -5,7 +5,7 @@
   >
     <span
       v-if="s.show_icon"
-      :style="{ color: s.icon_color || s.text_color || '#9CA3AF', fontSize: s.font_size || '16px' }"
+      :style="{ color: resolveColor(s.icon_color || s.text_color, TOKENS.textFaint), fontSize: s.font_size || '16px' }"
     >
       <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="12" cy="12" r="10"/>
@@ -18,6 +18,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { resolveColor, TOKENS } from '@/composables/oloTileDefaults';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },

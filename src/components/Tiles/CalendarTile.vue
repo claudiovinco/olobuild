@@ -7,7 +7,7 @@
             :class="{ 'ocp-filter-pill': isPills, 'ocp-filter-check': isCheckboxes }">
         <input v-if="isCheckboxes" type="checkbox" checked disabled />
         <span v-if="isPills || isMinimal" class="ocp-filter-dot"
-              :style="{ background: 'var(--olo-color-primary, #6366F1)' }"></span>
+              :style="{ background: 'var(--olo-color-primary, #e1474f)' }"></span>
         <span>{{ t('Tutti') }}</span>
       </span>
       <span v-for="cat in previewCats" :key="cat.name" class="ocp-filter-item ocp-filter-active"
@@ -132,10 +132,11 @@ const isPills = computed(() => (s.value.filter_style || 'pills') === 'pills');
 const isCheckboxes = computed(() => s.value.filter_style === 'checkboxes');
 const isMinimal = computed(() => s.value.filter_style === 'minimal');
 
+// Palette demo categorie: brand + semantici globali (no più hex off-brand fissi)
 const previewCats = [
-  { name: 'Conferenze', color: '#6366F1', count: 2 },
-  { name: 'Workshop', color: '#10B981', count: 3 },
-  { name: 'Social', color: '#EC4899', count: 1 },
+  { name: 'Conferenze', color: 'var(--olo-color-primary, #e1474f)', count: 2 },
+  { name: 'Workshop', color: 'var(--olo-color-success, #15803d)', count: 3 },
+  { name: 'Social', color: 'var(--olo-color-accent, #f4a23b)', count: 1 },
 ];
 
 const isGridView = computed(() => {
@@ -174,7 +175,13 @@ const weeks = computed(() => {
   return result;
 });
 
-const sampleColors = ['#6366F1', '#EC4899', '#10B981', '#F59E0B'];
+// Colori evento demo: ruoli brand/semantici globali (no più hex off-brand fissi)
+const sampleColors = [
+  'var(--olo-color-primary, #e1474f)',
+  'var(--olo-color-accent, #f4a23b)',
+  'var(--olo-color-success, #15803d)',
+  'var(--olo-color-info, #2563eb)',
+];
 function getSampleEventsForDay(day, isOther) {
   if (isOther) return [];
   const events = [];
@@ -226,7 +233,7 @@ const btnRadius = computed(() => ((v => isNaN(v) ? 8 : v)(parseInt(s.value.toolb
 
 const btnStyle = computed(() => {
   const st = {
-    backgroundColor: s.value.toolbar_btn_bg || 'var(--olo-color-primary, #6366F1)',
+    backgroundColor: s.value.toolbar_btn_bg || 'var(--olo-color-primary, #e1474f)',
     color: s.value.toolbar_btn_color || '#fff',
     borderRadius: btnRadius.value,
     padding: (parseInt(s.value.toolbar_btn_padding_y) || 6) + 'px ' + (parseInt(s.value.toolbar_btn_padding_x) || 14) + 'px',
@@ -243,14 +250,14 @@ const btnStyle = computed(() => {
 
 const btnActiveStyle = computed(() => ({
   ...btnStyle.value,
-  backgroundColor: s.value.toolbar_btn_active_bg || 'color-mix(in srgb, var(--olo-color-primary, #6366F1) 75%, black)',
+  backgroundColor: s.value.toolbar_btn_active_bg || 'color-mix(in srgb, var(--olo-color-primary, #e1474f) 75%, black)',
   color: s.value.toolbar_btn_active_color || btnStyle.value.color,
   opacity: '0.8',
 }));
 
 const headerStyle = computed(() => ({
-  backgroundColor: s.value.header_bg || '#f8f9fa',
-  color: s.value.header_color || '#6b7280',
+  backgroundColor: s.value.header_bg || 'var(--olo-color-surface-alt, #f6f7f9)',
+  color: s.value.header_color || 'var(--olo-color-text-soft, #6b7280)',
 }));
 
 const gridBorderStyle = computed(() => ({
@@ -263,7 +270,7 @@ const cellStyle = computed(() => ({
 
 const todayStyle = computed(() => ({
   ...cellStyle.value,
-  backgroundColor: s.value.today_bg || 'rgba(99,102,241,0.06)',
+  backgroundColor: s.value.today_bg || 'color-mix(in srgb, var(--olo-color-primary, #e1474f) 6%, transparent)',
 }));
 
 const dayNumStyle = computed(() => ({
@@ -304,7 +311,7 @@ function eventStyle(ev) {
 .ocp-filter-pill {
   padding: 4px 12px;
   border-radius: 20px;
-  background: #fff;
+  background: var(--olo-color-surface, #fff);
   border: 1px solid rgba(128,128,128,0.2);
   box-shadow: 0 1px 3px rgba(0,0,0,0.04);
 }
@@ -400,11 +407,11 @@ function eventStyle(ev) {
 
 .ocp-day-num {
   font-weight: 500;
-  color: #9ca3af;
+  color: var(--olo-color-text-faint, #9ca3af);
 }
 
 .ocp-today .ocp-day-num {
-  color: var(--olo-color-primary, #6366F1);
+  color: var(--olo-color-primary, #e1474f);
   font-weight: 700;
 }
 
@@ -417,7 +424,7 @@ function eventStyle(ev) {
 
 .ocp-event {
   padding: 1px 3px;
-  color: #fff;
+  color: var(--olo-color-primary-contrast, #fff);
   font-size: 9px;
   font-weight: 500;
   white-space: nowrap;
@@ -443,7 +450,7 @@ function eventStyle(ev) {
 
 .ocp-list-date {
   font-size: 12px;
-  color: #9ca3af;
+  color: var(--olo-color-text-faint, #9ca3af);
   min-width: 60px;
 }
 

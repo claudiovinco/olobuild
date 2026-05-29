@@ -13,7 +13,7 @@
 import { computed } from 'vue';
 import { t } from '@/i18n';
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
-const defaults = { font_size: 14, text_color: '#374151', line_height: 1.7 };
+const defaults = { font_size: 14, text_color: '', line_height: 1.7 };
 const s = computed(() => ({ ...defaults, ...props.settings }));
-const textStyle = computed(() => ({ fontSize: s.value.font_size+'px', color: s.value.text_color, lineHeight: s.value.line_height }));
+const textStyle = computed(() => ({ fontSize: s.value.font_size+'px', color: s.value.text_color || 'var(--olo-color-text, #1f2937)', lineHeight: s.value.line_height }));
 </script>

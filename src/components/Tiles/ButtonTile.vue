@@ -3,9 +3,13 @@
     class="mb-py-4"
     :style="{ display: 'flex', justifyContent: alignMap[rv(settings, 'alignment', s.alignment, builderStore.viewMode)] || 'center' }"
   >
-    <span
+    <a
+      :href="s.url || '#'"
+      :target="s.target || '_self'"
+      :aria-label="s.text || undefined"
+      class="olo-btn mb-relative"
       :style="btnStyle"
-      class="mb-relative"
+      @click.prevent
     >
       <!-- bg video creativo: anteprima fedele -->
       <video
@@ -29,7 +33,7 @@
         class="mb-absolute mb--top-2 mb--right-2 mb-bg-black/70 mb-text-white mb-rounded-full mb-w-5 mb-h-5 mb-flex mb-items-center mb-justify-center"
         style="font-size: 10px; line-height: 1;"
       >{{ s.hover_video ? '▶' : '⇄' }}</span>
-    </span>
+    </a>
   </div>
 </template>
 
@@ -39,6 +43,8 @@ import iconsSvg from '../ProSlider/uikitIconsSvg.js';
 import { useBuilderStore } from '@/stores/builder';
 import { rv } from '@/composables/useResponsiveValue';
 import { getShadowValue } from '@/composables/useShadowMap';
+import { useBoxModel } from '@/composables/useBoxModel';
+import { resolveColor, TOKENS, buildDefaults } from '@/composables/oloTileDefaults';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
@@ -46,29 +52,16 @@ const props = defineProps({
 
 const builderStore = useBuilderStore();
 
-const s = computed(() => ({
-  text: 'Clicca qui',
-  url: '#',
-  alignment: 'center',
-  full_width: false,
-  bg_color: '#6366F1',
-  text_color: '#FFFFFF',
-  border_radius: '6',
-  tile_padding: { top: 14, right: 32, bottom: 14, left: 32 },
-  font_size: '16',
-  font_weight: '600',
-  letter_spacing: '0',
-  text_transform: 'none',
-  icon: '',
-  icon_position: 'before',
-  icon_spacing: '8',
-  border_width: '0',
-  border_color: '#6366F1',
-  shadow: 'none',
-  hover_image: '',
-  hover_video: '',
-  ...props.settings,
-}));
+// Fonte UNICA dei default (stessi del registry button.js) — niente più
+// ridichiarazioni divergenti (era bg_color '#e1474f' vs '' nel config).
+const s = computed(() => ({ ...buildDefaults('button'), ...props.settings }));
+
+// Box-model normalizzato (gestisce numero|oggetto + legacy padding_x/padding_y).
+const { radiusCss, paddingCss } = useBoxModel(s, {
+  radiusKey: 'border_radius', radiusFallback: 10,
+  paddingKey: 'tile_padding', paddingFallback: [12, 24, 12, 24],
+  paddingLegacy: ['padding_y', 'padding_x'],
+});
 
 const iconSvg = computed(() => iconsSvg[s.value.icon] || '');
 
@@ -94,29 +87,8 @@ const btnStyle = computed(() => {
   const mode = builderStore.viewMode;
   const bw = parseInt(s.value.border_width) || 0;
   const ls = parseFloat(s.value.letter_spacing) || 0;
-  const rad = s.value.border_radius;
-  let borderRadius;
-  if (typeof rad === 'object' && rad !== null) {
-    borderRadius = `${rad.tl || 0}px ${rad.tr || 0}px ${rad.br || 0}px ${rad.bl || 0}px`;
-  } else {
-    borderRadius = `${rad || 6}px`;
-  }
 
   const fontSize = rv(props.settings, 'font_size', s.value.font_size, mode);
-
-  // tile_padding (standard spacing object) with backward compat for legacy padding_x/padding_y
-  const tp = s.value.tile_padding;
-  let padTop = 14, padRight = 32, padBottom = 14, padLeft = 32;
-  if (typeof tp === 'object' && tp !== null) {
-    padTop = parseInt(tp.top) || 14;
-    padRight = parseInt(tp.right) || 32;
-    padBottom = parseInt(tp.bottom) || 14;
-    padLeft = parseInt(tp.left) || 32;
-  } else if (s.value.padding_y !== undefined || s.value.padding_x !== undefined) {
-    // Legacy: padding_x / padding_y
-    padTop = padBottom = parseInt(s.value.padding_y) || 14;
-    padRight = padLeft = parseInt(s.value.padding_x) || 32;
-  }
 
   // Se c'è bg creativo (video/image/gradient/pattern), il bg_color viene sovrascritto
   const bgObj = s.value.bg;
@@ -126,20 +98,23 @@ const btnStyle = computed(() => {
     display: 'inline-block',
     width: s.value.full_width ? '100%' : 'auto',
     textAlign: 'center',
-    padding: `${padTop}px ${padRight}px ${padBottom}px ${padLeft}px`,
-    backgroundColor: hasCreative ? 'transparent' : (s.value.bg_color || '#6366F1'),
-    color: s.value.text_color || '#FFFFFF',
-    borderRadius,
+    textDecoration: 'none',
+    padding: paddingCss.value,
+    // TOKEN-FIRST: se l'utente non sceglie, eredita il brand (mai indaco hardcoded)
+    backgroundColor: hasCreative ? 'transparent' : resolveColor(s.value.bg_color, TOKENS.primary),
+    color: resolveColor(s.value.text_color, TOKENS.onPrimary),
+    borderRadius: radiusCss.value,
     fontSize: `${fontSize || 16}px`,
     fontWeight: s.value.font_weight || '600',
     cursor: 'pointer',
     textTransform: s.value.text_transform !== 'none' ? s.value.text_transform : undefined,
     position: 'relative',
     overflow: 'hidden',
+    transition: 'transform .15s ease, box-shadow .15s ease',
   };
 
   if (ls > 0) style.letterSpacing = ls + 'px';
-  if (bw > 0) style.border = `${bw}px solid ${s.value.border_color || '#6366F1'}`;
+  if (bw > 0) style.border = `${bw}px solid ${resolveColor(s.value.border_color, TOKENS.primary)}`;
 
   const sh = getShadowValue(s.value);
   if (sh !== 'none') style.boxShadow = sh;
@@ -154,5 +129,10 @@ const btnStyle = computed(() => {
   height: 100%;
   fill: currentColor;
   stroke: currentColor;
+}
+/* a11y: anello di focus visibile da tastiera (color-mix sul primario corrente) */
+.olo-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
 }
 </style>

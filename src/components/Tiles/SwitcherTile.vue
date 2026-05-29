@@ -3,27 +3,27 @@
     <!-- Navigation -->
     <div :class="containerClass">
       <div :class="navWrapClass">
-        <div class="mb-flex" :class="s.vertical ? 'mb-flex-col mb-gap-1' : 'mb-border-b-2 mb-border-gray-600'">
+        <div class="mb-flex" :class="s.vertical ? 'mb-flex-col mb-gap-1' : ''" :style="navRowStyle">
           <button
             v-for="(item, i) in items"
             :key="i"
+            type="button"
+            class="olo-switcher-tab"
             @click.stop="activeIndex = i"
             :class="[
               'mb-px-4 mb-py-2 mb-text-sm mb-bg-transparent mb-transition-colors',
-              i === activeIndex
-                ? 'mb-font-semibold mb-text-gray-100'
-                : 'mb-font-normal mb-text-gray-400 hover:mb-text-gray-200'
+              i === activeIndex ? 'mb-font-semibold' : 'mb-font-normal'
             ]"
             :style="tabStyle(i)"
             :data-olo-editable="'items.' + i + '.title'"
           >{{ item.title }}</button>
         </div>
-        <div class="mb-text-xs mb-text-gray-500 mb-mt-1 mb-px-1">{{ navLabel }}</div>
+        <div class="mb-text-xs mb-mt-1 mb-px-1" :style="{ color: TOKENS.textFaint }">{{ navLabel }}</div>
       </div>
 
       <!-- Content -->
       <div :class="contentWrapClass">
-        <div v-if="items[activeIndex]" class="mb-p-4 mb-leading-relaxed mb-text-sm mb-text-gray-300" style="white-space:pre-wrap;" :data-olo-editable="'items.' + activeIndex + '.content'" data-olo-multiline>{{ items[activeIndex].content }}</div>
+        <div v-if="items[activeIndex]" class="mb-p-4 mb-leading-relaxed mb-text-sm" :style="{ color: TOKENS.textSoft, whiteSpace: 'pre-wrap' }" :data-olo-editable="'items.' + activeIndex + '.content'" data-olo-multiline>{{ items[activeIndex].content }}</div>
       </div>
     </div>
   </div>
@@ -31,6 +31,7 @@
 
 <script setup>
 import { ref, computed } from 'vue';
+import { TOKENS } from '@/composables/oloTileDefaults';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
@@ -64,19 +65,41 @@ const containerClass = computed(() => s.value.vertical ? 'mb-flex mb-gap-4' : ''
 const navWrapClass = computed(() => s.value.vertical ? 'mb-w-1/4 mb-flex-shrink-0' : '');
 const contentWrapClass = computed(() => s.value.vertical ? 'mb-flex-1' : '');
 
+// Riga nav (orizzontale): bordo inferiore token-first invece del grigio nudo
+const navRowStyle = computed(() => s.value.vertical
+  ? {}
+  : { borderBottom: `2px solid ${TOKENS.border}` });
+
 function tabStyle(i) {
   const active = i === activeIndex.value;
+  // TOKEN-FIRST: indicatore → primary (era #e1474f indaco off-brand); testo via token
+  const indicator = `var(--olo-color-primary, #e1474f)`;
+  const base = {
+    color: active ? TOKENS.text : TOKENS.textSoft,
+  };
   if (s.value.vertical) {
     return {
-      borderLeft: active ? '2px solid #6366F1' : '2px solid transparent',
+      ...base,
+      borderLeft: active ? `2px solid ${indicator}` : '2px solid transparent',
       borderBottom: 'none',
       textAlign: 'left',
       width: '100%',
     };
   }
   return {
-    borderBottom: active ? '2px solid #6366F1' : '2px solid transparent',
+    ...base,
+    borderBottom: active ? `2px solid ${indicator}` : '2px solid transparent',
     marginBottom: '-2px',
   };
 }
 </script>
+
+<style scoped>
+.olo-switcher-tab:hover { color: var(--olo-color-text, #1f2937); }
+/* a11y: anello di focus visibile da tastiera sul tab */
+.olo-switcher-tab:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
+  border-radius: 4px;
+}
+</style>

@@ -96,6 +96,7 @@ class Olo_SiteLogo_Tile extends Olo_Tile_Base {
         <style>
         .<?php echo $uid; ?>{display:flex;justify-content:<?php echo $align_css; ?>}
         .<?php echo $uid; ?> .olo-sitelogo-link{display:inline-block;line-height:0}
+        .<?php echo $uid; ?> .olo-sitelogo-link:focus-visible{outline:none;box-shadow:0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);border-radius:4px}
         .<?php echo $uid; ?> img,.<?php echo $uid; ?> svg{max-height:<?php echo $max_height; ?>px;width:auto;display:block;transition:opacity <?php echo $trans_dur; ?>s ease,max-height <?php echo $trans_dur; ?>s ease}
         <?php if ( ! empty( $s['max_width'] ) ) : ?>
         .<?php echo $uid; ?> img,.<?php echo $uid; ?> svg{max-width:<?php echo absint( $s['max_width'] ); ?>px}

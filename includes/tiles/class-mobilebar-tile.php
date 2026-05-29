@@ -12,7 +12,7 @@ class Olo_Mobilebar_Tile extends Olo_Tile_Base {
         'logo_image'         => '',
         'logo_width'         => '120',
         'logo_link'          => '',
-        'bar_bg'             => '#1a3a5c',
+        'bar_bg'             => '',
         'bar_height'         => '56',
         'bar_shadow'         => true,
         'bar_padding'        => '12',
@@ -26,7 +26,7 @@ class Olo_Mobilebar_Tile extends Olo_Tile_Base {
         'panel_font_size'    => '17',
         'panel_item_padding' => '16',
         'panel_separator'    => true,
-        'panel_chevron_color'=> '#999999',
+        'panel_chevron_color'=> '',
         'search_enabled'     => true,
         'search_icon_color'  => '#ffffff',
         'search_placeholder' => 'Cerca...',
@@ -48,7 +48,8 @@ class Olo_Mobilebar_Tile extends Olo_Tile_Base {
 
         $bp          = intval( $s['breakpoint'] ) ?: 1024;
         $bar_h       = intval( $s['bar_height'] ) ?: 56;
-        $bar_bg      = $this->safe_color_css( $s['bar_bg'] ) ?: '#1a3a5c';
+        // Barra = superficie scura del brand (navy secondario) invece di navy hardcodato
+        $bar_bg      = $this->safe_color_css( $s['bar_bg'] ) ?: 'var(--olo-color-secondary, #16263d)';
         $bar_pad     = intval( $s['bar_padding'] );
         $bar_shadow  = ! empty( $s['bar_shadow'] );
         $ham_color   = $this->safe_color_css( $s['hamburger_color'] ) ?: '#fff';
@@ -64,7 +65,7 @@ class Olo_Mobilebar_Tile extends Olo_Tile_Base {
         $p_fs        = intval( $s['panel_font_size'] ) ?: 17;
         $p_pad       = intval( $s['panel_item_padding'] ) ?: 16;
         $p_sep       = ! empty( $s['panel_separator'] );
-        $p_chev      = $this->safe_color_css( $s['panel_chevron_color'] ) ?: '#999';
+        $p_chev      = $this->safe_color_css( $s['panel_chevron_color'] ) ?: 'var(--olo-color-text-faint, #94a3b8)';
         $search_on   = ! empty( $s['search_enabled'] );
         $search_ic   = $this->safe_color_css( $s['search_icon_color'] ) ?: '#fff';
         $search_ph   = esc_attr( $s['search_placeholder'] ?: 'Cerca...' );
@@ -167,6 +168,11 @@ class Olo_Mobilebar_Tile extends Olo_Tile_Base {
             border: none !important;
             box-shadow: none !important;
             outline: none !important;
+        }
+        /* a11y tastiera: anello di focus visibile su icone barra (keyboard-only) */
+        .<?php echo $uid; ?> .olo-mb-icon-btn:focus-visible {
+            box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent) !important;
+            border-radius: 6px;
         }
 
         /* Search icon */
@@ -315,6 +321,12 @@ class Olo_Mobilebar_Tile extends Olo_Tile_Base {
         .<?php echo $uid; ?> .olo-mb-nav > ul > li > a:hover,
         .<?php echo $uid; ?> .olo-mb-item a:hover {
             color: <?php echo $p_active; ?>;
+        }
+        /* a11y tastiera: anello di focus visibile sulle voci del pannello mobile */
+        .<?php echo $uid; ?> .olo-mb-item a:focus-visible,
+        .<?php echo $uid; ?> .olo-mb-nav > ul > li > a:focus-visible {
+            outline: none;
+            box-shadow: inset 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
         }
         .<?php echo $uid; ?> .olo-mb-nav li.olo-mb-active > a,
         .<?php echo $uid; ?> .olo-mb-nav li.olo-mb-active > .olo-mb-item > a {

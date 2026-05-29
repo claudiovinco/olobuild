@@ -26,7 +26,7 @@
     <div class="ql-grid" :style="gridStyle">
       <div v-for="(item, n) in cards" :key="n" class="ql-card" :class="cardClasses(n)" :style="cardStyle(n)">
         <span v-if="settings.new_badge && n === 0" class="ql-new-badge" :style="badgeStyle">{{ settings.new_badge_text || 'New' }}</span>
-        <span v-if="settings.trending_badge && n === 1" class="ql-trend-badge">🔥 Trending</span>
+        <span v-if="settings.trending_badge && n === 1" class="ql-trend-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg> Trending</span>
 
         <div v-if="settings.show_image !== false" class="ql-img" :style="imgStyle(n)"></div>
         <div class="ql-body" :style="bodyStyle(n)">
@@ -35,11 +35,11 @@
           <div v-if="settings.show_date !== false || settings.show_author || settings.show_reading_time || settings.show_comment_count" class="ql-meta" :style="{ color: settings.meta_color || undefined }">
             <span v-if="settings.show_date !== false">{{ item.date }}</span>
             <span v-if="settings.show_author"> &middot; {{ item.author }}</span>
-            <span v-if="settings.show_reading_time" class="ql-rt">⏱ {{ item.rt }} min</span>
-            <span v-if="settings.show_comment_count" class="ql-cc">💬 {{ item.cc }}</span>
+            <span v-if="settings.show_reading_time" class="ql-rt"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> {{ item.rt }} min</span>
+            <span v-if="settings.show_comment_count" class="ql-cc"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg> {{ item.cc }}</span>
           </div>
           <div v-if="settings.show_excerpt !== false" class="ql-excerpt" :style="{ color: settings.text_color || undefined }">{{ item.excerpt }}</div>
-          <div v-if="settings.show_read_more !== false" class="ql-readmore" :style="{ color: settings.link_color || settings.accent_color || '#6366F1' }" data-olo-editable="read_more_text">{{ settings.read_more_text || 'Leggi tutto' }} &rarr;</div>
+          <div v-if="settings.show_read_more !== false" class="ql-readmore" :style="{ color: settings.link_color || settings.accent_color || 'var(--olo-color-primary, #e1474f)' }" data-olo-editable="read_more_text">{{ settings.read_more_text || 'Leggi tutto' }} &rarr;</div>
         </div>
       </div>
     </div>
@@ -236,12 +236,13 @@ const titleStyle = computed(() => ({
   letterSpacing: (parseFloat(props.settings.letter_spacing) || 0) + 'px',
 }));
 
+// TOKEN-FIRST: accento/categoria/badge = primario brand (era #e1474f indaco / #e1474f arancio off-brand)
 const catStyle = computed(() => ({
-  color: props.settings.accent_color || props.settings.link_color || '#6366F1',
+  color: props.settings.accent_color || props.settings.link_color || 'var(--olo-color-primary, #e1474f)',
 }));
 
 const badgeStyle = computed(() => ({
-  background: props.settings.accent_color || '#e8622a',
+  background: props.settings.accent_color || 'var(--olo-color-primary, #e1474f)',
 }));
 
 function cardClasses(n) {
@@ -258,7 +259,7 @@ function cardClasses(n) {
 <style scoped>
 .olo-queryloop-preview { padding: 8px; min-height: 100px; position: relative; }
 .ql-header { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; font-size: 13px; color: #6b7280; }
-.ql-icon { color: var(--olo-color-primary, #6366F1); }
+.ql-icon { color: var(--olo-color-primary, #e1474f); }
 .ql-label { font-weight: 600; color: #374151; }
 .ql-info { font-size: 11px; background: #f3f4f6; padding: 2px 8px; border-radius: 4px; }
 
@@ -267,7 +268,7 @@ function cardClasses(n) {
 .ql-sort-wrap select { padding: 4px 8px; border-radius: 4px; border: 1px solid rgba(0,0,0,0.15); margin-left: 6px; pointer-events: none; }
 .ql-tabs { display: flex; gap: 6px; margin-bottom: 14px; border-bottom: 1px solid rgba(0,0,0,0.08); }
 .ql-tabs button { background: transparent; border: 0; border-bottom: 2px solid transparent; padding: 6px 12px; font-size: 12px; font-weight: 600; color: rgba(0,0,0,0.6); cursor: pointer; margin-bottom: -1px; }
-.ql-tabs button.active { color: var(--olo-color-primary, #6366F1); border-bottom-color: var(--olo-color-primary, #6366F1); }
+.ql-tabs button.active { color: var(--olo-color-primary, #e1474f); border-bottom-color: var(--olo-color-primary, #e1474f); }
 
 .ql-card { overflow: hidden; background: #fff; }
 .ql-card--shadow { box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
@@ -295,7 +296,7 @@ function cardClasses(n) {
 
 .ql-pagination { display: flex; justify-content: center; gap: 6px; margin-top: 16px; }
 .ql-page { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 4px; font-size: 12px; background: #f3f4f6; color: #374151; cursor: pointer; }
-.ql-page-active { background: var(--olo-color-primary, #6366F1); color: #fff; }
+.ql-page-active { background: var(--olo-color-primary, #e1474f); color: #fff; }
 .ql-loadmore { padding: 6px 20px; font-size: 12px; border: 1px solid #d1d5db; border-radius: 4px; background: #fff; cursor: pointer; }
 .ql-infinite { font-size: 11px; color: #9ca3af; text-align: center; }
 
@@ -312,7 +313,7 @@ function cardClasses(n) {
 .olo-ql-hover-image-zoom .ql-card:hover .ql-img { transform: scale(1.04); }
 
 /* Layout-specific tweaks (preview) */
-.olo-ql-layout-timeline .ql-card { border-left: 2px solid var(--olo-color-primary, #6366F1); padding-left: 14px; background: transparent; }
+.olo-ql-layout-timeline .ql-card { border-left: 2px solid var(--olo-color-primary, #e1474f); padding-left: 14px; background: transparent; }
 .olo-ql-layout-newspaper .ql-card { background: transparent; box-shadow: none; padding-bottom: 12px; border-bottom: 1px solid rgba(0,0,0,0.1); break-inside: avoid; }
 .olo-ql-layout-stacked :deep(.ql-img) { background: linear-gradient(135deg, #1f2937 0%, #0a0a0a 100%); }
 </style>

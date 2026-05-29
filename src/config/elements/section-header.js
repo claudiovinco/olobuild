@@ -41,7 +41,7 @@ export default {
     tagline_text_color: '#0f172a',
     tagline_text_size: 22,
     tagline_caption: 'TRE GARANZIE · CINQUE PROMESSE',
-    tagline_caption_color: '#9ca3af',
+    tagline_caption_color: '',
     tagline_caption_size: 11,
 
     layout: 'split',

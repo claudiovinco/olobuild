@@ -39,7 +39,7 @@ export default {
     inactive_color: '#64748b',
     hover_bg: '',
     indicator_type: 'none',
-    indicator_color: '#e8622a',
+    indicator_color: '',
     content_bg: '',
     content_color: '#1e293b',
     content_padding_y: '20',

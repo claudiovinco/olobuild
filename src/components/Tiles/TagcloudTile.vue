@@ -18,6 +18,7 @@
 
 <script setup>
 import { computed, ref } from 'vue';
+import { resolveColor, TOKENS } from '@/composables/oloTileDefaults';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
@@ -36,10 +37,10 @@ const defaults = {
   separator: ' ',
   layout: 'cloud',
   columns: '3',
-  text_color: '#374151',
-  hover_color: '#ffffff',
-  background_color: '#f3f4f6',
-  hover_background: '#6366f1',
+  text_color: '',
+  hover_color: '',
+  background_color: '',
+  hover_background: '',
   border_radius: '16',
   padding: '6 14',
   gap: '8',
@@ -115,8 +116,8 @@ function tagStyle(tag) {
   return {
     fontSize: getFontSize(tag.count) + 'px',
     fontWeight: s.value.font_weight || '500',
-    color: isHovered ? (s.value.hover_color || '#ffffff') : (s.value.text_color || '#374151'),
-    backgroundColor: isHovered ? (s.value.hover_background || '#6366f1') : (s.value.background_color || '#f3f4f6'),
+    color: isHovered ? resolveColor(s.value.hover_color, TOKENS.onPrimary) : resolveColor(s.value.text_color, TOKENS.text),
+    backgroundColor: isHovered ? resolveColor(s.value.hover_background, TOKENS.primary) : resolveColor(s.value.background_color, TOKENS.surfaceAlt),
     borderRadius: ((v => isNaN(v) ? 16 : v)(parseInt(s.value.border_radius))) + 'px',
     padding: parsePadding.value,
     display: 'inline-flex',
@@ -129,3 +130,10 @@ function tagStyle(tag) {
   };
 }
 </script>
+
+<style scoped>
+.olo-tagcloud-tag:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
+}
+</style>

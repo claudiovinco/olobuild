@@ -19,7 +19,7 @@ class Olo_Paymentbuttons_Tile extends Olo_Tile_Base {
         $success_url = esc_url( $settings['success_url'] ?? '' );
         $cancel_url  = esc_url( $settings['cancel_url'] ?? '' );
         $alignment   = esc_attr( $settings['alignment'] ?? 'center' );
-        $bg_color    = $settings['bg_color'] ?: 'var(--olo-color-primary, #6366F1)';
+        $bg_color    = $settings['bg_color'] ?: 'var(--olo-color-primary, #e1474f)';
         $text_color  = $settings['text_color'] ?: '#ffffff';
         $radius      = Olo_Tile_Utils::border_radius( $settings['border_radius'] ?? 8 );
         $font_size   = intval( $settings['font_size'] ?? 16 );
@@ -35,7 +35,8 @@ class Olo_Paymentbuttons_Tile extends Olo_Tile_Base {
         $btn_style = "background-color:{$bg_color};color:{$text_color};border-radius:{$radius};font-size:{$font_size}px;padding:12px 32px;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:8px;font-weight:600;";
         if ( $full_width ) $btn_style .= 'width:100%;justify-content:center;';
 
-        $html = '<div class="olo-paymentbuttons ' . esc_attr( $uid ) . '" style="text-align:' . $alignment . '">';
+        $html  = '<style>.' . $uid . ' .olo-pay-btn:focus-visible{outline:none;box-shadow:0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);}</style>';
+        $html .= '<div class="olo-paymentbuttons ' . esc_attr( $uid ) . '" style="text-align:' . $alignment . '">';
 
         if ( $provider === 'stripe' || $provider === 'both' ) {
             $html .= '<button class="olo-pay-btn olo-pay-btn--stripe" style="' . esc_attr( $btn_style ) . '"';

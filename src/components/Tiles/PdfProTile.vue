@@ -302,7 +302,7 @@ const containerStyle = computed(() => {
     flexDirection: 'column',
   };
   style.border = bw > 0
-    ? bw + 'px solid ' + (s.value.border_color || '#e5e7eb')
+    ? bw + 'px solid ' + (s.value.border_color || 'var(--olo-color-border, #e5e7eb)')
     : '1px solid ' + (isDark.value ? '#374151' : 'var(--olo-color-border, #e5e7eb)');
   return style;
 });
@@ -408,8 +408,8 @@ const thumbPercent = computed(() => {
   font-weight: 600;
   padding: 1px 6px;
   border-radius: 4px;
-  background: rgba(139, 92, 246, .15);
-  color: #8b5cf6;
+  background: color-mix(in srgb, var(--olo-color-primary, #e1474f) 15%, transparent);
+  color: var(--olo-color-primary, #e1474f);
 }
 .olo-pdfpro-hs-badge {
   font-size: 10px;
@@ -459,8 +459,8 @@ const thumbPercent = computed(() => {
 .olo-pdfpro-spinner {
   width: 24px;
   height: 24px;
-  border: 3px solid rgba(139,92,246,.2);
-  border-top-color: #8b5cf6;
+  border: 3px solid color-mix(in srgb, var(--olo-color-primary, #e1474f) 20%, transparent);
+  border-top-color: var(--olo-color-primary, #e1474f);
   border-radius: 50%;
   animation: oloPdfSpin .8s linear infinite;
 }

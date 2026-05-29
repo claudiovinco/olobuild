@@ -246,7 +246,7 @@ class Olo_OverlayGrid_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .olo-og-cta--arrow .olo-og-cta__arrow { transition: transform 0.25s ease; }
             .<?php echo $uid; ?> .uk-panel:hover .olo-og-cta--arrow .olo-og-cta__arrow,
             .<?php echo $uid; ?> a:hover .olo-og-cta--arrow .olo-og-cta__arrow { transform: translateX(4px); }
-            .<?php echo $uid; ?> .olo-og-cta--pill { background: var(--olo-color-primary, #e8622a); color: #fff; border-radius: 999px; padding: 8px 18px; }
+            .<?php echo $uid; ?> .olo-og-cta--pill { background: var(--olo-color-primary, #e1474f); color: #fff; border-radius: 999px; padding: 8px 18px; }
 
             /* Ribbon */
             .<?php echo $uid; ?> .mos-og-ribbon { position: absolute; z-index: 2; font-size: 11px; font-weight: 700; padding: 4px 12px; text-transform: uppercase; letter-spacing: 0.5px; background: <?php echo $ribbon_bg; ?>; color: <?php echo $ribbon_color; ?>; }

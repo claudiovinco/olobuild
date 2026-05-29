@@ -293,10 +293,10 @@ const ctaStyle = computed(() => {
     fontWeight: '600',
     marginTop: '6px',
     width: 'fit-content',
-    color: 'var(--olo-color-primary, #e8622a)',
+    color: 'var(--olo-color-primary, #e1474f)',
   };
   if (style === 'underline') return { ...base, borderBottom: '1px solid currentColor', paddingBottom: '1px' };
-  if (style === 'pill') return { ...base, background: 'var(--olo-color-primary, #e8622a)', color: '#fff', borderRadius: '999px', padding: '3px 10px' };
+  if (style === 'pill') return { ...base, background: 'var(--olo-color-primary, #e1474f)', color: '#fff', borderRadius: '999px', padding: '3px 10px' };
   return base;
 });
 
@@ -326,7 +326,7 @@ const arrowStyleObj = computed(() => {
     case 'minimal':        return { ...base, background: 'transparent', boxShadow: 'none' };
     case 'chevron-bold':   return { ...base, background: 'transparent', boxShadow: 'none' };
     case 'arrow-long':     return { ...base, width: (size + 12) + 'px', borderRadius: half + 'px', boxShadow: '0 4px 12px rgba(0,0,0,.15)' };
-    case 'fancy':          return { ...base, borderRadius: '50%', background: 'linear-gradient(135deg,var(--olo-color-primary,#6366F1),#8b5cf6)', color: '#fff', boxShadow: '0 6px 20px rgba(99,102,241,.35)' };
+    case 'fancy':          return { ...base, borderRadius: '50%', background: 'linear-gradient(135deg,var(--olo-color-primary, #e1474f),var(--olo-color-accent, #f4a23b))', color: '#fff', boxShadow: '0 6px 20px color-mix(in srgb, var(--olo-color-primary, #e1474f) 35%, transparent)' };
     case 'uikit':
     default:               return { ...base, background: 'rgba(0,0,0,0.6)', color: '#fff', borderRadius: '50%' };
   }
@@ -372,12 +372,12 @@ function prev() {
 /* Neon Cyber */
 .olo-ps--preset-neon-cyber .olo-ps-card {
   background: #0a0f1c !important;
-  border: 1px solid rgba(255,106,42,0.35) !important;
-  box-shadow: 0 0 14px rgba(255,106,42,0.25) !important;
+  border: 1px solid color-mix(in srgb, var(--olo-color-primary, #e1474f) 35%, transparent) !important;
+  box-shadow: 0 0 14px color-mix(in srgb, var(--olo-color-primary, #e1474f) 25%, transparent) !important;
 }
 .olo-ps--preset-neon-cyber .olo-ps-title {
-  color: #ff6a2a !important;
-  text-shadow: 0 0 6px rgba(255,106,42,0.5);
+  color: var(--olo-color-primary, #e1474f) !important;
+  text-shadow: 0 0 6px color-mix(in srgb, var(--olo-color-primary, #e1474f) 50%, transparent);
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
@@ -409,10 +409,10 @@ function prev() {
 /* Magnetic */
 .olo-ps--preset-magnetic-liquid .olo-ps-card {
   border-radius: 18px !important;
-  box-shadow: 0 6px 18px rgba(232,98,42,0.10) !important;
+  box-shadow: 0 6px 18px color-mix(in srgb, var(--olo-color-primary, #e1474f) 10%, transparent) !important;
 }
 .olo-ps--preset-magnetic-liquid .olo-ps-cta {
-  background: linear-gradient(135deg, #e8622a 0%, #ff8a5b 100%) !important;
+  background: linear-gradient(135deg, var(--olo-color-primary, #e1474f) 0%, var(--olo-color-accent, #f4a23b) 100%) !important;
   color: #fff !important;
   border-radius: 999px !important;
   padding: 4px 12px !important;
@@ -422,7 +422,7 @@ function prev() {
 /* Sticker */
 .olo-ps--preset-sticker .olo-ps-card {
   background: #fff !important;
-  border: 1.2px dashed rgba(232,98,42,0.5) !important;
+  border: 1.2px dashed color-mix(in srgb, var(--olo-color-primary, #e1474f) 50%, transparent) !important;
   box-shadow: 0 6px 14px rgba(0,0,0,0.10) !important;
 }
 .olo-ps--preset-sticker .olo-ps-track > .olo-ps-card:nth-child(3n+1) { transform: rotate(-1.2deg); }

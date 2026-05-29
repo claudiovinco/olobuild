@@ -32,7 +32,7 @@
               <!-- Marker -->
               <div :style="markerStyle(item, i)" class="olo-tl-marker">
                 <template v-if="s.marker_type === 'icon' && item.icon">
-                  <span :uk-icon="'icon: ' + item.icon" :style="{ color: item.icon_color || s.marker_color || 'var(--olo-color-primary, #6366F1)' }"></span>
+                  <span :uk-icon="'icon: ' + item.icon" :style="{ color: item.icon_color || s.marker_color || 'var(--olo-color-primary, #e1474f)' }"></span>
                 </template>
                 <template v-else-if="s.marker_type === 'number'">
                   {{ i + 1 }}
@@ -85,7 +85,7 @@
           <div class="olo-tl-v-marker" :style="vMarkerWrapStyle">
             <div :style="markerStyle(item, i)" class="olo-tl-marker">
               <template v-if="s.marker_type === 'icon' && item.icon">
-                <span :uk-icon="'icon: ' + item.icon" :style="{ color: item.icon_color || s.marker_color || 'var(--olo-color-primary, #6366F1)' }"></span>
+                <span :uk-icon="'icon: ' + item.icon" :style="{ color: item.icon_color || s.marker_color || 'var(--olo-color-primary, #e1474f)' }"></span>
               </template>
               <template v-else-if="s.marker_type === 'number'">
                 {{ i + 1 }}
@@ -134,6 +134,7 @@
 <script setup>
 import { t } from '@/i18n';
 import { ref, computed } from 'vue';
+import { resolveColor, TOKENS } from '@/composables/oloTileDefaults';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
@@ -146,17 +147,17 @@ const defaults = {
   line_style: 'solid',
   marker_type: 'dot',
   marker_size: '20',
-  marker_color: 'var(--olo-color-primary, #6366F1)',
-  marker_bg: 'var(--olo-color-background, #FFFFFF)',
+  marker_color: 'var(--olo-color-primary, #e1474f)',
+  marker_bg: 'var(--olo-color-surface, #FFFFFF)',
   marker_border_width: '3',
-  marker_border_color: 'var(--olo-color-primary, #6366F1)',
+  marker_border_color: 'var(--olo-color-primary, #e1474f)',
   marker_shape: 'circle',
   end_marker: true,
   end_marker_icon: 'flag',
   end_marker_color: '',
   end_marker_bg: '',
   end_marker_size: '',
-  card_bg: 'var(--olo-color-background, #FFFFFF)',
+  card_bg: 'var(--olo-color-surface, #FFFFFF)',
   card_text_color: 'var(--olo-color-text, #374151)',
   card_padding: '20',
   card_border_radius: '12',
@@ -170,7 +171,7 @@ const defaults = {
   card_media_margin: '0',
   card_media_radius: '4',
   date_position: 'outside',
-  date_color: '#9CA3AF',
+  date_color: '',
   date_size: '14',
   date_weight: '600',
   title_size: '18',
@@ -182,7 +183,7 @@ const defaults = {
   h_visible_items: '3',
   h_gap: '24',
   h_arrow_color: 'var(--olo-color-text, #374151)',
-  h_arrow_bg: 'var(--olo-color-muted, #F3F4F6)',
+  h_arrow_bg: 'var(--olo-color-surface-alt, #F3F4F6)',
 };
 const s = computed(() => ({ ...defaults, ...props.settings }));
 
@@ -225,8 +226,8 @@ function markerStyle(item, i) {
     flexShrink: '0',
     fontSize: (size * 0.45) + 'px',
     fontWeight: '700',
-    color: item.icon_color || s.value.marker_color || 'var(--olo-color-primary, #6366F1)',
-    background: s.value.marker_bg || 'var(--olo-color-background, #FFFFFF)',
+    color: item.icon_color || s.value.marker_color || 'var(--olo-color-primary, #e1474f)',
+    background: s.value.marker_bg || 'var(--olo-color-surface, #FFFFFF)',
     borderRadius: shape === 'circle' ? '50%' : shape === 'diamond' ? '4px' : '4px',
     transform: shape === 'diamond' ? 'rotate(45deg)' : 'none',
     position: 'relative',
@@ -234,10 +235,10 @@ function markerStyle(item, i) {
   };
   const bw = parseInt(s.value.marker_border_width) || 0;
   if (bw > 0) {
-    st.border = `${bw}px solid ${s.value.marker_border_color || s.value.marker_color || 'var(--olo-color-primary, #6366F1)'}`;
+    st.border = `${bw}px solid ${s.value.marker_border_color || s.value.marker_color || 'var(--olo-color-primary, #e1474f)'}`;
   }
   if (s.value.marker_type === 'dot') {
-    st.background = s.value.marker_color || 'var(--olo-color-primary, #6366F1)';
+    st.background = s.value.marker_color || 'var(--olo-color-primary, #e1474f)';
   }
   return st;
 }
@@ -248,7 +249,7 @@ const cardStyle = computed(() => {
   const radius = (v => isNaN(v) ? 12 : v)(parseInt(s.value.card_border_radius));
   const bw = parseInt(s.value.card_border_width) || 0;
   const st = {
-    background: s.value.card_bg || 'var(--olo-color-background, #FFFFFF)',
+    background: s.value.card_bg || 'var(--olo-color-surface, #FFFFFF)',
     color: s.value.card_text_color || 'var(--olo-color-text, #374151)',
     padding: pad + 'px',
     borderRadius: radius + 'px',
@@ -319,7 +320,7 @@ function getEmbedUrl(url) {
 const dateStyle = computed(() => ({
   fontSize: (parseInt(s.value.date_size) || 14) + 'px',
   fontWeight: s.value.date_weight || '600',
-  color: s.value.date_color || '#9CA3AF',
+  color: resolveColor(s.value.date_color, TOKENS.textFaint),
 }));
 
 // --- Title ---
@@ -425,7 +426,7 @@ function vDateWrapStyle(i) {
 
 function cardArrowStyle(i) {
   const layout = s.value.layout || 'vertical-center';
-  const bg = s.value.card_bg || 'var(--olo-color-background, #FFFFFF)';
+  const bg = s.value.card_bg || 'var(--olo-color-surface, #FFFFFF)';
   const size = 8;
   const base = {
     position: 'absolute',
@@ -469,8 +470,8 @@ const endMarkerStyle = computed(() => {
     justifyContent: 'center',
     flexShrink: '0',
     fontSize: (size * 0.5) + 'px',
-    color: s.value.end_marker_color || s.value.marker_color || 'var(--olo-color-primary, #6366F1)',
-    background: s.value.end_marker_bg || s.value.marker_bg || 'var(--olo-color-background, #FFFFFF)',
+    color: s.value.end_marker_color || s.value.marker_color || 'var(--olo-color-primary, #e1474f)',
+    background: s.value.end_marker_bg || s.value.marker_bg || 'var(--olo-color-surface, #FFFFFF)',
     borderRadius: shape === 'circle' ? '50%' : '4px',
     transform: shape === 'diamond' ? 'rotate(45deg)' : 'none',
     position: 'relative',
@@ -478,12 +479,12 @@ const endMarkerStyle = computed(() => {
   };
   const bw = parseInt(s.value.marker_border_width) || 0;
   if (bw > 0) {
-    st.border = `${bw}px solid ${s.value.marker_border_color || s.value.marker_color || 'var(--olo-color-primary, #6366F1)'}`;
+    st.border = `${bw}px solid ${s.value.marker_border_color || s.value.marker_color || 'var(--olo-color-primary, #e1474f)'}`;
   }
   return st;
 });
 
-const endIconColor = computed(() => s.value.end_marker_color || s.value.marker_color || 'var(--olo-color-primary, #6366F1)');
+const endIconColor = computed(() => s.value.end_marker_color || s.value.marker_color || 'var(--olo-color-primary, #e1474f)');
 
 const endItemStyle = computed(() => ({
   display: 'flex',
@@ -564,7 +565,7 @@ const arrowStyle = computed(() => ({
   alignItems: 'center',
   justifyContent: 'center',
   color: s.value.h_arrow_color || 'var(--olo-color-text, #374151)',
-  background: s.value.h_arrow_bg || 'var(--olo-color-muted, #F3F4F6)',
+  background: s.value.h_arrow_bg || 'var(--olo-color-surface-alt, #F3F4F6)',
 }));
 </script>
 
@@ -574,6 +575,10 @@ const arrowStyle = computed(() => ({
 }
 .olo-tl-h-arrow--next {
   right: -8px;
+}
+.olo-tl-h-arrow:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
 }
 
 .olo-tl-card h4 {
@@ -657,14 +662,14 @@ const arrowStyle = computed(() => ({
   box-shadow: 0 8px 22px rgba(232,98,42,0.16) !important;
 }
 .olo-tl--preset-magnetic-liquid :deep(.olo-tl-line) {
-  background: linear-gradient(180deg, #e8622a 0%, #ff8a5b 100%) !important;
+  background: linear-gradient(180deg, #e1474f 0%, #f07a80 100%) !important;
 }
 .olo-tl--preset-magnetic-liquid :deep(.olo-tl-marker) {
-  background: #e8622a !important;
+  background: #e1474f !important;
   color: #fff !important;
   box-shadow: 0 6px 14px rgba(232,98,42,0.4) !important;
 }
-.olo-tl--preset-magnetic-liquid :deep(.olo-tl-date) { color: #e8622a !important; font-weight: 700; }
+.olo-tl--preset-magnetic-liquid :deep(.olo-tl-date) { color: #e1474f !important; font-weight: 700; }
 
 /* Sticker */
 .olo-tl--preset-sticker :deep(.olo-tl-card) {
@@ -673,7 +678,7 @@ const arrowStyle = computed(() => ({
   box-shadow: 0 8px 18px rgba(0,0,0,0.10) !important;
 }
 .olo-tl--preset-sticker :deep(.olo-tl-marker) {
-  background: #e8622a !important;
+  background: #e1474f !important;
   color: #fff !important;
   border: 3px dashed #f3aa86 !important;
 }

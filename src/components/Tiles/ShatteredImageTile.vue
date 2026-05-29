@@ -1,6 +1,11 @@
 <template>
   <div style="padding:4px">
-    <div v-if="!s.image_url" style="display:flex;align-items:center;justify-content:center;height:200px;background:#f3f4f6;border-radius:8px;color:#9ca3af;font-size:13px">
+    <div v-if="!s.image_url" style="display:flex;flex-direction:column;gap:8px;align-items:center;justify-content:center;height:200px;background:var(--olo-color-surface-alt, #f6f7f9);border-radius:8px;color:var(--olo-color-text-faint, #94a3b8);font-size:13px">
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <rect x="3" y="3" width="18" height="18" rx="2" />
+        <circle cx="8.5" cy="8.5" r="1.5" />
+        <path d="m21 15-5-5L5 21" />
+      </svg>
       {{ t('Seleziona un\'immagine') }}
     </div>
     <template v-else>
@@ -18,8 +23,8 @@
       </div>
       <!-- Scroll effects badge (builder only) -->
       <div v-if="s.scroll_parallax || s.scroll_reveal" style="position:absolute;bottom:6px;right:8px;display:flex;gap:4px;z-index:2">
-        <span v-if="s.scroll_parallax" style="background:rgba(99,102,241,.85);color:#fff;font-size:10px;padding:2px 6px;border-radius:4px;line-height:1.3">{{ t('Parallax') }}</span>
-        <span v-if="s.scroll_reveal" style="background:rgba(99,102,241,.85);color:#fff;font-size:10px;padding:2px 6px;border-radius:4px;line-height:1.3">{{ t('Reveal') }}</span>
+        <span v-if="s.scroll_parallax" style="background:color-mix(in srgb, var(--olo-color-primary, #e1474f) 85%, transparent);color:#fff;font-size:10px;padding:2px 6px;border-radius:4px;line-height:1.3">{{ t('Parallax') }}</span>
+        <span v-if="s.scroll_reveal" style="background:color-mix(in srgb, var(--olo-color-primary, #e1474f) 85%, transparent);color:#fff;font-size:10px;padding:2px 6px;border-radius:4px;line-height:1.3">{{ t('Reveal') }}</span>
       </div>
       </div>
     </template>
@@ -408,7 +413,7 @@ const containerStyle = computed(() => {
     boxShadow: getShadowValue(s.value),
   };
   if (bw > 0) {
-    style.border = bw + 'px solid ' + (s.value.border_color || '#e5e7eb');
+    style.border = bw + 'px solid ' + (s.value.border_color || 'var(--olo-color-border, #e5e7eb)');
   }
   return style;
 });

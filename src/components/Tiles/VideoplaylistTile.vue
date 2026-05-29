@@ -2,7 +2,7 @@
   <div class="olo-videoplaylist" :style="wrapperStyle">
     <!-- Player -->
     <div :style="playerStyle" class="olo-vp-player">
-      <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#000;border-radius:6px;color:#6b7280;flex-direction:column;gap:6px;">
+      <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#000;border-radius:6px;color:var(--olo-color-text-soft, #6b7280);flex-direction:column;gap:6px;">
         <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
           <polygon points="5,3 19,12 5,21" fill="currentColor" opacity="0.3" stroke="none"/>
           <polygon points="5,3 19,12 5,21"/>
@@ -49,6 +49,7 @@
 <script setup>
 import { ref, computed } from 'vue';
 import { t } from '@/i18n';
+import { resolveColor, TOKENS } from '@/composables/oloTileDefaults';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
@@ -61,7 +62,7 @@ const defaults = {
   sidebar_width: '280',
   sidebar_bg: 'var(--olo-color-muted, #F3F4F6)',
   text_color: 'var(--olo-color-text, #374151)',
-  active_color: '#3b82f6',
+  active_color: '',
   show_duration: true,
   autoplay_next: false,
 };
@@ -124,7 +125,7 @@ function itemStyle(index) {
   return {
     padding: '8px 12px',
     cursor: 'pointer',
-    borderLeft: isActive ? '3px solid ' + (s.value.active_color || '#3b82f6') : '3px solid transparent',
+    borderLeft: isActive ? '3px solid ' + resolveColor(s.value.active_color, TOKENS.primary) : '3px solid transparent',
     background: isActive ? 'rgba(255,255,255,0.06)' : 'transparent',
     transition: 'background 0.15s, border-color 0.15s',
   };

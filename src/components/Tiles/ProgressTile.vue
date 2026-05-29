@@ -7,7 +7,7 @@
           <!-- Background circle -->
           <circle :cx="circleSize/2" :cy="circleSize/2" :r="radius" fill="none" :stroke="s.bar_bg || 'var(--olo-color-border, #E5E7EB)'" :stroke-width="strokeWidth" />
           <!-- Progress circle -->
-          <circle :cx="circleSize/2" :cy="circleSize/2" :r="radius" fill="none" :stroke="s.bar_color || 'var(--olo-color-primary, #6366F1)'" :stroke-width="strokeWidth"
+          <circle :cx="circleSize/2" :cy="circleSize/2" :r="radius" fill="none" :stroke="s.bar_color || 'var(--olo-color-primary, #e1474f)'" :stroke-width="strokeWidth"
             :stroke-dasharray="circumference" :stroke-dashoffset="circumference - (circumference * item.value / 100)"
             stroke-linecap="round" :transform="'rotate(-90 ' + circleSize/2 + ' ' + circleSize/2 + ')'"
             style="transition: stroke-dashoffset 1s ease;" />
@@ -46,7 +46,7 @@ import { computed } from 'vue';
 
 const defaults = {
   bars: 'HTML|90\nJavaScript|80\nVue.js|75',
-  bar_color: 'var(--olo-color-primary, #6366F1)',
+  bar_color: 'var(--olo-color-primary, #e1474f)',
   bar_bg: 'var(--olo-color-muted, #F3F4F6)',
   text_color: 'var(--olo-color-text, #374151)',
   height: '20',
@@ -60,7 +60,7 @@ const defaults = {
   animation_duration: '1500',
   shadow: 'none',
   border_width: '0',
-  border_color: '#e5e7eb',
+  border_color: 'var(--olo-color-border, #e5e7eb)',
   border_radius: { tl: 0, tr: 0, br: 0, bl: 0 },
 };
 

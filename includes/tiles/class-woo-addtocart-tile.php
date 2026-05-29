@@ -18,10 +18,10 @@ class Olo_Woo_Addtocart_Tile extends Olo_Tile_Base {
         'style'          => 'filled',
         'size'           => 'medium',
         'full_width'     => false,
-        'bg_color'       => '#6366F1',
-        'text_color'     => '#FFFFFF',
-        'hover_bg'       => '#4F46E5',
-        'hover_text'     => '#FFFFFF',
+        'bg_color'       => '',
+        'text_color'     => '',
+        'hover_bg'       => '',
+        'hover_text'     => '',
         'border_radius'  => 6,
         'quantity_style'  => 'input',
             'border'                  => [],
@@ -40,7 +40,7 @@ class Olo_Woo_Addtocart_Tile extends Olo_Tile_Base {
 
     public function render( $settings ) {
         if ( ! class_exists( 'WooCommerce' ) ) {
-            return '<div style="padding:40px;text-align:center;color:#92400E;background:#FEF3C7;border:1px solid #F59E0B;border-radius:8px;">'
+            return '<div style="padding:40px;text-align:center;color:var(--olo-color-warning, #b45309);background:color-mix(in srgb, var(--olo-color-warning, #b45309) 12%, #fff);border:1px solid var(--olo-color-warning, #b45309);border-radius:8px;">'
                  . esc_html( olo_t( 'WooCommerce non attivo. Installa e attiva WooCommerce per utilizzare questo elemento.' ) )
                  . '</div>';
         }
@@ -60,11 +60,11 @@ class Olo_Woo_Addtocart_Tile extends Olo_Tile_Base {
 
         $uid = 'olo-woo-atc-' . wp_rand( 10000, 99999 );
 
-        // Colors
-        $bg_color   = $this->safe_color_css( $s['bg_color'] );
-        $text_color = $this->safe_color_css( $s['text_color'] );
-        $hover_bg   = $this->safe_color_css( $s['hover_bg'] );
-        $hover_text = $this->safe_color_css( $s['hover_text'] );
+        // Colors — TOKEN-FIRST: la CTA carrello eredita il brand se l'utente non sceglie.
+        $bg_color   = $this->safe_color_css( $s['bg_color'] )   ?: 'var(--olo-color-primary, #e1474f)';
+        $text_color = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-on-primary, #ffffff)';
+        $hover_bg   = $this->safe_color_css( $s['hover_bg'] )   ?: 'var(--olo-color-primary, #e1474f)';
+        $hover_text = $this->safe_color_css( $s['hover_text'] ) ?: 'var(--olo-color-on-primary, #ffffff)';
         $radius     = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
         $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
 

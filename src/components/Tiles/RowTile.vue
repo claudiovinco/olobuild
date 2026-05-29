@@ -37,13 +37,13 @@ const s = computed(() => ({ ...defaults, ...props.settings }));
   gap: 6px;
   padding: 4px 8px;
   font-size: 10px;
-  color: #6B7280;
+  color: var(--olo-color-text-soft, #6B7280);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 .olo-row-tile-layout {
-  background: rgba(99, 102, 241, 0.15);
-  color: var(--olo-color-primary, #6366F1);
+  background: color-mix(in srgb, var(--olo-color-primary, #e1474f) 15%, transparent);
+  color: var(--olo-color-primary, #e1474f);
   padding: 1px 6px;
   border-radius: 3px;
   font-size: 9px;

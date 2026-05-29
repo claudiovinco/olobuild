@@ -20,7 +20,7 @@ class Olo_FlipCard_Tile extends Olo_Tile_Base {
         'front_icon_color' => '',
         'front_title'      => 'Titolo fronte',
         'front_description'=> 'Descrizione della card visibile.',
-        'front_bg'         => '#1e1e2e',
+        'front_bg'         => '',
         'front_overlay'    => '',
         'front_image_fit'     => 'cover',
         'front_image_padding' => '0',
@@ -42,7 +42,7 @@ class Olo_FlipCard_Tile extends Olo_Tile_Base {
         'back_image_fit'      => 'cover',
         'back_image_padding'  => '0',
         'back_image_radius'   => '0',
-        'back_text_color'  => '#FFFFFF',
+        'back_text_color'  => '',
         'back_text_align'  => 'center',
         'back_valign'      => 'center',
         'back_cta_text'    => 'Scopri di più',
@@ -100,7 +100,7 @@ class Olo_FlipCard_Tile extends Olo_Tile_Base {
         $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['card_border_radius_hover'] ?? null );
         $shadow   = Olo_Tile_Utils::shadow_value( $s, 'card_shadow' );
         $bw       = intval( $s['card_border_width'] );
-        $bc       = $this->safe_color_css( $s['card_border_color'] ) ?: 'var(--olo-color-text, #374151)';
+        $bc       = $this->safe_color_css( $s['card_border_color'] ) ?: 'var(--olo-color-border, #E5E7EB)';
         $padding = Olo_Tile_Utils::spacing_css( $s['tile_padding'] ?? $s['card_padding'] ?? 24, 24 );
         $halfH    = round( $height / 2 );
 
@@ -113,15 +113,15 @@ class Olo_FlipCard_Tile extends Olo_Tile_Base {
         $back_initial  = $this->get_back_transform( $dir, $halfH );
         $flip_transform = $this->get_flip_transform( $dir, $halfH );
 
-        // Front face
-        $front_fg      = $this->safe_color_css( $s['front_text_color'] ) ?: 'var(--olo-color-muted, #F3F4F6)';
-        $front_bg      = $this->safe_color_css( $s['front_bg'] ) ?: '#1e1e2e';
+        // Front face — token-first (allineato a flipcard.js + FlipCardTile.vue)
+        $front_fg      = $this->safe_color_css( $s['front_text_color'] ) ?: 'var(--olo-color-text, #374151)';
+        $front_bg      = $this->safe_color_css( $s['front_bg'] ) ?: 'var(--olo-color-surface-alt, #F3F4F6)';
         $front_align   = in_array( $s['front_text_align'], [ 'left', 'center', 'right' ] ) ? $s['front_text_align'] : 'center';
         $front_valign  = $this->valign_css( $s['front_valign'] );
 
         // Back face
-        $back_fg       = $this->safe_color_css( $s['back_text_color'] ) ?: '#FFFFFF';
-        $back_bg       = $this->safe_color_css( $s['back_bg'] ) ?: 'var(--olo-color-primary, #6366F1)';
+        $back_fg       = $this->safe_color_css( $s['back_text_color'] ) ?: 'var(--olo-color-on-primary, #FFFFFF)';
+        $back_bg       = $this->safe_color_css( $s['back_bg'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $back_align    = in_array( $s['back_text_align'], [ 'left', 'center', 'right' ] ) ? $s['back_text_align'] : 'center';
         $back_valign   = $this->valign_css( $s['back_valign'] );
 
@@ -129,8 +129,8 @@ class Olo_FlipCard_Tile extends Olo_Tile_Base {
         $cta_text   = esc_html( wp_strip_all_tags( $s['back_cta_text'] ) );
         $cta_url    = esc_url( $s['back_cta_url'] );
         $cta_target = ! empty( $s['back_cta_target'] ) ? ' target="_blank" rel="noopener"' : '';
-        $cta_bg     = $this->safe_color_css( $s['back_cta_bg'] ) ?: '#FFFFFF';
-        $cta_color  = $this->safe_color_css( $s['back_cta_color'] ) ?: 'var(--olo-color-primary, #6366F1)';
+        $cta_bg     = $this->safe_color_css( $s['back_cta_bg'] ) ?: 'var(--olo-color-on-primary, #FFFFFF)';
+        $cta_color  = $this->safe_color_css( $s['back_cta_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $cta_radius = Olo_Tile_Utils::border_radius( $s['back_cta_radius'] ?? 0 );
         $cta_radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['back_cta_radius_hover'] ?? null );
 
@@ -272,6 +272,10 @@ class Olo_FlipCard_Tile extends Olo_Tile_Base {
                 transform: translateY(-1px);
                 color: <?php echo $cta_color; ?> !important;
                 text-decoration: none !important;
+            }
+            .<?php echo $uid; ?> .olo-fc-cta:focus-visible {
+                outline: none;
+                box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
             }
 
             @media (max-width: 959px) {

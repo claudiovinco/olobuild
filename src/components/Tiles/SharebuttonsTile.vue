@@ -44,7 +44,7 @@ const defaults = {
   alignment: 'center',
   icon_color: '#ffffff',
   icon_hover_color: '#ffffff',
-  bg_color: '#6366F1',
+  bg_color: 'var(--olo-color-primary, #e1474f)',
 };
 
 const props = defineProps({
@@ -104,7 +104,7 @@ function btnStyle(platform) {
     padding: s.value.style === 'text-only' ? '8px 14px' : (s.value.style === 'icon-text' ? '8px 14px' : '8px'),
     width: s.value.style === 'icon-only' ? (parseInt(s.value.size) || 36) + 'px' : 'auto',
     height: s.value.style === 'icon-only' ? (parseInt(s.value.size) || 36) + 'px' : 'auto',
-    backgroundColor: s.value.bg_color || '#6366F1',
+    backgroundColor: s.value.bg_color || 'var(--olo-color-primary, #e1474f)',
     color: s.value.icon_color || '#ffffff',
     borderRadius: '8px',
     fontSize: iconSize.value + 'px',

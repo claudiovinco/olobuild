@@ -71,6 +71,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { resolveColor, TOKENS } from '@/composables/oloTileDefaults';
 
 const defaults = {
   items: [
@@ -81,10 +82,10 @@ const defaults = {
   ],
   layout: 'horizontal',
   connector_style: 'line',
-  connector_color: '#e5e7eb',
-  completed_color: '#10b981',
-  active_color: '#3b82f6',
-  pending_color: '#9ca3af',
+  connector_color: '',
+  completed_color: '',
+  active_color: '',
+  pending_color: '',
   text_color: 'var(--olo-color-text, #374151)',
   show_description: true,
   show_numbers: true,
@@ -121,9 +122,11 @@ const fSize = computed(() => (parseInt(s.value.font_size) || 14) + 'px');
 
 function getStatusColor(status) {
   switch (status) {
-    case 'completed': return s.value.completed_color || '#10b981';
-    case 'active': return s.value.active_color || '#3b82f6';
-    default: return s.value.pending_color || '#9ca3af';
+    // completato = semantico success, attivo = primario brand (era #3b82f6),
+    // in attesa = grigio tenue neutro.
+    case 'completed': return resolveColor(s.value.completed_color, TOKENS.success.fg);
+    case 'active': return resolveColor(s.value.active_color, TOKENS.primary);
+    default: return resolveColor(s.value.pending_color, TOKENS.textFaint);
   }
 }
 
@@ -140,14 +143,14 @@ function circleStyle(item, i) {
     flexShrink: '0',
     fontWeight: '700',
     fontSize: (size * 0.38) + 'px',
-    color: '#fff',
+    color: TOKENS.onPrimary,
     background: color,
     position: 'relative',
     zIndex: '2',
     transition: 'all 0.3s',
   };
   if (item.status === 'active') {
-    st.boxShadow = '0 0 0 4px ' + color + '40';
+    st.boxShadow = '0 0 0 4px color-mix(in srgb, ' + color + ' 25%, transparent)';
   }
   if (item.status === 'pending') {
     st.background = 'transparent';
@@ -182,7 +185,7 @@ function hConnectorStyle(i) {
   return {
     flex: '1',
     height: '0',
-    borderTop: '2px ' + connectorBorderStyle.value + ' ' + (s.value.connector_color || '#e5e7eb'),
+    borderTop: '2px ' + connectorBorderStyle.value + ' ' + resolveColor(s.value.connector_color, TOKENS.border),
     alignSelf: 'center',
   };
 }
@@ -227,7 +230,7 @@ function vConnectorStyle(i) {
     width: '0',
     flex: '1',
     minHeight: '24px',
-    borderLeft: '2px ' + connectorBorderStyle.value + ' ' + (s.value.connector_color || '#e5e7eb'),
+    borderLeft: '2px ' + connectorBorderStyle.value + ' ' + resolveColor(s.value.connector_color, TOKENS.border),
     marginTop: '4px',
     marginBottom: '4px',
   };

@@ -6,9 +6,9 @@
     <div style="display:flex;align-items:center" :style="{ gap: s.gap + 'px' }">
       <svg v-for="i in 5" :key="i" :width="sz" :height="sz" viewBox="0 0 24 24" fill="none">
         <path d="M12 2C8 2 4 5.5 4 9.5C4 13 7 14.5 7 14.5L7.5 20C7.5 20.5 8 21 8.5 21H15.5C16 21 16.5 20.5 16.5 20L17 14.5C17 14.5 20 13 20 9.5C20 5.5 16 2 12 2Z"
-              :fill="i <= displayVal ? s.active_color : s.inactive_color" />
+              :fill="i <= displayVal ? activeColor : inactiveColor" />
       </svg>
-      <span v-if="s.style === 'with-number'" :style="{ fontSize: sz+'px', fontWeight:'700', color: s.active_color, marginLeft:'4px' }">{{ displayVal }}/5</span>
+      <span v-if="s.style === 'with-number'" :style="{ fontSize: sz+'px', fontWeight:'700', color: activeColor, marginLeft:'4px' }">{{ displayVal }}/5</span>
     </div>
     <div v-if="s.show_label && s.label_position === 'bottom'" :style="labelStyle" style="margin-top:4px">
       {{ s.label_text }}
@@ -18,15 +18,19 @@
 
 <script setup>
 import { computed } from 'vue';
+import { resolveColor, TOKENS } from '@/composables/oloTileDefaults';
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 
 const defaults = {
-  style: 'inline', size: '28', gap: '4', active_color: '#D97706', inactive_color: '#E5E7EB',
+  // rating "funghi" (comfort): attivo → accent ambra brand, inattivo → border (token-first)
+  style: 'inline', size: '28', gap: '4', active_color: '', inactive_color: '',
   show_label: true, label_text: 'Classificazione comfort', label_size: '13',
-  label_color: '#6B7280', label_position: 'top', align: 'left',
+  label_color: '', label_position: 'top', align: 'left',
   bg_color: '', border_radius: '0', padding: '0',
 };
 const s = computed(() => ({ ...defaults, ...props.settings }));
+const activeColor = computed(() => resolveColor(s.value.active_color, TOKENS.accent));
+const inactiveColor = computed(() => resolveColor(s.value.inactive_color, TOKENS.border));
 const sz = computed(() => Math.min(parseInt(s.value.size) || 28, 36));
 const displayVal = computed(() => Math.max(0, Math.min(5, Math.round(parseFloat(s.value.value) || 3))));
 
@@ -41,6 +45,6 @@ const wrapStyle = computed(() => {
 
 const labelStyle = computed(() => ({
   fontSize: Math.min(parseInt(s.value.label_size) || 13, 16) + 'px',
-  color: s.value.label_color, fontWeight: '600',
+  color: resolveColor(s.value.label_color, TOKENS.textSoft), fontWeight: '600',
 }));
 </script>

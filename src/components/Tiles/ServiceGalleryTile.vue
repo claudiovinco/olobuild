@@ -16,7 +16,7 @@
   </div>
   <!-- Effect indicators -->
   <div v-if="activeEffects.length" style="display:flex;gap:3px;margin-top:4px;justify-content:flex-end">
-    <span v-for="fx in activeEffects" :key="fx" style="background:rgba(0,0,0,0.5);color:#a5f3fc;padding:1px 5px;border-radius:8px;font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:0.3px">{{ fx }}</span>
+    <span v-for="fx in activeEffects" :key="fx" style="background:rgba(0,0,0,0.5);color:var(--olo-color-on-primary, #ffffff);padding:1px 5px;border-radius:8px;font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:0.3px">{{ fx }}</span>
   </div>
   </div>
 </template>
@@ -29,7 +29,8 @@ const defaults = {
   columns: '3', rows: '2', gap: '8', thumb_height: '200', thumb_radius: '12',
   fx_kenburns: false, fx_hover_zoom: true, fx_hover_tilt: false,
   fx_vignette: false, fx_vignette_strength: '40',
-  fx_grain: false, fx_tint: false, fx_tint_color: '#1E3A5F', fx_tint_opacity: '10', fx_tint_blend: 'multiply',
+  // tint creativo default → navy brand (era #1E3A5F hardcoded)
+  fx_grain: false, fx_tint: false, fx_tint_color: 'var(--olo-color-secondary, #16263d)', fx_tint_opacity: '10', fx_tint_blend: 'multiply',
   more_bg: 'rgba(0,0,0,0.55)', more_color: '#FFFFFF', more_size: '28',
 };
 const s = computed(() => ({ ...defaults, ...props.settings }));
@@ -53,13 +54,14 @@ const thumbStyle = computed(() => ({
   overflow: 'hidden',
 }));
 
-const hues = [200, 180, 220, 160, 240, 190, 210, 170, 230, 150, 205, 185];
+// placeholder thumb elegante: tinta soft brand variabile su superficie (no più HSL blu off-brand)
+const mixes = [16, 24, 32, 20, 36, 28, 18, 30, 22, 34, 26, 38];
 function imgStyle(i) {
-  const h = hues[(i - 1) % hues.length];
+  const m = mixes[(i - 1) % mixes.length];
   const anim = s.value.fx_kenburns ? `olo-sgal-kb-preview 8s ease-in-out infinite ${(i * 2.5) % 8}s` : 'none';
   return {
     position: 'absolute', inset: '0',
-    background: `linear-gradient(135deg, hsl(${h},40%,65%), hsl(${h + 20},35%,50%))`,
+    background: `linear-gradient(135deg, color-mix(in srgb, var(--olo-color-primary, #e1474f) ${m}%, #fff), color-mix(in srgb, var(--olo-color-primary, #e1474f) ${m + 14}%, #fff))`,
     animation: anim,
   };
 }

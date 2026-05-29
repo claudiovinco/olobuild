@@ -9,15 +9,15 @@ class Olo_Iconlist_Tile extends Olo_Tile_Base {
     protected $defaults = [
         'preset' => 'custom',
         'items'          => [],
-        'icon_color'     => '#22C55E',
+        'icon_color'     => '',
         'icon_size'      => '20',
-        'text_color'     => '#E5E7EB',
+        'text_color'     => '',
         'text_size'      => '16',
         'gap'            => '12',
         'icon_shape'     => 'none',
         'icon_bg_color'  => '',
         'divider'        => false,
-        'divider_color'  => '#374151',
+        'divider_color'  => '',
         'layout'         => 'vertical',
         // Text effects defaults (l'unica opzione di target è 'text')
         'text_effect'           => 'none',
@@ -56,15 +56,15 @@ class Olo_Iconlist_Tile extends Olo_Tile_Base {
         }
 
         $icon_clr   = $this->safe_color_css($s['icon_color']) ?: 'var(--olo-color-success, #10B981)';
-        $text_clr   = $this->safe_color_css($s['text_color']) ?: 'var(--olo-color-border, #E5E7EB)';
+        $text_clr   = $this->safe_color_css($s['text_color']) ?: 'var(--olo-color-text, #374151)';
         $icon_size  = absint($s['icon_size']) ?: 20;
         $text_size  = absint($s['text_size']) ?: 16;
         $gap        = absint($s['gap']) ?: 12;
         $shape      = $s['icon_shape'] ?? 'none';
-        $bg_clr     = $this->safe_color_css($s['icon_bg_color']) ?: 'rgba(34,197,94,0.15)';
+        $bg_clr     = $this->safe_color_css($s['icon_bg_color']) ?: 'color-mix(in srgb, var(--olo-color-success, #10B981) 15%, transparent)';
         $is_horiz   = $s['layout'] === 'horizontal';
         $divider    = !empty($s['divider']);
-        $div_clr    = $this->safe_color_css($s['divider_color']) ?: 'var(--olo-color-text, #374151)';
+        $div_clr    = $this->safe_color_css($s['divider_color']) ?: 'var(--olo-color-border, #E5E7EB)';
         $radius     = $shape === 'circle' ? '50%' : ($shape === 'rounded' ? '8px' : '4px');
 
         $list_style = 'display:flex;gap:' . $gap . 'px;';
@@ -76,6 +76,9 @@ class Olo_Iconlist_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
+        <style>
+            .<?php echo $uid; ?> a:focus-visible { outline: none; border-radius: 4px; box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent); }
+        </style>
         <div class="olo-iconlist <?php echo esc_attr( $uid ); ?> olo-il-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" style="padding:16px;<?php echo $list_style; ?>">
             <?php foreach ($items as $item) :
                 $item_icon = $item['icon'] ?? 'check';

@@ -43,7 +43,7 @@ export default {
     input_height: '44',
     input_border_color: '#e5e7eb',
     input_border_radius: '8',
-    focus_border_color: '#6366f1',
+    focus_border_color: '',   // '' ⇒ primary (era #e1474f off-brand)
     results_bg: '#ffffff',
     results_border_color: '',
     item_hover_bg: '',

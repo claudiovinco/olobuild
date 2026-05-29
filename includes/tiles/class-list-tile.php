@@ -18,7 +18,7 @@ class Olo_List_Tile extends Olo_Tile_Base {
             [ 'text' => 'Terza voce della lista', 'icon' => 'check' ],
         ],
         'icon_default' => 'check',
-        'icon_color'   => '#22C55E',
+        'icon_color'   => '',
         'text_color'   => '',
         'spacing'      => '12',
         'icon_size'    => '18',
@@ -97,7 +97,7 @@ ob_start();
                 ?>
                 <?php echo $li_tag; ?>
                     <?php if ( $icon === 'number' ) : ?>
-                        <span style="flex-shrink:0;font-weight:700;line-height:normal;font-size:<?php echo $isize; ?>px;min-width:<?php echo $isize; ?>px;text-align:center;color:<?php echo esc_attr( $this->safe_color_css( $s['icon_color'] ) ?: 'currentColor' ); ?>;"><?php echo ( $i + 1 ); ?>.</span>
+                        <span style="flex-shrink:0;font-weight:700;line-height:normal;font-size:<?php echo $isize; ?>px;min-width:<?php echo $isize; ?>px;text-align:center;color:<?php echo esc_attr( $this->safe_color_css( $s['icon_color'] ) ?: 'var(--olo-color-success, #15803d)' ); ?>;"><?php echo ( $i + 1 ); ?>.</span>
                     <?php else : ?>
                         <span style="flex-shrink:0;display:flex;align-items:center;line-height:1;"><?php echo $this->get_icon_svg( $icon, $s['icon_color'], $isize ); ?></span>
                     <?php endif; ?>
@@ -159,7 +159,7 @@ ob_start();
     }
 
     private function get_icon_svg( $icon, $color, $size ) {
-        $c = $this->safe_color_css( $color ) ?: 'currentColor';
+        $c = $this->safe_color_css( $color ) ?: 'var(--olo-color-success, #15803d)';
         $s = intval( $size );
         switch ( $icon ) {
             case 'check':

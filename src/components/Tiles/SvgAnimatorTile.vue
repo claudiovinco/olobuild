@@ -1,16 +1,16 @@
 <template>
   <div class="mb-flex mb-flex-col mb-items-center" :style="wrapStyle">
     <div v-if="hasSvg" ref="svgWrap" class="mb-w-full" v-html="sanitizedSvg"></div>
-    <div v-else class="mb-flex mb-flex-col mb-items-center mb-justify-center mb-py-10 mb-px-6 mb-text-center mb-bg-gray-100 mb-rounded-lg mb-w-full" style="min-height:120px">
-      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <div v-else class="mb-flex mb-flex-col mb-items-center mb-justify-center mb-py-10 mb-px-6 mb-text-center mb-rounded-lg mb-w-full" style="min-height:120px" :style="{ background: 'var(--olo-color-surface-alt, #f6f7f9)', color: 'var(--olo-color-text-faint, #94a3b8)' }">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
         <path d="M12 2L2 7l10 5 10-5-10-5z"/>
         <path d="M2 17l10 5 10-5"/>
         <path d="M2 12l10 5 10-5"/>
       </svg>
-      <span class="mb-text-xs mb-text-gray-400 mb-mt-2">{{ t('Inserisci un file SVG') }}</span>
+      <span class="mb-text-xs mb-mt-2">{{ t('Inserisci un file SVG') }}</span>
     </div>
     <div v-if="s.replay_button && hasSvg" class="mb-mt-2">
-      <span class="mb-text-xs mb-px-3 mb-py-1 mb-bg-blue-500 mb-text-white mb-rounded mb-cursor-pointer">{{ s.replay_button_label || 'Replay' }}</span>
+      <span class="mb-text-xs mb-px-3 mb-py-1 mb-text-white mb-rounded mb-cursor-pointer" :style="{ background: 'var(--olo-color-primary, #e1474f)' }">{{ s.replay_button_label || 'Replay' }}</span>
     </div>
   </div>
 </template>

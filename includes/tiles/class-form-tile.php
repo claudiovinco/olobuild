@@ -267,7 +267,7 @@ class Olo_Form_Tile extends Olo_Tile_Base {
             <?php if ( $radius_hover_css !== '' ) : ?>.<?php echo $uid; ?> .uk-input:hover,.<?php echo $uid; ?> .uk-textarea:hover,.<?php echo $uid; ?> .uk-select:hover{border-radius:<?php echo $radius_hover_css; ?> !important}<?php endif; ?>
             .<?php echo $uid; ?> .uk-input:focus,
             .<?php echo $uid; ?> .uk-textarea:focus,
-            .<?php echo $uid; ?> .uk-select:focus{border-color:<?php echo $focus_bc ?: 'var(--olo-color-primary, #6366F1)'; ?>;outline:none<?php if ( $focus_shadow ) : ?>;box-shadow:0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #6366F1) 15%, transparent)<?php endif; ?>}
+            .<?php echo $uid; ?> .uk-select:focus{border-color:<?php echo $focus_bc ?: 'var(--olo-color-primary, #e1474f)'; ?>;outline:none<?php if ( $focus_shadow ) : ?>;box-shadow:0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 15%, transparent)<?php endif; ?>}
             .<?php echo $uid; ?> .uk-input::placeholder,
             .<?php echo $uid; ?> .uk-textarea::placeholder{color:<?php echo $input_color; ?>;opacity:<?php echo $ph_opacity; ?>}
             .<?php echo $uid; ?> .uk-input:-webkit-autofill,
@@ -275,8 +275,9 @@ class Olo_Form_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .uk-select:-webkit-autofill{-webkit-box-shadow:0 0 0 1000px <?php echo $input_bg; ?> inset !important;-webkit-text-fill-color:<?php echo $input_color; ?> !important;transition:background-color 5000s ease-in-out 0s}
             .<?php echo $uid; ?> .uk-form-icon{color:<?php echo $input_color; ?>;opacity:0.5}
             .<?php echo $uid; ?> .uk-form-icon:hover{opacity:0.8}
-            .<?php echo $uid; ?> .olo-f-btn{background:<?php echo $btn_bg ?: 'var(--olo-color-primary, #6366F1)'; ?>;color:<?php echo $btn_color; ?>;<?php if ( $btn_bw > 0 ) : ?>border:<?php echo $btn_bw; ?>px solid <?php echo $btn_bc ?: 'var(--olo-color-primary, #6366F1)'; ?><?php else : ?>border:none<?php endif; ?>;border-radius:<?php echo $btn_radius; ?>;padding:<?php echo $btn_py; ?>px <?php echo $btn_px; ?>px;font-size:<?php echo $btn_fs; ?>px;font-weight:<?php echo $btn_fw; ?>;cursor:pointer;transition:background 0.2s ease,border-color 0.2s ease,transform 0.15s ease;display:inline-flex;align-items:center;gap:8px<?php if ( $btn_ls > 0 ) : ?>;letter-spacing:<?php echo $btn_ls; ?>px<?php endif; ?><?php if ( $btn_tt !== 'none' ) : ?>;text-transform:<?php echo $btn_tt; ?><?php endif; ?><?php if ( $btn_full ) : ?>;width:100%;justify-content:center<?php endif; ?>}
-            .<?php echo $uid; ?> .olo-f-btn:hover{background:<?php echo $btn_hover ?: 'var(--olo-color-primary-dark, #4F46E5)'; ?><?php if ( $btn_bw > 0 && $btn_hbc ) : ?>;border-color:<?php echo $btn_hbc; ?><?php endif; ?><?php if ( $btn_radius_hover_css !== '' ) : ?>;border-radius:<?php echo $btn_radius_hover_css; ?> !important<?php endif; ?>}
+            .<?php echo $uid; ?> .olo-f-btn{background:<?php echo $btn_bg ?: 'var(--olo-color-primary, #e1474f)'; ?>;color:<?php echo $btn_color; ?>;<?php if ( $btn_bw > 0 ) : ?>border:<?php echo $btn_bw; ?>px solid <?php echo $btn_bc ?: 'var(--olo-color-primary, #e1474f)'; ?><?php else : ?>border:none<?php endif; ?>;border-radius:<?php echo $btn_radius; ?>;padding:<?php echo $btn_py; ?>px <?php echo $btn_px; ?>px;font-size:<?php echo $btn_fs; ?>px;font-weight:<?php echo $btn_fw; ?>;cursor:pointer;transition:background 0.2s ease,border-color 0.2s ease,transform 0.15s ease;display:inline-flex;align-items:center;gap:8px<?php if ( $btn_ls > 0 ) : ?>;letter-spacing:<?php echo $btn_ls; ?>px<?php endif; ?><?php if ( $btn_tt !== 'none' ) : ?>;text-transform:<?php echo $btn_tt; ?><?php endif; ?><?php if ( $btn_full ) : ?>;width:100%;justify-content:center<?php endif; ?>}
+            .<?php echo $uid; ?> .olo-f-btn:hover{background:<?php echo $btn_hover ?: 'color-mix(in srgb, var(--olo-color-primary, #e1474f) 85%, #000)'; ?><?php if ( $btn_bw > 0 && $btn_hbc ) : ?>;border-color:<?php echo $btn_hbc; ?><?php endif; ?><?php if ( $btn_radius_hover_css !== '' ) : ?>;border-radius:<?php echo $btn_radius_hover_css; ?> !important<?php endif; ?>}
+            .<?php echo $uid; ?> .olo-f-btn:focus-visible{outline:none;box-shadow:0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent)}
             .<?php echo $uid; ?> .olo-f-btn:active{transform:translateY(1px)}
             .<?php echo $uid; ?> .olo-f-btn:disabled{opacity:0.6;cursor:not-allowed}
             .<?php echo $uid; ?> .olo-f-msg{margin-top:12px;padding:12px 16px;border-radius:<?php echo $radius; ?>;font-size:14px;display:none}
@@ -288,12 +289,12 @@ class Olo_Form_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .uk-radio,
             .<?php echo $uid; ?> .uk-checkbox{width:<?php echo $chk_size; ?>px;height:<?php echo $chk_size; ?>px<?php if ( $chk_bc ) : ?>;border-color:<?php echo $chk_bc; ?><?php endif; ?>;flex-shrink:0}
             .<?php echo $uid; ?> .uk-checkbox:checked,
-            .<?php echo $uid; ?> .uk-radio:checked{background-color:<?php echo $chk_accent ?: 'var(--olo-color-primary, #6366F1)'; ?>}
+            .<?php echo $uid; ?> .uk-radio:checked{background-color:<?php echo $chk_accent ?: 'var(--olo-color-primary, #e1474f)'; ?>}
             .<?php echo $uid; ?> .uk-checkbox:focus,
-            .<?php echo $uid; ?> .uk-radio:focus{border-color:<?php echo $chk_accent ?: 'var(--olo-color-primary, #6366F1)'; ?>}
+            .<?php echo $uid; ?> .uk-radio:focus{border-color:<?php echo $chk_accent ?: 'var(--olo-color-primary, #e1474f)'; ?>}
             .<?php echo $uid; ?> .olo-f-option{display:flex;align-items:center;gap:<?php echo $chk_gap; ?>px;color:<?php echo $label_color; ?>;font-size:<?php echo $label_size; ?>px;cursor:pointer}
             .<?php echo $uid; ?> .olo-f-privacy{margin-top:<?php echo $gap; ?>px}
-            .<?php echo $uid; ?> .olo-f-privacy a{color:var(--olo-color-primary, #6366F1);text-decoration:underline}
+            .<?php echo $uid; ?> .olo-f-privacy a{color:var(--olo-color-primary, #e1474f);text-decoration:underline}
             <?php if ( $is_floating ) : ?>
             .<?php echo $uid; ?> .olo-f-float{position:relative}
             .<?php echo $uid; ?> .olo-f-float-label{position:absolute;top:50%;left:14px;transform:translateY(-50%);color:<?php echo $label_color; ?>;font-size:<?php echo $label_size; ?>px;pointer-events:none;transition:all 0.2s ease;opacity:0.6}
@@ -314,22 +315,22 @@ class Olo_Form_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .olo-f-step-nav{display:flex;gap:12px;margin-top:20px}
             .<?php echo $uid; ?> .olo-f-step-nav .olo-f-btn{flex:1}
             .<?php echo $uid; ?> .olo-f-progress-bar{height:4px;background:<?php echo $input_bc; ?>;border-radius:2px;margin-bottom:24px;overflow:hidden}
-            .<?php echo $uid; ?> .olo-f-progress-fill{height:100%;background:<?php echo $btn_bg ?: 'var(--olo-color-primary, #6366F1)'; ?>;transition:width 0.3s ease;border-radius:2px}
+            .<?php echo $uid; ?> .olo-f-progress-fill{height:100%;background:<?php echo $btn_bg ?: 'var(--olo-color-primary, #e1474f)'; ?>;transition:width 0.3s ease;border-radius:2px}
             .<?php echo $uid; ?> .olo-f-steps-indicator{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:24px;flex-wrap:wrap}
             .<?php echo $uid; ?> .olo-f-step-item{display:flex;flex-direction:column;align-items:center}
             .<?php echo $uid; ?> .olo-f-step-dot{width:12px;height:12px;border-radius:50%;background:<?php echo $input_bc; ?>;transition:background 0.3s ease,transform 0.3s ease}
-            .<?php echo $uid; ?> .olo-f-step-dot.active{background:<?php echo $btn_bg ?: 'var(--olo-color-primary, #6366F1)'; ?>;transform:scale(1.3)}
-            .<?php echo $uid; ?> .olo-f-step-dot.completed{background:<?php echo $btn_bg ?: 'var(--olo-color-primary, #6366F1)'; ?>;opacity:0.6}
+            .<?php echo $uid; ?> .olo-f-step-dot.active{background:<?php echo $btn_bg ?: 'var(--olo-color-primary, #e1474f)'; ?>;transform:scale(1.3)}
+            .<?php echo $uid; ?> .olo-f-step-dot.completed{background:<?php echo $btn_bg ?: 'var(--olo-color-primary, #e1474f)'; ?>;opacity:0.6}
             .<?php echo $uid; ?> .olo-f-step-line{width:32px;height:2px;background:<?php echo $input_bc; ?>}
-            .<?php echo $uid; ?> .olo-f-step-line.completed{background:<?php echo $btn_bg ?: 'var(--olo-color-primary, #6366F1)'; ?>}
+            .<?php echo $uid; ?> .olo-f-step-line.completed{background:<?php echo $btn_bg ?: 'var(--olo-color-primary, #e1474f)'; ?>}
             .<?php echo $uid; ?> .olo-f-step-label{display:block;font-size:11px;color:<?php echo $label_color; ?>;text-align:center;margin-top:4px;opacity:0.6}
             .<?php echo $uid; ?> .olo-f-step-item.active .olo-f-step-label{opacity:1}
             .<?php echo $uid; ?> .olo-f-step-num{width:32px;height:32px;border-radius:50%;background:<?php echo $input_bc; ?>;color:<?php echo $label_color; ?>;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;transition:background 0.3s ease,color 0.3s ease}
-            .<?php echo $uid; ?> .olo-f-step-num.active{background:<?php echo $btn_bg ?: 'var(--olo-color-primary, #6366F1)'; ?>;color:<?php echo $btn_color; ?>}
-            .<?php echo $uid; ?> .olo-f-step-num.completed{background:<?php echo $btn_bg ?: 'var(--olo-color-primary, #6366F1)'; ?>;color:<?php echo $btn_color; ?>;opacity:0.7}
+            .<?php echo $uid; ?> .olo-f-step-num.active{background:<?php echo $btn_bg ?: 'var(--olo-color-primary, #e1474f)'; ?>;color:<?php echo $btn_color; ?>}
+            .<?php echo $uid; ?> .olo-f-step-num.completed{background:<?php echo $btn_bg ?: 'var(--olo-color-primary, #e1474f)'; ?>;color:<?php echo $btn_color; ?>;opacity:0.7}
             <?php endif; ?>
             .<?php echo $uid; ?> .olo-f-cond-hidden{display:none !important}
-            .<?php echo $uid; ?> .olo-f-file-btn:hover{border-color:<?php echo $focus_bc ?: 'var(--olo-color-primary, #6366F1)'; ?>}
+            .<?php echo $uid; ?> .olo-f-file-btn:hover{border-color:<?php echo $focus_bc ?: 'var(--olo-color-primary, #e1474f)'; ?>}
             .<?php echo $uid; ?> .olo-f-file-list-item{display:flex;align-items:center;gap:6px;padding:4px 0}
             .<?php echo $uid; ?> .olo-f-file-remove{color:var(--olo-color-danger, #EF4444);cursor:pointer;font-size:18px;line-height:1;border:none;background:none;padding:0 4px}
             .<?php echo $uid; ?> .olo-f-file-remove:hover{opacity:0.7}
@@ -657,8 +658,8 @@ class Olo_Form_Tile extends Olo_Tile_Base {
                                     <label class="olo-f-label"><?php echo esc_html( $flabel ); ?><?php if ( $frequired ) : ?><span class="olo-f-required">*</span><?php endif; ?></label>
                                 <?php endif; ?>
                                 <div style="display:flex;align-items:center;gap:10px">
-                                    <input type="color" name="fields[<?php echo esc_attr( $fname ); ?>]" value="<?php echo esc_attr( $fplaceholder ?: '#6366F1' ); ?>" style="width:48px;height:40px;padding:2px;border:<?php echo $bw; ?>px solid <?php echo $input_bc; ?>;border-radius:<?php echo $radius; ?>;background:<?php echo $input_bg; ?>;cursor:pointer" oninput="this.nextElementSibling.textContent=this.value" />
-                                    <span style="font-size:14px;color:<?php echo $label_color; ?>;font-family:monospace"><?php echo esc_html( $fplaceholder ?: '#6366F1' ); ?></span>
+                                    <input type="color" name="fields[<?php echo esc_attr( $fname ); ?>]" value="<?php echo esc_attr( $fplaceholder ?: '#e1474f' ); ?>" style="width:48px;height:40px;padding:2px;border:<?php echo $bw; ?>px solid <?php echo $input_bc; ?>;border-radius:<?php echo $radius; ?>;background:<?php echo $input_bg; ?>;cursor:pointer" oninput="this.nextElementSibling.textContent=this.value" />
+                                    <span style="font-size:14px;color:<?php echo $label_color; ?>;font-family:monospace"><?php echo esc_html( $fplaceholder ?: '#e1474f' ); ?></span>
                                 </div>
 
                             <?php elseif ( $ftype === 'calculation' ) :

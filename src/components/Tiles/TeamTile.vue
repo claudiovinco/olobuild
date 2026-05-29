@@ -5,7 +5,9 @@
       <div :style="photoOuterStyle">
         <div :style="photoInnerStyle">
           <img v-if="s.photo" :src="s.photo" :alt="s.name" style="width:100%;height:100%;object-fit:cover;display:block" />
-          <div v-else :style="photoPlaceholderStyle">{{ t('&#x1F464;') }}</div>
+          <div v-else class="olo-team-photo-ph" :style="photoPlaceholderStyle">
+            <span :style="{ width: (photoSize * 0.4) + 'px', height: (photoSize * 0.4) + 'px', display: 'inline-flex' }" v-html="avatarPlaceholderSvg"></span>
+          </div>
         </div>
       </div>
     </div>
@@ -30,31 +32,36 @@
 <script setup>
 import { t } from '@/i18n';
 import { computed } from 'vue';
+import iconsSvg from '../ProSlider/uikitIconsSvg.js';
+import { resolveColor, TOKENS } from '@/composables/oloTileDefaults';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
 });
 
+// Default colore = '' ⇒ risolti token-first a runtime (allineato a config team.js)
 const s = computed(() => ({
   photo: '', hover_image: '', hover_video: '',
   name: 'Jane Smith', role: 'Lead Designer',
   bio: 'Appassionata di creare esperienze utente eccellenti.',
   link_text: 'Profilo', link_url: '',
   photo_size: '120', photo_shape: 'circle', photo_radius: '12',
-  photo_border_width: '3', photo_border_color: '#FFFFFF',
+  photo_border_width: '3', photo_border_color: '',
   photo_shadow: 'md', photo_gap: '12',
-  info_bg_color: 'var(--olo-color-primary, #6366F1)', info_text_color: '#FFFFFF', info_padding: '24',
+  info_bg_color: '', info_text_color: '', info_padding: '24',
   info_width: '100', info_margin: '0',
-  info_radius: '16', info_border_width: '0', info_border_color: 'var(--olo-color-border, #E5E7EB)',
+  info_radius: '16', info_border_width: '0', info_border_color: '',
   info_align: 'center',
   name_size: '20', name_weight: '600',
   role_size: '14', role_color: '', bio_size: '14',
   bg_color: '', tile_padding: '16',
-  border_radius: '16', border_width: '0', border_color: 'var(--olo-color-border, #E5E7EB)',
+  border_radius: '16', border_width: '0', border_color: '',
   ...props.settings,
 }));
 
 const photoSize = computed(() => parseInt(s.value.photo_size) || 120);
+// Placeholder foto = icona SVG "user" (no più emoji)
+const avatarPlaceholderSvg = computed(() => iconsSvg['user'] || iconsSvg['users'] || '');
 const photoGap = computed(() => {
   const v = parseInt(s.value.photo_gap);
   return isNaN(v) ? 12 : Math.max(v, 0);
@@ -72,7 +79,7 @@ const tileStyle = computed(() => {
     padding: tp + 'px',
     minHeight: '80px',
   };
-  if (bw > 0) st.border = `${bw}px solid ${s.value.border_color || 'var(--olo-color-border, #E5E7EB)'}`;
+  if (bw > 0) st.border = `${bw}px solid ${resolveColor(s.value.border_color, TOKENS.border)}`;
   return st;
 });
 
@@ -93,9 +100,9 @@ const photoOuterStyle = computed(() => {
   };
   if (shape === 'hexagon') {
     st.clipPath = hexClip;
-    st.background = bw > 0 ? (s.value.photo_border_color || '#FFF') : 'transparent';
+    st.background = bw > 0 ? resolveColor(s.value.photo_border_color, TOKENS.onPrimary) : 'transparent';
   } else {
-    st.background = bw > 0 ? (s.value.photo_border_color || '#FFF') : 'transparent';
+    st.background = bw > 0 ? resolveColor(s.value.photo_border_color, TOKENS.onPrimary) : 'transparent';
     if (shape === 'circle') st.borderRadius = '50%';
     else if (shape === 'rounded') st.borderRadius = ((v => isNaN(v) ? 12 : v)(parseInt(s.value.photo_radius))) + 'px';
     else st.borderRadius = '0';
@@ -119,7 +126,7 @@ const photoInnerStyle = computed(() => {
 });
 
 const photoPlaceholderStyle = computed(() => ({
-  width: '100%', height: '100%', background: 'var(--olo-color-muted, #F3F4F6)',
+  width: '100%', height: '100%', background: TOKENS.surfaceAlt, color: TOKENS.textFaint,
   display: 'flex', alignItems: 'center', justifyContent: 'center',
   fontSize: (photoSize.value * 0.4) + 'px',
 }));
@@ -140,12 +147,12 @@ const infoStyle = computed(() => {
   const st = {
     padding: pad + 'px',
     textAlign: s.value.info_align || 'center',
-    color: s.value.info_text_color || '#FFFFFF',
+    color: resolveColor(s.value.info_text_color, TOKENS.onPrimary),
     borderRadius: (parseInt(s.value.info_radius) || 0) + 'px',
     width: w + '%',
+    background: resolveColor(s.value.info_bg_color, TOKENS.primary),
   };
-  if (s.value.info_bg_color) st.background = s.value.info_bg_color;
-  if (ibw > 0) st.border = `${ibw}px solid ${s.value.info_border_color || 'var(--olo-color-border, #E5E7EB)'}`;
+  if (ibw > 0) st.border = `${ibw}px solid ${resolveColor(s.value.info_border_color, TOKENS.border)}`;
   return st;
 });
 
@@ -176,3 +183,12 @@ const linkStyle = computed(() => ({
   opacity: 0.9,
 }));
 </script>
+
+<style scoped>
+.olo-team-photo-ph :deep(svg) {
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+  stroke: currentColor;
+}
+</style>

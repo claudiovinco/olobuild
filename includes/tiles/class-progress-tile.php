@@ -165,7 +165,7 @@ class Olo_Progress_Tile extends Olo_Tile_Base {
                     <circle cx="<?php echo $cx; ?>" cy="<?php echo $cx; ?>" r="<?php echo $radius; ?>" fill="none"
                         stroke="<?php echo esc_attr( $prog_bg ? $prog_bg : 'var(--olo-color-secondary, #1F2937)' ); ?>" stroke-width="<?php echo $circle_width; ?>" />
                     <circle cx="<?php echo $cx; ?>" cy="<?php echo $cx; ?>" r="<?php echo $radius; ?>" fill="none"
-                        stroke="<?php echo esc_attr( $prog_bar ? $prog_bar : 'var(--olo-color-primary, #6366F1)' ); ?>" stroke-width="<?php echo $circle_width; ?>"
+                        stroke="<?php echo esc_attr( $prog_bar ? $prog_bar : 'var(--olo-color-primary, #e1474f)' ); ?>" stroke-width="<?php echo $circle_width; ?>"
                         stroke-dasharray="<?php echo $circumference; ?>" stroke-dashoffset="<?php echo $offset; ?>"
                         stroke-linecap="round" transform="rotate(-90 <?php echo $cx; ?> <?php echo $cx; ?>)"
                         style="transition:stroke-dashoffset 1s ease;" />

@@ -18,11 +18,11 @@ class Olo_Hotspot_Tile extends Olo_Tile_Base {
             [ 'pos_x' => '30', 'pos_y' => '40', 'title' => 'Punto di interesse', 'description' => 'Descrizione del primo hotspot.', 'icon' => 'pin', 'tooltip_position' => 'top' ],
             [ 'pos_x' => '65', 'pos_y' => '55', 'title' => 'Secondo punto', 'description' => 'Descrizione del secondo hotspot.', 'icon' => 'pin', 'tooltip_position' => 'bottom' ],
         ],
-        'marker_color'    => '#ef4444',
+        'marker_color'    => '',
         'marker_size'     => '24',
         'pulse_animation' => true,
         'tooltip_bg'      => '',
-        'tooltip_color'   => '#f3f4f6',
+        'tooltip_color'   => '',
         'tooltip_width'   => '220',
             'border'                  => [],
         'border_hover'            => [],
@@ -59,11 +59,11 @@ class Olo_Hotspot_Tile extends Olo_Tile_Base {
         $uid           = 'olo-hotspot-' . wp_unique_id();
         $image         = esc_url( $s['image'] );
         $img_height    = max( 200, min( 800, intval( $s['image_height'] ) ) );
-        $marker_color  = $this->safe_color_css( $s['marker_color'] );
+        $marker_color  = $this->safe_color_css( $s['marker_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $marker_size   = max( 16, min( 40, intval( $s['marker_size'] ) ) );
         $pulse         = ! empty( $s['pulse_animation'] );
-        $tooltip_bg    = $this->safe_color_css( $s['tooltip_bg'] );
-        $tooltip_color = $this->safe_color_css( $s['tooltip_color'] );
+        $tooltip_bg    = $this->safe_color_css( $s['tooltip_bg'] ) ?: 'var(--olo-color-surface, #FFFFFF)';
+        $tooltip_color = $this->safe_color_css( $s['tooltip_color'] ) ?: 'var(--olo-color-text, #374151)';
         $tooltip_width = max( 150, min( 350, intval( $s['tooltip_width'] ) ) );
 
         $pin_svg = '<svg width="' . $marker_size . '" height="' . $marker_size . '" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z"/></svg>';
@@ -101,8 +101,8 @@ class Olo_Hotspot_Tile extends Olo_Tile_Base {
             }
             <?php if ( $pulse ) : ?>
             @keyframes <?php echo esc_attr( $uid ); ?>-pulse {
-                0%, 100% { box-shadow: 0 0 0 0 <?php echo $marker_color; ?>80; }
-                50% { box-shadow: 0 0 0 <?php echo round( $marker_size * 0.6 ); ?>px <?php echo $marker_color; ?>00; }
+                0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, <?php echo $marker_color; ?> 50%, transparent); }
+                50% { box-shadow: 0 0 0 <?php echo round( $marker_size * 0.6 ); ?>px color-mix(in srgb, <?php echo $marker_color; ?> 0%, transparent); }
             }
             .<?php echo esc_attr( $uid ); ?> .olo-hs-ring {
                 position: absolute;
@@ -195,7 +195,7 @@ class Olo_Hotspot_Tile extends Olo_Tile_Base {
             <?php if ( $image ) : ?>
                 <img src="<?php echo $image; ?>" alt="" loading="lazy" />
             <?php else : ?>
-                <div style="width:100%;height:100%;background:var(--olo-color-muted, #F3F4F6);display:flex;align-items:center;justify-content:center;color:var(--olo-color-text-muted, #9CA3AF);font-size:14px;">Seleziona un'immagine</div>
+                <div style="width:100%;height:100%;background:var(--olo-color-surface-alt, #F3F4F6);display:flex;align-items:center;justify-content:center;color:var(--olo-color-text-faint, #9CA3AF);font-size:14px;">Seleziona un'immagine</div>
             <?php endif; ?>
 
             <?php foreach ( $markers as $idx => $marker ) :

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="!wooActive" class="olo-woo-notice">
-      <span class="olo-woo-notice-icon">{{ t('&#x1F6D2;') }}</span>
+      <span class="olo-woo-notice-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor"><circle cx="7.3" cy="17.3" r="1.4" fill="currentColor" stroke="none"/><circle cx="13.3" cy="17.3" r="1.4" fill="currentColor" stroke="none"/><polyline points="0 2 3.2 4 5.3 12.5 16 12.5 18 6.5 8 6.5"/></svg></span>
       <span>{{ t('WooCommerce richiesto') }}</span>
     </div>
     <div v-else :style="wrapStyle">
@@ -57,9 +57,9 @@ const defaults = {
   show_tags: true,
   layout: 'stacked',
   separator: '|',
-  text_color: '#6B7280',
+  text_color: '',
   label_color: 'var(--olo-color-text, #374151)',
-  link_color: 'var(--olo-color-primary, #6366F1)',
+  link_color: 'var(--olo-color-primary, #e1474f)',
   font_size: '14',
   label_weight: '600',
 };
@@ -70,7 +70,7 @@ const wooActive = computed(() => true);
 const wrapStyle = computed(() => {
   const st = {
     fontSize: parseInt(s.value.font_size) + 'px',
-    color: s.value.text_color || '#6B7280',
+    color: s.value.text_color || 'var(--olo-color-text-soft, #6b7280)',
   };
   if (s.value.layout === 'stacked') {
     st.display = 'flex';
@@ -96,11 +96,11 @@ const labelStyle = computed(() => ({
 }));
 
 const linkStyle = computed(() => ({
-  color: s.value.link_color || 'var(--olo-color-primary, #6366F1)',
+  color: s.value.link_color || 'var(--olo-color-primary, #e1474f)',
 }));
 
 const sepStyle = computed(() => ({
-  color: s.value.text_color || '#6B7280',
+  color: s.value.text_color || 'var(--olo-color-text-soft, #6b7280)',
   opacity: '0.4',
   margin: '0 4px',
 }));
@@ -112,14 +112,21 @@ const sepStyle = computed(() => ({
   align-items: center;
   gap: 8px;
   padding: 16px 20px;
-  background: #FEF3C7;
-  border: 1px solid #F59E0B;
+  background: color-mix(in srgb, var(--olo-color-warning, #b45309) 12%, #fff);
+  border: 1px solid var(--olo-color-warning, #b45309);
   border-radius: 8px;
-  color: #92400E;
+  color: var(--olo-color-warning, #b45309);
   font-size: 14px;
   font-weight: 500;
 }
 .olo-woo-notice-icon {
-  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  flex-shrink: 0;
+}
+.olo-woo-notice-icon :deep(svg) {
+  width: 100%;
+  height: 100%;
 }
 </style>

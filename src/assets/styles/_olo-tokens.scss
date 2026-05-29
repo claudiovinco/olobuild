@@ -1,0 +1,36 @@
+/**
+ * OLObuild — Token di SISTEMA (fallback globali).
+ *
+ * Adattamento di `regoletiles1/prototype/tokens-brand.css`. Vedi TOKEN_MAPPING.md.
+ *
+ * Qui stanno SOLO i token che il GlobalColorsPanel NON produce: neutri fini,
+ * on-primary (calcolato a runtime dallo store/PHP) e i 4 semantici. Sono
+ * fallback: il sito (`.olo-template`) e il backend li possono sovrascrivere.
+ *
+ * I 6 ruoli GLOBALI (primary/secondary/accent/dark/light/text) NON sono
+ * ridefiniti qui: arrivano dal GlobalColorsPanel/store e hanno già un fallback
+ * brand nei `var(--olo-color-x, …)` lato componente (vedi oloTileDefaults.js).
+ * Ridefinirli qui interferirebbe con la chrome dell'editor (#e8622a).
+ */
+:root {
+  /* on-primary: ricalcolato per CONTRASTO sul primario corrente (store/PHP).
+     Qui solo il seed bianco (il primario brand #e1474f → testo bianco). */
+  --olo-color-on-primary: #ffffff;
+
+  /* ── ALIAS di compatibilità: i nomi del PACCHETTO mappano sui token del TEMA
+     (styles.colors) così le tile seguono la palette personalizzata dal cliente.
+     Tema → pacchetto: text-muted→text-soft, muted→surface-alt, background→surface,
+     danger→error. Il fallback (dopo la virgola) vale se il tema non è caricato. ── */
+  --olo-color-text-soft:    var(--olo-color-text-muted, #6b7280);
+  --olo-color-text-faint:   var(--olo-color-text-muted, #94a3b8);
+  --olo-color-surface:      var(--olo-color-background, #ffffff);
+  --olo-color-surface-alt:  var(--olo-color-muted, #f6f7f9);
+  --olo-color-error:        var(--olo-color-danger, #b42318);
+
+  /* border esiste sia nel tema sia qui: seed neutro (il tema lo sovrascrive) */
+  --olo-color-border:       #e5e7eb;
+
+  /* info: non esiste nel tema → seed. success/warning esistono nel tema (non
+     ridefinibili qui senza auto-referenza); usati direttamente dal loro nome. */
+  --olo-color-info:    #2563eb;
+}

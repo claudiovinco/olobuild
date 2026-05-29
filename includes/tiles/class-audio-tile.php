@@ -166,7 +166,7 @@ class Olo_Audio_Tile extends Olo_Tile_Base {
     private function render_minimal( $s, $src ) {
         $bg_color   = $this->safe_color_css( $s['bg_color'] ) ?: 'var(--olo-color-muted, #F3F4F6)';
         $text_color = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-text, #374151)';
-        $accent     = $this->safe_color_css( $s['accent_color'] ) ?: 'var(--olo-color-primary, #6366F1)';
+        $accent     = $this->safe_color_css( $s['accent_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $radius     = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
         $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
 
@@ -266,7 +266,7 @@ class Olo_Audio_Tile extends Olo_Tile_Base {
     private function render_custom( $s, $src ) {
         $bg_color   = $this->safe_color_css( $s['bg_color'] ) ?: 'var(--olo-color-muted, #F3F4F6)';
         $text_color = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-text, #374151)';
-        $accent     = $this->safe_color_css( $s['accent_color'] ) ?: 'var(--olo-color-primary, #6366F1)';
+        $accent     = $this->safe_color_css( $s['accent_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $radius     = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
         $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
 

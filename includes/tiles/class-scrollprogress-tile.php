@@ -12,8 +12,8 @@ class Olo_Scrollprogress_Tile extends Olo_Tile_Base {
     protected $category = 'interactive';
     protected $defaults = [
         'position'         => 'top',
-        'bar_color'        => '#6366F1',
-        'bar_bg'           => '#e5e7eb',
+        'bar_color'        => 'var(--olo-color-primary, #e1474f)',
+        'bar_bg'           => 'var(--olo-color-border, #e5e7eb)',
         'bar_height'       => '4',
         'show_percentage'  => false,
         'percentage_color' => '#ffffff',
@@ -38,8 +38,8 @@ class Olo_Scrollprogress_Tile extends Olo_Tile_Base {
         $uid       = 'olo-scrollprogress-' . wp_unique_id();
         $pos       = ( $s['position'] === 'bottom' ) ? 'bottom' : 'top';
         $height    = max( 2, min( 12, absint( $s['bar_height'] ) ) );
-        $bar_color = $this->safe_color_css( $s['bar_color'] ) ?: '#6366F1';
-        $bar_bg    = $this->safe_color_css( $s['bar_bg'] ) ?: '#e5e7eb';
+        $bar_color = $this->safe_color_css( $s['bar_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
+        $bar_bg    = $this->safe_color_css( $s['bar_bg'] ) ?: 'var(--olo-color-border, #e5e7eb)';
         $zidx      = absint( $s['z_index'] ) ?: 9999;
         $show_pct  = ! empty( $s['show_percentage'] );
         $pct_color = $this->safe_color_css( $s['percentage_color'] ) ?: '#ffffff';

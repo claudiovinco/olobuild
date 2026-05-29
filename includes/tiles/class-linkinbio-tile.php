@@ -16,16 +16,16 @@ class Olo_LinkInBio_Tile extends Olo_Tile_Base {
         'profile_name'       => 'Il tuo nome',
         'profile_bio'        => 'Una breve descrizione qui',
         'max_width'          => '420',
-        'link_color'         => '#1e87f0',
-        'link_bg'            => '#ffffff',
-        'link_hover_bg'      => '#f3f4f6',
+        'link_color'         => '',
+        'link_bg'            => '',
+        'link_hover_bg'      => '',
         'link_border_radius' => '12',
         'link_padding'       => '14',
         'gap'                => '12',
         'text_align'         => 'center',
         'profile_name_color' => '',
-        'bio_color'          => '#6b7280',
-        'background_color'   => '#f9fafb',
+        'bio_color'          => '',
+        'background_color'   => '',
         'background_gradient' => '',
         'show_social_icons'  => false,
             'border'                  => [],
@@ -65,7 +65,7 @@ class Olo_LinkInBio_Tile extends Olo_Tile_Base {
 
         $items = is_array( $s['items'] ) ? $s['items'] : [];
         if ( empty( $items ) ) {
-            return '<div class="olo-linkinbio" style="text-align:center;padding:20px;color:var(--olo-color-text-muted, #9CA3AF);">' . olo_t( 'Aggiungi dei link nell\'inspector.' ) . '</div>';
+            return '<div class="olo-linkinbio" style="text-align:center;padding:20px;color:var(--olo-color-text-faint, #9CA3AF);">' . olo_t( 'Aggiungi dei link nell\'inspector.' ) . '</div>';
         }
 
         $max_width    = max( 300, min( 600, absint( $s['max_width'] ) ) );
@@ -75,12 +75,12 @@ class Olo_LinkInBio_Tile extends Olo_Tile_Base {
         $padding = Olo_Tile_Utils::spacing_css( $s['tile_padding'] ?? $s['link_padding'] ?? 14, 14 );
         $text_align   = in_array( $s['text_align'], [ 'left', 'center', 'right' ], true ) ? $s['text_align'] : 'center';
 
-        $link_color      = $this->safe_color_css( $s['link_color'] )      ?: 'var(--olo-color-primary, #6366F1)';
-        $link_bg         = $this->safe_color_css( $s['link_bg'] )         ?: 'var(--olo-color-background, #FFFFFF)';
-        $link_hover_bg   = $this->safe_color_css( $s['link_hover_bg'] )   ?: 'var(--olo-color-muted, #F3F4F6)';
+        $link_color      = $this->safe_color_css( $s['link_color'] )      ?: 'var(--olo-color-primary, #e1474f)';
+        $link_bg         = $this->safe_color_css( $s['link_bg'] )         ?: 'var(--olo-color-surface, #FFFFFF)';
+        $link_hover_bg   = $this->safe_color_css( $s['link_hover_bg'] )   ?: 'var(--olo-color-surface-alt, #F3F4F6)';
         $name_color      = $this->safe_color_css( $s['profile_name_color'] ) ?: 'var(--olo-color-text, #374151)';
-        $bio_color       = $this->safe_color_css( $s['bio_color'] )       ?: 'var(--olo-color-text-muted, #9CA3AF)';
-        $bg_color        = $this->safe_color_css( $s['background_color'] ) ?: 'var(--olo-color-muted, #F3F4F6)';
+        $bio_color       = $this->safe_color_css( $s['bio_color'] )       ?: 'var(--olo-color-text-soft, #6b7280)';
+        $bg_color        = $this->safe_color_css( $s['background_color'] ) ?: 'var(--olo-color-surface-alt, #F3F4F6)';
 
         $bg_gradient = '';
         if ( ! empty( $s['background_gradient'] ) ) {
@@ -98,7 +98,8 @@ class Olo_LinkInBio_Tile extends Olo_Tile_Base {
             #<?php echo $uid; ?> { background: <?php echo $bg_style; ?>; padding: 32px 16px; display: flex; justify-content: center; }
             #<?php echo $uid; ?> .olo-lib-inner { width: 100%; max-width: <?php echo $max_width; ?>px; text-align: <?php echo $text_align; ?>; }
             #<?php echo $uid; ?> .olo-lib-avatar { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; <?php echo $text_align === 'center' ? 'margin: 0 auto 12px;' : 'margin: 0 0 12px;'; ?> display: block; }
-            #<?php echo $uid; ?> .olo-lib-avatar-placeholder { width: 80px; height: 80px; border-radius: 50%; background: var(--olo-color-border, #E5E7EB); <?php echo $text_align === 'center' ? 'margin: 0 auto 12px;' : 'margin: 0 0 12px;'; ?> display: block; }
+            #<?php echo $uid; ?> .olo-lib-avatar-placeholder { width: 80px; height: 80px; border-radius: 50%; background: var(--olo-color-surface-alt, #F3F4F6); color: var(--olo-color-text-faint, #9CA3AF); <?php echo $text_align === 'center' ? 'margin: 0 auto 12px;' : 'margin: 0 0 12px;'; ?> display: flex; align-items: center; justify-content: center; }
+            #<?php echo $uid; ?> .olo-lib-avatar-placeholder svg { width: 38px; height: 38px; fill: currentColor; stroke: currentColor; }
             #<?php echo $uid; ?> .olo-lib-name { font-weight: 700; font-size: 1.2em; color: <?php echo $name_color; ?>; margin: 0 0 4px; }
             #<?php echo $uid; ?> .olo-lib-bio { color: <?php echo $bio_color; ?>; font-size: 0.9em; margin: 0 0 20px; }
             #<?php echo $uid; ?> .olo-lib-links { display: flex; flex-direction: column; gap: <?php echo $gap; ?>px; }
@@ -110,6 +111,7 @@ class Olo_LinkInBio_Tile extends Olo_Tile_Base {
             #<?php echo $uid; ?> .olo-lib-btn--minimal { background: transparent; color: <?php echo $link_color; ?>; border: none; text-decoration: underline; border-radius: <?php echo $radius; ?>; }
             #<?php echo $uid; ?> .olo-lib-btn--minimal:hover { background: <?php echo $link_hover_bg; ?>; }
             #<?php echo $uid; ?> .olo-lib-btn:hover { transform: translateY(-1px); }
+            #<?php echo $uid; ?> .olo-lib-btn:focus-visible { outline: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent); }
             <?php if ( $radius_hover_css !== '' ) : ?>#<?php echo $uid; ?> .olo-lib-btn{transition:border-radius 400ms cubic-bezier(.4,0,.2,1),background-color 0.2s,color 0.2s,transform 0.2s}#<?php echo $uid; ?> .olo-lib-btn:hover{border-radius:<?php echo $radius_hover_css; ?> !important}<?php endif; ?>
         </style>
         <div id="<?php echo esc_attr( $uid ); ?>" class="olo-linkinbio">
@@ -119,7 +121,7 @@ class Olo_LinkInBio_Tile extends Olo_Tile_Base {
                     <?php if ( ! empty( $s['profile_image'] ) ) : ?>
                         <img class="olo-lib-avatar" src="<?php echo esc_url( $s['profile_image'] ); ?>" alt="<?php echo esc_attr( $s['profile_name'] ); ?>" loading="lazy" />
                     <?php else : ?>
-                        <div class="olo-lib-avatar-placeholder"></div>
+                        <div class="olo-lib-avatar-placeholder"><?php echo $this->render_icon_html( 'user', 1 ); ?></div>
                     <?php endif; ?>
 
                     <?php if ( ! empty( $s['profile_name'] ) ) : ?>

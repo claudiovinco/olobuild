@@ -26,11 +26,11 @@ class Olo_CtaBanner_Tile extends Olo_Tile_Base {
 
         'bg'                      => [ 'type' => 'solid', 'color' => '#0f172a' ],
         'text_color'              => '#ffffff',
-        'accent_color'            => '#b3261e',
+        'accent_color'            => 'var(--olo-color-primary, #e1474f)',
         'subtitle_color'          => '#9ca3af',
 
-        'cta_bg'                  => '#b3261e',
-        'cta_bg_hover'            => '#dc2626',
+        'cta_bg'                  => 'var(--olo-color-primary, #e1474f)',
+        'cta_bg_hover'            => '',
         'cta_color'               => '#ffffff',
         'cta_color_hover'         => '#ffffff',
         'cta_radius'              => [ 'tl' => 999, 'tr' => 999, 'br' => 999, 'bl' => 999, 'linked' => true ],
@@ -79,11 +79,11 @@ class Olo_CtaBanner_Tile extends Olo_Tile_Base {
         $h_size   = max( 18, min( 80, absint( $s['headline_size'] ) ) );
         $h_weight = preg_match( '/^\d+$/', (string) $s['headline_weight'] ) ? $s['headline_weight'] : '400';
         $text_c   = $this->safe_color_css( $s['text_color'] ) ?: '#ffffff';
-        $accent_c = $this->safe_color_css( $s['accent_color'] ) ?: '#b3261e';
+        $accent_c = $this->safe_color_css( $s['accent_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $sub_size = max( 11, min( 22, absint( $s['subtitle_size'] ) ) );
         $sub_c    = $this->safe_color_css( $s['subtitle_color'] ) ?: '#9ca3af';
 
-        $cta_bg   = $this->safe_color_css( $s['cta_bg'] ) ?: '#b3261e';
+        $cta_bg   = $this->safe_color_css( $s['cta_bg'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $cta_c    = $this->safe_color_css( $s['cta_color'] ) ?: '#ffffff';
         $cta_size = max( 12, min( 22, absint( $s['cta_size'] ) ) );
         $cta_py   = max( 10, min( 30, absint( $s['cta_padding_y'] ) ) );
@@ -153,6 +153,7 @@ class Olo_CtaBanner_Tile extends Olo_Tile_Base {
             $cta_clr_h = $this->safe_color_css( $s['cta_color_hover'] ?? '' );
             ?>
             .<?php echo $uid; ?> .olo-ctab__cta:hover { transform: translateY(-1px); <?php if ( $cta_bg_h ) echo 'background:' . $cta_bg_h . ' !important;'; ?> <?php if ( $cta_clr_h ) echo 'color:' . $cta_clr_h . ' !important;'; ?> <?php if ( $cta_radius_h ) echo 'border-radius:' . $cta_radius_h . ' !important;'; ?> }
+            .<?php echo $uid; ?> .olo-ctab__cta:focus-visible { outline: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent); }
             <?php if ( $banner_radius_h ) : ?>
             .<?php echo $uid; ?>:hover { border-radius: <?php echo $banner_radius_h; ?> !important; }
             <?php endif; ?>

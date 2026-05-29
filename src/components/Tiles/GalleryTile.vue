@@ -1,14 +1,14 @@
 <template>
   <div v-if="images.length > 0">
     <!-- Layout badge -->
-    <div v-if="s.layout !== 'grid'" style="display:inline-block;margin-bottom:6px;padding:2px 8px;background:rgba(99,102,241,0.25);border-radius:3px;font-size:9px;color:#a5b4fc;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">
+    <div v-if="s.layout !== 'grid'" style="display:inline-block;margin-bottom:6px;padding:2px 8px;background:color-mix(in srgb, var(--olo-color-primary, #e1474f) 22%, transparent);border-radius:3px;font-size:9px;color:var(--olo-color-primary, #e1474f);font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">
       {{ s.layout === 'masonry' ? 'Masonry' : 'Giustificato' }}
     </div>
     <!-- Filter bar preview -->
     <div v-if="s.filter_bar" style="display:flex;gap:8px;margin-bottom:8px;padding:4px 0;">
-      <span style="font-size:9px;padding:2px 8px;background:rgba(255,255,255,0.15);border-radius:3px;color:#e5e7eb;font-weight:600;">{{ t('Tutti') }}</span>
-      <span style="font-size:9px;padding:2px 8px;color:#9ca3af;">{{ t('Cat. 1') }}</span>
-      <span style="font-size:9px;padding:2px 8px;color:#9ca3af;">{{ t('Cat. 2') }}</span>
+      <span style="font-size:9px;padding:2px 8px;background:color-mix(in srgb, var(--olo-color-primary, #e1474f) 14%, transparent);border-radius:3px;color:var(--olo-color-text, #1f2937);font-weight:600;">{{ t('Tutti') }}</span>
+      <span style="font-size:9px;padding:2px 8px;color:var(--olo-color-text-soft, #6b7280);">{{ t('Cat. 1') }}</span>
+      <span style="font-size:9px;padding:2px 8px;color:var(--olo-color-text-soft, #6b7280);">{{ t('Cat. 2') }}</span>
     </div>
     <!-- Grid layout -->
     <div v-if="s.layout === 'grid'" :style="gridStyle">
@@ -82,9 +82,14 @@
   </div>
   <div
     v-else
-    class="mb-flex mb-flex-col mb-items-center mb-justify-center mb-py-12 mb-text-gray-500 mb-bg-gray-800 mb-rounded-lg"
+    class="mb-flex mb-flex-col mb-items-center mb-justify-center mb-py-12 mb-rounded-lg"
+    :style="{ background: 'var(--olo-color-surface-alt, #f6f7f9)', color: 'var(--olo-color-text-faint, #94a3b8)' }"
   >
-    <span class="mb-text-4xl mb-mb-2">{{ t('&#x1F5BC;&#x1F5BC;') }}</span>
+    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="mb-mb-2">
+      <rect x="3" y="3" width="18" height="18" rx="2" />
+      <circle cx="8.5" cy="8.5" r="1.5" />
+      <path d="m21 15-5-5L5 21" />
+    </svg>
     <span class="mb-text-sm">{{ t('Aggiungi immagini alla galleria') }}</span>
   </div>
 </template>

@@ -56,7 +56,7 @@ class Olo_Viewer360_Tile extends Olo_Tile_Base {
 
         if ( empty( $src ) ) {
             return '<div style="padding:40px;text-align:center;color:var(--olo-color-text-muted,#9CA3AF);background:var(--olo-color-muted,#F3F4F6);border-radius:12px">'
-                 . '<p style="font-size:2em;margin:0 0 8px">🌍</p>'
+                 . '<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin:0 auto 8px;display:block"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/></svg>'
                  . '<p style="font-size:1em;margin:0">Inserisci una foto o video 360° equirectangular.</p>'
                  . '</div>';
         }

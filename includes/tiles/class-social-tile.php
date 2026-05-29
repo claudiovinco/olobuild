@@ -86,7 +86,7 @@ class Olo_Social_Tile extends Olo_Tile_Base {
             'tiktok'    => '#000000',
             'github'    => '#333333',
             'email'     => '#EA4335',
-            'website'   => 'var(--olo-color-primary, #6366F1)',
+            'website'   => 'var(--olo-color-primary, #e1474f)',
             'pinterest' => '#BD081C',
             'whatsapp'  => '#25D366',
             'telegram'  => '#0088CC',
@@ -101,7 +101,7 @@ class Olo_Social_Tile extends Olo_Tile_Base {
         $gap          = absint( $s['gap'] );
         $style        = $s['style'] ?: 'filled';
         $use_brand    = ! empty( $s['use_brand_colors'] );
-        $custom_color = $s['icon_color'] ?: 'var(--olo-color-primary, #6366F1)';
+        $custom_color = $s['icon_color'] ?: 'var(--olo-color-primary, #e1474f)';
         $show_labels  = ! empty( $s['show_labels'] );
         $hover_effect = $s['hover_effect'] ?: 'lift';
 
@@ -114,18 +114,19 @@ class Olo_Social_Tile extends Olo_Tile_Base {
         ?>
         <style>
             #<?php echo $uid; ?> .olo-social-link { transition: all 0.2s ease; text-decoration: none; }
+            #<?php echo $uid; ?> .olo-social-link:focus-visible { outline: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent); }
             <?php if ( $hover_effect === 'lift' ) : ?>
             #<?php echo $uid; ?> .olo-social-link:hover { transform: translateY(-3px); }
             <?php elseif ( $hover_effect === 'grow' ) : ?>
             #<?php echo $uid; ?> .olo-social-link:hover { transform: scale(1.15); }
             <?php elseif ( $hover_effect === 'glow' ) : ?>
-            #<?php echo $uid; ?> .olo-social-link:hover { box-shadow: 0 0 12px color-mix(in srgb, var(--olo-color-primary, #6366F1) 50%, transparent); }
+            #<?php echo $uid; ?> .olo-social-link:hover { box-shadow: 0 0 12px color-mix(in srgb, var(--olo-color-primary, #e1474f) 50%, transparent); }
             <?php endif; ?>
         </style>
         <div id="<?php echo esc_attr( $uid ); ?>" class="olo-social uk-flex uk-flex-wrap <?php echo esc_attr( $align_class ); ?>" style="gap: <?php echo $gap; ?>px; padding: 16px;">
             <?php foreach ( $links as $link ) :
                 $icon  = self::get_icon_svg( $link['platform'] );
-                $color = $use_brand ? ( $brand_colors[ $link['platform'] ] ?? 'var(--olo-color-primary, #6366F1)' ) : $this->safe_color_css( $custom_color );
+                $color = $use_brand ? ( $brand_colors[ $link['platform'] ] ?? 'var(--olo-color-primary, #e1474f)' ) : $this->safe_color_css( $custom_color );
 
                 if ( $style === 'filled' ) {
                     $link_style = sprintf(

@@ -13,10 +13,10 @@ class Olo_Chart_Tile extends Olo_Tile_Base {
     protected $defaults = [
         'chart_type'           => 'bar',
         'items'                => [
-            [ 'id' => 'c-1', 'label' => 'Gen', 'value' => '65', 'color' => '#6366F1' ],
-            [ 'id' => 'c-2', 'label' => 'Feb', 'value' => '45', 'color' => '#8B5CF6' ],
-            [ 'id' => 'c-3', 'label' => 'Mar', 'value' => '80', 'color' => '#A78BFA' ],
-            [ 'id' => 'c-4', 'label' => 'Apr', 'value' => '55', 'color' => '#C4B5FD' ],
+            [ 'id' => 'c-1', 'label' => 'Gen', 'value' => '65', 'color' => '#e1474f' ],
+            [ 'id' => 'c-2', 'label' => 'Feb', 'value' => '45', 'color' => '#16263d' ],
+            [ 'id' => 'c-3', 'label' => 'Mar', 'value' => '80', 'color' => '#f4a23b' ],
+            [ 'id' => 'c-4', 'label' => 'Apr', 'value' => '55', 'color' => '#15803d' ],
         ],
         'chart_height'         => '400',
         'show_legend'          => true,
@@ -131,7 +131,7 @@ class Olo_Chart_Tile extends Olo_Tile_Base {
         foreach ( $items as $item ) {
             $labels[]        = esc_js( $item['label'] );
             $values[]        = floatval( $item['value'] );
-            $item_color      = $this->safe_color_css( $item['color'] ) ?: '#6366F1';
+            $item_color      = $this->safe_color_css( $item['color'] ) ?: '#e1474f';
             $bg_colors[]     = $item_color;
             $border_colors[] = $border_override ?: ( $this->safe_color_css( $item['border_color'] ?? '' ) ?: $item_color );
         }
@@ -436,7 +436,7 @@ class Olo_Chart_Tile extends Olo_Tile_Base {
             $parsed[] = [
                 'label'        => isset( $item['label'] ) ? trim( $item['label'] ) : '',
                 'value'        => isset( $item['value'] ) ? trim( $item['value'] ) : '0',
-                'color'        => isset( $item['color'] ) ? trim( $item['color'] ) : '#6366F1',
+                'color'        => isset( $item['color'] ) ? trim( $item['color'] ) : '#e1474f',
                 'border_color' => isset( $item['border_color'] ) ? trim( $item['border_color'] ) : '',
             ];
         }

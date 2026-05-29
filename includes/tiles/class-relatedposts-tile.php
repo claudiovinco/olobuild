@@ -23,9 +23,9 @@ class Olo_RelatedPosts_Tile extends Olo_Tile_Base {
         'image_ratio'        => '16/9',
         'gap'                => '20',
         'title_tag'          => 'h4',
-        'title_color'        => '#F3F4F6',
-        'text_color'         => '#9CA3AF',
-        'date_color'         => '#6B7280',
+        'title_color'        => '',
+        'text_color'         => '',
+        'date_color'         => '',
         'card_background'    => '',
         'card_padding'       => '16',
         'card_border_radius' => '8',
@@ -122,9 +122,10 @@ class Olo_RelatedPosts_Tile extends Olo_Tile_Base {
         $card_padding = Olo_Tile_Utils::spacing_css( $s['tile_padding'] ?? $s['card_padding'] ?? 16, 16 );
         $card_radius   = Olo_Tile_Utils::border_radius( $s['card_border_radius'] ?? 0 );
         $card_radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['card_border_radius_hover'] ?? null );
-        $title_color   = $this->safe_color_css( $s['title_color'] );
-        $text_color    = $this->safe_color_css( $s['text_color'] );
-        $date_color    = $this->safe_color_css( $s['date_color'] );
+        // TOKEN-FIRST: neutri → token tema (vuoto = default brand)
+        $title_color   = $this->safe_color_css( $s['title_color'] ) ?: 'var(--olo-color-text, #374151)';
+        $text_color    = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-text-faint, #9CA3AF)';
+        $date_color    = $this->safe_color_css( $s['date_color'] ) ?: 'var(--olo-color-text-soft, #6B7280)';
         $image_ratio   = in_array( $s['image_ratio'], [ '16/9', '4/3', '1/1', 'auto' ], true ) ? $s['image_ratio'] : '16/9';
         $hover_effect  = $s['hover_effect'];
         $excerpt_len   = max( 5, min( 50, absint( $s['excerpt_length'] ) ) );
@@ -143,6 +144,7 @@ class Olo_RelatedPosts_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .olo-rp-card { background: <?php echo $card_bg; ?>; border-radius: <?php echo $card_radius; ?>; overflow: hidden; transition: transform 0.3s ease, box-shadow 0.3s ease, border-radius 400ms cubic-bezier(.4,0,.2,1); text-decoration: none; display: block; }
             <?php if ( $card_radius_hover_css !== '' ) : ?>.<?php echo $uid; ?> .olo-rp-card:hover{border-radius:<?php echo $card_radius_hover_css; ?> !important}<?php endif; ?>
             .<?php echo $uid; ?> .olo-rp-card:hover { text-decoration: none; }
+            .<?php echo $uid; ?> .olo-rp-card:focus-visible { outline: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent); }
             <?php if ( $hover_effect === 'shadow' ) : ?>
             .<?php echo $uid; ?> .olo-rp-card:hover { box-shadow: 0 8px 30px rgba(0,0,0,0.3); }
             <?php elseif ( $hover_effect === 'scale' ) : ?>

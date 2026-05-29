@@ -22,8 +22,8 @@ class Olo_Postnavigation_Tile extends Olo_Tile_Base {
         'gap'             => '20',
         'thumbnail_size'  => '60',
         'text_color'      => '#F3F4F6',
-        'link_color'      => '#93C5FD',
-        'hover_color'     => '#60A5FA',
+        'link_color'      => '',
+        'hover_color'     => '',
         'background_color' => '',
         'border_radius'   => '8',
         'padding'         => '16',
@@ -88,9 +88,10 @@ class Olo_Postnavigation_Tile extends Olo_Tile_Base {
         $radius     = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
         $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
 
+        // TOKEN-FIRST: titolo link = primario brand (era #93C5FD/#60A5FA azzurri off-brand)
         $text_clr   = $this->safe_color_css( $s['text_color'] ) ?: '#F3F4F6';
-        $link_clr   = $this->safe_color_css( $s['link_color'] ) ?: '#93C5FD';
-        $hover_clr  = $this->safe_color_css( $s['hover_color'] ) ?: '#60A5FA';
+        $link_clr   = $this->safe_color_css( $s['link_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
+        $hover_clr  = $this->safe_color_css( $s['hover_color'] ) ?: 'color-mix(in srgb, var(--olo-color-primary, #e1474f) 80%, #fff)';
         $bg_clr     = $this->safe_color_css( $s['background_color'] ) ?: 'var(--olo-color-muted, #F3F4F6)';
 
         ob_start();
@@ -117,6 +118,10 @@ class Olo_Postnavigation_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .olo-pnav-card:hover {
                 box-shadow: 0 4px 16px rgba(0,0,0,.25);
                 transform: translateY(-2px);
+            }
+            .<?php echo $uid; ?> .olo-pnav-card:focus-visible {
+                outline: none;
+                box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
             }
             .<?php echo $uid; ?> .olo-pnav-label {
                 font-size: 11px;

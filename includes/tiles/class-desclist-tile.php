@@ -13,9 +13,9 @@ class Olo_DescList_Tile extends Olo_Tile_Base {
     protected $defaults = [
         'preset' => 'custom',
         'items'                => [
-            [ 'term' => 'Anno di fondazione', 'definition' => '2024', 'icon' => 'calendar' ],
-            [ 'term' => 'Sede principale', 'definition' => 'Milano, Italia', 'icon' => 'location' ],
-            [ 'term' => 'Clienti serviti', 'definition' => 'Oltre 500 aziende', 'icon' => 'users' ],
+            [ 'term' => 'Framework', 'definition' => 'Vue.js 3 con Composition API', 'icon' => 'code' ],
+            [ 'term' => 'Linguaggio', 'definition' => 'PHP 7.4+ con WordPress', 'icon' => 'server' ],
+            [ 'term' => 'Build Tool', 'definition' => 'Vite 5', 'icon' => 'bolt' ],
         ],
         'layout'               => 'stacked',
         'show_icon'            => true,
@@ -72,7 +72,7 @@ class Olo_DescList_Tile extends Olo_Tile_Base {
         $items = $this->parse_items( $s['items'] );
 
         if ( empty( $items ) ) {
-            return '<div class="olo-desclist" style="padding:20px;text-align:center;color:var(--olo-color-text-muted, #9CA3AF);">Nessun elemento definito</div>';
+            return '<div class="olo-desclist" style="padding:20px;text-align:center;color:var(--olo-color-text-faint, #9CA3AF);">Nessun elemento definito</div>';
         }
 
         $uid    = 'mdl-' . wp_rand( 10000, 99999 );
@@ -81,7 +81,7 @@ class Olo_DescList_Tile extends Olo_Tile_Base {
         $term_clr    = $this->safe_color_css( $s['term_color'] );
         $def_clr     = $this->safe_color_css( $s['definition_color'] );
         $brd_clr     = $this->safe_color_css( $s['border_color'] ) ?: 'var(--olo-color-border, #E5E7EB)';
-        $icon_clr    = $this->safe_color_css( $s['icon_color'] ) ?: 'var(--olo-color-primary, #6366F1)';
+        $icon_clr    = $this->safe_color_css( $s['icon_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $icon_size   = absint( $s['icon_size'] );
         $show_icon   = ! empty( $s['show_icon'] );
         $show_sep    = ! empty( $s['separator'] );

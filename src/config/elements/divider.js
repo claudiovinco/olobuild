@@ -1,5 +1,6 @@
 
 import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
+import { buildDefaults } from '@/composables/oloTileDefaults';
 import { t } from '@/i18n';
 
 /**
@@ -13,17 +14,10 @@ export default {
   name: t('Divisore'),
   icon: 'dashicons-minus',
   category: 'essential',
+  // Default da FONTE UNICA (buildDefaults): style/width/thickness/color:''/
+  // alignment/spacing(SPACE)/text/text_color:''/text_size/icon_emoji.
   defaults: {
-    style: 'solid',
-    width: '100',
-    thickness: '1',
-    color: '',
-    alignment: 'center',
-    spacing: '16',
-    text: '',
-    text_color: '',
-    text_size: '14',
-    icon_emoji: '',
+    ...buildDefaults('divider'),
     border: { ...borderDefault },
     border_hover: { ...borderHoverDefault },
     border_hover_duration: 300,

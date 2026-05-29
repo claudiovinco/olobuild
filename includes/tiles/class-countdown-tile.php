@@ -104,7 +104,7 @@ class Olo_Countdown_Tile extends Olo_Tile_Base {
         // dal wrapper esterno .olo-frontend-tile dal frontend renderer.
         $bg      = $this->safe_color_css( $s['bg_color'] ?? '' );
         $fg      = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-text, #374151)';
-        $accent  = $this->safe_color_css( $s['accent_color'] ) ?: 'var(--olo-color-primary, #6366F1)';
+        $accent  = $this->safe_color_css( $s['accent_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $is_inline = ( $s['display_mode'] === 'inline' );
         // Card per singola unità (giorni/ore/min/sec) — opzionali, default 0 = no card.
         $item_bg     = $this->safe_color_css( $s['item_bg_color'] ?? '' );
@@ -303,7 +303,7 @@ class Olo_Countdown_Tile extends Olo_Tile_Base {
         $pad = Olo_Tile_Utils::spacing_css( $s['tile_padding'] ?? $s['padding'] ?? 32, 32 );
         $bg      = $this->safe_color_css( $s['bg_color'] ?? '' );
         $fg      = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-text, #374151)';
-        $accent  = $this->safe_color_css( $s['accent_color'] ) ?: 'var(--olo-color-primary, #6366F1)';
+        $accent  = $this->safe_color_css( $s['accent_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $item_bg     = $this->safe_color_css( $s['item_bg_color'] ?? '' );
         $item_radius = absint( $s['item_radius'] ?? 0 );
         $item_pad    = absint( $s['item_padding'] ?? 0 );

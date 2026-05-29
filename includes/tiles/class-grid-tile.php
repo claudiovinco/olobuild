@@ -171,7 +171,7 @@ class Olo_Grid_Tile extends Olo_Tile_Base {
                         <?php
                         // Badge
                         if ( ! empty( $item['badge'] ) ) {
-                            $bc = ! empty( $item['badge_color'] ) ? esc_attr( $item['badge_color'] ) : 'var(--olo-color-primary,#6366F1)';
+                            $bc = ! empty( $item['badge_color'] ) ? esc_attr( $item['badge_color'] ) : 'var(--olo-color-primary, #e1474f)';
                             echo '<span class="olo-grid-badge" style="background:' . $bc . ';">' . esc_html( $item['badge'] ) . '</span>';
                         }
 
@@ -297,7 +297,7 @@ class Olo_Grid_Tile extends Olo_Tile_Base {
             if ( $border_color ) {
                 $css .= $sel . ' .olo-grid-card--gradient{background:#fff;border:2px solid ' . esc_attr( $border_color ) . ';}';
             } else {
-                $css .= $sel . ' .olo-grid-card--gradient{background:#fff;border:2px solid transparent;background-image:linear-gradient(#fff,#fff),linear-gradient(135deg,var(--olo-color-primary,#6366F1),#EC4899,#F59E0B);background-origin:border-box;background-clip:padding-box,border-box;}';
+                $css .= $sel . ' .olo-grid-card--gradient{background:#fff;border:2px solid transparent;background-image:linear-gradient(#fff,#fff),linear-gradient(135deg,var(--olo-color-primary, #e1474f),var(--olo-color-accent, #f4a23b),var(--olo-color-secondary, #16263d));background-origin:border-box;background-clip:padding-box,border-box;}';
             }
         } elseif ( $card_style === 'flat' ) {
             $css .= $sel . ' .olo-grid-card--flat{background:#f9fafb;border:none;}';
@@ -319,10 +319,10 @@ class Olo_Grid_Tile extends Olo_Tile_Base {
         } elseif ( $hover === 'scale' ) {
             $css .= $sel . ' .olo-grid-hover--scale:hover{transform:scale(1.03);}';
         } elseif ( $hover === 'glow' ) {
-            $css .= $sel . ' .olo-grid-hover--glow:hover{box-shadow:0 0 20px rgba(99,102,241,0.3);}';
+            $css .= $sel . ' .olo-grid-hover--glow:hover{box-shadow:0 0 20px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);}';
         } elseif ( $hover === 'border-glow' ) {
             $css .= $sel . ' .olo-grid-hover--border-glow{transition:border-color 0.3s,transform 0.35s cubic-bezier(.4,0,.2,1),box-shadow 0.35s;}';
-            $css .= $sel . ' .olo-grid-hover--border-glow:hover{border-color:var(--olo-color-primary,#6366F1)!important;box-shadow:0 0 15px rgba(99,102,241,0.2);}';
+            $css .= $sel . ' .olo-grid-hover--border-glow:hover{border-color:var(--olo-color-primary, #e1474f)!important;box-shadow:0 0 15px color-mix(in srgb, var(--olo-color-primary, #e1474f) 20%, transparent);}';
         } elseif ( $hover === 'tilt' ) {
             $css .= $sel . ' .olo-grid-hover--tilt:hover{transform:perspective(800px) rotateY(4deg) rotateX(2deg);box-shadow:4px 8px 24px rgba(0,0,0,0.12);}';
         }
@@ -391,7 +391,7 @@ class Olo_Grid_Tile extends Olo_Tile_Base {
         }
 
         // Icon
-        $css .= $sel . ' .olo-grid-icon{font-size:1.5em;margin-bottom:8px;display:inline-block;color:var(--olo-color-primary,#6366F1);}';
+        $css .= $sel . ' .olo-grid-icon{font-size:1.5em;margin-bottom:8px;display:inline-block;color:var(--olo-color-primary, #e1474f);}';
 
         // Title
         $title_size = absint( $s['title_size'] ?? 0 );

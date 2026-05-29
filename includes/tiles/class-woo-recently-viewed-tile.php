@@ -26,9 +26,9 @@ class Olo_Woo_Recently_Viewed_Tile extends Olo_Tile_Base {
         'image_ratio'     => '4-3',
         'title_color'     => '',
         'price_color'     => '',
-        'sale_color'      => '#EF4444',
-        'button_bg'       => '#6366F1',
-        'button_color'    => '#FFFFFF',
+        'sale_color'      => '',
+        'button_bg'       => '',
+        'button_color'    => '',
         'heading'         => 'Visti di recente',
         'heading_size'    => 20,
         'heading_color'   => '',
@@ -49,7 +49,7 @@ class Olo_Woo_Recently_Viewed_Tile extends Olo_Tile_Base {
 
     public function render( $settings ) {
         if ( ! class_exists( 'WooCommerce' ) ) {
-            return '<div style="padding:40px;text-align:center;color:#92400E;background:#FEF3C7;border:1px solid #F59E0B;border-radius:8px;">'
+            return '<div style="padding:40px;text-align:center;color:var(--olo-color-warning, #b45309);background:color-mix(in srgb, var(--olo-color-warning, #b45309) 12%, #fff);border:1px solid var(--olo-color-warning, #b45309);border-radius:8px;">'
                  . esc_html( olo_t( 'WooCommerce non attivo. Installa e attiva WooCommerce per utilizzare questo elemento.' ) )
                  . '</div>';
         }
@@ -86,9 +86,9 @@ class Olo_Woo_Recently_Viewed_Tile extends Olo_Tile_Base {
         // Colors
         $title_color = $this->safe_color_css( $s['title_color'] ) ?: 'var(--olo-color-text, #374151)';
         $price_color = $this->safe_color_css( $s['price_color'] ) ?: 'var(--olo-color-text, #374151)';
-        $sale_color  = $this->safe_color_css( $s['sale_color'] ) ?: '#EF4444';
-        $btn_bg      = $this->safe_color_css( $s['button_bg'] ) ?: '#6366F1';
-        $btn_color   = $this->safe_color_css( $s['button_color'] ) ?: '#FFFFFF';
+        $sale_color  = $this->safe_color_css( $s['sale_color'] ) ?: 'var(--olo-color-error, #b42318)';
+        $btn_bg      = $this->safe_color_css( $s['button_bg'] ) ?: 'var(--olo-color-primary, #e1474f)';
+        $btn_color   = $this->safe_color_css( $s['button_color'] ) ?: 'var(--olo-color-on-primary, #ffffff)';
         $heading_col = $this->safe_color_css( $s['heading_color'] ) ?: 'var(--olo-color-text, #374151)';
         $heading_sz  = max( 14, min( 40, absint( $s['heading_size'] ) ) );
 

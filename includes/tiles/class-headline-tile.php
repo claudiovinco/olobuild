@@ -81,7 +81,7 @@ class Olo_Headline_Tile extends Olo_Tile_Base {
         $text_effects = '';
         $stroke = absint( $s['text_stroke'] ?? 0 );
         if ( $stroke > 0 ) {
-            $stroke_clr = $this->safe_color_css( $s['text_stroke_color'] ) ?: '#000';
+            $stroke_clr = $this->safe_color_css( $s['text_stroke_color'] ) ?: 'var(--olo-color-text, #1f2937)';
             $text_effects .= '-webkit-text-stroke:' . $stroke . 'px ' . $stroke_clr . ';';
         }
         if ( ! empty( $s['text_shadow'] ) ) {
@@ -143,8 +143,8 @@ class Olo_Headline_Tile extends Olo_Tile_Base {
             : esc_html( $raw );
         $heading_extra = $has_gradient ? ' olo-hl-grad' : '';
 
-        // Decoration color fallback
-        $dec_css = $dec_clr ?: 'var(--olo-color-primary, #6366F1)';
+        // Decoration color fallback (token-first sul primario brand)
+        $dec_css = $dec_clr ?: 'var(--olo-color-primary, #e1474f)';
 
         // Subtitle — strip <p> tags (legacy editor), keep inline formatting
         $subtitle_text = '';
@@ -163,8 +163,8 @@ class Olo_Headline_Tile extends Olo_Tile_Base {
         ?>
         <style>
         <?php if ( $has_gradient ) :
-            $gf = $this->safe_color_css( $s['gradient_from'] ) ?: 'var(--olo-color-primary, #6366F1)';
-            $gt = $this->safe_color_css( $s['gradient_to'] ) ?: '#EC4899';
+            $gf = $this->safe_color_css( $s['gradient_from'] ) ?: 'var(--olo-color-primary, #e1474f)';
+            $gt = $this->safe_color_css( $s['gradient_to'] ) ?: 'var(--olo-color-accent, #f4a23b)';
             $ga = absint( $s['gradient_angle'] ?? 90 );
         ?>
         .<?php echo $uid; ?> .olo-hl-grad { background: linear-gradient(<?php echo $ga; ?>deg, <?php echo $gf; ?>, <?php echo $gt; ?>); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }

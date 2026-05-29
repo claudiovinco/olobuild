@@ -116,10 +116,12 @@ const wrapperStyle = computed(() => ({
 
 function itemStyle(isActive) {
   const v = s.value;
+  // TOKEN-FIRST: lingua attiva = primario brand (era #e1474f indaco off-brand);
+  // neutri nudi (bianco/grigio testo) → token superficie/testo
   const base = {
-    background: isActive ? (v.active_bg || '#6366F1') : (v.bg || '#ffffff'),
-    color: isActive ? (v.active_color || '#ffffff') : (v.color || '#374151'),
-    borderColor: v.border_color || '#e5e7eb',
+    background: isActive ? (v.active_bg || 'var(--olo-color-primary, #e1474f)') : (v.bg || 'var(--olo-color-surface, #ffffff)'),
+    color: isActive ? (v.active_color || 'var(--olo-color-primary-contrast, #ffffff)') : (v.color || 'var(--olo-color-text, #374151)'),
+    borderColor: v.border_color || 'var(--olo-color-border, #e5e7eb)',
     borderRadius: (v.border_radius || 8) + 'px',
   };
   if (v.compact) {
@@ -132,8 +134,8 @@ function itemStyle(isActive) {
 function tabItemStyle(isActive) {
   const v = s.value;
   return {
-    background: isActive ? (v.active_bg || '#6366F1') : (v.bg || 'rgba(255,255,255,0.9)'),
-    color: isActive ? (v.active_color || '#fff') : (v.color || '#374151'),
+    background: isActive ? (v.active_bg || 'var(--olo-color-primary, #e1474f)') : (v.bg || 'rgba(255,255,255,0.9)'),
+    color: isActive ? (v.active_color || 'var(--olo-color-primary-contrast, #ffffff)') : (v.color || 'var(--olo-color-text, #374151)'),
   };
 }
 </script>
@@ -155,6 +157,13 @@ function tabItemStyle(isActive) {
   font-size: 13px;
   font-weight: 500;
   transition: all 0.15s;
+}
+/* a11y tastiera: anello di focus visibile sulle voci lingua */
+.ols-item-preview:focus-visible,
+.ols-dropdown-preview:focus-visible,
+.ols-tab-item:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
 }
 .ols-compact .ols-item-preview {
   padding: 3px 6px;
@@ -217,7 +226,7 @@ function tabItemStyle(isActive) {
   border-radius: 4px;
 }
 .ols-layout--floating {
-  border: 1px dashed #6366F1;
+  border: 1px dashed #e1474f;
   padding: 4px;
   border-radius: 6px;
 }
@@ -267,7 +276,7 @@ function tabItemStyle(isActive) {
   margin-left: 8px;
 }
 .ols-layout--tabs {
-  border: 1px dashed #8b5cf6;
+  border: 1px dashed #f4a23b;
   padding: 6px;
   border-radius: 6px;
 }

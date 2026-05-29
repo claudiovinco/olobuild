@@ -49,7 +49,7 @@ const defaults = {
   tagline_text_color: '#0f172a',
   tagline_text_size: 22,
   tagline_caption: 'TRE GARANZIE · CINQUE PROMESSE',
-  tagline_caption_color: '#9ca3af',
+  tagline_caption_color: '',
   tagline_caption_size: 11,
   layout: 'split',
   split_ratio: '1.6fr 1fr',
@@ -110,7 +110,7 @@ const captionStyle = computed(() => ({
   fontFamily: MONO,
   fontSize: (s.value.tagline_caption_size || 11) + 'px',
   letterSpacing: '0.1em', textTransform: 'uppercase',
-  color: s.value.tagline_caption_color || '#9ca3af',
+  color: s.value.tagline_caption_color || 'var(--olo-color-text-faint, #9ca3af)',
 }));
 </script>
 

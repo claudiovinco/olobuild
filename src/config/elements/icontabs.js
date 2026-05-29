@@ -21,18 +21,18 @@ export default {
     ],
     preset: 'pill-default',
     pill_bg: '#F5F2EB',
-    active_bg: '#E8622A',
-    active_color: '#FFFFFF',
-    inactive_color: '#1A1A1A',
+    active_bg: '',            // '' ⇒ primary (era #e1474f off-brand)
+    active_color: '',         // '' ⇒ on-primary
+    inactive_color: '',       // '' ⇒ text
     card_bg: '#F9D7D7',
     card_radius: '16',
     card_border: { ...borderDefault },
     card_border_hover: { ...borderHoverDefault },
     card_border_hover_duration: 300,
-    heading_color: '#E8622A',
-    title_color: '#1A1A1A',
-    text_color: '#333333',
-    link_color: '#2563EB',
+    heading_color: '',        // '' ⇒ primary (era #e1474f off-brand)
+    title_color: '',          // '' ⇒ text
+    text_color: '',           // '' ⇒ text-soft
+    link_color: '',           // '' ⇒ token link
     default_index: '0',
     effect_color: '',
     effect_intensity: 'medium',

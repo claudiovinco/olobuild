@@ -117,7 +117,7 @@ const defaults = {
   header_bg: '',
   header_text_color: '',
   text_color: '',
-  border_color: '#e5e7eb',
+  border_color: '',
   even_row_bg: '',
 };
 
@@ -245,8 +245,8 @@ const tableStyle = computed(() => ({
 }));
 
 const headerRowStyle = computed(() => ({
-  background: s.value.header_bg || 'var(--olo-color-secondary, #1F2937)',
-  color: s.value.header_text_color || '#fff',
+  background: s.value.header_bg || 'var(--olo-color-secondary, #16263d)',
+  color: s.value.header_text_color || 'var(--olo-color-on-primary, #ffffff)',
 }));
 
 function bodyRowStyle(bodyIdx) {
@@ -259,7 +259,7 @@ function bodyRowStyle(bodyIdx) {
 
 function cellStyle(ri, ci) {
   const pad = s.value.compact ? '6px 10px' : '10px 16px';
-  const border = s.value.bordered ? `1px solid ${s.value.border_color || '#e5e7eb'}` : 'none';
+  const border = s.value.bordered ? `1px solid ${s.value.border_color || 'var(--olo-color-border, #e5e7eb)'}` : 'none';
   const align = getAlign(ci);
   return { padding: pad, borderBottom: border, borderRight: border, textAlign: align };
 }
@@ -277,29 +277,31 @@ function cellStyle(ri, ci) {
 .olo-te-mini-btn {
   display: inline-flex; align-items: center; justify-content: center;
   width: auto; min-width: 20px; height: 20px; padding: 0 5px;
-  border: 1px solid rgba(99,102,241,0.3); border-radius: 4px;
-  background: rgba(99,102,241,0.08); color: #6366f1;
+  border: 1px solid color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent); border-radius: 4px;
+  background: color-mix(in srgb, var(--olo-color-primary, #e1474f) 8%, transparent); color: var(--olo-color-primary, #e1474f);
   font-size: 11px; font-weight: 600; cursor: pointer; line-height: 1;
   transition: all .15s;
 }
-.olo-te-mini-btn:hover { background: rgba(99,102,241,0.2); }
-.olo-te-del-col, .olo-te-del-row { color: #ef4444; border-color: rgba(239,68,68,0.3); background: rgba(239,68,68,0.08); }
-.olo-te-del-col:hover, .olo-te-del-row:hover { background: rgba(239,68,68,0.2); }
+.olo-te-mini-btn:hover { background: color-mix(in srgb, var(--olo-color-primary, #e1474f) 20%, transparent); }
+.olo-te-mini-btn:focus-visible { outline: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent); }
+.olo-te-del-col, .olo-te-del-row { color: var(--olo-color-error, #b42318); border-color: color-mix(in srgb, var(--olo-color-error, #b42318) 30%, transparent); background: color-mix(in srgb, var(--olo-color-error, #b42318) 8%, transparent); }
+.olo-te-del-col:hover, .olo-te-del-row:hover { background: color-mix(in srgb, var(--olo-color-error, #b42318) 20%, transparent); }
 
 .olo-te-align-btn {
   display: inline-flex; align-items: center; justify-content: center;
   width: 20px; height: 20px; border: none; border-radius: 3px;
-  background: transparent; color: #9CA3AF; cursor: pointer; padding: 0;
+  background: transparent; color: var(--olo-color-text-faint, #94a3b8); cursor: pointer; padding: 0;
   transition: all .15s;
 }
-.olo-te-align-btn:hover { color: #6366f1; background: rgba(99,102,241,0.1); }
+.olo-te-align-btn:hover { color: var(--olo-color-primary, #e1474f); background: color-mix(in srgb, var(--olo-color-primary, #e1474f) 10%, transparent); }
+.olo-te-align-btn:focus-visible { outline: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent); }
 
 .olo-te-table { table-layout: auto; }
 .olo-te-cell {
   position: relative; cursor: text; min-width: 60px;
   transition: background .15s;
 }
-.olo-te-cell:hover { background: rgba(99,102,241,0.06) !important; }
+.olo-te-cell:hover { background: color-mix(in srgb, var(--olo-color-primary, #e1474f) 6%, transparent) !important; }
 .olo-te-th { font-weight: 600; }
 .olo-te-bold { font-weight: 600; }
 .olo-te-text {
@@ -307,12 +309,12 @@ function cellStyle(ri, ci) {
 }
 .olo-te-input {
   position: absolute; inset: 0; width: 100%; height: 100%;
-  border: 2px solid #6366f1; border-radius: 0;
+  border: 2px solid var(--olo-color-primary, #e1474f); border-radius: 0;
   background: #fff; color: #111; padding: 8px 14px;
   font-size: inherit; font-family: inherit;
   outline: none; z-index: 5; box-sizing: border-box;
 }
-.olo-te-hover:hover { background: rgba(99,102,241,0.05); }
+.olo-te-hover:hover { background: color-mix(in srgb, var(--olo-color-primary, #e1474f) 5%, transparent); }
 
 .olo-te-row-bar {
   display: flex; gap: 6px; margin-top: 4px; padding: 2px 0;

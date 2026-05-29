@@ -65,7 +65,7 @@ const defaults = {
   ],
   card_bg:           { type: 'solid', color: '#0f172a' },
   card_color:        '#e5e7eb',
-  card_accent_color: '#b3261e',
+  card_accent_color: '',
   card_radius:       R(18),
   card_padding:      40,
   card_border:       '',
@@ -87,7 +87,7 @@ const fmap  = { serif: SERIF, 'sans-serif': SANS, mono: MONO };
 
 const items = computed(() => Array.isArray(s.value.items) ? s.value.items : []);
 const cardColor = computed(() => s.value.card_color || '#e5e7eb');
-const accentColor = computed(() => s.value.card_accent_color || '#b3261e');
+const accentColor = computed(() => s.value.card_accent_color || 'var(--olo-color-primary, #e1474f)');
 const tfam = computed(() => fmap[s.value.title_font_family] || SERIF);
 const hoverClass = computed(() => 'olo-icards-hover-' + (s.value.card_hover_effect || 'none'));
 

@@ -36,9 +36,9 @@
         </div>
       </div>
     </div>
-    <div class="olo-svsearch-preview-btn" :style="btnStyle">
+    <button type="button" class="olo-svsearch-preview-btn" :style="btnStyle">
       {{ settings.button_text || 'Cerca' }}
-    </div>
+    </button>
   </div>
 </template>
 
@@ -71,8 +71,8 @@ const wrapStyle = computed(() => {
   const s = props.settings;
   const style = {
     borderRadius: (s.border_radius || 8) + 'px',
-    background: s.filter_bg || '#ffffff',
-    border: '1px solid ' + (s.filter_border || '#e5e7eb'),
+    background: s.filter_bg || 'var(--olo-color-surface, #ffffff)',
+    border: '1px solid ' + (s.filter_border || 'var(--olo-color-border, #e5e7eb)'),
   };
   // In clean mode, apply overlap styles like the frontend
   if (builderStore.cleanMode && s.overlap) {
@@ -94,8 +94,8 @@ const wrapStyle = computed(() => {
 const btnStyle = computed(() => {
   const s = props.settings;
   return {
-    background: s.button_bg || 'var(--olo-color-primary, #6366F1)',
-    color: s.button_color || '#ffffff',
+    background: s.button_bg || 'var(--olo-color-primary, #e1474f)',
+    color: s.button_color || 'var(--olo-color-on-primary, #ffffff)',
   };
 });
 </script>
@@ -134,16 +134,16 @@ const btnStyle = computed(() => {
   font-size: 0.7em;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #888;
+  color: var(--olo-color-text-soft, #6b7280);
   font-weight: 600;
 }
 .olo-svsearch-preview-input {
   font-size: 0.82em;
   padding: 5px 8px;
-  background: #f9fafb;
-  border: 1px solid #e5e7eb;
+  background: var(--olo-color-surface-alt, #f6f7f9);
+  border: 1px solid var(--olo-color-border, #e5e7eb);
   border-radius: 4px;
-  color: #666;
+  color: var(--olo-color-text-soft, #6b7280);
 }
 .olo-svsearch-preview-pills {
   display: flex;
@@ -153,18 +153,24 @@ const btnStyle = computed(() => {
 .olo-svsearch-preview-pill {
   font-size: 0.72em;
   padding: 2px 8px;
-  background: #f3f4f6;
-  border: 1px solid #e5e7eb;
+  background: var(--olo-color-surface-alt, #f6f7f9);
+  border: 1px solid var(--olo-color-border, #e5e7eb);
   border-radius: 999px;
-  color: #666;
+  color: var(--olo-color-text-soft, #6b7280);
 }
 .olo-svsearch-preview-btn {
   padding: 8px 24px;
+  border: none;
+  font-family: inherit;
   border-radius: 6px;
   font-size: 0.85em;
   font-weight: 600;
   text-align: center;
   white-space: nowrap;
-  cursor: default;
+  cursor: pointer;
+}
+.olo-svsearch-preview-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
 }
 </style>

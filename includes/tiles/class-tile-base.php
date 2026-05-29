@@ -465,8 +465,8 @@ abstract class Olo_Tile_Base {
         $d = $this->parse_border( $border );
         if ( ! $d && ! in_array( $effect, [ 'gradient', 'gradient-spin' ], true ) ) return '';
 
-        $color1 = $d['color'] ?? '#6366f1';
-        $color2 = trim( $settings['border_effect_color2'] ?? '' ) ?: '#ec4899';
+        $color1 = $d['color'] ?? '#e1474f';
+        $color2 = trim( $settings['border_effect_color2'] ?? '' ) ?: '#f4a23b';
 
         switch ( $effect ) {
 

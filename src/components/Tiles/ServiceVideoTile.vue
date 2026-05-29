@@ -45,7 +45,8 @@ const wrapStyle = computed(() => ({
 
 const bgStyle = computed(() => ({
   position: 'absolute', inset: '0',
-  background: 'linear-gradient(135deg, #1e293b 0%, #334155 50%, #1e293b 100%)',
+  // poster video placeholder: navy brand (era slate grigio nudo)
+  background: 'linear-gradient(135deg, var(--olo-color-secondary, #16263d) 0%, color-mix(in srgb, var(--olo-color-secondary, #16263d) 80%, #fff) 50%, var(--olo-color-secondary, #16263d) 100%)',
 }));
 
 const btnSz = computed(() => Math.min(parseInt(s.value.play_btn_size) || 64, 50));
@@ -63,7 +64,8 @@ const playBtnStyle = computed(() => ({
 }));
 
 const badgeStyle = computed(() => ({
-  background: 'rgba(0,0,0,0.5)', color: '#a5f3fc',
+  // testo badge su poster scuro: bianco neutro (era ciano #a5f3fc off-brand)
+  background: 'rgba(0,0,0,0.5)', color: 'var(--olo-color-on-primary, #ffffff)',
   padding: '1px 6px', borderRadius: '8px',
   fontSize: '8px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.3px',
 }));

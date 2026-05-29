@@ -9,7 +9,7 @@
     />
     <div
       v-else
-      style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:var(--olo-color-muted, #F3F4F6);color:var(--olo-color-text-muted, #9CA3AF);font-size:13px;"
+      style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:var(--olo-color-surface-alt, #F3F4F6);color:var(--olo-color-text-faint, #9CA3AF);font-size:13px;"
     >
       {{ t('Seleziona un\'immagine') }}
     </div>
@@ -36,6 +36,7 @@
 <script setup>
 import { computed } from 'vue';
 import { t } from '@/i18n';
+import { resolveColor, TOKENS } from '@/composables/oloTileDefaults';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
@@ -45,11 +46,11 @@ const defaults = {
   image: '',
   image_height: '400',
   markers: [],
-  marker_color: '#ef4444',
+  marker_color: '',
   marker_size: '24',
   pulse_animation: true,
-  tooltip_bg: 'var(--olo-color-background, #FFFFFF)',
-  tooltip_color: 'var(--olo-color-text, #374151)',
+  tooltip_bg: '',
+  tooltip_color: '',
   tooltip_width: '220',
 };
 const s = computed(() => ({ ...defaults, ...props.settings }));
@@ -71,7 +72,7 @@ function markerStyle(marker) {
     left: (parseFloat(marker.pos_x) || 50) + '%',
     top: (parseFloat(marker.pos_y) || 50) + '%',
     transform: 'translate(-50%, -50%)',
-    color: s.value.marker_color || '#ef4444',
+    color: resolveColor(s.value.marker_color, TOKENS.primary),
     cursor: 'pointer',
     zIndex: '10',
     display: 'flex',
@@ -85,8 +86,8 @@ function tooltipPreviewStyle(marker) {
   const pos = marker.tooltip_position || 'top';
   const base = {
     position: 'absolute',
-    background: s.value.tooltip_bg || 'var(--olo-color-background, #FFFFFF)',
-    color: s.value.tooltip_color || 'var(--olo-color-text, #374151)',
+    background: resolveColor(s.value.tooltip_bg, TOKENS.surface),
+    color: resolveColor(s.value.tooltip_color, TOKENS.text),
     padding: '3px 8px',
     borderRadius: '4px',
     whiteSpace: 'nowrap',

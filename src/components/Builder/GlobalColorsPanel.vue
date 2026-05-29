@@ -78,15 +78,23 @@ const toast = useToast();
 // Local copy for editing
 const localColors = ref(JSON.parse(JSON.stringify(stylesStore.globalColors || [])));
 
-// If the store has no colors yet, provide defaults
+// If the store has no colors yet, provide defaults.
+// I ruoli `core` hanno id STABILE (mai rigenerato dalla label): garantisce che
+// var(--olo-color-primary) ecc. restino validi anche se l'utente rinomina.
+// Seed brand: primario = ROSSO #e1474f, secondario navy + accento ambra coordinati.
 if (localColors.value.length === 0) {
   localColors.value = [
-    { id: 'primary', label: 'Primario', value: '#1e87f0' },
-    { id: 'secondary', label: 'Secondario', value: '#32d296' },
-    { id: 'accent', label: 'Accento', value: '#faa05a' },
-    { id: 'dark', label: 'Scuro', value: '#1a1a2e' },
-    { id: 'light', label: 'Chiaro', value: '#f8f9fa' },
-    { id: 'text', label: 'Testo', value: '#333333' },
+    { id: 'primary', label: 'Primario', value: '#e1474f', core: true },
+    { id: 'secondary', label: 'Secondario', value: '#16263d', core: true },
+    { id: 'accent', label: 'Accento', value: '#f4a23b', core: true },
+    { id: 'dark', label: 'Scuro', value: '#16263d', core: true },
+    { id: 'light', label: 'Chiaro', value: '#f8f9fa', core: true },
+    { id: 'text', label: 'Testo', value: '#1f2937', core: true },
+    // Ruoli semantici (il cliente sceglie i 4 fg; la tinta soft è derivata via color-mix)
+    { id: 'info', label: 'Info', value: '#2563eb', core: true },
+    { id: 'success', label: 'Successo', value: '#15803d', core: true },
+    { id: 'warning', label: 'Attenzione', value: '#b45309', core: true },
+    { id: 'error', label: 'Errore', value: '#b42318', core: true },
   ];
 }
 
@@ -107,12 +115,13 @@ function updateColorValue(index, value) {
 }
 
 function updateColorLabel(index, label) {
-  const oldId = localColors.value[index].id;
   localColors.value[index].label = label;
-  // Auto-generate ID only if the id was auto-generated (matches old label pattern)
-  const expectedOldId = generateId(localColors.value[index].label);
-  // Always regenerate id from label for new / user-editable colors
-  localColors.value[index].id = generateId(label);
+  // I ruoli `core` (6 globali + 4 semantici) hanno id STABILE: NON va rigenerato
+  // dalla label, altrimenti var(--olo-color-primary) si romperebbe a ogni rinomina
+  // (vedi TOKEN_MAPPING.md §fragilità). Solo i colori custom rigenerano l'id.
+  if (!localColors.value[index].core) {
+    localColors.value[index].id = generateId(label);
+  }
   isDirty.value = true;
 }
 

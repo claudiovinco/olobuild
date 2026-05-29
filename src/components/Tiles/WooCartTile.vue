@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="!wooActive" class="olo-woo-notice">
-      <span class="olo-woo-notice-icon">{{ t('&#x1F6D2;') }}</span>
+      <span class="olo-woo-notice-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor"><circle cx="7.3" cy="17.3" r="1.4" fill="currentColor" stroke="none"/><circle cx="13.3" cy="17.3" r="1.4" fill="currentColor" stroke="none"/><polyline points="0 2 3.2 4 5.3 12.5 16 12.5 18 6.5 8 6.5"/></svg></span>
       <span>{{ t('WooCommerce richiesto') }}</span>
     </div>
     <div v-else>
@@ -21,7 +21,7 @@
           <tr v-for="item in cartItems" :key="item.name">
             <td :style="tdStyle" v-if="s.show_thumbnail">
               <div :style="thumbStyle">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#D1D5DB" stroke-width="1.5">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--olo-color-text-faint, #94a3b8)" stroke-width="1.5">
                   <rect x="3" y="3" width="18" height="18" rx="2"/>
                   <circle cx="8.5" cy="8.5" r="1.5"/>
                   <path d="M21 15l-5-5L5 21"/>
@@ -42,7 +42,7 @@
             </td>
             <td :style="{ ...tdStyle, fontWeight: 600 }">&euro;{{ (item.price * item.qty).toFixed(2) }}</td>
             <td :style="tdStyle">
-              <span style="color:#EF4444;cursor:pointer;font-size:18px;">{{ t('&times;') }}</span>
+              <span style="color:var(--olo-color-error, #b42318);cursor:pointer;font-size:18px;">{{ t('&times;') }}</span>
             </td>
           </tr>
         </tbody>
@@ -88,6 +88,7 @@
 <script setup>
 import { t } from '@/i18n';
 import { computed } from 'vue';
+import { resolveColor, TOKENS } from '@/composables/oloTileDefaults';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
@@ -97,13 +98,22 @@ const defaults = {
   show_thumbnail: true,
   show_coupon: true,
   show_totals: true,
-  button_color: '#FFFFFF',
-  button_bg: 'var(--olo-color-primary, #6366F1)',
-  text_color: '#374151',
+  button_color: '',         // '' ⇒ TOKENS.onPrimary
+  button_bg: 'var(--olo-color-primary, #e1474f)',
+  text_color: '',           // '' ⇒ TOKENS.text
   heading_color: 'var(--olo-color-text, #374151)',
-  border_color: '#E5E7EB',
+  border_color: '',         // '' ⇒ TOKENS.border
 };
-const s = computed(() => ({ ...defaults, ...props.settings }));
+const sRaw = computed(() => ({ ...defaults, ...props.settings }));
+// Vista risolta token-first: colori vuoti ⇒ token del tema (niente grigi nudi).
+const s = computed(() => ({
+  ...sRaw.value,
+  text_color: resolveColor(sRaw.value.text_color, TOKENS.text),
+  heading_color: resolveColor(sRaw.value.heading_color, TOKENS.text),
+  border_color: resolveColor(sRaw.value.border_color, TOKENS.border),
+  button_color: resolveColor(sRaw.value.button_color, TOKENS.onPrimary),
+  button_bg: resolveColor(sRaw.value.button_bg, TOKENS.primary),
+}));
 
 const wooActive = computed(() => true);
 
@@ -123,7 +133,7 @@ const tableStyle = computed(() => ({
 }));
 
 const thStyle = computed(() => ({
-  background: '#F9FAFB',
+  background: TOKENS.surfaceAlt,
   color: s.value.heading_color,
   fontWeight: '600',
   fontSize: '13px',
@@ -145,7 +155,7 @@ const tdStyle = computed(() => ({
 const thumbStyle = {
   width: '60px',
   height: '60px',
-  background: '#F3F4F6',
+  background: TOKENS.surfaceAlt,
   borderRadius: '6px',
   display: 'flex',
   alignItems: 'center',
@@ -254,14 +264,21 @@ const checkoutBtnStyle = computed(() => ({
   align-items: center;
   gap: 8px;
   padding: 16px 20px;
-  background: #FEF3C7;
-  border: 1px solid #F59E0B;
+  background: color-mix(in srgb, var(--olo-color-warning, #b45309) 12%, #fff);
+  border: 1px solid var(--olo-color-warning, #b45309);
   border-radius: 8px;
-  color: #92400E;
+  color: var(--olo-color-warning, #b45309);
   font-size: 14px;
   font-weight: 500;
 }
 .olo-woo-notice-icon {
-  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  flex-shrink: 0;
+}
+.olo-woo-notice-icon :deep(svg) {
+  width: 100%;
+  height: 100%;
 }
 </style>

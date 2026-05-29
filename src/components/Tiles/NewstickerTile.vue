@@ -380,6 +380,12 @@ function badgeStyleFor(item) {
   line-height: 1;
 }
 .olo-newsticker-ctrl:hover { background: rgba(255,255,255,0.3); }
+/* a11y tastiera: anello di focus visibile sui controlli prev/next e indicatori */
+.olo-newsticker-ctrl:focus-visible,
+.olo-newsticker-dot:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
+}
 .olo-newsticker-indicators {
   display: flex;
   gap: 6px;

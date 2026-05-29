@@ -90,12 +90,13 @@ class Olo_Code_Tile extends Olo_Tile_Base {
 
         ob_start();
         ?>
+        <style>#<?php echo esc_attr( $uid ); ?> .olo-code-copy:focus-visible{outline:none;box-shadow:0 0 0 3px color-mix(in srgb, var(--olo-color-primary,#e1474f) 30%, transparent)}</style>
         <div class="olo-code" id="<?php echo esc_attr( $uid ); ?>" style="border-radius:8px;overflow:hidden;background:<?php echo esc_attr( $t['bg'] ); ?>;border:1px solid <?php echo esc_attr( $t['line'] ); ?>;">
             <?php if ( ! empty( $s['language'] ) || ! empty( $s['show_copy_button'] ) ) : ?>
             <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 16px;background:<?php echo esc_attr( $t['header'] ); ?>;border-bottom:1px solid <?php echo esc_attr( $t['line'] ); ?>;">
                 <span style="font-size:12px;font-family:monospace;text-transform:uppercase;color:<?php echo esc_attr( $t['line'] ); ?>;"><?php echo esc_html( $s['language'] ); ?></span>
                 <?php if ( ! empty( $s['show_copy_button'] ) ) : ?>
-                <button type="button" onclick="(function(btn){var el=btn.closest('.olo-code');if(el){var c=el.querySelector('code');if(c){var t=c.textContent;if(navigator.clipboard){navigator.clipboard.writeText(t)}btn.textContent='<?php echo esc_js( olo_t( 'Copiato!' ) ); ?>';setTimeout(function(){btn.textContent='<?php echo esc_js( olo_t( 'Copy' ) ); ?>'},2000)}}})(this)" style="font-size:12px;font-family:monospace;color:<?php echo esc_attr( $t['text'] ); ?>;opacity:0.7;background:transparent;border:1px solid <?php echo esc_attr( $t['line'] ); ?>;border-radius:4px;padding:2px 8px;cursor:pointer;"><?php echo esc_html( olo_t( 'Copy' ) ); ?></button>
+                <button type="button" class="olo-code-copy" onclick="(function(btn){var el=btn.closest('.olo-code');if(el){var c=el.querySelector('code');if(c){var t=c.textContent;if(navigator.clipboard){navigator.clipboard.writeText(t)}btn.textContent='<?php echo esc_js( olo_t( 'Copiato!' ) ); ?>';setTimeout(function(){btn.textContent='<?php echo esc_js( olo_t( 'Copy' ) ); ?>'},2000)}}})(this)" style="font-size:12px;font-family:monospace;color:<?php echo esc_attr( $t['text'] ); ?>;opacity:0.7;background:transparent;border:1px solid <?php echo esc_attr( $t['line'] ); ?>;border-radius:4px;padding:2px 8px;cursor:pointer;"><?php echo esc_html( olo_t( 'Copy' ) ); ?></button>
                 <?php endif; ?>
             </div>
             <?php endif; ?>

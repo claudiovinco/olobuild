@@ -1,7 +1,7 @@
 <template>
   <div :style="wrapStyle">
     <!-- Badge evergreen -->
-    <div v-if="isEvergreen" style="position:absolute;top:6px;right:8px;background:var(--olo-color-primary, #6366F1);color:#fff;font-size:10px;padding:2px 6px;border-radius:4px;z-index:2;">
+    <div v-if="isEvergreen" style="position:absolute;top:6px;right:8px;background:var(--olo-color-primary, #e1474f);color:var(--olo-color-on-primary, #ffffff);font-size:10px;padding:2px 6px;border-radius:4px;z-index:2;">
       {{ t('&#9851; Evergreen') }}
     </div>
     <template v-if="!expired">
@@ -57,7 +57,7 @@ const defaults = {
   separator: ':',
   bg_color: 'var(--olo-color-background, #FFFFFF)',
   text_color: 'var(--olo-color-text, #374151)',
-  accent_color: 'var(--olo-color-primary, #6366F1)',
+  accent_color: 'var(--olo-color-primary, #e1474f)',
   number_font_size: '48',
   number_font_weight: '700',
   label_font_size: '12',
@@ -66,7 +66,7 @@ const defaults = {
   item_min_width: '70',
   padding: '32',
   border_width: '0',
-  border_color: '#e5e7eb',
+  border_color: 'var(--olo-color-border, #e5e7eb)',
   border_radius: { tl: 0, tr: 0, br: 0, bl: 0 },
 };
 
@@ -117,7 +117,7 @@ const wrapStyle = computed(() => {
     borderRadius: `${br.tl || 0}px ${br.tr || 0}px ${br.br || 0}px ${br.bl || 0}px`,
   };
   if (bw > 0) {
-    style.border = bw + 'px solid ' + (s.value.border_color || '#e5e7eb');
+    style.border = bw + 'px solid ' + (s.value.border_color || 'var(--olo-color-border, #e5e7eb)');
   }
   return style;
 });

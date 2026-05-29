@@ -13,9 +13,9 @@ class Olo_Woo_Product_Stock_Tile extends Olo_Tile_Base {
     protected $defaults = [
         'show_quantity'     => true,
         'show_icon'         => true,
-        'in_stock_color'    => '#059669',
-        'out_of_stock_color' => '#DC2626',
-        'low_stock_color'   => '#D97706',
+        'in_stock_color'    => '',
+        'out_of_stock_color' => '',
+        'low_stock_color'   => '',
         'low_stock_threshold' => 5,
         'font_size'         => 14,
         'font_weight'       => '500',
@@ -37,7 +37,7 @@ class Olo_Woo_Product_Stock_Tile extends Olo_Tile_Base {
 
     public function render( $settings ) {
         if ( ! class_exists( 'WooCommerce' ) ) {
-            return '<div style="padding:40px;text-align:center;color:#92400E;background:#FEF3C7;border:1px solid #F59E0B;border-radius:8px;">'
+            return '<div style="padding:40px;text-align:center;color:var(--olo-color-warning, #b45309);background:color-mix(in srgb, var(--olo-color-warning, #b45309) 12%, #fff);border:1px solid var(--olo-color-warning, #b45309);border-radius:8px;">'
                  . esc_html( olo_t( 'WooCommerce non attivo. Installa e attiva WooCommerce per utilizzare questo elemento.' ) )
                  . '</div>';
         }
@@ -65,9 +65,10 @@ class Olo_Woo_Product_Stock_Tile extends Olo_Tile_Base {
 
         // Determine color and text
         $low_threshold = max( 1, absint( $s['low_stock_threshold'] ) );
-        $in_stock_color     = $this->safe_color_css( $s['in_stock_color'] );
-        $out_of_stock_color = $this->safe_color_css( $s['out_of_stock_color'] );
-        $low_stock_color    = $this->safe_color_css( $s['low_stock_color'] );
+        // TOKEN-FIRST stati semantici: disponibile=success, esaurito=error, scorte basse=warning.
+        $in_stock_color     = $this->safe_color_css( $s['in_stock_color'] )     ?: 'var(--olo-color-success, #15803d)';
+        $out_of_stock_color = $this->safe_color_css( $s['out_of_stock_color'] ) ?: 'var(--olo-color-error, #b42318)';
+        $low_stock_color    = $this->safe_color_css( $s['low_stock_color'] )    ?: 'var(--olo-color-warning, #b45309)';
 
         if ( $stock_status === 'onbackorder' ) {
             $status_text  = olo_t( 'Disponibile su ordinazione' );

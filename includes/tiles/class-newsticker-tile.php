@@ -441,6 +441,11 @@ class Olo_Newsticker_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .olo-nt-ctrl:hover {
                 background: rgba(255,255,255,0.3);
             }
+            .<?php echo $uid; ?> .olo-nt-ctrl:focus-visible,
+            .<?php echo $uid; ?> .olo-nt-dot:focus-visible {
+                outline: none;
+                box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
+            }
             .<?php echo $uid; ?> .olo-nt-counter {
                 font-size: 11px;
                 opacity: 0.7;

@@ -40,7 +40,7 @@ const props = defineProps({
 const s = computed(() => ({
   title: 'Benvenuto nel nostro sito',
   subtitle: 'Scopri qualcosa di straordinario',
-  text_color: '#FFFFFF',
+  text_color: 'var(--olo-color-on-primary, #FFFFFF)',
   min_height: '500px',
   content_max_width: '700',
   vertical_align: 'center',
@@ -49,7 +49,7 @@ const s = computed(() => ({
   tile_padding: { top: 60, right: 20, bottom: 60, left: 20 },
   cta_text: 'Inizia ora',
   cta_url: '#',
-  cta_bg_color: '#FFFFFF',
+  cta_bg_color: 'var(--olo-color-on-primary, #FFFFFF)',
   cta_text_color: '',
   cta_radius: { tl: 6, tr: 6, br: 6, bl: 6 },
   cta_size: '15',
@@ -57,7 +57,7 @@ const s = computed(() => ({
   cta2_text: '',
   cta2_url: '#',
   cta2_bg_color: 'transparent',
-  cta2_text_color: '#FFFFFF',
+  cta2_text_color: 'var(--olo-color-on-primary, #FFFFFF)',
   cta2_style: 'outline',
   full_bleed: false,
   ...props.settings,
@@ -74,7 +74,7 @@ function safeInline(input) {
 /* ── Container (sfondo gestito dal wrapper esterno via tile.style.bg) ── */
 const containerStyle = computed(() => ({
   minHeight: s.value.min_height || '500px',
-  color: s.value.text_color || '#FFFFFF',
+  color: s.value.text_color || 'var(--olo-color-on-primary, #FFFFFF)',
   display: 'flex',
 }));
 
@@ -168,7 +168,7 @@ function radiusCss(val) {
 function ctaStyle(n) {
   const prefix = n === 1 ? 'cta' : 'cta2';
   const style = s.value[prefix + '_style'] || (n === 1 ? 'filled' : 'outline');
-  const bgColor = s.value[prefix + '_bg_color'] || (n === 1 ? '#FFFFFF' : 'transparent');
+  const bgColor = s.value[prefix + '_bg_color'] || (n === 1 ? 'var(--olo-color-on-primary, #FFFFFF)' : 'transparent');
   const radius = radiusCss(s.value.cta_radius);
 
   const fs = parseInt(s.value.cta_size) || 15;
@@ -181,12 +181,12 @@ function ctaStyle(n) {
     if (explicit) {
       textColor = explicit;
     } else if (style === 'filled') {
-      textColor = 'var(--olo-color-primary, #6366F1)';
+      textColor = 'var(--olo-color-primary, #e1474f)';
     } else {
-      textColor = s.value.text_color || '#FFFFFF';
+      textColor = s.value.text_color || 'var(--olo-color-on-primary, #FFFFFF)';
     }
   } else {
-    textColor = s.value.cta2_text_color || '#FFFFFF';
+    textColor = s.value.cta2_text_color || 'var(--olo-color-on-primary, #FFFFFF)';
   }
 
   const base = {

@@ -18,9 +18,9 @@ class Olo_IconTabs_Tile extends Olo_Tile_Base {
         ],
         'preset'         => 'pill-default',
         'pill_bg'        => '#F5F2EB',
-        'active_bg'      => '#E8622A',
-        'active_color'   => '#FFFFFF',
-        'inactive_color' => '#1A1A1A',
+        'active_bg'      => '',
+        'active_color'   => '',
+        'inactive_color' => '',
         'card_bg'        => '#F9D7D7',
         'card_radius'    => '16',
         'effect_color'   => '',
@@ -42,10 +42,10 @@ class Olo_IconTabs_Tile extends Olo_Tile_Base {
         'card_border'              => [],
         'card_border_hover'        => [],
         'card_border_hover_duration' => 300,
-        'heading_color'  => '#E8622A',
-        'title_color'    => '#1A1A1A',
-        'text_color'     => '#333333',
-        'link_color'     => '#2563EB',
+        'heading_color'  => '',
+        'title_color'    => '',
+        'text_color'     => '',
+        'link_color'     => '',
         'default_index'  => '0',
             'border'                  => [],
         'border_hover'            => [],
@@ -92,16 +92,17 @@ class Olo_IconTabs_Tile extends Olo_Tile_Base {
 
         $uid           = 'oit-' . wp_rand( 10000, 99999 );
         $default       = max( 0, min( intval( $s['default_index'] ), count( $items ) - 1 ) );
+        // TOKEN-FIRST: default '' ⇒ token brand/tema (era #e1474f / grigi nudi / #2563EB off-brand)
         $pill_bg       = $this->safe_color_css( $s['pill_bg'] );
-        $active_bg     = $this->safe_color_css( $s['active_bg'] );
-        $active_color  = $this->safe_color_css( $s['active_color'] );
-        $inactive_col  = $this->safe_color_css( $s['inactive_color'] );
+        $active_bg     = $this->safe_color_css( $s['active_bg'] )    ?: 'var(--olo-color-primary, #e1474f)';
+        $active_color  = $this->safe_color_css( $s['active_color'] ) ?: 'var(--olo-color-primary-contrast, #ffffff)';
+        $inactive_col  = $this->safe_color_css( $s['inactive_color'] ) ?: 'var(--olo-color-text, #1f2937)';
         $card_bg       = $this->safe_color_css( $s['card_bg'] );
         $radius        = max( 0, Olo_Tile_Utils::radius_int( $s['card_radius'] ) );
-        $heading_color = $this->safe_color_css( $s['heading_color'] );
-        $title_color   = $this->safe_color_css( $s['title_color'] );
-        $text_color    = $this->safe_color_css( $s['text_color'] );
-        $link_color    = $this->safe_color_css( $s['link_color'] );
+        $heading_color = $this->safe_color_css( $s['heading_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
+        $title_color   = $this->safe_color_css( $s['title_color'] )  ?: 'var(--olo-color-text, #1f2937)';
+        $text_color    = $this->safe_color_css( $s['text_color'] )   ?: 'var(--olo-color-text-soft, #6b7280)';
+        $link_color    = $this->safe_color_css( $s['link_color'] )   ?: 'var(--olo-color-link, #2563eb)';
 
         $preset_id     = $s['preset'] ?? 'pill-default';
 
@@ -116,11 +117,13 @@ class Olo_IconTabs_Tile extends Olo_Tile_Base {
             .<?php echo esc_attr( $uid ); ?> .oit-tab.is-active { background: <?php echo $active_bg; ?>; color: <?php echo $active_color; ?>; padding: 0 22px; }
             .<?php echo esc_attr( $uid ); ?> .oit-tab.is-active span.oit-label { display:inline; }
             .<?php echo esc_attr( $uid ); ?> .oit-tab:hover:not(.is-active) { background: rgba(0,0,0,.04); }
+            .<?php echo esc_attr( $uid ); ?> .oit-tab:focus-visible { outline:none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent); }
             .<?php echo esc_attr( $uid ); ?> .oit-card { width:100%; background: <?php echo $card_bg; ?>; border-radius: <?php echo $radius; ?>px; padding:32px; }
             .<?php echo esc_attr( $uid ); ?> .oit-card .oit-heading { font-size:16px; font-weight:700; color: <?php echo $heading_color; ?>; margin:0 0 8px; letter-spacing:-.01em; }
             .<?php echo esc_attr( $uid ); ?> .oit-card .oit-title { font-size:28px; font-weight:700; color: <?php echo $title_color; ?>; margin:0 0 12px; letter-spacing:-.01em; line-height:1.2; }
             .<?php echo esc_attr( $uid ); ?> .oit-card .oit-content { font-size:15px; color: <?php echo $text_color; ?>; line-height:1.6; margin:0; }
             .<?php echo esc_attr( $uid ); ?> .oit-card .oit-link { color: <?php echo $link_color; ?>; text-decoration:underline; font-weight:600; }
+            .<?php echo esc_attr( $uid ); ?> .oit-card .oit-link:focus-visible { outline:none; border-radius:3px; box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent); }
             .<?php echo esc_attr( $uid ); ?> .oit-panel { display:none; }
             .<?php echo esc_attr( $uid ); ?> .oit-panel.is-active { display:block; animation: <?php echo $uid; ?>-fade .25s ease; }
             @keyframes <?php echo $uid; ?>-fade { from { opacity:0; transform:translateY(4px); } to { opacity:1; transform:none; } }

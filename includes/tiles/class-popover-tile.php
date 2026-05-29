@@ -43,7 +43,7 @@ class Olo_Popover_Tile extends Olo_Tile_Base {
         $s = wp_parse_args( $settings, $this->defaults );
 
         $markers          = is_array( $s['markers'] ) ? $s['markers'] : [];
-        $color            = $this->safe_color_css( $s['marker_color'] ?? '' ) ?: 'var(--olo-color-primary, #6366F1)';
+        $color            = $this->safe_color_css( $s['marker_color'] ?? '' ) ?: 'var(--olo-color-primary, #e1474f)';
         $image_height     = absint( $s['image_height'] ?? 0 );
         $popup_bg         = $this->safe_color_css( $s['popup_bg'] ?? '#ffffff' );
         $popup_color      = $this->safe_color_css( $s['popup_color'] ?? '#333333' );
@@ -51,7 +51,7 @@ class Olo_Popover_Tile extends Olo_Tile_Base {
         $popup_radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['popup_radius_hover'] ?? null );
         $popup_img_height = absint( $s['popup_img_height'] ?? 120 );
         $hover_effect     = $s['popup_hover_effect'] ?? 'none';
-        $hover_color      = $this->safe_color_css( $s['popup_hover_color'] ?? '' ) ?: 'var(--olo-color-primary, #6366F1)';
+        $hover_color      = $this->safe_color_css( $s['popup_hover_color'] ?? '' ) ?: 'var(--olo-color-primary, #e1474f)';
 
         $uid = 'olo-pop-' . wp_rand( 10000, 99999 );
 
@@ -75,6 +75,11 @@ class Olo_Popover_Tile extends Olo_Tile_Base {
                 overflow: hidden;
                 min-width: 240px;
                 max-width: 320px;
+            }
+            /* a11y: anello di focus visibile da tastiera sul marker */
+            .<?php echo $uid; ?> .olo-popover-marker:focus-visible {
+                outline: none;
+                box-shadow: 0 0 0 3px rgba(255,255,255,0.4), 0 0 0 6px color-mix(in srgb, var(--olo-color-primary, #e1474f) 40%, transparent);
             }
             <?php if ( $popup_radius_hover_css !== '' ) : ?>.<?php echo $uid; ?> .olo-popover-drop{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?> .olo-popover-drop:hover{border-radius:<?php echo $popup_radius_hover_css; ?> !important}<?php endif; ?>
             .<?php echo $uid; ?> .olo-popover-drop h4 { color: <?php echo $popup_color; ?>; }
@@ -122,7 +127,7 @@ class Olo_Popover_Tile extends Olo_Tile_Base {
             <?php if ( ! empty( $s['image'] ) ) : ?>
                 <?php echo Olo_Tile_Utils::img_srcset( absint( $s['image_id'] ?? 0 ), $s['image'], $s['image_alt'] ?? '', '', 'full', 'style="' . esc_attr( $img_style ) . '"' ); ?>
             <?php else : ?>
-                <div style="width:100%;<?php echo $image_height > 0 ? 'height:' . $image_height . 'px;' : 'padding-bottom:56.25%;'; ?>background:#1F2937;"></div>
+                <div style="width:100%;<?php echo $image_height > 0 ? 'height:' . $image_height . 'px;' : 'padding-bottom:56.25%;'; ?>background:var(--olo-color-text, #1F2937);"></div>
             <?php endif; ?>
 
             <?php foreach ( $markers as $i => $marker ) :
@@ -130,7 +135,7 @@ class Olo_Popover_Tile extends Olo_Tile_Base {
                 $y = floatval( $marker['y'] ?? 50 );
                 $marker_img = $marker['image'] ?? '';
             ?>
-                <a class="uk-position-absolute" href="#" style="left:<?php echo esc_attr( $x ); ?>%;top:<?php echo esc_attr( $y ); ?>%;transform:translate(-50%,-50%);width:20px;height:20px;border-radius:50%;background:<?php echo $color; ?>;display:block;box-shadow:0 0 0 3px rgba(255,255,255,0.4);" aria-label="<?php echo esc_attr( $marker['title'] ?? '' ); ?>"></a>
+                <a class="uk-position-absolute olo-popover-marker" href="#" style="left:<?php echo esc_attr( $x ); ?>%;top:<?php echo esc_attr( $y ); ?>%;transform:translate(-50%,-50%);width:20px;height:20px;border-radius:50%;background:<?php echo $color; ?>;display:block;box-shadow:0 0 0 3px rgba(255,255,255,0.4);" aria-label="<?php echo esc_attr( $marker['title'] ?? '' ); ?>"></a>
                 <div uk-drop="mode: click; pos: top-center">
                     <div class="olo-popover-drop">
                         <?php if ( ! empty( $marker_img ) ) : ?>

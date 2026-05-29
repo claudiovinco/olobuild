@@ -62,7 +62,7 @@ class Olo_Videoplaylist_Tile extends Olo_Tile_Base {
         $sidebar_width = max( 200, min( 400, intval( $s['sidebar_width'] ) ) );
         $sidebar_bg    = $this->safe_color_css( $s['sidebar_bg'] ) ?: 'var(--olo-color-secondary, #1F2937)';
         $text_color    = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-primary-contrast, #FFFFFF)';
-        $active_color  = $this->safe_color_css( $s['active_color'] ) ?: 'var(--olo-color-primary, #6366F1)';
+        $active_color  = $this->safe_color_css( $s['active_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $show_duration = ! empty( $s['show_duration'] );
         $autoplay_next = ! empty( $s['autoplay_next'] );
 

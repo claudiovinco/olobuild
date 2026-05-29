@@ -43,8 +43,41 @@ database/                   → schema.sql
 
 ## Regole
 - Tailwind prefix: `mb-` (evita conflitti con WordPress)
-- Colori primary via CSS custom property `var(--olo-color-primary)` — mai hardcodare hex blu
+- **Colori solo via token** `var(--olo-color-*)` + `resolveColor()` — **mai hardcodare hex**.
+  Attenzione: nel codice convivono 4 "primari" storici da eliminare (`#6366F1` indaco,
+  `#1e87f0` blu, `#e8622a` arancio, `#e1474f`); il primario unico è il rosso brand
+  `#e1474f` via `--olo-color-primary`. Vedi sezione *Tile — design coerente*.
 - Mai toccare siti WordPress in produzione
+
+## 🎨 Tile — design coerente (pacchetto `regoletiles1`)
+Obiettivo permanente: le tile devono essere **belle e coerenti** come una sola famiglia.
+Quando tocchi una qualsiasi tile — sia il render **Vue** (`src/components/Tiles/*Tile.vue`),
+sia il render **PHP frontend** (`includes/tiles/`), sia il config inspector
+(`src/config/elements/*.js`) — applica le regole del pacchetto:
+
+- **Entry point / protocollo completo**: `D:\TECNICA\olobuild\regoletiles1\START_HERE.md`
+- **Le 10 regole**: `…\regoletiles1\DESIGN_LANGUAGE.md`
+- **Checklist per tile + categorie**: `…\regoletiles1\TILE_AUDIT_CHECKLIST.md`
+- **Token e colori globali del cliente**: `…\regoletiles1\TOKEN_MAPPING.md`
+- **Strumenti** (`…\regoletiles1\prototype\`): `oloTileDefaults.js` (token GLOBAL/SYSTEM,
+  `resolveColor`, `contrastOn`, `SPACE`/`RADIUS`, `TILE_DEFAULTS`), `useBoxModel.js`,
+  `tokens-brand.css`
+- **Riferimenti visivi** del risultato atteso: `REFERENCE_card-category.html`,
+  `REFERENCE_data-category.html`, `REFERENCE_interactive-category.html`
+
+Regole sempre attive (sintesi):
+- Colori solo via token (GLOBAL = ruoli cliente / SYSTEM = fissi) + `resolveColor()`; primario rosso brand.
+- Box-model via `useBoxModel`; **default da fonte unica** (no default duplicati config↔componente).
+- Icone dal set SVG, **mai emoji**; **focus-visible** su ogni elemento interattivo.
+- Scale condivise `SPACE` (8pt) e `RADIUS`: una tile = un raggio, una lingua d'ombra.
+- **Chiavi salvate INVARIATE** (margin_*, padding_*, border_radius, hover.*, ecc.): cambia
+  la UI/resa, non il formato dei dati. I template esistenti devono continuare a funzionare.
+- Non inventare nomi `--olo-color-*` che il `GlobalColorsPanel` non genera (vedi TOKEN_MAPPING).
+- Coerenza render: lo stesso aspetto va garantito sia in Vue (canvas) sia in PHP (frontend).
+- Dopo le modifiche: build (`node node_modules/vite/bin/vite.js build`) + bump `OLO_VERSION`.
+
+> Anche creando una **nuova** tile (vedi playbook *Aggiungere un tile OloBuild*), applica
+> da subito queste regole: nasce già bella e coerente, default token-first curati.
 
 ---
 

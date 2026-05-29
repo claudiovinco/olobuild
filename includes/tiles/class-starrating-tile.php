@@ -11,13 +11,13 @@ class Olo_Starrating_Tile extends Olo_Tile_Base {
         'rating'         => '4',
         'max_stars'      => '5',
         'star_size'      => '32',
-        'star_color'     => '#FBBF24',
-        'empty_color'    => '#4B5563',
+        'star_color'     => '',
+        'empty_color'    => '',
         'style'          => 'filled',
         'title'          => '',
         'subtitle'       => '',
-        'title_color'    => '#F3F4F6',
-        'subtitle_color' => '#9CA3AF',
+        'title_color'    => '',
+        'subtitle_color' => '',
         'alignment'      => 'center',
             'border'                  => [],
         'border_hover'            => [],
@@ -36,8 +36,8 @@ class Olo_Starrating_Tile extends Olo_Tile_Base {
         $rating = floatval( $s['rating'] );
         $max    = absint( $s['max_stars'] ) ?: 5;
         $size   = absint( $s['star_size'] ) ?: 32;
-        $clr    = $this->safe_color_css( $s['star_color'] ) ?: '#FBBF24';
-        $empty  = $this->safe_color_css( $s['empty_color'] ) ?: '#4B5563';
+        $clr    = $this->safe_color_css( $s['star_color'] ) ?: 'var(--olo-color-accent, #f4a23b)';
+        $empty  = $this->safe_color_css( $s['empty_color'] ) ?: 'var(--olo-color-border, #E5E7EB)';
         $align  = in_array( $s['alignment'], ['left','center','right'], true ) ? $s['alignment'] : 'center';
         $is_outline = $s['style'] === 'outline';
         $star_d = 'M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z';
@@ -51,7 +51,7 @@ class Olo_Starrating_Tile extends Olo_Tile_Base {
             list( $srs_cls, $srs_data ) = $this->tfx_attrs( $s, 'subtitle', wp_strip_all_tags( $s['subtitle'] ?? '' ) );
             ?>
             <?php if ( ! empty( $s['title'] ) ) : ?>
-                <div class="olo-sr-title<?php echo $srt_cls; ?>" style="font-weight:600;margin-bottom:8px;color:<?php echo $this->safe_color_css($s['title_color']) ?: '#F3F4F6'; ?>;font-size:16px;"<?php echo $srt_data; ?>>
+                <div class="olo-sr-title<?php echo $srt_cls; ?>" style="font-weight:600;margin-bottom:8px;color:<?php echo $this->safe_color_css($s['title_color']) ?: 'var(--olo-color-text, #374151)'; ?>;font-size:16px;"<?php echo $srt_data; ?>>
                     <?php echo esc_html( wp_strip_all_tags( $s['title'] ) ); ?>
                 </div>
             <?php endif; ?>
@@ -75,7 +75,7 @@ class Olo_Starrating_Tile extends Olo_Tile_Base {
                 <?php echo esc_html( $rating . ' / ' . $max ); ?>
             </div>
             <?php if ( ! empty( $s['subtitle'] ) ) : ?>
-                <div class="olo-sr-subtitle<?php echo $srs_cls; ?>" style="margin-top:4px;font-size:13px;color:<?php echo $this->safe_color_css($s['subtitle_color']) ?: '#9CA3AF'; ?>;"<?php echo $srs_data; ?>>
+                <div class="olo-sr-subtitle<?php echo $srs_cls; ?>" style="margin-top:4px;font-size:13px;color:<?php echo $this->safe_color_css($s['subtitle_color']) ?: 'var(--olo-color-text-faint, #94a3b8)'; ?>;"<?php echo $srs_data; ?>>
                     <?php echo esc_html( wp_strip_all_tags( $s['subtitle'] ) ); ?>
                 </div>
             <?php endif; ?>

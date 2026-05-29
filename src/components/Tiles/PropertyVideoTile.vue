@@ -21,6 +21,6 @@ import { computed } from 'vue';
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 const defaults = { height: 360, border_radius: 12 };
 const s = computed(() => ({ ...defaults, ...props.settings }));
-const videoStyle = computed(() => ({ position:'relative', height: s.value.height+'px', background:'linear-gradient(135deg,#1F293780,#1F2937C0)', borderRadius: s.value.border_radius+'px', overflow:'hidden' }));
-const playBtnStyle = { width:'64px', height:'64px', borderRadius:'50%', background:'rgba(99,102,241,0.85)', display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer', boxShadow:'0 4px 16px rgba(0,0,0,0.3)' };
+const videoStyle = computed(() => ({ position:'relative', height: s.value.height+'px', aspectRatio:'16 / 9', maxWidth:'100%', background:'var(--olo-color-dark, #16263d)', borderRadius: s.value.border_radius+'px', overflow:'hidden' }));
+const playBtnStyle = { width:'64px', height:'64px', borderRadius:'50%', background:'var(--olo-color-primary, #e1474f)', display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer', boxShadow:'0 4px 16px rgba(0,0,0,0.3)' };
 </script>

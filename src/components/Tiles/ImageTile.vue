@@ -16,22 +16,34 @@
     />
     <div
       v-else
-      class="mb-flex mb-flex-col mb-items-center mb-justify-center mb-bg-gray-800 mb-text-gray-500"
-      :style="{ height: s.height, borderRadius: brStyle }"
+      class="mb-flex mb-flex-col mb-items-center mb-justify-center"
+      :style="{ height: s.height, borderRadius: brStyle, background: 'var(--olo-color-surface-alt, #f6f7f9)', color: 'var(--olo-color-text-faint, #94a3b8)', aspectRatio: s.height ? undefined : '16/9' }"
     >
-      <span class="mb-text-4xl mb-mb-2">{{ t('&#x1F5BC;') }}</span>
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="mb-mb-2">
+        <rect x="3" y="3" width="18" height="18" rx="2" />
+        <circle cx="8.5" cy="8.5" r="1.5" />
+        <path d="m21 15-5-5L5 21" />
+      </svg>
       <span class="mb-text-sm">{{ t('Click to add image') }}</span>
     </div>
     <!-- Hover indicator -->
     <div
       v-if="s.hover_image || s.hover_video"
-      class="mb-absolute mb-top-1 mb-right-1 mb-bg-black/60 mb-text-white mb-text-xs mb-px-1.5 mb-py-0.5 mb-rounded"
+      class="mb-absolute mb-top-1 mb-right-1 mb-bg-black/60 mb-text-white mb-text-xs mb-px-1.5 mb-py-0.5 mb-rounded mb-inline-flex mb-items-center mb-gap-1"
       style="z-index:2"
-    >{{ s.hover_video ? '▶ hover' : '⇄ hover' }}</div>
-    <div v-if="s.lightbox" class="mb-absolute mb-bottom-1 mb-right-1 mb-bg-black/60 mb-text-white mb-text-xs mb-px-1.5 mb-py-0.5 mb-rounded" style="z-index:2">{{ t('&#x1F50D; lightbox') }}</div>
+    >
+      <svg v-if="s.hover_video" width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><polygon points="6,4 20,12 6,20" /></svg>
+      <svg v-else width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+      <span>hover</span>
+    </div>
+    <div v-if="s.lightbox" class="mb-absolute mb-bottom-1 mb-right-1 mb-bg-black/60 mb-text-white mb-text-xs mb-px-1.5 mb-py-0.5 mb-rounded mb-inline-flex mb-items-center mb-gap-1" style="z-index:2">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <span>{{ t('lightbox') }}</span>
+    </div>
     <div
       v-if="s.caption"
-      class="mb-text-sm mb-text-gray-400 mb-text-center mb-mt-2"
+      class="mb-text-sm mb-text-center mb-mt-2"
+      :style="{ color: 'var(--olo-color-text-soft, #6b7280)' }"
     data-olo-editable="caption">{{ s.caption }}</div>
   </div>
 </template>

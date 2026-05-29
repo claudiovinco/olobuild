@@ -23,19 +23,21 @@
 
 <script setup>
 import { computed } from 'vue';
+import { resolveColor, TOKENS } from '@/composables/oloTileDefaults';
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 
 const defaults = {
   layout: 'grid', columns: '4', gap: '16', align: 'center',
   icon_size: '24', number_size: '22', label_size: '11',
   icon_color: '', number_color: '', label_color: '',
-  show_dividers: false, divider_color: '#E5E7EB',
+  show_dividers: false, divider_color: '',
   item_bg: '', item_border_radius: '8', item_padding: '0', item_border_color: '',
   bg_color: '', border_radius: '0', padding: '0',
 };
 const s = computed(() => ({ ...defaults, ...props.settings }));
 const iconSz = computed(() => Math.min(parseInt(s.value.icon_size) || 24, 32));
-const c = computed(() => s.value.icon_color || '#6366F1');
+// colore icone stat: token-first sul brand (era #e1474f indaco off-brand)
+const c = computed(() => resolveColor(s.value.icon_color, 'var(--olo-color-primary, #e1474f)'));
 
 const justifyAlign = computed(() =>
   s.value.align === 'center' ? 'center' : s.value.align === 'right' ? 'flex-end' : 'flex-start'
@@ -84,7 +86,7 @@ const itemStyle = computed(() => {
 
 function inlineItemStyle(idx) {
   if (!s.value.show_dividers || idx === 0) return {};
-  return { paddingLeft: s.value.gap + 'px', borderLeft: '1px solid ' + s.value.divider_color };
+  return { paddingLeft: s.value.gap + 'px', borderLeft: '1px solid ' + resolveColor(s.value.divider_color, TOKENS.border) };
 }
 
 const numStyle = computed(() => ({

@@ -15,8 +15,8 @@ class Olo_Woo_Price_Tile extends Olo_Tile_Base {
         'show_sale'     => true,
         'show_suffix'   => false,
         'price_color'   => '',
-        'sale_color'    => '#EF4444',
-        'regular_color' => '#9CA3AF',
+        'sale_color'    => '',
+        'regular_color' => '',
         'font_size'     => 24,
         'font_weight'   => '700',
         'text_align'    => 'left',
@@ -38,7 +38,7 @@ class Olo_Woo_Price_Tile extends Olo_Tile_Base {
 
     public function render( $settings ) {
         if ( ! class_exists( 'WooCommerce' ) ) {
-            return '<div style="padding:40px;text-align:center;color:#92400E;background:#FEF3C7;border:1px solid #F59E0B;border-radius:8px;">'
+            return '<div style="padding:40px;text-align:center;color:var(--olo-color-warning, #b45309);background:color-mix(in srgb, var(--olo-color-warning, #b45309) 12%, #fff);border:1px solid var(--olo-color-warning, #b45309);border-radius:8px;">'
                  . esc_html( olo_t( 'WooCommerce non attivo. Installa e attiva WooCommerce per utilizzare questo elemento.' ) )
                  . '</div>';
         }
@@ -58,10 +58,10 @@ class Olo_Woo_Price_Tile extends Olo_Tile_Base {
 
         $uid = 'olo-woo-price-' . wp_rand( 10000, 99999 );
 
-        // Colors
-        $price_color   = $this->safe_color_css( $s['price_color'] );
-        $sale_color    = $this->safe_color_css( $s['sale_color'] );
-        $regular_color = $this->safe_color_css( $s['regular_color'] );
+        // Colors — TOKEN-FIRST: prezzo = testo, saldo = stato (rosso), barrato = neutro soft.
+        $price_color   = $this->safe_color_css( $s['price_color'] )   ?: 'var(--olo-color-text, #1f2937)';
+        $sale_color    = $this->safe_color_css( $s['sale_color'] )    ?: 'var(--olo-color-error, #b42318)';
+        $regular_color = $this->safe_color_css( $s['regular_color'] ) ?: 'var(--olo-color-text-soft, #6b7280)';
 
         // Font
         $font_size   = max( 12, min( 72, absint( $s['font_size'] ) ) );

@@ -430,7 +430,7 @@ class Olo_PostGrid_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .olo-postgrid-item > .uk-card > .uk-card-body { flex: 1; }
             <?php endif; ?>
             <?php if ( $s['card_style'] === 'primary' ) :
-                $primary_bg = $this->safe_color_css( $s['card_primary_bg'] ?? '' ) ?: 'var(--olo-color-primary, #6366F1)';
+                $primary_bg = $this->safe_color_css( $s['card_primary_bg'] ?? '' ) ?: 'var(--olo-color-primary, #e1474f)';
             ?>
             .<?php echo $uid; ?> .uk-card-primary { background-color: <?php echo $primary_bg; ?> !important; }
             .<?php echo $uid; ?> .uk-card-primary .uk-card-title,

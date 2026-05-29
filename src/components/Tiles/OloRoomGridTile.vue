@@ -18,25 +18,27 @@
           <div style="position:absolute;inset:0;background:linear-gradient(135deg,#e0f2fe,#bae6fd 40%,#7dd3fc);opacity:.5"></div>
           <div style="position:absolute;inset:0;opacity:.12;background:repeating-linear-gradient(0deg,transparent,transparent 25px,#0284c7 25px,#0284c7 26px),repeating-linear-gradient(90deg,transparent,transparent 25px,#0284c7 25px,#0284c7 26px)"></div>
           <div v-for="pin in pins" :key="pin.x" :style="{position:'absolute',left:pin.x+'%',top:pin.y+'%',transform:'translate(-50%,-100%)',zIndex:2}">
-            <svg width="18" height="28" viewBox="0 0 25 41"><path d="M12.5 0C5.6 0 0 5.6 0 12.5C0 22 12.5 41 12.5 41S25 22 25 12.5C25 5.6 19.4 0 12.5 0Z" :fill="s.marker_color||'#e11d48'"/><circle cx="12.5" cy="12.5" r="5" fill="#fff" fill-opacity=".9"/></svg>
+            <svg width="18" height="28" viewBox="0 0 25 41"><path d="M12.5 0C5.6 0 0 5.6 0 12.5C0 22 12.5 41 12.5 41S25 22 25 12.5C25 5.6 19.4 0 12.5 0Z" :fill="markerColor"/><circle cx="12.5" cy="12.5" r="5" fill="#fff" fill-opacity=".9"/></svg>
           </div>
-          <div style="position:absolute;bottom:6px;left:8px;background:rgba(255,255,255,.85);padding:2px 8px;border-radius:4px;font-size:9px;color:#374151;z-index:3">{{ s.tile_layer || 'positron' }}</div>
+          <div :style="{ position:'absolute', bottom:'6px', left:'8px', background:'rgba(255,255,255,.85)', padding:'2px 8px', borderRadius:'4px', fontSize:'9px', color: TOKENS.text, zIndex:3 }">{{ s.tile_layer || 'positron' }}</div>
         </div>
       </div>
 
       <!-- Cards -->
       <div :style="{flex:'1',minWidth:'0'}">
-        <div style="font-size:11px;color:#6b7280;margin-bottom:6px"><strong style="color:var(--olo-color-text, #374151)">3</strong> / 9 sale</div>
+        <div :style="{ fontSize:'11px', color: TOKENS.textSoft, marginBottom:'6px' }"><strong :style="{ color: TOKENS.text }">3</strong> / 9 sale</div>
         <div :style="gridStyle">
-          <div v-for="room in rooms" :key="room.name" style="border:1px solid #e5e7eb;border-radius:8px;overflow:hidden">
-            <div v-if="s.card_image !== false" :style="{height:'100px',background:room.bg}"></div>
+          <div v-for="room in rooms" :key="room.name" :style="{ border:'1px solid ' + TOKENS.border, borderRadius:'8px', overflow:'hidden' }">
+            <div v-if="s.card_image !== false" :style="cardImgStyle">
+              <span class="olo-grid-ph" :style="{ width:'24px', height:'24px', color: TOKENS.textFaint }" v-html="imgIcon"></span>
+            </div>
             <div style="padding:10px 12px">
-              <div style="font-size:13px;font-weight:700;color:var(--olo-color-text, #374151)">{{ room.name }}</div>
-              <span style="font-size:9px;font-weight:600;color:#1e87f0;background:rgba(30,135,240,.08);padding:1px 6px;border-radius:3px">{{ room.type }}</span>
-              <div style="font-size:11px;color:#6b7280;margin-top:3px">{{ room.addr }}</div>
-              <div style="display:flex;gap:8px;font-size:11px;color:#4b5563;margin-top:4px">
+              <div :style="{ fontSize:'13px', fontWeight:'700', color: TOKENS.text }">{{ room.name }}</div>
+              <span :style="tagStyle">{{ room.type }}</span>
+              <div :style="{ fontSize:'11px', color: TOKENS.textSoft, marginTop:'3px' }">{{ room.addr }}</div>
+              <div :style="{ display:'flex', gap:'8px', fontSize:'11px', color: TOKENS.textSoft, marginTop:'4px' }">
                 <span>{{ room.cap }} persone</span>
-                <span style="font-weight:700;color:#1e87f0">&euro;{{ room.rate }}/h</span>
+                <span :style="{ fontWeight:'700', color: TOKENS.primary }">&euro;{{ room.rate }}/h</span>
               </div>
             </div>
           </div>
@@ -49,14 +51,20 @@
 <script setup>
 import { t } from '@/i18n';
 import { computed } from 'vue';
+import iconsSvg from '../ProSlider/uikitIconsSvg.js';
+import { resolveColor, TOKENS } from '@/composables/oloTileDefaults';
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
-const defaults = { layout: 'map-left', map_height: '500', tile_layer: 'positron', marker_color: '#e11d48', columns: '1', card_image: true };
+const defaults = { layout: 'map-left', map_height: '500', tile_layer: 'positron', marker_color: '', columns: '1', card_image: true };
 const s = computed(() => ({ ...defaults, ...props.settings }));
 
+// Pin token-first: brand primario se l'utente non sceglie un colore.
+const markerColor = computed(() => resolveColor(s.value.marker_color, TOKENS.primary));
+const imgIcon = computed(() => iconsSvg['image'] || '');
+
 const rooms = [
-  { name: 'Sala Giunta', type: 'Conferenze', addr: 'P.zza Podestà 1, Rovereto', cap: 25, rate: 20, bg: 'linear-gradient(135deg,#1e3a5f,#0e7490)' },
-  { name: 'Auditorium Melotti', type: 'Auditorium', addr: 'Via Laurenti 7', cap: 200, rate: 50, bg: 'linear-gradient(135deg,#6366f1,#4f46e5)' },
-  { name: 'Sala Rosmini', type: 'Conferenze', addr: 'C.so Bettini 39', cap: 80, rate: 35, bg: 'linear-gradient(135deg,#059669,#047857)' },
+  { name: 'Sala Giunta', type: 'Conferenze', addr: 'P.zza Podestà 1, Rovereto', cap: 25, rate: 20 },
+  { name: 'Auditorium Melotti', type: 'Auditorium', addr: 'Via Laurenti 7', cap: 200, rate: 50 },
+  { name: 'Sala Rosmini', type: 'Conferenze', addr: 'C.so Bettini 39', cap: 80, rate: 35 },
 ];
 
 const equipment = [
@@ -68,9 +76,11 @@ const pins = [
   { x: 35, y: 40 }, { x: 55, y: 30 }, { x: 45, y: 60 }, { x: 65, y: 50 }, { x: 30, y: 55 },
 ];
 
-const selStyle = { padding: '7px 10px', border: '1px solid #d1d5db', borderRadius: '8px', fontSize: '12px', flex: '1', minWidth: '120px', background: '#fff', color: 'var(--olo-color-text, #374151)' };
-const pillStyle = { padding: '4px 12px', borderRadius: '999px', fontSize: '11px', fontWeight: '500', background: '#f3f4f6', color: '#4b5563', cursor: 'pointer', border: '1px solid transparent' };
-const activePill = { background: '#1e87f0', color: '#fff', borderColor: '#1e87f0' };
+const selStyle = { padding: '7px 10px', border: '1px solid ' + TOKENS.border, borderRadius: '8px', fontSize: '12px', flex: '1', minWidth: '120px', background: TOKENS.surface, color: TOKENS.text };
+const pillStyle = { padding: '4px 12px', borderRadius: '999px', fontSize: '11px', fontWeight: '500', background: TOKENS.surfaceAlt, color: TOKENS.textSoft, cursor: 'pointer', border: '1px solid transparent' };
+const activePill = { background: TOKENS.primary, color: TOKENS.onPrimary, borderColor: TOKENS.primary };
+const cardImgStyle = { height: '100px', background: TOKENS.surfaceAlt, display: 'flex', alignItems: 'center', justifyContent: 'center' };
+const tagStyle = { fontSize: '9px', fontWeight: '600', color: TOKENS.primary, background: 'color-mix(in srgb, var(--olo-color-primary, #e1474f) 8%, transparent)', padding: '1px 6px', borderRadius: '3px' };
 
 const isHoriz = computed(() => s.value.layout === 'map-left' || s.value.layout === 'map-right');
 const bodyStyle = computed(() => ({
@@ -95,3 +105,7 @@ const gridStyle = computed(() => ({
   gap: '10px',
 }));
 </script>
+
+<style scoped>
+.olo-grid-ph :deep(svg) { width: 100%; height: 100%; fill: currentColor; stroke: currentColor; }
+</style>

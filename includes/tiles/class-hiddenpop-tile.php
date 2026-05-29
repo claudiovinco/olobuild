@@ -175,6 +175,12 @@ class Olo_Hiddenpop_Tile extends Olo_Tile_Base {
             #<?php echo esc_attr( $uid ); ?>-modal .olo-hp-cta {
                 margin-top: 8px;
             }
+            /* a11y: anello di focus visibile da tastiera su CTA + chiudi */
+            #<?php echo esc_attr( $uid ); ?>-modal .olo-hp-cta a:focus-visible,
+            #<?php echo esc_attr( $uid ); ?>-modal .uk-modal-close-default:focus-visible {
+                outline: none;
+                box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
+            }
         </style>
 
         <div class="olo-hiddenpop" id="<?php echo esc_attr( $uid ); ?>">

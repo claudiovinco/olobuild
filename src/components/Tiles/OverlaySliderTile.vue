@@ -305,15 +305,15 @@ function prev() { goTo(current.value - 1); }
 
 /* Neon Cyber */
 .olo-os--preset-neon-cyber .olo-os-slide {
-  border: 2px solid #ff6a2a;
-  box-shadow: 0 0 14px rgba(255,106,42,0.35);
+  border: 2px solid var(--olo-color-primary, #e1474f);
+  box-shadow: 0 0 14px color-mix(in srgb, var(--olo-color-primary, #e1474f) 35%, transparent);
 }
 .olo-os--preset-neon-cyber .olo-os-overlay {
   background: linear-gradient(180deg, transparent 0%, rgba(10,15,28,0.85) 100%) !important;
 }
 .olo-os--preset-neon-cyber .olo-os-overlay :deep(*) {
-  color: #ff6a2a !important;
-  text-shadow: 0 0 6px rgba(255,106,42,0.5);
+  color: var(--olo-color-primary, #e1474f) !important;
+  text-shadow: 0 0 6px color-mix(in srgb, var(--olo-color-primary, #e1474f) 50%, transparent);
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
@@ -337,17 +337,17 @@ function prev() { goTo(current.value - 1); }
 /* Magnetic */
 .olo-os--preset-magnetic-liquid .olo-os-slide {
   border-radius: 22px;
-  box-shadow: 0 14px 32px rgba(232,98,42,0.18);
+  box-shadow: 0 14px 32px color-mix(in srgb, var(--olo-color-primary, #e1474f) 18%, transparent);
 }
 .olo-os--preset-magnetic-liquid .olo-os-overlay {
-  background: linear-gradient(135deg, rgba(0,0,0,0.30) 0%, rgba(232,98,42,0.55) 100%) !important;
+  background: linear-gradient(135deg, rgba(0,0,0,0.30) 0%, color-mix(in srgb, var(--olo-color-primary, #e1474f) 55%, transparent) 100%) !important;
   border-radius: 22px;
   margin: 12px;
 }
 
 /* Sticker */
 .olo-os--preset-sticker .olo-os-slide {
-  border: 3px dashed rgba(232,98,42,0.55);
+  border: 3px dashed color-mix(in srgb, var(--olo-color-primary, #e1474f) 55%, transparent);
   background: #fff;
   padding: 6px;
   border-radius: 6px;

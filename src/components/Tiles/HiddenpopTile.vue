@@ -3,7 +3,7 @@
     <!-- Marker badge -->
     <div :style="markerStyle">
       <div style="display:flex;align-items:center;gap:6px;">
-        <span style="font-size:16px;flex-shrink:0;">{{ t('&#x1F6A9;') }}</span>
+        <span style="flex-shrink:0;display:inline-flex;color:#fbbf24;" v-html="flagSvg"></span>
         <span style="font-weight:700;color:#fbbf24;font-size:13px;">{{ t('Hidden Pop') }}</span>
       </div>
       <div style="color:#fde68a;font-size:11px;padding-left:22px;">
@@ -58,6 +58,9 @@ import { t } from '@/i18n';
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
 });
+
+// Icona bandierina SVG (sostituisce l'emoji 🚩 dell'hint builder)
+const flagSvg = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>';
 
 const s = computed(() => ({
   mode: 'simple',
@@ -125,10 +128,10 @@ const titlePreviewStyle = computed(() => ({
 }));
 
 const ctaStyleMap = {
-  primary:   { bg: 'var(--olo-color-primary, #111)', color: '#fff' },
-  secondary: { bg: '#e5e7eb', color: '#111' },
-  danger:    { bg: '#dc2626', color: '#fff' },
-  text:      { bg: 'transparent', color: 'var(--olo-color-primary, #111)' },
+  primary:   { bg: 'var(--olo-color-primary, #e1474f)', color: 'var(--olo-color-primary-contrast, #fff)' },
+  secondary: { bg: 'var(--olo-color-surface-alt, #e5e7eb)', color: 'var(--olo-color-text, #111)' },
+  danger:    { bg: 'var(--olo-color-danger, #dc2626)', color: '#fff' },
+  text:      { bg: 'transparent', color: 'var(--olo-color-primary, #e1474f)' },
 };
 
 const ctaBtnStyle = computed(() => {

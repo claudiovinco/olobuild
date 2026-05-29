@@ -26,12 +26,12 @@ class Olo_Woo_Comparison_Tile extends Olo_Tile_Base {
         'show_description' => true,
         'show_attributes' => true,
         'show_add_to_cart' => true,
-        'header_bg'       => '#F9FAFB',
+        'header_bg'       => '',
         'header_color'    => '',
-        'border_color'    => '#E5E7EB',
-        'accent_color'    => '#4f46e5',
-        'btn_bg'          => '#4f46e5',
-        'btn_color'       => '#FFFFFF',
+        'border_color'    => '',
+        'accent_color'    => '',
+        'btn_bg'          => '',
+        'btn_color'       => '',
         'empty_text'      => 'Aggiungi prodotti da confrontare usando il pulsante "Confronta".',
             'border'                  => [],
         'border_hover'            => [],
@@ -119,12 +119,12 @@ class Olo_Woo_Comparison_Tile extends Olo_Tile_Base {
         $uid = 'olo-cmp-' . wp_rand( 10000, 99999 );
 
         $max        = max( 2, min( 6, intval( $s['max_products'] ) ) );
-        $hdr_bg     = $this->safe_color_css( $s['header_bg'] ) ?: '#F9FAFB';
+        $hdr_bg     = $this->safe_color_css( $s['header_bg'] ) ?: 'var(--olo-color-surface-alt, #f6f7f9)';
         $hdr_c      = $this->safe_color_css( $s['header_color'] ) ?: 'var(--olo-color-text, #374151)';
-        $bdr_c      = $this->safe_color_css( $s['border_color'] ) ?: '#E5E7EB';
-        $accent     = $this->safe_color_css( $s['accent_color'] ) ?: '#4f46e5';
-        $btn_bg     = $this->safe_color_css( $s['btn_bg'] ) ?: '#4f46e5';
-        $btn_c      = $this->safe_color_css( $s['btn_color'] ) ?: '#FFFFFF';
+        $bdr_c      = $this->safe_color_css( $s['border_color'] ) ?: 'var(--olo-color-border, #e5e7eb)';
+        $accent     = $this->safe_color_css( $s['accent_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
+        $btn_bg     = $this->safe_color_css( $s['btn_bg'] ) ?: 'var(--olo-color-primary, #e1474f)';
+        $btn_c      = $this->safe_color_css( $s['btn_color'] ) ?: 'var(--olo-color-on-primary, #ffffff)';
         $empty_text = esc_html( $s['empty_text'] );
 
         ob_start();

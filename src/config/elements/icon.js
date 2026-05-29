@@ -1,4 +1,5 @@
 import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
+import { buildDefaults } from '@/composables/oloTileDefaults';
 import { t } from '@/i18n';
 
 /**
@@ -12,16 +13,10 @@ export default {
   name: t('Icona'),
   icon: 'dashicons-star-filled',
   category: 'essential',
+  // Default da FONTE UNICA (buildDefaults): icon/size/color:''/view/bg_color:''/
+  // bg_shape/tile_padding(SPACE)/hover_animation/rotation.
   defaults: {
-    icon: 'star',
-    size: 40,
-    color: '',
-    view: 'default',
-    bg_color: '',
-    bg_shape: 'circle',
-    tile_padding: { top: 20, right: 20, bottom: 20, left: 20 },
-    hover_animation: 'none',
-    rotation: '0',
+    ...buildDefaults('icon'),
     secondary_color: '',
     link_url: '',
     link_target: '_self',

@@ -247,17 +247,17 @@ const defaults = {
   hover_effect: 'none', hover_effect_color: '', hover_effect_height: '2',
   mega_mode: 'auto', panel_width: 'container', panel_columns: '4',
   panel_bg: '#ffffff', panel_shadow: 'md', panel_radius: '8',
-  panel_padding: '32', panel_border_top: '3', panel_border_color: '#6366f1',
+  panel_padding: '32', panel_border_top: '3', panel_border_color: '',
   panel_animation: 'fade', panel_max_width: '900',
   panel_offset_top: '0', panel_origin: 'nav',
   panel_size: 'auto', panel_open_animation: 'fade',
   show_dividers: false,
-  heading_color: '#111827', heading_size: '14', heading_weight: '600',
+  heading_color: '', heading_size: '14', heading_weight: '600',
   heading_transform: 'uppercase',
-  link_color: '#374151', link_hover_color: '#6366f1',
+  link_color: '', link_hover_color: '',
   link_size: '14', link_spacing: '8',
-  show_descriptions: false, desc_color: '#9ca3af',
-  button_mode: 'none', btn_bg: '#6366f1', btn_color: '#ffffff',
+  show_descriptions: false, desc_color: '',
+  button_mode: 'none', btn_bg: '', btn_color: '',
   btn_radius: '6', btn_hover_bg: '',
   search_icon: true, hamburger_style: 'classic', hamburger_size: '28',
   hamburger_color: '',
@@ -499,7 +499,7 @@ function hoverEffectLine(item, idx) {
 
 const hoverLineStyle = computed(() => {
   const he = s.value.hover_effect || 'none';
-  const color = s.value.hover_effect_color || s.value.active_color || '#6366f1';
+  const color = s.value.hover_effect_color || s.value.active_color || 'var(--olo-color-primary, #e1474f)';
   const h2 = parseInt(s.value.hover_effect_height) || 2;
 
   if (he === 'overline') return { position: 'absolute', top: 0, left: 0, right: 0, height: h2 + 'px', background: color };
@@ -567,8 +567,9 @@ const hamburgerBtnStyle = computed(() => ({
 
 function getLinkStyle(item, idx) {
   const isActive = idx === activeMegaIdx.value && item.isMega;
+  // TOKEN-FIRST: voce attiva = primario brand (era #e1474f); testo neutro → token
   return {
-    color: isActive ? (s.value.active_color || '#6366f1') : (s.value.text_color || '#374151'),
+    color: isActive ? (s.value.active_color || 'var(--olo-color-primary, #e1474f)') : (s.value.text_color || 'var(--olo-color-text, #374151)'),
     fontSize: (parseInt(s.value.font_size) || 15) + 'px',
     fontWeight: s.value.font_weight || 'normal',
     textTransform: s.value.text_transform || 'none',
@@ -581,8 +582,9 @@ function getLinkStyle(item, idx) {
 const btnStyle = computed(() => ({
   display: 'inline-flex', alignItems: 'center',
   padding: '8px 20px',
-  background: s.value.btn_bg || '#6366f1',
-  color: (s.value.btn_color || '#fff') + ' !important',
+  // CTA = primario brand (era #e1474f indaco off-brand)
+  background: s.value.btn_bg || 'var(--olo-color-primary, #e1474f)',
+  color: (s.value.btn_color || 'var(--olo-color-primary-contrast, #fff)') + ' !important',
   borderRadius: (parseInt(s.value.btn_radius) || 6) + 'px',
   fontSize: (parseInt(s.value.font_size) || 15) + 'px',
   fontWeight: '600', textDecoration: 'none', whiteSpace: 'nowrap',
@@ -624,7 +626,7 @@ const panelStyle = computed(() => ({
 const accentLineStyle = computed(() => ({
   position: 'absolute', top: 0, left: 0, right: 0,
   height: panelBorderTop.value + 'px',
-  background: s.value.panel_border_color || '#6366f1',
+  background: s.value.panel_border_color || 'var(--olo-color-primary, #e1474f)',
   borderRadius: `${parseInt(s.value.panel_radius) || 8}px ${parseInt(s.value.panel_radius) || 8}px 0 0`,
 }));
 
@@ -644,7 +646,7 @@ function colStyle(colIdx) {
 const headingStyle = computed(() => ({
   fontSize: (parseInt(s.value.heading_size) || 14) + 'px',
   fontWeight: s.value.heading_weight || '600',
-  color: s.value.heading_color || '#111827',
+  color: s.value.heading_color || 'var(--olo-color-text, #111827)',
   textTransform: s.value.heading_transform || 'uppercase',
   letterSpacing: s.value.heading_transform === 'uppercase' ? '0.5px' : '0',
   margin: '0 0 12px', paddingBottom: '8px',
@@ -652,14 +654,14 @@ const headingStyle = computed(() => ({
 }));
 
 const linkStyleObj = computed(() => ({
-  display: 'block', color: s.value.link_color || '#374151',
+  display: 'block', color: s.value.link_color || 'var(--olo-color-text, #374151)',
   fontSize: (parseInt(s.value.link_size) || 14) + 'px',
   padding: (parseInt(s.value.link_spacing) || 8) + 'px 0',
   textDecoration: 'none', lineHeight: '1.4',
 }));
 
 const descStyleObj = computed(() => ({
-  display: 'block', color: s.value.desc_color || '#9ca3af',
+  display: 'block', color: s.value.desc_color || 'var(--olo-color-text-faint, #9ca3af)',
   fontSize: Math.max(11, (parseInt(s.value.link_size) || 14) - 2) + 'px',
   marginTop: '2px', lineHeight: '1.3',
 }));
@@ -817,6 +819,15 @@ const mobilePanelLinkStyle = computed(() => ({
 .olo-mm-nav-item { position: relative; list-style: none; display: flex; align-items: center; }
 .olo-mm-nav-link { cursor: default; position: relative; }
 .olo-mm-nav-link:hover { opacity: .8; }
+/* a11y tastiera: anello di focus visibile su link/CTA/hamburger del megamenu */
+.olo-mm-nav-link:focus-visible,
+.olo-mm-btn:focus-visible,
+.olo-mm-link:focus-visible,
+.olo-mm-hamburger-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
+  border-radius: 3px;
+}
 .olo-mm-chevron { opacity: .4; transition: transform .2s; }
 .olo-mm-nav-item--active .olo-mm-chevron { transform: rotate(180deg); }
 
@@ -850,7 +861,7 @@ const mobilePanelLinkStyle = computed(() => ({
 .olo-mm-heading { cursor: default; }
 .olo-mm-links { display: flex; flex-direction: column; }
 .olo-mm-link { cursor: default; border-radius: 3px; }
-.olo-mm-link:hover { padding-left: 4px; color: var(--olo-color-primary, #6366f1) !important; }
+.olo-mm-link:hover { padding-left: 4px; color: var(--olo-color-primary, #e1474f) !important; }
 .olo-mm-desc { pointer-events: none; }
 
 /* Social bar */

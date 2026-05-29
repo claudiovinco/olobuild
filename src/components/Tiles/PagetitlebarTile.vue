@@ -24,18 +24,20 @@ const titleTag = computed(() => {
   return valid.includes(s.value.title_tag) ? s.value.title_tag : 'h1';
 });
 const titleText = computed(() => 'Titolo pagina');
-const titleColor = computed(() => s.value.title_color || '#FFFFFF');
+// TOKEN-FIRST: barra titolo = superficie scura del brand; testo bianco in contrasto;
+// neutri (breadcrumb/sottotitolo/bordo) → token tema
+const titleColor = computed(() => s.value.title_color || 'var(--olo-color-primary-contrast, #FFFFFF)');
 const titleSize = computed(() => Math.max(14, parseInt(s.value.title_size) || 36));
 const titleWeight = computed(() => s.value.title_weight || '700');
 const align = computed(() => ['left','center','right'].includes(s.value.title_align) ? s.value.title_align : 'center');
 
-const bgColor = computed(() => s.value.bg_color || '#1F2937');
+const bgColor = computed(() => s.value.bg_color || 'var(--olo-color-dark, #1F2937)');
 const overlayOpacity = computed(() => Math.max(0, Math.min(100, parseInt(s.value.bg_overlay) || 60)));
 const overlayColor = computed(() => s.value.bg_overlay_color || '#000000');
 const minH = computed(() => Math.max(0, parseInt(s.value.min_height) || 200));
 const padY = computed(() => Math.max(0, parseInt(s.value.padding_y) || 60));
 const maxW = computed(() => Math.max(0, parseInt(s.value.content_width) || 1200));
-const bcColor = computed(() => s.value.breadcrumb_color || '#9CA3AF');
+const bcColor = computed(() => s.value.breadcrumb_color || 'var(--olo-color-text-faint, #9CA3AF)');
 
 const wrapperStyle = computed(() => {
   const st = {
@@ -53,7 +55,7 @@ const wrapperStyle = computed(() => {
     st.backgroundRepeat = 'no-repeat';
   }
   if (s.value.border_bottom) {
-    st.borderBottom = `1px solid ${s.value.border_color || '#374151'}`;
+    st.borderBottom = `1px solid ${s.value.border_color || 'var(--olo-color-border, #374151)'}`;
   }
   return st;
 });
@@ -84,7 +86,7 @@ const titleStyle = computed(() => ({
 }));
 
 const subtitleStyle = computed(() => ({
-  color: s.value.subtitle_color || '#D1D5DB',
+  color: s.value.subtitle_color || 'var(--olo-color-text-soft, #D1D5DB)',
   fontSize: Math.max(12, parseInt(s.value.subtitle_size) || 16) + 'px',
   margin: '10px 0 0',
   opacity: '.85',

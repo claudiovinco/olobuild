@@ -6,20 +6,20 @@
         <!-- Progress bar style -->
         <div v-if="s.step_style === 'progress'" style="display:flex;align-items:center;gap:4px;">
           <div v-for="(step, i) in totalSteps" :key="i" style="flex:1;height:4px;border-radius:2px;"
-            :style="{ background: i <= currentStep ? (s.submit_bg || '#6366F1') : 'var(--olo-color-border, #E5E7EB)' }"></div>
+            :style="{ background: i <= currentStep ? accentColor : 'var(--olo-color-border, #E5E7EB)' }"></div>
         </div>
         <!-- Numbers style -->
         <div v-else-if="s.step_style === 'numbers'" style="display:flex;justify-content:center;gap:12px;">
           <div v-for="(step, i) in totalSteps" :key="i" style="display:flex;flex-direction:column;align-items:center;gap:4px;">
-            <span style="width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;"
-              :style="{ background: i <= currentStep ? (s.submit_bg || '#6366F1') : '#374151', color: '#fff' }">{{ i + 1 }}</span>
-            <span style="font-size:9px;color:#9ca3af;">{{ stepLabels[i] || 'Step ' + (i+1) }}</span>
+            <span style="width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;"
+              :style="{ background: i <= currentStep ? accentColor : 'var(--olo-color-text, #374151)' }">{{ i + 1 }}</span>
+            <span style="font-size:9px;" :style="{ color: 'var(--olo-color-text-faint, #94a3b8)' }">{{ stepLabels[i] || 'Step ' + (i+1) }}</span>
           </div>
         </div>
         <!-- Dots style -->
         <div v-else style="display:flex;justify-content:center;gap:8px;">
           <span v-for="(step, i) in totalSteps" :key="i" style="width:10px;height:10px;border-radius:50%;"
-            :style="{ background: i <= currentStep ? (s.submit_bg || '#6366F1') : 'var(--olo-color-border, #E5E7EB)' }"></span>
+            :style="{ background: i <= currentStep ? accentColor : 'var(--olo-color-border, #E5E7EB)' }"></span>
         </div>
       </div>
 
@@ -31,7 +31,7 @@
           style="position:relative;"
         >
           <!-- Conditional logic indicator -->
-          <span v-if="s.enable_conditions && field.condition_field" style="position:absolute;top:2px;right:2px;font-size:9px;color:var(--olo-color-primary, #6366F1);z-index:1;" :title="t('Condizionale')">&#9889;</span>
+          <span v-if="s.enable_conditions && field.condition_field" style="position:absolute;top:2px;right:2px;font-size:9px;color:var(--olo-color-primary, #e1474f);z-index:1;" :title="t('Condizionale')">&#9889;</span>
 
           <!-- Hidden -->
           <template v-if="field.field_type === 'hidden'">
@@ -172,8 +172,8 @@
                 <span v-if="field.required" class="olo-form-required">*</span>
               </label>
               <div class="olo-form-input olo-form-file-drop" :style="{ ...inputStyle, display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', padding: '12px 14px' }">
-                <span style="font-size:18px;">&#128206;</span>
-                <span style="font-size:12px;opacity:0.7;">Scegli file... (max {{ s.file_max_size }}MB)</span>
+                <span class="olo-form-file-ico" v-html="paperclipSvg"></span>
+                <span style="font-size:12px;opacity:0.7;">{{ t('Scegli file...') }} (max {{ s.file_max_size }}MB)</span>
               </div>
             </div>
           </template>
@@ -181,7 +181,7 @@
           <!-- Step separator -->
           <template v-else-if="field.field_type === 'step'">
             <div style="grid-column:1/-1;border-top:2px dashed var(--olo-color-border, #E5E7EB);margin:8px 0;position:relative;width:100%;">
-              <span style="position:absolute;top:-10px;left:16px;background:var(--olo-color-background, #FFFFFF);padding:0 8px;font-size:10px;color:var(--olo-color-primary, #6366F1);font-weight:600;">STEP</span>
+              <span style="position:absolute;top:-10px;left:16px;background:var(--olo-color-background, #FFFFFF);padding:0 8px;font-size:10px;color:var(--olo-color-primary, #e1474f);font-weight:600;">STEP</span>
             </div>
           </template>
         </div>
@@ -240,6 +240,9 @@ const props = defineProps({
   settings: { type: Object, default: () => ({}) },
 });
 
+// Icona graffetta SVG (sostituisce l'emoji 📎 del file upload)
+const paperclipSvg = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>';
+
 const defaults = {
   form_layout: 'stacked',
   form_max_width: '0',
@@ -289,6 +292,9 @@ const defaults = {
 };
 const s = computed(() => ({ ...defaults, ...props.settings }));
 const submitHover = ref(false);
+
+// TOKEN-FIRST: accento (submit + step indicator) → primary; era #e1474f off-brand
+const accentColor = computed(() => s.value.submit_bg || 'var(--olo-color-primary, #e1474f)');
 
 const formFields = computed(() => {
   const raw = s.value.fields;
@@ -431,15 +437,16 @@ const submitWrapStyle = computed(() => ({
 
 const submitStyle = computed(() => {
   const bw = parseInt(s.value.submit_border_width) || 0;
-  const borderColor = bw > 0 ? (s.value.submit_border_color || 'var(--olo-color-primary, #6366F1)') : 'transparent';
+  const borderColor = bw > 0 ? (s.value.submit_border_color || 'var(--olo-color-primary, #e1474f)') : 'transparent';
   const hoverBorderColor = bw > 0 && s.value.submit_hover_border_color ? s.value.submit_hover_border_color : borderColor;
   const ls = parseFloat(s.value.submit_letter_spacing) || 0;
   const tt = s.value.submit_text_transform || 'none';
 
   return {
+    // hover: scurisce il primario via color-mix (no var inventata --olo-color-primary-dark)
     backgroundColor: submitHover.value
-      ? (s.value.submit_hover_bg || 'var(--olo-color-primary-dark, #4F46E5)')
-      : (s.value.submit_bg || 'var(--olo-color-primary, #6366F1)'),
+      ? (s.value.submit_hover_bg || 'color-mix(in srgb, var(--olo-color-primary, #e1474f) 85%, #000)')
+      : accentColor.value,
     color: s.value.submit_color || '#FFFFFF',
     borderRadius: ((v => isNaN(v) ? 6 : v)(parseInt(s.value.submit_radius))) + 'px',
     padding: (parseInt(s.value.submit_padding_y) || 14) + 'px ' + (parseInt(s.value.submit_padding_x) || 32) + 'px',
@@ -469,7 +476,7 @@ const submitStyle = computed(() => {
 }
 
 .olo-form-required {
-  color: #EF4444;
+  color: var(--olo-color-danger, #ef4444);
   margin-left: 2px;
 }
 
@@ -480,6 +487,14 @@ const submitStyle = computed(() => {
   outline: none;
   font-family: inherit;
 }
+
+/* a11y: bordo input attivo → primary + anello focus */
+.olo-form-input:focus {
+  border-color: var(--olo-color-primary, #e1474f) !important;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
+}
+.olo-form-file-ico { display: inline-flex; opacity: 0.7; }
+.olo-form-file-ico :deep(svg) { display: block; }
 
 .olo-form-input--small {
   padding: 7px 10px;
@@ -542,7 +557,7 @@ const submitStyle = computed(() => {
   border: 1px dashed var(--olo-color-border, #E5E7EB);
   border-radius: 6px;
   text-align: center;
-  background: rgba(75, 85, 99, 0.1);
+  background: var(--olo-color-surface-alt, #f6f7f9);
 }
 
 .olo-form-privacy {
@@ -550,7 +565,7 @@ const submitStyle = computed(() => {
 }
 
 .olo-form-privacy :deep(a) {
-  color: var(--olo-color-primary, #6366F1);
+  color: var(--olo-color-primary, #e1474f);
   text-decoration: underline;
 }
 
@@ -589,6 +604,11 @@ const submitStyle = computed(() => {
   gap: 8px;
   text-align: center;
   text-decoration: none;
+}
+/* a11y: anello di focus visibile da tastiera sul pulsante */
+.olo-form-submit:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
 }
 
 .olo-form-submit-icon {

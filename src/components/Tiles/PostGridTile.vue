@@ -213,8 +213,8 @@ const cardClasses = computed(() => {
 const cardStyle = computed(() => {
   const style = { borderRadius: (parseInt(props.settings.card_radius) || 4) + 'px' };
   if ((props.settings.card_style || 'default') === 'primary') {
-    style.background = props.settings.card_primary_bg || 'var(--olo-color-primary, #6366F1)';
-    style.borderColor = props.settings.card_primary_bg || 'var(--olo-color-primary, #6366F1)';
+    style.background = props.settings.card_primary_bg || 'var(--olo-color-primary, #e1474f)';
+    style.borderColor = props.settings.card_primary_bg || 'var(--olo-color-primary, #e1474f)';
   }
   return style;
 });
@@ -346,7 +346,7 @@ const pagPageCount = computed(() => {
   width: 20px;
   height: 20px;
   border: 2px solid #e5e7eb;
-  border-top-color: var(--olo-color-primary, #6366F1);
+  border-top-color: var(--olo-color-primary, #e1474f);
   border-radius: 50%;
   animation: mpg-spin 0.6s linear infinite;
 }
@@ -443,12 +443,12 @@ const pagPageCount = computed(() => {
 }
 .mpg-meta {
   font-size: 9px;
-  color: #9ca3af;
+  color: var(--olo-color-text-faint, #9ca3af);
   margin-bottom: 4px;
 }
 .mpg-excerpt {
   font-size: 9px;
-  color: #6b7280;
+  color: var(--olo-color-text-soft, #6b7280);
   line-height: 1.3;
   margin-bottom: 4px;
   overflow: hidden;
@@ -459,20 +459,20 @@ const pagPageCount = computed(() => {
 .mpg-price {
   font-size: 11px;
   font-weight: 700;
-  color: #059669;
+  color: var(--olo-color-success, #059669);
   margin-bottom: 4px;
 }
 .mpg-btn {
   display: inline-block;
   font-size: 9px;
   padding: 3px 8px;
-  background: var(--olo-color-primary, #6366F1);
+  background: var(--olo-color-primary, #e1474f);
   color: #fff;
   border-radius: 3px;
 }
 .mpg-link {
   font-size: 9px;
-  color: var(--olo-color-primary, #6366F1);
+  color: var(--olo-color-primary, #e1474f);
 }
 
 /* Pagination preview */
@@ -497,8 +497,8 @@ const pagPageCount = computed(() => {
 }
 .mpg-pag-dot:hover { border-color: #9ca3af; }
 .mpg-pag-dot.mpg-pag-active {
-  background: var(--olo-color-primary, #6366F1);
-  border-color: var(--olo-color-primary, #6366F1);
+  background: var(--olo-color-primary, #e1474f);
+  border-color: var(--olo-color-primary, #e1474f);
 }
 .mpg-pag-num {
   display: inline-flex;
@@ -517,8 +517,8 @@ const pagPageCount = computed(() => {
 }
 .mpg-pag-num:hover { background: rgba(0,0,0,0.05); border-color: #9ca3af; }
 .mpg-pag-num.mpg-pag-active {
-  background: var(--olo-color-primary, #6366F1);
-  border-color: var(--olo-color-primary, #6366F1);
+  background: var(--olo-color-primary, #e1474f);
+  border-color: var(--olo-color-primary, #e1474f);
   color: #fff;
 }
 .mpg-pag-btn {
@@ -575,7 +575,7 @@ const pagPageCount = computed(() => {
 .mpg-service-club {
   font-size: 8px;
   font-weight: 600;
-  color: var(--olo-color-primary, #6366F1);
+  color: var(--olo-color-primary, #e1474f);
   margin-bottom: 3px;
 }
 /* Opening badge preview */

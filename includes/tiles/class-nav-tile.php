@@ -77,7 +77,7 @@ class Olo_Nav_Tile extends Olo_Tile_Base {
         // Colors with fallbacks
         $link_color  = $s['link_color'] ?: 'var(--olo-color-text-muted, #9CA3AF)';
         $hover_color = $s['link_hover_color'] ?: 'var(--olo-color-border, #E5E7EB)';
-        $active_color = $s['active_color'] ?: 'var(--olo-color-primary, #6366f1)';
+        $active_color = $s['active_color'] ?: 'var(--olo-color-primary, #e1474f)';
         $icon_color  = $s['icon_color'] ?: '';
         $hover_bg    = $s['hover_bg'] ?: '';
         $active_bg   = $s['active_bg'] ?: '';
@@ -114,6 +114,9 @@ class Olo_Nav_Tile extends Olo_Tile_Base {
         $css .= "border-radius:{$radius};font-size:{$fs}px;font-weight:{$fw};text-transform:{$tt};";
         $css .= "letter-spacing:{$ls}px;color:{$link_color};text-decoration:none;transition:all .2s ease;position:relative}";
 
+        // a11y tastiera: anello di focus visibile sulle voci di menu
+        $css .= "#{$uid} .olo-nav-item:focus-visible{outline:none;box-shadow:0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent)}";
+
         // Stretch
         if ( $s['alignment'] === 'stretch' && ! $is_horizontal ) {
             $css .= "#{$uid} .olo-nav-item{width:100%}";
@@ -145,7 +148,8 @@ class Olo_Nav_Tile extends Olo_Tile_Base {
         } elseif ( $ast === 'bottom-border' ) {
             $active_rules .= ";border-bottom:2px solid {$active_color}";
         } elseif ( $ast === 'background' ) {
-            $bg = $active_bg ?: $active_color . '15';
+            // Tinta soft token-safe (color-mix invece di concat hex-alpha, incompatibile con var())
+            $bg = $active_bg ?: "color-mix(in srgb, {$active_color} 8%, transparent)";
             $active_rules .= ";background:{$bg}";
         } elseif ( $ast === 'bold' ) {
             $active_rules .= ';font-weight:700';
@@ -156,11 +160,11 @@ class Olo_Nav_Tile extends Olo_Tile_Base {
         $style = $s['style'];
         if ( $style === 'pill' ) {
             $css .= "#{$uid} .olo-nav-item{border-radius:999px}";
-            $active_pill_bg = $active_bg ?: $active_color . '20';
+            $active_pill_bg = $active_bg ?: "color-mix(in srgb, {$active_color} 12%, transparent)";
             $css .= "#{$uid} .olo-nav-item.uk-active{background:{$active_pill_bg}}";
         } elseif ( $style === 'boxed' ) {
             $css .= "#{$uid} .olo-nav-item{border:1px solid rgba(0,0,0,.08)}";
-            $active_box_bg = $active_bg ?: $active_color . '10';
+            $active_box_bg = $active_bg ?: "color-mix(in srgb, {$active_color} 6%, transparent)";
             $css .= "#{$uid} .olo-nav-item.uk-active{border-color:{$active_color};background:{$active_box_bg}}";
         } elseif ( $style === 'underline' ) {
             $css .= "#{$uid} .olo-nav-item{border-radius:0;border-bottom:2px solid transparent}";

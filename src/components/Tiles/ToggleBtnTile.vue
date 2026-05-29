@@ -5,7 +5,7 @@
       <span class="olo-tb-label">{{ currentText }}</span>
       <span v-if="s.icon_position === 'right'" class="olo-tb-icon" v-html="currentIcon"></span>
     </button>
-    <div v-if="!s.target_id" style="color:#EF4444;font-size:12px;margin-top:6px;text-align:center;">
+    <div v-if="!s.target_id" style="color:var(--olo-color-danger, #ef4444);font-size:12px;margin-top:6px;text-align:center;">
       {{ t('Imposta l\'ID della sezione target') }}
     </div>
   </div>
@@ -28,10 +28,10 @@ const s = computed(() => ({
   target_id: '',
   initial_state: 'hidden',
   btn_bg: 'transparent',
-  btn_color: '#6366F1',
-  btn_hover_bg: 'rgba(99,102,241,0.1)',
+  btn_color: 'var(--olo-color-primary, #e1474f)',
+  btn_hover_bg: 'color-mix(in srgb, var(--olo-color-primary, #e1474f) 10%, transparent)',
   btn_border_width: '2',
-  btn_border_color: '#6366F1',
+  btn_border_color: 'var(--olo-color-primary, #e1474f)',
   btn_border_radius: '8',
   btn_padding_x: '24',
   btn_padding_y: '12',
@@ -83,8 +83,8 @@ const btnStyle = computed(() => {
     display: 'inline-flex',
     alignItems: 'center',
     gap: '8px',
-    background: hovered.value ? (s.value.btn_hover_bg || 'rgba(99,102,241,0.1)') : (s.value.btn_bg || 'transparent'),
-    color: s.value.btn_color || '#6366F1',
+    background: hovered.value ? (s.value.btn_hover_bg || 'color-mix(in srgb, var(--olo-color-primary, #e1474f) 10%, transparent)') : (s.value.btn_bg || 'transparent'),
+    color: s.value.btn_color || 'var(--olo-color-primary, #e1474f)',
     fontSize: (parseInt(s.value.btn_font_size) || 15) + 'px',
     fontWeight: s.value.btn_font_weight || '600',
     lineHeight: '1.2',
@@ -93,7 +93,7 @@ const btnStyle = computed(() => {
     cursor: 'pointer',
     transition: 'background 0.2s',
     userSelect: 'none',
-    border: bw > 0 ? `${bw}px solid ${s.value.btn_border_color || '#6366F1'}` : 'none',
+    border: bw > 0 ? `${bw}px solid ${s.value.btn_border_color || 'var(--olo-color-primary, #e1474f)'}` : 'none',
   };
   if (s.value.btn_full_width) {
     st.width = '100%';
@@ -102,3 +102,10 @@ const btnStyle = computed(() => {
   return st;
 });
 </script>
+
+<style scoped>
+.olo-tb-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
+}
+</style>

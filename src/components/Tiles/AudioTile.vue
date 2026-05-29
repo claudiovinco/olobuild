@@ -60,7 +60,7 @@
       </div>
 
       <!-- Style label -->
-      <div class="mb-text-xs mb-text-gray-500 mb-flex-shrink-0">
+      <div class="mb-text-xs mb-flex-shrink-0" :style="{ color: 'var(--olo-color-text-faint, #94a3b8)' }">
         {{ styleLabel }}
       </div>
     </div>
@@ -93,7 +93,7 @@ const defaults = {
 };
 const s = computed(() => ({ ...defaults, ...props.settings }));
 
-const accentColor = computed(() => s.value.accent_color || 'var(--olo-color-primary, #6366F1)');
+const accentColor = computed(() => s.value.accent_color || 'var(--olo-color-primary, #e1474f)');
 
 const styleLabels = { default: 'Standard', minimal: 'Minimale', custom: 'Custom' };
 const styleLabel = computed(() => styleLabels[s.value.player_style] || 'Standard');

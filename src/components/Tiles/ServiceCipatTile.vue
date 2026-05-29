@@ -29,7 +29,8 @@ const defaults = {
   bg_color: '', border_color: '', border_radius: '8', padding: '12', align: 'left',
 };
 const s = computed(() => ({ ...defaults, ...props.settings }));
-const iconC = computed(() => s.value.icon_color || '#6366F1');
+// icona codice CIPAT: token-first sul brand (era #e1474f indaco off-brand)
+const iconC = computed(() => s.value.icon_color || 'var(--olo-color-primary, #e1474f)');
 
 const iconSz = computed(() => Math.min(parseInt(s.value.font_size) || 14, 18) + 2);
 const isBlock = computed(() => s.value.layout === 'block');

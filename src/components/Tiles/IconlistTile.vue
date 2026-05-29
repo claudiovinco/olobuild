@@ -6,7 +6,7 @@
           <span v-if="iconSvg(item.icon)" v-html="iconSvg(item.icon)" :style="{ width: iconSize + 'px', height: iconSize + 'px', display: 'inline-flex' }"></span>
           <span v-else style="line-height:1;">{{ item.icon || '✓' }}</span>
         </span>
-        <span :style="{ color: s.text_color || '#E5E7EB', fontSize: (parseInt(s.text_size) || 16) + 'px', lineHeight: '1.4' }" :data-olo-editable="'items.' + i + '.text'">{{ item.text || 'Voce' }}</span>
+        <span :style="{ color: resolveColor(s.text_color, TOKENS.text), fontSize: (parseInt(s.text_size) || 16) + 'px', lineHeight: '1.4' }" :data-olo-editable="'items.' + i + '.text'">{{ item.text || 'Voce' }}</span>
         <span v-if="item.link" class="olo-il-link-badge" :title="t('Link')">{{ t('&#x1F517;') }}</span>
       </div>
     </div>
@@ -17,6 +17,7 @@
 import { computed } from 'vue';
 import iconsSvg from '../ProSlider/uikitIconsSvg.js';
 import { t } from '@/i18n';
+import { resolveColor, TOKENS } from '@/composables/oloTileDefaults';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
@@ -28,15 +29,15 @@ const defaults = {
     { id: 'il-2', icon: 'check', text: 'Seconda voce della lista', color: '' },
     { id: 'il-3', icon: 'check', text: 'Terza voce della lista', color: '' },
   ],
-  icon_color: '#22C55E',
+  icon_color: '',
   icon_size: '20',
-  text_color: '#E5E7EB',
+  text_color: '',
   text_size: '16',
   gap: '12',
   icon_shape: 'none',
   icon_bg_color: '',
   divider: false,
-  divider_color: '#374151',
+  divider_color: '',
   layout: 'vertical',
 };
 const s = computed(() => ({ ...defaults, ...props.settings }));
@@ -60,13 +61,13 @@ const itemStyle = computed(() => {
   const st = { display: 'flex', alignItems: 'center', gap: '10px' };
   if (s.value.divider && s.value.layout === 'vertical') {
     st.paddingBottom = gap.value + 'px';
-    st.borderBottom = '1px solid ' + (s.value.divider_color || '#374151');
+    st.borderBottom = '1px solid ' + resolveColor(s.value.divider_color, TOKENS.border);
   }
   return st;
 });
 
 function iconStyle(item) {
-  const clr = item.color || s.value.icon_color || '#22C55E';
+  const clr = resolveColor(item.color || s.value.icon_color, TOKENS.success.fg);
   const shape = s.value.icon_shape || 'none';
   const st = {
     color: clr,
@@ -76,7 +77,7 @@ function iconStyle(item) {
     justifyContent: 'center',
   };
   if (shape !== 'none') {
-    st.background = s.value.icon_bg_color || 'rgba(34,197,94,0.15)';
+    st.background = s.value.icon_bg_color || 'color-mix(in srgb, var(--olo-color-success, #10B981) 15%, transparent)';
     st.width = (iconSize.value + 16) + 'px';
     st.height = (iconSize.value + 16) + 'px';
     st.borderRadius = shape === 'circle' ? '50%' : shape === 'rounded' ? '8px' : '4px';

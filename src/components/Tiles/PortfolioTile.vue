@@ -56,6 +56,7 @@
 <script setup>
 import { computed } from 'vue';
 import { t } from '@/i18n';
+import { resolveColor, TOKENS } from '@/composables/oloTileDefaults';
 import { radiusToCss as radiusToCssRaw } from '@/composables/useRadius';
 const radiusToCss = (r) => radiusToCssRaw(r, { fallback: null, zero: '0', acceptPrimitive: false });
 
@@ -71,8 +72,8 @@ const defaults = {
   filter_bar: true,
   filter_style: 'buttons',
   filter_all_label: 'Tutti',
-  filter_color: '#9CA3AF',
-  filter_active_color: '#6366F1',
+  filter_color: '',
+  filter_active_color: '',
   layout: 'grid',
   hover_effect: 'fade',
   caption_position: 'overlay',
@@ -80,8 +81,8 @@ const defaults = {
   show_title: true,
   show_category: true,
   show_excerpt: false,
-  title_color: '#374151',
-  text_color: '#6B7280',
+  title_color: '',
+  text_color: '',
   bg_color: '',
   accent_color: '',
   overlay_color: '#000000',
@@ -153,7 +154,7 @@ const wrapStyle = computed(() => {
     background: s.value.bg_color || 'transparent',
     padding: `${cp.top || 0}px ${cp.right || 0}px ${cp.bottom || 0}px ${cp.left || 0}px`,
     borderRadius: radiusToCss(s.value.container_radius) || '0',
-    color: s.value.text_color || 'inherit',
+    color: resolveColor(s.value.text_color, TOKENS.textSoft),
     minHeight: '100px',
     position: 'relative',
   };
@@ -247,7 +248,7 @@ function imageAreaStyle(idx) {
     position: 'relative',
     overflow: 'hidden',
     borderRadius: 'inherit',
-    background: '#F3F4F6',
+    background: TOKENS.surfaceAlt,
   };
 
   if (fullHeight) {
@@ -277,7 +278,7 @@ const placeholderStyle = computed(() => ({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  background: '#E5E7EB',
+  background: TOKENS.border,
 }));
 
 const overlayPreviewStyle = computed(() => ({
@@ -308,19 +309,20 @@ const filterItemClass = computed(() => 'olo-pf-filter-' + (s.value.filter_style 
 
 const activeFilterStyle = computed(() => {
   const style = s.value.filter_style || 'buttons';
-  const base = { fontSize: '11px', fontWeight: '600', cursor: 'pointer', transition: 'all 0.2s', color: '#fff' };
-  if (style === 'pills') { base.padding = '4px 14px'; base.borderRadius = '20px'; base.background = s.value.filter_active_color || '#6366F1'; }
-  else if (style === 'underline') { base.padding = '4px 8px'; base.borderBottom = '2px solid ' + (s.value.filter_active_color || '#6366F1'); base.background = 'transparent'; base.color = s.value.filter_active_color || '#6366F1'; }
-  else { base.padding = '4px 12px'; base.borderRadius = '4px'; base.background = s.value.filter_active_color || '#6366F1'; }
+  const activeC = resolveColor(s.value.filter_active_color, TOKENS.primary);
+  const base = { fontSize: '11px', fontWeight: '600', cursor: 'pointer', transition: 'all 0.2s', color: TOKENS.onPrimary };
+  if (style === 'pills') { base.padding = '4px 14px'; base.borderRadius = '20px'; base.background = activeC; }
+  else if (style === 'underline') { base.padding = '4px 8px'; base.borderBottom = '2px solid ' + activeC; base.background = 'transparent'; base.color = activeC; }
+  else { base.padding = '4px 12px'; base.borderRadius = '4px'; base.background = activeC; }
   return base;
 });
 
 const inactiveFilterStyle = computed(() => {
   const style = s.value.filter_style || 'buttons';
-  const base = { fontSize: '11px', fontWeight: '500', cursor: 'pointer', transition: 'all 0.2s', color: s.value.filter_color || '#374151' };
-  if (style === 'pills') { base.padding = '4px 14px'; base.borderRadius = '20px'; base.background = '#F3F4F6'; }
+  const base = { fontSize: '11px', fontWeight: '500', cursor: 'pointer', transition: 'all 0.2s', color: resolveColor(s.value.filter_color, TOKENS.textSoft) };
+  if (style === 'pills') { base.padding = '4px 14px'; base.borderRadius = '20px'; base.background = TOKENS.surfaceAlt; }
   else if (style === 'underline') { base.padding = '4px 8px'; base.borderBottom = '2px solid transparent'; base.background = 'transparent'; }
-  else { base.padding = '4px 12px'; base.borderRadius = '4px'; base.background = '#F3F4F6'; }
+  else { base.padding = '4px 12px'; base.borderRadius = '4px'; base.background = TOKENS.surfaceAlt; }
   return base;
 });
 
@@ -328,7 +330,7 @@ const textBelowStyle = computed(() => ({ padding: '12px 4px 4px', position: 'rel
 
 const catStyle = computed(() => ({
   fontSize: '10px',
-  color: s.value.accent_color || s.value.filter_active_color || '#e8622a',
+  color: resolveColor(s.value.accent_color || s.value.filter_active_color, TOKENS.primary),
   fontWeight: '600',
   textTransform: 'uppercase',
   letterSpacing: '0.5px',
@@ -338,12 +340,12 @@ const catStyle = computed(() => ({
 const titleStyle = computed(() => ({
   fontSize: '13px',
   fontWeight: '600',
-  color: s.value.title_color || '#374151',
+  color: resolveColor(s.value.title_color, TOKENS.text),
 }));
 
 const descStyle = computed(() => ({
   fontSize: '11px',
-  color: s.value.text_color || '#374151',
+  color: resolveColor(s.value.text_color, TOKENS.textSoft),
   marginTop: '4px',
   lineHeight: '1.4',
 }));
@@ -352,8 +354,8 @@ const ribbonStyle = computed(() => ({
   position: 'absolute',
   top: '12px',
   left: '-26px',
-  background: s.value.accent_color || '#e8622a',
-  color: '#fff',
+  background: resolveColor(s.value.accent_color, TOKENS.primary),
+  color: TOKENS.onPrimary,
   padding: '3px 28px',
   fontSize: '9px',
   fontWeight: '700',
@@ -372,7 +374,7 @@ const indexStyle = computed(() => ({
   fontSize: '9px',
   fontWeight: '600',
   letterSpacing: '2px',
-  color: s.value.accent_color || '#e8622a',
+  color: resolveColor(s.value.accent_color, TOKENS.primary),
   fontFamily: 'ui-monospace, monospace',
   background: 'rgba(255,255,255,0.9)',
   padding: '2px 6px',

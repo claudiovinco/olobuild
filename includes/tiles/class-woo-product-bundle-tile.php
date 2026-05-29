@@ -22,12 +22,12 @@ class Olo_Woo_Product_Bundle_Tile extends Olo_Tile_Base {
         'layout'           => 'horizontal',
         'title_color'      => '',
         'price_color'      => '',
-        'discount_color'   => '#059669',
-        'savings_bg'       => '#ECFDF5',
-        'button_bg'        => '#6366F1',
-        'button_color'     => '#FFFFFF',
-        'bg_color'         => '#FFFFFF',
-        'border_color'     => '#E5E7EB',
+        'discount_color'   => '',
+        'savings_bg'       => '',
+        'button_bg'        => '',
+        'button_color'     => '',
+        'bg_color'         => '',
+        'border_color'     => '',
         'border_radius'    => 12,
         'button_text'      => 'Aggiungi bundle al carrello',
         'gap'              => 16,
@@ -47,7 +47,7 @@ class Olo_Woo_Product_Bundle_Tile extends Olo_Tile_Base {
 
     public function render( $settings ) {
         if ( ! class_exists( 'WooCommerce' ) ) {
-            return '<div style="padding:40px;text-align:center;color:#92400E;background:#FEF3C7;border:1px solid #F59E0B;border-radius:8px;">'
+            return '<div style="padding:40px;text-align:center;color:var(--olo-color-warning, #b45309);background:color-mix(in srgb, var(--olo-color-warning, #b45309) 12%, #fff);border:1px solid var(--olo-color-warning, #b45309);border-radius:8px;">'
                  . esc_html( olo_t( 'WooCommerce non attivo. Installa e attiva WooCommerce per utilizzare questo elemento.' ) )
                  . '</div>';
         }
@@ -109,12 +109,12 @@ class Olo_Woo_Product_Bundle_Tile extends Olo_Tile_Base {
         // Colors
         $title_color    = $this->safe_color_css( $s['title_color'] ) ?: 'var(--olo-color-text, #374151)';
         $price_color    = $this->safe_color_css( $s['price_color'] ) ?: 'var(--olo-color-text, #374151)';
-        $discount_color = $this->safe_color_css( $s['discount_color'] ) ?: '#059669';
-        $savings_bg     = $this->safe_color_css( $s['savings_bg'] ) ?: '#ECFDF5';
-        $btn_bg         = $this->safe_color_css( $s['button_bg'] ) ?: '#6366F1';
-        $btn_color      = $this->safe_color_css( $s['button_color'] ) ?: '#FFFFFF';
-        $bg_color       = $this->safe_color_css( $s['bg_color'] ) ?: '#FFFFFF';
-        $border_color   = $this->safe_color_css( $s['border_color'] ) ?: '#E5E7EB';
+        $discount_color = $this->safe_color_css( $s['discount_color'] ) ?: 'var(--olo-color-success, #15803d)';
+        $savings_bg     = $this->safe_color_css( $s['savings_bg'] ) ?: 'color-mix(in srgb, var(--olo-color-success, #15803d) 12%, #fff)';
+        $btn_bg         = $this->safe_color_css( $s['button_bg'] ) ?: 'var(--olo-color-primary, #e1474f)';
+        $btn_color      = $this->safe_color_css( $s['button_color'] ) ?: 'var(--olo-color-on-primary, #ffffff)';
+        $bg_color       = $this->safe_color_css( $s['bg_color'] ) ?: 'var(--olo-color-surface, #ffffff)';
+        $border_color   = $this->safe_color_css( $s['border_color'] ) ?: 'var(--olo-color-border, #e5e7eb)';
         $radius         = Olo_Tile_Utils::border_radius( $s['border_radius'] ?? 0 );
         $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['border_radius_hover'] ?? null );
         $gap            = absint( $s['gap'] );

@@ -35,7 +35,7 @@ class Olo_InfoCards_Tile extends Olo_Tile_Base {
 
         'card_bg'           => [ 'type' => 'solid', 'color' => '#0f172a' ],
         'card_color'        => '#e5e7eb',
-        'card_accent_color' => '#b3261e',
+        'card_accent_color' => '',
         'card_radius'                  => [ 'tl' => 18, 'tr' => 18, 'br' => 18, 'bl' => 18, 'linked' => true ],
         'card_radius_hover'            => [ 'tl' => 18, 'tr' => 18, 'br' => 18, 'bl' => 18, 'linked' => true ],
         'card_radius_hover_duration'   => 400,
@@ -113,7 +113,7 @@ class Olo_InfoCards_Tile extends Olo_Tile_Base {
         $footer_size  = max( 9, min( 16, absint( $s['footer_size'] ) ) );
 
         $card_color   = $this->safe_color_css( $s['card_color'] ) ?: '#e5e7eb';
-        $accent_color = $this->safe_color_css( $s['card_accent_color'] ) ?: '#b3261e';
+        $accent_color = $this->safe_color_css( $s['card_accent_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $card_border  = $this->safe_color_css( $s['card_border'] ) ?: '';
 
         // Container bg
@@ -251,7 +251,7 @@ class Olo_InfoCards_Tile extends Olo_Tile_Base {
                     .<?php echo $uid; ?> .olo-icards__card:hover { transform: scale(1.03); z-index: 2; }
                     <?php break;
                 case 'glow' : ?>
-                    .<?php echo $uid; ?> .olo-icards__card:hover { box-shadow: 0 0 0 1px <?php echo $accent_color; ?>, 0 0 30px <?php echo $accent_color; ?>33; }
+                    .<?php echo $uid; ?> .olo-icards__card:hover { box-shadow: 0 0 0 1px <?php echo $accent_color; ?>, 0 0 30px color-mix(in srgb, <?php echo $accent_color; ?> 20%, transparent); }
                     <?php break;
                 case 'tilt' : ?>
                     .<?php echo $uid; ?> .olo-icards__card { transform-style: preserve-3d; }

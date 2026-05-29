@@ -274,6 +274,9 @@ class Olo_NavMenu_Tile extends Olo_Tile_Base {
             $rules[] = "{$sel} .uk-navbar-nav > li.uk-active > a, {$sel} .uk-navbar-nav > li.current-menu-item > a, {$sel} .uk-subnav > li.uk-active > a { color: {$active_color}; }";
         }
 
+        // a11y tastiera: anello di focus visibile sulle voci di menu orizzontale
+        $rules[] = "{$sel} .uk-navbar-nav > li > a:focus-visible, {$sel} .uk-subnav > li > a:focus-visible { outline:none; box-shadow:0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent); border-radius:3px; }";
+
         // Gap between items
         $gap_map = [ 'small' => '5px', 'medium' => '15px', 'large' => '30px' ];
         $gap_val = $gap_map[ $gap ] ?? '15px';
@@ -416,6 +419,8 @@ class Olo_NavMenu_Tile extends Olo_Tile_Base {
 
             $rules[] = "{$sel} .olo-vnav-list { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:{$v_spacing}px; }";
             $rules[] = "{$sel} .olo-vnav-link { display:flex; align-items:center; gap:8px; padding:{$v_padding}px " . ( $v_padding + 4 ) . "px; border-radius:{$v_radius}px; text-decoration:none; transition:background .15s,color .15s; }";
+            // a11y tastiera: anello di focus visibile sulle voci di menu verticale
+            $rules[] = "{$sel} .olo-vnav-link:focus-visible { outline:none; box-shadow:0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent); }";
 
             // Link typography (reuse existing vars)
             $v_link_decls = [];
@@ -438,12 +443,12 @@ class Olo_NavMenu_Tile extends Olo_Tile_Base {
                 $rules[] = "{$sel} .olo-vnav-link:hover { color:{$hover_color}; }";
             }
 
-            // Active indicator
-            $active_c = $active_color ?: '#6366f1';
+            // Active indicator — TOKEN-FIRST: primario brand (era #e1474f / rgba indaco off-brand)
+            $active_c = $active_color ?: 'var(--olo-color-primary, #e1474f)';
             if ( $v_indicator === 'left-border' ) {
-                $rules[] = "{$sel} .olo-vnav-item--active > .olo-vnav-link { border-left:3px solid {$active_c}; color:{$active_c}; background:" . ( $v_active_bg ?: 'rgba(99,102,241,0.08)' ) . "; }";
+                $rules[] = "{$sel} .olo-vnav-item--active > .olo-vnav-link { border-left:3px solid {$active_c}; color:{$active_c}; background:" . ( $v_active_bg ?: "color-mix(in srgb, {$active_c} 8%, transparent)" ) . "; }";
             } elseif ( $v_indicator === 'background' ) {
-                $rules[] = "{$sel} .olo-vnav-item--active > .olo-vnav-link { color:{$active_c}; background:" . ( $v_active_bg ?: 'rgba(99,102,241,0.1)' ) . "; }";
+                $rules[] = "{$sel} .olo-vnav-item--active > .olo-vnav-link { color:{$active_c}; background:" . ( $v_active_bg ?: "color-mix(in srgb, {$active_c} 10%, transparent)" ) . "; }";
             } elseif ( $v_indicator === 'bold' ) {
                 $rules[] = "{$sel} .olo-vnav-item--active > .olo-vnav-link { color:{$active_c}; font-weight:700; }";
             } elseif ( $v_indicator === 'none' ) {

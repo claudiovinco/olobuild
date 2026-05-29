@@ -17,10 +17,10 @@ const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 const defaults = {
   layout: 'horizontal', logo_url: '', logo_width: '80',
   show_group: false, show_category: true,
-  text_size: '14', text_color: '#374151', text_weight: '600',
-  group_size: '12', group_color: '#9CA3AF',
+  text_size: '14', text_color: '', text_weight: '600',
+  group_size: '12', group_color: '',
   gap: '12', align: 'left',
-  bg_color: '', border_color: '#E5E7EB', border_radius: '10', padding: '12',
+  bg_color: '', border_color: '', border_radius: '10', padding: '12',
 };
 const s = computed(() => ({ ...defaults, ...props.settings }));
 const logoW = computed(() => Math.min(parseInt(s.value.logo_width) || 80, 200));
@@ -44,11 +44,11 @@ const wrapStyle = computed(() => {
 const catStyle = computed(() => ({
   fontSize: Math.min(parseInt(s.value.text_size) || 14, 22) + 'px',
   fontWeight: s.value.text_weight,
-  color: s.value.text_color,
+  color: s.value.text_color || 'var(--olo-color-text, #374151)',
 }));
 
 const groupStyle = computed(() => ({
   fontSize: Math.min(parseInt(s.value.group_size) || 12, 18) + 'px',
-  color: s.value.group_color,
+  color: s.value.group_color || 'var(--olo-color-text-muted, #9CA3AF)',
 }));
 </script>

@@ -13,13 +13,13 @@ class Olo_Woo_Checkout_Tile extends Olo_Tile_Base {
     protected $defaults = [
         'layout'           => 'two_columns',
         'show_order_notes' => true,
-        'accent_color'     => '#6366F1',
-        'text_color'       => '#374151',
+        'accent_color'     => '',
+        'text_color'       => '',
         'form_style'       => 'modern',
         'heading_color'    => '',
-        'border_color'     => '#E5E7EB',
-        'button_color'     => '#FFFFFF',
-        'button_bg'        => '#6366F1',
+        'border_color'     => '',
+        'button_color'     => '',
+        'button_bg'        => '',
             'border'                  => [],
         'border_hover'            => [],
         'border_hover_duration'   => 300,
@@ -36,7 +36,7 @@ class Olo_Woo_Checkout_Tile extends Olo_Tile_Base {
 
     public function render( $settings ) {
         if ( ! class_exists( 'WooCommerce' ) ) {
-            return '<div style="padding:40px;text-align:center;color:#92400E;background:#FEF3C7;border:1px solid #F59E0B;border-radius:8px;">'
+            return '<div style="padding:40px;text-align:center;color:var(--olo-color-warning, #b45309);background:color-mix(in srgb, var(--olo-color-warning, #b45309) 12%, #fff);border:1px solid var(--olo-color-warning, #b45309);border-radius:8px;">'
                  . esc_html( olo_t( 'WooCommerce non attivo. Installa e attiva WooCommerce per utilizzare questo elemento.' ) )
                  . '</div>';
         }
@@ -115,12 +115,12 @@ class Olo_Woo_Checkout_Tile extends Olo_Tile_Base {
                 transition: border-color 0.2s ease;
                 box-sizing: border-box;
             }
-            .<?php echo $uid; ?> .woocommerce .form-row input:focus,
-            .<?php echo $uid; ?> .woocommerce .form-row select:focus,
-            .<?php echo $uid; ?> .woocommerce .form-row textarea:focus {
+            .<?php echo $uid; ?> .woocommerce .form-row input:focus-visible,
+            .<?php echo $uid; ?> .woocommerce .form-row select:focus-visible,
+            .<?php echo $uid; ?> .woocommerce .form-row textarea:focus-visible {
                 outline: none;
                 border-color: <?php echo $accent_color; ?>;
-                box-shadow: 0 0 0 3px <?php echo $accent_color; ?>20;
+                box-shadow: 0 0 0 3px color-mix(in srgb, <?php echo $accent_color; ?> 25%, transparent);
             }
             .<?php echo $uid; ?> .woocommerce .form-row {
                 margin-bottom: 16px;

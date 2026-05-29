@@ -8,10 +8,10 @@
     ></div>
     <div
       v-else
-      class="olo-popover-placeholder mb-bg-gray-700 mb-flex mb-items-center mb-justify-center"
+      class="olo-popover-placeholder mb-flex mb-items-center mb-justify-center"
       :style="placeholderStyle"
     >
-      <span class="mb-text-gray-500 mb-text-sm" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);">{{ t('Image Placeholder') }}</span>
+      <span class="mb-text-sm" :style="{ color: TOKENS.textFaint, position:'absolute', top:'50%', left:'50%', transform:'translate(-50%,-50%)' }">{{ t('Image Placeholder') }}</span>
     </div>
 
     <!-- Markers -->
@@ -19,20 +19,25 @@
       v-for="(marker, i) in markers"
       :key="marker.id || i"
       class="olo-popover-marker"
+      role="button"
+      tabindex="0"
+      :aria-label="marker.title"
       :style="{
         left: marker.x + '%',
         top: marker.y + '%',
-        background: s.marker_color || '#6366F1',
+        background: markerColor,
       }"
       :title="marker.title"
       @click="activeMarker = activeMarker === i ? -1 : i"
+      @keydown.enter.prevent="activeMarker = activeMarker === i ? -1 : i"
+      @keydown.space.prevent="activeMarker = activeMarker === i ? -1 : i"
     >
-      <span class="olo-popover-marker-pulse" :style="{ borderColor: s.marker_color || '#6366F1' }"></span>
+      <span class="olo-popover-marker-pulse" :style="{ borderColor: markerColor }"></span>
       <!-- Mini popup preview -->
       <div v-if="activeMarker === i" class="pop-preview" :style="popStyle" @click.stop>
         <div v-if="marker.image" class="pop-preview__media" :style="{ height: popImgH + 'px' }">
           <img :src="marker.image" alt="" class="pop-preview__img" :class="hoverClass" />
-          <div v-if="s.popup_hover_effect === 'color-overlay'" class="pop-preview__overlay" :style="{ background: s.popup_hover_color || '#6366F1' }"></div>
+          <div v-if="s.popup_hover_effect === 'color-overlay'" class="pop-preview__overlay" :style="{ background: resolveColor(s.popup_hover_color, 'var(--olo-color-primary, #e1474f)') }"></div>
         </div>
         <div class="pop-preview__body">
           <div class="pop-preview__title" :data-olo-editable="'markers.' + i + '.title'">{{ marker.title }}</div>
@@ -46,6 +51,7 @@
 <script setup>
 import { t } from '@/i18n';
 import { ref, computed } from 'vue';
+import { resolveColor, TOKENS } from '@/composables/oloTileDefaults';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
@@ -54,15 +60,18 @@ const props = defineProps({
 const defaults = {
   image: '',
   image_height: '0',
-  marker_color: '#6366F1',
+  marker_color: '',          // '' ⇒ primary (era #e1474f off-brand)
   popup_bg: '#ffffff',
   popup_color: '#333333',
   popup_radius: '8',
   popup_img_height: '120',
   popup_hover_effect: 'none',
-  popup_hover_color: '#6366F1',
+  popup_hover_color: '',     // '' ⇒ primary (era #e1474f off-brand)
 };
 const s = computed(() => ({ ...defaults, ...props.settings }));
+
+// TOKEN-FIRST: marker → primary
+const markerColor = computed(() => resolveColor(s.value.marker_color, 'var(--olo-color-primary, #e1474f)'));
 
 const activeMarker = ref(-1);
 
@@ -88,7 +97,7 @@ const imgStyle = computed(() => {
 });
 
 const placeholderStyle = computed(() => {
-  const st = { position: 'relative', borderRadius: '6px' };
+  const st = { position: 'relative', borderRadius: '6px', background: TOKENS.surfaceAlt };
   if (imgHeight.value > 0) {
     st.height = Math.min(imgHeight.value, 300) + 'px';
   } else {
@@ -135,6 +144,11 @@ const hoverClass = computed(() => {
   cursor: pointer;
   z-index: 2;
   box-shadow: 0 0 0 3px rgba(255,255,255,0.4);
+}
+/* a11y: anello di focus visibile da tastiera sul marker */
+.olo-popover-marker:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255,255,255,0.4), 0 0 0 6px color-mix(in srgb, var(--olo-color-primary, #e1474f) 40%, transparent);
 }
 
 .olo-popover-marker-pulse {

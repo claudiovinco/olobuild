@@ -17,15 +17,15 @@ class Olo_Pagetitlebar_Tile extends Olo_Tile_Base {
     protected $category = 'structure';
     protected $defaults = [
         'title_tag'         => 'h1',
-        'title_color'       => '#FFFFFF',
+        'title_color'       => '',
         'title_size'        => '36',
         'title_weight'      => '700',
         'title_align'       => 'center',
         'subtitle'          => '',
-        'subtitle_color'    => '#D1D5DB',
+        'subtitle_color'    => '',
         'subtitle_size'     => '16',
         'show_breadcrumbs'  => true,
-        'breadcrumb_color'  => '#9CA3AF',
+        'breadcrumb_color'  => '',
         'breadcrumb_separator' => '/',
         'bg_color'          => '',
         'bg_image'          => '',
@@ -38,7 +38,7 @@ class Olo_Pagetitlebar_Tile extends Olo_Tile_Base {
         'padding_y'         => '60',
         'content_width'     => '1200',
         'border_bottom'     => false,
-        'border_color'      => '#374151',
+        'border_color'      => '',
             'border'                  => [],
         'border_hover'            => [],
         'border_hover_duration'   => 300,
@@ -61,15 +61,16 @@ class Olo_Pagetitlebar_Tile extends Olo_Tile_Base {
         $title = $this->get_dynamic_title();
         $tag   = in_array( $s['title_tag'], [ 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'div', 'span' ], true ) ? $s['title_tag'] : 'h1';
 
-        $title_c    = $this->safe_color_css( $s['title_color'] ) ?: '#FFFFFF';
+        // TOKEN-FIRST: barra titolo scura del brand, testo bianco in contrasto, neutri → token
+        $title_c    = $this->safe_color_css( $s['title_color'] ) ?: 'var(--olo-color-primary-contrast, #FFFFFF)';
         $title_size = max( 14, intval( $s['title_size'] ) );
         $title_w    = sanitize_text_field( $s['title_weight'] ) ?: '700';
         $align      = in_array( $s['title_align'], [ 'left', 'center', 'right' ], true ) ? $s['title_align'] : 'center';
 
-        $sub_c    = $this->safe_color_css( $s['subtitle_color'] ) ?: '#D1D5DB';
+        $sub_c    = $this->safe_color_css( $s['subtitle_color'] ) ?: 'var(--olo-color-text-soft, #D1D5DB)';
         $sub_size = max( 12, intval( $s['subtitle_size'] ) );
 
-        $bg_c       = $this->safe_color_css( $s['bg_color'] ) ?: 'var(--olo-color-muted, #F3F4F6)';
+        $bg_c       = $this->safe_color_css( $s['bg_color'] ) ?: 'var(--olo-color-dark, #1F2937)';
         $bg_img     = esc_url( $s['bg_image'] ?? '' );
         $overlay    = max( 0, min( 100, intval( $s['bg_overlay'] ) ) );
         $overlay_c  = $this->safe_color_css( $s['bg_overlay_color'] ) ?: '#000000';
@@ -78,11 +79,11 @@ class Olo_Pagetitlebar_Tile extends Olo_Tile_Base {
         $pad_y = is_array( $_tp ) ? max( 0, intval( $_tp['top'] ?? 40 ) ) : max( 0, intval( $s['padding_y'] ?? 40 ) );
         $max_w      = max( 0, intval( $s['content_width'] ) );
 
-        $bc_color = $this->safe_color_css( $s['breadcrumb_color'] ) ?: '#9CA3AF';
+        $bc_color = $this->safe_color_css( $s['breadcrumb_color'] ) ?: 'var(--olo-color-text-faint, #9CA3AF)';
         $bc_sep   = esc_html( $s['breadcrumb_separator'] ?: '/' );
 
         $border_b = ! empty( $s['border_bottom'] );
-        $border_c = $this->safe_color_css( $s['border_color'] ) ?: '#374151';
+        $border_c = $this->safe_color_css( $s['border_color'] ) ?: 'var(--olo-color-border, #374151)';
 
         $bg_style = "background-color:{$bg_c};";
         if ( $bg_img ) {
@@ -118,6 +119,14 @@ class Olo_Pagetitlebar_Tile extends Olo_Tile_Base {
                 <?php endif; ?>
             </div>
         </div>
+        <style>
+            /* a11y tastiera: anello di focus visibile sui link breadcrumb della barra titolo */
+            #<?php echo esc_attr( $uid ); ?> .olo-ptb-breadcrumbs a:focus-visible {
+                outline: none;
+                box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
+                border-radius: 3px;
+            }
+        </style>
         <?php
         $tfx_css = $this->tfx_css( $s, '.' . $uid );
         if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';

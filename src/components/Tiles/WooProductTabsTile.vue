@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="!wooActive" class="olo-woo-notice">
-      <span class="olo-woo-notice-icon">{{ t('&#x1F6D2;') }}</span>
+      <span class="olo-woo-notice-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor"><circle cx="7.3" cy="17.3" r="1.4" fill="currentColor" stroke="none"/><circle cx="13.3" cy="17.3" r="1.4" fill="currentColor" stroke="none"/><polyline points="0 2 3.2 4 5.3 12.5 16 12.5 18 6.5 8 6.5"/></svg></span>
       <span>{{ t('WooCommerce richiesto') }}</span>
     </div>
     <div v-else>
@@ -31,22 +31,22 @@
         <div v-else-if="visibleTabs[activeTab]?.key === 'reviews'">
           <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
             <div style="display:flex;gap:2px;">
-              <svg v-for="star in 5" :key="star" width="16" height="16" viewBox="0 0 24 24" :fill="star <= 4 ? '#F59E0B' : '#D1D5DB'" stroke="none">
+              <svg v-for="star in 5" :key="star" width="16" height="16" viewBox="0 0 24 24" :fill="star <= 4 ? TOKENS.accent : TOKENS.border" stroke="none">
                 <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
               </svg>
             </div>
-            <span :style="{ fontSize: '13px', color: '#6B7280' }">{{ t('Basato su 12 recensioni') }}</span>
+            <span :style="{ fontSize: '13px', color: TOKENS.textSoft }">{{ t('Basato su 12 recensioni') }}</span>
           </div>
           <div v-for="review in mockReviews" :key="review.name" :style="reviewStyle">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
               <strong :style="{ fontSize: '14px', color: s.text_color }">{{ review.name }}</strong>
               <div style="display:flex;gap:1px;">
-                <svg v-for="star in 5" :key="star" width="12" height="12" viewBox="0 0 24 24" :fill="star <= review.rating ? '#F59E0B' : '#D1D5DB'" stroke="none">
+                <svg v-for="star in 5" :key="star" width="12" height="12" viewBox="0 0 24 24" :fill="star <= review.rating ? TOKENS.accent : TOKENS.border" stroke="none">
                   <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                 </svg>
               </div>
             </div>
-            <p style="margin:0;font-size:13px;color:#6B7280;">{{ review.text }}</p>
+            <p :style="{ margin: 0, fontSize: '13px', color: TOKENS.textSoft }">{{ review.text }}</p>
           </div>
         </div>
       </div>
@@ -57,6 +57,7 @@
 <script setup>
 import { computed, ref } from 'vue';
 import { t } from '@/i18n';
+import { resolveColor, TOKENS } from '@/composables/oloTileDefaults';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
@@ -67,11 +68,17 @@ const defaults = {
   show_additional: true,
   show_reviews: true,
   tab_style: 'underline',
-  active_color: 'var(--olo-color-primary, #6366F1)',
-  text_color: '#374151',
-  border_color: '#E5E7EB',
+  active_color: 'var(--olo-color-primary, #e1474f)',
+  text_color: '',           // '' ⇒ TOKENS.text
+  border_color: '',         // '' ⇒ TOKENS.border
 };
-const s = computed(() => ({ ...defaults, ...props.settings }));
+const sRaw = computed(() => ({ ...defaults, ...props.settings }));
+const s = computed(() => ({
+  ...sRaw.value,
+  text_color: resolveColor(sRaw.value.text_color, TOKENS.text),
+  border_color: resolveColor(sRaw.value.border_color, TOKENS.border),
+  active_color: resolveColor(sRaw.value.active_color, TOKENS.primary),
+}));
 
 const wooActive = computed(() => true);
 const activeTab = ref(0);
@@ -142,7 +149,7 @@ const tabBtnStyle = (isActive) => {
     base.borderRadius = '6px';
     if (isActive) {
       base.background = s.value.active_color;
-      base.color = '#fff';
+      base.color = TOKENS.onPrimary;
     }
   } else if (s.value.tab_style === 'boxed') {
     base.flex = '1';
@@ -184,14 +191,21 @@ const reviewStyle = computed(() => ({
   align-items: center;
   gap: 8px;
   padding: 16px 20px;
-  background: #FEF3C7;
-  border: 1px solid #F59E0B;
+  background: color-mix(in srgb, var(--olo-color-warning, #b45309) 12%, #fff);
+  border: 1px solid var(--olo-color-warning, #b45309);
   border-radius: 8px;
-  color: #92400E;
+  color: var(--olo-color-warning, #b45309);
   font-size: 14px;
   font-weight: 500;
 }
 .olo-woo-notice-icon {
-  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  flex-shrink: 0;
+}
+.olo-woo-notice-icon :deep(svg) {
+  width: 100%;
+  height: 100%;
 }
 </style>

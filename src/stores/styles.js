@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import { contrastOn } from '@/composables/oloTileDefaults';
 
 const oloData = window.oloData || {};
 
@@ -122,6 +123,22 @@ export const useStylesStore = defineStore('styles', {
           }
         }
       }
+
+      // on-primary: testo leggibile sul primario corrente (contrasto sRGB).
+      // Fonte del primario: palette globale → colors.primary → seed brand.
+      const gcPrimary = (state.globalColors || []).find(g => g.id === 'primary');
+      const primaryHex = (gcPrimary && gcPrimary.value) || c.primary || '#e1474f';
+      css += `  --olo-color-on-primary: ${contrastOn(primaryHex)};\n`;
+
+      // Alias di compatibilità: i nomi-pacchetto usati dalle tile mappano sui
+      // token del tema (text_muted/muted/background/danger), così seguono la
+      // palette del cliente. Vedi _olo-tokens.scss.
+      css += '  --olo-color-text-soft: var(--olo-color-text-muted, #6b7280);\n';
+      css += '  --olo-color-text-faint: var(--olo-color-text-muted, #94a3b8);\n';
+      css += '  --olo-color-surface: var(--olo-color-background, #ffffff);\n';
+      css += '  --olo-color-surface-alt: var(--olo-color-muted, #f6f7f9);\n';
+      css += '  --olo-color-error: var(--olo-color-danger, #b42318);\n';
+      css += '  --olo-color-info: #2563eb;\n';
 
       // Global Typography
       if (state.globalTypography && state.globalTypography.length > 0) {

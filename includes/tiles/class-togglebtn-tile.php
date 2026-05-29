@@ -69,10 +69,10 @@ class Olo_ToggleBtn_Tile extends Olo_Tile_Base {
 
         // Button styles
         $bg          = $s['btn_bg'] ?: 'transparent';
-        $color       = $this->safe_color_css( $s['btn_color'] ) ?: 'var(--olo-color-primary, #6366F1)';
-        $hover_bg    = $s['btn_hover_bg'] ?: 'color-mix(in srgb, var(--olo-color-primary, #6366F1) 10%, transparent)';
+        $color       = $this->safe_color_css( $s['btn_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
+        $hover_bg    = $s['btn_hover_bg'] ?: 'color-mix(in srgb, var(--olo-color-primary, #e1474f) 10%, transparent)';
         $bw          = max( 0, intval( $s['btn_border_width'] ) );
-        $bc          = $this->safe_color_css( $s['btn_border_color'] ) ?: 'var(--olo-color-primary, #6366F1)';
+        $bc          = $this->safe_color_css( $s['btn_border_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $radius      = Olo_Tile_Utils::border_radius( $s['btn_border_radius'] ?? 0 );
         $radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['btn_border_radius_hover'] ?? null );
         $px          = intval( $s['btn_padding_x'] );
@@ -114,6 +114,10 @@ class Olo_ToggleBtn_Tile extends Olo_Tile_Base {
             }
             .<?php echo $uid; ?>:active {
                 transform: scale(0.97);
+            }
+            .<?php echo $uid; ?>:focus-visible {
+                outline: none;
+                box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
             }
 
             .<?php echo $uid; ?> svg {

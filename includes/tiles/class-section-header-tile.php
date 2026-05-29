@@ -40,7 +40,7 @@ class Olo_SectionHeader_Tile extends Olo_Tile_Base {
         'tagline_text_color'    => '#0f172a',
         'tagline_text_size'     => 22,
         'tagline_caption'       => 'TRE GARANZIE · CINQUE PROMESSE',
-        'tagline_caption_color' => '#9ca3af',
+        'tagline_caption_color' => '',
         'tagline_caption_size'  => 11,
 
         'layout'         => 'split',
@@ -123,7 +123,7 @@ class Olo_SectionHeader_Tile extends Olo_Tile_Base {
             <?php if ( $show_tagline ) :
                 $tag_clr     = $this->safe_color_css( $s['tagline_text_color'] ) ?: '#0f172a';
                 $tag_size    = absint( $s['tagline_text_size'] ) ?: 22;
-                $cap_clr     = $this->safe_color_css( $s['tagline_caption_color'] ) ?: '#9ca3af';
+                $cap_clr     = $this->safe_color_css( $s['tagline_caption_color'] ) ?: 'var(--olo-color-text-faint, #9ca3af)';
                 $cap_size    = absint( $s['tagline_caption_size'] ) ?: 11;
                 $tag_italic  = ! empty( $s['tagline_text_italic'] ) ? 'font-style:italic;' : '';
             ?>

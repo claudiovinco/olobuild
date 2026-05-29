@@ -73,9 +73,9 @@ const s = computed(() => ({
   shape_bottom_fill: 'color', shape_bottom_fill_image: '', shape_bottom_fill_video: '',
   shape_bottom_flip: false, shape_bottom_invert: false, shape_bottom_scale_x: '100',
   shape_bottom_layer2: false, shape_bottom_layer2_color: '#000000', shape_bottom_layer2_opacity: '30',
-  bg_color: '', bg_gradient: false, bg_gradient_from: '#6366F1', bg_gradient_to: '#8B5CF6', bg_gradient_angle: '180',
+  bg_color: '', bg_gradient: false, bg_gradient_from: 'var(--olo-color-primary, #e1474f)', bg_gradient_to: 'var(--olo-color-accent, #f4a23b)', bg_gradient_angle: '180',
   full_bleed: false, overlap_top: '0', overlap_bottom: '0',
-  custom_svg: '', show_divider: false, divider_style: 'solid', divider_color: '#374151', divider_width: '100', divider_thickness: '1',
+  custom_svg: '', show_divider: false, divider_style: 'solid', divider_color: 'var(--olo-color-text, #374151)', divider_width: '100', divider_thickness: '1',
   ...props.settings,
 }));
 
@@ -132,6 +132,6 @@ function svgStyleFor(pos) {
 
 const dividerStyle = computed(() => ({
   width: (parseInt(s.value.divider_width) || 100) + '%',
-  borderTop: `${parseInt(s.value.divider_thickness) || 1}px ${s.value.divider_style || 'solid'} ${s.value.divider_color || '#374151'}`,
+  borderTop: `${parseInt(s.value.divider_thickness) || 1}px ${s.value.divider_style || 'solid'} ${s.value.divider_color || 'var(--olo-color-text, #374151)'}`,
 }));
 </script>

@@ -15,9 +15,9 @@ class Olo_Woo_Product_Tabs_Tile extends Olo_Tile_Base {
         'show_additional'  => true,
         'show_reviews'     => true,
         'tab_style'        => 'underline',
-        'active_color'     => '#6366F1',
-        'text_color'       => '#374151',
-        'border_color'     => '#E5E7EB',
+        'active_color'     => '',
+        'text_color'       => '',
+        'border_color'     => '',
             'border'                  => [],
         'border_hover'            => [],
         'border_hover_duration'   => 300,
@@ -34,7 +34,7 @@ class Olo_Woo_Product_Tabs_Tile extends Olo_Tile_Base {
 
     public function render( $settings ) {
         if ( ! class_exists( 'WooCommerce' ) ) {
-            return '<div style="padding:40px;text-align:center;color:#92400E;background:#FEF3C7;border:1px solid #F59E0B;border-radius:8px;">'
+            return '<div style="padding:40px;text-align:center;color:var(--olo-color-warning, #b45309);background:color-mix(in srgb, var(--olo-color-warning, #b45309) 12%, #fff);border:1px solid var(--olo-color-warning, #b45309);border-radius:8px;">'
                  . esc_html( olo_t( 'WooCommerce non attivo. Installa e attiva WooCommerce per utilizzare questo elemento.' ) )
                  . '</div>';
         }
@@ -53,10 +53,10 @@ class Olo_Woo_Product_Tabs_Tile extends Olo_Tile_Base {
 
         $uid = 'olo-woo-tabs-' . wp_rand( 10000, 99999 );
 
-        // Colors
-        $active_color = $this->safe_color_css( $s['active_color'] );
-        $text_color   = $this->safe_color_css( $s['text_color'] );
-        $border_color = $this->safe_color_css( $s['border_color'] );
+        // Colors — TOKEN-FIRST: tab attivo col primario brand, testo neutro, bordo dal token.
+        $active_color = $this->safe_color_css( $s['active_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
+        $text_color   = $this->safe_color_css( $s['text_color'] )   ?: 'var(--olo-color-text, #1f2937)';
+        $border_color = $this->safe_color_css( $s['border_color'] ) ?: 'var(--olo-color-border, #e5e7eb)';
 
         $tab_style = in_array( $s['tab_style'], [ 'underline', 'pills', 'boxed' ], true ) ? $s['tab_style'] : 'underline';
 
@@ -148,7 +148,7 @@ class Olo_Woo_Product_Tabs_Tile extends Olo_Tile_Base {
                 color: <?php echo $active_color; ?>;
                 <?php endif; ?>
                 <?php if ( $tab_style === 'pills' ) : ?>
-                background: <?php echo $active_color; ?>22;
+                background: color-mix(in srgb, <?php echo $active_color; ?> 13%, transparent);
                 <?php endif; ?>
             }
             .<?php echo $uid; ?> .olo-tab-btn.active:hover {

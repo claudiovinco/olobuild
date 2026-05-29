@@ -53,6 +53,13 @@
   transform: scale(1.05);
 }
 
+/* a11y: anello di focus visibile da tastiera sul trigger + clear */
+.olo-ls-trigger:focus-visible,
+.olo-ls-clear:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
+}
+
 /* ─── Field wrap (input + icons) ─── */
 .olo-ls-field {
   position: relative;
@@ -67,8 +74,8 @@
 }
 
 .olo-ls-field:focus-within {
-  border-color: var(--ls-focus-border-color, #6366f1);
-  box-shadow: 0 0 0 3px rgba(99,102,241,.15);
+  border-color: var(--ls-focus-border-color, var(--olo-color-primary, #e1474f));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
 }
 
 /* Compact: campo si espande con larghezza fissa, transizione smooth */

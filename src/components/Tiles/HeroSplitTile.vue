@@ -72,7 +72,7 @@ const props = defineProps({
 const defaults = {
   eyebrow_text: 'STACK WORDPRESS · PER AGENZIE E PMI',
   eyebrow_dot_color: '#10b981',
-  eyebrow_color: '#1f2937',
+  eyebrow_color: 'var(--olo-color-text, #1f2937)',
   headline_lines: [
     { text: 'Costruisci.', color: '#0f172a', italic: false },
     { text: 'Traduci.',    color: '#b3261e', italic: true  },
@@ -84,7 +84,7 @@ const defaults = {
   headline_font_weight: '700',
   headline_align: 'left',
   subhead: 'Un telaio, cinque prodotti, nessuna catena.',
-  subhead_color: '#374151',
+  subhead_color: 'var(--olo-color-text, #374151)',
   subhead_size: 18,
   subhead_italic: true,
   subhead_max_width: 520,
@@ -176,7 +176,7 @@ const eyebrowStyle = computed(() => ({
   fontSize: '12px',
   letterSpacing: '0.08em',
   textTransform: 'uppercase',
-  color: s.value.eyebrow_color || '#1f2937',
+  color: s.value.eyebrow_color || 'var(--olo-color-text, #1f2937)',
   marginBottom: '32px',
 }));
 
@@ -195,7 +195,7 @@ const subheadStyle = computed(() => {
     fontFamily: headlineFamily.value,
     fontSize: (s.value.subhead_size || 18) + 'px',
     lineHeight: 1.5,
-    color: s.value.subhead_color || '#374151',
+    color: s.value.subhead_color || 'var(--olo-color-text, #374151)',
     textAlign: s.value.subhead_align || 'left',
     margin: '0 0 40px',
   };
@@ -324,7 +324,7 @@ function parseCssString(str) {
 .olo-hsplit__stat-lbl {
   font-family: ui-monospace,'SF Mono',Menlo,Consolas,monospace;
   font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
-  color: #6b7280; line-height: 1.4;
+  color: var(--olo-color-text-soft, #6b7280); line-height: 1.4;
 }
 
 .olo-hsplit__badge {
@@ -343,7 +343,7 @@ function parseCssString(str) {
 
 .olo-hsplit__card-num {
   font-family: ui-monospace,'SF Mono',Menlo,Consolas,monospace;
-  font-size: 11px; color: #9ca3af; letter-spacing: 0.05em;
+  font-size: 11px; color: var(--olo-color-text-faint, #9ca3af); letter-spacing: 0.05em;
 }
 .olo-hsplit__card-txt { font-size: 36px; font-weight: 500; text-align: center; }
 
@@ -351,7 +351,7 @@ function parseCssString(str) {
   display: flex; justify-content: space-between; align-items: center;
   margin-top: auto;
   font-family: ui-monospace,'SF Mono',Menlo,Consolas,monospace;
-  font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: #9ca3af;
+  font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--olo-color-text-faint, #9ca3af);
 }
 
 /* Hover effects per le card (sincronizzati con PHP).
@@ -361,4 +361,10 @@ function parseCssString(str) {
 .olo-hsplit-hover-scale .olo-hsplit__card:hover { transform: scale(1.04); z-index: 2; }
 .olo-hsplit-hover-tilt .olo-hsplit__card { transform-style: preserve-3d; }
 .olo-hsplit-hover-tilt .olo-hsplit__card:hover { transform: perspective(800px) rotateX(4deg) rotateY(-4deg) scale(1.02); }
+
+/* a11y: anello di focus visibile da tastiera sui CTA (color-mix sul primario corrente) */
+.olo-hsplit__cta:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
+}
 </style>

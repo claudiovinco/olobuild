@@ -8,14 +8,14 @@
       gap: s.layout === 'block' ? '4px' : '6px',
       fontSize: s.font_size + 'px',
       fontWeight: s.font_weight,
-      color: s.text_color || '#6B7280',
+      color: s.text_color || 'var(--olo-color-text-soft, #6b7280)',
     }"
   >
     <!-- Icon before -->
     <span
       v-if="s.show_icon && s.icon_position === 'before'"
       class="olo-vc-icon"
-      :style="{ color: s.icon_color || s.text_color || '#6B7280' }"
+      :style="{ color: s.icon_color || s.text_color || 'var(--olo-color-text-soft, #6b7280)' }"
       v-html="eyeSvg"
     ></span>
 
@@ -29,7 +29,7 @@
     <span
       v-if="s.show_icon && s.icon_position === 'after'"
       class="olo-vc-icon"
-      :style="{ color: s.icon_color || s.text_color || '#6B7280' }"
+      :style="{ color: s.icon_color || s.text_color || 'var(--olo-color-text-soft, #6b7280)' }"
       v-html="eyeSvg"
     ></span>
   </div>
@@ -48,8 +48,8 @@ const defaults = {
   icon_position: 'before',
   label: 'visualizzazioni',
   show_label: true,
-  text_color: '#6B7280',
-  icon_color: '#6B7280',
+  text_color: '',
+  icon_color: '',
   font_size: '14',
   font_weight: '400',
   layout: 'inline',

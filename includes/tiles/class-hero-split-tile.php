@@ -28,7 +28,7 @@ class Olo_HeroSplit_Tile extends Olo_Tile_Base {
         // Eyebrow
         'eyebrow_text'      => 'STACK WORDPRESS · PER AGENZIE E PMI',
         'eyebrow_dot_color' => '#10b981',
-        'eyebrow_color'     => '#1f2937',
+        'eyebrow_color'     => 'var(--olo-color-text, #1f2937)',
 
         // Headline
         'headline_lines' => [
@@ -44,7 +44,7 @@ class Olo_HeroSplit_Tile extends Olo_Tile_Base {
 
         // Subhead
         'subhead'            => 'Un telaio, cinque prodotti, nessuna catena. Page builder gratis + prenotazioni + multilingua + virtual tour + e-learning, tutto in WordPress.',
-        'subhead_color'      => '#374151',
+        'subhead_color'      => 'var(--olo-color-text, #374151)',
         'subhead_size'       => 18,
         'subhead_italic'     => true,
         'subhead_max_width'  => 520,
@@ -213,7 +213,7 @@ class Olo_HeroSplit_Tile extends Olo_Tile_Base {
                 <!-- LEFT COLUMN -->
                 <div class="olo-hsplit__left">
                     <?php if ( ! empty( $s['eyebrow_text'] ) ) : ?>
-                        <div class="olo-hsplit__eyebrow" style="display:inline-flex;align-items:center;gap:10px;font-family:<?php echo esc_attr( $mono_stack ); ?>;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:<?php echo esc_attr( $this->safe_color_css( $s['eyebrow_color'] ) ?: '#1f2937' ); ?>;margin-bottom:32px">
+                        <div class="olo-hsplit__eyebrow" style="display:inline-flex;align-items:center;gap:10px;font-family:<?php echo esc_attr( $mono_stack ); ?>;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:<?php echo esc_attr( $this->safe_color_css( $s['eyebrow_color'] ) ?: 'var(--olo-color-text, #1f2937)' ); ?>;margin-bottom:32px">
                             <span style="width:10px;height:10px;border-radius:50%;background:<?php echo esc_attr( $this->safe_color_css( $s['eyebrow_dot_color'] ) ?: '#10b981' ); ?>"></span>
                             <span data-olo-editable="eyebrow_text"><?php echo esc_html( $s['eyebrow_text'] ); ?></span>
                         </div>
@@ -240,7 +240,7 @@ class Olo_HeroSplit_Tile extends Olo_Tile_Base {
                     <?php endif; ?>
 
                     <?php if ( ! empty( $s['subhead'] ) ) :
-                        $sub_color  = $this->safe_color_css( $s['subhead_color'] ) ?: '#374151';
+                        $sub_color  = $this->safe_color_css( $s['subhead_color'] ) ?: 'var(--olo-color-text, #374151)';
                         $sub_size   = absint( $s['subhead_size'] ) ?: 18;
                         $sub_italic = ! empty( $s['subhead_italic'] ) ? 'font-style:italic;' : '';
                         $sub_mw     = absint( $s['subhead_max_width'] ?? 0 );
@@ -286,7 +286,7 @@ class Olo_HeroSplit_Tile extends Olo_Tile_Base {
                             ?>
                                 <div class="olo-hsplit__stat">
                                     <div style="font-family:<?php echo esc_attr( $headline_family ); ?>;font-size:36px;line-height:1;font-weight:600;color:<?php echo esc_attr( $val_color ); ?>;margin-bottom:10px;<?php echo $val === 'Gratis' ? 'font-style:italic;' : ''; ?>" data-olo-editable="<?php echo 'stats.' . intval( $sidx ) . '.value'; ?>"><?php echo esc_html( $val ); ?></div>
-                                    <div style="font-family:<?php echo esc_attr( $mono_stack ); ?>;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:#6b7280;line-height:1.4" data-olo-editable="<?php echo 'stats.' . intval( $sidx ) . '.label'; ?>"><?php echo esc_html( $lbl ); ?></div>
+                                    <div style="font-family:<?php echo esc_attr( $mono_stack ); ?>;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--olo-color-text-soft, #6b7280);line-height:1.4" data-olo-editable="<?php echo 'stats.' . intval( $sidx ) . '.label'; ?>"><?php echo esc_html( $lbl ); ?></div>
                                 </div>
                             <?php endforeach; ?>
                         </div>
@@ -325,7 +325,7 @@ class Olo_HeroSplit_Tile extends Olo_Tile_Base {
                                     $shadow_css = $card_shadow ? 'box-shadow:' . $card_shadow . ';' : '';
                                 ?>
                                     <div class="olo-hsplit__card olo-hsplit__card--<?php echo $idx; ?>" style="<?php echo esc_attr( $card_bg_css ); ?>;<?php if ( $card_radius ) echo 'border-radius:' . esc_attr( $card_radius ) . ';'; ?>padding:24px;display:flex;flex-direction:column;justify-content:space-between;min-height:180px;<?php echo $shadow_css; ?>transition:border-radius <?php echo $card_rdur; ?>ms cubic-bezier(.4,0,.2,1),transform .3s ease,box-shadow .3s ease">
-                                        <div style="font-family:<?php echo esc_attr( $mono_stack ); ?>;font-size:11px;color:#9ca3af;letter-spacing:0.05em" data-olo-editable="<?php echo 'showcase_items.' . intval( $idx ) . '.number'; ?>"><?php echo esc_html( $num ); ?></div>
+                                        <div style="font-family:<?php echo esc_attr( $mono_stack ); ?>;font-size:11px;color:var(--olo-color-text-faint, #9ca3af);letter-spacing:0.05em" data-olo-editable="<?php echo 'showcase_items.' . intval( $idx ) . '.number'; ?>"><?php echo esc_html( $num ); ?></div>
                                         <div style="font-family:<?php echo esc_attr( $headline_family ); ?>;font-size:36px;font-weight:500;color:<?php echo esc_attr( $txt_clr ); ?>;text-align:center;<?php echo $italic; ?>" data-olo-editable="<?php echo 'showcase_items.' . intval( $idx ) . '.text'; ?>"><?php echo esc_html( $txt ); ?></div>
                                     </div>
                                 <?php endforeach; ?>
@@ -333,7 +333,7 @@ class Olo_HeroSplit_Tile extends Olo_Tile_Base {
                         <?php endif; ?>
 
                         <?php if ( ! empty( $s['showcase_caption_left'] ) || ! empty( $s['showcase_caption_right'] ) ) : ?>
-                            <div class="olo-hsplit__captions" style="display:flex;justify-content:space-between;align-items:center;margin-top:auto;font-family:<?php echo esc_attr( $mono_stack ); ?>;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:#9ca3af">
+                            <div class="olo-hsplit__captions" style="display:flex;justify-content:space-between;align-items:center;margin-top:auto;font-family:<?php echo esc_attr( $mono_stack ); ?>;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--olo-color-text-faint, #9ca3af)">
                                 <span data-olo-editable="showcase_caption_left"><?php echo esc_html( $s['showcase_caption_left'] ); ?></span>
                                 <span data-olo-editable="showcase_caption_right"><?php echo esc_html( $s['showcase_caption_right'] ); ?></span>
                             </div>

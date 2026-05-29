@@ -21,7 +21,7 @@ class Olo_Woo_Quickview_Tile extends Olo_Tile_Base {
         'show_meta'        => true,
         'modal_width'      => 800,
         'image_width'      => 50,
-        'accent_color'     => '#6366F1',
+        'accent_color'     => '',
         'text_color'       => '',
             'border'                  => [],
         'border_hover'            => [],
@@ -39,7 +39,7 @@ class Olo_Woo_Quickview_Tile extends Olo_Tile_Base {
 
     public function render( $settings ) {
         if ( ! class_exists( 'WooCommerce' ) ) {
-            return '<div style="padding:40px;text-align:center;color:#92400E;background:#FEF3C7;border:1px solid #F59E0B;border-radius:8px;">'
+            return '<div style="padding:40px;text-align:center;color:var(--olo-color-warning, #b45309);background:color-mix(in srgb, var(--olo-color-warning, #b45309) 12%, #fff);border:1px solid var(--olo-color-warning, #b45309);border-radius:8px;">'
                  . esc_html( olo_t( 'WooCommerce non attivo. Installa e attiva WooCommerce per utilizzare questo elemento.' ) )
                  . '</div>';
         }
@@ -47,7 +47,7 @@ class Olo_Woo_Quickview_Tile extends Olo_Tile_Base {
         $s   = wp_parse_args( $settings, $this->defaults );
         $uid = 'olo-woo-qv-' . wp_rand( 10000, 99999 );
 
-        $accent    = $this->safe_color_css( $s['accent_color'] ) ?: '#6366F1';
+        $accent    = $this->safe_color_css( $s['accent_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $text_col  = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-text, #374151)';
         $modal_w   = max( 400, min( 1200, absint( $s['modal_width'] ) ) );
         $img_w     = max( 30, min( 70, absint( $s['image_width'] ) ) );
@@ -459,7 +459,7 @@ class Olo_Woo_Quickview_Tile extends Olo_Tile_Base {
                     <?php if ( $product->is_in_stock() ) : ?>
                     <div style="display:flex;gap:10px;align-items:center;margin-top:16px">
                         <input type="number" class="olo-qv-qty" value="1" min="1" max="<?php echo $product->get_stock_quantity() ?: 99; ?>" style="width:60px;height:40px;text-align:center;border:1px solid var(--olo-color-border, #E5E7EB);border-radius:6px;font-size:14px" />
-                        <button data-olo-qv-atc-btn style="padding:10px 24px;border:none;border-radius:6px;cursor:pointer;font-weight:600;font-size:14px;background:var(--olo-color-primary,#6366F1);color:var(--olo-color-primary-contrast, #FFFFFF)"><?php echo esc_html( olo_t( 'Aggiungi al carrello' ) ); ?></button>
+                        <button data-olo-qv-atc-btn style="padding:10px 24px;border:none;border-radius:6px;cursor:pointer;font-weight:600;font-size:14px;background:var(--olo-color-primary,#e1474f);color:var(--olo-color-primary-contrast, #FFFFFF)"><?php echo esc_html( olo_t( 'Aggiungi al carrello' ) ); ?></button>
                     </div>
                     <?php else : ?>
                     <div style="color:var(--olo-color-danger, #EF4444);font-weight:600;margin-top:12px"><?php echo esc_html( olo_t( 'Esaurito' ) ); ?></div>
@@ -475,7 +475,7 @@ class Olo_Woo_Quickview_Tile extends Olo_Tile_Base {
                     <div><?php echo esc_html( olo_t( 'Categorie' ) ); ?>: <?php echo $cats; ?></div>
                     <?php endif; ?>
                 </div>
-                <a href="<?php echo esc_url( get_permalink( $pid ) ); ?>" style="display:inline-block;margin-top:16px;font-size:13px;color:var(--olo-color-primary,#6366F1);text-decoration:none"><?php echo esc_html( olo_t( 'Vedi dettagli completi' ) ); ?> &rarr;</a>
+                <a href="<?php echo esc_url( get_permalink( $pid ) ); ?>" style="display:inline-block;margin-top:16px;font-size:13px;color:var(--olo-color-primary,#e1474f);text-decoration:none"><?php echo esc_html( olo_t( 'Vedi dettagli completi' ) ); ?> &rarr;</a>
             </div>
         </div>
         <?php

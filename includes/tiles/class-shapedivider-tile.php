@@ -75,7 +75,7 @@ class Olo_Shapedivider_Tile extends Olo_Tile_Base {
         $path = $paths[ $shape ];
 
         $position = ( $s['position'] === 'top' ) ? 'top' : 'bottom';
-        $color    = $this->safe_color_css( $s['color'] ) ?: '#ffffff';
+        $color    = $this->safe_color_css( $s['color'] ) ?: 'var(--olo-color-surface, #ffffff)';
         $height   = max( 10, intval( $s['height'] ) );
         $width    = max( 100, min( 300, intval( $s['width'] ) ) );
         $flip_h   = ! empty( $s['flip_horizontal'] );

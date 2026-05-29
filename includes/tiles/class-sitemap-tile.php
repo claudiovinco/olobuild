@@ -42,9 +42,9 @@ class Olo_Sitemap_Tile extends Olo_Tile_Base {
         'font_weight'             => '400',
         'text_transform'          => 'none',
         'letter_spacing'          => 0,
-        'title_color'             => '#1e293b',
-        'link_color'              => '#2563eb',
-        'hover_color'             => '#1d4ed8',
+        'title_color'             => '',
+        'link_color'              => '',
+        'hover_color'             => '',
         'text_color'              => '',
         'bg_color'                => '',
         'accent_color'            => '',
@@ -171,10 +171,11 @@ class Olo_Sitemap_Tile extends Olo_Tile_Base {
         $item_gap   = max( 0, min( 24, absint( $s['item_gap'] ) ) );
         $limit      = max( 5, min( 500, absint( $s['limit_per_section'] ) ) );
 
-        $title_color = $this->safe_color_css( $s['title_color'] ) ?: '#1e293b';
-        $link_color  = $this->safe_color_css( $s['link_color'] )  ?: '#2563eb';
-        $hover_color = $this->safe_color_css( $s['hover_color'] ) ?: '#1d4ed8';
-        $text_color  = $this->safe_color_css( $s['text_color'] )  ?: '#64748b';
+        // TOKEN-FIRST: link/hover = primario brand (era #2563eb/#1d4ed8 blu off-brand); neutri → token
+        $title_color = $this->safe_color_css( $s['title_color'] ) ?: 'var(--olo-color-text, #1e293b)';
+        $link_color  = $this->safe_color_css( $s['link_color'] )  ?: 'var(--olo-color-primary, #e1474f)';
+        $hover_color = $this->safe_color_css( $s['hover_color'] ) ?: 'color-mix(in srgb, var(--olo-color-primary, #e1474f) 80%, #000)';
+        $text_color  = $this->safe_color_css( $s['text_color'] )  ?: 'var(--olo-color-text-soft, #64748b)';
         $bg_color    = $this->safe_color_css( $s['bg_color'] );
         $accent      = $this->safe_color_css( $s['accent_color'] ) ?: $link_color;
 
@@ -406,6 +407,7 @@ class Olo_Sitemap_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> ul.is-bulleted { list-style-type:<?php echo esc_attr( $real_list_style ); ?>; padding-left:<?php echo $indent; ?>px; }
             .<?php echo $uid; ?> a { color:<?php echo $link_color; ?>; text-decoration:none; transition:color 0.2s; display:inline-flex; align-items:center; gap:5px; }
             .<?php echo $uid; ?> a:hover { color:<?php echo $hover_color; ?>; text-decoration:underline; }
+            .<?php echo $uid; ?> a:focus-visible { outline:none; box-shadow:0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent); border-radius:3px; }
             .<?php echo $uid; ?> .olo-sm-icon { color:<?php echo $accent; ?>; flex-shrink:0; display:inline-flex; align-items:center; }
             .<?php echo $uid; ?> .olo-sm-meta { font-size:0.8em; color:<?php echo $text_color; ?>; margin-left:8px; opacity:0.75; }
             .<?php echo $uid; ?> .olo-sm-excerpt { display:block; font-size:0.85em; color:<?php echo $text_color; ?>; margin-top:2px; opacity:0.8; line-height:1.4; }

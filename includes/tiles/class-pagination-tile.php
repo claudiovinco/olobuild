@@ -20,10 +20,10 @@ class Olo_Pagination_Tile extends Olo_Tile_Base {
         'gap'                => '8',
         'button_padding'     => '8 16',
         'text_color'         => '',
-        'active_color'       => '#1e87f0',
-        'active_text_color'  => '#ffffff',
+        'active_color'       => '',
+        'active_text_color'  => '',
         'background_color'   => '',
-        'active_background'  => '#1e87f0',
+        'active_background'  => '',
         'border_radius'      => '4',
         'hover_background'   => '',
         'font_size'          => '14',
@@ -83,12 +83,12 @@ class Olo_Pagination_Tile extends Olo_Tile_Base {
             $padding_css = '8px 16px';
         }
 
-        // Colors
+        // Colors — TOKEN-FIRST: voce attiva = primario brand (era #e1474f blu off-brand)
         $text_color      = $this->safe_color_css( $s['text_color'] );
-        $active_color    = $this->safe_color_css( $s['active_color'] ?: '#1e87f0' );
-        $active_text     = $this->safe_color_css( $s['active_text_color'] ?: '#ffffff' );
+        $active_color    = $this->safe_color_css( $s['active_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
+        $active_text     = $this->safe_color_css( $s['active_text_color'] ) ?: 'var(--olo-color-primary-contrast, #ffffff)';
         $bg_color        = $this->safe_color_css( $s['background_color'] );
-        $active_bg       = $this->safe_color_css( $s['active_background'] ?: '#1e87f0' );
+        $active_bg       = $this->safe_color_css( $s['active_background'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $hover_bg        = $this->safe_color_css( $s['hover_background'] );
         $border_color    = $this->safe_color_css( $s['border_color'] ?: '#e5e7eb' );
 
@@ -293,6 +293,10 @@ class Olo_Pagination_Tile extends Olo_Tile_Base {
                 background: <?php echo $hover_bg; ?>;
             }
             <?php endif; ?>
+            .<?php echo $uid; ?> .olo-pagination-link:focus-visible {
+                outline: none;
+                box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
+            }
             .<?php echo $uid; ?> .olo-pagination-current {
                 color: <?php echo $active_text; ?>;
                 background: <?php echo $active_bg; ?>;

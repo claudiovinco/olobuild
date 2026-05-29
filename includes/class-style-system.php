@@ -23,9 +23,9 @@ class Olo_Style_System {
     public function get_defaults() {
         return [
             'colors' => [
-                'primary'            => '#6366F1',
+                'primary'            => '#e1474f',
                 'primary_contrast'   => '#FFFFFF',
-                'secondary'          => '#1F2937',
+                'secondary'          => '#16263d',
                 'secondary_contrast' => '#FFFFFF',
                 'muted'              => '#F3F4F6',
                 'muted_contrast'     => '#374151',
@@ -36,7 +36,7 @@ class Olo_Style_System {
                 'text_muted'         => '#9CA3AF',
                 'background'         => '#FFFFFF',
                 'border'             => '#E5E7EB',
-                'link'               => '#6366F1',
+                'link'               => '#e1474f',
             ],
             'typography' => [
                 'font_family'              => '',
@@ -425,6 +425,15 @@ class Olo_Style_System {
                 $css .= "  --olo-color-" . sanitize_html_class( $gc['id'] ) . ": " . esc_attr( $gc['value'] ) . ";\n";
             }
         }
+        // Alias di compatibilità: i nomi-pacchetto usati dalle tile mappano sui
+        // token del tema (così seguono la palette del cliente). Vedi _olo-tokens.scss.
+        $css .= "  --olo-color-on-primary: var(--olo-color-primary-contrast, #ffffff);\n";
+        $css .= "  --olo-color-text-soft: var(--olo-color-text-muted, #6b7280);\n";
+        $css .= "  --olo-color-text-faint: var(--olo-color-text-muted, #94a3b8);\n";
+        $css .= "  --olo-color-surface: var(--olo-color-background, #ffffff);\n";
+        $css .= "  --olo-color-surface-alt: var(--olo-color-muted, #f6f7f9);\n";
+        $css .= "  --olo-color-error: var(--olo-color-danger, #b42318);\n";
+        $css .= "  --olo-color-info: #2563eb;\n";
         // Typography
         if ( ! empty( $t['font_family'] ) ) {
             $css .= "  --olo-font-family: {$t['font_family']};\n";

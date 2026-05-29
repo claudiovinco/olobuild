@@ -18,7 +18,7 @@ class Olo_Woo_Product_Title_Tile extends Olo_Tile_Base {
         'font_weight' => '700',
         'line_height' => '1.2',
         'link_to_product' => false,
-        'link_color_hover' => '#6366F1',
+        'link_color_hover' => '',
             'border'                  => [],
         'border_hover'            => [],
         'border_hover_duration'   => 300,
@@ -35,7 +35,7 @@ class Olo_Woo_Product_Title_Tile extends Olo_Tile_Base {
 
     public function render( $settings ) {
         if ( ! class_exists( 'WooCommerce' ) ) {
-            return '<div style="padding:40px;text-align:center;color:#92400E;background:#FEF3C7;border:1px solid #F59E0B;border-radius:8px;">'
+            return '<div style="padding:40px;text-align:center;color:var(--olo-color-warning, #b45309);background:color-mix(in srgb, var(--olo-color-warning, #b45309) 12%, #fff);border:1px solid var(--olo-color-warning, #b45309);border-radius:8px;">'
                  . esc_html( olo_t( 'WooCommerce non attivo. Installa e attiva WooCommerce per utilizzare questo elemento.' ) )
                  . '</div>';
         }
@@ -59,9 +59,9 @@ class Olo_Woo_Product_Title_Tile extends Olo_Tile_Base {
         $allowed_tags = [ 'h1', 'h2', 'h3', 'h4', 'h5', 'h6' ];
         $tag = in_array( $s['tag'], $allowed_tags, true ) ? $s['tag'] : 'h1';
 
-        // Colors
-        $color       = $this->safe_color_css( $s['color'] );
-        $hover_color = $this->safe_color_css( $s['link_color_hover'] );
+        // Colors — TOKEN-FIRST: titolo eredita il testo del tema, hover col primario brand.
+        $color       = $this->safe_color_css( $s['color'] ) ?: 'var(--olo-color-text, #1f2937)';
+        $hover_color = $this->safe_color_css( $s['link_color_hover'] ) ?: 'var(--olo-color-primary, #e1474f)';
 
         // Font
         $font_size   = max( 12, min( 96, absint( $s['font_size'] ) ) );

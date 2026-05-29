@@ -22,7 +22,8 @@ const defaults = {
   bg_color: '', border_color: '', border_radius: '8', padding: '16',
 };
 const s = computed(() => ({ ...defaults, ...props.settings }));
-const iconC = computed(() => s.value.icon_color || '#6366F1');
+// icona "come arrivare": token-first sul brand (era #e1474f indaco off-brand)
+const iconC = computed(() => s.value.icon_color || 'var(--olo-color-primary, #e1474f)');
 const titleSz = computed(() => Math.min(parseInt(s.value.title_size) || 18, 20));
 const textSz = computed(() => Math.min(parseInt(s.value.text_size) || 14, 15));
 const wrapStyle = computed(() => {

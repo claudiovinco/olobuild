@@ -76,7 +76,7 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
         // Buttons
         'button_mode'        => 'none',
         'btn_bg'             => '',
-        'btn_color'          => '#FFFFFF',
+        'btn_color'          => '',
         'btn_radius'         => [ 'tl' => 6, 'tr' => 6, 'br' => 6, 'bl' => 6 ],
         'btn_hover_bg'       => '',
         'btn_padding_v'      => [ 'top' => 8, 'right' => 0, 'bottom' => 8, 'left' => 0 ],
@@ -305,25 +305,25 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
         $p_radius    = Olo_Tile_Utils::radius_int( $s['panel_radius'] );
         $p_pad       = $this->pad_int( $s['panel_padding'] ?? null, 32 ) ?: 32;
         $p_bt        = intval( $s['panel_border_top'] );
-        $p_bc        = $this->safe_color( $s['panel_border_color'] ) ?: 'var(--olo-color-primary, #6366F1)';
+        $p_bc        = $this->safe_color( $s['panel_border_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $p_anim      = $s['panel_animation'] === 'slide-down' ? 'slide' : 'fade';
         $p_shadow    = Olo_Tile_Utils::shadow( $s['panel_shadow'] ?? 'none', 'panel' );
         $dividers    = ! empty( $s['show_dividers'] );
 
-        // Panel typography
-        $h_color     = $this->safe_color( $s['heading_color'] ) ?: '#111827';
+        // Panel typography — neutri nudi → token tema
+        $h_color     = $this->safe_color( $s['heading_color'] ) ?: 'var(--olo-color-text, #111827)';
         $h_size      = intval( $s['heading_size'] ) ?: 14;
         $h_weight    = intval( $s['heading_weight'] ) ?: 600;
         $h_tt        = esc_attr( $s['heading_transform'] ?: 'none' );
-        $l_color     = $this->safe_color( $s['link_color'] ) ?: '#4B5563';
-        $l_hcolor    = $this->safe_color( $s['link_hover_color'] ) ?: 'var(--olo-color-primary, #6366F1)';
+        $l_color     = $this->safe_color( $s['link_color'] ) ?: 'var(--olo-color-text, #4B5563)';
+        $l_hcolor    = $this->safe_color( $s['link_hover_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $l_size      = intval( $s['link_size'] ) ?: 14;
         $l_spacing   = intval( $s['link_spacing'] ) ?: 8;
-        $desc_color  = $this->safe_color( $s['desc_color'] ) ?: '#9CA3AF';
+        $desc_color  = $this->safe_color( $s['desc_color'] ) ?: 'var(--olo-color-text-faint, #9CA3AF)';
 
         // Buttons
-        $btn_bg      = $this->safe_color( $s['btn_bg'] ) ?: 'var(--olo-color-primary, #6366F1)';
-        $btn_color   = $this->safe_color( $s['btn_color'] ) ?: '#FFFFFF';
+        $btn_bg      = $this->safe_color( $s['btn_bg'] ) ?: 'var(--olo-color-primary, #e1474f)';
+        $btn_color   = $this->safe_color( $s['btn_color'] ) ?: 'var(--olo-color-primary-contrast, #FFFFFF)';
         $btn_radius  = Olo_Tile_Utils::radius_int( $s['btn_radius'] );
         $btn_hbg     = $this->safe_color( $s['btn_hover_bg'] );
         $btn_pv      = $this->pad_int( $s['btn_padding_v'] ?? null, 8 );
@@ -339,7 +339,7 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
         $mob_bg      = $this->safe_color( $s['mobile_bg'] ) ?: '#1e1e2e';
         $mob_tc      = $this->safe_color( $s['mobile_text_color'] ) ?: '#FFFFFF';
         $mob_hc      = $this->safe_color( $s['mobile_heading_color'] ) ?: 'rgba(255,255,255,.5)';
-        $mob_acc     = $this->safe_color( $s['mobile_accent_color'] ) ?: 'var(--olo-color-primary, #6366F1)';
+        $mob_acc     = $this->safe_color( $s['mobile_accent_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $mob_logo_h  = intval( $s['mobile_logo_height'] ) ?: 36;
 
         // Toggle sottomenu
@@ -375,7 +375,7 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
         // Social
         $soc_size    = intval( $s['social_size'] ?? 20 );
         $soc_color   = $this->safe_color( $s['social_color'] ) ?: 'inherit';
-        $soc_hcolor  = $this->safe_color( $s['social_hover_color'] ) ?: 'var(--olo-color-primary, #6366F1)';
+        $soc_hcolor  = $this->safe_color( $s['social_hover_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $soc_style   = $s['social_style'] ?? 'plain';
         $soc_pos     = $s['social_position'] ?? 'menu-footer';
         // New toggle-based social positions
@@ -472,7 +472,7 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
         }
         <?php
         $he       = $s['hover_effect'] ?? 'none';
-        $he_color = $this->safe_color_css( $s['hover_effect_color'] ?? '' ) ?: ( $ac ?: 'var(--olo-color-primary, #6366F1)' );
+        $he_color = $this->safe_color_css( $s['hover_effect_color'] ?? '' ) ?: ( $ac ?: 'var(--olo-color-primary, #e1474f)' );
         $he_h     = max( 1, intval( $s['hover_effect_height'] ?? 2 ) );
         if ( $he === 'none' || $he === '' ) : // Default underline (backward compat)
         ?>
@@ -823,6 +823,14 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
         .<?php echo $uid; ?> .olo-mm-link:hover {
             color: <?php echo $l_hcolor; ?>;
             padding-left: 4px;
+        }
+        /* a11y tastiera: anello di focus visibile su link/CTA del megamenu */
+        .<?php echo $uid; ?> .olo-mm-link:focus-visible,
+        .<?php echo $uid; ?> .olo-mm-btn:focus-visible,
+        .<?php echo $uid; ?> .uk-navbar-nav > li > a:focus-visible {
+            outline: none;
+            box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
+            border-radius: 3px;
         }
         .<?php echo $uid; ?> .olo-mm-desc {
             display: block;
@@ -1492,7 +1500,7 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
         <?php
         // ── HOVER EFFECTS (nuovi 6) ──
         $he = $s['hover_effect'] ?? 'none';
-        $he_color = $this->safe_color( $s['hover_effect_color'] ) ?: 'var(--olo-color-primary, #6366F1)';
+        $he_color = $this->safe_color( $s['hover_effect_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $he_h = intval( $s['hover_effect_height'] ?? 2 );
         $he_pad = $this->pad_int( $s['hover_effect_padding'] ?? null, 8 );
         ?>

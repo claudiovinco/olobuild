@@ -8,7 +8,7 @@
           borderRadius: (parseInt(settings.border_radius) || 0) + 'px',
           overflow: 'hidden',
           position: 'relative',
-          border: '1px solid #D1D5DB',
+          border: '1px solid var(--olo-color-border, #d1d5db)',
         }"
       >
         <iframe
@@ -25,6 +25,7 @@
 
         <!-- Edit mode toggle -->
         <button
+          class="olo-map-edit-btn"
           :style="{
             position: 'absolute',
             top: '8px',
@@ -72,7 +73,7 @@
       class="mb-flex mb-flex-col mb-items-center mb-justify-center mb-text-gray-400 mb-gap-2 mb-p-4"
       :style="{ height: (settings.height || 400) + 'px' }"
     >
-      <span class="mb-text-5xl">&#x1F4CD;</span>
+      <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
       <span class="mb-text-sm mb-font-semibold mb-text-gray-300">Mappa Servizio Dinamico</span>
       <div class="mb-text-xs mb-text-center mb-text-gray-500">
         <div>Legge GPS dal servizio corrente</div>
@@ -87,7 +88,7 @@
       class="mb-flex mb-flex-col mb-items-center mb-justify-center mb-text-gray-400 mb-gap-2 mb-p-4"
       :style="{ height: (settings.height || 400) + 'px' }"
     >
-      <span class="mb-text-5xl">&#x1F3D4;</span>
+      <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m3 20 5.5-9 4 6 3-4.5L21 20H3z"/><circle cx="8" cy="6" r="2"/></svg>
       <span class="mb-text-sm mb-font-semibold mb-text-gray-300">Mappa Servizi (Olo Booking)</span>
       <div class="mb-text-xs mb-text-center mb-space-y-1 mb-text-gray-500">
         <div>Modalit&agrave;: <span class="mb-text-gray-300">{{ settings.svc_booking_mode || 'tutti' }}</span></div>
@@ -115,7 +116,7 @@
       class="mb-flex mb-flex-col mb-items-center mb-justify-center mb-text-gray-400 mb-gap-2 mb-p-4"
       :style="{ height: (settings.height || 400) + 'px' }"
     >
-      <span class="mb-text-5xl">&#x1F4CD;</span>
+      <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
       <span class="mb-text-sm mb-font-semibold mb-text-gray-300">Leaflet Locations Map</span>
       <div class="mb-text-xs mb-text-center mb-space-y-1 mb-text-gray-500">
         <div>Post Type: <span class="mb-text-gray-300">{{ settings.loc_post_type || 'location' }}</span></div>
@@ -271,3 +272,10 @@ map.on('click',function(e){
 </html>`;
 });
 </script>
+
+<style scoped>
+.olo-map-edit-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
+}
+</style>

@@ -142,9 +142,9 @@
               <!-- Password strength (after password) -->
               <div v-if="s.show_password_strength" style="margin-top:8px;">
                 <div style="display:flex;gap:4px;">
-                  <div v-for="i in 4" :key="i" :style="{ flex:1, height:'4px', borderRadius:'2px', backgroundColor: i <= 2 ? '#F59E0B' : (s.input_border_color || 'var(--olo-color-border, #E5E7EB)') }"></div>
+                  <div v-for="i in 4" :key="i" :style="{ flex:1, height:'4px', borderRadius:'2px', backgroundColor: i <= 2 ? 'var(--olo-color-warning, #b45309)' : (s.input_border_color || 'var(--olo-color-border, #E5E7EB)') }"></div>
                 </div>
-                <div style="font-size:11px;margin-top:4px;color:#F59E0B;">{{ t('Media') }}</div>
+                <div style="font-size:11px;margin-top:4px;" :style="{ color: 'var(--olo-color-warning, #b45309)' }">{{ t('Media') }}</div>
               </div>
               <!-- Password requirements -->
               <div v-if="pwRequirements.length" style="margin-top:8px;">
@@ -294,8 +294,8 @@ const showLoggedIn = ref(false);
 const showPwLogin = ref(false);
 const showPwRegister = ref(false);
 
-const submitBg = computed(() => s.value.submit_bg || 'var(--olo-color-primary, #6366F1)');
-const linkColor = computed(() => s.value.link_color || s.value.submit_bg || 'var(--olo-color-primary, #6366F1)');
+const submitBg = computed(() => s.value.submit_bg || 'var(--olo-color-primary, #e1474f)');
+const linkColor = computed(() => s.value.link_color || s.value.submit_bg || 'var(--olo-color-primary, #e1474f)');
 const inputPad = computed(() => (parseInt(s.value.input_padding) || 11) + 'px');
 const inputR = computed(() => ((v => isNaN(v) ? 8 : v)(parseInt(s.value.input_radius))) + 'px');
 const submitR = computed(() => ((v => isNaN(v) ? 8 : v)(parseInt(s.value.submit_radius))) + 'px');
@@ -570,5 +570,17 @@ const tabInactiveStyle = computed(() => {
 }
 .olo-loginform-preview a:hover {
   text-decoration: underline !important;
+}
+/* a11y: anello di focus visibile da tastiera su tutti i controlli */
+.olo-loginform-preview button:focus-visible,
+.olo-loginform-preview a:focus-visible {
+  outline: none;
+  border-radius: 4px;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
+}
+/* bordo input attivo → primary */
+.olo-loginform-preview input:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
 }
 </style>

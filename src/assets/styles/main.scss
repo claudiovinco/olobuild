@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+// Token di SISTEMA (fallback globali): on-primary, neutri fini, semantici.
+// I 6 ruoli globali arrivano dal GlobalColorsPanel/store. Vedi _olo-tokens.scss.
+@import 'olo-tokens';
+
 // Reset for WP admin area
 #olobuilder-app {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;

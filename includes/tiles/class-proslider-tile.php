@@ -317,7 +317,7 @@ class Olo_ProSlider_Tile extends Olo_Tile_Base {
             <?php endif; ?>
 
             <?php if ( ! empty( $s['showProgressBar'] ) && count( $slides ) > 1 ) :
-                $pb_color  = $this->safe_color_css( $s['progressBarColor'] ?? '#3b82f6' ) ?: '#3b82f6';
+                $pb_color  = $this->safe_color_css( $s['progressBarColor'] ?? '' ) ?: 'var(--olo-color-primary, #e1474f)';
                 $pb_height = absint( $s['progressBarHeight'] ?? 3 );
                 if ( $pb_height < 1 ) { $pb_height = 3; }
             ?>
@@ -672,11 +672,11 @@ class Olo_ProSlider_Tile extends Olo_Tile_Base {
             if ( ! empty( $layer['shapeGradient'] ) && is_array( $layer['shapeGradient'] ) ) {
                 $sg = $layer['shapeGradient'];
                 $sg_angle = intval( $sg['angle'] ?? 180 );
-                $sg_from = $this->safe_color_css( $sg['from'] ?? '#3b82f6' ) ?: '#3b82f6';
-                $sg_to = $this->safe_color_css( $sg['to'] ?? '#8b5cf6' ) ?: '#8b5cf6';
+                $sg_from = $this->safe_color_css( $sg['from'] ?? '' ) ?: 'var(--olo-color-primary, #e1474f)';
+                $sg_to = $this->safe_color_css( $sg['to'] ?? '' ) ?: 'var(--olo-color-accent, #f4a23b)';
                 $style .= 'background:linear-gradient(' . $sg_angle . 'deg,' . $sg_from . ',' . $sg_to . ');';
             } else {
-                $style .= 'background-color:' . ( $layer_bg ?: '#3b82f6' ) . ';';
+                $style .= 'background-color:' . ( $layer_bg ?: 'var(--olo-color-primary, #e1474f)' ) . ';';
             }
         } elseif ( $type === 'button' ) {
             $style .= 'background-color:' . ( $layer_bg ?: '#2563eb' ) . ';';

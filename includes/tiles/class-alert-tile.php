@@ -57,11 +57,13 @@ class Olo_Alert_Tile extends Olo_Tile_Base {
         ];
         $uk_type = $type_map[ $s['alert_type'] ] ?? 'primary';
 
+        // Icone SVG dal set (UIkit), MAI emoji: rese coerenti col builder
+        // (AlertTile.vue usa gli stessi nomi: info/check/warning/ban).
         $icons = [
-            'info'    => '&#x2139;&#xFE0F;',
-            'success' => '&#x2705;',
-            'warning' => '&#x26A0;&#xFE0F;',
-            'error'   => '&#x274C;',
+            'info'    => 'info',
+            'success' => 'check',
+            'warning' => 'warning',
+            'error'   => 'ban',
         ];
         $icon = $icons[ $s['alert_type'] ] ?? $icons['info'];
 
@@ -98,7 +100,7 @@ class Olo_Alert_Tile extends Olo_Tile_Base {
                 <?php if ( ! empty( $s['custom_icon'] ) ) : ?>
                     <span style="flex-shrink: 0;" uk-icon="icon: <?php echo esc_attr( $s['custom_icon'] ); ?>; ratio: 1.2"></span>
                 <?php elseif ( $s['show_icon'] ) : ?>
-                    <span style="font-size: 1.25em; flex-shrink: 0;"><?php echo $icon; ?></span>
+                    <span style="flex-shrink: 0;" uk-icon="icon: <?php echo esc_attr( $icon ); ?>; ratio: 1.2"></span>
                 <?php endif; ?>
                 <div style="flex: 1;">
                     <?php if ( ! empty( $s['title'] ) ) : ?>

@@ -12,8 +12,8 @@ class Olo_Woo_Breadcrumbs_Tile extends Olo_Tile_Base {
     protected $category = 'woocommerce';
     protected $defaults = [
         'separator'  => '/',
-        'text_color' => '#6B7280',
-        'link_color' => '#6366F1',
+        'text_color' => '',
+        'link_color' => '',
         'font_size'  => 14,
         'alignment'  => 'left',
             'border'                  => [],
@@ -32,7 +32,7 @@ class Olo_Woo_Breadcrumbs_Tile extends Olo_Tile_Base {
 
     public function render( $settings ) {
         if ( ! class_exists( 'WooCommerce' ) ) {
-            return '<div style="padding:40px;text-align:center;color:#92400E;background:#FEF3C7;border:1px solid #F59E0B;border-radius:8px;">'
+            return '<div style="padding:40px;text-align:center;color:var(--olo-color-warning, #b45309);background:color-mix(in srgb, var(--olo-color-warning, #b45309) 12%, #fff);border:1px solid var(--olo-color-warning, #b45309);border-radius:8px;">'
                  . esc_html( olo_t( 'WooCommerce non attivo. Installa e attiva WooCommerce per utilizzare questo elemento.' ) )
                  . '</div>';
         }
@@ -41,9 +41,9 @@ class Olo_Woo_Breadcrumbs_Tile extends Olo_Tile_Base {
 
         $uid = 'olo-woo-bc-' . wp_rand( 10000, 99999 );
 
-        // Colors
-        $text_color = $this->safe_color_css( $s['text_color'] );
-        $link_color = $this->safe_color_css( $s['link_color'] );
+        // Colors — TOKEN-FIRST: testo neutro soft, link col token link del tema.
+        $text_color = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-text-soft, #6b7280)';
+        $link_color = $this->safe_color_css( $s['link_color'] ) ?: 'var(--olo-color-link, #e1474f)';
 
         // Font
         $font_size = max( 10, min( 24, absint( $s['font_size'] ) ) );

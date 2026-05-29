@@ -12,9 +12,12 @@
         </div>
       </div>
       <div v-else :style="placeholderStyle">
-        <div style="font-size:40px;margin-bottom:8px;">&#127916;</div>
-        <div style="font-size:11px;color:#9ca3af;">{{ t('Inserisci URL file .json Lottie') }}</div>
-        <div style="font-size:9px;color:#6b7280;margin-top:4px;">{{ t('Supporta LottieFiles.com') }}</div>
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom:8px;opacity:0.85">
+          <polygon points="10 8 16 12 10 16 10 8" fill="currentColor" stroke="none"/>
+          <circle cx="12" cy="12" r="10"/>
+        </svg>
+        <div style="font-size:11px;">{{ t('Inserisci URL file .json Lottie') }}</div>
+        <div style="font-size:9px;opacity:0.7;margin-top:4px;">{{ t('Supporta LottieFiles.com') }}</div>
       </div>
       <!-- Trigger badge -->
       <div v-if="s.trigger !== 'autoplay'" style="position:absolute;bottom:4px;right:4px;background:rgba(0,0,0,0.6);color:#e5e7eb;font-size:9px;padding:1px 6px;border-radius:3px;">
@@ -65,9 +68,10 @@ const placeholderStyle = computed(() => ({
   flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'center',
-  background: 'linear-gradient(135deg, #1e293b, #0f172a)',
+  background: 'var(--olo-color-surface-alt, #f6f7f9)',
+  color: 'var(--olo-color-text-faint, #94a3b8)',
   borderRadius: '8px',
-  border: '2px dashed #374151',
+  border: '2px dashed var(--olo-color-border, #e5e7eb)',
 }));
 
 const triggerLabel = computed(() => {

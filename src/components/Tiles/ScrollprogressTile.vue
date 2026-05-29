@@ -8,7 +8,7 @@
         display: 'flex',
         alignItems: 'center',
         height: barHeight + 'px',
-        backgroundColor: s.bar_bg || '#e5e7eb',
+        backgroundColor: s.bar_bg || 'var(--olo-color-border, #e5e7eb)',
         borderRadius: '2px',
         overflow: 'hidden',
         position: 'relative',
@@ -18,7 +18,7 @@
         :style="{
           width: '42%',
           height: '100%',
-          backgroundColor: s.bar_color || '#6366F1',
+          backgroundColor: s.bar_color || 'var(--olo-color-primary, #e1474f)',
           transition: 'width 0.3s ease',
           borderRadius: '2px',
         }"
@@ -48,8 +48,8 @@ import { computed } from 'vue';
 
 const defaults = {
   position: 'top',
-  bar_color: '#6366F1',
-  bar_bg: '#e5e7eb',
+  bar_color: 'var(--olo-color-primary, #e1474f)',
+  bar_bg: 'var(--olo-color-border, #e5e7eb)',
   bar_height: '4',
   show_percentage: false,
   percentage_color: '#ffffff',

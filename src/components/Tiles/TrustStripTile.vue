@@ -2,10 +2,10 @@
   <div class="olo-tstrip" :style="rowStyle">
     <template v-for="(it, idx) in items" :key="idx">
       <span v-if="it.text || it.icon" class="olo-tstrip__item" style="display:inline-flex;align-items:center;gap:8px">
-        <span v-if="it.icon" class="olo-tstrip__icon" :style="{ color: it.icon_color || '#10b981' }" v-html="resolveIcon(it.icon)"></span>
+        <span v-if="it.icon" class="olo-tstrip__icon" :style="{ color: resolveColor(it.icon_color, TOKENS.success.fg) }" v-html="resolveIcon(it.icon)"></span>
         <span v-if="it.text" v-html="it.text"></span>
       </span>
-      <span v-if="s.separator_char && idx < items.length - 1" class="olo-tstrip__sep" :style="{ color: s.separator_color || '#9ca3af', opacity: .65 }">{{ s.separator_char }}</span>
+      <span v-if="s.separator_char && idx < items.length - 1" class="olo-tstrip__sep" :style="{ color: resolveColor(s.separator_color, TOKENS.textFaint), opacity: .65 }">{{ s.separator_char }}</span>
     </template>
   </div>
 </template>
@@ -13,20 +13,21 @@
 <script setup>
 import { computed } from 'vue';
 import iconsSvg from '../ProSlider/iconsLibrary.js';
+import { resolveColor, TOKENS } from '@/composables/oloTileDefaults';
 
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 
 const defaults = {
   items: [
-    { icon: 'check', icon_color: '#10b981', text: 'Licenza <b>GPL-v3</b>' },
-    { icon: 'check', icon_color: '#10b981', text: '<b>WCAG 2.2 AA</b>' },
-    { icon: 'check', icon_color: '#10b981', text: 'Hosting <b>a scelta tua</b>' },
-    { icon: 'check', icon_color: '#10b981', text: 'Export <b>HTML/JSON</b> totale' },
-    { icon: 'check', icon_color: '#10b981', text: 'Trento, <b>Italia 🇮🇹</b>' },
+    { icon: 'check', icon_color: '', text: 'Licenza <b>GPL-v3</b>' },
+    { icon: 'check', icon_color: '', text: '<b>WCAG 2.2 AA</b>' },
+    { icon: 'check', icon_color: '', text: 'Hosting <b>a scelta tua</b>' },
+    { icon: 'check', icon_color: '', text: 'Export <b>HTML/JSON</b> totale' },
+    { icon: 'check', icon_color: '', text: 'Trento, <b>Italia 🇮🇹</b>' },
   ],
   separator_char: '·',
-  separator_color: '#9ca3af',
-  text_color: '#374151',
+  separator_color: '',
+  text_color: '',
   text_size: 14,
   font_family: 'sans-serif',
   align: 'center',
@@ -52,7 +53,7 @@ const rowStyle = computed(() => ({
   gap: (s.value.gap || 24) + 'px',
   fontFamily: fmap[s.value.font_family] || SANS,
   fontSize: (s.value.text_size || 14) + 'px',
-  color: s.value.text_color || '#374151',
+  color: resolveColor(s.value.text_color, TOKENS.text),
   lineHeight: 1.5,
 }));
 

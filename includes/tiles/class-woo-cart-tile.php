@@ -14,11 +14,11 @@ class Olo_Woo_Cart_Tile extends Olo_Tile_Base {
         'show_thumbnail' => true,
         'show_coupon'    => true,
         'show_totals'    => true,
-        'button_color'   => '#FFFFFF',
-        'button_bg'      => '#6366F1',
-        'text_color'     => '#374151',
+        'button_color'   => '',
+        'button_bg'      => '',
+        'text_color'     => '',
         'heading_color'  => '',
-        'border_color'   => '#E5E7EB',
+        'border_color'   => '',
             'border'                  => [],
         'border_hover'            => [],
         'border_hover_duration'   => 300,
@@ -35,7 +35,7 @@ class Olo_Woo_Cart_Tile extends Olo_Tile_Base {
 
     public function render( $settings ) {
         if ( ! class_exists( 'WooCommerce' ) ) {
-            return '<div style="padding:40px;text-align:center;color:#92400E;background:#FEF3C7;border:1px solid #F59E0B;border-radius:8px;">'
+            return '<div style="padding:40px;text-align:center;color:var(--olo-color-warning, #b45309);background:color-mix(in srgb, var(--olo-color-warning, #b45309) 12%, #fff);border:1px solid var(--olo-color-warning, #b45309);border-radius:8px;">'
                  . esc_html( olo_t( 'WooCommerce non attivo. Installa e attiva WooCommerce per utilizzare questo elemento.' ) )
                  . '</div>';
         }
@@ -44,12 +44,12 @@ class Olo_Woo_Cart_Tile extends Olo_Tile_Base {
 
         $uid = 'olo-woo-cart-' . wp_rand( 10000, 99999 );
 
-        // Colors
-        $btn_color     = $this->safe_color_css( $s['button_color'] );
-        $btn_bg        = $this->safe_color_css( $s['button_bg'] );
-        $text_color    = $this->safe_color_css( $s['text_color'] );
-        $heading_color = $this->safe_color_css( $s['heading_color'] );
-        $border_color  = $this->safe_color_css( $s['border_color'] );
+        // Colors — TOKEN-FIRST: CTA col brand, testo/heading dal tema, bordo dal token.
+        $btn_color     = $this->safe_color_css( $s['button_color'] )  ?: 'var(--olo-color-on-primary, #ffffff)';
+        $btn_bg        = $this->safe_color_css( $s['button_bg'] )     ?: 'var(--olo-color-primary, #e1474f)';
+        $text_color    = $this->safe_color_css( $s['text_color'] )    ?: 'var(--olo-color-text, #1f2937)';
+        $heading_color = $this->safe_color_css( $s['heading_color'] ) ?: 'var(--olo-color-text, #1f2937)';
+        $border_color  = $this->safe_color_css( $s['border_color'] )  ?: 'var(--olo-color-border, #e5e7eb)';
 
         ob_start();
         ?>

@@ -110,7 +110,7 @@ const contentStyle = computed(() => {
   opacity: 0.85;
 }
 .olo-textblock-preview :deep(a) {
-  color: var(--olo-color-primary, #3b82f6);
+  color: var(--olo-color-primary, #e1474f);
   text-decoration: underline;
 }
 </style>

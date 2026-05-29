@@ -78,6 +78,14 @@ class Olo_Breadcrumbs_Tile extends Olo_Tile_Base {
                 <?php echo implode( "\n", $items ); ?>
             </ul>
         </nav>
+        <style>
+            /* a11y tastiera: anello di focus visibile sui link del breadcrumb */
+            .olo-breadcrumbs a:focus-visible {
+                outline: none;
+                box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
+                border-radius: 3px;
+            }
+        </style>
         <?php
         return ob_get_clean();
     }

@@ -15,8 +15,8 @@ class Olo_Woo_Product_Navigation_Tile extends Olo_Tile_Base {
         'show_label'     => true,
         'label_prev'     => 'Prodotto precedente',
         'label_next'     => 'Prodotto successivo',
-        'text_color'     => '#374151',
-        'hover_color'    => '#6366F1',
+        'text_color'     => '',
+        'hover_color'    => '',
         'separator_style' => 'line',
             'border'                  => [],
         'border_hover'            => [],
@@ -34,7 +34,7 @@ class Olo_Woo_Product_Navigation_Tile extends Olo_Tile_Base {
 
     public function render( $settings ) {
         if ( ! class_exists( 'WooCommerce' ) ) {
-            return '<div style="padding:40px;text-align:center;color:#92400E;background:#FEF3C7;border:1px solid #F59E0B;border-radius:8px;">'
+            return '<div style="padding:40px;text-align:center;color:var(--olo-color-warning, #b45309);background:color-mix(in srgb, var(--olo-color-warning, #b45309) 12%, #fff);border:1px solid var(--olo-color-warning, #b45309);border-radius:8px;">'
                  . esc_html( olo_t( 'WooCommerce non attivo. Installa e attiva WooCommerce per utilizzare questo elemento.' ) )
                  . '</div>';
         }
@@ -54,9 +54,9 @@ class Olo_Woo_Product_Navigation_Tile extends Olo_Tile_Base {
 
         $uid = 'olo-woo-pnav-' . wp_rand( 10000, 99999 );
 
-        // Colors
-        $text_color  = $this->safe_color_css( $s['text_color'] );
-        $hover_color = $this->safe_color_css( $s['hover_color'] );
+        // Colors — TOKEN-FIRST: testo neutro, hover col primario brand.
+        $text_color  = $this->safe_color_css( $s['text_color'] )  ?: 'var(--olo-color-text, #1f2937)';
+        $hover_color = $this->safe_color_css( $s['hover_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
 
         // Adjacent products (within same category)
         $prev_product = $this->get_adjacent_product( true );

@@ -1,4 +1,5 @@
 import { textEffectsFields, textEffectsDefaults, shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared.js';
+import { buildDefaults } from '@/composables/oloTileDefaults';
 import { t } from '@/i18n';
 
 /**
@@ -12,9 +13,13 @@ export default {
   name: t('Pulsante'),
   icon: 'dashicons-button',
   category: 'essential',
+  // Default da FONTE UNICA (buildDefaults): bg_color:'', text_color:'',
+  // border_radius:10, tile_padding(SPACE), font_size:16, font_weight:600,
+  // shadow:'sm', hover_effect:'lift', text. Le chiavi salvate restano identiche.
   defaults: {
+    ...buildDefaults('button'),
+    text: t('Clicca qui'),        // i18n (sovrascrive la stringa non tradotta)
     preset: 'custom',
-    text: t('Clicca qui'),
     url: '#',
     target: '_self',
     alignment: 'center',
@@ -22,18 +27,11 @@ export default {
 
     typography_preset: '',
     bg: { type: 'none' },
-    bg_color: '',
-    text_color: '',
-    border_radius: '6',
-    tile_padding: { top: 14, right: 32, bottom: 14, left: 32 },
-    font_size: '16',
-    font_weight: '600',
     letter_spacing: '0',
     text_transform: 'none',
     icon: '',
     icon_position: 'before',
     icon_spacing: '8',
-    shadow: 'none',
     border: { ...borderDefault },
     border_hover: { ...borderHoverDefault },
     border_hover_duration: 300,
@@ -42,7 +40,6 @@ export default {
     hover_bg_color: '',
     hover_text_color: '',
     hover_shadow: '',
-    hover_effect: 'lift',
     hover_image: '',
     hover_video: '',
     ...textEffectsDefaults,

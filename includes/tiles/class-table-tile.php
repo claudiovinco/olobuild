@@ -64,10 +64,10 @@ class Olo_Table_Tile extends Olo_Tile_Base {
         $has_header    = ! empty( $s['has_header'] );
         $header        = $has_header ? array_shift( $rows ) : null;
         $col_aligns    = is_array( $s['col_alignments'] ) ? $s['col_alignments'] : [];
-        $border_color  = $this->safe_color_css( $s['border_color'] ) ?: '#e5e7eb';
+        $border_color  = $this->safe_color_css( $s['border_color'] ) ?: 'var(--olo-color-border,#e5e7eb)';
         $text_color    = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-text,#374151)';
-        $header_bg     = $this->safe_color_css( $s['header_bg'] ) ?: 'var(--olo-color-secondary,#1F2937)';
-        $header_tc     = $this->safe_color_css( $s['header_text_color'] ) ?: '#fff';
+        $header_bg     = $this->safe_color_css( $s['header_bg'] ) ?: 'var(--olo-color-secondary,#16263d)';
+        $header_tc     = $this->safe_color_css( $s['header_text_color'] ) ?: 'var(--olo-color-on-primary,#ffffff)';
         $even_bg       = $this->safe_color_css( $s['even_row_bg'] ) ?: 'rgba(0,0,0,0.025)';
         $compact       = ! empty( $s['compact'] );
         $bordered      = ! empty( $s['bordered'] );

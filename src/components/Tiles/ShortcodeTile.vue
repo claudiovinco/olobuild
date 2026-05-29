@@ -11,7 +11,7 @@
 
     <!-- Shortcode preview -->
     <div v-else :style="codeBlockStyle">
-      <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.5px;color:#9ca3af;margin-bottom:6px;">
+      <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.5px;color:var(--olo-color-text-muted, #9ca3af);margin-bottom:6px;">
         {{ t('Shortcode') }}
       </div>
       <code :style="codeStyle">{{ s.shortcode_text }}</code>
@@ -44,7 +44,7 @@ const codeBlockStyle = computed(() => ({
 const codeStyle = computed(() => ({
   fontFamily: "'JetBrains Mono', 'Fira Code', 'Consolas', monospace",
   fontSize: '14px',
-  color: 'var(--olo-color-primary, #6366F1)',
+  color: 'var(--olo-color-primary, #e1474f)',
   wordBreak: 'break-all',
   whiteSpace: 'pre-wrap',
 }));

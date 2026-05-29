@@ -220,7 +220,7 @@ const cardStyle = computed(() => {
     style.WebkitBackdropFilter = 'blur(12px)';
   } else if (cs === 'gradient' && !bc) {
     style.border = '2px solid transparent';
-    style.backgroundImage = 'linear-gradient(rgba(30,30,46,1),rgba(30,30,46,1)),linear-gradient(135deg,#6366F1,#EC4899,#F59E0B)';
+    style.backgroundImage = 'linear-gradient(rgba(30,30,46,1),rgba(30,30,46,1)),linear-gradient(135deg,var(--olo-color-primary, #e1474f),var(--olo-color-accent, #f4a23b),var(--olo-color-secondary, #16263d))';
     style.backgroundOrigin = 'border-box';
     style.backgroundClip = 'padding-box,border-box';
   } else if (cs === 'flat') {
@@ -331,7 +331,7 @@ const contentTextStyle = computed(() => {
 
 function badgeStyle(item) {
   return {
-    background: item.badge_color || 'var(--olo-color-primary, #6366F1)',
+    background: item.badge_color || 'var(--olo-color-primary, #e1474f)',
   };
 }
 </script>
@@ -370,11 +370,11 @@ function badgeStyle(item) {
   transform: scale(1.03);
 }
 .olo-grid-hover--glow:hover {
-  box-shadow: 0 0 20px rgba(99,102,241,0.4) !important;
+  box-shadow: 0 0 20px color-mix(in srgb, var(--olo-color-primary, #e1474f) 40%, transparent) !important;
 }
 .olo-grid-hover--border-glow:hover {
-  border-color: var(--olo-color-primary, #6366F1) !important;
-  box-shadow: 0 0 15px rgba(99,102,241,0.3) !important;
+  border-color: var(--olo-color-primary, #e1474f) !important;
+  box-shadow: 0 0 15px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent) !important;
 }
 .olo-grid-hover--tilt:hover {
   transform: perspective(800px) rotateY(4deg) rotateX(2deg);
@@ -433,7 +433,7 @@ function badgeStyle(item) {
   font-size: 1.5em;
   margin-bottom: 8px;
   display: inline-block;
-  color: var(--olo-color-primary, #6366F1);
+  color: var(--olo-color-primary, #e1474f);
 }
 
 /* ── Link hint ── */
@@ -441,7 +441,7 @@ function badgeStyle(item) {
   display: inline-block;
   margin-top: 6px;
   font-size: 0.72em;
-  color: var(--olo-color-primary, #6366F1);
+  color: var(--olo-color-primary, #e1474f);
   opacity: 0.7;
 }
 

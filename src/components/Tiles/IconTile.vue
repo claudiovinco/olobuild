@@ -4,12 +4,12 @@
       <span
         v-if="iconSvg"
         class="olo-icon-preview"
-        :style="{ width: s.size + 'px', height: s.size + 'px', color: s.color || '#9CA3AF' }"
+        :style="{ width: s.size + 'px', height: s.size + 'px', color: iconColor }"
         v-html="iconSvg"
       ></span>
       <span
         v-else
-        :style="{ fontSize: s.size + 'px', color: s.color || '#9CA3AF', lineHeight: 1, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }"
+        :style="{ fontSize: s.size + 'px', color: iconColor, lineHeight: 1, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }"
       >&#9733;</span>
     </span>
   </div>
@@ -18,33 +18,37 @@
 <script setup>
 import { computed } from 'vue';
 import iconsSvg from '../ProSlider/uikitIconsSvg.js';
+import { useBoxModel } from '@/composables/useBoxModel';
+import { resolveColor, TOKENS, RADIUS, buildDefaults } from '@/composables/oloTileDefaults';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
 });
 
-const defaults = {
-  icon: 'star',
-  size: 40,
-  color: '',
-  view: 'default',
-  bg_color: '#6366F1',
-  bg_shape: 'circle',
-  padding: '20',
-  hover_animation: 'none',
-  rotation: '0',
-  link_url: '',
-  link_target: '_self',
-};
-const s = computed(() => ({ ...defaults, ...props.settings }));
+// Fonte UNICA dei default (allineata a icon.js); colori token-first
+const s = computed(() => ({ ...buildDefaults('icon'), ...props.settings }));
+
+// Box-model: tile_padding (oggetto) con retrocompat per la vecchia chiave 'padding'
+const { paddingCss } = useBoxModel(s, {
+  paddingKey: 'tile_padding', paddingFallback: [16, 16, 16, 16],
+  paddingLegacy: ['padding', 'padding'],
+});
 
 const iconSvg = computed(() => iconsSvg[s.value.icon] || '');
+
+// Colore icona token-first: su sfondo pieno (stacked) contrasta col primario,
+// altrimenti usa il primario brand (era fallback grigio #9CA3AF).
+const iconColor = computed(() =>
+  resolveColor(s.value.color, (s.value.view === 'stacked') ? TOKENS.onPrimary : TOKENS.primary),
+);
 
 const wrapperStyle = computed(() => {
   const view = s.value.view || 'default';
   const shape = s.value.bg_shape || 'circle';
-  const pad = parseInt(s.value.padding) || 20;
   const rotation = parseInt(s.value.rotation) || 0;
+  // raggio dalla scala condivisa RADIUS (rounded → lg)
+  const radius = shape === 'circle' ? '50%' : shape === 'rounded' ? RADIUS.lg + 'px' : '0';
+  const accent = resolveColor(s.value.bg_color, TOKENS.primary);
   const st = {
     display: 'inline-flex',
     alignItems: 'center',
@@ -53,13 +57,13 @@ const wrapperStyle = computed(() => {
   };
   if (rotation !== 0) st.transform = `rotate(${rotation}deg)`;
   if (view === 'stacked') {
-    st.background = s.value.bg_color || '#6366F1';
-    st.padding = pad + 'px';
-    st.borderRadius = shape === 'circle' ? '50%' : shape === 'rounded' ? '12px' : '0';
+    st.background = accent;
+    st.padding = paddingCss.value;
+    st.borderRadius = radius;
   } else if (view === 'framed') {
-    st.border = '2px solid ' + (s.value.bg_color || '#6366F1');
-    st.padding = pad + 'px';
-    st.borderRadius = shape === 'circle' ? '50%' : shape === 'rounded' ? '12px' : '0';
+    st.border = '2px solid ' + accent;
+    st.padding = paddingCss.value;
+    st.borderRadius = radius;
   }
   return st;
 });

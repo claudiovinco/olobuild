@@ -66,7 +66,8 @@
           <div class="mb-flex-1 mb-h-9 mb-rounded mb-border mb-border-gray-600 mb-bg-gray-800/50"></div>
         </div>
         <button
-          class="mb-px-4 mb-py-2 mb-rounded mb-text-sm mb-font-medium mb-text-white mb-bg-blue-600 mb-cursor-default"
+          class="olo-wpc-submit mb-px-4 mb-py-2 mb-rounded mb-text-sm mb-font-medium mb-cursor-default"
+          :style="{ color: '#fff', background: s.link_color || 'var(--olo-color-primary, #e1474f)' }"
         >{{ t('Invia commento') }}</button>
       </div>
     </div>
@@ -99,7 +100,7 @@ const defaults = {
   date_color: '',
   link_color: '',
   form_background: '',
-  border_color: '#e5e7eb',
+  border_color: '',
   avatar_border_radius: '50',
 };
 
@@ -133,25 +134,25 @@ const authorStyle = computed(() => {
 });
 
 const dateStyle = computed(() => {
-  const st = { color: s.value.date_color || '#9CA3AF' };
+  const st = { color: s.value.date_color || 'var(--olo-color-text-muted, #9ca3af)' };
   return st;
 });
 
 const linkStyle = computed(() => {
-  const st = { color: s.value.link_color || '#60A5FA' };
+  const st = { color: s.value.link_color || 'var(--olo-color-primary, #e1474f)' };
   return st;
 });
 
 const commentBorderStyle = computed(() => {
   return {
-    borderBottom: '1px solid ' + (s.value.border_color || '#e5e7eb'),
+    borderBottom: '1px solid ' + (s.value.border_color || 'var(--olo-color-border, #e5e7eb)'),
   };
 });
 
 const formStyle = computed(() => {
   const st = {};
   if (s.value.form_background) st.background = s.value.form_background;
-  if (s.value.border_color) st.border = '1px solid ' + s.value.border_color;
+  st.border = '1px solid ' + (s.value.border_color || 'var(--olo-color-border, #e5e7eb)');
   return st;
 });
 </script>
@@ -160,5 +161,10 @@ const formStyle = computed(() => {
 .olo-wpcomments {
   padding: 8px 0;
   min-height: 80px;
+}
+.olo-wpcomments a:focus-visible,
+.olo-wpc-submit:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
 }
 </style>

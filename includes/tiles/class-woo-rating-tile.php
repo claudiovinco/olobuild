@@ -13,9 +13,9 @@ class Olo_Woo_Rating_Tile extends Olo_Tile_Base {
     protected $defaults = [
         'show_count'       => true,
         'show_average'     => true,
-        'star_color'       => '#F59E0B',
-        'empty_star_color' => '#D1D5DB',
-        'text_color'       => '#6B7280',
+        'star_color'       => '',
+        'empty_star_color' => '',
+        'text_color'       => '',
         'star_size'        => 20,
         'text_size'        => 14,
     ];
@@ -26,7 +26,7 @@ class Olo_Woo_Rating_Tile extends Olo_Tile_Base {
 
     public function render( $settings ) {
         if ( ! class_exists( 'WooCommerce' ) ) {
-            return '<div style="padding:20px;text-align:center;color:#92400E;background:#FEF3C7;border:1px solid #F59E0B;border-radius:8px;">'
+            return '<div style="padding:20px;text-align:center;color:var(--olo-color-warning, #b45309);background:color-mix(in srgb, var(--olo-color-warning, #b45309) 12%, #fff);border:1px solid var(--olo-color-warning, #b45309);border-radius:8px;">'
                  . esc_html( olo_t( 'WooCommerce non attivo.' ) )
                  . '</div>';
         }
@@ -47,9 +47,10 @@ class Olo_Woo_Rating_Tile extends Olo_Tile_Base {
         $count  = (int) $product->get_review_count();
         $size   = max( 12, min( 48, absint( $s['star_size'] ) ) );
         $t_size = max( 10, min( 24, absint( $s['text_size'] ) ) );
-        $fill   = $this->safe_color_css( $s['star_color'] );
-        $empty  = $this->safe_color_css( $s['empty_star_color'] );
-        $txt    = $this->safe_color_css( $s['text_color'] );
+        // TOKEN-FIRST: stelle = accento (ambra), vuote = bordo, testo = neutro soft.
+        $fill   = $this->safe_color_css( $s['star_color'] )       ?: 'var(--olo-color-accent, #f4a23b)';
+        $empty  = $this->safe_color_css( $s['empty_star_color'] ) ?: 'var(--olo-color-border, #e5e7eb)';
+        $txt    = $this->safe_color_css( $s['text_color'] )       ?: 'var(--olo-color-text-soft, #6b7280)';
 
         $full_stars  = floor( $avg );
         $half_star   = ( ( $avg - $full_stars ) >= 0.5 ) ? 1 : 0;

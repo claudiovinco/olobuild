@@ -20,13 +20,13 @@ class Olo_Woo_Product_Gallery_Slider_Tile extends Olo_Tile_Base {
         'thumbnail_gap'          => 8,
         'arrows'                 => true,
         'border_radius'          => 8,
-        'main_bg'                => '#F9FAFB',
-        'thumbnail_border'       => '#E5E7EB',
-        'thumbnail_active_border' => '#6366F1',
+        'main_bg'                => '',
+        'thumbnail_border'       => '',
+        'thumbnail_active_border' => '',
         'arrow_color'            => '',
         'arrow_bg'               => 'rgba(255,255,255,0.9)',
         'show_badge'             => true,
-        'badge_bg'               => '#EF4444',
+        'badge_bg'               => '',
         'max_width'              => 600,
             'border'                  => [],
         'border_hover'            => [],
@@ -44,7 +44,7 @@ class Olo_Woo_Product_Gallery_Slider_Tile extends Olo_Tile_Base {
 
     public function render( $settings ) {
         if ( ! class_exists( 'WooCommerce' ) ) {
-            return '<div style="padding:40px;text-align:center;color:#92400E;background:#FEF3C7;border:1px solid #F59E0B;border-radius:8px;">'
+            return '<div style="padding:40px;text-align:center;color:var(--olo-color-warning, #b45309);background:color-mix(in srgb, var(--olo-color-warning, #b45309) 12%, #fff);border:1px solid var(--olo-color-warning, #b45309);border-radius:8px;">'
                  . esc_html( olo_t( 'WooCommerce non attivo. Installa e attiva WooCommerce per utilizzare questo elemento.' ) )
                  . '</div>';
         }
@@ -100,12 +100,12 @@ class Olo_Woo_Product_Gallery_Slider_Tile extends Olo_Tile_Base {
         $on_sale     = $product->is_on_sale();
 
         // Colors
-        $main_bg   = $this->safe_color_css( $s['main_bg'] ) ?: '#F9FAFB';
-        $tb        = $this->safe_color_css( $s['thumbnail_border'] ) ?: '#E5E7EB';
-        $tab       = $this->safe_color_css( $s['thumbnail_active_border'] ) ?: '#6366F1';
+        $main_bg   = $this->safe_color_css( $s['main_bg'] ) ?: 'var(--olo-color-surface-alt, #f6f7f9)';
+        $tb        = $this->safe_color_css( $s['thumbnail_border'] ) ?: 'var(--olo-color-border, #e5e7eb)';
+        $tab       = $this->safe_color_css( $s['thumbnail_active_border'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $arrow_c   = $this->safe_color_css( $s['arrow_color'] ) ?: 'var(--olo-color-text, #374151)';
         $arrow_bg  = $s['arrow_bg'] ?: 'rgba(255,255,255,0.9)';
-        $badge_bg  = $this->safe_color_css( $s['badge_bg'] ) ?: '#EF4444';
+        $badge_bg  = $this->safe_color_css( $s['badge_bg'] ) ?: 'var(--olo-color-primary, #e1474f)';
 
         // Build image data for template and JS
         $images = [];

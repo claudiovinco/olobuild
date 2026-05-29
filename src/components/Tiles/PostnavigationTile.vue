@@ -13,7 +13,7 @@
         <div v-if="showLabel" :style="{ color: s.text_color || 'var(--olo-color-text, #374151)', fontSize: '11px', opacity: 0.7, marginBottom: '2px' }">
           &larr; <span data-olo-editable="prev_label">{{ s.prev_label || 'Precedente' }}</span>
         </div>
-        <div v-if="showTitle" :style="{ color: s.link_color || '#93C5FD', fontSize: '13px', fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }">
+        <div v-if="showTitle" :style="{ color: s.link_color || 'var(--olo-color-primary, #e1474f)', fontSize: '13px', fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }">
           {{ t('Titolo articolo precedente') }}
         </div>
       </div>
@@ -25,7 +25,7 @@
         <div v-if="showLabel" :style="{ color: s.text_color || 'var(--olo-color-text, #374151)', fontSize: '11px', opacity: 0.7, marginBottom: '2px' }">
           <span data-olo-editable="next_label">{{ s.next_label || 'Successivo' }}</span> &rarr;
         </div>
-        <div v-if="showTitle" :style="{ color: s.link_color || '#93C5FD', fontSize: '13px', fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }">
+        <div v-if="showTitle" :style="{ color: s.link_color || 'var(--olo-color-primary, #e1474f)', fontSize: '13px', fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }">
           {{ t('Titolo articolo successivo') }}
         </div>
       </div>
@@ -55,8 +55,8 @@ const defaults = {
   gap: '20',
   thumbnail_size: '60',
   text_color: 'var(--olo-color-text, #374151)',
-  link_color: '#93C5FD',
-  hover_color: '#60A5FA',
+  link_color: '',
+  hover_color: '',
   background_color: 'var(--olo-color-muted, #F3F4F6)',
   border_radius: '8',
   padding: '16',

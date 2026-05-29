@@ -7,7 +7,7 @@
       <span v-if="s.after_text" data-olo-editable="after_text"> {{ s.after_text }}</span>
     </component>
     <div style="margin-top:8px;display:flex;justify-content:center;gap:6px;flex-wrap:wrap;">
-      <span v-for="(word, i) in words" :key="i" style="font-size:10px;padding:1px 6px;border-radius:3px;background:rgba(99,102,241,0.15);color:var(--olo-color-primary, #6366F1);">{{ word }}</span>
+      <span v-for="(word, i) in words" :key="i" style="font-size:10px;padding:1px 6px;border-radius:3px;background:color-mix(in srgb, var(--olo-color-primary, #e1474f) 15%, transparent);color:var(--olo-color-primary, #e1474f);">{{ word }}</span>
     </div>
   </div>
 </template>
@@ -27,13 +27,13 @@ const defaults = {
   tag: 'h2',
   alignment: 'center',
   text_color: 'var(--olo-color-text, #374151)',
-  animated_color: 'var(--olo-color-primary, #6366F1)',
+  animated_color: 'var(--olo-color-primary, #e1474f)',
   font_size: '36',
   font_weight: '700',
   typing_speed: '100',
   pause_time: '2000',
   highlight_style: 'underline',
-  highlight_color: 'var(--olo-color-primary, #6366F1)',
+  highlight_color: 'var(--olo-color-primary, #e1474f)',
 };
 const s = computed(() => ({ ...defaults, ...props.settings }));
 
@@ -112,10 +112,10 @@ const headingStyle = computed(() => ({
 }));
 
 const animatedStyle = computed(() => {
-  const st = { color: s.value.animated_color || 'var(--olo-color-primary, #6366F1)' };
+  const st = { color: s.value.animated_color || 'var(--olo-color-primary, #e1474f)' };
   const anim = s.value.animation;
   if (anim === 'highlight') {
-    const hclr = s.value.highlight_color || 'var(--olo-color-primary, #6366F1)';
+    const hclr = s.value.highlight_color || 'var(--olo-color-primary, #e1474f)';
     const hstyle = s.value.highlight_style || 'underline';
     if (hstyle === 'underline') st.borderBottom = '3px solid ' + hclr;
     else if (hstyle === 'background') { st.background = hclr + '30'; st.padding = '0 6px'; st.borderRadius = '4px'; }

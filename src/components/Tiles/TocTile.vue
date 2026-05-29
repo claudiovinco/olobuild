@@ -8,11 +8,11 @@
         <div v-for="(item, i) in mockItems" :key="i"
           :style="{ paddingLeft: (item.level * indent) + 'px', marginBottom: '6px', display: 'flex', alignItems: 'baseline', gap: '6px' }">
           <span v-if="s.list_style === 'numbered'" :style="{ color: s.text_color || 'var(--olo-color-text, #374151)', fontSize: fontSize + 'px', opacity: 0.5, flexShrink: 0 }">{{ item.num }}</span>
-          <span v-else-if="s.list_style === 'bullets'" :style="{ width: '5px', height: '5px', borderRadius: '50%', background: s.link_color || 'var(--olo-color-primary, #6366F1)', flexShrink: 0, marginTop: '6px' }"></span>
-          <span :style="{ color: s.link_color || 'var(--olo-color-primary, #6366F1)', fontSize: fontSize + 'px', cursor: 'pointer' }">{{ item.text }}</span>
+          <span v-else-if="s.list_style === 'bullets'" :style="{ width: '5px', height: '5px', borderRadius: '50%', background: s.link_color || 'var(--olo-color-primary, #e1474f)', flexShrink: 0, marginTop: '6px' }"></span>
+          <span :style="{ color: s.link_color || 'var(--olo-color-primary, #e1474f)', fontSize: fontSize + 'px', cursor: 'pointer' }">{{ item.text }}</span>
         </div>
       </div>
-      <div style="margin-top:12px;font-size:10px;color:#6b7280;font-style:italic;">
+      <div :style="{ marginTop: '12px', fontSize: '10px', color: 'var(--olo-color-text-soft, #6b7280)', fontStyle: 'italic' }">
         {{ t('Auto-generato dagli heading della pagina') }}
       </div>
     </div>
@@ -32,7 +32,7 @@ const defaults = {
   max_depth: '3',
   list_style: 'numbered',
   text_color: 'var(--olo-color-text, #374151)',
-  link_color: 'var(--olo-color-primary, #6366F1)',
+  link_color: 'var(--olo-color-primary, #e1474f)',
   title_color: 'var(--olo-color-text, #374151)',
   font_size: '15',
   indent: '20',

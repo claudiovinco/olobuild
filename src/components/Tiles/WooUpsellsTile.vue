@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="!wooActive" class="olo-woo-notice">
-      <span class="olo-woo-notice-icon">{{ t('&#x1F6D2;') }}</span>
+      <span class="olo-woo-notice-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor"><circle cx="7.3" cy="17.3" r="1.4" fill="currentColor" stroke="none"/><circle cx="13.3" cy="17.3" r="1.4" fill="currentColor" stroke="none"/><polyline points="0 2 3.2 4 5.3 12.5 16 12.5 18 6.5 8 6.5"/></svg></span>
       <span>{{ t('WooCommerce richiesto') }}</span>
     </div>
     <div v-else>
@@ -85,7 +85,7 @@ const cardStyle = computed(() => {
   if (s.value.card_style === 'shadow') {
     st.boxShadow = '0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06)';
   } else if (s.value.card_style === 'border') {
-    st.border = '1px solid #E5E7EB';
+    st.border = '1px solid var(--olo-color-border, #e5e7eb)';
   }
   return st;
 });
@@ -94,7 +94,7 @@ const imgStyle = computed(() => ({
   position: 'relative',
   width: '100%',
   paddingTop: '100%',
-  background: '#F3F4F6',
+  background: 'var(--olo-color-surface-alt, #f6f7f9)',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
@@ -107,14 +107,21 @@ const imgStyle = computed(() => ({
   align-items: center;
   gap: 8px;
   padding: 16px 20px;
-  background: #FEF3C7;
-  border: 1px solid #F59E0B;
+  background: color-mix(in srgb, var(--olo-color-warning, #b45309) 12%, #fff);
+  border: 1px solid var(--olo-color-warning, #b45309);
   border-radius: 8px;
-  color: #92400E;
+  color: var(--olo-color-warning, #b45309);
   font-size: 14px;
   font-weight: 500;
 }
 .olo-woo-notice-icon {
-  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  flex-shrink: 0;
+}
+.olo-woo-notice-icon :deep(svg) {
+  width: 100%;
+  height: 100%;
 }
 </style>

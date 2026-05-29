@@ -47,7 +47,7 @@ function defaultLayer(type = 'text') {
     fontStyle: 'normal', // normal | italic
     color: '#ffffff',
     textAlign: 'left',
-    bgColor: type === 'button' ? '#2563eb' : (type === 'shape' ? '#3b82f6' : ''),
+    bgColor: type === 'button' ? '#2563eb' : '',
     borderRadius: type === 'button' ? 6 : 0,
     borderRadiusLinked: true, // true = tutti gli angoli uguali
     borderRadiusTL: 0,
@@ -102,7 +102,7 @@ function defaultLayer(type = 'text') {
     backdropBrightness: 100,
     backdropGrayscale: 0,
     // Shape gradient
-    shapeGradient: null, // { from: '#3b82f6', to: '#8b5cf6', angle: 180 }
+    shapeGradient: null, // { from: '#e1474f', to: '#f4a23b', angle: 180 }
     // SFX block reveal (null = disabilitato)
     sfx: null, // { effect: 'blockRight'|'blockLeft'|'blockDown'|'blockUp', color: '#fff', duration: 800 }
     // Blend mode
@@ -267,7 +267,7 @@ export default {
     showDots: true,
     dotStyle: 'circles',
     showProgressBar: false,
-    progressBarColor: '#3b82f6',
+    progressBarColor: '',
     progressBarHeight: 3,
     keyboard: true,
     swipe: true,

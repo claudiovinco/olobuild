@@ -156,7 +156,7 @@ const textStyleOther = computed(() => {
   const st = { ...baseTextStyle.value, zIndex: 2 };
   if (s.value.mask_mode === 'video_behind_text') {
     st.color = 'transparent';
-    st.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+    st.background = 'linear-gradient(135deg, var(--olo-color-primary, #e1474f) 0%, var(--olo-color-accent, #f4a23b) 100%)';
     st.WebkitBackgroundClip = 'text';
     st.backgroundClip = 'text';
   } else {

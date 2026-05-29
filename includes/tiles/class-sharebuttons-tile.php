@@ -19,7 +19,7 @@ class Olo_Sharebuttons_Tile extends Olo_Tile_Base {
         'alignment'        => 'center',
         'icon_color'       => '#ffffff',
         'icon_hover_color' => '#ffffff',
-        'bg_color'         => '#6366F1',
+        'bg_color'         => 'var(--olo-color-primary, #e1474f)',
             'border'                  => [],
         'border_hover'            => [],
         'border_hover_duration'   => 300,
@@ -88,7 +88,7 @@ class Olo_Sharebuttons_Tile extends Olo_Tile_Base {
         $gap       = absint( $s['gap'] );
         $icon_clr  = $this->safe_color_css( $s['icon_color'] ) ?: '#ffffff';
         $hover_clr = $this->safe_color_css( $s['icon_hover_color'] ) ?: '#ffffff';
-        $bg_clr    = $this->safe_color_css( $s['bg_color'] ) ?: '#6366F1';
+        $bg_clr    = $this->safe_color_css( $s['bg_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $labels    = self::platform_labels();
 
         $align_map   = [ 'left' => 'flex-start', 'center' => 'center', 'right' => 'flex-end' ];
@@ -104,6 +104,7 @@ class Olo_Sharebuttons_Tile extends Olo_Tile_Base {
             #<?php echo $uid; ?> .olo-share-btn { transition: opacity 0.2s ease; text-decoration: none; cursor: pointer; }
             #<?php echo $uid; ?> .olo-share-btn:hover { opacity: 0.85; }
             #<?php echo $uid; ?> .olo-share-btn:hover svg { color: <?php echo esc_attr( $hover_clr ); ?>; }
+            #<?php echo $uid; ?> .olo-share-btn:focus-visible { outline: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent); }
         </style>
         <div id="<?php echo esc_attr( $uid ); ?>" class="olo-sharebuttons olo-sb-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>" style="display:flex;flex-wrap:wrap;justify-content:<?php echo $justify; ?>;gap:<?php echo $gap; ?>px;padding:16px;">
             <?php foreach ( $buttons as $btn ) :

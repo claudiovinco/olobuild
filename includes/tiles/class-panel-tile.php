@@ -343,7 +343,7 @@ class Olo_Panel_Tile extends Olo_Tile_Base {
         // Read-more link
         $link_color = $s['link_color'] ?? '';
         $css .= $sel . ' .olo-panel-readmore{display:inline-block;margin-top:12px;font-weight:600;text-decoration:none;';
-        $css .= $link_color ? 'color:' . esc_attr( $link_color ) . ';' : 'color:var(--olo-color-primary,#6366F1);';
+        $css .= $link_color ? 'color:' . esc_attr( $link_color ) . ';' : 'color:var(--olo-color-primary, #e1474f);';
         $css .= '}';
         $css .= $sel . ' .olo-panel-readmore:hover{opacity:0.8;}';
 

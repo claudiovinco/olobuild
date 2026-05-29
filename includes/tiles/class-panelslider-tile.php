@@ -405,12 +405,12 @@ class Olo_PanelSlider_Tile extends Olo_Tile_Base {
         $css .= $sel . ' .olo-ps-text{' . $content_styles . '}';
 
         // CTA
-        $css .= $sel . ' .olo-ps-cta{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;margin-top:auto;padding-top:8px;color:var(--olo-color-primary,#e8622a);transition:all 0.25s ease;width:fit-content;}';
+        $css .= $sel . ' .olo-ps-cta{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;margin-top:auto;padding-top:8px;color:var(--olo-color-primary,#e1474f);transition:all 0.25s ease;width:fit-content;}';
         $css .= $sel . ' .olo-ps-cta--underline{border-bottom:1.5px solid currentColor;padding-bottom:2px;}';
         $css .= $sel . ' .olo-ps-cta--arrow .olo-ps-cta__arrow{transition:transform 0.25s ease;}';
         $css .= $sel . ' .olo-ps-card:hover .olo-ps-cta--arrow .olo-ps-cta__arrow{transform:translateX(4px);}';
-        $css .= $sel . ' .olo-ps-cta--pill{background:var(--olo-color-primary,#e8622a);color:#fff;border-radius:999px;padding:8px 18px;}';
-        $css .= $sel . ' .olo-ps-cta--text{color:var(--olo-color-primary,#e8622a);}';
+        $css .= $sel . ' .olo-ps-cta--pill{background:var(--olo-color-primary,#e1474f);color:#fff;border-radius:999px;padding:8px 18px;}';
+        $css .= $sel . ' .olo-ps-cta--text{color:var(--olo-color-primary,#e1474f);}';
 
         // Arrows + dots
         $arrow_size  = absint( $s['arrow_size'] ?? 40 ) ?: 40;
@@ -464,8 +464,8 @@ class Olo_PanelSlider_Tile extends Olo_Tile_Base {
                 $css .= $sel . ' .olo-ps-arrow svg{width:55%;height:55%;}';
                 break;
             case 'fancy':
-                $css .= $sel . ' .olo-ps-arrow{width:' . $size . 'px;height:' . $size . 'px;border-radius:50%;background:linear-gradient(135deg,var(--olo-color-primary,#6366F1),#8b5cf6);color:#fff;box-shadow:0 6px 20px rgba(99,102,241,0.35);}';
-                $css .= $sel . ' .olo-ps-arrow:hover{box-shadow:0 10px 28px rgba(99,102,241,0.5);}';
+                $css .= $sel . ' .olo-ps-arrow{width:' . $size . 'px;height:' . $size . 'px;border-radius:50%;background:linear-gradient(135deg,var(--olo-color-primary, #e1474f),var(--olo-color-accent, #f4a23b));color:#fff;box-shadow:0 6px 20px color-mix(in srgb, var(--olo-color-primary, #e1474f) 35%, transparent);}';
+                $css .= $sel . ' .olo-ps-arrow:hover{box-shadow:0 10px 28px color-mix(in srgb, var(--olo-color-primary, #e1474f) 50%, transparent);}';
                 break;
             case 'uikit':
             default:

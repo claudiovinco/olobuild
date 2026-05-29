@@ -1,6 +1,6 @@
 <template>
   <div style="padding:4px">
-    <div v-if="!images.length" style="display:flex;align-items:center;justify-content:center;height:200px;background:#f3f4f6;border-radius:8px;color:#9ca3af;font-size:13px">
+    <div v-if="!images.length" style="display:flex;align-items:center;justify-content:center;height:200px;background:var(--olo-color-surface-alt, #f6f7f9);border-radius:8px;color:var(--olo-color-text-soft, #6b7280);font-size:13px">
       {{ t('Aggiungi immagini alla Pro Gallery') }}
     </div>
     <template v-else>
@@ -243,7 +243,7 @@ const defaults = {
   strip_pause_hover: true, strip_direction: 'left', strip_fade_edges: true,
   entrance: 'none', entrance_stagger: '120', entrance_duration: '600',
   hover_effect: 'zoom', hover_zoom_scale: '1.08', hover_tilt_angle: '10',
-  hover_magnetic_strength: '24', hover_glow_color: '#6366f1', hover_glow_spread: '20',
+  hover_magnetic_strength: '24', hover_glow_color: '', hover_glow_spread: '20',
   hover_caption: 'none', hover_caption_bg: 'rgba(0,0,0,0.6)', hover_caption_color: '#ffffff',
   continuous: '', continuous_speed: '20',
   filter: 'none', duotone_dark: '#1a1a2e', duotone_light: '#e94560', duotone_intensity: '80',
@@ -1309,7 +1309,7 @@ const hasBadges = computed(() =>
 );
 
 const badgeStyle = {
-  background: 'rgba(99,102,241,.85)',
+  background: 'color-mix(in srgb, var(--olo-color-primary, #e1474f) 85%, transparent)',
   color: '#fff',
   fontSize: '10px',
   padding: '2px 6px',

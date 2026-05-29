@@ -18,14 +18,14 @@ class Olo_Woo_Wishlist_Tile extends Olo_Tile_Base {
         'columns'         => 4,
         'card_style'      => 'shadow',
         'icon_size'       => 20,
-        'icon_color'      => '#EF4444',
+        'icon_color'      => '',
         'icon_bg'         => 'transparent',
-        'badge_bg'        => '#EF4444',
-        'badge_color'     => '#FFFFFF',
+        'badge_bg'        => '',
+        'badge_color'     => '',
         'title_color'     => '',
         'price_color'     => '',
-        'btn_bg'          => '#6366F1',
-        'btn_color'       => '#FFFFFF',
+        'btn_bg'          => '',
+        'btn_color'       => '',
         'remove_text'     => 'Rimuovi',
         'empty_text'      => 'La tua wishlist è vuota',
         'columns_tablet'  => 2,
@@ -47,7 +47,7 @@ class Olo_Woo_Wishlist_Tile extends Olo_Tile_Base {
 
     public function render( $settings ) {
         if ( ! class_exists( 'WooCommerce' ) ) {
-            return '<div style="padding:40px;text-align:center;color:#92400E;background:#FEF3C7;border:1px solid #F59E0B;border-radius:8px;">'
+            return '<div style="padding:40px;text-align:center;color:var(--olo-color-warning, #b45309);background:color-mix(in srgb, var(--olo-color-warning, #b45309) 12%, #fff);border:1px solid var(--olo-color-warning, #b45309);border-radius:8px;">'
                  . esc_html( olo_t( 'WooCommerce non attivo. Installa e attiva WooCommerce per utilizzare questo elemento.' ) )
                  . '</div>';
         }
@@ -57,14 +57,15 @@ class Olo_Woo_Wishlist_Tile extends Olo_Tile_Base {
 
         // Settings
         $icon_size   = max( 14, min( 48, absint( $s['icon_size'] ) ) );
-        $icon_color  = $this->safe_color_css( $s['icon_color'] ) ?: '#EF4444';
+        // TOKEN-FIRST: cuore/badge/CTA ereditano il brand se l'utente non sceglie.
+        $icon_color  = $this->safe_color_css( $s['icon_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $icon_bg     = $this->safe_color_css( $s['icon_bg'] ) ?: 'transparent';
-        $badge_bg    = $this->safe_color_css( $s['badge_bg'] ) ?: '#EF4444';
-        $badge_color = $this->safe_color_css( $s['badge_color'] ) ?: '#FFFFFF';
-        $title_color = $this->safe_color_css( $s['title_color'] ) ?: 'var(--olo-color-text, #374151)';
-        $price_color = $this->safe_color_css( $s['price_color'] ) ?: 'var(--olo-color-text, #374151)';
-        $btn_bg      = $this->safe_color_css( $s['btn_bg'] ) ?: '#6366F1';
-        $btn_color   = $this->safe_color_css( $s['btn_color'] ) ?: '#FFFFFF';
+        $badge_bg    = $this->safe_color_css( $s['badge_bg'] ) ?: 'var(--olo-color-primary, #e1474f)';
+        $badge_color = $this->safe_color_css( $s['badge_color'] ) ?: 'var(--olo-color-on-primary, #ffffff)';
+        $title_color = $this->safe_color_css( $s['title_color'] ) ?: 'var(--olo-color-text, #1f2937)';
+        $price_color = $this->safe_color_css( $s['price_color'] ) ?: 'var(--olo-color-text, #1f2937)';
+        $btn_bg      = $this->safe_color_css( $s['btn_bg'] ) ?: 'var(--olo-color-primary, #e1474f)';
+        $btn_color   = $this->safe_color_css( $s['btn_color'] ) ?: 'var(--olo-color-on-primary, #ffffff)';
         $cols        = max( 1, min( 6, absint( $s['columns'] ) ) );
         $cols_t      = max( 1, min( 4, absint( $s['columns_tablet'] ) ) );
         $cols_m      = max( 1, min( 2, absint( $s['columns_mobile'] ) ) );
@@ -103,6 +104,12 @@ class Olo_Woo_Wishlist_Tile extends Olo_Tile_Base {
             }
             .<?php echo $uid; ?>-btn:hover {
                 transform: scale(1.1);
+            }
+            .<?php echo $uid; ?>-btn:focus-visible,
+            .<?php echo $uid; ?>-card-atc:focus-visible,
+            .<?php echo $uid; ?>-card-remove:focus-visible {
+                outline: none;
+                box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
             }
             .<?php echo $uid; ?>-btn .olo-wl-heart-outline,
             .<?php echo $uid; ?>-btn .olo-wl-heart-filled {
@@ -200,8 +207,8 @@ class Olo_Woo_Wishlist_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?>-card-atc:hover { opacity: 0.9; }
             .<?php echo $uid; ?>-card-remove {
                 padding: 8px 12px;
-                background: #FEE2E2;
-                color: var(--olo-color-danger, #EF4444);
+                background: color-mix(in srgb, var(--olo-color-error, #b42318) 12%, #fff);
+                color: var(--olo-color-error, #b42318);
                 border: none;
                 border-radius: 4px;
                 font-size: 12px;
@@ -209,7 +216,7 @@ class Olo_Woo_Wishlist_Tile extends Olo_Tile_Base {
                 cursor: pointer;
                 transition: background 0.2s;
             }
-            .<?php echo $uid; ?>-card-remove:hover { background: #FECACA; }
+            .<?php echo $uid; ?>-card-remove:hover { background: color-mix(in srgb, var(--olo-color-error, #b42318) 20%, #fff); }
             .<?php echo $uid; ?>-empty {
                 text-align: center;
                 padding: 40px 20px;

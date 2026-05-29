@@ -66,7 +66,7 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         'svc_popup_max_width'      => '280',
         'svc_popup_img_height'     => '180',
         'svc_popup_btn_text'       => 'Scopri e Prenota',
-        'svc_popup_btn_color'      => '#3b82f6',
+        'svc_popup_btn_color'      => '',
         'svc_popup_bg'             => '#ffffff',
         'svc_popup_color'          => '#333333',
         'svc_popup_radius'         => '8',
@@ -915,7 +915,7 @@ class Olo_Map_Tile extends Olo_Tile_Base {
             'popupMaxWidth' => absint( $s['svc_popup_max_width'] ) ?: 280,
             'popupImgHeight'=> absint( $s['svc_popup_img_height'] ) ?: 180,
             'popupBtnText'  => $s['svc_popup_btn_text'] ?: 'Scopri e Prenota',
-            'popupBtnColor' => $this->safe_hex( $s['svc_popup_btn_color'] ?? '', '#3b82f6' ),
+            'popupBtnColor' => $this->safe_hex( $s['svc_popup_btn_color'] ?? '', 'var(--olo-color-primary, #e1474f)' ),
             'popupBg'       => $this->safe_hex( $s['svc_popup_bg'] ?? '', '#ffffff' ),
             'popupColor'    => $this->safe_hex( $s['svc_popup_color'] ?? '', '#333333' ),
             'popupRadius'   => Olo_Tile_Utils::radius_int( $s['svc_popup_radius'] ?? 8 ),
@@ -1776,7 +1776,7 @@ class Olo_Map_Tile extends Olo_Tile_Base {
      * Uses $color + alpha hex suffix to tint the cluster background.
      */
     private function build_cluster_css( $uid, $color ) {
-        $c = $this->safe_hex( $color, '#3b82f6' );
+        $c = $this->safe_hex( $color, '#e1474f' );
         $sel = '.' . $uid;
         return $sel . ' .marker-cluster-small { background-color: ' . $c . '33; }'
              . $sel . ' .marker-cluster-small div { background-color: ' . $c . '; color: #fff; }'
@@ -2501,7 +2501,7 @@ class Olo_Map_Tile extends Olo_Tile_Base {
      * Common CSS block for fullscreen button + new enhancements, scoped to $uid.
      */
     private function build_common_enhance_css( $uid, $color, $card_radius = 8, $card_max_h = 0, $grid_cols = 2 ) {
-        $c = $this->safe_hex( $color, '#3b82f6' );
+        $c = $this->safe_hex( $color, '#e1474f' );
         $uid_sel = '.' . $uid;
         ob_start();
         ?>

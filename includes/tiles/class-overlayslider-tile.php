@@ -270,7 +270,7 @@ class Olo_OverlaySlider_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .olo-os-cta--underline { border-bottom: 1.5px solid currentColor; padding-bottom: 2px; }
             .<?php echo $uid; ?> .olo-os-cta--arrow .olo-os-cta__arrow { transition: transform 0.25s ease; }
             .<?php echo $uid; ?> li:hover .olo-os-cta--arrow .olo-os-cta__arrow { transform: translateX(4px); }
-            .<?php echo $uid; ?> .olo-os-cta--pill { background: var(--olo-color-primary, #e8622a); color: #fff; border-radius: 999px; padding: 8px 18px; }
+            .<?php echo $uid; ?> .olo-os-cta--pill { background: var(--olo-color-primary, #e1474f); color: #fff; border-radius: 999px; padding: 8px 18px; }
 
             /* Ribbon */
             .<?php echo $uid; ?> .mos-os-ribbon { position: absolute; z-index: 2; font-size: 11px; font-weight: 700; padding: 4px 12px; text-transform: uppercase; letter-spacing: 0.5px; background: <?php echo $ribbon_bg; ?>; color: <?php echo $ribbon_color; ?>; }

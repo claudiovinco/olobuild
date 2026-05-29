@@ -35,6 +35,7 @@
 import { computed } from 'vue';
 import { useBuilderStore } from '@/stores/builder';
 import { rv } from '@/composables/useResponsiveValue';
+import { resolveColor, TOKENS, buildDefaults } from '@/composables/oloTileDefaults';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
@@ -42,30 +43,8 @@ const props = defineProps({
 
 const builderStore = useBuilderStore();
 
-const defaults = {
-  heading: 'Titolo sezione',
-  subtitle: '',
-  tag: 'h2',
-  alignment: 'center',
-  heading_size: 'lg',
-  heading_color: '',
-  heading_italic: false,
-  heading_uppercase: false,
-  decoration: 'line',
-  decoration_color: '',
-  decoration_count: 3,
-  decoration_spacing: 6,
-  subtitle_color: '',
-  text_stroke: '0',
-  text_stroke_color: '',
-  text_shadow: '',
-  gradient_text: false,
-  gradient_from: '',
-  gradient_to: '',
-  gradient_angle: '90',
-  blend_mode: 'normal',
-};
-const s = computed(() => ({ ...defaults, ...props.settings }));
+// Fonte UNICA dei default (allineata a headline.js); colori token-first
+const s = computed(() => ({ ...buildDefaults('headline'), ...props.settings }));
 
 const sizeMap = { sm: '1.25em', md: '1.75em', lg: '2.25em', xl: '3em' };
 
@@ -85,8 +64,8 @@ const isMultiline = computed(() => {
 // Responsive alignment
 const effectiveAlignment = computed(() => rv(props.settings, 'alignment', s.value.alignment, builderStore.viewMode));
 
-// Decoration color with fallback
-const decoColor = computed(() => s.value.decoration_color || 'var(--olo-color-primary, #6366F1)');
+// Decoration color: token-first sul primario brand (era fallback indaco #e1474f)
+const decoColor = computed(() => resolveColor(s.value.decoration_color, TOKENS.primary));
 const decoCount = computed(() => Math.max(1, Math.min(9, parseInt(s.value.decoration_count) || 3)));
 
 const headingStyle = computed(() => {
@@ -108,11 +87,11 @@ const headingStyle = computed(() => {
     st.letterSpacing = '0.05em';
   }
 
-  // Gradient wins over heading_color
+  // Gradient wins over heading_color — token-first (primario → accento brand)
   if (s.value.gradient_text) {
     const angle = parseInt(s.value.gradient_angle) || 90;
-    const from = s.value.gradient_from || 'var(--olo-color-primary, #6366F1)';
-    const to = s.value.gradient_to || '#EC4899';
+    const from = resolveColor(s.value.gradient_from, TOKENS.primary);
+    const to = resolveColor(s.value.gradient_to, TOKENS.accent);
     st.background = `linear-gradient(${angle}deg, ${from}, ${to})`;
     st.WebkitBackgroundClip = 'text';
     st.WebkitTextFillColor = 'transparent';
@@ -124,7 +103,7 @@ const headingStyle = computed(() => {
   // Text stroke
   const stroke = parseInt(s.value.text_stroke) || 0;
   if (stroke > 0) {
-    st.WebkitTextStroke = stroke + 'px ' + (s.value.text_stroke_color || '#000');
+    st.WebkitTextStroke = stroke + 'px ' + resolveColor(s.value.text_stroke_color, TOKENS.text);
   }
 
   // Text shadow
@@ -148,13 +127,11 @@ const headingStyle = computed(() => {
   return st;
 });
 
-const subtitleStyle = computed(() => {
-  const st = { margin: '12px 0 0' };
-  if (s.value.subtitle_color) {
-    st.color = s.value.subtitle_color;
-  }
-  return st;
-});
+const subtitleStyle = computed(() => ({
+  margin: '12px 0 0',
+  // sottotitolo "curato": grigio soft di default (token-first)
+  color: resolveColor(s.value.subtitle_color, TOKENS.textSoft),
+}));
 
 const alignJustify = computed(() => {
   const m = { left: 'flex-start', center: 'center', right: 'flex-end' };

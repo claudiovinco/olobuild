@@ -92,7 +92,7 @@ const brandColors = {
   tiktok: '#000000',
   github: '#333333',
   email: '#EA4335',
-  website: '#6366F1',
+  website: 'var(--olo-color-primary, #e1474f)',
   pinterest: '#BD081C',
   whatsapp: '#25D366',
   telegram: '#0088CC',
@@ -113,7 +113,7 @@ const hoverClass = computed(() => {
 });
 
 function linkStyle(platform) {
-  const brand = (s.value.use_brand_colors !== false) ? (brandColors[platform] || '#6366F1') : (s.value.icon_color || '#6366F1');
+  const brand = (s.value.use_brand_colors !== false) ? (brandColors[platform] || 'var(--olo-color-primary, #e1474f)') : (s.value.icon_color || 'var(--olo-color-primary, #e1474f)');
   const st = s.value.style || 'filled';
   if (st === 'filled') return { background: brand, color: '#fff', borderRadius: '50%', width: iconSizePx.value + 'px', height: iconSizePx.value + 'px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: Math.round(iconSizePx.value * 0.5) + 'px', lineHeight: '1' };
   if (st === 'outline') return { border: '2px solid ' + brand, color: brand, borderRadius: '50%', width: iconSizePx.value + 'px', height: iconSizePx.value + 'px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', background: 'transparent', fontSize: Math.round(iconSizePx.value * 0.5) + 'px', lineHeight: '1' };
@@ -144,6 +144,6 @@ const links = computed(() => {
   transform: scale(1.15);
 }
 .olo-social-hover-glow:hover {
-  box-shadow: 0 0 12px rgba(99, 102, 241, 0.5);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--olo-color-primary, #e1474f) 50%, transparent);
 }
 </style>

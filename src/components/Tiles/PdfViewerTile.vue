@@ -110,7 +110,7 @@ const containerStyle = computed(() => {
     background: s.value.bg_color || (isDark.value ? '#1a1a1a' : '#f5f5f5'),
     borderRadius: `${br.tl || 0}px ${br.tr || 0}px ${br.br || 0}px ${br.bl || 0}px`,
     overflow: 'hidden',
-    border: bw > 0 ? `${bw}px solid ${s.value.border_color || '#e5e7eb'}` : '1px solid #e5e7eb',
+    border: bw > 0 ? `${bw}px solid ${s.value.border_color || 'var(--olo-color-border, #e5e7eb)'}` : '1px solid var(--olo-color-border, #e5e7eb)',
     display: 'flex',
     flexDirection: 'column',
     boxSizing: 'border-box',
@@ -230,8 +230,8 @@ const showBottomBar = computed(() => {
   font-weight: 600;
   padding: 2px 8px;
   border-radius: 999px;
-  background: rgba(99, 102, 241, 0.12);
-  color: #4f46e5;
+  background: color-mix(in srgb, var(--olo-color-primary, #e1474f) 12%, transparent);
+  color: var(--olo-color-primary, #e1474f);
   letter-spacing: 0.02em;
 }
 .olo-pdfv-preview-bottombar {

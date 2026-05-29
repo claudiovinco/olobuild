@@ -22,7 +22,7 @@ class Olo_Floatingpanel_Tile extends Olo_Tile_Base {
         'width'             => '300',
         'height'            => '',
         'z_index'           => '9999',
-        'bg_color'          => '#ffffff',
+        'bg_color'          => '',
         'border_color'      => '',
         'border_width'      => '0',
         'border_radius'     => '12',
@@ -35,11 +35,11 @@ class Olo_Floatingpanel_Tile extends Olo_Tile_Base {
         'trigger_icon'      => 'plus',
         'trigger_size'      => '48',
         'trigger_bg'        => '',
-        'trigger_color'     => '#ffffff',
+        'trigger_color'     => '',
         'trigger_radius'    => '50',
         'trigger_shadow'    => true,
         'show_close'        => true,
-        'close_color'       => '#666666',
+        'close_color'       => '',
         'close_size'        => '20',
         'close_outside'     => true,
         'animation'         => 'fade',
@@ -129,14 +129,14 @@ class Olo_Floatingpanel_Tile extends Olo_Tile_Base {
         }
 
         // --- Visual ---
-        $bg = $this->safe_color_css( $s['bg_color'] ) ?: '#ffffff';
+        $bg = $this->safe_color_css( $s['bg_color'] ) ?: 'var(--olo-color-surface, #ffffff)';
         $pos_css .= "background:{$bg};";
         $pos_css .= 'border-radius:' . Olo_Tile_Utils::radius_int( $s['border_radius'] ) . 'px;';
         $pos_css .= 'padding:' . Olo_Tile_Utils::spacing_css( $s['tile_padding'] ?? $s['padding'] ?? 20, 20 ) . ';';
         $pos_css .= 'box-sizing:border-box;';
 
         if ( intval( $s['border_width'] ) > 0 ) {
-            $bc = $this->safe_color_css( $s['border_color'] ) ?: '#e0e0e0';
+            $bc = $this->safe_color_css( $s['border_color'] ) ?: 'var(--olo-color-border, #e0e0e0)';
             $pos_css .= 'border:' . intval( $s['border_width'] ) . 'px solid ' . $bc . ';';
         }
 
@@ -170,8 +170,8 @@ class Olo_Floatingpanel_Tile extends Olo_Tile_Base {
         $trigger_html = '';
         if ( $is_trigger ) :
             $t_size   = intval( $s['trigger_size'] );
-            $t_bg     = $this->safe_color_css( $s['trigger_bg'] ) ?: 'var(--olo-color-primary, #3B82F6)';
-            $t_color  = $this->safe_color_css( $s['trigger_color'] ) ?: '#ffffff';
+            $t_bg     = $this->safe_color_css( $s['trigger_bg'] ) ?: 'var(--olo-color-primary, #e1474f)';
+            $t_color  = $this->safe_color_css( $s['trigger_color'] ) ?: 'var(--olo-color-on-primary, #ffffff)';
             $t_radius = intval( $s['trigger_radius'] );
             $t_shadow = ( ! empty( $s['trigger_shadow'] ) && $s['trigger_shadow'] !== 'false' )
                         ? 'box-shadow:0 4px 12px rgba(0,0,0,0.2);' : '';
@@ -234,7 +234,7 @@ class Olo_Floatingpanel_Tile extends Olo_Tile_Base {
             $show_close = ( ! empty( $s['show_close'] ) && $s['show_close'] !== 'false' );
             // Hide close button in builder mode (panel must stay visible for editing)
             if ( $show_close && empty( $s['_builder_mode'] ) ) :
-                $cc = $this->safe_color_css( $s['close_color'] ) ?: '#666';
+                $cc = $this->safe_color_css( $s['close_color'] ) ?: 'var(--olo-color-text-soft, #666666)';
                 $cs = intval( $s['close_size'] );
             ?>
             <button class="olo-fp-close"

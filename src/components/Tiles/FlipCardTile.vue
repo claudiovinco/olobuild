@@ -71,6 +71,7 @@
 
 <script setup>
 import { ref, computed } from 'vue';
+import { resolveColor, TOKENS } from '@/composables/oloTileDefaults';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
@@ -84,9 +85,9 @@ const s = computed(() => ({
   front_icon_color: '',
   front_title: 'Titolo fronte',
   front_description: 'Descrizione della card visibile.',
-  front_bg: 'var(--olo-color-muted, #F3F4F6)',
+  front_bg: '',
   front_overlay: 'rgba(0,0,0,0.3)',
-  front_text_color: 'var(--olo-color-text, #374151)',
+  front_text_color: '',
   front_text_align: 'center',
   front_valign: 'center',
 
@@ -97,16 +98,16 @@ const s = computed(() => ({
   back_icon_color: '',
   back_title: 'Titolo retro',
   back_description: 'Contenuto retro con dettagli.',
-  back_bg: 'var(--olo-color-primary, #6366F1)',
+  back_bg: '',
   back_overlay: '',
-  back_text_color: '#FFFFFF',
+  back_text_color: '',
   back_text_align: 'center',
   back_valign: 'center',
   back_cta_text: 'Scopri di più',
   back_cta_url: '',
   back_cta_target: false,
-  back_cta_bg: '#FFFFFF',
-  back_cta_color: 'var(--olo-color-primary, #6366F1)',
+  back_cta_bg: '',
+  back_cta_color: '',
   back_cta_radius: '6',
 
   flip_direction: 'horizontal',
@@ -210,8 +211,8 @@ const backTransform = computed(() => {
 const frontStyle = computed(() => {
   const r = parseInt(s.value.card_border_radius) || 0;
   const st = {
-    backgroundColor: s.value.front_bg || 'var(--olo-color-muted, #F3F4F6)',
-    color: s.value.front_text_color || 'var(--olo-color-text, #374151)',
+    backgroundColor: resolveColor(s.value.front_bg, TOKENS.surfaceAlt),
+    color: resolveColor(s.value.front_text_color, TOKENS.text),
     borderRadius: r + 'px',
   };
   if (s.value.flip_direction === 'cube') {
@@ -223,8 +224,8 @@ const frontStyle = computed(() => {
 const backFaceStyle = computed(() => {
   const r = parseInt(s.value.card_border_radius) || 0;
   return {
-    backgroundColor: s.value.back_bg || 'var(--olo-color-primary, #6366F1)',
-    color: s.value.back_text_color || '#FFFFFF',
+    backgroundColor: resolveColor(s.value.back_bg, TOKENS.primary),
+    color: resolveColor(s.value.back_text_color, TOKENS.onPrimary),
     borderRadius: r + 'px',
     transform: backTransform.value,
   };
@@ -267,8 +268,8 @@ const ctaStyle = computed(() => ({
   display: 'inline-block',
   marginTop: '16px',
   padding: '10px 24px',
-  background: s.value.back_cta_bg || '#FFFFFF',
-  color: s.value.back_cta_color || 'var(--olo-color-primary, #6366F1)',
+  background: resolveColor(s.value.back_cta_bg, TOKENS.onPrimary),
+  color: resolveColor(s.value.back_cta_color, TOKENS.primary),
   borderRadius: ((v => isNaN(v) ? 6 : v)(parseInt(s.value.back_cta_radius))) + 'px',
   textDecoration: 'none',
   fontWeight: '600',

@@ -8,7 +8,7 @@
 import { computed } from 'vue';
 import { t } from '@/i18n';
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
-const defaults = { font_size: 15, text_color: '#6B7280', line_height: 1.7 };
+const defaults = { font_size: 15, text_color: '', line_height: 1.7 };
 const s = computed(() => ({ ...defaults, ...props.settings }));
-const textStyle = computed(() => ({ fontSize: s.value.font_size+'px', color: s.value.text_color, lineHeight: s.value.line_height, fontStyle:'italic', margin:0 }));
+const textStyle = computed(() => ({ fontSize: s.value.font_size+'px', color: s.value.text_color || 'var(--olo-color-text-muted, #6b7280)', lineHeight: s.value.line_height, fontStyle:'italic', margin:0 }));
 </script>

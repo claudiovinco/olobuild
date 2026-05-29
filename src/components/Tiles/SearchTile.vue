@@ -3,7 +3,7 @@
     <div :style="formStyle" class="olo-search-form-wrap">
       <!-- Icon left -->
       <span v-if="s.show_icon !== false && iconPos === 'left'" :style="iconStyle">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" :stroke="s.icon_color || '#6B7280'" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" :stroke="iconColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="11" cy="11" r="8"/>
           <path d="m21 21-4.35-4.35"/>
         </svg>
@@ -19,7 +19,7 @@
 
       <!-- Icon right -->
       <span v-if="s.show_icon !== false && iconPos === 'right' && !s.show_button" :style="iconStyle">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" :stroke="s.icon_color || '#6B7280'" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" :stroke="iconColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="11" cy="11" r="8"/>
           <path d="m21 21-4.35-4.35"/>
         </svg>
@@ -37,13 +37,14 @@
 
     <!-- Animated placeholder words preview -->
     <div v-if="s.animated_placeholder && animWords.length" style="margin-top:6px;display:flex;gap:4px;flex-wrap:wrap;justify-content:center;">
-      <span v-for="(w, i) in animWords" :key="i" style="font-size:9px;padding:1px 5px;border-radius:3px;background:rgba(99,102,241,0.1);color:#6366F1;">{{ w }}</span>
+      <span v-for="(w, i) in animWords" :key="i" class="olo-search-word">{{ w }}</span>
     </div>
   </div>
 </template>
 
 <script setup>
 import { computed, ref, onMounted, onBeforeUnmount, watch } from 'vue';
+import { resolveColor, TOKENS } from '@/composables/oloTileDefaults';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
@@ -68,8 +69,8 @@ const defaults = {
   border_color: '#E5E7EB',
   border_width: '1',
   border_radius: '8',
-  focus_border_color: '#6366F1',
-  button_bg: '#6366F1',
+  focus_border_color: '',   // '' ⇒ primary (era #e1474f off-brand)
+  button_bg: '',            // '' ⇒ primary (era #e1474f off-brand)
   button_color: '#FFFFFF',
   button_radius: '8',
   input_shadow: false,
@@ -82,6 +83,10 @@ const s = computed(() => ({ ...defaults, ...props.settings }));
 
 const iconPos = computed(() => s.value.icon_position || 'left');
 const btnStyle = computed(() => s.value.button_style || 'filled');
+
+// TOKEN-FIRST: icona neutra via token text-soft; pulsante/focus via primary
+const iconColor = computed(() => resolveColor(s.value.icon_color, TOKENS.textSoft));
+const accentColor = computed(() => resolveColor(s.value.button_bg, 'var(--olo-color-primary, #e1474f)'));
 
 const animWords = computed(() =>
   (s.value.placeholder_words || '').split('\n').map(w => w.trim()).filter(Boolean)
@@ -229,12 +234,12 @@ const buttonStyle = computed(() => {
 
   if (btnStyle.value === 'outline') {
     base.background = 'transparent';
-    base.color = s.value.button_bg || '#6366F1';
-    base.border = `2px solid ${s.value.button_bg || '#6366F1'}`;
+    base.color = accentColor.value;
+    base.border = `2px solid ${accentColor.value}`;
     base.borderRadius = ((v => isNaN(v) ? 8 : v)(parseInt(s.value.button_radius))) + 'px';
     base.margin = '4px';
   } else {
-    base.background = s.value.button_bg || '#6366F1';
+    base.background = accentColor.value;
     base.color = s.value.button_color || '#FFFFFF';
     base.borderRadius = s.value.style === 'pill' ? '50px' : ((v => isNaN(v) ? 8 : v)(parseInt(s.value.button_radius))) + 'px';
     base.margin = '4px';
@@ -251,7 +256,23 @@ const buttonStyle = computed(() => {
 
 <style scoped>
 .olo-search-tile { min-height: 40px; }
-.olo-search-form-wrap:focus-within { outline: none; }
-input::placeholder { color: #9CA3AF; }
+/* a11y: focus visibile sul wrap input + bordo input attivo → primary */
+.olo-search-form-wrap:focus-within {
+  outline: none;
+  border-color: var(--olo-color-primary, #e1474f) !important;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
+}
+input::placeholder { color: var(--olo-color-text-faint, #94a3b8); }
 input:disabled { cursor: default; opacity: 1; -webkit-text-fill-color: unset; }
+.olo-search-tile button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
+}
+.olo-search-word {
+  font-size: 9px;
+  padding: 1px 5px;
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--olo-color-primary, #e1474f) 10%, transparent);
+  color: var(--olo-color-primary, #e1474f);
+}
 </style>

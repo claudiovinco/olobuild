@@ -72,7 +72,7 @@ class Olo_Carousel_Tile extends Olo_Tile_Base {
 
         $arrow_col  = $this->safe_color_css( $s['arrow_color'] ) ?: '#FFFFFF';
         $arrow_bg   = $this->safe_color_css( $s['arrow_bg'] ) ?: 'rgba(0,0,0,0.5)';
-        $dot_col    = $this->safe_color_css( $s['dot_color'] ) ?: 'var(--olo-color-primary, #6366F1)';
+        $dot_col    = $this->safe_color_css( $s['dot_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $dot_inact  = $this->safe_color_css( $s['dot_inactive_color'] ) ?: 'var(--olo-color-border, #E5E7EB)';
         $cap_col    = $this->safe_color_css( $s['caption_color'] ) ?: '#FFFFFF';
         $cap_bg     = $this->safe_color_css( $s['caption_bg'] ) ?: 'rgba(0,0,0,0.6)';

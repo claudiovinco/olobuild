@@ -132,8 +132,8 @@ class Olo_Newsletter_Tile extends Olo_Tile_Base {
             ? Olo_Form_Handler::generate_token( $config_b64 )
             : ''; // fallback no-op: senza handler il form non è funzionante
 
-        // Styles
-        $primary     = 'var(--olo-color-primary, #3B82F6)';
+        // Styles — TOKEN-FIRST: primary brand (era fallback #3B82F6 off-brand)
+        $primary     = 'var(--olo-color-primary, #e1474f)';
         $bg          = $s['bg_color'] ?: 'transparent';
         $radius      = Olo_Tile_Utils::radius_int( $s['border_radius'] );
         $pad = Olo_Tile_Utils::spacing_css( $s['tile_padding'] ?? $s['padding'] ?? 32, 32 );
@@ -160,9 +160,10 @@ class Olo_Newsletter_Tile extends Olo_Tile_Base {
         .<?php echo $uid; ?> .olo-nl-form{display:flex;<?php echo $is_h ? 'flex-direction:row;gap:8px;align-items:stretch' : 'flex-direction:column;gap:10px'; ?>}
         .<?php echo $uid; ?> .olo-nl-form input[type="text"],
         .<?php echo $uid; ?> .olo-nl-form input[type="email"]{height:<?php echo $ih; ?>px;padding:0 14px;background:<?php echo esc_attr($s['input_bg']); ?>;color:<?php echo esc_attr($s['input_color']); ?>;border:1px solid <?php echo esc_attr($s['input_border']); ?>;border-radius:<?php echo $ir; ?>px;font-size:14px;outline:none;transition:border-color 0.2s;flex:1;min-width:0}
-        .<?php echo $uid; ?> .olo-nl-form input:focus{border-color:<?php echo esc_attr($focus_b); ?>}
+        .<?php echo $uid; ?> .olo-nl-form input:focus{border-color:<?php echo esc_attr($focus_b); ?>;box-shadow:0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent)}
         .<?php echo $uid; ?> .olo-nl-btn{height:<?php echo $ih; ?>px;padding:0 <?php echo $is_minimal ? '16' : '24'; ?>px;background:<?php echo esc_attr($btn_bg); ?>;color:<?php echo esc_attr($s['btn_color']); ?>;border:none;border-radius:<?php echo $br; ?>px;font-size:<?php echo absint($s['btn_font_size']); ?>px;font-weight:<?php echo esc_attr($s['btn_font_weight']); ?>;cursor:pointer;transition:background 0.2s,transform 0.15s;display:inline-flex;align-items:center;gap:6px;justify-content:center;white-space:nowrap;<?php echo $is_h ? '' : 'width:100%'; ?>}
         .<?php echo $uid; ?> .olo-nl-btn:hover{background:<?php echo esc_attr($btn_hover); ?>;transform:translateY(-1px)}
+        .<?php echo $uid; ?> .olo-nl-btn:focus-visible{outline:none;box-shadow:0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent)}
         .<?php echo $uid; ?> .olo-nl-privacy{font-size:11px;color:var(--olo-color-text-muted,#9CA3AF);margin-top:10px;display:flex;align-items:flex-start;gap:6px;justify-content:center;text-align:left}
         .<?php echo $uid; ?> .olo-nl-privacy a{color:inherit;text-decoration:underline}
         .<?php echo $uid; ?> .olo-nl-msg{padding:16px;border-radius:8px;font-size:14px;text-align:center;display:none}

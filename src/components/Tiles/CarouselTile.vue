@@ -97,7 +97,7 @@ const defaults = {
   border_radius: 8,
   arrow_color: '#FFFFFF',
   arrow_bg: 'rgba(0,0,0,0.5)',
-  dot_color: 'var(--olo-color-primary, #6366F1)',
+  dot_color: 'var(--olo-color-primary, #e1474f)',
   dot_inactive_color: 'var(--olo-color-border, #E5E7EB)',
   show_caption: false,
   caption_color: '#FFFFFF',
@@ -225,7 +225,7 @@ const widgetBadgeStyle = computed(() => {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    background: 'linear-gradient(135deg, var(--olo-color-primary, #6366F1), var(--olo-color-primary, #8B5CF6))',
+    background: 'linear-gradient(135deg, var(--olo-color-primary, #e1474f), var(--olo-color-accent, #f4a23b))',
     color: '#FFFFFF',
     fontWeight: '600',
     fontSize: '13px',
@@ -262,7 +262,7 @@ function dotStyle(index) {
     border: 'none',
     padding: '0',
     cursor: 'pointer',
-    background: index === activeIdx ? (s.value.dot_color || 'var(--olo-color-primary, #6366F1)') : (s.value.dot_inactive_color || 'var(--olo-color-border, #E5E7EB)'),
+    background: index === activeIdx ? (s.value.dot_color || 'var(--olo-color-primary, #e1474f)') : (s.value.dot_inactive_color || 'var(--olo-color-border, #E5E7EB)'),
     transition: 'background 0.2s',
   };
 }
@@ -307,5 +307,11 @@ const captionStyle = computed(() => ({
 
 .olo-carousel-next {
   right: 8px;
+}
+
+.olo-carousel-arrow:focus-visible,
+.olo-carousel-dot:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
 }
 </style>

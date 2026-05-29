@@ -1,5 +1,5 @@
 <template>
-  <div class="mb-flex mb-justify-center">
+  <div class="mb-flex mb-justify-center olo-newsletter">
     <div :style="boxStyle" class="mb-w-full mb-text-center">
       <!-- Icon -->
       <div v-if="s.icon_type === 'emoji'" class="mb-mb-3" :style="{ fontSize: s.icon_size + 'px' }">{{ s.icon_name }}</div>
@@ -15,21 +15,22 @@
       <div :class="['mb-flex mb-gap-2', s.layout === 'horizontal' ? 'mb-flex-row mb-items-stretch' : 'mb-flex-col']">
         <input v-if="s.show_name" type="text" :placeholder="s.name_placeholder" :style="inputStyle" class="mb-flex-1 mb-min-w-0" disabled />
         <input type="email" :placeholder="s.email_placeholder" :style="inputStyle" class="mb-flex-1 mb-min-w-0" disabled />
-        <button :style="btnStyle" class="mb-inline-flex mb-items-center mb-gap-1.5 mb-justify-center mb-whitespace-nowrap mb-cursor-default">
+        <button type="button" :style="btnStyle" class="mb-inline-flex mb-items-center mb-gap-1.5 mb-justify-center mb-whitespace-nowrap mb-cursor-default">
           {{ s.button_text }}
           <svg v-if="s.button_icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
         </button>
       </div>
 
       <!-- Privacy -->
-      <div v-if="s.privacy_text" class="mb-mt-2 mb-text-[11px] mb-text-gray-400 mb-flex mb-items-start mb-gap-1 mb-justify-center">
+      <div v-if="s.privacy_text" class="mb-mt-2 mb-text-[11px] mb-flex mb-items-start mb-gap-1 mb-justify-center" :style="{ color: TOKENS.textFaint }">
         <input v-if="s.privacy_required" type="checkbox" disabled class="mb-mt-0.5" />
         <span v-html="s.privacy_text"></span>
       </div>
 
       <!-- Content Lock indicator -->
-      <div v-if="s.content_lock" class="mb-mt-4 mb-p-3 mb-bg-amber-50 mb-border mb-border-amber-200 mb-rounded-md mb-text-xs mb-text-amber-700">
-        {{ t('🔒 Content Lock attivo — il contenuto successivo sarà bloccato fino all\'iscrizione') }}
+      <div v-if="s.content_lock" class="mb-mt-4 mb-p-3 mb-rounded-md mb-text-xs" :style="lockBadgeStyle">
+        <span class="olo-newsletter-lock-ico" v-html="lockSvg"></span>
+        {{ t('Content Lock attivo — il contenuto successivo sarà bloccato fino all\'iscrizione') }}
       </div>
     </div>
   </div>
@@ -38,8 +39,12 @@
 <script setup>
 import { computed } from 'vue';
 import { t } from '@/i18n';
+import { TOKENS } from '@/composables/oloTileDefaults';
 
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
+
+// Icona lucchetto SVG (sostituisce l'emoji 🔒 nell'hint del builder)
+const lockSvg = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>';
 
 const defaults = {
   layout: 'horizontal', title: 'Iscriviti alla newsletter',
@@ -88,11 +93,39 @@ const inputStyle = computed(() => ({
 const btnStyle = computed(() => ({
   height: s.value.input_height + 'px',
   padding: '0 24px',
-  background: s.value.btn_bg || 'var(--olo-color-primary, #3B82F6)',
+  // TOKEN-FIRST: pulsante → primary (era fallback #3B82F6 off-brand)
+  background: s.value.btn_bg || 'var(--olo-color-primary, #e1474f)',
   color: s.value.btn_color,
   border: 'none',
   borderRadius: s.value.btn_radius + 'px',
   fontSize: s.value.btn_font_size + 'px',
   fontWeight: s.value.btn_font_weight,
+  cursor: 'pointer',
+}));
+
+// Badge "content lock": token warning semantico invece di amber hardcoded
+const lockBadgeStyle = computed(() => ({
+  background: 'color-mix(in srgb, var(--olo-color-warning, #b45309) 12%, #fff)',
+  border: '1px solid color-mix(in srgb, var(--olo-color-warning, #b45309) 35%, #fff)',
+  color: 'var(--olo-color-warning, #b45309)',
+  display: 'flex',
+  alignItems: 'center',
+  gap: '6px',
+  justifyContent: 'center',
 }));
 </script>
+
+<style scoped>
+.olo-newsletter-lock-ico { display: inline-flex; }
+.olo-newsletter-lock-ico :deep(svg) { display: block; }
+/* a11y: focus su input (bordo primary) e pulsante */
+.olo-newsletter input:focus {
+  outline: none;
+  border-color: var(--olo-color-primary, #e1474f);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
+}
+.olo-newsletter button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
+}
+</style>

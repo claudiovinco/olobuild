@@ -244,7 +244,7 @@ function onDocMove(e) {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #9CA3AF;
+  color: var(--olo-color-text-faint, #94a3b8);
   font-size: 14px;
 }
 </style>

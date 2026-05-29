@@ -39,26 +39,26 @@
       <div
         v-if="activeItem.heading"
         class="oit-heading"
-        :style="{ fontSize: '16px', fontWeight: 700, color: s.heading_color, margin: '0 0 8px', letterSpacing: '-0.01em' }"
+        :style="{ fontSize: '16px', fontWeight: 700, color: headingColor, margin: '0 0 8px', letterSpacing: '-0.01em' }"
         :data-olo-editable="'items.' + activeIndex + '.heading'"
       >{{ activeItem.heading }}</div>
       <h3
         v-if="activeItem.title"
         class="oit-title"
-        :style="{ fontSize: '28px', fontWeight: 700, color: s.title_color, margin: '0 0 12px', letterSpacing: '-0.01em', lineHeight: 1.2 }"
+        :style="{ fontSize: '28px', fontWeight: 700, color: titleColor, margin: '0 0 12px', letterSpacing: '-0.01em', lineHeight: 1.2 }"
         :data-olo-editable="'items.' + activeIndex + '.title'"
       >{{ activeItem.title }}</h3>
       <p
         v-if="activeItem.content || activeItem.link_text"
         class="oit-content"
-        :style="{ fontSize: '15px', color: s.text_color, lineHeight: 1.6, margin: 0 }"
+        :style="{ fontSize: '15px', color: textColor, lineHeight: 1.6, margin: 0 }"
       >
         <span v-if="activeItem.content" :data-olo-editable="'items.' + activeIndex + '.content'">{{ activeItem.content }}</span>
         <a
           v-if="activeItem.link_text"
           :href="activeItem.link_url || '#'"
           class="oit-link"
-          :style="{ color: s.link_color, textDecoration: 'underline', fontWeight: 600, marginLeft: '6px' }"
+          :style="{ color: linkColor, textDecoration: 'underline', fontWeight: 600, marginLeft: '6px' }"
           @click.prevent
           :data-olo-editable="'items.' + activeIndex + '.link_text'"
         >{{ activeItem.link_text }}</a>
@@ -69,28 +69,38 @@
 
 <script setup>
 import { ref, computed } from 'vue';
+import { resolveColor, TOKENS } from '@/composables/oloTileDefaults';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
 });
 
+// Token-first link: il blu #2563EB era il fallback del ruolo link del tema
+const LINK_TOKEN = 'var(--olo-color-link, #2563eb)';
+
 const defaults = {
   items: [],
   pill_bg: '#F5F2EB',
-  active_bg: '#E8622A',
-  active_color: '#FFFFFF',
-  inactive_color: '#1A1A1A',
+  active_bg: '',            // '' ⇒ TOKENS.primary (era #e1474f off-brand)
+  active_color: '',         // '' ⇒ TOKENS.onPrimary
+  inactive_color: '',       // '' ⇒ TOKENS.text
   card_bg: '#F9D7D7',
   card_radius: '16',
-  heading_color: '#E8622A',
-  title_color: '#1A1A1A',
-  text_color: '#333333',
-  link_color: '#2563EB',
+  heading_color: '',        // '' ⇒ TOKENS.primary (era #e1474f off-brand)
+  title_color: '',          // '' ⇒ TOKENS.text
+  text_color: '',           // '' ⇒ TOKENS.textSoft
+  link_color: '',           // '' ⇒ token link
   default_index: '0',
 };
 
 const s = computed(() => ({ ...defaults, ...(props.settings || {}) }));
 const items = computed(() => Array.isArray(s.value.items) ? s.value.items : []);
+
+// Colori risolti token-first (default '' ⇒ token brand/tema)
+const headingColor = computed(() => resolveColor(s.value.heading_color, 'var(--olo-color-primary, #e1474f)'));
+const titleColor = computed(() => resolveColor(s.value.title_color, TOKENS.text));
+const textColor = computed(() => resolveColor(s.value.text_color, TOKENS.textSoft));
+const linkColor = computed(() => resolveColor(s.value.link_color, LINK_TOKEN));
 
 const activeIndex = ref(Math.max(0, Math.min(parseInt(s.value.default_index) || 0, Math.max(0, items.value.length - 1))));
 
@@ -111,8 +121,9 @@ function tabStyle(i) {
     height: '48px',
     padding: active ? '0 22px' : '0 14px',
     border: 'none',
-    background: active ? s.value.active_bg : 'transparent',
-    color: active ? s.value.active_color : s.value.inactive_color,
+    // TOKEN-FIRST: attivo → primary, testo attivo → onPrimary, inattivo → text
+    background: active ? resolveColor(s.value.active_bg, 'var(--olo-color-primary, #e1474f)') : 'transparent',
+    color: active ? resolveColor(s.value.active_color, TOKENS.onPrimary) : resolveColor(s.value.inactive_color, TOKENS.text),
     borderRadius: '999px',
     cursor: 'pointer',
     fontSize: '14px',
@@ -155,6 +166,16 @@ function renderIcon(icon) {
 <style scoped>
 .oit-tab:hover:not(.is-active) {
   background: rgba(0, 0, 0, 0.04);
+}
+/* a11y: anello di focus visibile da tastiera */
+.oit-tab:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
+}
+.oit-link:focus-visible {
+  outline: none;
+  border-radius: 3px;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
 }
 .oit-icon { display: inline-flex; align-items: center; justify-content: center; }
 .oit-icon :deep(svg) { display: block; width: 22px; height: 22px; }

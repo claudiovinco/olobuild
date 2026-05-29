@@ -8,13 +8,14 @@
       :style="{
         width: '36px',
         height: '36px',
-        border: s.style === 'primary' ? 'none' : '1px solid #6b7280',
-        background: s.style === 'primary' ? '#6366F1' : 'transparent',
-        color: s.style === 'primary' ? '#fff' : '#9CA3AF',
-        fontSize: '16px',
+        border: s.style === 'primary' ? 'none' : '1px solid var(--olo-color-border, #e5e7eb)',
+        background: s.style === 'primary' ? 'var(--olo-color-primary, #e1474f)' : 'transparent',
+        color: s.style === 'primary' ? 'var(--olo-color-primary-contrast, #fff)' : 'var(--olo-color-text-muted, #9ca3af)',
         cursor: 'pointer',
       }"
-    >&#9650;</span>
+    >
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
+    </span>
   </div>
 </template>
 

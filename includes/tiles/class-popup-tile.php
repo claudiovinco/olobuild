@@ -278,6 +278,13 @@ class Olo_Popup_Tile extends Olo_Tile_Base {
                 background: rgba(0, 0, 0, <?php echo $overlay_alpha; ?>) !important;
                 <?php if ( $popup_overlay_blur > 0 ) : ?>backdrop-filter: blur(<?php echo $popup_overlay_blur; ?>px); -webkit-backdrop-filter: blur(<?php echo $popup_overlay_blur; ?>px);<?php endif; ?>
             }
+            /* a11y: anello di focus visibile da tastiera su trigger + chiudi */
+            .olo-popup-<?php echo esc_attr( $uid ); ?> > button:focus-visible,
+            #<?php echo esc_attr( $uid ); ?> [uk-close]:focus-visible,
+            #<?php echo esc_attr( $uid ); ?> .uk-close:focus-visible {
+                outline: none;
+                box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
+            }
             <?php if ( empty( $s['button_fullwidth'] ) ) : ?>
             .olo-frontend-tile:has(> .olo-popup-<?php echo esc_attr( $uid ); ?>),
             .olo-frontend-tile:has(> div > .olo-popup-<?php echo esc_attr( $uid ); ?>) {

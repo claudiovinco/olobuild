@@ -19,10 +19,10 @@ class Olo_Countercircle_Tile extends Olo_Tile_Base {
         'title'          => 'Progresso',
         'size'           => '160',
         'stroke_width'   => '10',
-        'stroke_color'   => '#1e87f0',
-        'track_color'    => '#e5e5e5',
-        'text_color'     => '#333333',
-        'title_color'    => '#666666',
+        'stroke_color'   => '',
+        'track_color'    => '',
+        'text_color'     => '',
+        'title_color'    => '',
         'duration'       => '1500',
         'title_position' => 'below',
             'border'                  => [],
@@ -67,7 +67,7 @@ class Olo_Countercircle_Tile extends Olo_Tile_Base {
 
         $size         = max( 60, intval( $s['size'] ) );
         $stroke_w     = max( 2, intval( $s['stroke_width'] ) );
-        $stroke_color = $this->safe_color_css( $s['stroke_color'] ) ?: 'var(--olo-color-primary, #6366F1)';
+        $stroke_color = $this->safe_color_css( $s['stroke_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $track_color  = $this->safe_color_css( $s['track_color'] ) ?: 'var(--olo-color-border, #E5E7EB)';
         $text_color   = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-text, #374151)';
         $title_color  = $this->safe_color_css( $s['title_color'] ) ?: 'var(--olo-color-text-muted, #9CA3AF)';

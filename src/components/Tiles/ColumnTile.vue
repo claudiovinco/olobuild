@@ -45,7 +45,7 @@ const hasChildren = computed(() => {
   align-items: center;
   justify-content: center;
   min-height: 80px;
-  color: #6B7280;
+  color: var(--olo-color-text-soft, #6B7280);
   font-size: 11px;
   gap: 2px;
 }

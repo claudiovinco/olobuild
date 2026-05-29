@@ -56,13 +56,19 @@ class Olo_Icon_Tile extends Olo_Tile_Base {
 
         /* --- wrapper styling --- */
         $view   = $s['view'] ?? 'default';
-        $bg_clr = $this->safe_color_css( $s['bg_color'] ) ?: 'var(--olo-color-primary, #6366F1)';
+        $bg_clr = $this->safe_color_css( $s['bg_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $shape  = $s['bg_shape'] ?? 'circle';
-        $pad = Olo_Tile_Utils::spacing_css( $s['tile_padding'] ?? $s['padding'] ?? 20, 20 );
+        $pad = Olo_Tile_Utils::spacing_css( $s['tile_padding'] ?? $s['padding'] ?? 16, 16 );
         $rot    = intval( $s['rotation'] ?? 0 );
         $anim   = $s['hover_animation'] ?? 'none';
 
-        $radius = $shape === 'circle' ? '50%' : ( $shape === 'rounded' ? '12px' : '0' );
+        // Colore icona token-first (allineato al builder): su sfondo pieno contrasta
+        // col primario, altrimenti usa il primario brand. Era ereditato/grigio.
+        if ( ! $color ) {
+            $color = ( $view === 'stacked' ) ? 'var(--olo-color-on-primary, #ffffff)' : 'var(--olo-color-primary, #e1474f)';
+        }
+
+        $radius = $shape === 'circle' ? '50%' : ( $shape === 'rounded' ? '14px' : '0' );
         // Color sul wrapper: propaga via currentColor sia agli SVG Lucide
         // (stroke="currentColor") sia ai <span uk-icon> UIkit.
         $wrapper_style = 'display:inline-flex;align-items:center;justify-content:center;';

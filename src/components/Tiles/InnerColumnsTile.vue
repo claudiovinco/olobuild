@@ -151,13 +151,13 @@ function onChange() {
   gap: 6px;
   padding: 4px 8px;
   font-size: 10px;
-  color: #6B7280;
+  color: var(--olo-color-text-soft, #6B7280);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 .olo-ic-layout-badge {
-  background: rgba(99, 102, 241, 0.15);
-  color: var(--olo-color-primary, #6366F1);
+  background: color-mix(in srgb, var(--olo-color-primary, #e1474f) 15%, transparent);
+  color: var(--olo-color-primary, #e1474f);
   padding: 1px 6px;
   border-radius: 3px;
   font-size: 9px;
@@ -176,11 +176,11 @@ function onChange() {
   position: relative;
 }
 .olo-ic-column--selected {
-  border-color: var(--olo-color-primary, #6366F1);
+  border-color: var(--olo-color-primary, #e1474f);
 }
 .olo-ic-column--dragover {
-  border-color: var(--olo-color-primary, #6366F1);
-  background: rgb(var(--olo-primary-rgb, 99 102 241) / 0.08);
+  border-color: var(--olo-color-primary, #e1474f);
+  background: color-mix(in srgb, var(--olo-color-primary, #e1474f) 8%, transparent);
 }
 
 .olo-ic-elements {
@@ -193,7 +193,7 @@ function onChange() {
   align-items: center;
   justify-content: center;
   min-height: 60px;
-  color: #4B5563;
+  color: var(--olo-color-text-soft, #4B5563);
   font-size: 16px;
   user-select: none;
 }
@@ -214,18 +214,22 @@ function onChange() {
   border-radius: 4px;
   border: 1px solid var(--olo-color-border, #E5E7EB);
   background: none;
-  color: #6B7280;
+  color: var(--olo-color-text-soft, #6B7280);
   cursor: pointer;
   transition: all 0.15s;
 }
 .olo-ic-preset-btn:hover {
   border-color: var(--olo-color-border, #E5E7EB);
-  color: #9CA3AF;
+  color: var(--olo-color-text-faint, #9CA3AF);
+}
+.olo-ic-preset-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
 }
 .olo-ic-preset-btn--active {
-  border-color: var(--olo-color-primary, #6366F1);
-  color: var(--olo-color-primary, #6366F1);
-  background: rgb(var(--olo-primary-rgb, 99 102 241) / 0.1);
+  border-color: var(--olo-color-primary, #e1474f);
+  color: var(--olo-color-primary, #e1474f);
+  background: color-mix(in srgb, var(--olo-color-primary, #e1474f) 10%, transparent);
 }
 
 .olo-ghost {

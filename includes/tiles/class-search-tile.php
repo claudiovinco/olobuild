@@ -30,8 +30,8 @@ class Olo_Search_Tile extends Olo_Tile_Base {
         'border_color'       => '#E5E7EB',
         'border_width'       => '1',
         'border_radius'      => '8',
-        'focus_border_color' => '#6366F1',
-        'button_bg'          => '#6366F1',
+        'focus_border_color' => '',
+        'button_bg'          => '',
         'button_color'       => '#FFFFFF',
         'button_radius'      => '8',
         'input_shadow'       => false,
@@ -66,14 +66,15 @@ class Olo_Search_Tile extends Olo_Tile_Base {
         $max_width   = absint( $s['max_width'] );
         $alignment   = in_array( $s['alignment'], [ 'left', 'center', 'right' ], true ) ? $s['alignment'] : 'center';
 
+        // TOKEN-FIRST: neutri → token tema; accento/focus → primary (era #e1474f off-brand)
         $bg_c          = $this->safe_color_css( $s['bg_color'] ) ?: '#FFFFFF';
-        $text_c        = $this->safe_color_css( $s['text_color'] ) ?: '#374151';
-        $ph_c          = $this->safe_color_css( $s['placeholder_color'] ) ?: '#9CA3AF';
-        $icon_c        = $this->safe_color_css( $s['icon_color'] ) ?: '#6B7280';
-        $border_c      = $this->safe_color_css( $s['border_color'] ) ?: '#E5E7EB';
+        $text_c        = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-text, #374151)';
+        $ph_c          = $this->safe_color_css( $s['placeholder_color'] ) ?: 'var(--olo-color-text-faint, #94a3b8)';
+        $icon_c        = $this->safe_color_css( $s['icon_color'] ) ?: 'var(--olo-color-text-soft, #6b7280)';
+        $border_c      = $this->safe_color_css( $s['border_color'] ) ?: 'var(--olo-color-border, #e5e7eb)';
         $border_w      = absint( $s['border_width'] ) . 'px';
-        $focus_c       = $this->safe_color_css( $s['focus_border_color'] ) ?: '#6366F1';
-        $btn_bg        = $this->safe_color_css( $s['button_bg'] ) ?: '#6366F1';
+        $focus_c       = $this->safe_color_css( $s['focus_border_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
+        $btn_bg        = $this->safe_color_css( $s['button_bg'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $btn_color     = $this->safe_color_css( $s['button_color'] ) ?: '#FFFFFF';
         $btn_radius    = $this->build_border_radius_css( $s["button_radius"] );
         $btn_radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['button_radius_hover'] ?? null );
@@ -141,12 +142,17 @@ class Olo_Search_Tile extends Olo_Tile_Base {
         .<?php echo $uid; ?> .olo-srch-form:focus-within {
             <?php if ( $style !== 'underline' ) : ?>
             border-color: <?php echo $focus_c; ?>;
-            box-shadow: 0 0 0 3px <?php echo $focus_c; ?>20;
+            box-shadow: 0 0 0 3px color-mix(in srgb, <?php echo $focus_c; ?> 30%, transparent);
             <?php else : ?>
             border-bottom-color: <?php echo $focus_c; ?>;
             <?php endif; ?>
         }
         <?php endif; ?>
+        /* a11y: anello di focus visibile da tastiera sul pulsante */
+        .<?php echo $uid; ?> button:focus-visible {
+            outline: none;
+            box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
+        }
         <?php if ( $btn_radius_hover_css !== '' ) : ?>.<?php echo $uid; ?> button[type=submit]{transition:border-radius 400ms cubic-bezier(.4,0,.2,1) !important}.<?php echo $uid; ?> button[type=submit]:hover{border-radius:<?php echo $btn_radius_hover_css; ?> !important}<?php endif; ?>
         </style>
         <div class="olo-search <?php echo $uid; ?> olo-srch-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>"<?php if ( $wrapper_css ) echo ' style="' . esc_attr( $wrapper_css ) . '"'; ?>>

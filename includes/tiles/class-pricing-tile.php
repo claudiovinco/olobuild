@@ -85,7 +85,7 @@ class Olo_Pricing_Tile extends Olo_Tile_Base {
 
         $price_clr = $this->safe_color_css( $s['price_color'] ) ?: '';
         $check_size = intval( $s['check_size'] ) ?: 14;
-        $accent    = $this->safe_color_css( $s['accent_color'] ) ?: 'var(--olo-color-primary, #6366F1)';
+        $accent    = $this->safe_color_css( $s['accent_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $bg        = $this->safe_color_css( $s['bg_color'] ) ?: 'var(--olo-color-secondary, #1F2937)';
         $fg        = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-muted, #F3F4F6)';
         $feat_raw  = is_array( $s['features'] ) ? implode( "\n", $s['features'] ) : (string) $s['features'];
@@ -126,10 +126,10 @@ class Olo_Pricing_Tile extends Olo_Tile_Base {
         $shape      = $s['price_shape'] ?: 'none';
         $shape_col  = $this->safe_color_css( $s['price_shape_color'] ) ?: 'var(--olo-color-text, #374151)';
         $shape_glow = filter_var( $s['price_shape_glow'], FILTER_VALIDATE_BOOLEAN );
-        $shape_gc   = $this->safe_color_css( $s['price_shape_glow_color'] ) ?: '#6366F1';
+        $shape_gc   = $this->safe_color_css( $s['price_shape_glow_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $shape_gi   = intval( $s['price_shape_glow_intensity'] ) ?: 15;
         $shape_bw   = intval( $s['price_shape_border_width'] );
-        $shape_bc   = $this->safe_color_css( $s['price_shape_border_color'] ) ?: 'var(--olo-color-primary, #6366F1)';
+        $shape_bc   = $this->safe_color_css( $s['price_shape_border_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
 
         // Badge
         $badge_bg  = $this->safe_color_css( $s['badge_bg_color'] ) ?: $accent;
@@ -241,7 +241,7 @@ class Olo_Pricing_Tile extends Olo_Tile_Base {
                 border: <?php echo $shape_bw; ?>px solid <?php echo $shape_bc; ?>;
                 <?php endif; ?>
                 <?php if ( $shape_glow ) : ?>
-                box-shadow: inset 0 0 <?php echo $shape_gi; ?>px <?php echo $shape_gc; ?>66, inset 0 0 <?php echo $shape_gi * 2; ?>px <?php echo $shape_gc; ?>33;
+                box-shadow: inset 0 0 <?php echo $shape_gi; ?>px <?php echo 'color-mix(in srgb, ' . $shape_gc . ' 40%, transparent)'; ?>, inset 0 0 <?php echo $shape_gi * 2; ?>px <?php echo 'color-mix(in srgb, ' . $shape_gc . ' 20%, transparent)'; ?>;
                 <?php endif; ?>
             }
             <?php endif; ?>

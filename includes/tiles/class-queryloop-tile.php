@@ -624,7 +624,8 @@ class Olo_Queryloop_Tile extends Olo_Tile_Base {
         $allowed_fx = [ 'none','lift','image-zoom','title-underline','arrow-slide','color-tint','border-grow','glassy-border' ];
         $hover_fx   = in_array( $s['hover_effect'], $allowed_fx, true ) ? $s['hover_effect'] : 'none';
 
-        $accent_c   = $this->safe_color_css( $s['accent_color'] ) ?: ( $this->safe_color_css( $s['effect_color'] ) ?: ( $this->safe_color_css( $s['link_color'] ) ?: '#6366F1' ) );
+        // TOKEN-FIRST: accento = primario brand (era #e1474f indaco off-brand)
+        $accent_c   = $this->safe_color_css( $s['accent_color'] ) ?: ( $this->safe_color_css( $s['effect_color'] ) ?: ( $this->safe_color_css( $s['link_color'] ) ?: 'var(--olo-color-primary, #e1474f)' ) );
         $bg_c       = $this->safe_color_css( $s['bg_color'] ?? '' );
         $font_family = $this->font_family_css( $s['font_family'] ?? 'inherit' );
         $title_weight = in_array( $s['title_weight'], [ '400','500','600','700','800' ], true ) ? $s['title_weight'] : '700';
@@ -806,6 +807,12 @@ class Olo_Queryloop_Tile extends Olo_Tile_Base {
             .olo-ql-excerpt { font-size: 0.92em; color: var(--olo-color-text-muted, #9CA3AF); line-height: 1.6; margin: 0 0 10px; }
             .olo-ql-readmore { font-size: 0.88em; font-weight: 500; text-decoration: none; color: <?php echo $accent_c; ?>; }
             .olo-ql-readmore:hover { text-decoration: underline; }
+            /* a11y tastiera: anello di focus visibile su link card, read-more, paginazione e load-more */
+            .olo-ql-title a:focus-visible,
+            .olo-ql-readmore:focus-visible,
+            .olo-ql-img-link:focus-visible,
+            .olo-ql-pagination .page-numbers li a:focus-visible,
+            .olo-ql-loadmore-btn:focus-visible { outline: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent); border-radius: 4px; }
             .olo-ql-pagination { margin-top: 24px; text-align: center; }
             .olo-ql-pagination .page-numbers { display: inline-flex; list-style: none; padding: 0; margin: 0; gap: 4px; }
             .olo-ql-pagination .page-numbers li a,

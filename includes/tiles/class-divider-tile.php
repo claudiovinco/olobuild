@@ -56,8 +56,8 @@ class Olo_Divider_Tile extends Olo_Tile_Base {
         $align_map = [ 'left' => 'flex-start', 'center' => 'center', 'right' => 'flex-end' ];
         $justify   = $align_map[ $s['alignment'] ] ?? 'center';
 
-        $line_clr = $this->safe_color_css( $s['color'] ) ?: 'var(--olo-color-text, #d1d5db)';
-        $txt_clr  = $this->safe_color_css( $s['text_color'] ) ?: '#6b7280';
+        $line_clr = $this->safe_color_css( $s['color'] ) ?: 'var(--olo-color-border, #e5e7eb)';
+        $txt_clr  = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-text-soft, #6b7280)';
         $has_center = ! empty( $s['text'] ) || ! empty( $s['icon_emoji'] );
 
         $style_type = $s['style'];

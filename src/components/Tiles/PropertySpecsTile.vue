@@ -3,9 +3,9 @@
     <h3 v-if="s.show_title" :style="{ margin:'0 0 16px', fontSize: s.title_size+'px', fontWeight:'700', color: s.title_color || 'inherit' }">{{ s.title_text || 'Caratteristiche' }}</h3>
     <div :style="gridStyle">
       <div v-for="spec in specs" :key="spec.label" :style="itemStyle">
-        <svg xmlns="http://www.w3.org/2000/svg" :width="s.icon_size || 22" :height="s.icon_size || 22" viewBox="0 0 24 24" fill="none" :stroke="s.icon_color || '#2563EB'" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" v-html="spec.icon"></svg>
-        <span :style="{ fontSize: (s.value_size || 18)+'px', fontWeight:'700', color: s.value_color || '#1E293B', lineHeight:'1.2' }">{{ spec.value }}</span>
-        <span :style="{ fontSize: (s.label_size || 12)+'px', color: s.label_color || '#64748B', textTransform:'uppercase', letterSpacing:'0.3px', fontWeight:'500', marginTop:'2px' }">{{ spec.label }}</span>
+        <svg xmlns="http://www.w3.org/2000/svg" :width="s.icon_size || 22" :height="s.icon_size || 22" viewBox="0 0 24 24" fill="none" :stroke="s.icon_color || 'var(--olo-color-primary, #e1474f)'" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" v-html="spec.icon"></svg>
+        <span :style="{ fontSize: (s.value_size || 18)+'px', fontWeight:'700', color: s.value_color || 'var(--olo-color-text, #1f2937)', lineHeight:'1.2' }">{{ spec.value }}</span>
+        <span :style="{ fontSize: (s.label_size || 12)+'px', color: s.label_color || 'var(--olo-color-text-muted, #6b7280)', textTransform:'uppercase', letterSpacing:'0.3px', fontWeight:'500', marginTop:'2px' }">{{ spec.label }}</span>
       </div>
     </div>
   </div>
@@ -14,7 +14,7 @@
 <script setup>
 import { computed } from 'vue';
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
-const defaults = { columns: 4, gap: 12, style: 'cards', show_title: true, title_text: 'Caratteristiche', title_size: 18, title_color: '', card_bg: '#F8FAFC', card_border: '#E2E8F0', card_radius: 10, icon_color: '#2563EB', icon_size: 22, value_color: '#1E293B', value_size: 18, label_color: '#64748B', label_size: 12 };
+const defaults = { columns: 4, gap: 12, style: 'cards', show_title: true, title_text: 'Caratteristiche', title_size: 18, title_color: '', card_bg: '', card_border: '', card_radius: 10, icon_color: '', icon_size: 22, value_color: '', value_size: 18, label_color: '', label_size: 12 };
 const s = computed(() => ({ ...defaults, ...props.settings }));
 
 const specs = [
@@ -30,14 +30,16 @@ const gridStyle = computed(() => ({
   gap: s.value.gap + 'px',
 }));
 
+const cardBg = computed(() => s.value.card_bg || 'var(--olo-color-surface-alt, #f6f7f9)');
+const cardBorder = computed(() => s.value.card_border || 'var(--olo-color-border, #e5e7eb)');
 const itemStyle = computed(() => {
   const base = { display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' };
   if (s.value.style === 'cards') {
-    return { ...base, background: s.value.card_bg, border: '1px solid ' + s.value.card_border, borderRadius: s.value.card_radius + 'px', padding: '16px 12px' };
+    return { ...base, background: cardBg.value, border: '1px solid ' + cardBorder.value, borderRadius: s.value.card_radius + 'px', padding: '16px 12px' };
   }
   if (s.value.style === 'pills') {
-    return { ...base, flexDirection: 'row', gap: '10px', textAlign: 'left', background: s.value.card_bg, borderRadius: '100px', padding: '12px 16px' };
+    return { ...base, flexDirection: 'row', gap: '10px', textAlign: 'left', background: cardBg.value, borderRadius: '100px', padding: '12px 16px' };
   }
-  return { ...base, flexDirection: 'row', gap: '12px', textAlign: 'left', padding: '8px 0', borderBottom: '1px solid ' + s.value.card_border };
+  return { ...base, flexDirection: 'row', gap: '12px', textAlign: 'left', padding: '8px 0', borderBottom: '1px solid ' + cardBorder.value };
 });
 </script>

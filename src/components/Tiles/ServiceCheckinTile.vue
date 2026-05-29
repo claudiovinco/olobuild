@@ -13,14 +13,14 @@ const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 
 const defaults = {
   bg_color: '', text_color: '', label_color: '',
-  border_color: '#E5E7EB', border_radius: '12', padding: '16', font_size: '14',
+  border_color: '', border_radius: '12', padding: '16', font_size: '14',
 };
 const s = computed(() => ({ ...defaults, ...props.settings }));
 
 const barStyle = computed(() => ({
   background: s.value.bg_color || 'var(--olo-color-muted, #F3F4F6)',
   color: s.value.text_color || 'var(--olo-color-text, #374151)',
-  border: '1px solid ' + s.value.border_color,
+  border: '1px solid ' + (s.value.border_color || 'var(--olo-color-border, #E5E7EB)'),
   borderRadius: s.value.border_radius + 'px',
   padding: s.value.padding + 'px',
   fontSize: s.value.font_size + 'px',

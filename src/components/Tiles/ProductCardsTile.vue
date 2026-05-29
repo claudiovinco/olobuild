@@ -39,6 +39,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { resolveColor, TOKENS } from '@/composables/oloTileDefaults';
 
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 
@@ -51,7 +52,7 @@ const defaults = {
     { letter: 'C', letter_color: '#b3261e', top_bg: { type: 'gradient', gradient_from: '#fdf2f2', gradient_to: '#fbe1e1', gradient_angle: 180 }, screenshot_label: 'SCREENSHOT · EDITOR LIVE', brand_label: 'OLOBUILD', brand_color: '#b3261e', show_badge: true, badge_text: 'GRATIS', badge_bg: '#0f172a', badge_color: '#ffffff', title: 'Co', title_accent: 'struisci', title_accent_italic: true, description: 'Page builder olonico. Alla pari dei top builder commerciali.', cta_text: 'SCOPRI OLOBUILD', cta_url: '#' },
   ],
   card_bg: { type: 'solid', color: '#ffffff' },
-  card_color: '#374151',
+  card_color: '',
   card_radius: R(24),
   card_shadow: 'sm',
   card_padding: 28,
@@ -62,7 +63,7 @@ const defaults = {
   letter_italic: true,
   letter_align: 'center',
   show_screenshot_label: true,
-  screenshot_label_color: '#9ca3af',
+  screenshot_label_color: '',
   brand_size: 13,
   brand_letter_spacing: 0.08,
   title_font_family: 'serif',
@@ -125,7 +126,7 @@ const gridStyle = computed(() => ({
 
 const cardStyle = computed(() => ({
   ...bgToCss(s.value.card_bg, { background: '#ffffff' }),
-  color: s.value.card_color || '#374151',
+  color: resolveColor(s.value.card_color, TOKENS.text),
   borderRadius: radiusToCss(s.value.card_radius),
   boxShadow: SHADOW[s.value.card_shadow || 'sm'] || SHADOW.sm,
   overflow: 'hidden',
@@ -157,21 +158,24 @@ function letterStyle(it) {
   };
 }
 
-const screenLabelStyle = computed(() => ({
-  position: 'absolute',
-  left: (s.value.top_padding || 24) + 'px',
-  right: (s.value.top_padding || 24) + 'px',
-  bottom: (s.value.top_padding || 24) + 'px',
-  border: `1px dashed ${(s.value.screenshot_label_color || '#9ca3af')}66`,
-  borderRadius: '6px',
-  padding: '8px 12px',
-  textAlign: 'center',
-  fontFamily: MONO,
-  fontSize: '10px',
-  letterSpacing: '0.1em',
-  textTransform: 'uppercase',
-  color: s.value.screenshot_label_color || '#9ca3af',
-}));
+const screenLabelStyle = computed(() => {
+  const labelC = resolveColor(s.value.screenshot_label_color, TOKENS.textFaint);
+  return {
+    position: 'absolute',
+    left: (s.value.top_padding || 24) + 'px',
+    right: (s.value.top_padding || 24) + 'px',
+    bottom: (s.value.top_padding || 24) + 'px',
+    border: `1px dashed color-mix(in srgb, ${labelC} 40%, transparent)`,
+    borderRadius: '6px',
+    padding: '8px 12px',
+    textAlign: 'center',
+    fontFamily: MONO,
+    fontSize: '10px',
+    letterSpacing: '0.1em',
+    textTransform: 'uppercase',
+    color: labelC,
+  };
+});
 
 function brandStyle(it) {
   return {
@@ -190,7 +194,7 @@ function badgeStyle(it) {
     alignItems: 'center',
     padding: '3px 10px',
     background: it.badge_bg || '#0f172a',
-    color: it.badge_color || '#ffffff',
+    color: resolveColor(it.badge_color, TOKENS.onPrimary),
     fontFamily: MONO,
     fontSize: '11px',
     letterSpacing: '0.06em',
@@ -204,7 +208,7 @@ const titleStyle = computed(() => ({
   fontFamily: fmap[s.value.title_font_family] || SERIF,
   fontSize: (s.value.title_size || 30) + 'px',
   fontWeight: s.value.title_weight || '500',
-  color: s.value.card_color || '#374151',
+  color: resolveColor(s.value.card_color, TOKENS.text),
   margin: 0,
   lineHeight: 1.1,
   letterSpacing: '-0.01em',
@@ -214,7 +218,7 @@ const descStyle = computed(() => ({
   fontFamily: SANS,
   fontSize: (s.value.description_size || 15) + 'px',
   lineHeight: 1.55,
-  color: s.value.card_color || '#374151',
+  color: resolveColor(s.value.card_color, TOKENS.text),
   flex: 1,
 }));
 

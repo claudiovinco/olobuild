@@ -119,7 +119,7 @@ class Olo_Loginform_Tile extends Olo_Tile_Base {
         $form_bc          = $this->safe_color_css( $s['border_color'] );
         $form_pad = Olo_Tile_Utils::spacing_css( $s['tile_padding'] ?? $s['form_padding'] ?? 32, 32 );
 
-        $submit_bg_val    = $submit_bg ?: 'var(--olo-color-primary, #6366F1)';
+        $submit_bg_val    = $submit_bg ?: 'var(--olo-color-primary, #e1474f)';
         $text_color_val   = $text_color ?: 'var(--olo-color-text, #374151)';
         $label_color_val  = $label_color ?: $text_color_val;
         $input_bg_val     = $input_bg ?: 'var(--olo-color-background, #FFFFFF)';
@@ -235,6 +235,7 @@ class Olo_Loginform_Tile extends Olo_Tile_Base {
             <?php if ( $input_radius_hover_css !== '' ) : ?>.<?php echo $uid; ?> .olo-lf-input-wrap{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?> .olo-lf-input-wrap:hover{border-radius:<?php echo $input_radius_hover_css; ?> !important}<?php endif; ?>
             .<?php echo $uid; ?> .olo-lf-input-wrap:focus-within {
                 border-color: <?php echo $input_focus_val; ?>;
+                box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 25%, transparent);
             }
             .<?php echo $uid; ?> .olo-lf-icon {
                 display: flex; align-items: center; padding: 0 0 0 14px;
@@ -270,6 +271,7 @@ class Olo_Loginform_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> select.olo-lf-input-standalone:focus,
             .<?php echo $uid; ?> textarea.olo-lf-input-standalone:focus {
                 border-color: <?php echo $input_focus_val; ?>;
+                box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 25%, transparent);
             }
             .<?php echo $uid; ?> textarea.olo-lf-input-standalone {
                 min-height: 72px; resize: vertical;
@@ -287,10 +289,10 @@ class Olo_Loginform_Tile extends Olo_Tile_Base {
                 font-size: 11px; margin-top: 4px;
                 color: <?php echo $text_color_val; ?>; opacity: 0.6;
             }
-            .<?php echo $uid; ?>[data-pw-str="1"] .olo-lf-strength-bar:nth-child(1) { background: #EF4444; }
-            .<?php echo $uid; ?>[data-pw-str="2"] .olo-lf-strength-bar:nth-child(-n+2) { background: #F59E0B; }
-            .<?php echo $uid; ?>[data-pw-str="3"] .olo-lf-strength-bar:nth-child(-n+3) { background: #10B981; }
-            .<?php echo $uid; ?>[data-pw-str="4"] .olo-lf-strength-bar { background: #10B981; }
+            .<?php echo $uid; ?>[data-pw-str="1"] .olo-lf-strength-bar:nth-child(1) { background: var(--olo-color-danger, #ef4444); }
+            .<?php echo $uid; ?>[data-pw-str="2"] .olo-lf-strength-bar:nth-child(-n+2) { background: var(--olo-color-warning, #b45309); }
+            .<?php echo $uid; ?>[data-pw-str="3"] .olo-lf-strength-bar:nth-child(-n+3) { background: var(--olo-color-success, #15803d); }
+            .<?php echo $uid; ?>[data-pw-str="4"] .olo-lf-strength-bar { background: var(--olo-color-success, #15803d); }
             /* Submit */
             .<?php echo $uid; ?> .olo-lf-submit {
                 display: block; width: 100%; padding: 12px 24px;
@@ -307,12 +309,16 @@ class Olo_Loginform_Tile extends Olo_Tile_Base {
                 <?php else : ?>opacity: 0.9;<?php endif; ?>
                 transform: translateY(-1px);
             }
+            .<?php echo $uid; ?> .olo-lf-submit:focus-visible { outline: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent); }
+            .<?php echo $uid; ?> .olo-lf-pw-toggle:focus-visible { outline: none; border-radius: 4px; box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent); }
             .<?php echo $uid; ?> .olo-lf-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
             /* Links */
             .<?php echo $uid; ?> .olo-lf-link {
                 color: <?php echo $link_color_val; ?>; text-decoration: none; font-size: 13px; font-weight: 500;
             }
             .<?php echo $uid; ?> .olo-lf-link:hover { text-decoration: underline; }
+            .<?php echo $uid; ?> .olo-lf-link:focus-visible,
+            .<?php echo $uid; ?> .olo-lf-switch a:focus-visible { outline: none; border-radius: 3px; box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent); }
             /* Remember + lost password row */
             .<?php echo $uid; ?> .olo-lf-row {
                 display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;
@@ -345,6 +351,7 @@ class Olo_Loginform_Tile extends Olo_Tile_Base {
                 <?php endif; ?>
             }
             .<?php echo $uid; ?> .olo-lf-tab:hover { opacity: 0.8; }
+            .<?php echo $uid; ?> .olo-lf-tab:focus-visible { outline: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent); }
             .<?php echo $uid; ?> .olo-lf-tab.active {
                 font-weight: 600;
                 <?php if ( $tab_style === 'underline' ) : ?>
@@ -395,6 +402,7 @@ class Olo_Loginform_Tile extends Olo_Tile_Base {
                 box-sizing: border-box;
             }
             .<?php echo $uid; ?> .olo-lf-social-btn:hover { opacity: 0.85; }
+            .<?php echo $uid; ?> .olo-lf-social-btn:focus-visible { outline: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent); }
             .<?php echo $uid; ?> .olo-lf-divider {
                 display: flex; align-items: center; gap: 12px; margin: 20px 0;
             }

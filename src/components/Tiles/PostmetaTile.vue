@@ -1,10 +1,10 @@
 <template>
   <div class="olo-postmeta" :class="['olo-pm-preset-'+preset, 'olo-pm-chip-'+chipStyle]" :style="wrapStyle">
     <template v-for="(item, idx) in visibleItems" :key="item.key">
-      <span v-if="idx > 0 && showSeparator" class="olo-postmeta-sep" :style="{ color: s.text_color }">{{ s.separator }}</span>
+      <span v-if="idx > 0 && showSeparator" class="olo-postmeta-sep" :style="{ color: textC }">{{ s.separator }}</span>
       <span class="olo-postmeta-item" :class="{ 'is-chip': chipStyle !== 'none' }" :style="itemStyle(idx)">
-        <svg v-if="s.icon_style === 'before'" :style="{ color: s.icon_color }" class="olo-postmeta-icon" v-html="item.icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></svg>
-        <a v-if="item.isLink" href="#" :style="{ color: s.link_color, textDecoration: 'none' }" v-html="item.label" @click.prevent></a>
+        <svg v-if="s.icon_style === 'before'" :style="{ color: iconC }" class="olo-postmeta-icon" v-html="item.icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></svg>
+        <a v-if="item.isLink" href="#" class="olo-pm-link" :style="{ color: linkC, textDecoration: 'none' }" v-html="item.label" @click.prevent></a>
         <span v-else v-html="item.label"></span>
       </span>
     </template>
@@ -33,9 +33,9 @@ const defaults = {
   layout: 'inline',
   separator: ' · ',
   icon_style: 'none',
-  text_color: '#9CA3AF',
-  link_color: '#6366F1',
-  icon_color: '#6B7280',
+  text_color: '',
+  link_color: '',
+  icon_color: '',
   bg_color: '',
   font_size: '14',
   font_family: 'inherit',
@@ -55,6 +55,11 @@ const defaults = {
   category_link: true,
 };
 const s = computed(() => ({ ...defaults, ...props.settings }));
+
+// TOKEN-FIRST: neutri → token tema; link = primario brand (era #e1474f indaco off-brand)
+const textC = computed(() => s.value.text_color || 'var(--olo-color-text-faint, #9CA3AF)');
+const linkC = computed(() => s.value.link_color || 'var(--olo-color-primary, #e1474f)');
+const iconC = computed(() => s.value.icon_color || 'var(--olo-color-text-soft, #6B7280)');
 
 const preset = computed(() => s.value.preset || 'custom');
 const chipStyle = computed(() => s.value.chip_style || 'none');
@@ -132,7 +137,7 @@ const wrapStyle = computed(() => {
     background: s.value.bg_color || 'transparent',
     padding: `${cp.top || 0}px ${cp.right || 0}px ${cp.bottom || 0}px ${cp.left || 0}px`,
     borderRadius: radiusToCss(s.value.container_radius),
-    color: s.value.text_color || '#9CA3AF',
+    color: textC.value,
     lineHeight: '1.6',
     position: 'relative',
     display: 'flex',
@@ -149,7 +154,7 @@ function itemStyle(idx) {
     display: 'inline-flex',
     alignItems: 'center',
     gap: '5px',
-    color: s.value.text_color,
+    color: textC.value,
   };
   if (chipStyle.value !== 'none') {
     if (s.value.chip_bg) base.background = s.value.chip_bg;
@@ -184,6 +189,12 @@ function itemStyle(idx) {
 .olo-postmeta-item { display: inline-flex; align-items: center; gap: 5px; }
 .olo-postmeta-icon { flex-shrink: 0; }
 .olo-postmeta-sep { display: inline-block; }
+/* a11y tastiera: anello di focus visibile sui link meta (autore/categorie/tag) */
+.olo-pm-link:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
+  border-radius: 3px;
+}
 
 .olo-pm-preset-tilt-3d { perspective: 800px; }
 
@@ -204,7 +215,7 @@ function itemStyle(idx) {
 @keyframes olo-pm-blink { 50% { opacity: 0; } }
 
 .olo-pm-preset-gradient-glow .olo-postmeta-item {
-  background: linear-gradient(90deg, #e8622a 0%, rgba(232,98,42,0.6) 50%, #e8622a 100%);
+  background: linear-gradient(90deg, #e1474f 0%, rgba(232,98,42,0.6) 50%, #e1474f 100%);
   background-size: 200% 100%;
   -webkit-background-clip: text;
   background-clip: text;
@@ -214,7 +225,7 @@ function itemStyle(idx) {
 }
 .olo-pm-preset-gradient-glow .olo-postmeta-icon {
   -webkit-text-fill-color: initial;
-  color: #e8622a !important;
+  color: #e1474f !important;
 }
 @keyframes olo-pm-grad {
   0% { background-position: 0% 50%; }

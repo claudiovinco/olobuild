@@ -103,7 +103,7 @@ const iconWrapStyle = computed(() => ({
   flexShrink: 0,
   display: 'inline-flex',
   alignItems: 'center',
-  color: s.value.icon_color || 'var(--olo-color-primary, #6366F1)',
+  color: s.value.icon_color || 'var(--olo-color-primary, #e1474f)',
 }));
 
 const termStyle = computed(() => {

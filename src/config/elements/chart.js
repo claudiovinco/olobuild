@@ -25,10 +25,10 @@ export default {
     typography_preset: '',
     chart_type: 'bar',
     items: [
-      { id: 'c-1', label: t('Gen'), value: '65', color: '#6366F1' },
-      { id: 'c-2', label: 'Feb', value: '45', color: '#8B5CF6' },
-      { id: 'c-3', label: t('Mar'), value: '80', color: '#A78BFA' },
-      { id: 'c-4', label: t('Apr'), value: '55', color: '#C4B5FD' },
+      { id: 'c-1', label: t('Gen'), value: '65', color: '#e1474f' },
+      { id: 'c-2', label: 'Feb', value: '45', color: '#16263d' },
+      { id: 'c-3', label: t('Mar'), value: '80', color: '#f4a23b' },
+      { id: 'c-4', label: t('Apr'), value: '55', color: '#15803d' },
     ],
     chart_height: '400',
 
@@ -138,7 +138,7 @@ export default {
         { key: 'color', label: t('Colore sfondo'), type: 'color' },
         { key: 'border_color', label: t('Colore bordo'), type: 'color' },
       ],
-      newItemDefaults: { label: t('Nuovo'), value: '50', color: '#6366F1', border_color: '' },
+      newItemDefaults: { label: t('Nuovo'), value: '50', color: '#e1474f', border_color: '' },
       itemLabel: 'Dato',
     },
     { key: 'dataset_label', label: t('Etichetta dataset'), type: 'text', placeholder: t('Mostrata nella legenda'),

@@ -20,11 +20,11 @@ class Olo_Progresstracker_Tile extends Olo_Tile_Base {
         ],
         'layout'           => 'horizontal',
         'connector_style'  => 'line',
-        'connector_color'  => '#e5e7eb',
-        'completed_color'  => '#10b981',
-        'active_color'     => '#3b82f6',
-        'pending_color'    => '#9ca3af',
-        'text_color'       => '#F3F4F6',
+        'connector_color'  => '',
+        'completed_color'  => '',
+        'active_color'     => '',
+        'pending_color'    => '',
+        'text_color'       => '',
         'show_description' => true,
         'show_numbers'     => true,
         'circle_size'      => '40',
@@ -56,11 +56,11 @@ class Olo_Progresstracker_Tile extends Olo_Tile_Base {
         $layout     = $s['layout'] === 'vertical' ? 'vertical' : 'horizontal';
         $conn_style = in_array( $s['connector_style'], [ 'line', 'dashed', 'dotted' ] ) ? $s['connector_style'] : 'line';
         $conn_css   = $conn_style === 'line' ? 'solid' : $conn_style;
-        $conn_clr   = $this->safe_color_css( $s['connector_color'] ) ?: '#e5e7eb';
-        $comp_clr   = $this->safe_color_css( $s['completed_color'] ) ?: '#10b981';
-        $act_clr    = $this->safe_color_css( $s['active_color'] ) ?: '#3b82f6';
-        $pend_clr   = $this->safe_color_css( $s['pending_color'] ) ?: '#9ca3af';
-        $text_clr   = $this->safe_color_css( $s['text_color'] ) ?: '#F3F4F6';
+        $conn_clr   = $this->safe_color_css( $s['connector_color'] ) ?: 'var(--olo-color-border, #E5E7EB)';
+        $comp_clr   = $this->safe_color_css( $s['completed_color'] ) ?: 'var(--olo-color-success, #15803d)';
+        $act_clr    = $this->safe_color_css( $s['active_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
+        $pend_clr   = $this->safe_color_css( $s['pending_color'] ) ?: 'var(--olo-color-text-faint, #94a3b8)';
+        $text_clr   = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-text, #374151)';
         $show_desc  = filter_var( $s['show_description'], FILTER_VALIDATE_BOOLEAN );
         $show_nums  = filter_var( $s['show_numbers'], FILTER_VALIDATE_BOOLEAN );
         $c_size     = max( 24, intval( $s['circle_size'] ) );
@@ -83,7 +83,7 @@ class Olo_Progresstracker_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .olo-pt-circle--active {
                 background: <?php echo $act_clr; ?>;
                 color: var(--olo-color-primary-contrast, #FFFFFF);
-                box-shadow: 0 0 0 4px <?php echo $act_clr; ?>40;
+                box-shadow: 0 0 0 4px <?php echo 'color-mix(in srgb, ' . $act_clr . ' 25%, transparent)'; ?>;
                 animation: olo-pt-pulse-<?php echo $uid; ?> 2s ease-in-out infinite;
             }
             .<?php echo $uid; ?> .olo-pt-circle--pending {

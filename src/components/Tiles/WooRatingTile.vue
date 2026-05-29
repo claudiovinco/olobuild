@@ -13,14 +13,14 @@
         <path
           v-if="star <= 4"
           d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
-          :fill="s.star_color || '#F59E0B'"
+          :fill="starColor"
         />
         <!-- Half star (5th) -->
         <template v-else>
           <defs>
             <linearGradient :id="'half-' + star">
-              <stop offset="50%" :stop-color="s.star_color || '#F59E0B'" />
-              <stop offset="50%" :stop-color="s.empty_star_color || '#D1D5DB'" />
+              <stop offset="50%" :stop-color="starColor" />
+              <stop offset="50%" :stop-color="emptyColor" />
             </linearGradient>
           </defs>
           <path
@@ -40,6 +40,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { resolveColor, TOKENS } from '@/composables/oloTileDefaults';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
@@ -48,15 +49,17 @@ const props = defineProps({
 const defaults = {
   show_count: true,
   show_average: true,
-  star_color: '#F59E0B',
-  empty_star_color: '#D1D5DB',
-  text_color: '#6B7280',
+  star_color: '',           // '' ⇒ TOKENS.accent (stelle = ambra)
+  empty_star_color: '',     // '' ⇒ TOKENS.border
+  text_color: '',           // '' ⇒ TOKENS.textSoft
   star_size: '20',
   text_size: '14',
 };
 const s = computed(() => ({ ...defaults, ...props.settings }));
 
 const starSize = computed(() => (parseInt(s.value.star_size) || 20) + 'px');
+const starColor = computed(() => resolveColor(s.value.star_color, TOKENS.accent));
+const emptyColor = computed(() => resolveColor(s.value.empty_star_color, TOKENS.border));
 
 const wrapStyle = computed(() => ({
   display: 'flex',
@@ -66,7 +69,7 @@ const wrapStyle = computed(() => ({
 }));
 
 const textStyle = computed(() => ({
-  color: s.value.text_color || '#6B7280',
+  color: resolveColor(s.value.text_color, TOKENS.textSoft),
   fontSize: (parseInt(s.value.text_size) || 14) + 'px',
 }));
 </script>

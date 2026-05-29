@@ -16,8 +16,8 @@ class Olo_Viewscounter_Tile extends Olo_Tile_Base {
         'icon_position' => 'before',
         'label'         => 'visualizzazioni',
         'show_label'    => true,
-        'text_color'    => '#6B7280',
-        'icon_color'    => '#6B7280',
+        'text_color'    => '',
+        'icon_color'    => '',
         'font_size'     => '14',
         'font_weight'   => '400',
         'layout'        => 'inline',
@@ -111,7 +111,7 @@ class Olo_Viewscounter_Tile extends Olo_Tile_Base {
         $icon_pos    = $s['icon_position'] === 'after' ? 'after' : 'before';
         $layout      = $s['layout'] === 'block' ? 'block' : 'inline';
         $label       = esc_html( $s['label'] ?: olo_t( 'visualizzazioni' ) );
-        $text_color  = $this->safe_color_css( $s['text_color'] ) ?: '#6B7280';
+        $text_color  = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-text-soft, #6b7280)';
         $icon_color  = $this->safe_color_css( $s['icon_color'] ) ?: $text_color;
         $font_size   = absint( $s['font_size'] ) ?: 14;
         $font_weight = absint( $s['font_weight'] ) ?: 400;

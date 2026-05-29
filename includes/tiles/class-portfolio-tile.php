@@ -21,8 +21,8 @@ class Olo_Portfolio_Tile extends Olo_Tile_Base {
         'filter_bar'          => true,
         'filter_style'        => 'buttons',
         'filter_all_label'    => 'Tutti',
-        'filter_color'        => '#9CA3AF',
-        'filter_active_color' => '#6366F1',
+        'filter_color'        => '',
+        'filter_active_color' => '',
         'layout'              => 'grid',
         'hover_effect'        => 'fade',
         'caption_position'    => 'overlay',
@@ -30,8 +30,8 @@ class Olo_Portfolio_Tile extends Olo_Tile_Base {
         'show_title'          => true,
         'show_category'       => true,
         'show_excerpt'        => false,
-        'title_color'         => '#F3F4F6',
-        'text_color'          => '#9CA3AF',
+        'title_color'         => '',
+        'text_color'          => '',
         'bg_color'            => '',
         'accent_color'        => '',
         'overlay_color'       => '#000000',
@@ -304,11 +304,11 @@ class Olo_Portfolio_Tile extends Olo_Tile_Base {
 
         $ov_color = $this->safe_color_css( $s['overlay_color'] ) ?: '#000000';
         $ov_opa   = max( 0, min( 100, absint( $s['overlay_opacity'] ) ) );
-        $title_c  = $this->safe_color_css( $s['title_color'] ) ?: '#F3F4F6';
-        $text_c   = $this->safe_color_css( $s['text_color'] ) ?: '#9CA3AF';
+        $title_c  = $this->safe_color_css( $s['title_color'] ) ?: 'var(--olo-color-text, #374151)';
+        $text_c   = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-text-soft, #6b7280)';
         $bg_c     = $this->safe_color_css( $s['bg_color'] );
-        $accent_c = $this->safe_color_css( $s['accent_color'] ) ?: ( $this->safe_color_css( $s['effect_color'] ) ?: '#6366F1' );
-        $flt_c    = $this->safe_color_css( $s['filter_color'] ) ?: '#9CA3AF';
+        $accent_c = $this->safe_color_css( $s['accent_color'] ) ?: ( $this->safe_color_css( $s['effect_color'] ) ?: 'var(--olo-color-primary, #e1474f)' );
+        $flt_c    = $this->safe_color_css( $s['filter_color'] ) ?: 'var(--olo-color-text-soft, #6b7280)';
         $flt_ac   = $this->safe_color_css( $s['filter_active_color'] ) ?: $accent_c;
         $all_label = esc_html( $s['filter_all_label'] ?: olo_t( 'Tutti' ) );
 
@@ -529,10 +529,18 @@ class Olo_Portfolio_Tile extends Olo_Tile_Base {
                 <?php endif; ?>
             }
             .<?php echo $uid; ?>-filter button:hover, .<?php echo $uid; ?>-filter button.active {
-                color: #FFFFFF;
+                color: var(--olo-color-on-primary, #FFFFFF);
                 <?php if ( $filter_style === 'buttons' || $filter_style === 'pills' || $filter_style === 'dropdown' ) : ?>background: <?php echo $flt_ac; ?>;
                 <?php elseif ( $filter_style === 'underline' ) : ?>color:<?php echo $flt_ac; ?>;border-bottom-color:<?php echo $flt_ac; ?>;
                 <?php endif; ?>
+            }
+            .<?php echo $uid; ?>-filter button:focus-visible {
+                outline: none;
+                box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
+            }
+            .<?php echo $uid; ?>-grid .olo-pf-item:focus-visible {
+                outline: none;
+                box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
             }
 
             /* ── Search ── */

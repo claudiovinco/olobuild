@@ -181,8 +181,8 @@ class Olo_Spacer_Tile extends Olo_Tile_Base {
         $bg_css = '';
         if ( ! empty( $s['bg_gradient'] ) ) {
             $angle = absint( $s['bg_gradient_angle'] ) % 360;
-            $from  = $this->safe_color_css( $s['bg_gradient_from'] ) ?: 'var(--olo-color-primary, #6366F1)';
-            $to    = $this->safe_color_css( $s['bg_gradient_to'] ) ?: '#8B5CF6';
+            $from  = $this->safe_color_css( $s['bg_gradient_from'] ) ?: 'var(--olo-color-primary, #e1474f)';
+            $to    = $this->safe_color_css( $s['bg_gradient_to'] ) ?: 'var(--olo-color-accent, #f4a23b)';
             $bg_css = "background: linear-gradient({$angle}deg, {$from}, {$to});";
         } elseif ( ! empty( $s['bg_color'] ) ) {
             $bg_css = 'background-color: ' . ( $this->safe_color_css( $s['bg_color'] ) ) . ';';

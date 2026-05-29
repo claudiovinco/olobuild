@@ -26,7 +26,7 @@ export default {
     show_description: true,
     show_attributes: true,
     show_add_to_cart: true,
-    header_bg: '#F9FAFB',
+    header_bg: '',
     header_color: '',
     border: { ...borderDefault },
     border_hover: { ...borderHoverDefault },

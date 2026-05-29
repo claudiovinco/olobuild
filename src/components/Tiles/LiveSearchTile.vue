@@ -37,7 +37,7 @@
           </div>
         </div>
         <!-- Footer -->
-        <div v-if="s.show_all_url" style="padding:8px 12px;font-size:12px;text-align:center;border-top:1px solid;font-weight:600" :style="{ borderColor: s.results_border_color || '#e5e7eb', color: '#6366F1' }" data-olo-editable="show_all_text">
+        <div v-if="s.show_all_url" style="padding:8px 12px;font-size:12px;text-align:center;border-top:1px solid;font-weight:600" :style="{ borderColor: s.results_border_color || 'var(--olo-color-border, #e5e7eb)', color: 'var(--olo-color-primary, #e1474f)' }" data-olo-editable="show_all_text">
           {{ s.show_all_text || 'Vedi tutti i risultati' }}
         </div>
       </div>
@@ -68,7 +68,7 @@
             </div>
           </div>
         </div>
-        <div v-if="s.show_all_url" style="padding:8px 12px;font-size:12px;text-align:center;border-top:1px solid;font-weight:600" :style="{ borderColor: s.results_border_color || '#e5e7eb', color: '#6366F1' }" data-olo-editable="show_all_text">
+        <div v-if="s.show_all_url" style="padding:8px 12px;font-size:12px;text-align:center;border-top:1px solid;font-weight:600" :style="{ borderColor: s.results_border_color || 'var(--olo-color-border, #e5e7eb)', color: 'var(--olo-color-primary, #e1474f)' }" data-olo-editable="show_all_text">
           {{ s.show_all_text || 'Vedi tutti i risultati' }}
         </div>
       </div>
@@ -120,7 +120,7 @@
             </div>
           </div>
         </div>
-        <div v-if="s.show_all_url" style="padding:8px 12px;font-size:12px;text-align:center;border-top:1px solid;font-weight:600" :style="{ borderColor: s.results_border_color || '#e5e7eb', color: '#6366F1' }" data-olo-editable="show_all_text">
+        <div v-if="s.show_all_url" style="padding:8px 12px;font-size:12px;text-align:center;border-top:1px solid;font-weight:600" :style="{ borderColor: s.results_border_color || 'var(--olo-color-border, #e5e7eb)', color: 'var(--olo-color-primary, #e1474f)' }" data-olo-editable="show_all_text">
           {{ s.show_all_text || 'Vedi tutti i risultati' }}
         </div>
       </div>
@@ -128,7 +128,7 @@
 
     <!-- Animated placeholder words preview -->
     <div v-if="s.animated_placeholder && animWords.length" style="margin-top:8px;display:flex;gap:4px;flex-wrap:wrap;justify-content:center;">
-      <span v-for="(w, i) in animWords" :key="i" style="font-size:9px;padding:1px 5px;border-radius:3px;background:rgba(99,102,241,0.1);color:#6366F1;">{{ w }}</span>
+      <span v-for="(w, i) in animWords" :key="i" style="font-size:9px;padding:1px 5px;border-radius:3px;" :style="{ background: 'color-mix(in srgb, var(--olo-color-primary, #e1474f) 10%, transparent)', color: 'var(--olo-color-primary, #e1474f)' }">{{ w }}</span>
     </div>
   </div>
 </template>
@@ -169,7 +169,7 @@ const defaults = {
   input_height: '44',
   input_border_color: '#e5e7eb',
   input_border_radius: '8',
-  focus_border_color: '#6366f1',
+  focus_border_color: '',
   results_bg: '#ffffff',
   results_border_color: '',
   item_hover_bg: '',

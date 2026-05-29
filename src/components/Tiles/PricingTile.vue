@@ -11,7 +11,7 @@
     <div v-if="showOverlay" class="mb-absolute mb-inset-0" :style="overlayStyle"></div>
 
     <!-- Sale badge -->
-    <div v-if="hasSalePrice" style="position:absolute;top:12px;right:12px;padding:2px 8px;border-radius:4px;font-size:9px;font-weight:700;color:#fff;z-index:10;" :style="{ background: s.sale_badge_color || '#EF4444' }">
+    <div v-if="hasSalePrice" style="position:absolute;top:12px;right:12px;padding:2px 8px;border-radius:4px;font-size:9px;font-weight:700;color:var(--olo-color-on-primary, #ffffff);z-index:10;" :style="{ background: s.sale_badge_color || 'var(--olo-color-error, #b42318)' }">
       <span data-olo-editable="sale_badge_text">{{ s.sale_badge_text || 'OFFERTA' }}</span>
     </div>
 
@@ -72,7 +72,7 @@
       </div>
 
       <!-- Additional info -->
-      <div v-if="s.additional_info" style="margin-top:8px;font-size:10px;color:#9ca3af;text-align:center;" data-olo-editable="additional_info">{{ s.additional_info }}</div>
+      <div v-if="s.additional_info" style="margin-top:8px;font-size:10px;color:var(--olo-color-text-faint, #94a3b8);text-align:center;" data-olo-editable="additional_info">{{ s.additional_info }}</div>
     </div>
   </div>
 </template>
@@ -88,19 +88,19 @@ const props = defineProps({
 const s = computed(() => ({
   plan_name: 'Piano Pro', price: '29', currency: '€', currency_size: '14', period: '/mese',
   features: 'Progetti illimitati\n10 GB di spazio\nSupporto prioritario',
-  sale_price: '', sale_badge_text: 'OFFERTA', sale_badge_color: '#EF4444',
+  sale_price: '', sale_badge_text: 'OFFERTA', sale_badge_color: '',
   currency_position: 'before',
   is_popular: false, badge_text: 'Popolare', badge_style: 'pill', badge_top: '-12', badge_radius: '20',
-  badge_bg_color: '', badge_text_color: '#FFFFFF',
+  badge_bg_color: '', badge_text_color: 'var(--olo-color-on-primary, #ffffff)',
   price_shape: 'none', price_shape_color: 'var(--olo-color-muted, #F3F4F6)', price_shape_glow: false,
-  price_shape_glow_color: 'var(--olo-color-primary, #6366F1)', price_shape_glow_intensity: '15',
-  price_shape_border_width: '0', price_shape_border_color: 'var(--olo-color-primary, #6366F1)',
+  price_shape_glow_color: 'var(--olo-color-primary, #e1474f)', price_shape_glow_intensity: '15',
+  price_shape_border_width: '0', price_shape_border_color: 'var(--olo-color-primary, #e1474f)',
   check_style: 'checkmark', check_size: '14', feature_dividers: true, price_color: '',
-  bg_color: 'var(--olo-color-background, #FFFFFF)', accent_color: 'var(--olo-color-primary, #6366F1)', text_color: 'var(--olo-color-text, #374151)',
+  bg_color: 'var(--olo-color-background, #FFFFFF)', accent_color: 'var(--olo-color-primary, #e1474f)', text_color: 'var(--olo-color-text, #374151)',
   bg_type: 'color', bg_image: '', bg_video: '', overlay: false,
   overlay_color: '#000000', overlay_opacity: '50',
-  cta_text: 'Inizia ora', cta_url: '#', cta_bg_color: '', cta_text_color: '#FFFFFF',
-  cta_width: '100', cta_radius: '8', cta_border_width: '0', cta_border_color: '#FFFFFF',
+  cta_text: 'Inizia ora', cta_url: '#', cta_bg_color: '', cta_text_color: 'var(--olo-color-on-primary, #ffffff)',
+  cta_width: '100', cta_radius: '8', cta_border_width: '0', cta_border_color: 'var(--olo-color-on-primary, #ffffff)',
   cta_hover_effect: 'lift', cta_hover_bg_color: '', cta_hover_text_color: '',
   additional_info: '',
   enable_toggle: false, toggle_label_1: 'Mensile', toggle_label_2: 'Annuale', toggle_color: '', price_yearly: '',
@@ -124,7 +124,7 @@ const displayPrice = computed(() => {
 });
 
 const toggleSwitchStyle = computed(() => {
-  const color = s.value.toggle_color || s.value.accent_color || 'var(--olo-color-primary, #6366F1)';
+  const color = s.value.toggle_color || s.value.accent_color || 'var(--olo-color-primary, #e1474f)';
   return {
     position: 'relative',
     width: '40px',
@@ -156,7 +156,7 @@ const priceWrapColor = computed(() => {
 });
 
 const checkIconStyle = computed(() => ({
-  color: s.value.accent_color || 'var(--olo-color-primary, #6366F1)',
+  color: s.value.accent_color || 'var(--olo-color-primary, #e1474f)',
   fontSize: (parseInt(s.value.check_size) || 14) + 'px',
   marginRight: '8px',
   opacity: '0.8',
@@ -221,7 +221,7 @@ const overlayStyle = computed(() => ({
 }));
 
 const badgeStyle = computed(() => {
-  const accent = s.value.accent_color || 'var(--olo-color-primary, #6366F1)';
+  const accent = s.value.accent_color || 'var(--olo-color-primary, #e1474f)';
   const bg = s.value.badge_bg_color || accent;
   const fg = s.value.badge_text_color || '#FFFFFF';
   const radius = ((v => isNaN(v) ? 20 : v)(parseInt(s.value.badge_radius))) + 'px';
@@ -249,7 +249,7 @@ const priceShapeStyle = computed(() => {
   if (shape === 'none') return { display: 'inline-flex', alignItems: 'baseline' };
   const color = s.value.price_shape_color || 'var(--olo-color-muted, #F3F4F6)';
   const bw = parseInt(s.value.price_shape_border_width) || 0;
-  const bc = s.value.price_shape_border_color || 'var(--olo-color-primary, #6366F1)';
+  const bc = s.value.price_shape_border_color || 'var(--olo-color-primary, #e1474f)';
   const st = {
     display: 'inline-flex', alignItems: 'baseline', justifyContent: 'center',
     background: color, padding: '16px 20px',
@@ -265,9 +265,9 @@ const priceShapeStyle = computed(() => {
   // Glow
   const glow = s.value.price_shape_glow;
   if (glow && glow !== 'false' && glow !== '0' && glow !== '') {
-    const gc = s.value.price_shape_glow_color || 'var(--olo-color-primary, #6366F1)';
+    const gc = s.value.price_shape_glow_color || 'var(--olo-color-primary, #e1474f)';
     const gi = parseInt(s.value.price_shape_glow_intensity) || 15;
-    st.boxShadow = `inset 0 0 ${gi}px ${gc}40, inset 0 0 ${gi * 2}px ${gc}20`;
+    st.boxShadow = `inset 0 0 ${gi}px color-mix(in srgb, ${gc} 25%, transparent), inset 0 0 ${gi * 2}px color-mix(in srgb, ${gc} 12%, transparent)`;
   }
   return st;
 });
@@ -326,7 +326,7 @@ const countdownWrapStyle = computed(() => ({
 }));
 
 const ctaStyle = computed(() => {
-  const accent = s.value.accent_color || 'var(--olo-color-primary, #6366F1)';
+  const accent = s.value.accent_color || 'var(--olo-color-primary, #e1474f)';
   const bg = s.value.cta_bg_color || accent;
   const fg = s.value.cta_text_color || '#FFFFFF';
   const radius = ((v => isNaN(v) ? 8 : v)(parseInt(s.value.cta_radius))) + 'px';

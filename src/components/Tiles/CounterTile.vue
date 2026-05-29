@@ -42,7 +42,7 @@ const props = defineProps({
 
 const s = computed(() => ({
   number: '1250', label: 'Clienti soddisfatti', prefix: '', suffix: '+',
-  icon_emoji: '🏆', icon_size: '40',
+  icon_emoji: 'bolt', icon_size: '40',
   text_color: 'var(--olo-color-text, #374151)', number_font_size: '48', number_font_weight: '700',
   label_color: '', label_font_size: '14', label_font_weight: '400',
   bg_type: 'color', bg_color: '', bg_image: '', bg_video: '',

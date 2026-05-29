@@ -24,7 +24,7 @@
       <!-- Horizontal mode -->
       <template v-else>
         <div class="olo-navmenu-bar" :class="alignmentClass" :style="barStyle">
-          <span v-if="hasSearch && s.search_position === 'before'" class="olo-navmenu-item olo-navmenu-item--search" :style="{ color: s.text_color || '#d1d5db' }" title="Ricerca">
+          <span v-if="hasSearch && s.search_position === 'before'" class="olo-navmenu-item olo-navmenu-item--search" :style="{ color: s.text_color || 'var(--olo-color-text-soft, #6b7280)' }" title="Ricerca">
             <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8.5" cy="8.5" r="5.5"/><line x1="13" y1="13" x2="17" y2="17"/></svg>
           </span>
           <template v-for="(item, idx) in previewItems" :key="idx">
@@ -40,7 +40,7 @@
               <span v-if="item.isMega" class="olo-navmenu-mega-arrow">&#9660;</span>
             </span>
           </template>
-          <span v-if="hasSearch && s.search_position !== 'before'" class="olo-navmenu-item olo-navmenu-item--search" :style="{ color: s.text_color || '#d1d5db' }" title="Ricerca">
+          <span v-if="hasSearch && s.search_position !== 'before'" class="olo-navmenu-item olo-navmenu-item--search" :style="{ color: s.text_color || 'var(--olo-color-text-soft, #6b7280)' }" title="Ricerca">
             <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8.5" cy="8.5" r="5.5"/><line x1="13" y1="13" x2="17" y2="17"/></svg>
           </span>
         </div>
@@ -71,9 +71,9 @@ const defaults = {
   append_search: false,
   button_items: 'none',
   mega_menu: 'none',
-  text_color: '#d1d5db',
-  hover_color: '#ffffff',
-  active_color: '#6366f1',
+  text_color: '',
+  hover_color: '',
+  active_color: '',
   font_size: '14',
   font_weight: '500',
   text_transform: 'none',
@@ -101,23 +101,29 @@ const barStyle = computed(() => ({
   gap: (parseInt(s.value.gap) || 8) + 'px',
 }));
 
+// TOKEN-FIRST: testo voce → token testo soft (era #d1d5db nudo)
 const itemStyle = computed(() => ({
   fontSize: (parseInt(s.value.font_size) || 14) + 'px',
   fontWeight: s.value.font_weight || '500',
   textTransform: s.value.text_transform || 'none',
   letterSpacing: (parseFloat(s.value.letter_spacing) || 0) + 'px',
-  color: s.value.text_color || '#d1d5db',
+  color: s.value.text_color || 'var(--olo-color-text-soft, #6b7280)',
 }));
 
-const buttonItemStyle = computed(() => ({
-  fontSize: (parseInt(s.value.font_size) || 14) - 1 + 'px',
-  fontWeight: '600',
-  background: s.value.button_style === 'secondary' ? 'transparent' : (s.value.active_color || '#6366f1'),
-  color: s.value.button_style === 'secondary' ? (s.value.active_color || '#6366f1') : '#fff',
-  border: s.value.button_style === 'secondary' ? '1px solid ' + (s.value.active_color || '#6366f1') : 'none',
-  padding: '3px 10px',
-  borderRadius: '4px',
-}));
+const buttonItemStyle = computed(() => {
+  // CTA = primario brand (era #e1474f indaco off-brand)
+  const accent = s.value.active_color || 'var(--olo-color-primary, #e1474f)';
+  const isSecondary = s.value.button_style === 'secondary';
+  return {
+    fontSize: (parseInt(s.value.font_size) || 14) - 1 + 'px',
+    fontWeight: '600',
+    background: isSecondary ? 'transparent' : accent,
+    color: isSecondary ? accent : 'var(--olo-color-primary-contrast, #fff)',
+    border: isSecondary ? '1px solid ' + accent : 'none',
+    padding: '3px 10px',
+    borderRadius: '4px',
+  };
+});
 
 // Vertical mode
 const vertLabels = ['Home', 'Chi siamo', 'Servizi', 'Contatti', 'Blog'];
@@ -130,24 +136,26 @@ const vertListStyle = computed(() => ({
 function vertItemStyle(idx) {
   const pad = parseInt(s.value.v_item_padding) || 10;
   const radius = parseInt(s.value.v_border_radius) || 6;
+  // TOKEN-FIRST: voce attiva = primario brand (era #e1474f / rgba indaco off-brand)
+  const accent = s.value.active_color || 'var(--olo-color-primary, #e1474f)';
   const base = {
     padding: pad + 'px ' + (pad + 4) + 'px',
     borderRadius: radius + 'px',
     fontSize: (parseInt(s.value.font_size) || 14) + 'px',
     fontWeight: s.value.font_weight || '500',
-    color: s.value.text_color || '#d1d5db',
+    color: s.value.text_color || 'var(--olo-color-text-soft, #6b7280)',
     textTransform: s.value.text_transform || 'none',
     letterSpacing: (parseFloat(s.value.letter_spacing) || 0) + 'px',
   };
   if (idx === 0) {
     const indicator = s.value.v_active_indicator || 'left-border';
     if (indicator === 'left-border') {
-      base.borderLeft = '3px solid ' + (s.value.active_color || '#6366f1');
-      base.background = s.value.v_active_bg || 'rgba(99,102,241,0.08)';
+      base.borderLeft = '3px solid ' + accent;
+      base.background = s.value.v_active_bg || `color-mix(in srgb, ${accent} 8%, transparent)`;
     } else if (indicator === 'background') {
-      base.background = s.value.v_active_bg || 'rgba(99,102,241,0.1)';
+      base.background = s.value.v_active_bg || `color-mix(in srgb, ${accent} 10%, transparent)`;
     }
-    base.color = s.value.active_color || '#6366f1';
+    base.color = accent;
     if (indicator === 'bold') base.fontWeight = '700';
   }
   if (s.value.v_separator && idx > 0) {
@@ -157,7 +165,7 @@ function vertItemStyle(idx) {
 }
 
 const vertIconWrapStyle = computed(() => ({
-  color: s.value.v_icon_color || s.value.text_color || '#9ca3af',
+  color: s.value.v_icon_color || s.value.text_color || 'var(--olo-color-text-soft, #6b7280)',
   width: (parseInt(s.value.v_icon_size) || 20) + 'px',
   height: (parseInt(s.value.v_icon_size) || 20) + 'px',
 }));
@@ -225,8 +233,14 @@ const previewItems = computed(() => {
   align-items: center;
   gap: 4px;
 }
+/* a11y tastiera: anello di focus visibile sulle voci di menu */
+.olo-navmenu-item:focus-visible,
+.olo-navmenu-vert-item:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
+}
 .olo-navmenu-item--mega {
-  border-bottom: 2px solid #3b82f6;
+  border-bottom: 2px solid var(--olo-color-primary, #e1474f);
 }
 .olo-navmenu-mega-arrow {
   font-size: 8px;

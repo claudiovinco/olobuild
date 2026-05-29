@@ -32,32 +32,34 @@
 
 <script setup>
 import { computed, h } from 'vue';
+import { resolveColor, TOKENS } from '@/composables/oloTileDefaults';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
 });
 
+// Default colore = '' ⇒ risolti token-first a runtime (allineato a config testimonial.js)
 const s = computed(() => ({
   quote: 'Un prodotto fantastico!',
   author_name: 'Mario Rossi',
   author_role: 'CEO',
   avatar: '',
   rating: '5',
-  bg_color: 'var(--olo-color-muted, #F3F4F6)',
-  text_color: 'var(--olo-color-text, #374151)',
+  bg_color: '',
+  text_color: '',
   show_line: true,
-  line_color: 'var(--olo-color-primary, #6366F1)',
+  line_color: '',
   author_position: 'bottom-left',
   avatar_size: '48',
   avatar_shape: 'circle',
   avatar_radius: '6',
   avatar_shadow: 'none',
   avatar_border_width: '0',
-  avatar_border_color: '#FFFFFF',
+  avatar_border_color: '',
   avatar_filter: 'none',
   border_radius: '12',
   border_width: '0',
-  border_color: 'var(--olo-color-border, #E5E7EB)',
+  border_color: '',
   ...props.settings,
 }));
 
@@ -66,13 +68,13 @@ const rating = computed(() => parseInt(s.value.rating) || 0);
 const wrapStyle = computed(() => {
   const bw = parseInt(s.value.border_width) || 0;
   const st = {
-    background: s.value.bg_color || 'var(--olo-color-muted, #F3F4F6)',
-    color: s.value.text_color || 'var(--olo-color-text, #374151)',
+    background: resolveColor(s.value.bg_color, TOKENS.surfaceAlt),
+    color: resolveColor(s.value.text_color, TOKENS.text),
     minHeight: '80px',
     borderRadius: (parseInt(s.value.border_radius) || 0) + 'px',
   };
   if (bw > 0) {
-    st.border = `${bw}px solid ${s.value.border_color || 'var(--olo-color-border, #E5E7EB)'}`;
+    st.border = `${bw}px solid ${resolveColor(s.value.border_color, TOKENS.border)}`;
   }
   return st;
 });
@@ -103,7 +105,7 @@ const avatarStyle = computed(() => {
   };
   const shadow = shadowMap[s.value.avatar_shadow] || 'none';
   if (shadow !== 'none') st.boxShadow = shadow;
-  if (bw > 0) st.border = `${bw}px solid ${s.value.avatar_border_color || '#FFFFFF'}`;
+  if (bw > 0) st.border = `${bw}px solid ${resolveColor(s.value.avatar_border_color, TOKENS.onPrimary)}`;
   const flt = filterMap[s.value.avatar_filter] || 'none';
   if (flt !== 'none') st.filter = flt;
   return st;
@@ -114,7 +116,7 @@ const lineStyle = computed(() => {
     return { borderLeft: 'none', paddingLeft: '0' };
   }
   return {
-    borderLeft: `3px solid ${s.value.line_color || 'var(--olo-color-primary, #6366F1)'}`,
+    borderLeft: `3px solid ${resolveColor(s.value.line_color, TOKENS.primary)}`,
     paddingLeft: '16px',
   };
 });

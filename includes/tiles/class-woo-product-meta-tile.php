@@ -16,9 +16,9 @@ class Olo_Woo_Product_Meta_Tile extends Olo_Tile_Base {
         'show_tags'       => true,
         'layout'          => 'stacked',
         'separator'       => '|',
-        'text_color'      => '#6B7280',
+        'text_color'      => '',
         'label_color'     => '',
-        'link_color'      => '#6366F1',
+        'link_color'      => '',
         'font_size'       => 14,
         'label_weight'    => '600',
             'border'                  => [],
@@ -37,7 +37,7 @@ class Olo_Woo_Product_Meta_Tile extends Olo_Tile_Base {
 
     public function render( $settings ) {
         if ( ! class_exists( 'WooCommerce' ) ) {
-            return '<div style="padding:40px;text-align:center;color:#92400E;background:#FEF3C7;border:1px solid #F59E0B;border-radius:8px;">'
+            return '<div style="padding:40px;text-align:center;color:var(--olo-color-warning, #b45309);background:color-mix(in srgb, var(--olo-color-warning, #b45309) 12%, #fff);border:1px solid var(--olo-color-warning, #b45309);border-radius:8px;">'
                  . esc_html( olo_t( 'WooCommerce non attivo. Installa e attiva WooCommerce per utilizzare questo elemento.' ) )
                  . '</div>';
         }
@@ -57,10 +57,10 @@ class Olo_Woo_Product_Meta_Tile extends Olo_Tile_Base {
 
         $uid = 'olo-woo-pmeta-' . wp_rand( 10000, 99999 );
 
-        // Colors
-        $text_color  = $this->safe_color_css( $s['text_color'] );
-        $label_color = $this->safe_color_css( $s['label_color'] );
-        $link_color  = $this->safe_color_css( $s['link_color'] );
+        // Colors — TOKEN-FIRST: valore neutro soft, etichetta testo pieno, link col token link.
+        $text_color  = $this->safe_color_css( $s['text_color'] )  ?: 'var(--olo-color-text-soft, #6b7280)';
+        $label_color = $this->safe_color_css( $s['label_color'] ) ?: 'var(--olo-color-text, #1f2937)';
+        $link_color  = $this->safe_color_css( $s['link_color'] )  ?: 'var(--olo-color-link, #e1474f)';
 
         // Font
         $font_size    = max( 11, min( 24, absint( $s['font_size'] ) ) );

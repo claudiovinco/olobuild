@@ -34,7 +34,7 @@ class Olo_Switcher_Tile extends Olo_Tile_Base {
         'inactive_color'     => '#64748b',
         'hover_bg'           => '',
         'indicator_type'     => 'none',
-        'indicator_color'    => '#e8622a',
+        'indicator_color'    => '',
         'content_bg'         => '',
         'content_color'      => '#1e293b',
         'content_padding_y'  => '20',
@@ -99,7 +99,7 @@ class Olo_Switcher_Tile extends Olo_Tile_Base {
                 'inactive_color'    => '#64748b',
                 'hover_bg'          => 'rgba(0,0,0,0.03)',
                 'indicator_type'    => 'pill',
-                'indicator_color'   => '#e8622a',
+                'indicator_color'   => '#e1474f',
                 'shadow'            => 'none',
             ],
             'underline-animated' => [
@@ -110,11 +110,11 @@ class Olo_Switcher_Tile extends Olo_Tile_Base {
                 'container_padding' => 0,
                 'container_radius'  => 0,
                 'active_bg'         => '',
-                'active_color'      => '#e8622a',
+                'active_color'      => '#e1474f',
                 'inactive_color'    => '#64748b',
                 'hover_bg'          => '',
                 'indicator_type'    => 'underline',
-                'indicator_color'   => '#e8622a',
+                'indicator_color'   => '#e1474f',
                 'shadow'            => 'none',
             ],
             'card-tabs' => [
@@ -129,7 +129,7 @@ class Olo_Switcher_Tile extends Olo_Tile_Base {
                 'inactive_color'    => '#64748b',
                 'hover_bg'          => '#f8fafc',
                 'indicator_type'    => 'none',
-                'indicator_color'   => '#e8622a',
+                'indicator_color'   => '#e1474f',
                 'shadow'            => 'sm',
             ],
             'minimal-text' => [
@@ -144,7 +144,7 @@ class Olo_Switcher_Tile extends Olo_Tile_Base {
                 'inactive_color'    => '#64748b',
                 'hover_bg'          => 'rgba(0,0,0,0.03)',
                 'indicator_type'    => 'none',
-                'indicator_color'   => '#e8622a',
+                'indicator_color'   => '#e1474f',
                 'shadow'            => 'none',
             ],
             'vertical-sidebar' => [
@@ -159,7 +159,7 @@ class Olo_Switcher_Tile extends Olo_Tile_Base {
                 'inactive_color'    => '#64748b',
                 'hover_bg'          => 'rgba(0,0,0,0.03)',
                 'indicator_type'    => 'left-bar',
-                'indicator_color'   => '#e8622a',
+                'indicator_color'   => '#e1474f',
                 'shadow'            => 'none',
                 'vertical'          => true,
             ],
@@ -198,7 +198,7 @@ class Olo_Switcher_Tile extends Olo_Tile_Base {
         $tab_color_inact = $this->safe_color_css( $s['inactive_color'] ) ?: '#64748b';
         $tab_hover_bg    = $this->safe_color_css( $s['hover_bg'] ) ?: '';
         $container_bg    = $this->safe_color_css( $s['container_bg'] ) ?: '';
-        $indicator_clr   = $this->safe_color_css( $s['indicator_color'] ) ?: 'var(--olo-color-primary, #e8622a)';
+        $indicator_clr   = $this->safe_color_css( $s['indicator_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $content_bg      = $this->safe_color_css( $s['content_bg'] ) ?: '';
         $content_color   = $this->safe_color_css( $s['content_color'] ) ?: '';
 
@@ -300,6 +300,13 @@ class Olo_Switcher_Tile extends Olo_Tile_Base {
                 color: <?php echo $tab_color_act; ?>;
             }
             <?php endif; ?>
+            /* a11y: anello di focus visibile da tastiera sul tab */
+            .<?php echo esc_attr( $uid ); ?> ul.uk-tab > * > a:focus-visible,
+            .<?php echo esc_attr( $uid ); ?> ul.uk-subnav > * > a:focus-visible,
+            .<?php echo esc_attr( $uid ); ?> ul.uk-tab-left > * > a:focus-visible {
+                outline: none;
+                box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
+            }
             .<?php echo esc_attr( $uid ); ?> ul.uk-tab > .uk-active > a,
             .<?php echo esc_attr( $uid ); ?> ul.uk-subnav > .uk-active > a,
             .<?php echo esc_attr( $uid ); ?> ul.uk-tab-left > .uk-active > a {

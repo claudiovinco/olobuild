@@ -1,5 +1,5 @@
 <template>
-  <div style="padding:10px;background:#f9fafb;border-radius:8px;min-height:60px;">
+  <div style="padding:10px;background:var(--olo-color-surface-alt, #f6f7f9);border-radius:8px;min-height:60px;">
     <!-- Immagine principale -->
     <div :style="mainImageStyle">
       <svg style="width:48px;height:48px;opacity:0.2;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -9,12 +9,12 @@
       </svg>
       <!-- Frecce navigazione -->
       <div style="position:absolute;top:50%;left:8px;transform:translateY(-50%);width:28px;height:28px;background:rgba(255,255,255,0.85);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 3px rgba(0,0,0,0.15);">
-        <svg style="width:14px;height:14px;color:#374151;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <svg style="width:14px;height:14px;color:var(--olo-color-text, #1f2937);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
           <path d="M15 18l-6-6 6-6"/>
         </svg>
       </div>
       <div style="position:absolute;top:50%;right:8px;transform:translateY(-50%);width:28px;height:28px;background:rgba(255,255,255,0.85);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 3px rgba(0,0,0,0.15);">
-        <svg style="width:14px;height:14px;color:#374151;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <svg style="width:14px;height:14px;color:var(--olo-color-text, #1f2937);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
           <path d="M9 18l6-6-6-6"/>
         </svg>
       </div>
@@ -64,7 +64,7 @@ const thumbCount = computed(() => Math.max(3, Math.min(8, parseInt(s.value.thumb
 const mainImageStyle = computed(() => ({
   width: '100%',
   paddingTop: ratioMap[s.value.image_ratio] || '75%',
-  background: '#E5E7EB',
+  background: 'var(--olo-color-surface-alt, #f6f7f9)',
   borderRadius: '6px',
   position: 'relative',
   display: 'flex',
@@ -82,7 +82,7 @@ const thumbStripStyle = computed(() => ({
 const thumbStyle = {
   width: '100%',
   paddingTop: '100%',
-  background: '#E5E7EB',
+  background: 'var(--olo-color-surface-alt, #f6f7f9)',
   borderRadius: '4px',
   position: 'relative',
   display: 'flex',
@@ -92,6 +92,6 @@ const thumbStyle = {
 };
 
 const activeThumbStyle = {
-  border: '2px solid #6366F1',
+  border: '2px solid var(--olo-color-primary, #e1474f)',
 };
 </script>

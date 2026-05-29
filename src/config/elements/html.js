@@ -13,7 +13,7 @@ export default {
   icon: 'dashicons-editor-code',
   category: 'text',
   defaults: {
-    html_content: '<div style="padding:20px;text-align:center;color:#9CA3AF;">HTML personalizzato</div>',
+    html_content: '<div style="padding:20px;text-align:center;color:var(--olo-color-text-faint, #9ca3af);">HTML personalizzato</div>',
     sandbox: false,
     shadow: 'none',
   },

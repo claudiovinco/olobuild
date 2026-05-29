@@ -25,7 +25,7 @@
       <div :style="textColStyle">
         <component :is="s.heading_tag || 'h2'" class="mb-font-bold" :style="headingStyle" data-olo-editable="heading">{{ s.heading || 'Titolo Sezione' }}</component>
         <div class="mb-leading-relaxed" :style="textStyle" data-olo-editable="text" data-olo-richtext data-olo-multiline v-html="textHtml"></div>
-        <div v-if="s.link_url" class="mb-mt-2 mb-text-blue-400 mb-text-sm mb-truncate">{{ s.link_url }}</div>
+        <div v-if="s.link_url" class="mb-mt-2 mb-text-sm mb-truncate" style="color: var(--olo-color-primary, #e1474f);">{{ s.link_url }}</div>
       </div>
     </div>
   </div>
@@ -58,7 +58,7 @@ const s = computed(() => ({
   image_fit: 'cover',
   image_radius: '0',
   image_border_width: '0',
-  image_border_color: '#e5e7eb',
+  image_border_color: '',
   image_shadow: 'none',
   heading_gap: '8',
   image_gap: '16',
@@ -151,7 +151,7 @@ const imgWrapStyle = computed(() => {
   const bw = parseInt(s.value.image_border_width) || 0;
   const style = { borderRadius: r + 'px' };
   if (bw > 0) {
-    style.border = bw + 'px solid ' + (s.value.image_border_color || '#e5e7eb');
+    style.border = bw + 'px solid ' + (s.value.image_border_color || 'var(--olo-color-border, #e5e7eb)');
   }
   const sh = shadowMap[s.value.image_shadow] || 'none';
   if (sh !== 'none') style.boxShadow = sh;

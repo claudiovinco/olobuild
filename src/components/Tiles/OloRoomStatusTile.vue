@@ -1,18 +1,19 @@
 <template>
   <div style="display:flex;align-items:center;gap:12px;padding:8px 0">
     <div style="display:flex;align-items:center;gap:6px">
-      <span style="width:10px;height:10px;border-radius:50%;background:#22c55e;display:inline-block"></span>
-      <span style="font-size:14px;font-weight:600;color:#166534">{{ t('Aperto ora') }}</span>
+      <span :style="{ width:'10px', height:'10px', borderRadius:'50%', background: TOKENS.success.fg, display:'inline-block' }"></span>
+      <span :style="{ fontSize:'14px', fontWeight:'600', color: TOKENS.success.fg }">{{ t('Aperto ora') }}</span>
     </div>
-    <span style="color:#d1d5db">|</span>
-    <span style="font-size:13px;color:#6b7280">{{ t('Prossimo slot: 14:00 - 15:00') }}</span>
-    <span style="color:#d1d5db">|</span>
-    <span style="font-size:13px;color:#6b7280">{{ t('3 slot disponibili oggi') }}</span>
+    <span :style="{ color: TOKENS.border }">|</span>
+    <span :style="{ fontSize:'13px', color: TOKENS.textSoft }">{{ t('Prossimo slot: 14:00 - 15:00') }}</span>
+    <span :style="{ color: TOKENS.border }">|</span>
+    <span :style="{ fontSize:'13px', color: TOKENS.textSoft }">{{ t('3 slot disponibili oggi') }}</span>
   </div>
 </template>
 
 <script setup>
 import { computed } from 'vue';
 import { t } from '@/i18n';
+import { TOKENS } from '@/composables/oloTileDefaults';
 defineProps({ settings: { type: Object, default: () => ({}) } });
 </script>

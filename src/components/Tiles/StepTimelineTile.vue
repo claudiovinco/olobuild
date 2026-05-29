@@ -19,7 +19,7 @@
         <div style="display:flex;align-items:flex-end;gap:18px;flex-wrap:wrap">
           <span v-if="it.counter" :style="counterStyle">{{ it.counter }}</span>
           <div v-if="it.tag_text" style="display:inline-flex;align-items:center;gap:8px;padding-bottom:14px">
-            <span :style="{ width: '8px', height: '8px', borderRadius: '50%', background: it.tag_dot_color || '#b3261e' }"></span>
+            <span :style="{ width: '8px', height: '8px', borderRadius: '50%', background: resolveColor(it.tag_dot_color, TOKENS.primary) }"></span>
             <span :style="tagStyle">{{ it.tag_text }}</span>
           </div>
         </div>
@@ -37,9 +37,9 @@
             <img v-if="it.media_type === 'image' && it.media_image" :src="it.media_image" :style="{ width: '100%', height: '100%', objectFit: 'cover' }" />
             <pre v-else-if="it.media_type === 'terminal' && it.media_content" :style="terminalStyle(it)">{{ it.media_content }}</pre>
             <div v-else style="width:100%;display:flex;flex-direction:column;gap:8px;opacity:.7">
-              <span :style="{ height: '8px', background: (it.media_color || '#b3261e') + '33', borderRadius: '4px' }"></span>
-              <span :style="{ height: '8px', width: '80%', background: (it.media_color || '#b3261e') + '22', borderRadius: '4px' }"></span>
-              <span :style="{ height: '8px', width: '60%', background: (it.media_color || '#b3261e') + '22', borderRadius: '4px' }"></span>
+              <span :style="{ height: '8px', background: 'color-mix(in srgb, ' + resolveColor(it.media_color, TOKENS.primary) + ' 20%, transparent)', borderRadius: '4px' }"></span>
+              <span :style="{ height: '8px', width: '80%', background: 'color-mix(in srgb, ' + resolveColor(it.media_color, TOKENS.primary) + ' 13%, transparent)', borderRadius: '4px' }"></span>
+              <span :style="{ height: '8px', width: '60%', background: 'color-mix(in srgb, ' + resolveColor(it.media_color, TOKENS.primary) + ' 13%, transparent)', borderRadius: '4px' }"></span>
             </div>
           </div>
         </div>
@@ -47,13 +47,13 @@
         <div v-if="it.pre_title" :style="preTitleStyle">{{ it.pre_title }}</div>
 
         <h3 v-if="it.title || it.title_accent || it.title_after" :style="titleStyle">
-          <span v-if="it.title">{{ it.title }}</span><template v-if="it.title_accent"> <span :style="{ color: s.title_accent_color || '#b3261e', fontStyle: it.title_accent_italic ? 'italic' : 'normal' }">{{ it.title_accent }}</span></template><template v-if="it.title_after"> <span :style="{ fontStyle: it.title_after_italic ? 'italic' : 'normal' }">{{ it.title_after }}</span></template>
+          <span v-if="it.title">{{ it.title }}</span><template v-if="it.title_accent"> <span :style="{ color: resolveColor(s.title_accent_color, TOKENS.primary), fontStyle: it.title_accent_italic ? 'italic' : 'normal' }">{{ it.title_accent }}</span></template><template v-if="it.title_after"> <span :style="{ fontStyle: it.title_after_italic ? 'italic' : 'normal' }">{{ it.title_after }}</span></template>
         </h3>
 
         <div v-if="it.description" :style="descStyle" v-html="it.description"></div>
 
         <div v-if="it.footer_value || it.footer_label" :style="footerStyle">
-          <span v-if="s.footer_icon" :style="{ color: s.footer_value_color || '#0f172a' }" v-html="resolveIcon(s.footer_icon)"></span>
+          <span v-if="s.footer_icon" :style="{ color: resolveColor(s.footer_value_color, TOKENS.text) }" v-html="resolveIcon(s.footer_icon)"></span>
           <span v-if="it.footer_value" :style="footerValueStyle">{{ it.footer_value }}</span>
           <span v-if="it.footer_label" :style="footerLabelStyle">{{ it.footer_label }}</span>
         </div>
@@ -65,6 +65,7 @@
 <script setup>
 import { computed } from 'vue';
 import iconsSvg from '../ProSlider/iconsLibrary.js';
+import { resolveColor, TOKENS } from '@/composables/oloTileDefaults';
 
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 
@@ -73,25 +74,25 @@ const R = (n) => ({ tl: n, tr: n, br: n, bl: n, linked: true });
 const defaults = {
   items: [],
   show_timeline: true,
-  timeline_line_color: '#fde8e8',
-  timeline_dot_color: '#b3261e',
+  timeline_line_color: '',
+  timeline_dot_color: '',
   timeline_dot_size: 14,
   timeline_height: 3,
   timeline_margin_bottom: 50,
   counter_font_family: 'serif',
-  counter_size: 96, counter_color: '#b3261e', counter_italic: true, counter_weight: '500',
-  tag_size: 12, tag_color: '#374151',
+  counter_size: 96, counter_color: '', counter_italic: true, counter_weight: '500',
+  tag_size: 12, tag_color: '',
   media_aspect_ratio: '5/4',
   media_radius: R(14),
   media_shadow: 'sm',
   show_media_label: true,
-  pre_title_size: 12, pre_title_color: '#9ca3af',
+  pre_title_size: 12, pre_title_color: '',
   title_font_family: 'serif', title_size: 30, title_weight: '500',
-  title_color: '#0f172a', title_accent_color: '#b3261e',
-  description_size: 14, description_color: '#6b7280',
+  title_color: '', title_accent_color: '',
+  description_size: 14, description_color: '',
   footer_icon: 'clock', footer_value_size: 18, footer_label_size: 11,
-  footer_value_color: '#0f172a', footer_label_color: '#9ca3af',
-  separator_color: '#b3261e', show_separator: true,
+  footer_value_color: '', footer_label_color: '',
+  separator_color: '', show_separator: true,
   columns: 3, gap: 32, items_align: 'start',
 };
 
@@ -127,14 +128,14 @@ const lineStyle = computed(() => ({
   position: 'absolute',
   left: 0, right: 0, top: '50%', transform: 'translateY(-50%)',
   height: (s.value.timeline_height || 3) + 'px',
-  background: s.value.timeline_line_color || '#fde8e8',
+  background: resolveColor(s.value.timeline_line_color, 'color-mix(in srgb, var(--olo-color-primary, #e1474f) 18%, #fff)'),
   borderRadius: (s.value.timeline_height || 3) + 'px',
 }));
 
 function dotStyle(i) {
   const n = dotsCount.value;
   const pct = n > 1 ? (i / (n - 1)) * 100 : 50;
-  let color = s.value.timeline_dot_color || '#b3261e';
+  let color = resolveColor(s.value.timeline_dot_color, TOKENS.primary);
   if (i === n - 1 && items.value[items.value.length - 1]?.tag_dot_color) {
     color = items.value[items.value.length - 1].tag_dot_color;
   }
@@ -145,7 +146,7 @@ function dotStyle(i) {
     height: (s.value.timeline_dot_size || 14) + 'px',
     borderRadius: '50%',
     background: color,
-    boxShadow: `0 0 0 4px #fff, 0 0 0 5px ${color}33`,
+    boxShadow: `0 0 0 4px #fff, 0 0 0 5px color-mix(in srgb, ${color} 20%, transparent)`,
   };
 }
 
@@ -161,7 +162,7 @@ const counterStyle = computed(() => ({
   fontFamily: fmap[s.value.counter_font_family] || SERIF,
   fontSize: (s.value.counter_size || 96) + 'px',
   lineHeight: 0.9,
-  color: s.value.counter_color || '#b3261e',
+  color: resolveColor(s.value.counter_color, TOKENS.primary),
   fontStyle: s.value.counter_italic ? 'italic' : 'normal',
   fontWeight: s.value.counter_weight || '500',
   letterSpacing: '-0.02em',
@@ -172,7 +173,7 @@ const tagStyle = computed(() => ({
   fontSize: (s.value.tag_size || 12) + 'px',
   letterSpacing: '0.08em',
   textTransform: 'uppercase',
-  color: s.value.tag_color || '#374151',
+  color: resolveColor(s.value.tag_color, TOKENS.text),
 }));
 
 function mockupStyle(it) {
@@ -196,7 +197,7 @@ function mockupHeaderStyle(it) {
     fontSize: '10px',
     letterSpacing: '0.1em',
     textTransform: 'uppercase',
-    color: (it.media_bg === '#0f172a') ? '#9ca3af' : '#6b7280',
+    color: (it.media_bg === '#0f172a') ? TOKENS.textFaint : TOKENS.textSoft,
     display: 'flex',
     alignItems: 'center',
     gap: '6px',
@@ -215,7 +216,7 @@ const preTitleStyle = computed(() => ({
   fontSize: (s.value.pre_title_size || 12) + 'px',
   letterSpacing: '0.12em',
   textTransform: 'uppercase',
-  color: s.value.pre_title_color || '#9ca3af',
+  color: resolveColor(s.value.pre_title_color, TOKENS.textFaint),
 }));
 
 const titleStyle = computed(() => ({
@@ -224,7 +225,7 @@ const titleStyle = computed(() => ({
   fontWeight: s.value.title_weight || '500',
   lineHeight: 1.15,
   letterSpacing: '-0.01em',
-  color: s.value.title_color || '#0f172a',
+  color: resolveColor(s.value.title_color, TOKENS.text),
   margin: 0,
 }));
 
@@ -232,7 +233,7 @@ const descStyle = computed(() => ({
   fontFamily: SANS,
   fontSize: (s.value.description_size || 14) + 'px',
   lineHeight: 1.55,
-  color: s.value.description_color || '#6b7280',
+  color: resolveColor(s.value.description_color, TOKENS.textSoft),
 }));
 
 const footerStyle = computed(() => ({
@@ -245,7 +246,7 @@ const footerValueStyle = computed(() => ({
   fontFamily: fmap[s.value.title_font_family] || SERIF,
   fontSize: (s.value.footer_value_size || 18) + 'px',
   fontWeight: 600,
-  color: s.value.footer_value_color || '#0f172a',
+  color: resolveColor(s.value.footer_value_color, TOKENS.text),
 }));
 
 const footerLabelStyle = computed(() => ({
@@ -253,7 +254,7 @@ const footerLabelStyle = computed(() => ({
   fontSize: (s.value.footer_label_size || 11) + 'px',
   letterSpacing: '0.08em',
   textTransform: 'uppercase',
-  color: s.value.footer_label_color || '#9ca3af',
+  color: resolveColor(s.value.footer_label_color, TOKENS.textFaint),
 }));
 
 function resolveIcon(name) {

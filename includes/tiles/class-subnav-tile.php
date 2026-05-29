@@ -67,7 +67,7 @@ class Olo_Subnav_Tile extends Olo_Tile_Base {
         // Colors
         $link_c   = $s['link_color'] ?: 'var(--olo-color-text-muted, #9CA3AF)';
         $hover_c  = $s['hover_color'] ?: '';
-        $active_c = $s['active_color'] ?: 'var(--olo-color-primary, #6366f1)';
+        $active_c = $s['active_color'] ?: 'var(--olo-color-primary, #e1474f)';
         $bg_c     = $s['bg_color'] ?: '';
         $hover_bg = $s['hover_bg'] ?: '';
         $active_bg = $s['active_bg'] ?: '';
@@ -95,6 +95,8 @@ class Olo_Subnav_Tile extends Olo_Tile_Base {
             $css .= ";background:{$bg_c}";
         }
         $css .= '}';
+        // a11y tastiera: anello di focus visibile sulle voci di sotto-navigazione
+        $css .= "#{$uid} a:focus-visible{outline:none;box-shadow:0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent)}";
         if ( $radius_hover_css !== '' ) $css .= "#{$uid} a:hover{border-radius:{$radius_hover_css} !important}";
 
         // Hover
@@ -111,7 +113,8 @@ class Olo_Subnav_Tile extends Olo_Tile_Base {
         if ( $ast === 'underline' ) {
             $active_rules .= ";border-bottom:2px solid {$active_c}";
         } elseif ( $ast === 'background' ) {
-            $abg = $active_bg ?: $active_c . '15';
+            // Tinta soft token-safe (color-mix invece di concat hex-alpha, incompatibile con var())
+            $abg = $active_bg ?: "color-mix(in srgb, {$active_c} 8%, transparent)";
             $active_rules .= ";background:{$abg}";
         } elseif ( $ast === 'bold' ) {
             $active_rules .= ';font-weight:700';
@@ -124,14 +127,14 @@ class Olo_Subnav_Tile extends Olo_Tile_Base {
         // Style presets
         if ( $style === 'pill' ) {
             $css .= "#{$uid} a{border-radius:999px}";
-            $pill_bg = $active_bg ?: $active_c . '20';
+            $pill_bg = $active_bg ?: "color-mix(in srgb, {$active_c} 12%, transparent)";
             $css .= "#{$uid} .olo-sn-active{background:{$pill_bg}}";
         } elseif ( $style === 'underline' ) {
             $css .= "#{$uid} a{border-radius:0;border-bottom:2px solid transparent}";
             $css .= "#{$uid} .olo-sn-active{border-bottom:2px solid {$active_c}}";
         } elseif ( $style === 'boxed' ) {
             $css .= "#{$uid} a{border:1px solid rgba(0,0,0,.08)}";
-            $box_bg = $active_bg ?: $active_c . '10';
+            $box_bg = $active_bg ?: "color-mix(in srgb, {$active_c} 6%, transparent)";
             $css .= "#{$uid} .olo-sn-active{border-color:{$active_c};background:{$box_bg}}";
         }
 

@@ -24,20 +24,20 @@ class Olo_StepTimeline_Tile extends Olo_Tile_Base {
         ],
 
         'show_timeline'          => true,
-        'timeline_line_color'    => '#fde8e8',
-        'timeline_dot_color'     => '#b3261e',
+        'timeline_line_color'    => '',
+        'timeline_dot_color'     => '',
         'timeline_dot_size'      => 14,
         'timeline_height'        => 3,
         'timeline_margin_bottom' => 50,
 
         'counter_font_family' => 'serif',
         'counter_size'        => 96,
-        'counter_color'       => '#b3261e',
+        'counter_color'       => '',
         'counter_italic'      => true,
         'counter_weight'      => '500',
 
         'tag_size'  => 12,
-        'tag_color' => '#374151',
+        'tag_color' => '',
 
         'media_aspect_ratio'         => '5/4',
         'media_radius'               => [ 'tl' => 14, 'tr' => 14, 'br' => 14, 'bl' => 14, 'linked' => true ],
@@ -47,24 +47,24 @@ class Olo_StepTimeline_Tile extends Olo_Tile_Base {
         'show_media_label'           => true,
 
         'pre_title_size'  => 12,
-        'pre_title_color' => '#9ca3af',
+        'pre_title_color' => '',
 
         'title_font_family'  => 'serif',
         'title_size'         => 30,
         'title_weight'       => '500',
-        'title_color'        => '#0f172a',
-        'title_accent_color' => '#b3261e',
+        'title_color'        => '',
+        'title_accent_color' => '',
 
         'description_size'  => 14,
-        'description_color' => '#6b7280',
+        'description_color' => '',
 
         'footer_icon'        => 'clock',
         'footer_value_size'  => 18,
         'footer_label_size'  => 11,
-        'footer_value_color' => '#0f172a',
-        'footer_label_color' => '#9ca3af',
+        'footer_value_color' => '',
+        'footer_label_color' => '',
 
-        'separator_color' => '#b3261e',
+        'separator_color' => '',
         'show_separator'  => true,
 
         'columns'     => 3,
@@ -100,19 +100,19 @@ class Olo_StepTimeline_Tile extends Olo_Tile_Base {
         $gap        = max( 0, min( 80, absint( $s['gap'] ) ) );
         $items_alig = $s['items_align'] === 'center' ? 'center' : 'flex-start';
 
-        $tl_line   = $this->safe_color_css( $s['timeline_line_color'] ) ?: '#fde8e8';
-        $tl_dot    = $this->safe_color_css( $s['timeline_dot_color'] )  ?: '#b3261e';
+        $tl_line   = $this->safe_color_css( $s['timeline_line_color'] ) ?: 'color-mix(in srgb, var(--olo-color-primary, #e1474f) 18%, #fff)';
+        $tl_dot    = $this->safe_color_css( $s['timeline_dot_color'] )  ?: 'var(--olo-color-primary, #e1474f)';
         $tl_dotsz  = max( 6, min( 24, absint( $s['timeline_dot_size'] ) ) );
         $tl_h      = max( 1, min( 8, absint( $s['timeline_height'] ) ) );
         $tl_mb     = max( 0, min( 120, absint( $s['timeline_margin_bottom'] ) ) );
 
         $counter_size   = max( 40, min( 200, absint( $s['counter_size'] ) ) );
-        $counter_clr    = $this->safe_color_css( $s['counter_color'] ) ?: '#b3261e';
+        $counter_clr    = $this->safe_color_css( $s['counter_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $counter_italic = ! empty( $s['counter_italic'] ) ? 'italic' : 'normal';
         $counter_w      = preg_match( '/^\d+$/', (string) $s['counter_weight'] ) ? $s['counter_weight'] : '500';
 
         $tag_size  = max( 10, min( 16, absint( $s['tag_size'] ) ) );
-        $tag_color = $this->safe_color_css( $s['tag_color'] ) ?: '#374151';
+        $tag_color = $this->safe_color_css( $s['tag_color'] ) ?: 'var(--olo-color-text, #374151)';
 
         $aspect_allow = [ '16/9', '5/4', '4/3', '1/1', '3/2' ];
         $media_aspect = in_array( $s['media_aspect_ratio'] ?? '5/4', $aspect_allow, true ) ? $s['media_aspect_ratio'] : '5/4';
@@ -130,23 +130,23 @@ class Olo_StepTimeline_Tile extends Olo_Tile_Base {
         $media_shadow = $shadow_map[ $s['media_shadow'] ?? 'sm' ] ?? '';
 
         $pre_title_size  = max( 9, min( 16, absint( $s['pre_title_size'] ) ) );
-        $pre_title_clr   = $this->safe_color_css( $s['pre_title_color'] ) ?: '#9ca3af';
+        $pre_title_clr   = $this->safe_color_css( $s['pre_title_color'] ) ?: 'var(--olo-color-text-faint, #9ca3af)';
 
         $title_size      = max( 18, min( 60, absint( $s['title_size'] ) ) );
         $title_w         = preg_match( '/^\d+$/', (string) $s['title_weight'] ) ? $s['title_weight'] : '500';
-        $title_clr       = $this->safe_color_css( $s['title_color'] ) ?: '#0f172a';
-        $title_accent_c  = $this->safe_color_css( $s['title_accent_color'] ) ?: '#b3261e';
+        $title_clr       = $this->safe_color_css( $s['title_color'] ) ?: 'var(--olo-color-text, #0f172a)';
+        $title_accent_c  = $this->safe_color_css( $s['title_accent_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
 
         $desc_size = max( 11, min( 20, absint( $s['description_size'] ) ) );
-        $desc_clr  = $this->safe_color_css( $s['description_color'] ) ?: '#6b7280';
+        $desc_clr  = $this->safe_color_css( $s['description_color'] ) ?: 'var(--olo-color-text-soft, #6b7280)';
 
         $fv_size = max( 12, min( 30, absint( $s['footer_value_size'] ) ) );
         $fl_size = max( 9, min( 14, absint( $s['footer_label_size'] ) ) );
-        $fv_clr  = $this->safe_color_css( $s['footer_value_color'] ) ?: '#0f172a';
-        $fl_clr  = $this->safe_color_css( $s['footer_label_color'] ) ?: '#9ca3af';
+        $fv_clr  = $this->safe_color_css( $s['footer_value_color'] ) ?: 'var(--olo-color-text, #0f172a)';
+        $fl_clr  = $this->safe_color_css( $s['footer_label_color'] ) ?: 'var(--olo-color-text-faint, #9ca3af)';
         $f_icon  = $s['footer_icon'] ?? 'clock';
 
-        $sep_clr = $this->safe_color_css( $s['separator_color'] ) ?: '#b3261e';
+        $sep_clr = $this->safe_color_css( $s['separator_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
 
         $items = is_array( $s['items'] ) ? $s['items'] : [];
         $n_items = count( $items );
@@ -169,7 +169,7 @@ class Olo_StepTimeline_Tile extends Olo_Tile_Base {
                             $dot_c = $this->safe_color_css( $items[ $n_items - 1 ]['tag_dot_color'] ) ?: $tl_dot;
                         }
                     ?>
-                        <span style="position:absolute;left:<?php echo $pct; ?>%;top:50%;transform:translate(-50%,-50%);width:<?php echo $tl_dotsz; ?>px;height:<?php echo $tl_dotsz; ?>px;border-radius:50%;background:<?php echo esc_attr( $dot_c ); ?>;box-shadow:0 0 0 4px #fff,0 0 0 5px <?php echo esc_attr( $dot_c ); ?>33"></span>
+                        <span style="position:absolute;left:<?php echo $pct; ?>%;top:50%;transform:translate(-50%,-50%);width:<?php echo $tl_dotsz; ?>px;height:<?php echo $tl_dotsz; ?>px;border-radius:50%;background:<?php echo esc_attr( $dot_c ); ?>;box-shadow:0 0 0 4px #fff,0 0 0 5px color-mix(in srgb, <?php echo esc_attr( $dot_c ); ?> 20%, transparent)"></span>
                     <?php endfor; ?>
                 </div>
             <?php endif; ?>
@@ -184,7 +184,7 @@ class Olo_StepTimeline_Tile extends Olo_Tile_Base {
                     $m_content    = $it['media_content'] ?? '';
                     $m_image      = $it['media_image'] ?? '';
                     $m_bg         = $this->safe_color_css( $it['media_bg'] ?? '' ) ?: '#f5efe7';
-                    $m_color      = $this->safe_color_css( $it['media_color'] ?? '' ) ?: '#b3261e';
+                    $m_color      = $this->safe_color_css( $it['media_color'] ?? '' ) ?: 'var(--olo-color-primary, #e1474f)';
                     $pre_title    = $it['pre_title'] ?? '';
                     $title        = $it['title'] ?? '';
                     $t_accent     = $it['title_accent'] ?? '';
@@ -216,7 +216,7 @@ class Olo_StepTimeline_Tile extends Olo_Tile_Base {
                         <!-- Mockup card -->
                         <div class="olo-stl__mockup" style="background:<?php echo esc_attr( $m_bg ); ?>;<?php if ( $media_radius ) echo 'border-radius:' . esc_attr( $media_radius ) . ';'; ?>aspect-ratio:<?php echo esc_attr( $media_aspect ); ?>;overflow:hidden;<?php if ( $media_shadow ) echo 'box-shadow:' . esc_attr( $media_shadow ) . ';'; ?>display:flex;flex-direction:column;transition:transform .3s ease<?php if ( $media_radius_h ) echo ',border-radius ' . $media_rdur . 'ms ease'; ?>">
                             <?php if ( ! empty( $s['show_media_label'] ) && $m_label !== '' ) : ?>
-                                <div style="padding:10px 14px;background:rgba(0,0,0,0.06);font-family:<?php echo esc_attr( $mono ); ?>;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:<?php echo esc_attr( $m_bg === '#0f172a' ? '#9ca3af' : '#6b7280' ); ?>;display:flex;align-items:center;gap:6px">
+                                <div style="padding:10px 14px;background:rgba(0,0,0,0.06);font-family:<?php echo esc_attr( $mono ); ?>;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:<?php echo $m_bg === '#0f172a' ? 'var(--olo-color-text-faint, #9ca3af)' : 'var(--olo-color-text-soft, #6b7280)'; ?>;display:flex;align-items:center;gap:6px">
                                     <span style="display:inline-flex;gap:4px">
                                         <span style="width:8px;height:8px;border-radius:50%;background:#ef4444;opacity:.7"></span>
                                         <span style="width:8px;height:8px;border-radius:50%;background:#f59e0b;opacity:.7"></span>
@@ -233,9 +233,9 @@ class Olo_StepTimeline_Tile extends Olo_Tile_Base {
                                 <?php else : ?>
                                     <!-- Placeholder visivo: 3 barre stilizzate -->
                                     <div style="width:100%;display:flex;flex-direction:column;gap:8px;opacity:.7">
-                                        <span style="height:8px;background:<?php echo esc_attr( $m_color ); ?>33;border-radius:4px"></span>
-                                        <span style="height:8px;width:80%;background:<?php echo esc_attr( $m_color ); ?>22;border-radius:4px"></span>
-                                        <span style="height:8px;width:60%;background:<?php echo esc_attr( $m_color ); ?>22;border-radius:4px"></span>
+                                        <span style="height:8px;background:color-mix(in srgb, <?php echo esc_attr( $m_color ); ?> 20%, transparent);border-radius:4px"></span>
+                                        <span style="height:8px;width:80%;background:color-mix(in srgb, <?php echo esc_attr( $m_color ); ?> 13%, transparent);border-radius:4px"></span>
+                                        <span style="height:8px;width:60%;background:color-mix(in srgb, <?php echo esc_attr( $m_color ); ?> 13%, transparent);border-radius:4px"></span>
                                     </div>
                                 <?php endif; ?>
                             </div>

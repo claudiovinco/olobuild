@@ -36,7 +36,7 @@ class Olo_Woo_Product_Image_Tile extends Olo_Tile_Base {
 
     public function render( $settings ) {
         if ( ! class_exists( 'WooCommerce' ) ) {
-            return '<div style="padding:40px;text-align:center;color:#92400E;background:#FEF3C7;border:1px solid #F59E0B;border-radius:8px;">'
+            return '<div style="padding:40px;text-align:center;color:var(--olo-color-warning, #b45309);background:color-mix(in srgb, var(--olo-color-warning, #b45309) 12%, #fff);border:1px solid var(--olo-color-warning, #b45309);border-radius:8px;">'
                  . esc_html( olo_t( 'WooCommerce non attivo. Installa e attiva WooCommerce per utilizzare questo elemento.' ) )
                  . '</div>';
         }
@@ -178,7 +178,7 @@ class Olo_Woo_Product_Image_Tile extends Olo_Tile_Base {
             <?php if ( $thumb_border_radius_hover_css !== '' ) : ?>.<?php echo $uid; ?> .olo-woo-pimg-thumb{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?> .olo-woo-pimg-thumb:hover{border-radius:<?php echo $thumb_border_radius_hover_css; ?> !important}<?php endif; ?>
             .<?php echo $uid; ?> .olo-woo-pimg-thumb.active,
             .<?php echo $uid; ?> .olo-woo-pimg-thumb:hover {
-                border-color: var(--olo-color-primary, #6366F1);
+                border-color: var(--olo-color-primary, #e1474f);
             }
             .<?php echo $uid; ?> .olo-woo-pimg-thumb img {
                 width: 100%;

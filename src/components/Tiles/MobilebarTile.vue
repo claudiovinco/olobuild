@@ -31,11 +31,11 @@
       </div>
       <div class="olo-mbp-menu-item" :style="itemStyle">
         <span>{{ t('Pagina 1') }}</span>
-        <span class="olo-mbp-chev" :style="{ color: s.panel_chevron_color || '#999' }">›</span>
+        <span class="olo-mbp-chev" :style="{ color: s.panel_chevron_color || 'var(--olo-color-text-faint, #94a3b8)' }">›</span>
       </div>
       <div class="olo-mbp-menu-item" :style="itemStyle">
         <span>{{ t('Pagina 2') }}</span>
-        <span class="olo-mbp-chev" :style="{ color: s.panel_chevron_color || '#999' }">›</span>
+        <span class="olo-mbp-chev" :style="{ color: s.panel_chevron_color || 'var(--olo-color-text-faint, #94a3b8)' }">›</span>
       </div>
     </div>
   </div>
@@ -53,7 +53,7 @@ const defaults = {
   breakpoint: '1024',
   logo_image: '',
   logo_width: '120',
-  bar_bg: '#1a3a5c',
+  bar_bg: '',
   bar_height: '56',
   bar_shadow: true,
   bar_padding: '12',
@@ -67,7 +67,7 @@ const defaults = {
   panel_font_size: '17',
   panel_item_padding: '16',
   panel_separator: true,
-  panel_chevron_color: '#999999',
+  panel_chevron_color: '',
   search_enabled: true,
   search_icon_color: '#ffffff',
   search_placeholder: 'Cerca...',
@@ -93,7 +93,8 @@ const styleLabel = computed(() => {
 });
 
 const barStyle = computed(() => ({
-  '--mb-bar-bg': s.value.bar_bg || '#1a3a5c',
+  // Barra = superficie scura del brand (navy secondario) invece di navy hardcodato
+  '--mb-bar-bg': s.value.bar_bg || 'var(--olo-color-secondary, #16263d)',
   '--mb-bar-h': (parseInt(s.value.bar_height) || 56) + 'px',
   borderRadius: '8px',
   overflow: 'hidden',
@@ -121,7 +122,7 @@ const itemStyle = computed(() => ({
   align-items: center;
   height: var(--mb-bar-h, 56px);
   padding: 0 12px;
-  background: var(--mb-bar-bg, #1a3a5c);
+  background: var(--mb-bar-bg, var(--olo-color-secondary, #16263d));
   gap: 4px;
 }
 .olo-mbp-logo img {
@@ -142,6 +143,12 @@ const itemStyle = computed(() => ({
   width: 32px;
   height: 32px;
   padding: 4px;
+}
+/* a11y tastiera: anello di focus visibile su icone barra e voci pannello */
+.olo-mbp-icon:focus-visible,
+.olo-mbp-menu-item:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
 }
 .olo-mbp-icon svg {
   width: 20px;

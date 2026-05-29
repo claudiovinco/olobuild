@@ -34,8 +34,8 @@ export default {
     border_color: '#E5E7EB',
     border_width: '1',
     border_radius: '8',
-    focus_border_color: '#6366F1',
-    button_bg: '#6366F1',
+    focus_border_color: '',   // '' ⇒ primary (era #e1474f off-brand)
+    button_bg: '',            // '' ⇒ primary (era #e1474f off-brand)
     button_color: '#FFFFFF',
     button_radius: '8',
     input_shadow: false,

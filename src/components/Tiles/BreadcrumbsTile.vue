@@ -1,14 +1,14 @@
 <template>
   <div class="olo-breadcrumbs">
-    <nav class="mb-flex mb-items-center mb-gap-2 mb-text-sm mb-text-gray-400">
+    <nav class="mb-flex mb-items-center mb-gap-2 mb-text-sm" :style="{ color: linkResolved }">
       <template v-if="s.show_home !== false">
-        <a href="#" class="mb-text-blue-400 mb-no-underline hover:mb-underline" data-olo-editable="home_label">{{ s.home_label }}</a>
-        <span class="mb-text-gray-600" data-olo-editable="separator">{{ s.separator }}</span>
+        <a href="#" class="olo-bc-link mb-no-underline hover:mb-underline" :style="{ color: 'var(--olo-color-primary, #e1474f)' }" data-olo-editable="home_label">{{ s.home_label }}</a>
+        <span :style="{ color: 'var(--olo-color-text-faint, #94a3b8)' }" data-olo-editable="separator">{{ s.separator }}</span>
       </template>
-      <a href="#" class="mb-text-blue-400 mb-no-underline hover:mb-underline">{{ t('Categoria') }}</a>
-      <span class="mb-text-gray-600">{{ s.separator }}</span>
+      <a href="#" class="olo-bc-link mb-no-underline hover:mb-underline" :style="{ color: 'var(--olo-color-primary, #e1474f)' }">{{ t('Categoria') }}</a>
+      <span :style="{ color: 'var(--olo-color-text-faint, #94a3b8)' }">{{ s.separator }}</span>
       <template v-if="s.show_current !== false">
-        <span class="mb-text-gray-300">{{ t('Pagina corrente') }}</span>
+        <span :style="{ color: 'var(--olo-color-text, #374151)' }">{{ t('Pagina corrente') }}</span>
       </template>
     </nav>
   </div>
@@ -34,11 +34,19 @@ const props = defineProps({
 });
 
 const s = computed(() => ({ ...defaults, ...props.settings }));
+// Neutro nudo (mb-text-gray-400) → token testo soft
+const linkResolved = 'var(--olo-color-text-soft, #6b7280)';
 </script>
 
 <style scoped>
 .olo-breadcrumbs {
   padding: 8px 0;
   min-height: 32px;
+}
+/* a11y tastiera: anello di focus visibile sui link del breadcrumb */
+.olo-bc-link:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
+  border-radius: 3px;
 }
 </style>

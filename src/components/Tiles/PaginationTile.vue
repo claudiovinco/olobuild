@@ -61,10 +61,10 @@ const defaults = {
   gap: '8',
   button_padding: '8 16',
   text_color: '',
-  active_color: '#1e87f0',
-  active_text_color: '#ffffff',
+  active_color: '',
+  active_text_color: '',
   background_color: '',
-  active_background: '#1e87f0',
+  active_background: '',
   border_radius: '4',
   hover_background: '',
   font_size: '14',
@@ -108,8 +108,9 @@ const btnStyle = computed(() => {
     transition: 'background 0.2s, color 0.2s',
     textDecoration: 'none',
   };
+  // Neutro nudo (#9CA3AF) → token testo soft
   if (s.value.text_color) st.color = s.value.text_color;
-  else st.color = '#9CA3AF';
+  else st.color = 'var(--olo-color-text-soft, #6b7280)';
   if (s.value.background_color) st.background = s.value.background_color;
   else st.background = 'transparent';
   const bw = parseInt(s.value.border_width) || 1;
@@ -121,18 +122,27 @@ const btnStyle = computed(() => {
   return st;
 });
 
-const activeBtnStyle = computed(() => ({
-  ...btnStyle.value,
-  color: s.value.active_text_color || '#ffffff',
-  background: s.value.active_background || '#1e87f0',
-  borderColor: s.value.active_background || '#1e87f0',
-  fontWeight: '600',
-}));
+const activeBtnStyle = computed(() => {
+  // TOKEN-FIRST: voce attiva = primario brand (era #e1474f blu off-brand)
+  const activeBg = s.value.active_background || 'var(--olo-color-primary, #e1474f)';
+  return {
+    ...btnStyle.value,
+    color: s.value.active_text_color || 'var(--olo-color-primary-contrast, #ffffff)',
+    background: activeBg,
+    borderColor: activeBg,
+    fontWeight: '600',
+  };
+});
 </script>
 
 <style scoped>
 .olo-pagination-preview {
   padding: 8px 0;
   min-height: 40px;
+}
+/* a11y tastiera: anello di focus visibile sui controlli di paginazione */
+.olo-pgn-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
 }
 </style>

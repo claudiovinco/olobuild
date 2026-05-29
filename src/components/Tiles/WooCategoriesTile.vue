@@ -24,7 +24,7 @@
         <div v-if="s.show_count" :style="countStyle">{{ 5 + i * 3 }} prodotti</div>
       </div>
       <!-- Description -->
-      <div v-if="s.show_description" style="padding:8px 12px;font-size:12px;color:#6B7280;">
+      <div v-if="s.show_description" style="padding:8px 12px;font-size:12px;color:var(--olo-color-text-soft, #6b7280);">
         {{ t('Descrizione breve della categoria...') }}
       </div>
     </div>
@@ -72,14 +72,14 @@ const gridStyle = computed(() => ({
 const cardStyle = computed(() => ({
   borderRadius: ((v => isNaN(v) ? 8 : v)(parseInt(s.value.border_radius))) + 'px',
   overflow: 'hidden',
-  background: '#F3F4F6',
+  background: 'var(--olo-color-surface-alt, #f6f7f9)',
 }));
 
 const imgStyle = computed(() => ({
   position: 'relative',
   width: '100%',
   paddingTop: ratioMap[s.value.image_ratio] || '100%',
-  background: '#E5E7EB',
+  background: 'var(--olo-color-surface-alt, #f6f7f9)',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',

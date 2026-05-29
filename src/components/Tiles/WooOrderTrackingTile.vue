@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="!wooActive" class="olo-woo-notice">
-      <span class="olo-woo-notice-icon">{{ t('&#x1F6D2;') }}</span>
+      <span class="olo-woo-notice-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor"><circle cx="7.3" cy="17.3" r="1.4" fill="currentColor" stroke="none"/><circle cx="13.3" cy="17.3" r="1.4" fill="currentColor" stroke="none"/><polyline points="0 2 3.2 4 5.3 12.5 16 12.5 18 6.5 8 6.5"/></svg></span>
       <span>{{ t('WooCommerce richiesto') }}</span>
     </div>
     <div v-else>
@@ -35,10 +35,10 @@ const props = defineProps({
 const defaults = {
   title: 'Traccia il tuo ordine',
   title_tag: 'h2',
-  accent_color: 'var(--olo-color-primary, #6366F1)',
-  text_color: '#374151',
+  accent_color: 'var(--olo-color-primary, #e1474f)',
+  text_color: '',
   button_color: '#FFFFFF',
-  button_bg: 'var(--olo-color-primary, #6366F1)',
+  button_bg: 'var(--olo-color-primary, #e1474f)',
   form_style: 'modern',
 };
 const s = computed(() => ({ ...defaults, ...props.settings }));
@@ -74,7 +74,7 @@ const labelStyle = computed(() => ({
 
 const inputStyle = computed(() => ({
   padding: isModern.value ? '12px 16px' : '8px 12px',
-  border: isModern.value ? '2px solid #E5E7EB' : '1px solid #D1D5DB',
+  border: isModern.value ? '2px solid var(--olo-color-border, #e5e7eb)' : '1px solid var(--olo-color-border, #e5e7eb)',
   borderRadius: isModern.value ? '10px' : '4px',
   fontSize: '15px',
   outline: 'none',
@@ -100,6 +100,6 @@ const btnStyle = computed(() => ({
 </script>
 
 <style scoped>
-.olo-woo-notice { display:flex;align-items:center;gap:8px;padding:16px 20px;background:#FEF3C7;border:1px solid #F59E0B;border-radius:8px;color:#92400E;font-size:14px;font-weight:500 }
-.olo-woo-notice-icon { font-size:20px }
+.olo-woo-notice { display:flex;align-items:center;gap:8px;padding:16px 20px;background:color-mix(in srgb, var(--olo-color-warning, #b45309) 12%, #fff);border:1px solid var(--olo-color-warning, #b45309);border-radius:8px;color:var(--olo-color-warning, #b45309);font-size:14px;font-weight:500 }
+.olo-woo-notice-icon { width:20px;height:20px;display:inline-flex;flex-shrink:0 } .olo-woo-notice-icon :deep(svg) { width:100%;height:100% }
 </style>

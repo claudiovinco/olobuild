@@ -167,7 +167,7 @@ class Olo_Accordion_Tile extends Olo_Tile_Base {
         $media_radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['media_radius_hover'] ?? null );
 
         // Brand accent for active state (Olobuild orange).
-        $brand_accent = 'var(--olo-color-primary, #e8622a)';
+        $brand_accent = 'var(--olo-color-primary, #e1474f)';
 
         // V3.22: granular header/content controls.
         $header_pad_y = max( 0, intval( $s['header_padding_y'] ?? 16 ) );
@@ -220,6 +220,13 @@ class Olo_Accordion_Tile extends Olo_Tile_Base {
             }
             .<?php echo esc_attr( $uid ); ?> .uk-accordion-title:hover {
                 <?php if ( $header_bg ) : ?>filter: brightness(0.97);<?php else : ?>background: rgba(0,0,0,0.025);<?php endif; ?>
+            }
+            /* a11y: anello di focus visibile da tastiera sull'header */
+            .<?php echo esc_attr( $uid ); ?> .uk-accordion-title:focus-visible {
+                outline: none;
+                box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
+                position: relative;
+                z-index: 1;
             }
             .<?php echo esc_attr( $uid ); ?> .macc-title-text {
                 flex: 1;
@@ -580,7 +587,7 @@ class Olo_Accordion_Tile extends Olo_Tile_Base {
                 'header_bg'         => '',
                 'header_bg_active'  => '',
                 'header_text_color' => '#0f172a',
-                'header_text_color_active' => '#e8622a',
+                'header_text_color_active' => '#e1474f',
                 'header_padding_y'  => 22,
                 'header_padding_x'  => 0,
                 'header_font_size'  => 17,
@@ -606,7 +613,7 @@ class Olo_Accordion_Tile extends Olo_Tile_Base {
             ],
             'pill-brand' => [
                 'header_bg'         => '#ffffff',
-                'header_bg_active'  => '#e8622a',
+                'header_bg_active'  => '#e1474f',
                 'header_text_color' => '#1e293b',
                 'header_text_color_active' => '#ffffff',
                 'header_padding_y'  => 16,
@@ -647,7 +654,7 @@ class Olo_Accordion_Tile extends Olo_Tile_Base {
                 'content_padding_x' => 18,
                 'content_font_size' => 13,
                 'text_color'        => '#475569',
-                'border_color'      => '#e8622a',
+                'border_color'      => '#e1474f',
                 'border_width'      => 2,
                 'gap'               => 0,
                 'border_radius'     => 6,

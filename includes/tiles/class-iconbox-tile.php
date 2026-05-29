@@ -56,7 +56,7 @@ class Olo_IconBox_Tile extends Olo_Tile_Base {
 
         $fg         = $this->safe_color_css( $s['text_color'] );
         $title_clr  = $this->safe_color_css( $s['title_color'] ?? '' );
-        $link_clr   = $this->safe_color_css( $s['link_color'] ) ?: 'var(--olo-color-primary, #6366F1)';
+        $link_clr   = $this->safe_color_css( $s['link_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $icon_size  = floatval( $s['icon_size'] ) ?: 3;
         $title_fs   = absint( $s['title_font_size'] ) ?: 20;
         $title_fw   = absint( $s['title_font_weight'] ) ?: 600;
@@ -111,7 +111,7 @@ class Olo_IconBox_Tile extends Olo_Tile_Base {
         $tile_border_css = '';
         $bw = intval( $s['border_width'] ?? 0 );
         if ( $bw > 0 ) {
-            $tile_border_css = 'border:' . $bw . 'px ' . esc_attr( $s['border_style'] ?? 'solid' ) . ' ' . ( $this->safe_color_css( $s['border_color'] ?? '' ) ?: '#e5e7eb' ) . ';';
+            $tile_border_css = 'border:' . $bw . 'px ' . esc_attr( $s['border_style'] ?? 'solid' ) . ' ' . ( $this->safe_color_css( $s['border_color'] ?? '' ) ?: 'var(--olo-color-border, #e5e7eb)' ) . ';';
         }
 
         // Border radius
@@ -167,6 +167,11 @@ class Olo_IconBox_Tile extends Olo_Tile_Base {
             }
             .<?php echo $uid; ?> .mib-link:hover {
                 text-decoration: underline !important;
+            }
+            .<?php echo $uid; ?> .mib-link:focus-visible {
+                outline: none;
+                border-radius: 3px;
+                box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
             }
             <?php if ( $icon_bg ) : ?>
             .<?php echo $uid; ?> .mib-icon-bg {

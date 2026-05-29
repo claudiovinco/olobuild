@@ -10,7 +10,7 @@
       <span v-if="s.show_label" :style="labelStyle">{{ s.label_text || 'Indirizzo' }}</span>
       <span :style="textStyle">{{ t('Via Roma 12, 38032 Canazei (TN)') }}</span>
       <span v-if="s.show_locality" :style="{fontSize:(fs-1)+'px',color:s.label_color || 'var(--olo-color-text-muted, #9CA3AF)'}">{{ t('Val di Fassa') }}</span>
-      <span v-if="s.show_map_link" :style="{fontSize:(fs-2)+'px',color:s.link_color || 'var(--olo-color-primary, #6366F1)',marginTop:'3px'}">{{ s.map_link_text || 'Apri in Google Maps' }} ↗</span>
+      <span v-if="s.show_map_link" :style="{fontSize:(fs-2)+'px',color:s.link_color || 'var(--olo-color-primary, #e1474f)',marginTop:'3px'}">{{ s.map_link_text || 'Apri in Google Maps' }} ↗</span>
     </div>
   </div>
 </template>
@@ -28,7 +28,8 @@ const defaults = {
 const s = computed(() => ({ ...defaults, ...props.settings }));
 const fs = computed(() => Math.min(parseInt(s.value.font_size) || 15, 18));
 const iconSz = computed(() => fs.value + 4);
-const iconC = computed(() => s.value.icon_color || '#EF4444');
+// icona pin indirizzo: token-first sul brand (era #EF4444 off-brand)
+const iconC = computed(() => s.value.icon_color || 'var(--olo-color-primary, #e1474f)');
 const wrapStyle = computed(() => {
   const st = { display: 'flex', alignItems: 'flex-start', gap: '8px' };
   if (s.value.bg_color) st.background = s.value.bg_color;

@@ -61,12 +61,12 @@ const logoUrl = computed(() => {
 .olo-sitelogo-text {
   font-size: 20px;
   font-weight: 700;
-  color: #e5e7eb;
+  color: var(--olo-color-text, #374151);
   line-height: 1.2;
 }
 .olo-sitelogo-tagline {
   font-size: 11px;
-  color: #9ca3af;
+  color: var(--olo-color-text-faint, #94a3b8);
   margin: 0;
 }
 </style>

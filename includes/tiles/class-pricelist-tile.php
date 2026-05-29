@@ -63,19 +63,19 @@ class Olo_Pricelist_Tile extends Olo_Tile_Base {
         $sep_style   = in_array( $s['separator_style'], [ 'dotted', 'dashed', 'solid', 'none' ] ) ? $s['separator_style'] : 'dotted';
         $sep_color   = $this->safe_color_css( $s['separator_color'] ) ?: 'rgba(0, 0, 0, 0.06)';
         $title_clr   = $this->safe_color_css( $s['title_color'] ) ?: 'var(--olo-color-text, #1a1a1a)';
-        $price_clr   = $this->safe_color_css( $s['price_color'] ) ?: 'var(--olo-color-primary, #e8622a)';
+        $price_clr   = $this->safe_color_css( $s['price_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $desc_clr    = $this->safe_color_css( $s['description_color'] ) ?: 'var(--olo-color-text-muted, #888)';
         $img_size    = intval( $s['image_size'] ) ?: 60;
         $img_radius  = Olo_Tile_Utils::border_radius( $s['image_border_radius'] ?? 0 );
         $img_radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['image_border_radius_hover'] ?? null );
         $show_image  = filter_var( $s['show_image'], FILTER_VALIDATE_BOOLEAN );
         $price_pos   = $s['price_position'] ?: 'right';
-        $hl_bg       = $this->safe_color_css( $s['highlighted_bg'] ) ?: 'rgba(232, 98, 42, 0.06)';
-        $badge_bg    = $this->safe_color_css( $s['badge_bg'] ) ?: 'var(--olo-color-primary, #e8622a)';
-        $badge_clr   = $this->safe_color_css( $s['badge_color'] ) ?: '#fff';
+        $hl_bg       = $this->safe_color_css( $s['highlighted_bg'] ) ?: 'color-mix(in srgb, var(--olo-color-primary, #e1474f) 6%, transparent)';
+        $badge_bg    = $this->safe_color_css( $s['badge_bg'] ) ?: 'var(--olo-color-primary, #e1474f)';
+        $badge_clr   = $this->safe_color_css( $s['badge_color'] ) ?: 'var(--olo-color-on-primary, #ffffff)';
         $badge_bw    = intval( $s['badge_border_width'] );
         $badge_bs    = in_array( $s['badge_border_style'], [ 'solid', 'dashed', 'dotted' ] ) ? $s['badge_border_style'] : 'solid';
-        $badge_bc    = $this->safe_color_css( $s['badge_border_color'] ) ?: 'var(--olo-color-primary, #e8622a)';
+        $badge_bc    = $this->safe_color_css( $s['badge_border_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $badge_br    = Olo_Tile_Utils::radius_int( $s['badge_border_radius'] ?? 6 );
         $gap         = intval( $s['gap'] ) ?: 12;
         $padding = Olo_Tile_Utils::spacing_css( $s['tile_padding'] ?? $s['padding'] ?? 14, 14 );
@@ -83,7 +83,7 @@ class Olo_Pricelist_Tile extends Olo_Tile_Base {
         $card_radius = Olo_Tile_Utils::radius_int( $s['card_border_radius'] ?? 12 );
         $card_border = $this->safe_color_css( $s['card_border_color'] ?? '' ) ?: 'rgba(0, 0, 0, 0.06)';
         $hover_lift  = filter_var( $s['hover_lift'] ?? true, FILTER_VALIDATE_BOOLEAN );
-        $hl_border   = $this->safe_color_css( $s['highlighted_bg'] ) ? $this->safe_color_css( $s['highlighted_bg'] ) : 'rgba(232, 98, 42, 0.2)';
+        $hl_border   = $this->safe_color_css( $s['highlighted_bg'] ) ? $this->safe_color_css( $s['highlighted_bg'] ) : 'color-mix(in srgb, var(--olo-color-primary, #e1474f) 20%, transparent)';
 
         ob_start();
         ?>
@@ -118,7 +118,7 @@ class Olo_Pricelist_Tile extends Olo_Tile_Base {
             }
             <?php if ( $hover_lift ) : ?>
             .<?php echo $uid; ?> .olo-pl-card--hl:hover {
-                border-color: rgba(232, 98, 42, 0.35);
+                border-color: color-mix(in srgb, var(--olo-color-primary, #e1474f) 35%, transparent);
             }
             <?php endif; ?>
             <?php if ( $show_image ) : ?>

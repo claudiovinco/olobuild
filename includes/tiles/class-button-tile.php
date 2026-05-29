@@ -62,8 +62,8 @@ class Olo_Button_Tile extends Olo_Tile_Base {
         $align_class = 'uk-text-' . ( in_array( $s['alignment'], [ 'left', 'center', 'right' ], true ) ? $s['alignment'] : 'center' );
 
         // Colors
-        $bg = $this->safe_color_css( $s['bg_color'] ) ?: 'var(--olo-color-primary, #6366F1)';
-        $fg = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-primary-contrast, #FFFFFF)';
+        $bg = $this->safe_color_css( $s['bg_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
+        $fg = $this->safe_color_css( $s['text_color'] ) ?: 'var(--olo-color-on-primary, var(--olo-color-primary-contrast, #ffffff))';
 
         // Sfondo creativo (bg unificato) — se settato (type !== 'none') sovrascrive il
         // bg_color tinta unita usando lo stesso CSS Builder di section/row/iconbox.
@@ -150,7 +150,7 @@ class Olo_Button_Tile extends Olo_Tile_Base {
 
         // Border (legacy)
         $border_width = absint( $s['border_width'] ?? 0 );
-        $border_color = $this->safe_color_css( $s['border_color'] ?? '' ) ?: 'var(--olo-color-primary, #6366F1)';
+        $border_color = $this->safe_color_css( $s['border_color'] ?? '' ) ?: 'var(--olo-color-primary, #e1474f)';
 
         // Border system — applicato a .olo-btn-link (il pulsante visibile),
         // NON al wrapper .uid (che è solo container con allineamento/padding).
