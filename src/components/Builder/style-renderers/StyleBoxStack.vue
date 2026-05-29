@@ -3,9 +3,9 @@
     StyleBoxStack — pannello unico "Spazi & Bordi" (design handoff olobuild_boxcontrol,
     composizione "StackedPanel"). Impila controlli box-model compatti (FieldBox) con UNO
     switch device condiviso in cima, sincronizzato col viewport globale (builderStore.viewMode).
+    Ogni controllo ha un "occhio" (peek) che mostra un'anteprima live, neutra (non altera i valori).
     Margine/Padding sono per-breakpoint (chiavi margin_top[_bp]…, già supportate dal renderer);
     il Raggio ha il toggle Normale/Hover. Nessun cambio di formato salvato.
-    Il Bordo ricco (stile/colore/effetti/hover) resta nel suo controllo dedicato.
   -->
   <div class="olo-boxstack">
     <!-- Switch device condiviso -->
@@ -31,8 +31,15 @@
         <span class="olo-bs-ic" v-html="ICONS.margin"></span>
         <span class="olo-bs-name">{{ t('Margine') }}</span>
         <span v-if="bp !== 'desktop'" class="olo-bs-bp">{{ bpLabel }}</span>
+        <span class="olo-bs-spacer"></span>
+        <button type="button" class="olo-bs-eye" :class="{ on: peek.margin }" @click="peek.margin = !peek.margin"
+          :title="peek.margin ? t('Nascondi anteprima') : t('Mostra anteprima')" :aria-pressed="peek.margin"
+          v-html="peek.margin ? EYE : EYE_OFF"></button>
       </div>
-      <FieldBox mode="sides" :sliderMax="200" :modelValue="spacingModel('margin')" @update:modelValue="onSpacing('margin', $event)" />
+      <FieldBox mode="sides" preview="none" :sliderMax="200" :modelValue="spacingModel('margin')" @update:modelValue="onSpacing('margin', $event)" />
+      <div v-if="peek.margin" class="olo-bs-pv">
+        <div class="olo-bs-pv-box"><div class="olo-bs-pv-inner" :style="spacingPreviewStyle('margin')"></div></div>
+      </div>
     </div>
 
     <!-- Padding -->
@@ -41,8 +48,15 @@
         <span class="olo-bs-ic" v-html="ICONS.padding"></span>
         <span class="olo-bs-name">{{ t('Padding') }}</span>
         <span v-if="bp !== 'desktop'" class="olo-bs-bp">{{ bpLabel }}</span>
+        <span class="olo-bs-spacer"></span>
+        <button type="button" class="olo-bs-eye" :class="{ on: peek.padding }" @click="peek.padding = !peek.padding"
+          :title="peek.padding ? t('Nascondi anteprima') : t('Mostra anteprima')" :aria-pressed="peek.padding"
+          v-html="peek.padding ? EYE : EYE_OFF"></button>
       </div>
-      <FieldBox mode="sides" :sliderMax="200" :modelValue="spacingModel('padding')" @update:modelValue="onSpacing('padding', $event)" />
+      <FieldBox mode="sides" preview="none" :sliderMax="200" :modelValue="spacingModel('padding')" @update:modelValue="onSpacing('padding', $event)" />
+      <div v-if="peek.padding" class="olo-bs-pv">
+        <div class="olo-bs-pv-box"><div class="olo-bs-pv-inner" :style="spacingPreviewStyle('padding')"></div></div>
+      </div>
     </div>
 
     <!-- Raggio (Normale / Hover) -->
@@ -57,14 +71,20 @@
             {{ t('Hover') }}<span v-if="radiusHoverDiffers" class="olo-bs-dot"></span>
           </button>
         </div>
+        <button type="button" class="olo-bs-eye" :class="{ on: peek.radius }" @click="peek.radius = !peek.radius"
+          :title="peek.radius ? t('Nascondi anteprima') : t('Mostra anteprima')" :aria-pressed="peek.radius"
+          v-html="peek.radius ? EYE : EYE_OFF"></button>
       </div>
-      <FieldBox mode="corners" :sliderMax="100" :modelValue="radiusModel" @update:modelValue="onRadius($event)" />
+      <FieldBox mode="corners" preview="none" :sliderMax="100" :modelValue="radiusModel" @update:modelValue="onRadius($event)" />
+      <div v-if="peek.radius" class="olo-bs-pv">
+        <div class="olo-bs-pv-chip" :style="{ borderRadius: radiusPreviewCss }"></div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue';
+import { ref, reactive, computed, watch } from 'vue';
 import FieldBox from '../fields/FieldBox.vue';
 import { useBuilderStore } from '@/stores/builder';
 import { t } from '@/i18n';
@@ -81,12 +101,17 @@ const ICONS = {
   padding: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="1" opacity=".5"/><rect x="7" y="7" width="10" height="10" rx="1"/></svg>',
   radius: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 21v-6a8 8 0 0 0-8-8H3"/></svg>',
 };
+const EYE = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>';
+const EYE_OFF = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3l18 18"/><path d="M10.6 6.1A10.8 10.8 0 0 1 12 6c6.5 0 10 6 10 6a17.6 17.6 0 0 1-3.36 3.96M6.6 6.6A17.6 17.6 0 0 0 2 12s3.5 6 10 6a10.8 10.8 0 0 0 3.4-.55"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>';
 
 const devices = [
   { key: 'desktop', label: 'Desktop', icon: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg>' },
   { key: 'tablet', label: 'Tablet', icon: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M11 18h2"/></svg>' },
   { key: 'mobile', label: 'Mobile', icon: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg>' },
 ];
+
+// Stato peek (anteprima) per-controllo — neutro, non altera i valori.
+const peek = reactive({ margin: false, padding: false, radius: false });
 
 // Breakpoint attivo derivato dal viewport globale (stesso schema di StyleSpacingBp).
 const breakpoints = {
@@ -116,11 +141,16 @@ function sKey(prefix, side) {
   const base = `${prefix}_${side}`;
   return bp.value === 'desktop' ? base : `${base}_${bp.value}`;
 }
+function spacingSides(prefix) {
+  return {
+    top: parseInt(props.tileStyle[sKey(prefix, 'top')]) || 0,
+    right: parseInt(props.tileStyle[sKey(prefix, 'right')]) || 0,
+    bottom: parseInt(props.tileStyle[sKey(prefix, 'bottom')]) || 0,
+    left: parseInt(props.tileStyle[sKey(prefix, 'left')]) || 0,
+  };
+}
 function spacingModel(prefix) {
-  const top = parseInt(props.tileStyle[sKey(prefix, 'top')]) || 0;
-  const right = parseInt(props.tileStyle[sKey(prefix, 'right')]) || 0;
-  const bottom = parseInt(props.tileStyle[sKey(prefix, 'bottom')]) || 0;
-  const left = parseInt(props.tileStyle[sKey(prefix, 'left')]) || 0;
+  const { top, right, bottom, left } = spacingSides(prefix);
   // Valori uniformi → numero (FieldBox parte "collegato", riga compatta)
   if (top === right && right === bottom && bottom === left) return top;
   return { top, right, bottom, left };
@@ -148,6 +178,12 @@ function onSpacing(prefix, val) {
     ],
   });
 }
+// Anteprima spaziatura: gap interno proporzionale ai 4 valori (clampati per restare nel box).
+function spacingPreviewStyle(prefix) {
+  const s = spacingSides(prefix);
+  const c = (v, max) => Math.min(Math.max(v, 0), max);
+  return { margin: `${c(s.top, 22)}px ${c(s.right, 44)}px ${c(s.bottom, 22)}px ${c(s.left, 44)}px` };
+}
 
 // ── Raggio (Normale / Hover) ──
 const radiusState = ref('normal');
@@ -160,6 +196,13 @@ const radiusHoverDiffers = computed(() => {
   const h = props.tileStyle.hover?.border_radius;
   if (h === undefined || h === null) return false;
   return JSON.stringify(h) !== JSON.stringify(props.tileStyle.border_radius ?? 0);
+});
+const radiusPreviewCss = computed(() => {
+  const v = radiusModel.value;
+  if (v && typeof v === 'object') {
+    return `${parseInt(v.tl) || 0}px ${parseInt(v.tr) || 0}px ${parseInt(v.br) || 0}px ${parseInt(v.bl) || 0}px`;
+  }
+  return `${parseInt(v) || 0}px`;
 });
 function onRadius(val) {
   emit('update', {
@@ -211,9 +254,7 @@ function onRadius(val) {
   cursor: pointer;
   transition: all 0.15s;
 }
-.olo-bs-devices button:hover {
-  color: #e5e7eb;
-}
+.olo-bs-devices button:hover { color: #e5e7eb; }
 .olo-bs-devices button.on {
   background: var(--olo-color-primary, #6366f1);
   color: #fff;
@@ -247,8 +288,30 @@ function onRadius(val) {
   color: #fbbf24;
   margin-left: 2px;
 }
-.olo-bs-spacer {
-  flex: 1;
+.olo-bs-spacer { flex: 1; }
+
+/* occhio anteprima (peek) */
+.olo-bs-eye {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: transparent;
+  color: #9ca3af;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+.olo-bs-eye:hover {
+  color: #e5e7eb;
+  border-color: rgba(255, 255, 255, 0.25);
+}
+.olo-bs-eye.on {
+  color: var(--olo-color-primary, #6366f1);
+  border-color: var(--olo-color-primary, #6366f1);
 }
 
 /* toggle Normale / Hover */
@@ -272,14 +335,46 @@ function onRadius(val) {
   cursor: pointer;
   transition: all 0.15s;
 }
-.olo-bs-seg button.on {
-  background: #fff;
-  color: #1f2937;
-}
+.olo-bs-seg button.on { background: #fff; color: #1f2937; }
 .olo-bs-dot {
   width: 5px;
   height: 5px;
   border-radius: 50%;
   background: var(--olo-color-primary, #e8622a);
+}
+
+/* anteprima live (peek) */
+.olo-bs-pv {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px;
+  border-radius: 8px;
+  background-color: #f3f4f6;
+  background-image:
+    linear-gradient(45deg, #e2e5ea 25%, transparent 25%),
+    linear-gradient(-45deg, #e2e5ea 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #e2e5ea 75%),
+    linear-gradient(-45deg, transparent 75%, #e2e5ea 75%);
+  background-size: 14px 14px;
+  background-position: 0 0, 0 7px, 7px -7px, -7px 0;
+}
+.olo-bs-pv-box {
+  width: 100%;
+  max-width: 260px;
+  border: 1.5px dashed #9ca3af;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.65);
+}
+.olo-bs-pv-inner {
+  height: 30px;
+  background: var(--olo-color-primary, #6366f1);
+  border-radius: 7px;
+}
+.olo-bs-pv-chip {
+  width: 66px;
+  height: 46px;
+  background: var(--olo-color-primary, #6366f1);
+  transition: border-radius 0.2s ease;
 }
 </style>
