@@ -11,18 +11,7 @@
     <!-- Switch device condiviso -->
     <div class="olo-bs-devbar">
       <span class="olo-bs-devlabel">{{ t('Modifica per') }}</span>
-      <div class="olo-bs-devices" role="group" :aria-label="t('Dispositivo')">
-        <button
-          v-for="d in devices"
-          :key="d.key"
-          type="button"
-          :class="{ on: activeDevice === d.key }"
-          @click="setDevice(d.key)"
-          :title="t(d.label)"
-          :aria-pressed="activeDevice === d.key"
-          v-html="d.icon"
-        ></button>
-      </div>
+      <DeviceSwitch />
     </div>
 
     <!-- Margine -->
@@ -86,6 +75,7 @@
 <script setup>
 import { ref, reactive, computed, watch } from 'vue';
 import FieldBox from '../fields/FieldBox.vue';
+import DeviceSwitch from '../DeviceSwitch.vue';
 import { useBuilderStore } from '@/stores/builder';
 import { t } from '@/i18n';
 
@@ -104,12 +94,6 @@ const ICONS = {
 const EYE = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>';
 const EYE_OFF = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3l18 18"/><path d="M10.6 6.1A10.8 10.8 0 0 1 12 6c6.5 0 10 6 10 6a17.6 17.6 0 0 1-3.36 3.96M6.6 6.6A17.6 17.6 0 0 0 2 12s3.5 6 10 6a10.8 10.8 0 0 0 3.4-.55"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>';
 
-const devices = [
-  { key: 'desktop', label: 'Desktop', icon: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg>' },
-  { key: 'tablet', label: 'Tablet', icon: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M11 18h2"/></svg>' },
-  { key: 'mobile', label: 'Mobile', icon: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg>' },
-];
-
 // Stato peek (anteprima) per-controllo — neutro, non altera i valori.
 const peek = reactive({ margin: false, padding: false, radius: false });
 
@@ -124,17 +108,6 @@ watch(() => builderStore.viewMode, (mode) => {
   bp.value = (mode === 'desktop' || mode === 'widescreen') ? 'desktop' : mode;
 }, { immediate: true });
 const bpLabel = computed(() => t(breakpoints[bp.value] || ''));
-
-// Lo switch a 3 icone riflette/guida il viewport globale.
-const activeDevice = computed(() => {
-  const m = builderStore.viewMode;
-  if (m === 'desktop' || m === 'widescreen') return 'desktop';
-  if (m === 'tablet' || m === 'tablet_landscape') return 'tablet';
-  return 'mobile';
-});
-function setDevice(key) {
-  builderStore.setViewMode(key);
-}
 
 // ── Margine / Padding (per-breakpoint, 4 lati su chiavi piatte) ──
 function sKey(prefix, side) {
@@ -234,32 +207,6 @@ function onRadius(val) {
   font-weight: 500;
   color: #9ca3af;
 }
-.olo-bs-devices {
-  display: flex;
-  gap: 2px;
-  background: #374151;
-  border-radius: 8px;
-  padding: 2px;
-}
-.olo-bs-devices button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 30px;
-  height: 26px;
-  border: none;
-  background: transparent;
-  color: #9ca3af;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.15s;
-}
-.olo-bs-devices button:hover { color: #e5e7eb; }
-.olo-bs-devices button.on {
-  background: var(--olo-color-primary, #6366f1);
-  color: #fff;
-}
-
 /* singolo controllo */
 .olo-bs-field {
   display: flex;

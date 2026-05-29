@@ -49,19 +49,8 @@
             </button>
           </div>
         </div>
-        <div v-if="field.responsive && respOpen" class="mb-flex mb-gap-0.5 mb-mb-1.5 mb-bg-gray-700 mb-rounded-lg mb-p-0.5">
-          <button
-            v-for="bp in respBreakpoints"
-            :key="bp.key"
-            @click="respBp = bp.key"
-            :class="[
-              'mb-flex-1 mb-py-0.5 mb-text-[9px] mb-font-medium mb-rounded mb-transition-colors mb-text-center',
-              respBp === bp.key
-                ? 'mb-bg-primary-600 mb-text-white'
-                : 'mb-text-gray-500 hover:mb-text-gray-400'
-            ]"
-            :title="t(bp.label)"
-          >{{ bp.short }}</button>
+        <div v-if="field.responsive && respOpen" class="mb-mb-1.5">
+          <DeviceSwitch />
         </div>
         <div v-if="field.responsive && !respOpen && respBp !== 'desktop'" class="mb-mb-1">
           <span class="mb-text-[9px] mb-bg-primary-700 mb-text-primary-200 mb-px-1.5 mb-py-0.5 mb-rounded mb-font-medium">
@@ -399,6 +388,7 @@ import FieldColor from './fields/FieldColor.vue';
 import FieldRange from './fields/FieldRange.vue';
 import FieldSpacing from './fields/FieldSpacing.vue';
 import FieldBox from './fields/FieldBox.vue';
+import DeviceSwitch from './DeviceSwitch.vue';
 import FieldBorder from './fields/FieldBorder.vue';
 import FieldImage from './fields/FieldImage.vue';
 import FieldMedia from './fields/FieldMedia.vue';
