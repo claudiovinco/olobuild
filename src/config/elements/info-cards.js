@@ -100,8 +100,8 @@ export default {
   // ═══ STILE ════════════════════════════════════════════════════
   styleFields: [
     { type: 'separator', label: t('Layout griglia') },
-    { key: 'columns',   label: t('Numero colonne'),    type: 'range', min: 1, max: 6, step: 1 },
-    { key: 'items_gap', label: t('Gap tra card (px)'), type: 'range', min: 0, max: 60, step: 2 },
+    { key: 'columns',   label: t('Numero colonne'),    type: 'range', min: 1, max: 6, step: 1, responsive: true },
+    { key: 'items_gap', label: t('Gap tra card (px)'), type: 'range', min: 0, max: 60, step: 2, responsive: true },
 
     { type: 'separator', label: t('Sfondo container') },
     { key: 'container_bg',      label: t('Sfondo'),               type: 'background', showParallax: false },

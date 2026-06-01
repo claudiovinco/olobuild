@@ -41,10 +41,15 @@ class Olo_Form_Tile extends Olo_Tile_Base {
         'label_color'       => '',
         'label_size'        => '14',
         'label_weight'      => '500',
+        'label_transform'   => '',
+        'label_letter_spacing' => '',
+        'label_font_family' => '',
         'input_bg'          => '',
         'input_color'       => '',
         'input_border_color'=> '',
         'input_border_width'=> '1',
+        'input_border_style'=> 'box',
+        'input_font_family' => '',
         'input_radius'      => '6',
         'input_size'        => 'default',
         'input_focus_border'=> '',
@@ -64,6 +69,7 @@ class Olo_Form_Tile extends Olo_Tile_Base {
         'submit_hover_border_color' => '',
         'submit_letter_spacing' => '0.3',
         'submit_text_transform' => 'none',
+        'submit_font_family' => '',
         'check_accent_color' => '',
         'check_bg'           => '',
         'check_border_color' => '',
@@ -121,11 +127,42 @@ class Olo_Form_Tile extends Olo_Tile_Base {
         $label_color = $this->safe_color_css( $s['label_color'] ) ?: 'var(--olo-color-text, #374151)';
         $label_size  = absint( $s['label_size'] ) ?: 14;
         $label_weight= $s['label_weight'] ?: '500';
-        $input_bg    = $this->safe_color_css( $s['input_bg'] ) ?: 'var(--olo-color-background, #FFFFFF)';
+        $label_tt    = in_array( $s['label_transform'] ?? '', [ 'none', 'uppercase', 'lowercase', 'capitalize' ], true ) ? $s['label_transform'] : '';
+        $label_ls    = floatval( $s['label_letter_spacing'] ?? 0 );
+        // Font-family: stack web-safe (con virgola/apici) usato as-is, nome singolo quotato con fallback.
+        $mk_font = function( $v ) {
+            $v = trim( (string) $v );
+            if ( $v === '' ) return '';
+            $v = preg_replace( '/[^a-zA-Z0-9 ,\'"\-]/', '', $v );
+            if ( $v === '' ) return '';
+            return ( strpbrk( $v, ',\'"' ) !== false ) ? $v : "'" . $v . "', sans-serif";
+        };
+        $label_ff    = $mk_font( $s['label_font_family'] ?? '' );
+        $input_ff    = $mk_font( $s['input_font_family'] ?? '' );
+        $submit_ff   = $mk_font( $s['submit_font_family'] ?? '' );
+        // Stile bordo input: box (tutti i lati) | underline (solo sotto) | none.
+        $border_style = in_array( $s['input_border_style'] ?? 'box', [ 'box', 'underline', 'none' ], true ) ? $s['input_border_style'] : 'box';
+        // In underline/none lo sfondo di default è trasparente (look editoriale su sezioni scure);
+        // resta sovrascrivibile da input_bg esplicito.
+        $input_bg    = $this->safe_color_css( $s['input_bg'] );
+        if ( $input_bg === '' ) {
+            $input_bg = ( $border_style === 'box' ) ? 'var(--olo-color-background, #FFFFFF)' : 'transparent';
+        }
         $input_color = $this->safe_color_css( $s['input_color'] ) ?: 'var(--olo-color-text, #374151)';
         $input_bc    = $this->safe_color_css( $s['input_border_color'] ) ?: 'var(--olo-color-border, #E5E7EB)';
         $focus_bc    = $this->safe_color_css( $s['input_focus_border'] );
         $focus_shadow= ! empty( $s['input_focus_shadow'] );
+        // Dichiarazione bordo input in base allo stile (box / underline / none).
+        // !important su underline/none: il tile DEVE vincere su eventuali regole del tema che
+        // stilano input[type=...] con sfondo/bordo (ma non le textarea → asimmetria visibile).
+        $imp = ( $border_style === 'box' ) ? '' : ' !important';
+        if ( $border_style === 'underline' ) {
+            $input_border_decl = 'border:0' . $imp . ';border-bottom:' . $bw . 'px solid ' . $input_bc . $imp . ';border-radius:0' . $imp . ';padding-left:0' . $imp . ';padding-right:0' . $imp;
+        } elseif ( $border_style === 'none' ) {
+            $input_border_decl = 'border:0' . $imp . ';border-radius:' . $radius . $imp;
+        } else {
+            $input_border_decl = 'border:' . $bw . 'px solid ' . $input_bc . ';border-radius:' . $radius;
+        }
         $ph_opacity  = floatval( $s['input_placeholder_opacity'] ) ?: 0.4;
         $btn_bg      = $this->safe_color_css( $s['submit_bg'] );
         $btn_color   = $this->safe_color_css( $s['submit_color'] );
@@ -259,15 +296,15 @@ class Olo_Form_Tile extends Olo_Tile_Base {
         ob_start();
         ?>
         <style>
-            .<?php echo $uid; ?> .olo-f-label{color:<?php echo $label_color; ?>;font-size:<?php echo $label_size; ?>px;font-weight:<?php echo $label_weight; ?>;margin-bottom:6px;display:block}
+            .<?php echo $uid; ?> .olo-f-label{color:<?php echo $label_color; ?>;font-size:<?php echo $label_size; ?>px;font-weight:<?php echo $label_weight; ?>;margin-bottom:6px;display:block<?php if ( $label_tt && $label_tt !== 'none' ) : ?>;text-transform:<?php echo $label_tt; ?><?php endif; ?><?php if ( $label_ls != 0 ) : ?>;letter-spacing:<?php echo $label_ls; ?>px<?php endif; ?><?php if ( $label_ff ) : ?>;font-family:<?php echo $label_ff; ?><?php endif; ?>}
             .<?php echo $uid; ?> .olo-f-required{color:currentColor;opacity:.65;margin-left:2px;font-weight:700}
             .<?php echo $uid; ?> .uk-input,
             .<?php echo $uid; ?> .uk-textarea,
-            .<?php echo $uid; ?> .uk-select{background-color:<?php echo $input_bg; ?>;color:<?php echo $input_color; ?>;border:<?php echo $bw; ?>px solid <?php echo $input_bc; ?>;border-radius:<?php echo $radius; ?>;transition:border-radius 400ms cubic-bezier(.4,0,.2,1),border-color 0.15s ease}
-            <?php if ( $radius_hover_css !== '' ) : ?>.<?php echo $uid; ?> .uk-input:hover,.<?php echo $uid; ?> .uk-textarea:hover,.<?php echo $uid; ?> .uk-select:hover{border-radius:<?php echo $radius_hover_css; ?> !important}<?php endif; ?>
+            .<?php echo $uid; ?> .uk-select{background-color:<?php echo $input_bg; ?><?php echo $imp; ?>;color:<?php echo $input_color; ?>;<?php if ( $input_ff ) : ?>font-family:<?php echo $input_ff; ?>;<?php endif; ?><?php echo $input_border_decl; ?>;transition:border-radius 400ms cubic-bezier(.4,0,.2,1),border-color 0.15s ease}
+            <?php if ( $border_style === 'box' && $radius_hover_css !== '' ) : ?>.<?php echo $uid; ?> .uk-input:hover,.<?php echo $uid; ?> .uk-textarea:hover,.<?php echo $uid; ?> .uk-select:hover{border-radius:<?php echo $radius_hover_css; ?> !important}<?php endif; ?>
             .<?php echo $uid; ?> .uk-input:focus,
             .<?php echo $uid; ?> .uk-textarea:focus,
-            .<?php echo $uid; ?> .uk-select:focus{border-color:<?php echo $focus_bc ?: 'var(--olo-color-primary, #e1474f)'; ?>;outline:none<?php if ( $focus_shadow ) : ?>;box-shadow:0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 15%, transparent)<?php endif; ?>}
+            .<?php echo $uid; ?> .uk-select:focus{border-color:<?php echo $focus_bc ?: 'var(--olo-color-primary, #e1474f)'; ?><?php echo $imp; ?>;outline:none<?php if ( $focus_shadow ) : ?>;box-shadow:0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 15%, transparent)<?php endif; ?>}
             .<?php echo $uid; ?> .uk-input::placeholder,
             .<?php echo $uid; ?> .uk-textarea::placeholder{color:<?php echo $input_color; ?>;opacity:<?php echo $ph_opacity; ?>}
             .<?php echo $uid; ?> .uk-input:-webkit-autofill,
@@ -275,7 +312,7 @@ class Olo_Form_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .uk-select:-webkit-autofill{-webkit-box-shadow:0 0 0 1000px <?php echo $input_bg; ?> inset !important;-webkit-text-fill-color:<?php echo $input_color; ?> !important;transition:background-color 5000s ease-in-out 0s}
             .<?php echo $uid; ?> .uk-form-icon{color:<?php echo $input_color; ?>;opacity:0.5}
             .<?php echo $uid; ?> .uk-form-icon:hover{opacity:0.8}
-            .<?php echo $uid; ?> .olo-f-btn{background:<?php echo $btn_bg ?: 'var(--olo-color-primary, #e1474f)'; ?>;color:<?php echo $btn_color; ?>;<?php if ( $btn_bw > 0 ) : ?>border:<?php echo $btn_bw; ?>px solid <?php echo $btn_bc ?: 'var(--olo-color-primary, #e1474f)'; ?><?php else : ?>border:none<?php endif; ?>;border-radius:<?php echo $btn_radius; ?>;padding:<?php echo $btn_py; ?>px <?php echo $btn_px; ?>px;font-size:<?php echo $btn_fs; ?>px;font-weight:<?php echo $btn_fw; ?>;cursor:pointer;transition:background 0.2s ease,border-color 0.2s ease,transform 0.15s ease;display:inline-flex;align-items:center;gap:8px<?php if ( $btn_ls > 0 ) : ?>;letter-spacing:<?php echo $btn_ls; ?>px<?php endif; ?><?php if ( $btn_tt !== 'none' ) : ?>;text-transform:<?php echo $btn_tt; ?><?php endif; ?><?php if ( $btn_full ) : ?>;width:100%;justify-content:center<?php endif; ?>}
+            .<?php echo $uid; ?> .olo-f-btn{background:<?php echo $btn_bg ?: 'var(--olo-color-primary, #e1474f)'; ?>;color:<?php echo $btn_color; ?>;<?php if ( $submit_ff ) : ?>font-family:<?php echo $submit_ff; ?>;<?php endif; ?><?php if ( $btn_bw > 0 ) : ?>border:<?php echo $btn_bw; ?>px solid <?php echo $btn_bc ?: 'var(--olo-color-primary, #e1474f)'; ?><?php else : ?>border:none<?php endif; ?>;border-radius:<?php echo $btn_radius; ?>;padding:<?php echo $btn_py; ?>px <?php echo $btn_px; ?>px;font-size:<?php echo $btn_fs; ?>px;font-weight:<?php echo $btn_fw; ?>;cursor:pointer;transition:background 0.2s ease,border-color 0.2s ease,transform 0.15s ease;display:inline-flex;align-items:center;gap:8px<?php if ( $btn_ls > 0 ) : ?>;letter-spacing:<?php echo $btn_ls; ?>px<?php endif; ?><?php if ( $btn_tt !== 'none' ) : ?>;text-transform:<?php echo $btn_tt; ?><?php endif; ?><?php if ( $btn_full ) : ?>;width:100%;justify-content:center<?php endif; ?>}
             .<?php echo $uid; ?> .olo-f-btn:hover{background:<?php echo $btn_hover ?: 'color-mix(in srgb, var(--olo-color-primary, #e1474f) 85%, #000)'; ?><?php if ( $btn_bw > 0 && $btn_hbc ) : ?>;border-color:<?php echo $btn_hbc; ?><?php endif; ?><?php if ( $btn_radius_hover_css !== '' ) : ?>;border-radius:<?php echo $btn_radius_hover_css; ?> !important<?php endif; ?>}
             .<?php echo $uid; ?> .olo-f-btn:focus-visible{outline:none;box-shadow:0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent)}
             .<?php echo $uid; ?> .olo-f-btn:active{transform:translateY(1px)}
@@ -297,7 +334,7 @@ class Olo_Form_Tile extends Olo_Tile_Base {
             .<?php echo $uid; ?> .olo-f-privacy a{color:var(--olo-color-primary, #e1474f);text-decoration:underline}
             <?php if ( $is_floating ) : ?>
             .<?php echo $uid; ?> .olo-f-float{position:relative}
-            .<?php echo $uid; ?> .olo-f-float-label{position:absolute;top:50%;left:14px;transform:translateY(-50%);color:<?php echo $label_color; ?>;font-size:<?php echo $label_size; ?>px;pointer-events:none;transition:all 0.2s ease;opacity:0.6}
+            .<?php echo $uid; ?> .olo-f-float-label{position:absolute;top:50%;left:14px;transform:translateY(-50%);color:<?php echo $label_color; ?>;font-size:<?php echo $label_size; ?>px;pointer-events:none;transition:all 0.2s ease;opacity:0.6<?php if ( $label_tt && $label_tt !== 'none' ) : ?>;text-transform:<?php echo $label_tt; ?><?php endif; ?><?php if ( $label_ls != 0 ) : ?>;letter-spacing:<?php echo $label_ls; ?>px<?php endif; ?><?php if ( $label_ff ) : ?>;font-family:<?php echo $label_ff; ?><?php endif; ?>}
             .<?php echo $uid; ?> .olo-f-float textarea ~ .olo-f-float-label{top:14px;transform:none}
             .<?php echo $uid; ?> .olo-f-float input:focus ~ .olo-f-float-label,
             .<?php echo $uid; ?> .olo-f-float input:not(:placeholder-shown) ~ .olo-f-float-label,
@@ -671,7 +708,7 @@ class Olo_Form_Tile extends Olo_Tile_Base {
                                 <?php if ( $flabel ) : ?>
                                     <label class="olo-f-label"><?php echo esc_html( $flabel ); ?></label>
                                 <?php endif; ?>
-                                <div class="olo-f-calc-display" data-calc-formula="<?php echo esc_attr( $calc_formula ); ?>" data-calc-decimals="<?php echo $calc_decimals; ?>" data-calc-prefix="<?php echo esc_attr( $calc_prefix ); ?>" data-calc-suffix="<?php echo esc_attr( $calc_suffix ); ?>" style="font-size:20px;font-weight:600;padding:10px 16px;background:<?php echo $input_bg; ?>;color:<?php echo $input_c; ?>;border:<?php echo $border_w; ?>px solid <?php echo $border_c; ?>;border-radius:<?php echo $radius; ?>">
+                                <div class="olo-f-calc-display" data-calc-formula="<?php echo esc_attr( $calc_formula ); ?>" data-calc-decimals="<?php echo $calc_decimals; ?>" data-calc-prefix="<?php echo esc_attr( $calc_prefix ); ?>" data-calc-suffix="<?php echo esc_attr( $calc_suffix ); ?>" style="font-size:20px;font-weight:600;padding:10px 16px;background:<?php echo $input_bg; ?>;color:<?php echo $input_color; ?>;border:<?php echo $bw; ?>px solid <?php echo $input_bc; ?>;border-radius:<?php echo $radius; ?>">
                                     <?php echo $calc_prefix; ?><span class="olo-f-calc-value">0</span><?php echo $calc_suffix; ?>
                                 </div>
                                 <input type="hidden" name="fields[<?php echo esc_attr( $fname ); ?>]" class="olo-f-calc-hidden" value="0" />

@@ -1,4 +1,4 @@
-import { withHover, borderFields } from './_shared.js';
+import { withHover, borderEffectFields } from './_shared.js';
 import { t } from '@/i18n';
 
 /**
@@ -27,34 +27,16 @@ import { t } from '@/i18n';
 const STRUCTURAL_TYPES = new Set(['section', 'row', 'column', 'inner-columns']);
 
 export function styleFieldsBase(tileType) {
-  const isStructural = STRUCTURAL_TYPES.has(tileType);
-  const layoutFields = isStructural
-    ? [
-        // Le tile strutturali hanno controlli larghezza dedicati nel proprio config.
-        // Qui esponiamo solo altezza minima e overflow (utili anche su section/row/column).
-        { key: 'tile_min_height', label: t('Altezza minima'),  type: 'text', responsive: true, placeholder: t('auto (es. 300px, 50vh)') },
-        { key: 'overflow',       label: t('Overflow'),         type: 'select', options: [
-          { value: 'visible', label: t('Visibile') },
-          { value: 'hidden',  label: t('Nascosto') },
-          { value: 'auto',    label: t('Auto (scroll)') },
-        ]},
-      ]
-    : [
-        { key: 'full_width',     label: t('Larghezza piena'),  type: 'toggle' },
-        { key: 'tile_width',     label: t('Larghezza'),        type: 'text', responsive: true, placeholder: t('auto (es. 25%, 200px)') },
-        { key: 'tile_max_width', label: t('Larghezza massima'), type: 'text', responsive: true, placeholder: t('none (es. 600px, 80%)') },
-        { key: 'tile_min_height', label: t('Altezza minima'),  type: 'text', responsive: true, placeholder: t('auto (es. 300px, 50vh)') },
-        { key: 'overflow',       label: t('Overflow'),         type: 'select', options: [
-          { value: 'visible', label: t('Visibile') },
-          { value: 'hidden',  label: t('Nascosto') },
-          { value: 'auto',    label: t('Auto (scroll)') },
-        ]},
-      ];
-
   return [
     // ─── LAYOUT ─────────────────────────────────────────────────
+    // Pannello unico compatto (StyleLayoutStack): larghezza piena (+descrizione), larghezza,
+    // larghezza massima, altezza minima (con SELETTORE UNITÀ), overflow + anteprima vincoli.
+    // Niente switch device qui: il breakpoint si cambia dalla barra in alto (viewMode) e i
+    // campi dimensionali (responsive) lo seguono. Chiavi salvate INVARIATE: full_width,
+    // tile_width[_bp], tile_max_width[_bp], tile_min_height[_bp], overflow. Le tile strutturali
+    // (section/row/column) sono gestite dentro il componente (solo altezza minima + overflow).
     { type: 'separator', label: t('Layout') },
-    ...layoutFields,
+    { type: 'layout-stack' },
 
     // ─── SPAZI & BORDI (pannello unico compatto: margine/padding/raggio) ───
     // Sostituisce le sezioni separate "Spaziatura" e "Border radius" con un solo
@@ -67,36 +49,50 @@ export function styleFieldsBase(tileType) {
     { type: 'separator', label: t('Sfondo') },
     { key: 'bg', label: t('Sfondo'), type: 'background', showParallax: true },
 
-    // ─── BORDO completo ─────────────────────────────────────────
-    // Sistema FieldBorder: 4 lati indipendenti con link/unlink + stile + colore + hover + 4 effetti.
-    // Salva in style.border (oggetto), style.border_hover, style.border_effect_*.
-    // Il PHP frontend renderer (build_wrapper_border_css) lo legge con priorità sul vecchio
-    // sistema legacy (border_width/style/color), che resta come fallback per template salvati prima.
-    // borderFields() inserisce i propri separator "Bordo" e "Effetti bordo" → 2 sezioni.
-    ...borderFields(),
+    // ─── EFFETTI BORDO ──────────────────────────────────────────
+    // Il CONTROLLO bordo (style.border / border_<bp> per-device / border_hover) ora vive
+    // DENTRO il pannello "Spazi & Bordi" (box-stack), accanto a margine/padding/raggio.
+    // Qui resta solo la sezione "Effetti bordo" (neon/gradiente), che opera su border_effect_*
+    // e legge style.border come colore base.
+    // PHP frontend: build_wrapper_border_css (desktop, inline) + collect_responsive_css (border_<bp>).
+    ...borderEffectFields(),
 
     // ─── EFFETTI ────────────────────────────────────────────────
+    // Pannello unico compatto (StyleEffectsStack): ombra, opacità, trasformazione, ombra
+    // testo, filtro sfondo (glassmorphism), maschera + toggle Normale/Hover globale e
+    // anteprima effetti dal vivo. Chiavi salvate INVARIATE e allineate al renderer PHP
+    // (collect_hover_css): shadow/shadow_custom, opacity, transform (oggetto; hover su chiavi
+    // piatte transform_*), text_shadow_*, backdrop_*, mask (non hoverable).
     { type: 'separator', label: t('Effetti') },
-    withHover({ key: 'shadow_block',     label: t('Ombra'),     type: 'shadow-block' }),
-    withHover({ key: 'opacity',          label: t('Opacità'),   type: 'range', min: 0, max: 100, step: 5, default: 100, unit: '%' }),
-    withHover({ key: 'transform',        label: t('Trasformazione'), type: 'transform' }),
-    withHover({ key: 'text_shadow',      label: t('Ombra testo'),     type: 'text-shadow' }),
-    withHover({ key: 'backdrop_filter',  label: t('Filtro sfondo (glassmorphism)'), type: 'backdrop-filter' }),
-    { key: 'mask', label: t('Maschera'), type: 'select', options: [
-      { value: 'none',     label: t('Nessuna') },
-      { value: 'circle',   label: t('Cerchio') },
-      { value: 'triangle', label: t('Triangolo') },
-      { value: 'diamond',  label: t('Diamante') },
-      { value: 'hexagon',  label: t('Esagono') },
-      { value: 'star',     label: t('Stella') },
-      { value: 'blob',     label: t('Blob') },
-      { value: 'wave',     label: t('Onda') },
+    { type: 'effects-stack' },
+
+    // ─── BLEND MODE WRAPPER ─────────────────────────────────────
+    // mix-blend-mode sul wrapper del tile/contenitore: utile per nav/heading che
+    // si invertono sopra hero chiari/scuri (es. 'difference'). Chiave salvata:
+    // style.blend_mode. PHP frontend: apply_common_box_styles → 'mix-blend-mode: …'.
+    { key: 'blend_mode', label: t('Fusione (blend mode)'), type: 'select', default: 'normal', options: [
+      { value: 'normal',      label: t('Normale') },
+      { value: 'multiply',    label: t('Moltiplica') },
+      { value: 'screen',      label: t('Schermo') },
+      { value: 'overlay',     label: t('Sovrapposizione') },
+      { value: 'darken',      label: t('Scurisci') },
+      { value: 'lighten',     label: t('Schiarisci') },
+      { value: 'color-dodge', label: t('Color Dodge') },
+      { value: 'color-burn',  label: t('Color Burn') },
+      { value: 'hard-light',  label: t('Hard Light') },
+      { value: 'soft-light',  label: t('Soft Light') },
+      { value: 'difference',  label: t('Differenza') },
+      { value: 'exclusion',   label: t('Esclusione') },
+      { value: 'hue',         label: t('Tonalità') },
+      { value: 'saturation',  label: t('Saturazione') },
+      { value: 'color',       label: t('Colore') },
+      { value: 'luminosity',  label: t('Luminosità') },
     ]},
 
     // ─── TRANSIZIONE GLOBALE (fallback se i singoli withHover non hanno duration) ──
     { type: 'separator', label: t('Transizione hover (globale)') },
-    { key: 'transition.duration', label: t('Durata (ms)'), type: 'range', min: 0, max: 2000, step: 50, default: 300 },
-    { key: 'transition.easing',   label: t('Easing'), type: 'select', options: [
+    { key: 'transition.duration', label: t('Durata'), type: 'range', min: 0, max: 2000, step: 50, default: 300, unit: 'ms' },
+    { key: 'transition.easing',   label: t('Easing'), type: 'select', default: 'ease', options: [
       { value: 'ease',        label: t('Ease (default)') },
       { value: 'ease-in',     label: t('Ease in') },
       { value: 'ease-out',    label: t('Ease out') },

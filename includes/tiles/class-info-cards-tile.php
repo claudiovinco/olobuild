@@ -136,7 +136,7 @@ class Olo_InfoCards_Tile extends Olo_Tile_Base {
         $hover_effect = in_array( $s['card_hover_effect'] ?? 'none', [ 'none', 'lift', 'scale', 'glow', 'tilt' ], true ) ? $s['card_hover_effect'] : 'none';
 
         $container_style = $container_bg_css . ';' . ( $c_radius ? 'border-radius:' . $c_radius . ';' : '' ) . 'padding:' . $c_pad . 'px;' . ( $c_radius_h ? 'transition:border-radius ' . $c_rdur . 'ms ease;' : '' );
-        $grid_style = 'display:grid;grid-template-columns:repeat(' . $cols . ',1fr);gap:' . $items_gap . 'px;';
+        $grid_style = 'display:grid;grid-template-columns:repeat(' . $cols . ',minmax(0,1fr));gap:' . $items_gap . 'px;';
 
         // Card style template
         $card_style_base = $card_bg_css_default . ';color:' . $card_color . ';' . ( $card_radius ? 'border-radius:' . $card_radius . ';' : '' ) . 'padding:' . $card_pad . 'px;position:relative;display:flex;flex-direction:column;min-height:280px;transition:transform .3s ease,box-shadow .3s ease,border-color .3s ease' . ( $card_radius_h ? ',border-radius ' . $card_rdur . 'ms ease' : '' ) . ';';
@@ -258,12 +258,23 @@ class Olo_InfoCards_Tile extends Olo_Tile_Base {
                     .<?php echo $uid; ?> .olo-icards__card:hover { transform: perspective(800px) rotateX(2deg) rotateY(-2deg) scale(1.02); }
                     <?php break;
             endswitch; ?>
-            @media (max-width: 900px) {
-                .<?php echo $uid; ?> .olo-icards__grid { grid-template-columns: 1fr !important; }
+            <?php
+            // Layout griglia PER-DEVICE: numero colonne e gap configurabili per breakpoint
+            // (columns_<bp> / items_gap_<bp>). Niente più responsive automatico fisso: ogni
+            // breakpoint senza override eredita il desktop (cascade CSS), come gli altri controlli.
+            $ic_bps = [ 'tablet_landscape' => 1200, 'tablet' => 960, 'mobile_landscape' => 640, 'mobile' => 480 ];
+            foreach ( $ic_bps as $ic_bp => $ic_w ) :
+                $ic_c = $s[ 'columns_' . $ic_bp ]   ?? '';
+                $ic_g = $s[ 'items_gap_' . $ic_bp ] ?? '';
+                if ( $ic_c === '' && $ic_g === '' ) { continue; }
+                $ic_decls = '';
+                if ( $ic_c !== '' ) { $ic_decls .= 'grid-template-columns:repeat(' . max( 1, min( 6, absint( $ic_c ) ) ) . ',minmax(0,1fr)) !important;'; }
+                if ( $ic_g !== '' ) { $ic_decls .= 'gap:' . max( 0, min( 60, absint( $ic_g ) ) ) . 'px !important;'; }
+                ?>
+            @media (max-width: <?php echo $ic_w; ?>px) {
+                .<?php echo $uid; ?> .olo-icards__grid { <?php echo $ic_decls; ?> }
             }
-            @media (min-width: 901px) and (max-width: 1200px) {
-                .<?php echo $uid; ?> .olo-icards__grid { grid-template-columns: repeat(<?php echo min( $cols, 3 ); ?>, 1fr) !important; }
-            }
+            <?php endforeach; ?>
         </style>
         <?php
         return ob_get_clean();

@@ -17,7 +17,7 @@
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mb-text-primary-400">
                 <rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/>
               </svg>
-              <h3 class="mb-text-white mb-text-sm mb-font-semibold mb-m-0">{{ t('Libreria Template') }}</h3>
+              <h3 class="mb-text-white mb-text-sm mb-font-semibold mb-m-0">{{ t('Blocchi & Pagine') }}</h3>
             </div>
             <!-- Search -->
             <div class="mb-flex mb-items-center mb-gap-3">
@@ -378,11 +378,18 @@ const pageInsertMode = ref(null); // null, 'replace', 'append'
 const pendingPageTpl = ref(null);
 
 function onCardClick(tpl) {
-  if (tpl.category === 'page' && tilesStore.canvasTiles.length > 0) {
-    pendingPageTpl.value = tpl;
-    pageInsertMode.value = 'ask';
+  if (tpl.category === 'page') {
+    // Pagina completa: con canvas già pieno chiedi (sostituisci/accoda),
+    // su canvas vuoto sostituisci direttamente.
+    if (tilesStore.canvasTiles.length > 0) {
+      pendingPageTpl.value = tpl;
+      pageInsertMode.value = 'ask';
+    } else {
+      insertTemplate(tpl, 'replace');
+    }
   } else {
-    insertTemplate(tpl, 'replace');
+    // Blocco/sezione: si accoda in fondo alla pagina, non la sostituisce.
+    insertTemplate(tpl, 'append');
   }
 }
 
@@ -666,7 +673,9 @@ async function insertTemplate(tpl, mode = 'append') {
       tilesStore.canvasTiles.push(node);
     }
     builderStore.isDirty = true;
-    toast.success(t(`Template "${tpl.name}" inserito`));
+    toast.success(mode === 'append'
+      ? t(`"${tpl.name}" aggiunto in fondo`)
+      : t(`"${tpl.name}" caricato`));
     close();
   } catch (err) {
     console.error('insertTemplate error:', err);

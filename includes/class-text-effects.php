@@ -245,25 +245,39 @@ class Olo_Text_Effects {
     ws.forEach(function(w,i){ w.style.opacity='0'; w.style.filter='blur(6px)'; w.style.transition='opacity .5s, filter .5s, transform .5s'; w.style.display='inline-block'; w.style.transform='translateY(10px)'; setTimeout(function(){ w.style.opacity='1'; w.style.filter='blur(0)'; w.style.transform='translateY(0)'; }, opts.delay + i*opts.speed); });
   }
   function scramble(el, opts){
-    var full = el.getAttribute('data-fx-original') || getTextWithBreaks(el);
-    el.setAttribute('data-fx-original', full);
     var chars = '!@#$%^&*()_+-=[]{}|;:,.<>?ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    var len = full.length, frame = 0, totalFrames = Math.ceil(len*opts.speed/30);
-    function step(){
-      var output = '';
-      for (var i=0;i<len;i++){
-        var revealAt = (i/len)*totalFrames;
-        if (full[i] === '\n') { output += '\n'; continue; }
-        if (full[i] === ' ')  { output += ' '; continue; }
-        if (frame >= revealAt){ output += full[i]; }
-        else { output += chars[Math.floor(Math.random()*chars.length)]; }
-      }
-      el.innerHTML = htmlEscapeWithBreaks(output);
-      frame++;
-      if (frame <= totalFrames + 5) requestAnimationFrame(step);
-      else if (opts.loop){ setTimeout(function(){ frame=0; step(); }, 2500); }
+    // Cycle mode: se sono fornite più frasi (data-fx-phrases, una per riga) lo scramble
+    // CICLA tra le parole (MOVE→SHINE→SPEAK→…) come il blueprint NOVA, anziché
+    // ri-scramblare sempre lo stesso testo. Fallback: single-word re-scramble in loop.
+    var phrases = (opts.phrases||'').split(/\n+/).map(function(s){return s.trim();}).filter(Boolean);
+    function scrambleTo(target, onDone){
+      el.setAttribute('data-fx-original', target);
+      var len = target.length, frame = 0, totalFrames = Math.ceil(len*opts.speed/30) + 6;
+      (function step(){
+        var output = '';
+        for (var i=0;i<len;i++){
+          var revealAt = (i/len)*totalFrames;
+          if (target[i] === '\n') { output += '\n'; continue; }
+          if (target[i] === ' ')  { output += ' '; continue; }
+          output += (frame >= revealAt) ? target[i] : chars[Math.floor(Math.random()*chars.length)];
+        }
+        el.innerHTML = htmlEscapeWithBreaks(output);
+        frame++;
+        if (frame <= totalFrames + 5) requestAnimationFrame(step);
+        else if (onDone) onDone();
+      })();
     }
-    setTimeout(step, opts.delay);
+    if (phrases.length >= 2){
+      var wi = 0;
+      el.textContent = phrases[0];
+      setTimeout(function(){
+        scrambleTo(phrases[0]);
+        setInterval(function(){ wi = (wi+1) % phrases.length; scrambleTo(phrases[wi]); }, Math.max(1200, opts.pause||2600));
+      }, opts.delay);
+    } else {
+      var full = el.getAttribute('data-fx-original') || getTextWithBreaks(el);
+      setTimeout(function(){ scrambleTo(full, opts.loop ? function(){ setTimeout(function(){ scrambleTo(full); }, 2500); } : null); }, opts.delay);
+    }
   }
   function activateGrow(el){ el.classList.add('olo-tfx-active'); }
   function activateWave(el){ if(!el.querySelector('.olo-tfx-char')) splitIntoChars(el); }

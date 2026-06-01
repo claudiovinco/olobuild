@@ -32,14 +32,28 @@ class Olo_Button_Tile extends Olo_Tile_Base {
         'icon_spacing'       => '8',
         'border_width'       => '0',
         'border_color'       => '',
+        // Ombra NORMALE: preset (shadow) + custom (shadow_h/v/blur/spread/color/inset)
         'shadow'             => 'none',
+        'shadow_h'           => 0,
+        'shadow_v'           => 0,
+        'shadow_blur'        => 0,
+        'shadow_spread'      => 0,
+        'shadow_color'       => 'rgba(0,0,0,0.15)',
+        'shadow_inset'       => false,
         'hover_bg_color'     => '',
         'hover_text_color'   => '',
         'hover_border_color' => '',
-        'hover_shadow'       => '',
         'hover_effect'       => 'lift',
-        'hover_image'             => '',
-        'hover_video'             => '',
+        'hover_image'        => '',
+        'hover_video'        => '',
+        // Ombra HOVER: '' = invariata; preset oppure custom (hover_shadow_h/v/blur/spread/color/inset)
+        'hover_shadow'        => '',
+        'hover_shadow_h'      => 0,
+        'hover_shadow_v'      => 0,
+        'hover_shadow_blur'   => 0,
+        'hover_shadow_spread' => 0,
+        'hover_shadow_color'  => 'rgba(0,0,0,0.15)',
+        'hover_shadow_inset'  => false,
         'border'                  => [],
         'border_hover'            => [],
         'border_hover_duration'   => 300,
@@ -164,13 +178,17 @@ class Olo_Button_Tile extends Olo_Tile_Base {
 
         // Shadow — variant 'button' usa ombre più visibili (alpha 18-35%)
         // invece dei valori "standard" troppo deboli (8-15%) per bottoni colorati.
-        $shadow = Olo_Tile_Utils::shadow( $s['shadow'] ?? 'none', 'button' );
+        // shadow_value() gestisce sia i preset (sm/md/lg/xl) sia 'custom' (shadow_h/v/blur/
+        // spread/color/inset). Prima si usava shadow() preset-only → l'ombra custom era ignorata.
+        $shadow = Olo_Tile_Utils::shadow_value( $s, 'shadow', 'button' );
 
         // Hover colors
         $hover_bg     = $this->safe_color_css( $s['hover_bg_color'] );
         $hover_fg     = $this->safe_color_css( $s['hover_text_color'] );
         $hover_bc     = $this->safe_color_css( $s['hover_border_color'] );
-        $hover_shadow = ( $s['hover_shadow'] !== '' ) ? Olo_Tile_Utils::shadow( $s['hover_shadow'], 'button' ) : '';
+        // Hover shadow: '' = invariata (nessun override al hover). Altrimenti preset o custom
+        // (hover_shadow_h/v/blur/spread/color/inset) via shadow_value() con prefix 'hover_shadow'.
+        $hover_shadow = ( ( $s['hover_shadow'] ?? '' ) !== '' ) ? Olo_Tile_Utils::shadow_value( $s, 'hover_shadow', 'button' ) : '';
         $hover_effect = $s['hover_effect'] ?? 'lift';
 
         // Hover image/video

@@ -1057,6 +1057,7 @@
                 <select :value="tileAdvanced.infinite_animation || 'none'" @change="updateAdvanced('infinite_animation', $event.target.value)" class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1 mb-text-sm mb-text-gray-900">
                   <option value="none">Nessuna</option>
                   <option value="float">Galleggiamento</option>
+                  <option value="float-rot">Galleggiamento + rotazione</option>
                   <option value="pulse">Pulsazione</option>
                   <option value="spin">Rotazione</option>
                   <option value="wiggle">Dondolio</option>
@@ -1069,6 +1070,14 @@
                 <div>
                   <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Velocità: {{ tileAdvanced.infinite_speed || 3 }}s</label>
                   <input type="range" min="1" max="10" step="0.5" :value="tileAdvanced.infinite_speed || 3" @input="updateAdvanced('infinite_speed', $event.target.value)" class="mb-w-full mb-accent-primary-500" />
+                </div>
+                <div v-if="['float','float-rot','bounce'].includes(tileAdvanced.infinite_animation)">
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Ampiezza: {{ tileAdvanced.infinite_amplitude || (tileAdvanced.infinite_animation === 'bounce' ? 15 : 12) }}px</label>
+                  <input type="range" min="2" max="60" step="1" :value="tileAdvanced.infinite_amplitude || (tileAdvanced.infinite_animation === 'bounce' ? 15 : 12)" @input="updateAdvanced('infinite_amplitude', $event.target.value)" class="mb-w-full mb-accent-primary-500" />
+                </div>
+                <div>
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Ritardo: {{ tileAdvanced.infinite_delay || 0 }}ms</label>
+                  <input type="range" min="0" max="3000" step="100" :value="tileAdvanced.infinite_delay || 0" @input="updateAdvanced('infinite_delay', $event.target.value)" class="mb-w-full mb-accent-primary-500" />
                 </div>
                 <div>
                   <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Direzione</label>
@@ -5182,6 +5191,8 @@ const TILE_PRESETS = {
     'sticker-fun':     { bg_color: '#fef3c7', input_bg: '#fff', input_color: '#78350f', input_border_color: '#fbbf24', input_border_width: 2, label_color: '#78350f', submit_bg: '#fbbf24', submit_color: '#fff', check_accent_color: '#fbbf24', check_bg: '#fff', check_border_color: '#fbbf24' },
     'retro-terminal':  { bg_color: '#0a0a0a', input_bg: '#0a0a0a', input_color: '#22c55e', input_border_color: '#22c55e', input_border_width: 1, label_color: '#22c55e', submit_bg: '#22c55e', submit_color: '#0a0a0a', check_accent_color: '#22c55e', check_bg: '#0a0a0a', check_border_color: '#22c55e' },
     'tilt-3d':         { bg_color: '#6366f1', input_bg: '#fff', input_color: '#312e81', input_border_color: '#312e81', input_border_width: 1, label_color: '#fff', submit_bg: '#312e81', submit_color: '#fff', check_accent_color: '#fff', check_bg: '#fff', check_border_color: '#312e81' },
+    // Editoriale dark / studio: input "underline" trasparenti, label uppercase tracciate, CTA terracotta full-width (stile Studio Càrdo).
+    'underline-dark':  { bg_color: '#211f1c', input_bg: 'transparent', input_color: '#f4efe7', input_border_color: 'rgba(244,239,231,0.22)', input_border_width: 1, input_border_style: 'underline', input_focus_border: '#c6a888', label_color: '#c6a888', label_transform: 'uppercase', label_letter_spacing: 2, submit_bg: '#bd5b38', submit_color: '#ffffff', submit_text_transform: 'uppercase', submit_letter_spacing: 1.5, submit_full_width: true, check_accent_color: '#bd5b38', check_bg: 'transparent', check_border_color: 'rgba(244,239,231,0.4)' },
   },
   newsletter: {
     // v1.0.58 — preset self-contained: aggiunti bg_color, title_color, subtitle_color, icon_color, input_*, btn_*.

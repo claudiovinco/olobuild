@@ -261,10 +261,23 @@ class Olo_Animation_Builder {
         if ( $anim === 'none' || $anim === '' ) {
             return '';
         }
+        // NB: ritorna SOLO la dichiarazione `animation:` inline; i @keyframes globali
+        // (olo-anim-float, ecc.) sono definiti in frontend.css. Storicamente mancavano
+        // per float/float-rot → ora aggiunti al foglio. Direzione + (additive) speed.
+        $valid = [ 'float', 'float-rot', 'pulse', 'spin', 'wiggle', 'bounce', 'swing', 'breathe' ];
+        if ( ! in_array( $anim, $valid, true ) ) {
+            return '';
+        }
         $speed = floatval( $advanced['infinite_speed'] ?? 3 );
+        if ( $speed <= 0 ) $speed = 3;
         $dir   = $advanced['infinite_direction'] ?? 'normal';
+        if ( ! in_array( $dir, [ 'normal', 'reverse', 'alternate', 'alternate-reverse' ], true ) ) {
+            $dir = 'normal';
+        }
+        $delay = max( 0, min( 5000, intval( $advanced['infinite_delay'] ?? 0 ) ) );
+        $delay_css = $delay > 0 ? ' ' . $delay . 'ms' : '';
         $name  = 'olo-anim-' . sanitize_html_class( $anim );
-        return "animation: {$name} {$speed}s {$dir} infinite";
+        return "animation: {$name} {$speed}s ease-in-out{$delay_css} {$dir} infinite";
     }
 
     /**

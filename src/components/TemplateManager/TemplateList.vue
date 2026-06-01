@@ -11,7 +11,11 @@
         </div>
       </div>
       <div class="spc"></div>
-      <button class="btn-sec" @click="triggerImport" :title="t('Importa un template da JSON')">
+      <button class="btn-sec" :class="{ on: selectMode }" @click="toggleSelectMode" :title="t('Seleziona più template per esportarli come tema')">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        {{ selectMode ? t('Annulla') : t('Seleziona') }}
+      </button>
+      <button class="btn-sec" @click="triggerImport" :title="t('Importa un template o un tema da JSON')">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v12M7 9l5-5 5 5M5 20h14"/></svg>
         {{ t('Importa') }}
       </button>
@@ -40,6 +44,17 @@
           </div>
         </div>
       </div>
+    </div>
+
+    <!-- ═══ Barra selezione (export tema) ════════════════════════════ -->
+    <div v-if="selectMode" class="tpl-selbar">
+      <span class="cnt">{{ selectedCount }} {{ t('selezionati') }}</span>
+      <button class="btn-sec" @click="selectAllFiltered">{{ t('Seleziona tutti') }}</button>
+      <div class="spc"></div>
+      <button class="btn-pri" :disabled="!selectedCount" @click="openBundleExport">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v12M7 9l5-5 5 5M5 20h14"/></svg>
+        {{ t('Esporta tema') }}<template v-if="selectedCount"> ({{ selectedCount }})</template>
+      </button>
     </div>
 
     <!-- ═══ Toolbar ══════════════════════════════════════════════════ -->
@@ -103,7 +118,10 @@
 
     <!-- Grid view -->
     <div v-else-if="layout === 'grid'" class="tpl-grid">
-      <div v-for="tpl in filteredSorted" :key="tpl.id" class="tpl-card" @click="editTemplate(tpl.id)">
+      <div v-for="tpl in filteredSorted" :key="tpl.id" class="tpl-card" :class="{ 'sel-on': selectMode && isSelected(tpl.id) }" @click="onCardClick(tpl)">
+        <div v-if="selectMode" class="sel-check" :class="{ on: isSelected(tpl.id) }" @click.stop="toggleSelect(tpl.id)">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+        </div>
         <div class="thumb">
           <img v-if="tpl.thumbnail" :src="tpl.thumbnail" :alt="tpl.title || ''" loading="lazy" class="thumb-img" />
           <TplPreviewShape v-else :kind="previewKindFor(tpl)" :type="tpl.type" />
@@ -169,9 +187,12 @@
         <span>{{ t('Modificato') }}</span>
         <span></span>
       </div>
-      <div v-for="tpl in filteredSorted" :key="tpl.id" class="row" @click="editTemplate(tpl.id)">
+      <div v-for="tpl in filteredSorted" :key="tpl.id" class="row" :class="{ 'sel-on': selectMode && isSelected(tpl.id) }" @click="onCardClick(tpl)">
         <div class="mini-thumb" :style="miniThumbStyle(tpl)">
           <img v-if="tpl.thumbnail" :src="tpl.thumbnail" alt="" loading="lazy" />
+          <span v-if="selectMode" class="sel-check list" :class="{ on: isSelected(tpl.id) }" @click.stop="toggleSelect(tpl.id)">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+          </span>
         </div>
         <div class="ttl-cell">
           <div class="ttl">{{ tpl.title || t('Senza titolo') }}</div>
@@ -222,6 +243,24 @@
         </div>
       </div>
     </Teleport>
+
+    <!-- Esporta tema (bundle) -->
+    <Teleport to="body">
+      <div v-if="bundleDialogVisible" class="tpl-export-overlay" @click.self="bundleDialogVisible = false">
+        <div class="tpl-export-dialog">
+          <h3>{{ t('Esporta tema') }}</h3>
+          <p>{{ selectedCount }} {{ t('template verranno inclusi nel file del tema (re-importabile).') }}</p>
+          <label class="fld"><span>{{ t('Nome tema') }}</span>
+            <input type="text" v-model="bundleName" :placeholder="t('Tema Olobuild')" /></label>
+          <label class="fld"><span>{{ t('Descrizione (opzionale)') }}</span>
+            <input type="text" v-model="bundleDesc" /></label>
+          <div class="actions-row">
+            <button @click="bundleDialogVisible = false" class="btn-sec">{{ t('Annulla') }}</button>
+            <button @click="doBundleExport" :disabled="bundleLoading" class="btn-pri">{{ bundleLoading ? t('Esportazione…') : t('Esporta .json') }}</button>
+          </div>
+        </div>
+      </div>
+    </Teleport>
   </div>
 </template>
 
@@ -256,6 +295,58 @@ const renameDraft = ref('');
 const renameInputRef = ref(null);
 const importFileRef = ref(null);
 const toastMsg = ref('');
+
+/* ─── Selezione multipla + export "tema" (bundle di template) ──────── */
+const selectMode = ref(false);
+const selectedIds = ref([]);
+const selectedCount = computed(() => selectedIds.value.length);
+function isSelected(id) { return selectedIds.value.includes(id); }
+function toggleSelect(id) {
+  const i = selectedIds.value.indexOf(id);
+  if (i === -1) selectedIds.value.push(id); else selectedIds.value.splice(i, 1);
+}
+function exitSelectMode() { selectMode.value = false; selectedIds.value = []; }
+function toggleSelectMode() { selectMode.value ? exitSelectMode() : (selectMode.value = true); }
+function onCardClick(tpl) { if (selectMode.value) toggleSelect(tpl.id); else editTemplate(tpl.id); }
+function selectAllFiltered() { selectedIds.value = filteredSorted.value.map(x => x.id); }
+
+const bundleDialogVisible = ref(false);
+const bundleName = ref('Tema Olobuild');
+const bundleDesc = ref('');
+const bundleLoading = ref(false);
+function openBundleExport() {
+  if (!selectedCount.value) return;
+  bundleName.value = 'Tema Olobuild';
+  bundleDesc.value = '';
+  bundleDialogVisible.value = true;
+}
+async function doBundleExport() {
+  bundleLoading.value = true;
+  try {
+    const res = await fetch(`${oloData.restUrl}/templates/export-bundle`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': oloData.nonce },
+      body: JSON.stringify({ ids: selectedIds.value, name: bundleName.value, description: bundleDesc.value }),
+    });
+    if (!res.ok) throw new Error('Export bundle failed');
+    const data = await res.json();
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `tema-${(data.name || 'olobuild').replace(/[^a-z0-9]/gi, '-').toLowerCase()}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    bundleDialogVisible.value = false;
+    exitSelectMode();
+    showToast(t('Tema esportato'));
+  } catch (err) {
+    console.error(err);
+    alert(t('Errore durante l\'esportazione del tema.'));
+  } finally {
+    bundleLoading.value = false;
+  }
+}
 
 /* ─── Sort options ─────────────────────────────────────────────────── */
 const sortOptions = [
@@ -543,11 +634,14 @@ async function handleImportFile(e) {
     const json = JSON.parse(text);
     const isOld = json.olo_export === 'template';
     const isNew = json.format === 'olobuild-template';
-    if (!isOld && !isNew) {
-      alert(t('File non valido: non è un export Olobuild template.'));
+    const isBundle = json.olo_export === 'theme-bundle';
+    if (!isOld && !isNew && !isBundle) {
+      alert(t('File non valido: non è un export Olobuild (template o tema).'));
       return;
     }
-    const endpoint = isNew ? `${oloData.restUrl}/import-template` : `${oloData.restUrl}/templates/import`;
+    const endpoint = isBundle
+      ? `${oloData.restUrl}/templates/import-bundle`
+      : (isNew ? `${oloData.restUrl}/import-template` : `${oloData.restUrl}/templates/import`);
     const res = await fetch(endpoint, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': oloData.nonce },
@@ -557,8 +651,9 @@ async function handleImportFile(e) {
       const err = await res.json();
       throw new Error(err.message || 'Import failed');
     }
+    const result = await res.json().catch(() => ({}));
     await fetchTemplates();
-    showToast(t('Importato'));
+    showToast(isBundle ? (t('Tema importato') + ': ' + (result.imported || 0) + ' template') : t('Importato'));
   } catch (err) {
     console.error(err);
     alert(t('Errore importazione') + ': ' + err.message);
@@ -1151,4 +1246,50 @@ import TplPreviewShape from './TplPreviewShape.vue';
 .tpl-export-dialog .btn-pri { background: #4a8c2a; color: #fff; }
 .tpl-export-dialog .btn-pri:disabled { opacity: .6; cursor: not-allowed; }
 .tpl-export-dialog .btn-sec { background: #fff; color: #1e293b; border-color: #e2e8f0; }
+.tpl-export-dialog .fld { display: flex; flex-direction: column; gap: 4px; margin-bottom: 12px; align-items: stretch; }
+.tpl-export-dialog .fld span { font-size: 12px; font-weight: 600; color: #1e293b; }
+.tpl-export-dialog .fld input { width: 100%; height: auto; padding: 8px 10px; border: 1px solid #e2e8f0; border-radius: 7px; font: inherit; font-size: 13px; outline: 0; accent-color: initial; box-sizing: border-box; }
+.tpl-export-dialog .fld input:focus { border-color: var(--ot-primary); box-shadow: 0 0 0 3px rgba(74,140,42,.15); }
+
+/* ── Selezione multipla + barra export tema ──────────────────────── */
+.tpl-head .btn-sec.on { background: var(--ot-text); color: #fff; border-color: var(--ot-text); }
+.tpl-selbar {
+  display: flex; align-items: center; gap: 10px;
+  background: #1e293b; color: #fff;
+  border-radius: 10px; padding: 8px 12px;
+  font-size: 13px; flex-shrink: 0;
+}
+.tpl-selbar .cnt { font-weight: 600; }
+.tpl-selbar .spc { flex: 1; }
+.tpl-selbar .btn-sec {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(255,255,255,.12); color: #fff;
+  border: 1px solid rgba(255,255,255,.2);
+  padding: 6px 12px; border-radius: 7px;
+  font: inherit; font-size: 12px; font-weight: 600; cursor: pointer;
+}
+.tpl-selbar .btn-sec:hover { background: rgba(255,255,255,.22); }
+.tpl-selbar .btn-pri {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--ot-primary); color: #fff; border: 0;
+  padding: 6px 14px; border-radius: 7px;
+  font: inherit; font-size: 12px; font-weight: 700; cursor: pointer;
+}
+.tpl-selbar .btn-pri:disabled { opacity: .5; cursor: not-allowed; }
+.tpl-card .sel-check {
+  position: absolute; top: 10px; left: 10px; z-index: 5;
+  width: 24px; height: 24px; border-radius: 6px;
+  background: #fff; border: 2px solid var(--ot-border);
+  display: grid; place-items: center; color: transparent;
+  box-shadow: 0 2px 6px rgba(0,0,0,.14); cursor: pointer;
+}
+.tpl-card .sel-check.on { background: var(--ot-primary); border-color: var(--ot-primary); color: #fff; }
+.tpl-card.sel-on { border-color: var(--ot-primary); box-shadow: 0 0 0 2px var(--ot-primary); }
+.tpl-list .mini-thumb .sel-check.list {
+  position: absolute; inset: 0; z-index: 3;
+  display: grid; place-items: center;
+  background: rgba(30,41,59,.35); color: transparent; cursor: pointer;
+}
+.tpl-list .mini-thumb .sel-check.list.on { background: var(--ot-primary); color: #fff; }
+.tpl-list .row.sel-on { background: var(--ot-primary-50); }
 </style>

@@ -79,6 +79,12 @@ class Olo_CSS_Builder {
         if ( $bg['type'] === 'pattern' && ! empty( $bg['pattern_type'] ) ) {
             return $this->build_pattern_css( $bg );
         }
+        if ( $bg['type'] === 'mesh' ) {
+            return $this->build_mesh_css( $bg );
+        }
+        if ( $bg['type'] === 'glow' ) {
+            return $this->build_glow_css( $bg );
+        }
         if ( $bg['type'] === 'image' && ! empty( $bg['image_url'] ) ) {
             $url      = esc_url_raw( $bg['image_url'] );
             $position = sanitize_text_field( $bg['image_position'] ?? 'center center' );
@@ -191,6 +197,197 @@ class Olo_CSS_Builder {
         }
         $angle = intval( $bg['gradient_angle'] ?? 180 );
         return "background: linear-gradient({$angle}deg, {$from}, {$to})";
+    }
+
+    /**
+     * Build "mesh / aurora" background CSS — gradiente multi-blob sfocato riusabile
+     * su qualsiasi Section/contenitore (stesso look del preset hero gradient-aurora).
+     *
+     * Composto da 2-3 radial-gradient morbidi (i "blob") sovrapposti a un colore base.
+     * I colori arrivano come ruoli token (es. var(--olo-color-primary)) — niente hex
+     * hardcoded. Drift opzionale: anima background-position via keyframe globale
+     * `olo-mesh-drift` (definita in frontend.css), referenziabile inline.
+     *
+     * Chiavi lette: mesh_c1, mesh_c2, mesh_c3 (color), mesh_base (color di fondo),
+     * mesh_animate (bool), mesh_speed (secondi). Tutte opzionali con default sensati.
+     *
+     * @param array $bg Background config.
+     * @return string CSS declaration string (background-color + background-image [+ animation]).
+     */
+    public function build_mesh_css( $bg ) {
+        $c1   = esc_attr( $bg['mesh_c1'] ?? 'var(--olo-color-primary)' );
+        $c2   = esc_attr( $bg['mesh_c2'] ?? 'var(--olo-color-secondary)' );
+        $c3   = esc_attr( $bg['mesh_c3'] ?? 'var(--olo-color-accent)' );
+        $base = esc_attr( $bg['mesh_base'] ?? 'var(--olo-color-background, #0b0a0d)' );
+
+        // Tre blob radiali in posizioni gradevoli; fade a trasparente per fondersi.
+        $blobs = [
+            "radial-gradient(60% 60% at 20% 25%, {$c1} 0%, transparent 60%)",
+            "radial-gradient(55% 55% at 80% 30%, {$c2} 0%, transparent 60%)",
+            "radial-gradient(70% 70% at 50% 90%, {$c3} 0%, transparent 65%)",
+        ];
+        $css = 'background-color: ' . $base
+             . '; background-image: ' . implode( ', ', $blobs )
+             . '; background-repeat: no-repeat';
+
+        if ( ! empty( $bg['mesh_animate'] ) ) {
+            // background-size > 100% così c'è spazio per lo scorrimento del drift.
+            $speed = max( 4, min( 60, intval( $bg['mesh_speed'] ?? 18 ) ) );
+            $css  .= '; background-size: 160% 160%'
+                   . '; animation: olo-mesh-drift ' . $speed . 's ease-in-out infinite alternate';
+        }
+
+        return $css;
+    }
+
+    /**
+     * Gemello PHP di src/utils/glowCSS.js (getGlowCSS).
+     * Sfondo "Bagliori": aloni radial-gradient morbidi (no filter:blur) + grana SVG
+     * opzionale. Colore dal ruolo globale del cliente: token (var()/color-mix()) →
+     * applica l'alfa con color-mix(in srgb, … X%, transparent); hex/rgba → rgba().
+     * DEVE produrre la stessa stringa background-* della preview Vue e del canvas.
+     *
+     * @param array $bg  config con chiavi glow_* (glow_base, glow_color, glow_color2,
+     *                   glow_preset, glow_intensity, glow_size, glow_grain).
+     * @return string  background-color + background-image (+ repeat/size).
+     */
+    public function build_glow_css( $bg ) {
+        $hotspots_map = [
+            'spread'    => [ [ 12, 6, 1.15 ], [ 88, 30, 0.9 ] ],
+            'top'       => [ [ 50, -8, 1.25 ] ],
+            'top-left'  => [ [ 8, 4, 1.2 ] ],
+            'top-right' => [ [ 92, 6, 1.2 ] ],
+            'center'    => [ [ 50, 42, 1.1 ] ],
+            'corners'   => [ [ 4, 4, 0.95 ], [ 96, 96, 0.95 ] ],
+            'aurora'    => [ [ 30, 108, 1.3 ], [ 74, 116, 1.0 ] ],
+        ];
+
+        $base      = $bg['glow_base'] ?: '#0b0d12';
+        $c1        = $bg['glow_color'] ?: 'var(--olo-color-primary)';
+        $c2        = ! empty( $bg['glow_color2'] ) ? $bg['glow_color2'] : $c1;
+        $preset    = $bg['glow_preset'] ?? 'spread';
+        $intensity = ( isset( $bg['glow_intensity'] ) ? intval( $bg['glow_intensity'] ) : 55 ) / 100;
+        $size_pct  = isset( $bg['glow_size'] ) ? intval( $bg['glow_size'] ) : 70;
+        $hotspots  = $hotspots_map[ $preset ] ?? $hotspots_map['spread'];
+
+        $layers = [];
+        foreach ( $hotspots as $i => $h ) {
+            $color  = ( $i % 2 === 0 ) ? $c1 : $c2;
+            $stop   = max( 20, min( 110, (int) round( $size_pct * $h[2] ) ) );
+            $a      = min( 1, $intensity * ( $i === 0 ? 1 : 0.8 ) );
+            $core   = $this->glow_color_to_css( $color, $a );
+            $mid    = $this->glow_color_to_css( $color, $a * 0.45 );
+            $fade   = $this->glow_color_to_css( $color, 0 );
+            $midpos = (int) round( $stop * 0.42 );
+            $layers[] = "radial-gradient(circle at {$h[0]}% {$h[1]}%, {$core} 0%, {$mid} {$midpos}%, {$fade} {$stop}%)";
+        }
+
+        if ( ! isset( $bg['glow_grain'] ) || $bg['glow_grain'] !== false ) {
+            $layers[] = $this->glow_grain_layer( 0.06 );
+        }
+
+        $css = 'background-color:' . esc_attr( $base )
+             . ';background-image:' . implode( ', ', $layers )
+             . ';background-repeat:no-repeat';
+
+        // Animazione bagliori (additive). Anima solo background-size/position → aloni
+        // dinamici senza muovere il contenuto. Speculare a glowAnimStyle() in glowCSS.js;
+        // @keyframes olo-glow-* in frontend.css. A riposo bg-size 140% per dare margine.
+        $anim = $bg['glow_anim'] ?? 'none';
+        $combo_map = [
+            'vivo'     => [ 'size' => 'olo-glow-size-breathe', 'pos' => 'olo-glow-pos-orbit', 'ease' => 'ease-in-out', 'mult' => 1.6 ],
+            'tempesta' => [ 'size' => 'olo-glow-size-throb',   'pos' => 'olo-glow-pos-sway',  'ease' => 'ease-in-out', 'mult' => 0.7 ],
+        ];
+        $valid_anim = [ 'pulse', 'drift', 'wander', 'flicker', 'scroll' ];
+        // Intensità respiro → custom property min/max (solo modalità che animano background-size).
+        // Speculare a breatheVars() in glowCSS.js. Default 46 = valori storici (nessuna regressione).
+        $breathe_vars = '';
+        if ( in_array( $anim, [ 'pulse', 'vivo' ], true ) && isset( $bg['glow_anim_intensity'] ) && $bg['glow_anim_intensity'] !== '' ) {
+            $tt   = max( 0, min( 100, intval( $bg['glow_anim_intensity'] ) ) ) / 100;
+            $bmin = (int) round( 135 - $tt * 40 );
+            $bmax = (int) round( 160 + $tt * 70 );
+            $breathe_vars = ';--olo-glow-bs-min:' . $bmin . '%;--olo-glow-bs-max:' . $bmax . '%';
+        }
+        if ( isset( $combo_map[ $anim ] ) ) {
+            // Preset combinato: due animazioni atomiche su durate diverse.
+            $sp   = max( 1, min( 10, isset( $bg['glow_anim_speed'] ) ? intval( $bg['glow_anim_speed'] ) : 6 ) );
+            $dur  = max( 2, (int) round( ( 11 - $sp ) * 1.5 ) );
+            $c    = $combo_map[ $anim ];
+            $dur2 = max( 2, (int) round( $dur * $c['mult'] ) );
+            $css .= ';background-size:140% 140%;background-position:center' . $breathe_vars
+                  . ';animation:' . $c['size'] . ' ' . $dur . 's ' . $c['ease'] . ' infinite, '
+                  . $c['pos'] . ' ' . $dur2 . 's ' . $c['ease'] . ' infinite';
+        } elseif ( in_array( $anim, $valid_anim, true ) ) {
+            $sp  = max( 1, min( 10, isset( $bg['glow_anim_speed'] ) ? intval( $bg['glow_anim_speed'] ) : 6 ) );
+            $dur = max( 2, (int) round( ( 11 - $sp ) * 1.5 ) );
+            $ease_map = [ 'pulse' => 'ease-in-out', 'drift' => 'ease-in-out', 'wander' => 'ease-in-out', 'flicker' => 'steps(1,end)', 'scroll' => 'linear' ];
+            $ease = $ease_map[ $anim ];
+            $css .= ';background-size:140% 140%;background-position:center' . $breathe_vars
+                  . ';animation:olo-glow-' . $anim . ' ' . $dur . 's ' . $ease . ' infinite';
+            if ( $anim === 'scroll' ) {
+                $css .= ';animation-timeline:view()';
+            }
+        } else {
+            $css .= ';background-size:cover';
+        }
+
+        return $css;
+    }
+
+    /**
+     * Converte hex|rgba|var(--token) + alfa (0-1) in colore CSS valido.
+     * Token globale → color-mix() per applicare l'alfa (segue il ruolo del cliente).
+     * Speculare a glowColorToCss() in glowCSS.js.
+     */
+    private function glow_color_to_css( $input, $alpha ) {
+        $s = trim( (string) ( $input ?: '#e1474f' ) );
+        $alpha = max( 0, min( 1, (float) $alpha ) );
+        if ( strpos( $s, 'var(' ) === 0 || strpos( $s, 'color-mix(' ) === 0 ) {
+            $pct = (int) round( $alpha * 100 );
+            return "color-mix(in srgb, {$s} {$pct}%, transparent)";
+        }
+        if ( preg_match( '/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*(?:,\s*([\d.]+))?\s*\)/', $s, $m ) ) {
+            $r = (int) $m[1]; $g = (int) $m[2]; $b = (int) $m[3];
+            $a = isset( $m[4] ) ? (float) $m[4] : 1.0;
+            return 'rgba(' . $r . ', ' . $g . ', ' . $b . ', ' . number_format( $a * $alpha, 3, '.', '' ) . ')';
+        }
+        $h = ltrim( $s, '#' );
+        if ( strlen( $h ) === 3 ) {
+            $r = hexdec( $h[0] . $h[0] ); $g = hexdec( $h[1] . $h[1] ); $b = hexdec( $h[2] . $h[2] );
+        } else {
+            $r = hexdec( substr( $h, 0, 2 ) ); $g = hexdec( substr( $h, 2, 2 ) ); $b = hexdec( substr( $h, 4, 2 ) );
+        }
+        return 'rgba(' . ( $r ?: 0 ) . ', ' . ( $g ?: 0 ) . ', ' . ( $b ?: 0 ) . ', ' . number_format( $alpha, 3, '.', '' ) . ')';
+    }
+
+    /** Grana film come layer SVG data-URI. Speculare a grainLayer() in glowCSS.js.
+     *  Usa lo stesso encoding di JS encodeURIComponent (le virgolette ' restano
+     *  letterali, '%23' diventa '%2523') così le 3 rese producono la stessa stringa. */
+    private function glow_grain_layer( $opacity = 0.06 ) {
+        // number_format senza trailing-zero forzati: JS produce es. "0.96" e "0.36".
+        $o1 = rtrim( rtrim( number_format( $opacity * 16, 6, '.', '' ), '0' ), '.' );
+        $o2 = rtrim( rtrim( number_format( $opacity * 6, 6, '.', '' ), '0' ), '.' );
+        $svg = "<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'>"
+             . "<filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' seed='4'/>"
+             . "<feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 {$o1} -{$o2}'/></filter>"
+             . "<rect width='100%' height='100%' filter='url(%23n)'/></svg>";
+        return 'url("data:image/svg+xml,' . self::encode_uri_component( $svg ) . '")';
+    }
+
+    /** Replica JS encodeURIComponent: encoda tutto tranne A-Za-z0-9 e -_.!~*'() */
+    private static function encode_uri_component( $str ) {
+        $unreserved = "-_.!~*'()";
+        $out = '';
+        $len = strlen( $str );
+        for ( $i = 0; $i < $len; $i++ ) {
+            $ch = $str[ $i ];
+            if ( ctype_alnum( $ch ) || strpos( $unreserved, $ch ) !== false ) {
+                $out .= $ch;
+            } else {
+                $out .= '%' . strtoupper( bin2hex( $ch ) );
+            }
+        }
+        return $out;
     }
 
     /**
@@ -701,14 +898,24 @@ class Olo_CSS_Builder {
             return '';
         }
 
+        // Ampiezza configurabile (px) per le animazioni di traslazione "galleggianti".
+        // Additive: se infinite_amplitude non è settato, fallback ai valori storici
+        // (float -10px, bounce -15px) così i template esistenti restano identici.
+        $amp = isset( $settings['infinite_amplitude'] ) && $settings['infinite_amplitude'] !== ''
+            ? max( 2, min( 60, intval( $settings['infinite_amplitude'] ) ) )
+            : null;
+        $float_amp  = $amp !== null ? $amp : 10;
+        $bounce_amp = $amp !== null ? $amp : 15;
+
         $keyframes_map = [
-            'float'   => '0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)}',
-            'pulse'   => '0%,100%{transform:scale(1)} 50%{transform:scale(1.05)}',
-            'spin'    => '0%{transform:rotate(0)} 100%{transform:rotate(360deg)}',
-            'wiggle'  => '0%,100%{transform:rotate(0)} 25%{transform:rotate(-5deg)} 75%{transform:rotate(5deg)}',
-            'bounce'  => '0%,100%{transform:translateY(0)} 50%{transform:translateY(-15px)}',
-            'swing'   => '0%,100%{transform:rotate(0)} 25%{transform:rotate(10deg)} 75%{transform:rotate(-10deg)}',
-            'breathe' => '0%,100%{opacity:1} 50%{opacity:0.6}',
+            'float'     => '0%,100%{transform:translateY(0)} 50%{transform:translateY(-' . $float_amp . 'px)}',
+            'float-rot' => '0%,100%{transform:translateY(0) rotate(-4deg)} 50%{transform:translateY(-' . $float_amp . 'px) rotate(-4deg)}',
+            'pulse'     => '0%,100%{transform:scale(1)} 50%{transform:scale(1.05)}',
+            'spin'      => '0%{transform:rotate(0)} 100%{transform:rotate(360deg)}',
+            'wiggle'    => '0%,100%{transform:rotate(0)} 25%{transform:rotate(-5deg)} 75%{transform:rotate(5deg)}',
+            'bounce'    => '0%,100%{transform:translateY(0)} 50%{transform:translateY(-' . $bounce_amp . 'px)}',
+            'swing'     => '0%,100%{transform:rotate(0)} 25%{transform:rotate(10deg)} 75%{transform:rotate(-10deg)}',
+            'breathe'   => '0%,100%{opacity:1} 50%{opacity:0.6}',
         ];
 
         if ( ! isset( $keyframes_map[ $anim ] ) ) {
@@ -724,11 +931,16 @@ class Olo_CSS_Builder {
             $direction = 'normal';
         }
 
+        $delay = isset( $settings['infinite_delay'] ) ? max( 0, min( 5000, intval( $settings['infinite_delay'] ) ) ) : 0;
+        $delay_css = $delay > 0 ? ' ' . $delay . 'ms' : '';
+
         $safe_id = preg_replace( '/[^a-zA-Z0-9_-]/', '', $css_id );
         $kf_name = 'olo-inf-' . $safe_id;
 
         $css  = '@keyframes ' . $kf_name . '{' . $keyframes_map[ $anim ] . '} ';
-        $css .= '#' . esc_attr( $css_id ) . '{animation:' . $kf_name . ' ' . $duration . 's ' . $direction . ' infinite}';
+        $css .= '#' . esc_attr( $css_id ) . '{animation:' . $kf_name . ' ' . $duration . 's ease-in-out' . $delay_css . ' ' . $direction . ' infinite}';
+        // Rispetta prefers-reduced-motion: niente moto continuo per chi lo disattiva.
+        $css .= '@media(prefers-reduced-motion:reduce){#' . esc_attr( $css_id ) . '{animation:none}}';
 
         return $css;
     }

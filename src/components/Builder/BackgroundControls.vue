@@ -352,6 +352,43 @@
       </div>
     </div>
 
+    <!-- Mesh / Aurora -->
+    <div v-if="bg.type === 'mesh'" class="mb-space-y-3">
+      <p class="mb-text-[10px] mb-text-gray-400">{{ t('Sfondo aurora: 3 blob sfumati sopra un colore base. Usa i ruoli colore del tema.') }}</p>
+      <div class="mb-grid mb-grid-cols-2 mb-gap-2">
+        <div>
+          <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Colore 1') }}</label>
+          <FieldColor :modelValue="bg.mesh_c1 || 'var(--olo-color-primary)'" @update:modelValue="updateField('mesh_c1', $event)" />
+        </div>
+        <div>
+          <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Colore 2') }}</label>
+          <FieldColor :modelValue="bg.mesh_c2 || 'var(--olo-color-secondary)'" @update:modelValue="updateField('mesh_c2', $event)" />
+        </div>
+        <div>
+          <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Colore 3') }}</label>
+          <FieldColor :modelValue="bg.mesh_c3 || 'var(--olo-color-accent)'" @update:modelValue="updateField('mesh_c3', $event)" />
+        </div>
+        <div>
+          <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Colore base') }}</label>
+          <FieldColor :modelValue="bg.mesh_base || 'var(--olo-color-background)'" @update:modelValue="updateField('mesh_base', $event)" />
+        </div>
+      </div>
+      <!-- Preview -->
+      <div class="mb-h-16 mb-rounded mb-border mb-border-gray-600" :style="meshPreviewStyle"></div>
+      <!-- Animate -->
+      <div class="mb-flex mb-items-center mb-justify-between">
+        <span class="mb-text-[10px] mb-text-gray-400">{{ t('Movimento lento (drift)') }}</span>
+        <button
+          @click="updateField('mesh_animate', !bg.mesh_animate)"
+          :class="['mb-relative mb-w-10 mb-h-5 mb-rounded-full mb-transition-colors mb-shrink-0', bg.mesh_animate ? 'mb-bg-primary-600' : 'mb-bg-gray-600']"
+        ><span :class="['mb-absolute mb-top-0.5 mb-w-4 mb-h-4 mb-rounded-full mb-bg-white mb-transition-transform', bg.mesh_animate ? 'mb-left-5' : 'mb-left-0.5']"></span></button>
+      </div>
+      <div v-if="bg.mesh_animate">
+        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Velocità (s)') }} ({{ bg.mesh_speed || 18 }})</label>
+        <input type="range" :value="bg.mesh_speed || 18" @input="updateField('mesh_speed', parseInt($event.target.value))" min="4" max="60" step="1" class="mb-w-full" />
+      </div>
+    </div>
+
     <!-- Pattern -->
     <div v-if="bg.type === 'pattern'" class="mb-space-y-3">
       <div>
@@ -388,6 +425,72 @@
       </div>
     </div>
 
+    <!-- Glow / Bagliori -->
+    <div v-if="bg.type === 'glow'" class="mb-space-y-3">
+      <!-- Preset posizione -->
+      <div>
+        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Disposizione') }}</label>
+        <select :value="bg.glow_preset || 'spread'" @change="updateField('glow_preset', $event.target.value)"
+          class="mb-w-full mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded mb-px-2 mb-py-1.5 mb-text-xs mb-text-white">
+          <option v-for="p in glowPresets" :key="p.value" :value="p.value">{{ t(p.label) }}</option>
+        </select>
+      </div>
+      <!-- Anteprima -->
+      <div class="mb-h-16 mb-rounded mb-border mb-border-gray-600" :style="glowPreviewStyle"></div>
+      <div class="mb-grid mb-grid-cols-2 mb-gap-2">
+        <div>
+          <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Colore alone') }}</label>
+          <FieldColor :modelValue="bg.glow_color || 'var(--olo-color-primary)'" @update:modelValue="updateField('glow_color', $event)" />
+        </div>
+        <div>
+          <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Colore base') }}</label>
+          <FieldColor :modelValue="bg.glow_base || '#0b0d12'" @update:modelValue="updateField('glow_base', $event)" />
+        </div>
+      </div>
+      <div>
+        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Colore alone 2 (opzionale)') }}</label>
+        <FieldColor :modelValue="bg.glow_color2 || ''" @update:modelValue="updateField('glow_color2', $event)" />
+      </div>
+      <div>
+        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Intensità') }} ({{ bg.glow_intensity ?? 62 }}%)</label>
+        <input type="range" :value="bg.glow_intensity ?? 62" @input="updateField('glow_intensity', parseInt($event.target.value))" min="10" max="100" step="2" class="mb-w-full" />
+      </div>
+      <div>
+        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Ampiezza') }} ({{ bg.glow_size ?? 78 }}%)</label>
+        <input type="range" :value="bg.glow_size ?? 78" @input="updateField('glow_size', parseInt($event.target.value))" min="30" max="120" step="2" class="mb-w-full" />
+      </div>
+      <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
+        <button @click="updateField('glow_grain', !(bg.glow_grain !== false))"
+          :class="['mb-relative mb-w-10 mb-h-5 mb-rounded-full mb-shrink-0', (bg.glow_grain !== false) ? 'mb-bg-primary-600' : 'mb-bg-gray-600']">
+          <span :class="['mb-absolute mb-top-0.5 mb-w-4 mb-h-4 mb-rounded-full mb-bg-white mb-transition-transform', (bg.glow_grain !== false) ? 'mb-left-5' : 'mb-left-0.5']"></span>
+        </button>
+        <span class="mb-text-xs mb-text-gray-300">{{ t('Grana film') }}</span>
+      </label>
+      <!-- Animazione bagliori -->
+      <div class="mb-pt-2 mb-border-t mb-border-gray-700">
+        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Animazione bagliore') }}</label>
+        <select :value="bg.glow_anim || 'none'" @change="updateField('glow_anim', $event.target.value)"
+          class="mb-w-full mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded mb-px-2 mb-py-1.5 mb-text-xs mb-text-white">
+          <option value="none">{{ t('Nessuna (statico)') }}</option>
+          <option value="pulse">{{ t('Pulsazione (respiro)') }}</option>
+          <option value="drift">{{ t('Deriva (movimento lento)') }}</option>
+          <option value="wander">{{ t('Vagare (respiro + deriva)') }}</option>
+          <option value="flicker">{{ t('Sfarfallio (energia neon)') }}</option>
+          <option value="vivo">{{ t('Vivo (respiro + orbita) ✦') }}</option>
+          <option value="tempesta">{{ t('Tempesta (sfarfallio + ondeggio) ✦') }}</option>
+          <option value="scroll">{{ t('Reattivo allo scroll') }}</option>
+        </select>
+      </div>
+      <div v-if="(bg.glow_anim || 'none') !== 'none' && bg.glow_anim !== 'scroll'">
+        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Velocità') }} ({{ bg.glow_anim_speed ?? 6 }})</label>
+        <input type="range" :value="bg.glow_anim_speed ?? 6" @input="updateField('glow_anim_speed', parseInt($event.target.value))" min="1" max="10" step="1" class="mb-w-full" />
+      </div>
+      <div v-if="['pulse','vivo'].includes(bg.glow_anim)">
+        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Intensità respiro') }} ({{ bg.glow_anim_intensity ?? 46 }}%)</label>
+        <input type="range" :value="bg.glow_anim_intensity ?? 46" @input="updateField('glow_anim_intensity', parseInt($event.target.value))" min="0" max="100" step="2" class="mb-w-full" />
+      </div>
+    </div>
+
     <!-- Overlay (for all types except none) -->
     <div v-if="bg.type && bg.type !== 'none'" class="mb-space-y-2 mb-pt-2 mb-border-t mb-border-gray-700">
       <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300">{{ t('Sovrapposizione') }}</label>
@@ -415,6 +518,7 @@ import { computed } from 'vue';
 import { t } from '@/i18n';
 import { useMediaPicker } from '@/composables/useMediaPicker';
 import { patternList, getPatternCSS } from '@/utils/patternCSS';
+import { getGlowCSS, glowPresets } from '@/utils/glowCSS';
 import ParallaxEditor from './ParallaxEditor.vue';
 import FieldGradient from './fields/FieldGradient.vue';
 import FieldColor from './fields/FieldColor.vue';
@@ -464,6 +568,22 @@ const defaultBg = {
   parallax_nomobile: true,
   cover_height: 0,
   video_scale: 100,
+  mesh_c1: 'var(--olo-color-primary)',
+  mesh_c2: 'var(--olo-color-secondary)',
+  mesh_c3: 'var(--olo-color-accent)',
+  mesh_base: 'var(--olo-color-background)',
+  mesh_animate: false,
+  mesh_speed: 18,
+  glow_base: '#0b0d12',
+  glow_color: 'var(--olo-color-primary)',
+  glow_color2: '',
+  glow_preset: 'spread',
+  glow_intensity: 62,
+  glow_size: 78,
+  glow_grain: true,
+  glow_anim: 'none',
+  glow_anim_speed: 6,
+  glow_anim_intensity: 46,
   overlay_color: '#000000',
   overlay_opacity: 0,
   color_opacity: 100,
@@ -481,6 +601,8 @@ const types = [
   { value: 'none', label: 'Nessuno' },
   { value: 'solid', label: 'Tinta unita' },
   { value: 'gradient', label: 'Gradiente' },
+  { value: 'mesh', label: 'Aurora' },
+  { value: 'glow', label: 'Bagliori' },
   { value: 'pattern', label: 'Pattern' },
   { value: 'image', label: 'Immagine' },
   { value: 'video', label: 'Video' },
@@ -496,6 +618,28 @@ const patternGroups = [
   { label: 'Texture', items: patternList.filter(p => ['carbon-fiber','graph-paper','lined-paper','blueprint','noise','brick','wood-grain'].includes(p.value)) },
   { label: 'Decorativi', items: patternList.filter(p => ['stars','crosses','plus-signs','hearts'].includes(p.value)) },
 ];
+
+// Mesh/aurora preview: rispecchia build_mesh_css() lato PHP (3 blob radiali + base).
+const meshPreviewStyle = computed(() => {
+  const b = bg.value;
+  if (b.type !== 'mesh') return {};
+  const c1 = b.mesh_c1 || 'var(--olo-color-primary)';
+  const c2 = b.mesh_c2 || 'var(--olo-color-secondary)';
+  const c3 = b.mesh_c3 || 'var(--olo-color-accent)';
+  const base = b.mesh_base || 'var(--olo-color-background, #0b0a0d)';
+  return {
+    backgroundColor: base,
+    backgroundImage: [
+      `radial-gradient(60% 60% at 20% 25%, ${c1} 0%, transparent 60%)`,
+      `radial-gradient(55% 55% at 80% 30%, ${c2} 0%, transparent 60%)`,
+      `radial-gradient(70% 70% at 50% 90%, ${c3} 0%, transparent 65%)`,
+    ].join(', '),
+    backgroundRepeat: 'no-repeat',
+  };
+});
+
+// Glow/Bagliori preview: usa lo stesso util getGlowCSS della resa canvas/PHP.
+const glowPreviewStyle = computed(() => bg.value.type === 'glow' ? getGlowCSS(bg.value) : {});
 
 const patternPreviewStyle = computed(() => {
   const b = bg.value;

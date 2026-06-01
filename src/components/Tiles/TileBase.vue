@@ -28,6 +28,7 @@ import PricingTile from './PricingTile.vue';
 import CounterTile from './CounterTile.vue';
 import IconBoxTile from './IconBoxTile.vue';
 import AlertTile from './AlertTile.vue';
+import BadgeTile from './BadgeTile.vue';
 import TeamTile from './TeamTile.vue';
 import AccordionTile from './AccordionTile.vue';
 
@@ -277,6 +278,7 @@ const tileComponents = {
   counter: CounterTile,
   iconbox: IconBoxTile,
   alert: AlertTile,
+  badge: BadgeTile,
   team: TeamTile,
   accordion: AccordionTile,
   icontabs: IconTabsTile,

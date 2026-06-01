@@ -250,10 +250,15 @@ const defaults = {
   label_color: 'var(--olo-color-text, #374151)',
   label_size: '14',
   label_weight: '500',
-  input_bg: 'var(--olo-color-background, #FFFFFF)',
+  label_transform: '',
+  label_letter_spacing: '',
+  label_font_family: '',
+  input_bg: '',
   input_color: 'var(--olo-color-text, #374151)',
   input_border_color: 'var(--olo-color-border, #E5E7EB)',
   input_border_width: '1',
+  input_border_style: 'box',
+  input_font_family: '',
   input_radius: '6',
   input_size: 'default',
   gap: '16',
@@ -275,6 +280,7 @@ const defaults = {
   submit_hover_border_color: '',
   submit_letter_spacing: '0.3',
   submit_text_transform: 'none',
+  submit_font_family: '',
   check_accent_color: '',
   check_bg: '',
   check_border_color: '',
@@ -374,10 +380,26 @@ const gridStyle = computed(() => ({
   gap: gap.value + 'px',
 }));
 
+// Normalizza un valore font: stack web-safe (con virgola/apici) usato as-is,
+// nome singolo (Google Font) quotato con fallback. Vuoto → undefined (eredita).
+function fontStack(v) {
+  if (!v) return undefined;
+  return /[,'"]/.test(v) ? v : `'${v}', sans-serif`;
+}
+
+// letter-spacing condiviso label/float-label: 0 o NaN → 'normal'
+const labelLetterSpacing = computed(() => {
+  const ls = parseFloat(s.value.label_letter_spacing);
+  return (isNaN(ls) || ls === 0) ? 'normal' : ls + 'px';
+});
+
 const labelStyle = computed(() => ({
   color: s.value.label_color || 'var(--olo-color-text, #374151)',
   fontSize: (parseInt(s.value.label_size) || 14) + 'px',
   fontWeight: s.value.label_weight || '500',
+  textTransform: s.value.label_transform || 'none',
+  letterSpacing: labelLetterSpacing.value,
+  fontFamily: fontStack(s.value.label_font_family),
   marginBottom: '6px',
   display: 'block',
 }));
@@ -385,18 +407,42 @@ const labelStyle = computed(() => ({
 const floatLabelStyle = computed(() => ({
   color: s.value.label_color || 'var(--olo-color-text, #374151)',
   fontSize: (parseInt(s.value.label_size) || 14) + 'px',
+  textTransform: s.value.label_transform || 'none',
+  letterSpacing: labelLetterSpacing.value,
+  fontFamily: fontStack(s.value.label_font_family),
 }));
 
 const inputStyle = computed(() => {
-  const bw = parseInt(s.value.input_border_width) || 1;
-  return {
-    backgroundColor: s.value.input_bg || 'var(--olo-color-background, #FFFFFF)',
+  const bwRaw = parseInt(s.value.input_border_width);
+  const bw = isNaN(bwRaw) ? 1 : bwRaw;
+  const bc = s.value.input_border_color || 'var(--olo-color-border, #E5E7EB)';
+  const bstyle = s.value.input_border_style || 'box';
+  const radius = ((v => isNaN(v) ? 6 : v)(parseInt(s.value.input_radius))) + 'px';
+  // underline/none: sfondo trasparente di default (look editoriale su sezioni scure)
+  const bgFallback = bstyle === 'box' ? 'var(--olo-color-background, #FFFFFF)' : 'transparent';
+
+  const style = {
+    backgroundColor: s.value.input_bg || bgFallback,
     color: s.value.input_color || 'var(--olo-color-text, #374151)',
-    border: bw + 'px solid ' + (s.value.input_border_color || 'var(--olo-color-border, #E5E7EB)'),
-    borderRadius: ((v => isNaN(v) ? 6 : v)(parseInt(s.value.input_radius))) + 'px',
+    fontFamily: fontStack(s.value.input_font_family),
     width: '100%',
     boxSizing: 'border-box',
   };
+
+  if (bstyle === 'underline') {
+    style.border = '0';
+    style.borderBottom = bw + 'px solid ' + bc;
+    style.borderRadius = '0';
+    style.paddingLeft = '0';
+    style.paddingRight = '0';
+  } else if (bstyle === 'none') {
+    style.border = '0';
+    style.borderRadius = radius;
+  } else {
+    style.border = bw + 'px solid ' + bc;
+    style.borderRadius = radius;
+  }
+  return style;
 });
 
 const inputSizeClass = computed(() => {
@@ -456,6 +502,7 @@ const submitStyle = computed(() => {
     border: bw > 0 ? bw + 'px solid ' + (submitHover.value ? hoverBorderColor : borderColor) : 'none',
     letterSpacing: ls > 0 ? ls + 'px' : 'normal',
     textTransform: tt !== 'none' ? tt : 'none',
+    fontFamily: fontStack(s.value.submit_font_family),
     cursor: 'pointer',
     transition: 'background-color 0.2s ease, border-color 0.2s ease',
     display: 'inline-flex',

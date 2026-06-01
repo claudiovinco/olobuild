@@ -12,6 +12,7 @@
  */
 import { computed } from 'vue';
 import { getPatternCSS } from '@/utils/patternCSS';
+import { getGlowCSS } from '@/utils/glowCSS';
 
 // v1.0.55 — Tile ATOMICHE: il loro wrapper esterno (sezione/colonna container)
 // NON deve MAI ricevere bg_color/border-radius/shadow dal preset/settings/style della
@@ -118,6 +119,10 @@ export function buildBgStyle(bg) {
     );
   }
 
+  if (bg.type === 'glow') {
+    return getGlowCSS(bg);
+  }
+
   if (bg.type === 'gallery') {
     if (bg.gallery_images?.length) {
       return {
@@ -216,6 +221,7 @@ export function useBackgroundStyle(bgGetter) {
     if (bg.type === 'solid') return buildBgStyle(bg);
     if (bg.type === 'gradient') return buildBgStyle(bg);
     if (bg.type === 'pattern') return buildBgStyle(bg);
+    if (bg.type === 'glow') return buildBgStyle(bg);
     return {};
   });
 

@@ -33,6 +33,7 @@ export const useStylesStore = defineStore('styles', {
     typography: (state) => state.styles.typography || {},
     layout: (state) => state.styles.layout || {},
     googleFonts: (state) => state.styles.google_fonts || [],
+    grain: (state) => state.styles.grain || { enabled: false, opacity: 6, scale: 180 },
 
     /**
      * Generate CSS custom properties client-side for live preview.
@@ -238,6 +239,17 @@ export const useStylesStore = defineStore('styles', {
         css += '}\n';
       }
 
+      // Grain / noise overlay (mirror del PHP Olo_Style_System::generate_css).
+      const grain = s.grain || {};
+      if (grain.enabled) {
+        const gOp = Math.max(0, Math.min(30, parseInt(grain.opacity ?? 6, 10))) / 100;
+        const gScale = Math.max(60, Math.min(400, parseInt(grain.scale ?? 180, 10)));
+        const noise = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E";
+        css += '\n/* Grain / noise overlay */\n';
+        css += '.olo-template { position: relative; }\n';
+        css += `.olo-template::after { content: ""; position: fixed; inset: 0; z-index: 9999; pointer-events: none; mix-blend-mode: overlay; opacity: ${gOp}; background-image: url("${noise}"); background-size: ${gScale}px ${gScale}px; }\n`;
+      }
+
       return css;
     },
   },
@@ -300,6 +312,12 @@ export const useStylesStore = defineStore('styles', {
     updateFluidScaling(key, value) {
       if (!this.styles.fluid_scaling) this.styles.fluid_scaling = {};
       this.styles.fluid_scaling[key] = value;
+      this.isDirty = true;
+    },
+
+    updateGrain(key, value) {
+      if (!this.styles.grain) this.styles.grain = {};
+      this.styles.grain[key] = value;
       this.isDirty = true;
     },
 

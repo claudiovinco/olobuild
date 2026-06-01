@@ -16,6 +16,7 @@ export default {
     bg: { type: 'none' },
     style: 'default',
     width: 'default',
+    padding: 'default',
     bg_scope: 'container',
     sticky_effect: 'none',
     sticky_top: '',
@@ -48,6 +49,13 @@ export default {
       { value: 'container', label: t('Centrata (segue la larghezza scelta sopra)') },
       { value: 'section',   label: t('Edge-to-edge (sfondo a tutto il viewport)') },
     ], description: t('Scegli se la sezione (incluso lo sfondo colore/immagine/video) rimane centrata entro la larghezza impostata o si estende fino ai bordi del viewport. La modalità edge-to-edge è utile per band visive con sfondi a tutta pagina ma contenuto centrato.') },
+    { key: 'padding', label: t('Padding verticale'), type: 'select', options: [
+      { value: 'remove-vertical', label: t('Nessuno (azzerato)') },
+      { value: 'small',           label: t('Piccolo') },
+      { value: 'default',         label: t('Predefinito') },
+      { value: 'large',           label: t('Grande') },
+      { value: 'xlarge',          label: t('Extra grande') },
+    ], description: t('Spazio sopra e sotto il contenuto della sezione. Imposta "Nessuno" per eliminare lo spazio verticale (es. band a contatto). Per un controllo px-preciso usa il padding fine nel tab Stile → Spazi & Bordi.') },
 
     { type: 'separator', label: t('Aspetto preset') },
     { key: 'style', label: t('Variante colore'), type: 'select', options: [

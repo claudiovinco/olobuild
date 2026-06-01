@@ -107,6 +107,18 @@ class Olo_Rest_Api {
             'permission_callback' => [ $this, 'check_permission' ],
         ] );
 
+        // Theme bundle: esporta/importa un SET di template selezionati (header+footer+pagine)
+        register_rest_route( $this->namespace, '/templates/export-bundle', [
+            'methods'             => 'POST',
+            'callback'            => [ $this, 'export_bundle' ],
+            'permission_callback' => [ $this, 'check_permission' ],
+        ] );
+        register_rest_route( $this->namespace, '/templates/import-bundle', [
+            'methods'             => 'POST',
+            'callback'            => [ $this, 'import_bundle' ],
+            'permission_callback' => [ $this, 'check_permission' ],
+        ] );
+
         // Template revisions
         register_rest_route( $this->namespace, '/templates/(?P<id>\d+)/revisions', [
             'methods'             => 'GET',
@@ -1599,6 +1611,109 @@ class Olo_Rest_Api {
 
         $template = $db->get_template( $id );
         return rest_ensure_response( $this->prepare_template( $template ) );
+    }
+
+    /**
+     * Esporta un BUNDLE (tema) = i template selezionati in un unico file JSON.
+     * Body: { ids:[..], name, description }. L'header/footer/404 attivi vengono marcati
+     * in `activate` tramite una chiave stabile, così l'import sa cosa riattivare.
+     */
+    public function export_bundle( $request ) {
+        $body = $request->get_json_params();
+        $ids  = ( isset( $body['ids'] ) && is_array( $body['ids'] ) ) ? array_values( array_unique( array_map( 'intval', $body['ids'] ) ) ) : [];
+        if ( empty( $ids ) ) {
+            return new WP_Error( 'no_ids', 'Nessun template selezionato.', [ 'status' => 400 ] );
+        }
+
+        $db            = new Olo_Database();
+        $active_header = (int) get_option( 'olo_active_header', 0 );
+        $active_footer = (int) get_option( 'olo_active_footer', 0 );
+        $active_404    = (int) get_option( 'olo_active_404', 0 );
+
+        $templates = [];
+        $activate  = [];
+        foreach ( $ids as $id ) {
+            $t = $db->get_template( $id );
+            if ( ! $t ) continue;
+            $key = 'tpl_' . $id;
+            $templates[] = [
+                'key'      => $key,
+                'title'    => $t['title'],
+                'type'     => $t['type'] ?? 'page',
+                'content'  => $t['content'] ?? [],
+                'settings' => ! empty( $t['settings'] ) ? $t['settings'] : new stdClass,
+            ];
+            if ( $id === $active_header ) $activate['header'] = $key;
+            if ( $id === $active_footer ) $activate['footer'] = $key;
+            if ( $id === $active_404 )    $activate['404']    = $key;
+        }
+        if ( empty( $templates ) ) {
+            return new WP_Error( 'not_found', 'Template non trovati.', [ 'status' => 404 ] );
+        }
+
+        $name   = sanitize_text_field( $body['name'] ?? 'Tema Olobuild' );
+        $bundle = [
+            'olo_export'  => 'theme-bundle',
+            'version'     => OLO_VERSION,
+            'name'        => $name,
+            'description' => sanitize_text_field( $body['description'] ?? '' ),
+            'activate'    => $activate,
+            'templates'   => $templates,
+        ];
+
+        $response = rest_ensure_response( $bundle );
+        $response->header( 'Content-Disposition', 'attachment; filename="tema-' . sanitize_title( $name ?: 'olobuild' ) . '.json"' );
+        return $response;
+    }
+
+    /**
+     * Importa un BUNDLE (tema): crea tutti i template come bozze e riattiva
+     * header/footer/404 se il bundle li indica. NON crea pagine WP (i template
+     * restano nel cockpit, pronti per essere assegnati o usati via shortcode).
+     */
+    public function import_bundle( $request ) {
+        $body = $request->get_json_params();
+        if ( empty( $body['olo_export'] ) || $body['olo_export'] !== 'theme-bundle' ) {
+            return new WP_Error( 'invalid_file', 'File non valido: non è un tema Olobuild (theme-bundle).', [ 'status' => 400 ] );
+        }
+        $templates = ( isset( $body['templates'] ) && is_array( $body['templates'] ) ) ? $body['templates'] : [];
+        if ( empty( $templates ) ) {
+            return new WP_Error( 'empty', 'Il tema non contiene template.', [ 'status' => 400 ] );
+        }
+
+        $db      = new Olo_Database();
+        $id_map  = [];
+        $created = [];
+        foreach ( $templates as $tpl ) {
+            if ( ! is_array( $tpl ) ) continue;
+            $content  = ( isset( $tpl['content'] ) && is_array( $tpl['content'] ) ) ? $tpl['content'] : [];
+            $settings = $tpl['settings'] ?? [];
+            if ( is_object( $settings ) ) $settings = (array) $settings;
+            $new_id = $db->create_template( [
+                'title'    => sanitize_text_field( $tpl['title'] ?? 'Importato' ),
+                'type'     => sanitize_text_field( $tpl['type'] ?? 'page' ),
+                'content'  => $content,
+                'settings' => is_array( $settings ) ? $settings : [],
+                'status'   => 'draft',
+            ] );
+            if ( $new_id ) {
+                if ( ! empty( $tpl['key'] ) ) $id_map[ $tpl['key'] ] = $new_id;
+                $created[] = [ 'id' => $new_id, 'title' => $tpl['title'] ?? '', 'type' => $tpl['type'] ?? 'page' ];
+            }
+        }
+
+        $activated = [];
+        $activate  = ( isset( $body['activate'] ) && is_array( $body['activate'] ) ) ? $body['activate'] : [];
+        if ( ! empty( $activate['header'] ) && isset( $id_map[ $activate['header'] ] ) ) { update_option( 'olo_active_header', $id_map[ $activate['header'] ] ); $activated[] = 'header'; }
+        if ( ! empty( $activate['footer'] ) && isset( $id_map[ $activate['footer'] ] ) ) { update_option( 'olo_active_footer', $id_map[ $activate['footer'] ] ); $activated[] = 'footer'; }
+        if ( ! empty( $activate['404'] ) && isset( $id_map[ $activate['404'] ] ) )       { update_option( 'olo_active_404', $id_map[ $activate['404'] ] ); $activated[] = '404'; }
+
+        return rest_ensure_response( [
+            'success'   => true,
+            'imported'  => count( $created ),
+            'templates' => $created,
+            'activated' => $activated,
+        ] );
     }
 
     // ── Custom Fonts ────────────────────────────────────────

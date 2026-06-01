@@ -51,8 +51,19 @@
       >
         <div class="mb-space-y-3">
           <template v-for="(field, fIdx) in section.fields" :key="field.key || ('f-' + sIdx + '-' + fIdx)">
+            <StyleLayoutStack
+              v-if="field.type === 'layout-stack'"
+              :tileStyle="tileStyle"
+              :tileType="tileType"
+              @update="$emit('update', $event)"
+            />
             <StyleBoxStack
-              v-if="field.type === 'box-stack'"
+              v-else-if="field.type === 'box-stack'"
+              :tileStyle="tileStyle"
+              @update="$emit('update', $event)"
+            />
+            <StyleEffectsStack
+              v-else-if="field.type === 'effects-stack'"
               :tileStyle="tileStyle"
               @update="$emit('update', $event)"
             />
@@ -103,8 +114,19 @@
       <template v-else>
         <div class="mb-space-y-3">
           <template v-for="(field, fIdx) in section.fields" :key="field.key || ('f0-' + fIdx)">
+            <StyleLayoutStack
+              v-if="field.type === 'layout-stack'"
+              :tileStyle="tileStyle"
+              :tileType="tileType"
+              @update="$emit('update', $event)"
+            />
             <StyleBoxStack
-              v-if="field.type === 'box-stack'"
+              v-else-if="field.type === 'box-stack'"
+              :tileStyle="tileStyle"
+              @update="$emit('update', $event)"
+            />
+            <StyleEffectsStack
+              v-else-if="field.type === 'effects-stack'"
               :tileStyle="tileStyle"
               @update="$emit('update', $event)"
             />
@@ -158,6 +180,8 @@ import CollapseSection from './CollapseSection.vue';
 import InspectorField from './InspectorField.vue';
 import StyleSpacingBp from './style-renderers/StyleSpacingBp.vue';
 import StyleBoxStack from './style-renderers/StyleBoxStack.vue';
+import StyleLayoutStack from './style-renderers/StyleLayoutStack.vue';
+import StyleEffectsStack from './style-renderers/StyleEffectsStack.vue';
 import StyleShadowBlock from './style-renderers/StyleShadowBlock.vue';
 import StyleNestedField from './style-renderers/StyleNestedField.vue';
 import FieldTextShadow from './fields/FieldTextShadow.vue';

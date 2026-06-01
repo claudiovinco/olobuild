@@ -521,6 +521,7 @@ export const infiniteAnimationFields = [
   { key: 'infinite_animation', label: t('Animazione'), type: 'select', options: [
     { value: 'none', label: t('Nessuna') },
     { value: 'float', label: t('Galleggiamento') },
+    { value: 'float-rot', label: t('Galleggiamento + rotazione') },
     { value: 'pulse', label: t('Pulsazione') },
     { value: 'spin', label: t('Rotazione') },
     { value: 'wiggle', label: t('Dondolio') },
@@ -529,6 +530,10 @@ export const infiniteAnimationFields = [
     { value: 'breathe', label: t('Respiro') },
   ]},
   { key: 'infinite_speed', label: t('Velocità (s)'), type: 'range', min: 1, max: 10, step: 0.5,
+    condition: { field: 'infinite_animation', operator: '!=', value: 'none' } },
+  { key: 'infinite_amplitude', label: t('Ampiezza (px)'), type: 'range', min: 2, max: 60, step: 1,
+    condition: { field: 'infinite_animation', op: 'in', value: ['float', 'float-rot', 'bounce'] } },
+  { key: 'infinite_delay', label: t('Ritardo (ms)'), type: 'range', min: 0, max: 3000, step: 100,
     condition: { field: 'infinite_animation', operator: '!=', value: 'none' } },
   { key: 'infinite_direction', label: t('Direzione'), type: 'select', options: [
     { value: 'normal', label: t('Normale') },
@@ -540,6 +545,8 @@ export const infiniteAnimationFields = [
 export const infiniteAnimationDefaults = {
   infinite_animation: 'none',
   infinite_speed: '3',
+  infinite_amplitude: '',
+  infinite_delay: '0',
   infinite_direction: 'normal',
 };
 
@@ -951,18 +958,14 @@ export const borderEffectDefaults = {
  * Restituisce l'array di fields per la sezione Bordo dell'inspector.
  * @param {Object} opts  { key, hoverKey, durationKey } — override chiavi default
  */
-export function borderFields(opts = {}) {
-  const key      = opts.key          ?? 'border';
-  const hoverKey = opts.hoverKey     ?? 'border_hover';
-  const durKey   = opts.durationKey  ?? 'border_hover_duration';
-
+/**
+ * Solo la sezione "Effetti bordo" (neon/gradiente…). Estratta da borderFields()
+ * così il tab Stile del wrapper può montare il CONTROLLO bordo dentro il pannello
+ * "Spazi & Bordi" (StyleBoxStack) e tenere gli effetti come sezione separata,
+ * senza duplicare le definizioni. Opera sulle chiavi border_effect_*.
+ */
+export function borderEffectFields() {
   return [
-    { type: 'separator', label: t('Bordo') },
-    withHover(
-      { key, label: t('Bordo'), type: 'border' },
-      { hoverKey, hoverDurationKey: durKey }
-    ),
-
     { type: 'separator', label: t('Effetti bordo') },
     { key: 'border_effect', label: t('Effetto'), type: 'select', options: [
       { value: 'none',          label: t('Nessuno') },
@@ -986,6 +989,21 @@ export function borderFields(opts = {}) {
     { key: 'border_effect_speed', label: t('Velocità rotazione (s)'), type: 'range',
       min: 1, max: 20, step: 1,
       condition: { field: 'border_effect', op: '=', value: 'gradient-spin' } },
+  ];
+}
+
+export function borderFields(opts = {}) {
+  const key      = opts.key          ?? 'border';
+  const hoverKey = opts.hoverKey     ?? 'border_hover';
+  const durKey   = opts.durationKey  ?? 'border_hover_duration';
+
+  return [
+    { type: 'separator', label: t('Bordo') },
+    withHover(
+      { key, label: t('Bordo'), type: 'border' },
+      { hoverKey, hoverDurationKey: durKey }
+    ),
+    ...borderEffectFields(),
   ];
 }
 

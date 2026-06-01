@@ -1,148 +1,97 @@
 <template>
-  <div class="olo-border-wrap">
+  <!--
+    FieldBorder — controllo Bordo compatto, in linea con FieldBox (handoff
+    "olobuild_bordercontrol"). Una riga per lo SPESSORE (collega/separa + slider
+    + valore, 4 lati on-demand — riusa FieldBox in mode="sides"), poi Stile e
+    Colore allineati, e un peek che mostra il bordo reale su sfondo a scacchi.
+    Sostituisce la vecchia croce 2×2 + il pannello "Effetti bordo" separato.
 
-    <!-- Riga style + colore -->
-    <div class="olo-border-header">
-      <div class="olo-border-style-group">
-        <span class="olo-border-hdr-label">{{ t('Stile') }}</span>
-        <select class="olo-border-select" :value="val.style" @change="emit({ style: $event.target.value })">
+    CONTRATTO DATI INVARIATO: modelValue = { top, right, bottom, left, linked,
+    style, color }. Nessuna chiave nuova: i template esistenti continuano a
+    funzionare. Il colore è "token-first" SOLO nella resa (swatch/peek): il
+    valore salvato resta una stringa (hex/rgba o '' = nessun bordo), come oggi —
+    il frontend PHP usa il colore verbatim e tratta '' come bordo inattivo.
+
+    Hover e breakpoint NON sono gestiti qui: come per FieldBox li avvolge
+    InspectorField (occhio Normale/Hover sulla chiave `border_hover`, switch
+    device via DeviceSwitch). Lo switch device / toggle hover del mockup sono
+    chrome del wrapper, mostrati solo per contesto.
+
+    Accento = CHROME del builder (arancio fisso) via --olo-ui-accent, NON il
+    primario tile. Definito qui sul root .olo-border2 così lo eredita anche il
+    FieldBox interno dello spessore (vedi FieldBox.vue: --olo-bf-accent).
+  -->
+  <div class="olo-border2">
+
+    <!-- SPESSORE — stesso pattern di FieldBox (sides): collega/separa + slider + valore -->
+    <div class="olo-border2-row">
+      <span class="olo-border2-lab">{{ t('Spessore') }}</span>
+      <FieldBox
+        class="olo-border2-width"
+        mode="sides"
+        :units="['px']"
+        :slider-max="50"
+        :slider-step="1"
+        preview="none"
+        :model-value="widthModel"
+        @update:model-value="onWidth"
+      />
+    </div>
+
+    <!-- STILE -->
+    <div class="olo-border2-row">
+      <span class="olo-border2-lab">{{ t('Stile') }}</span>
+      <div class="olo-border2-selwrap">
+        <select
+          class="olo-border2-sel"
+          :value="val.style"
+          @change="emit({ style: $event.target.value })"
+          :aria-label="t('Stile bordo')"
+        >
           <option value="solid">{{ t('Solido') }}</option>
           <option value="dashed">{{ t('Tratteggiato') }}</option>
           <option value="dotted">{{ t('Punteggiato') }}</option>
           <option value="double">{{ t('Doppio') }}</option>
-          <option value="groove">Groove</option>
-          <option value="ridge">Ridge</option>
+          <option value="groove">{{ t('Incasso') }}</option>
+          <option value="ridge">{{ t('Rilievo') }}</option>
         </select>
-      </div>
-      <div class="olo-border-color-group">
-        <span class="olo-border-hdr-label">{{ t('Colore') }}</span>
-        <div class="olo-border-color-row">
-          <div class="olo-border-color-swatch" :style="swatchStyle" @click="focusColorInput">
-            <span v-if="!val.color" class="olo-border-color-empty">—</span>
-          </div>
-          <input
-            ref="colorInputRef"
-            type="color"
-            class="olo-border-color-native"
-            :value="colorHex"
-            @input="onColorPick($event.target.value)"
-          />
-          <input
-            type="text"
-            class="olo-border-color-text"
-            :value="val.color"
-            :placeholder="t('vuoto')"
-            @change="emit({ color: $event.target.value })"
-            @blur="emit({ color: $event.target.value })"
-          />
-        </div>
+        <svg class="olo-border2-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
       </div>
     </div>
 
-    <!-- Croce visiva: top / left·preview·right / bottom -->
-    <div class="olo-border-cross">
-
-      <!-- Top -->
-      <div class="olo-border-cross-top">
-        <input
-          type="number"
-          @wheel="handleNumberWheel"
-          class="olo-border-num"
-          :class="{ 'olo-border-num--active': val.top > 0 }"
-          :value="val.top"
-          @input="onSide('top', $event.target.value)"
-          min="0" max="50" step="1"
-          :title="t('Bordo superiore (px)')"
-        />
-        <div class="olo-border-seg olo-border-seg--h" :class="{ 'olo-border-seg--on': val.top > 0 }"></div>
+    <!-- COLORE — FieldColor standard del builder: palette globali, pulsante colori
+         globali (globe), picker nativo e slider Alfa. Emette sempre un valore CSS
+         valido (hex / rgba / var(--olo-color-*)) → coerente col render PHP del bordo. -->
+    <div class="olo-border2-row olo-border2-row--top">
+      <span class="olo-border2-lab">{{ t('Colore') }}</span>
+      <div class="olo-border2-colorwrap">
+        <FieldColor :modelValue="val.color || ''" @update:modelValue="emit({ color: $event })" />
       </div>
-
-      <!-- Riga centrale: left | preview | right -->
-      <div class="olo-border-cross-mid">
-
-        <!-- Left -->
-        <div class="olo-border-cross-side olo-border-cross-side--l">
-          <input
-            type="number"
-            @wheel="handleNumberWheel"
-            class="olo-border-num"
-            :class="{ 'olo-border-num--active': val.left > 0 }"
-            :value="val.left"
-            @input="onSide('left', $event.target.value)"
-            min="0" max="50" step="1"
-            :title="t('Bordo sinistro (px)')"
-          />
-          <div class="olo-border-seg olo-border-seg--v" :class="{ 'olo-border-seg--on': val.left > 0 }"></div>
-        </div>
-
-        <!-- Preview box -->
-        <div class="olo-border-preview" :style="previewStyle">
-          <button
-            type="button"
-            class="olo-border-link-btn"
-            :class="{ 'olo-border-link-btn--linked': val.linked }"
-            @click="toggleLink"
-            :title="val.linked ? t('Scollega lati') : t('Collega lati')"
-          >
-            <svg v-if="val.linked" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
-              <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
-            </svg>
-            <svg v-else width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-4.46 4.97"/>
-              <path d="M9 17H6a5 5 0 0 1-5-5 5 5 0 0 1 4.46-4.97"/>
-              <line x1="2" y1="2" x2="22" y2="22"/>
-            </svg>
-          </button>
-        </div>
-
-        <!-- Right -->
-        <div class="olo-border-cross-side olo-border-cross-side--r">
-          <div class="olo-border-seg olo-border-seg--v" :class="{ 'olo-border-seg--on': val.right > 0 }"></div>
-          <input
-            type="number"
-            @wheel="handleNumberWheel"
-            class="olo-border-num"
-            :class="{ 'olo-border-num--active': val.right > 0 }"
-            :value="val.right"
-            @input="onSide('right', $event.target.value)"
-            min="0" max="50" step="1"
-            :title="t('Bordo destro (px)')"
-          />
-        </div>
-
-      </div>
-
-      <!-- Bottom -->
-      <div class="olo-border-cross-bot">
-        <div class="olo-border-seg olo-border-seg--h" :class="{ 'olo-border-seg--on': val.bottom > 0 }"></div>
-        <input
-          type="number"
-          @wheel="handleNumberWheel"
-          class="olo-border-num"
-          :class="{ 'olo-border-num--active': val.bottom > 0 }"
-          :value="val.bottom"
-          @input="onSide('bottom', $event.target.value)"
-          min="0" max="50" step="1"
-          :title="t('Bordo inferiore (px)')"
-        />
-      </div>
-
     </div>
+
+    <!-- PEEK — anteprima del bordo reale (l'occhio Normale/Hover è del wrapper).
+         Disattivabile (showPeek=false) quando il field è ospitato in un pannello
+         che fornisce la propria anteprima, es. StyleBoxStack "Spazi & Bordi". -->
+    <div class="olo-border2-peek" v-if="showPeek">
+      <span class="olo-border2-chip" :style="chipStyle"></span>
+    </div>
+
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { computed } from 'vue';
 import { t } from '@/i18n';
-import { handleNumberWheel } from '@/utils/numberInputWheel';
+import FieldBox from './FieldBox.vue';
+import FieldColor from './FieldColor.vue';
 
 const props = defineProps({
+  // { top, right, bottom, left, linked, style, color }
   modelValue: { default: null },
+  // Mostra il peek interno. false quando un pannello esterno fornisce l'anteprima.
+  showPeek: { type: Boolean, default: true },
 });
 const emits = defineEmits(['update:modelValue']);
-
-const colorInputRef = ref(null);
 
 const EMPTY = { top: 0, right: 0, bottom: 0, left: 0, linked: true, style: 'solid', color: '' };
 
@@ -162,263 +111,133 @@ const val = computed(() => {
   return { ...EMPTY };
 });
 
-const colorHex = computed(() => {
-  const c = val.value.color;
-  if (!c) return '#000000';
-  if (c.startsWith('#') && c.length === 7) return c;
-  if (c.startsWith('#') && c.length === 4) {
-    return '#' + c[1]+c[1]+c[2]+c[2]+c[3]+c[3];
+/* ── SPESSORE via FieldBox ──────────────────────────────────────
+   FieldBox usa uno scalare quando "collegato" e un oggetto
+   {top,right,bottom,left} quando "separato": combacia 1:1 col nostro modello. */
+const widthModel = computed(() => {
+  const { top, right, bottom, left, linked } = val.value;
+  return linked ? top : { top, right, bottom, left };
+});
+function onWidth(v) {
+  if (v && typeof v === 'object') {
+    emit({ ...v, linked: false });
+  } else {
+    const n = Math.max(0, parseInt(v) || 0);
+    emit({ top: n, right: n, bottom: n, left: n, linked: true });
   }
-  const m = c.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
-  if (m) return '#' + [m[1],m[2],m[3]].map(n => parseInt(n).toString(16).padStart(2,'0')).join('');
-  return '#000000';
-});
+}
 
-const swatchStyle = computed(() => {
-  const c = val.value.color;
-  return c ? { background: c } : { background: '#f3f4f6' };
-});
-
-const previewStyle = computed(() => {
+/* ── PEEK ──
+   Anteprima del controllo: usa il colore COSÌ COM'È (FieldColor emette hex/rgba o
+   var(--olo-color-*), tutti CSS validi). Vuoto → 'transparent' (nessun bordo,
+   coerente con il render). Hairline minimo (1px) per dare un'idea con spessore 0. */
+const chipStyle = computed(() => {
   const { top, right, bottom, left, style, color } = val.value;
-  const c = color || '#9ca3af';
+  const c = color || 'transparent';
   const s = style || 'solid';
-  const opacity = color ? 1 : 0.35;
-  const t2 = top > 0 ? `${top}px` : '1px';
-  const r2 = right > 0 ? `${right}px` : '1px';
-  const b2 = bottom > 0 ? `${bottom}px` : '1px';
-  const l2 = left > 0 ? `${left}px` : '1px';
-  const st = color ? s : 'dashed';
   return {
-    borderTop:    `${t2} ${st} ${c}`,
-    borderRight:  `${r2} ${st} ${c}`,
-    borderBottom: `${b2} ${st} ${c}`,
-    borderLeft:   `${l2} ${st} ${c}`,
-    opacity,
+    borderTop:    `${Math.max(top, 1)}px ${s} ${c}`,
+    borderRight:  `${Math.max(right, 1)}px ${s} ${c}`,
+    borderBottom: `${Math.max(bottom, 1)}px ${s} ${c}`,
+    borderLeft:   `${Math.max(left, 1)}px ${s} ${c}`,
   };
 });
 
 function emit(patch) {
   emits('update:modelValue', { ...val.value, ...patch });
 }
-
-function onSide(side, rawVal) {
-  const n = Math.max(0, parseInt(rawVal) || 0);
-  if (val.value.linked) {
-    emit({ top: n, right: n, bottom: n, left: n });
-  } else {
-    emit({ [side]: n });
-  }
-}
-
-function toggleLink() {
-  if (val.value.linked) {
-    emit({ linked: false });
-  } else {
-    const { top, right, bottom, left } = val.value;
-    const max = Math.max(top, right, bottom, left);
-    emit({ linked: true, top: max, right: max, bottom: max, left: max });
-  }
-}
-
-function focusColorInput() {
-  colorInputRef.value?.click();
-}
-
-function onColorPick(hex) {
-  emit({ color: hex });
-}
 </script>
 
 <style scoped>
-.olo-border-wrap {
-  padding: 4px 0;
-  user-select: none;
-}
-
-/* ── Header (style + colore) ── */
-.olo-border-header {
+/* Accento CHROME del builder (arancio fisso) — vedi README §"Accento".
+   --olo-ui-accent è ereditato dal FieldBox interno (spessore) via --olo-bf-accent,
+   così l'intero blocco bordo parla la stessa lingua cromatica. */
+.olo-border2 {
+  --ui: var(--olo-ui-accent, #e8622a);
+  --line: #e5e7eb;
+  --ink: #1f2937;
+  --faint: #94a3b8;
   display: flex;
-  align-items: flex-end;
+  flex-direction: column;
   gap: 10px;
-  margin-bottom: 10px;
+  padding: 2px 0;
 }
-.olo-border-hdr-label {
-  display: block;
+
+.olo-border2-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.olo-border2-lab {
+  flex: 0 0 56px;
   font-size: 9px;
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  letter-spacing: 0.4px;
-  color: #9ca3af;
-  margin-bottom: 4px;
+  color: var(--faint);
+  white-space: nowrap;
 }
 
-.olo-border-style-group { flex: 0 0 auto; }
-.olo-border-select {
-  height: 28px;
-  padding: 0 6px;
-  border: 1.5px solid #e5e7eb;
-  border-radius: 6px;
-  font-size: 11.5px;
-  color: #374151;
+/* lo spessore (FieldBox) occupa il resto della riga */
+.olo-border2-width { flex: 1; min-width: 0; }
+
+/* select Stile */
+.olo-border2-selwrap { flex: 1; position: relative; min-width: 0; }
+.olo-border2-sel {
+  width: 100%;
+  height: 34px;
+  padding: 0 30px 0 10px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
   background: #fff;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink);
   outline: none;
+  appearance: none;
+  -webkit-appearance: none;
   cursor: pointer;
-  transition: border-color 0.15s;
+  transition: border-color 0.15s, box-shadow 0.15s;
 }
-.olo-border-select:focus { border-color: #60a5fa; }
-
-.olo-border-color-group { flex: 1 1 auto; min-width: 0; }
-.olo-border-color-row {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  border: 1.5px solid #e5e7eb;
-  border-radius: 6px;
-  overflow: hidden;
-  background: #fff;
-  height: 28px;
-  transition: border-color 0.15s;
+.olo-border2-sel:focus,
+.olo-border2-sel:focus-visible {
+  border-color: var(--ui);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ui) 20%, transparent);
 }
-.olo-border-color-row:focus-within { border-color: #60a5fa; }
-
-.olo-border-color-swatch {
-  position: relative;
-  width: 28px;
-  height: 100%;
-  flex-shrink: 0;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-right: 1px solid #e5e7eb;
-  transition: filter 0.15s;
-}
-.olo-border-color-swatch:hover { filter: brightness(0.93); }
-.olo-border-color-empty { font-size: 13px; color: #9ca3af; }
-
-/* Native color input: full overlay on the swatch so the OS picker opens
-   on direct user click, without needing a programmatic .click() dispatch
-   (Chromium recent versions ignore programmatic clicks on size-0 inputs). */
-.olo-border-color-native {
+.olo-border2-chev {
   position: absolute;
-  inset: 0;
-  width: 28px;
-  height: 100%;
-  opacity: 0;
-  cursor: pointer;
-  border: none;
-  background: transparent;
-  padding: 0;
-  z-index: 2;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 14px;
+  height: 14px;
+  color: var(--faint);
+  pointer-events: none;
 }
-.olo-border-color-text {
+
+/* colore — la riga ospita FieldColor (blocco multi-riga): label allineata in alto */
+.olo-border2-row--top { align-items: flex-start; }
+.olo-border2-row--top .olo-border2-lab { padding-top: 10px; }
+.olo-border2-colorwrap {
   flex: 1;
   min-width: 0;
-  border: none;
-  background: transparent;
-  font-size: 11px;
-  font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
-  color: #374151;
-  outline: none;
-  padding: 0 6px 0 0;
 }
 
-/* ── Croce ── */
-.olo-border-cross {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-}
-
-.olo-border-cross-top,
-.olo-border-cross-bot {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-}
-
-.olo-border-cross-mid {
+/* peek */
+.olo-border2-peek {
+  margin-top: 4px;
+  height: 62px;
+  border-radius: 10px;
+  background: repeating-conic-gradient(#f0f1f4 0 25%, #fff 0 50%) 50% / 14px 14px;
   display: flex;
   align-items: center;
-  gap: 2px;
+  justify-content: center;
 }
-
-.olo-border-cross-side {
-  display: flex;
-  align-items: center;
-  gap: 2px;
-}
-
-/* Segmenti lato (indicatore attivo) */
-.olo-border-seg {
-  background: #e5e7eb;
-  border-radius: 2px;
-  transition: background 0.2s;
-}
-.olo-border-seg--h { width: 68px; height: 3px; }
-.olo-border-seg--v { width: 3px;  height: 50px; }
-.olo-border-seg--on { background: var(--olo-color-primary, #6366f1); }
-
-/* Input numerico lato */
-.olo-border-num {
-  width: 56px;
-  height: 26px;
-  background: #f0f4f8;
-  border: 1.5px solid #d1d9e6;
-  border-radius: 5px;
-  font-size: 11px;
-  font-weight: 500;
-  color: #374151;
-  text-align: center;
-  outline: none;
-  -moz-appearance: textfield;
-  padding: 0 4px;
-  transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
-}
-.olo-border-num::-webkit-inner-spin-button,
-.olo-border-num::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
-.olo-border-num:focus {
-  border-color: #60a5fa;
-  box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.25);
+.olo-border2-chip {
+  width: 90px;
+  height: 40px;
+  border-radius: 8px;
   background: #fff;
+  box-sizing: border-box;
 }
-.olo-border-num:hover:not(:focus) { border-color: #93c5fd; background: #fff; }
-.olo-border-num--active {
-  border-color: var(--olo-color-primary, #6366f1);
-  color: var(--olo-color-primary, #6366f1);
-  font-weight: 600;
-}
-
-/* Preview box centrale */
-.olo-border-preview {
-  width: 68px;
-  height: 50px;
-  background: rgba(96, 165, 250, 0.04);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 4px;
-  transition: border 0.15s, opacity 0.2s;
-}
-
-/* Bottone link */
-.olo-border-link-btn {
-  width: 28px;
-  height: 28px;
-  border-radius: 7px;
-  border: 1.5px solid #d1d9e6;
-  background: #f0f4f8;
-  color: #6b7280;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.15s;
-}
-.olo-border-link-btn:hover { border-color: #60a5fa; color: #3b82f6; background: #eff6ff; }
-.olo-border-link-btn--linked { border-color: #60a5fa; color: #3b82f6; background: #eff6ff; }
 </style>

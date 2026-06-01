@@ -335,6 +335,54 @@
       </div>
     </div>
 
+    <!-- Grana / Texture -->
+    <div class="olo-card">
+      <button class="olo-card-head olo-card-toggle" @click="toggle('grain')">
+        <div style="display:flex;align-items:flex-start;gap:14px">
+          <div class="olo-card-icon" style="background:#1a1a1a;color:#fff">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="5" cy="6" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="19" cy="7" r="1"/><circle cx="7" cy="13" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="20" cy="15" r="1"/><circle cx="5" cy="19" r="1"/><circle cx="13" cy="19" r="1"/></svg>
+          </div>
+          <div>
+            <h3>{{ t('Grana / Texture') }}</h3>
+            <p>{{ t('Sovrapposizione di rumore fine su tutta la pagina') }}</p>
+          </div>
+        </div>
+        <svg :class="['olo-chevron', sections.grain && 'open']" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div v-show="sections.grain" class="olo-card-body">
+        <div class="olo-color-item" style="margin-bottom:14px">
+          <label style="display:flex;align-items:center;gap:10px;cursor:pointer">
+            <input
+              type="checkbox"
+              :checked="stylesStore.grain.enabled"
+              @change="stylesStore.updateGrain('enabled', $event.target.checked)"
+            />
+            {{ t('Attiva grana su tutto il sito') }}
+          </label>
+        </div>
+        <template v-if="stylesStore.grain.enabled">
+          <div class="olo-color-item" style="margin-bottom:12px">
+            <label>{{ t('Opacità') }} ({{ stylesStore.grain.opacity ?? 6 }}%)</label>
+            <input
+              type="range" min="0" max="30" step="1"
+              :value="stylesStore.grain.opacity ?? 6"
+              @input="stylesStore.updateGrain('opacity', parseInt($event.target.value))"
+              style="width:100%"
+            />
+          </div>
+          <div class="olo-color-item">
+            <label>{{ t('Dimensione grana (px)') }} ({{ stylesStore.grain.scale ?? 180 }})</label>
+            <input
+              type="range" min="60" max="400" step="10"
+              :value="stylesStore.grain.scale ?? 180"
+              @input="stylesStore.updateGrain('scale', parseInt($event.target.value))"
+              style="width:100%"
+            />
+          </div>
+        </template>
+      </div>
+    </div>
+
     <!-- Save / Reset -->
     <div class="olo-actions">
       <button
@@ -406,6 +454,7 @@ const sections = reactive({
   radius: false,
   shadows: false,
   fonts: false,
+  grain: false,
 });
 
 function toggle(key) {

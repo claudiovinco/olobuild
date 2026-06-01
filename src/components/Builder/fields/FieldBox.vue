@@ -200,6 +200,10 @@ function toggleLink() {
 
 <style scoped>
 .olo-boxfield {
+  /* Accento del controllo: arancio CHROME del builder quando un contenitore
+     espone --olo-ui-accent (es. FieldBorder), altrimenti fallback INVARIATO al
+     primario — nessuna regressione per margine/padding/raggio usati altrove. */
+  --olo-bf-accent: var(--olo-ui-accent, var(--olo-color-primary, #6366f1));
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -227,13 +231,13 @@ function toggleLink() {
   transition: all 0.15s;
 }
 .olo-bf-link:hover {
-  border-color: var(--olo-color-primary, #6366f1);
-  color: var(--olo-color-primary, #6366f1);
+  border-color: var(--olo-bf-accent);
+  color: var(--olo-bf-accent);
 }
 .olo-bf-link.is-linked {
-  border-color: var(--olo-color-primary, #6366f1);
-  color: var(--olo-color-primary, #6366f1);
-  background: color-mix(in srgb, var(--olo-color-primary, #6366f1) 10%, #fff);
+  border-color: var(--olo-bf-accent);
+  color: var(--olo-bf-accent);
+  background: color-mix(in srgb, var(--olo-bf-accent) 10%, #fff);
 }
 
 /* slider */
@@ -254,7 +258,7 @@ function toggleLink() {
   height: 16px;
   border-radius: 50%;
   background: #fff;
-  border: 2px solid var(--olo-color-primary, #6366f1);
+  border: 2px solid var(--olo-bf-accent);
   cursor: pointer;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
@@ -263,11 +267,11 @@ function toggleLink() {
   height: 16px;
   border-radius: 50%;
   background: #fff;
-  border: 2px solid var(--olo-color-primary, #6366f1);
+  border: 2px solid var(--olo-bf-accent);
   cursor: pointer;
 }
 .olo-bf-slider:focus-visible {
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #6366f1) 25%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-bf-accent) 25%, transparent);
 }
 
 /* valore + unità */
@@ -324,8 +328,8 @@ function toggleLink() {
   flex-shrink: 0;
   width: 26px;
   height: 26px;
-  border: 2px solid var(--olo-color-primary, #6366f1);
-  background: color-mix(in srgb, var(--olo-color-primary, #6366f1) 12%, #fff);
+  border: 2px solid var(--olo-bf-accent);
+  background: color-mix(in srgb, var(--olo-bf-accent) 12%, #fff);
   transition: border-radius 0.2s ease;
 }
 
@@ -348,8 +352,8 @@ function toggleLink() {
   cursor: text;
 }
 .olo-bf-cell:focus-within {
-  border-color: var(--olo-color-primary, #6366f1);
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--olo-color-primary, #6366f1) 18%, transparent);
+  border-color: var(--olo-bf-accent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--olo-bf-accent) 18%, transparent);
 }
 .olo-bf-ic {
   display: inline-flex;

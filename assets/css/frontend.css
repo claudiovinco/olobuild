@@ -5,6 +5,153 @@
  */
 
 /* ========================================
+   Mesh / Aurora background (bg.type = 'mesh')
+   Drift animation for the multi-blob gradient.
+   Built inline by Olo_CSS_Builder::build_mesh_css().
+   ======================================== */
+@keyframes olo-mesh-drift {
+  0%   { background-position: 0% 0%, 100% 0%, 50% 100%; }
+  50%  { background-position: 30% 20%, 70% 10%, 40% 80%; }
+  100% { background-position: 10% 30%, 90% 40%, 60% 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  [style*="olo-mesh-drift"] { animation: none !important; }
+}
+
+/* ========================================
+   Glow / "Bagliori" — animazioni dello sfondo (bg.type = 'glow', glow_anim).
+   Animano SOLO background-size / background-position: gli aloni respirano,
+   derivano o sfarfallano SENZA muovere testo o immagini sopra. Costruite inline
+   da getGlowCSS()/build_glow_css() (a riposo: background-size:140% 140%).
+   ======================================== */
+/* Pulse — respiro d'intensità: gli aloni si gonfiano e sgonfiano.
+   L'ampiezza è controllata da --olo-glow-bs-min/max (slider "Intensità respiro");
+   i fallback 120%/175% mantengono invariati i template che non li impostano. */
+@keyframes olo-glow-pulse {
+  0%,100% { background-size: var(--olo-glow-bs-min, 120%) var(--olo-glow-bs-min, 120%); }
+  50%     { background-size: var(--olo-glow-bs-max, 175%) var(--olo-glow-bs-max, 175%); }
+}
+/* Drift — deriva lenta della posizione, dimensione costante */
+@keyframes olo-glow-drift {
+  0%   { background-position: 50% 50%; }
+  25%  { background-position: 38% 42%; }
+  50%  { background-position: 60% 58%; }
+  75%  { background-position: 45% 62%; }
+  100% { background-position: 50% 50%; }
+}
+/* Wander — respiro + deriva combinati (più organico) */
+@keyframes olo-glow-wander {
+  0%   { background-size: 130% 130%; background-position: 42% 46%; }
+  50%  { background-size: 170% 170%; background-position: 60% 56%; }
+  100% { background-size: 130% 130%; background-position: 42% 46%; }
+}
+/* Flicker — micro-sfarfallio irregolare, tipo neon vivo (steps) */
+@keyframes olo-glow-flicker {
+  0%,100% { background-size: 150% 150%; }
+  20%     { background-size: 158% 158%; }
+  35%     { background-size: 142% 142%; }
+  55%     { background-size: 168% 168%; }
+  70%     { background-size: 146% 146%; }
+  85%     { background-size: 160% 160%; }
+}
+/* Scroll — stessa progressione del wander ma legata allo scroll (vedi sotto) */
+@keyframes olo-glow-scroll {
+  0%   { background-size: 120% 120%; background-position: 50% 30%; }
+  100% { background-size: 185% 185%; background-position: 50% 75%; }
+}
+/* ── Preset COMBINATI: due animazioni atomiche (una su size, una su position)
+   montate su durate diverse → moto composito che non si ripete mai uguale.
+   Gli inline-style applicano `animation: <size-kf> Xs, <pos-kf> Ys`. ── */
+/* atomiche — solo background-size (ampiezza via --olo-glow-bs-min/max, fallback 125/180) */
+@keyframes olo-glow-size-breathe {
+  0%,100% { background-size: var(--olo-glow-bs-min, 125%) var(--olo-glow-bs-min, 125%); }
+  50%     { background-size: var(--olo-glow-bs-max, 180%) var(--olo-glow-bs-max, 180%); }
+}
+@keyframes olo-glow-size-throb   { 0%,100% { background-size: 150% 150%; } 18% { background-size: 162% 162%; } 37% { background-size: 140% 140%; } 60% { background-size: 172% 172%; } 80% { background-size: 146% 146%; } }
+/* atomiche — solo background-position */
+@keyframes olo-glow-pos-orbit {
+  0%   { background-position: 38% 42%; }
+  25%  { background-position: 62% 38%; }
+  50%  { background-position: 64% 62%; }
+  75%  { background-position: 40% 60%; }
+  100% { background-position: 38% 42%; }
+}
+@keyframes olo-glow-pos-sway {
+  0%,100% { background-position: 44% 50%; }
+  50%     { background-position: 58% 52%; }
+}
+/* Scroll-driven dove supportato (Chrome/Edge): la timeline segue l'ingresso/uscita
+   dell'elemento dal viewport. Dove non supportato, resta il loop temporale inline. */
+@supports (animation-timeline: view()) {
+  [style*="olo-glow-scroll"] {
+    animation-timeline: view() !important;
+    animation-iteration-count: 1 !important;
+    animation-duration: auto !important;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  [style*="olo-glow-"] { animation: none !important; }
+}
+
+/*
+ * Grain / Noise overlay (site-wide theme option) is emitted dynamically by
+ * Olo_Style_System::generate_css() targeting `.olo-template::after` when
+ * olo_styles.grain.enabled is true — no static rule here so it never shows
+ * unless the user turns it on.
+ */
+
+/* ========================================
+   Live dot — pallino "Stato live" pulsante (tile Badge)
+   Registrato UNA volta qui (frontend) + in iframe-builder.css (canvas).
+   Colore dal ruolo globale: success (default) o primario (.is-brand).
+   ======================================== */
+.olo-live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--olo-color-success, #22c55e);
+  position: relative;
+  flex: none;
+  display: inline-block;
+}
+.olo-live-dot.is-brand { background: var(--olo-color-primary, #e1474f); }
+.olo-live-dot::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1px solid currentColor;
+  color: var(--olo-color-success, #22c55e);
+  opacity: .6;
+  animation: olo-pulse 1.8s ease-out infinite;
+}
+.olo-live-dot.is-brand::after { color: var(--olo-color-primary, #e1474f); }
+@keyframes olo-pulse {
+  0%   { transform: scale(.6); opacity: .7; }
+  100% { transform: scale(2);  opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .olo-live-dot::after { animation: none; }
+}
+
+/* ========================================
+   Animazioni LOOP continue (infinite_animation) — keyframes globali nominati.
+   Usati dal path "advanced" (build_inline_animation_css); il path "settings"
+   genera invece keyframe per-id parametrici. "Galleggiamento" = olo-anim-float.
+   ======================================== */
+@keyframes olo-anim-float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+@keyframes olo-anim-float-rot { 0%,100%{transform:translateY(0) rotate(-4deg)} 50%{transform:translateY(-12px) rotate(-4deg)} }
+@keyframes olo-anim-pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.05)} }
+@keyframes olo-anim-spin { 0%{transform:rotate(0)} 100%{transform:rotate(360deg)} }
+@keyframes olo-anim-wiggle { 0%,100%{transform:rotate(0)} 25%{transform:rotate(-5deg)} 75%{transform:rotate(5deg)} }
+@keyframes olo-anim-bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-15px)} }
+@keyframes olo-anim-swing { 0%,100%{transform:rotate(0)} 25%{transform:rotate(10deg)} 75%{transform:rotate(-10deg)} }
+@keyframes olo-anim-breathe { 0%,100%{opacity:1} 50%{opacity:0.6} }
+@media (prefers-reduced-motion: reduce) {
+  [style*="olo-anim-"] { animation: none !important; }
+}
+
+/* ========================================
    Template wrapper – full-width breakout
    ======================================== */
 /*

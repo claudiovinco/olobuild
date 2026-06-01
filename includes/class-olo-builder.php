@@ -2992,6 +2992,7 @@ class Olo_Builder {
         require_once OLO_PATH . 'includes/tiles/class-counter-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-iconbox-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-alert-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-badge-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-team-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-accordion-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-icontabs-tile.php';
@@ -3152,6 +3153,7 @@ class Olo_Builder {
         $manager->register_tile( new Olo_Counter_Tile() );
         $manager->register_tile( new Olo_IconBox_Tile() );
         $manager->register_tile( new Olo_Alert_Tile() );
+        $manager->register_tile( new Olo_Badge_Tile() );
         $manager->register_tile( new Olo_Team_Tile() );
         $manager->register_tile( new Olo_Accordion_Tile() );
         $manager->register_tile( new Olo_IconTabs_Tile() );

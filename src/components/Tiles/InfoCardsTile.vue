@@ -45,6 +45,8 @@
 
 <script setup>
 import { computed } from 'vue';
+import { useBuilderStore } from '@/stores/builder';
+import { resolveResponsive } from '@/composables/useResponsiveValue';
 import iconsSvg from '../ProSlider/iconsLibrary.js';
 
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
@@ -129,11 +131,19 @@ const containerStyle = computed(() => ({
   padding: (s.value.container_padding || 0) + 'px',
 }));
 
-const gridStyle = computed(() => ({
-  display: 'grid',
-  gridTemplateColumns: `repeat(${s.value.columns || 3}, 1fr)`,
-  gap: (s.value.items_gap || 0) + 'px',
-}));
+// columns/items_gap sono PER-DEVICE (responsive: true in info-cards.js): si leggono col
+// breakpoint attivo del builder. minmax(0, 1fr) — non '1fr' — impedisce che colonne con
+// contenuto largo (titoli 72px) sfondino il container.
+const builderStore = useBuilderStore();
+const gridStyle = computed(() => {
+  const cols = parseInt(resolveResponsive(s.value, 'columns', builderStore.viewMode)) || 3;
+  const gap = parseInt(resolveResponsive(s.value, 'items_gap', builderStore.viewMode));
+  return {
+    display: 'grid',
+    gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`,
+    gap: (isNaN(gap) ? 0 : gap) + 'px',
+  };
+});
 
 const cardStyle = computed(() => {
   const out = {

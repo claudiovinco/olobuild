@@ -214,6 +214,16 @@ class Olo_Frontend_Renderer {
             $inline_styles[] = 'overflow: ' . esc_attr( $style['overflow'] );
         }
 
+        // Blend mode (mix-blend-mode sul wrapper) — whitelist contro CSS injection.
+        if ( ! empty( $style['blend_mode'] ) && $style['blend_mode'] !== 'normal' ) {
+            $allowed_blend = [ 'multiply', 'screen', 'overlay', 'darken', 'lighten',
+                'color-dodge', 'color-burn', 'hard-light', 'soft-light', 'difference',
+                'exclusion', 'hue', 'saturation', 'color', 'luminosity' ];
+            if ( in_array( $style['blend_mode'], $allowed_blend, true ) ) {
+                $inline_styles[] = 'mix-blend-mode: ' . $style['blend_mode'];
+            }
+        }
+
         // Dimensions (tile_width / tile_max_width / tile_min_height) — unità libere via safe_dim_value
         $dim_map = [
             'tile_width'      => 'width',
@@ -1064,8 +1074,12 @@ class Olo_Frontend_Renderer {
     /**
      * Render a node (recursive dispatcher).
      */
+    /** Profondità di annidamento delle chiamate render_node: serve a localizzare i link UNA sola volta (sul nodo radice). */
+    private $link_depth = 0;
+
     private function render_node( $node, $manager, $template_id, &$hover_css_rules, &$tile_counter, $parent_is_grid = false ) {
         if ( ! $this->should_render_node( $node ) ) return '';
+        $this->link_depth++;
 
         $type = $node['type'] ?? '';
         switch ( $type ) {
@@ -1127,7 +1141,33 @@ class Olo_Frontend_Renderer {
             }
         }
 
+        $this->link_depth--;
+        if ( $this->link_depth === 0 ) {
+            $html = $this->localize_internal_links( $html );
+        }
+
         return $html;
+    }
+
+    /**
+     * Prefissa il base path dell'installazione (es. /olobuild) ai link interni
+     * root-relative (href="/...") — necessario quando WordPress è installato in una
+     * SOTTOCARTELLA. No-op se il sito è in root. Idempotente: salta i link che già
+     * iniziano col base path, gli URL assoluti/protocol-relative, le ancore e mailto/tel.
+     */
+    private function localize_internal_links( $html ) {
+        if ( ! is_string( $html ) || $html === '' ) return $html;
+        $base = rtrim( (string) wp_parse_url( home_url( '/' ), PHP_URL_PATH ), '/' );
+        if ( $base === '' || $base === '/' ) return $html; // sito in root → nessuna modifica
+        return preg_replace_callback(
+            '/\shref="(\/(?!\/)[^"]*)"/i',
+            function ( $m ) use ( $base ) {
+                $url = $m[1];
+                if ( strpos( $url, $base . '/' ) === 0 || $url === $base ) return $m[0]; // già col base
+                return ' href="' . $base . $url . '"';
+            },
+            $html
+        );
     }
 
     /**
@@ -2837,6 +2877,14 @@ class Olo_Frontend_Renderer {
         // Custom CSS per elemento (campo settings.custom_css)
         $this->collect_custom_css( $settings, $css_id, $hover_css_rules );
 
+        // Infinite/loop animation (Galleggiamento, ecc.) — Avanzate → "Animazione continua".
+        // Le sezioni la rendono già; qui la abilitiamo anche per le TILE (es. badge flottante
+        // su un'immagine). Usa il builder per-id parametrico (ampiezza/ritardo/reduced-motion).
+        $elem_inf_anim_css = $this->css->build_infinite_animation_css( $advanced, $css_id );
+        if ( $elem_inf_anim_css ) {
+            $hover_css_rules[] = $elem_inf_anim_css;
+        }
+
         // Scrollspy & element parallax attributes (skip for fixed tiles — handled by sentinel JS)
         $elem_scrollspy_attr = ( $pos_mode === 'fixed' ) ? '' : $this->anim->build_scrollspy_attr( $advanced );
         $elem_el_parallax_attr = $this->anim->build_element_parallax_attr( $advanced );
@@ -3225,13 +3273,15 @@ class Olo_Frontend_Renderer {
                 if ( $eff_c !== '' ) {
                     $bs = $this->safe_border_style( $eff_s ?: 'solid' );
                     $bc = $this->safe_border_color( $eff_c );
+                    // !important: il bordo base è reso INLINE sull'elemento e un selettore
+                    // #id:hover non lo sovrascriverebbe (l'inline ha specificità maggiore).
                     if ( $eff_t === $eff_r && $eff_r === $eff_b && $eff_b === $eff_l ) {
-                        $hover_decls[] = "border: {$eff_t}px {$bs} {$bc}";
+                        $hover_decls[] = "border: {$eff_t}px {$bs} {$bc} !important";
                     } else {
-                        if ( $eff_t ) $hover_decls[] = "border-top: {$eff_t}px {$bs} {$bc}";
-                        if ( $eff_r ) $hover_decls[] = "border-right: {$eff_r}px {$bs} {$bc}";
-                        if ( $eff_b ) $hover_decls[] = "border-bottom: {$eff_b}px {$bs} {$bc}";
-                        if ( $eff_l ) $hover_decls[] = "border-left: {$eff_l}px {$bs} {$bc}";
+                        if ( $eff_t ) $hover_decls[] = "border-top: {$eff_t}px {$bs} {$bc} !important";
+                        if ( $eff_r ) $hover_decls[] = "border-right: {$eff_r}px {$bs} {$bc} !important";
+                        if ( $eff_b ) $hover_decls[] = "border-bottom: {$eff_b}px {$bs} {$bc} !important";
+                        if ( $eff_l ) $hover_decls[] = "border-left: {$eff_l}px {$bs} {$bc} !important";
                     }
                     $has_hover = true;
                 }
@@ -3378,6 +3428,115 @@ class Olo_Frontend_Renderer {
             $hover_css_rules[] = "{$sel} { transition: {$trans_val}; }";
             $hover_css_rules[] = "{$sel}:hover { " . implode( '; ', $hover_decls ) . "; }";
         }
+
+        // Effetti bordo avanzati (neon/gradiente) del WRAPPER — letti da style.border_effect*.
+        // Agganciati qui perché collect_hover_css è il punto comune a TUTTI i percorsi
+        // wrapper (element/section/row/column), con $style + $css_id già disponibili.
+        $be_css = $this->build_wrapper_border_effect_css( $css_id, $style );
+        if ( $be_css !== '' ) {
+            $hover_css_rules[] = $be_css;
+        }
+    }
+
+    /**
+     * Effetti bordo avanzati (neon / neon-pulse / gradiente / gradiente-rotante) per il
+     * WRAPPER di un nodo (element/section/row/column). Equivalente lato wrapper di
+     * Olo_Tile_Base::build_border_effect_css: legge style.border (colore base) +
+     * style.border_effect_*. Selettore = #css_id. Stringa CSS senza <style> (o '').
+     */
+    private function build_wrapper_border_effect_css( $css_id, $style ) {
+        $effect = $style['border_effect'] ?? 'none';
+        if ( $effect === 'none' || $effect === '' ) return '';
+
+        $border  = $style['border'] ?? null;
+        $b_color = is_array( $border ) ? trim( $border['color'] ?? '' ) : '';
+        $b_active = is_array( $border ) && $b_color !== '' && (
+            intval( $border['top'] ?? 0 ) || intval( $border['right'] ?? 0 ) ||
+            intval( $border['bottom'] ?? 0 ) || intval( $border['left'] ?? 0 )
+        );
+        // neon/neon-pulse richiedono un bordo base con colore; i gradienti no (usano border-image).
+        if ( ! $b_active && ! in_array( $effect, [ 'gradient', 'gradient-spin' ], true ) ) return '';
+
+        $uid    = '#' . $css_id;
+        $color1 = $b_color !== '' ? $b_color : '#e1474f';
+        $color2 = trim( $style['border_effect_color2'] ?? '' ) ?: '#f4a23b';
+
+        switch ( $effect ) {
+            case 'neon':
+                $levels = [ 'subtle' => [ 4, 8 ], 'medium' => [ 6, 18 ], 'intense' => [ 10, 30 ] ];
+                $intensity = $style['border_effect_intensity'] ?? 'medium';
+                [ $a, $b ] = $levels[ $intensity ] ?? $levels['medium'];
+                $alpha = $this->hex_to_rgba( $color1, 0.45 );
+                return "{$uid}{box-shadow:0 0 {$a}px {$color1},0 0 {$b}px {$color1},0 0 " . ( $b * 2 ) . "px {$alpha};}";
+
+            case 'neon-pulse':
+                $intensity = $style['border_effect_intensity'] ?? 'medium';
+                $anim_id   = 'olo-np-' . substr( md5( $uid . $color1 ), 0, 6 );
+                $a1 = $this->hex_to_rgba( $color1, 0.5 );
+                $a2 = $this->hex_to_rgba( $color1, 0.8 );
+                switch ( $intensity ) {
+                    case 'subtle':  [ $s1, $s2, $s3, $s4 ] = [ 3, 6, 5, 12 ]; break;
+                    case 'intense': [ $s1, $s2, $s3, $s4 ] = [ 8, 20, 14, 40 ]; break;
+                    default:        [ $s1, $s2, $s3, $s4 ] = [ 5, 12, 8, 24 ]; break;
+                }
+                return "@keyframes {$anim_id}{0%,100%{box-shadow:0 0 {$s1}px {$color1},0 0 {$s2}px {$a1};}50%{box-shadow:0 0 {$s3}px {$color1},0 0 {$s4}px {$a2},0 0 " . ( $s4 * 2 ) . "px {$a1};}}" .
+                       "{$uid}{animation:{$anim_id} 2s ease-in-out infinite;}";
+
+            case 'gradient':
+                $angle = intval( $style['border_effect_angle'] ?? 135 );
+                return "{$uid}{border-image:linear-gradient({$angle}deg,{$color1},{$color2}) 1;}";
+
+            case 'gradient-spin':
+                $speed   = max( 1, intval( $style['border_effect_speed'] ?? 4 ) );
+                $prop    = '--olo-ba-' . substr( md5( $uid ), 0, 6 );
+                $anim_id = 'olo-bs-' . substr( md5( $uid ), 0, 6 );
+                return "@property {$prop}{syntax:'<angle>';initial-value:0deg;inherits:false;}" .
+                       "@keyframes {$anim_id}{to{{$prop}:360deg;}}" .
+                       "{$uid}{border-image:conic-gradient(from var({$prop}),{$color1},{$color2},{$color1}) 1;" .
+                       "animation:{$anim_id} {$speed}s linear infinite;}";
+        }
+        return '';
+    }
+
+    /** Converte un colore hex in rgba(r,g,b,alpha); fallback brand se non hex. */
+    private function hex_to_rgba( $hex, $alpha ) {
+        $hex = ltrim( (string) $hex, '#' );
+        if ( strlen( $hex ) === 3 ) $hex = $hex[0].$hex[0].$hex[1].$hex[1].$hex[2].$hex[2];
+        if ( strlen( $hex ) !== 6 || ! ctype_xdigit( $hex ) ) return "rgba(225,71,79,{$alpha})";
+        $r = hexdec( substr( $hex, 0, 2 ) );
+        $g = hexdec( substr( $hex, 2, 2 ) );
+        $b = hexdec( substr( $hex, 4, 2 ) );
+        return "rgba({$r},{$g},{$b},{$alpha})";
+    }
+
+    /** Dichiarazione text-shadow da chiavi (text_shadow_h/_v/_blur/_color + $suffix). '' se inattiva.
+     *  !important perché il valore desktop è inline e va sovrascritto nelle media query. */
+    private function build_text_shadow_decl( $src, $suffix = '' ) {
+        $h = $src["text_shadow_h{$suffix}"]    ?? null;
+        $v = $src["text_shadow_v{$suffix}"]    ?? null;
+        $b = $src["text_shadow_blur{$suffix}"] ?? null;
+        if ( $h === null && $v === null && $b === null ) return '';
+        $hi = intval( $h ?? 0 ); $vi = intval( $v ?? 0 ); $bi = intval( $b ?? 0 );
+        if ( ! $hi && ! $vi && ! $bi ) return '';
+        $c = esc_attr( $src["text_shadow_color{$suffix}"] ?? 'rgba(0,0,0,0.3)' );
+        return "text-shadow: {$hi}px {$vi}px {$bi}px {$c} !important";
+    }
+
+    /** Dichiarazioni backdrop-filter da chiavi (backdrop_blur/_brightness/_saturate + $suffix). [] se inattive. */
+    private function build_backdrop_decls( $src, $suffix = '' ) {
+        $parts = [];
+        if ( isset( $src["backdrop_blur{$suffix}"] ) && intval( $src["backdrop_blur{$suffix}"] ) != 0 ) {
+            $parts[] = 'blur(' . intval( $src["backdrop_blur{$suffix}"] ) . 'px)';
+        }
+        if ( isset( $src["backdrop_brightness{$suffix}"] ) && intval( $src["backdrop_brightness{$suffix}"] ) != 100 ) {
+            $parts[] = 'brightness(' . intval( $src["backdrop_brightness{$suffix}"] ) . '%)';
+        }
+        if ( isset( $src["backdrop_saturate{$suffix}"] ) && intval( $src["backdrop_saturate{$suffix}"] ) != 100 ) {
+            $parts[] = 'saturate(' . intval( $src["backdrop_saturate{$suffix}"] ) . '%)';
+        }
+        if ( empty( $parts ) ) return [];
+        $val = implode( ' ', $parts );
+        return [ '-webkit-backdrop-filter: ' . $val . ' !important', 'backdrop-filter: ' . $val . ' !important' ];
     }
 
     /**
@@ -3464,6 +3623,19 @@ class Olo_Frontend_Renderer {
                 }
             }
 
+            // Border per-device (oggetto 4-side su border_<bp>). Il controllo "Bordo"
+            // di Spazi & Bordi salva un override per breakpoint: stessa policy del
+            // desktop (build_wrapper_border_css) — se la chiave esiste è un override
+            // esplicito, incluso "border: none" per disattivare il bordo su quel device.
+            $bd_key = "border_{$bp}";
+            if ( isset( $style[ $bd_key ] ) && is_array( $style[ $bd_key ] ) ) {
+                // !important: il bordo desktop è inline, va sovrascritto nella media query.
+                $bd_css = $this->build_wrapper_border_css( [ 'border' => $style[ $bd_key ] ], true );
+                if ( $bd_css !== '' ) {
+                    $decls[] = $bd_css;
+                }
+            }
+
             // Transform responsive overrides
             $resp_t_parts = [];
             $t_scale_key = "transform_scale_{$bp}";
@@ -3478,8 +3650,20 @@ class Olo_Frontend_Renderer {
             if ( isset( $style[ $t_ty_key ] ) && $style[ $t_ty_key ] !== '' && $style[ $t_ty_key ] !== null ) {
                 $resp_t_parts[] = 'translateY(' . floatval( $style[ $t_ty_key ] ) . 'px)';
             }
+            $t_rot_key = "transform_rotate_{$bp}";
+            if ( isset( $style[ $t_rot_key ] ) && $style[ $t_rot_key ] !== '' && $style[ $t_rot_key ] !== null ) {
+                $resp_t_parts[] = 'rotate(' . intval( $style[ $t_rot_key ] ) . 'deg)';
+            }
+            $t_skx_key = "transform_skewX_{$bp}";
+            if ( isset( $style[ $t_skx_key ] ) && $style[ $t_skx_key ] !== '' && $style[ $t_skx_key ] !== null ) {
+                $resp_t_parts[] = 'skewX(' . intval( $style[ $t_skx_key ] ) . 'deg)';
+            }
+            $t_sky_key = "transform_skewY_{$bp}";
+            if ( isset( $style[ $t_sky_key ] ) && $style[ $t_sky_key ] !== '' && $style[ $t_sky_key ] !== null ) {
+                $resp_t_parts[] = 'skewY(' . intval( $style[ $t_sky_key ] ) . 'deg)';
+            }
             if ( ! empty( $resp_t_parts ) ) {
-                $decls[] = 'transform: ' . implode( ' ', $resp_t_parts );
+                $decls[] = 'transform: ' . implode( ' ', $resp_t_parts ) . ' !important';
             }
 
             // Width override
@@ -3544,6 +3728,35 @@ class Olo_Frontend_Renderer {
                 if ( isset( $advanced[ $pz_key ] ) && $advanced[ $pz_key ] !== '' && $advanced[ $pz_key ] !== null ) {
                     $decls[] = 'z-index: ' . intval( $advanced[ $pz_key ] );
                 }
+            }
+
+            // ── Effetti per-device — NORMALE (#id): opacity / text-shadow / backdrop ──
+            $op_key = "opacity_{$bp}";
+            if ( isset( $style[ $op_key ] ) && $style[ $op_key ] !== '' && $style[ $op_key ] !== null ) {
+                $decls[] = 'opacity: ' . ( intval( $style[ $op_key ] ) / 100 ) . ' !important';
+            }
+            $ts_n = $this->build_text_shadow_decl( $style, "_{$bp}" );
+            if ( $ts_n !== '' ) $decls[] = $ts_n;
+            foreach ( $this->build_backdrop_decls( $style, "_{$bp}" ) as $d ) $decls[] = $d;
+
+            // ── Effetti per-device — HOVER (#id:hover): opacity / transform / text-shadow / backdrop ──
+            $h = is_array( $style['hover'] ?? null ) ? $style['hover'] : [];
+            $h_decls = [];
+            $h_op = $h[ "opacity_{$bp}" ] ?? null;
+            if ( $h_op !== null && $h_op !== '' ) $h_decls[] = 'opacity: ' . ( intval( $h_op ) / 100 ) . ' !important';
+            $h_t_parts = [];
+            $hts = $h["transform_scale_{$bp}"]     ?? null; if ( $hts !== null && $hts !== '' ) $h_t_parts[] = 'scale(' . floatval( $hts ) . ')';
+            $htx = $h["transform_translateX_{$bp}"] ?? null; if ( $htx !== null && $htx !== '' ) $h_t_parts[] = 'translateX(' . floatval( $htx ) . 'px)';
+            $hty = $h["transform_translateY_{$bp}"] ?? null; if ( $hty !== null && $hty !== '' ) $h_t_parts[] = 'translateY(' . floatval( $hty ) . 'px)';
+            $hro = $h["transform_rotate_{$bp}"]     ?? null; if ( $hro !== null && $hro !== '' ) $h_t_parts[] = 'rotate(' . intval( $hro ) . 'deg)';
+            $hsx = $h["transform_skewX_{$bp}"]      ?? null; if ( $hsx !== null && $hsx !== '' ) $h_t_parts[] = 'skewX(' . intval( $hsx ) . 'deg)';
+            $hsy = $h["transform_skewY_{$bp}"]      ?? null; if ( $hsy !== null && $hsy !== '' ) $h_t_parts[] = 'skewY(' . intval( $hsy ) . 'deg)';
+            if ( ! empty( $h_t_parts ) ) $h_decls[] = 'transform: ' . implode( ' ', $h_t_parts ) . ' !important';
+            $ts_h = $this->build_text_shadow_decl( $h, "_{$bp}" );
+            if ( $ts_h !== '' ) $h_decls[] = $ts_h;
+            foreach ( $this->build_backdrop_decls( $h, "_{$bp}" ) as $d ) $h_decls[] = $d;
+            if ( ! empty( $h_decls ) ) {
+                $this->responsive_css_rules[ $max_width ][] = '#' . esc_attr( $css_id ) . ':hover { ' . implode( '; ', $h_decls ) . '; }';
             }
 
             if ( ! empty( $decls ) ) {
@@ -4601,7 +4814,11 @@ class Olo_Frontend_Renderer {
      * @param array $style  tile.style flat
      * @return string       CSS declarations (vuoto se nessun border)
      */
-    private function build_wrapper_border_css( $style ) {
+    private function build_wrapper_border_css( $style, $important = false ) {
+        // $important=true aggiunge !important: serve SOLO al bordo per-device nelle
+        // media query (collect_responsive_css), perché il bordo desktop è inline e
+        // un selettore #id non lo sovrascriverebbe altrimenti. Inline desktop = false.
+        $imp = $important ? ' !important' : '';
         // Sistema NUOVO: oggetto 4-side. Se la chiave esiste, vince sempre sul legacy.
         if ( array_key_exists( 'border', $style ) && is_array( $style['border'] ) ) {
             $b = $style['border'];
@@ -4616,18 +4833,18 @@ class Olo_Frontend_Renderer {
                 $bs = $this->safe_border_style( $stylename );
                 $bc = $this->safe_border_color( $color );
                 if ( $top === $right && $right === $bottom && $bottom === $left ) {
-                    return "border: {$top}px {$bs} {$bc}";
+                    return "border: {$top}px {$bs} {$bc}{$imp}";
                 }
                 $parts = [];
-                if ( $top    ) $parts[] = "border-top: {$top}px {$bs} {$bc}";
-                if ( $right  ) $parts[] = "border-right: {$right}px {$bs} {$bc}";
-                if ( $bottom ) $parts[] = "border-bottom: {$bottom}px {$bs} {$bc}";
-                if ( $left   ) $parts[] = "border-left: {$left}px {$bs} {$bc}";
+                if ( $top    ) $parts[] = "border-top: {$top}px {$bs} {$bc}{$imp}";
+                if ( $right  ) $parts[] = "border-right: {$right}px {$bs} {$bc}{$imp}";
+                if ( $bottom ) $parts[] = "border-bottom: {$bottom}px {$bs} {$bc}{$imp}";
+                if ( $left   ) $parts[] = "border-left: {$left}px {$bs} {$bc}{$imp}";
                 return implode( '; ', $parts );
             }
             // Nuovo sistema esiste ma utente l'ha messo a 0/vuoto → bordo OFF (no fallback).
             // Forza border:none così il legacy non riemerge via cascade CSS del tema.
-            return 'border: none';
+            return 'border: none' . $imp;
         }
 
         // Sistema LEGACY: 3 chiavi piatte. Solo se la chiave 'border' nuova non esiste.

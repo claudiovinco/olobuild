@@ -22,40 +22,47 @@
       </p>
 
       <template v-else>
-      <!-- Label + state toggles (responsive / hover) -->
+      <!-- Label + occhio hover + badge breakpoint. Lo switch device NON è qui:
+           il dispositivo si cambia dalla barra in alto (builderStore.viewMode) e
+           questo campo segue automaticamente quel breakpoint. Niente duplicati. -->
       <template v-if="field.responsive || field.hoverable">
         <div class="mb-flex mb-items-center mb-justify-between mb-mb-1">
           <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400">
             {{ t(field.label) }}
           </label>
           <div class="mb-flex mb-items-center mb-gap-1">
-            <button
+            <!-- Toggle Normale/Hover (sostituisce la vecchia icona "occhio"). Pilota la
+                 stessa `hoverOpen`: "Hover" apre il controllo della variante hover qui sotto.
+                 Classe dedicata .olo-hover-seg (NON Tailwind arbitrario [#hex]: il JIT non
+                 lo genera in modo affidabile) → stessa grafica di .olo-es-seg/.olo-bs-seg. -->
+            <div
               v-if="field.hoverable"
-              @click="hoverOpen = !hoverOpen"
-              class="mb-p-0.5 mb-rounded mb-transition-colors"
-              :class="hoverOpen || hasHoverValue ? 'mb-text-orange-400' : 'mb-text-gray-500 hover:mb-text-gray-300'"
-              :title="t('Stato hover')"
+              class="olo-hover-seg"
+              role="tablist"
+              :aria-label="t('Stato Normale o Hover')"
             >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
-            </button>
-            <button
-              v-if="field.responsive"
-              @click="respOpen = !respOpen"
-              class="mb-p-0.5 mb-rounded mb-transition-colors"
-              :class="respBp !== 'desktop' || respOpen ? 'mb-text-primary-400' : 'mb-text-gray-500 hover:mb-text-gray-300'"
-              :title="t('Responsive')"
+              <button
+                type="button" role="tab" :aria-selected="!hoverOpen ? 'true' : 'false'"
+                :class="{ on: !hoverOpen }"
+                @click="hoverOpen = false"
+              >{{ t('Normale') }}</button>
+              <button
+                type="button" role="tab" :aria-selected="hoverOpen ? 'true' : 'false'"
+                :class="{ on: hoverOpen }"
+                @click="hoverOpen = true"
+              >
+                {{ t('Hover') }}
+                <span v-if="hasHoverValue" class="olo-hover-seg-dot"></span>
+              </button>
+            </div>
+            <span
+              v-if="field.responsive && respBp !== 'desktop'"
+              class="mb-text-[9px] mb-bg-primary-700 mb-text-primary-200 mb-px-1.5 mb-py-0.5 mb-rounded mb-font-medium"
+              :title="t('Stai modificando questo breakpoint — cambia dispositivo dalla barra in alto')"
             >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg>
-            </button>
+              {{ t(respBreakpoints.find(b => b.key === respBp)?.label) }}
+            </span>
           </div>
-        </div>
-        <div v-if="field.responsive && respOpen" class="mb-mb-1.5">
-          <DeviceSwitch />
-        </div>
-        <div v-if="field.responsive && !respOpen && respBp !== 'desktop'" class="mb-mb-1">
-          <span class="mb-text-[9px] mb-bg-primary-700 mb-text-primary-200 mb-px-1.5 mb-py-0.5 mb-rounded mb-font-medium">
-            {{ t(respBreakpoints.find(b => b.key === respBp)?.label) }}
-          </span>
         </div>
       </template>
       <label v-else-if="field.type !== 'typography' && field.type !== 'content-popup'" class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">
@@ -337,29 +344,15 @@
         @confirm="$emit('confirm', $event)"
       />
 
-      <!-- Hover sub-control (inline secondary value bound to ${key}_hover) -->
+      <!-- Stato Hover: il CONTROLLO sopra mostra e scrive già il valore hover (pilotato dal
+           toggle Normale/Hover). Qui resta solo la durata della transizione + reset. NIENTE
+           striscia arancione né controllo duplicato (era il "vecchio sistema"). -->
       <div
         v-if="field.hoverable && hoverOpen"
-        class="mb-mt-1.5 mb-pl-2 mb-pr-1 mb-py-1.5 mb-border-l-2 mb-border-orange-400/60 mb-bg-orange-400/5 mb-rounded-r"
+        class="mb-mt-2 mb-flex mb-items-center mb-gap-2"
       >
-        <div class="mb-flex mb-items-center mb-justify-between mb-mb-1">
-          <span class="mb-text-[10px] mb-font-semibold mb-text-orange-400 mb-uppercase mb-tracking-wide">
-            {{ t('Hover') }}
-          </span>
-          <button
-            v-if="hasHoverValue"
-            @click="resetHoverValue"
-            class="mb-text-[10px] mb-text-gray-500 hover:mb-text-red-400 mb-px-1"
-            :title="t('Reset valore hover')"
-          >×</button>
-        </div>
-        <component
-          :is="fieldComponent"
-          v-bind="fieldPropsHover"
-          @update:modelValue="onHoverUpdate"
-        />
-        <div class="mb-flex mb-items-center mb-gap-1.5 mb-mt-1">
-          <span class="mb-text-[9px] mb-text-gray-500">{{ t('Durata') }}</span>
+        <span class="mb-text-[10px] mb-font-semibold mb-text-gray-400 mb-uppercase mb-tracking-wide">{{ t('Durata') }}</span>
+        <div class="mb-inline-flex mb-items-center mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-overflow-hidden">
           <input
             type="number"
             min="0"
@@ -367,10 +360,16 @@
             step="50"
             :value="hoverDurationValue"
             @input="onHoverDurationUpdate(Number($event.target.value))"
-            class="mb-w-16 mb-bg-white mb-border mb-border-gray-300 mb-rounded mb-px-1 mb-py-0.5 mb-text-[10px] mb-text-gray-900"
+            class="mb-w-14 mb-bg-transparent mb-px-2 mb-py-1 mb-text-xs mb-text-gray-900 mb-text-center mb-outline-none"
           />
-          <span class="mb-text-[9px] mb-text-gray-500">ms</span>
+          <span class="mb-px-2 mb-py-1 mb-text-[10px] mb-text-gray-400 mb-bg-gray-50 mb-border-l mb-border-gray-200">ms</span>
         </div>
+        <button
+          v-if="hasHoverValue"
+          @click="resetHoverValue"
+          class="mb-ml-auto mb-text-[11px] mb-text-gray-400 hover:mb-text-red-500 mb-px-1.5 mb-py-1 mb-transition-colors"
+          :title="t('Reset valore hover')"
+        >{{ t('Azzera') }}</button>
       </div>
       </template>
     </template>
@@ -388,7 +387,6 @@ import FieldColor from './fields/FieldColor.vue';
 import FieldRange from './fields/FieldRange.vue';
 import FieldSpacing from './fields/FieldSpacing.vue';
 import FieldBox from './fields/FieldBox.vue';
-import DeviceSwitch from './DeviceSwitch.vue';
 import FieldBorder from './fields/FieldBorder.vue';
 import FieldImage from './fields/FieldImage.vue';
 import FieldMedia from './fields/FieldMedia.vue';
@@ -471,6 +469,12 @@ const respValue = computed(() => {
 });
 
 function onFieldUpdate(value) {
+  // Stato Hover (toggle Normale/Hover su campo hoverable): scrivi sul valore hover,
+  // così il CONTROLLO principale modifica direttamente l'hover (niente più sub-control).
+  if (props.field.hoverable && hoverOpen.value) {
+    emit('update:hoverValue', { key: hoverKey.value, value });
+    return;
+  }
   if (props.field.responsive && respBp.value !== 'desktop') {
     emit('update:responsiveValue', { key: respKey.value, value });
   } else {
@@ -691,7 +695,13 @@ const fieldComponent = computed(() => {
   }
 });
 
-const effectiveValue = computed(() => props.field.responsive ? respValue.value : props.modelValue);
+const effectiveValue = computed(() => {
+  // Stato Hover attivo: il controllo principale mostra il valore hover (toggle Normale/Hover).
+  if (props.field.hoverable && hoverOpen.value) return hoverValue.value;
+  return props.field.responsive ? respValue.value : props.modelValue;
+});
+// `hoverOpen`/`hoverKey`/`hoverValue` sono definiti più sotto (const): vengono usati qui solo
+// a runtime (computed lazy / handler), mai durante l'inizializzazione → nessun TDZ.
 
 // Auto-detect media type for FieldMedia from explicit field.accept or by parsing field.key.
 // e.g. 'bg_video' / 'hover_video' / 'video_url' → 'video';  'pdf_url' → 'application/pdf'
@@ -817,4 +827,34 @@ function onDynamicUpdate(dynamicUpdate, isRemove) {
   white-space: pre;
   line-height: 1.5;
 }
+
+/* Toggle Normale / Hover — UNICA grafica condivisa con .olo-es-seg (StyleEffectsStack)
+   e .olo-bs-seg (StyleBoxStack): navy + pill bianca attiva. Scritto a mano (non Tailwind
+   arbitrario [#hex], che il JIT non compila in modo affidabile) → identico ovunque. */
+.olo-hover-seg {
+  --olo-ui-accent: #e8622a;
+  display: inline-flex;
+  background: #16263d;
+  border-radius: 9px;
+  padding: 3px;
+  gap: 2px;
+}
+.olo-hover-seg button {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border: none;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.olo-hover-seg button:hover { color: #fff; }
+.olo-hover-seg button.on { background: #fff; color: #1f2937; box-shadow: 0 1px 2px rgba(16, 24, 40, 0.12); }
+.olo-hover-seg button:focus-visible { outline: 2px solid var(--olo-ui-accent); outline-offset: 1px; }
+.olo-hover-seg-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--olo-ui-accent); }
 </style>

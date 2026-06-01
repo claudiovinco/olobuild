@@ -36,7 +36,7 @@
     <!-- Tiles tab — V2 layout: 56px rail + 1fr panel -->
     <div v-if="activeTab === 'tiles'" class="olo-sb-body">
       <!-- Rail: vertical category buttons -->
-      <div class="olo-sb-rail" role="tablist" aria-label="Categorie elementi">
+      <div class="olo-sb-rail olo-sb-rail--cats" role="tablist" aria-label="Categorie elementi">
         <button
           v-for="cat in railCategories"
           :key="cat.id"
@@ -47,19 +47,20 @@
           :title="cat.label"
           @click="onSelectCategory(cat.id)"
         >
-          <span class="bar" :style="cat.id === activeCategory ? { background: catColor(cat.id) } : {}"></span>
+          <span class="bar"></span>
           <span class="ic" v-html="catIcon(cat.id)"></span>
           <span class="lbl">{{ cat.label }}</span>
-          <span class="cnt">{{ cat.count }}</span>
         </button>
       </div>
 
       <!-- Panel: header + search + grid -->
       <div class="olo-sb-panel">
-        <div class="olo-sb-panel-head">
-          <span class="dot" :style="{ background: tileSearch.trim() ? '#94a3b8' : catColor(activeCategory) }"></span>
-          <h3>{{ tileSearch.trim() ? t('Risultati') : activeCategoryLabel }}</h3>
-          <span class="cnt">{{ panelCount }}</span>
+        <div class="olo-sb-panel-head olo-sb-panel-head--cats">
+          <h3 class="olo-sb-ph-title">
+            <span class="t">{{ tileSearch.trim() ? t('Risultati') : activeCategoryLabel }}</span>
+            <span class="olo-sb-ph-count">· {{ panelCount }}</span>
+          </h3>
+          <span class="olo-sb-ph-hint">{{ t('trascina nel canvas') }}</span>
         </div>
 
         <div class="olo-sb-search">
@@ -159,7 +160,7 @@
       <!-- Panel: header + search + toolbar + tree + breadcrumb -->
       <div class="olo-sb-panel olo-sb-panel--struct">
         <div class="olo-sb-panel-head">
-          <span class="dot" style="background: var(--olo-color-primary, #e8622a)"></span>
+          <span class="dot" style="background: var(--olo-ui-accent)"></span>
           <h3>{{ t('Struttura pagina') }}</h3>
           <span class="cnt">{{ structureCount }}</span>
         </div>
@@ -949,6 +950,10 @@ async function deleteGlobal(globalId, name) {
 <style scoped>
 /* ── Root container ──────────────────────────────────────── */
 .olo-sb-root {
+  /* Accento CHROME del builder = arancio fisso #e8622a (identità prodotto). Definito qui in
+     locale, indipendente da --olo-color-primary (che AIAssistant rimappa col colore del cliente):
+     stesso pattern di InspectorField / StyleBoxStack / StyleEffectsStack. */
+  --olo-ui-accent: #e8622a;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -985,7 +990,7 @@ async function deleteGlobal(globalId, name) {
 .sidebar-tab:hover { color: #1e293b; }
 .sidebar-tab--active {
   color: #1e293b;
-  border-bottom-color: var(--olo-color-primary, #e8622a);
+  border-bottom-color: var(--olo-ui-accent);
 }
 
 /* ── Insert-after banner ─────────────────────────────────── */
@@ -1022,11 +1027,13 @@ async function deleteGlobal(globalId, name) {
 .olo-sb-body {
   flex: 1;
   display: grid;
-  grid-template-columns: 56px 1fr;
+  grid-template-columns: 78px 1fr;
   min-height: 0;
   overflow: hidden;
   background: #fff;
 }
+/* Tab Struttura: rail stretto invariato (le sue label brevi non servono più larghe) */
+.olo-sb-body--struct { grid-template-columns: 56px 1fr; }
 
 /* Rail — vertical category buttons */
 .olo-sb-rail {
@@ -1115,6 +1122,31 @@ async function deleteGlobal(globalId, name) {
   color: #b04217;
 }
 
+/* ── Inserter Elementi: rail coerente ──────────────────────
+   Label intere su 2 righe (no troncamento), accento arancio UNICO sulla categoria
+   attiva (barretta 3px + icona), niente conteggi sull'icona. Scope --cats: il tab
+   Struttura (toni per zona + conteggi) resta invariato. */
+.olo-sb-rail--cats .olo-sb-rail-btn {
+  height: auto;
+  min-height: 60px;
+  padding: 8px 4px;
+  gap: 5px;
+}
+.olo-sb-rail--cats .olo-sb-rail-btn .bar { width: 3px; }
+.olo-sb-rail--cats .olo-sb-rail-btn .lbl {
+  white-space: normal;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow-wrap: anywhere;
+  line-height: 1.15;
+}
+.olo-sb-rail--cats .olo-sb-rail-btn.on {
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--olo-ui-accent) 22%, #fff);
+}
+.olo-sb-rail--cats .olo-sb-rail-btn.on .bar { background: var(--olo-ui-accent); }
+.olo-sb-rail--cats .olo-sb-rail-btn.on .ic { color: var(--olo-ui-accent); }
+
 /* Panel — header + search + grid */
 .olo-sb-panel {
   display: flex;
@@ -1157,6 +1189,39 @@ async function deleteGlobal(globalId, name) {
   margin-left: auto;
 }
 
+/* ── Inserter Elementi: header parlante "Categoria · N" + hint, senza pallino ── */
+.olo-sb-panel-head--cats { gap: 0; }
+.olo-sb-panel-head--cats .olo-sb-ph-title {
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  min-width: 0;
+  flex: 0 1 auto;
+  font-size: 13px;
+  font-weight: 700;
+  color: #1e293b;
+}
+.olo-sb-panel-head--cats .olo-sb-ph-title .t {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.olo-sb-panel-head--cats .olo-sb-ph-count {
+  color: var(--olo-ui-accent);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+.olo-sb-panel-head--cats .olo-sb-ph-hint {
+  margin-left: auto;
+  padding-left: 10px;
+  font-size: 11px;
+  color: #94a3b8;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
 .olo-sb-search {
   margin: 0 12px 10px;
   padding: 6px 10px;
@@ -1170,7 +1235,7 @@ async function deleteGlobal(globalId, name) {
   transition: border-color 0.15s, background 0.15s;
 }
 .olo-sb-search:focus-within {
-  border-color: var(--olo-color-primary, #e8622a);
+  border-color: var(--olo-ui-accent);
   background: #fff;
 }
 .olo-sb-search > svg {
@@ -1208,7 +1273,9 @@ async function deleteGlobal(globalId, name) {
 .olo-sb-grid {
   flex: 1;
   overflow-y: auto;
-  padding: 0 12px 14px;
+  /* padding-top: spazio per il sollevamento (translateY) + ombra della prima riga di card,
+     altrimenti l'overflow le taglia in cima al passaggio del mouse. */
+  padding: 8px 12px 14px;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 8px;
@@ -1219,13 +1286,16 @@ async function deleteGlobal(globalId, name) {
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  padding: 10px 8px 8px;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 12px 8px;
+  min-height: 92px;
   border: 1px solid #e2e8f0;
   border-radius: 8px;
   background: #fff;
   cursor: grab;
-  text-align: left;
+  text-align: center;
   font: inherit;
   color: #1e293b;
   font-family: inherit;
@@ -1237,10 +1307,22 @@ async function deleteGlobal(globalId, name) {
 }
 .olo-sb-card:active { cursor: grabbing; }
 .olo-sb-card:hover {
-  border-color: var(--olo-color-primary, #e8622a);
+  border-color: var(--olo-ui-accent);
   background: rgba(232, 98, 42, 0.04);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 4px 14px -4px color-mix(in srgb, var(--olo-ui-accent) 30%, transparent);
   transform: translateY(-1px);
+}
+/* Affordance "in trascinamento" (solo CSS, nessuna logica DnD toccata): bordo+ombra arancio,
+   translateY e icona piena — l'highlight che il mockup mostra sulla card "Galleria". */
+.olo-sb-card:active {
+  border-color: var(--olo-ui-accent);
+  background: #fff;
+  box-shadow: 0 8px 20px -5px color-mix(in srgb, var(--olo-ui-accent) 42%, transparent);
+  transform: translateY(-2px);
+}
+.olo-sb-card:active .ic {
+  background: var(--olo-ui-accent);
+  color: #fff;
 }
 .olo-sb-card .ic {
   width: 28px;
@@ -1255,24 +1337,26 @@ async function deleteGlobal(globalId, name) {
 .olo-sb-card .ic :deep(svg) { width: 16px; height: 16px; }
 .olo-sb-card:hover .ic {
   background: #fff;
-  color: var(--olo-color-primary, #e8622a);
+  color: var(--olo-ui-accent);
   box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
 }
 .olo-sb-card .lbl {
   font-size: 11px;
   font-weight: 500;
-  line-height: 1.25;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  line-height: 1.2;
   color: #1e293b;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  max-width: 100%;
 }
 .olo-sb-card .bdg {
   font-size: 9px;
   font-weight: 600;
   padding: 1px 6px;
   border-radius: 99px;
-  align-self: flex-start;
+  align-self: center;
   text-transform: uppercase;
   letter-spacing: 0.04em;
   line-height: 1.4;
@@ -1370,7 +1454,7 @@ async function deleteGlobal(globalId, name) {
 .olo-sb-rail-btn.tone-success.on .cnt { background: #dcfce7; color: #15803d; }
 
 .olo-sb-rail-btn.tone-neutral.on { background: #fff; color: #1e293b; }
-.olo-sb-rail-btn.tone-neutral.on .bar { background: var(--olo-color-primary, #e8622a); }
+.olo-sb-rail-btn.tone-neutral.on .bar { background: var(--olo-ui-accent); }
 
 .olo-sb-panel--struct {
   display: flex;
@@ -1423,7 +1507,7 @@ async function deleteGlobal(globalId, name) {
 }
 .olo-sb-tools button.iso.on {
   background: rgba(232, 98, 42, 0.12);
-  color: var(--olo-color-primary, #e8622a);
+  color: var(--olo-ui-accent);
 }
 
 /* Breadcrumb sticky bottom */
@@ -1466,7 +1550,7 @@ async function deleteGlobal(globalId, name) {
   align-items: center;
   gap: 4px;
   background: rgba(232, 98, 42, 0.12);
-  color: var(--olo-color-primary, #e8622a);
+  color: var(--olo-ui-accent);
   font-weight: 600;
   padding: 1px 7px;
   border-radius: 99px;

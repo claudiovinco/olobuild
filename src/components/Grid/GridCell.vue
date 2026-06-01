@@ -199,9 +199,10 @@ const cellStyle = computed(() => {
     // Altrimenti: drop-shadow via contentFilterStyle (applicato al div contenuto)
   }
 
-  // Opacity
-  if (s.opacity && parseInt(s.opacity) < 100) {
-    style.opacity = parseInt(s.opacity) / 100;
+  // Opacity (responsive)
+  const opVal = rv(s, 'opacity', undefined, mode);
+  if (opVal != null && opVal !== '' && parseInt(opVal) < 100) {
+    style.opacity = parseInt(opVal) / 100;
   }
 
   // Width override (responsive)
@@ -248,15 +249,45 @@ const cellStyle = computed(() => {
   const gapVal = rv(s, 'gap', undefined, mode);
   if (gapVal && !hasFlexGap) style.gap = `${gapVal}px`;
 
-  // Transform (responsive)
+  // Transform (responsive). Desktop = oggetto style.transform; per-device = chiavi piatte
+  // transform_<prop>_<bp> (fallback all'oggetto desktop). Include rotate/skew, non solo scale/translate.
+  const tBase = (s.transform && typeof s.transform === 'object') ? s.transform : {};
   const transforms = [];
-  const tScale = rv(s, 'transform_scale', undefined, mode);
-  const tTx = rv(s, 'transform_translateX', undefined, mode);
-  const tTy = rv(s, 'transform_translateY', undefined, mode);
+  const tScale = rv(s, 'transform_scale', tBase.scale, mode);
+  const tTx = rv(s, 'transform_translateX', tBase.translateX, mode);
+  const tTy = rv(s, 'transform_translateY', tBase.translateY, mode);
+  const tRot = rv(s, 'transform_rotate', tBase.rotate, mode);
+  const tSkx = rv(s, 'transform_skewX', tBase.skewX, mode);
+  const tSky = rv(s, 'transform_skewY', tBase.skewY, mode);
   if (tScale != null && tScale !== '' && tScale != 1) transforms.push(`scale(${tScale})`);
   if (tTx) transforms.push(`translateX(${tTx}px)`);
   if (tTy) transforms.push(`translateY(${tTy}px)`);
+  if (tRot) transforms.push(`rotate(${tRot}deg)`);
+  if (tSkx) transforms.push(`skewX(${tSkx}deg)`);
+  if (tSky) transforms.push(`skewY(${tSky}deg)`);
   if (transforms.length) style.transform = transforms.join(' ');
+
+  // Text shadow (responsive)
+  const tsH = rv(s, 'text_shadow_h', undefined, mode);
+  const tsV = rv(s, 'text_shadow_v', undefined, mode);
+  const tsB = rv(s, 'text_shadow_blur', undefined, mode);
+  if (parseInt(tsH) || parseInt(tsV) || parseInt(tsB)) {
+    const tsC = rv(s, 'text_shadow_color', 'rgba(0,0,0,0.3)', mode);
+    style.textShadow = `${parseInt(tsH) || 0}px ${parseInt(tsV) || 0}px ${parseInt(tsB) || 0}px ${tsC}`;
+  }
+
+  // Backdrop filter (responsive)
+  const bdParts = [];
+  const bdBlur = rv(s, 'backdrop_blur', undefined, mode);
+  const bdBr = rv(s, 'backdrop_brightness', undefined, mode);
+  const bdSat = rv(s, 'backdrop_saturate', undefined, mode);
+  if (parseInt(bdBlur)) bdParts.push(`blur(${parseInt(bdBlur)}px)`);
+  if (bdBr != null && bdBr !== '' && parseInt(bdBr) !== 100) bdParts.push(`brightness(${parseInt(bdBr)}%)`);
+  if (bdSat != null && bdSat !== '' && parseInt(bdSat) !== 100) bdParts.push(`saturate(${parseInt(bdSat)}%)`);
+  if (bdParts.length) {
+    style.backdropFilter = bdParts.join(' ');
+    style.WebkitBackdropFilter = style.backdropFilter;
+  }
 
   // Full-width: span full grid
   if (s.full_width) {

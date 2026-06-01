@@ -97,6 +97,12 @@ class Olo_Style_System {
                 'tablet'  => 0.85,
                 'mobile'  => 0.65,
             ],
+            // Grain / noise overlay site-wide (texture fine sopra tutta la pagina).
+            'grain' => [
+                'enabled' => false,
+                'opacity' => 6,   // percentuale (0-30 sensata)
+                'scale'   => 180, // px del tile di rumore
+            ],
             'buttons' => [
                 'font_size'        => '14px',
                 'font_weight'      => '600',
@@ -166,6 +172,7 @@ class Olo_Style_System {
             'section_padding' => wp_parse_args( $saved['section_padding'] ?? [], $defaults['section_padding'] ),
             'gutter'          => wp_parse_args( $saved['gutter'] ?? [], $defaults['gutter'] ),
             'fluid_scaling'   => wp_parse_args( $saved['fluid_scaling'] ?? [], $defaults['fluid_scaling'] ),
+            'grain'           => wp_parse_args( $saved['grain'] ?? [], $defaults['grain'] ),
         ];
     }
 
@@ -349,6 +356,16 @@ class Olo_Style_System {
                 'enabled' => ! empty( $fs['enabled'] ),
                 'tablet'  => max( 0.3, min( 1.0, (float) ( $fs['tablet'] ?? 0.85 ) ) ),
                 'mobile'  => max( 0.3, min( 1.0, (float) ( $fs['mobile'] ?? 0.65 ) ) ),
+            ];
+        }
+
+        // Grain / noise overlay
+        if ( isset( $styles['grain'] ) && is_array( $styles['grain'] ) ) {
+            $gr = $styles['grain'];
+            $sanitized['grain'] = [
+                'enabled' => ! empty( $gr['enabled'] ),
+                'opacity' => max( 0, min( 30, absint( $gr['opacity'] ?? 6 ) ) ),
+                'scale'   => max( 60, min( 400, absint( $gr['scale'] ?? 180 ) ) ),
             ];
         }
 
@@ -768,6 +785,19 @@ class Olo_Style_System {
                 $css .= "  --olo-color-{$prop}: {$value};\n";
             }
             $css .= "}\n";
+        }
+
+        // Grain / noise overlay (site-wide). SVG fractalNoise inline come data-URI,
+        // sopra tutto il contenuto con mix-blend-mode:overlay. Solo se abilitato.
+        $grain = $s['grain'] ?? [];
+        if ( ! empty( $grain['enabled'] ) ) {
+            $g_op    = max( 0, min( 30, absint( $grain['opacity'] ?? 6 ) ) ) / 100;
+            $g_scale = max( 60, min( 400, absint( $grain['scale'] ?? 180 ) ) );
+            // data-URI: SVG con feTurbulence (fractalNoise). %23 = '#' url-encoded.
+            $noise = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E";
+            $css .= "\n/* Grain / noise overlay */\n";
+            $css .= ".olo-template { position: relative; }\n";
+            $css .= ".olo-template::after { content: \"\"; position: fixed; inset: 0; z-index: 9999; pointer-events: none; mix-blend-mode: overlay; opacity: {$g_op}; background-image: url(\"{$noise}\"); background-size: {$g_scale}px {$g_scale}px; }\n";
         }
 
         return $css;

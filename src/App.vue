@@ -50,7 +50,7 @@
     <RevisionHistory ref="revisionHistoryRef" />
     <!-- Assistente AI -->
     <AIAssistant ref="aiAssistantRef" />
-    <!-- Libreria Template -->
+    <!-- Libreria Blocchi & Pagine -->
     <TemplateLibrary ref="templateLibraryRef" />
     <!-- Temi -->
     <ThemeSelector ref="themeSelectorRef" />

@@ -87,7 +87,19 @@ class Olo_Hero_Tile extends Olo_Tile_Base {
             'b'      => [],
             'i'      => [],
             'u'      => [],
-            'span'   => [ 'class' => true, 'style' => true ],
+            'span'   => [
+                'class' => true,
+                'style' => true,
+                // Consenti il pilotaggio inline del Text-FX su una singola parola del
+                // titolo (es. ultima riga "scramble" che cicla data-fx-phrases) senza
+                // applicare l'effetto all'intero titolo. Attributi letti da class-text-effects.js.
+                'data-olo-text-fx'    => true,
+                'data-fx-phrases'     => true,
+                'data-fx-loop'        => true,
+                'data-fx-speed'       => true,
+                'data-fx-delay'       => true,
+                'data-fx-pause'       => true,
+            ],
             'sup'    => [],
             'sub'    => [],
             'mark'   => [],
