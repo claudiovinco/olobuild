@@ -18,3 +18,13 @@ server_zip_list.txt
 src_backup_*/
 test-*.php
 tmp_deploy/
+
+# Note, handoff e demo locali (non codice del plugin)
+/NOVA - per Claude Code/
+/design_handoff_*/
+/iotfarm-demo/
+/bordo/
+
+# Script e file temporanei di lavoro in root
+/_*.php
+/_*.txt
