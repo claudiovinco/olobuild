@@ -3130,8 +3130,37 @@ class Olo_Builder {
             require_once OLO_PATH . 'includes/tiles/class-woo-myaccount-tile.php';
         }
 
+        // ── Tile speciali (batch tile-speciali) — require ──
+        require_once OLO_PATH . 'includes/tiles/class-stackscroll-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-crtoverlay-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-physicsbin-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-scratchfx-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-particlefx-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-asciiviz-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-variablespecimen-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-presencegrid-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-leaderboard-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-scrollscrub-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-goo-tile.php';
+        require_once OLO_PATH . 'includes/class-magnetic-cursor.php';
+        Olo_Magnetic_Cursor::init();
+
         $manager = Olo_Tile_Manager::instance();
         $manager->register_tile( new Olo_Section_Tile() );
+        // ── Tile speciali (batch tile-speciali) — register ──
+        $manager->register_tile( new Olo_Stackscroll_Tile() );
+        // Olo_Crtoverlay_Tile NON è un tile in flusso: è un EFFETTO DI PAGINA
+        // (Impostazioni Pagina → Effetti di pagina), reso da render_tiles_array. La classe
+        // resta require'd sopra come helper di render; nessun register_tile.
+        $manager->register_tile( new Olo_Physicsbin_Tile() );
+        $manager->register_tile( new Olo_Scratchfx_Tile() );
+        $manager->register_tile( new Olo_Particlefx_Tile() );
+        $manager->register_tile( new Olo_Asciiviz_Tile() );
+        $manager->register_tile( new Olo_Variablespecimen_Tile() );
+        $manager->register_tile( new Olo_Presencegrid_Tile() );
+        $manager->register_tile( new Olo_Leaderboard_Tile() );
+        $manager->register_tile( new Olo_Scrollscrub_Tile() );
+        $manager->register_tile( new Olo_Goo_Tile() );
         $manager->register_tile( new Olo_Column_Tile() );
         $manager->register_tile( new Olo_Hero_Tile() );
         $manager->register_tile( new Olo_HeroSplit_Tile() );

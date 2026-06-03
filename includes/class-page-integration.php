@@ -25,6 +25,54 @@ class Olo_Page_Integration {
 
         // Auto-render Olobuild template on frontend if linked
         add_filter( 'the_content', [ $this, 'auto_render_template' ], 20 );
+
+        // Sulle pagine con template Olobuild: niente wptexturize + ripara <script> (vedi metodo).
+        // Priorità bassa: l'ob_start dev'essere il più esterno per catturare l'output finale.
+        add_action( 'template_redirect', [ $this, 'maybe_disable_texturize' ], 0 );
+    }
+
+    /**
+     * Protegge gli <script> runtime dei tile dalla texturizzazione di WordPress, sulle
+     * pagine renderizzate da un template Olobuild.
+     *
+     * Il contenuto Olobuild è markup strutturato (HTML + <script>), non prosa. Gli <script>
+     * dei tile "wow" sono grandi e densi di operatori JS (`<`, `>`, `&&`): su input grande
+     * wptexturize/wp_html_split va in backtrack PCRE, perde i confini dello <script> e ne
+     * processa il contenuto come testo, convertendo `&` → `&#038;` (quindi `&&` → SyntaxError).
+     * Il runtime del tile non parte (canvas/particelle inerti nel frontend, pur funzionando
+     * nel builder). In un block-theme (FSE) la texturizzazione avviene in più punti, non solo
+     * su `the_content`: per questo, oltre a togliere il filtro principale, ripariamo le entità
+     * `&#038;` rimaste SOLO dentro i blocchi <script> dell'output finale.
+     */
+    public function maybe_disable_texturize() {
+        $id = get_queried_object_id();
+        if ( ! $id || ! get_post_meta( $id, '_olo_template_id', true ) ) {
+            return;
+        }
+        // 1) Niente wptexturize sul markup del template.
+        remove_filter( 'the_content', 'wptexturize' );
+        // 2) Rete di sicurezza: ripara `&#038;` (→ `&`) solo dentro gli <script> finali.
+        ob_start( [ $this, 'repair_script_entities' ] );
+    }
+
+    /**
+     * Callback ob_start: nell'HTML finale, ripristina `&` corrotto in `&#038;` ma SOLO
+     * all'interno dei blocchi <script> (dove `&` è sempre letterale, mai un'entità). Il
+     * testo/markup fuori dagli script resta invariato. Guardia anti-backtrack PCRE: se il
+     * match fallisce, restituisce l'HTML intatto.
+     */
+    public function repair_script_entities( $html ) {
+        if ( ! is_string( $html ) || strpos( $html, '&#038;' ) === false ) {
+            return $html;
+        }
+        $out = preg_replace_callback(
+            '#<script\b[^>]*>.*?</script>#is',
+            function ( $m ) {
+                return strpos( $m[0], '&#038;' ) !== false ? str_replace( '&#038;', '&', $m[0] ) : $m[0];
+            },
+            $html
+        );
+        return ( null === $out ) ? $html : $out;
     }
 
     /**

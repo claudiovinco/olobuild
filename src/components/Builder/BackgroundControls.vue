@@ -491,6 +491,27 @@
       </div>
     </div>
 
+    <!-- CRT (scanline + vignetta) -->
+    <div v-if="bg.type === 'crt'" class="mb-space-y-3">
+      <p class="mb-text-[10px] mb-text-gray-400">{{ t('Sfondo retro CRT: scanline + vignetta su un colore base. Statico (no flicker) con riduzione del movimento.') }}</p>
+      <div>
+        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Colore base') }}</label>
+        <FieldColor :modelValue="bg.crt_base || 'var(--olo-color-background)'" @update:modelValue="updateField('crt_base', $event)" />
+      </div>
+      <div>
+        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Intensità scanline') }} ({{ bg.crt_scanline_opacity ?? 50 }}%)</label>
+        <input type="range" :value="bg.crt_scanline_opacity ?? 50" @input="updateField('crt_scanline_opacity', parseInt($event.target.value))" min="0" max="100" step="5" class="mb-w-full" />
+      </div>
+      <div>
+        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Passo scanline (px)') }} ({{ bg.crt_scanline_gap ?? 3 }})</label>
+        <input type="range" :value="bg.crt_scanline_gap ?? 3" @input="updateField('crt_scanline_gap', parseInt($event.target.value))" min="2" max="12" step="1" class="mb-w-full" />
+      </div>
+      <div>
+        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Vignetta') }} ({{ bg.crt_vignette ?? 55 }}%)</label>
+        <input type="range" :value="bg.crt_vignette ?? 55" @input="updateField('crt_vignette', parseInt($event.target.value))" min="0" max="100" step="5" class="mb-w-full" />
+      </div>
+    </div>
+
     <!-- Overlay (for all types except none) -->
     <div v-if="bg.type && bg.type !== 'none'" class="mb-space-y-2 mb-pt-2 mb-border-t mb-border-gray-700">
       <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300">{{ t('Sovrapposizione') }}</label>
@@ -607,6 +628,7 @@ const types = [
   { value: 'image', label: 'Immagine' },
   { value: 'video', label: 'Video' },
   { value: 'gallery', label: 'Galleria' },
+  { value: 'crt', label: 'CRT (scanline)' },
 ];
 
 // Pattern groups for select optgroup
@@ -801,3 +823,45 @@ function updateParallaxData(newData) {
   updateField('parallax', newData);
 }
 </script>
+
+<style scoped>
+/* Slider uniformi per tutti i pannelli sfondo (Bagliori, Aurora, Pattern, Video…):
+   track scuro arrotondato + thumb tondo, coerente con FieldRange. Sostituisce lo
+   stile nativo del browser (blu) che risultava incoerente nel pannello. */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  background: #374151;
+  border-radius: 3px;
+  outline: none;
+  cursor: pointer;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--olo-color-primary, #6366f1);
+  border: 2px solid #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+}
+input[type="range"]::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--olo-color-primary, #6366f1);
+  border: 2px solid #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+}
+input[type="range"]::-moz-range-track {
+  height: 6px;
+  background: #374151;
+  border-radius: 3px;
+}
+input[type="range"]:focus-visible {
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.45);
+}
+</style>

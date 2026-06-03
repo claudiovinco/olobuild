@@ -1,11 +1,21 @@
 <template>
-  <div class="olo-tstrip" :style="rowStyle">
-    <template v-for="(it, idx) in items" :key="idx">
-      <span v-if="it.text || it.icon" class="olo-tstrip__item" style="display:inline-flex;align-items:center;gap:8px">
-        <span v-if="it.icon" class="olo-tstrip__icon" :style="{ color: resolveColor(it.icon_color, TOKENS.success.fg) }" v-html="resolveIcon(it.icon)"></span>
-        <span v-if="it.text" v-html="it.text"></span>
+  <div class="olo-tstrip" :class="{ 'olo-tstrip--pill': isPill }" :style="rowStyle">
+    <template v-if="isPill">
+      <span v-for="(it, idx) in items" :key="idx" class="olo-tstrip__pill" :style="pillStyle">
+        <img v-if="it.logo" :src="it.logo" alt="" :style="{ height: logoH + 'px', width: 'auto', display: 'block', flexShrink: 0 }" />
+        <span v-else-if="it.icon" class="olo-tstrip__icon" :style="{ color: resolveColor(it.icon_color, TOKENS.success.fg) }" v-html="resolveIcon(it.icon)"></span>
+        <span v-if="it.text" class="olo-tstrip__pill-txt" :style="pillTextStyle(it)" v-html="it.text"></span>
+        <span v-if="it.badge" :style="badgeStyle">{{ it.badge }}</span>
       </span>
-      <span v-if="s.separator_char && idx < items.length - 1" class="olo-tstrip__sep" :style="{ color: resolveColor(s.separator_color, TOKENS.textFaint), opacity: .65 }">{{ s.separator_char }}</span>
+    </template>
+    <template v-else>
+      <template v-for="(it, idx) in items" :key="idx">
+        <span v-if="it.text || it.icon" class="olo-tstrip__item" style="display:inline-flex;align-items:center;gap:8px">
+          <span v-if="it.icon" class="olo-tstrip__icon" :style="{ color: resolveColor(it.icon_color, TOKENS.success.fg) }" v-html="resolveIcon(it.icon)"></span>
+          <span v-if="it.text" v-html="it.text"></span>
+        </span>
+        <span v-if="s.separator_char && idx < items.length - 1" class="olo-tstrip__sep" :style="{ color: resolveColor(s.separator_color, TOKENS.textFaint), opacity: .65 }">{{ s.separator_char }}</span>
+      </template>
     </template>
   </div>
 </template>
@@ -33,6 +43,13 @@ const defaults = {
   align: 'center',
   flow: 'wrap',
   gap: 24,
+  variant: 'inline',
+  logo_height: 18,
+  pill_bg: 'rgba(255,255,255,0.05)',
+  pill_border: 'rgba(255,255,255,0.12)',
+  pill_text_color: '',
+  badge_bg: '#D8FF4A',
+  badge_color: '#1B2A4E',
 };
 
 const s = computed(() => ({ ...defaults, ...props.settings }));
@@ -57,6 +74,40 @@ const rowStyle = computed(() => ({
   lineHeight: 1.5,
 }));
 
+const isPill = computed(() => s.value.variant === 'pill');
+const logoH = computed(() => s.value.logo_height || 18);
+const pillStyle = computed(() => ({
+  display: 'inline-flex',
+  alignItems: 'center',
+  gap: '11px',
+  padding: '10px 16px',
+  borderRadius: '100px',
+  background: s.value.pill_bg || 'rgba(255,255,255,0.05)',
+  border: '1px solid ' + (s.value.pill_border || 'rgba(255,255,255,0.12)'),
+  backdropFilter: 'blur(8px)',
+  WebkitBackdropFilter: 'blur(8px)',
+  whiteSpace: 'nowrap',
+}));
+const badgeStyle = computed(() => ({
+  fontFamily: MONO,
+  fontSize: '9.5px',
+  fontWeight: 600,
+  letterSpacing: '.06em',
+  textTransform: 'uppercase',
+  color: s.value.badge_color || '#1B2A4E',
+  background: s.value.badge_bg || '#D8FF4A',
+  padding: '2px 7px',
+  borderRadius: '5px',
+}));
+function pillTextStyle(it) {
+  const st = { color: resolveColor(s.value.pill_text_color, TOKENS.text) };
+  if (it.logo || it.icon) {
+    st.borderLeft = '1px solid ' + (s.value.pill_border || 'rgba(255,255,255,0.12)');
+    st.paddingLeft = '11px';
+  }
+  return st;
+}
+
 function resolveIcon(name) {
   if (!name) return '';
   return iconsSvg[name] || '';
@@ -66,4 +117,10 @@ function resolveIcon(name) {
 <style scoped>
 .olo-tstrip__icon { display: inline-flex; align-items: center; }
 .olo-tstrip__icon :deep(svg) { width: 0.9em; height: 0.9em; }
+.olo-tstrip--pill .olo-tstrip__pill { max-width: 100%; box-sizing: border-box; }
+@media (max-width: 768px) {
+  .olo-tstrip--pill { flex-direction: column !important; align-items: stretch !important; gap: 8px !important; }
+  .olo-tstrip--pill .olo-tstrip__pill { width: 100% !important; max-width: 100% !important; justify-content: center !important; align-items: center !important; flex-wrap: wrap !important; }
+  .olo-tstrip--pill .olo-tstrip__pill-txt { border-left: none !important; padding-left: 0 !important; text-align: center; }
+}
 </style>

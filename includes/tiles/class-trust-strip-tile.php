@@ -31,6 +31,13 @@ class Olo_TrustStrip_Tile extends Olo_Tile_Base {
         'align'           => 'center',
         'flow'            => 'wrap',
         'gap'             => 24,
+        'variant'         => 'inline',
+        'logo_height'     => 18,
+        'pill_bg'         => 'rgba(255,255,255,0.05)',
+        'pill_border'     => 'rgba(255,255,255,0.12)',
+        'pill_text_color' => '',
+        'badge_bg'        => '#D8FF4A',
+        'badge_color'     => '#1B2A4E',
     ];
 
     public function get_controls() { return []; }
@@ -51,6 +58,7 @@ class Olo_TrustStrip_Tile extends Olo_Tile_Base {
         $align      = in_array( $s['align'], [ 'left', 'center', 'right', 'space-between' ], true ) ? $s['align'] : 'center';
         $flow       = $s['flow'] === 'nowrap' ? 'nowrap' : 'wrap';
         $sep_char   = $s['separator_char'] ?? '';
+        $variant    = ( $s['variant'] ?? 'inline' ) === 'pill' ? 'pill' : 'inline';
 
         $align_map = [
             'left'          => 'flex-start',
@@ -70,6 +78,44 @@ class Olo_TrustStrip_Tile extends Olo_Tile_Base {
             $text_size,
             esc_attr( $text_color )
         );
+
+        // ── Variante PILL: ogni voce in un box "glass" (logo + label + badge) ──
+        if ( $variant === 'pill' ) {
+            $logo_h    = max( 10, min( 64, absint( $s['logo_height'] ?? 18 ) ) );
+            $pill_bg   = $s['pill_bg'] ?? 'rgba(255,255,255,0.05)';
+            $pill_bd   = $s['pill_border'] ?? 'rgba(255,255,255,0.12)';
+            $pill_txt  = $this->safe_color_css( $s['pill_text_color'] ?? '' ) ?: $text_color;
+            $badge_bg  = $this->safe_color_css( $s['badge_bg'] ?? '' ) ?: '#D8FF4A';
+            $badge_clr = $this->safe_color_css( $s['badge_color'] ?? '' ) ?: '#1B2A4E';
+            ob_start();
+            ?>
+            <div class="olo-tstrip olo-tstrip--pill" style="<?php echo esc_attr( $row_style ); ?>">
+                <?php foreach ( $items as $idx => $it ) :
+                    $logo  = $it['logo'] ?? '';
+                    $text  = $it['text'] ?? '';
+                    $badge = $it['badge'] ?? '';
+                    $icon  = $it['icon'] ?? '';
+                    if ( $logo === '' && $text === '' && $icon === '' ) { continue; }
+                ?>
+                    <span class="olo-tstrip__pill" style="display:inline-flex;align-items:center;gap:11px;padding:10px 16px;border-radius:100px;background:<?php echo esc_attr( $pill_bg ); ?>;border:1px solid <?php echo esc_attr( $pill_bd ); ?>;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);white-space:nowrap">
+                        <?php if ( $logo !== '' ) : ?>
+                            <img src="<?php echo esc_url( $logo ); ?>" alt="<?php echo esc_attr( wp_strip_all_tags( $text ) ); ?>" style="height:<?php echo $logo_h; ?>px;width:auto;display:block;flex-shrink:0" />
+                        <?php elseif ( $icon !== '' ) : ?>
+                            <span style="display:inline-flex;align-items:center;color:<?php echo esc_attr( $this->safe_color_css( $it['icon_color'] ?? '' ) ?: $pill_txt ); ?>"><?php echo $this->render_icon_html( $icon, 0.9 ); ?></span>
+                        <?php endif; ?>
+                        <?php if ( $text !== '' ) : ?>
+                            <span class="olo-tstrip__pill-txt" style="color:<?php echo esc_attr( $pill_txt ); ?>;<?php echo ( $logo !== '' || $icon !== '' ) ? 'border-left:1px solid ' . esc_attr( $pill_bd ) . ';padding-left:11px;' : ''; ?>" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.text'; ?>" data-olo-richtext><?php echo wp_kses_post( $text ); ?></span>
+                        <?php endif; ?>
+                        <?php if ( $badge !== '' ) : ?>
+                            <span style="font-family:<?php echo esc_attr( $mono ); ?>;font-size:9.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:<?php echo esc_attr( $badge_clr ); ?>;background:<?php echo esc_attr( $badge_bg ); ?>;padding:2px 7px;border-radius:5px" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.badge'; ?>"><?php echo esc_html( $badge ); ?></span>
+                        <?php endif; ?>
+                    </span>
+                <?php endforeach; ?>
+            </div>
+            <style>.olo-tstrip--pill .olo-tstrip__pill{max-width:100%;box-sizing:border-box}@media(max-width:768px){.olo-tstrip--pill{flex-direction:column!important;align-items:stretch!important;gap:8px!important}.olo-tstrip--pill .olo-tstrip__pill{width:100%!important;max-width:100%!important;justify-content:center!important;align-items:center!important;flex-wrap:wrap!important}.olo-tstrip--pill .olo-tstrip__pill-txt{border-left:none!important;padding-left:0!important;text-align:center}}</style>
+            <?php
+            return ob_get_clean();
+        }
 
         ob_start();
         ?>

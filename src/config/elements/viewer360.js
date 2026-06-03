@@ -19,9 +19,16 @@ export default {
   defaults: {
     typography_preset: '',
     preset: 'custom',
+    mode: 'hdri',
     source_type: 'image',
     image_url: '',
     video_url: '',
+    // Object-spin (turntable) — default OFF (mode=hdri): i Viewer360 esistenti restano invariati
+    object_image: '',
+    object_frames: [],
+    spin_inertia: 0.97,
+    drag_sensitivity: 0.55,
+    show_angle: true,
     // Navigation
     autorotate: true,
     autorotate_speed: '1',
@@ -59,22 +66,37 @@ export default {
   fields: [
     // ── SORGENTE ──
     { type: 'separator', label: t('Sorgente') },
-    { key: 'source_type', label: t('Tipo'), type: 'select', options: [
+    { key: 'mode', label: t('Modalità'), type: 'select', options: [
+      { value: 'hdri',          label: t('Panorama 360° (HDRI / equirect)') },
+      { value: 'object-rotate', label: t('Oggetto girevole — 1 immagine (pseudo-3D)') },
+      { value: 'object-frames', label: t('Oggetto girevole — sequenza di frame') },
+    ], description: t('“Oggetto girevole”: trascina per ruotare un prodotto su sé stesso, con inerzia al rilascio. Pseudo-3D (una immagine ruotata) oppure sequenza di frame reale.') },
+
+    { key: 'source_type', label: t('Tipo'), type: 'select',
+      condition: { field: 'mode', value: 'hdri' }, options: [
       { value: 'image', label: t('Foto 360° (equirectangular)') },
       { value: 'video', label: t('Video 360°') },
     ]},
     { key: 'image_url', label: t('Immagine panoramica 360°'), type: 'image',
-      condition: { field: 'source_type', value: 'image' } },
+      condition: { field: 'mode', value: 'hdri' } },
     { key: 'video_url', label: t('Video 360° (URL mp4/webm)'), type: 'text', placeholder: t('https://...video-360.mp4'),
       condition: { field: 'source_type', value: 'video' } },
+    { key: 'object_image', label: t('Immagine oggetto'), type: 'image',
+      condition: { field: 'mode', value: 'object-rotate' } },
+    { key: 'object_frames', label: t('Frame della rotazione (in ordine)'), type: 'gallery',
+      condition: { field: 'mode', value: 'object-frames' } },
 
     // ── NAVIGAZIONE ──
     { type: 'separator', label: t('Navigazione') },
     { key: 'autorotate', label: t('Rotazione automatica'), type: 'toggle' },
     { key: 'mouse_drag', label: t('Trascinamento mouse'), type: 'toggle' },
     { key: 'touch_drag', label: t('Trascinamento touch'), type: 'toggle' },
-    { key: 'scroll_zoom', label: t('Zoom con scroll'), type: 'toggle' },
-    { key: 'gyroscope', label: t('Giroscopio (mobile)'), type: 'toggle' },
+    { key: 'scroll_zoom', label: t('Zoom con scroll'), type: 'toggle',
+      condition: { field: 'mode', value: 'hdri' } },
+    { key: 'gyroscope', label: t('Giroscopio (mobile)'), type: 'toggle',
+      condition: { field: 'mode', value: 'hdri' } },
+    { key: 'show_angle', label: t('Mostra angolo di rotazione'), type: 'toggle',
+      condition: { field: 'mode', op: 'in', value: ['object-rotate', 'object-frames'] } },
 
     // ── CONTROLLI ──
     { type: 'separator', label: t('Controlli UI') },
@@ -86,13 +108,18 @@ export default {
     { key: 'show_compass', label: t('Bussola'), type: 'toggle',
       condition: { field: 'show_controls', value: true } },
 
-    // ── VISTA INIZIALE ──
-    { type: 'separator', label: t('Vista iniziale') },
-    { key: 'default_yaw', label: t('Rotazione orizzontale (°)'), type: 'range', min: -180, max: 180, step: 5 },
-    { key: 'default_pitch', label: t('Inclinazione verticale (°)'), type: 'range', min: -90, max: 90, step: 5 },
-    { key: 'default_zoom', label: t('Zoom iniziale (%)'), type: 'range', min: 10, max: 100, step: 5 },
-    { key: 'min_zoom', label: t('Zoom minimo (%)'), type: 'range', min: 10, max: 50, step: 5 },
-    { key: 'max_zoom', label: t('Zoom massimo (%)'), type: 'range', min: 50, max: 120, step: 5 },
+    // ── VISTA INIZIALE (solo panorama) ──
+    { type: 'separator', label: t('Vista iniziale'), condition: { field: 'mode', value: 'hdri' } },
+    { key: 'default_yaw', label: t('Rotazione orizzontale (°)'), type: 'range', min: -180, max: 180, step: 5,
+      condition: { field: 'mode', value: 'hdri' } },
+    { key: 'default_pitch', label: t('Inclinazione verticale (°)'), type: 'range', min: -90, max: 90, step: 5,
+      condition: { field: 'mode', value: 'hdri' } },
+    { key: 'default_zoom', label: t('Zoom iniziale (%)'), type: 'range', min: 10, max: 100, step: 5,
+      condition: { field: 'mode', value: 'hdri' } },
+    { key: 'min_zoom', label: t('Zoom minimo (%)'), type: 'range', min: 10, max: 50, step: 5,
+      condition: { field: 'mode', value: 'hdri' } },
+    { key: 'max_zoom', label: t('Zoom massimo (%)'), type: 'range', min: 50, max: 120, step: 5,
+      condition: { field: 'mode', value: 'hdri' } },
 
     // ── Didascalia (testo) ──
     { type: 'separator', label: t('Didascalia') },
@@ -125,6 +152,10 @@ export default {
     { type: 'separator', label: t('Animazione') },
     { key: 'autorotate_speed', label: t('Velocità rotazione (°/s)'), type: 'range', min: 0.1, max: 5, step: 0.1,
       condition: { field: 'autorotate', value: true } },
+    { key: 'drag_sensitivity', label: t('Sensibilità trascinamento'), type: 'range', min: 0.1, max: 1.5, step: 0.05,
+      condition: { field: 'mode', op: 'in', value: ['object-rotate', 'object-frames'] } },
+    { key: 'spin_inertia', label: t('Inerzia al rilascio'), type: 'range', min: 0.8, max: 0.99, step: 0.01,
+      condition: { field: 'mode', op: 'in', value: ['object-rotate', 'object-frames'] } },
 
     // ── LAYOUT ──
     { type: 'separator', label: t('Layout') },

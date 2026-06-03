@@ -22,6 +22,13 @@ class Olo_Marquee_Tile extends Olo_Tile_Base {
         'pause_hover'    => true,
         'gap'            => '60',
 
+        // VelocitySkew (reattivo allo scroll) — default OFF: i Marquee esistenti restano invariati
+        'velocity_skew'      => false,
+        'vskew_base_speed'   => 0.6,
+        'vskew_scroll_boost' => 0.6,
+        'vskew_max_skew'     => 14,
+        'vskew_damping'      => 0.86,
+
         'bg_color'       => '#1F2937',
         'text_color'     => '#FFFFFF',
         'font_size'      => '16',
@@ -56,6 +63,14 @@ class Olo_Marquee_Tile extends Olo_Tile_Base {
         $direction   = $s['direction'] === 'right' ? 'right' : 'left';
         $pause       = ! empty( $s['pause_hover'] );
         $gap         = max( 0, intval( $s['gap'] ) );
+
+        // VelocitySkew (reattivo allo scroll) — vedi runtime in fondo
+        $vskew     = ! empty( $s['velocity_skew'] );
+        $vs_base   = max( 0,   min( 3,    floatval( $s['vskew_base_speed'] ) ) );
+        $vs_boost  = max( 0,   min( 2,    floatval( $s['vskew_scroll_boost'] ) ) );
+        $vs_max    = max( 0,   min( 30,   intval( $s['vskew_max_skew'] ) ) );
+        $vs_damp   = max( 0.5, min( 0.98, floatval( $s['vskew_damping'] ) ) );
+        $dir_sign  = $direction === 'right' ? 1 : -1;
         // Bg: preferisce l'oggetto "bg" (Sfondo creativo) — supporta solid/gradient/pattern via CSS Builder.
         // Fallback su bg_color setting (colore semplice).
         $bg_obj  = $s['bg'] ?? null;
@@ -159,6 +174,10 @@ class Olo_Marquee_Tile extends Olo_Tile_Base {
                 <?php if ( $direction === 'right' ) : ?>
                 animation-direction: reverse;
                 <?php endif; ?>
+                <?php if ( $vskew ) : ?>
+                will-change: transform;
+                transition: transform .1s linear;
+                <?php endif; ?>
             }
 
             <?php if ( $pause ) : ?>
@@ -208,6 +227,79 @@ class Olo_Marquee_Tile extends Olo_Tile_Base {
                 <?php echo $inner_html; ?>
             </div>
         </div>
+
+        <?php if ( $vskew ) : ?>
+        <script>
+        /* Marquee · VelocitySkew — runtime scoped per istanza (rif. 64-tema-pastificio.html) */
+        (function(){
+            var root = document.querySelector('.<?php echo esc_js( $uid ); ?>');
+            if ( ! root ) { return; }
+            var track = root.querySelector('.olo-mq-track');
+            if ( ! track ) { return; }
+            if ( track.dataset.oloVskew ) { return; }   // idempotente: una sola init per istanza
+            track.dataset.oloVskew = '1';
+
+            // prefers-reduced-motion → nessun JS: resta il drift base CSS, skew 0
+            var rm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
+            if ( rm && rm.matches ) { return; }
+
+            // Il JS prende il controllo: spegne l'animazione CSS e guida transform via rAF
+            track.style.animation = 'none';
+
+            var BASE  = <?php echo json_encode( $vs_base ); ?>;
+            var BOOST = <?php echo json_encode( $vs_boost ); ?>;
+            var MAXSK = <?php echo json_encode( $vs_max ); ?>;
+            var DAMP  = <?php echo json_encode( $vs_damp ); ?>;
+            var DIR   = <?php echo json_encode( $dir_sign ); ?>;
+
+            var x = 0, vel = 0, lastY = window.scrollY || window.pageYOffset || 0;
+            var paused = false, running = false, rafId = null;
+
+            window.addEventListener('scroll', function(){
+                var y = window.scrollY || window.pageYOffset || 0;
+                vel = y - lastY; lastY = y;
+            }, { passive: true });
+
+            <?php if ( $pause ) : ?>
+            root.addEventListener('mouseenter', function(){ paused = true; });
+            root.addEventListener('mouseleave', function(){ paused = false; });
+            <?php endif; ?>
+
+            function frame(){
+                if ( ! running ) { return; }
+                var half = ( track.scrollWidth / 2 ) || 1;
+                if ( ! paused ) {
+                    // drift costante + spinta dalla velocità di scroll
+                    x += ( DIR * BASE ) + ( -vel * BOOST );
+                    if ( x <= -half ) { x += half; }
+                    if ( x > 0 )      { x -= half; }
+                }
+                // inclinazione proporzionale alla velocità, clampata
+                var sk = vel * BOOST;
+                if ( sk >  MAXSK ) { sk =  MAXSK; }
+                if ( sk < -MAXSK ) { sk = -MAXSK; }
+                track.style.transform = 'translateX(' + x + 'px) skewX(' + sk + 'deg)';
+                vel *= DAMP;   // smorzamento → lo skew torna a 0 da fermo
+                rafId = requestAnimationFrame( frame );
+            }
+            function start(){ if ( ! running ) { running = true; rafId = requestAnimationFrame( frame ); } }
+            function stop(){ running = false; if ( rafId ) { cancelAnimationFrame( rafId ); rafId = null; } }
+
+            // Performance: gira solo quando il nastro è nel viewport
+            if ( 'IntersectionObserver' in window ) {
+                var io = new IntersectionObserver(function( entries ){
+                    for ( var i = 0; i < entries.length; i++ ) {
+                        if ( entries[i].isIntersecting ) { start(); } else { stop(); }
+                    }
+                }, { threshold: 0 });
+                io.observe( root );
+            } else {
+                start();
+            }
+        })();
+        </script>
+        <?php endif; ?>
+
         <?php
                 // Border system
         $border_css        = $this->build_border_css( $s['border'] ?? [] );

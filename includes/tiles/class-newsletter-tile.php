@@ -68,6 +68,7 @@ class Olo_Newsletter_Tile extends Olo_Tile_Base {
         'input_height'      => '44',
         'btn_bg'            => '',
         'btn_color'         => '#ffffff',
+        'box_border'        => '',
         'btn_hover_bg'      => '',
         'btn_radius'        => 8,
         'btn_font_size'     => '14',
@@ -152,7 +153,7 @@ class Olo_Newsletter_Tile extends Olo_Tile_Base {
         ?>
         <style>
         .<?php echo $uid; ?>{display:flex;justify-content:<?php echo $align_css; ?>}
-        .<?php echo $uid; ?> .olo-nl-box{max-width:<?php echo absint($s['max_width']) ?: 600; ?>px;width:100%;background:<?php echo esc_attr($bg); ?>;border-radius:<?php echo $radius; ?>px;padding: <?php echo $pad; ?>;text-align:center}
+        .<?php echo $uid; ?> .olo-nl-box{max-width:<?php echo absint($s['max_width']) ?: 600; ?>px;width:100%;background:<?php echo esc_attr($bg); ?>;border-radius:<?php echo $radius; ?>px;padding: <?php echo $pad; ?>;<?php echo ! empty( $s['box_border'] ) ? 'border:1px solid ' . esc_attr( $s['box_border'] ) . ';' : ''; ?>text-align:center}
         .<?php echo $uid; ?> .olo-nl-title{font-size:<?php echo absint($s['title_size']); ?>px;font-weight:<?php echo esc_attr($s['title_weight']); ?>;color:<?php echo $s['title_color'] ? esc_attr($s['title_color']) : 'inherit'; ?>;margin:0 0 8px;line-height:1.3}
         .<?php echo $uid; ?> .olo-nl-sub{font-size:<?php echo absint($s['subtitle_size']); ?>px;color:<?php echo $s['subtitle_color'] ? esc_attr($s['subtitle_color']) : 'var(--olo-color-text-muted, #6B7280)'; ?>;margin:0 0 20px;line-height:1.5}
         .<?php echo $uid; ?> .olo-nl-icon{font-size:<?php echo absint($s['icon_size']); ?>px;margin-bottom:12px;<?php echo $s['icon_color'] ? 'color:' . esc_attr($s['icon_color']) . ';' : ''; ?>line-height:1}
@@ -178,7 +179,7 @@ class Olo_Newsletter_Tile extends Olo_Tile_Base {
         .<?php echo $uid; ?>-unlocked>.olo-nl-lock-content{filter:none!important;pointer-events:auto!important;user-select:auto!important}
         .<?php echo $uid; ?>-unlocked>.olo-nl-lock-overlay{display:none!important}
         <?php endif; ?>
-        @media(max-width:640px){.<?php echo $uid; ?> .olo-nl-form{flex-direction:column}.<?php echo $uid; ?> .olo-nl-btn{width:100%}}
+        @media(max-width:768px){.<?php echo $uid; ?> .olo-nl-form{flex-direction:column}.<?php echo $uid; ?> .olo-nl-form input[type="text"],.<?php echo $uid; ?> .olo-nl-form input[type="email"]{flex:none;width:100%}.<?php echo $uid; ?> .olo-nl-btn{width:100%}}
         </style>
 
         <div class="<?php echo esc_attr( $uid ); ?> olo-nl-preset-<?php echo esc_attr( sanitize_key( $s['preset'] ?? 'custom' ) ); ?>">

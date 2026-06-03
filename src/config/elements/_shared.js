@@ -312,6 +312,12 @@ export const scrollEffectFields = [
     condition: { scroll_effect_translatex: [true] } },
   { key: 'scroll_translatex_end', label: t('X fine (px)'), type: 'range', min: -200, max: 200,
     condition: { scroll_effect_translatex: [true] } },
+  { key: 'scroll_effect_fill', label: t('Riempimento su scroll (altezza %)'), type: 'toggle',
+    description: t('Anima la height da inizio→fine col progresso di scroll (preset FillFX — barra/livello che si riempie).') },
+  { key: 'scroll_fill_start', label: t('Riempimento inizio (%)'), type: 'range', min: 0, max: 100,
+    condition: { scroll_effect_fill: [true] } },
+  { key: 'scroll_fill_end', label: t('Riempimento fine (%)'), type: 'range', min: 0, max: 100,
+    condition: { scroll_effect_fill: [true] } },
 ];
 
 export const scrollEffectDefaults = {
@@ -327,6 +333,9 @@ export const scrollEffectDefaults = {
   scroll_effect_translatex: false,
   scroll_translatex_start: '-50',
   scroll_translatex_end: '0',
+  scroll_effect_fill: false,
+  scroll_fill_start: '0',
+  scroll_fill_end: '100',
 };
 
 // ─── Enhanced scroll effects (with blur + translateY) ───

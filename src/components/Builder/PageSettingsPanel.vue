@@ -58,6 +58,47 @@
     <!-- Separator -->
     <div class="mb-border-t mb-border-gray-700"></div>
 
+    <!-- Effetti di pagina -->
+    <div class="mb-space-y-3">
+      <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300">{{ t('Effetti di pagina') }}</label>
+      <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
+        <input type="checkbox" :checked="pageSettings.page_crt_enabled === true" @change="builderStore.updatePageSetting('page_crt_enabled', $event.target.checked)" class="mb-accent-primary-500" />
+        <span class="mb-text-xs mb-text-gray-300">{{ t('Overlay CRT (scanline + vignetta)') }}</span>
+      </label>
+      <p class="mb-text-[10px] mb-text-gray-500 mb-leading-snug">{{ t('Decoratore a tutta pagina in stile schermo CRT. Statico con riduzione del movimento.') }}</p>
+      <template v-if="pageSettings.page_crt_enabled">
+        <div>
+          <label class="mb-block mb-text-xs mb-text-gray-400 mb-mb-1">{{ t('Intensità scanline') }}: {{ pageSettings.page_crt_scanline_opacity ?? 50 }}%</label>
+          <input type="range" min="0" max="100" step="5" :value="pageSettings.page_crt_scanline_opacity ?? 50" @input="builderStore.updatePageSetting('page_crt_scanline_opacity', parseInt($event.target.value))" class="mb-w-full mb-accent-primary-500" />
+        </div>
+        <div>
+          <label class="mb-block mb-text-xs mb-text-gray-400 mb-mb-1">{{ t('Passo scanline (px)') }}: {{ pageSettings.page_crt_scanline_gap ?? 3 }}</label>
+          <input type="range" min="2" max="12" step="1" :value="pageSettings.page_crt_scanline_gap ?? 3" @input="builderStore.updatePageSetting('page_crt_scanline_gap', parseInt($event.target.value))" class="mb-w-full mb-accent-primary-500" />
+        </div>
+        <div>
+          <label class="mb-block mb-text-xs mb-text-gray-400 mb-mb-1">{{ t('Vignetta') }}: {{ pageSettings.page_crt_vignette ?? 55 }}%</label>
+          <input type="range" min="0" max="100" step="5" :value="pageSettings.page_crt_vignette ?? 55" @input="builderStore.updatePageSetting('page_crt_vignette', parseInt($event.target.value))" class="mb-w-full mb-accent-primary-500" />
+        </div>
+        <div>
+          <label class="mb-block mb-text-xs mb-text-gray-400 mb-mb-1">{{ t('Fusione') }}</label>
+          <select :value="pageSettings.page_crt_blend_mode || 'overlay'" @change="builderStore.updatePageSetting('page_crt_blend_mode', $event.target.value)" class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1 mb-text-sm mb-text-gray-900">
+            <option value="overlay">Overlay</option>
+            <option value="screen">Screen</option>
+            <option value="soft-light">Soft Light</option>
+            <option value="multiply">Multiply</option>
+            <option value="normal">{{ t('Normale') }}</option>
+          </select>
+        </div>
+        <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
+          <input type="checkbox" :checked="pageSettings.page_crt_flicker === true" @change="builderStore.updatePageSetting('page_crt_flicker', $event.target.checked)" class="mb-accent-primary-500" />
+          <span class="mb-text-xs mb-text-gray-300">{{ t('Sfarfallio animato') }}</span>
+        </label>
+      </template>
+    </div>
+
+    <!-- Separator -->
+    <div class="mb-border-t mb-border-gray-700"></div>
+
     <!-- SEO Section: only when template is bound to a post -->
     <div v-if="seo.isReady.value">
       <div class="mb-flex mb-items-center mb-justify-between mb-mb-2">

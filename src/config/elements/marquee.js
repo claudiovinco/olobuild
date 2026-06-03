@@ -24,6 +24,12 @@ export default {
     direction: 'left',
     pause_hover: true,
     gap: '60',
+    // VelocitySkew (reattivo allo scroll) — default OFF: i Marquee esistenti restano invariati
+    velocity_skew: false,
+    vskew_base_speed: 0.6,
+    vskew_scroll_boost: 0.6,
+    vskew_max_skew: 14,
+    vskew_damping: 0.86,
     bg_color: '#1F2937',
     text_color: '',
     font_size: '16',
@@ -62,6 +68,18 @@ export default {
     ]},
     { key: 'pause_hover', label: t('Pausa al passaggio mouse'), type: 'toggle' },
     { key: 'gap', label: t('Spazio tra elementi (px)'), type: 'range', min: 20, max: 120, step: 10 },
+
+    { type: 'separator', label: t('Velocity Skew (reattivo allo scroll)') },
+    { key: 'velocity_skew', label: t('Inclina con la velocità di scroll'), type: 'toggle',
+      description: t('Lo scroll aggiunge spinta e inclinazione al nastro, che si smorza al fermarsi. Rispetta prefers-reduced-motion (solo drift base).') },
+    { key: 'vskew_base_speed', label: t('Velocità base (drift)'), type: 'range', min: 0, max: 3, step: 0.1,
+      condition: { field: 'velocity_skew', op: 'eq', value: true } },
+    { key: 'vskew_scroll_boost', label: t('Spinta da scroll'), type: 'range', min: 0, max: 2, step: 0.05,
+      condition: { field: 'velocity_skew', op: 'eq', value: true } },
+    { key: 'vskew_max_skew', label: t('Inclinazione massima (°)'), type: 'range', min: 0, max: 30, step: 1,
+      condition: { field: 'velocity_skew', op: 'eq', value: true } },
+    { key: 'vskew_damping', label: t('Smorzamento'), type: 'range', min: 0.5, max: 0.98, step: 0.01,
+      condition: { field: 'velocity_skew', op: 'eq', value: true } },
   ],
 
   styleFields: [

@@ -45,6 +45,11 @@ export default {
     trigger_direction: 'down',
     exit_intent: false,
     retrigger: false,
+    // Trigger sequenza-tasti (Konami) — additivo, default OFF: gli altri trigger restano invariati
+    key_sequence: false,
+    key_sequence_keys: '↑↑↓↓←→←→ba',
+    key_sequence_confetti: false,
+    key_sequence_confetti_colors: '',
     popup_frequency: 'always',
     show_max_times: 0,
     // Display rules
@@ -103,6 +108,22 @@ export default {
     ], condition: { field: 'exit_intent', op: 'eq', value: false } },
     { key: 'retrigger', label: t('Ri-attiva a ogni passaggio'), type: 'toggle',
       condition: { field: 'exit_intent', op: 'eq', value: false } },
+
+    { type: 'separator', label: t('Sequenza di tasti (Konami)') },
+    { key: 'key_sequence', label: t('Apri con sequenza di tasti'), type: 'toggle',
+      description: t('Mostra il popup quando il visitatore digita una sequenza segreta (es. codice Konami). Funziona insieme agli altri trigger.') },
+    { key: 'key_sequence_keys', label: t('Sequenza'), type: 'text',
+      placeholder: '↑↑↓↓←→←→ba',
+      description: t('Usa le frecce ↑ ↓ ← → e le lettere/numeri (es. “ba”). Spazi e maiuscole ignorati.'),
+      condition: { field: 'key_sequence', op: 'eq', value: true } },
+    { key: 'key_sequence_confetti', label: t('Coriandoli alla scoperta'), type: 'toggle',
+      description: t('Lancia un effetto coriandoli quando la sequenza viene completata.'),
+      condition: { field: 'key_sequence', op: 'eq', value: true } },
+    { key: 'key_sequence_confetti_colors', label: t('Colori coriandoli'), type: 'text',
+      placeholder: 'var(--olo-color-primary), var(--olo-color-secondary), var(--olo-color-accent)',
+      description: t('Colori separati da virgola. Lascia vuoto per usare la palette del brand.'),
+      condition: { field: 'key_sequence_confetti', op: 'eq', value: true } },
+
     { key: 'popup_frequency', label: t('Frequenza'), type: 'select', options: [
       { value: 'always', label: t('Sempre') },
       { value: 'once_session', label: t('Una volta per sessione') },

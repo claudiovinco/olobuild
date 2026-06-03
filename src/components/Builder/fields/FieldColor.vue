@@ -62,22 +62,19 @@
         </svg>
       </button>
     </div>
-    <div class="mb-flex mb-items-center mb-gap-2">
-      <span class="mb-text-[10px] mb-text-gray-400 mb-shrink-0">{{ t('Alfa') }}</span>
+    <div class="fc-alpha-row">
+      <span class="fc-alpha-label">{{ t('Alfa') }}</span>
       <input
         type="range"
         :value="alphaPct"
         @input="onAlphaChange(parseInt($event.target.value))"
         min="0" max="100" step="5"
-        class="mb-flex-1"
+        class="fc-alpha-range"
+        :style="{ '--fc-rgb': previewRgb }"
         :aria-label="t('Opacità colore')"
         :aria-valuetext="alphaPct + '%'"
       />
-      <span class="mb-text-[10px] mb-text-gray-400 mb-w-8 mb-text-right">{{ alphaPct }}%</span>
-      <div
-        class="mb-w-5 mb-h-5 mb-rounded mb-border mb-border-gray-300 mb-shrink-0"
-        :style="{ background: previewColor }"
-      ></div>
+      <span class="fc-alpha-val">{{ alphaPct }}%</span>
     </div>
   </div>
 </template>
@@ -193,6 +190,15 @@ const previewColor = computed(() => {
     return toOutput(parsed.value.hex, 1);
   }
   return toOutput(parsed.value.hex, parsed.value.alpha);
+});
+
+// Terna "r, g, b" del colore corrente (senza alfa) per il gradiente della barra Alfa.
+const previewRgb = computed(() => {
+  const h = parsed.value.hex.replace('#', '');
+  const rp = parseInt(h.substring(0, 2), 16); const r = !isNaN(rp) ? rp : 0;
+  const gp = parseInt(h.substring(2, 4), 16); const g = !isNaN(gp) ? gp : 0;
+  const bp = parseInt(h.substring(4, 6), 16); const b = !isNaN(bp) ? bp : 0;
+  return `${r}, ${g}, ${b}`;
 });
 
 function onHexChange(hex) {
@@ -402,5 +408,70 @@ async function removeQuickColor(colorId) {
 .fc-globe-btn--active:hover {
   color: var(--olo-color-primary, #6366f1);
   background: rgba(99, 102, 241, 0.08);
+}
+
+/* ── Barra Alfa (checkerboard + gradiente trasparenza→colore) ── */
+.fc-alpha-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 2px;
+}
+.fc-alpha-label {
+  font-size: 10px;
+  color: #9ca3af;
+  flex-shrink: 0;
+}
+.fc-alpha-val {
+  font-size: 10px;
+  color: #9ca3af;
+  width: 30px;
+  text-align: right;
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+.fc-alpha-range {
+  -webkit-appearance: none;
+  appearance: none;
+  flex: 1;
+  min-width: 0;
+  height: 14px;
+  border-radius: 7px;
+  outline: none;
+  cursor: pointer;
+  border: 1px solid #d1d5db;
+  /* alto → basso: gradiente alfa, scacchiera (2 layer), base bianca */
+  background:
+    linear-gradient(90deg, rgba(var(--fc-rgb, 0, 0, 0), 0), rgba(var(--fc-rgb, 0, 0, 0), 1)),
+    linear-gradient(45deg, #cbd5e1 25%, transparent 0, transparent 75%, #cbd5e1 0) 0 0 / 10px 10px,
+    linear-gradient(45deg, #cbd5e1 25%, transparent 0, transparent 75%, #cbd5e1 0) 5px 5px / 10px 10px,
+    #fff;
+}
+.fc-alpha-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.35);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+  cursor: pointer;
+}
+.fc-alpha-range::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.35);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+  cursor: pointer;
+}
+.fc-alpha-range::-moz-range-track {
+  height: 14px;
+  border-radius: 7px;
+  background: transparent;
+}
+.fc-alpha-range:focus-visible {
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.5);
 }
 </style>

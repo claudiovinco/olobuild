@@ -23,6 +23,11 @@ export default {
     letter_spacing: '2',
     animation: 'none',
     animation_speed: '10',
+    // Spin: rotazione continua dell'intero gruppo testo-su-tracciato (es. badge ad anello "type set in motion").
+    // Additivo, default OFF: i TextPath esistenti restano invariati. Rispetta prefers-reduced-motion (fermo).
+    spin: false,
+    spin_speed: '14',
+    spin_direction: 'cw',
     ...textEffectsDefaults,
     text_effect_target: 'text',
     border: { ...borderDefault },
@@ -53,6 +58,16 @@ export default {
     ]},
     { key: 'animation_speed', label: t('Velocità animazione (sec)'), type: 'range', min: 1, max: 20,
       condition: { field: 'animation', value: ['scroll', 'continuous'] } },
+
+    { type: 'separator', label: t('Rotazione continua (spin)') },
+    { key: 'spin', label: t('Ruota tutto il gruppo'), type: 'toggle',
+      description: t('Ruota in continuazione l\'intero testo-su-tracciato (ideale per badge ad anello). Rispetta prefers-reduced-motion: resta fermo.') },
+    { key: 'spin_speed', label: t('Velocità rotazione (sec/giro)'), type: 'range', min: 3, max: 40, step: 1,
+      condition: { field: 'spin', op: 'eq', value: true } },
+    { key: 'spin_direction', label: t('Direzione'), type: 'select', options: [
+      { value: 'cw',  label: t('Oraria') },
+      { value: 'ccw', label: t('Antioraria') },
+    ], condition: { field: 'spin', op: 'eq', value: true } },
   ],
 
   styleFields: [

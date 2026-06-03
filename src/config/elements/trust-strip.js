@@ -27,6 +27,13 @@ export default {
     align: 'center',
     flow:  'wrap',
     gap:   24,
+    variant: 'inline',
+    logo_height: 18,
+    pill_bg: 'rgba(255,255,255,0.05)',
+    pill_border: 'rgba(255,255,255,0.12)',
+    pill_text_color: '',
+    badge_bg: '#D8FF4A',
+    badge_color: '#1B2A4E',
   },
 
   // ═══ CONTENUTO ════════════════════════════════════════════════
@@ -37,7 +44,9 @@ export default {
       defaults: { icon: 'check', icon_color: '#10b981', text: 'Nuova garanzia' },
       itemFields: [
         { key: 'icon',       label: t('Icona'),        type: 'icon' },
+        { key: 'logo',       label: t('Logo (immagine — variante Pill)'), type: 'image' },
         { key: 'text',       label: t('Testo'), type: 'editor', mode: 'inline' },
+        { key: 'badge',      label: t('Badge (variante Pill)'), type: 'text' },
         { key: 'icon_color', label: t('Colore icona'), type: 'color' },
       ],
     },
@@ -45,6 +54,18 @@ export default {
 
   // ═══ STILE ════════════════════════════════════════════════════
   styleFields: [
+    { type: 'separator', label: t('Variante') },
+    { key: 'variant', label: t('Stile'), type: 'select', options: [
+      { value: 'inline', label: t('Inline (icona + testo, separatori)') },
+      { value: 'pill',   label: t('Pill (box glass: logo + testo + badge)') },
+    ]},
+    { key: 'logo_height',     label: t('Altezza logo (px)'),  type: 'range', min: 10, max: 64, step: 1, condition: { field: 'variant', value: 'pill' } },
+    { key: 'pill_bg',         label: t('Sfondo pill (CSS)'),  type: 'text',  condition: { field: 'variant', value: 'pill' } },
+    { key: 'pill_border',     label: t('Bordo pill (CSS)'),   type: 'text',  condition: { field: 'variant', value: 'pill' } },
+    { key: 'pill_text_color', label: t('Colore testo pill'),  type: 'color', condition: { field: 'variant', value: 'pill' } },
+    { key: 'badge_bg',        label: t('Badge sfondo'),       type: 'color', condition: { field: 'variant', value: 'pill' } },
+    { key: 'badge_color',     label: t('Badge testo'),        type: 'color', condition: { field: 'variant', value: 'pill' } },
+
     { type: 'separator', label: t('Tipografia') },
     { key: 'font_family', label: t('Famiglia'), type: 'select', options: [
       { value: 'sans-serif', label: t('Sans-serif (default)') },

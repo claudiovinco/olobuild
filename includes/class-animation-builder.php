@@ -251,6 +251,35 @@ class Olo_Animation_Builder {
     }
 
     /**
+     * Build the data-olo-spotlight attribute (cursor "torch" effect).
+     * Riusabile su section/row/column/element. Legge da $advanced come gli altri effetti puntatore.
+     *
+     * @param array $advanced Advanced settings.
+     * @return string Attribute string (leading space) or empty.
+     */
+    public function build_spotlight_attr( $advanced ) {
+        if ( empty( $advanced['cursor_spotlight'] ) ) {
+            return '';
+        }
+        $blend = $advanced['cursor_spotlight_blend'] ?? 'difference';
+        if ( ! in_array( $blend, [ 'difference', 'exclusion', 'screen', 'overlay', 'hard-light', 'color-dodge' ], true ) ) {
+            $blend = 'difference';
+        }
+        $color = $advanced['cursor_spotlight_color'] ?? '#ffffff';
+        if ( ! preg_match( '/^#[0-9a-fA-F]{3,8}$/', (string) $color ) ) {
+            $color = '#ffffff';
+        }
+        $cfg = [
+            'size'  => max( 40, min( 800, intval( $advanced['cursor_spotlight_size'] ?? 300 ) ) ),
+            'soft'  => max( 0, min( 100, intval( $advanced['cursor_spotlight_softness'] ?? 40 ) ) ),
+            'blend' => $blend,
+            'color' => $color,
+            'ease'  => max( 0.02, min( 1, intval( $advanced['cursor_spotlight_easing'] ?? 22 ) / 100 ) ),
+        ];
+        return " data-olo-spotlight='" . esc_attr( wp_json_encode( $cfg ) ) . "'";
+    }
+
+    /**
      * Build inline CSS for infinite (looping) animation (legacy element-level).
      *
      * @param array $advanced Advanced settings.

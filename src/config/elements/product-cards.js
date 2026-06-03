@@ -45,6 +45,7 @@ export default {
     letter_size:             140,
     letter_italic:           true,
     letter_align:            'center',
+    logo_height:             52,
     show_screenshot_label:   true,
     screenshot_label_color:  '#9ca3af',
 
@@ -67,10 +68,11 @@ export default {
     { type: 'separator', label: t('Product cards') },
     { key: 'items', label: t('Cards'), type: 'content-items',
       itemLabel: t('Card'),
-      defaults: { letter: 'X', letter_color: '#0f172a', top_bg: { type: 'solid', color: '#f5f5f5' }, screenshot_label: 'SCREENSHOT', brand_label: 'BRAND', brand_color: '#0f172a', show_badge: false, badge_text: '', badge_bg: '#0f172a', badge_color: '#ffffff', title: 'Titolo', title_accent: '', title_accent_italic: false, description: 'Descrizione…', cta_text: 'SCOPRI', cta_url: '#' },
+      defaults: { letter: 'X', letter_color: '#0f172a', logo_image: '', top_bg: { type: 'solid', color: '#f5f5f5' }, screenshot_label: 'SCREENSHOT', brand_label: 'BRAND', brand_color: '#0f172a', show_badge: false, badge_text: '', badge_bg: '#0f172a', badge_color: '#ffffff', title: 'Titolo', title_accent: '', title_accent_italic: false, description: 'Descrizione…', cta_text: 'SCOPRI', cta_url: '#' },
       itemFields: [
         { key: 'letter',              label: t('Lettera monogramma'), type: 'text' },
         { key: 'letter_color',        label: t('Colore lettera'),     type: 'color' },
+        { key: 'logo_image',          label: t('Logo prodotto (sostituisce la lettera)'), type: 'image' },
         { key: 'top_bg',              label: t('Sfondo metà alta'),   type: 'background', showParallax: false },
         { key: 'screenshot_label',    label: t('Label outline (metà alta)'), type: 'text' },
         { key: 'brand_label',         label: t('Brand label'),        type: 'text' },
@@ -127,6 +129,7 @@ export default {
       { value: 'mono',       label: t('Monospace') },
     ]},
     { key: 'letter_size',   label: t('Dimensione lettera (px)'), type: 'range', min: 40, max: 280, step: 4 },
+    { key: 'logo_height',   label: t('Altezza logo (px)'),       type: 'range', min: 16, max: 160, step: 2 },
     { key: 'letter_italic', label: t('Lettera in italico'),      type: 'toggle' },
     { key: 'letter_align', label: t('Allineamento lettera'), type: 'select', options: [
       { value: 'left',   label: t('Sinistra') },

@@ -39,6 +39,10 @@ class Olo_Hiddenpop_Tile extends Olo_Tile_Base {
         'trigger_direction'   => 'down',
         'exit_intent'         => false,
         'retrigger'           => false,
+        'key_sequence'                 => false,
+        'key_sequence_keys'            => '↑↑↓↓←→←→ba',
+        'key_sequence_confetti'        => false,
+        'key_sequence_confetti_colors' => '',
         'popup_frequency'     => 'always',
         'show_max_times'      => 0,
         'display_device'      => '',
@@ -97,6 +101,61 @@ class Olo_Hiddenpop_Tile extends Olo_Tile_Base {
         $exit_intent = ! empty( $s['exit_intent'] );
         $display_device   = sanitize_text_field( $s['display_device'] ?? '' );
         $display_referrer = sanitize_text_field( $s['display_referrer'] ?? '' );
+
+        // ── Trigger sequenza-tasti (Konami) — additivo ──
+        $key_seq_on       = ! empty( $s['key_sequence'] );
+        $key_seq_confetti = ! empty( $s['key_sequence_confetti'] );
+        // Normalizza la sequenza scritta dall'utente in token KeyboardEvent.key.
+        // ↑↓←→ → Arrow*, lettere/cifre → minuscolo. Spazi e separatori ignorati.
+        $key_seq_arr = [];
+        if ( $key_seq_on ) {
+            $raw_seq = (string) ( $s['key_sequence_keys'] ?? '' );
+            if ( trim( $raw_seq ) === '' ) {
+                $raw_seq = '↑↑↓↓←→←→ba';
+            }
+            // Itera per carattere unicode (mb_str_split: PHP 7.4+).
+            $chars = function_exists( 'mb_str_split' )
+                ? mb_str_split( $raw_seq )
+                : preg_split( '//u', $raw_seq, -1, PREG_SPLIT_NO_EMPTY );
+            $arrow_map = [
+                '↑' => 'ArrowUp',   '⬆' => 'ArrowUp',
+                '↓' => 'ArrowDown', '⬇' => 'ArrowDown',
+                '←' => 'ArrowLeft', '⬅' => 'ArrowLeft',
+                '→' => 'ArrowRight','➡' => 'ArrowRight',
+            ];
+            foreach ( (array) $chars as $ch ) {
+                if ( $ch === null || $ch === '' ) { continue; }
+                if ( isset( $arrow_map[ $ch ] ) ) {
+                    $key_seq_arr[] = $arrow_map[ $ch ];
+                } elseif ( trim( $ch ) === '' || $ch === ',' || $ch === '-' || $ch === '+' ) {
+                    // separatori "decorativi" ignorati
+                    continue;
+                } else {
+                    $key_seq_arr[] = function_exists( 'mb_strtolower' ) ? mb_strtolower( $ch, 'UTF-8' ) : strtolower( $ch );
+                }
+            }
+        }
+        // Fallback di sicurezza: se dopo il parsing la coda è vuota, usa il Konami canonico.
+        if ( $key_seq_on && empty( $key_seq_arr ) ) {
+            $key_seq_arr = [ 'ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a' ];
+        }
+
+        // Colori coriandoli: lista CSS-safe via virgola, fallback palette brand (token).
+        $confetti_colors = [];
+        if ( $key_seq_confetti ) {
+            $raw_cols = (string) ( $s['key_sequence_confetti_colors'] ?? '' );
+            foreach ( explode( ',', $raw_cols ) as $col ) {
+                $col = $this->safe_color_css( trim( $col ) );
+                if ( $col !== '' ) { $confetti_colors[] = $col; }
+            }
+            if ( empty( $confetti_colors ) ) {
+                $confetti_colors = [
+                    'var(--olo-color-primary, #e1474f)',
+                    'var(--olo-color-secondary, #1f2937)',
+                    'var(--olo-color-accent, #f59e0b)',
+                ];
+            }
+        }
 
         // ── Modal styling ──
         $max_w       = max( 300, min( 900, intval( $s['modal_max_width'] ) ) );
@@ -181,6 +240,26 @@ class Olo_Hiddenpop_Tile extends Olo_Tile_Base {
                 outline: none;
                 box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
             }
+            <?php if ( $key_seq_confetti ) : ?>
+            /* Coriandoli al match della sequenza — layer + pezzi scoped per istanza */
+            #<?php echo esc_attr( $uid ); ?>-confetti {
+                position: fixed; inset: 0; z-index: 1000000;
+                pointer-events: none; overflow: hidden;
+            }
+            #<?php echo esc_attr( $uid ); ?>-confetti .olo-hp-conf {
+                position: absolute; top: -16px; width: 10px; height: 14px;
+                border-radius: 2px; will-change: transform, opacity;
+                animation: <?php echo esc_attr( $uid ); ?>-conf-fall linear forwards;
+            }
+            @keyframes <?php echo esc_attr( $uid ); ?>-conf-fall {
+                0%   { transform: translateY(0) rotate(0deg);   opacity: 1; }
+                100% { transform: translateY(105vh) rotate(720deg); opacity: 0; }
+            }
+            @media (prefers-reduced-motion: reduce) {
+                /* reduced-motion: nessun coriandolo animato */
+                #<?php echo esc_attr( $uid ); ?>-confetti { display: none !important; }
+            }
+            <?php endif; ?>
         </style>
 
         <div class="olo-hiddenpop" id="<?php echo esc_attr( $uid ); ?>">
@@ -401,6 +480,80 @@ class Olo_Hiddenpop_Tile extends Olo_Tile_Base {
               /* Check on load in case marker is already at threshold */
               setTimeout(tryOpen, 500);
             }
+
+            <?php if ( $key_seq_on ) : ?>
+            /* ── Trigger sequenza-tasti (Konami) — additivo agli altri trigger ── */
+            /* Rif. 60-tema-community-gamer.html. Idempotente: guard su dataset del modal. */
+            (function(){
+                if (modalEl.dataset.oloHpKeySeq) { return; }   // una sola init per istanza
+                modalEl.dataset.oloHpKeySeq = '1';
+
+                var SEQ = <?php echo wp_json_encode( $key_seq_arr ); ?>;
+                if (!SEQ || !SEQ.length) { return; }
+                var pos = 0;
+
+                function keyShow() {
+                    /* Riusa il meccanismo show già presente + regole di frequenza/visibilità */
+                    if (isModalVisible()) { return; }
+                    if (!canShow()) { return; }
+                    openModal();
+                    <?php if ( $key_seq_confetti ) : ?>
+                    party();
+                    <?php endif; ?>
+                }
+
+                document.addEventListener('keydown', function(e){
+                    /* Non interferire con la digitazione in campi/editor */
+                    var tgt = e.target;
+                    if (tgt && (tgt.tagName === 'INPUT' || tgt.tagName === 'TEXTAREA' || tgt.tagName === 'SELECT' || tgt.isContentEditable)) {
+                        return;
+                    }
+                    var k = (e.key && e.key.length === 1) ? e.key.toLowerCase() : e.key;
+                    if (k === SEQ[pos]) {
+                        pos++;
+                        if (pos === SEQ.length) {
+                            pos = 0;
+                            keyShow();
+                        }
+                    } else {
+                        /* ricomincia; se il tasto coincide col primo, conta come passo 1 */
+                        pos = (k === SEQ[0]) ? 1 : 0;
+                    }
+                });
+
+                <?php if ( $key_seq_confetti ) : ?>
+                /* Coriandoli one-shot, scoped per istanza. Off in reduced-motion. */
+                function party(){
+                    var rm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
+                    if (rm && rm.matches) { return; }
+                    var COLORS = <?php echo wp_json_encode( $confetti_colors ); ?>;
+                    if (!COLORS || !COLORS.length) { return; }
+                    var layer = document.getElementById('<?php echo esc_js( $uid ); ?>-confetti');
+                    if (!layer) {
+                        layer = document.createElement('div');
+                        layer.id = '<?php echo esc_js( $uid ); ?>-confetti';
+                        document.body.appendChild(layer);
+                    }
+                    var N = 90;
+                    for (var n = 0; n < N; n++) {
+                        var c = document.createElement('span');
+                        c.className = 'olo-hp-conf';
+                        c.style.background = COLORS[n % COLORS.length];
+                        c.style.left = (Math.random() * 100) + 'vw';
+                        c.style.animationDuration = (1.6 + Math.random() * 1.4) + 's';
+                        c.style.animationDelay = (Math.random() * 0.4) + 's';
+                        c.style.transform = 'translateY(0) rotate(' + (Math.random() * 360) + 'deg)';
+                        (function(el){
+                            el.addEventListener('animationend', function(){ if (el.parentNode) { el.parentNode.removeChild(el); } });
+                        })(c);
+                        layer.appendChild(c);
+                    }
+                    /* safety cleanup nel caso animationend non scatti */
+                    setTimeout(function(){ if (layer) { layer.innerHTML = ''; } }, 4000);
+                }
+                <?php endif; ?>
+            })();
+            <?php endif; ?>
         })();
         </script>
         <?php

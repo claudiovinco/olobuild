@@ -142,6 +142,8 @@ class Olo_Maintenance_Mode {
         }
     ?></title>
     <?php wp_head(); ?>
+    <!-- Coming-soon/maintenance: nascondi CTA flottanti globali (es. sticky "Prenota demo") -->
+    <style>[class^="olo-sticky-cta"],[class*="olo-sticky-cta"]{display:none!important}body.olo-maintenance-page{background:#0a1226}</style>
 </head>
 <body <?php body_class( 'olo-maintenance-page' ); ?>>
     <?php

@@ -38,7 +38,7 @@ export const useTilesStore = defineStore('tiles', {
       // Return in fixed order
       const order = [
         'essential', 'layout', 'text', 'media', 'marketing',
-        'interactive', 'navigation', 'dynamic', 'booking', 'olo-space',
+        'interactive', 'atmosphere', 'navigation', 'dynamic', 'booking', 'olo-space',
       ];
       const groups = {};
       for (const cat of order) {

@@ -1046,6 +1046,41 @@
                   <input type="range" min="1" max="10" step="1" :value="tileAdvanced.mouse_track_speed || 3" @input="updateAdvanced('mouse_track_speed', $event.target.value)" class="mb-w-full mb-accent-primary-500" />
                 </div>
               </template>
+
+              <div class="mb-border-t mb-border-gray-700 mb-pt-3 mb-mt-1"></div>
+              <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
+                <input type="checkbox" :checked="tileAdvanced.cursor_spotlight === true" @change="updateAdvanced('cursor_spotlight', $event.target.checked)" class="mb-accent-primary-500" />
+                <span class="mb-text-xs mb-text-gray-300">Spotlight cursore (torcia)</span>
+              </label>
+              <p class="mb-text-[10px] mb-text-gray-500 mb-leading-snug">Un disco-torcia segue il cursore e inverte i colori, confinato a questo elemento. Si disattiva su touch e con riduzione del movimento.</p>
+              <template v-if="tileAdvanced.cursor_spotlight">
+                <div>
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Inversione (blend)</label>
+                  <select :value="tileAdvanced.cursor_spotlight_blend || 'difference'" @change="updateAdvanced('cursor_spotlight_blend', $event.target.value)" class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1 mb-text-sm mb-text-gray-900">
+                    <option value="difference">Differenza</option>
+                    <option value="exclusion">Esclusione</option>
+                    <option value="screen">Schermo</option>
+                    <option value="overlay">Sovrapposizione</option>
+                    <option value="hard-light">Hard Light</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Colore luce</label>
+                  <input type="color" :value="tileAdvanced.cursor_spotlight_color || '#ffffff'" @input="updateAdvanced('cursor_spotlight_color', $event.target.value)" class="mb-w-full mb-h-8 mb-rounded mb-cursor-pointer" />
+                </div>
+                <div>
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Dimensione disco: {{ tileAdvanced.cursor_spotlight_size || 300 }}px</label>
+                  <input type="range" min="80" max="600" step="10" :value="tileAdvanced.cursor_spotlight_size || 300" @input="updateAdvanced('cursor_spotlight_size', $event.target.value)" class="mb-w-full mb-accent-primary-500" />
+                </div>
+                <div>
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Morbidezza bordo: {{ tileAdvanced.cursor_spotlight_softness ?? 40 }}%</label>
+                  <input type="range" min="0" max="100" step="5" :value="tileAdvanced.cursor_spotlight_softness ?? 40" @input="updateAdvanced('cursor_spotlight_softness', $event.target.value)" class="mb-w-full mb-accent-primary-500" />
+                </div>
+                <div>
+                  <label class="mb-block mb-text-xs mb-font-medium mb-text-gray-400 mb-mb-1">Inseguimento: {{ tileAdvanced.cursor_spotlight_easing || 22 }}</label>
+                  <input type="range" min="5" max="100" step="1" :value="tileAdvanced.cursor_spotlight_easing || 22" @input="updateAdvanced('cursor_spotlight_easing', $event.target.value)" class="mb-w-full mb-accent-primary-500" />
+                </div>
+              </template>
             </div>
           </CollapseSection>
 

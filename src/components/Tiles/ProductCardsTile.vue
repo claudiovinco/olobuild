@@ -8,7 +8,9 @@
     >
       <!-- TOP HALF -->
       <div class="olo-pcards__top" :style="topStyle(it)">
-        <span v-if="it.letter" class="olo-pcards__letter" :style="letterStyle(it)">{{ it.letter }}</span>
+        <div v-if="overlayOf(it)" :style="overlayOf(it)" aria-hidden="true"></div>
+        <img v-if="it.logo_image" class="olo-pcards__logo" :src="it.logo_image" :alt="it.brand_label || it.title" :style="logoStyle" />
+        <span v-else-if="it.letter" class="olo-pcards__letter" :style="letterStyle(it)">{{ it.letter }}</span>
         <div
           v-if="s.show_screenshot_label && it.screenshot_label"
           class="olo-pcards__screen-label"
@@ -62,6 +64,7 @@ const defaults = {
   letter_size: 140,
   letter_italic: true,
   letter_align: 'center',
+  logo_height: 52,
   show_screenshot_label: true,
   screenshot_label_color: '',
   brand_size: 13,
@@ -149,6 +152,8 @@ function topStyle(it) {
 
 function letterStyle(it) {
   return {
+    position: 'relative',
+    zIndex: 2,
     fontFamily: fmap[s.value.letter_font_family] || SERIF,
     fontSize: (s.value.letter_size || 140) + 'px',
     fontStyle: s.value.letter_italic ? 'italic' : 'normal',
@@ -158,10 +163,37 @@ function letterStyle(it) {
   };
 }
 
+const logoStyle = computed(() => ({
+  position: 'relative',
+  zIndex: 2,
+  maxHeight: (s.value.logo_height || 52) + 'px',
+  maxWidth: '78%',
+  width: 'auto',
+  height: 'auto',
+  objectFit: 'contain',
+  display: 'block',
+}));
+
+// Overlay (sovrapposizione) della metà alta: layer colore sopra l'immagine/bg.
+function overlayOf(it) {
+  const bg = it.top_bg || {};
+  const op = parseInt(bg.overlay_opacity || 0);
+  if (!bg.type || bg.type === 'none' || !(op > 0)) return null;
+  return {
+    position: 'absolute',
+    inset: 0,
+    backgroundColor: bg.overlay_color || '#000000',
+    opacity: Math.min(100, op) / 100,
+    pointerEvents: 'none',
+    zIndex: 1,
+  };
+}
+
 const screenLabelStyle = computed(() => {
   const labelC = resolveColor(s.value.screenshot_label_color, TOKENS.textFaint);
   return {
     position: 'absolute',
+    zIndex: 2,
     left: (s.value.top_padding || 24) + 'px',
     right: (s.value.top_padding || 24) + 'px',
     bottom: (s.value.top_padding || 24) + 'px',

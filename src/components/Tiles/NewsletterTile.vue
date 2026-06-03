@@ -52,7 +52,7 @@ const defaults = {
   icon_image: '', icon_size: '48', show_name: false, name_placeholder: 'Il tuo nome',
   email_placeholder: 'La tua email', button_text: 'Iscriviti', button_icon: true,
   privacy_text: '', privacy_required: false, content_lock: false,
-  max_width: '600', bg_color: '', border_radius: 12, padding: '32',
+  max_width: '600', bg_color: '', box_border: '', border_radius: 12, padding: '32',
   title_size: '24', title_weight: '700', title_color: '', subtitle_size: '14', subtitle_color: '',
   input_bg: '#ffffff', input_color: '#1F2937', input_border: '#D1D5DB', input_radius: 8, input_height: '44',
   btn_bg: '', btn_color: '#ffffff', btn_radius: 8, btn_font_size: '14', btn_font_weight: '600',
@@ -63,6 +63,7 @@ const s = computed(() => ({ ...defaults, ...props.settings }));
 const boxStyle = computed(() => ({
   maxWidth: (s.value.max_width || 600) + 'px',
   background: s.value.bg_color || 'transparent',
+  border: s.value.box_border ? '1px solid ' + s.value.box_border : 'none',
   borderRadius: s.value.border_radius + 'px',
   padding: s.value.padding + 'px',
 }));

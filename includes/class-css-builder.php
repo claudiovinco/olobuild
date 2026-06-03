@@ -33,8 +33,14 @@ class Olo_CSS_Builder {
      * @return array Background config with 'type' key.
      */
     public function get_effective_bg( $style ) {
-        if ( ! empty( $style['bg'] ) && ! empty( $style['bg']['type'] ) && $style['bg']['type'] !== 'none' ) {
+        if ( ! empty( $style['bg'] ) && ! empty( $style['bg']['type'] ) ) {
             $bg = $style['bg'];
+            // Il bg "moderno" (oggetto style.bg con type esplicito) ha SEMPRE priorità sul
+            // legacy bg_color/bg_type piatto. Se l'utente ha scelto "Nessuno", lo si rispetta:
+            // niente fallback al vecchio bg_color residuo (bug: lo sfondo "non si toglieva").
+            if ( $bg['type'] === 'none' ) {
+                return [ 'type' => 'none' ];
+            }
             // Normalizza: se il type richiede un asset ma l'asset manca, fallback al
             // color (se presente) come 'solid', altrimenti 'none'. Caso classico:
             // l'utente seleziona galleria/immagine/video, poi cambia idea e mette un
@@ -84,6 +90,9 @@ class Olo_CSS_Builder {
         }
         if ( $bg['type'] === 'glow' ) {
             return $this->build_glow_css( $bg );
+        }
+        if ( $bg['type'] === 'crt' ) {
+            return $this->build_crt_css( $bg );
         }
         if ( $bg['type'] === 'image' && ! empty( $bg['image_url'] ) ) {
             $url      = esc_url_raw( $bg['image_url'] );
@@ -152,6 +161,31 @@ class Olo_CSS_Builder {
         }
 
         return '';
+    }
+
+    /**
+     * Build "CRT" background CSS — scanline (repeating-linear-gradient) + vignetta
+     * (radial-gradient) su un colore base, come background multi-layer. CSS puro →
+     * applicabile a Section/Colonna/elemento/pagina via get_bg_inline_css (universale).
+     * Statico (le scanline restano leggibili anche con prefers-reduced-motion).
+     *
+     * Chiavi: crt_scanline_opacity (0–100), crt_scanline_gap (px), crt_vignette (0–100),
+     * crt_base (color). Tutte opzionali con default sensati.
+     *
+     * @param array $bg
+     * @return string
+     */
+    public function build_crt_css( $bg ) {
+        $scan_pct = max( 0, min( 100, intval( $bg['crt_scanline_opacity'] ?? 50 ) ) );
+        $scan_a   = round( ( $scan_pct / 100 ) * 0.5, 3 );
+        $gap      = max( 2, min( 12, intval( $bg['crt_scanline_gap'] ?? 3 ) ) );
+        $vig_pct  = max( 0, min( 100, intval( $bg['crt_vignette'] ?? 55 ) ) );
+        $vig_a    = round( $vig_pct / 100, 3 );
+        $vig_stop = 70 - intval( round( ( $vig_pct / 100 ) * 30 ) );
+        $base     = esc_attr( $bg['crt_base'] ?? 'var(--olo-color-background, #0b0a0d)' );
+        $scan     = "repeating-linear-gradient(0deg, rgba(255,255,255,{$scan_a}) 0 1px, transparent 1px {$gap}px)";
+        $vignette = "radial-gradient(120% 120% at 50% 40%, transparent {$vig_stop}%, rgba(5,3,12,{$vig_a}))";
+        return "background: {$scan}, {$vignette}, {$base}";
     }
 
     /**

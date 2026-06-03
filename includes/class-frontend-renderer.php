@@ -1191,6 +1191,12 @@ class Olo_Frontend_Renderer {
             return $html;
         }
 
+        // Effetti "tutta la pagina" (overlay fisso, es. ParticleFX/Goo con Ambito=Pagina):
+        // devono attivarsi al caricamento, non quando lo scroll raggiunge il tile.
+        if ( strpos( $html, '"scope":"page"' ) !== false ) {
+            return $html;
+        }
+
         // Fixed/sticky positioned tiles: placeholder won't be in viewport flow
         $pos = $advanced['position_mode'] ?? 'static';
         if ( in_array( $pos, [ 'fixed', 'sticky' ], true ) ) {
@@ -1455,7 +1461,7 @@ class Olo_Frontend_Renderer {
         if ( $inline_styles ) {
             $html .= ' style="' . esc_attr( implode( '; ', $inline_styles ) ) . '"';
         }
-        $html .= $scrollspy_attr . $el_parallax_attr . $snap_data_attr . $mouse_attrs . '>';
+        $html .= $scrollspy_attr . $el_parallax_attr . $snap_data_attr . $mouse_attrs . $this->anim->build_spotlight_attr( $advanced ) . '>';
 
         $bg_layers_html = '';
         if ( $has_bg_image ) {
@@ -1777,7 +1783,7 @@ class Olo_Frontend_Renderer {
             if ( $wrapper_styles ) {
                 $html .= ' style="' . esc_attr( implode( '; ', $wrapper_styles ) ) . '"';
             }
-            $html .= $row_scrollspy_attr . $row_el_parallax_attr . '>';
+            $html .= $row_scrollspy_attr . $row_el_parallax_attr . $this->anim->build_spotlight_attr( $advanced ) . '>';
 
             // Background image layer (with optional UIkit parallax)
             if ( $has_bg_image ) {
@@ -2298,7 +2304,7 @@ class Olo_Frontend_Renderer {
         if ( ! empty( $inline_styles ) ) {
             $html .= ' style="' . esc_attr( implode( '; ', $inline_styles ) ) . '"';
         }
-        $html .= $col_scrollspy_attr . $col_el_parallax_attr . '>';
+        $html .= $col_scrollspy_attr . $col_el_parallax_attr . $this->anim->build_spotlight_attr( $advanced ) . '>';
 
         // Background image cover for column
         if ( $has_col_bg_image ) {
@@ -2934,6 +2940,9 @@ class Olo_Frontend_Renderer {
             $elem_mouse_attrs .= ' data-olo-track="' . $track_speed . '"';
         }
 
+        // Spotlight cursore — riusabile su section/column/row/element (vedi Olo_Animation_Builder::build_spotlight_attr)
+        $elem_spotlight_attr = $this->anim->build_spotlight_attr( $advanced );
+
         // Bezier path scroll animation
         $elem_bezier_attr = '';
         if ( ! empty( $advanced['bezier_path'] ) && is_array( $advanced['bezier_path'] ) ) {
@@ -2967,8 +2976,32 @@ class Olo_Frontend_Renderer {
                 intval( $settings['scroll_translatex_end'] ?? 0 ),
             ];
         }
+        if ( ! empty( $settings['scroll_effect_fill'] ) ) {
+            $scroll_fx['fill'] = [
+                intval( $settings['scroll_fill_start'] ?? 0 ),
+                intval( $settings['scroll_fill_end'] ?? 100 ),
+            ];
+        }
         if ( ! empty( $scroll_fx ) ) {
             $elem_scroll_fx_attr = " data-olo-scroll-fx='" . esc_attr( wp_json_encode( $scroll_fx ) ) . "'";
+        }
+
+        // ScrollAssembly (preset Parallax multi-target): genitore (data-olo-assembly) +
+        // parti figlie (data-olo-part) che si "montano" su UN unico progress del genitore.
+        $elem_assembly_attr = '';
+        if ( ! empty( $advanced['scroll_assembly'] ) ) {
+            $elem_assembly_attr .= ' data-olo-assembly';
+        }
+        if ( ! empty( $advanced['assembly_part'] ) ) {
+            $part = [
+                'x'     => intval( $advanced['assembly_from_x'] ?? 0 ),
+                'y'     => intval( $advanced['assembly_from_y'] ?? 0 ),
+                's'     => floatval( $advanced['assembly_from_scale'] ?? 1.2 ),
+                'r'     => intval( $advanced['assembly_from_rotate'] ?? 0 ),
+                'start' => max( 0, min( 1, floatval( $advanced['assembly_start'] ?? 0 ) / 100 ) ),
+                'end'   => max( 0, min( 1, floatval( $advanced['assembly_end'] ?? 60 ) / 100 ) ),
+            ];
+            $elem_assembly_attr .= " data-olo-part='" . esc_attr( wp_json_encode( $part ) ) . "'";
         }
 
         // A/B test data attributes for frontend tracking
@@ -3027,7 +3060,7 @@ class Olo_Frontend_Renderer {
         // Render
         ob_start();
         ?>
-        <div class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>"<?php echo $id_attr; ?> style="<?php echo esc_attr( $style_attr ); ?>"<?php echo $elem_scrollspy_attr . $elem_el_parallax_attr . $elem_sticky_attr . $elem_mouse_attrs . $elem_bezier_attr . $elem_scroll_fx_attr . $ab_test_attrs . $seo_attrs; ?>>
+        <div class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>"<?php echo $id_attr; ?> style="<?php echo esc_attr( $style_attr ); ?>"<?php echo $elem_scrollspy_attr . $elem_el_parallax_attr . $elem_sticky_attr . $elem_mouse_attrs . $elem_bezier_attr . $elem_scroll_fx_attr . $elem_spotlight_attr . $elem_assembly_attr . $ab_test_attrs . $seo_attrs; ?>>
             <?php if ( $has_bg_image ) :
                 $bg_size = esc_attr( $tile_bg['image_size'] ?? 'cover' );
                 $bg_pos  = esc_attr( $tile_bg['image_position'] ?? 'center center' );
@@ -4510,6 +4543,58 @@ class Olo_Frontend_Renderer {
             })();
             </script>
             <script>
+            /* Spotlight cursore — disco-torcia confinato all'elemento (effetto puntatore riusabile) */
+            (function(){
+              function setup(host){
+                if(host.dataset.oloSpotReady) return;
+                var cfg; try { cfg = JSON.parse(host.dataset.oloSpotlight); } catch(e){ return; }
+                host.dataset.oloSpotReady = '1';
+                var size = +cfg.size || 300, soft = (cfg.soft != null ? +cfg.soft : 40);
+                var blend = cfg.blend || 'difference', color = cfg.color || '#ffffff', ease = +cfg.ease || 0.22;
+                var inner = Math.max(0, 100 - soft), half = size / 2;
+                var disc = null, tx = 0, ty = 0, cx = 0, cy = 0, running = false, inside = false;
+                function build(){          // creazione lazy: solo al primo hover con mouse/pen
+                  if(disc) return;
+                  if(getComputedStyle(host).position === 'static') host.style.position = 'relative';
+                  host.style.overflow = 'hidden';
+                  host.style.isolation = 'isolate';     // confina il mix-blend al contenuto del box
+                  disc = document.createElement('div');
+                  disc.setAttribute('aria-hidden', 'true');
+                  disc.style.cssText = 'position:absolute;top:0;left:0;z-index:99999;width:' + size + 'px;height:' + size + 'px;border-radius:50%;pointer-events:none;will-change:transform,opacity;opacity:0;transition:opacity .2s ease;background:radial-gradient(circle, ' + color + ' 0%, ' + color + ' ' + inner + '%, transparent 100%);mix-blend-mode:' + blend + ';';
+                  host.appendChild(disc);
+                }
+                function frame(){
+                  cx += (tx - cx) * ease; cy += (ty - cy) * ease;
+                  if(disc) disc.style.transform = 'translate(' + (cx - half) + 'px,' + (cy - half) + 'px)';
+                  if(inside || Math.abs(tx - cx) > 0.5 || Math.abs(ty - cy) > 0.5){ requestAnimationFrame(frame); } else { running = false; }
+                }
+                function start(){ if(!running){ running = true; requestAnimationFrame(frame); } }
+                host.addEventListener('pointerenter', function(e){
+                  if(e.pointerType === 'touch') return;   // niente torcia su touch (rilevato per-evento, non via media-query)
+                  if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+                  build();
+                  var r = host.getBoundingClientRect(); tx = cx = e.clientX - r.left; ty = cy = e.clientY - r.top;
+                  inside = true; disc.style.opacity = '1'; start();
+                });
+                host.addEventListener('pointermove', function(e){
+                  if(e.pointerType === 'touch' || !disc) return;
+                  var r = host.getBoundingClientRect(); tx = e.clientX - r.left; ty = e.clientY - r.top; start();
+                });
+                host.addEventListener('pointerleave', function(){ inside = false; if(disc) disc.style.opacity = '0'; });
+              }
+              function initSpotlights(){
+                var hosts = document.querySelectorAll('[data-olo-spotlight]');
+                for(var i = 0; i < hosts.length; i++){ setup(hosts[i]); }
+              }
+              // init multipli: cattura anche host inseriti/idratati dopo il DOMContentLoaded
+              if(document.readyState !== 'loading'){ initSpotlights(); }
+              document.addEventListener('DOMContentLoaded', initSpotlights);
+              window.addEventListener('load', initSpotlights);
+              setTimeout(initSpotlights, 800);
+              setTimeout(initSpotlights, 2500);
+            })();
+            </script>
+            <script>
             (function(){
               var els = document.querySelectorAll('[data-olo-scroll-fx]');
               if(!els.length) return;
@@ -4549,6 +4634,10 @@ class Olo_Frontend_Renderer {
                     var xv = xStart + progress * (xEnd - xStart);
                     transforms.push('translateX(' + xv + 'px)');
                   }
+                  if(fx.fill){
+                    var flStart = fx.fill[0], flEnd = fx.fill[1];
+                    el.style.height = (flStart + progress * (flEnd - flStart)) + '%';
+                  }
                   if(transforms.length){
                     el.style.transform = transforms.join(' ');
                   }
@@ -4564,6 +4653,47 @@ class Olo_Frontend_Renderer {
               window.addEventListener('scroll', onScroll, {passive: true});
               window.addEventListener('resize', onScroll, {passive: true});
               update();
+            })();
+            </script>
+            <script>
+            /* ScrollAssembly — preset Parallax multi-target: piu parti figlie [data-olo-part]
+               animate su UN unico progress del genitore [data-olo-assembly]. Additivo: no-op
+               senza l'attributo. reduced-motion -> stato finale montato (e=1). */
+            (function(){
+              var hosts = document.querySelectorAll('[data-olo-assembly]');
+              if(!hosts.length) return;
+              var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+              var items = [];
+              hosts.forEach(function(host){
+                var parts = [].slice.call(host.querySelectorAll('[data-olo-part]'));
+                parts.forEach(function(el){ el.style.willChange = 'transform,opacity'; });
+                items.push({ host: host, parts: parts });
+              });
+              function frame(){
+                var vh = window.innerHeight;
+                items.forEach(function(it){
+                  var rect = it.host.getBoundingClientRect();
+                  var total = (it.host.offsetHeight - vh) || 1;
+                  var p = Math.min(1, Math.max(0, (-rect.top) / total));
+                  it.parts.forEach(function(el, i){
+                    var cfg; try { cfg = JSON.parse(el.dataset.oloPart); } catch(e){ return; }
+                    var start = (cfg.start != null ? cfg.start : i * 0.12);
+                    var end   = (cfg.end != null ? cfg.end : start + 0.5);
+                    var t = Math.min(1, Math.max(0, (p - start) / ((end - start) || 1)));
+                    var e = reduce ? 1 : (1 - Math.pow(1 - t, 3));
+                    if(cfg.fill != null){ var f0 = cfg.fill[0], f1 = cfg.fill[1]; el.style.height = (f0 + e * (f1 - f0)).toFixed(1) + '%'; return; }
+                    var x = (cfg.x || 0) * (1 - e), y = (cfg.y || 0) * (1 - e);
+                    var s = 1 + ((cfg.s || 1) - 1) * (1 - e), r = (cfg.r || 0) * (1 - e);
+                    el.style.transform = 'translate(' + x + 'px,' + y + 'px) scale(' + s + ') rotate(' + r + 'deg)';
+                    if(cfg.fade !== false) el.style.opacity = (0.15 + e * 0.85).toFixed(2);
+                  });
+                });
+              }
+              var ticking = false;
+              function onScroll(){ if(!ticking){ ticking = true; requestAnimationFrame(function(){ frame(); ticking = false; }); } }
+              window.addEventListener('scroll', onScroll, { passive: true });
+              window.addEventListener('resize', onScroll, { passive: true });
+              frame();
             })();
             </script>
             <?php if ( $has_any_snap ) : ?>
@@ -4786,6 +4916,19 @@ class Olo_Frontend_Renderer {
             echo $this->render_node( $section, $manager, 0, $hover_css_rules, $tile_counter );
         }
         echo '</div>';
+
+        // Effetto di pagina: Overlay CRT (decoratore di pagina, da Impostazioni Pagina → Effetti di pagina).
+        if ( ! empty( $page_settings['page_crt_enabled'] ) && class_exists( 'Olo_Crtoverlay_Tile' ) ) {
+            echo ( new Olo_Crtoverlay_Tile() )->render( [
+                'scanline_opacity' => intval( $page_settings['page_crt_scanline_opacity'] ?? 50 ),
+                'scanline_gap'     => intval( $page_settings['page_crt_scanline_gap'] ?? 3 ),
+                'vignette'         => intval( $page_settings['page_crt_vignette'] ?? 55 ),
+                'blend_mode'       => $page_settings['page_crt_blend_mode'] ?? 'overlay',
+                'flicker'          => ! empty( $page_settings['page_crt_flicker'] ),
+                'flicker_speed'    => intval( $page_settings['page_crt_flicker_speed'] ?? 8 ),
+                'z_index'          => intval( $page_settings['page_crt_z_index'] ?? 200 ),
+            ] );
+        }
 
         if ( ! empty( $hover_css_rules ) || ! empty( $this->responsive_css_rules ) ) {
             $all_css = implode( ' ', $hover_css_rules );

@@ -19,6 +19,10 @@ class Olo_Textpath_Tile extends Olo_Tile_Base {
         'letter_spacing'  => '2',
         'animation'       => 'none',
         'animation_speed' => '10',
+        // Spin: rotazione continua dell'intero gruppo (additivo, default OFF). Reduced-motion → fermo.
+        'spin'            => false,
+        'spin_speed'      => '14',
+        'spin_direction'  => 'cw',
             'border'                  => [],
         'border_hover'            => [],
         'border_hover_duration'   => 300,
@@ -44,6 +48,11 @@ class Olo_Textpath_Tile extends Olo_Tile_Base {
         $spacing = max( 0, min( 20, intval( $s['letter_spacing'] ) ) );
         $anim    = in_array( $s['animation'], [ 'none', 'scroll', 'continuous' ], true ) ? $s['animation'] : 'none';
         $speed   = max( 1, min( 20, intval( $s['animation_speed'] ) ) );
+
+        // Spin (rotazione continua del gruppo) — scoped per istanza, reduced-motion aware
+        $spin       = ! empty( $s['spin'] );
+        $spin_speed = max( 3, min( 40, intval( $s['spin_speed'] ) ) );
+        $spin_dir   = ( $s['spin_direction'] === 'ccw' ) ? 'reverse' : 'normal';
 
         // Path presets
         $presets = [
@@ -83,6 +92,22 @@ class Olo_Textpath_Tile extends Olo_Tile_Base {
                 height: auto;
                 overflow: visible;
             }
+
+            <?php if ( $spin ) : ?>
+            @keyframes <?php echo $uid; ?>-spin {
+                to { transform: rotate(360deg); }
+            }
+            .<?php echo $uid; ?> svg {
+                transform-box: view-box;
+                transform-origin: center;
+                animation: <?php echo $uid; ?>-spin <?php echo $spin_speed; ?>s linear infinite;
+                animation-direction: <?php echo $spin_dir; ?>;
+                will-change: transform;
+            }
+            @media (prefers-reduced-motion: reduce) {
+                .<?php echo $uid; ?> svg { animation: none; }
+            }
+            <?php endif; ?>
 
             <?php if ( $anim === 'continuous' ) : ?>
             @keyframes <?php echo $uid; ?>-offset {

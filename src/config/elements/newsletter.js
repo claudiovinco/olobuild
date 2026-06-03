@@ -57,6 +57,7 @@ export default {
     max_width: '600',
     alignment: 'center',
     bg_color: '',
+    box_border: '',
     border_radius: 12,
     tile_padding: { top: 32, right: 32, bottom: 32, left: 32 },
     title_size: '24',
@@ -201,6 +202,7 @@ export default {
       { value: 'right', label: t('Destra') },
     ]},
     { key: 'bg_color', label: t('Sfondo'), type: 'color' },
+    { key: 'box_border', label: t('Bordo box (CSS, es. rgba(255,255,255,.14))'), type: 'text' },
     withHover({ key: 'border_radius', label: t('Raggio bordi'), type: 'border-radius'}),
     { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 60 },
 

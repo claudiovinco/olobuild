@@ -377,6 +377,8 @@ export function useInlineEdit(canvasEl) {
 
     var tileId = activeTileId;
     var fieldKey = activeField;
+    var el = activeElement;        // ref salvata prima di cleanup()
+    var wasRichtext = isRichtext;  // stato salvato prima di cleanup()
     var changed = newValue !== originalValue;
 
     cleanup();
@@ -390,6 +392,42 @@ export function useInlineEdit(canvasEl) {
       }
       builderStore.isDirty = true;
     }
+
+    // Riallinea il DOM al valore "di verità" presente nello store.
+    // Il contenteditable può lasciare il nodo testo divergente dal render Vue:
+    // succede se il campo è stato modificato dall'inspector mentre l'inline era
+    // attivo (changed=false → niente updateTile, ma lo store è già cambiato),
+    // oppure se Vue non riconcilia il nodo testo dell'elemento appena editato.
+    // Senza questo, il canvas continua a mostrare il testo "vecchio" finché non
+    // si ricarica il builder. Il check !== rende il riallineamento un no-op
+    // quando DOM e store già coincidono (nessuna regressione sul caso normale).
+    if (el && el.isConnected && tileId && fieldKey) {
+      var trueVal = getFieldValue(tileId, fieldKey);
+      if (trueVal !== null && trueVal !== undefined) {
+        if (wasRichtext) {
+          if (el.innerHTML !== String(trueVal)) { el.innerHTML = String(trueVal); }
+        } else if (el.textContent !== String(trueVal)) {
+          el.textContent = String(trueVal);
+        }
+      }
+    }
+  }
+
+  /**
+   * Legge il valore corrente di un campo dallo store (supporta path array "panels.0.title").
+   */
+  function getFieldValue(tileId, fieldKey) {
+    var tile = tilesStore.getTileById(tileId);
+    if (!tile || !tile.settings) return null;
+    if (fieldKey.indexOf('.') === -1) {
+      return tile.settings[fieldKey];
+    }
+    var parts = fieldKey.split('.');
+    var arr = tile.settings[parts[0]];
+    if (!Array.isArray(arr)) return null;
+    var item = arr[parseInt(parts[1])];
+    if (!item) return null;
+    return item[parts.slice(2).join('.')];
   }
 
   /**

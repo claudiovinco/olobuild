@@ -67,6 +67,10 @@
 
     var config;
     try { config = JSON.parse(container.getAttribute('data-olo-v360')); } catch(e) { return; }
+
+    // Object-spin (turntable) — non usa Pannellum
+    if (config.mode === 'object') { initObjectViewer(container, config); return; }
+
     if (!config.src) return;
 
     loadPannellum(function() {
@@ -172,6 +176,93 @@
       };
       container.appendChild(fsBtn);
     }
+  }
+
+  // Object-spin (turntable) viewer — drag-to-spin + inerzia, frames o pseudo-3D rotateY,
+  // frecce tastiera, touch pan-y, reduced-motion → no auto-spin. (rif. 65-tema-ceramica.html)
+  function initObjectViewer(container, config) {
+    var img = container.querySelector('.olo-v360-frame');
+    if (!img) return;
+    var angleEl = container.querySelector('.olo-v360-angle');
+    var prevBtn = container.querySelector('.olo-v360-prev');
+    var nextBtn = container.querySelector('.olo-v360-next');
+
+    var sub      = config.sub === 'frames' ? 'frames' : 'rotate';
+    var frames   = Array.isArray(config.frames) ? config.frames : [];
+    var dragSens = parseFloat(config.dragSens) || 0.55;
+    var inertia  = parseFloat(config.inertia)  || 0.97;
+    var arSpeed  = parseFloat(config.arSpeed)  || 1;
+    var reduce   = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var spinFloor = (config.autospin && !reduce) ? Math.max(0.05, arSpeed * 0.25) : 0; // °/frame; reduced-motion → 0
+
+    if (sub === 'frames' && frames.length > 1) {
+      frames.forEach(function(u){ var p = new Image(); p.src = u; }); // preload
+    }
+    if (sub === 'rotate') { container.style.perspective = container.style.perspective || '1200px'; }
+
+    var angle = 0, vel = 0, dragging = false, lastX = 0, running = false, rafId = null, inView = true;
+
+    function frameIndex(a) {
+      var n = frames.length; if (!n) return 0;
+      var norm = ((a % 360) + 360) % 360;
+      return Math.floor(norm / 360 * n) % n;
+    }
+    function paint() {
+      var a = ((angle % 360) + 360) % 360;
+      if (sub === 'frames' && frames.length) {
+        var src = frames[frameIndex(angle)];
+        if (img.getAttribute('src') !== src) img.setAttribute('src', src);
+      } else {
+        img.style.transform = 'rotateY(' + angle + 'deg)';
+      }
+      if (angleEl) angleEl.textContent = Math.round(a) + '°';
+    }
+    function loop() {
+      if (!dragging) {
+        angle += vel; vel *= inertia;
+        if (spinFloor > 0) { if (Math.abs(vel) < spinFloor) vel = (vel < 0 ? -spinFloor : spinFloor); }
+        else if (Math.abs(vel) < 0.02) { vel = 0; }
+      }
+      paint();
+      if (!dragging && spinFloor === 0 && vel === 0) { running = false; rafId = null; return; } // perf: stop a regime
+      if (inView) { rafId = requestAnimationFrame(loop); } else { running = false; rafId = null; }
+    }
+    function start() { if (!running) { running = true; rafId = requestAnimationFrame(loop); } }
+    function stop()  { running = false; if (rafId) { cancelAnimationFrame(rafId); rafId = null; } }
+
+    container.addEventListener('pointerdown', function(e){
+      if (e.pointerType === 'touch' && config.touch === false) return;
+      if (e.pointerType !== 'touch' && config.drag === false) return;
+      dragging = true; lastX = e.clientX; vel = 0; container.style.cursor = 'grabbing';
+      try { container.setPointerCapture(e.pointerId); } catch(_){}
+      start();
+    });
+    container.addEventListener('pointermove', function(e){
+      if (!dragging) return;
+      var dx = e.clientX - lastX; lastX = e.clientX;
+      angle += dx * dragSens; vel = dx * dragSens;
+    });
+    var endDrag = function(){ if (dragging) { dragging = false; container.style.cursor = 'grab'; start(); } };
+    container.addEventListener('pointerup', endDrag);
+    container.addEventListener('pointercancel', endDrag);
+
+    // Tastiera: frecce ← → sul contenitore + pulsanti ‹ ›
+    container.addEventListener('keydown', function(e){
+      if (e.key === 'ArrowLeft')  { angle -= 15; vel = -2; start(); e.preventDefault(); }
+      else if (e.key === 'ArrowRight') { angle += 15; vel = 2; start(); e.preventDefault(); }
+    });
+    if (prevBtn) prevBtn.addEventListener('click', function(){ angle -= 15; vel = -2; start(); });
+    if (nextBtn) nextBtn.addEventListener('click', function(){ angle += 15; vel = 2; start(); });
+
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function(entries){
+        entries.forEach(function(en){ inView = en.isIntersecting; if (inView) start(); else stop(); });
+      }, { threshold: 0 });
+      io.observe(container);
+    }
+
+    paint();
+    start();
   }
 
   // Init all

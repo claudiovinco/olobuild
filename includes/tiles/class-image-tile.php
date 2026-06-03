@@ -42,6 +42,22 @@ class Olo_Image_Tile extends Olo_Tile_Base {
         'hover_filter_sepia'      => '',
         'hover_animation'  => 'none',
         'lightbox'         => false,
+        // ── SpotlightFX (alone di luce sul cursore — tema 43) ──
+        'spotlight_enabled'   => false,
+        'spotlight_mode'      => 'mask',
+        'spotlight_radius'    => 260,
+        'spotlight_intensity' => 80,
+        'spotlight_falloff'   => 55,
+        'spotlight_tint'      => '',
+        // ── WaterDisplacement (filtro acqua SVG feTurbulence+feDisplacementMap — tema 68) ──
+        'water_enabled'        => false,
+        'water_target'         => 'image',
+        'water_base_freq_x'    => 0.012,
+        'water_base_freq_y'    => 0.02,
+        'water_octaves'        => 2,
+        'water_displace_scale' => 12,
+        'water_ripple_scale'   => 34,
+        'water_anim_speed'     => 22,
         'border_radius'    => '0',
         'hover_border_radius' => '',
         'hover_radius_duration' => '400',
@@ -153,6 +169,204 @@ class Olo_Image_Tile extends Olo_Tile_Base {
             $s
         );
 
+        // ── SpotlightFX (alone di luce sul cursore — rif. 43-tema-gioielleria.html #spot) ──
+        // Stato base SSR: gradiente centrato già visibile. Il runtime aggiorna --mx/--my.
+        // Scoped sull'UID dell'istanza (classe .olo-spot-<uid>); N istanze non si calpestano.
+        $spot_on = ! empty( $s['spotlight_enabled'] );
+        $spot_css   = '';
+        $spot_html  = '';
+        $spot_js    = '';
+        if ( $spot_on ) {
+            $spot_mode   = ( $s['spotlight_mode'] ?? 'mask' ) === 'lighten' ? 'lighten' : 'mask';
+            $spot_radius = max( 40, min( 1200, intval( $s['spotlight_radius'] ?? 260 ) ) );
+            // intensità 0..100 → alpha 0..1
+            $spot_int    = max( 0, min( 100, intval( $s['spotlight_intensity'] ?? 80 ) ) );
+            $spot_a      = round( $spot_int / 100, 3 );
+            // falloff 0..100 → posizione (%) in cui parte la dissolvenza dell'alone
+            $spot_fall   = max( 0, min( 100, intval( $s['spotlight_falloff'] ?? 55 ) ) );
+            // soft = punto da cui inizia la sfumatura (più alto = bordo più netto).
+            $spot_soft   = max( 0, min( 90, 100 - $spot_fall ) );
+            $spot_cls    = 'olo-spot-' . $uid;
+
+            if ( $spot_mode === 'lighten' ) {
+                // Luce additiva: tinta al centro che svanisce verso i bordi.
+                $tint  = $this->safe_color_css( $s['spotlight_tint'] ?? '' );
+                $blend = 'screen';
+                $a_mid = round( $spot_a * 0.55, 3 );
+                if ( $tint !== '' && strpos( $tint, 'var(' ) === 0 ) {
+                    // Token cliente: mantieni il token, modula l'alpha via color-mix (token-first).
+                    $p_core = round( $spot_a * 100 );
+                    $p_mid  = round( $a_mid  * 100 );
+                    $c_core = 'color-mix(in srgb,' . $tint . ' ' . $p_core . '%,transparent)';
+                    $c_mid  = 'color-mix(in srgb,' . $tint . ' ' . $p_mid  . '%,transparent)';
+                    $c_edge = 'color-mix(in srgb,' . $tint . ' 0%,transparent)';
+                } else {
+                    // Hex/rgb o default bianco caldo → tripletta rgb con alpha.
+                    $tint_rgb = $this->color_to_rgb( $tint !== '' ? $tint : '#FFF4DE' );
+                    $c_core   = 'rgba(' . $tint_rgb . ',' . $spot_a . ')';
+                    $c_mid    = 'rgba(' . $tint_rgb . ',' . $a_mid . ')';
+                    $c_edge   = 'rgba(' . $tint_rgb . ',0)';
+                }
+                $grad = 'radial-gradient(circle ' . $spot_radius . 'px at var(--mx,50%) var(--my,42%),'
+                      . $c_core . ' 0%,'
+                      . $c_mid . ' ' . $spot_soft . '%,'
+                      . $c_edge . ' 100%)';
+            } else {
+                // Maschera: trasparente sotto il cursore, scuro verso i bordi (come #spot del demo).
+                $blend    = 'normal';
+                $grad     = 'radial-gradient(circle ' . $spot_radius . 'px at var(--mx,50%) var(--my,42%),'
+                          . 'rgba(8,7,5,0) 0%,'
+                          . 'rgba(8,7,5,' . round( $spot_a * 0.6, 3 ) . ') ' . $spot_soft . '%,'
+                          . 'rgba(8,7,5,' . $spot_a . ') 100%)';
+            }
+
+            // Stile scoped: figure relative, overlay assoluto sopra l'immagine, didascalia
+            // sopra l'overlay; riduzione movimento toglie la transizione; touch/no-hover spegne.
+            $spot_css = '<style>'
+                . '.' . $uid . '.olo-image{position:relative;}'
+                . '.' . $uid . ' .' . $spot_cls . '{position:absolute;inset:0;z-index:1;pointer-events:none;'
+                . 'mix-blend-mode:' . $blend . ';'
+                . 'background:' . $grad . ';'
+                . 'transition:background .12s ease;'
+                . 'will-change:background;}'
+                . '.' . $uid . ' .olo-img-caption{position:relative;z-index:2;}'
+                . '@media (prefers-reduced-motion: reduce){.' . $uid . ' .' . $spot_cls . '{transition:none;}}'
+                . '@media (hover:none),(pointer:coarse){.' . $uid . ' .' . $spot_cls . '{display:none;}}'
+                . '</style>';
+
+            $spot_html = '<div class="' . esc_attr( $spot_cls ) . '" aria-hidden="true"></div>';
+
+            // Runtime inline, idempotente (guard su dataset), multi-istanza. Niente "&&"/"||"
+            // nel JS (WordPress li converte in entità HTML): si usano if annidati + helper mq().
+            // Touch/no-hover e reduced-motion → nessun listener (alone resta al default centrato).
+            $spot_js = '<script>'
+                . '(function(){'
+                . 'var fig=document.querySelector(".' . esc_js( $uid ) . '.olo-image");'
+                . 'if(!fig){return;}'
+                . 'var spot=fig.querySelector(".' . esc_js( $spot_cls ) . '");'
+                . 'if(!spot){return;}'
+                . 'if(spot.dataset.oloSpot){return;}spot.dataset.oloSpot="1";'
+                . 'function mq(q){if(!window.matchMedia){return false;}return window.matchMedia(q).matches;}'
+                . 'if(mq("(hover:none)")){return;}'
+                . 'if(mq("(pointer:coarse)")){return;}'
+                . 'if(mq("(prefers-reduced-motion: reduce)")){return;}'
+                . 'function move(e){'
+                . 'var r=fig.getBoundingClientRect();if(!r.width){return;}if(!r.height){return;}'
+                . 'var x=((e.clientX-r.left)/r.width*100);'
+                . 'var y=((e.clientY-r.top)/r.height*100);'
+                . 'if(x<0){x=0;}if(x>100){x=100;}if(y<0){y=0;}if(y>100){y=100;}'
+                . 'spot.style.setProperty("--mx",x+"%");'
+                . 'spot.style.setProperty("--my",y+"%");'
+                . '}'
+                . 'function reset(){spot.style.setProperty("--mx","50%");spot.style.setProperty("--my","42%");}'
+                . 'fig.addEventListener("pointermove",move);'
+                . 'fig.addEventListener("pointerleave",reset);'
+                . '})();'
+                . '</script>';
+        }
+
+        // ── WaterDisplacement (filtro acqua — rif. 68-tema-terme-spa.html) ──
+        // SSR: il filtro SVG con <animate> sul baseFrequency rende il moto base GIA' visibile,
+        // anche senza JS. Il runtime fa solo l'easing dello "scale" del feDisplacementMap verso
+        // rippleScale al passaggio del cursore, e il ritorno a displaceScale. Tutto scoped sull'UID
+        // (id filtro/turbolenza/displacement) così N istanze non si calpestano. reduced-motion →
+        // niente <animate>, scale statico e leggero, nessun listener.
+        $water_on   = ! empty( $s['water_enabled'] );
+        $water_svg  = '';   // <svg><defs><filter>… (UID-scoped)
+        $water_css  = '';   // wrapper .olo-water-<uid>{filter:url(#water-<uid>)}
+        $water_js   = '';   // easing scale su pointermove (image) / applica filtro alla section (section-bg)
+        $water_cls  = '';   // classe wrapper per target=image
+        $water_tgt  = 'image';
+        if ( $water_on ) {
+            $water_tgt = ( $s['water_target'] ?? 'image' ) === 'section-bg' ? 'section-bg' : 'image';
+            // Frequenze: clamp in un range sicuro (turbolenza troppo alta = "rumore", non acqua).
+            $wfx   = max( 0.001, min( 0.08, floatval( $s['water_base_freq_x'] ?? 0.012 ) ) );
+            $wfy   = max( 0.001, min( 0.08, floatval( $s['water_base_freq_y'] ?? 0.02 ) ) );
+            $woct  = max( 1, min( 4, intval( $s['water_octaves'] ?? 2 ) ) );
+            $wrest = max( 0, min( 80, intval( $s['water_displace_scale'] ?? 12 ) ) );
+            $wrip  = max( 0, min( 160, intval( $s['water_ripple_scale'] ?? 34 ) ) );
+            if ( $wrip < $wrest ) { $wrip = $wrest; }   // ripple non può essere meno del riposo
+            $wspeed = max( 4, min( 90, intval( $s['water_anim_speed'] ?? 22 ) ) );
+            // Wobble del baseFrequency attorno al valore impostato (moto "respirante" dell'acqua).
+            $fx_lo = round( $wfx * 0.82, 4 ); $fx_hi = round( $wfx * 1.32, 4 );
+            $fy_lo = round( $wfy * 0.82, 4 ); $fy_hi = round( $wfy * 1.32, 4 );
+            $bf_lo = $fx_lo . ' ' . $fy_lo;
+            $bf_md = $fx_hi . ' ' . $fy_hi;
+            $bf_vals = $bf_lo . ';' . $bf_md . ';' . $bf_lo;
+
+            $filter_id = 'water-' . $uid;
+            $turb_id   = 'wturb-' . $uid;
+            $disp_id   = 'wdisp-' . $uid;
+            $seed      = wp_rand( 1, 99 );
+
+            // SVG nascosto (0x0): definisce SOLO il filtro. id scoped per istanza.
+            // x/y/width/height al -20%/140% per evitare il clip dei bordi sotto displacement.
+            $water_svg  = '<svg class="olo-water-defs" width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden;">';
+            $water_svg .= '<defs>';
+            $water_svg .= '<filter id="' . esc_attr( $filter_id ) . '" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">';
+            $water_svg .= '<feTurbulence id="' . esc_attr( $turb_id ) . '" type="fractalNoise" baseFrequency="' . esc_attr( $bf_lo ) . '" numOctaves="' . esc_attr( $woct ) . '" seed="' . esc_attr( $seed ) . '" result="noise">';
+            // <animate> = moto base SSR (no-JS). Rimosso nel ramo reduced-motion via <style>.
+            $water_svg .= '<animate class="olo-water-anim" attributeName="baseFrequency" dur="' . esc_attr( $wspeed ) . 's" values="' . esc_attr( $bf_vals ) . '" repeatCount="indefinite"/>';
+            $water_svg .= '</feTurbulence>';
+            $water_svg .= '<feDisplacementMap id="' . esc_attr( $disp_id ) . '" in="SourceGraphic" in2="noise" scale="' . esc_attr( $wrest ) . '" xChannelSelector="R" yChannelSelector="G"/>';
+            $water_svg .= '</filter>';
+            $water_svg .= '</defs></svg>';
+
+            $water_cls = 'olo-water-' . $uid;
+            // Il wrapper porta il filtro. Per target=image avvolge l'immagine; per section-bg
+            // la classe viene applicata dal runtime alla sezione contenitore.
+            $water_css  = '<style>';
+            $water_css .= '.' . $water_cls . '{filter:url(#' . $filter_id . ');-webkit-filter:url(#' . $filter_id . ');will-change:filter;}';
+            // reduced-motion: ferma l'<animate> SVG (l'acqua resta nitida/statica) e niente easing JS.
+            $water_css .= '@media (prefers-reduced-motion: reduce){.olo-water-defs .olo-water-anim{display:none;}}';
+            $water_css .= '</style>';
+
+            // Runtime inline, idempotente, multi-istanza. Niente "&&"/"||" (WordPress li trasforma
+            // in entità): if annidati + helper mq(). reduced-motion / touch → nessun easing.
+            $sel_fig  = '.' . $uid . '.olo-image';
+            $water_js  = '<script>';
+            $water_js .= '(function(){';
+            $water_js .= 'var fig=document.querySelector("' . esc_js( $sel_fig ) . '");';
+            $water_js .= 'if(!fig){return;}';
+            $water_js .= 'var disp=document.getElementById("' . esc_js( $disp_id ) . '");';
+            $water_js .= 'if(!disp){return;}';
+            $water_js .= 'if(fig.dataset.oloWater){return;}fig.dataset.oloWater="1";';
+            // Target dell'hover: la sezione contenitore (section-bg) o il figure stesso (image).
+            $water_js .= 'var tgt="' . esc_js( $water_tgt ) . '";';
+            $water_js .= 'var host=fig;';
+            $water_js .= 'if(tgt==="section-bg"){';
+            $water_js .= 'var sec=fig.closest(".olo-section,section,.uk-section");';
+            $water_js .= 'if(sec){sec.classList.add("' . esc_js( $water_cls ) . '");host=sec;}';
+            $water_js .= '}';
+            $water_js .= 'var REST=' . json_encode( $wrest ) . ',RIP=' . json_encode( $wrip ) . ';';
+            $water_js .= 'function mq(q){if(!window.matchMedia){return false;}return window.matchMedia(q).matches;}';
+            // Senza hover / con riduzione movimento: scale fisso al riposo, nessun rAF.
+            $water_js .= 'var noFx=false;';
+            $water_js .= 'if(mq("(hover:none)")){noFx=true;}';
+            $water_js .= 'if(mq("(pointer:coarse)")){noFx=true;}';
+            $water_js .= 'if(mq("(prefers-reduced-motion: reduce)")){noFx=true;}';
+            $water_js .= 'if(noFx){disp.setAttribute("scale",REST);return;}';
+            $water_js .= 'var cur=REST,target=REST,running=false,rafId=null;';
+            $water_js .= 'function loop(){';
+            $water_js .= 'if(!running){return;}';
+            $water_js .= 'cur+=(target-cur)*0.08;';        // easing verso il target
+            $water_js .= 'target+=(REST-target)*0.04;';    // il target si rilassa da solo verso il riposo (ripple)
+            $water_js .= 'disp.setAttribute("scale",cur.toFixed(1));';
+            $water_js .= 'rafId=requestAnimationFrame(loop);';
+            $water_js .= '}';
+            $water_js .= 'function start(){if(!running){running=true;rafId=requestAnimationFrame(loop);}}';
+            $water_js .= 'function stop(){running=false;if(rafId){cancelAnimationFrame(rafId);rafId=null;}}';
+            $water_js .= 'host.addEventListener("pointermove",function(){target=RIP;start();});';
+            $water_js .= 'host.addEventListener("pointerleave",function(){target=REST;});';
+            // Performance: spegne il rAF quando l'istanza è fuori viewport.
+            $water_js .= 'if("IntersectionObserver" in window){';
+            $water_js .= 'var io=new IntersectionObserver(function(es){for(var i=0;i<es.length;i++){if(es[i].isIntersecting){if(Math.abs(cur-REST)>0.2){start();}}else{stop();}}},{threshold:0});';
+            $water_js .= 'io.observe(fig);';
+            $water_js .= '}';
+            $water_js .= '})();';
+            $water_js .= '</script>';
+        }
+
         ob_start();
 
         if ( $filter_css || $hover_filter_css || $hover_transform || $anim === 'blur-in' || $has_hover_br ) {
@@ -186,6 +400,13 @@ class Olo_Image_Tile extends Olo_Tile_Base {
             if ( $border_effect_css ) echo $border_effect_css;
             echo '</style>';
         }
+
+        // CSS SpotlightFX (scoped per istanza)
+        if ( $spot_css ) echo $spot_css;
+
+        // WaterDisplacement: filtro SVG (UID-scoped) + CSS wrapper. Stampati una volta per istanza.
+        if ( $water_svg ) echo $water_svg;
+        if ( $water_css ) echo $water_css;
         ?>
         <?php
         // ── Dimensioni & fit (controlli professionali) ──
@@ -292,6 +513,12 @@ class Olo_Image_Tile extends Olo_Tile_Base {
 
             $img = $this->render_hover_wrap( $img, $s['hover_image'] ?? '', $s['hover_video'] ?? '' );
 
+            // WaterDisplacement (target=image): avvolge l'immagine nel wrapper filtrato.
+            // Per target=section-bg il filtro è applicato dal runtime alla sezione, non qui.
+            if ( $water_on && $water_tgt === 'image' && $water_cls ) {
+                $img = '<div class="' . esc_attr( $water_cls ) . '">' . $img . '</div>';
+            }
+
             if ( ! empty( $s['link_url'] ) ) {
                 $link_rel = ! empty( $s['_link_rel'] ) ? ' rel="' . esc_attr( $s['_link_rel'] ) . '"' : '';
                 $link_title = ! empty( $s['_link_title'] ) ? ' title="' . esc_attr( $s['_link_title'] ) . '"' : '';
@@ -312,6 +539,8 @@ class Olo_Image_Tile extends Olo_Tile_Base {
             } else {
                 echo $img;
             }
+            // SpotlightFX overlay (decorativo, sopra l'immagine, sotto la didascalia)
+            echo $spot_html;
             ?>
             <?php if ( ! empty( $s['caption'] ) ) : ?>
                 <?php list( $ic_cls, $ic_data ) = $this->tfx_attrs( $s, 'caption', wp_strip_all_tags( $s['caption'] ) ); ?>
@@ -324,6 +553,13 @@ class Olo_Image_Tile extends Olo_Tile_Base {
         $tfx_css = $this->tfx_css( $s, '.' . $uid );
         if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
         $this->tfx_print_script();
+
+        // SpotlightFX runtime (inline, idempotente, multi-istanza)
+        if ( $spot_js ) echo $spot_js;
+
+        // WaterDisplacement runtime (inline, idempotente, multi-istanza)
+        if ( $water_js ) echo $water_js;
+
         return ob_get_clean();
     }
 }
