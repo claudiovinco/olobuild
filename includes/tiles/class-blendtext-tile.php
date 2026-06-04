@@ -24,6 +24,12 @@ class Olo_Blendtext_Tile extends Olo_Tile_Base {
         'text_align'      => 'center',
         'text_color'      => '#ffffff',
         'blend_mode'      => 'difference',
+        'mode'              => 'text',
+        'spotlight_size'    => 300,
+        'spotlight_softness'=> 40,
+        'spotlight_blend'   => 'difference',
+        'spotlight_color'   => '#ffffff',
+        'spotlight_easing'  => 22,
         'padding_top'     => '40',
         'padding_bottom'  => '40',
         'padding_left'    => '20',
@@ -59,6 +65,7 @@ class Olo_Blendtext_Tile extends Olo_Tile_Base {
         $ta         = esc_attr( $s['text_align'] ) ?: 'center';
         $color      = $s['text_color'] ?: '#ffffff';
         $blend      = esc_attr( $s['blend_mode'] ) ?: 'difference';
+        $mode       = ( ( $s['mode'] ?? 'text' ) === 'spotlight' ) ? 'spotlight' : 'text';
         // Padding: tile_padding (standard) oppure bt_padding/legacy
         $pad_obj    = $s['tile_padding'] ?? $s['bt_padding'] ?? null;
         if ( is_array( $pad_obj ) ) {
@@ -78,20 +85,80 @@ class Olo_Blendtext_Tile extends Olo_Tile_Base {
         // also the parallax target — putting mix-blend-mode on the SAME element as the
         // transform/z-index avoids the descendant-isolation pitfall: the blend composites
         // with the parent stacking context's backdrop (which contains the section bg image).
-        $css  = ".olo-frontend-tile:has(> #{$uid}){mix-blend-mode:{$blend};}";
+        // In modalità "spotlight" il blend NON è statico sul testo: lo porta il disco-torcia.
+        $css  = '';
+        if ( $mode === 'text' ) {
+            $css .= ".olo-frontend-tile:has(> #{$uid}){mix-blend-mode:{$blend};}";
+        }
         $css .= "#{$uid}{padding:{$pt}px {$pr}px {$pb}px {$pl}px}";
         $css .= "#{$uid} .olo-bt-text{font-size:{$fs}px;font-weight:{$fw};font-family:{$ff};text-transform:{$tt};letter-spacing:{$ls}px;line-height:{$lh};text-align:{$ta};color:{$color};margin:0}";
         $css .= "@media(max-width:960px){#{$uid} .olo-bt-text{font-size:{$fs_tablet}px !important}}";
         $css .= "@media(max-width:640px){#{$uid} .olo-bt-text{font-size:{$fs_mobile}px !important}}";
 
+        // ── BlendText · Spotlight: disco-torcia che segue il cursore (rif. 63-tema-risograph.html) ──
+        // Anatomia: <div#uid-flash> position:fixed, border-radius:50%, mix-blend-mode, pointer-events:none.
+        // SSR: il testo resta leggibile senza JS. Runtime: portale su body + rAF easing. Scoped per UID.
+        // a11y/touch: nascosto su (hover:none); reduced-motion → off. In builder: solo testo (no disco).
+        $flash_css = $flash_html = $flash_js = '';
+        $in_builder = ! empty( $s['_builder_mode'] );
+        if ( $mode === 'spotlight' && ! $in_builder ) {
+            $sp_size  = max( 40, min( 1000, intval( $s['spotlight_size'] ?? 300 ) ) );
+            $sp_half  = intval( round( $sp_size / 2 ) );
+            $sp_soft  = max( 0, min( 100, intval( $s['spotlight_softness'] ?? 40 ) ) );
+            $sp_inner = max( 0, min( 100, 100 - $sp_soft ) );  // softness alto → inner basso → bordo più sfumato
+            $sp_blend = in_array( $s['spotlight_blend'] ?? 'difference', [ 'difference', 'exclusion', 'screen' ], true ) ? $s['spotlight_blend'] : 'difference';
+            $sp_color = $this->safe_color_css( $s['spotlight_color'] ?? '' ) ?: '#ffffff';
+            $sp_ease  = max( 5, min( 90, intval( $s['spotlight_easing'] ?? 22 ) ) ) / 100;
+            $flash_id = $uid . '-flash';
+
+            $flash_css  = "#{$flash_id}{position:fixed;top:0;left:0;width:{$sp_size}px;height:{$sp_size}px;margin:-{$sp_half}px 0 0 -{$sp_half}px;border-radius:50%;pointer-events:none;z-index:99990;display:none;will-change:transform;background:radial-gradient(circle, {$sp_color} 0%, {$sp_color} {$sp_inner}%, transparent 100%);mix-blend-mode:{$sp_blend};}";
+            $flash_css .= "@media(hover:none){#{$flash_id}{display:none !important;}}";
+
+            $flash_html = '<div id="' . esc_attr( $flash_id ) . '" class="olo-bt-flash" aria-hidden="true"></div>';
+
+            ob_start();
+            ?>
+            <script>
+            (function(){
+                var flash = document.getElementById('<?php echo esc_js( $flash_id ); ?>');
+                if(!flash) return;
+                if(flash.dataset.oloFlash) return;
+                flash.dataset.oloFlash = '1';
+                if(window.matchMedia && window.matchMedia('(hover:none)').matches) return;
+                if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+                document.body.appendChild(flash);
+                flash.style.display = 'block';
+                var EASE = <?php echo $sp_ease; ?>;
+                var x = window.innerWidth / 2, y = window.innerHeight / 2, cx = x, cy = y;
+                var running = false;
+                function loop(){
+                    cx += (x - cx) * EASE;
+                    cy += (y - cy) * EASE;
+                    if ( Math.abs(x - cx) < 0.5 && Math.abs(y - cy) < 0.5 ) {
+                        flash.style.transform = 'translate(' + x + 'px,' + y + 'px)';
+                        running = false; return;
+                    }
+                    flash.style.transform = 'translate(' + cx + 'px,' + cy + 'px)';
+                    requestAnimationFrame( loop );
+                }
+                function start(){ if ( ! running ) { running = true; requestAnimationFrame( loop ); } }
+                window.addEventListener('pointermove', function( e ){ x = e.clientX; y = e.clientY; start(); }, { passive: true });
+            })();
+            </script>
+            <?php
+            $flash_js = ob_get_clean();
+        }
+
         list( $bt_cls, $bt_data ) = $this->tfx_attrs( $s, 'text', wp_strip_all_tags( $s['text'] ) );
 
         ob_start();
-        echo '<style>' . $css . '</style>';
+        echo '<style>' . $css . $flash_css . '</style>';
         ?>
         <div id="<?php echo esc_attr( $uid ); ?>">
             <<?php echo $tag; ?> class="olo-bt-text<?php echo $bt_cls; ?>"<?php echo $bt_data; ?>><?php echo nl2br( $text ); ?></<?php echo $tag; ?>>
         </div>
+        <?php echo $flash_html; ?>
+        <?php if ( $mode === 'text' ) : // l'auto-fix stacking-context serve solo al blend statico ?>
         <script>
         (function(){
             var el = document.getElementById('<?php echo esc_js( $uid ); ?>');
@@ -130,6 +197,8 @@ class Olo_Blendtext_Tile extends Olo_Tile_Base {
             } catch(e){}
         })();
         </script>
+        <?php endif; ?>
+        <?php echo $flash_js; ?>
         <?php
         $tfx_css = $this->tfx_css( $s, '#' . $uid );
         if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';

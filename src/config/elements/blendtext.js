@@ -28,6 +28,12 @@ export default {
     text_align: 'center',
     text_color: '#ffffff',
     blend_mode: 'difference',
+    mode: 'text',
+    spotlight_size: 300,
+    spotlight_softness: 40,
+    spotlight_blend: 'difference',
+    spotlight_color: '#ffffff',
+    spotlight_easing: 22,
     tile_padding: { top: 40, right: 20, bottom: 40, left: 20 },
     ...textEffectsDefaults,
     text_effect_target: 'text',
@@ -68,8 +74,14 @@ export default {
     ] },
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
 
-    { type: 'separator', label: t('Blend') },
-    { key: 'blend_mode', label: t('Blend Mode'), type: 'select', options: [
+    { type: 'separator', label: t('Modalità') },
+    { key: 'mode', label: t('Modalità'), type: 'select', options: [
+      { value: 'text',      label: t('Testo (blend su tutto il testo)') },
+      { value: 'spotlight', label: t('Torcia (segue il cursore)') },
+    ], description: t('Testo: il blend si applica a tutto il testo e compone con lo sfondo della sezione. Torcia: un disco luminoso segue il cursore e inverte i colori solo sotto di sé. Disattivato su touch e con riduzione del movimento.') },
+
+    { type: 'separator', label: t('Blend'), condition: { field: 'mode', value: ['text'] } },
+    { key: 'blend_mode', label: t('Blend Mode'), type: 'select', condition: { field: 'mode', value: ['text'] }, options: [
       { value: 'normal', label: t('Normale') },
       { value: 'multiply', label: t('Moltiplica') },
       { value: 'screen', label: t('Schermo') },
@@ -87,6 +99,25 @@ export default {
       { value: 'color', label: t('Colore') },
       { value: 'luminosity', label: t('Luminosità') },
     ]},
+
+    { type: 'separator', label: t('Torcia'), condition: { field: 'mode', value: ['spotlight'] } },
+    { key: 'spotlight_size', label: t('Dimensione luce (px)'), type: 'range', min: 80, max: 800, step: 10,
+      condition: { field: 'mode', value: ['spotlight'] } },
+    { key: 'spotlight_softness', label: t('Sfumatura bordo (%)'), type: 'range', min: 0, max: 100, step: 5,
+      description: t('0 = bordo netto, 100 = molto morbido.'),
+      condition: { field: 'mode', value: ['spotlight'] } },
+    { key: 'spotlight_blend', label: t('Fusione'), type: 'select',
+      condition: { field: 'mode', value: ['spotlight'] }, options: [
+      { value: 'difference', label: t('Differenza (inverte i colori)') },
+      { value: 'exclusion',  label: t('Esclusione') },
+      { value: 'screen',     label: t('Schermo (schiarisce)') },
+    ] },
+    { key: 'spotlight_color', label: t('Colore luce'), type: 'color',
+      description: t('Bianco + "Differenza" = inversione classica.'),
+      condition: { field: 'mode', value: ['spotlight'] } },
+    { key: 'spotlight_easing', label: t('Inseguimento'), type: 'range', min: 5, max: 60, step: 1,
+      description: t('Più alto = la luce segue il cursore più da vicino.'),
+      condition: { field: 'mode', value: ['spotlight'] } },
 
     ...textEffectsFields([ { value: 'text', label: t('Solo Testo') } ]),
 
