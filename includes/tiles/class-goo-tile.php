@@ -98,7 +98,9 @@ class Olo_Goo_Tile extends Olo_Tile_Base {
 
         // ── Parametri (clampati) ──────────────────────────────────────────
         $mode    = ( $s['mode'] === 'aurora' ) ? 'aurora' : 'goo';
-        $scope   = 'section';   // modalità "tutta la pagina" rimossa: sempre sfondo di sezione
+        // 'section' (default) = sfondo della sezione ospite; 'column' = sfondo della
+        // colonna ospite (utile per card/box con goo per-cella, es. showcase landing).
+        $scope   = ( ( $s['scope'] ?? 'section' ) === 'column' ) ? 'column' : 'section';
         // Builder: l'effetto "tutta la pagina" è un overlay a runtime, non rappresentabile
         // nella cella del tile → si mostra un box-anteprima coi blob, con altezza propria.
         $preview = ! empty( $s['_builder_mode'] ) && $scope === 'page';
@@ -309,6 +311,15 @@ class Olo_Goo_Tile extends Olo_Tile_Base {
                         if ( nh > FH ) { FH = nh; stage.style.height = FH + 'px'; }   // cresce con il documento (lazy-load)
                     }).observe( document.documentElement );
                 }
+            } else
+            if ( CFG.scope === 'column' && ( host = wrap.closest('.olo-column, [class*="uk-width"]') ) ) {
+                // scope=column: il goo è lo sfondo della COLONNA ospite (card/box).
+                var ccs = getComputedStyle( host );
+                if ( ccs.position === 'static' )  { host.style.position = 'relative'; }
+                if ( ccs.overflow === 'visible' ) { host.style.overflow = 'hidden'; }
+                host.style.isolation = 'isolate';
+                host.insertBefore( stage, host.firstChild );
+                if ( host.clientHeight < 40 ) { host.style.minHeight = '<?php echo intval( $min_h ); ?>px'; }
             } else
             if ( ( host = wrap.closest('section') || wrap.closest('.olo-section') ) ) {
                 var hcs = getComputedStyle( host );

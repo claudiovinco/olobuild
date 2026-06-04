@@ -82,6 +82,12 @@ export default {
   },
 
   fields: [
+    { type: 'separator', label: t('Ambito') },
+    { key: 'scope', label: t('Riempi'), type: 'select', options: [
+      { value: 'section', label: t('Sezione (sfondo intera sezione)') },
+      { value: 'column',  label: t('Colonna (sfondo della singola card)') },
+    ], description: t('Sezione: il layer di blob riempie la sezione che ospita il tile (sfondo full). Colonna: riempie solo la colonna contenitore — utile per dare il goo a una singola card/box (es. showcase).') },
+
     { type: 'separator', label: t('Sfondo') },
     { key: 'mode', label: t('Modalità'), type: 'select', options: [
       { value: 'goo',    label: t('Goo (metaball che si fondono)') },

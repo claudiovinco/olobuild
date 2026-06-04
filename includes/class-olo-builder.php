@@ -3142,6 +3142,7 @@ class Olo_Builder {
         require_once OLO_PATH . 'includes/tiles/class-leaderboard-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-scrollscrub-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-goo-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-buildermock-tile.php';
         require_once OLO_PATH . 'includes/class-magnetic-cursor.php';
         Olo_Magnetic_Cursor::init();
 
@@ -3161,6 +3162,7 @@ class Olo_Builder {
         $manager->register_tile( new Olo_Leaderboard_Tile() );
         $manager->register_tile( new Olo_Scrollscrub_Tile() );
         $manager->register_tile( new Olo_Goo_Tile() );
+        $manager->register_tile( new Olo_BuilderMock_Tile() );
         $manager->register_tile( new Olo_Column_Tile() );
         $manager->register_tile( new Olo_Hero_Tile() );
         $manager->register_tile( new Olo_HeroSplit_Tile() );
