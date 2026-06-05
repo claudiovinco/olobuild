@@ -1361,6 +1361,7 @@ import ParallaxEditor from './ParallaxEditor.vue';
 import BezierPathEditor from './BezierPathEditor.vue';
 import ProSliderEditor from '../ProSlider/ProSliderEditor.vue';
 import HeightModeSelector from '../ProSlider/HeightModeSelector.vue';
+import { MEGAMENU_PRESETS } from '@/config/megamenuPresets';
 
 const elementParallaxProperties = [
   { key: 'x', label: 'Traslazione X', min: -1000, max: 1000, step: 10, unit: 'px' },
@@ -2452,20 +2453,11 @@ const TILE_PRESETS = {
     'retro-vhs':       { style: 'icon-label', size: '36', icon_color: '#22c55e', bg_color: '#0a0a0a', border_radius: '0'   },
     'tilt-3d':         { style: 'icon-only',  size: '44', icon_color: '#fff',    bg_color: '#6366f1', border_radius: '8'   },
   },
-  megamenu: {
-    'modern-clean':    { hover_effect: 'underline',  hover_effect_color: '#0ea5e9', nav_bg: '#ffffff',                                  nav_height: '72',  item_gap: '24', sticky_shadow: true,  sticky_shrink: true  },
-    'minimal-line':    { hover_effect: 'underline',  hover_effect_color: '#1f2937', nav_bg: '',                                          nav_height: '60',  item_gap: '20', sticky_shadow: false, sticky_shrink: false },
-    'magazine-bold':   { hover_effect: 'underline',  hover_effect_color: '#000',    nav_bg: '#ffffff',                                  nav_height: '88',  item_gap: '32', sticky_shadow: false, sticky_shrink: true  },
-    'cinema-bar':      { hover_effect: 'background', hover_effect_color: 'rgba(255,255,255,0.1)', nav_bg: '#0a0a0a',                    nav_height: '64',  item_gap: '28', sticky_shadow: true,  sticky_shrink: false },
-    'compact-bar':     { hover_effect: 'underline',  hover_effect_color: '#0ea5e9', nav_bg: '#f9fafb',                                  nav_height: '52',  item_gap: '16', sticky_shadow: true,  sticky_shrink: true  },
-    'glass-bar':       { hover_effect: 'background', hover_effect_color: 'rgba(255,255,255,0.15)', nav_bg: 'rgba(255,255,255,0.1)',     nav_height: '72',  item_gap: '24', sticky_shadow: true,  sticky_shrink: true  },
-    'neon-strip':      { hover_effect: 'background', hover_effect_color: '#00ffff', nav_bg: '#0a0a0a',                                  nav_height: '60',  item_gap: '32', sticky_shadow: true,  sticky_shrink: false },
-    'brutalist-block': { hover_effect: 'background', hover_effect_color: '#fde047', nav_bg: '#000000',                                  nav_height: '80',  item_gap: '36', sticky_shadow: false, sticky_shrink: false },
-    'gradient-bar':    { hover_effect: 'underline',  hover_effect_color: '#a855f7', nav_bg: 'linear-gradient(90deg,#a855f7,#ec4899)',   nav_height: '72',  item_gap: '24', sticky_shadow: true,  sticky_shrink: true  },
-    'sticker-tape':    { hover_effect: 'background', hover_effect_color: '#fef3c7', nav_bg: '#fef3c7',                                  nav_height: '68',  item_gap: '28', sticky_shadow: false, sticky_shrink: false },
-    'retro-terminal':  { hover_effect: 'underline',  hover_effect_color: '#22c55e', nav_bg: '#0a0a0a',                                  nav_height: '60',  item_gap: '24', sticky_shadow: false, sticky_shrink: false },
-    'tilt-bar':        { hover_effect: 'lift',       hover_effect_color: '#6366f1', nav_bg: '#ffffff',                                  nav_height: '76',  item_gap: '24', sticky_shadow: true,  sticky_shrink: true  },
-  },
+  // v1.4.11 — ricetta token-first completa estratta in src/config/megamenuPresets.js.
+  // Sostituisce il vecchio bundle inline (hex off-brand #0ea5e9/#a855f7 e
+  // hover_effect:'lift' inesistente nel config). Applicata dal dispatcher
+  // applyTilePresetTheme al cambio di `settings.preset`.
+  megamenu: MEGAMENU_PRESETS,
   sitelogo: {
     'modern-clean':    { hover_opacity: '85',  max_height: '48', alignment: 'left',   transition_duration: '0.3', show_tagline: false },
     'minimal-mono':    { hover_opacity: '70',  max_height: '36', alignment: 'left',   transition_duration: '0.2', show_tagline: false },
