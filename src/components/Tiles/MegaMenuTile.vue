@@ -265,7 +265,7 @@ const defaults = {
   mobile_slide_direction: 'left', offcanvas_fullscreen: false,
   fullscreen_animation: 'fade',
   menu_items_animation: 'none', menu_items_stagger: '80',
-  mobile_bg: '#1e1e2e', mobile_text_color: '#ffffff',
+  mobile_bg: 'var(--olo-color-dark, #1e1e2e)', mobile_text_color: '#ffffff',
   mobile_heading_color: '', mobile_accent_color: '',
   mobile_separator: true, mobile_font_size: '17', mobile_item_padding: '16',
   mobile_logo: '', mobile_logo_height: '36',
@@ -718,7 +718,7 @@ const mobHamburgerStyle = computed(() => ({
 }));
 
 const mobileMenuStyle = computed(() => ({
-  background: s.value.mobile_bg || '#1e1e2e',
+  background: s.value.mobile_bg || 'var(--olo-color-dark, #1e1e2e)',
   padding: '4px 0',
 }));
 
@@ -778,7 +778,7 @@ const mobileHamburgerBtnStyle = computed(() => {
 });
 
 const mobilePanelStyle = computed(() => ({
-  background: s.value.mobile_bg || '#1e1e2e',
+  background: s.value.mobile_bg || 'var(--olo-color-dark, #1e1e2e)',
   padding: '8px 0',
   animationName: 'olo-mm-panelSlideDown',
   animationDuration: '0.25s',

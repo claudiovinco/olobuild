@@ -102,7 +102,7 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
         'hamburger_style'    => 'classic',
         'hamburger_size'     => '28',
         'hamburger_color'    => '',
-        'mobile_bg'          => '#1e1e2e',
+        'mobile_bg'          => 'var(--olo-color-dark, #1e1e2e)',
         'mobile_text_color'  => '#FFFFFF',
         'mobile_heading_color' => '',
         'mobile_accent_color'  => '',
@@ -161,8 +161,10 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
         'sticky_text_color'  => '',
         // Top Bar
         'topbar_enabled'       => false,
-        'topbar_bg'            => '#1F2937',
-        'topbar_text_color'    => '#9CA3AF',
+        // Token-first (v1.4.11): superficie scura "decisa" → dark; testo su scuro → light.
+        // Hex storici come fallback → resa identica se il token non è definito.
+        'topbar_bg'            => 'var(--olo-color-dark, #1F2937)',
+        'topbar_text_color'    => 'var(--olo-color-light, #9CA3AF)',
         'topbar_link_color'    => '#FFFFFF',
         'topbar_height'        => '40',
         'topbar_font_size'     => '13',
@@ -181,7 +183,7 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
         'topbar_right_cta_label' => '',
         'topbar_right_cta_url'  => '',
         'topbar_right_cta_bg'   => '',
-        'topbar_right_cta_color'=> '#FFFFFF',
+        'topbar_right_cta_color'=> 'var(--olo-color-light, #FFFFFF)',
         'topbar_border_bottom' => true,
         'topbar_border_color'  => '',
             'border'                  => [],
@@ -336,7 +338,7 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
         // Mobile
         $mob_side    = $s['mobile_side'] === 'right' ? 'right' : 'left';
         $ham_color   = $this->safe_color( $s['hamburger_color'] ) ?: $tc;
-        $mob_bg      = $this->safe_color( $s['mobile_bg'] ) ?: '#1e1e2e';
+        $mob_bg      = $this->safe_color( $s['mobile_bg'] ) ?: 'var(--olo-color-dark, #1e1e2e)';
         $mob_tc      = $this->safe_color( $s['mobile_text_color'] ) ?: '#FFFFFF';
         $mob_hc      = $this->safe_color( $s['mobile_heading_color'] ) ?: 'rgba(255,255,255,.5)';
         $mob_acc     = $this->safe_color( $s['mobile_accent_color'] ) ?: 'var(--olo-color-primary, #e1474f)';

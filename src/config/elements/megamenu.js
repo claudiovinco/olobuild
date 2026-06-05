@@ -178,8 +178,10 @@ export default {
     sticky_shrink: false,
     sticky_text_color: '',
     topbar_enabled: false,
-    topbar_bg: '#1F2937',
-    topbar_text_color: '#9CA3AF',
+    // Token-first: superficie scura "decisa" → ruolo dark; testo su scuro → ruolo light.
+    // Hex storici mantenuti come fallback (resa identica se il token non è definito).
+    topbar_bg: 'var(--olo-color-dark, #1F2937)',
+    topbar_text_color: 'var(--olo-color-light, #9CA3AF)',
     topbar_link_color: '#FFFFFF',
     topbar_height: '40',
     topbar_font_size: '13',
@@ -198,7 +200,7 @@ export default {
     topbar_right_cta_label: '',
     topbar_right_cta_url: '',
     topbar_right_cta_bg: '',
-    topbar_right_cta_color: '#FFFFFF',
+    topbar_right_cta_color: 'var(--olo-color-light, #FFFFFF)',
     topbar_border_bottom: true,
     topbar_border_color: '',
     border: { ...borderDefault },
