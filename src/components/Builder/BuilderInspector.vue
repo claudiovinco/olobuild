@@ -1362,6 +1362,7 @@ import BezierPathEditor from './BezierPathEditor.vue';
 import ProSliderEditor from '../ProSlider/ProSliderEditor.vue';
 import HeightModeSelector from '../ProSlider/HeightModeSelector.vue';
 import { MEGAMENU_PRESETS } from '@/config/megamenuPresets';
+import { MEGAMENU_TEMPLATES } from '@/config/megamenuTemplates';
 
 const elementParallaxProperties = [
   { key: 'x', label: 'Traslazione X', min: -1000, max: 1000, step: 10, unit: 'px' },
@@ -5461,6 +5462,20 @@ function applyTilePresetTheme(tile, presetId) {
   }
 }
 
+/**
+ * Mega Menu — applica un "template pronto" (40 ricette in megamenuTemplates.js).
+ * Apply-once: scrive l'intero bundle settings del template in tile.settings
+ * (sovrascrivibile poi dall'inspector). Il template imposta anche `preset` quando
+ * previsto, così il selettore Preset riflette la base. Nessuna chiave nuova salvata.
+ */
+function applyMegamenuTemplate(tile, templateId) {
+  if (!tile || !templateId) return;
+  const tpl = MEGAMENU_TEMPLATES.find(t => t.id === templateId);
+  if (!tpl || !tpl.settings) return;
+  tilesStore.updateTile(tile.id, structuredClone(tpl.settings));
+  builderStore.markDirtyForTile(tile.id);
+}
+
 function updateSetting(key, value) {
   if (!builderStore.selectedTileId) return;
   const tile = tilesStore.getTileById(builderStore.selectedTileId);
@@ -5481,6 +5496,14 @@ function updateSetting(key, value) {
   // di resettare gli override del preset precedente (specifico hero).
   if (tile && key === 'preset' && value !== undefined) {
     applyTilePresetTheme(tile, value);
+  }
+  // v1.4.11 — Mega Menu: selettore "Template pronti". Chiave SENTINELLA non salvata:
+  // applica i settings del template una tantum (apply-once) e NON persiste la chiave,
+  // così il select resta sui "— Applica un template… —" e il template è solo un punto
+  // di partenza interamente sovrascrivibile dall'inspector.
+  if (tile && key === '__megamenu_template__') {
+    if (value) applyMegamenuTemplate(tile, value);
+    return; // mai persistere la sentinella
   }
   // Row custom_widths: handled by dedicated inline input, not here
   tilesStore.updateTile(builderStore.selectedTileId, { [key]: value });

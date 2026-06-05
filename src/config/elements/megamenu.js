@@ -1,6 +1,16 @@
 
 import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover } from './_shared.js';
 import { t } from '@/i18n';
+import { MEGAMENU_TEMPLATES } from '../megamenuTemplates.js';
+
+// Opzioni del selettore "Template pronti": placeholder + 40 template raggruppati
+// per famiglia. La selezione NON è una chiave salvata: il valore arriva alla
+// chiave sentinella `__megamenu_template__`, intercettata da BuilderInspector
+// (applyMegamenuTemplate) e mai persistita — applica i settings una tantum.
+const MEGAMENU_TEMPLATE_OPTIONS = [
+  { value: '', label: t('— Applica un template… —') },
+  ...MEGAMENU_TEMPLATES.map(tpl => ({ value: tpl.id, label: `${tpl.family} · ${tpl.name}` })),
+];
 
 /**
  * Tile Mega Menu — split CONTENUTO/STILE (regola universale Olobuild).
@@ -343,6 +353,10 @@ export default {
 
   // ─── STILE ─────────────────────────────────────────────────
   styleFields: [
+    { type: 'separator', label: t('Template pronti') },
+    { key: '__megamenu_template__', label: t('Template (punto di partenza)'), type: 'select',
+      options: MEGAMENU_TEMPLATE_OPTIONS },
+
     { type: 'separator', label: t('Preset stilistico') },
     { key: 'preset', label: t('Stile'), type: 'select', options: [
       { value: 'modern-clean', label: t('Modern Clean') },
