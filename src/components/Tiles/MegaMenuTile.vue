@@ -331,10 +331,19 @@ const previewItems = computed(() => {
       if (btnMode === 'last-2' && i >= tops.length - 2) isButton = true;
       if (btnMode === 'css-class' && (item.classes || []).includes('olo-btn')) isButton = true;
 
-      if (!isButton && megaMode === 'auto' && hasGC) isMega = true;
-      if (!isButton && megaMode === 'all' && hasKids) isMega = true;
+      // Mega panel attivo SOLO se esistono "nipoti" (livello 3) — stesso contratto
+      // del frontend PHP (is_mega_item): è la precondizione per entrambe le modalità.
+      //   'auto'      → qualunque voce con nipoti diventa mega
+      //   'css-class' → mega solo se la voce ha la classe CSS `mega-menu`
+      // Il vecchio ramo `megaMode === 'all'` era codice morto (valore inesistente nel
+      // config) e la modalità `css-class` non veniva gestita affatto → il pannello non
+      // compariva mai in quella modalità.
+      if (!isButton && hasGC) {
+        if (megaMode === 'css-class') isMega = (item.classes || []).includes('mega-menu');
+        else isMega = true; // 'auto'
+      }
 
-      return { label: item.title, isButton, isMega, hasChildren: hasKids, id: item.id };
+      return { label: item.title, isButton, isMega, hasChildren: hasKids, id: item.id, classes: item.classes || [] };
     });
   }
 
@@ -344,8 +353,10 @@ const previewItems = computed(() => {
     let isMega = false;
     if (btnMode === 'last' && i === labels.length - 1) isButton = true;
     if (btnMode === 'last-2' && i >= labels.length - 2) isButton = true;
-    if (!isButton && megaMode !== 'none' && i >= 1 && i <= 2) isMega = true;
-    return { label, isButton, isMega, hasChildren: isMega, id: i };
+    // Dati demo (nessun menu selezionato): mostra comunque un paio di voci "mega"
+    // per illustrare il pannello, a prescindere dalla modalità reale.
+    if (!isButton && i >= 1 && i <= 2) isMega = true;
+    return { label, isButton, isMega, hasChildren: isMega, id: i, classes: [] };
   });
 });
 
