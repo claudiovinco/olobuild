@@ -243,6 +243,11 @@ export default {
       { value: 'topbar', label: t('Top bar') },
       { value: 'both', label: t('Entrambi') },
     ], condition: { field: 'search_icon', value: true } },
+    { key: 'search_style', label: t('Comportamento ricerca'), type: 'select', options: [
+      { value: 'expand', label: t('Espandi inline (default)') },
+      { value: 'overlay', label: t('Overlay a tutta pagina') },
+      { value: 'command', label: t('Command palette (⌘K)') },
+    ], condition: { field: 'search_icon', value: true } },
     { key: 'search_tile_id', label: t('Tile ricerca (opzionale)'), type: 'select', optionsSource: 'searchTiles' },
     { key: 'search_tile_position', label: t('Posizione tile ricerca'), type: 'select',
       show: s => !!s.search_tile_id,

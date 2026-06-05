@@ -31,6 +31,7 @@
             <a v-if="!item.isButton" class="olo-mm-nav-link" :style="getLinkStyle(item, idx)" href="javascript:void(0)"
               :data-text="item.label">
               {{ item.label }}
+              <span v-if="itemBadge(item)" class="olo-mm-badge">{{ itemBadge(item) }}</span>
               <svg v-if="item.isMega || item.hasChildren" class="olo-mm-chevron" width="10" height="10" viewBox="0 0 12 12" fill="currentColor"><path d="M2 4l4 4 4-4z"/></svg>
             </a>
             <a v-else class="olo-mm-btn" :style="btnStyle" href="javascript:void(0)">{{ item.label }}</a>
@@ -60,15 +61,22 @@
             <a v-if="!item.isButton" class="olo-mm-nav-link" :style="getLinkStyle(item, idx)" href="javascript:void(0)"
               :data-text="item.label">
               {{ item.label }}
+              <span v-if="itemBadge(item)" class="olo-mm-badge">{{ itemBadge(item) }}</span>
               <svg v-if="item.isMega || (item.hasChildren && !item.isButton)" class="olo-mm-chevron" width="10" height="10" viewBox="0 0 12 12" fill="currentColor"><path d="M2 4l4 4 4-4z"/></svg>
             </a>
             <a v-else class="olo-mm-btn" :style="btnStyle" href="javascript:void(0)">{{ item.label }}</a>
             <span v-if="hoverEffectLine(item, idx)" class="olo-mm-hover-line" :style="hoverLineStyle"></span>
           </li>
 
-          <!-- Search icon -->
+          <!-- Search icon / pill (E1: overlay|command mostrano la scorciatoia) -->
           <li v-if="s.search_icon" class="olo-mm-nav-item olo-mm-nav-item--search" :style="{ order: 99 }">
-            <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" :style="{ color: s.text_color || 'currentColor' }">
+            <span v-if="searchStyle !== 'expand'" class="olo-mm-search-pill" :style="searchPillStyle">
+              <svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <circle cx="8.5" cy="8.5" r="5.5"/><line x1="13" y1="13" x2="17" y2="17"/>
+              </svg>
+              <span class="olo-mm-search-kbd-mini">{{ searchStyle === 'command' ? '⌘K' : '/' }}</span>
+            </span>
+            <svg v-else width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" :style="{ color: s.text_color || 'currentColor' }">
               <circle cx="8.5" cy="8.5" r="5.5"/><line x1="13" y1="13" x2="17" y2="17"/>
             </svg>
           </li>
@@ -98,14 +106,24 @@
         <div class="olo-mm-panel" :style="panelStyle">
           <div v-if="panelBorderTop > 0" class="olo-mm-panel-accent" :style="accentLineStyle"></div>
           <div class="olo-mm-grid" :style="gridStyle">
-            <div v-for="(col, cIdx) in panelColumns" :key="cIdx" class="olo-mm-col" :style="colStyle(cIdx)">
-              <div class="olo-mm-heading" :style="headingStyle">{{ col.heading }}</div>
-              <div class="olo-mm-links">
-                <a v-for="(link, lIdx) in col.links" :key="lIdx" class="olo-mm-link" :style="linkStyleObj" href="javascript:void(0)">
-                  {{ link }}
-                  <span v-if="s.show_descriptions" class="olo-mm-desc" :style="descStyleObj">{{ t('Descrizione breve') }}</span>
-                </a>
+            <div v-for="(col, cIdx) in panelColumns" :key="cIdx" class="olo-mm-col" :class="{ 'olo-mm-col-promo': col.promo }" :style="colStyle(cIdx)">
+              <!-- E2: colonna promo (child con classe `mega-promo`) -->
+              <div v-if="col.promo" class="olo-mm-promo">
+                <span class="olo-mm-promo-media"></span>
+                <span class="olo-mm-promo-body">
+                  <span class="olo-mm-promo-title" :style="promoTitleStyle">{{ col.title }}</span>
+                  <span class="olo-mm-promo-cta" :style="promoCtaStyle">{{ t('Scopri di più') }} →</span>
+                </span>
               </div>
+              <template v-else>
+                <div class="olo-mm-heading" :style="headingStyle">{{ col.heading }}</div>
+                <div class="olo-mm-links">
+                  <a v-for="(link, lIdx) in col.links" :key="lIdx" class="olo-mm-link" :style="linkStyleObj" href="javascript:void(0)">
+                    {{ link }}
+                    <span v-if="s.show_descriptions" class="olo-mm-desc" :style="descStyleObj">{{ t('Descrizione breve') }}</span>
+                  </a>
+                </div>
+              </template>
             </div>
           </div>
         </div>
@@ -413,7 +431,9 @@ const panelColumns = computed(() => {
       const cols = [];
       for (const child of children) {
         const grandkids = getChildren(child.id);
-        cols.push({ heading: child.title, links: grandkids.map(gc => gc.title) });
+        // E2 — colonna promo: child con classe CSS `mega-promo`.
+        const isPromo = (child.classes || []).includes('mega-promo');
+        cols.push({ heading: child.title, title: child.title, promo: isPromo, links: grandkids.map(gc => gc.title) });
       }
       if (cols.length > 0) return cols.slice(0, numCols);
     }
@@ -431,6 +451,37 @@ const panelColumns = computed(() => {
 });
 
 const panelBorderTop = computed(() => parseInt(s.value.panel_border_top) || 0);
+
+// ── E1: stile ricerca (expand | overlay | command) — anteprima a pillola ──
+const searchStyle = computed(() => s.value.search_style || 'expand');
+const accentColor = computed(() => s.value.active_color || 'var(--olo-color-primary, #e1474f)');
+const searchPillStyle = computed(() => ({
+  display: 'inline-flex', alignItems: 'center', gap: '6px',
+  padding: '3px 8px 3px 6px', borderRadius: '999px',
+  border: '1px solid color-mix(in srgb, currentColor 25%, transparent)',
+  color: s.value.text_color || 'currentColor', fontSize: '11px', whiteSpace: 'nowrap',
+}));
+
+// ── E3: badge per-voce da classe CSS `badge-<label>` (es. badge-new → NEW) ──
+function itemBadge(item) {
+  const classes = (item && item.classes) || [];
+  for (const c of classes) {
+    if (typeof c === 'string' && c.indexOf('badge-') === 0) {
+      const label = c.slice(6);
+      if (label) return label.replace(/-/g, ' ').toUpperCase();
+    }
+  }
+  return '';
+}
+
+// ── E2: stile card promo nel pannello ──
+const promoTitleStyle = computed(() => ({
+  fontWeight: '700', fontSize: (parseInt(s.value.link_size) || 14) + 'px',
+  color: s.value.heading_color || 'var(--olo-color-text, #111827)',
+}));
+const promoCtaStyle = computed(() => ({
+  marginTop: '4px', fontSize: '12px', fontWeight: '600', color: accentColor.value,
+}));
 
 // ── Hamburger SVG Components ──
 const hamburgerSvgs = {
@@ -874,6 +925,37 @@ const mobilePanelLinkStyle = computed(() => ({
 .olo-mm-link { cursor: default; border-radius: 3px; }
 .olo-mm-link:hover { padding-left: 4px; color: var(--olo-color-primary, #e1474f) !important; }
 .olo-mm-desc { pointer-events: none; }
+
+/* E1 — pillola ricerca (overlay/command) */
+.olo-mm-search-pill { cursor: default; opacity: .9; }
+.olo-mm-search-kbd-mini {
+  font-size: 9px; font-weight: 700; letter-spacing: .02em;
+  padding: 1px 4px; border-radius: 4px;
+  background: color-mix(in srgb, currentColor 14%, transparent);
+}
+
+/* E2 — card promo nel pannello */
+.olo-mm-col-promo { min-width: 0; }
+.olo-mm-promo {
+  display: flex; flex-direction: column; border-radius: 10px; overflow: hidden;
+  background: rgba(0,0,0,.03); border: 1px solid rgba(0,0,0,.06);
+}
+.olo-mm-promo-media {
+  display: block; width: 100%; aspect-ratio: 16 / 10;
+  background-image: linear-gradient(135deg, var(--olo-color-primary, #e1474f), var(--olo-color-dark, #1a1a2e));
+}
+.olo-mm-promo-body { padding: 10px 12px; display: flex; flex-direction: column; gap: 2px; }
+.olo-mm-promo-title { line-height: 1.3; }
+.olo-mm-promo-cta { display: inline-block; }
+
+/* E3 — badge per-voce */
+.olo-mm-badge {
+  display: inline-block; vertical-align: super;
+  margin-left: 4px; padding: 0 5px;
+  font-size: 8px; font-weight: 700; letter-spacing: .04em; line-height: 1.6;
+  text-transform: uppercase; border-radius: 999px; white-space: nowrap;
+  background: var(--olo-color-primary, #e1474f); color: #fff;
+}
 
 /* Social bar */
 .olo-mm-social-bar { flex-shrink: 0; }

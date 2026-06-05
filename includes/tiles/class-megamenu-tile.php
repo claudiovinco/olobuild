@@ -688,6 +688,80 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
         .<?php echo $uid; ?> .olo-mm-search-expand { display: none !important; }
         <?php endif; ?>
 
+        /* === E1: Ricerca overlay / command palette (search_style: overlay|command) === */
+        .<?php echo $uid; ?> .olo-mm-search-overlay {
+            position: fixed; inset: 0; z-index: 99999;
+            display: flex; align-items: flex-start; justify-content: center;
+            padding: 12vh 16px 16px;
+        }
+        .<?php echo $uid; ?> .olo-mm-search-overlay[hidden] { display: none; }
+        .<?php echo $uid; ?> .olo-mm-search-overlay--cmd { align-items: center; padding-top: 16px; }
+        .<?php echo $uid; ?> .olo-mm-search-overlay-backdrop {
+            position: absolute; inset: 0;
+            background: rgba(10,12,20,.55);
+            backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+            animation: olo-mm-so-fade .2s ease;
+        }
+        .<?php echo $uid; ?> .olo-mm-search-box {
+            position: relative; width: 100%; max-width: 600px;
+            background: <?php echo $p_bg; ?>; border-radius: 14px;
+            box-shadow: 0 24px 70px rgba(0,0,0,.35); overflow: hidden;
+            animation: olo-mm-so-pop .22s cubic-bezier(.2,.8,.2,1);
+        }
+        .<?php echo $uid; ?> .olo-mm-search-overlay--cmd .olo-mm-search-box { max-width: 560px; }
+        .<?php echo $uid; ?> .olo-mm-search-form {
+            display: flex; align-items: center; gap: 10px;
+            padding: 16px 18px; border-bottom: 1px solid rgba(0,0,0,.08);
+        }
+        .<?php echo $uid; ?> .olo-mm-search-box-icon { display: flex; color: <?php echo $ac ?: 'var(--olo-color-primary, #e1474f)'; ?>; }
+        .<?php echo $uid; ?> .olo-mm-search-box-icon svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+        .<?php echo $uid; ?> .olo-mm-search-input {
+            flex: 1; border: none; outline: none; background: none;
+            font-size: 18px; color: var(--olo-color-text, #111827); min-width: 0;
+        }
+        .<?php echo $uid; ?> .olo-mm-search-kbd {
+            font-size: 11px; font-weight: 600; color: var(--olo-color-text-faint, #9ca3af);
+            border: 1px solid rgba(0,0,0,.15); border-radius: 5px; padding: 2px 7px; background: rgba(0,0,0,.03);
+            flex-shrink: 0;
+        }
+        .<?php echo $uid; ?> .olo-mm-search-results { max-height: 46vh; overflow-y: auto; }
+        .<?php echo $uid; ?> .olo-mm-search-result {
+            display: block; padding: 12px 18px; text-decoration: none;
+            color: var(--olo-color-text, #1f2937); font-size: 15px;
+            border-bottom: 1px solid rgba(0,0,0,.05);
+        }
+        .<?php echo $uid; ?> .olo-mm-search-result:hover { background: rgba(0,0,0,.04); color: <?php echo $ac ?: 'var(--olo-color-primary, #e1474f)'; ?>; }
+        .<?php echo $uid; ?> .olo-mm-search-empty { padding: 16px 18px; color: var(--olo-color-text-faint, #9ca3af); font-size: 14px; }
+        @keyframes olo-mm-so-fade { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes olo-mm-so-pop { from { opacity: 0; transform: translateY(-10px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+
+        /* === E2: Colonna promo/immagine nel mega panel (voce-colonna con classe `mega-promo`) === */
+        .<?php echo $uid; ?> .olo-mm-col-promo { display: flex; }
+        .<?php echo $uid; ?> .olo-mm-promo {
+            display: flex; flex-direction: column; width: 100%;
+            text-decoration: none; border-radius: 12px; overflow: hidden;
+            background: rgba(0,0,0,.03); transition: transform .25s ease, box-shadow .25s ease;
+        }
+        .<?php echo $uid; ?> .olo-mm-promo:hover { transform: translateY(-3px); box-shadow: 0 14px 34px rgba(0,0,0,.16); }
+        .<?php echo $uid; ?> .olo-mm-promo-media {
+            display: block; width: 100%; aspect-ratio: 16 / 10; background-size: cover; background-position: center;
+            background-image: linear-gradient(135deg, var(--olo-color-primary, #e1474f), var(--olo-color-dark, #1a1a2e));
+        }
+        .<?php echo $uid; ?> .olo-mm-promo-body { padding: 14px 16px; display: flex; flex-direction: column; gap: 4px; }
+        .<?php echo $uid; ?> .olo-mm-promo-title { font-weight: 700; font-size: 15px; color: var(--olo-color-text, #111827); }
+        .<?php echo $uid; ?> .olo-mm-promo-desc { font-size: 13px; color: var(--olo-color-text-faint, #6b7280); line-height: 1.4; }
+        .<?php echo $uid; ?> .olo-mm-promo-cta { margin-top: 4px; font-size: 13px; font-weight: 600; color: <?php echo $ac ?: 'var(--olo-color-primary, #e1474f)'; ?>; }
+
+        /* === E3: Badge per-voce (classe `badge-<label>`, es. badge-new → NEW) === */
+        .<?php echo $uid; ?> .olo-mm-badge {
+            display: inline-block; vertical-align: super;
+            margin-left: 5px; padding: 1px 6px;
+            font-size: 9px; font-weight: 700; letter-spacing: .04em; line-height: 1.5;
+            text-transform: uppercase; border-radius: 999px; white-space: nowrap;
+            background: var(--olo-color-primary, #e1474f); color: #fff;
+        }
+        .<?php echo $uid; ?> .olo-mm-btn .olo-mm-badge { background: rgba(255,255,255,.25); }
+
         /* Chevron on items with mega panel */
         .<?php echo $uid; ?> .olo-mm-chevron {
             width: 10px; height: 10px;
@@ -2151,6 +2225,7 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
                             <?php else : ?>
                                 <a href="<?php echo esc_url( $item->url ); ?>" data-text="<?php echo esc_attr( $item->title ); ?>"<?php echo $item->target ? ' target="' . esc_attr( $item->target ) . '"' : ''; ?>>
                                     <?php echo esc_html( $item->title ); ?>
+                                    <?php $item_badge = $this->get_item_badge( $item ); if ( $item_badge !== '' ) : ?><span class="olo-mm-badge"><?php echo esc_html( $item_badge ); ?></span><?php endif; ?>
                                     <?php if ( $has_subs ) : ?>
                                         <svg class="olo-mm-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"/></svg>
                                     <?php endif; ?>
@@ -2171,14 +2246,18 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
                     <?php $this->render_extra_links( $s ); ?>
                 </ul>
 
-                <?php // Desktop search icon ?>
-                <?php if ( $search_icon ) : ?>
-                <button class="olo-mm-search-icon olo-mm-icon-btn" aria-label="<?php echo esc_attr( olo_t( 'Cerca' ) ); ?>" type="button"><?php echo $search_svg; ?></button>
+                <?php // Desktop search icon — search_style: expand (inline) | overlay | command ?>
+                <?php if ( $search_icon ) :
+                    $search_style = $s['search_style'] ?? 'expand';
+                ?>
+                <button class="olo-mm-search-icon olo-mm-icon-btn" data-olo-search-style="<?php echo esc_attr( $search_style ); ?>" aria-label="<?php echo esc_attr( olo_t( 'Cerca' ) ); ?>" type="button"><?php echo $search_svg; ?></button>
+                <?php if ( $search_style === 'expand' ) : ?>
                 <div class="olo-mm-search-expand">
                     <form action="<?php echo esc_url( home_url('/') ); ?>" method="get" role="search" style="display:flex;">
                         <input type="search" name="s" placeholder="<?php echo esc_attr( olo_t( 'Cerca...' ) ); ?>" autocomplete="off">
                     </form>
                 </div>
+                <?php endif; ?>
                 <?php endif; ?>
                 <?php $this->render_social_icons( $s, 'bar' ); ?>
             </div>
@@ -2359,6 +2438,23 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
                 </nav>
             </div>
             <?php endif; ?>
+
+            <?php // === E1: Overlay ricerca / command palette === ?>
+            <?php if ( ! empty( $s['search_icon'] ) && in_array( ( $s['search_style'] ?? 'expand' ), [ 'overlay', 'command' ], true ) ) :
+                $is_cmd = ( $s['search_style'] === 'command' );
+            ?>
+            <div class="olo-mm-search-overlay<?php echo $is_cmd ? ' olo-mm-search-overlay--cmd' : ''; ?>" role="dialog" aria-modal="true" aria-label="<?php echo esc_attr( olo_t( 'Cerca' ) ); ?>" hidden>
+                <div class="olo-mm-search-overlay-backdrop" data-olo-search-close></div>
+                <div class="olo-mm-search-box">
+                    <form class="olo-mm-search-form" action="<?php echo esc_url( home_url( '/' ) ); ?>" method="get" role="search">
+                        <span class="olo-mm-search-box-icon"><?php echo $search_svg; ?></span>
+                        <input type="search" name="s" class="olo-mm-search-input" placeholder="<?php echo esc_attr( $is_cmd ? olo_t( 'Cerca o digita…' ) : olo_t( 'Cerca nel sito…' ) ); ?>" autocomplete="off" />
+                        <kbd class="olo-mm-search-kbd"><?php echo $is_cmd ? esc_html( '⌘K' ) : esc_html( 'ESC' ); ?></kbd>
+                    </form>
+                    <div class="olo-mm-search-results" aria-live="polite"></div>
+                </div>
+            </div>
+            <?php endif; ?>
         </div>
         <?php
     }
@@ -2369,6 +2465,12 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
             <div class="olo-mm-grid">
                 <?php foreach ( $subs as $sub ) :
                     $gc = $grandchildren[ $sub->ID ] ?? [];
+                    // E2 — colonna "promo/immagine": voce-colonna con classe CSS `mega-promo`.
+                    $sub_classes = is_array( $sub->classes ) ? $sub->classes : [];
+                    if ( in_array( 'mega-promo', $sub_classes, true ) ) {
+                        $this->render_promo_column( $sub );
+                        continue;
+                    }
                 ?>
                     <div class="olo-mm-col">
                         <div class="olo-mm-heading">
@@ -2395,6 +2497,42 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
                     </div>
                 <?php endforeach; ?>
             </div>
+        </div>
+        <?php
+    }
+
+    /**
+     * E2 — Colonna promo nel mega panel. La voce-colonna (livello 2) con classe CSS
+     * `mega-promo` diventa una card visuale: immagine (featured image della pagina
+     * collegata o URL nella descrizione, altrimenti placeholder a gradiente token),
+     * titolo, descrizione e CTA. Nessuna chiave salvata nuova.
+     */
+    private function render_promo_column( $sub ) {
+        $img  = '';
+        if ( ! empty( $sub->object_id ) ) {
+            $thumb = get_the_post_thumbnail_url( (int) $sub->object_id, 'medium_large' );
+            if ( $thumb ) $img = $thumb;
+        }
+        $desc = trim( (string) ( $sub->description ?? '' ) );
+        // Descrizione = URL immagine → usala come media (non come testo).
+        if ( ! $img && $desc !== '' && preg_match( '#^https?://#i', $desc ) ) {
+            $img  = $desc;
+            $desc = '';
+        }
+        $media_cls   = 'olo-mm-promo-media' . ( $img ? '' : ' olo-mm-promo-media--placeholder' );
+        $media_style = $img ? ' style="background-image:url(' . esc_url( $img ) . ')"' : '';
+        ?>
+        <div class="olo-mm-col olo-mm-col-promo">
+            <a class="olo-mm-promo" href="<?php echo esc_url( $sub->url ?: '#' ); ?>"<?php echo $sub->target ? ' target="' . esc_attr( $sub->target ) . '"' : ''; ?>>
+                <span class="<?php echo esc_attr( $media_cls ); ?>"<?php echo $media_style; ?>></span>
+                <span class="olo-mm-promo-body">
+                    <span class="olo-mm-promo-title"><?php echo esc_html( $sub->title ); ?></span>
+                    <?php if ( $desc !== '' ) : ?>
+                        <span class="olo-mm-promo-desc"><?php echo esc_html( $desc ); ?></span>
+                    <?php endif; ?>
+                    <span class="olo-mm-promo-cta"><?php echo esc_html( olo_t( 'Scopri di più' ) ); ?> &rarr;</span>
+                </span>
+            </a>
         </div>
         <?php
     }
@@ -2742,6 +2880,87 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
                 });
             }
 
+            /* ── E1: Search overlay / command palette (search_style overlay|command) ── */
+            var soOverlay = root.querySelector(".olo-mm-search-overlay");
+            if (soOverlay) {
+                var soInput = soOverlay.querySelector(".olo-mm-search-input");
+                var soResults = soOverlay.querySelector(".olo-mm-search-results");
+                var soIsCmd = soOverlay.classList.contains("olo-mm-search-overlay--cmd");
+                var soTimer = null;
+                var soRestBase = "<?php echo esc_url_raw( rest_url( 'wp/v2/search' ) ); ?>";
+                var soAmp = String.fromCharCode(38); /* evita il letterale & negli script inline */
+                var soOpen = function() {
+                    soOverlay.removeAttribute("hidden");
+                    document.body.style.overflow = "hidden";
+                    setTimeout(function(){ if (soInput) soInput.focus(); }, 30);
+                };
+                var soClose = function() {
+                    soOverlay.setAttribute("hidden", "");
+                    document.body.style.overflow = "";
+                };
+                if (searchBtn) {
+                    searchBtn.addEventListener("click", function(e){ e.preventDefault(); soOpen(); });
+                }
+                soOverlay.querySelectorAll("[data-olo-search-close]").forEach(function(el){
+                    el.addEventListener("click", soClose);
+                });
+                document.addEventListener("keydown", function(e){
+                    var openKey = false;
+                    if (e.key === "/") openKey = true;
+                    if (soIsCmd) {
+                        if (e.metaKey || e.ctrlKey) {
+                            if (e.key === "k" || e.key === "K") openKey = true;
+                        }
+                    }
+                    if (openKey) {
+                        var tag = "";
+                        if (e.target) { if (e.target.tagName) tag = e.target.tagName.toLowerCase(); }
+                        if (tag !== "input") {
+                            if (tag !== "textarea") { e.preventDefault(); soOpen(); }
+                        }
+                    }
+                    if (e.key === "Escape") {
+                        if (soOverlay.getAttribute("hidden") === null) soClose();
+                    }
+                });
+                if (soInput) {
+                    soInput.addEventListener("input", function(){
+                        var q = soInput.value.trim();
+                        if (soTimer) clearTimeout(soTimer);
+                        if (q.length > 1) {
+                            soTimer = setTimeout(function(){
+                                var soSep = (soRestBase.indexOf("?") === -1) ? "?" : soAmp;
+                                var soUrl = soRestBase + soSep + "search=" + encodeURIComponent(q) + soAmp + "per_page=6";
+                                fetch(soUrl, { headers: { "Accept": "application/json" } })
+                                    .then(function(r){ return r.json(); })
+                                    .then(function(items){
+                                        if (!soResults) return;
+                                        soResults.innerHTML = "";
+                                        if (!items) return;
+                                        if (!items.length) {
+                                            var empty = document.createElement("div");
+                                            empty.className = "olo-mm-search-empty";
+                                            empty.textContent = "<?php echo esc_js( olo_t( 'Nessun risultato' ) ); ?>";
+                                            soResults.appendChild(empty);
+                                            return;
+                                        }
+                                        items.forEach(function(it){
+                                            var a = document.createElement("a");
+                                            a.className = "olo-mm-search-result";
+                                            a.href = it.url;
+                                            a.textContent = it.title || "";
+                                            soResults.appendChild(a);
+                                        });
+                                    })
+                                    .catch(function(){});
+                            }, 220);
+                        } else {
+                            if (soResults) soResults.innerHTML = "";
+                        }
+                    });
+                }
+            }
+
             /* ── Mobile search toggle (bar) ── */
             var mobSearchBtn = root.querySelector(".olo-mm-mobile-search");
             if (mobSearchBtn) {
@@ -3004,6 +3223,7 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
         <?php else : ?>
             <a href="<?php echo esc_url( $item->url ); ?>" data-text="<?php echo esc_attr( $item->title ); ?>"<?php echo $item->target ? ' target="' . esc_attr( $item->target ) . '"' : ''; ?>>
                 <?php echo esc_html( $item->title ); ?>
+                <?php $item_badge = $this->get_item_badge( $item ); if ( $item_badge !== '' ) : ?><span class="olo-mm-badge"><?php echo esc_html( $item_badge ); ?></span><?php endif; ?>
                 <?php if ( $has_subs ) : ?>
                     <svg class="olo-mm-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"/></svg>
                 <?php endif; ?>
@@ -3019,6 +3239,25 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
                 endif;
             ?>
         <?php endif;
+    }
+
+    /**
+     * E3 — Badge per-voce. Una classe CSS sulla voce del menu WP nella forma
+     * `badge-<label>` (es. `badge-new`, `badge-hot`, `badge-sale`) genera un badge.
+     * Il label è derivato dal suffisso (trattini → spazi, maiuscolo): badge-new → NEW.
+     * Nessuna chiave salvata nuova.
+     */
+    private function get_item_badge( $item ) {
+        $classes = is_array( $item->classes ) ? $item->classes : [];
+        foreach ( $classes as $c ) {
+            if ( strpos( (string) $c, 'badge-' ) === 0 ) {
+                $label = substr( (string) $c, 6 );
+                if ( $label !== '' ) {
+                    return strtoupper( str_replace( '-', ' ', $label ) );
+                }
+            }
+        }
+        return '';
     }
 
     private function is_button_item( $item, $idx, $total, $s ) {
