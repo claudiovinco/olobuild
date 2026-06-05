@@ -13,6 +13,8 @@
 import { computed } from 'vue';
 import { getPatternCSS } from '@/utils/patternCSS';
 import { getGlowCSS } from '@/utils/glowCSS';
+import { getMeshCSS } from '@/utils/meshCSS';
+import { getCrtCSS } from '@/utils/crtCSS';
 
 // v1.0.55 — Tile ATOMICHE: il loro wrapper esterno (sezione/colonna container)
 // NON deve MAI ricevere bg_color/border-radius/shadow dal preset/settings/style della
@@ -115,12 +117,22 @@ export function buildBgStyle(bg) {
       bg.pattern_color || '#000000',
       bg.pattern_bg_color || '#ffffff',
       bg.pattern_size || 20,
-      (bg.pattern_opacity ?? 50) / 100
+      (bg.pattern_opacity ?? 50) / 100,
+      bg.pattern_thickness,
+      bg.pattern_rotation
     );
   }
 
   if (bg.type === 'glow') {
     return getGlowCSS(bg);
+  }
+
+  if (bg.type === 'mesh') {
+    return getMeshCSS(bg);
+  }
+
+  if (bg.type === 'crt') {
+    return getCrtCSS(bg);
   }
 
   if (bg.type === 'gallery') {
@@ -222,6 +234,8 @@ export function useBackgroundStyle(bgGetter) {
     if (bg.type === 'gradient') return buildBgStyle(bg);
     if (bg.type === 'pattern') return buildBgStyle(bg);
     if (bg.type === 'glow') return buildBgStyle(bg);
+    if (bg.type === 'mesh') return buildBgStyle(bg);
+    if (bg.type === 'crt') return buildBgStyle(bg);
     return {};
   });
 

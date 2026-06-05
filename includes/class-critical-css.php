@@ -414,7 +414,7 @@ class Olo_Critical_CSS {
             }
 
             $settings = $node['settings'] ?? [];
-            $font_keys = [ 'font_family', 'title_font_family', 'heading_font_family' ];
+            $font_keys = [ 'font_family', 'title_font_family', 'heading_font_family', 'tl_title_family', 'tl_text_family', 'tl_yr_family' ];
 
             foreach ( $font_keys as $key ) {
                 if ( ! empty( $settings[ $key ] ) ) {

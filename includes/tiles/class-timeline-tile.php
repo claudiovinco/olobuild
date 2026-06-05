@@ -4,1028 +4,443 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
+/**
+ * Tile Timeline "SUPER" — redesign (handoff "OLObuild - Tile Timeline SUPER").
+ *
+ * 10 dimensioni combinabili: Layout (alt·one·horizontal·navigator) · Ingresso
+ * (sides·bloom·unroll·slot) · Tema (paper·night·neon·blue) · Card
+ * (bubble·glass·polaroid·ticket) · Filo (solid2·dash·dot·comet) · Nodo
+ * (icon·dot·num·year) · Colore (cat·mono) · Media (on·off) · Densità
+ * (comfy·compact) · Stato (scroll-roadmap·solid).
+ *
+ * CSS condiviso col canvas Vue: assets/css/timeline-super.css (namespace .olo-tlsuper),
+ * stampato una sola volta per pagina. Runtime JS scoped per istanza (no &&/|| —
+ * vincolo wptexturize). Migrazione delle vecchie chiavi (layout/marker_type/…).
+ */
 class Olo_Timeline_Tile extends Olo_Tile_Base {
 
     protected $type     = 'timeline';
     protected $name     = 'Timeline';
     protected $icon     = 'dashicons-backup';
     protected $category = 'interactive';
+
     protected $defaults = [
         'items' => [
-            [ 'title' => 'Primo evento', 'description' => 'Descrizione del primo evento.', 'date' => '2024', 'image' => '', 'icon' => 'star', 'icon_color' => '' ],
-            [ 'title' => 'Secondo evento', 'description' => 'Descrizione del secondo evento.', 'date' => '2025', 'image' => '', 'icon' => 'check', 'icon_color' => '' ],
-            [ 'title' => 'Terzo evento', 'description' => 'Descrizione del terzo evento.', 'date' => '2026', 'image' => '', 'icon' => 'heart', 'icon_color' => '' ],
+            [ 'title' => 'Prima riga di codice', 'tag' => 'Fondazione', 'description' => 'Il prototipo del builder: drag-and-drop nativo in WordPress.', 'date' => '2019', 'image' => '', 'video' => '', 'icon' => 'star', 'category' => 'primary', 'icon_color' => '' ],
+            [ 'title' => 'Libreria tile v1', 'tag' => 'Prodotto', 'description' => '40 tile native e il sistema di colori globali.', 'date' => '2021', 'image' => '', 'video' => '', 'icon' => 'grid', 'category' => 'accent', 'icon_color' => '' ],
+            [ 'title' => 'Aurora, bagliori, animazioni', 'tag' => 'Effetti', 'description' => 'Sfondi generativi e transizioni native.', 'date' => '2023', 'image' => '', 'video' => '', 'icon' => 'star', 'category' => 'success', 'icon_color' => '' ],
+            [ 'title' => 'Linguaggio bello & coerente', 'tag' => 'Sistema', 'description' => 'Token globali e controlli inspector allineati.', 'date' => '2025', 'image' => '', 'video' => '', 'icon' => 'settings', 'category' => 'secondary', 'icon_color' => '' ],
+            [ 'title' => '240 tile, un solo standard', 'tag' => 'Futuro', 'description' => 'Ogni categoria curata, un solo standard.', 'date' => '2026', 'image' => '', 'video' => '', 'icon' => 'flag', 'category' => 'primary', 'icon_color' => '' ],
         ],
-        'preset'              => 'classic-center',
-        'effect_color'        => '',
-        'effect_intensity'    => 'medium',
-        'effect_speed'        => 0,
-        'wow_disable'           => false,
-        'wow_backdrop_blur'     => 0,
-        'wow_backdrop_saturate' => 100,
-        'wow_border_style'      => 'solid',
-        'wow_font_family'       => 'inherit',
-        'wow_rotation'          => 0,
-        'wow_perspective'       => 0,
-        'wow_tilt_x'            => 0,
-        'wow_glow_pulse'        => false,
-        'wow_title_glow'        => false,
-        'wow_scanlines'         => false,
-
-        'wow_terminal_prompt' => false,
-        'layout'              => 'vertical-center',
-        'mobile_layout'       => 'vertical-left',
-        'line_color'          => '',
-        'line_width'          => '3',
-        'line_style'          => 'solid',
-        'line_progress'       => false,
-        'line_progress_color' => '',
-        'line_progress_width' => '',
-        'marker_type'         => 'dot',
-        'marker_size'         => '20',
-        'marker_color'        => '',
-        'marker_bg'           => '',
-        'marker_border_width' => '3',
-        'marker_border_color' => '',
-        'marker_shape'        => 'circle',
-        'marker_pulse'        => false,
-        'card_bg'             => '',
-        'card_text_color'     => '',
-        'card_padding'        => '20',
-        'card_border_radius'  => '12',
-        'card_shadow'         => 'md',
-        'card_border_width'   => '0',
-        'card_border_color'   => '',
-        'card_hover'          => 'lift',
-        'card_arrow'          => true,
-        'card_max_width'      => '',
-        'card_media_ratio'    => 'auto',
-        'card_media_margin'   => '0',
-        'card_media_radius'   => '4',
-        'date_position'       => 'outside',
-        'date_color'          => '',
-        'date_size'           => '14',
-        'date_weight'         => '600',
-        'title_size'          => '18',
-        'title_weight'        => '600',
-        'title_color'         => '',
-        'description_size'    => '14',
-        'description_color'   => '',
-        'animation'           => 'fade-up',
-        'stagger_delay'       => '150',
-        'animation_duration'  => '600',
-        'end_marker'          => true,
-        'end_marker_icon'     => 'flag',
-        'end_marker_color'    => '',
-        'end_marker_bg'       => '',
-        'end_marker_size'     => '',
-        'h_card_width'        => '300',
-        'h_visible_items'     => '3',
-        'h_gap'               => '24',
-        'h_arrow_color'       => '',
-        'h_arrow_bg'          => '',
-            'border'                  => [],
-        'border_hover'            => [],
-        'border_hover_duration'   => 300,
-        'border_effect'           => 'none',
-        'border_effect_intensity' => 'medium',
-        'border_effect_color2'    => '',
-        'border_effect_angle'     => 135,
-        'border_effect_speed'     => 4,
+        'tl_layout'  => 'alt',
+        'tl_reveal'  => 'sides',
+        'tl_theme'   => 'paper',
+        'tl_card'    => 'bubble',
+        'tl_thread'  => 'solid2',
+        'tl_node'    => 'icon',
+        'tl_color'   => 'cat',
+        'tl_media'   => 'on',
+        'tl_density' => 'comfy',
+        'tl_line'    => 'scroll',
+        'tl_transparent' => false,
+        // Personalizzazione (override; '' o 0 = default variante)
+        'tl_rail_color' => '', 'tl_rail_w' => 0, 'tl_fill_from' => '', 'tl_fill_to' => '',
+        'tl_node_size' => 0, 'tl_node_border' => 0,
+        'tl_card_bg' => '', 'tl_card_radius' => 0, 'tl_card_maxw' => 0, 'tl_card_pad' => 0,
+        'tl_media_ratio' => 'auto', 'tl_media_h' => 0, 'tl_media_fit' => 'cover', 'tl_media_radius' => 0, 'tl_media_bar' => true,
+        'tl_title_size' => 0, 'tl_title_weight' => '', 'tl_title_color' => '', 'tl_title_family' => '',
+        'tl_text_size' => 0, 'tl_text_color' => '', 'tl_text_lh' => 0, 'tl_text_align' => 'left', 'tl_text_family' => '',
+        'tl_yr_size' => 0, 'tl_yr_color' => '', 'tl_yr_family' => '',
+        'tl_show_tag' => true, 'tl_tag_color' => '',
+        'h_card_width' => '268',
+        'border'                => [],
+        'border_hover'          => [],
+        'border_hover_duration' => 300,
     ];
 
     public function get_controls() { return []; }
 
-    /**
-     * V3.26.0 — Extra CSS for "audacious" timeline presets.
-     */
-    private function get_preset_extra_css( $preset_id, $sel, $s = [] ) {
-        // @deprecated v1.0.73 — refactor profondo: i preset audaci ora settano direttamente
-        // i field standard tramite TILE_PRESETS in BuilderInspector.vue, e i field wow_* via
-        // build_wow_effects_css(). Nessun !important, ogni proprieta personalizzabile.
-        return '';
+    /** Stampa il foglio di stile condiviso una sola volta per richiesta. */
+    private function print_shared_css() {
+        static $done = false;
+        if ( $done ) { return; }
+        $done = true;
+        $path = OLO_PATH . 'assets/css/timeline-super.css';
+        if ( file_exists( $path ) ) {
+            echo '<style id="olo-tlsuper-css">' . file_get_contents( $path ) . '</style>'; // phpcs:ignore
+        }
     }
 
-    public function render( $settings ) {
-        $s     = wp_parse_args( $settings, $this->defaults );
-        $items = $this->parse_items( $s['items'] );
-        $count = count( $items );
-
-        if ( $count === 0 ) {
-            return '';
+    /** Migra le vecchie chiavi (raw, prima del merge coi default). */
+    private function migrate( $raw ) {
+        if ( ! is_array( $raw ) ) { return $raw; }
+        if ( ! isset( $raw['tl_layout'] ) && isset( $raw['layout'] ) ) {
+            $map = [ 'vertical-center' => 'alt', 'vertical-left' => 'one', 'vertical-right' => 'one', 'horizontal' => 'horizontal' ];
+            $raw['tl_layout'] = $map[ $raw['layout'] ] ?? 'alt';
         }
-
-        $uid    = 'olo-tl-' . wp_rand( 10000, 99999 );
-        $layout = $s['layout'] ?: 'vertical-center';
-        $preset_id = $s['preset'] ?? 'classic-center';
-
-        ob_start();
-
-        $this->render_styles( $uid, $s, $layout, $count );
-
-        // Append preset extra CSS if it's an audacious preset
-        $preset_css = $this->get_preset_extra_css( $preset_id, '.' . $uid, $s );
-        $preset_css .= $this->build_wow_effects_css( $s, '.' . $uid, '.olo-timeline-title' );
-        if ( $preset_css ) {
-            echo '<style>' . $preset_css . '</style>';
+        if ( ! isset( $raw['tl_node'] ) && isset( $raw['marker_type'] ) ) {
+            $map = [ 'dot' => 'dot', 'icon' => 'icon', 'number' => 'num' ];
+            $raw['tl_node'] = $map[ $raw['marker_type'] ] ?? 'icon';
         }
-
-        if ( $layout === 'horizontal' ) {
-            $this->render_horizontal( $uid, $items, $s );
-        } else {
-            $this->render_vertical( $uid, $items, $s, $layout );
+        if ( ! isset( $raw['tl_thread'] ) && isset( $raw['line_style'] ) ) {
+            $map = [ 'solid' => 'solid2', 'dashed' => 'dash', 'dotted' => 'dot' ];
+            $raw['tl_thread'] = $map[ $raw['line_style'] ] ?? 'solid2';
         }
-
-        $tfx_css = $this->tfx_css( $s, '.' . $uid );
-        if ( $tfx_css ) echo '<style>' . $tfx_css . '</style>';
-        $this->tfx_print_script();
-                // Border system
-        $border_css        = $this->build_border_css( $s['border'] ?? [] );
-        $border_hover_css  = $this->build_border_hover_css( ".{$uid}", $s['border'] ?? [], $s['border_hover'] ?? [], intval( $s['border_hover_duration'] ?? 300 ) );
-        $border_effect_css = $this->build_border_effect_css( ".{$uid}", $s['border'] ?? [], $s );
-        if ( $border_css || $border_hover_css || $border_effect_css ) {
-            echo '<style>';
-            if ( $border_css ) echo ".{$uid}{{$border_css}}";
-            echo $border_hover_css . $border_effect_css . '</style>';
+        if ( ! isset( $raw['tl_line'] ) && isset( $raw['line_progress'] ) ) {
+            $raw['tl_line'] = ! empty( $raw['line_progress'] ) ? 'scroll' : 'solid';
         }
-        return ob_get_clean();
+        return $raw;
     }
 
     private function parse_items( $raw ) {
-        if ( ! is_array( $raw ) ) {
-            return [];
-        }
+        if ( ! is_array( $raw ) ) { return []; }
         $items = [];
         foreach ( $raw as $item ) {
-            if ( is_array( $item ) ) {
-                $items[] = [
-                    'title'       => $item['title'] ?? '',
-                    'description' => $item['description'] ?? '',
-                    'date'        => $item['date'] ?? '',
-                    'image'       => $item['image'] ?? '',
-                    'video'       => $item['video'] ?? '',
-                    'icon'        => $item['icon'] ?? '',
-                    'icon_color'  => $item['icon_color'] ?? '',
-                ];
-            }
+            if ( ! is_array( $item ) ) { continue; }
+            $items[] = [
+                'title'       => $item['title'] ?? '',
+                'tag'         => $item['tag'] ?? '',
+                'description' => $item['description'] ?? '',
+                'date'        => $item['date'] ?? '',
+                'image'       => $item['image'] ?? '',
+                'video'       => $item['video'] ?? '',
+                'icon'        => $item['icon'] ?? 'star',
+                'category'    => $item['category'] ?? 'primary',
+                'icon_color'  => $item['icon_color'] ?? '',
+            ];
         }
         return $items;
     }
 
-    /**
-     * Render media (image or video) inside a timeline card.
-     */
-    private function render_media( $item ) {
-        $image = $item['image'] ?? '';
-        $video = $item['video'] ?? '';
+    private function cat_class( $cat ) {
+        $allow = [ 'primary', 'secondary', 'accent', 'success', 'warning', 'info' ];
+        return in_array( $cat, $allow, true ) ? $cat : 'primary';
+    }
 
-        if ( empty( $image ) && empty( $video ) ) {
-            return '';
+    /** Override fini → custom property --tl-* sul root (vuoto/0 = usa default variante). */
+    private function custom_style( $s ) {
+        $v = [];
+        $color = function ( $k, $css ) use ( $s, &$v ) {
+            $raw = $s[ $k ] ?? '';
+            if ( $raw === '' ) { return; }
+            $c = $this->safe_color_css( $raw );
+            if ( $c !== '' ) { $v[] = $css . ':' . $c; }
+        };
+        $px = function ( $k, $css ) use ( $s, &$v ) {
+            $n = intval( $s[ $k ] ?? 0 );
+            if ( $n > 0 ) { $v[] = $css . ':' . $n . 'px'; }
+        };
+        // font-family: valore verbatim ripulito (no CSS injection); l'attributo style è poi esc_attr nel render.
+        $str = function ( $k, $css ) use ( $s, &$v ) {
+            $raw = trim( (string) ( $s[ $k ] ?? '' ) );
+            $raw = preg_replace( '/[^A-Za-z0-9 ,"\'\-]/', '', $raw );
+            if ( $raw !== '' ) { $v[] = $css . ':' . $raw; }
+        };
+        $color( 'tl_rail_color', '--tl-rail-color' );
+        $px( 'tl_rail_w', '--tl-rail-w' );
+        $color( 'tl_fill_from', '--tl-fill-from' );
+        $color( 'tl_fill_to', '--tl-fill-to' );
+        $px( 'tl_node_size', '--tl-node-size' );
+        $px( 'tl_node_border', '--tl-node-bd' );
+        $color( 'tl_card_bg', '--tl-card-bg' );
+        $px( 'tl_card_radius', '--tl-card-radius' );
+        $px( 'tl_card_maxw', '--tl-card-maxw' );
+        $px( 'tl_card_pad', '--tl-card-pad' );
+        $ratio = $s['tl_media_ratio'] ?? 'auto';
+        if ( $ratio !== 'auto' && preg_match( '#^\d+/\d+$#', $ratio ) ) {
+            $v[] = '--tl-media-ar:' . $ratio;
+            $v[] = '--tl-media-h:auto';
+        } else {
+            $px( 'tl_media_h', '--tl-media-h' );
         }
+        $fit = $s['tl_media_fit'] ?? 'cover';
+        if ( in_array( $fit, [ 'contain', 'fill', 'none' ], true ) ) { $v[] = '--tl-media-fit:' . $fit; }
+        $px( 'tl_media_radius', '--tl-media-radius' );
+        $px( 'tl_title_size', '--tl-title-size' );
+        $w = intval( $s['tl_title_weight'] ?? 0 );
+        if ( $w > 0 ) { $v[] = '--tl-title-weight:' . $w; }
+        $color( 'tl_title_color', '--tl-title-color' );
+        $px( 'tl_text_size', '--tl-text-size' );
+        $color( 'tl_text_color', '--tl-text-color' );
+        $lh = floatval( $s['tl_text_lh'] ?? 0 );
+        if ( $lh > 0 ) { $v[] = '--tl-text-lh:' . rtrim( rtrim( number_format( $lh, 2, '.', '' ), '0' ), '.' ); }
+        $al = $s['tl_text_align'] ?? 'left';
+        if ( in_array( $al, [ 'center', 'right' ], true ) ) { $v[] = '--tl-text-align:' . $al; }
+        $px( 'tl_yr_size', '--tl-yr-size' );
+        $color( 'tl_yr_color', '--tl-yr-color' );
+        $color( 'tl_tag_color', '--tl-tag-color' );
+        $str( 'tl_title_family', '--tl-title-family' );
+        $str( 'tl_text_family', '--tl-text-family' );
+        $str( 'tl_yr_family', '--tl-yr-family' );
+        return implode( ';', $v );
+    }
 
-        $html = '<div class="olo-tl-media">';
+    /** Contenuto del nodo: icona (render_icon_html) + pip + label (num/anno). */
+    private function node_inner( $item, $i, $node, $mono ) {
+        $icon = $item['icon'] ?: 'star';
+        $svg  = $this->render_icon_html( $icon, 0.9 );
+        $lab  = '';
+        if ( $node === 'num' )  { $lab = sprintf( '%02d', $i + 1 ); }
+        if ( $node === 'year' ) { $lab = esc_html( $item['date'] ); }
+        return $svg . '<span class="pip"></span><span class="lab">' . $lab . '</span>';
+    }
 
-        if ( ! empty( $video ) ) {
-            $html .= $this->get_video_embed( $video );
-        } elseif ( ! empty( $image ) ) {
-            $html .= '<img src="' . esc_url( $image ) . '" alt="' . esc_attr( wp_strip_all_tags( $item['title'] ?? '' ) ) . '" loading="lazy" />';
+    /** Blocco media della card (immagine/video o placeholder a strisce). */
+    private function media_html( $item ) {
+        $html = '<div class="it-media"><span class="bar"></span>';
+        if ( ! empty( $item['video'] ) ) {
+            $html .= $this->get_video_embed( $item['video'] );
+        } elseif ( ! empty( $item['image'] ) ) {
+            $html .= '<img src="' . esc_url( $item['image'] ) . '" alt="' . esc_attr( wp_strip_all_tags( $item['title'] ) ) . '" loading="lazy" />';
+        } else {
+            $html .= '<span class="ph">' . esc_html( $item['tag'] ?: $item['title'] ) . '</span>';
         }
-
         $html .= '</div>';
         return $html;
     }
 
-    /**
-     * Convert a video URL to embeddable HTML (YouTube, Vimeo, or direct file).
-     */
     private function get_video_embed( $url ) {
         $url = trim( $url );
-
-        // YouTube
         if ( preg_match( '/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/', $url, $m ) ) {
             return '<iframe src="https://www.youtube-nocookie.com/embed/' . esc_attr( $m[1] ) . '" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>';
         }
-
-        // Vimeo
         if ( preg_match( '/vimeo\.com\/(\d+)/', $url, $m ) ) {
             return '<iframe src="https://player.vimeo.com/video/' . esc_attr( $m[1] ) . '?dnt=1" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen loading="lazy"></iframe>';
         }
-
-        // Direct video file
         return '<video controls preload="metadata"><source src="' . esc_url( $url ) . '" type="video/mp4"></video>';
     }
 
-    private function render_styles( $uid, $s, $layout, $count ) {
-        $line_w    = intval( $s['line_width'] ) ?: 3;
-        $line_clr  = $this->safe_color_css( $s['line_color'] ) ?: 'var(--olo-color-border, #E5E7EB)';
-        $line_stl  = in_array( $s['line_style'], [ 'solid', 'dashed', 'dotted' ] ) ? $s['line_style'] : 'solid';
-        $mk_size   = intval( $s['marker_size'] ) ?: 20;
-        $mk_clr    = $this->safe_color_css( $s['marker_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
-        $mk_bg     = $this->safe_color_css( $s['marker_bg'] ) ?: 'var(--olo-color-surface, #FFFFFF)';
-        $mk_bw     = intval( $s['marker_border_width'] );
-        $mk_bc     = $this->safe_color_css( $s['marker_border_color'] ) ?: $mk_clr;
-        $mk_shape  = $s['marker_shape'] ?: 'circle';
-        $mk_pulse  = ! empty( $s['marker_pulse'] );
-        $mk_type   = $s['marker_type'] ?: 'dot';
+    public function render( $settings ) {
+        $raw   = $this->migrate( is_array( $settings ) ? $settings : [] );
+        $s     = wp_parse_args( $raw, $this->defaults );
+        $items = $this->parse_items( $s['items'] );
+        $count = count( $items );
+        if ( $count === 0 ) { return ''; }
 
-        $c_bg      = $this->safe_color_css( $s['card_bg'] ) ?: 'var(--olo-color-surface, #FFFFFF)';
-        $c_text    = $this->safe_color_css( $s['card_text_color'] ) ?: 'var(--olo-color-text, #374151)';
-        $c_pad = Olo_Tile_Utils::spacing_css( $s['tile_padding'] ?? $s['card_padding'] ?? 20, 20 );
-        $c_rad     = Olo_Tile_Utils::border_radius( $s['card_border_radius'] ?? 0 );
-        $c_rad_hover_css = Olo_Tile_Utils::radius_force_css( $s['card_border_radius_hover'] ?? null );
-        $c_bw      = intval( $s['card_border_width'] );
-        $c_bc      = $this->safe_color_css( $s['card_border_color'] ) ?: 'var(--olo-color-border, #E5E7EB)';
-        $c_hover   = $s['card_hover'] ?: 'none';
-        $c_maxw    = intval( $s['card_max_width'] ?? 0 );
+        $layout = in_array( $s['tl_layout'], [ 'alt', 'one', 'horizontal', 'navigator' ], true ) ? $s['tl_layout'] : 'alt';
+        $theme  = in_array( $s['tl_theme'], [ 'paper', 'night', 'neon', 'blue' ], true ) ? $s['tl_theme'] : 'paper';
+        $mono   = ( $s['tl_color'] === 'mono' );
+        $uid    = 'olo-tl-' . wp_rand( 10000, 99999 );
 
-        $c_shadow = Olo_Tile_Utils::shadow( $s['card_shadow'] ?? 'none' );
+        ob_start();
+        $this->print_shared_css();
 
-        $d_clr   = $this->safe_color_css( $s['date_color'] ) ?: 'var(--olo-color-text-faint, #9CA3AF)';
-        $d_size  = intval( $s['date_size'] ) ?: 14;
-        $d_wt    = intval( $s['date_weight'] ) ?: 600;
+        $root_cls = 'olo-tlsuper';
+        if ( $theme !== 'paper' ) { $root_cls .= ' t-' . $theme; }
+        if ( $mono ) { $root_cls .= ' mono'; }
+        if ( ! empty( $s['tl_transparent'] ) ) { $root_cls .= ' bg-transparent'; }
+        if ( empty( $s['tl_media_bar'] ) ) { $root_cls .= ' tl-nobar'; }
+        if ( empty( $s['tl_show_tag'] ) ) { $root_cls .= ' tl-notag'; }
+        // stile card sul root (oltre che su .super): serve a navigatore/orizzontale
+        if ( $s['tl_card'] !== 'bubble' ) { $root_cls .= ' card-' . sanitize_html_class( $s['tl_card'] ); }
+        $cstyle = $this->custom_style( $s );
+        echo '<div class="' . esc_attr( $root_cls . ' ' . $uid ) . '" id="' . esc_attr( $uid ) . '"' . ( $cstyle ? ' style="' . esc_attr( $cstyle ) . '"' : '' ) . '>';
 
-        $t_size  = intval( $s['title_size'] ) ?: 18;
-        $t_wt    = intval( $s['title_weight'] ) ?: 600;
-        $t_clr   = $this->safe_color_css( $s['title_color'] );
-        $desc_sz = intval( $s['description_size'] ) ?: 14;
-        $desc_cl = $this->safe_color_css( $s['description_color'] );
+        if ( $layout === 'horizontal' ) {
+            $this->render_horizontal( $items, $s, $mono );
+        } elseif ( $layout === 'navigator' ) {
+            $this->render_navigator( $items, $s );
+        } else {
+            $this->render_vertical( $items, $s, $layout, $mono );
+        }
 
-        $anim      = $s['animation'] ?: 'none';
-        $anim_dur  = intval( $s['animation_duration'] ) ?: 600;
-        $stagger   = intval( $s['stagger_delay'] ) ?: 150;
+        echo '</div>';
 
-        $mobile_layout = $s['mobile_layout'] ?: 'vertical-left';
+        // Bordo (sistema standard) sulla card
+        $border_css        = $this->build_border_css( $s['border'] ?? [] );
+        $border_hover_css  = $this->build_border_hover_css( ".{$uid} .it-card", $s['border'] ?? [], $s['border_hover'] ?? [], intval( $s['border_hover_duration'] ?? 300 ) );
+        $border_effect_css = $this->build_border_effect_css( ".{$uid} .it-card", $s['border'] ?? [], $s );
+        if ( $border_css || $border_hover_css || $border_effect_css ) {
+            echo '<style>';
+            if ( $border_css ) { echo ".{$uid} .it-card{{$border_css}}"; }
+            echo $border_hover_css . $border_effect_css . '</style>';
+        }
 
-        $progress     = ! empty( $s['line_progress'] );
-        $progress_clr = $this->safe_color_css( $s['line_progress_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
-        $progress_w   = intval( $s['line_progress_width'] ?? 0 ) ?: ( $line_w + 4 );
-
-        $mk_radius = $mk_shape === 'circle' ? '50%' : '4px';
-        $mk_transform = $mk_shape === 'diamond' ? 'rotate(45deg)' : 'none';
-
-        // End marker
-        $end_marker = ! empty( $s['end_marker'] );
-        $end_icon   = sanitize_text_field( $s['end_marker_icon'] ?? 'flag' );
-        $end_clr    = $this->safe_color_css( $s['end_marker_color'] ?? '' ) ?: $mk_clr;
-        $end_bg     = $this->safe_color_css( $s['end_marker_bg'] ?? '' ) ?: $mk_bg;
-        $end_size   = intval( $s['end_marker_size'] ?? 0 ) ?: $mk_size;
-
-        // Card arrow
-        $card_arrow = ! empty( $s['card_arrow'] );
-
-        // Media
-        $m_ratio  = $s['card_media_ratio'] ?: 'auto';
-        $m_margin = intval( $s['card_media_margin'] ?? 0 );
-        $m_radius = Olo_Tile_Utils::border_radius( $s['card_media_radius'] ?? 4 );
-        $m_radius_hover_css = Olo_Tile_Utils::radius_force_css( $s['card_media_radius_hover'] ?? null );
-
-        // Horizontal
-        $h_gap    = intval( $s['h_gap'] ) ?: 24;
-        $h_cw     = intval( $s['h_card_width'] ) ?: 300;
-        $h_arr_c  = $this->safe_color_css( $s['h_arrow_color'] ) ?: 'var(--olo-color-text, #374151)';
-        $h_arr_bg = $this->safe_color_css( $s['h_arrow_bg'] ) ?: 'var(--olo-color-surface-alt, #F3F4F6)';
-
-        ?>
-        <style>
-            /* === Container === */
-            .<?php echo $uid; ?> {
-                position: relative;
-            }
-
-            /* === Line === */
-            .<?php echo $uid; ?> .olo-tl-line {
-                position: absolute;
-                <?php if ( $layout === 'horizontal' ) : ?>
-                top: <?php echo intval( $mk_size / 2 ); ?>px;
-                left: 0; right: 0;
-                height: <?php echo $line_w; ?>px;
-                <?php if ( $line_stl !== 'solid' ) : ?>
-                background: none;
-                border-top: <?php echo $line_w; ?>px <?php echo $line_stl; ?> <?php echo $line_clr; ?>;
-                height: 0;
-                <?php else : ?>
-                background: <?php echo $line_clr; ?>;
-                <?php endif; ?>
-                <?php else : ?>
-                top: 0; bottom: 0;
-                width: <?php echo $line_w; ?>px;
-                <?php if ( $line_stl !== 'solid' ) : ?>
-                background: none;
-                border-left: <?php echo $line_w; ?>px <?php echo $line_stl; ?> <?php echo $line_clr; ?>;
-                width: 0;
-                <?php else : ?>
-                background: <?php echo $line_clr; ?>;
-                <?php endif; ?>
-                <?php if ( $layout === 'vertical-center' ) : ?>
-                left: 50%;
-                transform: translateX(-50%);
-                <?php elseif ( $layout === 'vertical-right' ) : ?>
-                right: <?php echo intval( $mk_size / 2 - $line_w / 2 ); ?>px;
-                <?php else : ?>
-                left: <?php echo intval( $mk_size / 2 - $line_w / 2 ); ?>px;
-                <?php endif; ?>
-                <?php endif; ?>
-                z-index: 1;
-            }
-
-            /* === Progress line === */
-            <?php if ( $progress && $layout !== 'horizontal' ) : ?>
-            .<?php echo $uid; ?> .olo-tl-progress {
-                position: absolute;
-                top: 0;
-                height: 0%;
-                width: <?php echo $progress_w; ?>px;
-                background: <?php echo $progress_clr; ?>;
-                border-radius: <?php echo intval( $progress_w / 2 ); ?>px;
-                z-index: 0;
-                transition: height 0.1s linear;
-                <?php if ( $layout === 'vertical-center' ) : ?>
-                left: 50%;
-                transform: translateX(-50%);
-                <?php elseif ( $layout === 'vertical-right' ) : ?>
-                right: <?php echo intval( $mk_size / 2 - $progress_w / 2 ); ?>px;
-                <?php else : ?>
-                left: <?php echo intval( $mk_size / 2 - $progress_w / 2 ); ?>px;
-                <?php endif; ?>
-            }
-            <?php endif; ?>
-
-            /* === Marker === */
-            .<?php echo $uid; ?> .olo-tl-marker {
-                width: <?php echo $mk_size; ?>px;
-                height: <?php echo $mk_size; ?>px;
-                border-radius: <?php echo $mk_radius; ?>;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                flex-shrink: 0;
-                position: relative;
-                z-index: 3;
-                font-size: <?php echo intval( $mk_size * 0.45 ); ?>px;
-                font-weight: 700;
-                color: <?php echo $mk_clr; ?>;
-                background: <?php echo $mk_type === 'dot' ? $mk_clr : $mk_bg; ?>;
-                transform: <?php echo $mk_transform; ?>;
-                <?php if ( $mk_bw > 0 ) : ?>
-                border: <?php echo $mk_bw; ?>px solid <?php echo $mk_bc; ?>;
-                <?php endif; ?>
-            }
-
-            <?php if ( $mk_pulse ) : ?>
-            .<?php echo $uid; ?> .olo-tl-marker::after {
-                content: '';
-                position: absolute;
-                inset: -4px;
-                border-radius: <?php echo $mk_radius; ?>;
-                border: 2px solid <?php echo $mk_clr; ?>;
-                animation: olo-tl-pulse-<?php echo $uid; ?> 2s ease-out infinite;
-            }
-            @keyframes olo-tl-pulse-<?php echo $uid; ?> {
-                0% { transform: scale(1); opacity: 0.8; }
-                100% { transform: scale(1.8); opacity: 0; }
-            }
-            <?php endif; ?>
-
-            /* === End marker === */
-            <?php if ( $end_marker ) : ?>
-            .<?php echo $uid; ?> .olo-tl-end-marker {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                position: relative;
-                z-index: 3;
-            }
-            .<?php echo $uid; ?> .olo-tl-end-marker .olo-tl-marker {
-                width: <?php echo $end_size; ?>px;
-                height: <?php echo $end_size; ?>px;
-                background: <?php echo $end_bg; ?>;
-                color: <?php echo $end_clr; ?>;
-                font-size: <?php echo intval( $end_size * 0.5 ); ?>px;
-            }
-            <?php endif; ?>
-
-            /* === Card === */
-            .<?php echo $uid; ?> .olo-tl-card {
-                background: <?php echo $c_bg; ?>;
-                color: <?php echo $c_text; ?>;
-                padding: <?php echo $c_pad; ?>;
-                border-radius: <?php echo $c_rad; ?>;
-                box-shadow: <?php echo $c_shadow; ?>;
-                position: relative;
-                transition: transform 0.3s ease, box-shadow 0.3s ease;
-                <?php if ( $c_bw > 0 ) : ?>
-                border: <?php echo $c_bw; ?>px solid <?php echo $c_bc; ?>;
-                <?php endif; ?>
-                <?php if ( $c_maxw > 0 ) : ?>
-                max-width: <?php echo $c_maxw; ?>px;
-                <?php endif; ?>
-            }
-            <?php if ( $c_rad_hover_css !== '' ) : ?>.<?php echo $uid; ?> .olo-tl-card{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?> .olo-tl-card:hover{border-radius:<?php echo $c_rad_hover_css; ?> !important}<?php endif; ?>
-
-            <?php if ( $c_hover === 'lift' ) : ?>
-            .<?php echo $uid; ?> .olo-tl-card:hover {
-                transform: translateY(-4px);
-                box-shadow: 0 8px 24px rgba(0,0,0,.3);
-            }
-            <?php elseif ( $c_hover === 'glow' ) : ?>
-            .<?php echo $uid; ?> .olo-tl-card:hover {
-                box-shadow: 0 0 20px color-mix(in srgb, <?php echo $mk_clr; ?> 25%, transparent);
-            }
-            <?php elseif ( $c_hover === 'scale' ) : ?>
-            .<?php echo $uid; ?> .olo-tl-card:hover {
-                transform: scale(1.03);
-            }
-            <?php endif; ?>
-
-            /* === Media === */
-            .<?php echo $uid; ?> .olo-tl-media {
-                overflow: hidden;
-                border-radius: <?php echo $m_radius; ?>;
-                margin-bottom: 8px;
-                <?php if ( $m_ratio !== 'auto' ) : ?>
-                aspect-ratio: <?php echo esc_attr( $m_ratio ); ?>;
-                <?php endif; ?>
-                <?php if ( $m_margin < 0 ) : ?>
-                margin: <?php echo -$c_pad; ?>px <?php echo -$c_pad; ?>px 8px <?php echo -$c_pad; ?>px;
-                border-radius: 0;
-                <?php elseif ( $m_margin > 0 ) : ?>
-                margin: <?php echo $m_margin; ?>px <?php echo $m_margin; ?>px 8px <?php echo $m_margin; ?>px;
-                <?php endif; ?>
-            }
-            <?php if ( $m_radius_hover_css !== '' ) : ?>.<?php echo $uid; ?> .olo-tl-media{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?> .olo-tl-media:hover{border-radius:<?php echo $m_radius_hover_css; ?> !important}<?php endif; ?>
-            .<?php echo $uid; ?> .olo-tl-media img,
-            .<?php echo $uid; ?> .olo-tl-media video,
-            .<?php echo $uid; ?> .olo-tl-media iframe {
-                width: 100%;
-                <?php if ( $m_ratio !== 'auto' ) : ?>
-                height: 100%;
-                object-fit: cover;
-                <?php endif; ?>
-                display: block;
-            }
-
-            /* === Card arrow === */
-            <?php if ( $card_arrow && $layout !== 'horizontal' ) : ?>
-            .<?php echo $uid; ?> .olo-tl-arrow {
-                position: absolute;
-                top: 14px;
-                width: 0; height: 0;
-                border-style: solid;
-            }
-            .<?php echo $uid; ?> .olo-tl-arrow--left {
-                left: -8px;
-                border-width: 8px 8px 8px 0;
-                border-color: transparent <?php echo $c_bg; ?> transparent transparent;
-            }
-            .<?php echo $uid; ?> .olo-tl-arrow--right {
-                right: -8px;
-                border-width: 8px 0 8px 8px;
-                border-color: transparent transparent transparent <?php echo $c_bg; ?>;
-            }
-            <?php endif; ?>
-
-            /* === Date === */
-            .<?php echo $uid; ?> .olo-tl-date {
-                font-size: <?php echo $d_size; ?>px;
-                font-weight: <?php echo $d_wt; ?>;
-                color: <?php echo $d_clr; ?>;
-            }
-
-            /* === Typography === */
-            .<?php echo $uid; ?> .olo-tl-title {
-                font-size: <?php echo $t_size; ?>px;
-                font-weight: <?php echo $t_wt; ?>;
-                <?php if ( $t_clr ) : ?>color: <?php echo $t_clr; ?>;<?php endif; ?>
-                margin: 0 0 6px;
-                line-height: 1.3;
-            }
-            .<?php echo $uid; ?> .olo-tl-desc {
-                font-size: <?php echo $desc_sz; ?>px;
-                <?php if ( $desc_cl ) : ?>color: <?php echo $desc_cl; ?>;<?php endif; ?>
-                opacity: 0.85;
-                line-height: 1.5;
-                margin: 0;
-            }
-            .<?php echo $uid; ?> .olo-tl-desc p { margin: 0 0 0.5em; }
-            .<?php echo $uid; ?> .olo-tl-desc p:last-child { margin-bottom: 0; }
-
-            /* === Animation === */
-            <?php if ( $anim !== 'none' ) : ?>
-            .<?php echo $uid; ?> .olo-tl-item {
-                opacity: 0;
-            }
-            .<?php echo $uid; ?> .olo-tl-item.olo-tl-visible {
-                animation: olo-tl-anim-<?php echo $uid; ?> <?php echo $anim_dur; ?>ms ease forwards;
-            }
-            <?php if ( $anim === 'fade-up' ) : ?>
-            @keyframes olo-tl-anim-<?php echo $uid; ?> {
-                from { opacity: 0; transform: translateY(30px); }
-                to { opacity: 1; transform: translateY(0); }
-            }
-            <?php elseif ( $anim === 'fade-in' ) : ?>
-            @keyframes olo-tl-anim-<?php echo $uid; ?> {
-                from { opacity: 0; }
-                to { opacity: 1; }
-            }
-            <?php elseif ( $anim === 'slide-left' ) : ?>
-            @keyframes olo-tl-anim-<?php echo $uid; ?> {
-                from { opacity: 0; transform: translateX(-40px); }
-                to { opacity: 1; transform: translateX(0); }
-            }
-            <?php elseif ( $anim === 'slide-right' ) : ?>
-            @keyframes olo-tl-anim-<?php echo $uid; ?> {
-                from { opacity: 0; transform: translateX(40px); }
-                to { opacity: 1; transform: translateX(0); }
-            }
-            <?php elseif ( $anim === 'zoom-in' ) : ?>
-            @keyframes olo-tl-anim-<?php echo $uid; ?> {
-                from { opacity: 0; transform: scale(0.8); }
-                to { opacity: 1; transform: scale(1); }
-            }
-            <?php endif; ?>
-            <?php endif; ?>
-
-            /* === Vertical layouts === */
-            <?php if ( $layout !== 'horizontal' ) : ?>
-            .<?php echo $uid; ?> .olo-tl-items {
-                display: flex;
-                flex-direction: column;
-                gap: 24px;
-                position: relative;
-                z-index: 2;
-            }
-            .<?php echo $uid; ?> .olo-tl-item {
-                display: flex;
-                align-items: flex-start;
-                gap: 16px;
-                position: relative;
-            }
-            .<?php echo $uid; ?> .olo-tl-marker-wrap {
-                flex-shrink: 0;
-                display: flex;
-                align-items: flex-start;
-                justify-content: center;
-                position: relative;
-                z-index: 3;
-            }
-
-            <?php if ( $layout === 'vertical-center' ) : ?>
-            .<?php echo $uid; ?> .olo-tl-date-col {
-                flex: 1;
-                min-width: 0;
-                display: flex;
-                align-items: flex-start;
-                padding-top: 4px;
-            }
-            .<?php echo $uid; ?> .olo-tl-card-col {
-                flex: 1;
-                min-width: 0;
-            }
-            .<?php echo $uid; ?> .olo-tl-item--left {
-                flex-direction: row;
-            }
-            .<?php echo $uid; ?> .olo-tl-item--left .olo-tl-date-col {
-                justify-content: flex-end;
-                text-align: right;
-            }
-            .<?php echo $uid; ?> .olo-tl-item--right {
-                flex-direction: row-reverse;
-            }
-            .<?php echo $uid; ?> .olo-tl-item--right .olo-tl-date-col {
-                justify-content: flex-start;
-                text-align: left;
-            }
-            <?php elseif ( $layout === 'vertical-right' ) : ?>
-            .<?php echo $uid; ?> .olo-tl-item {
-                flex-direction: row-reverse;
-            }
-            .<?php echo $uid; ?> .olo-tl-card-col {
-                flex: 1;
-                min-width: 0;
-            }
-            <?php else : /* vertical-left */ ?>
-            .<?php echo $uid; ?> .olo-tl-card-col {
-                flex: 1;
-                min-width: 0;
-            }
-            <?php endif; ?>
-            <?php endif; ?>
-
-            /* === Horizontal === */
-            <?php if ( $layout === 'horizontal' ) : ?>
-            .<?php echo $uid; ?> .olo-tl-h-wrap {
-                position: relative;
-            }
-            .<?php echo $uid; ?> .olo-tl-h-viewport {
-                overflow: hidden;
-                position: relative;
-                padding: 0 4px;
-                max-width: <?php echo intval( $h_vis * $h_cw + ( $h_vis - 1 ) * $h_gap ); ?>px;
-                margin: 0 auto;
-            }
-            .<?php echo $uid; ?> .olo-tl-h-track {
-                display: flex;
-                gap: <?php echo $h_gap; ?>px;
-                transition: transform 0.4s ease;
-                position: relative;
-                z-index: 2;
-            }
-            .<?php echo $uid; ?> .olo-tl-h-item {
-                width: <?php echo $h_cw; ?>px;
-                flex-shrink: 0;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                gap: 12px;
-            }
-            .<?php echo $uid; ?> .olo-tl-h-arrow {
-                position: absolute;
-                top: 50%;
-                transform: translateY(-50%);
-                z-index: 10;
-                width: 40px; height: 40px;
-                border-radius: 50%;
-                border: none;
-                cursor: pointer;
-                font-size: 22px;
-                font-weight: 700;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                color: <?php echo $h_arr_c; ?>;
-                background: <?php echo $h_arr_bg; ?>;
-                transition: opacity 0.2s;
-            }
-            .<?php echo $uid; ?> .olo-tl-h-arrow:hover {
-                opacity: 0.8;
-            }
-            .<?php echo $uid; ?> .olo-tl-h-arrow:focus-visible {
-                outline: none;
-                box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
-            }
-            .<?php echo $uid; ?> .olo-tl-h-arrow--prev { left: -12px; }
-            .<?php echo $uid; ?> .olo-tl-h-arrow--next { right: -12px; }
-            <?php endif; ?>
-
-            /* === Mobile responsive === */
-            @media (max-width: 767px) {
-                <?php if ( $layout === 'vertical-center' ) : ?>
-                .<?php echo $uid; ?> .olo-tl-item--left,
-                .<?php echo $uid; ?> .olo-tl-item--right {
-                    <?php if ( $mobile_layout === 'vertical-right' ) : ?>
-                    flex-direction: row-reverse !important;
-                    <?php else : ?>
-                    flex-direction: row !important;
-                    <?php endif; ?>
-                }
-                .<?php echo $uid; ?> .olo-tl-date-col {
-                    display: none !important;
-                }
-                .<?php echo $uid; ?> .olo-tl-line {
-                    left: <?php echo intval( $mk_size / 2 - $line_w / 2 ); ?>px !important;
-                    transform: none !important;
-                    <?php if ( $mobile_layout === 'vertical-right' ) : ?>
-                    left: auto !important;
-                    right: <?php echo intval( $mk_size / 2 - $line_w / 2 ); ?>px !important;
-                    <?php endif; ?>
-                }
-                <?php if ( $progress ) : ?>
-                .<?php echo $uid; ?> .olo-tl-progress {
-                    left: <?php echo intval( $mk_size / 2 - $line_w / 2 ); ?>px !important;
-                    transform: none !important;
-                    <?php if ( $mobile_layout === 'vertical-right' ) : ?>
-                    left: auto !important;
-                    right: <?php echo intval( $mk_size / 2 - $line_w / 2 ); ?>px !important;
-                    <?php endif; ?>
-                }
-                <?php endif; ?>
-                .<?php echo $uid; ?> .olo-tl-arrow--right {
-                    <?php if ( $mobile_layout === 'vertical-right' ) : ?>
-                    display: block;
-                    <?php else : ?>
-                    display: none;
-                    <?php endif; ?>
-                }
-                .<?php echo $uid; ?> .olo-tl-arrow--left {
-                    <?php if ( $mobile_layout === 'vertical-right' ) : ?>
-                    display: none;
-                    <?php else : ?>
-                    display: block;
-                    <?php endif; ?>
-                }
-                <?php endif; ?>
-
-                <?php if ( $layout === 'horizontal' ) : ?>
-                .<?php echo $uid; ?> .olo-tl-h-desktop { display: none !important; }
-                .<?php echo $uid; ?> .olo-tl-h-mobile { display: flex !important; }
-                <?php endif; ?>
-            }
-
-            <?php if ( $layout === 'horizontal' ) : ?>
-            .<?php echo $uid; ?> .olo-tl-h-mobile {
-                display: none;
-                flex-direction: column;
-                gap: 24px;
-                position: relative;
-            }
-            .<?php echo $uid; ?> .olo-tl-h-mobile .olo-tl-line-mob {
-                position: absolute;
-                top: 0; bottom: 0;
-                left: <?php echo intval( $mk_size / 2 - $line_w / 2 ); ?>px;
-                width: <?php echo $line_w; ?>px;
-                background: <?php echo $line_clr; ?>;
-                z-index: 1;
-            }
-            .<?php echo $uid; ?> .olo-tl-h-mobile .olo-tl-mob-item {
-                display: flex;
-                align-items: flex-start;
-                gap: 16px;
-                position: relative;
-            }
-            .<?php echo $uid; ?> .olo-tl-h-mobile .olo-tl-mob-card {
-                flex: 1; min-width: 0;
-            }
-            <?php endif; ?>
-        </style>
-        <?php
+        return ob_get_clean();
     }
 
-    private function render_vertical( $uid, $items, $s, $layout ) {
-        $count      = count( $items );
-        $anim       = $s['animation'] ?: 'none';
-        $stagger    = intval( $s['stagger_delay'] ) ?: 150;
-        $date_pos   = $s['date_position'] ?: 'outside';
-        $card_arrow = ! empty( $s['card_arrow'] );
-        $mk_type    = $s['marker_type'] ?: 'dot';
-        $progress   = ! empty( $s['line_progress'] );
+    /* ───────── VERTICALE (alt · one) ───────── */
+    private function render_vertical( $items, $s, $layout, $mono ) {
+        $cls = 'super js';
+        $cls .= ( $s['tl_line'] === 'solid' ) ? ' line-solid' : ' line-scroll';
+        $cls .= ' ing-' . sanitize_html_class( $s['tl_reveal'] );
+        if ( $s['tl_reveal'] !== 'sides' ) { $cls .= ' ing-anim'; }
+        if ( $layout === 'one' ) { $cls .= ' one'; }
+        if ( $s['tl_card'] !== 'bubble' )   { $cls .= ' card-' . sanitize_html_class( $s['tl_card'] ); }
+        if ( $s['tl_thread'] !== 'solid2' ) { $cls .= ' thread-' . sanitize_html_class( $s['tl_thread'] ); }
+        if ( $s['tl_node'] !== 'icon' )     { $cls .= ' node-' . sanitize_html_class( $s['tl_node'] ); }
+        if ( $s['tl_media'] === 'off' )     { $cls .= ' no-media'; }
+        if ( $s['tl_density'] === 'compact' ) { $cls .= ' dense'; }
+        if ( $mono ) { $cls .= ' mono'; }
 
-        $end_marker = ! empty( $s['end_marker'] );
-        $end_icon   = sanitize_text_field( $s['end_marker_icon'] ?? 'flag' );
-        $mk_clr     = $this->safe_color_css( $s['marker_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
-        $mk_bg      = $this->safe_color_css( $s['marker_bg'] ) ?: 'var(--olo-color-surface, #FFFFFF)';
-        $end_clr    = $this->safe_color_css( $s['end_marker_color'] ?? '' ) ?: $mk_clr;
+        $node = $s['tl_node'];
+        echo '<div class="' . esc_attr( $cls ) . '">';
+        echo '<span class="rail"></span><span class="rail-fill"></span>';
 
-        $scrollspy = '';
-        if ( $anim !== 'none' ) {
-            $scrollspy = ' uk-scrollspy="cls: olo-tl-visible; target: .olo-tl-item; delay: ' . $stagger . '; repeat: false"';
+        foreach ( $items as $i => $item ) {
+            $cat   = $mono ? 'primary' : $this->cat_class( $item['category'] );
+            $style = ( ! $mono && ! empty( $item['icon_color'] ) ) ? ' style="--cat:' . esc_attr( $this->safe_color_css( $item['icon_color'] ) ) . '"' : '';
+            echo '<div class="it cat-' . esc_attr( $cat ) . '"' . $style . '>';
+            echo '<span class="it-node">' . $this->node_inner( $item, $i, $node, $mono ) . '</span>';
+            echo '<div class="it-date"><span class="yr">' . esc_html( $item['date'] ) . '</span><span class="ph">' . esc_html( $item['tag'] ) . '</span><span class="st" data-st>&mdash;</span></div>';
+            echo '<div class="it-card">';
+            echo $this->media_html( $item );
+            echo '<div class="it-body">';
+            if ( $item['tag'] !== '' )         { echo '<span class="it-tag">' . esc_html( $item['tag'] ) . '</span>'; }
+            if ( $item['title'] !== '' )       { echo '<h4>' . esc_html( $item['title'] ) . '</h4>'; }
+            if ( $item['description'] !== '' ) { echo '<p>' . esc_html( $item['description'] ) . '</p>'; }
+            echo '</div></div></div>';
         }
-        $preset_class = 'olo-tl--preset-' . esc_attr( $s['preset'] ?? 'classic-center' );
+
+        if ( $s['tl_thread'] === 'comet' ) { echo '<span class="comet"></span>'; }
+        echo '</div>';
+
+        $this->vertical_script( $s['tl_line'] !== 'solid' );
+    }
+
+    private function vertical_script( $scroll ) {
+        // Scoping per istanza via document.currentScript.parentNode (il wrapper .olo-tlsuper).
         ?>
-        <div class="olo-timeline <?php echo $preset_class; ?> <?php echo esc_attr( $uid ); ?>"<?php echo $scrollspy; ?>>
-            <div class="olo-tl-line"></div>
-            <?php if ( $progress ) : ?>
-            <div class="olo-tl-progress" data-olo-progress></div>
-            <?php endif; ?>
-
-            <div class="olo-tl-items">
-                <?php foreach ( $items as $i => $item ) :
-                    $side_class = '';
-                    if ( $layout === 'vertical-center' ) {
-                        $side_class = $i % 2 === 0 ? 'olo-tl-item--left' : 'olo-tl-item--right';
-                    }
-                    $arrow_class = '';
-                    if ( $card_arrow ) {
-                        if ( $layout === 'vertical-center' ) {
-                            $arrow_class = $i % 2 === 0 ? 'olo-tl-arrow--left' : 'olo-tl-arrow--right';
-                        } elseif ( $layout === 'vertical-right' ) {
-                            $arrow_class = 'olo-tl-arrow--right';
-                        } else {
-                            $arrow_class = 'olo-tl-arrow--left';
-                        }
-                    }
-                ?>
-                <div class="olo-tl-item <?php echo esc_attr( $side_class ); ?>">
-                    <?php if ( $layout === 'vertical-center' ) : ?>
-                    <div class="olo-tl-date-col">
-                        <?php if ( $date_pos === 'outside' && ! empty( $item['date'] ) ) : ?>
-                        <span class="olo-tl-date"><?php echo esc_html( $item['date'] ); ?></span>
-                        <?php endif; ?>
-                    </div>
-                    <?php endif; ?>
-
-                    <div class="olo-tl-marker-wrap">
-                        <div class="olo-tl-marker">
-                            <?php if ( $mk_type === 'icon' && ! empty( $item['icon'] ) ) : ?>
-                                <span uk-icon="icon: <?php echo esc_attr( $item['icon'] ); ?>" <?php if ( ! empty( $item['icon_color'] ) ) echo 'style="color:' . $this->safe_color_css( $item['icon_color'] ) . '"'; ?>></span>
-                            <?php elseif ( $mk_type === 'number' ) : ?>
-                                <?php echo $i + 1; ?>
-                            <?php endif; ?>
-                        </div>
-                    </div>
-
-                    <div class="olo-tl-card-col">
-                        <?php if ( $date_pos === 'above' && ! empty( $item['date'] ) ) : ?>
-                        <div class="olo-tl-date" style="margin-bottom:6px"><?php echo esc_html( $item['date'] ); ?></div>
-                        <?php endif; ?>
-
-                        <div class="olo-tl-card">
-                            <?php if ( $card_arrow && ! empty( $arrow_class ) ) : ?>
-                            <div class="olo-tl-arrow <?php echo esc_attr( $arrow_class ); ?>"></div>
-                            <?php endif; ?>
-
-                            <?php echo $this->render_media( $item ); ?>
-
-                            <?php if ( $date_pos === 'inside' && ! empty( $item['date'] ) ) : ?>
-                            <div class="olo-tl-date" style="margin-bottom:4px"><?php echo esc_html( $item['date'] ); ?></div>
-                            <?php endif; ?>
-
-                            <?php list( $tlt_cls, $tlt_data ) = $this->tfx_attrs( $s, "title", wp_strip_all_tags( $item["title"] ) ); ?><h4 class="olo-tl-title<?php echo $tlt_cls; ?>"<?php echo $tlt_data; ?>><?php echo esc_html( wp_strip_all_tags( $item["title"] ) ); ?></h4>
-                            <?php list( $tld_cls, $tld_data ) = $this->tfx_attrs( $s, "description", wp_strip_all_tags( $item["description"] ) ); ?><div class="olo-tl-desc<?php echo $tld_cls; ?>"<?php echo $tld_data; ?>><?php echo nl2br( esc_html( wp_strip_all_tags( $item["description"] ) ) ); ?></div>
-                        </div>
-
-                        <?php if ( $layout !== 'vertical-center' && $date_pos === 'outside' && ! empty( $item['date'] ) ) : ?>
-                        <div class="olo-tl-date" style="margin-top:6px"><?php echo esc_html( $item['date'] ); ?></div>
-                        <?php endif; ?>
-                    </div>
-                </div>
-                <?php endforeach; ?>
-
-                <?php if ( $end_marker ) : ?>
-                <div class="olo-tl-item" style="display:flex;align-items:center;justify-content:center;gap:16px">
-                    <?php if ( $layout === 'vertical-center' ) : ?>
-                    <div class="olo-tl-date-col"></div>
-                    <?php endif; ?>
-                    <div class="olo-tl-end-marker olo-tl-marker-wrap">
-                        <div class="olo-tl-marker">
-                            <?php if ( ! empty( $end_icon ) ) : ?>
-                                <span uk-icon="icon: <?php echo esc_attr( $end_icon ); ?>" style="color:<?php echo $end_clr; ?>"></span>
-                            <?php endif; ?>
-                        </div>
-                    </div>
-                    <?php if ( $layout === 'vertical-center' ) : ?>
-                    <div class="olo-tl-card-col"></div>
-                    <?php endif; ?>
-                </div>
-                <?php endif; ?>
-            </div>
-        </div>
-
-        <?php if ( $progress ) : ?>
-        <script>
-        (function(){
-            var el = document.querySelector('.<?php echo $uid; ?>');
-            if (!el) return;
-            var prog = el.querySelector('[data-olo-progress]');
-            if (!prog) return;
-            function update() {
-                var rect = el.getBoundingClientRect();
-                var mid = window.innerHeight / 2;
-                var total = rect.height;
-                if (total <= 0) return;
-                var scrolled = mid - rect.top;
-                var pct = Math.min(100, Math.max(0, (scrolled / total) * 100));
-                prog.style.height = pct + '%';
+        <script>(function(){
+            var sup = document.currentScript.parentNode.querySelector('.super');
+            if(!sup){return;}
+            var rfill = sup.querySelector('.rail-fill');
+            var its = [].slice.call(sup.querySelectorAll('.it'));
+            var scroll = sup.classList.contains('line-scroll');
+            function inView(el){ var r=el.getBoundingClientRect(); var vh=window.innerHeight; if(r.top>=vh*0.92){return false;} if(r.bottom<=0){return false;} return true; }
+            function reveal(){ for(var i=0;i<its.length;i++){ if(inView(its[i])){ its[i].classList.add('in'); } } }
+            function update(){
+                reveal();
+                if(!scroll){ return; }
+                var r = sup.getBoundingClientRect();
+                var play = window.innerHeight*0.56;
+                var fill = Math.max(0, Math.min(r.height, play - r.top));
+                if(rfill){ rfill.style.height = Math.max(0, fill-6) + 'px'; }
+                var last = -1;
+                for(var i=0;i<its.length;i++){
+                    var node = its[i].querySelector('.it-node');
+                    var nr = node.getBoundingClientRect();
+                    var c = (nr.top + nr.height/2) - r.top;
+                    var on = c <= fill;
+                    its[i].classList.toggle('reached', on);
+                    its[i].classList.remove('active');
+                    if(on){ last = i; }
+                }
+                for(var j=0;j<its.length;j++){
+                    var st = its[j].querySelector('[data-st]');
+                    if(st){ if(j < last){ st.textContent='Fatto'; } else if(j === last){ st.textContent='Fatto'; } else { st.textContent='In arrivo'; } }
+                }
+                if(last>=0){ its[last].classList.add('active'); var sl=its[last].querySelector('[data-st]'); if(sl){ sl.textContent='In corso'; } }
             }
-            window.addEventListener('scroll', update, {passive: true});
+            window.addEventListener('scroll', update, {passive:true});
+            window.addEventListener('resize', update);
             update();
-        })();
-        </script>
-        <?php endif; ?>
+        })();</script>
         <?php
     }
 
-    private function render_horizontal( $uid, $items, $s ) {
-        $count    = count( $items );
-        $mk_type  = $s['marker_type'] ?: 'dot';
-        $date_pos = $s['date_position'] ?: 'outside';
-        $anim     = $s['animation'] ?: 'none';
-        $stagger  = intval( $s['stagger_delay'] ) ?: 150;
-        $h_vis    = intval( $s['h_visible_items'] ) ?: 3;
-        $h_cw     = intval( $s['h_card_width'] ) ?: 300;
-        $h_gap    = intval( $s['h_gap'] ) ?: 24;
-        $mk_size  = intval( $s['marker_size'] ) ?: 20;
-        $line_w   = intval( $s['line_width'] ) ?: 3;
-        $card_arrow = ! empty( $s['card_arrow'] );
-
-        $end_marker = ! empty( $s['end_marker'] );
-        $end_icon   = sanitize_text_field( $s['end_marker_icon'] ?? 'flag' );
-        $mk_clr     = $this->safe_color_css( $s['marker_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
-        $end_clr    = $this->safe_color_css( $s['end_marker_color'] ?? '' ) ?: $mk_clr;
-
-        $scrollspy = '';
-        if ( $anim !== 'none' ) {
-            $scrollspy = ' uk-scrollspy="cls: olo-tl-visible; target: .olo-tl-item; delay: ' . $stagger . '; repeat: false"';
+    /* ───────── ORIZZONTALE ───────── */
+    private function render_horizontal( $items, $s, $mono ) {
+        $cw = intval( $s['h_card_width'] ) ?: 268;
+        echo '<div class="hwrap">';
+        echo '<div class="hbar"><span class="ht"></span><div class="hnav">';
+        echo '<button class="prev" type="button" aria-label="Precedente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>';
+        echo '<button class="next" type="button" aria-label="Successivo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>';
+        echo '</div></div>';
+        echo '<div class="hscroll"><div class="htrack">';
+        foreach ( $items as $i => $item ) {
+            $cat = $mono ? 'primary' : $this->cat_class( $item['category'] );
+            $style = ' style="width:' . $cw . 'px"';
+            $style2 = ( ! $mono && ! empty( $item['icon_color'] ) ) ? ';--cat:' . esc_attr( $this->safe_color_css( $item['icon_color'] ) ) : '';
+            echo '<div class="hit cat-' . esc_attr( $cat ) . '" style="width:' . $cw . 'px' . $style2 . '">';
+            echo '<span class="hit-node">' . $this->render_icon_html( $item['icon'] ?: 'star', 0.8 ) . '</span>';
+            echo '<span class="hit-date">' . esc_html( $item['date'] ) . '</span>';
+            echo '<div class="hit-card">';
+            if ( $item['tag'] !== '' )   { echo '<span class="t">' . esc_html( $item['tag'] ) . '</span>'; }
+            if ( $item['title'] !== '' ) { echo '<h4>' . esc_html( $item['title'] ) . '</h4>'; }
+            if ( $item['description'] !== '' ) { echo '<p>' . esc_html( $item['description'] ) . '</p>'; }
+            echo '</div></div>';
         }
-        $preset_class = 'olo-tl--preset-' . esc_attr( $s['preset'] ?? 'classic-center' );
+        echo '</div></div></div>';
         ?>
-        <div class="olo-timeline <?php echo $preset_class; ?> <?php echo esc_attr( $uid ); ?>"<?php echo $scrollspy; ?>>
-            <!-- Desktop horizontal -->
-            <div class="olo-tl-h-desktop olo-tl-h-wrap">
-                <button class="olo-tl-h-arrow olo-tl-h-arrow--prev" data-olo-prev><?php echo esc_html( olo_t( '&lsaquo;' ) ); ?></button>
-                <button class="olo-tl-h-arrow olo-tl-h-arrow--next" data-olo-next><?php echo esc_html( olo_t( '&rsaquo;' ) ); ?></button>
-                <div class="olo-tl-h-viewport">
-                    <div class="olo-tl-line"></div>
-                    <div class="olo-tl-h-track" data-olo-track>
-                        <?php foreach ( $items as $i => $item ) : ?>
-                        <div class="olo-tl-h-item olo-tl-item">
-                            <div class="olo-tl-marker">
-                                <?php if ( $mk_type === 'icon' && ! empty( $item['icon'] ) ) : ?>
-                                    <span uk-icon="icon: <?php echo esc_attr( $item['icon'] ); ?>" <?php if ( ! empty( $item['icon_color'] ) ) echo 'style="color:' . $this->safe_color_css( $item['icon_color'] ) . '"'; ?>></span>
-                                <?php elseif ( $mk_type === 'number' ) : ?>
-                                    <?php echo $i + 1; ?>
-                                <?php endif; ?>
-                            </div>
-                            <div class="olo-tl-card" style="width:100%">
-                                <?php echo $this->render_media( $item ); ?>
+        <script>(function(){
+            var root = document.currentScript.parentNode;
+            var hs = root.querySelector('.hscroll'); if(!hs){return;}
+            function step(){ var c=hs.querySelector('.hit'); if(c){ return c.getBoundingClientRect().width; } return 280; }
+            var p = root.querySelector('.hnav .prev'), n = root.querySelector('.hnav .next');
+            if(p){ p.addEventListener('click', function(){ hs.scrollBy({left:-step(), behavior:'smooth'}); }); }
+            if(n){ n.addEventListener('click', function(){ hs.scrollBy({left:step(), behavior:'smooth'}); }); }
+        })();</script>
+        <?php
+    }
 
-                                <?php if ( $date_pos === 'inside' && ! empty( $item['date'] ) ) : ?>
-                                <div class="olo-tl-date" style="margin-bottom:4px"><?php echo esc_html( $item['date'] ); ?></div>
-                                <?php endif; ?>
-
-                                <?php list( $tlt_cls, $tlt_data ) = $this->tfx_attrs( $s, "title", wp_strip_all_tags( $item["title"] ) ); ?><h4 class="olo-tl-title<?php echo $tlt_cls; ?>"<?php echo $tlt_data; ?>><?php echo esc_html( wp_strip_all_tags( $item["title"] ) ); ?></h4>
-                                <?php list( $tld_cls, $tld_data ) = $this->tfx_attrs( $s, "description", wp_strip_all_tags( $item["description"] ) ); ?><div class="olo-tl-desc<?php echo $tld_cls; ?>"<?php echo $tld_data; ?>><?php echo nl2br( esc_html( wp_strip_all_tags( $item["description"] ) ) ); ?></div>
-                            </div>
-                            <?php if ( $date_pos === 'outside' && ! empty( $item['date'] ) ) : ?>
-                            <div class="olo-tl-date"><?php echo esc_html( $item['date'] ); ?></div>
-                            <?php elseif ( $date_pos === 'above' && ! empty( $item['date'] ) ) : ?>
-                            <div class="olo-tl-date" style="margin-bottom:4px;order:-1"><?php echo esc_html( $item['date'] ); ?></div>
-                            <?php endif; ?>
-                        </div>
-                        <?php endforeach; ?>
-
-                        <?php if ( $end_marker ) : ?>
-                        <div class="olo-tl-h-item olo-tl-item" style="justify-content:flex-start">
-                            <div class="olo-tl-end-marker">
-                                <div class="olo-tl-marker">
-                                    <?php if ( ! empty( $end_icon ) ) : ?>
-                                        <span uk-icon="icon: <?php echo esc_attr( $end_icon ); ?>" style="color:<?php echo $end_clr; ?>"></span>
-                                    <?php endif; ?>
-                                </div>
-                            </div>
-                        </div>
-                        <?php endif; ?>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Mobile fallback: vertical-left -->
-            <div class="olo-tl-h-mobile">
-                <div class="olo-tl-line-mob"></div>
-                <?php foreach ( $items as $i => $item ) : ?>
-                <div class="olo-tl-mob-item olo-tl-item">
-                    <div class="olo-tl-marker-wrap">
-                        <div class="olo-tl-marker">
-                            <?php if ( $mk_type === 'icon' && ! empty( $item['icon'] ) ) : ?>
-                                <span uk-icon="icon: <?php echo esc_attr( $item['icon'] ); ?>" <?php if ( ! empty( $item['icon_color'] ) ) echo 'style="color:' . $this->safe_color_css( $item['icon_color'] ) . '"'; ?>></span>
-                            <?php elseif ( $mk_type === 'number' ) : ?>
-                                <?php echo $i + 1; ?>
-                            <?php endif; ?>
-                        </div>
-                    </div>
-                    <div class="olo-tl-mob-card">
-                        <div class="olo-tl-card">
-                            <?php echo $this->render_media( $item ); ?>
-
-                            <?php if ( ! empty( $item['date'] ) ) : ?>
-                            <div class="olo-tl-date" style="margin-bottom:4px"><?php echo esc_html( $item['date'] ); ?></div>
-                            <?php endif; ?>
-
-                            <?php list( $tlt_cls, $tlt_data ) = $this->tfx_attrs( $s, "title", wp_strip_all_tags( $item["title"] ) ); ?><h4 class="olo-tl-title<?php echo $tlt_cls; ?>"<?php echo $tlt_data; ?>><?php echo esc_html( wp_strip_all_tags( $item["title"] ) ); ?></h4>
-                            <?php list( $tld_cls, $tld_data ) = $this->tfx_attrs( $s, "description", wp_strip_all_tags( $item["description"] ) ); ?><div class="olo-tl-desc<?php echo $tld_cls; ?>"<?php echo $tld_data; ?>><?php echo nl2br( esc_html( wp_strip_all_tags( $item["description"] ) ) ); ?></div>
-                        </div>
-                    </div>
-                </div>
-                <?php endforeach; ?>
-
-                <?php if ( $end_marker ) : ?>
-                <div class="olo-tl-mob-item olo-tl-item">
-                    <div class="olo-tl-end-marker olo-tl-marker-wrap">
-                        <div class="olo-tl-marker">
-                            <?php if ( ! empty( $end_icon ) ) : ?>
-                                <span uk-icon="icon: <?php echo esc_attr( $end_icon ); ?>" style="color:<?php echo $end_clr; ?>"></span>
-                            <?php endif; ?>
-                        </div>
-                    </div>
-                    <div class="olo-tl-mob-card"></div>
-                </div>
-                <?php endif; ?>
-            </div>
-
-            <script>
-            (function(){
-                var el = document.querySelector('.<?php echo $uid; ?>');
-                if (!el) return;
-                var track = el.querySelector('[data-olo-track]');
-                var prev = el.querySelector('[data-olo-prev]');
-                var next = el.querySelector('[data-olo-next]');
-                if (!track || !prev || !next) return;
-                var scrollPx = 0;
-                var cardW = <?php echo $h_cw; ?>;
-                var gap = <?php echo $h_gap; ?>;
-                var total = <?php echo $count; ?>;
-                var visible = <?php echo $h_vis; ?>;
-                var viewportW = visible * cardW + (visible - 1) * gap;
-                var trackW = total * cardW + (total - 1) * gap;
-                var maxScroll = Math.max(0, trackW - viewportW);
-                var step = cardW + gap;
-                function move() {
-                    track.style.transform = 'translateX(-' + scrollPx + 'px)';
-                }
-                prev.addEventListener('click', function() { scrollPx = Math.max(0, scrollPx - step); move(); });
-                next.addEventListener('click', function() { scrollPx = Math.min(maxScroll, scrollPx + step); move(); });
-            })();
-            </script>
-        </div>
+    /* ───────── NAVIGATORE (asse date + post singolo) ───────── */
+    private function render_navigator( $items, $s ) {
+        echo '<div class="navd">';
+        echo '<div class="nv-nav">';
+        echo '<button class="nv-arrow nv-prev" type="button" aria-label="Precedente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>';
+        echo '<div class="nv-viewport"><div class="nv-track"><span class="nv-base"></span><span class="nv-fill"></span>';
+        foreach ( $items as $i => $item ) {
+            echo '<div class="nv-step"'
+                . ' data-yr="' . esc_attr( $item['date'] ) . '"'
+                . ' data-tag="' . esc_attr( $item['tag'] ) . '"'
+                . ' data-title="' . esc_attr( $item['title'] ) . '"'
+                . ' data-text="' . esc_attr( $item['description'] ) . '"'
+                . ' data-img="' . esc_attr( esc_url( $item['image'] ) ) . '">'
+                . '<span class="l">' . esc_html( $item['date'] ) . '</span><span class="d"></span></div>';
+        }
+        echo '</div></div>';
+        echo '<button class="nv-arrow nv-next" type="button" aria-label="Successivo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>';
+        echo '</div>';
+        echo '<div class="nv-stage"><div class="nv-post">';
+        echo '<div class="nv-media"><img alt="" /><span class="nyr nv-yr"></span><span class="nph nv-ph"></span></div>';
+        echo '<div class="nv-body"><div class="m"><span class="tg nv-tag"></span><span class="dt nv-date"></span></div>';
+        echo '<h2 class="nv-title"></h2><p class="nv-text"></p></div>';
+        echo '</div></div>';
+        echo '<div class="nv-counter"></div>';
+        echo '</div>';
+        ?>
+        <script>(function(){
+            var root = document.currentScript.parentNode;
+            var track = root.querySelector('.nv-track'); if(!track){return;}
+            var fill = root.querySelector('.nv-fill');
+            var steps = [].slice.call(root.querySelectorAll('.nv-step'));
+            var post = root.querySelector('.nv-post');
+            var STEP = 168, idx = 0, n = steps.length;
+            function set(sel, val){ var e=root.querySelector(sel); if(e){ e.textContent = val ? val : ''; } }
+            function layout(){
+                var vp = track.parentElement, vpW = vp.clientWidth, trackW = n*STEP;
+                var desired = vpW/2 - (idx*STEP + STEP/2), min = Math.min(0, vpW - trackW);
+                track.style.transform = 'translateX(' + Math.max(min, Math.min(0, desired)) + 'px)';
+                if(fill){ fill.style.width = (idx*STEP + STEP/2) + 'px'; }
+                for(var i=0;i<n;i++){ steps[i].classList.toggle('done', i<=idx); steps[i].classList.toggle('sel', i===idx); }
+                var pb=root.querySelector('.nv-prev'), nb=root.querySelector('.nv-next');
+                if(pb){ pb.disabled = (idx===0); } if(nb){ nb.disabled = (idx===n-1); }
+            }
+            function render(){
+                var st = steps[idx]; if(!st){return;}
+                set('.nv-yr', st.getAttribute('data-yr'));
+                set('.nv-ph', 'archivio · ' + st.getAttribute('data-yr'));
+                set('.nv-tag', st.getAttribute('data-tag'));
+                set('.nv-date', st.getAttribute('data-yr'));
+                set('.nv-title', st.getAttribute('data-title'));
+                set('.nv-text', st.getAttribute('data-text'));
+                var img = root.querySelector('.nv-media img'); var src = st.getAttribute('data-img');
+                if(img){ if(src){ img.src = src; img.style.display='block'; } else { img.removeAttribute('src'); img.style.display='none'; } }
+                var cnt = root.querySelector('.nv-counter'); if(cnt){ cnt.innerHTML = '<b>' + (idx+1) + '</b> / ' + n; }
+            }
+            function go(i){
+                if(i<0){ i=0; } if(i>n-1){ i=n-1; }
+                if(i!==idx){ idx=i; post.classList.add('out'); setTimeout(function(){ render(); post.classList.remove('out'); }, 200); }
+                layout();
+            }
+            var pb=root.querySelector('.nv-prev'), nb=root.querySelector('.nv-next');
+            if(pb){ pb.addEventListener('click', function(){ go(idx-1); }); }
+            if(nb){ nb.addEventListener('click', function(){ go(idx+1); }); }
+            for(var i=0;i<n;i++){ (function(k){ steps[k].addEventListener('click', function(){ go(k); }); })(i); }
+            window.addEventListener('resize', layout);
+            render(); layout();
+        })();</script>
         <?php
     }
 }

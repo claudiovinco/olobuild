@@ -1,28 +1,22 @@
-
-import { textEffectsFields, textEffectsDefaults, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults, withHover, wowEffectsFields, wowEffectsDefaults } from './_shared';
+import { borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared';
 import { t } from '@/i18n';
 
 /**
- * Tile Timeline — split CONTENUTO/STILE (regola universale Olobuild).
- *   fields[]      → array items (content-items), layout (vertical/horizontal + mobile),
- *                   toggle visibilità marker (end_marker, line_progress, marker_pulse, card_arrow),
- *                   marker_type/marker_shape, tipo animazione (animation)
- *   styleFields[] → preset, bg, typography_preset, textEffects, effect tweaks,
- *                   linea (colore/spessore/stile), marker (colore/dim/bordo),
- *                   card (sfondo, padding, radius, shadow, hover, max-width, media ratio/radius),
- *                   data (posizione/colore/dim/peso), tipografia (size/peso/color),
- *                   stagger/duration animazione, opzioni orizzontale (width/visible/gap/arrow), bordo
- *   defaults      → identico (nessuna modifica)
+ * Tile Timeline "SUPER" — redesign (handoff "OLObuild - Tile Timeline SUPER").
  *
- * Note di scelta:
- *   - `marker_type` (dot/icon/number) è tipo di marker → fields[]
- *   - `marker_shape` (circle/square/diamond) è tipo geometrico → fields[]
- *   - `marker_pulse` (toggle animazione comportamentale) → fields[]
- *   - `card_arrow` (toggle visibilità freccia) → fields[]
- *   - `end_marker` + `end_marker_icon` → fields[]; `end_marker_color/bg/size` → styleFields[]
- *   - `card_hover` è effetto → styleFields[]
- *   - `animation` (tipo) → fields[]; `stagger_delay`/`animation_duration` (ms) → styleFields[]
- *   - `effect_*` (tweak preset audace) → styleFields[]
+ * Riscrittura del vecchio EventList in una timeline ricca e combinabile su
+ * 10 dimensioni: Layout · Ingresso · Tema · Card · Filo · Nodo · Colore · Media ·
+ * Densità · Stato. Stesse sorgenti dati (items), chiavi tl_* additive.
+ *
+ * Migrazione (resa PHP/Vue): legge le vecchie chiavi come fallback —
+ *   layout(vertical-center→alt, vertical-left/right→one, horizontal→horizontal),
+ *   marker_type(dot→dot, icon→icon, number→num), line_style/line_progress→thread/line.
+ * Gli items vecchi (title/description/date/image/video/icon/icon_color) restano validi;
+ * `tag` e `category` sono additivi (default sensati).
+ *
+ * Colori categoria dai ruoli globali del cliente:
+ *   primary · secondary · accent · success (con override per-item via icon_color).
+ *   Modalità "mono" forza tutto sul primario.
  */
 export default {
   type: 'timeline',
@@ -32,357 +26,221 @@ export default {
   defaults: {
     bg: { type: 'none' },
     typography_preset: '',
-    // Items
+
+    // ── Items ──
     items: [
-      { id: 'tl-1', title: t('La fondazione'), description: t('L\'inizio del nostro percorso, con una visione chiara e un team appassionato.'), date: '2014', image: 'https://images.unsplash.com/photo-1618468121522-fa4b1cbac0e2?w=900&q=75&auto=format&fit=crop', icon: 'star', icon_color: '' },
-      { id: 'tl-2', title: t('L\'espansione'), description: t('Crescita del team e apertura di nuove sedi nel cuore della città.'), date: '2019', image: 'https://images.unsplash.com/photo-1573408268160-571b710c06c2?w=900&q=75&auto=format&fit=crop', icon: 'check', icon_color: '' },
-      { id: 'tl-3', title: t('Il riconoscimento'), description: t('Premi internazionali e collaborazioni con brand di livello mondiale.'), date: '2024', image: 'https://images.unsplash.com/photo-1761682751228-783c48e7cd30?w=900&q=75&auto=format&fit=crop', icon: 'heart', icon_color: '' },
+      { id: 'tl-1', title: t('Prima riga di codice'), tag: t('Fondazione'), description: t('Il prototipo del builder: drag-and-drop nativo in WordPress, senza shortcode.'), date: '2019', image: '', video: '', icon: 'star', category: 'primary', icon_color: '' },
+      { id: 'tl-2', title: t('Libreria tile v1'), tag: t('Prodotto'), description: t('40 tile native e il sistema di colori globali. Pubblicati i primi mille siti.'), date: '2021', image: '', video: '', icon: 'grid', category: 'accent', icon_color: '' },
+      { id: 'tl-3', title: t('Aurora, bagliori, animazioni'), tag: t('Effetti'), description: t('Sfondi generativi e transizioni native. La libreria supera le 150 tile.'), date: '2023', image: '', video: '', icon: 'star', category: 'success', icon_color: '' },
+      { id: 'tl-4', title: t('Linguaggio "bello & coerente"'), tag: t('Sistema'), description: t('Token globali, controlli inspector e tile allineati a un\'unica grammatica.'), date: '2025', image: '', video: '', icon: 'settings', category: 'secondary', icon_color: '' },
+      { id: 'tl-5', title: t('240 tile, un solo standard'), tag: t('Futuro'), description: t('Ogni categoria curata, ogni controllo coerente. La libreria completa.'), date: '2026', image: '', video: '', icon: 'flag', category: 'primary', icon_color: '' },
     ],
 
-    // Preset
-    preset: 'classic-center',
+    // ── 10 dimensioni SUPER ──
+    tl_layout: 'alt',       // alt · one · horizontal · navigator
+    tl_reveal: 'sides',     // sides · bloom · unroll · slot
+    tl_theme: 'paper',      // paper · night · neon · blue
+    tl_card: 'bubble',      // bubble · glass · polaroid · ticket
+    tl_thread: 'solid2',    // solid2 · dash · dot · comet
+    tl_node: 'icon',        // icon · dot · num · year
+    tl_color: 'cat',        // cat · mono
+    tl_media: 'on',         // on · off
+    tl_density: 'comfy',    // comfy · compact
+    tl_line: 'scroll',      // scroll (roadmap) · solid (statico)
+    tl_transparent: false,  // sfondo blocco trasparente (ignora il bg del tema)
 
-    // Layout
-    layout: 'vertical-center',
-    mobile_layout: 'vertical-left',
+    // ── Personalizzazione (override; '' o 0 = usa il default della variante/tema) ──
+    tl_rail_color: '', tl_rail_w: 0, tl_fill_from: '', tl_fill_to: '',
+    tl_node_size: 0, tl_node_border: 0,
+    tl_card_bg: '', tl_card_radius: 0, tl_card_maxw: 0, tl_card_pad: 0,
+    tl_media_ratio: 'auto', tl_media_h: 0, tl_media_fit: 'cover', tl_media_radius: 0, tl_media_bar: true,
+    tl_title_size: 0, tl_title_weight: '', tl_title_color: '', tl_title_family: '',
+    tl_text_size: 0, tl_text_color: '', tl_text_lh: 0, tl_text_align: 'left', tl_text_family: '',
+    tl_yr_size: 0, tl_yr_color: '', tl_yr_family: '',
+    tl_show_tag: true, tl_tag_color: '',
 
-    // Linea
-    line_color: '',
-    line_width: '3',
-    line_style: 'solid',
-    line_progress: false,
-    line_progress_color: '',
-    line_progress_width: '',
+    // Opzioni orizzontale
+    h_card_width: '268',
 
-    // Marker
-    marker_type: 'dot',
-    marker_size: '20',
-    marker_color: '',
-    marker_bg: '',
-    marker_border_width: '3',
-    marker_border_color: '',
-    marker_shape: 'circle',
-    marker_pulse: false,
-
-    // Marker finale
-    end_marker: true,
-    end_marker_icon: 'flag',
-    end_marker_color: '',
-    end_marker_bg: '',
-    end_marker_size: '',
-
-    // Card
-    card_bg: '',
-    card_text_color: '',
-    tile_padding: { top: 20, right: 20, bottom: 20, left: 20 },
-    card_border_radius: '12',
-    card_shadow: 'md',
-    card_border_width: '0',
-    card_border_color: '',
-    card_hover: 'lift',
-    card_arrow: true,
-    card_max_width: '',
-    card_media_ratio: 'auto',
-    card_media_margin: '0',
-    card_media_radius: '4',
-
-    // Data
-    date_position: 'outside',
-    date_color: '',
-    date_size: '14',
-    date_weight: '600',
-
-    // Tipografia
-    title_size: '18',
-    title_weight: '600',
-    title_color: '',
-    description_size: '14',
-    description_color: '',
-
-    // Animazione
-    animation: 'fade-up',
-    stagger_delay: '150',
-    animation_duration: '600',
-
-    // Orizzontale
-    h_card_width: '300',
-    h_visible_items: '3',
-    h_gap: '24',
-    h_arrow_color: '',
-    h_arrow_bg: '',
-
-    // Effect tweaks (audacious presets only)
-    effect_color: '',
-    effect_intensity: 'medium',
-    effect_speed: 0,
-
-    ...textEffectsDefaults,
-    text_effect_target: 'title',
     border: { ...borderDefault },
     border_hover: { ...borderHoverDefault },
     border_hover_duration: 300,
     ...borderEffectDefaults,
-    ...wowEffectsDefaults,
   },
 
   // ─── CONTENUTO ─────────────────────────────────────────────
   fields: [
-    // ── Items ──
+    // ── Eventi ──
     { type: 'separator', label: t('Eventi') },
     { key: 'items', label: t('Eventi'), type: 'content-items',
       itemFields: [
         { key: 'title', label: t('Titolo'), type: 'text' },
+        { key: 'tag', label: t('Etichetta / fase'), type: 'text' },
         { key: 'description', label: t('Descrizione'), type: 'textarea' },
-        { key: 'date', label: t('Data / etichetta'), type: 'text' },
+        { key: 'date', label: t('Data / anno'), type: 'text' },
         { key: 'image', label: t('Immagine'), type: 'image' },
         { key: 'video', label: t('Video'), type: 'media' },
-        { key: 'icon', label: t('Icona marker'), type: 'icon' },
-        { key: 'icon_color', label: t('Colore icona'), type: 'color' },
+        { key: 'icon', label: t('Icona nodo'), type: 'icon' },
+        { key: 'category', label: t('Categoria (colore)'), type: 'select', options: [
+          { value: 'primary',   label: t('Primario') },
+          { value: 'secondary', label: t('Secondario') },
+          { value: 'accent',    label: t('Accento') },
+          { value: 'success',   label: t('Successo') },
+          { value: 'warning',   label: t('Avviso') },
+          { value: 'info',      label: t('Info') },
+        ]},
+        { key: 'icon_color', label: t('Colore override'), type: 'color' },
       ],
-      newItemDefaults: { title: t('Nuovo evento'), description: t('Descrizione evento.'), date: '', image: '', video: '', icon: '', icon_color: '' },
+      newItemDefaults: { title: t('Nuovo evento'), tag: t('Tappa'), description: t('Descrizione evento.'), date: '', image: '', video: '', icon: 'star', category: 'primary', icon_color: '' },
       itemLabel: 'Evento',
     },
 
     // ── Layout ──
     { type: 'separator', label: t('Layout') },
-    { key: 'layout', label: t('Layout'), type: 'select', options: [
-      { value: 'vertical-center', label: t('Verticale alternato') },
-      { value: 'vertical-left', label: t('Verticale sinistra') },
-      { value: 'vertical-right', label: t('Verticale destra') },
+    { key: 'tl_layout', label: t('Disposizione'), type: 'select', options: [
+      { value: 'alt',        label: t('Alternato') },
+      { value: 'one',        label: t('Una colonna') },
       { value: 'horizontal', label: t('Orizzontale') },
-    ]},
-    { key: 'mobile_layout', label: t('Layout mobile'), type: 'select', options: [
-      { value: 'vertical-left', label: t('Sinistra') },
-      { value: 'vertical-right', label: t('Destra') },
+      { value: 'navigator',  label: t('Navigatore (asse date)') },
     ]},
 
-    // ── Linea (comportamento) ──
-    { type: 'separator', label: t('Linea — Comportamento') },
-    { key: 'line_progress', label: t('Linea progressiva'), type: 'toggle' },
-
-    // ── Marker (tipo / forma / comportamento) ──
-    { type: 'separator', label: t('Marker — Tipo') },
-    { key: 'marker_type', label: t('Tipo marker'), type: 'select', options: [
-      { value: 'dot', label: t('Pallino') },
+    // ── Nodo / Colore ──
+    { type: 'separator', label: t('Nodo') },
+    { key: 'tl_node', label: t('Nodo'), type: 'select', options: [
       { value: 'icon', label: t('Icona') },
-      { value: 'number', label: t('Numero') },
+      { value: 'dot',  label: t('Punto') },
+      { value: 'num',  label: t('Numero') },
+      { value: 'year', label: t('Anno') },
     ]},
-    { key: 'marker_shape', label: t('Forma'), type: 'select', options: [
-      { value: 'circle', label: t('Cerchio') },
-      { value: 'square', label: t('Quadrato') },
-      { value: 'diamond', label: t('Rombo') },
-    ]},
-    { key: 'marker_pulse', label: t('Animazione pulse'), type: 'toggle' },
-
-    // ── Marker finale ──
-    { type: 'separator', label: t('Marker finale') },
-    { key: 'end_marker', label: t('Mostra marker finale'), type: 'toggle' },
-    { key: 'end_marker_icon', label: t('Icona finale'), type: 'icon',
-      condition: { field: 'end_marker', value: true } },
-
-    // ── Card (comportamento) ──
-    { type: 'separator', label: t('Card — Comportamento') },
-    { key: 'card_arrow', label: t('Freccia verso linea'), type: 'toggle' },
-    { key: 'card_media_ratio', label: t('Rapporto media'), type: 'select', options: [
-      { value: 'auto', label: t('Automatico') },
-      { value: '16/9', label: '16:9' },
-      { value: '4/3', label: '4:3' },
-      { value: '3/2', label: '3:2' },
-      { value: '1/1', label: '1:1' },
-      { value: '2/1', label: '2:1' },
+    { key: 'tl_color', label: t('Colore'), type: 'select', options: [
+      { value: 'cat',  label: t('Per categoria') },
+      { value: 'mono', label: t('Mono (primario)') },
     ]},
 
-    // ── Data (posizione) ──
-    { type: 'separator', label: t('Etichetta data') },
-    { key: 'date_position', label: t('Posizione data'), type: 'select', options: [
-      { value: 'outside', label: t('Esterna') },
-      { value: 'inside', label: t('Interna alla card') },
-      { value: 'above', label: t('Sopra la card') },
+    // ── Media / Densità ──
+    { type: 'separator', label: t('Contenuto') },
+    { key: 'tl_media', label: t('Media nelle card'), type: 'select', options: [
+      { value: 'on',  label: t('Immagini') },
+      { value: 'off', label: t('Solo testo') },
+    ]},
+    { key: 'tl_density', label: t('Densità'), type: 'select', options: [
+      { value: 'comfy',   label: t('Comoda') },
+      { value: 'compact', label: t('Compatta') },
     ]},
 
-    // ── Animazione (tipo) ──
+    // ── Stato linea / Ingresso ──
     { type: 'separator', label: t('Animazione') },
-    { key: 'animation', label: t('Animazione'), type: 'select', options: [
-      { value: 'none', label: t('Nessuna') },
-      { value: 'fade-up', label: t('Fade up') },
-      { value: 'fade-in', label: t('Fade in') },
-      { value: 'slide-left', label: t('Scorrimento da sinistra') },
-      { value: 'slide-right', label: t('Scorrimento da destra') },
-      { value: 'zoom-in', label: t('Zoom in') },
+    { key: 'tl_line', label: t('Filo + stato'), type: 'select', options: [
+      { value: 'scroll', label: t('Scroll + roadmap (Fatto/In corso/In arrivo)') },
+      { value: 'solid',  label: t('Statico') },
+    ]},
+    { key: 'tl_reveal', label: t('Ingresso card'), type: 'select', options: [
+      { value: 'sides',   label: t('Lati') },
+      { value: 'bloom',   label: t('Sboccia') },
+      { value: 'unroll',  label: t('Srotola') },
+      { value: 'slot',    label: t('Scatto') },
+      { value: 'flip',    label: t('Flip') },
+      { value: 'zoom',    label: t('Zoom') },
+      { value: 'tendina', label: t('Tendina') },
     ]},
   ],
 
   // ─── STILE ─────────────────────────────────────────────────
   styleFields: [
     { key: 'typography_preset', label: t('Stile tipografico'), type: 'select', optionsSource: 'globalTypography' },
-    // ────────── Preset stile ──────────
-    { type: 'separator', label: t('Preset stile') },
-    { key: 'preset', label: t('Stile'), type: 'select', options: [
-      { value: 'classic-center',   label: t('Classic Center (default alternato)') },
-      { value: 'modern-cards',     label: t('Modern Cards (sx con shadow)') },
-      { value: 'minimal-line',     label: t('Minimal Line (linea sottile)') },
-      { value: 'magazine-history', label: t('Magazine History (editorial)') },
-      { value: 'corporate-clean',  label: t('Corporate Clean (verticale dx)') },
-      { value: 'liquid-glass',     label: t('Liquid Glass (Vision Pro)') },
-      { value: 'neon-cyber',       label: t('Neon Cyberpunk (Tron)') },
-      { value: 'brutalist-block',  label: t('Brutalist Block (neo-brutalist)') },
-      { value: 'magnetic-liquid',  label: t('Magnetic Liquid (next-gen)') },
-      { value: 'sticker',          label: t('Sticker / Scrapbook') },
-      { value: 'retro-terminal',   label: t('Retro Terminal (CRT)') },
-      { value: '3d-tilt',          label: t('3D Card Tilt') },
-      { value: 'custom',           label: t('Personalizzato (usa controlli sotto)') },
+
+    // ── Tema ──
+    { type: 'separator', label: t('Tema') },
+    { key: 'tl_theme', label: t('Tema'), type: 'select', options: [
+      { value: 'paper', label: t('Carta (chiaro)') },
+      { value: 'night', label: t('Notte') },
+      { value: 'neon',  label: t('Neon') },
+      { value: 'blue',  label: t('Blueprint') },
     ]},
-
-    // ────────── Tweak effetti (solo audaci) ──────────
-    { type: 'separator', label: t('Tweak effetto preset'),
-      condition: { field: 'preset', op: 'in', value: ['liquid-glass','neon-cyber','brutalist-block','magnetic-liquid','sticker','retro-terminal','3d-tilt'] } },
-    { key: 'effect_color', label: t('Colore effetto'), type: 'color',
-      condition: { field: 'preset', op: 'in', value: ['neon-cyber','brutalist-block','magnetic-liquid','sticker','retro-terminal'] } },
-    { key: 'effect_intensity', label: t('Intensità effetto'), type: 'select',
-      options: [
-        { value: 'low',    label: t('Bassa') },
-        { value: 'medium', label: t('Media (default)') },
-        { value: 'high',   label: t('Alta') },
-      ],
-      condition: { field: 'preset', op: 'in', value: ['liquid-glass','neon-cyber','brutalist-block','magnetic-liquid','sticker','retro-terminal','3d-tilt'] } },
-    { key: 'effect_speed', label: t('Velocità animazioni (ms)'), type: 'range',
-      min: 0, max: 4000, step: 100,
-      condition: { field: 'preset', op: 'in', value: ['neon-cyber','magnetic-liquid','retro-terminal','3d-tilt'] } },
-
-    ...textEffectsFields([
-      { value: 'title', label: t('Solo Titolo') },
-      { value: 'description', label: t('Solo Descrizione') },
-      { value: 'all', label: t('Tutti gli elementi testuali') },
-    ]),
-
-    // ── Linea ──
-    { type: 'separator', label: t('Linea') },
-    { key: 'line_color', label: t('Colore linea'), type: 'color' },
-    { key: 'line_width', label: t('Spessore linea (px)'), type: 'range', min: 1, max: 8, step: 1 },
-    { key: 'line_style', label: t('Stile linea'), type: 'select', options: [
-      { value: 'solid', label: t('Continua') },
-      { value: 'dashed', label: t('Tratteggiata') },
-      { value: 'dotted', label: t('Puntinata') },
-    ]},
-    { key: 'line_progress_color', label: t('Colore progresso'), type: 'color',
-      condition: { field: 'line_progress', value: true } },
-    { key: 'line_progress_width', label: t('Spessore progresso (px)'), type: 'range', min: 1, max: 16, step: 1,
-      condition: { field: 'line_progress', value: true } },
-
-    // ── Marker (stile) ──
-    { type: 'separator', label: t('Marker — Stile') },
-    { key: 'marker_size', label: t('Dimensione (px)'), type: 'range', min: 10, max: 40, step: 2 },
-    { key: 'marker_color', label: t('Colore marker'), type: 'color' },
-    { key: 'marker_bg', label: t('Sfondo marker'), type: 'color' },
-    { key: 'marker_border_width', label: t('Bordo marker (px)'), type: 'range', min: 0, max: 6, step: 1 },
-    { key: 'marker_border_color', label: t('Colore bordo marker'), type: 'color',
-      condition: { field: 'marker_border_width', operator: '>', value: '0' } },
-
-    // ── Marker finale (stile) ──
-    { type: 'separator', label: t('Marker finale — Stile') },
-    { key: 'end_marker_color', label: t('Colore icona finale'), type: 'color',
-      condition: { field: 'end_marker', value: true } },
-    { key: 'end_marker_bg', label: t('Sfondo marker finale'), type: 'color',
-      condition: { field: 'end_marker', value: true } },
-    { key: 'end_marker_size', label: t('Dimensione finale (px)'), type: 'range', min: 10, max: 60, step: 2,
-      condition: { field: 'end_marker', value: true } },
+    { key: 'tl_transparent', label: t('Sfondo blocco trasparente'), type: 'toggle' },
 
     // ── Card ──
-    { type: 'separator', label: t('Card — Aspetto') },
-    { key: 'card_bg', label: t('Sfondo card'), type: 'color' },
-    { key: 'card_text_color', label: t('Colore testo card'), type: 'color' },
-    { key: 'tile_padding', label: t('Padding (px)'), type: 'spacing', max: 40 },
-    withHover({ key: 'card_border_radius', label: t('Arrotondamento (px)'), type: 'border-radius' }),
-
-    { type: 'separator', label: t('Card — Ombra') },
-    { key: 'card_shadow', label: t('Ombra'), type: 'select', options: [
-      { value: 'none', label: t('Nessuna') },
-      { value: 'sm', label: t('Leggera') },
-      { value: 'md', label: t('Media') },
-      { value: 'lg', label: t('Grande') },
-      { value: 'custom', label: t('Personalizzata') },
+    { type: 'separator', label: t('Card') },
+    { key: 'tl_card', label: t('Stile card'), type: 'select', options: [
+      { value: 'bubble',   label: t('Fumetto') },
+      { value: 'glass',    label: t('Vetro') },
+      { value: 'polaroid', label: t('Polaroid') },
+      { value: 'ticket',   label: t('Ticket') },
     ]},
-    { key: 'card_shadow_h', label: t('Offset H (px)'), type: 'range', min: -50, max: 50, step: 1,
-      condition: { field: 'card_shadow', op: 'eq', value: 'custom' } },
-    { key: 'card_shadow_v', label: t('Offset V (px)'), type: 'range', min: -50, max: 50, step: 1,
-      condition: { field: 'card_shadow', op: 'eq', value: 'custom' } },
-    { key: 'card_shadow_blur', label: t('Sfocatura (px)'), type: 'range', min: 0, max: 100, step: 1,
-      condition: { field: 'card_shadow', op: 'eq', value: 'custom' } },
-    { key: 'card_shadow_spread', label: t('Espansione (px)'), type: 'range', min: -50, max: 50, step: 1,
-      condition: { field: 'card_shadow', op: 'eq', value: 'custom' } },
-    { key: 'card_shadow_color', label: t('Colore ombra'), type: 'color',
-      condition: { field: 'card_shadow', op: 'eq', value: 'custom' } },
-    { key: 'card_shadow_inset', label: t('Ombra interna'), type: 'toggle',
-      condition: { field: 'card_shadow', op: 'eq', value: 'custom' } },
 
-    { type: 'separator', label: t('Card — Bordo e hover') },
-    { key: 'card_border_width', label: t('Bordo card (px)'), type: 'range', min: 0, max: 4, step: 1 },
-    { key: 'card_border_color', label: t('Colore bordo card'), type: 'color',
-      condition: { field: 'card_border_width', operator: '>', value: '0' } },
-    { key: 'card_hover', label: t('Effetto hover'), type: 'select', options: [
-      { value: 'none', label: t('Nessuno') },
-      { value: 'lift', label: t('Sollevamento') },
-      { value: 'glow', label: t('Bagliore') },
-      { value: 'scale', label: t('Scala') },
+    // ── Filo ──
+    { type: 'separator', label: t('Filo') },
+    { key: 'tl_thread', label: t('Filo'), type: 'select', options: [
+      { value: 'solid2', label: t('Pieno') },
+      { value: 'dash',   label: t('Tratteggio') },
+      { value: 'dot',    label: t('Punti') },
+      { value: 'comet',  label: t('Comet') },
     ]},
-    { key: 'card_max_width', label: t('Larghezza max card (px)'), type: 'range', min: 0, max: 800, step: 10 },
-
-    { type: 'separator', label: t('Card — Media') },
-    { key: 'card_media_margin', label: t('Margine media (px)'), type: 'spacing', max: 20 },
-    withHover({ key: 'card_media_radius', label: t('Arrotondamento media (px)'), type: 'border-radius' }),
-
-    // ── Tipografia ──
-    { type: 'separator', label: t('Tipografia') },
-    { type: 'typography', label: t('Titolo'),
-      presetKey: 'typography_preset',
-      responsiveKeys: ['size'],
-      keys: {
-        size:   'title_size',
-        weight: 'title_weight',
-        color:  'title_color',
-      },
-      sizeMin: 14, sizeMax: 32, sizeStep: 1,
-    },
-    { type: 'typography', label: t('Descrizione'),
-      presetKey: 'typography_preset',
-      responsiveKeys: ['size'],
-      keys: {
-        size:  'description_size',
-        color: 'description_color',
-      },
-      sizeMin: 12, sizeMax: 20, sizeStep: 1,
-    },
-    { type: 'typography', label: t('Data'),
-      presetKey: 'typography_preset',
-      responsiveKeys: ['size'],
-      keys: {
-        size:   'date_size',
-        weight: 'date_weight',
-        color:  'date_color',
-      },
-      sizeMin: 10, sizeMax: 20, sizeStep: 1,
-    },
-
-    // ── Animazione (tempi) ──
-    { type: 'separator', label: t('Animazione — Tempi') },
-    { key: 'stagger_delay', label: t('Ritardo stagger (ms)'), type: 'range', min: 0, max: 500, step: 25,
-      condition: { field: 'animation', operator: '!=', value: 'none' } },
-    { key: 'animation_duration', label: t('Durata animazione (ms)'), type: 'range', min: 200, max: 1200, step: 50,
-      condition: { field: 'animation', operator: '!=', value: 'none' } },
 
     // ── Orizzontale ──
-    { type: 'separator', label: t('Opzioni orizzontale') },
-    { key: 'h_card_width', label: t('Larghezza card (px)'), type: 'range', min: 200, max: 500, step: 10,
-      condition: { field: 'layout', value: 'horizontal' } },
-    { key: 'h_visible_items', label: t('Elementi visibili'), type: 'range', min: 1, max: 5, step: 1,
-      condition: { field: 'layout', value: 'horizontal' } },
-    { key: 'h_gap', label: t('Gap (px)'), type: 'range', min: 8, max: 48, step: 4,
-      condition: { field: 'layout', value: 'horizontal' } },
-    { key: 'h_arrow_color', label: t('Colore frecce'), type: 'color',
-      condition: { field: 'layout', value: 'horizontal' } },
-    { key: 'h_arrow_bg', label: t('Sfondo frecce'), type: 'color',
-      condition: { field: 'layout', value: 'horizontal' } },
-    ...wowEffectsFields(),
+    { type: 'separator', label: t('Opzioni orizzontale'),
+      condition: { field: 'tl_layout', value: 'horizontal' } },
+    { key: 'h_card_width', label: t('Larghezza card (px)'), type: 'range', min: 200, max: 420, step: 4,
+      condition: { field: 'tl_layout', value: 'horizontal' } },
+
+    // ═══════════ PERSONALIZZAZIONE (override fine; 0/vuoto = default variante) ═══════════
+    // ── Filo ──
+    { type: 'separator', label: t('Personalizza · Filo') },
+    { key: 'tl_rail_color', label: t('Colore filo (statico)'), type: 'color' },
+    { key: 'tl_rail_w', label: t('Spessore filo (px · 0 = auto)'), type: 'range', min: 0, max: 12, step: 1 },
+    { key: 'tl_fill_from', label: t('Riempimento — da'), type: 'color' },
+    { key: 'tl_fill_to', label: t('Riempimento — a'), type: 'color' },
+
+    // ── Nodo ──
+    { type: 'separator', label: t('Personalizza · Nodo') },
+    { key: 'tl_node_size', label: t('Dimensione nodo (px · 0 = auto)'), type: 'range', min: 0, max: 64, step: 2 },
+    { key: 'tl_node_border', label: t('Spessore bordo nodo (px · 0 = auto)'), type: 'range', min: 0, max: 6, step: 1 },
+
+    // ── Card ──
+    { type: 'separator', label: t('Personalizza · Card') },
+    { key: 'tl_card_bg', label: t('Sfondo card'), type: 'color' },
+    { key: 'tl_card_radius', label: t('Arrotondamento card (px · 0 = auto)'), type: 'range', min: 0, max: 40, step: 1 },
+    { key: 'tl_card_maxw', label: t('Larghezza max card (px · 0 = auto)'), type: 'range', min: 0, max: 600, step: 10 },
+    { key: 'tl_card_pad', label: t('Padding card (px · 0 = auto)'), type: 'range', min: 0, max: 32, step: 1 },
+
+    // ── Immagine ──
+    { type: 'separator', label: t('Personalizza · Immagine') },
+    { key: 'tl_media_ratio', label: t('Proporzioni'), type: 'select', options: [
+      { value: 'auto',  label: t('Auto (usa altezza)') },
+      { value: '16/9',  label: '16:9' },
+      { value: '4/3',   label: '4:3' },
+      { value: '3/2',   label: '3:2' },
+      { value: '1/1',   label: '1:1 (quadrata)' },
+      { value: '21/9',  label: '21:9 (panoramica)' },
+    ]},
+    { key: 'tl_media_h', label: t('Altezza immagine (px · 0 = auto)'), type: 'range', min: 0, max: 420, step: 4,
+      condition: { field: 'tl_media_ratio', value: 'auto' } },
+    { key: 'tl_media_fit', label: t('Adattamento'), type: 'select', options: [
+      { value: 'cover',   label: t('Riempi (cover)') },
+      { value: 'contain', label: t('Contieni (contain)') },
+    ]},
+    { key: 'tl_media_radius', label: t('Arrotondamento immagine (px · 0 = auto)'), type: 'range', min: 0, max: 30, step: 1 },
+    { key: 'tl_media_bar', label: t('Barra colore sopra immagine'), type: 'toggle' },
+
+    // ── Testi (popup tipografia — convenzione OLObuild) ──
+    { type: 'separator', label: t('Personalizza · Testi') },
+    { type: 'typography', label: t('Titolo'),
+      keys: { family: 'tl_title_family', size: 'tl_title_size', weight: 'tl_title_weight', color: 'tl_title_color' },
+      sizeMin: 10, sizeMax: 48, sizeStep: 1 },
+    { type: 'typography', label: t('Descrizione'),
+      keys: { family: 'tl_text_family', size: 'tl_text_size', color: 'tl_text_color', lineHeight: 'tl_text_lh' },
+      sizeMin: 10, sizeMax: 28, sizeStep: 1 },
+    { type: 'typography', label: t('Data / anno'),
+      keys: { family: 'tl_yr_family', size: 'tl_yr_size', color: 'tl_yr_color' },
+      sizeMin: 12, sizeMax: 64, sizeStep: 1 },
+    { key: 'tl_text_align', label: t('Allineamento testo'), type: 'select', options: [
+      { value: 'left',   label: t('Sinistra') },
+      { value: 'center', label: t('Centro') },
+      { value: 'right',  label: t('Destra') },
+    ]},
+    { key: 'tl_show_tag', label: t('Mostra etichetta (pill)'), type: 'toggle' },
+    { key: 'tl_tag_color', label: t('Colore etichetta'), type: 'color' },
+
     ...borderFields(),
   ],
 };

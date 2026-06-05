@@ -1,545 +1,531 @@
 <template>
-  <div class="mb-space-y-3">
-    <!-- Type selector -->
-    <div>
-      <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300 mb-mb-2">{{ t('Tipo di sfondo') }}</label>
-      <div class="mb-flex mb-gap-1 mb-bg-gray-700 mb-rounded-lg mb-p-0.5">
+  <!--
+    BackgroundControls — pannello "Sfondo" ridisegnato (design handoff
+    "Redesign pannello Sfondo"). Il vecchio selettore stipava 10 tipi in una
+    riga di chip testuali (etichette a capo, niente anteprime); ora è una
+    GRIGLIA di swatch con mini-anteprima reale, raggruppata in
+    Colore · Generativi · Media. Sotto, i controlli del tipo scelto seguono il
+    sistema (slider arancio CHROME via --olo-ui-accent + valbox con unità,
+    select con chevron) e la Sovrapposizione è una sotto-sezione con occhio.
+
+    CONTRATTO DATI INVARIATO: cambia SOLO la presentazione. Tutte le chiavi
+    salvate restano identiche (type, color, gradient*, image_*, video_*,
+    gallery_*, mesh_*, pattern_*, glow_*, crt_*, overlay_*, parallax). La resa
+    canvas (useBackgroundStyle.js) e frontend (class-frontend-renderer.php) NON
+    sono toccate: i template esistenti continuano a funzionare.
+
+    Accento = CHROME del builder (arancio fisso #e8622a via --olo-ui-accent),
+    NON il primario tile. Il colore DEI contenuti (alone, base, pattern…) resta
+    token-first (var(--olo-color-*)) tramite FieldColor.
+  -->
+  <div class="olo-bg2">
+
+    <!-- ───────── TIPO DI SFONDO — griglia swatch raggruppata ───────── -->
+    <div class="subhead first"><span class="t2">{{ t('Tipo di sfondo') }}</span></div>
+    <div class="bgtypes">
+      <template v-for="(group, gi) in typeGroups" :key="group.cat">
+        <div class="cat" :class="{ first: gi === 0 }">{{ t(group.cat) }}</div>
         <button
-          v-for="bgType in types"
-          :key="bgType.value"
-          @click="updateField('type', bgType.value)"
-          :class="[
-            'mb-flex-1 mb-py-1.5 mb-text-[10px] mb-font-medium mb-rounded-md mb-transition-colors',
-            bg.type === bgType.value
-              ? 'mb-bg-primary-600 mb-text-white'
-              : 'mb-text-gray-400 hover:mb-text-gray-300'
-          ]"
+          v-for="it in group.items"
+          :key="it.value"
+          type="button"
+          class="bt"
+          :class="{ on: bg.type === it.value }"
+          :aria-pressed="bg.type === it.value"
+          :title="t(it.label)"
+          @click="updateField('type', it.value)"
         >
-          {{ t(bgType.label) }}
+          <span v-if="bg.type === it.value" class="ck">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+          </span>
+          <span class="sw-prev" :class="it.prev">
+            <span v-if="it.value === 'image'" class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="1.6"/><path d="m21 15-5-5L5 21"/></svg></span>
+            <span v-else-if="it.value === 'video'" class="ico"><span class="play"></span></span>
+            <span v-else-if="it.value === 'gallery'" class="ico"><span class="stack"><i></i><i></i><i></i></span></span>
+          </span>
+          <span class="bl">{{ t(it.label) }}</span>
         </button>
-      </div>
+      </template>
     </div>
 
-    <!-- Solid color -->
-    <!-- v1.0.74 — rimosso lo slider "Opacità sfondo": era ridondante con l'Alfa
-         dentro FieldColor (entrambi producono background-color rgba). Il
-         default color_opacity:100 resta nei dati e il backend lo applica come
-         no-op; i template legacy con color_opacity != 100 continuano a
-         funzionare ma non sono più modificabili dall'inspector — l'utente
-         migra usando l'Alfa del color picker. -->
-    <div v-if="bg.type === 'solid'" class="mb-space-y-2">
-      <label class="mb-block mb-text-[10px] mb-text-gray-400">{{ t('Colore') }}</label>
-      <FieldColor
-        :modelValue="bg.color || '#ffffff'"
-        @update:modelValue="updateField('color', $event)"
-      />
-      <!-- Preview swatch -->
-      <div
-        class="mb-h-6 mb-rounded-md mb-border mb-border-gray-600"
-        :style="{ background: solidPreview }"
-      ></div>
-    </div>
+    <!-- ───────── IMPOSTAZIONI · per-tipo ───────── -->
+    <template v-if="bg.type && bg.type !== 'none'">
+      <div class="subhead"><span class="t2">{{ t('Impostazioni') }} · <span class="q">{{ t(currentTypeLabel) }}</span></span></div>
 
-    <!-- Gradient (multi-stop) -->
-    <div v-if="bg.type === 'gradient'" class="mb-space-y-3">
-      <!-- FieldGradient include già una preview interna; nessun bisogno di
-           duplicarla qui (creava le due barre "morte" non cliccabili). -->
-      <FieldGradient
-        :modelValue="gradientModel"
-        @update:modelValue="onGradientUpdate"
-      />
-    </div>
-
-    <!-- Image -->
-    <div v-if="bg.type === 'image'" class="mb-space-y-3">
-      <!-- Thumbnail -->
-      <div v-if="bg.image_url" class="mb-relative mb-group">
-        <img
-          :src="bg.image_url"
-          :alt="t('Background')"
-          class="mb-w-full mb-h-20 mb-object-cover mb-rounded-md mb-border mb-border-gray-600"
-        />
-        <button
-          @click="updateField('image_url', '')"
-          class="mb-absolute mb-top-1 mb-right-1 mb-bg-red-600 mb-text-white mb-rounded-full mb-w-5 mb-h-5 mb-text-xs mb-flex mb-items-center mb-justify-center mb-opacity-0 group-hover:mb-opacity-100 mb-transition-opacity"
-          :title="t('Rimuovi immagine')"
-        >{{ t('&times;') }}</button>
-      </div>
-      <button
-        @click="pickBgImage"
-        class="mb-w-full mb-py-1.5 mb-px-3 mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-md mb-text-xs mb-text-gray-300 hover:mb-bg-gray-600 mb-transition-colors"
-      >
-        {{ bg.image_url ? 'Cambia immagine' : 'Seleziona immagine' }}
-      </button>
-
-      <!-- Size -->
-      <div>
-        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Dimensione') }}</label>
-        <select
-          :value="bg.image_size || 'cover'"
-          @change="updateField('image_size', $event.target.value)"
-          class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1 mb-text-sm mb-text-gray-900"
-        >
-          <option value="cover">{{ t('Cover') }}</option>
-          <option value="contain">{{ t('Contain') }}</option>
-          <option value="auto">{{ t('Auto') }}</option>
-        </select>
-      </div>
-
-      <!-- Position -->
-      <div>
-        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Posizione') }}</label>
-        <select
-          :value="bg.image_position || 'center center'"
-          @change="updateField('image_position', $event.target.value)"
-          class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1 mb-text-sm mb-text-gray-900"
-        >
-          <option value="center center">{{ t('Centro') }}</option>
-          <option value="top center">{{ t('Alto') }}</option>
-          <option value="bottom center">{{ t('Basso') }}</option>
-          <option value="left center">{{ t('Sinistra') }}</option>
-          <option value="right center">{{ t('Destra') }}</option>
-          <option value="top left">{{ t('Alto sinistra') }}</option>
-          <option value="top right">{{ t('Alto destra') }}</option>
-          <option value="bottom left">{{ t('Basso sinistra') }}</option>
-          <option value="bottom right">{{ t('Basso destra') }}</option>
-        </select>
-      </div>
-
-      <!-- Parallax -->
-      <div v-if="showParallax">
-        <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
-          <button
-            @click="toggleParallax"
-            :class="[
-              'mb-relative mb-w-10 mb-h-5 mb-rounded-full mb-transition-colors mb-shrink-0',
-              isParallaxEnabled ? 'mb-bg-primary-600' : 'mb-bg-gray-600'
-            ]"
-          >
-            <span
-              :class="[
-                'mb-absolute mb-top-0.5 mb-w-4 mb-h-4 mb-rounded-full mb-bg-white mb-transition-transform',
-                isParallaxEnabled ? 'mb-left-5' : 'mb-left-0.5'
-              ]"
-            ></span>
-          </button>
-          <span class="mb-text-xs mb-text-gray-300">{{ t('Parallasse') }}</span>
-        </label>
-        <div v-if="isParallaxEnabled" class="mb-mt-2">
-          <ParallaxEditor
-            :modelValue="bgParallaxData"
-            :properties="bgParallaxProperties"
-            @update:modelValue="updateParallaxData"
-          />
+      <!-- Tinta unita -->
+      <!-- v1.0.74 — niente slider "Opacità sfondo": ridondante con l'Alfa di
+           FieldColor. color_opacity:100 resta nei dati come no-op legacy. -->
+      <div v-if="bg.type === 'solid'" class="type-body">
+        <div class="field">
+          <span class="cl">{{ t('Colore') }}</span>
+          <FieldColor :modelValue="bg.color || '#ffffff'" @update:modelValue="updateField('color', $event)" />
         </div>
+        <div class="pv" :style="{ background: solidPreview }"></div>
       </div>
-    </div>
 
-    <!-- Video -->
-    <div v-if="bg.type === 'video'" class="mb-space-y-3">
-      <!-- Video preview -->
-      <div v-if="bg.video_url" class="mb-relative mb-group">
-        <div class="mb-w-full mb-h-20 mb-rounded-md mb-border mb-border-gray-600 mb-bg-gray-800 mb-flex mb-items-center mb-justify-center mb-overflow-hidden">
-          <img v-if="bg.video_poster" :src="bg.video_poster" :alt="t('Video poster')" class="mb-w-full mb-h-20 mb-object-cover" />
-          <span v-else class="mb-text-2xl">{{ t('&#x1F3AC;') }}</span>
+      <!-- Gradiente (FieldGradient ha già la sua preview interna) -->
+      <div v-else-if="bg.type === 'gradient'" class="type-body">
+        <FieldGradient :modelValue="gradientModel" @update:modelValue="onGradientUpdate" />
+      </div>
+
+      <!-- Immagine -->
+      <div v-else-if="bg.type === 'image'" class="type-body">
+        <div v-if="bg.image_url" class="thumb">
+          <img :src="bg.image_url" :alt="t('Sfondo')" />
+          <button type="button" class="thumb-x" :title="t('Rimuovi immagine')" @click="updateField('image_url', '')">&times;</button>
         </div>
-        <button
-          @click="removeVideo"
-          class="mb-absolute mb-top-1 mb-right-1 mb-bg-red-600 mb-text-white mb-rounded-full mb-w-5 mb-h-5 mb-text-xs mb-flex mb-items-center mb-justify-center mb-opacity-0 group-hover:mb-opacity-100 mb-transition-opacity"
-          :title="t('Rimuovi video')"
-        >{{ t('&times;') }}</button>
-      </div>
-      <button
-        @click="pickBgVideo"
-        class="mb-w-full mb-py-1.5 mb-px-3 mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-md mb-text-xs mb-text-gray-300 hover:mb-bg-gray-600 mb-transition-colors"
-      >
-        {{ bg.video_url ? 'Cambia video' : 'Seleziona video' }}
-      </button>
+        <button type="button" class="btn-soft" @click="pickBgImage">{{ bg.image_url ? t('Cambia immagine') : t('Seleziona immagine') }}</button>
 
-      <!-- Poster image (optional) -->
-      <button
-        @click="pickBgPoster"
-        class="mb-w-full mb-py-1.5 mb-px-3 mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-md mb-text-xs mb-text-gray-300 hover:mb-bg-gray-600 mb-transition-colors"
-      >
-        {{ bg.video_poster ? 'Cambia poster' : 'Seleziona poster' }}
-      </button>
-
-      <!-- Fit mode -->
-      <div>
-        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Adattamento') }}</label>
-        <select
-          :value="bg.video_fit || 'cover'"
-          @change="updateField('video_fit', $event.target.value)"
-          class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1 mb-text-sm mb-text-gray-900"
-        >
-          <option value="cover">{{ t('Cover') }}</option>
-          <option value="contain">{{ t('Contain') }}</option>
-          <option value="fill">{{ t('Riempi') }}</option>
-          <option value="none">{{ t('Nessuno (dimensione originale)') }}</option>
-        </select>
-      </div>
-
-      <!-- Position -->
-      <div>
-        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Posizione') }}</label>
-        <select
-          :value="bg.image_position || 'center center'"
-          @change="updateField('image_position', $event.target.value)"
-          class="mb-w-full mb-bg-white mb-border mb-border-gray-300 mb-rounded-md mb-px-2 mb-py-1 mb-text-sm mb-text-gray-900"
-        >
-          <option value="center center">{{ t('Centro') }}</option>
-          <option value="top center">{{ t('Alto') }}</option>
-          <option value="bottom center">{{ t('Basso') }}</option>
-          <option value="left center">{{ t('Sinistra') }}</option>
-          <option value="right center">{{ t('Destra') }}</option>
-          <option value="top left">{{ t('Alto sinistra') }}</option>
-          <option value="top right">{{ t('Alto destra') }}</option>
-          <option value="bottom left">{{ t('Basso sinistra') }}</option>
-          <option value="bottom right">{{ t('Basso destra') }}</option>
-        </select>
-      </div>
-
-      <!-- Cover Height -->
-      <div>
-        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Altezza cover (px)') }}</label>
-        <div class="mb-flex mb-items-center mb-gap-2">
-          <input
-            type="range"
-            :value="bg.cover_height || 0"
-            @input="updateField('cover_height', parseInt($event.target.value))"
-            min="0" max="1200" step="10"
-            class="mb-flex-1"
-          />
-          <span class="mb-text-xs mb-text-gray-400 mb-w-10 mb-text-right">{{ bg.cover_height || 'auto' }}</span>
-        </div>
-        <p class="mb-text-[9px] mb-text-gray-500 mb-mt-0.5">{{ t('0 = auto (altezza contenuto)') }}</p>
-      </div>
-
-      <!-- Video Scale (zoom) -->
-      <div>
-        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Scala video (%)') }}</label>
-        <div class="mb-flex mb-items-center mb-gap-2">
-          <input
-            type="range"
-            :value="bg.video_scale || 100"
-            @input="updateField('video_scale', parseInt($event.target.value))"
-            min="100" max="300" step="10"
-            class="mb-flex-1"
-          />
-          <span class="mb-text-xs mb-text-gray-400 mb-w-10 mb-text-right">{{ bg.video_scale || 100 }}%</span>
-        </div>
-        <p class="mb-text-[9px] mb-text-gray-500 mb-mt-0.5">{{ t('100% = normale, 200% = doppio') }}</p>
-      </div>
-    </div>
-
-    <!-- Gallery slideshow -->
-    <div v-if="bg.type === 'gallery'" class="mb-space-y-3">
-      <!-- Image picker -->
-      <div>
-        <div class="mb-flex mb-items-center mb-justify-between mb-mb-2">
-          <span class="mb-text-[10px] mb-text-gray-400">{{ (bg.gallery_images || []).length }} {{ t('immagini selezionate') }}</span>
-          <button
-            v-if="(bg.gallery_images || []).length"
-            @click="updateField('gallery_images', [])"
-            class="mb-text-gray-500 hover:mb-text-red-400 mb-text-sm"
-          >&#128465;</button>
-        </div>
-        <div v-if="(bg.gallery_images || []).length" class="mb-flex mb-flex-wrap mb-gap-1 mb-mb-2">
-          <div v-for="(img, idx) in bg.gallery_images" :key="idx" class="mb-relative mb-group">
-            <img :src="img.url" :alt="img.alt" class="mb-w-16 mb-h-12 mb-object-cover mb-rounded mb-border mb-border-gray-600" />
-            <button
-              @click="removeGalleryImage(idx)"
-              class="mb-absolute mb-top-0 mb-right-0 mb-bg-red-600 mb-text-white mb-rounded-full mb-w-4 mb-h-4 mb-text-[9px] mb-flex mb-items-center mb-justify-center mb-opacity-0 group-hover:mb-opacity-100 mb-transition-opacity mb-leading-none"
-            >{{ t('&times;') }}</button>
+        <div class="row">
+          <span class="rowlab">{{ t('Dimensione') }}</span>
+          <div class="selwrap">
+            <select class="sel" :value="bg.image_size || 'cover'" :aria-label="t('Dimensione')" @change="updateField('image_size', $event.target.value)">
+              <option value="cover">{{ t('Cover') }}</option>
+              <option value="contain">{{ t('Contain') }}</option>
+              <option value="auto">{{ t('Auto') }}</option>
+            </select>
+            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
           </div>
         </div>
-        <button
-          @click="pickGalleryImages"
-          class="mb-w-full mb-py-1.5 mb-px-3 mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded-md mb-text-xs mb-text-gray-300 hover:mb-bg-gray-600"
-        >{{ (bg.gallery_images || []).length ? t('Cambia immagini') : t('Seleziona immagini') }}</button>
-      </div>
-
-      <!-- Loop -->
-      <div class="mb-flex mb-items-center mb-justify-between">
-        <span class="mb-text-[10px] mb-text-gray-400">{{ t('Ciclo infinito') }}</span>
-        <button
-          @click="updateField('gallery_loop', !(bg.gallery_loop !== false))"
-          :class="['mb-relative mb-w-10 mb-h-5 mb-rounded-full mb-transition-colors mb-shrink-0', (bg.gallery_loop !== false) ? 'mb-bg-primary-600' : 'mb-bg-gray-600']"
-        ><span :class="['mb-absolute mb-top-0.5 mb-w-4 mb-h-4 mb-rounded-full mb-bg-white mb-transition-transform', (bg.gallery_loop !== false) ? 'mb-left-5' : 'mb-left-0.5']"></span></button>
-      </div>
-
-      <!-- Duration -->
-      <div class="mb-flex mb-items-center mb-justify-between">
-        <span class="mb-text-[10px] mb-text-gray-400">{{ t('Durata (ms)') }}</span>
-        <input type="number" :value="bg.gallery_duration || 5000" @change="updateField('gallery_duration', parseInt($event.target.value))" min="1000" max="30000" step="500"
-          class="mb-w-20 mb-bg-white mb-border mb-border-gray-300 mb-rounded mb-px-2 mb-py-1 mb-text-xs mb-text-gray-900 mb-text-right" />
-      </div>
-
-      <!-- Transition type -->
-      <div class="mb-flex mb-items-center mb-justify-between">
-        <span class="mb-text-[10px] mb-text-gray-400">{{ t('Transizione') }}</span>
-        <select :value="bg.gallery_transition || 'fade'" @change="updateField('gallery_transition', $event.target.value)"
-          class="mb-w-28 mb-bg-white mb-border mb-border-gray-300 mb-rounded mb-px-2 mb-py-1 mb-text-xs mb-text-gray-900">
-          <option value="fade">{{ t('Fade') }}</option>
-          <option value="crossfade">{{ t('Crossfade') }}</option>
-          <option value="slide">{{ t('Slide') }}</option>
-          <option value="slide-up">{{ t('Slide Up') }}</option>
-          <option value="zoom">{{ t('Zoom') }}</option>
-          <option value="blur">{{ t('Blur') }}</option>
-          <option value="flip">{{ t('Flip') }}</option>
-          <option value="none">{{ t('Nessuna') }}</option>
-        </select>
-      </div>
-
-      <!-- Transition duration -->
-      <div class="mb-flex mb-items-center mb-justify-between">
-        <span class="mb-text-[10px] mb-text-gray-400">{{ t('Durata della transizione (ms)') }}</span>
-        <input type="number" :value="bg.gallery_transition_ms || 500" @change="updateField('gallery_transition_ms', parseInt($event.target.value))" min="100" max="3000" step="100"
-          class="mb-w-20 mb-bg-white mb-border mb-border-gray-300 mb-rounded mb-px-2 mb-py-1 mb-text-xs mb-text-gray-900 mb-text-right" />
-      </div>
-
-      <!-- Size -->
-      <div class="mb-flex mb-items-center mb-justify-between">
-        <span class="mb-text-[10px] mb-text-gray-400">{{ t('Dimensione sfondo') }}</span>
-        <select :value="bg.image_size || 'cover'" @change="updateField('image_size', $event.target.value)"
-          class="mb-w-28 mb-bg-white mb-border mb-border-gray-300 mb-rounded mb-px-2 mb-py-1 mb-text-xs mb-text-gray-900">
-          <option value="cover">{{ t('Cover') }}</option>
-          <option value="contain">{{ t('Contain') }}</option>
-          <option value="auto">{{ t('Auto') }}</option>
-        </select>
-      </div>
-
-      <!-- Position -->
-      <div class="mb-flex mb-items-center mb-justify-between">
-        <span class="mb-text-[10px] mb-text-gray-400">{{ t('Posizione sfondo') }}</span>
-        <select :value="bg.image_position || 'center center'" @change="updateField('image_position', $event.target.value)"
-          class="mb-w-28 mb-bg-white mb-border mb-border-gray-300 mb-rounded mb-px-2 mb-py-1 mb-text-xs mb-text-gray-900">
-          <option value="center center">{{ t('Centro') }}</option>
-          <option value="top center">{{ t('Alto') }}</option>
-          <option value="bottom center">{{ t('Basso') }}</option>
-          <option value="left center">{{ t('Sinistra') }}</option>
-          <option value="right center">{{ t('Destra') }}</option>
-        </select>
-      </div>
-
-      <!-- Lazyload -->
-      <div class="mb-flex mb-items-center mb-justify-between">
-        <span class="mb-text-[10px] mb-text-gray-400">{{ t('Lazyload') }}</span>
-        <button
-          @click="updateField('gallery_lazyload', !(bg.gallery_lazyload !== false))"
-          :class="['mb-relative mb-w-10 mb-h-5 mb-rounded-full mb-transition-colors mb-shrink-0', (bg.gallery_lazyload !== false) ? 'mb-bg-primary-600' : 'mb-bg-gray-600']"
-        ><span :class="['mb-absolute mb-top-0.5 mb-w-4 mb-h-4 mb-rounded-full mb-bg-white mb-transition-transform', (bg.gallery_lazyload !== false) ? 'mb-left-5' : 'mb-left-0.5']"></span></button>
-      </div>
-
-      <!-- Ken Burns -->
-      <div class="mb-flex mb-items-center mb-justify-between">
-        <span class="mb-text-[10px] mb-text-gray-400">{{ t('Effetto Ken Burns') }}</span>
-        <button
-          @click="updateField('gallery_kenburns', !bg.gallery_kenburns)"
-          :class="['mb-relative mb-w-10 mb-h-5 mb-rounded-full mb-transition-colors mb-shrink-0', bg.gallery_kenburns ? 'mb-bg-primary-600' : 'mb-bg-gray-600']"
-        ><span :class="['mb-absolute mb-top-0.5 mb-w-4 mb-h-4 mb-rounded-full mb-bg-white mb-transition-transform', bg.gallery_kenburns ? 'mb-left-5' : 'mb-left-0.5']"></span></button>
-      </div>
-
-      <!-- Ken Burns direction -->
-      <div v-if="bg.gallery_kenburns" class="mb-flex mb-items-center mb-justify-between">
-        <span class="mb-text-[10px] mb-text-gray-400">{{ t('Direzione') }}</span>
-        <select :value="bg.gallery_kenburns_dir || 'in'" @change="updateField('gallery_kenburns_dir', $event.target.value)"
-          class="mb-w-28 mb-bg-white mb-border mb-border-gray-300 mb-rounded mb-px-2 mb-py-1 mb-text-xs mb-text-gray-900">
-          <option value="in">{{ t('Dentro') }} (Zoom in)</option>
-          <option value="out">{{ t('Fuori') }} (Zoom out)</option>
-          <option value="alternate">{{ t('Alternato') }}</option>
-        </select>
-      </div>
-    </div>
-
-    <!-- Mesh / Aurora -->
-    <div v-if="bg.type === 'mesh'" class="mb-space-y-3">
-      <p class="mb-text-[10px] mb-text-gray-400">{{ t('Sfondo aurora: 3 blob sfumati sopra un colore base. Usa i ruoli colore del tema.') }}</p>
-      <div class="mb-grid mb-grid-cols-2 mb-gap-2">
-        <div>
-          <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Colore 1') }}</label>
-          <FieldColor :modelValue="bg.mesh_c1 || 'var(--olo-color-primary)'" @update:modelValue="updateField('mesh_c1', $event)" />
+        <div class="row">
+          <span class="rowlab">{{ t('Posizione') }}</span>
+          <div class="selwrap">
+            <select class="sel" :value="bg.image_position || 'center center'" :aria-label="t('Posizione')" @change="updateField('image_position', $event.target.value)">
+              <option value="center center">{{ t('Centro') }}</option>
+              <option value="top center">{{ t('Alto') }}</option>
+              <option value="bottom center">{{ t('Basso') }}</option>
+              <option value="left center">{{ t('Sinistra') }}</option>
+              <option value="right center">{{ t('Destra') }}</option>
+              <option value="top left">{{ t('Alto sinistra') }}</option>
+              <option value="top right">{{ t('Alto destra') }}</option>
+              <option value="bottom left">{{ t('Basso sinistra') }}</option>
+              <option value="bottom right">{{ t('Basso destra') }}</option>
+            </select>
+            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+          </div>
         </div>
-        <div>
-          <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Colore 2') }}</label>
-          <FieldColor :modelValue="bg.mesh_c2 || 'var(--olo-color-secondary)'" @update:modelValue="updateField('mesh_c2', $event)" />
+
+        <div v-if="showParallax" class="field field--sep">
+          <div class="tgl-row">
+            <button type="button" class="tgl" :class="{ on: isParallaxEnabled }" :aria-pressed="isParallaxEnabled" @click="toggleParallax"><b></b></button>
+            <span class="tl">{{ t('Parallasse') }}</span>
+          </div>
+          <div v-if="isParallaxEnabled" class="sub-editor">
+            <ParallaxEditor :modelValue="bgParallaxData" :properties="bgParallaxProperties" @update:modelValue="updateParallaxData" />
+          </div>
         </div>
-        <div>
-          <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Colore 3') }}</label>
-          <FieldColor :modelValue="bg.mesh_c3 || 'var(--olo-color-accent)'" @update:modelValue="updateField('mesh_c3', $event)" />
+      </div>
+
+      <!-- Video -->
+      <div v-else-if="bg.type === 'video'" class="type-body">
+        <div v-if="bg.video_url" class="thumb">
+          <div class="thumb-video">
+            <img v-if="bg.video_poster" :src="bg.video_poster" :alt="t('Poster video')" />
+            <span v-else class="thumb-vico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></span>
+          </div>
+          <button type="button" class="thumb-x" :title="t('Rimuovi video')" @click="removeVideo">&times;</button>
         </div>
-        <div>
-          <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Colore base') }}</label>
+        <button type="button" class="btn-soft" @click="pickBgVideo">{{ bg.video_url ? t('Cambia video') : t('Seleziona video') }}</button>
+        <button type="button" class="btn-soft" @click="pickBgPoster">{{ bg.video_poster ? t('Cambia poster') : t('Seleziona poster') }}</button>
+
+        <div class="row">
+          <span class="rowlab">{{ t('Adattamento') }}</span>
+          <div class="selwrap">
+            <select class="sel" :value="bg.video_fit || 'cover'" :aria-label="t('Adattamento')" @change="updateField('video_fit', $event.target.value)">
+              <option value="cover">{{ t('Cover') }}</option>
+              <option value="contain">{{ t('Contain') }}</option>
+              <option value="fill">{{ t('Riempi') }}</option>
+              <option value="none">{{ t('Nessuno (dimensione originale)') }}</option>
+            </select>
+            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+          </div>
+        </div>
+        <div class="row">
+          <span class="rowlab">{{ t('Posizione') }}</span>
+          <div class="selwrap">
+            <select class="sel" :value="bg.image_position || 'center center'" :aria-label="t('Posizione')" @change="updateField('image_position', $event.target.value)">
+              <option value="center center">{{ t('Centro') }}</option>
+              <option value="top center">{{ t('Alto') }}</option>
+              <option value="bottom center">{{ t('Basso') }}</option>
+              <option value="left center">{{ t('Sinistra') }}</option>
+              <option value="right center">{{ t('Destra') }}</option>
+              <option value="top left">{{ t('Alto sinistra') }}</option>
+              <option value="top right">{{ t('Alto destra') }}</option>
+              <option value="bottom left">{{ t('Basso sinistra') }}</option>
+              <option value="bottom right">{{ t('Basso destra') }}</option>
+            </select>
+            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+          </div>
+        </div>
+        <div class="row">
+          <span class="rowlab">{{ t('Altezza') }}</span>
+          <input type="range" class="uirange" :style="fillStyle(bg.cover_height || 0, 0, 1200)" :value="bg.cover_height || 0" :aria-label="t('Altezza cover')" min="0" max="1200" step="10" @input="commitInt('cover_height', $event.target.value, 0)" />
+          <div class="valbox"><input type="number" :value="bg.cover_height || 0" min="0" max="1200" step="10" @input="commitInt('cover_height', $event.target.value, 0)" @wheel="handleNumberWheel" /><span class="u">px</span></div>
+        </div>
+        <p class="hint">{{ t('0 = auto (altezza contenuto)') }}</p>
+        <div class="row">
+          <span class="rowlab">{{ t('Scala') }}</span>
+          <input type="range" class="uirange" :style="fillStyle(bg.video_scale || 100, 100, 300)" :value="bg.video_scale || 100" :aria-label="t('Scala video')" min="100" max="300" step="10" @input="commitInt('video_scale', $event.target.value, 100)" />
+          <div class="valbox"><input type="number" :value="bg.video_scale || 100" min="100" max="300" step="10" @input="commitInt('video_scale', $event.target.value, 100)" @wheel="handleNumberWheel" /><span class="u">%</span></div>
+        </div>
+      </div>
+
+      <!-- Galleria -->
+      <div v-else-if="bg.type === 'gallery'" class="type-body">
+        <div class="gallery-head">
+          <span class="gcount">{{ (bg.gallery_images || []).length }} {{ t('immagini selezionate') }}</span>
+          <button v-if="(bg.gallery_images || []).length" type="button" class="gclear" :title="t('Svuota')" @click="updateField('gallery_images', [])">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+          </button>
+        </div>
+        <div v-if="(bg.gallery_images || []).length" class="gthumbs">
+          <div v-for="(img, idx) in bg.gallery_images" :key="idx" class="gthumb">
+            <img :src="img.url" :alt="img.alt" />
+            <button type="button" class="gthumb-x" @click="removeGalleryImage(idx)">&times;</button>
+          </div>
+        </div>
+        <button type="button" class="btn-soft" @click="pickGalleryImages">{{ (bg.gallery_images || []).length ? t('Cambia immagini') : t('Seleziona immagini') }}</button>
+
+        <div class="tgl-row">
+          <button type="button" class="tgl" :class="{ on: bg.gallery_loop !== false }" :aria-pressed="bg.gallery_loop !== false" @click="updateField('gallery_loop', !(bg.gallery_loop !== false))"><b></b></button>
+          <span class="tl">{{ t('Ciclo infinito') }}</span>
+        </div>
+
+        <div class="row">
+          <span class="rowlab">{{ t('Durata') }}</span>
+          <span class="spacer"></span>
+          <div class="valbox valbox--wide"><input type="number" :value="bg.gallery_duration || 5000" min="1000" max="30000" step="500" @input="commitInt('gallery_duration', $event.target.value, 5000)" @wheel="handleNumberWheel" /><span class="u">ms</span></div>
+        </div>
+        <div class="row">
+          <span class="rowlab">{{ t('Transizione') }}</span>
+          <div class="selwrap">
+            <select class="sel" :value="bg.gallery_transition || 'fade'" :aria-label="t('Transizione')" @change="updateField('gallery_transition', $event.target.value)">
+              <option value="fade">{{ t('Fade') }}</option>
+              <option value="crossfade">{{ t('Crossfade') }}</option>
+              <option value="slide">{{ t('Slide') }}</option>
+              <option value="slide-up">{{ t('Slide Up') }}</option>
+              <option value="zoom">{{ t('Zoom') }}</option>
+              <option value="blur">{{ t('Blur') }}</option>
+              <option value="flip">{{ t('Flip') }}</option>
+              <option value="none">{{ t('Nessuna') }}</option>
+            </select>
+            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+          </div>
+        </div>
+        <div class="row">
+          <span class="rowlab">{{ t('Durata trans.') }}</span>
+          <span class="spacer"></span>
+          <div class="valbox valbox--wide"><input type="number" :value="bg.gallery_transition_ms || 500" min="100" max="3000" step="100" @input="commitInt('gallery_transition_ms', $event.target.value, 500)" @wheel="handleNumberWheel" /><span class="u">ms</span></div>
+        </div>
+        <div class="row">
+          <span class="rowlab">{{ t('Dimensione') }}</span>
+          <div class="selwrap">
+            <select class="sel" :value="bg.image_size || 'cover'" :aria-label="t('Dimensione sfondo')" @change="updateField('image_size', $event.target.value)">
+              <option value="cover">{{ t('Cover') }}</option>
+              <option value="contain">{{ t('Contain') }}</option>
+              <option value="auto">{{ t('Auto') }}</option>
+            </select>
+            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+          </div>
+        </div>
+        <div class="row">
+          <span class="rowlab">{{ t('Posizione') }}</span>
+          <div class="selwrap">
+            <select class="sel" :value="bg.image_position || 'center center'" :aria-label="t('Posizione sfondo')" @change="updateField('image_position', $event.target.value)">
+              <option value="center center">{{ t('Centro') }}</option>
+              <option value="top center">{{ t('Alto') }}</option>
+              <option value="bottom center">{{ t('Basso') }}</option>
+              <option value="left center">{{ t('Sinistra') }}</option>
+              <option value="right center">{{ t('Destra') }}</option>
+            </select>
+            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+          </div>
+        </div>
+        <div class="tgl-row">
+          <button type="button" class="tgl" :class="{ on: bg.gallery_lazyload !== false }" :aria-pressed="bg.gallery_lazyload !== false" @click="updateField('gallery_lazyload', !(bg.gallery_lazyload !== false))"><b></b></button>
+          <span class="tl">{{ t('Lazyload') }}</span>
+        </div>
+        <div class="tgl-row">
+          <button type="button" class="tgl" :class="{ on: !!bg.gallery_kenburns }" :aria-pressed="!!bg.gallery_kenburns" @click="updateField('gallery_kenburns', !bg.gallery_kenburns)"><b></b></button>
+          <span class="tl">{{ t('Effetto Ken Burns') }}</span>
+        </div>
+        <div v-if="bg.gallery_kenburns" class="row">
+          <span class="rowlab">{{ t('Direzione') }}</span>
+          <div class="selwrap">
+            <select class="sel" :value="bg.gallery_kenburns_dir || 'in'" :aria-label="t('Direzione')" @change="updateField('gallery_kenburns_dir', $event.target.value)">
+              <option value="in">{{ t('Dentro') }} (Zoom in)</option>
+              <option value="out">{{ t('Fuori') }} (Zoom out)</option>
+              <option value="alternate">{{ t('Alternato') }}</option>
+            </select>
+            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Aurora (mesh) -->
+      <div v-else-if="bg.type === 'mesh'" class="type-body">
+        <p class="hint">{{ t('Aurora: blob sfumati su un colore base. Colori dai ruoli del tema.') }}</p>
+
+        <!-- Disposizione -->
+        <div class="row">
+          <span class="rowlab">{{ t('Disposiz.') }}</span>
+          <div class="selwrap">
+            <select class="sel" :value="bg.mesh_preset || 'spread'" :aria-label="t('Disposizione')" @change="updateField('mesh_preset', $event.target.value)">
+              <option v-for="p in meshPresets" :key="p.value" :value="p.value">{{ t(p.label) }}</option>
+            </select>
+            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+          </div>
+        </div>
+
+        <!-- Colori (palette dinamica) -->
+        <div class="field">
+          <span class="cl">{{ t('Colori') }}</span>
+          <div v-for="(c, idx) in meshColors" :key="idx" class="mesh-color-row">
+            <div class="mesh-color-field"><FieldColor :modelValue="c" @update:modelValue="setMeshColor(idx, $event)" /></div>
+            <button v-if="meshColors.length > 1" type="button" class="mini-x" :title="t('Rimuovi colore')" @click="removeMeshColor(idx)">&times;</button>
+          </div>
+          <button v-if="meshColors.length < 5" type="button" class="btn-soft btn-soft--sm" @click="addMeshColor">+ {{ t('Aggiungi colore') }}</button>
+        </div>
+
+        <!-- Colore base -->
+        <div class="field">
+          <span class="cl">{{ t('Colore base') }}</span>
           <FieldColor :modelValue="bg.mesh_base || 'var(--olo-color-background)'" @update:modelValue="updateField('mesh_base', $event)" />
         </div>
-      </div>
-      <!-- Preview -->
-      <div class="mb-h-16 mb-rounded mb-border mb-border-gray-600" :style="meshPreviewStyle"></div>
-      <!-- Animate -->
-      <div class="mb-flex mb-items-center mb-justify-between">
-        <span class="mb-text-[10px] mb-text-gray-400">{{ t('Movimento lento (drift)') }}</span>
-        <button
-          @click="updateField('mesh_animate', !bg.mesh_animate)"
-          :class="['mb-relative mb-w-10 mb-h-5 mb-rounded-full mb-transition-colors mb-shrink-0', bg.mesh_animate ? 'mb-bg-primary-600' : 'mb-bg-gray-600']"
-        ><span :class="['mb-absolute mb-top-0.5 mb-w-4 mb-h-4 mb-rounded-full mb-bg-white mb-transition-transform', bg.mesh_animate ? 'mb-left-5' : 'mb-left-0.5']"></span></button>
-      </div>
-      <div v-if="bg.mesh_animate">
-        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Velocità (s)') }} ({{ bg.mesh_speed || 18 }})</label>
-        <input type="range" :value="bg.mesh_speed || 18" @input="updateField('mesh_speed', parseInt($event.target.value))" min="4" max="60" step="1" class="mb-w-full" />
-      </div>
-    </div>
 
-    <!-- Pattern -->
-    <div v-if="bg.type === 'pattern'" class="mb-space-y-3">
-      <div>
-        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Pattern') }}</label>
-        <select
-          :value="bg.pattern_type || 'dots'"
-          @change="updateField('pattern_type', $event.target.value)"
-          class="mb-w-full mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded mb-px-2 mb-py-1.5 mb-text-xs mb-text-white"
-        >
-          <optgroup v-for="group in patternGroups" :key="group.label" :label="group.label">
-            <option v-for="p in group.items" :key="p.value" :value="p.value">{{ p.label }}</option>
-          </optgroup>
-        </select>
-      </div>
-      <!-- Preview -->
-      <div class="mb-h-16 mb-rounded mb-border mb-border-gray-600" :style="patternPreviewStyle"></div>
-      <div class="mb-grid mb-grid-cols-2 mb-gap-2">
-        <div>
-          <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Colore pattern') }}</label>
-          <FieldColor :modelValue="bg.pattern_color || '#000000'" @update:modelValue="updateField('pattern_color', $event)" />
-        </div>
-        <div>
-          <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Colore sfondo') }}</label>
-          <FieldColor :modelValue="bg.pattern_bg_color || '#ffffff'" @update:modelValue="updateField('pattern_bg_color', $event)" />
-        </div>
-      </div>
-      <div>
-        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Dimensione') }} ({{ bg.pattern_size || 20 }}px)</label>
-        <input type="range" :value="bg.pattern_size || 20" @input="updateField('pattern_size', parseInt($event.target.value))" min="8" max="100" step="1" class="mb-w-full" />
-      </div>
-      <div>
-        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Opacità') }} ({{ bg.pattern_opacity ?? 50 }}%)</label>
-        <input type="range" :value="bg.pattern_opacity ?? 50" @input="updateField('pattern_opacity', parseInt($event.target.value))" min="5" max="100" step="5" class="mb-w-full" />
-      </div>
-    </div>
+        <!-- Anteprima live -->
+        <div class="pv" :style="meshPreviewStyle"><span class="pv-tag">{{ t('anteprima live') }}</span></div>
 
-    <!-- Glow / Bagliori -->
-    <div v-if="bg.type === 'glow'" class="mb-space-y-3">
-      <!-- Preset posizione -->
-      <div>
-        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Disposizione') }}</label>
-        <select :value="bg.glow_preset || 'spread'" @change="updateField('glow_preset', $event.target.value)"
-          class="mb-w-full mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded mb-px-2 mb-py-1.5 mb-text-xs mb-text-white">
-          <option v-for="p in glowPresets" :key="p.value" :value="p.value">{{ t(p.label) }}</option>
-        </select>
-      </div>
-      <!-- Anteprima -->
-      <div class="mb-h-16 mb-rounded mb-border mb-border-gray-600" :style="glowPreviewStyle"></div>
-      <div class="mb-grid mb-grid-cols-2 mb-gap-2">
-        <div>
-          <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Colore alone') }}</label>
-          <FieldColor :modelValue="bg.glow_color || 'var(--olo-color-primary)'" @update:modelValue="updateField('glow_color', $event)" />
+        <!-- N° luci -->
+        <div class="row">
+          <span class="rowlab">{{ t('N° luci') }}</span>
+          <input type="range" class="uirange" :style="fillStyle(meshCount, 1, 6)" :value="meshCount" :aria-label="t('Numero luci')" min="1" max="6" step="1" @input="commitInt('mesh_count', $event.target.value, meshColors.length)" />
+          <div class="valbox nounit"><input type="number" :value="meshCount" min="1" max="6" step="1" @input="commitInt('mesh_count', $event.target.value, meshColors.length)" @wheel="handleNumberWheel" /></div>
         </div>
-        <div>
-          <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Colore base') }}</label>
+        <!-- Morbidezza -->
+        <div class="row">
+          <span class="rowlab">{{ t('Morbidezza') }}</span>
+          <input type="range" class="uirange" :style="fillStyle(bg.mesh_softness ?? 70, 0, 100)" :value="bg.mesh_softness ?? 70" :aria-label="t('Morbidezza')" min="0" max="100" step="2" @input="commitInt('mesh_softness', $event.target.value, 70)" />
+          <div class="valbox"><input type="number" :value="bg.mesh_softness ?? 70" min="0" max="100" step="2" @input="commitInt('mesh_softness', $event.target.value, 70)" @wheel="handleNumberWheel" /><span class="u">%</span></div>
+        </div>
+        <!-- Intensità -->
+        <div class="row">
+          <span class="rowlab">{{ t('Intensità') }}</span>
+          <input type="range" class="uirange" :style="fillStyle(bg.mesh_intensity ?? 100, 0, 100)" :value="bg.mesh_intensity ?? 100" :aria-label="t('Intensità')" min="0" max="100" step="2" @input="commitInt('mesh_intensity', $event.target.value, 100)" />
+          <div class="valbox"><input type="number" :value="bg.mesh_intensity ?? 100" min="0" max="100" step="2" @input="commitInt('mesh_intensity', $event.target.value, 100)" @wheel="handleNumberWheel" /><span class="u">%</span></div>
+        </div>
+        <!-- Animazione + velocità -->
+        <div class="row tgl-inline">
+          <div class="tgl-row">
+            <button type="button" class="tgl" :class="{ on: !!bg.mesh_animate }" :aria-pressed="!!bg.mesh_animate" @click="updateField('mesh_animate', !bg.mesh_animate)"><b></b></button>
+            <span class="tl">{{ t('Animazione') }}</span>
+          </div>
+          <div v-if="bg.mesh_animate" class="valbox"><input type="number" :value="bg.mesh_speed || 18" min="4" max="60" step="1" @input="commitInt('mesh_speed', $event.target.value, 18)" @wheel="handleNumberWheel" /><span class="u">s</span></div>
+        </div>
+      </div>
+
+      <!-- Pattern -->
+      <div v-else-if="bg.type === 'pattern'" class="type-body">
+        <div class="field">
+          <span class="cl">{{ t('Pattern') }}</span>
+          <div class="selwrap">
+            <select class="sel" :value="bg.pattern_type || 'dots'" :aria-label="t('Pattern')" @change="updateField('pattern_type', $event.target.value)">
+              <optgroup v-for="group in patternGroups" :key="group.label" :label="group.label">
+                <option v-for="p in group.items" :key="p.value" :value="p.value">{{ p.label }}</option>
+              </optgroup>
+            </select>
+            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+          </div>
+        </div>
+        <div class="pv" :style="patternPreviewStyle"></div>
+        <div class="grid2">
+          <div class="cell"><span class="cl">{{ t('Colore pattern') }}</span><FieldColor :modelValue="bg.pattern_color || '#000000'" @update:modelValue="updateField('pattern_color', $event)" /></div>
+          <div class="cell"><span class="cl">{{ t('Colore sfondo') }}</span><FieldColor :modelValue="bg.pattern_bg_color || '#ffffff'" @update:modelValue="updateField('pattern_bg_color', $event)" /></div>
+        </div>
+        <div class="row">
+          <span class="rowlab">{{ t('Dimensione') }}</span>
+          <input type="range" class="uirange" :style="fillStyle(bg.pattern_size || 20, 8, 100)" :value="bg.pattern_size || 20" :aria-label="t('Dimensione')" min="8" max="100" step="1" @input="commitInt('pattern_size', $event.target.value, 20)" />
+          <div class="valbox"><input type="number" :value="bg.pattern_size || 20" min="8" max="100" step="1" @input="commitInt('pattern_size', $event.target.value, 20)" @wheel="handleNumberWheel" /><span class="u">px</span></div>
+        </div>
+        <div class="row">
+          <span class="rowlab">{{ t('Spessore') }}</span>
+          <input type="range" class="uirange" :style="fillStyle(bg.pattern_thickness ?? 1, 1, 12)" :value="bg.pattern_thickness ?? 1" :aria-label="t('Spessore')" min="1" max="12" step="1" @input="commitInt('pattern_thickness', $event.target.value, 1)" />
+          <div class="valbox"><input type="number" :value="bg.pattern_thickness ?? 1" min="1" max="12" step="1" @input="commitInt('pattern_thickness', $event.target.value, 1)" @wheel="handleNumberWheel" /><span class="u">px</span></div>
+        </div>
+        <div class="row">
+          <span class="rowlab">{{ t('Rotazione') }}</span>
+          <input type="range" class="uirange" :style="fillStyle(bg.pattern_rotation ?? 0, 0, 180)" :value="bg.pattern_rotation ?? 0" :aria-label="t('Rotazione')" min="0" max="180" step="5" @input="commitInt('pattern_rotation', $event.target.value, 0)" />
+          <div class="valbox"><input type="number" :value="bg.pattern_rotation ?? 0" min="0" max="180" step="5" @input="commitInt('pattern_rotation', $event.target.value, 0)" @wheel="handleNumberWheel" /><span class="u">&deg;</span></div>
+        </div>
+        <div class="row">
+          <span class="rowlab">{{ t('Opacità') }}</span>
+          <input type="range" class="uirange" :style="fillStyle(bg.pattern_opacity ?? 50, 5, 100)" :value="bg.pattern_opacity ?? 50" :aria-label="t('Opacità')" min="5" max="100" step="5" @input="commitInt('pattern_opacity', $event.target.value, 50)" />
+          <div class="valbox"><input type="number" :value="bg.pattern_opacity ?? 50" min="5" max="100" step="5" @input="commitInt('pattern_opacity', $event.target.value, 50)" @wheel="handleNumberWheel" /><span class="u">%</span></div>
+        </div>
+      </div>
+
+      <!-- Bagliori (glow) -->
+      <div v-else-if="bg.type === 'glow'" class="type-body">
+        <div class="row">
+          <span class="rowlab">{{ t('Disposiz.') }}</span>
+          <div class="selwrap">
+            <select class="sel" :value="bg.glow_preset || 'spread'" :aria-label="t('Disposizione')" @change="updateField('glow_preset', $event.target.value)">
+              <option v-for="p in glowPresets" :key="p.value" :value="p.value">{{ t(p.label) }}</option>
+            </select>
+            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+          </div>
+        </div>
+        <div class="pv" :style="glowPreviewStyle"><span class="pv-tag">{{ t('anteprima live') }}</span></div>
+        <div class="field">
+          <span class="cl">{{ t('Colori alone') }}</span>
+          <div v-for="(c, idx) in glowColors" :key="idx" class="mesh-color-row">
+            <div class="mesh-color-field"><FieldColor :modelValue="c" @update:modelValue="setGlowColor(idx, $event)" /></div>
+            <button v-if="glowColors.length > 1" type="button" class="mini-x" :title="t('Rimuovi colore')" @click="removeGlowColor(idx)">&times;</button>
+          </div>
+          <button v-if="glowColors.length < 5" type="button" class="btn-soft btn-soft--sm" @click="addGlowColor">+ {{ t('Aggiungi colore') }}</button>
+        </div>
+        <div class="field">
+          <span class="cl">{{ t('Colore base') }}</span>
           <FieldColor :modelValue="bg.glow_base || '#0b0d12'" @update:modelValue="updateField('glow_base', $event)" />
         </div>
+        <div class="row">
+          <span class="rowlab">{{ t('Intensità') }}</span>
+          <input type="range" class="uirange" :style="fillStyle(bg.glow_intensity ?? 62, 10, 100)" :value="bg.glow_intensity ?? 62" :aria-label="t('Intensità')" min="10" max="100" step="2" @input="commitInt('glow_intensity', $event.target.value, 62)" />
+          <div class="valbox"><input type="number" :value="bg.glow_intensity ?? 62" min="10" max="100" step="2" @input="commitInt('glow_intensity', $event.target.value, 62)" @wheel="handleNumberWheel" /><span class="u">%</span></div>
+        </div>
+        <div class="row">
+          <span class="rowlab">{{ t('Ampiezza') }}</span>
+          <input type="range" class="uirange" :style="fillStyle(bg.glow_size ?? 78, 30, 120)" :value="bg.glow_size ?? 78" :aria-label="t('Ampiezza')" min="30" max="120" step="2" @input="commitInt('glow_size', $event.target.value, 78)" />
+          <div class="valbox"><input type="number" :value="bg.glow_size ?? 78" min="30" max="120" step="2" @input="commitInt('glow_size', $event.target.value, 78)" @wheel="handleNumberWheel" /><span class="u">%</span></div>
+        </div>
+        <div class="tgl-row">
+          <button type="button" class="tgl" :class="{ on: bg.glow_grain !== false }" :aria-pressed="bg.glow_grain !== false" @click="updateField('glow_grain', !(bg.glow_grain !== false))"><b></b></button>
+          <span class="tl">{{ t('Grana film') }}</span>
+        </div>
+
+        <div class="field field--sep">
+          <span class="cl">{{ t('Animazione bagliore') }}</span>
+          <div class="selwrap">
+            <select class="sel" :value="bg.glow_anim || 'none'" :aria-label="t('Animazione bagliore')" @change="updateField('glow_anim', $event.target.value)">
+              <option value="none">{{ t('Nessuna (statico)') }}</option>
+              <option value="pulse">{{ t('Pulsazione (respiro)') }}</option>
+              <option value="drift">{{ t('Deriva (movimento lento)') }}</option>
+              <option value="wander">{{ t('Vagare (respiro + deriva)') }}</option>
+              <option value="flicker">{{ t('Sfarfallio (energia neon)') }}</option>
+              <option value="vivo">{{ t('Vivo (respiro + orbita) ✦') }}</option>
+              <option value="tempesta">{{ t('Tempesta (sfarfallio + ondeggio) ✦') }}</option>
+              <option value="scroll">{{ t('Reattivo allo scroll') }}</option>
+            </select>
+            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+          </div>
+        </div>
+        <div v-if="(bg.glow_anim || 'none') !== 'none' && bg.glow_anim !== 'scroll'" class="row">
+          <span class="rowlab">{{ t('Velocità') }}</span>
+          <input type="range" class="uirange" :style="fillStyle(bg.glow_anim_speed ?? 6, 1, 10)" :value="bg.glow_anim_speed ?? 6" :aria-label="t('Velocità')" min="1" max="10" step="1" @input="commitInt('glow_anim_speed', $event.target.value, 6)" />
+          <div class="valbox"><input type="number" :value="bg.glow_anim_speed ?? 6" min="1" max="10" step="1" @input="commitInt('glow_anim_speed', $event.target.value, 6)" @wheel="handleNumberWheel" /></div>
+        </div>
+        <div v-if="['pulse','vivo'].includes(bg.glow_anim)" class="row">
+          <span class="rowlab">{{ t('Respiro') }}</span>
+          <input type="range" class="uirange" :style="fillStyle(bg.glow_anim_intensity ?? 46, 0, 100)" :value="bg.glow_anim_intensity ?? 46" :aria-label="t('Intensità respiro')" min="0" max="100" step="2" @input="commitInt('glow_anim_intensity', $event.target.value, 46)" />
+          <div class="valbox"><input type="number" :value="bg.glow_anim_intensity ?? 46" min="0" max="100" step="2" @input="commitInt('glow_anim_intensity', $event.target.value, 46)" @wheel="handleNumberWheel" /><span class="u">%</span></div>
+        </div>
       </div>
-      <div>
-        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Colore alone 2 (opzionale)') }}</label>
-        <FieldColor :modelValue="bg.glow_color2 || ''" @update:modelValue="updateField('glow_color2', $event)" />
+
+      <!-- CRT (scanline + vignetta + curvatura + flicker) -->
+      <div v-else-if="bg.type === 'crt'" class="type-body">
+        <!-- Modello -->
+        <div class="row">
+          <span class="rowlab">{{ t('Modello') }}</span>
+          <div class="selwrap">
+            <select class="sel" :value="bg.crt_model || 'classic'" :aria-label="t('Modello')" @change="updateField('crt_model', $event.target.value)">
+              <option v-for="m in crtModels" :key="m.value" :value="m.value">{{ t(m.label) }}</option>
+            </select>
+            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+          </div>
+        </div>
+
+        <!-- Anteprima live -->
+        <div class="pv" :style="crtPreviewStyle"><span class="pv-tag">{{ t('anteprima live') }}</span></div>
+
+        <!-- Colori -->
+        <div class="grid2">
+          <div class="cell"><span class="cl">{{ t('Colore linee') }}</span><FieldColor :modelValue="bg.crt_line_color || '#ffffff'" @update:modelValue="updateField('crt_line_color', $event)" /></div>
+          <div class="cell"><span class="cl">{{ t('Colore base') }}</span><FieldColor :modelValue="bg.crt_base || 'var(--olo-color-background)'" @update:modelValue="updateField('crt_base', $event)" /></div>
+        </div>
+
+        <!-- Scanline -->
+        <div class="row">
+          <span class="rowlab">{{ t('Scanline') }}</span>
+          <input type="range" class="uirange" :style="fillStyle(bg.crt_scanline_opacity ?? 50, 0, 100)" :value="bg.crt_scanline_opacity ?? 50" :aria-label="t('Intensità scanline')" min="0" max="100" step="5" @input="commitInt('crt_scanline_opacity', $event.target.value, 50)" />
+          <div class="valbox"><input type="number" :value="bg.crt_scanline_opacity ?? 50" min="0" max="100" step="5" @input="commitInt('crt_scanline_opacity', $event.target.value, 50)" @wheel="handleNumberWheel" /><span class="u">%</span></div>
+        </div>
+        <!-- Passo -->
+        <div class="row">
+          <span class="rowlab">{{ t('Passo') }}</span>
+          <input type="range" class="uirange" :style="fillStyle(bg.crt_scanline_gap ?? 3, 2, 12)" :value="bg.crt_scanline_gap ?? 3" :aria-label="t('Passo scanline')" min="2" max="12" step="1" @input="commitInt('crt_scanline_gap', $event.target.value, 3)" />
+          <div class="valbox"><input type="number" :value="bg.crt_scanline_gap ?? 3" min="2" max="12" step="1" @input="commitInt('crt_scanline_gap', $event.target.value, 3)" @wheel="handleNumberWheel" /><span class="u">px</span></div>
+        </div>
+        <!-- Curvatura -->
+        <div class="row">
+          <span class="rowlab">{{ t('Curvatura') }}</span>
+          <input type="range" class="uirange" :style="fillStyle(bg.crt_curvature ?? 0, 0, 100)" :value="bg.crt_curvature ?? 0" :aria-label="t('Curvatura')" min="0" max="100" step="5" @input="commitInt('crt_curvature', $event.target.value, 0)" />
+          <div class="valbox"><input type="number" :value="bg.crt_curvature ?? 0" min="0" max="100" step="5" @input="commitInt('crt_curvature', $event.target.value, 0)" @wheel="handleNumberWheel" /><span class="u">%</span></div>
+        </div>
+        <!-- Vignetta -->
+        <div class="row">
+          <span class="rowlab">{{ t('Vignetta') }}</span>
+          <input type="range" class="uirange" :style="fillStyle(bg.crt_vignette ?? 55, 0, 100)" :value="bg.crt_vignette ?? 55" :aria-label="t('Vignetta')" min="0" max="100" step="5" @input="commitInt('crt_vignette', $event.target.value, 55)" />
+          <div class="valbox"><input type="number" :value="bg.crt_vignette ?? 55" min="0" max="100" step="5" @input="commitInt('crt_vignette', $event.target.value, 55)" @wheel="handleNumberWheel" /><span class="u">%</span></div>
+        </div>
+        <!-- Flicker + velocità -->
+        <div class="row tgl-inline">
+          <div class="tgl-row">
+            <button type="button" class="tgl" :class="{ on: !!bg.crt_flicker }" :aria-pressed="!!bg.crt_flicker" @click="updateField('crt_flicker', !bg.crt_flicker)"><b></b></button>
+            <span class="tl">{{ t('Flicker') }}</span>
+          </div>
+          <div v-if="bg.crt_flicker" class="valbox"><input type="number" :value="bg.crt_flicker_speed ?? 6" min="2" max="12" step="1" @input="commitInt('crt_flicker_speed', $event.target.value, 6)" @wheel="handleNumberWheel" /><span class="u">s</span></div>
+        </div>
       </div>
-      <div>
-        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Intensità') }} ({{ bg.glow_intensity ?? 62 }}%)</label>
-        <input type="range" :value="bg.glow_intensity ?? 62" @input="updateField('glow_intensity', parseInt($event.target.value))" min="10" max="100" step="2" class="mb-w-full" />
-      </div>
-      <div>
-        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Ampiezza') }} ({{ bg.glow_size ?? 78 }}%)</label>
-        <input type="range" :value="bg.glow_size ?? 78" @input="updateField('glow_size', parseInt($event.target.value))" min="30" max="120" step="2" class="mb-w-full" />
-      </div>
-      <label class="mb-flex mb-items-center mb-gap-2 mb-cursor-pointer">
-        <button @click="updateField('glow_grain', !(bg.glow_grain !== false))"
-          :class="['mb-relative mb-w-10 mb-h-5 mb-rounded-full mb-shrink-0', (bg.glow_grain !== false) ? 'mb-bg-primary-600' : 'mb-bg-gray-600']">
-          <span :class="['mb-absolute mb-top-0.5 mb-w-4 mb-h-4 mb-rounded-full mb-bg-white mb-transition-transform', (bg.glow_grain !== false) ? 'mb-left-5' : 'mb-left-0.5']"></span>
+
+      <!-- ───────── SOVRAPPOSIZIONE — sotto-sezione con occhio ───────── -->
+      <div class="subhead">
+        <span class="t2">{{ t('Sovrapposizione') }}</span>
+        <button
+          type="button"
+          class="eyeb"
+          :class="{ on: showOverlay }"
+          :aria-pressed="showOverlay"
+          :title="t('Mostra/nascondi sovrapposizione')"
+          @click="showOverlay = !showOverlay"
+        >
+          <svg v-if="showOverlay" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
+          <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 10 8 10 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><path d="M1 1l22 22"/><path d="M6.61 6.61A18.5 18.5 0 0 0 2 12s3 8 10 8a9.12 9.12 0 0 0 5.39-1.61"/></svg>
         </button>
-        <span class="mb-text-xs mb-text-gray-300">{{ t('Grana film') }}</span>
-      </label>
-      <!-- Animazione bagliori -->
-      <div class="mb-pt-2 mb-border-t mb-border-gray-700">
-        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Animazione bagliore') }}</label>
-        <select :value="bg.glow_anim || 'none'" @change="updateField('glow_anim', $event.target.value)"
-          class="mb-w-full mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded mb-px-2 mb-py-1.5 mb-text-xs mb-text-white">
-          <option value="none">{{ t('Nessuna (statico)') }}</option>
-          <option value="pulse">{{ t('Pulsazione (respiro)') }}</option>
-          <option value="drift">{{ t('Deriva (movimento lento)') }}</option>
-          <option value="wander">{{ t('Vagare (respiro + deriva)') }}</option>
-          <option value="flicker">{{ t('Sfarfallio (energia neon)') }}</option>
-          <option value="vivo">{{ t('Vivo (respiro + orbita) ✦') }}</option>
-          <option value="tempesta">{{ t('Tempesta (sfarfallio + ondeggio) ✦') }}</option>
-          <option value="scroll">{{ t('Reattivo allo scroll') }}</option>
-        </select>
       </div>
-      <div v-if="(bg.glow_anim || 'none') !== 'none' && bg.glow_anim !== 'scroll'">
-        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Velocità') }} ({{ bg.glow_anim_speed ?? 6 }})</label>
-        <input type="range" :value="bg.glow_anim_speed ?? 6" @input="updateField('glow_anim_speed', parseInt($event.target.value))" min="1" max="10" step="1" class="mb-w-full" />
+      <div v-if="showOverlay" class="type-body">
+        <div class="field">
+          <span class="cl">{{ t('Colore') }}</span>
+          <FieldColor :modelValue="bg.overlay_color || '#000000'" @update:modelValue="updateField('overlay_color', $event)" />
+        </div>
+        <div class="row">
+          <span class="rowlab">{{ t('Opacità') }}</span>
+          <input type="range" class="uirange" :style="fillStyle(bg.overlay_opacity || 0, 0, 100)" :value="bg.overlay_opacity || 0" :aria-label="t('Opacità sovrapposizione')" min="0" max="100" step="5" @input="commitInt('overlay_opacity', $event.target.value, 0)" />
+          <div class="valbox"><input type="number" :value="bg.overlay_opacity || 0" min="0" max="100" step="5" @input="commitInt('overlay_opacity', $event.target.value, 0)" @wheel="handleNumberWheel" /><span class="u">%</span></div>
+        </div>
       </div>
-      <div v-if="['pulse','vivo'].includes(bg.glow_anim)">
-        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Intensità respiro') }} ({{ bg.glow_anim_intensity ?? 46 }}%)</label>
-        <input type="range" :value="bg.glow_anim_intensity ?? 46" @input="updateField('glow_anim_intensity', parseInt($event.target.value))" min="0" max="100" step="2" class="mb-w-full" />
-      </div>
-    </div>
-
-    <!-- CRT (scanline + vignetta) -->
-    <div v-if="bg.type === 'crt'" class="mb-space-y-3">
-      <p class="mb-text-[10px] mb-text-gray-400">{{ t('Sfondo retro CRT: scanline + vignetta su un colore base. Statico (no flicker) con riduzione del movimento.') }}</p>
-      <div>
-        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Colore base') }}</label>
-        <FieldColor :modelValue="bg.crt_base || 'var(--olo-color-background)'" @update:modelValue="updateField('crt_base', $event)" />
-      </div>
-      <div>
-        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Intensità scanline') }} ({{ bg.crt_scanline_opacity ?? 50 }}%)</label>
-        <input type="range" :value="bg.crt_scanline_opacity ?? 50" @input="updateField('crt_scanline_opacity', parseInt($event.target.value))" min="0" max="100" step="5" class="mb-w-full" />
-      </div>
-      <div>
-        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Passo scanline (px)') }} ({{ bg.crt_scanline_gap ?? 3 }})</label>
-        <input type="range" :value="bg.crt_scanline_gap ?? 3" @input="updateField('crt_scanline_gap', parseInt($event.target.value))" min="2" max="12" step="1" class="mb-w-full" />
-      </div>
-      <div>
-        <label class="mb-block mb-text-[10px] mb-text-gray-400 mb-mb-1">{{ t('Vignetta') }} ({{ bg.crt_vignette ?? 55 }}%)</label>
-        <input type="range" :value="bg.crt_vignette ?? 55" @input="updateField('crt_vignette', parseInt($event.target.value))" min="0" max="100" step="5" class="mb-w-full" />
-      </div>
-    </div>
-
-    <!-- Overlay (for all types except none) -->
-    <div v-if="bg.type && bg.type !== 'none'" class="mb-space-y-2 mb-pt-2 mb-border-t mb-border-gray-700">
-      <label class="mb-block mb-text-xs mb-font-semibold mb-text-gray-300">{{ t('Sovrapposizione') }}</label>
-      <FieldColor
-        :modelValue="bg.overlay_color || '#000000'"
-        @update:modelValue="updateField('overlay_color', $event)"
-      />
-      <div class="mb-flex mb-items-center mb-gap-2">
-        <span class="mb-text-[10px] mb-text-gray-400 mb-shrink-0">{{ t('Opacità') }}</span>
-        <input
-          type="range"
-          :value="bg.overlay_opacity || 0"
-          @input="updateField('overlay_opacity', parseInt($event.target.value))"
-          min="0" max="100" step="5"
-          class="mb-flex-1"
-        />
-        <span class="mb-text-xs mb-text-gray-400 mb-w-10 mb-text-right">{{ bg.overlay_opacity || 0 }}%</span>
-      </div>
-    </div>
+    </template>
   </div>
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { t } from '@/i18n';
 import { useMediaPicker } from '@/composables/useMediaPicker';
 import { patternList, getPatternCSS } from '@/utils/patternCSS';
-import { getGlowCSS, glowPresets } from '@/utils/glowCSS';
+import { getGlowCSS, getGlowColors, glowPresets } from '@/utils/glowCSS';
+import { getMeshCSS, getMeshColors, meshPresets } from '@/utils/meshCSS';
+import { getCrtCSS, crtModels } from '@/utils/crtCSS';
+import { handleNumberWheel } from '@/utils/numberInputWheel';
 import ParallaxEditor from './ParallaxEditor.vue';
 import FieldGradient from './fields/FieldGradient.vue';
 import FieldColor from './fields/FieldColor.vue';
@@ -595,6 +581,9 @@ const defaultBg = {
   mesh_base: 'var(--olo-color-background)',
   mesh_animate: false,
   mesh_speed: 18,
+  mesh_preset: 'spread',
+  mesh_softness: 70,
+  mesh_intensity: 100,
   glow_base: '#0b0d12',
   glow_color: 'var(--olo-color-primary)',
   glow_color2: '',
@@ -618,18 +607,30 @@ const defaultBg = {
   gallery_kenburns_dir: 'in',
 };
 
-const types = [
-  { value: 'none', label: 'Nessuno' },
-  { value: 'solid', label: 'Tinta unita' },
-  { value: 'gradient', label: 'Gradiente' },
-  { value: 'mesh', label: 'Aurora' },
-  { value: 'glow', label: 'Bagliori' },
-  { value: 'pattern', label: 'Pattern' },
-  { value: 'image', label: 'Immagine' },
-  { value: 'video', label: 'Video' },
-  { value: 'gallery', label: 'Galleria' },
-  { value: 'crt', label: 'CRT (scanline)' },
+const bg = computed(() => ({ ...defaultBg, ...props.modelValue }));
+
+// Tipi raggruppati per la griglia di swatch. `prev` = classe CSS della
+// mini-anteprima; i tipi "media" hanno un'icona interna (image/video/gallery).
+const typeGroups = [
+  { cat: 'Colore', items: [
+    { value: 'none',     label: 'Nessuno',      prev: 'p-none' },
+    { value: 'solid',    label: 'Tinta unita',  prev: 'p-solid' },
+    { value: 'gradient', label: 'Gradiente',    prev: 'p-grad' },
+  ] },
+  { cat: 'Generativi', items: [
+    { value: 'mesh',    label: 'Aurora',        prev: 'p-aurora' },
+    { value: 'glow',    label: 'Bagliori',      prev: 'p-glow' },
+    { value: 'pattern', label: 'Pattern',       prev: 'p-pattern' },
+    { value: 'crt',     label: 'CRT scanline',  prev: 'p-crt' },
+  ] },
+  { cat: 'Media', items: [
+    { value: 'image',   label: 'Immagine',      prev: 'p-img' },
+    { value: 'video',   label: 'Video',         prev: 'p-video' },
+    { value: 'gallery', label: 'Galleria',      prev: 'p-gallery' },
+  ] },
 ];
+const allTypes = typeGroups.flatMap((g) => g.items);
+const currentTypeLabel = computed(() => (allTypes.find((it) => it.value === bg.value.type) || {}).label || '');
 
 // Pattern groups for select optgroup
 const patternGroups = [
@@ -641,27 +642,71 @@ const patternGroups = [
   { label: 'Decorativi', items: patternList.filter(p => ['stars','crosses','plus-signs','hearts'].includes(p.value)) },
 ];
 
-// Mesh/aurora preview: rispecchia build_mesh_css() lato PHP (3 blob radiali + base).
-const meshPreviewStyle = computed(() => {
-  const b = bg.value;
-  if (b.type !== 'mesh') return {};
-  const c1 = b.mesh_c1 || 'var(--olo-color-primary)';
-  const c2 = b.mesh_c2 || 'var(--olo-color-secondary)';
-  const c3 = b.mesh_c3 || 'var(--olo-color-accent)';
-  const base = b.mesh_base || 'var(--olo-color-background, #0b0a0d)';
-  return {
-    backgroundColor: base,
-    backgroundImage: [
-      `radial-gradient(60% 60% at 20% 25%, ${c1} 0%, transparent 60%)`,
-      `radial-gradient(55% 55% at 80% 30%, ${c2} 0%, transparent 60%)`,
-      `radial-gradient(70% 70% at 50% 90%, ${c3} 0%, transparent 65%)`,
-    ].join(', '),
-    backgroundRepeat: 'no-repeat',
-  };
+// Mesh/aurora preview: stesso util getMeshCSS della resa canvas/PHP (WYSIWYG).
+const meshPreviewStyle = computed(() => bg.value.type === 'mesh' ? getMeshCSS(bg.value) : {});
+
+// Palette colori effettiva (mesh_colors[] o legacy c1/c2/c3) e n° luci.
+const meshColors = computed(() => getMeshColors(bg.value));
+const meshCount = computed(() => {
+  const n = parseInt(bg.value.mesh_count ?? meshColors.value.length);
+  return Math.max(1, Math.min(6, Number.isNaN(n) ? meshColors.value.length : n));
 });
+
+// Persiste mesh_colors[] e rispecchia i primi 3 in mesh_c1/c2/c3 (retrocompat).
+function writeMeshColors(arr) {
+  emit('update:modelValue', {
+    ...bg.value,
+    mesh_colors: arr,
+    mesh_c1: arr[0] || 'var(--olo-color-primary)',
+    mesh_c2: arr[1] || 'var(--olo-color-secondary)',
+    mesh_c3: arr[2] || 'var(--olo-color-accent)',
+  });
+}
+function setMeshColor(idx, val) {
+  const a = [...meshColors.value];
+  a[idx] = val;
+  writeMeshColors(a);
+}
+function addMeshColor() {
+  const a = [...meshColors.value];
+  if (a.length < 5) { a.push('var(--olo-color-primary)'); writeMeshColors(a); }
+}
+function removeMeshColor(idx) {
+  const a = [...meshColors.value];
+  a.splice(idx, 1);
+  if (!a.length) a.push('var(--olo-color-primary)');
+  writeMeshColors(a);
+}
 
 // Glow/Bagliori preview: usa lo stesso util getGlowCSS della resa canvas/PHP.
 const glowPreviewStyle = computed(() => bg.value.type === 'glow' ? getGlowCSS(bg.value) : {});
+
+// Palette aloni dinamica (stessa gestione dell'Aurora). Persiste glow_colors[] e
+// rispecchia i primi 2 in glow_color/glow_color2 (retrocompat).
+const glowColors = computed(() => getGlowColors(bg.value));
+function writeGlowColors(arr) {
+  emit('update:modelValue', {
+    ...bg.value,
+    glow_colors: arr,
+    glow_color: arr[0] || 'var(--olo-color-primary)',
+    glow_color2: arr[1] || '',
+  });
+}
+function setGlowColor(idx, val) {
+  const a = [...glowColors.value];
+  a[idx] = val;
+  writeGlowColors(a);
+}
+function addGlowColor() {
+  const a = [...glowColors.value];
+  if (a.length < 5) { a.push('var(--olo-color-primary)'); writeGlowColors(a); }
+}
+function removeGlowColor(idx) {
+  const a = [...glowColors.value];
+  a.splice(idx, 1);
+  if (!a.length) a.push('var(--olo-color-primary)');
+  writeGlowColors(a);
+}
 
 const patternPreviewStyle = computed(() => {
   const b = bg.value;
@@ -671,11 +716,14 @@ const patternPreviewStyle = computed(() => {
     b.pattern_color || '#000000',
     b.pattern_bg_color || '#ffffff',
     b.pattern_size || 20,
-    (b.pattern_opacity ?? 50) / 100
+    (b.pattern_opacity ?? 50) / 100,
+    b.pattern_thickness,
+    b.pattern_rotation
   );
 });
 
-const bg = computed(() => ({ ...defaultBg, ...props.modelValue }));
+// CRT preview: stesso util getCrtCSS della resa canvas/PHP (WYSIWYG).
+const crtPreviewStyle = computed(() => bg.value.type === 'crt' ? getCrtCSS(bg.value) : {});
 
 // v1.0.77 — preview usa direttamente bg.color (può essere #hex, rgba(...) o var(--olo-color-*)),
 // l'Alfa è già parte del valore emesso da FieldColor. color_opacity è legacy no-op.
@@ -711,16 +759,29 @@ function onGradientUpdate(newGrad) {
   });
 }
 
-const gradientPreview = computed(() => {
-  const g = gradientModel.value;
-  const stops = (g.stops || []).map(s => `${s.color} ${s.position}%`).join(', ');
-  if (g.type === 'radial') return `radial-gradient(circle, ${stops})`;
-  return `linear-gradient(${g.angle || 180}deg, ${stops})`;
-});
-
 function updateField(key, value) {
   emit('update:modelValue', { ...bg.value, [key]: value });
 }
+
+// Commit numerico robusto (slider + valbox): scarta NaN tornando al default,
+// così svuotare il campo non corrompe la chiave salvata.
+function commitInt(key, raw, def = 0) {
+  const n = parseInt(raw, 10);
+  updateField(key, Number.isNaN(n) ? def : n);
+}
+
+// Stile di riempimento "arancio fino al valore" per gli slider nativi (WebKit).
+// Firefox usa ::-moz-range-progress (vedi <style>). var(--ui)=accento chrome.
+function fillStyle(value, min, max) {
+  const lo = Number(min);
+  const hi = Number(max);
+  const val = Number(value);
+  const pct = hi > lo ? Math.max(0, Math.min(100, ((val - lo) / (hi - lo)) * 100)) : 0;
+  return { background: `linear-gradient(to right, var(--ui) ${pct}%, var(--track) ${pct}%)` };
+}
+
+// Sovrapposizione: disclosure locale (occhio). Aperta se esiste già un overlay.
+const showOverlay = ref(((props.modelValue || {}).overlay_opacity ?? 0) > 0);
 
 function pickBgImage() {
   openSingleImage(({ url }) => {
@@ -825,43 +886,474 @@ function updateParallaxData(newData) {
 </script>
 
 <style scoped>
-/* Slider uniformi per tutti i pannelli sfondo (Bagliori, Aurora, Pattern, Video…):
-   track scuro arrotondato + thumb tondo, coerente con FieldRange. Sostituisce lo
-   stile nativo del browser (blu) che risultava incoerente nel pannello. */
-input[type="range"] {
+/* ════════════════════════════════════════════════════════════════════
+   Pannello Sfondo — tema CHIARO coerente (handoff "Redesign pannello Sfondo").
+   Card autosufficiente: leggibile sia nell'inspector chiaro (tile/sezione)
+   sia nel PageSettingsPanel scuro. Accento = arancio CHROME (--olo-ui-accent),
+   contenuti = token cliente (FieldColor). Vedi commento nel <template>.
+   ════════════════════════════════════════════════════════════════════ */
+.olo-bg2 {
+  --ui: var(--olo-ui-accent, #e8622a);
+  --ui-soft: #fdeee2;
+  --navy: #16263d;
+  --ink: #1f2937;
+  --mute: #6b7280;
+  --faint: #94a3b8;
+  --line: #e5e7eb;
+  --surface-alt: #f6f7f9;
+  --track: #e5e7eb;
+  --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 12px;
+  color: var(--ink);
+}
+
+/* sotto-intestazioni di sezione */
+.subhead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 0 0 11px;
+  padding-top: 15px;
+  border-top: 1px solid #f0f1f4;
+}
+.subhead.first { padding-top: 0; border-top: 0; }
+.subhead .t2 {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--navy);
+}
+.subhead .t2 .q { color: var(--ui); }
+
+/* occhio (disclosure sovrapposizione) */
+.eyeb {
+  width: 28px;
+  height: 26px;
+  border: 1px solid var(--line);
+  background: #fff;
+  border-radius: 7px;
+  color: var(--faint);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: color 0.12s, background 0.12s, border-color 0.12s;
+}
+.eyeb:hover { color: var(--mute); }
+.eyeb.on { color: var(--navy); background: var(--surface-alt); }
+.eyeb svg { width: 15px; height: 15px; }
+.eyeb:focus-visible {
+  outline: none;
+  border-color: var(--ui);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ui) 20%, transparent);
+}
+
+/* ───────── griglia tipi ───────── */
+.bgtypes {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.cat {
+  grid-column: 1 / -1;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--faint);
+  margin: 10px 0 1px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.cat::after { content: ""; flex: 1; height: 1px; background: #f0f1f4; }
+.cat.first { margin-top: 0; }
+
+.bt {
+  appearance: none;
+  border: 1px solid var(--line);
+  background: #fff;
+  border-radius: 10px;
+  padding: 5px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  position: relative;
+  transition: border-color 0.12s, box-shadow 0.12s;
+}
+.bt:hover { border-color: #d7dbe0; }
+.bt.on { border-color: var(--ui); box-shadow: 0 0 0 2px var(--ui-soft); }
+.bt:focus-visible {
+  outline: none;
+  border-color: var(--ui);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ui) 22%, transparent);
+}
+.bt .sw-prev {
+  height: 40px;
+  border-radius: 6px;
+  border: 1px solid rgba(15, 23, 42, 0.07);
+  overflow: hidden;
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+.bt .bl {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--mute);
+  text-align: center;
+  line-height: 1.05;
+  letter-spacing: 0.01em;
+}
+.bt.on .bl { color: var(--navy); font-weight: 700; }
+.bt .ck {
+  position: absolute;
+  top: -7px;
+  right: -7px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--ui);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.28);
+  z-index: 2;
+}
+.bt .ck svg { width: 11px; height: 11px; }
+
+/* mini-anteprime dei tipi */
+.p-none { background: repeating-linear-gradient(45deg, #eef0f3 0 5px, #f9fafb 5px 10px); }
+.p-none::after { content: ""; position: absolute; width: 140%; height: 1.5px; background: #cdd2d9; transform: rotate(-30deg); }
+.p-solid { background: var(--olo-color-primary, #e1474f); }
+.p-grad { background: linear-gradient(118deg, var(--olo-color-primary, #e1474f) 0%, var(--olo-color-accent, #f4a23b) 100%); }
+.p-aurora {
+  background:
+    radial-gradient(circle at 18% 28%, color-mix(in srgb, var(--olo-color-primary, #e1474f) 85%, transparent), transparent 48%),
+    radial-gradient(circle at 82% 22%, rgba(99, 102, 241, 0.8), transparent 46%),
+    radial-gradient(circle at 62% 88%, color-mix(in srgb, var(--olo-color-accent, #f4a23b) 85%, transparent), transparent 50%),
+    var(--navy);
+}
+.p-glow {
+  background:
+    radial-gradient(120% 150% at 50% 132%, var(--olo-color-primary, #e1474f) 0%, color-mix(in srgb, var(--olo-color-primary, #e1474f) 28%, transparent) 30%, transparent 60%),
+    #0b0d12;
+}
+.p-pattern { background: radial-gradient(var(--olo-color-primary, #e1474f) 1.5px, transparent 1.7px) 0 0 / 9px 9px, #fff; }
+.p-crt { background: repeating-linear-gradient(0deg, #06140f 0 2px, rgba(56, 209, 127, 0.32) 2px 3px), #06140f; }
+.p-img { background: repeating-linear-gradient(45deg, #e7ebf0 0 8px, #dde3ea 8px 16px); }
+.p-video { background: var(--navy); }
+.p-gallery { background: #eef1f5; }
+
+.ico { position: relative; z-index: 1; display: grid; place-items: center; }
+.ico svg { width: 18px; height: 18px; color: #9aa6b4; }
+.p-video .play {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 7px 0 7px 12px;
+  border-color: transparent transparent transparent #fff;
+  margin-left: 2px;
+  opacity: 0.92;
+}
+.p-gallery .stack { position: relative; width: 30px; height: 24px; }
+.p-gallery .stack i { position: absolute; width: 20px; height: 16px; border-radius: 3px; border: 1px solid #fff; }
+.p-gallery .stack i:nth-child(1) { left: 0; top: 5px; background: var(--olo-color-accent, #f4a23b); transform: rotate(-8deg); }
+.p-gallery .stack i:nth-child(2) { left: 5px; top: 2px; background: #6366f1; transform: rotate(4deg); }
+.p-gallery .stack i:nth-child(3) { left: 9px; top: 6px; background: var(--olo-color-primary, #e1474f); transform: rotate(-2deg); }
+
+/* ───────── corpo controlli per-tipo ───────── */
+.type-body { display: flex; flex-direction: column; gap: 10px; }
+
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field--sep { border-top: 1px solid #f0f1f4; padding-top: 10px; }
+.sub-editor { margin-top: 4px; }
+.cl {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+.hint { font-size: 10px; color: var(--mute); line-height: 1.45; margin: 0; }
+
+.row { display: flex; align-items: center; gap: 10px; }
+.rowlab {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--faint);
+  width: 64px;
+  flex-shrink: 0;
+}
+.spacer { flex: 1; }
+
+/* select custom */
+.selwrap { flex: 1; position: relative; min-width: 0; }
+.sel {
+  width: 100%;
+  height: 34px;
+  padding: 0 30px 0 10px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: #fff;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink);
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.sel:focus-visible {
+  border-color: var(--ui);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ui) 20%, transparent);
+}
+.chev {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 14px;
+  height: 14px;
+  color: var(--faint);
+  pointer-events: none;
+}
+
+/* slider — track con riempimento arancio (WebKit via :style; FF via progress) */
+.uirange {
+  flex: 1;
+  min-width: 40px;
   -webkit-appearance: none;
   appearance: none;
   height: 6px;
-  background: #374151;
-  border-radius: 3px;
+  border-radius: 99px;
+  background: var(--track);
   outline: none;
   cursor: pointer;
 }
-input[type="range"]::-webkit-slider-thumb {
+.uirange::-webkit-slider-thumb {
   -webkit-appearance: none;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid var(--ui);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
+  cursor: pointer;
+}
+.uirange::-moz-range-thumb {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid var(--ui);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
+  cursor: pointer;
+}
+.uirange::-moz-range-track { height: 6px; border-radius: 99px; background: var(--track); }
+.uirange::-moz-range-progress { height: 6px; border-radius: 99px; background: var(--ui); }
+.uirange:focus-visible { box-shadow: 0 0 0 3px color-mix(in srgb, var(--ui) 25%, transparent); }
+
+/* valbox numerico con unità */
+.valbox {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  overflow: hidden;
+  background: #fff;
+  height: 34px;
+  width: 74px;
+  flex-shrink: 0;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.valbox--wide { width: 96px; }
+.valbox:focus-within {
+  border-color: var(--ui);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ui) 18%, transparent);
+}
+.valbox input {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: none;
+  text-align: center;
+  font: 500 13px var(--mono);
+  color: var(--ink);
+  background: transparent;
+  -moz-appearance: textfield;
+}
+.valbox input::-webkit-inner-spin-button,
+.valbox input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+.valbox .u {
+  font-size: 11px;
+  color: var(--faint);
+  font-weight: 600;
+  padding: 0 8px;
+  border-left: 1px solid #eef0f3;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  background: var(--surface-alt);
+}
+
+/* griglia 2 colonne (colori affiancati) */
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.cell { display: flex; flex-direction: column; gap: 6px; }
+
+/* Aurora: palette dinamica + valbox senza unità (N° luci) */
+.valbox.nounit { width: 54px; }
+.row.tgl-inline { justify-content: space-between; }
+.mesh-color-row { display: flex; align-items: flex-start; gap: 6px; }
+.mesh-color-field { flex: 1; min-width: 0; }
+.mini-x {
+  flex: none;
+  width: 26px;
+  height: 30px;
+  margin-top: 2px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--faint);
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: color 0.12s, border-color 0.12s;
+}
+.mini-x:hover { color: #e11d48; border-color: #f0c2c8; }
+.btn-soft--sm { height: 28px; font-size: 11px; }
+
+/* toggle */
+.tgl-row { display: flex; align-items: center; gap: 10px; }
+.tgl {
+  position: relative;
+  width: 38px;
+  height: 20px;
+  border-radius: 99px;
+  background: #d7dbe0;
+  border: 0;
+  cursor: pointer;
+  flex: none;
+  padding: 0;
+  transition: background 0.15s;
+}
+.tgl.on { background: var(--ui); }
+.tgl b {
+  position: absolute;
+  top: 2px;
+  left: 2px;
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  background: var(--olo-color-primary, #6366f1);
-  border: 2px solid #fff;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
-  cursor: pointer;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  transition: left 0.15s;
 }
-input[type="range"]::-moz-range-thumb {
+.tgl.on b { left: 20px; }
+.tgl:focus-visible { outline: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--ui) 25%, transparent); }
+.tl { font-size: 12px; color: var(--ink); }
+
+/* anteprima live (glow/aurora) */
+.pv {
+  height: 72px;
+  border-radius: 10px;
+  border: 1px solid #eef0f3;
+  position: relative;
+  overflow: hidden;
+}
+.pv-tag {
+  position: absolute;
+  left: 9px;
+  bottom: 7px;
+  font: 600 9px inherit;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.62);
+  pointer-events: none;
+}
+
+/* pulsanti soft (picker media) */
+.btn-soft {
+  width: 100%;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 1px solid var(--line);
+  background: var(--surface-alt);
+  border-radius: 9px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink);
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s;
+}
+.btn-soft:hover { background: #eef0f3; border-color: #d7dbe0; }
+.btn-soft:focus-visible {
+  outline: none;
+  border-color: var(--ui);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ui) 20%, transparent);
+}
+
+/* thumbnail immagine / video */
+.thumb { position: relative; border-radius: 9px; overflow: hidden; border: 1px solid var(--line); }
+.thumb img { display: block; width: 100%; height: 80px; object-fit: cover; }
+.thumb-video { width: 100%; height: 80px; background: var(--navy); display: flex; align-items: center; justify-content: center; }
+.thumb-video img { height: 80px; }
+.thumb-vico svg { width: 26px; height: 26px; color: rgba(255, 255, 255, 0.7); }
+.thumb-x {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 0;
+  background: rgba(17, 24, 39, 0.72);
+  color: #fff;
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+.thumb-x:hover { background: #e11d48; }
+
+/* galleria */
+.gallery-head { display: flex; align-items: center; justify-content: space-between; }
+.gcount { font-size: 10px; color: var(--faint); font-weight: 600; }
+.gclear { border: 0; background: transparent; color: var(--faint); cursor: pointer; display: grid; place-items: center; padding: 2px; }
+.gclear:hover { color: #e11d48; }
+.gclear svg { width: 15px; height: 15px; }
+.gthumbs { display: flex; flex-wrap: wrap; gap: 5px; }
+.gthumb { position: relative; }
+.gthumb img { width: 54px; height: 40px; object-fit: cover; border-radius: 6px; border: 1px solid var(--line); display: block; }
+.gthumb-x {
+  position: absolute;
+  top: -5px;
+  right: -5px;
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  background: var(--olo-color-primary, #6366f1);
-  border: 2px solid #fff;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  border: 0;
+  background: #e11d48;
+  color: #fff;
+  font-size: 11px;
+  line-height: 1;
   cursor: pointer;
-}
-input[type="range"]::-moz-range-track {
-  height: 6px;
-  background: #374151;
-  border-radius: 3px;
-}
-input[type="range"]:focus-visible {
-  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.45);
+  display: grid;
+  place-items: center;
 }
 </style>

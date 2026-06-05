@@ -169,8 +169,10 @@ class Olo_CSS_Builder {
      * applicabile a Section/Colonna/elemento/pagina via get_bg_inline_css (universale).
      * Statico (le scanline restano leggibili anche con prefers-reduced-motion).
      *
-     * Chiavi: crt_scanline_opacity (0–100), crt_scanline_gap (px), crt_vignette (0–100),
-     * crt_base (color). Tutte opzionali con default sensati.
+     * Chiavi (additive, retrocompat — default = resa storica): crt_scanline_opacity (0–100),
+     * crt_scanline_gap (px), crt_vignette (0–100), crt_base (color), crt_line_color (def #fff),
+     * crt_model (classic|vertical|aperture), crt_curvature (0–100), crt_flicker (bool),
+     * crt_flicker_speed (2–12 s). Gemello JS: src/utils/crtCSS.js (getCrtCSS).
      *
      * @param array $bg
      * @return string
@@ -182,10 +184,52 @@ class Olo_CSS_Builder {
         $vig_pct  = max( 0, min( 100, intval( $bg['crt_vignette'] ?? 55 ) ) );
         $vig_a    = round( $vig_pct / 100, 3 );
         $vig_stop = 70 - intval( round( ( $vig_pct / 100 ) * 30 ) );
+        $curv     = max( 0, min( 100, intval( $bg['crt_curvature'] ?? 0 ) ) );
+        $model    = $bg['crt_model'] ?? 'classic';
         $base     = esc_attr( $bg['crt_base'] ?? 'var(--olo-color-background, #0b0a0d)' );
-        $scan     = "repeating-linear-gradient(0deg, rgba(255,255,255,{$scan_a}) 0 1px, transparent 1px {$gap}px)";
-        $vignette = "radial-gradient(120% 120% at 50% 40%, transparent {$vig_stop}%, rgba(5,3,12,{$vig_a}))";
-        return "background: {$scan}, {$vignette}, {$base}";
+        // Colore linee: default bianco → resa storica. Token/hex/rgba via glow_color_to_css.
+        $line     = $this->glow_color_to_css( $bg['crt_line_color'] ?? '#ffffff', $scan_a );
+
+        $imgs = []; $reps = []; $sizes = []; $poss = [];
+
+        // scanline
+        if ( $model === 'vertical' ) {
+            $imgs[] = "repeating-linear-gradient(90deg, {$line} 0 1px, transparent 1px {$gap}px)"; $reps[] = 'repeat'; $sizes[] = 'auto'; $poss[] = '0 0';
+        } elseif ( $model === 'aperture' ) {
+            $imgs[] = "repeating-linear-gradient(90deg, {$line} 0 1px, transparent 1px {$gap}px)"; $reps[] = 'repeat'; $sizes[] = 'auto'; $poss[] = '0 0';
+            $imgs[] = "repeating-linear-gradient(0deg, {$line} 0 1px, transparent 1px {$gap}px)"; $reps[] = 'repeat'; $sizes[] = 'auto'; $poss[] = '0 0';
+        } else {
+            $imgs[] = "repeating-linear-gradient(0deg, {$line} 0 1px, transparent 1px {$gap}px)"; $reps[] = 'repeat'; $sizes[] = 'auto'; $poss[] = '0 0';
+        }
+
+        // curvatura — scurimento curvo agli angoli (più marcato della vignetta)
+        if ( $curv > 0 ) {
+            $c_stop = max( 38, 100 - (int) round( $curv * 0.6 ) );
+            $c_a    = number_format( 0.25 + $curv / 100 * 0.65, 3, '.', '' );
+            $imgs[] = "radial-gradient(100% 100% at 50% 50%, transparent {$c_stop}%, rgba(0,0,0,{$c_a}) 100%)"; $reps[] = 'no-repeat'; $sizes[] = 'cover'; $poss[] = 'center';
+        }
+
+        // vignetta
+        $imgs[] = "radial-gradient(120% 120% at 50% 40%, transparent {$vig_stop}%, rgba(5,3,12,{$vig_a}))"; $reps[] = 'no-repeat'; $sizes[] = 'cover'; $poss[] = 'center';
+
+        $anim = '';
+        if ( ! empty( $bg['crt_flicker'] ) ) {
+            // Barra luminosa (layer 1) che spazza top→bottom via olo-crt-flicker (content-safe).
+            $bar_col = $this->glow_color_to_css( $bg['crt_line_color'] ?? '#ffffff', 0.22 );
+            array_unshift( $imgs, "linear-gradient(to bottom, transparent, {$bar_col}, transparent)" );
+            array_unshift( $reps, 'no-repeat' );
+            array_unshift( $sizes, '100% 18%' );
+            array_unshift( $poss, '0 -25%' );
+            $sp   = max( 2, min( 12, intval( $bg['crt_flicker_speed'] ?? 6 ) ) );
+            $anim = '; animation: olo-crt-flicker ' . $sp . 's linear infinite';
+        }
+
+        return 'background-color:' . $base
+             . ';background-image:' . implode( ', ', $imgs )
+             . ';background-repeat:' . implode( ', ', $reps )
+             . ';background-size:' . implode( ', ', $sizes )
+             . ';background-position:' . implode( ', ', $poss )
+             . $anim;
     }
 
     /**
@@ -242,24 +286,65 @@ class Olo_CSS_Builder {
      * hardcoded. Drift opzionale: anima background-position via keyframe globale
      * `olo-mesh-drift` (definita in frontend.css), referenziabile inline.
      *
-     * Chiavi lette: mesh_c1, mesh_c2, mesh_c3 (color), mesh_base (color di fondo),
-     * mesh_animate (bool), mesh_speed (secondi). Tutte opzionali con default sensati.
+     * Chiavi lette (additive, retrocompatibili): mesh_colors[] (palette, fallback ai
+     * legacy mesh_c1/c2/c3), mesh_base (color di fondo), mesh_count (1-6 blob),
+     * mesh_softness (0-100 falloff), mesh_intensity (0-100 alfa), mesh_preset
+     * (spread|boreale|corners|center|top), mesh_animate (bool), mesh_speed (secondi).
+     * Tutte opzionali con default sensati. Gemello JS: src/utils/meshCSS.js (getMeshCSS).
      *
      * @param array $bg Background config.
      * @return string CSS declaration string (background-color + background-image [+ animation]).
      */
     public function build_mesh_css( $bg ) {
-        $c1   = esc_attr( $bg['mesh_c1'] ?? 'var(--olo-color-primary)' );
-        $c2   = esc_attr( $bg['mesh_c2'] ?? 'var(--olo-color-secondary)' );
-        $c3   = esc_attr( $bg['mesh_c3'] ?? 'var(--olo-color-accent)' );
+        // Palette: mesh_colors[] (nuovo) oppure i legacy mesh_c1/c2/c3, con fallback ai ruoli.
+        $colors = [];
+        if ( ! empty( $bg['mesh_colors'] ) && is_array( $bg['mesh_colors'] ) ) {
+            foreach ( $bg['mesh_colors'] as $c ) {
+                if ( $c !== '' && $c !== null ) { $colors[] = (string) $c; }
+            }
+        }
+        if ( empty( $colors ) ) {
+            foreach ( [ $bg['mesh_c1'] ?? '', $bg['mesh_c2'] ?? '', $bg['mesh_c3'] ?? '' ] as $c ) {
+                if ( $c !== '' ) { $colors[] = (string) $c; }
+            }
+        }
+        if ( empty( $colors ) ) {
+            $colors = [ 'var(--olo-color-primary)', 'var(--olo-color-secondary)', 'var(--olo-color-accent)' ];
+        }
         $base = esc_attr( $bg['mesh_base'] ?? 'var(--olo-color-background, #0b0a0d)' );
 
-        // Tre blob radiali in posizioni gradevoli; fade a trasparente per fondersi.
-        $blobs = [
-            "radial-gradient(60% 60% at 20% 25%, {$c1} 0%, transparent 60%)",
-            "radial-gradient(55% 55% at 80% 30%, {$c2} 0%, transparent 60%)",
-            "radial-gradient(70% 70% at 50% 90%, {$c3} 0%, transparent 65%)",
+        // Posizioni [x,y] dei blob per disposizione; le prime 3 di "spread" = resa storica
+        // (20/25, 80/30, 50/90) → nessuna regressione per gli aurora legacy.
+        $positions_map = [
+            'spread'  => [ [ 20, 25 ], [ 80, 30 ], [ 50, 90 ], [ 85, 78 ], [ 15, 75 ], [ 50, 12 ] ],
+            'boreale' => [ [ 22, 94 ], [ 50, 88 ], [ 78, 96 ], [ 35, 78 ], [ 66, 82 ], [ 50, 66 ] ],
+            'corners' => [ [ 10, 12 ], [ 90, 14 ], [ 12, 88 ], [ 88, 86 ], [ 50, 50 ], [ 50, 8 ] ],
+            'center'  => [ [ 50, 46 ], [ 34, 56 ], [ 66, 56 ], [ 50, 30 ], [ 42, 42 ], [ 58, 42 ] ],
+            'top'     => [ [ 20, 8 ], [ 50, 3 ], [ 80, 8 ], [ 35, 22 ], [ 66, 18 ], [ 50, 32 ] ],
         ];
+        $preset    = $bg['mesh_preset'] ?? 'spread';
+        $positions = $positions_map[ $preset ] ?? $positions_map['spread'];
+        $pcount    = count( $positions );
+        $ccount    = count( $colors );
+
+        $count     = max( 1, min( 6, isset( $bg['mesh_count'] ) ? intval( $bg['mesh_count'] ) : $ccount ) );
+        $softness  = max( 0, min( 100, intval( $bg['mesh_softness'] ?? 70 ) ) );
+        $intensity = max( 0, min( 100, intval( $bg['mesh_intensity'] ?? 100 ) ) ) / 100;
+        $stop      = (int) round( 40 + $softness * 0.5 );  // 40..90
+        $midpos    = (int) round( $stop * 0.45 );
+
+        // Blob radiali (3 stop: nucleo → plateau → trasparente). glow_color_to_css applica
+        // l'alfa rispettando token (color-mix) / hex-rgba — stesso helper dei Bagliori.
+        $blobs = [];
+        for ( $i = 0; $i < $count; $i++ ) {
+            $pos  = $positions[ $i % $pcount ];
+            $col  = $colors[ $i % $ccount ];
+            $core = $this->glow_color_to_css( $col, $intensity );
+            $mid  = $this->glow_color_to_css( $col, $intensity * 0.5 );
+            $fade = $this->glow_color_to_css( $col, 0 );
+            $blobs[] = "radial-gradient(circle at {$pos[0]}% {$pos[1]}%, {$core} 0%, {$mid} {$midpos}%, {$fade} {$stop}%)";
+        }
+
         $css = 'background-color: ' . $base
              . '; background-image: ' . implode( ', ', $blobs )
              . '; background-repeat: no-repeat';
@@ -269,9 +354,29 @@ class Olo_CSS_Builder {
             $speed = max( 4, min( 60, intval( $bg['mesh_speed'] ?? 18 ) ) );
             $css  .= '; background-size: 160% 160%'
                    . '; animation: olo-mesh-drift ' . $speed . 's ease-in-out infinite alternate';
+        } else {
+            $css .= '; background-size: cover';
         }
 
         return $css;
+    }
+
+    /** Palette aloni glow: glow_colors[] (nuovo) o legacy glow_color/glow_color2, fallback primario.
+     *  Gemello JS getGlowColors(). Stessa gestione colori dell'Aurora. */
+    private function glow_colors( $bg ) {
+        $colors = [];
+        if ( ! empty( $bg['glow_colors'] ) && is_array( $bg['glow_colors'] ) ) {
+            foreach ( $bg['glow_colors'] as $c ) {
+                if ( $c !== '' && $c !== null ) { $colors[] = (string) $c; }
+            }
+        }
+        if ( empty( $colors ) ) {
+            foreach ( [ $bg['glow_color'] ?? '', $bg['glow_color2'] ?? '' ] as $c ) {
+                if ( $c !== '' ) { $colors[] = (string) $c; }
+            }
+        }
+        if ( empty( $colors ) ) { $colors = [ 'var(--olo-color-primary)' ]; }
+        return $colors;
     }
 
     /**
@@ -297,8 +402,7 @@ class Olo_CSS_Builder {
         ];
 
         $base      = $bg['glow_base'] ?: '#0b0d12';
-        $c1        = $bg['glow_color'] ?: 'var(--olo-color-primary)';
-        $c2        = ! empty( $bg['glow_color2'] ) ? $bg['glow_color2'] : $c1;
+        $colors    = $this->glow_colors( $bg );
         $preset    = $bg['glow_preset'] ?? 'spread';
         $intensity = ( isset( $bg['glow_intensity'] ) ? intval( $bg['glow_intensity'] ) : 55 ) / 100;
         $size_pct  = isset( $bg['glow_size'] ) ? intval( $bg['glow_size'] ) : 70;
@@ -306,7 +410,7 @@ class Olo_CSS_Builder {
 
         $layers = [];
         foreach ( $hotspots as $i => $h ) {
-            $color  = ( $i % 2 === 0 ) ? $c1 : $c2;
+            $color  = $colors[ $i % count( $colors ) ];
             $stop   = max( 20, min( 110, (int) round( $size_pct * $h[2] ) ) );
             $a      = min( 1, $intensity * ( $i === 0 ? 1 : 0.8 ) );
             $core   = $this->glow_color_to_css( $color, $a );
@@ -436,6 +540,12 @@ class Olo_CSS_Builder {
         $bg_clr  = esc_attr( $bg['pattern_bg_color'] ?? '#ffffff' );
         $size    = max( 8, intval( $bg['pattern_size'] ?? 20 ) );
         $opacity = max( 0.05, min( 1, ( intval( $bg['pattern_opacity'] ?? 50 ) ) / 100 ) );
+        // Spessore (default 1px = storico) + rotazione (gradienti direzionali), additivi.
+        $thick = ( isset( $bg['pattern_thickness'] ) && intval( $bg['pattern_thickness'] ) > 0 ) ? intval( $bg['pattern_thickness'] ) : 0;
+        $lw    = $thick > 0 ? $thick : 1;
+        $dot_r = $thick > 0 ? $thick : null;
+        $rot   = intval( $bg['pattern_rotation'] ?? 0 );
+        $a0    = 0 + $rot; $a90 = 90 + $rot; $a45 = 45 + $rot; $am45 = -45 + $rot;
 
         // Parse pattern_color: supporta hex (#rrggbb, #rgb) E rgba(r,g,b,a).
         // BUG storico: usare hexdec() su una stringa rgba(...) produceva colori
@@ -453,62 +563,62 @@ class Olo_CSS_Builder {
 
         switch ( $type ) {
             case 'horizontal-lines':
-                $bg_image = "repeating-linear-gradient(0deg,{$c} 0px,{$c} 1px,transparent 1px,transparent {$size}px)";
+                $bg_image = "repeating-linear-gradient({$a0}deg,{$c} 0px,{$c} {$lw}px,transparent {$lw}px,transparent {$size}px)";
                 break;
             case 'vertical-lines':
-                $bg_image = "repeating-linear-gradient(90deg,{$c} 0px,{$c} 1px,transparent 1px,transparent {$size}px)";
+                $bg_image = "repeating-linear-gradient({$a90}deg,{$c} 0px,{$c} {$lw}px,transparent {$lw}px,transparent {$size}px)";
                 break;
             case 'diagonal-lines':
-                $bg_image = "repeating-linear-gradient(45deg,{$c} 0px,{$c} 1px,transparent 1px,transparent {$size}px)";
+                $bg_image = "repeating-linear-gradient({$a45}deg,{$c} 0px,{$c} {$lw}px,transparent {$lw}px,transparent {$size}px)";
                 break;
             case 'diagonal-lines-reverse':
-                $bg_image = "repeating-linear-gradient(-45deg,{$c} 0px,{$c} 1px,transparent 1px,transparent {$size}px)";
+                $bg_image = "repeating-linear-gradient({$am45}deg,{$c} 0px,{$c} {$lw}px,transparent {$lw}px,transparent {$size}px)";
                 break;
             case 'crosshatch':
-                $bg_image = "repeating-linear-gradient(0deg,{$c} 0px,{$c} 1px,transparent 1px,transparent {$size}px),repeating-linear-gradient(90deg,{$c} 0px,{$c} 1px,transparent 1px,transparent {$size}px)";
+                $bg_image = "repeating-linear-gradient({$a0}deg,{$c} 0px,{$c} {$lw}px,transparent {$lw}px,transparent {$size}px),repeating-linear-gradient({$a90}deg,{$c} 0px,{$c} {$lw}px,transparent {$lw}px,transparent {$size}px)";
                 break;
             case 'diagonal-crosshatch':
-                $bg_image = "repeating-linear-gradient(45deg,{$c} 0px,{$c} 1px,transparent 1px,transparent {$size}px),repeating-linear-gradient(-45deg,{$c} 0px,{$c} 1px,transparent 1px,transparent {$size}px)";
+                $bg_image = "repeating-linear-gradient({$a45}deg,{$c} 0px,{$c} {$lw}px,transparent {$lw}px,transparent {$size}px),repeating-linear-gradient({$am45}deg,{$c} 0px,{$c} {$lw}px,transparent {$lw}px,transparent {$size}px)";
                 break;
             case 'dots':
-                $dr = max( 1, round( $size * 0.05 ) );
+                $dr = $dot_r !== null ? $dot_r : max( 1, round( $size * 0.05 ) );
                 $bg_image = "radial-gradient(circle,{$c} {$dr}px,transparent {$dr}px)";
                 break;
             case 'dots-large':
-                $dr = max( 2, round( $size * 0.15 ) );
+                $dr = $dot_r !== null ? $dot_r : max( 2, round( $size * 0.15 ) );
                 $bg_image = "radial-gradient(circle,{$c} {$dr}px,transparent {$dr}px)";
                 break;
             case 'dots-grid':
-                $dr = max( 1, round( $size * 0.08 ) );
+                $dr = $dot_r !== null ? $dot_r : max( 1, round( $size * 0.08 ) );
                 $bg_image = "radial-gradient(circle,{$c} {$dr}px,transparent {$dr}px)";
                 break;
             case 'checkerboard':
                 $half = $size / 2;
-                $bg_image = "linear-gradient(45deg,{$c} 25%,transparent 25%,transparent 75%,{$c} 75%,{$c}),linear-gradient(45deg,{$c} 25%,transparent 25%,transparent 75%,{$c} 75%,{$c})";
+                $bg_image = "linear-gradient({$a45}deg,{$c} 25%,transparent 25%,transparent 75%,{$c} 75%,{$c}),linear-gradient({$a45}deg,{$c} 25%,transparent 25%,transparent 75%,{$c} 75%,{$c})";
                 $bg_pos = "0 0,{$half}px {$half}px";
                 break;
             case 'graph-paper':
-                $bg_image = "linear-gradient({$c} 1px,transparent 1px),linear-gradient(90deg,{$c} 1px,transparent 1px)";
+                $bg_image = "linear-gradient({$c} {$lw}px,transparent {$lw}px),linear-gradient(90deg,{$c} {$lw}px,transparent {$lw}px)";
                 break;
             case 'carbon-fiber':
                 $half = $size / 2;
-                $bg_image = "radial-gradient(circle,{$c} 1px,transparent 1px),radial-gradient(circle,{$c} 1px,transparent 1px)";
+                $bg_image = "radial-gradient(circle,{$c} {$lw}px,transparent {$lw}px),radial-gradient(circle,{$c} {$lw}px,transparent {$lw}px)";
                 $bg_pos = "0 0,{$half}px {$half}px";
                 break;
             case 'polka-dots':
-                $dr = max( 2, round( $size * 0.2 ) );
+                $dr = $dot_r !== null ? $dot_r : max( 2, round( $size * 0.2 ) );
                 $half = $size / 2;
                 $bg_image = "radial-gradient(circle {$dr}px,{$c} 100%,transparent 100%),radial-gradient(circle {$dr}px,{$c} 100%,transparent 100%)";
                 $bg_pos = "0 0,{$half}px {$half}px";
                 break;
             case 'lined-paper':
-                $bg_image = "repeating-linear-gradient(0deg,{$c} 0px,{$c} 1px,transparent 1px,transparent {$size}px)";
+                $bg_image = "repeating-linear-gradient({$a0}deg,{$c} 0px,{$c} {$lw}px,transparent {$lw}px,transparent {$size}px)";
                 break;
             case 'blueprint':
                 $thin_opacity = round( $final_opacity * 0.5, 2 );
                 $c_thin = "rgba({$r},{$g},{$b},{$thin_opacity})";
                 $sub = max( 1, round( $size / 5 ) );
-                $bg_image = "linear-gradient({$c} 1px,transparent 1px),linear-gradient(90deg,{$c} 1px,transparent 1px),linear-gradient({$c_thin} 1px,transparent 1px),linear-gradient(90deg,{$c_thin} 1px,transparent 1px)";
+                $bg_image = "linear-gradient({$c} {$lw}px,transparent {$lw}px),linear-gradient(90deg,{$c} {$lw}px,transparent {$lw}px),linear-gradient({$c_thin} 1px,transparent 1px),linear-gradient(90deg,{$c_thin} 1px,transparent 1px)";
                 $bg_size = "{$size}px {$size}px,{$size}px {$size}px,{$sub}px {$sub}px,{$sub}px {$sub}px";
                 break;
             default:

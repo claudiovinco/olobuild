@@ -18,6 +18,19 @@
   [style*="olo-mesh-drift"] { animation: none !important; }
 }
 
+/* CRT flicker — barra luminosa che spazza dall'alto in basso. Anima SOLO
+   background-position del PRIMO layer (la barra); gli altri restano fermi
+   (centrati). Content-safe. Inline da getCrtCSS()/build_crt_css().
+   La lista a 5 posizioni copre il max dei layer (barra+2 scanline+curvatura+vignetta);
+   con meno layer le posizioni in eccesso sono ignorate. */
+@keyframes olo-crt-flicker {
+  from { background-position: 0 -25%, center, center, center, center; }
+  to   { background-position: 0 125%, center, center, center, center; }
+}
+@media (prefers-reduced-motion: reduce) {
+  [style*="olo-crt-flicker"] { animation: none !important; }
+}
+
 /* ========================================
    Glow / "Bagliori" — animazioni dello sfondo (bg.type = 'glow', glow_anim).
    Animano SOLO background-size / background-position: gli aloni respirano,

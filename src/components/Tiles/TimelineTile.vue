@@ -1,723 +1,286 @@
 <template>
-  <div class="olo-timeline-preview" :class="'olo-tl--preset-' + (s.preset || 'classic-center')" :style="wrapStyle">
-    <!-- Horizontal layout -->
-    <template v-if="isHorizontal">
-      <div class="olo-tl-h-wrap" style="position:relative">
-        <!-- Arrows -->
-        <button
-          class="olo-tl-h-arrow olo-tl-h-arrow--prev"
-          :style="arrowStyle"
-          @click="hPrev"
-        >{{ t('&lsaquo;') }}</button>
-        <button
-          class="olo-tl-h-arrow olo-tl-h-arrow--next"
-          :style="arrowStyle"
-          @click="hNext"
-        >{{ t('&rsaquo;') }}</button>
+  <div class="olo-tlsuper" :class="rootClass" :style="customVars">
 
-        <!-- Viewport -->
-        <div class="olo-tl-h-viewport" :style="hViewportStyle">
-          <!-- Horizontal line -->
-          <div :style="hLineStyle"></div>
+    <!-- ═══ VERTICALE (alt · one) ═══ -->
+    <div v-if="layout === 'alt' || layout === 'one'" class="super js" :class="superClass">
+      <span class="rail"></span>
+      <span class="rail-fill" :style="{ height: isScroll ? 'calc(100% - 12px)' : '0' }"></span>
+
+      <div
+        v-for="(item, i) in items"
+        :key="item.id || i"
+        class="it in"
+        :class="[ 'cat-' + catClass(item), isScroll ? 'reached' : '', (isScroll && i === items.length - 1) ? 'active' : '' ]"
+        :style="itStyle(item)"
+      >
+        <span class="it-node">
+          <span :uk-icon="'icon: ' + (item.icon || 'star')"></span>
+          <span class="pip"></span>
+          <span class="lab">{{ lab(item, i) }}</span>
+        </span>
+        <div class="it-date">
+          <span class="yr">{{ item.date }}</span>
+          <span class="ph">{{ item.tag }}</span>
+          <span class="st">{{ stText(i) }}</span>
+        </div>
+        <div class="it-card">
+          <div class="it-media">
+            <span class="bar"></span>
+            <img v-if="item.image" :src="item.image" :alt="item.title" />
+            <span v-else class="ph">{{ item.tag || item.title }}</span>
+          </div>
+          <div class="it-body">
+            <span v-if="item.tag" class="it-tag">{{ item.tag }}</span>
+            <h4 v-if="item.title">{{ item.title }}</h4>
+            <p v-if="item.description">{{ item.description }}</p>
+          </div>
+        </div>
+      </div>
+
+      <span v-if="s.tl_thread === 'comet'" class="comet"></span>
+    </div>
+
+    <!-- ═══ ORIZZONTALE ═══ -->
+    <div v-else-if="layout === 'horizontal'" class="hwrap">
+      <div class="hbar">
+        <span class="ht"></span>
+        <div class="hnav">
+          <button type="button" class="prev" @click="hScroll(-1)" :aria-label="t('Precedente')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+          </button>
+          <button type="button" class="next" @click="hScroll(1)" :aria-label="t('Successivo')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="hscroll" ref="hscrollRef">
+        <div class="htrack">
           <div
-            class="olo-tl-h-track"
-            :style="hTrackStyle"
+            v-for="(item, i) in items"
+            :key="item.id || i"
+            class="hit"
+            :class="'cat-' + catClass(item)"
+            :style="hitStyle(item)"
           >
+            <span class="hit-node"><span :uk-icon="'icon: ' + (item.icon || 'star')"></span></span>
+            <span class="hit-date">{{ item.date }}</span>
+            <div class="hit-card">
+              <span v-if="item.tag" class="t">{{ item.tag }}</span>
+              <h4 v-if="item.title">{{ item.title }}</h4>
+              <p v-if="item.description">{{ item.description }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ NAVIGATORE ═══ -->
+    <div v-else class="navd">
+      <div class="nv-nav">
+        <button type="button" class="nv-arrow nv-prev" :disabled="nvIdx === 0" @click="nvGo(nvIdx - 1)" :aria-label="t('Precedente')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <div class="nv-viewport">
+          <div class="nv-track" :style="nvTrackStyle">
+            <span class="nv-base"></span>
+            <span class="nv-fill" :style="{ width: (nvIdx * 168 + 84) + 'px' }"></span>
             <div
               v-for="(item, i) in items"
               :key="item.id || i"
-              class="olo-tl-h-item"
-              :style="hItemStyle"
+              class="nv-step"
+              :class="[ i <= nvIdx ? 'done' : '', i === nvIdx ? 'sel' : '' ]"
+              @click="nvGo(i)"
             >
-              <!-- Marker -->
-              <div :style="markerStyle(item, i)" class="olo-tl-marker">
-                <template v-if="s.marker_type === 'icon' && item.icon">
-                  <span :uk-icon="'icon: ' + item.icon" :style="{ color: item.icon_color || s.marker_color || 'var(--olo-color-primary, #e1474f)' }"></span>
-                </template>
-                <template v-else-if="s.marker_type === 'number'">
-                  {{ i + 1 }}
-                </template>
-              </div>
-              <!-- Card -->
-              <div :style="cardStyle" class="olo-tl-card">
-                <div v-if="item.image || item.video" :style="mediaWrapStyle">
-                  <img v-if="item.image && !item.video" :src="item.image" :style="mediaInnerStyle" />
-                  <iframe v-else-if="isEmbedVideo(item.video)" :src="getEmbedUrl(item.video)" :style="mediaInnerStyle" frameborder="0" allow="autoplay" allowfullscreen></iframe>
-                  <video v-else-if="item.video" :src="item.video" :style="mediaInnerStyle" controls preload="metadata"></video>
-                </div>
-                <div v-if="item.date && s.date_position === 'above'" :style="dateStyle" style="margin-bottom:4px" :data-olo-editable="'items.' + i + '.date'">{{ item.date }}</div>
-                <div v-if="item.date && s.date_position === 'inside'" :style="dateStyle" style="margin-bottom:4px" :data-olo-editable="'items.' + i + '.date'">{{ item.date }}</div>
-                <h4 :style="titleStyle" :data-olo-editable="'items.' + i + '.title'">{{ item.title || 'Titolo' }}</h4>
-                <div :style="{ ...descStyle, whiteSpace: 'pre-wrap' }" :data-olo-editable="'items.' + i + '.description'" data-olo-multiline>{{ item.description || '' }}</div>
-              </div>
-              <!-- Date below marker -->
-              <div v-if="item.date && s.date_position === 'outside'" :style="dateStyle" style="margin-top:8px;text-align:center" :data-olo-editable="'items.' + i + '.date'">
-                {{ item.date }}
-              </div>
+              <span class="l">{{ item.date }}</span><span class="d"></span>
             </div>
+          </div>
+        </div>
+        <button type="button" class="nv-arrow nv-next" :disabled="nvIdx === items.length - 1" @click="nvGo(nvIdx + 1)" :aria-label="t('Successivo')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+        </button>
+      </div>
+      <div class="nv-stage">
+        <div class="nv-post">
+          <div class="nv-media">
+            <img v-if="cur.image" :src="cur.image" :alt="cur.title" />
+            <span class="nyr">{{ cur.date }}</span>
+            <span class="nph">{{ t('archivio') }} · {{ cur.date }}</span>
+          </div>
+          <div class="nv-body">
+            <div class="m"><span class="tg">{{ cur.tag }}</span><span class="dt">{{ cur.date }}</span></div>
+            <h2>{{ cur.title }}</h2>
+            <p>{{ cur.description }}</p>
           </div>
         </div>
       </div>
-    </template>
+      <div class="nv-counter"><b>{{ nvIdx + 1 }}</b> / {{ items.length }}</div>
+    </div>
 
-    <!-- Vertical layout -->
-    <template v-else>
-      <div class="olo-tl-v-wrap" :style="vWrapStyle">
-        <!-- Vertical line -->
-        <div :style="vLineStyle"></div>
-
-        <div
-          v-for="(item, i) in items"
-          :key="item.id || i"
-          class="olo-tl-v-item"
-          :style="vItemStyle(i)"
-        >
-          <!-- Date column (spacer for center layout, content only when outside) -->
-          <div
-            v-if="isCenter"
-            class="olo-tl-v-date"
-            :style="vDateWrapStyle(i)"
-          >
-            <span v-if="item.date && s.date_position === 'outside'" :style="dateStyle" :data-olo-editable="'items.' + i + '.date'">{{ item.date }}</span>
-          </div>
-
-          <!-- Marker -->
-          <div class="olo-tl-v-marker" :style="vMarkerWrapStyle">
-            <div :style="markerStyle(item, i)" class="olo-tl-marker">
-              <template v-if="s.marker_type === 'icon' && item.icon">
-                <span :uk-icon="'icon: ' + item.icon" :style="{ color: item.icon_color || s.marker_color || 'var(--olo-color-primary, #e1474f)' }"></span>
-              </template>
-              <template v-else-if="s.marker_type === 'number'">
-                {{ i + 1 }}
-              </template>
-            </div>
-          </div>
-
-          <!-- Card -->
-          <div class="olo-tl-v-card" :style="vCardWrapStyle(i)">
-            <div v-if="item.date && s.date_position === 'above'" :style="dateStyle" style="margin-bottom:6px" :data-olo-editable="'items.' + i + '.date'">{{ item.date }}</div>
-            <div :style="cardStyle" class="olo-tl-card">
-              <!-- Arrow -->
-              <div v-if="s.card_arrow" :style="cardArrowStyle(i)" class="olo-tl-card-arrow"></div>
-              <!-- Media -->
-              <div v-if="item.image || item.video" :style="mediaWrapStyle">
-                <img v-if="item.image && !item.video" :src="item.image" :style="mediaInnerStyle" />
-                <iframe v-else-if="isEmbedVideo(item.video)" :src="getEmbedUrl(item.video)" :style="mediaInnerStyle" frameborder="0" allow="autoplay" allowfullscreen></iframe>
-                <video v-else-if="item.video" :src="item.video" :style="mediaInnerStyle" controls preload="metadata"></video>
-              </div>
-              <div v-if="item.date && s.date_position === 'inside'" :style="dateStyle" style="margin-bottom:4px" :data-olo-editable="'items.' + i + '.date'">{{ item.date }}</div>
-              <h4 :style="titleStyle" :data-olo-editable="'items.' + i + '.title'">{{ item.title || 'Titolo' }}</h4>
-              <div :style="{ ...descStyle, whiteSpace: 'pre-wrap' }" :data-olo-editable="'items.' + i + '.description'" data-olo-multiline>{{ item.description || '' }}</div>
-            </div>
-            <!-- Date outside for non-center layouts -->
-            <div v-if="!isCenter && item.date && s.date_position === 'outside'" :style="dateStyle" style="margin-top:6px" :data-olo-editable="'items.' + i + '.date'">
-              {{ item.date }}
-            </div>
-          </div>
-        </div>
-
-        <!-- End marker -->
-        <div v-if="s.end_marker" class="olo-tl-v-item" :style="endItemStyle">
-          <div v-if="isCenter" class="olo-tl-v-date" style="flex:1;min-width:0"></div>
-          <div class="olo-tl-v-marker" :style="vMarkerWrapStyle">
-            <div :style="endMarkerStyle" class="olo-tl-marker">
-              <span v-if="s.end_marker_icon" :uk-icon="'icon: ' + s.end_marker_icon" :style="{ color: endIconColor }"></span>
-            </div>
-          </div>
-          <div v-if="isCenter" style="flex:1;min-width:0"></div>
-        </div>
-      </div>
-    </template>
   </div>
 </template>
 
 <script setup>
 import { t } from '@/i18n';
 import { ref, computed } from 'vue';
-import { resolveColor, TOKENS } from '@/composables/oloTileDefaults';
+// CSS condiviso col frontend PHP (assets/css/timeline-super.css) — Vite lo bundla.
+import '../../../assets/css/timeline-super.css';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
 });
 
 const defaults = {
-  layout: 'vertical-center',
-  line_color: 'var(--olo-color-border, #E5E7EB)',
-  line_width: '3',
-  line_style: 'solid',
-  marker_type: 'dot',
-  marker_size: '20',
-  marker_color: 'var(--olo-color-primary, #e1474f)',
-  marker_bg: 'var(--olo-color-surface, #FFFFFF)',
-  marker_border_width: '3',
-  marker_border_color: 'var(--olo-color-primary, #e1474f)',
-  marker_shape: 'circle',
-  end_marker: true,
-  end_marker_icon: 'flag',
-  end_marker_color: '',
-  end_marker_bg: '',
-  end_marker_size: '',
-  card_bg: 'var(--olo-color-surface, #FFFFFF)',
-  card_text_color: 'var(--olo-color-text, #374151)',
-  card_padding: '20',
-  card_border_radius: '12',
-  card_shadow: 'md',
-  card_border_width: '0',
-  card_border_color: 'var(--olo-color-border, #E5E7EB)',
-  card_hover: 'lift',
-  card_arrow: true,
-  card_max_width: '',
-  card_media_ratio: 'auto',
-  card_media_margin: '0',
-  card_media_radius: '4',
-  date_position: 'outside',
-  date_color: '',
-  date_size: '14',
-  date_weight: '600',
-  title_size: '18',
-  title_weight: '600',
-  title_color: '',
-  description_size: '14',
-  description_color: '',
-  h_card_width: '300',
-  h_visible_items: '3',
-  h_gap: '24',
-  h_arrow_color: 'var(--olo-color-text, #374151)',
-  h_arrow_bg: 'var(--olo-color-surface-alt, #F3F4F6)',
+  tl_layout: 'alt',
+  tl_reveal: 'sides',
+  tl_theme: 'paper',
+  tl_card: 'bubble',
+  tl_thread: 'solid2',
+  tl_node: 'icon',
+  tl_color: 'cat',
+  tl_media: 'on',
+  tl_density: 'comfy',
+  tl_line: 'scroll',
+  tl_transparent: false,
+  h_card_width: '268',
+  items: [],
 };
-const s = computed(() => ({ ...defaults, ...props.settings }));
+
+// Migrazione vecchie chiavi → tl_* (parità col PHP).
+function migrate(raw) {
+  const r = { ...raw };
+  if (r.tl_layout == null && r.layout != null) {
+    r.tl_layout = ({ 'vertical-center': 'alt', 'vertical-left': 'one', 'vertical-right': 'one', horizontal: 'horizontal' })[r.layout] || 'alt';
+  }
+  if (r.tl_node == null && r.marker_type != null) {
+    r.tl_node = ({ dot: 'dot', icon: 'icon', number: 'num' })[r.marker_type] || 'icon';
+  }
+  if (r.tl_thread == null && r.line_style != null) {
+    r.tl_thread = ({ solid: 'solid2', dashed: 'dash', dotted: 'dot' })[r.line_style] || 'solid2';
+  }
+  if (r.tl_line == null && r.line_progress != null) {
+    r.tl_line = r.line_progress ? 'scroll' : 'solid';
+  }
+  return r;
+}
+
+const s = computed(() => ({ ...defaults, ...migrate(props.settings || {}) }));
 
 const items = computed(() => {
-  const raw = s.value.items;
-  if (Array.isArray(raw)) return raw;
-  return [];
+  const arr = Array.isArray(s.value.items) ? s.value.items : [];
+  return arr.map((it, i) => ({
+    id: it.id || ('tl-' + i),
+    title: it.title || '',
+    tag: it.tag || '',
+    description: it.description || '',
+    date: it.date || '',
+    image: it.image || '',
+    video: it.video || '',
+    icon: it.icon || 'star',
+    category: it.category || 'primary',
+    icon_color: it.icon_color || '',
+  }));
 });
 
-const isHorizontal = computed(() => s.value.layout === 'horizontal');
-const isCenter = computed(() => s.value.layout === 'vertical-center');
-const isRight = computed(() => s.value.layout === 'vertical-right');
+const layout = computed(() => ['alt', 'one', 'horizontal', 'navigator'].includes(s.value.tl_layout) ? s.value.tl_layout : 'alt');
+const theme = computed(() => ['paper', 'night', 'neon', 'blue'].includes(s.value.tl_theme) ? s.value.tl_theme : 'paper');
+const mono = computed(() => s.value.tl_color === 'mono');
+const isScroll = computed(() => s.value.tl_line !== 'solid');
 
-const mSize = computed(() => parseInt(s.value.marker_size) || 20);
-const lineW = computed(() => parseInt(s.value.line_width) || 3);
+const rootClass = computed(() => [
+  theme.value !== 'paper' ? 't-' + theme.value : '',
+  mono.value ? 'mono' : '',
+  s.value.tl_transparent ? 'bg-transparent' : '',
+  !s.value.tl_media_bar ? 'tl-nobar' : '',
+  !s.value.tl_show_tag ? 'tl-notag' : '',
+  s.value.tl_card && s.value.tl_card !== 'bubble' ? 'card-' + s.value.tl_card : '',
+]);
 
-const shadowMap = {
-  none: 'none',
-  sm: '0 2px 6px rgba(0,0,0,.15)',
-  md: '0 4px 12px rgba(0,0,0,.2)',
-  lg: '0 8px 24px rgba(0,0,0,.3)',
-};
-
-// --- Wrap ---
-const wrapStyle = computed(() => ({
-  minHeight: '100px',
-  position: 'relative',
-}));
-
-// --- Marker ---
-function markerStyle(item, i) {
-  const size = mSize.value;
-  const shape = s.value.marker_shape || 'circle';
-  const st = {
-    width: size + 'px',
-    height: size + 'px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexShrink: '0',
-    fontSize: (size * 0.45) + 'px',
-    fontWeight: '700',
-    color: item.icon_color || s.value.marker_color || 'var(--olo-color-primary, #e1474f)',
-    background: s.value.marker_bg || 'var(--olo-color-surface, #FFFFFF)',
-    borderRadius: shape === 'circle' ? '50%' : shape === 'diamond' ? '4px' : '4px',
-    transform: shape === 'diamond' ? 'rotate(45deg)' : 'none',
-    position: 'relative',
-    zIndex: '2',
-  };
-  const bw = parseInt(s.value.marker_border_width) || 0;
-  if (bw > 0) {
-    st.border = `${bw}px solid ${s.value.marker_border_color || s.value.marker_color || 'var(--olo-color-primary, #e1474f)'}`;
-  }
-  if (s.value.marker_type === 'dot') {
-    st.background = s.value.marker_color || 'var(--olo-color-primary, #e1474f)';
-  }
-  return st;
-}
-
-// --- Card ---
-const cardStyle = computed(() => {
-  const pad = parseInt(s.value.card_padding) || 20;
-  const radius = (v => isNaN(v) ? 12 : v)(parseInt(s.value.card_border_radius));
-  const bw = parseInt(s.value.card_border_width) || 0;
-  const st = {
-    background: s.value.card_bg || 'var(--olo-color-surface, #FFFFFF)',
-    color: s.value.card_text_color || 'var(--olo-color-text, #374151)',
-    padding: pad + 'px',
-    borderRadius: radius + 'px',
-    boxShadow: shadowMap[s.value.card_shadow] || 'none',
-    transition: 'transform 0.3s, box-shadow 0.3s',
-    position: 'relative',
-    overflow: 'hidden',
-  };
-  const mw = parseInt(s.value.card_max_width) || 0;
-  if (mw > 0) {
-    st.maxWidth = mw + 'px';
-  }
-  if (bw > 0) {
-    st.border = `${bw}px solid ${s.value.card_border_color || 'var(--olo-color-border, #E5E7EB)'}`;
-  }
-  return st;
+// Override fini → custom property --tl-* sul root (parità col PHP custom_style).
+const customVars = computed(() => {
+  const v = {};
+  const col = (k, css) => { const c = s.value[k]; if (c) v[css] = c; };
+  const px = (k, css) => { const n = parseInt(s.value[k]) || 0; if (n > 0) v[css] = n + 'px'; };
+  col('tl_rail_color', '--tl-rail-color'); px('tl_rail_w', '--tl-rail-w');
+  col('tl_fill_from', '--tl-fill-from'); col('tl_fill_to', '--tl-fill-to');
+  px('tl_node_size', '--tl-node-size'); px('tl_node_border', '--tl-node-bd');
+  col('tl_card_bg', '--tl-card-bg'); px('tl_card_radius', '--tl-card-radius'); px('tl_card_maxw', '--tl-card-maxw'); px('tl_card_pad', '--tl-card-pad');
+  const ratio = s.value.tl_media_ratio || 'auto';
+  if (ratio !== 'auto' && /^\d+\/\d+$/.test(ratio)) { v['--tl-media-ar'] = ratio; v['--tl-media-h'] = 'auto'; }
+  else px('tl_media_h', '--tl-media-h');
+  const fit = s.value.tl_media_fit || 'cover';
+  if (['contain', 'fill', 'none'].includes(fit)) v['--tl-media-fit'] = fit;
+  px('tl_media_radius', '--tl-media-radius');
+  px('tl_title_size', '--tl-title-size');
+  const w = parseInt(s.value.tl_title_weight) || 0; if (w > 0) v['--tl-title-weight'] = String(w);
+  col('tl_title_color', '--tl-title-color');
+  px('tl_text_size', '--tl-text-size'); col('tl_text_color', '--tl-text-color');
+  const lh = parseFloat(s.value.tl_text_lh) || 0; if (lh > 0) v['--tl-text-lh'] = String(lh);
+  const al = s.value.tl_text_align || 'left';
+  if (al === 'center' || al === 'right') v['--tl-text-align'] = al;
+  px('tl_yr_size', '--tl-yr-size'); col('tl_yr_color', '--tl-yr-color');
+  col('tl_tag_color', '--tl-tag-color');
+  col('tl_title_family', '--tl-title-family'); col('tl_text_family', '--tl-text-family'); col('tl_yr_family', '--tl-yr-family');
+  return v;
 });
 
-// --- Media ---
-const mediaWrapStyle = computed(() => {
-  const m = parseInt(s.value.card_media_margin) || 0;
-  const r = parseInt(s.value.card_media_radius) ?? 4;
-  const ratio = s.value.card_media_ratio || 'auto';
-  const st = {
-    overflow: 'hidden',
-    borderRadius: r + 'px',
-    marginBottom: '8px',
-  };
-  if (m < 0) {
-    // Negative margin = bleed outside padding
-    const pad = parseInt(s.value.card_padding) || 20;
-    st.margin = `${-pad}px ${-pad}px 8px ${-pad}px`;
-    st.borderRadius = '0';
-  } else if (m > 0) {
-    st.margin = `${m}px ${m}px 8px ${m}px`;
-  }
-  if (ratio !== 'auto') {
-    st.aspectRatio = ratio;
-  }
-  return st;
+const superClass = computed(() => {
+  const c = [];
+  c.push(isScroll.value ? 'line-scroll' : 'line-solid');
+  c.push('ing-' + s.value.tl_reveal);
+  if (s.value.tl_reveal !== 'sides') c.push('ing-anim');
+  if (layout.value === 'one') c.push('one');
+  if (s.value.tl_card !== 'bubble') c.push('card-' + s.value.tl_card);
+  if (s.value.tl_thread !== 'solid2') c.push('thread-' + s.value.tl_thread);
+  if (s.value.tl_node !== 'icon') c.push('node-' + s.value.tl_node);
+  if (s.value.tl_media === 'off') c.push('no-media');
+  if (s.value.tl_density === 'compact') c.push('dense');
+  if (mono.value) c.push('mono');
+  return c;
 });
 
-const mediaInnerStyle = computed(() => {
-  const ratio = s.value.card_media_ratio || 'auto';
-  return {
-    width: '100%',
-    height: ratio !== 'auto' ? '100%' : 'auto',
-    objectFit: ratio !== 'auto' ? 'cover' : undefined,
-    display: 'block',
-  };
-});
-
-function isEmbedVideo(url) {
-  if (!url) return false;
-  return /youtube|youtu\.be|vimeo/i.test(url);
+function catClass(item) {
+  if (mono.value) return 'primary';
+  const allow = ['primary', 'secondary', 'accent', 'success', 'warning', 'info'];
+  return allow.includes(item.category) ? item.category : 'primary';
 }
-
-function getEmbedUrl(url) {
-  if (!url) return '';
-  const yt = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
-  if (yt) return 'https://www.youtube-nocookie.com/embed/' + yt[1];
-  const vm = url.match(/vimeo\.com\/(\d+)/);
-  if (vm) return 'https://player.vimeo.com/video/' + vm[1];
-  return url;
+function itStyle(item) {
+  return (!mono.value && item.icon_color) ? { '--cat': item.icon_color } : {};
 }
-
-// --- Date ---
-const dateStyle = computed(() => ({
-  fontSize: (parseInt(s.value.date_size) || 14) + 'px',
-  fontWeight: s.value.date_weight || '600',
-  color: resolveColor(s.value.date_color, TOKENS.textFaint),
-}));
-
-// --- Title ---
-const titleStyle = computed(() => ({
-  fontSize: (parseInt(s.value.title_size) || 18) + 'px',
-  fontWeight: s.value.title_weight || '600',
-  color: s.value.title_color || '',
-  margin: '0 0 6px',
-  lineHeight: '1.3',
-}));
-
-// --- Description ---
-const descStyle = computed(() => ({
-  fontSize: (parseInt(s.value.description_size) || 14) + 'px',
-  color: s.value.description_color || '',
-  opacity: '0.85',
-  lineHeight: '1.5',
-  margin: '0',
-}));
-
-// ===================
-// VERTICAL LAYOUT
-// ===================
-const vWrapStyle = computed(() => ({
-  position: 'relative',
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '24px',
-}));
-
-const vLineStyle = computed(() => {
-  const layout = s.value.layout || 'vertical-center';
-  const w = lineW.value;
-  const st = {
-    position: 'absolute',
-    top: '0',
-    bottom: '0',
-    width: w + 'px',
-    background: s.value.line_color || 'var(--olo-color-border, #E5E7EB)',
-    borderStyle: s.value.line_style || 'solid',
-    zIndex: '1',
-  };
-  if (s.value.line_style !== 'solid') {
-    st.background = 'none';
-    st.borderLeftWidth = w + 'px';
-    st.borderLeftStyle = s.value.line_style;
-    st.borderLeftColor = s.value.line_color || 'var(--olo-color-border, #E5E7EB)';
-    st.width = '0';
-  }
-  if (layout === 'vertical-center') {
-    st.left = '50%';
-    st.transform = 'translateX(-50%)';
-  } else if (layout === 'vertical-right') {
-    st.right = (mSize.value / 2 - w / 2) + 'px';
-  } else {
-    st.left = (mSize.value / 2 - w / 2) + 'px';
-  }
-  return st;
-});
-
-function vItemStyle(i) {
-  const layout = s.value.layout || 'vertical-center';
-  const st = {
-    display: 'flex',
-    alignItems: 'flex-start',
-    gap: '16px',
-    position: 'relative',
-  };
-  if (layout === 'vertical-center') {
-    st.flexDirection = i % 2 === 0 ? 'row' : 'row-reverse';
-  } else if (layout === 'vertical-right') {
-    st.flexDirection = 'row-reverse';
-  }
+function hitStyle(item) {
+  const w = parseInt(s.value.h_card_width) || 268;
+  const st = { width: w + 'px' };
+  if (!mono.value && item.icon_color) st['--cat'] = item.icon_color;
   return st;
 }
-
-const vMarkerWrapStyle = computed(() => ({
-  flexShrink: '0',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  zIndex: '2',
-}));
-
-function vCardWrapStyle(i) {
-  const layout = s.value.layout || 'vertical-center';
-  if (layout === 'vertical-center') {
-    return { flex: '1', minWidth: '0' };
-  }
-  return { flex: '1', minWidth: '0' };
+function lab(item, i) {
+  if (s.value.tl_node === 'num') return ('0' + (i + 1)).slice(-2);
+  if (s.value.tl_node === 'year') return item.date;
+  return '';
+}
+function stText(i) {
+  if (!isScroll.value) return '—';
+  return i === items.value.length - 1 ? t('In corso') : t('Fatto');
 }
 
-function vDateWrapStyle(i) {
-  return {
-    flex: '1',
-    minWidth: '0',
-    display: 'flex',
-    alignItems: 'flex-start',
-    justifyContent: i % 2 === 0 ? 'flex-end' : 'flex-start',
-    paddingTop: '4px',
-  };
+// ── orizzontale ──
+const hscrollRef = ref(null);
+function hScroll(dir) {
+  const el = hscrollRef.value;
+  if (!el) return;
+  const card = el.querySelector('.hit');
+  const step = card ? card.getBoundingClientRect().width : 280;
+  el.scrollBy({ left: dir * step, behavior: 'smooth' });
 }
 
-function cardArrowStyle(i) {
-  const layout = s.value.layout || 'vertical-center';
-  const bg = s.value.card_bg || 'var(--olo-color-surface, #FFFFFF)';
-  const size = 8;
-  const base = {
-    position: 'absolute',
-    top: '14px',
-    width: '0',
-    height: '0',
-    borderStyle: 'solid',
-  };
-  // Determine arrow direction
-  let pointsLeft = true;
-  if (layout === 'vertical-center') {
-    pointsLeft = i % 2 === 0;
-  } else if (layout === 'vertical-right') {
-    pointsLeft = false;
-  }
-  if (pointsLeft) {
-    base.left = -size + 'px';
-    base.borderWidth = size + 'px ' + size + 'px ' + size + 'px 0';
-    base.borderColor = `transparent ${bg} transparent transparent`;
-  } else {
-    base.right = -size + 'px';
-    base.borderWidth = size + 'px 0 ' + size + 'px ' + size + 'px';
-    base.borderColor = `transparent transparent transparent ${bg}`;
-  }
-  return base;
+// ── navigatore ──
+const nvIdx = ref(0);
+const cur = computed(() => items.value[Math.min(nvIdx.value, items.value.length - 1)] || {});
+function nvGo(i) {
+  nvIdx.value = Math.max(0, Math.min(items.value.length - 1, i));
 }
-
-// ===================
-// END MARKER
-// ===================
-const endMkSize = computed(() => parseInt(s.value.end_marker_size) || mSize.value);
-
-const endMarkerStyle = computed(() => {
-  const size = endMkSize.value;
-  const shape = s.value.marker_shape || 'circle';
-  const st = {
-    width: size + 'px',
-    height: size + 'px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexShrink: '0',
-    fontSize: (size * 0.5) + 'px',
-    color: s.value.end_marker_color || s.value.marker_color || 'var(--olo-color-primary, #e1474f)',
-    background: s.value.end_marker_bg || s.value.marker_bg || 'var(--olo-color-surface, #FFFFFF)',
-    borderRadius: shape === 'circle' ? '50%' : '4px',
-    transform: shape === 'diamond' ? 'rotate(45deg)' : 'none',
-    position: 'relative',
-    zIndex: '2',
-  };
-  const bw = parseInt(s.value.marker_border_width) || 0;
-  if (bw > 0) {
-    st.border = `${bw}px solid ${s.value.marker_border_color || s.value.marker_color || 'var(--olo-color-primary, #e1474f)'}`;
-  }
-  return st;
+const nvTrackStyle = computed(() => {
+  // centratura approssimata del passo selezionato (parità con la resa frontend)
+  const STEP = 168;
+  return { transform: 'translateX(' + (-Math.max(0, nvIdx.value * STEP - STEP)) + 'px)' };
 });
-
-const endIconColor = computed(() => s.value.end_marker_color || s.value.marker_color || 'var(--olo-color-primary, #e1474f)');
-
-const endItemStyle = computed(() => ({
-  display: 'flex',
-  alignItems: 'flex-start',
-  justifyContent: 'center',
-  gap: '16px',
-  position: 'relative',
-}));
-
-// ===================
-// HORIZONTAL LAYOUT
-// ===================
-const hScrollPx = ref(0);
-
-const hCardW = computed(() => parseInt(s.value.h_card_width) || 300);
-const hGap = computed(() => parseInt(s.value.h_gap) || 24);
-const hVis = computed(() => parseInt(s.value.h_visible_items) || 3);
-const hViewportW = computed(() => hVis.value * hCardW.value + (hVis.value - 1) * hGap.value);
-const hTrackW = computed(() => items.value.length * hCardW.value + Math.max(0, items.value.length - 1) * hGap.value);
-const hMaxScroll = computed(() => Math.max(0, hTrackW.value - hViewportW.value));
-
-const hViewportStyle = computed(() => ({
-  overflow: 'hidden',
-  maxWidth: hViewportW.value + 'px',
-  margin: '0 auto',
-}));
-
-function hPrev() {
-  const step = hCardW.value + hGap.value;
-  hScrollPx.value = Math.max(0, hScrollPx.value - step);
-}
-function hNext() {
-  const step = hCardW.value + hGap.value;
-  hScrollPx.value = Math.min(hMaxScroll.value, hScrollPx.value + step);
-}
-
-const hLineStyle = computed(() => ({
-  position: 'absolute',
-  top: (mSize.value / 2) + 'px',
-  left: '0',
-  right: '0',
-  height: lineW.value + 'px',
-  background: s.value.line_color || 'var(--olo-color-border, #E5E7EB)',
-  zIndex: '1',
-}));
-
-const hTrackStyle = computed(() => ({
-  display: 'flex',
-  gap: hGap.value + 'px',
-  transition: 'transform 0.4s ease',
-  transform: `translateX(-${hScrollPx.value}px)`,
-  position: 'relative',
-  zIndex: '2',
-}));
-
-const hItemStyle = computed(() => ({
-  width: hCardW.value + 'px',
-  flexShrink: '0',
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  gap: '12px',
-}));
-
-const arrowStyle = computed(() => ({
-  position: 'absolute',
-  top: '50%',
-  transform: 'translateY(-50%)',
-  zIndex: '10',
-  width: '36px',
-  height: '36px',
-  borderRadius: '50%',
-  border: 'none',
-  cursor: 'pointer',
-  fontSize: '20px',
-  fontWeight: '700',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  color: s.value.h_arrow_color || 'var(--olo-color-text, #374151)',
-  background: s.value.h_arrow_bg || 'var(--olo-color-surface-alt, #F3F4F6)',
-}));
 </script>
-
-<style scoped>
-.olo-tl-h-arrow--prev {
-  left: -8px;
-}
-.olo-tl-h-arrow--next {
-  right: -8px;
-}
-.olo-tl-h-arrow:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
-}
-
-.olo-tl-card h4 {
-  margin: 0 0 6px;
-}
-
-.olo-tl-card :deep(p) {
-  margin: 0 0 0.5em;
-}
-.olo-tl-card :deep(p:last-child) {
-  margin-bottom: 0;
-}
-
-.olo-tl-marker {
-  transition: transform 0.3s;
-}
-
-/* ───── Preset visual hints in builder ───── */
-
-/* Liquid Glass */
-.olo-tl--preset-liquid-glass :deep(.olo-tl-card) {
-  background: rgba(255,255,255,0.55) !important;
-  backdrop-filter: blur(12px) saturate(180%);
-  -webkit-backdrop-filter: blur(12px) saturate(180%);
-  border: 1px solid rgba(255,255,255,0.5) !important;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.10) !important;
-}
-.olo-tl--preset-liquid-glass :deep(.olo-tl-marker) {
-  background: rgba(255,255,255,0.7) !important;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-}
-
-/* Neon Cyber */
-.olo-tl--preset-neon-cyber :deep(.olo-tl-card) {
-  background: #0a0f1c !important;
-  border: 1px solid rgba(255,106,42,0.45) !important;
-  color: rgba(255,255,255,0.85) !important;
-  box-shadow: 0 0 14px rgba(255,106,42,0.20) !important;
-}
-.olo-tl--preset-neon-cyber :deep(.olo-tl-title) {
-  color: #ff6a2a !important;
-  text-shadow: 0 0 6px rgba(255,106,42,0.5);
-  text-transform: uppercase;
-}
-.olo-tl--preset-neon-cyber :deep(.olo-tl-desc) { color: rgba(255,255,255,0.78) !important; }
-.olo-tl--preset-neon-cyber :deep(.olo-tl-date) { color: #ff6a2a !important; }
-.olo-tl--preset-neon-cyber :deep(.olo-tl-line) { background: #ff6a2a !important; box-shadow: 0 0 6px rgba(255,106,42,0.6); }
-.olo-tl--preset-neon-cyber :deep(.olo-tl-marker) {
-  background: #0a0f1c !important;
-  border: 2px solid #ff6a2a !important;
-  color: #ff6a2a !important;
-}
-
-/* Brutalist */
-.olo-tl--preset-brutalist-block :deep(.olo-tl-card) {
-  background: #fff !important;
-  border: 3px solid #000 !important;
-  box-shadow: 5px 5px 0 0 #000 !important;
-  border-radius: 0 !important;
-  color: #000 !important;
-}
-.olo-tl--preset-brutalist-block :deep(.olo-tl-title) {
-  color: #000 !important;
-  font-weight: 900 !important;
-  text-transform: uppercase;
-}
-.olo-tl--preset-brutalist-block :deep(.olo-tl-desc) { color: #000 !important; font-weight: 500; }
-.olo-tl--preset-brutalist-block :deep(.olo-tl-date) { color: #000 !important; font-weight: 800; text-transform: uppercase; }
-.olo-tl--preset-brutalist-block :deep(.olo-tl-line) { background: #000 !important; }
-.olo-tl--preset-brutalist-block :deep(.olo-tl-marker) {
-  background: #000 !important;
-  color: #fff !important;
-  border: 3px solid #000 !important;
-  border-radius: 0 !important;
-}
-
-/* Magnetic */
-.olo-tl--preset-magnetic-liquid :deep(.olo-tl-card) {
-  border-radius: 18px !important;
-  box-shadow: 0 8px 22px rgba(232,98,42,0.16) !important;
-}
-.olo-tl--preset-magnetic-liquid :deep(.olo-tl-line) {
-  background: linear-gradient(180deg, #e1474f 0%, #f07a80 100%) !important;
-}
-.olo-tl--preset-magnetic-liquid :deep(.olo-tl-marker) {
-  background: #e1474f !important;
-  color: #fff !important;
-  box-shadow: 0 6px 14px rgba(232,98,42,0.4) !important;
-}
-.olo-tl--preset-magnetic-liquid :deep(.olo-tl-date) { color: #e1474f !important; font-weight: 700; }
-
-/* Sticker */
-.olo-tl--preset-sticker :deep(.olo-tl-card) {
-  background: #fff !important;
-  border: 2px dashed rgba(232,98,42,0.55) !important;
-  box-shadow: 0 8px 18px rgba(0,0,0,0.10) !important;
-}
-.olo-tl--preset-sticker :deep(.olo-tl-marker) {
-  background: #e1474f !important;
-  color: #fff !important;
-  border: 3px dashed #f3aa86 !important;
-}
-.olo-tl--preset-sticker :deep(.olo-tl-line) {
-  background: rgba(232,98,42,0.4) !important;
-}
-
-/* Retro Terminal */
-.olo-tl--preset-retro-terminal :deep(.olo-tl-card) {
-  background: #0c0c0c !important;
-  border: 1px solid rgba(0,255,140,0.4) !important;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace !important;
-  background-image: repeating-linear-gradient(0deg, transparent 0, transparent 2px, rgba(0,255,140,0.06) 2px, rgba(0,255,140,0.06) 3px);
-  border-radius: 0 !important;
-}
-.olo-tl--preset-retro-terminal :deep(.olo-tl-title) {
-  color: #00ff8c !important;
-  text-shadow: 0 0 6px rgba(0,255,140,0.5);
-  font-family: inherit !important;
-  text-transform: uppercase;
-}
-.olo-tl--preset-retro-terminal :deep(.olo-tl-title)::before {
-  content: '> ';
-  opacity: 0.7;
-}
-.olo-tl--preset-retro-terminal :deep(.olo-tl-desc) { color: rgba(0,255,140,0.85) !important; font-family: inherit !important; }
-.olo-tl--preset-retro-terminal :deep(.olo-tl-date) { color: #00ff8c !important; font-family: inherit !important; }
-.olo-tl--preset-retro-terminal :deep(.olo-tl-line) { background: #00ff8c !important; }
-.olo-tl--preset-retro-terminal :deep(.olo-tl-marker) {
-  background: #0c0c0c !important;
-  border: 2px solid #00ff8c !important;
-  color: #00ff8c !important;
-  border-radius: 0 !important;
-}
-
-/* 3D Tilt */
-.olo-tl--preset-3d-tilt :deep(.olo-tl-card) {
-  box-shadow: 0 18px 36px rgba(0,0,0,0.14) !important;
-  transform: perspective(900px) rotateX(2deg);
-  transform-origin: center top;
-}
-</style>

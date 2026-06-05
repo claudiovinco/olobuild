@@ -87,17 +87,28 @@ function grainLayer(opacity = 0.06) {
  *   glow_size      30-120 (% raggio alone)                    default 70
  *   glow_grain     bool (grana film)                          default true
  */
+/** Palette aloni: glow_colors[] (nuovo) o i legacy glow_color/glow_color2, fallback al primario.
+ *  Stessa gestione colori dell'Aurora (getMeshColors). */
+export function getGlowColors(g = {}) {
+  if (Array.isArray(g.glow_colors)) {
+    const list = g.glow_colors.filter((c) => c !== '' && c != null);
+    if (list.length) return list;
+  }
+  const legacy = [g.glow_color, g.glow_color2].filter((c) => c !== '' && c != null);
+  if (legacy.length) return legacy;
+  return ['var(--olo-color-primary)'];
+}
+
 export function getGlowCSS(g = {}) {
   const base      = g.glow_base || '#0b0d12';
-  const c1        = g.glow_color || 'var(--olo-color-primary)';
-  const c2        = g.glow_color2 || c1;
+  const colors    = getGlowColors(g);
   const preset    = g.glow_preset || 'spread';
   const intensity = (g.glow_intensity ?? 55) / 100;       // 0-1
   const sizePct   = (g.glow_size ?? 70);                  // % falloff
   const hotspots  = HOTSPOTS[preset] || HOTSPOTS.spread;
 
   const layers = hotspots.map((h, i) => {
-    const color = i % 2 === 0 ? c1 : c2;
+    const color = colors[i % colors.length];
     const stop  = Math.max(20, Math.min(110, Math.round(sizePct * h.s)));
     // alone in primo piano leggermente più intenso
     const a = Math.min(1, intensity * (i === 0 ? 1 : 0.8));

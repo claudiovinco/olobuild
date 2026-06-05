@@ -90,10 +90,15 @@ function svgDataUri(svgContent, width, height) {
  * @param {number} opacity - opacita pattern 0-1
  * @returns {{ backgroundImage: string, backgroundColor: string, backgroundSize: string }}
  */
-export function getPatternCSS(type, color, bgColor, size, opacity) {
+export function getPatternCSS(type, color, bgColor, size, opacity, thickness, rotation) {
   const c = colorToRgba(color || '#000000', opacity);
   const sz = size || 20;
   const bg = bgColor || '#ffffff';
+  // Spessore linea/stroke: default 1px = resa storica. Raggio punti: null = formula storica.
+  const lw = thickness && thickness > 0 ? thickness : 1;
+  const dotR = thickness && thickness > 0 ? thickness : null;
+  // Rotazione (gradienti direzionali): bake nell'angolo. 0 = nessuna variazione.
+  const rot = parseInt(rotation) || 0;
 
   let backgroundImage = '';
   let backgroundSize = `${sz}px ${sz}px`;
@@ -101,42 +106,42 @@ export function getPatternCSS(type, color, bgColor, size, opacity) {
   switch (type) {
     // ── Lines ──
     case 'horizontal-lines':
-      backgroundImage = `repeating-linear-gradient(0deg, ${c} 0px, ${c} 1px, transparent 1px, transparent ${sz}px)`;
+      backgroundImage = `repeating-linear-gradient(${0 + rot}deg, ${c} 0px, ${c} ${lw}px, transparent ${lw}px, transparent ${sz}px)`;
       break;
 
     case 'vertical-lines':
-      backgroundImage = `repeating-linear-gradient(90deg, ${c} 0px, ${c} 1px, transparent 1px, transparent ${sz}px)`;
+      backgroundImage = `repeating-linear-gradient(${90 + rot}deg, ${c} 0px, ${c} ${lw}px, transparent ${lw}px, transparent ${sz}px)`;
       break;
 
     case 'diagonal-lines':
-      backgroundImage = `repeating-linear-gradient(45deg, ${c} 0px, ${c} 1px, transparent 1px, transparent ${sz}px)`;
+      backgroundImage = `repeating-linear-gradient(${45 + rot}deg, ${c} 0px, ${c} ${lw}px, transparent ${lw}px, transparent ${sz}px)`;
       break;
 
     case 'diagonal-lines-reverse':
-      backgroundImage = `repeating-linear-gradient(-45deg, ${c} 0px, ${c} 1px, transparent 1px, transparent ${sz}px)`;
+      backgroundImage = `repeating-linear-gradient(${-45 + rot}deg, ${c} 0px, ${c} ${lw}px, transparent ${lw}px, transparent ${sz}px)`;
       break;
 
     case 'crosshatch':
-      backgroundImage = `repeating-linear-gradient(0deg, ${c} 0px, ${c} 1px, transparent 1px, transparent ${sz}px), repeating-linear-gradient(90deg, ${c} 0px, ${c} 1px, transparent 1px, transparent ${sz}px)`;
+      backgroundImage = `repeating-linear-gradient(${0 + rot}deg, ${c} 0px, ${c} ${lw}px, transparent ${lw}px, transparent ${sz}px), repeating-linear-gradient(${90 + rot}deg, ${c} 0px, ${c} ${lw}px, transparent ${lw}px, transparent ${sz}px)`;
       break;
 
     case 'diagonal-crosshatch':
-      backgroundImage = `repeating-linear-gradient(45deg, ${c} 0px, ${c} 1px, transparent 1px, transparent ${sz}px), repeating-linear-gradient(-45deg, ${c} 0px, ${c} 1px, transparent 1px, transparent ${sz}px)`;
+      backgroundImage = `repeating-linear-gradient(${45 + rot}deg, ${c} 0px, ${c} ${lw}px, transparent ${lw}px, transparent ${sz}px), repeating-linear-gradient(${-45 + rot}deg, ${c} 0px, ${c} ${lw}px, transparent ${lw}px, transparent ${sz}px)`;
       break;
 
     // ── Dots ──
     case 'dots':
-      backgroundImage = `radial-gradient(circle, ${c} ${Math.max(1, sz * 0.05)}px, transparent ${Math.max(1, sz * 0.05)}px)`;
+      backgroundImage = `radial-gradient(circle, ${c} ${dotR ?? Math.max(1, sz * 0.05)}px, transparent ${dotR ?? Math.max(1, sz * 0.05)}px)`;
       backgroundSize = `${sz}px ${sz}px`;
       break;
 
     case 'dots-large':
-      backgroundImage = `radial-gradient(circle, ${c} ${Math.max(2, sz * 0.15)}px, transparent ${Math.max(2, sz * 0.15)}px)`;
+      backgroundImage = `radial-gradient(circle, ${c} ${dotR ?? Math.max(2, sz * 0.15)}px, transparent ${dotR ?? Math.max(2, sz * 0.15)}px)`;
       backgroundSize = `${sz}px ${sz}px`;
       break;
 
     case 'dots-grid': {
-      const dr = Math.max(1, sz * 0.08);
+      const dr = dotR ?? Math.max(1, sz * 0.08);
       backgroundImage = `radial-gradient(circle, ${c} ${dr}px, transparent ${dr}px)`;
       backgroundSize = `${sz}px ${sz}px`;
       break;
@@ -147,7 +152,7 @@ export function getPatternCSS(type, color, bgColor, size, opacity) {
       const half = sz / 2;
       backgroundImage = `linear-gradient(45deg, ${c} 25%, transparent 25%, transparent 75%, ${c} 75%), linear-gradient(45deg, ${c} 25%, transparent 25%, transparent 75%, ${c} 75%)`;
       backgroundSize = `${sz}px ${sz}px`;
-      backgroundImage = `linear-gradient(45deg, ${c} 25%, transparent 25%, transparent 75%, ${c} 75%, ${c}), linear-gradient(45deg, ${c} 25%, transparent 25%, transparent 75%, ${c} 75%, ${c})`;
+      backgroundImage = `linear-gradient(${45 + rot}deg, ${c} 25%, transparent 25%, transparent 75%, ${c} 75%, ${c}), linear-gradient(${45 + rot}deg, ${c} 25%, transparent 25%, transparent 75%, ${c} 75%, ${c})`;
       backgroundSize = `${sz}px ${sz}px`;
       // Checkerboard needs background-position offset
       return {
@@ -260,7 +265,7 @@ export function getPatternCSS(type, color, bgColor, size, opacity) {
     // ── Textures ──
     case 'carbon-fiber': {
       const half = sz / 2;
-      backgroundImage = `radial-gradient(circle, ${c} 1px, transparent 1px), radial-gradient(circle, ${c} 1px, transparent 1px)`;
+      backgroundImage = `radial-gradient(circle, ${c} ${lw}px, transparent ${lw}px), radial-gradient(circle, ${c} ${lw}px, transparent ${lw}px)`;
       backgroundSize = `${sz}px ${sz}px`;
       return {
         backgroundColor: bg,
@@ -271,20 +276,20 @@ export function getPatternCSS(type, color, bgColor, size, opacity) {
     }
 
     case 'graph-paper': {
-      backgroundImage = `linear-gradient(${c} 1px, transparent 1px), linear-gradient(90deg, ${c} 1px, transparent 1px)`;
+      backgroundImage = `linear-gradient(${c} ${lw}px, transparent ${lw}px), linear-gradient(90deg, ${c} ${lw}px, transparent ${lw}px)`;
       backgroundSize = `${sz}px ${sz}px`;
       break;
     }
 
     case 'lined-paper': {
-      backgroundImage = `repeating-linear-gradient(0deg, ${c} 0px, ${c} 1px, transparent 1px, transparent ${sz}px)`;
+      backgroundImage = `repeating-linear-gradient(${0 + rot}deg, ${c} 0px, ${c} ${lw}px, transparent ${lw}px, transparent ${sz}px)`;
       break;
     }
 
     case 'blueprint': {
       const cThin = colorToRgba(color || '#000000', opacity * 0.5);
       const subSz = sz / 5;
-      backgroundImage = `linear-gradient(${c} 1px, transparent 1px), linear-gradient(90deg, ${c} 1px, transparent 1px), linear-gradient(${cThin} 1px, transparent 1px), linear-gradient(90deg, ${cThin} 1px, transparent 1px)`;
+      backgroundImage = `linear-gradient(${c} ${lw}px, transparent ${lw}px), linear-gradient(90deg, ${c} ${lw}px, transparent ${lw}px), linear-gradient(${cThin} 1px, transparent 1px), linear-gradient(90deg, ${cThin} 1px, transparent 1px)`;
       backgroundSize = `${sz}px ${sz}px, ${sz}px ${sz}px, ${subSz}px ${subSz}px, ${subSz}px ${subSz}px`;
       break;
     }
