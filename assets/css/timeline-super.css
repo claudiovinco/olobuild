@@ -35,7 +35,7 @@
 .olo-tlsuper .super.line-solid .rail{background:linear-gradient(180deg,var(--tl-fill-from,var(--red)),var(--tl-fill-to,var(--amber)));}
 .olo-tlsuper .super.line-solid .rail-fill{display:none;}
 
-.olo-tlsuper .it{--cat:var(--red);display:grid;grid-template-columns:1fr 1fr;align-items:center;position:relative;margin-bottom:30px;}
+.olo-tlsuper .it{--cat:var(--red);display:grid;grid-template-columns:1fr 1fr;grid-auto-flow:dense;align-items:center;position:relative;margin-bottom:30px;}
 .olo-tlsuper .it.cat-primary{--cat:var(--red);}
 .olo-tlsuper .it.cat-secondary{--cat:var(--indigo);}
 .olo-tlsuper .it.cat-accent{--cat:var(--amber);}
