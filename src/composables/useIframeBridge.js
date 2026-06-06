@@ -9,6 +9,7 @@ import { onScrollToTileRequest } from '@/utils/scrollToTileChannel';
 
 let debounceTimer = null;
 let patchTimer = null;
+let zoneTimer = null;
 let lastTileSnapshot = null;
 let renderInFlight = false;
 
@@ -255,6 +256,42 @@ export function useIframeBridge(iframeRef) {
     patchTimer = setTimeout(() => patchTile(tileId), 80);
   }
 
+  // ── Render di una singola zona (header/footer) — usato in modalità INLINE ──
+  // In inline mode l'header/footer è renderizzato dal tema FUORI da #olo-iframe-root,
+  // quindi renderFull (che aggiorna solo il body) NON lo tocca: le modifiche all'header
+  // (template/preset/stile) si salvano ma non si vedono live. Qui ri-renderizziamo SOLO
+  // la zona via REST e la iniettiamo nell'iframe sostituendo il CONTENUTO della zona
+  // (preservandone il wrapper <header>/<footer>, quindi overlay/sticky restano intatti).
+  // Fail-safe: su qualsiasi errore non facciamo nulla → la zona resta com'era (= stato attuale).
+  async function renderZone(zone) {
+    if (renderInFlight || patchInFlight) return;
+    const zoneTiles = zone === 'footer' ? tilesStore.footerTiles : tilesStore.headerTiles;
+    if (!zoneTiles || !zoneTiles.length) return;
+    const olo = window.oloData || {};
+    const body = { page_settings: builderStore.pageSettings || {} };
+    // SOLO i tile della zona richiesta (body tiles assenti → il REST rende solo la zona).
+    if (zone === 'footer') body.footer_tiles = deepClone(zoneTiles);
+    else body.header_tiles = deepClone(zoneTiles);
+    try {
+      const res = await fetch(olo.restUrl + '/builder/render', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': olo.nonce },
+        body: JSON.stringify(body),
+      });
+      const data = await res.json();
+      if (data && data.html) {
+        postToIframe('olo:render-zone', { zone, html: data.html });
+      }
+    } catch (err) {
+      console.error('[IframeBridge] zone render error:', err);
+    }
+  }
+
+  function scheduleZoneRender(zone) {
+    clearTimeout(zoneTimer);
+    zoneTimer = setTimeout(() => renderZone(zone), 200);
+  }
+
   function onTilesChange() {
     if (!iframeReady.value || renderInFlight) return;
 
@@ -463,12 +500,18 @@ export function useIframeBridge(iframeRef) {
   // but throttled with a shallow check first
   watch(() => tilesStore.canvasTiles, onTilesChange, { deep: true });
 
-  // Header/footer/page settings → full re-render (deep needed for setting edits)
+  // Header/footer → re-render. In INLINE mode l'header/footer è del tema (fuori da
+  // #olo-iframe-root): il full render lo salta, quindi facciamo un re-render MIRATO
+  // della zona. In STANDALONE il full render include già header_tiles/footer_tiles.
   watch(() => tilesStore.headerTiles, () => {
-    if (iframeReady.value) scheduleFullRender();
+    if (!iframeReady.value) return;
+    if (iframeMode === 'inline') scheduleZoneRender('header');
+    else scheduleFullRender();
   }, { deep: true });
   watch(() => tilesStore.footerTiles, () => {
-    if (iframeReady.value) scheduleFullRender();
+    if (!iframeReady.value) return;
+    if (iframeMode === 'inline') scheduleZoneRender('footer');
+    else scheduleFullRender();
   }, { deep: true });
 
   watch(() => builderStore.pageSettings, () => {

@@ -1132,6 +1132,35 @@
         }
         break;
 
+      case 'olo:render-zone': {
+        // Re-render live di una zona (header/footer) in modalità INLINE: l'header reale è
+        // renderizzato dal tema e vive FUORI da #olo-iframe-root, quindi il full render lo
+        // salta. Qui sostituiamo SOLO il CONTENUTO della zona, preservandone il wrapper
+        // (<header class="olo-site-header ...">) così overlay/sticky restano intatti, e
+        // rieseguiamo gli <script> inline del tile (es. runtime megamenu).
+        if (d.zone && d.html) {
+          var zoneEl = document.querySelector('[data-olo-zone="' + d.zone + '"]')
+                    || document.querySelector(d.zone === 'footer' ? 'footer.olo-site-footer' : 'header.olo-site-header');
+          if (zoneEl) {
+            var tmpZ = document.createElement('div');
+            tmpZ.innerHTML = String(d.html).trim();
+            var srcZone = tmpZ.querySelector('[data-olo-zone="' + d.zone + '"]') || tmpZ.firstElementChild;
+            if (srcZone) {
+              zoneEl.innerHTML = srcZone.innerHTML;
+              // Doppio rAF: layout pronto prima di eseguire gli script (sticky/posPanel
+              // del megamenu usano getBoundingClientRect).
+              requestAnimationFrame(function() {
+                requestAnimationFrame(function() {
+                  executeInlineScripts(zoneEl);
+                  setTimeout(function() { reinitUIkit(); reinitTileScripts(); }, 30);
+                });
+              });
+            }
+          }
+        }
+        break;
+      }
+
       case 'olo:select':
         selectTile(d.tileId || null);
         break;
