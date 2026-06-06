@@ -132,15 +132,16 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
         'extra_link_3_blank' => false,
         'extra_link_4_blank' => false,
         // Social Icons
-        // Predefiniti '#': icone social visibili come punto di partenza (no-op da sostituire).
+        // Predefiniti '#' SOLO sui principali (FB/IG/X/LinkedIn) come punto di partenza;
+        // gli altri vuoti (nessuna icona finché non si inserisce l'URL).
         'social_facebook'    => '#',
         'social_instagram'   => '#',
         'social_x'           => '#',
         'social_linkedin'    => '#',
-        'social_youtube'     => '#',
-        'social_tiktok'      => '#',
-        'social_pinterest'   => '#',
-        'social_whatsapp'    => '#',
+        'social_youtube'     => '',
+        'social_tiktok'      => '',
+        'social_pinterest'   => '',
+        'social_whatsapp'    => '',
         'social_position'    => 'bar-right+mobile-bottom',
         'social_in_navbar'   => true,
         'social_navbar_side' => 'right',

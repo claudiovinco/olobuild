@@ -110,16 +110,17 @@ export default {
     search_tile_id: '',
     search_tile_position: 'after',
 
-    // Predefiniti '#': le icone social compaiono come punto di partenza (link no-op
-    // da sostituire con gli URL reali), niente URL fittizi/segnaposto.
+    // Predefiniti '#' SOLO sui principali (Facebook/Instagram/X/LinkedIn): le icone
+    // compaiono come punto di partenza (link no-op da sostituire). Gli altri restano
+    // vuoti (nessuna icona finché il cliente non inserisce l'URL).
     social_facebook: '#',
     social_instagram: '#',
     social_x: '#',
     social_linkedin: '#',
-    social_youtube: '#',
-    social_tiktok: '#',
-    social_pinterest: '#',
-    social_whatsapp: '#',
+    social_youtube: '',
+    social_tiktok: '',
+    social_pinterest: '',
+    social_whatsapp: '',
     social_position: 'bar-right+mobile-bottom',
     social_in_navbar: true,
     social_navbar_side: 'right',
