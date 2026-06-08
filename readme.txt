@@ -1,10 +1,10 @@
 === Olobuild ===
 Contributors: claudiovinco
 Tags: page-builder, drag-and-drop, builder, grid, blocks
-Requires at least: 5.8
+Requires at least: 5.9
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.4.102
+Stable tag: 1.4.103
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -103,6 +103,9 @@ Yes. Enter them in Olobuild settings, or define them as constants in wp-config.p
 (`OLO_UNSPLASH_API_KEY`, `OLO_PEXELS_API_KEY`, `OLO_PIXABAY_API_KEY`).
 
 == Changelog ==
+
+= 1.4.103 =
+* Set "Requires at least" to WordPress 5.9 (str_contains / str_starts_with / str_ends_with are provided by core since 5.9).
 
 = 1.4.102 =
 * Compliance: the admin builder now loads Leaflet, lottie-web and PDF.js from the local assets/vendor/ folder instead of unpkg/cdnjs — no library is loaded from a CDN, front-end or admin.

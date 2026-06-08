@@ -63,8 +63,9 @@ EXCLUDE_PATTERN_PREFIXES = (
 def is_backup_file(name: str) -> bool:
     return ".bak" in name
 
-# Include src folder or not (for production ZIP, don't include src)
-INCLUDE_SRC = False
+# Include src folder: required by wordpress.org so the minified builder.js bundle
+# has its readable, non-compiled sources available for review.
+INCLUDE_SRC = True
 
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 

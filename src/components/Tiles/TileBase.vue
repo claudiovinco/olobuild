@@ -10,10 +10,36 @@ import SectionTile from './SectionTile.vue';
 import ColumnTile from './ColumnTile.vue';
 import HeroTile from './HeroTile.vue';
 import HeroSplitTile from './HeroSplitTile.vue';
+import AudioHeroTile from './AudioHeroTile.vue';
 import SectionHeaderTile from './SectionHeaderTile.vue';
 import InfoCardsTile from './InfoCardsTile.vue';
+import WorkListTile from './WorkListTile.vue';
+import WorkGridTile from './WorkGridTile.vue';
+import StatStripTile from './StatStripTile.vue';
+import HoursStripTile from './HoursStripTile.vue';
+import HoverListTile from './HoverListTile.vue';
+import LookbookMixerTile from './LookbookMixerTile.vue';
+import CategoryRailTile from './CategoryRailTile.vue';
+import BeforeAfterTile from './BeforeAfterTile.vue';
+import TripFinderTile from './TripFinderTile.vue';
+import MaskedVideoHeroTile from './MaskedVideoHeroTile.vue';
+import SearchHeroTile from './SearchHeroTile.vue';
+import SmearHeroTile from './SmearHeroTile.vue';
+import PhotoCoverTile from './PhotoCoverTile.vue';
+import MastheadTile from './MastheadTile.vue';
+import MatchFixturesTile from './MatchFixturesTile.vue';
+import ShowcaseGridTile from './ShowcaseGridTile.vue';
+import IntroSplitTile from './IntroSplitTile.vue';
+import MediaCtaTile from './MediaCtaTile.vue';
+import ImageHeroTile from './ImageHeroTile.vue';
+import GlowHeroTile from './GlowHeroTile.vue';
+import ProductHeroTile from './ProductHeroTile.vue';
+import FeaturedStoryTile from './FeaturedStoryTile.vue';
+import GlowGalleryTile from './GlowGalleryTile.vue';
+import ChatHeroTile from './ChatHeroTile.vue';
 import ProductCardsTile from './ProductCardsTile.vue';
 import StepTimelineTile from './StepTimelineTile.vue';
+import ProcessStepsTile from './ProcessStepsTile.vue';
 import CtaBannerTile from './CtaBannerTile.vue';
 import TrustStripTile from './TrustStripTile.vue';
 import ContentTile from './ContentTile.vue';
@@ -31,6 +57,15 @@ import AlertTile from './AlertTile.vue';
 import BadgeTile from './BadgeTile.vue';
 import TeamTile from './TeamTile.vue';
 import AccordionTile from './AccordionTile.vue';
+import ProjectorTile from './ProjectorTile.vue';
+import FinderTile from './FinderTile.vue';
+import BuilderTile from './BuilderTile.vue';
+import MixerTile from './MixerTile.vue';
+import ScheduleTile from './ScheduleTile.vue';
+import HotspotsTile from './HotspotsTile.vue';
+import ScalerTile from './ScalerTile.vue';
+import TimezoneTile from './TimezoneTile.vue';
+import AvailabilityTile from './AvailabilityTile.vue';
 
 import SocialTile from './SocialTile.vue';
 import MapTile from './MapTile.vue';
@@ -103,7 +138,7 @@ import ServiceResultsTile from './ServiceResultsTile.vue';
 import HostcardTile from './HostcardTile.vue';
 import LiveSearchTile from './LiveSearchTile.vue';
 import ShatteredImageTile from './ShatteredImageTile.vue';
-import ProGalleryTile from './ProGalleryTile.vue';
+import ProGalleryTile from './ProgalleryTile.vue';
 import PdfViewerTile from './PdfViewerTile.vue';
 import PdfProTile from './PdfProTile.vue';
 import StarratingTile from './StarratingTile.vue';
@@ -260,12 +295,47 @@ const tileComponents = {
   column: ColumnTile,
   hero: HeroTile,
   'hero-split': HeroSplitTile,
+  audiohero: AudioHeroTile,
   'section-header': SectionHeaderTile,
   'info-cards': InfoCardsTile,
+  worklist: WorkListTile,
+  workgrid: WorkGridTile,
+  statstrip: StatStripTile,
+  hoursstrip: HoursStripTile,
+  hoverlist: HoverListTile,
+  lookbookmixer: LookbookMixerTile,
+  categoryrail: CategoryRailTile,
+  beforeafter: BeforeAfterTile,
+  tripfinder: TripFinderTile,
+  maskedvideohero: MaskedVideoHeroTile,
+  searchhero: SearchHeroTile,
+  smearhero: SmearHeroTile,
+  photocover: PhotoCoverTile,
+  masthead: MastheadTile,
+  matchfixtures: MatchFixturesTile,
+  showcasegrid: ShowcaseGridTile,
+  introsplit: IntroSplitTile,
+  mediacta: MediaCtaTile,
+  imagehero: ImageHeroTile,
+  glowhero: GlowHeroTile,
+  producthero: ProductHeroTile,
+  featuredstory: FeaturedStoryTile,
+  glowgallery: GlowGalleryTile,
+  chathero: ChatHeroTile,
   'product-cards': ProductCardsTile,
   'step-timeline': StepTimelineTile,
+  'process-steps': ProcessStepsTile,
   'cta-banner': CtaBannerTile,
   'trust-strip': TrustStripTile,
+  projector: ProjectorTile,
+  finder: FinderTile,
+  builder: BuilderTile,
+  mixer: MixerTile,
+  schedule: ScheduleTile,
+  hotspots: HotspotsTile,
+  scaler: ScalerTile,
+  timezone: TimezoneTile,
+  availability: AvailabilityTile,
   content: ContentTile,
   image: ImageTile,
   video: VideoTile,

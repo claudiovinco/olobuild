@@ -94,7 +94,7 @@ import ServiceResultsTile from './ServiceResultsTile.vue';
 import HostcardTile from './HostcardTile.vue';
 import LiveSearchTile from './LiveSearchTile.vue';
 import ShatteredImageTile from './ShatteredImageTile.vue';
-import ProGalleryTile from './ProGalleryTile.vue';
+import ProGalleryTile from './ProgalleryTile.vue';
 import PdfViewerTile from './PdfViewerTile.vue';
 import PdfProTile from './PdfProTile.vue';
 import StarratingTile from './StarratingTile.vue';
