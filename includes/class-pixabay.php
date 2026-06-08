@@ -16,10 +16,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Olo_Pixabay {
 
     /**
-     * Restituisce la API key Pixabay da wp_options (con fallback hardcoded).
+     * Restituisce la API key Pixabay.
+     *
+     * Ordine di risoluzione: costante OLO_PIXABAY_API_KEY (definibile in wp-config.php)
+     * → opzione olo_pixabay_api_key. Nessuna chiave hardcoded: l'utente deve
+     * configurare la propria chiave (requisito wordpress.org).
      */
-    private static function get_api_key() {
-        return get_option( 'olo_pixabay_api_key', '***REMOVED-API-KEY***' );
+    public static function get_api_key() {
+        if ( defined( 'OLO_PIXABAY_API_KEY' ) && OLO_PIXABAY_API_KEY ) {
+            return OLO_PIXABAY_API_KEY;
+        }
+        return (string) get_option( 'olo_pixabay_api_key', '' );
     }
 
     public function init() {

@@ -212,9 +212,12 @@ class Olo_ProSlider_Tile extends Olo_Tile_Base {
             $ff = sanitize_text_field( $lay['fontFamily'] ?? '' );
             if ( $ff ) { $google_fonts[ $ff ] = true; }
         }
-        if ( $google_fonts ) {
-            $families = array_map( function( $f ) { return str_replace( ' ', '+', $f ) . ':wght@300;400;500;600;700;800;900'; }, array_keys( $google_fonts ) );
-            echo '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=' . esc_attr( implode( '&family=', $families ) ) . '&display=swap" />';
+        if ( $google_fonts && class_exists( 'Olo_Font_Host' ) ) {
+            // Self-hosted (Olo_Font_Host): nessuna richiesta del visitatore a Google.
+            $ff_css = Olo_Font_Host::get_font_face_css( array_keys( $google_fonts ), '300;400;500;600;700;800;900' );
+            if ( $ff_css ) {
+                echo '<style id="olo-proslider-fonts">' . $ff_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS @font-face generato internamente con URL locali
+            }
         }
         ?>
         <?php

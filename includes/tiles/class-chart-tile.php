@@ -211,7 +211,7 @@ class Olo_Chart_Tile extends Olo_Tile_Base {
         // Enqueue Chart.js
         if ( ! self::$chartjs_enqueued ) {
             self::$chartjs_enqueued = true;
-            wp_enqueue_script( 'chartjs', 'https://cdn.jsdelivr.net/npm/chart.js@4.5/dist/chart.umd.min.js', [], '4.5', true );
+            wp_enqueue_script( 'chartjs', OLO_URL . 'assets/vendor/chartjs/chart.umd.min.js', [], '4.5.0', true );
         }
 
         ob_start();

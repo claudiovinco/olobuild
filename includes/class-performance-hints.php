@@ -105,12 +105,8 @@ class Olo_Performance_Hints {
     public function output_resource_hints() {
         $hints = [];
 
-        // DNS prefetch for common external resources
-        $hints[] = '<link rel="dns-prefetch" href="//fonts.googleapis.com" />';
-        $hints[] = '<link rel="dns-prefetch" href="//fonts.gstatic.com" />';
-
-        // Preconnect for services likely used
-        $hints[] = '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />';
+        // Nota: nessun hint verso fonts.googleapis.com / fonts.gstatic.com.
+        // I Google Fonts sono self-hosted (Olo_Font_Host), serviti da /uploads.
 
         // YouTube/Vimeo preconnect only if video tiles detected
         if ( $this->page_has_video_tile() ) {

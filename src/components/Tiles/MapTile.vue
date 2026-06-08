@@ -217,13 +217,14 @@ const mapHtml = computed(() => {
   const showMarker = s.value.marker !== false && s.value.marker !== 'false';
   const markerColor = s.value.marker_color || '#e74c3c';
   const popupText = s.value.marker_popup || '';
+  const vbase = (window.oloData?.pluginUrl || '/wp-content/plugins/olobuild/') + 'assets/vendor/leaflet/';
 
   return `<!DOCTYPE html>
 <html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<link rel="stylesheet" href="${vbase}leaflet.css"/>
 <style>
 html,body{margin:0;padding:0;height:100%;overflow:hidden}
 #map{width:100%;height:100%;cursor:crosshair}
@@ -233,7 +234,7 @@ html,body{margin:0;padding:0;height:100%;overflow:hidden}
 </head>
 <body>
 <div id="map"></div>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"><\/script>
+<script src="${vbase}leaflet.js"><\/script>
 <script>
 var map=L.map('map',{scrollWheelZoom:true,dragging:true,zoomControl:true,attributionControl:true}).setView([${lat},${lng}],${zoom});
 L.tileLayer('${tileUrl}',{attribution:'\\u00a9 OpenStreetMap',maxZoom:19}).addTo(map);

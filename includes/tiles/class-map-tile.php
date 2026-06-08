@@ -295,8 +295,8 @@ class Olo_Map_Tile extends Olo_Tile_Base {
         $uid            = 'olo-map-single-' . wp_unique_id();
         $fs_enabled     = ! empty( $s['fullscreen_btn'] );
 
-        wp_enqueue_style( 'leaflet', 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css', [], '1.9.4' );
-        wp_enqueue_script( 'leaflet', 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js', [], '1.9.4', true );
+        wp_enqueue_style( 'leaflet', OLO_URL . 'assets/vendor/leaflet/leaflet.css', [], '1.9.4' );
+        wp_enqueue_script( 'leaflet', OLO_URL . 'assets/vendor/leaflet/leaflet.js', [], '1.9.4', true );
 
         ob_start();
         ?>
@@ -1850,7 +1850,7 @@ class Olo_Map_Tile extends Olo_Tile_Base {
      * Enqueue Leaflet (and MarkerCluster if requested).
      */
     private function enqueue_leaflet( $cluster ) {
-        $vendor = defined( 'OLO_URL' ) ? OLO_URL . 'assets/vendor/leaflet/' : 'https://unpkg.com/leaflet@1.9.4/dist/';
+        $vendor = OLO_URL . 'assets/vendor/leaflet/';
         if ( ! wp_style_is( 'leaflet', 'enqueued' ) && ! wp_style_is( 'leaflet-css', 'enqueued' ) ) {
             wp_enqueue_style( 'leaflet', $vendor . 'leaflet.css', [], '1.9.4' );
         }

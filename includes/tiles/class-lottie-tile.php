@@ -44,7 +44,7 @@ class Olo_Lottie_Tile extends Olo_Tile_Base {
 
         if (empty($url)) return '<div class="olo-lottie" style="text-align:center;padding:20px;color:var(--olo-color-text-muted, #9CA3AF);">Nessun file Lottie configurato</div>';
 
-        wp_enqueue_script( 'lottie-web', 'https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js', [], '5.12.2', true );
+        wp_enqueue_script( 'lottie-web', OLO_URL . 'assets/vendor/lottie/lottie.min.js', [], '5.12.2', true );
 
         ob_start();
         ?>

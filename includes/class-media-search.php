@@ -15,11 +15,11 @@ class Olo_Media_Search {
         $rest_url_vtour = esc_url_raw( rest_url( 'olo-vtour/v1' ) );
         $vtour_active = is_plugin_active( 'olo-vtour/olo-vtour.php' );
 
-        // Check configured API keys
+        // Check configured API keys (costante wp-config o opzione; nessun fallback hardcoded)
         $keys = [
-            'unsplash'  => ! empty( get_option( 'olo_unsplash_api_key', 'mAtcGSa97BuefUN55vaORLV6YvFH4SHjdcCFbq_gJ84' ) ),
-            'pexels'    => ! empty( get_option( 'olo_pexels_api_key', '***REMOVED-API-KEY***' ) ),
-            'pixabay'   => ! empty( get_option( 'olo_pixabay_api_key', '***REMOVED-API-KEY***' ) ),
+            'unsplash'  => class_exists( 'Olo_Unsplash' ) && ! empty( Olo_Unsplash::get_access_key() ),
+            'pexels'    => class_exists( 'Olo_Pexels' ) && ! empty( Olo_Pexels::get_api_key() ),
+            'pixabay'   => class_exists( 'Olo_Pixabay' ) && ! empty( Olo_Pixabay::get_api_key() ),
             'openverse' => true,
             'freesound' => ! empty( get_option( 'olo_freesound_api_key', '' ) ),
             'polyhaven' => $vtour_active,

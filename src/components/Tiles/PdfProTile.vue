@@ -189,7 +189,7 @@ const loading = ref(false);
 const error = ref('');
 let currentLoadId = 0;
 
-const PDFJS_CDN = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174';
+const PDFJS_CDN = (window.oloData?.pluginUrl || '/wp-content/plugins/olobuild/') + 'assets/vendor/pdfjs';
 let pdfjsLoaded = null;
 
 function loadPdfJs() {

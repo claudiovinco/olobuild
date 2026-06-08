@@ -30,21 +30,35 @@ EXCLUDE_DIRS = {
     "node_modules", ".git", ".claude", "tmp_deploy", "dist",
     "docs", ".vscode", ".idea", "__pycache__",
     "tmp_handoff", "scripts",
+    # cartelle di lavoro che NON devono finire nel plugin distribuito
+    "regoletiles1", "audit_results", "handoff-tile-speciali",
+    "iotfarm-demo", "bordo",
 }
-EXCLUDE_DIR_PREFIXES = ("design_handoff_", "languages._backup_")
+# Qualsiasi cartella che inizia con questi prefissi viene esclusa.
+# "tmp_" → tmp_try_build/tmp_try_ref/ecc.; "_" → _legacy/_backup; più le cartelle di lavoro note.
+EXCLUDE_DIR_PREFIXES = (
+    "design_handoff_", "languages._backup_",
+    "tmp_", "_", "handoff", "regoletiles", "audit_", "iotfarm",
+    "NOVA", "OLObuild design",
+)
 EXCLUDE_FILES = {
     "CLAUDE.md", ".gitignore", ".gitattributes", ".editorconfig",
     "package.json", "package-lock.json", "yarn.lock",
-    "vite.config.js", "vite.config.admin.js",
+    "vite.config.js", "vite.config.admin.js", "vite.picker.config.js",
     "tailwind.config.js", "postcss.config.js",
     "composer.json", "composer.lock",
     "_build.cjs", "check_config.py", "build_zip.py",
     ".DS_Store", "Thumbs.db",
-    "ROADMAP.md", "OLOBUILD-SCHEDA.md",
+    "ROADMAP.md", "OLOBUILD-SCHEDA.md", "TILE_PROGRESS.md",
     "add_borders.py", "add_borders_special.py",
 }
-EXCLUDE_EXT = {".log", ".po~", ".bak", ".tmp", ".swp", ".tsv"}
-EXCLUDE_PATTERN_PREFIXES = ("test-", "BRIEF_", "AUDIT-", "AUDIT_")  # test-*.php, BRIEF_*.md, AUDIT-*.md
+# .md non serve nel plugin distribuito (il riferimento è readme.txt); idem file di lavoro
+EXCLUDE_EXT = {".log", ".po~", ".bak", ".tmp", ".swp", ".tsv", ".cjs", ".zip", ".md"}
+# test-*.php, BRIEF_*.md, AUDIT-*.md, HERO_AUDIT_*.json, tmp_*, _tmp*, _b.txt, HANDOFF*
+EXCLUDE_PATTERN_PREFIXES = (
+    "test-", "BRIEF_", "AUDIT-", "AUDIT_", "HERO_AUDIT", "HANDOFF",
+    "tmp_", "_tmp", "_",
+)
 # Exclude files with .bak somewhere in the name
 def is_backup_file(name: str) -> bool:
     return ".bak" in name
@@ -107,6 +121,26 @@ print(f"  Total source size: {total_size / 1024 / 1024:.1f} MB")
 main_in_zip = f"{PLUGIN}/{PLUGIN}.php"
 if not any(arc == main_in_zip for _, arc in files_to_zip):
     print(f"ERROR: main file {main_in_zip} not included!")
+    sys.exit(1)
+
+# Safety: nessun SECONDO header di plugin oltre al main — un altro file con
+# "Plugin Name:" nell'header fa fallire l'installazione con
+# "Il plugin ha un'intestazione non valida".
+offenders = []
+for abs_path, arc in files_to_zip:
+    if arc.endswith(".php") and arc != main_in_zip:
+        try:
+            with open(abs_path, "r", encoding="utf-8", errors="ignore") as fh:
+                head = fh.read(4096)
+            if "Plugin Name:" in head:
+                offenders.append(arc)
+        except OSError:
+            pass
+if offenders:
+    print("ERROR: trovato un secondo header di plugin (causa 'intestazione non valida'):")
+    for o in offenders:
+        print(f"   - {o}")
+    print("Aggiungi la cartella/file alle esclusioni e riprova.")
     sys.exit(1)
 
 # Create ZIP

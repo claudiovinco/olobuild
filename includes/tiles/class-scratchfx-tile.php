@@ -95,7 +95,7 @@ class Olo_Scratchfx_Tile extends Olo_Tile_Base {
         $text     = esc_html( wp_strip_all_tags( $s['prize_text'] ) );
         $hint     = esc_html( wp_strip_all_tags( $s['hint'] ) );
         $show_btn = ! empty( $s['show_button'] );
-        $btn_lbl  = esc_html( wp_strip_all_tags( $s['reveal_label'] ) ) ?: esc_html__( 'Scopri', 'olobuilder' );
+        $btn_lbl  = esc_html( wp_strip_all_tags( $s['reveal_label'] ) ) ?: esc_html__( 'Scopri', 'olobuild' );
 
         $text_color   = $this->safe_color_css( $s['text_color'] )   ?: 'var(--olo-color-text, #2b2230)';
         $accent_color = $this->safe_color_css( $s['accent_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
@@ -127,10 +127,10 @@ class Olo_Scratchfx_Tile extends Olo_Tile_Base {
 
         // ── Shadow preset → box-shadow ──
         $shadow_map = [
-            'sm' => '0 1px 3px 0 rgba(0,0,0,0.12),0 1px 2px -1px rgba(0,0,0,0.1)',
-            'md' => '0 8px 18px -10px rgba(0,0,0,0.30)',
-            'lg' => '0 30px 60px -28px rgba(0,0,0,0.40)',
-            'xl' => '0 40px 80px -30px rgba(0,0,0,0.5)',
+            'sm' => '0 1px 2px rgba(16,24,40,.06), 0 6px 16px -10px rgba(16,24,40,.18)',
+            'md' => '0 2px 4px rgba(16,24,40,.06), 0 14px 28px -12px rgba(22,38,61,.28)',
+            'lg' => '0 8px 24px -6px rgba(16,24,40,.18), 0 18px 40px -12px rgba(22,38,61,.30)',
+            'xl' => '0 12px 32px -8px rgba(16,24,40,.20), 0 28px 56px -14px rgba(22,38,61,.34)',
         ];
         $shadow_val = $s['shadow'] ?? 'none';
         $shadow_css = '';

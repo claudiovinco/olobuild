@@ -804,19 +804,19 @@ class Olo_Style_System {
     }
 
     /**
-     * Generate Google Fonts @import statement.
+     * Generate self-hosted @font-face CSS for the given Google Font families.
+     *
+     * I file vengono scaricati una sola volta e serviti da /uploads (vedi
+     * Olo_Font_Host): nessuna richiesta del visitatore a Google.
      */
     public function generate_google_fonts_import( $fonts = [] ) {
         if ( empty( $fonts ) ) {
             return '';
         }
-
-        $families = [];
-        foreach ( $fonts as $font ) {
-            $families[] = str_replace( ' ', '+', $font ) . ':wght@300;400;500;600;700';
+        if ( class_exists( 'Olo_Font_Host' ) ) {
+            return Olo_Font_Host::get_font_face_css( $fonts );
         }
-
-        return '@import url("https://fonts.googleapis.com/css2?family=' . implode( '&family=', $families ) . '&display=swap");';
+        return '';
     }
 
     /**

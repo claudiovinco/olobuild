@@ -14,10 +14,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Olo_Unsplash {
 
     /**
-     * Restituisce la Access Key Unsplash da wp_options (con fallback hardcoded).
+     * Restituisce la Access Key Unsplash.
+     *
+     * Ordine di risoluzione: costante OLO_UNSPLASH_API_KEY (definibile in wp-config.php)
+     * → opzione olo_unsplash_api_key. Nessuna chiave hardcoded: l'utente deve
+     * configurare la propria chiave (requisito wordpress.org).
      */
-    private static function get_access_key() {
-        return get_option( 'olo_unsplash_api_key', 'mAtcGSa97BuefUN55vaORLV6YvFH4SHjdcCFbq_gJ84' );
+    public static function get_access_key() {
+        if ( defined( 'OLO_UNSPLASH_API_KEY' ) && OLO_UNSPLASH_API_KEY ) {
+            return OLO_UNSPLASH_API_KEY;
+        }
+        return (string) get_option( 'olo_unsplash_api_key', '' );
     }
 
     public function init() {

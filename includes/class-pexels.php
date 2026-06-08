@@ -16,10 +16,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Olo_Pexels {
 
     /**
-     * Restituisce la API key Pexels da wp_options (con fallback hardcoded).
+     * Restituisce la API key Pexels.
+     *
+     * Ordine di risoluzione: costante OLO_PEXELS_API_KEY (definibile in wp-config.php)
+     * → opzione olo_pexels_api_key. Nessuna chiave hardcoded: l'utente deve
+     * configurare la propria chiave (requisito wordpress.org).
      */
-    private static function get_api_key() {
-        return get_option( 'olo_pexels_api_key', '***REMOVED-API-KEY***' );
+    public static function get_api_key() {
+        if ( defined( 'OLO_PEXELS_API_KEY' ) && OLO_PEXELS_API_KEY ) {
+            return OLO_PEXELS_API_KEY;
+        }
+        return (string) get_option( 'olo_pexels_api_key', '' );
     }
 
     public function init() {

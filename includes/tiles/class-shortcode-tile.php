@@ -38,7 +38,8 @@ class Olo_Shortcode_Tile extends Olo_Tile_Base {
         <div class="olo-shortcode">
         <?php
             if ( ! empty( $s['parse_shortcodes'] ) ) {
-                // Execute shortcode — sanitize with wp_kses_post after execution
+                // Il testo viene sanificato con wp_kses_post al salvataggio per chi
+                // non ha unfiltered_html (Olo_Rest_Api::sanitize_unfiltered_tile_fields).
                 echo do_shortcode( $shortcode_text );
             } else {
                 // Display as code without execution

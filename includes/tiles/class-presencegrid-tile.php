@@ -379,7 +379,7 @@ class Olo_Presencegrid_Tile extends Olo_Tile_Base {
             </div>
             <?php endif; ?>
 
-            <ul class="olo-pg-grid" role="list" aria-label="<?php esc_attr_e( 'Membri e stato di presenza', 'olobuilder' ); ?>">
+            <ul class="olo-pg-grid" role="list" aria-label="<?php esc_attr_e( 'Membri e stato di presenza', 'olobuild' ); ?>">
                 <?php foreach ( $members as $i => $m ) :
                     $name    = trim( (string) ( $m['name'] ?? '' ) );
                     if ( $name === '' ) { continue; }

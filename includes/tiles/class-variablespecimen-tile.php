@@ -273,7 +273,7 @@ class Olo_Variablespecimen_Tile extends Olo_Tile_Base {
             <div
                 class="olo-vf-stage"
                 id="<?php echo esc_attr( $uid ); ?>-stage"
-                <?php if ( $has_drag ) : ?>role="slider" aria-label="<?php echo esc_attr__( 'Trascina per modificare gli assi del font', 'olobuilder' ); ?>" tabindex="0"<?php endif; ?>
+                <?php if ( $has_drag ) : ?>role="slider" aria-label="<?php echo esc_attr__( 'Trascina per modificare gli assi del font', 'olobuild' ); ?>" tabindex="0"<?php endif; ?>
             ><?php echo $sample_html; ?></div>
 
             <?php if ( $show_read ) : ?>

@@ -3,19 +3,22 @@
  * Plugin Name: Olobuild
  * Plugin URI:  https://olotheme.com
  * Description: Page builder professionale olonico con sistema a griglia (tile drag & drop).
- * Version:     1.4.15
+ * Version:     1.4.102
  * Author:      Claudio Vinco
  * Author URI:  https://clod.eu
  * Text Domain: olobuild
+ * Domain Path: /languages
  * Requires PHP: 7.4
  * Requires at least: 5.8
+ * License:     GPLv2 or later
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'OLO_VERSION', '1.4.15' );
+define( 'OLO_VERSION', '1.4.102' );
 define( 'OLO_PATH', plugin_dir_path( __FILE__ ) );
 define( 'OLO_URL', plugin_dir_url( __FILE__ ) );
 
@@ -372,6 +375,7 @@ require_once OLO_PATH . 'includes/class-tile-manager.php';
 require_once OLO_PATH . 'includes/class-rest-api.php';
 require_once OLO_PATH . 'includes/class-dynamic-content.php';
 require_once OLO_PATH . 'includes/class-style-system.php';
+require_once OLO_PATH . 'includes/class-font-host.php';
 require_once OLO_PATH . 'includes/class-css-builder.php';
 require_once OLO_PATH . 'includes/class-animation-builder.php';
 require_once OLO_PATH . 'includes/class-frontend-renderer.php';
@@ -395,10 +399,23 @@ require_once OLO_PATH . 'includes/class-media-search.php';
 require_once OLO_PATH . 'includes/class-custom-fonts.php';
 require_once OLO_PATH . 'includes/class-custom-code.php';
 require_once OLO_PATH . 'includes/class-form-submissions.php';
+require_once OLO_PATH . 'includes/class-newsletter.php';
 require_once OLO_PATH . 'includes/class-maintenance-mode.php';
 require_once OLO_PATH . 'includes/class-analytics-tracking.php';
 require_once OLO_PATH . 'includes/class-diagnostics.php';
 Olo_Diagnostics::init();
+// OLOsecurity — moduli di sicurezza
+require_once OLO_PATH . 'includes/class-security-audit.php';
+require_once OLO_PATH . 'includes/class-security-config-monitor.php';
+require_once OLO_PATH . 'includes/class-security-components.php';
+require_once OLO_PATH . 'includes/class-security-login.php';
+require_once OLO_PATH . 'includes/class-security-hardening.php';
+require_once OLO_PATH . 'includes/class-security-sentinel.php';
+Olo_Security_Audit::maybe_install();
+Olo_Security_Audit::init();
+Olo_Security_Login::init();
+Olo_Security_Hardening::init();
+Olo_Security_Sentinel::init();
 require_once OLO_PATH . 'includes/class-critical-css.php';
 require_once OLO_PATH . 'includes/class-ab-testing.php';
 require_once OLO_PATH . 'includes/class-cookie-consent.php';
@@ -468,6 +485,12 @@ register_activation_hook( __FILE__, function () {
 
     // Form submissions table
     Olo_Form_Submissions::create_table();
+    Olo_Newsletter::create_table();
+
+    // Security Sentinel: fotografa lo stato "buono" dei file come baseline integrità.
+    if ( class_exists( 'Olo_Security_Sentinel' ) ) {
+        Olo_Security_Sentinel::build_baseline();
+    }
 
     // Migrate options
     $option_map = [
@@ -516,6 +539,7 @@ register_activation_hook( __FILE__, function () {
 register_deactivation_hook( __FILE__, function () {
     delete_transient( 'olo_builder_activated' );
     wp_clear_scheduled_hook( 'olo_weekly_cleanup' );
+    wp_clear_scheduled_hook( 'olo_sentinel_scan' );
 } );
 
 // Weekly cron for orphaned revision cleanup
@@ -544,16 +568,8 @@ add_action( 'send_headers', function() {
     header( 'Vary: Cookie', false );
 }, 1 );
 
-// Preconnect hints for Google Fonts — only on pages using Olobuild or custom fonts
-add_action( 'wp_head', function() {
-    // Only output preconnect if Google Fonts or custom fonts are actually used
-    $styles = get_option( 'olo_styles', [] );
-    $has_google_font = ! empty( $styles['global_font'] ) || ! empty( $styles['heading_font'] );
-    if ( $has_google_font ) {
-        echo '<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />';
-        echo '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />';
-    }
-}, 1 );
+// Google Fonts: self-hosted via Olo_Font_Host (serviti da /uploads), quindi
+// nessun preconnect verso i domini Google — il visitatore non li contatta.
 
 // Custom Fonts @font-face CSS — only if custom fonts exist
 add_action( 'wp_head', function() {
@@ -667,6 +683,9 @@ add_action( 'plugins_loaded', function () {
 
     // Form submissions dashboard
     Olo_Form_Submissions::init();
+
+    // Newsletter (lista iscritti + endpoint REST dedicato)
+    Olo_Newsletter::init();
 
     // Login form AJAX handlers
     if ( class_exists( 'Olo_Loginform_Tile' ) ) {

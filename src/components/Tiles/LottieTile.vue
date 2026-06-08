@@ -87,7 +87,7 @@ async function loadLottie() {
   try {
     if (!window.lottie) {
       const script = document.createElement('script');
-      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js';
+      script.src = (window.oloData?.pluginUrl || '/wp-content/plugins/olobuild/') + 'assets/vendor/lottie/lottie.min.js';
       document.head.appendChild(script);
       await new Promise((resolve, reject) => { script.onload = resolve; script.onerror = reject; });
     }

@@ -399,7 +399,10 @@ class Olo_Rest_Api {
             [
                 'methods'             => 'PUT',
                 'callback'            => [ $this, 'save_custom_code' ],
-                'permission_callback' => function () { return current_user_can( 'manage_options' ); },
+                // unfiltered_html, non manage_options: gli snippet vengono emessi raw nel
+                // frontend, quindi solo chi può inserire HTML/JS arbitrario deve poterli salvare
+                // (su multisite gli admin di sito NON hanno unfiltered_html).
+                'permission_callback' => function () { return current_user_can( 'unfiltered_html' ); },
             ],
         ] );
 
@@ -1029,6 +1032,31 @@ class Olo_Rest_Api {
         return rest_ensure_response( $this->prepare_template( $copy ) );
     }
 
+    /**
+     * Sanifica i campi di codice grezzo dei tile (html_content, shortcode_text)
+     * quando chi salva NON ha la capability unfiltered_html. Gli utenti fidati
+     * (admin / chi ha unfiltered_html) mantengono l'HTML completo; gli altri
+     * passano per wp_kses_post (niente <script> persistente → no stored XSS,
+     * importante su multisite dove gli Editor non hanno unfiltered_html).
+     * Cammina l'albero ricorsivamente toccando SOLO quei due campi: la struttura
+     * del template resta invariata.
+     */
+    private function sanitize_unfiltered_tile_fields( $data ) {
+        if ( current_user_can( 'unfiltered_html' ) ) {
+            return $data;
+        }
+        if ( is_array( $data ) ) {
+            foreach ( $data as $k => $v ) {
+                if ( ( 'html_content' === $k || 'shortcode_text' === $k ) && is_string( $v ) ) {
+                    $data[ $k ] = wp_kses_post( $v );
+                } else {
+                    $data[ $k ] = $this->sanitize_unfiltered_tile_fields( $v );
+                }
+            }
+        }
+        return $data;
+    }
+
     public function create_template( $request ) {
         $db   = new Olo_Database();
         $body = $request->get_json_params();
@@ -1038,6 +1066,7 @@ class Olo_Rest_Api {
         if ( ! is_array( $content ) ) {
             return new WP_Error( 'invalid_content', 'Il campo content deve essere un array.', [ 'status' => 400 ] );
         }
+        $content = $this->sanitize_unfiltered_tile_fields( $content );
 
         // Validate settings — must be an array or object (associative array)
         $settings = $body['settings'] ?? [];
@@ -1147,7 +1176,7 @@ class Olo_Rest_Api {
             if ( ! is_array( $body['content'] ) ) {
                 return new WP_Error( 'invalid_content', 'Il campo content deve essere un array.', [ 'status' => 400 ] );
             }
-            $update_data['content'] = $body['content'];
+            $update_data['content'] = $this->sanitize_unfiltered_tile_fields( $body['content'] );
         }
         if ( isset( $body['settings'] ) ) {
             if ( ! is_array( $body['settings'] ) && ! is_object( $body['settings'] ) ) {
@@ -1960,6 +1989,11 @@ class Olo_Rest_Api {
     }
 
     public function save_custom_code( $request ) {
+        // Difesa in profondità: gli snippet sono emessi raw nel frontend.
+        if ( ! current_user_can( 'unfiltered_html' ) ) {
+            return new WP_Error( 'olo_forbidden', __( 'Permessi insufficienti per salvare codice personalizzato.', 'olobuild' ), [ 'status' => 403 ] );
+        }
+
         $body = $request->get_json_params();
 
         if ( isset( $body['head'] ) ) {

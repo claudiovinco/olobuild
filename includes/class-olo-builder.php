@@ -379,6 +379,15 @@ class Olo_Builder {
             'olo-form-submissions',
             [ 'Olo_Form_Submissions', 'render_page' ]
         );
+
+        add_submenu_page(
+            'olobuild',
+            __( 'Newsletter', 'olobuild' ),
+            __( 'Newsletter', 'olobuild' ),
+            'manage_options',
+            'olo-newsletter',
+            [ 'Olo_Newsletter', 'render_page' ]
+        );
     }
 
     /**
@@ -400,6 +409,7 @@ class Olo_Builder {
             'olobuilder-settings' => '\f107', // dashicons-admin-generic
             'olo-media-search'    => '\f128', // dashicons-format-image
             'olo-form-submissions'=> '\f466', // dashicons-email-alt
+            'olo-newsletter'      => '\f465', // dashicons-email
             'olo-analytics'       => '\f185', // dashicons-chart-bar
             'olo-cookie-consent'  => '\f332', // dashicons-shield
             'olo-seo'             => '\f179', // dashicons-search
@@ -1977,8 +1987,9 @@ class Olo_Builder {
             'olo_pexels_api_key',
             __( 'Pexels API Key', 'olobuild' ),
             function () {
-                $val = get_option( 'olo_pexels_api_key', '***REMOVED-API-KEY***' );
-                echo '<input type="text" name="olo_pexels_api_key" value="' . esc_attr( $val ) . '" class="regular-text" />';
+                $val = get_option( 'olo_pexels_api_key', '' );
+                $via_const = defined( 'OLO_PEXELS_API_KEY' ) && OLO_PEXELS_API_KEY;
+                echo '<input type="text" name="olo_pexels_api_key" value="' . esc_attr( $val ) . '" class="regular-text"' . ( $via_const ? ' placeholder="' . esc_attr__( 'Definita in wp-config.php (OLO_PEXELS_API_KEY)', 'olobuild' ) . '" disabled' : '' ) . ' />';
                 echo '<p class="description">' . sprintf(
                     /* translators: %s = URL */
                     __( 'Ottieni una chiave su %s', 'olobuild' ),
@@ -1999,8 +2010,9 @@ class Olo_Builder {
             'olo_pixabay_api_key',
             __( 'Pixabay API Key', 'olobuild' ),
             function () {
-                $val = get_option( 'olo_pixabay_api_key', '***REMOVED-API-KEY***' );
-                echo '<input type="text" name="olo_pixabay_api_key" value="' . esc_attr( $val ) . '" class="regular-text" />';
+                $val = get_option( 'olo_pixabay_api_key', '' );
+                $via_const = defined( 'OLO_PIXABAY_API_KEY' ) && OLO_PIXABAY_API_KEY;
+                echo '<input type="text" name="olo_pixabay_api_key" value="' . esc_attr( $val ) . '" class="regular-text"' . ( $via_const ? ' placeholder="' . esc_attr__( 'Definita in wp-config.php (OLO_PIXABAY_API_KEY)', 'olobuild' ) . '" disabled' : '' ) . ' />';
                 echo '<p class="description">' . sprintf(
                     __( 'Ottieni una chiave su %s', 'olobuild' ),
                     '<a href="https://pixabay.com/api/docs/" target="_blank" rel="noopener">pixabay.com/api/docs</a>'
@@ -2020,8 +2032,9 @@ class Olo_Builder {
             'olo_unsplash_api_key',
             __( 'Unsplash Access Key', 'olobuild' ),
             function () {
-                $val = get_option( 'olo_unsplash_api_key', 'mAtcGSa97BuefUN55vaORLV6YvFH4SHjdcCFbq_gJ84' );
-                echo '<input type="text" name="olo_unsplash_api_key" value="' . esc_attr( $val ) . '" class="regular-text" />';
+                $val = get_option( 'olo_unsplash_api_key', '' );
+                $via_const = defined( 'OLO_UNSPLASH_API_KEY' ) && OLO_UNSPLASH_API_KEY;
+                echo '<input type="text" name="olo_unsplash_api_key" value="' . esc_attr( $val ) . '" class="regular-text"' . ( $via_const ? ' placeholder="' . esc_attr__( 'Definita in wp-config.php (OLO_UNSPLASH_API_KEY)', 'olobuild' ) . '" disabled' : '' ) . ' />';
                 echo '<p class="description">' . sprintf(
                     __( 'Ottieni una chiave su %s', 'olobuild' ),
                     '<a href="https://unsplash.com/developers" target="_blank" rel="noopener">unsplash.com/developers</a>'
@@ -2974,10 +2987,36 @@ class Olo_Builder {
         require_once OLO_PATH . 'includes/tiles/class-column-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-hero-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-hero-split-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-audiohero-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-section-header-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-info-cards-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-worklist-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-workgrid-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-statstrip-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-hoursstrip-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-hoverlist-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-lookbookmixer-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-categoryrail-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-beforeafter-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-tripfinder-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-maskedvideohero-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-searchhero-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-smearhero-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-photocover-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-masthead-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-matchfixtures-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-showcasegrid-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-introsplit-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-mediacta-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-imagehero-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-glowhero-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-producthero-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-featuredstory-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-glowgallery-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-chathero-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-product-cards-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-step-timeline-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-process-steps-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-cta-banner-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-trust-strip-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-content-tile.php';
@@ -2996,6 +3035,15 @@ class Olo_Builder {
         require_once OLO_PATH . 'includes/tiles/class-team-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-accordion-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-icontabs-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-projector-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-finder-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-builder-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-mixer-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-schedule-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-hotspots-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-scaler-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-timezone-tile.php';
+        require_once OLO_PATH . 'includes/tiles/class-availability-tile.php';
 
         require_once OLO_PATH . 'includes/tiles/class-social-tile.php';
         require_once OLO_PATH . 'includes/tiles/class-map-tile.php';
@@ -3166,10 +3214,36 @@ class Olo_Builder {
         $manager->register_tile( new Olo_Column_Tile() );
         $manager->register_tile( new Olo_Hero_Tile() );
         $manager->register_tile( new Olo_HeroSplit_Tile() );
+        $manager->register_tile( new Olo_AudioHero_Tile() );
         $manager->register_tile( new Olo_SectionHeader_Tile() );
         $manager->register_tile( new Olo_InfoCards_Tile() );
+        $manager->register_tile( new Olo_WorkList_Tile() );
+        $manager->register_tile( new Olo_WorkGrid_Tile() );
+        $manager->register_tile( new Olo_StatStrip_Tile() );
+        $manager->register_tile( new Olo_HoursStrip_Tile() );
+        $manager->register_tile( new Olo_HoverList_Tile() );
+        $manager->register_tile( new Olo_LookbookMixer_Tile() );
+        $manager->register_tile( new Olo_CategoryRail_Tile() );
+        $manager->register_tile( new Olo_BeforeAfter_Tile() );
+        $manager->register_tile( new Olo_TripFinder_Tile() );
+        $manager->register_tile( new Olo_MaskedVideoHero_Tile() );
+        $manager->register_tile( new Olo_SearchHero_Tile() );
+        $manager->register_tile( new Olo_SmearHero_Tile() );
+        $manager->register_tile( new Olo_PhotoCover_Tile() );
+        $manager->register_tile( new Olo_Masthead_Tile() );
+        $manager->register_tile( new Olo_MatchFixtures_Tile() );
+        $manager->register_tile( new Olo_ShowcaseGrid_Tile() );
+        $manager->register_tile( new Olo_IntroSplit_Tile() );
+        $manager->register_tile( new Olo_MediaCTA_Tile() );
+        $manager->register_tile( new Olo_ImageHero_Tile() );
+        $manager->register_tile( new Olo_GlowHero_Tile() );
+        $manager->register_tile( new Olo_ProductHero_Tile() );
+        $manager->register_tile( new Olo_FeaturedStory_Tile() );
+        $manager->register_tile( new Olo_GlowGallery_Tile() );
+        $manager->register_tile( new Olo_ChatHero_Tile() );
         $manager->register_tile( new Olo_ProductCards_Tile() );
         $manager->register_tile( new Olo_StepTimeline_Tile() );
+        $manager->register_tile( new Olo_Process_Steps_Tile() );
         $manager->register_tile( new Olo_CtaBanner_Tile() );
         $manager->register_tile( new Olo_TrustStrip_Tile() );
         $manager->register_tile( new Olo_Content_Tile() );
@@ -3188,6 +3262,15 @@ class Olo_Builder {
         $manager->register_tile( new Olo_Team_Tile() );
         $manager->register_tile( new Olo_Accordion_Tile() );
         $manager->register_tile( new Olo_IconTabs_Tile() );
+        $manager->register_tile( new Olo_Projector_Tile() );
+        $manager->register_tile( new Olo_Finder_Tile() );
+        $manager->register_tile( new Olo_Builder_Tile() );
+        $manager->register_tile( new Olo_Mixer_Tile() );
+        $manager->register_tile( new Olo_Schedule_Tile() );
+        $manager->register_tile( new Olo_Hotspots_Tile() );
+        $manager->register_tile( new Olo_Scaler_Tile() );
+        $manager->register_tile( new Olo_Timezone_Tile() );
+        $manager->register_tile( new Olo_Availability_Tile() );
 
         $manager->register_tile( new Olo_Social_Tile() );
         $manager->register_tile( new Olo_Map_Tile() );

@@ -170,8 +170,8 @@ class Olo_Physicsbin_Tile extends Olo_Tile_Base {
         </style>
 
         <div class="olo-physicsbin <?php echo esc_attr( $uid ); ?>" data-olo-pb
-             role="img" aria-label="<?php echo esc_attr__( 'Cesto interattivo: trascina e lancia i giocattoli', 'olobuilder' ); ?>">
-            <span class="olo-pb-lab" aria-hidden="true">&#8623; <?php echo esc_html__( 'trascina & lancia', 'olobuilder' ); ?></span>
+             role="img" aria-label="<?php echo esc_attr__( 'Cesto interattivo: trascina e lancia i giocattoli', 'olobuild' ); ?>">
+            <span class="olo-pb-lab" aria-hidden="true">&#8623; <?php echo esc_html__( 'trascina & lancia', 'olobuild' ); ?></span>
             <?php
             foreach ( $items as $i => $it ) {
                 $d   = $it['r'] * 2;
