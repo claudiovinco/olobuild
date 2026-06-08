@@ -39,6 +39,9 @@ database/                   → schema.sql
 ## Note build
 - `npx` non funziona su questo sistema (node non nel PATH di cmd.exe)
 - Usare: `node node_modules/vite/bin/vite.js build`
+- **Due bundle**: oltre a `builder.js` esiste `assets/js/theme-picker.js` (selettore temi
+  condiviso `src/theme-picker/`, usato dal modale del builder E dal setup wizard). Dopo
+  modifiche al picker buildare ANCHE: `node node_modules/vite/bin/vite.js build --config vite.picker.config.js`
 - Version bump obbligatorio dopo modifiche JS/CSS: `OLO_VERSION` in mosaic-builder.php
 
 ## Regole

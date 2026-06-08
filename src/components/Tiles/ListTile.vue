@@ -19,6 +19,7 @@
 <script setup>
 import { computed } from 'vue';
 import { t } from '@/i18n';
+import { SHADOW } from '@/composables/oloTileDefaults';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
@@ -49,12 +50,7 @@ const listStyle = computed(() => {
   const style = {};
   style.padding = (parseInt(s.value.padding) || 16) + 'px';
   if (s.value.text_color) style.color = s.value.text_color;
-  const shadowMap = {
-    sm: '0 1px 3px 0 rgba(0,0,0,0.3), 0 1px 2px -1px rgba(0,0,0,0.25)',
-    md: '0 4px 6px -1px rgba(0,0,0,0.35), 0 2px 4px -2px rgba(0,0,0,0.25)',
-    lg: '0 10px 15px -3px rgba(0,0,0,0.4), 0 4px 6px -4px rgba(0,0,0,0.25)',
-    xl: '0 20px 25px -5px rgba(0,0,0,0.45), 0 8px 10px -6px rgba(0,0,0,0.3)',
-  };
+  const shadowMap = SHADOW;
   const sh = s.value.shadow || 'none';
   if (shadowMap[sh]) {
     style.boxShadow = shadowMap[sh];

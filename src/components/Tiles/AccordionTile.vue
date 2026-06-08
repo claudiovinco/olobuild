@@ -92,9 +92,9 @@ const builderStore = useBuilderStore();
 // the user-controlled fields for the visual identity keys.
 const PRESETS = {
   'card-soft': {
-    header_bg: '#ffffff', header_bg_active: '#fdf2ec', header_text_color: '#1e293b',
+    header_bg: '#ffffff', header_bg_active: 'color-mix(in srgb, var(--olo-color-primary, #e1474f) 8%, #fff)', header_text_color: '#1e293b',
     content_bg: '#ffffff', text_color: '#475569', border_color: '#e5e7eb',
-    gap: 12, border_radius: 12, icon_style: 'plus', separator_style: 'border', shadow: 'sm',
+    gap: 12, border_radius: 10, icon_style: 'plus', separator_style: 'border', shadow: 'sm',
   },
   'minimal-underline': {
     header_bg: '', header_bg_active: '', header_text_color: '#0f172a',
@@ -107,7 +107,7 @@ const PRESETS = {
     gap: 8, border_radius: 999, icon_style: 'chevron', separator_style: 'shadow', shadow: 'sm',
   },
   'outline-sharp': {
-    header_bg: '#ffffff', header_bg_active: '#fdf2ec', header_text_color: '#0f172a',
+    header_bg: '#ffffff', header_bg_active: 'color-mix(in srgb, var(--olo-color-primary, #e1474f) 8%, #fff)', header_text_color: '#0f172a',
     content_bg: '#ffffff', text_color: '#475569', border_color: '#e1474f',
     gap: 0, border_radius: 6, icon_style: 'plus', separator_style: 'border', shadow: 'none',
   },

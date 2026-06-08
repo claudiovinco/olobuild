@@ -1,0 +1,950 @@
+[
+ {
+  "id": "bl-se-4",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#3a2230"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "bl-ro-3",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "bl-co-2",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "bl-hero-split-1",
+        "type": "hero-split",
+        "settings": {
+         "eyebrow_text": "Clean colour cosmetics",
+         "eyebrow_dot_color": "#e7a0b4",
+         "eyebrow_color": "#e7a0b4",
+         "headline_lines": [
+          {
+           "text": "Your colour,",
+           "color": "#f6e9ec",
+           "italic": false
+          },
+          {
+           "text": "your",
+           "color": "#f6e9ec",
+           "italic": false
+          },
+          {
+           "text": "rules.",
+           "color": "#e7a0b4",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 80,
+         "headline_line_height": 1,
+         "headline_font_weight": "400",
+         "headline_align": "left",
+         "subhead": "High-pigment, skin-kind makeup in shades for every undertone — built to be mixed, layered and absolutely yours.",
+         "subhead_color": "#cdb1bd",
+         "subhead_size": 18,
+         "subhead_italic": false,
+         "subhead_max_width": 420,
+         "cta1_text": "Shop the range",
+         "cta1_url": "#new",
+         "cta1_bg": "#e7a0b4",
+         "cta1_color": "#23131d",
+         "cta1_size": 15,
+         "cta1_radius": {
+          "tl": 999,
+          "tr": 999,
+          "br": 999,
+          "bl": 999,
+          "linked": true
+         },
+         "cta1_radius_hover": {
+          "tl": 999,
+          "tr": 999,
+          "br": 999,
+          "bl": 999,
+          "linked": true
+         },
+         "cta2_text": "Find your shade",
+         "cta2_url": "#finder",
+         "cta2_bg": "transparent",
+         "cta2_color": "#f6e9ec",
+         "cta2_border": "rgba(231,160,180,.42)",
+         "cta2_size": 15,
+         "cta2_radius": {
+          "tl": 999,
+          "tr": 999,
+          "br": 999,
+          "bl": 999,
+          "linked": true
+         },
+         "cta2_radius_hover": {
+          "tl": 999,
+          "tr": 999,
+          "br": 999,
+          "bl": 999,
+          "linked": true
+         },
+         "stats": [],
+         "showcase_enabled": false,
+         "showcase_bg": {
+          "type": "solid",
+          "color": "#4d2f40"
+         },
+         "showcase_padding": 28,
+         "showcase_radius": {
+          "tl": 200,
+          "tr": 200,
+          "br": 200,
+          "bl": 200,
+          "linked": true
+         },
+         "showcase_radius_hover": {
+          "tl": 200,
+          "tr": 200,
+          "br": 200,
+          "bl": 200,
+          "linked": true
+         },
+         "showcase_badge_text": "",
+         "showcase_badge_dot": "#e7a0b4",
+         "showcase_badge_bg": "#23131d",
+         "showcase_badge_color": "#f6e9ec",
+         "showcase_items": [],
+         "showcase_card_radius": {
+          "tl": 14,
+          "tr": 14,
+          "br": 14,
+          "bl": 14,
+          "linked": true
+         },
+         "showcase_card_radius_hover": {
+          "tl": 14,
+          "tr": 14,
+          "br": 14,
+          "bl": 14,
+          "linked": true
+         },
+         "showcase_card_shadow": "none",
+         "showcase_caption_left": "",
+         "showcase_caption_right": "",
+         "showcase_hover_effect": "none",
+         "split_ratio": "1.05fr .95fr",
+         "gap": 48,
+         "min_height": 0,
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "bl-se-11",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large",
+   "gap": 24
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#3a2230"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "bl-ro-7",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "bl-co-6",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "bl-section-header-5",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "Best sellers",
+         "eyebrow_color": "#e7a0b4",
+         "eyebrow_dot_color": "#e7a0b4",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "Loved in",
+           "color": "#f6e9ec",
+           "italic": false
+          },
+          {
+           "text": "every shade",
+           "color": "#e7a0b4",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 48,
+         "headline_font_weight": "400",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": false,
+         "tagline_text": "",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#9c7e8c",
+         "tagline_text_size": 16.5,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "bl-ro-10",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "bl-co-9",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "bl-product-cards-8",
+        "type": "product-cards",
+        "settings": {
+         "columns": 4,
+         "gap": 20,
+         "card_bg": {
+          "type": "solid",
+          "color": "#4d2f40"
+         },
+         "card_color": "#cdb1bd",
+         "card_radius": {
+          "tl": 18,
+          "tr": 18,
+          "br": 18,
+          "bl": 18,
+          "linked": true
+         },
+         "card_radius_hover": {
+          "tl": 18,
+          "tr": 18,
+          "br": 18,
+          "bl": 18,
+          "linked": true
+         },
+         "card_shadow": "none",
+         "card_padding": 24,
+         "top_aspect_ratio": "1/1",
+         "top_padding": 24,
+         "show_screenshot_label": true,
+         "screenshot_label_color": "#f6e9ec",
+         "brand_size": 12,
+         "brand_letter_spacing": 0.1,
+         "title_font_family": "serif",
+         "title_size": 24,
+         "title_weight": "400",
+         "description_size": 13,
+         "cta_size": 12,
+         "cta_arrow": false,
+         "card_hover_effect": "lift",
+         "items": [
+          {
+           "letter": "",
+           "top_bg": {
+            "type": "gradient",
+            "gradient_from": "#b5564f",
+            "gradient_to": "#7d2e3e",
+            "gradient_angle": 135
+           },
+           "screenshot_label": "NEW",
+           "brand_label": "Lips",
+           "brand_color": "#e7a0b4",
+           "show_badge": true,
+           "badge_text": "€22",
+           "badge_bg": "#23131d",
+           "badge_color": "#f6e9ec",
+           "title": "Velvet Matte ",
+           "title_accent": "Lip",
+           "title_accent_italic": true,
+           "description": "Rich, long-wear matte in four classic shades — cool berry to warm terracotta.",
+           "cta_text": "Add to bag",
+           "cta_url": "#"
+          },
+          {
+           "letter": "",
+           "top_bg": {
+            "type": "gradient",
+            "gradient_from": "#e79aa6",
+            "gradient_to": "#c96f6a",
+            "gradient_angle": 135
+           },
+           "screenshot_label": "",
+           "brand_label": "Cheeks",
+           "brand_color": "#e7a0b4",
+           "show_badge": true,
+           "badge_text": "€19",
+           "badge_bg": "#23131d",
+           "badge_color": "#f6e9ec",
+           "title": "Dewdrop ",
+           "title_accent": "Blush",
+           "title_accent_italic": true,
+           "description": "Buildable powder blush in 12 natural shades for a fresh-from-the-garden glow.",
+           "cta_text": "Add to bag",
+           "cta_url": "#"
+          },
+          {
+           "letter": "",
+           "top_bg": {
+            "type": "gradient",
+            "gradient_from": "#f0d3bd",
+            "gradient_to": "#6e4a2f",
+            "gradient_angle": 135
+           },
+           "screenshot_label": "40 SHADES",
+           "brand_label": "Base",
+           "brand_color": "#e3b778",
+           "show_badge": true,
+           "badge_text": "€28",
+           "badge_bg": "#23131d",
+           "badge_color": "#f6e9ec",
+           "title": "Second-Skin ",
+           "title_accent": "Tint",
+           "title_accent_italic": true,
+           "description": "Featherlight skin tint with SPF 20, matched to every undertone in forty shades.",
+           "cta_text": "Add to bag",
+           "cta_url": "#"
+          },
+          {
+           "letter": "",
+           "top_bg": {
+            "type": "gradient",
+            "gradient_from": "#caa07a",
+            "gradient_to": "#5a4636",
+            "gradient_angle": 135
+           },
+           "screenshot_label": "",
+           "brand_label": "Eyes",
+           "brand_color": "#e7a0b4",
+           "show_badge": true,
+           "badge_text": "€34",
+           "badge_bg": "#23131d",
+           "badge_color": "#f6e9ec",
+           "title": "Everyday ",
+           "title_accent": "Palette",
+           "title_accent_italic": true,
+           "description": "Eight versatile shades — matte to shimmer — for a one-and-done eye look any day.",
+           "cta_text": "Add to bag",
+           "cta_url": "#"
+          }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "bl-se-15",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#432838"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "bl-ro-14",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "bl-co-13",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "bl-hoverlist-12",
+        "type": "hoverlist",
+        "settings": {
+         "items": [
+          {
+           "color": "#9a3b52",
+           "name": "Rosewood",
+           "sub": "Cool · matte",
+           "link_url": ""
+          },
+          {
+           "color": "#c77a6a",
+           "name": "Terracotta",
+           "sub": "Warm · matte",
+           "link_url": ""
+          },
+          {
+           "color": "#e79aa6",
+           "name": "Peony",
+           "sub": "Cool · blush",
+           "link_url": ""
+          },
+          {
+           "color": "#e6a17e",
+           "name": "Apricot",
+           "sub": "Warm · blush",
+           "link_url": ""
+          },
+          {
+           "color": "#7d2e3e",
+           "name": "Merlot",
+           "sub": "Deep · matte",
+           "link_url": ""
+          }
+         ],
+         "swatch_size": 26,
+         "swatch_shape": "circle",
+         "name_font_family": "heading",
+         "name_color": "#f6e9ec",
+         "name_size": 22,
+         "sub_color": "#9c7e8c",
+         "sub_size": 12,
+         "sub_uppercase": true,
+         "row_padding_y": 20,
+         "hover_indent": 20,
+         "hover_bg": "#4d2f40",
+         "line_color": "rgba(246,233,236,.13)",
+         "peek": true,
+         "mono_font_family": ""
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "bl-se-22",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#3a2230"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "bl-ro-18",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "bl-co-17",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "bl-section-header-16",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "Build your ritual",
+         "eyebrow_color": "#e7a0b4",
+         "eyebrow_dot_color": "#e7a0b4",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "Compose your ",
+           "color": "#f6e9ec",
+           "italic": false
+          },
+          {
+           "text": "routine",
+           "color": "#e7a0b4",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 48,
+         "headline_font_weight": "400",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": true,
+         "tagline_text": "Four steps, your call. Tap through each to build a regimen — the total updates as you go.",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#9c7e8c",
+         "tagline_text_size": 16.5,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "bl-ro-21",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "bl-co-20",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "bl-lookbookmixer-19",
+        "type": "lookbookmixer",
+        "settings": {
+         "items": [
+          {
+           "step": "Cleanse",
+           "name": "Rosewater Gel",
+           "price": "24",
+           "color": "#f4c9d4"
+          },
+          {
+           "step": "Cleanse",
+           "name": "Clay Melt Balm",
+           "price": "29",
+           "color": "#e3b778"
+          },
+          {
+           "step": "Cleanse",
+           "name": "Milk Cleanser",
+           "price": "22",
+           "color": "#f6e9ec"
+          },
+          {
+           "step": "Treat",
+           "name": "Vitamin C Drops",
+           "price": "38",
+           "color": "#e3b778"
+          },
+          {
+           "step": "Treat",
+           "name": "Niacinamide 10%",
+           "price": "32",
+           "color": "#e7a0b4"
+          },
+          {
+           "step": "Treat",
+           "name": "Retinal Night Oil",
+           "price": "46",
+           "color": "#d98aa1"
+          },
+          {
+           "step": "Hydrate",
+           "name": "Ceramide Cream",
+           "price": "34",
+           "color": "#f4c9d4"
+          },
+          {
+           "step": "Hydrate",
+           "name": "Gel-Water Lotion",
+           "price": "28",
+           "color": "#cfeaf0"
+          },
+          {
+           "step": "Protect",
+           "name": "Sheer SPF 50",
+           "price": "30",
+           "color": "#f6e9ec"
+          },
+          {
+           "step": "Protect",
+           "name": "Tinted SPF 30",
+           "price": "33",
+           "color": "#e3b778"
+          }
+         ],
+         "currency": "€",
+         "card_title": "Your routine",
+         "card_steps_label": "steps",
+         "card_sub": "Built in four taps. Swap any step until it’s yours.",
+         "cta_text": "Add routine to bag",
+         "cta_url": "#",
+         "panel_bg": "#4d2f40",
+         "slot_bg": "#432838",
+         "accent": "#e7a0b4",
+         "accent_ink": "#23131d",
+         "name_color": "#f6e9ec",
+         "price_color": "#9c7e8c",
+         "line_color": "rgba(246,233,236,.13)",
+         "name_font_family": "heading",
+         "mono_font_family": ""
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "bl-se-29",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large",
+   "gap": 24
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#432838"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "bl-ro-25",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "bl-co-24",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "bl-section-header-23",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "What we stand for",
+         "eyebrow_color": "#e7a0b4",
+         "eyebrow_dot_color": "#e7a0b4",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "Pretty, ",
+           "color": "#f6e9ec",
+           "italic": false
+          },
+          {
+           "text": "and principled",
+           "color": "#e7a0b4",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 48,
+         "headline_font_weight": "400",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": false,
+         "tagline_text": "",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#9c7e8c",
+         "tagline_text_size": 16.5,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "bl-ro-28",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "bl-co-27",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "bl-overlaygrid-26",
+        "type": "overlaygrid",
+        "settings": {
+         "items": [
+          {
+           "id": "bl-og-1",
+           "image": "",
+           "title": "Clean formulas",
+           "subtitle": "Skin-kind, dermatologist-tested",
+           "link": ""
+          },
+          {
+           "id": "bl-og-2",
+           "image": "",
+           "title": "Never on animals",
+           "subtitle": "Certified cruelty-free & vegan",
+           "link": ""
+          },
+          {
+           "id": "bl-og-3",
+           "image": "",
+           "title": "Refillable",
+           "subtitle": "Bring the bullet back, save 20%",
+           "link": ""
+          }
+         ],
+         "columns": "3",
+         "columns_mobile": "1"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "bl-se-33",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#432838"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "bl-ro-32",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "bl-co-31",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "bl-testimonial-30",
+        "type": "testimonial",
+        "settings": {
+         "quote": "“Finally a brand that had my exact undertone — and the formula lasts all day without going cakey. I've repurchased three times.”",
+         "author_name": "Aisha K.",
+         "author_role": "verified buyer",
+         "rating": "5",
+         "layout": "single",
+         "show_line": false,
+         "bg_color": "transparent",
+         "text_color": "#f6e9ec",
+         "text_size": 36,
+         "author_color": "#e7a0b4",
+         "border_radius": "0",
+         "avatar": ""
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "bl-se-37",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#3a2230"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "bl-ro-36",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "bl-co-35",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "bl-newsletter-34",
+        "type": "newsletter",
+        "settings": {
+         "title": "Get 10% off your first order",
+         "subtitle": "Join the list for early shade drops, refill reminders and the occasional tutorial.",
+         "layout": "minimal",
+         "email_placeholder": "you@example.com",
+         "button_text": "Sign up",
+         "button_icon": false,
+         "max_width": "520",
+         "alignment": "center",
+         "bg_color": "#4d2f40",
+         "box_border": "rgba(231,160,180,.42)",
+         "border_radius": 24,
+         "tile_padding": {
+          "top": 68,
+          "right": 68,
+          "bottom": 68,
+          "left": 68
+         },
+         "title_size": "46",
+         "title_weight": "400",
+         "title_color": "#f6e9ec",
+         "subtitle_size": "17",
+         "subtitle_color": "#cdb1bd",
+         "input_bg": "rgba(246,233,236,.08)",
+         "input_color": "#f6e9ec",
+         "input_border": "rgba(231,160,180,.42)",
+         "input_focus_border": "#e7a0b4",
+         "input_radius": 999,
+         "input_height": "48",
+         "btn_bg": "#e7a0b4",
+         "btn_color": "#23131d",
+         "btn_hover_bg": "#d98aa1",
+         "btn_radius": 999,
+         "btn_font_size": "15",
+         "btn_font_weight": "700",
+         "shadow": "none"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

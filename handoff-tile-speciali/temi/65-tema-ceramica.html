@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tórnio — ceramica artigiana · tema dimostrativo OLObuild</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared/olo-demo.css">
+<style>
+:root{
+  --bg:#E9E2D3; --bg-2:#E0D7C4; --ink:#2A241B; --ink-2:#6E6453; --ink-3:#9C9079;
+  --clay:#B5663B; --sage:#7E8463; --glaze:#5C7A88; --line:rgba(42,36,27,.16);
+  --tile-accent:#B5663B; --tile-btn:#2A241B;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Manrope',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+a{color:inherit;text-decoration:none;}
+.ins{font-family:'Instrument Serif',serif;}
+.mono{font-family:'JetBrains Mono',monospace;}
+.wrap{max-width:1180px;margin:0 auto;padding:0 44px;}
+.kick{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--clay);font-weight:500;display:inline-flex;align-items:center;gap:9px;}
+.kick::before{content:"";width:20px;height:2px;background:var(--sage);}
+
+/* nav */
+.nav{position:fixed;inset:0 0 auto 0;z-index:50;display:flex;align-items:center;gap:26px;padding:22px 44px;transition:all .35s;border-bottom:1px solid transparent;}
+.nav.solid{background:rgba(233,226,211,.92);backdrop-filter:blur(12px);border-color:var(--line);padding:14px 44px;}
+.brand{font-family:'Instrument Serif';font-size:30px;letter-spacing:.01em;}
+.nav-links{margin-left:auto;display:flex;gap:26px;font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;}
+.nav-links a{color:var(--ink-2);}.nav-links a:hover{color:var(--clay);}
+.nav-cta{border:1px solid var(--ink);padding:11px 20px;border-radius:100px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.05em;text-transform:uppercase;transition:all .2s;}
+.nav-cta:hover{background:var(--ink);color:var(--bg);}
+@media(max-width:880px){.nav-links{display:none;}}
+
+/* hero + turntable */
+#hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:30px;padding:120px 44px 60px;max-width:1180px;margin:0 auto;}
+.hero-h{font-family:'Instrument Serif';font-size:clamp(54px,9vw,148px);line-height:.92;letter-spacing:-.01em;margin:18px 0 0;}
+.hero-h em{font-style:italic;color:var(--clay);}
+.hero-sub{font-size:18px;color:var(--ink-2);max-width:38ch;margin:24px 0 0;line-height:1.6;}
+.hint{margin-top:30px;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);}
+
+.turn-stage{display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.turn{perspective:1100px;width:min(420px,80vw);cursor:grab;touch-action:pan-y;user-select:none;}
+.turn:active{cursor:grabbing;}
+.piece{position:relative;transform-style:preserve-3d;will-change:transform;}
+.piece image-slot{display:block;width:100%;aspect-ratio:3/4;border-radius:6px;
+  box-shadow:0 40px 60px -30px rgba(42,36,27,.5);backface-visibility:hidden;}
+.piece::after{content:"";position:absolute;inset:0;border-radius:6px;background:linear-gradient(105deg,rgba(255,255,255,.28),transparent 40%);pointer-events:none;}
+.pedestal{margin-top:-14px;width:min(440px,84vw);height:62px;
+  background:radial-gradient(ellipse at 50% 30%,rgba(42,36,27,.22),transparent 62%);}
+.ring{position:relative;width:200px;height:46px;margin:-26px auto 0;border-radius:50%;
+  border:1px dashed rgba(42,36,27,.3);}
+.ring i{position:absolute;top:50%;left:50%;width:7px;height:7px;border-radius:50%;background:var(--clay);transform-origin:0 0;}
+.angle{margin-top:18px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;color:var(--ink-2);}
+.angle b{color:var(--clay);}
+@media(max-width:880px){#hero{grid-template-columns:1fr;}.turn-stage{order:-1;margin-bottom:10px;}}
+
+/* materia */
+#mat{padding:110px 0;border-top:1px solid var(--line);background:var(--bg-2);}
+.mat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:46px;border-top:1px solid var(--line);}
+.cel{padding:38px 28px 38px 0;border-right:1px solid var(--line);border-bottom:1px solid var(--line);}
+.cel:last-child{border-right:none;}
+.cel .t{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--clay);}
+.cel h3{font-family:'Instrument Serif';font-size:32px;margin:14px 0 12px;}
+.cel p{font-size:14px;color:var(--ink-2);line-height:1.7;margin:0;}
+@media(max-width:880px){.mat-grid{grid-template-columns:1fr;}.cel{border-right:none;}}
+
+/* collection */
+#coll{padding:110px 0;}
+.coll-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:18px;margin-top:40px;}
+.pc{position:relative;overflow:hidden;border-radius:14px;background:var(--bg-2);}
+.pc image-slot{width:100%;height:100%;display:block;transition:transform .6s;}
+.pc:hover image-slot{transform:scale(1.05);}
+.pc::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(42,36,27,.6),transparent 55%);}
+.pc .cx{position:absolute;left:0;bottom:0;padding:20px;z-index:2;color:#F3EEE3;}
+.pc .nm{font-family:'Instrument Serif';font-size:24px;}
+.pc .ds{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#E5C2A6;margin-top:5px;}
+.pc.big{grid-column:span 7;}.pc.big image-slot{aspect-ratio:4/3;}
+.pc.sm{grid-column:span 5;}.pc.sm image-slot{aspect-ratio:4/3;}
+@media(max-width:880px){.pc.big,.pc.sm{grid-column:span 12;}}
+
+/* quote */
+.quote{padding:120px 0;text-align:center;background:var(--ink);color:var(--bg);}
+.quote p{font-family:'Instrument Serif';font-style:italic;font-size:clamp(28px,4vw,52px);line-height:1.3;max-width:24ch;margin:0 auto;}
+.quote .who{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-top:26px;}
+
+/* stats */
+.stats{padding:80px 0;text-align:center;}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:30px;}
+.st .num{font-family:'Instrument Serif';font-size:clamp(48px,6vw,90px);line-height:1;color:var(--clay);}
+.st .lbl{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);margin-top:6px;}
+@media(max-width:760px){.stat-grid{grid-template-columns:1fr 1fr;gap:34px 20px;}}
+
+/* cta */
+#cta{padding:120px 0;text-align:center;}
+#cta h2{font-family:'Instrument Serif';font-size:clamp(46px,8vw,140px);line-height:.94;margin:16px 0 26px;}
+#cta h2 em{font-style:italic;color:var(--clay);}
+.btn{display:inline-flex;align-items:center;gap:10px;background:var(--clay);color:#fff;border:none;cursor:pointer;padding:16px 32px;border-radius:100px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.05em;text-transform:uppercase;transition:transform .15s;}
+.btn:hover{transform:translateY(-2px);}
+
+footer{border-top:1px solid var(--line);padding:34px 0;}
+.f-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px;}
+.f-row .fm{font-family:'Instrument Serif';font-size:27px;}
+.olo-credit{color:var(--ink-2);}
+.f-meta{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-3);}
+.f-tiles{font-family:'JetBrains Mono',monospace;font-size:10.5px;line-height:1.9;color:var(--ink-3);margin-top:22px;max-width:96ch;}
+.f-tiles b{color:var(--ink-2);}
+</style>
+</head>
+<body>
+
+<nav class="nav" id="nav" data-solid-at="70vh">
+  <div class="brand ins">Tórnio</div>
+  <div class="nav-links"><a href="#mat">La materia</a><a href="#coll">Collezione</a><a href="#cta">Lo studio</a></div>
+  <a class="nav-cta" href="#cta">Visita il laboratorio</a>
+</nav>
+
+<section id="hero" data-tile="Hero · Viewer360">
+  <div>
+    <span class="kick">Ceramica fatta al tornio · Faenza</span>
+    <h1 class="hero-h ins">Terra che<br><em>gira</em></h1>
+    <p class="hero-sub">Ogni pezzo nasce da una zolla di argilla e da una giornata al tornio. Trascina il pezzo — giralo come se fosse tra le tue mani.</p>
+    <div class="hint">⟳ trascina per ruotare · lascia per l'inerzia</div>
+  </div>
+  <div class="turn-stage" data-tile="Viewer360 · TurntableSpin">
+    <div class="turn" id="turn">
+      <div class="piece" id="piece"><image-slot id="cer-hero" placeholder="vaso / pezzo in ceramica"></image-slot></div>
+    </div>
+    <div class="pedestal"></div>
+    <div class="ring"><i id="ringDot"></i></div>
+    <div class="angle">rotazione · <b id="angVal">0°</b></div>
+  </div>
+</section>
+
+<section id="mat" data-tile="DescList · materia">
+  <div class="wrap">
+    <span class="kick">Dalla zolla al fuoco</span>
+    <h2 class="ins" style="font-size:clamp(34px,4.6vw,64px);margin:14px 0 0;line-height:.96;">Come prende forma</h2>
+    <div class="mat-grid reveal">
+      <div class="cel"><div class="t">01 — Tornio</div><h3 class="ins">Centrare l'argilla</h3><p>Mani bagnate, argilla che sale e scende finché trova il centro. È il gesto più lento da imparare.</p></div>
+      <div class="cel"><div class="t">02 — Smalto</div><h3 class="ins">Il colore nel fuoco</h3><p>Gli smalti cambiano nel forno: stendi un grigio, esce un blu profondo. Ogni cottura è una scommessa.</p></div>
+      <div class="cel"><div class="t">03 — Cottura</div><h3 class="ins">1.250 gradi</h3><p>Due cotture, due giorni di attesa. Quando il forno si apre, sappiamo se la terra ci ha detto sì.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="coll" data-tile="ProGallery · collezione">
+  <div class="wrap">
+    <span class="kick">Pezzi unici</span>
+    <h2 class="ins" style="font-size:clamp(34px,4.6vw,64px);margin:14px 0 0;line-height:.96;">La collezione</h2>
+    <div class="coll-grid reveal">
+      <div class="pc big"><image-slot id="cer-1" placeholder="ciotole"></image-slot><div class="cx"><div class="nm ins">Ciotole Luna</div><div class="ds">gres smaltato · pezzo unico</div></div></div>
+      <div class="pc sm"><image-slot id="cer-2" placeholder="brocca"></image-slot><div class="cx"><div class="nm ins">Brocca Sàssi</div><div class="ds">terracotta · ingobbio</div></div></div>
+      <div class="pc sm"><image-slot id="cer-3" placeholder="piatti"></image-slot><div class="cx"><div class="nm ins">Piatti Onda</div><div class="ds">porcellana · cobalto</div></div></div>
+      <div class="pc big"><image-slot id="cer-4" placeholder="vasi"></image-slot><div class="cx"><div class="nm ins">Vasi Radìce</div><div class="ds">gres · smalto reattivo</div></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="quote" data-tile="Quotation">
+  <div class="wrap">
+    <p class="ins">«La ceramica perfetta non esiste. Esiste quella che porta i segni delle <em>mani</em> che l'hanno fatta.»</p>
+    <div class="who">La ceramista · al tornio dal 1998</div>
+  </div>
+</section>
+
+<section class="stats" data-tile="Counter">
+  <div class="wrap">
+    <div class="stat-grid reveal-stagger">
+      <div class="st"><div class="num"><span class="count" data-count="27">0</span></div><div class="lbl">Anni al tornio</div></div>
+      <div class="st"><div class="num"><span class="count" data-count="1250" data-suffix="°">0</span></div><div class="lbl">Gradi di cottura</div></div>
+      <div class="st"><div class="num"><span class="count" data-count="100" data-suffix="%">0</span></div><div class="lbl">Pezzi unici</div></div>
+      <div class="st"><div class="num"><span class="count" data-count="0">0</span></div><div class="lbl">Due pezzi uguali</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="cta" data-tile="AnimatedHeading">
+  <div class="wrap">
+    <span class="kick" style="justify-content:center">Vieni a sporcarti le mani</span>
+    <h2 class="ins">Siediti al <em>tornio</em></h2>
+    <a class="btn" href="#">Prenota un corso →</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="f-row">
+      <div class="fm ins">Tórnio</div>
+      <div class="olo-credit"><span class="olo-mk"><b></b><i></i><b></b></span>Costruito con <b class="hl">OLObuild</b> — zero codice</div>
+    </div>
+    <div class="f-tiles"><b>Tile usati (9):</b> Hero · Viewer360 TurntableSpin (trascina per ruotare, inerzia al rilascio) · DescList materia · ProGallery collezione · Quotation · Counter · AnimatedHeading · Image · DarkMode — nessuna prenotazione.</div>
+    <div class="f-row" style="margin-top:22px"><span class="f-meta">© 2026 Tórnio ceramica — tema dimostrativo</span><span class="f-meta">OLOtheme · demo · 65 — Ceramica</span></div>
+  </div>
+</footer>
+
+<button id="tiletoggle"><span class="sq"></span><span class="t">Mostra tile</span></button>
+
+<script src="image-slot.js"></script>
+<script src="shared/olo-demo.js"></script>
+<script>
+/* ===== drag-to-spin turntable with inertia ===== */
+(function(){
+  var turn=document.getElementById('turn'),piece=document.getElementById('piece'),
+      angEl=document.getElementById('angVal'),dot=document.getElementById('ringDot');
+  if(!turn)return;
+  var angle=0,vel=0.25,dragging=false,lastX=0;
+  function render(){
+    var a=((angle%360)+360)%360;
+    piece.style.transform='rotateY('+angle+'deg)';
+    angEl.textContent=Math.round(a)+'°';
+    var rad=a*Math.PI/180;
+    dot.style.transform='translate('+(Math.cos(rad)*94-3)+'px,'+(Math.sin(rad)*20-3)+'px)';
+  }
+  function loop(){
+    if(!dragging){angle+=vel;vel*=0.985;if(Math.abs(vel)<0.05)vel=(vel<0?-0.05:0.05);}
+    render();requestAnimationFrame(loop);
+  }
+  turn.addEventListener('pointerdown',function(e){dragging=true;lastX=e.clientX;vel=0;turn.setPointerCapture(e.pointerId);});
+  turn.addEventListener('pointermove',function(e){if(!dragging)return;var dx=e.clientX-lastX;lastX=e.clientX;angle+=dx*0.55;vel=dx*0.55;});
+  turn.addEventListener('pointerup',function(){dragging=false;});
+  turn.addEventListener('pointercancel',function(){dragging=false;});
+  loop();
+})();
+</script>
+</body>
+</html>

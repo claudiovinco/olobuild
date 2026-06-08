@@ -1,0 +1,1078 @@
+{
+  "id": "page-pricing-page",
+  "name": "Pagina prezzi",
+  "category": "page",
+  "preview_description": "Template token-first assemblato dal sistema di sezioni coerente (6 sezioni).",
+  "content": {
+    "0": {
+      "id": "tpl-herocenter-sec",
+      "type": "section",
+      "settings": {
+        "style": "default",
+        "width": "expand",
+        "padding": "xlarge"
+      },
+      "style": {
+        "bg_type": "color",
+        "bg_color": "#FFFFFF",
+        "padding_top": "200",
+        "padding_bottom": "200"
+      },
+      "advanced": {},
+      "children": [
+        {
+          "id": "tpl-herocenter-row",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl-herocenter-col1",
+              "type": "column",
+              "settings": {
+                "width": "1-2"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl-herocenter-headline",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "Benvenuto.",
+                    "subtitle": "",
+                    "tag": "h1",
+                    "alignment": "center",
+                    "decoration": "none",
+                    "heading_color": "#111827",
+                    "heading_size": "xl"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-herocenter-spacer1",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "40"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-herocenter-btn1",
+                  "type": "button",
+                  "settings": {
+                    "text": "Entra",
+                    "url": "#",
+                    "style": "solid",
+                    "alignment": "center",
+                    "bg_color": "#111827",
+                    "color": "#FFFFFF",
+                    "border_radius": "50",
+                    "size": "md",
+                    "hover_effect": "grow"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "1": {
+      "id": "p11-sec",
+      "type": "section",
+      "settings": {
+        "style": "default",
+        "width": "large",
+        "padding": "large"
+      },
+      "style": {
+        "bg_type": "color",
+        "bg_color": "",
+        "padding_top": "80",
+        "padding_bottom": "80"
+      },
+      "advanced": {},
+      "children": [
+        {
+          "id": "p11-r1",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "p11-c0",
+              "type": "column",
+              "settings": {
+                "width": "1-1"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "p11-h",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "Confronta i piani",
+                    "subtitle": "Trova il piano perfetto per il tuo business.",
+                    "tag": "h2",
+                    "alignment": "center",
+                    "decoration": "line",
+                    "decoration_color": "",
+                    "heading_color": "",
+                    "subtitle_color": "",
+                    "heading_size": "lg"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "p11-sp",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "48"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "p11-r2",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "p11-c1",
+              "type": "column",
+              "settings": {
+                "width": "1-4"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "p11-t1",
+                  "type": "pricing",
+                  "settings": {
+                    "plan_name": "Micro",
+                    "price": "9",
+                    "currency": "€",
+                    "period": "/mese",
+                    "features": "1 utente\n2 progetti\n1 GB\nEmail",
+                    "is_popular": false,
+                    "cta_text": "Attiva",
+                    "cta_url": "#",
+                    "bg_color": "#FFFFFF",
+                    "text_color": "#374151",
+                    "accent_color": "#6B7280",
+                    "border_radius": "0",
+                    "border_width": "1",
+                    "border_color": "#E5E7EB",
+                    "cta_bg_color": "#F3F4F6",
+                    "cta_text_color": "#374151",
+                    "cta_hover_effect": "none",
+                    "cta_radius": "0",
+                    "check_style": "dot",
+                    "feature_dividers": true
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": "p11-c2",
+              "type": "column",
+              "settings": {
+                "width": "1-4"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "p11-t2",
+                  "type": "pricing",
+                  "settings": {
+                    "plan_name": "Small",
+                    "price": "29",
+                    "currency": "€",
+                    "period": "/mese",
+                    "features": "5 utenti\n10 progetti\n25 GB\nChat + email",
+                    "is_popular": false,
+                    "cta_text": "Attiva",
+                    "cta_url": "#",
+                    "bg_color": "#FFFFFF",
+                    "text_color": "#374151",
+                    "accent_color": "#6B7280",
+                    "border_radius": "0",
+                    "border_width": "1",
+                    "border_color": "#E5E7EB",
+                    "cta_bg_color": "#F3F4F6",
+                    "cta_text_color": "#374151",
+                    "cta_hover_effect": "none",
+                    "cta_radius": "0",
+                    "check_style": "dot",
+                    "feature_dividers": true
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": "p11-c3",
+              "type": "column",
+              "settings": {
+                "width": "1-4"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "p11-t3",
+                  "type": "pricing",
+                  "settings": {
+                    "plan_name": "Medium",
+                    "price": "59",
+                    "currency": "€",
+                    "period": "/mese",
+                    "features": "20 utenti\nProgetti illimitati\n100 GB\nSupporto prioritario",
+                    "is_popular": true,
+                    "badge_text": "Best seller",
+                    "badge_top": "-14",
+                    "badge_style": "classic",
+                    "badge_bg_color": "#111827",
+                    "badge_text_color": "#FFFFFF",
+                    "cta_text": "Attiva",
+                    "cta_url": "#",
+                    "bg_color": "#111827",
+                    "text_color": "#F9FAFB",
+                    "accent_color": "#D1D5DB",
+                    "border_radius": "0",
+                    "border_width": "0",
+                    "cta_bg_color": "#FFFFFF",
+                    "cta_text_color": "#111827",
+                    "cta_hover_effect": "none",
+                    "cta_radius": "0",
+                    "check_style": "checkmark",
+                    "feature_dividers": true
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": "p11-c4",
+              "type": "column",
+              "settings": {
+                "width": "1-4"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "p11-t4",
+                  "type": "pricing",
+                  "settings": {
+                    "plan_name": "Large",
+                    "price": "99",
+                    "currency": "€",
+                    "period": "/mese",
+                    "features": "Illimitato\nIllimitato\n500 GB\nSupporto 24/7",
+                    "is_popular": false,
+                    "cta_text": "Attiva",
+                    "cta_url": "#",
+                    "bg_color": "#FFFFFF",
+                    "text_color": "#374151",
+                    "accent_color": "#6B7280",
+                    "border_radius": "0",
+                    "border_width": "1",
+                    "border_color": "#E5E7EB",
+                    "cta_bg_color": "#F3F4F6",
+                    "cta_text_color": "#374151",
+                    "cta_hover_effect": "none",
+                    "cta_radius": "0",
+                    "check_style": "dot",
+                    "feature_dividers": true
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "2": {
+      "id": "p13-sec1",
+      "type": "section",
+      "settings": {
+        "style": "default",
+        "width": "large",
+        "padding": "large"
+      },
+      "style": {
+        "bg_type": "color",
+        "bg_color": "",
+        "padding_top": "80",
+        "padding_bottom": "80"
+      },
+      "advanced": {},
+      "children": [
+        {
+          "id": "p13-r1",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "p13-c0",
+              "type": "column",
+              "settings": {
+                "width": "1-1"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "p13-h",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "Piani e prezzi",
+                    "subtitle": "Domande? Scorri in basso per le FAQ.",
+                    "tag": "h2",
+                    "alignment": "center",
+                    "decoration": "line",
+                    "decoration_color": "",
+                    "heading_color": "",
+                    "subtitle_color": "",
+                    "heading_size": "lg"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "p13-sp",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "40"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "p13-r2",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "p13-c1",
+              "type": "column",
+              "settings": {
+                "width": "1-2"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "p13-t1",
+                  "type": "pricing",
+                  "settings": {
+                    "plan_name": "Starter",
+                    "price": "14",
+                    "currency": "€",
+                    "period": "/mese",
+                    "features": "5 progetti\n10 GB storage\nSupporto email\nTemplate base",
+                    "is_popular": false,
+                    "cta_text": "Scegli Starter",
+                    "cta_url": "#",
+                    "bg_color": "#FFFFFF",
+                    "text_color": "#374151",
+                    "accent_color": "#F97316",
+                    "border_radius": "16",
+                    "border_width": "1",
+                    "border_color": "#FED7AA",
+                    "cta_bg_color": "#FFFFFF",
+                    "cta_text_color": "#F97316",
+                    "cta_border_width": "2",
+                    "cta_border_color": "#F97316",
+                    "cta_hover_effect": "grow",
+                    "cta_radius": "8",
+                    "check_style": "arrow",
+                    "feature_dividers": false
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": "p13-c2",
+              "type": "column",
+              "settings": {
+                "width": "1-2"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "p13-t2",
+                  "type": "pricing",
+                  "settings": {
+                    "plan_name": "Growth",
+                    "price": "39",
+                    "currency": "€",
+                    "period": "/mese",
+                    "features": "Progetti illimitati\n100 GB storage\nSupporto prioritario\nTutti i template\nAnalytics\nIntegrazioni",
+                    "is_popular": true,
+                    "badge_text": "Consigliato",
+                    "badge_top": "-14",
+                    "badge_style": "pill",
+                    "badge_bg_color": "#F97316",
+                    "cta_text": "Scegli Growth",
+                    "cta_url": "#",
+                    "bg_color": "#FFF7ED",
+                    "text_color": "#374151",
+                    "accent_color": "#F97316",
+                    "border_radius": "16",
+                    "border_width": "2",
+                    "border_color": "#F97316",
+                    "cta_bg_color": "#F97316",
+                    "cta_text_color": "#FFFFFF",
+                    "cta_hover_effect": "grow",
+                    "cta_radius": "8",
+                    "check_style": "circle-check",
+                    "feature_dividers": false
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "3": {
+      "id": "p13-sec2",
+      "type": "section",
+      "settings": {
+        "style": "default",
+        "width": "large",
+        "padding": "large"
+      },
+      "style": {
+        "bg_type": "color",
+        "bg_color": "#F9FAFB",
+        "padding_top": "80",
+        "padding_bottom": "80"
+      },
+      "advanced": {},
+      "children": [
+        {
+          "id": "p13-r3",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "p13-c3",
+              "type": "column",
+              "settings": {
+                "width": "1-1"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "p13-h2",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "Domande frequenti",
+                    "subtitle": "",
+                    "tag": "h2",
+                    "alignment": "center",
+                    "decoration": "none",
+                    "decoration_color": "",
+                    "heading_color": "",
+                    "subtitle_color": "",
+                    "heading_size": "md"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "p13-sp2",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "24"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "p13-acc",
+                  "type": "accordion",
+                  "settings": {
+                    "items": [
+                      {
+                        "title": "Posso cambiare piano in qualsiasi momento?",
+                        "content": "Sì, puoi passare a un piano superiore o inferiore in qualsiasi momento. La differenza verrà calcolata pro-rata."
+                      },
+                      {
+                        "title": "C'è un periodo di prova gratuito?",
+                        "content": "Sì, tutti i piani includono 14 giorni di prova gratuita senza carta di credito."
+                      },
+                      {
+                        "title": "Quali metodi di pagamento accettate?",
+                        "content": "Accettiamo carte di credito (Visa, Mastercard, Amex), PayPal e bonifico bancario per piani annuali."
+                      },
+                      {
+                        "title": "Cosa succede se supero i limiti del piano?",
+                        "content": "Ti avviseremo prima di raggiungere il limite. Potrai aggiornare il piano o acquistare spazio aggiuntivo."
+                      }
+                    ],
+                    "style": "bordered",
+                    "icon_position": "right"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "4": {
+      "id": "tpl-tr-sec",
+      "type": "section",
+      "settings": {
+        "style": "default",
+        "width": "large",
+        "padding": "large"
+      },
+      "style": {
+        "bg_type": "color",
+        "bg_color": "#FAFAFA",
+        "padding_top": "80",
+        "padding_bottom": "80"
+      },
+      "advanced": {},
+      "children": [
+        {
+          "id": "tpl-tr-row0",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl-tr-col0",
+              "type": "column",
+              "settings": {
+                "width": "1-1"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl-tr-head",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "Valutazioni dei nostri clienti",
+                    "subtitle": "Media 4.9 su 5 stelle",
+                    "tag": "h2",
+                    "alignment": "center",
+                    "decoration": "none",
+                    "heading_color": "#111827",
+                    "subtitle_color": "#F59E0B",
+                    "heading_size": "lg"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-tr-sp",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "40"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "tpl-tr-row1",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl-tr-c1",
+              "type": "column",
+              "settings": {
+                "width": "1-3"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl-tr-q1",
+                  "type": "testimonial",
+                  "settings": {
+                    "quote": "Esperienza eccellente. Il prodotto ha superato ogni nostra aspettativa iniziale.",
+                    "author_name": "Federica Santini",
+                    "author_role": "Responsabile Acquisti",
+                    "rating": "5",
+                    "bg_color": "#FEF3C7",
+                    "text_color": "#92400E",
+                    "show_line": false,
+                    "border_radius": "16",
+                    "show_rating": true,
+                    "rating_color": "#D97706"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": "tpl-tr-c2",
+              "type": "column",
+              "settings": {
+                "width": "1-3"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl-tr-q2",
+                  "type": "testimonial",
+                  "settings": {
+                    "quote": "Rapporto qualita-prezzo imbattibile. Assistenza sempre pronta e risolutiva.",
+                    "author_name": "Enrico Pellegrini",
+                    "author_role": "Direttore IT, Pellegrini Corp",
+                    "rating": "5",
+                    "bg_color": "#FCE7F3",
+                    "text_color": "#831843",
+                    "show_line": false,
+                    "border_radius": "16",
+                    "show_rating": true,
+                    "rating_color": "#DB2777"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": "tpl-tr-c3",
+              "type": "column",
+              "settings": {
+                "width": "1-3"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl-tr-q3",
+                  "type": "testimonial",
+                  "settings": {
+                    "quote": "Il team e stato capace di gestire ogni criticita con prontezza. Risultato finale impeccabile.",
+                    "author_name": "Monica Vitale",
+                    "author_role": "CEO, Vitale Solutions",
+                    "rating": "5",
+                    "bg_color": "#ECFDF5",
+                    "text_color": "#065F46",
+                    "show_line": false,
+                    "border_radius": "16",
+                    "show_rating": true,
+                    "rating_color": "#059669"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "5": {
+      "id": "tpl-cta1-sec",
+      "type": "section",
+      "settings": {
+        "style": "default",
+        "width": "large",
+        "padding": "large"
+      },
+      "style": {
+        "bg_type": "color",
+        "bg_color": "#F3F4F6",
+        "padding_top": "80",
+        "padding_bottom": "80"
+      },
+      "advanced": {},
+      "children": [
+        {
+          "id": "tpl-cta1-row",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl-cta1-col1",
+              "type": "column",
+              "settings": {
+                "width": "2-3"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl-cta1-headline",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "Pronto a iniziare?",
+                    "subtitle": "Unisciti a migliaia di professionisti che hanno già scelto la nostra piattaforma",
+                    "tag": "h2",
+                    "alignment": "center",
+                    "decoration": "none",
+                    "heading_color": "#111827",
+                    "subtitle_color": "#6B7280",
+                    "heading_size": "lg"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-cta1-spacer1",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "24"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-cta1-btn1",
+                  "type": "button",
+                  "settings": {
+                    "text": "Registrati gratis",
+                    "url": "#registrazione",
+                    "style": "solid",
+                    "alignment": "center",
+                    "bg_color": "var(--olo-color-primary, #e1474f)",
+                    "color": "#FFFFFF",
+                    "border_radius": "8",
+                    "size": "lg",
+                    "hover_effect": "lift"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "6": {
+      "id": "tpl_79",
+      "type": "section",
+      "settings": {
+        "style": "default",
+        "width": "large",
+        "padding": "large"
+      },
+      "style": {
+        "bg_type": "color",
+        "bg_color": "#1e293b",
+        "padding_top": "60",
+        "padding_bottom": "40"
+      },
+      "advanced": {},
+      "children": [
+        {
+          "id": "tpl_73",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl_63",
+              "type": "column",
+              "settings": {
+                "width": "1-4"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_59",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "La tua Azienda",
+                    "subtitle": "",
+                    "tag": "h4",
+                    "alignment": "left",
+                    "decoration": "none",
+                    "heading_color": "#ffffff",
+                    "subtitle_color": "",
+                    "heading_size": "sm"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_60",
+                  "type": "content",
+                  "settings": {
+                    "content": "<p style=\"color:#94a3b8;\">Offriamo soluzioni innovative per il tuo business. Qualità, affidabilità e passione al tuo servizio dal 2010.</p>",
+                    "alignment": "left"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_61",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "16"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_62",
+                  "type": "social",
+                  "settings": {
+                    "links": "facebook|#\ninstagram|#\nlinkedin|#",
+                    "style": "default",
+                    "size": "md",
+                    "alignment": "left"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            },
+            {
+              "id": "tpl_66",
+              "type": "column",
+              "settings": {
+                "width": "1-4"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_64",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "Link rapidi",
+                    "subtitle": "",
+                    "tag": "h5",
+                    "alignment": "left",
+                    "decoration": "none",
+                    "heading_color": "#ffffff",
+                    "subtitle_color": "",
+                    "heading_size": "sm"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_65",
+                  "type": "content",
+                  "settings": {
+                    "content": "<p><a href=\"#\" style=\"color:#94a3b8;text-decoration:none;\">Home</a><br><a href=\"#\" style=\"color:#94a3b8;text-decoration:none;\">Chi siamo</a><br><a href=\"#\" style=\"color:#94a3b8;text-decoration:none;\">Blog</a><br><a href=\"#\" style=\"color:#94a3b8;text-decoration:none;\">Contatti</a><br><a href=\"#\" style=\"color:#94a3b8;text-decoration:none;\">Privacy Policy</a></p>",
+                    "alignment": "left"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            },
+            {
+              "id": "tpl_69",
+              "type": "column",
+              "settings": {
+                "width": "1-4"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_67",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "Servizi",
+                    "subtitle": "",
+                    "tag": "h5",
+                    "alignment": "left",
+                    "decoration": "none",
+                    "heading_color": "#ffffff",
+                    "subtitle_color": "",
+                    "heading_size": "sm"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_68",
+                  "type": "content",
+                  "settings": {
+                    "content": "<p><a href=\"#\" style=\"color:#94a3b8;text-decoration:none;\">Web Design</a><br><a href=\"#\" style=\"color:#94a3b8;text-decoration:none;\">Sviluppo App</a><br><a href=\"#\" style=\"color:#94a3b8;text-decoration:none;\">SEO</a><br><a href=\"#\" style=\"color:#94a3b8;text-decoration:none;\">Marketing</a><br><a href=\"#\" style=\"color:#94a3b8;text-decoration:none;\">Consulenza</a></p>",
+                    "alignment": "left"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            },
+            {
+              "id": "tpl_72",
+              "type": "column",
+              "settings": {
+                "width": "1-4"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_70",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "Contatti",
+                    "subtitle": "",
+                    "tag": "h5",
+                    "alignment": "left",
+                    "decoration": "none",
+                    "heading_color": "#ffffff",
+                    "subtitle_color": "",
+                    "heading_size": "sm"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_71",
+                  "type": "content",
+                  "settings": {
+                    "content": "<p style=\"color:#94a3b8;\">Via Roma 42, 00100 Roma<br>Tel: +39 06 1234567<br>Email: info@azienda.it<br>P.IVA: 01234567890</p>",
+                    "alignment": "left"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "tpl_78",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl_77",
+              "type": "column",
+              "settings": {
+                "width": "1-1"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_74",
+                  "type": "divider",
+                  "settings": {
+                    "style": "solid",
+                    "width": "100",
+                    "color": "#334155"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_75",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "16"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_76",
+                  "type": "content",
+                  "settings": {
+                    "content": "<p style=\"text-align:center;color:#64748b;font-size:14px;\">&copy; 2026 La tua Azienda. Tutti i diritti riservati.</p>",
+                    "alignment": "center"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

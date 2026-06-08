@@ -28,13 +28,13 @@
 
 <script setup>
 import { computed } from 'vue';
-import { resolveColor, TOKENS } from '@/composables/oloTileDefaults';
+import { resolveColor, TOKENS, SHADOW } from '@/composables/oloTileDefaults';
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 const defaults = { columns: 3, gap: 24, card_border_radius: 12, card_shadow: 'sm', hover_effect: 'none', show_image: true, show_title: true, title_size: 16, title_weight: '700', show_specs: true, show_price: true, show_btn: true, btn_text: 'Prenota', btn_bg: '', btn_color: '', btn_radius: 8, layout: 'vertical', filter_bar: true, accent_color: '', price_color: '' };
 const s = computed(() => ({ ...defaults, ...props.settings }));
 const accent = computed(() => resolveColor(s.value.accent_color, TOKENS.primary));
 const priceColor = computed(() => resolveColor(s.value.price_color, accent.value));
-const shadowMap = { none:'none', sm:'0 1px 3px rgba(0,0,0,0.1)', md:'0 4px 12px rgba(0,0,0,0.1)', lg:'0 8px 24px rgba(0,0,0,0.15)' };
+const shadowMap = SHADOW;
 const categories = [ { label:'Tutti', active:true }, { label:'SUV', active:false }, { label:'Berlina', active:false }, { label:'City', active:false } ];
 // placeholder media elegante: tinte soft brand su superficie (no pi\u00F9 gradienti off-brand)
 const placeholders = [

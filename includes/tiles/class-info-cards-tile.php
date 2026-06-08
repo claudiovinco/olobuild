@@ -36,6 +36,12 @@ class Olo_InfoCards_Tile extends Olo_Tile_Base {
         'card_bg'           => [ 'type' => 'solid', 'color' => '#0f172a' ],
         'card_color'        => '#e5e7eb',
         'card_accent_color' => '',
+        'title_color'       => '',
+        'counter_color'     => '',
+        'icon_color'        => '',
+        'icon_bg_color'     => '',
+        'counter_shape'     => 'plain',
+        'counter_bg'        => '',
         'card_radius'                  => [ 'tl' => 18, 'tr' => 18, 'br' => 18, 'bl' => 18, 'linked' => true ],
         'card_radius_hover'            => [ 'tl' => 18, 'tr' => 18, 'br' => 18, 'bl' => 18, 'linked' => true ],
         'card_radius_hover_duration'   => 400,
@@ -82,8 +88,8 @@ class Olo_InfoCards_Tile extends Olo_Tile_Base {
         $s   = wp_parse_args( $settings, $this->defaults );
         $uid = 'olo-icards-' . wp_rand( 10000, 99999 );
 
-        $serif = "'Playfair Display','Cormorant Garamond',Georgia,'Times New Roman',serif";
-        $sans  = "'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif";
+        $serif = "var(--olo-font-family-heading, 'Playfair Display','Cormorant Garamond',Georgia,'Times New Roman',serif)";
+        $sans  = "var(--olo-font-family, 'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif)";
         $mono  = "ui-monospace,'SF Mono',Menlo,Consolas,monospace";
         $fmap  = [ 'serif' => $serif, 'sans-serif' => $sans, 'mono' => $mono ];
         $tfam  = $fmap[ $s['title_font_family'] ] ?? $serif;
@@ -115,6 +121,13 @@ class Olo_InfoCards_Tile extends Olo_Tile_Base {
         $card_color   = $this->safe_color_css( $s['card_color'] ) ?: '#e5e7eb';
         $accent_color = $this->safe_color_css( $s['card_accent_color'] ) ?: 'var(--olo-color-primary, #e1474f)';
         $card_border  = $this->safe_color_css( $s['card_border'] ) ?: '';
+        // Colori indipendenti (opzionali, fallback retro-compatibile):
+        $title_color   = $this->safe_color_css( $s['title_color'] ?? '' ) ?: $accent_color;
+        $counter_color = $this->safe_color_css( $s['counter_color'] ?? '' ) ?: $card_color;
+        $icon_color    = $this->safe_color_css( $s['icon_color'] ?? '' ) ?: $card_color;
+        $icon_bg       = $this->safe_color_css( $s['icon_bg_color'] ?? '' );
+        $counter_shape = ( ( $s['counter_shape'] ?? 'plain' ) === 'circle' ) ? 'circle' : 'plain';
+        $counter_bg    = $this->safe_color_css( $s['counter_bg'] ?? '' );
 
         // Container bg
         $container_bg_css = '';
@@ -183,15 +196,19 @@ class Olo_InfoCards_Tile extends Olo_Tile_Base {
                         <?php if ( ! empty( $s['show_icon'] ) || ! empty( $s['show_counter'] ) || ! empty( $s['show_arrow'] ) ) : ?>
                             <div class="olo-icards__top" style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:48px;min-height:36px">
                                 <div style="display:flex;align-items:center;gap:10px;flex:1">
-                                    <?php if ( ! empty( $s['show_icon'] ) && $icon_name ) : ?>
-                                        <span style="font-size:1.8em;line-height:1;color:<?php echo esc_attr( $card_color ); ?>">
-                                            <?php echo $this->render_icon_html( $icon_name, 1.8 ); ?>
+                                    <?php if ( ! empty( $s['show_icon'] ) && $icon_name ) :
+                                        $icon_box = $icon_bg ? 'width:44px;height:44px;border-radius:11px;background:' . esc_attr( $icon_bg ) . ';display:inline-flex;align-items:center;justify-content:center;' : '';
+                                    ?>
+                                        <span style="<?php echo $icon_box; ?>line-height:1;color:<?php echo esc_attr( $icon_color ); ?>">
+                                            <?php echo $this->render_icon_html( $icon_name, $icon_bg ? 1.2 : 1.8 ); ?>
                                         </span>
+                                    <?php elseif ( ! empty( $s['show_counter'] ) && $counter && $counter_shape === 'circle' ) : ?>
+                                        <span style="width:36px;height:36px;border-radius:50%;background:<?php echo esc_attr( $counter_bg ?: 'rgba(127,127,127,.14)' ); ?>;display:inline-flex;align-items:center;justify-content:center;font-family:<?php echo esc_attr( $tfam ); ?>;font-weight:800;font-size:15px;color:<?php echo esc_attr( $counter_color ); ?>" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.counter'; ?>"><?php echo esc_html( $counter ); ?></span>
                                     <?php endif; ?>
                                 </div>
                                 <div style="display:flex;align-items:center;gap:14px">
-                                    <?php if ( ! empty( $s['show_counter'] ) && $counter ) : ?>
-                                        <span style="font-family:<?php echo esc_attr( $mono ); ?>;font-size:<?php echo $counter_size; ?>px;letter-spacing:0.08em;text-transform:uppercase;color:<?php echo esc_attr( $card_color ); ?>;opacity:.6"><span data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.counter'; ?>"><?php echo esc_html( $counter ); ?></span><?php if ( ! empty( $s['show_counter_label'] ) && $counter_label ) : ?> / <span data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.counter_label'; ?>"><?php echo esc_html( $counter_label ); ?></span><?php endif; ?></span>
+                                    <?php if ( ! empty( $s['show_counter'] ) && $counter && $counter_shape !== 'circle' ) : ?>
+                                        <span style="font-family:<?php echo esc_attr( $mono ); ?>;font-size:<?php echo $counter_size; ?>px;letter-spacing:0.08em;text-transform:uppercase;color:<?php echo esc_attr( $counter_color ); ?>;opacity:.85"><span data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.counter'; ?>"><?php echo esc_html( $counter ); ?></span><?php if ( ! empty( $s['show_counter_label'] ) && $counter_label ) : ?> / <span data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.counter_label'; ?>"><?php echo esc_html( $counter_label ); ?></span><?php endif; ?></span>
                                     <?php endif; ?>
                                     <?php if ( ! empty( $s['show_arrow'] ) ) : ?>
                                         <span style="width:34px;height:34px;border-radius:50%;border:1px solid <?php echo esc_attr( $card_color ); ?>33;display:inline-flex;align-items:center;justify-content:center;color:<?php echo esc_attr( $card_color ); ?>;font-size:14px;opacity:.7">→</span>
@@ -204,7 +221,7 @@ class Olo_InfoCards_Tile extends Olo_Tile_Base {
                         <?php if ( $title !== '' || $title_accent !== '' ) :
                             $title_italic_css = ! empty( $s['title_italic'] ) ? 'font-style:italic;' : '';
                         ?>
-                            <div class="olo-icards__title" style="font-family:<?php echo esc_attr( $tfam ); ?>;font-size:<?php echo $title_size; ?>px;line-height:1.05;font-weight:<?php echo esc_attr( $title_weight ); ?>;color:<?php echo esc_attr( $accent_color ); ?>;<?php echo $title_italic_css; ?>letter-spacing:-0.02em;margin-bottom:20px">
+                            <div class="olo-icards__title" style="font-family:<?php echo esc_attr( $tfam ); ?>;font-size:<?php echo $title_size; ?>px;line-height:1.05;font-weight:<?php echo esc_attr( $title_weight ); ?>;color:<?php echo esc_attr( $title_color ); ?>;<?php echo $title_italic_css; ?>letter-spacing:-0.02em;margin-bottom:20px">
                                 <?php if ( $title !== '' ) : ?><span data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.title'; ?>"><?php echo esc_html( $title ); ?></span><?php endif; ?><?php if ( $title_accent !== '' ) : ?><span style="font-size:.45em;vertical-align:baseline;margin-left:0.05em;<?php if ( $accent_italic ) echo 'font-style:italic;'; ?>" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.title_accent'; ?>"><?php echo esc_html( $title_accent ); ?></span><?php endif; ?>
                             </div>
                         <?php endif; ?>

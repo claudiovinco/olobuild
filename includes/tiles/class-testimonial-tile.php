@@ -85,7 +85,7 @@ class Olo_Testimonial_Tile extends Olo_Tile_Base {
         ob_start();
 
         // CSS comune
-        $this->render_common_styles( $uid, $bg, $fg, $line_col, $show_line, $is_bottom, $position, $av_size, $av_radius, $tile_radius, $bottom_jc, $s );
+        $this->render_common_styles( $uid, $bg, $fg, $line_col, $show_line, $is_bottom, $position, $av_size, $av_radius, $tile_radius, $tile_radius_hover_css, $bottom_jc, $s );
 
         if ( $layout === 'single' ) {
             $this->render_single( $uid, $s, $star_svg, $is_bottom, $position );
@@ -114,7 +114,7 @@ class Olo_Testimonial_Tile extends Olo_Tile_Base {
         return ob_get_clean();
     }
 
-    private function render_common_styles( $uid, $bg, $fg, $line_col, $show_line, $is_bottom, $position, $av_size, $av_radius, $tile_radius, $bottom_jc, $s ) {
+    private function render_common_styles( $uid, $bg, $fg, $line_col, $show_line, $is_bottom, $position, $av_size, $av_radius, $tile_radius, $tile_radius_hover_css, $bottom_jc, $s ) {
         ?>
         <style>
             .<?php echo $uid; ?> .olo-test-card {

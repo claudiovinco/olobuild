@@ -464,10 +464,10 @@ class Olo_Goo_Tile extends Olo_Tile_Base {
             return "{$inset}{$h}px {$v}px {$blur}px {$spread}px {$color}";
         }
         $map = [
-            'sm' => '0 1px 3px rgba(0,0,0,0.12)',
-            'md' => '0 4px 12px rgba(0,0,0,0.15)',
-            'lg' => '0 12px 28px rgba(0,0,0,0.18)',
-            'xl' => '0 24px 48px rgba(0,0,0,0.22)',
+            'sm' => '0 1px 2px rgba(16,24,40,.06), 0 6px 16px -10px rgba(16,24,40,.18)',
+            'md' => '0 2px 4px rgba(16,24,40,.06), 0 14px 28px -12px rgba(22,38,61,.28)',
+            'lg' => '0 8px 24px -6px rgba(16,24,40,.18), 0 18px 40px -12px rgba(22,38,61,.30)',
+            'xl' => '0 12px 32px -8px rgba(16,24,40,.20), 0 28px 56px -14px rgba(22,38,61,.34)',
         ];
         return $map[ $preset ] ?? '';
     }

@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RESPÀWN — community gamer · tema dimostrativo OLObuild</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared/olo-demo.css">
+<style>
+:root{
+  --bg:#0A0712; --bg-2:#120C22; --bg-3:#1A1233; --fg:#EDEAFB; --fg-2:#948CC4; --fg-3:#5E568C;
+  --violet:#8B5CF6; --indigo:#6366F1; --cyan:#22D3EE; --lime:#B6FF3D; --pink:#FF4D9D;
+  --line:rgba(237,234,251,.12);
+  --tile-accent:#8B5CF6; --tile-btn:#000;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:'Manrope',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden;cursor:none;}
+@media(hover:none){body{cursor:auto;}}
+a{color:inherit;text-decoration:none;}
+.gro{font-family:'Space Grotesk',sans-serif;}
+.mono{font-family:'JetBrains Mono',monospace;}
+.wrap{max-width:1240px;margin:0 auto;padding:0 44px;}
+.kick{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--cyan);font-weight:600;display:inline-flex;align-items:center;gap:9px;}
+.kick::before{content:"";width:18px;height:3px;background:var(--pink);}
+
+/* ===== CRT scanline + vignette overlay (Section · CRTOverlay) ===== */
+.crt{position:fixed;inset:0;z-index:200;pointer-events:none;mix-blend-mode:overlay;
+  background:repeating-linear-gradient(0deg,rgba(255,255,255,.05) 0 1px,transparent 1px 3px);opacity:.5;}
+.vignette{position:fixed;inset:0;z-index:199;pointer-events:none;
+  background:radial-gradient(120% 120% at 50% 40%,transparent 55%,rgba(5,3,12,.7));}
+
+/* ===== magnetic neon cursor ===== */
+.cur,.cur-dot{position:fixed;top:0;left:0;z-index:300;pointer-events:none;border-radius:50%;}
+.cur{width:38px;height:38px;border:1.5px solid var(--cyan);margin:-19px 0 0 -19px;transition:width .18s,height .18s,margin .18s,background .18s,border-color .18s;mix-blend-mode:screen;}
+.cur-dot{width:6px;height:6px;background:var(--lime);margin:-3px 0 0 -3px;}
+.cur.hot{width:62px;height:62px;margin:-31px 0 0 -31px;background:rgba(139,92,246,.18);border-color:var(--lime);}
+@media(hover:none){.cur,.cur-dot{display:none;}}
+
+/* nav */
+.nav{position:fixed;inset:0 0 auto 0;z-index:50;display:flex;align-items:center;gap:26px;padding:20px 44px;transition:all .35s;border-bottom:1px solid transparent;}
+.nav.solid{background:rgba(10,7,18,.86);backdrop-filter:blur(14px);border-color:var(--line);padding:13px 44px;}
+.brand{font-family:'Space Grotesk';font-weight:700;font-size:22px;letter-spacing:-.01em;display:flex;align-items:center;gap:10px;}
+.brand .px{width:14px;height:14px;background:var(--lime);box-shadow:4px 0 var(--cyan),-4px 0 var(--pink);}
+.nav-links{margin-left:auto;display:flex;gap:26px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.05em;text-transform:uppercase;font-weight:500;}
+.nav-links a{opacity:.82;}.nav-links a:hover{opacity:1;color:var(--cyan);}
+.nav-cta{background:var(--violet);color:#fff;padding:11px 20px;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;}
+@media(max-width:920px){.nav-links{display:none;}}
+
+/* hero */
+#hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;padding:120px 44px 80px;
+  background:radial-gradient(70% 60% at 50% 22%,rgba(99,102,241,.22),transparent 70%);}
+.live-pill{display:inline-flex;align-items:center;gap:9px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.08em;color:var(--fg);background:var(--bg-2);border:1px solid var(--line);border-radius:100px;padding:8px 16px;margin-bottom:26px;}
+.live-pill .d{width:9px;height:9px;border-radius:50%;background:var(--lime);box-shadow:0 0 0 0 rgba(182,255,61,.6);animation:lp 1.6s infinite;}
+@keyframes lp{0%{box-shadow:0 0 0 0 rgba(182,255,61,.55);}70%{box-shadow:0 0 0 11px rgba(182,255,61,0);}100%{box-shadow:0 0 0 0 rgba(182,255,61,0);}}
+.live-pill b{color:var(--lime);font-weight:700;}
+.glitch{font-family:'Space Grotesk';font-weight:700;font-size:clamp(56px,13vw,184px);line-height:.84;letter-spacing:-.03em;margin:0;position:relative;text-transform:uppercase;}
+.glitch::before,.glitch::after{content:attr(data-txt);position:absolute;inset:0;clip-path:inset(0);}
+.glitch::before{color:var(--cyan);transform:translate(-2px,0);animation:gl1 2.6s infinite linear alternate;mix-blend-mode:screen;}
+.glitch::after{color:var(--pink);transform:translate(2px,0);animation:gl2 2.2s infinite linear alternate;mix-blend-mode:screen;}
+@keyframes gl1{0%,92%,100%{clip-path:inset(0 0 100% 0);}93%{clip-path:inset(12% 0 60% 0);}96%{clip-path:inset(45% 0 30% 0);}}
+@keyframes gl2{0%,90%,100%{clip-path:inset(100% 0 0 0);}91%{clip-path:inset(60% 0 22% 0);}95%{clip-path:inset(28% 0 55% 0);}}
+@media(prefers-reduced-motion:reduce){.glitch::before,.glitch::after{display:none;}}
+.hero-sub{font-size:18px;color:var(--fg-2);max-width:46ch;margin:24px auto 32px;line-height:1.55;}
+.btn{display:inline-flex;align-items:center;gap:10px;background:var(--lime);color:#0A0712;border:none;cursor:none;padding:16px 30px;border-radius:12px;font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;transition:transform .12s;}
+.btn.ghost{background:transparent;color:var(--fg);border:1px solid var(--line);}
+.hint{margin-top:34px;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--fg-3);}
+
+/* presence wall */
+#wall{padding:90px 0;border-top:1px solid var(--line);}
+.ticker{overflow:hidden;border:1px solid var(--line);border-radius:14px;background:var(--bg-2);margin-bottom:42px;}
+.ticker-track{display:flex;gap:48px;white-space:nowrap;padding:14px 0;animation:tick 26s linear infinite;font-family:'JetBrains Mono',monospace;font-size:13px;}
+.ticker-track span{color:var(--fg-2);}.ticker-track b{color:var(--lime);}.ticker-track i{color:var(--cyan);font-style:normal;}
+@keyframes tick{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+.wall-h{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:30px;flex-wrap:wrap;gap:14px;}
+.wall-h h2{font-family:'Space Grotesk';font-weight:700;font-size:clamp(32px,4.4vw,58px);letter-spacing:-.02em;margin:14px 0 0;}
+.members{display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:14px;}
+.mem{position:relative;background:var(--bg-2);border:1px solid var(--line);border-radius:14px;padding:18px 16px;text-align:center;transition:transform .18s,border-color .18s;}
+.mem:hover{transform:translateY(-4px);border-color:var(--violet);}
+.av{width:54px;height:54px;border-radius:50%;margin:0 auto 12px;display:grid;place-items:center;font-family:'Space Grotesk';font-weight:700;font-size:20px;color:#0A0712;position:relative;}
+.mem .on{position:absolute;right:34px;top:54px;width:13px;height:13px;border-radius:50%;border:3px solid var(--bg-2);background:var(--lime);}
+.mem.off .on{background:var(--fg-3);}
+.mem .nm{font-weight:600;font-size:14px;}
+.mem .rk{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.06em;color:var(--fg-2);margin-top:4px;}
+
+/* leaderboard */
+#board{padding:100px 0;background:var(--bg-2);}
+.lb{display:grid;gap:12px;margin-top:36px;}
+.row{display:grid;grid-template-columns:46px 1fr 96px;align-items:center;gap:18px;background:var(--bg-3);border:1px solid var(--line);border-radius:14px;padding:16px 20px;}
+.row .pos{font-family:'Space Grotesk';font-weight:700;font-size:24px;color:var(--fg-3);}
+.row.top1 .pos{color:var(--lime);}.row.top2 .pos{color:var(--cyan);}.row.top3 .pos{color:var(--pink);}
+.row .who{display:flex;flex-direction:column;gap:9px;}
+.row .who .n{font-weight:700;font-size:16px;display:flex;align-items:center;gap:9px;}
+.row .who .n .badge{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:6px;background:rgba(139,92,246,.2);color:var(--violet);}
+.xp{height:8px;border-radius:6px;background:rgba(237,234,251,.08);overflow:hidden;}
+.xp i{display:block;height:100%;width:0;border-radius:6px;background:linear-gradient(90deg,var(--violet),var(--cyan));transition:width 1.3s cubic-bezier(.2,.7,.2,1);}
+.row .pts{font-family:'JetBrains Mono',monospace;font-weight:700;text-align:right;color:var(--fg);}
+.row .pts b{color:var(--lime);}
+
+/* channels */
+#chan{padding:100px 0;}
+.ch-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:36px;}
+.ch{background:var(--bg-2);border:1px solid var(--line);border-radius:16px;padding:24px;transition:transform .18s,border-color .18s;position:relative;overflow:hidden;}
+.ch:hover{transform:translateY(-5px);border-color:var(--cyan);}
+.ch .tag{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--cyan);}
+.ch h3{font-family:'Space Grotesk';font-weight:700;font-size:22px;margin:12px 0 8px;}
+.ch p{font-size:13.5px;color:var(--fg-2);line-height:1.55;margin:0 0 16px;}
+.ch .voice{display:flex;align-items:center;gap:7px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--fg-2);}
+.ch .voice .b{width:6px;border-radius:3px;background:var(--lime);animation:vb 1s ease-in-out infinite;}
+@keyframes vb{0%,100%{height:6px;}50%{height:16px;}}
+@media(max-width:880px){.ch-grid{grid-template-columns:1fr;}}
+
+/* stats */
+.stats{padding:80px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:30px;}
+.st{text-align:center;}
+.st .num{font-family:'Space Grotesk';font-weight:700;font-size:clamp(40px,6vw,80px);line-height:1;background:linear-gradient(100deg,var(--cyan),var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent;}
+.st .lbl{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--fg-2);margin-top:10px;}
+@media(max-width:760px){.stat-grid{grid-template-columns:1fr 1fr;gap:34px 20px;}}
+
+/* cta */
+#cta{padding:120px 0;text-align:center;}
+#cta h2{font-family:'Space Grotesk';font-weight:700;font-size:clamp(40px,8vw,128px);line-height:.85;letter-spacing:-.03em;margin:16px 0 26px;text-transform:uppercase;}
+#cta h2 em{color:var(--lime);font-style:normal;}
+
+footer{border-top:1px solid var(--line);padding:34px 0;}
+.f-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px;}
+.f-row .fm{font-family:'Space Grotesk';font-weight:700;font-size:22px;}
+.olo-credit{color:var(--fg-2);}
+.f-meta{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--fg-3);}
+.f-tiles{font-family:'JetBrains Mono',monospace;font-size:10.5px;line-height:1.9;color:var(--fg-3);margin-top:22px;max-width:96ch;}
+.f-tiles b{color:var(--fg-2);}
+
+/* konami toast */
+#gg{position:fixed;inset:0;z-index:250;pointer-events:none;display:flex;align-items:center;justify-content:center;}
+#gg .t{font-family:'Space Grotesk';font-weight:700;font-size:clamp(60px,16vw,220px);color:var(--lime);text-transform:uppercase;opacity:0;transform:scale(.6);transition:opacity .3s,transform .4s cubic-bezier(.2,1.4,.4,1);text-shadow:0 0 40px rgba(182,255,61,.6);}
+#gg.show .t{opacity:1;transform:scale(1);}
+.conf{position:fixed;width:10px;height:14px;z-index:249;pointer-events:none;}
+</style>
+</head>
+<body>
+
+<div class="crt"></div><div class="vignette"></div>
+<div class="cur" id="cur"></div><div class="cur-dot" id="curDot"></div>
+
+<nav class="nav" id="nav" data-solid-at="70vh">
+  <div class="brand"><span class="px"></span>RESPÀWN</div>
+  <div class="nav-links"><a href="#wall">Membri</a><a href="#board">Classifica</a><a href="#chan">Stanze</a><a href="#cta">Entra</a></div>
+  <a class="nav-cta magnetic" href="#cta">Unisciti al server</a>
+</nav>
+
+<section id="hero" data-tile="Hero · GlitchHeading">
+  <div class="live-pill"><span class="d"></span><b id="onCount">2.418</b><span>&nbsp;online adesso</span></div>
+  <h1 class="glitch gro" data-txt="GAME ON">GAME ON</h1>
+  <p class="hero-sub">La community per chi gioca sul serio (e per chi gioca male ma ride forte). Voice 24/7, tornei settimanali, niente tossici.</p>
+  <div style="display:flex;gap:13px;flex-wrap:wrap;justify-content:center">
+    <a class="btn magnetic" href="#cta">⚡ Entra nel server</a>
+    <a class="btn ghost magnetic" href="#board">Vedi la classifica</a>
+  </div>
+  <div class="hint">↑↑↓↓←→←→ B A · prova il codice</div>
+</section>
+
+<section id="wall" data-tile="NewsTicker + PresenceGrid">
+  <div class="wrap">
+    <div class="ticker" data-tile="NewsTicker">
+      <div class="ticker-track" id="tick">
+        <span><i>@KiraByte</i> ha sbloccato <b>Diamante I</b></span><span><i>@nott2late</i> è entrato in <b>#valorant-ranked</b></span><span>torneo <b>FIFA Cup</b> · domenica 21:00</span><span><i>@pixelmom</i> ha vinto <b>MVP</b></span><span>nuovo record clan: <b>+18.000 XP</b> in un giorno</span><span><i>@grumpyTank</i> cerca team per <b>raid</b></span>
+      </div>
+    </div>
+    <div class="wall-h"><div><span class="kick">Chi c'è</span><h2 class="gro">La crew, in tempo reale</h2></div><span class="mono" style="color:var(--fg-2);font-size:12px">presenza live · pallino verde = online</span></div>
+    <div class="members reveal" id="members"></div>
+  </div>
+</section>
+
+<section id="board" data-tile="Leaderboard · XP animati">
+  <div class="wrap">
+    <span class="kick">Stagione 7</span>
+    <h2 class="gro" style="font-weight:700;font-size:clamp(32px,4.4vw,58px);letter-spacing:-.02em;margin:14px 0 0;">Classifica del clan</h2>
+    <div class="lb reveal" id="lb"></div>
+  </div>
+</section>
+
+<section id="chan" data-tile="Section · inner-columns">
+  <div class="wrap">
+    <span class="kick">Le stanze</span>
+    <h2 class="gro" style="font-weight:700;font-size:clamp(32px,4.4vw,58px);letter-spacing:-.02em;margin:14px 0 0;">Trova la tua tribù</h2>
+    <div class="ch-grid reveal-stagger">
+      <div class="ch"><div class="tag">// voice · 12 attivi</div><h3 class="gro">Ranked Grind</h3><p>Squadre competitive, callout puliti, zero rage. Sali di elo con chi sa cosa fa.</p><div class="voice"><span class="b" style="height:8px"></span><span class="b" style="animation-delay:.1s"></span><span class="b" style="animation-delay:.25s"></span><span class="b" style="animation-delay:.4s"></span>&nbsp;in voce ora</div></div>
+      <div class="ch"><div class="tag">// chill · 34 attivi</div><h3 class="gro">Lobby & Lo-fi</h3><p>Cozy games, backlog co-op e chiacchiere notturne. Il divano digitale del server.</p><div class="voice"><span class="b" style="height:8px"></span><span class="b" style="animation-delay:.15s"></span><span class="b" style="animation-delay:.3s"></span>&nbsp;in voce ora</div></div>
+      <div class="ch"><div class="tag">// creators · 8 attivi</div><h3 class="gro">Clip & Streaming</h3><p>Condividi le tue clip, organizza co-stream, montaggi e feedback dalla community.</p><div class="voice"><span class="b" style="height:8px"></span><span class="b" style="animation-delay:.2s"></span>&nbsp;in voce ora</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="stats" data-tile="Counter">
+  <div class="wrap">
+    <div class="stat-grid reveal-stagger">
+      <div class="st"><div class="num"><span class="count" data-count="48" data-suffix="k">0</span></div><div class="lbl">Membri totali</div></div>
+      <div class="st"><div class="num"><span class="count" data-count="120">0</span></div><div class="lbl">Stanze vocali</div></div>
+      <div class="st"><div class="num"><span class="count" data-count="312">0</span></div><div class="lbl">Tornei giocati</div></div>
+      <div class="st"><div class="num"><span class="count" data-count="0" data-suffix="🤖">0</span></div><div class="lbl">Bot tossici tollerati</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="cta" data-tile="AnimatedHeading">
+  <div class="wrap">
+    <span class="kick" style="justify-content:center">L'avventura ti aspetta</span>
+    <h2 class="gro">PREMI <em>START</em></h2>
+    <a class="btn magnetic" href="#">⚡ Entra nel server →</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="f-row">
+      <div class="fm">RESPÀWN</div>
+      <div class="olo-credit"><span class="olo-mk"><b></b><i></i><b></b></span>Costruito con <b class="hl">OLObuild</b> — zero codice</div>
+    </div>
+    <div class="f-tiles"><b>Tile usati (10):</b> Hero · GlitchHeading · CRTOverlay (nuovo) · MagneticCursor (nuovo) · NewsTicker · PresenceGrid (nuovo · stato online live) · Leaderboard (nuovo · barre XP animate) · Counter · Section/inner-columns · AnimatedHeading — easter egg Konami via tile HiddenPop.</div>
+    <div class="f-row" style="margin-top:22px"><span class="f-meta">© 2026 Respàwn — tema dimostrativo, nessun login reale</span><span class="f-meta">OLOtheme · demo · 60 — Community Gamer</span></div>
+  </div>
+</footer>
+
+<div id="gg"><div class="t">GG!</div></div>
+<button id="tiletoggle"><span class="sq"></span><span class="t">Mostra tile</span></button>
+
+<script src="image-slot.js"></script>
+<script src="shared/olo-demo.js"></script>
+<script>
+/* ===== magnetic neon cursor ===== */
+(function(){
+  if(matchMedia('(hover:none)').matches)return;
+  var cur=document.getElementById('cur'),dot=document.getElementById('curDot');
+  var mx=innerWidth/2,my=innerHeight/2,cx=mx,cy=my;
+  addEventListener('pointermove',function(e){mx=e.clientX;my=e.clientY;dot.style.transform='translate('+mx+'px,'+my+'px)';});
+  function loop(){cx+=(mx-cx)*.18;cy+=(my-cy)*.18;cur.style.transform='translate('+cx+'px,'+cy+'px)';requestAnimationFrame(loop);}loop();
+  document.querySelectorAll('.magnetic,a,button').forEach(function(el){
+    el.addEventListener('pointerenter',function(){cur.classList.add('hot');});
+    el.addEventListener('pointerleave',function(){cur.classList.remove('hot');});
+  });
+  /* magnet pull on .magnetic */
+  document.querySelectorAll('.magnetic').forEach(function(el){
+    el.addEventListener('pointermove',function(e){
+      var r=el.getBoundingClientRect();
+      el.style.transform='translate('+((e.clientX-r.left-r.width/2)*.3)+'px,'+((e.clientY-r.top-r.height/2)*.3)+'px)';
+    });
+    el.addEventListener('pointerleave',function(){el.style.transform='';});
+  });
+})();
+
+/* ===== live online counter drift ===== */
+(function(){
+  var el=document.getElementById('onCount');if(!el)return;
+  setInterval(function(){
+    var n=2418+Math.round((Math.random()-.45)*40);
+    el.textContent=n.toLocaleString('it-IT');
+  },2600);
+})();
+
+/* ===== presence grid (PresenceGrid tile) ===== */
+(function(){
+  var box=document.getElementById('members');if(!box)return;
+  var names=['KiraByte','nott2late','pixelmom','grumpyTank','vex_','luna404','t0fu','RiotKid','mochi','dadgamer','spectra','zenoZ','byteme','frostbyte','wasd_','glhf'];
+  var ranks=['Diamante','Platino','Oro','Argento','Bronzo','Maestro'];
+  var cols=['#8B5CF6','#22D3EE','#B6FF3D','#FF4D9D','#6366F1'];
+  names.forEach(function(nm,i){
+    var off=Math.random()<.28;
+    var c=cols[i%cols.length];
+    var d=document.createElement('div');d.className='mem'+(off?' off':'');
+    d.innerHTML='<div class="av" style="background:linear-gradient(135deg,'+c+','+cols[(i+2)%cols.length]+')">'+nm[0].toUpperCase()+'</div><span class="on"></span><div class="nm">@'+nm+'</div><div class="rk">'+ranks[i%ranks.length]+'</div>';
+    box.appendChild(d);
+  });
+  /* random flip online/offline */
+  setInterval(function(){
+    var all=box.querySelectorAll('.mem');var t=all[Math.floor(Math.random()*all.length)];
+    if(t)t.classList.toggle('off');
+  },2200);
+})();
+
+/* ===== leaderboard with animated XP ===== */
+(function(){
+  var lb=document.getElementById('lb');if(!lb)return;
+  var data=[['KiraByte','Capoclan',98,'24.810'],['nott2late','Veterano',82,'20.140'],['pixelmom','Veterano',74,'18.305'],['vex_','Membro',61,'15.022'],['t0fu','Membro',48,'11.870'],['mochi','Recluta',33,'8.140']];
+  data.forEach(function(r,i){
+    var row=document.createElement('div');row.className='row'+(i<3?' top'+(i+1):'');
+    row.innerHTML='<div class="pos">'+(i+1)+'</div><div class="who"><div class="n">@'+r[0]+' <span class="badge">'+r[1]+'</span></div><div class="xp"><i data-w="'+r[2]+'"></i></div></div><div class="pts"><b>'+r[3]+'</b> xp</div>';
+    lb.appendChild(row);
+  });
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){lb.querySelectorAll('.xp i').forEach(function(b){b.style.width=b.dataset.w+'%';});io.disconnect();}});},{threshold:.3});
+  io.observe(lb);
+})();
+
+/* ===== Konami code easter egg (HiddenPop tile) ===== */
+(function(){
+  var seq=['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'],i=0;
+  addEventListener('keydown',function(e){
+    var k=e.key.length===1?e.key.toLowerCase():e.key;
+    i=(k===seq[i])?i+1:(k===seq[0]?1:0);
+    if(i===seq.length){i=0;party();}
+  });
+  function party(){
+    var gg=document.getElementById('gg');gg.classList.add('show');
+    var cols=['#8B5CF6','#22D3EE','#B6FF3D','#FF4D9D','#6366F1'];
+    for(var n=0;n<90;n++){
+      (function(){
+        var c=document.createElement('div');c.className='conf';
+        c.style.background=cols[n%cols.length];c.style.left=(50+(Math.random()-.5)*10)+'vw';c.style.top='42vh';
+        document.body.appendChild(c);
+        var ang=Math.random()*Math.PI*2,v=8+Math.random()*14,vx=Math.cos(ang)*v,vy=Math.sin(ang)*v-6,x=0,y=0,rot=Math.random()*360,t=0;
+        (function fall(){t++;vy+=.5;x+=vx;y+=vy;rot+=12;
+          c.style.transform='translate('+x+'px,'+y+'px) rotate('+rot+'deg)';c.style.opacity=Math.max(0,1-t/70);
+          if(t<70)requestAnimationFrame(fall);else c.remove();})();
+      })();
+    }
+    setTimeout(function(){gg.classList.remove('show');},1400);
+  }
+})();
+</script>
+</body>
+</html>

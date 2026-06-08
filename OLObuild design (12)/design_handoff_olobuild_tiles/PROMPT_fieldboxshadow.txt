@@ -1,0 +1,57 @@
+PROMPT PER CLAUDE CODE — Implementare il redesign del controllo OMBRA (FieldBoxShadow)
+Repo: claudiovinco/olobuild · branch main · stack Vue 3 + Pinia + PHP
+
+── OBIETTIVO ──────────────────────────────────────────────────────────────────
+Portare nel builder il redesign del controllo Ombra, già progettato e verificato
+contro il codice. Due interventi:
+  1) Sostituire il componente custom esistente con il redesign (drop-in).
+  2) Rendere il preset di livello come "scala segmented" coerente nello StyleEffectsStack.
+
+── FILE DI RIFERIMENTO (in regoletiles1/ , = design_handoff_olobuild_tiles) ─────
+  • regoletiles1/REFERENCE_shadow-control.html   → il "perché" + la UI target (Oggi vs Coerente).
+  • regoletiles1/prototype/FieldBoxShadow.vue    → il componente ridisegnato, drop-in, da portare.
+  • regoletiles1/ADVANCED_TILES_CHALLENGE.md     → Batch 2 (riga FieldBoxShadow) + regole comuni.
+  • regoletiles1/DESIGN_LANGUAGE.md              → 10 regole + nota CHROME vs CONTENUTO.
+
+── CONTRATTO DATI (VERIFICATO su src/config/elements/_styleFieldsBase.js → shadow_block) ──
+NON cambiare le chiavi salvate. Il mapping reale è:
+  • style.shadow        = 'none'|'sm'|'md'|'lg'|'xl'|'custom'   (PRESET → lo rende StyleEffectsStack)
+  • style.shadow_custom = { h, v, blur, spread, color, inset }  (OGGETTO → lo edita FieldBoxShadow)
+  • hover               = style.hover.shadow + style.hover.shadow_custom (toggle Normale/Hover dello stack)
+  • default oggetto     = { h:0, v:4, blur:10, spread:0, color:'rgba(0,0,0,0.15)', inset:false }
+  • colore              = via <FieldColor> (come l'attuale)
+
+── TASK 1 — sostituire src/components/Builder/fields/FieldBoxShadow.vue ─────────
+Rimpiazza il file con il redesign in regoletiles1/prototype/FieldBoxShadow.vue.
+È un drop-in: stesse props (modelValue = oggetto shadow_custom) ed emit (update:modelValue),
+stessi default → ZERO migrazione dati, i template esistenti continuano a funzionare.
+Cosa cambia: i 4 number-input ammucchiati + checkbox diventano righe compatte
+"slider + valore" (lingua di FieldBox/FieldBorder), inset come switch, preview CSS reale.
+Verifica che import e path siano corretti per il repo:
+  • `import { t } from '@/i18n'`  e  `import FieldColor from './FieldColor.vue'` (stessa cartella).
+
+── TASK 2 — scala segmented nello StyleEffectsStack ─────────────────────────────
+Dove oggi lo stack rende il PRESET `style.shadow` come select, sostituiscilo con la
+"scala" segmented mostrata nella colonna "Coerente" del reference: 5 bottoni
+None · S · M · L · Custom, ognuno con una chip di anteprima dell'elevazione, attivo
+con accento CHROME. Selezionando "Custom" si monta (come già oggi) FieldBoxShadow
+per editare style.shadow_custom. Default sensato: 'sm' (non 'none' piatto).
+Le chip di anteprima usano la scala ombre dei token (--ot-shadow-sm/md/lg).
+
+── GUARDRAIL (dal DESIGN_LANGUAGE) ──────────────────────────────────────────────
+  • Chiavi salvate INVARIATE (vedi contratto sopra). Nessuna chiave nuova.
+  • CHROME vs CONTENUTO: slider/switch/segmenti/focus = accento builder arancio #e8622a
+    (fisso, identità prodotto). Il COLORE dell'ombra è contenuto → token cliente (FieldColor).
+  • focus-visible su ogni controllo; target ≥ 44px; aria-label già presenti nel .vue.
+  • Allinea il look a FieldBox/FieldBorder già rifattorizzati. Se nel repo l'inspector è
+    ancora "scuro" (classi mb-bg-gray-*), NON introdurre un terzo stile: mantieni il layout
+    del redesign e aggancia i colori al tema corrente dell'inspector (un solo look coerente).
+  • default da fonte unica (oloTileDefaults/buildDefaults): non ridichiarare default nel componente.
+
+── DEFINITION OF DONE ───────────────────────────────────────────────────────────
+  • Il vecchio template a 4 number-input è sostituito; l'ombra custom si modifica dal
+    blocco compatto e la preview CSS è corretta (inset incluso).
+  • Lo StyleEffectsStack mostra la scala segmented per style.shadow; "Custom" apre il blocco.
+  • Stato Normale/Hover funziona (scrive style.hover.shadow / style.hover.shadow_custom).
+  • Un template esistente che usava shadow/shadow_custom rende IDENTICO a prima (nessuna regressione dati).
+  • Aggiorna TILE_PROGRESS.md se tracci l'avanzamento dei controlli inspector.

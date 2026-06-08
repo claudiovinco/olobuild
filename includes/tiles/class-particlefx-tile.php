@@ -81,6 +81,7 @@ class Olo_Particlefx_Tile extends Olo_Tile_Base {
             'bubbles'  => [ '#BDEBEE', '#A7D8E8', '#E6FBFF' ],
             'stars'    => [ '#EDEFFB', '#F5C24B', '#9B6BFF', '#5BD6E0' ],
             'confetti' => [ '#e1474f', '#F5C24B', '#5BD6E0', '#9B6BFF', '#7BD88F' ],
+            'soccer'   => [ '#FFFFFF', '#15241D' ],
         ];
         return $map[ $preset ] ?? $map['petals'];
     }
@@ -90,7 +91,7 @@ class Olo_Particlefx_Tile extends Olo_Tile_Base {
         $uid = 'olo-particlefx-' . wp_rand( 10000, 99999 );
 
         // ── Parametri sistema (clampati) ──────────────────────────────────
-        $presets = [ 'petals', 'snow', 'bubbles', 'stars', 'confetti' ];
+        $presets = [ 'petals', 'snow', 'bubbles', 'stars', 'confetti', 'soccer' ];
         $preset  = in_array( $s['preset'], $presets, true ) ? $s['preset'] : 'petals';
         $scope   = 'section';   // modalità "tutta la pagina" rimossa: sempre sfondo di sezione
 
@@ -217,8 +218,25 @@ class Olo_Particlefx_Tile extends Olo_Tile_Base {
                     var hcs = getComputedStyle( host );
                     if ( hcs.position === 'static' )  { host.style.position = 'relative'; }
                     if ( hcs.overflow === 'visible' ) { host.style.overflow = 'hidden'; }
-                    host.style.isolation = 'isolate';   // confina lo stacking: il canvas (z-index:-1) resta sopra lo sfondo del contenitore e sotto il contenuto
-                    host.insertBefore( canvas, host.firstChild );
+                    host.style.isolation = 'isolate';   // confina lo stacking nella sezione
+                    // Se la sezione ha layer di sfondo DOM (video/gallery/immagine), il suo
+                    // contenitore-contenuto sta a z-index>=1 e i layer bg a z-index:0. In tal
+                    // caso il canvas va messo SOPRA i layer bg (z-index:0, inserito DOPO di essi
+                    // cioè subito prima del contenitore) ma SOTTO il contenuto. Altrimenti
+                    // (sfondo solo CSS o assente) resta dietro al contenuto in flusso (z-index:-1).
+                    var contentEl = host.querySelector(':scope > .uk-container, :scope > .olo-section-fullbleed');
+                    var raise = false;
+                    if ( contentEl ) {
+                        var cz = parseInt( getComputedStyle( contentEl ).zIndex, 10 );
+                        if ( cz >= 1 ) { raise = true; }
+                    }
+                    if ( raise ) {
+                        canvas.style.zIndex = '0';
+                        host.insertBefore( canvas, contentEl );   // sopra video/gallery, sotto il contenuto
+                    } else {
+                        canvas.style.zIndex = '-1';
+                        host.insertBefore( canvas, host.firstChild );
+                    }
                     // Decoratore "da solo": se il contenitore non ha contenuto che gli dia
                     // altezza, dagli un'altezza minima così le particelle restano visibili.
                     if ( host.clientHeight < 40 ) { host.style.minHeight = '<?php echo intval( $min_h ); ?>px'; }
@@ -241,6 +259,8 @@ class Olo_Particlefx_Tile extends Olo_Tile_Base {
             var mouse = { x: -9999, y: -9999, on: false };
             var rafId = null, running = false, started = false;
             var TAU = Math.PI * 2;
+            var SOCCER_DARK = '#15241d';
+            if ( CFG.colors ) { if ( CFG.colors[1] ) { SOCCER_DARK = CFG.colors[1]; } }
 
             // Modalità "tutta la pagina": le particelle vivono nello spazio dell'intero
             // documento (altezza FH) e si disegnano con offset = scorrimento, così scorrono
@@ -282,6 +302,7 @@ class Olo_Particlefx_Tile extends Olo_Tile_Base {
             function makeBubble() { return { x: rnd(0,W), y: H+rnd(0,H), r: Math.max(1,CFG.size*rnd(.4,1.1)), s: rnd(.5,1.6)*CFG.speed, a: rnd(0,TAU), sw: rnd(.3,1)*CFG.wind, col: pick(CFG.colors) }; }
             function makeStar()   { return { x: rnd(0,W), y: rnd(0,H),   r: Math.max(.4,CFG.size*rnd(.06,.28)), tw: rnd(0,TAU), sp: rnd(.3,.8), vx: rnd(-.15,.15)*CFG.wind, vy: rnd(.02,.18)*CFG.gravity*CFG.speed, col: pick(CFG.colors) }; }
             function makeConfetti(){ var ang=rnd(0,TAU), spd=rnd(3,9)*CFG.speed; return { x: rnd(W*.35,W*.65), y: rnd(-20, H*.25), r: CFG.size*rnd(.5,1.1), vx: Math.cos(ang)*spd*.5, vy: Math.sin(ang)*spd - rnd(2,6), a: rnd(0,TAU), va: rnd(-.2,.2), col: pick(CFG.colors), life: 1 }; }
+            function makeSoccer(){ return { x: rnd(0,W), y: rnd(-H,0), r: Math.max(3, CFG.size*rnd(.9,1.6)), s: rnd(.5,1.4)*CFG.speed, a: rnd(0,TAU), ph: rnd(0,TAU), sw: rnd(.4,1.2)*CFG.wind, spin: rnd(-.05,.05), col: CFG.colors[0] }; }
 
             function makeOne() {
                 switch ( CFG.preset ) {
@@ -289,6 +310,7 @@ class Olo_Particlefx_Tile extends Olo_Tile_Base {
                     case 'bubbles':  return makeBubble();
                     case 'stars':    return makeStar();
                     case 'confetti': return makeConfetti();
+                    case 'soccer':   return makeSoccer();
                     default:         return makePetal();
                 }
             }
@@ -335,6 +357,33 @@ class Olo_Particlefx_Tile extends Olo_Tile_Base {
                 ctx.globalAlpha = Math.max( 0, Math.min( 1, p.life ) ) * CFG.opacity; ctx.fillStyle = p.col;
                 ctx.fillRect( -p.r * .5, -p.r * .35, p.r, p.r * .7 );
                 ctx.restore();
+            }
+            // Pallone da calcio stilizzato: corpo chiaro + contorno, pentagono centrale e
+            // cuciture verso il bordo (in SOCCER_DARK). Ruota su se stesso (p.a/p.spin).
+            function drawSoccer( p ) {
+                var pr = p.r * .42, i, ang, px, py, a2;
+                ctx.save(); ctx.translate( p.x, p.y ); ctx.rotate( p.a );
+                ctx.globalAlpha = CFG.opacity;
+                ctx.fillStyle = p.col;
+                ctx.beginPath(); ctx.arc( 0, 0, p.r, 0, TAU ); ctx.fill();
+                ctx.lineWidth = Math.max( 1, p.r * .08 ); ctx.strokeStyle = SOCCER_DARK;
+                ctx.beginPath(); ctx.arc( 0, 0, p.r, 0, TAU ); ctx.stroke();
+                ctx.fillStyle = SOCCER_DARK;
+                ctx.beginPath();
+                for ( i = 0; i < 5; i++ ) {
+                    ang = -Math.PI / 2 + i * TAU / 5; px = Math.cos( ang ) * pr; py = Math.sin( ang ) * pr;
+                    if ( i === 0 ) { ctx.moveTo( px, py ); } else { ctx.lineTo( px, py ); }
+                }
+                ctx.closePath(); ctx.fill();
+                ctx.lineWidth = Math.max( 1, p.r * .09 );
+                for ( i = 0; i < 5; i++ ) {
+                    a2 = -Math.PI / 2 + i * TAU / 5;
+                    ctx.beginPath();
+                    ctx.moveTo( Math.cos( a2 ) * pr, Math.sin( a2 ) * pr );
+                    ctx.lineTo( Math.cos( a2 ) * p.r, Math.sin( a2 ) * p.r );
+                    ctx.stroke();
+                }
+                ctx.restore(); ctx.globalAlpha = 1;
             }
 
             // ── Linee di connessione (costellazioni) ──────────────────────
@@ -394,8 +443,10 @@ class Olo_Particlefx_Tile extends Olo_Tile_Base {
                         p.vy += .12 * CFG.gravity; p.x += p.vx; p.y += p.vy; p.a += p.va;
                         p.vx *= .992; p.life -= .006;
                         // one-shot: NON ricicla; quando esce/sfuma resta fuori scena
-                    } else { // petals / snow
-                        p.y += p.s * CFG.gravity; p.a += .02; p.x += Math.sin( p.a ) * p.sw;
+                    } else { // petals / snow / soccer
+                        p.y += p.s * CFG.gravity; p.a += ( p.spin != null ? p.spin : .02 );
+                        var phase = ( p.ph != null ? p.ph : p.a ); p.x += Math.sin( phase ) * p.sw;
+                        if ( p.ph != null ) { p.ph += .02; }
                         if ( canHover && mouse.on ) { repel( p ); }
                         if ( pageMode ) { if ( p.y > FH ) { p.y -= FH; } } else if ( p.y > H + 20 ) { p.y = -20; p.x = rnd( 0, W ); }
                         if ( p.x < -30 ) { p.x = W + 20; } if ( p.x > W + 30 ) { p.x = -20; }
@@ -417,6 +468,7 @@ class Olo_Particlefx_Tile extends Olo_Tile_Base {
                         case 'bubbles':  drawBubble( p ); break;
                         case 'stars':    drawStar( p ); break;
                         case 'confetti': drawConfetti( p ); break;
+                        case 'soccer':   drawSoccer( p ); break;
                         default:         drawPetal( p );
                     }
                 }
@@ -558,10 +610,10 @@ class Olo_Particlefx_Tile extends Olo_Tile_Base {
             return "{$inset}{$h}px {$v}px {$blur}px {$spread}px {$color}";
         }
         $map = [
-            'sm' => '0 1px 3px rgba(0,0,0,0.12)',
-            'md' => '0 4px 12px rgba(0,0,0,0.15)',
-            'lg' => '0 12px 28px rgba(0,0,0,0.18)',
-            'xl' => '0 24px 48px rgba(0,0,0,0.22)',
+            'sm' => '0 1px 2px rgba(16,24,40,.06), 0 6px 16px -10px rgba(16,24,40,.18)',
+            'md' => '0 2px 4px rgba(16,24,40,.06), 0 14px 28px -12px rgba(22,38,61,.28)',
+            'lg' => '0 8px 24px -6px rgba(16,24,40,.18), 0 18px 40px -12px rgba(22,38,61,.30)',
+            'xl' => '0 12px 32px -8px rgba(16,24,40,.20), 0 28px 56px -14px rgba(22,38,61,.34)',
         ];
         return $map[ $preset ] ?? '';
     }

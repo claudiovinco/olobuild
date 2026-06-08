@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Verifica · Marquee · VelocitySkew (olobuild 1.2.63)</title>
+<style>
+  body{margin:0;font-family:system-ui,sans-serif;color:#111;background:#fafafa;}
+  .guide{max-width:760px;margin:0 auto;padding:40px 24px;}
+  .guide h1{font-size:22px;margin:0 0 6px;}
+  .guide p{font-size:14px;line-height:1.6;color:#444;}
+  .guide code{background:#eee;padding:1px 5px;border-radius:4px;font-size:12px;}
+  .guide ul{font-size:14px;line-height:1.7;color:#444;}
+  .spacer{height:90vh;display:flex;align-items:center;justify-content:center;color:#bbb;font-size:13px;letter-spacing:.1em;text-transform:uppercase;}
+  .tag{max-width:760px;margin:10px auto 0;padding:0 24px;font:12px/1.5 monospace;color:#888;}
+
+  /* ====================================================================
+     Replica FEDELE dell'output di Olo_Marquee_Tile::render() con
+     velocity_skew = true. Due istanze con UID distinti per provare
+     lo scoping (nessuna interferenza tra i nastri).
+     ==================================================================== */
+
+  /* ---- Istanza 1: testo, default (drift 0.6 / boost 0.6 / max 14° / damp 0.86), sinistra ---- */
+  @keyframes olo-mq-77001-scroll { 0%{transform:translateX(0);} 100%{transform:translateX(-50%);} }
+  .olo-mq-77001{display:flex;align-items:center;background:#1F2937;height:84px;overflow:hidden;width:100%;}
+  .olo-mq-77001 .olo-mq-track{display:flex;align-items:center;height:100%;width:max-content;gap:60px;
+    animation:olo-mq-77001-scroll 30s linear infinite;will-change:transform;transition:transform .1s linear;}
+  .olo-mq-77001:hover .olo-mq-track{animation-play-state:paused;}
+  .olo-mq-77001 .olo-mq-text{color:#FFFFFF;font-size:44px;font-weight:600;letter-spacing:1px;text-transform:uppercase;line-height:1;white-space:nowrap;}
+  .olo-mq-77001 .olo-mq-sep{color:#e1474f;font-size:44px;font-weight:600;line-height:1;opacity:.8;white-space:nowrap;}
+
+  /* ---- Istanza 2: testo, audace (drift 0.4 / boost 1.2 / max 25° / damp 0.9), destra ---- */
+  @keyframes olo-mq-77002-scroll { 0%{transform:translateX(0);} 100%{transform:translateX(-50%);} }
+  .olo-mq-77002{display:flex;align-items:center;background:#e1474f;height:84px;overflow:hidden;width:100%;}
+  .olo-mq-77002 .olo-mq-track{display:flex;align-items:center;height:100%;width:max-content;gap:60px;
+    animation:olo-mq-77002-scroll 30s linear infinite;animation-direction:reverse;will-change:transform;transition:transform .1s linear;}
+  .olo-mq-77002:hover .olo-mq-track{animation-play-state:paused;}
+  .olo-mq-77002 .olo-mq-text{color:#FFFFFF;font-size:44px;font-weight:600;letter-spacing:1px;text-transform:uppercase;line-height:1;white-space:nowrap;}
+  .olo-mq-77002 .olo-mq-sep{color:#1F2937;font-size:44px;font-weight:600;line-height:1;opacity:.8;white-space:nowrap;}
+</style>
+</head>
+<body>
+
+<div class="guide">
+  <h1>Verifica runtime — Marquee · VelocitySkew</h1>
+  <p>Replica fedele di ciò che <code>Olo_Marquee_Tile::render()</code> stampa con <code>velocity_skew = true</code>.
+     <strong>Scorri la pagina su e giù</strong>, anche di scatto: i due nastri prendono spinta e si inclinano
+     proporzionalmente alla velocità, poi lo skew si smorza tornando a 0.</p>
+  <ul>
+    <li><strong>Multi-istanza / scoping</strong>: le due barre hanno UID diversi e parametri diversi (la rossa è più reattiva, va a destra). Non si influenzano.</li>
+    <li><strong>Pausa hover</strong>: tieni il mouse fermo su una barra → si ferma il drift (lo skew rientra).</li>
+    <li><strong>reduced-motion</strong>: DevTools → <em>Rendering</em> → <em>Emulate CSS prefers-reduced-motion: reduce</em> → ricarica. I nastri tornano al solo drift CSS, <strong>skew 0</strong> (nessun JS).</li>
+    <li><strong>Fallback no-JS</strong>: DevTools → disabilita JavaScript → ricarica. I nastri scorrono lo stesso (animazione CSS di base).</li>
+  </ul>
+  <p>Lo stato è ispezionabile da console: <code>document.querySelector('.olo-mq-77001 .olo-mq-track').dataset.oloVskew</code>
+     deve valere <code>"1"</code> e <code>...track.style.animation</code> deve essere <code>"none"</code> quando il JS ha preso il controllo.</p>
+</div>
+
+<div class="spacer">↓ scorri ↓</div>
+
+<div class="tag">// istanza 1 — olo-mq-77001 · base 0.6 · boost 0.6 · maxSkew 14° · damping 0.86 · sinistra</div>
+<div class="olo-mq olo-mq-77001">
+  <div class="olo-mq-track">
+    <span class="olo-mq-text">Tonnarelli</span><span class="olo-mq-sep">•</span><span class="olo-mq-text">Strozzapreti</span><span class="olo-mq-sep">•</span><span class="olo-mq-text">Orecchiette</span><span class="olo-mq-sep">•</span><span class="olo-mq-text">Maccheroncini</span><span class="olo-mq-sep">•</span><span class="olo-mq-text">Garganelli</span><span class="olo-mq-sep">•</span><span class="olo-mq-text">Tonnarelli</span><span class="olo-mq-sep">•</span><span class="olo-mq-text">Strozzapreti</span><span class="olo-mq-sep">•</span><span class="olo-mq-text">Orecchiette</span><span class="olo-mq-sep">•</span><span class="olo-mq-text">Maccheroncini</span><span class="olo-mq-sep">•</span><span class="olo-mq-text">Garganelli</span><span class="olo-mq-sep">•</span>
+  </div>
+</div>
+
+<div class="spacer">continua a scorrere — prova scatti veloci</div>
+
+<div class="tag">// istanza 2 — olo-mq-77002 · base 0.4 · boost 1.2 · maxSkew 25° · damping 0.90 · destra</div>
+<div class="olo-mq olo-mq-77002">
+  <div class="olo-mq-track">
+    <span class="olo-mq-text">Trafilata al bronzo</span><span class="olo-mq-sep">/</span><span class="olo-mq-text">Essiccata lenta</span><span class="olo-mq-sep">/</span><span class="olo-mq-text">Grano duro</span><span class="olo-mq-sep">/</span><span class="olo-mq-text">Acqua di sorgente</span><span class="olo-mq-sep">/</span><span class="olo-mq-text">Trafilata al bronzo</span><span class="olo-mq-sep">/</span><span class="olo-mq-text">Essiccata lenta</span><span class="olo-mq-sep">/</span><span class="olo-mq-text">Grano duro</span><span class="olo-mq-sep">/</span><span class="olo-mq-text">Acqua di sorgente</span><span class="olo-mq-sep">/</span>
+  </div>
+</div>
+
+<div class="spacer">↑ scrolla indietro: lo skew cambia segno ↑</div>
+
+<!-- ===== runtime istanza 1 (identico a quello stampato dal PHP) ===== -->
+<script>
+/* Marquee · VelocitySkew — runtime scoped per istanza (rif. 64-tema-pastificio.html) */
+(function(){
+    var root = document.querySelector('.olo-mq-77001');
+    if ( ! root ) { return; }
+    var track = root.querySelector('.olo-mq-track');
+    if ( ! track ) { return; }
+    if ( track.dataset.oloVskew ) { return; }
+    track.dataset.oloVskew = '1';
+    var rm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
+    if ( rm && rm.matches ) { return; }
+    track.style.animation = 'none';
+    var BASE = 0.6, BOOST = 0.6, MAXSK = 14, DAMP = 0.86, DIR = -1;
+    var x = 0, vel = 0, lastY = window.scrollY || window.pageYOffset || 0;
+    var paused = false, running = false, rafId = null;
+    window.addEventListener('scroll', function(){
+        var y = window.scrollY || window.pageYOffset || 0;
+        vel = y - lastY; lastY = y;
+    }, { passive: true });
+    root.addEventListener('mouseenter', function(){ paused = true; });
+    root.addEventListener('mouseleave', function(){ paused = false; });
+    function frame(){
+        if ( ! running ) { return; }
+        var half = ( track.scrollWidth / 2 ) || 1;
+        if ( ! paused ) {
+            x += ( DIR * BASE ) + ( -vel * BOOST );
+            if ( x <= -half ) { x += half; }
+            if ( x > 0 )      { x -= half; }
+        }
+        var sk = vel * BOOST;
+        if ( sk >  MAXSK ) { sk =  MAXSK; }
+        if ( sk < -MAXSK ) { sk = -MAXSK; }
+        track.style.transform = 'translateX(' + x + 'px) skewX(' + sk + 'deg)';
+        vel *= DAMP;
+        rafId = requestAnimationFrame( frame );
+    }
+    function start(){ if ( ! running ) { running = true; rafId = requestAnimationFrame( frame ); } }
+    function stop(){ running = false; if ( rafId ) { cancelAnimationFrame( rafId ); rafId = null; } }
+    if ( 'IntersectionObserver' in window ) {
+        var io = new IntersectionObserver(function( entries ){
+            for ( var i = 0; i < entries.length; i++ ) {
+                if ( entries[i].isIntersecting ) { start(); } else { stop(); }
+            }
+        }, { threshold: 0 });
+        io.observe( root );
+    } else { start(); }
+})();
+</script>
+
+<!-- ===== runtime istanza 2 (parametri audaci, direzione destra) ===== -->
+<script>
+(function(){
+    var root = document.querySelector('.olo-mq-77002');
+    if ( ! root ) { return; }
+    var track = root.querySelector('.olo-mq-track');
+    if ( ! track ) { return; }
+    if ( track.dataset.oloVskew ) { return; }
+    track.dataset.oloVskew = '1';
+    var rm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
+    if ( rm && rm.matches ) { return; }
+    track.style.animation = 'none';
+    var BASE = 0.4, BOOST = 1.2, MAXSK = 25, DAMP = 0.9, DIR = 1;
+    var x = 0, vel = 0, lastY = window.scrollY || window.pageYOffset || 0;
+    var paused = false, running = false, rafId = null;
+    window.addEventListener('scroll', function(){
+        var y = window.scrollY || window.pageYOffset || 0;
+        vel = y - lastY; lastY = y;
+    }, { passive: true });
+    root.addEventListener('mouseenter', function(){ paused = true; });
+    root.addEventListener('mouseleave', function(){ paused = false; });
+    function frame(){
+        if ( ! running ) { return; }
+        var half = ( track.scrollWidth / 2 ) || 1;
+        if ( ! paused ) {
+            x += ( DIR * BASE ) + ( -vel * BOOST );
+            if ( x <= -half ) { x += half; }
+            if ( x > 0 )      { x -= half; }
+        }
+        var sk = vel * BOOST;
+        if ( sk >  MAXSK ) { sk =  MAXSK; }
+        if ( sk < -MAXSK ) { sk = -MAXSK; }
+        track.style.transform = 'translateX(' + x + 'px) skewX(' + sk + 'deg)';
+        vel *= DAMP;
+        rafId = requestAnimationFrame( frame );
+    }
+    function start(){ if ( ! running ) { running = true; rafId = requestAnimationFrame( frame ); } }
+    function stop(){ running = false; if ( rafId ) { cancelAnimationFrame( rafId ); rafId = null; } }
+    if ( 'IntersectionObserver' in window ) {
+        var io = new IntersectionObserver(function( entries ){
+            for ( var i = 0; i < entries.length; i++ ) {
+                if ( entries[i].isIntersecting ) { start(); } else { stop(); }
+            }
+        }, { threshold: 0 });
+        io.observe( root );
+    } else { start(); }
+})();
+</script>
+
+</body>
+</html>

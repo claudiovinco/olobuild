@@ -94,6 +94,7 @@ class Olo_HeroSplit_Tile extends Olo_Tile_Base {
         'showcase_badge_text'     => 'DEMO LIVE',
         'showcase_badge_dot'      => '#dc2626',
         'showcase_badge_bg'       => '#ffffff',
+        'showcase_badge_color'    => '#0f172a',
         'showcase_items' => [
             [ 'number' => '01', 'text' => 'crea',     'italic' => true, 'text_color' => '#0f172a', 'bg' => [ 'type' => 'solid', 'color' => '#ffffff' ] ],
             [ 'number' => '02', 'text' => 'anima',    'italic' => true, 'text_color' => '#0f172a', 'bg' => [ 'type' => 'solid', 'color' => '#ffffff' ] ],
@@ -142,8 +143,8 @@ class Olo_HeroSplit_Tile extends Olo_Tile_Base {
         $uid = 'olo-hsplit-' . wp_rand( 10000, 99999 );
 
         // Font stack
-        $serif_stack = "'Playfair Display','Cormorant Garamond',Georgia,'Times New Roman',serif";
-        $sans_stack  = "'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif";
+        $serif_stack = "var(--olo-font-family-heading, 'Playfair Display','Cormorant Garamond',Georgia,'Times New Roman',serif)";
+        $sans_stack  = "var(--olo-font-family, 'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif)";
         $mono_stack  = "ui-monospace,'SF Mono',Menlo,Consolas,monospace";
         $family_map  = [ 'serif' => $serif_stack, 'sans-serif' => $sans_stack, 'mono' => $mono_stack ];
         $headline_family = $family_map[ $s['headline_font_family'] ] ?? $serif_stack;
@@ -178,10 +179,10 @@ class Olo_HeroSplit_Tile extends Olo_Tile_Base {
         // Shadow map per card
         $shadow_map = [
             'none' => '',
-            'sm'   => '0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04)',
-            'md'   => '0 4px 12px rgba(0,0,0,0.10), 0 2px 4px rgba(0,0,0,0.06)',
-            'lg'   => '0 10px 30px rgba(0,0,0,0.12), 0 4px 8px rgba(0,0,0,0.08)',
-            'xl'   => '0 24px 60px rgba(0,0,0,0.18), 0 8px 16px rgba(0,0,0,0.10)',
+            'sm'   => '0 1px 2px rgba(16,24,40,.06), 0 6px 16px -10px rgba(16,24,40,.18)',
+            'md'   => '0 2px 4px rgba(16,24,40,.06), 0 14px 28px -12px rgba(22,38,61,.28)',
+            'lg'   => '0 8px 24px -6px rgba(16,24,40,.18), 0 18px 40px -12px rgba(22,38,61,.30)',
+            'xl'   => '0 12px 32px -8px rgba(16,24,40,.20), 0 28px 56px -14px rgba(22,38,61,.34)',
         ];
         $card_shadow = $shadow_map[ $s['showcase_card_shadow'] ?? 'sm' ] ?? '';
 
@@ -297,11 +298,12 @@ class Olo_HeroSplit_Tile extends Olo_Tile_Base {
                 <?php if ( ! empty( $s['showcase_enabled'] ) ) :
                     $sc_badge_dot = $this->safe_color_css( $s['showcase_badge_dot'] ) ?: '#dc2626';
                     $sc_badge_bg  = $this->safe_color_css( $s['showcase_badge_bg'] ) ?: '#ffffff';
+                    $sc_badge_col = $this->safe_color_css( $s['showcase_badge_color'] ?? '' ) ?: '#0f172a';
                     $items        = is_array( $s['showcase_items'] ) ? array_slice( $s['showcase_items'], 0, 4 ) : [];
                 ?>
                     <div class="olo-hsplit__right" style="<?php echo esc_attr( $showcase_bg_css ); ?>;<?php if ( $sc_radius ) echo 'border-radius:' . esc_attr( $sc_radius ) . ';'; ?>padding:<?php echo $sc_padding; ?>px;position:relative;min-height:480px;display:flex;flex-direction:column<?php if ( $sc_radius_h ) echo ';transition:border-radius ' . $sc_rdur . 'ms ease'; ?>">
                         <?php if ( ! empty( $s['showcase_badge_text'] ) ) : ?>
-                            <div class="olo-hsplit__badge" style="display:inline-flex;align-items:center;gap:8px;background:<?php echo esc_attr( $sc_badge_bg ); ?>;padding:6px 14px;border-radius:999px;font-family:<?php echo esc_attr( $mono_stack ); ?>;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:#0f172a;align-self:flex-start;box-shadow:0 1px 3px rgba(0,0,0,0.06)">
+                            <div class="olo-hsplit__badge" style="display:inline-flex;align-items:center;gap:8px;background:<?php echo esc_attr( $sc_badge_bg ); ?>;padding:6px 14px;border-radius:999px;font-family:<?php echo esc_attr( $mono_stack ); ?>;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:<?php echo esc_attr( $sc_badge_col ); ?>;align-self:flex-start;box-shadow:0 1px 3px rgba(0,0,0,0.06)">
                                 <span style="width:8px;height:8px;border-radius:50%;background:<?php echo esc_attr( $sc_badge_dot ); ?>"></span>
                                 <span data-olo-editable="showcase_badge_text"><?php echo esc_html( $s['showcase_badge_text'] ); ?></span>
                             </div>

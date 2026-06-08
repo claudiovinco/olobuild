@@ -1,0 +1,1783 @@
+[
+ {
+  "id": "df-se-4",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#0c1418"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "df-ro-3",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "df-co-2",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "df-hero-split-1",
+        "type": "producthero",
+        "settings": {
+         "pill_pre": "v4",
+         "pill_text": "now with real-time models",
+         "headline_text": "Every metric,",
+         "accent_text": "one source of truth.",
+         "subhead": "DataFold pulls your scattered data into one live workspace — model it once, query in plain SQL, and ship dashboards the whole team actually trusts.",
+         "cta1_text": "Start free",
+         "cta1_url": "#pricing",
+         "cta2_text": "See the platform",
+         "cta2_url": "#platform",
+         "glow_on": true,
+         "glow_color": "rgba(54,214,195,.26)",
+         "grid_on": true,
+         "grid_color": "rgba(255,255,255,0.035)",
+         "grid_size": 46,
+         "mock_mode": "dashboard",
+         "mock_url": "app.datafold.io / workspace / revenue",
+         "mock_label": "product — live revenue dashboard",
+         "kpis": [
+          {
+           "label": "Net revenue",
+           "value": "$4.82M",
+           "delta": "▲ 18.4% MoM",
+           "down": ""
+          },
+          {
+           "label": "Active accounts",
+           "value": "12,408",
+           "delta": "▲ 6.1% MoM",
+           "down": ""
+          },
+          {
+           "label": "Churn",
+           "value": "1.9%",
+           "delta": "▼ 0.3 pts",
+           "down": "1"
+          }
+         ],
+         "chart_title": "Revenue by week",
+         "chart_meta": "last 12 weeks · live",
+         "bars": [
+          {
+           "h": 38,
+           "label": "w1",
+           "alt": ""
+          },
+          {
+           "h": 46,
+           "label": "w2",
+           "alt": ""
+          },
+          {
+           "h": 41,
+           "label": "w3",
+           "alt": ""
+          },
+          {
+           "h": 54,
+           "label": "w4",
+           "alt": ""
+          },
+          {
+           "h": 60,
+           "label": "w5",
+           "alt": ""
+          },
+          {
+           "h": 52,
+           "label": "w6",
+           "alt": ""
+          },
+          {
+           "h": 68,
+           "label": "w7",
+           "alt": ""
+          },
+          {
+           "h": 74,
+           "label": "w8",
+           "alt": ""
+          },
+          {
+           "h": 66,
+           "label": "w9",
+           "alt": "1"
+          },
+          {
+           "h": 82,
+           "label": "w10",
+           "alt": ""
+          },
+          {
+           "h": 90,
+           "label": "w11",
+           "alt": ""
+          },
+          {
+           "h": 100,
+           "label": "w12",
+           "alt": "1"
+          }
+         ],
+         "bg_color": "#0c1418",
+         "panel_color": "#13212a",
+         "panel2_color": "#182b35",
+         "cell_color": "#0e171c",
+         "accent": "#36d6c3",
+         "accent2": "#b6e85a",
+         "accent_on": "#070e11",
+         "down_color": "#f0b35a",
+         "text_color": "#ffffff",
+         "sub_color": "#6e8088",
+         "pill_text_color": "#36d6c3",
+         "pill_bg": "rgba(54,214,195,.1)",
+         "line_color": "rgba(255,255,255,.08)",
+         "pill_mono": true,
+         "mono_meta": true
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "df-se-11",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "small"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#0e171c"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "df-ro-7",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "df-co-6",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "df-section-header-5",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": false,
+         "headline_lines": [
+          {
+           "text": "Powering analytics at data-driven teams",
+           "color": "#6e8088",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 12,
+         "headline_font_weight": "500",
+         "headline_align": "center",
+         "tagline_show": false,
+         "layout": "center",
+         "gap": 0
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "df-ro-10",
+    "type": "row",
+    "settings": {
+     "gap": 16
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "df-co-9",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "df-trust-strip-8",
+        "type": "trust-strip",
+        "settings": {
+         "items": [
+          {
+           "text": "NORTHBEAM"
+          },
+          {
+           "text": "ARCTYPE"
+          },
+          {
+           "text": "SEGMENT"
+          },
+          {
+           "text": "LIVEBLOCKS"
+          },
+          {
+           "text": "PRIMER"
+          },
+          {
+           "text": "HEAP"
+          }
+         ],
+         "variant": "pill",
+         "separator_char": "",
+         "align": "center",
+         "flow": "wrap",
+         "gap": 46,
+         "font_family": "sans-serif",
+         "text_color": "#6e8088",
+         "text_size": 13,
+         "pill_bg": "rgba(255,255,255,.05)",
+         "pill_border": "rgba(255,255,255,.08)",
+         "pill_text_color": "#6e8088"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "df-se-21",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "small"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#0e171c"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "df-ro-20",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "df-co-13",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "df-statstrip-12",
+        "type": "statstrip",
+        "settings": {
+         "items": [
+          {
+           "value": "14B+",
+           "label": "Rows queried daily"
+          },
+          {
+           "value": "220ms",
+           "label": "Median query time"
+          },
+          {
+           "value": "180+",
+           "label": "Native connectors"
+          },
+          {
+           "value": "99.98%",
+           "label": "Pipeline uptime"
+          }
+         ],
+         "columns": 4,
+         "items_gap": 0,
+         "band_padding_y": 24,
+         "show_dividers": true,
+         "divider_color": "rgba(255,255,255,.10)",
+         "band_border": true,
+         "value_font_family": "heading",
+         "value_color": "#36d6c3",
+         "value_size": 50,
+         "value_weight": "700",
+         "label_color": "#6e8088",
+         "label_size": 13,
+         "label_uppercase": false,
+         "align": "center",
+         "mono_font_family": ""
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "df-se-33",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#0e171c"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "df-ro-24",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "df-co-23",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "df-section-header-22",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "// the workspace",
+         "eyebrow_color": "#36d6c3",
+         "eyebrow_dot_color": "#36d6c3",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "Dashboards that read",
+           "color": "#ffffff",
+           "italic": false
+          },
+          {
+           "text": "like the truth",
+           "color": "#36d6c3",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 46,
+         "headline_font_weight": "700",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": true,
+         "tagline_text": "Build a metric once and reuse it everywhere. Every chart is live, drillable, and tied back to the model — no more six versions of “revenue”.",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#6e8088",
+         "tagline_text_size": 16.5,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "df-ro-29",
+    "type": "row",
+    "settings": {
+     "gap": 16
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "df-co-26",
+      "type": "column",
+      "settings": {
+       "width": "2-3"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "df-chart-25",
+        "type": "chart",
+        "settings": {
+         "chart_type": "bar",
+         "dataset_label": "MRR $",
+         "show_title": true,
+         "chart_title": "Monthly recurring revenue",
+         "title_color": "#ffffff",
+         "title_font_size": "14",
+         "title_font_weight": "600",
+         "show_subtitle": true,
+         "chart_subtitle": "$4.82M · ▲ 18.4%",
+         "subtitle_color": "#36d6c3",
+         "subtitle_font_size": "12",
+         "items": [
+          {
+           "id": "c-1",
+           "label": "Jan",
+           "value": "34",
+           "color": "#36d6c3",
+           "border_color": ""
+          },
+          {
+           "id": "c-2",
+           "label": "Feb",
+           "value": "42",
+           "color": "#36d6c3",
+           "border_color": ""
+          },
+          {
+           "id": "c-3",
+           "label": "Mar",
+           "value": "48",
+           "color": "#36d6c3",
+           "border_color": ""
+          },
+          {
+           "id": "c-4",
+           "label": "Apr",
+           "value": "44",
+           "color": "#36d6c3",
+           "border_color": ""
+          },
+          {
+           "id": "c-5",
+           "label": "May",
+           "value": "58",
+           "color": "#36d6c3",
+           "border_color": ""
+          },
+          {
+           "id": "c-6",
+           "label": "Jun",
+           "value": "64",
+           "color": "#36d6c3",
+           "border_color": ""
+          },
+          {
+           "id": "c-7",
+           "label": "Jul",
+           "value": "72",
+           "color": "#36d6c3",
+           "border_color": ""
+          },
+          {
+           "id": "c-8",
+           "label": "Aug",
+           "value": "80",
+           "color": "#36d6c3",
+           "border_color": ""
+          },
+          {
+           "id": "c-9",
+           "label": "Sep",
+           "value": "92",
+           "color": "#25bdab",
+           "border_color": ""
+          },
+          {
+           "id": "c-10",
+           "label": "Oct",
+           "value": "100",
+           "color": "#25bdab",
+           "border_color": ""
+          }
+         ],
+         "chart_height": "220",
+         "show_legend": false,
+         "tooltip_enabled": true,
+         "tooltip_prefix": "$",
+         "tooltip_suffix": "k",
+         "tooltip_bg": "#13212a",
+         "tooltip_text_color": "#ffffff",
+         "tooltip_corner_radius": {
+          "tl": 6,
+          "tr": 6,
+          "br": 6,
+          "bl": 6
+         },
+         "animate": true,
+         "begin_at_zero": true,
+         "bar_radius": {
+          "tl": 4,
+          "tr": 4,
+          "br": 0,
+          "bl": 0
+         },
+         "bar_percentage": 0.65,
+         "category_percentage": 0.85,
+         "grid_color": "rgba(255,255,255,.06)",
+         "axis_color": "rgba(255,255,255,.10)",
+         "text_color": "#6e8088",
+         "tick_font_size": "10",
+         "bg_color": "transparent",
+         "bg": {
+          "type": "solid",
+          "color": "#13212a"
+         },
+         "border": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0,
+          "style": "solid",
+          "color": "rgba(255,255,255,.08)"
+         },
+         "tile_padding": {
+          "top": 20,
+          "right": 20,
+          "bottom": 20,
+          "left": 20
+         },
+         "border_radius": {
+          "tl": 14,
+          "tr": 14,
+          "br": 14,
+          "bl": 14
+         }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "df-co-28",
+      "type": "column",
+      "settings": {
+       "width": "1-3"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "df-chart-27",
+        "type": "chart",
+        "settings": {
+         "chart_type": "doughnut",
+         "dataset_label": "Plan share",
+         "show_title": true,
+         "chart_title": "Revenue by plan",
+         "title_color": "#ffffff",
+         "title_font_size": "14",
+         "title_font_weight": "600",
+         "show_subtitle": false,
+         "items": [
+          {
+           "id": "d-1",
+           "label": "Team",
+           "value": "62",
+           "color": "#36d6c3",
+           "border_color": ""
+          },
+          {
+           "id": "d-2",
+           "label": "Business",
+           "value": "19",
+           "color": "#b6e85a",
+           "border_color": ""
+          },
+          {
+           "id": "d-3",
+           "label": "Enterprise",
+           "value": "11",
+           "color": "#f0b35a",
+           "border_color": ""
+          },
+          {
+           "id": "d-4",
+           "label": "Starter",
+           "value": "8",
+           "color": "rgba(255,255,255,.18)",
+           "border_color": ""
+          }
+         ],
+         "chart_height": "220",
+         "show_legend": true,
+         "legend_position": "bottom",
+         "legend_align": "center",
+         "legend_color": "#6e8088",
+         "legend_font_size": "11",
+         "legend_point_style": true,
+         "doughnut_cutout": 62,
+         "tooltip_enabled": true,
+         "tooltip_suffix": "%",
+         "tooltip_bg": "#13212a",
+         "tooltip_text_color": "#ffffff",
+         "tooltip_corner_radius": {
+          "tl": 6,
+          "tr": 6,
+          "br": 6,
+          "bl": 6
+         },
+         "animate": true,
+         "bg_color": "transparent",
+         "bg": {
+          "type": "solid",
+          "color": "#13212a"
+         },
+         "border": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0,
+          "style": "solid",
+          "color": "rgba(255,255,255,.08)"
+         },
+         "tile_padding": {
+          "top": 20,
+          "right": 20,
+          "bottom": 20,
+          "left": 20
+         },
+         "border_radius": {
+          "tl": 14,
+          "tr": 14,
+          "br": 14,
+          "bl": 14
+         }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "df-ro-32",
+    "type": "row",
+    "settings": {
+     "gap": 16
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "df-co-31",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "df-chart-30",
+        "type": "chart",
+        "settings": {
+         "chart_type": "bar",
+         "index_axis": "y",
+         "dataset_label": "Score",
+         "show_title": true,
+         "chart_title": "Platform health",
+         "title_color": "#ffffff",
+         "title_font_size": "14",
+         "title_font_weight": "600",
+         "show_subtitle": false,
+         "items": [
+          {
+           "id": "k-1",
+           "label": "Activation",
+           "value": "74",
+           "color": "#b6e85a",
+           "border_color": ""
+          },
+          {
+           "id": "k-2",
+           "label": "Retention 90d",
+           "value": "91",
+           "color": "#36d6c3",
+           "border_color": ""
+          },
+          {
+           "id": "k-3",
+           "label": "NPS",
+           "value": "79",
+           "color": "#36d6c3",
+           "border_color": ""
+          },
+          {
+           "id": "k-4",
+           "label": "Expansion",
+           "value": "100",
+           "color": "#25bdab",
+           "border_color": ""
+          }
+         ],
+         "chart_height": "180",
+         "show_legend": false,
+         "tooltip_enabled": true,
+         "tooltip_suffix": "%",
+         "tooltip_bg": "#13212a",
+         "tooltip_text_color": "#ffffff",
+         "tooltip_corner_radius": {
+          "tl": 6,
+          "tr": 6,
+          "br": 6,
+          "bl": 6
+         },
+         "animate": true,
+         "begin_at_zero": true,
+         "bar_radius": {
+          "tl": 4,
+          "tr": 4,
+          "br": 4,
+          "bl": 4
+         },
+         "bar_percentage": 0.55,
+         "category_percentage": 0.85,
+         "y_max": "120",
+         "grid_color": "rgba(255,255,255,.06)",
+         "axis_color": "rgba(255,255,255,.10)",
+         "text_color": "#6e8088",
+         "tick_font_size": "10",
+         "bg_color": "transparent",
+         "bg": {
+          "type": "solid",
+          "color": "#13212a"
+         },
+         "border": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0,
+          "style": "solid",
+          "color": "rgba(255,255,255,.08)"
+         },
+         "tile_padding": {
+          "top": 20,
+          "right": 20,
+          "bottom": 20,
+          "left": 20
+         },
+         "border_radius": {
+          "tl": 14,
+          "tr": 14,
+          "br": 14,
+          "bl": 14
+         }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "df-se-37",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#0c1418"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "df-ro-36",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "df-co-35",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "df-hero-split-34",
+        "type": "hero-split",
+        "settings": {
+         "eyebrow_text": "// modelling",
+         "eyebrow_dot_color": "#36d6c3",
+         "eyebrow_color": "#36d6c3",
+         "headline_lines": [
+          {
+           "text": "Model once,",
+           "color": "#ffffff",
+           "italic": false
+          },
+          {
+           "text": "in plain SQL.",
+           "color": "#ffffff",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 44,
+         "headline_line_height": 1.08,
+         "headline_font_weight": "700",
+         "headline_align": "left",
+         "subhead": "Define your metrics as version-controlled models. DataFold compiles them into fast, governed queries — so everyone’s numbers come from the same place.",
+         "subhead_color": "#aebec6",
+         "subhead_size": 16,
+         "subhead_italic": false,
+         "subhead_max_width": 500,
+         "cta1_text": "Read the docs",
+         "cta1_url": "#",
+         "cta1_bg": "rgba(255,255,255,.05)",
+         "cta1_color": "#ffffff",
+         "cta1_border": "rgba(255,255,255,.16)",
+         "cta1_size": 14,
+         "cta1_radius": {
+          "tl": 8,
+          "tr": 8,
+          "br": 8,
+          "bl": 8,
+          "linked": true
+         },
+         "cta1_radius_hover": {
+          "tl": 8,
+          "tr": 8,
+          "br": 8,
+          "bl": 8,
+          "linked": true
+         },
+         "cta2_text": "",
+         "cta2_url": "",
+         "stats": [],
+         "showcase_enabled": true,
+         "showcase_bg": {
+          "type": "solid",
+          "color": "#13212a"
+         },
+         "showcase_padding": 24,
+         "showcase_radius": {
+          "tl": 14,
+          "tr": 14,
+          "br": 14,
+          "bl": 14,
+          "linked": true
+         },
+         "showcase_radius_hover": {
+          "tl": 14,
+          "tr": 14,
+          "br": 14,
+          "bl": 14,
+          "linked": true
+         },
+         "showcase_badge_text": "GIT-BACKED SEMANTIC LAYER",
+         "showcase_badge_dot": "#36d6c3",
+         "showcase_badge_bg": "#070e11",
+         "showcase_badge_color": "#aebec6",
+         "showcase_items": [
+          {
+           "number": "Git-backed semantic layer",
+           "text": "check",
+           "italic": false,
+           "text_color": "#36d6c3",
+           "bg": {
+            "type": "solid",
+            "color": "#0e171c"
+           }
+          },
+          {
+           "number": "Column-level lineage",
+           "text": "check",
+           "italic": false,
+           "text_color": "#36d6c3",
+           "bg": {
+            "type": "solid",
+            "color": "#0e171c"
+           }
+          },
+          {
+           "number": "Tests that block bad data shipping",
+           "text": "check",
+           "italic": false,
+           "text_color": "#36d6c3",
+           "bg": {
+            "type": "solid",
+            "color": "#0e171c"
+           }
+          }
+         ],
+         "showcase_card_radius": {
+          "tl": 10,
+          "tr": 10,
+          "br": 10,
+          "bl": 10,
+          "linked": true
+         },
+         "showcase_card_radius_hover": {
+          "tl": 10,
+          "tr": 10,
+          "br": 10,
+          "bl": 10,
+          "linked": true
+         },
+         "showcase_card_shadow": "none",
+         "showcase_caption_left": "MODELLING",
+         "showcase_caption_right": "v4",
+         "showcase_hover_effect": "none",
+         "split_ratio": "1fr 1fr",
+         "gap": 48,
+         "min_height": 0,
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "df-se-41",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#0e171c"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "df-ro-40",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "df-co-39",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "df-hero-split-38",
+        "type": "hero-split",
+        "settings": {
+         "eyebrow_text": "// monitoring",
+         "eyebrow_dot_color": "#36d6c3",
+         "eyebrow_color": "#36d6c3",
+         "headline_lines": [
+          {
+           "text": "It tells you",
+           "color": "#ffffff",
+           "italic": false
+          },
+          {
+           "text": "before they ask.",
+           "color": "#ffffff",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 44,
+         "headline_line_height": 1.08,
+         "headline_font_weight": "700",
+         "headline_align": "left",
+         "subhead": "DataFold watches every metric for anomalies and routes the alert to the right channel — with the context to act, not just a red number.",
+         "subhead_color": "#aebec6",
+         "subhead_size": 16,
+         "subhead_italic": false,
+         "subhead_max_width": 500,
+         "cta1_text": "See monitoring",
+         "cta1_url": "#",
+         "cta1_bg": "rgba(255,255,255,.05)",
+         "cta1_color": "#ffffff",
+         "cta1_border": "rgba(255,255,255,.16)",
+         "cta1_size": 14,
+         "cta1_radius": {
+          "tl": 8,
+          "tr": 8,
+          "br": 8,
+          "bl": 8,
+          "linked": true
+         },
+         "cta1_radius_hover": {
+          "tl": 8,
+          "tr": 8,
+          "br": 8,
+          "bl": 8,
+          "linked": true
+         },
+         "cta2_text": "",
+         "cta2_url": "",
+         "stats": [],
+         "showcase_enabled": true,
+         "showcase_bg": {
+          "type": "solid",
+          "color": "#13212a"
+         },
+         "showcase_padding": 24,
+         "showcase_radius": {
+          "tl": 14,
+          "tr": 14,
+          "br": 14,
+          "bl": 14,
+          "linked": true
+         },
+         "showcase_radius_hover": {
+          "tl": 14,
+          "tr": 14,
+          "br": 14,
+          "bl": 14,
+          "linked": true
+         },
+         "showcase_badge_text": "ANOMALY DETECTION · ML-POWERED",
+         "showcase_badge_dot": "#f0b35a",
+         "showcase_badge_bg": "#070e11",
+         "showcase_badge_color": "#aebec6",
+         "showcase_items": [
+          {
+           "number": "ML anomaly detection on any metric",
+           "text": "zap",
+           "italic": false,
+           "text_color": "#36d6c3",
+           "bg": {
+            "type": "solid",
+            "color": "#0e171c"
+           }
+          },
+          {
+           "number": "Slack, email and webhook routing",
+           "text": "zap",
+           "italic": false,
+           "text_color": "#36d6c3",
+           "bg": {
+            "type": "solid",
+            "color": "#0e171c"
+           }
+          },
+          {
+           "number": "Root-cause drill-downs in one click",
+           "text": "zap",
+           "italic": false,
+           "text_color": "#36d6c3",
+           "bg": {
+            "type": "solid",
+            "color": "#0e171c"
+           }
+          }
+         ],
+         "showcase_card_radius": {
+          "tl": 10,
+          "tr": 10,
+          "br": 10,
+          "bl": 10,
+          "linked": true
+         },
+         "showcase_card_radius_hover": {
+          "tl": 10,
+          "tr": 10,
+          "br": 10,
+          "bl": 10,
+          "linked": true
+         },
+         "showcase_card_shadow": "none",
+         "showcase_caption_left": "MONITORING",
+         "showcase_caption_right": "LIVE",
+         "showcase_hover_effect": "none",
+         "split_ratio": "1fr 1fr",
+         "gap": 48,
+         "min_height": 0,
+         "layout_direction": "reverse",
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "df-se-48",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#0c1418"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "df-ro-44",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "df-co-43",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "df-section-header-42",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "// data sources",
+         "eyebrow_color": "#36d6c3",
+         "eyebrow_dot_color": "#36d6c3",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "Connect everything,",
+           "color": "#ffffff",
+           "italic": false
+          },
+          {
+           "text": "sync both ways",
+           "color": "#36d6c3",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 46,
+         "headline_font_weight": "700",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": true,
+         "tagline_text": "180+ native connectors. Point DataFold at your warehouse and it does the rest.",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#6e8088",
+         "tagline_text_size": 16.5,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "df-ro-47",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "df-co-46",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "df-info-cards-45",
+        "type": "info-cards",
+        "settings": {
+         "container_bg": {
+          "type": "solid",
+          "color": "transparent"
+         },
+         "container_padding": 0,
+         "container_gap": 16,
+         "columns": 6,
+         "items_gap": 14,
+         "card_bg": {
+          "type": "solid",
+          "color": "#13212a"
+         },
+         "card_color": "#6e8088",
+         "card_radius": {
+          "tl": 14,
+          "tr": 14,
+          "br": 14,
+          "bl": 14,
+          "linked": true
+         },
+         "card_padding": 20,
+         "show_icon": true,
+         "show_counter": false,
+         "show_arrow": false,
+         "show_footer": false,
+         "show_media": false,
+         "icon_color": "#36d6c3",
+         "icon_bg_color": "rgba(54,214,195,.13)",
+         "title_color": "#ffffff",
+         "title_font_family": "sans-serif",
+         "title_size": 13,
+         "title_weight": "500",
+         "title_italic": false,
+         "description_size": 13,
+         "items": [
+          {
+           "icon": "database",
+           "title": "Warehouse",
+           "description": ""
+          },
+          {
+           "icon": "server",
+           "title": "Postgres",
+           "description": ""
+          },
+          {
+           "icon": "zap",
+           "title": "Events",
+           "description": ""
+          },
+          {
+           "icon": "credit-card",
+           "title": "Billing",
+           "description": ""
+          },
+          {
+           "icon": "users",
+           "title": "CRM",
+           "description": ""
+          },
+          {
+           "icon": "globe",
+           "title": "Ads",
+           "description": ""
+          },
+          {
+           "icon": "archive",
+           "title": "Object store",
+           "description": ""
+          },
+          {
+           "icon": "grid",
+           "title": "Sheets",
+           "description": ""
+          },
+          {
+           "icon": "help-circle",
+           "title": "Support",
+           "description": ""
+          },
+          {
+           "icon": "cpu",
+           "title": "Product",
+           "description": ""
+          },
+          {
+           "icon": "activity",
+           "title": "Queue",
+           "description": ""
+          },
+          {
+           "icon": "plus-circle",
+           "title": "+170",
+           "description": ""
+          }
+         ],
+         "card_hover_effect": "lift"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "df-se-59",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#0e171c"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "df-ro-51",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "df-co-50",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "df-section-header-49",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "// pricing",
+         "eyebrow_color": "#36d6c3",
+         "eyebrow_dot_color": "#36d6c3",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "Pay for seats,",
+           "color": "#ffffff",
+           "italic": false
+          },
+          {
+           "text": "not for rows",
+           "color": "#36d6c3",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 46,
+         "headline_font_weight": "700",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": false,
+         "tagline_text": "",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#6e8088",
+         "tagline_text_size": 16.5,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "df-ro-58",
+    "type": "row",
+    "settings": {
+     "gap": 18,
+     "vertical_align": "stretch"
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "df-co-53",
+      "type": "column",
+      "settings": {
+       "width": "1-3"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "df-pricing-52",
+        "type": "pricing",
+        "settings": {
+         "plan_name": "Starter",
+         "price": "$0",
+         "currency": "",
+         "period": "/mo",
+         "description": "For analysts kicking the tyres.",
+         "features": "1 workspace\n5 data sources\nCommunity support",
+         "is_popular": false,
+         "badge_text": "",
+         "badge_bg_color": "#36d6c3",
+         "cta_text": "Get started",
+         "cta_url": "#",
+         "cta_bg": "rgba(255,255,255,.07)",
+         "cta_color": "#ffffff",
+         "bg_color": "#13212a",
+         "price_color": "#ffffff",
+         "accent_color": "#36d6c3",
+         "border_color": "rgba(255,255,255,.08)",
+         "border_radius": {
+          "tl": 18,
+          "tr": 18,
+          "br": 18,
+          "bl": 18,
+          "linked": true
+         },
+         "border_radius_hover": {
+          "tl": 18,
+          "tr": 18,
+          "br": 18,
+          "bl": 18,
+          "linked": true
+         }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "df-co-55",
+      "type": "column",
+      "settings": {
+       "width": "1-3"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "df-pricing-54",
+        "type": "pricing",
+        "settings": {
+         "plan_name": "Team",
+         "price": "$32",
+         "currency": "",
+         "period": "/user/mo",
+         "description": "For teams running on real numbers.",
+         "features": "Unlimited dashboards\nAll 180+ connectors\nAnomaly monitoring\nSemantic layer",
+         "is_popular": true,
+         "badge_text": "Most popular",
+         "badge_bg_color": "#36d6c3",
+         "cta_text": "Start 14-day trial",
+         "cta_url": "#pricing",
+         "cta_bg": "#36d6c3",
+         "cta_color": "#070e11",
+         "bg_color": "#13212a",
+         "price_color": "#ffffff",
+         "accent_color": "#36d6c3",
+         "border_color": "#36d6c3",
+         "border_radius": {
+          "tl": 18,
+          "tr": 18,
+          "br": 18,
+          "bl": 18,
+          "linked": true
+         },
+         "border_radius_hover": {
+          "tl": 18,
+          "tr": 18,
+          "br": 18,
+          "bl": 18,
+          "linked": true
+         }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "df-co-57",
+      "type": "column",
+      "settings": {
+       "width": "1-3"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "df-pricing-56",
+        "type": "pricing",
+        "settings": {
+         "plan_name": "Enterprise",
+         "price": "Custom",
+         "currency": "",
+         "period": "",
+         "description": "For scale, security and governance.",
+         "features": "SSO, SCIM and audit log\nRow-level security\nDedicated support",
+         "is_popular": false,
+         "badge_text": "",
+         "badge_bg_color": "#36d6c3",
+         "cta_text": "Talk to sales",
+         "cta_url": "#",
+         "cta_bg": "rgba(255,255,255,.07)",
+         "cta_color": "#ffffff",
+         "bg_color": "#13212a",
+         "price_color": "#ffffff",
+         "accent_color": "#36d6c3",
+         "border_color": "rgba(255,255,255,.08)",
+         "border_radius": {
+          "tl": 18,
+          "tr": 18,
+          "br": 18,
+          "bl": 18,
+          "linked": true
+         },
+         "border_radius_hover": {
+          "tl": 18,
+          "tr": 18,
+          "br": 18,
+          "bl": 18,
+          "linked": true
+         }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "df-se-63",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#0c1418"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "df-ro-62",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "df-co-61",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "df-testimonial-60",
+        "type": "testimonial",
+        "settings": {
+         "quote": "“We deleted four spreadsheets and a BI tool the week we switched. Now one number means one thing — and the whole company finally agrees on it.”",
+         "author_name": "Priya Nair",
+         "author_role": "Head of Data, Northbeam",
+         "rating": "0",
+         "layout": "single",
+         "show_line": false,
+         "bg_color": "transparent",
+         "text_color": "#ffffff",
+         "border_radius": "0",
+         "avatar": ""
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "df-se-67",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#0e171c"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "df-ro-66",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "df-co-65",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "df-cta-banner-64",
+        "type": "cta-banner",
+        "settings": {
+         "headline": "Put your data",
+         "headline_accent": "to work",
+         "headline_accent_italic": false,
+         "subtitle": "Connect a warehouse and ship your first trusted dashboard this afternoon. Free to start, no card.",
+         "cta_text": "Start free",
+         "cta_url": "#pricing",
+         "cta2_text": "See customer stories",
+         "cta2_url": "#",
+         "cta2_bg": "transparent",
+         "cta2_color": "#ffffff",
+         "cta2_border": "rgba(54,214,195,.28)",
+         "bg": {
+          "type": "gradient",
+          "color": "rgba(54,214,195,.16)",
+          "color2": "rgba(182,232,90,.05)",
+          "angle": 160
+         },
+         "text_color": "#ffffff",
+         "accent_color": "#36d6c3",
+         "subtitle_color": "#aebec6",
+         "cta_bg": "#36d6c3",
+         "cta_color": "#070e11",
+         "cta_radius": {
+          "tl": 8,
+          "tr": 8,
+          "br": 8,
+          "bl": 8,
+          "linked": true
+         },
+         "cta_size": 15,
+         "headline_font_family": "sans-serif",
+         "headline_size": 50,
+         "headline_weight": "700",
+         "subtitle_size": 17,
+         "layout": "stack",
+         "vertical_align": "center",
+         "banner_radius": {
+          "tl": 24,
+          "tr": 24,
+          "br": 24,
+          "bl": 24,
+          "linked": true
+         },
+         "banner_padding": 80
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

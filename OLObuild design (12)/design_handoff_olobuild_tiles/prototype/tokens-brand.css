@@ -1,0 +1,43 @@
+/**
+ * OLObuild — Token colore: ruoli GLOBALI (cliente) + token di SISTEMA.
+ *
+ * ⚠️ Leggere TOKEN_MAPPING.md. Il GlobalColorsPanel genera var(--olo-color-<id>)
+ * SOLO per i 6 ruoli seed (primary/secondary/accent/dark/light/text) + custom.
+ * I token di SISTEMA qui sotto NON sono prodotti dal pannello: sono costanti
+ * (questo file è solo un fallback/seed globale, includibile a livello di sito).
+ */
+:root {
+  /* ── RUOLI GLOBALI (seed; normalmente gestiti dal GlobalColorsPanel/store) ──
+     Decisione cliente: primario = ROSSO BRAND. Secondario/accento coordinati
+     (navy profondo + ambra calda) per una palette seed armonica col rosso. */
+  --olo-color-primary:   #e1474f;
+  --olo-color-secondary: #16263d;
+  --olo-color-accent:    #f4a23b;
+  --olo-color-dark:      #16263d;
+  --olo-color-light:     #f8f9fa;
+  --olo-color-text:      #1f2937;
+
+  /* ── on-primary: gestito dallo store per CONTRASTO sul primario corrente ──
+     (rosso → bianco). Vedi contrastOn() in oloTileDefaults.js. */
+  --olo-color-on-primary:   #ffffff;
+
+  /* ── Neutri di sistema (fissi) ── */
+  --olo-color-text-soft:    #6b7280;
+  --olo-color-text-faint:   #94a3b8;
+  --olo-color-surface:      #ffffff;
+  --olo-color-surface-alt:  #f6f7f9;
+  --olo-color-border:       #e5e7eb;
+
+  /* ── Semantici: ORA personalizzabili dal cliente (4 ruoli globali). ──
+     Il cliente sceglie i 4 fg; la tinta "soft" è derivata via color-mix nei
+     consumer (vedi oloTileDefaults SYSTEM), quindi NON serve dichiararla qui. */
+  --olo-color-info:    #2563eb;
+  --olo-color-success: #15803d;
+  --olo-color-warning: #b45309;
+  --olo-color-error:   #b42318;
+}
+
+/* NB: il rosso brand di OLObuild (#e1474f) è ORA il primario seed di default
+   (decisione cliente). La scala completa 50→950 resta disponibile in
+   tokens-brand.css per stati/tinte. Il cliente può comunque sovrascrivere il
+   primario dal GlobalColorsPanel: i default tile seguiranno la sua scelta. */

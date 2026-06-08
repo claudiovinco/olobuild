@@ -35,6 +35,7 @@
 import { computed } from 'vue';
 import { useBuilderStore } from '@/stores/builder';
 import { rv } from '@/composables/useResponsiveValue';
+import { SHADOW } from '@/composables/oloTileDefaults';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
@@ -132,13 +133,8 @@ const textColStyle = computed(() => {
   return isHorizontal.value ? { flex: 1, minWidth: 0 } : {};
 });
 
-const shadowMap = {
-  none: 'none',
-  sm: '0 1px 2px rgba(0,0,0,.05)',
-  md: '0 4px 6px rgba(0,0,0,.1)',
-  lg: '0 10px 15px rgba(0,0,0,.1)',
-  xl: '0 20px 25px rgba(0,0,0,.1)',
-};
+// Lingua d'ombra condivisa (gemella di Olo_Tile_Utils::SHADOW_MAP lato PHP).
+const shadowMap = SHADOW;
 
 const hoverClass = computed(() => {
   const fx = s.value.hover_effect;

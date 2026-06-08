@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vapòre — terme &amp; spa · tema dimostrativo OLObuild</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Manrope:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared/olo-demo.css">
+<style>
+:root{
+  --bg:#E7EFEC; --bg-2:#DCE8E4; --ink:#1A2A26; --ink-2:#566E68; --ink-3:#8AA29B;
+  --teal:#3C7E77; --aqua:#6FB3AE; --pine:#21433C; --sand:#CDB892; --line:rgba(26,42,38,.15);
+  --tile-accent:#3C7E77; --tile-btn:#1A2A26;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Manrope',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+a{color:inherit;text-decoration:none;}
+.mar{font-family:'Marcellus',serif;}
+.mono{font-family:'JetBrains Mono',monospace;}
+.wrap{max-width:1180px;margin:0 auto;padding:0 44px;}
+.kick{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--teal);font-weight:500;display:inline-flex;align-items:center;gap:9px;}
+.kick::before{content:"";width:20px;height:1px;background:var(--sand);}
+
+/* nav */
+.nav{position:fixed;inset:0 0 auto 0;z-index:50;display:flex;align-items:center;gap:26px;padding:22px 44px;transition:all .35s;border-bottom:1px solid transparent;}
+.nav.solid{background:rgba(231,239,236,.9);backdrop-filter:blur(12px);border-color:var(--line);padding:14px 44px;}
+.brand{font-family:'Marcellus';font-size:27px;letter-spacing:.06em;}
+.nav-links{margin-left:auto;display:flex;gap:28px;font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;}
+.nav-links a{color:var(--ink-2);}.nav-links a:hover{color:var(--teal);}
+.nav-cta{border:1px solid var(--ink);padding:11px 22px;border-radius:100px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.05em;text-transform:uppercase;transition:all .2s;}
+.nav-cta:hover{background:var(--ink);color:var(--bg);}
+@media(max-width:880px){.nav-links{display:none;}}
+
+/* hero with water displacement */
+#hero{min-height:100vh;display:flex;align-items:flex-end;position:relative;overflow:hidden;}
+.hero-media{position:absolute;inset:0;z-index:0;}
+.hero-media .water{width:100%;height:100%;filter:url(#water);}
+.hero-media image-slot{width:100%;height:100%;display:block;}
+.hero-media::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(26,42,38,.15),rgba(26,42,38,.55));}
+.hero-inner{position:relative;z-index:2;padding:0 44px 9vh;max-width:1180px;margin:0 auto;width:100%;color:#F2F7F4;}
+.hero-inner .kick{color:#BfeDe4;}.hero-inner .kick::before{background:var(--sand);}
+.hero-h{font-family:'Marcellus';font-size:clamp(54px,11vw,176px);line-height:.94;letter-spacing:.01em;margin:18px 0 0;text-shadow:0 4px 30px rgba(0,0,0,.3);}
+.hero-sub{font-size:18px;color:rgba(242,247,244,.85);max-width:42ch;margin:22px 0 0;line-height:1.6;}
+.hint{margin-top:28px;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(242,247,244,.7);}
+
+/* treatments */
+#treat{padding:110px 0;}
+.tr-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:46px;border-top:1px solid var(--line);}
+.trt{padding:36px 24px 36px 0;border-right:1px solid var(--line);border-bottom:1px solid var(--line);}
+.trt:nth-child(4n){border-right:none;}
+.trt .n{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--teal);}
+.trt h3{font-family:'Marcellus';font-size:26px;margin:14px 0 10px;}
+.trt p{font-size:13.5px;color:var(--ink-2);line-height:1.6;margin:0;}
+@media(max-width:880px){.tr-grid{grid-template-columns:1fr 1fr;}.trt:nth-child(2n){border-right:none;}}
+
+/* waters gallery */
+#waters{padding:110px 0;background:var(--pine);color:#EAF3EF;}
+#waters .kick{color:var(--aqua);}#waters .kick::before{background:var(--sand);}
+.waters-h{font-family:'Marcellus';font-size:clamp(38px,5vw,76px);margin:14px 0 40px;line-height:.96;}
+.w-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px;}
+.wc{position:relative;overflow:hidden;border-radius:16px;}
+.wc image-slot{width:100%;height:100%;display:block;transition:transform .8s;}
+.wc:hover image-slot{transform:scale(1.06);}
+.wc::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(15,30,26,.7),transparent 55%);}
+.wc .cx{position:absolute;left:0;bottom:0;padding:22px;z-index:2;}
+.wc .nm{font-family:'Marcellus';font-size:24px;}
+.wc .ds{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--aqua);margin-top:5px;}
+.wc.big{grid-column:span 7;}.wc.big image-slot{aspect-ratio:16/11;}
+.wc.sm{grid-column:span 5;}.wc.sm image-slot{aspect-ratio:16/11;}
+.wc.full{grid-column:span 12;}.wc.full image-slot{aspect-ratio:21/7;}
+@media(max-width:880px){.wc.big,.wc.sm,.wc.full{grid-column:span 12;}}
+
+/* quote */
+.quote{padding:120px 0;text-align:center;}
+.quote p{font-family:'Marcellus';font-size:clamp(28px,4vw,52px);line-height:1.3;max-width:24ch;margin:0 auto;color:var(--ink);}
+.quote .who{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2);margin-top:26px;}
+
+/* stats */
+.stats{padding:80px 0;background:var(--bg-2);}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:30px;text-align:center;}
+.st .num{font-family:'Marcellus';font-size:clamp(46px,6vw,88px);line-height:1;color:var(--teal);}
+.st .lbl{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);margin-top:8px;}
+@media(max-width:760px){.stat-grid{grid-template-columns:1fr 1fr;gap:34px 20px;}}
+
+/* cta */
+#cta{padding:120px 0;text-align:center;}
+#cta h2{font-family:'Marcellus';font-size:clamp(44px,8vw,138px);line-height:.96;margin:16px 0 26px;}
+#cta h2 em{color:var(--teal);font-style:normal;}
+.btn{display:inline-flex;align-items:center;gap:10px;background:var(--teal);color:#fff;border:none;cursor:pointer;padding:16px 32px;border-radius:100px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.05em;text-transform:uppercase;transition:transform .15s;}
+.btn:hover{transform:translateY(-2px);}
+
+footer{border-top:1px solid var(--line);padding:34px 0;}
+.f-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px;}
+.f-row .fm{font-family:'Marcellus';font-size:26px;letter-spacing:.05em;}
+.olo-credit{color:var(--ink-2);}
+.f-meta{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-3);}
+.f-tiles{font-family:'JetBrains Mono',monospace;font-size:10.5px;line-height:1.9;color:var(--ink-3);margin-top:22px;max-width:96ch;}
+.f-tiles b{color:var(--ink-2);}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute"><defs>
+<filter id="water"><feTurbulence type="fractalNoise" baseFrequency="0.012 0.02" numOctaves="2" seed="7" result="n"><animate attributeName="baseFrequency" dur="22s" values="0.010 0.018;0.016 0.026;0.010 0.018" repeatCount="indefinite"/></feTurbulence><feDisplacementMap id="disp" in="SourceGraphic" in2="n" scale="14" xChannelSelector="R" yChannelSelector="G"/></filter>
+</defs></svg>
+
+<nav class="nav" id="nav" data-solid-at="80vh">
+  <div class="brand mar">Vapòre</div>
+  <div class="nav-links"><a href="#treat">Trattamenti</a><a href="#waters">Le acque</a><a href="#cta">Prenota</a></div>
+  <a class="nav-cta" href="#cta">Prenota il rituale</a>
+</nav>
+
+<section id="hero" data-tile="Hero · WaterDisplacement">
+  <div class="hero-media" data-tile="Image · WaterFilter">
+    <div class="water" id="water"><image-slot id="spa-hero" placeholder="piscina termale / vapore"></image-slot></div>
+  </div>
+  <div class="hero-inner">
+    <span class="kick">Terme &amp; spa · acque sorgive</span>
+    <h1 class="hero-h mar">Lasciati<br>andare</h1>
+    <p class="hero-sub">Acque calde, vapore e silenzio. Un rituale che scioglie il tempo. Passa il cursore sull'acqua — si increspa.</p>
+    <div class="hint">≈ muovi il mouse sull'immagine</div>
+  </div>
+</section>
+
+<section id="treat" data-tile="DescList · trattamenti">
+  <div class="wrap">
+    <span class="kick">I rituali</span>
+    <h2 class="mar" style="font-size:clamp(36px,5vw,68px);margin:14px 0 0;line-height:.96;">Trattamenti</h2>
+    <div class="tr-grid reveal">
+      <div class="trt"><div class="n">01</div><h3 class="mar">Percorso Kneipp</h3><p>Vasche calde e fredde alternate per riattivare la circolazione e la lucidità.</p></div>
+      <div class="trt"><div class="n">02</div><h3 class="mar">Bagno di vapore</h3><p>Hammam alle erbe officinali. Pelle che respira, mente che si svuota.</p></div>
+      <div class="trt"><div class="n">03</div><h3 class="mar">Massaggio sonoro</h3><p>Campane tibetane e oli caldi. Il corpo segue le vibrazioni dell'acqua.</p></div>
+      <div class="trt"><div class="n">04</div><h3 class="mar">Float room</h3><p>Galleggiamento in acqua salina. Zero peso, zero suono, solo tu.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="waters" data-tile="ProGallery · le acque">
+  <div class="wrap">
+    <span class="kick">Gli ambienti</span>
+    <h2 class="waters-h mar">Le nostre acque</h2>
+    <div class="w-grid reveal">
+      <div class="wc big"><image-slot id="w-1" placeholder="vasca calda"></image-slot><div class="cx"><div class="nm mar">Vasca Madre</div><div class="ds">38° · all'aperto</div></div></div>
+      <div class="wc sm"><image-slot id="w-2" placeholder="grotta vapore"></image-slot><div class="cx"><div class="nm mar">Grotta del Vapore</div><div class="ds">hammam · 45°</div></div></div>
+      <div class="wc full"><image-slot id="w-3" placeholder="piscina panoramica"></image-slot><div class="cx"><div class="nm mar">Infinity panoramica</div><div class="ds">vista valle · al tramonto</div></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="quote" data-tile="Quotation">
+  <div class="wrap">
+    <p class="mar">«L'acqua non ha fretta, eppure arriva ovunque. Qui impari a fare lo stesso.»</p>
+    <div class="who">Maestro del rituale</div>
+  </div>
+</section>
+
+<section class="stats" data-tile="Counter">
+  <div class="wrap">
+    <div class="stat-grid reveal-stagger">
+      <div class="st"><div class="num mar"><span class="count" data-count="38" data-suffix="°">0</span></div><div class="lbl">Acqua sorgiva</div></div>
+      <div class="st"><div class="num mar"><span class="count" data-count="9">0</span></div><div class="lbl">Vasche &amp; ambienti</div></div>
+      <div class="st"><div class="num mar"><span class="count" data-count="2000" data-suffix="m²">0</span></div><div class="lbl">Di percorso benessere</div></div>
+      <div class="st"><div class="num mar"><span class="count" data-count="100" data-suffix="%">0</span></div><div class="lbl">Silenzio garantito</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="cta" data-tile="AnimatedHeading">
+  <div class="wrap">
+    <span class="kick" style="justify-content:center">Concediti mezza giornata</span>
+    <h2 class="mar">Entra <em>nell'acqua</em></h2>
+    <a class="btn" href="#">Prenota il rituale →</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="f-row">
+      <div class="fm mar">Vapòre</div>
+      <div class="olo-credit"><span class="olo-mk"><b></b><i></i><b></b></span>Costruito con <b class="hl">OLObuild</b> — zero codice</div>
+    </div>
+    <div class="f-tiles"><b>Tile usati (9):</b> Hero · WaterDisplacement (filtro SVG feTurbulence + feDisplacementMap animato, increspatura al cursore) · DescList trattamenti · ProGallery acque · Quotation · Counter · AnimatedHeading · Image · DarkMode — nessuna prenotazione.</div>
+    <div class="f-row" style="margin-top:22px"><span class="f-meta">© 2026 Vapòre terme — tema dimostrativo</span><span class="f-meta">OLOtheme · demo · 68 — Terme / Spa</span></div>
+  </div>
+</footer>
+
+<button id="tiletoggle"><span class="sq"></span><span class="t">Mostra tile</span></button>
+
+<script src="image-slot.js"></script>
+<script src="shared/olo-demo.js"></script>
+<script>
+/* ===== ripple: bump displacement scale on cursor move over hero ===== */
+(function(){
+  var disp=document.getElementById('disp'),hero=document.getElementById('hero');
+  if(!disp||!hero)return;
+  var target=12,cur=12;
+  hero.addEventListener('pointermove',function(){target=34;});
+  hero.addEventListener('pointerleave',function(){target=12;});
+  function loop(){cur+=(target-cur)*0.06;target+=(12-target)*0.04;disp.setAttribute('scale',cur.toFixed(1));requestAnimationFrame(loop);}loop();
+})();
+</script>
+</body>
+</html>

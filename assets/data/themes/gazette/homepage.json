@@ -1,0 +1,823 @@
+[
+ {
+  "id": "gz-se-4",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "none"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#16161a"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "gz-ro-3",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "gz-co-2",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "gz-newsticker-1",
+        "type": "newsticker",
+        "settings": {
+         "show_label": true,
+         "label_text": "Latest",
+         "label_shape": "arrow",
+         "label_position": "left",
+         "label_bg": "#9a2b22",
+         "label_color": "#ffffff",
+         "animation_type": "marquee",
+         "marquee_direction": "left",
+         "marquee_duration": 38,
+         "marquee_gap": 44,
+         "bg_color": "#16161a",
+         "text_color": "rgba(243,240,233,.82)",
+         "height": "42",
+         "font_size": 13,
+         "font_family": "serif",
+         "font_weight": "400",
+         "separator": " — ",
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         },
+         "items": [
+          {
+           "id": "gz-t1",
+           "title": "The slow return of the city night market",
+           "url": "#",
+           "badge": "",
+           "icon": "",
+           "timestamp": ""
+          },
+          {
+           "id": "gz-t2",
+           "title": "A painter who only works at dawn",
+           "url": "#",
+           "badge": "",
+           "icon": "",
+           "timestamp": ""
+          },
+          {
+           "id": "gz-t3",
+           "title": "What we lost when restaurants got quiet",
+           "url": "#",
+           "badge": "",
+           "icon": "",
+           "timestamp": ""
+          },
+          {
+           "id": "gz-t4",
+           "title": "The last letterpress in the old quarter",
+           "url": "#",
+           "badge": "",
+           "icon": "",
+           "timestamp": ""
+          }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "gz-se-8",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#f3f0e9"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "gz-ro-7",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "gz-co-6",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "gz-hero-split-5",
+        "type": "featuredstory",
+        "settings": {
+         "kicker_text": "The Essay · Cities",
+         "headline_text": "The slow return of the city night market",
+         "headline_url": "OLOtheme - Gazette - Article.html",
+         "standfirst": "For a decade they were left for dead. Now, under the same lanterns, a new generation is rebuilding the night market — one stall, one recipe, one argument at a time.",
+         "byline_pre": "By",
+         "byline_name": "Elena Russo",
+         "byline_meta": "18 min read",
+         "cover_image": "",
+         "cover_url": "OLOtheme - Gazette - Article.html",
+         "cover_label": "cover — empty night market, lanterns, long exposure",
+         "cta1_text": "",
+         "cta1_url": "#",
+         "cta2_text": "",
+         "cta2_url": "#",
+         "media_side": "left",
+         "col_ratio": "1.15fr .85fr",
+         "cover_aspect": "4 / 3",
+         "media_radius": 0,
+         "standfirst_italic": false,
+         "placeholder_dark": true,
+         "bg_color": "#f3f0e9",
+         "kicker_color": "#9a2b22",
+         "headline_color": "#16161a",
+         "accent_color": "#9a2b22",
+         "standfirst_color": "#2c2c30",
+         "byline_color": "#76746e",
+         "byline_name_color": "#16161a",
+         "media_bg": "#e9e4d8",
+         "cta_solid_bg": "#16161a",
+         "cta_solid_text": "#f3f0e9",
+         "heading_font": "'Libre Caslon Display', Georgia, serif",
+         "serif_font": "'Libre Caslon Text', Georgia, serif",
+         "sans_font": "'Mulish', -apple-system, sans-serif"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "gz-se-15",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#f3f0e9"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "gz-ro-11",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "gz-co-10",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "gz-section-header-9",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": false,
+         "headline_lines": [
+          {
+           "text": "This week",
+           "color": "#16161a",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 24,
+         "headline_font_weight": "400",
+         "headline_align": "left",
+         "headline_inline": false,
+         "tagline_show": true,
+         "tagline_text": "All stories →",
+         "tagline_text_color": "#9a2b22",
+         "tagline_text_size": 11.5,
+         "tagline_text_italic": false,
+         "layout": "stack",
+         "gap": 0
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "gz-ro-14",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "gz-co-13",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "gz-info-cards-12",
+        "type": "info-cards",
+        "settings": {
+         "container_bg": {
+          "type": "solid",
+          "color": "transparent"
+         },
+         "container_padding": 0,
+         "container_gap": 0,
+         "columns": 3,
+         "items_gap": 30,
+         "card_bg": {
+          "type": "solid",
+          "color": "#faf8f2"
+         },
+         "card_color": "#76746e",
+         "card_radius": {
+          "tl": 3,
+          "tr": 3,
+          "br": 3,
+          "bl": 3,
+          "linked": true
+         },
+         "card_padding": 24,
+         "show_icon": false,
+         "show_counter": true,
+         "show_counter_label": true,
+         "show_arrow": false,
+         "show_footer": true,
+         "show_media": false,
+         "counter_shape": "plain",
+         "counter_color": "#9a2b22",
+         "counter_size": 11,
+         "title_font_family": "serif",
+         "title_size": 22,
+         "title_weight": "400",
+         "title_italic": false,
+         "title_color": "#16161a",
+         "description_size": 14.5,
+         "card_hover_effect": "lift",
+         "items": [
+          {
+           "counter": "Profile · Art",
+           "counter_label": "",
+           "title": "The painter who only works at dawn",
+           "description": "Margit Halász hasn’t touched a brush after 9am in thirty years. We spent a week watching the light she chases — and the discipline behind it.",
+           "footer_text": "By Tomas Veber · 12 min",
+           "footer_dot_color": "#9a2b22"
+          },
+          {
+           "counter": "Essay · Food",
+           "counter_label": "",
+           "title": "What we lost when restaurants got quiet",
+           "description": "On noise, intimacy, and the strange grief of a half-empty dining room.",
+           "footer_text": "By A. Demir · 9 min",
+           "footer_dot_color": "#9a2b22"
+          },
+          {
+           "counter": "Craft · Cities",
+           "counter_label": "",
+           "title": "The last letterpress in the old quarter",
+           "description": "One family, four tonnes of lead type, and a refusal to go digital.",
+           "footer_text": "By J. Okoro · 7 min",
+           "footer_dot_color": "#9a2b22"
+          }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "gz-se-25",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#faf8f2"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "gz-ro-18",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "gz-co-17",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "gz-section-header-16",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": false,
+         "headline_lines": [
+          {
+           "text": "More from the issue",
+           "color": "#16161a",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 24,
+         "headline_font_weight": "400",
+         "headline_align": "left",
+         "headline_inline": false,
+         "tagline_show": false,
+         "layout": "stack",
+         "gap": 0
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "gz-ro-24",
+    "type": "row",
+    "settings": {
+     "gap": 48,
+     "vertical_align": "stretch"
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "gz-co-20",
+      "type": "column",
+      "settings": {
+       "width": "2-3"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "gz-info-cards-19",
+        "type": "info-cards",
+        "settings": {
+         "container_bg": {
+          "type": "solid",
+          "color": "transparent"
+         },
+         "container_padding": 0,
+         "container_gap": 0,
+         "columns": 2,
+         "items_gap": 20,
+         "card_bg": {
+          "type": "solid",
+          "color": "#ffffff"
+         },
+         "card_color": "#76746e",
+         "card_radius": {
+          "tl": 3,
+          "tr": 3,
+          "br": 3,
+          "bl": 3,
+          "linked": true
+         },
+         "card_padding": 22,
+         "show_icon": false,
+         "show_counter": true,
+         "show_counter_label": false,
+         "show_arrow": false,
+         "show_footer": true,
+         "show_media": false,
+         "counter_shape": "plain",
+         "counter_color": "#9a2b22",
+         "counter_size": 11,
+         "title_font_family": "serif",
+         "title_size": 20,
+         "title_weight": "400",
+         "title_italic": false,
+         "title_color": "#16161a",
+         "description_size": 14,
+         "card_hover_effect": "lift",
+         "items": [
+          {
+           "counter": "History",
+           "counter_label": "",
+           "title": "A short history of the public bath",
+           "description": "How cities learned to be clean together — and what they traded for it.",
+           "footer_text": "By R. Bianchi · 11 min",
+           "footer_dot_color": "#9a2b22"
+          },
+          {
+           "counter": "Ideas",
+           "counter_label": "",
+           "title": "The case for the second-hand bookshop",
+           "description": "Against the algorithm: in praise of finding what you weren’t looking for.",
+           "footer_text": "By L. Haddad · 8 min",
+           "footer_dot_color": "#9a2b22"
+          }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "gz-co-23",
+      "type": "column",
+      "settings": {
+       "width": "1-3"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "gz-section-header-21",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": false,
+         "headline_lines": [
+          {
+           "text": "Most read",
+           "color": "#16161a",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 24,
+         "headline_font_weight": "400",
+         "headline_align": "left",
+         "headline_inline": false,
+         "tagline_show": false,
+         "layout": "stack",
+         "gap": 0
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "gz-worklist-22",
+        "type": "worklist",
+        "settings": {
+         "items": [
+          {
+           "number": "1",
+           "title": "Why your grandmother’s kitchen had no recipes",
+           "category": "Food",
+           "year": "6 min",
+           "link_url": "#"
+          },
+          {
+           "number": "2",
+           "title": "The roundabout that started a revolution",
+           "category": "Cities",
+           "year": "10 min",
+           "link_url": "#"
+          },
+          {
+           "number": "3",
+           "title": "Forgery, and the men who loved being fooled",
+           "category": "Art",
+           "year": "14 min",
+           "link_url": "#"
+          },
+          {
+           "number": "4",
+           "title": "In defence of doing one thing slowly",
+           "category": "Ideas",
+           "year": "5 min",
+           "link_url": "#"
+          }
+         ],
+         "divider_color": "#d8d2c4",
+         "row_padding_y": 18,
+         "row_hover_bg": "#f3f0e9",
+         "hover_indent": 12,
+         "number_color": "#c7c0ae",
+         "number_size": 16,
+         "title_font_family": "heading",
+         "title_color": "#16161a",
+         "title_size": 18,
+         "title_weight": "400",
+         "show_category": true,
+         "category_color": "#9a2b22",
+         "category_size": 11,
+         "show_year": true,
+         "year_color": "#76746e",
+         "year_size": 12,
+         "show_arrow": true,
+         "arrow_color": "#16161a",
+         "mono_font_family": ""
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "gz-se-32",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#f3f0e9"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "gz-ro-28",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "gz-co-27",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "gz-section-header-26",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": false,
+         "headline_lines": [
+          {
+           "text": "Departments",
+           "color": "#16161a",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 24,
+         "headline_font_weight": "400",
+         "headline_align": "left",
+         "headline_inline": false,
+         "tagline_show": false,
+         "layout": "stack",
+         "gap": 0
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "gz-ro-31",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "gz-co-30",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "gz-info-cards-29",
+        "type": "info-cards",
+        "settings": {
+         "container_bg": {
+          "type": "solid",
+          "color": "transparent"
+         },
+         "container_padding": 0,
+         "container_gap": 0,
+         "columns": 4,
+         "items_gap": 14,
+         "card_bg": {
+          "type": "solid",
+          "color": "transparent"
+         },
+         "card_border": "1px solid #c7c0ae",
+         "card_color": "#76746e",
+         "card_radius": {
+          "tl": 3,
+          "tr": 3,
+          "br": 3,
+          "bl": 3,
+          "linked": true
+         },
+         "card_padding": 24,
+         "show_icon": false,
+         "show_counter": false,
+         "show_counter_label": false,
+         "show_arrow": false,
+         "show_footer": false,
+         "show_media": false,
+         "title_font_family": "serif",
+         "title_size": 24,
+         "title_weight": "400",
+         "title_italic": false,
+         "title_color": "#16161a",
+         "description_size": 12,
+         "description_color": "#76746e",
+         "card_hover_effect": "fill",
+         "card_hover_bg": "#16161a",
+         "card_hover_text": "#f3f0e9",
+         "items": [
+          {
+           "title": "Art",
+           "description": "Exhibitions, studios, the made world"
+          },
+          {
+           "title": "Cities",
+           "description": "How we live close together"
+          },
+          {
+           "title": "Food",
+           "description": "Kitchens, markets, the table"
+          },
+          {
+           "title": "Ideas",
+           "description": "Arguments worth the time"
+          }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "gz-se-36",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#16161a"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "gz-ro-35",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "gz-co-34",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "gz-newsletter-33",
+        "type": "newsletter",
+        "settings": {
+         "title": "One long read, every weekend",
+         "subtitle": "No noise, no notifications — just one carefully chosen story in your inbox each Saturday morning, free.",
+         "icon_type": "emoji",
+         "icon_name": "The Saturday letter",
+         "layout": "horizontal",
+         "show_name": false,
+         "email_placeholder": "you@example.com",
+         "button_text": "Subscribe",
+         "button_icon": false,
+         "privacy_text": "",
+         "max_width": "640",
+         "alignment": "center",
+         "bg_color": "transparent",
+         "border_radius": 0,
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         },
+         "title_size": "46",
+         "title_weight": "400",
+         "title_color": "#f3f0e9",
+         "subtitle_size": "16",
+         "subtitle_color": "rgba(243,240,233,.70)",
+         "icon_size": "13",
+         "icon_color": "#d8a59f",
+         "input_bg": "rgba(243,240,233,.08)",
+         "input_color": "#f3f0e9",
+         "input_border": "rgba(243,240,233,.22)",
+         "input_focus_border": "#f3f0e9",
+         "input_radius": 3,
+         "input_height": "50",
+         "btn_bg": "#f3f0e9",
+         "btn_color": "#16161a",
+         "btn_hover_bg": "#e9e4d8",
+         "btn_radius": 2,
+         "btn_font_size": "12",
+         "btn_font_weight": "700"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

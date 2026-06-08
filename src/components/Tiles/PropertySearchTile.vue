@@ -21,6 +21,7 @@
 <script setup>
 import { computed } from 'vue';
 import { t } from '@/i18n';
+import { SHADOW } from '@/composables/oloTileDefaults';
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 const defaults = { layout:'horizontal', bg:'', border_radius:12, shadow:'md', padding:24, accent_color:'', btn_radius:8 };
 const s = computed(() => ({ ...defaults, ...props.settings }));
@@ -29,7 +30,7 @@ const fields = [
   { label:'Tipo', value:'Vendita' }, { label:'Tipologia', value:'Appartamento' },
   { label:'Città', value:'Trento' }, { label:'Prezzo max', value:'€ 500.000' },
 ];
-const shadowMap = { none:'none', sm:'0 1px 3px rgba(0,0,0,0.1)', md:'0 4px 12px rgba(0,0,0,0.1)', lg:'0 8px 24px rgba(0,0,0,0.15)' };
+const shadowMap = SHADOW;
 const wrapStyle = computed(() => ({ background: s.value.bg || 'var(--olo-color-surface, #ffffff)', borderRadius: s.value.border_radius+'px', boxShadow: shadowMap[s.value.shadow]||shadowMap.md, padding: s.value.padding+'px' }));
 const formStyle = computed(() => {
   if (s.value.layout === 'vertical') return { display:'flex', flexDirection:'column', gap:'16px' };

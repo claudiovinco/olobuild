@@ -54,33 +54,36 @@ class Olo_Tile_Utils {
 
     /**
      * Standard shadow presets (card / element level).
+     * Lingua d'ombra unica "claude design": due strati navy-tinted (un contact
+     * shadow stretto + un ambient morbido) invece del nero piatto a strato singolo.
+     * sm/md sono i valori esatti dei REFERENCE_*.html; lg/xl ne sono l'estensione coerente.
      */
     const SHADOW_MAP = [
         'none' => 'none',
-        'sm'   => '0 1px 2px rgba(0,0,0,.08)',
-        'md'   => '0 4px 6px rgba(0,0,0,.12)',
-        'lg'   => '0 10px 15px rgba(0,0,0,.12)',
-        'xl'   => '0 20px 25px rgba(0,0,0,.15)',
+        'sm'   => '0 1px 2px rgba(16,24,40,.06), 0 6px 16px -10px rgba(16,24,40,.18)',
+        'md'   => '0 2px 4px rgba(16,24,40,.06), 0 14px 28px -12px rgba(22,38,61,.28)',
+        'lg'   => '0 8px 24px -6px rgba(16,24,40,.18), 0 18px 40px -12px rgba(22,38,61,.30)',
+        'xl'   => '0 12px 32px -8px rgba(16,24,40,.20), 0 28px 56px -14px rgba(22,38,61,.34)',
     ];
 
     /**
-     * Photo / avatar shadow presets (slightly more opaque).
+     * Photo / avatar shadow presets (slightly more present). Stesso tono navy.
      */
     const SHADOW_PHOTO = [
         'none' => 'none',
-        'sm'   => '0 2px 6px rgba(0,0,0,.2)',
-        'md'   => '0 4px 12px rgba(0,0,0,.3)',
-        'lg'   => '0 8px 24px rgba(0,0,0,.4)',
+        'sm'   => '0 2px 6px -1px rgba(16,24,40,.16)',
+        'md'   => '0 6px 16px -4px rgba(16,24,40,.24)',
+        'lg'   => '0 12px 28px -6px rgba(22,38,61,.30)',
     ];
 
     /**
-     * Panel / dropdown shadow presets (larger, softer).
+     * Panel / dropdown shadow presets (larger, softer). Stesso tono navy.
      */
     const SHADOW_PANEL = [
         'none' => 'none',
-        'sm'   => '0 4px 12px rgba(0,0,0,.08)',
-        'md'   => '0 8px 30px rgba(0,0,0,.12)',
-        'lg'   => '0 16px 48px rgba(0,0,0,.18)',
+        'sm'   => '0 4px 12px -2px rgba(16,24,40,.10)',
+        'md'   => '0 8px 30px -6px rgba(16,24,40,.16)',
+        'lg'   => '0 16px 48px -12px rgba(22,38,61,.22)',
     ];
 
     /**
@@ -90,10 +93,10 @@ class Olo_Tile_Utils {
      */
     const SHADOW_BUTTON = [
         'none' => 'none',
-        'sm'   => '0 2px 4px rgba(0,0,0,.18)',
-        'md'   => '0 4px 12px rgba(0,0,0,.25)',
-        'lg'   => '0 8px 24px rgba(0,0,0,.30)',
-        'xl'   => '0 16px 32px rgba(0,0,0,.35)',
+        'sm'   => '0 1px 2px rgba(15,23,42,.12), 0 4px 12px -4px rgba(15,23,42,.22)',
+        'md'   => '0 2px 4px rgba(15,23,42,.14), 0 8px 20px -6px rgba(15,23,42,.30)',
+        'lg'   => '0 4px 8px -2px rgba(15,23,42,.16), 0 14px 30px -8px rgba(15,23,42,.36)',
+        'xl'   => '0 8px 16px -4px rgba(15,23,42,.18), 0 24px 48px -12px rgba(15,23,42,.42)',
     ];
 
     /**

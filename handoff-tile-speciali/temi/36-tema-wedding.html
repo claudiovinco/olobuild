@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Atelier Sì — wedding planner · tema dimostrativo OLObuild</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pinyon+Script&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300&family=Manrope:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared/olo-demo.css">
+<style>
+:root{
+  --blush:#F7EEE9; --blush-2:#F0E0D8; --ivory:#FBF7F2; --rose:#C98B7A; --rose-d:#A86C5C;
+  --sage:#8A9A7B; --sage-d:#6E7E60; --gold:#B89150;
+  --ink:#3C302B; --ink-2:#6E5F58; --ink-3:#A2938B; --line:#E8DAD1;
+  --tile-accent:#C98B7A; --tile-btn:#3C302B;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;background:var(--ivory);color:var(--ink);font-family:'Manrope',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+a{color:inherit;text-decoration:none;}
+.fr{font-family:'Fraunces',Georgia,serif;font-weight:300;}
+.script{font-family:'Pinyon Script',cursive;}
+.mono{font-family:'JetBrains Mono',monospace;}
+.wrap{max-width:1180px;margin:0 auto;padding:0 46px;}
+.kick{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--rose);font-weight:600;display:inline-flex;align-items:center;gap:11px;}
+.kick::before{content:"";width:24px;height:1px;background:var(--rose);}
+
+/* nav */
+.nav{position:fixed;inset:0 0 auto 0;z-index:60;display:flex;align-items:center;gap:26px;padding:24px 46px;transition:all .35s;border-bottom:1px solid transparent;}
+.nav.solid{background:rgba(251,247,242,.92);backdrop-filter:blur(14px);border-color:var(--line);padding:15px 46px;}
+.brand{font-family:'Fraunces',serif;font-weight:300;font-size:25px;letter-spacing:.04em;}
+.brand em{font-family:'Pinyon Script',cursive;font-style:normal;color:var(--rose);font-size:30px;}
+.nav-links{margin-left:auto;display:flex;gap:28px;font-size:13.5px;font-weight:500;color:var(--ink-2);}
+.nav-links a:hover{color:var(--rose);}
+.nav-cta{border:1px solid var(--rose);color:var(--rose);padding:10px 18px;border-radius:100px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;transition:all .2s;}
+.nav-cta:hover{background:var(--rose);color:#fff;}
+@media(max-width:880px){.nav-links{display:none;}}
+
+/* hero */
+#hero{min-height:100vh;position:relative;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;background:
+  radial-gradient(70% 60% at 50% 30%,var(--blush),var(--ivory));}
+#petals{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none;}
+.hero-in{position:relative;z-index:2;padding-top:60px;}
+.hero-ey{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--rose);margin-bottom:18px;}
+.hero-script{font-family:'Pinyon Script',cursive;font-size:clamp(60px,12vw,170px);line-height:.9;color:var(--rose);margin:0;}
+.hero-h{font-family:'Fraunces',serif;font-weight:300;font-size:clamp(30px,4.4vw,58px);letter-spacing:.04em;text-transform:uppercase;margin:6px 0 0;color:var(--ink);}
+.hero-sub{font-size:18px;color:var(--ink-2);max-width:40ch;margin:28px auto 32px;line-height:1.6;}
+.btn{display:inline-flex;align-items:center;gap:9px;background:var(--rose);color:#fff;border:none;cursor:pointer;padding:15px 30px;border-radius:100px;font-family:inherit;font-size:14px;font-weight:600;transition:all .2s;}
+.btn:hover{background:var(--rose-d);transform:translateY(-1px);}
+.btn.sage{background:transparent;color:var(--sage-d);border:1px solid var(--sage);}
+.btn.sage:hover{background:var(--sage);color:#fff;}
+.hero-rings{margin:38px auto 0;width:130px;}
+.hero-rings path,.hero-rings circle{fill:none;stroke:var(--gold);stroke-width:1.6;}
+
+/* intro signature */
+#intro{padding:120px 0;text-align:center;}
+#intro .sig{width:min(440px,80vw);margin:0 auto 10px;}
+#intro .sig path{fill:none;stroke:var(--rose);stroke-width:2.4;stroke-linecap:round;}
+#intro p{font-family:'Fraunces',serif;font-weight:300;font-size:clamp(24px,3.4vw,40px);line-height:1.35;max-width:24ch;margin:30px auto 0;}
+#intro p em{font-family:'Pinyon Script',cursive;font-style:normal;color:var(--rose);font-size:1.4em;}
+
+/* services */
+#serv{padding:110px 0;background:var(--blush);}
+.sec-h{text-align:center;max-width:580px;margin:0 auto 50px;}
+.sec-h h2{font-family:'Fraunces',serif;font-weight:300;font-size:clamp(34px,4.4vw,58px);margin:16px 0 12px;letter-spacing:.01em;}
+.sec-h p{font-size:16px;color:var(--ink-2);line-height:1.6;margin:0;}
+.serv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+.svc{background:var(--ivory);border:1px solid var(--line);border-radius:18px;padding:34px 30px;text-align:center;transition:transform .25s,box-shadow .25s;}
+.svc:hover{transform:translateY(-6px);box-shadow:0 24px 44px -24px rgba(60,48,43,.25);}
+.svc .no{font-family:'Pinyon Script',cursive;font-size:46px;color:var(--rose);line-height:.8;}
+.svc h3{font-family:'Fraunces',serif;font-weight:400;font-size:23px;margin:12px 0 10px;}
+.svc p{font-size:14px;color:var(--ink-2);line-height:1.6;margin:0;}
+@media(max-width:880px){.serv-grid{grid-template-columns:1fr;}}
+
+/* timeline */
+#story{padding:120px 0;}
+.tl-h{text-align:center;margin-bottom:60px;}
+.tl-h h2{font-family:'Fraunces',serif;font-weight:300;font-size:clamp(34px,4.4vw,58px);margin:16px 0 0;}
+.timeline{max-width:760px;margin:0 auto;position:relative;}
+.timeline::before{content:"";position:absolute;left:50%;top:0;bottom:0;width:1px;background:var(--line);transform:translateX(-.5px);}
+.tnode{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-bottom:50px;}
+.tnode .ph image-slot{width:100%;aspect-ratio:4/3;display:block;border-radius:14px;}
+.tnode .tx{display:flex;flex-direction:column;justify-content:center;}
+.tnode:nth-child(even) .ph{order:2;}
+.tnode .step{font-family:'Pinyon Script',cursive;font-size:40px;color:var(--rose);line-height:.8;}
+.tnode h3{font-family:'Fraunces',serif;font-weight:400;font-size:25px;margin:8px 0 8px;}
+.tnode p{font-size:14.5px;color:var(--ink-2);line-height:1.6;margin:0;}
+.tnode::after{content:"";position:absolute;left:50%;top:30px;width:13px;height:13px;border-radius:50%;background:var(--rose);border:3px solid var(--ivory);transform:translateX(-50%);box-shadow:0 0 0 1px var(--line);}
+@media(max-width:760px){.timeline::before{left:18px;}.tnode{grid-template-columns:1fr;gap:14px;padding-left:46px;}.tnode .ph{order:0!important;}.tnode::after{left:18px;}}
+
+/* gallery */
+#gallery{padding:110px 0;background:var(--blush);}
+.gal{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:180px;gap:14px;}
+.gc{overflow:hidden;border-radius:14px;background:var(--blush-2);}
+.gc image-slot{width:100%;height:100%;display:block;transition:transform .6s;}
+.gc:hover image-slot{transform:scale(1.06);}
+.gc.a{grid-column:span 2;grid-row:span 2;}
+.gc.b{grid-column:span 2;}
+@media(max-width:880px){.gal{grid-template-columns:1fr 1fr;}.gc.a{grid-column:span 2;}}
+
+/* quote */
+#quote{padding:120px 0;text-align:center;}
+#quote .q{font-family:'Fraunces',serif;font-weight:300;font-style:italic;font-size:clamp(24px,3.4vw,42px);line-height:1.4;max-width:24ch;margin:0 auto;}
+#quote .who{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--rose);margin-top:30px;}
+.stars{color:var(--gold);font-size:20px;letter-spacing:3px;margin-bottom:24px;}
+
+/* cta */
+#cta{padding:0 0 120px;}
+.cta-card{background:var(--sage);color:#fff;border-radius:26px;padding:70px 60px;text-align:center;}
+.cta-card .script{font-size:clamp(46px,7vw,90px);line-height:.9;color:#fff;}
+.cta-card p{font-size:17px;color:rgba(255,255,255,.9);max-width:42ch;margin:14px auto 28px;}
+.cta-card .btn{background:#fff;color:var(--sage-d);}
+.cta-card .btn:hover{background:var(--ivory);}
+
+footer{background:var(--ink);color:rgba(251,247,242,.62);padding:56px 0 34px;}
+.f-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px;}
+.f-row .fm{font-family:'Fraunces',serif;font-size:24px;color:var(--ivory);}
+.f-row .fm em{font-family:'Pinyon Script',cursive;color:#E6B3A2;}
+.olo-credit{color:rgba(251,247,242,.74);border-color:rgba(251,247,242,.18);background:rgba(255,255,255,.05);}
+.f-meta{font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(251,247,242,.42);}
+.f-tiles{font-family:'JetBrains Mono',monospace;font-size:10.5px;line-height:1.9;color:rgba(251,247,242,.42);margin-top:22px;max-width:92ch;}
+.f-tiles b{color:rgba(251,247,242,.7);}
+</style>
+</head>
+<body>
+
+<nav class="nav" id="nav" data-solid-at="70vh">
+  <div class="brand">Atelier <em>Sì</em></div>
+  <div class="nav-links"><a href="#serv">Servizi</a><a href="#story">Come lavoriamo</a><a href="#gallery">Matrimoni</a><a href="#cta">Contatti</a></div>
+  <a class="nav-cta" href="#cta">Raccontaci il vostro sì</a>
+</nav>
+
+<section id="hero" data-tile="Hero + ParticleFX">
+  <canvas id="petals" data-tile="ParticleFX · petali"></canvas>
+  <div class="hero-in"><div class="wrap">
+    <div class="hero-ey">Wedding planner · Italia & destination</div>
+    <h1 class="hero-script">Per sempre</h1>
+    <div class="hero-h fr">comincia da un dettaglio</div>
+    <p class="hero-sub">Disegniamo matrimoni che vi somigliano. Voi sognate, noi ci occupiamo di ogni singola cosa.</p>
+    <div style="display:flex;gap:13px;justify-content:center;flex-wrap:wrap"><a class="btn" href="#cta">Prenota una call →</a><a class="btn sage" href="#gallery">I nostri matrimoni</a></div>
+    <svg class="hero-rings" viewBox="0 0 130 60"><circle cx="52" cy="30" r="20"/><circle cx="78" cy="30" r="20"/></svg>
+  </div></div>
+</section>
+
+<section id="intro" data-tile="SVG Animator · firma">
+  <div class="wrap">
+    <span class="kick" style="justify-content:center">Il nostro tocco</span>
+    <svg class="sig" id="sig" viewBox="0 0 400 90"><path id="sigPath" d="M14,60 C30,20 48,18 52,46 C55,66 40,72 44,52 C48,34 70,30 84,52 C92,66 80,40 100,38 C120,36 116,64 132,60 C150,56 150,26 166,30 C182,34 176,66 196,60 C220,52 214,30 236,34 C252,37 246,64 268,58 C292,52 286,28 312,36 C332,42 330,60 352,56 C372,52 378,40 388,44"/></svg>
+    <p class="fr">Ogni coppia ha la sua storia. Noi la trasformiamo in un <em>giorno</em> indimenticabile.</p>
+  </div>
+</section>
+
+<section id="serv" data-tile="IconBox · servizi">
+  <div class="wrap">
+    <div class="sec-h"><span class="kick" style="justify-content:center">Cosa facciamo</span><h2 class="fr">Dal sogno al «sì».</h2><p>Tre formule, un'unica cura maniacale per il dettaglio.</p></div>
+    <div class="serv-grid reveal-stagger">
+      <div class="svc"><div class="no">i</div><h3 class="fr">Full planning</h3><p>Vi seguiamo dall'idea al giorno stesso: location, fornitori, budget, timeline e regia completa.</p></div>
+      <div class="svc"><div class="no">ii</div><h3 class="fr">Coordinamento</h3><p>Avete organizzato tutto voi? Gestiamo noi la giornata, perché possiate solo godervela.</p></div>
+      <div class="svc"><div class="no">iii</div><h3 class="fr">Destination</h3><p>Matrimoni in Italia per coppie da tutto il mondo: dal lago alla Costiera alle Dolomiti.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="story" data-tile="Timeline · percorso">
+  <div class="wrap">
+    <div class="tl-h"><span class="kick" style="justify-content:center">Il percorso</span><h2 class="fr">Come arriviamo al grande giorno</h2></div>
+    <div class="timeline">
+      <div class="tnode reveal"><div class="ph"><image-slot id="ws-t1" placeholder="primo incontro"></image-slot></div><div class="tx"><div class="step">i</div><h3 class="fr">Ci conosciamo</h3><p>Una call o un caffè per capire chi siete, cosa sognate e che budget avete in mente.</p></div></div>
+      <div class="tnode reveal"><div class="ph"><image-slot id="ws-t2" placeholder="concept e mood"></image-slot></div><div class="tx"><div class="step">ii</div><h3 class="fr">Concept & mood</h3><p>Disegniamo lo stile: palette, fiori, allestimenti. Vi presentiamo una visione su misura.</p></div></div>
+      <div class="tnode reveal"><div class="ph"><image-slot id="ws-t3" placeholder="fornitori"></image-slot></div><div class="tx"><div class="step">iii</div><h3 class="fr">Selezione fornitori</h3><p>Location, catering, foto, musica: scegliamo insieme il meglio per voi, e trattiamo noi.</p></div></div>
+      <div class="tnode reveal"><div class="ph"><image-slot id="ws-t4" placeholder="il giorno"></image-slot></div><div class="tx"><div class="step">iv</div><h3 class="fr">Il vostro giorno</h3><p>Regia invisibile dall'alba all'ultimo ballo. Voi presenti solo al vostro amore.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="gallery" data-tile="ProGallery · matrimoni">
+  <div class="wrap">
+    <div class="sec-h"><span class="kick" style="justify-content:center">Portfolio</span><h2 class="fr">Alcuni dei nostri «sì»</h2></div>
+    <div class="gal reveal">
+      <div class="gc a"><image-slot id="ws-g1" placeholder="cerimonia"></image-slot></div>
+      <div class="gc b"><image-slot id="ws-g2" placeholder="allestimento"></image-slot></div>
+      <div class="gc"><image-slot id="ws-g3" placeholder="bouquet"></image-slot></div>
+      <div class="gc"><image-slot id="ws-g4" placeholder="tavola"></image-slot></div>
+      <div class="gc b"><image-slot id="ws-g5" placeholder="festa"></image-slot></div>
+    </div>
+  </div>
+</section>
+
+<section id="quote" data-tile="Testimonial">
+  <div class="wrap">
+    <div class="stars">★★★★★</div>
+    <p class="q fr">«Ci siamo svegliati la mattina del matrimonio senza una sola preoccupazione. Hanno pensato a tutto, anche a ciò che non sapevamo di volere.»</p>
+    <div class="who">— Giulia &amp; Lorenzo · Villa sul Garda</div>
+  </div>
+</section>
+
+<section id="cta" data-tile="AnimatedHeading">
+  <div class="wrap">
+    <div class="cta-card">
+      <div class="script">Raccontateci il vostro sì</div>
+      <p>Una prima chiacchierata gratuita per capire come possiamo rendere unico il vostro giorno.</p>
+      <a class="btn" href="mailto:ciao@ateliersi.it">Scrivici →</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="f-row">
+      <div class="fm fr">Atelier <em>Sì</em></div>
+      <div class="olo-credit"><span class="olo-mk"><b></b><i></i><b></b></span>Costruito con <b class="hl">OLObuild</b> — zero codice</div>
+    </div>
+    <div class="f-tiles"><b>Tile usati (10):</b> Hero · ParticleFX (petali) · SVG Animator (firma) · IconBox · Timeline · ProGallery · Testimonial · AnimatedHeading · Image · ShapeDivider — nessuna prenotazione.</div>
+    <div class="f-row" style="margin-top:22px"><span class="f-meta">© 2026 Atelier Sì — tema dimostrativo</span><span class="f-meta">OLOtheme · demo · 36 — Wedding</span></div>
+  </div>
+</footer>
+
+<button id="tiletoggle"><span class="sq"></span><span class="t">Mostra tile</span></button>
+
+<script src="image-slot.js"></script>
+<script src="shared/olo-demo.js"></script>
+<script>
+/* petals */
+(function(){
+  var c=document.getElementById('petals'),x=c.getContext('2d'),W,H,P=[];
+  function size(){W=c.width=c.offsetWidth;H=c.height=c.offsetHeight;}
+  size();window.addEventListener('resize',size);
+  var COL=['#E8C4B8','#D9A593','#F0D9CE','#C98B7A','#EBD3B0'];
+  for(var i=0;i<34;i++)P.push(mk());
+  function mk(){return {x:Math.random()*W,y:Math.random()*-H,r:5+Math.random()*7,s:.5+Math.random()*1.1,a:Math.random()*Math.PI*2,sw:.6+Math.random()*1.4,col:COL[i%5||Math.floor(Math.random()*5)]};}
+  function loop(){
+    x.clearRect(0,0,W,H);
+    P.forEach(function(p){
+      p.y+=p.s;p.a+=0.02;p.x+=Math.sin(p.a)*p.sw;
+      if(p.y>H+20){p.y=-20;p.x=Math.random()*W;}
+      x.save();x.translate(p.x,p.y);x.rotate(p.a);
+      x.fillStyle=p.col;x.globalAlpha=.8;
+      x.beginPath();x.ellipse(0,0,p.r,p.r*.55,0,0,Math.PI*2);x.fill();
+      x.restore();
+    });
+    requestAnimationFrame(loop);
+  }
+  loop();
+})();
+/* signature draw on view */
+(function(){
+  var path=document.getElementById('sigPath');if(!path)return;
+  var len=path.getTotalLength();
+  path.style.strokeDasharray=len;path.style.strokeDashoffset=len;
+  path.style.transition='stroke-dashoffset 2.4s cubic-bezier(.6,.05,.2,1)';
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){path.style.strokeDashoffset=0;io.unobserve(e.target);}});},{threshold:.5});
+  io.observe(path);
+})();
+</script>
+</body>
+</html>

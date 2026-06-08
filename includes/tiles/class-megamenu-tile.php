@@ -17,6 +17,16 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
         'panel_templates'    => [],
         // Logo
         'logo_image'         => '',
+        'logo_text'          => '',
+        'logo_dot'           => false,
+        'logo_text_color'    => '',
+        'logo_text_size'     => '19',
+        'logo_crest'         => '',
+        'logo_crest_bg'      => '',
+        'logo_crest_color'   => '',
+        'nav_phone'          => '',
+        'nav_phone_url'      => '',
+        'nav_phone_color'    => '',
         'logo_width'         => '140',
         'logo_min_height'    => '0',
         'logo_position'      => 'left',
@@ -593,6 +603,13 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
             <?php elseif ( $logo_pos === 'split' ) : ?>order: 50; margin: 0 <?php echo $gap * 2; ?>px;
             <?php endif; ?>
         }
+        .<?php echo $uid; ?> .olo-mm-logo--text { gap: 10px; }
+        .<?php echo $uid; ?> .olo-mm-logo-text { font-family: var(--olo-font-family-heading, 'DM Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif); font-weight: 700; letter-spacing: -0.02em; line-height: 1; color: inherit; white-space: nowrap; }
+        .<?php echo $uid; ?> .olo-mm-logo-dot { width: 9px; height: 9px; border-radius: 50%; background: currentColor; flex: none; }
+        .<?php echo $uid; ?> .olo-mm-crest { display: inline-grid; place-items: center; width: 34px; height: 38px; font-family: var(--olo-font-family-heading, 'Archivo',sans-serif); font-weight: 900; font-size: 13px; letter-spacing: .02em; flex: none; border-radius: 14px 14px 16px 16px/14px 14px 22px 22px; box-shadow: inset 0 0 0 2px rgba(255,255,255,.2); }
+        .<?php echo $uid; ?> .olo-mm-tel-li { display: flex; align-items: center; }
+        .<?php echo $uid; ?> .olo-mm-tel { font-weight: 700; font-size: 14px; letter-spacing: .02em; white-space: nowrap; }
+        .<?php echo $uid; ?> .olo-mm-tel-li::after { display: none !important; }
         <?php $logo_min_h = intval( $s['logo_min_height'] ?? 0 ); ?>
         .<?php echo $uid; ?> .olo-mm-logo img {
             <?php if ( $logo_min_h > 0 ) : ?>
@@ -1960,6 +1977,14 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
                 <li role="none"><a href="<?php echo esc_url( $url ); ?>" data-text="<?php echo esc_attr( $label ); ?>"<?php echo $tgt; ?>><?php echo esc_html( $label ); ?></a></li>
             <?php endif;
         }
+        $phone = trim( (string) ( $s['nav_phone'] ?? '' ) );
+        if ( $phone !== '' ) {
+            $purl = trim( (string) ( $s['nav_phone_url'] ?? '' ) );
+            $pcol = $this->safe_color_css( $s['nav_phone_color'] ?? '' ) ?: 'var(--olo-color-primary)';
+            $href = $purl !== '' ? $purl : ( 'tel:' . preg_replace( '/[^0-9+]/', '', $phone ) );
+            $li   = $context === 'mobile' ? '<li>' : '<li role="none" class="olo-mm-tel-li">';
+            echo $li . '<a class="olo-mm-tel" href="' . esc_url( $href ) . '" style="color:' . esc_attr( $pcol ) . '">' . esc_html( $phone ) . '</a></li>';
+        }
     }
 
     /* ─── Social Icons ─── */
@@ -2005,6 +2030,15 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
         $logo_link   = esc_url( $s['logo_link'] ?: home_url('/') );
         $logo_sticky = esc_url( $s['logo_sticky'] ?? '' );
         $mob_logo    = esc_url( $s['mobile_logo'] ?? '' );
+        // Logo testuale (wordmark): usato quando non c'è un'immagine logo
+        $logo_text   = trim( (string) ( $s['logo_text'] ?? '' ) );
+        $logo_dot    = ! empty( $s['logo_dot'] );
+        $ltc_raw     = trim( (string) ( $s['logo_text_color'] ?? '' ) );
+        $logo_txt_c  = preg_match( '/^#[0-9a-fA-F]{3,8}$/', $ltc_raw ) || preg_match( '/^(rgb|hsl|var)/i', $ltc_raw ) ? $ltc_raw : '';
+        $logo_txt_sz = max( 12, min( 40, absint( $s['logo_text_size'] ?? 19 ) ) );
+        $logo_crest  = trim( (string) ( $s['logo_crest'] ?? '' ) );
+        $crest_bg    = $this->safe_color_css( $s['logo_crest_bg'] ?? '' ) ?: 'var(--olo-color-primary, #c8ff3c)';
+        $crest_col   = $this->safe_color_css( $s['logo_crest_color'] ?? '' ) ?: 'var(--olo-color-primary-contrast, #0a2a1e)';
         $mob_search  = ! empty( $s['mobile_search'] );
         $mob_bar_logo= ! empty( $s['mobile_bar_logo'] );
         $search_icon = ! empty( $s['search_icon'] );
@@ -2127,7 +2161,7 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
                 <?php // Mobile logo (shown only on mobile via CSS) ?>
                 <?php if ( $mob_bar_logo ) : ?>
                 <a class="olo-mm-mobile-logo" href="<?php echo $logo_link; ?>">
-                    <img src="<?php echo $mob_logo ?: $logo_img; ?>" alt="<?php echo esc_attr( olo_t( 'Logo' ) ); ?>">
+                    <?php if ( $mob_logo ?: $logo_img ) : ?><img src="<?php echo $mob_logo ?: $logo_img; ?>" alt="<?php echo esc_attr( olo_t( 'Logo' ) ); ?>"><?php elseif ( $logo_text !== '' ) : ?><?php if ( $logo_dot ) : ?><span class="olo-mm-logo-dot"></span><?php endif; ?><span class="olo-mm-logo-text" style="font-size:<?php echo $logo_txt_sz; ?>px<?php echo $logo_txt_c ? ';color:' . esc_attr( $logo_txt_c ) : ''; ?>"><?php echo esc_html( $logo_text ); ?></span><?php endif; ?>
                 </a>
                 <?php endif; ?>
 
@@ -2158,6 +2192,10 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
                 <a class="olo-mm-logo" href="<?php echo $logo_link; ?>">
                     <img class="olo-mm-logo-default" src="<?php echo $logo_img; ?>" alt="<?php echo esc_attr( olo_t( 'Logo' ) ); ?>">
                     <?php if ( $logo_sticky ) : ?><img class="olo-mm-logo-sticky" src="<?php echo $logo_sticky; ?>" alt="<?php echo esc_attr( olo_t( 'Logo' ) ); ?>" style="display:none;"><?php endif; ?>
+                </a>
+                <?php elseif ( $logo_text !== '' ) : ?>
+                <a class="olo-mm-logo olo-mm-logo--text" href="<?php echo $logo_link; ?>"<?php echo $logo_txt_c ? ' style="color:' . esc_attr( $logo_txt_c ) . '"' : ''; ?>>
+                    <?php if ( $logo_crest !== '' ) : ?><span class="olo-mm-crest" style="background:<?php echo $crest_bg; ?>;color:<?php echo $crest_col; ?>"><?php echo esc_html( $logo_crest ); ?></span><?php endif; ?><?php if ( $logo_dot ) : ?><span class="olo-mm-logo-dot"></span><?php endif; ?><span class="olo-mm-logo-text" style="font-size:<?php echo $logo_txt_sz; ?>px"><?php echo esc_html( $logo_text ); ?></span>
                 </a>
                 <?php endif; ?>
 
@@ -2359,6 +2397,8 @@ class Olo_MegaMenu_Tile extends Olo_Tile_Base {
                 <div class="olo-mm-fs-header">
                     <?php if ( $logo_img ) : ?>
                     <a class="olo-mm-fs-logo" href="<?php echo $logo_link; ?>"><img src="<?php echo $logo_img; ?>" alt="<?php echo esc_attr( olo_t( 'Logo' ) ); ?>" loading="lazy" /></a>
+                    <?php elseif ( $logo_text !== '' ) : ?>
+                    <a class="olo-mm-fs-logo olo-mm-logo--text" href="<?php echo $logo_link; ?>"<?php echo $logo_txt_c ? ' style="color:' . esc_attr( $logo_txt_c ) . '"' : ''; ?>><?php if ( $logo_dot ) : ?><span class="olo-mm-logo-dot"></span><?php endif; ?><span class="olo-mm-logo-text" style="font-size:<?php echo $logo_txt_sz; ?>px"><?php echo esc_html( $logo_text ); ?></span></a>
                     <?php else : ?><div></div><?php endif; ?>
                     <button class="olo-mm-fs-close" type="button" aria-label="<?php echo esc_attr( olo_t( 'Chiudi' ) ); ?>" onclick="this.closest('.olo-megamenu').classList.remove('olo-mm-mob-active');this.closest('.olo-megamenu').querySelector('.olo-mm-hamburger').classList.remove('olo-mm-ham-open');document.body.style.overflow=''">
                         <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>

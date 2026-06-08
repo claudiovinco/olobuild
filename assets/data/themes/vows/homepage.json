@@ -1,0 +1,776 @@
+[
+ {
+  "id": "vo-se-4",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "full",
+   "padding_top": 0,
+   "padding_bottom": 0
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#2a2620"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "vo-ro-3",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "vo-co-2",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "vo-hero-split-1",
+        "type": "imagehero",
+        "settings": {
+         "eyebrow_text": "Wedding planning & design",
+         "eyebrow_dot": false,
+         "headline_text": "A day that feels",
+         "accent_text": "you two.",
+         "headline_tail": "",
+         "accent_italic": true,
+         "stack_lines": true,
+         "subhead": "We plan and design weddings that are unmistakably yours — beautiful, calm, and run so smoothly you actually get to enjoy them.",
+         "cta1_text": "Check our date",
+         "cta1_url": "#enquire",
+         "cta2_text": "Real weddings",
+         "cta2_url": "#weddings",
+         "meta_text": "",
+         "scroll_hint": "",
+         "bg_image": "",
+         "bg_color": "#2a2620",
+         "media_label": "wedding — couple, golden hour, full bleed",
+         "text_position": "center",
+         "text_align": "center",
+         "content_width": 720,
+         "aspect_ratio": "21/10",
+         "min_height": 560,
+         "heading_font": "serif",
+         "overlay_color": "#1b1813",
+         "overlay_top": 0.5,
+         "overlay_bottom": 0.95,
+         "overlay_sides": false,
+         "accent": "#cbab6a",
+         "accent_on": "#1b1813",
+         "text_color": "#ffffff",
+         "sub_color": "#f3ecdf",
+         "eyebrow_color": "#cbab6a"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "vo-se-9",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#312c25"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "vo-ro-8",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "vo-co-7",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "vo-section-header-5",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "Next on our calendar",
+         "eyebrow_color": "#cbab6a",
+         "eyebrow_dot_color": "#cbab6a",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "A & J, married at",
+           "color": "#f3ecdf",
+           "italic": false
+          },
+          {
+           "text": "Villa Lume",
+           "color": "#cbab6a",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 48,
+         "headline_font_weight": "500",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": true,
+         "tagline_text": "19 September 2026 · Lake Garda",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#8a7f6c",
+         "tagline_text_size": 13,
+         "layout": "center",
+         "gap": 12
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "vo-countdown-6",
+        "type": "countdown",
+        "settings": {
+         "countdown_type": "date",
+         "target_date": "2026-09-19T15:00",
+         "show_days": true,
+         "show_hours": true,
+         "show_minutes": true,
+         "show_seconds": true,
+         "label_days": "Days",
+         "label_hours": "Hours",
+         "label_minutes": "Minutes",
+         "label_seconds": "Seconds",
+         "separator": "",
+         "display_mode": "inline",
+         "accent_color": "#cbab6a",
+         "text_color": "#8a7f6c",
+         "separator_color": "transparent",
+         "number_font_size": "72",
+         "number_font_weight": "500",
+         "label_font_size": "11",
+         "label_font_weight": "500",
+         "item_min_width": "90",
+         "item_bg_color": "transparent",
+         "item_radius": "0",
+         "item_padding": "0",
+         "bg_color": "transparent",
+         "tile_padding": {
+          "top": 24,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         },
+         "expire_action": "none"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "vo-se-16",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#2a2620"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "vo-ro-12",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "vo-co-11",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "vo-section-header-10",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "How we help",
+         "eyebrow_color": "#cbab6a",
+         "eyebrow_dot_color": "#cbab6a",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "Three ways to ",
+           "color": "#f3ecdf",
+           "italic": false
+          },
+          {
+           "text": "say yes",
+           "color": "#cbab6a",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 52,
+         "headline_font_weight": "500",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": false,
+         "tagline_text": "",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#8a7f6c",
+         "tagline_text_size": 16,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "vo-ro-15",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "vo-co-14",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "vo-process-steps-13",
+        "type": "process-steps",
+        "settings": {
+         "columns": 3,
+         "gap": 16,
+         "align": "center",
+         "auto_number": false,
+         "item_gap": 10,
+         "number_style": "plain",
+         "number_color": "#cbab6a",
+         "number_size": 20,
+         "number_font": "serif",
+         "number_weight": "500",
+         "title_color": "#f3ecdf",
+         "title_size": 25,
+         "title_font": "serif",
+         "title_weight": "500",
+         "desc_color": "#8a7f6c",
+         "desc_size": 14,
+         "card_bg": "#383228",
+         "card_border": "1px solid rgba(243,236,223,.13)",
+         "card_radius": {
+          "tl": 14,
+          "tr": 14,
+          "br": 14,
+          "bl": 14,
+          "linked": true
+         },
+         "card_padding": 32,
+         "items": [
+          {
+           "number": "i.",
+           "title": "Full planning",
+           "description": "From the first idea to the last dance — venue, design, suppliers and the day itself, all handled.\n\nfrom €9,000"
+          },
+          {
+           "number": "ii.",
+           "title": "Partial planning",
+           "description": "You've made a start; we bring the structure, the contacts and the calm to carry it home.\n\nfrom €4,500"
+          },
+          {
+           "number": "iii.",
+           "title": "On-the-day",
+           "description": "You plan it, we run it — so you and your family are guests, not coordinators.\n\nfrom €1,800"
+          }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "vo-se-23",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#312c25"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "vo-ro-19",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "vo-co-18",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "vo-section-header-17",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "A few we've loved",
+         "eyebrow_color": "#cbab6a",
+         "eyebrow_dot_color": "#cbab6a",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "Recently ",
+           "color": "#f3ecdf",
+           "italic": false
+          },
+          {
+           "text": "celebrated",
+           "color": "#cbab6a",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 52,
+         "headline_font_weight": "500",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": false,
+         "tagline_text": "",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#8a7f6c",
+         "tagline_text_size": 16,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "vo-ro-22",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "vo-co-21",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "vo-workgrid-20",
+        "type": "workgrid",
+        "settings": {
+         "columns": 3,
+         "items_gap": 16,
+         "media_aspect": "4/3",
+         "media_tall_aspect": "4/5",
+         "media_bg": "#383228",
+         "media_label_color": "#cbab6a",
+         "hover_zoom": true,
+         "title_font_family": "heading",
+         "title_color": "#f3ecdf",
+         "title_size": 22,
+         "title_weight": "500",
+         "meta_color": "#8a7f6c",
+         "meta_size": 12,
+         "show_desc": false,
+         "desc_color": "#8a7f6c",
+         "desc_size": 15,
+         "mono_font_family": "",
+         "items": [
+          {
+           "image": "",
+           "media_label": "ceremony arch",
+           "title": "",
+           "meta": "",
+           "description": "",
+           "link_url": "",
+           "tall": true
+          },
+          {
+           "image": "",
+           "media_label": "tablescape",
+           "title": "",
+           "meta": "",
+           "description": "",
+           "link_url": "",
+           "tall": false
+          },
+          {
+           "image": "",
+           "media_label": "first dance",
+           "title": "",
+           "meta": "",
+           "description": "",
+           "link_url": "",
+           "tall": false
+          },
+          {
+           "image": "",
+           "media_label": "reception, long table",
+           "title": "",
+           "meta": "",
+           "description": "",
+           "link_url": "",
+           "tall": false
+          },
+          {
+           "image": "",
+           "media_label": "florals",
+           "title": "",
+           "meta": "",
+           "description": "",
+           "link_url": "",
+           "tall": false
+          },
+          {
+           "image": "",
+           "media_label": "couple portrait",
+           "title": "",
+           "meta": "",
+           "description": "",
+           "link_url": "",
+           "tall": false
+          }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "vo-se-27",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#2a2620"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "vo-ro-26",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "vo-co-25",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "vo-testimonial-24",
+        "type": "testimonial",
+        "settings": {
+         "quote": "\"From the first call, it felt like handing the worry to a friend with impeccable taste. Our day was perfect, and we were actually present for it.\"",
+         "author_name": "Amara & James",
+         "author_role": "married 2025",
+         "rating": "0",
+         "layout": "single",
+         "show_line": false,
+         "bg_color": "transparent",
+         "text_color": "#f3ecdf",
+         "border_radius": "0",
+         "avatar": ""
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "vo-se-33",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#312c25"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "vo-ro-32",
+    "type": "row",
+    "settings": {
+     "gap": 56
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "vo-co-29",
+      "type": "column",
+      "settings": {
+       "width": "1-2"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "vo-section-header-28",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "Enquire",
+         "eyebrow_color": "#cbab6a",
+         "eyebrow_dot_color": "#cbab6a",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "Is your date",
+           "color": "#f3ecdf",
+           "italic": false
+          },
+          {
+           "text": "free?",
+           "color": "#cbab6a",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 52,
+         "headline_font_weight": "500",
+         "headline_align": "left",
+         "headline_inline": true,
+         "tagline_show": true,
+         "tagline_text": "We take a limited number of weddings each year so every couple gets our full attention. Tell us a little and we'll be in touch within two days.",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#8a7f6c",
+         "tagline_text_size": 16,
+         "layout": "stack",
+         "gap": 20
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "vo-co-31",
+      "type": "column",
+      "settings": {
+       "width": "1-2"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "vo-form-30",
+        "type": "form",
+        "settings": {
+         "fields": [
+          {
+           "id": "f-1",
+           "field_type": "text",
+           "label": "Your names",
+           "placeholder": "You & yours",
+           "name": "names",
+           "required": true,
+           "width": "1-2",
+           "options": "",
+           "icon": ""
+          },
+          {
+           "id": "f-2",
+           "field_type": "date",
+           "label": "Wedding date",
+           "placeholder": "",
+           "name": "date",
+           "required": false,
+           "width": "1-2",
+           "options": "",
+           "icon": ""
+          },
+          {
+           "id": "f-3",
+           "field_type": "select",
+           "label": "Guests",
+           "placeholder": "",
+           "name": "guests",
+           "required": false,
+           "width": "1-2",
+           "options": "Under 50\n50–120\n120–200\n200+",
+           "icon": ""
+          },
+          {
+           "id": "f-4",
+           "field_type": "select",
+           "label": "Service",
+           "placeholder": "",
+           "name": "service",
+           "required": false,
+           "width": "1-2",
+           "options": "Full planning\nPartial\nOn-the-day",
+           "icon": ""
+          },
+          {
+           "id": "f-5",
+           "field_type": "email",
+           "label": "Email",
+           "placeholder": "you@example.com",
+           "name": "email",
+           "required": true,
+           "width": "1-1",
+           "options": "",
+           "icon": "mail"
+          }
+         ],
+         "email_to": "hello@vows.studio",
+         "email_subject": "New wedding enquiry",
+         "success_message": "Thank you! We'll be in touch within two days.",
+         "submit_text": "Check our availability",
+         "submit_alignment": "center",
+         "submit_full_width": true,
+         "form_layout": "stacked",
+         "input_bg": "#2a2620",
+         "input_color": "#f3ecdf",
+         "input_border_color": "rgba(203,171,106,.42)",
+         "input_border_width": "1",
+         "input_border_style": "box",
+         "input_radius": "8",
+         "input_focus_border": "#cbab6a",
+         "input_focus_shadow": false,
+         "input_size": "default",
+         "label_color": "#8a7f6c",
+         "label_size": "11",
+         "label_weight": "500",
+         "label_transform": "uppercase",
+         "label_letter_spacing": "0.12em",
+         "gap": "18",
+         "submit_bg": "#cbab6a",
+         "submit_color": "#1b1813",
+         "submit_hover_bg": "#d9bd82",
+         "submit_radius": "999",
+         "submit_font_size": "12",
+         "submit_font_weight": "600",
+         "submit_letter_spacing": "0.14",
+         "submit_text_transform": "uppercase",
+         "bg": {
+          "type": "solid",
+          "color": "#383228"
+         },
+         "tile_padding": {
+          "top": 32,
+          "right": 32,
+          "bottom": 32,
+          "left": 32
+         }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

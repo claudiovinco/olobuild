@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sòla — skincare naturale · tema dimostrativo OLObuild</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared/olo-demo.css">
+<style>
+:root{
+  --sand:#F3EEE4; --sand-2:#E9E1D2; --cream:#FBF8F1; --sage:#A7B89A; --sage-d:#7E9270; --clay:#C98E6E; --clay-d:#A8704F;
+  --ink:#37352E; --ink-2:#6E6A5E; --ink-3:#A29C8C; --line:#E2D9C8;
+  --glass:rgba(255,255,255,.45); --glass-b:rgba(255,255,255,.6);
+  --tile-accent:#7E9270; --tile-btn:#37352E;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;background:var(--sand);color:var(--ink);font-family:'Manrope',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+a{color:inherit;text-decoration:none;}
+.fr{font-family:'Fraunces',Georgia,serif;font-weight:400;}
+.mono{font-family:'JetBrains Mono',monospace;}
+.wrap{max-width:1180px;margin:0 auto;padding:0 44px;}
+.kick{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--sage-d);font-weight:600;display:inline-flex;align-items:center;gap:9px;}
+.kick::before{content:"";width:24px;height:1px;background:var(--clay);}
+
+/* nav */
+.nav{position:fixed;inset:0 0 auto 0;z-index:50;display:flex;align-items:center;gap:26px;padding:24px 44px;transition:all .35s;border-bottom:1px solid transparent;}
+.nav.solid{background:rgba(243,238,228,.8);backdrop-filter:blur(16px);border-color:var(--line);padding:15px 44px;}
+.brand{font-family:'Fraunces',serif;font-weight:500;font-size:27px;letter-spacing:.14em;padding-left:.14em;}
+.nav-links{margin-left:auto;display:flex;gap:28px;font-size:13.5px;font-weight:500;color:var(--ink-2);}
+.nav-links a:hover{color:var(--sage-d);}
+.nav-cta{border:1px solid var(--ink);color:var(--ink);padding:10px 20px;border-radius:100px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;transition:all .2s;}
+.nav-cta:hover{background:var(--ink);color:var(--cream);}
+@media(max-width:880px){.nav-links{display:none;}}
+
+/* hero with morphing blob */
+#hero{min-height:100vh;display:grid;grid-template-columns:1.05fr .95fr;align-items:center;gap:50px;padding:130px 44px 60px;max-width:1180px;margin:0 auto;position:relative;}
+.hero-ey{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--clay-d);margin-bottom:22px;}
+.hero-h{font-family:'Fraunces',serif;font-weight:400;font-size:clamp(48px,7vw,116px);line-height:.96;letter-spacing:-.01em;margin:0;}
+.hero-h em{font-style:italic;color:var(--sage-d);}
+.hero-sub{font-size:18px;line-height:1.65;color:var(--ink-2);max-width:36ch;margin:26px 0 32px;}
+.btn{display:inline-flex;align-items:center;gap:9px;background:var(--ink);color:var(--cream);border:none;cursor:pointer;padding:15px 28px;border-radius:100px;font-family:inherit;font-size:14px;font-weight:600;transition:all .2s;}
+.btn:hover{background:#26241E;transform:translateY(-1px);}
+.btn.sage{background:var(--sage-d);}.btn.sage:hover{background:#6A7D5E;}
+.hero-blobwrap{position:relative;display:flex;align-items:center;justify-content:center;min-height:60vh;}
+.blob-bg{position:absolute;width:min(440px,80vw);aspect-ratio:1;background:linear-gradient(135deg,var(--sage),var(--clay));
+  border-radius:42% 58% 63% 37%/45% 38% 62% 55%;animation:morph 12s ease-in-out infinite;filter:blur(1px);opacity:.85;}
+@keyframes morph{0%,100%{border-radius:42% 58% 63% 37%/45% 38% 62% 55%;transform:rotate(0deg) scale(1);}33%{border-radius:60% 40% 38% 62%/56% 60% 40% 44%;transform:rotate(8deg) scale(1.04);}66%{border-radius:38% 62% 56% 44%/62% 42% 58% 38%;transform:rotate(-6deg) scale(.98);}}
+.hero-product{position:relative;z-index:2;width:54%;}
+.hero-product image-slot{width:100%;aspect-ratio:3/4;display:block;border-radius:18px;}
+@media(max-width:880px){#hero{grid-template-columns:1fr;gap:30px;}.hero-blobwrap{min-height:46vh;}}
+
+/* glass utility */
+.glass{background:var(--glass);backdrop-filter:blur(16px) saturate(1.2);-webkit-backdrop-filter:blur(16px) saturate(1.2);border:1px solid var(--glass-b);border-radius:22px;}
+
+/* ritual */
+#ritual{padding:120px 0;}
+.sec-h{text-align:center;max-width:600px;margin:0 auto 50px;}
+.sec-h h2{font-family:'Fraunces',serif;font-weight:400;font-size:clamp(34px,4.6vw,60px);margin:16px 0 12px;}
+.sec-h p{font-size:16px;color:var(--ink-2);line-height:1.6;margin:0;}
+.ritual-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+.step{padding:34px 30px;position:relative;}
+.step .no{font-family:'Fraunces',serif;font-style:italic;font-size:44px;color:var(--clay);line-height:.8;}
+.step h3{font-family:'Fraunces',serif;font-weight:500;font-size:23px;margin:14px 0 10px;}
+.step p{font-size:14px;color:var(--ink-2);line-height:1.6;margin:0;}
+@media(max-width:880px){.ritual-grid{grid-template-columns:1fr;}}
+
+/* ingredients */
+#ingredients{padding:110px 0;background:linear-gradient(180deg,var(--sand),var(--sand-2));}
+.ing-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
+.ing{padding:28px 24px;text-align:center;}
+.ing .ic{width:64px;height:64px;border-radius:50%;margin:0 auto 18px;background:linear-gradient(135deg,var(--sage),var(--clay));position:relative;animation:morph 10s ease-in-out infinite;}
+.ing:nth-child(2) .ic{animation-delay:-2s;}.ing:nth-child(3) .ic{animation-delay:-4s;}.ing:nth-child(4) .ic{animation-delay:-6s;}
+.ing h3{font-family:'Fraunces',serif;font-weight:500;font-size:20px;margin:0 0 8px;}
+.ing p{font-size:13px;color:var(--ink-2);line-height:1.5;margin:0;}
+@media(max-width:880px){.ing-grid{grid-template-columns:1fr 1fr;}}
+
+/* products */
+#shop{padding:110px 0;}
+.shop-h{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:42px;flex-wrap:wrap;gap:18px;}
+.shop-h h2{font-family:'Fraunces',serif;font-weight:400;font-size:clamp(34px,4.4vw,58px);margin:14px 0 0;}
+.prod-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
+.prod{background:var(--cream);border:1px solid var(--line);border-radius:22px;overflow:hidden;transition:transform .25s,box-shadow .25s;}
+.prod:hover{transform:translateY(-6px);box-shadow:0 22px 44px -22px rgba(55,53,46,.2);}
+.prod .pimg{aspect-ratio:4/5;background:var(--sand-2);}
+.prod .pimg image-slot{width:100%;height:100%;display:block;}
+.prod .px{padding:24px;}
+.prod .pt2{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--clay-d);}
+.prod h3{font-family:'Fraunces',serif;font-weight:500;font-size:22px;margin:9px 0 8px;}
+.prod p{font-size:13.5px;color:var(--ink-2);line-height:1.5;margin:0 0 14px;min-height:40px;}
+.prod .pf{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);padding-top:14px;}
+.prod .pr{font-family:'Fraunces',serif;font-weight:500;font-size:20px;}
+@media(max-width:880px){.prod-grid{grid-template-columns:1fr;max-width:420px;margin:0 auto;}}
+
+/* promise */
+#promise{padding:90px 0;background:var(--sage);color:var(--cream);}
+.promise-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:30px;text-align:center;}
+.pm .num{font-family:'Fraunces',serif;font-weight:400;font-size:clamp(40px,5vw,72px);line-height:1;}
+.pm .lbl{font-size:13.5px;color:rgba(251,248,241,.82);margin-top:10px;}
+@media(max-width:760px){.promise-grid{grid-template-columns:1fr 1fr;gap:34px 20px;}}
+
+/* cta */
+#cta{padding:120px 0;text-align:center;}
+#cta h2{font-family:'Fraunces',serif;font-weight:400;font-size:clamp(34px,5vw,68px);margin:14px 0 16px;}
+#cta h2 em{font-style:italic;color:var(--sage-d);}
+#cta p{color:var(--ink-2);max-width:42ch;margin:0 auto 28px;font-size:17px;}
+
+footer{background:var(--ink);color:rgba(251,248,241,.62);padding:56px 0 34px;}
+.f-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px;}
+.f-row .fm{font-family:'Fraunces',serif;font-size:24px;letter-spacing:.12em;color:var(--cream);}
+.olo-credit{color:rgba(251,248,241,.74);border-color:rgba(251,248,241,.18);background:rgba(255,255,255,.05);}
+.f-meta{font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(251,248,241,.42);}
+.f-tiles{font-family:'JetBrains Mono',monospace;font-size:10.5px;line-height:1.9;color:rgba(251,248,241,.42);margin-top:22px;max-width:92ch;}
+.f-tiles b{color:rgba(251,248,241,.7);}
+</style>
+</head>
+<body>
+
+<nav class="nav" id="nav" data-solid-at="70vh">
+  <div class="brand">SÒLA</div>
+  <div class="nav-links"><a href="#ritual">Il rituale</a><a href="#ingredients">Ingredienti</a><a href="#shop">Prodotti</a></div>
+  <a class="nav-cta" href="#shop">Acquista</a>
+</nav>
+
+<section id="hero" data-tile="Hero + BlobFX">
+  <div>
+    <div class="hero-ey">Skincare naturale · vegana · clean</div>
+    <h1 class="hero-h">La pelle<br>che <em>respira.</em></h1>
+    <p class="hero-sub">Formule essenziali a base vegetale, senza profumi sintetici. Pochi ingredienti, scelti bene, che funzionano.</p>
+    <div style="display:flex;gap:13px;flex-wrap:wrap"><a class="btn" href="#shop">Scopri i prodotti →</a><a class="btn sage" href="#ritual">Il rituale</a></div>
+  </div>
+  <div class="hero-blobwrap" data-tile="Image">
+    <div class="blob-bg"></div>
+    <div class="hero-product"><image-slot id="so-hero" placeholder="flacone prodotto"></image-slot></div>
+  </div>
+</section>
+
+<section id="ritual" data-tile="IconBox · rituale">
+  <div class="wrap">
+    <div class="sec-h"><span class="kick" style="justify-content:center">Il rituale Sòla</span><h2 class="fr">Tre gesti, mattina e sera.</h2><p>Una routine minimale che la tua pelle imparerà ad amare.</p></div>
+    <div class="ritual-grid reveal-stagger">
+      <div class="step glass"><div class="no fr">01</div><h3 class="fr">Deterge</h3><p>Gel detergente delicato che pulisce senza seccare. Adatto ogni giorno.</p></div>
+      <div class="step glass"><div class="no fr">02</div><h3 class="fr">Idrata</h3><p>Siero all'acido ialuronico vegetale per rimpolpare e levigare.</p></div>
+      <div class="step glass"><div class="no fr">03</div><h3 class="fr">Protegge</h3><p>Crema leggera con SPF e antiossidanti per affrontare la giornata.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="ingredients" data-tile="IconBox · ingredienti">
+  <div class="wrap">
+    <div class="sec-h"><span class="kick" style="justify-content:center">Cosa c'è dentro</span><h2 class="fr">Solo ciò che serve.</h2></div>
+    <div class="ing-grid reveal-stagger">
+      <div class="ing"><div class="ic"></div><h3 class="fr">Bava di lumaca? No.</h3><p>Niente mode. Solo attivi con prove scientifiche.</p></div>
+      <div class="ing"><div class="ic"></div><h3 class="fr">Acido ialuronico</h3><p>Da fermentazione vegetale. Idratazione profonda.</p></div>
+      <div class="ing"><div class="ic"></div><h3 class="fr">Niacinamide</h3><p>Uniforma il tono e rinforza la barriera cutanea.</p></div>
+      <div class="ing"><div class="ic"></div><h3 class="fr">Olio di jojoba</h3><p>Nutre senza ungere, simile al sebo naturale.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="shop" data-tile="WooCommerce · ProductGrid">
+  <div class="wrap">
+    <div class="shop-h"><div><span class="kick">La collezione</span><h2 class="fr">I prodotti</h2></div><span class="mono" style="font-size:11px;color:var(--ink-3)">spedizione neutra in CO₂</span></div>
+    <div class="prod-grid reveal-stagger">
+      <div class="prod"><div class="pimg"><image-slot id="so-p1" placeholder="detergente"></image-slot></div><div class="px"><div class="pt2">Step 01 · Deterge</div><h3 class="fr">Gel Puro</h3><p>Detergente viso delicato, 200ml.</p><div class="pf"><span class="pr">€ 24</span><span class="kick" style="margin:0">+ Aggiungi</span></div></div></div>
+      <div class="prod"><div class="pimg"><image-slot id="so-p2" placeholder="siero"></image-slot></div><div class="px"><div class="pt2">Step 02 · Idrata</div><h3 class="fr">Siero Fonte</h3><p>Acido ialuronico vegetale, 30ml.</p><div class="pf"><span class="pr">€ 38</span><span class="kick" style="margin:0">+ Aggiungi</span></div></div></div>
+      <div class="prod"><div class="pimg"><image-slot id="so-p3" placeholder="crema"></image-slot></div><div class="px"><div class="pt2">Step 03 · Protegge</div><h3 class="fr">Crema Giorno</h3><p>Idratante con SPF 30, 50ml.</p><div class="pf"><span class="pr">€ 32</span><span class="kick" style="margin:0">+ Aggiungi</span></div></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="promise" data-tile="Counter">
+  <div class="wrap">
+    <div class="promise-grid reveal-stagger">
+      <div class="pm"><div class="num fr"><span class="count" data-count="98">0</span>%</div><div class="lbl">Ingredienti naturali</div></div>
+      <div class="pm"><div class="num fr"><span class="count" data-count="0">0</span></div><div class="lbl">Test su animali</div></div>
+      <div class="pm"><div class="num fr"><span class="count" data-count="100">0</span>%</div><div class="lbl">Packaging riciclabile</div></div>
+      <div class="pm"><div class="num fr"><span class="count" data-count="9">0</span></div><div class="lbl">Ingredienti per formula</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="cta" data-tile="AnimatedHeading">
+  <div class="wrap">
+    <span class="kick" style="justify-content:center">Inizia oggi</span>
+    <h2 class="fr">La tua pelle, <em>al naturale.</em></h2>
+    <p>Prova il rituale completo con il 15% di sconto sul primo set. Soddisfatti o rimborsati in 30 giorni.</p>
+    <a class="btn" href="#shop">Scopri il set completo →</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="f-row">
+      <div class="fm">SÒLA</div>
+      <div class="olo-credit"><span class="olo-mk"><b></b><i></i><b></b></span>Costruito con <b class="hl">OLObuild</b> — zero codice</div>
+    </div>
+    <div class="f-tiles"><b>Tile usati (10):</b> Hero · BlobFX (morphing) · GlassCard · IconBox · WooCommerce ProductGrid · Counter · AnimatedHeading · Image · DarkMode · ShapeDivider — nessuna prenotazione.</div>
+    <div class="f-row" style="margin-top:22px"><span class="f-meta">© 2026 Sòla skincare — tema dimostrativo</span><span class="f-meta">OLOtheme · demo · 48 — Skincare</span></div>
+  </div>
+</footer>
+
+<button id="tiletoggle"><span class="sq"></span><span class="t">Mostra tile</span></button>
+
+<script src="image-slot.js"></script>
+<script src="shared/olo-demo.js"></script>
+</body>
+</html>

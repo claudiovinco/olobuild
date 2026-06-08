@@ -1,0 +1,1129 @@
+[
+ {
+  "id": "sy-se-4",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "full",
+   "padding": "large",
+   "padding_top": 0,
+   "padding_bottom": 0
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#140e22"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "sy-ro-3",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "sy-co-2",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "sy-hero-split-1",
+        "type": "chathero",
+        "settings": {
+         "pill_text": "Synapse 3 · now with long-term memory",
+         "pill_dot": true,
+         "headline_text": "The AI workspace that ",
+         "accent_text": "remembers.",
+         "subhead": "Chat, agents and your company's knowledge in one place — grounded in your docs, your data and every conversation you've had before.",
+         "cta1_text": "Try free",
+         "cta1_url": "#pricing",
+         "cta2_text": "See how it works",
+         "cta2_url": "#features",
+         "chat_enabled": true,
+         "chat_label": "synapse · workspace",
+         "messages": [
+          {
+           "side": "you",
+           "text": "Summarise last week's customer calls and flag anything about pricing."
+          },
+          {
+           "side": "ai",
+           "text": "Across 9 calls: 3 flagged pricing — two want annual billing, one found the Team tier \"a jump\". Drafted a follow-up for each. Want me to send?"
+          },
+          {
+           "side": "you",
+           "text": "Yes, and add them to the CRM."
+          },
+          {
+           "side": "ai",
+           "text": "…"
+          }
+         ],
+         "bg_color": "#140e22",
+         "panel_color": "#1e1633",
+         "panel2_color": "#271d42",
+         "accent": "#a06bff",
+         "accent2": "#ff7ad1",
+         "accent_on": "#ffffff",
+         "text_color": "#ffffff",
+         "sub_color": "#776e92",
+         "msg_text_color": "#b3a9cc",
+         "pill_color": "#a06bff",
+         "glow_color": "rgba(160,107,255,0.3)",
+         "glow_w": 820,
+         "glow_h": 560,
+         "glow_blur": 110,
+         "glow_x": 50,
+         "glow_y": -220,
+         "h_size_min": 40,
+         "h_size_vw": 6.6,
+         "h_size_max": 82,
+         "max_width": 840,
+         "chat_max_width": 760
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "sy-se-11",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "small"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#171029"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "sy-ro-7",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "sy-co-6",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "sy-section-header-5",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": false,
+         "headline_lines": [
+          {
+           "text": "The workspace for teams who'd rather think than search",
+           "color": "#776e92",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 12,
+         "headline_font_weight": "400",
+         "headline_align": "center",
+         "tagline_show": false,
+         "layout": "center",
+         "gap": 0
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "sy-ro-10",
+    "type": "row",
+    "settings": {
+     "gap": 16
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "sy-co-9",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "sy-trust-strip-8",
+        "type": "trust-strip",
+        "settings": {
+         "items": [
+          {
+           "text": "VERCEL"
+          },
+          {
+           "text": "LINEAR"
+          },
+          {
+           "text": "NOTION"
+          },
+          {
+           "text": "GITHUB"
+          },
+          {
+           "text": "FIGMA"
+          },
+          {
+           "text": "STRIPE"
+          }
+         ],
+         "variant": "pill",
+         "separator_char": "",
+         "align": "center",
+         "flow": "wrap",
+         "gap": 46,
+         "font_family": "sans-serif",
+         "text_color": "#776e92",
+         "text_size": 13,
+         "pill_bg": "rgba(255,255,255,.06)",
+         "pill_border": "rgba(255,255,255,.08)",
+         "pill_text_color": "#776e92"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "sy-se-21",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "small"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#171029"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "sy-ro-20",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "sy-co-13",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "sy-statstrip-12",
+        "type": "statstrip",
+        "settings": {
+         "items": [
+          {
+           "value": "9h",
+           "label": "Saved / person / week"
+          },
+          {
+           "value": "120+",
+           "label": "Connected sources"
+          },
+          {
+           "value": "40k",
+           "label": "Teams onboard"
+          },
+          {
+           "value": "99.9%",
+           "label": "Uptime"
+          }
+         ],
+         "columns": 4,
+         "items_gap": 0,
+         "band_padding_y": 28,
+         "show_dividers": true,
+         "divider_color": "rgba(255,255,255,.08)",
+         "band_border": false,
+         "value_font_family": "heading",
+         "value_color": "#ffffff",
+         "value_size": 48,
+         "value_weight": "700",
+         "label_color": "#776e92",
+         "label_size": 12,
+         "label_uppercase": false,
+         "align": "center",
+         "mono_font_family": ""
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "sy-se-28",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#140e22"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "sy-ro-27",
+    "type": "row",
+    "settings": {
+     "gap": 54
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "sy-co-24",
+      "type": "column",
+      "settings": {
+       "width": "1-2"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "sy-section-header-22",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "// memory",
+         "eyebrow_color": "#a06bff",
+         "eyebrow_dot_color": "#a06bff",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "It learns your ",
+           "color": "#ffffff",
+           "italic": false
+          },
+          {
+           "text": "context, once",
+           "color": "#a06bff",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 40,
+         "headline_font_weight": "700",
+         "headline_align": "left",
+         "headline_inline": true,
+         "tagline_show": true,
+         "tagline_text": "Synapse builds a private memory of your projects, people and decisions — so you stop re-explaining yourself and start where you left off.",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#776e92",
+         "tagline_text_size": 16,
+         "layout": "stack",
+         "gap": 12
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "sy-iconlist-23",
+        "type": "iconlist",
+        "settings": {
+         "items": [
+          {
+           "text": "Grounded in your docs & data",
+           "icon": "check"
+          },
+          {
+           "text": "Per-workspace, private by default",
+           "icon": "check"
+          },
+          {
+           "text": "Cites its sources, every time",
+           "icon": "check"
+          }
+         ],
+         "icon_color": "#a06bff",
+         "text_color": "#b3a9cc",
+         "text_size": "14.5",
+         "icon_shape": "none",
+         "gap": "12",
+         "layout": "vertical"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "sy-co-26",
+      "type": "column",
+      "settings": {
+       "width": "1-2"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "sy-info-cards-25",
+        "type": "info-cards",
+        "settings": {
+         "container_bg": {
+          "type": "solid",
+          "color": "transparent"
+         },
+         "container_padding": 0,
+         "container_gap": 0,
+         "columns": 1,
+         "items_gap": 0,
+         "card_bg": {
+          "type": "solid",
+          "color": "#1e1633"
+         },
+         "card_color": "#776e92",
+         "card_radius": {
+          "tl": 16,
+          "tr": 16,
+          "br": 16,
+          "bl": 16,
+          "linked": true
+         },
+         "card_padding": 32,
+         "show_icon": true,
+         "show_counter": false,
+         "show_arrow": false,
+         "show_footer": false,
+         "show_media": false,
+         "icon_color": "#a06bff",
+         "icon_bg_color": "rgba(160,107,255,.14)",
+         "title_color": "#ffffff",
+         "title_font_family": "sans-serif",
+         "title_size": 18,
+         "title_weight": "600",
+         "title_italic": false,
+         "description_size": 14,
+         "items": [
+          {
+           "icon": "database",
+           "title": "Private memory graph",
+           "description": "Connected to your docs, Slack, GitHub and every tool in your stack — so context lives where your team already works."
+          }
+         ],
+         "card_hover_effect": "none"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "sy-se-32",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#171029"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "sy-ro-31",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "sy-co-30",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "sy-cta-banner-29",
+        "type": "cta-banner",
+        "settings": {
+         "headline": "One box for your",
+         "headline_accent": "whole company",
+         "headline_accent_italic": false,
+         "subtitle": "Move your cursor here. Ask in plain language — Synapse pulls from every tool you've connected and answers with sources.",
+         "cta_text": "Ask anything",
+         "cta_url": "#features",
+         "bg": {
+          "type": "solid",
+          "color": "#0c0818"
+         },
+         "text_color": "#ffffff",
+         "accent_color": "#a06bff",
+         "subtitle_color": "#776e92",
+         "cta_bg": "#a06bff",
+         "cta_color": "#ffffff",
+         "cta_radius": {
+          "tl": 9,
+          "tr": 9,
+          "br": 9,
+          "bl": 9,
+          "linked": true
+         },
+         "cta_size": 15,
+         "headline_font_family": "sans-serif",
+         "headline_size": 46,
+         "headline_weight": "700",
+         "subtitle_size": 16,
+         "layout": "stack",
+         "vertical_align": "center",
+         "banner_radius": {
+          "tl": 18,
+          "tr": 18,
+          "br": 18,
+          "bl": 18,
+          "linked": true
+         },
+         "banner_padding": 64
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "sy-se-39",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#140e22"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "sy-ro-35",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "sy-co-34",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "sy-section-header-33",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "// integrations",
+         "eyebrow_color": "#a06bff",
+         "eyebrow_dot_color": "#a06bff",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "Connected to ",
+           "color": "#ffffff",
+           "italic": false
+          },
+          {
+           "text": "everything",
+           "color": "#a06bff",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 46,
+         "headline_font_weight": "700",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": true,
+         "tagline_text": "Plug in your stack and Synapse reasons across all of it.",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#776e92",
+         "tagline_text_size": 16.5,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "sy-ro-38",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "sy-co-37",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "sy-info-cards-36",
+        "type": "info-cards",
+        "settings": {
+         "container_bg": {
+          "type": "solid",
+          "color": "transparent"
+         },
+         "container_padding": 0,
+         "container_gap": 14,
+         "columns": 6,
+         "items_gap": 14,
+         "card_bg": {
+          "type": "solid",
+          "color": "#1e1633"
+         },
+         "card_color": "#776e92",
+         "card_radius": {
+          "tl": 12,
+          "tr": 12,
+          "br": 12,
+          "bl": 12,
+          "linked": true
+         },
+         "card_padding": 16,
+         "show_icon": true,
+         "show_counter": false,
+         "show_arrow": false,
+         "show_footer": false,
+         "show_media": false,
+         "icon_color": "#a06bff",
+         "icon_bg_color": "rgba(255,255,255,.07)",
+         "title_color": "#776e92",
+         "title_font_family": "sans-serif",
+         "title_size": 9,
+         "title_weight": "400",
+         "title_italic": false,
+         "description_size": 0,
+         "items": [
+          {
+           "icon": "hard-drive",
+           "title": "Drive"
+          },
+          {
+           "icon": "book-open",
+           "title": "Notion"
+          },
+          {
+           "icon": "message-square",
+           "title": "Slack"
+          },
+          {
+           "icon": "github",
+           "title": "GitHub"
+          },
+          {
+           "icon": "check-square",
+           "title": "Linear"
+          },
+          {
+           "icon": "mail",
+           "title": "Gmail"
+          },
+          {
+           "icon": "database",
+           "title": "Salesforce"
+          },
+          {
+           "icon": "figma",
+           "title": "Figma"
+          },
+          {
+           "icon": "clipboard",
+           "title": "Jira"
+          },
+          {
+           "icon": "layers",
+           "title": "Confluence"
+          },
+          {
+           "icon": "users",
+           "title": "Zendesk"
+          },
+          {
+           "icon": "zap",
+           "title": "+110"
+          }
+         ],
+         "card_hover_effect": "lift"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "sy-se-50",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#171029"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "sy-ro-42",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "sy-co-41",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "sy-section-header-40",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "// pricing",
+         "eyebrow_color": "#a06bff",
+         "eyebrow_dot_color": "#a06bff",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "Start free, ",
+           "color": "#ffffff",
+           "italic": false
+          },
+          {
+           "text": "scale per seat",
+           "color": "#a06bff",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 46,
+         "headline_font_weight": "700",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": false,
+         "tagline_text": "",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#776e92",
+         "tagline_text_size": 16.5,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "sy-ro-49",
+    "type": "row",
+    "settings": {
+     "gap": 18,
+     "vertical_align": "stretch"
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "sy-co-44",
+      "type": "column",
+      "settings": {
+       "width": "1-3"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "sy-pricing-43",
+        "type": "pricing",
+        "settings": {
+         "plan_name": "Personal",
+         "price": "0",
+         "currency": "$",
+         "period": "",
+         "description": "For individuals getting started.",
+         "features": "Unlimited chats\n3 connected sources\n7-day memory",
+         "is_popular": false,
+         "badge_text": "",
+         "badge_bg_color": "",
+         "bg_color": "#1e1633",
+         "price_color": "#ffffff",
+         "accent_color": "#a06bff",
+         "cta_text": "Get started",
+         "cta_url": "#",
+         "cta_bg": "rgba(255,255,255,.08)",
+         "cta_color": "#ffffff",
+         "cta_border": "rgba(255,255,255,.18)",
+         "border_radius": {
+          "tl": 18,
+          "tr": 18,
+          "br": 18,
+          "bl": 18,
+          "linked": true
+         }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "sy-co-46",
+      "type": "column",
+      "settings": {
+       "width": "1-3"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "sy-pricing-45",
+        "type": "pricing",
+        "settings": {
+         "plan_name": "Team",
+         "price": "24",
+         "currency": "$",
+         "period": "/seat/mo",
+         "description": "For teams that run on shared context.",
+         "features": "Unlimited memory\nAll integrations\nShared agents\nAdmin & SSO",
+         "is_popular": true,
+         "badge_text": "Most popular",
+         "badge_bg_color": "rgba(160,107,255,.14)",
+         "bg_color": "#1e1633",
+         "price_color": "#ffffff",
+         "accent_color": "#a06bff",
+         "cta_text": "Start free trial",
+         "cta_url": "#",
+         "cta_bg": "#a06bff",
+         "cta_color": "#ffffff",
+         "border_radius": {
+          "tl": 18,
+          "tr": 18,
+          "br": 18,
+          "bl": 18,
+          "linked": true
+         }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "sy-co-48",
+      "type": "column",
+      "settings": {
+       "width": "1-3"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "sy-pricing-47",
+        "type": "pricing",
+        "settings": {
+         "plan_name": "Enterprise",
+         "price": "Custom",
+         "currency": "",
+         "period": "",
+         "description": "For scale, security & control.",
+         "features": "Private deployment\nSCIM & audit log\nDedicated support",
+         "is_popular": false,
+         "badge_text": "",
+         "badge_bg_color": "",
+         "bg_color": "#1e1633",
+         "price_color": "#ffffff",
+         "accent_color": "#a06bff",
+         "cta_text": "Talk to sales",
+         "cta_url": "#",
+         "cta_bg": "rgba(255,255,255,.08)",
+         "cta_color": "#ffffff",
+         "cta_border": "rgba(255,255,255,.18)",
+         "border_radius": {
+          "tl": 18,
+          "tr": 18,
+          "br": 18,
+          "bl": 18,
+          "linked": true
+         }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "sy-se-54",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#140e22"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "sy-ro-53",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "sy-co-52",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "sy-projector-51",
+        "type": "projector",
+        "settings": {
+         "eyebrow": "// the math",
+         "heading": "Give your team their <em>week</em> back",
+         "intro": "Teams on Synapse hand off roughly six hours of busywork per person each week to their agents. Drag to your headcount and see what that adds up to.",
+         "min": "5",
+         "max": "200",
+         "step": "5",
+         "value": "40",
+         "rate": "0",
+         "years": "6",
+         "currency": "",
+         "input_label": "Team size",
+         "out_caption": "Hours saved every week",
+         "note": "≈ 6 hrs/person/week of triage, summarising and data-entry, automated. Based on aggregated customer usage.",
+         "show_contrib": true,
+         "zone_accent": "#a06bff",
+         "align": "left",
+         "tile_padding": {
+          "top": 52,
+          "right": 52,
+          "bottom": 52,
+          "left": 52
+         },
+         "border_radius": "18",
+         "shadow": "sm"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "sy-se-58",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#140e22"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "sy-ro-57",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "sy-co-56",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "sy-cta-banner-55",
+        "type": "cta-banner",
+        "settings": {
+         "headline": "Stop searching.",
+         "headline_accent": "Start asking.",
+         "headline_accent_italic": false,
+         "subtitle": "Bring your tools, ask your first question, and watch Synapse connect the dots. Free to try, no card.",
+         "cta_text": "Try free",
+         "cta_url": "#pricing",
+         "cta2_text": "See use cases",
+         "cta2_url": "#",
+         "cta2_bg": "rgba(255,255,255,.05)",
+         "cta2_color": "#ffffff",
+         "cta2_border": "rgba(255,255,255,.16)",
+         "bg": {
+          "type": "gradient",
+          "gradient_angle": 160,
+          "gradient_from": "rgba(160,107,255,.18)",
+          "gradient_to": "rgba(255,122,209,.05)"
+         },
+         "text_color": "#ffffff",
+         "accent_color": "#a06bff",
+         "subtitle_color": "#b3a9cc",
+         "cta_bg": "#a06bff",
+         "cta_color": "#ffffff",
+         "cta_radius": {
+          "tl": 9,
+          "tr": 9,
+          "br": 9,
+          "bl": 9,
+          "linked": true
+         },
+         "cta_size": 15,
+         "headline_font_family": "sans-serif",
+         "headline_size": 52,
+         "headline_weight": "700",
+         "subtitle_size": 17,
+         "layout": "stack",
+         "vertical_align": "center",
+         "banner_radius": {
+          "tl": 24,
+          "tr": 24,
+          "br": 24,
+          "bl": 24,
+          "linked": true
+         },
+         "banner_padding": 80
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

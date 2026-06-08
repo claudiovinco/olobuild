@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Centòtipo — type foundry · tema dimostrativo OLObuild</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Recursive:slnt,wght,CASL,CRSV,MONO@-15..0,300..1000,0..1,0..1,0..1&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared/olo-demo.css">
+<style>
+:root{
+  --bg:#0D0D0C; --bg-2:#161614; --bg-3:#201F1C; --fg:#F1F0E8; --fg-2:#9B9A8E; --fg-3:#605F55;
+  --acid:#D6FF3D; --coral:#FF6B4A; --line:rgba(241,240,232,.13);
+  --tile-accent:#D6FF3D; --tile-btn:#000;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:'Recursive',system-ui,sans-serif;font-variation-settings:"MONO" 0,"CASL" 0,"slnt" 0,"CRSV" 0;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+a{color:inherit;text-decoration:none;}
+.rec{font-family:'Recursive',sans-serif;}
+.mono{font-family:'JetBrains Mono',monospace;}
+.wrap{max-width:1200px;margin:0 auto;padding:0 44px;}
+.kick{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--acid);font-weight:600;display:inline-flex;align-items:center;gap:9px;}
+.kick::before{content:"";width:18px;height:3px;background:var(--coral);}
+
+/* nav */
+.nav{position:fixed;inset:0 0 auto 0;z-index:50;display:flex;align-items:center;gap:26px;padding:20px 44px;transition:all .35s;border-bottom:1px solid transparent;}
+.nav.solid{background:rgba(13,13,12,.88);backdrop-filter:blur(14px);border-color:var(--line);padding:13px 44px;}
+.brand{font-family:'Recursive';font-weight:800;font-size:23px;letter-spacing:-.02em;font-variation-settings:"MONO" 0,"CASL" 0;}
+.nav-links{margin-left:auto;display:flex;gap:24px;font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;font-weight:500;}
+.nav-links a{opacity:.82;}.nav-links a:hover{opacity:1;color:var(--acid);}
+.nav-cta{background:var(--acid);color:#0D0D0C;padding:11px 20px;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;}
+@media(max-width:880px){.nav-links{display:none;}}
+
+/* hero morph */
+#hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:120px 44px 70px;max-width:1200px;margin:0 auto;position:relative;}
+.hero-top{display:flex;justify-content:space-between;align-items:flex-start;gap:30px;flex-wrap:wrap;}
+.hero-lead{max-width:30ch;}
+.hero-lead .eyebrow{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--acid);}
+.hero-lead p{font-size:17px;color:var(--fg-2);line-height:1.55;margin:18px 0 0;}
+.morph{font-weight:900;font-size:clamp(120px,34vw,560px);line-height:.8;letter-spacing:-.04em;margin:6px 0 0;cursor:ew-resize;will-change:font-variation-settings;
+  background:linear-gradient(120deg,var(--fg),var(--fg) 60%,var(--acid));-webkit-background-clip:text;background-clip:text;color:transparent;}
+.readout{display:flex;gap:24px;flex-wrap:wrap;margin-top:18px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--fg-2);}
+.readout b{color:var(--acid);}
+.hint{margin-top:24px;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--fg-3);}
+
+/* rotating TextPath badge */
+.ring-badge{width:150px;height:150px;flex-shrink:0;animation:spin 14s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.ring-badge text{font-family:'JetBrains Mono',monospace;font-size:12.4px;letter-spacing:.22em;fill:var(--fg);text-transform:uppercase;}
+.ring-badge .mid{font-family:'Recursive';font-weight:800;font-size:30px;fill:var(--acid);}
+
+/* playground */
+#play{padding:100px 0;border-top:1px solid var(--line);background:var(--bg-2);}
+.play-wrap{display:grid;grid-template-columns:300px 1fr;gap:50px;align-items:center;margin-top:36px;}
+.controls{display:flex;flex-direction:column;gap:22px;}
+.ctrl label{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--fg-2);margin-bottom:9px;}
+.ctrl label b{color:var(--acid);}
+.ctrl input[type=range]{width:100%;-webkit-appearance:none;height:3px;background:rgba(241,240,232,.2);border-radius:3px;outline:none;}
+.ctrl input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--acid);cursor:pointer;}
+.ctrl input[type=range]::-moz-range-thumb{width:18px;height:18px;border:none;border-radius:50%;background:var(--acid);cursor:pointer;}
+.sample{font-size:clamp(34px,5.2vw,82px);line-height:1.02;letter-spacing:-.02em;}
+@media(max-width:880px){.play-wrap{grid-template-columns:1fr;gap:30px;}}
+
+/* specimens */
+#spec{padding:110px 0;}
+.spec-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:40px;}
+.sp{border:1px solid var(--line);border-radius:16px;padding:34px;background:var(--bg-2);}
+.sp .tag{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--acid);}
+.sp .big{font-size:clamp(40px,5vw,68px);line-height:.98;margin:14px 0 16px;}
+.sp p{font-size:15px;color:var(--fg-2);line-height:1.6;margin:0;}
+.sp.s1 .big{font-variation-settings:"wght" 900,"MONO" 0,"CASL" 0,"slnt" 0;}
+.sp.s2 .big{font-variation-settings:"wght" 400,"CASL" 1,"slnt" -8;font-style:italic;}
+.sp.s3 .big{font-variation-settings:"wght" 600,"MONO" 1,"CASL" 0;}
+.sp.s4 .big{font-variation-settings:"wght" 300,"CASL" 0;}
+@media(max-width:880px){.spec-grid{grid-template-columns:1fr;}}
+
+/* in use */
+#use{padding:110px 0;background:var(--bg-2);}
+.use-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px;margin-top:40px;}
+.uc{position:relative;overflow:hidden;border-radius:12px;}
+.uc image-slot{width:100%;height:100%;display:block;transition:transform .6s;}
+.uc:hover image-slot{transform:scale(1.05);}
+.uc .cap{position:absolute;left:0;bottom:0;background:var(--acid);color:#0D0D0C;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.06em;padding:6px 11px;text-transform:uppercase;}
+.uc.big{grid-column:span 7;}.uc.big image-slot{aspect-ratio:4/3;}
+.uc.sm{grid-column:span 5;}.uc.sm image-slot{aspect-ratio:4/3;}
+@media(max-width:880px){.uc.big,.uc.sm{grid-column:span 12;}}
+
+/* stats */
+.stats{padding:80px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:30px;text-align:center;}
+.st .num{font-weight:900;font-size:clamp(44px,6vw,86px);line-height:1;color:var(--acid);font-variation-settings:"MONO" 0;}
+.st .lbl{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--fg-2);margin-top:8px;}
+@media(max-width:760px){.stat-grid{grid-template-columns:1fr 1fr;gap:34px 20px;}}
+
+/* cta */
+#cta{padding:120px 0;text-align:center;}
+#cta h2{font-weight:900;font-size:clamp(46px,9vw,150px);line-height:.85;margin:16px 0 28px;letter-spacing:-.03em;}
+#cta h2 em{color:var(--acid);font-style:normal;}
+.btn{display:inline-flex;align-items:center;gap:10px;background:var(--acid);color:#0D0D0C;border:none;cursor:pointer;padding:17px 34px;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;transition:transform .15s;}
+.btn:hover{transform:translateY(-2px);}
+
+footer{border-top:1px solid var(--line);padding:34px 0;}
+.f-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px;}
+.f-row .fm{font-weight:800;font-size:22px;font-variation-settings:"MONO" 0;}
+.olo-credit{color:var(--fg-2);}
+.f-meta{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--fg-3);}
+.f-tiles{font-family:'JetBrains Mono',monospace;font-size:10.5px;line-height:1.9;color:var(--fg-3);margin-top:22px;max-width:96ch;}
+.f-tiles b{color:var(--fg-2);}
+</style>
+</head>
+<body>
+
+<nav class="nav" id="nav" data-solid-at="70vh">
+  <div class="brand rec">Centòtipo</div>
+  <div class="nav-links"><a href="#play">Playground</a><a href="#spec">Specimen</a><a href="#use">In uso</a><a href="#cta">Licenze</a></div>
+  <a class="nav-cta" href="#cta">Compra il font</a>
+</nav>
+
+<section id="hero" data-tile="Hero · VariableFont">
+  <div class="hero-top">
+    <div class="hero-lead">
+      <div class="eyebrow">Type foundry indipendente</div>
+      <p>Disegniamo caratteri variabili: un solo file, infinite forme. Trascina la lettera qui sotto e guardala cambiare peso e inclinazione.</p>
+    </div>
+    <svg class="ring-badge" viewBox="0 0 150 150" data-tile="TextPath">
+      <defs><path id="circ" d="M75,75 m-58,0 a58,58 0 1,1 116,0 a58,58 0 1,1 -116,0"/></defs>
+      <text><textPath href="#circ" startOffset="0">· type set in motion · type set in motion </textPath></text>
+      <text class="mid" x="75" y="86" text-anchor="middle">Aa</text>
+    </svg>
+  </div>
+  <div class="morph rec" id="morph">Ga</div>
+  <div class="readout"><span>wght <b id="rW">700</b></span><span>slnt <b id="rS">0</b></span><span>CASL <b id="rC">0</b></span></div>
+  <div class="hint">↔ trascina la lettera · X = peso · Y = inclinazione</div>
+</section>
+
+<section id="play" data-tile="Section · VariableControls">
+  <div class="wrap">
+    <span class="kick">Provalo</span>
+    <h2 class="rec" style="font-weight:800;font-size:clamp(32px,4.4vw,58px);margin:14px 0 0;letter-spacing:-.02em;">Un font, mille voci</h2>
+    <div class="play-wrap">
+      <div class="controls">
+        <div class="ctrl"><label>Peso · Weight <b id="lW">600</b></label><input type="range" id="cW" min="300" max="1000" value="600"></div>
+        <div class="ctrl"><label>Inclinazione · Slant <b id="lS">0</b></label><input type="range" id="cS" min="-15" max="0" value="0"></div>
+        <div class="ctrl"><label>Casual · CASL <b id="lC">0</b></label><input type="range" id="cC" min="0" max="100" value="0"></div>
+        <div class="ctrl"><label>Mono · MONO <b id="lM">0</b></label><input type="range" id="cM" min="0" max="100" value="0"></div>
+      </div>
+      <div class="sample rec" id="sample" contenteditable="true" spellcheck="false">Il carattere<br>cambia con te.</div>
+    </div>
+  </div>
+</section>
+
+<section id="spec" data-tile="ProGallery · specimen">
+  <div class="wrap">
+    <span class="kick">Quattro tagli</span>
+    <h2 class="rec" style="font-weight:800;font-size:clamp(32px,4.4vw,58px);margin:14px 0 0;letter-spacing:-.02em;">Specimen</h2>
+    <div class="spec-grid reveal-stagger">
+      <div class="sp s1"><div class="tag">Black · 900</div><div class="big rec">Titoli che gridano</div><p>Pesi estremi per manifesti, copertine e tutto ciò che deve farsi notare da lontano.</p></div>
+      <div class="sp s2"><div class="tag">Casual Italic</div><div class="big rec">Una voce calda</div><p>L'asse Casual ammorbidisce le terminazioni: un tono umano, quasi scritto a mano.</p></div>
+      <div class="sp s3"><div class="tag">Mono · 600</div><div class="big rec">code &amp; tables</div><p>L'asse Mono porta larghezze fisse: perfetto per codice, dati e interfacce tecniche.</p></div>
+      <div class="sp s4"><div class="tag">Light · 300</div><div class="big rec">Sottile, lungo testo</div><p>I pesi leggeri tengono righe lunghe e paragrafi senza affaticare la lettura.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="use" data-tile="ProGallery · in uso">
+  <div class="wrap">
+    <span class="kick">Sul campo</span>
+    <h2 class="rec" style="font-weight:800;font-size:clamp(32px,4.4vw,58px);margin:14px 0 0;letter-spacing:-.02em;">Visto in giro</h2>
+    <div class="use-grid reveal">
+      <div class="uc big"><image-slot id="ty-1" placeholder="poster col font"></image-slot><span class="cap">Manifesto culturale</span></div>
+      <div class="uc sm"><image-slot id="ty-2" placeholder="packaging"></image-slot><span class="cap">Packaging</span></div>
+      <div class="uc sm"><image-slot id="ty-3" placeholder="editoriale"></image-slot><span class="cap">Rivista</span></div>
+      <div class="uc big"><image-slot id="ty-4" placeholder="brand identity"></image-slot><span class="cap">Identità di marca</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="stats" data-tile="Counter">
+  <div class="wrap">
+    <div class="stat-grid reveal-stagger">
+      <div class="st"><div class="num rec"><span class="count" data-count="5">0</span></div><div class="lbl">Assi variabili</div></div>
+      <div class="st"><div class="num rec"><span class="count" data-count="1100" data-suffix="+">0</span></div><div class="lbl">Glifi</div></div>
+      <div class="st"><div class="num rec"><span class="count" data-count="92">0</span></div><div class="lbl">Lingue supportate</div></div>
+      <div class="st"><div class="num rec"><span class="count" data-count="1">0</span></div><div class="lbl">File, infinite forme</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="cta" data-tile="AnimatedHeading">
+  <div class="wrap">
+    <span class="kick" style="justify-content:center">Porta il font nel tuo progetto</span>
+    <h2 class="rec">Scrivi <em>diverso</em></h2>
+    <a class="btn" href="#">Compra la licenza →</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="f-row">
+      <div class="fm rec">Centòtipo</div>
+      <div class="olo-credit"><span class="olo-mk"><b></b><i></i><b></b></span>Costruito con <b class="hl">OLObuild</b> — zero codice</div>
+    </div>
+    <div class="f-tiles"><b>Tile usati (9):</b> Hero · VariableFont (drag X/Y → assi wght/slnt) · TextPath (testo lungo un cerchio, rotante) · VariableControls (slider live sugli assi) · ProGallery specimen + in uso · Counter · AnimatedHeading · DarkMode — nessuna prenotazione.</div>
+    <div class="f-row" style="margin-top:22px"><span class="f-meta">© 2026 Centòtipo foundry — tema dimostrativo · font: Recursive (OFL)</span><span class="f-meta">OLOtheme · demo · 66 — Type foundry</span></div>
+  </div>
+</footer>
+
+<button id="tiletoggle"><span class="sq"></span><span class="t">Mostra tile</span></button>
+
+<script src="image-slot.js"></script>
+<script src="shared/olo-demo.js"></script>
+<script>
+/* ===== hero: drag/move to morph wght (X) + slnt (Y) ===== */
+(function(){
+  var m=document.getElementById('morph'),rW=document.getElementById('rW'),rS=document.getElementById('rS'),rC=document.getElementById('rC');
+  var w=700,s=0,casl=0,auto=true,t=0;
+  function apply(){
+    m.style.fontVariationSettings='"wght" '+Math.round(w)+',"slnt" '+s.toFixed(1)+',"CASL" '+(casl/100).toFixed(2)+',"MONO" 0';
+    rW.textContent=Math.round(w);rS.textContent=s.toFixed(0);rC.textContent=Math.round(casl);
+  }
+  function setFromEvent(e){
+    var r=m.getBoundingClientRect();
+    w=300+Math.max(0,Math.min(1,(e.clientX-r.left)/r.width))*700;
+    s=Math.max(0,Math.min(1,(e.clientY-r.top)/r.height))*-15;
+    apply();
+  }
+  m.addEventListener('pointermove',function(e){auto=false;setFromEvent(e);});
+  m.addEventListener('pointerleave',function(){auto=true;});
+  function loop(){if(auto){t+=0.02;w=650+Math.sin(t)*300;s=Math.sin(t*0.7)*-7;apply();}requestAnimationFrame(loop);}loop();
+})();
+
+/* ===== playground sliders ===== */
+(function(){
+  var sample=document.getElementById('sample');
+  var cW=document.getElementById('cW'),cS=document.getElementById('cS'),cC=document.getElementById('cC'),cM=document.getElementById('cM');
+  var lW=document.getElementById('lW'),lS=document.getElementById('lS'),lC=document.getElementById('lC'),lM=document.getElementById('lM');
+  function upd(){
+    sample.style.fontVariationSettings='"wght" '+cW.value+',"slnt" '+cS.value+',"CASL" '+(cC.value/100)+',"MONO" '+(cM.value/100);
+    sample.style.fontStyle=cS.value<0?'italic':'normal';
+    lW.textContent=cW.value;lS.textContent=cS.value;lC.textContent=cC.value;lM.textContent=cM.value;
+  }
+  [cW,cS,cC,cM].forEach(function(c){c.addEventListener('input',upd);});upd();
+})();
+</script>
+</body>
+</html>

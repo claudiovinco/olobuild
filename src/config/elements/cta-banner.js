@@ -23,6 +23,14 @@ export default {
     cta_url:         '#',
     cta_target:      '_self',
 
+    // CTA secondaria (opzionale — vuota = nascosta)
+    cta2_text:       '',
+    cta2_url:        '#',
+    cta2_target:     '_self',
+    cta2_bg:         'transparent',
+    cta2_color:      '#ffffff',
+    cta2_border:     'rgba(255,255,255,.28)',
+
     // Stile globale
     bg:              { type: 'solid', color: '#0f172a' },
     text_color:      '#ffffff',
@@ -75,6 +83,17 @@ export default {
       { value: '_self',  label: t('Stessa scheda') },
       { value: '_blank', label: t('Nuova scheda') },
     ]},
+
+    { type: 'separator', label: t('CTA secondaria (opzionale)') },
+    { key: 'cta2_text',   label: t('Testo CTA 2 (vuoto = nascosto)'), type: 'text' },
+    { key: 'cta2_url',    label: t('URL'),     type: 'link' },
+    { key: 'cta2_target', label: t('Apri in'), type: 'select', options: [
+      { value: '_self',  label: t('Stessa scheda') },
+      { value: '_blank', label: t('Nuova scheda') },
+    ]},
+    { key: 'cta2_bg',     label: t('Sfondo CTA 2'),   type: 'color' },
+    { key: 'cta2_color',  label: t('Colore testo CTA 2'), type: 'color' },
+    { key: 'cta2_border', label: t('Bordo CTA 2'),    type: 'color' },
   ],
 
   // ═══ STILE ════════════════════════════════════════════════════

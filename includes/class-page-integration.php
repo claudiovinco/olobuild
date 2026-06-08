@@ -440,6 +440,29 @@ class Olo_Page_Integration {
         $post_id = get_the_ID();
         $template_id = get_post_meta( $post_id, '_olo_template_id', true );
 
+        // Fallback: un template "page" può essere collegato alla pagina tramite il suo
+        // settings.post_id anche se il meta _olo_template_id è andato perso (tipico delle
+        // pagine gestite/tradotte da OLOlang, che possono azzerare i meta in sync). Cerco
+        // a ritroso il template e ri-scrivo il meta (self-healing) così i load successivi
+        // tornano sulla via veloce.
+        if ( ! $template_id ) {
+            global $wpdb;
+            $rows = $wpdb->get_results( $wpdb->prepare(
+                "SELECT id, settings FROM {$wpdb->prefix}olo_templates WHERE type = 'page' AND status = 'published' AND settings LIKE %s ORDER BY id DESC",
+                '%"post_id":' . intval( $post_id ) . '%'
+            ), ARRAY_A );
+            if ( $rows ) {
+                foreach ( $rows as $r ) {
+                    $st = json_decode( $r['settings'], true );
+                    if ( is_array( $st ) && isset( $st['post_id'] ) && intval( $st['post_id'] ) === intval( $post_id ) ) {
+                        $template_id = $r['id'];
+                        update_post_meta( $post_id, '_olo_template_id', $template_id );
+                        break;
+                    }
+                }
+            }
+        }
+
         if ( ! $template_id ) {
             return $content;
         }

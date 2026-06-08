@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Astrarium — planetario · tema dimostrativo OLObuild</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared/olo-demo.css">
+<style>
+:root{
+  --bg:#05060F; --bg-2:#0A0C1C; --bg-3:#12152C; --fg:#EDEFFB; --fg-2:#949AC4; --fg-3:#5C6090;
+  --gold:#F5C24B; --aqua:#5BD6E0; --violet:#9B6BFF; --rose:#FF7AAE; --line:rgba(237,239,251,.12);
+  --tile-accent:#F5C24B; --tile-btn:#05060F;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:'Manrope',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+a{color:inherit;text-decoration:none;}
+.fr{font-family:'Fraunces',Georgia,serif;font-weight:300;}
+.mono{font-family:'JetBrains Mono',monospace;}
+.wrap{max-width:1200px;margin:0 auto;padding:0 44px;}
+.kick{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:600;display:inline-flex;align-items:center;gap:9px;}
+.kick::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--gold);box-shadow:0 0 12px var(--gold);}
+
+/* nav */
+.nav{position:fixed;inset:0 0 auto 0;z-index:50;display:flex;align-items:center;gap:26px;padding:22px 44px;transition:all .35s;border-bottom:1px solid transparent;}
+.nav.solid{background:rgba(5,6,15,.86);backdrop-filter:blur(14px);border-color:var(--line);padding:14px 44px;}
+.brand{font-family:'Fraunces',serif;font-weight:400;font-size:25px;letter-spacing:.06em;display:flex;align-items:center;gap:9px;}
+.brand .star{color:var(--gold);}
+.nav-links{margin-left:auto;display:flex;gap:28px;font-size:13.5px;font-weight:600;}
+.nav-links a{opacity:.85;}.nav-links a:hover{opacity:1;color:var(--gold);}
+.nav-cta{border:1px solid var(--gold);color:var(--gold);padding:10px 20px;border-radius:100px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;transition:all .2s;}
+.nav-cta:hover{background:var(--gold);color:var(--bg);}
+@media(max-width:880px){.nav-links{display:none;}}
+
+/* hero starfield */
+#hero{height:100vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;text-align:center;
+  background:radial-gradient(120% 90% at 50% 120%,#1A1340 0%,#0A0C1C 45%,#05060F 100%);}
+#stars{position:absolute;inset:0;width:100%;height:100%;z-index:1;}
+.nebula{position:absolute;border-radius:50%;filter:blur(80px);opacity:.4;z-index:0;}
+.nebula.n1{width:46vw;height:46vw;background:var(--violet);top:-8%;left:-8%;}
+.nebula.n2{width:38vw;height:38vw;background:var(--aqua);bottom:-10%;right:-6%;opacity:.3;}
+.hero-in{position:relative;z-index:3;pointer-events:none;}
+.hero-ey{font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:.3em;text-transform:uppercase;color:var(--aqua);margin-bottom:18px;}
+.hero-h{font-family:'Fraunces',serif;font-weight:300;font-size:clamp(54px,11vw,180px);line-height:.92;margin:0;letter-spacing:.01em;}
+.hero-h em{font-style:italic;color:var(--gold);}
+.hero-sub{font-size:18px;color:rgba(237,239,251,.82);max-width:38ch;margin:24px auto 0;line-height:1.55;}
+.hero-hint{position:absolute;bottom:6vh;left:50%;transform:translateX(-50%);z-index:3;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--fg-3);}
+
+/* shows */
+#shows{padding:110px 0;}
+.shows-h{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:42px;flex-wrap:wrap;gap:16px;}
+.shows-h h2{font-family:'Fraunces',serif;font-weight:300;font-size:clamp(38px,5vw,72px);margin:14px 0 0;}
+.show-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+.show{position:relative;overflow:hidden;border-radius:18px;background:var(--bg-2);border:1px solid var(--line);}
+.show .ph{aspect-ratio:4/3;overflow:hidden;}
+.show .ph image-slot{width:100%;height:100%;display:block;transition:transform .6s;}
+.show:hover .ph image-slot{transform:scale(1.06);}
+.show .sx{padding:24px;}
+.show .dur{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--aqua);}
+.show h3{font-family:'Fraunces',serif;font-weight:400;font-size:24px;margin:9px 0 8px;}
+.show p{font-size:13.5px;color:var(--fg-2);line-height:1.55;margin:0;}
+@media(max-width:880px){.show-grid{grid-template-columns:1fr;}}
+
+/* feature */
+#dome{padding:110px 0;background:var(--bg-2);}
+.dome{display:grid;grid-template-columns:1fr 1.05fr;gap:64px;align-items:center;}
+.dome .ph image-slot{width:100%;aspect-ratio:4/3;display:block;border-radius:18px;}
+.dome h2{font-family:'Fraunces',serif;font-weight:300;font-size:clamp(34px,4.4vw,60px);line-height:1.04;margin:16px 0 18px;}
+.dome h2 em{font-style:italic;color:var(--gold);}
+.dome p{font-size:16px;line-height:1.72;color:var(--fg-2);margin:0 0 16px;}
+.dome p strong{color:var(--fg);}
+@media(max-width:880px){.dome{grid-template-columns:1fr;gap:36px;}}
+
+/* stats */
+.stats{padding:80px 0;}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:30px;text-align:center;}
+.st .num{font-family:'Fraunces',serif;font-weight:300;font-size:clamp(46px,6vw,84px);line-height:1;color:var(--gold);}
+.st .lbl{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--fg-2);margin-top:10px;}
+@media(max-width:760px){.stat-grid{grid-template-columns:1fr 1fr;gap:34px 20px;}}
+
+/* schedule */
+#sched{padding:110px 0;}
+.sched-h{margin-bottom:30px;}
+.sched-h h2{font-family:'Fraunces',serif;font-weight:300;font-size:clamp(34px,4.4vw,60px);margin:14px 0 0;}
+.srow{display:grid;grid-template-columns:130px 1fr auto auto;gap:24px;align-items:center;padding:22px 0;border-bottom:1px solid var(--line);transition:padding-left .2s;}
+.srow:first-of-type{border-top:1px solid var(--line);}
+.srow:hover{padding-left:12px;}
+.srow .tm{font-family:'JetBrains Mono',monospace;font-size:15px;color:var(--gold);}
+.srow .tt{font-family:'Fraunces',serif;font-style:italic;font-size:22px;}
+.srow .ag{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--fg-2);}
+.srow .px{font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--fg);}
+@media(max-width:680px){.srow{grid-template-columns:1fr;gap:6px;}}
+
+/* cta */
+#cta{padding:0 0 110px;}
+.cta-card{border:1px solid var(--line);border-radius:28px;padding:70px 50px;text-align:center;position:relative;overflow:hidden;background:radial-gradient(100% 120% at 50% 0%,rgba(155,107,255,.18),transparent 60%);}
+.cta-card h2{font-family:'Fraunces',serif;font-weight:300;font-size:clamp(34px,5vw,68px);margin:0 0 16px;}
+.cta-card h2 em{font-style:italic;color:var(--gold);}
+.cta-card p{color:var(--fg-2);max-width:42ch;margin:0 auto 28px;font-size:17px;}
+.btn{display:inline-flex;align-items:center;gap:9px;background:var(--gold);color:var(--bg);border:none;cursor:pointer;padding:15px 30px;border-radius:100px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;transition:all .2s;}
+.btn:hover{background:#FFD46B;transform:translateY(-2px);}
+
+footer{border-top:1px solid var(--line);padding:50px 0 34px;}
+.f-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px;}
+.f-row .fm{font-family:'Fraunces',serif;font-size:24px;letter-spacing:.06em;}
+.olo-credit{color:var(--fg-2);}
+.f-meta{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--fg-3);}
+.f-tiles{font-family:'JetBrains Mono',monospace;font-size:10.5px;line-height:1.9;color:var(--fg-3);margin-top:22px;max-width:92ch;}
+.f-tiles b{color:var(--fg-2);}
+</style>
+</head>
+<body>
+
+<nav class="nav" id="nav" data-solid-at="70vh">
+  <div class="brand fr"><span class="star">✦</span> Astrarium</div>
+  <div class="nav-links"><a href="#shows">Spettacoli</a><a href="#dome">La cupola</a><a href="#sched">Orari</a></div>
+  <a class="nav-cta" href="#sched">Programma di oggi</a>
+</nav>
+
+<section id="hero" data-tile="Hero · ConstellationFX">
+  <div class="nebula n1"></div><div class="nebula n2"></div>
+  <canvas id="stars" data-tile="ParticleFX · costellazioni"></canvas>
+  <div class="hero-in"><div class="wrap">
+    <div class="hero-ey">Planetario digitale · cupola 18 metri</div>
+    <h1 class="hero-h fr">Tocca le <em>stelle</em></h1>
+    <p class="hero-sub">Viaggi immersivi nell'universo sotto la nostra cupola 8K. Muovi il cursore e disegna le tue costellazioni.</p>
+  </div></div>
+  <div class="hero-hint">✦ muovi il cursore tra le stelle</div>
+</section>
+
+<section id="shows" data-tile="ProGallery · spettacoli">
+  <div class="wrap">
+    <div class="shows-h"><div><span class="kick">In programma</span><h2 class="fr">Gli spettacoli</h2></div><span class="mono" style="color:var(--fg-2);font-size:12px">cupola immersiva 8K</span></div>
+    <div class="show-grid reveal-stagger">
+      <div class="show"><div class="ph"><image-slot id="pl-s1" placeholder="universo"></image-slot></div><div class="sx"><div class="dur">45 min · tutti</div><h3 class="fr">Ai confini del cosmo</h3><p>Dalla Terra ai buchi neri, un viaggio mozzafiato oltre la Via Lattea.</p></div></div>
+      <div class="show"><div class="ph"><image-slot id="pl-s2" placeholder="bambini"></image-slot></div><div class="sx"><div class="dur">35 min · 4-10 anni</div><h3 class="fr">La luna di Leo</h3><p>Una favola stellata per i più piccoli, tra pianeti e comete.</p></div></div>
+      <div class="show"><div class="ph"><image-slot id="pl-s3" placeholder="nebulose"></image-slot></div><div class="sx"><div class="dur">50 min · 12+</div><h3 class="fr">Nascita di una stella</h3><p>Come polvere e gravità accendono i soli. Con musica dal vivo.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="dome" data-tile="Section · inner-columns">
+  <div class="wrap dome">
+    <div class="ph reveal" data-tile="Image"><image-slot id="pl-dome" placeholder="cupola / proiezione"></image-slot></div>
+    <div class="reveal">
+      <span class="kick">La cupola</span>
+      <h2 class="fr">18 metri di <em>cielo</em> sopra di te.</h2>
+      <p>Il nostro planetario proietta su una cupola di 18 metri con risoluzione 8K e audio immersivo a 32 canali. <strong>120 posti reclinabili</strong> per guardare in alto in totale comfort.</p>
+      <p>Il sistema riproduce il cielo di qualsiasi luogo e di qualsiasi epoca: passata, presente o futura.</p>
+    </div>
+  </div>
+</section>
+
+<section class="stats" data-tile="Counter">
+  <div class="wrap">
+    <div class="stat-grid reveal-stagger">
+      <div class="st"><div class="num fr"><span class="count" data-count="9000">0</span></div><div class="lbl">Stelle proiettate</div></div>
+      <div class="st"><div class="num fr"><span class="count" data-count="18">0</span>m</div><div class="lbl">Diametro cupola</div></div>
+      <div class="st"><div class="num fr"><span class="count" data-count="120">0</span></div><div class="lbl">Posti a sedere</div></div>
+      <div class="st"><div class="num fr"><span class="count" data-count="14">0</span></div><div class="lbl">Spettacoli in rotazione</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="sched" data-tile="QueryLoop · orari">
+  <div class="wrap">
+    <div class="sched-h"><span class="kick">Oggi in cupola</span><h2 class="fr">Orari degli spettacoli</h2></div>
+    <div class="srow"><span class="tm">10:30</span><span class="tt fr">La luna di Leo</span><span class="ag">famiglie</span><span class="px">€ 8</span></div>
+    <div class="srow"><span class="tm">12:00</span><span class="tt fr">Ai confini del cosmo</span><span class="ag">tutti</span><span class="px">€ 10</span></div>
+    <div class="srow"><span class="tm">15:30</span><span class="tt fr">Nascita di una stella</span><span class="ag">12+</span><span class="px">€ 12</span></div>
+    <div class="srow"><span class="tm">17:00</span><span class="tt fr">Ai confini del cosmo</span><span class="ag">tutti</span><span class="px">€ 10</span></div>
+    <div class="srow"><span class="tm">21:00</span><span class="tt fr">Notte di stelle · live</span><span class="ag">evento</span><span class="px">€ 16</span></div>
+  </div>
+</section>
+
+<section id="cta" data-tile="AnimatedHeading">
+  <div class="wrap">
+    <div class="cta-card">
+      <span class="kick" style="justify-content:center">Biglietti in cassa</span>
+      <h2 class="fr">Guarda <em>in alto.</em></h2>
+      <p>Biglietti disponibili all'ingresso o online. Gruppi e scuole su richiesta, tutto l'anno.</p>
+      <a class="btn" href="#">Come raggiungerci →</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="f-row">
+      <div class="fm fr">✦ Astrarium</div>
+      <div class="olo-credit"><span class="olo-mk"><b></b><i></i><b></b></span>Costruito con <b class="hl">OLObuild</b> — zero codice</div>
+    </div>
+    <div class="f-tiles"><b>Tile usati (9):</b> Hero · ConstellationFX (canvas) · ProGallery spettacoli · Section/inner-columns · Counter · QueryLoop orari · AnimatedHeading · Image · ShapeDivider — nessuna prenotazione.</div>
+    <div class="f-row" style="margin-top:22px"><span class="f-meta">© 2026 Astrarium planetario — tema dimostrativo</span><span class="f-meta">OLOtheme · demo · 49 — Planetario</span></div>
+  </div>
+</footer>
+
+<button id="tiletoggle"><span class="sq"></span><span class="t">Mostra tile</span></button>
+
+<script src="image-slot.js"></script>
+<script src="shared/olo-demo.js"></script>
+<script>
+/* starfield + constellation to cursor */
+(function(){
+  var c=document.getElementById('stars'),x=c.getContext('2d'),W,H,S=[],mouse={x:-999,y:-999};
+  function size(){W=c.width=c.offsetWidth;H=c.height=c.offsetHeight;build();}
+  function build(){S=[];var n=Math.round(W*H/9000);for(var i=0;i<n;i++)S.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.6+.4,tw:Math.random()*Math.PI*2,sp:.3+Math.random()*.5,vy:.05+Math.random()*.15});}
+  size();window.addEventListener('resize',size);
+  c.addEventListener('pointermove',function(e){var r=c.getBoundingClientRect();mouse.x=e.clientX-r.left;mouse.y=e.clientY-r.top;});
+  c.addEventListener('pointerleave',function(){mouse.x=mouse.y=-999;});
+  function loop(){
+    x.clearRect(0,0,W,H);
+    // stars
+    S.forEach(function(s){
+      s.tw+=0.03;s.y+=s.vy;if(s.y>H)s.y=0;
+      var a=.5+Math.sin(s.tw)*.4;
+      x.fillStyle='rgba(237,239,251,'+a+')';
+      x.beginPath();x.arc(s.x,s.y,s.r,0,Math.PI*2);x.fill();
+    });
+    // constellation lines to nearby + to cursor
+    var near=[];
+    S.forEach(function(s){var dx=s.x-mouse.x,dy=s.y-mouse.y;if(dx*dx+dy*dy<26000)near.push(s);});
+    x.strokeStyle='rgba(245,194,75,.5)';x.lineWidth=.7;
+    near.forEach(function(s){
+      var d=Math.hypot(s.x-mouse.x,s.y-mouse.y);
+      x.globalAlpha=1-d/165;
+      x.beginPath();x.moveTo(mouse.x,mouse.y);x.lineTo(s.x,s.y);x.stroke();
+    });
+    // links between near stars
+    for(var i=0;i<near.length;i++)for(var j=i+1;j<near.length;j++){
+      var a=near[i],b=near[j],dd=Math.hypot(a.x-b.x,a.y-b.y);
+      if(dd<90){x.globalAlpha=(1-dd/90)*.5;x.beginPath();x.moveTo(a.x,a.y);x.lineTo(b.x,b.y);x.stroke();}
+    }
+    x.globalAlpha=1;
+    requestAnimationFrame(loop);
+  }
+  loop();
+})();
+</script>
+</body>
+</html>

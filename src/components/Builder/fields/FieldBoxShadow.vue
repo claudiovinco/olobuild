@@ -1,43 +1,47 @@
 <template>
-  <div class="mb-space-y-2">
-    <div class="mb-flex mb-gap-2">
-      <div class="mb-flex-1">
-        <label class="mb-text-[10px] mb-text-gray-500">H</label>
-        <input type="number" :value="val.h" @input="update('h', $event.target.value)" min="-100" max="100"
-          :aria-label="t('Offset orizzontale ombra (px)')"
-          class="mb-w-full mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded mb-px-2 mb-py-1 mb-text-xs mb-text-gray-200" />
-      </div>
-      <div class="mb-flex-1">
-        <label class="mb-text-[10px] mb-text-gray-500">V</label>
-        <input type="number" :value="val.v" @input="update('v', $event.target.value)" min="-100" max="100"
-          :aria-label="t('Offset verticale ombra (px)')"
-          class="mb-w-full mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded mb-px-2 mb-py-1 mb-text-xs mb-text-gray-200" />
-      </div>
-      <div class="mb-flex-1">
-        <label class="mb-text-[10px] mb-text-gray-500">{{ t('Blur') }}</label>
-        <input type="number" :value="val.blur" @input="update('blur', $event.target.value)" min="0" max="200"
-          :aria-label="t('Sfocatura ombra (px)')"
-          class="mb-w-full mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded mb-px-2 mb-py-1 mb-text-xs mb-text-gray-200" />
-      </div>
-      <div class="mb-flex-1">
-        <label class="mb-text-[10px] mb-text-gray-500">{{ t('Spread') }}</label>
-        <input type="number" :value="val.spread" @input="update('spread', $event.target.value)" min="-100" max="100"
-          :aria-label="t('Diffusione ombra (px)')"
-          class="mb-w-full mb-bg-gray-700 mb-border mb-border-gray-600 mb-rounded mb-px-2 mb-py-1 mb-text-xs mb-text-gray-200" />
+  <div class="olo-shadowfield">
+    <div class="olo-sh-row">
+      <span class="olo-sh-rl">{{ t('Offset') }}</span>
+      <input class="olo-sh-slider" type="range" min="-50" max="50" :value="val.h"
+             :aria-label="t('Offset orizzontale ombra (px)')" @input="update('h', $event.target.value)"/>
+      <span class="olo-sh-val"><input type="number" min="-100" max="100" :value="val.h"
+             :aria-label="t('Offset orizzontale ombra (px)')" @input="update('h', $event.target.value)"/><i>H</i></span>
+    </div>
+    <div class="olo-sh-row">
+      <span class="olo-sh-rl"></span>
+      <input class="olo-sh-slider" type="range" min="-50" max="50" :value="val.v"
+             :aria-label="t('Offset verticale ombra (px)')" @input="update('v', $event.target.value)"/>
+      <span class="olo-sh-val"><input type="number" min="-100" max="100" :value="val.v"
+             :aria-label="t('Offset verticale ombra (px)')" @input="update('v', $event.target.value)"/><i>V</i></span>
+    </div>
+    <div class="olo-sh-row">
+      <span class="olo-sh-rl">{{ t('Sfoc.') }}</span>
+      <input class="olo-sh-slider" type="range" min="0" max="100" :value="val.blur"
+             :aria-label="t('Sfocatura ombra (px)')" @input="update('blur', $event.target.value)"/>
+      <span class="olo-sh-val"><input type="number" min="0" max="200" :value="val.blur"
+             :aria-label="t('Sfocatura ombra (px)')" @input="update('blur', $event.target.value)"/><i>px</i></span>
+    </div>
+    <div class="olo-sh-row">
+      <span class="olo-sh-rl">{{ t('Estens.') }}</span>
+      <input class="olo-sh-slider" type="range" min="-30" max="50" :value="val.spread"
+             :aria-label="t('Diffusione ombra (px)')" @input="update('spread', $event.target.value)"/>
+      <span class="olo-sh-val"><input type="number" min="-100" max="100" :value="val.spread"
+             :aria-label="t('Diffusione ombra (px)')" @input="update('spread', $event.target.value)"/><i>px</i></span>
+    </div>
+    <div class="olo-sh-row olo-sh-row--col">
+      <span class="olo-sh-rl">{{ t('Colore') }}</span>
+      <div class="olo-sh-color">
+        <FieldColor :modelValue="val.color || 'rgba(0,0,0,0.15)'" @update:modelValue="update('color', $event)" />
       </div>
     </div>
-    <div>
-      <label class="mb-text-[10px] mb-text-gray-500">{{ t('Colore') }}</label>
-      <FieldColor :modelValue="val.color || '#000000'" @update:modelValue="update('color', $event)" />
+    <div class="olo-sh-row olo-sh-row--last">
+      <span class="olo-sh-rl">{{ t('Inset') }}</span>
+      <button type="button" role="switch" :aria-checked="String(!!val.inset)"
+              :class="['olo-sh-switch', { on: val.inset }]"
+              :aria-label="t('Ombra interna (inset)')"
+              @click="update('inset', !val.inset)"></button>
     </div>
-    <label class="mb-flex mb-items-center mb-gap-1 mb-cursor-pointer mb-text-[10px] mb-text-gray-400">
-      <input type="checkbox" :checked="val.inset" @change="update('inset', $event.target.checked)"
-        class="mb-rounded mb-border-gray-600" />
-      Inset
-    </label>
-    <div class="mb-text-[10px] mb-text-gray-500 mb-bg-gray-900 mb-rounded mb-px-2 mb-py-1 mb-font-mono">
-      {{ previewText }}
-    </div>
+    <div class="olo-sh-preview" aria-hidden="true">{{ previewText }}</div>
   </div>
 </template>
 
@@ -47,7 +51,7 @@ import { computed } from 'vue';
 import FieldColor from './FieldColor.vue';
 
 const props = defineProps({
-  modelValue: { type: Object, default: () => ({ h: 0, v: 4, blur: 10, spread: 0, color: 'rgba(0,0,0,0.15)', inset: false }) }
+  modelValue: { type: Object, default: () => ({ h: 0, v: 4, blur: 10, spread: 0, color: 'rgba(0,0,0,0.15)', inset: false }) },
 });
 const emit = defineEmits(['update:modelValue']);
 
@@ -67,7 +71,30 @@ const previewText = computed(() => {
 
 function update(key, value) {
   const numKeys = ['h', 'v', 'blur', 'spread'];
-  const newVal = { ...val.value, [key]: numKeys.includes(key) ? parseInt(value) || 0 : value };
+  const newVal = { ...val.value, [key]: numKeys.includes(key) ? (parseInt(value) || 0) : value };
   emit('update:modelValue', newVal);
 }
 </script>
+
+<style scoped>
+.olo-shadowfield { display: flex; flex-direction: column; gap: 10px; padding: 2px 0; }
+.olo-sh-row { display: flex; align-items: center; gap: 10px; }
+.olo-sh-row--last { margin-bottom: 0; }
+.olo-sh-row--col { align-items: flex-start; }
+.olo-sh-rl { width: 54px; flex-shrink: 0; font-size: 9px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #94a3b8; padding-top: 9px; }
+.olo-sh-row:not(.olo-sh-row--col) .olo-sh-rl { padding-top: 0; }
+.olo-sh-slider { flex: 1; accent-color: var(--olo-ui-accent, #e8622a); height: 5px; cursor: pointer; }
+.olo-sh-slider:focus-visible { outline: 2px solid var(--olo-ui-accent, #e8622a); outline-offset: 4px; }
+.olo-sh-val { display: flex; align-items: center; border: 1px solid #e5e7eb; border-radius: 9px; overflow: hidden; background: #fff; height: 34px; width: 72px; flex-shrink: 0; }
+.olo-sh-val input { width: 100%; min-width: 0; border: 0; outline: none; text-align: center; font: 500 13px ui-monospace, monospace; color: #1f2937; background: transparent; -moz-appearance: textfield; }
+.olo-sh-val input::-webkit-outer-spin-button, .olo-sh-val input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.olo-sh-val:focus-within { border-color: var(--olo-ui-accent, #e8622a); box-shadow: 0 0 0 3px rgba(232,98,42,.18); }
+.olo-sh-val i { font-style: normal; font-size: 11px; color: #94a3b8; font-weight: 600; padding: 0 8px; border-left: 1px solid #eef0f3; align-self: stretch; display: flex; align-items: center; background: #f6f7f9; }
+.olo-sh-color { flex: 1; min-width: 0; }
+.olo-sh-switch { width: 34px; height: 19px; border: 0; border-radius: 99px; background: #cbd5e1; position: relative; cursor: pointer; transition: background .15s; flex-shrink: 0; }
+.olo-sh-switch::after { content: ""; position: absolute; top: 2px; left: 2px; width: 15px; height: 15px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.2); transition: left .15s; }
+.olo-sh-switch.on { background: var(--olo-ui-accent, #e8622a); }
+.olo-sh-switch.on::after { left: 17px; }
+.olo-sh-switch:focus-visible { outline: 2px solid var(--olo-ui-accent, #e8622a); outline-offset: 2px; }
+.olo-sh-preview { font: 500 10px ui-monospace, monospace; color: #6b7280; background: #f6f7f9; border-radius: 7px; padding: 7px 9px; word-break: break-all; }
+</style>

@@ -54,12 +54,12 @@
 <script setup>
 import { computed } from 'vue';
 import { t } from '@/i18n';
-import { resolveColor, TOKENS } from '@/composables/oloTileDefaults';
+import { resolveColor, TOKENS, SHADOW } from '@/composables/oloTileDefaults';
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 const defaults = { show_header: true, header_bg: '', header_text_color: '', card_border_radius: 12, card_shadow: 'sm', accent_color: '', btn_text: 'Conferma Prenotazione', btn_bg: '', btn_color: '', btn_radius: 8, btn_full_width: true, max_width: '', step_badge_color: '', label_color: '', input_radius: 8 };
 const s = computed(() => ({ ...defaults, ...props.settings }));
 const accent = computed(() => resolveColor(s.value.accent_color, TOKENS.primary));
-const shadowMap = { none:'none', sm:'0 1px 3px rgba(0,0,0,0.1)', md:'0 4px 12px rgba(0,0,0,0.1)', lg:'0 8px 24px rgba(0,0,0,0.15)' };
+const shadowMap = SHADOW;
 const today = new Date().toLocaleDateString('it-IT', { day:'2-digit', month:'short', year:'numeric' });
 const cardWrapStyle = computed(() => ({
   background: TOKENS.surface, borderRadius: s.value.card_border_radius+'px', border:'1px solid '+TOKENS.border,

@@ -90,6 +90,19 @@ export const TOKENS = {
 export const SPACE = { xs: 4, sm: 8, md: 12, lg: 16, xl: 24, '2xl': 32, '3xl': 48 };
 export const RADIUS = { none: 0, sm: 6, md: 10, lg: 14, pill: 999 };
 
+/* Lingua d'ombra unica "claude design" — gemella JS di Olo_Tile_Utils::SHADOW_MAP
+   (PHP). Due strati navy-tinted (contact stretto + ambient morbido). I valori sm/md
+   sono quelli esatti dei REFERENCE_*.html; lg/xl ne sono l'estensione coerente.
+   Le tile Vue devono usare QUESTA scala (no box-shadow nero piatto inline) così la
+   canvas combacia col render PHP. hover di una card = passare da `sm` a `md`. */
+export const SHADOW = {
+  none: 'none',
+  sm: '0 1px 2px rgba(16,24,40,.06), 0 6px 16px -10px rgba(16,24,40,.18)',
+  md: '0 2px 4px rgba(16,24,40,.06), 0 14px 28px -12px rgba(22,38,61,.28)',
+  lg: '0 8px 24px -6px rgba(16,24,40,.18), 0 18px 40px -12px rgba(22,38,61,.30)',
+  xl: '0 12px 32px -8px rgba(16,24,40,.20), 0 28px 56px -14px rgba(22,38,61,.34)',
+};
+
 /**
  * resolveColor — risolve un valore colore in modo TOKEN-FIRST:
  * se l'utente non ha scelto un colore, usa il token; mai un hex hardcoded.

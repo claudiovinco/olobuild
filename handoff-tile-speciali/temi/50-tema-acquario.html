@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Abìsso — acquario · tema dimostrativo OLObuild</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared/olo-demo.css">
+<style>
+:root{
+  --deep:#021A2E; --deep-2:#04263F; --mid:#06405F; --surf:#1E8FB0; --foam:#BDEBEE;
+  --paper:#F0FAFB; --ink:#06283B; --ink-2:#3E6379; --ink-3:#7BA0B2; --coral:#FF8A6B; --line:#CFE7EC;
+  --tile-accent:#1E8FB0; --tile-btn:#021A2E;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:'Manrope',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+a{color:inherit;text-decoration:none;}
+.fr{font-family:'Fraunces',Georgia,serif;font-weight:500;}
+.mono{font-family:'JetBrains Mono',monospace;}
+.wrap{max-width:1200px;margin:0 auto;padding:0 44px;}
+.kick{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--surf);font-weight:600;display:inline-flex;align-items:center;gap:9px;}
+.kick::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--coral);}
+
+/* nav */
+.nav{position:fixed;inset:0 0 auto 0;z-index:50;display:flex;align-items:center;gap:26px;padding:22px 44px;transition:all .35s;color:#fff;border-bottom:1px solid transparent;}
+.nav.solid{background:rgba(2,26,46,.82);backdrop-filter:blur(14px);border-color:rgba(255,255,255,.12);padding:14px 44px;}
+.brand{font-family:'Fraunces',serif;font-weight:600;font-size:25px;letter-spacing:-.01em;display:flex;align-items:center;gap:9px;}
+.brand .wv{color:var(--foam);}
+.nav-links{margin-left:auto;display:flex;gap:26px;font-size:14px;font-weight:600;}
+.nav-links a{opacity:.88;}.nav-links a:hover{opacity:1;color:var(--foam);}
+.nav-cta{background:var(--coral);color:#fff;padding:11px 20px;border-radius:100px;font-size:13px;font-weight:700;transition:transform .15s;}
+.nav-cta:hover{transform:translateY(-2px);}
+@media(max-width:880px){.nav-links{display:none;}}
+
+/* hero underwater */
+#hero{height:100vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;text-align:center;color:#fff;
+  background:linear-gradient(180deg,#1E8FB0 0%,#06405F 42%,#04263F 74%,#021A2E 100%);}
+.layer{position:absolute;left:0;right:0;will-change:transform;}
+#rays{inset:0;z-index:1;background:
+  linear-gradient(100deg,transparent 40%,rgba(189,235,238,.10) 46%,transparent 52%),
+  linear-gradient(86deg,transparent 55%,rgba(189,235,238,.08) 61%,transparent 67%),
+  linear-gradient(94deg,transparent 22%,rgba(189,235,238,.07) 28%,transparent 34%);
+  animation:rays 9s ease-in-out infinite alternate;}
+@keyframes rays{from{opacity:.6;transform:translateX(-10px);}to{opacity:1;transform:translateX(10px);}}
+#bubbles{position:absolute;inset:0;width:100%;height:100%;z-index:2;}
+.kelp{bottom:-2%;z-index:2;display:flex;align-items:flex-end;justify-content:space-between;padding:0 4vw;height:46vh;opacity:.55;}
+.kelp .k{width:26px;background:linear-gradient(180deg,transparent,#032536);border-radius:50% 50% 0 0;transform-origin:bottom;animation:sway 6s ease-in-out infinite;}
+.kelp .k:nth-child(odd){animation-delay:-2s;}
+@keyframes sway{0%,100%{transform:rotate(-4deg);}50%{transform:rotate(5deg);}}
+.fish{position:absolute;z-index:2;width:54px;height:24px;opacity:.7;will-change:transform;}
+.fish svg{width:100%;height:100%;}
+.hero-in{position:relative;z-index:5;}
+.hero-ey{font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:.28em;text-transform:uppercase;color:var(--foam);margin-bottom:18px;}
+.hero-h{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(56px,12vw,190px);line-height:.9;margin:0;letter-spacing:-.02em;text-shadow:0 6px 40px rgba(2,26,46,.5);}
+.hero-h em{font-style:italic;color:var(--foam);}
+.hero-sub{font-size:18px;color:rgba(240,250,251,.92);max-width:38ch;margin:24px auto 0;line-height:1.55;}
+.hero-hint{position:absolute;bottom:5vh;left:50%;transform:translateX(-50%);z-index:5;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:rgba(240,250,251,.6);}
+
+/* exhibits */
+#exhibits{padding:110px 0;}
+.ex-h{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:42px;flex-wrap:wrap;gap:16px;}
+.ex-h h2{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(38px,5vw,72px);margin:14px 0 0;}
+.ex-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px;}
+.exh{position:relative;overflow:hidden;border-radius:18px;background:var(--mid);cursor:pointer;}
+.exh image-slot{width:100%;height:100%;display:block;transition:transform .7s;}
+.exh:hover image-slot{transform:scale(1.06);}
+.exh::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(2,26,46,.8),transparent 55%);}
+.exh .ex{position:absolute;left:0;right:0;bottom:0;padding:22px;z-index:2;color:#fff;}
+.exh .et{font-family:'Fraunces',serif;font-weight:600;font-size:25px;line-height:.95;}
+.exh .es{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--foam);margin-top:7px;}
+.exh.big{grid-column:span 7;}.exh.big image-slot{aspect-ratio:16/11;}
+.exh.sm{grid-column:span 5;}.exh.sm image-slot{aspect-ratio:16/11;}
+.exh.t{grid-column:span 4;}.exh.t image-slot{aspect-ratio:4/3;}
+@media(max-width:880px){.exh.big,.exh.sm,.exh.t{grid-column:span 12;}}
+
+/* stats */
+.stats{padding:80px 0;background:var(--deep);color:#fff;}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:30px;text-align:center;}
+.st .num{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(44px,6vw,82px);line-height:1;color:var(--foam);}
+.st .lbl{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:rgba(240,250,251,.7);margin-top:10px;}
+@media(max-width:760px){.stat-grid{grid-template-columns:1fr 1fr;gap:34px 20px;}}
+
+/* tunnel feature */
+#tunnel{padding:110px 0;}
+.tunnel{display:grid;grid-template-columns:1.05fr 1fr;gap:64px;align-items:center;}
+.tunnel .ph image-slot{width:100%;aspect-ratio:5/4;display:block;border-radius:20px;}
+.tunnel h2{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(34px,4.4vw,60px);line-height:1.04;margin:16px 0 18px;}
+.tunnel h2 em{font-style:italic;color:var(--surf);}
+.tunnel p{font-size:16px;line-height:1.72;color:var(--ink-2);margin:0 0 16px;}
+.tunnel p strong{color:var(--ink);}
+@media(max-width:880px){.tunnel{grid-template-columns:1fr;gap:36px;}}
+
+/* visit */
+#visit{padding:110px 0;background:linear-gradient(180deg,var(--paper),#E1F2F4);}
+.visit-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid var(--line);}
+.vc{padding:34px 30px 34px 0;border-right:1px solid var(--line);}
+.vc:last-child{border-right:none;padding-right:0;}
+.vc h4{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--surf);margin:0 0 18px;font-weight:600;}
+.vc .ln{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px;color:var(--ink-2);}
+.vc .ln b{color:var(--ink);}
+.vc p{font-size:14.5px;line-height:1.65;color:var(--ink-2);margin:0;}
+.vc p b{color:var(--ink);}
+@media(max-width:760px){.visit-grid{grid-template-columns:1fr;}.vc{border-right:none;padding-right:0;}}
+
+footer{background:var(--deep);color:rgba(240,250,251,.6);padding:56px 0 34px;}
+.f-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px;}
+.f-row .fm{font-family:'Fraunces',serif;font-weight:600;font-size:24px;color:#fff;}
+.olo-credit{color:rgba(240,250,251,.74);border-color:rgba(240,250,251,.18);background:rgba(255,255,255,.05);}
+.f-meta{font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(240,250,251,.42);}
+.f-tiles{font-family:'JetBrains Mono',monospace;font-size:10.5px;line-height:1.9;color:rgba(240,250,251,.42);margin-top:22px;max-width:92ch;}
+.f-tiles b{color:rgba(240,250,251,.7);}
+</style>
+</head>
+<body>
+
+<nav class="nav" id="nav" data-solid-at="70vh">
+  <div class="brand"><span class="wv">≈</span>Abìsso</div>
+  <div class="nav-links"><a href="#exhibits">Vasche</a><a href="#tunnel">Il tunnel</a><a href="#visit">Visita</a></div>
+  <a class="nav-cta" href="#visit">Biglietti</a>
+</nav>
+
+<section id="hero" data-tile="Hero · UnderwaterParallax">
+  <div class="layer" id="rays" data-depth="2"></div>
+  <canvas id="bubbles" data-tile="ParticleFX · bolle"></canvas>
+  <div class="layer kelp" id="kelp" data-depth="10"></div>
+  <div class="hero-in"><div class="wrap">
+    <div class="hero-ey">Acquario civico · oltre 8.000 animali</div>
+    <h1 class="hero-h fr">Negli <em>abissi</em></h1>
+    <p class="hero-sub">Un tuffo tra meduse, squali e barriere coralline. Scorri e scendi sempre più in profondità.</p>
+  </div></div>
+  <div class="hero-hint">↓ scorri per immergerti</div>
+</section>
+
+<section id="exhibits" data-tile="ProGallery · vasche">
+  <div class="wrap">
+    <div class="ex-h"><div><span class="kick">Da non perdere</span><h2 class="fr">Le vasche</h2></div><span class="mono" style="color:var(--ink-3);font-size:12px">12 ambienti marini</span></div>
+    <div class="ex-grid reveal">
+      <div class="exh big"><image-slot id="aq-1" placeholder="squali"></image-slot><div class="ex"><div class="et">Oceano aperto</div><div class="es">Squali · tonni · razze</div></div></div>
+      <div class="exh sm"><image-slot id="aq-2" placeholder="meduse"></image-slot><div class="ex"><div class="et">Galleria delle meduse</div><div class="es">Luci & lente derive</div></div></div>
+      <div class="exh t"><image-slot id="aq-3" placeholder="corallo"></image-slot><div class="ex"><div class="et">Barriera tropicale</div><div class="es">Pesci pagliaccio</div></div></div>
+      <div class="exh t"><image-slot id="aq-4" placeholder="abissi"></image-slot><div class="ex"><div class="et">Zona abissale</div><div class="es">Creature bioluminescenti</div></div></div>
+      <div class="exh t"><image-slot id="aq-5" placeholder="fiume"></image-slot><div class="ex"><div class="et">Foreste sommerse</div><div class="es">Acqua dolce amazzonica</div></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="stats" data-tile="Counter">
+  <div class="wrap">
+    <div class="stat-grid reveal-stagger">
+      <div class="st"><div class="num fr"><span class="count" data-count="8000" data-suffix="+">0</span></div><div class="lbl">Animali ospitati</div></div>
+      <div class="st"><div class="num fr"><span class="count" data-count="450">0</span></div><div class="lbl">Specie diverse</div></div>
+      <div class="st"><div class="num fr"><span class="count" data-count="5">0</span>M</div><div class="lbl">Litri d'acqua</div></div>
+      <div class="st"><div class="num fr"><span class="count" data-count="40">0</span>m</div><div class="lbl">Tunnel subacqueo</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="tunnel" data-tile="Section · inner-columns">
+  <div class="wrap tunnel">
+    <div class="ph reveal" data-tile="Image"><image-slot id="aq-tunnel" placeholder="tunnel acquario"></image-slot></div>
+    <div class="reveal">
+      <span class="kick">L'esperienza</span>
+      <h2 class="fr">Cammina <em>sotto</em> l'oceano.</h2>
+      <p>Il nostro tunnel di vetro lungo 40 metri ti porta nel cuore della vasca oceanica: <strong>squali e razze nuotano sopra la tua testa</strong> mentre attraversi l'abisso.</p>
+      <p>Un'esperienza a 360° che lascia senza fiato grandi e piccoli, ogni giorno dell'anno.</p>
+    </div>
+  </div>
+</section>
+
+<section id="visit" data-tile="IconList · visita">
+  <div class="wrap">
+    <span class="kick">Informazioni</span>
+    <h2 class="fr" style="font-weight:600;font-size:clamp(32px,4vw,54px);margin:16px 0 44px;">Pianifica la visita</h2>
+    <div class="visit-grid">
+      <div class="vc"><h4>Orari</h4><div class="ln"><span>Lun — Ven</span><b>09:30 — 18:00</b></div><div class="ln"><span>Sab — Dom</span><b>09:30 — 20:00</b></div><div class="ln"><span>Ultimo ingresso</span><b>1h prima</b></div></div>
+      <div class="vc"><h4>Biglietti</h4><div class="ln"><span>Intero</span><b>€ 22</b></div><div class="ln"><span>Bambini 3-12</span><b>€ 14</b></div><div class="ln"><span>Famiglia (2+2)</span><b>€ 60</b></div></div>
+      <div class="vc"><h4>Dove</h4><p><b>Acquario Abìsso</b><br>Molo Sud, Porto Vecchio<br>Biglietti in cassa o online, senza prenotazione obbligatoria.</p></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="f-row">
+      <div class="fm fr">≈ Abìsso</div>
+      <div class="olo-credit"><span class="olo-mk"><b></b><i></i><b></b></span>Costruito con <b class="hl">OLObuild</b> — zero codice</div>
+    </div>
+    <div class="f-tiles"><b>Tile usati (9):</b> Hero UnderwaterParallax · ParticleFX (bolle + pesci) · ProGallery vasche · Counter · Section/inner-columns · IconList visita · Image · DarkMode · ShapeDivider — nessuna prenotazione.</div>
+    <div class="f-row" style="margin-top:22px"><span class="f-meta">© 2026 Acquario Abìsso — tema dimostrativo</span><span class="f-meta">OLOtheme · demo · 50 — Acquario</span></div>
+  </div>
+</footer>
+
+<button id="tiletoggle"><span class="sq"></span><span class="t">Mostra tile</span></button>
+
+<script src="image-slot.js"></script>
+<script src="shared/olo-demo.js"></script>
+<script>
+/* kelp */
+(function(){
+  var kelp=document.getElementById('kelp');
+  for(var i=0;i<16;i++){var k=document.createElement('div');k.className='k';k.style.height=(30+Math.random()*60)+'%';k.style.animationDuration=(5+Math.random()*4)+'s';kelp.appendChild(k);}
+})();
+/* bubbles + fish canvas */
+(function(){
+  var c=document.getElementById('bubbles'),x=c.getContext('2d'),W,H,B=[];
+  function size(){W=c.width=c.offsetWidth;H=c.height=c.offsetHeight;}
+  size();window.addEventListener('resize',size);
+  for(var i=0;i<46;i++)B.push(mk());
+  function mk(){return {x:Math.random()*W,y:H+Math.random()*H,r:2+Math.random()*7,s:.5+Math.random()*1.6,w:Math.random()*Math.PI*2};}
+  function loop(){
+    x.clearRect(0,0,W,H);
+    B.forEach(function(b){
+      b.y-=b.s;b.w+=0.03;b.x+=Math.sin(b.w)*.4;
+      if(b.y<-10){b.y=H+10;b.x=Math.random()*W;}
+      x.strokeStyle='rgba(189,235,238,.4)';x.lineWidth=1;
+      x.beginPath();x.arc(b.x,b.y,b.r,0,Math.PI*2);x.stroke();
+      x.fillStyle='rgba(189,235,238,.08)';x.fill();
+    });
+    requestAnimationFrame(loop);
+  }
+  loop();
+  /* parallax layers on scroll */
+  var rays=document.getElementById('rays'),kelp=document.getElementById('kelp'),t=false;
+  function par(){var y=window.scrollY||0;rays.style.transform='translateY('+(y*0.3)+'px)';kelp.style.transform='translateY('+(y*0.12)+'px)';t=false;}
+  window.addEventListener('scroll',function(){if(!t){requestAnimationFrame(par);t=true;}},{passive:true});
+  /* swimming fish */
+  var hero=document.getElementById('hero');
+  var fishSvg='<svg viewBox="0 0 54 24"><path d="M2 12 Q14 2 34 6 Q48 9 52 12 Q48 15 34 18 Q14 22 2 12 Z" fill="rgba(189,235,238,.5)"/><path d="M2 12 L-8 6 L-4 12 L-8 18 Z" fill="rgba(189,235,238,.5)"/></svg>';
+  for(var f=0;f<5;f++){
+    var el=document.createElement('div');el.className='fish';el.innerHTML=fishSvg;
+    el.style.top=(20+Math.random()*60)+'%';
+    var dur=14+Math.random()*12,delay=-Math.random()*dur,sc=.6+Math.random()*.8;
+    el.style.transform='scale('+sc+')';
+    el.animate([{left:'-10%'},{left:'110%'}],{duration:dur*1000,delay:delay*1000,iterations:Infinity,easing:'linear'});
+    hero.appendChild(el);
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Inchiòstro — risograph studio · tema dimostrativo OLObuild</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Manrope:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared/olo-demo.css">
+<style>
+:root{
+  --paper:#EDE7D8; --ink:#15110C; --blue:#1438D6; --pink:#FF3DA5; --yellow:#FFC400; --teal:#0FA88C;
+  --line:rgba(21,17,12,.18);
+  --tile-accent:#1438D6; --tile-btn:#15110C;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:'Manrope',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden;cursor:none;
+  background-image:radial-gradient(rgba(21,17,12,.10) 1px,transparent 1.4px);background-size:6px 6px;}
+@media(hover:none){body{cursor:auto;}}
+a{color:inherit;text-decoration:none;}
+.bric{font-family:'Bricolage Grotesque',sans-serif;}
+.mono{font-family:'JetBrains Mono',monospace;}
+.wrap{max-width:1200px;margin:0 auto;padding:0 44px;}
+.kick{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--blue);font-weight:600;display:inline-flex;align-items:center;gap:9px;}
+.kick::before{content:"";width:20px;height:3px;background:var(--pink);}
+
+/* ===== blend-difference flashlight (BlendText · Spotlight) ===== */
+#flash{position:fixed;top:0;left:0;width:300px;height:300px;margin:-150px 0 0 -150px;border-radius:50%;z-index:300;pointer-events:none;
+  background:radial-gradient(circle,#fff 0%,#fff 56%,transparent 70%);mix-blend-mode:difference;will-change:transform;}
+@media(hover:none){#flash{display:none;}}
+
+/* nav */
+.nav{position:fixed;inset:0 0 auto 0;z-index:50;display:flex;align-items:center;gap:26px;padding:22px 44px;transition:all .35s;border-bottom:2px solid transparent;}
+.nav.solid{background:var(--paper);border-color:var(--ink);padding:13px 44px;}
+.brand{font-family:'Bricolage Grotesque';font-weight:800;font-size:24px;letter-spacing:-.02em;}
+.nav-links{margin-left:auto;display:flex;gap:24px;font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;font-weight:500;}
+.nav-links a:hover{color:var(--blue);}
+.nav-cta{background:var(--blue);color:var(--paper);padding:11px 20px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;box-shadow:4px 4px 0 var(--pink);transition:transform .12s,box-shadow .12s;}
+.nav-cta:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--pink);}
+@media(max-width:880px){.nav-links{display:none;}}
+
+/* hero */
+#hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:130px 44px 70px;max-width:1200px;margin:0 auto;position:relative;}
+.hero-h{font-family:'Bricolage Grotesque';font-weight:800;font-size:clamp(60px,15vw,230px);line-height:.82;letter-spacing:-.04em;margin:0;text-transform:uppercase;color:var(--blue);}
+.hero-h .o2{color:var(--pink);}
+.hero-h .o3{-webkit-text-stroke:3px var(--ink);color:transparent;}
+.hero-sub{font-size:19px;color:var(--ink);max-width:42ch;margin:30px 0 0;line-height:1.55;}
+.hint{margin-top:30px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);display:inline-flex;align-items:center;gap:9px;background:var(--yellow);padding:8px 15px;width:fit-content;}
+
+/* process */
+#proc{padding:110px 0;border-top:2px solid var(--ink);}
+.proc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:42px;}
+.step{border:2px solid var(--ink);padding:26px;background:var(--paper);box-shadow:6px 6px 0 var(--ink);}
+.step:nth-child(1){box-shadow:6px 6px 0 var(--blue);}
+.step:nth-child(2){box-shadow:6px 6px 0 var(--pink);}
+.step:nth-child(3){box-shadow:6px 6px 0 var(--teal);}
+.step .n{font-family:'Bricolage Grotesque';font-weight:800;font-size:44px;line-height:1;}
+.step h3{font-family:'Bricolage Grotesque';font-weight:700;font-size:21px;margin:14px 0 9px;}
+.step p{font-size:13.5px;color:var(--ink);line-height:1.6;margin:0;opacity:.82;}
+@media(max-width:880px){.proc-grid{grid-template-columns:1fr;}}
+
+/* separation showcase */
+#sep{padding:100px 0;background:var(--ink);color:var(--paper);background-image:radial-gradient(rgba(255,255,255,.07) 1px,transparent 1.4px);background-size:6px 6px;}
+#sep .kick{color:var(--yellow);}#sep .kick::before{background:var(--pink);}
+.sep-h{font-family:'Bricolage Grotesque';font-weight:800;font-size:clamp(34px,5vw,72px);line-height:.9;margin:14px 0 36px;text-transform:uppercase;}
+.layers{display:flex;gap:18px;flex-wrap:wrap;justify-content:center;}
+.lyr{position:relative;width:210px;height:260px;border:1px solid rgba(255,255,255,.2);display:grid;place-items:center;}
+.lyr .blob{position:absolute;inset:0;mix-blend-mode:screen;}
+.lyr .lab{position:absolute;bottom:12px;left:12px;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;z-index:2;}
+.lyr.c1 .blob{background:radial-gradient(circle at 40% 35%,var(--pink),transparent 60%);}
+.lyr.c2 .blob{background:radial-gradient(circle at 55% 55%,var(--blue),transparent 60%);}
+.lyr.c3 .blob{background:radial-gradient(circle at 45% 60%,var(--yellow),transparent 60%);}
+.lyr.mix .blob.a{background:radial-gradient(circle at 40% 35%,var(--pink),transparent 60%);}
+.lyr.mix .blob.b{background:radial-gradient(circle at 60% 50%,var(--blue),transparent 60%);}
+.lyr.mix .blob.c{background:radial-gradient(circle at 48% 66%,var(--yellow),transparent 60%);}
+
+/* prints */
+#prints{padding:110px 0;}
+.print-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:18px;margin-top:40px;}
+.pr{position:relative;overflow:hidden;border:2px solid var(--ink);}
+.pr image-slot{width:100%;height:100%;display:block;filter:contrast(1.05);transition:transform .5s;}
+.pr:hover image-slot{transform:scale(1.04);}
+.pr .cap{position:absolute;left:0;bottom:0;background:var(--blue);color:var(--paper);font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.06em;padding:7px 12px;text-transform:uppercase;}
+.pr.big{grid-column:span 7;}.pr.big image-slot{aspect-ratio:4/3;}
+.pr.sm{grid-column:span 5;}.pr.sm image-slot{aspect-ratio:4/3;}
+.pr.t{grid-column:span 4;}.pr.t image-slot{aspect-ratio:1/1;}
+@media(max-width:880px){.pr.big,.pr.sm,.pr.t{grid-column:span 12;}}
+
+/* stats */
+.stats{padding:80px 0;border-top:2px solid var(--ink);border-bottom:2px solid var(--ink);}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:30px;text-align:center;}
+.st .num{font-family:'Bricolage Grotesque';font-weight:800;font-size:clamp(44px,6vw,84px);line-height:1;color:var(--blue);}
+.st:nth-child(2) .num{color:var(--pink);}.st:nth-child(3) .num{color:var(--teal);}.st:nth-child(4) .num{color:var(--ink);}
+.st .lbl{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);margin-top:8px;opacity:.8;}
+@media(max-width:760px){.stat-grid{grid-template-columns:1fr 1fr;gap:34px 20px;}}
+
+/* cta */
+#cta{padding:120px 0;text-align:center;}
+#cta h2{font-family:'Bricolage Grotesque';font-weight:800;font-size:clamp(46px,9vw,150px);line-height:.84;margin:16px 0 28px;text-transform:uppercase;letter-spacing:-.03em;color:var(--pink);}
+#cta h2 em{color:var(--blue);font-style:normal;}
+.btn{display:inline-flex;align-items:center;gap:10px;background:var(--ink);color:var(--paper);border:none;cursor:none;padding:17px 34px;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;box-shadow:6px 6px 0 var(--blue);transition:transform .12s,box-shadow .12s;}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:8px 8px 0 var(--blue);}
+
+footer{border-top:2px solid var(--ink);padding:34px 0;}
+.f-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px;}
+.f-row .fm{font-family:'Bricolage Grotesque';font-weight:800;font-size:23px;text-transform:uppercase;}
+.olo-credit{color:var(--ink);}
+.f-meta{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink);opacity:.7;}
+.f-tiles{font-family:'JetBrains Mono',monospace;font-size:10.5px;line-height:1.9;color:var(--ink);opacity:.75;margin-top:22px;max-width:96ch;}
+.f-tiles b{font-weight:600;}
+</style>
+</head>
+<body>
+
+<div id="flash"></div>
+
+<nav class="nav" id="nav" data-solid-at="70vh">
+  <div class="brand bric">INCHIÒSTRO</div>
+  <div class="nav-links"><a href="#proc">Come</a><a href="#prints">Stampe</a><a href="#sep">Colori</a><a href="#cta">Stampa con noi</a></div>
+  <a class="nav-cta" href="#cta">Chiedi un preventivo</a>
+</nav>
+
+<section id="hero" data-tile="Hero · BlendText Spotlight">
+  <span class="kick">Risograph &amp; stampa d'artista</span>
+  <h1 class="hero-h bric">STAMPA<br><span class="o2">CHE SI</span><br><span class="o3">SENTE</span></h1>
+  <p class="hero-sub">Inchiostri fluo, registri imperfetti, carta vera. Stampiamo poster, zine e tirature limitate — un colore alla volta.</p>
+  <span class="hint">◐ muovi il cursore: la luce inverte i colori</span>
+</section>
+
+<section id="proc" data-tile="IconList · processo">
+  <div class="wrap">
+    <span class="kick">Come nasce una riso</span>
+    <h2 class="bric" style="font-weight:800;font-size:clamp(34px,5vw,72px);line-height:.9;margin:14px 0 0;text-transform:uppercase;">Tre colori, mille mani</h2>
+    <div class="proc-grid reveal-stagger">
+      <div class="step"><div class="n bric">01</div><h3 class="bric">Separazione</h3><p>Scomponiamo la tua immagine in livelli di colore spot. Ogni livello diventa un master.</p></div>
+      <div class="step"><div class="n bric">02</div><h3 class="bric">Stampa a strati</h3><p>Un passaggio per colore. Il leggero fuori-registro è la firma della riso.</p></div>
+      <div class="step"><div class="n bric">03</div><h3 class="bric">Rilegatura</h3><p>Piega, cuci, fascetta. Zine e poster pronti, profumati di inchiostro a base soia.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="sep" data-tile="OverlayGrid · separazione colore">
+  <div class="wrap">
+    <span class="kick">Sovrapposizione</span>
+    <h2 class="sep-h bric">Un colore alla volta</h2>
+    <div class="layers reveal-stagger">
+      <div class="lyr c1"><div class="blob"></div><span class="lab">1 · fluo pink</span></div>
+      <div class="lyr c2"><div class="blob"></div><span class="lab">2 · blue</span></div>
+      <div class="lyr c3"><div class="blob"></div><span class="lab">3 · yellow</span></div>
+      <div class="lyr mix"><div class="blob a"></div><div class="blob b"></div><div class="blob c"></div><span class="lab">= sovrapposti</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="prints" data-tile="ProGallery · portfolio">
+  <div class="wrap">
+    <span class="kick">Lavori</span>
+    <h2 class="bric" style="font-weight:800;font-size:clamp(34px,5vw,72px);line-height:.9;margin:14px 0 0;text-transform:uppercase;">Cosa abbiamo stampato</h2>
+    <div class="print-grid reveal">
+      <div class="pr big"><image-slot id="ri-1" placeholder="poster riso"></image-slot><span class="cap">Poster · 2 colori</span></div>
+      <div class="pr sm"><image-slot id="ri-2" placeholder="zine"></image-slot><span class="cap">Zine · 28 pagine</span></div>
+      <div class="pr t"><image-slot id="ri-3" placeholder="stampa"></image-slot><span class="cap">Art print</span></div>
+      <div class="pr t"><image-slot id="ri-4" placeholder="stampa"></image-slot><span class="cap">Cartoline</span></div>
+      <div class="pr t"><image-slot id="ri-5" placeholder="stampa"></image-slot><span class="cap">Copertina</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="stats" data-tile="Counter">
+  <div class="wrap">
+    <div class="stat-grid reveal-stagger">
+      <div class="st"><div class="num"><span class="count" data-count="12">0</span></div><div class="lbl">Inchiostri fluo</div></div>
+      <div class="st"><div class="num"><span class="count" data-count="9" data-suffix="k">0</span></div><div class="lbl">Stampe l'anno</div></div>
+      <div class="st"><div class="num"><span class="count" data-count="140" data-suffix="+">0</span></div><div class="lbl">Artisti stampati</div></div>
+      <div class="st"><div class="num"><span class="count" data-count="1">0</span></div><div class="lbl">Tamburo, mai fermo</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="cta" data-tile="AnimatedHeading">
+  <div class="wrap">
+    <span class="kick" style="justify-content:center">Porta la tua immagine</span>
+    <h2 class="bric">FACCIAMO<br><em>RUMORE</em></h2>
+    <a class="btn" href="#">Chiedi un preventivo →</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="f-row">
+      <div class="fm bric">INCHIÒSTRO</div>
+      <div class="olo-credit"><span class="olo-mk"><b></b><i></i><b></b></span>Costruito con <b class="hl">OLObuild</b> — zero codice</div>
+    </div>
+    <div class="f-tiles"><b>Tile usati (9):</b> Hero · BlendText Spotlight (cursore mix-blend-mode difference che inverte i colori) · IconList processo · OverlayGrid separazione · ProGallery portfolio · Counter · AnimatedHeading · Image · DarkMode — nessuna prenotazione.</div>
+    <div class="f-row" style="margin-top:22px"><span class="f-meta">© 2026 Inchiòstro studio — tema dimostrativo</span><span class="f-meta">OLOtheme · demo · 63 — Risograph studio</span></div>
+  </div>
+</footer>
+
+<button id="tiletoggle"><span class="sq"></span><span class="t">Mostra tile</span></button>
+
+<script src="image-slot.js"></script>
+<script src="shared/olo-demo.js"></script>
+<script>
+/* ===== blend-difference flashlight follows cursor ===== */
+(function(){
+  if(matchMedia('(hover:none)').matches)return;
+  var f=document.getElementById('flash'),x=innerWidth/2,y=innerHeight/2,cx=x,cy=y;
+  addEventListener('pointermove',function(e){x=e.clientX;y=e.clientY;});
+  function loop(){cx+=(x-cx)*.22;cy+=(y-cy)*.22;f.style.transform='translate('+cx+'px,'+cy+'px)';requestAnimationFrame(loop);}loop();
+})();
+</script>
+</body>
+</html>

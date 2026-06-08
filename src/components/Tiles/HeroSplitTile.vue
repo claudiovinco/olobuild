@@ -64,6 +64,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { SHADOW as SHADOW_SCALE } from '@/composables/oloTileDefaults';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
@@ -146,13 +147,7 @@ const items     = computed(() => (Array.isArray(s.value.showcase_items) ? s.valu
 
 const hoverClass = computed(() => 'olo-hsplit-hover-' + (s.value.showcase_hover_effect || 'none'));
 
-const SHADOW = {
-  none: 'none',
-  sm:   '0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04)',
-  md:   '0 4px 12px rgba(0,0,0,0.10), 0 2px 4px rgba(0,0,0,0.06)',
-  lg:   '0 10px 30px rgba(0,0,0,0.12), 0 4px 8px rgba(0,0,0,0.08)',
-  xl:   '0 24px 60px rgba(0,0,0,0.18), 0 8px 16px rgba(0,0,0,0.10)',
-};
+const SHADOW = SHADOW_SCALE;
 
 const wrapStyle = computed(() => {
   const p = s.value.tile_padding || {};

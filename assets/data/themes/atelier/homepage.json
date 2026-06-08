@@ -1,0 +1,934 @@
+[
+ {
+  "id": "at-se-4",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "full",
+   "padding": "large",
+   "padding_top": 0,
+   "padding_bottom": 0
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#141414"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "at-ro-3",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "at-co-2",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "at-hero-split-1",
+        "type": "imagehero",
+        "settings": {
+         "eyebrow_text": "Autumn / Winter '26",
+         "eyebrow_dot": false,
+         "headline_text": "The",
+         "accent_text": "Nocturne",
+         "headline_tail": "Collection",
+         "accent_italic": true,
+         "stack_lines": true,
+         "subhead": "Tailoring for the hours after dark. Cut in wool crêpe and silk, finished by hand in our Paris atelier.",
+         "cta1_text": "Shop the collection",
+         "cta1_url": "#",
+         "cta2_text": "View lookbook",
+         "cta2_url": "#lookbook",
+         "meta_text": "",
+         "scroll_hint": "",
+         "bg_image": "",
+         "bg_color": "#141414",
+         "media_label": "campaign — figure in black tailoring, gold light, full bleed",
+         "text_position": "left",
+         "text_align": "left",
+         "content_width": 600,
+         "aspect_ratio": "21/10",
+         "min_height": 520,
+         "heading_font": "serif",
+         "overlay_color": "#0c0c0c",
+         "overlay_top": 0.2,
+         "overlay_bottom": 0.55,
+         "overlay_sides": true,
+         "accent": "#c9a86a",
+         "accent_on": "#0c0c0c",
+         "text_color": "#ffffff",
+         "sub_color": "#efe9de",
+         "eyebrow_color": "#c9a86a"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "at-se-8",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "small"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#181818"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "at-ro-7",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "at-co-6",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "at-marquee-5",
+        "type": "marquee",
+        "settings": {
+         "content_type": "text",
+         "text_items": "Ready-to-wear — Made-to-measure — Hand-finished in Paris — Since 1998 — The Nocturne Collection",
+         "separator": " ✶ ",
+         "speed": "40",
+         "direction": "left",
+         "pause_hover": false,
+         "gap": "48",
+         "bg_color": "#181818",
+         "text_color": "#7c776e",
+         "font_size": "24",
+         "font_weight": "400",
+         "letter_spacing": "0",
+         "text_transform": "none",
+         "height": "60",
+         "border_top": "1",
+         "border_bottom": "1",
+         "border_color": "rgba(239,233,222,.12)",
+         "full_width": true
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "at-se-15",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#141414"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "at-ro-11",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "at-co-10",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "at-section-header-9",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "The Lookbook",
+         "eyebrow_color": "#c9a86a",
+         "eyebrow_dot_color": "#c9a86a",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "Dressed for the ",
+           "color": "#efe9de",
+           "italic": false
+          },
+          {
+           "text": "night",
+           "color": "#c9a86a",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 52,
+         "headline_font_weight": "400",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": false,
+         "tagline_text": "",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#7c776e",
+         "tagline_text_size": 16,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "at-ro-14",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "at-co-13",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "at-workgrid-12",
+        "type": "workgrid",
+        "settings": {
+         "columns": 3,
+         "items_gap": 24,
+         "media_aspect": "4/5",
+         "media_tall_aspect": "4/5",
+         "media_bg": "#1e1e1e",
+         "media_label_color": "#c9a86a",
+         "hover_zoom": true,
+         "title_font_family": "heading",
+         "title_color": "#efe9de",
+         "title_size": 24,
+         "title_weight": "400",
+         "meta_color": "#c9a86a",
+         "meta_size": 11,
+         "show_desc": true,
+         "desc_color": "#7c776e",
+         "desc_size": 14,
+         "mono_font_family": "",
+         "items": [
+          {
+           "image": "",
+           "media_label": "look 01 — long coat",
+           "title": "The Crêpe Coat",
+           "meta": "Look 01",
+           "description": "Long-line tailored coat in double-faced wool crêpe. A clean shoulder, a fluid hem, a single button.",
+           "link_url": "#lookbook",
+           "tall": false
+          },
+          {
+           "image": "",
+           "media_label": "look 02 — eveningwear, wide",
+           "title": "Silk Column Dress",
+           "meta": "Look 02",
+           "description": "Bias-cut silk, liquid drape. Worn to openings, premières, and anywhere the light is low.",
+           "link_url": "#lookbook",
+           "tall": true
+          },
+          {
+           "image": "",
+           "media_label": "look 03 — tailoring detail",
+           "title": "The Tuxedo",
+           "meta": "Look 03",
+           "description": "Le Smoking revisited for the season. Peak lapel, fluid trouser, finished with hand-sewn seams.",
+           "link_url": "#lookbook",
+           "tall": false
+          },
+          {
+           "image": "",
+           "media_label": "look 04 — knitwear",
+           "title": "Cashmere Set",
+           "meta": "Look 04",
+           "description": "Two-ply Mongolian cashmere, relaxed and refined. The weight of the real thing.",
+           "link_url": "#lookbook",
+           "tall": false
+          },
+          {
+           "image": "",
+           "media_label": "look 05 — accessory",
+           "title": "Gilt Hardware",
+           "meta": "Look 05",
+           "description": "Accessories in the house vocabulary — gold-toned hardware, hand-stitched leather, worn quietly.",
+           "link_url": "#lookbook",
+           "tall": true
+          }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "at-se-22",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#181818"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "at-ro-18",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "at-co-17",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "at-section-header-16",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "From the collection",
+         "eyebrow_color": "#c9a86a",
+         "eyebrow_dot_color": "#c9a86a",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "The",
+           "color": "#efe9de",
+           "italic": false
+          },
+          {
+           "text": "pieces",
+           "color": "#c9a86a",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 52,
+         "headline_font_weight": "400",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": false,
+         "tagline_text": "",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#7c776e",
+         "tagline_text_size": 16,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "at-ro-21",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "at-co-20",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "at-product-cards-19",
+        "type": "product-cards",
+        "settings": {
+         "columns": 4,
+         "gap": 22,
+         "card_bg": {
+          "type": "solid",
+          "color": "#1e1e1e"
+         },
+         "card_color": "#7c776e",
+         "card_radius": {
+          "tl": 0,
+          "tr": 0,
+          "br": 0,
+          "bl": 0,
+          "linked": true
+         },
+         "card_radius_hover": {
+          "tl": 0,
+          "tr": 0,
+          "br": 0,
+          "bl": 0,
+          "linked": true
+         },
+         "card_shadow": "none",
+         "card_padding": 24,
+         "top_aspect_ratio": "3/4",
+         "top_padding": 24,
+         "letter_font_family": "serif",
+         "letter_size": 140,
+         "letter_italic": true,
+         "letter_align": "center",
+         "show_screenshot_label": false,
+         "brand_size": 10,
+         "brand_letter_spacing": 0.16,
+         "title_font_family": "serif",
+         "title_size": 21,
+         "title_weight": "400",
+         "description_size": 13,
+         "cta_size": 11,
+         "cta_arrow": true,
+         "card_hover_effect": "lift",
+         "items": [
+          {
+           "letter": "O",
+           "letter_color": "#c9a86a",
+           "top_bg": {
+            "type": "solid",
+            "color": "#141414"
+           },
+           "screenshot_label": "",
+           "brand_label": "OUTERWEAR",
+           "brand_color": "#7c776e",
+           "show_badge": true,
+           "badge_text": "New",
+           "badge_bg": "#0c0c0c",
+           "badge_color": "#c9a86a",
+           "title": "Crêpe Tailored",
+           "title_accent": "Coat",
+           "title_accent_italic": true,
+           "description": "Wool crêpe, hand-finished. A defining piece for the season.",
+           "cta_text": "€1,290",
+           "cta_url": "#"
+          },
+          {
+           "letter": "S",
+           "letter_color": "#efe9de",
+           "top_bg": {
+            "type": "solid",
+            "color": "#141414"
+           },
+           "screenshot_label": "",
+           "brand_label": "EVENINGWEAR",
+           "brand_color": "#7c776e",
+           "show_badge": false,
+           "badge_text": "",
+           "badge_bg": "#0c0c0c",
+           "badge_color": "#c9a86a",
+           "title": "Silk Column",
+           "title_accent": "Dress",
+           "title_accent_italic": true,
+           "description": "Bias-cut silk with a liquid fall. New in the collection.",
+           "cta_text": "€980",
+           "cta_url": "#"
+          },
+          {
+           "letter": "L",
+           "letter_color": "#efe9de",
+           "top_bg": {
+            "type": "solid",
+            "color": "#141414"
+           },
+           "screenshot_label": "",
+           "brand_label": "TAILORING",
+           "brand_color": "#7c776e",
+           "show_badge": false,
+           "badge_text": "",
+           "badge_bg": "#0c0c0c",
+           "badge_color": "#c9a86a",
+           "title": "Le Smoking",
+           "title_accent": "Jacket",
+           "title_accent_italic": true,
+           "description": "Peak lapel, hand-sewn seams. The house tuxedo jacket.",
+           "cta_text": "€1,150",
+           "cta_url": "#"
+          },
+          {
+           "letter": "C",
+           "letter_color": "#efe9de",
+           "top_bg": {
+            "type": "solid",
+            "color": "#141414"
+           },
+           "screenshot_label": "",
+           "brand_label": "KNITWEAR",
+           "brand_color": "#7c776e",
+           "show_badge": true,
+           "badge_text": "Atelier",
+           "badge_bg": "#0c0c0c",
+           "badge_color": "#c9a86a",
+           "title": "Cashmere",
+           "title_accent": "Roll-Neck",
+           "title_accent_italic": true,
+           "description": "Two-ply Mongolian cashmere. Atelier edition, limited run.",
+           "cta_text": "€620",
+           "cta_url": "#"
+          }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "at-se-26",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#1e1e1e"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "at-ro-25",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "at-co-24",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "at-hero-split-23",
+        "type": "hero-split",
+        "settings": {
+         "eyebrow_text": "The Atelier",
+         "eyebrow_dot_color": "#c9a86a",
+         "eyebrow_color": "#c9a86a",
+         "headline_lines": [
+          {
+           "text": "Made by hand,",
+           "color": "#efe9de",
+           "italic": false
+          },
+          {
+           "text": "made to last",
+           "color": "#c9a86a",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 52,
+         "headline_line_height": 1.05,
+         "headline_font_weight": "400",
+         "headline_align": "left",
+         "subhead": "Every Atelier Noir garment passes through a single pair of hands from first cut to final stitch. We make in small runs, in our own Paris workrooms, with cloth we can trace to the mill.\n\n— Camille Aubry, Founder",
+         "subhead_color": "#b6b1a8",
+         "subhead_size": 16,
+         "subhead_italic": false,
+         "subhead_max_width": 520,
+         "cta1_text": "Our craftsmanship",
+         "cta1_url": "#",
+         "cta1_bg": "transparent",
+         "cta1_color": "#efe9de",
+         "cta1_border": "rgba(201,168,106,.4)",
+         "cta1_size": 12,
+         "cta1_radius": {
+          "tl": 0,
+          "tr": 0,
+          "br": 0,
+          "bl": 0,
+          "linked": true
+         },
+         "cta1_radius_hover": {
+          "tl": 0,
+          "tr": 0,
+          "br": 0,
+          "bl": 0,
+          "linked": true
+         },
+         "cta2_text": "",
+         "cta2_url": "",
+         "cta2_bg": "transparent",
+         "cta2_color": "#efe9de",
+         "cta2_border": "transparent",
+         "cta2_size": 12,
+         "cta2_radius": {
+          "tl": 0,
+          "tr": 0,
+          "br": 0,
+          "bl": 0,
+          "linked": true
+         },
+         "cta2_radius_hover": {
+          "tl": 0,
+          "tr": 0,
+          "br": 0,
+          "bl": 0,
+          "linked": true
+         },
+         "stats": [],
+         "showcase_enabled": false,
+         "split_ratio": "1fr",
+         "gap": 0,
+         "min_height": 0,
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "at-se-30",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#0c0c0c"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "at-ro-29",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "at-co-28",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "at-cta-banner-27",
+        "type": "cta-banner",
+        "settings": {
+         "eyebrow": "The Film",
+         "eyebrow_color": "#c9a86a",
+         "headline": "Nocturne,",
+         "headline_accent": "after hours",
+         "headline_accent_italic": true,
+         "subtitle": "Watch the collection come to life — shot across one night in the eighth arrondissement.",
+         "cta_text": "Watch the film",
+         "cta_url": "#",
+         "bg": {
+          "type": "solid",
+          "color": "#0c0c0c"
+         },
+         "text_color": "#ffffff",
+         "accent_color": "#c9a86a",
+         "subtitle_color": "#b6b1a8",
+         "cta_bg": "#efe9de",
+         "cta_color": "#0c0c0c",
+         "cta_radius": {
+          "tl": 0,
+          "tr": 0,
+          "br": 0,
+          "bl": 0,
+          "linked": true
+         },
+         "cta_size": 12,
+         "headline_font_family": "serif",
+         "headline_size": 68,
+         "headline_weight": "400",
+         "subtitle_size": 16,
+         "layout": "stack",
+         "vertical_align": "center",
+         "banner_radius": {
+          "tl": 0,
+          "tr": 0,
+          "br": 0,
+          "bl": 0,
+          "linked": true
+         },
+         "banner_padding": 80
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "at-se-34",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#181818"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "at-ro-33",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "at-co-32",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "at-finder-31",
+        "type": "finder",
+        "settings": {
+         "eyebrow": "Styled for you",
+         "heading": "Find your look",
+         "intro": "",
+         "zone_accent": "#c9a86a",
+         "zone_on": "#0c0c0c",
+         "card_bg": "#1e1e1e",
+         "card_border": "rgba(201,168,106,.4)",
+         "align": "center",
+         "items": [
+          {
+           "option": "An evening",
+           "title": "After Dark",
+           "text": "Bias-cut silk, liquid drape and a single point of gold. Made to be the last thing remembered at the party.",
+           "meta": "made to order · from €1,200",
+           "cta_text": "",
+           "cta_url": "#",
+           "icon": ""
+          },
+          {
+           "option": "Tailoring",
+           "title": "The Suit",
+           "text": "A precise shoulder, a clean trouser break, wool that holds its line from morning to midnight. Power, quietly.",
+           "meta": "made to measure · from €1,650",
+           "cta_text": "",
+           "cta_url": "#",
+           "icon": ""
+          },
+          {
+           "option": "Bridal",
+           "title": "La Mariée",
+           "text": "Sculpted ivory, hand-finished over months in the atelier. One fitting at a time, entirely yours.",
+           "meta": "private commission · by appointment",
+           "cta_text": "",
+           "cta_url": "#",
+           "icon": ""
+          },
+          {
+           "option": "Everyday luxe",
+           "title": "Quiet Luxury",
+           "text": "Bouclé knits, fluid trousers and a camel coat that does the talking. The wardrobe you reach for without thinking.",
+           "meta": "ready to wear · from €420",
+           "cta_text": "",
+           "cta_url": "#",
+           "icon": ""
+          }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "at-se-38",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#141414"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "at-ro-37",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "at-co-36",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "at-newsletter-35",
+        "type": "newsletter",
+        "settings": {
+         "title": "Join the <em>house list</em>",
+         "subtitle": "Early access to collections, private appointments and invitations to our seasonal presentations.",
+         "layout": "horizontal",
+         "show_name": false,
+         "email_placeholder": "Email address",
+         "button_text": "Subscribe",
+         "button_icon": false,
+         "privacy_text": "",
+         "max_width": "600",
+         "alignment": "center",
+         "bg_color": "transparent",
+         "box_border": "",
+         "border_radius": 0,
+         "tile_padding": {
+          "top": 64,
+          "right": 32,
+          "bottom": 64,
+          "left": 32
+         },
+         "title_size": "52",
+         "title_weight": "400",
+         "title_color": "#efe9de",
+         "subtitle_size": "16",
+         "subtitle_color": "#7c776e",
+         "input_bg": "transparent",
+         "input_color": "#efe9de",
+         "input_border": "rgba(201,168,106,.4)",
+         "input_focus_border": "#c9a86a",
+         "input_radius": 0,
+         "input_height": "52",
+         "btn_bg": "#c9a86a",
+         "btn_color": "#0c0c0c",
+         "btn_hover_bg": "#ddc089",
+         "btn_radius": 0,
+         "btn_font_size": "12",
+         "btn_font_weight": "500",
+         "shadow": "none",
+         "icon_type": "none"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pendìo — scuola di sci · tema dimostrativo OLObuild</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared/olo-demo.css">
+<style>
+:root{
+  --sky:#BFE0F2; --sky-d:#7FB8DC; --night:#163049; --night-2:#0F2236; --paper:#F4FAFE; --snow:#FFFFFF;
+  --ink:#13293D; --ink-2:#4D6577; --ink-3:#8AA0AE; --sun:#FFC23C; --sun-d:#E8A92A; --ice:#2E9BD6; --line:#D6E6F0;
+  --tile-accent:#2E9BD6; --tile-btn:#163049;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:'Manrope',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+a{color:inherit;text-decoration:none;}
+.fr{font-family:'Fraunces',Georgia,serif;}
+.mono{font-family:'JetBrains Mono',monospace;}
+.wrap{max-width:1200px;margin:0 auto;padding:0 44px;}
+.kick{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--ice);font-weight:600;display:inline-flex;align-items:center;gap:9px;}
+.kick::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--sun);}
+
+/* nav */
+.nav{position:fixed;inset:0 0 auto 0;z-index:50;display:flex;align-items:center;gap:26px;padding:22px 44px;transition:all .35s;color:#fff;border-bottom:1px solid transparent;}
+.nav.solid{background:rgba(22,48,73,.92);backdrop-filter:blur(14px);border-color:rgba(255,255,255,.12);padding:14px 44px;}
+.brand{font-family:'Fraunces',serif;font-weight:600;font-size:24px;letter-spacing:-.01em;display:flex;align-items:center;gap:9px;}
+.brand .fk{color:var(--sun);}
+.nav-links{margin-left:auto;display:flex;gap:26px;font-size:14px;font-weight:600;}
+.nav-links a{opacity:.9;}.nav-links a:hover{opacity:1;color:var(--sun);}
+.nav-cta{background:var(--sun);color:var(--night);padding:11px 20px;border-radius:100px;font-size:13px;font-weight:700;transition:transform .15s;}
+.nav-cta:hover{transform:translateY(-2px);}
+@media(max-width:880px){.nav-links{display:none;}}
+
+/* hero */
+#hero{height:100vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;text-align:center;color:#fff;
+  background:linear-gradient(180deg,#163049 0%,#2C5C82 38%,#6BA6CE 66%,#BFE0F2 100%);}
+.mtn{position:absolute;left:0;right:0;bottom:0;will-change:transform;}
+#m1{height:46vh;background:#234a6b;clip-path:polygon(0 70%,16% 30%,30% 52%,46% 18%,62% 48%,78% 24%,100% 56%,100% 100%,0 100%);opacity:.85;}
+#m2{height:38vh;background:#2E5E84;clip-path:polygon(0 78%,22% 44%,40% 64%,58% 36%,74% 60%,90% 40%,100% 62%,100% 100%,0 100%);opacity:.9;}
+#m3{height:30vh;background:#EAF4FB;clip-path:polygon(0 88%,18% 58%,34% 76%,52% 50%,70% 72%,86% 54%,100% 74%,100% 100%,0 100%);}
+#m3::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent,rgba(191,224,242,.4));}
+#snow{position:absolute;inset:0;width:100%;height:100%;z-index:4;pointer-events:none;}
+.hero-in{position:relative;z-index:5;}
+.hero-ey{font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:.28em;text-transform:uppercase;color:var(--sun);margin-bottom:18px;text-shadow:0 2px 14px rgba(22,48,73,.5);}
+.hero-h{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(56px,12vw,180px);line-height:.9;margin:0;letter-spacing:-.02em;text-shadow:0 6px 34px rgba(22,48,73,.4);}
+.hero-sub{font-size:19px;color:rgba(255,255,255,.94);margin:24px auto 30px;max-width:38ch;line-height:1.5;text-shadow:0 2px 14px rgba(22,48,73,.5);}
+.btn{display:inline-flex;align-items:center;gap:9px;background:var(--sun);color:var(--night);border:none;cursor:pointer;padding:15px 30px;border-radius:100px;font-family:inherit;font-size:14px;font-weight:700;transition:all .2s;}
+.btn:hover{background:var(--sun-d);transform:translateY(-1px);}
+.btn.glass{background:rgba(255,255,255,.16);color:#fff;backdrop-filter:blur(6px);}
+.btn.glass:hover{background:rgba(255,255,255,.28);}
+
+/* conditions */
+.cond-bar{background:var(--night);color:#fff;}
+.cond-row{display:grid;grid-template-columns:repeat(4,1fr);}
+.cond-row .c{padding:30px 28px;border-right:1px solid rgba(255,255,255,.1);}
+.cond-row .c:last-child{border-right:none;}
+.cond-row .cl{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--sky-d);margin-bottom:10px;}
+.cond-row .cv{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(34px,4vw,54px);line-height:.9;}
+.cond-row .cv .u{font-family:'Manrope';font-size:16px;font-weight:600;color:var(--sun);}
+.cond-row .meta{font-size:12.5px;color:rgba(255,255,255,.6);margin-top:8px;}
+.cond-row .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#3BD17A;margin-right:6px;}
+@media(max-width:760px){.cond-row{grid-template-columns:1fr 1fr;}.cond-row .c:nth-child(2){border-right:none;}.cond-row .c{border-bottom:1px solid rgba(255,255,255,.1);}}
+
+/* courses */
+#courses{padding:110px 0;}
+.sec-h{text-align:center;max-width:600px;margin:0 auto 48px;}
+.sec-h h2{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(34px,4.6vw,60px);margin:16px 0 12px;}
+.sec-h p{font-size:16px;color:var(--ink-2);line-height:1.6;margin:0;}
+.course-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
+.course{background:var(--paper);border:1px solid var(--line);border-radius:22px;overflow:hidden;transition:transform .25s,box-shadow .25s;}
+.course:hover{transform:translateY(-6px);box-shadow:0 26px 50px -26px rgba(19,41,61,.3);}
+.course image-slot{width:100%;aspect-ratio:4/3;display:block;}
+.course .cx{padding:26px;}
+.course .lvl{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ice);font-weight:600;}
+.course h3{font-family:'Fraunces',serif;font-weight:600;font-size:23px;margin:9px 0 10px;}
+.course p{font-size:14px;color:var(--ink-2);line-height:1.55;margin:0 0 16px;}
+.course .cf{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);padding-top:14px;}
+.course .pr{font-family:'Fraunces',serif;font-weight:600;font-size:20px;}
+.course .pr small{font-size:12px;color:var(--ink-3);font-weight:400;}
+@media(max-width:880px){.course-grid{grid-template-columns:1fr;}}
+
+/* instructors */
+#team{padding:110px 0;background:linear-gradient(180deg,var(--paper),#E8F3FB);}
+.team-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;}
+.inst{text-align:center;}
+.inst image-slot{width:100%;aspect-ratio:1;display:block;border-radius:20px;}
+.inst .nm{font-family:'Fraunces',serif;font-weight:600;font-size:19px;margin-top:14px;}
+.inst .rl{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ice);margin-top:5px;}
+@media(max-width:880px){.team-grid{grid-template-columns:1fr 1fr;}}
+
+/* stats */
+.stats{padding:80px 0;text-align:center;}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:30px;}
+.st .num{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(46px,6vw,82px);line-height:1;color:var(--ice);}
+.st .lbl{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2);margin-top:10px;}
+@media(max-width:760px){.stat-grid{grid-template-columns:1fr 1fr;gap:34px 20px;}}
+
+/* cta */
+#cta{padding:0 0 110px;}
+.cta-card{background:var(--night);color:#fff;border-radius:28px;padding:64px 50px;text-align:center;position:relative;overflow:hidden;}
+.cta-card::before{content:"";position:absolute;inset:0;background:radial-gradient(60% 80% at 50% 0%,rgba(255,194,60,.16),transparent 70%);}
+.cta-card h2{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(32px,4.4vw,58px);margin:0 0 14px;position:relative;}
+.cta-card p{color:rgba(255,255,255,.8);max-width:42ch;margin:0 auto 28px;position:relative;}
+
+footer{background:var(--night-2);color:rgba(244,250,254,.6);padding:56px 0 34px;}
+.f-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px;}
+.f-row .fm{font-family:'Fraunces',serif;font-weight:600;font-size:24px;color:#fff;display:flex;align-items:center;gap:9px;}
+.f-row .fm .fk{color:var(--sun);}
+.olo-credit{color:rgba(244,250,254,.74);border-color:rgba(244,250,254,.18);background:rgba(255,255,255,.05);}
+.f-meta{font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(244,250,254,.42);}
+.f-tiles{font-family:'JetBrains Mono',monospace;font-size:10.5px;line-height:1.9;color:rgba(244,250,254,.42);margin-top:22px;max-width:92ch;}
+.f-tiles b{color:rgba(244,250,254,.7);}
+</style>
+</head>
+<body>
+
+<nav class="nav" id="nav" data-solid-at="70vh">
+  <div class="brand">Pendìo</div>
+  <div class="nav-links"><a href="#courses">Corsi</a><a href="#team">Maestri</a><a href="#cta">Contatti</a></div>
+  <a class="nav-cta" href="#courses">Scopri i corsi</a>
+</nav>
+
+<section id="hero" data-tile="Hero · parallax + ParticleFX">
+  <div class="mtn" id="m1"></div>
+  <div class="mtn" id="m2"></div>
+  <div class="mtn" id="m3"></div>
+  <canvas id="snow" data-tile="ParticleFX · neve"></canvas>
+  <div class="hero-in"><div class="wrap">
+    <div class="hero-ey">Scuola di sci & snowboard · Dolomiti</div>
+    <h1 class="hero-h fr">Impara<br>a volare<br>sulla neve</h1>
+    <p class="hero-sub">Maestri federali per ogni livello, dai primi spazzaneve al fuoripista. Bambini e adulti.</p>
+    <div style="display:flex;gap:13px;justify-content:center;flex-wrap:wrap"><a class="btn" href="#courses">I nostri corsi →</a><a class="btn glass" href="#team">I maestri</a></div>
+  </div></div>
+</section>
+
+<section class="cond-bar" data-tile="DataWidget · condizioni">
+  <div class="wrap"><div class="cond-row">
+    <div class="c"><div class="cl">Neve fresca</div><div class="cv"><span class="count" data-count="35">0</span><span class="u">cm</span></div><div class="meta">nelle ultime 24h</div></div>
+    <div class="c"><div class="cl">Manto</div><div class="cv"><span class="count" data-count="180">0</span><span class="u">cm</span></div><div class="meta">in quota</div></div>
+    <div class="c"><div class="cl">Impianti aperti</div><div class="cv"><span class="count" data-count="22">0</span><span class="u">/24</span></div><div class="meta"><span class="dot"></span>aggiornato ora</div></div>
+    <div class="c"><div class="cl">Temperatura</div><div class="cv">−<span class="count" data-count="6">0</span><span class="u">°C</span></div><div class="meta">cielo sereno ☀</div></div>
+  </div></div>
+</section>
+
+<section id="courses" data-tile="ProGallery · corsi">
+  <div class="wrap">
+    <div class="sec-h"><span class="kick" style="justify-content:center">I corsi</span><h2 class="fr">Per ogni livello</h2><p>Lezioni private o collettive, sci e snowboard, dai 4 anni in su.</p></div>
+    <div class="course-grid reveal-stagger">
+      <div class="course"><image-slot id="sk-c1" placeholder="bambini"></image-slot><div class="cx"><div class="lvl">Principianti · 4-12 anni</div><h3 class="fr">Baby Snow</h3><p>Gioco e sicurezza nel campo scuola, con maestri specializzati.</p><div class="cf"><span class="pr">€ 35<small>/ora</small></span><span class="kick" style="margin:0">Info →</span></div></div></div>
+      <div class="course"><image-slot id="sk-c2" placeholder="adulti"></image-slot><div class="cx"><div class="lvl">Tutti i livelli · adulti</div><h3 class="fr">Lezione privata</h3><p>Un maestro tutto per te: progressi rapidi, ritmo tuo.</p><div class="cf"><span class="pr">€ 50<small>/ora</small></span><span class="kick" style="margin:0">Info →</span></div></div></div>
+      <div class="course"><image-slot id="sk-c3" placeholder="fuoripista"></image-slot><div class="cx"><div class="lvl">Avanzato · freeride</div><h3 class="fr">Fuoripista & off</h3><p>Powder, sicurezza in valanga e tecnica su neve fresca.</p><div class="cf"><span class="pr">€ 70<small>/ora</small></span><span class="kick" style="margin:0">Info →</span></div></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="team" data-tile="HostCard · maestri">
+  <div class="wrap">
+    <div class="sec-h"><span class="kick" style="justify-content:center">La scuola</span><h2 class="fr">I nostri maestri</h2></div>
+    <div class="team-grid reveal-stagger">
+      <div class="inst"><image-slot id="sk-t1" placeholder="maestro"></image-slot><div class="nm">Andrea</div><div class="rl">Direttore · sci alpino</div></div>
+      <div class="inst"><image-slot id="sk-t2" placeholder="maestra"></image-slot><div class="nm">Lisa</div><div class="rl">Snowboard · freestyle</div></div>
+      <div class="inst"><image-slot id="sk-t3" placeholder="maestro"></image-slot><div class="nm">Kurt</div><div class="rl">Freeride · guida alpina</div></div>
+      <div class="inst"><image-slot id="sk-t4" placeholder="maestra"></image-slot><div class="nm">Marta</div><div class="rl">Baby snow · bambini</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="stats" data-tile="Counter">
+  <div class="wrap">
+    <div class="stat-grid reveal-stagger">
+      <div class="st"><div class="num"><span class="count" data-count="38">0</span></div><div class="lbl">Anni di scuola</div></div>
+      <div class="st"><div class="num"><span class="count" data-count="45">0</span></div><div class="lbl">Maestri federali</div></div>
+      <div class="st"><div class="num"><span class="count" data-count="60" data-suffix="k">0</span></div><div class="lbl">Allievi formati</div></div>
+      <div class="st"><div class="num"><span class="count" data-count="120">0</span></div><div class="lbl">Km di piste servite</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="cta" data-tile="AnimatedHeading">
+  <div class="wrap">
+    <div class="cta-card">
+      <span class="kick" style="justify-content:center;color:var(--sun)">Prenota dal vivo</span>
+      <h2 class="fr">Ci vediamo in pista?</h2>
+      <p>Passa alla nostra baita ai piedi degli impianti, o chiamaci: troviamo il corso giusto per te. Niente prenotazione online.</p>
+      <a class="btn" href="tel:0461000000">Chiama la scuola →</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="f-row">
+      <div class="fm">Pend<span class="fk">ì</span>o</div>
+      <div class="olo-credit"><span class="olo-mk"><b></b><i></i><b></b></span>Costruito con <b class="hl">OLObuild</b> — zero codice</div>
+    </div>
+    <div class="f-tiles"><b>Tile usati (10):</b> Hero parallax · ParticleFX (neve) · DataWidget condizioni · Counter · ProGallery corsi · HostCard · AnimatedHeading · Image · DarkMode · ShapeDivider — nessuna prenotazione.</div>
+    <div class="f-row" style="margin-top:22px"><span class="f-meta">© 2026 Pendìo scuola sci — tema dimostrativo · Dolomiti</span><span class="f-meta">OLOtheme · demo · 42 — Scuola di sci</span></div>
+  </div>
+</footer>
+
+<button id="tiletoggle"><span class="sq"></span><span class="t">Mostra tile</span></button>
+
+<script src="image-slot.js"></script>
+<script src="shared/olo-demo.js"></script>
+<script>
+/* snowfall + mountain parallax */
+(function(){
+  var c=document.getElementById('snow'),x=c.getContext('2d'),W,H,F=[];
+  function size(){W=c.width=c.offsetWidth;H=c.height=c.offsetHeight;}
+  size();window.addEventListener('resize',size);
+  for(var i=0;i<140;i++)F.push({x:Math.random()*W,y:Math.random()*H,r:1+Math.random()*3,s:.4+Math.random()*1.4,d:Math.random()*Math.PI*2});
+  function loop(){
+    x.clearRect(0,0,W,H);x.fillStyle='rgba(255,255,255,.85)';
+    F.forEach(function(f){
+      f.y+=f.s;f.d+=0.01;f.x+=Math.sin(f.d)*.5;
+      if(f.y>H){f.y=-5;f.x=Math.random()*W;}
+      x.beginPath();x.arc(f.x,f.y,f.r,0,Math.PI*2);x.fill();
+    });
+    requestAnimationFrame(loop);
+  }
+  loop();
+  var m1=document.getElementById('m1'),m2=document.getElementById('m2'),m3=document.getElementById('m3'),t=false;
+  function par(){var y=window.scrollY||0;
+    m1.style.transform='translateY('+(y*0.18)+'px)';
+    m2.style.transform='translateY('+(y*0.10)+'px)';
+    m3.style.transform='translateY('+(y*0.04)+'px)';t=false;}
+  window.addEventListener('scroll',function(){if(!t){requestAnimationFrame(par);t=true;}},{passive:true});par();
+})();
+</script>
+</body>
+</html>

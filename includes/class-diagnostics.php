@@ -1,8 +1,12 @@
 <?php
 /**
- * Olobuild Diagnostics — permission-free debug page.
- * Accessible to any logged-in user at: /wp-admin/admin.php?page=olo-diagnostics
+ * Olobuild Diagnostics — admin-only debug page.
+ * Accessible to administrators at: /wp-admin/tools.php?page=olo-diagnostics
  * Used only for troubleshooting access issues.
+ *
+ * NOTA sicurezza: in passato era aperta a qualsiasi utente loggato (capability 'read'),
+ * ma espone versioni software, lista plugin attivi e path — info utili a un attaccante
+ * per profilare il sito. Ora richiede 'manage_options'.
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit;
@@ -14,12 +18,12 @@ class Olo_Diagnostics {
     }
 
     public static function register_page() {
-        // Registered with the lowest capability 'read' so it's always accessible to logged-in users.
+        // Solo amministratori: la pagina espone informazioni di sistema (info-disclosure).
         add_submenu_page(
             'tools.php',
             __( 'Olobuild Diagnostics', 'olobuild' ),
             __( 'Olobuild Diagnostics', 'olobuild' ),
-            'read',
+            'manage_options',
             'olo-diagnostics',
             [ __CLASS__, 'render_page' ]
         );

@@ -1,0 +1,954 @@
+[
+ {
+  "id": "lo-se-4",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "full",
+   "padding": {
+    "top": 0,
+    "right": 0,
+    "bottom": 0,
+    "left": 0
+   },
+   "padding_top": 0,
+   "padding_bottom": 0
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#1c1c1e"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "lo-ro-3",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "lo-co-2",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "lo-hero-split-1",
+        "type": "imagehero",
+        "settings": {
+         "eyebrow_text": "Architecture & interiors",
+         "eyebrow_dot": false,
+         "headline_text": "Quiet buildings, made of light and material.",
+         "accent_text": "",
+         "headline_tail": "",
+         "accent_italic": false,
+         "stack_lines": false,
+         "subhead": "A small studio designing homes and workspaces where structure, daylight and a few honest materials do all the talking.",
+         "cta1_text": "",
+         "cta1_url": "#",
+         "cta2_text": "",
+         "cta2_url": "#",
+         "meta_text": "",
+         "scroll_hint": "",
+         "bg_image": "",
+         "bg_color": "#1c1c1e",
+         "media_label": "hero — concrete & timber house, raking light",
+         "text_position": "bottom-left",
+         "text_align": "left",
+         "content_width": 460,
+         "aspect_ratio": "21/10",
+         "min_height": 540,
+         "heading_font": "sans",
+         "overlay_color": "#1c1c1e",
+         "overlay_top": 0.35,
+         "overlay_bottom": 0.88,
+         "overlay_sides": false,
+         "accent": "#c9c2b6",
+         "accent_on": "#121214",
+         "text_color": "#ffffff",
+         "sub_color": "#eeece6",
+         "eyebrow_color": "#c9c2b6"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "lo-se-11",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#202022"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "lo-ro-7",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "lo-co-6",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "lo-section-header-5",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": false,
+         "headline_lines": [
+          {
+           "text": "Selected projects",
+           "color": "#eeece6",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 38,
+         "headline_font_weight": "600",
+         "headline_align": "left",
+         "tagline_show": true,
+         "tagline_text": "← drag · all work →",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#646058",
+         "tagline_text_size": 13,
+         "tagline_caption": "",
+         "layout": "split",
+         "split_ratio": "1.6fr 1fr",
+         "vertical_align": "end",
+         "gap": 24
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "lo-ro-10",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "lo-co-9",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "lo-categoryrail-8",
+        "type": "categoryrail",
+        "settings": {
+         "items": [
+          {
+           "image": "",
+           "title": "House on the Slope",
+           "subtitle": "'25 — Private residence",
+           "link": "#projects"
+          },
+          {
+           "image": "",
+           "title": "Riverside Studio",
+           "subtitle": "'24 — Workspace",
+           "link": "#projects"
+          },
+          {
+           "image": "",
+           "title": "Courtyard House",
+           "subtitle": "'24 — Residence",
+           "link": "#projects"
+          },
+          {
+           "image": "",
+           "title": "The Reading Room",
+           "subtitle": "'23 — Public",
+           "link": "#projects"
+          }
+         ],
+         "card_width": 360,
+         "card_aspect": "3/2",
+         "gap": 16,
+         "media_bg": "#26262a",
+         "overlay_color": "rgba(18,18,20,0.55)",
+         "title_color": "#eeece6",
+         "subtitle_color": "#c9c2b6",
+         "radius": 6,
+         "show_hint": true,
+         "hint_text": "← drag · all work →",
+         "hint_color": "#646058"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "lo-se-15",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#1c1c1e"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "lo-ro-14",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "lo-co-13",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "lo-hotspots-12",
+        "type": "hotspots",
+        "settings": {
+         "eyebrow": "",
+         "heading": "House on the Slope · in plan",
+         "intro": "",
+         "panel_label": "ground-floor plan — concrete spine, glazed south face",
+         "aspect_ratio": "16/10",
+         "items": [
+          {
+           "x": 24,
+           "y": 40,
+           "title": "Concrete spine",
+           "text": "Holds the hill back and anchors every room.",
+           "meta": ""
+          },
+          {
+           "x": 58,
+           "y": 60,
+           "title": "Glazed south face",
+           "text": "Full-height glass for low winter sun, shaded in summer.",
+           "meta": ""
+          },
+          {
+           "x": 80,
+           "y": 34,
+           "title": "Roof light",
+           "text": "A single slot pulls daylight to the core.",
+           "meta": ""
+          }
+         ],
+         "zone_accent": "#c9c2b6",
+         "zone_on": "#121214",
+         "panel_bg": "#26262a",
+         "card_bg": "#2f2f34",
+         "card_border": "rgba(238,236,230,.12)",
+         "align": "left"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "lo-se-22",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#1c1c1e"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "lo-ro-18",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "lo-co-17",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "lo-section-header-16",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": false,
+         "headline_lines": [
+          {
+           "text": "How we work",
+           "color": "#eeece6",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 38,
+         "headline_font_weight": "600",
+         "headline_align": "left",
+         "tagline_show": false,
+         "layout": "stack",
+         "gap": 0
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "lo-ro-21",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "lo-co-20",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "lo-process-steps-19",
+        "type": "process-steps",
+        "settings": {
+         "columns": 3,
+         "gap": 1,
+         "align": "left",
+         "auto_number": false,
+         "item_gap": 10,
+         "number_style": "plain",
+         "number_color": "#c9c2b6",
+         "number_size": 13,
+         "number_font": "sans-serif",
+         "number_weight": "600",
+         "title_color": "#eeece6",
+         "title_size": 24,
+         "title_font": "sans-serif",
+         "title_weight": "600",
+         "desc_color": "#646058",
+         "desc_size": 14.5,
+         "card_bg": "#1c1c1e",
+         "card_border": "rgba(238,236,230,.12)",
+         "card_radius": {
+          "tl": 0,
+          "tr": 0,
+          "br": 0,
+          "bl": 0,
+          "linked": true
+         },
+         "card_padding": 36,
+         "items": [
+          {
+           "number": "01",
+           "title": "Listen",
+           "description": "We start on site, with how you live and how the light moves — long before a line is drawn."
+          },
+          {
+           "number": "02",
+           "title": "Reduce",
+           "description": "Fewer materials, fewer moves. We design until there's nothing left to take away."
+          },
+          {
+           "number": "03",
+           "title": "Build well",
+           "description": "We stay on through construction so the detail that mattered on paper survives the site."
+          }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "lo-se-32",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "small"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#202022"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "lo-ro-31",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "lo-co-24",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "lo-statstrip-23",
+        "type": "statstrip",
+        "settings": {
+         "columns": 4,
+         "items_gap": 0,
+         "band_padding_y": 12,
+         "show_dividers": true,
+         "divider_color": "rgba(238,236,230,.12)",
+         "band_border": false,
+         "value_font_family": "heading",
+         "value_color": "#eeece6",
+         "value_size": 52,
+         "value_weight": "600",
+         "label_color": "#646058",
+         "label_size": 12,
+         "label_uppercase": false,
+         "align": "left",
+         "mono_font_family": "",
+         "items": [
+          {
+           "value": "60+",
+           "label": "Projects built"
+          },
+          {
+           "value": "18",
+           "label": "Years"
+          },
+          {
+           "value": "9",
+           "label": "Awards"
+          },
+          {
+           "value": "7",
+           "label": "In the studio"
+          }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "lo-se-45",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#1c1c1e"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "lo-ro-35",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "lo-co-34",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "lo-section-header-33",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": false,
+         "headline_lines": [
+          {
+           "text": "The studio",
+           "color": "#eeece6",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 38,
+         "headline_font_weight": "600",
+         "headline_align": "left",
+         "tagline_show": false,
+         "layout": "stack",
+         "gap": 0
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "lo-ro-44",
+    "type": "row",
+    "settings": {
+     "gap": 16
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "lo-co-37",
+      "type": "column",
+      "settings": {
+       "width": "1-4"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "lo-team-36",
+        "type": "team",
+        "settings": {
+         "photo": "",
+         "name": "Ana Roca",
+         "role": "Founding partner",
+         "bio": "",
+         "link_url": "",
+         "link_text": "",
+         "photo_size": "120",
+         "photo_shape": "circle",
+         "photo_border_width": "0",
+         "photo_shadow": "none",
+         "photo_gap": "14",
+         "info_bg_color": "transparent",
+         "info_text_color": "#eeece6",
+         "role_color": "#c9c2b6",
+         "info_align": "left",
+         "name_size": "18",
+         "name_weight": "600",
+         "role_size": "12",
+         "bg_color": "transparent",
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         },
+         "border_radius": "0"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "lo-co-39",
+      "type": "column",
+      "settings": {
+       "width": "1-4"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "lo-team-38",
+        "type": "team",
+        "settings": {
+         "photo": "",
+         "name": "Ito Vesa",
+         "role": "Partner",
+         "bio": "",
+         "link_url": "",
+         "link_text": "",
+         "photo_size": "120",
+         "photo_shape": "circle",
+         "photo_border_width": "0",
+         "photo_shadow": "none",
+         "photo_gap": "14",
+         "info_bg_color": "transparent",
+         "info_text_color": "#eeece6",
+         "role_color": "#c9c2b6",
+         "info_align": "left",
+         "name_size": "18",
+         "name_weight": "600",
+         "role_size": "12",
+         "bg_color": "transparent",
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         },
+         "border_radius": "0"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "lo-co-41",
+      "type": "column",
+      "settings": {
+       "width": "1-4"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "lo-team-40",
+        "type": "team",
+        "settings": {
+         "photo": "",
+         "name": "Priya Nair",
+         "role": "Associate",
+         "bio": "",
+         "link_url": "",
+         "link_text": "",
+         "photo_size": "120",
+         "photo_shape": "circle",
+         "photo_border_width": "0",
+         "photo_shadow": "none",
+         "photo_gap": "14",
+         "info_bg_color": "transparent",
+         "info_text_color": "#eeece6",
+         "role_color": "#c9c2b6",
+         "info_align": "left",
+         "name_size": "18",
+         "name_weight": "600",
+         "role_size": "12",
+         "bg_color": "transparent",
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         },
+         "border_radius": "0"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "lo-co-43",
+      "type": "column",
+      "settings": {
+       "width": "1-4"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "lo-team-42",
+        "type": "team",
+        "settings": {
+         "photo": "",
+         "name": "Karl Weiss",
+         "role": "Interiors lead",
+         "bio": "",
+         "link_url": "",
+         "link_text": "",
+         "photo_size": "120",
+         "photo_shape": "circle",
+         "photo_border_width": "0",
+         "photo_shadow": "none",
+         "photo_gap": "14",
+         "info_bg_color": "transparent",
+         "info_text_color": "#eeece6",
+         "role_color": "#c9c2b6",
+         "info_align": "left",
+         "name_size": "18",
+         "name_weight": "600",
+         "role_size": "12",
+         "bg_color": "transparent",
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         },
+         "border_radius": "0"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "lo-se-49",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#202022"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "lo-ro-48",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "lo-co-47",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "lo-mixer-46",
+        "type": "mixer",
+        "settings": {
+         "eyebrow": "Material study",
+         "heading": "Compose a palette",
+         "intro": "Every project starts as a few materials on the bench. Tap two or three and see how the tones sit together before we ever draw a line.",
+         "max": 3,
+         "empty_label": "Tap materials to blend",
+         "zone_accent": "#c9c2b6",
+         "zone_on": "#121214",
+         "card_bg": "#26262a",
+         "card_border": "rgba(238,236,230,.12)",
+         "align": "left",
+         "items": [
+          {
+           "name": "Concrete",
+           "color": "#b8b2a6"
+          },
+          {
+           "name": "Oak",
+           "color": "#b08968"
+          },
+          {
+           "name": "Clay",
+           "color": "#9c6b4a"
+          },
+          {
+           "name": "Brass",
+           "color": "#c9a76a"
+          },
+          {
+           "name": "Charcoal",
+           "color": "#3a3a3e"
+          },
+          {
+           "name": "Linen",
+           "color": "#e3ddd0"
+          }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "lo-se-53",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#1c1c1e"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "lo-ro-52",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "lo-co-51",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "lo-cta-banner-50",
+        "type": "cta-banner",
+        "settings": {
+         "headline": "Building something?",
+         "headline_accent": "",
+         "headline_accent_italic": false,
+         "subtitle": "We take on a handful of projects a year. Tell us about the site and the idea — we'll tell you honestly if we're the right studio.",
+         "cta_text": "Start a project",
+         "cta_url": "#contact",
+         "bg": {
+          "type": "solid",
+          "color": "#26262a"
+         },
+         "text_color": "#eeece6",
+         "accent_color": "#c9c2b6",
+         "subtitle_color": "#9a958c",
+         "cta_bg": "#c9c2b6",
+         "cta_color": "#121214",
+         "cta_radius": {
+          "tl": 0,
+          "tr": 0,
+          "br": 0,
+          "bl": 0,
+          "linked": true
+         },
+         "cta_size": 13,
+         "cta2_text": "See the work",
+         "cta2_url": "#projects",
+         "cta2_bg": "transparent",
+         "cta2_color": "#eeece6",
+         "cta2_border": "rgba(201,194,182,.4)",
+         "cta2_radius": {
+          "tl": 0,
+          "tr": 0,
+          "br": 0,
+          "bl": 0,
+          "linked": true
+         },
+         "headline_font_family": "sans-serif",
+         "headline_size": 56,
+         "headline_weight": "600",
+         "subtitle_size": 17,
+         "layout": "stack",
+         "vertical_align": "center",
+         "banner_radius": {
+          "tl": 0,
+          "tr": 0,
+          "br": 0,
+          "bl": 0,
+          "linked": true
+         },
+         "banner_padding": 80
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

@@ -1,0 +1,1146 @@
+[
+ {
+  "id": "ca-se-4",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#1a1a22"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ca-ro-3",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ca-co-2",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ca-hero-split-1",
+        "type": "searchhero",
+        "settings": {
+         "eyebrow_text": "Marketplace for independent makers",
+         "headline_text": "Everything good,",
+         "headline_line2": "from",
+         "accent_text": "small shops.",
+         "subhead": "Thousands of independent sellers, one cart, one checkout. Find the thing — and support the person who made it.",
+         "search_placeholder": "Search 90,000+ handmade things…",
+         "search_button": "Search",
+         "search_url": "#",
+         "chips": "Ceramics, Prints, Jewellery, Homeware, Vintage, Gifts",
+         "bg_color": "#1a1a22",
+         "panel_color": "#26262f",
+         "accent": "#ff5a5f",
+         "accent_on": "#ffffff",
+         "glow_color": "rgba(255,90,95,0.22)",
+         "text_color": "#ffffff",
+         "sub_color": "#6c6c7c",
+         "chip_color": "#a6a6b4",
+         "border_color": "rgba(255,255,255,0.09)",
+         "search_border": "rgba(255,90,95,0.4)",
+         "min_height": 0
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ca-se-11",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "small"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#1e1e28"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ca-ro-7",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ca-co-6",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ca-section-header-5",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": false,
+         "headline_lines": [
+          {
+           "text": "Shop by ",
+           "color": "#ffffff",
+           "italic": false
+          },
+          {
+           "text": "category",
+           "color": "#ff5a5f",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 32,
+         "headline_font_weight": "800",
+         "headline_align": "left",
+         "headline_inline": true,
+         "tagline_show": false,
+         "layout": "stack",
+         "gap": 0
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "ca-ro-10",
+    "type": "row",
+    "settings": {
+     "gap": 16
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ca-co-9",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ca-categoryrail-8",
+        "type": "categoryrail",
+        "settings": {
+         "items": [
+          {
+           "image": "",
+           "title": "Ceramics",
+           "subtitle": "",
+           "link": "#categories"
+          },
+          {
+           "image": "",
+           "title": "Art & prints",
+           "subtitle": "",
+           "link": "#categories"
+          },
+          {
+           "image": "",
+           "title": "Jewellery",
+           "subtitle": "",
+           "link": "#categories"
+          },
+          {
+           "image": "",
+           "title": "Homeware",
+           "subtitle": "",
+           "link": "#categories"
+          },
+          {
+           "image": "",
+           "title": "Vintage",
+           "subtitle": "",
+           "link": "#categories"
+          },
+          {
+           "image": "",
+           "title": "Stationery",
+           "subtitle": "",
+           "link": "#categories"
+          }
+         ],
+         "card_width": 240,
+         "card_aspect": "4/5",
+         "gap": 16,
+         "media_bg": "#26262f",
+         "overlay_color": "rgba(16,16,21,0.6)",
+         "title_color": "#ffffff",
+         "subtitle_color": "#a6a6b4",
+         "radius": 12,
+         "show_hint": true,
+         "hint_text": "← drag →",
+         "hint_color": "#6c6c7c"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ca-se-18",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "medium"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#1a1a22"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ca-ro-14",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ca-co-13",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ca-cta-banner-12",
+        "type": "cta-banner",
+        "settings": {
+         "eyebrow": "Maker's Week",
+         "eyebrow_color": "#ffffff",
+         "headline": "Up to 40% off,",
+         "headline_accent": "this week only",
+         "headline_accent_italic": false,
+         "subtitle": "Hand-picked deals across thousands of shops.",
+         "cta_text": "Shop deals",
+         "cta_url": "#trending",
+         "bg": {
+          "type": "gradient",
+          "gradient_from": "#ff5a5f",
+          "gradient_to": "#ff8a5f",
+          "gradient_angle": 100
+         },
+         "text_color": "#ffffff",
+         "accent_color": "#ffffff",
+         "subtitle_color": "rgba(255,255,255,.85)",
+         "cta_bg": "#101015",
+         "cta_color": "#ffffff",
+         "cta_radius": {
+          "tl": 10,
+          "tr": 10,
+          "br": 10,
+          "bl": 10,
+          "linked": true
+         },
+         "cta_size": 14,
+         "headline_font_family": "sans-serif",
+         "headline_size": 40,
+         "headline_weight": "800",
+         "subtitle_size": 16,
+         "layout": "split-2",
+         "vertical_align": "center",
+         "banner_radius": {
+          "tl": 16,
+          "tr": 16,
+          "br": 16,
+          "bl": 16,
+          "linked": true
+         },
+         "banner_padding": 40
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "ca-ro-17",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ca-co-16",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ca-countdown-15",
+        "type": "countdown",
+        "settings": {
+         "countdown_style": "custom",
+         "countdown_type": "date",
+         "target_date": "2026-06-30T23:59",
+         "show_days": true,
+         "show_hours": true,
+         "show_minutes": true,
+         "show_seconds": true,
+         "label_days": "Days",
+         "label_hours": "Hrs",
+         "label_minutes": "Min",
+         "label_seconds": "Sec",
+         "separator": "",
+         "display_mode": "inline",
+         "bg": {
+          "type": "none"
+         },
+         "accent_color": "#ffffff",
+         "text_color": "rgba(255,255,255,.8)",
+         "item_bg_color": "rgba(16,16,21,.25)",
+         "item_radius": 10,
+         "item_padding": 14,
+         "number_font_size": "30",
+         "number_font_weight": "800",
+         "label_font_size": "10",
+         "label_font_weight": "500",
+         "item_min_width": "64",
+         "tile_padding": {
+          "top": 8,
+          "right": 0,
+          "bottom": 16,
+          "left": 0
+         },
+         "preset": "custom"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ca-se-22",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#1a1a22"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ca-ro-21",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ca-co-20",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ca-finder-19",
+        "type": "finder",
+        "settings": {
+         "eyebrow": "Gift mode",
+         "heading": "Who are you shopping for?",
+         "intro": "Four curated edits from our independent makers — pick yours and discover pieces that mean something.",
+         "zone_accent": "#ff5a5f",
+         "zone_on": "#ffffff",
+         "card_bg": "#26262f",
+         "card_border": "rgba(255,255,255,.09)",
+         "align": "center",
+         "items": [
+          {
+           "option": "A partner",
+           "icon": "heart",
+           "title": "The Thoughtful Edit",
+           "text": "Pieces made to last and to mean something — hand-thrown, hand-set, hand-finished by makers who sign their work.",
+           "meta": "Jewellery · Ceramics · Leather",
+           "cta_text": "Shop the edit · from €24",
+           "cta_url": "#"
+          },
+          {
+           "option": "A close friend",
+           "icon": "gift",
+           "title": "Small Joys",
+           "text": "The little luxuries that always land — a riso print, a good candle, the notebook they'll actually use. All under forty euro.",
+           "meta": "Prints · Candles · Stationery",
+           "cta_text": "Shop the edit · from €12",
+           "cta_url": "#"
+          },
+          {
+           "option": "A new home",
+           "icon": "home",
+           "title": "The Housewarming",
+           "text": "Everything that makes a new place feel lived-in fast — linen for the table, wool for the sofa, something warm for the kitchen.",
+           "meta": "Homeware · Textiles · Kitchen",
+           "cta_text": "Shop the edit · from €18",
+           "cta_url": "#"
+          },
+          {
+           "option": "Treat yourself",
+           "icon": "star",
+           "title": "Just Because",
+           "text": "The treat you'd never quite buy at full price — a vintage find, a small original, the self-care thing you keep almost adding to cart.",
+           "meta": "Vintage · Art · Self-care",
+           "cta_text": "Shop the edit · from €15",
+           "cta_url": "#"
+          }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ca-se-29",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#1e1e28"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ca-ro-25",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ca-co-24",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ca-section-header-23",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": false,
+         "eyebrow_text": "",
+         "eyebrow_color": "#ff5a5f",
+         "eyebrow_dot_color": "#ff5a5f",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "Trending ",
+           "color": "#ffffff",
+           "italic": false
+          },
+          {
+           "text": "now",
+           "color": "#ff5a5f",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 38,
+         "headline_font_weight": "800",
+         "headline_align": "left",
+         "headline_inline": true,
+         "tagline_show": false,
+         "layout": "stack",
+         "gap": 10
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "ca-ro-28",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ca-co-27",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ca-product-cards-26",
+        "type": "product-cards",
+        "settings": {
+         "columns": 4,
+         "gap": 16,
+         "items": [
+          {
+           "letter": "",
+           "logo_image": "",
+           "top_bg": {
+            "type": "gradient",
+            "gradient_from": "#2a2a35",
+            "gradient_to": "#26262f",
+            "gradient_angle": 180
+           },
+           "screenshot_label": "ceramic mug",
+           "brand_label": "Kiln Studio",
+           "brand_color": "#ff5a5f",
+           "show_badge": true,
+           "badge_text": "-25%",
+           "badge_bg": "#ff5a5f",
+           "badge_color": "#ffffff",
+           "title": "Speckled Tea Mug",
+           "title_accent": "",
+           "title_accent_italic": false,
+           "description": "★ 4.9 (212)",
+           "cta_text": "Add · €24",
+           "cta_url": "#"
+          },
+          {
+           "letter": "",
+           "logo_image": "",
+           "top_bg": {
+            "type": "gradient",
+            "gradient_from": "#2a2a35",
+            "gradient_to": "#26262f",
+            "gradient_angle": 180
+           },
+           "screenshot_label": "risograph print",
+           "brand_label": "Press Yan",
+           "brand_color": "#ff5a5f",
+           "show_badge": false,
+           "badge_text": "",
+           "badge_bg": "#ff5a5f",
+           "badge_color": "#ffffff",
+           "title": "Riso Print, A2",
+           "title_accent": "",
+           "title_accent_italic": false,
+           "description": "★ 5.0 (88)",
+           "cta_text": "Add · €34",
+           "cta_url": "#"
+          },
+          {
+           "letter": "",
+           "logo_image": "",
+           "top_bg": {
+            "type": "gradient",
+            "gradient_from": "#2a2a35",
+            "gradient_to": "#26262f",
+            "gradient_angle": 180
+           },
+           "screenshot_label": "brass earrings",
+           "brand_label": "Mara Made",
+           "brand_color": "#ff5a5f",
+           "show_badge": true,
+           "badge_text": "-15%",
+           "badge_bg": "#ff5a5f",
+           "badge_color": "#ffffff",
+           "title": "Brass Arc Earrings",
+           "title_accent": "",
+           "title_accent_italic": false,
+           "description": "★ 4.8 (340)",
+           "cta_text": "Add · €42",
+           "cta_url": "#"
+          },
+          {
+           "letter": "",
+           "logo_image": "",
+           "top_bg": {
+            "type": "gradient",
+            "gradient_from": "#2a2a35",
+            "gradient_to": "#26262f",
+            "gradient_angle": 180
+           },
+           "screenshot_label": "linen napkins",
+           "brand_label": "Flax & Co",
+           "brand_color": "#ff5a5f",
+           "show_badge": false,
+           "badge_text": "",
+           "badge_bg": "#ff5a5f",
+           "badge_color": "#ffffff",
+           "title": "Linen Napkins, 4",
+           "title_accent": "",
+           "title_accent_italic": false,
+           "description": "★ 4.9 (156)",
+           "cta_text": "Add · €38",
+           "cta_url": "#"
+          }
+         ],
+         "card_bg": {
+          "type": "solid",
+          "color": "#26262f"
+         },
+         "card_color": "#a6a6b4",
+         "card_radius": {
+          "tl": 12,
+          "tr": 12,
+          "br": 12,
+          "bl": 12,
+          "linked": true
+         },
+         "card_radius_hover": {
+          "tl": 12,
+          "tr": 12,
+          "br": 12,
+          "bl": 12,
+          "linked": true
+         },
+         "card_shadow": "none",
+         "card_padding": 18,
+         "top_aspect_ratio": "1/1",
+         "top_padding": 16,
+         "letter_font_family": "sans-serif",
+         "letter_size": 80,
+         "letter_italic": false,
+         "letter_align": "center",
+         "logo_height": 52,
+         "show_screenshot_label": true,
+         "screenshot_label_color": "#6c6c7c",
+         "brand_size": 11,
+         "brand_letter_spacing": 0.06,
+         "title_font_family": "sans-serif",
+         "title_size": 16,
+         "title_weight": "700",
+         "description_size": 12,
+         "cta_size": 12,
+         "cta_arrow": false,
+         "card_hover_effect": "lift"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ca-se-36",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#1e1e28"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ca-ro-32",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ca-co-31",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ca-section-header-30",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": false,
+         "eyebrow_text": "",
+         "eyebrow_color": "#ff5a5f",
+         "eyebrow_dot_color": "#ff5a5f",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "Shops to ",
+           "color": "#ffffff",
+           "italic": false
+          },
+          {
+           "text": "follow",
+           "color": "#ff5a5f",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 38,
+         "headline_font_weight": "800",
+         "headline_align": "left",
+         "headline_inline": true,
+         "tagline_show": false,
+         "layout": "stack",
+         "gap": 10
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "ca-ro-35",
+    "type": "row",
+    "settings": {
+     "gap": 16
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ca-co-34a",
+      "type": "column",
+      "settings": {
+       "width": "1-3"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ca-team-33a",
+        "type": "team",
+        "settings": {
+         "bg": {
+          "type": "none"
+         },
+         "preset": "custom",
+         "photo": "",
+         "name": "Kiln Studio",
+         "role": "Ceramics · 2.1k sales",
+         "bio": "",
+         "link_text": "",
+         "link_url": "",
+         "photo_size": "64",
+         "photo_shape": "circle",
+         "photo_border_width": "0",
+         "photo_shadow": "none",
+         "photo_gap": "0",
+         "info_bg_color": "#26262f",
+         "info_text_color": "#ffffff",
+         "info_padding": {
+          "top": 22,
+          "right": 22,
+          "bottom": 22,
+          "left": 22
+         },
+         "info_width": "100",
+         "info_radius": "12",
+         "info_border_width": "0",
+         "info_align": "left",
+         "name_size": "16",
+         "name_weight": "700",
+         "role_size": "13",
+         "role_color": "#6c6c7c",
+         "bg_color": "",
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         },
+         "border_radius": "0"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "ca-co-34b",
+      "type": "column",
+      "settings": {
+       "width": "1-3"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ca-team-33b",
+        "type": "team",
+        "settings": {
+         "bg": {
+          "type": "none"
+         },
+         "preset": "custom",
+         "photo": "",
+         "name": "Press Yan",
+         "role": "Prints · 4.6k sales",
+         "bio": "",
+         "link_text": "",
+         "link_url": "",
+         "photo_size": "64",
+         "photo_shape": "circle",
+         "photo_border_width": "0",
+         "photo_shadow": "none",
+         "photo_gap": "0",
+         "info_bg_color": "#26262f",
+         "info_text_color": "#ffffff",
+         "info_padding": {
+          "top": 22,
+          "right": 22,
+          "bottom": 22,
+          "left": 22
+         },
+         "info_width": "100",
+         "info_radius": "12",
+         "info_border_width": "0",
+         "info_align": "left",
+         "name_size": "16",
+         "name_weight": "700",
+         "role_size": "13",
+         "role_color": "#6c6c7c",
+         "bg_color": "",
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         },
+         "border_radius": "0"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "ca-co-34c",
+      "type": "column",
+      "settings": {
+       "width": "1-3"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ca-team-33c",
+        "type": "team",
+        "settings": {
+         "bg": {
+          "type": "none"
+         },
+         "preset": "custom",
+         "photo": "",
+         "name": "Mara Made",
+         "role": "Jewellery · 8.9k sales",
+         "bio": "",
+         "link_text": "",
+         "link_url": "",
+         "photo_size": "64",
+         "photo_shape": "circle",
+         "photo_border_width": "0",
+         "photo_shadow": "none",
+         "photo_gap": "0",
+         "info_bg_color": "#26262f",
+         "info_text_color": "#ffffff",
+         "info_padding": {
+          "top": 22,
+          "right": 22,
+          "bottom": 22,
+          "left": 22
+         },
+         "info_width": "100",
+         "info_radius": "12",
+         "info_border_width": "0",
+         "info_align": "left",
+         "name_size": "16",
+         "name_weight": "700",
+         "role_size": "13",
+         "role_color": "#6c6c7c",
+         "bg_color": "",
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         },
+         "border_radius": "0"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ca-se-40",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#1a1a22"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ca-ro-39",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ca-co-38",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ca-builder-37",
+        "type": "builder",
+        "settings": {
+         "eyebrow": "Try the cart",
+         "heading": "Build a basket",
+         "intro": "Tap to add a few finds from makers on Carrello — the total ticks up live, like the real thing.",
+         "currency": "€",
+         "cap": 0,
+         "total_label": "Total",
+         "count_label": "items",
+         "cta_text": "Go to cart",
+         "cta_url": "#",
+         "zone_accent": "#ff5a5f",
+         "zone_on": "#ffffff",
+         "card_bg": "#26262f",
+         "card_border": "1px solid rgba(255,255,255,.09)",
+         "align": "left",
+         "items": [
+          {
+           "name": "Hand-thrown Mug",
+           "price": 32,
+           "note": "Clayfolk",
+           "start": false
+          },
+          {
+           "name": "Linen Tote",
+           "price": 58,
+           "note": "Norra Goods",
+           "start": false
+          },
+          {
+           "name": "Beeswax Candle",
+           "price": 24,
+           "note": "Hearth & Co",
+           "start": false
+          },
+          {
+           "name": "Notebook Set",
+           "price": 45,
+           "note": "Paper Lab",
+           "start": false
+          },
+          {
+           "name": "Wool Throw",
+           "price": 76,
+           "note": "Loom & Field",
+           "start": false
+          },
+          {
+           "name": "Herb Seed Kit",
+           "price": 19,
+           "note": "Sprout",
+           "start": false
+          }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ca-se-44",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#1a1a22"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ca-ro-43",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ca-co-42",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ca-cta-banner-41",
+        "type": "cta-banner",
+        "settings": {
+         "headline": "Make something?",
+         "headline_accent": "Sell it here.",
+         "headline_accent_italic": false,
+         "subtitle": "Open a shop in minutes, reach millions of buyers, and only pay when you sell.",
+         "cta_text": "Open a shop",
+         "cta_url": "#vendors",
+         "cta2_text": "Browse deals",
+         "cta2_url": "#trending",
+         "cta2_bg": "rgba(255,255,255,.06)",
+         "cta2_color": "#ffffff",
+         "cta2_border": "rgba(255,255,255,.16)",
+         "bg": {
+          "type": "gradient",
+          "gradient_from": "rgba(255,90,95,.16)",
+          "gradient_to": "rgba(63,214,168,.05)",
+          "gradient_angle": 160
+         },
+         "text_color": "#ffffff",
+         "accent_color": "#ff5a5f",
+         "subtitle_color": "#a6a6b4",
+         "cta_bg": "#ff5a5f",
+         "cta_color": "#ffffff",
+         "cta_radius": {
+          "tl": 10,
+          "tr": 10,
+          "br": 10,
+          "bl": 10,
+          "linked": true
+         },
+         "cta_size": 15,
+         "headline_font_family": "sans-serif",
+         "headline_size": 50,
+         "headline_weight": "800",
+         "subtitle_size": 17,
+         "layout": "stack",
+         "vertical_align": "center",
+         "banner_radius": {
+          "tl": 20,
+          "tr": 20,
+          "br": 20,
+          "bl": 20,
+          "linked": true
+         },
+         "banner_padding": 72
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

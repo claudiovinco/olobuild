@@ -1,5 +1,6 @@
 <template>
   <div
+    ref="cellRef"
     :class="cellClasses"
     :style="cellStyle"
     :id="tile.advanced?.html_id || undefined"
@@ -52,7 +53,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed, ref, onMounted, onBeforeUnmount, watch } from 'vue';
 import { useBuilderStore } from '@/stores/builder';
 import { useTilesStore } from '@/stores/tiles';
 import TileBase from '@/components/Tiles/TileBase.vue';
@@ -66,6 +67,62 @@ const props = defineProps({
 
 const builderStore = useBuilderStore();
 const tilesStore = useTilesStore();
+
+// ── Anteprima "Spotlight cursore (torcia)" nel canvas builder ──────────────
+// Effetto advanced cursor_spotlight: nel frontend è gestito dal runtime di
+// class-frontend-renderer; qui lo replichiamo per-elemento così è WYSIWYG.
+const cellRef = ref(null);
+let _spotDisc = null, _spotH = null;
+function teardownSpotlight() {
+  const host = cellRef.value;
+  if (host && _spotH) {
+    host.removeEventListener('pointerenter', _spotH.enter);
+    host.removeEventListener('pointermove', _spotH.move);
+    host.removeEventListener('pointerleave', _spotH.leave);
+  }
+  if (_spotDisc && _spotDisc.parentNode) _spotDisc.parentNode.removeChild(_spotDisc);
+  _spotDisc = null; _spotH = null;
+}
+function setupSpotlight() {
+  teardownSpotlight();
+  const host = cellRef.value, adv = props.tile.advanced || {};
+  if (!host || !adv.cursor_spotlight) return;
+  const size = +adv.cursor_spotlight_size || 300;
+  const soft = adv.cursor_spotlight_softness != null ? +adv.cursor_spotlight_softness : 40;
+  const blend = adv.cursor_spotlight_blend || 'difference';
+  const color = adv.cursor_spotlight_color || '#ffffff';
+  const ease = (+adv.cursor_spotlight_easing || 22) / 100;
+  const inner = Math.max(0, 100 - soft), half = size / 2;
+  let disc = null, tx = 0, ty = 0, cx = 0, cy = 0, running = false, inside = false;
+  function build() {
+    if (disc) return;
+    if (getComputedStyle(host).position === 'static') host.style.position = 'relative';
+    host.style.overflow = 'hidden'; host.style.isolation = 'isolate';
+    disc = document.createElement('div');
+    disc.setAttribute('aria-hidden', 'true');
+    disc.style.cssText = 'position:absolute;top:0;left:0;z-index:99999;width:' + size + 'px;height:' + size + 'px;border-radius:50%;pointer-events:none;will-change:transform,opacity;opacity:0;transition:opacity .2s ease;background:radial-gradient(circle, ' + color + ' 0%, ' + color + ' ' + inner + '%, transparent 100%);mix-blend-mode:' + blend + ';';
+    host.appendChild(disc); _spotDisc = disc;
+  }
+  function frame() {
+    cx += (tx - cx) * ease; cy += (ty - cy) * ease;
+    if (disc) disc.style.transform = 'translate(' + (cx - half) + 'px,' + (cy - half) + 'px)';
+    if (inside || Math.abs(tx - cx) > 0.5 || Math.abs(ty - cy) > 0.5) { requestAnimationFrame(frame); } else { running = false; }
+  }
+  function start() { if (!running) { running = true; requestAnimationFrame(frame); } }
+  const enter = (e) => { if (e.pointerType === 'touch') return; build(); const r = host.getBoundingClientRect(); tx = cx = e.clientX - r.left; ty = cy = e.clientY - r.top; inside = true; if (disc) disc.style.opacity = '1'; start(); };
+  const move = (e) => { if (e.pointerType === 'touch' || !disc) return; const r = host.getBoundingClientRect(); tx = e.clientX - r.left; ty = e.clientY - r.top; start(); };
+  const leave = () => { inside = false; if (disc) disc.style.opacity = '0'; };
+  host.addEventListener('pointerenter', enter);
+  host.addEventListener('pointermove', move);
+  host.addEventListener('pointerleave', leave);
+  _spotH = { enter, move, leave };
+}
+onMounted(setupSpotlight);
+onBeforeUnmount(teardownSpotlight);
+watch(() => {
+  const a = props.tile.advanced || {};
+  return [a.cursor_spotlight, a.cursor_spotlight_blend, a.cursor_spotlight_color, a.cursor_spotlight_size, a.cursor_spotlight_softness, a.cursor_spotlight_easing].join('|');
+}, setupSpotlight);
 
 const isSelected = computed(() => builderStore.selectedTileId === props.tile.id);
 

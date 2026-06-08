@@ -1,0 +1,992 @@
+{
+  "id": "page-artisan-food",
+  "name": "Pastificio / Food artigianale",
+  "category": "page",
+  "preview_description": "Template token-first assemblato dal sistema di sezioni coerente (7 sezioni).",
+  "content": {
+    "0": {
+      "id": "tpl-heroimgov-sec",
+      "type": "section",
+      "settings": {
+        "style": "default",
+        "width": "expand",
+        "padding": "xlarge"
+      },
+      "style": {
+        "bg_type": "color",
+        "bg_color": "#064E3B",
+        "padding_top": "130",
+        "padding_bottom": "130"
+      },
+      "advanced": {},
+      "children": [
+        {
+          "id": "tpl-heroimgov-row",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl-heroimgov-col1",
+              "type": "column",
+              "settings": {
+                "width": "3-5"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl-heroimgov-headline",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "Sostenibilità e innovazione",
+                    "subtitle": "Creiamo soluzioni digitali rispettose dell'ambiente e orientate al futuro del pianeta",
+                    "tag": "h1",
+                    "alignment": "left",
+                    "decoration": "line",
+                    "heading_color": "#FFFFFF",
+                    "subtitle_color": "#A7F3D0",
+                    "decoration_color": "#34D399",
+                    "heading_size": "lg"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-heroimgov-spacer1",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "32"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-heroimgov-btn1",
+                  "type": "button",
+                  "settings": {
+                    "text": "Scopri la nostra missione",
+                    "url": "#missione",
+                    "style": "outline",
+                    "alignment": "left",
+                    "color": "#FFFFFF",
+                    "border_radius": "8",
+                    "size": "lg",
+                    "hover_effect": "grow"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "1": {
+      "id": "tpl_32",
+      "type": "section",
+      "settings": {
+        "style": "default",
+        "width": "large",
+        "padding": "large"
+      },
+      "style": {
+        "bg_type": "color",
+        "bg_color": "#ffffff",
+        "padding_top": "100",
+        "padding_bottom": "100"
+      },
+      "advanced": {},
+      "children": [
+        {
+          "id": "tpl_22",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl_21",
+              "type": "column",
+              "settings": {
+                "width": "1-1"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_19",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "Chi siamo",
+                    "subtitle": "La nostra storia e i nostri valori",
+                    "tag": "h2",
+                    "alignment": "center",
+                    "decoration": "line",
+                    "heading_color": "#1e293b",
+                    "subtitle_color": "#64748b",
+                    "heading_size": "lg"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_20",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "48"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "tpl_31",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl_24",
+              "type": "column",
+              "settings": {
+                "width": "1-2"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_23",
+                  "type": "image",
+                  "settings": {
+                    "url": "",
+                    "alt": "Chi siamo",
+                    "width": "100%",
+                    "border_radius": "12",
+                    "shadow": "lg"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            },
+            {
+              "id": "tpl_30",
+              "type": "column",
+              "settings": {
+                "width": "1-2"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_25",
+                  "type": "content",
+                  "settings": {
+                    "content": "<p>Siamo un team appassionato e dedicato, con anni di esperienza nel nostro settore. La nostra missione è fornire soluzioni innovative che fanno la differenza per i nostri clienti.</p><p>Crediamo nella qualità, nella trasparenza e nel lavoro di squadra. Ogni progetto che affrontiamo è un'opportunità per superare le aspettative.</p>",
+                    "alignment": "left"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_26",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "32"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_27",
+                  "type": "counter",
+                  "settings": {
+                    "number": "500",
+                    "suffix": "+",
+                    "label": "Clienti soddisfatti",
+                    "duration": "2000",
+                    "color": "var(--olo-color-primary, #e1474f)",
+                    "number_size": "lg"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_28",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "16"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_29",
+                  "type": "counter",
+                  "settings": {
+                    "number": "15",
+                    "suffix": "",
+                    "label": "Anni di esperienza",
+                    "duration": "2000",
+                    "color": "#059669",
+                    "number_size": "lg"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "2": {
+      "id": "tpl-ft-181",
+      "type": "section",
+      "settings": {
+        "style": "default",
+        "width": "large",
+        "padding": "large"
+      },
+      "style": {
+        "bg_type": "color",
+        "bg_color": "#FFFFFF",
+        "padding_top": "80",
+        "padding_bottom": "0"
+      },
+      "advanced": {},
+      "children": [
+        {
+          "id": "tpl-ft-180",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl-ft-174",
+              "type": "column",
+              "settings": {
+                "width": "1-2"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl-ft-173",
+                  "type": "image",
+                  "settings": {
+                    "url": "",
+                    "alt": "Personalizzazione",
+                    "width": "100%",
+                    "border_radius": "16",
+                    "shadow": "md"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": "tpl-ft-179",
+              "type": "column",
+              "settings": {
+                "width": "1-2"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl-ft-175",
+                  "type": "icon",
+                  "settings": {
+                    "icon": "settings",
+                    "size": "48",
+                    "color": "var(--olo-color-primary, #e1474f)",
+                    "bg_color": "color-mix(in srgb, var(--olo-color-primary, #e1474f) 12%, #fff)",
+                    "border_radius": "12",
+                    "style": "square"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-ft-176",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "16"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-ft-177",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "Personalizzazione Totale",
+                    "tag": "h3",
+                    "alignment": "left",
+                    "decoration": "none",
+                    "heading_color": "#1F2937",
+                    "heading_size": "md"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-ft-178",
+                  "type": "content",
+                  "settings": {
+                    "content": "<p style=\"color:#6B7280\">Modifica ogni aspetto del tuo sito: colori, tipografia, layout e animazioni. Nessun limite alla creatività.</p>",
+                    "alignment": "left"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "3": {
+      "id": "tpl-ft-190",
+      "type": "section",
+      "settings": {
+        "style": "default",
+        "width": "large",
+        "padding": "large"
+      },
+      "style": {
+        "bg_type": "color",
+        "bg_color": "#FFF7ED",
+        "padding_top": "80",
+        "padding_bottom": "0"
+      },
+      "advanced": {},
+      "children": [
+        {
+          "id": "tpl-ft-189",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl-ft-186",
+              "type": "column",
+              "settings": {
+                "width": "1-2"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl-ft-182",
+                  "type": "icon",
+                  "settings": {
+                    "icon": "zap",
+                    "size": "48",
+                    "color": "#EA580C",
+                    "bg_color": "#FFEDD5",
+                    "border_radius": "12",
+                    "style": "square"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-ft-183",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "16"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-ft-184",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "Performance Ottimali",
+                    "tag": "h3",
+                    "alignment": "left",
+                    "decoration": "none",
+                    "heading_color": "#1F2937",
+                    "heading_size": "md"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-ft-185",
+                  "type": "content",
+                  "settings": {
+                    "content": "<p style=\"color:#6B7280\">Core Web Vitals perfetti. Lazy loading, compressione immagini e minificazione automatica del codice.</p>",
+                    "alignment": "left"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": "tpl-ft-188",
+              "type": "column",
+              "settings": {
+                "width": "1-2"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl-ft-187",
+                  "type": "image",
+                  "settings": {
+                    "url": "",
+                    "alt": "Performance",
+                    "width": "100%",
+                    "border_radius": "16",
+                    "shadow": "md"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "4": {
+      "id": "tpl-ft-199",
+      "type": "section",
+      "settings": {
+        "style": "default",
+        "width": "large",
+        "padding": "large"
+      },
+      "style": {
+        "bg_type": "color",
+        "bg_color": "#F0F9FF",
+        "padding_top": "80",
+        "padding_bottom": "80"
+      },
+      "advanced": {},
+      "children": [
+        {
+          "id": "tpl-ft-198",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl-ft-192",
+              "type": "column",
+              "settings": {
+                "width": "1-2"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl-ft-191",
+                  "type": "image",
+                  "settings": {
+                    "url": "",
+                    "alt": "Collaborazione",
+                    "width": "100%",
+                    "border_radius": "16",
+                    "shadow": "md"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": "tpl-ft-197",
+              "type": "column",
+              "settings": {
+                "width": "1-2"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl-ft-193",
+                  "type": "icon",
+                  "settings": {
+                    "icon": "users",
+                    "size": "48",
+                    "color": "#0284C7",
+                    "bg_color": "#E0F2FE",
+                    "border_radius": "12",
+                    "style": "square"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-ft-194",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "16"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-ft-195",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "Collaborazione in Team",
+                    "tag": "h3",
+                    "alignment": "left",
+                    "decoration": "none",
+                    "heading_color": "#1F2937",
+                    "heading_size": "md"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-ft-196",
+                  "type": "content",
+                  "settings": {
+                    "content": "<p style=\"color:#6B7280\">Invita colleghi, assegna ruoli e lavora in tempo reale sullo stesso progetto con il controllo versione integrato.</p>",
+                    "alignment": "left"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "5": {
+      "id": "tpl_112",
+      "type": "section",
+      "settings": {
+        "style": "default",
+        "width": "large",
+        "padding": "large"
+      },
+      "style": {
+        "bg_type": "color",
+        "bg_color": "#ffffff",
+        "padding_top": "80",
+        "padding_bottom": "80"
+      },
+      "advanced": {},
+      "children": [
+        {
+          "id": "tpl_111",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl_110",
+              "type": "column",
+              "settings": {
+                "width": "1-1"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_107",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "La nostra galleria",
+                    "subtitle": "Scopri i nostri lavori e i momenti migliori",
+                    "tag": "h2",
+                    "alignment": "center",
+                    "decoration": "line",
+                    "heading_color": "#1e293b",
+                    "subtitle_color": "#64748b",
+                    "heading_size": "lg"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_108",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "48"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_109",
+                  "type": "gallery",
+                  "settings": {
+                    "images": [],
+                    "columns": 3,
+                    "gap": "8",
+                    "border_radius": "8"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "6": {
+      "id": "tpl-tr-sec",
+      "type": "section",
+      "settings": {
+        "style": "default",
+        "width": "large",
+        "padding": "large"
+      },
+      "style": {
+        "bg_type": "color",
+        "bg_color": "#FAFAFA",
+        "padding_top": "80",
+        "padding_bottom": "80"
+      },
+      "advanced": {},
+      "children": [
+        {
+          "id": "tpl-tr-row0",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl-tr-col0",
+              "type": "column",
+              "settings": {
+                "width": "1-1"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl-tr-head",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "Valutazioni dei nostri clienti",
+                    "subtitle": "Media 4.9 su 5 stelle",
+                    "tag": "h2",
+                    "alignment": "center",
+                    "decoration": "none",
+                    "heading_color": "#111827",
+                    "subtitle_color": "#F59E0B",
+                    "heading_size": "lg"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-tr-sp",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "40"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "tpl-tr-row1",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl-tr-c1",
+              "type": "column",
+              "settings": {
+                "width": "1-3"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl-tr-q1",
+                  "type": "testimonial",
+                  "settings": {
+                    "quote": "Esperienza eccellente. Il prodotto ha superato ogni nostra aspettativa iniziale.",
+                    "author_name": "Federica Santini",
+                    "author_role": "Responsabile Acquisti",
+                    "rating": "5",
+                    "bg_color": "#FEF3C7",
+                    "text_color": "#92400E",
+                    "show_line": false,
+                    "border_radius": "16",
+                    "show_rating": true,
+                    "rating_color": "#D97706"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": "tpl-tr-c2",
+              "type": "column",
+              "settings": {
+                "width": "1-3"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl-tr-q2",
+                  "type": "testimonial",
+                  "settings": {
+                    "quote": "Rapporto qualita-prezzo imbattibile. Assistenza sempre pronta e risolutiva.",
+                    "author_name": "Enrico Pellegrini",
+                    "author_role": "Direttore IT, Pellegrini Corp",
+                    "rating": "5",
+                    "bg_color": "#FCE7F3",
+                    "text_color": "#831843",
+                    "show_line": false,
+                    "border_radius": "16",
+                    "show_rating": true,
+                    "rating_color": "#DB2777"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": "tpl-tr-c3",
+              "type": "column",
+              "settings": {
+                "width": "1-3"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl-tr-q3",
+                  "type": "testimonial",
+                  "settings": {
+                    "quote": "Il team e stato capace di gestire ogni criticita con prontezza. Risultato finale impeccabile.",
+                    "author_name": "Monica Vitale",
+                    "author_role": "CEO, Vitale Solutions",
+                    "rating": "5",
+                    "bg_color": "#ECFDF5",
+                    "text_color": "#065F46",
+                    "show_line": false,
+                    "border_radius": "16",
+                    "show_rating": true,
+                    "rating_color": "#059669"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "7": {
+      "id": "tpl-news1-sec",
+      "type": "section",
+      "settings": {
+        "style": "default",
+        "width": "large",
+        "padding": "large"
+      },
+      "style": {
+        "bg_type": "color",
+        "bg_color": "color-mix(in srgb, var(--olo-color-primary, #e1474f) 12%, #fff)",
+        "padding_top": "60",
+        "padding_bottom": "60"
+      },
+      "advanced": {},
+      "children": [
+        {
+          "id": "tpl-news1-row",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl-news1-col1",
+              "type": "column",
+              "settings": {
+                "width": "1-1"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl-news1-headline",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "Resta aggiornato",
+                    "subtitle": "Iscriviti alla newsletter per ricevere novità e consigli esclusivi",
+                    "tag": "h3",
+                    "alignment": "center",
+                    "decoration": "none",
+                    "heading_color": "var(--olo-color-primary, #e1474f)",
+                    "subtitle_color": "var(--olo-color-primary, #e1474f)",
+                    "heading_size": "md"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-news1-spacer1",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "24"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-news1-form",
+                  "type": "form",
+                  "settings": {
+                    "fields": [
+                      {
+                        "type": "email",
+                        "label": "La tua email",
+                        "placeholder": "nome@esempio.it",
+                        "required": true
+                      }
+                    ],
+                    "submit_text": "Iscriviti",
+                    "submit_bg_color": "var(--olo-color-primary, #e1474f)",
+                    "submit_text_color": "#FFFFFF",
+                    "layout": "inline"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "8": {
+      "id": "tpl_106",
+      "type": "section",
+      "settings": {
+        "style": "default",
+        "width": "large",
+        "padding": "large"
+      },
+      "style": {
+        "bg_type": "color",
+        "bg_color": "#374151",
+        "padding_top": "24",
+        "padding_bottom": "24"
+      },
+      "advanced": {},
+      "children": [
+        {
+          "id": "tpl_105",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl_102",
+              "type": "column",
+              "settings": {
+                "width": "1-2"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_101",
+                  "type": "content",
+                  "settings": {
+                    "content": "<p style=\"color:#d1d5db;font-size:14px;margin:0;\">&copy; 2026 La tua Azienda. Tutti i diritti riservati.</p>",
+                    "alignment": "left"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            },
+            {
+              "id": "tpl_104",
+              "type": "column",
+              "settings": {
+                "width": "1-2"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_103",
+                  "type": "social",
+                  "settings": {
+                    "links": "facebook|#\ninstagram|#\nlinkedin|#",
+                    "style": "default",
+                    "size": "md",
+                    "alignment": "right"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

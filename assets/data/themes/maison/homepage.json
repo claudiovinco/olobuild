@@ -1,0 +1,1049 @@
+[
+ {
+  "id": "ma-se-4",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#f3eee4"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ma-ro-3",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ma-co-2",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ma-hero-split-1",
+        "type": "hero-split",
+        "settings": {
+         "eyebrow_text": "Furniture & objects",
+         "eyebrow_dot_color": "#a9794f",
+         "eyebrow_color": "#a9794f",
+         "headline_lines": [
+          {
+           "text": "Pieces you’ll",
+           "color": "#2c2419",
+           "italic": false
+          },
+          {
+           "text": "keep for ",
+           "color": "#2c2419",
+           "italic": false
+          },
+          {
+           "text": "life.",
+           "color": "#a9794f",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 72,
+         "headline_line_height": 1.06,
+         "headline_font_weight": "400",
+         "headline_align": "left",
+         "subhead": "Solid materials, honest joinery and shapes that don’t date. Made in small runs to be lived with, not replaced.",
+         "subhead_color": "#5d5142",
+         "subhead_size": 18,
+         "subhead_italic": false,
+         "subhead_max_width": 420,
+         "cta1_text": "Shop the collection",
+         "cta1_url": "/shop/",
+         "cta1_bg": "#a9794f",
+         "cta1_color": "#ffffff",
+         "cta1_size": 14,
+         "cta1_radius": {
+          "tl": 2,
+          "tr": 2,
+          "br": 2,
+          "bl": 2,
+          "linked": true
+         },
+         "cta1_radius_hover": {
+          "tl": 2,
+          "tr": 2,
+          "br": 2,
+          "bl": 2,
+          "linked": true
+         },
+         "cta2_text": "Shop the room",
+         "cta2_url": "#room",
+         "cta2_bg": "transparent",
+         "cta2_color": "#2c2419",
+         "cta2_border": "#c8b89e",
+         "cta2_size": 14,
+         "cta2_radius": {
+          "tl": 2,
+          "tr": 2,
+          "br": 2,
+          "bl": 2,
+          "linked": true
+         },
+         "cta2_radius_hover": {
+          "tl": 2,
+          "tr": 2,
+          "br": 2,
+          "bl": 2,
+          "linked": true
+         },
+         "stats": [],
+         "showcase_enabled": false,
+         "showcase_bg": {
+          "type": "solid",
+          "color": "#e9e1d2"
+         },
+         "showcase_padding": 32,
+         "showcase_radius": {
+          "tl": 6,
+          "tr": 6,
+          "br": 6,
+          "bl": 6,
+          "linked": true
+         },
+         "showcase_radius_hover": {
+          "tl": 6,
+          "tr": 6,
+          "br": 6,
+          "bl": 6,
+          "linked": true
+         },
+         "showcase_badge_text": "MAISON · MADE TO LAST",
+         "showcase_badge_dot": "#a9794f",
+         "showcase_badge_bg": "#f3eee4",
+         "showcase_badge_color": "#2c2419",
+         "showcase_items": [
+          {
+           "number": "Solid timber & natural stone",
+           "text": "Materials",
+           "italic": false,
+           "text_color": "#a9794f",
+           "bg": {
+            "type": "solid",
+            "color": "#faf6ee"
+           }
+          },
+          {
+           "number": "Small-batch production",
+           "text": "Method",
+           "italic": false,
+           "text_color": "#2c2419",
+           "bg": {
+            "type": "solid",
+            "color": "#faf6ee"
+           }
+          },
+          {
+           "number": "Repaired, not replaced",
+           "text": "Promise",
+           "italic": false,
+           "text_color": "#2c2419",
+           "bg": {
+            "type": "solid",
+            "color": "#faf6ee"
+           }
+          },
+          {
+           "number": "Free delivery over €500",
+           "text": "Offer",
+           "italic": false,
+           "text_color": "#a9794f",
+           "bg": {
+            "type": "solid",
+            "color": "#faf6ee"
+           }
+          }
+         ],
+         "showcase_card_radius": {
+          "tl": 4,
+          "tr": 4,
+          "br": 4,
+          "bl": 4,
+          "linked": true
+         },
+         "showcase_card_radius_hover": {
+          "tl": 4,
+          "tr": 4,
+          "br": 4,
+          "bl": 4,
+          "linked": true
+         },
+         "showcase_card_shadow": "none",
+         "showcase_caption_left": "MAISON",
+         "showcase_caption_right": "EST. 2018",
+         "showcase_hover_effect": "none",
+         "split_ratio": "1fr 1.1fr",
+         "gap": 48,
+         "min_height": 0,
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ma-se-8",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#faf6ee"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ma-ro-7",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ma-co-6",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ma-hotspots-5",
+        "type": "hotspots",
+        "settings": {
+         "eyebrow": "Shop the room",
+         "heading": "See it in place",
+         "intro": "Hover the markers to shop each piece in the setting.",
+         "panel_label": "styled living room — chair, sideboard, lamp, rug",
+         "aspect_ratio": "16/9",
+         "items": [
+          {
+           "x": 24,
+           "y": 55,
+           "title": "Linden Lounge Chair",
+           "text": "Seating",
+           "meta": "€890"
+          },
+          {
+           "x": 58,
+           "y": 48,
+           "title": "Oak Sideboard",
+           "text": "Storage",
+           "meta": "€1,640"
+          },
+          {
+           "x": 78,
+           "y": 34,
+           "title": "Paper Floor Lamp",
+           "text": "Lighting",
+           "meta": "€240"
+          },
+          {
+           "x": 44,
+           "y": 80,
+           "title": "Wool Flatweave Rug",
+           "text": "Textiles",
+           "meta": "€520"
+          }
+         ],
+         "zone_accent": "#a9794f",
+         "zone_on": "#ffffff",
+         "panel_bg": "#e9e1d2",
+         "card_bg": "#f3eee4",
+         "card_border": "#c8b89e",
+         "align": "left"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ma-se-15",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#f3eee4"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ma-ro-11",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ma-co-10",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ma-section-header-9",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "By room",
+         "eyebrow_color": "#a9794f",
+         "eyebrow_dot_color": "#a9794f",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "The ",
+           "color": "#2c2419",
+           "italic": false
+          },
+          {
+           "text": "collections",
+           "color": "#a9794f",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 46,
+         "headline_font_weight": "400",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": false,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "ma-ro-14",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ma-co-13",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ma-overlaygrid-12",
+        "type": "overlaygrid",
+        "settings": {
+         "preset": "custom",
+         "bg": {
+          "type": "none"
+         },
+         "items": [
+          {
+           "id": "og-living",
+           "image": "",
+           "title": "Living",
+           "subtitle": "Seating & storage",
+           "link": "#collections"
+          },
+          {
+           "id": "og-dining",
+           "image": "",
+           "title": "Dining",
+           "subtitle": "Tables & chairs",
+           "link": "#collections"
+          },
+          {
+           "id": "og-objects",
+           "image": "",
+           "title": "Objects",
+           "subtitle": "Light & home",
+           "link": "#collections"
+          }
+         ],
+         "columns": "3",
+         "columns_mobile": "1",
+         "gap": "medium",
+         "height": 320,
+         "match_height": true,
+         "overlay_position": "bottom-left",
+         "overlay_horizontal": "left",
+         "overlay_style": "overlay-default",
+         "overlay_padding": "medium",
+         "title_size": "h3",
+         "hover_effect": "zoom",
+         "hover_overlay": "always",
+         "item_radius": 6,
+         "overlay_color": "rgba(44,36,25,0.55)",
+         "overlay_gradient": true,
+         "title_color": "#ffffff",
+         "title_weight": "400",
+         "title_letter_spacing": 0,
+         "title_uppercase": false,
+         "subtitle_color": "rgba(255,255,255,0.82)",
+         "subtitle_size": 14,
+         "show_cta": false,
+         "shadow": "none"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ma-se-22",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#faf6ee"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ma-ro-18",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ma-co-17",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ma-section-header-16",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "New this season",
+         "eyebrow_color": "#a9794f",
+         "eyebrow_dot_color": "#a9794f",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "Just ",
+           "color": "#2c2419",
+           "italic": false
+          },
+          {
+           "text": "landed",
+           "color": "#a9794f",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 46,
+         "headline_font_weight": "400",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": false,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "ma-ro-21",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ma-co-20",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ma-product-cards-19",
+        "type": "product-cards",
+        "settings": {
+         "columns": 4,
+         "gap": 22,
+         "items": [
+          {
+           "letter": "",
+           "logo_image": "",
+           "top_bg": {
+            "type": "solid",
+            "color": "#e9e1d2"
+           },
+           "screenshot_label": "lounge chair",
+           "brand_label": "Seating",
+           "brand_color": "#a9794f",
+           "show_badge": true,
+           "badge_text": "€890",
+           "badge_bg": "#2c2419",
+           "badge_color": "#ffffff",
+           "title": "Linden Lounge ",
+           "title_accent": "Chair",
+           "title_accent_italic": false,
+           "description": "",
+           "cta_text": "View piece",
+           "cta_url": "#shop"
+          },
+          {
+           "letter": "",
+           "logo_image": "",
+           "top_bg": {
+            "type": "solid",
+            "color": "#e9e1d2"
+           },
+           "screenshot_label": "sideboard",
+           "brand_label": "Storage",
+           "brand_color": "#a9794f",
+           "show_badge": true,
+           "badge_text": "€1,640",
+           "badge_bg": "#2c2419",
+           "badge_color": "#ffffff",
+           "title": "Oak ",
+           "title_accent": "Sideboard",
+           "title_accent_italic": false,
+           "description": "",
+           "cta_text": "View piece",
+           "cta_url": "#shop"
+          },
+          {
+           "letter": "",
+           "logo_image": "",
+           "top_bg": {
+            "type": "solid",
+            "color": "#e9e1d2"
+           },
+           "screenshot_label": "dining table",
+           "brand_label": "Dining",
+           "brand_color": "#a9794f",
+           "show_badge": true,
+           "badge_text": "€1,280",
+           "badge_bg": "#2c2419",
+           "badge_color": "#ffffff",
+           "title": "Trestle ",
+           "title_accent": "Table",
+           "title_accent_italic": false,
+           "description": "",
+           "cta_text": "View piece",
+           "cta_url": "#shop"
+          },
+          {
+           "letter": "",
+           "logo_image": "",
+           "top_bg": {
+            "type": "solid",
+            "color": "#e9e1d2"
+           },
+           "screenshot_label": "floor lamp",
+           "brand_label": "Lighting",
+           "brand_color": "#a9794f",
+           "show_badge": true,
+           "badge_text": "€240",
+           "badge_bg": "#2c2419",
+           "badge_color": "#ffffff",
+           "title": "Paper Floor ",
+           "title_accent": "Lamp",
+           "title_accent_italic": false,
+           "description": "",
+           "cta_text": "View piece",
+           "cta_url": "#shop"
+          }
+         ],
+         "card_bg": {
+          "type": "solid",
+          "color": "#f3eee4"
+         },
+         "card_color": "#5d5142",
+         "card_radius": {
+          "tl": 4,
+          "tr": 4,
+          "br": 4,
+          "bl": 4,
+          "linked": true
+         },
+         "card_radius_hover": {
+          "tl": 4,
+          "tr": 4,
+          "br": 4,
+          "bl": 4,
+          "linked": true
+         },
+         "card_shadow": "none",
+         "card_padding": 24,
+         "top_aspect_ratio": "4/5",
+         "top_padding": 20,
+         "letter_font_family": "serif",
+         "letter_size": 120,
+         "letter_italic": true,
+         "letter_align": "center",
+         "logo_height": 52,
+         "show_screenshot_label": true,
+         "screenshot_label_color": "#928572",
+         "brand_size": 12,
+         "brand_letter_spacing": 0.08,
+         "title_font_family": "serif",
+         "title_size": 22,
+         "title_weight": "400",
+         "description_size": 14,
+         "cta_size": 11,
+         "cta_arrow": true,
+         "card_hover_effect": "lift"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ma-se-26",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#f3eee4"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ma-ro-25",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ma-co-24",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ma-hero-split-23",
+        "type": "hero-split",
+        "settings": {
+         "eyebrow_text": "Our story",
+         "eyebrow_dot_color": "#a9794f",
+         "eyebrow_color": "#a9794f",
+         "headline_lines": [
+          {
+           "text": "Made in a ",
+           "color": "#2c2419",
+           "italic": false
+          },
+          {
+           "text": "workshop,",
+           "color": "#a9794f",
+           "italic": true
+          },
+          {
+           "text": "not a factory",
+           "color": "#2c2419",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 52,
+         "headline_line_height": 1.1,
+         "headline_font_weight": "400",
+         "headline_align": "left",
+         "subhead": "Maison began with two cabinetmakers who were tired of furniture built to be thrown away. We work in solid timber, joined the old way, finished by hand. Everything is made in small batches in our own workshop — and built to be repaired, not replaced.",
+         "subhead_color": "#5d5142",
+         "subhead_size": 16,
+         "subhead_italic": false,
+         "subhead_max_width": 460,
+         "cta1_text": "Meet the makers",
+         "cta1_url": "#story",
+         "cta1_bg": "transparent",
+         "cta1_color": "#2c2419",
+         "cta1_border": "#c8b89e",
+         "cta1_size": 13,
+         "cta1_radius": {
+          "tl": 2,
+          "tr": 2,
+          "br": 2,
+          "bl": 2,
+          "linked": true
+         },
+         "cta1_radius_hover": {
+          "tl": 2,
+          "tr": 2,
+          "br": 2,
+          "bl": 2,
+          "linked": true
+         },
+         "cta2_text": "",
+         "cta2_url": "",
+         "stats": [],
+         "showcase_enabled": true,
+         "showcase_bg": {
+          "type": "solid",
+          "color": "#e9e1d2"
+         },
+         "showcase_padding": 32,
+         "showcase_radius": {
+          "tl": 6,
+          "tr": 6,
+          "br": 6,
+          "bl": 6,
+          "linked": true
+         },
+         "showcase_radius_hover": {
+          "tl": 6,
+          "tr": 6,
+          "br": 6,
+          "bl": 6,
+          "linked": true
+         },
+         "showcase_badge_text": "THE WORKSHOP",
+         "showcase_badge_dot": "#a9794f",
+         "showcase_badge_bg": "#f3eee4",
+         "showcase_badge_color": "#2c2419",
+         "showcase_items": [
+          {
+           "number": "Solid timber",
+           "text": "Primary material",
+           "italic": false,
+           "text_color": "#a9794f",
+           "bg": {
+            "type": "solid",
+            "color": "#faf6ee"
+           }
+          },
+          {
+           "number": "Hand-finished",
+           "text": "Every piece",
+           "italic": false,
+           "text_color": "#2c2419",
+           "bg": {
+            "type": "solid",
+            "color": "#faf6ee"
+           }
+          },
+          {
+           "number": "Small batches",
+           "text": "Production method",
+           "italic": false,
+           "text_color": "#2c2419",
+           "bg": {
+            "type": "solid",
+            "color": "#faf6ee"
+           }
+          },
+          {
+           "number": "Repair service",
+           "text": "Lifetime support",
+           "italic": false,
+           "text_color": "#a9794f",
+           "bg": {
+            "type": "solid",
+            "color": "#faf6ee"
+           }
+          }
+         ],
+         "showcase_card_radius": {
+          "tl": 4,
+          "tr": 4,
+          "br": 4,
+          "bl": 4,
+          "linked": true
+         },
+         "showcase_card_radius_hover": {
+          "tl": 4,
+          "tr": 4,
+          "br": 4,
+          "bl": 4,
+          "linked": true
+         },
+         "showcase_card_shadow": "none",
+         "showcase_caption_left": "SINCE 2018",
+         "showcase_caption_right": "LONDON",
+         "showcase_hover_effect": "none",
+         "split_ratio": "1fr 1fr",
+         "gap": 56,
+         "min_height": 0,
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ma-se-30",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#e9e1d2"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ma-ro-29",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ma-co-28",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ma-finder-27",
+        "type": "finder",
+        "settings": {
+         "eyebrow": "Styling help",
+         "heading": "Find your room",
+         "intro": "Four curated room edits — everything you need, chosen together.",
+         "zone_accent": "#a9794f",
+         "zone_on": "#2c2419",
+         "card_bg": "#faf6ee",
+         "card_border": "#ddd1bd",
+         "align": "center",
+         "items": [
+          {
+           "option": "Living room",
+           "icon": "sofa",
+           "title": "The Slow Sunday",
+           "text": "A deep oak-framed sofa, a bouclé lounge chair and a travertine coffee table — built to be lived in, not looked at.",
+           "meta": "12 pieces · from €2,400",
+           "cta_text": "Shop this room",
+           "cta_url": "#living"
+          },
+          {
+           "option": "Bedroom",
+           "icon": "bed",
+           "title": "The Quiet Room",
+           "text": "An ash bed frame, washed-linen everything and a pair of softly-turned nightstands. Made for long mornings.",
+           "meta": "9 pieces · from €1,850",
+           "cta_text": "Shop this room",
+           "cta_url": "#bedroom"
+          },
+          {
+           "option": "Dining",
+           "icon": "utensils",
+           "title": "The Long Table",
+           "text": "A solid oak table that seats eight, spindle chairs and a low sideboard. The room everyone ends up in.",
+           "meta": "10 pieces · from €2,100",
+           "cta_text": "Shop this room",
+           "cta_url": "#dining"
+          },
+          {
+           "option": "Study / work",
+           "icon": "monitor",
+           "title": "The Good Desk",
+           "text": "A walnut writing desk, a proper task chair and open shelving — a corner that makes you want to start.",
+           "meta": "7 pieces · from €1,300",
+           "cta_text": "Shop this room",
+           "cta_url": "#study"
+          }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ma-se-34",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#2c2419"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ma-ro-33",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ma-co-32",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ma-cta-banner-31",
+        "type": "cta-banner",
+        "settings": {
+         "headline": "Bring it",
+         "headline_accent": "home.",
+         "headline_accent_italic": true,
+         "subtitle": "Free delivery on orders over €500, and a 100-day trial in your own space.",
+         "cta_text": "Shop the collection",
+         "cta_url": "#shop",
+         "bg": {
+          "type": "solid",
+          "color": "#2c2419"
+         },
+         "text_color": "#f3eee4",
+         "accent_color": "#a9794f",
+         "subtitle_color": "#c9bba6",
+         "cta_bg": "#a9794f",
+         "cta_color": "#ffffff",
+         "cta_radius": {
+          "tl": 2,
+          "tr": 2,
+          "br": 2,
+          "bl": 2,
+          "linked": true
+         },
+         "cta_size": 14,
+         "headline_font_family": "serif",
+         "headline_size": 60,
+         "headline_weight": "400",
+         "subtitle_size": 17,
+         "layout": "stack",
+         "vertical_align": "center",
+         "banner_radius": {
+          "tl": 0,
+          "tr": 0,
+          "br": 0,
+          "bl": 0,
+          "linked": true
+         },
+         "banner_padding": 96
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

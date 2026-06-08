@@ -1,0 +1,877 @@
+{
+  "id": "page-contact-page",
+  "name": "Pagina contatti",
+  "category": "page",
+  "preview_description": "Template token-first assemblato dal sistema di sezioni coerente (5 sezioni).",
+  "content": {
+    "0": {
+      "id": "tpl-herocenter-sec",
+      "type": "section",
+      "settings": {
+        "style": "default",
+        "width": "expand",
+        "padding": "xlarge"
+      },
+      "style": {
+        "bg_type": "color",
+        "bg_color": "#FFFFFF",
+        "padding_top": "200",
+        "padding_bottom": "200"
+      },
+      "advanced": {},
+      "children": [
+        {
+          "id": "tpl-herocenter-row",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl-herocenter-col1",
+              "type": "column",
+              "settings": {
+                "width": "1-2"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl-herocenter-headline",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "Benvenuto.",
+                    "subtitle": "",
+                    "tag": "h1",
+                    "alignment": "center",
+                    "decoration": "none",
+                    "heading_color": "#111827",
+                    "heading_size": "xl"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-herocenter-spacer1",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "40"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-herocenter-btn1",
+                  "type": "button",
+                  "settings": {
+                    "text": "Entra",
+                    "url": "#",
+                    "style": "solid",
+                    "alignment": "center",
+                    "bg_color": "#111827",
+                    "color": "#FFFFFF",
+                    "border_radius": "50",
+                    "size": "md",
+                    "hover_effect": "grow"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "1": {
+      "id": "tpl_9316",
+      "type": "section",
+      "settings": {
+        "style": "default",
+        "width": "large",
+        "padding": "large"
+      },
+      "style": {
+        "bg_type": "color",
+        "bg_color": "#f5f5f5",
+        "padding_top": "80",
+        "padding_bottom": "40"
+      },
+      "advanced": {},
+      "children": [
+        {
+          "id": "tpl_9308",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl_9307",
+              "type": "column",
+              "settings": {
+                "width": "1-1"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_9305",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "Scrivici",
+                    "subtitle": "Compila il modulo e ti risponderemo entro 24 ore",
+                    "tag": "h2",
+                    "alignment": "center",
+                    "decoration": "dot",
+                    "heading_color": "#d32f2f",
+                    "subtitle_color": "#757575",
+                    "heading_size": "xl"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9306",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "40"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "tpl_9315",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl_9310",
+              "type": "column",
+              "settings": {
+                "width": "1-4"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_9309",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "1"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            },
+            {
+              "id": "tpl_9312",
+              "type": "column",
+              "settings": {
+                "width": "1-2"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_9311",
+                  "type": "form",
+                  "settings": {
+                    "fields": [
+                      {
+                        "type": "text",
+                        "label": "Nome",
+                        "required": true
+                      },
+                      {
+                        "type": "text",
+                        "label": "Cognome",
+                        "required": true
+                      },
+                      {
+                        "type": "email",
+                        "label": "Email",
+                        "required": true
+                      },
+                      {
+                        "type": "text",
+                        "label": "Telefono",
+                        "required": false
+                      },
+                      {
+                        "type": "textarea",
+                        "label": "Il tuo messaggio"
+                      }
+                    ],
+                    "submit_text": "Invia",
+                    "submit_bg_color": "#d32f2f",
+                    "submit_text_color": "#FFFFFF",
+                    "layout": "stacked",
+                    "border_radius": "12"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            },
+            {
+              "id": "tpl_9314",
+              "type": "column",
+              "settings": {
+                "width": "1-4"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_9313",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "1"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "2": {
+      "id": "tpl_9320",
+      "type": "section",
+      "settings": {
+        "style": "default",
+        "width": "large",
+        "padding": "large"
+      },
+      "style": {
+        "bg_type": "color",
+        "bg_color": "#ffffff",
+        "padding_top": "0",
+        "padding_bottom": "0"
+      },
+      "advanced": {},
+      "children": [
+        {
+          "id": "tpl_9319",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl_9318",
+              "type": "column",
+              "settings": {
+                "width": "1-1"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_9317",
+                  "type": "map",
+                  "settings": {
+                    "address": "Milano, Italia",
+                    "zoom": "13",
+                    "height": "350",
+                    "style": "default"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "3": {
+      "id": "tpl_9469",
+      "type": "section",
+      "settings": {
+        "style": "default",
+        "width": "large",
+        "padding": "large"
+      },
+      "style": {
+        "bg_type": "color",
+        "bg_color": "#eceff1",
+        "padding_top": "60",
+        "padding_bottom": "40"
+      },
+      "advanced": {},
+      "children": [
+        {
+          "id": "tpl_9449",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl_9448",
+              "type": "column",
+              "settings": {
+                "width": "1-1"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_9446",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "Le Nostre Sedi",
+                    "tag": "h2",
+                    "alignment": "center",
+                    "decoration": "dot",
+                    "heading_color": "#37474f",
+                    "heading_size": "lg"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9447",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "40"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "tpl_9468",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl_9455",
+              "type": "column",
+              "settings": {
+                "width": "1-3"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_9450",
+                  "type": "icon",
+                  "settings": {
+                    "icon": "map-pin",
+                    "size": "36",
+                    "color": "#ffffff",
+                    "bg_color": "#ff5722",
+                    "style": "circle"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9451",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "12"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9452",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "Roma",
+                    "tag": "h3",
+                    "alignment": "center",
+                    "decoration": "none",
+                    "heading_color": "#37474f",
+                    "heading_size": "md"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9453",
+                  "type": "content",
+                  "settings": {
+                    "content": "<p style=\"text-align:center\">Via del Corso 120<br>00186 Roma<br>+39 06 111 2233</p>",
+                    "alignment": "center"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9454",
+                  "type": "content",
+                  "settings": {
+                    "content": "<p style=\"text-align:center;color:#888\">Lun-Ven: 9:00-18:00</p>",
+                    "alignment": "center"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            },
+            {
+              "id": "tpl_9461",
+              "type": "column",
+              "settings": {
+                "width": "1-3"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_9456",
+                  "type": "icon",
+                  "settings": {
+                    "icon": "map-pin",
+                    "size": "36",
+                    "color": "#ffffff",
+                    "bg_color": "var(--olo-color-primary, #e1474f)",
+                    "style": "circle"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9457",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "12"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9458",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "Milano",
+                    "tag": "h3",
+                    "alignment": "center",
+                    "decoration": "none",
+                    "heading_color": "#37474f",
+                    "heading_size": "md"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9459",
+                  "type": "content",
+                  "settings": {
+                    "content": "<p style=\"text-align:center\">Corso Buenos Aires 55<br>20124 Milano<br>+39 02 444 5566</p>",
+                    "alignment": "center"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9460",
+                  "type": "content",
+                  "settings": {
+                    "content": "<p style=\"text-align:center;color:#888\">Lun-Ven: 9:00-18:00</p>",
+                    "alignment": "center"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            },
+            {
+              "id": "tpl_9467",
+              "type": "column",
+              "settings": {
+                "width": "1-3"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_9462",
+                  "type": "icon",
+                  "settings": {
+                    "icon": "map-pin",
+                    "size": "36",
+                    "color": "#ffffff",
+                    "bg_color": "#4caf50",
+                    "style": "circle"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9463",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "12"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9464",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "Napoli",
+                    "tag": "h3",
+                    "alignment": "center",
+                    "decoration": "none",
+                    "heading_color": "#37474f",
+                    "heading_size": "md"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9465",
+                  "type": "content",
+                  "settings": {
+                    "content": "<p style=\"text-align:center\">Via Toledo 80<br>80132 Napoli<br>+39 081 777 8899</p>",
+                    "alignment": "center"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9466",
+                  "type": "content",
+                  "settings": {
+                    "content": "<p style=\"text-align:center;color:#888\">Lun-Ven: 9:00-18:00</p>",
+                    "alignment": "center"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "4": {
+      "id": "tpl_9479",
+      "type": "section",
+      "settings": {
+        "style": "default",
+        "width": "large",
+        "padding": "large"
+      },
+      "style": {
+        "bg_type": "color",
+        "bg_color": "#ffffff",
+        "padding_top": "40",
+        "padding_bottom": "60"
+      },
+      "advanced": {},
+      "children": [
+        {
+          "id": "tpl_9478",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl_9471",
+              "type": "column",
+              "settings": {
+                "width": "1-4"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_9470",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "1"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            },
+            {
+              "id": "tpl_9475",
+              "type": "column",
+              "settings": {
+                "width": "1-2"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_9472",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "Contatta la Sede più Vicina",
+                    "tag": "h3",
+                    "alignment": "center",
+                    "decoration": "line",
+                    "heading_color": "#37474f",
+                    "heading_size": "md"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9473",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "24"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9474",
+                  "type": "form",
+                  "settings": {
+                    "fields": [
+                      {
+                        "type": "text",
+                        "label": "Nome",
+                        "required": true
+                      },
+                      {
+                        "type": "email",
+                        "label": "Email",
+                        "required": true
+                      },
+                      {
+                        "type": "text",
+                        "label": "Sede di riferimento",
+                        "required": false
+                      },
+                      {
+                        "type": "textarea",
+                        "label": "Messaggio"
+                      }
+                    ],
+                    "submit_text": "Invia Richiesta",
+                    "submit_bg_color": "#37474f",
+                    "submit_text_color": "#FFFFFF",
+                    "layout": "stacked",
+                    "border_radius": "8"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            },
+            {
+              "id": "tpl_9477",
+              "type": "column",
+              "settings": {
+                "width": "1-4"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_9476",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "1"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "5": {
+      "id": "tpl_58",
+      "type": "section",
+      "settings": {
+        "style": "default",
+        "width": "large",
+        "padding": "large"
+      },
+      "style": {
+        "bg_type": "color",
+        "bg_color": "#f1f5f9",
+        "padding_top": "80",
+        "padding_bottom": "80"
+      },
+      "advanced": {},
+      "children": [
+        {
+          "id": "tpl_57",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl_56",
+              "type": "column",
+              "settings": {
+                "width": "1-1"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_53",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "Domande frequenti",
+                    "subtitle": "Trova rapidamente le risposte alle domande più comuni",
+                    "tag": "h2",
+                    "alignment": "center",
+                    "decoration": "line",
+                    "heading_color": "#1e293b",
+                    "subtitle_color": "#64748b",
+                    "heading_size": "lg"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_54",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "48"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_55",
+                  "type": "accordion",
+                  "settings": {
+                    "items": [
+                      {
+                        "title": "Come posso iniziare?",
+                        "content": "Per iniziare basta registrarsi sul nostro sito e seguire la procedura guidata. In pochi minuti sarai operativo."
+                      },
+                      {
+                        "title": "Quali metodi di pagamento accettate?",
+                        "content": "Accettiamo carte di credito, bonifico bancario e PayPal. Tutti i pagamenti sono sicuri e crittografati."
+                      },
+                      {
+                        "title": "Posso annullare il mio abbonamento?",
+                        "content": "Certamente. Puoi annullare il tuo abbonamento in qualsiasi momento dalla tua area personale, senza penali."
+                      },
+                      {
+                        "title": "Offrite supporto tecnico?",
+                        "content": "Sì, il nostro team di supporto è disponibile dal lunedì al venerdì, dalle 9 alle 18. Puoi contattarci via email o chat."
+                      },
+                      {
+                        "title": "I miei dati sono al sicuro?",
+                        "content": "Assolutamente sì. Utilizziamo crittografia di livello bancario e seguiamo le normative GDPR per la protezione dei dati."
+                      },
+                      {
+                        "title": "Come posso aggiornare il mio piano?",
+                        "content": "Puoi aggiornare il tuo piano in qualsiasi momento dall'area account. La differenza verrà calcolata in modo proporzionale."
+                      }
+                    ],
+                    "style": "separated"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "6": {
+      "id": "tpl_106",
+      "type": "section",
+      "settings": {
+        "style": "default",
+        "width": "large",
+        "padding": "large"
+      },
+      "style": {
+        "bg_type": "color",
+        "bg_color": "#374151",
+        "padding_top": "24",
+        "padding_bottom": "24"
+      },
+      "advanced": {},
+      "children": [
+        {
+          "id": "tpl_105",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl_102",
+              "type": "column",
+              "settings": {
+                "width": "1-2"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_101",
+                  "type": "content",
+                  "settings": {
+                    "content": "<p style=\"color:#d1d5db;font-size:14px;margin:0;\">&copy; 2026 La tua Azienda. Tutti i diritti riservati.</p>",
+                    "alignment": "left"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            },
+            {
+              "id": "tpl_104",
+              "type": "column",
+              "settings": {
+                "width": "1-2"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_103",
+                  "type": "social",
+                  "settings": {
+                    "links": "facebook|#\ninstagram|#\nlinkedin|#",
+                    "style": "default",
+                    "size": "md",
+                    "alignment": "right"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -24,19 +24,14 @@
     <!-- OMBRA -->
     <div class="olo-es-group">
       <span class="olo-es-gtitle">{{ t('Ombra') }}</span>
-      <div class="olo-es-row">
-        <span class="olo-es-lab">{{ t('Preset') }}</span>
-        <div class="olo-es-selwrap">
-          <select class="olo-es-sel" :value="shadowPreset" @change="setvGlobal('shadow', $event.target.value)" :aria-label="t('Preset ombra')">
-            <option value="none">{{ t('Nessuna') }}</option>
-            <option value="sm">{{ t('Piccola') }}</option>
-            <option value="md">{{ t('Media') }}</option>
-            <option value="lg">{{ t('Grande') }}</option>
-            <option value="xl">{{ t('Extra grande') }}</option>
-            <option value="custom">{{ t('Personalizzata') }}</option>
-          </select>
-          <svg class="olo-es-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
-        </div>
+      <div class="olo-es-scale" role="radiogroup" :aria-label="t('Livello ombra')">
+        <button v-for="opt in shadowScale" :key="opt.v" type="button"
+                role="radio" :aria-checked="String(isShadow(opt.v))"
+                :class="['olo-es-sc', `olo-es-sc--${opt.v}`, { on: isShadow(opt.v) }]"
+                :aria-label="opt.aria" @click="setvGlobal('shadow', opt.v)">
+          <span class="olo-es-sc-chip"></span>
+          <span class="olo-es-sc-lab">{{ opt.label }}</span>
+        </button>
       </div>
       <FieldBoxShadow v-if="shadowPreset === 'custom'" :modelValue="svGlobal('shadow_custom', {})" @update:modelValue="setvGlobal('shadow_custom', $event)" />
     </div>
@@ -306,8 +301,21 @@ function onMask(value) {
   emit('update', { type: 'main', key: 'mask', value });
 }
 
-// ── Ombra ──
+// ── Ombra ── scala segmented (None · S · M · L · Custom). La chiave salvata resta
+// 'none|sm|md|lg|xl|custom': 'xl' è un valore valido che ricade visivamente su "L".
 const shadowPreset = computed(() => svGlobal('shadow', 'none'));
+const shadowScale = [
+  { v: 'none', label: t('None'), aria: t('Nessuna ombra') },
+  { v: 'sm', label: 'S', aria: t('Ombra piccola') },
+  { v: 'md', label: 'M', aria: t('Ombra media') },
+  { v: 'lg', label: 'L', aria: t('Ombra grande') },
+  { v: 'custom', label: t('Custom'), aria: t('Ombra personalizzata') },
+];
+function isShadow(v) {
+  const cur = shadowPreset.value;
+  if (v === 'lg') return cur === 'lg' || cur === 'xl';
+  return cur === v;
+}
 
 // ── Trasformazione (Normale: oggetto style.transform; Hover: chiavi piatte transform_*) ──
 function tget(prop, def) {
@@ -514,6 +522,9 @@ const previewStyle = computed(() => {
 .olo-es-duo, .olo-es-trio { display: flex; gap: 10px; }
 .olo-es-duo .olo-es-field, .olo-es-trio .olo-es-field { flex: 1; min-width: 0; }
 .olo-es-field { display: flex; flex-direction: column; gap: 6px; }
+/* In colonna la label NON deve ereditare flex:0 0 64px (= altezza fissa 64px) dalle righe
+   orizzontali: altrimenti crea un vuoto verticale enorme sotto SPOSTA/SKEW/OMBRA TESTO. */
+.olo-es-field .olo-es-lab { flex: 0 0 auto; }
 .olo-es-numwrap {
   display: flex;
   align-items: center;
@@ -570,6 +581,24 @@ const previewStyle = computed(() => {
   position: absolute; right: 11px; top: 50%; transform: translateY(-50%);
   width: 14px; height: 14px; color: #9ca3af; pointer-events: none;
 }
+
+/* scala segmented ombra (chip = anteprima elevazione, fallback box-shadow inline) */
+.olo-es-scale { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+.olo-es-sc {
+  appearance: none; border: 1px solid #e5e7eb; background: #fff; border-radius: 9px;
+  cursor: pointer; padding: 9px 0 8px; display: flex; flex-direction: column;
+  align-items: center; gap: 7px; transition: border-color .15s, background .15s;
+}
+.olo-es-sc-chip { width: 30px; height: 18px; border-radius: 5px; background: #fff; border: 1px solid #eef0f3; }
+.olo-es-sc--none .olo-es-sc-chip { box-shadow: none; }
+.olo-es-sc--sm .olo-es-sc-chip { box-shadow: 0 1px 2px rgba(0,0,0,.10); }
+.olo-es-sc--md .olo-es-sc-chip { box-shadow: 0 3px 7px rgba(16,24,40,.16); }
+.olo-es-sc--lg .olo-es-sc-chip { box-shadow: 0 6px 14px rgba(16,24,40,.20); }
+.olo-es-sc--custom .olo-es-sc-chip { box-shadow: 0 3px 9px rgba(232,98,42,.34); border-color: #f3c5a3; }
+.olo-es-sc-lab { font-size: 10px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: #94a3b8; }
+.olo-es-sc.on { border-color: var(--olo-ui-accent); background: #fdeee2; }
+.olo-es-sc.on .olo-es-sc-lab { color: var(--olo-ui-accent); }
+.olo-es-sc:focus-visible { outline: 2px solid var(--olo-ui-accent); outline-offset: 2px; }
 
 /* anteprima */
 .olo-es-preview {

@@ -1,0 +1,42 @@
+/* ============================================================
+   OLObuild demo collection — shared primitives
+   Each theme sets --tile-accent (label color) + --tile-btn (toggle bg)
+   ============================================================ */
+
+/* scroll reveals */
+.reveal{opacity:0;transform:translateY(28px);
+  transition:opacity .85s cubic-bezier(.2,.7,.2,1),transform .85s cubic-bezier(.2,.7,.2,1);}
+.reveal.in{opacity:1;transform:none;}
+.reveal-stagger > *{opacity:0;transform:translateY(24px);
+  transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1);}
+.reveal-stagger.in > *{opacity:1;transform:none;}
+
+/* OLO logo mark (footer credit) */
+.olo-mk{display:inline-flex;align-items:center;gap:3px;vertical-align:middle;}
+.olo-mk b{width:13px;height:13px;border-radius:50%;border:3px solid var(--tile-accent,#B05636);display:inline-block;box-sizing:border-box;}
+.olo-mk i{display:inline-block;width:5px;height:17px;background:var(--tile-accent,#B05636);clip-path:polygon(0 0,100% 15%,100% 100%,0 100%);}
+
+/* footer credit pill */
+.olo-credit{display:inline-flex;align-items:center;gap:13px;
+  background:rgba(127,127,127,.08);border:1px solid rgba(127,127,127,.28);
+  border-radius:100px;padding:12px 20px;font-family:'JetBrains Mono',monospace;
+  font-size:11.5px;letter-spacing:.05em;}
+.olo-credit b.hl{font-weight:600;}
+
+/* ============================================================
+   TILE INSPECTOR
+   ============================================================ */
+#tiletoggle{position:fixed;z-index:90;bottom:24px;right:24px;display:inline-flex;align-items:center;gap:10px;
+  background:var(--tile-btn,#1a1a1a);color:#fff;border:none;cursor:pointer;border-radius:100px;padding:13px 20px;
+  font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;
+  box-shadow:0 12px 30px -10px rgba(0,0,0,.5);transition:background .2s,transform .2s;}
+#tiletoggle:hover{transform:translateY(-2px);}
+#tiletoggle .sq{width:11px;height:11px;border:2px solid var(--tile-accent,#B05636);border-radius:2px;}
+#tiletoggle.on{background:var(--tile-accent,#B05636);}
+#tiletoggle.on .sq{border-color:#fff;background:rgba(255,255,255,.25);}
+
+body.show-tiles [data-tile]{outline:1.5px dashed color-mix(in srgb,var(--tile-accent,#B05636) 72%,transparent);outline-offset:-1px;}
+body.show-tiles [data-tile]::after{content:"▢ "attr(data-tile);position:absolute;top:0;left:0;z-index:80;
+  background:var(--tile-accent,#B05636);color:#fff;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;
+  letter-spacing:.07em;padding:4px 9px;pointer-events:none;white-space:nowrap;}
+[data-tile]{position:relative;}

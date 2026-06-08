@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>verify verdano — header + maskedvideohero</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Work+Sans:wght@400;500;600;700&display=swap"/>
+<style>
+  :root{ --olo-font-family-heading:"Archivo",sans-serif; --olo-font-family:"Work Sans",sans-serif; }
+  *{box-sizing:border-box;} body{margin:0;background:#f3f0e7;font-family:var(--olo-font-family);}
+  /* ===== HEADER (megamenu esteso: crest + wordmark + nav + tel + CTA) ===== */
+  .vh-nav{position:sticky;top:0;z-index:60;background:rgba(10,42,30,.9);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.1);}
+  .vh-in{max-width:1240px;margin:0 auto;padding:0 28px;display:flex;align-items:center;gap:30px;height:74px;}
+  .vh-logo{display:flex;align-items:center;gap:11px;color:#fff;font-family:var(--olo-font-family-heading);font-weight:900;font-size:20px;letter-spacing:.02em;text-transform:uppercase;white-space:nowrap;text-decoration:none;}
+  .vh-crest{display:inline-grid;place-items:center;width:34px;height:38px;font-family:var(--olo-font-family-heading);font-weight:900;font-size:13px;letter-spacing:.02em;border-radius:14px 14px 16px 16px/14px 14px 22px 22px;box-shadow:inset 0 0 0 2px rgba(255,255,255,.2);background:#c8ff3c;color:#0a2a1e;}
+  .vh-nav-links{display:flex;gap:24px;margin-left:6px;}
+  .vh-nav-links a{color:rgba(255,255,255,.66);font-weight:600;font-size:14px;text-decoration:none;}
+  .vh-right{margin-left:auto;display:flex;align-items:center;gap:16px;}
+  .vh-tel{color:#c8ff3c;font-weight:700;font-size:14px;letter-spacing:.02em;text-decoration:none;}
+  .vh-cta{background:#c8ff3c;color:#0a2a1e;font-weight:700;font-size:14px;padding:14px 24px;border-radius:999px;text-decoration:none;}
+  /* ===== maskedvideohero (verdano tokens) ===== */
+  .omvh{position:relative;overflow:hidden;min-height:84vh;display:flex;align-items:center;color:#ffffff;font-family:var(--olo-font-family);}
+  .omvh .mvh-bg{position:absolute;inset:0;z-index:0;overflow:hidden;background:#0a2a1e;-webkit-mask:radial-gradient(150% 125% at 50% 0%, #000 87%, transparent 87.5%);mask:radial-gradient(150% 125% at 50% 0%, #000 87%, transparent 87.5%);}
+  .omvh .mvh-media{position:absolute;inset:0;background:#0a2a1e;background-image:repeating-linear-gradient(135deg, rgba(255,255,255,.05) 0 18px, rgba(255,255,255,0) 18px 36px);}
+  .omvh .mvh-grad{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg, rgba(10,42,30,0.495) 0%, rgba(10,42,30,0.149) 38%, rgba(10,42,30,0.935) 100%);}
+  .omvh .mvh-ghost{position:absolute;top:6%;left:50%;transform:translateX(-50%);z-index:1;font-family:var(--olo-font-family-heading);font-weight:900;font-size:min(34vw,420px);line-height:1;color:rgba(255,255,255,0.055);letter-spacing:-.02em;pointer-events:none;white-space:nowrap;}
+  .omvh .mvh-in{position:relative;z-index:2;width:100%;max-width:1240px;margin:0 auto;padding:clamp(36px,7vh,80px) 28px clamp(70px,12vh,130px);}
+  .omvh .mvh-tag{display:inline-flex;align-items:center;gap:10px;margin-bottom:22px;padding:8px 16px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);font-size:12.5px;font-weight:700;letter-spacing:.06em;}
+  .omvh .mvh-dot{width:8px;height:8px;border-radius:50%;background:#c8ff3c;box-shadow:0 0 10px #c8ff3c;}
+  .omvh .mvh-h{font-family:var(--olo-font-family-heading);font-weight:900;font-size:clamp(48px,8.4vw,128px);line-height:.86;letter-spacing:-.01em;text-transform:uppercase;color:#fff;margin:0;}
+  .omvh .mvh-acc{color:#c8ff3c;}
+  .omvh .mvh-row{display:flex;align-items:flex-end;justify-content:space-between;gap:30px;flex-wrap:wrap;margin-top:30px;}
+  .omvh .mvh-sub{max-width:440px;font-size:16.5px;line-height:1.6;color:rgba(255,255,255,0.72);margin:0;}
+  .omvh .mvh-cta{display:flex;gap:12px;flex-wrap:wrap;}
+  .omvh .mvh-btn{display:inline-flex;align-items:center;gap:9px;padding:17px 30px;border-radius:999px;font-weight:700;font-size:15px;text-decoration:none;border:0;}
+  .omvh .mvh-btn svg{width:17px;height:17px;}
+  .omvh .mvh-btn--solid{background:#c8ff3c;color:#0a2a1e;}
+  .omvh .mvh-btn--ghost{background:rgba(255,255,255,.06);color:#fff;border:1.5px solid rgba(255,255,255,.26);}
+  /* ===== matchfixtures (verdano) ===== */
+  .mf-sec{background:#0a2a1e;padding:84px 0;}
+  .mf-wrap{max-width:1240px;margin:0 auto;padding:0 28px;}
+  .mf-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:42px;flex-wrap:wrap;}
+  .mf-eyebrow{font-weight:700;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:#c8ff3c;display:block;margin-bottom:14px;}
+  .mf-h2{font-family:var(--olo-font-family-heading);font-weight:900;font-size:clamp(32px,5vw,60px);text-transform:uppercase;line-height:.92;color:#fff;margin:0;}
+  .mf-more{font-weight:700;font-size:14px;color:#c8ff3c;text-decoration:none;white-space:nowrap;}
+  .omf{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+  .omf-fix{background:#0f3a2a;border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:22px;display:flex;flex-direction:column;gap:18px;}
+  .omf-top{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+  .omf-when b{font-family:var(--olo-font-family-heading);font-weight:800;font-size:15px;color:#fff;display:block;}
+  .omf-when span{font-size:12px;color:rgba(255,255,255,.55);}
+  .omf-league{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#c8ff3c;text-align:right;}
+  .omf-badge{width:26px;height:26px;border-radius:7px;background:color-mix(in srgb,#c8ff3c 16%,transparent);display:grid;place-items:center;flex:none;}
+  .omf-badge svg{width:14px;height:14px;color:#c8ff3c;}
+  .omf-teams{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;padding:10px 0;border-top:1px solid rgba(255,255,255,.1);border-bottom:1px solid rgba(255,255,255,.1);}
+  .omf-side{display:flex;flex-direction:column;align-items:center;gap:9px;text-align:center;}
+  .omf-crest{display:inline-grid;place-items:center;width:46px;height:50px;font-family:var(--olo-font-family-heading);font-weight:900;font-size:15px;color:#fff;border-radius:14px 14px 16px 16px/14px 14px 22px 22px;box-shadow:inset 0 0 0 2px rgba(255,255,255,.2);}
+  .omf-nm{font-family:var(--olo-font-family-heading);font-weight:800;font-size:13px;text-transform:uppercase;color:#fff;line-height:1.05;}
+  .omf-score{font-family:var(--olo-font-family-heading);font-weight:900;font-size:26px;color:#fff;text-align:center;min-width:64px;}
+  .omf-score.omf-vs{color:#c8ff3c;font-size:18px;}
+  .omf-venue{display:flex;align-items:center;gap:7px;font-size:12.5px;color:rgba(255,255,255,.6);}
+  .omf-venue svg{width:14px;height:14px;flex:none;opacity:.85;}
+</style></head>
+<body>
+<header class="vh-nav"><div class="vh-in">
+  <a class="vh-logo" href="#"><span class="vh-crest">VF</span>VERDANO FC</a>
+  <nav class="vh-nav-links"><a href="#">News</a><a href="#">Teams</a><a href="#">Matches</a><a href="#">The Club</a><a href="#">Facility</a><a href="#">Contact</a></nav>
+  <div class="vh-right"><a class="vh-tel" href="#">+39 02 123 456</a><a class="vh-cta" href="#">Become a member</a></div>
+</div></header>
+<section class="omvh">
+  <div class="mvh-bg"><div class="mvh-media"></div><div class="mvh-grad"></div><div class="mvh-ghost">VFC</div></div>
+  <div class="mvh-in">
+    <span class="mvh-tag"><span class="mvh-dot"></span>Next home game · Sat 14 Mar · 15:00</span>
+    <h1 class="mvh-h">Forged on the <span class="mvh-acc">pitch.</span></h1>
+    <div class="mvh-row">
+      <p class="mvh-sub">Eight teams, one badge. Verdano FC has played, fought and grown in this city for fifty years — and we're only getting started.</p>
+      <div class="mvh-cta">
+        <a class="mvh-btn mvh-btn--solid" href="#">View fixtures <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a class="mvh-btn mvh-btn--ghost" href="#">Become a member</a>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="mf-sec"><div class="mf-wrap">
+  <div class="mf-head">
+    <div><span class="mf-eyebrow">Greenfield Park &amp; away</span><h2 class="mf-h2">Next matches</h2></div>
+    <a class="mf-more" href="#">See all matches →</a>
+  </div>
+  <div class="omf">
+    <article class="omf-fix">
+      <div class="omf-top"><div class="omf-when"><b>Sat, 14.03</b><span>15:00 · Verdano Park</span></div><div class="omf-league"><span class="omf-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2 4 6v6c0 5 8 8 8 8s8-3 8-8V6Z"/></svg></span><span>Super League<br>Matchday 04</span></div></div>
+      <div class="omf-teams"><div class="omf-side"><span class="omf-crest" style="background:#15543c">VF</span><span class="omf-nm">Verdano FC</span></div><div class="omf-score omf-vs">vs</div><div class="omf-side"><span class="omf-crest" style="background:#7a2230">RA</span><span class="omf-nm">Real Alta</span></div></div>
+      <div class="omf-venue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>First Men's Team</div>
+    </article>
+    <article class="omf-fix">
+      <div class="omf-top"><div class="omf-when"><b>Sat, 14.03</b><span>17:30 · Walter Field</span></div><div class="omf-league"><span class="omf-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2 4 6v6c0 5 8 8 8 8s8-3 8-8V6Z"/></svg></span><span>Women's League<br>Matchday 04</span></div></div>
+      <div class="omf-teams"><div class="omf-side"><span class="omf-crest" style="background:#26506b">BF</span><span class="omf-nm">SC Bendfeld</span></div><div class="omf-score omf-vs">vs</div><div class="omf-side"><span class="omf-crest" style="background:#15543c">VF</span><span class="omf-nm">Verdano FC</span></div></div>
+      <div class="omf-venue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>First Women's Team</div>
+    </article>
+    <article class="omf-fix">
+      <div class="omf-top"><div class="omf-when"><b>Sun, 08.03</b><span>13:30 · Redwood Park</span></div><div class="omf-league"><span class="omf-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2 4 6v6c0 5 8 8 8 8s8-3 8-8V6Z"/></svg></span><span>Youth Elite<br>Matchday 03</span></div></div>
+      <div class="omf-teams"><div class="omf-side"><span class="omf-crest" style="background:#8a5a1f">RC</span><span class="omf-nm">Redwood City</span></div><div class="omf-score">4 : 3</div><div class="omf-side"><span class="omf-crest" style="background:#15543c">VF</span><span class="omf-nm">Verdano FC</span></div></div>
+      <div class="omf-venue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>Under 14 Team · Full time</div>
+    </article>
+  </div>
+</div></section>
+</body></html>

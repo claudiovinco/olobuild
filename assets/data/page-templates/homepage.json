@@ -492,7 +492,7 @@
                     "showDots": true,
                     "dotStyle": "circles",
                     "showProgressBar": false,
-                    "progressBarColor": "#3b82f6",
+                    "progressBarColor": "var(--olo-color-primary, #e1474f)",
                     "progressBarHeight": 3,
                     "keyboard": true,
                     "swipe": true,

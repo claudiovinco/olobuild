@@ -1,0 +1,1043 @@
+[
+ {
+  "id": "fj-se-4",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "full",
+   "padding": "none",
+   "padding_top": 0,
+   "padding_bottom": 0
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#16273a"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "fj-ro-3",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "fj-co-2",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "fj-hero-split-1",
+        "type": "imagehero",
+        "settings": {
+         "eyebrow_text": "Small-group expeditions · max 12",
+         "eyebrow_dot": false,
+         "headline_text": "Go where the map turns",
+         "accent_text": "quiet.",
+         "headline_tail": "",
+         "accent_italic": true,
+         "stack_lines": false,
+         "subhead": "Fjords, ice fields and aurora — on foot, by kayak and under canvas, led by guides who grew up here.",
+         "cta1_text": "",
+         "cta1_url": "#",
+         "cta2_text": "",
+         "cta2_url": "#",
+         "meta_text": "",
+         "scroll_hint": "",
+         "bg_image": "",
+         "bg_color": "#16273a",
+         "media_label": "hero — fjord at blue hour, kayak, sheer cliffs",
+         "text_position": "left",
+         "text_align": "left",
+         "content_width": 680,
+         "aspect_ratio": "21/10",
+         "min_height": 560,
+         "heading_font": "serif",
+         "overlay_color": "#0e1c2c",
+         "overlay_top": 0.5,
+         "overlay_bottom": 0.95,
+         "overlay_sides": false,
+         "accent": "#8fc7e0",
+         "accent_on": "#0e1c2c",
+         "text_color": "#ffffff",
+         "sub_color": "#eef4f8",
+         "eyebrow_color": "#8fc7e0"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "fj-se-8",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "small"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#1f3550"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "fj-ro-7",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "fj-co-6",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "fj-tripfinder-5",
+        "type": "tripfinder",
+        "settings": {
+         "fields": [
+          {
+           "label": "Destination",
+           "value": "Anywhere north",
+           "options": "Anywhere north\nNorway · Lofoten\nIceland\nGreenland\nSvalbard"
+          },
+          {
+           "label": "When",
+           "value": "Any month",
+           "options": "Any month\nMar — aurora season\nJun — midnight sun\nSep — autumn light"
+          },
+          {
+           "label": "Activity",
+           "value": "Any",
+           "options": "Any\nHiking & trekking\nSea kayaking\nSki touring\nWildlife"
+          }
+         ],
+         "button_text": "Search expeditions",
+         "button_url": "#trips",
+         "accent": "#8fc7e0",
+         "accent_on": "#0e1c2c",
+         "bar_bg": "#1f3550",
+         "field_bg": "transparent",
+         "field_border": "rgba(238,244,248,.12)",
+         "label_color": "#6f87a0",
+         "value_color": "#eef4f8",
+         "radius": 12
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "fj-se-18",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "small"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#1a2e44"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "fj-ro-17",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "fj-co-10",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "fj-statstrip-9",
+        "type": "statstrip",
+        "settings": {
+         "items": [
+          {
+           "value": "42",
+           "label": "Expeditions"
+          },
+          {
+           "value": "12",
+           "label": "Max group size"
+          },
+          {
+           "value": "6",
+           "label": "Nordic countries"
+          },
+          {
+           "value": "18",
+           "label": "Years guiding"
+          }
+         ],
+         "columns": 4,
+         "band_padding_y": 40,
+         "show_dividers": true,
+         "divider_color": "rgba(238,244,248,.12)",
+         "band_border": true,
+         "value_font_family": "heading",
+         "value_color": "#eef4f8",
+         "value_size": 54,
+         "value_weight": "700",
+         "label_color": "#6f87a0",
+         "label_size": 13,
+         "label_uppercase": false,
+         "align": "left",
+         "mono_font_family": ""
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "fj-se-28",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#16273a"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "fj-ro-21",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "fj-co-20",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "fj-section-header-19",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "Featured journeys",
+         "eyebrow_color": "#8fc7e0",
+         "eyebrow_dot_color": "#8fc7e0",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "Trips for people who'd rather ",
+           "color": "#eef4f8",
+           "italic": false
+          },
+          {
+           "text": "walk than watch",
+           "color": "#8fc7e0",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 46,
+         "headline_font_weight": "700",
+         "headline_align": "left",
+         "headline_inline": true,
+         "tagline_show": false,
+         "tagline_text": "",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#6f87a0",
+         "tagline_text_size": 16,
+         "layout": "stack",
+         "gap": 12
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "fj-ro-24",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "fj-co-23",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "fj-workgrid-22",
+        "type": "workgrid",
+        "settings": {
+         "items": [
+          {
+           "image": "",
+           "media_label": "Lofoten — jagged peaks over the sea",
+           "title": "The Lofoten Traverse",
+           "meta": "8 days",
+           "description": "Norway · Lofoten — Hiking · kayak · Moderate · from €2,150/pp",
+           "link_url": "",
+           "tall": false
+          },
+          {
+           "image": "",
+           "media_label": "Iceland — glacier & black sand",
+           "title": "Fire & Ice Crossing",
+           "meta": "6 days",
+           "description": "Iceland · Highlands — Trek · hot springs · Easy · from €1,890/pp",
+           "link_url": "",
+           "tall": false
+          },
+          {
+           "image": "",
+           "media_label": "Greenland — icebergs, small boat",
+           "title": "Scoresby Sound by Sea",
+           "meta": "10 days",
+           "description": "East Greenland — Expedition cruise · Challenging · from €4,300/pp",
+           "link_url": "",
+           "tall": false
+          }
+         ],
+         "columns": 3,
+         "items_gap": 32,
+         "media_aspect": "4/3",
+         "media_tall_aspect": "4/5",
+         "media_bg": "#1f3550",
+         "media_label_color": "#aec3d6",
+         "hover_zoom": true,
+         "title_font_family": "heading",
+         "title_color": "#eef4f8",
+         "title_size": 22,
+         "title_weight": "700",
+         "meta_color": "#8fc7e0",
+         "meta_size": 12,
+         "show_desc": true,
+         "desc_color": "#aec3d6",
+         "desc_size": 14,
+         "mono_font_family": ""
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "fj-ro-27",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "fj-co-26",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "fj-cta-banner-25",
+        "type": "cta-banner",
+        "settings": {
+         "headline": "",
+         "headline_accent": "",
+         "headline_accent_italic": false,
+         "subtitle": "",
+         "cta_text": "Browse all 42 expeditions",
+         "cta_url": "#",
+         "bg": {
+          "type": "solid",
+          "color": "transparent"
+         },
+         "text_color": "#eef4f8",
+         "accent_color": "#8fc7e0",
+         "subtitle_color": "#aec3d6",
+         "cta_bg": "rgba(238,244,248,.06)",
+         "cta_color": "#eef4f8",
+         "cta_radius": {
+          "tl": 999,
+          "tr": 999,
+          "br": 999,
+          "bl": 999,
+          "linked": true
+         },
+         "cta_size": 14,
+         "cta_padding_y": 14,
+         "cta_padding_x": 26,
+         "headline_size": 0,
+         "subtitle_size": 0,
+         "layout": "stack",
+         "vertical_align": "center",
+         "banner_radius": {
+          "tl": 0,
+          "tr": 0,
+          "br": 0,
+          "bl": 0,
+          "linked": true
+         },
+         "banner_padding": 0
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "fj-se-36",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#1a2e44"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "fj-ro-35",
+    "type": "row",
+    "settings": {
+     "gap": 56
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "fj-co-32",
+      "type": "column",
+      "settings": {
+       "width": "1-2"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "fj-section-header-29",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "Why Fjordline",
+         "eyebrow_color": "#8fc7e0",
+         "eyebrow_dot_color": "#8fc7e0",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "Small groups, ",
+           "color": "#eef4f8",
+           "italic": false
+          },
+          {
+           "text": "local guides,",
+           "color": "#8fc7e0",
+           "italic": true
+          },
+          {
+           "text": " no crowds",
+           "color": "#eef4f8",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 46,
+         "headline_font_weight": "700",
+         "headline_align": "left",
+         "headline_inline": true,
+         "tagline_show": true,
+         "tagline_text": "We cap every departure at twelve and never run the same trail as the tour buses. Our guides are born-and-raised locals who read the weather and know where the light falls.",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#6f87a0",
+         "tagline_text_size": 16,
+         "layout": "stack",
+         "gap": 12
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "fj-list-30",
+        "type": "list",
+        "settings": {
+         "items": [
+          {
+           "text": "Maximum 12 travellers per departure",
+           "icon": "check"
+          },
+          {
+           "text": "Carbon-offset travel, low-impact camps",
+           "icon": "check"
+          },
+          {
+           "text": "Flexible weather days built into every trip",
+           "icon": "check"
+          }
+         ],
+         "icon_default": "check",
+         "icon_color": "#8fc7e0",
+         "icon_size": "16",
+         "icon_gap": "13",
+         "text_color": "#aec3d6",
+         "text_align": "left",
+         "spacing": "14",
+         "tile_padding": {
+          "top": 16,
+          "right": 0,
+          "bottom": 24,
+          "left": 0
+         },
+         "bg": {
+          "type": "none"
+         },
+         "preset": "custom"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "fj-cta-banner-31",
+        "type": "cta-banner",
+        "settings": {
+         "headline": "",
+         "headline_accent": "",
+         "headline_accent_italic": false,
+         "subtitle": "",
+         "cta_text": "Our approach",
+         "cta_url": "#",
+         "bg": {
+          "type": "solid",
+          "color": "transparent"
+         },
+         "text_color": "#eef4f8",
+         "accent_color": "#8fc7e0",
+         "subtitle_color": "#aec3d6",
+         "cta_bg": "rgba(238,244,248,.06)",
+         "cta_color": "#eef4f8",
+         "cta_radius": {
+          "tl": 999,
+          "tr": 999,
+          "br": 999,
+          "bl": 999,
+          "linked": true
+         },
+         "cta_size": 14,
+         "cta_padding_y": 14,
+         "cta_padding_x": 26,
+         "headline_size": 0,
+         "subtitle_size": 0,
+         "layout": "stack",
+         "vertical_align": "center",
+         "banner_radius": {
+          "tl": 0,
+          "tr": 0,
+          "br": 0,
+          "bl": 0,
+          "linked": true
+         },
+         "banner_padding": 0
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "fj-co-34",
+      "type": "column",
+      "settings": {
+       "width": "1-2"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "fj-workgrid-33",
+        "type": "workgrid",
+        "settings": {
+         "items": [
+          {
+           "image": "",
+           "media_label": "guide pointing across a valley to the group",
+           "title": "",
+           "meta": "",
+           "description": "",
+           "link_url": "",
+           "tall": true
+          }
+         ],
+         "columns": 1,
+         "items_gap": 0,
+         "media_aspect": "4/3",
+         "media_tall_aspect": "3/4",
+         "media_bg": "#1f3550",
+         "media_label_color": "#aec3d6",
+         "hover_zoom": false,
+         "title_font_family": "heading",
+         "title_color": "#eef4f8",
+         "title_size": 22,
+         "title_weight": "700",
+         "meta_color": "#8fc7e0",
+         "meta_size": 12,
+         "show_desc": false,
+         "desc_color": "#aec3d6",
+         "desc_size": 15,
+         "mono_font_family": ""
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "fj-se-40",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#16273a"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "fj-ro-39",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "fj-co-38",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "fj-projector-37",
+        "type": "projector",
+        "settings": {
+         "eyebrow": "Plan your budget",
+         "heading": "What should I <em>budget?</em>",
+         "intro": "Drag to the length of trip you have in mind. We'll show a rough all-in figure so there are no surprises before you ever email us.",
+         "min": "3",
+         "max": "14",
+         "step": "1",
+         "value": "8",
+         "rate": "0",
+         "years": "295",
+         "currency": "€",
+         "input_label": "Nights away",
+         "out_caption": "Indicative all-in · per person",
+         "note": "Guiding, lodging, meals and local transfers included — flights aren't. Your real quote depends on season, route and group size.",
+         "show_contrib": true,
+         "zone_accent": "#8fc7e0",
+         "align": "left",
+         "tile_padding": {
+          "top": 44,
+          "right": 44,
+          "bottom": 44,
+          "left": 44
+         },
+         "border_radius": "18",
+         "shadow": "sm"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "fj-se-44",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#16273a"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "fj-ro-43",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "fj-co-42",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "fj-testimonial-41",
+        "type": "testimonial",
+        "settings": {
+         "quote": "”Twelve strangers on day one, friends by day eight. The guiding was flawless — and we saw the aurora three nights running.”",
+         "author_name": "Priya & Tom",
+         "author_role": "The Lofoten Traverse, March",
+         "rating": "0",
+         "layout": "single",
+         "show_line": false,
+         "bg_color": "transparent",
+         "text_color": "#eef4f8",
+         "quote_font_family": "sans-serif",
+         "quote_size": 32,
+         "quote_weight": "600",
+         "border_radius": "0",
+         "avatar": ""
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "fj-se-51",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#16273a"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "fj-ro-47",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "fj-co-46",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "fj-section-header-45",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "Plan your north",
+         "eyebrow_color": "#8fc7e0",
+         "eyebrow_dot_color": "#8fc7e0",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "Which kind of ",
+           "color": "#eef4f8",
+           "italic": false
+          },
+          {
+           "text": "north?",
+           "color": "#8fc7e0",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 46,
+         "headline_font_weight": "700",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": false,
+         "tagline_text": "",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#6f87a0",
+         "tagline_text_size": 16.5,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "fj-ro-50",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "fj-co-49",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "fj-finder-48",
+        "type": "finder",
+        "settings": {
+         "eyebrow": "",
+         "heading": "",
+         "intro": "",
+         "items": [
+          {
+           "option": "Quiet & remote",
+           "icon": "moon",
+           "title": "The Silent Fjords",
+           "text": "A cabin at the water's edge, a wood-fired sauna and a rowboat. Days measured in tides, not hours. — 7 nights · from €1,980",
+           "meta": "We'd send you to",
+           "cta_text": "",
+           "cta_url": "#"
+          },
+          {
+           "option": "Big adventure",
+           "icon": "mountain",
+           "title": "The High Traverse",
+           "text": "Guided ridge hikes, a glacier crossing and kayaking the inlets. Earn every view, sleep like the dead. — 9 nights · from €2,640",
+           "meta": "We'd send you to",
+           "cta_text": "",
+           "cta_url": "#"
+          },
+          {
+           "option": "Northern lights",
+           "icon": "sparkles",
+           "title": "Chasing the Aurora",
+           "text": "North of the circle in winter — dog-sled by day, aurora-watch by night from a glass-roofed lodge. — 6 nights · from €2,310",
+           "meta": "We'd send you to",
+           "cta_text": "",
+           "cta_url": "#"
+          },
+          {
+           "option": "With the family",
+           "icon": "compass",
+           "title": "The Coastal Hop",
+           "text": "Gentle island-hopping by ferry, fishing-village harbours and short walks everyone can manage — even the small ones. — 8 nights · from €1,740",
+           "meta": "We'd send you to",
+           "cta_text": "",
+           "cta_url": "#"
+          }
+         ],
+         "zone_accent": "#8fc7e0",
+         "zone_on": "#0e1c2c",
+         "card_bg": "#1f3550",
+         "card_border": "rgba(238,244,248,.12)",
+         "align": "center"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "fj-se-55",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#16273a"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "fj-ro-54",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "fj-co-53",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "fj-cta-banner-52",
+        "type": "cta-banner",
+        "settings": {
+         "headline": "The north is",
+         "headline_accent": "waiting",
+         "headline_accent_italic": true,
+         "subtitle": "Departures fill months ahead — secure a place with a deposit, balance due 60 days out.",
+         "cta_text": "Find your expedition",
+         "cta_url": "#trips",
+         "cta2_text": "Request the brochure",
+         "cta2_url": "#",
+         "cta2_bg": "#eef4f8",
+         "cta2_color": "#0e1c2c",
+         "cta2_border": "",
+         "bg": {
+          "type": "solid",
+          "color": "#122133"
+         },
+         "text_color": "#ffffff",
+         "accent_color": "#8fc7e0",
+         "subtitle_color": "#eef4f8",
+         "cta_bg": "#8fc7e0",
+         "cta_color": "#0e1c2c",
+         "cta_radius": {
+          "tl": 999,
+          "tr": 999,
+          "br": 999,
+          "bl": 999,
+          "linked": true
+         },
+         "cta_size": 15,
+         "cta_padding_y": 16,
+         "cta_padding_x": 30,
+         "headline_font_family": "sans-serif",
+         "headline_size": 56,
+         "headline_weight": "700",
+         "subtitle_size": 17,
+         "layout": "stack",
+         "vertical_align": "center",
+         "banner_radius": {
+          "tl": 24,
+          "tr": 24,
+          "br": 24,
+          "bl": 24,
+          "linked": true
+         },
+         "banner_padding": 88
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

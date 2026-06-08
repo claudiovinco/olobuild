@@ -1,0 +1,127 @@
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+/**
+ * Hover List — righe con pastiglia colore + nome + sotto-etichetta, indentazione al hover
+ * e anteprima flottante (peek) che segue il cursore. Per shade finder / liste curate.
+ */
+class Olo_HoverList_Tile extends Olo_Tile_Base {
+
+    protected $type     = 'hoverlist';
+    protected $name     = 'Hover List';
+    protected $icon     = 'dashicons-art';
+    protected $category = 'layout';
+    protected $defaults = [
+        'items' => [
+            [ 'color' => '#9a3b52', 'name' => 'Rosewood',   'sub' => 'Cool · matte', 'link_url' => '' ],
+            [ 'color' => '#c77a6a', 'name' => 'Terracotta',  'sub' => 'Warm · matte', 'link_url' => '' ],
+            [ 'color' => '#e79aa6', 'name' => 'Peony',       'sub' => 'Cool · blush', 'link_url' => '' ],
+            [ 'color' => '#e6a17e', 'name' => 'Apricot',     'sub' => 'Warm · blush', 'link_url' => '' ],
+            [ 'color' => '#7d2e3e', 'name' => 'Merlot',      'sub' => 'Deep · matte', 'link_url' => '' ],
+        ],
+        'swatch_size'      => 26,
+        'swatch_shape'     => 'circle',
+        'name_font_family' => 'heading',
+        'name_color'       => '#f6e9ec',
+        'name_size'        => 22,
+        'sub_color'        => '#9c7e8c',
+        'sub_size'         => 12,
+        'sub_uppercase'    => true,
+        'row_padding_y'    => 20,
+        'hover_indent'     => 20,
+        'hover_bg'         => '#4d2f40',
+        'line_color'       => 'rgba(246,233,236,.13)',
+        'peek'             => true,
+        'mono_font_family' => '',
+    ];
+
+    public function get_controls() { return []; }
+
+    public function render( $settings, $style = [] ) {
+        $s   = wp_parse_args( $settings, $this->defaults );
+        $uid = 'olo-hl-' . wp_rand( 10000, 99999 );
+
+        $heading = "var(--olo-font-family-heading, 'DM Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif)";
+        $body    = "var(--olo-font-family, 'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif)";
+        $mono_fb = "ui-monospace,'SF Mono',Menlo,Consolas,monospace";
+        $mono_name = trim( preg_replace( '/[^A-Za-z0-9 \-]/', '', (string) ( $s['mono_font_family'] ?? '' ) ) );
+        $mono    = $mono_name !== '' ? "'" . $mono_name . "'," . $mono_fb : $mono_fb;
+        $nfam    = [ 'heading' => $heading, 'body' => $body, 'mono' => $mono ][ $s['name_font_family'] ?? 'heading' ] ?? $heading;
+
+        $sw_size = max( 14, min( 44, absint( $s['swatch_size'] ) ) );
+        $sw_rad  = ( ( $s['swatch_shape'] ?? 'circle' ) === 'square' ) ? '7px' : '50%';
+        $name_sz = max( 14, min( 36, absint( $s['name_size'] ) ) );
+        $sub_sz  = max( 10, min( 18, absint( $s['sub_size'] ) ) );
+        $pad_y   = max( 8, min( 40, absint( $s['row_padding_y'] ) ) );
+        $indent  = max( 0, min( 40, absint( $s['hover_indent'] ) ) );
+
+        $name_c  = $this->safe_color_css( $s['name_color'] ) ?: '#f6e9ec';
+        $sub_c   = $this->safe_color_css( $s['sub_color'] ) ?: '#9c7e8c';
+        $hbg     = $this->safe_color_css( $s['hover_bg'] ) ?: 'rgba(255,255,255,.05)';
+        $line    = $this->safe_color_css( $s['line_color'] ) ?: 'rgba(255,255,255,.13)';
+        $upper   = ! empty( $s['sub_uppercase'] );
+        $peek    = ! empty( $s['peek'] );
+
+        $items   = is_array( $s['items'] ) ? $s['items'] : [];
+        $row_base = 'display:flex;align-items:center;gap:18px;padding:' . $pad_y . 'px 8px;border-bottom:1px solid ' . $line . ';color:inherit;text-decoration:none;transition:padding .25s ease,background .2s ease;';
+
+        ob_start();
+        ?>
+        <div class="olo-hoverlist <?php echo esc_attr( $uid ); ?>" style="position:relative;border-top:1px solid <?php echo esc_attr( $line ); ?>;">
+            <?php foreach ( $items as $idx => $it ) :
+                $color = $this->safe_color_css( $it['color'] ?? '' ) ?: '#999';
+                $name  = $it['name'] ?? '';
+                $sub   = $it['sub'] ?? '';
+                $link  = $it['link_url'] ?? '';
+                $tag   = $link ? 'a' : 'div';
+                $attrs = $link ? ' href="' . esc_url( $link ) . '"' : '';
+            ?>
+                <<?php echo $tag . $attrs; ?> class="olo-hoverlist__row" data-color="<?php echo esc_attr( $color ); ?>" data-name="<?php echo esc_attr( $name ); ?>" style="<?php echo esc_attr( $row_base ); ?>">
+                    <span class="olo-hoverlist__sw" style="width:<?php echo $sw_size; ?>px;height:<?php echo $sw_size; ?>px;border-radius:<?php echo $sw_rad; ?>;flex:none;background:<?php echo esc_attr( $color ); ?>;box-shadow:inset 0 0 0 1.5px rgba(246,233,236,.3);"></span>
+                    <span class="olo-hoverlist__nm" style="font-family:<?php echo esc_attr( $nfam ); ?>;font-size:<?php echo $name_sz; ?>px;color:<?php echo esc_attr( $name_c ); ?>;line-height:1.1;" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.name'; ?>"><?php echo esc_html( $name ); ?></span>
+                    <?php if ( $sub !== '' ) : ?>
+                        <span class="olo-hoverlist__sub" style="margin-left:auto;font-family:<?php echo esc_attr( $mono ); ?>;font-size:<?php echo $sub_sz; ?>px;letter-spacing:0.06em;color:<?php echo esc_attr( $sub_c ); ?>;<?php echo $upper ? 'text-transform:uppercase;' : ''; ?>" data-olo-editable="<?php echo 'items.' . intval( $idx ) . '.sub'; ?>"><?php echo esc_html( $sub ); ?></span>
+                    <?php endif; ?>
+                </<?php echo $tag; ?>>
+            <?php endforeach; ?>
+            <?php if ( $peek ) : ?>
+            <div class="olo-hoverlist__peek" aria-hidden="true" style="position:fixed;z-index:90;pointer-events:none;opacity:0;transform:translate(14px,-50%);transition:opacity .15s ease;display:flex;align-items:center;gap:10px;background:<?php echo esc_attr( $hbg ); ?>;border:1px solid <?php echo esc_attr( $line ); ?>;border-radius:999px;padding:8px 16px 8px 8px;backdrop-filter:blur(6px);box-shadow:0 10px 30px rgba(0,0,0,.35);">
+                <span class="olo-hl-peek-sw" style="width:28px;height:28px;border-radius:50%;flex:none;box-shadow:inset 0 0 0 1.5px rgba(246,233,236,.3);"></span>
+                <span class="olo-hl-peek-nm" style="font-family:<?php echo esc_attr( $nfam ); ?>;font-size:16px;color:<?php echo esc_attr( $name_c ); ?>;white-space:nowrap;"></span>
+            </div>
+            <?php endif; ?>
+        </div>
+        <style>
+            .<?php echo $uid; ?> .olo-hoverlist__row:hover { padding-left: <?php echo $indent; ?>px; background: <?php echo $hbg; ?>; }
+            .<?php echo $uid; ?> a.olo-hoverlist__row:focus-visible { outline: 2px solid <?php echo $name_c; ?>; outline-offset: -2px; }
+        </style>
+        <?php if ( $peek ) : ?>
+        <script>(function(){
+            var root = document.querySelector('.<?php echo $uid; ?>');
+            if (!root) { return; }
+            var peek = root.querySelector('.olo-hoverlist__peek');
+            if (!peek) { return; }
+            var sw = peek.querySelector('.olo-hl-peek-sw');
+            var nm = peek.querySelector('.olo-hl-peek-nm');
+            var rows = root.querySelectorAll('.olo-hoverlist__row');
+            rows.forEach(function (r) {
+                r.addEventListener('mouseenter', function () {
+                    sw.style.background = r.getAttribute('data-color') || '#000';
+                    nm.textContent = r.getAttribute('data-name') || '';
+                    peek.style.opacity = '1';
+                });
+                r.addEventListener('mousemove', function (e) {
+                    peek.style.left = e.clientX + 'px';
+                    peek.style.top = e.clientY + 'px';
+                });
+                r.addEventListener('mouseleave', function () { peek.style.opacity = '0'; });
+            });
+        })();</script>
+        <?php endif; ?>
+        <?php
+        return ob_get_clean();
+    }
+}

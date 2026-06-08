@@ -245,10 +245,10 @@ class Olo_Grid_Tile extends Olo_Tile_Base {
         $shadow_css = '';
         $shadow_val = $s['shadow'] ?? 'none';
         $shadow_map = [
-            'sm' => '0 1px 3px 0 rgba(0,0,0,0.12),0 1px 2px -1px rgba(0,0,0,0.1)',
-            'md' => '0 4px 6px -1px rgba(0,0,0,0.15),0 2px 4px -2px rgba(0,0,0,0.12)',
-            'lg' => '0 10px 15px -3px rgba(0,0,0,0.18),0 4px 6px -4px rgba(0,0,0,0.12)',
-            'xl' => '0 20px 25px -5px rgba(0,0,0,0.2),0 8px 10px -6px rgba(0,0,0,0.15)',
+            'sm' => '0 1px 2px rgba(16,24,40,.06), 0 6px 16px -10px rgba(16,24,40,.18)',
+            'md' => '0 2px 4px rgba(16,24,40,.06), 0 14px 28px -12px rgba(22,38,61,.28)',
+            'lg' => '0 8px 24px -6px rgba(16,24,40,.18), 0 18px 40px -12px rgba(22,38,61,.30)',
+            'xl' => '0 12px 32px -8px rgba(16,24,40,.20), 0 28px 56px -14px rgba(22,38,61,.34)',
         ];
         if ( isset( $shadow_map[ $shadow_val ] ) ) {
             $shadow_css = 'box-shadow:' . $shadow_map[ $shadow_val ] . '!important;';

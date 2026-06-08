@@ -80,6 +80,7 @@ export default {
       { value: 'bubbles',  label: t('Bolle (salgono)') },
       { value: 'stars',    label: t('Stelle / Costellazioni') },
       { value: 'confetti', label: t('Coriandoli (scoppio una tantum)') },
+      { value: 'soccer',   label: t('Palloni da calcio') },
     ]},
     { key: 'count', label: t('Numero particelle'), type: 'range', min: 5, max: 300, step: 5,
       description: t('Su mobile il numero viene ridotto automaticamente per le prestazioni.') },

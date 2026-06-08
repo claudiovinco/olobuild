@@ -1,0 +1,1052 @@
+[
+ {
+  "id": "he-se-4",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "full",
+   "padding": "none",
+   "padding_top": 0,
+   "padding_bottom": 0
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#2a211c"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "he-ro-3",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "he-co-2",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "he-hero-split-1",
+        "type": "photocover",
+        "settings": {
+         "kicker_text": "Interior design studio · Milan",
+         "headline_text": "Rooms that feel like home — not a showroom.",
+         "uppercase": false,
+         "meta_items": [
+          {
+           "text": "We design warm, lived-in spaces with character and longevity — full interiors, styling and renovation, start to finish."
+          },
+          {
+           "text": "View our work →"
+          }
+         ],
+         "bg_image": "",
+         "media_label": "hero — warm sunlit living room, full-bleed",
+         "aspect_ratio": "21/9",
+         "min_height": 900,
+         "overlay_top": 0.35,
+         "overlay_bottom": 0.82,
+         "frame_padding": 0,
+         "media_bg": "#e2d6c1",
+         "kicker_color": "#ece3d3",
+         "headline_color": "#ffffff",
+         "meta_color": "rgba(255,255,255,.82)"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "he-se-11",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#ece3d3"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "he-ro-7",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "he-co-6",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "he-section-header-5",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "Selected projects",
+         "eyebrow_color": "#97593f",
+         "eyebrow_dot_color": "#97593f",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "Places we’ve ",
+           "color": "#2c241d",
+           "italic": false
+          },
+          {
+           "text": "made",
+           "color": "#97593f",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 42,
+         "headline_font_weight": "600",
+         "headline_align": "left",
+         "headline_inline": true,
+         "tagline_show": false,
+         "layout": "stack",
+         "gap": 12
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "he-ro-10",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "he-co-9",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "he-workgrid-8",
+        "type": "workgrid",
+        "settings": {
+         "columns": 2,
+         "items_gap": 40,
+         "media_aspect": "3/2",
+         "media_tall_aspect": "4/5",
+         "media_bg": "#e2d6c1",
+         "media_label_color": "#2c241d",
+         "hover_zoom": true,
+         "title_font_family": "heading",
+         "title_color": "#2a211c",
+         "title_size": 30,
+         "title_weight": "600",
+         "meta_color": "#97593f",
+         "meta_size": 12,
+         "show_desc": true,
+         "desc_color": "#6a5f53",
+         "desc_size": 15.5,
+         "mono_font_family": "",
+         "items": [
+          {
+           "image": "",
+           "media_label": "project — apartment interior",
+           "title": "Casa Navigli",
+           "meta": "Residential · Milan · 2025",
+           "description": "A 1930s apartment brought back to warmth — original parquet, soft plaster walls and furniture that earns its keep.",
+           "tall": false,
+           "link_url": "#projects"
+          },
+          {
+           "image": "",
+           "media_label": "project — café interior",
+           "title": "Bar Tonda",
+           "meta": "Hospitality · Turin · 2024",
+           "description": "A neighbourhood café in tactile materials — terracotta, oak and brass that will only look better with use.",
+           "tall": false,
+           "link_url": "#projects"
+          }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "he-se-15",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#2a211c"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "he-ro-14",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "he-co-13",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "he-hero-split-12",
+        "type": "hero-split",
+        "settings": {
+         "eyebrow_text": "The studio",
+         "eyebrow_dot_color": "#b06a4f",
+         "eyebrow_color": "#b06a4f",
+         "headline_lines": [
+          {
+           "text": "We design for ",
+           "color": "#ffffff",
+           "italic": false
+          },
+          {
+           "text": "how you live",
+           "color": "#b06a4f",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 46,
+         "headline_line_height": 1.12,
+         "headline_font_weight": "600",
+         "headline_align": "left",
+         "subhead": "A home shouldn’t perform for guests — it should hold up at 7am on a Tuesday. We start with how you actually use a space, then layer in the materials, light and pieces that make it yours.\n\nSmall studio, few projects at a time, every detail ours. That’s the deal.",
+         "subhead_color": "rgba(255,255,255,.72)",
+         "subhead_size": 16.5,
+         "subhead_italic": false,
+         "subhead_max_width": 500,
+         "cta1_text": "Work with us",
+         "cta1_url": "#contact",
+         "cta1_bg": "#b06a4f",
+         "cta1_color": "#ffffff",
+         "cta1_border": "#b06a4f",
+         "cta1_size": 13,
+         "cta1_radius": {
+          "tl": 2,
+          "tr": 2,
+          "br": 2,
+          "bl": 2,
+          "linked": true
+         },
+         "cta1_radius_hover": {
+          "tl": 2,
+          "tr": 2,
+          "br": 2,
+          "bl": 2,
+          "linked": true
+         },
+         "stats": [],
+         "showcase_enabled": true,
+         "showcase_bg": {
+          "type": "solid",
+          "color": "#3a2c24"
+         },
+         "showcase_padding": 28,
+         "showcase_radius": {
+          "tl": 4,
+          "tr": 4,
+          "br": 4,
+          "bl": 4,
+          "linked": true
+         },
+         "showcase_radius_hover": {
+          "tl": 4,
+          "tr": 4,
+          "br": 4,
+          "bl": 4,
+          "linked": true
+         },
+         "showcase_badge_text": "STUDIO & MATERIALS",
+         "showcase_badge_dot": "#b06a4f",
+         "showcase_badge_bg": "#2a211c",
+         "showcase_badge_color": "#ece3d3",
+         "showcase_items": [
+          {
+           "number": "Approach",
+           "text": "How you live",
+           "italic": true,
+           "text_color": "#ece3d3",
+           "bg": {
+            "type": "solid",
+            "color": "#3a2c24"
+           }
+          },
+          {
+           "number": "Projects",
+           "text": "Few, ours fully",
+           "italic": false,
+           "text_color": "#ece3d3",
+           "bg": {
+            "type": "solid",
+            "color": "#3a2c24"
+           }
+          },
+          {
+           "number": "Detail",
+           "text": "Every last one",
+           "italic": false,
+           "text_color": "#b06a4f",
+           "bg": {
+            "type": "solid",
+            "color": "#3a2c24"
+           }
+          }
+         ],
+         "showcase_card_radius": {
+          "tl": 3,
+          "tr": 3,
+          "br": 3,
+          "bl": 3,
+          "linked": true
+         },
+         "showcase_card_radius_hover": {
+          "tl": 3,
+          "tr": 3,
+          "br": 3,
+          "bl": 3,
+          "linked": true
+         },
+         "showcase_card_shadow": "none",
+         "showcase_caption_left": "THE STUDIO",
+         "showcase_caption_right": "MILAN",
+         "showcase_hover_effect": "none",
+         "split_ratio": "1fr 1fr",
+         "gap": 54,
+         "min_height": 0,
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "he-se-22",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#ece3d3"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "he-ro-18",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "he-co-17",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "he-section-header-16",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "What we do",
+         "eyebrow_color": "#97593f",
+         "eyebrow_dot_color": "#97593f",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "Services",
+           "color": "#2c241d",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 44,
+         "headline_font_weight": "600",
+         "headline_align": "left",
+         "tagline_show": false,
+         "layout": "stack",
+         "gap": 10
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "he-ro-21",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "he-co-20",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "he-process-steps-19",
+        "type": "process-steps",
+        "settings": {
+         "columns": 1,
+         "gap": 0,
+         "align": "left",
+         "auto_number": false,
+         "item_gap": 10,
+         "number_style": "plain",
+         "number_color": "#97593f",
+         "number_size": 16,
+         "number_font": "serif",
+         "number_weight": "600",
+         "title_color": "#2c241d",
+         "title_size": 30,
+         "title_font": "serif",
+         "title_weight": "600",
+         "desc_color": "#6a5f53",
+         "desc_size": 14.5,
+         "card_bg": "",
+         "card_border": "#ddd0bb",
+         "card_radius": {
+          "tl": 0,
+          "tr": 0,
+          "br": 0,
+          "bl": 0,
+          "linked": true
+         },
+         "card_padding": 28,
+         "items": [
+          {
+           "number": "01",
+           "title": "Full interior design",
+           "description": "Concept to install — layout, materials, FF&E and styling."
+          },
+          {
+           "number": "02",
+           "title": "Renovation",
+           "description": "Structural changes, joinery and trades, project-managed."
+          },
+          {
+           "number": "03",
+           "title": "Styling",
+           "description": "The finishing layer — for homes, shoots and sales."
+          },
+          {
+           "number": "04",
+           "title": "Consultation",
+           "description": "A focused session for the room you can’t quite crack."
+          }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "he-se-32",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "small"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#faf5ec"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "he-ro-31",
+    "type": "row",
+    "settings": {
+     "gap": 24
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "he-co-24",
+      "type": "column",
+      "settings": {
+       "width": "1-4"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "he-counter-23",
+        "type": "counter",
+        "settings": {
+         "number": "120",
+         "suffix": "+",
+         "prefix": "",
+         "label": "Homes designed",
+         "icon_emoji": "",
+         "text_color": "#2a211c",
+         "number_color": "#97593f",
+         "number_font_size": "56",
+         "number_font_weight": "600",
+         "label_color": "#9a8e7e",
+         "label_font_size": "13",
+         "bg_type": "color",
+         "bg_color": "transparent",
+         "padding": "8",
+         "border_radius": "0"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "he-co-26",
+      "type": "column",
+      "settings": {
+       "width": "1-4"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "he-counter-25",
+        "type": "counter",
+        "settings": {
+         "number": "14",
+         "suffix": "",
+         "prefix": "",
+         "label": "Years in practice",
+         "icon_emoji": "",
+         "text_color": "#2a211c",
+         "number_color": "#97593f",
+         "number_font_size": "56",
+         "number_font_weight": "600",
+         "label_color": "#9a8e7e",
+         "label_font_size": "13",
+         "bg_type": "color",
+         "bg_color": "transparent",
+         "padding": "8",
+         "border_radius": "0"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "he-co-28",
+      "type": "column",
+      "settings": {
+       "width": "1-4"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "he-counter-27",
+        "type": "counter",
+        "settings": {
+         "number": "8",
+         "suffix": "",
+         "prefix": "",
+         "label": "Design awards",
+         "icon_emoji": "",
+         "text_color": "#2a211c",
+         "number_color": "#97593f",
+         "number_font_size": "56",
+         "number_font_weight": "600",
+         "label_color": "#9a8e7e",
+         "label_font_size": "13",
+         "bg_type": "color",
+         "bg_color": "transparent",
+         "padding": "8",
+         "border_radius": "0"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "he-co-30",
+      "type": "column",
+      "settings": {
+       "width": "1-4"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "he-counter-29",
+        "type": "counter",
+        "settings": {
+         "number": "100",
+         "suffix": "%",
+         "prefix": "",
+         "label": "Referral & repeat",
+         "icon_emoji": "",
+         "text_color": "#2a211c",
+         "number_color": "#97593f",
+         "number_font_size": "56",
+         "number_font_weight": "600",
+         "label_color": "#9a8e7e",
+         "label_font_size": "13",
+         "bg_type": "color",
+         "bg_color": "transparent",
+         "padding": "8",
+         "border_radius": "0"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "he-se-39",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#ece3d3"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "he-ro-35",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "he-co-34",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "he-section-header-33",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "Details",
+         "eyebrow_color": "#97593f",
+         "eyebrow_dot_color": "#97593f",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "A closer ",
+           "color": "#2c241d",
+           "italic": false
+          },
+          {
+           "text": "look",
+           "color": "#97593f",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 46,
+         "headline_font_weight": "600",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": false,
+         "tagline_text": "",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#6a5f53",
+         "tagline_text_size": 16.5,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "he-ro-38",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "he-co-37",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "he-progallery-36",
+        "type": "progallery",
+        "settings": {
+         "images": [],
+         "layout": "grid",
+         "layout_family": "classic",
+         "columns": "4",
+         "gap": "12",
+         "img_height": "200px",
+         "object_fit": "cover",
+         "thumb_radius": "4",
+         "mobile_columns": "2",
+         "lightbox": true,
+         "show_caption": false
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "he-se-43",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#b06a4f"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "he-ro-42",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "he-co-41",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "he-testimonial-40",
+        "type": "testimonial",
+        "settings": {
+         "quote": "“They listened more than they talked, and the result is a flat that finally feels like ours. Two years on, we still notice new details we love.”",
+         "author_name": "Chiara & Luca",
+         "author_role": "Casa Navigli",
+         "rating": "0",
+         "layout": "single",
+         "show_line": false,
+         "bg_color": "transparent",
+         "text_color": "#ffffff",
+         "border_radius": "0",
+         "avatar": ""
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "he-se-47",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#ece3d3"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "he-ro-46",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "he-co-45",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "he-finder-44",
+        "type": "finder",
+        "settings": {
+         "eyebrow": "How can we help?",
+         "heading": "Find your project",
+         "intro": "",
+         "zone_accent": "#b06a4f",
+         "zone_on": "#ffffff",
+         "card_bg": "rgba(176,106,79,.14)",
+         "card_border": "#ddd0bb",
+         "align": "center",
+         "items": [
+          {
+           "option": "A whole home",
+           "title": "Full Home Design",
+           "text": "Concept to keys — layout, finishes, furniture and the day everything arrives and lands in its place. We hold the whole thing.",
+           "meta": "from €12k · 12–20 weeks",
+           "cta_text": "",
+           "cta_url": "#",
+           "icon": ""
+          },
+          {
+           "option": "A single room",
+           "title": "Room by Room",
+           "text": "One space, fully resolved — a living room that finally works, a bedroom that feels like rest. Sourced and styled.",
+           "meta": "from €3.5k · 5–7 weeks",
+           "cta_text": "",
+           "cta_url": "#",
+           "icon": ""
+          },
+          {
+           "option": "Just styling",
+           "title": "Styling Day",
+           "text": "You’ve got the bones; we bring the soul — art, textiles, lighting and the small things that make it feel finished.",
+           "meta": "from €900 · one day",
+           "cta_text": "",
+           "cta_url": "#",
+           "icon": ""
+          },
+          {
+           "option": "A quick consult",
+           "title": "Power-Hour Consult",
+           "text": "Two hours in your home with answers you can act on the same week — paint, layout, what to keep and what to lose.",
+           "meta": "€220 · 2 hours",
+           "cta_text": "",
+           "cta_url": "#",
+           "icon": ""
+          }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "he-se-51",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#2a211c"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "he-ro-50",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "he-co-49",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "he-cta-banner-48",
+        "type": "cta-banner",
+        "settings": {
+         "headline": "Tell us about",
+         "headline_accent": "your space",
+         "headline_accent_italic": true,
+         "subtitle": "We take on a handful of projects each season. Share a little about yours and we’ll be in touch.",
+         "cta_text": "Start a project",
+         "cta_url": "#contact",
+         "bg": {
+          "type": "solid",
+          "color": "#3a2c24"
+         },
+         "text_color": "#ffffff",
+         "accent_color": "#ece3d3",
+         "subtitle_color": "rgba(255,255,255,.8)",
+         "cta_bg": "#b06a4f",
+         "cta_color": "#ffffff",
+         "cta_radius": {
+          "tl": 2,
+          "tr": 2,
+          "br": 2,
+          "bl": 2,
+          "linked": true
+         },
+         "cta_size": 13,
+         "headline_font_family": "serif",
+         "headline_size": 52,
+         "headline_weight": "600",
+         "subtitle_size": 17,
+         "layout": "stack",
+         "vertical_align": "center",
+         "banner_radius": {
+          "tl": 4,
+          "tr": 4,
+          "br": 4,
+          "bl": 4,
+          "linked": true
+         },
+         "banner_padding": 80,
+         "eyebrow_show": true,
+         "eyebrow_text": "Let’s begin",
+         "eyebrow_color": "#b06a4f"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

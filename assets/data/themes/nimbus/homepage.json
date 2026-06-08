@@ -1,0 +1,1461 @@
+[
+ {
+  "id": "nb-se-4",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#0a1020"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "nb-ro-3",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "nb-co-2",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "nb-hero-split-1",
+        "type": "hero-split",
+        "settings": {
+         "eyebrow_text": "All systems operational · 30 regions",
+         "eyebrow_dot_color": "#46d18a",
+         "eyebrow_color": "#5aa9ff",
+         "eyebrow_bg": "rgba(90,169,255,.10)",
+         "eyebrow_border": "rgba(90,169,255,.34)",
+         "headline_lines": [
+          {
+           "text": "Ship to the edge",
+           "color": "#ffffff",
+           "italic": false
+          },
+          {
+           "text": "in one command.",
+           "color": "#5aa9ff",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 68,
+         "headline_line_height": 1.04,
+         "headline_font_weight": "700",
+         "headline_align": "left",
+         "subhead": "Nimbus runs your apps on a global network with cold starts under 40ms. Push once — we place it in every region your users are in.",
+         "subhead_color": "#6b7a96",
+         "subhead_size": 18,
+         "subhead_italic": false,
+         "subhead_max_width": 480,
+         "cta1_text": "Deploy free",
+         "cta1_url": "#pricing",
+         "cta1_bg": "#5aa9ff",
+         "cta1_color": "#060a14",
+         "cta1_size": 15,
+         "cta1_radius": {
+          "tl": 9,
+          "tr": 9,
+          "br": 9,
+          "bl": 9,
+          "linked": true
+         },
+         "cta1_radius_hover": {
+          "tl": 9,
+          "tr": 9,
+          "br": 9,
+          "bl": 9,
+          "linked": true
+         },
+         "cta2_text": "Read the docs",
+         "cta2_url": "#platform",
+         "cta2_bg": "rgba(255,255,255,.05)",
+         "cta2_color": "#ffffff",
+         "cta2_border": "rgba(255,255,255,.16)",
+         "cta2_size": 15,
+         "cta2_radius": {
+          "tl": 9,
+          "tr": 9,
+          "br": 9,
+          "bl": 9,
+          "linked": true
+         },
+         "cta2_radius_hover": {
+          "tl": 9,
+          "tr": 9,
+          "br": 9,
+          "bl": 9,
+          "linked": true
+         },
+         "stats": [],
+         "showcase_enabled": true,
+         "showcase_bg": {
+          "type": "solid",
+          "color": "#111a30"
+         },
+         "showcase_padding": 0,
+         "showcase_radius": {
+          "tl": 14,
+          "tr": 14,
+          "br": 14,
+          "bl": 14,
+          "linked": true
+         },
+         "showcase_radius_hover": {
+          "tl": 14,
+          "tr": 14,
+          "br": 14,
+          "bl": 14,
+          "linked": true
+         },
+         "showcase_badge_text": "zsh — nimbus deploy",
+         "showcase_badge_dot": "#5aa9ff",
+         "showcase_badge_bg": "#16223c",
+         "showcase_badge_color": "#aebbd0",
+         "showcase_items": [
+          {
+           "number": "~/app ❯ nimbus deploy",
+           "text": "✓ built in 8.2s",
+           "italic": false,
+           "text_color": "#46d18a",
+           "bg": {
+            "type": "solid",
+            "color": "#111a30"
+           }
+          },
+          {
+           "number": "✓ pushed to 30 regions",
+           "text": "✓ live at app.nimbus.dev",
+           "italic": false,
+           "text_color": "#46d18a",
+           "bg": {
+            "type": "solid",
+            "color": "#111a30"
+           }
+          },
+          {
+           "number": "# cold start p50",
+           "text": "37ms",
+           "italic": false,
+           "text_color": "#5aa9ff",
+           "bg": {
+            "type": "solid",
+            "color": "#111a30"
+           }
+          }
+         ],
+         "showcase_card_radius": {
+          "tl": 0,
+          "tr": 0,
+          "br": 0,
+          "bl": 0,
+          "linked": true
+         },
+         "showcase_card_radius_hover": {
+          "tl": 0,
+          "tr": 0,
+          "br": 0,
+          "bl": 0,
+          "linked": true
+         },
+         "showcase_card_shadow": "none",
+         "showcase_caption_left": "NIMBUS DEPLOY",
+         "showcase_caption_right": "LIVE",
+         "showcase_hover_effect": "none",
+         "split_ratio": "1.1fr .9fr",
+         "gap": 48,
+         "min_height": 0,
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         },
+         "subhead_align": "left"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "nb-se-11",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "small"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#0d1426"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "nb-ro-7",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "nb-co-6",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "nb-section-header-5",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": false,
+         "headline_lines": [
+          {
+           "text": "Running production for teams that can't go down",
+           "color": "#6b7a96",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 13,
+         "headline_font_weight": "600",
+         "headline_align": "center",
+         "tagline_show": false,
+         "layout": "center",
+         "gap": 0
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "nb-ro-10",
+    "type": "row",
+    "settings": {
+     "gap": 16
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "nb-co-9",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "nb-trust-strip-8",
+        "type": "trust-strip",
+        "settings": {
+         "items": [
+          {
+           "text": "TIDELINE"
+          },
+          {
+           "text": "FROSTPEAK"
+          },
+          {
+           "text": "AURORADATA"
+          },
+          {
+           "text": "HELIX IO"
+          },
+          {
+           "text": "SANDSTORM"
+          },
+          {
+           "text": "VAULTKITE"
+          }
+         ],
+         "variant": "pill",
+         "separator_char": "",
+         "align": "center",
+         "flow": "wrap",
+         "gap": 16,
+         "font_family": "sans-serif",
+         "text_color": "#6b7a96",
+         "text_size": 13,
+         "pill_bg": "rgba(255,255,255,.05)",
+         "pill_border": "rgba(255,255,255,.08)",
+         "pill_text_color": "#6b7a96"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "nb-se-21",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "small"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#0d1426"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "nb-ro-20",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "nb-co-13",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "nb-statstrip-12",
+        "type": "statstrip",
+        "settings": {
+         "items": [
+          {
+           "value": "30",
+           "label": "Edge regions"
+          },
+          {
+           "value": "37ms",
+           "label": "p50 cold start"
+          },
+          {
+           "value": "99.99%",
+           "label": "Network uptime"
+          },
+          {
+           "value": "14B",
+           "label": "Requests / day"
+          }
+         ],
+         "columns": 4,
+         "items_gap": 0,
+         "band_padding_y": 24,
+         "show_dividers": true,
+         "divider_color": "rgba(255,255,255,.10)",
+         "band_border": false,
+         "value_font_family": "heading",
+         "value_color": "#ffffff",
+         "value_size": 50,
+         "value_weight": "700",
+         "label_color": "#6b7a96",
+         "label_size": 13,
+         "label_uppercase": false,
+         "align": "center",
+         "mono_font_family": ""
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "nb-se-28",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#0a1020"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "nb-ro-24",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "nb-co-23",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "nb-section-header-22",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "// global edge",
+         "eyebrow_color": "#5aa9ff",
+         "eyebrow_dot_color": "#5aa9ff",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "Your code, where your users are",
+           "color": "#ffffff",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 44,
+         "headline_font_weight": "700",
+         "headline_align": "center",
+         "headline_inline": false,
+         "tagline_show": true,
+         "tagline_text": "Thirty regions across five continents, one anycast network. Requests resolve to the nearest healthy node automatically.",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#6b7a96",
+         "tagline_text_size": 16.5,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "nb-ro-27",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "nb-co-26",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "nb-info-cards-25",
+        "type": "info-cards",
+        "settings": {
+         "container_bg": {
+          "type": "solid",
+          "color": "transparent"
+         },
+         "container_padding": 0,
+         "container_gap": 16,
+         "columns": 4,
+         "items_gap": 16,
+         "card_bg": {
+          "type": "solid",
+          "color": "#111a30"
+         },
+         "card_border": "rgba(255,255,255,.08)",
+         "card_color": "#6b7a96",
+         "card_radius": {
+          "tl": 12,
+          "tr": 12,
+          "br": 12,
+          "bl": 12,
+          "linked": true
+         },
+         "card_padding": 22,
+         "show_icon": true,
+         "show_counter": false,
+         "show_arrow": false,
+         "show_footer": true,
+         "show_media": false,
+         "icon_color": "#5aa9ff",
+         "icon_bg_color": "rgba(90,169,255,.13)",
+         "title_color": "#ffffff",
+         "title_font_family": "sans-serif",
+         "title_size": 16,
+         "title_weight": "700",
+         "title_italic": false,
+         "description_size": 13,
+         "card_hover_effect": "lift",
+         "items": [
+          {
+           "icon": "globe",
+           "title": "us-west",
+           "description": "North America West — Los Angeles PoP",
+           "footer_text": "● operational",
+           "footer_dot_color": "#46d18a"
+          },
+          {
+           "icon": "globe",
+           "title": "sao-paulo",
+           "description": "South America — direct peering",
+           "footer_text": "● operational",
+           "footer_dot_color": "#46d18a"
+          },
+          {
+           "icon": "globe",
+           "title": "london",
+           "description": "Europe West — Tier IV data centre",
+           "footer_text": "● operational",
+           "footer_dot_color": "#56e0e0"
+          },
+          {
+           "icon": "globe",
+           "title": "frankfurt",
+           "description": "Europe Central — DE hub",
+           "footer_text": "● operational",
+           "footer_dot_color": "#5aa9ff"
+          },
+          {
+           "icon": "globe",
+           "title": "cape-town",
+           "description": "Africa South — 2025 expansion",
+           "footer_text": "● operational",
+           "footer_dot_color": "#56e0e0"
+          },
+          {
+           "icon": "globe",
+           "title": "singapore",
+           "description": "APAC South-East — low-latency gateway",
+           "footer_text": "● operational",
+           "footer_dot_color": "#46d18a"
+          },
+          {
+           "icon": "globe",
+           "title": "tokyo",
+           "description": "APAC East — Japan + Korea coverage",
+           "footer_text": "● operational",
+           "footer_dot_color": "#5aa9ff"
+          },
+          {
+           "icon": "globe",
+           "title": "sydney",
+           "description": "Australia — ANZ edge node",
+           "footer_text": "● operational",
+           "footer_dot_color": "#56e0e0"
+          }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "nb-se-35",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#0d1426"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "nb-ro-31",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "nb-co-30",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "nb-section-header-29",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "// the platform",
+         "eyebrow_color": "#5aa9ff",
+         "eyebrow_dot_color": "#5aa9ff",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "Infrastructure that gets out of the way",
+           "color": "#ffffff",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 44,
+         "headline_font_weight": "700",
+         "headline_align": "center",
+         "headline_inline": false,
+         "tagline_show": false,
+         "tagline_text": "",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#6b7a96",
+         "tagline_text_size": 16.5,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "nb-ro-34",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "nb-co-33",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "nb-info-cards-32",
+        "type": "info-cards",
+        "settings": {
+         "container_bg": {
+          "type": "solid",
+          "color": "transparent"
+         },
+         "container_padding": 0,
+         "container_gap": 16,
+         "columns": 3,
+         "items_gap": 16,
+         "card_bg": {
+          "type": "solid",
+          "color": "#111a30"
+         },
+         "card_border": "rgba(255,255,255,.08)",
+         "card_color": "#6b7a96",
+         "card_radius": {
+          "tl": 14,
+          "tr": 14,
+          "br": 14,
+          "bl": 14,
+          "linked": true
+         },
+         "card_padding": 26,
+         "show_icon": true,
+         "show_counter": false,
+         "show_arrow": false,
+         "show_footer": false,
+         "show_media": false,
+         "icon_color": "#5aa9ff",
+         "icon_bg_color": "rgba(90,169,255,.13)",
+         "title_color": "#ffffff",
+         "title_font_family": "sans-serif",
+         "title_size": 19,
+         "title_weight": "700",
+         "title_italic": false,
+         "description_size": 14,
+         "card_hover_effect": "lift",
+         "items": [
+          {
+           "icon": "zap",
+           "title": "Instant cold starts",
+           "description": "Lightweight isolates boot in tens of milliseconds — no containers spinning up, no idle bill."
+          },
+          {
+           "icon": "globe",
+           "title": "Anycast networking",
+           "description": "One address, every region. Traffic lands on the closest healthy node, always."
+          },
+          {
+           "icon": "database",
+           "title": "Data at the edge",
+           "description": "Replicated key-value and SQL that read where they're requested, write where they're owned."
+          },
+          {
+           "icon": "shield-check",
+           "title": "Secure by default",
+           "description": "Automatic TLS, per-request isolation, secrets that never touch your image."
+          },
+          {
+           "icon": "terminal",
+           "title": "Git-push deploys",
+           "description": "Connect a repo and every push ships a preview. Promote to production with one click."
+          },
+          {
+           "icon": "trending-up",
+           "title": "Observability built in",
+           "description": "Per-region latency, logs and traces — no agents, no extra bill, no setup."
+          }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "nb-se-39",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#0a1020"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "nb-ro-38",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "nb-co-37",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "nb-hero-split-36",
+        "type": "hero-split",
+        "settings": {
+         "eyebrow_text": "// scaling",
+         "eyebrow_dot_color": "#5aa9ff",
+         "eyebrow_color": "#5aa9ff",
+         "eyebrow_bg": "transparent",
+         "eyebrow_border": "transparent",
+         "headline_lines": [
+          {
+           "text": "Scales to zero,",
+           "color": "#ffffff",
+           "italic": false
+          },
+          {
+           "text": "and to millions",
+           "color": "#5aa9ff",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 44,
+         "headline_line_height": 1.06,
+         "headline_font_weight": "700",
+         "headline_align": "left",
+         "subhead": "Nimbus spins capacity up the instant traffic arrives and back to nothing when it leaves. You pay for requests served, never for idle machines.",
+         "subhead_color": "#6b7a96",
+         "subhead_size": 16,
+         "subhead_italic": false,
+         "subhead_max_width": 480,
+         "cta1_text": "How autoscaling works",
+         "cta1_url": "#platform",
+         "cta1_bg": "rgba(255,255,255,.05)",
+         "cta1_color": "#ffffff",
+         "cta1_size": 14,
+         "cta1_radius": {
+          "tl": 9,
+          "tr": 9,
+          "br": 9,
+          "bl": 9,
+          "linked": true
+         },
+         "cta1_radius_hover": {
+          "tl": 9,
+          "tr": 9,
+          "br": 9,
+          "bl": 9,
+          "linked": true
+         },
+         "cta2_text": "",
+         "cta2_url": "",
+         "cta2_bg": "transparent",
+         "cta2_color": "#ffffff",
+         "cta2_border": "transparent",
+         "cta2_size": 14,
+         "cta2_radius": {
+          "tl": 9,
+          "tr": 9,
+          "br": 9,
+          "bl": 9,
+          "linked": true
+         },
+         "cta2_radius_hover": {
+          "tl": 9,
+          "tr": 9,
+          "br": 9,
+          "bl": 9,
+          "linked": true
+         },
+         "stats": [
+          {
+           "label": "No min instances, no warm-up tax",
+           "value": "✓",
+           "value_color": "#46d18a"
+          },
+          {
+           "label": "Per-region autoscaling in milliseconds",
+           "value": "✓",
+           "value_color": "#46d18a"
+          },
+          {
+           "label": "Hard spend caps you actually control",
+           "value": "✓",
+           "value_color": "#46d18a"
+          }
+         ],
+         "showcase_enabled": true,
+         "showcase_bg": {
+          "type": "solid",
+          "color": "#111a30"
+         },
+         "showcase_padding": 0,
+         "showcase_radius": {
+          "tl": 14,
+          "tr": 14,
+          "br": 14,
+          "bl": 14,
+          "linked": true
+         },
+         "showcase_radius_hover": {
+          "tl": 14,
+          "tr": 14,
+          "br": 14,
+          "bl": 14,
+          "linked": true
+         },
+         "showcase_badge_text": "nimbus scale --live",
+         "showcase_badge_dot": "#46d18a",
+         "showcase_badge_bg": "#16223c",
+         "showcase_badge_color": "#aebbd0",
+         "showcase_items": [
+          {
+           "number": "# live · eu-central",
+           "text": "",
+           "italic": false,
+           "text_color": "#6b7a96",
+           "bg": {
+            "type": "solid",
+            "color": "#111a30"
+           }
+          },
+          {
+           "number": "req/s   12,408  ▲",
+           "text": "",
+           "italic": false,
+           "text_color": "#ffffff",
+           "bg": {
+            "type": "solid",
+            "color": "#111a30"
+           }
+          },
+          {
+           "number": "isolates 86 (auto)",
+           "text": "",
+           "italic": false,
+           "text_color": "#aebbd0",
+           "bg": {
+            "type": "solid",
+            "color": "#111a30"
+           }
+          },
+          {
+           "number": "p99   41ms",
+           "text": "",
+           "italic": false,
+           "text_color": "#5aa9ff",
+           "bg": {
+            "type": "solid",
+            "color": "#111a30"
+           }
+          },
+          {
+           "number": "errors 0.00%",
+           "text": "",
+           "italic": false,
+           "text_color": "#46d18a",
+           "bg": {
+            "type": "solid",
+            "color": "#111a30"
+           }
+          },
+          {
+           "number": "cost/hr $0.84",
+           "text": "",
+           "italic": false,
+           "text_color": "#f0b95a",
+           "bg": {
+            "type": "solid",
+            "color": "#111a30"
+           }
+          }
+         ],
+         "showcase_card_radius": {
+          "tl": 0,
+          "tr": 0,
+          "br": 0,
+          "bl": 0,
+          "linked": true
+         },
+         "showcase_card_radius_hover": {
+          "tl": 0,
+          "tr": 0,
+          "br": 0,
+          "bl": 0,
+          "linked": true
+         },
+         "showcase_card_shadow": "none",
+         "showcase_caption_left": "NIMBUS SCALE",
+         "showcase_caption_right": "LIVE",
+         "showcase_hover_effect": "none",
+         "split_ratio": "1fr 1fr",
+         "gap": 54,
+         "min_height": 0,
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "nb-se-50",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#0d1426"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "nb-ro-42",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "nb-co-41",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "nb-section-header-40",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "// pricing",
+         "eyebrow_color": "#5aa9ff",
+         "eyebrow_dot_color": "#5aa9ff",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "Pay for requests,",
+           "color": "#ffffff",
+           "italic": false
+          },
+          {
+           "text": "not for idle",
+           "color": "#5aa9ff",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 44,
+         "headline_font_weight": "700",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": false,
+         "tagline_text": "",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#6b7a96",
+         "tagline_text_size": 16.5,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "nb-ro-49",
+    "type": "row",
+    "settings": {
+     "gap": 18,
+     "vertical_align": "stretch"
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "nb-co-44",
+      "type": "column",
+      "settings": {
+       "width": "1-3"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "nb-pricing-43",
+        "type": "pricing",
+        "settings": {
+         "plan_name": "Hobby",
+         "price": "$0",
+         "currency": "",
+         "period": "/mo",
+         "description": "For side projects and prototypes.",
+         "features": "1M requests / mo\n3 regions\nCommunity support",
+         "is_popular": false,
+         "bg_color": "#111a30",
+         "border_color": "rgba(255,255,255,.08)",
+         "price_color": "#ffffff",
+         "accent_color": "#5aa9ff",
+         "cta_text": "Start free",
+         "cta_url": "#pricing",
+         "cta_bg": "rgba(255,255,255,.07)",
+         "cta_color": "#ffffff",
+         "border_radius": {
+          "tl": 18,
+          "tr": 18,
+          "br": 18,
+          "bl": 18,
+          "linked": true
+         },
+         "feature_icon": "check",
+         "feature_icon_color": "#5aa9ff"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "nb-co-46",
+      "type": "column",
+      "settings": {
+       "width": "1-3"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "nb-pricing-45",
+        "type": "pricing",
+        "settings": {
+         "plan_name": "Pro",
+         "price": "$0.18",
+         "currency": "",
+         "period": "/M req",
+         "description": "Usage-based, for apps in production.",
+         "features": "All 30 regions\nEdge data & KV\nCustom domains & TLS\nEmail support",
+         "is_popular": true,
+         "badge_text": "Most popular",
+         "badge_bg_color": "rgba(90,169,255,.12)",
+         "badge_text_color": "#5aa9ff",
+         "bg_color": "#16223c",
+         "border_color": "#5aa9ff",
+         "price_color": "#5aa9ff",
+         "accent_color": "#5aa9ff",
+         "cta_text": "Start building",
+         "cta_url": "#pricing",
+         "cta_bg": "#5aa9ff",
+         "cta_color": "#060a14",
+         "border_radius": {
+          "tl": 18,
+          "tr": 18,
+          "br": 18,
+          "bl": 18,
+          "linked": true
+         },
+         "feature_icon": "check",
+         "feature_icon_color": "#5aa9ff"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "nb-co-48",
+      "type": "column",
+      "settings": {
+       "width": "1-3"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "nb-pricing-47",
+        "type": "pricing",
+        "settings": {
+         "plan_name": "Enterprise",
+         "price": "Custom",
+         "currency": "",
+         "period": "",
+         "description": "For scale, compliance & SLAs.",
+         "features": "Dedicated regions\n99.99% SLA\nSSO, audit & SCIM",
+         "is_popular": false,
+         "bg_color": "#111a30",
+         "border_color": "rgba(255,255,255,.08)",
+         "price_color": "#ffffff",
+         "accent_color": "#5aa9ff",
+         "cta_text": "Talk to sales",
+         "cta_url": "#pricing",
+         "cta_bg": "rgba(255,255,255,.07)",
+         "cta_color": "#ffffff",
+         "border_radius": {
+          "tl": 18,
+          "tr": 18,
+          "br": 18,
+          "bl": 18,
+          "linked": true
+         },
+         "feature_icon": "check",
+         "feature_icon_color": "#5aa9ff"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "nb-se-54",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#0a1020"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "nb-ro-53",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "nb-co-52",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "nb-testimonial-51",
+        "type": "testimonial",
+        "settings": {
+         "quote": "\"We moved our whole API to Nimbus over a weekend. Latency dropped by half in Asia and the idle bill just vanished.\"",
+         "author_name": "Wei Chen",
+         "author_role": "Platform Lead, Tideline",
+         "rating": "0",
+         "layout": "single",
+         "show_line": false,
+         "bg_color": "transparent",
+         "text_color": "#ffffff",
+         "border_radius": "0",
+         "avatar": ""
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "nb-se-58",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#0a1020"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "nb-ro-57",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "nb-co-56",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "nb-projector-55",
+        "type": "projector",
+        "settings": {
+         "eyebrow": "// estimate",
+         "heading": "Only pay for what <em>runs</em>",
+         "intro": "Drag to your monthly request volume. No idle charges, no per-seat tax — just €0.15 per million requests, billed to the second.",
+         "min": "10",
+         "max": "1000",
+         "step": "10",
+         "value": "250",
+         "rate": "0",
+         "years": "0.15",
+         "currency": "€",
+         "input_label": "Requests / month (millions)",
+         "out_caption": "Estimated monthly bill",
+         "note": "Includes 1M free requests & global edge routing. Volume discounts above 500M.",
+         "show_contrib": false,
+         "zone_accent": "#5aa9ff",
+         "align": "left",
+         "tile_padding": {
+          "top": 52,
+          "right": 52,
+          "bottom": 52,
+          "left": 52
+         },
+         "border_radius": "16",
+         "shadow": "sm"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "nb-se-62",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#0d1426"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "nb-ro-61",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "nb-co-60",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "nb-cta-banner-59",
+        "type": "cta-banner",
+        "settings": {
+         "headline": "Deploy your first app free",
+         "headline_accent": "",
+         "headline_accent_italic": false,
+         "subtitle": "Push a repo, get a global URL in under a minute. No card, no idle charges.",
+         "cta_text": "Deploy free",
+         "cta_url": "#pricing",
+         "cta2_text": "See live status",
+         "cta2_url": "#status",
+         "cta2_bg": "rgba(255,255,255,.05)",
+         "cta2_color": "#ffffff",
+         "cta2_border": "rgba(255,255,255,.16)",
+         "bg": {
+          "type": "gradient",
+          "value": "linear-gradient(160deg, rgba(90,169,255,.16), rgba(86,224,224,.05))",
+          "angle": 160,
+          "stops": [
+           {
+            "color": "rgba(90,169,255,.16)",
+            "position": 0
+           },
+           {
+            "color": "rgba(86,224,224,.05)",
+            "position": 100
+           }
+          ]
+         },
+         "border_color": "rgba(90,169,255,.34)",
+         "text_color": "#ffffff",
+         "accent_color": "#5aa9ff",
+         "subtitle_color": "#aebbd0",
+         "cta_bg": "#5aa9ff",
+         "cta_color": "#060a14",
+         "cta_radius": {
+          "tl": 9,
+          "tr": 9,
+          "br": 9,
+          "bl": 9,
+          "linked": true
+         },
+         "cta_size": 15,
+         "headline_font_family": "sans-serif",
+         "headline_size": 48,
+         "headline_weight": "700",
+         "subtitle_size": 17,
+         "layout": "stack",
+         "vertical_align": "center",
+         "banner_radius": {
+          "tl": 24,
+          "tr": 24,
+          "br": 24,
+          "bl": 24,
+          "linked": true
+         },
+         "banner_padding": 80
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

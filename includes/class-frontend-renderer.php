@@ -1485,6 +1485,11 @@ class Olo_Frontend_Renderer {
                 $bg_layers_html .= '<video aria-hidden="true" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: ' . $vid_fit . '; object-position: ' . $vid_pos . '; pointer-events: none' . $scale_css . '" autoplay muted loop playsinline';
             }
             if ( $vid_poster ) $bg_layers_html .= ' poster="' . $vid_poster . '"';
+            // Parallax di SOLO sfondo anche per il VIDEO (scale/blur/opacity): trasforma il
+            // layer video senza toccare il contenuto della sezione — a differenza del parallax
+            // di sezione (element parallax) che trasforma l'intero <section> figli inclusi.
+            // bgx/bgy sono no-op su <video> (non hanno background-position).
+            $bg_layers_html .= $this->anim->build_uk_parallax_attr( $tile_bg );
             $bg_layers_html .= '><source src="' . $vid_url . '" type="' . $this->get_video_mime( $vid_url ) . '"></video>';
         }
         if ( $has_bg_gallery ) {
@@ -2929,14 +2934,15 @@ class Olo_Frontend_Renderer {
         // Variabile mantenuta per compatibilità riga 2811, ora sempre vuota.
         $elem_sticky_attr = '';
 
-        // Mouse effects data attributes
+        // Mouse effects data attributes (leggi da settings OPPURE advanced — il pannello
+        // "Effetti mouse" del builder salva in advanced, lo styleField _shared in settings).
         $elem_mouse_attrs = '';
-        if ( ! empty( $settings['mouse_tilt'] ) ) {
-            $tilt_intensity = intval( $settings['mouse_tilt_intensity'] ?? 15 );
+        if ( ! empty( $settings['mouse_tilt'] ) || ! empty( $advanced['mouse_tilt'] ) ) {
+            $tilt_intensity = intval( $settings['mouse_tilt_intensity'] ?? $advanced['mouse_tilt_intensity'] ?? 15 );
             $elem_mouse_attrs .= ' data-olo-tilt="' . $tilt_intensity . '"';
         }
-        if ( ! empty( $settings['mouse_track'] ) ) {
-            $track_speed = intval( $settings['mouse_track_speed'] ?? 3 );
+        if ( ! empty( $settings['mouse_track'] ) || ! empty( $advanced['mouse_track'] ) ) {
+            $track_speed = intval( $settings['mouse_track_speed'] ?? $advanced['mouse_track_speed'] ?? 3 );
             $elem_mouse_attrs .= ' data-olo-track="' . $track_speed . '"';
         }
 

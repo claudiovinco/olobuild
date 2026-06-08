@@ -117,7 +117,10 @@ class Olo_Counter_Tile extends Olo_Tile_Base {
                 font-size: <?php echo $num_fs; ?>px;
                 font-weight: <?php echo $num_fw; ?>;
                 line-height: 1.1;
+                letter-spacing: -0.02em;
+                font-variant-numeric: tabular-nums;
             }
+            .<?php echo $uid; ?> .olo-cnt-suffix { color: <?php echo $this->safe_color_css( $s['number_color'] ?? '' ) ?: 'var(--olo-color-primary, #e1474f)'; ?>; }
             .<?php echo $uid; ?> .olo-cnt-label {
                 font-size: <?php echo $lbl_fs; ?>px;
                 font-weight: <?php echo $lbl_fw; ?>;
@@ -156,7 +159,7 @@ class Olo_Counter_Tile extends Olo_Tile_Base {
                     </div>
                 <?php endif; ?>
                 <div class="olo-cnt-number">
-                    <?php echo esc_html( $s['prefix'] ); ?><?php echo esc_html( $s['number'] ); ?><?php echo esc_html( $s['suffix'] ); ?>
+                    <?php echo esc_html( $s['prefix'] ); ?><?php echo esc_html( $s['number'] ); ?><?php if ( $s['suffix'] !== '' ) : ?><span class="olo-cnt-suffix"><?php echo esc_html( $s['suffix'] ); ?></span><?php endif; ?>
                 </div>
                 <?php if ( ! empty( $s['label'] ) ) : ?>
                     <?php list( $l_tfx_cls, $l_tfx_data ) = $this->tfx_attrs( $s, 'label', wp_strip_all_tags( $s['label'] ) ); ?>

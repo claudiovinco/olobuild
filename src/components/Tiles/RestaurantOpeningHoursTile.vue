@@ -25,13 +25,13 @@
 <script setup>
 import { computed } from 'vue';
 import iconsSvg from '../ProSlider/uikitIconsSvg.js';
-import { resolveColor, TOKENS } from '@/composables/oloTileDefaults';
+import { resolveColor, TOKENS, SHADOW } from '@/composables/oloTileDefaults';
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 const clockSvg = iconsSvg['clock'] || '';
 const closeSvg = iconsSvg['close'] || iconsSvg['x'] || '';
 const defaults = { show_header: true, title: 'Orari di Apertura', subtitle: '', header_bg: '', header_text_color: '', card_border_radius: 12, card_shadow: 'sm', card_bg: '#fff', highlight_today: true, day_font_size: 14, time_font_size: 13, day_color: '', time_color: '', time_bg: '', time_radius: 6, show_icon: true, closed_label: 'Chiuso', closed_color: '', divider_color: '' };
 const s = computed(() => ({ ...defaults, ...props.settings }));
-const shadowMap = { none:'none', sm:'0 1px 3px rgba(0,0,0,0.1)', md:'0 4px 12px rgba(0,0,0,0.1)', lg:'0 8px 24px rgba(0,0,0,0.15)' };
+const shadowMap = SHADOW;
 const dayColorTok = computed(() => resolveColor(s.value.day_color, TOKENS.text));
 const closedColor = computed(() => resolveColor(s.value.closed_color, TOKENS.error.fg));
 const timeColor = computed(() => resolveColor(s.value.time_color, TOKENS.primary));

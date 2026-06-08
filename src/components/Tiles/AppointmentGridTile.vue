@@ -18,12 +18,12 @@
 
 <script setup>
 import { computed } from 'vue';
-import { resolveColor, TOKENS } from '@/composables/oloTileDefaults';
+import { resolveColor, TOKENS, SHADOW } from '@/composables/oloTileDefaults';
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 const defaults = { columns: 3, gap: 24, card_border_radius: 12, card_shadow: 'sm', show_image: true, show_title: true, title_size: 16, show_duration: true, show_price: true, show_btn: true, btn_text: 'Prenota', btn_bg: '', btn_color: '', layout: 'vertical', accent_color: '' };
 const s = computed(() => ({ ...defaults, ...props.settings }));
 const accent = computed(() => resolveColor(s.value.accent_color, TOKENS.primary));
-const shadowMap = { none:'none', sm:'0 1px 3px rgba(0,0,0,0.1)', md:'0 4px 12px rgba(0,0,0,0.1)', lg:'0 8px 24px rgba(0,0,0,0.15)' };
+const shadowMap = SHADOW;
 // placeholder media elegante: tinta soft brand su superficie (no pi\u00F9 gradienti off-brand)
 const placeholderBg = 'linear-gradient(135deg, color-mix(in srgb, var(--olo-color-primary, #e1474f) 14%, #fff), color-mix(in srgb, var(--olo-color-primary, #e1474f) 28%, #fff))';
 const services = [

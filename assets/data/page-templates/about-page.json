@@ -1,0 +1,1085 @@
+{
+  "id": "page-about-page",
+  "name": "Pagina chi siamo",
+  "category": "page",
+  "preview_description": "Template token-first assemblato dal sistema di sezioni coerente (7 sezioni).",
+  "content": {
+    "0": {
+      "id": "tpl-herosplit-sec",
+      "type": "section",
+      "settings": {
+        "style": "default",
+        "width": "large",
+        "padding": "large"
+      },
+      "style": {
+        "bg_type": "color",
+        "bg_color": "#F1F3F5",
+        "padding_top": "80",
+        "padding_bottom": "80"
+      },
+      "advanced": {},
+      "children": [
+        {
+          "id": "tpl-herosplit-row",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl-herosplit-col1",
+              "type": "column",
+              "settings": {
+                "width": "1-2"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl-herosplit-image",
+                  "type": "image",
+                  "settings": {
+                    "url": "",
+                    "alt": "Immagine presentazione",
+                    "width": "100%",
+                    "border_radius": "16",
+                    "shadow": "md"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": "tpl-herosplit-col2",
+              "type": "column",
+              "settings": {
+                "width": "1-2"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl-herosplit-headline",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "La soluzione che cercavi",
+                    "subtitle": "Siamo specialisti nel creare esperienze digitali che convertono visitatori in clienti fedeli.",
+                    "tag": "h1",
+                    "alignment": "left",
+                    "decoration": "line",
+                    "heading_color": "#212529",
+                    "subtitle_color": "#495057",
+                    "decoration_color": "#E63946",
+                    "heading_size": "lg"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-herosplit-spacer1",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "24"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-herosplit-btn1",
+                  "type": "button",
+                  "settings": {
+                    "text": "Contattaci oggi",
+                    "url": "#contatti",
+                    "style": "solid",
+                    "alignment": "left",
+                    "bg_color": "#E63946",
+                    "color": "#FFFFFF",
+                    "border_radius": "8",
+                    "size": "lg",
+                    "hover_effect": "grow"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "1": {
+      "id": "tpl_32",
+      "type": "section",
+      "settings": {
+        "style": "default",
+        "width": "large",
+        "padding": "large"
+      },
+      "style": {
+        "bg_type": "color",
+        "bg_color": "#ffffff",
+        "padding_top": "100",
+        "padding_bottom": "100"
+      },
+      "advanced": {},
+      "children": [
+        {
+          "id": "tpl_22",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl_21",
+              "type": "column",
+              "settings": {
+                "width": "1-1"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_19",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "Chi siamo",
+                    "subtitle": "La nostra storia e i nostri valori",
+                    "tag": "h2",
+                    "alignment": "center",
+                    "decoration": "line",
+                    "heading_color": "#1e293b",
+                    "subtitle_color": "#64748b",
+                    "heading_size": "lg"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_20",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "48"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "tpl_31",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl_24",
+              "type": "column",
+              "settings": {
+                "width": "1-2"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_23",
+                  "type": "image",
+                  "settings": {
+                    "url": "",
+                    "alt": "Chi siamo",
+                    "width": "100%",
+                    "border_radius": "12",
+                    "shadow": "lg"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            },
+            {
+              "id": "tpl_30",
+              "type": "column",
+              "settings": {
+                "width": "1-2"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_25",
+                  "type": "content",
+                  "settings": {
+                    "content": "<p>Siamo un team appassionato e dedicato, con anni di esperienza nel nostro settore. La nostra missione è fornire soluzioni innovative che fanno la differenza per i nostri clienti.</p><p>Crediamo nella qualità, nella trasparenza e nel lavoro di squadra. Ogni progetto che affrontiamo è un'opportunità per superare le aspettative.</p>",
+                    "alignment": "left"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_26",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "32"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_27",
+                  "type": "counter",
+                  "settings": {
+                    "number": "500",
+                    "suffix": "+",
+                    "label": "Clienti soddisfatti",
+                    "duration": "2000",
+                    "color": "var(--olo-color-primary, #e1474f)",
+                    "number_size": "lg"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_28",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "16"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_29",
+                  "type": "counter",
+                  "settings": {
+                    "number": "15",
+                    "suffix": "",
+                    "label": "Anni di esperienza",
+                    "duration": "2000",
+                    "color": "#059669",
+                    "number_size": "lg"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "2": {
+      "id": "tpl_266",
+      "type": "section",
+      "settings": {
+        "style": "default",
+        "width": "large",
+        "padding": "large"
+      },
+      "style": {
+        "bg_type": "color",
+        "bg_color": "#312e81",
+        "padding_top": "80",
+        "padding_bottom": "80"
+      },
+      "advanced": {},
+      "children": [
+        {
+          "id": "tpl_256",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl_255",
+              "type": "column",
+              "settings": {
+                "width": "1-1"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_253",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "I numeri parlano",
+                    "subtitle": "",
+                    "tag": "h2",
+                    "alignment": "center",
+                    "decoration": "none",
+                    "heading_color": "#ffffff",
+                    "subtitle_color": "",
+                    "heading_size": "lg"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_254",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "48"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "tpl_265",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl_258",
+              "type": "column",
+              "settings": {
+                "width": "1-4"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_257",
+                  "type": "counter",
+                  "settings": {
+                    "number": "2500",
+                    "suffix": "+",
+                    "label": "Clienti",
+                    "duration": "2500",
+                    "color": "color-mix(in srgb, var(--olo-color-primary, #e1474f) 12%, #fff)",
+                    "number_size": "lg"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            },
+            {
+              "id": "tpl_260",
+              "type": "column",
+              "settings": {
+                "width": "1-4"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_259",
+                  "type": "counter",
+                  "settings": {
+                    "number": "800",
+                    "suffix": "",
+                    "label": "Progetti",
+                    "duration": "2000",
+                    "color": "color-mix(in srgb, var(--olo-color-primary, #e1474f) 12%, #fff)",
+                    "number_size": "lg"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            },
+            {
+              "id": "tpl_262",
+              "type": "column",
+              "settings": {
+                "width": "1-4"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_261",
+                  "type": "counter",
+                  "settings": {
+                    "number": "20",
+                    "suffix": "+",
+                    "label": "Anni",
+                    "duration": "1500",
+                    "color": "color-mix(in srgb, var(--olo-color-primary, #e1474f) 12%, #fff)",
+                    "number_size": "lg"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            },
+            {
+              "id": "tpl_264",
+              "type": "column",
+              "settings": {
+                "width": "1-4"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_263",
+                  "type": "counter",
+                  "settings": {
+                    "number": "45",
+                    "suffix": "",
+                    "label": "Paesi",
+                    "duration": "1800",
+                    "color": "color-mix(in srgb, var(--olo-color-primary, #e1474f) 12%, #fff)",
+                    "number_size": "lg"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "3": {
+      "id": "tpl-ft-525",
+      "type": "section",
+      "settings": {
+        "style": "default",
+        "width": "large",
+        "padding": "large"
+      },
+      "style": {
+        "bg_type": "color",
+        "bg_color": "color-mix(in srgb, var(--olo-color-primary, #e1474f) 12%, #fff)",
+        "padding_top": "100",
+        "padding_bottom": "100"
+      },
+      "advanced": {},
+      "children": [
+        {
+          "id": "tpl-ft-513",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl-ft-512",
+              "type": "column",
+              "settings": {
+                "width": "1-1"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl-ft-510",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "Il Nostro Leader",
+                    "subtitle": "Scopri chi guida il nostro team",
+                    "tag": "h2",
+                    "alignment": "center",
+                    "decoration": "line",
+                    "heading_color": "#1E3A8A",
+                    "subtitle_color": "var(--olo-color-primary, #e1474f)",
+                    "heading_size": "lg"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-ft-511",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "56"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "tpl-ft-524",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl-ft-517",
+              "type": "column",
+              "settings": {
+                "width": "1-3"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl-ft-514",
+                  "type": "image",
+                  "settings": {
+                    "url": "",
+                    "alt": "Giovanni Basile",
+                    "width": "100%",
+                    "border_radius": "16",
+                    "shadow": "lg"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-ft-515",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "16"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-ft-516",
+                  "type": "social",
+                  "settings": {
+                    "links": "linkedin|#\ntwitter|#\ngithub|#",
+                    "style": "circle",
+                    "size": "lg",
+                    "alignment": "center"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": "tpl-ft-523",
+              "type": "column",
+              "settings": {
+                "width": "2-3"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl-ft-518",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "Giovanni Basile",
+                    "subtitle": "Chief Technology Officer",
+                    "tag": "h3",
+                    "alignment": "left",
+                    "decoration": "none",
+                    "heading_color": "#1E3A8A",
+                    "subtitle_color": "var(--olo-color-primary, #e1474f)",
+                    "heading_size": "lg"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-ft-519",
+                  "type": "content",
+                  "settings": {
+                    "content": "<p style=\"color:#4B5563\">Giovanni vanta oltre 18 anni di esperienza nel settore IT. Ha guidato la trasformazione digitale di aziende enterprise e startup, con una profonda conoscenza di cloud computing, architetture distribuite e intelligenza artificiale. Prima di unirsi al nostro team, è stato VP of Engineering presso una unicorn europea.</p><p style=\"color:#4B5563\">Appassionato di open source, contribuisce attivamente a diversi progetti su GitHub e partecipa regolarmente come speaker a conferenze internazionali.</p>",
+                    "alignment": "left"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-ft-520",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "24"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-ft-521",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "Competenze",
+                    "tag": "h5",
+                    "alignment": "left",
+                    "decoration": "none",
+                    "heading_color": "#374151",
+                    "heading_size": "sm"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-ft-522",
+                  "type": "progress",
+                  "settings": {
+                    "bars": "Architettura Software|95\nCloud & DevOps|90\nIntelligenza Artificiale|85\nGestione Team|92\nStrategia Prodotto|88",
+                    "bar_color": "var(--olo-color-primary, #e1474f)",
+                    "track_color": "color-mix(in srgb, var(--olo-color-primary, #e1474f) 12%, #fff)",
+                    "label_color": "#374151",
+                    "height": "8",
+                    "border_radius": "4",
+                    "show_percentage": true
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "4": {
+      "id": "tpl_278",
+      "type": "section",
+      "settings": {
+        "style": "default",
+        "width": "large",
+        "padding": "large"
+      },
+      "style": {
+        "bg_type": "color",
+        "bg_color": "#1a1a2e",
+        "padding_top": "80",
+        "padding_bottom": "80"
+      },
+      "advanced": {},
+      "children": [
+        {
+          "id": "tpl_277",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl_276",
+              "type": "column",
+              "settings": {
+                "width": "1-1"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_273",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "Le nostre milestone",
+                    "subtitle": "Ogni traguardo racconta la nostra evoluzione",
+                    "tag": "h2",
+                    "alignment": "center",
+                    "decoration": "none",
+                    "heading_color": "#ffffff",
+                    "subtitle_color": "var(--olo-color-primary, #e1474f)",
+                    "heading_size": "lg"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_274",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "48"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_275",
+                  "type": "timeline",
+                  "settings": {
+                    "items": [
+                      {
+                        "title": "2010 — L'idea",
+                        "content": "Nasce il progetto: un gruppo di amici con la visione di cambiare il settore digitale.",
+                        "icon": "star"
+                      },
+                      {
+                        "title": "2013 — Primo ufficio",
+                        "content": "Apriamo la prima sede operativa e iniziamo a costruire il nostro portfolio.",
+                        "icon": "map-pin"
+                      },
+                      {
+                        "title": "2016 — Espansione",
+                        "content": "Nuove sedi a Milano e Barcellona. Il team cresce fino a 30 persone.",
+                        "icon": "globe"
+                      },
+                      {
+                        "title": "2019 — Innovazione",
+                        "content": "Lanciamo la nostra piattaforma SaaS che rivoluziona il settore.",
+                        "icon": "shield"
+                      },
+                      {
+                        "title": "2024 — Oggi",
+                        "content": "Leader di mercato con clienti in tutta Europa e un team di oltre 80 professionisti.",
+                        "icon": "heart"
+                      }
+                    ],
+                    "layout": "left",
+                    "line_color": "#4c1d95",
+                    "dot_color": "var(--olo-color-primary, #e1474f)"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "5": {
+      "id": "tpl-ctabanner-sec",
+      "type": "section",
+      "settings": {
+        "style": "default",
+        "width": "expand",
+        "padding": "medium"
+      },
+      "style": {
+        "bg_type": "color",
+        "bg_color": "var(--olo-color-primary, #e1474f)",
+        "padding_top": "40",
+        "padding_bottom": "40"
+      },
+      "advanced": {},
+      "children": [
+        {
+          "id": "tpl-ctabanner-row",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl-ctabanner-col1",
+              "type": "column",
+              "settings": {
+                "width": "2-3"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl-ctabanner-headline",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "Offerta speciale: sconto del 50% per i nuovi clienti!",
+                    "subtitle": "",
+                    "tag": "h3",
+                    "alignment": "left",
+                    "decoration": "none",
+                    "heading_color": "#FFFFFF",
+                    "heading_size": "md"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": "tpl-ctabanner-col2",
+              "type": "column",
+              "settings": {
+                "width": "1-3"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl-ctabanner-btn1",
+                  "type": "button",
+                  "settings": {
+                    "text": "Ottieni lo sconto",
+                    "url": "#sconto",
+                    "style": "solid",
+                    "alignment": "right",
+                    "bg_color": "#FFFFFF",
+                    "color": "var(--olo-color-primary, #e1474f)",
+                    "border_radius": "50",
+                    "size": "md",
+                    "font_weight": "700",
+                    "hover_effect": "lift"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "6": {
+      "id": "tpl_100",
+      "type": "section",
+      "settings": {
+        "style": "default",
+        "width": "large",
+        "padding": "large"
+      },
+      "style": {
+        "bg_type": "color",
+        "bg_color": "#030712",
+        "padding_top": "60",
+        "padding_bottom": "40"
+      },
+      "advanced": {},
+      "children": [
+        {
+          "id": "tpl_94",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl_82",
+              "type": "column",
+              "settings": {
+                "width": "1-4"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_80",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "Brand",
+                    "subtitle": "",
+                    "tag": "h4",
+                    "alignment": "left",
+                    "decoration": "none",
+                    "heading_color": "var(--olo-color-primary, #e1474f)",
+                    "subtitle_color": "",
+                    "heading_size": "sm"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_81",
+                  "type": "content",
+                  "settings": {
+                    "content": "<p style=\"color:#9ca3af;\">Creiamo esperienze digitali che ispirano e connettono le persone.</p>",
+                    "alignment": "left"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            },
+            {
+              "id": "tpl_85",
+              "type": "column",
+              "settings": {
+                "width": "1-4"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_83",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "Esplora",
+                    "subtitle": "",
+                    "tag": "h5",
+                    "alignment": "left",
+                    "decoration": "none",
+                    "heading_color": "#ffffff",
+                    "subtitle_color": "",
+                    "heading_size": "sm"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_84",
+                  "type": "content",
+                  "settings": {
+                    "content": "<p><a href=\"#\" style=\"color:#9ca3af;text-decoration:none;\">Portfolio</a><br><a href=\"#\" style=\"color:#9ca3af;text-decoration:none;\">Servizi</a><br><a href=\"#\" style=\"color:#9ca3af;text-decoration:none;\">Team</a><br><a href=\"#\" style=\"color:#9ca3af;text-decoration:none;\">Carriere</a></p>",
+                    "alignment": "left"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            },
+            {
+              "id": "tpl_88",
+              "type": "column",
+              "settings": {
+                "width": "1-4"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_86",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "Risorse",
+                    "subtitle": "",
+                    "tag": "h5",
+                    "alignment": "left",
+                    "decoration": "none",
+                    "heading_color": "#ffffff",
+                    "subtitle_color": "",
+                    "heading_size": "sm"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_87",
+                  "type": "content",
+                  "settings": {
+                    "content": "<p><a href=\"#\" style=\"color:#9ca3af;text-decoration:none;\">Documentazione</a><br><a href=\"#\" style=\"color:#9ca3af;text-decoration:none;\">Guide</a><br><a href=\"#\" style=\"color:#9ca3af;text-decoration:none;\">FAQ</a><br><a href=\"#\" style=\"color:#9ca3af;text-decoration:none;\">Supporto</a></p>",
+                    "alignment": "left"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            },
+            {
+              "id": "tpl_93",
+              "type": "column",
+              "settings": {
+                "width": "1-4"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_89",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "Seguici",
+                    "subtitle": "",
+                    "tag": "h5",
+                    "alignment": "left",
+                    "decoration": "none",
+                    "heading_color": "#ffffff",
+                    "subtitle_color": "",
+                    "heading_size": "sm"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_90",
+                  "type": "social",
+                  "settings": {
+                    "links": "facebook|#\ninstagram|#\nlinkedin|#\nyoutube|#",
+                    "style": "square",
+                    "size": "md",
+                    "alignment": "left"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_91",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "16"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_92",
+                  "type": "content",
+                  "settings": {
+                    "content": "<p style=\"color:#9ca3af;font-size:14px;\">Resta aggiornato sulle ultime novità e progetti.</p>",
+                    "alignment": "left"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "tpl_99",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl_98",
+              "type": "column",
+              "settings": {
+                "width": "1-1"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_95",
+                  "type": "divider",
+                  "settings": {
+                    "style": "solid",
+                    "width": "100",
+                    "color": "#1f2937"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_96",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "16"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_97",
+                  "type": "content",
+                  "settings": {
+                    "content": "<p style=\"text-align:center;color:#6b7280;font-size:13px;\">&copy; 2026 Brand Inc. &mdash; Fatto con passione in Italia</p>",
+                    "alignment": "center"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

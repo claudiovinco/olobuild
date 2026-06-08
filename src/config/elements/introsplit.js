@@ -1,0 +1,133 @@
+import { t } from '@/i18n';
+import { shadowField, borderFields, borderDefault, borderHoverDefault, borderEffectDefaults } from './_shared.js';
+
+/**
+ * Intro Split — feature split editoriale: testo (eyebrow + titolo gigante con parola-accento
+ * + lead + N statistiche inline + CTA) accanto a un media (slot/strisce) con badge d'angolo
+ * (numero + label). Estratta dal blueprint OLOthemes (.vd-intro / SplitText + Counter).
+ * Render Vue == PHP (IntroSplitTile.vue). Nessun JS.
+ */
+export default {
+  type: 'introsplit',
+  name: t('Intro Split (testo + stats + media badge)'),
+  icon: 'dashicons-align-pull-left',
+  category: 'marketing',
+
+  defaults: {
+    eyebrow: 'One unit · since 1974',
+    eyebrow_color: '',
+    headline: 'A regional club with a',
+    accent: 'rich history',
+    uppercase: true,
+    headline_color: '',
+    accent_color: '',
+    lead: "From a handful of friends on a muddy field to eight competitive teams across men's, women's and youth football — Verdano FC is built on the people who keep showing up.",
+    lead_color: '',
+    stats: [
+      { number: '50', label: 'Years of football' },
+      { number: '8', label: 'Competitive teams' },
+      { number: '600+', label: 'Active members' },
+    ],
+    stat_number_color: '',
+    stat_label_color: '',
+    cta_text: 'About the club',
+    cta_url: '#',
+    cta_bg: '',
+    cta_color: '#ffffff',
+    media_image: '',
+    media_label: 'club portrait — squad on the pitch',
+    media_light: true,
+    media_aspect: '4/4.4',
+    media_radius: 20,
+    // Spaziatura/forma additive — default no-op (padding gated OFF, raggi = valori attuali).
+    pad_custom: false,
+    content_padding: { top: 0, right: 0, bottom: 0, left: 0 },
+    badge_radius: { tl: 16, tr: 16, br: 16, bl: 16 },
+    cta_radius: { tl: 999, tr: 999, br: 999, bl: 999 },
+    badge_number: '1974',
+    badge_label: 'Established',
+    badge_bg: '',
+    badge_color: '',
+    media_position: 'right',
+
+    // KIT standard OLObuild — sfondo completo + ombra + bordo sul contenitore principale.
+    // Default no-op: bg none, shadow none, border 0 → render invariato.
+    bg: { type: 'none' },
+    shadow: 'none',
+    border: { ...borderDefault },
+    border_hover: { ...borderHoverDefault },
+    border_hover_duration: 300,
+    ...borderEffectDefaults,
+  },
+
+  fields: [
+    { key: 'eyebrow', label: t('Occhiello'), type: 'text' },
+    { key: 'headline', label: t('Titolo'), type: 'text' },
+    { key: 'accent', label: t('Parola accento'), type: 'text' },
+    { key: 'uppercase', label: t('Maiuscolo'), type: 'toggle' },
+    { key: 'lead', label: t('Testo'), type: 'textarea' },
+
+    { type: 'separator', label: t('Statistiche') },
+    { key: 'stats', label: t('Voci'), type: 'content-items',
+      itemLabel: t('Stat'),
+      defaults: { number: '0', label: 'Etichetta' },
+      itemFields: [
+        { key: 'number', label: t('Numero (es. 600+)'), type: 'text' },
+        { key: 'label', label: t('Etichetta'), type: 'text' },
+      ],
+    },
+
+    { type: 'separator', label: t('CTA') },
+    { key: 'cta_text', label: t('Testo CTA'), type: 'text' },
+    { key: 'cta_url', label: t('Link CTA'), type: 'link' },
+
+    { type: 'separator', label: t('Media + badge') },
+    { key: 'media_image', label: t('Immagine (vuoto = placeholder)'), type: 'image' },
+    { key: 'media_label', label: t('Etichetta placeholder'), type: 'text' },
+    { key: 'media_light', label: t('Placeholder chiaro'), type: 'toggle' },
+    { key: 'badge_number', label: t('Badge — numero'), type: 'text' },
+    { key: 'badge_label', label: t('Badge — etichetta'), type: 'text' },
+    { key: 'media_position', label: t('Posizione media'), type: 'select', options: [
+      { value: 'right', label: t('Destra') },
+      { value: 'left', label: t('Sinistra') },
+    ]},
+  ],
+
+  styleFields: [
+    { type: 'separator', label: t('Colori') },
+    { key: 'eyebrow_color', label: t('Occhiello (vuoto = secondario)'), type: 'color' },
+    { key: 'headline_color', label: t('Titolo'), type: 'color' },
+    { key: 'accent_color', label: t('Parola accento (vuoto = secondario)'), type: 'color' },
+    { key: 'lead_color', label: t('Testo'), type: 'color' },
+    { key: 'stat_number_color', label: t('Numeri stat'), type: 'color' },
+    { key: 'stat_label_color', label: t('Etichette stat'), type: 'color' },
+    { key: 'cta_bg', label: t('CTA sfondo (vuoto = testo del tema)'), type: 'color' },
+    { key: 'cta_color', label: t('CTA testo'), type: 'color' },
+    { key: 'badge_bg', label: t('Badge sfondo (vuoto = primario)'), type: 'color' },
+    { key: 'badge_color', label: t('Badge testo (vuoto = contrasto primario)'), type: 'color' },
+
+    { type: 'separator', label: t('Media') },
+    { key: 'media_aspect', label: t('Proporzioni media'), type: 'select', options: [
+      { value: '4/4.4', label: '4:4.4' },
+      { value: '1/1', label: '1:1' },
+      { value: '4/5', label: '4:5' },
+      { value: '3/4', label: '3:4' },
+    ]},
+    { key: 'media_radius', label: t('Raggio media (px)'), type: 'range', min: 0, max: 40, step: 1 },
+
+    { type: 'separator', label: t('Spaziatura') },
+    { key: 'pad_custom', label: t('Padding personalizzato'), type: 'toggle' },
+    { key: 'content_padding', label: t('Padding contenitore (px)'), type: 'spacing',
+      condition: { field: 'pad_custom', op: 'eq', value: true } },
+
+    { type: 'separator', label: t('Forma') },
+    { key: 'badge_radius', label: t('Raggio badge'), type: 'border-radius' },
+    { key: 'cta_radius', label: t('Raggio CTA'), type: 'border-radius' },
+
+    { type: 'separator', label: t('Sfondo') },
+    { key: 'bg', label: t('Sfondo completo'), type: 'background', showParallax: false },
+    { type: 'separator', label: t('Ombra') },
+    ...shadowField,
+    ...borderFields(),
+  ],
+};

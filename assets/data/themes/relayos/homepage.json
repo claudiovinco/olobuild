@@ -1,0 +1,1536 @@
+[
+ {
+  "id": "ro-se-4",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#0d1117"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ro-ro-3",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ro-co-2",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ro-hero-split-1",
+        "type": "hero-split",
+        "settings": {
+         "eyebrow_text": "Relay OS · no-code automation",
+         "eyebrow_dot_color": "#3fb950",
+         "eyebrow_color": "#3fb950",
+         "headline_lines": [
+          {
+           "text": "Automate the",
+           "color": "#ffffff",
+           "italic": false
+          },
+          {
+           "text": "busywork.",
+           "color": "#3fb950",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 72,
+         "headline_line_height": 1,
+         "headline_font_weight": "700",
+         "headline_align": "left",
+         "subhead": "Connect your apps, drag blocks into a flow, and let Relay run it — every time a trigger fires, day or night. No code, no cron jobs, no babysitting.",
+         "subhead_color": "#646e7c",
+         "subhead_size": 18,
+         "subhead_italic": false,
+         "subhead_max_width": 480,
+         "cta1_text": "Start free",
+         "cta1_url": "#pricing",
+         "cta1_bg": "#3fb950",
+         "cta1_color": "#04210a",
+         "cta1_size": 15,
+         "cta1_radius": {
+          "tl": 8,
+          "tr": 8,
+          "br": 8,
+          "bl": 8,
+          "linked": true
+         },
+         "cta1_radius_hover": {
+          "tl": 8,
+          "tr": 8,
+          "br": 8,
+          "bl": 8,
+          "linked": true
+         },
+         "cta2_text": "See it work",
+         "cta2_url": "#features",
+         "cta2_bg": "rgba(255,255,255,.05)",
+         "cta2_color": "#ffffff",
+         "cta2_border": "rgba(255,255,255,.16)",
+         "cta2_size": 15,
+         "cta2_radius": {
+          "tl": 8,
+          "tr": 8,
+          "br": 8,
+          "bl": 8,
+          "linked": true
+         },
+         "cta2_radius_hover": {
+          "tl": 8,
+          "tr": 8,
+          "br": 8,
+          "bl": 8,
+          "linked": true
+         },
+         "stats": [],
+         "showcase_enabled": true,
+         "showcase_bg": {
+          "type": "solid",
+          "color": "#161b22"
+         },
+         "showcase_padding": 24,
+         "showcase_radius": {
+          "tl": 14,
+          "tr": 14,
+          "br": 14,
+          "bl": 14,
+          "linked": true
+         },
+         "showcase_radius_hover": {
+          "tl": 14,
+          "tr": 14,
+          "br": 14,
+          "bl": 14,
+          "linked": true
+         },
+         "showcase_badge_text": "// FLOW CANVAS — LIVE",
+         "showcase_badge_dot": "#3fb950",
+         "showcase_badge_bg": "#080b0f",
+         "showcase_badge_color": "#ffffff",
+         "showcase_items": [
+          {
+           "number": "New form submission",
+           "text": "trigger · Typeform",
+           "italic": false,
+           "text_color": "#646e7c",
+           "bg": {
+            "type": "solid",
+            "color": "#10151c"
+           }
+          },
+          {
+           "number": "Enrich & score lead",
+           "text": "action · Clearbit",
+           "italic": false,
+           "text_color": "#646e7c",
+           "bg": {
+            "type": "solid",
+            "color": "#10151c"
+           }
+          },
+          {
+           "number": "Add to CRM + Slack",
+           "text": "action · HubSpot, Slack",
+           "italic": false,
+           "text_color": "#646e7c",
+           "bg": {
+            "type": "solid",
+            "color": "#10151c"
+           }
+          }
+         ],
+         "showcase_card_radius": {
+          "tl": 10,
+          "tr": 10,
+          "br": 10,
+          "bl": 10,
+          "linked": true
+         },
+         "showcase_card_radius_hover": {
+          "tl": 10,
+          "tr": 10,
+          "br": 10,
+          "bl": 10,
+          "linked": true
+         },
+         "showcase_card_shadow": "none",
+         "showcase_caption_left": "TRIGGERS",
+         "showcase_caption_right": "ACTIONS",
+         "showcase_hover_effect": "none",
+         "split_ratio": "1.05fr .95fr",
+         "gap": 48,
+         "min_height": 0,
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ro-se-11",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "small"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#0d1117"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ro-ro-7",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ro-co-6",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ro-section-header-5",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": false,
+         "headline_lines": [
+          {
+           "text": "Quietly running ops at teams of every size",
+           "color": "#646e7c",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 11.5,
+         "headline_font_weight": "500",
+         "headline_align": "center",
+         "tagline_show": false,
+         "layout": "center",
+         "gap": 0
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "ro-ro-10",
+    "type": "row",
+    "settings": {
+     "gap": 16
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ro-co-9",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ro-trust-strip-8",
+        "type": "trust-strip",
+        "settings": {
+         "items": [
+          {
+           "text": "SLACK"
+          },
+          {
+           "text": "NOTION"
+          },
+          {
+           "text": "HUBSPOT"
+          },
+          {
+           "text": "STRIPE"
+          },
+          {
+           "text": "AIRTABLE"
+          },
+          {
+           "text": "SHOPIFY"
+          }
+         ],
+         "variant": "pill",
+         "separator_char": "",
+         "align": "center",
+         "flow": "wrap",
+         "gap": 16,
+         "font_family": "sans-serif",
+         "text_color": "#646e7c",
+         "text_size": 12,
+         "pill_bg": "rgba(63,185,80,.08)",
+         "pill_border": "rgba(255,255,255,.08)",
+         "pill_text_color": "#646e7c"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ro-se-21",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "small"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#10151c"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ro-ro-20",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ro-co-13",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ro-statstrip-12",
+        "type": "statstrip",
+        "settings": {
+         "items": [
+          {
+           "value": "600+",
+           "label": "App connectors"
+          },
+          {
+           "value": "2B",
+           "label": "Tasks run / mo"
+          },
+          {
+           "value": "11h",
+           "label": "Saved / person / wk"
+          },
+          {
+           "value": "99.9%",
+           "label": "Run reliability"
+          }
+         ],
+         "columns": 4,
+         "items_gap": 0,
+         "band_padding_y": 18,
+         "show_dividers": true,
+         "divider_color": "rgba(255,255,255,.08)",
+         "band_border": false,
+         "value_font_family": "heading",
+         "value_color": "#3fb950",
+         "value_size": 48,
+         "value_weight": "800",
+         "label_color": "#646e7c",
+         "label_size": 11.5,
+         "label_uppercase": false,
+         "align": "center",
+         "mono_font_family": ""
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ro-se-29",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#0d1117"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ro-ro-28",
+    "type": "row",
+    "settings": {
+     "gap": 54,
+     "vertical_align": "center"
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ro-co-25",
+      "type": "column",
+      "settings": {
+       "width": "1-2"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ro-section-header-22",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "// visual builder",
+         "eyebrow_color": "#3fb950",
+         "eyebrow_dot_color": "#3fb950",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "If you can draw it, you can",
+           "color": "#ffffff",
+           "italic": false
+          },
+          {
+           "text": "automate it",
+           "color": "#3fb950",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 44,
+         "headline_font_weight": "700",
+         "headline_align": "left",
+         "headline_inline": true,
+         "tagline_show": true,
+         "tagline_text": "Drag triggers and actions onto the canvas, connect them, and Relay handles the rest — retries, errors, logs and all.",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#646e7c",
+         "tagline_text_size": 16,
+         "layout": "left",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "ro-info-cards-23",
+        "type": "info-cards",
+        "settings": {
+         "container_bg": {
+          "type": "solid",
+          "color": "transparent"
+         },
+         "container_padding": 0,
+         "container_gap": 10,
+         "columns": 1,
+         "items_gap": 10,
+         "card_bg": {
+          "type": "solid",
+          "color": "transparent"
+         },
+         "card_color": "#9ba6b4",
+         "card_radius": {
+          "tl": 0,
+          "tr": 0,
+          "br": 0,
+          "bl": 0,
+          "linked": true
+         },
+         "card_padding": 0,
+         "show_icon": true,
+         "show_counter": false,
+         "show_arrow": false,
+         "show_footer": false,
+         "show_media": false,
+         "icon_color": "#3fb950",
+         "icon_bg_color": "transparent",
+         "title_color": "#ffffff",
+         "title_font_family": "sans-serif",
+         "title_size": 14.5,
+         "title_weight": "500",
+         "title_italic": false,
+         "description_size": 0,
+         "items": [
+          {
+           "icon": "check",
+           "title": "Branching, filters & loops",
+           "description": ""
+          },
+          {
+           "icon": "check",
+           "title": "Built-in retries & error paths",
+           "description": ""
+          },
+          {
+           "icon": "check",
+           "title": "Drop to code when you need to",
+           "description": ""
+          }
+         ],
+         "card_hover_effect": "none"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "ro-button-24",
+        "type": "button",
+        "settings": {
+         "text": "Watch a 2-min demo",
+         "url": "#",
+         "bg": "rgba(255,255,255,.05)",
+         "color": "#ffffff",
+         "border": "rgba(255,255,255,.16)",
+         "radius": {
+          "tl": 8,
+          "tr": 8,
+          "br": 8,
+          "bl": 8,
+          "linked": true
+         },
+         "size": 14,
+         "full_width": false
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "ro-co-27",
+      "type": "column",
+      "settings": {
+       "width": "1-2"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ro-buildermock-26",
+        "type": "buildermock",
+        "settings": {
+         "bg_color": "#161b22",
+         "border_color": "rgba(255,255,255,.08)",
+         "border_radius": {
+          "tl": 16,
+          "tr": 16,
+          "br": 16,
+          "bl": 16,
+          "linked": true
+         },
+         "bar_bg": "#1c232c",
+         "bar_dot_color": "rgba(255,255,255,.16)",
+         "content_label": "flow canvas — nodes & connectors",
+         "content_bg": "#161b22",
+         "content_pattern": "grid",
+         "aspect_ratio": "16/10",
+         "label_color": "rgba(255,255,255,.4)",
+         "label_font": "mono"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ro-se-36",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#10151c"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ro-ro-32",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ro-co-31",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ro-section-header-30",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "// from trigger to done",
+         "eyebrow_color": "#3fb950",
+         "eyebrow_dot_color": "#3fb950",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "One flow,",
+           "color": "#ffffff",
+           "italic": false
+          },
+          {
+           "text": "a hundred hands off your plate",
+           "color": "#3fb950",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 44,
+         "headline_font_weight": "700",
+         "headline_align": "center",
+         "headline_inline": false,
+         "tagline_show": true,
+         "tagline_text": "Every step you'd do by hand becomes a block that runs itself.",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#646e7c",
+         "tagline_text_size": 16,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "ro-ro-35",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ro-co-34",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ro-process-steps-33",
+        "type": "process-steps",
+        "settings": {
+         "columns": 5,
+         "gap": 14,
+         "align": "center",
+         "auto_number": false,
+         "item_gap": 8,
+         "number_style": "circle",
+         "number_color": "#080b0f",
+         "number_bg": "#3fb950",
+         "number_size": 14,
+         "number_font": "sans-serif",
+         "number_weight": "500",
+         "title_color": "#ffffff",
+         "title_size": 14,
+         "title_font": "sans-serif",
+         "title_weight": "600",
+         "desc_color": "",
+         "desc_size": 0,
+         "card_bg": "#161b22",
+         "card_border": "rgba(255,255,255,.08)",
+         "card_radius": {
+          "tl": 999,
+          "tr": 999,
+          "br": 999,
+          "bl": 999,
+          "linked": true
+         },
+         "card_padding": "10px 16px",
+         "items": [
+          {
+           "number": "",
+           "title": "Trigger",
+           "description": ""
+          },
+          {
+           "number": "",
+           "title": "Filter",
+           "description": ""
+          },
+          {
+           "number": "",
+           "title": "Enrich",
+           "description": ""
+          },
+          {
+           "number": "",
+           "title": "Notify",
+           "description": ""
+          },
+          {
+           "number": "",
+           "title": "Done",
+           "description": ""
+          }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ro-se-43",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#0d1117"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ro-ro-39",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ro-co-38",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ro-section-header-37",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "// 600+ connectors",
+         "eyebrow_color": "#3fb950",
+         "eyebrow_dot_color": "#3fb950",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "Connected to your ",
+           "color": "#ffffff",
+           "italic": false
+          },
+          {
+           "text": "stack",
+           "color": "#3fb950",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 46,
+         "headline_font_weight": "700",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": true,
+         "tagline_text": "If it has an API, Relay probably already speaks to it.",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#646e7c",
+         "tagline_text_size": 16.5,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "ro-ro-42",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ro-co-41",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ro-info-cards-40",
+        "type": "info-cards",
+        "settings": {
+         "container_bg": {
+          "type": "solid",
+          "color": "transparent"
+         },
+         "container_padding": 0,
+         "container_gap": 14,
+         "columns": 6,
+         "items_gap": 14,
+         "card_bg": {
+          "type": "solid",
+          "color": "#161b22"
+         },
+         "card_color": "#646e7c",
+         "card_radius": {
+          "tl": 12,
+          "tr": 12,
+          "br": 12,
+          "bl": 12,
+          "linked": true
+         },
+         "card_padding": 10,
+         "show_icon": true,
+         "show_counter": false,
+         "show_arrow": false,
+         "show_footer": false,
+         "show_media": false,
+         "icon_color": "#3fb950",
+         "icon_bg_color": "rgba(255,255,255,.07)",
+         "title_color": "#9ba6b4",
+         "title_font_family": "sans-serif",
+         "title_size": 9,
+         "title_weight": "400",
+         "title_italic": false,
+         "description_size": 0,
+         "icon_size": 20,
+         "items": [
+          {
+           "icon": "message-square",
+           "title": "Slack",
+           "description": ""
+          },
+          {
+           "icon": "mail",
+           "title": "Gmail",
+           "description": ""
+          },
+          {
+           "icon": "trending-up",
+           "title": "HubSpot",
+           "description": ""
+          },
+          {
+           "icon": "file-text",
+           "title": "Notion",
+           "description": ""
+          },
+          {
+           "icon": "grid",
+           "title": "Sheets",
+           "description": ""
+          },
+          {
+           "icon": "credit-card",
+           "title": "Stripe",
+           "description": ""
+          },
+          {
+           "icon": "table",
+           "title": "Airtable",
+           "description": ""
+          },
+          {
+           "icon": "git-branch",
+           "title": "Jira",
+           "description": ""
+          },
+          {
+           "icon": "shopping-bag",
+           "title": "Shopify",
+           "description": ""
+          },
+          {
+           "icon": "link",
+           "title": "Webhooks",
+           "description": ""
+          },
+          {
+           "icon": "cpu",
+           "title": "OpenAI",
+           "description": ""
+          },
+          {
+           "icon": "plus-circle",
+           "title": "+590",
+           "description": ""
+          }
+         ],
+         "card_hover_effect": "lift"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ro-se-50",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#0d1117"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ro-ro-46",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ro-co-45",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ro-section-header-44",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "// scheduling",
+         "eyebrow_color": "#3fb950",
+         "eyebrow_dot_color": "#3fb950",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "Fire it when the whole team is ",
+           "color": "#ffffff",
+           "italic": false
+          },
+          {
+           "text": "awake",
+           "color": "#3fb950",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 46,
+         "headline_font_weight": "700",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": true,
+         "tagline_text": "Drag the trigger time and watch every region's clock move. Schedule reports, syncs and pings for the window where your people actually overlap.",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#646e7c",
+         "tagline_text_size": 16.5,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "ro-ro-49",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ro-co-48",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ro-timezone-47",
+        "type": "timezone",
+        "settings": {
+         "eyebrow": "// trigger · San Francisco",
+         "heading": "Fire it when the whole team is awake",
+         "intro": "",
+         "base_label": "San Francisco",
+         "input_value": 9,
+         "work_start": 9,
+         "work_end": 18,
+         "items": [
+          {
+           "city": "San Francisco",
+           "offset": -8,
+           "label": "UTC−8"
+          },
+          {
+           "city": "London",
+           "offset": 0,
+           "label": "UTC+0"
+          },
+          {
+           "city": "Berlin",
+           "offset": 1,
+           "label": "UTC+1"
+          },
+          {
+           "city": "Singapore",
+           "offset": 8,
+           "label": "UTC+8"
+          }
+         ],
+         "zone_accent": "#3fb950",
+         "work_color": "rgba(63,185,80,.14)",
+         "ok_color": "#3fb950",
+         "sleep_color": "#646e7c",
+         "card_bg": "#10151c",
+         "card_border": "rgba(255,255,255,.08)",
+         "align": "center"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ro-se-61",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#161b22"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ro-ro-53",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ro-co-52",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ro-section-header-51",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "// pricing",
+         "eyebrow_color": "#3fb950",
+         "eyebrow_dot_color": "#3fb950",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "Pay per ",
+           "color": "#ffffff",
+           "italic": false
+          },
+          {
+           "text": "task, not per seat",
+           "color": "#3fb950",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 46,
+         "headline_font_weight": "700",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": false,
+         "tagline_text": "",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#646e7c",
+         "tagline_text_size": 16.5,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "ro-ro-60",
+    "type": "row",
+    "settings": {
+     "gap": 18,
+     "vertical_align": "stretch"
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ro-co-55",
+      "type": "column",
+      "settings": {
+       "width": "1-3"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ro-pricing-54",
+        "type": "pricing",
+        "settings": {
+         "plan_name": "Free",
+         "price": "0",
+         "currency": "$",
+         "period": "/ mo",
+         "description": "For personal automations.",
+         "features": "500 tasks / mo\nUnlimited flows\n5-min polling",
+         "is_popular": false,
+         "bg_color": "#1c232c",
+         "price_color": "#ffffff",
+         "accent_color": "#3fb950",
+         "cta_text": "Start free",
+         "cta_url": "#pricing",
+         "cta_bg": "rgba(255,255,255,.05)",
+         "cta_color": "#ffffff",
+         "cta_border": "rgba(255,255,255,.16)",
+         "border_radius": {
+          "tl": 18,
+          "tr": 18,
+          "br": 18,
+          "bl": 18,
+          "linked": true
+         },
+         "title_color": "#ffffff",
+         "feature_color": "#9ba6b4",
+         "feature_icon_color": "#3fb950",
+         "card_border_color": "rgba(255,255,255,.08)"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "ro-co-57",
+      "type": "column",
+      "settings": {
+       "width": "1-3"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ro-pricing-56",
+        "type": "pricing",
+        "settings": {
+         "plan_name": "Team",
+         "price": "49",
+         "currency": "$",
+         "period": "/ mo",
+         "description": "For teams running real ops.",
+         "features": "50k tasks / mo\nReal-time triggers\nShared team workspace\nVersion history",
+         "is_popular": true,
+         "badge_text": "Most popular",
+         "badge_bg_color": "rgba(63,185,80,.12)",
+         "badge_text_color": "#3fb950",
+         "bg_color": "#1c232c",
+         "price_color": "#ffffff",
+         "accent_color": "#3fb950",
+         "cta_text": "Start 14-day trial",
+         "cta_url": "#pricing",
+         "cta_bg": "#3fb950",
+         "cta_color": "#080b0f",
+         "border_radius": {
+          "tl": 18,
+          "tr": 18,
+          "br": 18,
+          "bl": 18,
+          "linked": true
+         },
+         "title_color": "#ffffff",
+         "feature_color": "#9ba6b4",
+         "feature_icon_color": "#3fb950",
+         "card_border_color": "#3fb950"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "ro-co-59",
+      "type": "column",
+      "settings": {
+       "width": "1-3"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ro-pricing-58",
+        "type": "pricing",
+        "settings": {
+         "plan_name": "Business",
+         "price": "Custom",
+         "currency": "",
+         "period": "",
+         "description": "Scale, SSO & governance.",
+         "features": "Unlimited tasks\nSSO & audit log\nDedicated support",
+         "is_popular": false,
+         "bg_color": "#1c232c",
+         "price_color": "#ffffff",
+         "accent_color": "#3fb950",
+         "cta_text": "Talk to sales",
+         "cta_url": "#",
+         "cta_bg": "rgba(255,255,255,.05)",
+         "cta_color": "#ffffff",
+         "cta_border": "rgba(255,255,255,.16)",
+         "border_radius": {
+          "tl": 18,
+          "tr": 18,
+          "br": 18,
+          "bl": 18,
+          "linked": true
+         },
+         "title_color": "#ffffff",
+         "feature_color": "#9ba6b4",
+         "feature_icon_color": "#3fb950",
+         "card_border_color": "rgba(255,255,255,.08)"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ro-se-65",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#0d1117"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ro-ro-64",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ro-co-63",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ro-finder-62",
+        "type": "finder",
+        "settings": {
+         "eyebrow": "// recipes",
+         "heading": "What should we automate first?",
+         "intro": "",
+         "zone_accent": "#3fb950",
+         "zone_on": "#080b0f",
+         "card_bg": "#161b22",
+         "card_border": "rgba(255,255,255,.08)",
+         "align": "center",
+         "items": [
+          {
+           "option": "New leads",
+           "icon": "zap",
+           "title": "Lead → CRM → Slack",
+           "text": "Every new lead enriched, deduped and in front of the right rep in seconds — no copy-paste, no missed follow-ups.",
+           "meta": "Prebuilt recipe",
+           "cta_text": "Use this recipe",
+           "cta_url": "#"
+          },
+          {
+           "option": "Support tickets",
+           "icon": "cpu",
+           "title": "Triage & Route",
+           "text": "Inbound tickets read, tagged and routed by intent and urgency the moment they land.",
+           "meta": "Prebuilt recipe",
+           "cta_text": "Use this recipe",
+           "cta_url": "#"
+          },
+          {
+           "option": "Ops & reporting",
+           "icon": "calendar",
+           "title": "Nightly Rollup",
+           "text": "Yesterday's numbers, compiled and in every inbox before the first coffee. Runs while you sleep.",
+           "meta": "Prebuilt recipe",
+           "cta_text": "Use this recipe",
+           "cta_url": "#"
+          },
+          {
+           "option": "Onboarding",
+           "icon": "users",
+           "title": "Day-One Setup",
+           "text": "New starters fully provisioned and scheduled before they walk in — IT, access and intros, automatically.",
+           "meta": "Prebuilt recipe",
+           "cta_text": "Use this recipe",
+           "cta_url": "#"
+          }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ro-se-69",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#0d1117"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ro-ro-68",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ro-co-67",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ro-cta-banner-66",
+        "type": "cta-banner",
+        "settings": {
+         "headline": "Give the robots the",
+         "headline_accent": "boring bits",
+         "headline_accent_italic": false,
+         "subtitle": "Build your first automation in five minutes — free, no card, and it'll keep running long after you close the tab.",
+         "cta_text": "Start free",
+         "cta_url": "#pricing",
+         "cta2_text": "Browse templates",
+         "cta2_url": "#templates",
+         "cta2_bg": "rgba(255,255,255,.05)",
+         "cta2_color": "#ffffff",
+         "cta2_border": "rgba(255,255,255,.16)",
+         "bg": {
+          "type": "gradient",
+          "gradient": "linear-gradient(160deg, rgba(63,185,80,.16), rgba(86,211,100,.05))"
+         },
+         "text_color": "#ffffff",
+         "accent_color": "#3fb950",
+         "subtitle_color": "#9ba6b4",
+         "cta_bg": "#3fb950",
+         "cta_color": "#080b0f",
+         "cta_radius": {
+          "tl": 8,
+          "tr": 8,
+          "br": 8,
+          "bl": 8,
+          "linked": true
+         },
+         "cta_size": 15,
+         "headline_font_family": "sans-serif",
+         "headline_size": 52,
+         "headline_weight": "700",
+         "subtitle_size": 17,
+         "layout": "stack",
+         "vertical_align": "center",
+         "banner_radius": {
+          "tl": 20,
+          "tr": 20,
+          "br": 20,
+          "bl": 20,
+          "linked": true
+         },
+         "banner_padding": 80,
+         "border": {
+          "top": {
+           "width": 1,
+           "style": "solid",
+           "color": "rgba(63,185,80,.4)"
+          },
+          "right": {
+           "width": 1,
+           "style": "solid",
+           "color": "rgba(63,185,80,.4)"
+          },
+          "bottom": {
+           "width": 1,
+           "style": "solid",
+           "color": "rgba(63,185,80,.4)"
+          },
+          "left": {
+           "width": 1,
+           "style": "solid",
+           "color": "rgba(63,185,80,.4)"
+          }
+         }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

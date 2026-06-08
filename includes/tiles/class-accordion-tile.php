@@ -557,7 +557,7 @@ class Olo_Accordion_Tile extends Olo_Tile_Base {
         $presets = [
             'card-soft' => [
                 'header_bg'         => '#ffffff',
-                'header_bg_active'  => '#fdf2ec',
+                'header_bg_active'  => 'color-mix(in srgb, var(--olo-color-primary, #e1474f) 8%, #fff)',
                 'header_text_color' => '#1e293b',
                 'header_text_color_active' => '',
                 'header_padding_y'  => 16,
@@ -573,7 +573,7 @@ class Olo_Accordion_Tile extends Olo_Tile_Base {
                 'border_color'      => '#e5e7eb',
                 'border_width'      => 1,
                 'gap'               => 12,
-                'border_radius'     => 12,
+                'border_radius'     => 10,
                 'icon_style'        => 'plus',
                 'icon_shape'        => 'none',
                 'separator_style'   => 'border',
@@ -641,7 +641,7 @@ class Olo_Accordion_Tile extends Olo_Tile_Base {
             ],
             'outline-sharp' => [
                 'header_bg'         => '#ffffff',
-                'header_bg_active'  => '#fdf2ec',
+                'header_bg_active'  => 'color-mix(in srgb, var(--olo-color-primary, #e1474f) 8%, #fff)',
                 'header_text_color' => '#0f172a',
                 'header_text_color_active' => '#0f172a',
                 'header_padding_y'  => 14,
@@ -661,7 +661,7 @@ class Olo_Accordion_Tile extends Olo_Tile_Base {
                 'icon_style'        => 'plus',
                 'icon_shape'        => 'pill',
                 'icon_shape_size'   => 32,
-                'icon_shape_bg'     => '#fdf2ec',
+                'icon_shape_bg'     => 'color-mix(in srgb, var(--olo-color-primary, #e1474f) 8%, #fff)',
                 'separator_style'   => 'border',
                 'shadow'            => 'none',
                 'backdrop_blur'     => 0,

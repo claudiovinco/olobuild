@@ -33,6 +33,7 @@ class Olo_SectionHeader_Tile extends Olo_Tile_Base {
         'headline_line_height' => 1.0,
         'headline_font_weight' => '700',
         'headline_align'       => 'left',
+        'headline_inline'      => false,
 
         'tagline_show'          => true,
         'tagline_text'          => 'Try before you trust',
@@ -54,8 +55,8 @@ class Olo_SectionHeader_Tile extends Olo_Tile_Base {
     public function render( $settings, $style = [] ) {
         $s = wp_parse_args( $settings, $this->defaults );
 
-        $serif = "'Playfair Display','Cormorant Garamond',Georgia,'Times New Roman',serif";
-        $sans  = "'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif";
+        $serif = "var(--olo-font-family-heading, 'Playfair Display','Cormorant Garamond',Georgia,'Times New Roman',serif)";
+        $sans  = "var(--olo-font-family, 'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif)";
         $mono  = "ui-monospace,'SF Mono',Menlo,Consolas,monospace";
         $fmap  = [ 'serif' => $serif, 'sans-serif' => $sans, 'mono' => $mono ];
         $hfam  = $fmap[ $s['headline_font_family'] ] ?? $serif;
@@ -80,6 +81,7 @@ class Olo_SectionHeader_Tile extends Olo_Tile_Base {
         $hweight = preg_match( '/^\d+$/', (string) $s['headline_font_weight'] ) ? $s['headline_font_weight'] : '700';
         $halign  = in_array( $s['headline_align'] ?? 'left', [ 'left', 'center', 'right', 'justify' ], true ) ? $s['headline_align'] : 'left';
         if ( $layout === 'center' ) $halign = 'center';
+        $inline  = ! empty( $s['headline_inline'] );
 
         $eb_color = $this->safe_color_css( $s['eyebrow_color'] ) ?: '#b3261e';
         $eb_dot   = $this->safe_color_css( $s['eyebrow_dot_color'] ) ?: '#b3261e';
@@ -108,13 +110,15 @@ class Olo_SectionHeader_Tile extends Olo_Tile_Base {
                 if ( $headlines ) :
                 ?>
                     <h2 class="olo-sechead__headline" style="font-family:<?php echo esc_attr( $hfam ); ?>;font-size:<?php echo $hsize; ?>px;line-height:<?php echo $hlh; ?>;font-weight:<?php echo esc_attr( $hweight ); ?>;letter-spacing:-0.02em;text-align:<?php echo esc_attr( $halign ); ?>;margin:0">
-                        <?php foreach ( $headlines as $idx => $line ) :
+                        <?php $first = true; foreach ( $headlines as $idx => $line ) :
                             $ltext = $line['text'] ?? '';
                             if ( $ltext === '' ) continue;
                             $lcolor  = $this->safe_color_css( $line['color'] ?? '' ) ?: '#0f172a';
                             $litalic = ! empty( $line['italic'] ) ? 'font-style:italic;' : '';
+                            if ( $inline && ! $first ) echo ' ';
+                            $first = false;
                         ?>
-                            <span style="display:block;color:<?php echo esc_attr( $lcolor ); ?>;<?php echo $litalic; ?>" data-olo-editable="<?php echo 'headline_lines.' . intval( $idx ) . '.text'; ?>"><?php echo esc_html( $ltext ); ?></span>
+                            <span style="display:<?php echo $inline ? 'inline' : 'block'; ?>;color:<?php echo esc_attr( $lcolor ); ?>;<?php echo $litalic; ?>" data-olo-editable="<?php echo 'headline_lines.' . intval( $idx ) . '.text'; ?>"><?php echo esc_html( $ltext ); ?></span>
                         <?php endforeach; ?>
                     </h2>
                 <?php endif; ?>

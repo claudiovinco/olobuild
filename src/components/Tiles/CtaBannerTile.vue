@@ -5,7 +5,10 @@
     </h2>
     <div v-if="s.layout !== 'split-2' && s.subtitle" :style="subtitleStyle" v-html="s.subtitle"></div>
     <div v-else-if="s.layout === 'split-2' && s.subtitle" :style="{ ...subtitleStyle, gridColumn: 1, marginTop: '8px' }" v-html="s.subtitle"></div>
-    <a v-if="s.cta_text" :href="s.cta_url || '#'" class="olo-ctab__cta" :style="ctaStyle">{{ s.cta_text }}</a>
+    <div v-if="s.cta_text || s.cta2_text" class="olo-ctab__ctas" :style="ctasWrapStyle">
+      <a v-if="s.cta_text" :href="s.cta_url || '#'" class="olo-ctab__cta" :style="ctaStyle">{{ s.cta_text }}</a>
+      <a v-if="s.cta2_text" :href="s.cta2_url || '#'" class="olo-ctab__cta2" :style="cta2Style">{{ s.cta2_text }}</a>
+    </div>
   </div>
 </template>
 
@@ -22,6 +25,7 @@ const defaults = {
   headline_accent_italic: true,
   subtitle: 'Trial gratuita, niente carta. Tre passi, una sigaretta a testa di pausa.',
   cta_text: 'Inizia ora →', cta_url: '#',
+  cta2_text: '', cta2_url: '#', cta2_bg: 'transparent', cta2_color: '#ffffff', cta2_border: 'rgba(255,255,255,.28)',
   bg: { type: 'solid', color: '#0f172a' },
   text_color: '#ffffff', accent_color: 'var(--olo-color-primary, #e1474f)', subtitle_color: '#9ca3af',
   cta_bg: 'var(--olo-color-primary, #e1474f)', cta_color: '#ffffff',
@@ -108,6 +112,31 @@ const ctaStyle = computed(() => ({
   textDecoration: 'none',
   whiteSpace: 'nowrap',
   transition: 'transform .2s ease, background .2s, color .2s',
+}));
+
+const ctasWrapStyle = computed(() => ({
+  display: 'inline-flex',
+  gap: '12px',
+  flexWrap: 'wrap',
+  alignItems: 'center',
+  justifyContent: s.value.layout === 'stack' ? 'center' : 'flex-start',
+}));
+
+const cta2Style = computed(() => ({
+  display: 'inline-flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  padding: `${s.value.cta_padding_y || 18}px ${s.value.cta_padding_x || 32}px`,
+  background: s.value.cta2_bg || 'transparent',
+  color: s.value.cta2_color || '#ffffff',
+  border: s.value.cta2_border ? `1px solid ${s.value.cta2_border}` : 'none',
+  borderRadius: radiusToCss(s.value.cta_radius),
+  fontFamily: SANS,
+  fontSize: (s.value.cta_size || 15) + 'px',
+  fontWeight: 600,
+  textDecoration: 'none',
+  whiteSpace: 'nowrap',
+  transition: 'transform .2s ease, background .2s, color .2s, border-color .2s',
 }));
 </script>
 

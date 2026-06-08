@@ -1,0 +1,1170 @@
+[
+ {
+  "id": "fi-se-4",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "full",
+   "padding": {
+    "top": 0,
+    "right": 0,
+    "bottom": 0,
+    "left": 0
+   }
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#2c3327"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "fi-ro-3",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "fi-co-2",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "fi-hero-split-1",
+        "type": "imagehero",
+        "settings": {
+         "eyebrow_text": "We're getting married",
+         "eyebrow_dot": false,
+         "headline_text": "Marta",
+         "accent_text": "&",
+         "headline_tail": "Elia",
+         "accent_italic": false,
+         "stack_lines": true,
+         "subhead": "",
+         "cta1_text": "RSVP now",
+         "cta1_url": "#rsvp",
+         "cta2_text": "",
+         "cta2_url": "",
+         "meta_text": "12 September 2026 · Lago di Como",
+         "scroll_hint": "Scroll",
+         "bg_image": "",
+         "bg_color": "#2c3327",
+         "media_label": "hero — couple at the lake, full-bleed",
+         "text_position": "center",
+         "text_align": "center",
+         "content_width": 900,
+         "aspect_ratio": "21/10",
+         "min_height": 100,
+         "heading_font": "serif",
+         "overlay_color": "#2c3327",
+         "overlay_top": 0.4,
+         "overlay_bottom": 0.6,
+         "overlay_sides": false,
+         "accent": "#cfa6a0",
+         "accent_on": "#ffffff",
+         "text_color": "#ffffff",
+         "sub_color": "rgba(255,255,255,.85)",
+         "eyebrow_color": "rgba(255,255,255,.85)"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "fi-se-11",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "small"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#2c3327"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "fi-ro-7",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "fi-co-6",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "fi-section-header-5",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": false,
+         "eyebrow_text": "",
+         "headline_lines": [
+          {
+           "text": "Counting down to forever",
+           "color": "#cfa6a0",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 48,
+         "headline_font_weight": "400",
+         "headline_align": "center",
+         "headline_inline": false,
+         "tagline_show": false,
+         "tagline_text": "",
+         "layout": "center",
+         "gap": 0,
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "fi-ro-10",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "fi-co-9",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "fi-countdown-8",
+        "type": "countdown",
+        "settings": {
+         "countdown_type": "date",
+         "target_date": "2026-09-12T16:00",
+         "countdown_style": "custom",
+         "display_mode": "block",
+         "show_days": true,
+         "show_hours": true,
+         "show_minutes": true,
+         "show_seconds": true,
+         "label_days": "Days",
+         "label_hours": "Hours",
+         "label_minutes": "Minutes",
+         "label_seconds": "Seconds",
+         "separator": "",
+         "expired_message": "The big day has arrived!",
+         "expire_action": "message",
+         "expire_message": "The big day has arrived!",
+         "bg_color": "transparent",
+         "accent_color": "#ffffff",
+         "text_color": "rgba(255,255,255,.55)",
+         "separator_color": "transparent",
+         "number_font_size": "60",
+         "number_font_weight": "400",
+         "label_font_size": "11",
+         "label_font_weight": "600",
+         "separator_font_size": "32",
+         "item_min_width": "90",
+         "item_bg_color": "rgba(255,255,255,.05)",
+         "item_radius": "4",
+         "item_padding": "20",
+         "tile_padding": {
+          "top": 12,
+          "right": 32,
+          "bottom": 24,
+          "left": 32
+         }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "fi-se-15",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#f3efe6"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "fi-ro-14",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "fi-co-13",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "fi-hero-split-12",
+        "type": "hero-split",
+        "settings": {
+         "eyebrow_text": "our story",
+         "eyebrow_dot_color": "#bb8b84",
+         "eyebrow_color": "#bb8b84",
+         "headline_lines": [
+          {
+           "text": "From a rainy",
+           "color": "#34372e",
+           "italic": false
+          },
+          {
+           "text": "café to forever",
+           "color": "#5f6f4e",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 40,
+         "headline_line_height": 1.1,
+         "headline_font_weight": "400",
+         "headline_align": "left",
+         "subhead": "We met eight years ago, sheltering from the same downpour under the same café awning. Marta ordered the last cornetto; Elia has never quite forgiven her, and never quite left her side since.\n\nTwo cities, one very stubborn houseplant, and a thousand small mornings later — we’re doing the most natural thing in the world. We’d love you there when we do.",
+         "subhead_color": "#6a6d60",
+         "subhead_size": 16,
+         "subhead_italic": false,
+         "subhead_max_width": 520,
+         "cta1_text": "All the details",
+         "cta1_url": "#details",
+         "cta1_bg": "transparent",
+         "cta1_color": "#5f6f4e",
+         "cta1_border": "#5f6f4e",
+         "cta1_size": 12,
+         "cta1_radius": {
+          "tl": 999,
+          "tr": 999,
+          "br": 999,
+          "bl": 999,
+          "linked": true
+         },
+         "cta1_radius_hover": {
+          "tl": 999,
+          "tr": 999,
+          "br": 999,
+          "bl": 999,
+          "linked": true
+         },
+         "stats": [],
+         "showcase_enabled": true,
+         "showcase_bg": {
+          "type": "solid",
+          "color": "#eae3d5"
+         },
+         "showcase_padding": 0,
+         "showcase_radius": {
+          "tl": 4,
+          "tr": 4,
+          "br": 4,
+          "bl": 4,
+          "linked": true
+         },
+         "showcase_radius_hover": {
+          "tl": 4,
+          "tr": 4,
+          "br": 4,
+          "bl": 4,
+          "linked": true
+         },
+         "showcase_badge_text": "Eight years together",
+         "showcase_badge_dot": "#bb8b84",
+         "showcase_badge_bg": "#f3efe6",
+         "showcase_badge_color": "#6a6d60",
+         "showcase_items": [
+          {
+           "number": "Met",
+           "text": "2018",
+           "italic": false,
+           "text_color": "#34372e",
+           "bg": {
+            "type": "solid",
+            "color": "#eae3d5"
+           }
+          },
+          {
+           "number": "Engaged",
+           "text": "2025",
+           "italic": false,
+           "text_color": "#34372e",
+           "bg": {
+            "type": "solid",
+            "color": "#eae3d5"
+           }
+          },
+          {
+           "number": "Getting married",
+           "text": "♥ 2026",
+           "italic": false,
+           "text_color": "#bb8b84",
+           "bg": {
+            "type": "solid",
+            "color": "#eae3d5"
+           }
+          }
+         ],
+         "showcase_card_radius": {
+          "tl": 4,
+          "tr": 4,
+          "br": 4,
+          "bl": 4,
+          "linked": true
+         },
+         "showcase_card_radius_hover": {
+          "tl": 4,
+          "tr": 4,
+          "br": 4,
+          "bl": 4,
+          "linked": true
+         },
+         "showcase_card_shadow": "none",
+         "showcase_caption_left": "",
+         "showcase_caption_right": "",
+         "showcase_hover_effect": "none",
+         "split_ratio": "1.1fr .9fr",
+         "gap": 56,
+         "min_height": 0,
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "fi-se-22",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#fbf9f3"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "fi-ro-18",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "fi-co-17",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "fi-section-header-16",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "the day",
+         "eyebrow_color": "#bb8b84",
+         "eyebrow_dot_color": "#bb8b84",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "Where & when",
+           "color": "#34372e",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 36,
+         "headline_font_weight": "400",
+         "headline_align": "center",
+         "headline_inline": false,
+         "tagline_show": false,
+         "tagline_text": "",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#6a6d60",
+         "tagline_text_size": 16,
+         "layout": "center",
+         "gap": 14
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "fi-ro-21",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "fi-co-20",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "fi-info-cards-19",
+        "type": "info-cards",
+        "settings": {
+         "container_bg": {
+          "type": "solid",
+          "color": "transparent"
+         },
+         "container_padding": 0,
+         "container_gap": 24,
+         "columns": 3,
+         "items_gap": 24,
+         "card_bg": {
+          "type": "solid",
+          "color": "#fbf9f3"
+         },
+         "card_color": "#6a6d60",
+         "card_radius": {
+          "tl": 6,
+          "tr": 6,
+          "br": 6,
+          "bl": 6,
+          "linked": true
+         },
+         "card_padding": 36,
+         "show_icon": true,
+         "show_counter": false,
+         "show_arrow": false,
+         "show_footer": true,
+         "show_media": false,
+         "icon_color": "#5f6f4e",
+         "icon_bg_color": "transparent",
+         "icon_border_color": "#cfa6a0",
+         "icon_border_width": 1,
+         "icon_shape": "circle",
+         "icon_size": 24,
+         "icon_container_size": 54,
+         "title_color": "#34372e",
+         "title_font_family": "serif",
+         "title_size": 22,
+         "title_weight": "400",
+         "title_italic": false,
+         "description_size": 14,
+         "footer_size": 17,
+         "footer_color": "#bb8b84",
+         "footer_font_family": "serif",
+         "card_border_color": "#e3ddce",
+         "card_border_width": 1,
+         "card_hover_effect": "lift",
+         "items": [
+          {
+           "icon": "home",
+           "title": "Ceremony",
+           "description": "Villa Serbelloni gardens, overlooking the lake.",
+           "footer_text": "4:00 pm"
+          },
+          {
+           "icon": "glass-water",
+           "title": "Reception",
+           "description": "Dinner, dancing and far too much cake on the terrace.",
+           "footer_text": "6:30 pm"
+          },
+          {
+           "icon": "shirt",
+           "title": "Dress code",
+           "description": "Garden formal. Comfortable shoes for the lawn, please.",
+           "footer_text": "Garden formal"
+          }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "fi-se-29",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#fbf9f3"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "fi-ro-25",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "fi-co-24",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "fi-section-header-23",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "the timeline",
+         "eyebrow_color": "#bb8b84",
+         "eyebrow_dot_color": "#bb8b84",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "How the day unfolds",
+           "color": "#34372e",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 36,
+         "headline_font_weight": "400",
+         "headline_align": "center",
+         "headline_inline": false,
+         "tagline_show": false,
+         "tagline_text": "",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#6a6d60",
+         "tagline_text_size": 16,
+         "layout": "center",
+         "gap": 14
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "fi-ro-28",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "fi-co-27",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "fi-step-timeline-26",
+        "type": "step-timeline",
+        "settings": {
+         "columns": 1,
+         "gap": 0,
+         "items_align": "start",
+         "show_timeline": true,
+         "timeline_line_color": "rgba(227,221,206,.6)",
+         "timeline_dot_color": "#bb8b84",
+         "timeline_dot_size": 10,
+         "timeline_height": 1,
+         "timeline_margin_bottom": 0,
+         "counter_font_family": "serif",
+         "counter_size": 44,
+         "counter_color": "#5f6f4e",
+         "counter_italic": false,
+         "counter_weight": "400",
+         "tag_size": 11,
+         "tag_color": "#6a6d60",
+         "media_aspect_ratio": "4/3",
+         "media_radius": {
+          "tl": 0,
+          "tr": 0,
+          "br": 0,
+          "bl": 0,
+          "linked": true
+         },
+         "media_radius_hover": {
+          "tl": 0,
+          "tr": 0,
+          "br": 0,
+          "bl": 0,
+          "linked": true
+         },
+         "media_radius_hover_duration": 300,
+         "media_shadow": "none",
+         "show_media_label": false,
+         "pre_title_size": 11,
+         "pre_title_color": "#9a9b8d",
+         "title_font_family": "serif",
+         "title_size": 18,
+         "title_weight": "400",
+         "title_color": "#34372e",
+         "title_accent_color": "#5f6f4e",
+         "description_size": 14,
+         "description_color": "#6a6d60",
+         "footer_icon": "",
+         "footer_value_size": 14,
+         "footer_label_size": 10,
+         "footer_value_color": "#5f6f4e",
+         "footer_label_color": "#9a9b8d",
+         "separator_color": "#e3ddce",
+         "show_separator": true,
+         "items": [
+          {
+           "counter": "3:30 pm",
+           "tag_text": "",
+           "tag_dot_color": "#bb8b84",
+           "media_label": "",
+           "media_type": "placeholder",
+           "media_content": "",
+           "media_image": "",
+           "media_bg": "#eae3d5",
+           "media_color": "#bb8b84",
+           "pre_title": "",
+           "title": "Arrival",
+           "title_accent": "welcome",
+           "title_accent_italic": false,
+           "title_after": "",
+           "title_after_italic": false,
+           "description": "Find your seat in the gardens — a glass of something cold awaits.",
+           "footer_value": "",
+           "footer_label": "",
+           "separator_text": ""
+          },
+          {
+           "counter": "4:00 pm",
+           "tag_text": "",
+           "tag_dot_color": "#bb8b84",
+           "media_label": "",
+           "media_type": "placeholder",
+           "media_content": "",
+           "media_image": "",
+           "media_bg": "#eae3d5",
+           "media_color": "#5f6f4e",
+           "pre_title": "",
+           "title": "Ceremony",
+           "title_accent": "",
+           "title_accent_italic": false,
+           "title_after": "",
+           "title_after_italic": false,
+           "description": "The bit we’ve all been waiting for.",
+           "footer_value": "",
+           "footer_label": "",
+           "separator_text": ""
+          },
+          {
+           "counter": "5:00 pm",
+           "tag_text": "",
+           "tag_dot_color": "#bb8b84",
+           "media_label": "",
+           "media_type": "placeholder",
+           "media_content": "",
+           "media_image": "",
+           "media_bg": "#eae3d5",
+           "media_color": "#bb8b84",
+           "pre_title": "",
+           "title": "Aperitivo",
+           "title_accent": "photos",
+           "title_accent_italic": false,
+           "title_after": "",
+           "title_after_italic": false,
+           "description": "Lakeside drinks while we steal away for a few pictures.",
+           "footer_value": "",
+           "footer_label": "",
+           "separator_text": ""
+          },
+          {
+           "counter": "6:30 pm",
+           "tag_text": "",
+           "tag_dot_color": "#bb8b84",
+           "media_label": "",
+           "media_type": "placeholder",
+           "media_content": "",
+           "media_image": "",
+           "media_bg": "#eae3d5",
+           "media_color": "#5f6f4e",
+           "pre_title": "",
+           "title": "Dinner",
+           "title_accent": "",
+           "title_accent_italic": false,
+           "title_after": "",
+           "title_after_italic": false,
+           "description": "A long table, a longer menu, and the speeches you’ve been warned about.",
+           "footer_value": "",
+           "footer_label": "",
+           "separator_text": ""
+          },
+          {
+           "counter": "9:00 pm",
+           "tag_text": "",
+           "tag_dot_color": "#5f6f4e",
+           "media_label": "",
+           "media_type": "placeholder",
+           "media_content": "",
+           "media_image": "",
+           "media_bg": "#2c3327",
+           "media_color": "#cfa6a0",
+           "pre_title": "",
+           "title": "Dancing",
+           "title_accent": "",
+           "title_accent_italic": false,
+           "title_after": "",
+           "title_after_italic": false,
+           "description": "Until the band gives up or the sun comes back — whichever’s first.",
+           "footer_value": "",
+           "footer_label": "",
+           "separator_text": ""
+          }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "fi-se-36",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#f3efe6"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "fi-ro-32",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "fi-co-31",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "fi-section-header-30",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "us, lately",
+         "eyebrow_color": "#bb8b84",
+         "eyebrow_dot_color": "#bb8b84",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "A few favourites",
+           "color": "#34372e",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 36,
+         "headline_font_weight": "400",
+         "headline_align": "center",
+         "headline_inline": false,
+         "tagline_show": false,
+         "tagline_text": "",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#6a6d60",
+         "tagline_text_size": 16,
+         "layout": "center",
+         "gap": 14
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "fi-ro-35",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "fi-co-34",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "fi-progallery-33",
+        "type": "progallery",
+        "settings": {
+         "images": [],
+         "layout": "metro",
+         "layout_family": "classic",
+         "columns": "4",
+         "gap": "12",
+         "img_height": "160px",
+         "object_fit": "cover",
+         "thumb_radius": "4",
+         "mobile_columns": "2",
+         "expand_ratio": "4",
+         "bg": {
+          "type": "none"
+         },
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "fi-se-43",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#2c3327"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "fi-ro-39",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "fi-co-38",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "fi-section-header-37",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "join us",
+         "eyebrow_color": "#cfa6a0",
+         "eyebrow_dot_color": "#cfa6a0",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "Kindly reply",
+           "color": "#ffffff",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 40,
+         "headline_font_weight": "400",
+         "headline_align": "center",
+         "headline_inline": false,
+         "tagline_show": true,
+         "tagline_text": "We’d be honoured to have you there. Please let us know by 1 July 2026.",
+         "tagline_text_italic": false,
+         "tagline_text_color": "rgba(255,255,255,.82)",
+         "tagline_text_size": 16,
+         "layout": "center",
+         "gap": 14,
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 32,
+          "left": 0
+         }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "fi-ro-42",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "fi-co-41",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "fi-form-40",
+        "type": "form",
+        "settings": {
+         "fields": [
+          {
+           "id": "rsvp-1",
+           "field_type": "text",
+           "label": "First name",
+           "placeholder": "First name",
+           "name": "first_name",
+           "required": true,
+           "width": "1-2",
+           "options": "",
+           "icon": "user",
+           "condition_field": "",
+           "condition_operator": "equals",
+           "condition_value": ""
+          },
+          {
+           "id": "rsvp-2",
+           "field_type": "text",
+           "label": "Last name",
+           "placeholder": "Last name",
+           "name": "last_name",
+           "required": true,
+           "width": "1-2",
+           "options": "",
+           "icon": "user",
+           "condition_field": "",
+           "condition_operator": "equals",
+           "condition_value": ""
+          },
+          {
+           "id": "rsvp-3",
+           "field_type": "email",
+           "label": "Email address",
+           "placeholder": "Email address",
+           "name": "email",
+           "required": true,
+           "width": "1-1",
+           "options": "",
+           "icon": "mail",
+           "condition_field": "",
+           "condition_operator": "equals",
+           "condition_value": ""
+          },
+          {
+           "id": "rsvp-4",
+           "field_type": "select",
+           "label": "Attending",
+           "placeholder": "",
+           "name": "attending",
+           "required": true,
+           "width": "1-2",
+           "options": "Joyfully accepts\nRegretfully declines",
+           "icon": "",
+           "condition_field": "",
+           "condition_operator": "equals",
+           "condition_value": ""
+          },
+          {
+           "id": "rsvp-5",
+           "field_type": "select",
+           "label": "Guests",
+           "placeholder": "",
+           "name": "guests",
+           "required": false,
+           "width": "1-2",
+           "options": "1 guest\n2 guests\n3 guests",
+           "icon": "",
+           "condition_field": "",
+           "condition_operator": "equals",
+           "condition_value": ""
+          }
+         ],
+         "email_to": "",
+         "email_subject": "RSVP — Marta & Elia",
+         "success_message": "Thank you! We look forward to celebrating with you.",
+         "error_message": "Something went wrong. Please try again.",
+         "submit_text": "Send RSVP",
+         "submit_icon": "",
+         "submit_alignment": "center",
+         "submit_full_width": false,
+         "form_max_width": "560",
+         "form_align": "center",
+         "form_layout": "stacked",
+         "label_color": "rgba(255,255,255,.7)",
+         "label_size": "13",
+         "label_weight": "500",
+         "input_bg": "rgba(255,255,255,.08)",
+         "input_color": "#ffffff",
+         "input_border_color": "rgba(255,255,255,.3)",
+         "input_border_width": "1",
+         "input_border_style": "box",
+         "input_radius": {
+          "tl": 4,
+          "tr": 4,
+          "br": 4,
+          "bl": 4,
+          "linked": true
+         },
+         "input_size": "default",
+         "input_focus_border": "#cfa6a0",
+         "input_focus_shadow": false,
+         "input_placeholder_opacity": "0.5",
+         "gap": "12",
+         "submit_bg": "#cfa6a0",
+         "submit_color": "#ffffff",
+         "submit_radius": {
+          "tl": 999,
+          "tr": 999,
+          "br": 999,
+          "bl": 999,
+          "linked": true
+         },
+         "submit_font_size": "13",
+         "submit_font_weight": "600",
+         "submit_hover_bg": "#bb8b84",
+         "submit_border_width": "0",
+         "submit_letter_spacing": "0.1",
+         "submit_text_transform": "uppercase",
+         "honeypot": true,
+         "rate_limit": true,
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

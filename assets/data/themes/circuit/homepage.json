@@ -1,0 +1,1635 @@
+[
+ {
+  "id": "ci-se-4",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#0b0d18"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ci-ro-3",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ci-co-2",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ci-hero-split-1",
+        "type": "producthero",
+        "settings": {
+         "pill_pre": "New",
+         "pill_text": "Circuit 3.0 — now with live workflows",
+         "headline_text": "Ship reliable software,",
+         "accent_text": "without the busywork.",
+         "subhead": "Circuit connects the tools your team already uses, automates the hand-offs, and gives everyone one honest view of every release.",
+         "cta1_text": "Start free — no card",
+         "cta1_url": "#pricing",
+         "cta2_text": "See how it works",
+         "cta2_url": "#features",
+         "glow_on": true,
+         "glow_color": "#6c8cff",
+         "grid_on": true,
+         "grid_color": "rgba(255,255,255,0.04)",
+         "grid_size": 48,
+         "mock_mode": "media",
+         "mock_url": "app.circuit.io / workspace / releases",
+         "mock_label": "product — workflow board &amp; live status dashboard",
+         "kpis": [
+          {
+           "label": "Net revenue",
+           "value": "$4.82M",
+           "delta": "▲ 18.4% MoM",
+           "down": ""
+          },
+          {
+           "label": "Active accounts",
+           "value": "12,408",
+           "delta": "▲ 6.1% MoM",
+           "down": ""
+          },
+          {
+           "label": "Churn",
+           "value": "1.9%",
+           "delta": "▼ 0.3 pts",
+           "down": "1"
+          }
+         ],
+         "chart_title": "Revenue by week",
+         "chart_meta": "last 12 weeks · live",
+         "bars": [
+          {
+           "h": 38,
+           "label": "w1",
+           "alt": ""
+          },
+          {
+           "h": 46,
+           "label": "w2",
+           "alt": ""
+          },
+          {
+           "h": 41,
+           "label": "w3",
+           "alt": ""
+          },
+          {
+           "h": 54,
+           "label": "w4",
+           "alt": ""
+          },
+          {
+           "h": 60,
+           "label": "w5",
+           "alt": ""
+          },
+          {
+           "h": 52,
+           "label": "w6",
+           "alt": ""
+          },
+          {
+           "h": 68,
+           "label": "w7",
+           "alt": ""
+          },
+          {
+           "h": 74,
+           "label": "w8",
+           "alt": ""
+          },
+          {
+           "h": 66,
+           "label": "w9",
+           "alt": "1"
+          },
+          {
+           "h": 82,
+           "label": "w10",
+           "alt": ""
+          },
+          {
+           "h": 90,
+           "label": "w11",
+           "alt": ""
+          },
+          {
+           "h": 100,
+           "label": "w12",
+           "alt": "1"
+          }
+         ],
+         "bg_color": "#0b0d18",
+         "panel_color": "#141a2e",
+         "panel2_color": "#1b2238",
+         "cell_color": "#11142270",
+         "accent": "#6c8cff",
+         "accent2": "#b08bff",
+         "accent_on": "#ffffff",
+         "down_color": "",
+         "text_color": "#ffffff",
+         "sub_color": "#8a90a8",
+         "pill_text_color": "#c9cde0",
+         "pill_bg": "rgba(255,255,255,0.05)",
+         "line_color": "rgba(255,255,255,0.09)",
+         "pill_mono": false,
+         "mono_meta": true
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ci-se-11",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "small"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#141a2e"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ci-ro-7",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ci-co-6",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ci-section-header-5",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": false,
+         "headline_lines": [
+          {
+           "text": "Trusted by teams shipping every day",
+           "color": "#8a90a8",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 12,
+         "headline_font_weight": "600",
+         "headline_align": "center",
+         "tagline_show": false,
+         "layout": "center",
+         "gap": 0
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "ci-ro-10",
+    "type": "row",
+    "settings": {
+     "gap": 16
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ci-co-9",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ci-trust-strip-8",
+        "type": "trust-strip",
+        "settings": {
+         "items": [
+          {
+           "text": "NORTHWIND"
+          },
+          {
+           "text": "VELLUM"
+          },
+          {
+           "text": "ARCLIGHT"
+          },
+          {
+           "text": "TOLLKEEP"
+          },
+          {
+           "text": "KESTREL"
+          },
+          {
+           "text": "AURIC"
+          }
+         ],
+         "variant": "pill",
+         "separator_char": "",
+         "align": "center",
+         "flow": "wrap",
+         "gap": 16,
+         "font_family": "sans-serif",
+         "text_color": "#8a90a8",
+         "text_size": 13,
+         "pill_bg": "rgba(255,255,255,.06)",
+         "pill_border": "rgba(255,255,255,.09)",
+         "pill_text_color": "#8a90a8"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ci-se-18",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#0b0d18"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ci-ro-14",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ci-co-13",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ci-section-header-12",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "// the platform",
+         "eyebrow_color": "#6c8cff",
+         "eyebrow_dot_color": "#6c8cff",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "Everything between idea and",
+           "color": "#ffffff",
+           "italic": false
+          },
+          {
+           "text": "ship",
+           "color": "#6c8cff",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 46,
+         "headline_font_weight": "600",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": true,
+         "tagline_text": "One connected workspace for planning, building and releasing — so nothing falls through the cracks.",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#8a90a8",
+         "tagline_text_size": 16,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "ci-ro-17",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ci-co-16",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ci-info-cards-15",
+        "type": "info-cards",
+        "settings": {
+         "container_bg": {
+          "type": "solid",
+          "color": "transparent"
+         },
+         "container_padding": 0,
+         "container_gap": 16,
+         "columns": 3,
+         "items_gap": 16,
+         "card_bg": {
+          "type": "solid",
+          "color": "#1b2238"
+         },
+         "card_color": "#8a90a8",
+         "card_radius": {
+          "tl": 16,
+          "tr": 16,
+          "br": 16,
+          "bl": 16,
+          "linked": true
+         },
+         "card_padding": 26,
+         "show_icon": true,
+         "show_counter": false,
+         "show_arrow": false,
+         "show_footer": false,
+         "show_media": false,
+         "icon_color": "#6c8cff",
+         "icon_bg_color": "rgba(108,140,255,.14)",
+         "title_color": "#ffffff",
+         "title_font_family": "sans-serif",
+         "title_size": 21,
+         "title_weight": "600",
+         "title_italic": false,
+         "description_size": 14,
+         "items": [
+          {
+           "icon": "zap",
+           "title": "Live workflows",
+           "description": "Drag-and-drop pipelines that run themselves — triggers, approvals and hand-offs without the Slack archaeology."
+          },
+          {
+           "icon": "clock",
+           "title": "Real-time status",
+           "description": "Every release, one source of truth — no more \"is this done?\"."
+          },
+          {
+           "icon": "database",
+           "title": "Deep integrations",
+           "description": "Plugs into the 40+ tools your team already lives in."
+          },
+          {
+           "icon": "pie-chart",
+           "title": "Insights",
+           "description": "Cycle time, bottlenecks and trends — measured, not guessed."
+          },
+          {
+           "icon": "monitor",
+           "title": "Works where you work",
+           "description": "Native desktop, web and CLI — plus an API for everything else. Bring Circuit to your stack, not the other way around."
+          }
+         ],
+         "card_hover_effect": "lift"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ci-se-25",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#0b0d18"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ci-ro-24",
+    "type": "row",
+    "settings": {
+     "gap": 54,
+     "vertical_align": "center"
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ci-co-21",
+      "type": "column",
+      "settings": {
+       "width": "1-2"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ci-section-header-19",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "// automation",
+         "eyebrow_color": "#6c8cff",
+         "eyebrow_dot_color": "#6c8cff",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "Automate the work",
+           "color": "#ffffff",
+           "italic": false
+          },
+          {
+           "text": "nobody wants to do",
+           "color": "#ffffff",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 42,
+         "headline_font_weight": "600",
+         "headline_align": "left",
+         "tagline_show": true,
+         "tagline_text": "Circuit watches your pipeline and handles the routine — assigning reviewers, chasing approvals, updating status, closing the loop.",
+         "tagline_text_color": "#8a90a8",
+         "tagline_text_size": 16,
+         "layout": "stack",
+         "gap": 14
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "ci-list-20",
+        "type": "list",
+        "settings": {
+         "items": [
+          {
+           "text": "Conditional triggers & branching logic",
+           "icon": "check"
+          },
+          {
+           "text": "Approvals that route to the right person",
+           "icon": "check"
+          },
+          {
+           "text": "Audit trail on every action",
+           "icon": "check"
+          }
+         ],
+         "icon_default": "check",
+         "icon_color": "#4fe0c0",
+         "text_color": "#c9cde0",
+         "text_align": "left",
+         "spacing": "12",
+         "icon_size": "18",
+         "icon_gap": "11",
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 16,
+          "left": 0
+         }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "ci-button-20b",
+        "type": "button",
+        "settings": {
+         "text": "Explore automation",
+         "url": "#",
+         "target": "_self",
+         "alignment": "left",
+         "full_width": false,
+         "bg_color": "rgba(255,255,255,.06)",
+         "text_color": "#ffffff",
+         "font_size": 15,
+         "font_weight": "600",
+         "border_radius": {
+          "tl": 9,
+          "tr": 9,
+          "br": 9,
+          "bl": 9,
+          "linked": true
+         },
+         "tile_padding": {
+          "top": 12,
+          "right": 22,
+          "bottom": 12,
+          "left": 22
+         },
+         "border": {
+          "top": 1,
+          "right": 1,
+          "bottom": 1,
+          "left": 1,
+          "linked": true,
+          "style": "solid",
+          "color": "rgba(255,255,255,.16)"
+         },
+         "shadow": "none",
+         "hover_effect": "lift"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "ci-co-23",
+      "type": "column",
+      "settings": {
+       "width": "1-2"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ci-buildermock-22",
+        "type": "buildermock",
+        "settings": {
+         "accent": "#6c8cff",
+         "url_text": "circuit.app/automation",
+         "cat_active": "Automation",
+         "canvas_title": "Release pipeline",
+         "canvas_sub": "Triggers, approvals and hand-offs that route themselves.",
+         "selected_tile": "Approval step",
+         "drag_label": "Trigger",
+         "animate_drag": true,
+         "tilt": 10,
+         "width": 840,
+         "shadow": "xl"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ci-se-32",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#0b0d18"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ci-ro-31",
+    "type": "row",
+    "settings": {
+     "gap": 54,
+     "vertical_align": "center"
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ci-co-27",
+      "type": "column",
+      "settings": {
+       "width": "1-2"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ci-buildermock-26",
+        "type": "buildermock",
+        "settings": {
+         "accent": "#6c8cff",
+         "url_text": "circuit.app/insights",
+         "cat_active": "Insights",
+         "canvas_title": "Insights dashboard",
+         "canvas_sub": "Cycle time, throughput and bottlenecks across every team.",
+         "selected_tile": "Cycle-time chart",
+         "drag_label": "Metric",
+         "animate_drag": true,
+         "tilt": 10,
+         "width": 840,
+         "shadow": "xl"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "ci-co-30",
+      "type": "column",
+      "settings": {
+       "width": "1-2"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ci-section-header-28",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "// insights",
+         "eyebrow_color": "#6c8cff",
+         "eyebrow_dot_color": "#6c8cff",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "Decisions backed",
+           "color": "#ffffff",
+           "italic": false
+          },
+          {
+           "text": "by your own data",
+           "color": "#ffffff",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 42,
+         "headline_font_weight": "600",
+         "headline_align": "left",
+         "tagline_show": true,
+         "tagline_text": "Stop guessing where things slow down. Circuit measures cycle time, throughput and bottlenecks across every team in real time.",
+         "tagline_text_color": "#8a90a8",
+         "tagline_text_size": 16,
+         "layout": "stack",
+         "gap": 14
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "ci-list-29",
+        "type": "list",
+        "settings": {
+         "items": [
+          {
+           "text": "Live dashboards, no setup",
+           "icon": "check"
+          },
+          {
+           "text": "Export anywhere via API",
+           "icon": "check"
+          },
+          {
+           "text": "Weekly digests to your inbox",
+           "icon": "check"
+          }
+         ],
+         "icon_default": "check",
+         "icon_color": "#4fe0c0",
+         "text_color": "#c9cde0",
+         "text_align": "left",
+         "spacing": "12",
+         "icon_size": "18",
+         "icon_gap": "11",
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 16,
+          "left": 0
+         }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "ci-button-29b",
+        "type": "button",
+        "settings": {
+         "text": "See the metrics",
+         "url": "#",
+         "target": "_self",
+         "alignment": "left",
+         "full_width": false,
+         "bg_color": "rgba(255,255,255,.06)",
+         "text_color": "#ffffff",
+         "font_size": 15,
+         "font_weight": "600",
+         "border_radius": {
+          "tl": 9,
+          "tr": 9,
+          "br": 9,
+          "bl": 9,
+          "linked": true
+         },
+         "tile_padding": {
+          "top": 12,
+          "right": 22,
+          "bottom": 12,
+          "left": 22
+         },
+         "border": {
+          "top": 1,
+          "right": 1,
+          "bottom": 1,
+          "left": 1,
+          "linked": true,
+          "style": "solid",
+          "color": "rgba(255,255,255,.16)"
+         },
+         "shadow": "none",
+         "hover_effect": "lift"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ci-se-42",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "small"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#0b0d18"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ci-ro-41",
+    "type": "row",
+    "settings": {
+     "gap": 24
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ci-co-34",
+      "type": "column",
+      "settings": {
+       "width": "1-4"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ci-counter-33",
+        "type": "counter",
+        "settings": {
+         "number": "9000",
+         "suffix": "+",
+         "prefix": "",
+         "label": "Teams onboard",
+         "icon_emoji": "",
+         "text_color": "#ffffff",
+         "number_color": "#ffffff",
+         "number_font_size": "52",
+         "number_font_weight": "700",
+         "label_color": "#8a90a8",
+         "label_font_size": "13",
+         "bg_type": "color",
+         "bg_color": "transparent",
+         "padding": "8",
+         "border_radius": "0"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "ci-co-36",
+      "type": "column",
+      "settings": {
+       "width": "1-4"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ci-counter-35",
+        "type": "counter",
+        "settings": {
+         "number": "40",
+         "suffix": "%",
+         "prefix": "",
+         "label": "Less cycle time",
+         "icon_emoji": "",
+         "text_color": "#ffffff",
+         "number_color": "#ffffff",
+         "number_font_size": "52",
+         "number_font_weight": "700",
+         "label_color": "#8a90a8",
+         "label_font_size": "13",
+         "bg_type": "color",
+         "bg_color": "transparent",
+         "padding": "8",
+         "border_radius": "0"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "ci-co-38",
+      "type": "column",
+      "settings": {
+       "width": "1-4"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ci-counter-37",
+        "type": "counter",
+        "settings": {
+         "number": "99.99",
+         "suffix": "%",
+         "prefix": "",
+         "label": "Platform uptime",
+         "icon_emoji": "",
+         "text_color": "#ffffff",
+         "number_color": "#ffffff",
+         "number_font_size": "52",
+         "number_font_weight": "700",
+         "label_color": "#8a90a8",
+         "label_font_size": "13",
+         "bg_type": "color",
+         "bg_color": "transparent",
+         "padding": "8",
+         "border_radius": "0"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "ci-co-40",
+      "type": "column",
+      "settings": {
+       "width": "1-4"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ci-counter-39",
+        "type": "counter",
+        "settings": {
+         "number": "120",
+         "suffix": "+",
+         "prefix": "",
+         "label": "Integrations",
+         "icon_emoji": "",
+         "text_color": "#ffffff",
+         "number_color": "#ffffff",
+         "number_font_size": "52",
+         "number_font_weight": "700",
+         "label_color": "#8a90a8",
+         "label_font_size": "13",
+         "bg_type": "color",
+         "bg_color": "transparent",
+         "padding": "8",
+         "border_radius": "0"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ci-se-49",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#141a2e"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ci-ro-45",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ci-co-44",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ci-section-header-43",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "// integrations",
+         "eyebrow_color": "#6c8cff",
+         "eyebrow_dot_color": "#6c8cff",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "Plays nicely with",
+           "color": "#ffffff",
+           "italic": false
+          },
+          {
+           "text": "your stack",
+           "color": "#6c8cff",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 46,
+         "headline_font_weight": "600",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": true,
+         "tagline_text": "Connect in a click — Circuit syncs both ways and stays out of the way.",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#8a90a8",
+         "tagline_text_size": 16,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "ci-ro-48",
+    "type": "row",
+    "settings": {
+     "gap": 24
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ci-co-47",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ci-trust-strip-46",
+        "type": "trust-strip",
+        "settings": {
+         "items": [
+          {
+           "text": "GitHub"
+          },
+          {
+           "text": "Jira"
+          },
+          {
+           "text": "Slack"
+          },
+          {
+           "text": "Figma"
+          },
+          {
+           "text": "Linear"
+          },
+          {
+           "text": "Notion"
+          },
+          {
+           "text": "Datadog"
+          },
+          {
+           "text": "PagerDuty"
+          },
+          {
+           "text": "Sentry"
+          },
+          {
+           "text": "Vercel"
+          },
+          {
+           "text": "AWS"
+          },
+          {
+           "text": "Terraform"
+          }
+         ],
+         "variant": "pill",
+         "separator_char": "",
+         "align": "center",
+         "flow": "wrap",
+         "gap": 12,
+         "font_family": "sans-serif",
+         "text_color": "#8a90a8",
+         "text_size": 13,
+         "pill_bg": "#1b2238",
+         "pill_border": "rgba(255,255,255,.09)",
+         "pill_text_color": "#c9cde0"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ci-se-60",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#0b0d18"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ci-ro-52",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ci-co-51",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ci-section-header-50",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "// pricing",
+         "eyebrow_color": "#6c8cff",
+         "eyebrow_dot_color": "#6c8cff",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "Simple, scales",
+           "color": "#ffffff",
+           "italic": false
+          },
+          {
+           "text": "with you",
+           "color": "#6c8cff",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 46,
+         "headline_font_weight": "600",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": false,
+         "tagline_text": "",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#8a90a8",
+         "tagline_text_size": 16,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "ci-ro-59",
+    "type": "row",
+    "settings": {
+     "gap": 18,
+     "vertical_align": "stretch"
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ci-co-54",
+      "type": "column",
+      "settings": {
+       "width": "1-3"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ci-pricing-53",
+        "type": "pricing",
+        "settings": {
+         "plan_name": "Starter",
+         "plan_description": "For small teams getting started.",
+         "price": "0",
+         "currency": "€",
+         "currency_position": "before",
+         "period": "/mo",
+         "features": "Up to 5 members\n3 workflows\nCommunity support",
+         "feature_dividers": true,
+         "cta_text": "Get started",
+         "cta_url": "#",
+         "cta_target": "_self",
+         "cta_bg_color": "rgba(255,255,255,.06)",
+         "cta_text_color": "#ffffff",
+         "cta_border_width": "1",
+         "cta_border_color": "rgba(255,255,255,.09)",
+         "cta_width": "100",
+         "cta_radius": "9",
+         "cta_hover_effect": "lift",
+         "is_popular": false,
+         "check_style": "checkmark",
+         "check_size": "14",
+         "check_color": "#4fe0c0",
+         "price_color": "#ffffff",
+         "text_color": "#c9cde0",
+         "accent_color": "#6c8cff",
+         "bg_color": "#141a2e",
+         "border_radius": "18",
+         "border_color": "rgba(255,255,255,.09)"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "ci-co-56",
+      "type": "column",
+      "settings": {
+       "width": "1-3"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ci-pricing-55",
+        "type": "pricing",
+        "settings": {
+         "plan_name": "Team",
+         "plan_description": "For teams shipping in production.",
+         "price": "24",
+         "currency": "€",
+         "currency_position": "before",
+         "period": "/user/mo",
+         "features": "Unlimited workflows\nAll integrations\nInsights dashboard\nPriority support",
+         "feature_dividers": true,
+         "cta_text": "Start free trial",
+         "cta_url": "#",
+         "cta_target": "_self",
+         "cta_bg_color": "#6c8cff",
+         "cta_text_color": "#ffffff",
+         "cta_border_width": "0",
+         "cta_border_color": "",
+         "cta_width": "100",
+         "cta_radius": "9",
+         "cta_hover_effect": "lift",
+         "is_popular": true,
+         "badge_text": "Most popular",
+         "badge_style": "pill",
+         "badge_radius": "6",
+         "badge_bg_color": "rgba(108,140,255,.14)",
+         "badge_text_color": "#6c8cff",
+         "check_style": "checkmark",
+         "check_size": "14",
+         "check_color": "#4fe0c0",
+         "price_color": "#ffffff",
+         "text_color": "#c9cde0",
+         "accent_color": "#6c8cff",
+         "bg_color": "#141a2e",
+         "border_radius": "18",
+         "border_color": "#6c8cff"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "ci-co-58",
+      "type": "column",
+      "settings": {
+       "width": "1-3"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ci-pricing-57",
+        "type": "pricing",
+        "settings": {
+         "plan_name": "Enterprise",
+         "plan_description": "For orgs with scale & compliance needs.",
+         "price": "Custom",
+         "currency": "",
+         "currency_position": "before",
+         "period": "",
+         "features": "SSO & SAML\nAudit & compliance\nDedicated CSM",
+         "feature_dividers": true,
+         "cta_text": "Talk to sales",
+         "cta_url": "#",
+         "cta_target": "_self",
+         "cta_bg_color": "rgba(255,255,255,.06)",
+         "cta_text_color": "#ffffff",
+         "cta_border_width": "1",
+         "cta_border_color": "rgba(255,255,255,.09)",
+         "cta_width": "100",
+         "cta_radius": "9",
+         "cta_hover_effect": "lift",
+         "is_popular": false,
+         "check_style": "checkmark",
+         "check_size": "14",
+         "check_color": "#4fe0c0",
+         "price_color": "#ffffff",
+         "text_color": "#c9cde0",
+         "accent_color": "#6c8cff",
+         "bg_color": "#141a2e",
+         "border_radius": "18",
+         "border_color": "rgba(255,255,255,.09)"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ci-se-64",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#141a2e"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ci-ro-63",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ci-co-62",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ci-testimonial-61",
+        "type": "testimonial",
+        "settings": {
+         "quote": "\"We cut our release cycle from two weeks to four days in the first month. Circuit just removed the friction we'd stopped noticing.\"",
+         "author_name": "Dana Whitfield",
+         "author_role": "VP Engineering, Northwind",
+         "rating": "0",
+         "layout": "single",
+         "show_line": false,
+         "bg_color": "transparent",
+         "text_color": "#ffffff",
+         "border_radius": "0",
+         "avatar": ""
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ci-se-68",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#0b0d18"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ci-ro-67",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ci-co-66",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ci-builder-65",
+        "type": "builder",
+        "settings": {
+         "eyebrow": "// build your plan",
+         "heading": "Start with Team, add what you need",
+         "intro": "Team is €24/seat. Toggle the modules your org actually uses and watch the monthly add-on total update live.",
+         "currency": "€",
+         "cap": 0,
+         "total_label": "add-ons / month",
+         "count_label": "add-ons",
+         "cta_text": "Upgrade plan",
+         "cta_url": "#pricing",
+         "zone_accent": "#6c8cff",
+         "zone_on": "#ffffff",
+         "card_bg": "#141a2e",
+         "card_border": "rgba(255,255,255,.09)",
+         "align": "left",
+         "items": [
+          {
+           "name": "Insights dashboard",
+           "price": "19",
+           "note": "cycle-time & throughput",
+           "start": 0
+          },
+          {
+           "name": "Automation engine",
+           "price": "29",
+           "note": "unlimited workflows",
+           "start": 0
+          },
+          {
+           "name": "SSO & SAML",
+           "price": "40",
+           "note": "SCIM provisioning",
+           "start": 0
+          },
+          {
+           "name": "Priority support",
+           "price": "25",
+           "note": "1-hour SLA",
+           "start": 0
+          },
+          {
+           "name": "Audit log",
+           "price": "15",
+           "note": "compliance export",
+           "start": 0
+          },
+          {
+           "name": "+10 seats",
+           "price": "60",
+           "note": "grow the team",
+           "start": 0
+          }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ci-se-72",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#0b0d18"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ci-ro-71",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ci-co-70",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ci-cta-banner-69",
+        "type": "cta-banner",
+        "settings": {
+         "headline": "Start shipping with",
+         "headline_accent": "Circuit",
+         "headline_accent_italic": false,
+         "subtitle": "Free for small teams. No card, no sales call — just connect your tools and go.",
+         "cta_text": "Start free",
+         "cta_url": "#pricing",
+         "cta2_text": "Book a demo",
+         "cta2_url": "#",
+         "cta2_bg": "rgba(255,255,255,.06)",
+         "cta2_color": "#ffffff",
+         "cta2_border": "rgba(255,255,255,.16)",
+         "bg": {
+          "type": "gradient",
+          "gradient": "linear-gradient(160deg, rgba(108,140,255,.18), rgba(176,139,255,.06))"
+         },
+         "text_color": "#ffffff",
+         "accent_color": "#6c8cff",
+         "subtitle_color": "#c9cde0",
+         "cta_bg": "#ffffff",
+         "cta_color": "#0e1020",
+         "cta_radius": {
+          "tl": 9,
+          "tr": 9,
+          "br": 9,
+          "bl": 9,
+          "linked": true
+         },
+         "cta_size": 15,
+         "headline_font_family": "sans-serif",
+         "headline_size": 52,
+         "headline_weight": "700",
+         "subtitle_size": 17,
+         "layout": "stack",
+         "vertical_align": "center",
+         "banner_radius": {
+          "tl": 24,
+          "tr": 24,
+          "br": 24,
+          "bl": 24,
+          "linked": true
+         },
+         "banner_padding": 80
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

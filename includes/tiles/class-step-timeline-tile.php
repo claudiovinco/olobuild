@@ -88,8 +88,8 @@ class Olo_StepTimeline_Tile extends Olo_Tile_Base {
         $s   = wp_parse_args( $settings, $this->defaults );
         $uid = 'olo-stl-' . wp_rand( 10000, 99999 );
 
-        $serif = "'Playfair Display','Cormorant Garamond',Georgia,'Times New Roman',serif";
-        $sans  = "'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif";
+        $serif = "var(--olo-font-family-heading, 'Playfair Display','Cormorant Garamond',Georgia,'Times New Roman',serif)";
+        $sans  = "var(--olo-font-family, 'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif)";
         $mono  = "ui-monospace,'SF Mono',Menlo,Consolas,monospace";
         $fmap  = [ 'serif' => $serif, 'sans-serif' => $sans, 'mono' => $mono ];
 
@@ -123,9 +123,9 @@ class Olo_StepTimeline_Tile extends Olo_Tile_Base {
 
         $shadow_map = [
             'none' => '',
-            'sm'   => '0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04)',
-            'md'   => '0 4px 12px rgba(0,0,0,0.10), 0 2px 4px rgba(0,0,0,0.06)',
-            'lg'   => '0 10px 30px rgba(0,0,0,0.12), 0 4px 8px rgba(0,0,0,0.08)',
+            'sm'   => '0 1px 2px rgba(16,24,40,.06), 0 6px 16px -10px rgba(16,24,40,.18)',
+            'md'   => '0 2px 4px rgba(16,24,40,.06), 0 14px 28px -12px rgba(22,38,61,.28)',
+            'lg'   => '0 8px 24px -6px rgba(16,24,40,.18), 0 18px 40px -12px rgba(22,38,61,.30)',
         ];
         $media_shadow = $shadow_map[ $s['media_shadow'] ?? 'sm' ] ?? '';
 

@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Verifica · BlendText · Spotlight (olobuild 1.2.64)</title>
+<style>
+  body{margin:0;background:#f4f1ea;color:#15110d;font-family:'Manrope',system-ui,sans-serif;overflow-x:hidden;}
+  .wrap{max-width:1000px;margin:0 auto;padding:40px 24px 120px;}
+  .guide{font-size:14px;line-height:1.7;color:#444;border:1px solid #d9d3c7;border-radius:10px;padding:18px 20px;background:#fffdf8;}
+  .guide code{background:#eee;padding:1px 5px;border-radius:4px;font-size:12px;}
+  .swatches{display:flex;gap:0;margin:40px 0;border-radius:12px;overflow:hidden;}
+  .swatches div{flex:1;height:90px;}
+  .hint{font:12px/1.4 monospace;letter-spacing:.12em;text-transform:uppercase;color:#8a8275;margin-top:24px;}
+
+  /* ===== Replica FEDELE dell'output di Olo_Blendtext_Tile::render() con mode=spotlight ===== */
+  #olo-bt-demo1{padding:40px 20px}
+  #olo-bt-demo1 .olo-bt-text{font-size:120px;font-weight:900;font-family:inherit;text-transform:uppercase;letter-spacing:5px;line-height:1;text-align:center;color:#15110d;margin:0}
+  @media(max-width:960px){#olo-bt-demo1 .olo-bt-text{font-size:80px !important}}
+  @media(max-width:640px){#olo-bt-demo1 .olo-bt-text{font-size:50px !important}}
+  /* disco-torcia: size 300, softness 40 (inner 60%), colore #fff, blend difference, display:none di default */
+  #olo-bt-demo1-flash{position:fixed;top:0;left:0;width:300px;height:300px;margin:-150px 0 0 -150px;border-radius:50%;pointer-events:none;z-index:99990;display:none;will-change:transform;background:radial-gradient(circle, #ffffff 0%, #ffffff 60%, transparent 100%);mix-blend-mode:difference;}
+  @media(hover:none){#olo-bt-demo1-flash{display:none !important;}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="guide">
+    <strong>Verifica runtime — BlendText · Spotlight</strong> (replica di <code>Olo_Blendtext_Tile::render()</code> con <code>mode=spotlight</code>).<br>
+    <strong>Muovi il mouse</strong> sopra la pagina: un disco bianco con <code>mix-blend-mode:difference</code> segue il cursore con easing e <strong>inverte i colori</strong> sotto di sé (testo e fasce colorate).
+    <ul>
+      <li><strong>Portale</strong>: il disco viene spostato su <code>&lt;body&gt;</code> → compone con l'intera pagina. In console: <code>document.getElementById('olo-bt-demo1-flash').parentElement === document.body</code> deve essere <code>true</code>.</li>
+      <li><strong>hover:none / touch</strong>: emula un device touch (DevTools) → il disco resta <code>display:none</code>, nessuna torcia.</li>
+      <li><strong>reduced-motion</strong>: DevTools → Rendering → <em>Emulate prefers-reduced-motion: reduce</em> → ricarica → torcia <strong>off</strong>, testo invariato.</li>
+      <li><strong>No-JS</strong>: disabilita JS → nessun disco (il titolo resta perfettamente leggibile).</li>
+    </ul>
+  </div>
+
+  <div id="olo-bt-demo1">
+    <div class="olo-bt-text">RISO<br>GRAPH</div>
+  </div>
+
+  <div class="swatches">
+    <div style="background:#e1474f"></div>
+    <div style="background:#1f6feb"></div>
+    <div style="background:#f6c945"></div>
+    <div style="background:#15110d"></div>
+    <div style="background:#2bb673"></div>
+  </div>
+
+  <p class="hint">◐ muovi il cursore: la luce inverte i colori</p>
+</div>
+
+<!-- disco emesso nel markup (verrà portato su body dal runtime) -->
+<div id="olo-bt-demo1-flash" class="olo-bt-flash" aria-hidden="true"></div>
+
+<script>
+/* BlendText · Spotlight — disco-torcia scoped per istanza (rif. 63-tema-risograph.html) */
+(function(){
+    var flash = document.getElementById('olo-bt-demo1-flash');
+    if(!flash) return;
+    if(flash.dataset.oloFlash) return;
+    flash.dataset.oloFlash = '1';
+    if(window.matchMedia && window.matchMedia('(hover:none)').matches) return;
+    if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    document.body.appendChild(flash);
+    flash.style.display = 'block';
+    var EASE = 0.22;
+    var x = window.innerWidth / 2, y = window.innerHeight / 2, cx = x, cy = y;
+    var running = false;
+    function loop(){
+        cx += (x - cx) * EASE;
+        cy += (y - cy) * EASE;
+        if ( Math.abs(x - cx) < 0.5 && Math.abs(y - cy) < 0.5 ) {
+            flash.style.transform = 'translate(' + x + 'px,' + y + 'px)';
+            running = false; return;
+        }
+        flash.style.transform = 'translate(' + cx + 'px,' + cy + 'px)';
+        requestAnimationFrame( loop );
+    }
+    function start(){ if ( ! running ) { running = true; requestAnimationFrame( loop ); } }
+    window.addEventListener('pointermove', function( e ){ x = e.clientX; y = e.clientY; start(); }, { passive: true });
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,987 @@
+[
+ {
+  "id": "wa-se-4",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "full",
+   "padding": {
+    "top": 0,
+    "right": 0,
+    "bottom": 0,
+    "left": 0
+   },
+   "padding_top": 0,
+   "padding_bottom": 0
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#0d3b3f"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "wa-ro-3",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "wa-co-2",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "wa-hero-split-1",
+        "type": "imagehero",
+        "settings": {
+         "eyebrow_text": "Small groups · big places · since 2009",
+         "eyebrow_dot": true,
+         "headline_text": "The world is wide.",
+         "accent_text": "Go further.",
+         "headline_tail": "",
+         "accent_italic": false,
+         "stack_lines": true,
+         "subhead": "Expert-led expeditions to the places worth the effort — twelve travellers, zero crowds, a footprint we keep light.",
+         "cta1_text": "Find a trip",
+         "cta1_url": "#destinations",
+         "cta2_text": "Browse trips",
+         "cta2_url": "#trips",
+         "meta_text": "",
+         "scroll_hint": "",
+         "bg_image": "",
+         "bg_color": "#0d3b3f",
+         "media_label": "hero — mountain valley at golden hour, full-bleed",
+         "text_position": "left",
+         "text_align": "left",
+         "content_width": 560,
+         "aspect_ratio": "21/10",
+         "min_height": 92,
+         "heading_font": "serif",
+         "overlay_color": "#0d3b3f",
+         "overlay_top": 0.55,
+         "overlay_bottom": 0.85,
+         "overlay_sides": false,
+         "accent": "#e9c46a",
+         "accent_on": "#0d3b3f",
+         "text_color": "#ffffff",
+         "sub_color": "rgba(255,255,255,.82)",
+         "eyebrow_color": "#e9c46a"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "wa-se-tf",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "small"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#f5f1e8"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "wa-ro-tf",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "wa-co-tf",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "wa-tripfinder-tf",
+        "type": "tripfinder",
+        "settings": {
+         "fields": [
+          {
+           "label": "Where",
+           "value": "Anywhere wild",
+           "options": "Anywhere wild\nPatagonia\nIceland\nNamibia\nNepal"
+          },
+          {
+           "label": "When",
+           "value": "Flexible",
+           "options": "Flexible\nSpring\nSummer\nAutumn\nWinter"
+          },
+          {
+           "label": "Trip type",
+           "value": "All",
+           "options": "All\nTrekking\nWildlife & safari\nSailing\nCulture & food"
+          }
+         ],
+         "button_text": "Find a trip",
+         "button_url": "#cta",
+         "accent": "#e76f51",
+         "accent_on": "#ffffff",
+         "bar_bg": "#ffffff",
+         "field_bg": "transparent",
+         "field_border": "#e3ddcf",
+         "label_color": "#566260",
+         "value_color": "#1d2a29",
+         "radius": 14
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "wa-se-11",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#f5f1e8"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "wa-ro-7",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "wa-co-6",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "wa-section-header-5",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "Where to next",
+         "eyebrow_color": "#e76f51",
+         "eyebrow_dot_color": "#e76f51",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "Featured expeditions",
+           "color": "#1d2a29",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 44,
+         "headline_font_weight": "600",
+         "headline_align": "left",
+         "headline_inline": false,
+         "tagline_show": false,
+         "tagline_text": "",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#566260",
+         "tagline_text_size": 16.5,
+         "layout": "stack",
+         "gap": 12
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "wa-ro-10",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "wa-co-9",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "wa-workgrid-8",
+        "type": "workgrid",
+        "settings": {
+         "columns": 3,
+         "items_gap": 24,
+         "media_aspect": "4/3",
+         "media_tall_aspect": "4/5",
+         "media_bg": "#ece5d6",
+         "media_label_color": "#0d3b3f",
+         "hover_zoom": true,
+         "title_font_family": "heading",
+         "title_color": "#1d2a29",
+         "title_size": 26,
+         "title_weight": "600",
+         "meta_color": "#e76f51",
+         "meta_size": 12,
+         "show_desc": true,
+         "desc_color": "#566260",
+         "desc_size": 14,
+         "items": [
+          {
+           "image": "",
+           "media_label": "Patagonia — Trekking",
+           "title": "Patagonia",
+           "meta": "11 days · Chile & Argentina · €3,200",
+           "description": "Eleven days across the wild Andes — torres, glaciers, and the silence between them.",
+           "link_url": "",
+           "tall": false
+          },
+          {
+           "image": "",
+           "media_label": "Iceland — Expedition",
+           "title": "Iceland Highlands",
+           "meta": "8 days · Self-drive + guide · €2,450",
+           "description": "Eight days on the F-roads — lava fields, geysers, and aurora-lit nights. Self-drive with a local guide.",
+           "link_url": "",
+           "tall": false
+          },
+          {
+           "image": "",
+           "media_label": "Namibia — Safari",
+           "title": "Namib Desert",
+           "meta": "9 days · Namibia · €3,750",
+           "description": "Nine days in one of Earth's oldest deserts — towering dunes, starfields, and wildlife at dawn.",
+           "link_url": "",
+           "tall": false
+          }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "wa-se-19",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#ffffff"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "wa-ro-18",
+    "type": "row",
+    "settings": {
+     "gap": 54,
+     "vertical_align": "center"
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "wa-co-13",
+      "type": "column",
+      "settings": {
+       "width": "1-2"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "wa-image-12",
+        "type": "image",
+        "settings": {
+         "image_url": "",
+         "alt_text": "Guide with small group on a ridge",
+         "aspect_ratio": "4/4.4",
+         "object_fit": "cover",
+         "object_position": "center center",
+         "image_width": "100%",
+         "height": "auto",
+         "max_width": "",
+         "image_alignment": "left",
+         "border_radius": {
+          "tl": 20,
+          "tr": 20,
+          "br": 20,
+          "bl": 20
+         },
+         "bg_type": "color",
+         "bg_color": "#ece5d6"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "wa-co-17",
+      "type": "column",
+      "settings": {
+       "width": "1-2"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "wa-section-header-14",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "Why Wander",
+         "eyebrow_color": "#e76f51",
+         "eyebrow_dot_color": "#e76f51",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "Travel that's worth the distance",
+           "color": "#1d2a29",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 44,
+         "headline_font_weight": "600",
+         "headline_align": "left",
+         "headline_inline": false,
+         "tagline_show": true,
+         "tagline_text": "We keep groups to twelve, hire guides who actually live where they lead, and route around the crowds — not into them.",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#566260",
+         "tagline_text_size": 16.5,
+         "layout": "stack",
+         "gap": 12
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "wa-info-cards-15",
+        "type": "info-cards",
+        "settings": {
+         "container_bg": {
+          "type": "solid",
+          "color": "transparent"
+         },
+         "container_padding": 0,
+         "container_gap": 0,
+         "columns": 3,
+         "items_gap": 22,
+         "card_bg": {
+          "type": "solid",
+          "color": "transparent"
+         },
+         "card_color": "#566260",
+         "card_radius": {
+          "tl": 0,
+          "tr": 0,
+          "br": 0,
+          "bl": 0,
+          "linked": true
+         },
+         "card_padding": 4,
+         "show_icon": true,
+         "show_counter": false,
+         "show_arrow": false,
+         "show_footer": false,
+         "show_media": false,
+         "icon_color": "#16615f",
+         "icon_bg_color": "#ece5d6",
+         "title_color": "#1d2a29",
+         "title_font_family": "heading",
+         "title_size": 19,
+         "title_weight": "600",
+         "title_italic": false,
+         "description_size": 14,
+         "description_color": "#566260",
+         "card_hover_effect": "none",
+         "items": [
+          {
+           "icon": "users",
+           "title": "Groups of twelve",
+           "description": "Small enough to move differently."
+          },
+          {
+           "icon": "map-pin",
+           "title": "Local expert guides",
+           "description": "People who know the place by heart."
+          },
+          {
+           "icon": "leaf",
+           "title": "Light footprint",
+           "description": "Carbon-offset, leave-no-trace, always."
+          }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "wa-button-16",
+        "type": "button",
+        "settings": {
+         "text": "Plan your trip",
+         "url": "#cta",
+         "target": "_self",
+         "alignment": "left",
+         "full_width": false,
+         "bg_color": "#0d3b3f",
+         "text_color": "#f5f1e8",
+         "font_size": 15,
+         "font_weight": "600",
+         "border_radius": {
+          "tl": 999,
+          "tr": 999,
+          "br": 999,
+          "bl": 999
+         },
+         "shadow": "none",
+         "hover_effect": "lift",
+         "tile_padding": {
+          "top": 12,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "wa-se-26",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large",
+   "border_top": "1px solid #e3ddcf",
+   "border_bottom": "1px solid #e3ddcf"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#0d3b3f"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "wa-ro-22",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "wa-co-21",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "wa-section-header-20",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "Find your pace",
+         "eyebrow_color": "#e9c46a",
+         "eyebrow_dot_color": "#e9c46a",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "Trips for every kind of traveller",
+           "color": "#ffffff",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 46,
+         "headline_font_weight": "600",
+         "headline_align": "center",
+         "headline_inline": false,
+         "tagline_show": false,
+         "tagline_text": "",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#566260",
+         "tagline_text_size": 16.5,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "wa-ro-25",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "wa-co-24",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "wa-workgrid-23",
+        "type": "workgrid",
+        "settings": {
+         "columns": 4,
+         "items_gap": 16,
+         "media_aspect": "4/3",
+         "media_tall_aspect": "4/5",
+         "media_bg": "#114a4f",
+         "media_label_color": "#e9c46a",
+         "hover_zoom": true,
+         "title_font_family": "heading",
+         "title_color": "#ffffff",
+         "title_size": 20,
+         "title_weight": "600",
+         "meta_color": "rgba(255,255,255,.55)",
+         "meta_size": 11,
+         "show_desc": false,
+         "desc_color": "rgba(255,255,255,.75)",
+         "desc_size": 13.5,
+         "items": [
+          {
+           "image": "",
+           "media_label": "Trekking",
+           "title": "Trekking",
+           "meta": "",
+           "description": "Multi-day trails through high-altitude wilderness.",
+           "link_url": "",
+           "tall": false
+          },
+          {
+           "image": "",
+           "media_label": "Safari",
+           "title": "Wildlife & safari",
+           "meta": "",
+           "description": "Dawn drives, expert trackers, no overcrowded reserves.",
+           "link_url": "",
+           "tall": false
+          },
+          {
+           "image": "",
+           "media_label": "Sailing",
+           "title": "Sailing",
+           "meta": "",
+           "description": "Island-hopping under sail with a seasoned crew.",
+           "link_url": "",
+           "tall": false
+          },
+          {
+           "image": "",
+           "media_label": "Culture & food",
+           "title": "Culture & food",
+           "meta": "",
+           "description": "Markets, kitchens, and the people behind the flavours.",
+           "link_url": "",
+           "tall": false
+          }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "wa-se-36",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "small"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#0d3b3f"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "wa-ro-35",
+    "type": "row",
+    "settings": {
+     "gap": 24
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "wa-co-28",
+      "type": "column",
+      "settings": {
+       "width": "1-4"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "wa-counter-27",
+        "type": "counter",
+        "settings": {
+         "number": "60",
+         "suffix": "",
+         "prefix": "",
+         "label": "Countries",
+         "icon_emoji": "",
+         "text_color": "#e9c46a",
+         "number_color": "#e9c46a",
+         "number_font_size": "56",
+         "number_font_weight": "700",
+         "label_color": "rgba(255,255,255,.7)",
+         "label_font_size": "13",
+         "bg_type": "color",
+         "bg_color": "transparent",
+         "padding": "8",
+         "border_radius": "0"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "wa-co-30",
+      "type": "column",
+      "settings": {
+       "width": "1-4"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "wa-counter-29",
+        "type": "counter",
+        "settings": {
+         "number": "14000",
+         "suffix": "+",
+         "prefix": "",
+         "label": "Travellers guided",
+         "icon_emoji": "",
+         "text_color": "#e9c46a",
+         "number_color": "#e9c46a",
+         "number_font_size": "56",
+         "number_font_weight": "700",
+         "label_color": "rgba(255,255,255,.7)",
+         "label_font_size": "13",
+         "bg_type": "color",
+         "bg_color": "transparent",
+         "padding": "8",
+         "border_radius": "0"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "wa-co-32",
+      "type": "column",
+      "settings": {
+       "width": "1-4"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "wa-counter-31",
+        "type": "counter",
+        "settings": {
+         "number": "12",
+         "suffix": "",
+         "prefix": "",
+         "label": "Max group size",
+         "icon_emoji": "",
+         "text_color": "#e9c46a",
+         "number_color": "#e9c46a",
+         "number_font_size": "56",
+         "number_font_weight": "700",
+         "label_color": "rgba(255,255,255,.7)",
+         "label_font_size": "13",
+         "bg_type": "color",
+         "bg_color": "transparent",
+         "padding": "8",
+         "border_radius": "0"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "wa-co-34",
+      "type": "column",
+      "settings": {
+       "width": "1-4"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "wa-counter-33",
+        "type": "counter",
+        "settings": {
+         "number": "4.9",
+         "suffix": "",
+         "prefix": "",
+         "label": "Avg. rating",
+         "icon_emoji": "",
+         "text_color": "#e9c46a",
+         "number_color": "#e9c46a",
+         "number_font_size": "56",
+         "number_font_weight": "700",
+         "label_color": "rgba(255,255,255,.7)",
+         "label_font_size": "13",
+         "bg_type": "color",
+         "bg_color": "transparent",
+         "padding": "8",
+         "border_radius": "0"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "wa-se-40",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#f5f1e8"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "wa-ro-39",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "wa-co-38",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "wa-testimonial-37",
+        "type": "testimonial",
+        "settings": {
+         "quote": "Eleven days in Patagonia and not one moment felt packaged. We went where the weather let us, and our guide made every detour the best part.",
+         "author_name": "Hannah & Theo",
+         "author_role": "Patagonia expedition",
+         "rating": "5",
+         "layout": "single",
+         "show_line": false,
+         "bg_color": "transparent",
+         "text_color": "#1d2a29",
+         "border_radius": "0",
+         "avatar": "",
+         "quote_font_family": "serif",
+         "quote_size": 36,
+         "quote_weight": "500",
+         "quote_color": "#1d2a29",
+         "author_name_color": "#1d2a29",
+         "author_role_color": "#8a948f"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "wa-se-44",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#0d3b3f"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "wa-ro-43",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "wa-co-42",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "wa-cta-banner-41",
+        "type": "cta-banner",
+        "settings": {
+         "headline": "Where will you",
+         "headline_accent": "wander?",
+         "headline_accent_italic": false,
+         "subtitle": "Tell us roughly where and when. We'll send back two routes you can actually picture yourself on — no obligation.",
+         "cta_text": "Plan my trip",
+         "cta_url": "#",
+         "bg": {
+          "type": "solid",
+          "color": "#114a4f"
+         },
+         "text_color": "#ffffff",
+         "accent_color": "#e9c46a",
+         "subtitle_color": "rgba(255,255,255,.8)",
+         "cta_bg": "#e9c46a",
+         "cta_color": "#0d3b3f",
+         "cta_radius": {
+          "tl": 999,
+          "tr": 999,
+          "br": 999,
+          "bl": 999,
+          "linked": true
+         },
+         "cta_size": 15,
+         "headline_font_family": "serif",
+         "headline_size": 56,
+         "headline_weight": "600",
+         "subtitle_size": 17,
+         "layout": "stack",
+         "vertical_align": "center",
+         "banner_radius": {
+          "tl": 24,
+          "tr": 24,
+          "br": 24,
+          "bl": 24,
+          "linked": true
+         },
+         "banner_padding": 80,
+         "eyebrow_show": true,
+         "eyebrow_text": "Let's plan it",
+         "eyebrow_color": "#e9c46a"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

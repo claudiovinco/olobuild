@@ -41,7 +41,7 @@
 
 <script setup>
 import { computed } from 'vue';
-import { resolveColor, TOKENS } from '@/composables/oloTileDefaults';
+import { resolveColor, TOKENS, SHADOW } from '@/composables/oloTileDefaults';
 
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 
@@ -84,14 +84,6 @@ const SERIF = "'Playfair Display','Cormorant Garamond',Georgia,'Times New Roman'
 const SANS  = "'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif";
 const MONO  = "ui-monospace,'SF Mono',Menlo,Consolas,monospace";
 const fmap  = { serif: SERIF, 'sans-serif': SANS, mono: MONO };
-
-const SHADOW = {
-  none: 'none',
-  sm: '0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04)',
-  md: '0 4px 12px rgba(0,0,0,0.10), 0 2px 4px rgba(0,0,0,0.06)',
-  lg: '0 10px 30px rgba(0,0,0,0.12), 0 4px 8px rgba(0,0,0,0.08)',
-  xl: '0 24px 60px rgba(0,0,0,0.18), 0 8px 16px rgba(0,0,0,0.10)',
-};
 
 const items = computed(() => Array.isArray(s.value.items) ? s.value.items : []);
 const hoverClass = computed(() => 'olo-pcards-hover-' + (s.value.card_hover_effect || 'lift'));

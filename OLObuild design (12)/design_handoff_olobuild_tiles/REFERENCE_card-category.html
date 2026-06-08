@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8"/>
+<title>OLObuild — Redesign categoria Card</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Work+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+  :root{
+    --red:#e1474f;--red-soft:#fef2f3;--navy:#16263d;--ink:#1f2937;--mute:#6b7280;--faint:#94a3b8;
+    --bg:#f6f1e8;--line:#e6dfd1;
+    --sans:"Work Sans",-apple-system,sans-serif;--disp:"Instrument Serif",Georgia,serif;--mono:"JetBrains Mono",monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);font-family:var(--sans);color:var(--ink);-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:1140px;margin:0 auto;padding:52px 32px 90px;}
+  .eyebrow{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--red);margin-bottom:12px;}
+  h1{font-family:var(--disp);font-weight:400;font-size:clamp(40px,5.5vw,64px);line-height:1;letter-spacing:-.02em;color:var(--navy);margin:0 0 14px;}
+  h1 em{font-style:italic;color:var(--red);}
+  .lead{font-size:16px;color:var(--mute);max-width:72ch;margin:0 0 8px;line-height:1.55;}
+  .lead b{color:var(--navy);font-weight:600;}
+  .cat{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:600;background:#fff;border:1px solid var(--line);border-radius:999px;padding:6px 13px;color:var(--mute);margin-top:18px;}
+
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start;margin-top:36px;}
+  .col-head{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
+  .badge{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:4px 10px;border-radius:999px;}
+  .today .badge{background:#fde2e4;color:#b42318;} .new .badge{background:#dcfce7;color:#15803d;}
+  .col-head h2{font-size:15px;font-weight:700;color:var(--navy);margin:0;}
+  .col-head .n{font-size:12px;color:var(--faint);margin-left:auto;}
+
+  .stage{background:#efe9dd;border:1px solid var(--line);border-radius:16px;padding:22px;display:flex;flex-direction:column;gap:18px;}
+  .tlabel{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);margin:-2px 0 -8px 2px;}
+
+  /* callout pin */
+  .pin{position:absolute;z-index:4;font-size:10px;font-weight:700;background:#fff;border:1px dashed #e0a0a4;color:#b42318;border-radius:6px;padding:2px 7px;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.06);}
+
+  /* ── OGGI — faithful current renders ── */
+  .o-author{background:#F3F4F6;border-radius:8px;padding:20px;display:flex;gap:16px;align-items:flex-start;}
+  .o-author .av{width:72px;height:72px;border-radius:50%;background:#E5E7EB;flex-shrink:0;}
+  .o-author .nm{font-size:20px;font-weight:700;color:#374151;line-height:1.3;margin:0 0 4px;}
+  .o-author .role{font-size:13px;font-weight:500;color:#6366F1;margin-bottom:8px;}
+  .o-author .bio{font-size:14px;color:#374151;line-height:1.5;margin:0;}
+
+  .o-host{background:#fff;border-radius:12px;box-shadow:0 10px 25px rgba(0,0,0,.12),0 4px 8px rgba(0,0,0,.06);overflow:hidden;}
+  .o-host .row{display:flex;align-items:center;gap:14px;padding:16px;}
+  .o-host .mini{width:48px;height:48px;border-radius:50%;background:#e5e7eb;display:flex;align-items:center;justify-content:center;color:#9ca3af;flex-shrink:0;}
+  .o-host .nm{font-weight:600;font-size:15px;color:#374151;}
+  .o-host .role{font-size:13px;color:#6b7280;margin-top:2px;}
+  .o-host .chev{color:#9ca3af;flex-shrink:0;}
+
+  .o-icon{background:#fff;border-radius:6px;padding:22px;}
+  .o-icon .ic{width:46px;height:46px;border-radius:8px;background:#ECECFB;color:#6366F1;display:flex;align-items:center;justify-content:center;margin-bottom:14px;}
+  .o-icon .tt{font-size:18px;font-weight:600;color:#374151;margin:0 0 6px;}
+  .o-icon .tx{font-size:14px;color:#6b7280;line-height:1.55;margin:0;}
+
+  /* ── COERENTE — unified family ── */
+  .c-card{background:#fff;border:1px solid #e5e7eb;border-radius:10px;box-shadow:0 1px 2px rgba(16,24,40,.06),0 6px 16px -10px rgba(16,24,40,.18);transition:transform .18s,box-shadow .18s;}
+  .c-card:hover{transform:translateY(-2px);box-shadow:0 2px 4px rgba(16,24,40,.06),0 14px 28px -12px rgba(22,38,61,.28);}
+  .c-author{padding:20px;display:flex;gap:16px;align-items:flex-start;}
+  .c-author .av{width:72px;height:72px;border-radius:50%;background:var(--red-soft);border:2px solid var(--red);color:var(--red);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .c-author .nm{font-size:19px;font-weight:700;color:var(--ink);line-height:1.25;margin:0 0 3px;letter-spacing:-.01em;}
+  .c-author .role{font-size:13px;font-weight:600;color:var(--red);margin-bottom:8px;}
+  .c-author .bio{font-size:14px;color:var(--mute);line-height:1.55;margin:0;}
+
+  .c-host{overflow:hidden;}
+  .c-host .row{display:flex;align-items:center;gap:14px;padding:18px;}
+  .c-host .mini{width:48px;height:48px;border-radius:50%;background:var(--red-soft);display:flex;align-items:center;justify-content:center;color:var(--red);flex-shrink:0;}
+  .c-host .nm{font-weight:600;font-size:15px;color:var(--ink);}
+  .c-host .role{font-size:13px;color:var(--mute);margin-top:2px;}
+  .c-host .chev{color:var(--faint);flex-shrink:0;}
+
+  .c-icon{padding:20px;}
+  .c-icon .ic{width:46px;height:46px;border-radius:10px;background:var(--red-soft);color:var(--red);display:flex;align-items:center;justify-content:center;margin-bottom:14px;}
+  .c-icon .tt{font-size:18px;font-weight:600;color:var(--ink);margin:0 0 6px;letter-spacing:-.01em;}
+  .c-icon .tx{font-size:14px;color:var(--mute);line-height:1.55;margin:0;}
+
+  .why{margin-top:34px;background:#fffdf8;border:1px solid var(--line);border-radius:14px;padding:24px 26px;}
+  .why h3{font-family:var(--disp);font-weight:400;font-size:24px;color:var(--navy);margin:0 0 16px;}
+  .why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px 22px;}
+  .why-item{font-size:13px;line-height:1.5;color:var(--mute);}
+  .why-item b{color:var(--navy);display:block;font-size:12px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;margin-bottom:4px;}
+  .why-item .od{font-family:var(--mono);font-size:11px;color:#b42318;} .why-item .nw{font-family:var(--mono);font-size:11px;color:#15803d;}
+  @media(max-width:840px){.cols{grid-template-columns:1fr;}.why-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">OLObuild · tile redesign</div>
+  <h1>Categoria <em>Card</em></h1>
+  <p class="lead">Tre card della stessa famiglia — <b>Authorbox</b>, <b>Hostcard</b>, <b>Iconbox</b> — rese fedelmente. A sinistra com'è oggi: ogni card ha <b>raggio, ombra, superficie e accento diversi</b>. A destra applicando il <b>Design Language</b>: stessa superficie, stesso raggio, stessa lingua d'ombra, stesso accento del brand → sembrano <b>una famiglia</b>.</p>
+  <span class="cat">Campione fedele: AuthorboxTile · HostcardTile · Iconbox</span>
+
+  <div class="cols">
+    <!-- ───── OGGI ───── -->
+    <div>
+      <div class="col-head today"><span class="badge">Oggi</span><h2>Incoerente</h2><span class="n">3 stili diversi</span></div>
+      <div class="stage">
+
+        <div class="tlabel">Authorbox</div>
+        <div style="position:relative">
+          <span class="pin" style="right:8px;top:-6px">raggio 8 · niente ombra · bg grigio</span>
+          <div class="o-author">
+            <div class="av"></div>
+            <div>
+              <div class="nm">Marco Rossi</div>
+              <div class="role">Amministratore</div>
+              <p class="bio">Breve biografia dell'autore, estratta dal profilo WordPress.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="tlabel">Hostcard</div>
+        <div style="position:relative">
+          <span class="pin" style="right:8px;top:-6px">raggio 12 · ombra lg · bottone blu</span>
+          <div class="o-host">
+            <div class="row">
+              <div class="mini"><svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><circle cx="10" cy="6" r="4"/><path d="M2 18c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg></div>
+              <div style="flex:1;min-width:0"><div class="nm">Nome Gestore</div><div class="role">Gestore della struttura</div></div>
+              <svg class="chev" width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M7 4l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+        </div>
+
+        <div class="tlabel">Iconbox</div>
+        <div style="position:relative">
+          <span class="pin" style="right:8px;top:-6px">raggio 6 · accento indaco</span>
+          <div class="o-icon">
+            <div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+            <h4 class="tt">Veloce e affidabile</h4>
+            <p class="tx">Descrizione della funzionalità con un paio di righe di testo esplicativo.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ───── COERENTE ───── -->
+    <div>
+      <div class="col-head new"><span class="badge">Coerente</span><h2>Una famiglia</h2><span class="n">stesso linguaggio</span></div>
+      <div class="stage" style="background:#f3ede2;">
+
+        <div class="tlabel">Authorbox</div>
+        <div class="c-card c-author">
+          <div class="av"><svg width="30" height="30" viewBox="0 0 20 20" fill="currentColor"><circle cx="10" cy="6" r="4"/><path d="M2 18c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg></div>
+          <div>
+            <div class="nm">Marco Rossi</div>
+            <div class="role">Amministratore</div>
+            <p class="bio">Breve biografia dell'autore, estratta dal profilo WordPress.</p>
+          </div>
+        </div>
+
+        <div class="tlabel">Hostcard</div>
+        <div class="c-card c-host">
+          <div class="row">
+            <div class="mini"><svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><circle cx="10" cy="6" r="4"/><path d="M2 18c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg></div>
+            <div style="flex:1;min-width:0"><div class="nm">Nome Gestore</div><div class="role">Gestore della struttura</div></div>
+            <svg class="chev" width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M7 4l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </div>
+
+        <div class="tlabel">Iconbox</div>
+        <div class="c-card c-icon">
+          <div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+          <h4 class="tt">Veloce e affidabile</h4>
+          <p class="tx">Descrizione della funzionalità con un paio di righe di testo esplicativo.</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="why">
+    <h3>Cosa è stato unificato</h3>
+    <div class="why-grid">
+      <div class="why-item"><b>Superficie</b> Tutte su <span class="nw">surface #fff + border</span>, non più grigio vs bianco vs ombra fluttuante.</div>
+      <div class="why-item"><b>Raggio</b> Unico <span class="nw">RADIUS.md = 10</span> per tutte. Prima: <span class="od">8 / 12 / 6</span>.</div>
+      <div class="why-item"><b>Ombra</b> Stessa lingua: <span class="nw">sm a riposo → md in hover</span> (prova a passarci sopra). Prima: <span class="od">nessuna / lg / nessuna</span>.</div>
+      <div class="why-item"><b>Accento</b> <span class="nw">primary (rosso brand)</span> via token. Prima: <span class="od">indaco #6366F1 / blu #1e87f0</span>.</div>
+      <div class="why-item"><b>Placeholder</b> Avatar/foto come <span class="nw">red-soft + icona</span>, non blocco grigio piatto.</div>
+      <div class="why-item"><b>Tipografia</b> Stessa scala: titolo 18–19/700, ruolo 13, testo 14 <span class="nw">text-soft</span>. Ritmo identico.</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

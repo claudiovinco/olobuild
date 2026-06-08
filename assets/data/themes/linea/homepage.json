@@ -1,0 +1,837 @@
+[
+ {
+  "id": "ln-se-4",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "full",
+   "padding": "large",
+   "padding_top": 0,
+   "padding_bottom": 0
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#211f1d"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ln-ro-3",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ln-co-2",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ln-hero-split-1",
+        "type": "imagehero",
+        "settings": {
+         "eyebrow_text": "Concept boutique",
+         "eyebrow_dot": false,
+         "headline_text": "Fewer things,",
+         "accent_text": "chosen",
+         "headline_tail": "well.",
+         "accent_italic": true,
+         "stack_lines": false,
+         "subhead": "A tight edit of clothing, objects and scent from independent makers — considered, never crowded.",
+         "cta1_text": "Shop the edit",
+         "cta1_url": "#edit",
+         "cta2_text": "Our story",
+         "cta2_url": "#story",
+         "meta_text": "",
+         "scroll_hint": "",
+         "bg_image": "",
+         "bg_color": "#161410",
+         "media_label": "editorial — still life, garment on stone, soft shadow",
+         "text_position": "left",
+         "text_align": "left",
+         "content_width": 560,
+         "aspect_ratio": "21/10",
+         "min_height": 560,
+         "heading_font": "serif",
+         "overlay_color": "#161410",
+         "overlay_top": 0.15,
+         "overlay_bottom": 0.15,
+         "overlay_sides": true,
+         "accent": "#bd9a6f",
+         "accent_on": "#161410",
+         "text_color": "#ffffff",
+         "sub_color": "#efe9df",
+         "eyebrow_color": "#bd9a6f"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ln-se-11",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#211f1d"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ln-ro-7",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ln-co-6",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ln-section-header-5",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "New in",
+         "eyebrow_color": "#bd9a6f",
+         "eyebrow_dot_color": "#bd9a6f",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "This week's ",
+           "color": "#efe9df",
+           "italic": false
+          },
+          {
+           "text": "arrivals",
+           "color": "#bd9a6f",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 50,
+         "headline_font_weight": "400",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": false,
+         "tagline_text": "",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#827a6d",
+         "tagline_text_size": 16,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "ln-ro-10",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ln-co-9",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ln-product-cards-8",
+        "type": "product-cards",
+        "settings": {
+         "columns": 4,
+         "gap": 24,
+         "items": [
+          {
+           "letter": "C",
+           "letter_color": "#bd9a6f",
+           "top_bg": {
+            "type": "solid",
+            "color": "#2c2925"
+           },
+           "screenshot_label": "WOOL COAT",
+           "brand_label": "OUTERWEAR",
+           "brand_color": "#bd9a6f",
+           "show_badge": true,
+           "badge_text": "€420",
+           "badge_bg": "#161410",
+           "badge_color": "#efe9df",
+           "title": "Boiled Wool",
+           "title_accent": " Coat",
+           "title_accent_italic": true,
+           "description": "Made in Portugal — boiled wool, bone buttons, unlined. Will outlast everything else in your wardrobe.",
+           "cta_text": "Add to bag",
+           "cta_url": "#edit"
+          },
+          {
+           "letter": "V",
+           "letter_color": "#bd9a6f",
+           "top_bg": {
+            "type": "solid",
+            "color": "#2c2925"
+           },
+           "screenshot_label": "CERAMIC VASE",
+           "brand_label": "OBJECT",
+           "brand_color": "#bd9a6f",
+           "show_badge": true,
+           "badge_text": "€86",
+           "badge_bg": "#161410",
+           "badge_color": "#efe9df",
+           "title": "Stoneware",
+           "title_accent": " Vase",
+           "title_accent_italic": true,
+           "description": "Wheel-thrown by a solo maker in Lisbon. Each piece unique, reactive glaze in warm stone.",
+           "cta_text": "Add to bag",
+           "cta_url": "#edit"
+          },
+          {
+           "letter": "S",
+           "letter_color": "#bd9a6f",
+           "top_bg": {
+            "type": "solid",
+            "color": "#2c2925"
+           },
+           "screenshot_label": "LINEN SHIRT",
+           "brand_label": "READY-TO-WEAR",
+           "brand_color": "#bd9a6f",
+           "show_badge": true,
+           "badge_text": "€140",
+           "badge_bg": "#161410",
+           "badge_color": "#efe9df",
+           "title": "Washed Linen",
+           "title_accent": " Shirt",
+           "title_accent_italic": true,
+           "description": "Prewashed Italian linen, slightly oversized, works as a layer or standalone. Ivory.",
+           "cta_text": "Add to bag",
+           "cta_url": "#edit"
+          },
+          {
+           "letter": "N",
+           "letter_color": "#bd9a6f",
+           "top_bg": {
+            "type": "solid",
+            "color": "#2c2925"
+           },
+           "screenshot_label": "SCENT BOTTLE",
+           "brand_label": "SCENT",
+           "brand_color": "#bd9a6f",
+           "show_badge": true,
+           "badge_text": "€95",
+           "badge_bg": "#161410",
+           "badge_color": "#efe9df",
+           "title": "No. 4",
+           "title_accent": " Eau de Parfum",
+           "title_accent_italic": true,
+           "description": "Cedar, vetiver and quiet smoke. An independent perfumer's fourth release — sparse, precise, lasting.",
+           "cta_text": "Add to bag",
+           "cta_url": "#edit"
+          }
+         ],
+         "card_bg": {
+          "type": "solid",
+          "color": "#262320"
+         },
+         "card_color": "#827a6d",
+         "card_radius": {
+          "tl": 2,
+          "tr": 2,
+          "br": 2,
+          "bl": 2,
+          "linked": true
+         },
+         "card_radius_hover": {
+          "tl": 2,
+          "tr": 2,
+          "br": 2,
+          "bl": 2,
+          "linked": true
+         },
+         "card_shadow": "none",
+         "card_padding": 24,
+         "top_aspect_ratio": "3/4",
+         "top_padding": 24,
+         "letter_font_family": "serif",
+         "letter_size": 120,
+         "letter_italic": true,
+         "letter_align": "center",
+         "show_screenshot_label": true,
+         "screenshot_label_color": "#5c554c",
+         "brand_size": 11,
+         "brand_letter_spacing": 0.14,
+         "title_font_family": "serif",
+         "title_size": 24,
+         "title_weight": "400",
+         "description_size": 13,
+         "cta_size": 11,
+         "cta_arrow": true,
+         "card_hover_effect": "lift"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ln-se-18",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#262320"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ln-ro-14",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ln-co-13",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ln-section-header-12",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "By category",
+         "eyebrow_color": "#bd9a6f",
+         "eyebrow_dot_color": "#bd9a6f",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "The ",
+           "color": "#efe9df",
+           "italic": false
+          },
+          {
+           "text": "edit",
+           "color": "#bd9a6f",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 50,
+         "headline_font_weight": "400",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": false,
+         "tagline_text": "",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#827a6d",
+         "tagline_text_size": 16,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "ln-ro-17",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ln-co-16",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ln-overlaygrid-15",
+        "type": "overlaygrid",
+        "settings": {
+         "bg": {
+          "type": "none"
+         },
+         "items": [
+          {
+           "id": "og-wear",
+           "image": "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1200&q=75&auto=format&fit=crop",
+           "title": "Wear",
+           "subtitle": "Clothing",
+           "link": "#edit"
+          },
+          {
+           "id": "og-live",
+           "image": "https://images.unsplash.com/photo-1578500494198-246f612d3b3d?w=1200&q=75&auto=format&fit=crop",
+           "title": "Live",
+           "subtitle": "Objects & home",
+           "link": "#edit"
+          },
+          {
+           "id": "og-scent",
+           "image": "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=1200&q=75&auto=format&fit=crop",
+           "title": "Scent",
+           "subtitle": "Fragrance & skin",
+           "link": "#edit"
+          }
+         ],
+         "columns": "3",
+         "columns_mobile": "1",
+         "gap": "medium",
+         "height": 420,
+         "match_height": true,
+         "overlay_position": "bottom-left",
+         "title_size": "h3",
+         "hover_effect": "zoom",
+         "hover_overlay": "always",
+         "ribbon_position": "top-right",
+         "ribbon_bg": "",
+         "ribbon_color": "",
+         "shadow": "none",
+         "preset": "editorial-grid",
+         "item_radius": 2,
+         "overlay_color": "rgba(22,20,16,0.55)",
+         "overlay_gradient": true,
+         "overlay_horizontal": "left",
+         "overlay_style": "overlay-default",
+         "overlay_padding": "large",
+         "title_color": "#efe9df",
+         "title_weight": "400",
+         "title_letter_spacing": 0,
+         "title_uppercase": false,
+         "subtitle_color": "#bd9a6f",
+         "subtitle_size": 13,
+         "show_cta": false,
+         "cta_text": "Shop",
+         "cta_style": "arrow"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ln-se-22",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#211f1d"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ln-ro-21",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ln-co-20",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ln-hero-split-19",
+        "type": "hero-split",
+        "settings": {
+         "eyebrow_text": "About Linea",
+         "eyebrow_dot_color": "#bd9a6f",
+         "eyebrow_color": "#bd9a6f",
+         "headline_lines": [
+          {
+           "text": "A shop that ",
+           "color": "#efe9df",
+           "italic": false
+          },
+          {
+           "text": "says no",
+           "color": "#bd9a6f",
+           "italic": true
+          },
+          {
+           "text": "for you",
+           "color": "#efe9df",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 52,
+         "headline_line_height": 1.1,
+         "headline_font_weight": "400",
+         "headline_align": "left",
+         "subhead": "We see thousands of things and choose a few. Everything in Linea is here because it's beautifully made, will last, and earns its place on your shelf.\n\nWe work directly with small makers, in small runs, and we'll tell you the story behind every piece.\n\n— Sora & Idris, founders",
+         "subhead_color": "#b2a99c",
+         "subhead_size": 16,
+         "subhead_italic": false,
+         "subhead_max_width": 460,
+         "cta1_text": "Read more",
+         "cta1_url": "#",
+         "cta1_bg": "transparent",
+         "cta1_color": "#efe9df",
+         "cta1_border": "rgba(189,154,111,.42)",
+         "cta1_size": 12,
+         "cta1_radius": {
+          "tl": 0,
+          "tr": 0,
+          "br": 0,
+          "bl": 0,
+          "linked": true
+         },
+         "cta1_radius_hover": {
+          "tl": 0,
+          "tr": 0,
+          "br": 0,
+          "bl": 0,
+          "linked": true
+         },
+         "cta2_text": "",
+         "cta2_url": "",
+         "cta2_bg": "transparent",
+         "cta2_color": "#efe9df",
+         "stats": [],
+         "showcase_enabled": true,
+         "showcase_bg": {
+          "type": "solid",
+          "color": "#2c2925"
+         },
+         "showcase_padding": 40,
+         "showcase_radius": {
+          "tl": 0,
+          "tr": 0,
+          "br": 0,
+          "bl": 0,
+          "linked": true
+         },
+         "showcase_radius_hover": {
+          "tl": 0,
+          "tr": 0,
+          "br": 0,
+          "bl": 0,
+          "linked": true
+         },
+         "showcase_badge_text": "THE SHOP",
+         "showcase_badge_dot": "#bd9a6f",
+         "showcase_badge_bg": "#161410",
+         "showcase_badge_color": "#efe9df",
+         "showcase_items": [
+          {
+           "number": "Small runs",
+           "text": "Every piece is made in limited quantity — when it's gone, it's gone.",
+           "italic": true,
+           "text_color": "#b2a99c",
+           "bg": {
+            "type": "solid",
+            "color": "#262320"
+           }
+          },
+          {
+           "number": "Est. 2018",
+           "text": "Eight years curating what's worth owning.",
+           "italic": false,
+           "text_color": "#efe9df",
+           "bg": {
+            "type": "solid",
+            "color": "#262320"
+           }
+          },
+          {
+           "number": "Independent makers",
+           "text": "We work directly with craftspeople, no middlemen.",
+           "italic": false,
+           "text_color": "#efe9df",
+           "bg": {
+            "type": "solid",
+            "color": "#262320"
+           }
+          }
+         ],
+         "showcase_card_radius": {
+          "tl": 0,
+          "tr": 0,
+          "br": 0,
+          "bl": 0,
+          "linked": true
+         },
+         "showcase_card_radius_hover": {
+          "tl": 0,
+          "tr": 0,
+          "br": 0,
+          "bl": 0,
+          "linked": true
+         },
+         "showcase_card_shadow": "none",
+         "showcase_caption_left": "OUR STORY",
+         "showcase_caption_right": "EST. 2018",
+         "showcase_hover_effect": "none",
+         "split_ratio": "1fr 1fr",
+         "gap": 0,
+         "min_height": 0,
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ln-se-26",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#262320"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ln-ro-25",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ln-co-24",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ln-finder-23",
+        "type": "finder",
+        "settings": {
+         "eyebrow": "Personal edit",
+         "heading": "Find your edit",
+         "intro": "",
+         "zone_accent": "#bd9a6f",
+         "zone_on": "#161410",
+         "card_bg": "#2c2925",
+         "card_border": "rgba(189,154,111,.42)",
+         "align": "center",
+         "items": [
+          {
+           "option": "Quiet minimal",
+           "title": "The Essentials",
+           "text": "Stone, ecru and ink. Clean lines, the right weight of cotton, nothing shouting. Pieces that quietly do everything.",
+           "meta": "12 pieces · from €90",
+           "cta_text": "",
+           "cta_url": "#",
+           "icon": ""
+          },
+          {
+           "option": "Sharp & tailored",
+           "title": "The Tailored",
+           "text": "A precise blazer, straight wool trouser and a crisp poplin shirt. Structure that reads considered, never stiff.",
+           "meta": "9 pieces · from €140",
+           "cta_text": "",
+           "cta_url": "#",
+           "icon": ""
+          },
+          {
+           "option": "Soft & relaxed",
+           "title": "The Soft Edit",
+           "text": "Washed linen, dropped shoulders and easy knits. Made for slow weekends and warm light.",
+           "meta": "10 pieces · from €85",
+           "cta_text": "",
+           "cta_url": "#",
+           "icon": ""
+          },
+          {
+           "option": "A statement",
+           "title": "The One Thing",
+           "text": "A single sculptural piece to build a look around — the coat, the dress, the bag people remember.",
+           "meta": "Hero pieces · from €220",
+           "cta_text": "",
+           "cta_url": "#",
+           "icon": ""
+          }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ln-se-30",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#211f1d"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ln-ro-29",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ln-co-28",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ln-newsletter-27",
+        "type": "newsletter",
+        "settings": {
+         "title": "The <em>quiet</em> list",
+         "subtitle": "One considered email a month — new arrivals, maker stories and the occasional private preview.",
+         "layout": "horizontal",
+         "show_name": false,
+         "email_placeholder": "Email address",
+         "button_text": "Join",
+         "button_icon": false,
+         "privacy_text": "",
+         "max_width": "440",
+         "alignment": "center",
+         "bg_color": "transparent",
+         "box_border": "",
+         "border_radius": 0,
+         "tile_padding": {
+          "top": 56,
+          "right": 32,
+          "bottom": 56,
+          "left": 32
+         },
+         "title_size": "56",
+         "title_weight": "400",
+         "title_color": "#efe9df",
+         "subtitle_size": "16",
+         "subtitle_color": "#827a6d",
+         "input_bg": "transparent",
+         "input_color": "#efe9df",
+         "input_border": "rgba(189,154,111,.42)",
+         "input_focus_border": "#bd9a6f",
+         "input_radius": 0,
+         "input_height": "52",
+         "btn_bg": "#bd9a6f",
+         "btn_color": "#161410",
+         "btn_hover_bg": "#cfb088",
+         "btn_radius": 0,
+         "btn_font_size": "12",
+         "btn_font_weight": "500",
+         "shadow": "none",
+         "icon_type": "none"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

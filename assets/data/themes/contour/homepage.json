@@ -1,0 +1,1328 @@
+[
+ {
+  "id": "co-se-4",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#f4efe6"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "co-ro-3",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "co-co-2",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "co-hero-split-1",
+        "type": "hero-split",
+        "settings": {
+         "eyebrow_text": "Reformer · mat · private",
+         "eyebrow_dot_color": "#cf7e4f",
+         "eyebrow_color": "#cf7e4f",
+         "headline_lines": [
+          {
+           "text": "Move better,",
+           "color": "#2c2a26",
+           "italic": false
+          },
+          {
+           "text": "breathe ",
+           "color": "#2c2a26",
+           "italic": false
+          },
+          {
+           "text": "easier.",
+           "color": "#cf7e4f",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 68,
+         "headline_line_height": 1.04,
+         "headline_font_weight": "400",
+         "headline_align": "left",
+         "subhead": "A pilates studio built around small classes and good attention — so every session meets your body where it is today.",
+         "subhead_color": "#5e584e",
+         "subhead_size": 18,
+         "subhead_italic": false,
+         "subhead_max_width": 440,
+         "cta1_text": "Start with an intro offer",
+         "cta1_url": "#pricing",
+         "cta1_bg": "#cf7e4f",
+         "cta1_color": "#ffffff",
+         "cta1_size": 15,
+         "cta1_radius": {
+          "tl": 999,
+          "tr": 999,
+          "br": 999,
+          "bl": 999,
+          "linked": true
+         },
+         "cta1_radius_hover": {
+          "tl": 999,
+          "tr": 999,
+          "br": 999,
+          "bl": 999,
+          "linked": true
+         },
+         "cta2_text": "See timetable",
+         "cta2_url": "#timetable",
+         "cta2_bg": "transparent",
+         "cta2_color": "#2c2a26",
+         "cta2_border": "#cabfa9",
+         "cta2_size": 15,
+         "cta2_radius": {
+          "tl": 999,
+          "tr": 999,
+          "br": 999,
+          "bl": 999,
+          "linked": true
+         },
+         "cta2_radius_hover": {
+          "tl": 999,
+          "tr": 999,
+          "br": 999,
+          "bl": 999,
+          "linked": true
+         },
+         "stats": [],
+         "showcase_enabled": false,
+         "showcase_bg": {
+          "type": "solid",
+          "color": "#ebe3d5"
+         },
+         "showcase_padding": 28,
+         "showcase_radius": {
+          "tl": 200,
+          "tr": 200,
+          "br": 200,
+          "bl": 200,
+          "linked": true
+         },
+         "showcase_radius_hover": {
+          "tl": 200,
+          "tr": 200,
+          "br": 200,
+          "bl": 200,
+          "linked": true
+         },
+         "showcase_badge_text": "STUDIO · AT A GLANCE",
+         "showcase_badge_dot": "#cf7e4f",
+         "showcase_badge_bg": "#fbf7f0",
+         "showcase_badge_color": "#2c2a26",
+         "showcase_items": [
+          {
+           "number": "Max per class",
+           "text": "8",
+           "italic": false,
+           "text_color": "#cf7e4f",
+           "bg": {
+            "type": "solid",
+            "color": "#fbf7f0"
+           }
+          },
+          {
+           "number": "Classes weekly",
+           "text": "30+",
+           "italic": false,
+           "text_color": "#2c2a26",
+           "bg": {
+            "type": "solid",
+            "color": "#fbf7f0"
+           }
+          },
+          {
+           "number": "Instructors",
+           "text": "6",
+           "italic": false,
+           "text_color": "#2c2a26",
+           "bg": {
+            "type": "solid",
+            "color": "#fbf7f0"
+           }
+          },
+          {
+           "number": "Years open",
+           "text": "9",
+           "italic": false,
+           "text_color": "#2c2a26",
+           "bg": {
+            "type": "solid",
+            "color": "#fbf7f0"
+           }
+          }
+         ],
+         "showcase_card_radius": {
+          "tl": 14,
+          "tr": 14,
+          "br": 14,
+          "bl": 14,
+          "linked": true
+         },
+         "showcase_card_radius_hover": {
+          "tl": 14,
+          "tr": 14,
+          "br": 14,
+          "bl": 14,
+          "linked": true
+         },
+         "showcase_card_shadow": "sm",
+         "showcase_caption_left": "Contour Studio",
+         "showcase_caption_right": "Since 2017",
+         "showcase_hover_effect": "none",
+         "split_ratio": "1.05fr .95fr",
+         "gap": 48,
+         "min_height": 0,
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "co-se-14",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "small"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#fbf7f0"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "co-ro-13",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "co-co-6",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "co-statstrip-5",
+        "type": "statstrip",
+        "settings": {
+         "items": [
+          {
+           "value": "8",
+           "label": "Max per class"
+          },
+          {
+           "value": "30+",
+           "label": "Classes weekly"
+          },
+          {
+           "value": "6",
+           "label": "Instructors"
+          },
+          {
+           "value": "9",
+           "label": "Years open"
+          }
+         ],
+         "columns": 4,
+         "items_gap": 0,
+         "band_padding_y": 40,
+         "show_dividers": true,
+         "divider_color": "#ddd3c2",
+         "band_border": false,
+         "value_font_family": "heading",
+         "value_color": "#2c2a26",
+         "value_size": 54,
+         "value_weight": "400",
+         "label_color": "#938c7e",
+         "label_size": 13,
+         "label_uppercase": false,
+         "align": "center",
+         "mono_font_family": ""
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "co-se-21",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#f4efe6"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "co-ro-17",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "co-co-16",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "co-section-header-15",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "What we teach",
+         "eyebrow_color": "#cf7e4f",
+         "eyebrow_dot_color": "#cf7e4f",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "Three ways to ",
+           "color": "#2c2a26",
+           "italic": false
+          },
+          {
+           "text": "practise",
+           "color": "#cf7e4f",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 46,
+         "headline_font_weight": "400",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": false,
+         "tagline_text": "",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#938c7e",
+         "tagline_text_size": 16.5,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "co-ro-20",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "co-co-19",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "co-info-cards-18",
+        "type": "info-cards",
+        "settings": {
+         "container_bg": {
+          "type": "solid",
+          "color": "transparent"
+         },
+         "container_padding": 0,
+         "container_gap": 18,
+         "columns": 3,
+         "items_gap": 18,
+         "card_bg": {
+          "type": "solid",
+          "color": "#fbf7f0"
+         },
+         "card_color": "#5e584e",
+         "card_accent_color": "#2c2a26",
+         "card_radius": {
+          "tl": 16,
+          "tr": 16,
+          "br": 16,
+          "bl": 16,
+          "linked": true
+         },
+         "card_padding": 26,
+         "card_border": "#ddd3c2",
+         "show_icon": false,
+         "show_counter": true,
+         "show_counter_label": false,
+         "show_arrow": false,
+         "show_footer": false,
+         "show_media": true,
+         "media_aspect_ratio": "4/3",
+         "media_position": "top",
+         "media_radius": {
+          "tl": 12,
+          "tr": 12,
+          "br": 12,
+          "bl": 12,
+          "linked": true
+         },
+         "counter_color": "#cf7e4f",
+         "counter_size": 11,
+         "title_font_family": "serif",
+         "title_size": 25,
+         "title_weight": "400",
+         "title_italic": false,
+         "description_size": 14.5,
+         "items": [
+          {
+           "counter": "All levels",
+           "title": "Reformer Flow",
+           "description": "Spring-loaded resistance for strength, control and length. Our signature class.",
+           "media_image": "",
+           "media_label": "reformer class"
+          },
+          {
+           "counter": "Beginner friendly",
+           "title": "Mat & Breath",
+           "description": "Classical mat work and breathwork — the foundations, slowed right down.",
+           "media_image": "",
+           "media_label": "mat class"
+          },
+          {
+           "counter": "One-to-one",
+           "title": "Private Sessions",
+           "description": "Fully tailored work for rehab, pregnancy or going deeper. Just you and a teacher.",
+           "media_image": "",
+           "media_label": "private session"
+          }
+         ],
+         "card_hover_effect": "lift"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "co-se-25",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#ebe3d5"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "co-ro-24",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "co-co-23",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "co-finder-22",
+        "type": "finder",
+        "settings": {
+         "eyebrow": "Not sure where to start?",
+         "heading": "Where's your body today?",
+         "intro": "Pick the option that fits — we've got a class to match.",
+         "zone_accent": "#cf7e4f",
+         "zone_on": "#ffffff",
+         "card_bg": "#fbf7f0",
+         "card_border": "1px solid #ddd3c2",
+         "align": "center",
+         "items": [
+          {
+           "option": "Desk & screen tight",
+           "title": "The Reset",
+           "text": "A Reformer Flow that undoes the desk slump — open the chest, free the hips and wake up a sleepy back. You'll stand taller by the time you reach the door.",
+           "meta": "Reformer Flow · all levels",
+           "cta_text": "Try this class",
+           "cta_url": "#pricing",
+           "icon": "monitor"
+          },
+          {
+           "option": "New to pilates",
+           "title": "The Foundations",
+           "text": "Classical Mat & Breath, slowed right down. Learn the principles, find your centre and build the habit before you ever touch a spring.",
+           "meta": "Mat & Breath · beginner friendly",
+           "cta_text": "Try this class",
+           "cta_url": "#pricing",
+           "icon": "compass"
+          },
+          {
+           "option": "Easing back gently",
+           "title": "One to One",
+           "text": "Coming back from injury, pregnancy or a long pause? A private session meets your body exactly where it is, with a plan that's entirely yours.",
+           "meta": "Private Sessions · fully tailored",
+           "cta_text": "Book a private",
+           "cta_url": "#pricing",
+           "icon": "heart"
+          },
+          {
+           "option": "Want to build strength",
+           "title": "Reformer, Twice a Week",
+           "text": "Our signature Reformer Flow on heavier springs, twice weekly. Real, controlled strength — the kind that quietly holds you up for everything else.",
+           "meta": "Reformer Flow · progressive",
+           "cta_text": "Try this class",
+           "cta_url": "#pricing",
+           "icon": "trending-up"
+          }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "co-se-32",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#fbf7f0"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "co-ro-28",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "co-co-27",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "co-section-header-26",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "This week",
+         "eyebrow_color": "#cf7e4f",
+         "eyebrow_dot_color": "#cf7e4f",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "Find your ",
+           "color": "#2c2a26",
+           "italic": false
+          },
+          {
+           "text": "time",
+           "color": "#cf7e4f",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 46,
+         "headline_font_weight": "400",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": false,
+         "tagline_text": "",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#938c7e",
+         "tagline_text_size": 16.5,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "co-ro-31",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "co-co-30",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "co-schedule-29",
+        "type": "schedule",
+        "settings": {
+         "eyebrow": "This week",
+         "heading": "Find your time",
+         "days": "Mon, Tue, Wed, Thu, Fri",
+         "corner_label": "Time",
+         "rows": [
+          {
+           "time": "07:00",
+           "cells": "!Reformer · Ana | Mat · Jo | !Reformer · Ana | Mat · Jo | !Reformer · Lena"
+          },
+          {
+           "time": "12:30",
+           "cells": "Express · 30m | !Reformer · Lena | Express · 30m | !Reformer · Lena | Express · 30m"
+          },
+          {
+           "time": "18:30",
+           "cells": "!Reformer · Ana | Mat & Breath · Jo | !Reformer · Ana | Mat & Breath · Jo | "
+          }
+         ],
+         "zone_accent": "#cf7e4f",
+         "zone_on": "#ffffff",
+         "cell_bg": "#ebe3d5",
+         "card_border": "#ddd3c2",
+         "head_color": "#2c2a26",
+         "align": "left"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "co-se-45",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#f4efe6"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "co-ro-35",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "co-co-34",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "co-section-header-33",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "Your teachers",
+         "eyebrow_color": "#cf7e4f",
+         "eyebrow_dot_color": "#cf7e4f",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "Trained, patient, ",
+           "color": "#2c2a26",
+           "italic": false
+          },
+          {
+           "text": "present",
+           "color": "#cf7e4f",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 46,
+         "headline_font_weight": "400",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": false,
+         "tagline_text": "",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#938c7e",
+         "tagline_text_size": 16.5,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "co-ro-44",
+    "type": "row",
+    "settings": {
+     "gap": 16
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "co-co-37",
+      "type": "column",
+      "settings": {
+       "width": "1-4"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "co-team-36",
+        "type": "team",
+        "settings": {
+         "photo": "",
+         "name": "Ana Reyes",
+         "role": "Studio lead",
+         "bio": "",
+         "link_url": "",
+         "link_text": "",
+         "photo_size": "120",
+         "photo_shape": "circle",
+         "photo_border_width": "0",
+         "photo_shadow": "none",
+         "photo_gap": "16",
+         "info_bg_color": "transparent",
+         "info_text_color": "#2c2a26",
+         "role_color": "#cf7e4f",
+         "info_align": "center",
+         "name_size": "21",
+         "name_weight": "400",
+         "name_font": "serif",
+         "role_size": "13",
+         "role_weight": "600",
+         "bg_color": "transparent",
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         },
+         "border_radius": "0"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "co-co-39",
+      "type": "column",
+      "settings": {
+       "width": "1-4"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "co-team-38",
+        "type": "team",
+        "settings": {
+         "photo": "",
+         "name": "Jo Park",
+         "role": "Mat & breath",
+         "bio": "",
+         "link_url": "",
+         "link_text": "",
+         "photo_size": "120",
+         "photo_shape": "circle",
+         "photo_border_width": "0",
+         "photo_shadow": "none",
+         "photo_gap": "16",
+         "info_bg_color": "transparent",
+         "info_text_color": "#2c2a26",
+         "role_color": "#cf7e4f",
+         "info_align": "center",
+         "name_size": "21",
+         "name_weight": "400",
+         "name_font": "serif",
+         "role_size": "13",
+         "role_weight": "600",
+         "bg_color": "transparent",
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         },
+         "border_radius": "0"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "co-co-41",
+      "type": "column",
+      "settings": {
+       "width": "1-4"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "co-team-40",
+        "type": "team",
+        "settings": {
+         "photo": "",
+         "name": "Lena Voss",
+         "role": "Reformer",
+         "bio": "",
+         "link_url": "",
+         "link_text": "",
+         "photo_size": "120",
+         "photo_shape": "circle",
+         "photo_border_width": "0",
+         "photo_shadow": "none",
+         "photo_gap": "16",
+         "info_bg_color": "transparent",
+         "info_text_color": "#2c2a26",
+         "role_color": "#cf7e4f",
+         "info_align": "center",
+         "name_size": "21",
+         "name_weight": "400",
+         "name_font": "serif",
+         "role_size": "13",
+         "role_weight": "600",
+         "bg_color": "transparent",
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         },
+         "border_radius": "0"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "co-co-43",
+      "type": "column",
+      "settings": {
+       "width": "1-4"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "co-team-42",
+        "type": "team",
+        "settings": {
+         "photo": "",
+         "name": "Marco Sala",
+         "role": "Rehab & private",
+         "bio": "",
+         "link_url": "",
+         "link_text": "",
+         "photo_size": "120",
+         "photo_shape": "circle",
+         "photo_border_width": "0",
+         "photo_shadow": "none",
+         "photo_gap": "16",
+         "info_bg_color": "transparent",
+         "info_text_color": "#2c2a26",
+         "role_color": "#cf7e4f",
+         "info_align": "center",
+         "name_size": "21",
+         "name_weight": "400",
+         "name_font": "serif",
+         "role_size": "13",
+         "role_weight": "600",
+         "bg_color": "transparent",
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         },
+         "border_radius": "0"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "co-se-56",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#fbf7f0"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "co-ro-48",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "co-co-47",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "co-section-header-46",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "Memberships",
+         "eyebrow_color": "#cf7e4f",
+         "eyebrow_dot_color": "#cf7e4f",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "Simple, ",
+           "color": "#2c2a26",
+           "italic": false
+          },
+          {
+           "text": "flexible plans",
+           "color": "#cf7e4f",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 46,
+         "headline_font_weight": "400",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": true,
+         "tagline_text": "New here? Two weeks of unlimited classes for €49. No contract, freeze anytime.",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#938c7e",
+         "tagline_text_size": 16.5,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "co-ro-55",
+    "type": "row",
+    "settings": {
+     "gap": 16,
+     "vertical_align": "stretch"
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "co-co-50",
+      "type": "column",
+      "settings": {
+       "width": "1-3"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "co-pricing-49",
+        "type": "pricing",
+        "settings": {
+         "plan_name": "Intro Offer",
+         "price": "49",
+         "currency": "€",
+         "period": "/2 weeks",
+         "features": "All group classes\nIntro reformer workshop\nNo commitment",
+         "is_popular": false,
+         "badge_text": "",
+         "bg_color": "#fbf7f0",
+         "border_color": "#ddd3c2",
+         "price_color": "#2c2a26",
+         "accent_color": "#cf7e4f",
+         "cta_text": "Claim offer",
+         "cta_url": "#",
+         "cta_bg": "transparent",
+         "cta_color": "#2c2a26",
+         "cta_border_color": "#cabfa9",
+         "border_radius": {
+          "tl": 18,
+          "tr": 18,
+          "br": 18,
+          "bl": 18,
+          "linked": true
+         },
+         "description": "Unlimited classes for your first fortnight."
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "co-co-52",
+      "type": "column",
+      "settings": {
+       "width": "1-3"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "co-pricing-51",
+        "type": "pricing",
+        "settings": {
+         "plan_name": "Unlimited",
+         "price": "129",
+         "currency": "€",
+         "period": "/month",
+         "features": "Unlimited group classes\nPriority booking\n10% off privates",
+         "is_popular": true,
+         "badge_text": "Most popular",
+         "badge_bg_color": "#cf7e4f",
+         "bg_color": "#2c2a26",
+         "price_color": "#f4efe6",
+         "accent_color": "#cf7e4f",
+         "cta_text": "Join now",
+         "cta_url": "#",
+         "cta_bg": "#cf7e4f",
+         "cta_color": "#ffffff",
+         "border_radius": {
+          "tl": 18,
+          "tr": 18,
+          "br": 18,
+          "bl": 18,
+          "linked": true
+         },
+         "description": "For a steady, regular practice."
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "co-co-54",
+      "type": "column",
+      "settings": {
+       "width": "1-3"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "co-pricing-53",
+        "type": "pricing",
+        "settings": {
+         "plan_name": "Class Pack",
+         "price": "160",
+         "currency": "€",
+         "period": "/10 classes",
+         "features": "10 group classes\nShareable with a friend\nFlexible scheduling",
+         "is_popular": false,
+         "badge_text": "",
+         "bg_color": "#fbf7f0",
+         "border_color": "#ddd3c2",
+         "price_color": "#2c2a26",
+         "accent_color": "#cf7e4f",
+         "cta_text": "Buy a pack",
+         "cta_url": "#",
+         "cta_bg": "transparent",
+         "cta_color": "#2c2a26",
+         "cta_border_color": "#cabfa9",
+         "border_radius": {
+          "tl": 18,
+          "tr": 18,
+          "br": 18,
+          "bl": 18,
+          "linked": true
+         },
+         "description": "Come at your own pace, valid 4 months."
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "co-se-60",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#f4efe6"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "co-ro-59",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "co-co-58",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "co-testimonial-57",
+        "type": "testimonial",
+        "settings": {
+         "quote": "\"I came in with a cranky back and left, three months later, standing taller than I have in years. The teaching here is just exceptional.\"",
+         "author_name": "Federica M.",
+         "author_role": "Member since 2024",
+         "rating": "0",
+         "layout": "single",
+         "show_line": false,
+         "bg_color": "transparent",
+         "text_color": "#2c2a26",
+         "border_radius": "0",
+         "avatar": ""
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "co-se-64",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#2c2a26"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "co-ro-63",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "co-co-62",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "co-cta-banner-61",
+        "type": "cta-banner",
+        "settings": {
+         "headline": "Your first ",
+         "headline_accent": "two weeks,",
+         "headline_accent_italic": true,
+         "headline_line2": "€49.",
+         "subtitle": "Unlimited classes, no contract. Come find out what good movement feels like.",
+         "cta_text": "Claim the intro offer",
+         "cta_url": "#pricing",
+         "bg": {
+          "type": "solid",
+          "color": "#2c2a26"
+         },
+         "text_color": "#f4efe6",
+         "accent_color": "#cf7e4f",
+         "subtitle_color": "#cfc7b9",
+         "cta_bg": "#cf7e4f",
+         "cta_color": "#ffffff",
+         "cta_radius": {
+          "tl": 999,
+          "tr": 999,
+          "br": 999,
+          "bl": 999,
+          "linked": true
+         },
+         "cta_size": 15,
+         "headline_font_family": "serif",
+         "headline_size": 56,
+         "headline_weight": "400",
+         "subtitle_size": 17,
+         "layout": "stack",
+         "vertical_align": "center",
+         "banner_radius": {
+          "tl": 0,
+          "tr": 0,
+          "br": 0,
+          "bl": 0,
+          "linked": true
+         },
+         "banner_padding": 80
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

@@ -21,6 +21,15 @@
         >
           <img :src="s.logo_image" :alt="t('Logo')" :style="logoImgStyle" />
         </div>
+        <div
+          v-else-if="s.logo_text && (s.logo_position === 'left' || s.logo_position === 'stacked' || s.logo_position === 'split')"
+          class="olo-mm-logo-wrap olo-mm-logo--text"
+          :style="logoWrapStyle"
+        >
+          <span v-if="s.logo_crest" class="olo-mm-crest" :style="crestStyle">{{ s.logo_crest }}</span>
+          <span v-if="s.logo_dot" class="olo-mm-logo-dot" :style="logoDotStyle"></span>
+          <span class="olo-mm-logo-text" :style="logoTextStyle">{{ s.logo_text }}</span>
+        </div>
 
         <!-- Nav Left (split) -->
         <ul v-if="s.logo_position === 'split'" class="olo-mm-nav" :style="{ ...navStyle, flex: 'none' }">
@@ -261,7 +270,7 @@ const defaults = {
   font_size: '15', font_weight: 'normal', text_transform: 'none',
   letter_spacing: '0', item_gap: '15',
   bar_padding: '16', bar_gap: '20', logo_margin_right: '0',
-  logo_image: '', logo_width: '140', logo_position: 'left',
+  logo_image: '', logo_text: '', logo_dot: false, logo_text_color: '', logo_text_size: '19', logo_crest: '', logo_crest_bg: '', logo_crest_color: '', nav_phone: '', nav_phone_url: '', nav_phone_color: '', logo_width: '140', logo_position: 'left',
   hover_effect: 'none', hover_effect_color: '', hover_effect_height: '2',
   mega_mode: 'auto', panel_width: 'container', panel_columns: '4',
   panel_bg: '#ffffff', panel_shadow: 'md', panel_radius: '8',
@@ -617,6 +626,24 @@ const logoImgStyle = computed(() => ({
   height: 'auto', maxHeight: '36px', display: 'block',
 }));
 
+const logoTextStyle = computed(() => ({
+  fontFamily: "var(--olo-font-family-heading, 'DM Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif)",
+  fontWeight: 700, letterSpacing: '-0.02em', lineHeight: 1, whiteSpace: 'nowrap',
+  fontSize: (parseInt(s.value.logo_text_size) || 19) + 'px',
+  color: s.value.logo_text_color || s.value.text_color || 'inherit',
+}));
+const logoDotStyle = computed(() => ({
+  width: '9px', height: '9px', borderRadius: '50%', flex: 'none',
+  background: s.value.logo_text_color || s.value.text_color || 'currentColor',
+}));
+const crestStyle = computed(() => ({
+  display: 'inline-grid', placeItems: 'center', width: '34px', height: '38px', flex: 'none',
+  fontFamily: "var(--olo-font-family-heading, 'Archivo',sans-serif)", fontWeight: 900, fontSize: '13px', letterSpacing: '.02em',
+  borderRadius: '14px 14px 16px 16px/14px 14px 22px 22px', boxShadow: 'inset 0 0 0 2px rgba(255,255,255,.2)',
+  background: s.value.logo_crest_bg || 'var(--olo-color-primary, #c8ff3c)',
+  color: s.value.logo_crest_color || 'var(--olo-color-primary-contrast, #0a2a1e)',
+}));
+
 const hamburgerBtnStyle = computed(() => ({
   display: 'flex', alignItems: 'center', justifyContent: 'center',
   width: Math.min(28, parseInt(s.value.hamburger_size) || 28) + 'px',
@@ -866,6 +893,7 @@ const mobilePanelLinkStyle = computed(() => ({
 .olo-mm-badge--overlay { background: #059669; color: #fff; }
 .olo-mm-badge--origin { background: #d97706; color: #fff; }
 .olo-mm-badge--mob { background: #374151; color: #fff; }
+.olo-mm-logo--text { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; }
 
 /* Navbar bar */
 .olo-mm-bar { border-radius: 6px 6px 0 0; border: 1px solid rgba(0,0,0,.06); position: relative; z-index: 2; }

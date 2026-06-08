@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Càrica — alta orologeria · tema dimostrativo OLObuild</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Manrope:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared/olo-demo.css">
+<style>
+:root{
+  --bg:#0E0F12; --bg-2:#15171C; --bg-3:#1E2127; --fg:#ECEAE3; --fg-2:#9A968B; --fg-3:#605C53;
+  --gold:#C6A15B; --gold-2:#E3C988; --steel:#8C94A0; --line:rgba(236,234,227,.12);
+  --tile-accent:#C6A15B; --tile-btn:#000;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:'Manrope',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+a{color:inherit;text-decoration:none;}
+.serif{font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;}
+.mono{font-family:'JetBrains Mono',monospace;}
+.wrap{max-width:1180px;margin:0 auto;padding:0 44px;}
+.kick{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);font-weight:600;display:inline-flex;align-items:center;gap:10px;}
+.kick::before{content:"";width:24px;height:1px;background:var(--gold);}
+
+/* nav */
+.nav{position:fixed;inset:0 0 auto 0;z-index:50;display:flex;align-items:center;gap:26px;padding:22px 44px;transition:all .35s;border-bottom:1px solid transparent;}
+.nav.solid{background:rgba(14,15,18,.9);backdrop-filter:blur(14px);border-color:var(--line);padding:14px 44px;}
+.brand{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:26px;letter-spacing:.1em;padding-left:.1em;}
+.nav-links{margin-left:auto;display:flex;gap:28px;font-size:13.5px;font-weight:500;}
+.nav-links a{opacity:.85;}.nav-links a:hover{opacity:1;color:var(--gold);}
+.nav-cta{border:1px solid var(--gold);color:var(--gold);padding:10px 20px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;transition:all .2s;}
+.nav-cta:hover{background:var(--gold);color:var(--bg);}
+@media(max-width:880px){.nav-links{display:none;}}
+
+/* hero assembly */
+#hero{height:200vh;position:relative;}
+.hero-sticky{position:sticky;top:0;height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;
+  background:radial-gradient(60% 60% at 50% 45%,#1A1D24,#0E0F12 75%);}
+.hero-copy{position:absolute;z-index:5;text-align:center;top:11vh;left:0;right:0;pointer-events:none;}
+.hero-ey{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;}
+.hero-h{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(40px,7vw,108px);line-height:.92;margin:0;letter-spacing:.01em;}
+.hero-h em{font-style:italic;color:var(--gold);}
+.hero-hint{position:absolute;bottom:5vh;left:0;right:0;text-align:center;z-index:5;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--fg-3);}
+/* watch parts */
+.watch{position:relative;width:min(360px,80vw);aspect-ratio:1;}
+.part{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;will-change:transform,opacity;}
+.case-ring{border-radius:50%;background:radial-gradient(circle at 38% 32%,#2A2E36,#15171C);box-shadow:0 30px 70px -24px rgba(0,0,0,.7),inset 0 0 0 10px #20242B,inset 0 0 0 12px var(--gold);}
+.dial{width:80%;height:80%;border-radius:50%;background:radial-gradient(circle at 40% 36%,#23262D,#121419);margin:auto;box-shadow:inset 0 0 40px rgba(0,0,0,.6);position:relative;}
+.dial .idx{position:absolute;left:50%;top:6%;width:2px;height:9%;background:var(--gold);transform-origin:50% 478%;}
+.crown{width:18px;height:34px;border-radius:4px;background:linear-gradient(var(--gold-2),var(--gold-d,#9E7E38));position:absolute;right:2%;top:46%;}
+.brandmark{position:absolute;left:50%;top:32%;transform:translateX(-50%);font-family:'Cormorant Garamond',serif;font-size:15px;letter-spacing:.12em;color:var(--gold);}
+.sub{position:absolute;left:50%;top:62%;transform:translateX(-50%);font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.1em;color:var(--fg-2);text-transform:uppercase;}
+.hand{position:absolute;left:50%;bottom:50%;transform-origin:bottom center;border-radius:4px;}
+.hand.h{width:5px;height:24%;background:var(--fg);}
+.hand.m{width:4px;height:34%;background:var(--fg);}
+.hand.s{width:2px;height:38%;background:var(--gold);}
+.hub{width:12px;height:12px;border-radius:50%;background:var(--gold);position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:6;}
+@media(max-width:880px){#hero{height:160vh;}}
+
+/* specs */
+#specs{padding:120px 0;}
+.specs-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:1px solid var(--line);}
+.sp{padding:36px 26px 36px 0;border-right:1px solid var(--line);}
+.sp:last-child{border-right:none;}
+.sp .n{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);letter-spacing:.08em;}
+.sp .v{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(28px,3.2vw,42px);line-height:1;margin:12px 0 8px;}
+.sp p{font-size:13px;color:var(--fg-2);line-height:1.5;margin:0;}
+@media(max-width:880px){.specs-grid{grid-template-columns:1fr 1fr;}.sp:nth-child(2){border-right:none;}}
+
+/* collection */
+#coll{padding:110px 0;background:var(--bg-2);}
+.coll-h{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:42px;flex-wrap:wrap;gap:16px;}
+.coll-h h2{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(38px,5vw,68px);margin:14px 0 0;}
+.watch-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
+.wc{background:var(--bg-3);border:1px solid var(--line);border-radius:16px;overflow:hidden;transition:transform .25s,border-color .25s;}
+.wc:hover{transform:translateY(-6px);border-color:var(--gold);}
+.wc .wimg{aspect-ratio:1;background:radial-gradient(circle at 50% 40%,#23262D,#15171C);display:flex;align-items:center;justify-content:center;padding:26px;}
+.wc .wimg image-slot{width:100%;height:100%;display:block;}
+.wc .wx{padding:24px;}
+.wc .wt2{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);}
+.wc h3{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:24px;margin:9px 0 12px;}
+.wc .wf{display:flex;justify-content:space-between;border-top:1px solid var(--line);padding-top:13px;font-family:'JetBrains Mono',monospace;font-size:13px;}
+.wc .wf b{color:var(--gold);}
+@media(max-width:880px){.watch-grid{grid-template-columns:1fr;max-width:380px;margin:0 auto;}}
+
+/* craft */
+#craft{padding:120px 0;}
+.craft{display:grid;grid-template-columns:1fr 1.05fr;gap:64px;align-items:center;}
+.craft .ph image-slot{width:100%;aspect-ratio:4/5;display:block;}
+.craft h2{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(34px,4.4vw,58px);line-height:1.05;margin:16px 0 18px;}
+.craft h2 em{font-style:italic;color:var(--gold);}
+.craft p{font-size:16px;line-height:1.72;color:var(--fg-2);margin:0 0 16px;}
+.craft p strong{color:var(--fg);}
+@media(max-width:880px){.craft{grid-template-columns:1fr;gap:36px;}}
+
+/* cta */
+#cta{padding:0 0 120px;}
+.cta-card{border:1px solid var(--line);border-radius:0;padding:70px 50px;text-align:center;background:radial-gradient(110% 120% at 50% 0%,rgba(198,161,91,.12),transparent 60%);}
+.cta-card h2{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(34px,5vw,64px);margin:0 0 16px;}
+.cta-card h2 em{font-style:italic;color:var(--gold);}
+.cta-card p{color:var(--fg-2);max-width:42ch;margin:0 auto 28px;font-size:17px;}
+.btn{display:inline-flex;align-items:center;gap:9px;background:var(--gold);color:var(--bg);border:none;cursor:pointer;padding:15px 30px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;transition:all .2s;}
+.btn:hover{background:var(--gold-2);}
+
+footer{border-top:1px solid var(--line);padding:50px 0 34px;}
+.f-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px;}
+.f-row .fm{font-family:'Cormorant Garamond',serif;font-size:26px;letter-spacing:.1em;}
+.olo-credit{color:var(--fg-2);}
+.f-meta{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--fg-3);}
+.f-tiles{font-family:'JetBrains Mono',monospace;font-size:10.5px;line-height:1.9;color:var(--fg-3);margin-top:22px;max-width:92ch;}
+.f-tiles b{color:var(--fg-2);}
+</style>
+</head>
+<body>
+
+<nav class="nav" id="nav" data-solid-at="80vh">
+  <div class="brand">CÀRICA</div>
+  <div class="nav-links"><a href="#specs">Movimento</a><a href="#coll">Collezione</a><a href="#craft">Manifattura</a></div>
+  <a class="nav-cta" href="#coll">Richiedi un incontro</a>
+</nav>
+
+<section id="hero" data-tile="Hero · ExplodedAssembly">
+  <div class="hero-sticky">
+    <div class="hero-copy">
+      <div class="hero-ey">Manifattura svizzera · dal 1911</div>
+      <h1 class="hero-h serif">Ingranaggio per <em>ingranaggio</em></h1>
+    </div>
+    <div class="watch" id="watch" data-tile="ScrollAssembly">
+      <div class="part" data-part="case"><div class="case-ring" style="width:100%;height:100%"></div></div>
+      <div class="part" data-part="dial"><div class="dial"></div></div>
+      <div class="part" data-part="brand"><div class="brandmark serif">CÀRICA</div><div class="sub">automatic · genève</div></div>
+      <div class="part" data-part="crown"><div class="crown"></div></div>
+      <div class="part" data-part="hands">
+        <div class="hand h" id="handH"></div>
+        <div class="hand m" id="handM"></div>
+        <div class="hand s" id="handS"></div>
+        <div class="hub"></div>
+      </div>
+    </div>
+    <div class="hero-hint">↓ scorri per montare il calibro</div>
+  </div>
+</section>
+
+<section id="specs" data-tile="DescList · movimento">
+  <div class="wrap">
+    <span class="kick">Il calibro CÀ-01</span>
+    <h2 class="serif" style="font-weight:500;font-size:clamp(30px,4vw,52px);margin:16px 0 44px;">Un cuore meccanico, interamente nostro.</h2>
+    <div class="specs-grid">
+      <div class="sp"><div class="n">Riserva</div><div class="v serif">72h</div><p>Di carica automatica continua.</p></div>
+      <div class="sp"><div class="n">Frequenza</div><div class="v serif">28.800</div><p>Alternanze/ora, 4 Hz.</p></div>
+      <div class="sp"><div class="n">Componenti</div><div class="v serif">214</div><p>Assemblati e rifiniti a mano.</p></div>
+      <div class="sp"><div class="n">Impermeabilità</div><div class="v serif">100m</div><p>Cassa in acciaio 316L.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="coll" data-tile="ProGallery · collezione">
+  <div class="wrap">
+    <div class="coll-h"><div><span class="kick">Le referenze</span><h2 class="serif">La collezione</h2></div><span class="mono" style="color:var(--fg-2);font-size:12px">edizioni numerate</span></div>
+    <div class="watch-grid reveal-stagger">
+      <div class="wc"><div class="wimg"><image-slot id="wa-1" placeholder="orologio (PNG)"></image-slot></div><div class="wx"><div class="wt2">Classic · 39mm</div><h3 class="serif">Càrica Heritage</h3><div class="wf"><span>acciaio · pelle</span><b>€ 4.200</b></div></div></div>
+      <div class="wc"><div class="wimg"><image-slot id="wa-2" placeholder="orologio (PNG)"></image-slot></div><div class="wx"><div class="wt2">Sport · 42mm</div><h3 class="serif">Càrica Marina</h3><div class="wf"><span>acciaio · 300m</span><b>€ 5.800</b></div></div></div>
+      <div class="wc"><div class="wimg"><image-slot id="wa-3" placeholder="orologio (PNG)"></image-slot></div><div class="wx"><div class="wt2">Or rose · 40mm</div><h3 class="serif">Càrica Or</h3><div class="wf"><span>oro 18k</span><b>€ 18.400</b></div></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="craft" data-tile="Section · inner-columns">
+  <div class="wrap craft">
+    <div class="ph reveal" data-tile="Image"><image-slot id="wa-craft" placeholder="maestro orologiaio"></image-slot></div>
+    <div class="reveal">
+      <span class="kick">La manifattura</span>
+      <h2 class="serif">Il <em>tempo</em> per fare le cose bene.</h2>
+      <p>Ogni Càrica nasce nel nostro atelier di Ginevra, dove un solo maestro orologiaio assembla e regola l'intero movimento. <strong>Servono settimane</strong> per un solo segnatempo.</p>
+      <p>Finiture Côtes de Genève, ponti smussati a mano, rotore inciso: dettagli che si vedono solo dal fondello in zaffiro.</p>
+    </div>
+  </div>
+</section>
+
+<section id="cta" data-tile="AnimatedHeading">
+  <div class="wrap">
+    <div class="cta-card">
+      <span class="kick" style="justify-content:center">Su appuntamento</span>
+      <h2 class="serif">Possiedi il <em>tempo.</em></h2>
+      <p>Incontra i nostri segnatempo in boutique o richiedi una presentazione privata. Tiratura limitata.</p>
+      <a class="btn" href="#">Trova la boutique →</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="f-row">
+      <div class="fm serif">CÀRICA</div>
+      <div class="olo-credit"><span class="olo-mk"><b></b><i></i><b></b></span>Costruito con <b class="hl">OLObuild</b> — zero codice</div>
+    </div>
+    <div class="f-tiles"><b>Tile usati (9):</b> Hero ScrollAssembly (esploso che si monta) · LiveClock · DescList · ProGallery · Section/inner-columns · AnimatedHeading · Image · DarkMode · ShapeDivider — nessuna prenotazione.</div>
+    <div class="f-row" style="margin-top:22px"><span class="f-meta">© 2026 Càrica orologeria — tema dimostrativo</span><span class="f-meta">OLOtheme · demo · 56 — Orologeria</span></div>
+  </div>
+</footer>
+
+<button id="tiletoggle"><span class="sq"></span><span class="t">Mostra tile</span></button>
+
+<script src="image-slot.js"></script>
+<script src="shared/olo-demo.js"></script>
+<script>
+/* scroll assembly */
+(function(){
+  var hero=document.getElementById('hero');
+  var parts={
+    'case':{x:0,y:-120,s:1.4,r:-40},
+    'dial':{x:0,y:130,s:1.4,r:30},
+    'brand':{x:-160,y:0,s:1.2,r:0},
+    'crown':{x:200,y:-40,s:1.6,r:60},
+    'hands':{x:0,y:0,s:2.2,r:120}
+  };
+  var els=[].slice.call(hero.querySelectorAll('.part'));
+  function frame(){
+    var rect=hero.getBoundingClientRect();
+    var total=hero.offsetHeight-window.innerHeight;
+    var p=Math.min(1,Math.max(0,(-rect.top)/total));
+    // each part assembles in its own window
+    els.forEach(function(el,i){
+      var from=parts[el.dataset.part];
+      var start=i*0.12, end=start+0.5;
+      var t=Math.min(1,Math.max(0,(p-start)/(end-start)));
+      var e=1-Math.pow(1-t,3);
+      var x=from.x*(1-e),y=from.y*(1-e),s=1+(from.s-1)*(1-e),r=from.r*(1-e);
+      el.style.transform='translate('+x+'px,'+y+'px) scale('+s+') rotate('+r+'deg)';
+      el.style.opacity=(0.15+e*0.85).toFixed(2);
+    });
+  }
+  window.addEventListener('scroll',function(){requestAnimationFrame(frame);},{passive:true});
+  window.addEventListener('resize',frame);frame();
+  /* ticking hands */
+  var h=document.getElementById('handH'),m=document.getElementById('handM'),s=document.getElementById('handS');
+  function tick(){
+    var d=new Date();
+    var sec=d.getSeconds()+d.getMilliseconds()/1000;
+    var min=d.getMinutes()+sec/60;
+    var hr=(d.getHours()%12)+min/60;
+    s.style.transform='translateX(-50%) rotate('+(sec*6)+'deg)';
+    m.style.transform='translateX(-50%) rotate('+(min*6)+'deg)';
+    h.style.transform='translateX(-50%) rotate('+(hr*30)+'deg)';
+    requestAnimationFrame(tick);
+  }
+  // hands originate from center; set transform-origin
+  [h,m,s].forEach(function(el){el.style.left='50%';});
+  tick();
+  /* dial indices */
+  var dial=hero.querySelector('.dial');
+  for(var i=0;i<12;i++){var idx=document.createElement('div');idx.className='idx';idx.style.transform='translateX(-50%) rotate('+(i*30)+'deg)';idx.style.transformOrigin='50% 600%';dial.appendChild(idx);}
+})();
+</script>
+</body>
+</html>

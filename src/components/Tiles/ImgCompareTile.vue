@@ -41,6 +41,7 @@
 <script setup>
 import { t } from '@/i18n';
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
+import { SHADOW } from '@/composables/oloTileDefaults';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
@@ -81,13 +82,7 @@ const isVert = computed(() => s.value.orientation === 'vertical');
 const startPos = computed(() => parseInt(s.value.start_position) || 50);
 onMounted(() => { position.value = startPos.value; });
 
-const shadowMap = {
-  none: 'none',
-  sm: '0 1px 2px rgba(0,0,0,0.05)',
-  md: '0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1)',
-  lg: '0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1)',
-  xl: '0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1)',
-};
+const shadowMap = SHADOW;
 
 const containerStyle = computed(() => {
   const bw = parseInt(s.value.card_border_width) || 0;

@@ -1,0 +1,830 @@
+[
+ {
+  "id": "di-se-4",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "small"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#16161a"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "di-ro-3",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "di-co-2",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "di-newsticker-1",
+        "type": "newsticker",
+        "settings": {
+         "show_label": true,
+         "label_text": "Breaking",
+         "label_shape": "square",
+         "label_bg": "#cf2e2e",
+         "label_color": "#ffffff",
+         "label_position": "left",
+         "animation_type": "marquee",
+         "marquee_direction": "left",
+         "marquee_duration": 30,
+         "marquee_gap": 60,
+         "height": "40",
+         "bg_color": "#16161a",
+         "text_color": "rgba(255,255,255,.82)",
+         "font_size": 13,
+         "font_weight": "400",
+         "separator": "●",
+         "items": [
+          {
+           "id": "di-n1",
+           "title": "Central bank holds rates for a third straight meeting",
+           "url": "",
+           "badge": "",
+           "badge_bg": "",
+           "icon": "",
+           "timestamp": ""
+          },
+          {
+           "id": "di-n2",
+           "title": "City council approves the riverside transit plan",
+           "url": "",
+           "badge": "",
+           "badge_bg": "",
+           "icon": "",
+           "timestamp": ""
+          },
+          {
+           "id": "di-n3",
+           "title": "National side names squad ahead of the qualifier",
+           "url": "",
+           "badge": "",
+           "badge_bg": "",
+           "icon": "",
+           "timestamp": ""
+          },
+          {
+           "id": "di-n4",
+           "title": "Markets edge higher as energy prices cool",
+           "url": "",
+           "badge": "",
+           "badge_bg": "",
+           "icon": "",
+           "timestamp": ""
+          }
+         ],
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         },
+         "border_radius": {
+          "tl": 0,
+          "tr": 0,
+          "br": 0,
+          "bl": 0,
+          "linked": true
+         }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "di-se-8",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#f4f1ea"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "di-ro-7",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "di-co-6",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "di-hero-split-5",
+        "type": "masthead",
+        "settings": {
+         "edition_text": "Friday, 6 March 2026 · Milan",
+         "nameplate_text": "The Dispatch",
+         "action1_text": "Sign in",
+         "action1_url": "#",
+         "action2_text": "Subscribe",
+         "action2_url": "#newsletter",
+         "kicker_text": "Politics · Analysis",
+         "headline_text": "Inside the budget deal",
+         "headline_italic_text": "that almost didn't happen",
+         "subhead": "For seventy-two hours the talks looked dead. Then a late-night compromise on housing rewrote the maths — and the coalition with it. We reconstruct the week.",
+         "byline_text": "By Elena Marchetti · 12 min read",
+         "bg_color": "#f4f1ea",
+         "ink_color": "#16161a",
+         "ink_soft_color": "#44444c",
+         "ink_faint_color": "#86848c",
+         "accent": "#cf2e2e",
+         "rule_color": "#ddd8cc",
+         "nameplate_size": 52,
+         "headline_size": 54
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "di-se-15",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#f4f1ea"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "di-ro-11",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "di-co-10",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "di-section-header-9",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": false,
+         "headline_lines": [
+          {
+           "text": "Latest",
+           "color": "#16161a",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 24,
+         "headline_font_weight": "600",
+         "headline_align": "left",
+         "tagline_show": true,
+         "tagline_text": "All stories →",
+         "tagline_text_color": "#cf2e2e",
+         "tagline_text_size": 12,
+         "tagline_text_italic": false,
+         "layout": "split",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "di-ro-14",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "di-co-13",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "di-workgrid-12",
+        "type": "workgrid",
+        "settings": {
+         "columns": 4,
+         "items_gap": 24,
+         "media_aspect": "3/2",
+         "media_tall_aspect": "4/5",
+         "media_bg": "#ebe7dd",
+         "media_label_color": "#16161a",
+         "hover_zoom": true,
+         "title_font_family": "heading",
+         "title_color": "#16161a",
+         "title_size": 20,
+         "title_weight": "600",
+         "meta_color": "#cf2e2e",
+         "meta_size": 11,
+         "show_desc": true,
+         "desc_color": "#44444c",
+         "desc_size": 13,
+         "mono_font_family": "",
+         "items": [
+          {
+           "image": "",
+           "media_label": "photo",
+           "title": "What the new housing bill actually changes",
+           "meta": "Politics",
+           "description": "A clause-by-clause read of the plan landing next week.",
+           "link_url": "",
+           "tall": false
+          },
+          {
+           "image": "",
+           "media_label": "photo",
+           "title": "Why the energy market just blinked",
+           "meta": "Business",
+           "description": "Prices cooled overnight. The reasons are messier than they look.",
+           "link_url": "",
+           "tall": false
+          },
+          {
+           "image": "",
+           "media_label": "photo",
+           "title": "The lab quietly rewriting battery chemistry",
+           "meta": "Science",
+           "description": "Inside a small team with an outsized claim.",
+           "link_url": "",
+           "tall": false
+          },
+          {
+           "image": "",
+           "media_label": "photo",
+           "title": "A city votes to slow itself down",
+           "meta": "World",
+           "description": "The 15-minute idea gets its biggest test yet.",
+           "link_url": "",
+           "tall": false
+          }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "di-se-24",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#16161a"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "di-ro-18",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "di-co-17",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "di-section-header-16",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": false,
+         "headline_lines": [
+          {
+           "text": "Culture",
+           "color": "#ffffff",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 24,
+         "headline_font_weight": "600",
+         "headline_align": "left",
+         "tagline_show": true,
+         "tagline_text": "More culture →",
+         "tagline_text_color": "#cf2e2e",
+         "tagline_text_size": 12,
+         "tagline_text_italic": false,
+         "layout": "split",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "di-ro-23",
+    "type": "row",
+    "settings": {
+     "gap": 28
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "di-co-20",
+      "type": "column",
+      "settings": {
+       "width": "7-12"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "di-workgrid-19",
+        "type": "workgrid",
+        "settings": {
+         "columns": 1,
+         "items_gap": 0,
+         "media_aspect": "16/9",
+         "media_tall_aspect": "4/5",
+         "media_bg": "#22222a",
+         "media_label_color": "#ffffff",
+         "hover_zoom": true,
+         "title_font_family": "heading",
+         "title_color": "#ffffff",
+         "title_size": 30,
+         "title_weight": "600",
+         "meta_color": "#cf2e2e",
+         "meta_size": 11,
+         "show_desc": true,
+         "desc_color": "rgba(255,255,255,.6)",
+         "desc_size": 14,
+         "mono_font_family": "",
+         "items": [
+          {
+           "image": "",
+           "media_label": "culture lead photo",
+           "title": "The slow cinema revival nobody predicted",
+           "meta": "Film",
+           "description": "Three-hour films are selling out. We asked why audiences suddenly want to sit still.",
+           "link_url": "",
+           "tall": false
+          }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "di-co-22",
+      "type": "column",
+      "settings": {
+       "width": "5-12"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "di-workgrid-21",
+        "type": "workgrid",
+        "settings": {
+         "columns": 1,
+         "items_gap": 18,
+         "media_aspect": "3/2",
+         "media_tall_aspect": "4/5",
+         "media_bg": "#22222a",
+         "media_label_color": "#ffffff",
+         "hover_zoom": true,
+         "title_font_family": "heading",
+         "title_color": "#ffffff",
+         "title_size": 16,
+         "title_weight": "600",
+         "meta_color": "#cf2e2e",
+         "meta_size": 10,
+         "show_desc": false,
+         "desc_color": "rgba(255,255,255,.6)",
+         "desc_size": 13,
+         "mono_font_family": "",
+         "items": [
+          {
+           "image": "",
+           "media_label": "photo",
+           "title": "The debut novel everyone's arguing about",
+           "meta": "Books",
+           "description": "",
+           "link_url": "",
+           "tall": false
+          },
+          {
+           "image": "",
+           "media_label": "photo",
+           "title": "How a 30-second clip rebuilt a career",
+           "meta": "Music",
+           "description": "",
+           "link_url": "",
+           "tall": false
+          },
+          {
+           "image": "",
+           "media_label": "photo",
+           "title": "The exhibition that sold out before opening",
+           "meta": "Art",
+           "description": "",
+           "link_url": "",
+           "tall": false
+          },
+          {
+           "image": "",
+           "media_label": "photo",
+           "title": "The neighbourhood that became a destination",
+           "meta": "Food",
+           "description": "",
+           "link_url": "",
+           "tall": false
+          }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "di-se-28",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#f4f1ea"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "di-ro-27",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "di-co-26",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "di-testimonial-25",
+        "type": "testimonial",
+        "settings": {
+         "quote": "“A free press isn't a business model. It's the thing the business model is supposed to protect.”",
+         "author_name": "Editorial Board",
+         "author_role": "Opinion",
+         "avatar": "",
+         "rating": "0",
+         "layout": "single",
+         "show_line": true,
+         "line_color": "#c9c3b4",
+         "bg_color": "transparent",
+         "text_color": "#16161a",
+         "border_radius": "0",
+         "author_position": "bottom-center"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "di-se-35",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#f4f1ea"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "di-ro-31",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "di-co-30",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "di-section-header-29",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": false,
+         "headline_lines": [
+          {
+           "text": "Business",
+           "color": "#cf2e2e",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 24,
+         "headline_font_weight": "600",
+         "headline_align": "left",
+         "tagline_show": true,
+         "tagline_text": "More business →",
+         "tagline_text_color": "#cf2e2e",
+         "tagline_text_size": 12,
+         "tagline_text_italic": false,
+         "layout": "split",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "di-ro-34",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "di-co-33",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "di-workgrid-32",
+        "type": "workgrid",
+        "settings": {
+         "columns": 4,
+         "items_gap": 24,
+         "media_aspect": "3/2",
+         "media_tall_aspect": "4/5",
+         "media_bg": "#ffffff",
+         "media_label_color": "#16161a",
+         "hover_zoom": true,
+         "title_font_family": "heading",
+         "title_color": "#16161a",
+         "title_size": 20,
+         "title_weight": "600",
+         "meta_color": "#cf2e2e",
+         "meta_size": 11,
+         "show_desc": true,
+         "desc_color": "#44444c",
+         "desc_size": 13,
+         "mono_font_family": "",
+         "items": [
+          {
+           "image": "",
+           "media_label": "photo",
+           "title": "The index fund that broke its own rules",
+           "meta": "Markets",
+           "description": "A passive giant made an active bet. It paid off.",
+           "link_url": "",
+           "tall": false
+          },
+          {
+           "image": "",
+           "media_label": "photo",
+           "title": "Inside the startup betting against the cloud",
+           "meta": "Tech",
+           "description": "On-prem is back, and investors are listening.",
+           "link_url": "",
+           "tall": false
+          },
+          {
+           "image": "",
+           "media_label": "photo",
+           "title": "The four-day week, two years on",
+           "meta": "Labour",
+           "description": "The firms that kept it — and the ones that quietly didn't.",
+           "link_url": "",
+           "tall": false
+          },
+          {
+           "image": "",
+           "media_label": "photo",
+           "title": "A small port's very big year",
+           "meta": "Trade",
+           "description": "How a rerouted shipping lane changed a town.",
+           "link_url": "",
+           "tall": false
+          }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "di-se-39",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#cf2e2e"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "di-ro-38",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "di-co-37",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "di-newsletter-36",
+        "type": "newsletter",
+        "settings": {
+         "title": "The Dispatch, every morning",
+         "subtitle": "One email. The five stories that matter, explained — before your first coffee.",
+         "icon_type": "none",
+         "layout": "vertical",
+         "show_name": false,
+         "email_placeholder": "Your email address",
+         "button_text": "Subscribe free",
+         "button_icon": false,
+         "privacy_text": "",
+         "max_width": "420",
+         "alignment": "center",
+         "bg_color": "#cf2e2e",
+         "border_radius": {
+          "tl": 0,
+          "tr": 0,
+          "br": 0,
+          "bl": 0,
+          "linked": true
+         },
+         "tile_padding": {
+          "top": 72,
+          "right": 28,
+          "bottom": 72,
+          "left": 28
+         },
+         "title_size": "40",
+         "title_weight": "600",
+         "title_color": "#ffffff",
+         "subtitle_size": "16",
+         "subtitle_color": "rgba(255,255,255,.85)",
+         "input_bg": "#ffffff",
+         "input_color": "#16161a",
+         "input_border": "#ffffff",
+         "input_radius": 2,
+         "input_height": "48",
+         "btn_bg": "#16161a",
+         "btn_color": "#f4f1ea",
+         "btn_hover_bg": "#2a2a30",
+         "btn_radius": 2,
+         "btn_font_size": "14",
+         "btn_font_weight": "600",
+         "shadow": "none"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

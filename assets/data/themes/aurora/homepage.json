@@ -1,0 +1,1223 @@
+[
+ {
+  "id": "au-se-7",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "full",
+   "padding": "large",
+   "padding_top": 0,
+   "padding_bottom": 0
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#241430"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "au-ro-3",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "au-co-2",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "au-hero-1",
+        "type": "glowgallery",
+        "settings": {
+         "eyebrow": "Events studio · est. 2011",
+         "headline_text": "Celebrations worth",
+         "accent_text": "remembering.",
+         "subhead": "We design and produce weddings, galas and private events — the kind your guests talk about for years. From the first spark of an idea to the last dance.",
+         "cta1_text": "Start planning",
+         "cta1_url": "#enquire",
+         "cta2_text": "See our work",
+         "cta2_url": "#gallery",
+         "items": [
+          {
+           "image": "",
+           "caption": "tablescape, candlelight"
+          },
+          {
+           "image": "",
+           "caption": "ballroom, florals"
+          },
+          {
+           "image": "",
+           "caption": "couple, golden hour"
+          }
+         ],
+         "strip_offset": 28,
+         "strip_radius": 200,
+         "bg_color": "#241430",
+         "accent": "",
+         "accent_on": "#170c1f",
+         "text_color": "#f3e9ef",
+         "sub_color": "#c8b3c6",
+         "eyebrow_color": "#e0afca",
+         "media_bg": "#33203f",
+         "glow_color": "rgba(224,175,202,0.22)",
+         "glow_w": 760,
+         "glow_h": 520,
+         "glow_blur": 120,
+         "glow_y": -160,
+         "h_size_min": 48,
+         "h_size_vw": 8,
+         "h_size_max": 108,
+         "max_width": 880
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "au-se-14",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#241430"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "au-ro-10",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "au-co-9",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "au-section-header-8",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "What we do",
+         "eyebrow_color": "#e0afca",
+         "eyebrow_dot_color": "#e0afca",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "Every kind of ",
+           "color": "#f3e9ef",
+           "italic": false
+          },
+          {
+           "text": "occasion",
+           "color": "#e0afca",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 52,
+         "headline_font_weight": "400",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": false,
+         "tagline_text": "",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#94809a",
+         "tagline_text_size": 16.5,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "au-ro-13",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "au-co-12",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "au-overlaygrid-11",
+        "type": "overlaygrid",
+        "settings": {
+         "preset": "editorial-grid",
+         "bg": {
+          "type": "none"
+         },
+         "columns": "4",
+         "columns_mobile": "2",
+         "gap": "medium",
+         "height": "240",
+         "match_height": true,
+         "overlay_position": "bottom",
+         "overlay_horizontal": "left",
+         "overlay_style": "overlay-primary",
+         "overlay_color": "rgba(36,20,48,.66)",
+         "overlay_gradient": true,
+         "overlay_padding": "medium",
+         "title_size": "h3",
+         "title_color": "#f3e9ef",
+         "title_weight": "400",
+         "title_letter_spacing": 0,
+         "title_uppercase": false,
+         "subtitle_color": "#e0afca",
+         "subtitle_size": 12.5,
+         "hover_effect": "zoom",
+         "hover_overlay": "always",
+         "item_radius": 14,
+         "show_cta": false,
+         "items": [
+          {
+           "id": "au-et-1",
+           "image": "",
+           "title": "Weddings",
+           "subtitle": "The whole day",
+           "link": ""
+          },
+          {
+           "id": "au-et-2",
+           "image": "",
+           "title": "Galas",
+           "subtitle": "Fundraisers & awards",
+           "link": ""
+          },
+          {
+           "id": "au-et-3",
+           "image": "",
+           "title": "Corporate",
+           "subtitle": "Launches & summits",
+           "link": ""
+          },
+          {
+           "id": "au-et-4",
+           "image": "",
+           "title": "Private",
+           "subtitle": "Milestones & soirées",
+           "link": ""
+          }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "au-se-21",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#2a1838"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "au-ro-17",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "au-co-16",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "au-section-header-15",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "Next showcase",
+         "eyebrow_color": "#e0afca",
+         "eyebrow_dot_color": "#e0afca",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "The Midsummer ",
+           "color": "#f3e9ef",
+           "italic": false
+          },
+          {
+           "text": "Gala",
+           "color": "#e0afca",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 48,
+         "headline_font_weight": "400",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": true,
+         "tagline_text": "21 June 2026 · Villa Speranza, Lake Como",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#94809a",
+         "tagline_text_size": 13,
+         "layout": "center",
+         "gap": 12
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "au-ro-20",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "au-co-19",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "au-countdown-18",
+        "type": "countdown",
+        "settings": {
+         "countdown_type": "date",
+         "target_date": "2026-06-21T20:00",
+         "show_days": true,
+         "show_hours": true,
+         "show_minutes": true,
+         "show_seconds": true,
+         "label_days": "Days",
+         "label_hours": "Hours",
+         "label_minutes": "Minutes",
+         "label_seconds": "Seconds",
+         "separator": ":",
+         "display_mode": "block",
+         "expire_action": "message",
+         "expired_message": "L'evento è iniziato!",
+         "accent_color": "#e0afca",
+         "text_color": "#94809a",
+         "separator_color": "rgba(224,175,202,.42)",
+         "number_font_size": "72",
+         "number_font_weight": "400",
+         "label_font_size": "11",
+         "label_font_weight": "500",
+         "separator_font_size": "56",
+         "item_min_width": "100",
+         "item_bg_color": "transparent",
+         "item_radius": "0",
+         "item_padding": "20",
+         "tile_padding": {
+          "top": 16,
+          "right": 0,
+          "bottom": 16,
+          "left": 0
+         },
+         "bg": {
+          "type": "none"
+         },
+         "preset": "custom",
+         "countdown_style": "custom"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "au-se-25",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#241430"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "au-ro-24",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "au-co-23",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "au-hero-split-22",
+        "type": "hero-split",
+        "settings": {
+         "eyebrow_text": "Featured",
+         "eyebrow_dot_color": "#e0afca",
+         "eyebrow_color": "#e0afca",
+         "headline_lines": [
+          {
+           "text": "Elena & Marco,",
+           "color": "#f3e9ef",
+           "italic": false
+          },
+          {
+           "text": "on the water",
+           "color": "#e0afca",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 52,
+         "headline_line_height": 1.08,
+         "headline_font_weight": "400",
+         "headline_align": "left",
+         "subhead": "Two hundred guests, one Venetian palazzo, and a sunset that refused to be upstaged. A weekend celebration built around long tables, candlelight and a string quartet on a boat.",
+         "subhead_color": "#c8b3c6",
+         "subhead_size": 16,
+         "subhead_italic": false,
+         "subhead_max_width": 480,
+         "cta1_text": "See the full event",
+         "cta1_url": "#showcase",
+         "cta1_bg": "transparent",
+         "cta1_color": "#f3e9ef",
+         "cta1_size": 12,
+         "cta1_radius": {
+          "tl": 0,
+          "tr": 0,
+          "br": 0,
+          "bl": 0,
+          "linked": true
+         },
+         "cta1_radius_hover": {
+          "tl": 0,
+          "tr": 0,
+          "br": 0,
+          "bl": 0,
+          "linked": true
+         },
+         "stats": [],
+         "showcase_enabled": true,
+         "showcase_bg": {
+          "type": "solid",
+          "color": "#3d2a4a"
+         },
+         "showcase_padding": 32,
+         "showcase_radius": {
+          "tl": 14,
+          "tr": 14,
+          "br": 14,
+          "bl": 14,
+          "linked": true
+         },
+         "showcase_radius_hover": {
+          "tl": 14,
+          "tr": 14,
+          "br": 14,
+          "bl": 14,
+          "linked": true
+         },
+         "showcase_badge_text": "LAKE COMO · 2025",
+         "showcase_badge_dot": "#e6c98f",
+         "showcase_badge_bg": "#170c1f",
+         "showcase_badge_color": "#e6c98f",
+         "showcase_items": [
+          {
+           "number": "Location",
+           "text": "Venetian palazzo",
+           "italic": false,
+           "text_color": "#f3e9ef",
+           "bg": {
+            "type": "solid",
+            "color": "#2a1838"
+           }
+          },
+          {
+           "number": "Guests",
+           "text": "200+",
+           "italic": false,
+           "text_color": "#e0afca",
+           "bg": {
+            "type": "solid",
+            "color": "#2a1838"
+           }
+          },
+          {
+           "number": "Highlight",
+           "text": "String quartet on a boat",
+           "italic": true,
+           "text_color": "#f3e9ef",
+           "bg": {
+            "type": "solid",
+            "color": "#2a1838"
+           }
+          },
+          {
+           "number": "Season",
+           "text": "Golden hour · sunset",
+           "italic": false,
+           "text_color": "#f3e9ef",
+           "bg": {
+            "type": "solid",
+            "color": "#2a1838"
+           }
+          }
+         ],
+         "showcase_card_radius": {
+          "tl": 10,
+          "tr": 10,
+          "br": 10,
+          "bl": 10,
+          "linked": true
+         },
+         "showcase_card_radius_hover": {
+          "tl": 10,
+          "tr": 10,
+          "br": 10,
+          "bl": 10,
+          "linked": true
+         },
+         "showcase_card_shadow": "none",
+         "showcase_caption_left": "WEDDING",
+         "showcase_caption_right": "FULL WEEKEND",
+         "showcase_hover_effect": "none",
+         "split_ratio": ".85fr 1.15fr",
+         "gap": 56,
+         "min_height": 0,
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "au-se-32",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#2a1838"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "au-ro-28",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "au-co-27",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "au-section-header-26",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "The gallery",
+         "eyebrow_color": "#e0afca",
+         "eyebrow_dot_color": "#e0afca",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "Moments we’ve ",
+           "color": "#f3e9ef",
+           "italic": false
+          },
+          {
+           "text": "made",
+           "color": "#e0afca",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 52,
+         "headline_font_weight": "400",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": false,
+         "tagline_text": "",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#94809a",
+         "tagline_text_size": 16.5,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "au-ro-31",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "au-co-30",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "au-overlaygrid-29",
+        "type": "overlaygrid",
+        "settings": {
+         "preset": "editorial-grid",
+         "bg": {
+          "type": "none"
+         },
+         "columns": "4",
+         "columns_mobile": "2",
+         "gap": "small",
+         "height": "180",
+         "match_height": true,
+         "overlay_position": "bottom",
+         "overlay_style": "overlay-primary",
+         "overlay_color": "rgba(36,20,48,.7)",
+         "overlay_gradient": true,
+         "overlay_padding": "small",
+         "title_size": "h4",
+         "title_color": "#f3e9ef",
+         "title_weight": "400",
+         "title_letter_spacing": 0,
+         "title_uppercase": false,
+         "subtitle_color": "#e0afca",
+         "subtitle_size": 11,
+         "hover_effect": "zoom",
+         "hover_overlay": "always",
+         "item_radius": 10,
+         "show_cta": false,
+         "items": [
+          {
+           "image": "",
+           "title": "Ceremony aisle",
+           "subtitle": "Florals & candlelight"
+          },
+          {
+           "image": "",
+           "title": "Reception table",
+           "subtitle": "Long tables & linen"
+          },
+          {
+           "image": "",
+           "title": "Place setting",
+           "subtitle": "Every card, every stem"
+          },
+          {
+           "image": "",
+           "title": "First dance",
+           "subtitle": "The room holds its breath"
+          },
+          {
+           "image": "",
+           "title": "Champagne tower",
+           "subtitle": "Every gala deserves one"
+          },
+          {
+           "image": "",
+           "title": "Golden hour",
+           "subtitle": "The light that makes it right"
+          }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "au-se-39",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#241430"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "au-ro-35",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "au-co-34",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "au-section-header-33",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "How we work",
+         "eyebrow_color": "#e0afca",
+         "eyebrow_dot_color": "#e0afca",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "From idea to ",
+           "color": "#f3e9ef",
+           "italic": false
+          },
+          {
+           "text": "last dance",
+           "color": "#e0afca",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 52,
+         "headline_font_weight": "400",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": false,
+         "tagline_text": "",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#94809a",
+         "tagline_text_size": 16.5,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "au-ro-38",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "au-co-37",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "au-process-steps-36",
+        "type": "process-steps",
+        "settings": {
+         "columns": 3,
+         "gap": 20,
+         "align": "center",
+         "auto_number": false,
+         "item_gap": 10,
+         "number_style": "outline",
+         "number_color": "#e0afca",
+         "number_bg": "rgba(224,175,202,.42)",
+         "number_size": 26,
+         "number_font": "serif",
+         "number_weight": "400",
+         "title_color": "#f3e9ef",
+         "title_size": 23,
+         "title_font": "serif",
+         "title_weight": "400",
+         "desc_color": "#94809a",
+         "desc_size": 14.5,
+         "card_bg": "",
+         "card_border": "",
+         "card_padding": 0,
+         "items": [
+          {
+           "number": "I",
+           "title": "Dream",
+           "description": "We start with a long conversation and a blank page — your story, your guests, the feeling you want in the room."
+          },
+          {
+           "number": "II",
+           "title": "Design",
+           "description": "Concept, mood, floor plan and a budget that’s honest. You approve every detail before a thing is booked."
+          },
+          {
+           "number": "III",
+           "title": "Deliver",
+           "description": "On the day, our team runs everything so you don’t lift a finger — just arrive, and be a guest at your own party."
+          }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "au-se-43",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#2a1838"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "au-ro-42",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "au-co-41",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "au-testimonial-40",
+        "type": "testimonial",
+        "settings": {
+         "quote": "“Aurora didn’t just plan our wedding — they understood it. Every guest told us it was the most beautiful day they’d ever been to. So did we.”",
+         "author_name": "Elena & Marco",
+         "author_role": "Lake Como, 2025",
+         "rating": "0",
+         "layout": "single",
+         "show_line": false,
+         "bg_color": "transparent",
+         "text_color": "#f3e9ef",
+         "border_radius": "0",
+         "avatar": ""
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "au-se-49",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#241430"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "au-ro-48",
+    "type": "row",
+    "settings": {
+     "gap": 56,
+     "vertical_align": "center"
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "au-co-45",
+      "type": "column",
+      "settings": {
+       "width": "1-2"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "au-section-header-44",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "Enquire",
+         "eyebrow_color": "#e0afca",
+         "eyebrow_dot_color": "#e0afca",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "Let’s plan",
+           "color": "#f3e9ef",
+           "italic": false
+          },
+          {
+           "text": "something beautiful",
+           "color": "#e0afca",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 48,
+         "headline_font_weight": "400",
+         "headline_align": "left",
+         "headline_inline": false,
+         "tagline_show": true,
+         "tagline_text": "Tell us a little about your celebration and we’ll be in touch within two days to arrange a first conversation.",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#94809a",
+         "tagline_text_size": 16,
+         "layout": "stack",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "au-co-47",
+      "type": "column",
+      "settings": {
+       "width": "1-2"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "au-form-46",
+        "type": "form",
+        "settings": {
+         "preset": "custom",
+         "fields": [
+          {
+           "id": "au-f1",
+           "field_type": "select",
+           "label": "Event type",
+           "name": "event_type",
+           "required": true,
+           "width": "1-2",
+           "placeholder": "",
+           "options": "Wedding\nGala\nCorporate\nPrivate party",
+           "icon": ""
+          },
+          {
+           "id": "au-f2",
+           "field_type": "date",
+           "label": "Approx. date",
+           "name": "event_date",
+           "required": false,
+           "width": "1-2",
+           "placeholder": ""
+          },
+          {
+           "id": "au-f3",
+           "field_type": "select",
+           "label": "Guests",
+           "name": "guests",
+           "required": false,
+           "width": "1-2",
+           "placeholder": "",
+           "options": "Under 50\n50-150\n150-300\n300+",
+           "icon": ""
+          },
+          {
+           "id": "au-f4",
+           "field_type": "text",
+           "label": "Your name",
+           "name": "name",
+           "required": true,
+           "width": "1-2",
+           "placeholder": "Full name",
+           "icon": "user"
+          },
+          {
+           "id": "au-f5",
+           "field_type": "email",
+           "label": "Email",
+           "name": "email",
+           "required": true,
+           "width": "1-1",
+           "placeholder": "you@example.com",
+           "icon": "mail"
+          }
+         ],
+         "submit_text": "Send enquiry",
+         "submit_full_width": true,
+         "submit_alignment": "left",
+         "submit_bg": "#e0afca",
+         "submit_color": "#170c1f",
+         "submit_radius": "999",
+         "submit_font_size": "13",
+         "submit_font_weight": "600",
+         "submit_letter_spacing": "0.14",
+         "submit_text_transform": "uppercase",
+         "submit_hover_bg": "#cf94b4",
+         "email_subject": "New enquiry from Aurora website",
+         "success_message": "Thank you! We’ll be in touch within two days.",
+         "input_bg": "#241430",
+         "input_color": "#f3e9ef",
+         "input_border_color": "rgba(224,175,202,.42)",
+         "input_border_width": "1",
+         "input_border_style": "box",
+         "input_radius": {
+          "tl": 8,
+          "tr": 8,
+          "br": 8,
+          "bl": 8,
+          "linked": true
+         },
+         "input_size": "default",
+         "input_focus_border": "#e0afca",
+         "input_focus_shadow": false,
+         "label_color": "#94809a",
+         "label_size": "11",
+         "label_weight": "500",
+         "label_transform": "uppercase",
+         "label_letter_spacing": "0.12",
+         "gap": "18",
+         "form_layout": "stacked",
+         "honeypot": true,
+         "tile_padding": {
+          "top": 32,
+          "right": 32,
+          "bottom": 32,
+          "left": 32
+         },
+         "bg": {
+          "type": "solid",
+          "color": "#33203f"
+         }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "au-se-53",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#2a1838"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "au-ro-52",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "au-co-51",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "au-cta-banner-50",
+        "type": "cta-banner",
+        "settings": {
+         "headline": "Every celebration",
+         "headline_accent": "deserves to be remembered.",
+         "headline_accent_italic": true,
+         "subtitle": "From the first conversation to the last dance — our studio handles every detail. Let’s create something your guests will never forget.",
+         "cta_text": "Start planning",
+         "cta_url": "#enquire",
+         "bg": {
+          "type": "solid",
+          "color": "#2e1840"
+         },
+         "text_color": "#f3e9ef",
+         "accent_color": "#e0afca",
+         "subtitle_color": "#c8b3c6",
+         "cta_bg": "#e0afca",
+         "cta_color": "#170c1f",
+         "cta_radius": {
+          "tl": 999,
+          "tr": 999,
+          "br": 999,
+          "bl": 999,
+          "linked": true
+         },
+         "cta_size": 13,
+         "headline_font_family": "serif",
+         "headline_size": 46,
+         "headline_weight": "400",
+         "subtitle_size": 16,
+         "layout": "stack",
+         "vertical_align": "center",
+         "banner_radius": {
+          "tl": 20,
+          "tr": 20,
+          "br": 20,
+          "bl": 20,
+          "linked": true
+         },
+         "banner_padding": 80
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

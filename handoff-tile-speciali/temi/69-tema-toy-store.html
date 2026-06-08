@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Giòco — negozio di giocattoli · tema dimostrativo OLObuild</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared/olo-demo.css">
+<style>
+:root{
+  --bg:#FBF3E2; --bg-2:#F6E9CE; --ink:#2A2118; --ink-2:#6E6150; --ink-3:#A2937C;
+  --red:#E63E3E; --blue:#2E6BE6; --yellow:#F4B400; --green:#2BA65A; --purple:#8B53D6;
+  --line:rgba(42,33,24,.16);
+  --tile-accent:#E63E3E; --tile-btn:#2A2118;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Manrope',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+a{color:inherit;text-decoration:none;}
+.fred{font-family:'Fredoka',sans-serif;}
+.mono{font-family:'JetBrains Mono',monospace;}
+.wrap{max-width:1200px;margin:0 auto;padding:0 44px;}
+.kick{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--red);font-weight:500;display:inline-flex;align-items:center;gap:9px;}
+.kick::before{content:"";width:18px;height:3px;background:var(--blue);border-radius:3px;}
+
+/* nav */
+.nav{position:fixed;inset:0 0 auto 0;z-index:50;display:flex;align-items:center;gap:26px;padding:20px 44px;transition:all .35s;border-bottom:1px solid transparent;}
+.nav.solid{background:rgba(251,243,226,.92);backdrop-filter:blur(12px);border-color:var(--line);padding:13px 44px;}
+.brand{font-family:'Fredoka';font-weight:700;font-size:26px;letter-spacing:-.01em;display:flex;align-items:center;gap:9px;}
+.brand .b{width:16px;height:16px;border-radius:50%;background:var(--red);box-shadow:0 0 0 4px var(--yellow);}
+.nav-links{margin-left:auto;display:flex;gap:24px;font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.04em;text-transform:uppercase;font-weight:500;}
+.nav-links a{color:var(--ink-2);}.nav-links a:hover{color:var(--red);}
+.nav-cta{background:var(--red);color:#fff;padding:11px 20px;border-radius:100px;font-family:'Fredoka';font-size:13px;font-weight:600;transition:transform .15s;}
+.nav-cta:hover{transform:translateY(-2px) rotate(-2deg);}
+@media(max-width:880px){.nav-links{display:none;}}
+
+/* hero + physics bin */
+#hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:40px;padding:120px 44px 60px;max-width:1200px;margin:0 auto;}
+.hero-h{font-family:'Fredoka';font-weight:700;font-size:clamp(50px,9vw,140px);line-height:.9;letter-spacing:-.02em;margin:16px 0 0;}
+.hero-h em{font-style:normal;color:var(--red);}
+.hero-h .b{color:var(--blue);}.hero-h .g{color:var(--green);}
+.hero-sub{font-size:18px;color:var(--ink-2);max-width:38ch;margin:22px 0 28px;line-height:1.55;}
+.btn{display:inline-flex;align-items:center;gap:9px;background:var(--blue);color:#fff;border:none;cursor:pointer;padding:15px 28px;border-radius:100px;font-family:'Fredoka';font-size:15px;font-weight:600;transition:transform .15s;}
+.btn:hover{transform:translateY(-2px) rotate(-1deg);}
+.btn.alt{background:var(--ink);}
+.bin{position:relative;height:min(520px,70vh);border-radius:28px;background:repeating-linear-gradient(135deg,var(--bg-2) 0 22px,#F1E2C2 22px 44px);
+  border:3px solid var(--ink);box-shadow:0 24px 50px -24px rgba(42,33,24,.5),inset 0 -10px 0 rgba(42,33,24,.06);overflow:hidden;touch-action:none;}
+.bin .lab{position:absolute;top:16px;left:18px;z-index:5;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);pointer-events:none;background:rgba(251,243,226,.7);padding:5px 10px;border-radius:100px;}
+.toy{position:absolute;top:0;left:0;display:grid;place-items:center;border-radius:50%;cursor:grab;will-change:transform;user-select:none;
+  font-family:'Fredoka';font-weight:700;color:#fff;box-shadow:inset -6px -8px 0 rgba(0,0,0,.14),0 6px 14px -6px rgba(0,0,0,.4);}
+.toy:active{cursor:grabbing;}
+.toy.sq{border-radius:22%;}
+.toy.star{clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);box-shadow:none;}
+@media(max-width:880px){#hero{grid-template-columns:1fr;}.bin{order:-1;height:46vh;}}
+
+/* categories */
+#cats{padding:100px 0;border-top:1px solid var(--line);}
+.cat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:40px;}
+.cat{border-radius:20px;padding:28px;color:#fff;min-height:190px;display:flex;flex-direction:column;justify-content:space-between;transition:transform .2s;cursor:pointer;}
+.cat:hover{transform:translateY(-6px) rotate(-1.5deg);}
+.cat:nth-child(1){background:var(--red);}.cat:nth-child(2){background:var(--blue);}.cat:nth-child(3){background:var(--green);}.cat:nth-child(4){background:var(--purple);}
+.cat .ic{width:46px;height:46px;border-radius:14px;background:rgba(255,255,255,.25);}
+.cat .ic.round{border-radius:50%;}
+.cat h3{font-family:'Fredoka';font-weight:600;font-size:24px;margin:0;}
+.cat p{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;opacity:.85;margin:6px 0 0;}
+@media(max-width:880px){.cat-grid{grid-template-columns:1fr 1fr;}}
+
+/* products */
+#prods{padding:100px 0;background:var(--bg-2);}
+.prod-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:40px;}
+.pd{background:var(--bg);border:2px solid var(--ink);border-radius:20px;overflow:hidden;transition:transform .2s;}
+.pd:hover{transform:translateY(-6px);}
+.pd image-slot{width:100%;aspect-ratio:1/1;display:block;}
+.pd .meta{padding:16px 18px;}
+.pd .nm{font-family:'Fredoka';font-weight:600;font-size:19px;}
+.pd .pr{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--red);margin-top:4px;}
+.pd .age{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);margin-top:8px;}
+@media(max-width:880px){.prod-grid{grid-template-columns:1fr 1fr;}}
+
+/* stats */
+.stats{padding:80px 0;text-align:center;}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:30px;}
+.st .num{font-family:'Fredoka';font-weight:700;font-size:clamp(44px,6vw,86px);line-height:1;color:var(--blue);}
+.st:nth-child(2) .num{color:var(--red);}.st:nth-child(3) .num{color:var(--green);}.st:nth-child(4) .num{color:var(--purple);}
+.st .lbl{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);margin-top:6px;}
+@media(max-width:760px){.stat-grid{grid-template-columns:1fr 1fr;gap:34px 20px;}}
+
+/* cta */
+#cta{padding:120px 0;text-align:center;}
+#cta h2{font-family:'Fredoka';font-weight:700;font-size:clamp(46px,9vw,150px);line-height:.88;margin:16px 0 26px;letter-spacing:-.02em;}
+#cta h2 em{font-style:normal;color:var(--red);}
+
+footer{border-top:1px solid var(--line);padding:34px 0;}
+.f-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px;}
+.f-row .fm{font-family:'Fredoka';font-weight:700;font-size:24px;}
+.olo-credit{color:var(--ink-2);}
+.f-meta{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-3);}
+.f-tiles{font-family:'JetBrains Mono',monospace;font-size:10.5px;line-height:1.9;color:var(--ink-3);margin-top:22px;max-width:96ch;}
+.f-tiles b{color:var(--ink-2);}
+</style>
+</head>
+<body>
+
+<nav class="nav" id="nav" data-solid-at="70vh">
+  <div class="brand fred"><span class="b"></span>Giòco</div>
+  <div class="nav-links"><a href="#cats">Reparti</a><a href="#prods">Novità</a><a href="#cta">Trovaci</a></div>
+  <a class="nav-cta fred" href="#cta">Vieni a giocare</a>
+</nav>
+
+<section id="hero" data-tile="Hero · PhysicsBin">
+  <div>
+    <span class="kick">Negozio di giocattoli · dal 1986</span>
+    <h1 class="hero-h fred">Tira, <span class="b">lancia</span>,<br><em>gioca</em> <span class="g">qui</span></h1>
+    <p class="hero-sub">Giocattoli veri, di legno e di plastica buona, scelti uno a uno. Prova: trascina e lancia i giochi nel cesto →</p>
+    <div style="display:flex;gap:12px;flex-wrap:wrap"><a class="btn" href="#prods">Sfoglia le novità</a><a class="btn alt" href="#cta">Dove siamo</a></div>
+  </div>
+  <div class="bin" id="bin" data-tile="PhysicsBin · drag &amp; throw">
+    <span class="lab">↯ trascina &amp; lancia i giocattoli</span>
+  </div>
+</section>
+
+<section id="cats" data-tile="OverlayGrid · reparti">
+  <div class="wrap">
+    <span class="kick">I reparti</span>
+    <h2 class="fred" style="font-weight:700;font-size:clamp(32px,4.4vw,58px);margin:14px 0 0;letter-spacing:-.01em;">Cosa cerchi oggi?</h2>
+    <div class="cat-grid reveal-stagger">
+      <div class="cat"><div class="ic round"></div><div><h3 class="fred">Legno &amp; Montessori</h3><p>0–6 anni</p></div></div>
+      <div class="cat"><div class="ic"></div><div><h3 class="fred">Costruzioni</h3><p>mattoncini &amp; set</p></div></div>
+      <div class="cat"><div class="ic round"></div><div><h3 class="fred">Giochi da tavolo</h3><p>per tutta la famiglia</p></div></div>
+      <div class="cat"><div class="ic"></div><div><h3 class="fred">All'aperto</h3><p>palle, bici, sabbia</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="prods" data-tile="ProGallery · novità">
+  <div class="wrap">
+    <span class="kick">Appena arrivati</span>
+    <h2 class="fred" style="font-weight:700;font-size:clamp(32px,4.4vw,58px);margin:14px 0 0;letter-spacing:-.01em;">Le novità</h2>
+    <div class="prod-grid reveal-stagger">
+      <div class="pd"><image-slot id="toy-1" placeholder="giocattolo"></image-slot><div class="meta"><div class="nm fred">Trenino di legno</div><div class="pr">€ 34,90</div><div class="age">3+ anni</div></div></div>
+      <div class="pd"><image-slot id="toy-2" placeholder="giocattolo"></image-slot><div class="meta"><div class="nm fred">Set costruzioni</div><div class="pr">€ 49,00</div><div class="age">6+ anni</div></div></div>
+      <div class="pd"><image-slot id="toy-3" placeholder="giocattolo"></image-slot><div class="meta"><div class="nm fred">Cubo sensoriale</div><div class="pr">€ 22,50</div><div class="age">0+ anni</div></div></div>
+      <div class="pd"><image-slot id="toy-4" placeholder="giocattolo"></image-slot><div class="meta"><div class="nm fred">Gioco da tavolo</div><div class="pr">€ 28,00</div><div class="age">8+ anni</div></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="stats" data-tile="Counter">
+  <div class="wrap">
+    <div class="stat-grid reveal-stagger">
+      <div class="st"><div class="num fred"><span class="count" data-count="40">0</span></div><div class="lbl">Anni di gioco</div></div>
+      <div class="st"><div class="num fred"><span class="count" data-count="3" data-suffix="k+">0</span></div><div class="lbl">Giocattoli in negozio</div></div>
+      <div class="st"><div class="num fred"><span class="count" data-count="120">0</span></div><div class="lbl">Marchi selezionati</div></div>
+      <div class="st"><div class="num fred"><span class="count" data-count="0">0</span></div><div class="lbl">Pile incluse, mai</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="cta" data-tile="AnimatedHeading">
+  <div class="wrap">
+    <span class="kick" style="justify-content:center">Ti aspettiamo in negozio</span>
+    <h2 class="fred">Si <em>gioca!</em></h2>
+    <a class="btn" href="#" style="font-size:16px;padding:17px 34px">Vieni a trovarci →</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="f-row">
+      <div class="fm fred">Giòco</div>
+      <div class="olo-credit"><span class="olo-mk"><b></b><i></i><b></b></span>Costruito con <b class="hl">OLObuild</b> — zero codice</div>
+    </div>
+    <div class="f-tiles"><b>Tile usati (9):</b> Hero · PhysicsBin (nuovo · giocattoli trascinabili con gravità, rimbalzo e collisioni) · OverlayGrid reparti · ProGallery novità · Counter · AnimatedHeading · Image · DarkMode · ShapeDivider — nessuna prenotazione.</div>
+    <div class="f-row" style="margin-top:22px"><span class="f-meta">© 2026 Giòco — tema dimostrativo</span><span class="f-meta">OLOtheme · demo · 69 — Toy store</span></div>
+  </div>
+</footer>
+
+<button id="tiletoggle"><span class="sq"></span><span class="t">Mostra tile</span></button>
+
+<script src="image-slot.js"></script>
+<script src="shared/olo-demo.js"></script>
+<script>
+/* ===== tiny physics bin: drag, throw, gravity, bounce, collisions ===== */
+(function(){
+  var bin=document.getElementById('bin');if(!bin)return;
+  var W,H,toys=[],G=0.55,REST=0.74,FR=0.992;
+  var defs=[
+    {c:'var(--red)',r:46,sh:'',t:'★'},{c:'var(--blue)',r:40,sh:'sq',t:'A'},{c:'var(--yellow)',r:34,sh:'',t:''},
+    {c:'var(--green)',r:50,sh:'',t:'B'},{c:'var(--purple)',r:36,sh:'sq',t:'C'},{c:'var(--red)',r:32,sh:'',t:''},
+    {c:'var(--blue)',r:44,sh:'',t:'1'},{c:'var(--yellow)',r:42,sh:'star',t:''},{c:'var(--green)',r:30,sh:'sq',t:'2'}
+  ];
+  function size(){W=bin.clientWidth;H=bin.clientHeight;}
+  size();addEventListener('resize',size);
+  defs.forEach(function(d,i){
+    var el=document.createElement('div');el.className='toy '+d.sh;
+    el.style.width=el.style.height=(d.r*2)+'px';el.style.background=d.c;el.style.fontSize=(d.r*0.8)+'px';el.textContent=d.t;
+    bin.appendChild(el);
+    toys.push({el:el,r:d.r,x:40+Math.random()*(W-80),y:30+Math.random()*120,vx:(Math.random()-.5)*6,vy:0,drag:false});
+  });
+  var dragT=null,px=0,py=0,lpx=0,lpy=0;
+  function at(e){var rb=bin.getBoundingClientRect();return {x:e.clientX-rb.left,y:e.clientY-rb.top};}
+  bin.addEventListener('pointerdown',function(e){
+    var p=at(e);
+    for(var i=toys.length-1;i>=0;i--){var t=toys[i];if(Math.hypot(p.x-t.x,p.y-t.y)<t.r){dragT=t;t.drag=true;px=lpx=p.x;py=lpy=p.y;bin.setPointerCapture(e.pointerId);break;}}
+  });
+  bin.addEventListener('pointermove',function(e){if(!dragT)return;var p=at(e);lpx=px;lpy=py;px=p.x;py=p.y;dragT.x=p.x;dragT.y=p.y;});
+  function release(){if(dragT){dragT.vx=(px-lpx)*1.4;dragT.vy=(py-lpy)*1.4;dragT.drag=false;dragT=null;}}
+  bin.addEventListener('pointerup',release);bin.addEventListener('pointercancel',release);
+
+  function step(){
+    for(var i=0;i<toys.length;i++){
+      var t=toys[i];
+      if(!t.drag){
+        t.vy+=G;t.x+=t.vx;t.y+=t.vy;t.vx*=FR;
+        if(t.x<t.r){t.x=t.r;t.vx=-t.vx*REST;}
+        if(t.x>W-t.r){t.x=W-t.r;t.vx=-t.vx*REST;}
+        if(t.y>H-t.r){t.y=H-t.r;t.vy=-t.vy*REST;t.vx*=0.96;}
+        if(t.y<t.r){t.y=t.r;t.vy=-t.vy*REST;}
+      }
+    }
+    /* pairwise collisions */
+    for(var a=0;a<toys.length;a++)for(var b=a+1;b<toys.length;b++){
+      var A=toys[a],B=toys[b],dx=B.x-A.x,dy=B.y-A.y,d=Math.hypot(dx,dy)||0.01,min=A.r+B.r;
+      if(d<min){
+        var nx=dx/d,ny=dy/d,overlap=(min-d)/2;
+        if(!A.drag){A.x-=nx*overlap;A.y-=ny*overlap;}
+        if(!B.drag){B.x+=nx*overlap;B.y+=ny*overlap;}
+        var rvx=B.vx-A.vx,rvy=B.vy-A.vy,vn=rvx*nx+rvy*ny;
+        if(vn<0){var imp=-(1+REST)*vn/2;if(!A.drag){A.vx-=imp*nx;A.vy-=imp*ny;}if(!B.drag){B.vx+=imp*nx;B.vy+=imp*ny;}}
+      }
+    }
+    for(var k=0;k<toys.length;k++){var tt=toys[k];tt.el.style.transform='translate('+(tt.x-tt.r)+'px,'+(tt.y-tt.r)+'px) rotate('+(tt.x*0.7)+'deg)';}
+    requestAnimationFrame(step);
+  }
+  step();
+})();
+</script>
+</body>
+</html>

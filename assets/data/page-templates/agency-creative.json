@@ -1,0 +1,1518 @@
+{
+  "id": "page-agency-creative",
+  "name": "Agenzia creativa",
+  "category": "page",
+  "preview_description": "Template token-first assemblato dal sistema di sezioni coerente (8 sezioni).",
+  "content": {
+    "0": {
+      "id": "tpl-herobold-sec",
+      "type": "section",
+      "settings": {
+        "style": "default",
+        "width": "expand",
+        "padding": "xlarge"
+      },
+      "style": {
+        "bg_type": "color",
+        "bg_color": "var(--olo-color-primary, #e1474f)",
+        "padding_top": "140",
+        "padding_bottom": "140"
+      },
+      "advanced": {},
+      "children": [
+        {
+          "id": "tpl-herobold-row",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl-herobold-col1",
+              "type": "column",
+              "settings": {
+                "width": "1-1"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl-herobold-headline",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "CREA. INNOVA. DOMINA.",
+                    "subtitle": "",
+                    "tag": "h1",
+                    "alignment": "center",
+                    "decoration": "none",
+                    "heading_color": "#FFFFFF",
+                    "heading_size": "xl"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-herobold-spacer1",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "48"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-herobold-btn1",
+                  "type": "button",
+                  "settings": {
+                    "text": "Parti subito",
+                    "url": "#start",
+                    "style": "solid",
+                    "alignment": "center",
+                    "bg_color": "#FFFFFF",
+                    "color": "var(--olo-color-primary, #e1474f)",
+                    "border_radius": "4",
+                    "size": "lg",
+                    "font_weight": "800",
+                    "hover_effect": "lift"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "1": {
+      "id": "tpl_204",
+      "type": "section",
+      "settings": {
+        "style": "default",
+        "width": "large",
+        "padding": "large"
+      },
+      "style": {
+        "bg_type": "color",
+        "bg_color": "#f8fafc",
+        "padding_top": "80",
+        "padding_bottom": "80"
+      },
+      "advanced": {},
+      "children": [
+        {
+          "id": "tpl_196",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl_195",
+              "type": "column",
+              "settings": {
+                "width": "1-1"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_193",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "I nostri servizi",
+                    "subtitle": "Soluzioni su misura per ogni esigenza",
+                    "tag": "h2",
+                    "alignment": "center",
+                    "decoration": "line",
+                    "heading_color": "#1e293b",
+                    "subtitle_color": "#64748b",
+                    "heading_size": "lg"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_194",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "48"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "tpl_203",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl_198",
+              "type": "column",
+              "settings": {
+                "width": "1-3"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_197",
+                  "type": "iconbox",
+                  "settings": {
+                    "icon": "globe",
+                    "title": "Web Design",
+                    "description": "Creiamo siti web moderni, responsive e ottimizzati per la migliore esperienza utente.",
+                    "alignment": "center",
+                    "icon_color": "#ffffff",
+                    "icon_bg_color": "var(--olo-color-primary, #e1474f)",
+                    "icon_size": "56",
+                    "icon_style": "circle"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            },
+            {
+              "id": "tpl_200",
+              "type": "column",
+              "settings": {
+                "width": "1-3"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_199",
+                  "type": "iconbox",
+                  "settings": {
+                    "icon": "phone",
+                    "title": "App Mobile",
+                    "description": "Sviluppiamo applicazioni native e ibride per iOS e Android, performanti e intuitive.",
+                    "alignment": "center",
+                    "icon_color": "#ffffff",
+                    "icon_bg_color": "#06b6d4",
+                    "icon_size": "56",
+                    "icon_style": "circle"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            },
+            {
+              "id": "tpl_202",
+              "type": "column",
+              "settings": {
+                "width": "1-3"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_201",
+                  "type": "iconbox",
+                  "settings": {
+                    "icon": "shield",
+                    "title": "Sicurezza",
+                    "description": "Proteggiamo i tuoi dati e la tua infrastruttura con le soluzioni di sicurezza più avanzate.",
+                    "alignment": "center",
+                    "icon_color": "#ffffff",
+                    "icon_bg_color": "#10b981",
+                    "icon_size": "56",
+                    "icon_style": "circle"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "2": {
+      "id": "tpl-pg-sec",
+      "type": "section",
+      "settings": {
+        "style": "default",
+        "width": "large",
+        "padding": "large"
+      },
+      "style": {
+        "bg_type": "color",
+        "bg_color": "#F3F4F6",
+        "padding_top": "80",
+        "padding_bottom": "80"
+      },
+      "advanced": {},
+      "children": [
+        {
+          "id": "tpl-pg-row0",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl-pg-col0",
+              "type": "column",
+              "settings": {
+                "width": "1-1"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl-pg-head",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "Galleria progetti",
+                    "subtitle": "",
+                    "tag": "h2",
+                    "alignment": "center",
+                    "decoration": "dot",
+                    "heading_color": "#1F2937",
+                    "heading_size": "lg"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-pg-sp",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "40"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "tpl-pg-row1",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl-pg-c1",
+              "type": "column",
+              "settings": {
+                "width": "1-4"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl-pg-img1",
+                  "type": "image",
+                  "settings": {
+                    "url": "",
+                    "alt": "Lavoro 1",
+                    "width": "",
+                    "border_radius": "8",
+                    "shadow": "sm"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-pg-sp1",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "8"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-pg-t1",
+                  "type": "content",
+                  "settings": {
+                    "content": "<p style=\"text-align:center;font-size:14px;color:#6B7280\">Identita Visiva</p>",
+                    "alignment": "center"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": "tpl-pg-c2",
+              "type": "column",
+              "settings": {
+                "width": "1-4"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl-pg-img2",
+                  "type": "image",
+                  "settings": {
+                    "url": "",
+                    "alt": "Lavoro 2",
+                    "width": "",
+                    "border_radius": "8",
+                    "shadow": "sm"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-pg-sp2",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "8"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-pg-t2",
+                  "type": "content",
+                  "settings": {
+                    "content": "<p style=\"text-align:center;font-size:14px;color:#6B7280\">Sito Corporate</p>",
+                    "alignment": "center"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": "tpl-pg-c3",
+              "type": "column",
+              "settings": {
+                "width": "1-4"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl-pg-img3",
+                  "type": "image",
+                  "settings": {
+                    "url": "",
+                    "alt": "Lavoro 3",
+                    "width": "",
+                    "border_radius": "8",
+                    "shadow": "sm"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-pg-sp3",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "8"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-pg-t3",
+                  "type": "content",
+                  "settings": {
+                    "content": "<p style=\"text-align:center;font-size:14px;color:#6B7280\">Social Media Kit</p>",
+                    "alignment": "center"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": "tpl-pg-c4",
+              "type": "column",
+              "settings": {
+                "width": "1-4"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl-pg-img4",
+                  "type": "image",
+                  "settings": {
+                    "url": "",
+                    "alt": "Lavoro 4",
+                    "width": "",
+                    "border_radius": "8",
+                    "shadow": "sm"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-pg-sp4",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "8"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-pg-t4",
+                  "type": "content",
+                  "settings": {
+                    "content": "<p style=\"text-align:center;font-size:14px;color:#6B7280\">Campagna ADV</p>",
+                    "alignment": "center"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "tpl-pg-row2",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl-pg-c5",
+              "type": "column",
+              "settings": {
+                "width": "1-4"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl-pg-img5",
+                  "type": "image",
+                  "settings": {
+                    "url": "",
+                    "alt": "Lavoro 5",
+                    "width": "",
+                    "border_radius": "8",
+                    "shadow": "sm"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-pg-sp5",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "8"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-pg-t5",
+                  "type": "content",
+                  "settings": {
+                    "content": "<p style=\"text-align:center;font-size:14px;color:#6B7280\">Landing Page</p>",
+                    "alignment": "center"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": "tpl-pg-c6",
+              "type": "column",
+              "settings": {
+                "width": "1-4"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl-pg-img6",
+                  "type": "image",
+                  "settings": {
+                    "url": "",
+                    "alt": "Lavoro 6",
+                    "width": "",
+                    "border_radius": "8",
+                    "shadow": "sm"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-pg-sp6",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "8"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-pg-t6",
+                  "type": "content",
+                  "settings": {
+                    "content": "<p style=\"text-align:center;font-size:14px;color:#6B7280\">Newsletter Design</p>",
+                    "alignment": "center"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": "tpl-pg-c7",
+              "type": "column",
+              "settings": {
+                "width": "1-4"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl-pg-img7",
+                  "type": "image",
+                  "settings": {
+                    "url": "",
+                    "alt": "Lavoro 7",
+                    "width": "",
+                    "border_radius": "8",
+                    "shadow": "sm"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-pg-sp7",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "8"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-pg-t7",
+                  "type": "content",
+                  "settings": {
+                    "content": "<p style=\"text-align:center;font-size:14px;color:#6B7280\">Packaging</p>",
+                    "alignment": "center"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": "tpl-pg-c8",
+              "type": "column",
+              "settings": {
+                "width": "1-4"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl-pg-img8",
+                  "type": "image",
+                  "settings": {
+                    "url": "",
+                    "alt": "Lavoro 8",
+                    "width": "",
+                    "border_radius": "8",
+                    "shadow": "sm"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-pg-sp8",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "8"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-pg-t8",
+                  "type": "content",
+                  "settings": {
+                    "content": "<p style=\"text-align:center;font-size:14px;color:#6B7280\">Motion Graphics</p>",
+                    "alignment": "center"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "3": {
+      "id": "tpl-ft-181",
+      "type": "section",
+      "settings": {
+        "style": "default",
+        "width": "large",
+        "padding": "large"
+      },
+      "style": {
+        "bg_type": "color",
+        "bg_color": "#FFFFFF",
+        "padding_top": "80",
+        "padding_bottom": "0"
+      },
+      "advanced": {},
+      "children": [
+        {
+          "id": "tpl-ft-180",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl-ft-174",
+              "type": "column",
+              "settings": {
+                "width": "1-2"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl-ft-173",
+                  "type": "image",
+                  "settings": {
+                    "url": "",
+                    "alt": "Personalizzazione",
+                    "width": "100%",
+                    "border_radius": "16",
+                    "shadow": "md"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": "tpl-ft-179",
+              "type": "column",
+              "settings": {
+                "width": "1-2"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl-ft-175",
+                  "type": "icon",
+                  "settings": {
+                    "icon": "settings",
+                    "size": "48",
+                    "color": "var(--olo-color-primary, #e1474f)",
+                    "bg_color": "color-mix(in srgb, var(--olo-color-primary, #e1474f) 12%, #fff)",
+                    "border_radius": "12",
+                    "style": "square"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-ft-176",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "16"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-ft-177",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "Personalizzazione Totale",
+                    "tag": "h3",
+                    "alignment": "left",
+                    "decoration": "none",
+                    "heading_color": "#1F2937",
+                    "heading_size": "md"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-ft-178",
+                  "type": "content",
+                  "settings": {
+                    "content": "<p style=\"color:#6B7280\">Modifica ogni aspetto del tuo sito: colori, tipografia, layout e animazioni. Nessun limite alla creatività.</p>",
+                    "alignment": "left"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "4": {
+      "id": "tpl-ft-190",
+      "type": "section",
+      "settings": {
+        "style": "default",
+        "width": "large",
+        "padding": "large"
+      },
+      "style": {
+        "bg_type": "color",
+        "bg_color": "#FFF7ED",
+        "padding_top": "80",
+        "padding_bottom": "0"
+      },
+      "advanced": {},
+      "children": [
+        {
+          "id": "tpl-ft-189",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl-ft-186",
+              "type": "column",
+              "settings": {
+                "width": "1-2"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl-ft-182",
+                  "type": "icon",
+                  "settings": {
+                    "icon": "zap",
+                    "size": "48",
+                    "color": "#EA580C",
+                    "bg_color": "#FFEDD5",
+                    "border_radius": "12",
+                    "style": "square"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-ft-183",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "16"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-ft-184",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "Performance Ottimali",
+                    "tag": "h3",
+                    "alignment": "left",
+                    "decoration": "none",
+                    "heading_color": "#1F2937",
+                    "heading_size": "md"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-ft-185",
+                  "type": "content",
+                  "settings": {
+                    "content": "<p style=\"color:#6B7280\">Core Web Vitals perfetti. Lazy loading, compressione immagini e minificazione automatica del codice.</p>",
+                    "alignment": "left"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": "tpl-ft-188",
+              "type": "column",
+              "settings": {
+                "width": "1-2"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl-ft-187",
+                  "type": "image",
+                  "settings": {
+                    "url": "",
+                    "alt": "Performance",
+                    "width": "100%",
+                    "border_radius": "16",
+                    "shadow": "md"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "5": {
+      "id": "tpl-ft-199",
+      "type": "section",
+      "settings": {
+        "style": "default",
+        "width": "large",
+        "padding": "large"
+      },
+      "style": {
+        "bg_type": "color",
+        "bg_color": "#F0F9FF",
+        "padding_top": "80",
+        "padding_bottom": "80"
+      },
+      "advanced": {},
+      "children": [
+        {
+          "id": "tpl-ft-198",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl-ft-192",
+              "type": "column",
+              "settings": {
+                "width": "1-2"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl-ft-191",
+                  "type": "image",
+                  "settings": {
+                    "url": "",
+                    "alt": "Collaborazione",
+                    "width": "100%",
+                    "border_radius": "16",
+                    "shadow": "md"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": "tpl-ft-197",
+              "type": "column",
+              "settings": {
+                "width": "1-2"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl-ft-193",
+                  "type": "icon",
+                  "settings": {
+                    "icon": "users",
+                    "size": "48",
+                    "color": "#0284C7",
+                    "bg_color": "#E0F2FE",
+                    "border_radius": "12",
+                    "style": "square"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-ft-194",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "16"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-ft-195",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "Collaborazione in Team",
+                    "tag": "h3",
+                    "alignment": "left",
+                    "decoration": "none",
+                    "heading_color": "#1F2937",
+                    "heading_size": "md"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-ft-196",
+                  "type": "content",
+                  "settings": {
+                    "content": "<p style=\"color:#6B7280\">Invita colleghi, assegna ruoli e lavora in tempo reale sullo stesso progetto con il controllo versione integrato.</p>",
+                    "alignment": "left"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "6": {
+      "id": "tpl-ft-369",
+      "type": "section",
+      "settings": {
+        "style": "default",
+        "width": "large",
+        "padding": "large"
+      },
+      "style": {
+        "bg_type": "color",
+        "bg_color": "#1E1B4B",
+        "padding_top": "100",
+        "padding_bottom": "100"
+      },
+      "advanced": {},
+      "children": [
+        {
+          "id": "tpl-ft-361",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl-ft-360",
+              "type": "column",
+              "settings": {
+                "width": "1-1"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl-ft-358",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "Le Nostre Persone",
+                    "subtitle": "Talento e passione in ogni progetto",
+                    "tag": "h2",
+                    "alignment": "center",
+                    "decoration": "line",
+                    "heading_color": "color-mix(in srgb, var(--olo-color-primary, #e1474f) 12%, #fff)",
+                    "subtitle_color": "#A5B4FC",
+                    "heading_size": "lg"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-ft-359",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "48"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "tpl-ft-368",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl-ft-363",
+              "type": "column",
+              "settings": {
+                "width": "1-3"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl-ft-362",
+                  "type": "team",
+                  "settings": {
+                    "name": "Pietro Lombardi",
+                    "role": "Direttore Creativo",
+                    "bio": "Ha diretto campagne per brand internazionali.",
+                    "image": "",
+                    "social_links": "linkedin|#\ntwitter|#",
+                    "style": "card",
+                    "image_border_radius": "50%",
+                    "name_color": "#F1F5F9",
+                    "role_color": "#A5B4FC",
+                    "bg_color": "#312E81",
+                    "border_radius": "16",
+                    "shadow": "lg"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": "tpl-ft-365",
+              "type": "column",
+              "settings": {
+                "width": "1-3"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl-ft-364",
+                  "type": "team",
+                  "settings": {
+                    "name": "Marta Esposito",
+                    "role": "Data Scientist",
+                    "bio": "Trasforma i dati in decisioni strategiche.",
+                    "image": "",
+                    "social_links": "linkedin|#\ngithub|#",
+                    "style": "card",
+                    "image_border_radius": "50%",
+                    "name_color": "#F1F5F9",
+                    "role_color": "#A5B4FC",
+                    "bg_color": "#312E81",
+                    "border_radius": "16",
+                    "shadow": "lg"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": "tpl-ft-367",
+              "type": "column",
+              "settings": {
+                "width": "1-3"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl-ft-366",
+                  "type": "team",
+                  "settings": {
+                    "name": "Tommaso Bruno",
+                    "role": "DevOps Engineer",
+                    "bio": "Infrastrutture scalabili e sicure.",
+                    "image": "",
+                    "social_links": "linkedin|#\ngithub|#",
+                    "style": "card",
+                    "image_border_radius": "50%",
+                    "name_color": "#F1F5F9",
+                    "role_color": "#A5B4FC",
+                    "bg_color": "#312E81",
+                    "border_radius": "16",
+                    "shadow": "lg"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "7": {
+      "id": "tpl-tq-sec",
+      "type": "section",
+      "settings": {
+        "style": "default",
+        "width": "large",
+        "padding": "large"
+      },
+      "style": {
+        "bg_type": "color",
+        "bg_color": "#F3F4F6",
+        "padding_top": "120",
+        "padding_bottom": "120"
+      },
+      "advanced": {},
+      "children": [
+        {
+          "id": "tpl-tq-row",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl-tq-c1",
+              "type": "column",
+              "settings": {
+                "width": "1-6"
+              },
+              "style": {},
+              "advanced": {},
+              "children": []
+            },
+            {
+              "id": "tpl-tq-c2",
+              "type": "column",
+              "settings": {
+                "width": "2-3"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl-tq-i",
+                  "type": "icon",
+                  "settings": {
+                    "icon": "quote",
+                    "size": "80",
+                    "color": "#DC2626"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-tq-sp1",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "32"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-tq-q",
+                  "type": "testimonial",
+                  "settings": {
+                    "quote": "Collaborare con questo team e stata una delle decisioni migliori della mia carriera imprenditoriale. Hanno saputo trasformare la nostra visione in realta, con un livello di attenzione ai dettagli che non avevo mai sperimentato prima. Ogni fase del progetto e stata gestita con estrema professionalita.",
+                    "author_name": "Giovanni De Luca",
+                    "author_role": "Amministratore Delegato, De Luca Holdings",
+                    "rating": "5",
+                    "bg_color": "",
+                    "text_color": "#1F2937",
+                    "show_line": false,
+                    "border_radius": "0",
+                    "show_rating": false,
+                    "quote_size": "lg"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": "tpl-tq-c3",
+              "type": "column",
+              "settings": {
+                "width": "1-6"
+              },
+              "style": {},
+              "advanced": {},
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    "8": {
+      "id": "tpl-ctasplit-sec",
+      "type": "section",
+      "settings": {
+        "style": "default",
+        "width": "large",
+        "padding": "large"
+      },
+      "style": {
+        "bg_type": "color",
+        "bg_color": "#FFFFFF",
+        "padding_top": "80",
+        "padding_bottom": "80"
+      },
+      "advanced": {},
+      "children": [
+        {
+          "id": "tpl-ctasplit-row",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl-ctasplit-col1",
+              "type": "column",
+              "settings": {
+                "width": "1-2"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl-ctasplit-headline",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "Parliamo del tuo progetto",
+                    "subtitle": "Compila il form e ti ricontatteremo entro 24 ore con una proposta personalizzata per le tue esigenze.",
+                    "tag": "h2",
+                    "alignment": "left",
+                    "decoration": "line",
+                    "heading_color": "#1F2937",
+                    "subtitle_color": "#6B7280",
+                    "decoration_color": "var(--olo-color-primary, #e1474f)",
+                    "heading_size": "lg"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-ctasplit-spacer1",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "20"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-ctasplit-icon1",
+                  "type": "iconbox",
+                  "settings": {
+                    "icon": "phone",
+                    "title": "Chiamaci",
+                    "description": "+39 02 1234567",
+                    "alignment": "left",
+                    "icon_color": "var(--olo-color-primary, #e1474f)",
+                    "icon_size": "sm",
+                    "icon_style": "default"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-ctasplit-icon2",
+                  "type": "iconbox",
+                  "settings": {
+                    "icon": "mail",
+                    "title": "Scrivici",
+                    "description": "info@esempio.it",
+                    "alignment": "left",
+                    "icon_color": "var(--olo-color-primary, #e1474f)",
+                    "icon_size": "sm",
+                    "icon_style": "default"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": "tpl-ctasplit-col2",
+              "type": "column",
+              "settings": {
+                "width": "1-2"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl-ctasplit-form",
+                  "type": "form",
+                  "settings": {
+                    "fields": [
+                      {
+                        "type": "text",
+                        "label": "Nome",
+                        "placeholder": "Il tuo nome",
+                        "required": true
+                      },
+                      {
+                        "type": "email",
+                        "label": "Email",
+                        "placeholder": "La tua email",
+                        "required": true
+                      },
+                      {
+                        "type": "textarea",
+                        "label": "Messaggio",
+                        "placeholder": "Descrivi il tuo progetto...",
+                        "required": false
+                      }
+                    ],
+                    "submit_text": "Invia richiesta",
+                    "submit_bg_color": "var(--olo-color-primary, #e1474f)",
+                    "submit_text_color": "#FFFFFF",
+                    "layout": "stacked"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "9": {
+      "id": "tpl_106",
+      "type": "section",
+      "settings": {
+        "style": "default",
+        "width": "large",
+        "padding": "large"
+      },
+      "style": {
+        "bg_type": "color",
+        "bg_color": "#374151",
+        "padding_top": "24",
+        "padding_bottom": "24"
+      },
+      "advanced": {},
+      "children": [
+        {
+          "id": "tpl_105",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl_102",
+              "type": "column",
+              "settings": {
+                "width": "1-2"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_101",
+                  "type": "content",
+                  "settings": {
+                    "content": "<p style=\"color:#d1d5db;font-size:14px;margin:0;\">&copy; 2026 La tua Azienda. Tutti i diritti riservati.</p>",
+                    "alignment": "left"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            },
+            {
+              "id": "tpl_104",
+              "type": "column",
+              "settings": {
+                "width": "1-2"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_103",
+                  "type": "social",
+                  "settings": {
+                    "links": "facebook|#\ninstagram|#\nlinkedin|#",
+                    "style": "default",
+                    "size": "md",
+                    "alignment": "right"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

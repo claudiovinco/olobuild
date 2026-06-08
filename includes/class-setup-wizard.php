@@ -12,6 +12,11 @@ class Olo_Setup_Wizard {
         // Register wizard page (no auto-redirect to avoid potential loops on restrictive installs)
         add_action( 'admin_menu', [ $this, 'register_wizard_page' ] );
 
+        // Render the wizard as a full-screen document BEFORE WordPress prints the admin
+        // chrome (admin bar / header / sidebar). Without this the wizard's complete HTML
+        // document gets nested inside the admin page → broken layout. Pattern: WooCommerce setup.
+        add_action( 'admin_init', [ $this, 'maybe_takeover' ], 1 );
+
         // Show activation notice with link to wizard (safer than auto-redirect)
         add_action( 'admin_notices', [ $this, 'show_activation_notice' ] );
 
@@ -27,6 +32,16 @@ class Olo_Setup_Wizard {
                 delete_transient( 'olo_activating' );
             }
         } );
+    }
+
+    /**
+     * Take over the request and render the wizard full-screen, before the admin chrome.
+     */
+    public function maybe_takeover() {
+        if ( wp_doing_ajax() ) return;
+        if ( ! isset( $_GET['page'] ) || $_GET['page'] !== 'olo-setup' ) return;
+        if ( ! current_user_can( 'manage_options' ) ) return;
+        $this->render_wizard(); // prints a full HTML document and exits
     }
 
     /**
@@ -73,7 +88,7 @@ class Olo_Setup_Wizard {
         $theme_installed = wp_get_theme( 'hello-olobuild' )->exists();
         $theme_active    = get_stylesheet() === 'hello-olobuild';
 
-        // Get available Olobuild themes
+        // Get available Olobuild themes (con campi visivi per le mini-anteprime del picker)
         require_once OLO_PATH . 'includes/class-theme-importer.php';
         $themes = Olo_Theme_Importer::get_themes();
 
@@ -87,7 +102,8 @@ class Olo_Setup_Wizard {
             <style>
                 * { box-sizing: border-box; margin: 0; padding: 0; }
                 body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #1a1a1a; color: #E2E8F0; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
-                .wizard { max-width: 680px; width: 100%; padding: 48px; }
+                .wizard { max-width: 680px; width: 100%; padding: 48px; transition: max-width 0.25s ease; }
+                .wizard.wide { max-width: 1080px; }
                 .wizard-logo { text-align: center; margin-bottom: 40px; }
                 .wizard-logo img { height: 48px; }
                 .wizard-logo h1 { font-size: 28px; font-weight: 700; color: #F8FAFC; margin-top: 16px; }
@@ -111,17 +127,12 @@ class Olo_Setup_Wizard {
                 .spinner { display: inline-block; width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.2); border-top-color: #fff; border-radius: 50%; animation: spin 0.6s linear infinite; }
                 @keyframes spin { to { transform: rotate(360deg); } }
                 .status { font-size: 13px; color: #94A3B8; margin-top: 12px; min-height: 20px; }
-                .theme-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; margin-bottom: 20px; }
-                .theme-option { background: #1a1a1a; border: 2px solid #3a3a3a; border-radius: 12px; padding: 16px; cursor: pointer; transition: all 0.2s; text-align: center; }
-                .theme-option:hover { border-color: #e8622a; }
-                .theme-option.selected { border-color: #e8622a; background: #2e1c10; }
-                .theme-option h3 { font-size: 15px; font-weight: 600; color: #F1F5F9; margin-bottom: 4px; }
-                .theme-option p { font-size: 12px; color: #64748B; }
-                .theme-option .icon { display: flex; justify-content: center; margin-bottom: 12px; color: #64748B; transition: color 0.2s; }
-                .theme-option:hover .icon, .theme-option.selected .icon { color: #e8622a; }
+                /* Il selettore temi (card + filtri + ricerca) è il picker condiviso OloThemePicker. */
+                .wizard-picker { margin-bottom: 20px; }
+                .wizard-picker .otmp { height: 56vh; min-height: 320px; }
                 .skip-link { display: block; text-align: center; margin-top: 20px; color: #64748B; font-size: 13px; cursor: pointer; text-decoration: none; }
                 .skip-link:hover { color: #94A3B8; }
-                .theme-option:focus-visible, .btn:focus-visible, .skip-link:focus-visible, .quick-card:focus-visible { outline: 2px solid #e8622a; outline-offset: 2px; }
+                .btn:focus-visible, .skip-link:focus-visible, .quick-card:focus-visible { outline: 2px solid #e8622a; outline-offset: 2px; }
                 .quick-cards { display: grid; gap: 10px; }
                 .quick-card { display: flex; gap: 14px; align-items: center; padding: 14px 16px; background: #1a1a1a; border: 1px solid #3a3a3a; border-radius: 10px; text-decoration: none; color: #E2E8F0; transition: all 0.2s; }
                 .quick-card:hover { border-color: #e8622a; transform: translateX(2px); }
@@ -174,24 +185,7 @@ class Olo_Setup_Wizard {
                 <div class="wizard-card" id="step-2" style="display:none">
                     <h2><?php esc_html_e( '2. Scegli un design', 'olobuild' ); ?></h2>
                     <p><?php esc_html_e( 'Seleziona un tema completo per iniziare. Include header, footer, homepage e menu — tutto personalizzabile.', 'olobuild' ); ?></p>
-                    <div class="theme-grid">
-                        <?php foreach ( $themes as $theme ) : ?>
-                            <div class="theme-option" role="button" tabindex="0" onclick="selectTheme(this, '<?php echo esc_attr( $theme['id'] ); ?>')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click()}" data-theme-id="<?php echo esc_attr( $theme['id'] ); ?>">
-                                <div class="icon">
-                                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
-                                </div>
-                                <h3><?php echo esc_html( $theme['name'] ); ?></h3>
-                                <p><?php echo esc_html( implode( ', ', $theme['tags'] ?? [] ) ); ?></p>
-                            </div>
-                        <?php endforeach; ?>
-                        <div class="theme-option" role="button" tabindex="0" onclick="selectTheme(this, 'blank')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click()}" data-theme-id="blank">
-                            <div class="icon">
-                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="3 3"><rect x="5" y="3" width="14" height="18" rx="2"/></svg>
-                            </div>
-                            <h3><?php esc_html_e( 'Vuoto', 'olobuild' ); ?></h3>
-                            <p><?php esc_html_e( 'Parti da zero', 'olobuild' ); ?></p>
-                        </div>
-                    </div>
+                    <div class="wizard-picker" id="olo-wizard-picker"><!-- montato da OloThemePicker (embed) --></div>
                     <div class="btn-group">
                         <button class="btn btn-primary" id="btn-import" onclick="importTheme()" disabled><?php esc_html_e( 'Importa tema selezionato', 'olobuild' ); ?></button>
                     </div>
@@ -243,7 +237,9 @@ class Olo_Setup_Wizard {
                 <a href="#" role="button" class="skip-link" onclick="skipSetup(); return false;"><?php esc_html_e( 'Salta configurazione', 'olobuild' ); ?></a>
             </div>
 
+            <script src="<?php echo esc_url( OLO_URL . 'assets/js/theme-picker.js' ); ?>?v=<?php echo esc_attr( OLO_VERSION ); ?>"></script>
             <script>
+            var oloWizardThemes = <?php echo wp_json_encode( array_map( function ( $t ) { unset( $t['dir'] ); return $t; }, $themes ) ); ?>;
             var nonce = '<?php echo wp_create_nonce( 'olo_setup' ); ?>';
             var ajaxurl = '<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>';
             var selectedThemeId = null;
@@ -268,6 +264,8 @@ class Olo_Setup_Wizard {
                     var dot = document.getElementById('step-dot-' + i);
                     dot.className = 'wizard-step' + (i < n ? ' done' : (i === n ? ' active' : ''));
                 }
+                var wiz = document.querySelector('.wizard');
+                if (wiz) wiz.classList.toggle('wide', n === 2);
             }
 
             function nextStep(n) { setStep(n); }
@@ -296,12 +294,36 @@ class Olo_Setup_Wizard {
                 .catch(function(e) { status.textContent = '⚠ ' + oloSetupI18n.connectionError; });
             }
 
-            function selectTheme(el, id) {
-                document.querySelectorAll('.theme-option').forEach(function(t) { t.classList.remove('selected'); });
-                el.classList.add('selected');
-                selectedThemeId = id;
-                document.getElementById('btn-import').disabled = false;
-            }
+            // Selettore temi = picker condiviso (stesso del builder), in modalità embed.
+            (function mountThemePicker() {
+                var host = document.getElementById('olo-wizard-picker');
+                if (!host) return;
+                if (!window.OloThemePicker) {
+                    host.innerHTML = '<p style="color:#94A3B8;font-size:14px;padding:24px;text-align:center">'
+                        + <?php echo wp_json_encode( __( 'Impossibile caricare il selettore temi.', 'olobuild' ) ); ?> + '</p>';
+                    return;
+                }
+                window.OloThemePicker.create({
+                    mode: 'embed',
+                    target: host,
+                    themes: oloWizardThemes,
+                    card: { action: 'select' },
+                    blank: {
+                        id: 'blank',
+                        name: <?php echo wp_json_encode( __( 'Vuoto', 'olobuild' ) ); ?>,
+                        desc: <?php echo wp_json_encode( __( 'Parti da zero, tela bianca.', 'olobuild' ) ); ?>
+                    },
+                    i18n: {
+                        title: <?php echo wp_json_encode( __( 'Temi Olobuild', 'olobuild' ) ); ?>,
+                        importLabel: <?php echo wp_json_encode( __( 'Importa tema', 'olobuild' ) ); ?>
+                    },
+                    onSelect: function (id) {
+                        selectedThemeId = id;
+                        var b = document.getElementById('btn-import');
+                        if (b) b.disabled = false;
+                    }
+                });
+            })();
 
             function importTheme() {
                 if (!selectedThemeId) return;

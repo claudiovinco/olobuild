@@ -24,6 +24,13 @@ class Olo_CtaBanner_Tile extends Olo_Tile_Base {
         'cta_url'                 => '#',
         'cta_target'              => '_self',
 
+        'cta2_text'               => '',
+        'cta2_url'                => '#',
+        'cta2_target'             => '_self',
+        'cta2_bg'                 => 'transparent',
+        'cta2_color'              => '#ffffff',
+        'cta2_border'             => 'rgba(255,255,255,.28)',
+
         'bg'                      => [ 'type' => 'solid', 'color' => '#0f172a' ],
         'text_color'              => '#ffffff',
         'accent_color'            => 'var(--olo-color-primary, #e1474f)',
@@ -71,8 +78,8 @@ class Olo_CtaBanner_Tile extends Olo_Tile_Base {
         $s   = wp_parse_args( $settings, $this->defaults );
         $uid = 'olo-ctab-' . wp_rand( 10000, 99999 );
 
-        $serif = "'Playfair Display','Cormorant Garamond',Georgia,'Times New Roman',serif";
-        $sans  = "'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif";
+        $serif = "var(--olo-font-family-heading, 'Playfair Display','Cormorant Garamond',Georgia,'Times New Roman',serif)";
+        $sans  = "var(--olo-font-family, 'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif)";
         $fmap  = [ 'serif' => $serif, 'sans-serif' => $sans, 'mono' => "ui-monospace,'SF Mono',Menlo,Consolas,monospace" ];
 
         $h_family = $fmap[ $s['headline_font_family'] ] ?? $serif;
@@ -89,6 +96,11 @@ class Olo_CtaBanner_Tile extends Olo_Tile_Base {
         $cta_py   = max( 10, min( 30, absint( $s['cta_padding_y'] ) ) );
         $cta_px   = max( 16, min( 60, absint( $s['cta_padding_x'] ) ) );
         $cta_tgt  = $s['cta_target'] === '_blank' ? ' target="_blank" rel="noopener"' : '';
+
+        $cta2_bg   = $this->safe_color_css( $s['cta2_bg'] ?? '' ) ?: 'transparent';
+        $cta2_c    = $this->safe_color_css( $s['cta2_color'] ?? '' ) ?: '#ffffff';
+        $cta2_bord = $this->safe_color_css( $s['cta2_border'] ?? '' );
+        $cta2_tgt  = ( ( $s['cta2_target'] ?? '' ) === '_blank' ) ? ' target="_blank" rel="noopener"' : '';
 
         $cta_radius   = $this->build_border_radius_css( $s['cta_radius'] ?? [] );
         $cta_radius_h = $this->_radius_hover_diff( $s['cta_radius'] ?? [], $s['cta_radius_hover'] ?? [] );
@@ -141,9 +153,16 @@ class Olo_CtaBanner_Tile extends Olo_Tile_Base {
                 <div style="font-family:<?php echo esc_attr( $sans ); ?>;font-size:<?php echo $sub_size; ?>px;line-height:1.5;color:<?php echo esc_attr( $sub_c ); ?>;grid-column:1;margin-top:8px" data-olo-editable="subtitle" data-olo-richtext><?php echo $sub_html; ?></div>
             <?php endif; ?>
 
-            <!-- CTA -->
-            <?php if ( ! empty( $s['cta_text'] ) ) : ?>
-                <a href="<?php echo esc_url( $s['cta_url'] ?: '#' ); ?>"<?php echo $cta_tgt; ?> class="olo-ctab__cta" data-olo-editable="cta_text" style="display:inline-flex;align-items:center;justify-content:center;padding:<?php echo $cta_py; ?>px <?php echo $cta_px; ?>px;background:<?php echo esc_attr( $cta_bg ); ?>;color:<?php echo esc_attr( $cta_c ); ?>;<?php if ( $cta_radius ) echo 'border-radius:' . esc_attr( $cta_radius ) . ';'; ?>font-family:<?php echo esc_attr( $sans ); ?>;font-size:<?php echo $cta_size; ?>px;font-weight:600;text-decoration:none;white-space:nowrap;transition:transform .2s ease,background .2s,color .2s<?php if ( $cta_radius_h ) echo ',border-radius ' . $cta_rdur . 'ms ease'; ?>"><?php echo esc_html( $s['cta_text'] ); ?></a>
+            <!-- CTA(s) -->
+            <?php if ( ! empty( $s['cta_text'] ) || ! empty( $s['cta2_text'] ) ) : ?>
+                <div class="olo-ctab__ctas" style="display:inline-flex;gap:12px;flex-wrap:wrap;align-items:center;<?php echo ( $layout === 'stack' ) ? 'justify-content:center;' : ''; ?>">
+                    <?php if ( ! empty( $s['cta_text'] ) ) : ?>
+                        <a href="<?php echo esc_url( $s['cta_url'] ?: '#' ); ?>"<?php echo $cta_tgt; ?> class="olo-ctab__cta" data-olo-editable="cta_text" style="display:inline-flex;align-items:center;justify-content:center;padding:<?php echo $cta_py; ?>px <?php echo $cta_px; ?>px;background:<?php echo esc_attr( $cta_bg ); ?>;color:<?php echo esc_attr( $cta_c ); ?>;<?php if ( $cta_radius ) echo 'border-radius:' . esc_attr( $cta_radius ) . ';'; ?>font-family:<?php echo esc_attr( $sans ); ?>;font-size:<?php echo $cta_size; ?>px;font-weight:600;text-decoration:none;white-space:nowrap;transition:transform .2s ease,background .2s,color .2s<?php if ( $cta_radius_h ) echo ',border-radius ' . $cta_rdur . 'ms ease'; ?>"><?php echo esc_html( $s['cta_text'] ); ?></a>
+                    <?php endif; ?>
+                    <?php if ( ! empty( $s['cta2_text'] ) ) : ?>
+                        <a href="<?php echo esc_url( $s['cta2_url'] ?: '#' ); ?>"<?php echo $cta2_tgt; ?> class="olo-ctab__cta2" data-olo-editable="cta2_text" style="display:inline-flex;align-items:center;justify-content:center;padding:<?php echo $cta_py; ?>px <?php echo $cta_px; ?>px;background:<?php echo esc_attr( $cta2_bg ); ?>;color:<?php echo esc_attr( $cta2_c ); ?>;<?php if ( $cta2_bord ) echo 'border:1px solid ' . esc_attr( $cta2_bord ) . ';'; ?><?php if ( $cta_radius ) echo 'border-radius:' . esc_attr( $cta_radius ) . ';'; ?>font-family:<?php echo esc_attr( $sans ); ?>;font-size:<?php echo $cta_size; ?>px;font-weight:600;text-decoration:none;white-space:nowrap;transition:transform .2s ease,background .2s,color .2s,border-color .2s"><?php echo esc_html( $s['cta2_text'] ); ?></a>
+                    <?php endif; ?>
+                </div>
             <?php endif; ?>
         </div>
 
@@ -154,6 +173,8 @@ class Olo_CtaBanner_Tile extends Olo_Tile_Base {
             ?>
             .<?php echo $uid; ?> .olo-ctab__cta:hover { transform: translateY(-1px); <?php if ( $cta_bg_h ) echo 'background:' . $cta_bg_h . ' !important;'; ?> <?php if ( $cta_clr_h ) echo 'color:' . $cta_clr_h . ' !important;'; ?> <?php if ( $cta_radius_h ) echo 'border-radius:' . $cta_radius_h . ' !important;'; ?> }
             .<?php echo $uid; ?> .olo-ctab__cta:focus-visible { outline: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent); }
+            .<?php echo $uid; ?> .olo-ctab__cta2:hover { transform: translateY(-1px); <?php if ( $cta2_bord ) echo 'border-color:' . $cta2_c . ' !important;'; ?> }
+            .<?php echo $uid; ?> .olo-ctab__cta2:focus-visible { outline: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent); }
             <?php if ( $banner_radius_h ) : ?>
             .<?php echo $uid; ?>:hover { border-radius: <?php echo $banner_radius_h; ?> !important; }
             <?php endif; ?>

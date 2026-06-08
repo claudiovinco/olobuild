@@ -645,9 +645,15 @@
 
     // We need to know page dimensions first
     this.pdfDoc.getPage(1).then(function (firstPage) {
-      // Use requestAnimationFrame to ensure layout is computed
-      requestAnimationFrame(function () { self._setupFlipbook(firstPage); });
-    });
+      // requestAnimationFrame per assicurare il layout calcolato, MA con
+      // fallback setTimeout: in tab/iframe non visibili (o sotto il fold al
+      // load) rAF può restare in pausa e non scattare mai → senza fallback
+      // _setupFlipbook non parte e il flipbook resta una tile vuota/bianca.
+      var done = false;
+      var run = function () { if (done) return; done = true; self._setupFlipbook(firstPage); };
+      requestAnimationFrame(run);
+      setTimeout(run, 120);
+    }).catch(function (err) { console.error('OloPdfPro flipbook:', err); });
   };
 
   OloPdfPro.prototype._setupFlipbook = function (firstPage) {

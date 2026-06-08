@@ -31,6 +31,7 @@ import { computed } from 'vue';
 import iconsSvg from '../ProSlider/uikitIconsSvg.js';
 import { useBuilderStore } from '@/stores/builder';
 import { rv } from '@/composables/useResponsiveValue';
+import { SHADOW } from '@/composables/oloTileDefaults';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
@@ -106,14 +107,13 @@ const containerStyle = computed(() => {
   // Shadow
   const sh = s.value.shadow;
   if (sh && sh !== 'none') {
-    const shadowMap = { sm: '0 1px 3px rgba(0,0,0,0.1)', md: '0 4px 10px rgba(0,0,0,0.12)', lg: '0 8px 25px rgba(0,0,0,0.15)', xl: '0 12px 40px rgba(0,0,0,0.2)' };
     if (sh === 'custom') {
       const h = s.value.shadow_h || 0, v = s.value.shadow_v || 4, bl = s.value.shadow_blur || 10, sp = s.value.shadow_spread || 0;
       const col = s.value.shadow_color || 'rgba(0,0,0,0.15)';
       const ins = s.value.shadow_inset ? 'inset ' : '';
       st.boxShadow = ins + h + 'px ' + v + 'px ' + bl + 'px ' + sp + 'px ' + col;
-    } else if (shadowMap[sh]) {
-      st.boxShadow = shadowMap[sh];
+    } else if (SHADOW[sh]) {
+      st.boxShadow = SHADOW[sh];
     }
   }
   return st;

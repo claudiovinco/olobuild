@@ -1,5 +1,5 @@
 <template>
-  <div class="mb-flex mb-justify-center olo-newsletter">
+  <div class="mb-flex mb-justify-center olo-newsletter" :style="rootStyle">
     <div :style="boxStyle" class="mb-w-full mb-text-center">
       <!-- Icon -->
       <div v-if="s.icon_type === 'emoji'" class="mb-mb-3" :style="{ fontSize: s.icon_size + 'px' }">{{ s.icon_name }}</div>
@@ -22,7 +22,7 @@
       </div>
 
       <!-- Privacy -->
-      <div v-if="s.privacy_text" class="mb-mt-2 mb-text-[11px] mb-flex mb-items-start mb-gap-1 mb-justify-center" :style="{ color: TOKENS.textFaint }">
+      <div v-if="s.privacy_text" class="mb-mt-2 mb-text-[11px] mb-flex mb-items-start mb-gap-1 mb-justify-center" :style="{ color: s.privacy_color || TOKENS.textFaint }">
         <input v-if="s.privacy_required" type="checkbox" disabled class="mb-mt-0.5" />
         <span v-html="s.privacy_text"></span>
       </div>
@@ -54,11 +54,17 @@ const defaults = {
   privacy_text: '', privacy_required: false, content_lock: false,
   max_width: '600', bg_color: '', box_border: '', border_radius: 12, padding: '32',
   title_size: '24', title_weight: '700', title_color: '', subtitle_size: '14', subtitle_color: '',
-  input_bg: '#ffffff', input_color: '#1F2937', input_border: '#D1D5DB', input_radius: 8, input_height: '44',
+  input_bg: '#ffffff', input_color: '#1F2937', input_placeholder_color: '', input_border: '#D1D5DB', input_radius: 8, input_height: '44',
   btn_bg: '', btn_color: '#ffffff', btn_radius: 8, btn_font_size: '14', btn_font_weight: '600',
+  privacy_color: '',
 };
 
 const s = computed(() => ({ ...defaults, ...props.settings }));
+
+// Colore placeholder via CSS variable (il ::placeholder non è inline-style-abile)
+const rootStyle = computed(() => (
+  s.value.input_placeholder_color ? { '--olo-nl-ph': s.value.input_placeholder_color } : {}
+));
 
 const boxStyle = computed(() => ({
   maxWidth: (s.value.max_width || 600) + 'px',
@@ -129,4 +135,6 @@ const lockBadgeStyle = computed(() => ({
   outline: none;
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent);
 }
+/* Colore placeholder configurabile (var impostata solo se valorizzata) */
+.olo-newsletter input::placeholder { color: var(--olo-nl-ph); opacity: 1; }
 </style>

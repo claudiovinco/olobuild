@@ -176,16 +176,24 @@ class Olo_Pricing_Tile extends Olo_Tile_Base {
                 position: relative; overflow: hidden; text-align: center;
                 border-radius: <?php echo $tile_r; ?>;
                 padding: 32px 24px;
+                height: 100%;
                 color: <?php echo $fg; ?>;
                 <?php if ( $bg_type === 'color' ) : ?>
                 background: <?php echo $bg; ?>;
                 <?php else : ?>
                 background: #1F2937;
                 <?php endif; ?>
-                <?php if ( $tile_bw > 0 ) : ?>
+                <?php if ( $popular ) : ?>
+                border: 1.5px solid <?php echo $accent; ?>;
+                box-shadow: 0 0 0 1px <?php echo $accent; ?>, 0 24px 60px -30px <?php echo $accent; ?>;
+                <?php elseif ( $tile_bw > 0 ) : ?>
                 border: <?php echo $tile_bw; ?>px solid <?php echo $tile_bc; ?>;
                 <?php endif; ?>
             }
+            .<?php echo $uid; ?> .olo-price-inner { display: flex; flex-direction: column; height: 100%; }
+            .<?php echo $uid; ?> .olo-price-cta-wrap, .<?php echo $uid; ?> .olo-price-cta { margin-top: auto; }
+            /* Equal-height: propaga l'altezza della colonna (stretch) attraverso il wrapper del tile. */
+            .olo-frontend-tile:has(.<?php echo $uid; ?>), [data-olo-lazy]:has(.<?php echo $uid; ?>) { height: 100%; }
             <?php if ( $tile_r_hover_css !== '' ) : ?>.<?php echo $uid; ?>{transition:border-radius 400ms cubic-bezier(.4,0,.2,1)}.<?php echo $uid; ?>:hover{border-radius:<?php echo $tile_r_hover_css; ?> !important}<?php endif; ?>
             <?php if ( $bg_type === 'image' && ! empty( $s['bg_image'] ) ) : ?>
             .<?php echo $uid; ?> .olo-price-bg {
@@ -211,7 +219,7 @@ class Olo_Pricing_Tile extends Olo_Tile_Base {
             /* Badge */
             <?php if ( $popular ) : ?>
             .<?php echo $uid; ?> .olo-price-badge {
-                position: absolute; top: <?php echo $badge_top; ?>px; left: 50%; transform: translateX(-50%);
+                position: relative; display: inline-block; margin-top: <?php echo $badge_top; ?>px; margin-bottom: 18px;
                 font-size: 0.75em; font-weight: 600; text-transform: uppercase; white-space: nowrap; z-index: 5;
                 color: <?php echo $badge_fg; ?>;
                 border-radius: <?php echo $badge_r; ?>;
@@ -384,7 +392,7 @@ class Olo_Pricing_Tile extends Olo_Tile_Base {
                 </div>
                 <?php endif; ?>
 
-                <h3 style="font-size:1.25em;font-weight:600;margin:<?php echo $popular ? '24px' : '8px'; ?> 0 16px;color:<?php echo $fg; ?>"><?php echo $plan_name; ?></h3>
+                <h3 style="font-size:1.25em;font-weight:600;margin:8px 0 16px;color:<?php echo $fg; ?>"><?php echo $plan_name; ?></h3>
 
                 <div style="margin-bottom:24px">
                     <?php

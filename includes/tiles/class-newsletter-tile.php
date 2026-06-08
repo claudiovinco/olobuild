@@ -62,17 +62,24 @@ class Olo_Newsletter_Tile extends Olo_Tile_Base {
         'icon_color'        => '',
         'input_bg'          => '#ffffff',
         'input_color'       => '#1F2937',
+        'input_placeholder_color' => '',
         'input_border'      => '#D1D5DB',
         'input_focus_border' => '',
         'input_radius'      => 8,
         'input_height'      => '44',
         'btn_bg'            => '',
         'btn_color'         => '#ffffff',
+        'btn_color_hover'   => '',
         'box_border'        => '',
         'btn_hover_bg'      => '',
         'btn_radius'        => 8,
         'btn_font_size'     => '14',
         'btn_font_weight'   => '600',
+        'privacy_color'     => '',
+        'success_bg'        => '',
+        'success_color'     => '',
+        'error_bg'          => '',
+        'error_color'       => '',
         'shadow'            => 'none',
             'border'                  => [],
         'border_hover'            => [],
@@ -162,14 +169,15 @@ class Olo_Newsletter_Tile extends Olo_Tile_Base {
         .<?php echo $uid; ?> .olo-nl-form input[type="text"],
         .<?php echo $uid; ?> .olo-nl-form input[type="email"]{height:<?php echo $ih; ?>px;padding:0 14px;background:<?php echo esc_attr($s['input_bg']); ?>;color:<?php echo esc_attr($s['input_color']); ?>;border:1px solid <?php echo esc_attr($s['input_border']); ?>;border-radius:<?php echo $ir; ?>px;font-size:14px;outline:none;transition:border-color 0.2s;flex:1;min-width:0}
         .<?php echo $uid; ?> .olo-nl-form input:focus{border-color:<?php echo esc_attr($focus_b); ?>;box-shadow:0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent)}
+        <?php if ( ! empty( $s['input_placeholder_color'] ) ) : ?>.<?php echo $uid; ?> .olo-nl-form input::placeholder{color:<?php echo esc_attr($s['input_placeholder_color']); ?>;opacity:1}<?php endif; ?>
         .<?php echo $uid; ?> .olo-nl-btn{height:<?php echo $ih; ?>px;padding:0 <?php echo $is_minimal ? '16' : '24'; ?>px;background:<?php echo esc_attr($btn_bg); ?>;color:<?php echo esc_attr($s['btn_color']); ?>;border:none;border-radius:<?php echo $br; ?>px;font-size:<?php echo absint($s['btn_font_size']); ?>px;font-weight:<?php echo esc_attr($s['btn_font_weight']); ?>;cursor:pointer;transition:background 0.2s,transform 0.15s;display:inline-flex;align-items:center;gap:6px;justify-content:center;white-space:nowrap;<?php echo $is_h ? '' : 'width:100%'; ?>}
-        .<?php echo $uid; ?> .olo-nl-btn:hover{background:<?php echo esc_attr($btn_hover); ?>;transform:translateY(-1px)}
+        .<?php echo $uid; ?> .olo-nl-btn:hover{background:<?php echo esc_attr($btn_hover); ?>;<?php if ( ! empty( $s['btn_color_hover'] ) ) echo 'color:' . esc_attr( $s['btn_color_hover'] ) . ';'; ?>transform:translateY(-1px)}
         .<?php echo $uid; ?> .olo-nl-btn:focus-visible{outline:none;box-shadow:0 0 0 3px color-mix(in srgb, var(--olo-color-primary, #e1474f) 30%, transparent)}
-        .<?php echo $uid; ?> .olo-nl-privacy{font-size:11px;color:var(--olo-color-text-muted,#9CA3AF);margin-top:10px;display:flex;align-items:flex-start;gap:6px;justify-content:center;text-align:left}
+        .<?php echo $uid; ?> .olo-nl-privacy{font-size:11px;color:<?php echo ! empty( $s['privacy_color'] ) ? esc_attr( $s['privacy_color'] ) : 'var(--olo-color-text-muted,#9CA3AF)'; ?>;margin-top:10px;display:flex;align-items:flex-start;gap:6px;justify-content:center;text-align:left}
         .<?php echo $uid; ?> .olo-nl-privacy a{color:inherit;text-decoration:underline}
         .<?php echo $uid; ?> .olo-nl-msg{padding:16px;border-radius:8px;font-size:14px;text-align:center;display:none}
-        .<?php echo $uid; ?> .olo-nl-msg.olo-nl-ok{background:#ECFDF5;color:#065F46}
-        .<?php echo $uid; ?> .olo-nl-msg.olo-nl-err{background:#FEF2F2;color:#991B1B}
+        .<?php echo $uid; ?> .olo-nl-msg.olo-nl-ok{background:<?php echo ! empty( $s['success_bg'] ) ? esc_attr( $s['success_bg'] ) : '#ECFDF5'; ?>;color:<?php echo ! empty( $s['success_color'] ) ? esc_attr( $s['success_color'] ) : '#065F46'; ?>}
+        .<?php echo $uid; ?> .olo-nl-msg.olo-nl-err{background:<?php echo ! empty( $s['error_bg'] ) ? esc_attr( $s['error_bg'] ) : '#FEF2F2'; ?>;color:<?php echo ! empty( $s['error_color'] ) ? esc_attr( $s['error_color'] ) : '#991B1B'; ?>}
         .<?php echo $uid; ?> .olo-nl-loading{opacity:0.6;pointer-events:none}
         <?php if ( ! empty( $s['content_lock'] ) ) : ?>
         .<?php echo $uid; ?>-lock{position:relative;overflow:hidden;max-height:<?php echo absint($s['lock_height']); ?>px}
@@ -205,8 +213,6 @@ class Olo_Newsletter_Tile extends Olo_Tile_Base {
             <div class="olo-nl-msg olo-nl-err" id="<?php echo $uid; ?>-err"></div>
 
             <form class="olo-nl-form" id="<?php echo $uid; ?>-form" novalidate>
-              <input type="hidden" name="_olo_form_token" value="<?php echo esc_attr( $token ); ?>" />
-              <input type="hidden" name="_olo_form_config" value="<?php echo esc_attr( $config_b64 ); ?>" />
               <?php if ( ! empty( $s['honeypot'] ) ) : ?>
                 <div style="position:absolute;left:-9999px;top:-9999px" aria-hidden="true">
                   <input type="text" name="olo_website_url" tabindex="-1" autocomplete="off" />
@@ -260,7 +266,8 @@ class Olo_Newsletter_Tile extends Olo_Tile_Base {
 
           form.addEventListener('submit',function(e){
             e.preventDefault();
-            var email=form.querySelector('input[type="email"]').value;
+            var emailField=form.querySelector('input[type="email"]');
+            var email=emailField?emailField.value.trim():'';
             if(!email){errEl.textContent='Inserisci un indirizzo email';errEl.style.display='block';return}
 
             // Privacy check
@@ -272,11 +279,18 @@ class Olo_Newsletter_Tile extends Olo_Tile_Base {
             form.classList.add('olo-nl-loading');
             errEl.style.display='none';
 
-            var fd=new FormData(form);
-            var payload={};
-            fd.forEach(function(v,k){payload[k]=v});
+            // Payload mirato per il gestore newsletter dedicato.
+            var nameField=form.querySelector('input[name="name"]');
+            var payload={
+              email:email,
+              name:nameField?nameField.value:'',
+              source:(location.pathname||'')+(document.title?(' — '+document.title):''),
+              success_message:'<?php echo esc_js( $s['success_message'] ); ?>'
+            };
+            var hp1=form.querySelector('input[name="olo_website_url"]'); if(hp1&&hp1.value){payload.olo_website_url=hp1.value}
+            var hp2=form.querySelector('input[name="olo_hp_field"]'); if(hp2&&hp2.value){payload.olo_hp_field=hp2.value}
 
-            fetch('<?php echo esc_url( rest_url( 'olo/v1/form/submit' ) ); ?>',{
+            fetch('<?php echo esc_url( rest_url( 'olo/v1/newsletter/subscribe' ) ); ?>',{
               method:'POST',
               headers:{'Content-Type':'application/json'},
               body:JSON.stringify(payload)
@@ -284,11 +298,13 @@ class Olo_Newsletter_Tile extends Olo_Tile_Base {
             .then(function(r){return r.json()})
             .then(function(data){
               form.classList.remove('olo-nl-loading');
-              if(data.success){
+              var ok=!!(data&&data.success);
+              var msg=(data&&data.data&&data.data.message)?data.data.message:((data&&data.message)?data.message:'');
+              if(ok){
                 form.style.display='none';
                 var priv=form.parentElement.querySelector('.olo-nl-privacy');
                 if(priv)priv.style.display='none';
-                okEl.textContent=data.data.message||'<?php echo esc_js( $s['success_message'] ); ?>';
+                okEl.textContent=msg||'<?php echo esc_js( $s['success_message'] ); ?>';
                 okEl.style.display='block';
 
                 // Unlock content
@@ -299,11 +315,11 @@ class Olo_Newsletter_Tile extends Olo_Tile_Base {
                 }
 
                 // Redirect
-                if(data.data.redirect){
+                if(data.data&&data.data.redirect){
                   setTimeout(function(){window.location.href=data.data.redirect},1500);
                 }
               }else{
-                errEl.textContent=data.message||'Errore durante l\'iscrizione';
+                errEl.textContent=msg||'Errore durante l\'iscrizione';
                 errEl.style.display='block';
               }
             })

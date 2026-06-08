@@ -1,0 +1,1230 @@
+[
+ {
+  "id": "sf-se-4",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "full",
+   "padding": {
+    "top": 0,
+    "right": 0,
+    "bottom": 0,
+    "left": 0
+   }
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#241a16"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "sf-ro-3",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "sf-co-2",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "sf-hero-split-1",
+        "type": "imagehero",
+        "settings": {
+         "eyebrow_text": "Seasonal kitchen · est. 2012 · Milan",
+         "eyebrow_dot": false,
+         "headline_text": "Cooked over",
+         "accent_text": "with care.",
+         "headline_tail": "fire, served",
+         "accent_italic": true,
+         "stack_lines": true,
+         "subhead": "A short menu that changes with the market, an open kitchen you can watch, and a wine list we actually drink ourselves.",
+         "cta1_text": "Reserve a table",
+         "cta1_url": "#visit",
+         "cta2_text": "View the menu",
+         "cta2_url": "#menu",
+         "meta_text": "",
+         "scroll_hint": "",
+         "bg_image": "",
+         "bg_color": "#241a16",
+         "media_label": "hero — plated dish on open fire, full-bleed",
+         "text_position": "bottom-left",
+         "text_align": "left",
+         "content_width": 760,
+         "aspect_ratio": "21/10",
+         "min_height": 84,
+         "heading_font": "serif",
+         "overlay_color": "#241a16",
+         "overlay_top": 0.4,
+         "overlay_bottom": 0.9,
+         "overlay_sides": false,
+         "accent": "#e0a23a",
+         "accent_on": "#ffffff",
+         "text_color": "#ffffff",
+         "sub_color": "rgba(255,255,255,.74)",
+         "eyebrow_color": "#e0a23a"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "sf-se-12",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "small"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#312420"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "sf-ro-11",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "sf-co-6",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "sf-hoursstrip-5",
+        "type": "hoursstrip",
+        "settings": {
+         "items": [
+          {
+           "day": "Open now",
+           "time": "until 23:00",
+           "note": "Walk-ins welcome at the counter"
+          },
+          {
+           "day": "Lunch",
+           "time": "12:00 – 14:30",
+           "note": "Tue – Sun"
+          },
+          {
+           "day": "Dinner",
+           "time": "19:00 – 23:00",
+           "note": "Tue – Sun"
+          },
+          {
+           "day": "Find us",
+           "time": "Via Brera 18",
+           "note": "Milan · +39 02 555 12"
+          }
+         ],
+         "columns": 4,
+         "band_padding_y": 28,
+         "show_dividers": true,
+         "divider_color": "rgba(255,255,255,.12)",
+         "band_border": false,
+         "day_color": "#e0a23a",
+         "day_size": 12,
+         "time_font_family": "heading",
+         "time_color": "#ffffff",
+         "time_size": 26,
+         "time_weight": "400",
+         "note_color": "rgba(255,255,255,.55)",
+         "note_size": 13,
+         "mono_font_family": ""
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "sf-se-16",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#f6efe2"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "sf-ro-15",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "sf-co-14",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "sf-hero-split-13",
+        "type": "hero-split",
+        "settings": {
+         "eyebrow_text": "Our story",
+         "eyebrow_dot_color": "#c75d3a",
+         "eyebrow_color": "#c75d3a",
+         "headline_lines": [
+          {
+           "text": "A neighbourhood kitchen,",
+           "color": "#241a16",
+           "italic": false
+          },
+          {
+           "text": "run by the people",
+           "color": "#241a16",
+           "italic": false
+          },
+          {
+           "text": "who cook in it.",
+           "color": "#c75d3a",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 46,
+         "headline_line_height": 1.04,
+         "headline_font_weight": "400",
+         "headline_align": "left",
+         "subhead": "Saffron started as a six-table room with one wood oven. We still cook the way we did then — buying what's good that morning, writing the menu in the afternoon, and serving it the same night. No deliveries we wouldn't eat ourselves, no dish that hasn't earned its place. Just a kitchen that takes its time.",
+         "subhead_color": "#6e6258",
+         "subhead_size": 16.5,
+         "subhead_italic": false,
+         "subhead_max_width": 480,
+         "cta1_text": "More about us",
+         "cta1_url": "#story",
+         "cta1_bg": "#241a16",
+         "cta1_color": "#f6efe2",
+         "cta1_size": 14,
+         "cta1_radius": {
+          "tl": 999,
+          "tr": 999,
+          "br": 999,
+          "bl": 999,
+          "linked": true
+         },
+         "cta1_radius_hover": {
+          "tl": 999,
+          "tr": 999,
+          "br": 999,
+          "bl": 999,
+          "linked": true
+         },
+         "cta2_text": "",
+         "cta2_url": "",
+         "stats": [],
+         "showcase_enabled": true,
+         "showcase_bg": {
+          "type": "solid",
+          "color": "#efe6d4"
+         },
+         "showcase_padding": 32,
+         "showcase_radius": {
+          "tl": 8,
+          "tr": 8,
+          "br": 8,
+          "bl": 8,
+          "linked": true
+         },
+         "showcase_radius_hover": {
+          "tl": 8,
+          "tr": 8,
+          "br": 8,
+          "bl": 8,
+          "linked": true
+         },
+         "showcase_badge_text": "12 YEARS · OPEN KITCHEN",
+         "showcase_badge_dot": "#c75d3a",
+         "showcase_badge_bg": "#c75d3a",
+         "showcase_badge_color": "#ffffff",
+         "showcase_items": [
+          {
+           "number": "Est.",
+           "text": "2012",
+           "italic": false,
+           "text_color": "#c75d3a",
+           "bg": {
+            "type": "solid",
+            "color": "#fffdf8"
+           }
+          },
+          {
+           "number": "Tables",
+           "text": "6 → 24",
+           "italic": false,
+           "text_color": "#241a16",
+           "bg": {
+            "type": "solid",
+            "color": "#fffdf8"
+           }
+          }
+         ],
+         "showcase_card_radius": {
+          "tl": 8,
+          "tr": 8,
+          "br": 8,
+          "bl": 8,
+          "linked": true
+         },
+         "showcase_card_radius_hover": {
+          "tl": 8,
+          "tr": 8,
+          "br": 8,
+          "bl": 8,
+          "linked": true
+         },
+         "showcase_card_shadow": "none",
+         "showcase_caption_left": "OUR STORY",
+         "showcase_caption_right": "",
+         "showcase_hover_effect": "none",
+         "split_ratio": ".75fr 1.25fr",
+         "gap": 54,
+         "min_height": 0,
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "sf-se-23",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#efe6d4"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "sf-ro-19",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "sf-co-18",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "sf-section-header-17",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "From the pass",
+         "eyebrow_color": "#c75d3a",
+         "eyebrow_dot_color": "#c75d3a",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "This week's ",
+           "color": "#241a16",
+           "italic": false
+          },
+          {
+           "text": "signatures",
+           "color": "#c75d3a",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 44,
+         "headline_font_weight": "400",
+         "headline_align": "left",
+         "headline_inline": true,
+         "tagline_show": false,
+         "tagline_text": "",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#6e6258",
+         "tagline_text_size": 16,
+         "layout": "stack",
+         "gap": 14
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "sf-ro-22",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "sf-co-21",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "sf-workgrid-20",
+        "type": "workgrid",
+        "settings": {
+         "items": [
+          {
+           "image": "",
+           "media_label": "Fire-roasted quail",
+           "title": "Fire-roasted quail",
+           "meta": "€24",
+           "description": "Grape must, charred radicchio, toasted hazelnut.",
+           "link_url": "",
+           "tall": false
+          },
+          {
+           "image": "",
+           "media_label": "Saffron tagliolini",
+           "title": "Saffron tagliolini",
+           "meta": "€19",
+           "description": "Hand-cut pasta, mussels, bottarga, lemon.",
+           "link_url": "",
+           "tall": false
+          },
+          {
+           "image": "",
+           "media_label": "Embered celeriac",
+           "title": "Embered celeriac",
+           "meta": "€16",
+           "description": "Whole-roasted, brown butter, capers, herbs.",
+           "link_url": "",
+           "tall": false
+          }
+         ],
+         "columns": 3,
+         "items_gap": 28,
+         "media_aspect": "4/3",
+         "media_tall_aspect": "4/5",
+         "media_bg": "#e7ddca",
+         "media_label_color": "#6e6258",
+         "hover_zoom": true,
+         "title_font_family": "heading",
+         "title_color": "#241a16",
+         "title_size": 22,
+         "title_weight": "400",
+         "meta_color": "#c75d3a",
+         "meta_size": 15,
+         "show_desc": true,
+         "desc_color": "#6e6258",
+         "desc_size": 14,
+         "mono_font_family": ""
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "sf-se-32",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#241a16"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "sf-ro-26",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "sf-co-25",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "sf-section-header-24",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "A taste of it",
+         "eyebrow_color": "#e0a23a",
+         "eyebrow_dot_color": "#e0a23a",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "On the menu",
+           "color": "#ffffff",
+           "italic": false
+          },
+          {
+           "text": "tonight",
+           "color": "#e0a23a",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 48,
+         "headline_font_weight": "400",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": false,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "sf-ro-31",
+    "type": "row",
+    "settings": {
+     "gap": 48
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "sf-co-28",
+      "type": "column",
+      "settings": {
+       "width": "1-2"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "sf-pricelist-27",
+        "type": "pricelist",
+        "settings": {
+         "show_image": false,
+         "price_position": "right",
+         "separator_style": "dashed",
+         "separator_color": "rgba(255,255,255,.10)",
+         "title_color": "#ffffff",
+         "price_color": "#e0a23a",
+         "title_font_family": "serif",
+         "title_size": 19,
+         "title_weight": "400",
+         "price_font_family": "serif",
+         "price_size": 19,
+         "description_color": "rgba(255,255,255,.55)",
+         "description_size": 13,
+         "category_color": "#e0a23a",
+         "category_font_family": "serif",
+         "category_size": 26,
+         "category_border_color": "rgba(255,255,255,.12)",
+         "category_border_show": true,
+         "card_bg": "transparent",
+         "card_border_radius": "0",
+         "badge_bg": "transparent",
+         "badge_color": "#c75d3a",
+         "badge_border_color": "rgba(199,93,58,.5)",
+         "badge_border_width": "1",
+         "badge_border_radius": "999",
+         "gap": "0",
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         },
+         "items": [
+          {
+           "id": "sf-pl-s0",
+           "title": "To start",
+           "description": "",
+           "price": "",
+           "image_url": "",
+           "highlighted": false,
+           "badge": "",
+           "is_category": true
+          },
+          {
+           "id": "sf-pl-s1",
+           "title": "Burrata & winter tomato",
+           "description": "Aged balsamic, basil oil, sourdough.",
+           "price": "€14",
+           "image_url": "",
+           "highlighted": false,
+           "badge": ""
+          },
+          {
+           "id": "sf-pl-s2",
+           "title": "Beef tartare",
+           "description": "Hand-cut, egg yolk, mustard, crisp shallot.",
+           "price": "€16",
+           "image_url": "",
+           "highlighted": false,
+           "badge": "raw"
+          },
+          {
+           "id": "sf-pl-s3",
+           "title": "Charred leeks",
+           "description": "Romesco, almond, smoked paprika.",
+           "price": "€12",
+           "image_url": "",
+           "highlighted": false,
+           "badge": "vg"
+          }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "sf-co-30",
+      "type": "column",
+      "settings": {
+       "width": "1-2"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "sf-pricelist-29",
+        "type": "pricelist",
+        "settings": {
+         "show_image": false,
+         "price_position": "right",
+         "separator_style": "dashed",
+         "separator_color": "rgba(255,255,255,.10)",
+         "title_color": "#ffffff",
+         "price_color": "#e0a23a",
+         "title_font_family": "serif",
+         "title_size": 19,
+         "title_weight": "400",
+         "price_font_family": "serif",
+         "price_size": 19,
+         "description_color": "rgba(255,255,255,.55)",
+         "description_size": 13,
+         "category_color": "#e0a23a",
+         "category_font_family": "serif",
+         "category_size": 26,
+         "category_border_color": "rgba(255,255,255,.12)",
+         "category_border_show": true,
+         "card_bg": "transparent",
+         "card_border_radius": "0",
+         "badge_bg": "transparent",
+         "badge_color": "#c75d3a",
+         "badge_border_color": "rgba(199,93,58,.5)",
+         "badge_border_width": "1",
+         "badge_border_radius": "999",
+         "gap": "0",
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         },
+         "items": [
+          {
+           "id": "sf-pl-m0",
+           "title": "Mains",
+           "description": "",
+           "price": "",
+           "image_url": "",
+           "highlighted": false,
+           "badge": "",
+           "is_category": true
+          },
+          {
+           "id": "sf-pl-m1",
+           "title": "Fire-roasted quail",
+           "description": "Grape must, charred radicchio, hazelnut.",
+           "price": "€24",
+           "image_url": "",
+           "highlighted": false,
+           "badge": ""
+          },
+          {
+           "id": "sf-pl-m2",
+           "title": "Saffron tagliolini",
+           "description": "Mussels, bottarga, lemon.",
+           "price": "€19",
+           "image_url": "",
+           "highlighted": false,
+           "badge": ""
+          },
+          {
+           "id": "sf-pl-m3",
+           "title": "Dry-aged ribeye",
+           "description": "For two · embers, bone marrow, watercress.",
+           "price": "€32",
+           "image_url": "",
+           "highlighted": true,
+           "badge": ""
+          }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "sf-se-39",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#f6efe2"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "sf-ro-35",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "sf-co-34",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "sf-section-header-33",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "The room",
+         "eyebrow_color": "#c75d3a",
+         "eyebrow_dot_color": "#c75d3a",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "A look ",
+           "color": "#241a16",
+           "italic": false
+          },
+          {
+           "text": "inside",
+           "color": "#c75d3a",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 48,
+         "headline_font_weight": "400",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": false,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "sf-ro-38",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "sf-co-37",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "sf-progallery-36",
+        "type": "progallery",
+        "settings": {
+         "images": [],
+         "layout": "masonry",
+         "layout_family": "classic",
+         "columns": "3",
+         "mobile_columns": "2",
+         "gap": "10",
+         "img_height": "260px",
+         "object_fit": "cover",
+         "thumb_radius": "10",
+         "hover_effect": "zoom",
+         "hover_caption": "slide-up",
+         "hover_caption_bg": "rgba(36,26,22,.72)",
+         "lightbox": true,
+         "lightbox_animation": "fade",
+         "show_caption": true,
+         "more_bg": "rgba(36,26,22,.55)"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "sf-se-43",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#c75d3a"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "sf-ro-42",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "sf-co-41",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "sf-testimonial-40",
+        "type": "testimonial",
+        "settings": {
+         "quote": "The kind of place you cancel other plans for. Everything tasted like someone cared — because they clearly do.",
+         "author_name": "Gambero Rosso",
+         "author_role": "Two forks",
+         "rating": "5",
+         "layout": "single",
+         "show_line": false,
+         "bg_color": "transparent",
+         "text_color": "#ffffff",
+         "quote_font_family": "serif",
+         "quote_size": 38,
+         "quote_weight": "400",
+         "border_radius": "0",
+         "avatar": ""
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "sf-se-47",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#efe6d4"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "sf-ro-46",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "sf-co-45",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "sf-finder-44",
+        "type": "finder",
+        "settings": {
+         "eyebrow": "Tonight, I feel like…",
+         "heading": "What are you in the mood for?",
+         "intro": "",
+         "zone_accent": "#e0a23a",
+         "zone_on": "#241a16",
+         "card_bg": "#fffdf8",
+         "card_border": "1px solid #e7ddca",
+         "align": "center",
+         "items": [
+          {
+           "option": "Something light",
+           "title": "The Garden Menu",
+           "text": "Three lighter courses — a bright ceviche, grilled stone fruit salad and a citrus sorbet. Lunch that doesn’t slow you down.",
+           "meta": "3 courses · €42",
+           "cta_text": "",
+           "cta_url": "#",
+           "icon": ""
+          },
+          {
+           "option": "The full feast",
+           "title": "The Saffron Feast",
+           "text": "Our full tasting — seven courses, the kitchen’s choice, paired if you like. Settle in; you’re here for the evening.",
+           "meta": "7 courses · €98 · pairing +€55",
+           "cta_text": "",
+           "cta_url": "#",
+           "icon": ""
+          },
+          {
+           "option": "Drinks & small plates",
+           "title": "At the Bar",
+           "text": "A negroni flight and a run of small plates — spiced almonds, croquetas, the famous flatbread. Low lights, no rush.",
+           "meta": "small plates from €8",
+           "cta_text": "",
+           "cta_url": "#",
+           "icon": ""
+          },
+          {
+           "option": "All vegetarian",
+           "title": "The Green Tasting",
+           "text": "A full vegetarian journey that never feels like the afterthought — five courses built around the market that morning.",
+           "meta": "5 courses · €68",
+           "cta_text": "",
+           "cta_url": "#",
+           "icon": ""
+          }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "sf-se-51",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#efe6d4"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "sf-ro-50",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "sf-co-49",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "sf-hotspots-48",
+        "type": "hotspots",
+        "settings": {
+         "eyebrow": "Reserve your spot",
+         "heading": "Pick your table",
+         "intro": "Tap a table to hold it. Dining room or terrace — the choice is yours.",
+         "panel_label": "DINING ROOM · TERRACE",
+         "aspect_ratio": "16/10",
+         "zone_accent": "#e0a23a",
+         "zone_on": "#241a16",
+         "panel_bg": "#241a16",
+         "card_bg": "#fffdf8",
+         "card_border": "#e7ddca",
+         "align": "left",
+         "items": [
+          {
+           "x": 16,
+           "y": 32,
+           "title": "T1 · Window",
+           "text": "Window table, dining room.",
+           "meta": "2 seats"
+          },
+          {
+           "x": 16,
+           "y": 70,
+           "title": "T2 · Window",
+           "text": "Window table, dining room.",
+           "meta": "2 seats"
+          },
+          {
+           "x": 38,
+           "y": 34,
+           "title": "T3 · Centre",
+           "text": "Central table, dining room.",
+           "meta": "4 seats"
+          },
+          {
+           "x": 38,
+           "y": 72,
+           "title": "T4",
+           "text": "Dining room table.",
+           "meta": "4 seats · taken"
+          },
+          {
+           "x": 52,
+           "y": 52,
+           "title": "T5 · Booth",
+           "text": "Booth, dining room.",
+           "meta": "6 seats"
+          },
+          {
+           "x": 78,
+           "y": 30,
+           "title": "P1 · Terrace",
+           "text": "Terrace table.",
+           "meta": "2 seats"
+          },
+          {
+           "x": 78,
+           "y": 58,
+           "title": "P2",
+           "text": "Terrace table.",
+           "meta": "2 seats · taken"
+          },
+          {
+           "x": 88,
+           "y": 82,
+           "title": "P3 · Terrace",
+           "text": "Terrace table.",
+           "meta": "4 seats"
+          }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "sf-se-55",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#241a16"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "sf-ro-54",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "sf-co-53",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "sf-cta-banner-52",
+        "type": "cta-banner",
+        "settings": {
+         "eyebrow": "Reservations",
+         "headline": "Come and ",
+         "headline_accent": "sit with us",
+         "headline_accent_italic": true,
+         "subtitle": "We hold a few walk-in seats at the counter every night, but tables are best booked ahead — especially at weekends.",
+         "cta_text": "Book a table",
+         "cta_url": "#visit",
+         "cta2_text": "",
+         "cta2_url": "",
+         "bg": {
+          "type": "solid",
+          "color": "#2d1e18"
+         },
+         "text_color": "#ffffff",
+         "accent_color": "#e0a23a",
+         "subtitle_color": "rgba(255,255,255,.74)",
+         "cta_bg": "#e0a23a",
+         "cta_color": "#241a16",
+         "cta_radius": {
+          "tl": 999,
+          "tr": 999,
+          "br": 999,
+          "bl": 999,
+          "linked": true
+         },
+         "cta_size": 15,
+         "headline_font_family": "serif",
+         "headline_size": 58,
+         "headline_weight": "400",
+         "subtitle_size": 17,
+         "layout": "stack",
+         "vertical_align": "center",
+         "banner_radius": {
+          "tl": 20,
+          "tr": 20,
+          "br": 20,
+          "bl": 20,
+          "linked": true
+         },
+         "banner_padding": 80
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

@@ -58,6 +58,7 @@
 <script setup>
 import { ref, computed } from 'vue';
 import { t } from '@/i18n';
+import { SHADOW } from '@/composables/oloTileDefaults';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
@@ -129,12 +130,7 @@ const radiusCss = computed(() => {
 });
 
 const shadowCss = computed(() => {
-  const map = {
-    sm: '0 4px 12px rgba(0,0,0,.08)',
-    md: '0 8px 30px rgba(0,0,0,.12)',
-    lg: '0 16px 48px rgba(0,0,0,.18)',
-    xl: '0 24px 64px rgba(0,0,0,.22)',
-  };
+  const map = SHADOW;
   const v = s.value.shadow || 'none';
   if (v === 'custom') {
     const h = parseInt(s.value.shadow_h) || 0;

@@ -89,6 +89,7 @@
 <script setup>
 import { computed } from 'vue';
 import { t } from '@/i18n';
+import { SHADOW } from '@/composables/oloTileDefaults';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
@@ -241,13 +242,8 @@ const cardStyle = computed(() => {
     delete style.backgroundClip;
   }
 
-  // Shadow on cards
-  const shadowMap = {
-    sm: '0 1px 3px 0 rgba(0,0,0,0.3), 0 1px 2px -1px rgba(0,0,0,0.25)',
-    md: '0 4px 6px -1px rgba(0,0,0,0.35), 0 2px 4px -2px rgba(0,0,0,0.25)',
-    lg: '0 10px 15px -3px rgba(0,0,0,0.4), 0 4px 6px -4px rgba(0,0,0,0.25)',
-    xl: '0 20px 25px -5px rgba(0,0,0,0.45), 0 8px 10px -6px rgba(0,0,0,0.3)',
-  };
+  // Shadow on cards — lingua d'ombra condivisa (gemella di Olo_Tile_Utils::SHADOW_MAP)
+  const shadowMap = SHADOW;
   const sh = s.value.shadow || 'none';
   if (shadowMap[sh]) {
     style.boxShadow = shadowMap[sh];

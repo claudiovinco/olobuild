@@ -32,7 +32,7 @@
 
 <script setup>
 import { computed, h } from 'vue';
-import { resolveColor, TOKENS } from '@/composables/oloTileDefaults';
+import { resolveColor, TOKENS, SHADOW } from '@/composables/oloTileDefaults';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
@@ -79,12 +79,7 @@ const wrapStyle = computed(() => {
   return st;
 });
 
-const shadowMap = {
-  none: 'none',
-  sm: '0 1px 3px rgba(0,0,0,.3)',
-  md: '0 4px 8px rgba(0,0,0,.3)',
-  lg: '0 8px 20px rgba(0,0,0,.4)',
-};
+const shadowMap = SHADOW;
 const filterMap = {
   none: 'none',
   grayscale: 'grayscale(100%)',

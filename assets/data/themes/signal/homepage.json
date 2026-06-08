@@ -1,0 +1,657 @@
+[
+ {
+  "id": "sg-se-4",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "none"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#a3e635"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "sg-ro-3",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "sg-co-2",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "sg-newsticker-1",
+        "type": "newsticker",
+        "settings": {
+         "items": [
+          {
+           "id": "sg-t1",
+           "title": "The case against microservices (again)",
+           "url": "#",
+           "badge": "",
+           "icon": "",
+           "timestamp": ""
+          },
+          {
+           "id": "sg-t2",
+           "title": "What we got wrong about caching",
+           "url": "#",
+           "badge": "",
+           "icon": "",
+           "timestamp": ""
+          },
+          {
+           "id": "sg-t3",
+           "title": "A love letter to the CLI",
+           "url": "#",
+           "badge": "",
+           "icon": "",
+           "timestamp": ""
+          },
+          {
+           "id": "sg-t4",
+           "title": "Why your tests are slow",
+           "url": "#",
+           "badge": "",
+           "icon": "",
+           "timestamp": ""
+          }
+         ],
+         "direction": "horizontal",
+         "animation_type": "marquee",
+         "marquee_direction": "left",
+         "marquee_duration": 32,
+         "marquee_gap": 60,
+         "pause_on_hover": true,
+         "show_label": true,
+         "label_text": "//",
+         "label_shape": "square",
+         "label_bg": "#0a0e12",
+         "label_color": "#a3e635",
+         "show_controls": false,
+         "show_indicators": false,
+         "show_counter": false,
+         "bg_color": "#a3e635",
+         "text_color": "#0a0e12",
+         "font_size": 12,
+         "font_weight": "500",
+         "height": "38",
+         "separator": "//",
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         },
+         "border_radius": {
+          "tl": 0,
+          "tr": 0,
+          "br": 0,
+          "bl": 0
+         }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "sg-se-8",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#11161c"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "sg-ro-7",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "sg-co-6",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "sg-hero-split-5",
+        "type": "hero-split",
+        "settings": {
+         "eyebrow_text": "// featured · systems",
+         "eyebrow_dot_color": "#a3e635",
+         "eyebrow_color": "#a3e635",
+         "headline_lines": [
+          {
+           "text": "The cache that",
+           "color": "#eef2ec",
+           "italic": false
+          },
+          {
+           "text": "lied to us",
+           "color": "#eef2ec",
+           "italic": false
+          },
+          {
+           "text": "for three months",
+           "color": "#eef2ec",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 58,
+         "headline_line_height": 1.05,
+         "headline_font_weight": "600",
+         "headline_align": "left",
+         "subhead": "A debugging story about stale reads, false confidence, and the one-line config that quietly broke production — plus what we changed so it can't happen again.",
+         "subhead_color": "#9aa6b0",
+         "subhead_size": 17,
+         "subhead_italic": false,
+         "subhead_max_width": 520,
+         "cta1_text": "Read the post",
+         "cta1_url": "/signal-article/",
+         "cta1_bg": "#a3e635",
+         "cta1_color": "#0a0e12",
+         "cta1_size": 14,
+         "cta1_radius": {
+          "tl": 8,
+          "tr": 8,
+          "br": 8,
+          "bl": 8,
+          "linked": true
+         },
+         "cta1_radius_hover": {
+          "tl": 8,
+          "tr": 8,
+          "br": 8,
+          "bl": 8,
+          "linked": true
+         },
+         "cta2_text": "",
+         "cta2_url": "",
+         "cta2_bg": "",
+         "cta2_color": "",
+         "cta2_border": "",
+         "stats": [],
+         "showcase_enabled": false,
+         "showcase_bg": {
+          "type": "solid",
+          "color": "#1a212a"
+         },
+         "showcase_padding": 28,
+         "showcase_radius": {
+          "tl": 10,
+          "tr": 10,
+          "br": 10,
+          "bl": 10,
+          "linked": true
+         },
+         "showcase_radius_hover": {
+          "tl": 10,
+          "tr": 10,
+          "br": 10,
+          "bl": 10,
+          "linked": true
+         },
+         "showcase_badge_text": "",
+         "showcase_badge_dot": "#a3e635",
+         "showcase_badge_bg": "#0a0e12",
+         "showcase_badge_color": "#9aa6b0",
+         "showcase_items": [],
+         "showcase_card_radius": {
+          "tl": 9,
+          "tr": 9,
+          "br": 9,
+          "bl": 9,
+          "linked": true
+         },
+         "showcase_card_radius_hover": {
+          "tl": 9,
+          "tr": 9,
+          "br": 9,
+          "bl": 9,
+          "linked": true
+         },
+         "showcase_card_shadow": "none",
+         "showcase_caption_left": "",
+         "showcase_caption_right": "",
+         "showcase_hover_effect": "none",
+         "split_ratio": "1.1fr 0.9fr",
+         "gap": 44,
+         "min_height": 0,
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         },
+         "subhead_align": "left",
+         "cta1_target": "_self",
+         "cta2_target": "_self"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "sg-se-15",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large",
+   "border_top": "1px solid rgba(238,242,236,.1)"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#11161c"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "sg-ro-11",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "sg-co-10",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "sg-section-header-9",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "// latest",
+         "eyebrow_color": "#a3e635",
+         "eyebrow_dot_color": "#a3e635",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "latest",
+           "color": "#5f6b76",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "mono",
+         "headline_font_size": 16,
+         "headline_font_weight": "500",
+         "headline_align": "left",
+         "headline_inline": false,
+         "tagline_show": false,
+         "layout": "stack",
+         "gap": 8
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "sg-ro-14",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "sg-co-13",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "sg-workgrid-12",
+        "type": "workgrid",
+        "settings": {
+         "columns": 3,
+         "items_gap": 24,
+         "media_aspect": "16/9",
+         "media_tall_aspect": "4/5",
+         "media_bg": "#1a212a",
+         "media_label_color": "#eef2ec",
+         "hover_zoom": true,
+         "title_font_family": "sans-serif",
+         "title_color": "#eef2ec",
+         "title_size": 21,
+         "title_weight": "600",
+         "meta_color": "#a3e635",
+         "meta_size": 12,
+         "show_desc": true,
+         "desc_color": "#9aa6b0",
+         "desc_size": 14,
+         "mono_font_family": "",
+         "items": [
+          {
+           "image": "",
+           "media_label": "terminal",
+           "title": "A love letter to the CLI",
+           "meta": "// tooling",
+           "description": "Why the command line keeps outliving the GUIs built to replace it. — 9 min · R. Mensah",
+           "tall": false,
+           "link_url": "#"
+          },
+          {
+           "image": "",
+           "media_label": "graph",
+           "title": "The case against microservices",
+           "meta": "// architecture",
+           "description": "Again. But this time with the bill attached. — 12 min · D. Cho",
+           "tall": false,
+           "link_url": "#"
+          },
+          {
+           "image": "",
+           "media_label": "tests",
+           "title": "Why your tests are slow",
+           "meta": "// testing",
+           "description": "Five culprits, ranked by how much they're costing your team. — 7 min · L. Adeyemi",
+           "tall": false,
+           "link_url": "#"
+          }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "sg-se-22",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large",
+   "border_top": "1px solid rgba(238,242,236,.1)"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#141b22"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "sg-ro-18",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "sg-co-17",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "sg-section-header-16",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "// topics",
+         "eyebrow_color": "#a3e635",
+         "eyebrow_dot_color": "#a3e635",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "topics",
+           "color": "#5f6b76",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "mono",
+         "headline_font_size": 16,
+         "headline_font_weight": "500",
+         "headline_align": "left",
+         "headline_inline": false,
+         "tagline_show": false,
+         "layout": "stack",
+         "gap": 8
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "sg-ro-21",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "sg-co-20",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "sg-trust-strip-19",
+        "type": "trust-strip",
+        "settings": {
+         "items": [
+          {
+           "text": "architecture",
+           "icon": "",
+           "icon_color": "#a3e635"
+          },
+          {
+           "text": "performance",
+           "icon": "",
+           "icon_color": "#a3e635"
+          },
+          {
+           "text": "tooling",
+           "icon": "",
+           "icon_color": "#a3e635"
+          },
+          {
+           "text": "databases",
+           "icon": "",
+           "icon_color": "#a3e635"
+          },
+          {
+           "text": "frontend",
+           "icon": "",
+           "icon_color": "#a3e635"
+          },
+          {
+           "text": "careers",
+           "icon": "",
+           "icon_color": "#a3e635"
+          },
+          {
+           "text": "AI",
+           "icon": "",
+           "icon_color": "#a3e635"
+          },
+          {
+           "text": "culture",
+           "icon": "",
+           "icon_color": "#a3e635"
+          },
+          {
+           "text": "security",
+           "icon": "",
+           "icon_color": "#a3e635"
+          }
+         ],
+         "variant": "pill",
+         "separator_char": "",
+         "align": "left",
+         "flow": "wrap",
+         "gap": 10,
+         "font_family": "mono",
+         "text_color": "#9aa6b0",
+         "text_size": 13,
+         "pill_bg": "transparent",
+         "pill_border": "rgba(238,242,236,.1)",
+         "pill_text_color": "#9aa6b0",
+         "pill_padding_v": 9,
+         "pill_padding_h": 15,
+         "pill_radius": 8
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "sg-se-26",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#11161c"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "sg-ro-25",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "sg-co-24",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "sg-newsletter-23",
+        "type": "newsletter",
+        "settings": {
+         "title": "One good read, every Tuesday",
+         "subtitle": "No hot takes, no churn — just one carefully edited essay on building software. 24,000 engineers subscribe.",
+         "layout": "horizontal",
+         "email_placeholder": "you@company.dev",
+         "button_text": "Subscribe",
+         "button_icon": false,
+         "privacy_text": "",
+         "max_width": "420",
+         "alignment": "center",
+         "bg_color": "#1a212a",
+         "box_border": "rgba(163,230,53,.4)",
+         "border_radius": 14,
+         "tile_padding": {
+          "top": 52,
+          "right": 52,
+          "bottom": 52,
+          "left": 52
+         },
+         "title_size": "36",
+         "title_weight": "600",
+         "title_color": "#eef2ec",
+         "subtitle_size": "15",
+         "subtitle_color": "#9aa6b0",
+         "input_bg": "#11161c",
+         "input_color": "#eef2ec",
+         "input_border": "rgba(163,230,53,.4)",
+         "input_focus_border": "#a3e635",
+         "input_radius": 8,
+         "input_height": "46",
+         "btn_bg": "#a3e635",
+         "btn_color": "#0a0e12",
+         "btn_hover_bg": "#8fce28",
+         "btn_radius": 8,
+         "btn_font_size": "14",
+         "btn_font_weight": "600",
+         "shadow": "none",
+         "icon_type": "none"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

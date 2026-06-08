@@ -33,8 +33,9 @@
             type="number"
             :value="stop.value"
             @change="updateStopValue(prop.key, idx, $event, prop)"
+            @wheel="handleNumberWheel"
             :min="prop.min" :max="prop.max" :step="prop.step"
-            class="mb-w-20 mb-bg-white mb-border mb-border-gray-300 mb-rounded mb-px-1.5 mb-py-0.5 mb-text-[11px] mb-text-gray-900"
+            class="mb-w-24 mb-bg-white mb-border mb-border-gray-300 mb-rounded mb-px-1.5 mb-py-0.5 mb-text-[11px] mb-text-gray-900"
           />
           <span v-if="prop.unit" class="mb-text-[9px] mb-text-gray-500">{{ prop.unit }}</span>
           <span class="mb-text-[9px] mb-text-gray-500">@</span>
@@ -42,14 +43,15 @@
             type="number"
             :value="stop.position"
             @change="updateStopPosition(prop.key, idx, $event)"
+            @wheel="handleNumberWheel"
             min="0" max="100" step="1"
-            class="mb-w-12 mb-bg-white mb-border mb-border-gray-300 mb-rounded mb-px-1 mb-py-0.5 mb-text-[11px] mb-text-gray-900 mb-text-center"
+            class="mb-w-20 mb-bg-white mb-border mb-border-gray-300 mb-rounded mb-px-1.5 mb-py-0.5 mb-text-[11px] mb-text-gray-900 mb-text-center"
           />
           <span class="mb-text-[9px] mb-text-gray-500">%</span>
           <button
             v-if="idx > 0 && idx < getStops(prop.key).length - 1"
             @click="removeStop(prop.key, idx)"
-            class="mb-text-[10px] mb-text-red-400 hover:mb-text-red-300 mb-px-0.5"
+            class="mb-text-[12px] mb-text-red-400 hover:mb-text-red-300 mb-px-1"
             :title="t('Rimuovi stop')"
           >&times;</button>
           <span v-else class="mb-w-3"></span>
@@ -126,6 +128,7 @@
 
 <script setup>
 import { t } from '@/i18n';
+import { handleNumberWheel } from '@/utils/numberInputWheel';
 import { computed } from 'vue';
 
 const props = defineProps({

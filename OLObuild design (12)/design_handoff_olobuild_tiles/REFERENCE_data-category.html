@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8"/>
+<title>OLObuild — Redesign categoria Dati / Numeri</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Work+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+  :root{
+    --red:#e1474f;--red-soft:#fef2f3;--navy:#16263d;--ink:#1f2937;--mute:#6b7280;--faint:#94a3b8;
+    --surface-alt:#f6f7f9;--border:#e5e7eb;--bg:#f6f1e8;--line:#e6dfd1;
+    --sans:"Work Sans",-apple-system,sans-serif;--disp:"Instrument Serif",Georgia,serif;--mono:"JetBrains Mono",monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);font-family:var(--sans);color:var(--ink);-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:1140px;margin:0 auto;padding:52px 32px 90px;}
+  .eyebrow{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--red);margin-bottom:12px;}
+  h1{font-family:var(--disp);font-weight:400;font-size:clamp(40px,5.5vw,64px);line-height:1;letter-spacing:-.02em;color:var(--navy);margin:0 0 14px;}
+  h1 em{font-style:italic;color:var(--red);}
+  .lead{font-size:16px;color:var(--mute);max-width:74ch;margin:0 0 8px;line-height:1.55;}
+  .lead b{color:var(--navy);font-weight:600;}
+  .cat{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:600;background:#fff;border:1px solid var(--line);border-radius:999px;padding:6px 13px;color:var(--mute);margin-top:18px;}
+
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start;margin-top:36px;}
+  .col-head{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
+  .badge{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:4px 10px;border-radius:999px;}
+  .today .badge{background:#fde2e4;color:#b42318;} .new .badge{background:#dcfce7;color:#15803d;}
+  .col-head h2{font-size:15px;font-weight:700;color:var(--navy);margin:0;}
+  .col-head .n{font-size:12px;color:var(--faint);margin-left:auto;}
+
+  .stage{background:#efe9dd;border:1px solid var(--line);border-radius:16px;padding:22px;display:flex;flex-direction:column;gap:18px;}
+  .stage.coh{background:#f3ede2;}
+  .tlabel{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);margin:-2px 0 -8px 2px;}
+  .pin{position:absolute;z-index:4;font-size:10px;font-weight:700;background:#fff;border:1px dashed #e0a0a4;color:#b42318;border-radius:6px;padding:2px 7px;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.06);right:8px;top:-6px;}
+
+  /* ── OGGI ── */
+  .o-counter{text-align:center;padding:28px;}
+  .o-counter .emo{font-size:38px;line-height:1.2;margin-bottom:8px;}
+  .o-counter .num{font-size:46px;font-weight:700;line-height:1.1;color:#374151;}
+  .o-counter .lab{font-size:14px;color:#374151;opacity:.7;margin-top:8px;}
+
+  .o-circle{display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px;}
+  .o-circle .title{font-size:14px;font-weight:600;color:#666;}
+
+  .o-cd{display:flex;gap:16px;justify-content:center;align-items:center;flex-wrap:wrap;background:#fff;padding:28px;position:relative;}
+  .o-cd .ev{position:absolute;top:6px;right:8px;background:#6366F1;color:#fff;font-size:10px;padding:2px 6px;border-radius:4px;}
+  .o-cd .blk{text-align:center;min-width:64px;}
+  .o-cd .bn{font-size:44px;font-weight:700;line-height:1.1;color:#6366F1;}
+  .o-cd .bl{font-size:12px;font-weight:500;opacity:.7;text-transform:uppercase;letter-spacing:.05em;margin-top:4px;}
+  .o-cd .sep{font-size:30px;font-weight:700;opacity:.5;}
+
+  /* ── COERENTE ── */
+  .c-stat{background:#fff;border:1px solid var(--border);border-radius:10px;box-shadow:0 1px 2px rgba(16,24,40,.06),0 6px 16px -10px rgba(16,24,40,.18);}
+  .c-counter{text-align:center;padding:26px;}
+  .c-counter .ic{width:46px;height:46px;border-radius:12px;background:var(--red-soft);color:var(--red);display:inline-flex;align-items:center;justify-content:center;margin-bottom:12px;}
+  .c-counter .num{font-size:46px;font-weight:700;line-height:1;color:var(--ink);letter-spacing:-.02em;}
+  .c-counter .num .suf{color:var(--red);}
+  .c-counter .lab{font-size:12px;color:var(--mute);margin-top:8px;text-transform:uppercase;letter-spacing:.06em;font-weight:600;}
+
+  .c-circle{display:flex;flex-direction:column;align-items:center;gap:10px;padding:18px;}
+  .c-circle .title{font-size:12px;font-weight:600;color:var(--mute);text-transform:uppercase;letter-spacing:.06em;}
+
+  .c-cd{padding:22px;}
+  .c-cd .grid{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+  .c-cd .blk{background:var(--surface-alt);border:1px solid var(--border);border-radius:8px;padding:12px 6px;text-align:center;min-width:62px;}
+  .c-cd .bn{font-size:34px;font-weight:700;line-height:1;color:var(--red);font-variant-numeric:tabular-nums;}
+  .c-cd .bl{font-size:10px;font-weight:600;color:var(--mute);text-transform:uppercase;letter-spacing:.06em;margin-top:6px;}
+
+  .why{margin-top:34px;background:#fffdf8;border:1px solid var(--line);border-radius:14px;padding:24px 26px;}
+  .why h3{font-family:var(--disp);font-weight:400;font-size:24px;color:var(--navy);margin:0 0 16px;}
+  .why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px 22px;}
+  .why-item{font-size:13px;line-height:1.5;color:var(--mute);}
+  .why-item b{color:var(--navy);display:block;font-size:12px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;margin-bottom:4px;}
+  .why-item .od{font-family:var(--mono);font-size:11px;color:#b42318;}.why-item .nw{font-family:var(--mono);font-size:11px;color:#15803d;}
+  @media(max-width:840px){.cols{grid-template-columns:1fr;}.why-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">OLObuild · tile redesign</div>
+  <h1>Categoria <em>Dati / Numeri</em></h1>
+  <p class="lead">Counter, Countercircle e Countdown — rese fedelmente. Oggi il "numero", che è il cuore di tutte e tre, è trattato in <b>tre modi diversi</b>: grigio testo, blu <code style="font-family:var(--mono)">#1e87f0</code>, indaco <code style="font-family:var(--mono)">#6366F1</code> — più un'emoji 🏆 nel Counter. A destra, un unico <b>linguaggio dato</b>: numero nell'accento del brand, etichetta soft maiuscola, superficie e raggio condivisi.</p>
+  <span class="cat">Campione fedele: CounterTile · CountercircleTile · CountdownTile</span>
+
+  <div class="cols">
+    <!-- OGGI -->
+    <div>
+      <div class="col-head today"><span class="badge">Oggi</span><h2>Incoerente</h2><span class="n">3 trattamenti del numero</span></div>
+      <div class="stage">
+
+        <div class="tlabel">Counter</div>
+        <div style="position:relative"><span class="pin">emoji · numero grigio</span>
+          <div class="o-counter">
+            <div class="emo">🏆</div>
+            <div class="num">1.250+</div>
+            <div class="lab">Clienti soddisfatti</div>
+          </div>
+        </div>
+
+        <div class="tlabel">Countercircle</div>
+        <div style="position:relative"><span class="pin">progress blu #1e87f0</span>
+          <div class="o-circle">
+            <svg width="130" height="130" viewBox="0 0 130 130">
+              <circle cx="65" cy="65" r="60" fill="none" stroke="#e5e5e5" stroke-width="10"/>
+              <circle cx="65" cy="65" r="60" fill="none" stroke="#1e87f0" stroke-width="10" stroke-dasharray="376.99" stroke-dashoffset="94.25" stroke-linecap="round" transform="rotate(-90 65 65)"/>
+              <text x="65" y="65" text-anchor="middle" dominant-baseline="central" fill="#333" font-size="24" font-weight="700" font-family="Work Sans">75%</text>
+            </svg>
+            <div class="title">Progresso</div>
+          </div>
+        </div>
+
+        <div class="tlabel">Countdown</div>
+        <div style="position:relative"><span class="pin">numero indaco #6366F1</span>
+          <div class="o-cd">
+            <span class="ev">♺ Evergreen</span>
+            <div class="blk"><div class="bn">12</div><div class="bl">Giorni</div></div>
+            <span class="sep">:</span>
+            <div class="blk"><div class="bn">08</div><div class="bl">Ore</div></div>
+            <span class="sep">:</span>
+            <div class="blk"><div class="bn">45</div><div class="bl">Minuti</div></div>
+            <span class="sep">:</span>
+            <div class="blk"><div class="bn">30</div><div class="bl">Secondi</div></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- COERENTE -->
+    <div>
+      <div class="col-head new"><span class="badge">Coerente</span><h2>Un linguaggio dato</h2><span class="n">stesso numero, stessa label</span></div>
+      <div class="stage coh">
+
+        <div class="tlabel">Counter</div>
+        <div class="c-stat c-counter">
+          <div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0V4zM5 5H3v2a3 3 0 0 0 2 2.8M19 5h2v2a3 3 0 0 1-2 2.8"/></svg></div>
+          <div class="num">1.250<span class="suf">+</span></div>
+          <div class="lab">Clienti soddisfatti</div>
+        </div>
+
+        <div class="tlabel">Countercircle</div>
+        <div class="c-stat c-circle">
+          <svg width="130" height="130" viewBox="0 0 130 130">
+            <circle cx="65" cy="65" r="60" fill="none" stroke="#eef0f3" stroke-width="10"/>
+            <circle cx="65" cy="65" r="60" fill="none" stroke="#e1474f" stroke-width="10" stroke-dasharray="376.99" stroke-dashoffset="94.25" stroke-linecap="round" transform="rotate(-90 65 65)"/>
+            <text x="65" y="65" text-anchor="middle" dominant-baseline="central" fill="#1f2937" font-size="24" font-weight="700" font-family="Work Sans">75%</text>
+          </svg>
+          <div class="title">Progresso</div>
+        </div>
+
+        <div class="tlabel">Countdown</div>
+        <div class="c-stat c-cd">
+          <div class="grid">
+            <div class="blk"><div class="bn">12</div><div class="bl">Giorni</div></div>
+            <div class="blk"><div class="bn">08</div><div class="bl">Ore</div></div>
+            <div class="blk"><div class="bn">45</div><div class="bl">Minuti</div></div>
+            <div class="blk"><div class="bn">30</div><div class="bl">Secondi</div></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="why">
+    <h3>Cosa è stato unificato</h3>
+    <div class="why-grid">
+      <div class="why-item"><b>Colore del numero</b> Unico <span class="nw">accento brand</span> via token. Prima: <span class="od">grigio / #1e87f0 / #6366F1</span>.</div>
+      <div class="why-item"><b>Etichetta</b> Stessa: <span class="nw">soft · maiuscola · letter-spacing</span> su tutte e tre.</div>
+      <div class="why-item"><b>Icona</b> Counter con <span class="nw">SVG</span> in red-soft, non più emoji 🏆.</div>
+      <div class="why-item"><b>Superficie</b> Stesso contenitore <span class="nw">surface + border + radius 10 + ombra sm</span>.</div>
+      <div class="why-item"><b>Numeri tabellari</b> <span class="nw">tabular-nums</span> così le cifre non "ballano" nel countdown.</div>
+      <div class="why-item"><b>Cifre countdown</b> Blocchi su <span class="nw">surface-alt + radius 8</span> coerenti, niente separatori casuali.</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

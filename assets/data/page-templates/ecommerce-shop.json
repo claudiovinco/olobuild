@@ -1,0 +1,1484 @@
+{
+  "id": "page-ecommerce-shop",
+  "name": "E-commerce / Shop",
+  "category": "page",
+  "preview_description": "Template token-first assemblato dal sistema di sezioni coerente (7 sezioni).",
+  "content": {
+    "0": {
+      "id": "tpl-heroslider-sec",
+      "type": "section",
+      "settings": {
+        "style": "default",
+        "width": "expand",
+        "padding": "xlarge"
+      },
+      "style": {
+        "bg_type": "color",
+        "bg_color": "#18181B",
+        "padding_top": "140",
+        "padding_bottom": "80"
+      },
+      "advanced": {},
+      "children": [
+        {
+          "id": "tpl-heroslider-row1",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl-heroslider-col1",
+              "type": "column",
+              "settings": {
+                "width": "1-1"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl-heroslider-headline",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "Raccontiamo storie digitali",
+                    "subtitle": "Agenzia creativa specializzata in branding, web design e comunicazione visiva",
+                    "tag": "h1",
+                    "alignment": "center",
+                    "decoration": "none",
+                    "heading_color": "#FFFFFF",
+                    "subtitle_color": "#A1A1AA",
+                    "heading_size": "xl"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-heroslider-spacer1",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "36"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-heroslider-btn1",
+                  "type": "button",
+                  "settings": {
+                    "text": "I nostri progetti",
+                    "url": "#portfolio",
+                    "style": "outline",
+                    "alignment": "center",
+                    "color": "#FFFFFF",
+                    "border_radius": "50",
+                    "size": "lg",
+                    "hover_effect": "grow"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-heroslider-spacer2",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "60"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-heroslider-social",
+                  "type": "social",
+                  "settings": {
+                    "links": "facebook|#\ninstagram|#\nlinkedin|#\ntwitter|#",
+                    "style": "circle",
+                    "size": "md",
+                    "alignment": "center"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "1": {
+      "id": "tpl_9565",
+      "type": "section",
+      "settings": {
+        "style": "default",
+        "width": "large",
+        "padding": "large"
+      },
+      "style": {
+        "bg_type": "color",
+        "bg_color": "#ffffff",
+        "padding_top": "80",
+        "padding_bottom": "80"
+      },
+      "advanced": {},
+      "children": [
+        {
+          "id": "tpl_9545",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl_9544",
+              "type": "column",
+              "settings": {
+                "width": "1-1"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_9542",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "Esplora per Categoria",
+                    "tag": "h2",
+                    "alignment": "center",
+                    "decoration": "dot",
+                    "heading_color": "#006064",
+                    "heading_size": "lg"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9543",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "48"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "tpl_9564",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl_9551",
+              "type": "column",
+              "settings": {
+                "width": "1-3"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_9546",
+                  "type": "icon",
+                  "settings": {
+                    "icon": "tag",
+                    "size": "56",
+                    "color": "#006064",
+                    "bg_color": "#e0f7fa",
+                    "style": "circle"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9547",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "20"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9548",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "Abbigliamento",
+                    "tag": "h3",
+                    "alignment": "center",
+                    "decoration": "none",
+                    "heading_color": "#006064",
+                    "heading_size": "md"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9549",
+                  "type": "content",
+                  "settings": {
+                    "content": "<p style=\"text-align:center;color:#546e7a\">Magliette, pantaloni, giacche e accessori per ogni stagione.</p>",
+                    "alignment": "center"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9550",
+                  "type": "button",
+                  "settings": {
+                    "text": "Scopri",
+                    "url": "#",
+                    "style": "outline",
+                    "size": "md",
+                    "color": "#006064",
+                    "bg_color": "",
+                    "border_radius": "8",
+                    "hover_effect": "lift"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            },
+            {
+              "id": "tpl_9557",
+              "type": "column",
+              "settings": {
+                "width": "1-3"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_9552",
+                  "type": "icon",
+                  "settings": {
+                    "icon": "gift",
+                    "size": "56",
+                    "color": "#006064",
+                    "bg_color": "#e0f7fa",
+                    "style": "circle"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9553",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "20"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9554",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "Accessori",
+                    "tag": "h3",
+                    "alignment": "center",
+                    "decoration": "none",
+                    "heading_color": "#006064",
+                    "heading_size": "md"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9555",
+                  "type": "content",
+                  "settings": {
+                    "content": "<p style=\"text-align:center;color:#546e7a\">Borse, cinture, cappelli e gioielli selezionati con cura.</p>",
+                    "alignment": "center"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9556",
+                  "type": "button",
+                  "settings": {
+                    "text": "Scopri",
+                    "url": "#",
+                    "style": "outline",
+                    "size": "md",
+                    "color": "#006064",
+                    "bg_color": "",
+                    "border_radius": "8",
+                    "hover_effect": "lift"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            },
+            {
+              "id": "tpl_9563",
+              "type": "column",
+              "settings": {
+                "width": "1-3"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_9558",
+                  "type": "icon",
+                  "settings": {
+                    "icon": "star",
+                    "size": "56",
+                    "color": "#006064",
+                    "bg_color": "#e0f7fa",
+                    "style": "circle"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9559",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "20"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9560",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "Novità",
+                    "tag": "h3",
+                    "alignment": "center",
+                    "decoration": "none",
+                    "heading_color": "#006064",
+                    "heading_size": "md"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9561",
+                  "type": "content",
+                  "settings": {
+                    "content": "<p style=\"text-align:center;color:#546e7a\">Gli ultimi arrivi e le collezioni in edizione limitata.</p>",
+                    "alignment": "center"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9562",
+                  "type": "button",
+                  "settings": {
+                    "text": "Scopri",
+                    "url": "#",
+                    "style": "outline",
+                    "size": "md",
+                    "color": "#006064",
+                    "bg_color": "",
+                    "border_radius": "8",
+                    "hover_effect": "lift"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "2": {
+      "id": "tpl_9525",
+      "type": "section",
+      "settings": {
+        "style": "default",
+        "width": "large",
+        "padding": "large"
+      },
+      "style": {
+        "bg_type": "color",
+        "bg_color": "#fafafa",
+        "padding_top": "60",
+        "padding_bottom": "60"
+      },
+      "advanced": {},
+      "children": [
+        {
+          "id": "tpl_9499",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl_9498",
+              "type": "column",
+              "settings": {
+                "width": "1-1"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_9496",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "I Nostri Prodotti",
+                    "subtitle": "Scopri la collezione completa",
+                    "tag": "h2",
+                    "alignment": "center",
+                    "decoration": "line",
+                    "heading_color": "#1a237e",
+                    "subtitle_color": "var(--olo-color-primary, #e1474f)",
+                    "heading_size": "lg"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9497",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "40"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "tpl_9524",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl_9505",
+              "type": "column",
+              "settings": {
+                "width": "1-4"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_9500",
+                  "type": "image",
+                  "settings": {
+                    "url": "",
+                    "alt": "Prodotto 1",
+                    "width": "100%",
+                    "border_radius": "12",
+                    "shadow": "md"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9501",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "12"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9502",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "Prodotto Premium",
+                    "tag": "h3",
+                    "alignment": "center",
+                    "decoration": "none",
+                    "heading_color": "#1a237e",
+                    "heading_size": "sm"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9503",
+                  "type": "content",
+                  "settings": {
+                    "content": "<p style=\"text-align:center;color:#e53935;font-weight:bold;font-size:20px\">&euro; 49,90</p>",
+                    "alignment": "center"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9504",
+                  "type": "button",
+                  "settings": {
+                    "text": "Acquista",
+                    "url": "#",
+                    "style": "solid",
+                    "size": "md",
+                    "color": "#ffffff",
+                    "bg_color": "#1a237e",
+                    "border_radius": "8",
+                    "hover_effect": "lift"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            },
+            {
+              "id": "tpl_9511",
+              "type": "column",
+              "settings": {
+                "width": "1-4"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_9506",
+                  "type": "image",
+                  "settings": {
+                    "url": "",
+                    "alt": "Prodotto 2",
+                    "width": "100%",
+                    "border_radius": "12",
+                    "shadow": "md"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9507",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "12"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9508",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "Prodotto Classic",
+                    "tag": "h3",
+                    "alignment": "center",
+                    "decoration": "none",
+                    "heading_color": "#1a237e",
+                    "heading_size": "sm"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9509",
+                  "type": "content",
+                  "settings": {
+                    "content": "<p style=\"text-align:center;color:#e53935;font-weight:bold;font-size:20px\">&euro; 29,90</p>",
+                    "alignment": "center"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9510",
+                  "type": "button",
+                  "settings": {
+                    "text": "Acquista",
+                    "url": "#",
+                    "style": "solid",
+                    "size": "md",
+                    "color": "#ffffff",
+                    "bg_color": "#1a237e",
+                    "border_radius": "8",
+                    "hover_effect": "lift"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            },
+            {
+              "id": "tpl_9517",
+              "type": "column",
+              "settings": {
+                "width": "1-4"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_9512",
+                  "type": "image",
+                  "settings": {
+                    "url": "",
+                    "alt": "Prodotto 3",
+                    "width": "100%",
+                    "border_radius": "12",
+                    "shadow": "md"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9513",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "12"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9514",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "Prodotto Sport",
+                    "tag": "h3",
+                    "alignment": "center",
+                    "decoration": "none",
+                    "heading_color": "#1a237e",
+                    "heading_size": "sm"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9515",
+                  "type": "content",
+                  "settings": {
+                    "content": "<p style=\"text-align:center;color:#e53935;font-weight:bold;font-size:20px\">&euro; 39,90</p>",
+                    "alignment": "center"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9516",
+                  "type": "button",
+                  "settings": {
+                    "text": "Acquista",
+                    "url": "#",
+                    "style": "solid",
+                    "size": "md",
+                    "color": "#ffffff",
+                    "bg_color": "#1a237e",
+                    "border_radius": "8",
+                    "hover_effect": "lift"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            },
+            {
+              "id": "tpl_9523",
+              "type": "column",
+              "settings": {
+                "width": "1-4"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_9518",
+                  "type": "image",
+                  "settings": {
+                    "url": "",
+                    "alt": "Prodotto 4",
+                    "width": "100%",
+                    "border_radius": "12",
+                    "shadow": "md"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9519",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "12"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9520",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "Prodotto Eco",
+                    "tag": "h3",
+                    "alignment": "center",
+                    "decoration": "none",
+                    "heading_color": "#1a237e",
+                    "heading_size": "sm"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9521",
+                  "type": "content",
+                  "settings": {
+                    "content": "<p style=\"text-align:center;color:#e53935;font-weight:bold;font-size:20px\">&euro; 59,90</p>",
+                    "alignment": "center"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9522",
+                  "type": "button",
+                  "settings": {
+                    "text": "Acquista",
+                    "url": "#",
+                    "style": "solid",
+                    "size": "md",
+                    "color": "#ffffff",
+                    "bg_color": "#1a237e",
+                    "border_radius": "8",
+                    "hover_effect": "lift"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "3": {
+      "id": "tpl_9575",
+      "type": "section",
+      "settings": {
+        "style": "default",
+        "width": "large",
+        "padding": "large"
+      },
+      "style": {
+        "bg_type": "color",
+        "bg_color": "#b71c1c",
+        "padding_top": "80",
+        "padding_bottom": "80"
+      },
+      "advanced": {},
+      "children": [
+        {
+          "id": "tpl_9574",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl_9573",
+              "type": "column",
+              "settings": {
+                "width": "1-1"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_9566",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "SALDI INVERNALI",
+                    "subtitle": "Fino al 50% di sconto su tutta la collezione",
+                    "tag": "h2",
+                    "alignment": "center",
+                    "decoration": "none",
+                    "heading_color": "#ffffff",
+                    "subtitle_color": "#ffcdd2",
+                    "heading_size": "xl"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9567",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "32"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9568",
+                  "type": "countdown",
+                  "settings": {
+                    "date": "2025-12-31",
+                    "style": "card",
+                    "label_color": "#ffcdd2",
+                    "number_color": "#ffffff"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9569",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "40"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9570",
+                  "type": "button",
+                  "settings": {
+                    "text": "Approfitta Ora",
+                    "url": "#",
+                    "style": "solid",
+                    "size": "lg",
+                    "color": "#b71c1c",
+                    "bg_color": "#ffffff",
+                    "border_radius": "50",
+                    "hover_effect": "glow"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9571",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "16"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9572",
+                  "type": "content",
+                  "settings": {
+                    "content": "<p style=\"text-align:center;color:#ffcdd2;font-size:14px\">Offerta valida fino ad esaurimento scorte. Spedizione gratuita sopra i 50&euro;.</p>",
+                    "alignment": "center"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "4": {
+      "id": "tpl_9683",
+      "type": "section",
+      "settings": {
+        "style": "default",
+        "width": "large",
+        "padding": "large"
+      },
+      "style": {
+        "bg_type": "color",
+        "bg_color": "#fce4ec",
+        "padding_top": "60",
+        "padding_bottom": "60"
+      },
+      "advanced": {},
+      "children": [
+        {
+          "id": "tpl_9662",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl_9661",
+              "type": "column",
+              "settings": {
+                "width": "1-1"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_9659",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "Cosa Dicono i Nostri Clienti",
+                    "subtitle": "Recensioni verificate",
+                    "tag": "h2",
+                    "alignment": "center",
+                    "decoration": "dot",
+                    "heading_color": "#880e4f",
+                    "subtitle_color": "#c2185b",
+                    "heading_size": "lg"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9660",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "40"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "tpl_9678",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl_9667",
+              "type": "column",
+              "settings": {
+                "width": "1-3"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_9663",
+                  "type": "content",
+                  "settings": {
+                    "content": "<p style=\"color:#ff9800;font-size:20px;text-align:center\">&#9733;&#9733;&#9733;&#9733;&#9733;</p>",
+                    "alignment": "center"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9664",
+                  "type": "content",
+                  "settings": {
+                    "content": "<p style=\"text-align:center;font-style:italic\">\"Prodotto eccellente! La qualità è superiore alle aspettative. Lo consiglio a tutti, spedizione velocissima.\"</p>",
+                    "alignment": "center"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9665",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "16"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9666",
+                  "type": "content",
+                  "settings": {
+                    "content": "<p style=\"text-align:center;font-weight:bold;color:#880e4f\">Maria G.</p><p style=\"text-align:center;color:#999;font-size:13px\">Acquisto verificato</p>",
+                    "alignment": "center"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            },
+            {
+              "id": "tpl_9672",
+              "type": "column",
+              "settings": {
+                "width": "1-3"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_9668",
+                  "type": "content",
+                  "settings": {
+                    "content": "<p style=\"color:#ff9800;font-size:20px;text-align:center\">&#9733;&#9733;&#9733;&#9733;&#9733;</p>",
+                    "alignment": "center"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9669",
+                  "type": "content",
+                  "settings": {
+                    "content": "<p style=\"text-align:center;font-style:italic\">\"Rapporto qualità-prezzo imbattibile. Ho già fatto il secondo ordine. Il servizio clienti è impeccabile.\"</p>",
+                    "alignment": "center"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9670",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "16"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9671",
+                  "type": "content",
+                  "settings": {
+                    "content": "<p style=\"text-align:center;font-weight:bold;color:#880e4f\">Luca T.</p><p style=\"text-align:center;color:#999;font-size:13px\">Acquisto verificato</p>",
+                    "alignment": "center"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            },
+            {
+              "id": "tpl_9677",
+              "type": "column",
+              "settings": {
+                "width": "1-3"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_9673",
+                  "type": "content",
+                  "settings": {
+                    "content": "<p style=\"color:#ff9800;font-size:20px;text-align:center\">&#9733;&#9733;&#9733;&#9733;&#9734;</p>",
+                    "alignment": "center"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9674",
+                  "type": "content",
+                  "settings": {
+                    "content": "<p style=\"text-align:center;font-style:italic\">\"Ottimo prodotto, bello e funzionale. Unica nota: avrei preferito più varianti di colore disponibili.\"</p>",
+                    "alignment": "center"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9675",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "16"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9676",
+                  "type": "content",
+                  "settings": {
+                    "content": "<p style=\"text-align:center;font-weight:bold;color:#880e4f\">Sara M.</p><p style=\"text-align:center;color:#999;font-size:13px\">Acquisto verificato</p>",
+                    "alignment": "center"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "tpl_9682",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl_9681",
+              "type": "column",
+              "settings": {
+                "width": "1-1"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_9679",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "32"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_9680",
+                  "type": "button",
+                  "settings": {
+                    "text": "Vedi Tutte le Recensioni",
+                    "url": "#",
+                    "style": "outline",
+                    "size": "md",
+                    "color": "#880e4f",
+                    "bg_color": "",
+                    "border_radius": "8",
+                    "hover_effect": "grow"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "5": {
+      "id": "tpl-news1-sec",
+      "type": "section",
+      "settings": {
+        "style": "default",
+        "width": "large",
+        "padding": "large"
+      },
+      "style": {
+        "bg_type": "color",
+        "bg_color": "color-mix(in srgb, var(--olo-color-primary, #e1474f) 12%, #fff)",
+        "padding_top": "60",
+        "padding_bottom": "60"
+      },
+      "advanced": {},
+      "children": [
+        {
+          "id": "tpl-news1-row",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl-news1-col1",
+              "type": "column",
+              "settings": {
+                "width": "1-1"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl-news1-headline",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "Resta aggiornato",
+                    "subtitle": "Iscriviti alla newsletter per ricevere novità e consigli esclusivi",
+                    "tag": "h3",
+                    "alignment": "center",
+                    "decoration": "none",
+                    "heading_color": "var(--olo-color-primary, #e1474f)",
+                    "subtitle_color": "var(--olo-color-primary, #e1474f)",
+                    "heading_size": "md"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-news1-spacer1",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "24"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                },
+                {
+                  "id": "tpl-news1-form",
+                  "type": "form",
+                  "settings": {
+                    "fields": [
+                      {
+                        "type": "email",
+                        "label": "La tua email",
+                        "placeholder": "nome@esempio.it",
+                        "required": true
+                      }
+                    ],
+                    "submit_text": "Iscriviti",
+                    "submit_bg_color": "var(--olo-color-primary, #e1474f)",
+                    "submit_text_color": "#FFFFFF",
+                    "layout": "inline"
+                  },
+                  "style": {},
+                  "advanced": {},
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "6": {
+      "id": "tpl_100",
+      "type": "section",
+      "settings": {
+        "style": "default",
+        "width": "large",
+        "padding": "large"
+      },
+      "style": {
+        "bg_type": "color",
+        "bg_color": "#030712",
+        "padding_top": "60",
+        "padding_bottom": "40"
+      },
+      "advanced": {},
+      "children": [
+        {
+          "id": "tpl_94",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl_82",
+              "type": "column",
+              "settings": {
+                "width": "1-4"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_80",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "Brand",
+                    "subtitle": "",
+                    "tag": "h4",
+                    "alignment": "left",
+                    "decoration": "none",
+                    "heading_color": "var(--olo-color-primary, #e1474f)",
+                    "subtitle_color": "",
+                    "heading_size": "sm"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_81",
+                  "type": "content",
+                  "settings": {
+                    "content": "<p style=\"color:#9ca3af;\">Creiamo esperienze digitali che ispirano e connettono le persone.</p>",
+                    "alignment": "left"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            },
+            {
+              "id": "tpl_85",
+              "type": "column",
+              "settings": {
+                "width": "1-4"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_83",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "Esplora",
+                    "subtitle": "",
+                    "tag": "h5",
+                    "alignment": "left",
+                    "decoration": "none",
+                    "heading_color": "#ffffff",
+                    "subtitle_color": "",
+                    "heading_size": "sm"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_84",
+                  "type": "content",
+                  "settings": {
+                    "content": "<p><a href=\"#\" style=\"color:#9ca3af;text-decoration:none;\">Portfolio</a><br><a href=\"#\" style=\"color:#9ca3af;text-decoration:none;\">Servizi</a><br><a href=\"#\" style=\"color:#9ca3af;text-decoration:none;\">Team</a><br><a href=\"#\" style=\"color:#9ca3af;text-decoration:none;\">Carriere</a></p>",
+                    "alignment": "left"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            },
+            {
+              "id": "tpl_88",
+              "type": "column",
+              "settings": {
+                "width": "1-4"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_86",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "Risorse",
+                    "subtitle": "",
+                    "tag": "h5",
+                    "alignment": "left",
+                    "decoration": "none",
+                    "heading_color": "#ffffff",
+                    "subtitle_color": "",
+                    "heading_size": "sm"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_87",
+                  "type": "content",
+                  "settings": {
+                    "content": "<p><a href=\"#\" style=\"color:#9ca3af;text-decoration:none;\">Documentazione</a><br><a href=\"#\" style=\"color:#9ca3af;text-decoration:none;\">Guide</a><br><a href=\"#\" style=\"color:#9ca3af;text-decoration:none;\">FAQ</a><br><a href=\"#\" style=\"color:#9ca3af;text-decoration:none;\">Supporto</a></p>",
+                    "alignment": "left"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            },
+            {
+              "id": "tpl_93",
+              "type": "column",
+              "settings": {
+                "width": "1-4"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_89",
+                  "type": "headline",
+                  "settings": {
+                    "heading": "Seguici",
+                    "subtitle": "",
+                    "tag": "h5",
+                    "alignment": "left",
+                    "decoration": "none",
+                    "heading_color": "#ffffff",
+                    "subtitle_color": "",
+                    "heading_size": "sm"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_90",
+                  "type": "social",
+                  "settings": {
+                    "links": "facebook|#\ninstagram|#\nlinkedin|#\nyoutube|#",
+                    "style": "square",
+                    "size": "md",
+                    "alignment": "left"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_91",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "16"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_92",
+                  "type": "content",
+                  "settings": {
+                    "content": "<p style=\"color:#9ca3af;font-size:14px;\">Resta aggiornato sulle ultime novità e progetti.</p>",
+                    "alignment": "left"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "tpl_99",
+          "type": "row",
+          "settings": {},
+          "style": {},
+          "advanced": {},
+          "children": [
+            {
+              "id": "tpl_98",
+              "type": "column",
+              "settings": {
+                "width": "1-1"
+              },
+              "style": {},
+              "advanced": {},
+              "children": [
+                {
+                  "id": "tpl_95",
+                  "type": "divider",
+                  "settings": {
+                    "style": "solid",
+                    "width": "100",
+                    "color": "#1f2937"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_96",
+                  "type": "spacer",
+                  "settings": {
+                    "height": "16"
+                  },
+                  "style": {},
+                  "advanced": {}
+                },
+                {
+                  "id": "tpl_97",
+                  "type": "content",
+                  "settings": {
+                    "content": "<p style=\"text-align:center;color:#6b7280;font-size:13px;\">&copy; 2026 Brand Inc. &mdash; Fatto con passione in Italia</p>",
+                    "alignment": "center"
+                  },
+                  "style": {},
+                  "advanced": {}
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

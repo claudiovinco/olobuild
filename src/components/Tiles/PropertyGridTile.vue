@@ -34,11 +34,12 @@
 <script setup>
 import { computed } from 'vue';
 import { t } from '@/i18n';
+import { SHADOW } from '@/composables/oloTileDefaults';
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 const defaults = { columns: 3, gap: 24, card_radius: 12, card_shadow: 'sm', filter_bar: true, accent_color: '', btn_bg: '', btn_color: '', btn_radius: 8 };
 const s = computed(() => ({ ...defaults, ...props.settings }));
 const accent = computed(() => s.value.accent_color || 'var(--olo-color-primary, #e1474f)');
-const shadowMap = { none:'none', sm:'0 1px 3px rgba(0,0,0,0.1)', md:'0 4px 12px rgba(0,0,0,0.1)', lg:'0 8px 24px rgba(0,0,0,0.15)' };
+const shadowMap = SHADOW;
 const categories = [ { label:'Tutti', active:true }, { label:'Appartamenti', active:false }, { label:'Ville', active:false }, { label:'Commerciale', active:false } ];
 const properties = [
   { title:'Trilocale Centro Storico', location:'Trento, Centro', mq:95, locali:4, camere:2, bagni:1, price:'€ 325.000', badge:'Vendita' },

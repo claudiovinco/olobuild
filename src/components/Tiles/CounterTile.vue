@@ -24,7 +24,7 @@
         <template v-else>{{ s.icon_emoji }}</template>
       </div>
       <div :style="numberStyle">
-        <span v-if="s.prefix" data-olo-editable="prefix">{{ s.prefix }}</span>{{ s.number || '0' }}<span v-if="s.suffix" data-olo-editable="suffix">{{ s.suffix }}</span>
+        <span v-if="s.prefix" data-olo-editable="prefix">{{ s.prefix }}</span>{{ s.number || '0' }}<span v-if="s.suffix" :style="suffixStyle" data-olo-editable="suffix">{{ s.suffix }}</span>
       </div>
       <div v-if="s.label" :style="labelStyle" data-olo-editable="label">{{ s.label }}</div>
     </div>
@@ -91,6 +91,14 @@ const numberStyle = computed(() => ({
   fontSize: (parseInt(s.value.number_font_size) || 48) + 'px',
   fontWeight: s.value.number_font_weight || '700',
   lineHeight: '1.1',
+  letterSpacing: '-0.02em',
+  fontVariantNumeric: 'tabular-nums',
+}));
+
+// Suffisso nell'accento brand (come i REFERENCE data): "1.250+" → il "+" è rosso.
+// Se l'utente ha scelto un colore numero esplicito, il suffisso lo eredita.
+const suffixStyle = computed(() => ({
+  color: s.value.number_color || 'var(--olo-color-primary, #e1474f)',
 }));
 
 const labelStyle = computed(() => {

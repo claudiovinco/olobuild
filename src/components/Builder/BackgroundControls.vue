@@ -168,6 +168,17 @@
           <input type="range" class="uirange" :style="fillStyle(bg.video_scale || 100, 100, 300)" :value="bg.video_scale || 100" :aria-label="t('Scala video')" min="100" max="300" step="10" @input="commitInt('video_scale', $event.target.value, 100)" />
           <div class="valbox"><input type="number" :value="bg.video_scale || 100" min="100" max="300" step="10" @input="commitInt('video_scale', $event.target.value, 100)" @wheel="handleNumberWheel" /><span class="u">%</span></div>
         </div>
+
+        <!-- Parallasse SOLO sfondo (video): scala/opacità/sfocatura allo scroll, contenuto fermo -->
+        <div v-if="showParallax" class="field field--sep">
+          <div class="tgl-row">
+            <button type="button" class="tgl" :class="{ on: isParallaxEnabled }" :aria-pressed="isParallaxEnabled" @click="toggleParallax"><b></b></button>
+            <span class="tl">{{ t('Parallasse') }}</span>
+          </div>
+          <div v-if="isParallaxEnabled" class="sub-editor">
+            <ParallaxEditor :modelValue="bgParallaxData" :properties="videoParallaxProperties" @update:modelValue="updateParallaxData" />
+          </div>
+        </div>
       </div>
 
       <!-- Galleria -->
@@ -536,6 +547,16 @@ const bgParallaxProperties = [
   { key: 'scale', label: 'Scala', min: 0.5, max: 2, step: 0.05, unit: '' },
   { key: 'opacity', label: 'Opacità', min: 0, max: 1, step: 0.05, unit: '' },
   { key: 'blur', label: 'Sfocatura', min: 0, max: 20, step: 1, unit: 'px' },
+];
+// Per lo sfondo VIDEO bgx/bgy (background-position) non hanno effetto su un <video>:
+// lo spostamento si fa con la TRASLAZIONE (x/y), che il mapper uk-parallax applica come
+// transform sul <video>. Esponiamo: Spostamento X/Y + Scala + Opacità + Sfocatura.
+const videoParallaxProperties = [
+  { key: 'x', label: 'Spostamento X', min: -800, max: 800, step: 10, unit: 'px' },
+  { key: 'y', label: 'Spostamento Y', min: -800, max: 800, step: 10, unit: 'px' },
+  ...bgParallaxProperties.filter(
+    (p) => p.key === 'scale' || p.key === 'opacity' || p.key === 'blur'
+  ),
 ];
 
 const props = defineProps({

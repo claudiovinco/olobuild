@@ -1,0 +1,898 @@
+[
+ {
+  "id": "vy-se-4",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#141d2e"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "vy-ro-3",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "vy-co-2",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "vy-hero-split-1",
+        "type": "featuredstory",
+        "settings": {
+         "kicker_text": "The Long Way · Patagonia",
+         "headline_text": "The road that goes nowhere, slowly",
+         "headline_url": "#",
+         "standfirst": "Forty hours of gravel, three flat tyres and one unrepeatable silence. What we found at the end of the Carretera Austral — and what we found out about ourselves.",
+         "byline_pre": "Words & pictures",
+         "byline_name": "Mara Quinn",
+         "byline_meta": "16 min",
+         "cover_image": "",
+         "cover_url": "#",
+         "cover_label": "cover — empty mountain road at dawn, warm light",
+         "cta1_text": "",
+         "cta1_url": "#",
+         "cta2_text": "",
+         "cta2_url": "#",
+         "media_side": "left",
+         "col_ratio": "1.15fr .85fr",
+         "cover_aspect": "4 / 3",
+         "media_radius": 8,
+         "standfirst_italic": true,
+         "placeholder_dark": false,
+         "bg_color": "#141d2e",
+         "kicker_color": "#ff8c69",
+         "headline_color": "#eef2f7",
+         "accent_color": "#ff8c69",
+         "standfirst_color": "#eef2f7",
+         "byline_color": "#6c7a90",
+         "byline_name_color": "#eef2f7",
+         "media_bg": "#27344c",
+         "cta_solid_bg": "#ff8c69",
+         "cta_solid_text": "#0c1320",
+         "heading_font": "\"Vollkorn\", Georgia, serif",
+         "serif_font": "\"Vollkorn\", Georgia, serif",
+         "sans_font": "\"Figtree\", -apple-system, sans-serif"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "vy-se-11",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#172338"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "vy-ro-7",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "vy-co-6",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "vy-section-header-5",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": false,
+         "headline_lines": [
+          {
+           "text": "Latest dispatches",
+           "color": "#eef2f7",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 38,
+         "headline_font_weight": "700",
+         "headline_align": "left",
+         "tagline_show": true,
+         "tagline_text": "← drag · all stories →",
+         "tagline_text_color": "#ff8c69",
+         "tagline_text_size": 12,
+         "tagline_text_italic": false,
+         "layout": "split",
+         "gap": 0
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "vy-ro-10",
+    "type": "row",
+    "settings": {
+     "gap": 22
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "vy-co-9",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "vy-categoryrail-8",
+        "type": "categoryrail",
+        "settings": {
+         "items": [
+          {
+           "image": "",
+           "title": "Sleeping across a continent",
+           "subtitle": "Essay · Rail",
+           "link": "#dispatches"
+          },
+          {
+           "image": "",
+           "title": "Eat where the drivers eat",
+           "subtitle": "Guide · Food",
+           "link": "#dispatches"
+          },
+          {
+           "image": "",
+           "title": "The last ferry of the season",
+           "subtitle": "Dispatch · Islands",
+           "link": "#dispatches"
+          },
+          {
+           "image": "",
+           "title": "A week with no signal",
+           "subtitle": "Essay · Desert",
+           "link": "#dispatches"
+          }
+         ],
+         "card_width": 320,
+         "card_aspect": "4/5",
+         "gap": 16,
+         "media_bg": "#172338",
+         "overlay_color": "rgba(12,19,32,0.55)",
+         "title_color": "#eef2f7",
+         "subtitle_color": "#ff8c69",
+         "radius": 12,
+         "show_hint": true,
+         "hint_text": "← drag →",
+         "hint_color": "#6c7a90"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "vy-se-18",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#141d2e"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "vy-ro-14",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "vy-co-13",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "vy-section-header-12",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": false,
+         "headline_lines": [
+          {
+           "text": "Follow the route",
+           "color": "#eef2f7",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 38,
+         "headline_font_weight": "700",
+         "headline_align": "left",
+         "tagline_show": true,
+         "tagline_text": "Carretera Austral · 1,240 km south",
+         "tagline_text_color": "#ff8c69",
+         "tagline_text_size": 12,
+         "tagline_text_italic": false,
+         "layout": "split",
+         "gap": 0
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "vy-ro-17",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "vy-co-16",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "vy-step-timeline-15",
+        "type": "step-timeline",
+        "settings": {
+         "items": [
+          {
+           "counter": "01",
+           "tag_text": "DAY 1 · KM 0",
+           "tag_dot_color": "#ff8c69",
+           "media_label": "VILLA O'HIGGINS",
+           "media_type": "placeholder",
+           "media_content": "",
+           "media_image": "",
+           "media_bg": "#27344c",
+           "media_color": "#ff8c69",
+           "pre_title": "START",
+           "title": "Villa O'Higgins",
+           "title_accent": "",
+           "title_accent_italic": false,
+           "title_after": "",
+           "title_after_italic": false,
+           "description": "The road begins exactly where the next one gives up. End of the line, southbound. A single pump, a hand-painted sign, and 1,240 kilometres of gravel waiting to the north. We aired down the tyres and didn't speak for an hour.",
+           "footer_value": "Km 0",
+           "footer_label": "START",
+           "separator_text": "→"
+          },
+          {
+           "counter": "02",
+           "tag_text": "DAY 3 · KM 228",
+           "tag_dot_color": "#ff8c69",
+           "media_label": "CALETA TORTEL",
+           "media_type": "placeholder",
+           "media_content": "",
+           "media_image": "",
+           "media_bg": "#27344c",
+           "media_color": "#7fb5d6",
+           "pre_title": "VILLAGE",
+           "title": "Caleta Tortel",
+           "title_accent": "",
+           "title_accent_italic": false,
+           "title_after": "",
+           "title_after_italic": false,
+           "description": "A village with no streets — only cypress boardwalks. You leave the truck at the top and walk in. Every house on stilts, every path made of planks, the whole place smelling of woodsmoke and wet timber.",
+           "footer_value": "Km 228",
+           "footer_label": "WAYPOINT",
+           "separator_text": "→"
+          },
+          {
+           "counter": "03",
+           "tag_text": "DAY 6 · KM 612",
+           "tag_dot_color": "#ff8c69",
+           "media_label": "RÍO TRANQUILO",
+           "media_type": "placeholder",
+           "media_content": "",
+           "media_image": "",
+           "media_bg": "#27344c",
+           "media_color": "#7fb5d6",
+           "pre_title": "MARBLE CAVES",
+           "title": "Río Tranquilo",
+           "title_accent": "",
+           "title_accent_italic": false,
+           "title_after": "",
+           "title_after_italic": false,
+           "description": "Water so blue it looks edited. We rowed out at first light to the marble caves — caverns the lake has been polishing for six thousand years. The guide cut the motor and let us just listen to it drip.",
+           "footer_value": "Km 612",
+           "footer_label": "WAYPOINT",
+           "separator_text": "→"
+          },
+          {
+           "counter": "04",
+           "tag_text": "DAY 9 · KM 920",
+           "tag_dot_color": "#ff8c69",
+           "media_label": "CERRO CASTILLO",
+           "media_type": "placeholder",
+           "media_content": "",
+           "media_image": "",
+           "media_bg": "#27344c",
+           "media_color": "#ff8c69",
+           "pre_title": "PEAK HIKE",
+           "title": "Cerro Castillo",
+           "title_accent": "",
+           "title_accent_italic": false,
+           "title_after": "",
+           "title_after_italic": false,
+           "description": "A full day on foot to the lagoon beneath the spires. Wind that knocks you sideways, then ten minutes of total stillness that made the whole trip worth it.",
+           "footer_value": "Km 920",
+           "footer_label": "WAYPOINT",
+           "separator_text": "→"
+          },
+          {
+           "counter": "05",
+           "tag_text": "DAY 11 · KM 1,240",
+           "tag_dot_color": "#ff8c69",
+           "media_label": "COYHAIQUE",
+           "media_type": "placeholder",
+           "media_content": "",
+           "media_image": "",
+           "media_bg": "#27344c",
+           "media_color": "#ffa585",
+           "pre_title": "END",
+           "title": "Coyhaique",
+           "title_accent": "— tarmac again",
+           "title_accent_italic": true,
+           "title_after": "",
+           "title_after_italic": false,
+           "description": "Tarmac again — and a strange reluctance to reach it. Pavement, a proper coffee, phone signal. The road's over. We sat in the plaza too long, already plotting the way we'd come back and do it slower.",
+           "footer_value": "Km 1,240",
+           "footer_label": "FINISH",
+           "separator_text": ""
+          }
+         ],
+         "show_timeline": true,
+         "timeline_line_color": "rgba(255,140,105,.42)",
+         "timeline_dot_color": "#ff8c69",
+         "timeline_dot_size": 12,
+         "timeline_height": 2,
+         "timeline_margin_bottom": 40,
+         "counter_font_family": "serif",
+         "counter_size": 80,
+         "counter_color": "rgba(255,140,105,.42)",
+         "counter_italic": true,
+         "counter_weight": "700",
+         "tag_size": 11,
+         "tag_color": "#a6b2c4",
+         "media_aspect_ratio": "16/10",
+         "media_radius": {
+          "tl": 8,
+          "tr": 8,
+          "br": 8,
+          "bl": 8,
+          "linked": true
+         },
+         "media_radius_hover": {
+          "tl": 8,
+          "tr": 8,
+          "br": 8,
+          "bl": 8,
+          "linked": true
+         },
+         "media_shadow": "none",
+         "show_media_label": true,
+         "pre_title_size": 11,
+         "pre_title_color": "#6c7a90",
+         "title_font_family": "serif",
+         "title_size": 26,
+         "title_weight": "700",
+         "title_color": "#eef2f7",
+         "title_accent_color": "#ff8c69",
+         "description_size": 14,
+         "description_color": "#a6b2c4",
+         "footer_icon": "map-pin",
+         "footer_value_size": 16,
+         "footer_value_color": "#eef2f7",
+         "footer_label_size": 10,
+         "footer_label_color": "#6c7a90",
+         "separator_color": "#ff8c69",
+         "show_separator": true,
+         "columns": 5,
+         "gap": 24,
+         "items_align": "start"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "vy-se-25",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#172338"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "vy-ro-21",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "vy-co-20",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "vy-section-header-19",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": false,
+         "headline_lines": [
+          {
+           "text": "By destination",
+           "color": "#eef2f7",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 38,
+         "headline_font_weight": "700",
+         "headline_align": "left",
+         "tagline_show": true,
+         "tagline_text": "Atlas →",
+         "tagline_text_color": "#ff8c69",
+         "tagline_text_size": 12,
+         "tagline_text_italic": false,
+         "layout": "split",
+         "gap": 0
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "vy-ro-24",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "vy-co-23",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "vy-workgrid-22",
+        "type": "workgrid",
+        "settings": {
+         "items": [
+          {
+           "image": "",
+           "media_label": "Lisbon",
+           "title": "Portugal, slowly",
+           "meta": "",
+           "description": "Eight stories from the road between Porto and the south.",
+           "link_url": "#destinations",
+           "tall": true
+          },
+          {
+           "image": "",
+           "media_label": "Japan rail",
+           "title": "Japan by rail",
+           "meta": "",
+           "description": "Beyond the bullet train — the slow lines that locals love.",
+           "link_url": "#destinations",
+           "tall": true
+          },
+          {
+           "image": "",
+           "media_label": "Morocco",
+           "title": "The Atlas & beyond",
+           "meta": "",
+           "description": "Mountains, medinas and the long way to the dunes.",
+           "link_url": "#destinations",
+           "tall": true
+          }
+         ],
+         "columns": 3,
+         "items_gap": 30,
+         "media_aspect": "4/3",
+         "media_tall_aspect": "4/5",
+         "media_bg": "#27344c",
+         "media_label_color": "#a6b2c4",
+         "hover_zoom": true,
+         "title_font_family": "heading",
+         "title_color": "#eef2f7",
+         "title_size": 22,
+         "title_weight": "700",
+         "meta_color": "#ff8c69",
+         "meta_size": 12,
+         "show_desc": true,
+         "desc_color": "#a6b2c4",
+         "desc_size": 14,
+         "mono_font_family": ""
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "vy-se-33",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#141d2e"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "vy-ro-32",
+    "type": "row",
+    "settings": {
+     "gap": 48
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "vy-co-28",
+      "type": "column",
+      "settings": {
+       "width": "3-5"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "vy-section-header-26",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": false,
+         "headline_lines": [
+          {
+           "text": "Columns",
+           "color": "#eef2f7",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 36,
+         "headline_font_weight": "700",
+         "headline_align": "left",
+         "tagline_show": false,
+         "layout": "stack",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "vy-workgrid-27",
+        "type": "workgrid",
+        "settings": {
+         "items": [
+          {
+           "image": "",
+           "media_label": "packing",
+           "title": "The carry-on",
+           "meta": "",
+           "description": "One bag, every trip. A column on travelling light.",
+           "link_url": "#columns",
+           "tall": true
+          },
+          {
+           "image": "",
+           "media_label": "phrasebook",
+           "title": "Lost in translation",
+           "meta": "",
+           "description": "The joy of getting the words almost right.",
+           "link_url": "#columns",
+           "tall": true
+          }
+         ],
+         "columns": 2,
+         "items_gap": 30,
+         "media_aspect": "4/3",
+         "media_tall_aspect": "4/5",
+         "media_bg": "#27344c",
+         "media_label_color": "#a6b2c4",
+         "hover_zoom": true,
+         "title_font_family": "heading",
+         "title_color": "#eef2f7",
+         "title_size": 22,
+         "title_weight": "700",
+         "meta_color": "#ff8c69",
+         "meta_size": 12,
+         "show_desc": true,
+         "desc_color": "#a6b2c4",
+         "desc_size": 14,
+         "mono_font_family": ""
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "vy-co-31",
+      "type": "column",
+      "settings": {
+       "width": "2-5"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "vy-section-header-29",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": false,
+         "headline_lines": [
+          {
+           "text": "Most read",
+           "color": "#eef2f7",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 36,
+         "headline_font_weight": "700",
+         "headline_align": "left",
+         "tagline_show": false,
+         "layout": "stack",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       },
+       {
+        "id": "vy-worklist-30",
+        "type": "worklist",
+        "settings": {
+         "items": [
+          {
+           "number": "1",
+           "title": "The 1,000-mile breakfast",
+           "category": "Rail",
+           "year": "6 min",
+           "link_url": "#dispatches"
+          },
+          {
+           "number": "2",
+           "title": "How to be a regular for a week",
+           "category": "Cities",
+           "year": "8 min",
+           "link_url": "#dispatches"
+          },
+          {
+           "number": "3",
+           "title": "The only five things you need",
+           "category": "Gear",
+           "year": "5 min",
+           "link_url": "#dispatches"
+          },
+          {
+           "number": "4",
+           "title": "On coming home",
+           "category": "Essay",
+           "year": "10 min",
+           "link_url": "#dispatches"
+          }
+         ],
+         "divider_color": "rgba(238,242,247,.12)",
+         "row_padding_y": 18,
+         "row_hover_bg": "rgba(255,140,105,.08)",
+         "hover_indent": 12,
+         "number_color": "#6c7a90",
+         "number_size": 13,
+         "title_font_family": "heading",
+         "title_color": "#eef2f7",
+         "title_size": 20,
+         "title_weight": "700",
+         "show_category": true,
+         "category_color": "#ff8c69",
+         "category_size": 11,
+         "show_year": true,
+         "year_color": "#6c7a90",
+         "year_size": 12,
+         "show_arrow": true,
+         "arrow_color": "#ff8c69",
+         "mono_font_family": ""
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "vy-se-37",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#172338"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "vy-ro-36",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "vy-co-35",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "vy-newsletter-34",
+        "type": "newsletter",
+        "settings": {
+         "title": "Dispatches, every Sunday",
+         "subtitle": "One long read and three short ones from the road — free, no noise, unsubscribe whenever.",
+         "icon_type": "none",
+         "icon_name": "",
+         "layout": "horizontal",
+         "show_name": false,
+         "email_placeholder": "you@example.com",
+         "button_text": "Subscribe free",
+         "button_icon": false,
+         "privacy_text": "",
+         "privacy_required": false,
+         "bg_color": "#ff8c69",
+         "box_border": "",
+         "border_radius": 14,
+         "tile_padding": {
+          "top": 56,
+          "right": 56,
+          "bottom": 56,
+          "left": 56
+         },
+         "max_width": "0",
+         "alignment": "center",
+         "title_size": "46",
+         "title_weight": "700",
+         "title_color": "#0c1320",
+         "subtitle_size": "16",
+         "subtitle_color": "rgba(12,19,32,.78)",
+         "input_bg": "rgba(12,19,32,.10)",
+         "input_color": "#0c1320",
+         "input_border": "rgba(12,19,32,.25)",
+         "input_focus_border": "#ff8c69",
+         "input_radius": 999,
+         "input_height": "50",
+         "btn_bg": "#0c1320",
+         "btn_color": "#eef2f7",
+         "btn_hover_bg": "#1e2a40",
+         "btn_radius": 999,
+         "btn_font_size": "13",
+         "btn_font_weight": "700",
+         "shadow": "none"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

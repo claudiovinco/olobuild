@@ -33,7 +33,7 @@
 import { t } from '@/i18n';
 import { computed } from 'vue';
 import iconsSvg from '../ProSlider/uikitIconsSvg.js';
-import { resolveColor, TOKENS } from '@/composables/oloTileDefaults';
+import { resolveColor, TOKENS, SHADOW } from '@/composables/oloTileDefaults';
 
 const props = defineProps({
   settings: { type: Object, default: () => ({}) },
@@ -68,7 +68,7 @@ const photoGap = computed(() => {
 });
 const photoBw = computed(() => parseInt(s.value.photo_border_width) || 0);
 
-const shadowMap = { none: 'none', sm: '0 2px 6px rgba(0,0,0,.2)', md: '0 4px 12px rgba(0,0,0,.3)', lg: '0 8px 24px rgba(0,0,0,.4)' };
+const shadowMap = SHADOW;
 
 const tileStyle = computed(() => {
   const bw = parseInt(s.value.border_width) || 0;

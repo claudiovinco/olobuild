@@ -86,7 +86,7 @@
               @update="$emit('update', $event)"
             />
             <InspectorField
-              v-else-if="!isMultiKey(field.type)"
+              v-else-if="!isMultiKey(field.type) && isFieldVisible(field, tileStyle)"
               :field="field"
               :modelValue="tileStyle?.[field.key] ?? ''"
               :tileSettings="tileStyle"
@@ -149,7 +149,7 @@
               @update="$emit('update', $event)"
             />
             <InspectorField
-              v-else-if="!isMultiKey(field.type)"
+              v-else-if="!isMultiKey(field.type) && isFieldVisible(field, tileStyle)"
               :field="field"
               :modelValue="tileStyle?.[field.key] ?? ''"
               :tileSettings="tileStyle"
@@ -276,7 +276,19 @@ function sectionHasVisibleFields(section) {
 }
 
 const groupedSections   = computed(() => groupBySeparator(styleFieldsBase(props.tileType)));
-const tileStyleSections = computed(() => groupBySeparator(props.tileFields || []));
+const tileStyleSections = computed(() => {
+  // Nel tab Stile gli "Effetti bordo" del WRAPPER (groupedSections → borderEffectFields)
+  // sono già presenti. Rimuoviamo l'eventuale sezione effetti dai field-stile del tile
+  // (quando il config include `...borderFields()` nei styleFields) per evitare il doppione
+  // "Effetti bordo". Solo rendering: `borderFields()` e lo standard restano INVARIATI — il
+  // controllo "Bordo" del tile resta, sparisce solo la sezione effetti duplicata.
+  const fields = (props.tileFields || []).filter(f => {
+    if (f.type === 'separator' && f.label === t('Effetti bordo')) return false;
+    if (typeof f.key === 'string' && f.key.startsWith('border_effect')) return false;
+    return true;
+  });
+  return groupBySeparator(fields);
+});
 
 function emitMain(key, value) {
   emit('update', { type: 'main', key, value });

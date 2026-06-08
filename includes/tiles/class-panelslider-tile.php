@@ -284,10 +284,10 @@ class Olo_PanelSlider_Tile extends Olo_Tile_Base {
         // Hover shadow
         $hover_shadow_val = $s['hover_shadow'] ?? 'none';
         $hover_shadow_map = [
-            'sm' => '0 4px 12px rgba(0,0,0,0.08)',
-            'md' => '0 8px 24px rgba(0,0,0,0.12)',
-            'lg' => '0 16px 36px rgba(0,0,0,0.16)',
-            'xl' => '0 28px 56px rgba(0,0,0,0.20)',
+            'sm' => '0 1px 2px rgba(16,24,40,.06), 0 6px 16px -10px rgba(16,24,40,.18)',
+            'md' => '0 2px 4px rgba(16,24,40,.06), 0 14px 28px -12px rgba(22,38,61,.28)',
+            'lg' => '0 8px 24px -6px rgba(16,24,40,.18), 0 18px 40px -12px rgba(22,38,61,.30)',
+            'xl' => '0 12px 32px -8px rgba(16,24,40,.20), 0 28px 56px -14px rgba(22,38,61,.34)',
         ];
         $hover_shadow_css = isset( $hover_shadow_map[ $hover_shadow_val ] ) ? 'box-shadow:' . $hover_shadow_map[ $hover_shadow_val ] . ';' : '';
 

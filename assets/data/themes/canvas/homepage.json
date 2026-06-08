@@ -1,0 +1,721 @@
+[
+ {
+  "id": "cv-se-4",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#1c1a17"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "cv-ro-3",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "cv-co-2",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "cv-hero-split-1",
+        "type": "smearhero",
+        "settings": {
+         "eyebrow_text": "Painter · oil & pigment",
+         "headline_text": "Jonah",
+         "accent_text": "Veld",
+         "subhead": "Large-scale abstracts about colour, weather and memory.",
+         "hint_text": "↑ drag the colour around",
+         "bg_color": "#1c1a17",
+         "glow_color": "rgba(224,177,58,0.08)",
+         "eyebrow_color": "#e0b13a",
+         "text_color": "#f0ebe1",
+         "accent_color": "",
+         "sub_color": "#f0ebe1",
+         "hint_color": "#857c6d",
+         "smear_palette": "#e0b13a,#cc5b3f,#5b86b8,#f0ebe1",
+         "smear_enabled": true,
+         "min_height": 72
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "cv-se-11",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#211f1b"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "cv-ro-7",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "cv-co-6",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "cv-section-header-5",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "Selected work",
+         "eyebrow_color": "#e0b13a",
+         "eyebrow_dot_color": "#e0b13a",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "Recent ",
+           "color": "#f0ebe1",
+           "italic": false
+          },
+          {
+           "text": "paintings",
+           "color": "#e0b13a",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 44,
+         "headline_font_weight": "400",
+         "headline_align": "left",
+         "headline_inline": true,
+         "tagline_show": false,
+         "tagline_text": "",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#b3aa9b",
+         "tagline_text_size": 16,
+         "layout": "stack",
+         "gap": 12
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "cv-ro-10",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "cv-co-9",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "cv-workgrid-8",
+        "type": "workgrid",
+        "settings": {
+         "columns": 2,
+         "items_gap": 32,
+         "media_aspect": "4/3",
+         "media_tall_aspect": "4/5",
+         "media_bg": "#272320",
+         "media_label_color": "#857c6d",
+         "hover_zoom": true,
+         "title_font_family": "heading",
+         "title_color": "#f0ebe1",
+         "title_size": 24,
+         "title_weight": "400",
+         "meta_color": "#857c6d",
+         "meta_size": 12,
+         "show_desc": true,
+         "desc_color": "#857c6d",
+         "desc_size": 14,
+         "items": [
+          {
+           "image": "",
+           "media_label": "Tideline No.4 — oil on linen",
+           "title": "Tideline No.4",
+           "meta": "'26 · Oil",
+           "description": "180 × 140 cm · private collection",
+           "link_url": "#works",
+           "tall": true
+          },
+          {
+           "image": "",
+           "media_label": "Weatherfront — pigment",
+           "title": "Weatherfront",
+           "meta": "'25 · Pigment",
+           "description": "120 × 90 cm · available",
+           "link_url": "#works",
+           "tall": false
+          },
+          {
+           "image": "",
+           "media_label": "Field Study 11",
+           "title": "Field Study 11",
+           "meta": "'25 · Oil",
+           "description": "60 × 60 cm · available",
+           "link_url": "#works",
+           "tall": false
+          },
+          {
+           "image": "",
+           "media_label": "Nightfall — oil on board",
+           "title": "Nightfall",
+           "meta": "'24 · Oil",
+           "description": "200 × 150 cm · on loan",
+           "link_url": "#works",
+           "tall": true
+          }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "cv-se-15",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#272320"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "cv-ro-14",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "cv-co-13",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "cv-hero-split-12",
+        "type": "hero-split",
+        "settings": {
+         "eyebrow_text": "About",
+         "eyebrow_dot_color": "#e0b13a",
+         "eyebrow_color": "#e0b13a",
+         "headline_lines": [
+          {
+           "text": "Painting the ",
+           "color": "#f0ebe1",
+           "italic": false
+          },
+          {
+           "text": "edges",
+           "color": "#e0b13a",
+           "italic": true
+          },
+          {
+           "text": "of weather",
+           "color": "#f0ebe1",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 48,
+         "headline_line_height": 1.06,
+         "headline_font_weight": "400",
+         "headline_align": "left",
+         "subhead": "Jonah Veld (b. 1986) works in oil and hand-ground pigment from a harbour studio. His large abstracts begin outdoors, in notebooks and weather, and are finished slowly indoors over months.\n\nExhibited across Europe and held in private and public collections, his work is represented by Atelier 9.\n\n— studio notes",
+         "subhead_color": "#b3aa9b",
+         "subhead_size": 16,
+         "subhead_italic": false,
+         "subhead_max_width": 520,
+         "cta1_text": "Enquire",
+         "cta1_url": "#contact",
+         "cta1_bg": "#e0b13a",
+         "cta1_color": "#100e0c",
+         "cta1_size": 13,
+         "cta1_radius": {
+          "tl": 2,
+          "tr": 2,
+          "br": 2,
+          "bl": 2,
+          "linked": true
+         },
+         "cta1_radius_hover": {
+          "tl": 2,
+          "tr": 2,
+          "br": 2,
+          "bl": 2,
+          "linked": true
+         },
+         "cta2_text": "",
+         "cta2_url": "",
+         "stats": [],
+         "showcase_enabled": true,
+         "showcase_bg": {
+          "type": "solid",
+          "color": "#1c1a17"
+         },
+         "showcase_padding": 0,
+         "showcase_radius": {
+          "tl": 0,
+          "tr": 0,
+          "br": 0,
+          "bl": 0,
+          "linked": true
+         },
+         "showcase_radius_hover": {
+          "tl": 0,
+          "tr": 0,
+          "br": 0,
+          "bl": 0,
+          "linked": true
+         },
+         "showcase_badge_text": "",
+         "showcase_badge_dot": "#e0b13a",
+         "showcase_badge_bg": "#312c27",
+         "showcase_badge_color": "#f0ebe1",
+         "showcase_items": [],
+         "showcase_card_radius": {
+          "tl": 0,
+          "tr": 0,
+          "br": 0,
+          "bl": 0,
+          "linked": true
+         },
+         "showcase_card_radius_hover": {
+          "tl": 0,
+          "tr": 0,
+          "br": 0,
+          "bl": 0,
+          "linked": true
+         },
+         "showcase_card_shadow": "none",
+         "showcase_caption_left": "",
+         "showcase_caption_right": "",
+         "showcase_hover_effect": "none",
+         "split_ratio": "1.3fr 1fr",
+         "gap": 56,
+         "min_height": 0,
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "cv-se-22",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#1c1a17"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "cv-ro-18",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "cv-co-17",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "cv-section-header-16",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "Selected shows",
+         "eyebrow_color": "#e0b13a",
+         "eyebrow_dot_color": "#e0b13a",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "Exhibitions",
+           "color": "#f0ebe1",
+           "italic": false
+          },
+          {
+           "text": "",
+           "color": "#e0b13a",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 46,
+         "headline_font_weight": "400",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": false,
+         "tagline_text": "",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#857c6d",
+         "tagline_text_size": 16.5,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "cv-ro-21",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "cv-co-20",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "cv-worklist-19",
+        "type": "worklist",
+        "settings": {
+         "divider_color": "rgba(240,235,225,.12)",
+         "row_padding_y": 20,
+         "row_hover_bg": "#211f1b",
+         "hover_indent": 24,
+         "number_color": "#e0b13a",
+         "number_size": 13,
+         "title_font_family": "heading",
+         "title_color": "#f0ebe1",
+         "title_size": 20,
+         "title_weight": "400",
+         "show_category": true,
+         "category_color": "#857c6d",
+         "category_size": 13,
+         "show_year": false,
+         "year_color": "#b3aa9b",
+         "year_size": 13,
+         "show_arrow": true,
+         "arrow_color": "#e0b13a",
+         "items": [
+          {
+           "number": "'26",
+           "title": "Tideline — solo",
+           "category": "Atelier 9, Amsterdam",
+           "year": "",
+           "link_url": "#"
+          },
+          {
+           "number": "'25",
+           "title": "Weather Systems",
+           "category": "Kunsthalle, Oslo",
+           "year": "",
+           "link_url": "#"
+          },
+          {
+           "number": "'25",
+           "title": "Group: Pigment",
+           "category": "Tate Exchange, London",
+           "year": "",
+           "link_url": "#"
+          },
+          {
+           "number": "'24",
+           "title": "Nightfall — solo",
+           "category": "Galerie Sud, Paris",
+           "year": "",
+           "link_url": "#"
+          }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "cv-se-26",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#211f1b"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "cv-ro-25",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "cv-co-24",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "cv-mixer-23",
+        "type": "mixer",
+        "settings": {
+         "eyebrow": "On the palette",
+         "heading": "Mix a colour",
+         "intro": "Painting is mostly mixing. Tap two or three pigments from my working palette and watch the colour settle — the same muddy, hopeful guesswork I do every morning.",
+         "max": 3,
+         "empty_label": "Pick pigments to mix",
+         "zone_accent": "#e0b13a",
+         "zone_on": "#100e0c",
+         "card_bg": "#272320",
+         "card_border": "rgba(240,235,225,.12)",
+         "align": "left",
+         "items": [
+          {
+           "name": "Cadmium Red",
+           "color": "#c9352a"
+          },
+          {
+           "name": "Yellow Ochre",
+           "color": "#e0b13a"
+          },
+          {
+           "name": "Ultramarine",
+           "color": "#2f5fa8"
+          },
+          {
+           "name": "Viridian",
+           "color": "#3c6b4a"
+          },
+          {
+           "name": "Burnt Umber",
+           "color": "#7a4a2b"
+          },
+          {
+           "name": "Titanium White",
+           "color": "#efe9dc"
+          }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "cv-se-30",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#1c1a17"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "cv-ro-29",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "cv-co-28",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "cv-cta-banner-27",
+        "type": "cta-banner",
+        "settings": {
+         "headline": "Acquire or ",
+         "headline_accent": "enquire",
+         "headline_accent_italic": true,
+         "subtitle": "For available works, commissions or press, get in touch with the studio or Atelier 9.",
+         "cta_text": "Enquire about a work",
+         "cta_url": "#contact",
+         "cta2_text": "View the series",
+         "cta2_url": "#works",
+         "cta2_bg": "transparent",
+         "cta2_color": "#f0ebe1",
+         "cta2_border": "rgba(224,177,58,.42)",
+         "bg": {
+          "type": "solid",
+          "color": "#100e0c"
+         },
+         "text_color": "#f0ebe1",
+         "accent_color": "#e0b13a",
+         "subtitle_color": "#b3aa9b",
+         "cta_bg": "#e0b13a",
+         "cta_color": "#100e0c",
+         "cta_radius": {
+          "tl": 2,
+          "tr": 2,
+          "br": 2,
+          "bl": 2,
+          "linked": true
+         },
+         "cta_size": 13,
+         "headline_font_family": "serif",
+         "headline_size": 52,
+         "headline_weight": "400",
+         "subtitle_size": 17,
+         "layout": "stack",
+         "vertical_align": "center",
+         "banner_radius": {
+          "tl": 6,
+          "tr": 6,
+          "br": 6,
+          "bl": 6,
+          "linked": true
+         },
+         "banner_padding": 80,
+         "border": {
+          "top": {
+           "width": 1,
+           "style": "solid",
+           "color": "rgba(224,177,58,.42)"
+          },
+          "right": {
+           "width": 1,
+           "style": "solid",
+           "color": "rgba(224,177,58,.42)"
+          },
+          "bottom": {
+           "width": 1,
+           "style": "solid",
+           "color": "rgba(224,177,58,.42)"
+          },
+          "left": {
+           "width": 1,
+           "style": "solid",
+           "color": "rgba(224,177,58,.42)"
+          }
+         }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

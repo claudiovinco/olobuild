@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lùx — alta gioielleria · tema dimostrativo OLObuild</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300&family=Manrope:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared/olo-demo.css">
+<style>
+:root{
+  --bg:#0B0A08; --bg-2:#13110D; --bg-3:#1C1914; --fg:#EFE8D8; --fg-2:#9A9384; --fg-3:#5E5848;
+  --gold:#C9A75C; --gold-2:#E4CA8A; --gold-d:#A6863F; --champ:#EAD9B0; --line:rgba(239,232,216,.13);
+  --tile-accent:#C9A75C; --tile-btn:#000;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:'Manrope',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+a{color:inherit;text-decoration:none;}
+.serif{font-family:'Cormorant Garamond',Georgia,serif;font-weight:300;}
+.mono{font-family:'JetBrains Mono',monospace;}
+.wrap{max-width:1180px;margin:0 auto;padding:0 46px;}
+.kick{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);font-weight:500;display:inline-flex;align-items:center;gap:11px;}
+.kick::before{content:"";width:24px;height:1px;background:var(--gold);}
+.gold-grad{background:linear-gradient(100deg,var(--gold-d),var(--gold-2),var(--gold-d));-webkit-background-clip:text;background-clip:text;color:transparent;}
+
+/* nav */
+.nav{position:fixed;inset:0 0 auto 0;z-index:60;display:flex;align-items:center;gap:26px;padding:24px 46px;transition:all .35s;border-bottom:1px solid transparent;}
+.nav.solid{background:rgba(11,10,8,.86);backdrop-filter:blur(16px);border-color:var(--line);padding:15px 46px;}
+.brand{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:30px;letter-spacing:.28em;padding-left:.28em;}
+.nav-links{margin-left:auto;display:flex;gap:30px;font-size:13px;font-weight:500;letter-spacing:.02em;}
+.nav-links a{opacity:.8;}.nav-links a:hover{opacity:1;color:var(--gold-2);}
+.nav-cta{border:1px solid var(--gold);color:var(--gold-2);padding:10px 20px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;transition:all .2s;}
+.nav-cta:hover{background:var(--gold);color:var(--bg);}
+@media(max-width:880px){.nav-links{display:none;}}
+
+/* hero — spotlight */
+#hero{height:100vh;position:relative;overflow:hidden;background:#070605;display:flex;align-items:center;justify-content:center;text-align:center;}
+.hero-img{position:absolute;inset:0;z-index:0;}
+.hero-img image-slot{width:100%;height:100%;display:block;}
+.spotlight{position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:radial-gradient(circle 260px at var(--mx,50%) var(--my,42%),rgba(8,7,5,0) 0%,rgba(8,7,5,.55) 42%,rgba(8,7,5,.95) 75%);
+  transition:background .12s ease;}
+.hero-in{position:relative;z-index:2;pointer-events:none;}
+.hero-ey{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.34em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;}
+.hero-h{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(54px,10vw,160px);line-height:.92;margin:0;letter-spacing:.02em;}
+.hero-h em{font-style:italic;}
+.hero-sub{font-size:16px;letter-spacing:.04em;color:rgba(239,232,216,.78);margin:24px auto 0;max-width:36ch;line-height:1.6;}
+.hero-hint{position:absolute;bottom:6vh;left:50%;transform:translateX(-50%);z-index:2;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:rgba(239,232,216,.5);}
+
+/* statement */
+#stmt{padding:120px 0;text-align:center;}
+#stmt p{font-family:'Cormorant Garamond',serif;font-weight:300;font-style:italic;font-size:clamp(26px,4vw,52px);line-height:1.3;max-width:24ch;margin:22px auto 0;}
+#stmt p em{font-style:normal;}
+
+/* collection */
+#coll{padding:110px 0;}
+.coll-h{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:46px;flex-wrap:wrap;gap:18px;}
+.coll-h h2{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(38px,5vw,72px);margin:14px 0 0;letter-spacing:.01em;}
+.jewels{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+.jewel{position:relative;overflow:hidden;background:var(--bg-2);border:1px solid var(--line);cursor:pointer;}
+.jewel .ph{position:relative;aspect-ratio:4/5;overflow:hidden;}
+.jewel .ph image-slot{width:100%;height:100%;display:block;transition:transform .7s;}
+.jewel:hover .ph image-slot{transform:scale(1.05);}
+/* shimmer sweep */
+.jewel .ph::after{content:"";position:absolute;top:-120%;left:-60%;width:50%;height:340%;
+  background:linear-gradient(100deg,transparent,rgba(234,217,176,.45),transparent);transform:rotate(20deg);transition:left .7s ease;}
+.jewel:hover .ph::after{left:160%;}
+.jewel .jx{padding:22px;}
+.jewel .jc{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);}
+.jewel h3{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:25px;margin:9px 0 7px;}
+.jewel .jp{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--fg-2);}
+@media(max-width:880px){.jewels{grid-template-columns:1fr 1fr;}}
+@media(max-width:560px){.jewels{grid-template-columns:1fr;}}
+
+/* craft split */
+#craft{padding:110px 0;background:var(--bg-2);}
+.craft{display:grid;grid-template-columns:1fr 1.05fr;gap:70px;align-items:center;}
+.craft .ph image-slot{width:100%;aspect-ratio:4/5;display:block;}
+.craft h2{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(34px,4.4vw,58px);line-height:1.05;margin:16px 0 20px;}
+.craft h2 em{font-style:italic;}
+.craft p{font-size:16px;line-height:1.74;color:var(--fg-2);margin:0 0 18px;}
+.craft p strong{color:var(--fg);font-weight:600;}
+@media(max-width:880px){.craft{grid-template-columns:1fr;gap:36px;}}
+
+/* stats */
+.stats{padding:90px 0;}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:30px;}
+.st{text-align:center;border-top:1px solid var(--gold);padding-top:18px;}
+.st .num{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(48px,6vw,86px);line-height:1;}
+.st .num em{font-style:normal;font-size:.5em;color:var(--gold);}
+.st .lbl{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--fg-2);margin-top:10px;}
+@media(max-width:760px){.stat-grid{grid-template-columns:1fr 1fr;gap:34px 20px;}}
+
+/* atelier cta */
+#atelier{padding:0 0 120px;}
+.at-card{border:1px solid var(--gold);border-radius:0;padding:70px 56px;text-align:center;position:relative;background:
+  radial-gradient(120% 100% at 50% 0%,rgba(201,167,92,.1),transparent 60%);}
+.at-card h2{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(34px,5vw,64px);margin:14px 0 16px;}
+.at-card h2 em{font-style:italic;}
+.at-card p{font-size:16px;color:var(--fg-2);max-width:42ch;margin:0 auto 30px;line-height:1.6;}
+.btn{display:inline-flex;align-items:center;gap:9px;background:var(--gold);color:var(--bg);border:none;cursor:pointer;padding:15px 30px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;transition:background .2s;}
+.btn:hover{background:var(--gold-2);}
+
+footer{border-top:1px solid var(--line);padding:56px 0 34px;}
+.f-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px;}
+.f-row .fm{font-family:'Cormorant Garamond',serif;font-size:28px;letter-spacing:.24em;padding-left:.24em;}
+.olo-credit{color:var(--fg-2);}
+.f-meta{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--fg-3);}
+.f-tiles{font-family:'JetBrains Mono',monospace;font-size:10.5px;line-height:1.9;color:var(--fg-3);margin-top:22px;max-width:92ch;}
+.f-tiles b{color:var(--fg-2);}
+</style>
+</head>
+<body>
+
+<nav class="nav" id="nav" data-solid-at="70vh">
+  <div class="brand">LÙX</div>
+  <div class="nav-links"><a href="#coll">Collezioni</a><a href="#craft">Atelier</a><a href="#atelier">Su misura</a></div>
+  <a class="nav-cta" href="#atelier">Prendi un appuntamento</a>
+</nav>
+
+<section id="hero" data-tile="Hero · SpotlightFX">
+  <div class="hero-img" data-tile="Image"><image-slot id="lx-hero" placeholder="gioiello su fondo scuro — foto"></image-slot></div>
+  <div class="spotlight" id="spot"></div>
+  <div class="hero-in"><div class="wrap">
+    <div class="hero-ey">Alta gioielleria · dal 1948</div>
+    <h1 class="hero-h serif">La luce, <em>scolpita.</em></h1>
+    <p class="hero-sub">Pezzi unici creati a mano nel nostro atelier. Diamanti selezionati, oro etico, dettagli senza tempo.</p>
+  </div></div>
+  <div class="hero-hint">✦ muovi il cursore per illuminare</div>
+</section>
+
+<section id="stmt" data-tile="AnimatedHeading">
+  <div class="wrap">
+    <span class="kick" style="justify-content:center">La maison</span>
+    <p class="serif reveal">Ogni gioiello nasce <em class="gold-grad">una sola volta</em>, per una sola persona.</p>
+  </div>
+</section>
+
+<section id="coll" data-tile="ProGallery · ShimmerFX">
+  <div class="wrap">
+    <div class="coll-h"><div><span class="kick">Le collezioni</span><h2 class="serif">Pezzi in luce</h2></div><span class="mono" style="font-size:11px;color:var(--fg-2);letter-spacing:.1em">passa sopra · riflesso</span></div>
+    <div class="jewels reveal-stagger">
+      <div class="jewel"><div class="ph"><image-slot id="lx-1" placeholder="anello solitario"></image-slot></div><div class="jx"><div class="jc">Anelli · Solitaire</div><h3 class="serif">Goccia di Luna</h3><div class="jp">oro bianco · diamante 1.2ct</div></div></div>
+      <div class="jewel"><div class="ph"><image-slot id="lx-2" placeholder="collana"></image-slot></div><div class="jx"><div class="jc">Collane · Riviera</div><h3 class="serif">Cascata</h3><div class="jp">oro giallo · diamanti taglio brillante</div></div></div>
+      <div class="jewel"><div class="ph"><image-slot id="lx-3" placeholder="orecchini"></image-slot></div><div class="jx"><div class="jc">Orecchini · Pendant</div><h3 class="serif">Rugiada</h3><div class="jp">oro rosa · zaffiri e diamanti</div></div></div>
+      <div class="jewel"><div class="ph"><image-slot id="lx-4" placeholder="bracciale"></image-slot></div><div class="jx"><div class="jc">Bracciali · Tennis</div><h3 class="serif">Filo di Luce</h3><div class="jp">platino · 3.4ct totali</div></div></div>
+      <div class="jewel"><div class="ph"><image-slot id="lx-5" placeholder="anello fede"></image-slot></div><div class="jx"><div class="jc">Fedi · Nuziali</div><h3 class="serif">Per Sempre</h3><div class="jp">oro etico · incisione a mano</div></div></div>
+      <div class="jewel"><div class="ph"><image-slot id="lx-6" placeholder="spilla"></image-slot></div><div class="jx"><div class="jc">Alta gioielleria</div><h3 class="serif">Fiore di Brina</h3><div class="jp">pezzo unico · smeraldo colombiano</div></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="craft" data-tile="Section · inner-columns">
+  <div class="wrap craft">
+    <div class="ph reveal" data-tile="Image"><image-slot id="lx-craft" placeholder="orafo al banco"></image-slot></div>
+    <div class="reveal">
+      <span class="kick">Il savoir-faire</span>
+      <h2 class="serif">Mani che <em>disegnano</em> la luce.</h2>
+      <p>Ogni creazione passa dalle mani di un solo maestro orafo, dal disegno a matita alla lucidatura finale. Settimane di lavoro per un solo pezzo.</p>
+      <p>Usiamo esclusivamente <strong>oro etico certificato</strong> e pietre tracciabili, incastonate a mano secondo tecniche tramandate da tre generazioni.</p>
+      <p>Il risultato non è un oggetto: è un'eredità.</p>
+    </div>
+  </div>
+</section>
+
+<section class="stats" data-tile="Counter">
+  <div class="wrap">
+    <div class="stat-grid reveal-stagger">
+      <div class="st"><div class="num"><span class="count" data-count="76">0</span></div><div class="lbl">Anni di maison</div></div>
+      <div class="st"><div class="num"><span class="count" data-count="100">0</span><em>%</em></div><div class="lbl">Oro etico certificato</div></div>
+      <div class="st"><div class="num"><span class="count" data-count="3">0</span></div><div class="lbl">Generazioni di orafi</div></div>
+      <div class="st"><div class="num"><span class="count" data-count="2400" data-suffix="+">0</span></div><div class="lbl">Pezzi unici creati</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="atelier" data-tile="AnimatedHeading">
+  <div class="wrap">
+    <div class="at-card">
+      <span class="kick" style="justify-content:center">Su misura</span>
+      <h2 class="serif">Creiamo il <em>vostro</em> gioiello.</h2>
+      <p>Prendete un appuntamento privato nel nostro atelier: progetteremo insieme un pezzo unico, dal primo schizzo all'incisione.</p>
+      <a class="btn" href="#">Richiedi un incontro →</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="f-row">
+      <div class="fm serif">LÙX</div>
+      <div class="olo-credit"><span class="olo-mk"><b></b><i></i><b></b></span>Costruito con <b class="hl">OLObuild</b> — zero codice</div>
+    </div>
+    <div class="f-tiles"><b>Tile usati (9):</b> Hero · SpotlightFX (cursore) · AnimatedHeading · ProGallery + ShimmerFX · Section/inner-columns · Counter · Image · DarkMode · ShapeDivider — nessuna prenotazione.</div>
+    <div class="f-row" style="margin-top:22px"><span class="f-meta">© 2026 Lùx alta gioielleria — tema dimostrativo</span><span class="f-meta">OLOtheme · demo · 43 — Gioielleria</span></div>
+  </div>
+</footer>
+
+<button id="tiletoggle"><span class="sq"></span><span class="t">Mostra tile</span></button>
+
+<script src="image-slot.js"></script>
+<script src="shared/olo-demo.js"></script>
+<script>
+/* spotlight follows cursor */
+(function(){
+  var hero=document.getElementById('hero'),spot=document.getElementById('spot');
+  hero.addEventListener('pointermove',function(e){
+    var r=hero.getBoundingClientRect();
+    spot.style.setProperty('--mx',((e.clientX-r.left)/r.width*100)+'%');
+    spot.style.setProperty('--my',((e.clientY-r.top)/r.height*100)+'%');
+  });
+  hero.addEventListener('pointerleave',function(){spot.style.setProperty('--mx','50%');spot.style.setProperty('--my','42%');});
+})();
+</script>
+</body>
+</html>

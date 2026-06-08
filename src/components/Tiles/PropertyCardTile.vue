@@ -23,11 +23,12 @@
 <script setup>
 import { computed } from 'vue';
 import { t } from '@/i18n';
+import { SHADOW } from '@/composables/oloTileDefaults';
 const props = defineProps({ settings: { type: Object, default: () => ({}) } });
 const defaults = { max_width: 380, border_radius: 12, shadow: 'md', padding: 20, title_size: 18, accent_color: '', btn_radius: 8 };
 const s = computed(() => ({ ...defaults, ...props.settings }));
 const accent = computed(() => s.value.accent_color || 'var(--olo-color-primary, #e1474f)');
-const shadowMap = { none:'none', sm:'0 1px 3px rgba(0,0,0,0.1)', md:'0 4px 12px rgba(0,0,0,0.1)', lg:'0 8px 24px rgba(0,0,0,0.15)' };
+const shadowMap = SHADOW;
 const cardStyle = computed(() => ({ display:'block', textDecoration:'none', maxWidth: s.value.max_width+'px', background:'var(--olo-color-surface, #fff)', borderRadius: s.value.border_radius+'px', boxShadow: shadowMap[s.value.shadow]||shadowMap.md, overflow:'hidden', border:'1px solid var(--olo-color-border, #e5e7eb)' }));
 const imageStyle = computed(() => ({ position:'relative', aspectRatio:'3 / 2', background:'var(--olo-color-surface-alt, #f6f7f9)', borderRadius: s.value.border_radius+'px '+s.value.border_radius+'px 0 0', overflow:'hidden' }));
 const badgeStyle = computed(() => ({ position:'absolute', top:'12px', left:'12px', background: accent.value, color:'var(--olo-color-primary-contrast, #fff)', padding:'4px 12px', borderRadius:'6px', fontSize:'11px', fontWeight:'700', textTransform:'uppercase' }));

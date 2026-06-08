@@ -1,0 +1,1070 @@
+[
+ {
+  "id": "st-se-4",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#14241c"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "st-ro-3",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "st-co-2",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "st-hero-split-1",
+        "type": "hero-split",
+        "settings": {
+         "eyebrow_text": "Independent wealth management",
+         "eyebrow_dot_color": "#c9a44a",
+         "eyebrow_color": "#c9a44a",
+         "headline_lines": [
+          {
+           "text": "Wealth, managed",
+           "color": "#eef2e9",
+           "italic": false
+          },
+          {
+           "text": "with patience.",
+           "color": "#c9a44a",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 72,
+         "headline_line_height": 1.1,
+         "headline_font_weight": "500",
+         "headline_align": "left",
+         "subhead": "For three decades we’ve looked after the families and founders who’d rather think in decades than quarters. Independent, unhurried, and quietly thorough.",
+         "subhead_color": "#aebcae",
+         "subhead_size": 18,
+         "subhead_italic": false,
+         "subhead_max_width": 520,
+         "cta1_text": "Arrange a conversation",
+         "cta1_url": "#contact",
+         "cta1_bg": "#c9a44a",
+         "cta1_color": "#0c1812",
+         "cta1_size": 13,
+         "cta1_radius": {
+          "tl": 4,
+          "tr": 4,
+          "br": 4,
+          "bl": 4,
+          "linked": true
+         },
+         "cta1_radius_hover": {
+          "tl": 4,
+          "tr": 4,
+          "br": 4,
+          "bl": 4,
+          "linked": true
+         },
+         "cta2_text": "Our services",
+         "cta2_url": "#services",
+         "cta2_bg": "transparent",
+         "cta2_color": "#eef2e9",
+         "cta2_border": "rgba(201,164,74,.42)",
+         "cta2_size": 13,
+         "cta2_radius": {
+          "tl": 4,
+          "tr": 4,
+          "br": 4,
+          "bl": 4,
+          "linked": true
+         },
+         "cta2_radius_hover": {
+          "tl": 4,
+          "tr": 4,
+          "br": 4,
+          "bl": 4,
+          "linked": true
+         },
+         "stats": [],
+         "showcase_enabled": true,
+         "showcase_bg": {
+          "type": "solid",
+          "color": "#1d3328"
+         },
+         "showcase_padding": 28,
+         "showcase_radius": {
+          "tl": 14,
+          "tr": 14,
+          "br": 14,
+          "bl": 14,
+          "linked": true
+         },
+         "showcase_radius_hover": {
+          "tl": 14,
+          "tr": 14,
+          "br": 14,
+          "bl": 14,
+          "linked": true
+         },
+         "showcase_badge_text": "THE FIRM, IN FIGURES",
+         "showcase_badge_dot": "#c9a44a",
+         "showcase_badge_bg": "#0c1812",
+         "showcase_badge_color": "#eef2e9",
+         "showcase_items": [
+          {
+           "number": "Assets under care",
+           "text": "£4.2bn",
+           "italic": false,
+           "text_color": "#c9a44a",
+           "bg": {
+            "type": "solid",
+            "color": "#172a20"
+           }
+          },
+          {
+           "number": "Client families",
+           "text": "320",
+           "italic": false,
+           "text_color": "#eef2e9",
+           "bg": {
+            "type": "solid",
+            "color": "#172a20"
+           }
+          },
+          {
+           "number": "Avg. relationship",
+           "text": "14 yrs",
+           "italic": false,
+           "text_color": "#eef2e9",
+           "bg": {
+            "type": "solid",
+            "color": "#172a20"
+           }
+          },
+          {
+           "number": "Independent since",
+           "text": "1994",
+           "italic": false,
+           "text_color": "#eef2e9",
+           "bg": {
+            "type": "solid",
+            "color": "#172a20"
+           }
+          }
+         ],
+         "showcase_card_radius": {
+          "tl": 11,
+          "tr": 11,
+          "br": 11,
+          "bl": 11,
+          "linked": true
+         },
+         "showcase_card_radius_hover": {
+          "tl": 11,
+          "tr": 11,
+          "br": 11,
+          "bl": 11,
+          "linked": true
+         },
+         "showcase_card_shadow": "none",
+         "showcase_caption_left": "STERLING",
+         "showcase_caption_right": "EST. 1994",
+         "showcase_hover_effect": "none",
+         "split_ratio": "1.25fr .75fr",
+         "gap": 52,
+         "min_height": 0,
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         },
+         "subhead_align": "left",
+         "cta1_target": "_self",
+         "cta1_bg_hover": "#d8b766",
+         "cta1_color_hover": "#0c1812",
+         "cta2_target": "_self",
+         "cta2_bg_hover": "transparent",
+         "cta2_color_hover": "#c9a44a"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "st-se-8",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "small"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#172a20"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "st-ro-7",
+    "type": "row",
+    "settings": {
+     "gap": 16
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "st-co-6",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "st-trust-strip-5",
+        "type": "trust-strip",
+        "settings": {
+         "items": [
+          {
+           "text": "CAVENDISH"
+          },
+          {
+           "text": "NORTHGATE"
+          },
+          {
+           "text": "AILSWORTH"
+          },
+          {
+           "text": "THORNBURY"
+          },
+          {
+           "text": "BEXCELL & SONS"
+          }
+         ],
+         "variant": "pill",
+         "separator_char": "",
+         "align": "center",
+         "flow": "wrap",
+         "gap": 16,
+         "font_family": "sans-serif",
+         "text_color": "#74866f",
+         "text_size": 13,
+         "pill_bg": "rgba(238,242,233,.06)",
+         "pill_border": "rgba(238,242,233,.13)",
+         "pill_text_color": "#74866f"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "st-se-15",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#14241c"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "st-ro-11",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "st-co-10",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "st-section-header-9",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "What we do",
+         "eyebrow_color": "#c9a44a",
+         "eyebrow_dot_color": "#c9a44a",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "Looking after the",
+           "color": "#eef2e9",
+           "italic": false
+          },
+          {
+           "text": "whole picture",
+           "color": "#c9a44a",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 48,
+         "headline_font_weight": "500",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": false,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "st-ro-14",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "st-co-13",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "st-info-cards-12",
+        "type": "info-cards",
+        "settings": {
+         "container_bg": {
+          "type": "solid",
+          "color": "transparent"
+         },
+         "container_padding": 0,
+         "container_gap": 16,
+         "columns": 3,
+         "items_gap": 16,
+         "card_bg": {
+          "type": "solid",
+          "color": "#1d3328"
+         },
+         "card_color": "#74866f",
+         "card_radius": {
+          "tl": 12,
+          "tr": 12,
+          "br": 12,
+          "bl": 12,
+          "linked": true
+         },
+         "card_padding": 30,
+         "show_icon": true,
+         "show_counter": false,
+         "show_arrow": false,
+         "show_footer": false,
+         "show_media": false,
+         "icon_color": "#c9a44a",
+         "icon_bg_color": "rgba(201,164,74,.14)",
+         "title_color": "#eef2e9",
+         "title_font_family": "serif",
+         "title_size": 24,
+         "title_weight": "500",
+         "title_italic": false,
+         "description_size": 14.5,
+         "items": [
+          {
+           "icon": "trending-up",
+           "title": "Investment",
+           "description": "Discretionary portfolios built around your goals, risk and time horizon — not a model off the shelf."
+          },
+          {
+           "icon": "layers",
+           "title": "Planning",
+           "description": "Cashflow, tax and retirement modelled together, so every decision is made with the full view."
+          },
+          {
+           "icon": "shield-check",
+           "title": "Legacy",
+           "description": "Estate, succession and the next generation — structured so what you build lasts beyond you."
+          }
+         ],
+         "card_hover_effect": "lift"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "st-se-22",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#172a20"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "st-ro-18",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "st-co-17",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "st-section-header-16",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "Our approach",
+         "eyebrow_color": "#c9a44a",
+         "eyebrow_dot_color": "#c9a44a",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "Considered,",
+           "color": "#eef2e9",
+           "italic": false
+          },
+          {
+           "text": "every step",
+           "color": "#c9a44a",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 48,
+         "headline_font_weight": "500",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": false,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "st-ro-21",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "st-co-20",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "st-process-steps-19",
+        "type": "process-steps",
+        "settings": {
+         "columns": 4,
+         "gap": 16,
+         "align": "left",
+         "auto_number": false,
+         "item_gap": 10,
+         "number_style": "plain",
+         "number_color": "#c9a44a",
+         "number_size": 40,
+         "number_font": "serif",
+         "number_weight": "500",
+         "title_color": "#eef2e9",
+         "title_size": 21,
+         "title_font": "serif",
+         "title_weight": "600",
+         "desc_color": "#74866f",
+         "desc_size": 14,
+         "card_bg": "",
+         "card_border": "",
+         "card_padding": 0,
+         "items": [
+          {
+           "number": "01",
+           "title": "Listen",
+           "description": "We start with your life, not your balance sheet. What's it all for?"
+          },
+          {
+           "number": "02",
+           "title": "Plan",
+           "description": "A clear strategy, modelled and stress-tested against the things that worry you."
+          },
+          {
+           "number": "03",
+           "title": "Invest",
+           "description": "Patient, diversified, low-cost where it counts — and always explained."
+          },
+          {
+           "number": "04",
+           "title": "Review",
+           "description": "We meet regularly, adjust as life changes, and never go quiet."
+          }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "st-se-35",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#14241c"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "st-ro-25",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "st-co-24",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "st-section-header-23",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "Our people",
+         "eyebrow_color": "#c9a44a",
+         "eyebrow_dot_color": "#c9a44a",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "The same faces,",
+           "color": "#eef2e9",
+           "italic": false
+          },
+          {
+           "text": "year after year",
+           "color": "#c9a44a",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 48,
+         "headline_font_weight": "500",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": false,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "st-ro-34",
+    "type": "row",
+    "settings": {
+     "gap": 16
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "st-co-27",
+      "type": "column",
+      "settings": {
+       "width": "1-4"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "st-team-26",
+        "type": "team",
+        "settings": {
+         "photo": "",
+         "name": "Eleanor Vance",
+         "role": "Managing partner",
+         "bio": "",
+         "link_url": "",
+         "link_text": "",
+         "photo_size": "120",
+         "photo_shape": "circle",
+         "photo_border_width": "0",
+         "photo_shadow": "none",
+         "photo_gap": "16",
+         "info_bg_color": "transparent",
+         "info_text_color": "#eef2e9",
+         "role_color": "#c9a44a",
+         "info_align": "center",
+         "name_size": "21",
+         "name_weight": "600",
+         "role_size": "13",
+         "bg_color": "transparent",
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         },
+         "border_radius": "0"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "st-co-29",
+      "type": "column",
+      "settings": {
+       "width": "1-4"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "st-team-28",
+        "type": "team",
+        "settings": {
+         "photo": "",
+         "name": "James Okonkwo",
+         "role": "Head of planning",
+         "bio": "",
+         "link_url": "",
+         "link_text": "",
+         "photo_size": "120",
+         "photo_shape": "circle",
+         "photo_border_width": "0",
+         "photo_shadow": "none",
+         "photo_gap": "16",
+         "info_bg_color": "transparent",
+         "info_text_color": "#eef2e9",
+         "role_color": "#c9a44a",
+         "info_align": "center",
+         "name_size": "21",
+         "name_weight": "600",
+         "role_size": "13",
+         "bg_color": "transparent",
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         },
+         "border_radius": "0"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "st-co-31",
+      "type": "column",
+      "settings": {
+       "width": "1-4"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "st-team-30",
+        "type": "team",
+        "settings": {
+         "photo": "",
+         "name": "Priya Anand",
+         "role": "Investment director",
+         "bio": "",
+         "link_url": "",
+         "link_text": "",
+         "photo_size": "120",
+         "photo_shape": "circle",
+         "photo_border_width": "0",
+         "photo_shadow": "none",
+         "photo_gap": "16",
+         "info_bg_color": "transparent",
+         "info_text_color": "#eef2e9",
+         "role_color": "#c9a44a",
+         "info_align": "center",
+         "name_size": "21",
+         "name_weight": "600",
+         "role_size": "13",
+         "bg_color": "transparent",
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         },
+         "border_radius": "0"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "st-co-33",
+      "type": "column",
+      "settings": {
+       "width": "1-4"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "st-team-32",
+        "type": "team",
+        "settings": {
+         "photo": "",
+         "name": "Hugo Bexcell",
+         "role": "Estates & legacy",
+         "bio": "",
+         "link_url": "",
+         "link_text": "",
+         "photo_size": "120",
+         "photo_shape": "circle",
+         "photo_border_width": "0",
+         "photo_shadow": "none",
+         "photo_gap": "16",
+         "info_bg_color": "transparent",
+         "info_text_color": "#eef2e9",
+         "role_color": "#c9a44a",
+         "info_align": "center",
+         "name_size": "21",
+         "name_weight": "600",
+         "role_size": "13",
+         "bg_color": "transparent",
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         },
+         "border_radius": "0"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "st-se-39",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#172a20"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "st-ro-38",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "st-co-37",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "st-testimonial-36",
+        "type": "testimonial",
+        "settings": {
+         "quote": "“They talked me out of two things I’d have regretted, and into one I’m grateful for. That’s the whole point of an adviser.”",
+         "author_name": "Client family",
+         "author_role": "with Sterling since 2009",
+         "rating": "0",
+         "layout": "single",
+         "show_line": false,
+         "bg_color": "transparent",
+         "text_color": "#eef2e9",
+         "border_radius": "0",
+         "avatar": ""
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "st-se-43",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#14241c"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "st-ro-42",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "st-co-41",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "st-projector-40",
+        "type": "projector",
+        "settings": {
+         "eyebrow": "A quiet illustration",
+         "heading": "Patience <em>compounds</em>",
+         "intro": "Set what you’d put away each year. This is what it could become over twenty years at a steady 6% — the whole case for starting now, and then leaving it well alone.",
+         "min": "2000",
+         "max": "50000",
+         "step": "1000",
+         "value": "12000",
+         "rate": "0.06",
+         "years": "20",
+         "currency": "£",
+         "input_label": "Invested each year",
+         "out_caption": "Projected after 20 years",
+         "note": "Illustrative only — 6% p.a., contributions at year-end. Capital at risk; past performance is not a guide to the future.",
+         "show_contrib": true,
+         "zone_accent": "#c9a44a",
+         "align": "left",
+         "tile_padding": {
+          "top": 52,
+          "right": 52,
+          "bottom": 52,
+          "left": 52
+         },
+         "border_radius": "16",
+         "shadow": "sm"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "st-se-47",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#14241c"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "st-ro-46",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "st-co-45",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "st-cta-banner-44",
+        "type": "cta-banner",
+        "settings": {
+         "headline": "Let’s talk about",
+         "headline_accent": "what’s next",
+         "headline_accent_italic": true,
+         "subtitle": "An initial conversation is complimentary and entirely without obligation. We’ll tell you honestly if we’re the right fit.",
+         "cta_text": "Arrange a call",
+         "cta_url": "#contact",
+         "cta2_text": "Our services",
+         "cta2_url": "#services",
+         "cta2_bg": "transparent",
+         "cta2_color": "#eef2e9",
+         "cta2_border": "rgba(201,164,74,.42)",
+         "bg": {
+          "type": "solid",
+          "color": "#0c1812"
+         },
+         "text_color": "#eef2e9",
+         "accent_color": "#c9a44a",
+         "subtitle_color": "#aebcae",
+         "cta_bg": "#c9a44a",
+         "cta_color": "#0c1812",
+         "cta_radius": {
+          "tl": 4,
+          "tr": 4,
+          "br": 4,
+          "bl": 4,
+          "linked": true
+         },
+         "cta_size": 13,
+         "headline_font_family": "serif",
+         "headline_size": 52,
+         "headline_weight": "500",
+         "subtitle_size": 17,
+         "layout": "stack",
+         "vertical_align": "center",
+         "banner_radius": {
+          "tl": 18,
+          "tr": 18,
+          "br": 18,
+          "bl": 18,
+          "linked": true
+         },
+         "banner_padding": 80
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

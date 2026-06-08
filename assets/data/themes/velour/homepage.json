@@ -1,0 +1,1116 @@
+[
+ {
+  "id": "ve-se-4",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#241820"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ve-ro-3",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ve-co-2",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ve-hero-split-1",
+        "type": "hero-split",
+        "settings": {
+         "eyebrow_text": "Hair & beauty salon",
+         "eyebrow_dot_color": "#cf8e6f",
+         "eyebrow_color": "#cf8e6f",
+         "headline_lines": [
+          {
+           "text": "Leave feeling",
+           "color": "#ffffff",
+           "italic": false
+          },
+          {
+           "text": "like you.",
+           "color": "#cf8e6f",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 80,
+         "headline_line_height": 1.08,
+         "headline_font_weight": "400",
+         "headline_align": "left",
+         "subhead": "Colour, cuts and care by senior stylists who actually listen — in a warm, unhurried space where you're never rushed out the door.",
+         "subhead_color": "#f2e8e6",
+         "subhead_size": 17,
+         "subhead_italic": false,
+         "subhead_max_width": 400,
+         "cta1_text": "Book your chair",
+         "cta1_url": "#book",
+         "cta1_bg": "#cf8e6f",
+         "cta1_color": "#170f14",
+         "cta1_size": 12,
+         "cta1_radius": {
+          "tl": 999,
+          "tr": 999,
+          "br": 999,
+          "bl": 999,
+          "linked": true
+         },
+         "cta1_radius_hover": {
+          "tl": 999,
+          "tr": 999,
+          "br": 999,
+          "bl": 999,
+          "linked": true
+         },
+         "cta2_text": "View services",
+         "cta2_url": "#services",
+         "cta2_bg": "transparent",
+         "cta2_color": "#f2e8e6",
+         "cta2_border": "rgba(207,142,111,.42)",
+         "cta2_size": 12,
+         "cta2_radius": {
+          "tl": 999,
+          "tr": 999,
+          "br": 999,
+          "bl": 999,
+          "linked": true
+         },
+         "cta2_radius_hover": {
+          "tl": 999,
+          "tr": 999,
+          "br": 999,
+          "bl": 999,
+          "linked": true
+         },
+         "stats": [],
+         "showcase_enabled": false,
+         "showcase_bg": {
+          "type": "solid",
+          "color": "#352630"
+         },
+         "showcase_padding": 32,
+         "showcase_radius": {
+          "tl": 20,
+          "tr": 20,
+          "br": 20,
+          "bl": 20,
+          "linked": true
+         },
+         "showcase_radius_hover": {
+          "tl": 20,
+          "tr": 20,
+          "br": 20,
+          "bl": 20,
+          "linked": true
+         },
+         "showcase_badge_text": "VÉLOUR SALON",
+         "showcase_badge_dot": "#cf8e6f",
+         "showcase_badge_bg": "#170f14",
+         "showcase_badge_color": "#f2e8e6",
+         "showcase_items": [
+          {
+           "number": "Senior stylists",
+           "text": "4",
+           "italic": false,
+           "text_color": "#f2e8e6",
+           "bg": {
+            "type": "solid",
+            "color": "#2a1d26"
+           }
+          },
+          {
+           "number": "Years open",
+           "text": "9",
+           "italic": false,
+           "text_color": "#cf8e6f",
+           "bg": {
+            "type": "solid",
+            "color": "#2a1d26"
+           }
+          },
+          {
+           "number": "Open",
+           "text": "Tue – Sat",
+           "italic": false,
+           "text_color": "#f2e8e6",
+           "bg": {
+            "type": "solid",
+            "color": "#2a1d26"
+           }
+          },
+          {
+           "number": "New client welcome",
+           "text": "Consultation included",
+           "italic": false,
+           "text_color": "#f2e8e6",
+           "bg": {
+            "type": "solid",
+            "color": "#2a1d26"
+           }
+          }
+         ],
+         "showcase_card_radius": {
+          "tl": 12,
+          "tr": 12,
+          "br": 12,
+          "bl": 12,
+          "linked": true
+         },
+         "showcase_card_radius_hover": {
+          "tl": 12,
+          "tr": 12,
+          "br": 12,
+          "bl": 12,
+          "linked": true
+         },
+         "showcase_card_shadow": "none",
+         "showcase_caption_left": "EST. 2017",
+         "showcase_caption_right": "BY APPOINTMENT",
+         "showcase_hover_effect": "none",
+         "split_ratio": "1.25fr .75fr",
+         "gap": 52,
+         "min_height": 0,
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         },
+         "subhead_align": "left"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ve-se-13",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#241820"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ve-ro-7",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ve-co-6",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ve-section-header-5",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "The menu",
+         "eyebrow_color": "#cf8e6f",
+         "eyebrow_dot_color": "#cf8e6f",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "Services & ",
+           "color": "#f2e8e6",
+           "italic": false
+          },
+          {
+           "text": "pricing",
+           "color": "#cf8e6f",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 52,
+         "headline_font_weight": "400",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": false,
+         "tagline_text": "",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#8f7780",
+         "tagline_text_size": 16,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "ve-ro-12",
+    "type": "row",
+    "settings": {
+     "gap": 48
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ve-co-9",
+      "type": "column",
+      "settings": {
+       "width": "1-2"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ve-pricelist-8",
+        "type": "pricelist",
+        "settings": {
+         "show_image": false,
+         "price_position": "right",
+         "separator_style": "dotted",
+         "separator_color": "rgba(207,142,111,.42)",
+         "title_color": "#f2e8e6",
+         "price_color": "#cf8e6f",
+         "description_color": "#8f7780",
+         "card_bg": "",
+         "card_border_radius": "0",
+         "card_border_color": "transparent",
+         "hover_lift": false,
+         "gap": "0",
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         },
+         "items": [
+          {
+           "id": "ve-h1",
+           "title": "Hair",
+           "description": "",
+           "price": "",
+           "highlighted": false,
+           "badge": ""
+          },
+          {
+           "id": "ve-h2",
+           "title": "Cut & finish",
+           "description": "Consultation, cut, style. 60 min.",
+           "price": "from €55",
+           "highlighted": false,
+           "badge": ""
+          },
+          {
+           "id": "ve-h3",
+           "title": "Full colour",
+           "description": "Root to tip, gloss included.",
+           "price": "from €95",
+           "highlighted": false,
+           "badge": ""
+          },
+          {
+           "id": "ve-h4",
+           "title": "Balayage",
+           "description": "Hand-painted, lived-in.",
+           "price": "from €140",
+           "highlighted": false,
+           "badge": ""
+          }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "ve-co-11",
+      "type": "column",
+      "settings": {
+       "width": "1-2"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ve-pricelist-10",
+        "type": "pricelist",
+        "settings": {
+         "show_image": false,
+         "price_position": "right",
+         "separator_style": "dotted",
+         "separator_color": "rgba(207,142,111,.42)",
+         "title_color": "#f2e8e6",
+         "price_color": "#cf8e6f",
+         "description_color": "#8f7780",
+         "card_bg": "",
+         "card_border_radius": "0",
+         "card_border_color": "transparent",
+         "hover_lift": false,
+         "gap": "0",
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         },
+         "items": [
+          {
+           "id": "ve-b1",
+           "title": "Beauty",
+           "description": "",
+           "price": "",
+           "highlighted": false,
+           "badge": ""
+          },
+          {
+           "id": "ve-b2",
+           "title": "Brows & tint",
+           "description": "Shape, tint, finish.",
+           "price": "€28",
+           "highlighted": false,
+           "badge": ""
+          },
+          {
+           "id": "ve-b3",
+           "title": "Gel manicure",
+           "description": "Two weeks, no chips.",
+           "price": "€38",
+           "highlighted": false,
+           "badge": ""
+          },
+          {
+           "id": "ve-b4",
+           "title": "Facial · glow",
+           "description": "45 min, tailored to your skin.",
+           "price": "€65",
+           "highlighted": false,
+           "badge": ""
+          }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ve-se-26",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#2a1d26"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ve-ro-16",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ve-co-15",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ve-section-header-14",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "The chairs",
+         "eyebrow_color": "#cf8e6f",
+         "eyebrow_dot_color": "#cf8e6f",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "Your ",
+           "color": "#f2e8e6",
+           "italic": false
+          },
+          {
+           "text": "stylists",
+           "color": "#cf8e6f",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 52,
+         "headline_font_weight": "400",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": false,
+         "tagline_text": "",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#8f7780",
+         "tagline_text_size": 16,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "ve-ro-25",
+    "type": "row",
+    "settings": {
+     "gap": 16
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ve-co-18",
+      "type": "column",
+      "settings": {
+       "width": "1-4"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ve-team-17",
+        "type": "team",
+        "settings": {
+         "photo": "",
+         "name": "Noor",
+         "role": "Colour director",
+         "bio": "",
+         "link_url": "",
+         "link_text": "",
+         "photo_size": "120",
+         "photo_shape": "circle",
+         "photo_border_width": "0",
+         "photo_shadow": "none",
+         "photo_gap": "16",
+         "info_bg_color": "transparent",
+         "info_text_color": "#f2e8e6",
+         "role_color": "#cf8e6f",
+         "info_align": "center",
+         "name_size": "22",
+         "name_weight": "400",
+         "role_size": "12",
+         "bg_color": "transparent",
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         },
+         "border_radius": "0"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "ve-co-20",
+      "type": "column",
+      "settings": {
+       "width": "1-4"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ve-team-19",
+        "type": "team",
+        "settings": {
+         "photo": "",
+         "name": "Théo",
+         "role": "Senior cutter",
+         "bio": "",
+         "link_url": "",
+         "link_text": "",
+         "photo_size": "120",
+         "photo_shape": "circle",
+         "photo_border_width": "0",
+         "photo_shadow": "none",
+         "photo_gap": "16",
+         "info_bg_color": "transparent",
+         "info_text_color": "#f2e8e6",
+         "role_color": "#cf8e6f",
+         "info_align": "center",
+         "name_size": "22",
+         "name_weight": "400",
+         "role_size": "12",
+         "bg_color": "transparent",
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         },
+         "border_radius": "0"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "ve-co-22",
+      "type": "column",
+      "settings": {
+       "width": "1-4"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ve-team-21",
+        "type": "team",
+        "settings": {
+         "photo": "",
+         "name": "Bea",
+         "role": "Balayage",
+         "bio": "",
+         "link_url": "",
+         "link_text": "",
+         "photo_size": "120",
+         "photo_shape": "circle",
+         "photo_border_width": "0",
+         "photo_shadow": "none",
+         "photo_gap": "16",
+         "info_bg_color": "transparent",
+         "info_text_color": "#f2e8e6",
+         "role_color": "#cf8e6f",
+         "info_align": "center",
+         "name_size": "22",
+         "name_weight": "400",
+         "role_size": "12",
+         "bg_color": "transparent",
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         },
+         "border_radius": "0"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "ve-co-24",
+      "type": "column",
+      "settings": {
+       "width": "1-4"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ve-team-23",
+        "type": "team",
+        "settings": {
+         "photo": "",
+         "name": "Sami",
+         "role": "Beauty & brows",
+         "bio": "",
+         "link_url": "",
+         "link_text": "",
+         "photo_size": "120",
+         "photo_shape": "circle",
+         "photo_border_width": "0",
+         "photo_shadow": "none",
+         "photo_gap": "16",
+         "info_bg_color": "transparent",
+         "info_text_color": "#f2e8e6",
+         "role_color": "#cf8e6f",
+         "info_align": "center",
+         "name_size": "22",
+         "name_weight": "400",
+         "role_size": "12",
+         "bg_color": "transparent",
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         },
+         "border_radius": "0"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ve-se-33",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#241820"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ve-ro-29",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ve-co-28",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ve-section-header-27",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "Recent work",
+         "eyebrow_color": "#cf8e6f",
+         "eyebrow_dot_color": "#cf8e6f",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "From the ",
+           "color": "#f2e8e6",
+           "italic": false
+          },
+          {
+           "text": "chair",
+           "color": "#cf8e6f",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 52,
+         "headline_font_weight": "400",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": false,
+         "tagline_text": "",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#8f7780",
+         "tagline_text_size": 16,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "ve-ro-32",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ve-co-31",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ve-workgrid-30",
+        "type": "workgrid",
+        "settings": {
+         "columns": 3,
+         "items_gap": 16,
+         "media_aspect": "4/3",
+         "media_tall_aspect": "4/5",
+         "media_bg": "#352630",
+         "media_label_color": "#cf8e6f",
+         "hover_zoom": true,
+         "title_color": "#f2e8e6",
+         "title_font_family": "heading",
+         "title_size": 22,
+         "title_weight": "400",
+         "meta_color": "#8f7780",
+         "meta_size": 12,
+         "show_desc": false,
+         "desc_color": "#8f7780",
+         "desc_size": 15,
+         "items": [
+          {
+           "image": "",
+           "media_label": "colour transformation",
+           "title": "",
+           "meta": "",
+           "description": "",
+           "link_url": "",
+           "tall": true
+          },
+          {
+           "image": "",
+           "media_label": "blunt bob",
+           "title": "",
+           "meta": "",
+           "description": "",
+           "link_url": "",
+           "tall": false
+          },
+          {
+           "image": "",
+           "media_label": "balayage",
+           "title": "",
+           "meta": "",
+           "description": "",
+           "link_url": "",
+           "tall": false
+          },
+          {
+           "image": "",
+           "media_label": "updo",
+           "title": "",
+           "meta": "",
+           "description": "",
+           "link_url": "",
+           "tall": false
+          },
+          {
+           "image": "",
+           "media_label": "brows",
+           "title": "",
+           "meta": "",
+           "description": "",
+           "link_url": "",
+           "tall": false
+          },
+          {
+           "image": "",
+           "media_label": "gloss",
+           "title": "",
+           "meta": "",
+           "description": "",
+           "link_url": "",
+           "tall": true
+          }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ve-se-37",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#2a1d26"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ve-ro-36",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ve-co-35",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ve-testimonial-34",
+        "type": "testimonial",
+        "settings": {
+         "quote": "\"Noor is the first colourist who actually got what I meant by 'natural'. I won't go anywhere else now.\"",
+         "author_name": "Hannah V.",
+         "author_role": "client since 2022",
+         "rating": "0",
+         "layout": "single",
+         "show_line": false,
+         "bg_color": "transparent",
+         "text_color": "#f2e8e6",
+         "border_radius": "0",
+         "avatar": ""
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ve-se-41",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#241820"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ve-ro-40",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ve-co-39",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ve-mixer-38",
+        "type": "mixer",
+        "settings": {
+         "eyebrow": "The colour bar",
+         "heading": "Blend your shade",
+         "intro": "Balayage is two tones living together. Tap a base and a gloss to preview the melt — then bring it to your colourist as a starting point.",
+         "max": 2,
+         "empty_label": "Tap two tones to blend",
+         "zone_accent": "#cf8e6f",
+         "zone_on": "#170f14",
+         "card_bg": "#352630",
+         "card_border": "rgba(242,232,230,.13)",
+         "align": "center",
+         "items": [
+          {
+           "name": "Espresso",
+           "color": "#2b211c"
+          },
+          {
+           "name": "Chestnut",
+           "color": "#6e4a32"
+          },
+          {
+           "name": "Caramel",
+           "color": "#a9763f"
+          },
+          {
+           "name": "Honey",
+           "color": "#d8a86a"
+          },
+          {
+           "name": "Champagne",
+           "color": "#e7c98f"
+          },
+          {
+           "name": "Copper",
+           "color": "#b65b4a"
+          }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ve-se-45",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#241820"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "ve-ro-44",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "ve-co-43",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "ve-cta-banner-42",
+        "type": "cta-banner",
+        "settings": {
+         "headline": "Ready for a ",
+         "headline_accent": "change?",
+         "headline_accent_italic": true,
+         "subtitle": "Book online in under a minute, or call us — new clients always start with a consultation.",
+         "cta_text": "Book online",
+         "cta_url": "#book",
+         "cta2_text": "Call the salon",
+         "cta2_url": "#",
+         "cta2_bg": "#f2e8e6",
+         "cta2_color": "#170f14",
+         "cta2_border": "",
+         "bg": {
+          "type": "solid",
+          "color": "#352630"
+         },
+         "text_color": "#f2e8e6",
+         "accent_color": "#cf8e6f",
+         "subtitle_color": "#c1aab2",
+         "cta_bg": "#cf8e6f",
+         "cta_color": "#170f14",
+         "cta_radius": {
+          "tl": 999,
+          "tr": 999,
+          "br": 999,
+          "bl": 999,
+          "linked": true
+         },
+         "cta_size": 12,
+         "headline_font_family": "serif",
+         "headline_size": 52,
+         "headline_weight": "400",
+         "subtitle_size": 17,
+         "layout": "stack",
+         "vertical_align": "center",
+         "banner_radius": {
+          "tl": 20,
+          "tr": 20,
+          "br": 20,
+          "bl": 20,
+          "linked": true
+         },
+         "banner_padding": 80
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

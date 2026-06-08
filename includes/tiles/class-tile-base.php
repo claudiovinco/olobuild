@@ -125,8 +125,8 @@ abstract class Olo_Tile_Base {
     protected function safe_color_css( $value ) {
         $v = trim( (string) $value );
         if ( $v === '' ) return '';
-        // Allow: #hex, rgb(), rgba(), hsl(), hsla(), CSS variables, named colors, transparent/inherit/initial/currentColor
-        if ( preg_match( '/^(#[0-9a-fA-F]{3,8}|rgba?\(\s*[\d\s,.%\/]+\)|hsla?\(\s*[\d\s,.%\/deg]+\)|var\(\s*--[\w-]+(?:\s*,\s*[^)]+)?\)|transparent|inherit|initial|currentColor|[a-zA-Z]{3,20})$/', $v ) ) {
+        // Allow: #hex, rgb(), rgba(), hsl(), hsla(), CSS variables, color-mix(), named colors, transparent/inherit/initial/currentColor
+        if ( preg_match( '/^(#[0-9a-fA-F]{3,8}|rgba?\(\s*[\d\s,.%\/]+\)|hsla?\(\s*[\d\s,.%\/deg]+\)|var\(\s*--[\w-]+(?:\s*,\s*[^)]+)?\)|color-mix\([^;{}<>]*\)|transparent|inherit|initial|currentColor|[a-zA-Z]{3,20})$/', $v ) ) {
             return $v;
         }
         return '';

@@ -20,14 +20,141 @@ class Olo_Theme_Importer {
                     break;
                 }
             }
-            $themes[] = [
+            $themes[] = array_merge( [
                 'id' => $data['id'], 'name' => $data['name'] ?? $theme_id,
                 'description' => $data['description'] ?? '', 'author' => $data['author'] ?? '',
                 'version' => $data['version'] ?? '1.0', 'screenshot' => $screenshot,
                 'tags' => $data['tags'] ?? [], 'dir' => $dir,
-            ];
+            ], self::build_preview( $data, $theme_id ) );
         }
         return $themes;
+    }
+
+    /**
+     * Campi "visivi" per la mini-anteprima del modale Importa Temi (redesign).
+     * Derivati dai token del tema (styles.colors / styles.typography), con
+     * fallback robusti: temi privi di questi dati restano comunque importabili.
+     * Le chiavi salvate del tema NON vengono modificate.
+     */
+    private static function build_preview( $data, $theme_id ) {
+        $styles = ( isset( $data['styles'] ) && is_array( $data['styles'] ) ) ? $data['styles'] : [];
+        $colors = ( isset( $styles['colors'] ) && is_array( $styles['colors'] ) ) ? $styles['colors'] : [];
+        $typo   = ( isset( $styles['typography'] ) && is_array( $styles['typography'] ) ) ? $styles['typography'] : [];
+
+        $bg        = $colors['background'] ?? '#0e1626';
+        $accent    = $colors['primary'] ?? '#e8622a';
+        $text      = $colors['text'] ?? '#c9d2e0';
+        $secondary = $colors['secondary'] ?? $accent;
+        $muted     = $colors['muted'] ?? '#16223a';
+
+        $lum   = self::rel_luminance( $bg );
+        $light = ( $lum !== null && $lum > 0.55 );
+        $ink   = ( isset( $data['preview']['ink'] ) && $data['preview']['ink'] )
+            ? $data['preview']['ink']
+            : self::pick_ink( $bg, $text );
+
+        $font = $typo['font_family_heading'] ?? ( $typo['font_family'] ?? 'Inter, system-ui, sans-serif' );
+
+        $pal = [];
+        foreach ( [ $accent, $secondary, $muted, $ink ] as $c ) { if ( $c ) $pal[] = $c; }
+
+        $gfonts = ( isset( $styles['google_fonts'] ) && is_array( $styles['google_fonts'] ) )
+            ? array_values( $styles['google_fonts'] ) : [];
+
+        // Link alla pagina del tema. Predisposto: vuoto finché olotheme.com non avrà un
+        // catalogo. Quando ci sarà, basta il filtro `olo_theme_catalog_url` (o un `url` in
+        // theme.json) → il link compare in automatico su tutte le card, zero altre modifiche.
+        $catalog = apply_filters( 'olo_theme_catalog_url', '' );
+        $url = ( isset( $data['url'] ) && $data['url'] ) ? $data['url']
+            : ( $catalog ? rtrim( $catalog, '/' ) . '/' . $theme_id . '/' : '' );
+
+        return [
+            'category'     => ( isset( $data['category'] ) && $data['category'] !== '' ) ? $data['category'] : self::theme_category( $theme_id, $data ),
+            'zone'         => $data['zone'] ?? self::theme_zone( $theme_id ),
+            'accent'       => $accent,
+            'bg'           => $bg,
+            'ink'          => $ink,
+            'font'         => $font,
+            'light'        => $light,
+            'pal'          => $pal,
+            'google_fonts' => $gfonts,
+            'url'          => $url,
+        ];
+    }
+
+    /** #rgb / #rrggbb → [r,g,b] (0-255), oppure null se non è un hex valido. */
+    private static function hex_rgb( $hex ) {
+        $hex = ltrim( (string) $hex, '#' );
+        if ( strlen( $hex ) === 3 ) { $hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2]; }
+        if ( strlen( $hex ) < 6 || ! ctype_xdigit( substr( $hex, 0, 6 ) ) ) return null;
+        return [ hexdec( substr( $hex, 0, 2 ) ), hexdec( substr( $hex, 2, 2 ) ), hexdec( substr( $hex, 4, 2 ) ) ];
+    }
+
+    /** Luminanza relativa WCAG (0..1), null se il colore non è hex. */
+    private static function rel_luminance( $hex ) {
+        $rgb = self::hex_rgb( $hex );
+        if ( ! $rgb ) return null;
+        $c = array_map( function ( $v ) {
+            $v /= 255;
+            return $v <= 0.03928 ? $v / 12.92 : pow( ( $v + 0.055 ) / 1.055, 2.4 );
+        }, $rgb );
+        return 0.2126 * $c[0] + 0.7152 * $c[1] + 0.0722 * $c[2];
+    }
+
+    /** Colore "ink" (titolo dell'anteprima): forte contrasto sullo sfondo, fedele al tema quando possibile. */
+    private static function pick_ink( $bg, $text ) {
+        $lbg = self::rel_luminance( $bg );
+        if ( $lbg === null ) $lbg = 0.05; // assume scuro
+        $ltx = self::rel_luminance( $text );
+        if ( $lbg > 0.55 ) { // sfondo chiaro → ink scuro
+            return ( $ltx !== null && $ltx <= 0.42 ) ? $text : '#17171b';
+        }
+        // sfondo scuro → ink chiaro
+        return ( $ltx !== null && $ltx >= 0.62 ) ? $text : '#f3f5fb';
+    }
+
+    /** Categoria canonica dei 50 OLOtheme (override via theme.json `category`, fallback al primo tag). */
+    private static function theme_category( $theme_id, $data ) {
+        static $map = [
+            'atelier' => 'Beauty & Fashion', 'aurora' => 'Events', 'bloom' => 'Beauty & Fashion',
+            'brewline' => 'Food & Drink', 'cadence' => 'Health & Fitness', 'canvas' => 'Artist',
+            'capital-row' => 'Consulting & Finance', 'carrello' => 'E-commerce', 'circuit' => 'Software & Tech',
+            'contour' => 'Health & Fitness', 'datafold' => 'Software & Tech', 'dispatch' => 'Media & News',
+            'fieldco' => 'E-commerce', 'fiori' => 'Wedding', 'fjordline' => 'Travel', 'forge' => 'Software & Tech',
+            'frame' => 'Media & News', 'gazette' => 'Media & News', 'hearth' => 'Home & Living',
+            'honeycomb' => 'Food & Drink', 'kiln' => 'Artist', 'ledger' => 'Consulting & Finance',
+            'linea' => 'Beauty & Fashion', 'loft' => 'Home & Living', 'lumen' => 'Beauty & Fashion',
+            'maison' => 'Home & Living', 'mercato' => 'E-commerce', 'meridian' => 'Consulting & Finance',
+            'mono' => 'Creative', 'nimbus' => 'Software & Tech', 'pasaje' => 'Travel', 'prisma' => 'Creative',
+            'pulse' => 'Health & Fitness', 'relayos' => 'Software & Tech', 'saffron' => 'Food & Drink',
+            'signal' => 'Media & News', 'soundwave' => 'Artist', 'sterling' => 'Consulting & Finance',
+            'synapse' => 'Software & Tech', 'tavola' => 'Food & Drink', 'terra' => 'Home & Living',
+            'vela' => 'Creative', 'velour' => 'Beauty & Fashion', 'verdano' => 'Health & Fitness',
+            'verde' => 'Food & Drink', 'vinea' => 'Food & Drink', 'vitalis' => 'Health & Fitness',
+            'vows' => 'Wedding', 'voyage' => 'Travel', 'wander' => 'Travel',
+        ];
+        if ( isset( $map[ $theme_id ] ) ) return $map[ $theme_id ];
+        $tags = $data['tags'] ?? [];
+        if ( ! empty( $tags[0] ) ) return ucwords( str_replace( [ '-', '_' ], ' ', $tags[0] ) );
+        return 'Tema';
+    }
+
+    /** Badge "zona interattiva" dei temi che ne hanno una (override via theme.json `zone`). */
+    private static function theme_zone( $theme_id ) {
+        static $map = [
+            'atelier' => 'Finder', 'bloom' => 'Routine', 'brewline' => 'Builder', 'cadence' => 'Finder',
+            'canvas' => 'Mixer', 'capital-row' => 'Projector', 'carrello' => 'Builder', 'circuit' => 'Builder',
+            'contour' => 'Finder', 'fieldco' => 'Builder', 'fjordline' => 'Finder', 'forge' => 'Contrast',
+            'hearth' => 'Finder', 'honeycomb' => 'Builder', 'kiln' => 'Mixer', 'ledger' => 'Projector',
+            'linea' => 'Finder', 'loft' => 'Mixer', 'lumen' => 'Finder', 'maison' => 'Finder',
+            'mercato' => 'Builder', 'meridian' => 'Finder', 'mono' => 'Type tester', 'nimbus' => 'Projector',
+            'pasaje' => 'Finder', 'prisma' => 'Mixer', 'pulse' => 'Finder', 'relayos' => 'Finder',
+            'saffron' => 'Finder', 'soundwave' => 'Sequencer', 'sterling' => 'Projector', 'synapse' => 'Projector',
+            'tavola' => 'Builder', 'terra' => 'Finder', 'vela' => 'Finder', 'velour' => 'Mixer',
+            'verdano' => 'Builder', 'verde' => 'Builder', 'vinea' => 'Finder', 'vitalis' => 'Finder',
+            'voyage' => 'Route',
+        ];
+        return $map[ $theme_id ] ?? '';
     }
 
     public static function import_theme( $theme_id ) {
@@ -68,6 +195,13 @@ class Olo_Theme_Importer {
                 $menu_id = $existing ? $existing->term_id : 0;
             }
             if ( $menu_id ) {
+                // Svuota le voci esistenti: senza questo il menu cresce a ogni re-import (voci duplicate).
+                $existing_items = wp_get_nav_menu_items( $menu_id );
+                if ( is_array( $existing_items ) ) {
+                    foreach ( $existing_items as $mi ) {
+                        wp_delete_post( (int) $mi->ID, true );
+                    }
+                }
                 foreach ( $theme_json['menu']['items'] ?? [] as $item ) {
                     wp_update_nav_menu_item( $menu_id, 0, [
                         'menu-item-title'  => $item['title'] ?? '',
@@ -148,26 +282,63 @@ class Olo_Theme_Importer {
             $results['styles'] = true;
         }
 
+        // ── Step 5b: Global feature — cursore custom (Olo_Magnetic_Cursor) ──
+        // Il tema può attivare/configurare il cursore neon (anello+dot, blend, pull).
+        // Se la chiave 'cursor' manca, il cursore resta com'è (nessuna regressione).
+        if ( ! empty( $theme_json['cursor'] ) && is_array( $theme_json['cursor'] ) ) {
+            if ( ! class_exists( 'Olo_Magnetic_Cursor' ) ) {
+                require_once OLO_PATH . 'includes/class-magnetic-cursor.php';
+            }
+            update_option( 'olo_magnetic_cursor', Olo_Magnetic_Cursor::sanitize( $theme_json['cursor'] ) );
+            $results['cursor'] = true;
+        }
+
         // ── Step 6: Create pages and assign templates ──
+        // Idempotente: per la homepage RIUSA la static front page esistente (aggiorna
+        // _olo_template_id in-place) invece di creare una nuova pagina "Home" ad ogni
+        // import — evita la proliferazione di duplicati e l'ambiguità su quale pagina sia
+        // davvero la home. Stessa logica per la pagina blog (page_for_posts).
         if ( ! empty( $theme_json['pages'] ) ) {
             foreach ( $theme_json['pages'] as $page_key => $page_meta ) {
                 $tpl_key = $page_meta['template'] ?? $page_key;
                 if ( ! isset( $id_map[ $tpl_key ] ) ) continue;
 
-                $page_id = wp_insert_post( [
-                    'post_title'  => $page_meta['title'] ?? ucfirst( $page_key ),
-                    'post_status' => 'publish',
-                    'post_type'   => 'page',
-                    'post_content' => '',
-                ] );
+                $is_home = ! empty( $page_meta['set_as_homepage'] );
+                $is_blog = ! empty( $page_meta['set_as_blog'] );
+                $title   = $page_meta['title'] ?? ucfirst( $page_key );
+
+                // Riuso della pagina già assegnata a quel ruolo (home/blog), se esiste ancora.
+                $page_id = 0;
+                if ( $is_home ) {
+                    $existing = (int) get_option( 'page_on_front' );
+                    if ( $existing && get_post( $existing ) && get_post_type( $existing ) === 'page' ) {
+                        $page_id = $existing;
+                    }
+                } elseif ( $is_blog ) {
+                    $existing = (int) get_option( 'page_for_posts' );
+                    if ( $existing && get_post( $existing ) && get_post_type( $existing ) === 'page' ) {
+                        $page_id = $existing;
+                    }
+                }
+
+                if ( $page_id ) {
+                    wp_update_post( [ 'ID' => $page_id, 'post_title' => $title, 'post_status' => 'publish' ] );
+                } else {
+                    $page_id = wp_insert_post( [
+                        'post_title'   => $title,
+                        'post_status'  => 'publish',
+                        'post_type'    => 'page',
+                        'post_content' => '',
+                    ] );
+                }
 
                 if ( $page_id && ! is_wp_error( $page_id ) ) {
                     update_post_meta( $page_id, '_olo_template_id', $id_map[ $tpl_key ] );
-                    if ( ! empty( $page_meta['set_as_homepage'] ) ) {
+                    if ( $is_home ) {
                         update_option( 'page_on_front', $page_id );
                         update_option( 'show_on_front', 'page' );
                     }
-                    if ( ! empty( $page_meta['set_as_blog'] ) ) {
+                    if ( $is_blog ) {
                         update_option( 'page_for_posts', $page_id );
                     }
                 }

@@ -1,0 +1,1297 @@
+[
+ {
+  "id": "vt-se-4",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#0e3b3a"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "vt-ro-3",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "vt-co-2",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "vt-hero-split-1",
+        "type": "hero-split",
+        "settings": {
+         "eyebrow_text": "Wellness & recovery clinic",
+         "eyebrow_dot_color": "#6fd6c4",
+         "eyebrow_color": "#6fd6c4",
+         "headline_lines": [
+          {
+           "text": "Feel like",
+           "color": "#eaf6f2",
+           "italic": false
+          },
+          {
+           "text": "yourself",
+           "color": "#6fd6c4",
+           "italic": true
+          },
+          {
+           "text": "again.",
+           "color": "#eaf6f2",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 78,
+         "headline_line_height": 1.04,
+         "headline_font_weight": "500",
+         "headline_align": "left",
+         "subhead": "Physiotherapy, recovery suites and longevity care under one calm roof — evidence-led, unhurried, and built around you.",
+         "subhead_color": "#a9cfc7",
+         "subhead_size": 18,
+         "subhead_italic": false,
+         "subhead_max_width": 440,
+         "cta1_text": "Book a first visit",
+         "cta1_url": "#membership",
+         "cta1_bg": "#6fd6c4",
+         "cta1_color": "#072422",
+         "cta1_size": 15,
+         "cta1_radius": {
+          "tl": 999,
+          "tr": 999,
+          "br": 999,
+          "bl": 999,
+          "linked": true
+         },
+         "cta1_radius_hover": {
+          "tl": 999,
+          "tr": 999,
+          "br": 999,
+          "bl": 999,
+          "linked": true
+         },
+         "cta2_text": "Explore services",
+         "cta2_url": "#services",
+         "cta2_bg": "transparent",
+         "cta2_color": "#eaf6f2",
+         "cta2_border": "rgba(111,214,196,.42)",
+         "cta2_size": 15,
+         "cta2_radius": {
+          "tl": 999,
+          "tr": 999,
+          "br": 999,
+          "bl": 999,
+          "linked": true
+         },
+         "cta2_radius_hover": {
+          "tl": 999,
+          "tr": 999,
+          "br": 999,
+          "bl": 999,
+          "linked": true
+         },
+         "stats": [],
+         "showcase_enabled": false,
+         "showcase_bg": {
+          "type": "solid",
+          "color": "#14504d"
+         },
+         "showcase_padding": 28,
+         "showcase_radius": {
+          "tl": 18,
+          "tr": 18,
+          "br": 18,
+          "bl": 18,
+          "linked": true
+         },
+         "showcase_radius_hover": {
+          "tl": 18,
+          "tr": 18,
+          "br": 18,
+          "bl": 18,
+          "linked": true
+         },
+         "showcase_badge_text": "1:1 always",
+         "showcase_badge_dot": "#6fd6c4",
+         "showcase_badge_bg": "#072422",
+         "showcase_badge_color": "#eaf6f2",
+         "showcase_items": [
+          {
+           "number": "Your team",
+           "text": "12 clinicians",
+           "italic": false,
+           "text_color": "#6fd6c4",
+           "bg": {
+            "type": "solid",
+            "color": "#1a5d59"
+           }
+          },
+          {
+           "number": "Recovery suites",
+           "text": "4 suites",
+           "italic": false,
+           "text_color": "#eaf6f2",
+           "bg": {
+            "type": "solid",
+            "color": "#1a5d59"
+           }
+          },
+          {
+           "number": "Members",
+           "text": "3,200+",
+           "italic": false,
+           "text_color": "#eaf6f2",
+           "bg": {
+            "type": "solid",
+            "color": "#1a5d59"
+           }
+          },
+          {
+           "number": "Google rating",
+           "text": "4.9",
+           "italic": false,
+           "text_color": "#eaf6f2",
+           "bg": {
+            "type": "solid",
+            "color": "#1a5d59"
+           }
+          }
+         ],
+         "showcase_card_radius": {
+          "tl": 12,
+          "tr": 12,
+          "br": 12,
+          "bl": 12,
+          "linked": true
+         },
+         "showcase_card_radius_hover": {
+          "tl": 12,
+          "tr": 12,
+          "br": 12,
+          "bl": 12,
+          "linked": true
+         },
+         "showcase_card_shadow": "none",
+         "showcase_caption_left": "VITALIS",
+         "showcase_caption_right": "WELLNESS CLINIC",
+         "showcase_hover_effect": "none",
+         "split_ratio": "1.05fr .95fr",
+         "gap": 48,
+         "min_height": 0,
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "vt-se-11",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#0e3b3a"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "vt-ro-7",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "vt-co-6",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "vt-section-header-5",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "What we do",
+         "eyebrow_color": "#6fd6c4",
+         "eyebrow_dot_color": "#6fd6c4",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "Care, in",
+           "color": "#eaf6f2",
+           "italic": false
+          },
+          {
+           "text": "three pillars",
+           "color": "#6fd6c4",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 50,
+         "headline_font_weight": "500",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": false,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "vt-ro-10",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "vt-co-9",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "vt-overlaygrid-8",
+        "type": "overlaygrid",
+        "settings": {
+         "items": [
+          {
+           "id": "vt-cat-1",
+           "image": "",
+           "title": "Physiotherapy",
+           "subtitle": "Injury, posture & movement",
+           "link": "#services",
+           "ribbon": ""
+          },
+          {
+           "id": "vt-cat-2",
+           "image": "",
+           "title": "Recovery",
+           "subtitle": "Sauna · ice · compression",
+           "link": "#recovery",
+           "ribbon": ""
+          },
+          {
+           "id": "vt-cat-3",
+           "image": "",
+           "title": "Longevity",
+           "subtitle": "Bloods, plans & coaching",
+           "link": "#services",
+           "ribbon": ""
+          }
+         ],
+         "columns": "3",
+         "columns_mobile": "1",
+         "gap": "small",
+         "height": "320",
+         "match_height": true,
+         "overlay_position": "bottom",
+         "overlay_horizontal": "left",
+         "overlay_style": "overlay-primary",
+         "overlay_padding": "large",
+         "title_size": "h3",
+         "hover_effect": "zoom",
+         "hover_overlay": "always",
+         "preset": "custom",
+         "item_radius": 16,
+         "overlay_color": "rgba(7,36,34,.92)",
+         "overlay_gradient": true,
+         "title_color": "#ffffff",
+         "title_weight": "500",
+         "title_letter_spacing": 0,
+         "title_uppercase": false,
+         "subtitle_color": "#6fd6c4",
+         "subtitle_size": 13.5,
+         "show_cta": false,
+         "shadow": "none"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "vt-se-18",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#103f3e"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "vt-ro-14",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "vt-co-13",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "vt-section-header-12",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "The recovery menu",
+         "eyebrow_color": "#6fd6c4",
+         "eyebrow_dot_color": "#6fd6c4",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "Reset in an ",
+           "color": "#eaf6f2",
+           "italic": false
+          },
+          {
+           "text": "hour",
+           "color": "#6fd6c4",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 50,
+         "headline_font_weight": "500",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": false,
+         "tagline_text": "",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#6f9a92",
+         "tagline_text_size": 16.5,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "vt-ro-17",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "vt-co-16",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "vt-pricelist-15",
+        "type": "pricelist",
+        "settings": {
+         "preset": "custom",
+         "bg": {
+          "type": "none"
+         },
+         "show_image": false,
+         "price_position": "right",
+         "separator_style": "dotted",
+         "separator_color": "rgba(111,214,196,.42)",
+         "title_color": "#eaf6f2",
+         "price_color": "#6fd6c4",
+         "description_color": "#6f9a92",
+         "card_bg": "",
+         "card_border_radius": {
+          "tl": 0,
+          "tr": 0,
+          "br": 0,
+          "bl": 0,
+          "linked": true
+         },
+         "hover_lift": false,
+         "gap": "12",
+         "tile_padding": {
+          "top": 8,
+          "right": 0,
+          "bottom": 8,
+          "left": 0
+         },
+         "items": [
+          {
+           "id": "vt-pl1",
+           "title": "Infrared sauna",
+           "description": "45 min · deep heat, deeper calm.",
+           "price": "€35",
+           "image_url": "",
+           "highlighted": false,
+           "badge": ""
+          },
+          {
+           "id": "vt-pl2",
+           "title": "Ice bath & contrast",
+           "description": "Guided breathwork included.",
+           "price": "€28",
+           "image_url": "",
+           "highlighted": false,
+           "badge": ""
+          },
+          {
+           "id": "vt-pl3",
+           "title": "Compression therapy",
+           "description": "Legs & hips, 30 min.",
+           "price": "€30",
+           "image_url": "",
+           "highlighted": false,
+           "badge": ""
+          },
+          {
+           "id": "vt-pl4",
+           "title": "Sports massage",
+           "description": "60 min with a clinical therapist.",
+           "price": "€70",
+           "image_url": "",
+           "highlighted": false,
+           "badge": ""
+          },
+          {
+           "id": "vt-pl5",
+           "title": "Physio assessment",
+           "description": "Full movement screen & plan.",
+           "price": "€90",
+           "image_url": "",
+           "highlighted": false,
+           "badge": "Most popular"
+          },
+          {
+           "id": "vt-pl6",
+           "title": "Recovery day pass",
+           "description": "All suites, all day.",
+           "price": "€55",
+           "image_url": "",
+           "highlighted": false,
+           "badge": ""
+          }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "vt-se-28",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "small"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#0e3b3a"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "vt-ro-27",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "vt-co-20",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "vt-statstrip-19",
+        "type": "statstrip",
+        "settings": {
+         "items": [
+          {
+           "value": "12",
+           "label": "Clinicians"
+          },
+          {
+           "value": "4",
+           "label": "Recovery suites"
+          },
+          {
+           "value": "3,200+",
+           "label": "Members"
+          },
+          {
+           "value": "4.9",
+           "label": "Google rating"
+          }
+         ],
+         "columns": 4,
+         "band_padding_y": 36,
+         "align": "center",
+         "show_dividers": true,
+         "band_border": true,
+         "divider_color": "rgba(234,246,242,.13)",
+         "value_font_family": "heading",
+         "value_color": "#eaf6f2",
+         "value_size": 56,
+         "value_weight": "600",
+         "label_color": "#6f9a92",
+         "label_size": 12.5,
+         "label_uppercase": false,
+         "mono_font_family": ""
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "vt-se-41",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#103f3e"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "vt-ro-31",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "vt-co-30",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "vt-section-header-29",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "Your team",
+         "eyebrow_color": "#6fd6c4",
+         "eyebrow_dot_color": "#6fd6c4",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "People who ",
+           "color": "#eaf6f2",
+           "italic": false
+          },
+          {
+           "text": "listen first",
+           "color": "#6fd6c4",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 50,
+         "headline_font_weight": "500",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": false,
+         "tagline_text": "",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#6f9a92",
+         "tagline_text_size": 16.5,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "vt-ro-40",
+    "type": "row",
+    "settings": {
+     "gap": 16
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "vt-co-33",
+      "type": "column",
+      "settings": {
+       "width": "1-4"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "vt-team-32",
+        "type": "team",
+        "settings": {
+         "photo": "",
+         "name": "Dr. Anika Rao",
+         "role": "Clinical lead",
+         "bio": "",
+         "link_url": "",
+         "link_text": "",
+         "photo_size": "120",
+         "photo_shape": "circle",
+         "photo_border_width": "0",
+         "photo_shadow": "none",
+         "photo_gap": "16",
+         "info_bg_color": "transparent",
+         "info_text_color": "#eaf6f2",
+         "role_color": "#6fd6c4",
+         "info_align": "center",
+         "name_size": "21",
+         "name_weight": "500",
+         "role_size": "12.5",
+         "bg_color": "transparent",
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         },
+         "border_radius": "0"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "vt-co-35",
+      "type": "column",
+      "settings": {
+       "width": "1-4"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "vt-team-34",
+        "type": "team",
+        "settings": {
+         "photo": "",
+         "name": "Sam Becker",
+         "role": "Physiotherapist",
+         "bio": "",
+         "link_url": "",
+         "link_text": "",
+         "photo_size": "120",
+         "photo_shape": "circle",
+         "photo_border_width": "0",
+         "photo_shadow": "none",
+         "photo_gap": "16",
+         "info_bg_color": "transparent",
+         "info_text_color": "#eaf6f2",
+         "role_color": "#6fd6c4",
+         "info_align": "center",
+         "name_size": "21",
+         "name_weight": "500",
+         "role_size": "12.5",
+         "bg_color": "transparent",
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         },
+         "border_radius": "0"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "vt-co-37",
+      "type": "column",
+      "settings": {
+       "width": "1-4"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "vt-team-36",
+        "type": "team",
+        "settings": {
+         "photo": "",
+         "name": "Lina Ferri",
+         "role": "Recovery coach",
+         "bio": "",
+         "link_url": "",
+         "link_text": "",
+         "photo_size": "120",
+         "photo_shape": "circle",
+         "photo_border_width": "0",
+         "photo_shadow": "none",
+         "photo_gap": "16",
+         "info_bg_color": "transparent",
+         "info_text_color": "#eaf6f2",
+         "role_color": "#6fd6c4",
+         "info_align": "center",
+         "name_size": "21",
+         "name_weight": "500",
+         "role_size": "12.5",
+         "bg_color": "transparent",
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         },
+         "border_radius": "0"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "vt-co-39",
+      "type": "column",
+      "settings": {
+       "width": "1-4"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "vt-team-38",
+        "type": "team",
+        "settings": {
+         "photo": "",
+         "name": "Dr. Omar Haddad",
+         "role": "Longevity",
+         "bio": "",
+         "link_url": "",
+         "link_text": "",
+         "photo_size": "120",
+         "photo_shape": "circle",
+         "photo_border_width": "0",
+         "photo_shadow": "none",
+         "photo_gap": "16",
+         "info_bg_color": "transparent",
+         "info_text_color": "#eaf6f2",
+         "role_color": "#6fd6c4",
+         "info_align": "center",
+         "name_size": "21",
+         "name_weight": "500",
+         "role_size": "12.5",
+         "bg_color": "transparent",
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         },
+         "border_radius": "0"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "vt-se-48",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#103f3e"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "vt-ro-44",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "vt-co-43",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "vt-section-header-42",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "Membership",
+         "eyebrow_color": "#6fd6c4",
+         "eyebrow_dot_color": "#6fd6c4",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "Care that ",
+           "color": "#eaf6f2",
+           "italic": false
+          },
+          {
+           "text": "compounds",
+           "color": "#6fd6c4",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 50,
+         "headline_font_weight": "500",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": true,
+         "tagline_text": "First assessment is complimentary. Memberships include recovery access and member rates on every treatment.",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#6f9a92",
+         "tagline_text_size": 16.5,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "vt-ro-47",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "vt-co-46",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "vt-cta-banner-45",
+        "type": "cta-banner",
+        "settings": {
+         "headline": "",
+         "headline_accent": "",
+         "subtitle": "",
+         "cta_text": "Book a complimentary assessment",
+         "cta_url": "#membership",
+         "bg": {
+          "type": "none"
+         },
+         "text_color": "#eaf6f2",
+         "accent_color": "#6fd6c4",
+         "subtitle_color": "#a9cfc7",
+         "cta_bg": "#6fd6c4",
+         "cta_color": "#072422",
+         "cta_radius": {
+          "tl": 999,
+          "tr": 999,
+          "br": 999,
+          "bl": 999,
+          "linked": true
+         },
+         "cta_size": 15,
+         "headline_font_family": "serif",
+         "headline_size": 0,
+         "headline_weight": "500",
+         "subtitle_size": 0,
+         "layout": "stack",
+         "vertical_align": "center",
+         "banner_radius": {
+          "tl": 0,
+          "tr": 0,
+          "br": 0,
+          "bl": 0,
+          "linked": true
+         },
+         "banner_padding": 0,
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "vt-se-52",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#0e3b3a"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "vt-ro-51",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "vt-co-50",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "vt-testimonial-49",
+        "type": "testimonial",
+        "settings": {
+         "quote": "\"Six weeks at Vitalis did more for my back than two years of guessing. Calm place, sharp people.\"",
+         "author_name": "Daniel R.",
+         "author_role": "member since 2024",
+         "rating": "0",
+         "layout": "single",
+         "show_line": false,
+         "bg_color": "transparent",
+         "text_color": "#eaf6f2",
+         "border_radius": "0",
+         "avatar": "",
+         "font_family": "serif",
+         "font_size": 38,
+         "font_style": "italic",
+         "font_weight": "400"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "vt-se-56",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#103f3e"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "vt-ro-55",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "vt-co-54",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "vt-finder-53",
+        "type": "finder",
+        "settings": {
+         "eyebrow": "Where to begin",
+         "heading": "What brings you in?",
+         "intro": "",
+         "zone_accent": "#6fd6c4",
+         "zone_on": "#072422",
+         "card_bg": "#14504d",
+         "card_border": "1px solid rgba(111,214,196,.42)",
+         "align": "center",
+         "items": [
+          {
+           "option": "Always tired",
+           "title": "Energy & Bloodwork",
+           "text": "A full panel, a sleep and nutrition review, and a plan to find what's draining you — not just mask it with caffeine.",
+           "meta": "90-min assessment · then monthly",
+           "cta_text": "",
+           "cta_url": "#",
+           "icon": ""
+          },
+          {
+           "option": "Nagging pain",
+           "title": "Movement & Recovery",
+           "text": "Physio-led assessment, hands-on treatment and a corrective programme to settle the pain and keep it gone.",
+           "meta": "60-min sessions · 6-week block",
+           "cta_text": "",
+           "cta_url": "#",
+           "icon": ""
+          },
+          {
+           "option": "Stressed & wired",
+           "title": "Nervous-System Reset",
+           "text": "Breathwork, guided recovery and HRV tracking to bring you down from constant fight-or-flight.",
+           "meta": "45-min sessions · weekly",
+           "cta_text": "",
+           "cta_url": "#",
+           "icon": ""
+          },
+          {
+           "option": "A full reset",
+           "title": "The Foundations Programme",
+           "text": "Our flagship — bloodwork, movement, sleep and nutrition woven into one coached three-month plan.",
+           "meta": "12 weeks · fully guided",
+           "cta_text": "",
+           "cta_url": "#",
+           "icon": ""
+          }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "vt-se-60",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#0e3b3a"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "vt-ro-59",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "vt-co-58",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "vt-cta-banner-57",
+        "type": "cta-banner",
+        "settings": {
+         "headline": "Start feeling ",
+         "headline_accent": "better",
+         "headline_accent_italic": true,
+         "subtitle": "Your first assessment is on us. Come in, get a plan, and we'll take it from there.",
+         "cta_text": "Book your visit",
+         "cta_url": "#membership",
+         "cta2_text": "See services",
+         "cta2_url": "#services",
+         "cta2_bg": "#eaf6f2",
+         "cta2_color": "#072422",
+         "cta2_radius": {
+          "tl": 999,
+          "tr": 999,
+          "br": 999,
+          "bl": 999,
+          "linked": true
+         },
+         "cta2_border": "",
+         "bg": {
+          "type": "solid",
+          "color": "#072422"
+         },
+         "text_color": "#eaf6f2",
+         "accent_color": "#6fd6c4",
+         "subtitle_color": "#a9cfc7",
+         "cta_bg": "#6fd6c4",
+         "cta_color": "#072422",
+         "cta_radius": {
+          "tl": 999,
+          "tr": 999,
+          "br": 999,
+          "bl": 999,
+          "linked": true
+         },
+         "cta_size": 15,
+         "headline_font_family": "serif",
+         "headline_size": 54,
+         "headline_weight": "500",
+         "subtitle_size": 17,
+         "layout": "stack",
+         "vertical_align": "center",
+         "banner_radius": {
+          "tl": 24,
+          "tr": 24,
+          "br": 24,
+          "bl": 24,
+          "linked": true
+         },
+         "banner_padding": 80
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

@@ -1,0 +1,1276 @@
+[
+ {
+  "id": "cd-se-4",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#1a1d24"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "cd-ro-3",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "cd-co-2",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "cd-hero-split-1",
+        "type": "hero-split",
+        "settings": {
+         "eyebrow_text": "Coach Theo · 1:1 & online",
+         "eyebrow_dot_color": "#ff6b54",
+         "eyebrow_color": "#ff6b54",
+         "headline_lines": [
+          {
+           "text": "Stronger",
+           "color": "#ffffff",
+           "italic": false
+          },
+          {
+           "text": "on",
+           "color": "#ffffff",
+           "italic": false
+          },
+          {
+           "text": "your",
+           "color": "#ff6b54",
+           "italic": false
+          },
+          {
+           "text": "terms.",
+           "color": "#ffffff",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 96,
+         "headline_line_height": 0.9,
+         "headline_font_weight": "800",
+         "headline_align": "left",
+         "subhead": "Personal training and online coaching built around your life — proper programming, weekly check-ins, and the accountability that finally makes it stick.",
+         "subhead_color": "#aab1be",
+         "subhead_size": 18,
+         "subhead_italic": false,
+         "subhead_max_width": 420,
+         "cta1_text": "Book a free consult",
+         "cta1_url": "#pricing",
+         "cta1_bg": "#ff6b54",
+         "cta1_color": "#ffffff",
+         "cta1_size": 14,
+         "cta1_radius": {
+          "tl": 6,
+          "tr": 6,
+          "br": 6,
+          "bl": 6,
+          "linked": true
+         },
+         "cta1_radius_hover": {
+          "tl": 6,
+          "tr": 6,
+          "br": 6,
+          "bl": 6,
+          "linked": true
+         },
+         "cta2_text": "See results",
+         "cta2_url": "#results",
+         "cta2_bg": "transparent",
+         "cta2_color": "#ffffff",
+         "cta2_border": "rgba(255,107,84,.42)",
+         "cta2_size": 14,
+         "cta2_radius": {
+          "tl": 6,
+          "tr": 6,
+          "br": 6,
+          "bl": 6,
+          "linked": true
+         },
+         "cta2_radius_hover": {
+          "tl": 6,
+          "tr": 6,
+          "br": 6,
+          "bl": 6,
+          "linked": true
+         },
+         "stats": [],
+         "showcase_enabled": false,
+         "showcase_bg": {
+          "type": "solid",
+          "color": "#252932"
+         },
+         "showcase_padding": 28,
+         "showcase_radius": {
+          "tl": 12,
+          "tr": 12,
+          "br": 12,
+          "bl": 12,
+          "linked": true
+         },
+         "showcase_radius_hover": {
+          "tl": 12,
+          "tr": 12,
+          "br": 12,
+          "bl": 12,
+          "linked": true
+         },
+         "showcase_badge_text": "COACH THEO · AT A GLANCE",
+         "showcase_badge_dot": "#ff6b54",
+         "showcase_badge_bg": "#101218",
+         "showcase_badge_color": "#ffffff",
+         "showcase_items": [
+          {
+           "number": "Clients coached",
+           "text": "500+",
+           "italic": false,
+           "text_color": "#ff6b54",
+           "bg": {
+            "type": "solid",
+            "color": "#1e2129"
+           }
+          },
+          {
+           "number": "Years coaching",
+           "text": "9",
+           "italic": false,
+           "text_color": "#ffffff",
+           "bg": {
+            "type": "solid",
+            "color": "#1e2129"
+           }
+          },
+          {
+           "number": "Hit their goal",
+           "text": "92%",
+           "italic": false,
+           "text_color": "#ffffff",
+           "bg": {
+            "type": "solid",
+            "color": "#1e2129"
+           }
+          },
+          {
+           "number": "Avg. rating",
+           "text": "4.9",
+           "italic": false,
+           "text_color": "#ffffff",
+           "bg": {
+            "type": "solid",
+            "color": "#1e2129"
+           }
+          }
+         ],
+         "showcase_card_radius": {
+          "tl": 10,
+          "tr": 10,
+          "br": 10,
+          "bl": 10,
+          "linked": true
+         },
+         "showcase_card_radius_hover": {
+          "tl": 10,
+          "tr": 10,
+          "br": 10,
+          "bl": 10,
+          "linked": true
+         },
+         "showcase_card_shadow": "none",
+         "showcase_caption_left": "RESULTS",
+         "showcase_caption_right": "2026",
+         "showcase_hover_effect": "none",
+         "split_ratio": "1.1fr .9fr",
+         "gap": 48,
+         "min_height": 0,
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "cd-se-14",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "none"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#101218"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "cd-ro-13",
+    "type": "row",
+    "settings": {
+     "gap": 0
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "cd-co-6",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "cd-statstrip-5",
+        "type": "statstrip",
+        "settings": {
+         "items": [
+          {
+           "value": "500+",
+           "label": "Clients coached"
+          },
+          {
+           "value": "9",
+           "label": "Years coaching"
+          },
+          {
+           "value": "92%",
+           "label": "Hit their goal"
+          },
+          {
+           "value": "4.9",
+           "label": "Avg. rating"
+          }
+         ],
+         "columns": 4,
+         "items_gap": 0,
+         "band_padding_y": 40,
+         "align": "center",
+         "show_dividers": true,
+         "band_border": false,
+         "divider_color": "rgba(255,255,255,.09)",
+         "value_font_family": "heading",
+         "value_color": "#ff6b54",
+         "value_size": 64,
+         "value_weight": "800",
+         "label_color": "#6f7785",
+         "label_size": 12,
+         "label_uppercase": false,
+         "mono_font_family": ""
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "cd-se-21",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#1a1d24"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "cd-ro-17",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "cd-co-16",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "cd-section-header-15",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "Ways to train",
+         "eyebrow_color": "#ff6b54",
+         "eyebrow_dot_color": "#ff6b54",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "Pick your ",
+           "color": "#ffffff",
+           "italic": false
+          },
+          {
+           "text": "lane",
+           "color": "#ff6b54",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 52,
+         "headline_font_weight": "800",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": false,
+         "tagline_text": "",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#6f7785",
+         "tagline_text_size": 16.5,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "cd-ro-20",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "cd-co-19",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "cd-workgrid-18",
+        "type": "workgrid",
+        "settings": {
+         "items": [
+          {
+           "image": "",
+           "media_label": "1:1 session",
+           "title": "1:1 Training",
+           "meta": "In person",
+           "description": "Private sessions at the studio, fully coached, fully tailored.",
+           "link_url": "",
+           "tall": false
+          },
+          {
+           "image": "",
+           "media_label": "online app",
+           "title": "Online Coaching",
+           "meta": "Anywhere",
+           "description": "Your programme in the app, weekly check-ins, form reviews on video.",
+           "link_url": "",
+           "tall": false
+          },
+          {
+           "image": "",
+           "media_label": "small group",
+           "title": "Strength Squad",
+           "meta": "Small group",
+           "description": "Train with three others, split the cost, keep the accountability.",
+           "link_url": "",
+           "tall": false
+          }
+         ],
+         "columns": 3,
+         "items_gap": 18,
+         "media_aspect": "4/3",
+         "media_tall_aspect": "4/5",
+         "media_bg": "#101218",
+         "media_label_color": "#ff6b54",
+         "hover_zoom": true,
+         "title_font_family": "heading",
+         "title_color": "#ffffff",
+         "title_size": 24,
+         "title_weight": "700",
+         "meta_color": "#ff6b54",
+         "meta_size": 12,
+         "show_desc": true,
+         "desc_color": "#6f7785",
+         "desc_size": 14.5,
+         "mono_font_family": ""
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "cd-se-28",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#1e2129"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "cd-ro-24",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "cd-co-23",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "cd-section-header-22",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "Real people",
+         "eyebrow_color": "#ff6b54",
+         "eyebrow_dot_color": "#ff6b54",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "The ",
+           "color": "#ffffff",
+           "italic": false
+          },
+          {
+           "text": "proof",
+           "color": "#ff6b54",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 52,
+         "headline_font_weight": "800",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": false,
+         "tagline_text": "",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#6f7785",
+         "tagline_text_size": 16.5,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "cd-ro-27",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "cd-co-26",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "cd-beforeafter-25",
+        "type": "beforeafter",
+        "settings": {
+         "items": [
+          {
+           "before_image": "",
+           "after_image": "",
+           "before_label": "Before",
+           "after_label": "After",
+           "title": "Marcus · 16 weeks",
+           "text": "Down 11kg, first-ever pull-up, and a deadlift PB he never thought he'd hit."
+          },
+          {
+           "before_image": "",
+           "after_image": "",
+           "before_label": "Before",
+           "after_label": "After",
+           "title": "Priya · 6 months",
+           "text": "Built real strength postpartum, pain-free and back to running."
+          },
+          {
+           "before_image": "",
+           "after_image": "",
+           "before_label": "Before",
+           "after_label": "After",
+           "title": "Sam · 1 year",
+           "text": "From couch to first powerlifting meet — and stayed for the community."
+          }
+         ],
+         "columns": 3,
+         "gap": 24,
+         "media_bg": "#252932",
+         "media_aspect": "1/1",
+         "accent": "#ff6b54",
+         "before_label_color": "#ffffff",
+         "after_label_color": "#ffffff",
+         "title_color": "#ffffff",
+         "text_color": "#aab1be",
+         "card_bg": "transparent",
+         "radius": 12
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "cd-se-35",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#1a1d24"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "cd-ro-31",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "cd-co-30",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "cd-section-header-29",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "How it works",
+         "eyebrow_color": "#ff6b54",
+         "eyebrow_dot_color": "#ff6b54",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "Simple, ",
+           "color": "#ffffff",
+           "italic": false
+          },
+          {
+           "text": "start to finish",
+           "color": "#ff6b54",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 52,
+         "headline_font_weight": "800",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": false,
+         "tagline_text": "",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#6f7785",
+         "tagline_text_size": 16.5,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "cd-ro-34",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "cd-co-33",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "cd-process-steps-32",
+        "type": "process-steps",
+        "settings": {
+         "columns": 4,
+         "gap": 16,
+         "align": "left",
+         "auto_number": false,
+         "item_gap": 12,
+         "number_style": "plain",
+         "number_color": "#ff6b54",
+         "number_size": 34,
+         "number_font": "sans-serif",
+         "number_weight": "800",
+         "title_color": "#ffffff",
+         "title_size": 20,
+         "title_font": "sans-serif",
+         "title_weight": "700",
+         "desc_color": "#6f7785",
+         "desc_size": 13.5,
+         "card_bg": "#252932",
+         "card_border": "1px solid rgba(255,255,255,.09)",
+         "card_radius": {
+          "tl": 12,
+          "tr": 12,
+          "br": 12,
+          "bl": 12,
+          "linked": true
+         },
+         "card_padding": 26,
+         "items": [
+          {
+           "number": "01",
+           "title": "Consult",
+           "description": "A free call to talk goals, history and what's actually realistic."
+          },
+          {
+           "number": "02",
+           "title": "Plan",
+           "description": "A programme built for you — training, nutrition guidance, the lot."
+          },
+          {
+           "number": "03",
+           "title": "Train",
+           "description": "We work the plan together, in person or in the app."
+          },
+          {
+           "number": "04",
+           "title": "Adjust",
+           "description": "Weekly check-ins keep it honest and moving forward."
+          }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "cd-se-39",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#1e2129"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "cd-ro-38",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "cd-co-37",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "cd-availability-36",
+        "type": "availability",
+        "settings": {
+         "eyebrow": "Plan your week",
+         "heading": "When can you train?",
+         "intro": "Tap the slots you can show up. We'll suggest the track that fits your week — no pressure, just a plan.",
+         "days": "Mon,Tue,Wed,Thu,Fri,Sat,Sun",
+         "bands": "Morning,Midday,Evening",
+         "count_label": "Sessions / week",
+         "verdict_label": "Suggested track",
+         "tiers": [
+          {
+           "min": 0,
+           "label": "Reset",
+           "text": "Light, flexible sessions — deload and reconnect with movement at a pace that suits your week."
+          },
+          {
+           "min": 3,
+           "label": "Build",
+           "text": "The sweet spot for steady progress — enough frequency to adapt, enough rest to recover."
+          },
+          {
+           "min": 5,
+           "label": "Peak",
+           "text": "High-output week with full programming. For when you mean business."
+          }
+         ],
+         "zone_accent": "#ff6b54",
+         "zone_on": "#ff6b54",
+         "cell_bg": "#252932",
+         "card_border": "rgba(255,255,255,.09)",
+         "align": "center"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "cd-se-50",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#1e2129"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "cd-ro-42",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "cd-co-41",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "cd-section-header-40",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "Pricing",
+         "eyebrow_color": "#ff6b54",
+         "eyebrow_dot_color": "#ff6b54",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "Invest in ",
+           "color": "#ffffff",
+           "italic": false
+          },
+          {
+           "text": "showing up",
+           "color": "#ff6b54",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 52,
+         "headline_font_weight": "800",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": true,
+         "tagline_text": "First consult is always free. No lock-in — though most people stay.",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#6f7785",
+         "tagline_text_size": 16.5,
+         "layout": "center",
+         "gap": 16
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "cd-ro-49",
+    "type": "row",
+    "settings": {
+     "gap": 16,
+     "vertical_align": "stretch"
+    },
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "cd-co-44",
+      "type": "column",
+      "settings": {
+       "width": "1-3"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "cd-pricing-43",
+        "type": "pricing",
+        "settings": {
+         "plan_name": "Online",
+         "price": "90",
+         "currency": "€",
+         "period": "/mo",
+         "description": "Coaching in your pocket.",
+         "features": "Custom programme\nWeekly check-in\nForm reviews",
+         "is_popular": false,
+         "badge_text": "",
+         "badge_bg_color": "#252932",
+         "bg_color": "#252932",
+         "price_color": "#ffffff",
+         "accent_color": "#ff6b54",
+         "cta_text": "Start online",
+         "cta_url": "#pricing",
+         "cta_bg": "transparent",
+         "cta_color": "#ffffff",
+         "cta_border": "rgba(255,107,84,.42)",
+         "border_radius": {
+          "tl": 14,
+          "tr": 14,
+          "br": 14,
+          "bl": 14,
+          "linked": true
+         }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "cd-co-46",
+      "type": "column",
+      "settings": {
+       "width": "1-3"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "cd-pricing-45",
+        "type": "pricing",
+        "settings": {
+         "plan_name": "1:1 + Online",
+         "price": "280",
+         "currency": "€",
+         "period": "/mo",
+         "description": "The full Cadence experience.",
+         "features": "4 studio sessions / mo\nEverything in Online\nPriority scheduling",
+         "is_popular": true,
+         "badge_text": "Most popular",
+         "badge_bg_color": "#ed5840",
+         "bg_color": "#ff6b54",
+         "price_color": "#ffffff",
+         "accent_color": "#ffffff",
+         "cta_text": "Book consult",
+         "cta_url": "#pricing",
+         "cta_bg": "#ffffff",
+         "cta_color": "#ff6b54",
+         "cta_border": "transparent",
+         "border_radius": {
+          "tl": 14,
+          "tr": 14,
+          "br": 14,
+          "bl": 14,
+          "linked": true
+         }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     },
+     {
+      "id": "cd-co-48",
+      "type": "column",
+      "settings": {
+       "width": "1-3"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "cd-pricing-47",
+        "type": "pricing",
+        "settings": {
+         "plan_name": "Squad",
+         "price": "140",
+         "currency": "€",
+         "period": "/mo",
+         "description": "Small-group strength.",
+         "features": "8 group sessions / mo\nMax 4 per group\nShared programme",
+         "is_popular": false,
+         "badge_text": "",
+         "badge_bg_color": "#252932",
+         "bg_color": "#252932",
+         "price_color": "#ffffff",
+         "accent_color": "#ff6b54",
+         "cta_text": "Join a squad",
+         "cta_url": "#pricing",
+         "cta_bg": "transparent",
+         "cta_color": "#ffffff",
+         "cta_border": "rgba(255,107,84,.42)",
+         "border_radius": {
+          "tl": 14,
+          "tr": 14,
+          "br": 14,
+          "bl": 14,
+          "linked": true
+         }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "cd-se-54",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#1a1d24"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "cd-ro-53",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "cd-co-52",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "cd-testimonial-51",
+        "type": "testimonial",
+        "settings": {
+         "quote": "\"Theo's the first coach who got me to actually keep going. Strongest I've been in my life.\"",
+         "author_name": "Marcus B.",
+         "author_role": "16-week client",
+         "rating": "0",
+         "layout": "single",
+         "show_line": false,
+         "bg_color": "transparent",
+         "text_color": "#ffffff",
+         "border_radius": "0",
+         "avatar": ""
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "cd-se-58",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#1e2129"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "cd-ro-57",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "cd-co-56",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "cd-finder-55",
+        "type": "finder",
+        "settings": {
+         "eyebrow": "Match me up",
+         "heading": "What’s the goal?",
+         "intro": "",
+         "zone_accent": "#ff6b54",
+         "zone_on": "#ffffff",
+         "card_bg": "#252932",
+         "card_border": "rgba(255,255,255,.09)",
+         "align": "center",
+         "items": [
+          {
+           "option": "My first 5K",
+           "title": "Couch to 5K",
+           "text": "Eight weeks of run-walk intervals that build you up gently — and a coach who texts to make sure you actually go.",
+           "meta": "3 runs/week · 8 weeks",
+           "cta_text": "",
+           "cta_url": "#",
+           "icon": "mountain"
+          },
+          {
+           "option": "Chase a PR",
+           "title": "Race Sharpening",
+           "text": "Threshold work, long runs and tapering, periodised around your goal race date to peak on the day.",
+           "meta": "4–5 runs/week · 12 weeks",
+           "cta_text": "",
+           "cta_url": "#",
+           "icon": "trending-up"
+          },
+          {
+           "option": "Build strength",
+           "title": "Strength Base",
+           "text": "Two lifting sessions and one conditioning day a week to build the engine and bullet-proof the joints.",
+           "meta": "3 sessions/week · ongoing",
+           "cta_text": "",
+           "cta_url": "#",
+           "icon": "zap"
+          },
+          {
+           "option": "Just move more",
+           "title": "The Consistency Plan",
+           "text": "Short, flexible sessions built around your week. The goal isn’t intensity — it’s showing up, again and again.",
+           "meta": "2–4 sessions/week · flexible",
+           "cta_text": "",
+           "cta_url": "#",
+           "icon": "clock"
+          }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "cd-se-62",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#ff6b54"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "cd-ro-61",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "cd-co-60",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "cd-cta-banner-59",
+        "type": "cta-banner",
+        "settings": {
+         "headline": "Let's get",
+         "headline_accent": "started.",
+         "headline_accent_italic": true,
+         "subtitle": "Book a free, no-pressure consult. We'll talk through your goals and whether Cadence is the right fit.",
+         "cta_text": "Book your free consult",
+         "cta_url": "#pricing",
+         "cta2_text": "",
+         "bg": {
+          "type": "solid",
+          "color": "#ff6b54"
+         },
+         "text_color": "#ffffff",
+         "accent_color": "#ffffff",
+         "subtitle_color": "rgba(255,255,255,.85)",
+         "cta_bg": "#ffffff",
+         "cta_color": "#ff6b54",
+         "cta_radius": {
+          "tl": 6,
+          "tr": 6,
+          "br": 6,
+          "bl": 6,
+          "linked": true
+         },
+         "cta_size": 14,
+         "headline_font_family": "sans-serif",
+         "headline_size": 88,
+         "headline_weight": "800",
+         "subtitle_size": 17,
+         "layout": "stack",
+         "vertical_align": "center",
+         "banner_radius": {
+          "tl": 0,
+          "tr": 0,
+          "br": 0,
+          "bl": 0,
+          "linked": true
+         },
+         "banner_padding": 80
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

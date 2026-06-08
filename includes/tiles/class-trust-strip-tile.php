@@ -45,8 +45,8 @@ class Olo_TrustStrip_Tile extends Olo_Tile_Base {
     public function render( $settings, $style = [] ) {
         $s = wp_parse_args( $settings, $this->defaults );
 
-        $serif = "'Playfair Display','Cormorant Garamond',Georgia,'Times New Roman',serif";
-        $sans  = "'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif";
+        $serif = "var(--olo-font-family-heading, 'Playfair Display','Cormorant Garamond',Georgia,'Times New Roman',serif)";
+        $sans  = "var(--olo-font-family, 'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif)";
         $mono  = "ui-monospace,'SF Mono',Menlo,Consolas,monospace";
         $fmap  = [ 'serif' => $serif, 'sans-serif' => $sans, 'mono' => $mono ];
         $fam   = $fmap[ $s['font_family'] ] ?? $sans;

@@ -17,7 +17,69 @@
 - [x] Zero emoji come icona di default — verificato grep
 - [x] focus-visible aggiunto sugli interattivi (batch) — verifica visiva consigliata
 - [ ] Box-model via composable; default da fonte unica; chiavi salvate invariate
-- [ ] Tile della stessa categoria condividono raggio, ombra, superficie, accento, scala type
+- [~] Tile della stessa categoria condividono raggio, ombra, superficie, accento, scala type
+      → **lingua d'ombra UNIFICATA** a livello sistema (vedi Sprint 2026-06-07)
+
+## Sprint 2026-06-07 — coerenza "come gli originali claude design" (Fase A, batch alta-presenza)
+
+Target visivo = i `REFERENCE_*.html` del design handoff (card/data/interactive). Strategia
+**coerenza reale**: si cambia solo ciò che si RENDE davvero, chiavi salvate invariate.
+
+**Keystone sistematici (toccano tutte le tile, non one-off):**
+- 🟢 **Lingua d'ombra unica** — `Olo_Tile_Utils::SHADOW_MAP/PHOTO/PANEL/BUTTON` (PHP) +
+  nuovo export `SHADOW` in `oloTileDefaults.js` (JS, gemello). Da nero piatto a strato
+  singolo → **due strati navy-tinted** (`rgba(16,24,40,…)` contact + ambient), valori sm/md
+  esatti dei REFERENCE. Ogni tile PHP che usa la util è già allineata.
+- 🟢 **`safe_color_css()` ora ammette `color-mix()`** → abilita tinte brand-following
+  (es. red-soft = `color-mix(... var(--olo-color-primary) 8%, #fff)`) lato frontend.
+
+**Tile alta-presenza (Vue + PHP, render==):**
+| Tile | Intervento |
+|---|---|
+| IconBox | Vue su `SHADOW` condiviso (PHP già token+focus-visible+SVG) |
+| Content | shadowMap immagine → `SHADOW` condiviso |
+| Panel | shadowCss → `SHADOW` condiviso |
+| Grid | shadowMap card → `SHADOW` (era nero pesante .3–.45) |
+| List | shadowMap → `SHADOW` (era nero pesante) |
+| Accordion | accento attivo `#fdf2ec` (orange leak) → **red-soft token** (`color-mix` primary) · raggio default 12→**10** (RADIUS.md) · Vue+PHP |
+| Counter | numero `tabular-nums` + letter-spacing · **suffisso in accento brand** · Vue+PHP |
+| Button | già a norma (pilota) |
+| Hero/Pricing/Timeline | già brand-coherent (zero off-brand; ombra via keystone) |
+
+Build `vite` OK (821 moduli) · `OLO_VERSION` → 1.4.27.
+
+**Coda chiusa (stesso giorno) — "uno standard per tutto":** convertite TUTTE le mappe-ombra
+preset inline residue alla scala navy condivisa:
+- **18 Vue** (AppointmentGrid, BookingPicker, EventList, FlipCard, HeroSplit, ImgCompare,
+  PanelSlider, ProductCards, PropertyCard/Cta/Grid/Search, RentalInventory,
+  RestaurantBookingForm, RestaurantOpeningHours, StepTimeline, Team, Testimonial) → `SHADOW`.
+- **14 PHP** (grid, hero-split, leaderboard, list, overlaygrid, overlayslider, product-cards,
+  step-timeline, goo, particlefx, scratchfx, scrollscrub, shatteredimage, stackscroll,
+  panelslider hover) → valori navy standard.
+- Lasciate intatte le ombre **bespoke** degli effetti speciali e i rami `custom`/`filterMap`.
+- Verifica: build OK (0 errori) · grep residui = 0 (Vue e PHP) · `OLO_VERSION` → 1.4.28.
+→ **lingua d'ombra unica su 100% delle tile** (canvas Vue == frontend PHP).
+
+## Sprint 2026-06-07 — Fase B: 50 template token-first sul set coerente
+
+Il "sistema di sezioni" del builder = **161 section-template** validati in
+`assets/data/template-library.json`, ma con **1596 colori hex hardcoded off-brand**
+(blu/indaco/viola) → assemblarli as-is darebbe pagine NON brand-coerenti.
+
+Soluzione (senza toccare la libreria sezioni esistente): generatore che **clona +
+normalizza i colori off-brand→token brand** (classificatore HSL: accenti blu/viola
+saturi → `var(--olo-color-primary)`, indigo-soft → primary-soft; protetti
+neutri/scuri/bianchi/verdi/ambra) e **assembla nuovi page-template per archetipo**
+(ogni sezione usata una volta → ID univoci, niente re-ID che romperebbe riferimenti).
+
+- **30 nuovi page-template** in `assets/data/page-templates/` (SaaS, agenzia, portfolio,
+  corporate, ristorante, immobiliare, wedding, beauty, e-commerce, education, evento,
+  non-profit, app, fotografia, coming-soon, + pagine prezzi/chi-siamo/contatti/servizi/team…).
+- **4 originali** (cover/homepage/landing-page/blog-magazine) normalizzati in-place.
+- **Verifiche**: 34/34 parse OK · struttura identica agli originali (object di section node) ·
+  **0 ID duplicati** · **0 accenti off-brand residui** · auto-caricati da `get_templates()`.
+- Token-first end-to-end: i template seguono i ruoli colore globali del cliente. La resa
+  estetica finale va verificata visivamente nel builder (loop di verifica utente).
 
 ## Riepilogo categorie
 

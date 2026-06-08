@@ -1,0 +1,881 @@
+[
+ {
+  "id": "mo-se-4",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#f2efe8"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "mo-ro-3",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "mo-co-2",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "mo-hero-split-1",
+        "type": "hero-split",
+        "settings": {
+         "eyebrow_text": "Independent designer · brand & digital · working worldwide from Lisbon",
+         "eyebrow_dot_color": "transparent",
+         "eyebrow_color": "#8d8a82",
+         "headline_lines": [
+          {
+           "text": "Design that",
+           "color": "#18181a",
+           "italic": false
+          },
+          {
+           "text": "says less,",
+           "color": "#8d8a82",
+           "italic": false
+          },
+          {
+           "text": "means more.",
+           "color": "#18181a",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 80,
+         "headline_line_height": 0.94,
+         "headline_font_weight": "500",
+         "headline_align": "left",
+         "subhead": "I help founders and cultural institutions find the simplest version of their idea — then make it unmistakable.",
+         "subhead_color": "#3a3a3c",
+         "subhead_size": 19,
+         "subhead_italic": false,
+         "subhead_max_width": 440,
+         "cta1_text": "",
+         "cta1_url": "#",
+         "cta1_bg": "transparent",
+         "cta1_color": "#18181a",
+         "cta1_size": 14,
+         "cta1_radius": {
+          "tl": 999,
+          "tr": 999,
+          "br": 999,
+          "bl": 999,
+          "linked": true
+         },
+         "cta1_radius_hover": {
+          "tl": 999,
+          "tr": 999,
+          "br": 999,
+          "bl": 999,
+          "linked": true
+         },
+         "cta2_text": "",
+         "cta2_url": "#",
+         "cta2_bg": "transparent",
+         "cta2_color": "#18181a",
+         "cta2_border": "#c2bcab",
+         "cta2_size": 14,
+         "cta2_radius": {
+          "tl": 999,
+          "tr": 999,
+          "br": 999,
+          "bl": 999,
+          "linked": true
+         },
+         "cta2_radius_hover": {
+          "tl": 999,
+          "tr": 999,
+          "br": 999,
+          "bl": 999,
+          "linked": true
+         },
+         "stats": [],
+         "showcase_enabled": false,
+         "split_ratio": "1fr",
+         "gap": 0,
+         "min_height": 0,
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "mo-se-11",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#f2efe8"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "mo-ro-7",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "mo-co-6",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "mo-section-header-5",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": false,
+         "headline_lines": [
+          {
+           "text": "Selected work",
+           "color": "#8d8a82",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 13,
+         "headline_font_weight": "400",
+         "headline_align": "left",
+         "tagline_show": true,
+         "tagline_text": "12 projects",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#8d8a82",
+         "tagline_text_size": 12,
+         "layout": "stack",
+         "gap": 0
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "mo-ro-10",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "mo-co-9",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "mo-worklist-1",
+        "type": "worklist",
+        "settings": {
+         "items": [
+          {
+           "number": "01",
+           "title": "Marisol",
+           "category": "Brand identity",
+           "year": "2026",
+           "link_url": ""
+          },
+          {
+           "number": "02",
+           "title": "Atlas Press",
+           "category": "Editorial · web",
+           "year": "2025",
+           "link_url": ""
+          },
+          {
+           "number": "03",
+           "title": "Field Museum",
+           "category": "Wayfinding",
+           "year": "2025",
+           "link_url": ""
+          },
+          {
+           "number": "04",
+           "title": "Cobalt",
+           "category": "Identity · product",
+           "year": "2024",
+           "link_url": ""
+          },
+          {
+           "number": "05",
+           "title": "Höör Festival",
+           "category": "Campaign",
+           "year": "2023",
+           "link_url": ""
+          }
+         ],
+         "divider_color": "#d7d1c2",
+         "row_padding_y": 26,
+         "row_hover_bg": "#e8e3d7",
+         "hover_indent": 24,
+         "number_color": "#8d8a82",
+         "number_size": 13,
+         "title_font_family": "heading",
+         "title_color": "#18181a",
+         "title_size": 44,
+         "title_weight": "500",
+         "show_category": true,
+         "category_color": "#8d8a82",
+         "category_size": 12,
+         "show_year": true,
+         "year_color": "#18181a",
+         "year_size": 13,
+         "show_arrow": true,
+         "arrow_color": "#18181a",
+         "mono_font_family": "Space Mono"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "mo-se-18",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#e8e3d7"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "mo-ro-14",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "mo-co-13",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "mo-section-header-12",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": false,
+         "headline_lines": [
+          {
+           "text": "Recent / featured",
+           "color": "#8d8a82",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 13,
+         "headline_font_weight": "400",
+         "headline_align": "left",
+         "tagline_show": true,
+         "tagline_text": "↓ scroll",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#8d8a82",
+         "tagline_text_size": 12,
+         "layout": "stack",
+         "gap": 0
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "mo-ro-17",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "mo-co-16",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "mo-workgrid-1",
+        "type": "workgrid",
+        "settings": {
+         "items": [
+          {
+           "image": "",
+           "media_label": "Marisol — identity system, signage",
+           "title": "Marisol",
+           "meta": "'26 — Brand",
+           "description": "A coastal hotel group, rebuilt around one mark and a lot of restraint.",
+           "link_url": "",
+           "tall": false
+          },
+          {
+           "image": "",
+           "media_label": "Atlas Press — book covers",
+           "title": "Atlas Press",
+           "meta": "'25 — Editorial",
+           "description": "An independent publisher's new look, from spine to site.",
+           "link_url": "",
+           "tall": true
+          },
+          {
+           "image": "",
+           "media_label": "Field Museum — wayfinding",
+           "title": "Field Museum",
+           "meta": "'25 — Wayfinding",
+           "description": "A signage and type system that quietly tells you where you are.",
+           "link_url": "",
+           "tall": true
+          },
+          {
+           "image": "",
+           "media_label": "Cobalt — product UI",
+           "title": "Cobalt",
+           "meta": "'24 — Product",
+           "description": "Brand and interface for a developer tool that hates noise.",
+           "link_url": "",
+           "tall": false
+          }
+         ],
+         "columns": 2,
+         "items_gap": 40,
+         "media_aspect": "4/3",
+         "media_tall_aspect": "4/5",
+         "media_bg": "#ebe7dc",
+         "media_label_color": "#18181a",
+         "hover_zoom": true,
+         "title_font_family": "heading",
+         "title_color": "#18181a",
+         "title_size": 22,
+         "title_weight": "500",
+         "meta_color": "#8d8a82",
+         "meta_size": 12,
+         "show_desc": true,
+         "desc_color": "#8d8a82",
+         "desc_size": 15,
+         "mono_font_family": "Space Mono"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "mo-se-25",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#f2efe8"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "mo-ro-21",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "mo-co-20",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "mo-section-header-19",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": false,
+         "headline_lines": [
+          {
+           "text": "Type / specimen",
+           "color": "#8d8a82",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 13,
+         "headline_font_weight": "400",
+         "headline_align": "left",
+         "tagline_show": true,
+         "tagline_text": "drag · edit the words",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#8d8a82",
+         "tagline_text_size": 12,
+         "layout": "stack",
+         "gap": 0
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "mo-ro-24",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "mo-co-23",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "mo-variablespecimen-22",
+        "type": "variablespecimen",
+        "settings": {
+         "font_family": "\"DM Sans\", sans-serif",
+         "sample_text": "Typography is a voice you can see.",
+         "interaction": "both",
+         "auto_animate": true,
+         "auto_speed": "8",
+         "drag_hint": "Trascina · X = peso · Y = dimensione ottica",
+         "show_readout": true,
+         "axes": [
+          {
+           "tag": "wght",
+           "label": "Weight",
+           "min": 200,
+           "max": 800,
+           "default_val": 400
+          },
+          {
+           "tag": "opsz",
+           "label": "Optical",
+           "min": 9,
+           "max": 40,
+           "default_val": 24
+          }
+         ],
+         "text_color": "#18181a",
+         "accent_color": "#8d8a82",
+         "bg_color": "#ebe7dc",
+         "font_size": "72",
+         "font_weight_fallback": "400",
+         "text_align": "left",
+         "padding_y": "36"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "mo-se-32",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#e8e3d7"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "mo-ro-28",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "mo-co-27",
+      "type": "column",
+      "settings": {
+       "width": "2-3"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "mo-section-header-26",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "About",
+         "eyebrow_color": "#8d8a82",
+         "eyebrow_dot_color": "transparent",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "I'm Nadia — a designer who'd rather remove ten things than add one.",
+           "color": "#18181a",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "sans-serif",
+         "headline_font_size": 36,
+         "headline_font_weight": "500",
+         "headline_align": "left",
+         "headline_inline": false,
+         "tagline_show": true,
+         "tagline_text": "For eight years I've worked between brand and digital, mostly with small teams who care about craft. Before going independent I led design at a studio in Copenhagen; now it's just me, which is exactly the right number of people.\n\nI work in tight loops, show early, and treat your constraints as the brief — not the obstacle.",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#3a3a3c",
+         "tagline_text_size": 16,
+         "layout": "stack",
+         "gap": 20
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "mo-ro-31",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "mo-co-30",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "mo-info-cards-29",
+        "type": "info-cards",
+        "settings": {
+         "container_bg": {
+          "type": "solid",
+          "color": "transparent"
+         },
+         "container_padding": 0,
+         "container_gap": 0,
+         "columns": 1,
+         "items_gap": 0,
+         "card_bg": {
+          "type": "solid",
+          "color": "transparent"
+         },
+         "card_color": "#8d8a82",
+         "card_radius": {
+          "tl": 0,
+          "tr": 0,
+          "br": 0,
+          "bl": 0,
+          "linked": true
+         },
+         "card_padding": 15,
+         "card_border": "#d7d1c2",
+         "show_icon": false,
+         "show_counter": true,
+         "show_counter_label": false,
+         "show_arrow": false,
+         "show_footer": false,
+         "show_media": false,
+         "title_color": "#18181a",
+         "title_font_family": "sans-serif",
+         "title_size": 15,
+         "title_weight": "400",
+         "title_italic": false,
+         "counter_size": 12,
+         "description_size": 0,
+         "footer_size": 11,
+         "card_hover_effect": "none",
+         "items": [
+          {
+           "counter": "01",
+           "title": "Brand identity & systems",
+           "description": ""
+          },
+          {
+           "counter": "02",
+           "title": "Editorial & type",
+           "description": ""
+          },
+          {
+           "counter": "03",
+           "title": "Web & product design",
+           "description": ""
+          },
+          {
+           "counter": "04",
+           "title": "Art direction",
+           "description": ""
+          }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "mo-se-36",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "small"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#f2efe8"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "mo-ro-35",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "mo-co-34",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "mo-marquee-33",
+        "type": "marquee",
+        "settings": {
+         "items": [
+          {
+           "text": "Brand identity"
+          },
+          {
+           "text": "Editorial"
+          },
+          {
+           "text": "Web design"
+          },
+          {
+           "text": "Art direction"
+          },
+          {
+           "text": "Type"
+          },
+          {
+           "text": "Packaging"
+          }
+         ],
+         "speed": 34,
+         "direction": "left",
+         "separator": "✺",
+         "separator_color": "#8d8a82",
+         "font_family": "sans-serif",
+         "font_size": 52,
+         "font_weight": "500",
+         "text_color": "#18181a",
+         "bg_color": "transparent",
+         "pause_on_hover": true,
+         "letter_spacing": "-0.03em"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "mo-se-40",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#e8e3d7"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "mo-ro-39",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "mo-co-38",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "mo-cta-banner-37",
+        "type": "cta-banner",
+        "settings": {
+         "headline": "Let's make something",
+         "headline_accent": "clear.",
+         "headline_accent_italic": false,
+         "subtitle": "Currently booking — August 2026 onward",
+         "cta_text": "nadia@halford.studio",
+         "cta_url": "#",
+         "cta2_text": "Book a call",
+         "cta2_url": "#",
+         "cta2_bg": "transparent",
+         "cta2_color": "#18181a",
+         "cta2_border": "#c2bcab",
+         "bg": {
+          "type": "solid",
+          "color": "#e8e3d7"
+         },
+         "text_color": "#18181a",
+         "accent_color": "#18181a",
+         "subtitle_color": "#8d8a82",
+         "cta_bg": "#18181a",
+         "cta_color": "#f2efe8",
+         "cta_radius": {
+          "tl": 999,
+          "tr": 999,
+          "br": 999,
+          "bl": 999,
+          "linked": true
+         },
+         "cta_size": 14,
+         "headline_font_family": "sans-serif",
+         "headline_size": 96,
+         "headline_weight": "500",
+         "subtitle_size": 12,
+         "layout": "stack",
+         "vertical_align": "center",
+         "banner_radius": {
+          "tl": 0,
+          "tr": 0,
+          "br": 0,
+          "bl": 0,
+          "linked": true
+         },
+         "banner_padding": 80
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

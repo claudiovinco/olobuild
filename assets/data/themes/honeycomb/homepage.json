@@ -1,0 +1,1264 @@
+[
+ {
+  "id": "hc-se-4",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#f6ecd6"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "hc-ro-3",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "hc-co-2",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "hc-hero-split-1",
+        "type": "hero-split",
+        "settings": {
+         "eyebrow_text": "Neighbourhood bakery · since 2016",
+         "eyebrow_dot_color": "#c8870f",
+         "eyebrow_color": "#c8870f",
+         "headline_lines": [
+          {
+           "text": "Real bread,",
+           "color": "#3a2a12",
+           "italic": false
+          },
+          {
+           "text": "real",
+           "color": "#c8870f",
+           "italic": true
+          },
+          {
+           "text": "early.",
+           "color": "#3a2a12",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 76,
+         "headline_line_height": 1,
+         "headline_font_weight": "400",
+         "headline_align": "left",
+         "subhead": "Slow-proved sourdough, buttery viennoiserie and proper cakes — made by hand before the sun's up, every single day.",
+         "subhead_color": "#6b552f",
+         "subhead_size": 18,
+         "subhead_italic": false,
+         "subhead_max_width": 430,
+         "cta1_text": "See today's bakes",
+         "cta1_url": "#bakes",
+         "cta1_bg": "#e09a18",
+         "cta1_color": "#ffffff",
+         "cta1_size": 15,
+         "cta1_radius": {
+          "tl": 999,
+          "tr": 999,
+          "br": 999,
+          "bl": 999,
+          "linked": true
+         },
+         "cta1_radius_hover": {
+          "tl": 999,
+          "tr": 999,
+          "br": 999,
+          "bl": 999,
+          "linked": true
+         },
+         "cta2_text": "Our story",
+         "cta2_url": "#story",
+         "cta2_bg": "transparent",
+         "cta2_color": "#3a2a12",
+         "cta2_border": "#cdb47f",
+         "cta2_size": 15,
+         "cta2_radius": {
+          "tl": 999,
+          "tr": 999,
+          "br": 999,
+          "bl": 999,
+          "linked": true
+         },
+         "cta2_radius_hover": {
+          "tl": 999,
+          "tr": 999,
+          "br": 999,
+          "bl": 999,
+          "linked": true
+         },
+         "stats": [],
+         "showcase_enabled": false,
+         "showcase_bg": {
+          "type": "solid",
+          "color": "#efe1c4"
+         },
+         "showcase_padding": 32,
+         "showcase_radius": {
+          "tl": 24,
+          "tr": 24,
+          "br": 24,
+          "bl": 24,
+          "linked": true
+         },
+         "showcase_radius_hover": {
+          "tl": 24,
+          "tr": 24,
+          "br": 24,
+          "bl": 24,
+          "linked": true
+         },
+         "showcase_badge_text": "5am · ovens on",
+         "showcase_badge_dot": "#e09a18",
+         "showcase_badge_bg": "#3a2a12",
+         "showcase_badge_color": "#ffffff",
+         "showcase_items": [],
+         "showcase_card_radius": {
+          "tl": 12,
+          "tr": 12,
+          "br": 12,
+          "bl": 12,
+          "linked": true
+         },
+         "showcase_card_radius_hover": {
+          "tl": 12,
+          "tr": 12,
+          "br": 12,
+          "bl": 12,
+          "linked": true
+         },
+         "showcase_card_shadow": "none",
+         "showcase_caption_left": "",
+         "showcase_caption_right": "",
+         "showcase_hover_effect": "none",
+         "split_ratio": "1.2fr 1fr",
+         "gap": 48,
+         "min_height": 0,
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "hc-se-11",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#fbf5e7"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "hc-ro-7",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "hc-co-6",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "hc-section-header-5",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "Out of the oven",
+         "eyebrow_color": "#c8870f",
+         "eyebrow_dot_color": "#c8870f",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "Today's ",
+           "color": "#3a2a12",
+           "italic": false
+          },
+          {
+           "text": "bakes",
+           "color": "#c8870f",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 52,
+         "headline_font_weight": "400",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": false,
+         "tagline_text": "",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#9c8253",
+         "tagline_text_size": 16,
+         "layout": "center",
+         "gap": 14
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "hc-ro-10",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "hc-co-9",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "hc-product-cards-8",
+        "type": "product-cards",
+        "settings": {
+         "columns": 4,
+         "gap": 20,
+         "items": [
+          {
+           "letter": "S",
+           "letter_color": "#c8870f",
+           "top_bg": {
+            "type": "gradient",
+            "gradient_from": "#efe1c4",
+            "gradient_to": "#e0cfa6",
+            "gradient_angle": 135
+           },
+           "screenshot_label": "SOURDOUGH LOAVES · FLOUR DUST",
+           "brand_label": "BREAD",
+           "brand_color": "#9a6a2f",
+           "show_badge": false,
+           "badge_text": "",
+           "badge_bg": "#3a2a12",
+           "badge_color": "#ffffff",
+           "title": "Country Sourdough",
+           "title_accent": "",
+           "title_accent_italic": false,
+           "description": "48-hour ferment, blistered crust.",
+           "cta_text": "€6 — Add",
+           "cta_url": "#"
+          },
+          {
+           "letter": "C",
+           "letter_color": "#c8870f",
+           "top_bg": {
+            "type": "gradient",
+            "gradient_from": "#efe1c4",
+            "gradient_to": "#e0cfa6",
+            "gradient_angle": 135
+           },
+           "screenshot_label": "CROISSANT · LAMINATION",
+           "brand_label": "VIENNOISERIE",
+           "brand_color": "#9a6a2f",
+           "show_badge": false,
+           "badge_text": "",
+           "badge_bg": "#3a2a12",
+           "badge_color": "#ffffff",
+           "title": "Butter Croissant",
+           "title_accent": "",
+           "title_accent_italic": false,
+           "description": "27 layers, French butter.",
+           "cta_text": "€3.50 — Add",
+           "cta_url": "#"
+          },
+          {
+           "letter": "C",
+           "letter_color": "#c8870f",
+           "top_bg": {
+            "type": "gradient",
+            "gradient_from": "#efe1c4",
+            "gradient_to": "#e0cfa6",
+            "gradient_angle": 135
+           },
+           "screenshot_label": "CINNAMON BUN · STICKY",
+           "brand_label": "SWEET",
+           "brand_color": "#9a6a2f",
+           "show_badge": false,
+           "badge_text": "GONE BY 10",
+           "badge_bg": "#3a2a12",
+           "badge_color": "#f6ecd6",
+           "title": "Cardamom Bun",
+           "title_accent": "",
+           "title_accent_italic": false,
+           "description": "Sticky, fragrant, gone by 10.",
+           "cta_text": "€4 — Add",
+           "cta_url": "#"
+          },
+          {
+           "letter": "F",
+           "letter_color": "#c8870f",
+           "top_bg": {
+            "type": "gradient",
+            "gradient_from": "#efe1c4",
+            "gradient_to": "#e0cfa6",
+            "gradient_angle": 135
+           },
+           "screenshot_label": "FOCACCIA · OLIVE OIL",
+           "brand_label": "BREAD",
+           "brand_color": "#9a6a2f",
+           "show_badge": false,
+           "badge_text": "",
+           "badge_bg": "#3a2a12",
+           "badge_color": "#ffffff",
+           "title": "Rosemary Focaccia",
+           "title_accent": "",
+           "title_accent_italic": false,
+           "description": "Olive oil, flaky salt, dimples.",
+           "cta_text": "€5 — Add",
+           "cta_url": "#"
+          }
+         ],
+         "card_bg": {
+          "type": "solid",
+          "color": "#fbf5e7"
+         },
+         "card_color": "#9c8253",
+         "card_radius": {
+          "tl": 18,
+          "tr": 18,
+          "br": 18,
+          "bl": 18,
+          "linked": true
+         },
+         "card_radius_hover": {
+          "tl": 18,
+          "tr": 18,
+          "br": 18,
+          "bl": 18,
+          "linked": true
+         },
+         "card_radius_hover_duration": 300,
+         "card_shadow": "sm",
+         "card_padding": 18,
+         "top_aspect_ratio": "1/1",
+         "top_padding": 24,
+         "letter_font_family": "serif",
+         "letter_size": 96,
+         "letter_italic": true,
+         "letter_align": "center",
+         "show_screenshot_label": true,
+         "screenshot_label_color": "rgba(58,42,18,.4)",
+         "brand_size": 10,
+         "brand_letter_spacing": 0.08,
+         "title_font_family": "serif",
+         "title_size": 21,
+         "title_weight": "400",
+         "description_size": 13,
+         "cta_size": 12,
+         "cta_arrow": false,
+         "card_hover_effect": "lift"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "hc-se-18",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#f6ecd6"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "hc-ro-14",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "hc-co-13",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "hc-section-header-12",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "When we're open",
+         "eyebrow_color": "#c8870f",
+         "eyebrow_dot_color": "#c8870f",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "Come ",
+           "color": "#3a2a12",
+           "italic": false
+          },
+          {
+           "text": "early",
+           "color": "#c8870f",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 52,
+         "headline_font_weight": "400",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": false,
+         "tagline_text": "",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#9c8253",
+         "tagline_text_size": 16,
+         "layout": "center",
+         "gap": 14
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "hc-ro-17",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "hc-co-16",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "hc-hoursstrip-15",
+        "type": "hoursstrip",
+        "settings": {
+         "items": [
+          {
+           "day": "Tue – Fri",
+           "time": "7:00 – 15:00",
+           "note": "Or until sold out"
+          },
+          {
+           "day": "Saturday",
+           "time": "7:30 – 16:00",
+           "note": "Cake day"
+          },
+          {
+           "day": "Sunday",
+           "time": "8:00 – 13:00",
+           "note": "Brunch bakes"
+          },
+          {
+           "day": "Monday",
+           "time": "Closed",
+           "note": "Feeding the starter"
+          }
+         ],
+         "columns": 4,
+         "band_padding_y": 36,
+         "show_dividers": true,
+         "divider_color": "#e0cfa6",
+         "band_border": true,
+         "day_color": "#9c8253",
+         "day_size": 12,
+         "time_font_family": "heading",
+         "time_color": "#3a2a12",
+         "time_size": 30,
+         "time_weight": "400",
+         "note_color": "#9c8253",
+         "note_size": 13,
+         "mono_font_family": ""
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "hc-se-22",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#fbf5e7"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "hc-ro-21",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "hc-co-20",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "hc-hero-split-19",
+        "type": "hero-split",
+        "settings": {
+         "eyebrow_text": "Our story",
+         "eyebrow_dot_color": "#c8870f",
+         "eyebrow_color": "#c8870f",
+         "headline_lines": [
+          {
+           "text": "One oven, one ",
+           "color": "#3a2a12",
+           "italic": false
+          },
+          {
+           "text": "starter,",
+           "color": "#c8870f",
+           "italic": true
+          },
+          {
+           "text": "a lot of mornings",
+           "color": "#3a2a12",
+           "italic": false
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 48,
+         "headline_line_height": 1.08,
+         "headline_font_weight": "400",
+         "headline_align": "left",
+         "subhead": "Honeycomb began with a wild yeast starter named Doris and a market stall. Ten years on, Doris is still going — and still the boss.\n\nWe mill some of our own flour, prove everything slowly, and bake in small batches so it's always fresh. When it's gone, it's gone.",
+         "subhead_color": "#6b552f",
+         "subhead_size": 16,
+         "subhead_italic": false,
+         "subhead_max_width": 520,
+         "cta1_text": "Meet the bakers",
+         "cta1_url": "#",
+         "cta1_bg": "transparent",
+         "cta1_color": "#3a2a12",
+         "cta1_border": "#cdb47f",
+         "cta1_size": 14,
+         "cta1_radius": {
+          "tl": 999,
+          "tr": 999,
+          "br": 999,
+          "bl": 999,
+          "linked": true
+         },
+         "cta1_radius_hover": {
+          "tl": 999,
+          "tr": 999,
+          "br": 999,
+          "bl": 999,
+          "linked": true
+         },
+         "cta2_text": "",
+         "cta2_url": "",
+         "stats": [],
+         "showcase_enabled": true,
+         "showcase_bg": {
+          "type": "solid",
+          "color": "#efe1c4"
+         },
+         "showcase_padding": 32,
+         "showcase_radius": {
+          "tl": 18,
+          "tr": 18,
+          "br": 18,
+          "bl": 18,
+          "linked": true
+         },
+         "showcase_radius_hover": {
+          "tl": 18,
+          "tr": 18,
+          "br": 18,
+          "bl": 18,
+          "linked": true
+         },
+         "showcase_badge_text": "SINCE 2016",
+         "showcase_badge_dot": "#e09a18",
+         "showcase_badge_bg": "#3a2a12",
+         "showcase_badge_color": "#ffffff",
+         "showcase_items": [
+          {
+           "number": "Sourdough starter",
+           "text": "Doris",
+           "italic": true,
+           "text_color": "#c8870f",
+           "bg": {
+            "type": "solid",
+            "color": "#fbf5e7"
+           }
+          },
+          {
+           "number": "Flour milled",
+           "text": "in-house",
+           "italic": false,
+           "text_color": "#3a2a12",
+           "bg": {
+            "type": "solid",
+            "color": "#fbf5e7"
+           }
+          },
+          {
+           "number": "Batch size",
+           "text": "small",
+           "italic": false,
+           "text_color": "#3a2a12",
+           "bg": {
+            "type": "solid",
+            "color": "#fbf5e7"
+           }
+          }
+         ],
+         "showcase_card_radius": {
+          "tl": 11,
+          "tr": 11,
+          "br": 11,
+          "bl": 11,
+          "linked": true
+         },
+         "showcase_card_radius_hover": {
+          "tl": 11,
+          "tr": 11,
+          "br": 11,
+          "bl": 11,
+          "linked": true
+         },
+         "showcase_card_shadow": "none",
+         "showcase_caption_left": "HONEYCOMB",
+         "showcase_caption_right": "BAKERY",
+         "showcase_hover_effect": "none",
+         "split_ratio": "1fr 1fr",
+         "gap": 56,
+         "min_height": 0,
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "hc-se-29",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#f6ecd6"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "hc-ro-25",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "hc-co-24",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "hc-section-header-23",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "From the bench",
+         "eyebrow_color": "#c8870f",
+         "eyebrow_dot_color": "#c8870f",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "A morning at ",
+           "color": "#3a2a12",
+           "italic": false
+          },
+          {
+           "text": "Honeycomb",
+           "color": "#c8870f",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 52,
+         "headline_font_weight": "400",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": false,
+         "tagline_text": "",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#9c8253",
+         "tagline_text_size": 16,
+         "layout": "center",
+         "gap": 14
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "hc-ro-28",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "hc-co-27",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "hc-gallery-26",
+        "type": "gallery",
+        "settings": {
+         "layout": "masonry",
+         "columns": "4",
+         "gap": "12",
+         "img_height": "180px",
+         "object_fit": "cover",
+         "thumb_radius": "12",
+         "show_caption": false,
+         "fx_hover_zoom": true,
+         "fx_hover_zoom_scale": "1.06",
+         "fx_hover_tilt": false,
+         "shadow": "none",
+         "images": [
+          {
+           "url": "",
+           "caption": "scoring a loaf"
+          },
+          {
+           "url": "",
+           "caption": "croissant lamination"
+          },
+          {
+           "url": "",
+           "caption": "cooling rack"
+          },
+          {
+           "url": "",
+           "caption": "the counter"
+          },
+          {
+           "url": "",
+           "caption": "cardamom buns"
+          },
+          {
+           "url": "",
+           "caption": "flour and hands"
+          }
+         ],
+         "tile_padding": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+         }
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "hc-se-33",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#fbf5e7"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "hc-ro-32",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "hc-co-31",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "hc-testimonial-30",
+        "type": "testimonial",
+        "settings": {
+         "quote": "\"I've stopped pretending I'll bake my own. Honeycomb's sourdough ruined me for supermarket bread — in the best way.\"",
+         "author_name": "Greta H.",
+         "author_role": "Saturday regular",
+         "rating": "0",
+         "layout": "single",
+         "show_line": false,
+         "bg_color": "transparent",
+         "text_color": "#3a2a12",
+         "border_radius": "0",
+         "avatar": ""
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "hc-se-37",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#f6ecd6"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "hc-ro-36",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "hc-co-35",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "hc-builder-34",
+        "type": "builder",
+        "settings": {
+         "eyebrow": "Build a box",
+         "heading": "Box of six",
+         "intro": "Mix any six pastries for weekend pickup — tap to add and we'll have it bagged and still warm.",
+         "currency": "€",
+         "cap": 6,
+         "total_label": "Total",
+         "count_label": "of 6",
+         "cta_text": "Reserve your box",
+         "cta_url": "#",
+         "zone_accent": "#f0b429",
+         "zone_on": "#3a2a12",
+         "card_bg": "#fbf5e7",
+         "card_border": "1px solid #e0cfa6",
+         "align": "left",
+         "items": [
+          {
+           "name": "Butter Croissant",
+           "price": 3.5,
+           "note": "Classic, flaky, golden.",
+           "start": false
+          },
+          {
+           "name": "Pain au Chocolat",
+           "price": 4,
+           "note": "Dark chocolate, two rods.",
+           "start": false
+          },
+          {
+           "name": "Almond Croissant",
+           "price": 4.5,
+           "note": "Frangipane, toasted flakes.",
+           "start": false
+          },
+          {
+           "name": "Cinnamon Bun",
+           "price": 4,
+           "note": "Brown sugar, cardamom swirl.",
+           "start": false
+          },
+          {
+           "name": "Morning Bun",
+           "price": 3.5,
+           "note": "Orange zest, sugar crust.",
+           "start": false
+          },
+          {
+           "name": "Kouign-Amann",
+           "price": 4.5,
+           "note": "Caramelised, chewy, unmissable.",
+           "start": false
+          }
+         ]
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "hc-se-44",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#f6ecd6"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "hc-ro-40",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "hc-co-39",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "hc-section-header-38",
+        "type": "section-header",
+        "settings": {
+         "eyebrow_show": true,
+         "eyebrow_text": "For the home bakers",
+         "eyebrow_color": "#c8870f",
+         "eyebrow_dot_color": "#c8870f",
+         "eyebrow_separator": "",
+         "headline_lines": [
+          {
+           "text": "The maths in the ",
+           "color": "#3a2a12",
+           "italic": false
+          },
+          {
+           "text": "dough",
+           "color": "#c8870f",
+           "italic": true
+          }
+         ],
+         "headline_font_family": "serif",
+         "headline_font_size": 52,
+         "headline_font_weight": "400",
+         "headline_align": "center",
+         "headline_inline": true,
+         "tagline_show": true,
+         "tagline_text": "Our weekend sourdough, written the way bakers think — in percentages of the flour. Set your flour weight and everything else falls into place.",
+         "tagline_text_italic": false,
+         "tagline_text_color": "#9c8253",
+         "tagline_text_size": 16,
+         "layout": "center",
+         "gap": 14
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "id": "hc-ro-43",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "hc-co-42",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "hc-scaler-41",
+        "type": "scaler",
+        "settings": {
+         "eyebrow": "Set your flour",
+         "heading": "",
+         "intro": "~78% hydration, naturally leavened, a long cold prove. Salt last, always. Bake at 250°C with steam for the first fifteen minutes.",
+         "mode": "percent",
+         "base_label": "Flour",
+         "base_value": 1000,
+         "base_min": 300,
+         "base_max": 1500,
+         "base_step": 25,
+         "base_suffix": "g",
+         "items": [
+          {
+           "name": "Water",
+           "amount": 78,
+           "unit": "g"
+          },
+          {
+           "name": "Levain",
+           "amount": 20,
+           "unit": "g"
+          },
+          {
+           "name": "Sea salt",
+           "amount": 2,
+           "unit": "g"
+          }
+         ],
+         "show_total": true,
+         "total_label": "Total dough",
+         "total_unit": "g",
+         "zone_accent": "#e09a18",
+         "card_bg": "#fbf5e7",
+         "card_border": "1px solid #e0cfa6",
+         "align": "left"
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "hc-se-48",
+  "type": "section",
+  "settings": {
+   "style": "default",
+   "width": "large",
+   "padding": "large"
+  },
+  "style": {
+   "bg": {
+    "type": "solid",
+    "color": "#3a2a12"
+   }
+  },
+  "advanced": {},
+  "children": [
+   {
+    "id": "hc-ro-47",
+    "type": "row",
+    "settings": {},
+    "style": {},
+    "advanced": {},
+    "children": [
+     {
+      "id": "hc-co-46",
+      "type": "column",
+      "settings": {
+       "width": "1-1"
+      },
+      "style": {},
+      "advanced": {},
+      "children": [
+       {
+        "id": "hc-cta-banner-45",
+        "type": "cta-banner",
+        "settings": {
+         "headline": "Save your ",
+         "headline_accent": "loaf.",
+         "headline_accent_italic": true,
+         "subtitle": "Pre-order sourdough and pastries for weekend pickup — so you never miss out to the early crowd.",
+         "cta_text": "Pre-order for pickup",
+         "cta_url": "#",
+         "cta2_text": "",
+         "cta2_url": "",
+         "bg": {
+          "type": "solid",
+          "color": "#3a2a12"
+         },
+         "text_color": "#f6ecd6",
+         "accent_color": "#e09a18",
+         "subtitle_color": "#e3d3ad",
+         "cta_bg": "#e09a18",
+         "cta_color": "#ffffff",
+         "cta_radius": {
+          "tl": 999,
+          "tr": 999,
+          "br": 999,
+          "bl": 999,
+          "linked": true
+         },
+         "cta_size": 15,
+         "headline_font_family": "serif",
+         "headline_size": 60,
+         "headline_weight": "400",
+         "subtitle_size": 17,
+         "layout": "stack",
+         "vertical_align": "center",
+         "banner_radius": {
+          "tl": 0,
+          "tr": 0,
+          "br": 0,
+          "bl": 0,
+          "linked": true
+         },
+         "banner_padding": 80
+        },
+        "style": {},
+        "advanced": {},
+        "children": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

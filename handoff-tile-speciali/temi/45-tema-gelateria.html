@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gèlo — gelateria artigianale · tema dimostrativo OLObuild</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared/olo-demo.css">
+<style>
+:root{
+  --bg:#FFF6F0; --bg-2:#FFEAE0; --mint:#9BE0CE; --mint-d:#5FBFA6; --berry:#F2607D; --berry-d:#D8456;
+  --berry-dd:#D84563; --cream:#FFFBF6; --pist:#BFD98A; --choc:#7A4A35;
+  --ink:#3A2230; --ink-2:#7A5E6C; --ink-3:#B49AA6; --line:#F3DBD0;
+  --tile-accent:#F2607D; --tile-btn:#3A2230;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Manrope',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+a{color:inherit;text-decoration:none;}
+.fr{font-family:'Fraunces',Georgia,serif;font-weight:600;}
+.mono{font-family:'JetBrains Mono',monospace;}
+.wrap{max-width:1180px;margin:0 auto;padding:0 44px;}
+.kick{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--berry);font-weight:600;display:inline-flex;align-items:center;gap:9px;}
+.kick::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--mint-d);}
+
+/* nav */
+.nav{position:fixed;inset:0 0 auto 0;z-index:50;display:flex;align-items:center;gap:26px;padding:22px 44px;transition:all .35s;border-bottom:1px solid transparent;}
+.nav.solid{background:rgba(255,246,240,.92);backdrop-filter:blur(14px);border-color:var(--line);padding:14px 44px;}
+.brand{font-family:'Fraunces',serif;font-weight:600;font-size:27px;letter-spacing:-.01em;display:flex;align-items:center;gap:8px;}
+.brand .scoop{width:16px;height:16px;border-radius:50% 50% 50% 0;background:var(--berry);transform:rotate(45deg);}
+.nav-links{margin-left:auto;display:flex;gap:26px;font-size:14px;font-weight:600;}
+.nav-links a:hover{color:var(--berry);}
+.nav-cta{background:var(--berry);color:#fff;padding:11px 20px;border-radius:100px;font-size:13px;font-weight:700;transition:transform .15s;}
+.nav-cta:hover{transform:translateY(-2px);}
+@media(max-width:880px){.nav-links{display:none;}}
+
+/* hero */
+#hero{min-height:100vh;display:grid;grid-template-columns:1.05fr .95fr;align-items:center;gap:50px;padding:120px 44px 60px;max-width:1180px;margin:0 auto;position:relative;}
+.blob{position:absolute;border-radius:46% 54% 60% 40%/52% 44% 56% 48%;filter:blur(2px);z-index:-1;animation:wob 9s ease-in-out infinite;}
+.blob.b1{width:280px;height:280px;background:var(--mint);opacity:.5;top:12%;right:6%;}
+.blob.b2{width:200px;height:200px;background:var(--berry);opacity:.22;bottom:14%;left:2%;animation-delay:-3s;}
+@keyframes wob{0%,100%{border-radius:46% 54% 60% 40%/52% 44% 56% 48%;}50%{border-radius:58% 42% 44% 56%/46% 58% 42% 54%;}}
+.hero-ey{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--berry);margin-bottom:20px;}
+.hero-h{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(52px,8vw,124px);line-height:.92;letter-spacing:-.02em;margin:0;}
+.hero-h em{font-style:italic;color:var(--berry);}
+.hero-sub{font-size:18px;line-height:1.6;color:var(--ink-2);max-width:36ch;margin:24px 0 32px;}
+.btn{display:inline-flex;align-items:center;gap:9px;background:var(--berry);color:#fff;border:none;cursor:pointer;padding:15px 28px;border-radius:100px;font-family:inherit;font-size:14px;font-weight:700;transition:all .2s;}
+.btn:hover{background:var(--berry-dd);transform:translateY(-1px);}
+.btn.mint{background:var(--mint-d);}.btn.mint:hover{background:#4FA890;}
+.hero-img{position:relative;}
+.hero-img image-slot{width:100%;aspect-ratio:1;display:block;border-radius:32px;}
+@media(max-width:880px){#hero{grid-template-columns:1fr;}.hero-img{display:none;}}
+
+/* SCRATCH CARD */
+#scratch-sec{padding:120px 0;text-align:center;}
+.sc-h{max-width:560px;margin:0 auto 44px;}
+.sc-h h2{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(34px,4.6vw,58px);margin:16px 0 12px;}
+.sc-h p{font-size:16px;color:var(--ink-2);line-height:1.6;margin:0;}
+.scratch-card{position:relative;width:min(520px,90vw);margin:0 auto;aspect-ratio:16/10;border-radius:24px;overflow:hidden;box-shadow:0 30px 60px -28px rgba(58,34,48,.4);}
+.sc-prize{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px;
+  background:radial-gradient(circle at 50% 30%,#FFF3D6,var(--bg-2));}
+.sc-prize .pf{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--berry);}
+.sc-prize .pn{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(34px,5vw,58px);line-height:1;margin:10px 0 8px;color:var(--ink);}
+.sc-prize .pn em{font-style:italic;color:var(--berry);}
+.sc-prize .pd{font-size:15px;color:var(--ink-2);max-width:30ch;}
+.sc-prize .scoops{display:flex;gap:8px;margin-top:16px;}
+.sc-prize .scoops span{width:30px;height:30px;border-radius:50% 50% 50% 0;transform:rotate(45deg);}
+#scCanvas{position:absolute;inset:0;width:100%;height:100%;z-index:2;cursor:grab;touch-action:none;}
+#scCanvas:active{cursor:grabbing;}
+.sc-note{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.04em;color:var(--ink-3);margin-top:22px;}
+.sc-reset{background:transparent;border:1px solid var(--line);color:var(--ink-2);border-radius:100px;padding:9px 18px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;margin-top:18px;transition:all .2s;}
+.sc-reset:hover{border-color:var(--berry);color:var(--berry);}
+
+/* flavors */
+#flavors{padding:110px 0;background:var(--bg-2);}
+.fl-h{text-align:center;margin-bottom:46px;}
+.fl-h h2{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(34px,4.6vw,60px);margin:16px 0 0;}
+.fl-h .kick{justify-content:center;}
+.fl-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
+.flav{background:var(--cream);border-radius:22px;padding:28px 22px;text-align:center;transition:transform .25s;}
+.flav:hover{transform:translateY(-8px);}
+.flav .scoop{width:64px;height:64px;border-radius:50% 50% 50% 0;transform:rotate(45deg);margin:0 auto 22px;box-shadow:0 10px 20px -8px rgba(58,34,48,.3);}
+.flav h3{font-family:'Fraunces',serif;font-weight:600;font-size:21px;margin:0 0 8px;}
+.flav p{font-size:13px;color:var(--ink-2);line-height:1.5;margin:0;}
+.flav .vg{display:inline-block;margin-top:12px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--mint-d);border:1px solid var(--mint);border-radius:100px;padding:3px 9px;}
+@media(max-width:880px){.fl-grid{grid-template-columns:1fr 1fr;}}
+
+/* story */
+#story{padding:110px 0;}
+.story{display:grid;grid-template-columns:1.05fr 1fr;gap:64px;align-items:center;}
+.story .ph image-slot{width:100%;aspect-ratio:5/4;display:block;border-radius:24px;}
+.story h2{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(32px,4vw,54px);line-height:1.05;margin:16px 0 18px;}
+.story h2 em{font-style:italic;color:var(--berry);}
+.story p{font-size:16px;line-height:1.7;color:var(--ink-2);margin:0 0 16px;}
+.story p strong{color:var(--ink);}
+@media(max-width:880px){.story{grid-template-columns:1fr;gap:36px;}}
+
+/* stats */
+.stats{padding:80px 0;text-align:center;}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:30px;}
+.st .num{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(46px,6vw,82px);line-height:1;color:var(--berry);}
+.st .lbl{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2);margin-top:10px;}
+@media(max-width:760px){.stat-grid{grid-template-columns:1fr 1fr;gap:34px 20px;}}
+
+/* cta */
+#cta{padding:0 0 110px;}
+.cta-card{background:var(--mint);border-radius:30px;padding:64px 50px;text-align:center;position:relative;overflow:hidden;}
+.cta-card h2{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(32px,4.4vw,58px);margin:0 0 14px;color:var(--ink);}
+.cta-card p{font-size:17px;color:var(--ink-2);max-width:40ch;margin:0 auto 28px;}
+
+footer{background:var(--ink);color:rgba(255,251,246,.62);padding:56px 0 34px;}
+.f-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px;}
+.f-row .fm{font-family:'Fraunces',serif;font-weight:600;font-size:24px;color:var(--cream);}
+.olo-credit{color:rgba(255,251,246,.74);border-color:rgba(255,251,246,.18);background:rgba(255,255,255,.05);}
+.f-meta{font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(255,251,246,.42);}
+.f-tiles{font-family:'JetBrains Mono',monospace;font-size:10.5px;line-height:1.9;color:rgba(255,251,246,.42);margin-top:22px;max-width:92ch;}
+.f-tiles b{color:rgba(255,251,246,.7);}
+</style>
+</head>
+<body>
+
+<nav class="nav" id="nav" data-solid-at="70vh">
+  <div class="brand"><span class="scoop"></span>Gèlo</div>
+  <div class="nav-links"><a href="#scratch-sec">Gusto del mese</a><a href="#flavors">Gusti</a><a href="#story">Chi siamo</a></div>
+  <a class="nav-cta" href="#flavors">Vieni a provarci</a>
+</nav>
+
+<section id="hero" data-tile="Hero + BlobFX">
+  <div class="blob b1"></div><div class="blob b2"></div>
+  <div>
+    <div class="hero-ey">Gelateria artigianale · dal 1987</div>
+    <h1 class="hero-h">Felicità<br>in <em>coppetta.</em></h1>
+    <p class="hero-sub">Gelato mantecato ogni mattina con frutta di stagione e latte di montagna. Niente coloranti, solo cose vere.</p>
+    <div style="display:flex;gap:13px;flex-wrap:wrap"><a class="btn" href="#scratch-sec">Scopri il gusto del mese →</a><a class="btn mint" href="#flavors">Tutti i gusti</a></div>
+  </div>
+  <div class="hero-img" data-tile="Image"><image-slot id="gl-hero" placeholder="coni / vaschette — foto"></image-slot></div>
+</section>
+
+<!-- SCRATCH CARD -->
+<section id="scratch-sec" data-tile="ScratchFX · gratta e scopri">
+  <div class="wrap">
+    <div class="sc-h"><span class="kick" style="justify-content:center">Edizione limitata</span><h2 class="fr">Gratta e scopri il gusto del mese</h2><p>Usa il dito (o il mouse) per grattare via la pellicola e svelare il nostro nuovo gusto a sorpresa.</p></div>
+    <div class="scratch-card">
+      <div class="sc-prize">
+        <div class="pf">Gusto di Giugno</div>
+        <div class="pn fr">Fragola &amp; <em>Basilico</em></div>
+        <div class="pd">Fragole di Sant'Orsola e basilico fresco. Dolce, profumato, sorprendente.</div>
+        <div class="scoops"><span style="background:#F2607D"></span><span style="background:#BFD98A"></span><span style="background:#F2607D"></span></div>
+      </div>
+      <canvas id="scCanvas"></canvas>
+    </div>
+    <div><button class="sc-reset" id="scReset">↺ Ricopri e rigratta</button></div>
+    <div class="sc-note">✦ ogni mese un gusto nuovo da scoprire in negozio</div>
+  </div>
+</section>
+
+<section id="flavors" data-tile="ProGallery · gusti">
+  <div class="wrap">
+    <div class="fl-h"><span class="kick">Sempre disponibili</span><h2 class="fr">I nostri classici</h2></div>
+    <div class="fl-grid reveal-stagger">
+      <div class="flav"><div class="scoop" style="background:linear-gradient(135deg,#7A4A35,#9A6147)"></div><h3 class="fr">Cioccolato</h3><p>Fondente 70%, intenso e vellutato.</p></div>
+      <div class="flav"><div class="scoop" style="background:linear-gradient(135deg,#BFD98A,#A6C46A)"></div><h3 class="fr">Pistacchio</h3><p>Di Bronte DOP, tostato lentamente.</p><span class="vg">vegano</span></div>
+      <div class="flav"><div class="scoop" style="background:linear-gradient(135deg,#F2607D,#E04567)"></div><h3 class="fr">Fragola</h3><p>Solo frutta, niente latte. Fresca.</p><span class="vg">vegano</span></div>
+      <div class="flav"><div class="scoop" style="background:linear-gradient(135deg,#FFF3D6,#F3DDA0)"></div><h3 class="fr">Fiordilatte</h3><p>Il nostro latte d'alpeggio, e basta.</p></div>
+      <div class="flav"><div class="scoop" style="background:linear-gradient(135deg,#9BE0CE,#5FBFA6)"></div><h3 class="fr">Menta</h3><p>Foglie fresche, niente sciroppi.</p><span class="vg">vegano</span></div>
+      <div class="flav"><div class="scoop" style="background:linear-gradient(135deg,#E8B86A,#D89A3C)"></div><h3 class="fr">Caramello salato</h3><p>Burro salato e zucchero ambrato.</p></div>
+      <div class="flav"><div class="scoop" style="background:linear-gradient(135deg,#C98AB0,#A86890)"></div><h3 class="fr">Lampone</h3><p>Acidulo e brillante, da fine pasto.</p><span class="vg">vegano</span></div>
+      <div class="flav"><div class="scoop" style="background:linear-gradient(135deg,#6B4E9E,#54407E)"></div><h3 class="fr">Mirtillo</h3><p>Selvatico, raccolto in quota.</p><span class="vg">vegano</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="story" data-tile="Section · inner-columns">
+  <div class="wrap story">
+    <div class="ph reveal" data-tile="Image"><image-slot id="gl-story" placeholder="laboratorio gelato"></image-slot></div>
+    <div class="reveal">
+      <span class="kick">La nostra storia</span>
+      <h2 class="fr">Una <em>famiglia</em>, tre generazioni, una mantecatrice.</h2>
+      <p>Da quasi quarant'anni mantechiamo il gelato ogni mattina nel nostro laboratorio a vista. La ricetta del fiordilatte non è mai cambiata.</p>
+      <p>Usiamo <strong>frutta di stagione</strong> dei contadini del posto e zero semilavorati. Quello che non è naturale, qui non entra.</p>
+    </div>
+  </div>
+</section>
+
+<section class="stats" data-tile="Counter">
+  <div class="wrap">
+    <div class="stat-grid reveal-stagger">
+      <div class="st"><div class="num"><span class="count" data-count="38">0</span></div><div class="lbl">Anni di gelato</div></div>
+      <div class="st"><div class="num"><span class="count" data-count="42">0</span></div><div class="lbl">Gusti a rotazione</div></div>
+      <div class="st"><div class="num"><span class="count" data-count="100">0</span>%</div><div class="lbl">Ingredienti naturali</div></div>
+      <div class="st"><div class="num"><span class="count" data-count="12">0</span></div><div class="lbl">Gusti vegani</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="cta" data-tile="AnimatedHeading">
+  <div class="wrap">
+    <div class="cta-card">
+      <span class="kick" style="justify-content:center;color:var(--berry-dd)">Ti aspettiamo</span>
+      <h2 class="fr">Passa in gelateria</h2>
+      <p>Piazza del Duomo 4, Trento · tutti i giorni 11:00 — 24:00. Nei mesi caldi, anche di più.</p>
+      <a class="btn" href="#">Come arrivare →</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="f-row">
+      <div class="fm fr">Gèlo</div>
+      <div class="olo-credit"><span class="olo-mk"><b></b><i></i><b></b></span>Costruito con <b class="hl">OLObuild</b> — zero codice</div>
+    </div>
+    <div class="f-tiles"><b>Tile usati (10):</b> Hero · BlobFX · ScratchFX (gratta e scopri) · ProGallery gusti · Section/inner-columns · Counter · AnimatedHeading · Image · DarkMode · ShapeDivider — nessuna prenotazione.</div>
+    <div class="f-row" style="margin-top:22px"><span class="f-meta">© 2026 Gèlo gelateria — tema dimostrativo · Trento</span><span class="f-meta">OLOtheme · demo · 45 — Gelateria</span></div>
+  </div>
+</footer>
+
+<button id="tiletoggle"><span class="sq"></span><span class="t">Mostra tile</span></button>
+
+<script src="image-slot.js"></script>
+<script src="shared/olo-demo.js"></script>
+<script>
+/* scratch card */
+(function(){
+  var c=document.getElementById('scCanvas'),ctx=c.getContext('2d'),reset=document.getElementById('scReset');
+  var W,H,drawing=false,cleared=false;
+  function paintFoil(){
+    W=c.width=c.offsetWidth;H=c.height=c.offsetHeight;
+    var g=ctx.createLinearGradient(0,0,W,H);
+    g.addColorStop(0,'#C9C2CC');g.addColorStop(.5,'#E7DFE6');g.addColorStop(1,'#BBB2BD');
+    ctx.globalCompositeOperation='source-over';
+    ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+    // sprinkle text
+    ctx.fillStyle='rgba(242,96,125,.5)';ctx.font='bold 16px "JetBrains Mono",monospace';ctx.textAlign='center';
+    for(var y=24;y<H;y+=42){for(var x=0;x<W+60;x+=120){ctx.save();ctx.translate(x+(y/42%2?0:60),y);ctx.rotate(-0.2);ctx.fillText('GRATTA',0,0);ctx.restore();}}
+    cleared=false;
+  }
+  paintFoil();
+  var ro=new ResizeObserver(function(){if(!cleared)paintFoil();});ro.observe(c);
+  function pos(e){var r=c.getBoundingClientRect();var p=e.touches?e.touches[0]:e;return [(p.clientX-r.left)*(c.width/r.width),(p.clientY-r.top)*(c.height/r.height)];}
+  function scr(x,y){ctx.globalCompositeOperation='destination-out';ctx.beginPath();ctx.arc(x,y,30,0,Math.PI*2);ctx.fill();}
+  c.addEventListener('pointerdown',function(e){drawing=true;cleared=true;var p=pos(e);scr(p[0],p[1]);});
+  c.addEventListener('pointermove',function(e){if(!drawing)return;var p=pos(e);scr(p[0],p[1]);});
+  window.addEventListener('pointerup',function(){drawing=false;});
+  reset.addEventListener('click',paintFoil);
+})();
+</script>
+</body>
+</html>

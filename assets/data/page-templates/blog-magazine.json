@@ -7,96 +7,185 @@
     "0": {
       "id": "tpl-b1-s1",
       "type": "section",
-      "settings": { "style": "default", "width": "expand", "padding": "xlarge" },
-      "style": { "bg": { "type": "solid", "color": "#0F172A" }, "padding_top": "100", "padding_bottom": "100" },
+      "settings": {
+        "style": "default",
+        "width": "expand",
+        "padding": "xlarge"
+      },
+      "style": {
+        "bg": {
+          "type": "solid",
+          "color": "#0F172A"
+        },
+        "padding_top": "100",
+        "padding_bottom": "100"
+      },
       "advanced": {},
-      "children": [{
-        "id": "tpl-b1-r1",
-        "type": "row",
-        "settings": { "layout": "100", "gap": 0, "vertical_align": "center" },
-        "style": {},
-        "advanced": {},
-        "children": [],
-        "settings": {
-          "layout": "100", "gap": 0, "vertical_align": "center",
-          "columns_data": [{
-            "id": "tpl-b1-c1",
-            "tiles": [{
-              "id": "tpl-b1-t1",
-              "type": "headline",
-              "settings": { "text": "Il nostro Blog", "tag": "h1", "alignment": "center", "font_size": "48", "font_weight": "800", "color": "#ffffff" },
-              "style": {},
-              "advanced": {}
-            },{
-              "id": "tpl-b1-t2",
-              "type": "spacer",
-              "settings": { "height": "16" },
-              "style": {},
-              "advanced": {}
-            },{
-              "id": "tpl-b1-t3",
-              "type": "text",
-              "settings": { "text": "Idee, tutorial e approfondimenti per il tuo business digitale", "alignment": "center", "font_size": "18", "color": "#94A3B8" },
-              "style": {},
-              "advanced": {}
-            }]
-          }]
+      "children": [
+        {
+          "id": "tpl-b1-r1",
+          "type": "row",
+          "settings": {
+            "layout": "100",
+            "gap": 0,
+            "vertical_align": "center",
+            "columns_data": [
+              {
+                "id": "tpl-b1-c1",
+                "tiles": [
+                  {
+                    "id": "tpl-b1-t1",
+                    "type": "headline",
+                    "settings": {
+                      "text": "Il nostro Blog",
+                      "tag": "h1",
+                      "alignment": "center",
+                      "font_size": "48",
+                      "font_weight": "800",
+                      "color": "#ffffff"
+                    },
+                    "style": {},
+                    "advanced": {}
+                  },
+                  {
+                    "id": "tpl-b1-t2",
+                    "type": "spacer",
+                    "settings": {
+                      "height": "16"
+                    },
+                    "style": {},
+                    "advanced": {}
+                  },
+                  {
+                    "id": "tpl-b1-t3",
+                    "type": "text",
+                    "settings": {
+                      "text": "Idee, tutorial e approfondimenti per il tuo business digitale",
+                      "alignment": "center",
+                      "font_size": "18",
+                      "color": "#94A3B8"
+                    },
+                    "style": {},
+                    "advanced": {}
+                  }
+                ]
+              }
+            ]
+          },
+          "style": {},
+          "advanced": {},
+          "children": []
         }
-      }]
+      ]
     },
     "1": {
       "id": "tpl-b1-s2",
       "type": "section",
-      "settings": { "style": "default", "width": "default", "padding": "large" },
-      "style": { "padding_top": "60", "padding_bottom": "60" },
+      "settings": {
+        "style": "default",
+        "width": "default",
+        "padding": "large"
+      },
+      "style": {
+        "padding_top": "60",
+        "padding_bottom": "60"
+      },
       "advanced": {},
-      "children": [{
-        "id": "tpl-b1-r2",
-        "type": "row",
-        "settings": {
-          "layout": "100", "gap": 0,
-          "columns_data": [{
-            "id": "tpl-b1-c2",
-            "tiles": [{
-              "id": "tpl-b1-t4",
-              "type": "postgrid",
-              "settings": { "post_type": "post", "posts_per_page": 9, "columns": 3, "gap": 24, "show_image": true, "show_excerpt": true, "show_date": true, "show_author": true, "show_category": true, "pagination": true, "pagination_style": "numbers", "image_ratio": "16:9", "border_radius": 12 },
-              "style": {},
-              "advanced": {}
-            }]
-          }]
-        },
-        "style": {},
-        "advanced": {},
-        "children": []
-      }]
+      "children": [
+        {
+          "id": "tpl-b1-r2",
+          "type": "row",
+          "settings": {
+            "layout": "100",
+            "gap": 0,
+            "columns_data": [
+              {
+                "id": "tpl-b1-c2",
+                "tiles": [
+                  {
+                    "id": "tpl-b1-t4",
+                    "type": "postgrid",
+                    "settings": {
+                      "post_type": "post",
+                      "posts_per_page": 9,
+                      "columns": 3,
+                      "gap": 24,
+                      "show_image": true,
+                      "show_excerpt": true,
+                      "show_date": true,
+                      "show_author": true,
+                      "show_category": true,
+                      "pagination": true,
+                      "pagination_style": "numbers",
+                      "image_ratio": "16:9",
+                      "border_radius": 12
+                    },
+                    "style": {},
+                    "advanced": {}
+                  }
+                ]
+              }
+            ]
+          },
+          "style": {},
+          "advanced": {},
+          "children": []
+        }
+      ]
     },
     "2": {
       "id": "tpl-b1-s3",
       "type": "section",
-      "settings": { "style": "default", "width": "expand", "padding": "large" },
-      "style": { "bg": { "type": "solid", "color": "#F1F5F9" }, "padding_top": "60", "padding_bottom": "60" },
-      "advanced": {},
-      "children": [{
-        "id": "tpl-b1-r3",
-        "type": "row",
-        "settings": {
-          "layout": "100", "gap": 0,
-          "columns_data": [{
-            "id": "tpl-b1-c3",
-            "tiles": [{
-              "id": "tpl-b1-t5",
-              "type": "newsletter",
-              "settings": { "title": "Resta aggiornato", "subtitle": "Iscriviti alla newsletter per ricevere i nuovi articoli direttamente nella tua email.", "layout": "horizontal", "max_width": "600", "alignment": "center", "bg_color": "#ffffff", "border_radius": 16, "padding": "40" },
-              "style": {},
-              "advanced": {}
-            }]
-          }]
+      "settings": {
+        "style": "default",
+        "width": "expand",
+        "padding": "large"
+      },
+      "style": {
+        "bg": {
+          "type": "solid",
+          "color": "#F1F5F9"
         },
-        "style": {},
-        "advanced": {},
-        "children": []
-      }]
+        "padding_top": "60",
+        "padding_bottom": "60"
+      },
+      "advanced": {},
+      "children": [
+        {
+          "id": "tpl-b1-r3",
+          "type": "row",
+          "settings": {
+            "layout": "100",
+            "gap": 0,
+            "columns_data": [
+              {
+                "id": "tpl-b1-c3",
+                "tiles": [
+                  {
+                    "id": "tpl-b1-t5",
+                    "type": "newsletter",
+                    "settings": {
+                      "title": "Resta aggiornato",
+                      "subtitle": "Iscriviti alla newsletter per ricevere i nuovi articoli direttamente nella tua email.",
+                      "layout": "horizontal",
+                      "max_width": "600",
+                      "alignment": "center",
+                      "bg_color": "#ffffff",
+                      "border_radius": 16,
+                      "padding": "40"
+                    },
+                    "style": {},
+                    "advanced": {}
+                  }
+                ]
+              }
+            ]
+          },
+          "style": {},
+          "advanced": {},
+          "children": []
+        }
+      ]
     }
   }
 }
