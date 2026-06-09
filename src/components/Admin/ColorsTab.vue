@@ -72,7 +72,9 @@
         <div class="gen-seeds">
           <div class="gen-seed">
             <span class="gen-seed-label">{{ t('Colore base') }}</span>
-            <button class="brand-swatch sm" :style="{ background: seed1 }" @click="pickSeed('seed1', $event)" :aria-label="t('Scegli colore base')"></button>
+            <label class="brand-swatch sm" :style="{ background: seed1 }" :title="t('Scegli colore base')">
+              <input type="color" class="swatch-native" :value="hexInput(seed1)" @input="onPickSeed('seed1', $event.target.value)" :aria-label="t('Scegli colore base')" />
+            </label>
             <div class="cfg-input mono sm">
               <span class="prefix">#</span>
               <input type="text" :value="seed1.replace(/^#/, '').toUpperCase()" @input="onSeedInput('seed1', $event.target.value)" maxlength="6" spellcheck="false" />
@@ -80,7 +82,9 @@
           </div>
           <div v-if="ruleNeedsTwo" class="gen-seed">
             <span class="gen-seed-label">{{ t('Secondo colore') }}</span>
-            <button class="brand-swatch sm" :style="{ background: seed2 }" @click="pickSeed('seed2', $event)" :aria-label="t('Scegli secondo colore')"></button>
+            <label class="brand-swatch sm" :style="{ background: seed2 }" :title="t('Scegli secondo colore')">
+              <input type="color" class="swatch-native" :value="hexInput(seed2)" @input="onPickSeed('seed2', $event.target.value)" :aria-label="t('Scegli secondo colore')" />
+            </label>
             <div class="cfg-input mono sm">
               <span class="prefix">#</span>
               <input type="text" :value="seed2.replace(/^#/, '').toUpperCase()" @input="onSeedInput('seed2', $event.target.value)" maxlength="6" spellcheck="false" />
@@ -135,7 +139,9 @@
     <div class="cfg-card-body">
       <div class="brand-list">
         <div v-for="r in BRAND_ROLES" :key="r.key" class="brand-row">
-          <button class="brand-swatch" :style="{ background: colors[r.key] || '#000' }" @click="openPicker(r.key, $event)" :aria-label="t('Modifica colore ') + r.name"></button>
+          <label class="brand-swatch" :style="{ background: colors[r.key] || '#000' }" :title="t('Modifica colore ') + r.name">
+            <input type="color" class="swatch-native" :value="hexInput(colors[r.key])" @input="onPickRole(r.key, $event.target.value)" :aria-label="t('Modifica colore ') + r.name" />
+          </label>
           <div class="brand-info">
             <div class="brand-name">{{ t(r.name) }}</div>
             <div class="brand-role">{{ t(r.role) }}</div>
@@ -164,7 +170,9 @@
     <div class="cfg-card-body">
       <div class="brand-list">
         <div v-for="r in NEUTRAL_ROLES" :key="r.key" class="brand-row">
-          <button class="brand-swatch" :style="{ background: colors[r.key] || '#fff' }" @click="openPicker(r.key, $event)" :aria-label="t('Modifica colore ') + r.name"></button>
+          <label class="brand-swatch" :style="{ background: colors[r.key] || '#fff' }" :title="t('Modifica colore ') + r.name">
+            <input type="color" class="swatch-native" :value="hexInput(colors[r.key])" @input="onPickRole(r.key, $event.target.value)" :aria-label="t('Modifica colore ') + r.name" />
+          </label>
           <div class="brand-info">
             <div class="brand-name">{{ t(r.name) }}</div>
             <div class="brand-role">{{ t(r.role) }}</div>
@@ -199,7 +207,9 @@
     <div class="cfg-card-body">
       <div v-if="extraGlobals.length" class="brand-list">
         <div v-for="g in extraGlobals" :key="g.id" class="brand-row">
-          <button class="brand-swatch" :style="{ background: g.value }" @click="pickExtraGlobal(g, $event)" :aria-label="t('Modifica colore')"></button>
+          <label class="brand-swatch" :style="{ background: g.value }" :title="t('Modifica colore')">
+            <input type="color" class="swatch-native" :value="hexInput(g.value)" @change="setExtraGlobalHex(g.id, $event.target.value)" :aria-label="t('Modifica colore')" />
+          </label>
           <div class="brand-info">
             <input class="xg-label" :value="g.label" @change="setExtraGlobalLabel(g.id, $event.target.value)" :placeholder="t('Nome colore')" spellcheck="false" />
             <div class="brand-role">var(--olo-color-{{ g.id }})</div>
@@ -259,15 +269,14 @@
     <div class="cfg-card-body">
       <div class="neutral-scale">
         <div v-for="(c, i) in displayNeutrals" :key="i" class="neutral-col">
-          <button
-            type="button"
+          <label
             class="neutral-swatch"
             :class="{ 'is-locked': neutrals.mode === 'auto' }"
             :style="{ background: c }"
-            :disabled="neutrals.mode === 'auto'"
             :title="neutrals.mode === 'manual' ? t('Clicca per modificare') : t('Passa a Manuale per modificare')"
-            @click="openNeutralPicker(i, $event)"
-          ></button>
+          >
+            <input type="color" class="swatch-native" :value="hexInput(c)" :disabled="neutrals.mode === 'auto'" @input="onPickNeutral(i, $event.target.value)" :aria-label="t('Modifica neutro')" />
+          </label>
           <div class="neutral-label">{{ i === 0 ? 50 : i * 100 }}</div>
         </div>
       </div>
@@ -443,43 +452,34 @@ function updateHex(key, val) {
   if (clean.length === 6) recomputeContrasts();
   setDirty(true);
 }
-function openPicker(key, ev) {
-  spawnColorInput(colors.value[key] || '#000000', (hex) => {
-    colors.value[key] = hex.toUpperCase();
-    recomputeContrasts();
-    setDirty(true);
-  }, ev);
+// Color picker: usiamo un <input type="color"> REALE trasparente sovrapposto allo swatch
+// (classe .swatch-native nel template). È l'utente a cliccarlo, quindi Chrome ancora il
+// picker nativo esattamente allo swatch. NIENTE input nascosto + .click() programmatico:
+// in quel caso Chrome ignora la posizione e apre il picker in alto a sinistra.
+function hexInput(v) {
+  let s = String(v || '').trim();
+  if (s && s[0] !== '#') s = '#' + s;
+  if (/^#[0-9a-fA-F]{3}$/.test(s)) s = '#' + s.slice(1).split('').map((c) => c + c).join('');
+  return /^#[0-9a-fA-F]{6}$/.test(s) ? s : '#000000';
 }
-function spawnColorInput(initial, cb, ev) {
-  const input = document.createElement('input');
-  input.type = 'color';
-  input.value = isValidHex(initial)
-    ? (initial.length === 4 ? '#' + initial.slice(1).split('').map((c) => c + c).join('') : initial)
-    : '#000000';
-  input.style.position = 'fixed';
-  input.style.opacity = '0';
-  input.style.pointerEvents = 'none';
-  input.style.width = '1px';
-  input.style.height = '1px';
-  // Ancora il picker nativo allo swatch cliccato → appare lì, non in alto a sinistra.
-  const el = ev && (ev.currentTarget || ev.target);
-  const r = el && el.getBoundingClientRect ? el.getBoundingClientRect() : null;
-  if (r) {
-    input.style.left = Math.round(r.left) + 'px';
-    input.style.top = Math.round(r.bottom + 4) + 'px';
-  } else {
-    input.style.left = '-9999px';
-  }
-  document.body.appendChild(input);
-  input.addEventListener('change', (e) => { cb(e.target.value); document.body.removeChild(input); });
-  input.click();
+function onPickRole(key, val) {
+  colors.value[key] = String(val).toUpperCase();
+  recomputeContrasts();
+  setDirty(true);
+}
+function onPickSeed(which, val) {
+  if (which === 'seed1') seed1.value = String(val).toUpperCase();
+  else seed2.value = String(val).toUpperCase();
+}
+function onPickNeutral(i, val) {
+  if (neutrals.value.mode !== 'manual') return;
+  const next = [...neutrals.value.scale];
+  next[i] = String(val).toUpperCase();
+  neutrals.value.scale = next;
+  setDirty(true);
 }
 
 // ── Generatore ──
-function pickSeed(which, ev) {
-  const cur = which === 'seed1' ? seed1.value : seed2.value;
-  spawnColorInput(cur, (hex) => { if (which === 'seed1') seed1.value = hex.toUpperCase(); else seed2.value = hex.toUpperCase(); }, ev);
-}
 function onSeedInput(which, val) {
   const clean = String(val).replace(/[^0-9a-fA-F]/g, '').slice(0, 6);
   const hex = '#' + clean.toUpperCase();
@@ -527,14 +527,6 @@ function setNeutralTint(id) {
   neutrals.value.scale = [...(NEUTRAL_PRESETS[id] || NEUTRAL_PRESETS.zinc)];
   setDirty(true);
 }
-function openNeutralPicker(i, ev) {
-  if (neutrals.value.mode !== 'manual') return;
-  spawnColorInput(neutrals.value.scale[i] || '#888888', (hex) => {
-    const next = [...neutrals.value.scale]; next[i] = hex.toUpperCase();
-    neutrals.value.scale = next; setDirty(true);
-  }, ev);
-}
-
 // ── Modalità dark ──
 function setDark(k, v) { darkMode.value = { ...darkMode.value, [k]: v }; setDirty(true); }
 
@@ -701,10 +693,6 @@ function setExtraGlobalHex(id, val) {
 function setExtraGlobalLabel(id, label) {
   persistGlobalColors((list) => list.map((g) => (g.id === id ? { ...g, label } : g)));
 }
-function pickExtraGlobal(g, ev) {
-  spawnColorInput(g.value || '#888888', (hex) => setExtraGlobalHex(g.id, hex), ev);
-}
-
 async function saveStyles() {
   recomputeContrasts();
   try {
@@ -751,11 +739,18 @@ onBeforeUnmount(() => {
   border-radius: 10px;
 }
 .brand-swatch {
+  position: relative; display: block; overflow: hidden;
   width: 56px; height: 56px; border-radius: 8px;
   box-shadow: inset 0 0 0 1px rgba(0,0,0,.06);
   border: 0; cursor: pointer; padding: 0;
   transition: transform .12s;
 }
+.swatch-native {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  margin: 0; padding: 0; border: 0; background: none;
+  opacity: 0; cursor: pointer; -webkit-appearance: none; appearance: none;
+}
+.swatch-native:disabled { cursor: not-allowed; }
 .brand-swatch.sm { width: 38px; height: 38px; }
 .brand-swatch:hover { transform: scale(1.05); }
 .brand-name { font-weight: 600; font-size: 14px; color: var(--c-navy); }
@@ -828,12 +823,13 @@ onBeforeUnmount(() => {
 .neutral-scale { display: flex; gap: 6px; }
 .neutral-col { flex: 1; }
 .neutral-swatch {
+  position: relative; display: block; overflow: hidden;
   width: 100%; height: 64px; border-radius: 8px;
   box-shadow: inset 0 0 0 1px rgba(0,0,0,.06);
   border: 0; padding: 0; cursor: pointer;
   transition: transform .12s, box-shadow .12s;
 }
-.neutral-swatch:hover:not(:disabled) { transform: translateY(-1px); box-shadow: inset 0 0 0 1px rgba(0,0,0,.1), 0 4px 10px rgba(0,0,0,.08); }
+.neutral-swatch:hover:not(.is-locked) { transform: translateY(-1px); box-shadow: inset 0 0 0 1px rgba(0,0,0,.1), 0 4px 10px rgba(0,0,0,.08); }
 .neutral-swatch:disabled, .neutral-swatch.is-locked { cursor: not-allowed; }
 .neutral-label { text-align: center; margin-top: 6px; font-family: var(--c-mono); font-size: 11px; color: var(--c-text-mute); }
 .tint-chips { display: flex; flex-wrap: wrap; gap: 6px; }
